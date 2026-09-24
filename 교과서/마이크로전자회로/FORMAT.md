@@ -28,7 +28,7 @@ pdf_page: 20              # PDF 페이지(1부터)
 difficulty: 1             # 장말문제만: * 개수 (0, 1, 2)
 sol: false                # 장말문제만: SOL 마크 여부
 source_lang: en           # 원문 언어 (ko | en)
-figures:                  # 크롭 이미지가 있는 그림만
+figures:                  # 크롭 이미지가 있는 그림만. id 는 반드시 따옴표 ("9.30" 이 숫자 9.3 으로 바뀌는 것 방지)
   - {id: "9.42", role: problem, panels: [a, b, c, d]}   # role: problem | answer
 depends_on: []            # 전제로 하는 문제·예제 id (예: [E9.15])
 refs: []                  # 참조하는 식·그림·장 (자유 문자열, 예: "식 9.88")

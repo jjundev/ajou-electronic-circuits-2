@@ -107,7 +107,10 @@ def check_file(path, ch_dir):
             errors.append(f"이미지 없음: {link}")
 
     for fig in meta["figures"] or []:
-        fig_id = str(fig.get("id", ""))
+        fig_id = fig.get("id", "")
+        if not isinstance(fig_id, str):
+            errors.append(f'그림 id {fig_id!r} 는 따옴표로 감싼 문자열이어야 함 (예: "9.30")')
+            continue
         if "." not in fig_id:
             errors.append(f"그림 id 형식 오류: {fig_id!r}")
             continue

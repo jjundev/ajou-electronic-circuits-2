@@ -131,6 +131,12 @@ class CheckFileTest(unittest.TestCase):
         self.assertEqual(errors, [])
         self.assertTrue(any("E9.15" in w for w in warnings), warnings)
 
+    def test_unquoted_figure_id_is_error(self):
+        text = VALID_MD.replace('{id: "9.2", role: problem, panels: [a]}',
+                                "{id: 9.20, role: problem, panels: [a]}")
+        errors, _ = self.run_check(text)
+        self.assertTrue(any("따옴표" in e for e in errors), errors)
+
 
 class MainTest(unittest.TestCase):
     def test_exit_codes(self):
