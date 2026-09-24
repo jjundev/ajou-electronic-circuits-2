@@ -25,7 +25,10 @@ def crop_all(ch_dir: Path) -> list[Path]:
         for fig_id, fig in spec["figures"].items():
             if not isinstance(fig_id, str):
                 raise ValueError(f"그림 id {fig_id!r} 는 따옴표로 감싼 문자열이어야 함 (예: \"9.30\")")
-            page = doc[fig["pdf_page"] - 1]
+            pdf_page = fig["pdf_page"]
+            if not isinstance(pdf_page, int) or not 1 <= pdf_page <= len(doc):
+                raise ValueError(f"{fig_id}: pdf_page {pdf_page!r} 가 1..{len(doc)} 범위 밖")
+            page = doc[pdf_page - 1]
             rect = fitz.Rect(*fig["bbox"])
             if not page.rect.contains(rect):
                 raise ValueError(f"{fig_id}: bbox {fig['bbox']} 가 {fig['pdf_page']}쪽 범위 {tuple(page.rect)} 밖")

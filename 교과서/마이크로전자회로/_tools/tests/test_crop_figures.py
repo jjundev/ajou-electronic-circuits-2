@@ -51,6 +51,17 @@ class CropAllTest(unittest.TestCase):
             with self.assertRaises(ValueError):
                 crop_all(ch)
 
+    def test_rejects_pdf_page_out_of_range(self):
+        for page in (0, 2, -1):
+            with self.subTest(pdf_page=page), tempfile.TemporaryDirectory() as t:
+                ch = make_chapter(Path(t), (
+                    "pdf: ../../book.pdf\n"
+                    "figures:\n"
+                    f'  "9.1": {{pdf_page: {page}, bbox: [0, 0, 72, 36]}}\n'
+                ))
+                with self.assertRaises(ValueError):
+                    crop_all(ch)
+
     def test_rejects_unquoted_id(self):
         with tempfile.TemporaryDirectory() as t:
             ch = make_chapter(Path(t), (

@@ -64,6 +64,11 @@ def check_file(path, ch_dir):
     if not m:
         return [f"id 형식 오류: {meta['id']!r} (예: E9.01)"], warnings
     kind = KIND_BY_PREFIX[m.group(1)]
+    expected_number = f"{int(m.group(2))}.{int(m.group(3))}"
+    if not isinstance(meta["number"], str):
+        errors.append(f'number {meta["number"]!r} 는 따옴표로 감싼 문자열이어야 함 (예: "{expected_number}")')
+    elif meta["number"] != expected_number:
+        errors.append(f"number {meta['number']!r} 가 id {meta['id']} 와 안 맞음 (기대: \"{expected_number}\")")
     if meta["kind"] != kind:
         errors.append(f"kind {meta['kind']!r} 가 id 접두어와 안 맞음 (기대: {kind})")
     if path.stem != meta["id"]:
@@ -106,7 +111,14 @@ def check_file(path, ch_dir):
         if not (path.parent / link).exists():
             errors.append(f"이미지 없음: {link}")
 
-    for fig in meta["figures"] or []:
+    figures = meta["figures"] or []
+    if not isinstance(figures, list):
+        errors.append(f"figures 는 목록이어야 함: {figures!r}")
+        figures = []
+    for fig in figures:
+        if not isinstance(fig, dict):
+            errors.append(f"figures 항목은 {{id: ..., role: ...}} 형태여야 함: {fig!r}")
+            continue
         fig_id = fig.get("id", "")
         if not isinstance(fig_id, str):
             errors.append(f'그림 id {fig_id!r} 는 따옴표로 감싼 문자열이어야 함 (예: "9.30")')
@@ -137,10 +149,16 @@ def main(argv):
         print("사용법: python3 check_md.py <장 폴더>", file=sys.stderr)
         return 2
     ch_dir = Path(argv[1])
+    if not ch_dir.is_dir():
+        print(f"장 폴더가 없음: {ch_dir}", file=sys.stderr)
+        return 2
     files = md_files(ch_dir)
     n_err = 0
     for path in files:
-        errors, warnings = check_file(path, ch_dir)
+        try:
+            errors, warnings = check_file(path, ch_dir)
+        except Exception as e:  # 파일 하나가 깨져도 나머지는 계속 검사
+            errors, warnings = [f"검사 중 예외 {e!r}"], []
         for e in errors:
             print(f"ERROR {path}: {e}")
         for w in warnings:

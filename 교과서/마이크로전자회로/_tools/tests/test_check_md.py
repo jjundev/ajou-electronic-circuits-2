@@ -2,8 +2,9 @@ import io
 import sys
 import tempfile
 import unittest
-from contextlib import redirect_stdout
+from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from check_md import check_file, check_netlist_line, main  # noqa: E402
@@ -125,6 +126,42 @@ class CheckFileTest(unittest.TestCase):
         text = VALID_MD.replace("id: E9.01", "id: P9.01").replace("kind: 예제", "kind: 장말문제")
         errors, _ = self.run_check(text, rel="장말문제/P9.01.md")
         self.assertTrue(any("difficulty" in e for e in errors), errors)
+        self.assertTrue(any("sol" in e for e in errors), errors)
+
+    def test_problem_sol_only_missing(self):
+        text = (VALID_MD.replace("id: E9.01", "id: P9.01").replace("kind: 예제", "kind: 장말문제")
+                .replace("pdf_page: 2\n", "pdf_page: 2\ndifficulty: 1\n"))
+        errors, _ = self.run_check(text, rel="장말문제/P9.01.md")
+        self.assertFalse(any("difficulty" in e for e in errors), errors)
+        self.assertTrue(any("sol" in e for e in errors), errors)
+
+    def test_unquoted_number_is_error(self):
+        text = (VALID_MD.replace("id: E9.01", "id: E9.10")
+                .replace('number: "9.1"', "number: 9.10"))
+        errors, _ = self.run_check(text, rel="예제/E9.10.md")
+        self.assertTrue(any("number" in e and "따옴표" in e for e in errors), errors)
+
+    def test_number_must_match_id(self):
+        text = VALID_MD.replace('number: "9.1"', 'number: "9.01"')
+        errors, _ = self.run_check(text)
+        self.assertTrue(any("number" in e and "9.1" in e for e in errors), errors)
+
+    def test_number_two_digit_matches(self):
+        text = (VALID_MD.replace("id: E9.01", "id: E9.10")
+                .replace('number: "9.1"', 'number: "9.10"'))
+        errors, _ = self.run_check(text, rel="예제/E9.10.md")
+        self.assertEqual(errors, [])
+
+    def test_figures_not_a_list_is_error(self):
+        text = VALID_MD.replace('figures:\n  - {id: "9.2", role: problem, panels: [a]}',
+                                'figures: "9.2"')
+        errors, _ = self.run_check(text)
+        self.assertTrue(any("figures" in e for e in errors), errors)
+
+    def test_figure_item_not_mapping_is_error(self):
+        text = VALID_MD.replace('  - {id: "9.2", role: problem, panels: [a]}', '  - "9.2"')
+        errors, _ = self.run_check(text)
+        self.assertTrue(any("figures" in e for e in errors), errors)
 
     def test_missing_dependency_is_only_warning(self):
         errors, warnings = self.run_check(VALID_MD.replace("depends_on: []", "depends_on: [E9.15]"))
@@ -143,10 +180,43 @@ class MainTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as t:
             ok = make_chapter(Path(t) / "ok", {"예제/E9.01.md": VALID_MD})
             bad = make_chapter(Path(t) / "bad", {"예제/E9.01.md": VALID_MD}, with_png=False)
-            with redirect_stdout(io.StringIO()):
+            with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
                 self.assertEqual(main(["check_md.py", str(ok)]), 0)
                 self.assertEqual(main(["check_md.py", str(bad)]), 1)
                 self.assertEqual(main(["check_md.py"]), 2)
+
+    def test_missing_chapter_dir_returns_2(self):
+        with tempfile.TemporaryDirectory() as t:
+            out, err = io.StringIO(), io.StringIO()
+            with redirect_stdout(out), redirect_stderr(err):
+                self.assertEqual(main(["check_md.py", str(Path(t) / "nope")]), 2)
+            self.assertIn("nope", err.getvalue())
+
+    def test_malformed_file_does_not_stop_run(self):
+        broken = VALID_MD.replace("id: E9.01", "id: E9.02").replace('number: "9.1"', 'number: "9.2"')
+        with tempfile.TemporaryDirectory() as t:
+            ch = make_chapter(Path(t), {"예제/E9.01.md": VALID_MD, "예제/E9.02.md": broken})
+            out = io.StringIO()
+            with patch("check_md.check_file", side_effect=[([], []), RuntimeError("boom")]), \
+                    redirect_stdout(out), redirect_stderr(io.StringIO()):
+                self.assertEqual(main(["check_md.py", str(ch)]), 1)
+            text = out.getvalue()
+            self.assertIn("검사 중 예외", text)
+            self.assertIn("E9.02.md", text)
+            self.assertIn("2개 파일, 오류 1개", text)
+
+    def test_figures_string_reported_not_crash(self):
+        broken = (VALID_MD.replace("id: E9.01", "id: E9.02").replace('number: "9.1"', 'number: "9.2"')
+                  .replace('figures:\n  - {id: "9.2", role: problem, panels: [a]}', 'figures: "9.2"'))
+        with tempfile.TemporaryDirectory() as t:
+            ch = make_chapter(Path(t), {"예제/E9.01.md": VALID_MD, "예제/E9.02.md": broken})
+            out = io.StringIO()
+            with redirect_stdout(out), redirect_stderr(io.StringIO()):
+                self.assertEqual(main(["check_md.py", str(ch)]), 1)
+            text = out.getvalue()
+            self.assertIn("2개 파일", text)
+            self.assertNotIn("E9.01.md:", text)
+            self.assertIn("E9.02.md", text)
 
 
 if __name__ == "__main__":
