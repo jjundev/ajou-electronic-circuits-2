@@ -19,9 +19,13 @@ FIGURE_ROLES = {"problem", "answer"}
 ID_RE = re.compile(r"^([EXP])(\d+)\.(\d{2})$")
 
 NODE = r"[A-Za-z0-9_]+"
+NUM = r"\d+(\.\d+)?"
+SYM = r"\{[^\s{}]+\}"          # {n}, {(W/L)_n}: 중괄호 안에 공백·중괄호 없음
+MULT = rf"(\s+m=({NUM}|{SYM}))?"
 NETLIST_RES = [
-    re.compile(rf"^Q\w*\s+{NODE}\s+{NODE}\s+{NODE}\s+(npn|pnp)(\s+area=\d+(\.\d+)?)?$"),
-    re.compile(rf"^M\w*\s+{NODE}\s+{NODE}\s+{NODE}\s+(nmos|pmos)(\s+W/L=[\d.]+/[\d.]+)?$"),
+    re.compile(rf"^Q\w*\s+{NODE}\s+{NODE}\s+{NODE}\s+(npn|pnp)(\s+area=({NUM}|{SYM}))?{MULT}$"),
+    re.compile(rf"^M\w*\s+{NODE}\s+{NODE}\s+{NODE}\s+(nmos|pmos)"
+               rf"(\s+W/L=({NUM}/{NUM}|{SYM}))?{MULT}$"),
     re.compile(rf"^[RCLIV]\w*\s+{NODE}\s+{NODE}(\s+\S+)?$"),
     re.compile(rf"^X\w*\s+{NODE}\s+{NODE}\s+{NODE}\s+opamp$"),
     re.compile(rf'^X\w*(\s+{NODE})+\s+box\s+"[^"]+"$'),
@@ -29,6 +33,8 @@ NETLIST_RES = [
 SPICE_BLOCK_RE = re.compile(r"```spice\n(.*?)\n```", re.DOTALL)
 IMAGE_RE = re.compile(r"!\[[^\]]*\]\(([^)\s]+)\)")
 REQUIRED_BULLETS = ["- 단자:", "- 표시:", "- 배치:"]
+NO_CIRCUIT_PREFIX = "## 회로 — 없음"
+NO_CIRCUIT_RE = re.compile(r"^## 회로 — 없음 \(.+\)$")
 
 
 def split_frontmatter(text):
@@ -85,13 +91,21 @@ def check_file(path, ch_dir):
     for h in ("## 조건", "## 구할 것"):
         if h not in headings:
             errors.append(f"절 누락: {h}")
-    if not any(h.startswith("## 회로") for h in headings):
+    circuit_headings = [h for h in headings if h.startswith("## 회로")]
+    if not circuit_headings:
         errors.append("절 누락: ## 회로 …")
+    for h in circuit_headings:
+        if h.startswith(NO_CIRCUIT_PREFIX) and not NO_CIRCUIT_RE.match(h):
+            errors.append(f"{h!r}: 그림 없음 제목은 이유를 괄호로 적음 (예: '## 회로 — 없음 (설계 문제)')")
+    no_circuit = bool(circuit_headings) and all(h.startswith(NO_CIRCUIT_PREFIX) for h in circuit_headings)
+    for sec in re.finditer(r"^## 회로 — 없음.*?(?=^## |\Z)", body, re.DOTALL | re.MULTILINE):
+        if "```spice" in sec.group(0):
+            errors.append("'## 회로 — 없음' 절 아래에 ```spice 블록이 있음 (넷리스트는 적지 않음)")
     if kind == "예제" and "## 답 (검증용)" not in headings:
         errors.append("예제에 절 누락: ## 답 (검증용)")
 
     blocks = list(SPICE_BLOCK_RE.finditer(body))
-    if not blocks:
+    if not blocks and not no_circuit:
         errors.append("```spice 블록 없음")
     for b in blocks:
         lines = b.group(1).splitlines()

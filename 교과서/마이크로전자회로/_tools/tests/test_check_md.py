@@ -83,6 +83,26 @@ class NetlistLineTest(unittest.TestCase):
             with self.subTest(line=line):
                 self.assertIsNotNone(check_netlist_line(line))
 
+    def test_symbolic_sizes_and_multiplier_valid(self):
+        for line in [
+            "Q1 a b c npn area={n}",
+            "Q1 a b c npn area=4 m=2",
+            "M1 d g s nmos W/L={(W/L)_n} m=3",
+            "M2 d g s pmos W/L={(W/L)_p}",
+            "M3 d g s nmos m={k}",
+        ]:
+            with self.subTest(line=line):
+                self.assertIsNone(check_netlist_line(line))
+
+    def test_symbolic_sizes_and_multiplier_invalid(self):
+        for line in [
+            "Q1 a b c npn area={}",
+            "M1 d g s nmos W/L={a b}",
+            "M1 d g s nmos m=",
+        ]:
+            with self.subTest(line=line):
+                self.assertIsNotNone(check_netlist_line(line))
+
 
 class CheckFileTest(unittest.TestCase):
     def run_check(self, text, rel="예제/E9.01.md", with_png=True):
@@ -173,6 +193,59 @@ class CheckFileTest(unittest.TestCase):
                                 "{id: 9.20, role: problem, panels: [a]}")
         errors, _ = self.run_check(text)
         self.assertTrue(any("따옴표" in e for e in errors), errors)
+
+
+NO_CIRCUIT_SECTION = """## 회로 — Fig 9.2(a)
+```spice
+Q1  out  Vb1  n1  npn
+Q2  n1   Vb2  0   npn
+```
+- 단자: Vb1, Vb2 = 이상적 DC 바이어스
+- 표시: R_out 화살표
+- 배치: 위→아래 Q1, Q2
+
+![Fig 9.2](../figures/fig9-02.png)
+"""
+
+ANSWER_CIRCUIT = """### 정답 회로 — Fig 9.2
+```spice
+Q1  out  Vb1  n1  npn
+```
+- 단자: Vb1 = 이상적 DC 바이어스
+- 표시: 없음
+- 배치: Q1 하나
+
+![Fig 9.2](../figures/fig9-02.png)
+"""
+
+
+class NoCircuitTest(unittest.TestCase):
+    def run_check(self, text):
+        with tempfile.TemporaryDirectory() as t:
+            ch = make_chapter(Path(t), {"예제/E9.01.md": text})
+            return check_file(ch / "예제/E9.01.md", ch)
+
+    def test_no_circuit_without_spice_is_ok(self):
+        text = VALID_MD.replace(NO_CIRCUIT_SECTION, "## 회로 — 없음 (설계 문제, 그림은 풀이에만 있음)\n")
+        self.assertNotIn("```spice", text)
+        errors, _ = self.run_check(text)
+        self.assertEqual(errors, [])
+
+    def test_no_circuit_needs_reason(self):
+        text = VALID_MD.replace(NO_CIRCUIT_SECTION, "## 회로 — 없음\n")
+        errors, _ = self.run_check(text)
+        self.assertTrue(any("이유" in e for e in errors), errors)
+
+    def test_spice_under_no_circuit_is_error(self):
+        text = VALID_MD.replace("## 회로 — Fig 9.2(a)", "## 회로 — 없음 (설계 문제)")
+        errors, _ = self.run_check(text)
+        self.assertTrue(any("없음" in e and "spice" in e for e in errors), errors)
+
+    def test_no_circuit_example_with_answer_circuit_is_ok(self):
+        text = (VALID_MD.replace(NO_CIRCUIT_SECTION, "## 회로 — 없음 (설계 문제, 그림은 풀이에만 있음)\n")
+                + "\n" + ANSWER_CIRCUIT)
+        errors, _ = self.run_check(text)
+        self.assertEqual(errors, [])
 
 
 class MainTest(unittest.TestCase):
