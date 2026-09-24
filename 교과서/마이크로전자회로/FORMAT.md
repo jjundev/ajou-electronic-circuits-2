@@ -9,7 +9,9 @@
   FORMAT.md
   _tools/crop_figures.py      # figures.yaml → 그림 PNG
   _tools/check_md.py          # 형식 검사
+  _tools/make_index.py        # frontmatter → ch<장>/README.md 문제 인덱스
   ch<장>/
+    README.md                 # 문제 인덱스 (make_index.py로 생성, 손으로 고치지 않음)
     예제/E<장>.<NN>.md        # 본문 예제
     연습문제/X<장>.<NN>.md    # 예제 <장>.<NN> 바로 뒤의 연습문제
     장말문제/P<장>.<NN>.md    # 장말 PROBLEMS
@@ -114,4 +116,9 @@ refs: []                  # 참조하는 식·그림·장 (자유 문자열, 예
 ## 검사
 ```bash
 python3 교과서/마이크로전자회로/_tools/check_md.py 교과서/마이크로전자회로/ch09
+```
+
+문제 md를 추가하거나 frontmatter를 고친 뒤에는 인덱스를 다시 만든다.
+```bash
+python3 교과서/마이크로전자회로/_tools/make_index.py 교과서/마이크로전자회로/ch09 "9장 캐스코드 단과 전류 거울"
 ```

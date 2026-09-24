@@ -1,7 +1,7 @@
 # 9장 캐스코드 단과 전류 거울 — 문제 인덱스
 
-Razavi 마이크로전자회로 9장의 문제를 md로 옮긴 파일의 목록이다. 형식은 [FORMAT.md](../FORMAT.md)를 따른다.
-이 표는 각 파일의 frontmatter에서 만들었다. 원본은 `9장.pdf`이고, 쪽 번호는 교재 쪽, PDF는 PDF 페이지(1부터)다.
+9장 문제를 md로 옮긴 파일의 목록이다. 형식은 [FORMAT.md](../FORMAT.md)를 따른다.
+이 표는 각 파일의 frontmatter에서 `_tools/make_index.py`로 만들었다. 원본은 `9장.pdf`이고, 쪽 번호는 교재 쪽, PDF는 PDF 페이지(1부터)다.
 
 | 종류 | 개수 |
 |---|---|
