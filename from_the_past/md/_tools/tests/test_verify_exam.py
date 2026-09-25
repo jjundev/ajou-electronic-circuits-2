@@ -107,6 +107,16 @@ class VerifyTest(unittest.TestCase):
         (self.exam / "Q1.md").write_text("frontmatter 없음\n", encoding="utf-8")
         self.assertHas(verify(self.exam), "Q1.md: frontmatter 읽기 실패")
 
+    def test_missing_bbox_reported(self):
+        (self.exam / "figures" / "figures.yaml").write_text(
+            FIGURES_YAML.replace(", bbox: [0, 0, 100, 50]", ""), encoding="utf-8")
+        self.assertHas(verify(self.exam), "figures.yaml Q2: bbox 는 [x0, y0, x1, y1] 숫자 4개")
+
+    def test_nfd_folder_path(self):
+        import unicodedata
+        nfd = Path(unicodedata.normalize("NFD", str(self.exam)))
+        self.assertEqual(verify(nfd, recrop=True), [])
+
 
 class MainTest(unittest.TestCase):
     def test_ok_and_usage(self):

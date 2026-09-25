@@ -12,7 +12,7 @@ import fitz
 import yaml
 
 from check_exam import FILE_RE, ID_RE, exam_title, md_files, split_frontmatter
-from crop_exam import FIG_ID_RE, crop_all, figure_filename
+from crop_exam import FIG_ID_RE, crop_all, figure_filename, valid_bbox
 from make_exam_index import build_exam_index
 from verify_chapter import check_structure  # check_exam이 교과서 _tools를 sys.path에 넣음
 
@@ -65,6 +65,8 @@ def check_figures(exam_dir, docs):
         yaml_ids.add(key)
         if not isinstance(fig, dict) or "pdf" not in fig:
             errors.append(f"figures.yaml {key}: pdf 경로가 없음")
+        elif not valid_bbox(fig.get("bbox")):
+            errors.append(f"figures.yaml {key}: bbox 는 [x0, y0, x1, y1] 숫자 4개")
     used = set()
     for i, (path, fm, body) in sorted(docs.items()):
         links = IMG_RE.findall(body)

@@ -20,16 +20,25 @@ def figure_filename(fig_id: str) -> str:
     return f"fig-{fig_id}.png"
 
 
+def valid_bbox(bbox) -> bool:
+    return (isinstance(bbox, list) and len(bbox) == 4
+            and all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in bbox))
+
+
 def crop_all(exam_dir: Path) -> list[Path]:
     fig_dir = exam_dir / "figures"
     spec = yaml.safe_load((fig_dir / "figures.yaml").read_text(encoding="utf-8")) or {}
+    if not isinstance(spec, dict):
+        raise ValueError("figures.yaml 최상위가 매핑(키: 값)이 아님")
     dpi = spec.get("dpi", 144)
     written = []
     for fig_id, fig in (spec.get("figures") or {}).items():
         if not isinstance(fig_id, str) or not FIG_ID_RE.match(fig_id):
             raise ValueError(f'그림 id {fig_id!r} 형식 오류: 따옴표로 감싼 "Q<번호>" 또는 "Q<번호>-<n>" (예: "Q2")')
-        if not isinstance(fig, dict) or "pdf" not in fig:
+        if not isinstance(fig, dict) or not isinstance(fig.get("pdf"), str) or not fig["pdf"]:
             raise ValueError(f"{fig_id}: pdf 경로가 없음 (figures 폴더 기준 상대 경로로 적음)")
+        if not valid_bbox(fig.get("bbox")):
+            raise ValueError(f"{fig_id}: bbox 는 [x0, y0, x1, y1] 숫자 4개 (지금 {fig.get('bbox')!r})")
         pdf_path = (fig_dir / fig["pdf"]).resolve()
         if not pdf_path.is_file():
             raise ValueError(f"{fig_id}: PDF 없음 ({fig['pdf']})")

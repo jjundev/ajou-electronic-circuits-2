@@ -6,6 +6,7 @@
 """
 import re
 import sys
+import unicodedata
 from pathlib import Path
 
 import fitz
@@ -29,7 +30,13 @@ def is_int(v):
     return isinstance(v, int) and not isinstance(v, bool)
 
 
+def nfc(s):
+    """macOS 경로의 한글은 NFD(자모 분리)로 올 수 있어 NFC로 맞춘다."""
+    return unicodedata.normalize("NFC", s)
+
+
 def exam_title(dir_name):
+    dir_name = nfc(dir_name)
     m = EXAM_DIR_RE.match(dir_name)
     if not m:
         raise ValueError(f"시험 폴더 이름 형식 오류: {dir_name!r} (예: 2021-1_중간)")
@@ -91,8 +98,8 @@ def check_file(path, exam_dir):
     if not m:
         return [f"id 형식 오류: {meta['id']!r} (예: 2021-1_중간-Q2)"], warnings
     exam, n = m.group(1), m.group(2)
-    if exam != exam_dir.name:
-        errors.append(f"id {meta['id']} 의 시험 {exam} 이 폴더 {exam_dir.name} 와 다름")
+    if exam != nfc(exam_dir.name):
+        errors.append(f"id {meta['id']} 의 시험 {exam} 이 폴더 {nfc(exam_dir.name)} 와 다름")
     if path.name != f"Q{n}.md":
         errors.append(f"파일명 {path.name} 이 id {meta['id']} 와 다름 (기대: Q{n}.md)")
     if not isinstance(meta["number"], str):
@@ -121,7 +128,7 @@ def check_file(path, exam_dir):
         dm = ID_RE.match(str(dep))
         if not dm:
             errors.append(f"depends_on id 형식 오류: {dep!r}")
-        elif dm.group(1) != exam_dir.name:
+        elif dm.group(1) != nfc(exam_dir.name):
             errors.append(f"depends_on {dep} 는 다른 시험 (같은 시험 id만 적고, 다른 시험은 refs에 적음)")
         elif not (exam_dir / f"Q{dm.group(2)}.md").exists():
             warnings.append(f"depends_on {dep} 파일이 아직 없음")

@@ -14,6 +14,10 @@ class ExamTitleTest(unittest.TestCase):
     def test_title(self):
         self.assertEqual(exam_title("2023-1_기말"), "2023-1 기말고사")
 
+    def test_nfd_name(self):
+        import unicodedata
+        self.assertEqual(exam_title(unicodedata.normalize("NFD", "2023-1_기말")), "2023-1 기말고사")
+
     def test_bad_name(self):
         with self.assertRaises(ValueError):
             exam_title("2023_기말")
@@ -92,6 +96,12 @@ class CheckFileTest(unittest.TestCase):
 
     def test_missing_key(self):
         self.assertError(VALID_Q2.replace("points: 20\n", ""), "키 누락: points")
+
+    def test_nfd_exam_dir(self):
+        import unicodedata
+        exam = make_exam(self.root, {"Q2.md": VALID_Q2})
+        nfd = Path(unicodedata.normalize("NFD", str(exam)))
+        self.assertEqual(check_file(nfd / "Q2.md", nfd), ([], []))
 
 
 class MdFilesTest(unittest.TestCase):

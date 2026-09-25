@@ -76,6 +76,26 @@ figures:
         with self.assertRaisesRegex(ValueError, "bbox"):
             crop_all(exam)
 
+    def test_missing_bbox(self):
+        exam = make_exam(self.root, 'figures:\n  "Q1": {pdf: ../../../src/a.pdf, pdf_page: 1}\n')
+        with self.assertRaisesRegex(ValueError, "bbox 는 \\[x0, y0, x1, y1\\] 숫자 4개"):
+            crop_all(exam)
+
+    def test_bbox_wrong_length(self):
+        exam = make_exam(self.root, 'figures:\n  "Q1": {pdf: ../../../src/a.pdf, pdf_page: 1, bbox: [1, 2, 3]}\n')
+        with self.assertRaisesRegex(ValueError, "bbox 는"):
+            crop_all(exam)
+
+    def test_pdf_null(self):
+        exam = make_exam(self.root, 'figures:\n  "Q1": {pdf: null, pdf_page: 1, bbox: [0, 0, 10, 10]}\n')
+        with self.assertRaisesRegex(ValueError, "pdf 경로가 없음"):
+            crop_all(exam)
+
+    def test_top_level_not_mapping(self):
+        exam = make_exam(self.root, "- a\n- b\n")
+        with self.assertRaisesRegex(ValueError, "최상위"):
+            crop_all(exam)
+
 
 if __name__ == "__main__":
     unittest.main()
