@@ -11,7 +11,7 @@ from pathlib import Path
 import fitz
 import yaml
 
-from check_exam import FILE_RE, ID_RE, exam_title, md_files, split_frontmatter
+from check_exam import ID_RE, exam_title, md_files, split_frontmatter, stray_md
 from crop_exam import FIG_ID_RE, crop_all, figure_filename, valid_bbox
 from make_exam_index import build_exam_index
 from verify_chapter import check_structure  # check_exam이 교과서 _tools를 sys.path에 넣음
@@ -31,8 +31,7 @@ def load_docs(exam_dir):
 
 
 def check_stray_files(exam_dir):
-    return [f"알 수 없는 md 파일: {p.name} (Q<번호>.md와 README.md만 둠)"
-            for p in sorted(exam_dir.glob("*.md")) if p.name != "README.md" and not FILE_RE.match(p.name)]
+    return [f"알 수 없는 md 파일: {name} (Q<번호>.md와 README.md만 둠)" for name in stray_md(exam_dir)]
 
 
 def check_numbering(docs):

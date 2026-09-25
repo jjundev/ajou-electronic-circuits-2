@@ -24,6 +24,7 @@ EXAM_DIR_RE = re.compile(r"^(\d{4})-([12])_(중간|기말)$")
 ID_RE = re.compile(r"^(\d{4}-[12]_(?:중간|기말))-Q([1-9]\d*)$")
 FILE_RE = re.compile(r"^Q([1-9]\d*)\.md$")
 SOURCE_LANGS = {"ko", "en"}
+ANSWER_RE = re.compile(r"^## 답", re.M)
 
 
 def is_int(v):
@@ -46,6 +47,11 @@ def exam_title(dir_name):
 def md_files(exam_dir):
     return sorted((p for p in exam_dir.glob("Q*.md") if FILE_RE.match(p.name)),
                   key=lambda p: int(FILE_RE.match(p.name).group(1)))
+
+
+def stray_md(exam_dir):
+    """Q<번호>.md와 README.md가 아닌 md 파일 이름 (md_files가 건너뛰는 파일)."""
+    return sorted(p.name for p in exam_dir.glob("*.md") if p.name != "README.md" and not FILE_RE.match(p.name))
 
 
 def check_source(path, meta):
@@ -134,6 +140,8 @@ def check_file(path, exam_dir):
             warnings.append(f"depends_on {dep} 파일이 아직 없음")
 
     errors += check_body(body, path, KIND)
+    if ANSWER_RE.search(body):
+        errors.append("기출에는 답 절을 두지 않음 (풀이·답은 범위 밖, FORMAT-EXAM.md)")
     return errors, warnings
 
 
@@ -162,6 +170,8 @@ def main(argv):
         for w in warnings:
             print(f"WARN  {path}: {w}")
         n_err += len(errors)
+    for name in stray_md(exam_dir):
+        print(f"WARN  {exam_dir / name}: 알 수 없는 md 파일: {name} (Q<번호>.md 형식이 아니라 검사하지 않음)")
     print(f"{len(files)}개 파일, 오류 {n_err}개")
     return 1 if n_err else 0
 

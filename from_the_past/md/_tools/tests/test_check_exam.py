@@ -91,6 +91,9 @@ class CheckFileTest(unittest.TestCase):
         self.assertEqual(errors, [])
         self.assertEqual(warnings, ["depends_on 2021-1_중간-Q1 파일이 아직 없음"])
 
+    def test_answer_section_rejected(self):
+        self.assertError(VALID_Q2 + "\n## 답 (검증용)\n- 1 kΩ\n", "기출에는 답 절을 두지 않음")
+
     def test_body_checked(self):
         self.assertError(VALID_Q2.replace("- 배치: M1 하나\n", ""), "'- 배치:' bullet 없음")
 
@@ -130,6 +133,15 @@ class MainTest(unittest.TestCase):
             exam = make_exam(Path(t), {"Q2.md": VALID_Q2.replace("kind: 기출", "kind: 예제")})
             code, out = self.run_main(exam)
         self.assertEqual(code, 1)
+
+    def test_stray_md_warns(self):
+        with tempfile.TemporaryDirectory() as t:
+            exam = make_exam(Path(t), {"Q2.md": VALID_Q2, "Q2 copy.md": VALID_Q2, "README.md": ""})
+            code, out = self.run_main(exam)
+        self.assertEqual(code, 0)
+        self.assertIn("알 수 없는 md 파일: Q2 copy.md", out)
+        self.assertNotIn("README.md", out)
+        self.assertIn("1개 파일, 오류 0개", out)
 
     def test_bad_folder_name(self):
         with tempfile.TemporaryDirectory() as t:
