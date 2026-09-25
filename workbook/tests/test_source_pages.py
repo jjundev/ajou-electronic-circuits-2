@@ -8,12 +8,12 @@ from pathlib import Path
 import fitz
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from source_pages import SourceError, main, pending, render, source_pdf  # noqa: E402
+from source_pages import SourceError, main, pending, read_ledger, render, source_pdf  # noqa: E402
 
 
-def write_md(path, pid, kind, page, original=False, extra=""):
+def write_md(path, pid, kind, page, original=False, extra="", tail=""):
     path.parent.mkdir(parents=True, exist_ok=True)
-    body = "# 장말문제 9.1 — 제목\n\n" + ("## 원문\nText.\n\n" if original else "") + "## 조건\n- a\n"
+    body = "# 장말문제 9.1 — 제목\n\n" + ("## 원문\nText.\n\n" if original else "") + "## 조건\n- a\n" + tail
     path.write_text(f"---\nid: {pid}\nkind: {kind}\npdf_page: {page}\n{extra}---\n{body}", encoding="utf-8")
     return path
 
@@ -82,6 +82,50 @@ class TestPending(Base):
         code, out, _ = run(["next", str(self.ch), "--size", "2"])
         self.assertEqual(code, 0)
         self.assertEqual([Path(line).name for line in out.splitlines()], ["P9.01.md", "P9.02.md"])
+
+
+class TestLedger(Base):
+    def ledger(self, text):
+        path = self.root / "hints-ledger.md"
+        path.write_text(text, encoding="utf-8")
+        return path
+
+    def test_pending_skips_judged_ids(self):
+        write_md(self.ch / "예제/E9.01.md", "E9.01", "예제", 1, original=True)
+        write_md(self.ch / "예제/E9.02.md", "E9.02", "예제", 2, original=True)
+        ledger = read_ledger(self.ledger("# 힌트 판정 원장 — ch09\n\n- E9.01 | 없음 | 대입만\n"))
+        self.assertEqual(ledger, {"E9.01": 0})
+        self.assertEqual([p.name for p in pending(self.ch, ledger)], ["E9.02.md"])
+
+    def test_missing_ledger_file_is_empty(self):
+        self.assertEqual(read_ledger(self.root / "none.md"), {})
+
+    def test_bad_line_raises(self):
+        with self.assertRaises(SourceError):
+            read_ledger(self.ledger("- E9.01 | 아마 | 모름\n"))
+
+    def test_duplicate_id_raises(self):
+        with self.assertRaises(SourceError):
+            read_ledger(self.ledger("- E9.01 | 없음 | a\n- E9.01 | 힌트 1 | b\n"))
+
+    def test_main_missing_reports_mismatch(self):
+        write_md(self.ch / "예제/E9.01.md", "E9.01", "예제", 1, original=True,
+                 tail="\n## 힌트\n### 반회로로 본다\n- 대칭\n")
+        write_md(self.ch / "예제/E9.02.md", "E9.02", "예제", 2, original=True)
+        path = self.ledger("- E9.01 | 힌트 1 | 대칭\n- E9.02 | 힌트 1 | 절을 빠뜨림\n")
+        code, out, err = run(["missing", str(self.ch), "--ledger", str(path)])
+        self.assertEqual(code, 1)
+        self.assertIn("MISMATCH E9.02: 원장 1개, md 0개", out)
+        self.assertNotIn("E9.01", out)
+        self.assertIn("판정 없음: 0개", err)
+
+    def test_main_next_with_ledger(self):
+        for i in range(1, 4):
+            write_md(self.ch / f"장말문제/P9.0{i}.md", f"P9.0{i}", "장말문제", i, original=True)
+        path = self.ledger("- P9.01 | 없음 | 대입만\n")
+        code, out, _ = run(["next", str(self.ch), "--ledger", str(path), "--size", "5"])
+        self.assertEqual(code, 0)
+        self.assertEqual([Path(line).name for line in out.splitlines()], ["P9.02.md", "P9.03.md"])
 
 
 class TestRender(Base):
