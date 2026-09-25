@@ -31,9 +31,10 @@ Razavi 마이크로전자회로 `N장.pdf`의 예제, 연습문제, 장말문제
 - 장마다 worktree를 하나씩 쓴다. 다른 장과 병렬로 진행할 수 있다. PDF는 심볼릭 링크로 넣고 절대 add하지 않는다.
   ```bash
   git -C MAIN worktree add "$(dirname MAIN)/$(basename MAIN)-chN" -b feat/chN-problem-md main
-  ln -s MAIN/교과서/마이크로전자회로/N장.pdf "$(dirname MAIN)/$(basename MAIN)-chN/교과서/마이크로전자회로/N장.pdf"
+  ln -s "MAIN/교과서/마이크로전자회로/N장.pdf" "$(dirname MAIN)/$(basename MAIN)-chN/교과서/마이크로전자회로/N장.pdf"
   ```
   이후 모든 에이전트의 작업 루트(`<<REPO>>`)는 이 worktree(`WT`)다.
+- `WT`가 이미 있으면(재개) 위 두 명령은 건너뛰고, PDF 링크가 살아 있는지만 확인한다(`test -e WT/교과서/마이크로전자회로/N장.pdf`).
 
 ### 2. 재개 판단
 `WT/교과서/마이크로전자회로/chN/`가 이미 있으면 처음부터 하지 않는다.
@@ -43,10 +44,10 @@ ls WT/docs/superpowers/reports/chN/
 ```
 세 가지로 어디까지 끝났는지 판단하고 그다음부터 잇는다.
 - `add chN …` 커밋이 있으면 그 작성 묶음은 끝났다.
-- `review-<묶음>.md`가 있으면 그 리뷰는 끝났다(추적 여부와 무관).
+- `review-<묶음>.md`가 있으면 그 리뷰는 끝났다(추적 여부와 무관). 리뷰어는 `review-<묶음>.md.part`에 쓰다가 끝날 때 이름을 바꾸므로, `.part`만 남아 있으면 그 리뷰는 중간에 끊긴 것이다. `.part`를 지우고 리뷰를 다시 띄운다.
 - `apply review fixes` / `record review` 커밋이 있으면 그 반영은 끝났다.
 
-조사 결과가 scratchpad에 없으면 0단계를 다시 한다. 파일을 건드리지 않는 조사라서 안전하다.
+조사 결과가 scratchpad에 없으면 0단계를 다시 한다. 파일을 건드리지 않는 조사라서 안전하다. 다만 끝난 묶음의 이름과 범위는 새 조사로 다시 나누지 않고, 커밋 메시지와 보고서 파일 이름에 남은 커밋된 id 범위로 복원한다. 남은 문제만 새로 묶는다.
 
 ### 3. 0단계 조사
 1. `references/survey.md`의 자리표시자를 채워 `SCRATCH/survey-prompt-chN.md`로 쓴다. opus 에이전트 하나에 "이 파일을 읽고 그대로 따르라"고 맡긴다(포그라운드).
@@ -80,13 +81,15 @@ ls WT/docs/superpowers/reports/chN/
   - 1단계는 리뷰 k−1의 보고서를 반영한다. 리뷰 k−1이 아직 안 끝났으면 끝날 때까지 기다렸다가 띄운다. 첫 두 묶음은 `<<PREV_REVIEW>>` = "없음"이다.
   - `<<BUSY_FILES>>`에는 리뷰 k의 대상 파일과 `<<PREV_FIX_COMMIT>>`이 고친 파일을 적는다.
 
-마지막 작성 묶음 n이 끝나면 다음 순서로 마무리한다.
-1. 리뷰 n과 **반영 n−1**을 동시에 띄운다. 반영 n−1은 `writer.md`에서 `<<TARGETS>>` = "없음", `<<PREV_BATCH>>` = n−1로 채운다.
-2. 리뷰 n이 끝나면 **반영 n**을 띄운다(같은 방식).
+마지막 작성 묶음 n이 끝나면 다음 순서로 마무리한다. 반영도 작성 에이전트라서, 여기서도 한 번에 하나만 돌린다.
+1. 리뷰 n을 띄운다. 동시에, 리뷰 n−1이 끝난 뒤 **반영 n−1**을 띄운다. 반영 n−1은 `writer.md`에서 `<<TARGETS>>` = "없음", `<<PREV_BATCH>>` = n−1로 채우고, `<<BUSY_FILES>>`에는 리뷰 n의 대상을 적는다.
+2. 리뷰 n이 끝나고 반영 n−1이 끝난 뒤 **반영 n**을 띄운다(같은 방식).
+3. 묶음이 하나뿐이면(n = 1) 1의 반영 n−1은 없다. 리뷰 1이 끝나면 반영 1만 띄운다.
 
 묶음마다 사용자에게 한 줄씩 알린다. 내용은 작성 커밋, 리뷰 결과(사실 오류 수), 반영 커밋이다.
 
 ### 6. 마무리
+6단계의 모든 명령은 `WT`에서 실행한다(`cd WT`). `MAIN`에는 chN이 없고, 브랜치도 다르다.
 1. 인덱스를 만들고 `docs: add chN problem index README`로 커밋한다.
    ```bash
    python3 교과서/마이크로전자회로/_tools/make_index.py 교과서/마이크로전자회로/chN "N장 <조사에서 읽은 장 제목>"
@@ -102,7 +105,7 @@ ls WT/docs/superpowers/reports/chN/
    - verify: 오류 0이어야 한다. INFO(연습문제가 없는 예제)는 원본에서 직접 확인해 보고에 적는다.
    - check_md: 모든 장이 오류 0, WARN 0이어야 한다.
    - 묶음마다 `review-<묶음>.md`가 있고, 그 보고서를 커밋한 반영 또는 기록 커밋이 있어야 한다.
-3. 보고하고 병합·push·worktree 정리를 묻는다. 병합을 고르면 `git -C MAIN merge --ff-only feat/chN-problem-md`로 한다. main이 앞서 있으면 worktree에서 `git rebase main`을 한 뒤 fast-forward한다. worktree 삭제(`git worktree remove`)와 push는 따로 묻는다.
+3. 보고하고 병합·push·worktree 정리를 묻는다. 병합을 고르면 먼저 `git -C MAIN branch --show-current`가 `main`인지 확인한다. 다른 브랜치면 병합하지 말고 사용자에게 알린다. `main`이면 `git -C MAIN merge --ff-only feat/chN-problem-md`로 한다. main이 앞서 있으면 worktree에서 `git rebase main`을 한 뒤 fast-forward한다. worktree 삭제(`git worktree remove`)와 push는 따로 묻는다.
 
 ## 마무리 보고 형식
 | 항목 | 결과 |
