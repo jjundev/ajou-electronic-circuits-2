@@ -5,18 +5,22 @@
 """
 import re
 import sys
+import tempfile
 from pathlib import Path
 
+import fitz
 import yaml
 
 from check_md import ID_RE, KIND_BY_PREFIX, md_files, split_frontmatter
-from crop_figures import figure_filename
+from crop_figures import crop_all, figure_filename
+from make_index import build_index
 
 SECTION_ORDER = ["## 조건", "## 구할 것", "## 상속·참조", "## 회로", "## 답"]
 REQUIRED = {0: "조건", 1: "구할 것", 3: "회로"}
 ANSWER = 4
 HEADING_RE = re.compile(r"^## .+$", re.M)
 IMG_RE = re.compile(r"!\[[^\]]*\]\(([^)\s]+)\)")
+H1_RE = re.compile(r"^# (.+) — 문제 인덱스$", re.M)
 
 
 def load_docs(ch_dir):
@@ -112,6 +116,44 @@ def check_structure(docs):
     return errors
 
 
+def check_readme(ch_dir):
+    readme = ch_dir / "README.md"
+    if not readme.exists():
+        return ["README.md 없음 (make_index.py 실행)"]
+    text = readme.read_text(encoding="utf-8")
+    m = H1_RE.match(text)
+    if not m:
+        return ["README.md 첫 줄이 '# <제목> — 문제 인덱스' 형식이 아님"]
+    try:
+        fresh = build_index(ch_dir, m.group(1))
+    except Exception as e:  # 깨진 md가 있으면 인덱스를 만들 수 없음 — 그 원인은 다른 검사가 보고
+        return [f"README.md 비교 실패 ({e})"]
+    return [] if fresh == text else ["README.md가 최신이 아님 (make_index.py 다시 실행)"]
+
+
+def check_recrop(ch_dir):
+    fig_dir = ch_dir / "figures"
+    errors = []
+    try:
+        spec = yaml.safe_load((fig_dir / "figures.yaml").read_text(encoding="utf-8"))
+        spec["pdf"] = str((fig_dir / spec["pdf"]).resolve())
+        with tempfile.TemporaryDirectory() as t:
+            tmp_ch = Path(t) / ch_dir.name
+            (tmp_ch / "figures").mkdir(parents=True)
+            (tmp_ch / "figures" / "figures.yaml").write_text(
+                yaml.safe_dump(spec, allow_unicode=True), encoding="utf-8")
+            for out in crop_all(tmp_ch):
+                current = fig_dir / out.name
+                if not current.exists():
+                    continue  # PNG 없음은 check_figures가 보고
+                a, b = fitz.Pixmap(str(current)), fitz.Pixmap(str(out))
+                if (a.width, a.height, a.samples) != (b.width, b.height, b.samples):
+                    errors.append(f"{out.name}: figures.yaml로 다시 자른 결과와 다름 (crop_figures.py 다시 실행)")
+    except Exception as e:  # PDF 없음(worktree 심볼릭 링크 누락 등), bbox 오류
+        errors.append(f"다시 자르기 실패 ({e})")
+    return errors
+
+
 def verify(ch_dir, recrop=False):
     ch_dir = Path(ch_dir)
     docs, errors = load_docs(ch_dir)
@@ -121,6 +163,9 @@ def verify(ch_dir, recrop=False):
     errors += numbering_errors
     errors += check_figures(ch_dir, docs)
     errors += check_structure(docs)
+    errors += check_readme(ch_dir)
+    if recrop:
+        errors += check_recrop(ch_dir)
     return errors, infos
 
 

@@ -187,6 +187,35 @@ class RobustnessTest(ChapterCase):
         self.assertIn("문제 md가 없음", errors)
 
 
+class ReadmeTest(ChapterCase):
+    def test_missing_readme(self):
+        (self.ch / "README.md").unlink()
+        self.assertError("README.md 없음")
+
+    def test_stale_readme(self):
+        readme = self.ch / "README.md"
+        readme.write_text(readme.read_text(encoding="utf-8") + "손으로 고친 줄\n", encoding="utf-8")
+        self.assertError("README.md가 최신이 아님")
+
+    def test_bad_heading(self):
+        (self.ch / "README.md").write_text("# 아무 제목\n", encoding="utf-8")
+        self.assertError("README.md 첫 줄")
+
+
+class RecropTest(ChapterCase):
+    def test_clean_recrop_passes(self):
+        self.assertEqual(verify(self.ch, recrop=True), ([], []))
+
+    def test_tampered_png_detected_only_with_recrop(self):
+        fitz.Pixmap(fitz.csRGB, fitz.IRect(0, 0, 5, 5), False).save(str(self.ch / "figures" / "fig9-02.png"))
+        self.assertEqual(verify(self.ch), ([], []))
+        self.assertError("fig9-02.png", "다시 자른 결과와 다름", recrop=True)
+
+    def test_recrop_missing_pdf_is_error(self):
+        (self.root / "book.pdf").unlink()
+        self.assertError("다시 자르기 실패", recrop=True)
+
+
 class CliTest(ChapterCase):
     def run_main(self, *args):
         out = io.StringIO()
