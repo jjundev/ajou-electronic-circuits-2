@@ -45,3 +45,11 @@ python3 workbook/build_workbook.py --all                                 # 모�
 ```bash
 python3 -m unittest discover -s workbook/tests
 ```
+
+## 원문 옮기기 도구
+`source_pages.py`는 md frontmatter의 `pdf_page`로 원본 PDF 쪽을 찾는다. 규칙은 `교과서/마이크로전자회로/FORMAT.md` '문제집용 절'.
+```bash
+python3 workbook/source_pages.py next 교과서/마이크로전자회로/ch10 --size 10   # 다음 배치 (원문 없는 md)
+python3 workbook/source_pages.py missing from_the_past/md/2023-1_기말           # 남은 것 (있으면 종료 코드 1)
+python3 workbook/source_pages.py render <md…> --out /tmp/pages                  # pdf_page·다음 쪽 PNG (+ 글자 층 .txt)
+```
