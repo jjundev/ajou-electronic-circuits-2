@@ -6,6 +6,7 @@
 """
 import re
 import sys
+import unicodedata
 from pathlib import Path
 
 import yaml
@@ -38,6 +39,13 @@ NO_CIRCUIT_RE = re.compile(r"^## 회로 — 없음 \(.+\)$")
 SECTION_RE = re.compile(r"^## (.+)$", re.MULTILINE)
 SUBSECTION_RE = re.compile(r"^### (.+)$", re.MULTILINE)
 HINT_FORMULA_RE = re.compile(r"^> 띠: \$([^$]+)\$$")
+HINT_STRIP_PREFIX = "> 띠:"
+HINT_LABEL_MAX = 24     # 이름표는 문제지 Hint 띠(24mm, 7.5pt)에 그대로 보인다. 3줄쯤
+HINT_MAX = 2
+LABEL_MATH_RE = re.compile(r"\$([^$]+)\$")
+TEX_WRAPPER_RE = re.compile(r"\\(text|mathrm|left|right)\b")
+TEX_COMMAND_RE = re.compile(r"\\[A-Za-z]+")
+TEX_MARKUP_RE = re.compile(r"[{}_^\\\s]")
 WORKBOOK_SECTIONS = ("원문", "힌트", "풀이")
 WORKBOOK_TAIL = ("힌트", "풀이")
 # 원문 절은 PDF에 그대로 나온다(작성자 표시를 지우지 않음). 수식을 가린 뒤 검사한다.
@@ -97,6 +105,31 @@ def check_original(text):
     return errors
 
 
+def hint_label_length(label):
+    """띠에 보이는 글자 수. 수식 안은 \\mu 같은 명령을 한 글자로, \\text 같은 감싸개와 중괄호·첨자 기호·공백은 0으로 센다."""
+    def visible(m):
+        tex = TEX_WRAPPER_RE.sub("", m.group(1))
+        return TEX_MARKUP_RE.sub("", TEX_COMMAND_RE.sub("x", tex))
+    return len(unicodedata.normalize("NFC", LABEL_MATH_RE.sub(visible, label)))
+
+
+def check_hint(label, text):
+    """## 힌트의 ### 소절 하나: 띠 식 줄은 소절당 하나, 들여 쓰지 않고, 이름표는 HINT_LABEL_MAX자까지."""
+    errors = []
+    strips = [line for line in text.splitlines() if line.lstrip().startswith(HINT_STRIP_PREFIX)]
+    for line in strips:
+        if line != line.lstrip():
+            errors.append(f"## 힌트 / ### {label}: 띠 식 줄은 들여 쓰지 않음 ({line.strip()!r})")
+        elif not HINT_FORMULA_RE.match(line.rstrip()):
+            errors.append(f"## 힌트 / ### {label}: 띠 식 줄은 '> 띠: $<LaTeX>$' 형식 ({line.strip()!r})")
+    if len(strips) > 1:
+        errors.append(f"## 힌트 / ### {label}: 띠 식 줄은 소절에 하나만 ({len(strips)}개)")
+    n = hint_label_length(label)
+    if n > HINT_LABEL_MAX:
+        errors.append(f"## 힌트 / ### {label}: 이름표는 {HINT_LABEL_MAX}자까지 (지금 {n}자) — 문제지 띠에 그대로 보임")
+    return errors
+
+
 def check_workbook_sections(body):
     """문제집용 선택 절(## 원문, ## 힌트, ## 풀이)의 위치와 모양. 규칙은 FORMAT.md '문제집용 절'."""
     errors = []
@@ -125,10 +158,12 @@ def check_workbook_sections(body):
         for label, text in subs:
             if label and not text.strip():
                 errors.append(f"## {name} / ### {label}: 내용 없음")
-            if name == "힌트":
-                for line in text.splitlines():
-                    if line.startswith("> 띠:") and not HINT_FORMULA_RE.match(line.rstrip()):
-                        errors.append(f"## 힌트 / ### {label}: 띠 식 줄은 '> 띠: $<LaTeX>$' 형식 ({line.strip()!r})")
+            if name == "힌트" and label:
+                errors += check_hint(label, text)
+        if name == "힌트":
+            count = sum(1 for label, _ in subs if label)
+            if count > HINT_MAX:
+                errors.append(f"## 힌트: 힌트는 {HINT_MAX}개까지 (지금 {count}개)")
         if name == "풀이":
             labels = [label for label, _ in subs if label]
             if not labels or labels[-1] != "답" or labels.count("답") > 1:

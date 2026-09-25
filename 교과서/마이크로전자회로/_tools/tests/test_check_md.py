@@ -8,7 +8,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from check_md import check_body, check_file, check_netlist_line, main  # noqa: E402
-from check_md import check_workbook_sections, split_sections, split_subsections  # noqa: E402
+from check_md import check_workbook_sections, hint_label_length, split_sections, split_subsections  # noqa: E402
 
 VALID_MD = """---
 id: E9.01
@@ -418,6 +418,24 @@ class TestWorkbookSections(unittest.TestCase):
 
     def test_bad_formula_line(self):
         self.assert_error(WB_BASE + "\n## 힌트\n### 식\n> 띠: R = r_O\n- x\n", "띠 식 줄")
+
+    def test_two_strip_lines_rejected(self):
+        self.assert_error(WB_BASE + "\n## 힌트\n### 식\n> 띠: $a$\n> 띠: $b$\n- x\n", "하나만")
+
+    def test_indented_strip_line_rejected(self):
+        self.assert_error(WB_BASE + "\n## 힌트\n### 반회로\n- 대칭\n  > 띠: $R = r_O$\n", "들여 쓰지")
+
+    def test_hint_label_too_long_rejected(self):
+        self.assert_error(WB_BASE + "\n## 힌트\n### " + "가" * 25 + "\n- x\n", "24자까지")
+
+    def test_hint_label_math_counts_visible_chars(self):
+        body = WB_BASE + "\n## 힌트\n### $C_{\\mu}$를 밀러로 입력과 출력에 나눈다\n- x\n"
+        self.assertEqual(check_workbook_sections(body), [])
+        self.assertEqual(hint_label_length("$C_{\\mu}$를 밀러로 입력과 출력에 나눈다"), 19)
+        self.assertEqual(hint_label_length("$I = 1\\ \\text{mA}$"), 5)
+
+    def test_three_hints_rejected(self):
+        self.assert_error(WB_BASE + "\n## 힌트\n### 가\n- x\n### 나\n- y\n### 다\n- z\n", "2개까지")
 
     def test_duplicate_section(self):
         self.assert_error(WB_BASE + WB_HINTS + WB_HINTS, "두 번")
