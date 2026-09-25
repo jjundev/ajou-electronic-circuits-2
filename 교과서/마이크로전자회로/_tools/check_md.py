@@ -35,6 +35,11 @@ IMAGE_RE = re.compile(r"!\[[^\]]*\]\(([^)\s]+)\)")
 REQUIRED_BULLETS = ["- 단자:", "- 표시:", "- 배치:"]
 NO_CIRCUIT_PREFIX = "## 회로 — 없음"
 NO_CIRCUIT_RE = re.compile(r"^## 회로 — 없음 \(.+\)$")
+SECTION_RE = re.compile(r"^## (.+)$", re.MULTILINE)
+SUBSECTION_RE = re.compile(r"^### (.+)$", re.MULTILINE)
+HINT_FORMULA_RE = re.compile(r"^> 띠: \$([^$]+)\$$")
+WORKBOOK_SECTIONS = ("원문", "힌트", "풀이")
+WORKBOOK_TAIL = ("힌트", "풀이")
 
 
 def split_frontmatter(text):
@@ -53,6 +58,60 @@ def check_netlist_line(line):
     if any(r.match(code) for r in NETLIST_RES):
         return None
     return f"넷리스트 문법 오류: {code!r}"
+
+
+def split_sections(body):
+    """본문을 '## ' 절로 나눈다 → [(제목, 내용)]. 첫 '## ' 앞(H1)은 버린다. 문제집 생성기(workbook/)도 쓴다."""
+    ms = list(SECTION_RE.finditer(body))
+    ends = [m.start() for m in ms[1:]] + [len(body)]
+    return [(m.group(1).strip(), body[m.end():end].strip("\n")) for m, end in zip(ms, ends)]
+
+
+def split_subsections(text):
+    """절 내용을 '### ' 소절로 나눈다 → [(제목, 내용)]. 첫 '### ' 앞에 글이 있으면 ("", 글)을 맨 앞에 둔다."""
+    ms = list(SUBSECTION_RE.finditer(text))
+    head = text[:ms[0].start()] if ms else text
+    out = [("", head.strip("\n"))] if head.strip() else []
+    ends = [m.start() for m in ms[1:]] + [len(text)]
+    out += [(m.group(1).strip(), text[m.end():end].strip("\n")) for m, end in zip(ms, ends)]
+    return out
+
+
+def check_workbook_sections(body):
+    """문제집용 선택 절(## 원문, ## 힌트, ## 풀이)의 위치와 모양. 규칙은 FORMAT.md '문제집용 절'."""
+    errors = []
+    sections = split_sections(body)
+    titles = [t for t, _ in sections]
+    for name in WORKBOOK_SECTIONS:
+        if titles.count(name) > 1:
+            errors.append(f"## {name} 절이 두 번 이상 있음")
+    if "원문" in titles and titles[0] != "원문":
+        errors.append("## 원문 은 H1 바로 다음 첫 절이어야 함")
+    tail = [t for t in titles if t in WORKBOOK_TAIL]
+    if tail and titles[-len(tail):] != [t for t in WORKBOOK_TAIL if t in tail]:
+        errors.append("## 힌트, ## 풀이 는 이 순서로 본문 맨 끝에 둠")
+    content = {t: c for t, c in reversed(sections)}     # 같은 제목이 여럿이면 첫 절
+    for name in WORKBOOK_SECTIONS:
+        if name in content and not content[name].strip():
+            errors.append(f"## {name} 절이 비어 있음")
+    for name in WORKBOOK_TAIL:
+        if not content.get(name, "").strip():
+            continue
+        subs = split_subsections(content[name])
+        if subs[0][0] == "":
+            errors.append(f"## {name}: 첫 ### 소절 앞에 글이 있음")
+        for label, text in subs:
+            if label and not text.strip():
+                errors.append(f"## {name} / ### {label}: 내용 없음")
+            if name == "힌트":
+                for line in text.splitlines():
+                    if line.startswith("> 띠:") and not HINT_FORMULA_RE.match(line.rstrip()):
+                        errors.append(f"## 힌트 / ### {label}: 띠 식 줄은 '> 띠: $<LaTeX>$' 형식 ({line.strip()!r})")
+        if name == "풀이":
+            labels = [label for label, _ in subs if label]
+            if not labels or labels[-1] != "답" or labels.count("답") > 1:
+                errors.append("## 풀이: 마지막 소절 하나만 ### 답 이어야 함")
+    return errors
 
 
 def check_body(body, path, kind):
@@ -95,6 +154,7 @@ def check_body(body, path, kind):
     for link in IMAGE_RE.findall(body):
         if not (path.parent / link).exists():
             errors.append(f"이미지 없음: {link}")
+    errors += check_workbook_sections(body)
     return errors
 
 

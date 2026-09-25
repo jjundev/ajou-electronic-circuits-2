@@ -8,6 +8,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from check_md import check_body, check_file, check_netlist_line, main  # noqa: E402
+from check_md import check_workbook_sections, split_sections, split_subsections  # noqa: E402
 
 VALID_MD = """---
 id: E9.01
@@ -325,6 +326,77 @@ class CheckBodyTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as t:
             errors = check_body(body, Path(t) / "Q2.md", "기출")
         self.assertTrue(any("'- 배치:' bullet 없음" in e for e in errors), errors)
+
+
+WB_BASE = """# 연습문제 9.1 — 제목
+
+## 조건
+- a
+
+## 구할 것
+- b
+
+## 회로 — 없음 (글 문제)
+"""
+WB_ORIGINAL = "## 원문\nRepeat Example 9.1.\n\n"
+WB_HINTS = "\n## 힌트\n### 식 9.5\n> 띠: $R = r_O$\n- 캐스코드\n"
+WB_SOLUTION = "\n## 풀이\n### 소신호\n- $g_m$\n### 답\n$R \\approx 1$\n"
+
+
+def wb_body(original=True, hints=True, solution=True):
+    head, rest = WB_BASE.split("\n\n", 1)
+    body = head + "\n\n" + (WB_ORIGINAL if original else "") + rest
+    return body + (WB_HINTS if hints else "") + (WB_SOLUTION if solution else "")
+
+
+class TestWorkbookSections(unittest.TestCase):
+    def assert_error(self, body, fragment):
+        errors = check_workbook_sections(body)
+        self.assertTrue(any(fragment in e for e in errors), errors)
+
+    def test_valid_all_sections(self):
+        self.assertEqual(check_workbook_sections(wb_body()), [])
+
+    def test_valid_without_workbook_sections(self):
+        self.assertEqual(check_workbook_sections(wb_body(False, False, False)), [])
+
+    def test_original_must_be_first(self):
+        self.assert_error(WB_BASE.replace("## 구할 것", WB_ORIGINAL + "## 구할 것"), "## 원문")
+
+    def test_hint_after_solution_rejected(self):
+        self.assert_error(WB_BASE + WB_SOLUTION + WB_HINTS, "## 힌트, ## 풀이")
+
+    def test_section_after_hints_rejected(self):
+        self.assert_error(WB_BASE + WB_HINTS + "\n## 상속·참조\n- x\n", "## 힌트, ## 풀이")
+
+    def test_empty_section_rejected(self):
+        self.assert_error(WB_BASE + "\n## 힌트\n", "비어 있음")
+
+    def test_solution_must_end_with_answer(self):
+        self.assert_error(WB_BASE + "\n## 풀이\n### 소신호\n- x\n", "### 답")
+
+    def test_two_answers_rejected(self):
+        self.assert_error(WB_BASE + "\n## 풀이\n### 답\n- x\n### 답\n- y\n", "### 답")
+
+    def test_subsection_without_body(self):
+        self.assert_error(WB_BASE + "\n## 힌트\n### 식 9.5\n### 식 9.7\n- y\n", "### 식 9.5: 내용 없음")
+
+    def test_text_before_first_subsection(self):
+        self.assert_error(WB_BASE + "\n## 풀이\n먼저\n### 답\n- x\n", "첫 ### 소절 앞")
+
+    def test_bad_formula_line(self):
+        self.assert_error(WB_BASE + "\n## 힌트\n### 식\n> 띠: R = r_O\n- x\n", "띠 식 줄")
+
+    def test_duplicate_section(self):
+        self.assert_error(WB_BASE + WB_HINTS + WB_HINTS, "두 번")
+
+    def test_split_sections_and_subsections(self):
+        self.assertEqual(split_sections(wb_body())[0], ("원문", "Repeat Example 9.1."))
+        self.assertEqual(split_subsections("앞\n### a\nx\n### b\ny"), [("", "앞"), ("a", "x"), ("b", "y")])
+
+    def test_check_body_reports_workbook_errors(self):
+        errors = check_body(WB_BASE + "\n## 풀이\n### 소신호\n- x\n", Path("X9.01.md"), "연습문제")
+        self.assertTrue(any("### 답" in e for e in errors), errors)
 
 
 if __name__ == "__main__":
