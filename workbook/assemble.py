@@ -114,7 +114,6 @@ def entry(p, in_file, mode):
         "hints": hints(p),
     }
     if mode == "answers":
-        e["html"].pop("original", None)
         sol = solution(p)
         if sol is not None:
             e["solution"] = sol

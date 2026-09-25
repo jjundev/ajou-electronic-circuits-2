@@ -110,7 +110,9 @@ class TestEntries(unittest.TestCase):
         self.assertEqual(e901["solution"], {
             "steps": [], "answer": r"$R_{out} \approx 328.9\ \text{k}\Omega$ ($V_T \approx 26\ \text{mV}$, 식 9.10)"})
         self.assertNotIn("solution", p905)
-        self.assertTrue(all("original" not in p["html"] for p in data["problems"]))
+        problems = build_data(ids_selection(["E9.01", "P9.05"], "t"), "problems")["problems"]
+        self.assertEqual([p["html"]["original"] for p in data["problems"]],
+                         [p["html"]["original"] for p in problems])
 
     def test_example_answer_has_no_image_markdown(self):
         e = build_data(ids_selection(["E11.03"], "t"), "answers")["problems"][0]

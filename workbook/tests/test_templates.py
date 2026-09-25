@@ -38,8 +38,12 @@ class TestTemplates(unittest.TestCase):
                 self.assertIn("p.book_page != null", t)
                 self.assertNotIn("p.${p.book_page} · ${n}", t)
 
-    def test_original_lang_from_data(self):
-        self.assertIn("p.original_lang || 'en'", read("problem.html"))
+    def test_original_block_in_both_templates(self):
+        for name in ("problem.html", "answer.html"):
+            with self.subTest(name=name):
+                t = read(name)
+                self.assertIn("block('문제 원문', p.html.original, 'original', p.original_lang || 'en')", t)
+                self.assertIn(".original {", t)
 
 
 if __name__ == "__main__":

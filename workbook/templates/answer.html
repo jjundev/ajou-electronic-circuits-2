@@ -187,6 +187,14 @@ a:focus-visible { outline: .5mm solid var(--focus); outline-offset: .5mm; }
   background: none; color: var(--muted);
 }
 .prose code { font-size: .92em; }
+.prose p { margin: 0; }
+
+/* 문제 원문: 맨 위, 조건·구할 것과 구분되게 가는 선 아래 한 단계 작게 (문제지와 같음) */
+.original {
+  font-size: .95em; line-height: 1.45; color: var(--ink);
+  word-break: normal; overflow-wrap: break-word; hyphens: auto;
+  padding-bottom: 3mm; border-bottom: .25mm solid var(--rule);
+}
 
 .work {
   flex: 1; min-width: 0;
@@ -489,9 +497,11 @@ function figureImg(f) {
   return img;
 }
 
-function block(label, html, cls) {
+function block(label, html, cls, lang) {
   const b = el('section', 'block');
-  b.append(txt('div', 'block-label', label), el('div', `prose ${cls}`, breakEquations(html)));
+  const body = el('div', `prose ${cls}`, breakEquations(html));
+  if (lang) body.lang = lang;
+  b.append(txt('div', 'block-label', label), body);
   return b;
 }
 
@@ -558,6 +568,7 @@ function problemPage(p, n, total) {
 
   const row = el('div', 'page-row');
   const panel = el('div', 'panel');
+  if (p.html.original) panel.append(block('문제 원문', p.html.original, 'original', p.original_lang || 'en'));   // 원문은 맨 처음
   panel.append(block('조건', p.html.conditions, 'conditions'), block('구할 것', p.html.ask, 'ask-box'));
   const center = el('div', 'page-center');
   const figs = p.figures || [];
