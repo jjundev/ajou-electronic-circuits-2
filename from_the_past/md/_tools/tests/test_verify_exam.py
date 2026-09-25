@@ -1,4 +1,5 @@
 import io
+import os
 import sys
 import tempfile
 import unittest
@@ -117,6 +118,27 @@ class VerifyTest(unittest.TestCase):
         nfd = Path(unicodedata.normalize("NFD", str(self.exam)))
         self.assertEqual(verify(nfd, recrop=True), [])
 
+    def test_errors_in_numeric_order(self):
+        for n in (7, 10):
+            q = VALID_Q1.replace("2021-1_중간-Q1", f"2021-1_중간-Q{n}").replace('number: "1"', f'number: "{n}"') \
+                .replace("# 기출 2021-1 중간 1 — 서술형\n", "") + "\n![x](figures/none.png)\n"
+            (self.exam / f"Q{n}.md").write_text(q, encoding="utf-8")
+        errors = verify(self.exam)
+        for fragment in ("제목 줄", "깨진 이미지 링크"):
+            ids = [e.split(":", 1)[0] for e in errors if fragment in e]
+            self.assertEqual(ids, ["2021-1_중간-Q7", "2021-1_중간-Q10"], errors)
+
+    def test_recrop_bad_entry_no_python_message(self):
+        (self.exam / "figures" / "figures.yaml").write_text(
+            FIGURES_YAML.replace("pdf: ../../../src/a.pdf, ", "")
+            + '  "Q3": "문자열 항목"\n', encoding="utf-8")
+        errors = verify(self.exam, recrop=True)
+        self.assertHas(errors, "figures.yaml Q2: pdf 경로가 없음")
+        for e in errors:
+            self.assertNotIn("item assignment", e)
+            self.assertNotIn("('pdf')", e)
+            self.assertNotIn("KeyError", e)
+
 
 class MainTest(unittest.TestCase):
     def test_ok_and_usage(self):
@@ -127,6 +149,18 @@ class MainTest(unittest.TestCase):
             self.assertIn("오류 0개", out.getvalue())
             with redirect_stderr(io.StringIO()):
                 self.assertEqual(main(["verify_exam.py"]), 2)
+
+    def test_dot_path_prints_folder_name(self):
+        cwd = os.getcwd()
+        with tempfile.TemporaryDirectory() as t:
+            exam = make_full_exam(Path(t))
+            try:
+                os.chdir(exam)
+                with redirect_stdout(io.StringIO()) as out:
+                    self.assertEqual(main(["verify_exam.py", "."]), 0)
+            finally:
+                os.chdir(cwd)
+            self.assertIn("2021-1_중간", out.getvalue())
 
 
 if __name__ == "__main__":

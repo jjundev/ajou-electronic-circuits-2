@@ -75,6 +75,23 @@ class MainTest(unittest.TestCase):
                 self.assertEqual(main(["make_exam_index.py", str(exam)]), 0)
             self.assertEqual((exam / "README.md").read_text(encoding="utf-8"), build_exam_index(exam))
 
+    def test_broken_frontmatter_is_error_without_writing(self):
+        with tempfile.TemporaryDirectory() as t:
+            exam = make_exam(Path(t), {"Q1.md": "frontmatter 없음\n", "exam.yaml": EXAM_YAML})
+            with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()) as err:
+                self.assertEqual(main(["make_exam_index.py", str(exam)]), 1)
+            self.assertIn("ERROR", err.getvalue())
+            self.assertIn("check_exam.py", err.getvalue())
+            self.assertFalse((exam / "README.md").exists())
+
+    def test_non_int_points_keeps_old_readme(self):
+        with tempfile.TemporaryDirectory() as t:
+            exam = make_exam(Path(t), {"Q1.md": VALID_Q1.replace("points: 20", "points: 스무"),
+                                       "exam.yaml": EXAM_YAML, "README.md": "기존\n"})
+            with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
+                self.assertEqual(main(["make_exam_index.py", str(exam)]), 1)
+            self.assertEqual((exam / "README.md").read_text(encoding="utf-8"), "기존\n")
+
     def test_missing_exam_yaml(self):
         with tempfile.TemporaryDirectory() as t:
             exam = make_exam(Path(t), {"Q1.md": VALID_Q1})
