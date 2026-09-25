@@ -31,7 +31,10 @@ def problem_mds(folder):
     folder = Path(folder)
     if not folder.is_dir():
         raise SourceError(f"폴더 없음: {folder}")
-    return sorted(p for p in folder.rglob("*.md") if p.name != "README.md")
+    mds = sorted(p for p in folder.rglob("*.md") if p.name != "README.md")
+    if not mds:
+        raise SourceError(f"문제 md 없음: {folder}")
+    return mds
 
 
 def read_md(md):
@@ -74,6 +77,8 @@ def render(mds, out, dpi=200):
             raise SourceError(f"원본 PDF 없음: {pdf}")
         first = int(meta["pdf_page"])
         with fitz.open(pdf) as doc:
+            if not 1 <= first <= doc.page_count:
+                raise SourceError(f"pdf_page {first}가 범위 밖 (1–{doc.page_count}): {md}")
             for page_no in (first, first + 1):
                 if page_no > doc.page_count:
                     continue
@@ -120,7 +125,7 @@ def main(argv):
         else:
             for f in render(args.mds, args.out, args.dpi):
                 print(f)
-    except (SourceError, KeyError, OSError) as e:
+    except (SourceError, KeyError, ValueError, OSError, RuntimeError) as e:
         msg = e.args[0] if isinstance(e, SourceError) else f"{type(e).__name__}: {e}"
         print(f"ERROR {msg}", file=sys.stderr)
         return 1

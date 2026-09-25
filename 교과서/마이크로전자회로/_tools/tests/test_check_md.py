@@ -415,6 +415,10 @@ class TestWorkbookSections(unittest.TestCase):
         self.assertTrue(any("이미지" in e for e in errors), errors)
         self.assertTrue(any("### 소절" in e for e in errors), errors)
 
+    def test_original_marker_mid_parenthesis_rejected(self):
+        body = wb_body().replace("Repeat Example 9.1.", "Find the gain (see 원문의 Fig. 9.3 caption).")
+        self.assert_error(body, "작성자 표시")
+
 
 if __name__ == "__main__":
     unittest.main()

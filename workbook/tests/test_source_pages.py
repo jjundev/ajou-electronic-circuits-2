@@ -61,6 +61,12 @@ class TestPending(Base):
         with self.assertRaises(SourceError):
             pending(self.root / "ch99")
 
+    def test_folder_without_problem_md_raises(self):
+        (self.ch / "figures").mkdir(parents=True)
+        (self.ch / "README.md").write_text("# 9장\n", encoding="utf-8")
+        with self.assertRaises(SourceError):
+            pending(self.ch)
+
     def test_main_missing_exit_code(self):
         write_md(self.ch / "예제/E9.01.md", "E9.01", "예제", 2)
         code, out, err = run(["missing", str(self.ch)])
@@ -104,6 +110,25 @@ class TestRender(Base):
         code, _, err = run(["render", str(md), "--out", str(self.out)])
         self.assertEqual(code, 1)
         self.assertIn("ERROR 원본 PDF 없음", err)
+
+    def test_page_out_of_range_is_error(self):
+        write_pdf(self.root / "9장.pdf")
+        for page in (0, 4):
+            with self.subTest(page=page):
+                md = write_md(self.ch / "장말문제/P9.01.md", "P9.01", "장말문제", page)
+                code, _, err = run(["render", str(md), "--out", str(self.out)])
+                self.assertEqual(code, 1)
+                self.assertIn("ERROR pdf_page", err)
+
+    def test_bad_page_value_and_corrupt_pdf_are_error_lines(self):
+        md = write_md(self.ch / "장말문제/P9.01.md", "P9.01", "장말문제", "abc")
+        write_pdf(self.root / "9장.pdf")
+        code, _, err = run(["render", str(md), "--out", str(self.out)])
+        self.assertEqual((code, err.startswith("ERROR ")), (1, True), err)
+        (self.root / "9장.pdf").write_bytes(b"not a pdf")
+        md = write_md(self.ch / "장말문제/P9.01.md", "P9.01", "장말문제", 1)
+        code, _, err = run(["render", str(md), "--out", str(self.out)])
+        self.assertEqual((code, err.startswith("ERROR ")), (1, True), err)
 
 
 if __name__ == "__main__":

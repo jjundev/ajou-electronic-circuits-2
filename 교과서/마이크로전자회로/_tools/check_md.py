@@ -42,7 +42,7 @@ WORKBOOK_SECTIONS = ("원문", "힌트", "풀이")
 WORKBOOK_TAIL = ("힌트", "풀이")
 # 원문 절은 PDF에 그대로 나온다(작성자 표시를 지우지 않음). 수식을 가린 뒤 검사한다.
 ORIGINAL_MATH_RE = re.compile(r"\$\$.+?\$\$|\$[^$]+?\$", re.DOTALL)
-ORIGINAL_MARKER_RE = re.compile(r"원문에 없음|\(원문의 |보조 출처")
+ORIGINAL_MARKER_RE = re.compile(r"원문에 없음|보조 출처|\([^()\n]*원문의 ")
 SINGLE_EMPHASIS_RE = re.compile(r"(?<![*\\])\*(?![*\s])[^*\n]+?(?<![*\s])\*(?!\*)")
 
 
