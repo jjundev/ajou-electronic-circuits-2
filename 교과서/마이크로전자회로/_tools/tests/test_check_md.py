@@ -398,6 +398,23 @@ class TestWorkbookSections(unittest.TestCase):
         errors = check_body(WB_BASE + "\n## 풀이\n### 소신호\n- x\n", Path("X9.01.md"), "연습문제")
         self.assertTrue(any("### 답" in e for e in errors), errors)
 
+    def test_original_author_marker_rejected(self):
+        body = wb_body().replace("Repeat Example 9.1.", "Repeat Example 9.1 (원문에 없음).")
+        self.assert_error(body, "작성자 표시")
+
+    def test_original_single_emphasis_rejected(self):
+        self.assert_error(wb_body().replace("Repeat Example 9.1.", "a *higher* gain"), "기울임")
+
+    def test_original_bold_and_math_star_allowed(self):
+        body = wb_body().replace("Repeat Example 9.1.", "a **higher** gain with $V^*$ and $a * b$.")
+        self.assertEqual(check_workbook_sections(body), [])
+
+    def test_original_subsection_and_image_rejected(self):
+        body = wb_body().replace("Repeat Example 9.1.", "Text.\n![Fig](a.png)\n### (a)\nMore.")
+        errors = check_workbook_sections(body)
+        self.assertTrue(any("이미지" in e for e in errors), errors)
+        self.assertTrue(any("### 소절" in e for e in errors), errors)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -40,6 +40,10 @@ SUBSECTION_RE = re.compile(r"^### (.+)$", re.MULTILINE)
 HINT_FORMULA_RE = re.compile(r"^> 띠: \$([^$]+)\$$")
 WORKBOOK_SECTIONS = ("원문", "힌트", "풀이")
 WORKBOOK_TAIL = ("힌트", "풀이")
+# 원문 절은 PDF에 그대로 나온다(작성자 표시를 지우지 않음). 수식을 가린 뒤 검사한다.
+ORIGINAL_MATH_RE = re.compile(r"\$\$.+?\$\$|\$[^$]+?\$", re.DOTALL)
+ORIGINAL_MARKER_RE = re.compile(r"원문에 없음|\(원문의 |보조 출처")
+SINGLE_EMPHASIS_RE = re.compile(r"(?<![*\\])\*(?![*\s])[^*\n]+?(?<![*\s])\*(?!\*)")
 
 
 def split_frontmatter(text):
@@ -77,6 +81,22 @@ def split_subsections(text):
     return out
 
 
+def check_original(text):
+    """## 원문 내용: 인쇄된 문장만. 작성자 표시·*기울임*·### 소절·이미지 줄은 쓰지 않는다."""
+    errors = []
+    plain = ORIGINAL_MATH_RE.sub("", text)
+    if ORIGINAL_MARKER_RE.search(plain):
+        errors.append("## 원문: 작성자 표시(원문에 없음, (원문의 …, 보조 출처)는 넣지 않음 — ## 조건에 적음")
+    if SINGLE_EMPHASIS_RE.search(plain):
+        errors.append("## 원문: *기울임* 강조는 쓰지 않음 (PDF에 별표가 그대로 나옴)")
+    lines = text.splitlines()
+    if any(line.startswith("### ") for line in lines):
+        errors.append("## 원문: ### 소절을 두지 않음")
+    if any(line.lstrip().startswith("![") for line in lines):
+        errors.append("## 원문: 이미지 줄을 두지 않음")
+    return errors
+
+
 def check_workbook_sections(body):
     """문제집용 선택 절(## 원문, ## 힌트, ## 풀이)의 위치와 모양. 규칙은 FORMAT.md '문제집용 절'."""
     errors = []
@@ -94,6 +114,8 @@ def check_workbook_sections(body):
     for name in WORKBOOK_SECTIONS:
         if name in content and not content[name].strip():
             errors.append(f"## {name} 절이 비어 있음")
+    if content.get("원문", "").strip():
+        errors += check_original(content["원문"])
     for name in WORKBOOK_TAIL:
         if not content.get(name, "").strip():
             continue
