@@ -20,6 +20,7 @@ REQUIRED = {0: "조건", 1: "구할 것", 3: "회로"}
 ANSWER = 4
 HEADING_RE = re.compile(r"^## .+$", re.M)
 IMG_RE = re.compile(r"!\[[^\]]*\]\(([^)\s]+)\)")
+FIG_ID_RE = re.compile(r"^\d+\.\d+$")
 H1_RE = re.compile(r"^# (.+) — 문제 인덱스$", re.M)
 
 
@@ -58,18 +59,38 @@ def check_figures(ch_dir, docs):
     yaml_path = fig_dir / "figures.yaml"
     if not yaml_path.exists():
         return ["figures/figures.yaml 없음"]
+    try:
+        spec = yaml.safe_load(yaml_path.read_text(encoding="utf-8")) or {}
+    except yaml.YAMLError as e:
+        return [f"figures.yaml 읽기 실패 ({e})"]
+    if not isinstance(spec, dict):
+        return ["figures.yaml 최상위가 매핑(키: 값)이 아님"]
+    figures = spec.get("figures") or {}
+    if not isinstance(figures, dict):
+        return ['figures.yaml의 figures가 매핑("id": {...})이 아님']
     errors = []
-    figures = (yaml.safe_load(yaml_path.read_text(encoding="utf-8")) or {}).get("figures") or {}
+    yaml_ids = set()
     for key in figures:
         if not isinstance(key, str):
             errors.append(f"figures.yaml 그림 id {key!r}는 따옴표로 감싼 문자열이어야 함 (예: \"9.30\")")
-    yaml_ids = {str(k) for k in figures}
+        elif not FIG_ID_RE.match(key):
+            errors.append(f"figures.yaml 그림 id {key!r} 형식 오류 (예: \"9.30\")")
+        else:
+            yaml_ids.add(key)
     used = set()
     for i, (path, fm, body) in sorted(docs.items()):
         links = IMG_RE.findall(body)
         names = {Path(link).name for link in links}
-        for fig in fm.get("figures") or []:
-            fid = str(fig["id"])
+        figs = fm.get("figures") or []
+        if not isinstance(figs, list):
+            errors.append(f"{i}: frontmatter figures가 목록이 아님")
+            figs = []
+        for fig in figs:
+            fid = fig.get("id") if isinstance(fig, dict) else None
+            if fid is None or not FIG_ID_RE.match(str(fid)):
+                errors.append(f"{i}: figures 항목 {fig!r}에 올바른 id가 없음")
+                continue
+            fid = str(fid)
             used.add(fid)
             if figure_filename(fid) not in names:
                 errors.append(f"{i}: 그림 {fid} 이미지 링크 없음")
@@ -159,13 +180,20 @@ def verify(ch_dir, recrop=False):
     docs, errors = load_docs(ch_dir)
     if not docs and not errors:
         return ["문제 md가 없음"], []
-    numbering_errors, infos = check_numbering(docs)
-    errors += numbering_errors
-    errors += check_figures(ch_dir, docs)
-    errors += check_structure(docs)
-    errors += check_readme(ch_dir)
+    infos = []
+    checks = [("check_numbering", lambda: check_numbering(docs)),
+              ("check_figures", lambda: (check_figures(ch_dir, docs), [])),
+              ("check_structure", lambda: (check_structure(docs), [])),
+              ("check_readme", lambda: (check_readme(ch_dir), []))]
     if recrop:
-        errors += check_recrop(ch_dir)
+        checks.append(("check_recrop", lambda: (check_recrop(ch_dir), [])))
+    for name, run in checks:
+        try:  # 예상 못 한 입력 하나가 traceback으로 나머지 보고를 막지 않게
+            found_errors, found_infos = run()
+        except Exception as e:
+            found_errors, found_infos = [f"{name} 실패 ({e!r})"], []
+        errors += found_errors
+        infos += found_infos
     return errors, infos
 
 

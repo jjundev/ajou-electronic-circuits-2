@@ -6,6 +6,7 @@ import tempfile
 import unittest
 from contextlib import redirect_stdout
 from pathlib import Path
+from unittest.mock import patch
 
 import fitz
 
@@ -214,6 +215,46 @@ class RecropTest(ChapterCase):
     def test_recrop_missing_pdf_is_error(self):
         (self.root / "book.pdf").unlink()
         self.assertError("다시 자르기 실패", recrop=True)
+
+
+class MalformedFiguresTest(ChapterCase):
+    def set_yaml(self, text):
+        (self.ch / "figures" / "figures.yaml").write_text(text, encoding="utf-8")
+
+    def test_yaml_syntax_error(self):
+        self.set_yaml("pdf: [\n")
+        self.assertError("figures.yaml 읽기 실패")
+
+    def test_yaml_top_level_not_mapping(self):
+        self.set_yaml("- a\n- b\n")
+        self.assertError("figures.yaml", "매핑")
+
+    def test_figures_not_mapping(self):
+        self.set_yaml('pdf: ../../book.pdf\nfigures: "9.2"\n')
+        self.assertError("figures", "매핑")
+
+    def test_integer_figure_id(self):
+        self.set_yaml(FIGURES_YAML + "  9: {pdf_page: 1, bbox: [0, 0, 10, 10]}\n")
+        self.assertError("9", "따옴표")
+
+    def test_figure_id_without_dot(self):
+        self.set_yaml(FIGURES_YAML + '  "9-2": {pdf_page: 1, bbox: [0, 0, 10, 10]}\n')
+        self.assertError("9-2", "형식")
+
+    def test_md_figure_entry_without_id(self):
+        text = make_md("P9.02").replace("figures: []", "figures:\n  - {role: problem, panels: []}")
+        write_md(self.ch, "P9.02", text=text)
+        self.assertError("P9.02", "id")
+
+    def test_md_figures_not_list(self):
+        text = make_md("P9.02").replace("figures: []", 'figures: "9.2"')
+        write_md(self.ch, "P9.02", text=text)
+        self.assertError("P9.02", "figures")
+
+    def test_unexpected_exception_becomes_error_line(self):
+        with patch("verify_chapter.check_structure", side_effect=RuntimeError("boom")):
+            errors, _ = verify(self.ch)
+        self.assertTrue(any("check_structure" in e and "boom" in e for e in errors), errors)
 
 
 class CliTest(ChapterCase):
