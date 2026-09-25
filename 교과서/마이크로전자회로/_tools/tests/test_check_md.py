@@ -7,7 +7,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from check_md import check_file, check_netlist_line, main  # noqa: E402
+from check_md import check_body, check_file, check_netlist_line, main  # noqa: E402
 
 VALID_MD = """---
 id: E9.01
@@ -290,6 +290,41 @@ class MainTest(unittest.TestCase):
             self.assertIn("2개 파일", text)
             self.assertNotIn("E9.01.md:", text)
             self.assertIn("E9.02.md", text)
+
+
+BODY_NO_ANSWER = """# 기출 2021-1 중간 2 — 테스트
+
+## 조건
+- I_D = 1 mA
+
+## 구할 것
+- (1) R_out
+
+## 회로 — 그림
+```spice
+M1  out  Vin  0  nmos
+```
+- 단자: Vin = 입력 (개방 원)
+- 표시: 노드 라벨 Vin
+- 배치: M1 하나
+"""
+
+
+class CheckBodyTest(unittest.TestCase):
+    def test_exam_kind_needs_no_answer(self):
+        with tempfile.TemporaryDirectory() as t:
+            self.assertEqual(check_body(BODY_NO_ANSWER, Path(t) / "Q2.md", "기출"), [])
+
+    def test_example_kind_needs_answer(self):
+        with tempfile.TemporaryDirectory() as t:
+            errors = check_body(BODY_NO_ANSWER, Path(t) / "E9.01.md", "예제")
+        self.assertIn("예제에 절 누락: ## 답 (검증용)", errors)
+
+    def test_missing_bullet_reported(self):
+        body = BODY_NO_ANSWER.replace("- 배치: M1 하나\n", "")
+        with tempfile.TemporaryDirectory() as t:
+            errors = check_body(body, Path(t) / "Q2.md", "기출")
+        self.assertTrue(any("'- 배치:' bullet 없음" in e for e in errors), errors)
 
 
 if __name__ == "__main__":

@@ -55,38 +55,9 @@ def check_netlist_line(line):
     return f"넷리스트 문법 오류: {code!r}"
 
 
-def check_file(path, ch_dir):
-    errors, warnings = [], []
-    try:
-        meta, body = split_frontmatter(path.read_text(encoding="utf-8"))
-    except (ValueError, yaml.YAMLError) as e:
-        return [str(e)], warnings
-
-    missing = [k for k in REQUIRED_KEYS if k not in meta]
-    if missing:
-        return [f"frontmatter 키 누락: {', '.join(missing)}"], warnings
-
-    m = ID_RE.match(str(meta["id"]))
-    if not m:
-        return [f"id 형식 오류: {meta['id']!r} (예: E9.01)"], warnings
-    kind = KIND_BY_PREFIX[m.group(1)]
-    expected_number = f"{int(m.group(2))}.{int(m.group(3))}"
-    if not isinstance(meta["number"], str):
-        errors.append(f'number {meta["number"]!r} 는 따옴표로 감싼 문자열이어야 함 (예: "{expected_number}")')
-    elif meta["number"] != expected_number:
-        errors.append(f"number {meta['number']!r} 가 id {meta['id']} 와 안 맞음 (기대: \"{expected_number}\")")
-    if meta["kind"] != kind:
-        errors.append(f"kind {meta['kind']!r} 가 id 접두어와 안 맞음 (기대: {kind})")
-    if path.stem != meta["id"]:
-        errors.append(f"파일명 {path.name} 이 id {meta['id']} 와 다름")
-    if path.parent.name != kind:
-        errors.append(f"폴더 {path.parent.name} 이 kind {kind} 와 다름")
-    if kind == "장말문제":
-        if meta.get("difficulty") not in (0, 1, 2):
-            errors.append("장말문제 difficulty 는 0, 1, 2 중 하나")
-        if not isinstance(meta.get("sol"), bool):
-            errors.append("장말문제 sol 은 true/false")
-
+def check_body(body, path, kind):
+    """본문 절, 넷리스트, bullet, 이미지 링크를 검사한다. 기출 검사기(from_the_past/md/_tools)도 이 함수를 쓴다."""
+    errors = []
     headings = [l.strip() for l in body.splitlines() if l.startswith("## ")]
     for h in ("## 조건", "## 구할 것"):
         if h not in headings:
@@ -124,6 +95,42 @@ def check_file(path, ch_dir):
     for link in IMAGE_RE.findall(body):
         if not (path.parent / link).exists():
             errors.append(f"이미지 없음: {link}")
+    return errors
+
+
+def check_file(path, ch_dir):
+    errors, warnings = [], []
+    try:
+        meta, body = split_frontmatter(path.read_text(encoding="utf-8"))
+    except (ValueError, yaml.YAMLError) as e:
+        return [str(e)], warnings
+
+    missing = [k for k in REQUIRED_KEYS if k not in meta]
+    if missing:
+        return [f"frontmatter 키 누락: {', '.join(missing)}"], warnings
+
+    m = ID_RE.match(str(meta["id"]))
+    if not m:
+        return [f"id 형식 오류: {meta['id']!r} (예: E9.01)"], warnings
+    kind = KIND_BY_PREFIX[m.group(1)]
+    expected_number = f"{int(m.group(2))}.{int(m.group(3))}"
+    if not isinstance(meta["number"], str):
+        errors.append(f'number {meta["number"]!r} 는 따옴표로 감싼 문자열이어야 함 (예: "{expected_number}")')
+    elif meta["number"] != expected_number:
+        errors.append(f"number {meta['number']!r} 가 id {meta['id']} 와 안 맞음 (기대: \"{expected_number}\")")
+    if meta["kind"] != kind:
+        errors.append(f"kind {meta['kind']!r} 가 id 접두어와 안 맞음 (기대: {kind})")
+    if path.stem != meta["id"]:
+        errors.append(f"파일명 {path.name} 이 id {meta['id']} 와 다름")
+    if path.parent.name != kind:
+        errors.append(f"폴더 {path.parent.name} 이 kind {kind} 와 다름")
+    if kind == "장말문제":
+        if meta.get("difficulty") not in (0, 1, 2):
+            errors.append("장말문제 difficulty 는 0, 1, 2 중 하나")
+        if not isinstance(meta.get("sol"), bool):
+            errors.append("장말문제 sol 은 true/false")
+
+    errors += check_body(body, path, kind)
 
     figures = meta["figures"] or []
     if not isinstance(figures, list):
