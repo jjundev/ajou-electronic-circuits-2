@@ -61,13 +61,14 @@ def pending(folder, ledger=None):
 
 
 def read_ledger(path):
-    """힌트 판정 원장 → {id: 힌트 개수(없음 = 0)}. 파일이 없으면 빈 원장. '- '로 시작하지 않는 줄은 무시한다."""
+    """힌트 판정 원장 → {id: 힌트 개수(없음 = 0)}. 파일이 없으면 빈 원장.
+    목록 기호(-, *)로 시작하거나 '|'가 든 줄은 모두 판정 줄로 보고 형식을 검사한다. 나머지(제목, 빈 줄)는 무시한다."""
     path = Path(path)
     if not path.exists():
         return {}
     ledger = {}
     for n, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
-        if not line.startswith("- "):
+        if not (line.lstrip().startswith(("-", "*")) or "|" in line):
             continue
         m = LEDGER_LINE_RE.match(line.rstrip())
         if not m:

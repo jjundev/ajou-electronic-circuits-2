@@ -55,4 +55,4 @@ python3 workbook/source_pages.py render <md…> --out /tmp/pages                
 python3 workbook/source_pages.py next 교과서/마이크로전자회로/ch10 --ledger docs/superpowers/reports/ch10/hints-ledger.md --size 15   # 힌트 판정 안 된 md
 python3 workbook/source_pages.py missing 교과서/마이크로전자회로/ch10 --ledger docs/superpowers/reports/ch10/hints-ledger.md          # 남은 것 + MISMATCH
 ```
-힌트 판정 원장의 줄 형식은 `- <id> | 힌트 <1|2> | <이유>` 또는 `- <id> | 없음 | <이유>`다. 힌트는 없어도 되는 절이라, 검토가 끝났는지는 md가 아니라 원장으로 판단한다.
+힌트 판정 원장의 줄 형식은 `- <id> | 힌트 <1|2> | <이유>` 또는 `- <id> | 없음 | <이유>`다. 목록 기호나 `|`가 든 줄은 모두 이 형식이어야 한다(틀리면 `ERROR`). 힌트는 없어도 되는 절이라, 검토가 끝났는지는 md가 아니라 원장으로 판단한다.

@@ -104,6 +104,11 @@ class TestLedger(Base):
         with self.assertRaises(SourceError):
             read_ledger(self.ledger("- E9.01 | 아마 | 모름\n"))
 
+    def test_malformed_list_line_raises(self):
+        for line in ("-E9.01 | 없음 | x", "  - E9.01 | 없음 | x", "* E9.01 | 없음 | x", "E9.01 | 없음 | x"):
+            with self.subTest(line=line), self.assertRaises(SourceError):
+                read_ledger(self.ledger(f"# 원장\n\n{line}\n"))
+
     def test_duplicate_id_raises(self):
         with self.assertRaises(SourceError):
             read_ledger(self.ledger("- E9.01 | 없음 | a\n- E9.01 | 힌트 1 | b\n"))
