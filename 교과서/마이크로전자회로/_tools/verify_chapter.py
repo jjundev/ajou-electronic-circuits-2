@@ -15,9 +15,10 @@ from check_md import ID_RE, KIND_BY_PREFIX, md_files, split_frontmatter
 from crop_figures import crop_all, figure_filename
 from make_index import build_index
 
-SECTION_ORDER = ["## 조건", "## 구할 것", "## 상속·참조", "## 회로", "## 답"]
-REQUIRED = {0: "조건", 1: "구할 것", 3: "회로"}
-ANSWER = 4
+# 문제집용 절(## 원문, ## 힌트, ## 풀이)은 선택이다. 모양은 check_md.check_workbook_sections가 본다.
+SECTION_ORDER = ["## 원문", "## 조건", "## 구할 것", "## 상속·참조", "## 회로", "## 답", "## 힌트", "## 풀이"]
+REQUIRED = {1: "조건", 2: "구할 것", 4: "회로"}
+ANSWER = 5
 HEADING_RE = re.compile(r"^## .+$", re.M)
 IMG_RE = re.compile(r"!\[[^\]]*\]\(([^)\s]+)\)")
 FIG_ID_RE = re.compile(r"^\d+\.\d+$")

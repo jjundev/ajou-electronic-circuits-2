@@ -5,6 +5,7 @@
 - 목록 항목 아래 들여쓴 목록 아닌 줄(`  $$…$$`, `  설명`)은 그 항목에 공백으로 이어 붙인다
 - 들여쓰지 않은 일반 줄은 문단(<p>)이고, 빈 줄이 블록을 나눈다
 - `**굵게**` → <b> (수식 밖만)
+- 이미지 줄(`![…](…)`)은 뺀다
 수식($…$, $$…$$)은 그대로 둔다(템플릿의 KaTeX auto-render가 그림). & < > 는 수식 안팎 모두
 이스케이프한다. KaTeX는 텍스트 노드를 읽으므로 수식 안의 &lt; 도 < 로 읽힌다.
 """
@@ -14,6 +15,7 @@ import re
 MATH_RE = re.compile(r"\$\$.+?\$\$|\$[^$]+?\$", re.DOTALL)
 BOLD_RE = re.compile(r"\*\*(.+?)\*\*")
 ITEM_RE = re.compile(r"^( *)- (.*)$")
+IMAGE_LINE_RE = re.compile(r"^\s*!\[[^\]]*\]\([^)]*\)\s*$")
 
 
 def _plain(text):
@@ -51,6 +53,8 @@ def to_html(md):
     for raw in md.splitlines():
         line = raw.rstrip()
         cur = blocks[-1] if blocks else None
+        if IMAGE_LINE_RE.match(line):             # 이미지는 PDF에 넣지 않는다 (문제 그림은 figures로 따로 들어감)
+            continue
         if not line.strip():
             blocks.append(None)
             continue

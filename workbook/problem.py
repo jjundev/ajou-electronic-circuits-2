@@ -23,6 +23,9 @@ MATH_RE = re.compile(r"\$\$.+?\$\$|\$[^$]+?\$", re.DOTALL)
 # 작성자 보충 표시: 한 줄 안의 (…) 가운데 안쪽 괄호가 없고 이 말이 든 것
 MARKER_RE = re.compile(r"[ \t]*\([^()\n]*(?:원문에 없음|원문의 |보조 출처)[^()\n]*\)")
 MASK_RE = re.compile(r"\x00(\d+)\x00")
+# 값을 적은 줄: =, %, ≈ 가 있거나 수식 안에 첨자가 아닌 숫자가 있음 ($0.5\ \text{mA}$는 값, $Q_1$은 아님)
+VALUE_RE = re.compile(r"=|%|\\approx|≈")
+NUMBER_IN_MATH_RE = re.compile(r"(?<![\w{])\d")
 REQUIRED_KEYS = ("id", "kind", "number")
 
 
@@ -89,17 +92,27 @@ def strip_markers(md):
     return MASK_RE.sub(lambda m: maths[int(m.group(1))], masked)
 
 
+def _states_value(line):
+    return bool(VALUE_RE.search(line)) or any(NUMBER_IN_MATH_RE.search(m.group(0)) for m in MATH_RE.finditer(line))
+
+
 def drop_circuit_lines(md):
-    """'- 회로:' 줄과 그 아래 들여쓴 줄을 뺀다 (문제 그림이 PDF에 함께 나오므로)."""
-    out, skipping = [], False
-    for line in md.splitlines():
-        if line.startswith("- 회로:"):
-            skipping = True
+    """'- 회로:' 줄과 그 아래 들여쓴 줄을 뺀다 (문제 그림이 PDF에 함께 나오므로).
+    다만 그 묶음에 값(=, %, ≈, 수식 속 숫자)이 적혀 있으면 그림에 없는 조건일 수 있으므로 그대로 둔다."""
+    lines = md.splitlines()
+    out, i = [], 0
+    while i < len(lines):
+        if not lines[i].startswith("- 회로:"):
+            out.append(lines[i])
+            i += 1
             continue
-        if skipping and line.startswith(" "):
-            continue
-        skipping = False
-        out.append(line)
+        j = i + 1
+        while j < len(lines) and lines[j].startswith(" "):
+            j += 1
+        block = lines[i:j]
+        if any(_states_value(line) for line in block):
+            out += block
+        i = j
     return "\n".join(out)
 
 

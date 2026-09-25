@@ -159,6 +159,18 @@ class StructureTest(ChapterCase):
                                              "## 회로 — 없음 (그림 없는 글 문제)"])
         self.assertError("P9.02", "알 수 없는 절", "메모")
 
+    def test_workbook_sections_accepted(self):
+        write_md(self.ch, "P9.02", sections=["## 원문", "## 조건", "## 구할 것",
+                                             "## 회로 — 없음 (그림 없는 글 문제)",
+                                             "## 힌트\n### 식 9.5", "## 풀이\n### 답"])
+        errors, _ = verify(self.ch)
+        self.assertFalse([e for e in errors if "P9.02" in e and ("알 수 없는 절" in e or "순서" in e)], errors)
+
+    def test_workbook_section_order(self):
+        write_md(self.ch, "P9.02", sections=["## 힌트\n### 식 9.5", "## 조건", "## 구할 것",
+                                             "## 회로 — 없음 (그림 없는 글 문제)"])
+        self.assertError("P9.02", "순서")
+
     def test_example_without_answer(self):
         write_md(self.ch, "E9.01", figures=["9.2"],
                  sections=["## 조건", "## 구할 것", "## 회로 — Fig 9.2\n![Fig 9.2](../figures/fig9-02.png)"])

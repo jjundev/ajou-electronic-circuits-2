@@ -153,6 +153,18 @@ class TestHtmlFields(ProblemCase):
             with self.subTest(src=src):
                 self.assertEqual(strip_markers(src), want)
 
+    def test_circuit_line_with_value_kept(self):
+        kept = [
+            "- 회로: Fig 9.79의 전류 거울, $I_1 = 0.5\\ \\text{mA}$를 공급\n- 값",
+            "- 회로: Fig 9.50 캐스코드 전류원, 바이어스 전류 $0.5\\ \\text{mA}$로 설계\n- 값",
+            "- 회로: Fig 11.91, $Q_3$가 $Q_1$ 바이어스 전류의 75%를 공급\n- 값",
+            "- 회로: Fig 9.30\n  - $I_{REF} = 0.2\\ \\text{mA}$\n- 값",
+        ]
+        for md in kept:
+            with self.subTest(md=md):
+                self.assertEqual(drop_circuit_lines(md), md)
+        self.assertEqual(drop_circuit_lines("- 회로: Fig 9.13(a) CS 단 ($M_1$, 드레인 저항 $R_D$)\n- 값"), "- 값")
+
     def test_drop_circuit_lines(self):
         self.assertEqual(drop_circuit_lines("- 회로: Fig 1\n  - 설명\n  이어짐\n- 값\n  - 하위"), "- 값\n  - 하위")
 

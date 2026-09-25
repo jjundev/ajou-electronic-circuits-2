@@ -35,6 +35,9 @@ class TestToHtml(unittest.TestCase):
     def test_bold_outside_math_only(self):
         self.assertEqual(to_html("**굵게** $**x**$"), "<p><b>굵게</b> $**x**$</p>")
 
+    def test_image_lines_dropped(self):
+        self.assertEqual(to_html("- a\n![Fig 11.3](../figures/fig11-03.png)\n"), "<ul><li>a</li></ul>")
+
     def test_empty(self):
         self.assertEqual(to_html(""), "")
         self.assertEqual(to_html("\n\n"), "")

@@ -57,7 +57,7 @@
 | `difficulty, sol` | 장말문제는 frontmatter, 나머지는 `null` |
 | `original_lang` | frontmatter `source_lang` |
 | `html.original` | `## 원문`이 있을 때만(문제지). 답안지에서는 뺀다 |
-| `html.conditions` | `## 조건`. 문제 그림이 하나라도 있으면 `- 회로:` 줄과 그 아래 들여쓴 줄을 뺀다. 작성자 표시를 지운다 |
+| `html.conditions` | `## 조건`. 문제 그림이 하나라도 있으면 `- 회로:` 줄과 그 아래 들여쓴 줄을 뺀다. 단 그 묶음에 값(`=`, `%`, `≈`, 수식 속 첨자 아닌 숫자)이 있으면 그림에 없는 조건일 수 있어 남긴다(최종 리뷰에서 P9.60, P11.49가 값을 잃는 것을 발견해 추가). 작성자 표시를 지운다 |
 | `html.ask` | `## 구할 것`. 작성자 표시를 지운다 |
 | `figures[]` | `role: problem` 그림을 id 중복 없이 frontmatter 순서대로. `src`는 PNG base64 data URI, `w_mm`·`h_mm`는 위 공식 |
 | `depends_on[]` | `{id, in_file: 같은 묶음에 있는지}` |

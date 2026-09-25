@@ -112,6 +112,11 @@ class TestEntries(unittest.TestCase):
         self.assertNotIn("solution", p905)
         self.assertTrue(all("original" not in p["html"] for p in data["problems"]))
 
+    def test_example_answer_has_no_image_markdown(self):
+        e = build_data(ids_selection(["E11.03"], "t"), "answers")["problems"][0]
+        self.assertTrue(e["solution"]["answer"])
+        self.assertNotIn("![", e["solution"]["answer"])
+
     def test_exam_entry(self):
         e = build_data(ids_selection(["2023-1_기말-Q1"], "t"), "problems")["problems"][0]
         self.assertEqual((e["kind"], e["number"], e["section"], e["book_page"], e["difficulty"], e["original_lang"]),
