@@ -232,7 +232,7 @@ def check_file(path, ch_dir):
         if fig.get("role") not in FIGURE_ROLES:
             errors.append(f"그림 {fig_id} role 은 problem/answer")
         crop = fig.get("crop")
-        if crop is not None and not (isinstance(crop, str) and CROP_NAME_RE.match(crop)):
+        if crop is not None and not (isinstance(crop, str) and CROP_NAME_RE.fullmatch(crop)):
             errors.append(f"그림 {fig_id} crop {crop!r} 형식 오류 (소문자·숫자만, 예: a)")
             continue
         if not (ch_dir / "figures" / figure_filename(fig_id, crop)).exists():

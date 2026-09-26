@@ -24,6 +24,12 @@ def figure_filename(fig_id: str, crop: str | None = None) -> str:
 def _clip(page, bbox, where):
     if not isinstance(bbox, (list, tuple)) or len(bbox) != 4:
         raise ValueError(f"{where}: bbox {bbox!r} 는 [x0, y0, x1, y1] 네 값이어야 함")
+    for v in bbox:
+        if isinstance(v, bool) or not isinstance(v, (int, float)):
+            raise ValueError(f"{where}: bbox {bbox!r} 에 숫자가 아닌 값 {v!r} 이 있음")
+    x0, y0, x1, y1 = bbox
+    if x1 <= x0 or y1 <= y0:
+        raise ValueError(f"{where}: bbox {bbox!r} 가 뒤집혔거나 넓이 0 (x1<=x0 또는 y1<=y0)")
     rect = fitz.Rect(*bbox)
     if not page.rect.contains(rect):
         raise ValueError(f"{where}: bbox {bbox} 가 쪽 범위 밖 (쪽 크기 {tuple(page.rect)})")
@@ -49,7 +55,7 @@ def crop_all(ch_dir: Path) -> list[Path]:
                 raise ValueError(f"{fig_id}: crops 는 매핑(이름: bbox)이어야 함, 받은 값 {crops!r}")
             jobs = [(None, fig["bbox"])] + list(crops.items())
             for name, bbox in jobs:
-                if name is not None and not (isinstance(name, str) and CROP_NAME_RE.match(name)):
+                if name is not None and not (isinstance(name, str) and CROP_NAME_RE.fullmatch(name)):
                     raise ValueError(f"{fig_id}: 크롭 이름 {name!r} 형식 오류 (소문자·숫자만, 예: a, abc, ce)")
                 where = fig_id if name is None else f"{fig_id} 크롭 {name}"
                 rect = _clip(page, bbox, where)

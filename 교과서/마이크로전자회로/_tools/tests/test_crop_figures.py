@@ -95,6 +95,10 @@ class CropsTest(unittest.TestCase):
             with self.subTest(name=name), self.assertRaisesRegex(ValueError, "크롭 이름"):
                 self.crop(f'  "9.30": {{pdf_page: 1, bbox: [0, 0, 72, 36], crops: {{{name}: [0, 0, 10, 10]}}}}')
 
+    def test_rejects_trailing_newline_crop_name(self):
+        with self.assertRaisesRegex(ValueError, "크롭 이름"):
+            self.crop('  "9.30": {pdf_page: 1, bbox: [0, 0, 72, 36], crops: {"a\\n": [0, 0, 10, 10]}}')
+
     def test_rejects_crop_bbox_wrong_length(self):
         with self.assertRaisesRegex(ValueError, "bbox"):
             self.crop('  "9.30": {pdf_page: 1, bbox: [0, 0, 72, 36], crops: {a: [0, 0, 10]}}')
@@ -106,6 +110,18 @@ class CropsTest(unittest.TestCase):
     def test_rejects_crops_not_mapping(self):
         with self.assertRaisesRegex(ValueError, "crops"):
             self.crop('  "9.30": {pdf_page: 1, bbox: [0, 0, 72, 36], crops: [0, 0, 10, 10]}')
+
+    def test_rejects_inverted_bbox(self):
+        with self.assertRaisesRegex(ValueError, "bbox"):
+            self.crop('  "9.30": {pdf_page: 1, bbox: [0, 0, 72, 36], crops: {a: [10, 0, 5, 10]}}')
+
+    def test_rejects_zero_area_bbox(self):
+        with self.assertRaisesRegex(ValueError, "bbox"):
+            self.crop('  "9.30": {pdf_page: 1, bbox: [0, 0, 72, 36], crops: {a: [5, 0, 5, 10]}}')
+
+    def test_rejects_non_numeric_bbox(self):
+        with self.assertRaisesRegex(ValueError, "9.30"):
+            self.crop('  "9.30": {pdf_page: 1, bbox: [0, 0, 72, 36], crops: {a: ["x", 0, 10, 10]}}')
 
 
 if __name__ == "__main__":

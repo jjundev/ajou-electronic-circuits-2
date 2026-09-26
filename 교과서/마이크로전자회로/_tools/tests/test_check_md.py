@@ -213,6 +213,10 @@ class CheckFileTest(unittest.TestCase):
         errors, _ = self.run_crop_check(CROP_MD.replace("crop: a}", "crop: A}"))
         self.assertTrue(any("crop" in e and "형식 오류" in e for e in errors), errors)
 
+    def test_crop_value_with_trailing_newline_is_error(self):
+        errors, _ = self.run_crop_check(CROP_MD.replace("crop: a}", 'crop: "a\\n"}'))
+        self.assertTrue(any("crop" in e and "형식 오류" in e for e in errors), errors)
+
     def test_missing_crop_png_is_error(self):
         errors, _ = self.run_crop_check(CROP_MD, crop_png=False)
         self.assertTrue(any("그림 파일 없음" in e and "fig9-02-a.png" in e for e in errors), errors)
