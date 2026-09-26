@@ -191,6 +191,34 @@ class CropTest(ChapterCase):
         self.assertError("fig9-02-a.png", "다시 자른 결과와 다름", recrop=True)
 
 
+class AnswerLeakTest(ChapterCase):
+    def write_pair(self, problem_extra="", answer_panels="[b]", problem_panels="[a]", link="fig9-02.png"):
+        e = make_md("E9.01", figures=["9.2"]).replace(
+            '  - {id: "9.2", role: problem, panels: []}',
+            f'  - {{id: "9.2", role: problem, panels: {problem_panels}{problem_extra}}}\n'
+            f'  - {{id: "9.2", role: answer, panels: {answer_panels}}}')
+        e = e.replace("(../figures/fig9-02.png)", f"(../figures/{link})\n![답](../figures/fig9-02.png)")
+        write_md(self.ch, "E9.01", text=e)
+
+    def test_answer_panel_leak_is_error(self):
+        self.write_pair()
+        self.assertError("E9.01", "9.2", "풀이 패널 b", "crop 필요")
+
+    def test_leak_ok_with_crop(self):
+        path = self.ch / "figures" / "figures.yaml"
+        path.write_text(path.read_text(encoding="utf-8").replace(
+            "bbox: [0, 0, 72, 36]}", "bbox: [0, 0, 72, 36], crops: {a: [0, 0, 36, 36]}}"), encoding="utf-8")
+        crop_all(self.ch)
+        self.write_pair(problem_extra=", crop: a", link="fig9-02-a.png")
+        errors, _ = verify(self.ch)
+        self.assertFalse(any(e.startswith("E9.01") and "풀이 패널" in e for e in errors), errors)
+
+    def test_answer_panels_within_problem_panels_ok(self):
+        self.write_pair(answer_panels="[a, b]", problem_panels="[a, b]")
+        errors, _ = verify(self.ch)
+        self.assertFalse(any(e.startswith("E9.01") and "풀이 패널" in e for e in errors), errors)
+
+
 class StructureTest(ChapterCase):
     def test_section_order(self):
         write_md(self.ch, "P9.02", sections=["## 구할 것", "## 조건", "## 회로 — 없음 (그림 없는 글 문제)"])

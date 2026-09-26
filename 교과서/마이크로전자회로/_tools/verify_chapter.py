@@ -122,6 +122,19 @@ def check_figures(ch_dir, docs):
         errors.append(f"PNG 없음: {', '.join(sorted(expected - pngs))} (crop_figures.py 실행)")
     if pngs - expected:
         errors.append(f"figures.yaml에 없는 PNG: {', '.join(sorted(pngs - expected))}")
+    answer_panels = {}
+    for _, fm, _ in docs.values():
+        for fig in fm.get("figures") or []:
+            if isinstance(fig, dict) and fig.get("role") == "answer" and isinstance(fig.get("panels"), list):
+                answer_panels.setdefault(str(fig.get("id")), set()).update(map(str, fig["panels"]))
+    for i, (_, fm, _) in sorted(docs.items()):
+        for fig in fm.get("figures") or []:
+            if not isinstance(fig, dict) or fig.get("role") != "problem" or fig.get("crop") is not None:
+                continue
+            panels = fig.get("panels") if isinstance(fig.get("panels"), list) else []
+            leak = answer_panels.get(str(fig.get("id")), set()) - set(map(str, panels))
+            if leak:
+                errors.append(f"{i}: 그림 {fig.get('id')} 문제 이미지에 풀이 패널 {', '.join(sorted(leak))}이 보임 (crop 필요)")
     return errors
 
 
