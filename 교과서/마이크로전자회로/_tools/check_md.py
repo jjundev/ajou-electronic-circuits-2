@@ -10,7 +10,7 @@ from pathlib import Path
 
 import yaml
 
-from crop_figures import figure_filename
+from crop_figures import CROP_NAME_RE, figure_filename
 
 KIND_BY_PREFIX = {"E": "예제", "X": "연습문제", "P": "장말문제"}
 REQUIRED_KEYS = ["id", "kind", "number", "section", "book_page", "pdf_page",
@@ -231,8 +231,12 @@ def check_file(path, ch_dir):
             continue
         if fig.get("role") not in FIGURE_ROLES:
             errors.append(f"그림 {fig_id} role 은 problem/answer")
-        if not (ch_dir / "figures" / figure_filename(fig_id)).exists():
-            errors.append(f"그림 파일 없음: figures/{figure_filename(fig_id)}")
+        crop = fig.get("crop")
+        if crop is not None and not (isinstance(crop, str) and CROP_NAME_RE.match(crop)):
+            errors.append(f"그림 {fig_id} crop {crop!r} 형식 오류 (소문자·숫자만, 예: a)")
+            continue
+        if not (ch_dir / "figures" / figure_filename(fig_id, crop)).exists():
+            errors.append(f"그림 파일 없음: figures/{figure_filename(fig_id, crop)}")
 
     for dep in meta["depends_on"] or []:
         dm = ID_RE.match(str(dep))

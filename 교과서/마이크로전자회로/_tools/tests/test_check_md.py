@@ -59,6 +59,10 @@ def make_chapter(root: Path, files: dict, with_png: bool = True) -> Path:
     return ch
 
 
+CROP_MD = (VALID_MD.replace("panels: [a]}", "panels: [a], crop: a}")
+           .replace("fig9-02.png)", "fig9-02-a.png)"))
+
+
 class NetlistLineTest(unittest.TestCase):
     def test_valid_lines(self):
         for line in [
@@ -194,6 +198,24 @@ class CheckFileTest(unittest.TestCase):
                                 "{id: 9.20, role: problem, panels: [a]}")
         errors, _ = self.run_check(text)
         self.assertTrue(any("따옴표" in e for e in errors), errors)
+
+    def run_crop_check(self, text, crop_png=True):
+        with tempfile.TemporaryDirectory() as t:
+            ch = make_chapter(Path(t), {"예제/E9.01.md": text})
+            if crop_png:
+                (ch / "figures" / "fig9-02-a.png").write_bytes(b"\x89PNG")
+            return check_file(ch / "예제/E9.01.md", ch)
+
+    def test_crop_file_ok(self):
+        self.assertEqual(self.run_crop_check(CROP_MD), ([], []))
+
+    def test_bad_crop_value_is_error(self):
+        errors, _ = self.run_crop_check(CROP_MD.replace("crop: a}", "crop: A}"))
+        self.assertTrue(any("crop" in e and "형식 오류" in e for e in errors), errors)
+
+    def test_missing_crop_png_is_error(self):
+        errors, _ = self.run_crop_check(CROP_MD, crop_png=False)
+        self.assertTrue(any("그림 파일 없음" in e and "fig9-02-a.png" in e for e in errors), errors)
 
 
 NO_CIRCUIT_SECTION = """## 회로 — Fig 9.2(a)
