@@ -11,11 +11,14 @@ from_the_past/md/
   _tools/check_exam.py        # 파일 단위 형식 검사
   _tools/make_exam_index.py   # frontmatter + exam.yaml → <시험>/README.md
   _tools/verify_exam.py       # 시험 단위 검사 (번호, 그림, 절 순서, exam.yaml, README, --recrop)
+  _tools/schem_style.py       # 다시 그린 그림의 공통 기호·저장
+  _tools/draw_exam.py         # figures/redrawn/*.py → PNG, --compare 대조 시트
   <YYYY>-<학기>_<중간|기말>/
     exam.yaml                 # 시험지 머리 문구, 원본 PDF, 메모
     README.md                 # make_exam_index.py로 생성, 손으로 고치지 않음
     Q<n>.md                   # 문제 번호 그대로 (Q1, Q2, … Q10), 앞에 0을 채우지 않음
     figures/figures.yaml, figures/fig-Q<n>.png
+    figures/redrawn/fig-Q<n>.py, fig-Q<n>.png   # 다시 그린 그림
 ```
 
 ## frontmatter
@@ -62,6 +65,14 @@ figures:
 - 2023 기말은 가려진 곳에 한해 `23-1 기말고사 문제 및 답.pdf`(손정리 노트)를 보조로 쓴다. 그 줄 끝에 `(보조 출처: 손정리 노트)`를 붙인다.
 - 같은 폴더의 `2023 전회2 기말.hwp`에는 일부 회로의 깨끗한 원본 그림이 들어 있다(Q1(b) 확인됨). 손글씨에 가린 회로를 대조할 때 쓸 수 있다. 크롭 원본으로는 쓰지 않는다(`crop_exam.py`는 PDF만 읽는다).
 
+## 다시 그린 그림 (figures/redrawn)
+- 문제집에는 크롭 대신 schemdraw로 다시 그린 그림을 넣는다. 크롭(`figures/fig-Q<n>.png`)은 지우지 않는다. 원본 기록이자 인쇄 폭의 기준이다.
+- 파일: `figures/redrawn/fig-Q<n>.py`(`def draw() -> schemdraw.Drawing`)와 `draw_exam.py`가 만든 `fig-Q<n>.png`. id는 figures.yaml 키와 같다.
+- 연결은 `## 회로` 넷리스트, 모양은 `- 단자:`·`- 표시:`·`- 배치:` bullet을 따른다. 크롭은 배치를 눈으로 참고할 때만 쓰고, `> 참고:` 줄의 손글씨 획은 그리지 않는다.
+- 공통 기호와 저장은 `_tools/schem_style.py`로만 한다(`nmos`, `pmos`, `gate_terminal`, `caption`, `save_png`).
+- 문제집은 다시 그린 그림을 크롭과 같은 폭으로 찍는다. 라벨 글자가 7–11pt를 벗어나면 `draw_exam.py`가 `WARN`을 낸다.
+- md의 이미지 링크는 크롭을 그대로 가리킨다.
+
 ## 텍스트 레이어 (2021)
 2021 PDF는 텍스트를 추출할 수 있지만 그리스 문자(μ, λ, Ω, β)와 일부 기호가 빠진다. 판독은 렌더링한 이미지를 기준으로 하고, pdftotext는 보조로만 쓴다.
 
@@ -70,6 +81,7 @@ figures:
 python3 from_the_past/md/_tools/crop_exam.py from_the_past/md/2021-1_중간
 python3 from_the_past/md/_tools/check_exam.py from_the_past/md/2021-1_중간
 python3 from_the_past/md/_tools/make_exam_index.py from_the_past/md/2021-1_중간
-python3 from_the_past/md/_tools/verify_exam.py from_the_past/md/2021-1_중간 --recrop
+python3 from_the_past/md/_tools/draw_exam.py from_the_past/md/2021-1_중간 [--compare /tmp/sheet.png]
+python3 from_the_past/md/_tools/verify_exam.py from_the_past/md/2021-1_중간 --recrop --redraw
 python3 -m unittest discover -s from_the_past/md/_tools/tests
 ```

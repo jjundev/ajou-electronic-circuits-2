@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """시험 폴더 전체의 정합성을 검사한다. check_exam.py가 파일 하나씩 보는 것을 시험 단위로 보완한다.
 
-사용법: python3 verify_exam.py <시험 폴더> [--recrop]    예) python3 verify_exam.py ../2021-1_중간 --recrop
+사용법: python3 verify_exam.py <시험 폴더> [--recrop] [--redraw]    예) python3 verify_exam.py ../2021-1_중간 --recrop --redraw
 """
 import re
 import sys
@@ -163,7 +163,50 @@ def check_recrop(exam_dir):
     return errors
 
 
-def verify(exam_dir, recrop=False):
+REDRAWN_RE = re.compile(r"^fig-(Q[1-9]\d*(?:-[2-9]|-[1-9]\d+)?)\.(py|png)$")
+
+
+def check_redrawn(exam_dir):
+    """figures/redrawn/: fig-<id>.py와 fig-<id>.png가 짝으로 있고 id가 figures.yaml에 있는지."""
+    red = exam_dir / "figures" / "redrawn"
+    if not red.is_dir():
+        return []
+    spec = yaml.safe_load((exam_dir / "figures" / "figures.yaml").read_text(encoding="utf-8")) or {}
+    yaml_ids = {str(k) for k in (spec.get("figures") or {})}
+    errors, found = [], {"py": set(), "png": set()}
+    for path in sorted(red.iterdir()):
+        if path.name == "__pycache__":
+            continue
+        m = REDRAWN_RE.match(path.name)
+        if not m:
+            errors.append(f"redrawn/{path.name}: 알 수 없는 파일 (fig-Q<n>.py와 fig-Q<n>.png만 둠)")
+            continue
+        found[m.group(2)].add(m.group(1))
+    for i in sorted(found["png"] - found["py"]):
+        errors.append(f"redrawn/{figure_filename(i)}: 짝이 되는 .py 없음")
+    for i in sorted(found["py"] - found["png"]):
+        errors.append(f"redrawn/fig-{i}.py: PNG 없음 (draw_exam.py 실행)")
+    for i in sorted((found["py"] | found["png"]) - yaml_ids):
+        errors.append(f"redrawn/fig-{i}: figures.yaml에 없는 그림")
+    return errors
+
+
+def check_redraw(exam_dir):
+    """redrawn/*.py로 다시 그려 지금 PNG와 바이트가 같은지. schemdraw가 필요해서 여기서만 import한다."""
+    from draw_exam import draw_all
+    red = exam_dir / "figures" / "redrawn"
+    errors = []
+    with tempfile.TemporaryDirectory() as t:
+        written, draw_errors, _ = draw_all(exam_dir, out_dir=t)
+        errors += [f"다시 그리기 실패: {e}" for e in draw_errors]
+        for out in written:
+            current = red / out.name
+            if current.exists() and current.read_bytes() != out.read_bytes():
+                errors.append(f"redrawn/{out.name}: 코드로 다시 그린 결과와 다름 (draw_exam.py 다시 실행)")
+    return errors
+
+
+def verify(exam_dir, recrop=False, redraw=False):
     exam_dir = Path(exam_dir).resolve()
     docs, errors = load_docs(exam_dir)
     if not docs and not errors:
@@ -173,9 +216,12 @@ def verify(exam_dir, recrop=False):
               ("check_figures", lambda: check_figures(exam_dir, docs)),
               ("check_structure", lambda: by_number(check_structure(docs))),
               ("check_exam_yaml", lambda: check_exam_yaml(exam_dir)),
-              ("check_readme", lambda: check_readme(exam_dir))]
+              ("check_readme", lambda: check_readme(exam_dir)),
+              ("check_redrawn", lambda: check_redrawn(exam_dir))]
     if recrop:
         checks.append(("check_recrop", lambda: check_recrop(exam_dir)))
+    if redraw:
+        checks.append(("check_redraw", lambda: check_redraw(exam_dir)))
     for name, run in checks:
         try:  # 예상 못 한 입력 하나가 traceback으로 나머지 보고를 막지 않게
             errors += run()
@@ -185,15 +231,16 @@ def verify(exam_dir, recrop=False):
 
 
 def main(argv):
-    args = [a for a in argv[1:] if a != "--recrop"]
+    flags = ("--recrop", "--redraw")
+    args = [a for a in argv[1:] if a not in flags]
     if len(args) != 1:
-        print("사용법: python3 verify_exam.py <시험 폴더> [--recrop]", file=sys.stderr)
+        print("사용법: python3 verify_exam.py <시험 폴더> [--recrop] [--redraw]", file=sys.stderr)
         return 2
     exam_dir = Path(args[0]).resolve()
     if not exam_dir.is_dir():
         print(f"시험 폴더가 없음: {exam_dir}", file=sys.stderr)
         return 2
-    errors = verify(exam_dir, recrop="--recrop" in argv[1:])
+    errors = verify(exam_dir, recrop="--recrop" in argv[1:], redraw="--redraw" in argv[1:])
     for e in errors:
         print(f"ERROR {e}")
     print(f"{exam_dir}: 오류 {len(errors)}개")

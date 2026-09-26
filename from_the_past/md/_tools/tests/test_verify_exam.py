@@ -8,6 +8,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from crop_exam import crop_all  # noqa: E402
+from draw_exam import draw_all  # noqa: E402
 from exam_fixtures import VALID_Q1, VALID_Q2, make_exam  # noqa: E402
 from make_exam_index import build_exam_index  # noqa: E402
 from verify_exam import main, verify  # noqa: E402
@@ -138,6 +139,55 @@ class VerifyTest(unittest.TestCase):
             self.assertNotIn("item assignment", e)
             self.assertNotIn("('pdf')", e)
             self.assertNotIn("KeyError", e)
+
+
+SIMPLE_FIG = '''import schemdraw.elements as elm
+from schem_style import new_drawing
+
+
+def draw():
+    d = new_drawing()
+    d.add(elm.Resistor().right().label("$R$"))
+    return d
+'''
+
+
+class RedrawnTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.exam = make_full_exam(Path(self.tmp.name))
+        self.red = self.exam / "figures" / "redrawn"
+        self.red.mkdir()
+        (self.red / "fig-Q2.py").write_text(SIMPLE_FIG, encoding="utf-8")
+        draw_all(self.exam)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def assertHas(self, errors, fragment):
+        self.assertTrue(any(fragment in e for e in errors), errors)
+
+    def test_valid_redrawn_passes(self):
+        self.assertEqual(verify(self.exam, recrop=True, redraw=True), [])
+
+    def test_png_without_py(self):
+        (self.red / "fig-Q2.py").unlink()
+        self.assertHas(verify(self.exam), "redrawn/fig-Q2.png: 짝이 되는 .py 없음")
+
+    def test_py_without_png(self):
+        (self.red / "fig-Q2.png").unlink()
+        self.assertHas(verify(self.exam), "redrawn/fig-Q2.py: PNG 없음")
+
+    def test_unknown_id_and_stray_file(self):
+        (self.red / "fig-Q9.py").write_text(SIMPLE_FIG, encoding="utf-8")
+        (self.red / "notes.txt").write_text("x", encoding="utf-8")
+        errors = verify(self.exam)
+        self.assertHas(errors, "redrawn/fig-Q9: figures.yaml에 없는 그림")
+        self.assertHas(errors, "redrawn/notes.txt: 알 수 없는 파일")
+
+    def test_redraw_detects_stale_png(self):
+        (self.red / "fig-Q2.py").write_text(SIMPLE_FIG.replace('"$R$"', '"$R_2$"'), encoding="utf-8")
+        self.assertHas(verify(self.exam, redraw=True), "redrawn/fig-Q2.png: 코드로 다시 그린 결과와 다름")
 
 
 class MainTest(unittest.TestCase):
