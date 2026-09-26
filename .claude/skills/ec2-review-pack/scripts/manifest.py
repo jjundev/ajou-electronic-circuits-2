@@ -162,6 +162,8 @@ def validate(m: dict, repo: Path | str | None = None) -> list[str]:
             errors.append(f"{where}.date: MMDD 형식이어야 함: {q['date']}")
         if not q["why"].strip():
             errors.append(f"{where}.why: 빈 문자열")
+        elif "\n" in q["why"] or "|" in q["why"]:
+            errors.append(f"{where}.why: 줄바꿈이나 |를 쓸 수 없음")
     if len(m["problems"]) > MAX_PROBLEMS:
         errors.append(f"problems: 최대 {MAX_PROBLEMS}개 ({len(m['problems'])}개)")
 

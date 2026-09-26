@@ -139,6 +139,15 @@ class TestHtml2Md(unittest.TestCase):
         self.assertTrue(problems[0].startswith("링크 미변환(.html): ./정리노트"))
         self.assertTrue(problems[1].startswith("링크 파일 없음: ../"))
 
+    def test_no_figures_dir_when_no_svgs(self):
+        d = self.tmp / "nofig"
+        d.mkdir()
+        note = small_note(d, '<section id="s"><h2>A</h2><p>그림 없는 문단</p></section>')
+        note_md, figs = html2md.convert_note(note)
+        self.assertEqual(figs, 0)
+        self.assertFalse((d / "figures_0101").exists())
+        self.assertTrue(Path(note_md).exists())
+
     def test_nfd_named_note_converts(self):
         d = self.tmp / "nfd"
         d.mkdir()

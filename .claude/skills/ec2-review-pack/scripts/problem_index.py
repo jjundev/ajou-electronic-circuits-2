@@ -47,12 +47,19 @@ def secnum(meta: dict) -> str:
     return m.group(0) if m else section
 
 
-def used_ids(notes_dir: Path | str) -> set[str]:
-    """<notes_dir>/*/problems.txt 의 id (줄 형식 `id | why`)."""
+def used_ids(notes_dir: Path | str, exclude: str | None = None) -> set[str]:
+    """<notes_dir>/*/problems.txt 의 id (줄 형식 `id | why`).
+
+    exclude: 이 폴더 이름(NFC로 비교)의 problems.txt는 건너뛴다(같은 range를 다시 돌릴 때
+    자기 자신의 이전 결과가 USED로 잡히지 않게 한다).
+    """
     notes_dir, ids = Path(notes_dir), set()
     if not notes_dir.is_dir():
         return ids
+    exclude_nfc = nfc(exclude) if exclude is not None else None
     for path in notes_dir.glob("*/problems.txt"):
+        if exclude_nfc is not None and nfc(path.parent.name) == exclude_nfc:
+            continue
         for line in path.read_text(encoding="utf-8").splitlines():
             pid = nfc(line.split("|", 1)[0].strip())
             if pid:
@@ -81,9 +88,10 @@ def md_paths(repo: Path | str, chapters: set[int] | None = None) -> list[Path]:
 
 
 def index(repo: Path | str, used_dir: Path | str | None = None,
-          chapters: set[int] | None = None) -> tuple[list[list[str]], list[str]]:
+          chapters: set[int] | None = None,
+          exclude_range: str | None = None) -> tuple[list[list[str]], list[str]]:
     problem = _workbook(Path(repo))
-    used = used_ids(used_dir) if used_dir else set()
+    used = used_ids(used_dir, exclude=exclude_range) if used_dir else set()
     rows, errors = [], []
     for path in md_paths(repo, chapters):
         try:
@@ -106,9 +114,10 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--repo", required=True)
     ap.add_argument("--used", help="이전 팩 폴더들의 부모(보통 REPO/복습노트)")
     ap.add_argument("--chapters", help="쉼표로 구분한 장 번호 (예: 9,10)")
+    ap.add_argument("--exclude-range", help="이 range의 problems.txt는 USED 집계에서 뺀다(같은 range 재실행용)")
     args = ap.parse_args(argv)
     chapters = {int(c) for c in args.chapters.split(",")} if args.chapters else None
-    rows, errors = index(Path(args.repo), args.used, chapters)
+    rows, errors = index(Path(args.repo), args.used, chapters, args.exclude_range)
     print(HEADER)
     for row in rows:
         print("\t".join(row))

@@ -99,6 +99,7 @@ class TestBackupSnippet(unittest.TestCase):
         self.tmp = Path(self._tmp.name)
         self.notes = self.tmp / "repo" / "복습노트"
         self.notes.mkdir(parents=True)
+        (self.tmp / "repo" / "STT").mkdir()
         self.run_dir = self.tmp / "run"
         self.run_dir.mkdir()
 
@@ -145,6 +146,13 @@ class TestBackupSnippet(unittest.TestCase):
                 r = self.backup(bad)
                 self.assertEqual(r.returncode, 1)
                 self.assertIn("백업 중단", r.stderr)
+        self.assertEqual(self.backups(), [])
+
+    def test_bad_repo_fails_loudly(self):
+        env = dict(os.environ, RANGE="0923", REPO=str(self.tmp / "not-a-repo"), RUN=str(self.run_dir))
+        r = subprocess.run([sys.executable, "-"], input=self.code, env=env, capture_output=True, text=True)
+        self.assertEqual(r.returncode, 1)
+        self.assertIn("백업 중단", r.stderr)
         self.assertEqual(self.backups(), [])
 
 

@@ -633,6 +633,8 @@ def convert_note(note_path):
     ctx = Ctx(link_map, fig_abs, fig_name, prefix="note", registry=registry)
     out = os.path.join(out_dir, name[:-5] + ".md")
     convert(src, out, ctx, intro)
+    if not os.listdir(fig_abs):  # 그림이 하나도 없으면 빈 폴더를 남기지 않는다
+        os.rmdir(fig_abs)
     return out, len(registry)
 
 

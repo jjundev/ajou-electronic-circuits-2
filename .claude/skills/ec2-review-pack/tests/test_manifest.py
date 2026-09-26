@@ -96,6 +96,13 @@ class TestManifest(unittest.TestCase):
         self.assertIn("problems[0].date: MMDD 형식이어야 함: 9/23", errors)
         self.assertIn("problems[0].why: 빈 문자열", errors)
 
+    def test_why_rejects_newline_and_pipe(self):
+        for bad in ("한 줄\n다음 줄", "이유 | 다른 이유"):
+            with self.subTest(bad=bad):
+                m = mini()
+                m["problems"][0]["why"] = bad
+                self.assertIn("problems[0].why: 줄바꿈이나 |를 쓸 수 없음", manifest.validate(m))
+
     def test_too_many_problems(self):
         m = mini()
         m["problems"] = [{"id": f"P9.{i:02d}", "kind": "장말문제", "anchor": "s1-mean", "date": "0101", "why": "x"}

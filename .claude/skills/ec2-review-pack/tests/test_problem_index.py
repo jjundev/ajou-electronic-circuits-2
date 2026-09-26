@@ -31,6 +31,16 @@ class TestUnits(unittest.TestCase):
             self.assertEqual(problem_index.used_ids(notes), {"P9.01", "2023-1_기말-Q1"})
             self.assertEqual(problem_index.used_ids(notes / "missing"), set())
 
+    def test_used_ids_exclude_range(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            notes = Path(tmp)
+            (notes / "0918").mkdir()
+            (notes / "0918" / "problems.txt").write_text("P9.01 | 이유\n", encoding="utf-8")
+            (notes / "0923").mkdir()
+            (notes / "0923" / "problems.txt").write_text("P9.02 | 이유\n", encoding="utf-8")
+            self.assertEqual(problem_index.used_ids(notes), {"P9.01", "P9.02"})
+            self.assertEqual(problem_index.used_ids(notes, exclude="0923"), {"P9.01"})
+
 
 @unittest.skipUnless(HAS_WORKBOOK, "workbook 없음")
 class TestRealRepo(unittest.TestCase):
@@ -67,6 +77,29 @@ class TestRealRepo(unittest.TestCase):
         table = by_id(rows)
         self.assertEqual(table["P9.01"][5], "USED")
         self.assertEqual(table["P9.02"][5], "-")
+
+    def test_index_exclude_range_keeps_other_ranges_used(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            notes = Path(tmp)
+            (notes / "0918").mkdir()
+            (notes / "0918" / "problems.txt").write_text("P9.01 | x\n", encoding="utf-8")
+            (notes / "0923").mkdir()
+            (notes / "0923" / "problems.txt").write_text("P9.02 | x\n", encoding="utf-8")
+            rows, _ = problem_index.index(REPO, used_dir=notes, chapters={9}, exclude_range="0923")
+        table = by_id(rows)
+        self.assertEqual(table["P9.01"][5], "USED")
+        self.assertEqual(table["P9.02"][5], "-")
+
+    def test_cli_exclude_range(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            notes = Path(tmp)
+            (notes / "0923").mkdir()
+            (notes / "0923" / "problems.txt").write_text("P9.01 | x\n", encoding="utf-8")
+            with contextlib.redirect_stdout(io.StringIO()) as out:
+                self.assertEqual(problem_index.main(
+                    ["--repo", str(REPO), "--used", str(notes), "--chapters", "9", "--exclude-range", "0923"]), 0)
+        lines = {r.split("\t")[0]: r for r in out.getvalue().splitlines()[1:]}
+        self.assertEqual(lines["P9.01"].split("\t")[5], "-")
 
     def test_cli(self):
         with contextlib.redirect_stdout(io.StringIO()) as out:
