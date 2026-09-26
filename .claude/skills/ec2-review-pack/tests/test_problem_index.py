@@ -91,6 +91,20 @@ class TestRealRepo(unittest.TestCase):
                 self.assertEqual(problem_index.main(["--repo", str(repo)]), 1)
             self.assertIn("ERROR", err.getvalue())
 
+    def test_non_dict_frontmatter_is_reported_and_skipped(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            (repo / "workbook").symlink_to(REPO / "workbook", target_is_directory=True)
+            bad = repo / "교과서" / "마이크로전자회로" / "ch99" / "예제"
+            bad.mkdir(parents=True)
+            (bad / "E99.02.md").write_text(
+                "---\n- id\n- kind\n- number\n---\n# 예제 99.2 — x\n", encoding="utf-8")
+            (repo / "from_the_past" / "md").mkdir(parents=True)
+            rows, errors = problem_index.index(repo)
+            self.assertEqual(rows, [])
+            self.assertEqual(len(errors), 1)
+            self.assertIn("E99.02.md", errors[0])
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -87,17 +87,17 @@ def index(repo: Path | str, used_dir: Path | str | None = None,
     rows, errors = [], []
     for path in md_paths(repo, chapters):
         try:
+            # 손으로 쓴 md의 어떤 오류도 목록 전체를 멈추지 않게 넓게 잡는다.
             p = problem.load_problem(path)
-        except (problem.ProblemError, OSError, KeyError) as e:
+            meta, pid = p.meta, nfc(p.id)
+            exam = meta.get("kind") == "기출"
+            if exam and chapters and not set(meta.get("textbook_chapters") or []) & chapters:
+                continue
+            rows.append([pid, str(meta["kind"]), secnum(meta), str(meta.get("section", "-")),
+                         "-" if exam else str(meta.get("difficulty", "-")),
+                         "USED" if pid in used else "-", p.title.replace("\t", " ")])
+        except Exception as e:
             errors.append(f"{path}: {e}")
-            continue
-        meta, pid = p.meta, nfc(p.id)
-        exam = meta.get("kind") == "기출"
-        if exam and chapters and not set(meta.get("textbook_chapters") or []) & chapters:
-            continue
-        rows.append([pid, str(meta["kind"]), secnum(meta), str(meta.get("section", "-")),
-                     "-" if exam else str(meta.get("difficulty", "-")),
-                     "USED" if pid in used else "-", p.title.replace("\t", " ")])
     return rows, errors
 
 
