@@ -2,16 +2,20 @@
 """원문 옮기기용 원본 페이지 도구. md frontmatter의 pdf_page로 원본 PDF 쪽을 찾는다.
 
 사용법:
-  python3 workbook/source_pages.py next <폴더> [--size 10] [--ledger 원장]   원문 없는(원장을 주면 판정 없는) md를 (원본, pdf_page, id) 순으로 N개
-  python3 workbook/source_pages.py missing <폴더> [--ledger 원장]            남은 md 목록(+ 원장과 힌트 수가 다른 MISMATCH). 하나라도 있으면 종료 코드 1
+  python3 workbook/source_pages.py next <폴더> [--size 10] [--section 원문|풀이] [--ledger 원장]
+      그 절이 없는(원장을 주면 판정 없는) md를 (원본, pdf_page, id) 순으로 N개. 기본 절은 원문
+  python3 workbook/source_pages.py missing <폴더> [--section 원문|풀이] [--ledger 원장]
+      남은 md 목록(+ 원장과 힌트 수가 다른 MISMATCH). 하나라도 있으면 종료 코드 1
   python3 workbook/source_pages.py render <md…> --out <폴더> [--dpi 200]
       pdf_page와 다음 쪽을 <id>-p<쪽>.png로. 글자 층이 있으면 <id>-p<쪽>.txt도.
 <폴더>는 장 폴더(교과서/마이크로전자회로/ch09)나 시험 폴더(from_the_past/md/2023-1_기말).
+<폴더>는 종류 하위 폴더(ch09/예제)도 된다. --ledger는 힌트 판정용이라 --section 풀이와 함께 쓰지 않는다.
 원본 PDF: 교과서는 장 폴더 옆 <장 번호>장.pdf, 기출은 frontmatter source(md 기준 상대 경로).
 """
 import argparse
 import re
 import sys
+import unicodedata
 from pathlib import Path
 
 import fitz
@@ -22,6 +26,11 @@ from check_md import split_frontmatter, split_sections, split_subsections
 CHAPTER_RE = re.compile(r"^ch(\d+)$")
 TEXT_MIN = 20       # 이보다 짧은 글자 층은 스캔 잡음으로 보고 버린다
 LEDGER_LINE_RE = re.compile(r"^- (\S+) \| (없음|힌트 ([12])) \| \S.*$")
+SECTIONS = ("원문", "풀이")
+
+
+def nfc(text):
+    return unicodedata.normalize("NFC", text)
 
 
 class SourceError(Exception):
@@ -45,14 +54,14 @@ def read_md(md):
         raise SourceError(f"{md}: {e}") from e
 
 
-def pending(folder, ledger=None):
+def pending(folder, ledger=None, section="원문"):
     """할 일이 남은 md를 (source, pdf_page, id) 순으로. 같은 쪽의 예제·연습문제가 이어진다.
-    ledger가 None이면 원문이 없는 md, 판정 원장(dict)이면 원장에 판정이 없는 md."""
+    ledger가 None이면 section 절(원문, 풀이)이 없는 md, 판정 원장(dict)이면 원장에 판정이 없는 md."""
     keyed = []
     for md in problem_mds(folder):
         meta, body = read_md(md)
         if ledger is None:
-            if any(title == "원문" for title, _ in split_sections(body)):
+            if any(title == section for title, _ in split_sections(body)):
                 continue
         elif str(meta["id"]) in ledger:
             continue
@@ -144,9 +153,11 @@ def parse_args(argv):
     nxt.add_argument("folder", type=Path)
     nxt.add_argument("--size", type=int, default=10)
     nxt.add_argument("--ledger", type=Path, help="힌트 판정 원장. 주면 원장에 없는 md를 낸다")
+    nxt.add_argument("--section", type=nfc, choices=SECTIONS, default="원문", help="이 절이 없는 md를 낸다")
     mis = sub.add_parser("missing", help="원문 없는 md 전부 (있으면 종료 코드 1)")
     mis.add_argument("folder", type=Path)
     mis.add_argument("--ledger", type=Path, help="힌트 판정 원장. 주면 판정 없는 md와 MISMATCH를 낸다")
+    mis.add_argument("--section", type=nfc, choices=SECTIONS, default="원문", help="이 절이 없는 md를 낸다")
     ren = sub.add_parser("render", help="pdf_page와 다음 쪽을 PNG로")
     ren.add_argument("mds", nargs="+", type=Path)
     ren.add_argument("--out", type=Path, required=True)
@@ -158,8 +169,11 @@ def main(argv):
     args = parse_args(argv)
     try:
         if args.cmd in ("next", "missing"):
+            if args.ledger and args.section != "원문":
+                print("ERROR --ledger는 힌트 판정용이라 --section과 함께 쓰지 않음", file=sys.stderr)
+                return 2
             ledger = read_ledger(args.ledger) if args.ledger else None
-            left = pending(args.folder, ledger)
+            left = pending(args.folder, ledger, args.section)
         if args.cmd == "next":
             for md in left[:args.size]:
                 print(md)
@@ -167,7 +181,7 @@ def main(argv):
             bad = ledger_mismatches(args.folder, ledger) if ledger is not None else []
             for line in [str(md) for md in left] + bad:
                 print(line)
-            what = "판정 없음" if ledger is not None else "원문 없음"
+            what = "판정 없음" if ledger is not None else f"{args.section} 없음"
             print(f"{what}: {len(left)}개", file=sys.stderr)
             return 1 if left or bad else 0
         else:

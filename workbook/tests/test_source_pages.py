@@ -1,6 +1,7 @@
 import io
 import sys
 import tempfile
+import unicodedata
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
@@ -131,6 +132,44 @@ class TestLedger(Base):
         code, out, _ = run(["next", str(self.ch), "--ledger", str(path), "--size", "5"])
         self.assertEqual(code, 0)
         self.assertEqual([Path(line).name for line in out.splitlines()], ["P9.02.md", "P9.03.md"])
+
+
+class TestSection(Base):
+    SOL = "\n## 풀이\n### 소신호 파라미터\n- $g_m = 1$\n### 답\n- 1\n"
+
+    def test_pending_section_skips_solved(self):
+        write_md(self.ch / "예제/E9.01.md", "E9.01", "예제", 1, original=True, tail=self.SOL)
+        write_md(self.ch / "예제/E9.02.md", "E9.02", "예제", 2, original=True)
+        self.assertEqual([p.name for p in pending(self.ch, section="풀이")], ["E9.02.md"])
+        self.assertEqual(pending(self.ch), [])
+
+    def test_pending_on_kind_subfolder(self):
+        write_md(self.ch / "예제/E9.01.md", "E9.01", "예제", 1, original=True)
+        write_md(self.ch / "장말문제/P9.01.md", "P9.01", "장말문제", 1, original=True)
+        self.assertEqual([p.name for p in pending(self.ch / "예제", section="풀이")], ["E9.01.md"])
+
+    def test_main_missing_section(self):
+        write_md(self.ch / "예제/E9.01.md", "E9.01", "예제", 1, original=True)
+        code, out, err = run(["missing", str(self.ch), "--section", "풀이"])
+        self.assertEqual(code, 1)
+        self.assertIn("E9.01.md", out)
+        self.assertIn("풀이 없음: 1개", err)
+        write_md(self.ch / "예제/E9.01.md", "E9.01", "예제", 1, original=True, tail=self.SOL)
+        self.assertEqual(run(["missing", str(self.ch), "--section", "풀이"])[0], 0)
+
+    def test_section_argument_nfd_accepted(self):
+        write_md(self.ch / "예제/E9.01.md", "E9.01", "예제", 1, original=True)
+        code, out, _ = run(["next", str(self.ch), "--section", unicodedata.normalize("NFD", "풀이")])
+        self.assertEqual(code, 0)
+        self.assertEqual([Path(line).name for line in out.splitlines()], ["E9.01.md"])
+
+    def test_section_with_ledger_is_error(self):
+        write_md(self.ch / "예제/E9.01.md", "E9.01", "예제", 1, original=True)
+        ledger = self.root / "hints-ledger.md"
+        ledger.write_text("- E9.01 | 없음 | 대입만\n", encoding="utf-8")
+        code, _, err = run(["next", str(self.ch), "--section", "풀이", "--ledger", str(ledger)])
+        self.assertEqual(code, 2)
+        self.assertIn("ERROR", err)
 
 
 class TestRender(Base):
