@@ -8,7 +8,7 @@ from pathlib import Path
 import fitz
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from draw_exam import FONT_SIZE, draw_all, main, printed_font_pt  # noqa: E402
+from draw_exam import FONT_SIZE, draw_all, main, png_size, printed_font_pt  # noqa: E402
 
 SIMPLE_FIG = '''import schemdraw.elements as elm
 from schem_style import new_drawing
@@ -63,8 +63,25 @@ class DrawExamTest(unittest.TestCase):
     def test_font_warning_when_crop_much_narrower(self):
         make_png(self.exam / "figures" / "fig-Q2.png", 20, 20)
         _, _, warnings = draw_all(self.exam)
-        self.assertEqual(len(warnings), 1)
-        self.assertIn("fig-Q2.png: 인쇄 글자", warnings[0])
+        font_warnings = [w for w in warnings if "인쇄 글자" in w]
+        self.assertEqual(len(font_warnings), 1)
+        self.assertIn("fig-Q2.png: 인쇄 글자", font_warnings[0])
+
+    def test_height_warning_when_aspect_differs(self):
+        written, _, _ = draw_all(self.exam)
+        rw, rh = png_size(written[0])
+        crop_w = 200
+        crop_h = round(crop_w * rh / rw)
+        make_png(self.exam / "figures" / "fig-Q2.png", crop_w, crop_h)
+        _, _, warnings = draw_all(self.exam)
+        height_warnings = [w for w in warnings if "인쇄 높이" in w]
+        self.assertEqual(height_warnings, [])
+
+        make_png(self.exam / "figures" / "fig-Q2.png", crop_w, crop_h * 2)
+        _, _, warnings = draw_all(self.exam)
+        height_warnings = [w for w in warnings if "인쇄 높이" in w]
+        self.assertEqual(len(height_warnings), 1)
+        self.assertIn("fig-Q2.png: 인쇄 높이", height_warnings[0])
 
     def test_main_exit_codes_and_compare(self):
         make_png(self.exam / "figures" / "fig-Q2.png", 200, 60)

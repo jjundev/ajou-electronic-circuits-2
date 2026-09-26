@@ -17,6 +17,7 @@ from schem_style import DPI, FONT_SIZE, save_png
 
 REDRAWN = "redrawn"
 FONT_PT_RANGE = (7.0, 11.0)   # 문제집에 찍힐 라벨 글자 크기(pt) 허용 범위
+HEIGHT_TOLERANCE = 0.15       # 크롭 폭 기준 인쇄 높이가 크롭 높이와 벌어져도 되는 비율
 SHEET_WIDTH = 1200            # 대조 시트 폭(px)
 USAGE = "사용법: python3 draw_exam.py <시험 폴더> [--compare <out.png>]"
 
@@ -44,6 +45,14 @@ def printed_font_pt(crop_w_px, crop_dpi, redrawn_w_px, dpi=DPI):
     return FONT_SIZE * (crop_w_px / crop_dpi) / (redrawn_w_px / dpi)
 
 
+def printed_height_mm(crop_w_px, crop_h_px, dpi, redrawn_w_px, redrawn_h_px):
+    """문제집이 다시 그린 그림을 크롭 폭으로 찍을 때의 인쇄 높이(mm)와 크롭의 인쇄 높이(mm)."""
+    crop_w_mm = crop_w_px / dpi * 25.4
+    crop_h_mm = crop_h_px / dpi * 25.4
+    printed_h_mm = crop_w_mm * redrawn_h_px / redrawn_w_px
+    return printed_h_mm, crop_h_mm
+
+
 def crop_dpi(exam_dir):
     spec = yaml.safe_load((Path(exam_dir) / "figures" / "figures.yaml").read_text(encoding="utf-8")) or {}
     return spec.get("dpi", 144)
@@ -64,10 +73,18 @@ def draw_all(exam_dir, out_dir=None):
         written.append(out)
         crop = fig_dir / (py.stem + ".png")
         if crop.exists():
-            pt = printed_font_pt(png_size(crop)[0], crop_dpi(exam_dir), png_size(out)[0])
+            crop_w, crop_h = png_size(crop)
+            dpi_ = crop_dpi(exam_dir)
+            out_w, out_h = png_size(out)
+            pt = printed_font_pt(crop_w, dpi_, out_w)
             lo, hi = FONT_PT_RANGE
             if not lo <= pt <= hi:
                 warnings.append(f"{out.name}: 인쇄 글자 {pt:.1f}pt (허용 {lo:g}–{hi:g}pt). 그림 폭을 조정")
+            printed_h_mm, crop_h_mm = printed_height_mm(crop_w, crop_h, dpi_, out_w, out_h)
+            if abs(printed_h_mm - crop_h_mm) > HEIGHT_TOLERANCE * crop_h_mm:
+                warnings.append(
+                    f"{out.name}: 인쇄 높이 {printed_h_mm:.1f}mm (크롭 {crop_h_mm:.1f}mm, "
+                    f"허용 ±15%). 배치를 조정")
     return written, errors, warnings
 
 
