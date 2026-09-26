@@ -5,6 +5,7 @@ from schem_style import OPEN_R, Resistor, caption, dot, gate_terminal, new_drawi
 L = 0.12       # 소자 사이 짧은 배선
 GAP = 0.2      # 소자 라벨과 기호 사이 간격
 RAIL_Y = 8.0   # 두 패널의 V_DD 레일 높이
+STUB = 0.35    # (b) M5/M6 소스와 레일 사이 세로선
 
 
 def vdd_label(d, x_end):
@@ -52,13 +53,15 @@ def half_b(d, xo, mirror):
     """(b)의 한쪽: xo = 출력 세로줄(M3/M4, out, M1/M2). 바깥쪽 pmos M5/M6."""
     out = 1 if mirror else -1          # 바깥 쪽 부호
     xp = xo + out * 1.9                # M5/M6 소스 세로줄
-    mp = pmos(d, at=(xp, RAIL_Y), anchor="source", mirror=mirror)
+    # hwp 원본처럼 M5/M6는 M3/M4보다 조금 낮고, 소스가 짧은 세로선으로 레일에 붙는다
+    d.add(elm.Line().down().at((xp, RAIL_Y)).length(STUB))
+    mp = pmos(d, at=d.here, anchor="source", mirror=mirror)
     gate_terminal(d, mp.gate, r"$V_\mathrm{b1}$", right=mirror)
     mn = nmos(d, at=(xo, RAIL_Y), anchor="drain", mirror=mirror)
     # M3/M4 게이트 → 바깥으로 짧게 → 위로 레일
     d.add(elm.Line().at(mn.gate).tox(mn.gate.x + out * 0.3))
     d.add(elm.Line().up().toy(RAIL_Y))
-    d.add(elm.Line().down().at(mn.source).length(0.35)); o = dot(d)
+    d.add(elm.Line().down().at(mn.source).length(STUB + 0.3)); o = dot(d)
     # M5/M6 드레인 → 조금 아래 → 안쪽으로 출력 접속점
     d.add(elm.Line().down().at(mp.drain).toy(o.center.y))
     d.add(elm.Line().at((xp, o.center.y)).tox(xo))
