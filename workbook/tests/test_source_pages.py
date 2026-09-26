@@ -170,6 +170,7 @@ class TestSection(Base):
         code, _, err = run(["next", str(self.ch), "--section", "풀이", "--ledger", str(ledger)])
         self.assertEqual(code, 2)
         self.assertIn("ERROR", err)
+        self.assertIn("--section 풀이", err)
 
 
 class TestRender(Base):

@@ -170,7 +170,7 @@ def main(argv):
     try:
         if args.cmd in ("next", "missing"):
             if args.ledger and args.section != "원문":
-                print("ERROR --ledger는 힌트 판정용이라 --section과 함께 쓰지 않음", file=sys.stderr)
+                print("ERROR --ledger는 힌트 판정용이라 --section 풀이와 함께 쓰지 않음", file=sys.stderr)
                 return 2
             ledger = read_ledger(args.ledger) if args.ledger else None
             left = pending(args.folder, ledger, args.section)

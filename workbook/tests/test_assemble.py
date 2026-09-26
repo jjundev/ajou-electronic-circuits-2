@@ -9,6 +9,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from assemble import (BuildError, Selection, all_selections, build_data, chapter_selection,  # noqa: E402
                       exam_selection, ids_selection, resolve_target)
 from paths import TEMPLATES  # noqa: E402
+from test_problem import textbook_md  # noqa: E402
 
 SAMPLE_IDS = ["P9.05", "X9.13", "P11.39", "X11.01", "E9.01", "E11.18",
               "X9.16", "P9.07", "E11.01", "P10.32", "P9.09", "E9.07"]
@@ -115,10 +116,25 @@ class TestEntries(unittest.TestCase):
         self.assertEqual([p["html"]["original"] for p in data["problems"]],
                          [p["html"]["original"] for p in problems])
 
-    def test_example_answer_has_no_image_markdown(self):
-        e = build_data(ids_selection(["E11.03"], "t"), "answers")["problems"][0]
-        self.assertTrue(e["solution"]["answer"])
+    def fixture_entry(self, text, pid, kind):
+        """실제 md는 모두 ## 풀이가 있으므로, 풀이 없는 경로는 test_problem의 fixture md로 조립한다."""
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "ch09" / kind / f"{pid}.md"
+            path.parent.mkdir(parents=True)
+            path.write_text(text, encoding="utf-8")
+            return build_data(Selection("t", "t", 0, [path]), "answers")["problems"][0]
+
+    def test_example_answer_fallback_has_no_image_markdown(self):
+        text = textbook_md(figures="").replace("> 참고: 무시", "![Fig 9.3](../figures/fig9-3.png)\n> 참고: 무시")
+        self.assertIn("![", text)
+        e = self.fixture_entry(text, "E9.01", "예제")
+        self.assertEqual(e["solution"]["steps"], [])
+        self.assertIn("328.9", e["solution"]["answer"])
         self.assertNotIn("![", e["solution"]["answer"])
+
+    def test_entry_without_solution_has_no_solution_key(self):
+        e = self.fixture_entry(textbook_md(pid="X9.01", kind="연습문제", figures=""), "X9.01", "연습문제")
+        self.assertNotIn("solution", e)
 
     def test_exam_entry(self):
         e = build_data(ids_selection(["2023-1_기말-Q1"], "t"), "problems")["problems"][0]
