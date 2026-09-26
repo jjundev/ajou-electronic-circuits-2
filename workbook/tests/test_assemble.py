@@ -106,10 +106,11 @@ class TestEntries(unittest.TestCase):
     def test_answers_mode(self):
         data = build_data(ids_selection(["E9.01", "P9.05"], "t"), "answers")
         self.assertEqual(data["meta"]["title"], "t 답안")
-        e901, p905 = data["problems"]
-        self.assertEqual(e901["solution"], {
-            "steps": [], "answer": r"$R_{out} \approx 328.9\ \text{k}\Omega$ ($V_T \approx 26\ \text{mV}$, 식 9.10)"})
-        self.assertNotIn("solution", p905)
+        e901 = data["problems"][0]
+        # E9.01에는 ## 풀이가 있다: 단계와 답이 모두 온다. 없을 때의 대체(답 (검증용))와 생략은 test_problem이 본다
+        self.assertTrue(e901["solution"]["steps"])
+        self.assertTrue(all(st["label"] and st["html"] for st in e901["solution"]["steps"]))
+        self.assertIn("328", e901["solution"]["answer"])
         problems = build_data(ids_selection(["E9.01", "P9.05"], "t"), "problems")["problems"]
         self.assertEqual([p["html"]["original"] for p in data["problems"]],
                          [p["html"]["original"] for p in problems])
