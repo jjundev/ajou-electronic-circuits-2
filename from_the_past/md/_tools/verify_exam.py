@@ -42,6 +42,14 @@ def check_numbering(docs):
     return [f"문제 번호가 빠짐: {', '.join(missing)}"] if missing else []
 
 
+def by_number(errors):
+    """교과서 check_structure는 id를 문자열로 정렬하므로(Q10 < Q7) 오류를 문제 번호 순으로 다시 세운다."""
+    def key(e):
+        m = re.match(r"\S+-Q(\d+):", e)
+        return int(m.group(1)) if m else 0
+    return sorted(errors, key=key)
+
+
 def check_figures(exam_dir, docs):
     fig_dir = exam_dir / "figures"
     yaml_path = fig_dir / "figures.yaml"
@@ -67,7 +75,7 @@ def check_figures(exam_dir, docs):
         elif not valid_bbox(fig.get("bbox")):
             errors.append(f"figures.yaml {key}: bbox 는 [x0, y0, x1, y1] 숫자 4개")
     used = set()
-    for i, (path, fm, body) in sorted(docs.items()):
+    for i, (path, fm, body) in docs.items():  # load_docs가 채운 번호 순서
         links = IMG_RE.findall(body)
         names = {Path(link).name for link in links}
         figs = fm.get("figures") or []
@@ -136,7 +144,8 @@ def check_recrop(exam_dir):
     try:
         spec = yaml.safe_load((fig_dir / "figures.yaml").read_text(encoding="utf-8")) or {}
         for fig in (spec.get("figures") or {}).values():
-            fig["pdf"] = str((fig_dir / fig["pdf"]).resolve())
+            if isinstance(fig, dict) and isinstance(fig.get("pdf"), str):  # 나머지 형식 오류는 crop_all이 한국어로 보고
+                fig["pdf"] = str((fig_dir / fig["pdf"]).resolve())
         with tempfile.TemporaryDirectory() as t:
             tmp_exam = Path(t) / exam_dir.name
             (tmp_exam / "figures").mkdir(parents=True)
@@ -162,7 +171,7 @@ def verify(exam_dir, recrop=False):
     checks = [("check_stray_files", lambda: check_stray_files(exam_dir)),
               ("check_numbering", lambda: check_numbering(docs)),
               ("check_figures", lambda: check_figures(exam_dir, docs)),
-              ("check_structure", lambda: check_structure(docs)),
+              ("check_structure", lambda: by_number(check_structure(docs))),
               ("check_exam_yaml", lambda: check_exam_yaml(exam_dir)),
               ("check_readme", lambda: check_readme(exam_dir))]
     if recrop:
@@ -180,7 +189,7 @@ def main(argv):
     if len(args) != 1:
         print("사용법: python3 verify_exam.py <시험 폴더> [--recrop]", file=sys.stderr)
         return 2
-    exam_dir = Path(args[0])
+    exam_dir = Path(args[0]).resolve()
     if not exam_dir.is_dir():
         print(f"시험 폴더가 없음: {exam_dir}", file=sys.stderr)
         return 2

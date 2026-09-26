@@ -80,7 +80,12 @@ def main(argv):
         print(f"exam.yaml 없음: {exam_dir}", file=sys.stderr)
         return 2
     out = exam_dir / "README.md"
-    out.write_text(build_exam_index(exam_dir), encoding="utf-8")
+    try:
+        text = build_exam_index(exam_dir)
+    except (ValueError, KeyError, TypeError, yaml.YAMLError) as e:
+        print(f"ERROR {e} (check_exam.py로 먼저 확인)", file=sys.stderr)
+        return 1
+    out.write_text(text, encoding="utf-8")
     print(f"{out} 작성")
     return 0
 
