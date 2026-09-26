@@ -45,6 +45,12 @@ class TestTemplates(unittest.TestCase):
                 self.assertIn("block('문제 원문', p.html.original, 'original', p.original_lang || 'en')", t)
                 self.assertIn(".original {", t)
 
+    def test_hint_entry_shows_kind(self):
+        # 한 장 안에서 예제·연습문제·장말문제 번호가 겹친다(예: 10.12). Hint 쪽 항목은 종류를 붙여 구분한다
+        t = read("answer.html")
+        self.assertIn("const KIND_SHORT = { '예제': '예제', '연습문제': '연습', '장말문제': '문제', '기출': '문항' };", t)
+        self.assertIn("txt('a', 'hint-entry-num', `${KIND_SHORT[p.kind] || ''} ${p.number}`.trim())", t)
+
 
 if __name__ == "__main__":
     unittest.main()

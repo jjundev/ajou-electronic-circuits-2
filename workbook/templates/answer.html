@@ -313,6 +313,7 @@ a:focus-visible { outline: .5mm solid var(--focus); outline-offset: .5mm; }
 // 생성기가 문자열 치환으로 바꾸는 자리표시자. 여기서 이어 붙여 두어 치환 대상이 되지 않게 한다.
 const PLACEHOLDER = '__WORKBOOK' + '_DATA__';
 const KIND_SLUG = { '예제': 'example', '연습문제': 'exercise', '장말문제': 'problem', '기출': 'exam' };
+const KIND_SHORT = { '예제': '예제', '연습문제': '연습', '장말문제': '문제', '기출': '문항' };   // Hint 쪽 항목 번호 앞 (번호가 종류끼리 겹침)
 const FIG_SCALE_CAP = 1.5;        // 교재 인쇄 크기 대비 확대 상한
 const MATH_MIN_SCALE = 0.7;
 const STRIP_MATH_MIN_SCALE = 0.5;  // Hint 띠 속 식은 띠 폭에 맞춰 더 줄일 수 있음
@@ -657,7 +658,7 @@ function hintPage(title, first) {
 function hintEntry(p, withId) {
   const root = el('article', 'hint-entry');
   if (withId) root.id = `hint-${p.id}`;
-  const num = txt('a', 'hint-entry-num', p.number);
+  const num = txt('a', 'hint-entry-num', `${KIND_SHORT[p.kind] || ''} ${p.number}`.trim());
   num.href = `#${p.id}`;
   const list = el('ol', 'hint-items');
   root.append(num, list);
