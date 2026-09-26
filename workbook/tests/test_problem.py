@@ -253,6 +253,23 @@ class TestExam(unittest.TestCase):
         with self.assertRaisesRegex(ProblemError, "crop"):
             figures(load_problem(path))
 
+    def test_redrawn_replaces_crop_at_crop_width(self):
+        fig_dir = self.p.path.parent / "figures"
+        crop_src = figures(self.p)[0]["src"]
+        (fig_dir / "redrawn").mkdir()
+        make_png(fig_dir / "redrawn" / "fig-Q1.png", 432, 288)
+        figs = figures(self.p)
+        self.assertEqual([(f["w_mm"], f["h_mm"]) for f in figs], [(25.4, 16.9)])
+        self.assertNotEqual(figs[0]["src"], crop_src)
+
+    def test_redrawn_needs_crop_for_size(self):
+        fig_dir = self.p.path.parent / "figures"
+        (fig_dir / "redrawn").mkdir()
+        make_png(fig_dir / "redrawn" / "fig-Q1.png", 432, 288)
+        (fig_dir / "fig-Q1.png").unlink()
+        with self.assertRaisesRegex(ProblemError, "그림 파일 없음"):
+            figures(self.p)
+
 
 if __name__ == "__main__":
     unittest.main()

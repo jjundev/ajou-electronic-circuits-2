@@ -5,7 +5,7 @@
 
 ## 준비
 ```bash
-pip3 install --user --break-system-packages playwright
+pip3 install --user --break-system-packages playwright schemdraw matplotlib
 ```
 브라우저는 설치된 Google Chrome을 쓴다(`playwright install`은 하지 않는다). 빌드 중에 CDN에서 Pretendard와 KaTeX를 받으므로 인터넷이 필요하다.
 
@@ -30,7 +30,7 @@ python3 workbook/build_workbook.py --all                                 # 모�
 |---|---|
 | 문제 원문 | `## 원문` (없으면 블록을 숨김) |
 | 조건 / 구할 것 | `## 조건` / `## 구할 것`. 문제 그림이 있으면 `- 회로:` 줄은 뺀다(값 `=`·`%`·`≈`·수식 속 숫자가 적힌 줄은 남김). 이미지 줄은 뺀다. `(원문에 없음)`·`(원문의 …)`·`(보조 출처: …)`도 뺀다 |
-| 그림 | frontmatter `figures`의 `role: problem` 그림 (크기 = 픽셀 / dpi × 25.4 mm) |
+| 그림 | frontmatter `figures`의 `role: problem` 그림 (크기 = 픽셀 / dpi × 25.4 mm). 기출은 `figures/redrawn/fig-<id>.png`가 있으면 그것을 크롭과 같은 폭으로 넣는다 |
 | Hint 띠 / Hint 쪽 | `## 힌트`의 `### ` 소절 (`> 띠: $…$` 줄이 띠에 보인다) |
 | 풀이 / 답 | `## 풀이`의 `### ` 소절, 마지막 `### 답`. 없고 예제면 `## 답 (검증용)` |
 

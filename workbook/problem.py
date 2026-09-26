@@ -163,7 +163,7 @@ def png_size(data):
 
 
 def figures(p):
-    """문제 그림(role: problem)을 base64 data URI와 인쇄 크기(mm)로. mm = 픽셀 / dpi × 25.4."""
+    """문제 그림(role: problem)을 base64 data URI와 인쇄 크기(mm)로. mm = 픽셀 / dpi × 25.4. 기출에 figures/redrawn/ 그림이 있으면 그것을 크롭 폭으로 넣는다."""
     out = []
     for fig_id, crop in problem_figures(p):
         if p.is_exam:
@@ -180,8 +180,15 @@ def figures(p):
             raise ProblemError(f"figures.yaml 없음: {p.figures_dir}") from e
         data = png.read_bytes()
         w, h = png_size(data)
+        w_mm, h_mm = round(w / dpi * 25.4, 1), round(h / dpi * 25.4, 1)
+        redrawn = p.figures_dir / "redrawn" / png.name
+        if p.is_exam and redrawn.exists():
+            # 다시 그린 그림은 크롭과 같은 폭, 높이는 자기 비율 (FORMAT-EXAM.md '다시 그린 그림')
+            data = redrawn.read_bytes()
+            rw, rh = png_size(data)
+            h_mm = round(w_mm * rh / rw, 1)
         out.append({"src": "data:image/png;base64," + base64.b64encode(data).decode("ascii"),
-                    "w_mm": round(w / dpi * 25.4, 1), "h_mm": round(h / dpi * 25.4, 1)})
+                    "w_mm": w_mm, "h_mm": h_mm})
     return out
 
 
