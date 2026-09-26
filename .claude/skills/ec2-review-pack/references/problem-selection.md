@@ -4,11 +4,12 @@
 
 ## 1. 후보 목록
 ```bash
-python3 <SKILL>/scripts/problem_index.py --repo <REPO> --used <REPO>/복습노트 --chapters <이번 범위 장, 예: 9,10> > <RUN>/candidates.tsv
+python3 <SKILL>/scripts/problem_index.py --repo <REPO> --used <REPO>/복습노트 --exclude-range <range> --chapters <이번 범위 장, 예: 9,10> > <RUN>/candidates.tsv
 ```
 - 열: `id  kind  secnum  section  difficulty  used  title`
+- `--exclude-range <range>`: 이번 range를 다시 돌릴 때, 이번 range 자신의 이전 `problems.txt`가 USED로 잡혀 같은 문제를 다시 못 고르는 일을 막는다.
 - 종료 코드 1이면 stderr의 `ERROR` md는 후보에서 빠진 것이다. 보고서 "미해결"에 적는다(md는 고치지 않는다).
-- `used`가 `USED`인 id는 이전 팩에서 썼으므로 고르지 않는다.
+- `used`가 `USED`인 id는 이전 팩(이번 range 제외)에서 썼으므로 고르지 않는다.
 
 ## 2. 범위 맞추기
 - 요약의 `## 교과서 절 대조`에서 "다룸"인 절 번호 집합을 만든다(예: `{9.1.1, 9.1.2}`).
@@ -35,6 +36,8 @@ python3 <REPO>/workbook/build_workbook.py --ids <id1,id2,…(manifest 순서)> -
   --pdf-dir <REPO>/복습노트/<range> --build-dir <RUN>/workbook-build
 ```
 - 결과: `복습노트/<range>/복습문제_<range>_<slug>-문제.pdf`, `-답안.pdf`.
-- 종료 코드 2 또는 `ERROR` 줄: 그 id를 후보에서 같은 절의 다른 문제로 바꿔 manifest를 고치고 한 번만 다시 만든다. 또 실패하면 그 id를 빼고 "미해결"로 보고한다.
-- `OVERFLOW <파일>: <id>`: PDF는 남는다. 그 문제 쪽이 넘친 것이므로 "미해결"로 보고한다(workbook md 수정은 이 스킬의 일이 아니다).
+- stderr 줄로 원인을 구분한다.
+  - `ERROR <md 경로>: …`(문제 md 자체 오류, 종료 코드 2): 그 id를 후보에서 같은 절의 다른 문제로 바꿔 manifest를 고치고 한 번만 다시 만든다. 또 실패하면 그 id를 빼고 "미해결"로 보고한다.
+  - `ERROR <name>: …`(렌더링·Chrome·네트워크 오류, 종료 코드 1): md 문제가 아니므로 id를 바꾸지 않는다. "미해결"로 보고한다.
+  - `OVERFLOW <파일>: <id>`(종료 코드 1): PDF는 남는다. 그 문제 쪽이 넘친 것이므로 id를 바꾸지 않고 "미해결"로 보고한다(workbook md 수정은 이 스킬의 일이 아니다).
 - 인터넷이 필요하다(Pretendard, KaTeX CDN).

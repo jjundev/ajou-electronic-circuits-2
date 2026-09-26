@@ -24,14 +24,24 @@ description: 전자회로2 수업의 STT·강의노트·Razavi 교과서로 ELI5
 ## 절차
 
 ### 0. 준비
-1. `REPO`에 `STT/`, `강의노트/`, `교과서/마이크로전자회로/`, `workbook/build_workbook.py`가 모두 있는지 확인한다. 하나라도 없으면 "전자회로2 저장소에서만 동작합니다"라고 알리고 멈춘다.
+1. `REPO`에 `STT/`, `강의노트/`, `교과서/마이크로전자회로/`, `workbook/build_workbook.py`가 모두 있는지 확인한다. 하나라도 없으면 "전자회로2 저장소에서만 동작해요"라고 알리고 멈춘다.
 2. STT 목록은 NFC로 읽는다. macOS에는 NFD 파일명이 섞여 있다.
    ```bash
    python3 -c "import os,unicodedata as u,re;n=[u.normalize('NFC',f) for f in os.listdir('$REPO/STT')];print(sorted(m.group(1) for f in n if f.endswith('전회2.md') and (m:=re.match(r'(\d{4})',f))))"
    ```
 3. 기간을 정한다.
    - 인자가 있으면 그 기간을 쓴다.
-   - 인자가 없으면 `복습노트/*/정리노트_<range>_*.html` 중 가장 늦은 끝 날짜를 찾고, 그 뒤의 STT를 모두 쓴다. 팩이 하나도 없으면 사용 가능한 STT 날짜를 보여 주고 "기간을 인자로 주세요(예: /ec2-review-pack 0923)"라고 알린 뒤 멈춘다.
+   - 인자가 없으면 `복습노트/*/정리노트_<range>_*.html` 중 가장 늦은 끝 날짜를 찾는다(NFD 폴더·파일명도 잡히게 NFC로 비교).
+     ```bash
+     python3 -c "import os,re,unicodedata as u
+     packs=[]
+     for d in os.listdir('$REPO/복습노트'):
+         for f in os.listdir(os.path.join('$REPO/복습노트', d)):
+             if m:=re.match(r'정리노트_(\d{4}(?:-(\d{4}))?)_', u.normalize('NFC', f)):
+                 packs.append(m.group(2) or m.group(1))
+     print(max(packs) if packs else '없음')"
+     ```
+     그 뒤의 STT를 모두 쓴다. 팩이 하나도 없으면 사용 가능한 STT 날짜를 보여 주고 "기간을 인자로 넣어 주면 돼요(예: /ec2-review-pack 0923)"라고 알린 뒤 멈춘다.
    - 해당 STT가 하나도 없으면 사용 가능한 날짜를 보여 주고 멈춘다.
    - `range`는 첫 STT 날짜 하나이거나 `첫-끝` 형식이다.
 4. 실행 폴더를 만든다. 서브에이전트에게는 `RUN`, `RUN/repo`, `SKILL` 경로만 넘긴다.
@@ -42,16 +52,17 @@ description: 전자회로2 수업의 STT·강의노트·Razavi 교과서로 ELI5
 
 ### 1. 범위 파악
 1. **먼저** 관련 `강의노트/2026F_Lec*_*.pdf` 텍스트를 슬라이드 번호와 함께 `RUN/slides.txt`에 추출한다(PyMuPDF, 쪽마다 `=== LNN sK ===`, `LNN`은 파일명의 `LecN`을 두 자리로). 요약 에이전트는 이 파일이 있다고 보고 시작하므로 추출이 끝난 뒤에 띄운다.
-   - 관련 PDF: 이전 팩(`복습노트/*/정리노트_*`)이 끝까지 다루지 않은 Lec PDF 전부. 확실하지 않으면 넉넉히 넣는다.
+   - 관련 PDF: **이번 range의 STT가 실제로 다루는** 슬라이드가 들어 있는 Lec PDF만. 이전 날짜가 이미 다룬 슬라이드는 이전 팩이 있든 없든 이번 range 밖이므로 "안 다룸"이 아니라 그냥 넣지 않는다. 확실하지 않으면 넉넉히 넣는다.
    - 추출에 실패하면 STT만으로 진행하고 보고서에 적는다(브리프의 `slides.txt` 줄은 "없음"으로 바꿔 넘긴다).
+   - **슬라이드가 없는 날짜**: 이번 range의 날짜 중 그 날 강의 내용을 다루는 Lec PDF가 하나도 없으면(예: 교수님이 업로드된 슬라이드보다 더 나간 경우), 그 날짜를 표시해 둔다. 다음 항목의 브리프에서 쓴다.
 2. 그다음 STT 날짜마다 요약 에이전트 1명을 **병렬로** 띄운다. 브리프는 `references/stt-summary-prompt.md`에 있다.
-   - `<2026F_LecN_*.pdf>`: 그 날짜가 다룬 슬라이드가 들어 있는 PDF. 확실하지 않으면 1의 관련 PDF를 모두 적는다.
+   - `<2026F_LecN_*.pdf>`: 그 날짜가 다룬 슬라이드가 들어 있는 PDF. 확실하지 않으면 1의 관련 PDF를 모두 적는다. **1에서 "슬라이드 없음"으로 표시한 날짜**는 이 자리에 "없음(이 날짜 슬라이드 미게시)"이라고 적는다 — 요약 에이전트는 STT와 교과서만으로 진행하고, `## 슬라이드 대조표` 대신 `## 교과서 절 대조`만 쓴다(`references/stt-summary-prompt.md`).
    - `<YYYY-MM-DD>`: 연도는 이번 학기 연도(오늘 날짜 기준), 월·일은 `<MMDD>`.
-3. 에이전트가 도는 동안 메인 에이전트는 후보 문제 목록을 만든다(`references/problem-selection.md` 1).
+3. **요약이 모두 끝난 뒤** 메인 에이전트는 후보 문제 목록을 만든다(`references/problem-selection.md` 1).
    ```bash
-   python3 "$SKILL/scripts/problem_index.py" --repo "$REPO" --used "$REPO/복습노트" --chapters <장> > "$RUN/candidates.tsv"
+   python3 "$SKILL/scripts/problem_index.py" --repo "$REPO" --used "$REPO/복습노트" --exclude-range <range> --chapters <장> > "$RUN/candidates.tsv"
    ```
-   장은 slides.txt의 강의자료 제목(예: `Lec3_Ch9_…` → 9)으로 정한다. 강의자료가 전자회로1 복습(Lec1–2)뿐이면 이 단계를 건너뛴다.
+   장은 각 요약의 `## 교과서 절 대조`에서 "다룸"·"일부"로 적힌 절 번호마다 **첫 번째 숫자**(예: `9.1.2` → `9`)를 모아 만든 집합이다(슬라이드 제목이 아니다). 어떤 요약에도 Razavi 절이 없으면(순수 전자회로1 복습, Lec1–2뿐) 이 단계를 건너뛴다(문제 0개).
 
 ### 2. manifest
 - 요약들의 슬라이드 대조표와 용어·식 목록으로 `RUN/manifest.json`을 쓴다. 규칙은 `references/manifest-guide.md`에 있다.
@@ -71,10 +82,12 @@ description: 전자회로2 수업의 STT·강의노트·Razavi 교과서로 ELI5
 ```bash
 RANGE=<range> REPO=… RUN=… python3 - <<'EOF'
 import os, re, shutil, sys, tempfile, time, unicodedata as u
-r, run = os.environ["RANGE"], os.environ["RUN"]
-notes = os.path.join(os.environ["REPO"], "복습노트")
+r, run, repo = os.environ["RANGE"], os.environ["RUN"], os.environ["REPO"]
 if not re.fullmatch(r"\d{4}(-\d{4})?", r) or not os.path.isdir(run):
     sys.exit(f"백업 중단: RANGE={r!r} 또는 RUN={run!r} 잘못됨")
+if not os.path.isdir(os.path.join(repo, "STT")):
+    sys.exit(f"백업 중단: REPO={repo!r} 잘못됨")
+notes = os.path.join(repo, "복습노트")
 def want(n):
     n = u.normalize("NFC", n)
     return n.startswith((f"정리노트_{r}_", f"복습문제_{r}_")) or n in (f"figures_{r}", "problems.txt")
@@ -96,15 +109,36 @@ if got_n != want_n:
 print(f"백업 {len(hits)}항목(파일 {got_n}개): {dst}", *(a for _, a in hits), sep="\n")
 EOF
 ```
+  - 백업 직후(처음 조립이고 백업이 성공했을 때만): 이번 manifest가 만들 이름과 다른, 이번 range의 이전 산출물(문제가 0개로 바뀌었거나 slug가 바뀐 경우의 옛 `정리노트_<range>_*`/`복습문제_<range>_*`)을 지운다. 위에서 이미 백업했으므로 지워도 안전하다.
+```bash
+python3 - "$RUN/manifest.json" "$REPO/복습노트/<range>" <<'EOF'
+import json, os, sys, unicodedata as u
+m = json.load(open(sys.argv[1], encoding="utf-8"))
+r, slug, out = m["range"], m["slug"], sys.argv[2]
+keep = {f"정리노트_{r}_{slug}.html", f"정리노트_{r}_{slug}.md"}
+if m["problems"]:
+    keep |= {f"복습문제_{r}_{slug}-문제.pdf", f"복습문제_{r}_{slug}-답안.pdf"}
+removed = []
+for n in (os.listdir(out) if os.path.isdir(out) else []):
+    nn = u.normalize("NFC", n)
+    if nn.startswith((f"정리노트_{r}_", f"복습문제_{r}_")) and nn not in keep:
+        os.remove(os.path.join(out, n))
+        removed.append(nn)
+print("제거:", ", ".join(removed) if removed else "없음")
+EOF
+```
 - 정리노트를 조립한다.
 ```bash
 python3 "$SKILL/scripts/assemble.py" --run "$RUN" --out "$REPO/복습노트/<range>"
 ```
-- 문제가 1개 이상이면 PDF를 만든다(`references/problem-selection.md` 5). `--ids`는 manifest `problems` 순서대로 쉼표로 잇는다.
+- 문제가 1개 이상이면 PDF를 만든다(`references/problem-selection.md` 5). `--ids`는 manifest `problems` 순서대로 쉼표로 잇는다. 값은 아래처럼 manifest에서 그대로 뽑아 쓴다(손으로 다시 나열하지 않는다).
 ```bash
-python3 "$REPO/workbook/build_workbook.py" --ids <id,…> --name 복습문제_<range>_<slug> --pdf-dir "$REPO/복습노트/<range>" --build-dir "$RUN/workbook-build"
+python3 -c "import json,sys;print(','.join(q['id'] for q in json.load(open(sys.argv[1]))['problems']))" "$RUN/manifest.json"
 ```
-  - 빌드 오류로 id를 바꿨으면 manifest를 고쳐 2단계 검증부터 다시 하고 이 단계를 다시 한다(백업은 하지 않는다).
+```bash
+python3 "$REPO/workbook/build_workbook.py" --ids <위 결과> --name 복습문제_<range>_<slug> --pdf-dir "$REPO/복습노트/<range>" --build-dir "$RUN/workbook-build"
+```
+  - stderr에 `ERROR <md 경로>: …`(문제 md 자체 오류, 종료 코드 2)가 나오면 해당 id를 같은 절 후보로 한 번 바꿔 manifest를 고치고 2단계 검증부터 다시 하고 이 단계를 다시 한다(백업은 하지 않는다). `ERROR <name>: …`(렌더링·Chrome·네트워크, 종료 코드 1)나 `OVERFLOW`는 md 문제가 아니므로 id를 바꾸지 않고 "미해결"로 보고한다(`references/problem-selection.md` 5).
 
 ### 5. 기계 검사
 ```bash
@@ -112,19 +146,19 @@ python3 "$SKILL/scripts/check_html.py" --manifest "$RUN/manifest.json" --note "$
 ```
 - `FAIL`이면 Problem의 `where`(토픽 id, 섹션 id)로 담당 작성자를 찾는다. `broken-link`가 PDF이면 4단계 PDF 빌드를 확인한다.
 - 그 작성자에게 문제 목록을 보내 조각을 고치게 한다(SendMessage, 안 되면 같은 브리프로 새 에이전트).
-- 고친 뒤 4단계부터 다시 한다. 최대 2회까지이며, 그래도 남으면 "미해결"로 보고한다.
+- 고친 뒤 4단계부터 다시 한다. PDF는 manifest `problems`가 바뀐 경우에만 다시 만든다. HTML·MD 조각만 고쳤으면 조립(`assemble.py`)만 다시 하면 된다. 최대 2회까지이며, 그래도 남으면 "미해결"로 보고한다.
 
 ### 6. 리뷰 (`lite`면 생략)
 - 리뷰어 1명을 띄운다. 브리프는 `references/review-prompt.md`에 있다.
 - Critical과 Important는 모두, Minor는 쉬운 것만 고친다. 문제 선별 지적은 메인 에이전트가 manifest를 고치고 PDF를 다시 만든다.
 - 담당 작성자별로 **한 번에 모아서** 수정을 요청한다. 수정은 한 번만 한다.
-- 수정 후 4~5단계를 다시 한다. 반영하지 않은 항목은 보고서에 적는다.
+- 수정 후 4~5단계를 다시 한다. 문제 선별(manifest `problems`)을 고쳤을 때만 PDF를 다시 만들고, 정리노트 조각만 고쳤으면 조립만 다시 한다. 반영하지 않은 항목은 보고서에 적는다.
 
 ### 7. 브라우저 검증
 - `references/browser-check.md`대로 한다.
   - http.server를 빈 포트에 띄운다.
   - 확인: KaTeX 오류 0, 남은 `$` 없음, 375px에서 가로 스크롤 없음, 다크모드, 위젯, 링크(복습문제 PDF 포함), 콘솔 오류
-- 결함은 5단계와 같은 방식으로 작성자에게 되돌린다. 이것도 최대 2회 규칙에 포함된다.
+- 결함은 5단계와 같은 방식으로 작성자에게 되돌린다(정리노트 조각만 고치므로 조립만 다시 하면 된다). 이것도 최대 2회 규칙에 포함된다.
 - 끝나면 서버를 종료한다.
 
 ### 8. MD 변환
@@ -155,8 +189,9 @@ python3 "$SKILL/scripts/html2md.py" "$REPO/복습노트/<range>/<정리노트>.h
 | PDF 텍스트 추출 실패 | STT만으로 진행하고 보고서에 표시 |
 | 범위가 workbook(9~11장) 밖 | 문제 0개, PDF 없이 정리노트만. 보고서에 이유 |
 | `problem_index.py`가 ERROR md를 냄 | 그 md는 후보에서 빼고 "미해결"에 적음 |
-| `build_workbook.py` 오류(종료 코드 1·2) | 해당 id를 같은 절 후보로 한 번 교체해 재빌드. 또 실패하면 그 id를 빼고 "미해결" |
-| `OVERFLOW` | PDF는 남음. "미해결"에 적음 |
+| `build_workbook.py`가 `ERROR <md 경로>: …` 를 내거나 종료 코드 2 | 문제 md 자체의 오류다. 해당 id를 같은 절 후보로 한 번 교체해 재빌드. 또 실패하면 그 id를 빼고 "미해결" |
+| `build_workbook.py`가 `ERROR <name>: …` (렌더링·Chrome·네트워크) 를 내거나 종료 코드 1 (OVERFLOW 없이) | md 문제가 아니므로 id를 바꾸지 않는다. "미해결"에 적고 다음 단계로 진행 |
+| `OVERFLOW <파일>: <id>` | 종료 코드 1이지만 PDF는 남음. id를 바꾸지 않고 "미해결"에 적음 |
 | 포트 사용 중 | 다른 빈 포트 사용 |
 | 같은 range의 팩이 이미 있음 | 4단계 첫 조립 전에 기존 html·md·pdf·`problems.txt`·`figures_<range>/`를 새 폴더 `RUN/previous-<시각>-<임의>/`에 복사하고(다시 조립할 때는 복사하지 않음) 백업 경로를 보고서에 적음. 백업 명령이 실패하면 조립하지 않고 원인을 고친다 |
 | 검사 2회 실패 | 멈추지 않고 나머지 단계를 끝낸 뒤 "미해결"로 보고 |
