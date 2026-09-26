@@ -94,6 +94,10 @@ class CheckFileTest(unittest.TestCase):
     def test_answer_section_rejected(self):
         self.assertError(VALID_Q2 + "\n## 답 (검증용)\n- 1 kΩ\n", "기출에는 답 절을 두지 않음")
 
+    def test_solution_section_allowed(self):
+        solution = "\n## 풀이\n### (1) 소신호 파라미터\n- $g_m = 1\\ \\text{mS}$\n### 답\n- (1) $1\\ \\text{k}\\Omega$\n"
+        self.assertEqual(self.check(VALID_Q2 + solution), ([], []))
+
     def test_body_checked(self):
         self.assertError(VALID_Q2.replace("- 배치: M1 하나\n", ""), "'- 배치:' bullet 없음")
 

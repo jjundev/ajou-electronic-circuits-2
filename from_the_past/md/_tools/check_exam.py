@@ -141,7 +141,7 @@ def check_file(path, exam_dir):
 
     errors += check_body(body, path, KIND)
     if ANSWER_RE.search(body):
-        errors.append("기출에는 답 절을 두지 않음 (풀이·답은 범위 밖, FORMAT-EXAM.md)")
+        errors.append("기출에는 답 절을 두지 않음 (풀이와 답은 ## 풀이에 씀, FORMAT-EXAM.md)")
     return errors, warnings
 
 
