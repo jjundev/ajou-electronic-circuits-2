@@ -27,9 +27,11 @@ def draw():
     d.add(elm.Label().right().at((xm, out1.center.y)).label(r"$V_\mathrm{out}$"))
     # 입력 쌍: M1 보통, M2 좌우 반전
     d.add(elm.Line().down().at(out1.center).length(L))
-    m1 = nmos(d, at=d.here, anchor="drain", label=r"$M_\mathrm{1}$")
+    m1 = nmos(d, at=d.here, anchor="drain")
+    d.add(elm.Label().right().at((xl + 0.25, m1.center.y)).label(r"$M_\mathrm{1}$", halign="left"))
     d.add(elm.Line().down().at(out2.center).length(L))
-    m2 = nmos(d, at=d.here, anchor="drain", mirror=True, label=r"$M_\mathrm{2}$")
+    m2 = nmos(d, at=d.here, anchor="drain", mirror=True)
+    d.add(elm.Label().right().at((xr - 0.25, m2.center.y)).label(r"$M_\mathrm{2}$", halign="right"))
     gate_terminal(d, m1.gate, r"$V_\mathrm{in1}$", open_=True)
     gate_terminal(d, m2.gate, r"$V_\mathrm{in2}$", open_=True, right=True)
     # 두 소스 → 아래 → 가운데 n1 접속점

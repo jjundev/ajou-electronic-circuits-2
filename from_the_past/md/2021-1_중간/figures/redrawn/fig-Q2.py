@@ -39,11 +39,13 @@ def half_b(d, x, rail_y, mirror):
     """(b)의 한쪽 세로줄 위→아래: R_S, M3/M4, 출력 접속점, M1/M2, 소스 접속점, I_SS, 접지."""
     # 아래로 그리는 소자의 라벨: loc="bottom"이면 오른쪽, "top"이면 왼쪽
     side = "bottom" if mirror else "top"
-    rs = d.add(Resistor().down().at((x, rail_y)).length(0.9).label(r"$R_\mathrm{S}$", side, ofst=0.25))
+    rs = d.add(Resistor().down().at((x, rail_y)).length(1.2).label(r"$R_\mathrm{S}$", side, ofst=0.3))
     mp = pmos(d, at=rs.end, anchor="source")
     d.add(elm.Line().down().at(mp.drain).length(0.5)); out = dot(d)
-    mn = nmos(d, at=out.center, anchor="drain", mirror=mirror,
-              label=r"$M_\mathrm{2}$" if mirror else r"$M_\mathrm{1}$")
+    mn = nmos(d, at=out.center, anchor="drain", mirror=mirror)
+    # M1은 드레인 선 오른쪽, M2는 왼쪽. 기본 라벨보다 0.05 더 띄운다
+    d.add(elm.Label().right().at((x - 0.25 if mirror else x + 0.25, mn.center.y))
+          .label(r"$M_\mathrm{2}$" if mirror else r"$M_\mathrm{1}$", halign="right" if mirror else "left"))
     d.add(elm.Line().down().at(mn.source).length(0.3)); src = dot(d)
     iss = d.add(elm.SourceI().down().at(src.center).length(1.6).scale(0.6).label(**ISS, loc=side, ofst=0.35))
     d.add(elm.Ground().at(iss.end).scale(0.8))
@@ -58,7 +60,7 @@ def panel_b(d, x0, rail_y):
     m4, out2, m2, n4 = half_b(d, xr, rail_y, True)
     # M3, M4 라벨: 게이트 판 왼쪽 위. 오른쪽 끝을 게이트 판에서 0.2 넘게 띄운다
     for m, text in ((m3, r"$M_\mathrm{3}$"), (m4, r"$M_\mathrm{4}$")):
-        d.add(elm.Label().right().at((m.gate.x + 0.15, m.gate.y + 0.55)).label(text, halign="right"))
+        d.add(elm.Label().right().at((m.gate.x + 0.15, m.gate.y + 0.6)).label(text, halign="right"))
     # V_b → M3 게이트, 같은 높이로 M4 게이트까지 (게이트 공통선)
     gate_terminal(d, m3.gate, r"$V_\mathrm{b}$")
     d.add(elm.Line().right().at(m3.gate).tox(m4.gate))
@@ -68,7 +70,7 @@ def panel_b(d, x0, rail_y):
     d.add(elm.Label().right().at(((xl + xr) / 2, out1.center.y)).label(r"$V_\mathrm{out}$"))
     gate_terminal(d, m1.gate, r"$V_\mathrm{in1}$", open_=True)
     gate_terminal(d, m2.gate, r"$V_\mathrm{in2}$", open_=True, right=True)
-    d.add(Resistor().right().at(n3.center).to(n4.center).label(r"$R_\mathrm{SS}$", "bottom", ofst=GAP))
+    d.add(Resistor().right().at(n3.center).to(n4.center).label(r"$R_\mathrm{SS}$", "bottom", ofst=0.25))
     caption(d, ((xl + xr) / 2 - 0.15, CAP_Y), "(b)")
 
 

@@ -11,7 +11,7 @@ def supply_iref(d, x, top, label):
     """위→아래: T 전원 기호, I_REF 전류원(화살표 아래). 전류원 아래 끝을 돌려준다."""
     d.add(elm.Vdd().at((x, top - VDD_H)).scale(0.8).label(label, "right", ofst=GAP))
     iref = d.add(elm.SourceI().down().at((x, top - VDD_H)).length(1.5).scale(0.6)
-                 .label(r"$I_\mathrm{REF}$", "top", ofst=0.3))
+                 .label(r"$I_\mathrm{REF}$", "top", ofst=0.35))
     return iref.end
 
 
@@ -31,7 +31,7 @@ def panel_a(d, x0, top):
     mref = nmos(d, at=d.here, anchor="drain", mirror=True)
     d.add(elm.Ground().at(mref.source).scale(0.8))
     d.add(elm.Label().right().at((x0 + 0.4, mref.source.y - 0.45)).label(r"$M_\mathrm{REF}$", halign="left"))
-    d.add(elm.Label().right().at((x0 - 0.35, mref.center.y - 0.1)).label(WL, halign="right"))
+    d.add(elm.Label().right().at((x0 - 0.4, mref.center.y - 0.1)).label(WL, halign="right"))
     # n1 → 오른쪽 → 게이트보다 조금 오른쪽에서 아래로 → 게이트 접속점
     xg = mref.gate.x + 0.3
     d.add(elm.Line().right().at(n1.center).tox(xg))
@@ -42,7 +42,7 @@ def panel_a(d, x0, top):
     d.add(elm.Label().right().at((m1.drain.x - 0.3, m1.drain.y + 0.2)).label(r"$M_\mathrm{1}$", halign="right"))
     d.add(elm.Label().right().at((m1.drain.x + 0.35, m1.center.y - 0.25)).label(WL, halign="left"))
     i1_lead(d, m1.drain)
-    rp = d.add(Resistor().down().at(m1.source).length(1.3).label(r"$R_\mathrm{P}$", "bottom", ofst=GAP))
+    rp = d.add(Resistor().down().at(m1.source).length(1.3).label(r"$R_\mathrm{P}$", "bottom", ofst=0.25))
     d.add(elm.Ground().at(rp.end).scale(0.8))
     return (x0 + m1.drain.x) / 2, rp.end.y
 
@@ -54,7 +54,7 @@ def panel_b(d, x0, top):
     # Q_REF: npn 좌우 반전(베이스 오른쪽), 다이오드 연결
     qref = d.add(elm.BjtNpn().right().reverse().anchor("collector").at(d.here))
     d.add(elm.Label().right().at((x0 - 0.3, qref.emitter.y + 0.25)).label(r"$Q_\mathrm{REF}$", halign="right"))
-    rp = d.add(Resistor().down().at(qref.emitter).length(1.3).label(r"$R_\mathrm{P}$", "bottom", ofst=GAP))
+    rp = d.add(Resistor().down().at(qref.emitter).length(1.3).label(r"$R_\mathrm{P}$", "bottom", ofst=0.25))
     d.add(elm.Ground().at(rp.end).scale(0.8))
     xb = qref.base.x + 0.3
     d.add(elm.Line().right().at(n1.center).tox(xb))

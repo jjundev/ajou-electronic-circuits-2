@@ -30,14 +30,14 @@ def panel_a(d, x0, top):
     d.add(elm.Line().down().at(vout.center).length(0.3))
     q1 = npn(d, at=d.here, anchor="collector", label=r"$Q_\mathrm{1}$")
     gate_terminal(d, q1.base, r"$V_\mathrm{b1}$")
-    d.add(elm.Line().down().at(q1.emitter).length(0.45)); n1 = dot(d)
+    d.add(elm.Line().down().at(q1.emitter).length(0.7)); n1 = dot(d)
     d.add(elm.Line().down().at(n1.center).length(0.45))
     q2 = npn(d, at=d.here, anchor="collector", label=r"$Q_\mathrm{2}$")
     gate_terminal(d, q2.base, r"$V_\mathrm{in}$", open_=True)
     d.add(elm.Ground().at(q2.emitter).scale(0.8))
     # Q3: 오른쪽, Q1보다 조금 아래. pnp 좌우 반전(베이스 오른쪽, 이미터 왼쪽 위, 컬렉터 왼쪽 아래)
     xq = x0 + 3.0
-    q3 = d.add(elm.BjtPnp().right().reverse().anchor("collector").at((xq, n1.center.y + 0.45)))
+    q3 = d.add(elm.BjtPnp().right().reverse().anchor("collector").at((xq, n1.center.y + 0.15)))
     # Q3 라벨: 컬렉터 선 왼쪽 (오른쪽 끝을 선에서 0.35 띄운다)
     d.add(elm.Label().right().at((xq - 0.35, q3.center.y - 0.2)).label(r"$Q_\mathrm{3}$", halign="right"))
     d.add(elm.Line().up().at(q3.emitter).length(0.35))
@@ -76,7 +76,7 @@ def panel_b(d, x0, rail_y):
     out1, q3, q1 = half_b(d, xl, rail_y, False)
     out2, q4, q2 = half_b(d, xr, rail_y, True)
     # Q3는 컬렉터 선 왼쪽 위, Q4는 컬렉터 선 오른쪽 위
-    d.add(elm.Label().right().at((xl - 0.3, q3.collector.y + 0.2)).label(r"$Q_\mathrm{3}$", halign="right"))
+    d.add(elm.Label().right().at((xl - 0.35, q3.collector.y + 0.2)).label(r"$Q_\mathrm{3}$", halign="right"))
     d.add(elm.Label().right().at((xr + 0.3, q4.collector.y + 0.2)).label(r"$Q_\mathrm{4}$", halign="left"))
     # 출력: 두 원이 가운데에서 마주 보고 그 사이에 V_out
     d.add(elm.Line().right().at(out1.center).length(1.0)); dot(d, open_=True)
@@ -93,8 +93,9 @@ def panel_b(d, x0, rail_y):
     d.add(elm.Line().right().tox((xl + xr) / 2)); n3 = dot(d)
     d.add(elm.Line().right().tox(xr))
     d.add(elm.Line().up().toy(q2.emitter))
-    iee = d.add(elm.SourceI().down().at(n3.center).length(1.0).scale(0.6)
-                .label(r"$I_\mathrm{EE}$", "bottom", ofst=0.3))
+    iee = d.add(elm.SourceI().down().at(n3.center).length(1.0).scale(0.6))
+    # I_EE: 전류원 오른쪽, 위 테일 가로선과 0.2 넘게 떨어지도록 원 중심보다 아래
+    d.add(elm.Label().right().at((n3.center.x + 0.55, n3.center.y - 0.72)).label(r"$I_\mathrm{EE}$", halign="left"))
     d.add(elm.Ground().at(iee.end).scale(0.8))
     caption(d, ((xl + xr) / 2 - 0.15, CAP_Y), "(b)")
 
