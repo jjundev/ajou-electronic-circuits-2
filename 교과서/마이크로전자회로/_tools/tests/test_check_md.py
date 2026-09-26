@@ -221,6 +221,12 @@ class CheckFileTest(unittest.TestCase):
         errors, _ = self.run_crop_check(CROP_MD, crop_png=False)
         self.assertTrue(any("그림 파일 없음" in e and "fig9-02-a.png" in e for e in errors), errors)
 
+    def test_crop_on_answer_entry_is_error(self):
+        text = CROP_MD.replace('panels: [a], crop: a}',
+                               'panels: [a], crop: a}\n  - {id: "9.2", role: answer, panels: [b], crop: a}')
+        errors, _ = self.run_crop_check(text)
+        self.assertIn("그림 9.2 role answer 항목에는 crop을 달지 않음", errors)
+
 
 NO_CIRCUIT_SECTION = """## 회로 — Fig 9.2(a)
 ```spice

@@ -232,6 +232,8 @@ def check_file(path, ch_dir):
         if fig.get("role") not in FIGURE_ROLES:
             errors.append(f"그림 {fig_id} role 은 problem/answer")
         crop = fig.get("crop")
+        if crop is not None and fig.get("role") == "answer":
+            errors.append(f"그림 {fig_id} role answer 항목에는 crop을 달지 않음")
         if crop is not None and not (isinstance(crop, str) and CROP_NAME_RE.fullmatch(crop)):
             errors.append(f"그림 {fig_id} crop {crop!r} 형식 오류 (소문자·숫자만, 예: a)")
             continue
