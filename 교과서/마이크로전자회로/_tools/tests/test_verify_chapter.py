@@ -145,6 +145,52 @@ class FigureTest(ChapterCase):
         self.assertError("따옴표")
 
 
+class CropTest(ChapterCase):
+    def set_crops(self, crops="{a: [0, 0, 36, 36]}"):
+        path = self.ch / "figures" / "figures.yaml"
+        path.write_text(path.read_text(encoding="utf-8").replace(
+            "bbox: [0, 0, 72, 36]}", f"bbox: [0, 0, 72, 36], crops: {crops}}}"), encoding="utf-8")
+        crop_all(self.ch)
+
+    def use_crop(self, crop="a", link=None, id_="P9.02"):
+        text = make_md(id_, figures=["9.2"]).replace("panels: []}", f"panels: [], crop: {crop}}}")
+        text = text.replace("(../figures/fig9-02.png)", f"(../figures/{link or figure_filename('9.2', crop)})")
+        write_md(self.ch, id_, text=text)
+
+    def test_crop_chapter_passes(self):
+        self.set_crops()
+        self.use_crop()
+        (self.ch / "README.md").write_text(build_index(self.ch, "9장 테스트"), encoding="utf-8")
+        self.assertEqual(verify(self.ch, recrop=True), ([], []))
+
+    def test_link_must_point_to_crop(self):
+        self.set_crops()
+        self.use_crop(link="fig9-02.png")
+        self.assertError("P9.02", "9.2", "이미지 링크 없음", "fig9-02-a.png")
+
+    def test_crop_missing_from_yaml(self):
+        self.set_crops()
+        self.use_crop()
+        self.use_crop(crop="b", id_="P9.03")
+        self.assertError("P9.03", "크롭 b", "figures.yaml에 없음")
+
+    def test_unused_crop(self):
+        self.set_crops()
+        self.assertError("md가 쓰지 않는 크롭", "9.2 a")
+
+    def test_stray_crop_png(self):
+        self.set_crops()
+        self.use_crop()
+        shutil.copy(self.ch / "figures" / "fig9-02-a.png", self.ch / "figures" / "fig9-02-old.png")
+        self.assertError("figures.yaml에 없는 PNG", "fig9-02-old.png")
+
+    def test_tampered_crop_detected_with_recrop(self):
+        self.set_crops()
+        self.use_crop()
+        fitz.Pixmap(fitz.csRGB, fitz.IRect(0, 0, 5, 5), False).save(str(self.ch / "figures" / "fig9-02-a.png"))
+        self.assertError("fig9-02-a.png", "다시 자른 결과와 다름", recrop=True)
+
+
 class StructureTest(ChapterCase):
     def test_section_order(self):
         write_md(self.ch, "P9.02", sections=["## 구할 것", "## 조건", "## 회로 — 없음 (그림 없는 글 문제)"])

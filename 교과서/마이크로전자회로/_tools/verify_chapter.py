@@ -70,15 +70,17 @@ def check_figures(ch_dir, docs):
     if not isinstance(figures, dict):
         return ['figures.yaml의 figures가 매핑("id": {...})이 아님']
     errors = []
-    yaml_ids = set()
-    for key in figures:
+    yaml_ids, yaml_crops = set(), {}
+    for key, fig in figures.items():
         if not isinstance(key, str):
             errors.append(f"figures.yaml 그림 id {key!r}는 따옴표로 감싼 문자열이어야 함 (예: \"9.30\")")
         elif not FIG_ID_RE.match(key):
             errors.append(f"figures.yaml 그림 id {key!r} 형식 오류 (예: \"9.30\")")
         else:
             yaml_ids.add(key)
-    used = set()
+            crops = fig.get("crops") if isinstance(fig, dict) else None
+            yaml_crops[key] = {str(n) for n in crops} if isinstance(crops, dict) else set()
+    used, used_crops = set(), set()
     for i, (path, fm, body) in sorted(docs.items()):
         links = IMG_RE.findall(body)
         names = {Path(link).name for link in links}
@@ -93,8 +95,15 @@ def check_figures(ch_dir, docs):
                 continue
             fid = str(fid)
             used.add(fid)
-            if figure_filename(fid) not in names:
-                errors.append(f"{i}: 그림 {fid} 이미지 링크 없음")
+            crop = fig.get("crop")
+            crop = None if crop is None else str(crop)
+            if crop is not None:
+                used_crops.add((fid, crop))
+                if fid in yaml_crops and crop not in yaml_crops[fid]:
+                    errors.append(f"{i}: 그림 {fid} 크롭 {crop}이 figures.yaml에 없음")
+            expected_link = figure_filename(fid, crop)
+            if expected_link not in names:
+                errors.append(f"{i}: 그림 {fid} 이미지 링크 없음 ({expected_link})")
         for link in links:
             if not (path.parent / link).exists():
                 errors.append(f"{i}: 깨진 이미지 링크 {link}")
@@ -102,8 +111,13 @@ def check_figures(ch_dir, docs):
         errors.append(f"figures.yaml에만 있고 md가 쓰지 않는 그림: {', '.join(sorted(yaml_ids - used))}")
     if used - yaml_ids:
         errors.append(f"md가 쓰지만 figures.yaml에 없는 그림: {', '.join(sorted(used - yaml_ids))}")
+    unused_crops = {(f, n) for f, ns in yaml_crops.items() for n in ns} - used_crops
+    if unused_crops:
+        errors.append("figures.yaml에만 있고 md가 쓰지 않는 크롭: "
+                      + ", ".join(f"{f} {n}" for f, n in sorted(unused_crops)))
     pngs = {p.name for p in fig_dir.glob("*.png")}
     expected = {figure_filename(i) for i in yaml_ids}
+    expected |= {figure_filename(f, n) for f, ns in yaml_crops.items() for n in ns}
     if expected - pngs:
         errors.append(f"PNG 없음: {', '.join(sorted(expected - pngs))} (crop_figures.py 실행)")
     if pngs - expected:
