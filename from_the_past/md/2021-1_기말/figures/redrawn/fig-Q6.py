@@ -1,6 +1,6 @@
 """2021-1 기말 Q6 — 기준: Q6.md '회로 — Fig Q6'."""
 import schemdraw.elements as elm
-from schem_style import FONT_SIZE, OPEN_R, Resistor, dot, new_drawing
+from schem_style import OPEN_R, Resistor, dot, new_drawing
 
 GAP = 0.2   # 소자 라벨과 기호 사이 간격
 
@@ -11,9 +11,9 @@ def draw():
     # 왼쪽 V_in (원형 전압원, 부호는 원 오른쪽), 아래 접지
     vin = d.add(elm.Source().down().at((xv, -1.0)).label(r"$V_\mathrm{in}$", "top", ofst=GAP))
     d.add(elm.Ground().at(vin.end).scale(0.8))
-    for dx, dy, sign in ((0.5, 0.35, "+"), (0.58, -0.4, "−")):
+    for dx, dy, sign in ((0.5, 0.35, r"$+$"), (0.6, -0.4, r"$-$")):
         d.add(elm.Label().right().at((xv + dx, vin.center.y + dy))
-              .label(sign, font="Arial", fontsize=FONT_SIZE + 1, halign="left"))
+              .label(sign, halign="left"))
     # 위 단자 → 위로 → 오른쪽 R1, Y, R2, X, + 입력 (한 가로선)
     d.add(elm.Line().up().at(vin.start).toy(0))
     d.add(Resistor().right().tox(xy).label(r"$R_\mathrm{1}$", "bottom", ofst=0.25))

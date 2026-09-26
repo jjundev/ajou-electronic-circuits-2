@@ -18,7 +18,7 @@ def draw():
     m1 = nmos(d, at=d.here, anchor="drain", mirror=True)
     # M1: 왼쪽, 소스 화살표 높이
     d.add(elm.Label().right().at((xl - 0.3, m1.source.y + 0.35)).label(r"$M_\mathrm{1}$", halign="right"))
-    d.add(elm.Line().right().at(m1.gate).length(0.8))
+    d.add(elm.Line().right().at(m1.gate).length(0.25))
     gate_terminal(d, d.here, r"$V_\mathrm{b}$", right=True)
     d.add(elm.Line().down().at(m1.source).length(0.3)); n2 = dot(d)
     # 오른쪽 세로줄: M2 (게이트가 n1 높이, 드레인 위로 레일), Vout 접속점, R_M, 접지
