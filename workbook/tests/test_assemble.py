@@ -110,7 +110,7 @@ class TestEntries(unittest.TestCase):
         # E9.01에는 ## 풀이가 있다: 단계와 답이 모두 온다. 없을 때의 대체(답 (검증용))와 생략은 test_problem이 본다
         self.assertTrue(e901["solution"]["steps"])
         self.assertTrue(all(st["label"] and st["html"] for st in e901["solution"]["steps"]))
-        self.assertIn("328", e901["solution"]["answer"])
+        self.assertIn("R_{out}", e901["solution"]["answer"])
         problems = build_data(ids_selection(["E9.01", "P9.05"], "t"), "problems")["problems"]
         self.assertEqual([p["html"]["original"] for p in data["problems"]],
                          [p["html"]["original"] for p in problems])
