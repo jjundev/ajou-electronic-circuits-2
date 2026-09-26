@@ -127,13 +127,14 @@ def example_answer_md(text):
     return "\n".join(keep).strip()
 
 
-def problem_figure_ids(p):
-    ids = []
+def problem_figures(p):
+    """문제 그림(role: problem)의 (id, crop) — 순서 유지, 중복 제거. crop이 없으면 None."""
+    out = []
     for fig in p.meta.get("figures") or []:
-        fig_id = str(fig.get("id"))
-        if fig.get("role") == "problem" and fig_id not in ids:
-            ids.append(fig_id)
-    return ids
+        key = (str(fig.get("id")), fig.get("crop"))
+        if fig.get("role") == "problem" and key not in out:
+            out.append(key)
+    return out
 
 
 def html_fields(p):
@@ -142,7 +143,7 @@ def html_fields(p):
     if original is not None:
         fields["original"] = to_html(original)
     conditions = p.section("조건") or ""
-    if problem_figure_ids(p):
+    if problem_figures(p):
         conditions = drop_circuit_lines(conditions)
     fields["conditions"] = to_html(strip_markers(conditions))
     fields["ask"] = to_html(strip_markers(p.section("구할 것") or ""))
@@ -163,10 +164,14 @@ def png_size(data):
 
 def figures(p):
     """문제 그림(role: problem)을 base64 data URI와 인쇄 크기(mm)로. mm = 픽셀 / dpi × 25.4."""
-    name = exam_figure_filename if p.is_exam else textbook_figure_filename
     out = []
-    for fig_id in problem_figure_ids(p):
-        png = p.figures_dir / name(fig_id)
+    for fig_id, crop in problem_figures(p):
+        if p.is_exam:
+            if crop is not None:
+                raise ProblemError(f"기출 그림 {fig_id}에는 crop을 쓸 수 없음")
+            png = p.figures_dir / exam_figure_filename(fig_id)
+        else:
+            png = p.figures_dir / textbook_figure_filename(fig_id, crop)
         if not png.exists():
             raise ProblemError(f"그림 파일 없음: {png}")
         try:

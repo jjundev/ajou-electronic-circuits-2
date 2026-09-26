@@ -181,6 +181,19 @@ class TestFigures(ProblemCase):
         with self.assertRaisesRegex(ProblemError, "그림 파일 없음"):
             figures(self.load(textbook_md()))
 
+    def test_distinct_crops_kept_same_deduped(self):
+        make_png(self.root / "ch09" / "figures" / "fig9-02-a.png", 100, 50)
+        figs_yaml = ('  - {id: "9.2", role: problem, panels: [a], crop: a}\n'
+                     '  - {id: "9.2", role: problem, panels: [a], crop: a}\n'
+                     '  - {id: "9.2", role: problem, panels: [b]}\n')
+        figs = figures(self.load(textbook_md(figures=figs_yaml)))
+        self.assertEqual([(f["w_mm"], f["h_mm"]) for f in figs], [(17.6, 8.8), (35.3, 32.1)])
+
+    def test_missing_crop_file_raises(self):
+        figs_yaml = '  - {id: "9.2", role: problem, panels: [a], crop: a}\n'
+        with self.assertRaisesRegex(ProblemError, "fig9-02-a.png"):
+            figures(self.load(textbook_md(figures=figs_yaml)))
+
 
 class TestHintsAndSolution(ProblemCase):
     def test_hints(self):
@@ -233,6 +246,12 @@ class TestExam(unittest.TestCase):
         self.assertEqual(exam_info(self.p.path.parent)["exam"], "2023-1 기말고사")
         self.assertEqual([(f["w_mm"], f["h_mm"]) for f in figures(self.p)], [(25.4, 12.7)])
         self.assertEqual(html_fields(self.p)["conditions"], r"<ul><li>$\lambda = 0$</li></ul>")
+
+    def test_exam_crop_rejected(self):
+        path = self.p.path
+        path.write_text(EXAM_MD.replace("panels: [a, b]}", "panels: [a, b], crop: a}"), encoding="utf-8")
+        with self.assertRaisesRegex(ProblemError, "crop"):
+            figures(load_problem(path))
 
 
 if __name__ == "__main__":
