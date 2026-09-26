@@ -62,13 +62,16 @@ class TestRenderSmoke(unittest.TestCase):
         html_path = self.tmp / f"{mode}.html"
         html_path.write_text(inject(load_template(mode), data), encoding="utf-8")
         pdf_path = self.tmp / f"{mode}.pdf"
-        return render_pdf(html_path, pdf_path), pdf_path
+        return render_pdf(html_path, pdf_path), pdf_path, data
 
     def assert_pdf(self, mode):
-        overflow, pdf_path = self.render(mode)
+        overflow, pdf_path, data = self.render(mode)
         self.assertEqual(overflow, [])
+        # 문제 한 쪽씩. 답안지는 힌트가 있는 문제가 하나라도 있으면 끝에 Hint 쪽이 붙는다
+        has_hint = any(p.get("hints") for p in data["problems"])
+        pages = len(SMOKE_IDS) + (1 if mode == "answers" and has_hint else 0)
         with fitz.open(pdf_path) as doc:
-            self.assertEqual(doc.page_count, 3)
+            self.assertEqual(doc.page_count, pages)
             self.assertAlmostEqual(doc[0].rect.width, 841.89, delta=1)    # 297mm
             self.assertAlmostEqual(doc[0].rect.height, 595.28, delta=1)   # 210mm
 
