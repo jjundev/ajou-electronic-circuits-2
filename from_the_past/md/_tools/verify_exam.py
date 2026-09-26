@@ -176,7 +176,7 @@ def check_redrawn(exam_dir):
     yaml_ids = {str(k) for k in (spec.get("figures") or {})}
     errors, found = [], {"py": set(), "png": set()}
     for path in sorted(red.iterdir()):
-        if path.name == "__pycache__":
+        if path.name == "__pycache__" or path.name.startswith("."):
             continue
         m = REDRAWN_RE.match(path.name)
         if not m:

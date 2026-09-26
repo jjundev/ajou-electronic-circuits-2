@@ -189,6 +189,12 @@ class RedrawnTest(unittest.TestCase):
         (self.red / "fig-Q2.py").write_text(SIMPLE_FIG.replace('"$R$"', '"$R_2$"'), encoding="utf-8")
         self.assertHas(verify(self.exam, redraw=True), "redrawn/fig-Q2.png: 코드로 다시 그린 결과와 다름")
 
+    def test_dotfile_ignored(self):
+        (self.red / ".DS_Store").write_bytes(b"\x00")
+        errors = verify(self.exam)
+        for e in errors:
+            self.assertNotIn(".DS_Store", e)
+
     def test_missing_figures_yaml_not_reported_twice(self):
         (self.exam / "figures" / "figures.yaml").unlink()
         errors = verify(self.exam)

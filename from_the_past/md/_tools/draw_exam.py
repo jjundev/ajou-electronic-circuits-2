@@ -84,7 +84,7 @@ def draw_all(exam_dir, out_dir=None):
             if abs(printed_h_mm - crop_h_mm) > HEIGHT_TOLERANCE * crop_h_mm:
                 warnings.append(
                     f"{out.name}: 인쇄 높이 {printed_h_mm:.1f}mm (크롭 {crop_h_mm:.1f}mm, "
-                    f"허용 ±15%). 배치를 조정")
+                    f"허용 ±{HEIGHT_TOLERANCE:.0%}). 배치를 조정")
     return written, errors, warnings
 
 

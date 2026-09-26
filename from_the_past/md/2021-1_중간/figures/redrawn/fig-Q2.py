@@ -5,8 +5,7 @@ from schem_style import OPEN_R, Resistor, caption, dot, gate_terminal, new_drawi
 L = 0.12       # 소자 사이 짧은 배선
 GAP = 0.2      # 소자 라벨과 기호 사이 간격
 CAP_Y = -1.2   # 캡션 높이
-# 원본의 I_SS는 굵지 않은 정자체: \mathregular + 일반 Arial
-ISS = dict(label=r"$\mathregular{I_{SS}}$", font="Arial")
+ISS = dict(label=r"$I_\mathrm{SS}$")
 
 
 def panel_a(d, x0):
