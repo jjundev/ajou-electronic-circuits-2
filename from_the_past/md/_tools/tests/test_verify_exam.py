@@ -189,6 +189,13 @@ class RedrawnTest(unittest.TestCase):
         (self.red / "fig-Q2.py").write_text(SIMPLE_FIG.replace('"$R$"', '"$R_2$"'), encoding="utf-8")
         self.assertHas(verify(self.exam, redraw=True), "redrawn/fig-Q2.png: 코드로 다시 그린 결과와 다름")
 
+    def test_missing_figures_yaml_not_reported_twice(self):
+        (self.exam / "figures" / "figures.yaml").unlink()
+        errors = verify(self.exam)
+        self.assertHas(errors, "figures/figures.yaml 없음")
+        for e in errors:
+            self.assertNotIn("check_redrawn 실패", e)
+
 
 class MainTest(unittest.TestCase):
     def test_ok_and_usage(self):

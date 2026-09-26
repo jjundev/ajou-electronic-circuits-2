@@ -70,7 +70,7 @@ figures:
 - 파일: `figures/redrawn/fig-Q<n>.py`(`def draw() -> schemdraw.Drawing`)와 `draw_exam.py`가 만든 `fig-Q<n>.png`. id는 figures.yaml 키와 같다.
 - 연결은 `## 회로` 넷리스트, 모양은 `- 단자:`·`- 표시:`·`- 배치:` bullet을 따른다. 크롭은 배치를 눈으로 참고할 때만 쓰고, `> 참고:` 줄의 손글씨 획은 그리지 않는다.
 - 공통 기호와 저장은 `_tools/schem_style.py`로만 한다(`nmos`, `pmos`, `gate_terminal`, `caption`, `save_png`).
-- 문제집은 다시 그린 그림을 크롭과 같은 폭으로 찍는다. 라벨 글자가 7–11pt를 벗어나면 `draw_exam.py`가 `WARN`을 낸다.
+- 문제집은 다시 그린 그림을 크롭과 같은 폭으로 찍는다. 7–11pt는 크롭의 기본 폭 기준 라벨 글자 크기이고(문제집 템플릿이 그림을 최대 1.5배까지 키울 수 있는데 크롭도 같은 비율로 커지므로 상대적인 검사다), 이를 벗어나면 `draw_exam.py`가 `WARN`을 낸다.
 - md의 이미지 링크는 크롭을 그대로 가리킨다.
 
 ## 텍스트 레이어 (2021)

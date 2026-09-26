@@ -169,9 +169,10 @@ REDRAWN_RE = re.compile(r"^fig-(Q[1-9]\d*(?:-[2-9]|-[1-9]\d+)?)\.(py|png)$")
 def check_redrawn(exam_dir):
     """figures/redrawn/: fig-<id>.py와 fig-<id>.png가 짝으로 있고 id가 figures.yaml에 있는지."""
     red = exam_dir / "figures" / "redrawn"
-    if not red.is_dir():
-        return []
-    spec = yaml.safe_load((exam_dir / "figures" / "figures.yaml").read_text(encoding="utf-8")) or {}
+    yaml_path = exam_dir / "figures" / "figures.yaml"
+    if not red.is_dir() or not yaml_path.exists():
+        return []  # figures.yaml 없음은 check_figures가 보고
+    spec = yaml.safe_load(yaml_path.read_text(encoding="utf-8")) or {}
     yaml_ids = {str(k) for k in (spec.get("figures") or {})}
     errors, found = [], {"py": set(), "png": set()}
     for path in sorted(red.iterdir()):

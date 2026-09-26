@@ -79,6 +79,14 @@ class DrawExamTest(unittest.TestCase):
             self.assertEqual(main(["draw_exam.py", str(self.exam)]), 1)
         self.assertIn("ERROR fig-Q1.py: boom", out.getvalue())
 
+    def test_compare_with_no_redrawn_figures_reports_error(self):
+        (self.red / "fig-Q2.py").unlink()
+        sheet = Path(self._tmp.name) / "sheet.png"
+        out = io.StringIO()
+        with redirect_stdout(out), redirect_stderr(io.StringIO()):
+            self.assertEqual(main(["draw_exam.py", str(self.exam), "--compare", str(sheet)]), 1)
+        self.assertIn("ERROR 다시 그린 그림이 없음", out.getvalue())
+
 
 if __name__ == "__main__":
     unittest.main()

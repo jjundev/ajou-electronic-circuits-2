@@ -1,6 +1,7 @@
 """기출 회로도 다시 그리기 공통 스타일 (Razavi 시험지 모양). 규칙은 FORMAT-EXAM.md '다시 그린 그림'."""
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import schemdraw
 import schemdraw.elements as elm
 
@@ -47,8 +48,11 @@ def gate_terminal(d, gate, label, open_=False, right=False):
 
 
 def caption(d, xy, text):
-    """패널 캡션 (a), (b). 원본처럼 패널 아래 가운데에 둔다."""
-    return d.add(elm.Label().at(xy).label(text))
+    """패널 캡션 (a), (b). 원본처럼 패널 아래 가운데에 둔다.
+
+    .right()를 꼭 준다: 안 주면 앞 요소의 진행 방향을 물려받아 라벨 위치가 흔들린다.
+    """
+    return d.add(elm.Label().right().at(xy).label(text))
 
 
 def save_png(drawing, path, dpi=DPI):
@@ -56,3 +60,4 @@ def save_png(drawing, path, dpi=DPI):
     fig = drawing.draw(show=False)
     fig.fig.savefig(Path(path), dpi=dpi, facecolor="white", bbox_inches="tight",
                     pad_inches=0.05, metadata={"Software": None})
+    plt.close(fig.fig)

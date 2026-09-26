@@ -117,7 +117,11 @@ def main(argv):
     for e in errors:
         print(f"ERROR {e}")
     if compare and not errors:
-        print(compare_sheet(exam_dir, compare))
+        try:
+            print(compare_sheet(exam_dir, compare))
+        except ValueError:
+            print("ERROR 다시 그린 그림이 없음")
+            return 1
     return 1 if errors else 0
 
 
