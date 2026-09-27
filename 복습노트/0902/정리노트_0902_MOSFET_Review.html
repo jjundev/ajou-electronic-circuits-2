@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>전자회로2 정리노트 0902</title>
+  <meta name="description" content="권익진 교수님 전자회로2 · 0902 수업 (Lec1–2, Razavi 1·6장)">
+  <script>document.documentElement.classList.add('js');try{const t=localStorage.getItem('od-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false,ignoredTags:['script','noscript','style','textarea','pre','code']})"></script>
+  <style>
+    /* ---------- 토큰 ---------- */
+    :root {
+      color-scheme: light;
+      --bg: #ffffff; --surface: #f7f8fa; --ink: #111111; --ink-2: #6b7280; --line: #d9dee7;
+      --accent: #1677ff; --accent-ink: #1b64da; --btn-bg: #1b64da; --on-btn: #ffffff;
+      --warn: #b54708; --prof: #6941c6; --supp: #067647; --danger: #d92d20;
+      --font: 'Pretendard', system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      --fs-title: clamp(28px, 6vw, 36px); --fs-h3: clamp(26px, 5.4vw, 32px); --fs-layer: 19px; --fs-lead: 22px; --fs-body: 17px; --fs-sub: 15px; --fs-small: 14px; --fs-label: 13px; --fs-fig: 12px;
+      --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px;
+      --radius: 8px; --measure: 680px; --tap: 48px; --btn-min: 160px;
+      --dur: 220ms; --dur-exit: 150ms; --ease-out: cubic-bezier(.2, .8, .2, 1);
+      /* 예전 조각이 참조할 수 있는 이름 */
+      --surface-2: var(--surface); --accent-soft: var(--surface); --warn-soft: var(--surface);
+      --prof-soft: var(--surface); --supp-soft: var(--surface); --eli5: var(--accent-ink); --eli5-soft: var(--surface);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        color-scheme: dark;
+        --bg: #17171c; --surface: #212128; --ink: #f2f4f6; --ink-2: #a3abb8; --line: #34353d;
+        --accent: #3182f6; --accent-ink: #6ea4ff; --btn-bg: #1b64da; --on-btn: #ffffff;
+        --warn: #f5a15c; --prof: #b69cff; --supp: #5fd39a; --danger: #ff6b61;
+      }
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #17171c; --surface: #212128; --ink: #f2f4f6; --ink-2: #a3abb8; --line: #34353d;
+      --accent: #3182f6; --accent-ink: #6ea4ff; --btn-bg: #1b64da; --on-btn: #ffffff;
+      --warn: #f5a15c; --prof: #b69cff; --supp: #5fd39a; --danger: #ff6b61;
+    }
+
+    /* ---------- 기본 ---------- */
+    * { box-sizing: border-box; }
+    html { scroll-padding-top: 72px; -webkit-text-size-adjust: 100%; }
+    body { margin: 0; min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column;
+      background: var(--bg); color: var(--ink); font-family: var(--font); font-size: var(--fs-body); line-height: 1.7; word-break: keep-all; overflow-wrap: anywhere; }
+    a { color: var(--accent-ink); text-underline-offset: 3px; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    [hidden] { display: none !important; }
+
+    /* ---------- 상단 바 ---------- */
+    .topbar { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line); }
+    .topbar-inner { max-width: var(--measure); margin: 0 auto; padding: var(--s2) var(--s4); display: flex; align-items: center; gap: var(--s3); min-height: 56px; }
+    .brand { flex: 1 1 auto; min-width: 0; font-size: var(--fs-body); font-weight: 700; white-space: nowrap; }
+    .text-btn { flex: none; min-height: 44px; min-width: 44px; padding: 0 var(--s3); border: 0; border-radius: var(--radius);
+      background: transparent; color: var(--ink); font: 600 var(--fs-small)/1 var(--font); cursor: pointer; }
+    .bar { height: 2px; background: var(--line); overflow: hidden; }
+    .bar > span { display: block; height: 100%; background: var(--accent); transform-origin: left; transform: scaleX(0); transition: transform var(--dur) var(--ease-out); }
+
+    /* ---------- 본문 ---------- */
+    main { flex: 1 0 auto; width: 100%; max-width: var(--measure); margin: 0 auto; padding: var(--s6) var(--s5) var(--s7); }
+    .hero h1 { font-size: var(--fs-title); line-height: 1.3; margin: 0 0 var(--s3); letter-spacing: -0.02em; }
+    .hero p { color: var(--ink-2); margin: 0; }
+    section { margin-top: var(--s7); }
+    section > h2 { font-size: 22px; line-height: 1.4; margin: 0 0 var(--s4); }
+    .topic { padding: var(--s6) 0; border-top: 1px solid var(--line); }
+    .topic h3 { margin: 0 0 var(--s2); font-size: var(--fs-h3); font-weight: 800; line-height: 1.3; letter-spacing: -0.02em; }
+    .tags { display: flex; flex-wrap: wrap; gap: var(--s2); margin-bottom: var(--s5); }
+    .tag { font-size: var(--fs-label); line-height: 1.5; padding: 2px var(--s2); border-radius: 6px; background: var(--surface); color: var(--ink-2); white-space: nowrap; }
+
+    /* 레이어: 배경 없이 라벨과 구분선으로 나눈다 */
+    .layer { margin-top: var(--s5); padding-top: var(--s5); border-top: 1px solid var(--line); }
+    .layer.eli5 { margin-top: 0; padding-top: 0; border-top: 0; }
+    .layer > :first-child { margin-top: 0; }
+    .layer > :last-child { margin-bottom: 0; }
+    .layer-title { display: block; font-size: var(--fs-layer); font-weight: 700; line-height: 1.4; letter-spacing: -0.01em; color: var(--ink); margin-bottom: var(--s3); }
+    .layer.eli5 .layer-title { color: var(--accent-ink); }
+    .layer.eli5 .lead { font-size: var(--fs-lead); font-weight: 700; line-height: 1.5; letter-spacing: -0.01em; margin: 0 0 var(--s4); }
+    /* 정확히 말하면: 본문 크기 그대로, 굵은 첫머리만 진하게 */
+    .layer.formal b { font-weight: 700; color: var(--ink); }
+    /* 교수님 말씀 · 주의: 보조 정보는 한 단계 작게 */
+    .layer.prof, .layer.warn { font-size: var(--fs-sub); line-height: 1.7; }
+    .layer.prof blockquote { font-size: var(--fs-sub); }
+    .layer.prof .layer-title { color: var(--prof); }
+    .layer.warn { background: var(--surface); border-top: 0; border-radius: var(--radius); padding: var(--s4); }
+    .layer.warn .layer-title { color: var(--warn); font-size: var(--fs-body); }
+    .layer.supp .badge.supp { margin-bottom: var(--s2); }
+    .badge { display: inline-block; font-size: var(--fs-label); font-weight: 600; line-height: 1.5; padding: 2px var(--s2); border-radius: 6px; background: var(--surface); color: var(--ink-2); }
+    .badge.supp { color: var(--supp); }
+    blockquote { margin: var(--s3) 0; padding: 0 0 0 var(--s3); border-left: 2px solid var(--line); color: var(--ink-2); }
+    ol.steps { padding-left: 1.4em; }
+    ol.steps li { margin: var(--s2) 0; }
+
+    /* 그림 · 수식 · 표 */
+    .figure { margin: var(--s4) 0; text-align: center; }
+    .figure svg { width: 100%; height: auto; max-width: 560px; color: var(--ink); }
+    .figure figcaption { font-size: var(--fs-small); color: var(--ink-2); margin-top: var(--s1); }
+    .katex-display { overflow-x: auto; overflow-y: hidden; padding: var(--s1) 0; }
+    .table-wrap { overflow-x: auto; }
+    table { border-collapse: collapse; width: 100%; font-size: var(--fs-small); }
+    th, td { border-bottom: 1px solid var(--line); padding: var(--s2); text-align: left; vertical-align: top; }
+    th { color: var(--ink-2); font-weight: 600; }
+    td:first-child, th:first-child { min-width: 6em; }
+
+    /* 위젯 */
+    .widget { background: var(--surface); border-radius: var(--radius); padding: var(--s4); margin: var(--s5) 0; }
+    .widget h4 { margin: 0 0 var(--s1); font-size: var(--fs-layer); line-height: 1.4; }
+    .widget-help { font-size: var(--fs-small); color: var(--ink-2); margin: 0 0 var(--s3); }
+    .controls { display: grid; gap: var(--s2); grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-bottom: var(--s2); font-size: var(--fs-small); }
+    .controls label { display: flex; align-items: center; gap: var(--s2); min-height: 44px; }
+    .controls input[type=range] { flex: 1; min-width: 0; accent-color: var(--accent); }
+    .widget svg { width: 100%; height: auto; background: var(--bg); border-radius: var(--radius); }
+    .readout { font-size: var(--fs-small); margin-top: var(--s2); }
+    .legend { font-size: var(--fs-label); color: var(--ink-2); display: flex; flex-wrap: wrap; gap: var(--s3); }
+    .sw { display: inline-block; width: 14px; height: 4px; vertical-align: middle; margin-right: var(--s1); border-radius: 2px; }
+    .sw.truth { background: var(--ink-2); } .sw.fit { background: var(--accent); } .sw.train { background: var(--accent); height: 10px; width: 10px; border-radius: 50%; }
+    .sw.test { background: var(--warn); height: 10px; width: 10px; border-radius: 50%; } .sw.like { background: var(--accent); } .sw.prior { background: var(--prof); } .sw.post { background: var(--supp); }
+    .axis { stroke: var(--line); stroke-width: 1.5; }
+    .tick { fill: var(--ink-2); font-size: 11px; }
+    .plot-truth { fill: none; stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 5 4; }
+    .plot-fit { fill: none; stroke: var(--accent); stroke-width: 2.5; }
+    .pt-train { fill: var(--accent); }
+    .pt-test { fill: var(--warn); }
+    .plot-like { fill: none; stroke: var(--accent); stroke-width: 2; }
+    .plot-prior { fill: none; stroke: var(--prof); stroke-width: 2; stroke-dasharray: 6 4; }
+    .plot-post { fill: none; stroke: var(--supp); stroke-width: 3; }
+    .mark-ml { stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 3 3; }
+    .mark-map { stroke: var(--supp); stroke-width: 1.5; stroke-dasharray: 3 3; }
+    .fig-ink { stroke: currentColor; fill: none; stroke-width: 2; }
+    .fig-accent { stroke: var(--accent); fill: none; stroke-width: 2.5; }
+    .fig-danger { stroke: var(--danger); fill: none; stroke-width: 2.5; }
+    .fig-dot { fill: var(--accent); }
+    .fig-text { fill: currentColor; font-size: 13px; font-family: inherit; }
+    .fig-muted { fill: var(--ink-2); font-size: var(--fs-fig); font-family: inherit; }
+
+    footer { width: 100%; max-width: var(--measure); margin: 0 auto; padding: 0 var(--s5) var(--s6); color: var(--ink-2); font-size: var(--fs-small); }
+
+    /* ---------- 하단 이동 바 ---------- */
+    .pager { position: sticky; bottom: 0; z-index: 10; background: var(--bg); border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom); }
+    .pager-inner { max-width: var(--measure); margin: 0 auto; padding: var(--s3) var(--s4); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: var(--s3); }
+    .pager-count { font-size: var(--fs-small); color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; text-align: center; min-width: 4em; }
+    .btn { min-height: var(--tap); min-width: var(--btn-min); padding: 0 var(--s6); border-radius: var(--radius); border: 0; font: 700 var(--fs-body)/1 var(--font); cursor: pointer; white-space: nowrap;
+      transition: background-color 150ms ease-out, opacity 150ms ease-out; }
+    .btn-ghost { justify-self: start; background: var(--surface); color: var(--ink); }
+    .btn-primary { justify-self: end; background: var(--btn-bg); color: var(--on-btn); }
+    .btn:disabled { opacity: .4; cursor: default; }
+    @media (hover: hover) {
+      .text-btn:hover, .btn-ghost:not(:disabled):hover { background: var(--line); }
+      .btn-primary:not(:disabled):hover { box-shadow: inset 0 0 0 100px rgba(0, 0, 0, .14); }
+    }
+
+    /* ---------- 목차 시트 ---------- */
+    .sheet { width: min(100%, var(--measure)); max-width: 100%; max-height: 80dvh; margin: auto auto 0; padding: 0; border: 0;
+      border-radius: 16px 16px 0 0; background: var(--bg); color: var(--ink); }
+    .sheet::backdrop { background: rgba(0, 0, 0, .4); }
+    .sheet-inner { padding: var(--s4) var(--s5) calc(var(--s5) + env(safe-area-inset-bottom)); }
+    .sheet-head { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); margin-bottom: var(--s2); }
+    .sheet-head h2 { margin: 0; font-size: var(--fs-lead); }
+    .toc { display: flex; flex-direction: column; }
+    .toc > a, .toc-group > a { display: block; padding: var(--s3) 0 var(--s1); font-size: var(--fs-label); font-weight: 600; color: var(--ink-2); text-decoration: none; }
+    .toc-list { list-style: none; margin: 0 0 var(--s2); padding: 0; }
+    .toc-list a { display: flex; align-items: center; gap: var(--s3); min-height: var(--tap); padding: var(--s2) var(--s3); margin: 0 calc(-1 * var(--s3));
+      border-radius: var(--radius); color: var(--ink); text-decoration: none; line-height: 1.4; }
+    .toc-list a[aria-current="true"] { background: var(--surface); font-weight: 700; color: var(--accent-ink); }
+    .toc-list .toc-title { flex: 1 1 0; min-width: 0; }
+    @media (hover: hover) { .toc-list a:hover { background: var(--surface); } }
+
+    /* ---------- 한 화면에 하나씩 (JS가 켤 때만) ---------- */
+    html:not(.js) .pager, html:not(.js) #toc-open { display: none; }
+    html:not(.js) .sheet { display: block; position: static; width: 100%; max-height: none; margin: 0 auto; border-radius: 0; border-bottom: 1px solid var(--line); }
+    html:not(.js) .sheet-close { display: none; }
+    .js main > .hero:not(.is-current), .js main > section:not(.is-on), .js .screen:not(.is-current) { display: none; }
+    .js main > section { margin-top: 0; }
+    .js main > section > h2 { font-size: var(--fs-small); font-weight: 600; color: var(--accent-ink); margin: 0 0 var(--s2); }
+    .js .topic { padding: 0; border-top: 0; }
+    .js .hero { padding-top: 12vh; }
+    .js footer { display: none; }
+    .js body.at-end footer { display: block; }
+    .screen.enter-next { animation: enter-next var(--dur) var(--ease-out); }
+    .screen.enter-prev { animation: enter-prev var(--dur) var(--ease-out); }
+    @keyframes enter-next { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: none; } }
+    @keyframes enter-prev { from { opacity: 0; transform: translateX(-24px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) {
+      .screen.enter-next, .screen.enter-prev { animation: none; }
+      .bar > span, .btn { transition: none; }
+    }
+    @media (max-width: 480px) {
+      main { padding: var(--s5) var(--s4) var(--s6); }
+      footer { padding: 0 var(--s4) var(--s5); }
+      .btn { min-width: 120px; padding: 0 var(--s5); }
+    }
+    @media print {
+      .topbar, .pager, .sheet { display: none !important; }
+      .js main > .hero, .js main > section, .js .screen, .js footer { display: block !important; }
+    }
+
+    /* ---------- 좌우 패널 (drawer) ---------- */
+    :root { --panel-l: clamp(240px, 18vw, 320px); --panel-r-min: 320px; --panel-r-max: 720px; --scrollbar: 16px; --drawer-l: 304px; --drawer-r: 360px; --fs-panel: 16px; --scrim: rgba(0, 0, 0, .4); }
+    body { height: 100vh; height: 100dvh; min-height: 0; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; overflow: hidden; }
+    .topbar-inner { max-width: none; padding: var(--s2) var(--s3); gap: var(--s2); }
+    .panel-toggle { display: inline-flex; align-items: center; gap: var(--s1); padding: 0 var(--s2); }
+    .panel-toggle svg { flex: none; width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .panel-toggle .strip { fill: transparent; stroke: none; transition: fill 150ms ease-out; }
+    .panel-toggle[aria-expanded="true"] { color: var(--accent-ink); }
+    .panel-toggle[aria-expanded="true"] .strip { fill: currentColor; }
+    .theme-toggle { display: inline-flex; align-items: center; justify-content: center; padding: 0; }
+    .theme-toggle svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .theme-toggle .i-sun { display: none; }
+    :root[data-theme="dark"] .theme-toggle .i-sun { display: block; }
+    :root[data-theme="dark"] .theme-toggle .i-moon { display: none; }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .theme-toggle .i-sun { display: block; }
+      :root:not([data-theme="light"]) .theme-toggle .i-moon { display: none; }
+    }
+
+    .layout { display: grid; grid-template-columns: auto minmax(320px, 1fr) auto; min-height: 0; }
+    .content { display: flex; flex-direction: column; min-width: 0; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scroll-padding-top: var(--s4); }
+    .panel { position: relative; display: flex; flex-direction: column; min-height: 0; overflow: hidden; background: var(--bg); color: var(--ink); font-size: var(--fs-panel); line-height: 1.6; }
+    .panel-left { grid-column: 1; border-right: 1px solid var(--line); }
+    .content { grid-column: 2; }
+    .panel-right { grid-column: 3; border-left: 1px solid var(--line); }
+    .panel-inner { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: var(--s4) var(--s4) var(--s6); }
+    .panel-resize { display: none; }
+    .panel-head { display: flex; align-items: center; gap: var(--s2); min-height: 44px; margin-bottom: var(--s2); }
+    .panel-head h2 { flex: 1 1 0; min-width: 0; margin: 0; font-size: var(--fs-lead); line-height: 1.4; }
+    .panel-sub { margin: 0 0 var(--s4); font-size: var(--fs-layer); font-weight: 700; line-height: 1.4; letter-spacing: -0.01em; }
+    .panel-empty { margin: 0; color: var(--ink-2); }
+    .panel-label { display: block; margin: var(--s5) 0 var(--s2); font-size: var(--fs-label); font-weight: 600; color: var(--ink-2); }
+
+    /* 진행 상태 */
+    .panel-meta { margin: 0 0 var(--s2); font-size: var(--fs-small); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+    .panel-meta b { color: var(--ink); }
+    .progress { height: 4px; margin-bottom: var(--s3); border-radius: 2px; background: var(--line); overflow: hidden; }
+    .progress > span { display: block; height: 100%; background: var(--accent); transform-origin: left; transform: scaleX(0); transition: transform var(--dur) var(--ease-out); }
+    .panel .toc-list a { margin: 0 calc(-1 * var(--s2)); padding: var(--s2); font-size: var(--fs-panel); }
+    .toc-mark { flex: none; display: block; width: 20px; height: 20px; color: var(--ink-2); }
+    .toc-mark svg { display: block; width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .toc-mark.is-done { color: var(--accent-ink); }
+
+    /* 복습문제: 원문 · 힌트 · 풀이 */
+    .aid details:last-of-type { border-bottom: 1px solid var(--line); }
+    .aid details.original > summary { font-size: var(--fs-panel); }
+    .solved-btn { display: flex; align-items: center; justify-content: center; gap: var(--s2); width: 100%; min-height: var(--tap); margin-top: var(--s5); padding: 0 var(--s4);
+      border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg); color: var(--ink); font: 700 var(--fs-panel)/1.2 var(--font); cursor: pointer; }
+    .solved-btn svg { flex: none; width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .solved-btn[aria-pressed="true"] { border-color: var(--accent); color: var(--accent-ink); }
+
+    /* 정리노트: 페이지 요약 */
+    .sum-lead { margin: 0; font-size: var(--fs-body); font-weight: 700; line-height: 1.6; }
+    .eq-list { list-style: none; margin: 0; padding: 0; }
+    .eq-list li { padding: var(--s2) 0; border-bottom: 1px solid var(--line); }
+    .eq-list li:first-child { padding-top: 0; }
+    .eq-name { display: block; font-size: var(--fs-label); font-weight: 600; color: var(--ink-2); }
+    .eq-list .katex-display { margin: var(--s1) 0 0; text-align: left; }
+    .eq-list .katex-display > .katex { text-align: left; }
+    .terms { margin: 0; }
+    .terms dt { font-size: var(--fs-panel); font-weight: 700; margin-top: var(--s4); }
+    .terms dt:first-child { margin-top: 0; }
+    .terms dd { margin: var(--s1) 0 0; font-size: var(--fs-sub); line-height: 1.6; color: var(--ink-2); }
+    .flow { margin: 0; padding-left: 1.4em; font-size: var(--fs-sub); }
+    .flow li { margin: var(--s2) 0; }
+
+    @media (hover: hover) { .solved-btn:hover { background: var(--surface); } }
+
+    /* 넓은 화면: 본문 옆에 붙는 패널 */
+    @media (min-width: 1024px) {
+      .layout { --l: var(--panel-l-user, var(--panel-l)); }
+      .layout[data-left="closed"] { --l: 0px; }
+      .panel-left { width: var(--l); }
+      /* 기본값: 왼쪽 패널과 본문 폭을 뺀 나머지를 오른쪽 패널이 차지 → 본문 옆 빈 여백이 생기지 않는다 */
+      .panel-right { width: var(--panel-r-user, clamp(var(--panel-r-min), calc(100vw - var(--l) - var(--measure) - var(--scrollbar)), var(--panel-r-max))); }
+      .panel-resize { display: block; position: absolute; top: 0; bottom: 0; z-index: 2; width: 12px; padding: 0; border: 0; background: transparent; cursor: col-resize; touch-action: none; }
+      .panel-left .panel-resize { right: 0; }
+      .panel-right .panel-resize { left: 0; }
+      .panel-resize::after { content: ""; position: absolute; top: 0; bottom: 0; width: 2px; background: var(--accent); opacity: 0; transition: opacity 150ms ease-out; }
+      .panel-left .panel-resize::after { right: 0; }
+      .panel-right .panel-resize::after { left: 0; }
+      .panel-resize:focus-visible { outline: none; }
+      .panel-resize:focus-visible::after, .is-resizing .panel-resize:active::after { opacity: 1; }
+      @media (hover: hover) { .panel-resize:hover::after { opacity: 1; } }
+      body.is-resizing { cursor: col-resize; user-select: none; }
+      .layout[data-left="closed"] .panel-left, .layout[data-right="closed"] .panel-right { display: none; }
+      .panel.is-shown { animation: panel-fade var(--dur) var(--ease-out); }
+      .scrim, .panel-close { display: none; }
+    }
+    @keyframes panel-fade { from { opacity: 0; } to { opacity: 1; } }
+
+    /* 좁은 화면: 가장자리에서 밀려 나오는 drawer */
+    @media (max-width: 1023.98px) {
+      .panel { position: fixed; top: 0; bottom: 0; z-index: 40; visibility: hidden;
+        transition: transform var(--dur-exit) ease-in, visibility 0s linear var(--dur-exit); }
+      .panel-left { left: 0; width: min(var(--drawer-l), 88vw); transform: translateX(-100%); }
+      .panel-right { right: 0; width: min(var(--drawer-r), 88vw); transform: translateX(100%); }
+      .panel.is-open { visibility: visible; transform: none; transition: transform var(--dur) var(--ease-out); }
+      .panel-inner { padding-top: calc(var(--s3) + env(safe-area-inset-top)); padding-bottom: calc(var(--s6) + env(safe-area-inset-bottom)); }
+      .scrim { position: fixed; inset: 0; z-index: 35; background: var(--scrim); opacity: 0; visibility: hidden;
+        transition: opacity var(--dur-exit) ease-in, visibility 0s linear var(--dur-exit); }
+      .scrim.is-on { opacity: 1; visibility: visible; transition: opacity var(--dur) var(--ease-out); }
+      html:not(.js) .panel-left { display: none; }
+    }
+    @media (max-width: 480px) { .panel-toggle { padding: 0 var(--s1); } }
+    html:not(.js) .panel-toggle, html:not(.js) .panel-right, html:not(.js) .scrim { display: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .panel, .panel.is-open, .scrim, .scrim.is-on, .progress > span, .panel-toggle .strip { transition: none; }
+      .panel.is-shown { animation: none; }
+      .panel-resize::after { transition: none; }
+    }
+    @media print {
+      body { display: block; height: auto; overflow: visible; }
+      .layout { display: block; }
+      .content { overflow: visible; }
+      .panel, .scrim { display: none !important; }
+    }
+  </style>
+</head>
+<body data-screens="article.topic" data-panels="note" data-range="0902">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <button class="text-btn panel-toggle" id="toggle-left" type="button" aria-controls="panel-left" aria-expanded="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="strip" x="3" y="4" width="6" height="16" rx="1"/><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg><span>목차</span></button>
+      <strong class="brand">정리노트</strong>
+      <button class="text-btn theme-toggle" id="theme-toggle" type="button" aria-label="다크 모드로 전환" title="다크 모드로 전환"><svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg><svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+      <button class="text-btn panel-toggle" id="toggle-right" type="button" aria-controls="panel-right" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="strip" x="15" y="4" width="6" height="16" rx="1"/><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M15 4v16"/></svg><span>요약</span></button>
+    </div>
+    <div class="bar" aria-hidden="true"><span id="pager-bar"></span></div>
+  </header>
+  <div class="layout" data-left="open" data-right="closed">
+    <aside class="panel panel-left" id="panel-left" aria-labelledby="panel-left-title">
+      <div class="panel-resize" data-side="left" role="separator" aria-orientation="vertical" aria-controls="panel-left" aria-label="왼쪽 패널 너비 조절. 좌우 화살표로 조절, Home으로 자동 너비" tabindex="0"></div>
+      <div class="panel-inner">
+        <div class="panel-head">
+          <h2 id="panel-left-title">목차</h2>
+          <button class="text-btn panel-close" type="button" data-panel-close>닫기</button>
+        </div>
+        <p class="panel-meta">읽은 토픽 <b id="progress-n">0</b> / <span id="progress-total">0</span></p>
+        <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+        <nav class="toc" aria-label="목차"><a href="#s0">1 과목 소개</a><a href="#s1">2 역사·응용</a><a href="#s2">3 MOSFET</a><a href="#s3">4 요약·예고</a></nav>
+      </div>
+    </aside>
+    <div class="content">
+  <main>
+    <div class="hero">
+      <h1>전자회로2 첫 수업과 MOSFET 복습 — 5살도 이해하는 정리노트</h1>
+      <p>권익진 교수님 전자회로2 · 0902 수업 (Lec1–2, Razavi 1·6장)</p>
+    </div>
+    <section id="s0"><h2>1. 전자회로2는 어떤 과목일까</h2>
+<article class="topic" id="s0-rules"><h3>성적과 과제 규칙</h3><div class="tags"><span class="tag date">0902 수업</span><span class="tag slide">L01 s2–s4</span></div>
+  <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+    <p class="lead">점수는 두 번의 시험, 직접 회로를 설계하는 숙제, 출석으로 정해지고, 수업 중에 질문을 하면 점수를 더 받아요.</p>
+    <figure class="figure"><svg id="fig-s0-grade" viewBox="0 0 600 170" role="img" aria-label="선으로 그린 가로 막대 하나를 네 칸으로 나눈 그림이에요. 중간고사 35, 기말고사 40, 설계과제 20, 출석 5 칸이 차례로 있고, 설계과제 칸만 강조색 테두리예요. 막대 오른쪽에는 질문하면 더해 주는 점수를 뜻하는 강조색 점선 칸이 따로 있어요.">
+      <rect class="fig-ink" x="20" y="50" width="164.5" height="50" stroke-width="1.5"/>
+      <rect class="fig-ink" x="184.5" y="50" width="188" height="50" stroke-width="1.5"/>
+      <rect class="fig-accent" x="372.5" y="50" width="94" height="50" stroke-width="3"/>
+      <rect class="fig-ink" x="466.5" y="50" width="23.5" height="50" stroke-width="1.5"/>
+      <rect class="fig-accent" x="512" y="50" width="70" height="50" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <text class="fig-text" x="102" y="80" font-size="14" text-anchor="middle">중간고사 35</text>
+      <text class="fig-text" x="278" y="80" font-size="14" text-anchor="middle">기말고사 40</text>
+      <text class="fig-text" x="419.5" y="80" font-size="13" text-anchor="middle">설계과제 20</text>
+      <text class="fig-text" x="478" y="36" font-size="13" text-anchor="middle">출석 5</text>
+      <line class="fig-ink" x1="478" y1="41" x2="478" y2="50" stroke-width="1"/>
+      <text class="fig-text" x="547" y="80" font-size="18" text-anchor="middle">+</text>
+      <text class="fig-muted" x="547" y="122" font-size="12" text-anchor="middle">질문하면</text>
+      <text class="fig-muted" x="547" y="138" font-size="12" text-anchor="middle">더해 주는 점수</text>
+      <text class="fig-muted" x="419.5" y="122" font-size="12" text-anchor="middle">베끼면 0점</text>
+      <text class="fig-muted" x="20" y="130" font-size="12">0</text>
+      <text class="fig-muted" x="490" y="130" font-size="12" text-anchor="end">100</text>
+    </svg><figcaption>숙제를 베끼면 보여 준 사람도 본 사람도 모두 0점이에요.</figcaption></figure>
+  </div>
+  <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <p>성적평가기준(L01 s2)은 이래요. 중간·기말 비율은 녹음이 시작되기 전에 설명해서 슬라이드 값만 적어요.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>항목</th><th>비율</th><th>규칙</th></tr></thead>
+      <tbody>
+        <tr><td>중간고사</td><td>35%</td><td>녹음 전에 설명(슬라이드 기준)</td></tr>
+        <tr><td>기말고사</td><td>40%</td><td>녹음 전에 설명(슬라이드 기준)</td></tr>
+        <tr><td>설계과제</td><td>20%</td><td>Copy는 모두 0점 처리. 보여 준 사람과 본 사람 모두 0점이에요. 서로 논의하고 도움을 받는 것은 괜찮아요.</td></tr>
+        <tr><td>출석</td><td>5%</td><td>수업 중에 무작위로 확인해요. 부를 때 응답하지 않으면 결석이에요. 수업이 끝난 뒤 출석을 인정해 달라는 요청은 받지 않아요. 부정 출석은 최저학점이에요. 전자출석은 따로 확인하지 않아요(나중에 일괄 업데이트).</td></tr>
+        <tr><td>가산점</td><td>+</td><td>질의응답 참여도에 따라 줘요. 성적 그레이드가 바뀔 만큼의 점수예요.</td></tr>
+      </tbody>
+    </table></div>
+    <p>설계과제에서 SPICE를 써 본 적이 없는 학생에게는 가이드를 주고, 조교가 도와줘요.</p>
+    <p>그 밖의 강의 안내(L01 s3–s4)예요.</p>
+    <ul>
+      <li>담당교수 권익진, 원천관 314-1호, 집적회로시스템(ICAS) 연구실이에요. 연구분야는 아날로그 회로 가운데 무선통신용 RFIC와 전력관리용 PMIC(Power Management IC)예요.</li>
+      <li>상담은 이메일이나 포털로 미리 약속해요. 조교 정보는 아주Bb에 올려요.</li>
+      <li>강의노트는 수업 전에 아주Bb에 올려요. 수업은 강의노트로 진행해요.</li>
+      <li>교재는 Razavi, <i>Fundamentals of Microelectronics</i>예요. 번역본이든 원서든 상관없어요. 수업 시간에 꼭 가져올 필요는 없지만, 예제가 많으니 시험 준비에도 참고하라고 권하셨어요.</li>
+      <li>질문은 수업 중 언제든 해도 돼요.</li>
+    </ul>
+  </div>
+  <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+    <p>회로 설계는 정답이 하나로 정해진 문제가 아니에요. 그래서 여러 사람이 설계하면 결과가 서로 달라야 하고, 결과가 비슷하면 copy를 의심할 수밖에 없다고 하셨어요.</p>
+    <blockquote>"100명이 설계하면 100명이 다 일반적으로 다르게 나와야 되거든요." (0902 00:44)</blockquote>
+    <p>과제의 취지는 회사에서 실무를 할 때 필요한 설계 능력을 스스로 쌓아 보는 거예요.</p>
+    <p>가산점을 두는 이유는 질문을 권하기 위해서예요. 수동적으로 듣기만 하면 이해한 것 같아도 지나고 나면 모르게 되고, 질문하면서 이해도가 높아진다고 하셨어요.</p>
+    <blockquote>"좋은 질문, 나쁜 질문 없습니다." (0902 02:49)</blockquote>
+  </div>
+  <div class="layer warn"><span class="layer-title">꼭 기억해요</span>
+    <blockquote>"카피는 모두 0점 처리를 하도록 하겠습니다." (0902 00:09)</blockquote>
+    <blockquote>"수업 끝나고 와서 출석 인정해 달라고 하는 거는 허용하지 않는다" (0902 03:34)</blockquote>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">설계과제는 Copy는 모두 0점이고, 출석은 수업 중에만 인정하며, 질문하면 가산점을 받아요.</p>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>설계과제</dt><dd>20%. 보여 준 사람과 본 사람 모두 0점 처리</dd>
+      <dt>출석</dt><dd>5%. 수업 중 무작위 확인, 수업 뒤 인정 불가</dd>
+      <dt>가산점</dt><dd>질의응답 참여도에 따라 더해 주는 점수</dd>
+    </dl>
+  </div>
+</article>
+
+<article class="topic" id="s0-why"><h3>왜 전자회로를 배울까</h3><div class="tags"><span class="tag date">0902 수업</span><span class="tag slide">L01 s4</span></div>
+  <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+    <p class="lead">요즘 컴퓨터나 휴대폰으로 돈을 가장 많이 버는 곳은 겉 상자를 만드는 회사가 아니라 속에 든 부품을 만드는 회사예요.</p>
+    <p>그 부품이 어떻게 움직이는지 아는 힘이 우리 과의 무기예요.</p>
+    <figure class="figure"><svg id="fig-s0-value" viewBox="0 0 600 220" role="img" aria-label="왼쪽 예전 그림은 큰 상자가 강조색 테두리이고 속의 작은 상자 세 개는 보통 선이에요. 오른쪽 지금 그림은 큰 상자가 보통 선이고 속의 작은 상자 세 개가 강조색 테두리예요. 두 그림 사이에 왼쪽에서 오른쪽을 가리키는 화살표 선이 있어요.">
+      <text class="fig-text" x="140" y="24" font-size="14" text-anchor="middle">예전</text>
+      <text class="fig-text" x="460" y="24" font-size="14" text-anchor="middle">지금</text>
+      <rect class="fig-accent" x="40" y="40" width="200" height="130" rx="8" stroke-width="3"/>
+      <rect class="fig-ink" x="60" y="95" width="45" height="45" stroke-width="1.5"/>
+      <rect class="fig-ink" x="118" y="95" width="45" height="45" stroke-width="1.5"/>
+      <rect class="fig-ink" x="176" y="95" width="45" height="45" stroke-width="1.5"/>
+      <text class="fig-text" x="140" y="72" font-size="13" text-anchor="middle">겉 상자</text>
+      <text class="fig-muted" x="140" y="160" font-size="12" text-anchor="middle">속 부품</text>
+      <rect class="fig-ink" x="360" y="40" width="200" height="130" rx="8" stroke-width="1.5"/>
+      <rect class="fig-accent" x="380" y="95" width="45" height="45" stroke-width="3"/>
+      <rect class="fig-accent" x="438" y="95" width="45" height="45" stroke-width="3"/>
+      <rect class="fig-accent" x="496" y="95" width="45" height="45" stroke-width="3"/>
+      <text class="fig-muted" x="460" y="72" font-size="12" text-anchor="middle">겉 상자</text>
+      <text class="fig-text" x="460" y="160" font-size="13" text-anchor="middle">속 부품</text>
+      <line class="fig-ink" x1="258" y1="105" x2="342" y2="105" stroke-width="2"/>
+      <polyline class="fig-ink" points="332,97 342,105 332,113" stroke-width="2"/>
+      <text class="fig-muted" x="300" y="200" font-size="12" text-anchor="middle">강조색 테두리 = 돈을 많이 버는 쪽</text>
+    </svg><figcaption>돈을 많이 버는 쪽이 예전엔 겉 상자였고, 지금은 속 부품이에요.</figcaption></figure>
+  </div>
+  <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <p>전자회로1은 반은 소자, 반은 회로였어요. 전자회로2는 본격적인 회로 과목이에요.</p>
+    <p>회로를 해석하는 데 필요한 것은 소자의 물리(device physics)가 아니라 소자의 전기적 특성이에요. 곧 각 노드 사이의 전압과 전류의 관계, 다시 말해 등가 모델(equivalent model)이에요. 소자를 잘 알면 설계에 도움은 돼요.</p>
+    <p>전자회로가 필수 과목인 이유(L01 s4 "Why 전자회로?")는 세 가지예요.</p>
+    <ol>
+      <li>반도체의 기본 동작 원리와 전자회로 이론은 반도체 회로 설계에 필요한 기초 역량이에요.</li>
+      <li>반도체 설계와 검증에 쓰는 회로 개발 도구를 다루는 역량이 돼요.</li>
+      <li>하드웨어(hardware) 블록의 특성을 이해하고, 시스템에 필요한 회로 구성 요소를 최적화해 설계·구현하는 역량이 돼요.</li>
+    </ol>
+    <p>반도체 일을 하지 않더라도 이 과목이 필요해요. 전자공학의 강점은 하드웨어를 기반으로 한 소프트웨어이고, 소프트웨어만 하면 그 강점 하나를 버리는 셈이에요. 직접 설계하지 않더라도 하드웨어 블록의 특성을 이해하려면 회로와 기본 부품을 알아야 해요.</p>
+    <p>부가가치(added value)는 완제품에서 그 안의 부품으로 옮겨 갔어요.</p>
+    <ul>
+      <li>PC: 조립하는 회사보다 그 안에 들어가는 프로세서(processor)와 메모리를 만드는 회사가 더 많이 벌어요.</li>
+      <li>스마트폰: 노키아처럼 완제품을 만드는 것이 큰 산업이었지만, 지금은 애플·삼성도 그 안의 칩이 강점이에요.</li>
+      <li>자동차: 차체보다 안에 들어가는 전자 부품과 반도체가 중요해졌어요.</li>
+    </ul>
+    <p>우리나라에는 모바일, 자동차, 반도체처럼 하드웨어 중심 회사가 많아요. 현대자동차처럼 반도체 회사가 아닌 곳도 회로를 직접 설계하고 제조는 파운드리(foundry)에 맡겨요.</p>
+    <p>회로 설계 직무는 전자공학과 학생만 뽑아요. 소자·공정 쪽은 물리, 화학, 화공, 재료 전공도 가요.</p>
+  </div>
+  <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+    <p>PC로 돈을 버는 회사를 묻자 한 학생이 "레노버?"라고 답했어요. 교수님은 그 안의 부품을 만드는 회사가 번다고 정리하셨어요.</p>
+    <blockquote>"거기 안에 들어가는 프로세서, 메모리 만드는 업체가 법니다." (0902 12:58)</blockquote>
+    <blockquote>"그 안에 들어가는 부품을 만드는 게 굉장히 큰 강점이에요." (0902 13:19)</blockquote>
+  </div>
+  <div class="layer warn"><span class="layer-title">꼭 기억해요</span>
+    <blockquote>"등가 모델 좀 알아야지 회로를 해석할 수 있는 거죠." (0902 07:59)</blockquote>
+    <blockquote>"하드웨어의 기본적인 회로를 이해하는 게 굉장히 중요하다" (0902 10:46)</blockquote>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">회로 해석에는 소자 물리보다 전기적 특성, 곧 등가 모델이 필요하고, 하드웨어를 아는 것이 전자공학의 강점이에요.</p>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>등가 모델(equivalent model)</dt><dd>노드 사이 전압과 전류의 관계로 소자를 나타낸 모델</dd>
+      <dt>전기적 특성</dt><dd>각 노드의 전압과 전류의 관계</dd>
+      <dt>부가가치(added value)</dt><dd>완제품에서 프로세서·메모리 같은 부품으로 옮겨 갔어요</dd>
+    </dl>
+  </div>
+</article>
+
+<article class="topic" id="s0-philosophy"><h3>식을 외우지 말고 이해하기</h3><div class="tags"><span class="tag date">0902 수업</span><span class="tag slide">L01 s5</span></div>
+  <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+    <p class="lead">자전거 타는 법을 한 번 몸으로 익히면 오래 쉬어도 금방 다시 타듯, 원리를 이해해 두면 잊어도 금방 돌아와요.</p>
+    <figure class="figure"><svg id="fig-s0-flow" viewBox="0 0 600 250" role="img" aria-label="테두리 상자 네 개가 왼쪽부터 이해하기, 손으로 계산, 손으로 설계, 컴퓨터로 확인 순서로 선으로 이어져 있어요. 컴퓨터로 확인 상자는 강조색 테두리이고, 거기서 손으로 설계 상자로 돌아가는 강조색 점선에 모자란 만큼만 고치기라고 적혀 있어요. 아래에는 처음부터 컴퓨터로 숫자만 바꿔 보기라고 적힌 빨간 테두리 상자가 가위표로 지워져 있어요.">
+      <rect class="fig-ink" x="10" y="40" width="120" height="50" rx="6" stroke-width="1.5"/>
+      <rect class="fig-ink" x="165" y="40" width="120" height="50" rx="6" stroke-width="1.5"/>
+      <rect class="fig-ink" x="320" y="40" width="120" height="50" rx="6" stroke-width="1.5"/>
+      <rect class="fig-accent" x="475" y="40" width="115" height="50" rx="6" stroke-width="3"/>
+      <text class="fig-text" x="70" y="70" font-size="14" text-anchor="middle">1 이해하기</text>
+      <text class="fig-text" x="225" y="70" font-size="14" text-anchor="middle">2 손으로 계산</text>
+      <text class="fig-text" x="380" y="70" font-size="14" text-anchor="middle">3 손으로 설계</text>
+      <text class="fig-text" x="532" y="70" font-size="14" text-anchor="middle">4 컴퓨터로 확인</text>
+      <line class="fig-ink" x1="130" y1="65" x2="163" y2="65" stroke-width="1.5"/>
+      <polyline class="fig-ink" points="156,60 163,65 156,70" stroke-width="1.5"/>
+      <line class="fig-ink" x1="285" y1="65" x2="318" y2="65" stroke-width="1.5"/>
+      <polyline class="fig-ink" points="311,60 318,65 311,70" stroke-width="1.5"/>
+      <line class="fig-ink" x1="440" y1="65" x2="473" y2="65" stroke-width="1.5"/>
+      <polyline class="fig-ink" points="466,60 473,65 466,70" stroke-width="1.5"/>
+      <path class="fig-accent" d="M532,90 L532,125 L380,125 L380,92" stroke-width="2" stroke-dasharray="6 4"/>
+      <polyline class="fig-accent" points="375,100 380,92 385,100" stroke-width="2"/>
+      <text class="fig-muted" x="456" y="143" font-size="12" text-anchor="middle">모자란 만큼만 고치기</text>
+      <rect class="fig-danger" x="150" y="175" width="300" height="50" rx="6" stroke-width="2"/>
+      <text class="fig-text" x="300" y="205" font-size="13" text-anchor="middle">처음부터 컴퓨터로 숫자만 바꿔 보기</text>
+      <line class="fig-danger" x1="150" y1="175" x2="450" y2="225" stroke-width="2"/>
+      <line class="fig-danger" x1="450" y1="175" x2="150" y2="225" stroke-width="2"/>
+    </svg><figcaption>먼저 이해하고 손으로 풀어 본 뒤, 컴퓨터는 맞았는지 확인할 때만 써요.</figcaption></figure>
+  </div>
+  <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <p>이번 학기의 컨셉은 L01 s5의 한 줄이에요: Understand the circuit before using the computer to simulate a circuit!</p>
+    <p>식만 외우면 회로가 조금만 바뀌어도 식이 바뀌어요. 회로는 수백만 가지가 나올 수 있어서 다 외울 수 없고, 이해 없이 외운 식은 잊어버리면 아무것도 남지 않아요.</p>
+    <p>권장하는 설계 순서예요.</p>
+    <ol class="steps">
+      <li>회로를 이해해요.</li>
+      <li>손으로 계산해요.</li>
+      <li>손으로 설계해요.</li>
+      <li>시뮬레이션 툴로 검증해요.</li>
+    </ol>
+    <p>SPICE나 Cadence는 설계해 주는 도구가 아니라 계산기예요. node equation으로 전압과 전류를 계산해 줄 뿐이라서, 회로도를 제대로 그리지 않으면 엉뚱한 결과가 나와요.</p>
+    <p>파라미터를 바꿔 가며 원하는 값이 나올 때까지 돌리는 것을 튜닝(tuning)이라고 해요. 튜닝은 위험하고 남는 것이 없어요. 실무 파라미터는 수백 개가 넘고, 그런 반복은 AI가 더 잘해요.</p>
+    <p>설계는 구조를 고르는 데서 시작해요. 증폭기에는 common-source, common-gate, source follower 같은 여러 구조가 있어요. 각 구조의 장단점을 알고 내 사양에 맞는 구조를 판단해야 해요.</p>
+    <p>예: common-source(CS) 증폭기의 전압 이득은 $A_v = -g_m R_D$예요(L02 s16–s17). 이 식이 설계 방향을 바로 알려 줘요.</p>
+    <ol class="steps">
+      <li>이득 크기: $$|A_v| = g_m R_D$$</li>
+      <li>"이득 100"이 목표면 곱이 100인 조합을 골라요: $$g_m = 10,\ R_D = 10$$ 또는 $$g_m = 1,\ R_D = 100$$</li>
+      <li>시뮬레이션해 보니 이득이 10% 적게 나왔어요.</li>
+      <li>$|A_v|$는 $g_m$과 $R_D$에 비례하니, $g_m$이나 $R_D$를 10%쯤 키우면 돼요.</li>
+    </ol>
+    <p>식을 모르면 이득이 왜 모자란지 모른 채 다시 돌리게 돼요. 식을 배우는 이유는 외우기 위해서가 아니에요. "이득을 높이려면 무엇을 키워야 하나", "bandwidth를 높이려면 무엇을 바꿔야 하나"를 알려 주는 설계의 연결 고리(link)이기 때문이에요.</p>
+    <p>그래서 목표는 회로를 이해하고, 개념을 이해하고, 식이 어떻게 나오는지 이해하고, 식이 나타내는 의미를 파악하는 거예요.</p>
+    <p>(수업에서는 부하저항을 $R_L$이라고 부르셨지만, 슬라이드 L02 s16–s17의 표기 $R_D$로 통일해요.)</p>
+  </div>
+  <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+    <p>자전거 비유를 드셨어요. 한참 안 타면 기억이 잘 안 나도 다시 타면 금방 타요. 개념을 이해해 두면 나중에 관련 업무로 책을 다시 볼 때 "아, 이건 이런 개념이었지" 하고 바로 돌아와요.</p>
+    <p>이 과목을 듣지 않은 사람, 예를 들어 화학과 출신 회로 설계자는 아무리 봐도 모른다고 하셨어요. 그 차이가 이해의 힘이에요.</p>
+    <blockquote>"시험에서 나오는 회로의 개수가 제한돼 있기 때문에 … 회사에 가서 일할 때 과연 도움이 될까요?" (0902 16:39)</blockquote>
+    <p>설계 과제가 나오면 바로 컴퓨터 앞에 가서 파라미터를 바꿔 가며 돌리지 않느냐는 물음에 학생들이 수긍했어요. 그런 튜닝은 여러분보다 AI가 훨씬 더 잘한다고 하셨어요.</p>
+  </div>
+  <div class="layer warn"><span class="layer-title">꼭 기억해요</span>
+    <blockquote>"그거는 계산기예요, 사실은." (0902 20:32)</blockquote>
+    <blockquote>"그냥 검증의 도구로 simulation tool을 사용해야 된다." (0902 23:34)</blockquote>
+    <blockquote>"식은 여러분들이 외우, 외울 필요가 없습니다." (0902 23:40)</blockquote>
+    <blockquote>"식을 외우는 게 중요한 게 아니라 그 의미를 파악하는 게 중요하다" (0902 24:35)</blockquote>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">회로를 이해하고 손으로 설계한 뒤 시뮬레이터는 검증에만 쓰고, 식은 설계 방향을 찾는 데 써요.</p>
+    <p class="panel-label">핵심 식</p>
+    <ul class="eq-list">
+      <li><span class="eq-name">common-source 전압 이득</span>$$A_v = -g_m R_D$$</li>
+      <li><span class="eq-name">이득 크기</span>$$|A_v| = g_m R_D$$</li>
+    </ul>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>계산기</dt><dd>SPICE·Cadence는 node equation으로 전압·전류를 계산할 뿐 설계해 주지 않아요</dd>
+      <dt>튜닝(tuning)</dt><dd>이유를 모른 채 파라미터를 바꿔 가며 돌리는 것. 위험하고 남는 것이 없어요</dd>
+    </dl>
+  </div>
+</article>
+
+<article class="topic" id="s0-roadmap"><h3>이번 학기 진도</h3><div class="tags"><span class="tag date">0902 수업</span><span class="tag slide">L01 s6</span></div>
+  <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+    <p class="lead">이번 학기는 신호를 키우는 간단한 회로에서 출발해, 더 튼튼한 회로, 빠른 신호, 신호 거르기까지 차례로 배워요.</p>
+    <figure class="figure"><svg id="fig-s0-road" viewBox="0 0 620 170" role="img" aria-label="왼쪽에서 오른쪽으로 이어진 길 위에 점 일곱 개가 있어요. 처음 두 점, 소개와 복습은 색칠된 점이고 나머지 다섯 점, 전류 복사와 쌓기, 두 입력 비교, 빠른 신호, 되먹임, 거르기는 테두리만 있는 점이에요.">
+      <line class="fig-ink" x1="40" y1="70" x2="580" y2="70" stroke-width="2"/>
+      <circle class="fig-dot" cx="40" cy="70" r="11"/>
+      <circle class="fig-dot" cx="130" cy="70" r="11"/>
+      <circle class="fig-ink" cx="220" cy="70" r="11" stroke-width="2"/>
+      <circle class="fig-ink" cx="310" cy="70" r="11" stroke-width="2"/>
+      <circle class="fig-ink" cx="400" cy="70" r="11" stroke-width="2"/>
+      <circle class="fig-ink" cx="490" cy="70" r="11" stroke-width="2"/>
+      <circle class="fig-ink" cx="580" cy="70" r="11" stroke-width="2"/>
+      <text class="fig-muted" x="85" y="36" font-size="12" text-anchor="middle">오늘</text>
+      <line class="fig-accent" x1="35" y1="44" x2="135" y2="44" stroke-width="1.5"/>
+      <text class="fig-text" x="40" y="104" font-size="13" text-anchor="middle">소개</text>
+      <text class="fig-text" x="130" y="104" font-size="13" text-anchor="middle">복습</text>
+      <text class="fig-text" x="220" y="104" font-size="13" text-anchor="middle">전류 복사</text>
+      <text class="fig-text" x="220" y="121" font-size="13" text-anchor="middle">쌓기</text>
+      <text class="fig-text" x="310" y="104" font-size="13" text-anchor="middle">두 입력</text>
+      <text class="fig-text" x="310" y="121" font-size="13" text-anchor="middle">비교</text>
+      <text class="fig-text" x="400" y="104" font-size="13" text-anchor="middle">빠른 신호</text>
+      <text class="fig-text" x="490" y="104" font-size="13" text-anchor="middle">되먹임</text>
+      <text class="fig-text" x="580" y="104" font-size="13" text-anchor="middle">거르기</text>
+    </svg><figcaption>색칠된 두 점이 오늘 한 곳이고, 테두리만 있는 점이 앞으로 갈 곳이에요.</figcaption></figure>
+  </div>
+  <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <p>진도는 강의계획서대로 가요(L01 s6).</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>순서</th><th>주제</th><th>다루는 이유</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Introduction</td><td>과목 소개</td></tr>
+        <tr><td>2</td><td>Review</td><td>전자회로1에서 필요한 것만 복습</td></tr>
+        <tr><td>3</td><td>Cascode Stage and Current Mirror</td><td>전자회로1은 간단한 single-stage 증폭기가 중심이었어요. 바이어스 전압·전류를 공급하는 current mirror와, single-stage를 넘어선 cascode를 배워요.</td></tr>
+        <tr><td>4</td><td>Differential Amplifiers</td><td>차동 증폭기</td></tr>
+        <tr><td>5</td><td>Frequency Response</td><td>예전에는 음성만 처리하면 됐지만, 지금은 넓은 bandwidth에서 고주파 특성을 알아야 해요. 이것이 frequency response예요.</td></tr>
+        <tr><td>6</td><td>Feedback</td><td>정확도를 높이는 feedback</td></tr>
+        <tr><td>7</td><td>Analog Filters</td><td>신호를 걸러 주는 filter</td></tr>
+      </tbody>
+    </table></div>
+    <p>이것으로 아날로그 회로의 기본 블록을 다 다루지는 못해요. 신호를 만드는 회로, 기준 전압·전류를 만드는 회로, 지금까지 블랙박스로 쓰던 op-amp 자체의 설계는 선택과목 "아날로그 집적회로"에서 넓히면 돼요.</p>
+  </div>
+  <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+    <p>신호 주파수가 높아졌기 때문에 넓은 bandwidth에서의 주파수 특성을 이해해야 한다고 하셨어요.</p>
+    <blockquote>"옛날에는 음성만 처리하면 됐었잖아요." (0902 25:13)</blockquote>
+    <blockquote>"아날로그 집적회로 같은 과목을 통해서 … 이해의 폭을 넓히면 되겠습니다." (0902 26:12)</blockquote>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">single-stage 증폭기에서 출발해 current mirror, cascode, 차동 증폭기, frequency response, feedback, filter 순서로 가요.</p>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>current mirror</dt><dd>바이어스 전압·전류를 공급하는 회로</dd>
+      <dt>frequency response</dt><dd>넓은 bandwidth에서의 고주파 특성</dd>
+      <dt>feedback</dt><dd>정확도를 높이는 방법</dd>
+    </dl>
+  </div>
+</article>
+    </section>
+    <section id="s1"><h2>2. 반도체 회로는 어디에 쓰일까</h2>
+<article class="topic" id="s1-history"><h3>트랜지스터에서 IC까지</h3><div class="tags"><span class="tag date">0902 수업</span><span class="tag slide">L01 s7–s9</span></div>
+  <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+    <p class="lead">크고 잘 깨지는 유리관 부품이 작은 스위치로 바뀌었고, 그 스위치를 판 하나에 점점 더 많이 모으면서 지금의 전자기기가 생겼어요.</p>
+    <figure class="figure"><svg id="fig-history-timeline" viewBox="0 0 600 190" role="img" aria-label="가로 선 위에 색칠된 점 다섯 개가 시간 순서로 놓여 있어요. 1947년 작은 스위치 발명, 1959년 선으로 이은 첫 칩, 1961년 판 위에 새겨서 이은 칩, 1971년 스위치 2,250개짜리 첫 계산 칩, 그리고 지금은 스위치 수십억 개예요.">
+      <line class="fig-ink" x1="30" y1="80" x2="575" y2="80"/>
+      <path class="fig-ink" d="M565,74 L575,80 L565,86"/>
+      <circle class="fig-dot" cx="65" cy="80" r="6"/>
+      <circle class="fig-dot" cx="175" cy="80" r="6"/>
+      <circle class="fig-dot" cx="285" cy="80" r="6"/>
+      <circle class="fig-dot" cx="395" cy="80" r="6"/>
+      <circle class="fig-dot" cx="515" cy="80" r="6"/>
+      <text class="fig-text" x="65" y="60" font-size="14" text-anchor="middle">1947</text>
+      <text class="fig-text" x="175" y="60" font-size="14" text-anchor="middle">1959</text>
+      <text class="fig-text" x="285" y="60" font-size="14" text-anchor="middle">1961</text>
+      <text class="fig-text" x="395" y="60" font-size="14" text-anchor="middle">1971</text>
+      <text class="fig-text" x="515" y="60" font-size="14" text-anchor="middle">지금</text>
+      <text class="fig-muted" x="65" y="112" font-size="12" text-anchor="middle">작은 스위치</text>
+      <text class="fig-muted" x="65" y="128" font-size="12" text-anchor="middle">발명</text>
+      <text class="fig-muted" x="175" y="112" font-size="12" text-anchor="middle">첫 칩</text>
+      <text class="fig-muted" x="175" y="128" font-size="12" text-anchor="middle">(선으로 이음)</text>
+      <text class="fig-muted" x="285" y="112" font-size="12" text-anchor="middle">판 위에</text>
+      <text class="fig-muted" x="285" y="128" font-size="12" text-anchor="middle">새겨서 이음</text>
+      <text class="fig-muted" x="395" y="112" font-size="12" text-anchor="middle">첫 계산 칩</text>
+      <text class="fig-muted" x="395" y="128" font-size="12" text-anchor="middle">스위치 2,250개</text>
+      <text class="fig-muted" x="515" y="112" font-size="12" text-anchor="middle">스위치</text>
+      <text class="fig-muted" x="515" y="128" font-size="12" text-anchor="middle">수십억 개</text>
+      <text class="fig-text" x="300" y="170" font-size="13" text-anchor="middle">한 판에 모이는 스위치가 점점 많아져요</text>
+    </svg><figcaption>스위치를 한 판에 많이 모을수록 기기는 작아지고 전기도 덜 써요.</figcaption></figure>
+  </div>
+  <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <p>회로는 트랜지스터(transistor)로 만들어요. 그래서 전자회로의 역사는 트랜지스터의 개발에서 시작해요(L01 s7).</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>연도</th><th>사건</th><th>의미</th></tr></thead>
+      <tbody>
+        <tr><td>1947</td><td>Bell Labs에서 트랜지스터 발명</td><td>전화 교환기에서 스위치로 쓰던 진공관(vacuum tube)을 대체했어요. 진공관은 부피가 크고 잘 깨졌어요.</td></tr>
+        <tr><td>1959</td><td>Texas Instruments(TI)의 Jack Kilby가 첫 IC(integrated circuit, 집적회로)를 만듦</td><td>트랜지스터와 수동 소자(R, C)를 한 기판에 모았어요. 배선은 반도체 공정이 아니라 금선(gold wire)으로 이었어요. 기능 검증 수준이었어요.</td></tr>
+        <tr><td>1961</td><td>첫 planar IC</td><td>반도체 공정으로 기판 위에 트랜지스터, R, C를 만들고 연결까지 했어요. 오늘날 IC와 같은 방식이에요.</td></tr>
+        <tr><td>1971</td><td>Intel 4004</td><td>세계 최초의 마이크로프로세서(microprocessor)예요. 트랜지스터 2,250개를 12 mm² 면적에 넣었어요.</td></tr>
+      </tbody>
+    </table></div>
+    <ul>
+      <li>트랜지스터 이전에는 전자 소자로 진공관을 썼어요. 초기 컴퓨터 ENIAC도 진공관으로 만들었어요.</li>
+      <li>1947년의 첫 트랜지스터는 지금 트랜지스터와 모양이 달라요. 동작을 검증하기 위한 형태였어요. 이 연구에서 BJT(Bipolar Junction Transistor) 개념이 완성됐어요.</li>
+      <li>트랜지스터 발명은 노벨 물리학상을 받았어요(1956). 전자공학에서 노벨상을 받은 몇 안 되는 업적이에요.</li>
+      <li>planar IC는 Fairchild의 Robert Noyce가 고안했어요. 바탕이 된 planar 공정은 같은 회사의 Jean Hoerni가 개발했어요. Noyce는 뒤에 Intel을 공동 창업했어요.</li>
+      <li>IC 발명도 2000년 노벨 물리학상을 받았어요. 수상자는 Jack Kilby예요. Robert Noyce는 1990년에 세상을 떠나 받지 못했어요.</li>
+    </ul>
+    <p>무어의 법칙(Moore's law)에 따라 칩 하나에 들어가는 트랜지스터 수는 계속 늘었어요. 지금은 칩 하나에 수십억 개가 들어가고, 시스템 하나가 칩 하나에 들어가요.</p>
+    <p>부품을 따로따로 연결하는 discrete component 방식은 부피가 크고 전력 소모가 많아요. 그래서 지금 회로 설계는 곧 반도체 설계, 곧 반도체 IC 설계예요. 전자 시스템을 설계하는 것과 반도체를 설계하는 것이 거의 같은 개념이 됐어요.</p>
+  </div>
+  <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+    <p>Bell Labs의 벨이 누구냐고 물으셨고, 학생이 "전화기 만든 사람"이라고 답했어요. 그래서 전화기에 필요한 교환기의 스위치를 바꾸려고 트랜지스터를 만들었다고 이으셨어요.</p>
+    <p>지금 칩에 트랜지스터가 몇 개 들어가냐는 질문에 학생이 "몇 억?"이라고 답했고, 교수님은 수십억 개라고 정리하셨어요.</p>
+    <p>예전 TV는 discrete 부품으로 채워져 있었지만, 지금은 뜯어 보면 반도체 몇 개밖에 없다고 하셨어요.</p>
+    <blockquote>"회로 설계라고 하는 거는 사실 반도체 설계라고 이해하시면 되겠습니다." (0902 32:48)</blockquote>
+  </div>
+  <div class="layer warn"><span class="layer-title">꼭 기억해요</span>
+    <p>회로의 출발점은 트랜지스터예요.</p>
+    <blockquote>"가장 중요한 것 중의 하나가 트랜지스터죠, 트랜지스터." (0902 26:58)</blockquote>
+    <p>IC의 등장도 트랜지스터만큼 중요한 사건이에요.</p>
+    <blockquote>"트랜지스터의 개발과 마찬가지로 굉장히 중요한 거고" (0902 31:12)</blockquote>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">진공관을 대신한 트랜지스터가 IC로 모이면서, 지금 회로 설계는 곧 반도체 설계가 됐어요.</p>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>진공관(vacuum tube)</dt><dd>트랜지스터 이전의 스위치 소자. 부피가 크고 잘 깨져요</dd>
+      <dt>planar IC</dt><dd>반도체 공정으로 소자와 연결까지 기판 위에 만든 IC(1961)</dd>
+      <dt>Intel 4004</dt><dd>트랜지스터 2,250개로 만든 세계 최초의 마이크로프로세서(1971)</dd>
+    </dl>
+  </div>
+</article>
+
+<article class="topic" id="s1-analog-digital"><h3>디지털 회로와 아날로그 회로</h3><div class="tags"><span class="tag date">0902 수업</span><span class="tag slide">L01 s10</span></div>
+  <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+    <p class="lead">칩 속에는 켜짐과 꺼짐 두 가지로만 계산하는 부분과, 끊김 없이 변하는 작은 신호를 다루는 부분이 함께 들어 있어요.</p>
+    <figure class="figure"><svg id="fig-memory-half" viewBox="0 0 560 220" role="img" aria-label="테두리만 있는 큰 네모 하나가 강조색 점선으로 반씩 나뉘어 있어요. 왼쪽 반쪽은 계산하는 부분으로, 어느 칸에 쓸지 고르기와 켜짐 꺼짐 계산이 적혀 있어요. 오른쪽 반쪽은 신호를 다루는 부분으로, 아주 작은 차이 키우기, 필요한 전압 만들기, 빠르게 주고받기가 적혀 있어요.">
+      <text class="fig-text" x="280" y="20" font-size="14" text-anchor="middle">기억 칩 하나</text>
+      <rect class="fig-ink" x="40" y="32" width="480" height="168" rx="10"/>
+      <line class="fig-accent" x1="280" y1="40" x2="280" y2="192" stroke-dasharray="5 4"/>
+      <text class="fig-text" x="160" y="68" font-size="14" text-anchor="middle">계산하는 반쪽</text>
+      <text class="fig-muted" x="160" y="110" font-size="13" text-anchor="middle">어느 칸에 쓸지 고르기</text>
+      <text class="fig-muted" x="160" y="140" font-size="13" text-anchor="middle">켜짐·꺼짐 계산</text>
+      <text class="fig-text" x="400" y="68" font-size="14" text-anchor="middle">신호를 다루는 반쪽</text>
+      <text class="fig-muted" x="400" y="110" font-size="13" text-anchor="middle">아주 작은 차이 키우기</text>
+      <text class="fig-muted" x="400" y="140" font-size="13" text-anchor="middle">필요한 전압 만들기</text>
+      <text class="fig-muted" x="400" y="170" font-size="13" text-anchor="middle">빠르게 주고받기</text>
+    </svg><figcaption>기억을 담는 칩도 반은 계산하는 부분, 반은 신호를 다루는 부분이에요.</figcaption></figure>
+  </div>
+  <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <p>집적회로(IC)는 크게 디지털 회로(digital circuit)와 아날로그 회로(analog circuit)로 나뉘어요. 아날로그 쪽 과목은 전자회로와 아날로그 집적회로이고, 디지털 쪽 기본 과목은 논리회로예요.</p>
+    <p>메모리는 디지털일까요, 아날로그일까요? 답은 "반반"이에요. 메모리 안에 두 종류의 회로가 모두 들어 있어요.</p>
+    <ul>
+      <li>디지털 부분: decoder(주소에 따라 어느 셀에 쓸지 고름), logic(게이트 로직)</li>
+      <li>아날로그 부분:
+        <ul>
+          <li>sense amp: 셀에 저장된 전하가 만드는 아주 작은 전압 차를 증폭해서 1인지 0인지 판단해요.</li>
+          <li>BGR(bandgap reference)과 LDO(low dropout regulator): 필요한 전압을 만들어요.</li>
+          <li>CP(charge pump): 전압을 더 높여 줘요.</li>
+          <li>high-speed I/O: 속도가 높아지면서 필요해진 고속 입출력 회로예요.</li>
+        </ul>
+      </li>
+    </ul>
+    <p>메모리처럼 대부분의 시스템에는 아날로그 회로와 디지털 회로가 모두 들어가 있어요. 슬라이드 s10은 두 쪽을 이렇게 나눠요.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>구분</th><th>예</th></tr></thead>
+      <tbody>
+        <tr><td>디지털 회로</td><td>메모리의 decoder·logic, AP(application processor), modem(변조·복조 칩), AI용 CPU/GPU/NPU(Neural Processing Unit), 제품별 특화 digital IP</td></tr>
+        <tr><td>아날로그 회로</td><td>메모리의 sense amp·BGR·LDO·CP·high-speed I/O, image/touch/bio 센서, 자동차 레이더 센서, PMIC, DDI, RFIC, AI·5G·IoT·자동차용 analog IP</td></tr>
+      </tbody>
+    </table></div>
+    <ul>
+      <li>레이더 센서(radar sensor): 원래 군용·항공기 위치 정보에 쓰던 기술이 자동차로 내려왔어요. 전자기파를 쏘고 반사되어 돌아오는 시간으로 거리를 재요.</li>
+      <li>PMIC(Power Management IC): 배터리로 움직이는 기기를 오래 쓰려면 전력 관리가 필요해요. 자동차에서는 배터리 관리 IC, 곧 BMS(battery management system)라고도 불러요. 효율이 떨어지면 손실이 열이 되어 기기가 뜨거워지고, AI 때문에 이 문제가 더 심각해졌어요.</li>
+      <li>DDI(Display Driver IC): 디스플레이 뒤에서 픽셀을 구동하는 IC예요. 출력단이 버퍼 앰프 형태라서 이것도 앰프로 볼 수 있어요.</li>
+      <li>RFIC(Radio Frequency IC): 무선 통신용 아날로그 회로예요.</li>
+    </ul>
+    <p>아날로그 회로는 자동차에 특히 많이 쓰여요. 자동차 반도체의 약 70%가 아날로그이고, 메모리·디지털·파운드리를 합친 나머지가 약 30%예요.</p>
+    <p>응용이 달라도 증폭기의 개념은 같아요. 메모리에 쓰면 sense amp, 자동차에 쓰면 자동차용 앰프가 돼요. 응용에 따라 달라지는 것은 요구 사양(spec)이고, 사양이 달라지면 설계도 달라져요.</p>
+  </div>
+  <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+    <p>메모리가 아날로그냐 디지털이냐고 물으시고 바로 답하셨어요.</p>
+    <blockquote>"반반이죠, 반반." (0902 34:16)</blockquote>
+    <p>전자회로를 들으면 눈에 보이지 않는 회로를 붙잡고 헤매는 것 같지만, 이 회로들이 실제 제품마다 빌딩 블록으로 들어가 있다고 하셨어요(0902 39:21).</p>
+  </div>
+  <div class="layer warn"><span class="layer-title">꼭 기억해요</span>
+    <p>같은 증폭기라도 쓰는 곳에 따라 사양이 바뀌고, 그에 맞춰 설계가 바뀌어요.</p>
+    <blockquote>"요구 사양이 달라지면 설계도 조금 달라져야 되겠죠" (0902 39:49)</blockquote>
+    <p>배터리 기기에서는 전력 관리가 핵심이에요.</p>
+    <blockquote>"전력 관리가 굉장히 중요하죠." (0902 37:40)</blockquote>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">메모리를 포함한 대부분의 시스템에는 디지털과 아날로그 회로가 함께 들어 있고, 응용에 따라 사양(spec)이 달라져요.</p>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>sense amp</dt><dd>메모리 셀의 아주 작은 전압 차를 증폭해 1과 0을 판단하는 회로</dd>
+      <dt>PMIC(Power Management IC)</dt><dd>배터리 기기의 전력을 관리하는 아날로그 IC</dd>
+      <dt>사양(spec)</dt><dd>응용이 요구하는 성능 조건. 달라지면 설계도 달라져요</dd>
+    </dl>
+  </div>
+</article>
+
+<article class="topic" id="s1-jobs"><h3>회로설계 직무</h3><div class="tags"><span class="tag date">0902 수업</span><span class="tag slide">L01 s11–s12</span></div>
+  <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+    <p class="lead">칩 하나를 만들 때는 회로를 그려 계산하는 사람, 글로 동작을 적는 사람, 실제 모양을 그리는 사람, 잘 되는지 확인하는 사람이 일을 나눠요.</p>
+    <figure class="figure"><svg id="fig-jobs-roles" viewBox="0 0 560 230" role="img" aria-label="가운데 강조색 테두리 네모에 칩 만들기라고 적혀 있고, 테두리 네모 네 개가 둘레에서 선으로 이어져 있어요. 네 네모에는 회로를 그려 계산하기, 글로 동작 적기, 실제 모양 그리기, 잘 되는지 확인하기가 적혀 있어요.">
+      <rect class="fig-accent" x="215" y="92" width="130" height="46" rx="8"/>
+      <text class="fig-text" x="280" y="120" font-size="14" text-anchor="middle">칩 만들기</text>
+      <rect class="fig-ink" x="20" y="20" width="170" height="50" rx="8"/>
+      <text class="fig-text" x="105" y="50" font-size="13" text-anchor="middle">회로를 그려 계산하기</text>
+      <rect class="fig-ink" x="370" y="20" width="170" height="50" rx="8"/>
+      <text class="fig-text" x="455" y="50" font-size="13" text-anchor="middle">글로 동작 적기</text>
+      <rect class="fig-ink" x="20" y="160" width="170" height="50" rx="8"/>
+      <text class="fig-text" x="105" y="190" font-size="13" text-anchor="middle">실제 모양 그리기</text>
+      <rect class="fig-ink" x="370" y="160" width="170" height="50" rx="8"/>
+      <text class="fig-text" x="455" y="190" font-size="13" text-anchor="middle">잘 되는지 확인하기</text>
+      <line class="fig-ink" x1="190" y1="60" x2="232" y2="92"/>
+      <line class="fig-ink" x1="370" y1="60" x2="328" y2="92"/>
+      <line class="fig-ink" x1="190" y1="170" x2="232" y2="138"/>
+      <line class="fig-ink" x1="370" y1="170" x2="328" y2="138"/>
+    </svg><figcaption>빠르게 움직이는 칩은 글로 적는 쪽 사람도 신호를 다루는 지식이 있어야 만들 수 있어요.</figcaption></figure>
+  </div>
+  <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <p>회로설계 직무는 메모리(DRAM, Flash, controller)와 시스템 반도체(AP, modem, sensor, PMIC, DDI, security, RFIC 등)를 개발하려고 아날로그·디지털 회로를 설계하고 검증하는 일이에요(L01 s11). 메모리를 뺀 반도체를 시스템 반도체라고 불러요.</p>
+    <ul>
+      <li>아날로그 회로설계(s11)
+        <ul>
+          <li>메모리와 시스템 반도체 제품에 맞는 아날로그 IP를 개발해 제품에 적용해요. 아날로그 IP는 기본 단위 블록이에요.</li>
+          <li>ADC, amplifier, regulator, DC-DC, antenna 같은 저전력·초고속 아날로그 회로를 설계해요.</li>
+          <li>고속 신호 전송을 위한 I/O 회로, physical layer, SI/PI(signal/power integrity)를 연구 개발해요.</li>
+        </ul>
+      </li>
+      <li>디지털 회로설계(s12): 제품별 특화 digital IP(CPU, GPU, 5G modem), AI 전용 NPU, 모바일·자동차 SoC, 기능 구현과 평가를 위한 FPGA 설계, system architecture(BW, power, scenario) 최적화</li>
+      <li>회로 검증 및 최적화: 설계 과정의 회로 검증, 불량 분석, 최적화 방안 연구</li>
+      <li>layout 설계 및 설계 검증 방법론 개발: 설계된 회로를 반도체로 만들려면 물리적인 패턴으로 그려야 해요. 이 패턴이 layout이에요. 설계를 검증하는 방법론과 SPICE 같은 전문 소프트웨어를 개발하는 일도 여기에 속해요.</li>
+    </ul>
+    <p>같은 회로 설계라도 아날로그와 디지털은 설계 방법이 달라요.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>구분</th><th>설계 방법</th></tr></thead>
+      <tbody>
+        <tr><td>아날로그 설계</td><td>회로의 schematic을 그리고 전압과 전류를 계산해요.</td></tr>
+        <tr><td>디지털 설계</td><td>주로 Verilog로 코딩하고, back-end에서 튜닝해요.</td></tr>
+      </tbody>
+    </table></div>
+    <p>디지털 신호는 1과 0으로 구분되고, 아날로그 신호는 연속(continuous) 신호예요. 그런데 고속이 되면 디지털 신호도 1과 0으로 딱 나뉘지 않고 아날로그 신호처럼 보여요. 그래서 GHz 대역으로 동작하는 CPU, GPU, HBM 같은 고속 회로는 아날로그 회로처럼 해석해야 해요. 디지털 설계자도 아날로그를 알아야 하는 이유예요.</p>
+    <p>전자회로2는 아날로그 회로 설계의 기초에 해당해요.</p>
+  </div>
+  <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+    <p>디지털과 아날로그의 차이를 물으셨고, 학생이 "디지털은 1과 0으로 구분되고, 아날로그는 continuous 신호"라고 답했어요(0902 41:13). 교수님은 고속에서는 이 구분이 흐려진다고 이으셨어요.</p>
+    <p>두 분야의 설계 방법 차이는 직접 답하셨어요.</p>
+    <blockquote>"같은 회로 설계라도 아날로그 회로 설계랑 디지털 회로 설계는 좀 차이가 있어요." (0902 43:05)</blockquote>
+    <p>반도체 회사의 회로설계 부서에 회로 설계만 있는 것이 아니라, 검증·최적화·layout·방법론을 맡는 사람도 있다고 하셨어요.</p>
+  </div>
+  <div class="layer warn"><span class="layer-title">꼭 기억해요</span>
+    <p>디지털 설계를 하더라도 고속에서는 아날로그 해석이 필요해요.</p>
+    <blockquote>"디지털 회로 설계라 해도 아날로그를 몰라선 안 되는" (0902 44:27)</blockquote>
+    <blockquote>"요즘은 고속이 굉장히 중요하죠." (0902 44:44)</blockquote>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">아날로그 설계는 schematic을 그려 계산하고, 디지털 설계는 Verilog로 코딩하지만, 고속에서는 디지털도 아날로그처럼 해석해야 해요.</p>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>아날로그 IP</dt><dd>메모리·시스템 반도체에 들어가는 아날로그 기본 단위 블록(ADC, amplifier, regulator 등)</dd>
+      <dt>layout</dt><dd>설계된 회로를 반도체로 만들기 위한 물리적 패턴</dd>
+      <dt>Verilog</dt><dd>디지털 회로 설계에 쓰는 코딩 언어</dd>
+    </dl>
+  </div>
+</article>
+
+<article class="topic" id="s1-apps"><h3>스마트폰·자동차·AI 속 아날로그</h3><div class="tags"><span class="tag date">0902 수업</span><span class="tag slide">L01 s13–s17</span></div>
+  <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+    <p class="lead">계산하는 부분이 뇌라면, 신호를 다루는 회로는 바깥 세상과 만나는 눈·귀·입·손이에요.</p>
+    <figure class="figure"><svg id="fig-apps-body" viewBox="0 0 620 200" role="img" aria-label="테두리 네모 여섯 개가 왼쪽에서 오른쪽으로 선으로 이어져 있어요. 바깥 세상, 느끼기, 크게 키우기, 뇌 계산, 다시 바꾸기, 소리와 화면 순서이고, 뇌 계산 네모만 강조색 테두리예요. 뇌를 뺀 나머지 네모 아래에 몸이라는 글이 있어요.">
+      <rect class="fig-ink" x="10" y="60" width="84" height="56" rx="8"/>
+      <text class="fig-text" x="52" y="84" font-size="13" text-anchor="middle">바깥 세상</text>
+      <text class="fig-muted" x="52" y="102" font-size="12" text-anchor="middle">소리·빛</text>
+      <rect class="fig-ink" x="112" y="60" width="84" height="56" rx="8"/>
+      <text class="fig-text" x="154" y="93" font-size="13" text-anchor="middle">느끼기</text>
+      <rect class="fig-ink" x="214" y="60" width="84" height="56" rx="8"/>
+      <text class="fig-text" x="256" y="93" font-size="13" text-anchor="middle">크게 키우기</text>
+      <rect class="fig-accent" x="316" y="60" width="84" height="56" rx="8"/>
+      <text class="fig-text" x="358" y="84" font-size="13" text-anchor="middle">뇌</text>
+      <text class="fig-muted" x="358" y="102" font-size="12" text-anchor="middle">계산</text>
+      <rect class="fig-ink" x="418" y="60" width="84" height="56" rx="8"/>
+      <text class="fig-text" x="460" y="93" font-size="13" text-anchor="middle">다시 바꾸기</text>
+      <rect class="fig-ink" x="520" y="60" width="90" height="56" rx="8"/>
+      <text class="fig-text" x="565" y="84" font-size="13" text-anchor="middle">소리·화면</text>
+      <text class="fig-muted" x="565" y="102" font-size="12" text-anchor="middle">듣고 보기</text>
+      <path class="fig-ink" d="M94,88 L112,88 M106,83 L112,88 L106,93"/>
+      <path class="fig-ink" d="M196,88 L214,88 M208,83 L214,88 L208,93"/>
+      <path class="fig-ink" d="M298,88 L316,88 M310,83 L316,88 L310,93"/>
+      <path class="fig-ink" d="M400,88 L418,88 M412,83 L418,88 L412,93"/>
+      <path class="fig-ink" d="M502,88 L520,88 M514,83 L520,88 L514,93"/>
+      <path class="fig-ink" d="M112,130 L112,138 L298,138 L298,130"/>
+      <path class="fig-ink" d="M418,130 L418,138 L502,138 L502,130"/>
+      <text class="fig-muted" x="205" y="160" font-size="12" text-anchor="middle">몸 (눈·귀)</text>
+      <text class="fig-muted" x="460" y="160" font-size="12" text-anchor="middle">몸 (입·손)</text>
+    </svg><figcaption>작은 신호는 먼저 크게 키워야 뇌가 헷갈리지 않고 읽을 수 있어요.</figcaption></figure>
+  </div>
+  <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <p><b>스마트폰(L01 s13–s14).</b> 전자회로의 가장 대표적인 응용이에요.</p>
+    <ul>
+      <li>아날로그 부분: RFIC(셀룰러, Wi-Fi, Bluetooth, GPS 통신용 칩), 센서(자이로스코프, 가속도계, 조도 센서, 근접 센서, 터치스크린), PMIC, 오디오 앰프</li>
+      <li>디지털 부분: AP(application processor), modem</li>
+      <li>메인 칩 구성도(s14): 디지털·메모리(녹색) 5개(AP, DRAM, NAND flash, NOR flash, baseband 칩), 아날로그(적색) 15개(파워, 오디오, 비디오, 디스플레이, 터치 IC, RF IC, 나침반, 자이로스코프, 가속도계 등). 교수님은 대체로 아날로그 반, 디지털 반쯤이라고 보셨어요.</li>
+    </ul>
+    <p><b>아날로그 회로가 없어지지 않는 이유.</b></p>
+    <ol class="steps">
+      <li>예전에는 연산도 아날로그로 했어요. op-amp(operational amplifier, 연산 증폭기)라는 이름은 적분, 미분, 덧셈, 뺄셈을 아날로그로 하던 데서 나왔어요.</li>
+      <li>지금 연산은 아날로그로 하면 비효율적이라 디지털 신호처리로 넘어갔어요. 아날로그에서 사라진 것은 계산 기능이에요.</li>
+      <li>그런데 우리가 듣고, 보고, 말하는 현실 세계의 신호는 아날로그예요.</li>
+      <li>그래서 센싱해서 처리하고, 디지털로 계산한 뒤, 다시 아날로그로 바꿔야 우리가 듣고 볼 수 있어요.</li>
+      <li>센싱 기능은 오히려 늘고 있어요. 스마트폰은 이제 숨 쉬는 것까지 센싱해요.</li>
+    </ol>
+    <p><b>자동차(s15).</b> 자율주행에는 레이더 센서와 통신이 필요해요. 자동차 부품은 더 이상 기계 부품이 아니라 전자 부품이라서 반도체가 많이 필요해요. 반도체, 자동차, 모바일처럼 우리나라 핵심 산업이 모두 하드웨어 기반이라서 이 개념들이 중요해요.</p>
+    <p><b>기술 발전 동향(s16).</b></p>
+    <ul>
+      <li>IoT(사물인터넷): 모든 사물에 센싱, 통신, 컴퓨팅을 넣어요. 환경 데이터를 모으고 처리하려면 아날로그 반도체가 필요해서 반도체 수요가 폭증해요.</li>
+      <li>자동차: 전기차의 배터리 관리 시스템(BMS), 자율주행차의 센서와 데이터 처리 시스템에서 아날로그 반도체가 중요해져요.</li>
+      <li>5G 및 통신: 고주파 신호 처리용 아날로그 반도체 수요가 늘어요.</li>
+    </ul>
+    <p><b>AI 반도체(s17).</b></p>
+    <ul>
+      <li>메모리도 중요해요.</li>
+      <li>데이터 수집 및 전처리: 아날로그 반도체가 센서 신호를 증폭하고 잡음을 제거해 고품질 데이터를 줘요. physical AI로 가면 여러 센서의 신호를 처리하는 회로가 많이 필요해요.</li>
+      <li>전력 관리: AI 반도체는 고성능이라 전력을 많이 써요. PMIC로 전력을 효율적으로 분배해야 해요.</li>
+      <li>edge computing: 지금은 서버에 접속해 AI 처리를 하지만, 간단한 처리는 각 단말기에서 직접 하는 쪽으로 가고 있어요. 제한된 전력과 공간에서 동작해야 하므로 저전력 고성능 아날로그 반도체가 필요해요.</li>
+    </ul>
+    <p><b>RF 회로는 어디에 속하나(질의응답).</b> RF 회로도 아날로그 회로예요. 무선으로 기지국과 신호를 주고받는 무선통신용 아날로그 회로예요. 여러 기능이 함께 필요해요.</p>
+    <figure class="figure"><svg id="fig-apps-rf-chain" viewBox="0 0 640 180" role="img" aria-label="수신 경로 블록도. 테두리 네모 다섯 개가 왼쪽에서 오른쪽으로 이어져요. 안테나의 작은 신호에 붉은 물결선으로 노이즈가 섞여 있고, 증폭기, carrier 주파수 내림, 필터, 디지털 변환 순서예요. 증폭기 네모만 강조색 테두리예요.">
+      <path class="fig-danger" d="M22,40 L30,32 L38,46 L46,32 L54,46 L62,32 L70,46 L78,34 L86,40"/>
+      <text class="fig-text" x="100" y="44" font-size="12">노이즈</text>
+      <rect class="fig-ink" x="16" y="70" width="100" height="56" rx="8"/>
+      <text class="fig-text" x="66" y="94" font-size="13" text-anchor="middle">안테나</text>
+      <text class="fig-muted" x="66" y="112" font-size="12" text-anchor="middle">작은 신호</text>
+      <rect class="fig-accent" x="140" y="70" width="100" height="56" rx="8"/>
+      <text class="fig-text" x="190" y="94" font-size="13" text-anchor="middle">증폭기</text>
+      <text class="fig-muted" x="190" y="112" font-size="12" text-anchor="middle">amplifier</text>
+      <rect class="fig-ink" x="264" y="70" width="100" height="56" rx="8"/>
+      <text class="fig-text" x="314" y="94" font-size="13" text-anchor="middle">carrier 내림</text>
+      <text class="fig-muted" x="314" y="112" font-size="12" text-anchor="middle">낮은 주파수로</text>
+      <rect class="fig-ink" x="388" y="70" width="100" height="56" rx="8"/>
+      <text class="fig-text" x="438" y="94" font-size="13" text-anchor="middle">필터</text>
+      <text class="fig-muted" x="438" y="112" font-size="12" text-anchor="middle">filter</text>
+      <rect class="fig-ink" x="512" y="70" width="112" height="56" rx="8"/>
+      <text class="fig-text" x="568" y="94" font-size="13" text-anchor="middle">디지털 변환</text>
+      <text class="fig-muted" x="568" y="112" font-size="12" text-anchor="middle">ADC</text>
+      <path class="fig-ink" d="M116,98 L140,98 M134,93 L140,98 L134,103"/>
+      <path class="fig-ink" d="M240,98 L264,98 M258,93 L264,98 L258,103"/>
+      <path class="fig-ink" d="M364,98 L388,98 M382,93 L388,98 L382,103"/>
+      <path class="fig-ink" d="M488,98 L512,98 M506,93 L512,98 L506,103"/>
+      <text class="fig-text" x="320" y="160" font-size="13" text-anchor="middle">충분히 키운 뒤에야 디지털로 바꿀 수 있어요</text>
+    </svg><figcaption>RF 수신 경로. 기지국에서 온 작은 신호를 키우고, carrier를 내리고, 원하는 신호만 걸러서 디지털로 바꿔요.</figcaption></figure>
+    <ol class="steps">
+      <li>기지국이 멀어서 받는 신호가 매우 작고 노이즈가 섞여 있어요. 그래서 신호를 키우는 증폭기(amplifier)가 필요해요.</li>
+      <li>보낼 때는 신호를 높은 carrier 주파수에 변조(modulation)해 실어 보내요.</li>
+      <li>받을 때는 carrier 주파수를 낮은 주파수로 떨어뜨려요.</li>
+      <li>여러 사용자의 수많은 신호 가운데 원하는 신호만 걸러야 하므로 필터(filter)가 필요해요.</li>
+      <li>신호를 충분히 키운 뒤에 아날로그 신호를 디지털로 바꿔 처리해요.</li>
+      <li>작은 신호는 노이즈 때문에 바로 디지털로 바꿀 수 없어요. 센서도 같은 이유로 처음부터 디지털로 센싱할 수 없어요.</li>
+    </ol>
+    <p>여기에 쓰이는 증폭기가 어떤 회로 블록인지는 <a href="#s1-analog-digital">디지털 회로와 아날로그 회로</a>에서 정리했어요.</p>
+  </div>
+  <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+    <p>디지털은 계산하는 뇌이고, 아날로그 회로는 손, 귀, 눈, 입처럼 뇌를 뺀 나머지 몸 전체라고 비유하셨어요.</p>
+    <blockquote>"디지털은 두뇌에 해당되는 거예요." (0902 47:23)</blockquote>
+    <p>op-amp가 뭐냐고 물으셨고, 학생들이 연산 증폭기라고 답했어요(0902 48:08). 이름 그대로 예전에는 연산을 아날로그로 했다는 뜻이라고 이으셨어요.</p>
+    <p>RF 질문에는 큰 분야를 짧게 답했다고 덧붙이셨어요(0902 55:51).</p>
+  </div>
+  <div class="layer warn"><span class="layer-title">꼭 기억해요</span>
+    <p>작은 신호는 먼저 증폭해야 디지털로 바꿀 수 있어요.</p>
+    <blockquote>"신호가 작을 때는 … 디지털로 바꿀 수가 없어요. 노이즈 때문에." (0902 55:33)</blockquote>
+    <p>반도체와 AI에서 메모리의 중요성도 강조하셨어요.</p>
+    <blockquote>"향후에 계속 반도체가 중요하다." (0902 51:47)</blockquote>
+    <blockquote>"사실 메모리도 굉장히 중요하거든요." (0902 52:05)</blockquote>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">디지털이 뇌라면 아날로그는 센서로 세상을 느끼고 신호를 키우는 몸이고, 작은 신호는 노이즈 때문에 먼저 키워야 디지털로 바꿀 수 있어요.</p>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>op-amp(operational amplifier, 연산 증폭기)</dt><dd>예전에 적분·미분·덧셈·뺄셈을 아날로그로 하던 증폭기</dd>
+      <dt>edge computing</dt><dd>서버 대신 단말기가 간단한 AI 처리를 직접 하는 방식. 저전력이 필요해요</dd>
+      <dt>carrier 주파수</dt><dd>신호를 변조해 실어 보내는 높은 주파수. 받을 때 낮은 주파수로 내려요</dd>
+    </dl>
+  </div>
+</article>
+    </section>
+    <section id="s2"><h2>3. MOSFET 다시 보기</h2>
+<article class="topic" id="s2-review-map"><h3>전자회로1 복습 지도</h3><div class="tags"><span class="tag date">0902 수업</span><span class="tag slide">L02 s1–s2</span></div>
+  <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+    <p class="lead">새 층을 올리기 전에, 전에 다진 바닥이 튼튼한지 네 군데를 짚어 봐요.</p>
+    <figure class="figure"><svg id="fig-s2-reviewmap" viewBox="0 0 560 170" role="img" aria-label="네 칸이 선으로 차례로 이어진 그림이에요. 첫 칸 '전압과 전류 관계'는 강조색 테두리이고 위에 '오늘'이라고 적혀 있어요. 둘째 칸 '두 가지 모형'은 선 테두리이고 위에 '일부 오늘'이라고 적혀 있어요. '증폭기', '또 다른 부품' 칸은 선 테두리이고 위에 '다음 시간'이라고 적혀 있어요.">
+      <text class="fig-muted" x="70" y="40" text-anchor="middle">오늘</text>
+      <text class="fig-muted" x="210" y="40" text-anchor="middle">일부 오늘</text>
+      <text class="fig-muted" x="420" y="36" text-anchor="middle">다음 시간</text>
+      <rect class="fig-accent" x="12" y="55" width="116" height="70" rx="10"/>
+      <rect class="fig-ink" x="152" y="55" width="116" height="70" rx="10"/>
+      <rect class="fig-ink" x="292" y="55" width="116" height="70" rx="10"/>
+      <rect class="fig-ink" x="432" y="55" width="116" height="70" rx="10"/>
+      <text class="fig-text" x="70" y="86" text-anchor="middle">전압과 전류</text>
+      <text class="fig-text" x="70" y="104" text-anchor="middle">관계</text>
+      <text class="fig-text" x="210" y="95" text-anchor="middle">두 가지 모형</text>
+      <text class="fig-text" x="350" y="95" text-anchor="middle">증폭기</text>
+      <text class="fig-text" x="490" y="86" text-anchor="middle">또 다른</text>
+      <text class="fig-text" x="490" y="104" text-anchor="middle">부품</text>
+      <line class="fig-ink" x1="128" y1="90" x2="150" y2="90"/><polyline class="fig-ink" points="144,85 150,90 144,95"/>
+      <line class="fig-ink" x1="268" y1="90" x2="290" y2="90"/><polyline class="fig-ink" points="284,85 290,90 284,95"/>
+      <line class="fig-ink" x1="408" y1="90" x2="430" y2="90"/><polyline class="fig-ink" points="424,85 430,90 424,95"/>
+      <line class="fig-ink" x1="300" y1="44" x2="540" y2="44" stroke-dasharray="4 4" stroke-width="1"/>
+    </svg><figcaption>오늘은 첫 칸과 둘째 칸의 일부를 봤고, 나머지는 다음 시간에 이어서 봐요.</figcaption></figure>
+  </div>
+  <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <p>전자회로2를 따라가려면 전자회로1에서 아래 네 가지를 알고 있어야 해요 (L02 s2).</p>
+    <ol class="steps">
+      <li>MOSFET의 I/V 특성: 소자의 물리가 아니라 회로 설계에 쓰는 전압과 전류의 관계예요.</li>
+      <li>MOS 등가 회로 모델: large-signal model과 small-signal model. 둘의 차이를 구분할 수 있어야 해요.</li>
+      <li>CMOS 증폭기의 동작 원리.</li>
+      <li>BJT의 I/V 특성과 등가 모델.</li>
+    </ol>
+    <p>이번 수업에서는 1번을 다뤘어요. 2번은 saturation 영역의 MOSFET을 전류원으로 보는 개념까지만 말로 짚었어요. 나머지(small-signal model, CMOS 증폭기, BJT)는 다음 시간에 이어서 복습해요.</p>
+    <ul>
+      <li><a href="#s2-structure">MOSFET의 구조와 단자</a></li>
+      <li><a href="#s2-channel">게이트 전압과 채널</a></li>
+      <li><a href="#s2-triode">작은 V_DS: 저항이 되는 triode 영역</a></li>
+      <li><a href="#s2-saturation">큰 V_DS: 전류원이 되는 saturation 영역</a></li>
+    </ul>
+  </div>
+  <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+    <p>전자회로1을 다시 다 다룰 수는 없으니, 이 수업에 필요한 핵심만 짧게 짚고 넘어간다고 하셨어요. 리뷰를 듣다가 개념이 헷갈리면 스스로 복습하라고 당부하셨어요.</p>
+    <blockquote>"놓치게 되면 그 다음은 사실은 어렵죠. 따라오기가 어렵죠." (0902 56:43)</blockquote>
+    <p>트랜지스터로 회로를 설계하려면 물리적 동작보다 전압과 전류의 관계를 알아야 하고, 그 관계를 표현한 것이 등가 회로 모델이라고 하셨어요 (0902 57:13–57:34).</p>
+  </div>
+  <div class="layer warn"><span class="layer-title">꼭 기억해요</span>
+    <blockquote>"라지 시그널 모델과 스몰 시그널 모델이 있어요. 이 둘의 차이를 명확하게 … 이해를 하고 있어야 돼요." (0902 57:34)</blockquote>
+    <blockquote>"최소한 요거는 알아야지 … 회로 설계를 하는데 기본적인 백그라운드가 되겠죠." (0902 57:59)</blockquote>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">전자회로2를 따라가려면 I/V 특성, 두 등가 모델, CMOS 증폭기, BJT를 알고 있어야 해요.</p>
+    <p class="panel-label">용어</p>
+    <dl class="terms"><dt>I/V 특성</dt><dd>회로 설계에 쓰는 소자의 전압과 전류 관계</dd><dt>large-signal model / small-signal model</dt><dd>MOS 등가 회로 모델 두 가지. 차이를 구분해야 해요</dd><dt>CMOS 증폭기</dt><dd>트랜지스터로 만든 증폭기. 다음 시간에 복습해요</dd></dl>
+  </div>
+</article>
+
+<article class="topic" id="s2-structure"><h3>MOSFET의 구조와 단자</h3><div class="tags"><span class="tag date">0902 수업</span><span class="tag slide">L02 s3</span></div>
+  <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+    <p class="lead">가운데 문 하나를 사이에 두고 똑같이 생긴 방 두 개가 마주 보고 있어요.</p>
+    <figure class="figure"><svg id="fig-s2-structure" viewBox="0 0 560 240" role="img" aria-label="큰 바닥 사각형 위쪽 양옆에 똑같이 생긴 방 A와 방 B가 테두리로 그려져 있어요. 가운데 위에는 얇은 막이 깔려 있고, 그 위에 강조색 테두리의 문 판이 놓여 있어요.">
+      <rect class="fig-ink" x="20" y="90" width="520" height="130"/>
+      <path class="fig-ink" d="M60 90 L60 135 Q60 150 75 150 L165 150 Q180 150 180 135 L180 90"/>
+      <path class="fig-ink" d="M380 90 L380 135 Q380 150 395 150 L485 150 Q500 150 500 135 L500 90"/>
+      <rect class="fig-ink" x="170" y="78" width="220" height="12"/>
+      <rect class="fig-accent" x="170" y="56" width="220" height="22"/>
+      <text class="fig-text" x="280" y="46" text-anchor="middle">문</text>
+      <text class="fig-muted" x="398" y="80">얇은 막</text>
+      <text class="fig-text" x="120" y="126" text-anchor="middle">방 A</text>
+      <text class="fig-text" x="440" y="126" text-anchor="middle">방 B</text>
+      <text class="fig-muted" x="280" y="200" text-anchor="middle">바닥</text>
+    </svg><figcaption>두 방이 똑같아서 어느 쪽을 들어오는 방으로 정해도 돼요.</figcaption></figure>
+  </div>
+  <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <p>MOS는 층 구조의 이름이에요: Metal(게이트 전극), Oxide(절연체 산화막), Semiconductor(기판). NMOS는 p형 기판(p-substrate)에 n+ 영역 두 개를 만든 구조예요 (L02 s3).</p>
+    <p>두 n+ 영역은 대칭이에요. 그래서 어느 쪽이든 소스가 될 수 있고, 어느 쪽이든 드레인이 될 수 있어요.</p>
+    <div class="table-wrap"><table>
+      <tr><th>단자</th><th>이름의 뜻</th><th>NMOS에서</th></tr>
+      <tr><td>게이트(gate, G)</td><td>채널을 열어 주는 문</td><td>전압을 걸어 채널을 만들어요</td></tr>
+      <tr><td>소스(source, S)</td><td>캐리어를 공급하는 곳</td><td>전자가 여기서 나와요</td></tr>
+      <tr><td>드레인(drain, D)</td><td>캐리어가 빠져나가는 곳</td><td>전자가 여기로 나가요</td></tr>
+      <tr><td>body(substrate, B)</td><td>기판 단자</td><td>보통 ground나 소스에 연결해요. PMOS는 보통 $V_{DD}$에 연결해요</td></tr>
+    </table></div>
+    <p>회로 심볼은 G, S, D의 3단자로 기억하면 돼요. body를 넷째 단자로 따로 그리기도 해요.</p>
+    <p>전자는 소스에서 드레인으로 가요. 전류는 전자와 반대 방향이라서 드레인에서 소스로 흘러요.</p>
+  </div>
+  <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+    <p>소스와 드레인의 뜻을 물으셨고, 학생들이 "공급하는 거", "빠져나가는 거"라고 답했어요. 교수님은 게이트를 "문"에 비유하며, 전류가 흘러갈 수 있도록 채널을 열어 주는 역할이라고 정리하셨어요 (0902 59:31–60:22).</p>
+    <p>body는 소스에 묶여 있는 경우가 대부분이고, NMOS에서는 ground에 연결돼 있다고 하셨어요 (0902 59:09).</p>
+  </div>
+  <div class="layer warn"><span class="layer-title">꼭 기억해요</span>
+    <blockquote>"물리적인 동작이 중요한 게 아니고요." (0902 58:18)</blockquote>
+    <p>구조는 대칭이라는 것과 단자 이름만 기억하고, 회로 설계에 필요한 전압과 전류의 관계에 집중해요.</p>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">MOSFET은 Metal–Oxide–Semiconductor 구조이고, 두 n+ 영역이 대칭이라 어느 쪽이든 소스나 드레인이 될 수 있어요.</p>
+    <p class="panel-label">용어</p>
+    <dl class="terms"><dt>소스(source)</dt><dd>캐리어를 공급하는 곳</dd><dt>드레인(drain)</dt><dd>캐리어가 빠져나가는 곳. 전류는 드레인에서 소스로 흘러요</dd><dt>body(substrate)</dt><dd>넷째 단자. 보통 ground나 소스에 연결해요</dd></dl>
+  </div>
+</article>
+
+<article class="topic" id="s2-channel"><h3>게이트 전압과 채널</h3><div class="tags"><span class="tag date">0902 수업</span><span class="tag slide">L02 s4</span></div>
+  <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+    <p class="lead">문 위에서 세게 끌어당기면 작은 알갱이들이 문 아래로 모여 두 방을 잇는 길이 생겨요.</p>
+    <figure class="figure"><svg id="fig-s2-channel" viewBox="0 0 560 220" role="img" aria-label="왼쪽과 오른쪽 두 그림이에요. 왼쪽은 검은 테두리 문 아래가 비어 있어요. 오른쪽은 강조색 테두리 문 아래에 색칠된 작은 점들이 한 줄로 모여 양쪽 방을 이어요.">
+      <text class="fig-muted" x="135" y="36" text-anchor="middle">문을 안 당길 때</text>
+      <text class="fig-muted" x="415" y="36" text-anchor="middle">문을 세게 당길 때</text>
+      <g>
+        <rect class="fig-ink" x="10" y="90" width="250" height="110"/>
+        <path class="fig-ink" d="M20 90 L20 118 Q20 128 30 128 L70 128 Q80 128 80 118 L80 90"/>
+        <path class="fig-ink" d="M190 90 L190 118 Q190 128 200 128 L240 128 Q250 128 250 118 L250 90"/>
+        <rect class="fig-ink" x="80" y="80" width="110" height="10"/>
+        <rect class="fig-ink" x="80" y="58" width="110" height="22"/>
+      </g>
+      <g transform="translate(280,0)">
+        <rect class="fig-ink" x="10" y="90" width="250" height="110"/>
+        <path class="fig-ink" d="M20 90 L20 118 Q20 128 30 128 L70 128 Q80 128 80 118 L80 90"/>
+        <path class="fig-ink" d="M190 90 L190 118 Q190 128 200 128 L240 128 Q250 128 250 118 L250 90"/>
+        <rect class="fig-ink" x="80" y="80" width="110" height="10"/>
+        <rect class="fig-accent" x="80" y="58" width="110" height="22"/>
+        <circle class="fig-dot" cx="85" cy="97" r="4"/><circle class="fig-dot" cx="95" cy="97" r="4"/><circle class="fig-dot" cx="105" cy="97" r="4"/><circle class="fig-dot" cx="115" cy="97" r="4"/><circle class="fig-dot" cx="125" cy="97" r="4"/><circle class="fig-dot" cx="135" cy="97" r="4"/><circle class="fig-dot" cx="145" cy="97" r="4"/><circle class="fig-dot" cx="155" cy="97" r="4"/><circle class="fig-dot" cx="165" cy="97" r="4"/><circle class="fig-dot" cx="175" cy="97" r="4"/><circle class="fig-dot" cx="185" cy="97" r="4"/>
+        <text class="fig-text" x="135" y="124" text-anchor="middle">길</text>
+      </g>
+    </svg><figcaption>길이 생긴 뒤에 양쪽을 서로 다르게 밀어 줘야 비로소 흐르기 시작해요.</figcaption></figure>
+  </div>
+  <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <ol class="steps">
+      <li>NMOS 게이트에 양의 전압을 걸어요.</li>
+      <li>p형 기판의 전자(음전하)가 산화막 계면 근처로 끌려와 모여요.</li>
+      <li>게이트 전압이 충분히 높으면 계면에 free electron이 생기면서 소스와 드레인을 잇는 채널이 형성돼요.</li>
+      <li>p형이던 기판 표면이 전자가 많은 n형처럼 극성이 뒤집히므로, 이 채널을 inversion layer라고 불러요.</li>
+    </ol>
+    <p>채널이 생기기 시작하는 게이트 전압을 문턱 전압(threshold voltage) $V_{TH}$라고 해요. $V_{GS}$가 $V_{TH}$보다 높아야 채널이 생겨요.</p>
+    <p>채널이 생겼다고 바로 전류가 흐르지는 않아요. 채널 양단, 곧 드레인과 소스 사이에 전압 차가 있어야 전자가 움직여요.</p>
+  </div>
+  <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+    <p>"반도체"라는 이름을 이렇게 풀어 주셨어요. 채널이 생기면 도체, 채널이 없으면 부도체이니 반은 도체이고 반은 부도체라는 뜻이에요.</p>
+    <blockquote>"채널이 생기면은 도체가 되는 거고, 채널이 없으면 부도체가 되는 거니까" (0902 61:06)</blockquote>
+    <p>inversion이라는 말이 어렵다면 그냥 "전자가 흘러갈 수 있는 채널이 형성된다"로 보면 된다고 하셨어요 (0902 62:01).</p>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">게이트에 충분한 양의 전압을 걸면 계면에 전자가 모여 채널이 생기고, 그 문턱이 $V_{TH}$예요.</p>
+    <p class="panel-label">용어</p>
+    <dl class="terms"><dt>채널(inversion layer)</dt><dd>게이트 아래 계면에 전자가 모여 생긴 전류 통로</dd><dt>문턱 전압(threshold voltage) $V_{TH}$</dt><dd>채널이 생기기 시작하는 게이트 전압</dd></dl>
+  </div>
+</article>
+
+<article class="topic" id="s2-triode"><h3>작은 V_DS: 저항이 되는 triode 영역</h3><div class="tags"><span class="tag date">0902 수업</span><span class="tag slide">L02 s5</span></div>
+  <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+    <p class="lead">살짝 밀면 미는 만큼 비례해서 흐르고, 문을 넓게 열수록 더 잘 흘러요.</p>
+    <figure class="figure"><svg id="fig-s2-triode" viewBox="0 0 560 240" role="img" aria-label="원점에서 뻗은 곧은 선 세 개와 가로축에 붙은 평평한 선 하나예요. 문을 활짝 연 강조색 선이 가장 가파르고, 반쯤 연 선과 조금 연 선으로 갈수록 완만해요. 문을 꽉 닫은 경고색 선은 가로축에 붙어 평평해요.">
+      <line class="fig-ink" x1="60" y1="210" x2="530" y2="210"/>
+      <line class="fig-ink" x1="60" y1="210" x2="60" y2="20"/>
+      <text class="fig-muted" x="530" y="232" text-anchor="end">미는 힘</text>
+      <text class="fig-muted" x="68" y="26">흐르는 양</text>
+      <line class="fig-accent" x1="60" y1="210" x2="400" y2="50"/>
+      <line class="fig-ink" x1="60" y1="210" x2="400" y2="120"/>
+      <line class="fig-ink" x1="60" y1="210" x2="400" y2="170"/>
+      <text class="fig-text" x="410" y="54">문을 활짝 열면</text>
+      <text class="fig-text" x="410" y="124">반쯤 열면</text>
+      <text class="fig-text" x="410" y="174">조금 열면</text>
+      <line class="fig-danger" x1="60" y1="206" x2="400" y2="206"/>
+      <text class="fig-text" x="410" y="204">꽉 닫으면</text>
+    </svg><figcaption>문을 끝까지 열면 켜진 스위치, 꽉 닫으면 꺼진 스위치가 돼요.</figcaption></figure>
+  </div>
+  <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <ol class="steps">
+      <li>게이트에 양의 전압을 걸어 채널을 만들어요.</li>
+      <li>소스를 ground에 두고 드레인 전압을 올려 $V_{DS}$를 키워요.</li>
+      <li>전자는 높은 전압 쪽(드레인)으로 움직이므로, 전류 $I_D$는 드레인에서 소스로 흘러요.</li>
+      <li>$V_{GS}$를 키우면 채널에 전자가 더 많이 모여서 같은 $V_{DS}$에서 $I_D$가 커져요.</li>
+      <li>$V_{DS}$가 작을 때 $I_D$는 $V_{DS}$에 선형으로 비례해요. 트랜지스터가 저항처럼 동작해요.</li>
+    </ol>
+    <p>이 동작 영역을 triode region 또는 linear region이라고 해요. "linear"는 $I_D$와 $V_{DS}$의 관계가 직선이라는 뜻이에요. 이때 저항값은 (L02 s5)</p>
+    $$R_{on} = \frac{1}{\mu_n C_{ox}\frac{W}{L}(V_{GS}-V_{TH})}$$
+    <p>이고, $I_D$–$V_{DS}$ 직선의 기울기가 $1/R_{on}$이에요.</p>
+    $$I_D \approx \frac{V_{DS}}{R_{on}}$$
+    <p>$V_{GS}-V_{TH}$가 커지면 기울기가 커지고 $R_{on}$은 작아져요. 곧 $R_{on}$은 $V_{GS}-V_{TH}$에 반비례해요.</p>
+    <p>이 성질로 MOSFET을 전자 스위치로 써요.</p>
+    <ul>
+      <li>게이트에 가장 높은 전압 $V_{DD}$를 걸면 $R_{on}$이 작아져요(스위치 on).</li>
+      <li>게이트에 0을 걸면 채널이 없어 저항이 무한대에 가까워요. 스위치 off예요.</li>
+    </ul>
+    <p>게이트에 1이나 0을 넣어 스위치를 켜고 끄는 것이 디지털 로직의 원리예요. 아날로그 증폭기에서는 트랜지스터를 스위치로 쓰는 경우가 많지 않아요.</p>
+  </div>
+  <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+    <p>게이트 전압을 키우면 왜 전류가 커지는지 물으셨어요. 채널에 전자가 더 많이 모이고, 전류는 단위 시간당 흐르는 전하량이니 더 많은 전류가 흐른다고 정리하셨어요 (0902 63:15–63:45).</p>
+    <p>$V_{TH}$가 무엇이냐는 질문에는 "threshold 전압"이라는 답이 나왔어요 (0902 64:50).</p>
+    <blockquote>"게이트 전압에다 1 또는 0을 가하면 … 스위치가 온 됐다가 오프 됐다. 이게 이제 로직의 원리" (0902 66:35)</blockquote>
+  </div>
+  <div class="layer warn"><span class="layer-title">꼭 기억해요</span>
+    <blockquote>"식은 중요한 건 아닌데 어쨌든 이제 이게 저항처럼 동작을 해." (0902 64:39)</blockquote>
+    <p>식을 외우기보다, 작은 $V_{DS}$에서 MOSFET이 $V_{GS}$로 값이 바뀌는 저항이라는 것을 기억해요.</p>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">$V_{DS}$가 작으면 $I_D$가 $V_{DS}$에 비례해서 MOSFET이 저항처럼 동작하고, 이 성질로 스위치를 만들어요.</p>
+    <p class="panel-label">핵심 식</p>
+    <ul class="eq-list"><li><span class="eq-name">triode 저항</span>$$R_{on} = \frac{1}{\mu_n C_{ox}\frac{W}{L}(V_{GS}-V_{TH})}$$</li><li><span class="eq-name">작은 V_DS의 전류</span>$$I_D \approx \frac{V_{DS}}{R_{on}}$$</li></ul>
+    <p class="panel-label">용어</p>
+    <dl class="terms"><dt>triode region(linear region)</dt><dd>작은 $V_{DS}$에서 $I_D$가 $V_{DS}$에 비례하는 영역</dd><dt>스위치(switch)</dt><dd>게이트 $V_{DD}$면 on, 0이면 off</dd></dl>
+  </div>
+</article>
+
+<article class="topic" id="s2-saturation"><h3>큰 V_DS: 전류원이 되는 saturation 영역</h3><div class="tags"><span class="tag date">0902 수업</span><span class="tag slide">L02 s6–s8</span></div>
+  <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+    <p class="lead">세게 밀면 어느 순간부터 흐르는 양이 더 늘지 않고 그대로 머물러요.</p>
+    <figure class="figure"><svg id="fig-s2-saturation" viewBox="0 0 560 240" role="img" aria-label="원점에서 올라가다가 평평해지는 곡선 세 개예요. 문을 활짝 연 강조색 곡선이 가장 높은 곳에서 평평해지고, 반쯤 연 선, 조금 연 선으로 갈수록 더 낮은 곳에서 평평해져요. 가장 높은 곡선의 평평한 부분 위에 색칠된 점이 하나 있어요.">
+      <line class="fig-ink" x1="60" y1="210" x2="530" y2="210"/>
+      <line class="fig-ink" x1="60" y1="210" x2="60" y2="20"/>
+      <text class="fig-muted" x="530" y="232" text-anchor="end">미는 힘</text>
+      <text class="fig-muted" x="68" y="26">흐르는 양</text>
+      <path class="fig-accent" d="M60 210 Q190 50 280 50 L430 50"/>
+      <path class="fig-ink" d="M60 210 Q160 110 220 110 L430 110"/>
+      <path class="fig-ink" d="M60 210 Q130 160 170 160 L430 160"/>
+      <circle class="fig-dot" cx="360" cy="50" r="6"/>
+      <text class="fig-text" x="440" y="55">문을 활짝 열면</text>
+      <text class="fig-text" x="440" y="115">반쯤 열면</text>
+      <text class="fig-text" x="440" y="165">조금 열면</text>
+      <text class="fig-muted" x="300" y="36" text-anchor="middle">더 밀어도 그대로</text>
+    </svg><figcaption>머무는 양은 문을 얼마나 열었는지로만 정해지고, 이 성질 덕분에 작은 떨림을 크게 키울 수 있어요.</figcaption></figure>
+  </div>
+  <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <p>$V_{DS}$를 충분히 키우면 $I_D$가 더 이상 늘지 않고 일정해져요. 이 영역이 saturation region(포화 영역)이고, 그 앞은 triode region이에요 (L02 s6).</p>
+    <p>경계는 $V_{DS} = V_{GS}-V_{TH}$예요. $V_{GS} \gt V_{TH}$에서</p>
+    <ul>
+      <li>$V_{DS} \lt V_{GS}-V_{TH}$: triode region</li>
+      <li>$V_{DS} \ge V_{GS}-V_{TH}$: saturation region (경계점은 어느 쪽에 넣어도 돼요)</li>
+    </ul>
+    <p>L02 s7의 판별식 "$V_G - V_D \le V_{TH}$이면 saturation"도 같은 조건이에요.</p>
+    $$V_G - V_D = (V_G - V_S) - (V_D - V_S) = V_{GS} - V_{DS} \le V_{TH}$$
+    <p>saturation 영역의 전류는 (L02 s6)</p>
+    $$I_D = \frac{1}{2}\mu_n C_{ox}\frac{W}{L}(V_{GS}-V_{TH})^2$$
+    <p>수업에서는 이동도 $\mu_n$, 산화막 커패시턴스 $C_{ox}$, 크기 $W/L$을 상수 $k$로 묶어 $I_D = k(V_{GS}-V_{TH})^2$로 줄여 쓰셨어요. 수업에서 줄여 쓴 $k$는 $k=\tfrac12\mu_n C_{ox}\tfrac{W}{L}$이에요.</p>
+    <div class="table-wrap"><table>
+      <tr><th>영역</th><th>$I_D$와 $V_{DS}$</th><th>트랜지스터는</th></tr>
+      <tr><td>triode region</td><td>$V_{DS}$에 비례해 늘어요</td><td>저항</td></tr>
+      <tr><td>saturation region</td><td>$V_{DS}$와 무관하게 일정해요</td><td>전류원(current source)</td></tr>
+    </table></div>
+    <p>saturation 전류는 트랜지스터 양단 전압 $V_{DS}$와 무관하고 $V_{GS}$로 정해져요. 그래서 정확히는 voltage-controlled current source(전압제어 전류원)예요. voltage-dependent current source라고 불러도 돼요. L02 s8 위쪽 그림이 이 large-signal 모델이에요.</p>
+    <figure class="figure"><svg id="fig-s2-vccs" viewBox="0 0 560 220" role="img" aria-label="saturation 영역의 MOSFET 모델이에요. 왼쪽 위 G 단자는 열린 단자이고, G와 아래 선 사이에 플러스와 마이너스로 V_GS가 걸려요. 오른쪽 위 D 단자에서 강조색 테두리 원의 전류원을 지나 아래 선으로 이어지고, 아래 선의 색칠된 점에서 S 단자로 나가요.">
+      <text class="fig-text" x="210" y="26" text-anchor="middle">V<tspan baseline-shift="sub" font-size="9">GS</tspan> &gt; V<tspan baseline-shift="sub" font-size="9">TH</tspan></text>
+      <text class="fig-text" x="210" y="46" text-anchor="middle">V<tspan baseline-shift="sub" font-size="9">DS</tspan> ≥ V<tspan baseline-shift="sub" font-size="9">GS</tspan> − V<tspan baseline-shift="sub" font-size="9">TH</tspan></text>
+      <circle class="fig-ink" cx="110" cy="70" r="5"/>
+      <text class="fig-text" x="96" y="75" text-anchor="end">G</text>
+      <text class="fig-text" x="104" y="102" text-anchor="middle">+</text>
+      <text class="fig-text" x="104" y="150" text-anchor="middle">−</text>
+      <text class="fig-text" x="70" y="130" text-anchor="middle">V<tspan baseline-shift="sub" font-size="9">GS</tspan></text>
+      <line class="fig-ink" x1="110" y1="160" x2="420" y2="160"/>
+      <circle class="fig-ink" cx="420" cy="36" r="5"/>
+      <text class="fig-text" x="434" y="41">D</text>
+      <line class="fig-ink" x1="420" y1="41" x2="420" y2="80"/>
+      <circle class="fig-accent" cx="420" cy="100" r="20"/>
+      <line class="fig-accent" x1="420" y1="88" x2="420" y2="112"/>
+      <polyline class="fig-accent" points="414,105 420,112 426,105"/>
+      <line class="fig-ink" x1="420" y1="120" x2="420" y2="160"/>
+      <text class="fig-text" x="450" y="105">I<tspan baseline-shift="sub" font-size="9">D</tspan></text>
+      <circle class="fig-dot" cx="300" cy="160" r="4"/>
+      <line class="fig-ink" x1="300" y1="160" x2="300" y2="190"/>
+      <circle class="fig-ink" cx="300" cy="195" r="5"/>
+      <text class="fig-text" x="314" y="200">S</text>
+    </svg><figcaption>G와 S 사이의 전압이 D에서 S로 흐르는 전류원의 값을 정해요 (L02 s8).</figcaption></figure>
+    <p>증폭기에서는 이 saturation 영역을 써요. 저항은 저항 소자로 만들면 되지만 전류원은 다른 소자로 만들기 어려워서 트랜지스터로 전류원을 만들어요. 트랜지스터가 전류원으로 동작하기 때문에 증폭이 돼요.</p>
+<div class="widget" id="widget-mos-iv"><h4>직접 해 보기: 동작점을 옮기며 triode와 saturation 보기</h4>
+  <p class="widget-help">$V_{GS}$와 $V_{DS}$를 움직이면 $I_D$–$V_{DS}$ 곡선, 경계 $V_{DS}=V_{GS}-V_{TH}$, 지금 동작점이 바뀌어요. $V_{TH}=0.5\,\text{V}$, $\mu_n C_{ox}\frac{W}{L}=2\,\text{mA/V}^2$로 고정했어요. saturation 구간은 $I_D = \frac{1}{2}\mu_n C_{ox}\frac{W}{L}(V_{GS}-V_{TH})^2$로 평평하게 그렸어요. triode 구간은 곡선 모양만 참고로 그렸어요(수업에서 다루지 않은 식). $V_{GS} \le V_{TH}$이면 $I_D=0$이에요.</p>
+  <div class="controls">
+    <label><span>게이트 전압 V<sub>GS</sub> (V)</span> <input type="range" id="mos-iv-vgs" min="0" max="2" step="0.05" value="1.2"> <b id="mos-iv-vgs-val">1.20</b></label>
+    <label><span>드레인 전압 V<sub>DS</sub> (V)</span> <input type="range" id="mos-iv-vds" min="0" max="2" step="0.02" value="0.4"> <b id="mos-iv-vds-val">0.40</b></label>
+  </div>
+  <svg id="mos-iv-plot" viewBox="0 0 560 300" role="img" aria-label="가로축은 V_DS, 세로축은 I_D. 지금 V_GS의 곡선은 경계선까지 올라간 뒤 평평해지고, 경계선은 세로 점선, 여러 V_GS의 경계점을 이은 선은 회색 점선 포물선, 지금 동작점은 색칠된 점이에요."><line class="axis" x1="60" y1="256" x2="540" y2="256"/><line class="axis" x1="60" y1="16" x2="60" y2="256"/><text class="tick" x="60.0" y="272" text-anchor="middle">0</text><text class="tick" x="180.0" y="272" text-anchor="middle">0.5</text><text class="tick" x="300.0" y="272" text-anchor="middle">1</text><text class="tick" x="420.0" y="272" text-anchor="middle">1.5</text><text class="tick" x="540.0" y="272" text-anchor="middle">2</text><text class="tick" x="54" y="212.0" text-anchor="end">0.5</text><text class="tick" x="54" y="164.0" text-anchor="end">1</text><text class="tick" x="54" y="116.0" text-anchor="end">1.5</text><text class="tick" x="54" y="68.0" text-anchor="end">2</text><text class="tick" x="54" y="20.0" text-anchor="end">2.5</text><text class="tick" x="300" y="296" text-anchor="middle">V<tspan baseline-shift="sub" font-size="9">DS</tspan> (V)</text><text class="tick" x="16" y="136" text-anchor="middle" transform="rotate(-90 16 136)">I<tspan baseline-shift="sub" font-size="9">D</tspan> (mA)</text><path class="plot-truth" d="M60.0 256.0 L61.9 256.0 L63.8 256.0 L65.7 255.9 L67.6 255.9 L69.5 255.9 L71.4 255.8 L73.3 255.7 L75.2 255.6 L77.1 255.5 L79.0 255.4 L80.9 255.3 L82.8 255.1 L84.7 255.0 L86.6 254.8 L88.5 254.7 L90.4 254.5 L92.3 254.3 L94.2 254.1 L96.0 253.8 L97.9 253.6 L99.8 253.4 L101.7 253.1 L103.6 252.8 L105.5 252.5 L107.4 252.3 L109.3 251.9 L111.2 251.6 L113.1 251.3 L115.0 251.0 L116.9 250.6 L118.8 250.2 L120.7 249.9 L122.6 249.5 L124.5 249.1 L126.4 248.7 L128.3 248.2 L130.2 247.8 L132.1 247.3 L134.0 246.9 L135.9 246.4 L137.8 245.9 L139.7 245.4 L141.6 244.9 L143.5 244.4 L145.4 243.9 L147.3 243.3 L149.2 242.7 L151.1 242.2 L153.0 241.6 L154.9 241.0 L156.8 240.4 L158.7 239.8 L160.6 239.1 L162.5 238.5 L164.4 237.9 L166.3 237.2 L168.1 236.5 L170.0 235.8 L171.9 235.1 L173.8 234.4 L175.7 233.7 L177.6 232.9 L179.5 232.2 L181.4 231.4 L183.3 230.7 L185.2 229.9 L187.1 229.1 L189.0 228.3 L190.9 227.4 L192.8 226.6 L194.7 225.8 L196.6 224.9 L198.5 224.0 L200.4 223.1 L202.3 222.3 L204.2 221.3 L206.1 220.4 L208.0 219.5 L209.9 218.6 L211.8 217.6 L213.7 216.6 L215.6 215.7 L217.5 214.7 L219.4 213.7 L221.3 212.7 L223.2 211.6 L225.1 210.6 L227.0 209.5 L228.9 208.5 L230.8 207.4 L232.7 206.3 L234.6 205.2 L236.5 204.1 L238.4 203.0 L240.2 201.8 L242.1 200.7 L244.0 199.5 L245.9 198.4 L247.8 197.2 L249.7 196.0 L251.6 194.8 L253.5 193.6 L255.4 192.3 L257.3 191.1 L259.2 189.8 L261.1 188.6 L263.0 187.3 L264.9 186.0 L266.8 184.7 L268.7 183.4 L270.6 182.1 L272.5 180.7 L274.4 179.4 L276.3 178.0 L278.2 176.6 L280.1 175.3 L282.0 173.9 L283.9 172.5 L285.8 171.0 L287.7 169.6 L289.6 168.2 L291.5 166.7 L293.4 165.2 L295.3 163.7 L297.2 162.2 L299.1 160.7 L301.0 159.2 L302.9 157.7 L304.8 156.2 L306.7 154.6 L308.6 153.0 L310.5 151.5 L312.3 149.9 L314.2 148.3 L316.1 146.6 L318.0 145.0 L319.9 143.4 L321.8 141.7 L323.7 140.1 L325.6 138.4 L327.5 136.7 L329.4 135.0 L331.3 133.3 L333.2 131.6 L335.1 129.8 L337.0 128.1 L338.9 126.3 L340.8 124.6 L342.7 122.8 L344.6 121.0 L346.5 119.2 L348.4 117.4 L350.3 115.5 L352.2 113.7 L354.1 111.8 L356.0 110.0 L357.9 108.1 L359.8 106.2 L361.7 104.3 L363.6 102.4 L365.5 100.5 L367.4 98.5 L369.3 96.6 L371.2 94.6 L373.1 92.7 L375.0 90.7 L376.9 88.7 L378.8 86.7 L380.7 84.6 L382.6 82.6 L384.4 80.6 L386.3 78.5 L388.2 76.4 L390.1 74.3 L392.0 72.2 L393.9 70.1 L395.8 68.0 L397.7 65.9 L399.6 63.8 L401.5 61.6 L403.4 59.4 L405.3 57.3 L407.2 55.1 L409.1 52.9 L411.0 50.6 L412.9 48.4 L414.8 46.2 L416.7 43.9 L418.6 41.7 L420.5 39.4 L422.4 37.1 L424.3 34.8 L426.2 32.5 L428.1 30.2 L430.0 27.9 L431.9 25.5 L433.8 23.1 L435.7 20.8 L437.6 18.4 L439.5 16.0"/><line class="plot-prior" x1="228.0" y1="16" x2="228.0" y2="256"/><text class="tick" x="232.0" y="26" text-anchor="start">V<tspan baseline-shift="sub" font-size="9">DS</tspan> = V<tspan baseline-shift="sub" font-size="9">GS</tspan> − V<tspan baseline-shift="sub" font-size="9">TH</tspan></text><text class="tick" x="222.0" y="248" text-anchor="end">triode</text><text class="tick" x="234.0" y="248" text-anchor="start">saturation</text><path class="plot-fit" d="M60.0 256.0 L62.4 254.7 L64.8 253.4 L67.2 252.1 L69.6 250.8 L72.0 249.5 L74.4 248.3 L76.8 247.1 L79.2 245.9 L81.6 244.7 L84.0 243.5 L86.4 242.4 L88.8 241.3 L91.2 240.2 L93.6 239.1 L96.0 238.0 L98.4 237.0 L100.8 235.9 L103.2 234.9 L105.6 233.9 L108.0 233.0 L110.4 232.0 L112.8 231.1 L115.2 230.2 L117.6 229.3 L120.0 228.4 L122.4 227.5 L124.8 226.7 L127.2 225.9 L129.6 225.1 L132.0 224.3 L134.4 223.6 L136.8 222.8 L139.2 222.1 L141.6 221.4 L144.0 220.7 L146.4 220.1 L148.8 219.4 L151.2 218.8 L153.6 218.2 L156.0 217.6 L158.4 217.0 L160.8 216.5 L163.2 216.0 L165.6 215.4 L168.0 215.0 L170.4 214.5 L172.8 214.0 L175.2 213.6 L177.6 213.2 L180.0 212.8 L182.4 212.4 L184.8 212.1 L187.2 211.7 L189.6 211.4 L192.0 211.1 L194.4 210.8 L196.8 210.6 L199.2 210.3 L201.6 210.1 L204.0 209.9 L206.4 209.7 L208.8 209.6 L211.2 209.4 L213.6 209.3 L216.0 209.2 L218.4 209.1 L220.8 209.0 L223.2 209.0 L225.6 209.0 L228.0 209.0 L230.4 209.0 L232.8 209.0 L235.2 209.0 L237.6 209.0 L240.0 209.0 L242.4 209.0 L244.8 209.0 L247.2 209.0 L249.6 209.0 L252.0 209.0 L254.4 209.0 L256.8 209.0 L259.2 209.0 L261.6 209.0 L264.0 209.0 L266.4 209.0 L268.8 209.0 L271.2 209.0 L273.6 209.0 L276.0 209.0 L278.4 209.0 L280.8 209.0 L283.2 209.0 L285.6 209.0 L288.0 209.0 L290.4 209.0 L292.8 209.0 L295.2 209.0 L297.6 209.0 L300.0 209.0 L302.4 209.0 L304.8 209.0 L307.2 209.0 L309.6 209.0 L312.0 209.0 L314.4 209.0 L316.8 209.0 L319.2 209.0 L321.6 209.0 L324.0 209.0 L326.4 209.0 L328.8 209.0 L331.2 209.0 L333.6 209.0 L336.0 209.0 L338.4 209.0 L340.8 209.0 L343.2 209.0 L345.6 209.0 L348.0 209.0 L350.4 209.0 L352.8 209.0 L355.2 209.0 L357.6 209.0 L360.0 209.0 L362.4 209.0 L364.8 209.0 L367.2 209.0 L369.6 209.0 L372.0 209.0 L374.4 209.0 L376.8 209.0 L379.2 209.0 L381.6 209.0 L384.0 209.0 L386.4 209.0 L388.8 209.0 L391.2 209.0 L393.6 209.0 L396.0 209.0 L398.4 209.0 L400.8 209.0 L403.2 209.0 L405.6 209.0 L408.0 209.0 L410.4 209.0 L412.8 209.0 L415.2 209.0 L417.6 209.0 L420.0 209.0 L422.4 209.0 L424.8 209.0 L427.2 209.0 L429.6 209.0 L432.0 209.0 L434.4 209.0 L436.8 209.0 L439.2 209.0 L441.6 209.0 L444.0 209.0 L446.4 209.0 L448.8 209.0 L451.2 209.0 L453.6 209.0 L456.0 209.0 L458.4 209.0 L460.8 209.0 L463.2 209.0 L465.6 209.0 L468.0 209.0 L470.4 209.0 L472.8 209.0 L475.2 209.0 L477.6 209.0 L480.0 209.0 L482.4 209.0 L484.8 209.0 L487.2 209.0 L489.6 209.0 L492.0 209.0 L494.4 209.0 L496.8 209.0 L499.2 209.0 L501.6 209.0 L504.0 209.0 L506.4 209.0 L508.8 209.0 L511.2 209.0 L513.6 209.0 L516.0 209.0 L518.4 209.0 L520.8 209.0 L523.2 209.0 L525.6 209.0 L528.0 209.0 L530.4 209.0 L532.8 209.0 L535.2 209.0 L537.6 209.0 L540.0 209.0"/><circle class="pt-train" cx="156.0" cy="217.6" r="6"/></svg>
+  <p class="readout">지금 상태: <b id="mos-iv-out">triode 영역, I<sub>D</sub> = 0.400 mA (V<sub>GS</sub> − V<sub>TH</sub> = 0.70 V, V<sub>DS</sub> = 0.40 V)</b></p>
+  <p class="legend"><span><span class="sw fit"></span>지금 $V_{GS}$의 $I_D$–$V_{DS}$ 곡선</span> <span><span class="sw prior"></span>경계 $V_{DS}=V_{GS}-V_{TH}$</span> <span><span class="sw truth"></span>여러 $V_{GS}$의 경계점을 이은 선</span> <span><span class="sw train"></span>지금 동작점</span></p>
+  <div class="widget-static" hidden>
+    <figure class="figure"><svg id="widget-mos-iv-static-1" viewBox="0 0 560 300" role="img" aria-label="대표 설정 1: V_GS = 1.2 V, V_DS = 0.3 V, triode 영역, I_D = 0.330 mA"><line class="axis" x1="60" y1="256" x2="540" y2="256"/><line class="axis" x1="60" y1="16" x2="60" y2="256"/><text class="tick" x="60.0" y="272" text-anchor="middle">0</text><text class="tick" x="180.0" y="272" text-anchor="middle">0.5</text><text class="tick" x="300.0" y="272" text-anchor="middle">1</text><text class="tick" x="420.0" y="272" text-anchor="middle">1.5</text><text class="tick" x="540.0" y="272" text-anchor="middle">2</text><text class="tick" x="54" y="212.0" text-anchor="end">0.5</text><text class="tick" x="54" y="164.0" text-anchor="end">1</text><text class="tick" x="54" y="116.0" text-anchor="end">1.5</text><text class="tick" x="54" y="68.0" text-anchor="end">2</text><text class="tick" x="54" y="20.0" text-anchor="end">2.5</text><text class="tick" x="300" y="296" text-anchor="middle">V<tspan baseline-shift="sub" font-size="9">DS</tspan> (V)</text><text class="tick" x="16" y="136" text-anchor="middle" transform="rotate(-90 16 136)">I<tspan baseline-shift="sub" font-size="9">D</tspan> (mA)</text><path class="plot-truth" d="M60.0 256.0 L61.9 256.0 L63.8 256.0 L65.7 255.9 L67.6 255.9 L69.5 255.9 L71.4 255.8 L73.3 255.7 L75.2 255.6 L77.1 255.5 L79.0 255.4 L80.9 255.3 L82.8 255.1 L84.7 255.0 L86.6 254.8 L88.5 254.7 L90.4 254.5 L92.3 254.3 L94.2 254.1 L96.0 253.8 L97.9 253.6 L99.8 253.4 L101.7 253.1 L103.6 252.8 L105.5 252.5 L107.4 252.3 L109.3 251.9 L111.2 251.6 L113.1 251.3 L115.0 251.0 L116.9 250.6 L118.8 250.2 L120.7 249.9 L122.6 249.5 L124.5 249.1 L126.4 248.7 L128.3 248.2 L130.2 247.8 L132.1 247.3 L134.0 246.9 L135.9 246.4 L137.8 245.9 L139.7 245.4 L141.6 244.9 L143.5 244.4 L145.4 243.9 L147.3 243.3 L149.2 242.7 L151.1 242.2 L153.0 241.6 L154.9 241.0 L156.8 240.4 L158.7 239.8 L160.6 239.1 L162.5 238.5 L164.4 237.9 L166.3 237.2 L168.1 236.5 L170.0 235.8 L171.9 235.1 L173.8 234.4 L175.7 233.7 L177.6 232.9 L179.5 232.2 L181.4 231.4 L183.3 230.7 L185.2 229.9 L187.1 229.1 L189.0 228.3 L190.9 227.4 L192.8 226.6 L194.7 225.8 L196.6 224.9 L198.5 224.0 L200.4 223.1 L202.3 222.3 L204.2 221.3 L206.1 220.4 L208.0 219.5 L209.9 218.6 L211.8 217.6 L213.7 216.6 L215.6 215.7 L217.5 214.7 L219.4 213.7 L221.3 212.7 L223.2 211.6 L225.1 210.6 L227.0 209.5 L228.9 208.5 L230.8 207.4 L232.7 206.3 L234.6 205.2 L236.5 204.1 L238.4 203.0 L240.2 201.8 L242.1 200.7 L244.0 199.5 L245.9 198.4 L247.8 197.2 L249.7 196.0 L251.6 194.8 L253.5 193.6 L255.4 192.3 L257.3 191.1 L259.2 189.8 L261.1 188.6 L263.0 187.3 L264.9 186.0 L266.8 184.7 L268.7 183.4 L270.6 182.1 L272.5 180.7 L274.4 179.4 L276.3 178.0 L278.2 176.6 L280.1 175.3 L282.0 173.9 L283.9 172.5 L285.8 171.0 L287.7 169.6 L289.6 168.2 L291.5 166.7 L293.4 165.2 L295.3 163.7 L297.2 162.2 L299.1 160.7 L301.0 159.2 L302.9 157.7 L304.8 156.2 L306.7 154.6 L308.6 153.0 L310.5 151.5 L312.3 149.9 L314.2 148.3 L316.1 146.6 L318.0 145.0 L319.9 143.4 L321.8 141.7 L323.7 140.1 L325.6 138.4 L327.5 136.7 L329.4 135.0 L331.3 133.3 L333.2 131.6 L335.1 129.8 L337.0 128.1 L338.9 126.3 L340.8 124.6 L342.7 122.8 L344.6 121.0 L346.5 119.2 L348.4 117.4 L350.3 115.5 L352.2 113.7 L354.1 111.8 L356.0 110.0 L357.9 108.1 L359.8 106.2 L361.7 104.3 L363.6 102.4 L365.5 100.5 L367.4 98.5 L369.3 96.6 L371.2 94.6 L373.1 92.7 L375.0 90.7 L376.9 88.7 L378.8 86.7 L380.7 84.6 L382.6 82.6 L384.4 80.6 L386.3 78.5 L388.2 76.4 L390.1 74.3 L392.0 72.2 L393.9 70.1 L395.8 68.0 L397.7 65.9 L399.6 63.8 L401.5 61.6 L403.4 59.4 L405.3 57.3 L407.2 55.1 L409.1 52.9 L411.0 50.6 L412.9 48.4 L414.8 46.2 L416.7 43.9 L418.6 41.7 L420.5 39.4 L422.4 37.1 L424.3 34.8 L426.2 32.5 L428.1 30.2 L430.0 27.9 L431.9 25.5 L433.8 23.1 L435.7 20.8 L437.6 18.4 L439.5 16.0"/><line class="plot-prior" x1="228.0" y1="16" x2="228.0" y2="256"/><text class="tick" x="232.0" y="26" text-anchor="start">V<tspan baseline-shift="sub" font-size="9">DS</tspan> = V<tspan baseline-shift="sub" font-size="9">GS</tspan> − V<tspan baseline-shift="sub" font-size="9">TH</tspan></text><text class="tick" x="222.0" y="248" text-anchor="end">triode</text><text class="tick" x="234.0" y="248" text-anchor="start">saturation</text><path class="plot-fit" d="M60.0 256.0 L62.4 254.7 L64.8 253.4 L67.2 252.1 L69.6 250.8 L72.0 249.5 L74.4 248.3 L76.8 247.1 L79.2 245.9 L81.6 244.7 L84.0 243.5 L86.4 242.4 L88.8 241.3 L91.2 240.2 L93.6 239.1 L96.0 238.0 L98.4 237.0 L100.8 235.9 L103.2 234.9 L105.6 233.9 L108.0 233.0 L110.4 232.0 L112.8 231.1 L115.2 230.2 L117.6 229.3 L120.0 228.4 L122.4 227.5 L124.8 226.7 L127.2 225.9 L129.6 225.1 L132.0 224.3 L134.4 223.6 L136.8 222.8 L139.2 222.1 L141.6 221.4 L144.0 220.7 L146.4 220.1 L148.8 219.4 L151.2 218.8 L153.6 218.2 L156.0 217.6 L158.4 217.0 L160.8 216.5 L163.2 216.0 L165.6 215.4 L168.0 215.0 L170.4 214.5 L172.8 214.0 L175.2 213.6 L177.6 213.2 L180.0 212.8 L182.4 212.4 L184.8 212.1 L187.2 211.7 L189.6 211.4 L192.0 211.1 L194.4 210.8 L196.8 210.6 L199.2 210.3 L201.6 210.1 L204.0 209.9 L206.4 209.7 L208.8 209.6 L211.2 209.4 L213.6 209.3 L216.0 209.2 L218.4 209.1 L220.8 209.0 L223.2 209.0 L225.6 209.0 L228.0 209.0 L230.4 209.0 L232.8 209.0 L235.2 209.0 L237.6 209.0 L240.0 209.0 L242.4 209.0 L244.8 209.0 L247.2 209.0 L249.6 209.0 L252.0 209.0 L254.4 209.0 L256.8 209.0 L259.2 209.0 L261.6 209.0 L264.0 209.0 L266.4 209.0 L268.8 209.0 L271.2 209.0 L273.6 209.0 L276.0 209.0 L278.4 209.0 L280.8 209.0 L283.2 209.0 L285.6 209.0 L288.0 209.0 L290.4 209.0 L292.8 209.0 L295.2 209.0 L297.6 209.0 L300.0 209.0 L302.4 209.0 L304.8 209.0 L307.2 209.0 L309.6 209.0 L312.0 209.0 L314.4 209.0 L316.8 209.0 L319.2 209.0 L321.6 209.0 L324.0 209.0 L326.4 209.0 L328.8 209.0 L331.2 209.0 L333.6 209.0 L336.0 209.0 L338.4 209.0 L340.8 209.0 L343.2 209.0 L345.6 209.0 L348.0 209.0 L350.4 209.0 L352.8 209.0 L355.2 209.0 L357.6 209.0 L360.0 209.0 L362.4 209.0 L364.8 209.0 L367.2 209.0 L369.6 209.0 L372.0 209.0 L374.4 209.0 L376.8 209.0 L379.2 209.0 L381.6 209.0 L384.0 209.0 L386.4 209.0 L388.8 209.0 L391.2 209.0 L393.6 209.0 L396.0 209.0 L398.4 209.0 L400.8 209.0 L403.2 209.0 L405.6 209.0 L408.0 209.0 L410.4 209.0 L412.8 209.0 L415.2 209.0 L417.6 209.0 L420.0 209.0 L422.4 209.0 L424.8 209.0 L427.2 209.0 L429.6 209.0 L432.0 209.0 L434.4 209.0 L436.8 209.0 L439.2 209.0 L441.6 209.0 L444.0 209.0 L446.4 209.0 L448.8 209.0 L451.2 209.0 L453.6 209.0 L456.0 209.0 L458.4 209.0 L460.8 209.0 L463.2 209.0 L465.6 209.0 L468.0 209.0 L470.4 209.0 L472.8 209.0 L475.2 209.0 L477.6 209.0 L480.0 209.0 L482.4 209.0 L484.8 209.0 L487.2 209.0 L489.6 209.0 L492.0 209.0 L494.4 209.0 L496.8 209.0 L499.2 209.0 L501.6 209.0 L504.0 209.0 L506.4 209.0 L508.8 209.0 L511.2 209.0 L513.6 209.0 L516.0 209.0 L518.4 209.0 L520.8 209.0 L523.2 209.0 L525.6 209.0 L528.0 209.0 L530.4 209.0 L532.8 209.0 L535.2 209.0 L537.6 209.0 L540.0 209.0"/><circle class="pt-train" cx="132.0" cy="224.3" r="6"/></svg><figcaption>설정 1: triode</figcaption></figure>
+    <figure class="figure"><svg id="widget-mos-iv-static-2" viewBox="0 0 560 300" role="img" aria-label="대표 설정 2: V_GS = 1.2 V, V_DS = 1.5 V, saturation 영역, I_D = 0.490 mA"><line class="axis" x1="60" y1="256" x2="540" y2="256"/><line class="axis" x1="60" y1="16" x2="60" y2="256"/><text class="tick" x="60.0" y="272" text-anchor="middle">0</text><text class="tick" x="180.0" y="272" text-anchor="middle">0.5</text><text class="tick" x="300.0" y="272" text-anchor="middle">1</text><text class="tick" x="420.0" y="272" text-anchor="middle">1.5</text><text class="tick" x="540.0" y="272" text-anchor="middle">2</text><text class="tick" x="54" y="212.0" text-anchor="end">0.5</text><text class="tick" x="54" y="164.0" text-anchor="end">1</text><text class="tick" x="54" y="116.0" text-anchor="end">1.5</text><text class="tick" x="54" y="68.0" text-anchor="end">2</text><text class="tick" x="54" y="20.0" text-anchor="end">2.5</text><text class="tick" x="300" y="296" text-anchor="middle">V<tspan baseline-shift="sub" font-size="9">DS</tspan> (V)</text><text class="tick" x="16" y="136" text-anchor="middle" transform="rotate(-90 16 136)">I<tspan baseline-shift="sub" font-size="9">D</tspan> (mA)</text><path class="plot-truth" d="M60.0 256.0 L61.9 256.0 L63.8 256.0 L65.7 255.9 L67.6 255.9 L69.5 255.9 L71.4 255.8 L73.3 255.7 L75.2 255.6 L77.1 255.5 L79.0 255.4 L80.9 255.3 L82.8 255.1 L84.7 255.0 L86.6 254.8 L88.5 254.7 L90.4 254.5 L92.3 254.3 L94.2 254.1 L96.0 253.8 L97.9 253.6 L99.8 253.4 L101.7 253.1 L103.6 252.8 L105.5 252.5 L107.4 252.3 L109.3 251.9 L111.2 251.6 L113.1 251.3 L115.0 251.0 L116.9 250.6 L118.8 250.2 L120.7 249.9 L122.6 249.5 L124.5 249.1 L126.4 248.7 L128.3 248.2 L130.2 247.8 L132.1 247.3 L134.0 246.9 L135.9 246.4 L137.8 245.9 L139.7 245.4 L141.6 244.9 L143.5 244.4 L145.4 243.9 L147.3 243.3 L149.2 242.7 L151.1 242.2 L153.0 241.6 L154.9 241.0 L156.8 240.4 L158.7 239.8 L160.6 239.1 L162.5 238.5 L164.4 237.9 L166.3 237.2 L168.1 236.5 L170.0 235.8 L171.9 235.1 L173.8 234.4 L175.7 233.7 L177.6 232.9 L179.5 232.2 L181.4 231.4 L183.3 230.7 L185.2 229.9 L187.1 229.1 L189.0 228.3 L190.9 227.4 L192.8 226.6 L194.7 225.8 L196.6 224.9 L198.5 224.0 L200.4 223.1 L202.3 222.3 L204.2 221.3 L206.1 220.4 L208.0 219.5 L209.9 218.6 L211.8 217.6 L213.7 216.6 L215.6 215.7 L217.5 214.7 L219.4 213.7 L221.3 212.7 L223.2 211.6 L225.1 210.6 L227.0 209.5 L228.9 208.5 L230.8 207.4 L232.7 206.3 L234.6 205.2 L236.5 204.1 L238.4 203.0 L240.2 201.8 L242.1 200.7 L244.0 199.5 L245.9 198.4 L247.8 197.2 L249.7 196.0 L251.6 194.8 L253.5 193.6 L255.4 192.3 L257.3 191.1 L259.2 189.8 L261.1 188.6 L263.0 187.3 L264.9 186.0 L266.8 184.7 L268.7 183.4 L270.6 182.1 L272.5 180.7 L274.4 179.4 L276.3 178.0 L278.2 176.6 L280.1 175.3 L282.0 173.9 L283.9 172.5 L285.8 171.0 L287.7 169.6 L289.6 168.2 L291.5 166.7 L293.4 165.2 L295.3 163.7 L297.2 162.2 L299.1 160.7 L301.0 159.2 L302.9 157.7 L304.8 156.2 L306.7 154.6 L308.6 153.0 L310.5 151.5 L312.3 149.9 L314.2 148.3 L316.1 146.6 L318.0 145.0 L319.9 143.4 L321.8 141.7 L323.7 140.1 L325.6 138.4 L327.5 136.7 L329.4 135.0 L331.3 133.3 L333.2 131.6 L335.1 129.8 L337.0 128.1 L338.9 126.3 L340.8 124.6 L342.7 122.8 L344.6 121.0 L346.5 119.2 L348.4 117.4 L350.3 115.5 L352.2 113.7 L354.1 111.8 L356.0 110.0 L357.9 108.1 L359.8 106.2 L361.7 104.3 L363.6 102.4 L365.5 100.5 L367.4 98.5 L369.3 96.6 L371.2 94.6 L373.1 92.7 L375.0 90.7 L376.9 88.7 L378.8 86.7 L380.7 84.6 L382.6 82.6 L384.4 80.6 L386.3 78.5 L388.2 76.4 L390.1 74.3 L392.0 72.2 L393.9 70.1 L395.8 68.0 L397.7 65.9 L399.6 63.8 L401.5 61.6 L403.4 59.4 L405.3 57.3 L407.2 55.1 L409.1 52.9 L411.0 50.6 L412.9 48.4 L414.8 46.2 L416.7 43.9 L418.6 41.7 L420.5 39.4 L422.4 37.1 L424.3 34.8 L426.2 32.5 L428.1 30.2 L430.0 27.9 L431.9 25.5 L433.8 23.1 L435.7 20.8 L437.6 18.4 L439.5 16.0"/><line class="plot-prior" x1="228.0" y1="16" x2="228.0" y2="256"/><text class="tick" x="232.0" y="26" text-anchor="start">V<tspan baseline-shift="sub" font-size="9">DS</tspan> = V<tspan baseline-shift="sub" font-size="9">GS</tspan> − V<tspan baseline-shift="sub" font-size="9">TH</tspan></text><text class="tick" x="222.0" y="248" text-anchor="end">triode</text><text class="tick" x="234.0" y="248" text-anchor="start">saturation</text><path class="plot-fit" d="M60.0 256.0 L62.4 254.7 L64.8 253.4 L67.2 252.1 L69.6 250.8 L72.0 249.5 L74.4 248.3 L76.8 247.1 L79.2 245.9 L81.6 244.7 L84.0 243.5 L86.4 242.4 L88.8 241.3 L91.2 240.2 L93.6 239.1 L96.0 238.0 L98.4 237.0 L100.8 235.9 L103.2 234.9 L105.6 233.9 L108.0 233.0 L110.4 232.0 L112.8 231.1 L115.2 230.2 L117.6 229.3 L120.0 228.4 L122.4 227.5 L124.8 226.7 L127.2 225.9 L129.6 225.1 L132.0 224.3 L134.4 223.6 L136.8 222.8 L139.2 222.1 L141.6 221.4 L144.0 220.7 L146.4 220.1 L148.8 219.4 L151.2 218.8 L153.6 218.2 L156.0 217.6 L158.4 217.0 L160.8 216.5 L163.2 216.0 L165.6 215.4 L168.0 215.0 L170.4 214.5 L172.8 214.0 L175.2 213.6 L177.6 213.2 L180.0 212.8 L182.4 212.4 L184.8 212.1 L187.2 211.7 L189.6 211.4 L192.0 211.1 L194.4 210.8 L196.8 210.6 L199.2 210.3 L201.6 210.1 L204.0 209.9 L206.4 209.7 L208.8 209.6 L211.2 209.4 L213.6 209.3 L216.0 209.2 L218.4 209.1 L220.8 209.0 L223.2 209.0 L225.6 209.0 L228.0 209.0 L230.4 209.0 L232.8 209.0 L235.2 209.0 L237.6 209.0 L240.0 209.0 L242.4 209.0 L244.8 209.0 L247.2 209.0 L249.6 209.0 L252.0 209.0 L254.4 209.0 L256.8 209.0 L259.2 209.0 L261.6 209.0 L264.0 209.0 L266.4 209.0 L268.8 209.0 L271.2 209.0 L273.6 209.0 L276.0 209.0 L278.4 209.0 L280.8 209.0 L283.2 209.0 L285.6 209.0 L288.0 209.0 L290.4 209.0 L292.8 209.0 L295.2 209.0 L297.6 209.0 L300.0 209.0 L302.4 209.0 L304.8 209.0 L307.2 209.0 L309.6 209.0 L312.0 209.0 L314.4 209.0 L316.8 209.0 L319.2 209.0 L321.6 209.0 L324.0 209.0 L326.4 209.0 L328.8 209.0 L331.2 209.0 L333.6 209.0 L336.0 209.0 L338.4 209.0 L340.8 209.0 L343.2 209.0 L345.6 209.0 L348.0 209.0 L350.4 209.0 L352.8 209.0 L355.2 209.0 L357.6 209.0 L360.0 209.0 L362.4 209.0 L364.8 209.0 L367.2 209.0 L369.6 209.0 L372.0 209.0 L374.4 209.0 L376.8 209.0 L379.2 209.0 L381.6 209.0 L384.0 209.0 L386.4 209.0 L388.8 209.0 L391.2 209.0 L393.6 209.0 L396.0 209.0 L398.4 209.0 L400.8 209.0 L403.2 209.0 L405.6 209.0 L408.0 209.0 L410.4 209.0 L412.8 209.0 L415.2 209.0 L417.6 209.0 L420.0 209.0 L422.4 209.0 L424.8 209.0 L427.2 209.0 L429.6 209.0 L432.0 209.0 L434.4 209.0 L436.8 209.0 L439.2 209.0 L441.6 209.0 L444.0 209.0 L446.4 209.0 L448.8 209.0 L451.2 209.0 L453.6 209.0 L456.0 209.0 L458.4 209.0 L460.8 209.0 L463.2 209.0 L465.6 209.0 L468.0 209.0 L470.4 209.0 L472.8 209.0 L475.2 209.0 L477.6 209.0 L480.0 209.0 L482.4 209.0 L484.8 209.0 L487.2 209.0 L489.6 209.0 L492.0 209.0 L494.4 209.0 L496.8 209.0 L499.2 209.0 L501.6 209.0 L504.0 209.0 L506.4 209.0 L508.8 209.0 L511.2 209.0 L513.6 209.0 L516.0 209.0 L518.4 209.0 L520.8 209.0 L523.2 209.0 L525.6 209.0 L528.0 209.0 L530.4 209.0 L532.8 209.0 L535.2 209.0 L537.6 209.0 L540.0 209.0"/><circle class="pt-train" cx="420.0" cy="209.0" r="6"/></svg><figcaption>설정 2: saturation</figcaption></figure>
+    <figure class="figure"><svg id="widget-mos-iv-static-3" viewBox="0 0 560 300" role="img" aria-label="대표 설정 3: V_GS = 1.6 V, V_DS = 1.5 V, saturation 영역, I_D = 1.210 mA"><line class="axis" x1="60" y1="256" x2="540" y2="256"/><line class="axis" x1="60" y1="16" x2="60" y2="256"/><text class="tick" x="60.0" y="272" text-anchor="middle">0</text><text class="tick" x="180.0" y="272" text-anchor="middle">0.5</text><text class="tick" x="300.0" y="272" text-anchor="middle">1</text><text class="tick" x="420.0" y="272" text-anchor="middle">1.5</text><text class="tick" x="540.0" y="272" text-anchor="middle">2</text><text class="tick" x="54" y="212.0" text-anchor="end">0.5</text><text class="tick" x="54" y="164.0" text-anchor="end">1</text><text class="tick" x="54" y="116.0" text-anchor="end">1.5</text><text class="tick" x="54" y="68.0" text-anchor="end">2</text><text class="tick" x="54" y="20.0" text-anchor="end">2.5</text><text class="tick" x="300" y="296" text-anchor="middle">V<tspan baseline-shift="sub" font-size="9">DS</tspan> (V)</text><text class="tick" x="16" y="136" text-anchor="middle" transform="rotate(-90 16 136)">I<tspan baseline-shift="sub" font-size="9">D</tspan> (mA)</text><path class="plot-truth" d="M60.0 256.0 L61.9 256.0 L63.8 256.0 L65.7 255.9 L67.6 255.9 L69.5 255.9 L71.4 255.8 L73.3 255.7 L75.2 255.6 L77.1 255.5 L79.0 255.4 L80.9 255.3 L82.8 255.1 L84.7 255.0 L86.6 254.8 L88.5 254.7 L90.4 254.5 L92.3 254.3 L94.2 254.1 L96.0 253.8 L97.9 253.6 L99.8 253.4 L101.7 253.1 L103.6 252.8 L105.5 252.5 L107.4 252.3 L109.3 251.9 L111.2 251.6 L113.1 251.3 L115.0 251.0 L116.9 250.6 L118.8 250.2 L120.7 249.9 L122.6 249.5 L124.5 249.1 L126.4 248.7 L128.3 248.2 L130.2 247.8 L132.1 247.3 L134.0 246.9 L135.9 246.4 L137.8 245.9 L139.7 245.4 L141.6 244.9 L143.5 244.4 L145.4 243.9 L147.3 243.3 L149.2 242.7 L151.1 242.2 L153.0 241.6 L154.9 241.0 L156.8 240.4 L158.7 239.8 L160.6 239.1 L162.5 238.5 L164.4 237.9 L166.3 237.2 L168.1 236.5 L170.0 235.8 L171.9 235.1 L173.8 234.4 L175.7 233.7 L177.6 232.9 L179.5 232.2 L181.4 231.4 L183.3 230.7 L185.2 229.9 L187.1 229.1 L189.0 228.3 L190.9 227.4 L192.8 226.6 L194.7 225.8 L196.6 224.9 L198.5 224.0 L200.4 223.1 L202.3 222.3 L204.2 221.3 L206.1 220.4 L208.0 219.5 L209.9 218.6 L211.8 217.6 L213.7 216.6 L215.6 215.7 L217.5 214.7 L219.4 213.7 L221.3 212.7 L223.2 211.6 L225.1 210.6 L227.0 209.5 L228.9 208.5 L230.8 207.4 L232.7 206.3 L234.6 205.2 L236.5 204.1 L238.4 203.0 L240.2 201.8 L242.1 200.7 L244.0 199.5 L245.9 198.4 L247.8 197.2 L249.7 196.0 L251.6 194.8 L253.5 193.6 L255.4 192.3 L257.3 191.1 L259.2 189.8 L261.1 188.6 L263.0 187.3 L264.9 186.0 L266.8 184.7 L268.7 183.4 L270.6 182.1 L272.5 180.7 L274.4 179.4 L276.3 178.0 L278.2 176.6 L280.1 175.3 L282.0 173.9 L283.9 172.5 L285.8 171.0 L287.7 169.6 L289.6 168.2 L291.5 166.7 L293.4 165.2 L295.3 163.7 L297.2 162.2 L299.1 160.7 L301.0 159.2 L302.9 157.7 L304.8 156.2 L306.7 154.6 L308.6 153.0 L310.5 151.5 L312.3 149.9 L314.2 148.3 L316.1 146.6 L318.0 145.0 L319.9 143.4 L321.8 141.7 L323.7 140.1 L325.6 138.4 L327.5 136.7 L329.4 135.0 L331.3 133.3 L333.2 131.6 L335.1 129.8 L337.0 128.1 L338.9 126.3 L340.8 124.6 L342.7 122.8 L344.6 121.0 L346.5 119.2 L348.4 117.4 L350.3 115.5 L352.2 113.7 L354.1 111.8 L356.0 110.0 L357.9 108.1 L359.8 106.2 L361.7 104.3 L363.6 102.4 L365.5 100.5 L367.4 98.5 L369.3 96.6 L371.2 94.6 L373.1 92.7 L375.0 90.7 L376.9 88.7 L378.8 86.7 L380.7 84.6 L382.6 82.6 L384.4 80.6 L386.3 78.5 L388.2 76.4 L390.1 74.3 L392.0 72.2 L393.9 70.1 L395.8 68.0 L397.7 65.9 L399.6 63.8 L401.5 61.6 L403.4 59.4 L405.3 57.3 L407.2 55.1 L409.1 52.9 L411.0 50.6 L412.9 48.4 L414.8 46.2 L416.7 43.9 L418.6 41.7 L420.5 39.4 L422.4 37.1 L424.3 34.8 L426.2 32.5 L428.1 30.2 L430.0 27.9 L431.9 25.5 L433.8 23.1 L435.7 20.8 L437.6 18.4 L439.5 16.0"/><line class="plot-prior" x1="324.0" y1="16" x2="324.0" y2="256"/><text class="tick" x="320.0" y="26" text-anchor="end">V<tspan baseline-shift="sub" font-size="9">DS</tspan> = V<tspan baseline-shift="sub" font-size="9">GS</tspan> − V<tspan baseline-shift="sub" font-size="9">TH</tspan></text><text class="tick" x="318.0" y="248" text-anchor="end">triode</text><text class="tick" x="330.0" y="248" text-anchor="start">saturation</text><path class="plot-fit" d="M60.0 256.0 L62.4 253.9 L64.8 251.8 L67.2 249.8 L69.6 247.7 L72.0 245.7 L74.4 243.7 L76.8 241.7 L79.2 239.7 L81.6 237.8 L84.0 235.8 L86.4 233.9 L88.8 232.0 L91.2 230.2 L93.6 228.3 L96.0 226.5 L98.4 224.7 L100.8 222.9 L103.2 221.1 L105.6 219.3 L108.0 217.6 L110.4 215.9 L112.8 214.2 L115.2 212.5 L117.6 210.8 L120.0 209.2 L122.4 207.6 L124.8 206.0 L127.2 204.4 L129.6 202.8 L132.0 201.3 L134.4 199.8 L136.8 198.2 L139.2 196.8 L141.6 195.3 L144.0 193.8 L146.4 192.4 L148.8 191.0 L151.2 189.6 L153.6 188.2 L156.0 186.9 L158.4 185.5 L160.8 184.2 L163.2 182.9 L165.6 181.7 L168.0 180.4 L170.4 179.2 L172.8 177.9 L175.2 176.7 L177.6 175.6 L180.0 174.4 L182.4 173.3 L184.8 172.1 L187.2 171.0 L189.6 169.9 L192.0 168.9 L194.4 167.8 L196.8 166.8 L199.2 165.8 L201.6 164.8 L204.0 163.8 L206.4 162.9 L208.8 162.0 L211.2 161.0 L213.6 160.2 L216.0 159.3 L218.4 158.4 L220.8 157.6 L223.2 156.8 L225.6 156.0 L228.0 155.2 L230.4 154.4 L232.8 153.7 L235.2 153.0 L237.6 152.3 L240.0 151.6 L242.4 150.9 L244.8 150.3 L247.2 149.7 L249.6 149.1 L252.0 148.5 L254.4 147.9 L256.8 147.4 L259.2 146.8 L261.6 146.3 L264.0 145.8 L266.4 145.4 L268.8 144.9 L271.2 144.5 L273.6 144.1 L276.0 143.7 L278.4 143.3 L280.8 143.0 L283.2 142.6 L285.6 142.3 L288.0 142.0 L290.4 141.7 L292.8 141.5 L295.2 141.2 L297.6 141.0 L300.0 140.8 L302.4 140.6 L304.8 140.5 L307.2 140.3 L309.6 140.2 L312.0 140.1 L314.4 140.0 L316.8 139.9 L319.2 139.9 L321.6 139.8 L324.0 139.8 L326.4 139.8 L328.8 139.8 L331.2 139.8 L333.6 139.8 L336.0 139.8 L338.4 139.8 L340.8 139.8 L343.2 139.8 L345.6 139.8 L348.0 139.8 L350.4 139.8 L352.8 139.8 L355.2 139.8 L357.6 139.8 L360.0 139.8 L362.4 139.8 L364.8 139.8 L367.2 139.8 L369.6 139.8 L372.0 139.8 L374.4 139.8 L376.8 139.8 L379.2 139.8 L381.6 139.8 L384.0 139.8 L386.4 139.8 L388.8 139.8 L391.2 139.8 L393.6 139.8 L396.0 139.8 L398.4 139.8 L400.8 139.8 L403.2 139.8 L405.6 139.8 L408.0 139.8 L410.4 139.8 L412.8 139.8 L415.2 139.8 L417.6 139.8 L420.0 139.8 L422.4 139.8 L424.8 139.8 L427.2 139.8 L429.6 139.8 L432.0 139.8 L434.4 139.8 L436.8 139.8 L439.2 139.8 L441.6 139.8 L444.0 139.8 L446.4 139.8 L448.8 139.8 L451.2 139.8 L453.6 139.8 L456.0 139.8 L458.4 139.8 L460.8 139.8 L463.2 139.8 L465.6 139.8 L468.0 139.8 L470.4 139.8 L472.8 139.8 L475.2 139.8 L477.6 139.8 L480.0 139.8 L482.4 139.8 L484.8 139.8 L487.2 139.8 L489.6 139.8 L492.0 139.8 L494.4 139.8 L496.8 139.8 L499.2 139.8 L501.6 139.8 L504.0 139.8 L506.4 139.8 L508.8 139.8 L511.2 139.8 L513.6 139.8 L516.0 139.8 L518.4 139.8 L520.8 139.8 L523.2 139.8 L525.6 139.8 L528.0 139.8 L530.4 139.8 L532.8 139.8 L535.2 139.8 L537.6 139.8 L540.0 139.8"/><circle class="pt-train" cx="420.0" cy="139.8" r="6"/></svg><figcaption>설정 3: saturation</figcaption></figure>
+    <figure class="figure"><svg id="widget-mos-iv-static-4" viewBox="0 0 560 300" role="img" aria-label="대표 설정 4: V_GS = 0.4 V, V_DS = 1.0 V, off 영역, I_D = 0.000 mA"><line class="axis" x1="60" y1="256" x2="540" y2="256"/><line class="axis" x1="60" y1="16" x2="60" y2="256"/><text class="tick" x="60.0" y="272" text-anchor="middle">0</text><text class="tick" x="180.0" y="272" text-anchor="middle">0.5</text><text class="tick" x="300.0" y="272" text-anchor="middle">1</text><text class="tick" x="420.0" y="272" text-anchor="middle">1.5</text><text class="tick" x="540.0" y="272" text-anchor="middle">2</text><text class="tick" x="54" y="212.0" text-anchor="end">0.5</text><text class="tick" x="54" y="164.0" text-anchor="end">1</text><text class="tick" x="54" y="116.0" text-anchor="end">1.5</text><text class="tick" x="54" y="68.0" text-anchor="end">2</text><text class="tick" x="54" y="20.0" text-anchor="end">2.5</text><text class="tick" x="300" y="296" text-anchor="middle">V<tspan baseline-shift="sub" font-size="9">DS</tspan> (V)</text><text class="tick" x="16" y="136" text-anchor="middle" transform="rotate(-90 16 136)">I<tspan baseline-shift="sub" font-size="9">D</tspan> (mA)</text><path class="plot-truth" d="M60.0 256.0 L61.9 256.0 L63.8 256.0 L65.7 255.9 L67.6 255.9 L69.5 255.9 L71.4 255.8 L73.3 255.7 L75.2 255.6 L77.1 255.5 L79.0 255.4 L80.9 255.3 L82.8 255.1 L84.7 255.0 L86.6 254.8 L88.5 254.7 L90.4 254.5 L92.3 254.3 L94.2 254.1 L96.0 253.8 L97.9 253.6 L99.8 253.4 L101.7 253.1 L103.6 252.8 L105.5 252.5 L107.4 252.3 L109.3 251.9 L111.2 251.6 L113.1 251.3 L115.0 251.0 L116.9 250.6 L118.8 250.2 L120.7 249.9 L122.6 249.5 L124.5 249.1 L126.4 248.7 L128.3 248.2 L130.2 247.8 L132.1 247.3 L134.0 246.9 L135.9 246.4 L137.8 245.9 L139.7 245.4 L141.6 244.9 L143.5 244.4 L145.4 243.9 L147.3 243.3 L149.2 242.7 L151.1 242.2 L153.0 241.6 L154.9 241.0 L156.8 240.4 L158.7 239.8 L160.6 239.1 L162.5 238.5 L164.4 237.9 L166.3 237.2 L168.1 236.5 L170.0 235.8 L171.9 235.1 L173.8 234.4 L175.7 233.7 L177.6 232.9 L179.5 232.2 L181.4 231.4 L183.3 230.7 L185.2 229.9 L187.1 229.1 L189.0 228.3 L190.9 227.4 L192.8 226.6 L194.7 225.8 L196.6 224.9 L198.5 224.0 L200.4 223.1 L202.3 222.3 L204.2 221.3 L206.1 220.4 L208.0 219.5 L209.9 218.6 L211.8 217.6 L213.7 216.6 L215.6 215.7 L217.5 214.7 L219.4 213.7 L221.3 212.7 L223.2 211.6 L225.1 210.6 L227.0 209.5 L228.9 208.5 L230.8 207.4 L232.7 206.3 L234.6 205.2 L236.5 204.1 L238.4 203.0 L240.2 201.8 L242.1 200.7 L244.0 199.5 L245.9 198.4 L247.8 197.2 L249.7 196.0 L251.6 194.8 L253.5 193.6 L255.4 192.3 L257.3 191.1 L259.2 189.8 L261.1 188.6 L263.0 187.3 L264.9 186.0 L266.8 184.7 L268.7 183.4 L270.6 182.1 L272.5 180.7 L274.4 179.4 L276.3 178.0 L278.2 176.6 L280.1 175.3 L282.0 173.9 L283.9 172.5 L285.8 171.0 L287.7 169.6 L289.6 168.2 L291.5 166.7 L293.4 165.2 L295.3 163.7 L297.2 162.2 L299.1 160.7 L301.0 159.2 L302.9 157.7 L304.8 156.2 L306.7 154.6 L308.6 153.0 L310.5 151.5 L312.3 149.9 L314.2 148.3 L316.1 146.6 L318.0 145.0 L319.9 143.4 L321.8 141.7 L323.7 140.1 L325.6 138.4 L327.5 136.7 L329.4 135.0 L331.3 133.3 L333.2 131.6 L335.1 129.8 L337.0 128.1 L338.9 126.3 L340.8 124.6 L342.7 122.8 L344.6 121.0 L346.5 119.2 L348.4 117.4 L350.3 115.5 L352.2 113.7 L354.1 111.8 L356.0 110.0 L357.9 108.1 L359.8 106.2 L361.7 104.3 L363.6 102.4 L365.5 100.5 L367.4 98.5 L369.3 96.6 L371.2 94.6 L373.1 92.7 L375.0 90.7 L376.9 88.7 L378.8 86.7 L380.7 84.6 L382.6 82.6 L384.4 80.6 L386.3 78.5 L388.2 76.4 L390.1 74.3 L392.0 72.2 L393.9 70.1 L395.8 68.0 L397.7 65.9 L399.6 63.8 L401.5 61.6 L403.4 59.4 L405.3 57.3 L407.2 55.1 L409.1 52.9 L411.0 50.6 L412.9 48.4 L414.8 46.2 L416.7 43.9 L418.6 41.7 L420.5 39.4 L422.4 37.1 L424.3 34.8 L426.2 32.5 L428.1 30.2 L430.0 27.9 L431.9 25.5 L433.8 23.1 L435.7 20.8 L437.6 18.4 L439.5 16.0"/><path class="plot-fit" d="M60.0 256.0 L62.4 256.0 L64.8 256.0 L67.2 256.0 L69.6 256.0 L72.0 256.0 L74.4 256.0 L76.8 256.0 L79.2 256.0 L81.6 256.0 L84.0 256.0 L86.4 256.0 L88.8 256.0 L91.2 256.0 L93.6 256.0 L96.0 256.0 L98.4 256.0 L100.8 256.0 L103.2 256.0 L105.6 256.0 L108.0 256.0 L110.4 256.0 L112.8 256.0 L115.2 256.0 L117.6 256.0 L120.0 256.0 L122.4 256.0 L124.8 256.0 L127.2 256.0 L129.6 256.0 L132.0 256.0 L134.4 256.0 L136.8 256.0 L139.2 256.0 L141.6 256.0 L144.0 256.0 L146.4 256.0 L148.8 256.0 L151.2 256.0 L153.6 256.0 L156.0 256.0 L158.4 256.0 L160.8 256.0 L163.2 256.0 L165.6 256.0 L168.0 256.0 L170.4 256.0 L172.8 256.0 L175.2 256.0 L177.6 256.0 L180.0 256.0 L182.4 256.0 L184.8 256.0 L187.2 256.0 L189.6 256.0 L192.0 256.0 L194.4 256.0 L196.8 256.0 L199.2 256.0 L201.6 256.0 L204.0 256.0 L206.4 256.0 L208.8 256.0 L211.2 256.0 L213.6 256.0 L216.0 256.0 L218.4 256.0 L220.8 256.0 L223.2 256.0 L225.6 256.0 L228.0 256.0 L230.4 256.0 L232.8 256.0 L235.2 256.0 L237.6 256.0 L240.0 256.0 L242.4 256.0 L244.8 256.0 L247.2 256.0 L249.6 256.0 L252.0 256.0 L254.4 256.0 L256.8 256.0 L259.2 256.0 L261.6 256.0 L264.0 256.0 L266.4 256.0 L268.8 256.0 L271.2 256.0 L273.6 256.0 L276.0 256.0 L278.4 256.0 L280.8 256.0 L283.2 256.0 L285.6 256.0 L288.0 256.0 L290.4 256.0 L292.8 256.0 L295.2 256.0 L297.6 256.0 L300.0 256.0 L302.4 256.0 L304.8 256.0 L307.2 256.0 L309.6 256.0 L312.0 256.0 L314.4 256.0 L316.8 256.0 L319.2 256.0 L321.6 256.0 L324.0 256.0 L326.4 256.0 L328.8 256.0 L331.2 256.0 L333.6 256.0 L336.0 256.0 L338.4 256.0 L340.8 256.0 L343.2 256.0 L345.6 256.0 L348.0 256.0 L350.4 256.0 L352.8 256.0 L355.2 256.0 L357.6 256.0 L360.0 256.0 L362.4 256.0 L364.8 256.0 L367.2 256.0 L369.6 256.0 L372.0 256.0 L374.4 256.0 L376.8 256.0 L379.2 256.0 L381.6 256.0 L384.0 256.0 L386.4 256.0 L388.8 256.0 L391.2 256.0 L393.6 256.0 L396.0 256.0 L398.4 256.0 L400.8 256.0 L403.2 256.0 L405.6 256.0 L408.0 256.0 L410.4 256.0 L412.8 256.0 L415.2 256.0 L417.6 256.0 L420.0 256.0 L422.4 256.0 L424.8 256.0 L427.2 256.0 L429.6 256.0 L432.0 256.0 L434.4 256.0 L436.8 256.0 L439.2 256.0 L441.6 256.0 L444.0 256.0 L446.4 256.0 L448.8 256.0 L451.2 256.0 L453.6 256.0 L456.0 256.0 L458.4 256.0 L460.8 256.0 L463.2 256.0 L465.6 256.0 L468.0 256.0 L470.4 256.0 L472.8 256.0 L475.2 256.0 L477.6 256.0 L480.0 256.0 L482.4 256.0 L484.8 256.0 L487.2 256.0 L489.6 256.0 L492.0 256.0 L494.4 256.0 L496.8 256.0 L499.2 256.0 L501.6 256.0 L504.0 256.0 L506.4 256.0 L508.8 256.0 L511.2 256.0 L513.6 256.0 L516.0 256.0 L518.4 256.0 L520.8 256.0 L523.2 256.0 L525.6 256.0 L528.0 256.0 L530.4 256.0 L532.8 256.0 L535.2 256.0 L537.6 256.0 L540.0 256.0"/><circle class="pt-train" cx="300.0" cy="256.0" r="6"/><text class="tick" x="300" y="76" text-anchor="middle">V<tspan baseline-shift="sub" font-size="9">GS</tspan> ≤ V<tspan baseline-shift="sub" font-size="9">TH</tspan>: 채널이 없어 I<tspan baseline-shift="sub" font-size="9">D</tspan> = 0</text></svg><figcaption>설정 4: off</figcaption></figure>
+    <div class="table-wrap"><table><tr><th>설정</th><th>$V_{GS}$ (V)</th><th>$V_{DS}$ (V)</th><th>$V_{GS}-V_{TH}$ (V)</th><th>영역</th><th>$I_D$ (mA)</th></tr><tr><td>1</td><td>1.2</td><td>0.3</td><td>0.70</td><td>triode</td><td>0.330</td></tr><tr><td>2</td><td>1.2</td><td>1.5</td><td>0.70</td><td>saturation</td><td>0.490</td></tr><tr><td>3</td><td>1.6</td><td>1.5</td><td>1.10</td><td>saturation</td><td>1.210</td></tr><tr><td>4</td><td>0.4</td><td>1.0</td><td>−0.10 (off)</td><td>off</td><td>0.000</td></tr></table></div>
+  </div>
+</div>
+  </div>
+  <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+    <p>triode에서 트랜지스터가 무엇처럼 동작하냐는 질문에 "저항", saturation에서는 "전류원"이라는 답이 나왔어요 (0902 68:52–69:16).</p>
+    <p>드레인과 소스 사이 전압에 영향을 받아 비례하면 저항이고, 영향이 없어 항상 일정하면 전류원이라고 구분하셨어요 (0902 70:46–70:55).</p>
+    <blockquote>"저항은 저항으로 만들 수 있잖아요. … 근데 커런트 소스는 우리가 알고 있는 다른 소자가 많지 않죠." (0902 69:37–69:46)</blockquote>
+    <p>전류원이라고 부를 때 앞에 설명을 붙이면 "볼티지 컨트롤드 커런트 소스"이고, 그 전압은 게이트–소스 전압이라고 하셨어요 (0902 71:04–71:13).</p>
+  </div>
+  <div class="layer warn"><span class="layer-title">꼭 기억해요</span>
+    <blockquote>"실제로 우리가 앰프나 이런 회로 동작을 할 때에는 요 영역을 사용하는 거죠." (0902 69:26)</blockquote>
+    <blockquote>"트랜지스터를 커런트 소스로 쓰는 게 가장 기본적인 동작이에요." (0902 69:31)</blockquote>
+    <blockquote>"이 커런트 소스로 동작하기 때문에 증폭이 되는 거예요, 증폭이." (0902 69:54)</blockquote>
+    <blockquote>"이 정도는 여러분들이 새추레이션 영역에서 요런 전류 식으로 나타난다." (0902 68:36)</blockquote>
+    <blockquote>"앰프로 동작하는 원리는 이 커런트 소스로 동작하기 때문에" (0902 71:24)</blockquote>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">$V_{DS}$가 $V_{GS}-V_{TH}$ 이상이면 전류가 $V_{GS}$로만 정해지는 전류원이 되고, 그래서 증폭이 돼요.</p>
+    <p class="panel-label">핵심 식</p>
+    <ul class="eq-list"><li><span class="eq-name">saturation 전류</span>$$I_D = \frac{1}{2}\mu_n C_{ox}\frac{W}{L}(V_{GS}-V_{TH})^2$$</li><li><span class="eq-name">saturation 조건</span>$$V_{DS} \ge V_{GS}-V_{TH}$$</li></ul>
+    <p class="panel-label">용어</p>
+    <dl class="terms"><dt>saturation region(포화 영역)</dt><dd>$I_D$가 $V_{DS}$와 무관하게 일정한 영역</dd><dt>voltage-controlled current source</dt><dd>$V_{GS}$가 값을 정하는 전류원. 증폭의 바탕이에요</dd></dl>
+  </div>
+</article>
+    </section>
+    <section id="s3"><h2>4. 요약 · 예고</h2>
+<article class="topic" id="s3-cheatsheet"><h3>한 장 요약</h3><div class="tags"><span class="tag date">0902 수업</span><span class="tag slide">L01 s5, L02 s3–8</span></div>
+  <p>0902 수업에서 다룬 핵심만 모았어요. 행마다 자세한 설명이 있는 토픽으로 이어져요.</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>무엇</th><th>식 · 결론</th><th>토픽</th></tr></thead>
+    <tbody>
+      <tr><td>수업 철학</td><td>이해 → 손 계산 → 손 설계 → 시뮬레이터로 검증. 시뮬레이터는 설계 도구가 아니라 검증에 쓰는 계산기예요.</td><td><a href="#s0-philosophy">식을 외우지 말고 이해하기</a></td></tr>
+      <tr><td>MOSFET 단자</td><td>게이트(G), 소스(S), 드레인(D) 3단자에 body를 넷째 단자로 그리기도 해요. 소스와 드레인은 대칭이고, 전류는 드레인에서 소스로 흘러요.</td><td><a href="#s2-structure">MOSFET의 구조와 단자</a></td></tr>
+      <tr><td>채널이 생기는 전압</td><td>$V_{GS}$가 문턱 전압 $V_{TH}$를 넘으면 채널이 생겨요.</td><td><a href="#s2-channel">게이트 전압과 채널</a></td></tr>
+      <tr><td>triode 영역 (작은 $V_{DS}$)</td><td>$R_{on} = \frac{1}{\mu_n C_{ox}\frac{W}{L}(V_{GS}-V_{TH})}$. 저항처럼 동작해요. 게이트에 $V_{DD}$를 걸면 on, 0을 걸면 off인 스위치예요.</td><td><a href="#s2-triode">작은 V_DS: 저항이 되는 triode 영역</a></td></tr>
+      <tr><td>saturation 영역 (큰 $V_{DS}$)</td><td>$I_D = \frac{1}{2}\mu_n C_{ox}\frac{W}{L}(V_{GS}-V_{TH})^2$. 조건은 $V_{DS} \ge V_{GS}-V_{TH}$예요.</td><td><a href="#s2-saturation">큰 V_DS: 전류원이 되는 saturation 영역</a></td></tr>
+      <tr><td>증폭의 원리</td><td>saturation에서 $I_D$는 $V_{GS}$로 정해지는 전류원(voltage-controlled current source)이에요. 전류원으로 동작해서 증폭이 돼요.</td><td><a href="#s2-saturation">큰 V_DS: 전류원이 되는 saturation 영역</a></td></tr>
+    </tbody>
+  </table></div>
+</article>
+<article class="topic" id="s3-next"><h3>다음 시간 예고</h3><div class="tags"><span class="tag date">0902 수업</span><span class="tag slide">L02 s9–28</span></div>
+  <p>교수님이 복습의 나머지를 다음 시간에 이어서 정리한다고 했어요(0902 71:38). 아래 슬라이드는 이번 수업에서 시작하지 않았어요.</p>
+  <ul>
+    <li>small-signal vs large-signal 동작(Small/Large-signal operations, s9)</li>
+    <li>MOS 소신호 모델과 $g_m$(MOS Small-Signal Model, s10)</li>
+    <li>채널길이변조(Channel-Length Modulation, s11)</li>
+    <li>PMOS 식과 PMOS 소신호 모델(PMOS Equations, Small-Signal Model of PMOS, s12–13)</li>
+    <li>DC 해석과 소신호 해석(DC and Small-Signal Analysis, s14–15)</li>
+    <li>CS 증폭기(Common-Source Topology, Small-signal model of CS stage, Inclusion of CLM, s16–18)</li>
+    <li>BJT: 구조, 대신호 모델, 특성, 트랜스컨덕턴스, 소신호 모델, Early Effect, PNP 모델(s19–28)</li>
+  </ul>
+</article>
+<article class="topic" id="s3-links"><h3>함께 보면 좋은 자료</h3><div class="tags"><span class="tag date">0902 수업</span></div>
+  <p>이번 범위에는 workbook 문제가 없어요.</p>
+  <ul>
+    <li><a href="../0923/정리노트_0923_Differential_Amplifiers.html">0923 복습팩 정리노트 (Differential Amplifiers)</a></li>
+  </ul>
+</article>
+    </section>
+  </main>
+  <footer>출처: 권익진 교수님 강의자료(Lec1, Lec2) · 수업 녹음 전사(0902) · B. Razavi, <i>Fundamentals of Microelectronics</i> (Wiley) 1·6장.</footer>
+    </div>
+    <aside class="panel panel-right" id="panel-right" aria-labelledby="panel-right-title">
+      <div class="panel-resize" data-side="right" role="separator" aria-orientation="vertical" aria-controls="panel-right" aria-label="오른쪽 패널 너비 조절. 좌우 화살표로 조절, Home으로 자동 너비" tabindex="0"></div>
+      <div class="panel-inner">
+        <div class="panel-head">
+          <h2 id="panel-right-title">페이지 요약</h2>
+          <button class="text-btn panel-close" type="button" data-panel-close>닫기</button>
+        </div>
+        <p class="panel-sub" id="sum-for">전체 흐름</p>
+        <p class="panel-empty" id="sum-empty">페이지를 넘기면 그 페이지의 핵심 식과 용어가 여기에 나옵니다.</p>
+        <div class="sums"></div>
+      </div>
+    </aside>
+  </div>
+  <div class="scrim" id="panel-scrim" aria-hidden="true"></div>
+  <nav class="pager" aria-label="화면 이동">
+    <div class="pager-inner">
+      <button class="btn btn-ghost" id="pager-prev" type="button">이전</button>
+      <span class="pager-count" id="pager-count"></span>
+      <button class="btn btn-primary" id="pager-next" type="button">시작하기</button>
+    </div>
+  </nav>
+  <p class="sr-only" id="pager-status" aria-live="polite"></p>
+  <script id="widget-mos-iv-ui">(function () {
+var MOSIV = (function () {
+  var VTH = 0.5;   // V
+  var BETA = 2;    // mu_n C_ox W/L, mA/V^2  (k = BETA/2 = 1 mA/V^2)
+  var W = 560, H = 300, L = 60, R = 540, T = 16, B = 256;
+  var XMAX = 2, YMAX = 2.5;
+  function sx(x) { return L + x / XMAX * (R - L); }
+  function sy(y) { return B - y / YMAX * (B - T); }
+  function f(v) { return (Math.round(v * 10) / 10).toFixed(1); }
+  function model(vgs, vds) {
+    var vov = vgs - VTH;
+    if (vov <= 0) return { region: "off", vov: vov, id: 0 };
+    if (vds < vov) return { region: "triode", vov: vov, id: BETA * (vov * vds - vds * vds / 2) };
+    return { region: "saturation", vov: vov, id: BETA / 2 * vov * vov };
+  }
+  function sub(s) { return '<tspan baseline-shift="sub" font-size="9">' + s + '</tspan>'; }
+  function svg(vgs, vds) {
+    var m = model(vgs, vds), s = "", i, n = 200;
+    s += '<line class="axis" x1="' + L + '" y1="' + B + '" x2="' + R + '" y2="' + B + '"/>';
+    s += '<line class="axis" x1="' + L + '" y1="' + T + '" x2="' + L + '" y2="' + B + '"/>';
+    [0, 0.5, 1, 1.5, 2].forEach(function (x) {
+      s += '<text class="tick" x="' + f(sx(x)) + '" y="' + (B + 16) + '" text-anchor="middle">' + x + '</text>';
+    });
+    [0.5, 1, 1.5, 2, 2.5].forEach(function (y) {
+      s += '<text class="tick" x="' + (L - 6) + '" y="' + f(sy(y) + 4) + '" text-anchor="end">' + y + '</text>';
+    });
+    s += '<text class="tick" x="' + ((L + R) / 2) + '" y="' + (H - 4) + '" text-anchor="middle">V' + sub("DS") + ' (V)</text>';
+    s += '<text class="tick" x="16" y="' + ((T + B) / 2) + '" text-anchor="middle" transform="rotate(-90 16 ' + ((T + B) / 2) + ')">I' + sub("D") + ' (mA)</text>';
+    // locus of boundary points for every V_GS: I_D = BETA/2 * V_DS^2
+    var d = "", xe = Math.sqrt(2 * YMAX / BETA);
+    for (i = 0; i <= n; i++) {
+      var xl = xe * i / n;
+      d += (i ? " L" : "M") + f(sx(xl)) + " " + f(sy(BETA / 2 * xl * xl));
+    }
+    s += '<path class="plot-truth" d="' + d + '"/>';
+    // boundary line V_DS = V_GS - V_TH
+    if (m.vov > 0 && m.vov <= XMAX) {
+      var bx = sx(m.vov);
+      s += '<line class="plot-prior" x1="' + f(bx) + '" y1="' + T + '" x2="' + f(bx) + '" y2="' + B + '"/>';
+      var lft = m.vov > 1;
+      s += '<text class="tick" x="' + f(lft ? bx - 4 : bx + 4) + '" y="' + (T + 10) + '" text-anchor="' + (lft ? "end" : "start") + '">V' + sub("DS") + ' = V' + sub("GS") + ' − V' + sub("TH") + '</text>';
+      s += '<text class="tick" x="' + f(bx - 6) + '" y="' + (B - 8) + '" text-anchor="end">triode</text>';
+      s += '<text class="tick" x="' + f(bx + 6) + '" y="' + (B - 8) + '" text-anchor="start">saturation</text>';
+    }
+    // I_D - V_DS curve for current V_GS
+    d = "";
+    for (i = 0; i <= n; i++) {
+      var x = XMAX * i / n;
+      d += (i ? " L" : "M") + f(sx(x)) + " " + f(sy(model(vgs, x).id));
+    }
+    s += '<path class="plot-fit" d="' + d + '"/>';
+    // operating point
+    s += '<circle class="pt-train" cx="' + f(sx(vds)) + '" cy="' + f(sy(m.id)) + '" r="6"/>';
+    if (m.region === "off") {
+      s += '<text class="tick" x="' + ((L + R) / 2) + '" y="' + (T + 60) + '" text-anchor="middle">V' + sub("GS") + ' ≤ V' + sub("TH") + ': 채널이 없어 I' + sub("D") + ' = 0</text>';
+    }
+    return s;
+  }
+  function readout(vgs, vds) {
+    var m = model(vgs, vds);
+    if (m.region === "off") return "off (V<sub>GS</sub> ≤ V<sub>TH</sub>, 채널 없음), I<sub>D</sub> = 0 mA";
+    return m.region + " 영역, I<sub>D</sub> = " + m.id.toFixed(3) + " mA (V<sub>GS</sub> − V<sub>TH</sub> = " + m.vov.toFixed(2) + " V, V<sub>DS</sub> = " + vds.toFixed(2) + " V)";
+  }
+  return { VTH: VTH, BETA: BETA, model: model, svg: svg, readout: readout };
+})();
+
+  var vgsEl = document.getElementById("mos-iv-vgs"), vdsEl = document.getElementById("mos-iv-vds");
+  var plot = document.getElementById("mos-iv-plot"), out = document.getElementById("mos-iv-out");
+  var vgsVal = document.getElementById("mos-iv-vgs-val"), vdsVal = document.getElementById("mos-iv-vds-val");
+  if (!vgsEl || !vdsEl || !plot || !out) return;
+  function draw() {
+    var vgs = parseFloat(vgsEl.value), vds = parseFloat(vdsEl.value);
+    vgsVal.textContent = vgs.toFixed(2);
+    vdsVal.textContent = vds.toFixed(2);
+    plot.innerHTML = MOSIV.svg(vgs, vds);
+    out.innerHTML = MOSIV.readout(vgs, vds);
+  }
+  vgsEl.addEventListener("input", draw);
+  vdsEl.addEventListener("input", draw);
+  draw();
+})();
+</script>
+  <script id="theme-ui">
+    (function () {
+      const root = document.documentElement;
+      const btn = document.getElementById('theme-toggle');
+      const sysDark = matchMedia('(prefers-color-scheme: dark)');
+      const KEY = 'od-theme';
+      const isDark = () => root.dataset.theme ? root.dataset.theme === 'dark' : sysDark.matches;
+      function label() {
+        const next = isDark() ? '라이트 모드로 전환' : '다크 모드로 전환';
+        btn.setAttribute('aria-label', next);
+        btn.title = next;
+      }
+      btn.addEventListener('click', () => {
+        const t = isDark() ? 'light' : 'dark';
+        // 시스템 설정과 같아지면 저장을 지워 다시 시스템을 따른다
+        if ((t === 'dark') === sysDark.matches) { delete root.dataset.theme; try { localStorage.removeItem(KEY); } catch (e) {} }
+        else { root.dataset.theme = t; try { localStorage.setItem(KEY, t); } catch (e) { /* 저장 불가: 이번 방문에만 유지 */ } }
+        label();
+      });
+      sysDark.addEventListener('change', label);
+      window.addEventListener('storage', (e) => {
+        if (e.key !== KEY) return;
+        if (e.newValue === 'light' || e.newValue === 'dark') root.dataset.theme = e.newValue; else delete root.dataset.theme;
+        label();
+      });
+      label();
+    })();
+  </script>
+  <script id="panels-ui">
+    (function () {
+      const body = document.body;
+      const layout = document.querySelector('.layout');
+      const kind = body.dataset.panels;
+      const panels = { left: document.getElementById('panel-left'), right: document.getElementById('panel-right') };
+      const toggles = { left: document.getElementById('toggle-left'), right: document.getElementById('toggle-right') };
+      const scrim = document.getElementById('panel-scrim');
+      const blockers = [document.querySelector('.topbar'), document.querySelector('.content'), document.querySelector('.pager')];
+      const wideMq = matchMedia('(min-width: 1024px)');
+      const roomyMq = matchMedia('(min-width: 1280px)');
+      const store = {
+        get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+        set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* 저장 불가: 이번 방문에만 유지 */ } }
+      };
+      const PREF = 'od-panels:' + kind;
+      // 팩마다 문제·토픽 id가 p1, s1-…로 겹치므로 진행 기록은 기간별로 나눈다
+      const RANGE = body.dataset.range || '';
+      const ICON_TODO = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg>';
+      const ICON_DONE = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 10"/></svg>';
+      let overlay = null;
+
+      // ---------- 열고 닫기 ----------
+      function docked() {
+        const pref = store.get(PREF, {});
+        return { left: pref.left ?? true, right: pref.right ?? roomyMq.matches };
+      }
+      function sync() {
+        const wide = wideMq.matches;
+        const d = docked();
+        ['left', 'right'].forEach((side) => {
+          const open = wide ? d[side] : overlay === side;
+          const p = panels[side];
+          layout.dataset[side] = open ? 'open' : 'closed';
+          p.classList.toggle('is-open', !wide && open);
+          p.inert = !open;
+          if (!wide && open) { p.setAttribute('role', 'dialog'); p.setAttribute('aria-modal', 'true'); }
+          else { p.removeAttribute('role'); p.removeAttribute('aria-modal'); }
+          toggles[side].setAttribute('aria-expanded', String(open));
+        });
+        const drawer = !wide && overlay !== null;
+        scrim.classList.toggle('is-on', drawer);
+        body.classList.toggle('drawer-open', drawer);
+        blockers.forEach((el) => { el.inert = drawer; });
+      }
+      function openDrawer(side) {
+        overlay = side;
+        sync();
+        requestAnimationFrame(() => panels[side].querySelector('[data-panel-close]').focus());
+      }
+      function closeDrawer(refocus) {
+        if (overlay === null) return;
+        const side = overlay;
+        overlay = null;
+        sync();
+        if (refocus) toggles[side].focus();
+      }
+      function toggle(side) {
+        if (wideMq.matches) {
+          const d = docked();
+          d[side] = !d[side];
+          store.set(PREF, d);
+          sync();
+          if (d[side]) { const p = panels[side]; p.classList.remove('is-shown'); void p.offsetWidth; p.classList.add('is-shown'); }
+        } else if (overlay === side) closeDrawer(true);
+        else openDrawer(side);
+      }
+
+      toggles.left.addEventListener('click', () => toggle('left'));
+      toggles.right.addEventListener('click', () => toggle('right'));
+      scrim.addEventListener('click', () => closeDrawer(true));
+      document.querySelectorAll('[data-panel-close]').forEach((b) => b.addEventListener('click', () => closeDrawer(true)));
+      panels.left.addEventListener('click', (e) => { if (e.target.closest('.toc a')) closeDrawer(false); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && overlay !== null) { e.preventDefault(); closeDrawer(true); } });
+
+      // ---------- 패널 너비: 기본은 화면 폭에 맞춰 자동, 경계를 끌면 직접 조절 ----------
+      const WIDTH = { left: { min: 220, max: 480, prop: '--panel-l-user' }, right: { min: 280, max: 720, prop: '--panel-r-user' } };
+      function applyWidths() {
+        const w = store.get(PREF + ':w', {});
+        ['left', 'right'].forEach((side) => {
+          if (w[side]) layout.style.setProperty(WIDTH[side].prop, w[side] + 'px');
+          else layout.style.removeProperty(WIDTH[side].prop);
+        });
+      }
+      function maxFor(side) {
+        const other = side === 'left' ? panels.right : panels.left;
+        const otherW = layout.dataset[side === 'left' ? 'right' : 'left'] === 'open' ? other.getBoundingClientRect().width : 0;
+        return Math.max(WIDTH[side].min, Math.min(WIDTH[side].max, window.innerWidth - otherW - 400));
+      }
+      function setWidth(side, px, save) {
+        const v = Math.round(Math.min(Math.max(px, WIDTH[side].min), maxFor(side)));
+        layout.style.setProperty(WIDTH[side].prop, v + 'px');
+        panels[side].querySelector('.panel-resize').setAttribute('aria-valuenow', String(v));
+        if (save) { const w = store.get(PREF + ':w', {}); w[side] = v; store.set(PREF + ':w', w); }
+      }
+      function resetWidth(side) {
+        const w = store.get(PREF + ':w', {});
+        delete w[side];
+        store.set(PREF + ':w', w);
+        layout.style.removeProperty(WIDTH[side].prop);
+      }
+      document.querySelectorAll('.panel-resize').forEach((handle) => {
+        const side = handle.dataset.side;
+        const dir = side === 'left' ? 1 : -1;
+        handle.setAttribute('aria-valuemin', String(WIDTH[side].min));
+        handle.setAttribute('aria-valuemax', String(WIDTH[side].max));
+        handle.addEventListener('pointerdown', (e) => {
+          if (!wideMq.matches || e.button !== 0) return;
+          e.preventDefault();
+          const startX = e.clientX;
+          const startW = panels[side].getBoundingClientRect().width;
+          handle.setPointerCapture(e.pointerId);
+          body.classList.add('is-resizing');
+          const move = (ev) => setWidth(side, startW + dir * (ev.clientX - startX), false);
+          const up = () => {
+            handle.removeEventListener('pointermove', move);
+            handle.removeEventListener('pointerup', up);
+            handle.removeEventListener('pointercancel', up);
+            body.classList.remove('is-resizing');
+            setWidth(side, panels[side].getBoundingClientRect().width, true);
+          };
+          handle.addEventListener('pointermove', move);
+          handle.addEventListener('pointerup', up);
+          handle.addEventListener('pointercancel', up);
+        });
+        handle.addEventListener('dblclick', () => resetWidth(side));
+        handle.addEventListener('keydown', (e) => {
+          const step = e.shiftKey ? 64 : 16;
+          const cur = panels[side].getBoundingClientRect().width;
+          if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+            e.preventDefault();
+            e.stopPropagation();
+            setWidth(side, cur + (e.key === 'ArrowRight' ? step : -step) * dir, true);
+          } else if (e.key === 'Home') { e.preventDefault(); resetWidth(side); }
+        });
+      });
+      applyWidths();
+      const onMq = () => { overlay = null; sync(); };
+      wideMq.addEventListener('change', onMq);
+      roomyMq.addEventListener('change', onMq);
+
+      // ---------- 목차의 진행 표시 ----------
+      const progressN = document.getElementById('progress-n');
+      const progressBar = document.getElementById('progress-bar');
+      const progressTotal = document.getElementById('progress-total');
+      function markToc(done, total, doneLabel) {
+        panels.left.querySelectorAll('.toc-list a').forEach((a) => {
+          const id = decodeURIComponent(a.getAttribute('href').slice(1));
+          let mark = a.querySelector('.toc-mark');
+          if (!mark) {
+            mark = document.createElement('span');
+            mark.className = 'toc-mark';
+            mark.setAttribute('aria-hidden', 'true');
+            const state = document.createElement('span');
+            state.className = 'sr-only toc-state';
+            a.append(mark, state);
+          }
+          const isDone = done.has(id);
+          mark.classList.toggle('is-done', isDone);
+          mark.innerHTML = isDone ? ICON_DONE : ICON_TODO;
+          a.querySelector('.toc-state').textContent = isDone ? ' (' + doneLabel + ')' : '';
+        });
+        progressN.textContent = String(done.size);
+        progressTotal.textContent = String(total);
+        progressBar.style.transform = 'scaleX(' + (total ? done.size / total : 0) + ')';
+      }
+      function revealCurrent() {
+        const link = panels.left.querySelector('.toc-list a[aria-current="true"]');
+        if (link && layout.dataset.left === 'open') link.scrollIntoView({ block: 'nearest' });
+      }
+
+      // ---------- 복습문제: 오른쪽 = 원문 · 힌트 · 풀이 ----------
+      function setupReview() {
+        const KEY = 'od-review-solved:' + RANGE;
+        const cards = Array.from(document.querySelectorAll('main article.card'));
+        const aids = panels.right.querySelector('.aids');
+        const sub = document.getElementById('aid-for');
+        const empty = panels.right.querySelector('.panel-empty');
+        const btn = document.getElementById('solved-btn');
+        const groups = {};
+        const solved = new Set(store.get(KEY, []).filter((id) => cards.some((c) => c.id === id)));
+        cards.forEach((card) => {
+          const g = document.createElement('div');
+          g.className = 'aid';
+          g.hidden = true;
+          card.querySelectorAll(':scope > details').forEach((d) => g.appendChild(d));
+          aids.appendChild(g);
+          groups[card.id] = g;
+        });
+        let curId = null;
+        function paintBtn() {
+          const on = solved.has(curId);
+          btn.setAttribute('aria-pressed', String(on));
+          btn.innerHTML = (on ? ICON_DONE : ICON_TODO) + '<span>' + (on ? '푼 문제 · 표시 해제' : '푼 문제로 표시') + '</span>';
+        }
+        btn.addEventListener('click', () => {
+          if (!curId) return;
+          if (solved.has(curId)) solved.delete(curId); else solved.add(curId);
+          store.set(KEY, Array.from(solved));
+          paintBtn();
+          markToc(solved, cards.length, '푼 문제');
+        });
+        document.addEventListener('od:screen', (e) => {
+          const s = e.detail.screen;
+          curId = s.matches('article.card') ? s.id : null;
+          Object.keys(groups).forEach((id) => { groups[id].hidden = id !== curId; });
+          empty.hidden = Boolean(curId);
+          btn.hidden = !curId;
+          sub.textContent = curId ? ((s.querySelector('h3') || {}).textContent || '').trim() : '';
+          sub.hidden = !curId;
+          if (curId) paintBtn();
+          panels.right.querySelector('.panel-inner').scrollTop = 0;
+          markToc(solved, cards.length, '푼 문제');
+          revealCurrent();
+        });
+      }
+
+      // ---------- 정리노트: 오른쪽 = 페이지(토픽)별 요약 ----------
+      function setupNote() {
+        const KEY = 'od-note-read:' + RANGE;
+        const topics = Array.from(document.querySelectorAll('main article.topic'));
+        const read = new Set(store.get(KEY, []).filter((id) => topics.some((t) => t.id === id)));
+        // 조각의 <div class="sum" hidden> 을 오른쪽 패널로 옮긴다. 없으면 안내 문구만 보인다.
+        const box = panels.right.querySelector('.sums');
+        const sums = {};
+        topics.forEach((t) => {
+          const el = t.querySelector(':scope > .sum');
+          if (!el) return;
+          el.hidden = true;
+          box.appendChild(el);
+          sums[t.id] = el;
+        });
+        const sub = document.getElementById('sum-for');
+        const empty = document.getElementById('sum-empty');
+        document.addEventListener('od:screen', (e) => {
+          const s = e.detail.screen;
+          const key = s.matches('article.topic') ? s.id : 'intro';
+          Object.keys(sums).forEach((id) => { sums[id].hidden = id !== key; });
+          empty.hidden = Boolean(sums[key]);
+          sub.textContent = key === 'intro' ? '전체 흐름' : ((s.querySelector('h3') || {}).textContent || '').trim();
+          if (s.matches('article.topic') && !read.has(s.id)) { read.add(s.id); store.set(KEY, Array.from(read)); }
+          panels.right.querySelector('.panel-inner').scrollTop = 0;
+          markToc(read, topics.length, '읽음');
+          revealCurrent();
+        });
+      }
+
+      if (kind === 'review') setupReview();
+      if (kind === 'note') setupNote();
+      sync();
+    })();
+  </script>
+  <script id="pager-ui">
+    (function () {
+      const root = document.documentElement;
+      const main = document.querySelector('main');
+      const hero = main.querySelector('.hero');
+      const screens = [hero].concat(Array.from(main.querySelectorAll(document.body.dataset.screens)));
+      if (screens.length < 2) { root.classList.remove('js'); return; }
+      screens.forEach((s) => s.classList.add('screen'));
+
+      const last = screens.length - 1;
+      const prevBtn = document.getElementById('pager-prev');
+      const nextBtn = document.getElementById('pager-next');
+      const count = document.getElementById('pager-count');
+      const bar = document.getElementById('pager-bar');
+      const status = document.getElementById('pager-status');
+      const toc = document.querySelector('#panel-left .toc');
+      const scroller = document.querySelector('.content');
+      const titleOf = (s) => ((s.querySelector('h3') || s.querySelector('h1') || {}).textContent || '').trim();
+      let cur = -1;
+
+      // 목차: 섹션 링크 아래에 화면(토픽·카드) 목록을 붙인다
+      const tocLinks = [];
+      Array.from(toc.querySelectorAll(':scope > a')).forEach((a) => {
+        const sec = document.getElementById(decodeURIComponent(a.getAttribute('href').slice(1)));
+        const group = document.createElement('div');
+        group.className = 'toc-group';
+        a.replaceWith(group);
+        group.appendChild(a);
+        if (!sec) return;
+        const list = document.createElement('ol');
+        list.className = 'toc-list';
+        screens.forEach((s, i) => {
+          if (!sec.contains(s)) return;
+          const li = document.createElement('li');
+          const link = document.createElement('a');
+          link.href = '#' + s.id;
+          link.innerHTML = '<span class="toc-title"></span>';
+          link.firstChild.textContent = titleOf(s);
+          li.appendChild(link);
+          list.appendChild(li);
+          tocLinks[i] = link;
+        });
+        group.appendChild(list);
+      });
+
+      function indexFor(hash) {
+        const id = decodeURIComponent((hash || '').replace(/^#/, ''));
+        const el = id && document.getElementById(id);
+        if (!el || !main.contains(el)) return { i: 0 };
+        const i = screens.findIndex((s) => s.contains(el) || el.contains(s));
+        return { i: Math.max(i, 0), target: i >= 0 && screens[i].contains(el) && screens[i] !== el ? el : null };
+      }
+
+      function render(i, target) {
+        const dir = cur < 0 ? '' : i > cur ? 'enter-next' : 'enter-prev';
+        if (i !== cur) {
+          if (cur >= 0) screens[cur].classList.remove('is-current', 'enter-next', 'enter-prev');
+          main.querySelectorAll(':scope > section.is-on').forEach((sec) => sec.classList.remove('is-on'));
+          const s = screens[i];
+          const sec = s.closest('section');
+          if (sec) sec.classList.add('is-on');
+          s.classList.add('is-current');
+          if (dir) { s.classList.remove('enter-next', 'enter-prev'); void s.offsetWidth; s.classList.add(dir); }
+          cur = i;
+          document.body.classList.toggle('at-end', i === last);
+          prevBtn.disabled = i === 0;
+          nextBtn.textContent = i === 0 ? '시작하기' : i === last ? '처음으로' : '다음';
+          count.textContent = i === 0 ? '' : i + ' / ' + last;
+          bar.style.transform = 'scaleX(' + (i / last) + ')';
+          status.textContent = i === 0 ? titleOf(s) : i + ' / ' + last + ', ' + titleOf(s);
+          tocLinks.forEach((link, k) => link && link.setAttribute('aria-current', String(k === i)));
+          document.dispatchEvent(new CustomEvent('od:screen', { detail: { index: i, screen: s } }));
+        }
+        if (target) target.scrollIntoView({ block: 'start' });
+        else scroller.scrollTo(0, 0);
+      }
+
+      function go(i) {
+        i = Math.min(Math.max(i, 0), last);
+        if (i === cur) return;
+        const url = i === 0 ? location.pathname + location.search : '#' + screens[i].id;
+        history.pushState(null, '', url);
+        render(i);
+      }
+
+      prevBtn.addEventListener('click', () => go(cur - 1));
+      nextBtn.addEventListener('click', () => go(cur === last ? 0 : cur + 1));
+      const fromUrl = () => { const r = indexFor(location.hash); render(r.i, r.target); };
+      window.addEventListener('hashchange', fromUrl);
+      window.addEventListener('popstate', fromUrl);
+
+      document.addEventListener('keydown', (e) => {
+        if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || document.body.classList.contains('drawer-open')) return;
+        if (e.target.closest('input, select, textarea, [contenteditable="true"]')) return;
+        if (e.key === 'ArrowRight') { e.preventDefault(); go(cur + 1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); }
+      });
+
+      // 좌우로 밀어서 넘기기 (가로로 스크롤되는 영역은 제외)
+      let sx = 0, sy = 0, skip = true;
+      main.addEventListener('touchstart', (e) => {
+        const t = e.touches[0];
+        sx = t.clientX; sy = t.clientY;
+        skip = e.touches.length > 1 || Boolean(e.target.closest('.widget, .katex-display, .table-wrap, svg, input, details'));
+      }, { passive: true });
+      main.addEventListener('touchend', (e) => {
+        if (skip) return;
+        const t = e.changedTouches[0];
+        const dx = t.clientX - sx, dy = t.clientY - sy;
+        if (Math.abs(dx) > 64 && Math.abs(dx) > 2 * Math.abs(dy)) go(cur + (dx < 0 ? 1 : -1));
+      }, { passive: true });
+
+      fromUrl();
+    })();
+  </script>
+</body>
+</html>
