@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="660" height="290" viewBox="0 0 660 290" role="img" aria-label="CMOS 전류 미러 회로예요. 왼쪽에서 I_REF가 다이오드 연결된 NMOS M_REF로 흐르고, 그 게이트가 1:1 복사본 M_N1과 오른쪽 아래 M_N2의 게이트에 이어져요. M_N1은 위쪽의 다이오드 연결된 PMOS M_P,REF에서 강조색 화살표로 표시한 I_REF를 끌어내려요. M_P,REF의 게이트에서 나온 강조색 선이 M_P1의 게이트로 가고, M_P1은 V_DD에서 테두리만 있는 원인 노드 A로 전류를 흘려 넣어요(source). M_N2는 노드 B에서 접지로 전류를 빼내요(sink). 접속점은 색칠된 점이에요."><style>
+svg { color: #1b2130; font-family: -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; }
+.fig-ink { stroke: #1b2130; fill: none; stroke-width: 2; }
+.fig-accent { stroke: #2f6fdb; fill: none; stroke-width: 2.5; }
+.fig-danger { stroke: #d92d20; fill: none; stroke-width: 2.5; }
+.fig-dot { fill: #2f6fdb; }
+.fig-text { fill: #1b2130; font-size: 13px; }
+.fig-muted { fill: #4a5468; font-size: 12px; }
+.axis { stroke: #dde2ea; stroke-width: 1.5; }
+.tick { fill: #4a5468; font-size: 11px; }
+.plot-truth { fill: none; stroke: #4a5468; stroke-width: 1.5; stroke-dasharray: 5 4; }
+.plot-fit { fill: none; stroke: #2f6fdb; stroke-width: 2.5; }
+.pt-train { fill: #2f6fdb; }
+.pt-test { fill: #b54708; }
+.mark-ml { stroke: #2f6fdb; stroke-width: 1.5; stroke-dasharray: 3 3; }
+.mark-map { stroke: #067647; stroke-width: 1.5; stroke-dasharray: 3 3; }
+.plot-like { fill: none; stroke: #2f6fdb; stroke-width: 2; }
+.plot-prior { fill: none; stroke: #6941c6; stroke-width: 2; stroke-dasharray: 6 4; }
+.plot-post { fill: none; stroke: #067647; stroke-width: 3; }
+</style><rect x="0" y="0" width="660" height="290" rx="10" fill="#ffffff"/>
+      <line class="fig-ink" x1="56" y1="40" x2="84" y2="40"/>
+      <text class="fig-text" x="88" y="44">V<tspan baseline-shift="sub" font-size="9">DD</tspan></text>
+      <line class="fig-ink" x1="70" y1="40" x2="70" y2="75"/>
+      <circle class="fig-ink" cx="70" cy="90" r="15"/>
+      <line class="fig-ink" x1="70" y1="81" x2="70" y2="99"/>
+      <path class="fig-ink" d="M65,93 L70,100 L75,93"/>
+      <text class="fig-text" x="20" y="80">I<tspan baseline-shift="sub" font-size="9">REF</tspan></text>
+      <line class="fig-ink" x1="70" y1="105" x2="70" y2="171"/>
+      <circle class="fig-dot" cx="70" cy="135" r="3.5"/>
+      <line class="fig-ink" x1="90" y1="163" x2="90" y2="207"/>
+      <line class="fig-ink" x1="98" y1="167" x2="98" y2="203"/>
+      <line class="fig-ink" x1="90" y1="171" x2="70" y2="171"/>
+      <line class="fig-ink" x1="90" y1="199" x2="70" y2="199"/>
+      <path class="fig-ink" d="M81,194 L74,199 L81,204"/>
+      <line class="fig-ink" x1="70" y1="199" x2="70" y2="223"/>
+      <line class="fig-ink" x1="70" y1="223" x2="70" y2="233"/>
+      <line class="fig-ink" x1="58" y1="233" x2="82" y2="233"/>
+      <line class="fig-ink" x1="62" y1="239" x2="78" y2="239"/>
+      <line class="fig-ink" x1="67" y1="245" x2="73" y2="245"/>
+      <text class="fig-text" x="104" y="232">M<tspan baseline-shift="sub" font-size="9">REF</tspan></text>
+      <line class="fig-ink" x1="70" y1="135" x2="120" y2="135"/>
+      <line class="fig-ink" x1="120" y1="135" x2="120" y2="185"/>
+      <circle class="fig-dot" cx="120" cy="185" r="3.5"/>
+      <line class="fig-ink" x1="98" y1="185" x2="252" y2="185"/>
+      <circle class="fig-dot" cx="180" cy="185" r="3.5"/>
+      <line class="fig-ink" x1="180" y1="185" x2="180" y2="268"/>
+      <line class="fig-ink" x1="180" y1="268" x2="500" y2="268"/>
+      <line class="fig-ink" x1="500" y1="268" x2="500" y2="185"/>
+      <line class="fig-ink" x1="500" y1="185" x2="532" y2="185"/>
+      <line class="fig-ink" x1="260" y1="163" x2="260" y2="207"/>
+      <line class="fig-ink" x1="252" y1="167" x2="252" y2="203"/>
+      <line class="fig-ink" x1="260" y1="171" x2="280" y2="171"/>
+      <line class="fig-ink" x1="260" y1="199" x2="280" y2="199"/>
+      <path class="fig-ink" d="M269,194 L276,199 L269,204"/>
+      <line class="fig-ink" x1="280" y1="199" x2="280" y2="223"/>
+      <line class="fig-ink" x1="280" y1="223" x2="280" y2="233"/>
+      <line class="fig-ink" x1="268" y1="233" x2="292" y2="233"/>
+      <line class="fig-ink" x1="272" y1="239" x2="288" y2="239"/>
+      <line class="fig-ink" x1="277" y1="245" x2="283" y2="245"/>
+      <text class="fig-text" x="294" y="232">M<tspan baseline-shift="sub" font-size="9">N1</tspan> (1:1)</text>
+      <line class="fig-ink" x1="280" y1="94" x2="280" y2="171"/>
+      <circle class="fig-dot" cx="280" cy="120" r="3.5"/>
+      <line class="fig-accent" x1="294" y1="128" x2="294" y2="164"/>
+      <path class="fig-accent" d="M289,156 L294,164 L299,156"/>
+      <text class="fig-text" x="302" y="152">I<tspan baseline-shift="sub" font-size="9">REF</tspan></text>
+      <line class="fig-ink" x1="260" y1="40" x2="600" y2="40"/>
+      <text class="fig-text" x="606" y="44">V<tspan baseline-shift="sub" font-size="9">DD</tspan></text>
+      <line class="fig-ink" x1="300" y1="58" x2="300" y2="102"/>
+      <line class="fig-ink" x1="308" y1="62" x2="308" y2="98"/>
+      <line class="fig-ink" x1="300" y1="66" x2="280" y2="66"/>
+      <line class="fig-ink" x1="300" y1="94" x2="280" y2="94"/>
+      <path class="fig-ink" d="M287,61 L294,66 L287,71"/>
+      <line class="fig-ink" x1="280" y1="40" x2="280" y2="66"/>
+      <text class="fig-text" x="270" y="86" text-anchor="end">M<tspan baseline-shift="sub" font-size="9">P,REF</tspan></text>
+      <line class="fig-accent" x1="280" y1="120" x2="340" y2="120"/>
+      <line class="fig-accent" x1="340" y1="120" x2="340" y2="80"/>
+      <circle class="fig-dot" cx="340" cy="80" r="3.5"/>
+      <line class="fig-accent" x1="308" y1="80" x2="432" y2="80"/>
+      <line class="fig-ink" x1="440" y1="58" x2="440" y2="102"/>
+      <line class="fig-ink" x1="432" y1="62" x2="432" y2="98"/>
+      <line class="fig-ink" x1="440" y1="66" x2="460" y2="66"/>
+      <line class="fig-ink" x1="440" y1="94" x2="460" y2="94"/>
+      <path class="fig-ink" d="M453,61 L446,66 L453,71"/>
+      <line class="fig-ink" x1="460" y1="40" x2="460" y2="66"/>
+      <text class="fig-text" x="474" y="76">M<tspan baseline-shift="sub" font-size="9">P1</tspan></text>
+      <line class="fig-ink" x1="460" y1="94" x2="460" y2="130"/>
+      <circle class="fig-ink" cx="460" cy="134" r="4"/>
+      <text class="fig-muted" x="448" y="138" text-anchor="end">노드 A</text>
+      <line class="fig-accent" x1="474" y1="100" x2="474" y2="128"/>
+      <path class="fig-accent" d="M469,120 L474,128 L479,120"/>
+      <text class="fig-text" x="482" y="120">source</text>
+      <line class="fig-ink" x1="540" y1="163" x2="540" y2="207"/>
+      <line class="fig-ink" x1="532" y1="167" x2="532" y2="203"/>
+      <line class="fig-ink" x1="540" y1="171" x2="560" y2="171"/>
+      <line class="fig-ink" x1="540" y1="199" x2="560" y2="199"/>
+      <path class="fig-ink" d="M549,194 L556,199 L549,204"/>
+      <line class="fig-ink" x1="560" y1="199" x2="560" y2="223"/>
+      <line class="fig-ink" x1="560" y1="223" x2="560" y2="233"/>
+      <line class="fig-ink" x1="548" y1="233" x2="572" y2="233"/>
+      <line class="fig-ink" x1="552" y1="239" x2="568" y2="239"/>
+      <line class="fig-ink" x1="557" y1="245" x2="563" y2="245"/>
+      <text class="fig-text" x="574" y="232">M<tspan baseline-shift="sub" font-size="9">N2</tspan></text>
+      <line class="fig-ink" x1="560" y1="140" x2="560" y2="171"/>
+      <circle class="fig-ink" cx="560" cy="136" r="4"/>
+      <text class="fig-muted" x="572" y="132">노드 B</text>
+      <line class="fig-accent" x1="574" y1="144" x2="574" y2="168"/>
+      <path class="fig-accent" d="M569,160 L574,168 L579,160"/>
+      <text class="fig-text" x="582" y="162">sink</text>
+    </svg>
