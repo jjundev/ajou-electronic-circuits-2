@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="250" viewBox="0 0 560 250" role="img" aria-label="세 그림. 왼쪽은 대신호 모델로, G 단자는 어디에도 이어지지 않고 D와 S 사이에 아래 방향 화살표가 든 전류원 원이 있어요. 가운데는 소스가 접지이고 게이트에 V_b를 건 NMOS로, 색칠된 점인 노드 X에서 접지 쪽으로 강조색 화살표 전류가 흘러요. 오른쪽은 소스가 V_DD에 붙고 게이트에 V_b를 건 PMOS로, V_DD에서 색칠된 점인 노드 Y 쪽으로 강조색 화살표 전류가 흘러요."><style>
+svg { color: #1b2130; font-family: -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; }
+.fig-ink { stroke: #1b2130; fill: none; stroke-width: 2; }
+.fig-accent { stroke: #2f6fdb; fill: none; stroke-width: 2.5; }
+.fig-danger { stroke: #d92d20; fill: none; stroke-width: 2.5; }
+.fig-dot { fill: #2f6fdb; }
+.fig-text { fill: #1b2130; font-size: 13px; }
+.fig-muted { fill: #4a5468; font-size: 12px; }
+.axis { stroke: #dde2ea; stroke-width: 1.5; }
+.tick { fill: #4a5468; font-size: 11px; }
+.plot-truth { fill: none; stroke: #4a5468; stroke-width: 1.5; stroke-dasharray: 5 4; }
+.plot-fit { fill: none; stroke: #2f6fdb; stroke-width: 2.5; }
+.pt-train { fill: #2f6fdb; }
+.pt-test { fill: #b54708; }
+.mark-ml { stroke: #2f6fdb; stroke-width: 1.5; stroke-dasharray: 3 3; }
+.mark-map { stroke: #067647; stroke-width: 1.5; stroke-dasharray: 3 3; }
+.plot-like { fill: none; stroke: #2f6fdb; stroke-width: 2; }
+.plot-prior { fill: none; stroke: #6941c6; stroke-width: 2; stroke-dasharray: 6 4; }
+.plot-post { fill: none; stroke: #067647; stroke-width: 3; }
+</style><rect x="0" y="0" width="560" height="250" rx="10" fill="#ffffff"/>
+      <circle class="fig-ink" cx="100" cy="46" r="4"/>
+      <text class="fig-muted" x="110" y="42">D</text>
+      <line class="fig-ink" x1="100" y1="50" x2="100" y2="90"/>
+      <circle class="fig-ink" cx="100" cy="110" r="20"/>
+      <line class="fig-ink" x1="100" y1="97" x2="100" y2="123"/>
+      <path class="fig-ink" d="M94,116 L100,125 L106,116"/>
+      <line class="fig-ink" x1="100" y1="130" x2="100" y2="170"/>
+      <circle class="fig-ink" cx="100" cy="174" r="4"/>
+      <text class="fig-muted" x="110" y="186">S</text>
+      <text class="fig-text" x="128" y="114">I<tspan baseline-shift="sub" font-size="9">D</tspan></text>
+      <circle class="fig-ink" cx="36" cy="110" r="4"/>
+      <line class="fig-ink" x1="40" y1="110" x2="58" y2="110"/>
+      <text class="fig-muted" x="30" y="100" text-anchor="middle">G</text>
+      <text class="fig-muted" x="48" y="136" text-anchor="middle">개방</text>
+      <text class="fig-text" x="90" y="232" text-anchor="middle">대신호 모델(포화)</text>
+
+      <circle class="fig-dot" cx="290" cy="56" r="4"/>
+      <text class="fig-muted" x="278" y="52" text-anchor="end">X</text>
+      <line class="fig-ink" x1="290" y1="56" x2="290" y2="106"/>
+      <line class="fig-ink" x1="290" y1="106" x2="270" y2="106"/>
+      <line class="fig-ink" x1="270" y1="98" x2="270" y2="142"/>
+      <line class="fig-ink" x1="262" y1="100" x2="262" y2="140"/>
+      <line class="fig-ink" x1="228" y1="120" x2="262" y2="120"/>
+      <text class="fig-text" x="222" y="124" text-anchor="end">V<tspan baseline-shift="sub" font-size="9">b</tspan></text>
+      <line class="fig-ink" x1="270" y1="134" x2="290" y2="134"/>
+      <path class="fig-ink" d="M279,129 L286,134 L279,139"/>
+      <line class="fig-ink" x1="290" y1="134" x2="290" y2="180"/>
+      <line class="fig-ink" x1="278" y1="180" x2="302" y2="180"/>
+      <line class="fig-ink" x1="282" y1="186" x2="298" y2="186"/>
+      <line class="fig-ink" x1="287" y1="192" x2="293" y2="192"/>
+      <line class="fig-accent" x1="312" y1="70" x2="312" y2="168"/>
+      <path class="fig-accent" d="M306,160 L312,170 L318,160"/>
+      <text class="fig-text" x="322" y="124">I<tspan baseline-shift="sub" font-size="9">D</tspan></text>
+      <text class="fig-text" x="280" y="232" text-anchor="middle">NMOS 전류 싱크</text>
+
+      <line class="fig-ink" x1="440" y1="50" x2="500" y2="50"/>
+      <text class="fig-text" x="470" y="40" text-anchor="middle">V<tspan baseline-shift="sub" font-size="9">DD</tspan></text>
+      <line class="fig-ink" x1="470" y1="50" x2="470" y2="96"/>
+      <line class="fig-ink" x1="470" y1="96" x2="450" y2="96"/>
+      <path class="fig-ink" d="M463,91 L456,96 L463,101"/>
+      <line class="fig-ink" x1="450" y1="88" x2="450" y2="132"/>
+      <line class="fig-ink" x1="442" y1="90" x2="442" y2="130"/>
+      <line class="fig-ink" x1="408" y1="110" x2="442" y2="110"/>
+      <text class="fig-text" x="402" y="114" text-anchor="end">V<tspan baseline-shift="sub" font-size="9">b</tspan></text>
+      <line class="fig-ink" x1="450" y1="124" x2="470" y2="124"/>
+      <line class="fig-ink" x1="470" y1="124" x2="470" y2="176"/>
+      <circle class="fig-dot" cx="470" cy="176" r="4"/>
+      <text class="fig-muted" x="458" y="190" text-anchor="end">Y</text>
+      <line class="fig-accent" x1="492" y1="62" x2="492" y2="160"/>
+      <path class="fig-accent" d="M486,152 L492,162 L498,152"/>
+      <text class="fig-text" x="502" y="114">I<tspan baseline-shift="sub" font-size="9">D</tspan></text>
+      <text class="fig-text" x="470" y="232" text-anchor="middle">PMOS 전류 소스</text>
+    </svg>
