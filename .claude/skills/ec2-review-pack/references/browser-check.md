@@ -48,10 +48,27 @@ const textNodes = Array.from(document.querySelectorAll('main *, #panel-right *')
   sumsInPanel: document.querySelectorAll('#panel-right .sum').length,
   sumsLeftInMain: document.querySelectorAll('main .sum').length,
   hScroll: await overflowScreens(),
+  panelOverflow: await panelOverflow(),
   widgets: Array.from(document.querySelectorAll('.widget')).map((w) => ({ id: w.id, drawn: Array.from(w.querySelectorAll('svg')).some((s) => !s.closest('[hidden]') && s.childElementCount > 0) })),
 })
 ```
-통과: `katexErrors: 0`, `rawDollar: false`, `sumsInPanel`이 manifest에서 `layers`가 빈 목록이 아닌 토픽 수, `sumsLeftInMain: 0`, `hScroll: []`, 모든 위젯 `drawn: true`. `read_console_messages`에 오류 없음.
+`panelOverflow`는 토픽마다 넘겨 가며 "페이지 요약" 패널의 식이 패널 폭을 넘는지 잰다. 패널 식은 가로 스크롤이 되지만 스크롤바가 안 보여 잘린 것처럼 보이므로 넘침으로 친다. 1280px에서 재야 패널이 열려 있다. 같은 실행에 아래 정의도 붙여 넣는다.
+```js
+async function panelOverflow() {
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+  const over = [];
+  for (const t of document.querySelectorAll('main article.topic')) {
+    location.hash = '#' + t.id; await wait(250);
+    for (const d of document.querySelectorAll('#panel-right .sum .katex-display')) {
+      if (d.offsetParent !== null && d.scrollWidth > d.clientWidth + 1) over.push({ topic: t.id, px: d.scrollWidth - d.clientWidth, tex: (d.querySelector('annotation') || {}).textContent });
+    }
+  }
+  location.hash = '';
+  await wait(150);
+  return over;
+}
+```
+통과: `katexErrors: 0`, `rawDollar: false`, `sumsInPanel`이 manifest에서 `layers`가 빈 목록이 아닌 토픽 수, `sumsLeftInMain: 0`, `hScroll: []`, `panelOverflow: []`, 모든 위젯 `drawn: true`. `read_console_messages`에 오류 없음. `panelOverflow`에 나온 식은 그 토픽 작성자에게 `.sum`의 식을 여러 줄로 나누라고 되돌린다(`references/content-rules.md` 페이지 요약).
 
 개념 토픽 하나로 넘겨(`location.hash = '#<토픽 id>'`) 오른쪽 "페이지 요약" 패널에 그 토픽의 요약이 보이는지 스크린샷으로 확인한다(1280px 이상에서는 패널이 기본으로 열린다).
 
