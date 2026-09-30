@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="580" height="346" viewBox="0 0 580 346" role="img" aria-label="왼쪽 (a)는 전체 회로. 위쪽 V DD 가로선에 PMOS M3, M4의 소스가 붙고, 두 PMOS는 게이트가 자기 드레인에 묶인 다이오드 연결이다. 그 아래 NMOS M1, M2의 드레인이 이어지고 두 드레인 노드(색칠된 점)에서 안쪽으로 뻗은 선 끝의 테두리만 있는 원 두 개 사이가 출력 V out이다. 게이트에는 입력 V in1, V in2가 들어간다. 두 소스는 강조색 선으로 묶여 색칠된 점 노드 P에서 만나고, 그 아래 테두리만 있는 원 모양 테일 전류원 I SS를 거쳐 접지로 간다. 오른쪽 (b)는 반회로. 위쪽 강조색 가로선은 AC 접지가 된 V DD이고, 그 아래 다이오드 연결 M3, 출력 v out1 노드, 입력 v in1을 받는 M1이 세로로 놓이며, M1의 소스는 강조색 접지 기호(AC 접지가 된 노드 P)에 닿는다."><style>
+svg { color: #1b2130; font-family: -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; }
+.fig-ink { stroke: #1b2130; fill: none; stroke-width: 2; }
+.fig-accent { stroke: #2f6fdb; fill: none; stroke-width: 2.5; }
+.fig-danger { stroke: #d92d20; fill: none; stroke-width: 2.5; }
+.fig-dot { fill: #2f6fdb; }
+.fig-text { fill: #1b2130; font-size: 13px; }
+.fig-muted { fill: #4a5468; font-size: 12px; }
+.axis { stroke: #dde2ea; stroke-width: 1.5; }
+.tick { fill: #4a5468; font-size: 11px; }
+.plot-truth { fill: none; stroke: #4a5468; stroke-width: 1.5; stroke-dasharray: 5 4; }
+.plot-fit { fill: none; stroke: #2f6fdb; stroke-width: 2.5; }
+.pt-train { fill: #2f6fdb; }
+.pt-test { fill: #b54708; }
+.mark-ml { stroke: #2f6fdb; stroke-width: 1.5; stroke-dasharray: 3 3; }
+.mark-map { stroke: #067647; stroke-width: 1.5; stroke-dasharray: 3 3; }
+.plot-like { fill: none; stroke: #2f6fdb; stroke-width: 2; }
+.plot-prior { fill: none; stroke: #6941c6; stroke-width: 2; stroke-dasharray: 6 4; }
+.plot-post { fill: none; stroke: #067647; stroke-width: 3; }
+</style><rect x="0" y="0" width="580" height="346" rx="10" fill="#ffffff"/>
+      <line class="fig-ink" x1="90" y1="30" x2="290" y2="30"/>
+      <text class="fig-text" x="296" y="34">V<tspan baseline-shift="sub" font-size="10">DD</tspan></text>
+      <line class="fig-ink" x1="114" y1="54" x2="114" y2="86"/>
+      <line class="fig-ink" x1="106" y1="58" x2="106" y2="82"/>
+      <line class="fig-ink" x1="106" y1="70" x2="84" y2="70"/>
+      <path class="fig-ink" d="M114,58 H130 V40"/>
+      <path class="fig-ink" d="M114,82 H130 V100"/>
+      <path class="fig-ink" d="M123,54 L117,58 L123,62"/>
+      <line class="fig-ink" x1="266" y1="54" x2="266" y2="86"/>
+      <line class="fig-ink" x1="274" y1="58" x2="274" y2="82"/>
+      <line class="fig-ink" x1="274" y1="70" x2="296" y2="70"/>
+      <path class="fig-ink" d="M266,58 H250 V40"/>
+      <path class="fig-ink" d="M266,82 H250 V100"/>
+      <path class="fig-ink" d="M257,54 L263,58 L257,62"/>
+      <line class="fig-ink" x1="130" y1="30" x2="130" y2="40"/>
+      <line class="fig-ink" x1="250" y1="30" x2="250" y2="40"/>
+      <path class="fig-ink" d="M84,70 V116 H130"/>
+      <path class="fig-ink" d="M296,70 V116 H250"/>
+      <circle class="fig-dot" cx="130" cy="116" r="3.5"/>
+      <circle class="fig-dot" cx="250" cy="116" r="3.5"/>
+      <text class="fig-text" x="142" y="74">M<tspan baseline-shift="sub" font-size="10">3</tspan></text>
+      <text class="fig-text" x="238" y="74" text-anchor="end">M<tspan baseline-shift="sub" font-size="10">4</tspan></text>
+      <line class="fig-ink" x1="130" y1="100" x2="130" y2="170"/>
+      <line class="fig-ink" x1="250" y1="100" x2="250" y2="170"/>
+      <line class="fig-ink" x1="130" y1="142" x2="168" y2="142"/>
+      <line class="fig-ink" x1="250" y1="142" x2="212" y2="142"/>
+      <circle class="fig-dot" cx="130" cy="142" r="3.5"/>
+      <circle class="fig-dot" cx="250" cy="142" r="3.5"/>
+      <circle class="fig-ink" cx="172" cy="142" r="4"/>
+      <circle class="fig-ink" cx="208" cy="142" r="4"/>
+      <text class="fig-text" x="190" y="164" text-anchor="middle">V<tspan baseline-shift="sub" font-size="10">out</tspan></text>
+      <line class="fig-ink" x1="114" y1="184" x2="114" y2="216"/>
+      <line class="fig-ink" x1="106" y1="188" x2="106" y2="212"/>
+      <line class="fig-ink" x1="106" y1="200" x2="84" y2="200"/>
+      <path class="fig-ink" d="M114,188 H130 V170"/>
+      <path class="fig-ink" d="M114,212 H130 V230"/>
+      <path class="fig-ink" d="M121,208 L127,212 L121,216"/>
+      <line class="fig-ink" x1="266" y1="184" x2="266" y2="216"/>
+      <line class="fig-ink" x1="274" y1="188" x2="274" y2="212"/>
+      <line class="fig-ink" x1="274" y1="200" x2="296" y2="200"/>
+      <path class="fig-ink" d="M266,188 H250 V170"/>
+      <path class="fig-ink" d="M266,212 H250 V230"/>
+      <path class="fig-ink" d="M259,208 L253,212 L259,216"/>
+      <line class="fig-ink" x1="84" y1="200" x2="70" y2="200"/>
+      <circle class="fig-ink" cx="66" cy="200" r="4"/>
+      <text class="fig-text" x="58" y="204" text-anchor="end">V<tspan baseline-shift="sub" font-size="10">in1</tspan></text>
+      <line class="fig-ink" x1="296" y1="200" x2="310" y2="200"/>
+      <circle class="fig-ink" cx="314" cy="200" r="4"/>
+      <text class="fig-text" x="322" y="204">V<tspan baseline-shift="sub" font-size="10">in2</tspan></text>
+      <text class="fig-text" x="142" y="204">M<tspan baseline-shift="sub" font-size="10">1</tspan></text>
+      <text class="fig-text" x="238" y="204" text-anchor="end">M<tspan baseline-shift="sub" font-size="10">2</tspan></text>
+      <path class="fig-accent" d="M130,230 V246 H250 V230"/>
+      <circle class="fig-dot" cx="190" cy="246" r="4.5"/>
+      <text class="fig-muted" x="199" y="240">P</text>
+      <line class="fig-ink" x1="190" y1="246" x2="190" y2="258"/>
+      <circle class="fig-ink" cx="190" cy="274" r="16"/>
+      <path class="fig-ink" d="M190,265 V283 M185,277 L190,283 L195,277"/>
+      <text class="fig-text" x="214" y="279">I<tspan baseline-shift="sub" font-size="10">SS</tspan></text>
+      <line class="fig-ink" x1="190" y1="290" x2="190" y2="302"/>
+      <path class="fig-ink" d="M176,302 H204 M181,308 H199 M186,314 H194"/>
+      <text class="fig-muted" x="190" y="336" text-anchor="middle">(a) 전체 회로</text>
+      <line class="fig-accent" x1="446" y1="30" x2="514" y2="30"/>
+      <text class="fig-muted" x="480" y="20" text-anchor="middle">AC 접지 (V<tspan baseline-shift="sub" font-size="10">DD</tspan>)</text>
+      <line class="fig-ink" x1="464" y1="54" x2="464" y2="86"/>
+      <line class="fig-ink" x1="456" y1="58" x2="456" y2="82"/>
+      <line class="fig-ink" x1="456" y1="70" x2="434" y2="70"/>
+      <path class="fig-ink" d="M464,58 H480 V40"/>
+      <path class="fig-ink" d="M464,82 H480 V100"/>
+      <path class="fig-ink" d="M473,54 L467,58 L473,62"/>
+      <line class="fig-ink" x1="480" y1="30" x2="480" y2="40"/>
+      <path class="fig-ink" d="M434,70 V116 H480"/>
+      <circle class="fig-dot" cx="480" cy="116" r="3.5"/>
+      <text class="fig-text" x="492" y="74">M<tspan baseline-shift="sub" font-size="10">3</tspan></text>
+      <line class="fig-ink" x1="480" y1="100" x2="480" y2="170"/>
+      <line class="fig-ink" x1="480" y1="142" x2="516" y2="142"/>
+      <circle class="fig-dot" cx="480" cy="142" r="3.5"/>
+      <circle class="fig-ink" cx="520" cy="142" r="4"/>
+      <text class="fig-text" x="530" y="146">v<tspan baseline-shift="sub" font-size="10">out1</tspan></text>
+      <line class="fig-ink" x1="464" y1="184" x2="464" y2="216"/>
+      <line class="fig-ink" x1="456" y1="188" x2="456" y2="212"/>
+      <line class="fig-ink" x1="456" y1="200" x2="434" y2="200"/>
+      <path class="fig-ink" d="M464,188 H480 V170"/>
+      <path class="fig-ink" d="M464,212 H480 V230"/>
+      <path class="fig-ink" d="M471,208 L477,212 L471,216"/>
+      <line class="fig-ink" x1="434" y1="200" x2="420" y2="200"/>
+      <circle class="fig-ink" cx="416" cy="200" r="4"/>
+      <text class="fig-text" x="408" y="204" text-anchor="end">v<tspan baseline-shift="sub" font-size="10">in1</tspan></text>
+      <text class="fig-text" x="492" y="204">M<tspan baseline-shift="sub" font-size="10">1</tspan></text>
+      <line class="fig-accent" x1="480" y1="230" x2="480" y2="246"/>
+      <path class="fig-accent" d="M466,246 H494 M471,252 H489 M476,258 H484"/>
+      <text class="fig-muted" x="480" y="280" text-anchor="middle">AC 접지 (노드 P)</text>
+      <text class="fig-muted" x="480" y="336" text-anchor="middle">(b) 반회로</text>
+    </svg>
