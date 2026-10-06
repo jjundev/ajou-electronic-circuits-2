@@ -6,6 +6,28 @@ from solution_video.review_adapter import default_config
 from solution_video.composition import assemble
 from solution_video.util import browser
 class CompositionTests(Sandbox):
+    def test_explicit_camera_cannot_write_under_caption_after_letterboxing(self):
+        from solution_video.composition import camera_keys
+        from solution_video.contracts import InputError
+        m,l,_,_=example();l['metadata']={'width_pt':1440,'height_pt':810}
+        l['glyphs']=[dict(id='g1',text='x',bbox=[100,85,105,90],svg_ids=[],paint_order=0)]
+        l['map']['steps']=[dict(id='s',glyph_ids=['g1'],shape_ids=[])]
+        m['cameras']=[dict(at_frame=0,viewbox=[0,0,200,100])]
+        t=dict(total_frames=130,segments=[dict(start_sample=0,end_sample=80000)],events=[dict(id='g1',frame=5,kind='glyph')])
+        with self.assertRaisesRegex(InputError,'camera clips'):
+            camera_keys(m,l,t)
+    def test_wide_pdf_fills_frame_and_preserves_caption_clip(self):
+        import fitz
+        p=self.run/'wide.pdf';d=fitz.open();pg=d.new_page(width=1440,height=810)
+        pg.insert_text((10,30),'P10.1');pg.insert_text((110,120),'x + y = 2',fontsize=21);d.save(p)
+        candidate=export_page(p,0,self.run/'layers');mp=mapping(candidate);layers=extract_layers(candidate,mp)
+        m,_,_,_=example();m['segments']=m['segments'][:2];m['segments'][1]['step_id']='solution';m['reveal_order']=mp['steps'][0]['glyph_ids'];m['shape_anchors']={}
+        audio=[make_audio(s['id'],2400,self.run) for s in m['segments']];t=build_timeline(m,layers,audio,default_config())
+        parts=assemble({'problem':{'snapshot':'wide.pdf','page_index':0}},layers,m,t,self.run,S.parent/'ec2-review-video/assets/runtime/vendor/gsap.min.js')
+        r=browser(['--mode','timeline','--entry',str(self.run/parts[0]['entry'])])
+        self.assertEqual(r['svg']['width'],1920);self.assertEqual(r['svg']['height'],1080)
+        self.assertEqual(r['svg']['x'],0);self.assertEqual(r['viewport']['height'],900)
+        self.assertTrue(r['seek_equal']);self.assertEqual(r['final_cursor'],'0')
     def test_parts_have_exact_frame_coverage(self):
         p=math_pdf(self.run/'a.pdf'); candidate=export_page(p,0,self.run/'layers'); mp=mapping(candidate); layers=extract_layers(candidate,mp)
         m,_,_,_=example(); m['segments']=m['segments'][:2]; m['segments'][1]['step_id']='solution'; m['reveal_order']=mp['steps'][0]['glyph_ids']; m['shape_anchors']={s['id']:m['reveal_order'][-1] for s in layers['shapes']}

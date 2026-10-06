@@ -20,7 +20,7 @@ def stage_fingerprint(run,stage):
         for module in MODULES[s]:
             p=S/'scripts/solution_video'/(module+'.py')
             if p.exists(): files['tool:'+module]=file_hash(p)
-    for module in ['util','contracts']:
+    for module in ['util','contracts','page_layout']:
         p=S/'scripts/solution_video'/(module+'.py'); files['tool:'+module]=file_hash(p)
     if n>=1: files['tool:browser_check']=file_hash(S/'tests/browser_check.mjs')
     if n>=3: files['tool:adapter']=adapter_hash()

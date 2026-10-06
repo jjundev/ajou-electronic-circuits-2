@@ -19,7 +19,7 @@ from pathlib import Path
 
 import paths
 from assemble import MODE_SUFFIX, BuildError, all_selections, build_data, ids_selection, resolve_target
-from render import RenderError, inject, load_template, render_pdf
+from render import RenderError, inject, load_template, render_pdf, measure_typography
 
 
 def parse_args(argv):
@@ -31,7 +31,13 @@ def parse_args(argv):
     ap.add_argument("--json-only", action="store_true", help="PDF 없이 JSON·HTML만 만든다")
     ap.add_argument("--pdf-dir", type=Path, default=paths.WORKBOOK / "pdf")
     ap.add_argument("--build-dir", type=Path, default=paths.WORKBOOK / "build")
+    ap.add_argument("--layout", choices=("a4", "video-16x9"),
+                    help="복습노트 출력은 기본 16:9, 그 외 출력은 기본 A4 가로")
     args = ap.parse_args(argv[1:])
+    if args.layout is None:
+        import unicodedata
+        args.layout = "video-16x9" if "복습노트" in [unicodedata.normalize('NFC', p)
+            for p in args.pdf_dir.resolve().parts] else "a4"
     if sum([bool(args.target), bool(args.ids), args.all]) != 1:
         ap.error("대상은 target, --ids, --all 중 하나만 준다")
     if args.ids and not args.name:
@@ -52,12 +58,17 @@ def build_one(sel, args):
     overflow = []
     for mode, suffix in MODE_SUFFIX.items():
         data = build_data(sel, mode)
+        data['meta']['layout'] = args.layout
         stem = f"{sel.name}-{suffix}"
         args.build_dir.mkdir(parents=True, exist_ok=True)
+        if args.layout == 'video-16x9' and not args.json_only:
+            baseline = args.build_dir / f"{stem}-typography.html"
+            baseline.write_text(inject(load_template(mode), data), encoding="utf-8")
+            data['meta']['typography'] = measure_typography(baseline)
         (args.build_dir / f"{stem}.json").write_text(
             json.dumps(data, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
         html_path = args.build_dir / f"{stem}.html"
-        html_path.write_text(inject(load_template(mode), data), encoding="utf-8")
+        html_path.write_text(inject(load_template(mode, args.layout), data), encoding="utf-8")
         print(html_path)
         if args.json_only:
             continue

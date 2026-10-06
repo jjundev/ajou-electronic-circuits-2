@@ -2,9 +2,11 @@ from pathlib import Path
 import copy,html,json,re,shutil,xml.etree.ElementTree as ET
 from .util import S,write,file_hash,local
 from .contracts import InputError
+from .page_layout import page_layout
 
 def camera_keys(manifest,layers,timeline):
     meta=layers['metadata']; full=[0,0,meta['width_pt'],meta['height_pt']]; glyphs={g['id']:g for g in layers['glyphs']}
+    layout=page_layout(full[2],full[3]); screen_h=layout['height']; safe_fraction=900/screen_h
     final=timeline['segments'][-1]['end_sample']//800
     step_of={gid:step['id'] for step in layers['map']['steps'] for gid in step['glyph_ids']}
     base_heights={}; bounds={}
@@ -25,12 +27,12 @@ def camera_keys(manifest,layers,timeline):
             if event['kind']!='glyph': continue
             g=glyphs[event['id']]; b=g['bbox']; sid=step_of[g['id']]
             if g['text'].isspace(): continue
-            height=base_heights[sid]; h=min(full[3],height*900/28); w=h*1920/900
+            height=base_heights[sid]; h=min(full[3],height*screen_h/28); w=h*1920/screen_h; safe_h=h*safe_fraction
             cx,cy=(b[0]+b[2])/2,(b[1]+b[3])/2
             if active!=sid:
-                bound=bounds[sid]; cx=(bound[0]+bound[2])/2; cy=min((bound[1]+bound[3])/2,b[1]+h/3)
-            view=[max(0,min(max(0,full[2]-w),cx-w/2)),max(0,min(max(0,full[3]-h),cy-h/2)),w,h]
-            if active!=sid or not(current[0]+8<=b[0] and b[2]<=current[0]+current[2]-8 and current[1]+8<=b[1] and b[3]<=current[1]+current[3]-8):
+                bound=bounds[sid]; cx=(bound[0]+bound[2])/2; cy=min((bound[1]+bound[3])/2,b[1]+safe_h/3)
+            view=[max(0,min(max(0,full[2]-w),cx-w/2)),max(0,min(max(0,full[3]-safe_h),cy-safe_h/2)),w,h]
+            if active!=sid or not(current[0]+8<=b[0] and b[2]<=current[0]+current[2]-8 and current[1]+8<=b[1] and b[3]<=current[1]+current[3]*safe_fraction-8):
                 keys.append(dict(at_frame=event['frame'],viewbox=view)); current=view; active=sid
     if keys[-1]['at_frame']<final: keys.append(dict(at_frame=final,viewbox=full))
     for event in timeline['events']:
@@ -38,9 +40,12 @@ def camera_keys(manifest,layers,timeline):
         g=glyphs[event['id']]; b=g['bbox']
         if g['text'].isspace(): continue
         view=next(k['viewbox'] for k in reversed(keys) if k['at_frame']<=event['frame'])
-        scale=min(1920/view[2],900/view[3])
+        scale=min(1920/view[2],screen_h/view[3])
         if base_heights[step_of[g['id']]]*scale<25.99: raise InputError('camera makes writing body too small: '+g['id'])
-        if not(view[0]<=b[0] and view[1]<=b[1] and b[2]<=view[0]+view[2] and b[3]<=view[1]+view[3]): raise InputError('camera clips current writing glyph: '+g['id'])
+        left=(1920-view[2]*scale)/2;top=(screen_h-view[3]*scale)/2
+        screen=[left+(b[0]-view[0])*scale,top+(b[1]-view[1])*scale,
+                left+(b[2]-view[0])*scale,top+(b[3]-view[1])*scale]
+        if not(0<=screen[0] and 0<=screen[1] and screen[2]<=1920 and screen[3]<=900): raise InputError('camera clips current writing glyph: '+g['id'])
     return keys
 
 def _prefix(svg,prefix):
@@ -65,7 +70,8 @@ def assemble(pair,layers,manifest,timeline,run,runtime):
     contents='''<!doctype html><html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="layout.css"><script src="gsap.min.js"></script></head><body>'''
     contents+=f'<div data-composition-id="solution" data-width="1920" data-height="1080" data-duration="{t["total_frames"]/30}" id="solution">'
     contents+='<div id="pdf-viewport"><div id="problem-page">'+_prefix(problem,'problem-')+'</div><div id="answer-page" data-layout-allow-overflow>'+answer+'</div><div id="cursor"></div></div><div id="caption-strip"></div></div>'
-    contents+='<script>window.solutionTimeline='+encode(t)+';window.solutionGlyphs='+encode({g['id']:g for g in layers['glyphs']})+';</script><script>'+(dest/'player.js').read_text(encoding='utf-8')+'</script></body></html>'
+    layout=page_layout(layers['metadata']['width_pt'],layers['metadata']['height_pt'])
+    contents+='<script>window.solutionLayout='+encode(layout)+';window.solutionTimeline='+encode(t)+';window.solutionGlyphs='+encode({g['id']:g for g in layers['glyphs']})+';</script><script>'+(dest/'player.js').read_text(encoding='utf-8')+'</script></body></html>'
     (dest/'index.html').write_text(contents,encoding='utf-8')
     write(dest/'hyperframes.json',{'width':1920,'height':1080,'fps':30})
     write(dest/'runtime.json',{'gsap_sha256':file_hash(dest/'gsap.min.js'),'player_sha256':file_hash(dest/'player.js'),'layout_sha256':file_hash(dest/'layout.css')})

@@ -2,6 +2,7 @@ from pathlib import Path
 import calendar,copy,re,shutil,unicodedata
 from .contracts import InputError
 from .util import file_hash,digest,write
+from .page_layout import page_layout
 
 def _dates(selector):
     dates=selector.split('-')
@@ -15,8 +16,9 @@ def _pages(pdf,ids):
     found={}
     with fitz.open(pdf) as doc:
         for idx,pg in enumerate(doc):
-            header=_norm(pg.get_text(clip=fitz.Rect(0,0,pg.rect.width,58)))
-            badge=_norm(pg.get_text(clip=fitz.Rect(0,0,140,58))).splitlines()[0] if header else ''
+            bottom=page_layout(pg.rect.width,pg.rect.height)['header_bottom']-1
+            header=_norm(pg.get_text(clip=fitz.Rect(0,0,pg.rect.width,bottom)))
+            badge=_norm(pg.get_text(clip=fitz.Rect(0,0,140,bottom))).splitlines()[0] if header else ''
             # Workbook header shows kind and number separately, not its compact ID.
             candidates=[]
             for pid in ids:
@@ -29,7 +31,8 @@ def _pages(pdf,ids):
                     if badge.startswith(kind) and number and tuple(map(int,number.groups()))==(chapter,problem): candidates.append(pid)
                 elif re.fullmatch(r'\d{4}-\d_.*-Q\d+',n):
                     year,term=n[:4],n[5]; q=n.rsplit('Q',1)[1]
-                    if badge=='기출'+q and year+'-'+term in header and n.split('_',1)[1].split('-Q',1)[0] in header:
+                    exam_badge=re.match(r'^기출\s*(\d+)',badge)
+                    if exam_badge and int(exam_badge[1])==int(q) and year+'-'+term in header and n.split('_',1)[1].split('-Q',1)[0] in header:
                         matches=[x for x in ids if not re.fullmatch(r'[EPX]\d+\.\d+',x) and x.rsplit('Q',1)[-1]==q]
                         if len([x for x in matches if x.rsplit('-Q',1)[0].replace('_',' ') in header.replace('고사','')])>1: raise InputError('ambiguous exam year/term badge; author explicit pair')
                         candidates.append(pid)
@@ -44,13 +47,18 @@ def _conditions(ref):
     import fitz
     with fitz.open(ref['snapshot']) as d:
         p=d[ref['page_index']]
-        text=p.get_text(clip=fitz.Rect(22,60,286,573))
+        # The gray condition panel can widen during fitting; use its actual PDF rectangle.
+        panels=[draw['rect'] for draw in p.get_drawings() if draw.get('fill') and
+            max(abs(a-b) for a,b in zip(draw['fill'],(246/255,246/255,243/255)))<.002]
+        clip=max(panels,key=lambda r:r.get_area()) if panels else fitz.Rect(22,60,286,573)
+        text=p.get_text(clip=clip)
     return re.sub(r'\s+','',_norm(text))
 def _answer_hash(ref):
     import fitz
     with fitz.open(ref['snapshot']) as d:
         # Workbook content band excludes the fixed heading/pagination/footer only.
-        pg=d[ref['page_index']];clip=fitz.Rect(0,59,pg.rect.width,pg.rect.height-23)
+        pg=d[ref['page_index']];layout=page_layout(pg.rect.width,pg.rect.height)
+        clip=fitz.Rect(0,layout['header_bottom'],pg.rect.width,layout['body_bottom'])
         pix=pg.get_pixmap(matrix=fitz.Matrix(2,2),clip=clip,alpha=False)
         import hashlib
         return hashlib.sha256(pix.samples).hexdigest()

@@ -1,6 +1,6 @@
 ---
 name: ec2-review-pack
-description: 전자회로2 수업의 STT·강의노트·Razavi 교과서로 ELI5 정리노트 HTML(+MD, 그림)을 만들고, 그 수업 범위에 맞는 workbook 문제 약 10개를 골라 복습문제 PDF(문제+답안)를 만들어 복습노트/<날짜>/에 저장한다. "정리노트", "복습문제", "복습팩", "0923 정리해줘"처럼 전자회로2 수업 정리를 요청하거나 /ec2-review-pack [MMDD|MMDD-MMDD] [lite]로 부를 때 사용한다.
+description: 전자회로2 수업의 STT·강의노트·Razavi 교과서로 ELI5 정리노트 HTML(+MD, 그림)을 만들고, 그 수업 범위에 맞는 workbook 문제 약 10개를 골라 복습문제 PDF(문제+답안)를 만들어 복습노트의 날짜별 폴더에 저장한다. "정리노트", "복습문제", "복습팩", "0923 정리해줘"처럼 전자회로2 수업 정리를 요청하거나 /ec2-review-pack [MMDD|MMDD-MMDD] [lite]로 부를 때 사용한다.
 ---
 
 # 전자회로2 복습팩
@@ -9,6 +9,8 @@ description: 전자회로2 수업의 STT·강의노트·Razavi 교과서로 ELI5
 
 **산출물** (`복습노트/<range>/`):
 `정리노트_<range>_<slug>.html`, 같은 이름의 `.md`, `figures_<range>/`, 그리고 문제가 1개 이상이면 `복습문제_<range>_<slug>-문제.pdf`, `복습문제_<range>_<slug>-답안.pdf`, `problems.txt`
+
+**PDF 규격**: 문제지·답안지는 16:9 페이지를 사용한다. 1920×1080 기준 하단 180px는 자막 전용 여백으로 비우고, 본문 기본값은 약 11.34pt이며 제목·수식·힌트도 같은 약 1.134배로 조정해 기존 A4 영상 전체 화면에서 보이던 텍스트 크기를 유지한다. 긴 문항의 기존 축소 배율도 보존한다.
 
 **인자**: `[MMDD | MMDD-MMDD] [lite]`
 - `lite`: 작성자·요약 에이전트를 sonnet으로, 6단계 리뷰를 생략한다. 기계 검사와 브라우저 검사는 그대로 한다.
@@ -139,7 +141,7 @@ python3 "$SKILL/scripts/assemble.py" --run "$RUN" --out "$REPO/복습노트/<ran
 python3 -c "import json,sys;print(','.join(q['id'] for q in json.load(open(sys.argv[1]))['problems']))" "$RUN/manifest.json"
 ```
 ```bash
-python3 "$REPO/workbook/build_workbook.py" --ids <위 결과> --name 복습문제_<range>_<slug> --pdf-dir "$REPO/복습노트/<range>" --build-dir "$RUN/workbook-build"
+python3 "$REPO/workbook/build_workbook.py" --ids <위 결과> --name 복습문제_<range>_<slug> --layout video-16x9 --pdf-dir "$REPO/복습노트/<range>" --build-dir "$RUN/workbook-build"
 ```
   - stderr에 `ERROR <md 경로>: …`(문제 md 자체 오류, 종료 코드 2)가 나오면 해당 id를 같은 절 후보로 한 번 바꿔 manifest를 고치고 2단계 검증부터 다시 하고 이 단계를 다시 한다(백업은 하지 않는다). `ERROR <name>: …`(렌더링·Chrome·네트워크, 종료 코드 1)나 `OVERFLOW`는 md 문제가 아니므로 id를 바꾸지 않고 "미해결"로 보고한다(`references/problem-selection.md` 5).
 

@@ -52,6 +52,7 @@ try {
    const state=await page.evaluate(()=>({cursor:document.getElementById('cursor').style.opacity,box:document.getElementById('pdf-viewport').getBoundingClientRect().toJSON()}));
    await page.evaluate(f=>window.renderSolutionFrame(f),end);
    const last=await page.evaluate(()=>document.getElementById('cursor').style.opacity);
-   console.log(JSON.stringify({seek_equal:shots[0]===shots[3]&&shots[2]===direct,final_cursor:last,viewport:state.box}));
+   const svg=await page.evaluate(()=>document.querySelector('#answer-page>svg').getBoundingClientRect().toJSON());
+   console.log(JSON.stringify({seek_equal:shots[0]===shots[3]&&shots[2]===direct,final_cursor:last,viewport:state.box,svg}));
  } else throw new Error('unknown mode');
 } finally {await browser.close();}

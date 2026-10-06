@@ -2,6 +2,21 @@ from fixtures import *
 from solution_video.sources import discover,freeze_sources,validate_pairs
 from solution_video.contracts import InputError
 class SourceTests(Sandbox):
+    def test_wide_exam_badge_can_share_text_line_with_title(self):
+        pairs=discover(REPO,'0918',None)
+        self.assertEqual(len(pairs),10)
+        self.assertEqual({p['problem_id'] for p in pairs if p['problem_id'].startswith('202')},
+                         {'2021-1_중간-Q5','2023-1_중간-Q2'})
+    def test_wide_conditions_compare_entire_panel(self):
+        import fitz
+        refs=[]
+        for i in range(2):
+            p=self.run/f'wide{i}.pdf';d=fitz.open();pg=d.new_page(width=1440,height=810)
+            pg.draw_rect((36,61,487,657),fill=(246/255,246/255,243/255),color=None)
+            pg.insert_text((400,160),'I = '+str(i+1));d.save(p)
+            refs.append(dict(snapshot=str(p),page_index=0,width_pt=1440,height_pt=810))
+        with self.assertRaisesRegex(InputError,'conditions differ'):
+            validate_pairs([dict(problem_id='E10.11',problem=refs[0],answer=refs[1])])
     def test_1002_pairs_skip_hint(self):
         pairs=discover(REPO,'1002',None); self.assertEqual(len(pairs),10); self.assertTrue(all(p['md_snapshot'] for p in pairs))
         self.assertEqual(next(p for p in pairs if p['problem_id']=='E10.11')['answer']['page_index'],1)

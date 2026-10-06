@@ -89,3 +89,5 @@ await Promise.all(Array.from(document.querySelectorAll('a[href$=".pdf"]')).map(a
 
 ## 마무리
 모든 검사가 끝나면 `resize_window`(`preset: "desktop"`, `colorScheme: "light"`)로 되돌리고 서버를 종료한다(위 "서버" 4).
+
+PDF 규격도 확인한다: 모든 쪽이 16:9이고, 아래쪽 1/6(1920×1080 기준 180px)에 텍스트·회로·격자가 없어야 한다. 이전 A4 영상 전체 화면과 비교해 텍스트 표시 크기를 유지한다. 본문 기본값은 약 11.34pt이며 기존 문항별 축소 배율을 보존한다. 문제/답안 문항 순서, Hint 부록, 넘침 여부를 함께 확인한다.

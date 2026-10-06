@@ -37,7 +37,7 @@ python3 <SKILL>/scripts/problem_index.py --repo <REPO> --used <REPO>/복습노�
 ## 5. PDF 만들기 (4단계 조립에서)
 ```bash
 python3 <REPO>/workbook/build_workbook.py --ids <id1,id2,…(manifest 순서)> --name 복습문제_<range>_<slug> \
-  --pdf-dir <REPO>/복습노트/<range> --build-dir <RUN>/workbook-build
+  --layout video-16x9 --pdf-dir <REPO>/복습노트/<range> --build-dir <RUN>/workbook-build
 ```
 - 결과: `복습노트/<range>/복습문제_<range>_<slug>-문제.pdf`, `-답안.pdf`.
 - stderr 줄로 원인을 구분한다.
