@@ -36,10 +36,12 @@ def verify_run(run,hyperframes_entry):
         if t.get('writing',{}).get('mode')!='pencil':return True
         from .writing import load_pencil_asset,load_writing,timing_settings
         load_pencil_asset(run/'composition')
-        from .reveal import build_timeline
+        from .teaching import build_teaching_timeline
+        from .annotations import load_teaching
         cfg=read(run/'source/config.json');writing=load_writing(run,cfg)
         if timing_settings(t['writing'])!=timing_settings(writing):return False
-        expected=build_timeline(read(run/'source/manifest.json'),read(run/'layers/layers.json'),read(run/'source/audio.json')['voices'],cfg,writing)
+        m,l=read(run/'source/manifest.json'),read(run/'layers/layers.json')
+        expected=build_teaching_timeline(m,l,read(run/'source/audio.json')['voices'],cfg,writing,load_teaching(run,m,l))
         if dict(t,cameras=[],writing=timing_settings(t['writing']))!=dict(expected,cameras=[],writing=timing_settings(writing)):return False
         expected_path=run/'verification/writing-timeline.json';write(expected_path,expected)
         result=browser(['--mode','timeline','--entry',str((run/'composition/index.html').resolve()),'--layers',str((run/'layers/layers.json').resolve()),'--timeline',str(expected_path.resolve()),'--dest',str((run/'verification/writing-frames').resolve())])
@@ -48,6 +50,57 @@ def verify_run(run,hyperframes_entry):
         evidence.extend(w['evidence_hashes']);write(run/'verification/writing.json',w)
         return (w['timeline_equal'] and w['order_ok'] and w['seek_equal'] and w['gsap_seek_equal'] and w['bounds_ok'] and w['inactive_hidden'] and not w['final_visible'] and w['tip_error_px']<=1 and all(w[k]==0 for k in ['precomplete_diff','complete_diff','hidden_leaks']))
     check('writing_animation',writing_gate)
+    def teaching_gate():
+        from .annotations import load_teaching,compile_annotations
+        from .teaching import build_teaching_timeline
+        from .writing import load_writing,load_pencil_asset,timing_settings
+        from .composition import camera_keys
+        from .focus import compile_focus_keys
+        t=read(run/'source/timeline.json')
+        if not t.get('teaching') and not any((run/('source/'+n+'.json')).exists() for n in ['focus','annotations']):return True
+        m,l,cfg=read(run/'source/manifest.json'),read(run/'layers/layers.json'),read(run/'source/config.json')
+        plan=load_teaching(run,m,l);writing=load_writing(run,cfg) if (run/'source/writing.json').is_file() else None
+        from .lesson import load_lesson,lesson_expectations,lesson_screen_passed
+        lesson=load_lesson(run,m,l,plan)
+        expected=build_teaching_timeline(m,l,read(run/'source/audio.json')['voices'],cfg,writing,plan)
+        if dict(t,cameras=[],writing=timing_settings(t['writing']) if t.get('writing') else {})!=dict(expected,cameras=[],writing=timing_settings(expected['writing']) if expected.get('writing') else {}):return False
+        if not plan:return True
+        compiled=compile_annotations(plan,l,run/'verification/teaching-oracle') if plan['items'] else None
+        if compiled:load_pencil_asset(run/'composition')
+        expected['cameras']=compile_focus_keys(m,l,expected,plan,compiled,camera_keys(m,l,expected))
+        path=run/'verification/teaching-expected.json';write(path,dict(timeline=expected,compiled=compiled,lesson=lesson_expectations(lesson,m,expected,plan) if lesson else None))
+        r=browser(['--mode','teaching','--entry',str(run/'composition/index.html'),'--layers',str(run/'layers/layers.json'),'--timeline',str(path),'--dest',str(run/'verification/teaching-frames')])
+        r['input_hash']=h;r['evidence_hashes']={str(Path(p).relative_to(run)):file_hash(p) for p in r['evidence']};evidence.extend(r['evidence_hashes']);write(run/'verification/teaching.json',r)
+        return all(r[k] for k in ['timeline_equal','cameras_equal','geometry_equal','seek_equal','gsap_seek_equal','bounds_ok','inactive_hidden']) and not r['final_visible'] and r['tip_error_px']<=1 and all(r[k]==0 for k in ['original_pixel_diff','annotation_pixel_diff','future_leaks'])
+    check('teaching_animation',teaching_gate)
+    def lesson_gate():
+        if not (run/'source/lesson.json').is_file():return True
+        from .lesson import load_lesson,lesson_expectations,lesson_screen_passed
+        from .annotations import load_teaching
+        m,l=read(run/'source/manifest.json'),read(run/'layers/layers.json')
+        p=load_teaching(run,m,l);lesson=load_lesson(run,m,l,p)
+        expected=lesson_expectations(lesson,m,read(run/'source/timeline.json'),p or {'regions':[],'items':[]})
+        screen=read(run/'verification/teaching.json') if expected['probes'] else None
+        return checks['teaching_animation']['status']=='passed' and lesson_screen_passed(expected,screen)
+    check('lesson_flow',lesson_gate)
+    def flow_gate():
+        t=read(run/'source/timeline.json')
+        if t.get('writing',{}).get('mode')!='pencil':return True
+        from .writing_units import compile_writing_units
+        compile_writing_units(read(run/'layers/layers.json'))
+        r=browser(['--mode','writing-flow','--entry',str(run/'composition/index.html'),'--layers',str(run/'layers/layers.json'),'--dest',str(run/'verification/flow-frames')])
+        r['input_hash']=h;r['evidence_hashes']={str(Path(p).relative_to(run)):file_hash(p) for p in r['evidence']}
+        write(run/'verification/writing-flow.json',r);evidence.extend(r['evidence_hashes'])
+        return all(r[k] for k in ['order_ok','fit_ok','transitions_ok','stable_camera','seek_equal'])
+    check('writing_flow',flow_gate)
+    def pacing_gate():
+        t=read(run/'source/timeline.json')
+        if t.get('writing',{}).get('mode')!='pencil':return True
+        from .narration_pacing import analyze_narration_pacing
+        r=analyze_narration_pacing(t,read(run/'source/audio.json')['voices'],run)
+        write(run/'verification/narration-pacing.json',r);evidence.extend(r['evidence_hashes'])
+        return r['status']=='passed'
+    check('narration_pacing',pacing_gate)
     check('hyperframes',lambda:bool(source_checks(read(run/'source/parts.json'),run,hyperframes_entry)))
     def media():
         t=read(run/'source/timeline.json'); data=probe(final); streams=data['streams']; v=next(s for s in streams if s['codec_type']=='video'); a=next(s for s in streams if s['codec_type']=='audio')

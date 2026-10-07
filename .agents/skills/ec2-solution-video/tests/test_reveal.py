@@ -27,7 +27,12 @@ class PencilTimingTests(Sandbox):
         return m,l,[make_audio('w',800,self.run)]
     def timeline(self,*args):
         from solution_video.writing import default_writing
-        m,l,a=self.fixture(*args);return build_timeline(m,l,a,default_config(),default_writing())
+        m,l,a=self.fixture(*args);w=default_writing();w['chars_per_second']=5;return build_timeline(m,l,a,default_config(),w)
+    def test_requested_default_is_one_and_half_faster(self):
+        from solution_video.writing import default_writing
+        m,l,a=self.fixture();t=build_timeline(m,l,a,default_config(),default_writing())
+        self.assertEqual([(s['start_frame'],s['end_frame']) for s in t['writing_spans'] if s['kind']=='draw'],[(1,4),(5,8)])
+        self.assertEqual([e['frame'] for e in t['events'] if e['kind']=='glyph'],[4,8])
     def test_pencil_six_frame_slots(self):
         t=self.timeline()
         self.assertEqual([(s['kind'],s['start_frame'],s['end_frame']) for s in t['writing_spans']],[('move',0,1),('draw',1,6),('move',6,7),('draw',7,12)])
@@ -49,3 +54,22 @@ class PencilTimingTests(Sandbox):
         from solution_video.contracts import InputError
         m,l,a=self.fixture();a[0]['samples']=True
         with self.assertRaises(InputError):build_timeline(m,l,a,default_config(),default_writing())
+
+class SpatialTimingTests(Sandbox):
+    def timeline(self):
+        from test_writing_units import spatial_layers
+        from solution_video.writing import default_writing
+        layers=spatial_layers();manifest=dict(segments=[dict(id='w',kind='write',step_id='step')],shape_anchors={'bar':'right'},cameras=[])
+        return build_timeline(manifest,layers,[make_audio('w',800,self.run)],default_config(),default_writing())
+    def test_unit_order_is_spatial_not_paint_order(self):
+        t=self.timeline()
+        self.assertEqual([s['id'] for s in t['writing_spans'] if s['kind']=='draw'],['left','bar','sub','bar','right'])
+        self.assertEqual([u['unit_id'] for u in t['writing_unit_spans']],['u1','u2'])
+    def test_piece_final_event_once(self):
+        t=self.timeline(); events=[e for e in t['events'] if e['id']=='bar']
+        self.assertEqual(len(events),1)
+        self.assertEqual(events[0]['frame'],[s['end_frame'] for s in t['writing_spans'] if s['id']=='bar' and s['kind']=='draw'][-1])
+    def test_fraction_shape_has_no_future_leak(self):
+        t=self.timeline();bar=[s for s in t['writing_spans'] if s['id']=='bar' and s['kind']=='draw']
+        self.assertEqual([s['clip_bbox'] for s in bar],[[0,26,10,27],[10,26,30,27]])
+        self.assertTrue(all(s['end_frame']-s['start_frame']>=18 for s in bar))

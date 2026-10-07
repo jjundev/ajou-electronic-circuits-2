@@ -15,7 +15,7 @@ def validate_writing(value):
     if set(value)!=keys:raise InputError('writing settings keys mismatch')
     if type(value['schema_version']) is not int or value['schema_version']!=1:raise InputError('unknown writing schema')
     if value['mode'] not in ('pencil','typing') or value['asset_id']!='pencil-yellow-v1':raise InputError('unknown writing mode/asset')
-    for key,low,high,strict in [('chars_per_second',0,7,True),('pencil_length_px',0,float('inf'),True),('tilt_degrees',0,2,False),('read_hold_seconds',0,float('inf'),False)]:
+    for key,low,high,strict in [('chars_per_second',0,7.5 if value['mode']=='pencil' else 7,True),('pencil_length_px',0,float('inf'),True),('tilt_degrees',0,2,False),('read_hold_seconds',0,float('inf'),False)]:
         n=value[key]
         if type(n) not in (float,int) or not math.isfinite(n) or n>high or (n<=low if strict else n<low):raise InputError('invalid writing '+key)
     for key in ('adjacent_move_frames','lifted_move_frames'):

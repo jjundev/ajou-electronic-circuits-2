@@ -10,6 +10,11 @@ def example():
     h=content_fingerprint(manifest,layers,coverage); coverage['input_hash']=h; review['input_hash']=h
     return manifest,layers,coverage,review
 class ManifestTests(Sandbox):
+    def test_empty_caption_rejected(self):
+        for value in ['', '  ',None,3]:
+            m,l,c,r=example();m['segments'][1]['caption_text']=value
+            h=content_fingerprint(m,l,c);c['input_hash']=r['input_hash']=h
+            with self.subTest(value=value),self.assertRaises(ReviewError):validate_manifest(m,l,c,r)
     def test_exact_glyph_coverage_and_current_review(self):
         m,l,c,r=example(); validate_manifest(m,l,c,r)
         for bad in [m['reveal_order'][:-1],['g1','g1'],['g2','g1'],['g1','unknown']]:
@@ -28,3 +33,13 @@ class ManifestTests(Sandbox):
         m,l,c,r=example();c['rows'][0]['pdf_text']='임의 수정'
         h=content_fingerprint(m,l,c);c['input_hash']=r['input_hash']=h
         with self.assertRaises(ReviewError):validate_manifest(m,l,c,r)
+    def test_authored_invalid_units_rejected_without_changing_source_review(self):
+        m,l,c,r=example();l['map']['steps'][0]['writing_units']=[]
+        h=content_fingerprint(m,l,c);c['input_hash']=r['input_hash']=h
+        from solution_video.contracts import InputError
+        with self.assertRaises(InputError):validate_manifest(m,l,c,r)
+    def test_caption_layout_is_validated_for_legacy(self):
+        from solution_video.contracts import InputError
+        m,l,c,r=example();m['segments'][0]['text']='r_'+'O'*40
+        h=content_fingerprint(m,l,c);c['input_hash']=r['input_hash']=h
+        with self.assertRaisesRegex(InputError,'segment intro'):validate_manifest(m,l,c,r)

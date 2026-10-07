@@ -1,7 +1,8 @@
 from pathlib import Path
 import re
 from .util import digest,file_hash
-from .contracts import ReviewError
+from .contracts import ReviewError,InputError
+from .subtitles import caption_text,split_caption
 
 def content_fingerprint(manifest,layers,coverage):
     data=dict(layers)
@@ -19,6 +20,9 @@ def validate_manifest(manifest,layers,coverage,circuit_review):
     gs={g['id']:g for g in layers['glyphs']}; ss={s['id']:s for s in layers['shapes']}
     order=manifest.get('reveal_order',[])
     require(len(order)==len(gs) and set(order)==gs.keys(),'exact glyph coverage required')
+    if any('writing_units' in step for step in mapping['steps']):
+        from .writing_units import compile_writing_units
+        compile_writing_units(layers)
     steps=mapping['steps']; ids=[s['id'] for s in steps]
     require(len(set(ids))==len(ids) and ids[-1]==mapping['answer_step_id'],'answer must be final step')
     expected=[g for s in steps for g in s['glyph_ids']]
@@ -35,6 +39,10 @@ def validate_manifest(manifest,layers,coverage,circuit_review):
         require(bool(re.fullmatch(r'[A-Za-z][A-Za-z0-9_-]*',s['id'])),'segment ID must be safe ASCII')
         require(s.get('kind') in ['problem','reason','write','check','summary'],'invalid segment kind')
         require(bool(s.get('text','').strip()) and bool(s.get('source_refs')),'segment text/source_refs required')
+        if 'caption_text' in s:
+            require(isinstance(s['caption_text'],str) and bool(s['caption_text'].strip()),'nonempty caption_text required')
+        try:split_caption(caption_text(s))
+        except InputError as ex:raise InputError('segment '+s['id']+': '+str(ex)) from ex
         if s['kind']=='write':
             require(s.get('step_id') in ids,'unknown writing step'); writing.append(s['step_id'])
         elif s.get('step_id'): require(s['step_id'] in ids,'unknown step')

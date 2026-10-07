@@ -1,11 +1,18 @@
 from pathlib import Path
 import copy,html,json,re,shutil,math,xml.etree.ElementTree as ET
-from .util import S,read,write,file_hash,local
+from .util import digest,S,read,write,file_hash,local
 from .contracts import InputError
 from .page_layout import page_layout
+from .annotations import load_teaching,compile_annotations
+from .teaching import teaching_timing_settings
+from .focus import compile_focus_keys
 from .writing import load_pencil_asset,representative_height,load_writing,timing_settings
 
 def pencil_camera_keys(manifest,layers,timeline):
+    if timeline.get('writing_unit_spans'):
+        from .writing_units import compile_writing_units
+        from .writing_camera import build_writing_camera_keys
+        return build_writing_camera_keys(layers,timeline,compile_writing_units(layers))
     meta=layers['metadata'];full=[0,0,meta['width_pt'],meta['height_pt']];layout=page_layout(full[2],full[3]);height=layout['height']
     glyphs={g['id']:g for g in layers['glyphs']};bases={s['id']:representative_height([glyphs[g] for g in s['glyph_ids']]) for s in layers['map']['steps']}
     asset=load_pencil_asset(S/'assets/pencil');length=timeline['writing']['pencil_length_px'];unit=length/math.dist(asset['tip_px'],asset['end_px'])
@@ -117,28 +124,37 @@ def assemble(pair,layers,manifest,timeline,run,runtime):
         if not t.get('writing') or timing_settings(current)!=timing_settings(t['writing']):raise InputError('writing timing changed; retime before assemble')
         # Refresh visual settings without changing the saved timing output/hash.
         t['writing']=current
-    t['cameras']=camera_keys(manifest,layers,t)
     dest=run/'composition'; dest.mkdir(parents=True,exist_ok=True)
-    shutil.copyfile(runtime,dest/'gsap.min.js'); shutil.copyfile(S/'assets/player.js',dest/'player.js'); shutil.copyfile(S/'assets/layout.css',dest/'layout.css')
+    shutil.copyfile(S/'assets/camera.js',dest/'camera.js'); shutil.copyfile(runtime,dest/'gsap.min.js'); shutil.copyfile(S/'assets/player.js',dest/'player.js'); shutil.copyfile(S/'assets/layout.css',dest/'layout.css')
+    plan=load_teaching(run,manifest,layers)
+    if (t.get('teaching') or {}).get('timing_hash')!=(digest(teaching_timing_settings(plan)) if plan else None):raise InputError('teaching timing changed; retime before assemble')
+    compiled=compile_annotations(plan,layers,dest/'annotations') if plan and plan['items'] else None
+    t['cameras']=compile_focus_keys(manifest,layers,t,plan,compiled,camera_keys(manifest,layers,t))
     ref=pair['problem']; path=Path(ref['snapshot']); path=path if path.is_absolute() else local(run,path)
     with fitz.open(path) as pdf: problem=pdf[ref['page_index']].get_svg_image(text_as_path=True)
     answer=Path(layers['animated_svg']).read_text(encoding='utf-8')
-    pencil=t.get('writing',{}).get('mode')=='pencil';asset_meta=None
-    if pencil:
+    if compiled:
+        root=ET.fromstring(answer);root.append(ET.parse(compiled['svg']).getroot().find('{http://www.w3.org/2000/svg}g'));answer=ET.tostring(root,encoding='unicode')
+    pencil=t.get('writing',{}).get('mode')=='pencil';has_pen=pencil or bool(compiled);asset_meta=None
+    if has_pen:
         asset_meta=load_pencil_asset(S/'assets/pencil')
         for name in (asset_meta['file'],'pencil-yellow-v1.json'):shutil.copyfile(S/'assets/pencil'/name,dest/name)
-        shutil.copyfile(S/'assets/writing.js',dest/'writing.js')
+        shutil.copyfile(S/'assets/writing.js',dest/'writing.js');shutil.copyfile(S/'assets/pencil.js',dest/'pencil.js')
+    if compiled:shutil.copyfile(S/'assets/annotations.js',dest/'annotations.js')
     write(dest/'timeline.json',t)
     encode=lambda x:json.dumps(x,ensure_ascii=False,separators=(',',':')).replace('</','<\\/')
     contents='''<!doctype html><html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="layout.css"><script src="gsap.min.js"></script></head><body>'''
     contents+=f'<div data-composition-id="solution" data-width="1920" data-height="1080" data-duration="{t["total_frames"]/30}" id="solution">'
-    contents+='<div id="pdf-viewport"><div id="problem-page">'+_prefix(problem,'problem-')+'</div><div id="answer-page" data-layout-allow-overflow>'+answer+'</div><div id="cursor"></div>'+('<img id="pencil" src="pencil-yellow-v1.png" data-layout-allow-overflow>' if pencil else '')+'</div><div id="caption-strip"></div></div>'
+    contents+='<div id="pdf-viewport"><div id="problem-page">'+_prefix(problem,'problem-')+'</div><div id="answer-page" data-layout-allow-overflow>'+answer+'</div><div id="cursor"></div>'+('<img id="pencil" src="pencil-yellow-v1.png" data-layout-allow-overflow>' if has_pen else '')+'</div><div id="caption-strip"></div></div>'
     layout=page_layout(layers['metadata']['width_pt'],layers['metadata']['height_pt'])
-    contents+=('<script src="writing.js"></script><script>window.pencilMeta='+encode(asset_meta)+';</script>' if pencil else '')
-    contents+='<script>window.solutionLayout='+encode(layout)+';window.solutionTimeline='+encode(t)+';window.solutionGlyphs='+encode({g['id']:g for g in layers['glyphs']})+';</script><script>'+(dest/'player.js').read_text(encoding='utf-8')+'</script></body></html>'
+    contents+='<script src="camera.js"></script>'
+    contents+=('<script src="writing.js"></script><script src="pencil.js"></script><script>window.pencilMeta='+encode(asset_meta)+';</script>' if has_pen else '')
+    if compiled:contents+='<script src="annotations.js"></script><script>window.solutionAnnotationsData='+encode(compiled)+';</script>'
+    contents+='<script>window.solutionLayout='+encode(layout)+';window.solutionTimeline='+encode(t)+';window.solutionGlyphs='+encode({g['id']:g for g in layers['glyphs']+(layers['shapes'] if t.get('writing_unit_spans') else [])})+';</script><script>'+(dest/'player.js').read_text(encoding='utf-8')+'</script></body></html>'
     (dest/'index.html').write_text(contents,encoding='utf-8')
     write(dest/'hyperframes.json',{'width':1920,'height':1080,'fps':30})
     write(dest/'runtime.json',{'gsap_sha256':file_hash(dest/'gsap.min.js'),'player_sha256':file_hash(dest/'player.js'),'layout_sha256':file_hash(dest/'layout.css')})
-    if pencil:
-        r=json.loads((dest/'runtime.json').read_text());r['writing_assets']={n:file_hash(dest/n) for n in ['writing.js',asset_meta['file'],'pencil-yellow-v1.json']};write(dest/'runtime.json',r)
+    if has_pen:
+        r=json.loads((dest/'runtime.json').read_text());r['writing_assets']={n:file_hash(dest/n) for n in ['writing.js','pencil.js',asset_meta['file'],'pencil-yellow-v1.json']};write(dest/'runtime.json',r)
+    r=read(dest/'runtime.json');r['teaching_assets']={p.relative_to(dest).as_posix():file_hash(p) for p in dest.rglob('*') if p.is_file() and (p.suffix in ('.js','.svg') or p.name=='compiled.json')};write(dest/'runtime.json',r)
     parts=[dict(entry='composition/index.html',first_frame=0,last_frame=t['total_frames'],key='solution')]; write(run/'source/parts.json',parts); return parts

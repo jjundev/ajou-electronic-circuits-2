@@ -35,6 +35,9 @@ def author(run):
         # A spatial draft is reviewed below against the original PDF/MD; never used as generic auto authoring.
         gs.sort(key=lambda g:(round(g['bbox'][1]/8),g['bbox'][0]))
         steps.append(dict(id='answer' if j==len(boxes)-1 else 'step'+str(j+1),glyph_ids=[g['id'] for g in gs],shape_ids=[s['id'] for s in candidate['shapes'] if inside(s['bbox'],b)]))
+    from authored_writing import author_units
+    authored=dict(glyphs=candidate['glyphs'],shapes=candidate['shapes'],map=dict(steps=steps))
+    author_units(authored,pair['problem_id'])
     mp=dict(work_bbox=[boxes[0][0],boxes[0][1],boxes[-1][2],boxes[-1][3]],steps=steps,answer_step_id='answer');write(run/'source/map.json',mp)
     video.run_stage('extract',run,SimpleNamespace())
     layers=read(run/'layers/layers.json'); glyphs={g['id']:g for g in layers['glyphs']}

@@ -49,3 +49,29 @@ class VerifyTests(Sandbox):
         t=read(self.run/'source/timeline.json');t['events']=[];t['writing_spans']=[];write(self.run/'source/timeline.json',t)
         r=verify_run(self.run,Path('/missing/hyperframes'))
         self.assertEqual(r['checks']['writing_animation']['status'],'unverified')
+    def test_typing_teaching_is_not_exempt(self):
+        from solution_video.util import write
+        write(self.run/'source/timeline.json',{'writing':{'mode':'typing'},'teaching':{'spans':[]}})
+        r=verify_run(self.run,Path('/missing/hyperframes'))
+        self.assertIn('teaching_animation',r['checks'])
+        self.assertEqual(r['checks']['teaching_animation']['status'],'unverified')
+    def test_original_gate_survives_annotations(self):
+        from test_composition import CompositionTests
+        from solution_video.util import read,write,digest,file_hash
+        from solution_video.pdf_pages import compare_completed
+        self.run=self.run.resolve();fixture=CompositionTests();fixture.run=self.run;fixture.teaching_fixture('typing')
+        l=read(self.run/'layers/layers.json');g=compare_completed(l,self.run/'verification/gate-frames');g.update(input_hash=digest(l),source_hashes={k:file_hash(l[k]) for k in ['original_svg','animated_svg','reference_png']})
+        g['evidence']=[str(Path(p).relative_to(self.run)) for p in g['evidence']];g['evidence_hashes']={p:file_hash(self.run/p) for p in g['evidence']};write(self.run/'verification/gate.json',g)
+        report=verify_run(self.run,Path('/missing/hyperframes'))
+        self.assertEqual(report['checks']['original_svg']['status'],'passed');self.assertEqual(report['checks']['teaching_animation']['status'],'passed');self.assertFalse(report['complete'])
+        t=read(self.run/'source/timeline.json');t['teaching']['spans'][0]['end_frame']+=1;write(self.run/'source/timeline.json',t)
+        self.assertEqual(verify_run(self.run,Path('/missing/hyperframes'))['checks']['teaching_animation']['status'],'unverified')
+    def test_teaching_visual_pencil_setting_does_not_require_retime(self):
+        from test_composition import CompositionTests
+        from solution_video.util import read,write
+        from solution_video.composition import assemble
+        self.run=self.run.resolve();fixture=CompositionTests();fixture.run=self.run;fixture.teaching_fixture()
+        w=read(self.run/'source/writing.json');w['pencil_length_px']=120;write(self.run/'source/writing.json',w)
+        assemble({'problem':{'snapshot':'pencil.pdf','page_index':0}},read(self.run/'layers/layers.json'),read(self.run/'source/manifest.json'),read(self.run/'source/timeline.json'),self.run,S.parent/'ec2-review-video/assets/runtime/vendor/gsap.min.js')
+        report=verify_run(self.run,Path('/missing/hyperframes'))
+        self.assertEqual(report['checks']['teaching_animation']['status'],'passed')

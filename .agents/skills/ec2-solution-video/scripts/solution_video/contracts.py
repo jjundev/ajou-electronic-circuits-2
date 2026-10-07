@@ -18,6 +18,7 @@ class PageLayers(TypedDict):
     original_svg:str; animated_svg:str; reference_png:str; glyphs:list[Glyph]; shapes:list[Shape]; map:PageMap|None
 class Segment(TypedDict):
     id:str; step_id:str; text:str; source_refs:list[str]; kind:str
+    caption_text:NotRequired[str]
 class CameraKey(TypedDict):
     at_frame:int; viewbox:list[float]
 class Manifest(TypedDict):
