@@ -2,6 +2,7 @@ from pathlib import Path
 from .util import S,digest,file_hash,read,write,local
 from .review_adapter import adapter_hash
 from .contracts import InputError
+from .writing import timing_settings
 STAGES=['inputs','layers','script','voice','timing','composition','render','captions','verify','publish']
 FACTORS={
  'inputs':['source/inputs.json','source/pair.json','source/snapshots/*'],
@@ -10,7 +11,7 @@ FACTORS={
  'voice':['source/config.json'], 'timing':['source/audio.json','assets/voice/*.wav'],
  'composition':['source/timeline.json'], 'render':['source/parts.json','composition/*'],
  'captions':['renders/master.mp4'], 'verify':['renders/final.mp4','renders/captions.srt','verification/audio-review.json','verification/visual-review.json'], 'publish':['verification/report.json']}
-MODULES={'inputs':['sources'],'layers':['pdf_pages'],'script':['manifest'],'voice':['review_adapter'],'timing':['reveal'],'composition':['composition'],'render':['media'],'captions':['subtitles'],'verify':['verify'],'publish':['publication']}
+MODULES={'inputs':['sources'],'layers':['pdf_pages'],'script':['manifest'],'voice':['review_adapter'],'timing':['reveal','writing'],'composition':['composition'],'render':['media'],'captions':['subtitles'],'verify':['verify'],'publish':['publication']}
 def stage_fingerprint(run,stage):
     run=Path(run); n=STAGES.index(stage); files={}
     for s in STAGES[:n+1]:
@@ -24,9 +25,18 @@ def stage_fingerprint(run,stage):
         p=S/'scripts/solution_video'/(module+'.py'); files['tool:'+module]=file_hash(p)
     if n>=1: files['tool:browser_check']=file_hash(S/'tests/browser_check.mjs')
     if n>=3: files['tool:adapter']=adapter_hash()
+    writing_path=run/'source/writing.json'
+    writing=read(writing_path) if writing_path.is_file() else None
+    pencil=writing is not None and writing.get('mode')=='pencil'
+    if n>=4 and writing is not None:
+        files['writing:timing']=digest(timing_settings(writing))
     if n>=5:
+        if writing is not None:files['writing:composition']=digest(writing)
+        if pencil:
+            for name in ['pencil-yellow-v1.png','pencil-yellow-v1.json']:
+                path=S/'assets/pencil'/name;files['asset:pencil/'+name]=file_hash(path) if path.is_file() else 'missing'
         for p in (S/'assets').glob('*'):
-            if p.suffix in ('.js','.css'): files['asset:'+p.name]=file_hash(p)
+            if p.suffix in ('.js','.css') and (p.name!='writing.js' or pencil): files['asset:'+p.name]=file_hash(p)
     return digest(files)
 def recover_run(run):
     run=Path(run); path=run/'state.json'; state=read(path) if path.is_file() else {'stages':{}}

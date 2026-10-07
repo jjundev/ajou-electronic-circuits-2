@@ -11,6 +11,7 @@ from solution_video.pdf_pages import export_page,extract_layers,inside
 from solution_video.manifest import content_fingerprint
 from solution_video.reveal import build_timeline
 from solution_video.review_adapter import default_config
+from solution_video.writing import load_writing
 from solution_video.media import render_master
 from solution_video.subtitles import write_srt,burn_subtitles
 from solution_video.composition import assemble
@@ -19,12 +20,13 @@ from solution_video.verify import verify_run,verification_fingerprint
 IDS=['E10.11','E10.13','2021-1_중간-Q3']
 # Bounds authored from native pages; Q3 is left1,left2,right3,right4,answer.
 BOXES={1:[[301,260,815,340],[301,340,815,425],[301,425,815,525],[301,525,815,574]],2:[[301,180,747,256],[301,256,747,332],[301,332,747,412],[301,412,747,504],[301,504,747,574]],7:[[301,180,529,311],[301,311,529,513],[534,180,747,280],[534,280,747,513],[301,513,747,574]]}
+WIDE_BOXES={1:[[500,250,1400,320],[500,320,1400,405],[500,405,1400,600],[500,600,1400,657]],2:[[500,250,1287,320],[500,320,1287,389],[500,389,1287,460],[500,460,1287,580],[500,580,1287,657]],7:[[500,250,905,357],[500,357,905,590],[905,250,1287,310],[905,310,1287,590],[500,590,1287,657]]}
 TEXTS={
 'E10.11':['차동 소신호에서 이미터 전류 변화가 상쇄됩니다.','접지된 베이스와 이미터의 pnp 부하를 확인합니다.','출력 저항의 병렬값으로 차동 이득을 씁니다.','음의 전압 이득을 답안과 대조합니다.'],
 'E10.13':['대칭 때문에 P와 X가 가상 접지입니다.','pnp 부하는 컬렉터 출력 저항만 보입니다.','R1도 교류 접지로 가는 저항입니다.','세 저항의 병렬값에 음의 트랜스컨덕턴스를 곱합니다.','답안의 이득과 부호를 확인합니다.'],
 '2021-1_중간-Q3':['전류로 각 소신호 파라미터를 계산합니다.','이미터 저항과 베이스 입력 저항의 병렬을 확인합니다.','차동 반회로의 전류와 파라미터를 확인합니다.','RP가 캐스코드 소자의 출력 저항과 병렬입니다.','단일 출력 저항과 차동 출력 저항을 구별합니다.']}
 def author(run):
-    pair=read(run/'source/pair.json');candidate=read(run/'layers/candidates.json'); idx=pair['answer']['page_index'];boxes=BOXES[idx]
+    pair=read(run/'source/pair.json');candidate=read(run/'layers/candidates.json'); idx=pair['answer']['page_index'];boxes=WIDE_BOXES.get(idx,BOXES[idx]) if candidate['metadata']['width_pt']==1440 else BOXES[idx]
     for s in candidate['shapes']:
         if s['kind']=='unclassified' and any(inside(s['bbox'],b) for b in boxes):s['kind']='answer_box'
     write(run/'layers/candidates.json',candidate);steps=[]
@@ -33,7 +35,7 @@ def author(run):
         # A spatial draft is reviewed below against the original PDF/MD; never used as generic auto authoring.
         gs.sort(key=lambda g:(round(g['bbox'][1]/8),g['bbox'][0]))
         steps.append(dict(id='answer' if j==len(boxes)-1 else 'step'+str(j+1),glyph_ids=[g['id'] for g in gs],shape_ids=[s['id'] for s in candidate['shapes'] if inside(s['bbox'],b)]))
-    mp=dict(work_bbox=[301,boxes[0][1],boxes[-1][2],574],steps=steps,answer_step_id='answer');write(run/'source/map.json',mp)
+    mp=dict(work_bbox=[boxes[0][0],boxes[0][1],boxes[-1][2],boxes[-1][3]],steps=steps,answer_step_id='answer');write(run/'source/map.json',mp)
     video.run_stage('extract',run,SimpleNamespace())
     layers=read(run/'layers/layers.json'); glyphs={g['id']:g for g in layers['glyphs']}
     md=(run/pair['md_snapshot']).read_text(encoding='utf-8').split('## 풀이',1)[-1];sections=md.split('### ')[1:]
@@ -48,23 +50,23 @@ def author(run):
     video.run_stage('check',run,SimpleNamespace());return manifest,layers
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--dest',required=True,type=Path);parser.add_argument('--hyperframes-entry',required=True,type=Path);args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--dest',required=True,type=Path);parser.add_argument('--hyperframes-entry',required=True,type=Path);parser.add_argument('--problems');args=parser.parse_args();selected=args.problems.split(',') if args.problems else IDS
     args.dest.mkdir(parents=True,exist_ok=True); originals={str(p):file_hash(p) for p in REPO.rglob('*.pdf')}; oldskill={str(p):file_hash(p) for p in (S.parent/'ec2-review-video').rglob('*') if p.is_file() and '__pycache__' not in str(p)}
     # Create a separate source view without touching actual final output folders.
     for folder in ['복습노트','교과서','from_the_past']:
         source=next(p for p in REPO.iterdir() if __import__('unicodedata').normalize('NFC',p.name)==folder)
         target=args.dest/folder
         if not target.exists(): target.symlink_to(source,target_is_directory=True)
-    batch=video.prepare_batch(args.dest,'1002',IDS,False); print('BATCH',batch,flush=True);results=[]
+    batch=video.prepare_batch(args.dest,'1002',selected,False); print('BATCH',batch,flush=True);results=[]
     for item in read(batch/'batch.json')['items']:
         run=batch/item['run'];m,l=author(run);audio=[make_audio(s['id'],24000,run) for s in m['segments']];write(run/'source/audio.json',{'voices':audio})
-        t=build_timeline(m,l,audio,default_config());write(run/'source/timeline.json',t);parts=assemble(read(run/'source/pair.json'),l,m,t,run,S.parent/'ec2-review-video/assets/runtime/vendor/gsap.min.js')
+        t=build_timeline(m,l,audio,default_config(),load_writing(run,default_config()));write(run/'source/timeline.json',t);parts=assemble(read(run/'source/pair.json'),l,m,t,run,S.parent/'ec2-review-video/assets/runtime/vendor/gsap.min.js')
         master=render_master(parts,t,audio,run,args.hyperframes_entry);srt=write_srt(t,run/'renders/captions.srt');final=burn_subtitles(master,srt,run/'renders/final.mp4',S.parent/'ec2-review-video/assets/fonts/Pretendard-Bold.ttf')
-        report=verify_run(run,args.hyperframes_entry); technical=all(report['checks'][k]['status']=='passed' for k in ['content','original_svg','hyperframes','final_media','captions'])
+        report=verify_run(run,args.hyperframes_entry); technical=all(report['checks'][k]['status']=='passed' for k in ['content','original_svg','hyperframes','final_media','captions','writing_animation'])
         if not technical: raise RuntimeError(json.dumps(report,ensure_ascii=False))
         if report['complete'] or report['live_audio']!='unverified':raise RuntimeError('fake PCM wrongly approved for live production')
         r=dict(problem_id=item['id'],final=str(final),final_sha256=file_hash(final),pixel_diff=read(run/'verification/gate.json')['pixel_diff'],media_passed=technical,total_frames=t['total_frames']);results.append(r);print('DONE',r,flush=True)
     assert all(file_hash(p)==sha for p,sha in originals.items());assert all(file_hash(p)==sha for p,sha in oldskill.items())
     publish=video.publish_batch(batch);assert not publish['complete'] and not publish['published']
-    write(batch/'acceptance.json',dict(items=results,paid_requests=0,live_audio='unverified',production_publish_blocked=True));print('ACCEPTANCE',batch,flush=True)
+    write(batch/'acceptance.json',dict(items=results,selected_ids=selected,paid_requests=0,live_audio='unverified',production_publish_blocked=True));print('ACCEPTANCE',batch,flush=True)
 if __name__=='__main__':main()

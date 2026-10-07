@@ -1,6 +1,6 @@
 from pathlib import Path
 import json,wave
-from .util import digest,file_hash,read,write,command,local
+from .util import digest,file_hash,read,write,command,local,browser
 from .media import probe,ffmpeg,source_checks
 from .manifest import validate_manifest
 
@@ -20,7 +20,7 @@ def gate_valid(run,layers,g):
     except (OSError,KeyError,ValueError): return False
 
 def verify_run(run,hyperframes_entry):
-    run=Path(run); checks={}; evidence=[]; final=run/'renders/final.mp4'; h=verification_fingerprint(run)
+    run=Path(run).resolve(); checks={}; evidence=[]; final=run/'renders/final.mp4'; h=verification_fingerprint(run)
     def check(name,fn):
         try:
             ok=fn(); checks[name]={'status':'passed' if ok else 'unverified'}
@@ -31,6 +31,23 @@ def verify_run(run,hyperframes_entry):
     def gate():
         return gate_valid(run,read(run/'layers/layers.json'),read(run/'verification/gate.json'))
     check('original_svg',gate)
+    def writing_gate():
+        t=read(run/'source/timeline.json')
+        if t.get('writing',{}).get('mode')!='pencil':return True
+        from .writing import load_pencil_asset,load_writing,timing_settings
+        load_pencil_asset(run/'composition')
+        from .reveal import build_timeline
+        cfg=read(run/'source/config.json');writing=load_writing(run,cfg)
+        if timing_settings(t['writing'])!=timing_settings(writing):return False
+        expected=build_timeline(read(run/'source/manifest.json'),read(run/'layers/layers.json'),read(run/'source/audio.json')['voices'],cfg,writing)
+        if dict(t,cameras=[],writing=timing_settings(t['writing']))!=dict(expected,cameras=[],writing=timing_settings(writing)):return False
+        expected_path=run/'verification/writing-timeline.json';write(expected_path,expected)
+        result=browser(['--mode','timeline','--entry',str((run/'composition/index.html').resolve()),'--layers',str((run/'layers/layers.json').resolve()),'--timeline',str(expected_path.resolve()),'--dest',str((run/'verification/writing-frames').resolve())])
+        w=result['writing'];w['input_hash']=h
+        w['evidence_hashes']={str(Path(p).relative_to(run)):file_hash(p) for p in w['evidence']}
+        evidence.extend(w['evidence_hashes']);write(run/'verification/writing.json',w)
+        return (w['timeline_equal'] and w['order_ok'] and w['seek_equal'] and w['gsap_seek_equal'] and w['bounds_ok'] and w['inactive_hidden'] and not w['final_visible'] and w['tip_error_px']<=1 and all(w[k]==0 for k in ['precomplete_diff','complete_diff','hidden_leaks']))
+    check('writing_animation',writing_gate)
     check('hyperframes',lambda:bool(source_checks(read(run/'source/parts.json'),run,hyperframes_entry)))
     def media():
         t=read(run/'source/timeline.json'); data=probe(final); streams=data['streams']; v=next(s for s in streams if s['codec_type']=='video'); a=next(s for s in streams if s['codec_type']=='audio')

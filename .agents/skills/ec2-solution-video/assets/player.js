@@ -4,15 +4,19 @@
  document.documentElement.style.setProperty('--pdf-height',L.height+'px');
  document.querySelectorAll('[data-reveal]').forEach(n=>{const k=n.getAttribute('data-reveal');if(!nodes.has(k))nodes.set(k,[]);nodes.get(k).push(n);});
  const answer=document.querySelector('#answer-page>svg'), problem=document.getElementById('problem-page'), host=document.getElementById('answer-page'), cursor=document.getElementById('cursor');
+ const pencil=T.writing?.mode==='pencil', renderer=pencil?EC2Writing.createRenderer(answer,window.solutionGlyphs,document.getElementById('pencil'),window.pencilMeta):null;
+ window.solutionWriting=renderer;
  const initial=T.segments.filter(s=>s.kind==='problem').at(-1)?.end_sample/800||0;
  window.renderSolutionFrame=function(frame){
-   frame=Math.max(0,Math.min(T.total_frames-1,Math.floor(frame)));
+   // GSAP rounds time/values; 67 can arrive as 66.999999 on a frame seek.
+   frame=Math.max(0,Math.min(T.total_frames-1,Math.floor(frame+1e-5)));
    const shown=new Set(T.events.filter(e=>e.frame<=frame).map(e=>e.id));
-   nodes.forEach((ns,k)=>ns.forEach(n=>n.style.opacity=shown.has(k)?'1':'0'));
+   nodes.forEach((ns,k)=>{if(pencil&&window.solutionGlyphs[k])return;ns.forEach(n=>n.style.opacity=shown.has(k)?'1':'0');});
    problem.style.opacity=frame<initial?'1':'0'; host.style.opacity=frame<initial?'0':'1';
    let camera=T.cameras[0].viewbox;
    for(const key of T.cameras){if(key.at_frame<=frame)camera=key.viewbox;else break;}
    answer.setAttribute('viewBox',camera.join(' '));
+   if(pencil){renderer.render(T,frame,camera,L);cursor.style.opacity='0';return;}
    const segment=T.segments.find(s=>s.kind==='write'&&s.start_sample/800<=frame&&frame<s.end_sample/800);
    const done=frame>=T.events.at(-1).frame;
    if(segment&&!done){
@@ -25,7 +29,7 @@
  };
  const clock={frame:0};
  const tl=gsap.timeline({paused:true,onUpdate:()=>window.renderSolutionFrame(clock.frame)});
- tl.fromTo(clock,{frame:0},{frame:T.total_frames-1,duration:T.total_frames/30,ease:'none',immediateRender:false},0);
+ tl.fromTo(clock,{frame:0},{frame:T.total_frames,duration:T.total_frames/30,ease:'none',immediateRender:false},0);
  window.__timelines=window.__timelines||{};
  window.__timelines['solution']=tl;
  window.renderSolutionFrame(0);

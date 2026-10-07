@@ -53,3 +53,53 @@ class CLITests(Sandbox):
         data=read(batch/'batch.json');self.assertEqual(len(data['items']),2)
         self.assertEqual(data['items'][0]['status'],'failed');self.assertEqual(data['items'][1]['status'],'author-required')
         self.assertTrue((batch/data['items'][1]['run']/'layers/candidates.json').exists())
+    def test_prepare_writing_mode(self):
+        from unittest.mock import patch
+        from solution_video.sources import discover
+        from solution_video.util import read
+        pairs=discover(REPO,'1002',['E10.11'])
+        with patch.object(cli,'discover',return_value=pairs):
+            for mode in ['pencil','typing']:
+                batch=cli.prepare_batch(self.run,'1002',None,False,mode)
+                run=batch/read(batch/'batch.json')['items'][0]['run']
+                self.assertEqual(read(run/'source/writing.json')['mode'],mode)
+    def retime_fixture(self):
+        from test_manifest import example
+        from solution_video.util import write
+        from solution_video.state import finish_stage,STAGES
+        from solution_video.review_adapter import default_config
+        m,l,c,r=example()
+        for name,data in [('source/manifest.json',m),('layers/layers.json',l),('source/coverage.json',c),('source/circuit-review.json',r),('source/config.json',default_config())]:write(self.run/name,data)
+        audio=[make_audio(s['id'],2400,self.run) for s in m['segments']];write(self.run/'source/audio.json',{'voices':audio})
+        for stage in STAGES[:4]:
+            p=self.run/(stage+'.txt');p.write_text(stage);finish_stage(self.run,stage,[p])
+        return audio
+    def test_retime_uses_current_verified_pcm_without_paid_calls(self):
+        from unittest.mock import patch
+        from types import SimpleNamespace
+        from solution_video.util import write,file_hash,read
+        from solution_video.writing import default_writing
+        audio=self.retime_fixture();cfg=default_writing();cfg['chars_per_second']=4;write(self.run/'custom.json',cfg)
+        before=[file_hash(self.run/a['path']) for a in audio]
+        with patch.object(cli,'_gate'),patch.object(cli,'generate_voice',side_effect=AssertionError('paid call')) as voice:
+            result=cli.run_stage('retime',self.run,SimpleNamespace(writing_config=self.run/'custom.json'))
+        self.assertEqual(result['paid_requests'],0);self.assertEqual(result['status'],'passed');voice.assert_not_called()
+        self.assertEqual([file_hash(self.run/a['path']) for a in audio],before);self.assertEqual(read(self.run/'source/timeline.json')['writing']['chars_per_second'],4)
+    def test_retime_rejects_tampered_or_stale_voice(self):
+        from unittest.mock import patch
+        from types import SimpleNamespace
+        from solution_video.util import write
+        audio=self.retime_fixture()
+        with patch.object(cli,'_gate'):
+            (self.run/audio[0]['path']).write_bytes(b'tampered')
+            with self.assertRaises(ValueError):cli.run_stage('retime',self.run,SimpleNamespace(writing_config=None))
+            write(self.run/'source/config.json',{'voice':'changed'})
+            with self.assertRaisesRegex(ValueError,'prerequisite'):cli.run_stage('retime',self.run,SimpleNamespace(writing_config=None))
+    def test_invalid_writing_blocks_voice_before_paid_call(self):
+        from unittest.mock import patch
+        from types import SimpleNamespace
+        from solution_video.util import write
+        self.retime_fixture();write(self.run/'source/writing.json',{'mode':'broken'})
+        with patch.object(cli,'_gate'),patch.object(cli,'generate_voice',side_effect=AssertionError('paid call')) as voice:
+            with self.assertRaisesRegex(ValueError,'writing'):cli.run_stage('tts',self.run,SimpleNamespace(config=None,approve_review=False,env_file=None))
+            voice.assert_not_called()

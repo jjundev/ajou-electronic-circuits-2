@@ -26,7 +26,11 @@ class AudioRecord(TypedDict):
     id:str; path:str; samples:int; rate:int; sha256:str
 class RevealEvent(TypedDict):
     id:str; frame:int; kind:str
+class WritingSpan(TypedDict):
+    kind:str; id:str; from_id:str|None; step_id:str; start_frame:int; end_frame:int
+    lifted:NotRequired[bool]
 class Timeline(TypedDict):
     fps:int; rate:int; total_samples:int; total_frames:int; segments:list[dict]; events:list[RevealEvent]; cameras:list[CameraKey]
+    writing:NotRequired[dict]; writing_spans:NotRequired[list[WritingSpan]]
 class Verification(TypedDict):
     complete:bool; input_hash:str; checks:dict; evidence:list[str]; final_sha256:str|None

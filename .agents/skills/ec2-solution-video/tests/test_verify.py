@@ -15,3 +15,37 @@ class VerifyTests(Sandbox):
         g=dict(input_hash=digest(layer),pixel_diff=0,non_target_diff=0,hidden_leaks=0,evidence=['evidence.png'],evidence_hashes={'evidence.png':file_hash(self.run/'evidence.png')},source_hashes={k:file_hash(v) for k,v in layer.items()})
         self.assertTrue(gate_valid(self.run,layer,g));(self.run/'evidence.png').write_bytes(b'changed')
         self.assertFalse(gate_valid(self.run,layer,g))
+    def test_pencil_gate_failure_blocks_verify(self):
+        from solution_video.util import write
+        write(self.run/'source/timeline.json',{'writing':{'mode':'pencil'}})
+        report=verify_run(self.run,Path('/missing/hyperframes'))
+        self.assertFalse(report['complete']);self.assertEqual(report['checks']['writing_animation']['status'],'unverified')
+    def test_typing_requires_no_pencil(self):
+        from solution_video.util import write
+        write(self.run/'source/timeline.json',{'writing':{'mode':'typing'}})
+        report=verify_run(self.run,Path('/missing/hyperframes'))
+        self.assertEqual(report['checks']['writing_animation']['status'],'passed')
+    def test_actual_composition_tampering_is_rejected(self):
+        from test_composition import CompositionTests
+        from solution_video.util import write,read,digest,file_hash
+        from solution_video.pdf_pages import compare_completed
+        from solution_video.writing import default_writing
+        self.run=self.run.resolve()
+        fixture=CompositionTests();fixture.run=self.run;fixture.pencil_fixture()
+        layers=read(self.run/'layers/layers.json');g=compare_completed(layers,self.run/'verification/gate-frames')
+        g['input_hash']=digest(layers);g['evidence']=[str(Path(p).relative_to(self.run)) for p in g['evidence']];g['evidence_hashes']={p:file_hash(self.run/p) for p in g['evidence']};g['source_hashes']={k:file_hash(layers[k]) for k in ['original_svg','animated_svg','reference_png']};write(self.run/'verification/gate.json',g)
+        write(self.run/'source/timeline.json',read(self.run/'composition/timeline.json'))
+        entry=self.run/'composition/index.html';original=entry.read_text()
+        for mutation in ["document.querySelector('#answer-page [data-reveal]').style.opacity='1'", "document.getElementById('pencil').style.transform='translate(0px,0px)'", "document.getElementById('pencil').style.opacity='1'"]:
+            with self.subTest(mutation=mutation):
+                entry.write_text(original.replace('</body>',"<script>const realRender=window.renderSolutionFrame;window.renderSolutionFrame=f=>{realRender(f);"+mutation+";};</script></body>"))
+                r=verify_run(self.run,Path('/missing/hyperframes'))
+                self.assertEqual(r['checks']['original_svg']['status'],'passed');self.assertEqual(r['checks']['writing_animation']['status'],'unverified');self.assertFalse(r['complete'])
+    def test_blank_timeline_cannot_pass_original_gate(self):
+        from test_composition import CompositionTests
+        from solution_video.util import read,write
+        self.run=self.run.resolve();fixture=CompositionTests();fixture.run=self.run;fixture.pencil_fixture()
+        entry=self.run/'composition/index.html';entry.write_text(entry.read_text().replace('</body>',"<script>window.solutionTimeline.events=[];window.solutionTimeline.writing_spans=[];window.renderSolutionFrame(0);</script></body>"))
+        t=read(self.run/'source/timeline.json');t['events']=[];t['writing_spans']=[];write(self.run/'source/timeline.json',t)
+        r=verify_run(self.run,Path('/missing/hyperframes'))
+        self.assertEqual(r['checks']['writing_animation']['status'],'unverified')
