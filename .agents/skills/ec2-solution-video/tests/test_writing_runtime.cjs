@@ -7,3 +7,11 @@ test('draw/move endpoints and backward frameState',()=>{
  assert.equal(frameState(t,{},6).span,null);
  assert.equal(frameState(t,{},3).progress,.5);
 });
+test('piece clips accumulate on direct and reverse seek',()=>{
+ const api=require('../assets/writing.js');assert.equal(typeof api.revealedPieces,'function');
+ const t={writing_spans:[{id:'bar',kind:'draw',start_frame:0,end_frame:3,clip_bbox:[0,0,10,1]},
+ {id:'bar',kind:'draw',start_frame:5,end_frame:8,clip_bbox:[10,0,20,1]}]};
+ assert.deepEqual(api.revealedPieces(t,'bar',4),[[0,0,10,1]]);
+ assert.deepEqual(api.revealedPieces(t,'bar',6),[[0,0,10,1],[10,0,15,1]]);
+ api.revealedPieces(t,'bar',9);assert.deepEqual(api.revealedPieces(t,'bar',1),[[0,0,5,1]]);
+});

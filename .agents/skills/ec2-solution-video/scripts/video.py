@@ -9,7 +9,9 @@ from solution_video.sources import discover,freeze_sources
 from solution_video.pdf_pages import export_page,extract_layers,compare_completed
 from solution_video.manifest import validate_manifest,content_fingerprint
 from solution_video.review_adapter import default_config,generate_voice,validate_config
-from solution_video.reveal import build_timeline
+from solution_video.teaching import build_teaching_timeline
+from solution_video.annotations import load_teaching
+from solution_video.lesson import load_lesson
 from solution_video.writing import default_writing,load_writing,validate_writing
 from solution_video.composition import assemble
 from solution_video.media import render_master
@@ -91,6 +93,16 @@ def run_stage(action,run,args,transport=None):
     m,l,c,r=_load(run)
     if (run/'source/pair.json').exists() and m['problem_id']!=read(run/'source/pair.json')['problem_id']:raise ReviewError('manifest/source identity mismatch')
     validate_manifest(m,l,c,r);_gate(run,l)
+    teaching=load_teaching(run,m,l)
+    load_lesson(run,m,l,teaching)
+    if action in ('check','tts','retime'):
+        cfg=read(run/'source/config.json')
+        proposed=read(args.writing_config) if action=='retime' and args.writing_config else None
+        current=proposed or load_writing(run,cfg)
+        validate_writing(current)
+        if current['mode']=='pencil':
+            from solution_video.writing_units import compile_writing_units
+            compile_writing_units(l)
     if action=='check': finish_stage(run,stage,[run/'source/manifest.json',run/'source/coverage.json',run/'source/circuit-review.json']);return {'status':'passed','paid_requests':0,'input_hash':content_fingerprint(m,l,c)}
     if action=='tts':
         cfg=read(args.config) if args.config else read(run/'source/config.json');validate_config(cfg);write(run/'source/config.json',cfg)
@@ -110,7 +122,7 @@ def run_stage(action,run,args,transport=None):
             ex.paid_requests=0 if transport else count()-before
             raise
         paid=0 if transport else count()-before
-        finish_stage(run,'voice',[run/'source/audio.json']);t=build_timeline(m,l,audio,cfg,writing);write(run/'source/timeline.json',t);finish_stage(run,'timing',[run/'source/timeline.json'])
+        finish_stage(run,'voice',[run/'source/audio.json']);t=build_teaching_timeline(m,l,audio,cfg,writing,teaching);write(run/'source/timeline.json',t);finish_stage(run,'timing',[run/'source/timeline.json'])
         return {'status':'passed','segments':len(audio),'paid_requests':paid}
     if action=='retime':
         cfg=read(run/'source/config.json');validate_config(cfg)
@@ -125,13 +137,13 @@ def run_stage(action,run,args,transport=None):
                 with wave.open(str(path),'rb') as wav:
                     if (wav.getnchannels(),wav.getsampwidth(),wav.getframerate(),wav.getnframes())!=(1,2,24000,a['samples']):raise InputError('PCM provenance mismatch')
         except (OSError,wave.Error,KeyError) as ex:raise InputError('invalid saved PCM') from ex
-        t=build_timeline(m,l,audio,cfg,writing)
+        t=build_teaching_timeline(m,l,audio,cfg,writing,teaching)
         if proposed is not None:write(run/'source/writing.json',proposed)
         write(run/'source/timeline.json',t);finish_stage(run,'timing',[run/'source/timeline.json'])
         return {'status':'passed','paid_requests':0,'total_frames':t['total_frames']}
     if action=='assemble':
         if not (run/'source/audio.json').exists(): return {'status':'author-required','paid_requests':0,'missing':['source/audio.json']}
-        parts=assemble(read(run/'source/pair.json'),l,m,read(run/'source/timeline.json'),run,Path(args.runtime));finish_stage(run,stage,[run/'source/parts.json',*list((run/'composition').glob('*'))]);return {'status':'passed','parts':parts,'paid_requests':0}
+        parts=assemble(read(run/'source/pair.json'),l,m,read(run/'source/timeline.json'),run,Path(args.runtime));finish_stage(run,stage,[run/'source/parts.json',*[p for p in (run/'composition').rglob('*') if p.is_file()]]);return {'status':'passed','parts':parts,'paid_requests':0}
     if action=='render':
         p=render_master(read(run/'source/parts.json'),read(run/'source/timeline.json'),read(run/'source/audio.json')['voices'],run,Path(args.hyperframes_entry));finish_stage(run,stage,[p]);return {'status':'passed','master':str(p),'paid_requests':0}
     if action=='captions':

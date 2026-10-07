@@ -6,7 +6,7 @@ from solution_video.review_adapter import default_config
 class WritingTests(Sandbox):
     def test_new_defaults_and_legacy_fallback(self):
         from solution_video.writing import default_writing, load_writing
-        self.assertEqual(default_writing()['chars_per_second'],5)
+        self.assertEqual(default_writing()['chars_per_second'],7.5)
         self.assertEqual(default_writing()['pencil_length_px'],160)
         self.assertEqual(default_writing('typing')['chars_per_second'],7)
         self.assertEqual(load_writing(self.run,default_config())['mode'],'typing')

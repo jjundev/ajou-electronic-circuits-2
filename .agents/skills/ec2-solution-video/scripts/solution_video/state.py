@@ -7,11 +7,11 @@ STAGES=['inputs','layers','script','voice','timing','composition','render','capt
 FACTORS={
  'inputs':['source/inputs.json','source/pair.json','source/snapshots/*'],
  'layers':['source/map.json','layers/candidates.json','layers/original.svg'],
- 'script':['source/manifest.json','source/coverage.json','source/circuit-review.json','verification/gate.json'],
+ 'script':['source/manifest.json','source/coverage.json','source/circuit-review.json','source/lesson.json','verification/gate.json'],
  'voice':['source/config.json'], 'timing':['source/audio.json','assets/voice/*.wav'],
- 'composition':['source/timeline.json'], 'render':['source/parts.json','composition/*'],
- 'captions':['renders/master.mp4'], 'verify':['renders/final.mp4','renders/captions.srt','verification/audio-review.json','verification/visual-review.json'], 'publish':['verification/report.json']}
-MODULES={'inputs':['sources'],'layers':['pdf_pages'],'script':['manifest'],'voice':['review_adapter'],'timing':['reveal','writing'],'composition':['composition'],'render':['media'],'captions':['subtitles'],'verify':['verify'],'publish':['publication']}
+ 'composition':['source/timeline.json'], 'render':['source/parts.json','composition/**/*'],
+ 'captions':['renders/master.mp4'], 'verify':['renders/final.mp4','renders/captions.srt','verification/audio-review.json','verification/visual-review.json','verification/pacing-review.json'], 'publish':['verification/report.json']}
+MODULES={'inputs':['sources'],'layers':['pdf_pages','writing_units'],'script':['manifest','lesson','subtitles'],'voice':['review_adapter'],'timing':['reveal','writing'],'composition':['composition','writing_camera'],'render':['media'],'captions':['subtitles'],'verify':['verify','narration_pacing'],'publish':['publication']}
 def stage_fingerprint(run,stage):
     run=Path(run); n=STAGES.index(stage); files={}
     for s in STAGES[:n+1]:
@@ -24,10 +24,31 @@ def stage_fingerprint(run,stage):
     for module in ['util','contracts','page_layout']:
         p=S/'scripts/solution_video'/(module+'.py'); files['tool:'+module]=file_hash(p)
     if n>=1: files['tool:browser_check']=file_hash(S/'tests/browser_check.mjs')
+    if n>=8:files['tool:writing_flow_check']=file_hash(S/'tests/writing_flow_check.mjs')
+    if n>=8:files['tool:teaching_check']=file_hash(S/'tests/teaching_check.mjs')
     if n>=3: files['tool:adapter']=adapter_hash()
     writing_path=run/'source/writing.json'
     writing=read(writing_path) if writing_path.is_file() else None
     pencil=writing is not None and writing.get('mode')=='pencil'
+    if n>=4:
+        from .annotations import load_teaching
+        from .teaching import teaching_timing_settings
+        present={name:(run/('source/'+name+'.json')).is_file() for name in ['focus','annotations']}
+        files['teaching:presence']=digest(present)
+        if any(present.values()):
+            plan=load_teaching(run,read(run/'source/manifest.json'),read(run/'layers/layers.json'))
+            files['teaching:timing']=digest(teaching_timing_settings(plan))
+        files['tool:teaching']=file_hash(S/'scripts/solution_video/teaching.py')
+    if n>=5:
+        for name in ['focus','annotations']:
+            p=run/('source/'+name+'.json')
+            if p.is_file():files['teaching:'+name]=file_hash(p)
+        for name in ['annotations','focus']:
+            files['tool:'+name]=file_hash(S/'scripts/solution_video'/(name+'.py'))
+        if (run/'source/annotations.json').is_file():
+            font=S.parent/'ec2-review-video/assets/fonts/Pretendard-Bold.ttf'
+            files['teaching:font']=file_hash(font) if font.is_file() else 'missing'
+            pencil=True
     if n>=4 and writing is not None:
         files['writing:timing']=digest(timing_settings(writing))
     if n>=5:

@@ -177,3 +177,93 @@ class CompositionTests(Sandbox):
         assemble(read(self.run/'source/pair.json'),read(self.run/'layers/layers.json'),read(self.run/'source/manifest.json'),t,self.run,S.parent/'ec2-review-video/assets/runtime/vendor/gsap.min.js')
         report=verify_run(self.run,Path('/missing/hyperframes'))
         self.assertEqual(report['checks']['writing_animation']['status'],'passed')
+    def teaching_fixture(self,mode='pencil'):
+        from solution_video.annotations import load_teaching
+        from solution_video.teaching import build_teaching_timeline
+        from solution_video.util import read,write
+        self.pencil_fixture(check_browser=False)
+        m=read(self.run/'source/manifest.json');l=read(self.run/'layers/layers.json')
+        m['segments'].insert(1,dict(id='r',kind='reason',step_id='solution',text='회로의 방향을 표시합니다.',source_refs=['answer:1']))
+        f=dict(schema_version=1,source_sha256=l['metadata']['source_sha256'],regions=[dict(id='circuit',bbox=[30,35,190,75])],cues=[dict(segment_id='r',target='circuit')])
+        a=dict(schema_version=1,source_sha256=f['source_sha256'],items=[dict(id='arrow',segment_id='r',region_id='circuit',kind='arrow',geometry={'from':[60,40],'to':[60,65]},source_refs=['answer:1'],meaning_notes='synthetic test')])
+        write(self.run/'source/focus.json',f);write(self.run/'source/annotations.json',a)
+        from solution_video.writing import default_writing
+        w=default_writing(mode);write(self.run/'source/writing.json',w)
+        audio=[make_audio(s['id'],2400,self.run) for s in m['segments']]
+        t=build_teaching_timeline(m,l,audio,default_config(),w,load_teaching(self.run,m,l))
+        write(self.run/'source/manifest.json',m);write(self.run/'source/audio.json',{'voices':audio});write(self.run/'source/timeline.json',t)
+        assemble({'problem':{'snapshot':'pencil.pdf','page_index':0}},l,m,t,self.run,S.parent/'ec2-review-video/assets/runtime/vendor/gsap.min.js')
+        return t
+    def test_typing_annotations_load_pencil_but_legacy_does_not(self):
+        t=self.teaching_fixture('typing');html=(self.run/'composition/index.html').read_text()
+        self.assertIn('id="pencil"',html);self.assertTrue((self.run/'composition/annotations/compiled.json').is_file())
+        self.assertIn('annotations.js',html)
+        self.assertEqual(html.count('id="pencil"'),1)
+    def test_annotation_and_original_share_one_pen(self):
+        self.teaching_fixture()
+        r=browser(['--mode','teaching','--entry',str(self.run/'composition/index.html'),'--layers',str(self.run/'layers/layers.json'),'--dest',str(self.run/'verification/teaching-frames')])
+        self.assertTrue(r['bounds_ok']);self.assertTrue(r['seek_equal']);self.assertTrue(r['gsap_seek_equal']);self.assertLessEqual(r['tip_error_px'],1)
+        self.assertEqual(r['original_pixel_diff'],0);self.assertEqual(r['annotation_pixel_diff'],0);self.assertFalse(r['final_visible'])
+    def test_teaching_mutations_block_completion(self):
+        self.teaching_fixture('typing');html=self.run/'composition/index.html';base=html.read_text()
+        for change in ["document.getElementById('annotation-arrow').remove();", "document.getElementById('pencil').style.transform='translate(50px,50px)';", "document.getElementById('annotation-arrow').style.opacity='1';", "document.querySelector('#answer-page>svg').setAttribute('viewBox','0 0 200 100');"]:
+            html.write_text(base.replace('</body>',"<script>const renderOriginal=window.renderSolutionFrame;window.renderSolutionFrame=f=>{renderOriginal(f);"+change+"};</script></body>"))
+            with self.subTest(change=change):
+                from solution_video.contracts import InputError
+                try:r=browser(['--mode','teaching','--entry',str(html),'--layers',str(self.run/'layers/layers.json'),'--dest',str(self.run/'verification/teaching-frames')])
+                except InputError:continue
+                self.assertFalse(r.get('bounds_ok',False) and r.get('seek_equal',False) and r.get('tip_error_px',2)<=1 and r.get('annotation_pixel_diff',1)==0 and r.get('cameras_equal',False) and not r.get('final_visible',True))
+        html.write_text(base)
+
+    def test_labels_whitespace_and_focus_only_in_browser(self):
+        from solution_video.util import read,write
+        from solution_video.annotations import load_teaching
+        from solution_video.teaching import build_teaching_timeline
+        self.teaching_fixture('typing');m=read(self.run/'source/manifest.json');l=read(self.run/'layers/layers.json');a=read(self.run/'source/annotations.json')
+        a['items'][0].update(kind='label',geometry={'runs':[dict(text='v ',origin=[60,55],font_size_pt=12),dict(text='x',origin=[72,60],font_size_pt=8)]})
+        for items in [a['items'],[]]:
+            a['items']=items;write(self.run/'source/annotations.json',a)
+            t=build_teaching_timeline(m,l,read(self.run/'source/audio.json')['voices'],default_config(),read(self.run/'source/writing.json'),load_teaching(self.run,m,l));write(self.run/'source/timeline.json',t)
+            assemble({'problem':{'snapshot':'pencil.pdf','page_index':0}},l,m,t,self.run,S.parent/'ec2-review-video/assets/runtime/vendor/gsap.min.js')
+            r=browser(['--mode','teaching','--entry',str(self.run/'composition/index.html'),'--layers',str(self.run/'layers/layers.json'),'--dest',str(self.run/'verification/teaching-frames')])
+            self.assertEqual(r['annotation_pixel_diff'],0);self.assertEqual(r['original_pixel_diff'],0);self.assertTrue(r['bounds_ok']);self.assertTrue(r['inactive_hidden'])
+    def test_different_figures_do_not_drag_pen_from_hidden_camera(self):
+        from solution_video.util import read,write
+        from solution_video.annotations import load_teaching
+        from solution_video.teaching import build_teaching_timeline
+        self.teaching_fixture();m=read(self.run/'source/manifest.json');l=read(self.run/'layers/layers.json');f=read(self.run/'source/focus.json');a=read(self.run/'source/annotations.json')
+        m['segments'].append(dict(id='check2',kind='check',step_id='solution',text='다른 그림을 확인합니다.',source_refs=['answer:1']))
+        f['regions'].append(dict(id='other',bbox=[300,35,310,75]));f['cues'].append(dict(segment_id='check2',target='other'))
+        a['items'].append(dict(a['items'][0],id='other_arrow',segment_id='check2',region_id='other',geometry={'from':[305,40],'to':[305,65]}))
+        write(self.run/'source/focus.json',f);write(self.run/'source/annotations.json',a)
+        audio=[make_audio(s['id'],2400,self.run) for s in m['segments']];t=build_teaching_timeline(m,l,audio,default_config(),read(self.run/'source/writing.json'),load_teaching(self.run,m,l));write(self.run/'source/timeline.json',t)
+        assemble({'problem':{'snapshot':'pencil.pdf','page_index':0}},l,m,t,self.run,S.parent/'ec2-review-video/assets/runtime/vendor/gsap.min.js')
+        r=browser(['--mode','teaching','--entry',str(self.run/'composition/index.html'),'--layers',str(self.run/'layers/layers.json'),'--dest',str(self.run/'verification/teaching-frames')]);self.assertTrue(r['bounds_ok'])
+    def test_annotation_glyph_definition_tampering_is_detected(self):
+        from solution_video.util import read,write
+        from solution_video.annotations import load_teaching
+        from solution_video.teaching import build_teaching_timeline
+        self.teaching_fixture('typing');m=read(self.run/'source/manifest.json');l=read(self.run/'layers/layers.json');a=read(self.run/'source/annotations.json')
+        a['items'][0].update(kind='label',geometry={'runs':[dict(text='v',origin=[60,55],font_size_pt=12)]});write(self.run/'source/annotations.json',a)
+        t=build_teaching_timeline(m,l,read(self.run/'source/audio.json')['voices'],default_config(),read(self.run/'source/writing.json'),load_teaching(self.run,m,l))
+        assemble({'problem':{'snapshot':'pencil.pdf','page_index':0}},l,m,t,self.run,S.parent/'ec2-review-video/assets/runtime/vendor/gsap.min.js')
+        entry=self.run/'composition/index.html';entry.write_text(entry.read_text().replace('</body>',"<script>document.querySelectorAll('#teaching-annotations defs path').forEach(p=>p.setAttribute('d',''));</script></body>"))
+        r=browser(['--mode','teaching','--entry',str(entry),'--layers',str(self.run/'layers/layers.json'),'--dest',str(self.run/'verification/teaching-frames')])
+        self.assertGreater(r['annotation_pixel_diff'],0)
+    def test_focus_return_preserves_last_draw_screen_tip(self):
+        import fitz
+        from solution_video.writing import default_writing
+        from solution_video.annotations import load_teaching
+        from solution_video.teaching import build_teaching_timeline
+        from solution_video.util import write
+        pdf=self.run/'wide-check.pdf';d=fitz.open();page=d.new_page(width=1440,height=810)
+        for x,y,text in [(100,140,'x'),(1250,140,'y'),(100,210,'z')]:page.insert_text((x,y),text,fontsize=20)
+        page.draw_rect((780,60,940,90));d.save(pdf);d.close()
+        c=export_page(pdf,0,self.run/'layers');g={g['text']:g['id'] for g in c['glyphs']}
+        mp=dict(work_bbox=[90,100,1350,230],steps=[dict(id='s1',glyph_ids=[g['x'],g['y']],shape_ids=[]),dict(id='s2',glyph_ids=[g['z']],shape_ids=[])],answer_step_id='s2');l=extract_layers(c,mp)
+        m=dict(segments=[dict(id='intro',kind='problem',step_id='',text='intro'),dict(id='w1',kind='write',step_id='s1',text='write'),dict(id='c',kind='check',step_id='s1',text='check'),dict(id='w2',kind='write',step_id='s2',text='write')],reveal_order=[g['x'],g['y'],g['z']],shape_anchors={},cameras=[])
+        f=dict(schema_version=1,source_sha256=l['metadata']['source_sha256'],regions=[dict(id='figure',bbox=[780,60,940,90])],cues=[dict(segment_id='c',target='figure')]);write(self.run/'source/focus.json',f);write(self.run/'layers/layers.json',l)
+        t=build_teaching_timeline(m,l,[make_audio(s['id'],800,self.run) for s in m['segments']],default_config(),default_writing(),load_teaching(self.run,m,l))
+        assemble({'problem':{'snapshot':'wide-check.pdf','page_index':0}},l,m,t,self.run,S.parent/'ec2-review-video/assets/runtime/vendor/gsap.min.js')
+        r=browser(['--mode','timeline','--entry',str(self.run/'composition/index.html'),'--layers',str(self.run/'layers/layers.json'),'--dest',str(self.run/'verification/writing')])
+        self.assertTrue(r['writing']['bounds_ok'])

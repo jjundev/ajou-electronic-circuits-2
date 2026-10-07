@@ -2,6 +2,49 @@ from fixtures import *
 import importlib.util
 spec=importlib.util.spec_from_file_location('solution_cli',S/'scripts/video.py'); cli=importlib.util.module_from_spec(spec);spec.loader.exec_module(cli)
 class CLITests(Sandbox):
+    def test_invalid_lesson_blocks_paid_voice(self):
+        from unittest.mock import patch
+        from test_manifest import example
+        from solution_video.util import write
+        from solution_video.review_adapter import default_config
+        from types import SimpleNamespace
+        m,l,c,r=example()
+        for name,data in [('source/manifest.json',m),('layers/layers.json',l),('source/coverage.json',c),('source/circuit-review.json',r),('source/config.json',default_config()),('source/lesson.json',dict(schema_version=1,steps=[]))]:write(self.run/name,data)
+        with patch.object(cli,'_gate'),patch.object(cli,'generate_voice') as voice:
+            with self.assertRaisesRegex(ValueError,'lesson'):cli.run_stage('tts',self.run,SimpleNamespace(config=None,env_file=None,approve_review=False))
+            voice.assert_not_called()
+    def test_invalid_caption_before_paid_voice(self):
+        from unittest.mock import patch
+        from test_manifest import example
+        from solution_video.util import write
+        from solution_video.review_adapter import default_config
+        from solution_video.contracts import InputError
+        from types import SimpleNamespace
+        for field in ['caption_text','text']:
+            m,l,c,r=example();bad='너무 긴 설명을 같은 구절로 계속 이어갑니다 '*7
+            m['segments'][1][field]=bad
+            h=cli.content_fingerprint(m,l,c);c['input_hash']=r['input_hash']=h
+            for name,data in [('source/manifest.json',m),('layers/layers.json',l),('source/coverage.json',c),('source/circuit-review.json',r),('source/config.json',default_config())]:write(self.run/name,data)
+            write(self.run/'run.json',dict(batch=str(self.run/'batch'),review=False));write(self.run/'batch/batch.json',dict(items=[]))
+            with self.subTest(field=field),patch.object(cli,'_gate'),patch.object(cli,'generate_voice',side_effect=AssertionError('paid generation reached')) as voice:
+                with self.assertRaises(InputError) as caught:cli.run_stage('tts',self.run,SimpleNamespace(config=None,env_file=None,approve_review=False))
+                self.assertIn('segment write',str(caught.exception));self.assertIn('너무 긴 설명',str(caught.exception));voice.assert_not_called()
+    def test_invalid_sentence_terminator_before_paid_voice(self):
+        from unittest.mock import patch
+        from test_manifest import example
+        from solution_video.util import write
+        from solution_video.review_adapter import default_config
+        from solution_video.contracts import InputError
+        from types import SimpleNamespace
+        for bad in ['맞습니까? 다음입니다.','좋습니다! 다음입니다.','생략… 다음입니다.','“맞습니까?” 다음입니다.']:
+            m,l,c,r=example();field='caption_text'
+            m['segments'][1][field]=bad
+            h=cli.content_fingerprint(m,l,c);c['input_hash']=r['input_hash']=h
+            for name,data in [('source/manifest.json',m),('layers/layers.json',l),('source/coverage.json',c),('source/circuit-review.json',r),('source/config.json',default_config())]:write(self.run/name,data)
+            write(self.run/'run.json',dict(batch=str(self.run/'batch'),review=False));write(self.run/'batch/batch.json',dict(items=[]))
+            with self.subTest(text=bad),patch.object(cli,'_gate'),patch.object(cli,'generate_voice',side_effect=AssertionError('paid generation reached')) as voice:
+                with self.assertRaises(InputError) as caught:cli.run_stage('tts',self.run,SimpleNamespace(config=None,env_file=None,approve_review=False))
+                self.assertIn('segment write',str(caught.exception));self.assertIn(bad,str(caught.exception));voice.assert_not_called()
     def test_review_gate_and_zero_paid_prepare(self):
         self.assertEqual(cli.main(['prepare','0931','--repo',str(REPO)]),1)
         self.assertEqual(cli.main(['tts','--run',str(self.run)]),0)
@@ -79,7 +122,17 @@ class CLITests(Sandbox):
         from types import SimpleNamespace
         from solution_video.util import write,file_hash,read
         from solution_video.writing import default_writing
-        audio=self.retime_fixture();cfg=default_writing();cfg['chars_per_second']=4;write(self.run/'custom.json',cfg)
+        audio=self.retime_fixture()
+        from test_writing_units import unit
+        l=read(self.run/'layers/layers.json');m=read(self.run/'source/manifest.json');c=read(self.run/'source/coverage.json');r=read(self.run/'source/circuit-review.json')
+        for i,step in enumerate(l['map']['steps']):
+            ids=step['glyph_ids'];boxes=[next(g['bbox'] for g in l['glyphs'] if g['id']==gid) for gid in ids]+[s['bbox'] for s in l['shapes'] if s['id'] in step['shape_ids']]
+            step['writing_units']=[unit('u'+str(i),[min(b[0] for b in boxes),max(b[2] for b in boxes)],ids,step['shape_ids'],line='line'+str(i))]
+        c['input_hash']=r['input_hash']=cli.content_fingerprint(m,l,c)
+        for name,data in [('layers/layers.json',l),('source/coverage.json',c),('source/circuit-review.json',r)]:write(self.run/name,data)
+        from solution_video.state import finish_stage,STAGES
+        for stage in STAGES[:4]:finish_stage(self.run,stage,[self.run/(stage+'.txt')])
+        cfg=default_writing();cfg['chars_per_second']=4;write(self.run/'custom.json',cfg)
         before=[file_hash(self.run/a['path']) for a in audio]
         with patch.object(cli,'_gate'),patch.object(cli,'generate_voice',side_effect=AssertionError('paid call')) as voice:
             result=cli.run_stage('retime',self.run,SimpleNamespace(writing_config=self.run/'custom.json'))
@@ -103,3 +156,31 @@ class CLITests(Sandbox):
         with patch.object(cli,'_gate'),patch.object(cli,'generate_voice',side_effect=AssertionError('paid call')) as voice:
             with self.assertRaisesRegex(ValueError,'writing'):cli.run_stage('tts',self.run,SimpleNamespace(config=None,approve_review=False,env_file=None))
             voice.assert_not_called()
+    def test_teaching_retime_preserves_pcm_and_captions(self):
+        from unittest.mock import patch
+        from types import SimpleNamespace
+        from solution_video.util import write,read,file_hash
+        from solution_video.manifest import content_fingerprint
+        from test_annotations import teaching_fixture
+        from solution_video.subtitles import write_srt
+        self.retime_fixture();m=read(self.run/'source/manifest.json');l=read(self.run/'layers/layers.json');c=read(self.run/'source/coverage.json');r=read(self.run/'source/circuit-review.json')
+        l['metadata']=dict(width_pt=400,height_pt=300,source_sha256='a'*64);l['map']['work_bbox']=[100,100,300,240]
+        m['segments'].insert(1,dict(id='r',kind='reason',step_id=l['map']['steps'][0]['id'],text='회로를 확인합니다.',source_refs=['answer:1']))
+        c['input_hash']=r['input_hash']=content_fingerprint(m,l,c)
+        f,a,_,_=teaching_fixture()
+        for name,data in [('source/manifest.json',m),('layers/layers.json',l),('source/coverage.json',c),('source/circuit-review.json',r),('source/focus.json',f),('source/annotations.json',a)]:write(self.run/name,data)
+        audio=[make_audio(s['id'],2400,self.run) for s in m['segments']];write(self.run/'source/audio.json',{'voices':audio});before=[file_hash(self.run/a['path']) for a in audio]
+        from solution_video.state import finish_stage,STAGES
+        for stage in STAGES[:4]:finish_stage(self.run,stage,[self.run/(stage+'.txt')])
+        with patch.object(cli,'_gate'),patch.object(cli,'generate_voice',side_effect=AssertionError('paid call')) as voice:
+            result=cli.run_stage('retime',self.run,SimpleNamespace(writing_config=None))
+        self.assertEqual(result['paid_requests'],0);voice.assert_not_called();self.assertEqual(before,[file_hash(self.run/a['path']) for a in audio])
+        t=read(self.run/'source/timeline.json');self.assertIn('teaching',t);write_srt(t,self.run/'captions.srt');self.assertIn('00:00:02,767', (self.run/'captions.srt').read_text())
+    def test_pencil_missing_units_blocks_check_before_paid_calls(self):
+        from unittest.mock import patch
+        from types import SimpleNamespace
+        from solution_video.util import write
+        from solution_video.writing import default_writing
+        self.retime_fixture();write(self.run/'source/writing.json',default_writing())
+        with patch.object(cli,'_gate'),patch.object(cli,'recover_run',return_value='script'):
+            with self.assertRaisesRegex(ValueError,'writing_units'):cli.run_stage('check',self.run,SimpleNamespace())

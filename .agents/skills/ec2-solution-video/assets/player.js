@@ -6,6 +6,10 @@
  const answer=document.querySelector('#answer-page>svg'), problem=document.getElementById('problem-page'), host=document.getElementById('answer-page'), cursor=document.getElementById('cursor');
  const pencil=T.writing?.mode==='pencil', renderer=pencil?EC2Writing.createRenderer(answer,window.solutionGlyphs,document.getElementById('pencil'),window.pencilMeta):null;
  window.solutionWriting=renderer;
+ const annotation=window.solutionAnnotationsData?EC2Annotations.createRenderer(answer,window.solutionAnnotationsData):null;
+ window.solutionAnnotations=annotation;
+ const controller=window.pencilMeta?EC2Pencil.createController(document.getElementById('pencil'),window.pencilMeta,T.writing||{}):null;
+ window.solutionPen=controller;
  const initial=T.segments.filter(s=>s.kind==='problem').at(-1)?.end_sample/800||0;
  window.renderSolutionFrame=function(frame){
    // GSAP rounds time/values; 67 can arrive as 66.999999 on a frame seek.
@@ -13,10 +17,12 @@
    const shown=new Set(T.events.filter(e=>e.frame<=frame).map(e=>e.id));
    nodes.forEach((ns,k)=>{if(pencil&&window.solutionGlyphs[k])return;ns.forEach(n=>n.style.opacity=shown.has(k)?'1':'0');});
    problem.style.opacity=frame<initial?'1':'0'; host.style.opacity=frame<initial?'0':'1';
-   let camera=T.cameras[0].viewbox;
-   for(const key of T.cameras){if(key.at_frame<=frame)camera=key.viewbox;else break;}
+   const camera=EC2Camera.cameraAt(T.cameras,frame).viewbox;
    answer.setAttribute('viewBox',camera.join(' '));
-   if(pencil){renderer.render(T,frame,camera,L);cursor.style.opacity='0';return;}
+   const writingState=renderer?renderer.render(T,frame,camera,L):{visible:false};
+   const annotationState=annotation?annotation.render(T.teaching,frame,camera,L):{visible:false};
+   if(controller)controller.apply(writingState,annotationState);
+   if(pencil){cursor.style.opacity='0';return;}
    const segment=T.segments.find(s=>s.kind==='write'&&s.start_sample/800<=frame&&frame<s.end_sample/800);
    const done=frame>=T.events.at(-1).frame;
    if(segment&&!done){

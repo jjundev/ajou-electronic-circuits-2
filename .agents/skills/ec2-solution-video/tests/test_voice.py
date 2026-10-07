@@ -2,6 +2,15 @@ from fixtures import *
 from solution_video.review_adapter import generate_voice,default_config
 import base64
 class VoiceTests(Sandbox):
+    def test_caption_change_reuses_voice(self):
+        cfg=default_config();cfg.update(max_attempts=1,tts_concurrency=1);calls=[]
+        def transport(payload):
+            calls.append(payload)
+            return {'candidates':[{'finishReason':'STOP','content':{'parts':[{'inlineData':{'mimeType':'audio/L16;rate=24000','data':base64.b64encode(b'\0\0'*2400).decode()}}]}}]}
+        a=generate_voice([dict(id='one',text='알 오 원',caption_text='r_O1')],self.run,cfg,self.run/'ledger.json',transport)
+        b=generate_voice([dict(id='one',text='알 오 원',caption_text='출력 저항 r_O1')],self.run,cfg,self.run/'ledger.json',transport)
+        self.assertEqual(len(calls),1);self.assertEqual(a[0]['sha256'],b[0]['sha256'])
+        self.assertIn('알 오 원',str(calls[0]));self.assertNotIn('r_O1',str(calls[0]))
     def test_partial_voice_retry(self):
         cfg=default_config(); cfg.update(max_attempts=1,tts_concurrency=1)
         items=[dict(id='one',text='첫 문단'),dict(id='two',text='두 번째')]; counts={'one':0,'two':0}; fail=[True]
