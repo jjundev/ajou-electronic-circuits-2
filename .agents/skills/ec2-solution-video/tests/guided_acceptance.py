@@ -26,6 +26,7 @@ def symbol_caption(text):
     # Explicit E10.13 lexicon; no runtime heuristic or changes to TTS text.
     substitutions={'알 오 쓰리':'r_O3','알 오 원':'r_O1','지 엠 원':'g_m1','알 원':'R₁','알 투':'R₂','큐 쓰리':'Q₃','큐 포':'Q₄','큐 원':'Q₁','브이 씨 씨':'V_CC','베이스 이미터 전압':'V_BE','엑스':'X','피 노드':'P 노드','가운데 피':'가운데 P','피와':'P와'}
     for spoken,symbol in substitutions.items():text=text.replace(spoken,symbol)
+    text=text.replace('마이너스 g_m1','−g_m1').replace('예제 십 점 십이','예제 10.12')
     return text
 
 def author_guided(run:Path)->dict:

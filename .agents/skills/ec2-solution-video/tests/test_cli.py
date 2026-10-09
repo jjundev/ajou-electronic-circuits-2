@@ -1,7 +1,32 @@
 from fixtures import *
+from solution_video.util import read,write
 import importlib.util
 spec=importlib.util.spec_from_file_location('solution_cli',S/'scripts/video.py'); cli=importlib.util.module_from_spec(spec);spec.loader.exec_module(cli)
 class CLITests(Sandbox):
+    def test_warning_returned_and_printed_before_voice(self):
+        from unittest.mock import patch
+        from test_manifest import example
+        from types import SimpleNamespace
+        import io,contextlib,json
+        m,l,c,r=example();m['segments'][1]['caption_text']='이 R_L을 봅니다.'
+        h=cli.content_fingerprint(m,l,c);c['input_hash']=r['input_hash']=h
+        for name,data in [('source/manifest.json',m),('layers/layers.json',l),('source/coverage.json',c),('source/circuit-review.json',r),('source/config.json',cli.default_config())]:write(self.run/name,data)
+        write(self.run/'run.json',dict(batch=str(self.run/'batch'),review=False))
+        write(self.run/'batch/batch.json',dict(items=[]));stderr=io.StringIO()
+        def voice(segments,run,*args,**kwargs):
+            self.assertIn('number_before_symbol',stderr.getvalue())
+            audio=[make_audio(s['id'],24000,run) for s in segments]
+            write(run/'source/audio.json',dict(voices=audio));return audio
+        with patch.object(cli,'_gate'),contextlib.redirect_stderr(stderr):
+            checked=cli.run_stage('check',self.run,SimpleNamespace())
+            self.assertEqual(checked['status'],'passed');self.assertEqual(len(checked.get('warnings',[])),1)
+            # Synthetic content fixture has no input-stage records; state gates have separate tests.
+            (self.run/'state.json').unlink()
+            with patch.object(cli,'generate_voice',side_effect=voice):
+                result=cli.run_stage('tts',self.run,SimpleNamespace(config=None,env_file=None,approve_review=False),transport=lambda p:{})
+            self.assertEqual(result['status'],'passed');self.assertEqual(len(result.get('warnings',[])),1)
+        self.assertEqual(read(self.run/'source/manifest.json')['segments'][1]['caption_text'],'이 R_L을 봅니다.')
+
     def test_invalid_lesson_blocks_paid_voice(self):
         from unittest.mock import patch
         from test_manifest import example

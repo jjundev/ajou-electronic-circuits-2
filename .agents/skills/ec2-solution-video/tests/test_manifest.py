@@ -10,6 +10,13 @@ def example():
     h=content_fingerprint(manifest,layers,coverage); coverage['input_hash']=h; review['input_hash']=h
     return manifest,layers,coverage,review
 class ManifestTests(Sandbox):
+    def test_spoken_math_caption_blocks_content_before_voice(self):
+        from solution_video.contracts import InputError
+        m,l,c,r=example();m['segments'][1]['caption_text']='전류는 I₀ 더하기 ΔI입니다.'
+        h=content_fingerprint(m,l,c);c['input_hash']=r['input_hash']=h
+        with self.assertRaisesRegex(InputError,'segment write'):
+            validate_manifest(m,l,c,r)
+
     def test_empty_caption_rejected(self):
         for value in ['', '  ',None,3]:
             m,l,c,r=example();m['segments'][1]['caption_text']=value

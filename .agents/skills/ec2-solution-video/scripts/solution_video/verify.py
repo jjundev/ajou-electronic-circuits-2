@@ -2,6 +2,7 @@ from pathlib import Path
 import json,wave
 from .util import digest,file_hash,read,write,command,local,browser
 from .media import probe,ffmpeg,source_checks
+from .subtitles import caption_notation_warnings
 from .manifest import validate_manifest
 
 def verification_fingerprint(run):
@@ -146,4 +147,6 @@ def verify_run(run,hyperframes_entry):
         check(kind+'_meaning',review)
     complete=all(v['status']=='passed' for v in checks.values())
     report=dict(complete=complete,input_hash=h,checks=checks,evidence=evidence,final_sha256=file_hash(final) if final.is_file() else None,review_hashes={p.relative_to(run).as_posix():file_hash(p) for p in (run/'verification').glob('*-review.json')},live_audio='verified' if checks['audio_meaning']['status']=='passed' else 'unverified')
+    path=run/'source/manifest.json'
+    report['warnings']=caption_notation_warnings(read(path).get('segments',[])) if path.is_file() else []
     write(run/'verification/report.json',report); return report

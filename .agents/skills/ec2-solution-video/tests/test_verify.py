@@ -1,6 +1,14 @@
 from fixtures import *
+from solution_video.util import read,write
 from solution_video.verify import verify_run
 class VerifyTests(Sandbox):
+    def test_notation_warnings_are_reported_without_new_gate(self):
+        write(self.run/'source/manifest.json',dict(segments=[dict(id='s',caption_text='값은 이입니다.')]))
+        report=verify_run(self.run,Path('/missing/hyperframes'))
+        self.assertEqual(len(report.get('warnings',[])),1)
+        self.assertEqual(report['warnings'][0]['code'],'numeric_predicate')
+        self.assertNotIn('caption_notation',report['checks'])
+
     def test_final_media_checked_after_burn(self):
         report=verify_run(self.run,Path('/missing/hyperframes'))
         self.assertFalse(report['complete']); self.assertIsNone(report['final_sha256'])

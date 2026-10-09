@@ -10,7 +10,51 @@ def _stamp(samples,rate):
 def caption_text(segment:dict)->str:
     value=segment.get('caption_text') if 'caption_text' in segment else segment.get('text')
     if not isinstance(value,str) or not value.strip():raise InputError('nonempty caption_text required')
+    if 'caption_text' in segment:
+        validate_caption_notation(value,segment.get('id','unknown'))
     return ' '.join(value.split())
+
+_KOREAN_NUMBER=r'(?:영|일|이|삼|사|오|육|칠|팔|구|십|백|천|만)+'
+_MATH_ATOM=r'(?:[A-Za-zΔλμΩ][A-Za-z0-9_₀-₉]*|[0-9]+)'
+_NOTATION_RULES=[
+    ('error','spoken_operator',r'(?<![가-힣])(?:더하기|빼기|곱하기|나누기|마이너스)(?![가-힣])',
+     '명시적 연산을 기호로 표기하세요.'),
+    ('error','spoken_fraction',r'(?<![가-힣])'+_KOREAN_NUMBER+r'\s*분의\s*'+_KOREAN_NUMBER,
+     '분수를 숫자와 /로 표기하세요.'),
+    ('error','spoken_decimal',r'(?<![가-힣])'+_KOREAN_NUMBER+r'\s+점\s+'+_KOREAN_NUMBER,
+     '소수를 숫자로 표기하세요.'),
+    ('warning','number_before_symbol',r'(?<![가-힣])'+_KOREAN_NUMBER+r'\s+(?='+_MATH_ATOM+r')',
+     '숫자 또는 지시어일 수 있습니다. 원본 수식과 문맥을 대조하세요.'),
+    ('warning','spoken_divisor',r'(?<![가-힣])'+_KOREAN_NUMBER+r'(?:으로|로)\s+나눈',
+     '나누는 수를 뜻하는지 문맥으로 확인하세요.'),
+    ('warning','numeric_predicate',r'(?:값|계수|답|전류|전압)(?:은|는)\s+(?P<number>'+_KOREAN_NUMBER+r')(?=입니다|이다)',
+     '수치 서술 문맥의 한글 수사입니다. 원본과 대조하여 숫자인지 확인하세요.')]
+_NOTATION_RULES=[(severity,code,re.compile(pattern),reason)
+                 for severity,code,pattern,reason in _NOTATION_RULES]
+
+def inspect_caption_notation(text:str,segment_id:str)->list[dict]:
+    """Return diagnostics without guessing or changing Korean meaning."""
+    issues={}
+    for severity,code,pattern,reason in _NOTATION_RULES:
+        for match in pattern.finditer(text):
+            span=match.span('number') if 'number' in pattern.groupindex else match.span()
+            issue=dict(severity=severity,code=code,segment_id=segment_id,span=list(span),
+                       matched_text=text[slice(*span)],reason=reason)
+            if span not in issues or severity=='error':issues[span]=issue
+    return [issues[span] for span in sorted(issues)]
+
+def caption_notation_warnings(segments:list[dict])->list[dict]:
+    return [issue for segment in segments if isinstance(segment,dict)
+            and isinstance(segment.get('caption_text'),str)
+            for issue in inspect_caption_notation(segment['caption_text'],segment.get('id','unknown'))
+            if issue['severity']=='warning']
+
+def validate_caption_notation(text:str,segment_id:str)->None:
+    errors=[i for i in inspect_caption_notation(text,segment_id) if i['severity']=='error']
+    if errors:
+        details='; '.join(i['matched_text'].strip()+': '+i['reason'] for i in errors)
+        raise InputError('segment '+segment_id+': caption requires numeric/symbol notation: '
+                         +details+'; author caption_text: '+text)
 
 _PAIRS={'(':')','[':']','{':'}','“':'”','‘':'’','"':'"'}
 _QUOTES={'”','’','"'}

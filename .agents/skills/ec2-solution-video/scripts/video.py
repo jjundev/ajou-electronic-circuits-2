@@ -15,7 +15,7 @@ from solution_video.lesson import load_lesson
 from solution_video.writing import default_writing,load_writing,validate_writing
 from solution_video.composition import assemble
 from solution_video.media import render_master
-from solution_video.subtitles import write_srt,burn_subtitles
+from solution_video.subtitles import write_srt,burn_subtitles,caption_notation_warnings
 from solution_video.verify import verify_run
 from solution_video.state import STAGES,recover_run,finish_stage,stage_fingerprint
 from solution_video.publication import publish_batch
@@ -71,6 +71,15 @@ def _gate(run,layers):
         if file_hash(Path(layers[key]))!=g['source_hashes'][key]: raise ReviewError('PDF layer changed since gate')
 
 def run_stage(action,run,args,transport=None):
+    path=Path(run)/'source/manifest.json'
+    warnings=caption_notation_warnings(read(path).get('segments',[])) if path.is_file() else []
+    if action=='tts' and warnings:
+        print(json.dumps({'stage':'tts','warnings':warnings},ensure_ascii=False),file=sys.stderr,flush=True)
+    result=_run_stage(action,run,args,transport)
+    if action in ('check','tts','captions'):result['warnings']=warnings
+    return result
+
+def _run_stage(action,run,args,transport=None):
     run=Path(run).resolve()
     if action=='extract' and not (run/'layers/candidates.json').is_file() and (run/'source/pair.json').is_file():
         pair=read(run/'source/pair.json');export_page(local(run,pair['answer']['snapshot']),pair['answer']['page_index'],run/'layers')
