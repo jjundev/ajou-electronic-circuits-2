@@ -131,7 +131,11 @@ def _run_stage(action,run,args,transport=None):
             ex.paid_requests=0 if transport else count()-before
             raise
         paid=0 if transport else count()-before
-        finish_stage(run,'voice',[run/'source/audio.json']);t=build_teaching_timeline(m,l,audio,cfg,writing,teaching);write(run/'source/timeline.json',t);finish_stage(run,'timing',[run/'source/timeline.json'])
+        from solution_video.speech_chunks import validate_chunk_audio
+        validate_chunk_audio(m['segments'],audio,run)
+        outputs=[run/'source/audio.json']
+        if (run/'source/chunk-audio.json').is_file():outputs.append(run/'source/chunk-audio.json')
+        finish_stage(run,'voice',outputs);t=build_teaching_timeline(m,l,audio,cfg,writing,teaching);write(run/'source/timeline.json',t);finish_stage(run,'timing',[run/'source/timeline.json'])
         return {'status':'passed','segments':len(audio),'paid_requests':paid}
     if action=='retime':
         cfg=read(run/'source/config.json');validate_config(cfg)
@@ -146,6 +150,8 @@ def _run_stage(action,run,args,transport=None):
                 with wave.open(str(path),'rb') as wav:
                     if (wav.getnchannels(),wav.getsampwidth(),wav.getframerate(),wav.getnframes())!=(1,2,24000,a['samples']):raise InputError('PCM provenance mismatch')
         except (OSError,wave.Error,KeyError) as ex:raise InputError('invalid saved PCM') from ex
+        from solution_video.speech_chunks import validate_chunk_audio
+        validate_chunk_audio(m['segments'],audio,run)
         t=build_teaching_timeline(m,l,audio,cfg,writing,teaching)
         if proposed is not None:write(run/'source/writing.json',proposed)
         write(run/'source/timeline.json',t);finish_stage(run,'timing',[run/'source/timeline.json'])

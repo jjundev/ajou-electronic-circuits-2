@@ -51,6 +51,23 @@ guided manifest의 모든 segment에 음성 `text`와 표시 `caption_text`를 �
 ### 문장·쉼표 자막 경계
 문장 종료 온점에서 자막을 교체하고 서로 다른 문장을 한 cue에 합치지 않는다. 수식·괄호 밖 쉼표에서도 교체하며 쉼표는 앞 cue에 남긴다. 화면 내 줄바꿈은 교체와 별개이며 cue당 최대 두 줄, 줄당 34자다. 공백을 우선해 줄을 나누고 기호·첨자는 보존한다. 숫자 내부 점/쉼표, 식별자 점, 괄호/인용 내부 구두점은 보호하고 완결된 인용 문장의 닫는 따옴표는 문장과 함께 표시한다.
 마지막 온점이 없는 기존 text는 표시용 온점만 추가하며 저장 원고와 음성은 바꾸지 않는다. ?, !, … 종결 및 불균형 괄호/LaTeX 원문은 저작 오류다. 두 줄에 들어가지 않는 구절과 34자 초과 원자 토큰은 check/tts 전에 segment id와 문제 구절로 알린다. 작성자가 의미상 쉼표 경계 또는 간결한 표기를 지정한다.
-SRT 시간은 실측 voice_samples 안에서 원문 의미 단위의 글자 수 비율로 배분한다. 줄바꿈과 표시용 추가 온점은 시간 가중치에 넣지 않는다. cue 사이 임의 공백은 추가하지 않으며 실제 문장·쉼표 발화 시점과의 정밀 정렬은 제공하지 않는다. 자막만 바꾸어도 기존 final/SRT 검증은 다시 수행하고 같은 음성 WAV는 cache로 재사용한다. 두 줄 자막은 실제 libass 화면에서 하단 900..1080 영역과 기호 보존을 확인한다.
+청크 없는 legacy SRT 시간은 실측 voice_samples 안에서 원문 의미 단위의 글자 수 비율로 배분한다. 줄바꿈과 표시용 추가 온점은 시간 가중치에 넣지 않는다. cue 사이 임의 공백은 추가하지 않으며 실제 문장·쉼표 발화 시점과의 정밀 정렬은 제공하지 않는다. 자막만 바꾸어도 기존 final/SRT 검증은 다시 수행하고 같은 음성 WAV는 cache로 재사용한다. 두 줄 자막은 실제 libass 화면에서 하단 900..1080 영역과 기호 보존을 확인한다.
 
 두 줄 자막 배경은 libass BorderStyle4/Outline0/Shadow4로 cue 전체에 하나의 균일한 박스를 그린다. 줄별 박스를 겹치는 BorderStyle3은 사용하지 않는다. 실제 두 줄·서로 다른 줄 길이에서 박스 가장자리와 불투명도 균일성 및 기호·글자 가독성을 확인한다.
+
+## 대본 전용 TTS와 실측 청크 자막
+
+문제풀이 TTS는 `spoken-text-only-v1` 정책으로 읽을 대본만 텍스트 입력에 넣는다. direction·“원고:”·자막 표시 문구를 전송하지 않는다. Aoede·ko-KR·모델·출력 형식은 설정 필드로 전달하며 공용 review-video의 요청 방식은 바꾸지 않는다. 기존 direction을 읽은 WAV는 새 요청 캐시와 호환되지 않는다.
+
+신규 manifest에는 `caption_timing: "pcm-chunks-v1"`을 넣고 모든 segment 내부에 `{id,text,caption_text}` 청크를 작성한다. 각 caption_text는 기존 문장/쉼표 규칙의 cue 하나이며 최대 두 줄/줄당 34자다. 수식·분수·괄호 내부는 보존한다. 부모 text/caption_text는 각각 청크의 공백 연결과 같아야 한다. 현재 P10.72의 47개 cue가 저작 출발점이다. 일부 청크가 빠진 새 모드는 자동 legacy fallback하지 않는다.
+
+청크 WAV는 `source/chunk-audio.json`에 영수증을 저장하고 raw PCM으로 segment WAV에 연결한다. 자막은 실측 누적 샘플 위치를 사용하며 글자 수로 배분하지 않는다. SRT 반올림 오차는 1ms 이하, 30fps 영상의 표시 경계는 1프레임 이내다. 단어 내부 시점 정렬을 주장하지 않는다. 연결 사이에 임의 무음을 넣지 않고 segment의 필기 hold에 자막을 늘리지 않는다.
+
+기본은 원본 청크 전체를 사용한다. 긴 앞뒤 무음은 실제 확인한 경우에만 `source/chunk-trims.json`에 schema_version=1 및 rows의 segment_id/chunk_id/raw_sha256/start_sample/end_sample/reason을 작성한다. 음성 생성 명령을 재실행하면 성공 청크 캐시를 재사용하며 새 절단본을 연결한다. 원본 WAV는 보존하고 자동 에너지 절단을 하지 않는다. 절단이 바뀐 연결 WAV를 retime이 검사 없이 사용해서는 안 된다.
+
+`verification/chunk-sync.json`은 원본/연결 PCM·타임라인·SRT의 대응을 검사한다. 실제 의미 검토는 별도다. 청크 모드 audio-review의 mode는 실제 청취 후에만 live-listened이고, 전 청크 순서의 chunk_checks에 segment_id/chunk_id/transcript_match/no_instruction_speech/natural_join/sync_passed/notes를 기록한다. 네 boolean이 모두 true여야 한다. 지침·추가 발화·누락·잘못된 발음·부자연스러운 연결부·최종 MP4의 전환을 검토한다. 청취할 수 없으면 complete=false/live_audio=unverified 상태로 검토용 영상을 전달하고 publish/latest는 갱신하지 않는다.
+
+### 도형 작성 시간과 필기 지연
+spatial pencil은 원본 도형별 전체 가로 폭 W와 대표 글자 높이 H로 min(90, max(18, ceil(W/H × 글자 간격 프레임))) draw 예산을 정한 뒤 clip 폭에 비례해 배분한다. 조각마다 최소 1프레임, 합계는 전체 예산이며 조각 수가 예산보다 많으면 저작 오류다. 새 줄 들어 옮기기는 첫 대상에 한 번 적용한다. 음성 종료 후 필기 지연이 60프레임(2초)을 초과하면 별도 검토한다. narration-pacing의 voice_end_frame/writing_end_frame/writing_lag_frames/completed_hold_frames를 확인하고 필기 중 무음을 완성 화면 읽기로 기록하지 않는다. 예외는 현재 input_hash의 pacing-review writing_lags [{segment_id,voice_end_frame,writing_end_frame,reason}]로 명시한다. 기존 gaps 이유는 필기 지연을 승인하지 않으며 실제 청취/의미 검토를 대신하지 않는다.
+
+글자 없는 도형 전용 chunk는 페이지 전체와 연필 여백이 들어오는 구도를 사용한다. 해당 구간의 검증은 페이지 맥락/도형/연필 경계로 수행하고 글자 chunk의 26px 최소 크기는 유지한다.

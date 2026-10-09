@@ -2,6 +2,14 @@ from fixtures import *
 from solution_video.state import finish_stage,recover_run,STAGES
 from solution_video.util import write
 class StateTests(Sandbox):
+    def test_chunk_receipt_and_trim_invalidate_timing(self):
+        for stage in STAGES[:5]:
+            out=self.run/(stage+'.txt');out.write_text(stage);finish_stage(self.run,stage,[out])
+        write(self.run/'source/chunk-audio.json',dict(voices=[]))
+        self.assertEqual(recover_run(self.run),'timing')
+        finish_stage(self.run,'timing',[self.run/'timing.txt'])
+        write(self.run/'source/chunk-trims.json',dict(schema_version=1,rows=[]))
+        self.assertEqual(recover_run(self.run),'timing')
     def test_lesson_edit_invalidates_script(self):
         from solution_video.state import stage_fingerprint
         before=stage_fingerprint(self.run,'script')
@@ -73,3 +81,16 @@ class StateTests(Sandbox):
             self.assertEqual(recover_run(self.run),'script')
             finish();p=root/'scripts/solution_video/writing_camera.py';p.write_text(p.read_text()+'\n# camera edit\n')
             self.assertEqual(recover_run(self.run),'composition');self.assertEqual(file_hash(self.run/voice['path']),before)
+
+    def test_shape_timing_invalidates_only_timing(self):
+        import shutil
+        from unittest.mock import patch
+        import solution_video.state as state
+        root=self.run/'tool';shutil.copytree(S,root,ignore=shutil.ignore_patterns('__pycache__'))
+        a=make_audio('w',2400,self.run);before=(self.run/a['path']).read_bytes()
+        with patch.object(state,'S',root):
+            for stage in STAGES[:5]:
+                out=self.run/(stage+'.txt');out.write_text(stage);finish_stage(self.run,stage,[out])
+            p=root/'scripts/solution_video/shape_timing.py';p.write_text(p.read_text()+'\n# fingerprint change\n')
+            self.assertEqual(recover_run(self.run),'timing')
+            self.assertEqual((self.run/a['path']).read_bytes(),before)

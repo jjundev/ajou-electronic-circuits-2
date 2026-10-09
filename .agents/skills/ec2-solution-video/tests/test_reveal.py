@@ -72,4 +72,16 @@ class SpatialTimingTests(Sandbox):
     def test_fraction_shape_has_no_future_leak(self):
         t=self.timeline();bar=[s for s in t['writing_spans'] if s['id']=='bar' and s['kind']=='draw']
         self.assertEqual([s['clip_bbox'] for s in bar],[[0,26,10,27],[10,26,30,27]])
-        self.assertTrue(all(s['end_frame']-s['start_frame']>=18 for s in bar))
+        self.assertTrue(all(s['end_frame']>s['start_frame'] for s in bar))
+    def test_shape_total_budget(self):
+        t=self.timeline();bar=[s for s in t['writing_spans'] if s['id']=='bar' and s['kind']=='draw']
+        self.assertEqual(sum(s['end_frame']-s['start_frame'] for s in bar),18)
+    def test_lift_once_per_new_line(self):
+        from test_writing_units import spatial_layers,unit
+        from solution_video.writing import default_writing
+        l=spatial_layers();l['glyphs']+= [dict(id='a',text=' ',bbox=[0,40,1,50],paint_order=4),dict(id='b',text='b',bbox=[2,40,12,50],paint_order=5)]
+        l['map']['steps'][0]['glyph_ids']+=['a','b'];l['map']['steps'][0]['writing_units'].append(unit('u3',[0,12],['a','b'],line='line2'))
+        m=dict(segments=[dict(id='w',kind='write',step_id='step')],shape_anchors={},cameras=[])
+        t=build_timeline(m,l,[make_audio('w',800,self.run)],default_config(),default_writing())
+        moves=[s for s in t['writing_spans'] if s['unit_id']=='u3' and s['kind']=='move']
+        self.assertEqual([s['lifted'] for s in moves],[True,False]);self.assertEqual([s['end_frame']-s['start_frame'] for s in moves],[8,1])

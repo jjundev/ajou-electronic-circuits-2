@@ -8,10 +8,10 @@ FACTORS={
  'inputs':['source/inputs.json','source/pair.json','source/snapshots/*'],
  'layers':['source/map.json','layers/candidates.json','layers/original.svg'],
  'script':['source/manifest.json','source/coverage.json','source/circuit-review.json','source/lesson.json','verification/gate.json'],
- 'voice':['source/config.json'], 'timing':['source/audio.json','assets/voice/*.wav'],
+    'voice':['source/config.json'], 'timing':['source/audio.json','source/chunk-audio.json','source/chunk-trims.json','assets/voice/*.wav'],
  'composition':['source/timeline.json'], 'render':['source/parts.json','composition/**/*'],
  'captions':['renders/master.mp4'], 'verify':['renders/final.mp4','renders/captions.srt','verification/audio-review.json','verification/visual-review.json','verification/pacing-review.json'], 'publish':['verification/report.json']}
-MODULES={'inputs':['sources'],'layers':['pdf_pages','writing_units'],'script':['manifest','lesson','subtitles'],'voice':['review_adapter'],'timing':['reveal','writing'],'composition':['composition','writing_camera'],'render':['media'],'captions':['subtitles'],'verify':['verify','narration_pacing'],'publish':['publication']}
+MODULES={'inputs':['sources'],'layers':['pdf_pages','writing_units'],'script':['manifest','lesson','subtitles','speech_chunks'],'voice':['review_adapter','speech_tts','speech_chunks'],'timing':['reveal','writing','speech_chunks','shape_timing'],'composition':['composition','writing_camera'],'render':['media'],'captions':['subtitles'],'verify':['verify','narration_pacing'],'publish':['publication']}
 def stage_fingerprint(run,stage):
     run=Path(run); n=STAGES.index(stage); files={}
     for s in STAGES[:n+1]:

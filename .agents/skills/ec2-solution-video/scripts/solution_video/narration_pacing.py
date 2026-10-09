@@ -33,12 +33,13 @@ def analyze_narration_pacing(timeline:dict,audio:list[dict],run:Path)->dict:
                 if (w.getnchannels(),w.getsampwidth(),w.getframerate(),w.getnframes())!=(1,2,24000,a['samples']) or a['rate']!=24000:raise InputError('PCM provenance mismatch')
         except (OSError,wave.Error,KeyError) as ex:raise InputError('invalid measured PCM') from ex
         hashes[a['path']]=a['sha256'];speech[a['id']]=speech_intervals(p)
-    input_hash=digest(dict(timeline=timeline,audio=audio));reviews=[]
+    input_hash=digest(dict(timeline=timeline,audio=audio));reviews=[];lag_reviews=[]
     review_path=run/'verification/pacing-review.json'
     if review_path.is_file():
         review=read(review_path)
-        if review.get('input_hash')==input_hash:reviews=review.get('gaps',[])
-    rows=[];unreviewed=[]
+        if review.get('input_hash')==input_hash:
+            reviews=review.get('gaps',[]);lag_reviews=review.get('writing_lags',[])
+    rows=[];unreviewed=[];unreviewed_lags=[]
     for seg in timeline['segments']:
         if seg['kind']!='write':continue
         if seg['id'] not in voices:raise InputError('missing writing voice')
@@ -61,6 +62,10 @@ def analyze_narration_pacing(timeline:dict,audio:list[dict],run:Path)->dict:
         long=[g for g in gaps if g['end_frame']-g['start_frame']>60]
         for gap in long:
             if not any(r.get('segment_id')==seg['id'] and r.get('start_frame')==gap['start_frame'] and r.get('end_frame')==gap['end_frame'] and isinstance(r.get('reason'),str) and r['reason'].strip() for r in reviews):unreviewed.append(dict(segment_id=seg['id'],**gap))
+        voice_end=start+math.ceil(voices[seg['id']]['samples']/800)
+        lag=max(0,last-voice_end);completed_hold=max(0,end-max(voice_end,last))
+        if lag>60 and not any(r.get('segment_id')==seg['id'] and r.get('voice_end_frame')==voice_end and r.get('writing_end_frame')==last and isinstance(r.get('reason'),str) and r['reason'].strip() for r in lag_reviews):
+            unreviewed_lags.append(dict(segment_id=seg['id'],voice_end_frame=voice_end,writing_end_frame=last,writing_lag_frames=lag))
         ratio=len(active&voiced)/len(active) if active else 0
-        rows.append(dict(segment_id=seg['id'],voiced_ratio=ratio,longest_gap_frames=max((g['end_frame']-g['start_frame'] for g in gaps),default=0),gaps=gaps,density_guidance=None if .7<=ratio<=.85 else 'author speech for approximately 70–85% of active writing',writing_frames=len(active)))
-    return dict(input_hash=input_hash,segments=rows,status='review-required' if unreviewed else 'passed',unreviewed_gaps=unreviewed,evidence_hashes=hashes)
+        rows.append(dict(segment_id=seg['id'],voice_end_frame=voice_end,writing_end_frame=last,writing_lag_frames=lag,completed_hold_frames=completed_hold,voiced_ratio=ratio,longest_gap_frames=max((g['end_frame']-g['start_frame'] for g in gaps),default=0),gaps=gaps,density_guidance=None if .7<=ratio<=.85 else 'author speech for approximately 70–85% of active writing',writing_frames=len(active)))
+    return dict(input_hash=input_hash,segments=rows,status='review-required' if unreviewed or unreviewed_lags else 'passed',unreviewed_gaps=unreviewed,unreviewed_writing_lags=unreviewed_lags,evidence_hashes=hashes)

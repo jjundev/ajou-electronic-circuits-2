@@ -1,0 +1,111 @@
+{
+  "status": "passed",
+  "steps": [
+    {
+      "step_id": "part_0_0",
+      "assumptions": "λ=0, M4 포화, 동일 VSG 및 PMOS 종류. 원문 조건 유지.",
+      "equations": "\n### 거울 전류와 출력\n- $\\lambda = 0$이고 $M_4$가 포화에 있다고 보면 $I_{D4} = \\dfrac{(W/L)_4}{(W/L)_3} I_1$\n- 출력 노드 KCL: $I_{D4} = I_2 + V_{out}/R_L$ → $V_{out} = R_L(I_{D4} - I_2)$\n### (a) $(W/L)_3 = (W/L)_4$\n- 전: $I_{D4} = I_0$, $V_{out} = R_L(I_0 - I_0) = 0$\n- 후: $I_{D4} = I_0 + \\Delta I$, $V_{out} = R_L[(I_0 + \\Delta I) - (I_0 - \\Delta I)] = 2\\Delta I R_L$\n### (b) $(W/L)_3 = 2(W/L)_4$\n- 전: $I_{D4} = I_0/2$, $V_{out} = R_L(I_0/2 - I_0) = -I_0 R_L/2$\n- 후: $I_{D4} = (I_0 + \\Delta I)/2$, $V_{out} = R_L\\left[\\dfrac{I_0 + \\Delta I}{2} - (I_0 - \\Delta I)\\right] = R_L\\left(\\dfrac{3\\Delta I}{2} - \\dfrac{I_0}{2}\\right)$\n- 변화량은 $1.5\\Delta I R_L$로 (a)의 $2\\Delta I R_L$보다 작다\n### 답\n- (a) 전 $V_{out} = 0$, 후 $V_{out} = 2\\Delta I R_L$\n- (b) 전 $V_{out} = -I_0 R_L/2$, 후 $V_{out} = R_L(3\\Delta I - I_0)/2$\n",
+      "units": "전류 A, 저항 Ω, 출력 V. 비율 무차원.",
+      "evidence": "M3 다이오드 접속과 공통 게이트 확인. KCL: ID4=I2+Vout/RL. a 크기비 1, b 크기비 1/2. a 증분 2ΔI, b 증분 3ΔI/2. 음의 초기 출력은 원문 가정하의 형식적 결과로 보존."
+    },
+    {
+      "step_id": "part_0_1",
+      "assumptions": "λ=0, M4 포화, 동일 VSG 및 PMOS 종류. 원문 조건 유지.",
+      "equations": "\n### 거울 전류와 출력\n- $\\lambda = 0$이고 $M_4$가 포화에 있다고 보면 $I_{D4} = \\dfrac{(W/L)_4}{(W/L)_3} I_1$\n- 출력 노드 KCL: $I_{D4} = I_2 + V_{out}/R_L$ → $V_{out} = R_L(I_{D4} - I_2)$\n### (a) $(W/L)_3 = (W/L)_4$\n- 전: $I_{D4} = I_0$, $V_{out} = R_L(I_0 - I_0) = 0$\n- 후: $I_{D4} = I_0 + \\Delta I$, $V_{out} = R_L[(I_0 + \\Delta I) - (I_0 - \\Delta I)] = 2\\Delta I R_L$\n### (b) $(W/L)_3 = 2(W/L)_4$\n- 전: $I_{D4} = I_0/2$, $V_{out} = R_L(I_0/2 - I_0) = -I_0 R_L/2$\n- 후: $I_{D4} = (I_0 + \\Delta I)/2$, $V_{out} = R_L\\left[\\dfrac{I_0 + \\Delta I}{2} - (I_0 - \\Delta I)\\right] = R_L\\left(\\dfrac{3\\Delta I}{2} - \\dfrac{I_0}{2}\\right)$\n- 변화량은 $1.5\\Delta I R_L$로 (a)의 $2\\Delta I R_L$보다 작다\n### 답\n- (a) 전 $V_{out} = 0$, 후 $V_{out} = 2\\Delta I R_L$\n- (b) 전 $V_{out} = -I_0 R_L/2$, 후 $V_{out} = R_L(3\\Delta I - I_0)/2$\n",
+      "units": "전류 A, 저항 Ω, 출력 V. 비율 무차원.",
+      "evidence": "M3 다이오드 접속과 공통 게이트 확인. KCL: ID4=I2+Vout/RL. a 크기비 1, b 크기비 1/2. a 증분 2ΔI, b 증분 3ΔI/2. 음의 초기 출력은 원문 가정하의 형식적 결과로 보존."
+    },
+    {
+      "step_id": "part_0_2",
+      "assumptions": "λ=0, M4 포화, 동일 VSG 및 PMOS 종류. 원문 조건 유지.",
+      "equations": "\n### 거울 전류와 출력\n- $\\lambda = 0$이고 $M_4$가 포화에 있다고 보면 $I_{D4} = \\dfrac{(W/L)_4}{(W/L)_3} I_1$\n- 출력 노드 KCL: $I_{D4} = I_2 + V_{out}/R_L$ → $V_{out} = R_L(I_{D4} - I_2)$\n### (a) $(W/L)_3 = (W/L)_4$\n- 전: $I_{D4} = I_0$, $V_{out} = R_L(I_0 - I_0) = 0$\n- 후: $I_{D4} = I_0 + \\Delta I$, $V_{out} = R_L[(I_0 + \\Delta I) - (I_0 - \\Delta I)] = 2\\Delta I R_L$\n### (b) $(W/L)_3 = 2(W/L)_4$\n- 전: $I_{D4} = I_0/2$, $V_{out} = R_L(I_0/2 - I_0) = -I_0 R_L/2$\n- 후: $I_{D4} = (I_0 + \\Delta I)/2$, $V_{out} = R_L\\left[\\dfrac{I_0 + \\Delta I}{2} - (I_0 - \\Delta I)\\right] = R_L\\left(\\dfrac{3\\Delta I}{2} - \\dfrac{I_0}{2}\\right)$\n- 변화량은 $1.5\\Delta I R_L$로 (a)의 $2\\Delta I R_L$보다 작다\n### 답\n- (a) 전 $V_{out} = 0$, 후 $V_{out} = 2\\Delta I R_L$\n- (b) 전 $V_{out} = -I_0 R_L/2$, 후 $V_{out} = R_L(3\\Delta I - I_0)/2$\n",
+      "units": "전류 A, 저항 Ω, 출력 V. 비율 무차원.",
+      "evidence": "M3 다이오드 접속과 공통 게이트 확인. KCL: ID4=I2+Vout/RL. a 크기비 1, b 크기비 1/2. a 증분 2ΔI, b 증분 3ΔI/2. 음의 초기 출력은 원문 가정하의 형식적 결과로 보존."
+    },
+    {
+      "step_id": "part_1_0",
+      "assumptions": "λ=0, M4 포화, 동일 VSG 및 PMOS 종류. 원문 조건 유지.",
+      "equations": "\n### 거울 전류와 출력\n- $\\lambda = 0$이고 $M_4$가 포화에 있다고 보면 $I_{D4} = \\dfrac{(W/L)_4}{(W/L)_3} I_1$\n- 출력 노드 KCL: $I_{D4} = I_2 + V_{out}/R_L$ → $V_{out} = R_L(I_{D4} - I_2)$\n### (a) $(W/L)_3 = (W/L)_4$\n- 전: $I_{D4} = I_0$, $V_{out} = R_L(I_0 - I_0) = 0$\n- 후: $I_{D4} = I_0 + \\Delta I$, $V_{out} = R_L[(I_0 + \\Delta I) - (I_0 - \\Delta I)] = 2\\Delta I R_L$\n### (b) $(W/L)_3 = 2(W/L)_4$\n- 전: $I_{D4} = I_0/2$, $V_{out} = R_L(I_0/2 - I_0) = -I_0 R_L/2$\n- 후: $I_{D4} = (I_0 + \\Delta I)/2$, $V_{out} = R_L\\left[\\dfrac{I_0 + \\Delta I}{2} - (I_0 - \\Delta I)\\right] = R_L\\left(\\dfrac{3\\Delta I}{2} - \\dfrac{I_0}{2}\\right)$\n- 변화량은 $1.5\\Delta I R_L$로 (a)의 $2\\Delta I R_L$보다 작다\n### 답\n- (a) 전 $V_{out} = 0$, 후 $V_{out} = 2\\Delta I R_L$\n- (b) 전 $V_{out} = -I_0 R_L/2$, 후 $V_{out} = R_L(3\\Delta I - I_0)/2$\n",
+      "units": "전류 A, 저항 Ω, 출력 V. 비율 무차원.",
+      "evidence": "M3 다이오드 접속과 공통 게이트 확인. KCL: ID4=I2+Vout/RL. a 크기비 1, b 크기비 1/2. a 증분 2ΔI, b 증분 3ΔI/2. 음의 초기 출력은 원문 가정하의 형식적 결과로 보존."
+    },
+    {
+      "step_id": "part_1_1",
+      "assumptions": "λ=0, M4 포화, 동일 VSG 및 PMOS 종류. 원문 조건 유지.",
+      "equations": "\n### 거울 전류와 출력\n- $\\lambda = 0$이고 $M_4$가 포화에 있다고 보면 $I_{D4} = \\dfrac{(W/L)_4}{(W/L)_3} I_1$\n- 출력 노드 KCL: $I_{D4} = I_2 + V_{out}/R_L$ → $V_{out} = R_L(I_{D4} - I_2)$\n### (a) $(W/L)_3 = (W/L)_4$\n- 전: $I_{D4} = I_0$, $V_{out} = R_L(I_0 - I_0) = 0$\n- 후: $I_{D4} = I_0 + \\Delta I$, $V_{out} = R_L[(I_0 + \\Delta I) - (I_0 - \\Delta I)] = 2\\Delta I R_L$\n### (b) $(W/L)_3 = 2(W/L)_4$\n- 전: $I_{D4} = I_0/2$, $V_{out} = R_L(I_0/2 - I_0) = -I_0 R_L/2$\n- 후: $I_{D4} = (I_0 + \\Delta I)/2$, $V_{out} = R_L\\left[\\dfrac{I_0 + \\Delta I}{2} - (I_0 - \\Delta I)\\right] = R_L\\left(\\dfrac{3\\Delta I}{2} - \\dfrac{I_0}{2}\\right)$\n- 변화량은 $1.5\\Delta I R_L$로 (a)의 $2\\Delta I R_L$보다 작다\n### 답\n- (a) 전 $V_{out} = 0$, 후 $V_{out} = 2\\Delta I R_L$\n- (b) 전 $V_{out} = -I_0 R_L/2$, 후 $V_{out} = R_L(3\\Delta I - I_0)/2$\n",
+      "units": "전류 A, 저항 Ω, 출력 V. 비율 무차원.",
+      "evidence": "M3 다이오드 접속과 공통 게이트 확인. KCL: ID4=I2+Vout/RL. a 크기비 1, b 크기비 1/2. a 증분 2ΔI, b 증분 3ΔI/2. 음의 초기 출력은 원문 가정하의 형식적 결과로 보존."
+    },
+    {
+      "step_id": "part_1_2",
+      "assumptions": "λ=0, M4 포화, 동일 VSG 및 PMOS 종류. 원문 조건 유지.",
+      "equations": "\n### 거울 전류와 출력\n- $\\lambda = 0$이고 $M_4$가 포화에 있다고 보면 $I_{D4} = \\dfrac{(W/L)_4}{(W/L)_3} I_1$\n- 출력 노드 KCL: $I_{D4} = I_2 + V_{out}/R_L$ → $V_{out} = R_L(I_{D4} - I_2)$\n### (a) $(W/L)_3 = (W/L)_4$\n- 전: $I_{D4} = I_0$, $V_{out} = R_L(I_0 - I_0) = 0$\n- 후: $I_{D4} = I_0 + \\Delta I$, $V_{out} = R_L[(I_0 + \\Delta I) - (I_0 - \\Delta I)] = 2\\Delta I R_L$\n### (b) $(W/L)_3 = 2(W/L)_4$\n- 전: $I_{D4} = I_0/2$, $V_{out} = R_L(I_0/2 - I_0) = -I_0 R_L/2$\n- 후: $I_{D4} = (I_0 + \\Delta I)/2$, $V_{out} = R_L\\left[\\dfrac{I_0 + \\Delta I}{2} - (I_0 - \\Delta I)\\right] = R_L\\left(\\dfrac{3\\Delta I}{2} - \\dfrac{I_0}{2}\\right)$\n- 변화량은 $1.5\\Delta I R_L$로 (a)의 $2\\Delta I R_L$보다 작다\n### 답\n- (a) 전 $V_{out} = 0$, 후 $V_{out} = 2\\Delta I R_L$\n- (b) 전 $V_{out} = -I_0 R_L/2$, 후 $V_{out} = R_L(3\\Delta I - I_0)/2$\n",
+      "units": "전류 A, 저항 Ω, 출력 V. 비율 무차원.",
+      "evidence": "M3 다이오드 접속과 공통 게이트 확인. KCL: ID4=I2+Vout/RL. a 크기비 1, b 크기비 1/2. a 증분 2ΔI, b 증분 3ΔI/2. 음의 초기 출력은 원문 가정하의 형식적 결과로 보존."
+    },
+    {
+      "step_id": "part_1_3",
+      "assumptions": "λ=0, M4 포화, 동일 VSG 및 PMOS 종류. 원문 조건 유지.",
+      "equations": "\n### 거울 전류와 출력\n- $\\lambda = 0$이고 $M_4$가 포화에 있다고 보면 $I_{D4} = \\dfrac{(W/L)_4}{(W/L)_3} I_1$\n- 출력 노드 KCL: $I_{D4} = I_2 + V_{out}/R_L$ → $V_{out} = R_L(I_{D4} - I_2)$\n### (a) $(W/L)_3 = (W/L)_4$\n- 전: $I_{D4} = I_0$, $V_{out} = R_L(I_0 - I_0) = 0$\n- 후: $I_{D4} = I_0 + \\Delta I$, $V_{out} = R_L[(I_0 + \\Delta I) - (I_0 - \\Delta I)] = 2\\Delta I R_L$\n### (b) $(W/L)_3 = 2(W/L)_4$\n- 전: $I_{D4} = I_0/2$, $V_{out} = R_L(I_0/2 - I_0) = -I_0 R_L/2$\n- 후: $I_{D4} = (I_0 + \\Delta I)/2$, $V_{out} = R_L\\left[\\dfrac{I_0 + \\Delta I}{2} - (I_0 - \\Delta I)\\right] = R_L\\left(\\dfrac{3\\Delta I}{2} - \\dfrac{I_0}{2}\\right)$\n- 변화량은 $1.5\\Delta I R_L$로 (a)의 $2\\Delta I R_L$보다 작다\n### 답\n- (a) 전 $V_{out} = 0$, 후 $V_{out} = 2\\Delta I R_L$\n- (b) 전 $V_{out} = -I_0 R_L/2$, 후 $V_{out} = R_L(3\\Delta I - I_0)/2$\n",
+      "units": "전류 A, 저항 Ω, 출력 V. 비율 무차원.",
+      "evidence": "M3 다이오드 접속과 공통 게이트 확인. KCL: ID4=I2+Vout/RL. a 크기비 1, b 크기비 1/2. a 증분 2ΔI, b 증분 3ΔI/2. 음의 초기 출력은 원문 가정하의 형식적 결과로 보존."
+    },
+    {
+      "step_id": "part_1_4",
+      "assumptions": "λ=0, M4 포화, 동일 VSG 및 PMOS 종류. 원문 조건 유지.",
+      "equations": "\n### 거울 전류와 출력\n- $\\lambda = 0$이고 $M_4$가 포화에 있다고 보면 $I_{D4} = \\dfrac{(W/L)_4}{(W/L)_3} I_1$\n- 출력 노드 KCL: $I_{D4} = I_2 + V_{out}/R_L$ → $V_{out} = R_L(I_{D4} - I_2)$\n### (a) $(W/L)_3 = (W/L)_4$\n- 전: $I_{D4} = I_0$, $V_{out} = R_L(I_0 - I_0) = 0$\n- 후: $I_{D4} = I_0 + \\Delta I$, $V_{out} = R_L[(I_0 + \\Delta I) - (I_0 - \\Delta I)] = 2\\Delta I R_L$\n### (b) $(W/L)_3 = 2(W/L)_4$\n- 전: $I_{D4} = I_0/2$, $V_{out} = R_L(I_0/2 - I_0) = -I_0 R_L/2$\n- 후: $I_{D4} = (I_0 + \\Delta I)/2$, $V_{out} = R_L\\left[\\dfrac{I_0 + \\Delta I}{2} - (I_0 - \\Delta I)\\right] = R_L\\left(\\dfrac{3\\Delta I}{2} - \\dfrac{I_0}{2}\\right)$\n- 변화량은 $1.5\\Delta I R_L$로 (a)의 $2\\Delta I R_L$보다 작다\n### 답\n- (a) 전 $V_{out} = 0$, 후 $V_{out} = 2\\Delta I R_L$\n- (b) 전 $V_{out} = -I_0 R_L/2$, 후 $V_{out} = R_L(3\\Delta I - I_0)/2$\n",
+      "units": "전류 A, 저항 Ω, 출력 V. 비율 무차원.",
+      "evidence": "M3 다이오드 접속과 공통 게이트 확인. KCL: ID4=I2+Vout/RL. a 크기비 1, b 크기비 1/2. a 증분 2ΔI, b 증분 3ΔI/2. 음의 초기 출력은 원문 가정하의 형식적 결과로 보존."
+    },
+    {
+      "step_id": "part_2_0",
+      "assumptions": "λ=0, M4 포화, 동일 VSG 및 PMOS 종류. 원문 조건 유지.",
+      "equations": "\n### 거울 전류와 출력\n- $\\lambda = 0$이고 $M_4$가 포화에 있다고 보면 $I_{D4} = \\dfrac{(W/L)_4}{(W/L)_3} I_1$\n- 출력 노드 KCL: $I_{D4} = I_2 + V_{out}/R_L$ → $V_{out} = R_L(I_{D4} - I_2)$\n### (a) $(W/L)_3 = (W/L)_4$\n- 전: $I_{D4} = I_0$, $V_{out} = R_L(I_0 - I_0) = 0$\n- 후: $I_{D4} = I_0 + \\Delta I$, $V_{out} = R_L[(I_0 + \\Delta I) - (I_0 - \\Delta I)] = 2\\Delta I R_L$\n### (b) $(W/L)_3 = 2(W/L)_4$\n- 전: $I_{D4} = I_0/2$, $V_{out} = R_L(I_0/2 - I_0) = -I_0 R_L/2$\n- 후: $I_{D4} = (I_0 + \\Delta I)/2$, $V_{out} = R_L\\left[\\dfrac{I_0 + \\Delta I}{2} - (I_0 - \\Delta I)\\right] = R_L\\left(\\dfrac{3\\Delta I}{2} - \\dfrac{I_0}{2}\\right)$\n- 변화량은 $1.5\\Delta I R_L$로 (a)의 $2\\Delta I R_L$보다 작다\n### 답\n- (a) 전 $V_{out} = 0$, 후 $V_{out} = 2\\Delta I R_L$\n- (b) 전 $V_{out} = -I_0 R_L/2$, 후 $V_{out} = R_L(3\\Delta I - I_0)/2$\n",
+      "units": "전류 A, 저항 Ω, 출력 V. 비율 무차원.",
+      "evidence": "M3 다이오드 접속과 공통 게이트 확인. KCL: ID4=I2+Vout/RL. a 크기비 1, b 크기비 1/2. a 증분 2ΔI, b 증분 3ΔI/2. 음의 초기 출력은 원문 가정하의 형식적 결과로 보존."
+    },
+    {
+      "step_id": "part_2_1",
+      "assumptions": "λ=0, M4 포화, 동일 VSG 및 PMOS 종류. 원문 조건 유지.",
+      "equations": "\n### 거울 전류와 출력\n- $\\lambda = 0$이고 $M_4$가 포화에 있다고 보면 $I_{D4} = \\dfrac{(W/L)_4}{(W/L)_3} I_1$\n- 출력 노드 KCL: $I_{D4} = I_2 + V_{out}/R_L$ → $V_{out} = R_L(I_{D4} - I_2)$\n### (a) $(W/L)_3 = (W/L)_4$\n- 전: $I_{D4} = I_0$, $V_{out} = R_L(I_0 - I_0) = 0$\n- 후: $I_{D4} = I_0 + \\Delta I$, $V_{out} = R_L[(I_0 + \\Delta I) - (I_0 - \\Delta I)] = 2\\Delta I R_L$\n### (b) $(W/L)_3 = 2(W/L)_4$\n- 전: $I_{D4} = I_0/2$, $V_{out} = R_L(I_0/2 - I_0) = -I_0 R_L/2$\n- 후: $I_{D4} = (I_0 + \\Delta I)/2$, $V_{out} = R_L\\left[\\dfrac{I_0 + \\Delta I}{2} - (I_0 - \\Delta I)\\right] = R_L\\left(\\dfrac{3\\Delta I}{2} - \\dfrac{I_0}{2}\\right)$\n- 변화량은 $1.5\\Delta I R_L$로 (a)의 $2\\Delta I R_L$보다 작다\n### 답\n- (a) 전 $V_{out} = 0$, 후 $V_{out} = 2\\Delta I R_L$\n- (b) 전 $V_{out} = -I_0 R_L/2$, 후 $V_{out} = R_L(3\\Delta I - I_0)/2$\n",
+      "units": "전류 A, 저항 Ω, 출력 V. 비율 무차원.",
+      "evidence": "M3 다이오드 접속과 공통 게이트 확인. KCL: ID4=I2+Vout/RL. a 크기비 1, b 크기비 1/2. a 증분 2ΔI, b 증분 3ΔI/2. 음의 초기 출력은 원문 가정하의 형식적 결과로 보존."
+    },
+    {
+      "step_id": "part_2_2",
+      "assumptions": "λ=0, M4 포화, 동일 VSG 및 PMOS 종류. 원문 조건 유지.",
+      "equations": "\n### 거울 전류와 출력\n- $\\lambda = 0$이고 $M_4$가 포화에 있다고 보면 $I_{D4} = \\dfrac{(W/L)_4}{(W/L)_3} I_1$\n- 출력 노드 KCL: $I_{D4} = I_2 + V_{out}/R_L$ → $V_{out} = R_L(I_{D4} - I_2)$\n### (a) $(W/L)_3 = (W/L)_4$\n- 전: $I_{D4} = I_0$, $V_{out} = R_L(I_0 - I_0) = 0$\n- 후: $I_{D4} = I_0 + \\Delta I$, $V_{out} = R_L[(I_0 + \\Delta I) - (I_0 - \\Delta I)] = 2\\Delta I R_L$\n### (b) $(W/L)_3 = 2(W/L)_4$\n- 전: $I_{D4} = I_0/2$, $V_{out} = R_L(I_0/2 - I_0) = -I_0 R_L/2$\n- 후: $I_{D4} = (I_0 + \\Delta I)/2$, $V_{out} = R_L\\left[\\dfrac{I_0 + \\Delta I}{2} - (I_0 - \\Delta I)\\right] = R_L\\left(\\dfrac{3\\Delta I}{2} - \\dfrac{I_0}{2}\\right)$\n- 변화량은 $1.5\\Delta I R_L$로 (a)의 $2\\Delta I R_L$보다 작다\n### 답\n- (a) 전 $V_{out} = 0$, 후 $V_{out} = 2\\Delta I R_L$\n- (b) 전 $V_{out} = -I_0 R_L/2$, 후 $V_{out} = R_L(3\\Delta I - I_0)/2$\n",
+      "units": "전류 A, 저항 Ω, 출력 V. 비율 무차원.",
+      "evidence": "M3 다이오드 접속과 공통 게이트 확인. KCL: ID4=I2+Vout/RL. a 크기비 1, b 크기비 1/2. a 증분 2ΔI, b 증분 3ΔI/2. 음의 초기 출력은 원문 가정하의 형식적 결과로 보존."
+    },
+    {
+      "step_id": "part_2_3",
+      "assumptions": "λ=0, M4 포화, 동일 VSG 및 PMOS 종류. 원문 조건 유지.",
+      "equations": "\n### 거울 전류와 출력\n- $\\lambda = 0$이고 $M_4$가 포화에 있다고 보면 $I_{D4} = \\dfrac{(W/L)_4}{(W/L)_3} I_1$\n- 출력 노드 KCL: $I_{D4} = I_2 + V_{out}/R_L$ → $V_{out} = R_L(I_{D4} - I_2)$\n### (a) $(W/L)_3 = (W/L)_4$\n- 전: $I_{D4} = I_0$, $V_{out} = R_L(I_0 - I_0) = 0$\n- 후: $I_{D4} = I_0 + \\Delta I$, $V_{out} = R_L[(I_0 + \\Delta I) - (I_0 - \\Delta I)] = 2\\Delta I R_L$\n### (b) $(W/L)_3 = 2(W/L)_4$\n- 전: $I_{D4} = I_0/2$, $V_{out} = R_L(I_0/2 - I_0) = -I_0 R_L/2$\n- 후: $I_{D4} = (I_0 + \\Delta I)/2$, $V_{out} = R_L\\left[\\dfrac{I_0 + \\Delta I}{2} - (I_0 - \\Delta I)\\right] = R_L\\left(\\dfrac{3\\Delta I}{2} - \\dfrac{I_0}{2}\\right)$\n- 변화량은 $1.5\\Delta I R_L$로 (a)의 $2\\Delta I R_L$보다 작다\n### 답\n- (a) 전 $V_{out} = 0$, 후 $V_{out} = 2\\Delta I R_L$\n- (b) 전 $V_{out} = -I_0 R_L/2$, 후 $V_{out} = R_L(3\\Delta I - I_0)/2$\n",
+      "units": "전류 A, 저항 Ω, 출력 V. 비율 무차원.",
+      "evidence": "M3 다이오드 접속과 공통 게이트 확인. KCL: ID4=I2+Vout/RL. a 크기비 1, b 크기비 1/2. a 증분 2ΔI, b 증분 3ΔI/2. 음의 초기 출력은 원문 가정하의 형식적 결과로 보존."
+    },
+    {
+      "step_id": "part_2_4",
+      "assumptions": "λ=0, M4 포화, 동일 VSG 및 PMOS 종류. 원문 조건 유지.",
+      "equations": "\n### 거울 전류와 출력\n- $\\lambda = 0$이고 $M_4$가 포화에 있다고 보면 $I_{D4} = \\dfrac{(W/L)_4}{(W/L)_3} I_1$\n- 출력 노드 KCL: $I_{D4} = I_2 + V_{out}/R_L$ → $V_{out} = R_L(I_{D4} - I_2)$\n### (a) $(W/L)_3 = (W/L)_4$\n- 전: $I_{D4} = I_0$, $V_{out} = R_L(I_0 - I_0) = 0$\n- 후: $I_{D4} = I_0 + \\Delta I$, $V_{out} = R_L[(I_0 + \\Delta I) - (I_0 - \\Delta I)] = 2\\Delta I R_L$\n### (b) $(W/L)_3 = 2(W/L)_4$\n- 전: $I_{D4} = I_0/2$, $V_{out} = R_L(I_0/2 - I_0) = -I_0 R_L/2$\n- 후: $I_{D4} = (I_0 + \\Delta I)/2$, $V_{out} = R_L\\left[\\dfrac{I_0 + \\Delta I}{2} - (I_0 - \\Delta I)\\right] = R_L\\left(\\dfrac{3\\Delta I}{2} - \\dfrac{I_0}{2}\\right)$\n- 변화량은 $1.5\\Delta I R_L$로 (a)의 $2\\Delta I R_L$보다 작다\n### 답\n- (a) 전 $V_{out} = 0$, 후 $V_{out} = 2\\Delta I R_L$\n- (b) 전 $V_{out} = -I_0 R_L/2$, 후 $V_{out} = R_L(3\\Delta I - I_0)/2$\n",
+      "units": "전류 A, 저항 Ω, 출력 V. 비율 무차원.",
+      "evidence": "M3 다이오드 접속과 공통 게이트 확인. KCL: ID4=I2+Vout/RL. a 크기비 1, b 크기비 1/2. a 증분 2ΔI, b 증분 3ΔI/2. 음의 초기 출력은 원문 가정하의 형식적 결과로 보존."
+    },
+    {
+      "step_id": "part_2_5",
+      "assumptions": "λ=0, M4 포화, 동일 VSG 및 PMOS 종류. 원문 조건 유지.",
+      "equations": "\n### 거울 전류와 출력\n- $\\lambda = 0$이고 $M_4$가 포화에 있다고 보면 $I_{D4} = \\dfrac{(W/L)_4}{(W/L)_3} I_1$\n- 출력 노드 KCL: $I_{D4} = I_2 + V_{out}/R_L$ → $V_{out} = R_L(I_{D4} - I_2)$\n### (a) $(W/L)_3 = (W/L)_4$\n- 전: $I_{D4} = I_0$, $V_{out} = R_L(I_0 - I_0) = 0$\n- 후: $I_{D4} = I_0 + \\Delta I$, $V_{out} = R_L[(I_0 + \\Delta I) - (I_0 - \\Delta I)] = 2\\Delta I R_L$\n### (b) $(W/L)_3 = 2(W/L)_4$\n- 전: $I_{D4} = I_0/2$, $V_{out} = R_L(I_0/2 - I_0) = -I_0 R_L/2$\n- 후: $I_{D4} = (I_0 + \\Delta I)/2$, $V_{out} = R_L\\left[\\dfrac{I_0 + \\Delta I}{2} - (I_0 - \\Delta I)\\right] = R_L\\left(\\dfrac{3\\Delta I}{2} - \\dfrac{I_0}{2}\\right)$\n- 변화량은 $1.5\\Delta I R_L$로 (a)의 $2\\Delta I R_L$보다 작다\n### 답\n- (a) 전 $V_{out} = 0$, 후 $V_{out} = 2\\Delta I R_L$\n- (b) 전 $V_{out} = -I_0 R_L/2$, 후 $V_{out} = R_L(3\\Delta I - I_0)/2$\n",
+      "units": "전류 A, 저항 Ω, 출력 V. 비율 무차원.",
+      "evidence": "M3 다이오드 접속과 공통 게이트 확인. KCL: ID4=I2+Vout/RL. a 크기비 1, b 크기비 1/2. a 증분 2ΔI, b 증분 3ΔI/2. 음의 초기 출력은 원문 가정하의 형식적 결과로 보존."
+    },
+    {
+      "step_id": "part_3_0",
+      "assumptions": "λ=0, M4 포화, 동일 VSG 및 PMOS 종류. 원문 조건 유지.",
+      "equations": "\n### 거울 전류와 출력\n- $\\lambda = 0$이고 $M_4$가 포화에 있다고 보면 $I_{D4} = \\dfrac{(W/L)_4}{(W/L)_3} I_1$\n- 출력 노드 KCL: $I_{D4} = I_2 + V_{out}/R_L$ → $V_{out} = R_L(I_{D4} - I_2)$\n### (a) $(W/L)_3 = (W/L)_4$\n- 전: $I_{D4} = I_0$, $V_{out} = R_L(I_0 - I_0) = 0$\n- 후: $I_{D4} = I_0 + \\Delta I$, $V_{out} = R_L[(I_0 + \\Delta I) - (I_0 - \\Delta I)] = 2\\Delta I R_L$\n### (b) $(W/L)_3 = 2(W/L)_4$\n- 전: $I_{D4} = I_0/2$, $V_{out} = R_L(I_0/2 - I_0) = -I_0 R_L/2$\n- 후: $I_{D4} = (I_0 + \\Delta I)/2$, $V_{out} = R_L\\left[\\dfrac{I_0 + \\Delta I}{2} - (I_0 - \\Delta I)\\right] = R_L\\left(\\dfrac{3\\Delta I}{2} - \\dfrac{I_0}{2}\\right)$\n- 변화량은 $1.5\\Delta I R_L$로 (a)의 $2\\Delta I R_L$보다 작다\n### 답\n- (a) 전 $V_{out} = 0$, 후 $V_{out} = 2\\Delta I R_L$\n- (b) 전 $V_{out} = -I_0 R_L/2$, 후 $V_{out} = R_L(3\\Delta I - I_0)/2$\n",
+      "units": "전류 A, 저항 Ω, 출력 V. 비율 무차원.",
+      "evidence": "M3 다이오드 접속과 공통 게이트 확인. KCL: ID4=I2+Vout/RL. a 크기비 1, b 크기비 1/2. a 증분 2ΔI, b 증분 3ΔI/2. 음의 초기 출력은 원문 가정하의 형식적 결과로 보존."
+    }
+  ],
+  "input_hash": "68f9ea773ed92643f0f9fd2516416594e11f5881614160bee657a08b68bb574a"
+}

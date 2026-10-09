@@ -4,6 +4,10 @@ from .review_adapter import validate_config
 from .writing import validate_writing,representative_height
 
 def build_timeline(manifest,layers,audio,config,writing=None,*,minimum_frames=None):
+    from .speech_chunks import MODE,validate_speech_chunks,validate_caption_cues
+    chunk_mode=manifest.get('caption_timing')==MODE
+    if manifest.get('caption_timing') not in (None,MODE):raise InputError('unsupported caption timing mode')
+    validate_speech_chunks(manifest['segments'],required=chunk_mode)
     validate_config(config); fps,rate=30,24000; per_frame=800
     voices={a['id']:a for a in audio}
     if len(voices)!=len(audio) or set(voices)!={s['id'] for s in manifest['segments']}: raise InputError('audio/segment mismatch')
@@ -18,7 +22,7 @@ def build_timeline(manifest,layers,audio,config,writing=None,*,minimum_frames=No
         from .writing_units import compile_writing_units
         units=compile_writing_units(layers)
     last_piece={(p['kind'],p['id']):(u['id'],i) for u in units for i,p in enumerate(u['pieces'])}
-    steps={s['id']:s for s in layers['map']['steps']}; segs=[]; events=[]; frame=0
+    steps={s['id']:s for s in layers['map']['steps']}; segs=[]; events=[]; frame=0;caption_cues=[]
     for seg in manifest['segments']:
         n=math.ceil(voices[seg['id']]['samples']/per_frame)
         if seg['kind']=='write':
@@ -26,6 +30,8 @@ def build_timeline(manifest,layers,audio,config,writing=None,*,minimum_frames=No
             if pencil and not count:raise InputError('empty writing step')
             height=representative_height([glyphs[g] for g in step['glyph_ids']]) if pencil else None
             if spatial:
+                from .shape_timing import allocate_shape_frames
+                shape_frames=allocate_shape_frames(units,layers,seg['step_id'],height,interval)
                 for u in [u for u in units if u['step_id']==seg['step_id']]:
                     transition=previous_unit is None or (u['line_id'],u['chunk_id'])!=(previous_unit['line_id'],previous_unit['chunk_id'])
                     if transition: offset+=12
@@ -33,9 +39,9 @@ def build_timeline(manifest,layers,audio,config,writing=None,*,minimum_frames=No
                     for i,piece in enumerate(u['pieces']):
                         b=piece['clip_bbox']; gid=piece['id'];kind=piece['kind']
                         space=kind=='glyph' and glyphs[gid]['text'].isspace()
-                        lifted=previous_unit is not None and previous_unit['line_id']!=u['line_id']
-                        move=interval if space else max(8,writing['lifted_move_frames']) if lifted else writing['adjacent_move_frames']
-                        draw=0 if space else max(18 if kind=='shape' else 2,interval-writing['adjacent_move_frames'])
+                        lifted=i==0 and previous_unit is not None and previous_unit['line_id']!=u['line_id']
+                        move=max(8,writing['lifted_move_frames']) if lifted else interval if space else writing['adjacent_move_frames']
+                        draw=0 if space else shape_frames[(u['id'],i)] if kind=='shape' else max(2,interval-writing['adjacent_move_frames'])
                         base=dict(id=gid,from_id=previous_piece['id'] if previous_piece else None,from_bbox=previous_piece['clip_bbox'] if previous_piece else None,
                                   target_kind=kind,step_id=seg['step_id'],unit_id=u['id'],piece_index=i,clip_bbox=b)
                         spans.append(dict(base,kind='move',start_frame=frame+offset,end_frame=frame+offset+move,lifted=lifted));offset+=move
@@ -64,11 +70,20 @@ def build_timeline(manifest,layers,audio,config,writing=None,*,minimum_frames=No
                 events.extend(dict(id=sid,frame=at,kind='shape') for sid,anchor in manifest['shape_anchors'].items() if anchor==gid)
             n=max(n,offset if pencil else count*interval)+hold
         n=max(n,(minimum_frames or {}).get(seg['id'],0))
+        if chunk_mode:
+            boundaries=voices[seg['id']].get('chunks')
+            if not isinstance(boundaries,list) or [c.get('id') for c in boundaries]!=[c['id'] for c in seg['chunks']]:raise InputError('audio chunk boundaries missing/mismatched')
+            for chunk,boundary in zip(seg['chunks'],boundaries):
+                lo,hi=boundary.get('start_sample'),boundary.get('end_sample')
+                if type(lo) is not int or type(hi) is not int:raise InputError('invalid sample boundaries')
+                caption_cues.append(dict(segment_id=seg['id'],chunk_id=chunk['id'],caption_text=chunk['caption_text'],start_sample=frame*per_frame+lo,end_sample=frame*per_frame+hi))
         segs.append(dict(seg,start_sample=frame*per_frame,end_sample=(frame+n)*per_frame,voice_samples=voices[seg['id']]['samples']))
         frame+=n
     # Dedicated finished full-page hold; all glyphs remain visible without swapping SVG.
     frame+=max(hold,30)
     result=dict(fps=fps,rate=rate,total_samples=frame*per_frame,total_frames=frame,segments=segs,events=sorted(events,key=lambda e:e['frame']),cameras=manifest.get('cameras',[]))
+    if chunk_mode:
+        result.update(caption_timing=MODE,caption_cues=caption_cues);validate_caption_cues(result)
     if writing is not None:result['writing']=writing
     if pencil:result['writing_spans']=spans
     if spatial:result['writing_unit_spans']=unit_spans
