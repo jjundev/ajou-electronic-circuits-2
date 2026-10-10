@@ -209,3 +209,59 @@ class CLITests(Sandbox):
         self.retime_fixture();write(self.run/'source/writing.json',default_writing())
         with patch.object(cli,'_gate'),patch.object(cli,'recover_run',return_value='script'):
             with self.assertRaisesRegex(ValueError,'writing_units'):cli.run_stage('check',self.run,SimpleNamespace())
+    def render_fixture(self):
+        from test_manifest import example
+        m,l,c,r=example()
+        for name,data in [('source/manifest.json',m),('layers/layers.json',l),('source/coverage.json',c),('source/circuit-review.json',r),('source/config.json',cli.default_config()),('source/parts.json',[]),('source/timeline.json',{}),('source/audio.json',dict(voices=[]))]:write(self.run/name,data)
+    def test_prepare_keeps_render_options_out_of_voice_config(self):
+        from unittest.mock import patch
+        from solution_video.sources import discover
+        from test_render_options import M5,OPTIONS
+        pairs=discover(REPO,'1002',['E10.11'])
+        with patch.object(cli,'discover',return_value=pairs),patch('solution_video.render_options.detect_hardware',return_value=M5):
+            batch=cli.prepare_batch(self.run,'1002')
+        run=batch/read(batch/'batch.json')['items'][0]['run']
+        self.assertEqual(read(run/'source/render-options.json'),OPTIONS)
+        self.assertEqual(read(run/'source/config.json'),cli.default_config())
+    def test_render_override_precedes_recovery(self):
+        from unittest.mock import patch
+        from types import SimpleNamespace
+        from test_render_options import OPTIONS
+        from solution_video.util import file_hash
+        self.render_fixture();write(self.run/'state.json',dict(stages={}))
+        write(self.run/'source/render-options.json',dict(OPTIONS,workers=2))
+        before={p:file_hash(self.run/p) for p in ['source/config.json','source/timeline.json','source/audio.json']}
+        def recovery(run):
+            self.assertEqual(read(run/'source/render-options.json')['workers'],6)
+            return 'render'
+        def render(parts,timeline,audio,run,entry,*,render_options):
+            self.assertEqual(render_options,OPTIONS)
+            master=run/'renders/master.mp4';master.parent.mkdir();master.write_bytes(b'new')
+            write(run/'verification/render-receipt.json',dict(options=render_options));return master
+        with patch.object(cli,'_gate'),patch.object(cli,'recover_run',side_effect=recovery),patch.object(cli,'render_master',side_effect=render):
+            result=cli.run_stage('render',self.run,SimpleNamespace(hyperframes_entry='cli.js',render_workers=6))
+        self.assertEqual(result['render_options'],OPTIONS);self.assertEqual(result['paid_requests'],0)
+        self.assertEqual(set(read(self.run/'state.json')['stages']['render']['outputs']),{'renders/master.mp4','verification/render-receipt.json'})
+        self.assertEqual(before,{p:file_hash(self.run/p) for p in before})
+    def test_resume_set_does_not_initialize_legacy_options(self):
+        batch=self.run/'batch';run=batch/'videos/one';run.mkdir(parents=True)
+        write(batch/'batch.json',dict(items=[dict(id='one',run='videos/one')]))
+        result=cli.resume_batch(batch);self.assertEqual(result['items'][0]['next'],'inputs')
+        self.assertFalse((run/'source/render-options.json').exists())
+    def test_invalid_render_options_do_not_launch_renderer(self):
+        from unittest.mock import patch
+        from types import SimpleNamespace
+        from solution_video.contracts import InputError
+        self.render_fixture();path=self.run/'source/render-options.json'
+        for saved,worker in [('{broken',6),('{"workers":2}',6),(None,7),(None,True)]:
+            if saved is None:path.unlink(missing_ok=True)
+            else:path.write_text(saved)
+            before=path.read_bytes() if path.exists() else None
+            with patch.object(cli,'render_master',side_effect=AssertionError('renderer reached')),patch.object(cli,'generate_voice',side_effect=AssertionError('paid call reached')):
+                with self.assertRaises(InputError):cli.run_stage('render',self.run,SimpleNamespace(hyperframes_entry='cli.js',render_workers=worker))
+            self.assertEqual(path.read_bytes() if path.exists() else None,before)
+    def test_render_cli_worker_range_and_render_only(self):
+        import contextlib,io
+        for args in [['render','--run',str(self.run),'--hyperframes-entry','cli.js','--render-workers','7'],['check','--run',str(self.run),'--render-workers','2']]:
+            with contextlib.redirect_stderr(io.StringIO()),self.assertRaises(SystemExit) as caught:cli.main(args)
+            self.assertEqual(caught.exception.code,2)

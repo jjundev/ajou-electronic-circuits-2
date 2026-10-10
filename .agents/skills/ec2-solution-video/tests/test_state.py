@@ -73,3 +73,31 @@ class StateTests(Sandbox):
             self.assertEqual(recover_run(self.run),'script')
             finish();p=root/'scripts/solution_video/writing_camera.py';p.write_text(p.read_text()+'\n# camera edit\n')
             self.assertEqual(recover_run(self.run),'composition');self.assertEqual(file_hash(self.run/voice['path']),before)
+    def _finish_render_fixture(self):
+        from solution_video.util import file_hash
+        pub=self.run/'published.mp4';pub.write_bytes(b'published')
+        write(self.run/'verification/publication.json',dict(published={str(pub):file_hash(pub)}))
+        for stage in STAGES:
+            out=self.run/(stage+'.txt');out.write_text(stage);finish_stage(self.run,stage,[out])
+    def test_render_options_change_preserves_voice_and_timeline(self):
+        from solution_video.state import stage_fingerprint
+        from solution_video.util import file_hash
+        from test_render_options import OPTIONS
+        wav=make_audio('w',2400,self.run)
+        write(self.run/'source/config.json',dict(voice='Aoede'))
+        write(self.run/'source/timeline.json',dict(total_frames=30))
+        path=self.run/'source/render-options.json';write(path,dict(OPTIONS,workers=2))
+        self._finish_render_fixture()
+        snapshots={s:stage_fingerprint(self.run,s) for s in STAGES[:6]}
+        hashes={p:file_hash(self.run/p) for p in [wav['path'],'source/config.json','source/timeline.json']}
+        for change in ['update','delete','add']:
+            with self.subTest(change=change):
+                if change=='delete':path.unlink()
+                else:write(path,OPTIONS)
+                self.assertEqual(recover_run(self.run),'render')
+                self.assertEqual(snapshots,{s:stage_fingerprint(self.run,s) for s in STAGES[:6]})
+                self.assertEqual(hashes,{p:file_hash(self.run/p) for p in hashes})
+                self._finish_render_fixture()
+    def test_missing_options_recovery_is_read_only(self):
+        self._finish_render_fixture();self.assertIsNone(recover_run(self.run))
+        self.assertFalse((self.run/'source/render-options.json').exists())
