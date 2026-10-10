@@ -19,7 +19,7 @@ BODY = """# 설계 과제 1: MOS 차동 증폭기
 
 **▶** 반쪽 회로에서 $g_m$ 으로 구한다.
 
-![그림 1](../figures/fig1.png)
+![그림 1](figs/01_fig1.png)
 """
 
 
@@ -83,13 +83,13 @@ class PushTests(SyncTestBase):
         uploaded = []
         with mock.patch.object(notion, "_request", side_effect=self.fake_request(uploaded)):
             r = sync.push(1, self.root, token="t", now="2026-10-10 12:00")
-        self.assertEqual((r["version"], r["title"]), (1, "전자회로2 설계과제1 보고서 v1"))
+        self.assertEqual((r["version"], r["title"]), (1, "전자회로2 설계과제1 보고서"))
         self.assertTrue(r["baseline"].exists())
         self.assertEqual(r["baseline"], self.p.baseline(1))
         self.assertEqual(r["roundtrip"], [])
         self.assertFalse(uploaded[0]["markdown"].startswith("# 설계 과제 1"))
         self.assertEqual(uploaded[0]["properties"]["title"][0]["text"]["content"],
-                         "전자회로2 설계과제1 보고서 v1")
+                         "전자회로2 설계과제1 보고서")
         rec = notion.load_records(self.p.notion_dir)
         self.assertEqual(rec[0]["uploaded_at"], "2026-10-10 12:00")
         self.assertEqual(rec[0]["kind"], "보고서")

@@ -16,7 +16,9 @@ AI_WORDS = re.compile(r"Claude|ChatGPT|(?<![A-Za-z])GPT(?![A-Za-z])|Gemini|OpenA
 _H5 = re.compile(r"^#{5,}\s")
 _HEADING = re.compile(r"^#{1,6}\s")
 _FOOTNOTE = re.compile(r"\[\^[^\]]+\]")
-_RAW_HTML = re.compile(r"^<[a-zA-Z]")
+# 노션이 입력으로도 받는 자체 블록 태그 (논회실 `_NFM_BLOCK_TAGS`). 원시 HTML 이 아니다.
+_NFM_BLOCK_TAGS = ("table_of_contents", "empty-block")
+_RAW_HTML = re.compile(rf"^<(?!/?(?:{'|'.join(_NFM_BLOCK_TAGS)})\b)[a-zA-Z]")
 _TABLE_SEP = re.compile(r"^\|[\s:|-]+\|$")
 _CELL_SPLIT = re.compile(r"(?<!\\)\|")
 _LINE_BLOCK = re.compile(r"\$\$.*?\$\$")
@@ -26,6 +28,8 @@ _IMAGE_ANY = re.compile(r"!\[([^\]]*)\]\(([^)]*)\)")
 _ORDERED = re.compile(r"^\d+\.")
 _NOT_PROSE = ("#", "|", "-", "*", ">", "!", "<", "$$")
 MAX_COLUMNS = 11
+FIG_DIR = "figs"  # 보고서 그림은 md 옆 figs/ 한 폴더에만 둔다
+_IMAGE_EXT = (".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp")
 
 _LABELS = {"headings": "헤딩", "tables": "표", "math_blocks": "수식 블록",
            "inline_math": "인라인 수식", "images": "그림"}
@@ -158,6 +162,22 @@ def check_markdown(path: Path) -> list[Finding]:
 
     local = [t for t in _IMAGE_LOCAL.findall("\n".join(lines))
              if not t.startswith(("http://", "https://", "data:"))]
+    for k, t in enumerate(local, start=1):
+        if not re.fullmatch(rf"{FIG_DIR}/[^/]+", t):
+            out.append(Finding("error", name,
+                f"그림 '{t}' 이 {FIG_DIR}/ 밖에 있다 — 노션에 넣을 그림은 md 옆 {FIG_DIR}/ 한 폴더에 모은다"))
+        elif not Path(t).name.startswith(f"{k:02d}_"):
+            out.append(Finding("error", name,
+                f"그림 '{t}' 은 본문 {k}번째 그림이다 — 파일 이름을 '{k:02d}_<이름>' 으로 한다 "
+                "(번호는 본문에 나오는 순서, 노션에 넣는 순서)"))
+    fig_dir = path.parent / FIG_DIR
+    if fig_dir.is_dir():
+        used = {Path(t).name for t in local}
+        extra = sorted(f.name for f in fig_dir.iterdir()
+                       if f.suffix.lower() in _IMAGE_EXT and f.name not in used)
+        if extra:
+            out.append(Finding("warn", name,
+                f"{FIG_DIR}/ 에 본문이 쓰지 않는 그림이 있다 — 치우거나 sim/ 쪽으로 옮긴다: " + ", ".join(extra)))
     if local:
         out.append(Finding("info", name,
             f"노션에서 직접 넣을 그림 {len(local)}장: " + ", ".join(local)))
@@ -187,6 +207,6 @@ def roundtrip(src: str, baseline: str) -> list[Finding]:
 
 
 def check_pulled_images(text: str) -> list[Finding]:
-    return [Finding("error", "노션 그림", f"그림 빈자리: {alt}")
+    return [Finding("error", "노션 그림", f"그림 빈자리: {alt or '(캡션 없는 그림)'}")
             for alt, target in _IMAGE_ANY.findall(text)
             if not target.strip().startswith(("http://", "https://"))]

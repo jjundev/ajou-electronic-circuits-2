@@ -5,7 +5,7 @@ description: 전자회로2 설계과제 보고서 md 를 노션에 새 페이지
 
 # 전자회로2 설계과제 보고서 노션 업로드
 
-`설계과제/과제<n>/report/설계과제<n>_보고서.md` 를 `.claude/과목정보.md` 의 `notion_parent_page_id` 아래에 새 페이지 `전자회로2 설계과제<n> 보고서 v<N>` 으로 올린다. 그림은 올리지 않는다 — 사용자가 노션에서 넣고, 다 넣었는지는 `check-images` 로 확인한다. 코드는 `scripts/ec2_report/sync.py`.
+`설계과제/과제<n>/report/설계과제<n>_보고서.md` 를 `.claude/과목정보.md` 의 `notion_parent_page_id` 아래에 새 페이지 `전자회로2 설계과제<n> 보고서` 로 올린다 (판본 번호 v<N> 은 `notion.json` 과 baseline 파일명에만 남고 페이지 제목에는 붙지 않는다 — 제목이 PDF 본문 제목과 머리글이 되기 때문). 그림은 올리지 않는다 — 사용자가 노션에서 넣고, 다 넣었는지는 `check-images` 로 확인한다. 코드는 `scripts/ec2_report/sync.py`.
 
 ## 절대 규칙
 

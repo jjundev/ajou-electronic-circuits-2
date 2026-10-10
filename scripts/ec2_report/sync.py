@@ -35,7 +35,7 @@ def strip_title(text: str, title: str) -> str:
     """앞쪽 빈 줄 다음 첫 줄이 제목 헤딩이면 그 줄과 뒤따르는 빈 줄만 뗀다.
 
     페이지 제목은 properties 로 따로 주므로 본문의 제목 헤딩은 중복이다.
-    `# 1. Design Problem` 처럼 번호로 시작하는 헤딩은 대절이므로 남긴다.
+    `# 1. Design Problem` 처럼 번호로 시작하는 헤딩은 대절이므로 남긴다 (옛 양식 호환).
     """
     lines = text.splitlines(keepends=True)
     i = 0
@@ -70,7 +70,9 @@ def push(n: int, root: Path | None = None, token: str | None = None,
     token = token or notion.load_token()
 
     version = notion.next_version(p.notion_dir, config.KIND)
-    title = f"{config.document_title(n)} v{version}"
+    # 판본 번호는 notion.json·baseline 파일명에만 남긴다. 페이지 제목이 곧 PDF 본문 제목·머리글이 되므로
+    # 제목에 vN 을 붙이지 않는다 (2026-10-11 설계과제1 v2 에서 사용자가 노션에서 지웠다).
+    title = config.document_title(n)
     body = strip_title(p.report_md.read_text(encoding="utf-8"), title)
     if _first_line(body).startswith("# "):
         # 노션은 본문 첫 블록이 # 헤딩이면 그 헤딩을 지운다 (docs/notion-probe.md 프로브 1).
@@ -85,7 +87,7 @@ def push(n: int, root: Path | None = None, token: str | None = None,
     p.baseline(version).write_text(pulled, encoding="utf-8")
     return {"title": title, "version": version, "url": page["url"],
             "page_id": page["page_id"], "baseline": p.baseline(version),
-            "info": [f for f in findings if f.level == "info"],
+            "info": [f for f in findings if f.level in ("info", "warn")],
             "roundtrip": roundtrip(body, pulled)}
 
 
@@ -125,7 +127,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         if a.command == "push":
             r = push(a.n)
-            print(f"업로드: {r['title']}")
+            print(f"업로드: {r['title']} (판본 v{r['version']})")
             print(f"URL: {r['url']}")
             print(f"baseline: {r['baseline']}")
             for f in r["info"]:

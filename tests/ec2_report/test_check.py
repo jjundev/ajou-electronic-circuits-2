@@ -23,7 +23,7 @@ $$
 |---|---|
 | M1 | 65.48 |
 
-![그림 1](figs/a.png)
+![그림 1](figs/01_a.png)
 """
 
 
@@ -49,7 +49,28 @@ class CheckMarkdownTests(unittest.TestCase):
         info = [x for x in f if x.level == "info"]
         self.assertEqual(len(info), 1)
         self.assertIn("1장", info[0].msg)
-        self.assertIn("figs/a.png", info[0].msg)
+        self.assertIn("figs/01_a.png", info[0].msg)
+
+    def test_image_outside_figs_is_error(self):
+        e = self.errors("![그림 1](../figures/a.png)\n\n![그림 2](figs/sub/b.png)\n")
+        self.assertEqual(len(e), 2)
+        self.assertIn("figs/", e[0].msg)
+
+    def test_image_index_must_follow_body_order(self):
+        ok = "![](figs/01_a.png)\n\n![](figs/02_b.png)\n"
+        self.assertEqual(self.errors(ok), [])
+        e = self.errors("![](figs/02_b.png)\n\n![](figs/01_a.png)\n\n![](figs/c.png)\n")
+        self.assertEqual(len(e), 3)
+        self.assertIn("'01_<이름>'", e[0].msg)
+
+    def test_unused_image_in_figs_is_warn(self):
+        (self.dir / "figs").mkdir()
+        for n in ("01_a.png", "old.png", "notes.txt"):
+            (self.dir / "figs" / n).write_bytes(b"")
+        warn = [x for x in self.run_check(CLEAN) if x.level == "warn"]
+        self.assertEqual(len(warn), 1)
+        self.assertIn("old.png", warn[0].msg)
+        self.assertNotIn("01_a.png", warn[0].msg)
 
     def test_wrapped_prose_is_one_error(self):
         e = self.errors("첫 줄 산문\n둘째 줄 산문\n셋째 줄 산문\n")
@@ -76,6 +97,11 @@ class CheckMarkdownTests(unittest.TestCase):
         e = self.errors("<div>x</div>\n")
         self.assertEqual(len(e), 1)
         self.assertIn("HTML", e[0].msg)
+
+    def test_notion_block_tags_are_not_raw_html(self):
+        text = '<table_of_contents color="gray"/>\n\n<empty-block/>\n# 설계 조건\n'
+        self.assertEqual(self.errors(text), [])
+        self.assertEqual(len(self.errors("<table>\n")), 1)
 
     def test_h5_heading(self):
         self.assertEqual(len(self.errors("##### 너무 깊다\n")), 1)

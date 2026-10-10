@@ -1,7 +1,7 @@
 """ngspice 결과(op.txt, ac.txt, tran.txt) → 그래프 PNG + 포화 검증 표."""
 import re, numpy as np, matplotlib
 matplotlib.use('Agg'); import matplotlib.pyplot as plt
-FIG = '../report/figs'
+FIG = '../report/figs'  # 보고서 그림은 이 한 폴더에만, 본문이 쓰는 것만 둔다
 import os; os.makedirs(FIG, exist_ok=True)
 
 # --- Transient ---
@@ -17,18 +17,13 @@ ax[2].plot(t, vid * 100, label='$V_{in1}-V_{in2}$  (×100)'); ax[2].plot(t, vod,
 ax[2].set_ylabel('mV'); ax[2].set_xlabel('time [µs]'); ax[2].legend(loc='upper right')
 ax[2].set_title('Differential input (×100) vs differential output')
 for a in ax: a.grid(alpha=.3)
-plt.tight_layout(); plt.savefig(f'{FIG}/tran_1MHz.png', dpi=130)
+plt.tight_layout(); plt.savefig(f'{FIG}/03_tran_1MHz.png', dpi=130)
 m = t > 2  # 초기 과도 제외
 av_tran = np.ptp(vod[m]) / np.ptp(vid[m])
 print(f'tran: vid_pp={np.ptp(vid[m]):.4f} mV  vod_pp={np.ptp(vod[m]):.2f} mV  Av={av_tran:.1f}')
 
 # --- AC ---
 a = np.loadtxt('ac.txt'); f, av, ph = a[:, 0], a[:, 1], a[:, 3]
-plt.figure(figsize=(7, 3.5)); plt.semilogx(f, 20 * np.log10(av))
-plt.axvline(1e6, ls=':', c='gray'); plt.text(1.1e6, 20*np.log10(av[0]) - 15, '1 MHz')
-plt.xlabel('frequency [Hz]'); plt.ylabel('|Av| [dB]'); plt.grid(alpha=.3, which='both')
-plt.title(f'Differential gain: {av[0]:.1f} ({20*np.log10(av[0]):.2f} dB)')
-plt.tight_layout(); plt.savefig(f'{FIG}/ac_gain.png', dpi=130)
 
 # --- Bode (크기·위상) ---
 k = np.argmax(av < av[0] / np.sqrt(2))  # -3 dB 를 처음 넘는 점, 로그 주파수로 선형 보간
@@ -40,7 +35,7 @@ ax[0].text(1.15e6, 20*np.log10(av[0]) - 12, '1 MHz', color='gray')
 ax[1].semilogx(f, ph); ax[1].set_ylabel('phase [deg]'); ax[1].set_xlabel('frequency [Hz]')
 for x in ax:
     x.axvline(1e6, ls=':', c='gray'); x.axvline(f3, ls='--', c='tab:red', lw=.8); x.grid(alpha=.3, which='both')
-plt.tight_layout(); plt.savefig(f'{FIG}/ac_bode.png', dpi=130)
+plt.tight_layout(); plt.savefig(f'{FIG}/04_ac_bode.png', dpi=130)
 print(f'ac: av_1k={av[0]:.3f}  f3db={f3/1e6:.1f} MHz  ph(1k)={ph[0]:.2f}  ph(1M)={np.interp(1e6, f, ph):.2f}')
 
 # --- Saturation table ---
