@@ -1,4 +1,6 @@
+import io
 import os
+from contextlib import redirect_stdout
 import tempfile
 import unittest
 from pathlib import Path
@@ -120,7 +122,10 @@ class PushTests(SyncTestBase):
         self.write_body(BODY + "\nChatGPT\n")
         with mock.patch.object(sync.config, "find_root", return_value=self.root), \
              mock.patch.object(notion, "_request"):
-            self.assertEqual(sync.main(["push", "--n", "1"]), 2)
+            out = io.StringIO()
+            with redirect_stdout(out):
+                self.assertEqual(sync.main(["push", "--n", "1"]), 2)
+        self.assertIn("ChatGPT", out.getvalue())
 
 
 class NoParentTests(SyncTestBase):
@@ -137,7 +142,10 @@ class NoParentTests(SyncTestBase):
     def test_cli_no_parent_returns_3(self):
         with mock.patch.object(sync.config, "find_root", return_value=self.root), \
              mock.patch.object(notion, "_request"):
-            self.assertEqual(sync.main(["push", "--n", "1"]), 3)
+            out = io.StringIO()
+            with redirect_stdout(out):
+                self.assertEqual(sync.main(["push", "--n", "1"]), 3)
+        self.assertIn("notion_parent_page_id", out.getvalue())
 
 
 if __name__ == "__main__":
