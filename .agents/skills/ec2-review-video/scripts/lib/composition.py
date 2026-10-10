@@ -72,7 +72,7 @@ def assemble(m,timeline,theme,run):
             js.append('tl.fromTo('+json.dumps(target)+','+json.dumps(motion['from'])+','+json.dumps(values)+','+str(seg['start_sample']/24000-start)+');')
         if not motions: raise ValueError('scene requires meaningful motion')
         js.append('window.__timelines=window.__timelines||{};window.__timelines['+json.dumps(sid)+']=tl;')
-        script='<script>(()=>{'+''.join(js).replace('</','<\\/')+'})();</script>'
+        script='<script>Promise.resolve().then(()=>document.fonts.ready).then(()=>{'+''.join(js).replace('</','<\\/')+'});</script>'
         body=f'<div id="{sid}-root" class="video-scene" data-composition-id="{sid}" data-width="1920" data-height="1080" data-duration="{duration:.9f}">'+fragment+'</div>'
         page=scene_shell(body+script,scene['template_kind'],theme)
         math_links='';math_script=''

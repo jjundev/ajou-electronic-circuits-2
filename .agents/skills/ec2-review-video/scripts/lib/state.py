@@ -14,7 +14,7 @@ def stage_fingerprint(run,stage):
       'voice':['manifest.json'],
       'timing':['manifest.json','source/audio.json'],
       'composition':['manifest.json','source/timeline.json','source/theme.json','source/*.css','source/scene-fragments/*','assets/**/*'],
-      'render':['*.html','source/compositions/*','source/*.css','source/parts.json','source/timeline.json','assets/**/*'],
+      'render':['*.html','source/compositions/*','source/*.css','source/parts.json','source/timeline.json','source/render-options.json','assets/**/*'],
       'verify':['review.mp4','manifest.json','*.html','source/**/*','assets/**/*'],
       'publish':['review.mp4','verification/report.json']}
     files={}
@@ -27,6 +27,11 @@ def stage_fingerprint(run,stage):
     if stage=='voice' and (run/'config.json').exists():
         c=json.loads((run/'config.json').read_text(encoding='utf-8'))
         config={k:c.get(k) for k in ('provider','model','voice','language','direction','pronunciation','max_output_tokens')}
+    if stage=='composition':
+        files['renderer/composition.py']=file_hash(Path(__file__).with_name('composition.py'))
+    if stage=='render':
+        for name in ('render_options.py','render.py'):
+            files['renderer/'+name]=file_hash(Path(__file__).with_name(name))
     return digest({'files':files,'config':config})
 
 class RunStore:

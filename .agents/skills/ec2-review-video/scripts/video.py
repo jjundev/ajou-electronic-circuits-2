@@ -12,7 +12,8 @@ from lib.vertex_tts import load_key,live_transport,synthesize
 from lib.theme import snapshot_theme
 from lib.composition import stage_assets,assemble
 from lib.timing import build_timeline,write_subtitles
-from lib.render import probe_backends,render_parts,mux
+from lib.render import probe_backends,cpu_backend,render_parts,mux,write_render_receipt,mux_with_receipt
+from lib.render_options import load_render_options
 from lib.subtitles import burn_subtitles
 from lib.revoice import retime_input,plan_revoice,render_revoice,picture_fingerprint
 from lib.verify import verify_media,verify_audio,verify_sync,check_sources,review_fingerprint,verify_run,publish_latest
@@ -55,6 +56,7 @@ def parser():
         if name=='tts': q.add_argument('--approve-review',action='store_true')
         if name=='assemble': q.add_argument('--pack',required=True); q.add_argument('--assets-from')
         if name in ('render','verify','revoice'): q.add_argument('--hyperframes-entry')
+        if name in ('render','revoice'): q.add_argument('--render-workers',type=int,choices=range(1,7))
         if name=='revoice': q.add_argument('--source-run',required=True)
     for q in sub.choices.values():
         q.add_argument('--config'); q.add_argument('--voice'); q.add_argument('--env-file')
@@ -105,6 +107,9 @@ def main(argv=None):
                 if args.config or args.voice or args.env_file: atomic_json(run/'config.json',config_for(args,run))
                 output({'run':str(run),'next':RunStore(run).recover(),'state':RunStore(run).load()}); return 0
             config=config_for(args,run); atomic_json(run/'config.json',config)
+            if args.command in ('render','revoice'):
+                options=load_render_options(run,getattr(args,'render_workers',None))
+                atomic_json(run/'source/render-options.json',options)
             RunStore(run).recover()
             required={'check':'inputs','tts':'script','assemble':'voice','render':'composition','revoice':'composition','verify':'render'}[args.command]
             if RunStore(run).load().get('stages',{}).get(required,{}).get('status')!='passed':
@@ -139,7 +144,7 @@ def main(argv=None):
             if args.command in ('render','revoice'):
                 entry=args.hyperframes_entry or config.get('hyperframes_entry')
                 if not entry: raise ValueError('--hyperframes-entry required')
-                backend=probe_backends(run); backend['hyperframes_entry']=str(Path(entry).resolve())
+                backend=cpu_backend(entry,options)
                 parts=read(run/'source/parts.json')['parts']
                 if args.command=='render': rendered=render_parts(parts,run,backend)
                 else:
@@ -156,7 +161,10 @@ def main(argv=None):
                     needed={w['scene_id'] for w in windows if w['mode']=='rerender'}; selected=[p for p in parts if p['id'] in needed]
                     replacements={p['id']:v for p,v in zip(selected,render_parts(selected,run,backend))} if selected else {}
                     rendered=render_revoice(source,windows,run,backend,replacements)
-                mux(rendered,audio,timeline,run/'review.mp4'); finish(run,'render',[run/'review.mp4'])
+                # Revoice may contain retimed windows without capture receipts.
+                captured=rendered if args.command=='render' else list(replacements.values())
+                receipt=mux_with_receipt(rendered,audio,timeline,run/'review.mp4',backend,captured=captured)
+                finish(run,'render',[run/'review.mp4',receipt])
                 output({'status':'passed','video':str(run/'review.mp4'),'backend':backend}); return 0
             if args.command=='verify':
                 key=review_fingerprint(run,m)

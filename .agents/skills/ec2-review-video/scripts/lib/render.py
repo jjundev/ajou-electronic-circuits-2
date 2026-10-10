@@ -1,11 +1,74 @@
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
-import json,os,re,shutil,subprocess,time,wave
+import json,os,re,shutil,signal,subprocess,time,uuid,wave
 from .cache import digest,file_hash,cache_valid,atomic_json
+from .render_options import load_render_options,validate_render_options
+
+def _stop_process_tree(proc):
+    if os.name=='nt':
+        subprocess.run(['taskkill','/PID',str(proc.pid),'/T','/F'],capture_output=True,timeout=10)
+    else:
+        # Chrome may detach into its own session; collect owned descendants before killing Node.
+        rows=subprocess.run(['ps','-axo','pid=,ppid='],capture_output=True,text=True,timeout=3,check=True).stdout.splitlines()
+        parents={int(r.split()[0]):int(r.split()[1]) for r in rows if len(r.split())==2}
+        depths={proc.pid:0}
+        while True:
+            new={pid:depths[parent]+1 for pid,parent in parents.items() if parent in depths and pid not in depths}
+            if not new: break
+            depths.update(new)
+        for pid in sorted(depths,key=depths.get,reverse=True):
+            try: os.kill(pid,signal.SIGKILL)
+            except ProcessLookupError: pass
+        try: os.killpg(proc.pid,signal.SIGKILL)
+        except ProcessLookupError: pass
+    proc.kill() if proc.poll() is None else None
+    return proc.communicate()
 
 def command(args,cwd=None,timeout=300):
-    return subprocess.run([str(a) for a in args],cwd=cwd,capture_output=True,text=True,encoding='utf-8',errors='replace',
-       timeout=timeout,creationflags=subprocess.CREATE_NO_WINDOW if os.name=='nt' else 0)
+    args=[str(a) for a in args]
+    proc=subprocess.Popen(args,cwd=cwd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,
+                          encoding='utf-8',errors='replace',start_new_session=os.name!='nt',
+                          creationflags=(subprocess.CREATE_NO_WINDOW|subprocess.CREATE_NEW_PROCESS_GROUP) if os.name=='nt' else 0)
+    try: stdout,stderr=proc.communicate(timeout=timeout)
+    except subprocess.TimeoutExpired as ex:
+        stdout,stderr=_stop_process_tree(proc)
+        raise subprocess.TimeoutExpired(args,timeout,output=stdout,stderr=stderr) from ex
+    except BaseException:
+        _stop_process_tree(proc); raise
+    return subprocess.CompletedProcess(args,proc.returncode,stdout,stderr)
+
+
+def commit_media_receipt(pending,data,media,receipt):
+    pending,media,receipt=map(Path,(pending,media,receipt))
+    receipt_pending=receipt.with_name(receipt.name+'.'+uuid.uuid4().hex+'.pending')
+    targets=[media,receipt];backups={};replaced=[];cleanup=False
+    try:
+        retained=[t.with_name(t.name+'.rollback') for t in targets
+                  if t.with_name(t.name+'.rollback').exists() or t.with_name(t.name+'.rollback').is_symlink()]
+        if retained: raise RuntimeError('unresolved recovery copies; inspect before retry: '+', '.join(map(str,retained)))
+        atomic_json(receipt_pending,data)
+        for target in targets:
+            if target.exists() or target.is_symlink():
+                backup=target.with_name(target.name+'.rollback')
+                shutil.copy2(target,backup,follow_symlinks=False);backups[target]=backup
+        for source,target in [(pending,media),(receipt_pending,receipt)]:
+            os.replace(source,target);replaced.append(target)
+        cleanup=True
+    except BaseException as original:
+        failures=[]
+        for target in reversed(replaced):
+            try:
+                if target in backups:os.replace(backups[target],target)
+                else:target.unlink(missing_ok=True)
+            except BaseException as ex:failures.append(ex)
+        if failures:
+            retained=[str(p) for p in backups.values() if p.exists() or p.is_symlink()]
+            raise RuntimeError('rollback failed; recovery copies retained: '+', '.join(retained)) from original
+        cleanup=True;raise
+    finally:
+        pending.unlink(missing_ok=True);receipt_pending.unlink(missing_ok=True)
+        if cleanup:
+            for backup in backups.values():backup.unlink(missing_ok=True)
 
 def probe_media(path):
     r=command(['ffprobe','-v','error','-show_streams','-show_format','-of','json',path])
@@ -15,8 +78,8 @@ def probe_media(path):
 def frames_ok(path,frames):
     try:
         s=next(s for s in probe_media(path)['streams'] if s['codec_type']=='video')
-        return int(s['nb_frames'])==frames and int(s['width'])==1920 and int(s['height'])==1080
-    except (ValueError,KeyError,StopIteration,OSError): return False
+        return int(s['nb_frames'])==frames and int(s['width'])==1920 and int(s['height'])==1080 and s['r_frame_rate'] in ('30/1','60/2')
+    except (ValueError,KeyError,StopIteration,OSError,TypeError): return False
 
 DARK_MAX=80  # 다크 배경은 약 22/255. 라이트 배경은 200 이상이다.
 
@@ -74,8 +137,14 @@ def probe_backends(run):
     atomic_json(Path(run)/'verification/backend-probes.json',{'probes':candidates,'chosen':result})
     return result
 
+def cpu_backend(entry,options):
+    return dict(encoder='libx264',workers=1,capture_gpu=False,decode_gpu=False,
+                hyperframes_entry=str(Path(entry).resolve()),render_options=validate_render_options(options))
+
 def render_parts(parts,run,backend):
-    run=Path(run); require_dark_entries(parts,run); dest=run/'renders/parts'; dest.mkdir(parents=True,exist_ok=True)
+    run=Path(run)
+    options=validate_render_options(backend['render_options']) if 'render_options' in backend else load_render_options(run)
+    require_dark_entries(parts,run); dest=run/'renders/parts'; dest.mkdir(parents=True,exist_ok=True)
     entry=Path(backend['hyperframes_entry']).resolve()
     if not entry.is_file(): raise ValueError('HyperFrames Node entry is missing')
     versions=dict(backend.get('tool_versions',{}))
@@ -85,24 +154,58 @@ def render_parts(parts,run,backend):
     dependencies={p.relative_to(run).as_posix():file_hash(p) for p in run.rglob('*')
                   if p.is_file() and p.suffix in ('.html','.css','.js','.svg','.png','.jpg','.jpeg','.webp','.woff2')
                   and p.relative_to(run).parts[0] not in ('renders','verification','work')}
-    def render(part):
+    renderer={name:file_hash(Path(__file__).with_name(name)) for name in ('render.py','render_options.py')}
+    outputs=[]
+    for part in parts:
         out=dest/(part['id']+'.mp4'); receipt=out.with_suffix('.json')
-        key=digest({'part':part,'dependencies':dependencies,'backend':stable_backend(backend),'versions':versions})
+        key=digest({'part':part,'dependencies':dependencies,'render_options':options,'versions':versions,'renderer':renderer})
+        old=None
         if receipt.exists():
-            old=json.loads(receipt.read_text(encoding='utf-8'))
-            if cache_valid(out,old,key) and frames_ok(out,part['frames']): return out
-        pending=out.with_name(out.stem+'.pending.mp4')
-        args=['node',entry,'render','--composition',part['entry'],'--quality','delivery','--workers','1','--output',str(pending)]
-        if backend['encoder']=='h264_nvenc': args+=['--gpu']
-        if backend.get('capture_gpu'): args+=['--browser-gpu']
-        r=command(args,run,timeout=3600)
-        out.with_suffix('.log').write_text(r.stdout+'\n'+r.stderr,encoding='utf-8')
-        if r.returncode or not frames_ok(pending,part['frames']): raise RuntimeError('scene render failed: '+part['id'])
-        os.replace(pending,out)
-        atomic_json(receipt,{'key':key,'output_sha256':file_hash(out),'frames':part['frames']})
-        return out
-    with ThreadPoolExecutor(max_workers=max(1,min(backend.get('workers',1),len(parts)))) as pool:
-        return list(pool.map(render,parts))
+            try: old=json.loads(receipt.read_text(encoding='utf-8'))
+            except (OSError,ValueError): pass
+        if isinstance(old,dict) and cache_valid(out,old,key) and frames_ok(out,part['frames']):
+            outputs.append(out); continue
+        out.with_name(out.stem+'.pending.mp4').unlink(missing_ok=True) # clean legacy abandoned output
+        pending=out.with_name(out.stem+'.'+uuid.uuid4().hex+'.pending.mp4')
+        args=[str(a) for a in ['node',entry,'render','--composition',part['entry'],'--quality','delivery',
+                              '--workers',options['workers'],'--experimental-fast-capture=false','--output',pending]]
+        started=time.monotonic()
+        try:
+            try: r=command(args,run,timeout=3600)
+            except subprocess.TimeoutExpired as ex:
+                def text(value): return value.decode('utf-8',errors='replace') if isinstance(value,bytes) else (value or '')
+                out.with_suffix('.log').write_text(text(ex.stdout)+'\n'+text(ex.stderr)+'\nrender timeout',encoding='utf-8')
+                raise
+            out.with_suffix('.log').write_text(r.stdout+'\n'+r.stderr,encoding='utf-8')
+            if r.returncode or not pending.is_file() or not frames_ok(pending,part['frames']):
+                raise RuntimeError('scene render failed: '+part['id'])
+            record={'key':key,'output_sha256':file_hash(pending),'frames':part['frames'],
+                    'render_options':options,'args':args,'elapsed_seconds':time.monotonic()-started,'versions':versions}
+            commit_media_receipt(pending,record,out,receipt)
+            outputs.append(out)
+        finally: pending.unlink(missing_ok=True)
+    return outputs
+
+def render_receipt_data(run,backend,parts,master):
+    records=[json.loads(Path(p).with_suffix('.json').read_text(encoding='utf-8')) for p in parts]
+    return dict(schema_version=1,render_options=backend['render_options'],parts=records,
+                master_sha256=file_hash(master))
+
+def write_render_receipt(run,backend,parts,master):
+    path=Path(run)/'verification/render-receipt.json'
+    atomic_json(path,render_receipt_data(run,backend,parts,master))
+    return path
+
+def mux_with_receipt(parts,audio,timeline,destination,backend,*,captured=None):
+    destination=Path(destination)
+    pending=destination.with_name(destination.stem+'.'+uuid.uuid4().hex+'.pending.mp4')
+    receipt=destination.parent/'verification/render-receipt.json'
+    try:
+        mux(parts,audio,timeline,pending)
+        data=render_receipt_data(destination.parent,backend,parts if captured is None else captured,pending)
+        commit_media_receipt(pending,data,destination,receipt)
+        return receipt
+    finally:pending.unlink(missing_ok=True)
 
 def mux(parts,audio,timeline,destination):
     destination=Path(destination); run=destination.parent; work=run/'work/mux'; work.mkdir(parents=True,exist_ok=True)
