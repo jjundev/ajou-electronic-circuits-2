@@ -101,3 +101,15 @@ class CliTest(unittest.TestCase):
             with patch.object(RunStore,'recover',return_value='render'),patch('video.render_parts',return_value=[]),patch('lib.render.mux',side_effect=fake_mux),patch('video.mux',side_effect=fake_mux),patch('lib.render.atomic_json',side_effect=OSError('receipt failed')):
                 self.assertEqual(main(['render','--run',str(run),'--hyperframes-entry','unused']),1)
             self.assertEqual((run/'review.mp4').read_bytes(),b'old');self.assertEqual(__import__('json').loads((run/'verification/render-receipt.json').read_text()),{'old':True})
+
+    def test_auto_flag_and_legacy_render_policy_persistence(self):
+        from video import parser
+        from lib.cache import atomic_json
+        from lib.state import RunStore
+        import json
+        self.assertIn('auto',parser()._subparsers._group_actions[0].choices['render'].format_help())
+        self.assertEqual(parser().parse_args(['render','--run','r','--render-workers','auto']).render_workers,'auto')
+        with tempfile.TemporaryDirectory() as d:
+            run=Path(d);atomic_json(run/'source/render-options.json',dict(schema_version=1,workers=6,encoder='cpu',browser_gpu='auto',fast_capture=False))
+            with patch.object(RunStore,'recover',return_value='composition'):self.assertEqual(main(['render','--run',d]),1)
+            self.assertEqual(json.loads((run/'source/render-options.json').read_text())['workers'],'auto')

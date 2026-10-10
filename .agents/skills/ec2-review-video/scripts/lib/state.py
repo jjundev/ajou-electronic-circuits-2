@@ -30,7 +30,7 @@ def stage_fingerprint(run,stage):
     if stage=='composition':
         files['renderer/composition.py']=file_hash(Path(__file__).with_name('composition.py'))
     if stage=='render':
-        for name in ('render_options.py','render.py'):
+        for name in ('render_options.py','render.py','workload.py'):
             files['renderer/'+name]=file_hash(Path(__file__).with_name(name))
     return digest({'files':files,'config':config})
 

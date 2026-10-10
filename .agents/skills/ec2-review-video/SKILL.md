@@ -92,10 +92,10 @@ prepare --repo REPO --from-run OLD_RUN --voice Charon으로 별도 RUN을 만든
 
 ## 렌더링 성능 설정
 
-Apple M5(물리 CPU 10개, RAM 16 GiB 이상)는 장면 캡처 작업자 6개, 그 외 장비는 2개가 기본이다. 장면은 순서대로 처리하며 CPU 인코딩·브라우저 GPU 자동·fast capture 비활성·delivery 품질을 사용한다. `render`와 `revoice`의 `--render-workers 1..6`으로 덮어쓸 수 있다. CLI 값 > RUN의 `source/render-options.json` > 장비 기본값 순이다. 저장 파일이 손상되면 먼저 수정해야 한다.
+기본은 `workers=auto`이며 **장면별로 정지 구간이 많으면 2개, 동작 구간이 많으면 6개**를 선택한다. 동작 JSON에서 도착 속성의 값이 시작값과 달라지는 구간을 타임라인에 맞춰 합산하고, 겹친 구간은 한 번만 센다. 검증된 Apple M5(물리 CPU10, RAM16GiB 이상)에서 30초 이상 장면의 동작 비중이 50%를 넘으면6개, 나머지는2개다. 짧은 장면·분석 정보 누락·미검증 장비는2개를 선택한다. 이 기준은 동작 메타데이터에 따른 휴리스틱이며 모든 영상의 최적값을 보장하지 않는다.
 
-설정은 음성 config와 별도이며 변경 시 render 이후만 재검증한다. 기존 음성·조립 결과를 재사용한다. 장면 영수증과 `verification/render-receipt.json`에 실제 명령·설정·시간·hash를 기록한다. 재음성의 retime 구간은 기존 프레임을 변환하고 재렌더 장면에만 캡처 작업자를 적용한다.
+`render`/`revoice --render-workers auto`로 자동 선택, `--render-workers 1..6`으로 수동 고정한다. CLI > 저장값 > auto 기본값 순이다. schema2 저장 파일은 auto/수동 숫자를 유지한다. 이전 schema1은 기본값과 수동값의 구분을 저장하지 않았으므로 이번 자동 선택 요청에 맞춰 auto로 전환한다. 이전 숫자 고정이 필요하면 다시 CLI로 지정한다. 손상된 저장 파일은 override로 숨기지 않는다. resume은 파일을 바꾸지 않는다.
 
-짧고 대부분 정지한 장면은 workers6의 초기화 비용으로 더 느릴 수 있다. 그런 RUN은 `--render-workers 2`로 비교해 선택한다. 프레임·음성 동일성 검증과 속도 결과를 구분한다.
+CPU 인코딩·브라우저 GPU 자동·fast capture false·delivery1080p30과 순차 장면 처리를 유지한다. 정책 변경은 render 이후만 무효화하며 TTS·화면 조립 결과는 재사용한다. 각 장면 영수증과 verification/render-receipt.json에 실제 작업자 수·선택 이유·동작 비율·명령·시간·hash를 기록한다. 재음성은 재렌더 장면만 분석하고 retime 구간은 기존 프레임을 변환한다.
 
-글꼴 초기 그리기 차이를 막기 위해 화면 조립 시 document.fonts.ready 이후 타임라인을 등록한다. 이전 코드로 조립한 RUN은 composition 코드 지문 변경으로 assemble을 한 번 다시 실행해야 한다. 음성은 재생성하지 않는다.
+글꼴 준비 보정이 적용되기 전 RUN만 assemble을 한 번 다시 해야 한다. 이 자동 선택 기능 자체는 기존 화면을 다시 조립하지 않는다.
