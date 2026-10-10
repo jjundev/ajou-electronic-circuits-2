@@ -10,4 +10,4 @@ manifest.scenes의 template_kind는 note/review다. source/scene-fragments/<scen
 
 stage_assets에는 fonts/Pretendard-{Regular,SemiBold,Bold}.woff2와 vendor/gsap.min.js가 있는 로컬 asset 폴더를 넘긴다. 기본은 이 스킬의 assets/runtime이며 출처/라이선스/해시도 보존한다. 수식이 있으면 local vendor/katex에 katex.min.js, katex.min.css, auto-render.min.js와 fonts를 제공한다. 누락을 네트워크 fallback으로 감추지 않는다.
 
-회로 SVG 연결·소자·노드를 유지하고 위젯은 원래 식을 확인한 뒤 대표 상태를 결정적 motion으로 바꾼다. 직관 → 실제 회로 → 변화 원인 → 필요한 식 → 조건을 설명한다. 기호의 한국어 발음은 defaults.pronunciation에서 TTS payload에만 적용하며 화면 수식은 보존한다. [회로 검토](circuit-semantics.md)를 함께 읽는다.
+회로 SVG 연결·소자·노드를 유지하고 위젯은 원래 식을 확인한 뒤 대표 상태를 결정적 motion으로 바꾼다. 직관 → 실제 회로 → 변화 원인 → 필요한 식 → 조건을 설명한다. 노트에 `#why-circuit` 페이지가 있으면 첫 segment·장면은 그 선수 항목으로 "이 회로를 왜 쓰는가"를 15–25초 안에 연다: 풀려는 문제와 단순 해법의 한계를 보여 주고, 이 영상의 회로가 그 한계를 어떻게 넘는지 한 문장으로 이어 간다. 노트 페이지의 비유·`fig-why.svg` 흐름도를 재사용할 수 있으며 유도는 본론에 둔다. 기호의 한국어 발음은 defaults.pronunciation에서 TTS payload에만 적용하며 화면 수식은 보존한다. [회로 검토](circuit-semantics.md)를 함께 읽는다.

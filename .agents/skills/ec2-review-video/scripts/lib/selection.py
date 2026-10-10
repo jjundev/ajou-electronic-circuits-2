@@ -6,6 +6,25 @@ from .manifest import require_ready
 
 class SelectionError(ValueError): pass
 
+WHY_TOPIC='why-circuit'
+
+def _why_sources(inputs):
+    """Note sources that carry the review-pack opening page (id="why-circuit")."""
+    return {r['id'] for r in inputs['files'] if r['kind'] in ('note-html','note-md')
+            and 'id="'+WHY_TOPIC+'"' in Path(r['path']).read_text(encoding='utf-8-sig')}
+
+def _check_why(topics,clips,inputs):
+    sources=_why_sources(inputs)
+    if not sources: return
+    why=[rid for rid,t in topics.items() if t['source_id'] in sources and WHY_TOPIC in t['locator']]
+    if not why: raise SelectionError('note has a why-circuit page: inventory it as a topic with locator #why-circuit')
+    for rid in why:
+        if topics[rid]['decision'] not in (('context',) if clips else ('context','text')):
+            raise SelectionError('why-circuit topic must be context (text only when no clip is selected): '+rid)
+    for clip in clips.values():
+        if not set(why)&set(clip['prerequisite_ids']):
+            raise SelectionError('clip must list a why-circuit topic in prerequisite_ids: '+clip['id'])
+
 def filename(title):
     name=unicodedata.normalize('NFC',title)
     name=re.sub(r'[<>:"/\\|?*\x00-\x1f]','',name).strip(' .')
@@ -99,6 +118,7 @@ def require_selection(plan,inputs=None):
         raise SelectionError('an animation topic is unassigned')
     if not {rid for rid,r in topics.items() if r['decision']=='context'}<=context:
         raise SelectionError('context topic has no consuming clip')
+    if inputs is not None: _check_why(topics,clips,inputs)
     return plan
 
 def validate_clip_manifest(plan,clip_id,manifest):

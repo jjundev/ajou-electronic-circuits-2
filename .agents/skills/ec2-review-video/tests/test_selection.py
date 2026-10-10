@@ -111,6 +111,62 @@ class SelectionTest(unittest.TestCase):
             require_selection(plan)
 
 
+def why_fixture(repo, count=2):
+    folder=repo/'복습노트/1001'; folder.mkdir(parents=True)
+    (folder/'정리노트_1001_test.md').write_text('<a id="why"></a>\n## 들어가며\n<a id="why-circuit"></a>\n### 왜 이런 회로를 쓸까\n차동쌍은 잡음을 지운다.\n# 차동쌍\n전류 분배\n')
+    inputs=discover(repo,'1001'); source=inputs['files'][0]
+    topics=[{'id':'r-why','claim':'차동쌍은 공통 잡음을 지우려고 쓴다.','source_id':source['id'],
+             'locator':'#why-circuit','kind':'concept','decision':'context' if count else 'text',
+             'reason':'모든 영상 앞에 둘 회로의 동기다.'}]
+    topics+=[{'id':f'r-{i}','claim':f'개념 {i}','source_id':source['id'],'locator':f'#topic-{i}',
+              'kind':'concept','decision':'animate','reason':'전류 분배 변화를 보여준다.'} for i in range(count)]
+    plan={'schema_version':1,'mode':'selective','range':'1001','sources':inputs['files'],
+          'source_reviews':[{'source_id':source['id'],'status':'reviewed','reason':'왜 페이지와 본문 전체 대조'}],
+          'topics':topics,'clips':[{'id':f'clip-{i}','title':f'주제 {i}','learning_question':f'왜 개념 {i}의 변화가 생길까',
+            'requirement_ids':[f'r-{i}'],'prerequisite_ids':['r-why'],'visual_states':['변화 전','변화 후'],
+            'target_duration_seconds':90} for i in range(count)]}
+    return inputs,plan
+
+
+class WhyPageSelectionTest(unittest.TestCase):
+    def test_why_page_as_shared_prerequisite_is_valid(self):
+        for count in (0,1,2):
+            with self.subTest(count=count), tempfile.TemporaryDirectory() as d:
+                inputs,plan=why_fixture(Path(d),count); require_selection(plan,inputs)
+
+    def test_note_with_why_page_requires_inventoried_why_topic(self):
+        with tempfile.TemporaryDirectory() as d:
+            inputs,plan=why_fixture(Path(d),1)
+            plan['topics'][0]['locator']='#topic-x'
+            for clip in plan['clips']: clip['prerequisite_ids']=['r-why']
+            with self.assertRaisesRegex(ValueError,'why-circuit'):require_selection(plan,inputs)
+
+    def test_every_clip_needs_why_prerequisite(self):
+        with tempfile.TemporaryDirectory() as d:
+            inputs,plan=why_fixture(Path(d),2); plan['clips'][1]['prerequisite_ids']=[]
+            with self.assertRaisesRegex(ValueError,'why-circuit'):require_selection(plan,inputs)
+
+    def test_why_topic_is_never_its_own_video(self):
+        with tempfile.TemporaryDirectory() as d:
+            inputs,plan=why_fixture(Path(d),1)
+            bad=copy.deepcopy(plan); bad['topics'][0]['decision']='text'; bad['clips'][0]['prerequisite_ids']=[]
+            with self.assertRaisesRegex(ValueError,'why-circuit'):require_selection(bad,inputs)
+            bad=copy.deepcopy(plan); bad['topics'][0]['decision']='animate'
+            bad['clips'][0]['requirement_ids']=['r-0','r-why']; bad['clips'][0]['prerequisite_ids']=[]
+            with self.assertRaisesRegex(ValueError,'why-circuit'):require_selection(bad,inputs)
+
+    def test_notes_without_why_page_keep_old_contract(self):
+        with tempfile.TemporaryDirectory() as d:
+            inputs,plan=fixture(Path(d),2); require_selection(plan,inputs)
+
+    def test_clip_manifest_must_carry_why_requirement(self):
+        with tempfile.TemporaryDirectory() as d:
+            _,plan=why_fixture(Path(d),1); m=manifest_for(plan,plan['clips'][0])
+            validate_clip_manifest(plan,'clip-0',m)
+            m['topics'][0]['requirements']=[r for r in m['topics'][0]['requirements'] if r['id']!='r-why']
+            with self.assertRaises(ValueError):validate_clip_manifest(plan,'clip-0',m)
+
+
 class BatchTest(unittest.TestCase):
     def test_scope_checks_actual_source_bytes_and_budget_is_shared(self):
         with tempfile.TemporaryDirectory() as d:
