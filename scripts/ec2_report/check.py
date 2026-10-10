@@ -10,7 +10,8 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
-AI_WORDS = re.compile(r"Claude|ChatGPT|GPT-\d|Gemini|생성형|LLM|(?<![A-Za-z])AI(?![A-Za-z])")
+AI_WORDS = re.compile(r"Claude|ChatGPT|(?<![A-Za-z])GPT(?![A-Za-z])|Gemini|OpenAI|Anthropic|Copilot"
+                      r"|생성형|인공지능|LLM|(?<![A-Za-z])AI(?![A-Za-z])")
 
 _H5 = re.compile(r"^#{5,}\s")
 _HEADING = re.compile(r"^#{1,6}\s")
@@ -44,16 +45,40 @@ def _is_block_fence(line: str) -> bool:
     return line.strip() == "$$"
 
 
+def _is_code_fence(line: str) -> bool:
+    return line.lstrip().startswith(("```", "~~~"))
+
+
 def _block_mask(lines: list[str]) -> list[bool]:
-    """줄마다 `$$` 블록의 구분 줄이거나 그 안쪽이면 True."""
-    mask, inside = [], False
+    """줄마다 `$$` 수식 블록이나 코드 펜스의 구분 줄·안쪽이면 True."""
+    mask, state = [], None
     for line in lines:
-        if _is_block_fence(line):
+        if state is None and _is_code_fence(line):
+            state = "code"
             mask.append(True)
-            inside = not inside
+        elif state is None and _is_block_fence(line):
+            state = "math"
+            mask.append(True)
+        elif state == "code" and _is_code_fence(line):
+            state = None
+            mask.append(True)
+        elif state == "math" and _is_block_fence(line):
+            state = None
+            mask.append(True)
         else:
-            mask.append(inside)
+            mask.append(state is not None)
     return mask
+
+
+def _math_fences(lines: list[str]) -> int:
+    """코드 펜스 밖의 단독 `$$` 줄 개수."""
+    n, in_code = 0, False
+    for line in lines:
+        if _is_code_fence(line):
+            in_code = not in_code
+        elif not in_code and _is_block_fence(line):
+            n += 1
+    return n
 
 
 def _cells(line: str) -> list[str]:
@@ -91,7 +116,7 @@ def check_markdown(path: Path) -> list[Finding]:
     mask = _block_mask(lines)
     out: list[Finding] = []
 
-    fences = sum(1 for line in lines if _is_block_fence(line))
+    fences = _math_fences(lines)
     if fences % 2:
         out.append(Finding("error", name,
             f"단독 $$ 줄이 {fences}개다 — 수식 블록이 닫히지 않았다"))

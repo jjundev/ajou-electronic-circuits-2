@@ -136,6 +136,16 @@ class PushTests(SyncTestBase):
         self.assertIn("ChatGPT", out.getvalue())
 
 
+    def test_cli_missing_report_returns_3(self):
+        self.p.report_md.unlink()
+        with mock.patch.object(sync.config, "find_root", return_value=self.root), \
+             mock.patch.object(notion, "_request"):
+            out = io.StringIO()
+            with redirect_stdout(out):
+                self.assertEqual(sync.main(["check-images", "--n", "1"]), 3)
+                self.assertEqual(sync.main(["push", "--n", "1"]), 3)
+
+
 class NoParentTests(SyncTestBase):
     parent = None
 

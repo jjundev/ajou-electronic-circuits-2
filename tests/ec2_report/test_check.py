@@ -118,6 +118,14 @@ class CheckMarkdownTests(unittest.TestCase):
     def test_bold_or_escaped_arrow_allowed(self):
         self.assertEqual(self.errors("**▶** 풀이\n\n\\▶ 풀이\n\n본문 ▶ 가운데\n"), [])
 
+    def test_code_fence_lines_are_skipped(self):
+        text = "넷리스트:\n\n```spice\nM1 x in1 s 0 CMOSN W=65u\nM2 y in2 s 0 CMOSN W=65u\necho $HOME\n<tag>\n```\n"
+        self.assertEqual(self.errors(text), [])
+
+    def test_more_ai_words_blocked(self):
+        for w in ("GPT 로 검산", "OpenAI", "Anthropic", "Copilot", "인공지능"):
+            self.assertEqual(len(self.errors(w + "\n")), 1, w)
+
     def test_ai_inside_word_allowed(self):
         self.assertEqual(self.errors("MAIN 과 RAIL 은 낱말이다.\n"), [])
 

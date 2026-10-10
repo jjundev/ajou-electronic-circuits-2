@@ -91,6 +91,24 @@ class FindBodyTests(MergeTestBase):
         self.assertEqual(src.origin, z)
         self.assertEqual(len(PdfReader(src.path).pages), 2)
 
+    def test_find_body_notion_export_zip_matches_inner_pdf(self):
+        z = self.dl / "Export-1a2b3c4d.zip"
+        with zipfile.ZipFile(z, "w") as zf:
+            name = unicodedata.normalize("NFD", "전자회로2 설계과제1 보고서 v4 3f5b06d263bc80a8.pdf")
+            zf.writestr(name, pdf_bytes(2))
+            zf.writestr("__MACOSX/._" + name, b"x")
+        blank_pdf(self.dl / "전자회로2 설계과제1 보고서 v3.pdf", 1)
+        src = self.find()
+        self.assertEqual(src.origin, z)
+        self.assertEqual(len(PdfReader(src.path).pages), 2)
+
+    def test_find_body_unrelated_zip_ignored(self):
+        z = self.dl / "Export-ffff.zip"
+        with zipfile.ZipFile(z, "w") as zf:
+            zf.writestr("다른 문서.pdf", pdf_bytes(1))
+        with self.assertRaises(FileNotFoundError):
+            self.find()
+
     def test_find_body_zip_two_pdfs_rejected(self):
         z = self.dl / "전자회로2 설계과제1 보고서 v3.zip"
         with zipfile.ZipFile(z, "w") as zf:

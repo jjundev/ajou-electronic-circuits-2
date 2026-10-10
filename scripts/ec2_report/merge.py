@@ -36,11 +36,28 @@ def _default_dirs(n: int, root: Path) -> list[Path]:
     return [config.paths(n, root, info).report_md.parent, Path.home() / "Downloads"]
 
 
+def _zip_pdfs(zf: zipfile.ZipFile) -> list[str]:
+    """zip 안 PDF 멤버. Finder 가 붙이는 `__MACOSX/` 와 `._*` 는 뺀다."""
+    return [m for m in zf.namelist()
+            if m.lower().endswith(".pdf") and not m.startswith("__MACOSX/")
+            and not Path(m).name.startswith("._")]
+
+
+def _zip_inner_name(path: Path) -> str | None:
+    """노션 내보내기 zip(`Export-<id>.zip`)은 이름에 제목이 없다 — PDF 가 1개면 그 이름."""
+    try:
+        with zipfile.ZipFile(path) as zf:
+            pdfs = _zip_pdfs(zf)
+    except zipfile.BadZipFile:
+        return None
+    return _nfc(Path(pdfs[0]).name) if len(pdfs) == 1 else None
+
+
 def _open_source(origin: Path) -> BodySource:
     if origin.suffix.lower() != ".zip":
         return BodySource(origin, origin)
     with zipfile.ZipFile(origin) as zf:
-        pdfs = [m for m in zf.namelist() if m.lower().endswith(".pdf") and not m.endswith("/")]
+        pdfs = _zip_pdfs(zf)
         if len(pdfs) != 1:
             raise ValueError(f"zip 안의 PDF 가 {len(pdfs)}개입니다 (1개여야 함): {origin}")
         out = Path(tempfile.mkdtemp(prefix="ec2_body_")) / "body.pdf"
@@ -60,8 +77,11 @@ def find_body(n: int, root: Path, search_dirs: list[Path] | None = None) -> Body
             continue
         for f in Path(d).iterdir():
             name = _nfc(f.name)
-            if (f.is_file() and f.suffix.lower() in (".pdf", ".zip")
-                    and key in name and name not in excluded):
+            if not f.is_file() or f.suffix.lower() not in (".pdf", ".zip") or name in excluded:
+                continue
+            if key not in name and f.suffix.lower() == ".zip":
+                name = _zip_inner_name(f) or ""
+            if key in name:
                 m = _VERSION.search(name)
                 found.append((int(m.group(1)) if m else 0, f.stat().st_mtime, f))
     if not found:

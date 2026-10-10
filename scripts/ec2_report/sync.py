@@ -4,7 +4,7 @@
     python3 -m scripts.ec2_report.sync check-images --n 1
     python3 -m scripts.ec2_report.sync recover --n 1
 
-종료 코드: 0 성공, 1 그림 빈자리 있음, 2 md 검사 error 로 막힘, 3 노션·설정 오류.
+종료 코드: 0 성공, 1 그림 빈자리 있음, 2 md 검사 error 로 막힘, 3 노션·설정·파일 오류.
 """
 from __future__ import annotations
 
@@ -149,6 +149,9 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     except notion.NotionError as e:
         print(f"노션 오류: {e}")
+        return 3
+    except (OSError, ValueError, KeyError) as e:
+        print(f"설정 오류: {e}")
         return 3
 
 
