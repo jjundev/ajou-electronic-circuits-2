@@ -49,3 +49,25 @@ class StateTest(unittest.TestCase):
             finish(run,'voice',[run/'source/audio.json'])
             atomic_json(run/'config.json',{'voice':'Charon'})
             self.assertEqual(RunStore(run).recover(),'voice')
+
+    def test_render_options_only_invalidate_render_onwards(self):
+        from lib.state import stage_fingerprint
+        from video import finish
+        with tempfile.TemporaryDirectory() as d:
+            run=Path(d);atomic_json(run/'manifest.json',{'segments':[]});atomic_json(run/'source/parts.json',{'parts':[]})
+            atomic_json(run/'source/render-options.json',{'workers':2});(run/'review.mp4').write_bytes(b'previous')
+            finish(run,'voice',[run/'manifest.json']);finish(run,'composition',[run/'source/parts.json']);finish(run,'render',[run/'review.mp4'])
+            fingerprints={s:stage_fingerprint(run,s) for s in ('voice','timing','composition','render')}
+            atomic_json(run/'source/render-options.json',{'workers':6})
+            for s in ('voice','timing','composition'):self.assertEqual(fingerprints[s],stage_fingerprint(run,s))
+            self.assertNotEqual(fingerprints['render'],stage_fingerprint(run,'render'))
+            self.assertEqual(RunStore(run).recover(),'render');self.assertEqual(RunStore(run).load()['stages']['voice']['status'],'passed')
+    def test_composition_code_change_requires_reassemble_keeps_voice(self):
+        from video import finish
+        from lib.cache import file_hash as original
+        with tempfile.TemporaryDirectory() as d:
+            run=Path(d);atomic_json(run/'manifest.json',{'segments':[]});atomic_json(run/'source/parts.json',{'parts':[]});(run/'review.mp4').write_bytes(b'previous')
+            finish(run,'voice',[run/'manifest.json']);finish(run,'composition',[run/'source/parts.json']);finish(run,'render',[run/'review.mp4'])
+            def changed(path):return 'changed-composition-code' if Path(path).name=='composition.py' else original(path)
+            with patch('lib.state.file_hash',side_effect=changed):self.assertEqual(RunStore(run).recover(),'composition')
+            self.assertEqual(RunStore(run).load()['stages']['voice']['status'],'passed')

@@ -77,3 +77,18 @@ class CompositionTest(unittest.TestCase):
             text=(run/'source/compositions/scene-dm.html').read_text()
             self.assertIn('renderMathInElement',text);self.assertIn('assets/vendor/katex/katex.min.js',text)
             self.assertIn('.video-scene{--bg:',text)
+
+    def test_timeline_registration_waits_for_fonts(self):
+        import re,subprocess
+        from _util import SKILL
+        from lib.composition import stage_assets
+        with tempfile.TemporaryDirectory() as d:
+            run=Path(d);fixture=SKILL/'tests/fixtures/circuit-scene';m=json.loads((fixture/'manifest.json').read_text());frag=run/'source/scene-fragments';frag.mkdir(parents=True)
+            (frag/'scene-dm.html').write_text((fixture/'scene.html').read_text());(frag/'scene-dm.motion.json').write_text((fixture/'scene.motion.json').read_text())
+            stage_assets(SKILL/'assets/runtime',run);theme=snapshot_theme(ROOT/'.claude/skills/ec2-review-pack',run)
+            t=build_timeline(m,[dict(id='seg-dm',samples=24000,rate=24000,path='voice.wav')]);parts=assemble(m,t,theme,run)
+            for path in [run/parts[0]['entry'],run/'source/compositions/scene-dm.html']:
+                code=next(x for x in re.findall(r'<script>(.*?)</script>',path.read_text(),re.S) if 'const tl=gsap.timeline' in x)
+                js="const vm=require('node:vm');const assert=require('node:assert/strict');\nlet release;let builds=0;const frames=[];const window={};\nconst context={window,document:{fonts:{ready:new Promise(resolve=>release=resolve)}},requestAnimationFrame:cb=>frames.push(cb),gsap:{timeline:()=>{builds++;return {fromTo(){}}}}};\n(async()=>{vm.runInNewContext(CODE,context);assert.equal(builds,0);assert.equal(window.__timelines,undefined);\nrelease();await new Promise(resolve=>setImmediate(resolve));assert.equal(builds,1);assert.ok(window.__timelines['scene-dm']);})().catch(e=>{console.error(e);process.exitCode=1;});\n"
+                result=subprocess.run(['node','-'],input='const CODE='+json.dumps(code)+';'+js,capture_output=True,text=True,timeout=10)
+                self.assertEqual(result.returncode,0,result.stderr)

@@ -89,3 +89,13 @@ prepare --repo REPO --from-run OLD_RUN --voice Charon으로 별도 RUN을 만든
 전체 복습/재음성은 `prepare --repo REPO RANGE` 또는 `prepare --repo REPO --from-run OLD_RUN --voice NAME`으로 만든다. 제작 전에 RUN을 `<기간>_제작자료/실행/` 안으로 옮기고 이후 명령에는 옮긴 절대 경로를 사용한다. latest를 비롯한 이전 결과는 모든 검사 완료 전 유지한다. 검증된 마스터를 날짜 폴더의 자연스러운 제목으로 내보내기 전 파일 해시를 확인한다. 이전 제목 파일은 제작자료/이전버전에 보존하고 기존 review.mp4 상대 링크도 보존된 원본으로 다시 연결한다. RUN의 마스터를 내보낸 영상의 상대 링크로 바꾼 뒤 review_fingerprint와 증거 해시를 다시 대조한다. 단일 latest.json은 제작자료 안에서 RUN의 상대 경로를 가리키게 정리한다. 마스터 검증·내보내기 후 "자막" 절의 순서로 자막본만 남긴다. 자동 묶음 제작은 이 수작업 대신 prepare-set/publish-set을 사용한다.
 
 [개발 수용 기록](references/acceptance.md)은 로컬 합성 PCM과 실음성 검증의 범위를 구분한다.
+
+## 렌더링 성능 설정
+
+Apple M5(물리 CPU 10개, RAM 16 GiB 이상)는 장면 캡처 작업자 6개, 그 외 장비는 2개가 기본이다. 장면은 순서대로 처리하며 CPU 인코딩·브라우저 GPU 자동·fast capture 비활성·delivery 품질을 사용한다. `render`와 `revoice`의 `--render-workers 1..6`으로 덮어쓸 수 있다. CLI 값 > RUN의 `source/render-options.json` > 장비 기본값 순이다. 저장 파일이 손상되면 먼저 수정해야 한다.
+
+설정은 음성 config와 별도이며 변경 시 render 이후만 재검증한다. 기존 음성·조립 결과를 재사용한다. 장면 영수증과 `verification/render-receipt.json`에 실제 명령·설정·시간·hash를 기록한다. 재음성의 retime 구간은 기존 프레임을 변환하고 재렌더 장면에만 캡처 작업자를 적용한다.
+
+짧고 대부분 정지한 장면은 workers6의 초기화 비용으로 더 느릴 수 있다. 그런 RUN은 `--render-workers 2`로 비교해 선택한다. 프레임·음성 동일성 검증과 속도 결과를 구분한다.
+
+글꼴 초기 그리기 차이를 막기 위해 화면 조립 시 document.fonts.ready 이후 타임라인을 등록한다. 이전 코드로 조립한 RUN은 composition 코드 지문 변경으로 assemble을 한 번 다시 실행해야 한다. 음성은 재생성하지 않는다.
