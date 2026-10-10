@@ -109,6 +109,9 @@ def check_markdown(path: Path) -> list[Finding]:
             out.append(Finding("error", where, "h5 이상 헤딩은 노션이 h4 로 강등한다"))
         if _HEADING.match(line) and "`" in line:
             out.append(Finding("error", where, "헤딩 안 백틱은 노션에서 코드 서식으로 남는다"))
+        if line.startswith("▶"):
+            out.append(Finding("error", where,
+                "줄 맨 앞 ▶ 는 노션이 토글 블록으로 바꾼다 — **▶** 로 쓴다 (docs/notion-probe.md)"))
         if _RAW_HTML.match(line):
             out.append(Finding("error", where, "열 0 의 원시 HTML 은 노션이 받지 않는다"))
         footnotes += len(_FOOTNOTE.findall(line))

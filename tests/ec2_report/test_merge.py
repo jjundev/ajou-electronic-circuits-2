@@ -10,7 +10,7 @@ from unittest import mock
 
 from pypdf import PdfReader, PdfWriter
 
-from _util import REPO
+from _util import make_root
 from scripts.ec2_report import config, merge
 from scripts.ec2_report.check import AI_WORDS
 
@@ -37,12 +37,8 @@ def pdf_bytes(pages: int) -> bytes:
 class MergeTestBase(unittest.TestCase):
     def setUp(self):
         self._d = tempfile.TemporaryDirectory()
-        self.root = Path(self._d.name)
-        (self.root / ".claude").mkdir()
-        (self.root / ".claude" / "과목정보.md").write_text(
-            (REPO / ".claude" / "과목정보.md").read_text(encoding="utf-8"), encoding="utf-8")
+        self.root = make_root(self._d.name)
         self.report = self.root / "설계과제" / "과제1" / "report"
-        self.report.mkdir(parents=True)
         self.dl = self.root / "Downloads"
         self.dl.mkdir()
         self.paths = config.paths(1, self.root, config.load_course_info(self.root))
@@ -122,7 +118,7 @@ class MergeTests(MergeTestBase):
         self.assertFalse(body.exists())
         meta = PdfReader(r["output"]).metadata
         self.assertEqual(meta.title, "전자회로2 설계과제1 보고서")
-        self.assertEqual(meta.author, "신현준")
+        self.assertEqual(meta.author, "홍길동")
         self.assertEqual(set(meta.keys()), {"/Title", "/Author"})
         self.assertIsNone(AI_WORDS.search(" ".join(str(v) for v in meta.values())))
 

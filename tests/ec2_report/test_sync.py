@@ -6,16 +6,18 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-from _util import REPO
+from _util import make_root
 from scripts.ec2_report import config, notion, sync
 
 BODY = """# 설계 과제 1: MOS 차동 증폭기
+
+주어진 조건을 이용하여 다음 차동 증폭기를 설계하시오.
 
 # 1. Design Problem
 
 **(a) 이득을 구하라.**
 
-▶ 반쪽 회로에서 $g_m$ 으로 구한다.
+**▶** 반쪽 회로에서 $g_m$ 으로 구한다.
 
 ![그림 1](../figures/fig1.png)
 """
@@ -26,13 +28,7 @@ class SyncTestBase(unittest.TestCase):
 
     def setUp(self):
         self._d = tempfile.TemporaryDirectory()
-        self.root = Path(self._d.name)
-        (self.root / ".claude").mkdir()
-        text = (REPO / ".claude" / "과목정보.md").read_text(encoding="utf-8")
-        if self.parent:
-            text = text.replace("notion_parent_page_id: ~", f"notion_parent_page_id: {self.parent}")
-        (self.root / ".claude" / "과목정보.md").write_text(text, encoding="utf-8")
-        (self.root / "설계과제" / "과제1" / "report").mkdir(parents=True)
+        self.root = make_root(self._d.name, notion_parent_page_id=self.parent)
         self.p = config.paths(1, self.root, config.load_course_info(self.root))
         self.write_body(BODY)
 
@@ -48,6 +44,10 @@ class StripTitleTests(unittest.TestCase):
         self.assertEqual(sync.strip_title("\n\n# 제목\n\n# 1. Design\n", "제목"), "# 1. Design\n")
         no_title = "본문 첫 문단\n\n# 1. Design\n"
         self.assertEqual(sync.strip_title(no_title, "제목"), no_title)
+
+    def test_strip_title_keeps_numbered_section(self):
+        text = "# 1. Design Problem (설계과정 필수)\n\n본문\n"
+        self.assertEqual(sync.strip_title(text, "x"), text)
 
     def test_strip_title_keeps_h2_first_line(self):
         text = "## 소제목\n\n본문\n"
@@ -70,6 +70,14 @@ class PushTests(SyncTestBase):
                 sync.push(1, self.root, token="t")
         req.assert_not_called()
         self.assertTrue(any("Claude" in f.msg for f in cm.exception.findings))
+
+    def test_push_blocked_when_body_starts_with_heading(self):
+        self.write_body("# 1. Design Problem\n\n본문 문단\n")
+        with mock.patch.object(notion, "_request") as req:
+            with self.assertRaises(sync.SyncBlocked) as cm:
+                sync.push(1, self.root, token="t")
+        req.assert_not_called()
+        self.assertIn("첫 블록", cm.exception.findings[0].msg)
 
     def test_push_happy_path(self):
         uploaded = []

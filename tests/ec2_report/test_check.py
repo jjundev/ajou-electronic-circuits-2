@@ -6,12 +6,14 @@ from _util import REPO
 from scripts.ec2_report import check
 
 FIXTURE = Path(__file__).parent / "fixtures" / "probe_roundtrip.md"
+PROBE_SRC = Path(__file__).parent / "fixtures" / "probe_source.md"
+PROBE_PULLED = Path(__file__).parent / "fixtures" / "probe_pulled.md"
 
 CLEAN = """# 1. Design Problem
 
 **(a) 이득을 구하라.**
 
-▶ 반쪽 회로에서 $g_m$ 과 출력저항으로 이득을 구한다.
+**▶** 반쪽 회로에서 $g_m$ 과 출력저항으로 이득을 구한다.
 
 $$
 A_v = G_m R_{out}
@@ -108,6 +110,14 @@ class CheckMarkdownTests(unittest.TestCase):
     def test_ai_standalone_blocked(self):
         self.assertEqual(len(self.errors("AI 도움을 받았다.\n")), 1)
 
+    def test_leading_arrow_becomes_toggle(self):
+        e = self.errors("▶ 풀이 문단\n")
+        self.assertEqual(len(e), 1)
+        self.assertIn("토글", e[0].msg)
+
+    def test_bold_or_escaped_arrow_allowed(self):
+        self.assertEqual(self.errors("**▶** 풀이\n\n\\▶ 풀이\n\n본문 ▶ 가운데\n"), [])
+
     def test_ai_inside_word_allowed(self):
         self.assertEqual(self.errors("MAIN 과 RAIL 은 낱말이다.\n"), [])
 
@@ -122,6 +132,15 @@ class ShapeTests(unittest.TestCase):
         s = check.shape(CLEAN)
         self.assertEqual(s, {"headings": 1, "tables": 1, "math_blocks": 1,
                              "inline_math": 1, "images": 1})
+
+    def test_shape_counts_probe_block_math(self):
+        s = check.shape(PROBE_PULLED.read_text(encoding="utf-8"))
+        self.assertEqual((s["math_blocks"], s["tables"], s["inline_math"]), (1, 1, 7))
+
+    def test_roundtrip_detects_probe_heading_loss(self):
+        e = check.roundtrip(PROBE_SRC.read_text(encoding="utf-8"),
+                            PROBE_PULLED.read_text(encoding="utf-8"))
+        self.assertEqual([x.msg for x in e], ["헤딩 개수가 1개에서 0개로 줄었다"])
 
     def test_roundtrip_reports_only_losses(self):
         src = "| a |\n|---|\n| 1 |\n\n| b |\n|---|\n| 2 |\n\n$$\nx\n$$\n"

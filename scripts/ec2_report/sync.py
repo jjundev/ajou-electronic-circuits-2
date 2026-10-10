@@ -9,12 +9,20 @@
 from __future__ import annotations
 
 import argparse
+import re
 import sys
 from datetime import datetime
 from pathlib import Path
 
 from . import config, notion
 from .check import Finding, check_markdown, check_pulled_images, roundtrip
+
+
+_SECTION = re.compile(r"^# \d")
+
+
+def _first_line(text: str) -> str:
+    return next((line for line in text.splitlines() if line.strip()), "")
 
 
 class SyncBlocked(Exception):
@@ -24,15 +32,16 @@ class SyncBlocked(Exception):
 
 
 def strip_title(text: str, title: str) -> str:
-    """앞쪽 빈 줄 다음 첫 줄이 `# ` 헤딩이면 그 줄과 뒤따르는 빈 줄만 뗀다.
+    """앞쪽 빈 줄 다음 첫 줄이 제목 헤딩이면 그 줄과 뒤따르는 빈 줄만 뗀다.
 
     페이지 제목은 properties 로 따로 주므로 본문의 제목 헤딩은 중복이다.
+    `# 1. Design Problem` 처럼 번호로 시작하는 헤딩은 대절이므로 남긴다.
     """
     lines = text.splitlines(keepends=True)
     i = 0
     while i < len(lines) and not lines[i].strip():
         i += 1
-    if i == len(lines) or not lines[i].startswith("# "):
+    if i == len(lines) or not lines[i].startswith("# ") or _SECTION.match(lines[i]):
         return text
     i += 1
     while i < len(lines) and not lines[i].strip():
@@ -63,6 +72,11 @@ def push(n: int, root: Path | None = None, token: str | None = None,
     version = notion.next_version(p.notion_dir, config.KIND)
     title = f"{config.document_title(n)} v{version}"
     body = strip_title(p.report_md.read_text(encoding="utf-8"), title)
+    if _first_line(body).startswith("# "):
+        # 노션은 본문 첫 블록이 # 헤딩이면 그 헤딩을 지운다 (docs/notion-probe.md 프로브 1).
+        raise SyncBlocked([Finding("error", p.report_md.name,
+            "본문 첫 블록이 # 헤딩이다 — 노션이 첫 # 헤딩을 지운다. 맨 위에 제목 줄 "
+            "'# 설계 과제 N: …' 을 두거나 헤딩 앞에 문단을 둔다")])
     page = notion.push_markdown(body, parent, token, title=title)
     notion.append_record(p.notion_dir, config.KIND, page["page_id"], page["url"],
                          source=p.report_md.name,
