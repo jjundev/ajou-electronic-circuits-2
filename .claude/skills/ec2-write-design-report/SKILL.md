@@ -17,13 +17,20 @@ description: 전자회로2 설계과제 보고서 본문 md 를 선배 제출 �
 ## 절차
 
 1. **자료 읽기.** `설계과제/과제<n>/설계과제<n>.md` (문제·조건·그림), `sim/` 의 산출물과 그림 목록(`report/figs/` — 보고서 그림은 이 한 폴더에만 둔다, 양식.md §서식), 기존 본문이 있으면 그것도 읽는다.
-2. **작성.** [references/양식.md](references/양식.md) 의 순서와 서식대로 쓴다. 회로도 캡처 방법 같은 작업 메모는 본문이 아니라 `report/` 의 별도 md 에 둔다.
+2. **작성.** [references/양식.md](references/양식.md) 의 순서와 서식대로 쓴다. 회로도는 [references/LTspice.md](references/LTspice.md) 대로 스크립트로 만들고, 과제별 값·캡처 확인 같은 작업 메모는 본문이 아니라 `report/LTspice_작성메모.md` 에 둔다.
 3. **검사.** 저장소 루트에서 실행해 error 가 0 이 될 때까지 고친다. info 줄의 그림 목록이 본문에 둔 그림 자리와 같은지 확인한다.
    ```bash
    python3 -c "from scripts.ec2_report.check import check_markdown; [print(f) for f in check_markdown('설계과제/과제<n>/report/설계과제<n>_보고서.md')]"
    ```
 4. **감점 체크.** [references/감점체크리스트.md](references/감점체크리스트.md) 의 항목마다 본문 근거 위치를 찾아 ✔ / ✘ 표로 보고한다. ✘ 가 있으면 고치고 3 으로 돌아간다.
 5. **안내.** 사용자가 직접 할 일(회로도 캡처 등)을 짧게 적고, 다음 단계로 `ec2-sync-notion` 업로드를 안내한다.
+6. **노션 수정 되돌리기.** 사용자가 노션에서 본문을 직접 고쳤다고 하면(또는 push 가 "md 로 되돌리지 않은 노션 수정" 경고를 내면) 저장소 루트에서 실행한다.
+   ```bash
+   python3 -m scripts.ec2_report.sync diff --n <n>
+   ```
+   - 나온 `-`/`+` 줄을 md 의 같은 자리에 반영한다. 노션 쪽 줄은 형식이 다르다(인라인 수식이 `$\`x\`$`, 표가 `<table>`) — 내용만 옮기고 md 서식은 유지한다.
+   - 그 수정이 이번 과제에만 해당하지 않고 규칙으로 볼 만하면(헤딩 모양, 표기 방식 등) [references/양식.md](references/양식.md) 에 날짜와 근거를 함께 적고, 검사기로 잡을 수 있으면 `scripts/ec2_report/check.py` 에 규칙과 테스트를 더한다.
+   - 반영한 뒤 3(검사)부터 다시 한다. 노션에는 새 판본으로 올리고(기존 페이지는 고치지 않는다), 직전 판본 페이지 정리는 사용자에게 맡긴다.
 
 ## 비-목표
 

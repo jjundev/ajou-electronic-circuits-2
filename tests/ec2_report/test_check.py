@@ -72,6 +72,19 @@ class CheckMarkdownTests(unittest.TestCase):
         self.assertIn("old.png", warn[0].msg)
         self.assertNotIn("01_a.png", warn[0].msg)
 
+    def test_old_question_number_ref_is_error(self):
+        e = self.errors("1 % 차이는 2-(d)에서 확인한다.\n\n| a | b |\n|---|---|\n| x | 조정, 2-(a) |\n")
+        self.assertEqual(len(e), 2)
+        self.assertIn("Spice Problem (a)", e[0].msg)
+        ok = "Spice Problem (d)에서 확인한다.\n\n$$\nV = 1-(a)\n$$\n\nv1.2-(b) 아님\n"
+        self.assertEqual(self.errors(ok), [])
+
+    def test_figure_caption_alt_is_warn(self):
+        f = self.run_check("![그림 1. 회로](figs/01_a.png)\n\n![회로도](figs/02_b.png)\n")
+        warn = [x for x in f if x.level == "warn"]
+        self.assertEqual(len(warn), 1)
+        self.assertIn("그림 1.", warn[0].msg)
+
     def test_wrapped_prose_is_one_error(self):
         e = self.errors("첫 줄 산문\n둘째 줄 산문\n셋째 줄 산문\n")
         self.assertEqual(len(e), 1)

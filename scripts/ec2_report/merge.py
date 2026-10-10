@@ -1,11 +1,14 @@
 """표지 + 노션에서 내보낸 본문 PDF → BB 제출본.
 
     python3 -m scripts.ec2_report.merge --n 1 [--body P] [--date 2026.10.30] [--keep-body]
+
+본문 원본은 병합 검증이 통과한 뒤 ~/.Trash 로 옮긴다 (--keep-body 면 그대로 둔다).
 """
 from __future__ import annotations
 
 import argparse
 import re
+import shutil
 import sys
 import tempfile
 import unicodedata
@@ -16,9 +19,13 @@ from pathlib import Path
 from pypdf import PdfReader, PdfWriter
 
 from . import config
+from .check import _IMAGE_LOCAL
 from .cover import A4_H_MM, A4_W_MM, make_cover
 
 _VERSION = re.compile(r"(?<![A-Za-z])v(\d+)")
+_TITLE_VERSION = re.compile(r"설계과제\s*\d+\s*보고서\s+v\d+")
+_OLD_REF = re.compile(r"(?<![\w.])\d\s*-\s*\(\s*[a-z]\s*\)")
+TRASH = Path.home() / ".Trash"
 
 
 @dataclass
@@ -29,6 +36,11 @@ class BodySource:
 
 def _nfc(s: str) -> str:
     return unicodedata.normalize("NFC", s)
+
+
+def _norm(s: str) -> str:
+    """노션 내보내기 이름은 공백 대신 밑줄을 쓴다 (`<uuid>_전자회로2_설계과제1_보고서.pdf`)."""
+    return _nfc(s).replace("_", " ")
 
 
 def _default_dirs(n: int, root: Path) -> list[Path]:
@@ -50,7 +62,7 @@ def _zip_inner_name(path: Path) -> str | None:
             pdfs = _zip_pdfs(zf)
     except zipfile.BadZipFile:
         return None
-    return _nfc(Path(pdfs[0]).name) if len(pdfs) == 1 else None
+    return _norm(Path(pdfs[0]).name) if len(pdfs) == 1 else None
 
 
 def _open_source(origin: Path) -> BodySource:
@@ -69,14 +81,14 @@ def find_body(n: int, root: Path, search_dirs: list[Path] | None = None) -> Body
     root = Path(root)
     dirs = search_dirs if search_dirs is not None else _default_dirs(n, root)
     p = config.paths(n, root, config.load_course_info(root))
-    excluded = {_nfc(p.cover_pdf.name), _nfc(p.final_pdf.name)}
+    excluded = {_norm(p.cover_pdf.name), _norm(p.final_pdf.name)}
     key = f"설계과제{n} 보고서"
     found = []
     for d in dirs:
         if not Path(d).is_dir():
             continue
         for f in Path(d).iterdir():
-            name = _nfc(f.name)
+            name = _norm(f.name)
             if not f.is_file() or f.suffix.lower() not in (".pdf", ".zip") or name in excluded:
                 continue
             if key not in name and f.suffix.lower() == ".zip":
@@ -89,6 +101,48 @@ def find_body(n: int, root: Path, search_dirs: list[Path] | None = None) -> Body
         raise FileNotFoundError(f"'{key}' 이 이름에 든 PDF/zip 을 찾지 못했습니다: {where}")
     found.sort(key=lambda t: (t[0], t[1]))
     return _open_source(found[-1][2])
+
+
+def lint_body(text: str, images: int, expected_images: int) -> list[str]:
+    """노션에서 내보낸 본문 PDF 의 흔적 점검. 경고만 돌려주고 병합은 막지 않는다.
+
+    텍스트 추출은 수식을 깨뜨리므로 오검출이 적은 세 가지만 본다.
+    """
+    out = []
+    m = _TITLE_VERSION.search(text)
+    if m:
+        out.append(f"본문 제목에 판본 번호가 있다: '{m.group()}' — 노션 페이지 제목에서 vN 을 지운다")
+    if images != expected_images:
+        out.append(f"본문 PDF 그림이 {images}장인데 md 의 그림 자리는 {expected_images}장이다 — "
+                   "노션에 빠진 그림이 없는지 본다")
+    refs = sorted({re.sub(r"\s", "", r) for r in _OLD_REF.findall(text)})
+    if refs:
+        out.append("예전 문항 번호 표기가 남았다: " + ", ".join(refs)
+                   + " — 'Spice Problem (a)' 처럼 대절 이름으로 고친다")
+    return out
+
+
+def _body_lint(pdf: Path, report_md: Path) -> list[str]:
+    reader = PdfReader(pdf)
+    text = "\n".join(page.extract_text() or "" for page in reader.pages)
+    images = sum(len(page.images) for page in reader.pages)
+    expected = 0
+    if report_md.is_file():
+        expected = sum(1 for t in _IMAGE_LOCAL.findall(report_md.read_text(encoding="utf-8"))
+                       if not t.startswith(("http://", "https://", "data:")))
+    return lint_body(text, images, expected)
+
+
+def _to_trash(src: Path) -> Path:
+    """src 를 휴지통으로 옮기고 새 경로를 돌려준다. 같은 이름이 있으면 ' 2', ' 3' 을 붙인다."""
+    if not TRASH.is_dir():
+        raise OSError(f"휴지통 폴더가 없습니다: {TRASH}")
+    dest, k = TRASH / src.name, 2
+    while dest.exists():
+        dest = TRASH / f"{src.stem} {k}{src.suffix}"
+        k += 1
+    shutil.move(str(src), str(dest))
+    return dest
 
 
 def verify_merged(pdf: Path, expected_pages: int) -> dict:
@@ -120,16 +174,16 @@ def merge(n: int, body: Path | None = None, date: str | None = None,
     with open(p.final_pdf, "wb") as f:
         writer.write(f)
     result = verify_merged(p.final_pdf, 1 + body_pages)
+    warnings = _body_lint(src.path, p.report_md)
 
-    deleted = False
+    trashed = None
     if not keep_body and src.origin.resolve() != p.final_pdf.resolve():
         try:
-            src.origin.unlink()
-            deleted = True
-        except OSError:
-            print("경고: 본문 원본을 지우지 못했습니다", file=sys.stderr)
+            trashed = _to_trash(src.origin)
+        except OSError as e:
+            warnings.append(f"본문 원본을 휴지통으로 옮기지 못해 그대로 두었다: {e}")
     return {"output": p.final_pdf, "pages": result["pages"], "cover": cover,
-            "body_origin": src.origin, "deleted": deleted}
+            "body_origin": src.origin, "trashed": trashed, "warnings": warnings}
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -137,12 +191,15 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--n", type=int, required=True, help="설계과제 번호")
     ap.add_argument("--body", type=Path, help="본문 PDF 또는 zip (생략하면 자동 탐색)")
     ap.add_argument("--date", help="제출일 (기본: 오늘)")
-    ap.add_argument("--keep-body", action="store_true", help="병합 후 본문 원본을 지우지 않는다")
+    ap.add_argument("--keep-body", action="store_true", help="병합 후 본문 원본을 휴지통으로 옮기지 않는다")
     a = ap.parse_args(argv)
     r = merge(a.n, a.body, a.date, a.keep_body)
     print(f"최종본: {r['output']}")
     print(f"쪽수: {r['pages']} (표지 1 + 본문 {r['pages'] - 1})")
-    print(f"본문 원본: {r['body_origin']} ({'삭제함' if r['deleted'] else '보존'})")
+    print(f"본문 원본: {r['body_origin']} "
+          f"({'휴지통으로 옮김: ' + str(r['trashed']) if r['trashed'] else '그대로 둠'})")
+    for w in r["warnings"]:
+        print(f"경고: {w}")
     return 0
 
 

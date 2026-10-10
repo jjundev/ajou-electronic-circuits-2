@@ -113,6 +113,63 @@ class PushTests(SyncTestBase):
         self.assertIn("p2", req.call_args.args[1])
         self.assertEqual(self.p.baseline(1).read_text(encoding="utf-8"), "old")
 
+    def test_diff_no_changes_ignores_image_lines(self):
+        notion.append_record(self.p.notion_dir, "보고서", "p1", "u1", "r.md", "a")
+        self.p.baseline(1).write_text("# 설계 조건\n본문\n![회로도]()\n", encoding="utf-8")
+        pulled = "# 설계 조건\n본문\n![회로도](https://s3/x.png)\n"
+        with mock.patch.object(notion, "_request", return_value={"markdown": pulled}):
+            r = sync.diff(1, self.root, token="t")
+        self.assertEqual((r["version"], r["changed"]), (1, 0))
+        self.assertEqual(self.p.pulled(1).read_text(encoding="utf-8"), pulled)
+
+    def test_diff_reports_text_edit_on_latest_version(self):
+        notion.append_record(self.p.notion_dir, "보고서", "p1", "u1", "r.md", "a")
+        notion.append_record(self.p.notion_dir, "보고서", "p2", "u2", "r.md", "b")
+        self.p.baseline(2).write_text("# 1. Design Problem\n본문\n", encoding="utf-8")
+        with mock.patch.object(notion, "_request", return_value={"markdown": "# Design Problem\n본문\n"}) as req:
+            r = sync.diff(1, self.root, token="t")
+        self.assertIn("p2", req.call_args.args[1])
+        self.assertEqual(r["changed"], 2)
+        self.assertIn("-# 1. Design Problem", r["diff"])
+        self.assertIn("+# Design Problem", r["diff"])
+
+    def test_diff_without_baseline_is_error(self):
+        notion.append_record(self.p.notion_dir, "보고서", "p1", "u1", "r.md", "a")
+        with mock.patch.object(notion, "_request") as req:
+            with self.assertRaisesRegex(notion.NotionError, "recover"):
+                sync.diff(1, self.root, token="t")
+        req.assert_not_called()
+
+    def test_cli_diff_exit_codes(self):
+        notion.append_record(self.p.notion_dir, "보고서", "p1", "u1", "r.md", "a")
+        self.p.baseline(1).write_text("가\n", encoding="utf-8")
+        with mock.patch.object(sync.config, "find_root", return_value=self.root), \
+             mock.patch.object(notion, "load_token", return_value="t"):
+            for pulled, code in (("가\n", 0), ("나\n", 1)):
+                with mock.patch.object(notion, "_request", return_value={"markdown": pulled}):
+                    with redirect_stdout(io.StringIO()):
+                        self.assertEqual(sync.main(["diff", "--n", "1"]), code)
+
+    def test_push_warns_about_unported_notion_edits(self):
+        uploaded = []
+        req = self.fake_request(uploaded)
+        with mock.patch.object(notion, "_request", side_effect=req):
+            sync.push(1, self.root, token="t", now="a")
+        self.p.baseline(1).write_text("노션에서 고치기 전\n", encoding="utf-8")
+        with mock.patch.object(notion, "_request", side_effect=req):
+            r = sync.push(1, self.root, token="t", now="b")
+        self.assertEqual(r["version"], 2)
+        warn = [f for f in r["info"] if f.level == "warn" and f.where == "노션"]
+        self.assertEqual(len(warn), 1)
+        self.assertIn("v1", warn[0].msg)
+
+    def test_push_clean_previous_version_has_no_warning(self):
+        uploaded = []
+        with mock.patch.object(notion, "_request", side_effect=self.fake_request(uploaded)):
+            sync.push(1, self.root, token="t", now="a")
+            r = sync.push(1, self.root, token="t", now="b")
+        self.assertFalse([f for f in r["info"] if f.where == "노션"])
+
     def test_check_images_flags_empty(self):
         notion.append_record(self.p.notion_dir, "보고서", "p1", "u1", "r.md", "a")
         with mock.patch.object(notion, "_request", return_value={"markdown": "![회로도]()\n"}):

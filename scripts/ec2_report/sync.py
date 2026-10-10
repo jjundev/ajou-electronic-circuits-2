@@ -2,13 +2,16 @@
 
     python3 -m scripts.ec2_report.sync push --n 1
     python3 -m scripts.ec2_report.sync check-images --n 1
+    python3 -m scripts.ec2_report.sync diff --n 1
     python3 -m scripts.ec2_report.sync recover --n 1
 
-종료 코드: 0 성공, 1 그림 빈자리 있음, 2 md 검사 error 로 막힘, 3 노션·설정·파일 오류.
+종료 코드: 0 성공, 1 그림 빈자리 있음(check-images)·노션 수정 있음(diff),
+2 md 검사 error 로 막힘, 3 노션·설정·파일 오류.
 """
 from __future__ import annotations
 
 import argparse
+import difflib
 import re
 import sys
 from datetime import datetime
@@ -19,6 +22,7 @@ from .check import Finding, check_markdown, check_pulled_images, roundtrip
 
 
 _SECTION = re.compile(r"^# \d")
+_IMAGE_LINE = re.compile(r"^\s*!\[")
 
 
 def _first_line(text: str) -> str:
@@ -68,6 +72,7 @@ def push(n: int, root: Path | None = None, token: str | None = None,
             "`.claude/과목정보.md` 의 notion_parent_page_id 가 비어 있습니다. "
             "노션에 전자회로2 페이지를 만들고 integration 을 Connect 한 뒤 그 id 를 적으세요.")
     token = token or notion.load_token()
+    unported = _unported_warning(p, token)
 
     version = notion.next_version(p.notion_dir, config.KIND)
     # 판본 번호는 notion.json·baseline 파일명에만 남긴다. 페이지 제목이 곧 PDF 본문 제목·머리글이 되므로
@@ -87,7 +92,7 @@ def push(n: int, root: Path | None = None, token: str | None = None,
     p.baseline(version).write_text(pulled, encoding="utf-8")
     return {"title": title, "version": version, "url": page["url"],
             "page_id": page["page_id"], "baseline": p.baseline(version),
-            "info": [f for f in findings if f.level in ("info", "warn")],
+            "info": [f for f in findings if f.level in ("info", "warn")] + unported,
             "roundtrip": roundtrip(body, pulled)}
 
 
@@ -107,12 +112,64 @@ def recover_baselines(n: int, root: Path | None = None, token: str | None = None
     return out
 
 
-def check_images(n: int, root: Path | None = None, token: str | None = None) -> list[Finding]:
-    root, info, p = _context(n, root)
+def _latest_record(p) -> dict:
     records = [r for r in notion.load_records(p.notion_dir) if r.get("kind") == config.KIND]
     if not records:
         raise notion.NotionError(f"업로드 기록이 없습니다: {p.notion_dir / notion.RECORD_NAME}")
-    latest = max(records, key=lambda r: r["version"])
+    return max(records, key=lambda r: r["version"])
+
+
+def _text_lines(md: str) -> list[str]:
+    """그림 줄은 뺀다 — 노션에서 그림을 넣으면 URL 이 바뀌는데 그것은 본문 수정이 아니다."""
+    return [line for line in md.splitlines() if not _IMAGE_LINE.match(line)]
+
+
+def _diff(p, rec: dict, token: str) -> dict:
+    v = rec["version"]
+    base = p.baseline(v)
+    if not base.exists():
+        raise notion.NotionError(f"{base.name} 이 없습니다 — 먼저 `sync recover --n <n>` 로 되읽는다")
+    pulled = notion.pull_markdown(rec["page_id"], token)
+    p.pulled(v).write_text(pulled, encoding="utf-8")
+    lines = list(difflib.unified_diff(_text_lines(base.read_text(encoding="utf-8")),
+                                      _text_lines(pulled), base.name, p.pulled(v).name,
+                                      n=0, lineterm=""))
+    changed = sum(1 for line in lines
+                  if line[:1] in "+-" and not line.startswith(("+++", "---")))
+    return {"version": v, "url": rec.get("url"), "diff": lines, "changed": changed}
+
+
+def diff(n: int, root: Path | None = None, token: str | None = None) -> dict:
+    """최신 판본 페이지를 되읽어, 올렸을 때의 baseline 과 달라진 텍스트 줄을 돌려준다.
+
+    노션에서 사용자가 직접 고친 내용을 md 로 되돌리기 위한 것이다. 되읽은 md 는 형식이
+    달라(인라인 수식 백틱, `<table>`) 자동으로 합치지 않고 diff 만 보여 준다.
+    """
+    root, info, p = _context(n, root)
+    rec = _latest_record(p)
+    return _diff(p, rec, token or notion.load_token())
+
+
+def _unported_warning(p, token: str) -> list[Finding]:
+    """직전 판본에 md 로 되돌리지 않은 노션 수정이 있으면 경고 한 줄. 업로드는 막지 않는다."""
+    try:
+        rec = _latest_record(p)
+    except notion.NotionError:
+        return []
+    try:
+        d = _diff(p, rec, token)
+    except (notion.NotionError, OSError) as e:
+        return [Finding("warn", "노션", f"v{rec['version']} 을 되읽지 못해 노션 수정 여부를 확인하지 못했다: {e}")]
+    if not d["changed"]:
+        return []
+    return [Finding("warn", "노션",
+        f"v{d['version']} 에 md 로 되돌리지 않은 노션 수정이 {d['changed']}줄 있다 — "
+        "`sync diff` 로 확인하고 md 에 반영했는지 본다")]
+
+
+def check_images(n: int, root: Path | None = None, token: str | None = None) -> list[Finding]:
+    root, info, p = _context(n, root)
+    latest = _latest_record(p)
     token = token or notion.load_token()
     text = notion.pull_markdown(latest["page_id"], token)
     p.pulled(latest["version"]).write_text(text, encoding="utf-8")
@@ -121,7 +178,7 @@ def check_images(n: int, root: Path | None = None, token: str | None = None) -> 
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="python3 -m scripts.ec2_report.sync")
-    ap.add_argument("command", choices=("push", "check-images", "recover"))
+    ap.add_argument("command", choices=("push", "check-images", "diff", "recover"))
     ap.add_argument("--n", type=int, required=True, help="설계과제 번호")
     a = ap.parse_args(argv)
     try:
@@ -140,6 +197,11 @@ def main(argv: list[str] | None = None) -> int:
             got = recover_baselines(a.n)
             print("\n".join(str(x) for x in got) or "되읽을 판본 없음")
             return 0
+        if a.command == "diff":
+            d = diff(a.n)
+            print("\n".join(d["diff"]))
+            print(f"v{d['version']} 노션 수정: " + (f"{d['changed']}줄" if d["changed"] else "없음"))
+            return 1 if d["changed"] else 0
         findings = check_images(a.n)
         for f in findings:
             print(f"✗ {f.msg}")

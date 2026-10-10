@@ -26,6 +26,9 @@ _INLINE_MATH = re.compile(r"\$`?[^$\n]+?`?\$")
 _IMAGE_LOCAL = re.compile(r"!\[[^\]]*\]\(([^)]+)\)")
 _IMAGE_ANY = re.compile(r"!\[([^\]]*)\]\(([^)]*)\)")
 _ORDERED = re.compile(r"^\d+\.")
+# `2-(a)` 꼴 문항 참조. 대절 헤딩에 번호가 없으므로 'Spice Problem (a)' 처럼 이름으로 쓴다.
+_OLD_REF = re.compile(r"(?<![\w.])\d-\([a-z]\)")
+_CAPTION_ALT = re.compile(r"!\[(그림\s*\d+\.[^\]]*)\]\(")
 _NOT_PROSE = ("#", "|", "-", "*", ">", "!", "<", "$$")
 MAX_COLUMNS = 11
 FIG_DIR = "figs"  # 보고서 그림은 md 옆 figs/ 한 폴더에만 둔다
@@ -143,6 +146,14 @@ def check_markdown(path: Path) -> list[Finding]:
                 "줄 맨 앞 ▶ 는 노션이 토글 블록으로 바꾼다 — **▶** 로 쓴다 (docs/notion-probe.md)"))
         if _RAW_HTML.match(line):
             out.append(Finding("error", where, "열 0 의 원시 HTML 은 노션이 받지 않는다"))
+        for ref in _OLD_REF.findall(line):
+            out.append(Finding("error", where,
+                f"문항을 '{ref}' 처럼 번호로 가리킨다 — 대절 헤딩에 번호가 없으므로 "
+                "'Spice Problem (a)', 'Design Problem (a)' 처럼 대절 이름으로 쓴다"))
+        for alt in _CAPTION_ALT.findall(line):
+            out.append(Finding("warn", where,
+                f"그림 설명이 '{alt}' 로 시작한다 — 노션이 이것을 캡션으로 다는데, 이미지 안에 "
+                "이미 캡션이 있으면 두 번 나온다. 그런 그림은 ![](…) 로 비운다"))
         footnotes += len(_FOOTNOTE.findall(line))
         bare = _LINE_BLOCK.sub("", line.replace("\\$", ""))
         if bare.count("$") % 2:
