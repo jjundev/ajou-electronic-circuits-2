@@ -383,7 +383,7 @@
           <p>증폭기로 쓰면 이상적 전류원 부하를 단 CS 단도 $G_m = g_{m1}$, $R_{out} = r_{O1}$이라 이득이 $-g_{m1} r_{O1}$에서 막혀요(<a href="#s2-cs-gm">CS 단의 G_m은 g_m</a>). $G_m$은 소자 하나의 $g_m$으로 정해지니, 남은 손잡이는 $R_{out}$이에요.</p>
 
           <p><b>3. 핵심 아이디어</b></p>
-          <p>전류원 위에 트랜지스터를 하나 더 쌓으면(캐스코드(cascode)) 아래 소자의 $r_O$가 쌓은 소자의 $g_m r_O$배로 커 보여요. 전류는 아래 소자가 정하고, 위 소자는 출력저항만 키워요.</p>
+          <p>전류원 위에 트랜지스터를 하나 더 쌓으면(캐스코드(cascode)) 아래 소자의 $r_O$가 쌓은 소자의 $g_m r_O$배로 커 보여요. 전류는 아래 소자가 정하고, 위 소자는 출력저항만 키워요. 아래 식은 전류원 그림 번호예요: 위에 쌓은 소자가 $M_1$, 아래 소자가 $M_2$예요.</p>
           <p>$$R_{out} \approx g_{m1} r_{O1} r_{O2}$$</p>
           <p>수업 예제에서는 $20\,\text{k}\Omega$가 약 $500\,\text{k}\Omega$, 곧 25배가 됐어요(<a href="#s0-hand-calc">25배의 힘과 손계산의 목적</a>). PMOS는 위아래만 뒤집은 같은 식이고(<a href="#s1-pmos">PMOS 캐스코드: 뒤집으면 같다</a>), 바이폴라는 쌓은 소자의 $r_{\pi 1}$이 $r_{O2}$와 병렬로 보여 배수가 조금 줄어요(<a href="#s1-npn">NPN 캐스코드: r_π가 끼어든다</a>).</p>
           <p>증폭기에서는 $G_m$은 $g_{m1}$ 그대로이고 $R_{out}$만 커져서, 그만큼 이득이 커져요(<a href="#s2-cascode-amp">MOS 캐스코드 증폭기의 이득</a>). 증폭기 번호는 아래 입력 소자가 $M_1$, 위 캐스코드 소자가 $M_2$예요.</p>
@@ -419,7 +419,7 @@
           <p class="panel-label">핵심 식</p>
           <ul class="eq-list">
             <li><span class="eq-name">전압 이득</span>$$A_v = -G_m R_{out}$$</li>
-            <li><span class="eq-name">캐스코드 출력저항</span>$$R_{out} \approx g_{m1} r_{O1} r_{O2}$$</li>
+            <li><span class="eq-name">캐스코드 출력저항(전류원 번호, 위 소자 M1)</span>$$R_{out} \approx g_{m1} r_{O1} r_{O2}$$</li>
             <li><span class="eq-name">2단 최소 출력 전압</span>$$V_{out,min} = V_{OD1}+V_{OD2}$$</li>
           </ul>
           <p class="panel-label">용어</p>
