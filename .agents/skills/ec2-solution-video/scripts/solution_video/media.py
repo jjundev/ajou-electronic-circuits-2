@@ -3,7 +3,7 @@ from fractions import Fraction
 import functools,json,os,shutil,subprocess,time,wave
 from .util import checked,command,write,file_hash,local
 from .contracts import InputError
-from .render_options import load_render_options,validate_render_options
+from .render_options import load_render_options,validate_render_options,resolve_part_workers
 @functools.lru_cache
 def ffmpeg():
     candidates=[os.environ.get('EC2_FFMPEG'),shutil.which('ffmpeg'),'/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg']
@@ -77,11 +77,12 @@ def _log_text(value):
 def render_master(parts: list[dict],timeline: dict,audio: list[dict],run: Path,hyperframes_entry: Path,*,render_options: dict[str,object] | None=None) -> Path:
     run=Path(run).resolve();entry=Path(hyperframes_entry).resolve()
     options=load_render_options(run) if render_options is None else validate_render_options(render_options)
+    selections=[resolve_part_workers(run,part,options) for part in parts]
     source_checks(parts,run,entry)
     outputs=[];records=[];work=run/'renders';work.mkdir(parents=True,exist_ok=True)
-    for part in parts:
+    for part,selection in zip(parts,selections,strict=True):
         html=local(run,part['entry']);out=work/(part['key']+'.mp4');pending=work/(part['key']+'.pending.mp4')
-        args=[str(a) for a in ['node',entry,'render','--composition',html.name,'--quality','delivery','--workers',options['workers'],'--experimental-fast-capture=false','--output',pending]]
+        args=[str(a) for a in ['node',entry,'render','--composition',html.name,'--quality','delivery','--workers',selection['workers'],'--experimental-fast-capture=false','--output',pending]]
         log=work/(part['key']+'.log');start=time.perf_counter()
         try:
             pending.unlink(missing_ok=True)
@@ -89,7 +90,7 @@ def render_master(parts: list[dict],timeline: dict,audio: list[dict],run: Path,h
             log.write_text(r.stdout+'\n'+r.stderr,encoding='utf-8')
             if r.returncode or not pending.is_file():raise InputError('HyperFrames render failed; inspect '+str(log))
             frames=part['last_frame']-part['first_frame'];_validate_media(pending,frames)
-            record=dict(key=part['key'],command=args,elapsed_seconds=time.perf_counter()-start,output_sha256=file_hash(pending),frames=frames)
+            record=dict(key=part['key'],worker_selection=selection,command=args,elapsed_seconds=time.perf_counter()-start,output_sha256=file_hash(pending),frames=frames)
             os.replace(pending,out);outputs.append(out);records.append(record)
         except Exception as ex:
             if isinstance(ex,subprocess.TimeoutExpired):

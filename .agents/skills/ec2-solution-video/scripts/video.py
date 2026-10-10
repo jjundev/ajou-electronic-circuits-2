@@ -168,6 +168,11 @@ def _run_stage(action,run,args,transport=None):
     if report['complete']: finish_stage(run,stage,[run/'verification/report.json'])
     return dict(report,status='passed' if report['complete'] else 'failed',paid_requests=0)
 
+def render_workers(value):
+    if value=='auto':return value
+    try:return int(value)
+    except ValueError as ex:raise argparse.ArgumentTypeError('workers must be auto or 1–6') from ex
+
 def main(argv=None):
     parser=argparse.ArgumentParser(description=__doc__);subs=parser.add_subparsers(dest='action',required=True)
     p=subs.add_parser('prepare');p.add_argument('selector');p.add_argument('--repo',type=Path,default=Path.cwd());p.add_argument('--problems');p.add_argument('--review',action='store_true');p.add_argument('--writing-mode',choices=['pencil','typing'],default='pencil')
@@ -177,7 +182,7 @@ def main(argv=None):
             p.add_argument('--config',type=Path);p.add_argument('--env-file',type=Path);p.add_argument('--approve-review',action='store_true')
         if name=='retime':p.add_argument('--writing-config',type=Path)
         if name=='assemble': p.add_argument('--runtime',required=True)
-        if name=='render':p.add_argument('--render-workers',type=int,choices=range(1,7))
+        if name=='render':p.add_argument('--render-workers',type=render_workers,choices=('auto',1,2,3,4,5,6))
         if name in ['render','verify']: p.add_argument('--hyperframes-entry',required=True)
     for name in ['resume-set','publish-set']:
         p=subs.add_parser(name);p.add_argument('--batch',required=True,type=Path)

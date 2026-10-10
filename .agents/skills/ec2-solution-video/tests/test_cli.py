@@ -216,12 +216,12 @@ class CLITests(Sandbox):
     def test_prepare_keeps_render_options_out_of_voice_config(self):
         from unittest.mock import patch
         from solution_video.sources import discover
-        from test_render_options import M5,OPTIONS
+        from test_render_options import M5,AUTO
         pairs=discover(REPO,'1002',['E10.11'])
         with patch.object(cli,'discover',return_value=pairs),patch('solution_video.render_options.detect_hardware',return_value=M5):
             batch=cli.prepare_batch(self.run,'1002')
         run=batch/read(batch/'batch.json')['items'][0]['run']
-        self.assertEqual(read(run/'source/render-options.json'),OPTIONS)
+        self.assertEqual(read(run/'source/render-options.json'),AUTO)
         self.assertEqual(read(run/'source/config.json'),cli.default_config())
     def test_render_override_precedes_recovery(self):
         from unittest.mock import patch
@@ -265,3 +265,9 @@ class CLITests(Sandbox):
         for args in [['render','--run',str(self.run),'--hyperframes-entry','cli.js','--render-workers','7'],['check','--run',str(self.run),'--render-workers','2']]:
             with contextlib.redirect_stderr(io.StringIO()),self.assertRaises(SystemExit) as caught:cli.main(args)
             self.assertEqual(caught.exception.code,2)
+
+    def test_auto_cli_is_accepted_and_render_only(self):
+        from unittest.mock import patch
+        with patch.object(cli,'run_stage',return_value={'status':'passed'}) as stage:
+            self.assertEqual(cli.main(['render','--run',str(self.run),'--hyperframes-entry','cli.js','--render-workers','auto']),0)
+            self.assertEqual(stage.call_args.args[2].render_workers,'auto')

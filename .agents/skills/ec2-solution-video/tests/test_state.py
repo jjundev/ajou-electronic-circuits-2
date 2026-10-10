@@ -101,3 +101,15 @@ class StateTests(Sandbox):
     def test_missing_options_recovery_is_read_only(self):
         self._finish_render_fixture();self.assertIsNone(recover_run(self.run))
         self.assertFalse((self.run/'source/render-options.json').exists())
+    def test_worker_classifier_edit_invalidates_render_only(self):
+        import shutil
+        from unittest.mock import patch
+        import solution_video.state as state
+        from solution_video.util import file_hash
+        root=self.run/'tool';shutil.copytree(S,root,ignore=shutil.ignore_patterns('__pycache__'))
+        wav=make_audio('w',2400,self.run);before=file_hash(self.run/wav['path'])
+        with patch.object(state,'S',root):
+            self._finish_render_fixture()
+            p=root/'scripts/solution_video/workload.py';p.write_text(p.read_text()+'\n# classifier change\n')
+            self.assertEqual(recover_run(self.run),'render')
+            self.assertEqual(file_hash(self.run/wav['path']),before)
