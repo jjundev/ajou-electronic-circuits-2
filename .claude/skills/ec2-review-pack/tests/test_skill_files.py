@@ -156,7 +156,6 @@ class TestBackupSnippet(unittest.TestCase):
         self.assertEqual(self.backups(), [])
 
 
-
 class TestWhyPageDocs(unittest.TestCase):
     def read(self, rel):
         return (SKILL / rel).read_text(encoding="utf-8")
@@ -179,6 +178,7 @@ class TestWhyPageDocs(unittest.TestCase):
         t = self.read("SKILL.md")
         self.assertIn("scripts/insert_why.py", t)
         self.assertIn("## 기존 팩에 왜 페이지 붙이기", t)
+
 
 if __name__ == "__main__":
     unittest.main()

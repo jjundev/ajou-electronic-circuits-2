@@ -37,6 +37,8 @@ SUPP_LABEL = "보충 · 수업에서 유도하진 않았어요"
 LEGACY_SUPP_LABELS = ("📎 보충 · 수업 미유도",)
 SUM_PANEL_ID = "sum-for"
 SLOT_RE = re.compile(r"\{\{[A-Z_]+\}\}")
+# 조각에 HTML 대신 마크다운으로 쓴 링크: 화면에 [글자](#id)가 그대로 보이고 눌리지 않는다.
+MD_LINK_RE = re.compile(r"\[[^\]\n]+\]\((?:#|https?:|\.\./)[^)\s]*\)")
 REMOTE_PREFIXES = ("http://", "https://", "//")
 # CSS 안의 url(...) 과 @import "..." 대상
 CSS_URL_RE = re.compile(r"""url\(\s*['"]?([^'")\s]+)|@import\s+['"]([^'"]+)['"]""", re.IGNORECASE)
@@ -236,6 +238,7 @@ def check_common(doc: Doc, source: str, path: Path) -> list[Problem]:
     out += [Problem("math", name, e) for e in math_delimiter_errors(doc.body_text)]
     out += [Problem("broken-link", name, h) for h in broken_links(doc, Path(path).parent)]
     out += [Problem("leftover-slot", name, s) for s in sorted(set(SLOT_RE.findall(source)))]
+    out += [Problem("markdown-link", name, s) for s in MD_LINK_RE.findall(doc.body_text)]
     out += [Problem("widget-static-missing", wid, "위젯에 .widget-static 정적 대체물이 없음")
             for wid, classes in sorted(doc.widgets.items()) if "widget-static" not in classes]
     return out

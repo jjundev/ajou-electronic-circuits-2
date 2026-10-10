@@ -26,6 +26,11 @@ class TestPrimitives(unittest.TestCase):
         problems = check_html.check_common(check_html.parse_html(src), src, Path("x.html"))
         self.assertEqual([p.code for p in problems], ["widget-static-missing"])
 
+    def test_markdown_link(self):
+        src = '<html lang="ko"><body><p>[평균](#s1-mean)으로 가요. 배열 a[0](x)는 괜찮아요.</p></body></html>'
+        problems = check_html.check_common(check_html.parse_html(src), src, Path("x.html"))
+        self.assertEqual([(p.code, p.detail) for p in problems], [("markdown-link", "[평균](#s1-mean)")])
+
     def test_leftover_slot_and_external(self):
         src = '<html lang="ko"><head><script src="https://cdn.tailwindcss.com"></script></head><body>{{TOC}}</body></html>'
         codes = sorted(p.code for p in check_html.check_common(check_html.parse_html(src), src, Path("x.html")))

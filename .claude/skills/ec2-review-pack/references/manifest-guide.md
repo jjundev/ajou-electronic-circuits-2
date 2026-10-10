@@ -16,7 +16,7 @@ manifest는 이번 팩의 계약이다. 작성자, 검사기, 조립기가 모�
 | `sessions` | 날짜별 `{date, stt, summary, slides}` |
 
 ## sections / topics
-- **첫 섹션은 항상 "왜 이런 회로를 쓸까" 페이지다**(manifest.py가 강제). id·제목·토픽을 글자 그대로 쓴다.
+- **첫 섹션은 항상 "왜 이런 회로를 쓸까" 페이지다**(manifest.py가 섹션 id, 토픽 id, eli5·formal 레이어를 강제). 제목과 `short`도 아래와 글자 그대로 쓴다.
   ```json
   {"id": "why", "title": "들어가며: 왜 이런 회로를 쓸까", "short": "왜 쓸까", "topics": [
     {"id": "why-circuit", "title": "왜 이런 회로를 쓸까", "required_terms": ["캐스코드", "출력저항", "헤드룸"], "layers": ["eli5", "formal", "prof"], "supp": false}

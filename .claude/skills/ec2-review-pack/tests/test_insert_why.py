@@ -65,7 +65,9 @@ class TestInsertWhy(unittest.TestCase):
                "script": frag() + "<script>1</script>",
                "no-article": frag().replace('id="why-circuit"', 'id="other"'),
                "no-sum": frag().replace('class="sum"', 'class="summary"'),
-               "no-formal": frag().replace("layer formal", "layer other")}
+               "no-formal": frag().replace("layer formal", "layer other"),
+               "close-section": frag() + "</section>",
+               "md-link": frag().replace('<a href="#s1-mean">평균</a>', "[평균](#s1-mean)")}
         for name, f in bad.items():
             with self.subTest(name=name), self.assertRaises(insert_why.InsertError):
                 insert_why.insert_why(bare_note(), f)
@@ -75,6 +77,12 @@ class TestInsertWhy(unittest.TestCase):
                        bare_note().replace("<section id=", "<div id=")):
             with self.subTest(), self.assertRaises(insert_why.InsertError):
                 insert_why.insert_why(broken, frag())
+
+    def test_keeps_body_why_link_outside_toc(self):
+        note = bare_note().replace('<section id="s1"><h2>', '<section id="s1"><h2><a href="#why">왜</a>', 1)
+        out = insert_why.insert_why(note, frag())
+        self.assertIn('<h2><a href="#why">왜</a>', out)
+        self.assertEqual(out.count('href="#why"'), 2)
 
     def test_cli_rewrites_note(self):
         note = self.tmp / "n.html"

@@ -12,18 +12,21 @@ CLI: insert_why.py --note 복습노트/<range>/정리노트_….html --fragment 
 from __future__ import annotations
 
 import argparse
+import os
 from pathlib import Path
 import re
 import sys
+import tempfile
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from assemble import esc  # noqa: E402
+from check_html import MD_LINK_RE  # noqa: E402
 from manifest import WHY_REQUIRED_LAYERS, WHY_SECTION_ID, WHY_SHORT, WHY_TITLE, WHY_TOPIC_ID  # noqa: E402
 
 TOC_OPEN = '<nav class="toc" aria-label="목차">'
 SECTION_OPEN = '<section id="'
 OLD_SECTION_RE = re.compile(rf'<section id="{WHY_SECTION_ID}">.*?</section>\s*', re.S)
-OLD_TOC_LINK_RE = re.compile(rf'<a href="#{WHY_SECTION_ID}">[^<]*</a>')
+OLD_TOC_LINK = re.compile(rf'<a href="#{WHY_SECTION_ID}">[^<]*</a>')
 
 
 class InsertError(RuntimeError):
@@ -31,7 +34,8 @@ class InsertError(RuntimeError):
 
 
 def fragment_errors(fragment: str) -> list[str]:
-    errors = [f"조각에 {tag}를 쓸 수 없음" for tag in ("<section", "<h2", "<script") if tag in fragment.lower()]
+    errors = [f"조각에 {tag}를 쓸 수 없음" for tag in ("<section", "</section", "<h2", "<script") if tag in fragment.lower()]
+    errors += [f"조각에 마크다운 링크가 있음(<a href>로): {s}" for s in MD_LINK_RE.findall(fragment)]
     needed = [f'<article class="topic" id="{WHY_TOPIC_ID}">',
               *(f'class="layer {layer}"' for layer in WHY_REQUIRED_LAYERS), '<div class="sum" hidden>']
     errors += [f"조각에 {s} 없음" for s in needed if s not in fragment]
@@ -42,17 +46,22 @@ def insert_why(note_html: str, fragment: str, title: str = WHY_TITLE, short: str
     if errors := fragment_errors(fragment):
         raise InsertError("; ".join(errors))
     note = OLD_SECTION_RE.sub("", note_html, count=1)
-    note = OLD_TOC_LINK_RE.sub("", note, count=1)
+    toc = note.find(TOC_OPEN)
+    if toc < 0:
+        raise InsertError(f"노트에 목차({TOC_OPEN})가 없음")
+    toc += len(TOC_OPEN)
+    toc_end = note.find("</nav>", toc)
+    if toc_end < 0:
+        raise InsertError("노트의 목차가 </nav>로 닫히지 않음")
+    # 목차 안의 why 링크만 지운다(본문의 #why 링크는 그대로 둔다).
+    note = note[:toc] + OLD_TOC_LINK.sub("", note[toc:toc_end], count=1) + note[toc_end:]
     at = note.find(SECTION_OPEN)
     if at < 0:
         raise InsertError(f"노트에 {SECTION_OPEN}… 섹션이 없음")
     # 원래 들여쓰기는 첫 섹션 앞에 남아 있으므로 why 뒤에 같은 들여쓰기를 붙인다.
     section = f'<section id="{WHY_SECTION_ID}"><h2>{esc(title)}</h2>\n{fragment.strip()}\n    </section>\n    '
     note = note[:at] + section + note[at:]
-    toc = note.find(TOC_OPEN)
-    if toc < 0:
-        raise InsertError(f"노트에 목차({TOC_OPEN})가 없음")
-    toc += len(TOC_OPEN)
+    toc = note.find(TOC_OPEN) + len(TOC_OPEN)  # 섹션이 목차 앞에 들어갔을 때를 위해 다시 찾는다
     return note[:toc] + f'<a href="#{WHY_SECTION_ID}">{esc(short)}</a>' + note[toc:]
 
 
@@ -74,7 +83,11 @@ def main(argv: list[str] | None = None) -> int:
     except InsertError as e:
         print(f"insert_why 실패: {e}", file=sys.stderr)
         return 1
-    note.write_text(out, encoding="utf-8")
+    # 쓰다가 멈춰도 노트가 잘리지 않게 같은 폴더의 임시 파일에 쓴 뒤 바꿔 끼운다.
+    fd, tmp = tempfile.mkstemp(dir=note.parent, prefix=".insert_why-", suffix=".html")
+    with os.fdopen(fd, "w", encoding="utf-8") as f:
+        f.write(out)
+    os.replace(tmp, note)
     print(note)
     return 0
 
