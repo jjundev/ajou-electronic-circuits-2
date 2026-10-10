@@ -2,7 +2,11 @@
 
 Python 3.11+, Node, FFmpeg/ffprobe, 로컬 HyperFrames CLI Node entry가 필요하다. 자막 굽기는 libass subtitles filter가 있는 FFmpeg를 사용한다. HyperFrames entry는 해당 설치 package.json의 bin이 가리키는 실제 JS 파일이다. CLI에 --hyperframes-entry로 절대 경로를 넘긴다. 렌더 버전은 기록하고 이전 run의 도구/템플릿을 몰래 갱신하지 않는다.
 
-기본 CLI는 문제풀이 영상과 같은 정책을 쓴다: Apple M5/물리 CPU10/RAM>=16GiB workers6, 그 외 workers2. CPU 인코딩, 브라우저 GPU auto, `--experimental-fast-capture=false`, delivery 1080p30. 장면은 순차 처리해 내부 작업자와 장면 병렬의 중복을 방지한다. `render`/`revoice --render-workers 1..6` > source/render-options.json > 장비 기본값. resume은 설정 파일을 새로 만들지 않는다. 설정 변경은 render 이후만 무효화한다. 실제 로그 확인 전 GPU 사용 성공으로 보고하지 않는다.
+기본 CLI는 source/render-options.json schema2의 `workers=auto`를 쓴다. 장면별 타임라인/동작 JSON에서 `to`의 속성 값이 대응하는 `from` 값과 달라지는 구간(시작값만 설정하고 끝값에서 생략한 속성은 제외)의 합집합 길이를 장면 길이로 나눈다. 검증된 Apple M5/물리 CPU10/RAM>=16GiB에서 장면이900프레임 이상이고 동작 비중이50%를 넘으면6, 아니면2다. 누락된 분석 정보·짧은 장면·미검증 장비는2; 존재하지만 손상된 동작 정보는 실패한다. 동작 비중은 픽셀 비교가 아닌 작성한 동작의 시간 비중이며 중간 길이/다른 효과의 최적 성능은 보장하지 않는다.
+
+`render`/`revoice --render-workers auto|1..6` > 저장값 > auto 기본값. schema2의 숫자는 수동 고정으로 유지한다. schema1은 자동 기본값과 수동값의 출처 구분이 없으므로 auto로 읽고 render/revoice 때 schema2로 저장한다. 이전 숫자를 고정하려면 CLI로 다시 지정한다. resume/분석은 파일을 쓰지 않는다. 설정·분석 정책 변경은 render 이후만 무효화한다.
+
+CPU 인코딩, 브라우저 GPU auto, `--experimental-fast-capture=false`, delivery1080p30, 장면 순차 실행을 유지한다. 실제 로그 확인 전 GPU 사용 성공으로 보고하지 않는다. 장면 영수증의 worker_selection과 args에 실제2/6 선택 및 이유를 기록하고 이 결정도 캐시 지문에 넣는다. 혼합 영상은 각 장면에 다른 수를 쓸 수 있다.
 
 probe_backends는 기존 CPU/NVENC 진단용으로 유지되며 기본 CLI의 인코더 선택에 사용하지 않는다. 직접 render_parts를 부르는 기존 호출도 저장 정책 또는 장비 기본값으로 캡처한다. 장면 MP4 옆 JSON은 실제 args/elapsed_seconds/render_options/hash/frames를 기록한다. verification/render-receipt.json은 성공한 mux와 함께 render 단계의 검증 대상으로 등록한다. 재음성 영수증의 parts는 재렌더된 장면만 포함한다.
 
@@ -31,3 +35,5 @@ content에는 [회로 검토](circuit-semantics.md)의 현재 검토를 결합�
 글꼴 초기 그리기 차이를 막기 위해 화면 조립 시 document.fonts.ready 이후 타임라인을 등록한다. 이전 코드로 조립한 RUN은 composition 코드 지문 변경으로 assemble을 한 번 다시 실행해야 한다. 음성은 재생성하지 않는다.
 
 렌더 시도별 pending 파일을 쓰고 시간 초과/중단 시 Node와 Chrome·FFmpeg 자식 프로세스를 종료한 뒤 정리한다. 장면·마스터는 영수증과 함께 교체하며 교체 실패/중단은 이전 쌍으로 복구한다. 복구 실패 시 `.rollback` 사본을 유지하고 경로를 알린다. 이 사본이 남으면 다음 시도가 덮어쓰지 않으며 수동 복구 후 재개해야 한다. 프로세스 트리 종료는 현재 macOS에서 실측했고 Windows의 taskkill 경로는 이 장비에서 실행하지 않았다.
+
+자동 선택 실제 시험은 `tests/auto_workers_acceptance.py --source-root <이전 성능시험 폴더> --destination <새 폴더> --hyperframes-entry <고정 CLI JS>`로 실행한다. 기존 정지/동적 fixture에서2/2,6/6,혼합2/6을 확인하고 실제 영상 byte hash를 고정 설정 기준 결과와 비교한다. 실제 각 실행폴더의 원본 입력 hash를 전후 자동 비교한다. 합성 PCM을 쓰며 유료 TTS/게시를 하지 않는다.
