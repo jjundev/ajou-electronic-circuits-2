@@ -1,0 +1,46 @@
+test_signed_group_denominator_is_protected (test_subtitles.SubtitleTests.test_signed_group_denominator_is_protected) ... 
+  test_signed_group_denominator_is_protected (test_subtitles.SubtitleTests.test_signed_group_denominator_is_protected) (sign='−') ... FAIL
+  test_signed_group_denominator_is_protected (test_subtitles.SubtitleTests.test_signed_group_denominator_is_protected) (sign='-') ... FAIL
+  test_signed_group_denominator_is_protected (test_subtitles.SubtitleTests.test_signed_group_denominator_is_protected) (sign='− ') ... FAIL
+  test_signed_group_denominator_is_protected (test_subtitles.SubtitleTests.test_signed_group_denominator_is_protected) (sign='- ') ... FAIL
+
+======================================================================
+FAIL: test_signed_group_denominator_is_protected (test_subtitles.SubtitleTests.test_signed_group_denominator_is_protected) (sign='−')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.agents/skills/ec2-solution-video/tests/test_subtitles.py", line 146, in test_signed_group_denominator_is_protected
+    with self.subTest(sign=sign),self.assertRaises(InputError):wrap_caption(text)
+                                 ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: InputError not raised
+
+======================================================================
+FAIL: test_signed_group_denominator_is_protected (test_subtitles.SubtitleTests.test_signed_group_denominator_is_protected) (sign='-')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.agents/skills/ec2-solution-video/tests/test_subtitles.py", line 146, in test_signed_group_denominator_is_protected
+    with self.subTest(sign=sign),self.assertRaises(InputError):wrap_caption(text)
+                                 ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: InputError not raised
+
+======================================================================
+FAIL: test_signed_group_denominator_is_protected (test_subtitles.SubtitleTests.test_signed_group_denominator_is_protected) (sign='− ')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.agents/skills/ec2-solution-video/tests/test_subtitles.py", line 146, in test_signed_group_denominator_is_protected
+    with self.subTest(sign=sign),self.assertRaises(InputError):wrap_caption(text)
+                                 ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: InputError not raised
+
+======================================================================
+FAIL: test_signed_group_denominator_is_protected (test_subtitles.SubtitleTests.test_signed_group_denominator_is_protected) (sign='- ')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.agents/skills/ec2-solution-video/tests/test_subtitles.py", line 146, in test_signed_group_denominator_is_protected
+    with self.subTest(sign=sign),self.assertRaises(InputError):wrap_caption(text)
+                                 ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: InputError not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.002s
+
+FAILED (failures=4)

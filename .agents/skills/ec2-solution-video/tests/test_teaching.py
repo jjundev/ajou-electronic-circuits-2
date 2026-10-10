@@ -53,3 +53,46 @@ class TeachingTimingTests(Sandbox):
   draws=[s for s in t['teaching']['spans'] if s['id']=='label' and s['kind']=='draw']
   self.assertEqual(len(draws),24);self.assertEqual(draws[-1]['end_frame'],274);self.assertEqual(draws[-1]['hide_frame'],300)
   self.assertEqual([s['end_frame']-s['start_frame'] for s in draws],[5]*24)
+
+class ChunkWindowTests(Sandbox):
+ def fixture(self):
+  import copy
+  p=make_teaching_plan();p['items'][0].update(chunk_id='c1',offset_frames=0)
+  p['items'].append(dict(copy.deepcopy(p['items'][0]),id='b',chunk_id='c2'))
+  t=dict(segments=[dict(id='r',start_sample=80000,end_sample=200000)],caption_cues=[dict(segment_id='r',chunk_id='c1',start_sample=80000,end_sample=104000),dict(segment_id='r',chunk_id='c2',start_sample=104001,end_sample=180001)])
+  # First chunk must accommodate initial 12f camera + 26f mark.
+  t['caption_cues'][0]['end_sample']=104000+8000
+  t['caption_cues'][1]['start_sample']=104001+8000
+  return p,t
+ def resolve(self,p,t):
+  import solution_video.teaching as module
+  self.assertTrue(hasattr(module,'resolve_annotation_windows'),'chunk resolver missing')
+  return module.resolve_annotation_windows(p,t)
+ def test_chunk_absolute_windows(self):
+  p,t=self.fixture();t['caption_cues'][0]['end_sample']=112000;t['caption_cues'][1]['start_sample']=104001
+  # Overlapping speech cues are independently tested as overlapping marks below;
+  # first mark ends138, so place second at offset7, ceil130.001+7=138.
+  p['items'][1]['offset_frames']=7
+  windows=self.resolve(p,t);self.assertEqual([(w['start_frame'],w['end_frame']) for w in windows],[(112,138),(138,164)])
+  p['items']=p['items'][1:];p['items'][0]['offset_frames']=0
+  self.assertEqual(self.resolve(p,t)[0]['start_frame'],131)
+ def test_overlap_deadline_hide_and_long_label(self):
+  p,t=self.fixture();self.assertEqual([w['start_frame'] for w in self.resolve(p,t)],[112,141])
+  t['caption_cues'][1]['start_sample']=104001
+  with self.assertRaisesRegex(InputError,'b.*r.*c2'):self.resolve(p,t)
+  p,t=self.fixture();t['caption_cues'][0]['end_sample']=138*800-1
+  with self.assertRaisesRegex(InputError,'a.*r.*c1'):self.resolve(p,t)
+  p,t=self.fixture();p['items'][0].update(kind='label',units=list('x'*24))
+  with self.assertRaisesRegex(InputError,'a.*r.*c1'):self.resolve(p,t)
+  p,t=self.fixture();p['items'][0]['hide_at']=dict(segment_id='r',offset_frames=20)
+  with self.assertRaisesRegex(InputError,'a'):self.resolve(p,t)
+  p,t=self.fixture();t['segments'][0]['end_sample']=163*800
+  with self.assertRaisesRegex(InputError,'b'):self.resolve(p,t)
+ def test_chunk_marks_do_not_extend_segment_and_projection(self):
+  import copy
+  p,_=self.fixture();p['items'][0]['duration_frames']=300
+  self.assertEqual(minimum_segment_frames(p),{'r':54})
+  q=copy.deepcopy(p);q['items'][0]['chunk_id']='c2'
+  self.assertNotEqual(teaching_timing_settings(p),teaching_timing_settings(q))
+  q=copy.deepcopy(p);q['items'][0]['stroke_width_px']=8;q['items'][0]['color']='#C45100'
+  self.assertEqual(teaching_timing_settings(p),teaching_timing_settings(q))
