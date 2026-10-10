@@ -337,7 +337,7 @@
         </div>
         <p class="panel-meta">읽은 토픽 <b id="progress-n">0</b> / <span id="progress-total">0</span></p>
         <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
-        <nav class="toc" aria-label="목차"><a href="#s0">0 설계 예제</a><a href="#s1">1 부하</a><a href="#s2">2 축퇴</a><a href="#s3">3 BJT 차동쌍</a><a href="#s4">4 요약·예고</a></nav>
+        <nav class="toc" aria-label="목차"><a href="#why">왜 쓸까</a><a href="#s0">0 설계 예제</a><a href="#s1">1 부하</a><a href="#s2">2 축퇴</a><a href="#s3">3 BJT 차동쌍</a><a href="#s4">4 요약·예고</a></nav>
       </div>
     </aside>
     <div class="content">
@@ -346,6 +346,108 @@
       <h1>차동 증폭기 예제와 BJT 차동쌍 — 5살도 이해하는 정리노트</h1>
       <p>권익진 교수님 전자회로2 · 0930 수업 (Lec4, Razavi 10장)</p>
     </div>
+    <section id="why"><h2>들어가며: 왜 이런 회로를 쓸까</h2>
+<article class="topic" id="why-circuit"><h3>왜 이런 회로를 쓸까</h3><div class="tags"><span class="tag date">0930 수업</span><span class="tag slide">L04 s15–21</span></div>
+        <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+          <p class="lead">소리를 키워 주는 상자를 가장 쉽게 만들면 크게 키우기도 어렵고, 만들 때마다 키우는 정도가 들쭉날쭉해요.</p>
+          <p>그래서 크게 키워야 하면 부품을 바꾸고, 늘 같아야 하면 눈대중 대신 같은 계량컵 두 개의 비로 재듯 같은 부품끼리 견줘서 정해요.</p>
+          <figure class="figure"><svg id="fig-why" viewBox="0 0 640 230" role="img" aria-label="왼쪽 테두리 네모(가장 쉽게 만든 상자)에서 선 화살표가 경고색 테두리 네모(크게 못 키우고 들쭉날쭉)로 가고, 거기서 화살표 세 개가 오른쪽으로 갈라진다. 위쪽 강조색 테두리 네모는 부품을 바꿔 크게, 가운데 강조색 테두리 네모는 같은 부품끼리 견줘 늘 같게, 아래쪽 테두리 네모는 다른 재료로 만들어도 같은 짜임이다.">
+            <rect class="fig-ink" x="10" y="90" width="130" height="50" rx="6"/>
+            <text class="fig-text" x="75" y="112" text-anchor="middle" font-size="13">가장 쉽게</text>
+            <text class="fig-text" x="75" y="129" text-anchor="middle" font-size="13">만든 상자</text>
+            <line class="fig-ink" x1="140" y1="115" x2="196" y2="115"/>
+            <polyline class="fig-ink" points="188,109 196,115 188,121"/>
+            <rect class="fig-danger" x="198" y="90" width="150" height="50" rx="6"/>
+            <text class="fig-text" x="273" y="112" text-anchor="middle" font-size="13">크게 못 키우고</text>
+            <text class="fig-text" x="273" y="129" text-anchor="middle" font-size="13">들쭉날쭉</text>
+            <line class="fig-ink" x1="348" y1="115" x2="418" y2="40"/>
+            <polyline class="fig-ink" points="409,42 418,40 416,49"/>
+            <line class="fig-ink" x1="348" y1="115" x2="418" y2="115"/>
+            <polyline class="fig-ink" points="410,109 418,115 410,121"/>
+            <line class="fig-ink" x1="348" y1="115" x2="418" y2="190"/>
+            <polyline class="fig-ink" points="416,181 418,190 409,188"/>
+            <rect class="fig-accent" x="420" y="15" width="210" height="50" rx="6"/>
+            <text class="fig-text" x="525" y="45" text-anchor="middle" font-size="13">부품을 바꿔 크게</text>
+            <rect class="fig-accent" x="420" y="90" width="210" height="50" rx="6"/>
+            <text class="fig-text" x="525" y="120" text-anchor="middle" font-size="13">같은 부품끼리 견줘 늘 같게</text>
+            <rect class="fig-ink" x="420" y="165" width="210" height="50" rx="6"/>
+            <text class="fig-text" x="525" y="187" text-anchor="middle" font-size="13">다른 재료로 만들어도</text>
+            <text class="fig-text" x="525" y="204" text-anchor="middle" font-size="13">같은 짜임</text>
+          </svg><figcaption>한 가지 막힘에서 길이 세 갈래로 나뉘어요.</figcaption></figure>
+        </div>
+        <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+          <p><b>1. 풀고 싶은 문제</b></p>
+          <p>이번 범위는 사양에 맞는 차동쌍을 설계하는 데서 시작해요. <a href="#s0-design-bias">전력 예산과 출력 CM 레벨로 바이어스 정하기</a>에서 전력 예산 2 mW와 출력 CM 레벨 1.6 V 이상을, <a href="#s0-design-size">g_m 식 세 가지와 W/L 정하기</a>에서 이득 5를 맞춰요. 이득에 바라는 것은 세 가지예요.</p>
+          <ul>
+            <li>필요한 만큼 큰 이득</li>
+            <li>만들 때마다 같은, 정확한 이득</li>
+            <li>신호가 커져도 그대로인, 선형적인(linear) 이득</li>
+          </ul>
+          <p>그리고 이 모든 것을 차동 구조로 얻어야 해요. 차동 증폭기를 쓰는 이유가 공통 모드 제거(common-mode rejection)이기 때문이에요(<a href="#s3-bjt-bias">활성 영역 조건과 공통 모드 제거</a>).</p>
+
+          <p><b>2. 단순한 해법과 그 한계</b></p>
+          <p>가장 쉬운 회로는 저항 부하 차동쌍이에요.</p>
+          $$A_v = -g_m R_D$$
+          <ul>
+            <li>크기의 한계: $R_D$에 걸린 전압만큼 출력 CM 레벨이 내려가서 예제에서는 $R_D \le 400\ \Omega$로 묶여요. 이득은 $g_m$으로 올려야 하고, $g_m$은 $\sqrt{W/L}$에 비례하므로 이득 2배에 $W/L$ 4배가 들어요(<a href="#s0-design-size">g_m 식 세 가지와 W/L 정하기</a>).</li>
+            <li>정확도의 한계: $R_D$와 $g_m$은 서로 독립적으로 각각 20%까지 어긋나요. 그래서 이득도 20% 넘게 어긋나요(<a href="#s1-diode-load-gain">다이오드 연결 부하 차동쌍의 이득</a>).</li>
+            <li>선형성의 한계: $g_m$은 비선형(nonlinear)인 전압-전류 관계를 직선으로 근사한 값이에요. 신호가 커지면 이득이 변해요.</li>
+          </ul>
+          <p>BJT로 만들 때 가장 쉬운 회로는 이미터를 접지한 공통 이미터 단이에요. 입력 바이어스가 곧 $V_{BE}$라서 전류가 지수적으로 변하고, 출력 CM 레벨도 입력 바이어스에 끌려가요(<a href="#s3-bjt-cm">BJT 차동쌍의 CM 응답</a>).</p>
+
+          <p><b>3. 핵심 아이디어</b></p>
+          <p>한계마다 $R_D$ 자리나 소스 쪽에 무엇을 둘지 바꿔요.</p>
+          <p><b>정확한 이득: 다이오드 연결 부하.</b> $R_D$ 자리에 게이트와 드레인을 묶은 PMOS를 넣으면 이득이 같은 종류 소자의 비가 되고, 비는 1% 이내로 맞출 수 있어요(<a href="#s1-diode-vs-source">다이오드 연결 부하와 전류원 부하</a>).</p>
+          $$A_v \approx -\frac{g_{m1}}{g_{m3}}$$
+          <p><b>큰 이득: 전류원 부하.</b> 다이오드 연결을 떼고 게이트에 $V_b$를 주면 위쪽에서 보이는 저항이 $r_O$로 커져요(<a href="#s1-diode-load-gain">다이오드 연결 부하 차동쌍의 이득</a>).</p>
+          $$A_v = -g_{m1}(r_{O1} \parallel r_{O3})$$
+          <p><b>선형적인 이득: 소스 축퇴.</b> 소스 사이에 $R_{SS}$를 넣으면 이득이 선형 소자인 저항의 비로 정해져요. 대칭 중간점이 가상 접지라서 반회로 하나로 풀어요(<a href="#s2-virtual-ground-ext">가상 접지의 확장: 대칭 중간점</a>, <a href="#s2-degen-gain">소스 축퇴 차동쌍의 반회로 이득</a>).</p>
+          $$A_v \approx -\frac{R_{DD}}{R_{SS}}$$
+          <p><b>같은 짜임을 BJT로: BJT 차동쌍.</b> 이미터를 묶어 테일 전류원을 달면 이미터가 베이스를 따라 움직여 전류가 $V_{CM}$과 무관하게 고정돼요(<a href="#s3-bjt-cm">BJT 차동쌍의 CM 응답</a>).</p>
+          $$I_{C1} = I_{C2} = \frac{I_{EE}}{2}$$
+
+          <p><b>4. 대가와 쓰이는 곳</b></p>
+          <ul>
+            <li>다이오드 연결 부하: $\frac{1}{g_m}$이 작은 저항이라 이득이 작아요. 작아도 정확한 이득이 필요할 때 써요.</li>
+            <li>전류원 부하: 이득은 크지만 출력 저항이 $r_O$ 수준이라 채널 길이 변조를 반드시 고려해야 해요(<a href="#s1-diode-load-gain">다이오드 연결 부하 차동쌍의 이득</a>).</li>
+            <li>소스 축퇴: 이득 크기가 $g_{m1}\frac{R_{DD}}{2}$보다 항상 작아요. 큰 이득에는 좋지 않고, 정확하고 선형적인 이득이 필요할 때 써요(<a href="#s2-degen-why">축퇴 이득을 외우는 법과 쓰는 이유</a>).</li>
+            <li>BJT 차동쌍: 선 두 개, 트랜지스터 두 개, 전류 두 배를 내주고 공통 모드 제거를 얻어요. 활성 영역 조건이 $V_{CM}$의 상한을 정해요(<a href="#s3-bjt-bias">활성 영역 조건과 공통 모드 제거</a>).</li>
+          </ul>
+          $$V_{CC} - R_C\frac{I_{EE}}{2} \ge V_{CM}$$
+          <p>BJT 차동쌍은 입력 차가 작을 때만 선형이에요. 입력 차가 크면 출력이 포화하므로 그 영역은 비교기(comparator)로 써요(<a href="#s3-bjt-large">BJT 차동쌍의 대신호 해석</a>).</p>
+        </div>
+        <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+          <p>식을 아는 이유부터 짚으셨어요. 이득이 $g_m$과 $R_D$로 표현된다는 걸 알아야 무엇을 바꿀지 정할 수 있어요.</p>
+          <blockquote>"튜닝은 설계가 아니죠, 그죠?" (0930 12:24)</blockquote>
+          <p>다이오드 연결 부하를 쓰는 이유는 정확도라고 하셨어요.</p>
+          <blockquote>"이득이 gm의 비로 나타나기 때문에 … 굉장히 정확한 이득을 얻을 수가 있어요." (0930 20:55)</blockquote>
+          <p>큰 이득이 필요하면 다이오드 연결을 떼고 그 자리에 $r_O$가 들어가게 하라고 물으며 이끄셨어요 (0930 22:55).</p>
+          <p>소스 축퇴는 큰 이득이 아니라 $g_m$의 영향을 덜 받는 이득을 위한 구조라고 하셨어요.</p>
+          <blockquote>"이득은 크게 줄어들지만 정확한 이득을 얻고자 할 때 쓰는 용도로 있습니다." (0930 41:10)</blockquote>
+          <p>BJT에서는 이미터를 접지에 바로 묶었다면 입력 바이어스에 따라 전류가 바뀌었을 거라며 테일 전류원이 있는 차동쌍과 비교하셨어요 (0930 43:45). 차동 증폭기를 쓰는 이유는 이렇게 정리하셨어요.</p>
+          <blockquote>"전류도 두 배로 쓰는데 이거 왜 쓰냐? 커먼 모드 리젝션 특성 때문이죠." (0930 50:15)</blockquote>
+        </div>
+        <div class="layer supp"><span class="badge supp">보충 · 수업에서 유도하진 않았어요</span>
+          <p>Razavi 예제 10.10(10.2.3절, 520쪽)은 "이득을 최대로 하기 위해" 저항 대신 이상적인 전류원을 부하로 써서 차동 이득 $-g_m r_O$를 얻어요. 예제 10.11(521쪽)은 그 전류원을 pnp 트랜지스터로 만들어 $-g_m(r_{ON} \parallel r_{OP})$를 얻어요.</p>
+          <p>전류원 부하가 저항 부하의 크기 한계를 넘는 이유는 이래요. 저항은 DC 전압 강하와 소신호 저항이 둘 다 $R_D$ 하나로 정해져요. 전류원은 DC 전압 강하가 작아도 소신호 저항 $r_O$가 커요. 그래서 출력 CM 레벨을 지키면서 큰 이득을 얻어요.</p>
+        </div>
+        <div class="sum" hidden>
+          <p class="sum-lead">저항 부하의 이득 $-g_m R_D$는 키우기도, 정확하게 맞추기도 어려워서 부하나 소스 쪽을 바꿔 큰 이득, 정확한 이득, 선형적인 이득을 골라 얻어요.</p>
+          <p class="panel-label">핵심 식</p>
+          <ul class="eq-list">
+            <li><span class="eq-name">저항 부하</span>$$A_v = -g_m R_D$$</li>
+            <li><span class="eq-name">다이오드 연결 부하</span>$$A_v \approx -\frac{g_{m1}}{g_{m3}}$$</li>
+            <li><span class="eq-name">소스 축퇴</span>$$A_v \approx -\frac{R_{DD}}{R_{SS}}$$</li>
+          </ul>
+          <p class="panel-label">용어</p>
+          <dl class="terms">
+            <dt>다이오드 연결 부하(diode-connected load)</dt><dd>이득을 $g_m$의 비로 만들어 정확하게 하는 부하</dd>
+            <dt>소스 축퇴(source degeneration)</dt><dd>소스 쪽 저항으로 이득을 저항의 비에 묶어 정확하고 선형적으로 하는 구조</dd>
+            <dt>공통 모드 제거(common-mode rejection)</dt><dd>차동 증폭기를 쓰는 이유, 같은 위상의 노이즈가 출력에서 사라지는 성질</dd>
+          </dl>
+        </div>
+      </article>
+    </section>
     <section id="s0"><h2>0. MOS 차동쌍 설계 예제</h2>
 <article class="topic" id="s0-design-bias"><h3>전력 예산과 출력 CM 레벨로 바이어스 정하기</h3><div class="tags"><span class="tag date">0930 수업</span><span class="tag slide">L04 s15</span></div>
   <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>

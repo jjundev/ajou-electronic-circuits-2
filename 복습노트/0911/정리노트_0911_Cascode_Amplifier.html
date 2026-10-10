@@ -337,7 +337,7 @@
         </div>
         <p class="panel-meta">읽은 토픽 <b id="progress-n">0</b> / <span id="progress-total">0</span></p>
         <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
-        <nav class="toc" aria-label="목차"><a href="#s0">1 설계 예제</a><a href="#s1">2 PMOS·BJT</a><a href="#s2">3 캐스코드 증폭기</a><a href="#s3">4 요약·예고</a></nav>
+        <nav class="toc" aria-label="목차"><a href="#why">왜 쓸까</a><a href="#s0">1 설계 예제</a><a href="#s1">2 PMOS·BJT</a><a href="#s2">3 캐스코드 증폭기</a><a href="#s3">4 요약·예고</a></nav>
       </div>
     </aside>
     <div class="content">
@@ -346,6 +346,90 @@
       <h1>캐스코드 전류원과 증폭기 — 5살도 이해하는 정리노트</h1>
       <p>권익진 교수님 전자회로2 · 0911 수업 (Lec3, Razavi 9장)</p>
     </div>
+    <section id="why"><h2>들어가며: 왜 이런 회로를 쓸까</h2>
+<article class="topic" id="why-circuit"><h3>왜 이런 회로를 쓸까</h3><div class="tags"><span class="tag date">0911 수업</span><span class="tag slide">L03 s3, s13–14</span></div>
+        <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+          <p class="lead">혼자 버티는 사람 뒤에 한 사람이 더 받쳐 주면 훨씬 덜 밀리듯, 부품 위에 하나를 더 쌓으면 작은 흔들림을 훨씬 크게 키울 수 있어요.</p>
+          <figure class="figure"><svg id="fig-why" viewBox="0 0 660 130" role="img" aria-label="테두리 상자 네 개가 왼쪽에서 오른쪽으로 강조색 화살표로 이어져요. 첫 상자는 크게 키우고 싶어요, 경고색 테두리인 둘째 상자는 하나로는 금방 밀려요, 강조색 테두리인 셋째 상자는 하나 더 받쳐 세워요, 넷째 상자는 대신 높이를 더 써요라고 적혀 있어요.">
+            <rect class="fig-ink" x="10" y="25" width="130" height="80" rx="8"/>
+            <text class="fig-text" x="75" y="60" text-anchor="middle" font-size="13">크게 키우고</text>
+            <text class="fig-text" x="75" y="80" text-anchor="middle" font-size="13">싶어요</text>
+            <line class="fig-accent" x1="142" y1="65" x2="178" y2="65"/>
+            <polyline class="fig-accent" points="170,59 178,65 170,71"/>
+            <rect class="fig-danger" x="180" y="25" width="130" height="80" rx="8"/>
+            <text class="fig-text" x="245" y="60" text-anchor="middle" font-size="13">하나로는</text>
+            <text class="fig-text" x="245" y="80" text-anchor="middle" font-size="13">금방 밀려요</text>
+            <line class="fig-accent" x1="312" y1="65" x2="348" y2="65"/>
+            <polyline class="fig-accent" points="340,59 348,65 340,71"/>
+            <rect class="fig-accent" x="350" y="25" width="130" height="80" rx="8"/>
+            <text class="fig-text" x="415" y="60" text-anchor="middle" font-size="13">하나 더</text>
+            <text class="fig-text" x="415" y="80" text-anchor="middle" font-size="13">받쳐 세워요</text>
+            <line class="fig-accent" x1="482" y1="65" x2="518" y2="65"/>
+            <polyline class="fig-accent" points="510,59 518,65 510,71"/>
+            <rect class="fig-ink" x="520" y="25" width="130" height="80" rx="8"/>
+            <text class="fig-text" x="585" y="60" text-anchor="middle" font-size="13">대신 높이를</text>
+            <text class="fig-text" x="585" y="80" text-anchor="middle" font-size="13">더 써요</text>
+          </svg><figcaption>경고색 테두리의 막힌 곳을 강조색 테두리처럼 한 층 더 쌓아 넘고, 그 값으로 높이를 조금 더 내줘요.</figcaption></figure>
+        </div>
+        <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+          <p><b>1. 풀고 싶은 문제</b></p>
+          <p>증폭기의 전압 이득은 회로의 트랜스컨덕턴스와 출력저항의 곱이에요. 그래서 출력저항(output resistance)을 키우면 이득이 커져요(<a href="#s2-gain">전압 이득 A_v = -G_m R_out</a>).</p>
+          <p>$$A_v = -G_m R_{out}$$</p>
+          <p>전류원도 같은 것을 원해요. 이상적인 전류원은 출력 전압이 변해도 전류가 그대로인, 출력저항이 무한대인 소자예요. 그래서 이번 범위의 두 쓰임새, 전류원과 증폭기 모두 "$R_{out}$을 얼마나 키울 수 있나"가 문제예요.</p>
+
+          <p><b>2. 단순한 해법과 그 한계</b></p>
+          <p>트랜지스터 하나도 포화 영역에서는 전류원이에요. 하지만 채널 길이 변조(MOS)와 얼리 효과(BJT) 때문에 출력저항이 유한한 $r_O$에 머물러요(L03 s3). 수업 예제의 $0.5\,\text{mA}$, $\lambda=0.1\,\text{V}^{-1}$이면 $r_O$는 $20\,\text{k}\Omega$뿐이에요(<a href="#s0-wl">출력저항 500 kΩ에서 W/L 구하기</a>).</p>
+          <p>$$r_O = \frac{1}{\lambda I_D}$$</p>
+          <p>증폭기로 쓰면 이상적 전류원 부하를 단 CS 단도 $G_m = g_{m1}$, $R_{out} = r_{O1}$이라 이득이 $-g_{m1} r_{O1}$에서 막혀요(<a href="#s2-cs-gm">CS 단의 G_m은 g_m</a>). $G_m$은 소자 하나의 $g_m$으로 정해지니, 남은 손잡이는 $R_{out}$이에요.</p>
+
+          <p><b>3. 핵심 아이디어</b></p>
+          <p>전류원 위에 트랜지스터를 하나 더 쌓으면(캐스코드(cascode)) 아래 소자의 $r_O$가 쌓은 소자의 $g_m r_O$배로 커 보여요. 전류는 아래 소자가 정하고, 위 소자는 출력저항만 키워요.</p>
+          <p>$$R_{out} \approx g_{m1} r_{O1} r_{O2}$$</p>
+          <p>수업 예제에서는 $20\,\text{k}\Omega$가 약 $500\,\text{k}\Omega$, 곧 25배가 됐어요(<a href="#s0-hand-calc">25배의 힘과 손계산의 목적</a>). PMOS는 위아래만 뒤집은 같은 식이고(<a href="#s1-pmos">PMOS 캐스코드: 뒤집으면 같다</a>), 바이폴라는 쌓은 소자의 $r_{\pi 1}$이 $r_{O2}$와 병렬로 보여 배수가 조금 줄어요(<a href="#s1-npn">NPN 캐스코드: r_π가 끼어든다</a>).</p>
+          <p>증폭기에서는 $G_m$은 $g_{m1}$ 그대로이고 $R_{out}$만 커져서, 그만큼 이득이 커져요(<a href="#s2-cascode-amp">MOS 캐스코드 증폭기의 이득</a>). 증폭기 번호는 아래 입력 소자가 $M_1$, 위 캐스코드 소자가 $M_2$예요.</p>
+          <p>$$A_v \approx -g_{m1} r_{O1} g_{m2} r_{O2}$$</p>
+
+          <p><b>4. 대가와 쓰이는 곳</b></p>
+          <p>쌓은 트랜지스터도 포화에 있어야 해서, 한 층마다 $V_{OD}$ 하나만큼 전압 여유, 곧 헤드룸(headroom)을 더 써요(<a href="#s0-headroom">쌓을수록 드는 비용: 헤드룸과 3단 캐스코드</a>).</p>
+          <p>$$V_{out,min} = V_{OD1}+V_{OD2}$$</p>
+          <p>위 소자의 게이트(베이스)에 줄 바이어스 전압도 하나 더 필요하고, 그 값은 두 포화 조건 사이의 범위에서 골라야 해요(<a href="#s0-bias">바이어스부터: 포화 조건과 V_B1의 범위</a>). 더 쌓으면 출력저항은 다시 $g_m r_O$배 커지지만 헤드룸 부담 때문에 보통 2단까지만 써요(<a href="#s1-stack">바이폴라 캐스코드 다시 보기: 쌓을 때마다 g_m r_O배</a>).</p>
+          <p>쓰이는 곳은 출력저항이 큰 전류원(접지로 빼는 NMOS·NPN 싱크형, 전원에서 넣는 PMOS·PNP 소스형)과 이득이 큰 증폭기예요(L03 s14).</p>
+        </div>
+        <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+          <ul>
+            <li>위 트랜지스터는 전류를 바꾸지 않는데 왜 쓰느냐고 묻고, 답을 바로 주셨어요.
+              <blockquote>"왜 썼냐? 출력 임피던스를 증가시키기 위해서 쓰는 건데" (0911 34:21)</blockquote></li>
+            <li>25배라는 결과를 두고 구조의 가치를 짚으셨어요.
+              <blockquote>"그래서 굉장히 유용한 구조고요." (0911 16:45)</blockquote></li>
+            <li>이득은 두 가지로 키울 수 있다고 하셨어요.
+              <blockquote>"R_out을 증가시켜도 이득이 증가해요." (0911 59:39)</blockquote></li>
+            <li>캐스코드 증폭기를 이렇게 정리하셨어요.
+              <blockquote>"출력 임피던스가 증가하는 만큼 이득도 증가합니다." (0911 73:20)</blockquote>
+              그래서 고이득(high-gain) 회로를 만들 수 있다고 하셨어요. (0911 73:39)</li>
+            <li>대가로는 쌓을 때마다 $V_{OD}$만큼 전압이 더 들고, 그래서 전원 전압이 높아야 한다는 단점을 드셨어요. (0911 19:36–20:13, 22:05)</li>
+          </ul>
+        </div>
+        <div class="layer supp"><span class="badge supp">보충 · 수업에서 유도하진 않았어요</span>
+          <p>출력저항을 키우는 더 단순한 방법은 소스(이미터)에 축퇴 저항 $R_S$를 다는 거예요(Razavi 9.1.1, 450쪽, 식 9.3).</p>
+          <p>$$R_{out} = (1 + g_m R_S) r_O + R_S$$</p>
+          <p>$R_S$를 키울수록 $R_{out}$은 커지지만, $R_S$에 걸리는 DC 전압 강하도 같이 커져 헤드룸을 그만큼 먹어요. 그래서 저항 대신 트랜지스터를 넣어요. 트랜지스터는 작은 전압(포화에 필요한 $V_{OD}$ 정도)만 쓰면서 소신호로는 큰 저항 $r_O$처럼 보이기 때문이에요(Razavi 451쪽). 교과서는 캐스코드를 고성능 회로 설계에 유용한 CS·CE의 변형이라고 소개해요(449쪽).</p>
+        </div>
+        <div class="sum" hidden>
+          <p class="sum-lead">이득을 키우려면 $R_{out}$을 키워야 하는데 트랜지스터 하나는 $r_O$에서 막혀서, 하나를 더 쌓아 $g_m r_O$배로 키우고 대가로 헤드룸을 더 써요.</p>
+          <p class="panel-label">핵심 식</p>
+          <ul class="eq-list">
+            <li><span class="eq-name">전압 이득</span>$$A_v = -G_m R_{out}$$</li>
+            <li><span class="eq-name">캐스코드 출력저항</span>$$R_{out} \approx g_{m1} r_{O1} r_{O2}$$</li>
+            <li><span class="eq-name">2단 최소 출력 전압</span>$$V_{out,min} = V_{OD1}+V_{OD2}$$</li>
+          </ul>
+          <p class="panel-label">용어</p>
+          <dl class="terms">
+            <dt>캐스코드(cascode)</dt><dd>전류원 위에 트랜지스터를 하나 더 쌓아 출력저항을 키운 구조</dd>
+            <dt>헤드룸(headroom)</dt><dd>쌓은 트랜지스터를 모두 포화에 두는 데 드는 전압 여유</dd>
+          </dl>
+        </div>
+      </article>
+    </section>
     <section id="s0"><h2>1. NMOS 캐스코드 전류원 설계</h2>
 <article class="topic" id="s0-bias"><h3>바이어스부터: 포화 조건과 V_B1의 범위</h3><div class="tags"><span class="tag date">0911 수업</span><span class="tag slide">L03 s6</span></div>
   <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>

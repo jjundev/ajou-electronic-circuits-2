@@ -337,7 +337,7 @@
         </div>
         <p class="panel-meta">읽은 토픽 <b id="progress-n">0</b> / <span id="progress-total">0</span></p>
         <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
-        <nav class="toc" aria-label="목차"><a href="#s0">1 미러 원리</a><a href="#s1">2 바이어스 예</a><a href="#s2">3 바이폴라</a><a href="#s3">4 차동 신호</a><a href="#s4">5 요약·예고</a></nav>
+        <nav class="toc" aria-label="목차"><a href="#why">왜 쓸까</a><a href="#s0">1 미러 원리</a><a href="#s1">2 바이어스 예</a><a href="#s2">3 바이폴라</a><a href="#s3">4 차동 신호</a><a href="#s4">5 요약·예고</a></nav>
       </div>
     </aside>
     <div class="content">
@@ -346,6 +346,90 @@
       <h1>전류 미러 — 5살도 이해하는 정리노트</h1>
       <p>권익진 교수님 전자회로2 · 0918 수업 (Lec3 후반 · Lec4 도입, Razavi 9장 · 10장)</p>
     </div>
+    <section id="why"><h2>들어가며: 왜 이런 회로를 쓸까</h2>
+<article class="topic" id="why-circuit"><h3>왜 이런 회로를 쓸까</h3><div class="tags"><span class="tag date">0918 수업</span><span class="tag slide">L03 s23–s26, L04 s1–s3</span></div>
+        <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+          <p class="lead">눈대중으로 소금을 넣으면 날마다 맛이 달라지니, 계량컵 하나를 정해 두고 모두 그 컵으로 덜어 써요.</p>
+          <p>작은 소식은 줄 하나 대신 두 줄에 실어, 서로 거꾸로 흔들어 보내요.</p>
+          <figure class="figure"><svg id="fig-why" viewBox="0 0 720 230" role="img" aria-label="두 줄의 흐름도예요. 위 줄은 늘 같은 양이 필요하다는 선 테두리 상자에서, 눈대중은 날마다 어긋난다는 경고색 테두리 상자를 지나, 계량컵 하나를 베껴 쓴다는 강조색 테두리 상자로 이어져요. 아래 줄은 작은 소식을 또렷이 보내고 싶다는 선 테두리 상자에서, 줄 하나는 주변 소란을 같이 싣는다는 경고색 테두리 상자를 지나, 두 줄로 거꾸로 보낸다는 강조색 테두리 상자로 이어져요.">
+            <rect class="fig-ink" x="10" y="20" width="200" height="80" rx="8"/>
+            <text class="fig-text" x="110" y="55" text-anchor="middle">늘 같은 양이</text>
+            <text class="fig-text" x="110" y="75" text-anchor="middle">필요해요</text>
+            <line class="fig-ink" x1="210" y1="60" x2="258" y2="60"/>
+            <polyline class="fig-ink" points="249,55 258,60 249,65"/>
+            <rect class="fig-danger" x="260" y="20" width="200" height="80" rx="8"/>
+            <text class="fig-text" x="360" y="55" text-anchor="middle">눈대중은</text>
+            <text class="fig-text" x="360" y="75" text-anchor="middle">날마다 어긋나요</text>
+            <line class="fig-ink" x1="460" y1="60" x2="508" y2="60"/>
+            <polyline class="fig-ink" points="499,55 508,60 499,65"/>
+            <rect class="fig-accent" x="510" y="20" width="200" height="80" rx="8"/>
+            <text class="fig-text" x="610" y="55" text-anchor="middle">계량컵 하나를</text>
+            <text class="fig-text" x="610" y="75" text-anchor="middle">베껴 써요</text>
+            <rect class="fig-ink" x="10" y="130" width="200" height="80" rx="8"/>
+            <text class="fig-text" x="110" y="165" text-anchor="middle">작은 소식을</text>
+            <text class="fig-text" x="110" y="185" text-anchor="middle">또렷이 보내고 싶어요</text>
+            <line class="fig-ink" x1="210" y1="170" x2="258" y2="170"/>
+            <polyline class="fig-ink" points="249,165 258,170 249,175"/>
+            <rect class="fig-danger" x="260" y="130" width="200" height="80" rx="8"/>
+            <text class="fig-text" x="360" y="165" text-anchor="middle">줄 하나는</text>
+            <text class="fig-text" x="360" y="185" text-anchor="middle">주변 소란도 같이 실어요</text>
+            <line class="fig-ink" x1="460" y1="170" x2="508" y2="170"/>
+            <polyline class="fig-ink" points="499,165 508,170 499,175"/>
+            <rect class="fig-accent" x="510" y="130" width="200" height="80" rx="8"/>
+            <text class="fig-text" x="610" y="165" text-anchor="middle">두 줄로</text>
+            <text class="fig-text" x="610" y="185" text-anchor="middle">거꾸로 흔들어 보내요</text>
+          </svg><figcaption>두 줄 모두 왼쪽 선 테두리 상자의 바람이 가운데 경고색 테두리 상자에서 막히고, 오른쪽 강조색 테두리 상자에서 풀려요.</figcaption></figure>
+        </div>
+        <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+          <p><b>전류 미러(current mirror): 바이어스 전류를 정확히 정하기</b></p>
+          <p><b>1. 풀고 싶은 문제.</b> CS 단, 소스 팔로워 같은 증폭단은 정해 둔 바이어스 전류에서 동작하도록 설계해요. 전원 전압과 온도가 바뀌어도 그 전류가 그대로여야 해요(<a href="#s1-follower-scaling">5. 소스 팔로워·CS 단 바이어스와 전류 스케일링</a>).</p>
+          <p><b>2. 단순한 해법과 그 한계.</b> 지금까지는 저항 분배기로 $V_{GS}$(바이폴라는 $V_{BE}$) 전압을 정해 바이어스했어요. 그런데 전류는 전압만으로 정해지지 않아요.</p>
+          $$I_D=\frac{1}{2}\mu_n C_{ox}\frac{W}{L}(V_{GS}-V_{TH})^2$$
+          <p>분배기 전압은 $V_{DD}$를 따라 흔들리고, $\mu_n$과 $V_{TH}$는 온도를 따라 바뀌어요. 그래서 $V_{GS}$를 정확히 정해도 $I_D$는 정확하지 않아요. 자세한 식은 <a href="#s0-concept">1. 전류 미러가 필요한 이유</a>, PNP 전류원의 같은 문제는 <a href="#s2-pnp-iref">10. PNP 전류 미러의 기준 전류 만들기</a>에 있어요.</p>
+          <p><b>3. 핵심 아이디어.</b> 전압을 정하지 말고 믿을 만한 기준 전류 $I_{REF}$ 하나를 만든 뒤, 다이오드 연결 소자가 찾아낸 $V_{GS}$를 다른 소자에 그대로 걸어 전류를 크기 비만큼 복사해요.</p>
+          $$I_{copy} = \frac{(W/L)_1}{(W/L)_{REF}} I_{REF}$$
+          <p>$\mu_n$과 $V_{TH}$가 식에서 지워지는 과정은 <a href="#s0-mos-mirror">2. MOS 전류 미러의 식</a>, 바이폴라 버전은 <a href="#s2-bjt-mirror">7. 바이폴라 전류 미러의 식</a>에 있어요.</p>
+          <p><b>4. 대가와 쓰이는 곳.</b> 복사는 "두 소자의 $V_{GS}$가 같고 둘 다 포화 영역"이라는 전제에 기대요.</p>
+          <ul>
+            <li>$V_{DS1}$이 $V_{DS,REF}$와 다르면 채널 길이 변조만큼 복사 오차가 생겨요(<a href="#s0-lambda">4. 채널 길이 변조가 만드는 복사 오차</a>). 바이폴라는 베이스 전류만큼 복사 전류가 줄어요(<a href="#s2-base-current">8. 베이스 전류가 만드는 오차</a>).</li>
+            <li>복사 소자는 $V_{DS1} \ge V_{GS}-V_{TH}$를 지켜야 해서, 그 드레인 전압을 이 값 아래로 내릴 수 없어요.</li>
+            <li>소스에 저항이 붙으면 기준 쪽에도 저항을 달아 소스 전압을 맞춰야 해요(<a href="#s0-source-resistor">3. 소스에 저항이 있을 때</a>).</li>
+          </ul>
+          <p>그 대신 기준 전류 하나로 칩의 모든 바이어스 전류를 만들어요. NMOS·PMOS 미러로 넣고 빼는 전류(<a href="#s1-cmos-mirror">6. PMOS 미러와 CMOS 전류 미러</a>), 이득을 키우는 전류원 부하, 병렬 연결로 만든 배수 전류(<a href="#s2-scaling">9. 병렬 연결로 배수·분수 전류 만들기</a>)가 모두 미러예요. 동작점만 정하므로 소신호 해석에서는 지워요(<a href="#s2-bias-role">11. 바이어스 회로와 소신호 해석</a>).</p>
+          <p><b>차동 신호(differential signal): 10장 도입</b></p>
+          <p><b>1. 풀고 싶은 문제.</b> 고성능 회로, 특히 주변 노이즈에 취약한 회로에서 작은 신호를 또렷하게 전달하고 싶어요(<a href="#s3-signals">12. 단일 종단 신호와 차동 신호</a>).</p>
+          <p><b>2. 단순한 해법과 그 한계.</b> 지금까지는 단일 종단 신호(single-ended signal)로 보냈어요. 신호선 하나의 전압을 접지 기준으로 재요. 이 방식이 노이즈에 왜 약한지는 다음 수업에서 다루고, 미리 보는 설명은 보충에 있어요(<a href="#s3-signals">12. 단일 종단 신호와 차동 신호</a>).</p>
+          <p><b>3. 핵심 아이디어.</b> 두 선이 같은 공통 모드 레벨 $V_{CM}$을 공유하고, AC 성분만 크기가 같고 위상이 반대가 되게 보내요.</p>
+          $$V_X = V_{CM} + V_0 \sin\omega t$$
+          $$V_Y = V_{CM} - V_0 \sin\omega t$$
+          <p>정의와 그림은 <a href="#s3-signals">12. 단일 종단 신호와 차동 신호</a>에 있어요.</p>
+          <p><b>4. 대가와 쓰이는 곳.</b> 신호선이 2개, 회로가 2배, 전력 소모도 2배이고, 위상을 반전한 신호를 따로 만들어야 해요(<a href="#s3-signals">12. 단일 종단 신호와 차동 신호</a>). 그래도 고성능 회로에서는 일반적으로 차동 회로를 써요. 이 신호를 증폭하는 차동 쌍(differential pair)이 10장의 주제예요(<a href="#s4-next">다음 시간 예고</a>).</p>
+        </div>
+        <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+          <p>교수님은 지금까지 바이어스를 전압으로 걸었다면, 이제는 전류 미러로 전류를 흘려 준다고 정리했어요.</p>
+          <blockquote>"온도나 supply에 무관한 전류를 만들어 줄 수 있는 게 이제 이 current mirror" (0918 02:51)</blockquote>
+          <p>대가로 생기는 오차의 크기도 짚었어요.</p>
+          <blockquote>"한 10% 정도 오차는 생길 수 있어요. 왜냐하면 V_DS가 다를 수 있기 때문에" (0918 18:35)</blockquote>
+          <p>차동 신호는 쓰이는 곳과 단점을 먼저 말했고, 장점은 다음 시간으로 넘겼어요.</p>
+          <blockquote>"하이 퍼포먼스 circuit, 특히 굉장히 주변의 노이즈에 취약한 회로들" (0918 54:18)</blockquote>
+          <blockquote>"신호 라인도 두 개가 필요해 … 전력 소모도 두 배로 필요해." (0918 54:39–54:45)</blockquote>
+        </div>
+        <div class="layer supp"><span class="badge supp">보충 · 수업에서 유도하진 않았어요</span>
+          <p><b>기준 전류는 왜 하나만 둘까.</b> 전원과 온도에 무관한 전류는 밴드갭 기준 회로(bandgap reference circuit)로 만들어요. 이 회로는 소자가 수십 개 필요해서 전류원마다 하나씩 둘 수 없어요. 그래서 귀한 기준 전류 하나를 미러로 복사해요(Razavi 9.2.1, 469쪽).</p>
+          <p><b>차동 신호는 왜 노이즈에 강할까.</b> 저항 부하 CS 단의 출력은 $V_{DD}$에서 내려와요.</p>
+          $$V_{out}=V_{DD}-R_D I_D$$
+          <p>그래서 $V_{DD}$의 잡음이 이득 1로 출력에 그대로 실려요. 같은 CS 단 두 개를 대칭으로 두고 두 출력 사이 전압을 출력으로 쓰면, 전원 잡음은 $V_X$와 $V_Y$에 똑같이 실려 차에서 지워져요(L04 s4, Razavi 10.1.1, 498–499쪽).</p>
+          $$V_{out}=V_X-V_Y$$
+        </div>
+        <div class="sum" hidden>
+          <p class="sum-lead">전압으로 정한 바이어스는 전원·온도에 흔들려서 기준 전류 하나를 미러로 복사해 쓰고, 노이즈에 약한 회로는 차동 신호로 보내요.</p>
+          <p class="panel-label">핵심 식</p>
+          <ul class="eq-list"><li><span class="eq-name">복사 전류</span>$$I_{copy} = \frac{(W/L)_1}{(W/L)_{REF}} I_{REF}$$</li><li><span class="eq-name">차동 신호</span>$$V_X = V_{CM} + V_0 \sin\omega t$$$$V_Y = V_{CM} - V_0 \sin\omega t$$</li></ul>
+          <p class="panel-label">용어</p>
+          <dl class="terms"><dt>전류 미러(current mirror)</dt><dd>기준 전류 $I_{REF}$를 크기 비만큼 복사하는 바이어스 회로</dd><dt>차동 신호(differential signal)</dt><dd>같은 $V_{CM}$에 크기 같고 위상이 반대인 AC를 실은 두 선</dd></dl>
+        </div>
+      </article>
+    </section>
     <section id="s0"><h2>1. 전류 미러의 원리</h2>
 <article class="topic" id="s0-concept"><h3>1. 전류 미러가 필요한 이유</h3><div class="tags"><span class="tag date">0918 수업</span><span class="tag slide">L03 s23, s25</span></div>
   <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>

@@ -337,7 +337,7 @@
         </div>
         <p class="panel-meta">읽은 토픽 <b id="progress-n">0</b> / <span id="progress-total">0</span></p>
         <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
-        <nav class="toc" aria-label="목차"><a href="#s0">1 과목 소개</a><a href="#s1">2 역사·응용</a><a href="#s2">3 MOSFET</a><a href="#s3">4 요약·예고</a></nav>
+        <nav class="toc" aria-label="목차"><a href="#why">왜 쓸까</a><a href="#s0">1 과목 소개</a><a href="#s1">2 역사·응용</a><a href="#s2">3 MOSFET</a><a href="#s3">4 요약·예고</a></nav>
       </div>
     </aside>
     <div class="content">
@@ -346,6 +346,84 @@
       <h1>전자회로2 첫 수업과 MOSFET 복습 — 5살도 이해하는 정리노트</h1>
       <p>권익진 교수님 전자회로2 · 0902 수업 (Lec1–2, Razavi 1·6장)</p>
     </div>
+    <section id="why"><h2>들어가며: 왜 이런 회로를 쓸까</h2>
+<article class="topic" id="why-circuit"><h3>왜 이런 회로를 쓸까</h3><div class="tags"><span class="tag date">0902 수업</span><span class="tag slide">L01 s6, L02 s6–8·s16</span></div>
+        <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+          <p class="lead">바깥에서 들어오는 신호는 너무 작아서, 손으로 살짝 돌리면 굵은 물줄기가 바뀌는 수도꼭지 같은 부품으로 크게 키워야 읽을 수 있어요.</p>
+          <figure class="figure"><svg id="fig-why" viewBox="0 0 640 240" role="img" aria-label="왼쪽 테두리 네모 작은 신호에서 길이 두 갈래로 나뉘어요. 위 길은 붉은 테두리 네모 두 개로, 그냥 선으로 이으면 신호가 그대로 작아요. 아래 길은 강조색 테두리 네모 두 개로, 수도꼭지 부품을 거치면 신호가 크게 커져서 읽을 수 있어요.">
+            <rect class="fig-ink" x="10" y="92" width="120" height="56" rx="8"/>
+            <text class="fig-text" x="70" y="116" font-size="13" text-anchor="middle">작은 신호</text>
+            <text class="fig-muted" x="70" y="134" font-size="12" text-anchor="middle">소리·전파</text>
+            <path class="fig-ink" d="M130,110 L196,52 M188,53 L196,52 L194,60"/>
+            <path class="fig-ink" d="M130,130 L196,188 M194,180 L196,188 L188,187"/>
+            <rect class="fig-danger" x="200" y="24" width="170" height="56" rx="8"/>
+            <text class="fig-text" x="285" y="48" font-size="13" text-anchor="middle">그냥 선으로 잇기</text>
+            <text class="fig-muted" x="285" y="66" font-size="12" text-anchor="middle">더 커지지 않아요</text>
+            <rect class="fig-danger" x="440" y="24" width="180" height="56" rx="8"/>
+            <text class="fig-text" x="530" y="48" font-size="13" text-anchor="middle">그대로 작아요</text>
+            <text class="fig-muted" x="530" y="66" font-size="12" text-anchor="middle">잡음에 묻혀 못 읽어요</text>
+            <path class="fig-ink" d="M370,52 L440,52 M434,47 L440,52 L434,57"/>
+            <rect class="fig-accent" x="200" y="160" width="170" height="56" rx="8"/>
+            <text class="fig-text" x="285" y="184" font-size="13" text-anchor="middle">수도꼭지 부품</text>
+            <text class="fig-muted" x="285" y="202" font-size="12" text-anchor="middle">살짝 돌려 크게 흘려요</text>
+            <rect class="fig-accent" x="440" y="160" width="180" height="56" rx="8"/>
+            <text class="fig-text" x="530" y="184" font-size="13" text-anchor="middle">크게 커진 신호</text>
+            <text class="fig-muted" x="530" y="202" font-size="12" text-anchor="middle">이제 읽을 수 있어요</text>
+            <path class="fig-ink" d="M370,188 L440,188 M434,183 L440,188 L434,193"/>
+          </svg><figcaption>그냥 선으로 이으면 신호가 그대로 작고(붉은 테두리 길), 수도꼭지 부품을 거치면 크게 커져요(강조색 테두리 길).</figcaption></figure>
+          <p>이번 학기에는 이 부품으로 만든 회로를 더 튼튼하고 빠르게 쓰는 방법을 차례로 배워요.</p>
+        </div>
+        <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+          <p>이 과목이 왜 필수인지는 <a href="#s0-why">왜 전자회로를 배울까</a>에 있어요. 여기서는 그 가운데 "왜 트랜지스터(MOSFET) 회로로 신호를 키우는가"만 4단계로 짚어요.</p>
+          <p><b>1. 풀고 싶은 문제: 작은 아날로그 신호를 키워야 해요.</b></p>
+          <p>센서와 안테나가 받는 현실 세계의 신호는 아날로그이고 매우 작으며 노이즈가 섞여 있어요. 작은 채로는 노이즈 때문에 디지털로 안정되게 바꿀 수 없어서, 먼저 증폭(amplification)해야 해요(<a href="#s1-apps">스마트폰·자동차·AI 속 아날로그</a>). 메모리의 sense amp도 셀이 만드는 아주 작은 전압 차를 증폭해서 1과 0을 판단해요(<a href="#s1-analog-digital">디지털 회로와 아날로그 회로</a>).</p>
+          <p><b>2. 단순한 해법과 그 한계: 저항이나 스위치로는 키울 수 없어요.</b></p>
+          <p>저항은 전압을 나눌 뿐 신호를 키우지 못해요. 트랜지스터도 작은 $V_{DS}$의 triode 영역에서는 저항처럼 동작해요.</p>
+          $$I_D \approx \frac{V_{DS}}{R_{on}}$$
+          <p>이 성질로 켜고 끄는 스위치를 만들어 디지털 로직에 쓰지만, 아날로그 증폭기에서는 트랜지스터를 이렇게 쓰는 경우가 많지 않아요(<a href="#s2-triode">작은 V_DS: 저항이 되는 triode 영역</a>).</p>
+          <p><b>3. 핵심 아이디어: saturation 영역의 MOSFET을 전압제어 전류원으로 써요.</b></p>
+          <p>$V_{DS} \ge V_{GS}-V_{TH}$이면 $I_D$가 $V_{DS}$와 무관하게 $V_{GS}$로만 정해지는 voltage-controlled current source가 돼요. 전류원은 다른 소자로 만들기 어려워서 트랜지스터로 만들고, 이 전류원 동작 덕분에 증폭이 돼요(<a href="#s2-saturation">큰 V_DS: 전류원이 되는 saturation 영역</a>).</p>
+          $$I_D = \frac{1}{2}\mu_n C_{ox}\frac{W}{L}(V_{GS}-V_{TH})^2$$
+          <p>입력 전압의 작은 변화가 전류 변화를 만들고, 그 전류가 저항 $R_D$에 흐르며 큰 출력 전압 변화가 돼요. common-source 증폭기의 이득이 그 결과예요(L02 s16, <a href="#s0-philosophy">식을 외우지 말고 이해하기</a>).</p>
+          $$A_v = -g_m R_D$$
+          <p>$g_m$은 다음 시간에 소신호 모델에서 정의해요(<a href="#s3-next">다음 시간 예고</a>).</p>
+          <p><b>4. 대가와 쓰이는 곳: 바이어스를 맞춰야 하고, 한 단으로는 모자라요.</b></p>
+          <p>증폭하려면 트랜지스터를 늘 saturation 영역($V_{DS} \ge V_{GS}-V_{TH}$)에 두어야 하므로, 알맞은 바이어스 전압과 전류를 따로 공급해야 해요. 전자회로1의 간단한 single-stage 증폭기만으로는 부족해서, 이번 학기에 current mirror, cascode, 차동 증폭기, frequency response, feedback, filter를 차례로 다뤄요(<a href="#s0-roadmap">이번 학기 진도</a>).</p>
+          <p>이 증폭기는 메모리의 sense amp, RFIC, 센서, DDI처럼 응용마다 빌딩 블록으로 들어가고, 응용에 따라 사양(spec)만 달라져요(<a href="#s1-analog-digital">디지털 회로와 아날로그 회로</a>).</p>
+        </div>
+        <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+          <p>작은 신호를 먼저 키워야 하는 이유를 RF 질문에 답하며 말씀하셨어요.</p>
+          <blockquote>"신호가 작을 때는 … 디지털로 바꿀 수가 없어요. 노이즈 때문에." (0902 55:33)</blockquote>
+          <p>트랜지스터를 스위치로 쓰는 것과 증폭기로 쓰는 것을 나누셨어요.</p>
+          <blockquote>"앰프나 이런 아날로그 회로에서는 … 스위치로 동작을 시키는 경우는 별로 없고요" (0902 67:07)</blockquote>
+          <p>왜 하필 트랜지스터인지는 저항과 전류원을 비교해서 답하셨어요.</p>
+          <blockquote>"커런트 소스는 우리가 알고 있는 다른 소자가 많지 않죠." (0902 69:46)</blockquote>
+          <blockquote>"이 커런트 소스로 동작하기 때문에 증폭이 되는 거예요, 증폭이." (0902 69:54)</blockquote>
+          <p>이번 학기에 다룰 회로는 single-stage를 넘어서는 쪽이라고 하셨어요.</p>
+          <blockquote>"single-stage 앰프뿐만 아니라 cascode, 그다음에 차동 앰프." (0902 25:02)</blockquote>
+        </div>
+        <div class="layer supp"><span class="badge supp">보충 · 수업에서 유도하진 않았어요</span>
+          <p>저항만으로 만든 전압 분배기는 출력이 입력보다 작아요.</p>
+          $$\frac{v_{out}}{v_{in}} = \frac{R_2}{R_1+R_2} \lt 1$$
+          <p>그래서 이득이 1보다 크려면 전원에서 에너지를 끌어와 신호에 맞춰 전류를 조절하는 능동 소자(active device), 곧 트랜지스터가 필요해요.</p>
+          <p>L02 s17은 이득을 키우려면 $W/L$, $I_D$, $R_D$를 키우라고 하면서, $R_D$에 걸리는 전압 강하가 $V_{DD}$에 막힌다고 적어요(수업에서는 아직 다루지 않았어요). 저항 부하로는 이득에 한계가 있다는 점이, 뒤에서 current mirror와 cascode를 배우는 이유 가운데 하나예요.</p>
+        </div>
+        <div class="sum" hidden>
+          <p class="sum-lead">작은 아날로그 신호는 키워야 디지털로 바꿀 수 있고, saturation 영역의 MOSFET이 전압제어 전류원으로 동작해서 증폭이 돼요.</p>
+          <p class="panel-label">핵심 식</p>
+          <ul class="eq-list">
+            <li><span class="eq-name">common-source 전압 이득</span>$$A_v = -g_m R_D$$</li>
+            <li><span class="eq-name">saturation 조건</span>$$V_{DS} \ge V_{GS}-V_{TH}$$</li>
+          </ul>
+          <p class="panel-label">용어</p>
+          <dl class="terms">
+            <dt>증폭(amplification)</dt><dd>작은 신호를 노이즈에 묻히지 않게 키우는 일</dd>
+            <dt>voltage-controlled current source</dt><dd>$V_{GS}$가 값을 정하는 전류원. 증폭의 바탕이에요</dd>
+            <dt>current mirror</dt><dd>바이어스 전압·전류를 공급하는 회로</dd>
+          </dl>
+        </div>
+      </article>
+    </section>
     <section id="s0"><h2>1. 전자회로2는 어떤 과목일까</h2>
 <article class="topic" id="s0-rules"><h3>성적과 과제 규칙</h3><div class="tags"><span class="tag date">0902 수업</span><span class="tag slide">L01 s2–s4</span></div>
   <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>

@@ -337,7 +337,7 @@
         </div>
         <p class="panel-meta">읽은 토픽 <b id="progress-n">0</b> / <span id="progress-total">0</span></p>
         <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
-        <nav class="toc" aria-label="목차"><a href="#s0">1 CM 잡음</a><a href="#s1">2 CMRR</a><a href="#s2">3 능동 부하</a><a href="#s3">4 요약·예고</a></nav>
+        <nav class="toc" aria-label="목차"><a href="#why">왜 쓸까</a><a href="#s0">1 CM 잡음</a><a href="#s1">2 CMRR</a><a href="#s2">3 능동 부하</a><a href="#s3">4 요약·예고</a></nav>
       </div>
     </aside>
     <div class="content">
@@ -346,6 +346,86 @@
       <h1>CMRR과 능동 부하 차동 증폭기 — 5살도 이해하는 정리노트</h1>
       <p>권익진 교수님 전자회로2 · 1007 수업 (Lec4, Razavi 10장)</p>
     </div>
+    <section id="why"><h2>들어가며: 왜 이런 회로를 쓸까</h2>
+<article class="topic" id="why-circuit"><h3>왜 이런 회로를 쓸까</h3><div class="tags"><span class="tag date">1007 수업</span><span class="tag slide">L04 s36–39</span></div>
+        <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+          <p class="lead">두 컵에 똑같이 묻은 흔들림은 빼면 지워지지만, 컵이 조금씩 달라서 새는 만큼은 몇 배나 작은지 재 둬야 해요.</p>
+          <figure class="figure"><svg id="fig-why" viewBox="0 0 470 210" role="img" aria-label="두 줄로 된 흐름도. 윗줄은 테두리 상자 세 개가 화살표로 이어진다. 빼면 흔들림이 지워져요, 위험색 테두리의 컵이 조금 달라 조금 새요, 강조색 테두리의 새는 양을 몇 배로 재요 순서다. 아랫줄도 테두리 상자 세 개가 화살표로 이어진다. 한 컵으로만 내보내야 해요, 위험색 테두리의 한 컵만 쓰면 반만 남아요, 강조색 테두리의 옆 컵 몫을 옮겨 부어요 순서이고, 마지막 상자 오른쪽 아래에 색칠된 점과 다 모여요라는 글이 있다.">
+            <rect class="fig-ink" x="10" y="20" width="130" height="56"/>
+            <text class="fig-text" x="75" y="44" text-anchor="middle">빼면 흔들림이</text>
+            <text class="fig-text" x="75" y="62" text-anchor="middle">지워져요</text>
+            <line class="fig-ink" x1="142" y1="48" x2="166" y2="48"/>
+            <polyline class="fig-ink" points="160,43 167,48 160,53"/>
+            <rect class="fig-danger" x="170" y="20" width="130" height="56"/>
+            <text class="fig-text" x="235" y="44" text-anchor="middle">컵이 조금 달라</text>
+            <text class="fig-text" x="235" y="62" text-anchor="middle">조금 새요</text>
+            <line class="fig-ink" x1="302" y1="48" x2="326" y2="48"/>
+            <polyline class="fig-ink" points="320,43 327,48 320,53"/>
+            <rect class="fig-accent" x="330" y="20" width="130" height="56"/>
+            <text class="fig-text" x="395" y="44" text-anchor="middle">새는 양을</text>
+            <text class="fig-text" x="395" y="62" text-anchor="middle">몇 배로 재요</text>
+            <rect class="fig-ink" x="10" y="115" width="130" height="56"/>
+            <text class="fig-text" x="75" y="139" text-anchor="middle">한 컵으로만</text>
+            <text class="fig-text" x="75" y="157" text-anchor="middle">내보내야 해요</text>
+            <line class="fig-ink" x1="142" y1="143" x2="166" y2="143"/>
+            <polyline class="fig-ink" points="160,138 167,143 160,148"/>
+            <rect class="fig-danger" x="170" y="115" width="130" height="56"/>
+            <text class="fig-text" x="235" y="139" text-anchor="middle">한 컵만 쓰면</text>
+            <text class="fig-text" x="235" y="157" text-anchor="middle">반만 남아요</text>
+            <line class="fig-ink" x1="302" y1="143" x2="326" y2="143"/>
+            <polyline class="fig-ink" points="320,138 327,143 320,148"/>
+            <rect class="fig-accent" x="330" y="115" width="130" height="56"/>
+            <text class="fig-text" x="395" y="139" text-anchor="middle">옆 컵 몫을</text>
+            <text class="fig-text" x="395" y="157" text-anchor="middle">옮겨 부어요</text>
+            <circle class="fig-dot" cx="400" cy="192" r="5"/>
+            <text class="fig-muted" x="412" y="197">다 모여요</text>
+          </svg><figcaption>한 컵으로만 내보낼 때는 옆 컵의 몫을 버리지 않고 옮겨 부어서, 줄어든 만큼을 되찾아요.</figcaption></figure>
+        </div>
+        <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+          <p><b>1. 풀고 싶은 문제.</b> 차동 증폭기(differential amplifier)를 쓰는 가장 큰 이유는 두 라인에 같은 위상으로 들어오는 공통 모드(common-mode, CM) 잡음을 지우는 거예요. 두 쪽이 완전히 대칭이면 잡음은 각 노드에만 실리고 차동 출력에서는 상쇄돼요(<a href="#s0-cm-noise">2. 이상적인 테일과 실제 테일에서 본 CM 잡음</a>). 실제로는 $R_{SS}$가 유한하고 부하에 미스매치 $\Delta R_D$가 있어서, 잡음 일부가 차동 출력으로 새요(<a href="#s1-mismatch">3. 부하 미스매치와 CM-to-DM 이득</a>). 여기에 문제가 하나 더 있어요. op-amp처럼 입력은 차동이어도 출력은 하나(싱글엔디드, single-ended)여야 할 때가 있어요(<a href="#s2-single-ended">5. 한쪽 출력만 쓰면 생기는 두 가지 손해</a>).</p>
+          <p><b>2. 단순한 해법과 그 한계.</b> 새는 양은 CM-to-DM 이득으로 적을 수 있어요.</p>
+          <p>$$A_{CM-DM} \approx \frac{\Delta R_D}{2R_{SS}}$$</p>
+          <p>하지만 이 값만으로는 성능을 말할 수 없어요. 차동 증폭기는 원하는 신호의 이득도 커야 하니, 새는 양이 같아도 이득이 큰 회로가 더 좋은 회로예요(<a href="#s1-cmrr">4. CMRR: 원하는 신호 대 원하지 않는 신호</a>). 싱글엔디드 출력을 얻는 가장 쉬운 방법은 두 출력 가운데 한 노드만 꺼내는 거예요. 그러면 이득이 절반이 되고, 그 노드의 CM 이득이 출력에 그대로 남아요(<a href="#s2-single-ended">5. 한쪽 출력만 쓰면 생기는 두 가지 손해</a>).</p>
+          <p>$$|A_v|=\frac{g_mR_D}{2}$$</p>
+          <p><b>3. 핵심 아이디어.</b> CMRR(common-mode rejection ratio)은 원하는 신호의 이득을 원하지 않는 신호의 이득으로 나눠, 두 가지를 한 숫자로 재요(<a href="#s1-cmrr">4. CMRR: 원하는 신호 대 원하지 않는 신호</a>).</p>
+          <p>$$\mathrm{CMRR} = \frac{A_{DM}}{A_{CM-DM}}$$</p>
+          <p>능동 부하(active load)는 저항 부하를 전류 거울(current mirror)로 바꿔, 버리던 쪽의 전류 변화를 출력 쪽으로 복사해 더해요. 출력은 하나인데 전류 변화가 $2\Delta I$라서 차동 이득을 그대로 지켜요(<a href="#s2-mos-active">6. MOS 능동 부하 차동쌍</a>, <a href="#s2-bjt-active">7. BJT 능동 부하 차동쌍</a>).</p>
+          <p>$$A_v = g_m (r_{O2} \parallel r_{O4})$$</p>
+          <p><b>4. 대가와 쓰이는 곳.</b> CMRR을 키우려면 $R_{SS}$를 키워야 해요. $\Delta R_D$는 공정에 달려 있어서 설계자가 정할 수 없어요. 그래서 캐스코드 전류원처럼 테일을 더 좋은 전류원으로 만들어요(<a href="#s1-mismatch">3. 부하 미스매치와 CM-to-DM 이득</a>). CMRR은 값이 커서 데이터시트에 dB로 적혀요. 차동 구조 자체의 대가는 전류를 2배로 쓰고 차동 신호를 따로 만들어야 한다는 거예요(<a href="#s1-cmrr">4. CMRR: 원하는 신호 대 원하지 않는 신호</a>). 능동 부하 차동쌍은 M3만 다이오드 연결이라 대칭이 아니어서, 하프 서킷으로 풀 수 없어요. 출력저항은 $r_{O2} \parallel r_{O4}$로 유한하고, 출력에 $R_L$을 달면 그만큼 이득이 줄어요(<a href="#s2-mos-active">6. MOS 능동 부하 차동쌍</a>). 이 구조는 차동 입력, 싱글엔디드 출력인 op-amp의 입력단에 널리 쓰여요.</p>
+        </div>
+        <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+          <p>교수님은 차동 증폭기를 왜 쓰는지 묻고 바로 답하셨어요.</p>
+          <blockquote>"가장 중요한 이유가 뭐라고 그랬죠? 노이즈." (1007 Part 01)</blockquote>
+          <p>좋은 차동 증폭기의 기준도 이득보다 CM 리젝션이라고 하셨어요.</p>
+          <blockquote>"커먼 모드 리젝션 특성을 이상적인 값에 가깝도록 설계하는 게 굉장히 중요해요." (1007 Part 04)</blockquote>
+          <p>데이터시트에는 $A_{CM-DM}$이 아니라 CMRR이 적혀 있다고 하셨어요. 이득도 크면 좋기 때문이에요.</p>
+          <blockquote>"ACM-DM이 얼마다 이렇게 나와 있지 않고, CMRR이 얼마다라고" (1007 Part 04)</blockquote>
+          <p>한쪽 출력만 뽑는 회로는 쓰지 않는 이유를 이렇게 말씀하셨어요.</p>
+          <blockquote>"노이즈 제거가 안 되잖아요." (1007 Part 05)</blockquote>
+          <p>능동 부하 차동쌍은 op-amp를 예로 들며 실제로 많이 쓰는 구조라고 하셨어요.</p>
+          <blockquote>"이거는 사실은 굉장히 많이 쓰는 구조예요." (1007 Part 06)</blockquote>
+          <blockquote>"싱글 엔디드 구조로 구현하는 대표적인 방법이 되겠어요." (1007 Part 07)</blockquote>
+        </div>
+        <div class="layer supp"><span class="badge supp">보충 · 수업에서 유도하진 않았어요</span>
+          <p>Razavi 10.6절(551쪽 상자 글)에 따르면, 예전 op-amp는 입력에 차동쌍을 쓰고도 마지막 출력에서 한쪽 신호를 버렸어요. 능동 부하는 1967년 Widlar가 설계한 LM101A에서 처음 쓰였어요. 칩 면적을 많이 차지하는 큰 저항 대신 트랜지스터 부하를 쓰면 전압 여유(headroom)를 아끼면서 높은 이득을 얻어요. 이 차동쌍은 "5-트랜지스터 OTA"라고도 불러요.</p>
+          <p>캐스코드 전류원은 $R_{SS}$를 크게 키우지만, 트랜지스터를 하나 더 쌓으므로 테일에서 전압 여유를 더 써요. CMRR과 입력 CM 범위가 서로 맞바뀌는 셈이에요.</p>
+        </div>
+        <div class="sum" hidden>
+          <p class="sum-lead">CMRR은 CM 잡음이 차동 출력으로 새는 정도를 이득과 함께 한 숫자로 재고, 능동 부하는 싱글엔디드 출력에서도 이득을 반으로 잃지 않게 해요.</p>
+          <p class="panel-label">핵심 식</p>
+          <ul class="eq-list">
+            <li><span class="eq-name">CMRR 정의</span>$$\mathrm{CMRR} = \frac{A_{DM}}{A_{CM-DM}}$$</li>
+            <li><span class="eq-name">한쪽만 쓸 때 이득</span>$$|A_v|=\frac{g_mR_D}{2}$$</li>
+            <li><span class="eq-name">능동 부하 이득</span>$$A_v = g_m (r_{O2} \parallel r_{O4})$$</li>
+          </ul>
+          <p class="panel-label">용어</p>
+          <dl class="terms">
+            <dt>CMRR(common-mode rejection ratio)</dt><dd>원하는 신호 이득 대 CM 잡음이 차동 출력으로 바뀌는 이득의 비예요.</dd>
+            <dt>능동 부하(active load)</dt><dd>저항 대신 전류 거울로 만든 부하로, 한쪽 전류 변화를 출력으로 복사해요.</dd>
+          </dl>
+        </div>
+      </article>
+    </section>
     <section id="s0"><h2>1. 공통 모드 잡음은 어디로 가나</h2>
 <article class="topic" id="s0-cm-half-recap"><h3>1. 복습: 유한한 R_SS와 커먼 모드 하프 서킷</h3><div class="tags"><span class="tag date">1007 수업</span><span class="tag slide">L04 s32–33</span></div>
   <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>

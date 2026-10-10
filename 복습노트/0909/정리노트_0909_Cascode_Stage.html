@@ -337,7 +337,7 @@
         </div>
         <p class="panel-meta">읽은 토픽 <b id="progress-n">0</b> / <span id="progress-total">0</span></p>
         <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
-        <nav class="toc" aria-label="목차"><a href="#s0">1 BJT 대신호</a><a href="#s1">2 BJT 소신호</a><a href="#s2">3 캐스코드</a><a href="#s3">4 요약·예고</a></nav>
+        <nav class="toc" aria-label="목차"><a href="#why">왜 쓸까</a><a href="#s0">1 BJT 대신호</a><a href="#s1">2 BJT 소신호</a><a href="#s2">3 캐스코드</a><a href="#s3">4 요약·예고</a></nav>
       </div>
     </aside>
     <div class="content">
@@ -346,6 +346,85 @@
       <h1>BJT 소신호 모델과 캐스코드 전류원 — 5살도 이해하는 정리노트</h1>
       <p>권익진 교수님 전자회로2 · 0909 수업 (Lec2 s21–28, Lec3 s1–5, Razavi 9장)</p>
     </div>
+    <section id="why"><h2>들어가며: 왜 이런 회로를 쓸까</h2>
+<article class="topic" id="why-circuit"><h3>왜 이런 회로를 쓸까</h3><div class="tags"><span class="tag date">0909 수업</span><span class="tag slide">L02 s21–s28</span><span class="tag slide">L03 s3</span></div>
+        <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+          <p class="lead">두 종류 수도꼭지를 같은 규칙으로 읽어 보면, 꼭지 하나로는 늘 같은 양을 흘리지 못해서 꼭지 위에 꼭지를 하나 더 달아요.</p>
+          <figure class="figure"><svg id="fig-why" viewBox="0 0 640 170" role="img" aria-label="테두리 상자 네 개가 왼쪽에서 오른쪽으로 강조색 화살표 선으로 이어져요. 첫 상자는 늘 같은 양을 흘리고 싶다는 바람, 빨간 테두리의 둘째 상자는 꼭지 하나는 세게 밀면 더 샌다는 한계, 강조색 테두리의 셋째 상자는 꼭지 위에 꼭지를 달아 훨씬 고르게 나온다는 해법, 점선 테두리의 넷째 상자는 위에 남는 높이 여유가 줄어든다는 대가예요.">
+            <rect class="fig-ink" x="10" y="40" width="130" height="80" rx="10"/>
+            <text class="fig-text" x="75" y="74" text-anchor="middle">바라는 것</text>
+            <text class="fig-muted" x="75" y="98" text-anchor="middle">늘 같은 양</text>
+            <line class="fig-accent" x1="142" y1="80" x2="172" y2="80"/>
+            <polyline class="fig-accent" points="164,73 172,80 164,87"/>
+            <rect class="fig-danger" x="175" y="40" width="130" height="80" rx="10"/>
+            <text class="fig-text" x="240" y="74" text-anchor="middle">꼭지 하나</text>
+            <text class="fig-muted" x="240" y="98" text-anchor="middle">밀면 더 새요</text>
+            <line class="fig-accent" x1="307" y1="80" x2="337" y2="80"/>
+            <polyline class="fig-accent" points="329,73 337,80 329,87"/>
+            <rect class="fig-accent" x="340" y="40" width="130" height="80" rx="10"/>
+            <text class="fig-text" x="405" y="74" text-anchor="middle">꼭지 위에 꼭지</text>
+            <text class="fig-muted" x="405" y="98" text-anchor="middle">훨씬 고르게</text>
+            <line class="fig-accent" x1="472" y1="80" x2="502" y2="80"/>
+            <polyline class="fig-accent" points="494,73 502,80 494,87"/>
+            <rect class="fig-ink" x="505" y="40" width="125" height="80" rx="10" stroke-dasharray="6 5"/>
+            <text class="fig-text" x="567" y="74" text-anchor="middle">대가</text>
+            <text class="fig-muted" x="567" y="98" text-anchor="middle">높이 여유 줄어요</text>
+            <text class="fig-muted" x="75" y="150" text-anchor="middle">문제</text>
+            <text class="fig-muted" x="240" y="150" text-anchor="middle">한계</text>
+            <text class="fig-muted" x="405" y="150" text-anchor="middle">해법</text>
+            <text class="fig-muted" x="567" y="150" text-anchor="middle">내주는 것</text>
+          </svg><figcaption>겹쳐 단 꼭지는 물이 훨씬 고르게 나오지만, 위에 남는 높이 여유가 줄어요.</figcaption></figure>
+        </div>
+        <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+          <p>이번 범위는 BJT 소신호 모델과 전류원으로서의 캐스코드(cascode), 두 가지예요. 하나의 질문으로 이어져요. 증폭기 이득을 어떻게 계산하고, 어떻게 키울까.</p>
+          <p><b>1. 풀고 싶은 문제</b></p>
+          <p>증폭기의 이득을 손으로 계산하고, 더 키우고 싶어요. 이득은 트랜지스터의 $g_m$과 출력 쪽 저항이 정해요.</p>
+          $$A_v = -g_m R_D$$
+          <p>요즘 IC는 대부분 MOSFET이지만, 수십 GHz 이상의 고주파나 수~수십 W급 고전력 회로에는 BJT도 써요. 그래서 BJT도 같은 방법으로 해석할 수 있어야 해요(<a href="#s0-mos-vs-bjt">MOS와 BJT: 같은 전류원, 다른 입력 전류</a>, <a href="#s1-gm">소신호와 트랜스컨덕턴스 g_m</a>).</p>
+          <p><b>2. 단순한 해법과 그 한계</b></p>
+          <p>BJT 쪽: 대신호 식 $I_C = I_S \exp\frac{V_{BE}}{V_T}$를 그대로 KCL·KVL에 넣으면 지수 함수 때문에 방정식을 풀기 어려워요. MOS 소신호 모델을 그대로 가져오면 베이스 전류 $I_B = \frac{I_C}{\beta}$가 빠져서 맞지 않아요(<a href="#s1-rpi">베이스 전류를 모델링하는 r_π</a>).</p>
+          <p>전류원 쪽: 트랜지스터 하나로 만든 전류원은 출력저항이 유한한 $r_O$예요. 그래서 전류가 양단 전압을 따라 변하고, 부하를 아무리 키워도 이득이 $g_m r_O$에서 멈춰요(<a href="#s1-early">Early 효과와 출력저항 r_O</a>, <a href="#s2-why">왜 캐스코드인가: 유한한 출력저항</a>).</p>
+          $$|A_v| \to g_m r_O$$
+          <p><b>3. 핵심 아이디어</b></p>
+          <p>BJT 소신호 모델: 동작점에서 선형화해 MOS와 같은 $g_m$, $r_O$ 틀을 쓰고, 베이스 전류만 저항 $r_\pi$ 하나로 더해요. PNP는 NPN 식에 절댓값만 씌워요(<a href="#s1-pnp">PNP는 절댓값만 씌우면 된다</a>).</p>
+          <p>캐스코드: 전류원 트랜지스터 위에 트랜지스터를 하나 더 쌓아요. 전류는 아래 트랜지스터가 그대로 정하고(<a href="#s2-stack">쌓아도 전류는 그대로: M1은 전류의 통로</a>), 출력저항은 위 트랜지스터의 $g_m r_O$배로 커져요(<a href="#s2-rout">캐스코드의 출력저항 R_out 유도</a>).</p>
+          $$R_{out} \approx g_{m1} r_{O1} r_{O2}$$
+          <p><b>4. 대가와 쓰이는 곳</b></p>
+          <p>BJT 모델의 대가는 $r_\pi$ 때문에 식이 MOS보다 조금 복잡해지는 거예요.</p>
+          <p>캐스코드는 전력 소모가 늘지 않고, 트랜지스터 하나가 더 드는 것도 큰 문제가 아니에요. 진짜 대가는 전압 헤드룸(voltage headroom)이에요. 두 트랜지스터가 모두 포화 영역이어야 해서 출력에 최소 $V_{ov1} + V_{ov2}$가 필요해요(<a href="#s2-headroom">캐스코드의 단점: 전압 헤드룸</a>).</p>
+          <p>캐스코드는 고이득 증폭기와 정밀한 전류원 같은 고성능 회로에 써요. 증폭기로서의 캐스코드는 다음 시간에 다뤄요(<a href="#s3-next">다음 시간 예고</a>).</p>
+        </div>
+        <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+          <p>BJT도 다시 보는 이유를 이렇게 말씀하셨어요.</p>
+          <blockquote>"모스와 BJT는 어느 하나를 알면 나머지를 알기가 쉽습니다" (0909 02:44)</blockquote>
+          <p>선형 모델이 필요한 이유예요.</p>
+          <blockquote>"익스포넨셜 함수가 들어가면 방정식 풀기가 불가능합니다" (0909 10:19)</blockquote>
+          <p>트랜지스터 전류원의 한계와 그 답이에요.</p>
+          <blockquote>"양단의 전압이 변했을 때 전류가 안 변했으면 좋겠는데" (0909 41:21)</blockquote>
+          <blockquote>"고민해서 나온 게 캐스코드 스테이지가 되겠습니다" (0909 44:08)</blockquote>
+          <p>그리고 대가예요.</p>
+          <blockquote>"트랜지스터가 위로 쌓이게 되면 전압을 먹죠." (0909 70:23)</blockquote>
+        </div>
+        <div class="layer supp"><span class="badge supp">보충 · 수업에서 유도하진 않았어요</span>
+          <p>Razavi 9장 도입부(449쪽)는 캐스코드 단을 공통 이미터·공통 소스 구조를 고친 형태로 소개하고, 이 장의 각 기본 구성 요소를 바이폴라와 MOS 두 가지로 구현해 본다고 해요. BJT 소신호 모델을 MOS와 같은 틀로 정리해 두면 두 구현을 같은 식으로 읽을 수 있어요. 캐스코드라는 이름은 진공관 시대의 "cascaded triode"를 줄인 말로 여겨진다고 해요.</p>
+          <p>출력저항을 키우는 다른 단순한 방법은 이미터나 소스에 축퇴 저항을 다는 거예요(Razavi 9.1.1, 450쪽). 저항을 키울수록 그 위의 전압 강하도 커져서 여유 전압을 더 먹어요. 캐스코드는 저항 대신 트랜지스터를 두어, 큰 소신호 저항 $r_{O2}$를 얻으면서 전류와 무관한 헤드룸만 써요.</p>
+        </div>
+        <div class="sum" hidden>
+          <p class="sum-lead">BJT도 MOS와 같은 소신호 틀로 보면, 하나짜리 전류원의 유한한 $r_O$가 보이고, 트랜지스터를 쌓는 캐스코드로 헤드룸을 내주고 출력저항을 키워요.</p>
+          <p class="panel-label">핵심 식</p>
+          <ul class="eq-list">
+            <li><span class="eq-name">하나일 때 이득 한계</span>$$|A_v| \to g_m r_O$$</li>
+            <li><span class="eq-name">캐스코드 출력저항</span>$$R_{out} \approx g_{m1} r_{O1} r_{O2}$$</li>
+            <li><span class="eq-name">캐스코드 최소 출력 전압</span>$$V_{ov1} + V_{ov2}$$</li>
+          </ul>
+          <p class="panel-label">용어</p>
+          <dl class="terms">
+            <dt>캐스코드(cascode)</dt><dd>전류원 트랜지스터 위에 트랜지스터를 하나 더 쌓은 구조</dd>
+            <dt>전압 헤드룸(voltage headroom)</dt><dd>쌓은 트랜지스터가 모두 포화로 동작하려고 떼어 둬야 하는 전압 여유</dd>
+          </dl>
+        </div>
+      </article>
+    </section>
     <section id="s0"><h2>1. MOS와 BJT, 그리고 BJT 대신호 모델</h2>
 <article class="topic" id="s0-mos-vs-bjt"><h3>MOS와 BJT: 같은 전류원, 다른 입력 전류</h3><div class="tags"><span class="tag date">0909 수업</span><span class="tag slide">L02 s21</span></div>
   <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>

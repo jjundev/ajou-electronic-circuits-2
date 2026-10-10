@@ -337,7 +337,7 @@
         </div>
         <p class="panel-meta">읽은 토픽 <b id="progress-n">0</b> / <span id="progress-total">0</span></p>
         <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
-        <nav class="toc" aria-label="목차"><a href="#s0">0 왜 차동</a><a href="#s1">1 차동쌍</a><a href="#s2">2 대신호</a><a href="#s3">3 소신호</a><a href="#s4">4 요약·예고</a></nav>
+        <nav class="toc" aria-label="목차"><a href="#why">왜 쓸까</a><a href="#s0">0 왜 차동</a><a href="#s1">1 차동쌍</a><a href="#s2">2 대신호</a><a href="#s3">3 소신호</a><a href="#s4">4 요약·예고</a></nav>
       </div>
     </aside>
     <div class="content">
@@ -346,6 +346,82 @@
       <h1>차동 증폭기 — 5살도 이해하는 정리노트</h1>
       <p>권익진 교수님 전자회로2 · 0923 수업 (Lec4, Razavi 10장)</p>
     </div>
+    <section id="why"><h2>들어가며: 왜 이런 회로를 쓸까</h2>
+<article class="topic" id="why-circuit"><h3>왜 이런 회로를 쓸까</h3><div class="tags"><span class="tag date">0923 수업</span><span class="tag slide">L04 s3–s7</span></div>
+        <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+          <p class="lead">출렁이는 배 위에서 두 사람의 키를 재면 배가 오르내려도 둘의 키 차이는 그대로인 것처럼, 두 줄의 차이만 보면 흔들림이 지워져요.</p>
+          <figure class="figure"><svg id="fig-why" viewBox="0 0 360 262" role="img" aria-label="위에서 아래로 이어지는 흐름도. 첫째 테두리 상자는 한 줄로 보내면 흔들림까지 커진다는 내용이고 위험색 선으로 그렸어요. 화살표를 따라 둘째 테두리 상자는 두 줄로 보내 빼면 같은 흔들림이 지워진다는 내용이에요. 셋째 상자는 강조색 테두리로, 두 줄 끝을 펌프 하나에 묶으면 흐름이 늘 같아진다는 내용이에요. 맨 아래에 대신 전기를 두 배 쓴다는 글이 있어요.">
+            <rect class="fig-danger" x="40" y="10" width="280" height="50" rx="8"/>
+            <text class="fig-text" x="180" y="32" font-size="14" text-anchor="middle">한 줄로 보내면</text>
+            <text class="fig-muted" x="180" y="50" font-size="12" text-anchor="middle">흔들림까지 같이 커져요</text>
+            <line class="fig-ink" x1="180" y1="60" x2="180" y2="84"/>
+            <path class="fig-ink" d="M173,77 L180,85 L187,77"/>
+            <rect class="fig-ink" x="40" y="88" width="280" height="50" rx="8"/>
+            <text class="fig-text" x="180" y="110" font-size="14" text-anchor="middle">두 줄로 보내고 서로 빼면</text>
+            <text class="fig-muted" x="180" y="128" font-size="12" text-anchor="middle">둘에 똑같이 묻은 흔들림은 지워져요</text>
+            <line class="fig-ink" x1="180" y1="138" x2="180" y2="162"/>
+            <path class="fig-ink" d="M173,155 L180,163 L187,155"/>
+            <rect class="fig-accent" x="40" y="166" width="280" height="50" rx="8"/>
+            <text class="fig-text" x="180" y="188" font-size="14" text-anchor="middle">두 줄 끝을 펌프 하나에 묶으면</text>
+            <text class="fig-muted" x="180" y="206" font-size="12" text-anchor="middle">흐르는 양이 늘 같아 더 튼튼해요</text>
+            <text class="fig-muted" x="180" y="246" font-size="12" text-anchor="middle">대신 전기를 두 배 쓰고, 뒤집힌 짝 신호도 만들어야 해요</text>
+          </svg><figcaption>한 줄은 흔들림에 약하고, 두 줄로 나눠 빼면 흔들림이 지워지며, 두 줄을 펌프 하나에 묶으면 더 튼튼해지는 대신 전기를 더 써요.</figcaption></figure>
+        </div>
+        <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+          <p><b>1. 풀고 싶은 문제: 잡음에 강한 증폭</b></p>
+          <p>싱글엔디드(single-ended) 신호는 접지를 기준으로 잰 전압 하나예요. CS 단 하나로 증폭하면 $V_{DD}$에 실린 공급 잡음 $v_r$이 출력에 그대로 나타나요(L04 s4).</p>
+          <p>$$v_X=A_vv_{in}+v_r$$</p>
+          <p>외부에서 들어오는 잡음도 같은 문제를 일으켜요. 오디오·비디오처럼 잡음이 바로 소리나 화면으로 드러나는 회로에서는 이것을 막아야 해요. 자세한 내용은 <a href="#s0-noise">공통 모드 잡음은 빼면 사라진다</a>에 있어요.</p>
+
+          <p><b>2. 단순한 해법과 그 한계</b></p>
+          <p>똑같은 CS 단 두 개를 대칭으로 두고, 크기는 같고 위상은 반대인 차동 신호(differential signal) $+v_{in}$, $-v_{in}$을 넣어요. 출력의 차이를 취하면 같은 위상으로 실린 잡음이 빠져요.</p>
+          <p>$$v_X-v_Y=2A_vv_{in}$$</p>
+          <p>잡음은 사라지지만 이득은 CS 단 하나와 같은 $A_v$예요(<a href="#s0-noise">공통 모드 잡음은 빼면 사라진다</a>). 남는 한계는 소스가 접지에 고정돼 있다는 점이에요. 입력 DC 바이어스 $V_B$가 바뀌면 바이어스 전류와 출력 DC 레벨이 따라 바뀌어요.</p>
+          <p>$$V_X=V_{DD}-\tfrac12 k(V_B-V_{TH})^2R_D$$</p>
+          <p>이 비교는 <a href="#s1-cm-response">입력 CM 레벨을 올려도 전류와 출력은 그대로</a>의 표에 있어요.</p>
+
+          <p><b>3. 핵심 아이디어: 소스를 묶고 테일 전류원을 단다</b></p>
+          <p>두 소스를 노드 P로 묶고 테일 전류원(tail current source) $I_{SS}$를 달면, 입력 공통 모드 레벨 $V_{CM}$과 상관없이 두 전류가 절반씩 고정돼요. 그래서 공통 모드는 출력에서 걸러지고(공통 모드 제거, common-mode rejection) 차동 입력만 증폭돼요.</p>
+          <p>$$I_{D1}=I_{D2}=\dfrac{I_{SS}}{2}$$</p>
+          <p>$$A_v=-g_mR_D$$</p>
+          <p>구조는 <a href="#s1-pair">차동쌍의 구조: 소스를 묶고 테일 전류원을 단다</a>, 전류가 고정되는 이유는 <a href="#s1-cm-response">입력 CM 레벨을 올려도 전류와 출력은 그대로</a>, 이득은 <a href="#s3-linearize">작은 입력에서는 직선으로: 이득 -g_mR_D</a>에서 다뤄요.</p>
+
+          <p><b>4. 대가와 쓰이는 곳</b></p>
+          <ul>
+            <li>전류 소모가 두 배예요. 양쪽에 같은 바이어스 전류가 필요한데 이득은 그대로예요. 트랜지스터 수도 두 배지만 이것은 결정적인 문제가 아니에요.</li>
+            <li>위상이 반대인 입력 한 쌍을 따로 만들어야 해요. 보통 트랜스포머(transformer)를 써요.</li>
+            <li>테일 전류원은 실제로 트랜지스터라서 포화에 있으려면 전압 여유(헤드룸)가 필요해요. 그래서 $V_{CM}$에 하한이 생겨요: $V_{CM}\ge V_{GS1}+V_{OV,tail}$</li>
+          </ul>
+          <p>앞의 두 가지는 <a href="#s0-cost">차동 회로의 값: 전류 두 배와 차동 신호 만들기</a>, 헤드룸은 <a href="#s1-cm-range">입력 CM 레벨의 허용 범위</a>에 있어요. 이런 대가에도 공통 모드 잡음에 강하다는 점 때문에 오디오·비디오 회로에서는 차동 회로가 기본이에요.</p>
+        </div>
+        <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+          <p>차동 회로의 이점은 이득이 아니라 잡음 제거라고 정리하셨어요.</p>
+          <blockquote>"이득은 차이가 없어요. … 노이즈는 제거된다는 거죠." (0923 03:10)</blockquote>
+          <p>단점은 소자 수보다 전류라고 하셨어요.</p>
+          <blockquote>"근데 전류를 두 배로 쓴다, 그건 문제가 될 수 있죠." (0923 05:36)</blockquote>
+          <p>그럼에도 공급 잡음이 곧 소리·영상 잡음이 되는 오디오·비디오에서는 차동 회로를 쓰는 것이 기본이라고 하셨어요(0923 07:35). 이어서 CS 단 두 개만으로도 잡음 제거 효과는 있지만, 특성을 높이려고 소스를 묶고 테일 전류원을 단 차동쌍을 쓴다고 하셨어요(0923 08:10).</p>
+        </div>
+        <div class="layer supp"><span class="badge supp">보충 · 수업에서 유도하진 않았어요</span>
+          <p>교과서 10.1.1(예제 10.1, 498–499쪽)은 정류기로 전원을 받는 증폭기에서 출발해요. 공급 리플이 이득 1로 출력에 섞여 웅웅거리는 잡음이 들리고, 커패시터를 키워 리플을 줄이는 방법은 여러 회로가 같은 전원을 쓰면 필요한 크기가 너무 커져요. 그래서 출력을 접지가 아니라 같은 리플을 가진 다른 노드에 대해 재자는 생각이 차동 회로의 출발점이 돼요(그림 10.2).</p>
+          <p>교과서 10.1.2(501쪽)는 같은 구조가 출력 스윙을 두 배로 준다는 점도 이점으로 꼽아요. 이득이 그대로라는 수업의 정리와 어긋나지 않아요. 입력도 두 배이기 때문이에요.</p>
+        </div>
+        <div class="sum" hidden>
+          <p class="sum-lead">공통 모드 잡음을 지우려고 차동으로 쓰고, 테일 전류원으로 전류를 고정해 차동만 증폭하는 대신 전류 두 배와 헤드룸을 내줘요.</p>
+          <p class="panel-label">핵심 식</p>
+          <ul class="eq-list">
+            <li><span class="eq-name">차동 출력</span>$$v_X-v_Y=2A_vv_{in}$$</li>
+            <li><span class="eq-name">바이어스 전류</span>$$I_{D1}=I_{D2}=\dfrac{I_{SS}}{2}$$</li>
+            <li><span class="eq-name">헤드룸 하한</span>$$V_{CM}\ge V_{GS1}+V_{OV,tail}$$</li>
+          </ul>
+          <p class="panel-label">용어</p>
+          <dl class="terms">
+            <dt>차동 신호(differential signal)</dt><dd>크기는 같고 위상은 반대인 두 신호</dd>
+            <dt>테일 전류원(tail current source)</dt><dd>묶인 소스 노드에 달려 두 전류의 합을 $I_{SS}$로 고정하는 전류원</dd>
+            <dt>공통 모드 제거(common-mode rejection)</dt><dd>두 입력에 같이 들어온 신호가 차동 출력에 나타나지 않는 성질</dd>
+          </dl>
+        </div>
+      </article>
+    </section>
     <section id="s0"><h2>0. 왜 차동으로 쓸까</h2>
 <article class="topic" id="s0-noise"><h3>공통 모드 잡음은 빼면 사라진다</h3><div class="tags"><span class="tag date">0923 수업</span><span class="tag slide">L04 s3–s4</span></div>
   <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
