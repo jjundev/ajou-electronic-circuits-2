@@ -16,7 +16,16 @@ manifest는 이번 팩의 계약이다. 작성자, 검사기, 조립기가 모�
 | `sessions` | 날짜별 `{date, stt, summary, slides}` |
 
 ## sections / topics
-- 섹션 id는 `s0`, `s1`, … 순서. 마지막 섹션은 항상 "요약 · 예고"이며 토픽 `s<N>-cheatsheet`, `s<N>-next`, `s<N>-links`를 둔다.
+- **첫 섹션은 항상 "왜 이런 회로를 쓸까" 페이지다**(manifest.py가 강제). id·제목·토픽을 글자 그대로 쓴다.
+  ```json
+  {"id": "why", "title": "들어가며: 왜 이런 회로를 쓸까", "short": "왜 쓸까", "topics": [
+    {"id": "why-circuit", "title": "왜 이런 회로를 쓸까", "required_terms": ["캐스코드", "출력저항", "헤드룸"], "layers": ["eli5", "formal", "prof"], "supp": false}
+  ]}
+  ```
+  - 토픽은 `why-circuit` 하나. `layers`에 `eli5`, `formal`은 필수, 요약 `## 동기 발언`에 교수님 발언이 있으면 `prof`를 더한다. 수업에서 말하지 않은 동기(교과서 장 도입부)를 쓰면 `supp: true`.
+  - `required_terms` 3~6개: 대표 회로 이름, 그 회로가 푸는 문제, 그 대가를 각각 1개 이상. 범위에 회로가 여럿이면 모두 이 한 페이지에 담는다.
+  - 예고 토픽(`preview_topic`)이 될 수 없다. 범위의 다른 섹션(`s0`…) 안에 "왜 필요한가" 토픽을 따로 만들지 않는다.
+- 그다음 섹션 id는 `s0`, `s1`, … 순서. 마지막 섹션은 항상 "요약 · 예고"이며 토픽 `s<N>-cheatsheet`, `s<N>-next`, `s<N>-links`를 둔다.
 - 섹션은 **개념 순서(슬라이드 로드맵)** 로 묶는다. 날짜는 토픽 태그로만 드러낸다.
 - 토픽 id는 `s<n>-<kebab>`(영문 소문자). 토픽 하나 = 슬라이드 1~3장 또는 칠판 유도 하나.
 - `short`는 상단 목차 글자(예: `"2 출력저항"`), `title`은 `"2. 캐스코드의 출력저항"`.

@@ -70,6 +70,7 @@ description: 전자회로2 수업의 STT·강의노트·Razavi 교과서로 ELI5
 
 ### 2. manifest
 - 요약들의 슬라이드 대조표와 용어·식 목록으로 `RUN/manifest.json`을 쓴다. 규칙은 `references/manifest-guide.md`에 있다.
+- 첫 섹션은 항상 `why`(토픽 `why-circuit`, "들어가며: 왜 이런 회로를 쓸까")다. 요약의 `## 동기 발언`으로 `required_terms`를 고른다(`references/manifest-guide.md`).
 - 문제 선별은 `references/problem-selection.md`를 따른다. 요약의 `## 교과서 절 대조`와 `RUN/candidates.tsv`로 고른다.
 - 검증: `python3 "$SKILL/scripts/manifest.py" "$RUN/manifest.json" "$REPO"` 결과가 `OK`여야 한다.
 
@@ -77,6 +78,7 @@ description: 전자회로2 수업의 STT·강의노트·Razavi 교과서로 ELI5
 - 섹션마다 작성자 1명을 띄운다. 브리프는 `references/content-rules.md`, 위젯 규칙은 `references/widget-rules.md`에 있다.
 - 모두 **한 메시지에서 병렬로** 띄운다. 모델은 opus(GPT: sol), `lite`이면 sonnet(GPT: luna)이다. 병렬 작성자끼리 임시 파일이 섞이지 않게 브리프에 각자의 임시 폴더 `<RUN>/work/<sid>/`를 적어 준다.
 - 브리프의 `<…>` 자리는 실제 경로, id, 금지어 목록(`<forbidden 목록>`), 예고 토픽 id(`<preview_topic>`), 섹션 작성자에게 필요한 교과서 장 PDF와 쪽(`<N>장.pdf`, `<쪽>`), 그리고 manifest `links` 중 그 섹션 토픽에 속한 것만(`<이 섹션의 links 목록>`) 채워 넣는다. 요약·예고 섹션 작성자에게는 문제 수(0이면 "문제 없음")도 알린다.
+- `why` 섹션 작성자도 함께 병렬로 띄운다. 브리프의 `<뒤 섹션 토픽 id·제목 목록>`에 manifest의 나머지 토픽 id와 제목을 모두 적어 준다(링크 대상). 위젯은 두지 않는다.
 - 위젯은 팩 전체에 0~2개다. 병렬 작성자끼리는 서로를 모르므로 **메인 에이전트가 띄우기 전에** 위젯을 둘 토픽(0~2개)을 정하고, 그 토픽의 섹션 작성자 브리프에만 `<위젯>` 자리에 "토픽 `<토픽 id>`에 위젯 1개: <무엇을 움직이면 무엇이 보이는지>"를 적는다. 나머지 작성자의 `<위젯>` 자리에는 "위젯 없음"이라고 적는다. 정한 토픽과 이유는 보고서 "스킬이 정한 사항"에 적는다.
 
 ### 4. 조립
@@ -186,6 +188,17 @@ python3 "$SKILL/scripts/html2md.py" "$REPO/복습노트/<range>/<정리노트>.h
 ```
 실행 폴더 경로(`RUN`)도 적는다. 수정이 필요하면 조각을 고쳐 4단계부터 다시 돌리면 된다.
 
+## 기존 팩에 왜 페이지 붙이기
+첫 섹션 `why`가 생기기 전에 만든 팩에는 다시 조립하지 않고 조각만 끼워넣는다. 기존 토픽 id(`s0-…`)는 그대로라 팩 사이 링크와 읽음 표시가 유지된다.
+1. 대상 팩의 `정리노트_*.html`과 `.md`를 scratchpad에 백업한다(NFC로 찾는다).
+2. 팩마다 작성자 1명(opus, 병렬)에게 `references/content-rules.md`의 작성자 브리프를 섹션 `why`로 채워 넘긴다. manifest 대신 기존 노트를 계약으로 삼는다: 근거는 노트 자체(읽기 전용), 그 날짜 STT, 노트 태그의 강의자료, Razavi 장 도입부이고, `<뒤 섹션 토픽 id·제목 목록>`은 노트에서 `article class="topic" id=…`를 뽑아 채운다. 출력은 scratchpad의 `why.html` 한 파일이다.
+3. 끼워넣는다. 이미 why 섹션이 있으면 교체하므로 다시 실행해도 된다.
+```bash
+python3 "$SKILL/scripts/insert_why.py" --note "$REPO/복습노트/<range>/<정리노트>.html" --fragment <why.html>
+```
+4. `python3 "$SKILL/scripts/check_html.py" <정리노트>.html`이 `OK`, `html2md.py <정리노트>.html --check`가 `OK`(md를 다시 만든다)여야 한다.
+5. 7단계처럼 브라우저로 본다: 표지 다음 첫 화면이 why 토픽인지, 오른쪽 요약 패널, 링크 이동, 다크모드, 375px.
+
 ## 오류 처리
 | 상황 | 동작 |
 |---|---|
@@ -199,4 +212,5 @@ python3 "$SKILL/scripts/html2md.py" "$REPO/복습노트/<range>/<정리노트>.h
 | `OVERFLOW <파일>: <id>` | 종료 코드 1이지만 PDF는 남음. id를 바꾸지 않고 "미해결"에 적음 |
 | 포트 사용 중 | 다른 빈 포트 사용 |
 | 같은 range의 팩이 이미 있음 | 4단계 첫 조립 전에 기존 html·md·pdf·`problems.txt`·`figures_<range>/`를 새 폴더 `RUN/previous-<시각>-<임의>/`에 복사하고(다시 조립할 때는 복사하지 않음) 백업 경로를 보고서에 적음. 백업 명령이 실패하면 조립하지 않고 원인을 고친다 |
+| `insert_why.py`가 `insert_why 실패: …` | 노트는 그대로다. 메시지대로 why 조각을 고쳐 다시 실행 |
 | 검사 2회 실패 | 멈추지 않고 나머지 단계를 끝낸 뒤 "미해결"로 보고 |

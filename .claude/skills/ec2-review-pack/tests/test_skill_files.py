@@ -156,5 +156,29 @@ class TestBackupSnippet(unittest.TestCase):
         self.assertEqual(self.backups(), [])
 
 
+
+class TestWhyPageDocs(unittest.TestCase):
+    def read(self, rel):
+        return (SKILL / rel).read_text(encoding="utf-8")
+
+    def test_manifest_guide_fixes_why_section(self):
+        t = self.read("references/manifest-guide.md")
+        for s in ('"why"', "why-circuit", "들어가며: 왜 이런 회로를 쓸까", "왜 쓸까"):
+            self.assertIn(s, t)
+
+    def test_content_rules_has_why_section(self):
+        self.assertIn("## 왜 쓰는가 페이지 (`why-circuit`)", self.read("references/content-rules.md"))
+
+    def test_summary_prompt_collects_motivation(self):
+        self.assertIn("## 동기 발언", self.read("references/stt-summary-prompt.md"))
+
+    def test_review_prompt_checks_why(self):
+        self.assertIn("why-circuit", self.read("references/review-prompt.md"))
+
+    def test_skill_md_mentions_retrofit(self):
+        t = self.read("SKILL.md")
+        self.assertIn("scripts/insert_why.py", t)
+        self.assertIn("## 기존 팩에 왜 페이지 붙이기", t)
+
 if __name__ == "__main__":
     unittest.main()
