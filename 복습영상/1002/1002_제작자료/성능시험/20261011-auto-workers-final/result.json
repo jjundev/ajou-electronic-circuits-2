@@ -1,0 +1,135 @@
+{
+  "hardware": {
+    "platform": "darwin",
+    "chip": "Apple M5",
+    "cpu_cores": 10,
+    "memory_bytes": 17179869184
+  },
+  "policy": "authored motion union >50%, scene >=900frames, verified M5; otherwise2",
+  "cases": [
+    {
+      "case": "static",
+      "workers": [
+        2,
+        2
+      ],
+      "selections": [
+        {
+          "mode": "auto",
+          "workers": 2,
+          "reason": "static_majority",
+          "policy_version": 1,
+          "threshold_ratio": 0.5,
+          "min_scene_frames": 900,
+          "capacity": 6,
+          "status": "known",
+          "scene_frames": 900,
+          "animated_seconds": 0.6,
+          "motion_ratio": 0.02
+        },
+        {
+          "mode": "auto",
+          "workers": 2,
+          "reason": "static_majority",
+          "policy_version": 1,
+          "threshold_ratio": 0.5,
+          "min_scene_frames": 900,
+          "capacity": 6,
+          "status": "known",
+          "scene_frames": 900,
+          "animated_seconds": 0.6,
+          "motion_ratio": 0.02
+        }
+      ],
+      "elapsed_seconds": 15.700508250010898,
+      "master_sha256": "f0f25b5c0ba70dcfcb92f212f9348d0a9f81cbd406f6cdd1a9d7049593b75602",
+      "reference_sha256": "f0f25b5c0ba70dcfcb92f212f9348d0a9f81cbd406f6cdd1a9d7049593b75602",
+      "pcm_sha256": "d4cf5e98e3a5675cf3a9a9ad14329946283efdec205293af5190834d87a23974",
+      "frames": 1800,
+      "source_files": 111
+    },
+    {
+      "case": "dynamic",
+      "workers": [
+        6,
+        6
+      ],
+      "selections": [
+        {
+          "mode": "auto",
+          "workers": 6,
+          "reason": "motion_majority",
+          "policy_version": 1,
+          "threshold_ratio": 0.5,
+          "min_scene_frames": 900,
+          "capacity": 6,
+          "status": "known",
+          "scene_frames": 900,
+          "animated_seconds": 24.0,
+          "motion_ratio": 0.8
+        },
+        {
+          "mode": "auto",
+          "workers": 6,
+          "reason": "motion_majority",
+          "policy_version": 1,
+          "threshold_ratio": 0.5,
+          "min_scene_frames": 900,
+          "capacity": 6,
+          "status": "known",
+          "scene_frames": 900,
+          "animated_seconds": 24.0,
+          "motion_ratio": 0.8
+        }
+      ],
+      "elapsed_seconds": 29.191322708007647,
+      "master_sha256": "65a98a57ffe04a1b52660674ec3f20cabbaed4cac3d709434dbc853254b03136",
+      "reference_sha256": "65a98a57ffe04a1b52660674ec3f20cabbaed4cac3d709434dbc853254b03136",
+      "pcm_sha256": "d4cf5e98e3a5675cf3a9a9ad14329946283efdec205293af5190834d87a23974",
+      "frames": 1800,
+      "source_files": 111
+    },
+    {
+      "case": "mixed",
+      "workers": [
+        2,
+        6
+      ],
+      "selections": [
+        {
+          "mode": "auto",
+          "workers": 2,
+          "reason": "static_majority",
+          "policy_version": 1,
+          "threshold_ratio": 0.5,
+          "min_scene_frames": 900,
+          "capacity": 6,
+          "status": "known",
+          "scene_frames": 900,
+          "animated_seconds": 0.6,
+          "motion_ratio": 0.02
+        },
+        {
+          "mode": "auto",
+          "workers": 6,
+          "reason": "motion_majority",
+          "policy_version": 1,
+          "threshold_ratio": 0.5,
+          "min_scene_frames": 900,
+          "capacity": 6,
+          "status": "known",
+          "scene_frames": 900,
+          "animated_seconds": 24.0,
+          "motion_ratio": 0.8
+        }
+      ],
+      "elapsed_seconds": 22.101512082997942,
+      "master_sha256": "d0596cfcd627ffb8521ad68fa6acfb3e0b92b5c788b08d57dd0698b34b0c0ff5",
+      "reference_sha256": "d0596cfcd627ffb8521ad68fa6acfb3e0b92b5c788b08d57dd0698b34b0c0ff5",
+      "pcm_sha256": "d4cf5e98e3a5675cf3a9a9ad14329946283efdec205293af5190834d87a23974",
+      "frames": 1800,
+      "source_files": 111
+    }
+  ],
+  "status": "passed"
+}

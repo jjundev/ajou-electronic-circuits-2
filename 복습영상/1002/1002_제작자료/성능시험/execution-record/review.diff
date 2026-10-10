@@ -1,0 +1,699 @@
+diff --git a/.agents/skills/ec2-review-video/SKILL.md b/.agents/skills/ec2-review-video/SKILL.md
+index 0dcc89c..137523f 100644
+--- a/.agents/skills/ec2-review-video/SKILL.md
++++ b/.agents/skills/ec2-review-video/SKILL.md
+@@ -89,3 +89,13 @@ prepare --repo REPO --from-run OLD_RUN --voice Charon으로 별도 RUN을 만든
+ 전체 복습/재음성은 `prepare --repo REPO RANGE` 또는 `prepare --repo REPO --from-run OLD_RUN --voice NAME`으로 만든다. 제작 전에 RUN을 `<기간>_제작자료/실행/` 안으로 옮기고 이후 명령에는 옮긴 절대 경로를 사용한다. latest를 비롯한 이전 결과는 모든 검사 완료 전 유지한다. 검증된 마스터를 날짜 폴더의 자연스러운 제목으로 내보내기 전 파일 해시를 확인한다. 이전 제목 파일은 제작자료/이전버전에 보존하고 기존 review.mp4 상대 링크도 보존된 원본으로 다시 연결한다. RUN의 마스터를 내보낸 영상의 상대 링크로 바꾼 뒤 review_fingerprint와 증거 해시를 다시 대조한다. 단일 latest.json은 제작자료 안에서 RUN의 상대 경로를 가리키게 정리한다. 마스터 검증·내보내기 후 "자막" 절의 순서로 자막본만 남긴다. 자동 묶음 제작은 이 수작업 대신 prepare-set/publish-set을 사용한다.
+ 
+ [개발 수용 기록](references/acceptance.md)은 로컬 합성 PCM과 실음성 검증의 범위를 구분한다.
++
++## 렌더링 성능 설정
++
++Apple M5(물리 CPU 10개, RAM 16 GiB 이상)는 장면 캡처 작업자 6개, 그 외 장비는 2개가 기본이다. 장면은 순서대로 처리하며 CPU 인코딩·브라우저 GPU 자동·fast capture 비활성·delivery 품질을 사용한다. `render`와 `revoice`의 `--render-workers 1..6`으로 덮어쓸 수 있다. CLI 값 > RUN의 `source/render-options.json` > 장비 기본값 순이다. 저장 파일이 손상되면 먼저 수정해야 한다.
++
++설정은 음성 config와 별도이며 변경 시 render 이후만 재검증한다. 기존 음성·조립 결과를 재사용한다. 장면 영수증과 `verification/render-receipt.json`에 실제 명령·설정·시간·hash를 기록한다. 재음성의 retime 구간은 기존 프레임을 변환하고 재렌더 장면에만 캡처 작업자를 적용한다.
++
++짧고 대부분 정지한 장면은 workers6의 초기화 비용으로 더 느릴 수 있다. 그런 RUN은 `--render-workers 2`로 비교해 선택한다. 프레임·음성 동일성 검증과 속도 결과를 구분한다.
++
++글꼴 초기 그리기 차이를 막기 위해 화면 조립 시 document.fonts.ready 이후 타임라인을 등록한다. 이전 코드로 조립한 RUN은 composition 코드 지문 변경으로 assemble을 한 번 다시 실행해야 한다. 음성은 재생성하지 않는다.
+diff --git a/.agents/skills/ec2-review-video/references/rendering-and-verification.md b/.agents/skills/ec2-review-video/references/rendering-and-verification.md
+index 1b85c27..101dbef 100644
+--- a/.agents/skills/ec2-review-video/references/rendering-and-verification.md
++++ b/.agents/skills/ec2-review-video/references/rendering-and-verification.md
+@@ -2,7 +2,11 @@
+ 
+ Python 3.11+, Node, FFmpeg/ffprobe, 로컬 HyperFrames CLI Node entry가 필요하다. 자막 굽기는 libass subtitles filter가 있는 FFmpeg를 사용한다. HyperFrames entry는 해당 설치 package.json의 bin이 가리키는 실제 JS 파일이다. CLI에 --hyperframes-entry로 절대 경로를 넘긴다. 렌더 버전은 기록하고 이전 run의 도구/템플릿을 몰래 갱신하지 않는다.
+ 
+-probe_backends는 실제 CPU/NVENC 60frame 영상과 전체 decode를 시험한다. 여유 VRAM이 있으면 2개 병렬도 실측한다. 브라우저 캡처 GPU는 NVENC와 별개다. 실제 render 로그가 확인되기 전 RTX browser capture로 보고하지 않는다. OS 전역 GPU 선호 설정은 변경하지 않는다.
++기본 CLI는 문제풀이 영상과 같은 정책을 쓴다: Apple M5/물리 CPU10/RAM>=16GiB workers6, 그 외 workers2. CPU 인코딩, 브라우저 GPU auto, `--experimental-fast-capture=false`, delivery 1080p30. 장면은 순차 처리해 내부 작업자와 장면 병렬의 중복을 방지한다. `render`/`revoice --render-workers 1..6` > source/render-options.json > 장비 기본값. resume은 설정 파일을 새로 만들지 않는다. 설정 변경은 render 이후만 무효화한다. 실제 로그 확인 전 GPU 사용 성공으로 보고하지 않는다.
++
++probe_backends는 기존 CPU/NVENC 진단용으로 유지되며 기본 CLI의 인코더 선택에 사용하지 않는다. 직접 render_parts를 부르는 기존 호출도 저장 정책 또는 장비 기본값으로 캡처한다. 장면 MP4 옆 JSON은 실제 args/elapsed_seconds/render_options/hash/frames를 기록한다. verification/render-receipt.json은 성공한 mux와 함께 render 단계의 검증 대상으로 등록한다. 재음성 영수증의 parts는 재렌더된 장면만 포함한다.
++
++실제 성능시험: `PATH=/opt/homebrew/opt/ffmpeg-full/bin:$PATH HYPERFRAMES_FFMPEG_PATH=/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg python3 tests/render_performance_acceptance.py --destination <새 절대경로> --hyperframes-entry <로컬 JS 절대경로>`. 기존 차동쌍 fixture의 60초/2장면을 workers1/2/6으로 실행하며 전체 frame hash·PCM·AAC·소스 hash·자막 굽기·전체 decode를 검사한다. 합성 PCM 시험 신호이며 실제 Aoede 발화 품질 또는 전체 제작 속도 검증은 아니다. 단일 장비·fixture 결과로 일반화하지 않는다. `--motion-duration 24`는 동작을 연장한 stress 시험이다. 정지 프레임이 대부분인 짧은 장면은 CLI의 정지 프레임 재사용 효과 때문에 workers6가 더 느릴 수 있으므로 workers2와 비교해 선택한다.
+ 
+ 검증:
+ 1. content: 전체 원문 항목 발견과 발화/문항 판별점 의미 대응 검토.
+@@ -23,3 +27,5 @@ node tests/browser_check.mjs RUN PUPPETEER_PACKAGE_JSON CHROME_EXE는 로컬 설
+ **다크모드 고정.** 최종 영상은 항상 다크모드다. 렌더는 반드시 `render_parts`(장면별 `scene-NN.html`, `data-theme="dark"` 진입점)와 `mux`로 한다. 프로젝트 `index.html`을 `hyperframes render .`로 한 번에 렌더하면 서브 컴포지션 CSS 때문에 라이트로 나올 수 있으므로 쓰지 않는다. 코드가 이를 강제한다: `render_parts`는 `data-theme="dark"`가 아닌 진입점·`index.html`을 거부하고, `mux`·`verify_media`(`not-dark`)·`burn_subtitles`는 여러 시점의 좌상단 배경 밝기가 기준(80)을 넘으면 실패한다. 이 검사를 끄거나 우회하지 않는다.
+ 
+ content에는 [회로 검토](circuit-semantics.md)의 현재 검토를 결합한다. passed 보고서도 입력 변경·장면 누락·근거 변경 후에는 게시를 통과하지 않는다. 검토 구조 검사 통과를 식의 물리적 증명으로 보고하지 않는다.
++
++글꼴 초기 그리기 차이를 막기 위해 화면 조립 시 document.fonts.ready 이후 타임라인을 등록한다. 이전 코드로 조립한 RUN은 composition 코드 지문 변경으로 assemble을 한 번 다시 실행해야 한다. 음성은 재생성하지 않는다.
+diff --git a/.agents/skills/ec2-review-video/scripts/lib/composition.py b/.agents/skills/ec2-review-video/scripts/lib/composition.py
+index 63b960c..8308d47 100644
+--- a/.agents/skills/ec2-review-video/scripts/lib/composition.py
++++ b/.agents/skills/ec2-review-video/scripts/lib/composition.py
+@@ -72,7 +72,7 @@ def assemble(m,timeline,theme,run):
+             js.append('tl.fromTo('+json.dumps(target)+','+json.dumps(motion['from'])+','+json.dumps(values)+','+str(seg['start_sample']/24000-start)+');')
+         if not motions: raise ValueError('scene requires meaningful motion')
+         js.append('window.__timelines=window.__timelines||{};window.__timelines['+json.dumps(sid)+']=tl;')
+-        script='<script>(()=>{'+''.join(js).replace('</','<\\/')+'})();</script>'
++        script='<script>Promise.resolve().then(()=>document.fonts.ready).then(()=>{'+''.join(js).replace('</','<\\/')+'});</script>'
+         body=f'<div id="{sid}-root" class="video-scene" data-composition-id="{sid}" data-width="1920" data-height="1080" data-duration="{duration:.9f}">'+fragment+'</div>'
+         page=scene_shell(body+script,scene['template_kind'],theme)
+         math_links='';math_script=''
+diff --git a/.agents/skills/ec2-review-video/scripts/lib/render.py b/.agents/skills/ec2-review-video/scripts/lib/render.py
+index 86a1718..5f7a08d 100644
+--- a/.agents/skills/ec2-review-video/scripts/lib/render.py
++++ b/.agents/skills/ec2-review-video/scripts/lib/render.py
+@@ -2,6 +2,7 @@ from pathlib import Path
+ from concurrent.futures import ThreadPoolExecutor
+ import json,os,re,shutil,subprocess,time,wave
+ from .cache import digest,file_hash,cache_valid,atomic_json
++from .render_options import load_render_options,validate_render_options
+ 
+ def command(args,cwd=None,timeout=300):
+     return subprocess.run([str(a) for a in args],cwd=cwd,capture_output=True,text=True,encoding='utf-8',errors='replace',
+@@ -15,8 +16,8 @@ def probe_media(path):
+ def frames_ok(path,frames):
+     try:
+         s=next(s for s in probe_media(path)['streams'] if s['codec_type']=='video')
+-        return int(s['nb_frames'])==frames and int(s['width'])==1920 and int(s['height'])==1080
+-    except (ValueError,KeyError,StopIteration,OSError): return False
++        return int(s['nb_frames'])==frames and int(s['width'])==1920 and int(s['height'])==1080 and s['r_frame_rate'] in ('30/1','60/2')
++    except (ValueError,KeyError,StopIteration,OSError,TypeError): return False
+ 
+ DARK_MAX=80  # 다크 배경은 약 22/255. 라이트 배경은 200 이상이다.
+ 
+@@ -74,8 +75,14 @@ def probe_backends(run):
+     atomic_json(Path(run)/'verification/backend-probes.json',{'probes':candidates,'chosen':result})
+     return result
+ 
++def cpu_backend(entry,options):
++    return dict(encoder='libx264',workers=1,capture_gpu=False,decode_gpu=False,
++                hyperframes_entry=str(Path(entry).resolve()),render_options=validate_render_options(options))
++
+ def render_parts(parts,run,backend):
+-    run=Path(run); require_dark_entries(parts,run); dest=run/'renders/parts'; dest.mkdir(parents=True,exist_ok=True)
++    run=Path(run)
++    options=validate_render_options(backend['render_options']) if 'render_options' in backend else load_render_options(run)
++    require_dark_entries(parts,run); dest=run/'renders/parts'; dest.mkdir(parents=True,exist_ok=True)
+     entry=Path(backend['hyperframes_entry']).resolve()
+     if not entry.is_file(): raise ValueError('HyperFrames Node entry is missing')
+     versions=dict(backend.get('tool_versions',{}))
+@@ -85,24 +92,45 @@ def render_parts(parts,run,backend):
+     dependencies={p.relative_to(run).as_posix():file_hash(p) for p in run.rglob('*')
+                   if p.is_file() and p.suffix in ('.html','.css','.js','.svg','.png','.jpg','.jpeg','.webp','.woff2')
+                   and p.relative_to(run).parts[0] not in ('renders','verification','work')}
+-    def render(part):
++    renderer={name:file_hash(Path(__file__).with_name(name)) for name in ('render.py','render_options.py')}
++    outputs=[]
++    for part in parts:
+         out=dest/(part['id']+'.mp4'); receipt=out.with_suffix('.json')
+-        key=digest({'part':part,'dependencies':dependencies,'backend':stable_backend(backend),'versions':versions})
++        key=digest({'part':part,'dependencies':dependencies,'render_options':options,'versions':versions,'renderer':renderer})
++        old=None
+         if receipt.exists():
+-            old=json.loads(receipt.read_text(encoding='utf-8'))
+-            if cache_valid(out,old,key) and frames_ok(out,part['frames']): return out
+-        pending=out.with_name(out.stem+'.pending.mp4')
+-        args=['node',entry,'render','--composition',part['entry'],'--quality','delivery','--workers','1','--output',str(pending)]
+-        if backend['encoder']=='h264_nvenc': args+=['--gpu']
+-        if backend.get('capture_gpu'): args+=['--browser-gpu']
+-        r=command(args,run,timeout=3600)
+-        out.with_suffix('.log').write_text(r.stdout+'\n'+r.stderr,encoding='utf-8')
+-        if r.returncode or not frames_ok(pending,part['frames']): raise RuntimeError('scene render failed: '+part['id'])
+-        os.replace(pending,out)
+-        atomic_json(receipt,{'key':key,'output_sha256':file_hash(out),'frames':part['frames']})
+-        return out
+-    with ThreadPoolExecutor(max_workers=max(1,min(backend.get('workers',1),len(parts)))) as pool:
+-        return list(pool.map(render,parts))
++            try: old=json.loads(receipt.read_text(encoding='utf-8'))
++            except (OSError,ValueError): pass
++        if isinstance(old,dict) and cache_valid(out,old,key) and frames_ok(out,part['frames']):
++            outputs.append(out); continue
++        pending=out.with_name(out.stem+'.pending.mp4'); pending.unlink(missing_ok=True)
++        args=[str(a) for a in ['node',entry,'render','--composition',part['entry'],'--quality','delivery',
++                              '--workers',options['workers'],'--experimental-fast-capture=false','--output',pending]]
++        started=time.monotonic()
++        try:
++            try: r=command(args,run,timeout=3600)
++            except subprocess.TimeoutExpired as ex:
++                def text(value): return value.decode('utf-8',errors='replace') if isinstance(value,bytes) else (value or '')
++                out.with_suffix('.log').write_text(text(ex.stdout)+'\n'+text(ex.stderr)+'\nrender timeout',encoding='utf-8')
++                raise
++            out.with_suffix('.log').write_text(r.stdout+'\n'+r.stderr,encoding='utf-8')
++            if r.returncode or not pending.is_file() or not frames_ok(pending,part['frames']):
++                raise RuntimeError('scene render failed: '+part['id'])
++            record={'key':key,'output_sha256':file_hash(pending),'frames':part['frames'],
++                    'render_options':options,'args':args,'elapsed_seconds':time.monotonic()-started,'versions':versions}
++            os.replace(pending,out)
++            atomic_json(receipt,record)
++            outputs.append(out)
++        finally: pending.unlink(missing_ok=True)
++    return outputs
++
++def write_render_receipt(run,backend,parts,master):
++    run=Path(run)
++    records=[json.loads(Path(p).with_suffix('.json').read_text(encoding='utf-8')) for p in parts]
++    path=run/'verification/render-receipt.json'
++    atomic_json(path,dict(schema_version=1,render_options=backend['render_options'],parts=records,
++                          master_sha256=file_hash(master)))
++    return path
+ 
+ def mux(parts,audio,timeline,destination):
+     destination=Path(destination); run=destination.parent; work=run/'work/mux'; work.mkdir(parents=True,exist_ok=True)
+diff --git a/.agents/skills/ec2-review-video/scripts/lib/render_options.py b/.agents/skills/ec2-review-video/scripts/lib/render_options.py
+new file mode 100644
+index 0000000..e50640a
+--- /dev/null
++++ b/.agents/skills/ec2-review-video/scripts/lib/render_options.py
+@@ -0,0 +1,63 @@
++"""Read-only render policy, deliberately independent of voice configuration."""
++from pathlib import Path
++import subprocess
++import sys
++import json
++
++InputError = ValueError
++
++def read(path):
++    return json.loads(Path(path).read_text(encoding='utf-8-sig'))
++
++
++def detect_hardware() -> dict[str, object]:
++    hardware = dict(platform=sys.platform, chip=None, cpu_cores=None, memory_bytes=None)
++    if sys.platform == 'darwin':
++        for key, field, convert in [('chip', 'machdep.cpu.brand_string', str),
++                                    ('cpu_cores', 'hw.physicalcpu', int),
++                                    ('memory_bytes', 'hw.memsize', int)]:
++            try:
++                result = subprocess.run(['/usr/sbin/sysctl', '-n', field], capture_output=True,
++                                        text=True, timeout=2, check=True)
++                hardware[key] = convert(result.stdout.strip())
++            except (OSError, subprocess.SubprocessError, ValueError):
++                pass
++    return hardware
++
++
++def default_render_options(hardware: dict[str, object] | None = None) -> dict[str, object]:
++    host = detect_hardware() if hardware is None else hardware
++    verified = (host.get('platform') == 'darwin' and host.get('chip') == 'Apple M5'
++                and type(host.get('cpu_cores')) is int and host['cpu_cores'] == 10
++                and type(host.get('memory_bytes')) is int and host['memory_bytes'] >= 16 * 1024**3)
++    return dict(schema_version=1, workers=6 if verified else 2, encoder='cpu',
++                browser_gpu='auto', fast_capture=False)
++
++
++def validate_render_options(options: dict[str, object]) -> dict[str, object]:
++    keys = {'schema_version', 'workers', 'encoder', 'browser_gpu', 'fast_capture'}
++    if not isinstance(options, dict) or set(options) != keys:
++        raise InputError('render options require exactly: ' + ', '.join(sorted(keys)))
++    if type(options['schema_version']) is not int or options['schema_version'] != 1:
++        raise InputError('render options schema_version must be integer 1')
++    if type(options['workers']) is not int or not 1 <= options['workers'] <= 6:
++        raise InputError('render workers must be an integer from 1 to 6')
++    if (options['encoder'] != 'cpu' or options['browser_gpu'] != 'auto'
++            or type(options['fast_capture']) is not bool or options['fast_capture']):
++        raise InputError('render requires CPU encoding, browser GPU auto, fast_capture=false')
++    return dict(options)
++
++
++def load_render_options(run: Path, workers: int | None = None, *,
++                        hardware: dict[str, object] | None = None) -> dict[str, object]:
++    path = Path(run) / 'source/render-options.json'
++    if path.exists():
++        try:
++            options = validate_render_options(read(path))
++        except (OSError, ValueError) as ex:
++            raise InputError('invalid saved render options: ' + str(ex)) from ex
++    else:
++        options = default_render_options(hardware)
++    if workers is not None:
++        options['workers'] = workers
++    return validate_render_options(options)
+diff --git a/.agents/skills/ec2-review-video/scripts/lib/state.py b/.agents/skills/ec2-review-video/scripts/lib/state.py
+index a28c55f..8d93f96 100644
+--- a/.agents/skills/ec2-review-video/scripts/lib/state.py
++++ b/.agents/skills/ec2-review-video/scripts/lib/state.py
+@@ -14,7 +14,7 @@ def stage_fingerprint(run,stage):
+       'voice':['manifest.json'],
+       'timing':['manifest.json','source/audio.json'],
+       'composition':['manifest.json','source/timeline.json','source/theme.json','source/*.css','source/scene-fragments/*','assets/**/*'],
+-      'render':['*.html','source/compositions/*','source/*.css','source/parts.json','source/timeline.json','assets/**/*'],
++      'render':['*.html','source/compositions/*','source/*.css','source/parts.json','source/timeline.json','source/render-options.json','assets/**/*'],
+       'verify':['review.mp4','manifest.json','*.html','source/**/*','assets/**/*'],
+       'publish':['review.mp4','verification/report.json']}
+     files={}
+@@ -27,6 +27,11 @@ def stage_fingerprint(run,stage):
+     if stage=='voice' and (run/'config.json').exists():
+         c=json.loads((run/'config.json').read_text(encoding='utf-8'))
+         config={k:c.get(k) for k in ('provider','model','voice','language','direction','pronunciation','max_output_tokens')}
++    if stage=='composition':
++        files['renderer/composition.py']=file_hash(Path(__file__).with_name('composition.py'))
++    if stage=='render':
++        for name in ('render_options.py','render.py'):
++            files['renderer/'+name]=file_hash(Path(__file__).with_name(name))
+     return digest({'files':files,'config':config})
+ 
+ class RunStore:
+diff --git a/.agents/skills/ec2-review-video/scripts/video.py b/.agents/skills/ec2-review-video/scripts/video.py
+index ad36389..8b58785 100644
+--- a/.agents/skills/ec2-review-video/scripts/video.py
++++ b/.agents/skills/ec2-review-video/scripts/video.py
+@@ -12,7 +12,8 @@ from lib.vertex_tts import load_key,live_transport,synthesize
+ from lib.theme import snapshot_theme
+ from lib.composition import stage_assets,assemble
+ from lib.timing import build_timeline,write_subtitles
+-from lib.render import probe_backends,render_parts,mux
++from lib.render import probe_backends,cpu_backend,render_parts,mux,write_render_receipt
++from lib.render_options import load_render_options
+ from lib.subtitles import burn_subtitles
+ from lib.revoice import retime_input,plan_revoice,render_revoice,picture_fingerprint
+ from lib.verify import verify_media,verify_audio,verify_sync,check_sources,review_fingerprint,verify_run,publish_latest
+@@ -55,6 +56,7 @@ def parser():
+         if name=='tts': q.add_argument('--approve-review',action='store_true')
+         if name=='assemble': q.add_argument('--pack',required=True); q.add_argument('--assets-from')
+         if name in ('render','verify','revoice'): q.add_argument('--hyperframes-entry')
++        if name in ('render','revoice'): q.add_argument('--render-workers',type=int,choices=range(1,7))
+         if name=='revoice': q.add_argument('--source-run',required=True)
+     for q in sub.choices.values():
+         q.add_argument('--config'); q.add_argument('--voice'); q.add_argument('--env-file')
+@@ -105,6 +107,9 @@ def main(argv=None):
+                 if args.config or args.voice or args.env_file: atomic_json(run/'config.json',config_for(args,run))
+                 output({'run':str(run),'next':RunStore(run).recover(),'state':RunStore(run).load()}); return 0
+             config=config_for(args,run); atomic_json(run/'config.json',config)
++            if args.command in ('render','revoice'):
++                options=load_render_options(run,getattr(args,'render_workers',None))
++                atomic_json(run/'source/render-options.json',options)
+             RunStore(run).recover()
+             required={'check':'inputs','tts':'script','assemble':'voice','render':'composition','revoice':'composition','verify':'render'}[args.command]
+             if RunStore(run).load().get('stages',{}).get(required,{}).get('status')!='passed':
+@@ -139,7 +144,7 @@ def main(argv=None):
+             if args.command in ('render','revoice'):
+                 entry=args.hyperframes_entry or config.get('hyperframes_entry')
+                 if not entry: raise ValueError('--hyperframes-entry required')
+-                backend=probe_backends(run); backend['hyperframes_entry']=str(Path(entry).resolve())
++                backend=cpu_backend(entry,options)
+                 parts=read(run/'source/parts.json')['parts']
+                 if args.command=='render': rendered=render_parts(parts,run,backend)
+                 else:
+@@ -156,7 +161,11 @@ def main(argv=None):
+                     needed={w['scene_id'] for w in windows if w['mode']=='rerender'}; selected=[p for p in parts if p['id'] in needed]
+                     replacements={p['id']:v for p,v in zip(selected,render_parts(selected,run,backend))} if selected else {}
+                     rendered=render_revoice(source,windows,run,backend,replacements)
+-                mux(rendered,audio,timeline,run/'review.mp4'); finish(run,'render',[run/'review.mp4'])
++                mux(rendered,audio,timeline,run/'review.mp4')
++                # Revoice may contain retimed windows without capture receipts.
++                captured=rendered if args.command=='render' else list(replacements.values())
++                receipt=write_render_receipt(run,backend,captured,run/'review.mp4')
++                finish(run,'render',[run/'review.mp4',receipt])
+                 output({'status':'passed','video':str(run/'review.mp4'),'backend':backend}); return 0
+             if args.command=='verify':
+                 key=review_fingerprint(run,m)
+diff --git a/.agents/skills/ec2-review-video/tests/render_performance_acceptance.py b/.agents/skills/ec2-review-video/tests/render_performance_acceptance.py
+new file mode 100644
+index 0000000..10a6756
+--- /dev/null
++++ b/.agents/skills/ec2-review-video/tests/render_performance_acceptance.py
+@@ -0,0 +1,90 @@
++"""Real, opt-in local benchmark. Synthetic PCM/circuit fixture, no paid TTS or approvals."""
++from pathlib import Path
++import argparse,array,copy,json,math,os,shutil,subprocess,sys,time,wave
++sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
++from lib.cache import atomic_json,file_hash
++from lib.composition import assemble,stage_assets
++from lib.theme import snapshot_theme
++from lib.timing import build_timeline,write_subtitles
++from lib.render import cpu_backend,render_parts,mux,write_render_receipt,command
++from lib.render_options import default_render_options,detect_hardware
++from lib.verify import verify_media,verify_sync,check_sources
++from lib.subtitles import burn_subtitles
++
++SKILL=Path(__file__).resolve().parents[1]
++REPO=SKILL.parents[2]
++def inventory(run):
++    return {p.relative_to(run).as_posix():file_hash(p) for p in run.rglob('*') if p.is_file()}
++def checked(args,**kwargs):
++    r=command(args,**kwargs)
++    if r.returncode:raise RuntimeError(r.stderr[-1500:])
++    return r
++
++def main():
++    parser=argparse.ArgumentParser(description=__doc__)
++    parser.add_argument('--destination',required=True);parser.add_argument('--hyperframes-entry',required=True)
++    parser.add_argument('--motion-duration',type=float,default=.6)
++    args=parser.parse_args();dest=Path(args.destination).resolve();entry=Path(args.hyperframes_entry).resolve()
++    if dest.exists():raise ValueError('fresh destination required')
++    if not entry.is_file():raise ValueError('HyperFrames missing')
++    dest.mkdir(parents=True);fixture=dest/'fixture';fixture.mkdir()
++    f=SKILL/'tests/fixtures/circuit-scene';m=json.loads((f/'manifest.json').read_text())
++    second=copy.deepcopy(m['scenes'][0]);second['id']='scene-dm-b';second['visual']+=' (재확인)';m['scenes'].append(second)
++    seg=copy.deepcopy(m['segments'][0]);seg.update(id='seg-dm-b',scene_id='scene-dm-b');m['segments'].append(seg)
++    m['coverage_reviews'][0]['segment_ids'].append('seg-dm-b')
++    frag=fixture/'source/scene-fragments';frag.mkdir(parents=True);audio=[]
++    for sid,segid in [('scene-dm','seg-dm'),('scene-dm-b','seg-dm-b')]:
++        (frag/(sid+'.html')).write_text((f/'scene.html').read_text().replace('scene-dm',sid))
++        motions=json.loads((f/'scene.motion.json').read_text().replace('scene-dm',sid).replace('seg-dm',segid))
++        for motion in motions:motion['duration_s']=args.motion_duration
++        atomic_json(frag/(sid+'.motion.json'),motions)
++        path=fixture/'assets/voice'/(segid+'.wav');path.parent.mkdir(parents=True,exist_ok=True)
++        samples=681600 # 28.4 seconds + scene intro/gap/tail 1.6 = 30 seconds.
++        signal=array.array('h',(int(2500*math.sin(i*2*math.pi*220/24000)) for i in range(samples)))
++        if sys.byteorder!='little':signal.byteswap()
++        with wave.open(str(path),'wb') as w:w.setparams((1,2,24000,0,'NONE','not compressed'));w.writeframes(signal.tobytes())
++        audio.append(dict(id=segid,path=path.relative_to(fixture).as_posix(),samples=samples,rate=24000,sha256=file_hash(path)))
++    atomic_json(fixture/'manifest.json',m);atomic_json(fixture/'source/audio.json',{'voices':audio})
++    stage_assets(SKILL/'assets/runtime',fixture);theme=snapshot_theme(REPO/'.claude/skills/ec2-review-pack',fixture)
++    timeline=build_timeline(m,audio);assert timeline['total_frames']==1800
++    atomic_json(fixture/'source/timeline.json',timeline);write_subtitles(timeline,fixture)
++    parts=assemble(m,timeline,theme,fixture)
++    before=inventory(fixture);atomic_json(dest/'source-hashes-before.json',before)
++    result=dict(fixture='existing MOS differential pair fixture, two scenes, synthetic 220Hz PCM; not a production narration benchmark',
++                motion_duration=args.motion_duration,hardware=detect_hardware(),hyperframes=checked(['node',entry,'--version']).stdout.strip(),
++                ffmpeg=checked(['ffmpeg','-version']).stdout.splitlines()[0],frames=1800,seconds=60,runs=[])
++    for workers in (1,2,6):
++        run=dest/f'workers-{workers}';shutil.copytree(fixture,run)
++        options=default_render_options();options['workers']=workers;atomic_json(run/'source/render-options.json',options)
++        backend=cpu_backend(entry,options);start=time.monotonic()
++        rendered=render_parts(parts,run,backend);render_seconds=time.monotonic()-start
++        mux(rendered,audio,timeline,run/'review.mp4');receipt=write_render_receipt(run,backend,rendered,run/'review.mp4')
++        elapsed=time.monotonic()-start
++        media=verify_media(run/'review.mp4',timeline);sync=verify_sync(run,audio,timeline)
++        assert media['status']==sync['status']=='passed',(media,sync)
++        atomic_json(run/'verification/media.json',media);atomic_json(run/'verification/sync.json',sync)
++        framefile=dest/f'workers-{workers}.framemd5'
++        checked(['ffmpeg','-y','-v','error','-i',run/'review.mp4','-map','0:v:0','-f','framemd5',framefile],timeout=300)
++        frames=[l for l in framefile.read_text().splitlines() if l and not l.startswith('#')];assert len(frames)==1800
++        aac=dest/f'workers-{workers}.aac';checked(['ffmpeg','-y','-v','error','-i',run/'review.mp4','-map','0:a:0','-c:a','copy',aac])
++        row=dict(workers=workers,render_seconds=render_seconds,render_and_mux_seconds=elapsed,
++                 master_sha256=file_hash(run/'review.mp4'),pcm_sha256=file_hash(run/'work/mux/narration.wav'),
++                 aac_sha256=file_hash(aac),framemd5_sha256=file_hash(framefile),receipt_sha256=file_hash(receipt))
++        result['runs'].append(row);atomic_json(dest/'result.json',result)
++        print(json.dumps(row),flush=True)
++    for key in ('master_sha256','pcm_sha256','aac_sha256','framemd5_sha256'):
++        assert len({r[key] for r in result['runs']})==1,key
++    assert inventory(fixture)==before,'fixture modified'
++    atomic_json(dest/'source-hashes-after.json',inventory(fixture))
++    two,six=result['runs'][1:];result['reduction_percent']=100*(1-six['render_and_mux_seconds']/two['render_and_mux_seconds'])
++    result['six_faster_than_two']=six['render_and_mux_seconds']<two['render_and_mux_seconds']
++    # Correct output is an acceptance gate; performance is a measurement, not a doctored pass criterion.
++    run=dest/'workers-6';source=check_sources(run,entry);atomic_json(run/'verification/source.json',source)
++    assert source['status']=='passed',source
++    captioned=dest/'captioned-workers-6.mp4';burn_subtitles(run/'review.mp4',run/'narration.srt',captioned)
++    assert verify_media(captioned,timeline)['status']=='passed'
++    for at in (0,1,15,30,31,59):
++        checked(['ffmpeg','-y','-v','error','-ss',str(at),'-i',captioned,'-frames:v','1',dest/f'frame-{at}.png'])
++    result.update(status='passed',source_checks=source['status'],captioned_sha256=file_hash(captioned),source_file_count=len(before))
++    atomic_json(dest/'result.json',result);print(json.dumps(dict(status='passed',reduction_percent=result['reduction_percent'])),flush=True)
++if __name__=='__main__':main()
+diff --git a/.agents/skills/ec2-review-video/tests/test_cli.py b/.agents/skills/ec2-review-video/tests/test_cli.py
+index 969f1ed..a261731 100644
+--- a/.agents/skills/ec2-review-video/tests/test_cli.py
++++ b/.agents/skills/ec2-review-video/tests/test_cli.py
+@@ -32,3 +32,57 @@ class CliTest(unittest.TestCase):
+             atomic_json(run/'config.json',{'voice':'Charon'})
+             with patch('video.probe_backends',side_effect=AssertionError('stale render')):
+                 self.assertEqual(main(['render','--run',str(run),'--hyperframes-entry','unused']),1)
++
++    def test_render_workers_is_render_and_revoice_only(self):
++        from video import parser
++        self.assertIn('--render-workers',parser()._subparsers._group_actions[0].choices['render'].format_help())
++        for mode in ('render','revoice'):
++            extra=['--source-run','old'] if mode=='revoice' else []
++            self.assertEqual(parser().parse_args([mode,'--run','run','--render-workers','6',*extra]).render_workers,6)
++        for argv in (['render','--run','r','--render-workers','7'],['tts','--run','r','--render-workers','2']):
++            with self.assertRaises(SystemExit):parser().parse_args(argv)
++    def test_render_saves_policy_before_recovery_without_changing_voice_config(self):
++        import json
++        from video import parser
++        self.assertIn('--render-workers',parser()._subparsers._group_actions[0].choices['render'].format_help())
++        from lib.state import RunStore
++        with tempfile.TemporaryDirectory() as d:
++            run=Path(d);seen=[]
++            def recover(store):
++                seen.append(json.loads((store.run/'source/render-options.json').read_text()))
++            with patch.object(RunStore,'recover',recover):
++                self.assertEqual(main(['render','--run',d,'--render-workers','3']),1)
++            self.assertEqual(seen[0]['workers'],3)
++            self.assertNotIn('render_workers',json.loads((run/'config.json').read_text()))
++
++    def test_render_and_revoice_dispatch_cpu_policy_and_register_receipt(self):
++        import json
++        from _util import minimal_manifest
++        from lib.cache import atomic_json
++        from lib.timing import build_timeline
++        from lib.state import RunStore
++        for mode in ('render','revoice'):
++            with self.subTest(mode=mode),tempfile.TemporaryDirectory() as d:
++                run=Path(d)/'run';run.mkdir();old=Path(d)/'old';old.mkdir();m=minimal_manifest()
++                audio=[dict(id='seg-atp',samples=24000,rate=24000,path='voice.wav')];timeline=build_timeline(m,audio)
++                for base in (run,old):
++                    atomic_json(base/'manifest.json',m);atomic_json(base/'source/theme.json',{})
++                    atomic_json(base/'source/timeline.json',timeline);(base/'review.mp4').write_bytes(b'old')
++                atomic_json(run/'source/audio.json',{'voices':audio});atomic_json(run/'source/parts.json',{'parts':[dict(id='scene-atp',entry='scene-atp.html',frames=78)]})
++                capture=run/'renders/parts/scene-atp.mp4';capture.parent.mkdir(parents=True);capture.write_bytes(b'part')
++                atomic_json(capture.with_suffix('.json'),{'args':['actual capture'],'frames':78})
++                RunStore(run).save({'stages':{'composition':{'status':'passed'}}})
++                seen=[]
++                def render(parts,run,backend):seen.append(backend);return [capture]
++                def fake_mux(parts,audio,t,destination):Path(destination).write_bytes(b'new-master')
++                extra=['--source-run',str(old)] if mode=='revoice' else []
++                with patch.object(RunStore,'recover',return_value='render'),patch('video.render_parts',side_effect=render),patch('video.mux',side_effect=fake_mux),patch('video.probe_backends',side_effect=AssertionError('auto GPU probe forbidden')),patch('video.plan_revoice',return_value=[dict(scene_id='scene-atp',mode='rerender')]),patch('video.render_revoice',return_value=[capture]):
++                    self.assertEqual(main([mode,'--run',str(run),'--hyperframes-entry','unused','--render-workers','6',*extra]),0)
++                self.assertEqual(seen[0]['encoder'],'libx264');self.assertEqual(seen[0]['workers'],1);self.assertEqual(seen[0]['render_options']['workers'],6)
++                state=RunStore(run).load();self.assertIn('verification/render-receipt.json',state['stages']['render']['output_hashes'])
++                self.assertEqual(json.loads((run/'verification/render-receipt.json').read_text())['render_options']['workers'],6)
++
++    def test_resume_legacy_run_does_not_create_options(self):
++        with tempfile.TemporaryDirectory() as d:
++            self.assertEqual(main(['resume','--run',d]),0)
++            self.assertFalse((Path(d)/'source/render-options.json').exists())
+diff --git a/.agents/skills/ec2-review-video/tests/test_composition.py b/.agents/skills/ec2-review-video/tests/test_composition.py
+index ca8953f..d7f9d0d 100644
+--- a/.agents/skills/ec2-review-video/tests/test_composition.py
++++ b/.agents/skills/ec2-review-video/tests/test_composition.py
+@@ -77,3 +77,18 @@ class CompositionTest(unittest.TestCase):
+             text=(run/'source/compositions/scene-dm.html').read_text()
+             self.assertIn('renderMathInElement',text);self.assertIn('assets/vendor/katex/katex.min.js',text)
+             self.assertIn('.video-scene{--bg:',text)
++
++    def test_timeline_registration_waits_for_fonts(self):
++        import re,subprocess
++        from _util import SKILL
++        from lib.composition import stage_assets
++        with tempfile.TemporaryDirectory() as d:
++            run=Path(d);fixture=SKILL/'tests/fixtures/circuit-scene';m=json.loads((fixture/'manifest.json').read_text());frag=run/'source/scene-fragments';frag.mkdir(parents=True)
++            (frag/'scene-dm.html').write_text((fixture/'scene.html').read_text());(frag/'scene-dm.motion.json').write_text((fixture/'scene.motion.json').read_text())
++            stage_assets(SKILL/'assets/runtime',run);theme=snapshot_theme(ROOT/'.claude/skills/ec2-review-pack',run)
++            t=build_timeline(m,[dict(id='seg-dm',samples=24000,rate=24000,path='voice.wav')]);parts=assemble(m,t,theme,run)
++            for path in [run/parts[0]['entry'],run/'source/compositions/scene-dm.html']:
++                code=next(x for x in re.findall(r'<script>(.*?)</script>',path.read_text(),re.S) if 'const tl=gsap.timeline' in x)
++                js="const vm=require('node:vm');const assert=require('node:assert/strict');\nlet release;let builds=0;const frames=[];const window={};\nconst context={window,document:{fonts:{ready:new Promise(resolve=>release=resolve)}},requestAnimationFrame:cb=>frames.push(cb),gsap:{timeline:()=>{builds++;return {fromTo(){}}}}};\n(async()=>{vm.runInNewContext(CODE,context);assert.equal(builds,0);assert.equal(window.__timelines,undefined);\nrelease();await new Promise(resolve=>setImmediate(resolve));assert.equal(builds,1);assert.ok(window.__timelines['scene-dm']);})().catch(e=>{console.error(e);process.exitCode=1;});\n"
++                result=subprocess.run(['node','-'],input='const CODE='+json.dumps(code)+';'+js,capture_output=True,text=True,timeout=10)
++                self.assertEqual(result.returncode,0,result.stderr)
+diff --git a/.agents/skills/ec2-review-video/tests/test_render.py b/.agents/skills/ec2-review-video/tests/test_render.py
+index ebf4e80..ff3816d 100644
+--- a/.agents/skills/ec2-review-video/tests/test_render.py
++++ b/.agents/skills/ec2-review-video/tests/test_render.py
+@@ -27,3 +27,70 @@ class RenderTest(unittest.TestCase):
+             self.assertEqual(before,file_hash(video))
+             data=json.loads(subprocess.check_output(['ffprobe','-v','error','-show_streams','-of','json',str(run/'review.mp4')]))
+             self.assertEqual(sum(s['codec_type']=='audio' for s in data['streams']),1)
++
++
++class CapturePolicyTest(unittest.TestCase):
++    def setup_run(self,run):
++        from lib.cache import atomic_json
++        entry=run/'cli.js';entry.write_text('test')
++        parts=[dict(id='scene-a',entry='scene-a.html',frames=30),dict(id='scene-b',entry='scene-b.html',frames=30)]
++        for p in parts:(run/p['entry']).write_text('<html data-theme="dark"></html>')
++        options=dict(schema_version=1,workers=6,encoder='cpu',browser_gpu='auto',fast_capture=False)
++        atomic_json(run/'source/render-options.json',options)
++        return parts,dict(encoder='libx264',workers=2,hyperframes_entry=str(entry),render_options=options,capture_gpu=True)
++    def test_settings_receipts_cache_and_changed_workers(self):
++        from unittest.mock import patch
++        from types import SimpleNamespace
++        from lib.render import render_parts
++        with tempfile.TemporaryDirectory() as d:
++            run=Path(d);parts,backend=self.setup_run(run);seen=[]
++            def tool(args,cwd=None,timeout=300):
++                if 'render' in args:
++                    seen.append(list(map(str,args)));Path(args[args.index('--output')+1]).write_bytes(b'new')
++                return SimpleNamespace(returncode=0,stdout='0.8.137',stderr='')
++            with patch('lib.render.command',side_effect=tool),patch('lib.render.frames_ok',return_value=True):
++                outputs=render_parts(parts,run,backend)
++                self.assertEqual([a[a.index('--composition')+1] for a in seen],['scene-a.html','scene-b.html'])
++                self.assertTrue(all(str(a[a.index('--workers')+1])=='6' for a in seen))
++                self.assertTrue(all('--experimental-fast-capture=false' in a and '--gpu' not in a and '--browser-gpu' not in a for a in seen))
++                receipt=json.loads(outputs[0].with_suffix('.json').read_text())
++                self.assertEqual(receipt['render_options'],backend['render_options']);self.assertEqual(receipt['args'],seen[0]);self.assertGreaterEqual(receipt['elapsed_seconds'],0)
++                render_parts(parts,run,backend);self.assertEqual(len(seen),2)
++                backend['render_options']['workers']=2;render_parts(parts,run,backend);self.assertEqual(len(seen),4)
++    def test_failed_render_keeps_old_outputs_and_removes_stale_pending(self):
++        from unittest.mock import patch
++        from types import SimpleNamespace
++        from lib.render import render_parts
++        for failure in ('nonzero','stale','timeout'):
++            with self.subTest(failure=failure),tempfile.TemporaryDirectory() as d:
++                run=Path(d);parts,backend=self.setup_run(run);dest=run/'renders/parts';dest.mkdir(parents=True)
++                out=dest/'scene-a.mp4';out.write_bytes(b'old');receipt=out.with_suffix('.json');receipt.write_text('{}');pending=dest/'scene-a.pending.mp4';pending.write_bytes(b'stale')
++                def tool(args,cwd=None,timeout=300):
++                    if 'render' not in args:return SimpleNamespace(returncode=0,stdout='v',stderr='')
++                    if failure=='timeout':raise subprocess.TimeoutExpired(args,1,output='partial output',stderr='timeout detail')
++                    return SimpleNamespace(returncode=1 if failure=='nonzero' else 0,stdout='partial output',stderr='detail')
++                with patch('lib.render.command',side_effect=tool),patch('lib.render.frames_ok',side_effect=lambda p,n:Path(p).is_file()):
++                    with self.assertRaises((RuntimeError,subprocess.TimeoutExpired)):render_parts(parts[:1],run,backend)
++                self.assertEqual(out.read_bytes(),b'old');self.assertEqual(receipt.read_text(),'{}');self.assertFalse(pending.exists())
++                self.assertIn('partial output',out.with_suffix('.log').read_text())
++    def test_frames_require_30fps(self):
++        from unittest.mock import patch
++        from lib.render import frames_ok
++        with patch('lib.render.probe_media',return_value={'streams':[dict(codec_type='video',nb_frames='30',width=1920,height=1080,r_frame_rate='60/1')]}):
++            self.assertFalse(frames_ok('unused',30))
++
++    def test_renderer_code_change_invalidates_part_cache(self):
++        from unittest.mock import patch
++        from types import SimpleNamespace
++        from lib.render import render_parts
++        from lib.cache import file_hash as original
++        with tempfile.TemporaryDirectory() as d:
++            run=Path(d);parts,backend=self.setup_run(run);seen=[]
++            def tool(args,cwd=None,timeout=300):
++                if 'render' in args:seen.append(args);Path(args[args.index('--output')+1]).write_bytes(b'new')
++                return SimpleNamespace(returncode=0,stdout='v',stderr='')
++            with patch('lib.render.command',side_effect=tool),patch('lib.render.frames_ok',return_value=True):
++                render_parts(parts[:1],run,backend)
++                def changed(path):return 'changed-policy-code' if Path(path).name=='render_options.py' else original(path)
++                with patch('lib.render.file_hash',side_effect=changed):render_parts(parts[:1],run,backend)
++            self.assertEqual(len(seen),2)
+diff --git a/.agents/skills/ec2-review-video/tests/test_render_options.py b/.agents/skills/ec2-review-video/tests/test_render_options.py
+new file mode 100644
+index 0000000..4a4fb87
+--- /dev/null
++++ b/.agents/skills/ec2-review-video/tests/test_render_options.py
+@@ -0,0 +1,41 @@
++import importlib.util,json,tempfile,unittest
++from pathlib import Path
++from _util import ROOT
++
++class RenderOptionsTest(unittest.TestCase):
++    def policy(self):
++        self.assertIsNotNone(importlib.util.find_spec('lib.render_options'), 'render policy missing')
++        from lib import render_options
++        return render_options
++    def test_defaults_and_unknown_hardware(self):
++        p=self.policy();host=dict(platform='darwin',chip='Apple M5',cpu_cores=10,memory_bytes=16*1024**3)
++        self.assertEqual(p.default_render_options(host),dict(schema_version=1,workers=6,encoder='cpu',browser_gpu='auto',fast_capture=False))
++        for h in ({},dict(host,chip='Apple M4'),dict(host,memory_bytes=8*1024**3),dict(host,cpu_cores=True)):
++            self.assertEqual(p.default_render_options(h)['workers'],2)
++    def test_precedence_and_read_only(self):
++        p=self.policy()
++        with tempfile.TemporaryDirectory() as d:
++            run=Path(d);self.assertEqual(p.load_render_options(run,hardware={})['workers'],2)
++            self.assertFalse((run/'source').exists())
++            path=run/'source/render-options.json';path.parent.mkdir();o=p.default_render_options({});o['workers']=3;path.write_text(json.dumps(o))
++            before=path.read_bytes();self.assertEqual(p.load_render_options(run)['workers'],3)
++            self.assertEqual(p.load_render_options(run,6)['workers'],6);self.assertEqual(path.read_bytes(),before)
++    def test_invalid_saved_policy_not_hidden_by_override(self):
++        p=self.policy()
++        with tempfile.TemporaryDirectory() as d:
++            run=Path(d);path=run/'source/render-options.json';path.parent.mkdir();path.write_text('{bad')
++            with self.assertRaises(ValueError):p.load_render_options(run,6)
++    def test_strict_workers_and_fixed_flags(self):
++        p=self.policy();base=p.default_render_options({})
++        for field,values in {'workers':[True,1.0,'6',0,7], 'schema_version':[True,2], 'encoder':['gpu'], 'browser_gpu':['off'], 'fast_capture':[True,0]}.items():
++            for value in values:
++                with self.subTest(field=field,value=value),self.assertRaises(ValueError):p.validate_render_options(dict(base,**{field:value}))
++        with self.assertRaises(ValueError):p.validate_render_options(dict(base,extra=1))
++
++    def test_matches_solution_policy_for_shared_hardware(self):
++        import sys
++        sys.path.insert(0,str(ROOT/'.agents/skills/ec2-solution-video/scripts'))
++        from solution_video.render_options import default_render_options as solution_defaults
++        p=self.policy()
++        for host in ({},dict(platform='darwin',chip='Apple M5',cpu_cores=10,memory_bytes=16*1024**3),dict(platform='linux',chip='unknown',cpu_cores=32,memory_bytes=64*1024**3)):
++            self.assertEqual(p.default_render_options(host),solution_defaults(host))
+diff --git a/.agents/skills/ec2-review-video/tests/test_state.py b/.agents/skills/ec2-review-video/tests/test_state.py
+index 932e6fd..688e787 100644
+--- a/.agents/skills/ec2-review-video/tests/test_state.py
++++ b/.agents/skills/ec2-review-video/tests/test_state.py
+@@ -49,3 +49,25 @@ class StateTest(unittest.TestCase):
+             finish(run,'voice',[run/'source/audio.json'])
+             atomic_json(run/'config.json',{'voice':'Charon'})
+             self.assertEqual(RunStore(run).recover(),'voice')
++
++    def test_render_options_only_invalidate_render_onwards(self):
++        from lib.state import stage_fingerprint
++        from video import finish
++        with tempfile.TemporaryDirectory() as d:
++            run=Path(d);atomic_json(run/'manifest.json',{'segments':[]});atomic_json(run/'source/parts.json',{'parts':[]})
++            atomic_json(run/'source/render-options.json',{'workers':2});(run/'review.mp4').write_bytes(b'previous')
++            finish(run,'voice',[run/'manifest.json']);finish(run,'composition',[run/'source/parts.json']);finish(run,'render',[run/'review.mp4'])
++            fingerprints={s:stage_fingerprint(run,s) for s in ('voice','timing','composition','render')}
++            atomic_json(run/'source/render-options.json',{'workers':6})
++            for s in ('voice','timing','composition'):self.assertEqual(fingerprints[s],stage_fingerprint(run,s))
++            self.assertNotEqual(fingerprints['render'],stage_fingerprint(run,'render'))
++            self.assertEqual(RunStore(run).recover(),'render');self.assertEqual(RunStore(run).load()['stages']['voice']['status'],'passed')
++    def test_composition_code_change_requires_reassemble_keeps_voice(self):
++        from video import finish
++        from lib.cache import file_hash as original
++        with tempfile.TemporaryDirectory() as d:
++            run=Path(d);atomic_json(run/'manifest.json',{'segments':[]});atomic_json(run/'source/parts.json',{'parts':[]});(run/'review.mp4').write_bytes(b'previous')
++            finish(run,'voice',[run/'manifest.json']);finish(run,'composition',[run/'source/parts.json']);finish(run,'render',[run/'review.mp4'])
++            def changed(path):return 'changed-composition-code' if Path(path).name=='composition.py' else original(path)
++            with patch('lib.state.file_hash',side_effect=changed):self.assertEqual(RunStore(run).recover(),'composition')
++            self.assertEqual(RunStore(run).load()['stages']['voice']['status'],'passed')
+diff --git a/docs/superpowers/plans/2026-10-10-ec2-review-render-performance.md b/docs/superpowers/plans/2026-10-10-ec2-review-render-performance.md
+new file mode 100644
+index 0000000..ec59fa8
+--- /dev/null
++++ b/docs/superpowers/plans/2026-10-10-ec2-review-render-performance.md
+@@ -0,0 +1,38 @@
++# EC2 Review Render Performance Implementation Plan
++
++> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
++
++**Goal:** Apply approved rendering policy to review videos and validate real output before a scoped commit and main merge.
++**Architecture:** Independent read-only lib/render_options.py follows solution renderer policy. CLI persists policy before recover, render_parts consumes it with sequential scenes and internal capture workers. Existing audio and mux remain.
++**Tech Stack:** Python unittest, local HyperFrames 0.8.137, FFmpeg 9.0.2.
++**Spec:** docs/superpowers/specs/2026-10-10-ec2-review-render-performance.md
++
++## Global Constraints
++- Apple M5 physical10 RAM>=16GiB workers6; unknown host2; override1..6.
++- CPU encode, browser GPU auto, fast capture false, delivery1080p30.
++- No paid TTS, source content edits, dependency upgrades, push, other-user-file staging.
++- Commit only after actual render verification; merge main locally.
++
++## Review Focus
++- Saved malformed policy must fail even with override.
++- Cache hits after unchanged settings must avoid render; changed workers invalidate render only.
++- Nonzero/timeout/stale pending must preserve previous MP4/receipt and log errors.
++- revoice rebuilt scenes must use policy without enabling scene-level oversubscription.
++- Legacy RUN without settings remains readable; resume does not write new policy.
++
++### Task 1: Policy, CLI and rendering
++**Files:** lib/render_options.py, lib/render.py, lib/composition.py, lib/state.py, scripts/video.py, tests/test_render_options.py, tests/test_render.py, tests/test_cli.py, tests/test_state.py, tests/test_composition.py (under .agents/skills/ec2-review-video), SKILL.md, references/rendering-and-verification.md.
++**Interfaces:** Produces load_render_options(run, workers=None, *, hardware=None) -> dict; render_parts(parts, run, backend) -> list[Path], backend contains render_options. CLI render/revoice consumes these.
++- [ ] Write failing tests for policy validation/precedence, command settings/sequential/cache/failure/timeout, CLI flags/defaults, render-only invalidation.
++- [ ] Run unittest targeted files. Expected: new feature tests FAIL.
++- [ ] Implement exact policy and integrate render/revoice; preserve probe_backends public helper for older callers. Validate settings before subprocess, include settings in cache and state; log actual commands.
++- [ ] Run full unittest discover. Expected: all pass. Commit deferred until Task 2 acceptance by user instruction.
++
++### Task 2: Real acceptance and local integration
++**Files:** tests/render_performance_acceptance.py; plan/spec; results in 복습영상/1002/1002_제작자료/성능시험/<timestamp> (untracked).
++**Interfaces:** Consumes Task1 render_parts and CLI CPU backend, uses unchanged mux plus subtitles helper.
++- [ ] Build 2 scene60s fixture; run workers1/2/6 sequentially with real Node/Chrome/FFmpeg. Expected: 1800frames each, frame hashes/PCM/AAC equal; source hashes unchanged. Compare original0.6s motion and extended24s stress motion separately; report measured speed without asserting all workloads get faster. Inspect representative frames.
++- [ ] Test fonts-ready registration with deferred Promise in a Node VM (RED→GREEN); test composition-code drift invalidates composition but preserves voice. Re-run real static and dynamic acceptance after fix.
++- [ ] Full suite and skill validation. Expected: exit0.
++- [ ] Dispatch one fresh final code reviewer; fix Important/Critical via failing tests then full suite.
++- [ ] Stage only requested files, inspect cached diff; commit. Merge main locally and run merged tests; no push.
+diff --git a/docs/superpowers/specs/2026-10-10-ec2-review-render-performance.md b/docs/superpowers/specs/2026-10-10-ec2-review-render-performance.md
+new file mode 100644
+index 0000000..33b9853
+--- /dev/null
++++ b/docs/superpowers/specs/2026-10-10-ec2-review-render-performance.md
+@@ -0,0 +1,13 @@
++# 복습 영상 렌더링 설정 적용
++
++사용자가 승인한 문제풀이 영상 정책을 복습 영상 render와 revoice 재렌더 장면에 적용한다. Apple M5 / physical 10 cores / RAM >=16 GiB는 workers 6, 그 외는 2. CPU 인코딩, browser GPU auto, fast capture false, delivery 1080p30. 장면은 순차 실행한다.
++
++source/render-options.json은 음성 config와 독립. CLI --render-workers 1..6 > 저장값 > host 기본값. 손상된 저장값은 override로 숨기지 않는다. 옵션/정책 코드 변경은 render 이후만 무효화. 기존 TTS/PCM/조립 결과 보존. 기존 backend probe 함수는 호환을 위해 유지하지만 CLI는 CPU 정책을 직접 사용한다.
++
++장면 영수증에 실제 args/elapsed/options/hash/frames, cache hit는 재렌더 없이 보존. 실패/timeout은 이전 장면 MP4/영수증과 master 보존, stale pending 제거, 로그 보존. 1080p30/프레임 검사. 통합 영수증은 성공한 mux 이후 저장한다.
++
++실제 성능시험은 기존 MOS 차동쌍 fixture를 실제 템플릿·GSAP·KaTeX·Pretendard로 조립한 60초, 2장면 1080p30 영상이다. 음성은 합성 PCM 시험 신호(유료 TTS 없음). workers 1/2/6 순차 실행, 프레임 전체 hash와 PCM/AAC 동일성 검사, representative PNG 직접 확인. 원본 0.6초 motion과 24초로 연장한 stress motion을 별도 시험하고 속도 개선/저하를 모두 보존한다. 실패하면 커밋/병합하지 않는다. 단일 fixture·장비의 측정임을 보고한다.
++
++이번 skill 코드/테스트/설명/계획만 커밋. 시험 미디어는 제작자료 폴더, git에 넣지 않음. 기존 다른 변경 유지, main 로컬 병합, push 없음. HF 0.8.137, FFmpeg 9.0.2 유지해 기존 측정과 비교한다.
++
++동적 실험의 초기 수식 프레임 차이를 보정: document.fonts.ready 이후 타임라인 구성/등록. 이전 RUN은 composition 코드 지문으로 한 번 reassemble 요구(음성 유지). 설정 변경 자체는 render 이후만 무효화한다.

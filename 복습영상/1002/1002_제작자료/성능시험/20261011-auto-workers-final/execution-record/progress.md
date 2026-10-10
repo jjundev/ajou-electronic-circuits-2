@@ -1,0 +1,11 @@
+# Review auto workers execution record
+
+Bounded follow-up: user requests automatic2 for static6 for moving review video, Native execution and previously authorized scoped local main integration continue.
+Baseline102 tests (5.098s). Feature RED10 failures (13 tests), GREEN110 (4.806s), skill valid.
+Design: per-scene union of authored from/to-change time, >50% and >=900frames on verifiedM5 selects6; otherwise2. Missingmetadata2, malformedmetadatafail. Defaultschema2auto; oldschema1 numbers becomeauto since old defaults/manual source indistinguishable; fresh numericCLI/schema2 staysfixed, auto resets. No voice/assembly changes, render-only fingerprints include workload.
+Decisions: cutoff50% and30s are conservative heuristic from majority semantics and tested30s endpoints, not an empirical optimizer. No extra pixel sampling/render before deciding.
+Actual acceptance pending static/dynamic/mixed with fixed reference byte comparisons and source111files before/after in actual runs. No paid API/publishing or dependency changes.
+Review: no Critical, Importantpartialfrom-only properties mistaken as motion and Minormissingmetadata hidespresentcorrupt JSON. Both reproduced RED and corrected;112/112 full suite5.242s. Compare only destinationprops; independently parse presentfiles before fallback. No deferred findings. Reviewer declined pixel-optimal workers, broader compilation-source matching(existingCLI prerequisite), final render/video inspection(author completes), unchangedWindows termination.
+Initial real acceptance passed: static2/2=16.843s,dynamic6/6=27.821s,mixed2/6=21.039s,allmasterSHA matches fixedrefs,actualsource111files unchanged percase. Final rerun after review corrections pending.
+Final real acceptance exit0: static2/2=15.7005s,dynamic6/6=29.189s,mixed2/6=22.1015s;all1800frames/master matches fixed refs,source111originalfiles unchanged eachcase,decode/sync/captions/sourcechecks passed. Browsermixed28checks passed,representativeframe31 directly reviewed. Realcache reusedmixed2parts with0rendercalls/4filemtimes unchanged. Precommit112/1125.536s,skillvalid. Exact12files staged.
+Local main integration: feature0133bbb9b91c1e1a273b70ebe3e3f7d165b63f54,merge4dc58788c57e0bd165b9946d3a5413c7bc20535a. Merged-main112/1125.063s,skillvalid,livepolicyauto andmixed2/6 confirmed. No unrelated staged changes; trackeduserfile preserved, no push.

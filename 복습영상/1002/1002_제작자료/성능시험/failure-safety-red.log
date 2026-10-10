@@ -1,0 +1,67 @@
+test_failed_restore_keeps_backup_and_blocks_retry (test_render.FailureSafetyTest.test_failed_restore_keeps_backup_and_blocks_retry) ... FAIL
+test_pair_replace_failure_and_interrupt_restore_previous_pair (test_render.FailureSafetyTest.test_pair_replace_failure_and_interrupt_restore_previous_pair) ... FAIL
+test_part_receipt_write_failure_preserves_previous_pair (test_render.FailureSafetyTest.test_part_receipt_write_failure_preserves_previous_pair) ... FAIL
+test_timeout_kills_detached_descendant_before_pending_cleanup (test_render.FailureSafetyTest.test_timeout_kills_detached_descendant_before_pending_cleanup) ... ERROR
+test_master_receipt_failure_preserves_previous_pair (test_cli.CliTest.test_master_receipt_failure_preserves_previous_pair) ... FAIL
+
+======================================================================
+ERROR: test_timeout_kills_detached_descendant_before_pending_cleanup (test_render.FailureSafetyTest.test_timeout_kills_detached_descendant_before_pending_cleanup)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/hyunjun_macbook_pro/.codex/worktrees/ec2-review-render-performance/전자회로2/.agents/skills/ec2-review-video/tests/test_render.py", line 154, in test_timeout_kills_detached_descendant_before_pending_cleanup
+    self.assertIn('parent ready',caught.exception.stdout)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.8/Frameworks/Python.framework/Versions/3.14/lib/python3.14/unittest/case.py", line 1189, in assertIn
+    if member not in container:
+       ^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: a bytes-like object is required, not 'str'
+
+======================================================================
+FAIL: test_failed_restore_keeps_backup_and_blocks_retry (test_render.FailureSafetyTest.test_failed_restore_keeps_backup_and_blocks_retry)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/hyunjun_macbook_pro/.codex/worktrees/ec2-review-render-performance/전자회로2/.agents/skills/ec2-review-video/tests/test_render.py", line 132, in test_failed_restore_keeps_backup_and_blocks_retry
+    commit=self.transaction()
+  File "/Users/hyunjun_macbook_pro/.codex/worktrees/ec2-review-render-performance/전자회로2/.agents/skills/ec2-review-video/tests/test_render.py", line 114, in transaction
+    self.assertTrue(hasattr(render,'commit_media_receipt'),'transaction missing')
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : transaction missing
+
+======================================================================
+FAIL: test_pair_replace_failure_and_interrupt_restore_previous_pair (test_render.FailureSafetyTest.test_pair_replace_failure_and_interrupt_restore_previous_pair)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/hyunjun_macbook_pro/.codex/worktrees/ec2-review-render-performance/전자회로2/.agents/skills/ec2-review-video/tests/test_render.py", line 119, in test_pair_replace_failure_and_interrupt_restore_previous_pair
+    commit=self.transaction()
+  File "/Users/hyunjun_macbook_pro/.codex/worktrees/ec2-review-render-performance/전자회로2/.agents/skills/ec2-review-video/tests/test_render.py", line 114, in transaction
+    self.assertTrue(hasattr(render,'commit_media_receipt'),'transaction missing')
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : transaction missing
+
+======================================================================
+FAIL: test_part_receipt_write_failure_preserves_previous_pair (test_render.FailureSafetyTest.test_part_receipt_write_failure_preserves_previous_pair)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/hyunjun_macbook_pro/.codex/worktrees/ec2-review-render-performance/전자회로2/.agents/skills/ec2-review-video/tests/test_render.py", line 111, in test_part_receipt_write_failure_preserves_previous_pair
+    self.assertEqual(out.read_bytes(),b'old');self.assertEqual(receipt.read_text(),'{}')
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: b'new' != b'old'
+
+======================================================================
+FAIL: test_master_receipt_failure_preserves_previous_pair (test_cli.CliTest.test_master_receipt_failure_preserves_previous_pair)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/hyunjun_macbook_pro/.codex/worktrees/ec2-review-render-performance/전자회로2/.agents/skills/ec2-review-video/tests/test_cli.py", line 103, in test_master_receipt_failure_preserves_previous_pair
+    self.assertEqual((run/'review.mp4').read_bytes(),b'old');self.assertEqual(__import__('json').loads((run/'verification/render-receipt.json').read_text()),{'old':True})
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: b'new' != b'old'
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.425s
+
+FAILED (failures=4, errors=1)
+{
+  "status": "failed",
+  "reason": "receipt failed",
+  "run": "/private/var/folders/t7/zhvnpb1j4tb2pszpcnhlnt2h0000gn/T/tmpsjj5668n"
+}

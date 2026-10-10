@@ -1,0 +1,36 @@
+test_partial_properties_only_destination_changes_count (test_workload.WorkloadTest.test_partial_properties_only_destination_changes_count) ... FAIL
+test_missing_metadata_does_not_hide_present_corruption (test_workload.WorkloadTest.test_missing_metadata_does_not_hide_present_corruption) ... 
+  test_missing_metadata_does_not_hide_present_corruption (test_workload.WorkloadTest.test_missing_metadata_does_not_hide_present_corruption) (missing='timeline') ... FAIL
+  test_missing_metadata_does_not_hide_present_corruption (test_workload.WorkloadTest.test_missing_metadata_does_not_hide_present_corruption) (missing='motion') ... FAIL
+
+======================================================================
+FAIL: test_partial_properties_only_destination_changes_count (test_workload.WorkloadTest.test_partial_properties_only_destination_changes_count)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/hyunjun_macbook_pro/.codex/worktrees/ec2-review-auto-workers/전자회로2/.agents/skills/ec2-review-video/tests/test_workload.py", line 60, in test_partial_properties_only_destination_changes_count
+    decision=resolve(run,part,AUTO,hardware=M5);self.assertEqual(decision['workers'],2);self.assertEqual(decision['motion_ratio'],0)
+                                                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 6 != 2
+
+======================================================================
+FAIL: test_missing_metadata_does_not_hide_present_corruption (test_workload.WorkloadTest.test_missing_metadata_does_not_hide_present_corruption) (missing='timeline')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/hyunjun_macbook_pro/.codex/worktrees/ec2-review-auto-workers/전자회로2/.agents/skills/ec2-review-video/tests/test_workload.py", line 69, in test_missing_metadata_does_not_hide_present_corruption
+    with self.assertRaises(ValueError):resolve(run,part,AUTO,hardware=M5)
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_missing_metadata_does_not_hide_present_corruption (test_workload.WorkloadTest.test_missing_metadata_does_not_hide_present_corruption) (missing='motion')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/hyunjun_macbook_pro/.codex/worktrees/ec2-review-auto-workers/전자회로2/.agents/skills/ec2-review-video/tests/test_workload.py", line 69, in test_missing_metadata_does_not_hide_present_corruption
+    with self.assertRaises(ValueError):resolve(run,part,AUTO,hardware=M5)
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.009s
+
+FAILED (failures=3)

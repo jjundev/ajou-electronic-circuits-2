@@ -1,0 +1,36 @@
+test_timeline_registration_waits_for_fonts (test_composition.CompositionTest.test_timeline_registration_waits_for_fonts) ... FAIL
+
+======================================================================
+FAIL: test_timeline_registration_waits_for_fonts (test_composition.CompositionTest.test_timeline_registration_waits_for_fonts)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/hyunjun_macbook_pro/.codex/worktrees/ec2-review-render-performance/전자회로2/.agents/skills/ec2-review-video/tests/test_composition.py", line 94, in test_timeline_registration_waits_for_fonts
+    self.assertEqual(result.returncode,0,result.stderr)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+1 !== 0
+
+    at [stdin]:4:52
+    at [stdin]:5:128
+    at runScriptInThisContext (node:internal/vm:219:10)
+    at node:internal/process/execution:483:12
+    at [stdin]-wrapper:6:24
+    at runScriptInContext (node:internal/process/execution:481:60)
+    at evalFunction (node:internal/process/execution:315:30)
+    at evalTypeScript (node:internal/process/execution:327:3)
+    at node:internal/main/eval_stdin:51:5
+    at Socket.<anonymous> (node:internal/process/execution:237:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.154s
+
+FAILED (failures=1)

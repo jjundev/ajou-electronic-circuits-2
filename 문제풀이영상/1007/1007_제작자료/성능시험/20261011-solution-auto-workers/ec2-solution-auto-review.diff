@@ -1,0 +1,799 @@
+diff --git a/.agents/skills/ec2-solution-video/SKILL.md b/.agents/skills/ec2-solution-video/SKILL.md
+index 8fdc6bb..5b3bd8a 100644
+--- a/.agents/skills/ec2-solution-video/SKILL.md
++++ b/.agents/skills/ec2-solution-video/SKILL.md
+@@ -66,15 +66,17 @@ SRT 시간은 실측 voice_samples 안에서 원문 의미 단위의 글자 수
+ 
+ ## 렌더 작업자 설정
+ 
+-신규 RUN은 현재 검증된 Darwin / Apple M5 / 물리 CPU 10코어 / 16GiB 이상에서 캡처 작업자 6개를 사용하며 다른 호스트와 탐지 실패에서는 2개를 사용한다. CPU 인코딩과 브라우저 GPU auto를 유지하고 실험적 고속 캡처는 명시적으로 끈다. 파트와 문항은 한 번에 하나씩 순차 렌더한다.
++신규 RUN은 `workers: "auto"`로 파트별 캡처 작업자 수를 선택한다. 현재 검증된 Darwin / Apple M5 / 물리 CPU 10코어 / 16GiB 이상에서는 30초 이상 파트의 움직임 비율이 50%를 넘으면 6개, 그 외에는 2개다. 다른 호스트·탐지 실패·누락된 움직임 메타데이터에서도 2개를 사용한다. CPU 인코딩과 브라우저 GPU auto를 유지하고 실험적 고속 캡처는 명시적으로 끈다. 파트와 문항은 한 번에 하나씩 순차 렌더한다.
+ 
+-`source/render-options.json`은 음성 config와 별도다. 저장된 유효값은 다른 호스트에서도 유지하며 `render --render-workers N`이 최우선이다. N은 정수 1–6이다. 손상된 저장값은 override로 숨기지 않고 오류를 낸다. `resume-set`은 옵션 없는 이전 RUN에 파일을 추가하지 않는다. 렌더 요청 시만 저장하며 설정 변경은 render부터 재개한다. WAV·대본·타임라인은 그대로 사용한다.
++움직임 비율은 실제 HTML에 동결된 타임라인과 인접 timeline.json을 대조하여 계산한다. 연필 필기·이동, 회로 주석 작성·이동, 카메라 전환 시간을 겹침 없이 합산한다. 타이핑은 write 구간 시작부터 마지막 글자 공개까지를 작성 시간으로 계산한다. 설명·완성 hold와 주석 공백은 제외하며 순간 공개·카메라 변경은 한 프레임으로 센다. 화면 픽셀 분석이나 모든 문항에서 최단 시간을 보장하는 최적화는 아니다. 현재 조립기는 문항 전체를 하나의 파트로 만들므로 일반 실행은 문항 전체의 비율로 선택한다.
++
++`source/render-options.json`은 음성 config와 별도인 schema_version=2 정책이다. `render --render-workers auto|1..6`이 최우선이고 schema2의 숫자는 호스트가 바뀌어도 수동 고정값으로 유지한다. schema1의 숫자는 당시 자동 기본값과 수동값을 구별하지 않았으므로 읽을 때 auto로 전환한다. 수동 고정이 필요하면 CLI 숫자를 다시 지정한다. 손상된 저장 정책은 override로 숨기지 않고 오류를 낸다. auto 모드에서는 존재하는 타임라인의 손상·불일치를 누락 fallback으로 숨기지 않는다. 숫자 고정값은 움직임 분석을 생략한다. `resume-set`과 분석은 파일을 추가·수정하지 않는다. 렌더 요청 시만 정책을 저장하며 변경은 render부터 재개한다. WAV·대본·타임라인은 그대로 사용한다.
+ 
+ ```sh
+-python3 .agents/skills/ec2-solution-video/scripts/video.py render --run /ABS/RUN --hyperframes-entry /ABS/hyperframes/dist/cli.js --render-workers 6
+-# 메모리 압박이 있으면 같은 명령의 값을 4 또는 2로 낮춰 직접 재시도한다.
++python3 .agents/skills/ec2-solution-video/scripts/video.py render --run /ABS/RUN --hyperframes-entry /ABS/hyperframes/dist/cli.js --render-workers auto
++# 수동 고정이나 메모리 압박이 있으면 같은 명령의 값을 4 또는 2로 낮춰 직접 재시도한다.
+ ```
+ 
+-GPU 인코딩/작업자 수를 자동 대체하지 않는다. 실패한 임시 출력은 제거하고 로그를 남긴다. 규격 검사를 통과한 파트만 교체하며 이전 마스터와 렌더 영수증은 실패 시 복구한다. `verification/render-receipt.json`에 실제 명령, workers, 경과 시간, 프레임 수와 출력 해시를 남긴다. 자막과 기존 최종 검토·게시 절차는 그대로 수행한다.
++선택 후 실패했다고 다른 인코더나 작업자 수로 자동 재시도하지 않는다. 실패한 임시 출력은 제거하고 로그를 남긴다. 규격 검사를 통과한 파트만 교체하며 이전 마스터와 렌더 영수증은 실패 시 복구한다. `verification/render-receipt.json`에 실제 명령, workers 선택 이유·움직임 비율, 경과 시간, 프레임 수와 출력 해시를 남긴다. 자막과 기존 최종 검토·게시 절차는 그대로 수행한다.
+ 
+ 마스터/영수증 교체 도중 Ctrl+C도 이전 쌍으로 복구한다. 복구 자체가 실패하면 `.rollback` 사본을 보존하고 오류에 경로를 남기며, 남은 사본을 덮어쓰는 재시도는 차단한다. 해당 사본과 오류 로그를 확인해 이전 마스터/영수증을 복원한 다음 재시도한다. 사본을 무조건 삭제해 오류를 숨기지 않는다.
+diff --git a/.agents/skills/ec2-solution-video/references/verification.md b/.agents/skills/ec2-solution-video/references/verification.md
+index 3f63c39..edffc58 100644
+--- a/.agents/skills/ec2-solution-video/references/verification.md
++++ b/.agents/skills/ec2-solution-video/references/verification.md
+@@ -57,16 +57,18 @@ SRT 시간은 실측 voice_samples 안에서 원문 의미 단위의 글자 수
+ 
+ ## 렌더 작업자 설정
+ 
+-신규 RUN은 현재 검증된 Darwin / Apple M5 / 물리 CPU 10코어 / 16GiB 이상에서 캡처 작업자 6개를 사용하며 다른 호스트와 탐지 실패에서는 2개를 사용한다. CPU 인코딩과 브라우저 GPU auto를 유지하고 실험적 고속 캡처는 명시적으로 끈다. 파트와 문항은 한 번에 하나씩 순차 렌더한다.
++신규 RUN은 `workers: "auto"`로 파트별 캡처 작업자 수를 선택한다. 현재 검증된 Darwin / Apple M5 / 물리 CPU 10코어 / 16GiB 이상에서는 30초 이상 파트의 움직임 비율이 50%를 넘으면 6개, 그 외에는 2개다. 다른 호스트·탐지 실패·누락된 움직임 메타데이터에서도 2개를 사용한다. CPU 인코딩과 브라우저 GPU auto를 유지하고 실험적 고속 캡처는 명시적으로 끈다. 파트와 문항은 한 번에 하나씩 순차 렌더한다.
+ 
+-`source/render-options.json`은 음성 config와 별도다. 저장된 유효값은 다른 호스트에서도 유지하며 `render --render-workers N`이 최우선이다. N은 정수 1–6이다. 손상된 저장값은 override로 숨기지 않고 오류를 낸다. `resume-set`은 옵션 없는 이전 RUN에 파일을 추가하지 않는다. 렌더 요청 시만 저장하며 설정 변경은 render부터 재개한다. WAV·대본·타임라인은 그대로 사용한다.
++움직임 비율은 실제 HTML에 동결된 타임라인과 인접 timeline.json을 대조하여 계산한다. 연필 필기·이동, 회로 주석 작성·이동, 카메라 전환 시간을 겹침 없이 합산한다. 타이핑은 write 구간 시작부터 마지막 글자 공개까지를 작성 시간으로 계산한다. 설명·완성 hold와 주석 공백은 제외하며 순간 공개·카메라 변경은 한 프레임으로 센다. 화면 픽셀 분석이나 모든 문항에서 최단 시간을 보장하는 최적화는 아니다. 현재 조립기는 문항 전체를 하나의 파트로 만들므로 일반 실행은 문항 전체의 비율로 선택한다.
++
++`source/render-options.json`은 음성 config와 별도인 schema_version=2 정책이다. `render --render-workers auto|1..6`이 최우선이고 schema2의 숫자는 호스트가 바뀌어도 수동 고정값으로 유지한다. schema1의 숫자는 당시 자동 기본값과 수동값을 구별하지 않았으므로 읽을 때 auto로 전환한다. 수동 고정이 필요하면 CLI 숫자를 다시 지정한다. 손상된 저장 정책은 override로 숨기지 않고 오류를 낸다. auto 모드에서는 존재하는 타임라인의 손상·불일치를 누락 fallback으로 숨기지 않는다. 숫자 고정값은 움직임 분석을 생략한다. `resume-set`과 분석은 파일을 추가·수정하지 않는다. 렌더 요청 시만 정책을 저장하며 변경은 render부터 재개한다. WAV·대본·타임라인은 그대로 사용한다.
+ 
+ ```sh
+-python3 .agents/skills/ec2-solution-video/scripts/video.py render --run /ABS/RUN --hyperframes-entry /ABS/hyperframes/dist/cli.js --render-workers 6
+-# 메모리 압박이 있으면 같은 명령의 값을 4 또는 2로 낮춰 직접 재시도한다.
++python3 .agents/skills/ec2-solution-video/scripts/video.py render --run /ABS/RUN --hyperframes-entry /ABS/hyperframes/dist/cli.js --render-workers auto
++# 수동 고정이나 메모리 압박이 있으면 같은 명령의 값을 4 또는 2로 낮춰 직접 재시도한다.
+ ```
+ 
+-GPU 인코딩/작업자 수를 자동 대체하지 않는다. 실패한 임시 출력은 제거하고 로그를 남긴다. 규격 검사를 통과한 파트만 교체하며 이전 마스터와 렌더 영수증은 실패 시 복구한다. `verification/render-receipt.json`에 실제 명령, workers, 경과 시간, 프레임 수와 출력 해시를 남긴다. 자막과 기존 최종 검토·게시 절차는 그대로 수행한다.
++선택 후 실패했다고 다른 인코더나 작업자 수로 자동 재시도하지 않는다. 실패한 임시 출력은 제거하고 로그를 남긴다. 규격 검사를 통과한 파트만 교체하며 이전 마스터와 렌더 영수증은 실패 시 복구한다. `verification/render-receipt.json`에 실제 명령, workers 선택 이유·움직임 비율, 경과 시간, 프레임 수와 출력 해시를 남긴다. 자막과 기존 최종 검토·게시 절차는 그대로 수행한다.
+ 
+ ### 2026-10-10 생산 렌더러 수용 검증
+ 
+@@ -75,3 +77,21 @@ GPU 인코딩/작업자 수를 자동 대체하지 않는다. 실패한 임시 
+ 실제 수용검사는 EC2_RENDER_ACCEPTANCE=1, EC2_RENDER_FIXTURE(원본 또는 해시 일치 동결 RUN), EC2_RENDER_ACCEPTANCE_DEST(원본 외부의 새 폴더), EC2_HYPERFRAMES_ENTRY(검증된 로컬 CLI)를 지정하고 tests/test_render_performance_acceptance.py를 unittest discover로 실행한다. EC2_FFMPEG와 HYPERFRAMES_FFMPEG_PATH도 같은 검증된 FFmpeg에 고정한다. 미지정은 명시적으로 skip, 명시 실행의 누락 입력/다른 프레임 수는 실패다. 원본 승인/상태 영수증은 복사하지 않으며 유료 호출·게시를 금지한다.
+ 
+ 마스터/영수증 교체 도중 Ctrl+C도 이전 쌍으로 복구한다. 복구 자체가 실패하면 `.rollback` 사본을 보존하고 오류에 경로를 남기며, 남은 사본을 덮어쓰는 재시도는 차단한다. 해당 사본과 오류 로그를 확인해 이전 마스터/영수증을 복원한 다음 재시도한다. 사본을 무조건 삭제해 오류를 숨기지 않는다.
++
++### 자동 작업자 수용 검증
++
++`tests/auto_workers_acceptance.py`는 기존 P10.72의 동결 composition·narration.wav를 읽어 정지 화면 구간 0–900프레임과 필기 구간 6269–7169프레임을 각각 30초씩 렌더한다. 원본 PDF 윤곽·글로벌 타임라인은 보존하고 시험용 GSAP 시계만 해당 구간으로 제한한다. 각각 고정2·고정6·auto를 실제 render_master에서 실행하고 모든 프레임·PCM·AAC와 마스터 SHA256을 비교한다. 혼합60초의 auto [2,6]도 고정 기준본을 독립 mux한 결과와 대조한다. 실제 입력과 원본 전체 파일 해시를 전후 비교하며 수용 폴더는 원본 밖의 새 경로여야 한다.
++
++```sh
++PATH=/opt/homebrew/opt/ffmpeg-full/bin:$PATH \
++EC2_FFMPEG=/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg \
++HYPERFRAMES_FFMPEG_PATH=/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg \
++python3 .agents/skills/ec2-solution-video/tests/auto_workers_acceptance.py \
++  --fixture /ABS/FROZEN_P1072_RUN \
++  --destination /ABS/NEW_ACCEPTANCE_FOLDER \
++  --hyperframes-entry /ABS/hyperframes/dist/cli.js
++```
++
++시험은 기존 PCM을 재사용하며 유료 TTS·production publish를 금지한다. 자막을 제한된 구간에 다시 배분한 시험본은 원본 발화 경계의 정밀 정렬이나 새 교육·음성 의미 승인을 증명하지 않는다. 시간은 현재 부하에서 각 설정 한 번의 관측치이며 메타데이터 기반 50% 기준의 보편적인 속도 우위를 증명하지 않는다.
++
++`tests/auto_workers_browser_check.mjs`는 원본 전체 시계와 시험 구간 시계의 프레임·카메라 및 역방향 seek PNG를 소프트웨어 Chrome(`--disable-gpu`)으로 엄격 비교한다. GPU 기본 Chrome의 보조 탭 비교에서 정적 색상 24픽셀의 파랑 채널 차이 1이 관측되어 보조 화면 검사의 백엔드를 고정했다. 이는 생산 렌더의 브라우저 GPU auto/Metal과 별개다. 실제 인코딩 영상의 작업자별 전체 프레임·PCM·AAC 동일성은 GPU auto에서 검사하며 PNG 허용오차를 늘리지 않는다. 실행 백엔드·Chrome 경로와 비교 결과는 browser.json에 기록한다.
+diff --git a/.agents/skills/ec2-solution-video/scripts/solution_video/media.py b/.agents/skills/ec2-solution-video/scripts/solution_video/media.py
+index f3c173f..ea09099 100644
+--- a/.agents/skills/ec2-solution-video/scripts/solution_video/media.py
++++ b/.agents/skills/ec2-solution-video/scripts/solution_video/media.py
+@@ -3,7 +3,7 @@ from fractions import Fraction
+ import functools,json,os,shutil,subprocess,time,wave
+ from .util import checked,command,write,file_hash,local
+ from .contracts import InputError
+-from .render_options import load_render_options,validate_render_options
++from .render_options import load_render_options,validate_render_options,resolve_part_workers
+ @functools.lru_cache
+ def ffmpeg():
+     candidates=[os.environ.get('EC2_FFMPEG'),shutil.which('ffmpeg'),'/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg']
+@@ -77,11 +77,12 @@ def _log_text(value):
+ def render_master(parts: list[dict],timeline: dict,audio: list[dict],run: Path,hyperframes_entry: Path,*,render_options: dict[str,object] | None=None) -> Path:
+     run=Path(run).resolve();entry=Path(hyperframes_entry).resolve()
+     options=load_render_options(run) if render_options is None else validate_render_options(render_options)
++    selections=[resolve_part_workers(run,part,options) for part in parts]
+     source_checks(parts,run,entry)
+     outputs=[];records=[];work=run/'renders';work.mkdir(parents=True,exist_ok=True)
+-    for part in parts:
++    for part,selection in zip(parts,selections,strict=True):
+         html=local(run,part['entry']);out=work/(part['key']+'.mp4');pending=work/(part['key']+'.pending.mp4')
+-        args=[str(a) for a in ['node',entry,'render','--composition',html.name,'--quality','delivery','--workers',options['workers'],'--experimental-fast-capture=false','--output',pending]]
++        args=[str(a) for a in ['node',entry,'render','--composition',html.name,'--quality','delivery','--workers',selection['workers'],'--experimental-fast-capture=false','--output',pending]]
+         log=work/(part['key']+'.log');start=time.perf_counter()
+         try:
+             pending.unlink(missing_ok=True)
+@@ -89,7 +90,7 @@ def render_master(parts: list[dict],timeline: dict,audio: list[dict],run: Path,h
+             log.write_text(r.stdout+'\n'+r.stderr,encoding='utf-8')
+             if r.returncode or not pending.is_file():raise InputError('HyperFrames render failed; inspect '+str(log))
+             frames=part['last_frame']-part['first_frame'];_validate_media(pending,frames)
+-            record=dict(key=part['key'],command=args,elapsed_seconds=time.perf_counter()-start,output_sha256=file_hash(pending),frames=frames)
++            record=dict(key=part['key'],worker_selection=selection,command=args,elapsed_seconds=time.perf_counter()-start,output_sha256=file_hash(pending),frames=frames)
+             os.replace(pending,out);outputs.append(out);records.append(record)
+         except Exception as ex:
+             if isinstance(ex,subprocess.TimeoutExpired):
+diff --git a/.agents/skills/ec2-solution-video/scripts/solution_video/render_options.py b/.agents/skills/ec2-solution-video/scripts/solution_video/render_options.py
+index f253415..fe1b344 100644
+--- a/.agents/skills/ec2-solution-video/scripts/solution_video/render_options.py
++++ b/.agents/skills/ec2-solution-video/scripts/solution_video/render_options.py
+@@ -21,35 +21,59 @@ def detect_hardware() -> dict[str, object]:
+     return hardware
+ 
+ 
+-def default_render_options(hardware: dict[str, object] | None = None) -> dict[str, object]:
++def worker_capacity(hardware: dict[str, object] | None = None) -> int:
+     host = detect_hardware() if hardware is None else hardware
+     verified = (host.get('platform') == 'darwin' and host.get('chip') == 'Apple M5'
+                 and type(host.get('cpu_cores')) is int and host['cpu_cores'] == 10
+                 and type(host.get('memory_bytes')) is int and host['memory_bytes'] >= 16 * 1024**3)
+-    return dict(schema_version=1, workers=6 if verified else 2, encoder='cpu',
+-                browser_gpu='auto', fast_capture=False)
++    return 6 if verified else 2
++
++
++def default_render_options(hardware: dict[str, object] | None = None) -> dict[str, object]:
++    return dict(schema_version=2,workers='auto',encoder='cpu',browser_gpu='auto',fast_capture=False)
++
++
++def resolve_part_workers(run,part,options,*,hardware=None):
++    from .workload import part_motion_profile
++    options=validate_render_options(options)
++    if options['workers']!='auto':
++        return dict(mode='fixed',workers=options['workers'],reason='explicit_setting')
++    profile=part_motion_profile(run,part)
++    capacity=worker_capacity(hardware)
++    if capacity<6:workers,reason=2,'unverified_hardware'
++    elif profile['status']=='unknown':workers,reason=2,'missing_motion_metadata'
++    elif profile['part_frames']<900:workers,reason=2,'short_part'
++    elif profile['motion_ratio']>.5:workers,reason=6,'motion_majority'
++    else:workers,reason=2,'static_majority'
++    return dict(mode='auto',workers=workers,reason=reason,policy_version=1,
++                threshold_ratio=.5,min_part_frames=900,capacity=capacity,**profile)
+ 
+ 
+ def validate_render_options(options: dict[str, object]) -> dict[str, object]:
+     keys = {'schema_version', 'workers', 'encoder', 'browser_gpu', 'fast_capture'}
+     if not isinstance(options, dict) or set(options) != keys:
+         raise InputError('render options require exactly: ' + ', '.join(sorted(keys)))
+-    if type(options['schema_version']) is not int or options['schema_version'] != 1:
+-        raise InputError('render options schema_version must be integer 1')
+-    if type(options['workers']) is not int or not 1 <= options['workers'] <= 6:
+-        raise InputError('render workers must be an integer from 1 to 6')
++    if type(options['schema_version']) is not int or options['schema_version'] not in (1,2):
++        raise InputError('render options schema_version must be integer 1 or 2')
++    fixed=type(options['workers']) is int and 1<=options['workers']<=6
++    automatic=options['schema_version']==2 and options['workers']=='auto'
++    if not (fixed or automatic):raise InputError('render workers must be auto or an integer from 1 to 6')
+     if (options['encoder'] != 'cpu' or options['browser_gpu'] != 'auto'
+             or type(options['fast_capture']) is not bool or options['fast_capture']):
+         raise InputError('render requires CPU encoding, browser GPU auto, fast_capture=false')
+     return dict(options)
+ 
+ 
+-def load_render_options(run: Path, workers: int | None = None, *,
++def load_render_options(run: Path, workers: int | str | None = None, *,
+                         hardware: dict[str, object] | None = None) -> dict[str, object]:
+     path = Path(run) / 'source/render-options.json'
+     if path.exists():
+         try:
+             options = validate_render_options(read(path))
++            if options['schema_version']==1:
++                # v1 recorded host defaults without distinguishing manual intent.
++                # This release opts those legacy runs into the requested auto policy.
++                options=dict(options,schema_version=2,workers='auto')
+         except (OSError, ValueError) as ex:
+             raise InputError('invalid saved render options: ' + str(ex)) from ex
+     else:
+diff --git a/.agents/skills/ec2-solution-video/scripts/solution_video/state.py b/.agents/skills/ec2-solution-video/scripts/solution_video/state.py
+index e8b04fe..61de22b 100644
+--- a/.agents/skills/ec2-solution-video/scripts/solution_video/state.py
++++ b/.agents/skills/ec2-solution-video/scripts/solution_video/state.py
+@@ -11,7 +11,7 @@ FACTORS={
+  'voice':['source/config.json'], 'timing':['source/audio.json','assets/voice/*.wav'],
+  'composition':['source/timeline.json'], 'render':['source/parts.json','source/render-options.json','composition/**/*'],
+  'captions':['renders/master.mp4'], 'verify':['renders/final.mp4','renders/captions.srt','verification/audio-review.json','verification/visual-review.json','verification/pacing-review.json'], 'publish':['verification/report.json']}
+-MODULES={'inputs':['sources'],'layers':['pdf_pages','writing_units'],'script':['manifest','lesson','subtitles'],'voice':['review_adapter'],'timing':['reveal','writing'],'composition':['composition','writing_camera'],'render':['media','render_options'],'captions':['subtitles'],'verify':['verify','narration_pacing'],'publish':['publication']}
++MODULES={'inputs':['sources'],'layers':['pdf_pages','writing_units'],'script':['manifest','lesson','subtitles'],'voice':['review_adapter'],'timing':['reveal','writing'],'composition':['composition','writing_camera'],'render':['media','render_options','workload'],'captions':['subtitles'],'verify':['verify','narration_pacing'],'publish':['publication']}
+ def stage_fingerprint(run,stage):
+     run=Path(run); n=STAGES.index(stage); files={}
+     for s in STAGES[:n+1]:
+diff --git a/.agents/skills/ec2-solution-video/scripts/solution_video/workload.py b/.agents/skills/ec2-solution-video/scripts/solution_video/workload.py
+new file mode 100644
+index 0000000..9cdc191
+--- /dev/null
++++ b/.agents/skills/ec2-solution-video/scripts/solution_video/workload.py
+@@ -0,0 +1,106 @@
++"""Estimate changing-frame coverage from the timeline actually embedded in a part.
++
++Pencil/annotation spans and camera transitions are intervals; typing covers its
++reveal cadence up to the last event. Holds contribute no motion. This is an
++estimate of authored activity, not pixel sampling or a throughput guarantee.
++"""
++import json
++import math
++from pathlib import Path
++from .contracts import InputError
++from .util import local,read
++
++
++def _integer(value):
++    if type(value) is not int:
++        raise InputError('motion metadata requires integer frames/samples')
++    return value
++
++
++def part_motion_profile(run,part):
++    first=_integer(part['first_frame']);last=_integer(part['last_frame'])
++    if first<0 or last<=first:raise InputError('invalid render part frame range')
++    frames=last-first
++    unknown=dict(status='unknown',part_frames=frames,animated_frames=None,animated_seconds=None,motion_ratio=None)
++    html=local(Path(run).resolve(),part['entry']);path=html.parent/'timeline.json'
++    try:
++        # Parse every present file before falling back, so corruption stays visible.
++        saved_present=path.is_file()
++        saved=read(path) if saved_present else None
++        text=html.read_text(encoding='utf-8') if html.is_file() else ''
++        marker='window.solutionTimeline='
++        count=text.count(marker)
++        if count>1:raise InputError('repeated embedded solution timeline')
++        embedded=json.JSONDecoder().raw_decode(text.split(marker,1)[1].lstrip())[0] if count else None
++        if (saved_present and not isinstance(saved,dict)) or (count and not isinstance(embedded,dict)):
++            raise InputError('solution timeline must be an object')
++        missing=saved is None or embedded is None
++        if not missing and saved!=embedded:
++            raise InputError('compiled and embedded solution timelines differ')
++        t=embedded if embedded is not None else saved
++        if t is None:return unknown
++        total=_integer(t['total_frames'])
++        if t['fps']!=30 or t['rate']!=24000 or total<=0 or _integer(t['total_samples'])!=total*800 or last>total:
++            raise InputError('motion timeline must match 24kHz/30fps part')
++        intervals=[]
++        def interval(left,right):
++            left=_integer(left);right=_integer(right)
++            if not 0<=left<right<=total:raise InputError('motion interval outside timeline')
++            a,b=max(first,left),min(last,right)
++            if b>a:intervals.append((a,b))
++        def spans(rows,annotation=False):
++            if not isinstance(rows,list):raise InputError('motion spans must be a list')
++            for row in rows:
++                if row['kind'] not in (('draw','move','space') if annotation else ('draw','move')):raise InputError('unknown motion span kind')
++                left=_integer(row['start_frame']);right=_integer(row['end_frame'])
++                if not 0<=left<right<=total:raise InputError('motion span outside timeline')
++                if annotation:
++                    hide=_integer(row['hide_frame'])
++                    if not left<hide<=total:raise InputError('annotation hide outside timeline')
++                    right=min(right,hide)
++                if row['kind']!='space':interval(left,right)
++        events=t['events'];segments=t['segments'];cameras=t['cameras']
++        if not all(isinstance(rows,list) for rows in (events,segments,cameras)):
++            raise InputError('motion events, segments and cameras must be lists')
++        event_frames=[_integer(e['frame']) for e in events]
++        if any(f<0 or f>=total for f in event_frames):raise InputError('reveal outside timeline')
++        writing=t.get('writing')
++        if writing is None:writing={}
++        if not isinstance(writing,dict) or writing.get('mode','typing') not in ('typing','pencil'):
++            raise InputError('unknown writing mode')
++        # Validate available pencil metadata even in a legacy typing timeline.
++        if 'writing_spans' in t:spans(t['writing_spans'])
++        elif writing.get('mode')=='pencil':missing=True
++        for seg in segments:
++            left=_integer(seg['start_sample']);right=_integer(seg['end_sample'])
++            if not 0<=left<right<=total*800:raise InputError('segment outside timeline')
++            if writing.get('mode','typing')=='typing' and seg['kind']=='write':
++                reveals=[f for f in event_frames if left<=f*800<right]
++                if reveals:interval(left//800,min(total,max(reveals)+1))
++        previous=None;previous_frame=-1;previous_mirror=False;camera_changes=[]
++        for camera in cameras:
++            at=_integer(camera['at_frame']);duration=_integer(camera.get('transition_frames',0));view=camera['viewbox']
++            if not 0<=at<total or at<=previous_frame or duration<0 or at+duration>total:
++                raise InputError('camera outside timeline or unordered')
++            if not isinstance(view,list) or len(view)!=4 or any(type(v) not in (int,float) or not math.isfinite(v) for v in view) or view[2]<=0 or view[3]<=0:
++                raise InputError('invalid camera viewbox')
++            if previous is not None and previous!=view:
++                camera_changes.append(at)
++                if duration:interval(at,at+duration)
++            elif previous is not None and previous_mirror!=bool(camera.get('mirror',False)):
++                camera_changes.append(at)
++            previous=view;previous_frame=at;previous_mirror=bool(camera.get('mirror',False))
++        if t.get('teaching') is not None:spans(t['teaching']['spans'],annotation=True)
++        # Instant reveal/page/camera changes count one frame; continuous movement
++        # already included above is merged, never counted twice.
++        for f in event_frames:interval(f,f+1)
++        for at in camera_changes:interval(at,at+1)
++        merged=[]
++        for left,right in sorted(intervals):
++            if merged and left<=merged[-1][1]:merged[-1]=(merged[-1][0],max(merged[-1][1],right))
++            else:merged.append((left,right))
++        active=sum(right-left for left,right in merged)
++        if missing:return unknown
++        return dict(status='known',part_frames=frames,animated_frames=active,animated_seconds=active/30,motion_ratio=active/frames)
++    except (KeyError,TypeError,OverflowError,IndexError) as ex:
++        raise InputError('invalid motion metadata: '+str(ex)) from ex
+diff --git a/.agents/skills/ec2-solution-video/scripts/video.py b/.agents/skills/ec2-solution-video/scripts/video.py
+index 4566ffe..2067b12 100644
+--- a/.agents/skills/ec2-solution-video/scripts/video.py
++++ b/.agents/skills/ec2-solution-video/scripts/video.py
+@@ -168,6 +168,11 @@ def _run_stage(action,run,args,transport=None):
+     if report['complete']: finish_stage(run,stage,[run/'verification/report.json'])
+     return dict(report,status='passed' if report['complete'] else 'failed',paid_requests=0)
+ 
++def render_workers(value):
++    if value=='auto':return value
++    try:return int(value)
++    except ValueError as ex:raise argparse.ArgumentTypeError('workers must be auto or 1–6') from ex
++
+ def main(argv=None):
+     parser=argparse.ArgumentParser(description=__doc__);subs=parser.add_subparsers(dest='action',required=True)
+     p=subs.add_parser('prepare');p.add_argument('selector');p.add_argument('--repo',type=Path,default=Path.cwd());p.add_argument('--problems');p.add_argument('--review',action='store_true');p.add_argument('--writing-mode',choices=['pencil','typing'],default='pencil')
+@@ -177,7 +182,7 @@ def main(argv=None):
+             p.add_argument('--config',type=Path);p.add_argument('--env-file',type=Path);p.add_argument('--approve-review',action='store_true')
+         if name=='retime':p.add_argument('--writing-config',type=Path)
+         if name=='assemble': p.add_argument('--runtime',required=True)
+-        if name=='render':p.add_argument('--render-workers',type=int,choices=range(1,7))
++        if name=='render':p.add_argument('--render-workers',type=render_workers,choices=('auto',1,2,3,4,5,6))
+         if name in ['render','verify']: p.add_argument('--hyperframes-entry',required=True)
+     for name in ['resume-set','publish-set']:
+         p=subs.add_parser(name);p.add_argument('--batch',required=True,type=Path)
+diff --git a/.agents/skills/ec2-solution-video/tests/auto_workers_acceptance.py b/.agents/skills/ec2-solution-video/tests/auto_workers_acceptance.py
+new file mode 100644
+index 0000000..880ed30
+--- /dev/null
++++ b/.agents/skills/ec2-solution-video/tests/auto_workers_acceptance.py
+@@ -0,0 +1,162 @@
++"""Real P10.72 static/dynamic windows via render_master, without voice generation.
++
++Uses frozen existing composition/PCM. Fresh destination only; the windowed
++player clock is a test adapter, while PDF geometry and global timeline remain
++unchanged. Timings are single observations, not an optimization guarantee.
++"""
++import argparse
++import json
++import re
++from pathlib import Path
++import shutil
++import sys
++import time
++import wave
++from unittest.mock import patch
++sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
++from solution_video.media import render_master,ffmpeg,probe
++from solution_video.render_options import default_render_options,worker_capacity
++from solution_video.subtitles import burn_subtitles,write_srt
++from solution_video.util import read,write,file_hash,checked,local,S
++
++WINDOWS=[('static',0,900,2),('dynamic',6269,7169,6)]
++
++
++def hashes(root,inputs_only=False):
++    return {p.relative_to(root).as_posix():file_hash(p) for p in root.rglob('*') if p.is_file()
++            and (not inputs_only or p.relative_to(root).parts[0] in ('composition','source','assets'))}
++
++
++def pcm(path):
++    with wave.open(str(path),'rb') as w:
++        assert (w.getnchannels(),w.getsampwidth(),w.getframerate())==(1,2,24000)
++        return w.readframes(w.getnframes())
++
++
++def save_pcm(path,raw):
++    path.parent.mkdir(parents=True,exist_ok=True)
++    with wave.open(str(path),'wb') as w:
++        w.setparams((1,2,24000,0,'NONE',''));w.writeframes(raw)
++
++
++def prepare_run(fixture,run,windows,workers):
++    parts=[];segments=[];voices=[];offset=0;all_raw=b''
++    original=pcm(fixture/'renders/narration.wav')
++    for name,first,last,want in windows:
++        parent=run/'composition'/name;shutil.copytree(fixture/'composition',parent)
++        html=parent/'index.html';text=html.read_text();duration=(last-first)/30
++        old=read(parent/'timeline.json')['total_frames']/30
++        replacements=[(f'data-duration="{old}"',f'data-duration="{duration}"'),
++                      ('const clock={frame:0};',f'const clock={{frame:{first}}};'),
++                      ('{frame:0},{frame:T.total_frames,duration:T.total_frames/30',f'{{frame:{first}}},{{frame:{last},duration:{duration}'),
++                      ('window.renderSolutionFrame(0);',f'window.renderSolutionFrame({first});')]
++        for old_text,new_text in replacements:
++            assert text.count(old_text)==1,(name,old_text)
++            text=text.replace(old_text,new_text)
++        html.write_text(text)
++        parts.append(dict(key=name,entry=html.relative_to(run).as_posix(),first_frame=first,last_frame=last))
++        raw=original[first*800*2:last*800*2];assert len(raw)==(last-first)*800*2
++        all_raw+=raw;p=run/'assets/voice'/f'{name}.wav';save_pcm(p,raw)
++        samples=len(raw)//2
++        voices.append(dict(id=name,path=p.relative_to(run).as_posix(),samples=samples,rate=24000,sha256=file_hash(p)))
++        segments.append(dict(id=name,start_sample=offset,end_sample=offset+samples))
++        offset+=samples
++    timeline=dict(rate=24000,fps=30,total_samples=offset,total_frames=offset//800,segments=segments)
++    options=dict(default_render_options(),workers=workers)
++    for name,value in [('parts',parts),('timeline',timeline),('audio',dict(voices=voices)),('render-options',options)]:
++        write(run/'source'/f'{name}.json',value)
++    return parts,timeline,voices,options,all_raw
++
++
++def frame_hashes(master,dest):
++    checked([ffmpeg(),'-v','error','-i',master,'-map','0:v:0','-f','framemd5',dest],timeout=300)
++    return [row.rsplit(',',1)[1].strip() for row in dest.read_text().splitlines() if row and not row.startswith('#')]
++
++
++def assert_media(path,frames):
++    streams=probe(path)['streams']
++    video=next(s for s in streams if s['codec_type']=='video')
++    voice=next(s for s in streams if s['codec_type']=='audio')
++    assert (video['width'],video['height'],video['r_frame_rate'],int(video['nb_frames']))==(1920,1080,'30/1',frames)
++    assert (int(voice['sample_rate']),voice['channels'])==(24000,1)
++    assert abs(float(video['duration'])-float(voice['duration']))<=1/30
++
++
++def render_case(fixture,dest,entry,name,windows,workers):
++    run=dest/name;parts,timeline,audio,options,expected_pcm=prepare_run(fixture,run,windows,workers)
++    before=hashes(run,True);write(dest/(name+'-inputs-before.json'),before)
++    print('rendering '+name,flush=True);start=time.perf_counter()
++    master=render_master(parts,timeline,audio,run,entry,render_options=options)
++    elapsed=time.perf_counter()-start
++    after=hashes(run,True);write(dest/(name+'-inputs-after.json'),after);assert before==after
++    receipt=read(run/'verification/render-receipt.json');assert receipt['options']==options
++    assert receipt['master_sha256']==file_hash(master)
++    selections=[]
++    for part,row,window in zip(parts,receipt['parts'],windows,strict=True):
++        want=window[3] if workers=='auto' else workers;selection=row['worker_selection'];selections.append(selection)
++        assert selection['workers']==want
++        args=row['command'];assert args[args.index('--workers')+1]==str(want)
++        assert '--experimental-fast-capture=false' in args and '--gpu' not in args
++        assert row['frames']==900 and row['output_sha256']==file_hash(run/'renders'/(part['key']+'.mp4'))
++        log=(run/'renders'/(part['key']+'.log')).read_text()
++        logged_workers=re.findall(r'workerCount[\"\s:]+(\d+)',log)
++        assert logged_workers and set(logged_workers)=={str(want)},logged_workers
++        assert 'Metal' in log
++    assert pcm(run/'renders/narration.wav')==expected_pcm
++    assert_media(master,timeline['total_frames'])
++    decoded=frame_hashes(master,dest/(name+'.framemd5'));assert len(decoded)==timeline['total_frames']
++    aac=dest/(name+'.aac');checked([ffmpeg(),'-v','error','-i',master,'-map','0:a:0','-c','copy','-f','adts',aac],timeout=300)
++    row=dict(case=name,elapsed_seconds=elapsed,part_seconds=sum(p['elapsed_seconds'] for p in receipt['parts']),workers=[s['workers'] for s in selections],selections=selections,frames=len(decoded),master_sha256=file_hash(master),pcm_sha256=file_hash(run/'renders/narration.wav'),aac_sha256=file_hash(aac),inputs_unchanged=True)
++    print(name+f': {elapsed:.2f}s workers='+str(row['workers']),flush=True)
++    return row,decoded
++
++
++def run_acceptance(fixture,dest,entry):
++    assert fixture.is_dir() and entry.is_file()
++    assert dest!=fixture and not dest.is_relative_to(fixture) and not fixture.is_relative_to(dest)
++    assert not dest.exists(),'destination must be fresh'
++    assert worker_capacity()==6,'this acceptance requires verified M5 host'
++    assert read(fixture/'composition/timeline.json')['total_frames']==7220
++    dest.mkdir(parents=True);before=hashes(fixture);write(dest/'fixture-before.json',before)
++    results=[];decoded={}
++    try:
++        with patch('solution_video.review_adapter.generate_voice',side_effect=AssertionError('paid request forbidden')),patch('solution_video.publication.publish_batch',side_effect=AssertionError('production publication forbidden')):
++            for window in WINDOWS:
++                group=[]
++                for workers in [2,6,'auto']:
++                    name=window[0]+'-'+str(workers)
++                    row,frames=render_case(fixture,dest,entry,name,[window],workers)
++                    results.append(row);group.append(row);decoded[name]=frames
++                    write(dest/'progress.json',dict(results=results))
++                assert decoded[group[0]['case']]==decoded[group[1]['case']]==decoded[group[2]['case']]
++                for key in ['master_sha256','pcm_sha256','aac_sha256']:
++                    assert len({r[key] for r in group})==1,(window[0],key)
++            row,frames=render_case(fixture,dest,entry,'mixed-auto',WINDOWS,'auto');results.append(row)
++            assert frames==decoded['static-2']+decoded['dynamic-6']
++            # Independent mux of the fixed controls gives the mixed reference.
++            ref=dest/'mixed-reference';ref.mkdir()
++            for index,name in enumerate(['static-2','dynamic-6']):shutil.copyfile(dest/name/'renders'/('static.mp4' if index==0 else 'dynamic.mp4'),ref/f'part-{index}.mp4')
++            (ref/'concat.txt').write_text("file 'part-0.mp4'\nfile 'part-1.mp4'")
++            save_pcm(ref/'narration.wav',pcm(dest/'static-2/renders/narration.wav')+pcm(dest/'dynamic-6/renders/narration.wav'))
++            checked([ffmpeg(),'-y','-v','error','-f','concat','-safe','1','-i','concat.txt','-i','narration.wav','-c:v','copy','-c:a','aac','-b:a','128k','-movflags','+faststart',ref/'master.mp4'],cwd=ref,timeout=300)
++            assert file_hash(ref/'master.mp4')==row['master_sha256']
++            # Reuse original caption text, redistributing it inside clipped test windows.
++            source=read(fixture/'source/timeline.json');caption_segments=[];offset=0
++            for _,first,last,_ in WINDOWS:
++                for segment in source['segments']:
++                    left=max(first*800,segment['start_sample']);right=min(last*800,segment['start_sample']+segment['voice_samples'])
++                    if right>left:caption_segments.append(dict(segment,start_sample=offset+left-first*800,end_sample=offset+right-first*800,voice_samples=right-left))
++                offset+=(last-first)*800
++            srt=write_srt(dict(rate=24000,segments=caption_segments),dest/'mixed-captions.srt')
++            final=burn_subtitles(dest/'mixed-auto/renders/master.mp4',srt,dest/'mixed-captioned.mp4',S.parent/'ec2-review-video/assets/fonts/Pretendard-Bold.ttf')
++            assert_media(final,1800)
++            checked([ffmpeg(),'-v','error','-i',final,'-f','null','-'],timeout=300)
++            for at in [2,45,59]:checked([ffmpeg(),'-v','error','-ss',str(at),'-i',final,'-frames:v','1',dest/f'frame-{at}.png'],timeout=60)
++            write(dest/'result.json',dict(status='passed',results=results,all_frames_equal=True,pcm_equal=True,aac_equal=True,mixed_master_equal=True,captioned_decode_passed=True,paid_requests=0,published=False))
++    finally:
++        after=hashes(fixture);write(dest/'fixture-after.json',after);assert before==after,'frozen fixture changed'
++
++
++if __name__=='__main__':
++    parser=argparse.ArgumentParser();parser.add_argument('--fixture',type=Path,required=True);parser.add_argument('--destination',type=Path,required=True);parser.add_argument('--hyperframes-entry',type=Path,required=True)
++    args=parser.parse_args();run_acceptance(args.fixture.resolve(),args.destination.resolve(),args.hyperframes_entry.resolve())
+diff --git a/.agents/skills/ec2-solution-video/tests/auto_workers_browser_check.mjs b/.agents/skills/ec2-solution-video/tests/auto_workers_browser_check.mjs
+new file mode 100644
+index 0000000..ebcfc27
+--- /dev/null
++++ b/.agents/skills/ec2-solution-video/tests/auto_workers_browser_check.mjs
+@@ -0,0 +1,53 @@
++/* Compare window-adapted GSAP seeking with the untouched original PDF player.
++ * Software raster avoids Metal's observed 1-LSB color rounding between tabs.
++ * Production render acceptance separately verifies browser GPU auto/Metal. */
++import fs from 'node:fs';
++import path from 'node:path';
++import crypto from 'node:crypto';
++import {createRequire} from 'node:module';
++import {pathToFileURL} from 'node:url';
++const args=process.argv.slice(2), opt=k=>args[args.indexOf('--'+k)+1];
++for(const file of [path.join(opt('fixture'),'composition/index.html'),...['static','dynamic'].map(name=>path.join(opt('run'),'composition',name,'index.html'))]){
++ if(!fs.existsSync(file))throw Error('missing browser-check input: '+file);
++}
++const require=createRequire(opt('puppeteer-package'));
++const browserArgs=['--no-sandbox','--allow-file-access-from-files','--disable-gpu'];
++const browser=await require('puppeteer-core').launch({executablePath:opt('chrome'),headless:true,args:browserArgs});
++const dest=opt('destination');fs.mkdirSync(dest,{recursive:true});
++const digest=data=>crypto.createHash('sha256').update(data).digest('hex');
++try{
++ const original=await browser.newPage(),windowed=await browser.newPage();
++ for(const page of [original,windowed])await page.setViewport({width:1920,height:1080,deviceScaleFactor:1});
++ const load=async(page,file)=>{
++  process.stderr.write('Loading '+file+'\n');
++  await page.bringToFront();
++  await page.goto(pathToFileURL(file).href);
++  await page.waitForFunction(()=>Boolean(window.__timelines?.solution),{polling:50,timeout:10000});
++  await page.evaluate(async()=>{await document.fonts.ready;for(const image of document.images)await image.decode();const render=window.renderSolutionFrame;window.renderSolutionFrame=f=>{window.__checkedFrame=f;render(f);};});
++ };
++ await load(original,path.join(opt('fixture'),'composition/index.html'));
++ const results=[];
++ for(const [name,first] of [['static',0],['dynamic',6269]]){
++  await load(windowed,path.join(opt('run'),'composition',name,'index.html'));
++  const screenshot=async(page,seconds)=>{
++   await page.bringToFront();
++   await page.evaluate(at=>{window.__timelines.solution.seek(at,false);},seconds);
++   return Buffer.from(await page.screenshot());
++  };
++  process.stderr.write('Comparing '+name+'\n');
++  for(const frame of [0,450,150,899,0]){
++   const reference=await screenshot(original,(first+frame)/30);
++   const actual=await screenshot(windowed,frame/30);
++   const state=await windowed.evaluate(()=>({frame:window.__checkedFrame,viewbox:document.querySelector('#answer-page>svg').getAttribute('viewBox')}));
++   const originalState=await original.evaluate(()=>({frame:window.__checkedFrame,viewbox:document.querySelector('#answer-page>svg').getAttribute('viewBox')}));
++   if(Math.abs(state.frame-(first+frame))>1e-4||Math.abs(originalState.frame-(first+frame))>1e-4||state.viewbox!==originalState.viewbox)throw Error(`${name} frame or camera mismatch at ${frame}`);
++   fs.writeFileSync(path.join(dest,`${name}-${frame}-reference.png`),reference);
++   const equal=reference.equals(actual);fs.writeFileSync(path.join(dest,`${name}-${frame}.png`),actual);
++   results.push({name,frame,state,originalState,original_frame:first+frame,equal,reference_sha256:digest(reference),actual_sha256:digest(actual)});
++   fs.writeFileSync(path.join(dest,'progress.json'),JSON.stringify(results,null,2));
++   if(!equal)throw Error(`${name} seek at ${frame} differs from frozen original`);
++  }
++ }
++ fs.writeFileSync(path.join(dest,'browser.json'),JSON.stringify({status:'passed',backend:'software',chrome:opt('chrome'),browserArgs,comparisons:results.length,results},null,2));
++ process.stdout.write(JSON.stringify({status:'passed',comparisons:results.length}));
++}finally{await browser.close();}
+diff --git a/.agents/skills/ec2-solution-video/tests/test_cli.py b/.agents/skills/ec2-solution-video/tests/test_cli.py
+index d71dfe4..c5b0218 100644
+--- a/.agents/skills/ec2-solution-video/tests/test_cli.py
++++ b/.agents/skills/ec2-solution-video/tests/test_cli.py
+@@ -216,12 +216,12 @@ class CLITests(Sandbox):
+     def test_prepare_keeps_render_options_out_of_voice_config(self):
+         from unittest.mock import patch
+         from solution_video.sources import discover
+-        from test_render_options import M5,OPTIONS
++        from test_render_options import M5,AUTO
+         pairs=discover(REPO,'1002',['E10.11'])
+         with patch.object(cli,'discover',return_value=pairs),patch('solution_video.render_options.detect_hardware',return_value=M5):
+             batch=cli.prepare_batch(self.run,'1002')
+         run=batch/read(batch/'batch.json')['items'][0]['run']
+-        self.assertEqual(read(run/'source/render-options.json'),OPTIONS)
++        self.assertEqual(read(run/'source/render-options.json'),AUTO)
+         self.assertEqual(read(run/'source/config.json'),cli.default_config())
+     def test_render_override_precedes_recovery(self):
+         from unittest.mock import patch
+@@ -265,3 +265,9 @@ class CLITests(Sandbox):
+         for args in [['render','--run',str(self.run),'--hyperframes-entry','cli.js','--render-workers','7'],['check','--run',str(self.run),'--render-workers','2']]:
+             with contextlib.redirect_stderr(io.StringIO()),self.assertRaises(SystemExit) as caught:cli.main(args)
+             self.assertEqual(caught.exception.code,2)
++
++    def test_auto_cli_is_accepted_and_render_only(self):
++        from unittest.mock import patch
++        with patch.object(cli,'run_stage',return_value={'status':'passed'}) as stage:
++            self.assertEqual(cli.main(['render','--run',str(self.run),'--hyperframes-entry','cli.js','--render-workers','auto']),0)
++            self.assertEqual(stage.call_args.args[2].render_workers,'auto')
+diff --git a/.agents/skills/ec2-solution-video/tests/test_media.py b/.agents/skills/ec2-solution-video/tests/test_media.py
+index e0c85da..9008c20 100644
+--- a/.agents/skills/ec2-solution-video/tests/test_media.py
++++ b/.agents/skills/ec2-solution-video/tests/test_media.py
+@@ -207,3 +207,29 @@ class RenderOutputTests(Sandbox):
+         with self.assertRaisesRegex(InputError,'recovery'):
+             _commit_master_and_receipt(pending,dict(new=True),self.master,self.receipt)
+         self.assertEqual(backup.read_bytes(),b'only old master');self.assert_preserved()
++    def test_auto_worker_selection_reaches_command_and_receipt(self):
++        from test_render_options import AUTO,M5
++        from test_workload import motion_fixture,span
++        from solution_video.util import write,read
++        from unittest.mock import patch
++        self.parts=[motion_fixture(self.run,writing_spans=[span(0,720)])]
++        self.timeline=dict(total_frames=900,total_samples=720000,segments=[])
++        write(self.run/'source/render-options.json',AUTO)
++        def metadata(path):
++            m=self.metadata('master' in path.name);m['streams'][0]['nb_frames']=900;return m
++        with patch('solution_video.render_options.detect_hardware',return_value=M5):self.invoke(probe=metadata)
++        row=read(self.receipt)['parts'][0]
++        self.assertEqual(row['worker_selection']['workers'],6)
++        self.assertEqual(row['worker_selection']['motion_ratio'],.8)
++        self.assertEqual(row['command'][row['command'].index('--workers')+1],'6')
++        self.assertEqual(read(self.receipt)['options'],AUTO)
++    def test_auto_preflights_all_parts_before_render(self):
++        from test_render_options import AUTO
++        from test_workload import motion_fixture
++        from solution_video.media import render_master
++        from unittest.mock import patch
++        part=motion_fixture(self.run);second=dict(part,entry='composition/second.html',key='second')
++        (self.run/'composition/second.html').write_text('window.solutionTimeline={broken;')
++        with patch('solution_video.media.source_checks',side_effect=AssertionError('renderer reached')):
++            with self.assertRaises(ValueError):render_master([part,second],self.timeline,[],self.run,self.entry,render_options=AUTO)
++        self.assert_preserved()
+diff --git a/.agents/skills/ec2-solution-video/tests/test_render_options.py b/.agents/skills/ec2-solution-video/tests/test_render_options.py
+index dcdf451..a0da831 100644
+--- a/.agents/skills/ec2-solution-video/tests/test_render_options.py
++++ b/.agents/skills/ec2-solution-video/tests/test_render_options.py
+@@ -5,14 +5,15 @@ from solution_video.util import write
+ from solution_video.render_options import default_render_options, load_render_options, validate_render_options, detect_hardware
+ 
+ M5=dict(platform='darwin',chip='Apple M5',cpu_cores=10,memory_bytes=16*1024**3)
+-OPTIONS=dict(schema_version=1,workers=6,encoder='cpu',browser_gpu='auto',fast_capture=False)
++OPTIONS=dict(schema_version=2,workers=6,encoder='cpu',browser_gpu='auto',fast_capture=False)
++AUTO=dict(OPTIONS,workers='auto')
+ class RenderOptionsTests(Sandbox):
+     def test_host_defaults(self):
+-        self.assertEqual(default_render_options(M5),OPTIONS)
++        self.assertEqual(default_render_options(M5),AUTO)
+         for host in [dict(M5,chip='Apple M4'),dict(M5,memory_bytes=8*1024**3),dict(M5,cpu_cores=8),dict(platform='linux'),{}]:
+-            self.assertEqual(default_render_options(host)['workers'],2)
++            self.assertEqual(default_render_options(host)['workers'],'auto')
+     def test_missing_options_is_read_only(self):
+-        self.assertEqual(load_render_options(self.run,hardware=M5),OPTIONS)
++        self.assertEqual(load_render_options(self.run,hardware=M5),AUTO)
+         self.assertFalse((self.run/'source/render-options.json').exists())
+     def test_saved_override_survives_host_change(self):
+         path=self.run/'source/render-options.json';write(path,dict(OPTIONS,workers=4));before=path.read_bytes()
+@@ -23,7 +24,7 @@ class RenderOptionsTests(Sandbox):
+     def test_invalid_options_fail_without_rewrite(self):
+         path=self.run/'source/render-options.json'
+         bad=[dict(OPTIONS,workers=v) for v in [True,0,-1,7,2.5,'6']]
+-        bad += [dict(OPTIONS,**kv) for kv in [dict(extra=1),dict(schema_version=2),dict(schema_version=True),dict(encoder='gpu'),dict(browser_gpu='hardware'),dict(fast_capture=True),dict(fast_capture=0)]]
++        bad += [dict(OPTIONS,**kv) for kv in [dict(extra=1),dict(schema_version=3),dict(schema_version=True),dict(encoder='gpu'),dict(browser_gpu='hardware'),dict(fast_capture=True),dict(fast_capture=0)]]
+         bad += [[],None,dict(workers=2)]
+         for value in bad:
+             with self.subTest(value=value):
+@@ -38,9 +39,16 @@ class RenderOptionsTests(Sandbox):
+             with self.assertRaises(InputError):load_render_options(self.run,value,hardware=M5)
+     def test_detection_failure_uses_legacy_workers(self):
+         with patch('solution_video.render_options.sys.platform','darwin'),patch('solution_video.render_options.subprocess.run',side_effect=OSError('unavailable')):
+-            self.assertEqual(default_render_options()['workers'],2)
++            self.assertEqual(__import__('solution_video.render_options',fromlist=['worker_capacity']).worker_capacity(),2)
+         with patch('solution_video.render_options.sys.platform','darwin'),patch('solution_video.render_options.subprocess.run',side_effect=__import__('subprocess').TimeoutExpired('sysctl',2)):
+-            self.assertEqual(default_render_options()['workers'],2)
++            self.assertEqual(__import__('solution_video.render_options',fromlist=['worker_capacity']).worker_capacity(),2)
+     def test_validation_returns_copy(self):
+         result=validate_render_options(OPTIONS);result['workers']=2
+         self.assertEqual(OPTIONS['workers'],6)
++
++    def test_legacy_policy_migrates_without_writing_and_manual_override_remains(self):
++        path=self.run/'source/render-options.json';write(path,dict(OPTIONS,schema_version=1));before=path.read_bytes()
++        self.assertEqual(load_render_options(self.run),AUTO)
++        self.assertEqual(load_render_options(self.run,4),dict(OPTIONS,workers=4))
++        self.assertEqual(load_render_options(self.run,'auto'),AUTO)
++        self.assertEqual(path.read_bytes(),before)
+diff --git a/.agents/skills/ec2-solution-video/tests/test_state.py b/.agents/skills/ec2-solution-video/tests/test_state.py
+index 96a5994..15a7f5f 100644
+--- a/.agents/skills/ec2-solution-video/tests/test_state.py
++++ b/.agents/skills/ec2-solution-video/tests/test_state.py
+@@ -101,3 +101,15 @@ class StateTests(Sandbox):
+     def test_missing_options_recovery_is_read_only(self):
+         self._finish_render_fixture();self.assertIsNone(recover_run(self.run))
+         self.assertFalse((self.run/'source/render-options.json').exists())
++    def test_worker_classifier_edit_invalidates_render_only(self):
++        import shutil
++        from unittest.mock import patch
++        import solution_video.state as state
++        from solution_video.util import file_hash
++        root=self.run/'tool';shutil.copytree(S,root,ignore=shutil.ignore_patterns('__pycache__'))
++        wav=make_audio('w',2400,self.run);before=file_hash(self.run/wav['path'])
++        with patch.object(state,'S',root):
++            self._finish_render_fixture()
++            p=root/'scripts/solution_video/workload.py';p.write_text(p.read_text()+'\n# classifier change\n')
++            self.assertEqual(recover_run(self.run),'render')
++            self.assertEqual(file_hash(self.run/wav['path']),before)
+diff --git a/.agents/skills/ec2-solution-video/tests/test_workload.py b/.agents/skills/ec2-solution-video/tests/test_workload.py
+new file mode 100644
+index 0000000..d289d25
+--- /dev/null
++++ b/.agents/skills/ec2-solution-video/tests/test_workload.py
+@@ -0,0 +1,95 @@
++"""Wrong motion intervals, overlap, or fallback would select the wrong worker count."""
++from fixtures import *
++import copy
++from solution_video.util import write,file_hash
++from solution_video.render_options import resolve_part_workers
++from test_render_options import M5,AUTO,OPTIONS
++
++
++def motion_fixture(run,**changes):
++    t=dict(fps=30,rate=24000,total_frames=900,total_samples=720000,
++           segments=[dict(kind='write',start_sample=0,end_sample=720000)],
++           events=[],cameras=[dict(at_frame=0,viewbox=[0,0,100,100])],
++           writing=dict(mode='pencil'),writing_spans=[])
++    t.update(changes)
++    p=run/'composition/index.html';p.parent.mkdir(parents=True,exist_ok=True)
++    p.write_text('<script>window.solutionTimeline='+json.dumps(t)+';window.solutionGlyphs={};</script>')
++    write(p.parent/'timeline.json',t)
++    return dict(entry='composition/index.html',key='solution',first_frame=0,last_frame=900)
++
++
++def span(left,right,kind='draw',**extras):
++    return dict(start_frame=left,end_frame=right,kind=kind,**extras)
++
++
++class WorkloadTests(Sandbox):
++    def choose(self,part):return resolve_part_workers(self.run,part,AUTO,hardware=M5)
++    def test_pencil_static_and_dynamic_select_two_and_six(self):
++        for end,want in [(18,2),(450,2),(451,6),(720,6)]:
++            with self.subTest(end=end):
++                part=motion_fixture(self.run,writing_spans=[span(0,end)])
++                before={p:file_hash(p) for p in self.run.rglob('*') if p.is_file()}
++                result=self.choose(part);self.assertEqual(result['workers'],want)
++                self.assertAlmostEqual(result['motion_ratio'],end/900)
++                self.assertEqual(before,{p:file_hash(p) for p in before})
++    def test_overlap_union_camera_and_annotation_hide(self):
++        part=motion_fixture(self.run,writing_spans=[span(0,300),span(100,400,'move')],
++             cameras=[dict(at_frame=0,viewbox=[0,0,100,100]),dict(at_frame=390,transition_frames=80,viewbox=[0,0,50,50]),dict(at_frame=800,transition_frames=90,viewbox=[0,0,50,50])],
++             teaching=dict(spans=[span(450,650,hide_frame=480)]))
++        result=self.choose(part);self.assertEqual(result['workers'],6)
++        self.assertEqual(result['animated_frames'],480)
++    def test_part_window_clips_global_motion(self):
++        part=motion_fixture(self.run,total_frames=1800,total_samples=1440000,segments=[],writing_spans=[span(800,1500)])
++        part.update(first_frame=900,last_frame=1800)
++        result=self.choose(part);self.assertEqual(result['workers'],6);self.assertEqual(result['animated_frames'],600)
++    def test_typing_counts_only_active_reveal_cadence(self):
++        part=motion_fixture(self.run,writing=dict(mode='typing'),events=[dict(frame=10),dict(frame=720)])
++        result=self.choose(part);self.assertEqual(result['workers'],6);self.assertEqual(result['animated_frames'],721)
++        part=motion_fixture(self.run,writing=dict(mode='typing'),events=[dict(frame=10),dict(frame=100)])
++        self.assertEqual(self.choose(part)['workers'],2)
++    def test_missing_typing_mode_is_legacy_typing(self):
++        part=motion_fixture(self.run,writing=None,events=[dict(frame=10),dict(frame=720)])
++        self.assertEqual(self.choose(part)['workers'],6)
++    def test_short_host_and_explicit_override(self):
++        part=motion_fixture(self.run,writing_spans=[span(0,720)])
++        short=dict(part,last_frame=899);self.assertEqual(self.choose(short)['workers'],2)
++        self.assertEqual(resolve_part_workers(self.run,part,AUTO,hardware={})['workers'],2)
++        for workers in range(1,7):
++            self.assertEqual(resolve_part_workers(self.run,part,dict(OPTIONS,workers=workers),hardware={})['workers'],workers)
++    def test_missing_metadata_is_read_only_safe_fallback(self):
++        part=motion_fixture(self.run);(self.run/'composition/timeline.json').unlink()
++        self.assertEqual(self.choose(part)['reason'],'missing_motion_metadata')
++        self.assertFalse((self.run/'composition/timeline.json').exists())
++        part=motion_fixture(self.run);(self.run/'composition/index.html').write_text('legacy no embedded metadata')
++        self.assertEqual(self.choose(part)['workers'],2)
++    def test_corrupt_and_mismatched_metadata_fail(self):
++        cases=[dict(total_frames=True),dict(total_samples=1),dict(fps=24),dict(writing_spans=None),dict(writing_spans=[span(0,901)]),dict(writing_spans=[span(0,2.5)]),dict(writing_spans=[span(2,1)]),dict(writing_spans=[span(0,10,'hold')]),dict(cameras=[dict(at_frame=0,viewbox=[0,0,float('nan'),100])]),dict(teaching=dict(spans=[span(0,10,hide_frame=901)])),dict(events=[dict(frame=901)])]
++        for change in cases:
++            with self.subTest(change=change):
++                part=motion_fixture(self.run,**change)
++                with self.assertRaises(ValueError):self.choose(part)
++        part=motion_fixture(self.run);write(self.run/'composition/timeline.json',dict(fps=30))
++        with self.assertRaises(ValueError):self.choose(part)
++        part=motion_fixture(self.run);(self.run/'composition/timeline.json').write_text('{broken')
++        (self.run/'composition/index.html').write_text('no metadata')
++        with self.assertRaises(ValueError):self.choose(part)
++    def test_outside_run_entry_is_rejected(self):
++        part=motion_fixture(self.run);part['entry']='../index.html'
++        with self.assertRaises(ValueError):self.choose(part)
++    def test_annotation_spaces_are_valid_and_do_not_count_as_motion(self):
++        part=motion_fixture(self.run,teaching=dict(spans=[span(0,720,'space',hide_frame=900)]))
++        result=self.choose(part);self.assertEqual(result['workers'],2);self.assertEqual(result['animated_frames'],0)
++    def test_missing_metadata_does_not_mask_present_corruption(self):
++        part=motion_fixture(self.run);write(self.run/'composition/timeline.json',[])
++        (self.run/'composition/index.html').write_text('legacy missing timeline')
++        with self.assertRaises(ValueError):self.choose(part)
++        for change in [dict(cameras=[dict(at_frame=-1,viewbox=[0,0,100,100])]),dict(teaching=dict(spans=[span(0,901,hide_frame=900)]))]:
++            part=motion_fixture(self.run,**change)
++            p=self.run/'composition/timeline.json';t=json.loads(p.read_text());del t['writing_spans'];write(p,t)
++            (self.run/'composition/index.html').write_text('window.solutionTimeline='+json.dumps(t)+';')
++            with self.subTest(change=change),self.assertRaises(ValueError):self.choose(part)
++    def test_present_null_timeline_is_corruption(self):
++        part=motion_fixture(self.run);write(self.run/'composition/timeline.json',None)
++        with self.assertRaises(ValueError):self.choose(part)
++        part=motion_fixture(self.run);(self.run/'composition/index.html').write_text('window.solutionTimeline=null;')
++        with self.assertRaises(ValueError):self.choose(part)

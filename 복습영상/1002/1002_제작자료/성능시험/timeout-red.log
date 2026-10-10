@@ -1,0 +1,15 @@
+test_timeout_kills_detached_descendant_before_pending_cleanup (test_render.FailureSafetyTest.test_timeout_kills_detached_descendant_before_pending_cleanup) ... FAIL
+
+======================================================================
+FAIL: test_timeout_kills_detached_descendant_before_pending_cleanup (test_render.FailureSafetyTest.test_timeout_kills_detached_descendant_before_pending_cleanup)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/hyunjun_macbook_pro/.codex/worktrees/ec2-review-render-performance/전자회로2/.agents/skills/ec2-review-video/tests/test_render.py", line 156, in test_timeout_kills_detached_descendant_before_pending_cleanup
+    time.sleep(.7);self.assertFalse(late.exists(),'orphan wrote after timeout cleanup')
+                   ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: True is not false : orphan wrote after timeout cleanup
+
+----------------------------------------------------------------------
+Ran 1 test in 1.108s
+
+FAILED (failures=1)

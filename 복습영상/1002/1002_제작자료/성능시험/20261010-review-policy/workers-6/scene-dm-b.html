@@ -1,0 +1,13 @@
+<!doctype html><html lang="ko" data-theme="dark"><head><meta charset="utf-8"><link rel="stylesheet" href="source/template.css"><link rel="stylesheet" href="source/video-layout.css"><link rel="stylesheet" href="assets/fonts/fonts.css"><script src="assets/vendor/gsap.min.js"></script><link rel="stylesheet" href="assets/vendor/katex/katex.min.css"><script src="assets/vendor/katex/katex.min.js"></script><script src="assets/vendor/katex/auto-render.min.js"></script></head><body><div id="scene-dm-b-root" class="video-scene" data-composition-id="scene-dm-b" data-width="1920" data-height="1080" data-duration="30.000000000"><section class="topic">
+<h3>MOS 차동쌍 — 한쪽이 늘면 다른 쪽은 줄어듭니다</h3>
+<div class="tags"><span class="tag">이상적 MOS 소신호 · 검증용 예시</span></div>
+<div class="layer"><p>$I_{SS}=100\,\mu A,\quad i_1=50+10=60\,\mu A,\quad i_2=50-10=40\,\mu A$</p></div>
+<figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 280" width="1400" height="280" role="img" aria-label="전류 분배 막대: 연결된 실제 회로도가 아닌 수치 표시">
+<text x="20" y="38" fill="#a5d8ff" font-size="32">i₁ = 60 μA (+10)</text>
+<rect id="scene-dm-b-left" data-current-ua="60" x="20" y="60" width="500" height="60" fill="#a5d8ff" />
+<text x="20" y="168" fill="#f2c94c" font-size="32">i₂ = 40 μA (−10)</text>
+<rect id="scene-dm-b-right" data-current-ua="40" x="20" y="190" width="500" height="60" fill="#f2c94c" />
+<text x="780" y="120" fill="#f1f1f4" font-size="38">i₁ + i₂ = 100 μA</text>
+</svg></figure>
+<div class="layer warn"><p>대칭 소자 · 일정한 테일 전류 · 포화영역 · 작은 차동 입력. 막대는 수치 표시이며 실제 회로 시뮬레이션이 아닙니다.</p></div>
+</section></div><script>(()=>{const tl=gsap.timeline({paused:true});tl.fromTo("#scene-dm-b-left",{"scaleX": 1},{"scaleX": 1.2, "duration": 0.6, "ease": "none"},0.5500000000000007);tl.fromTo("#scene-dm-b-right",{"scaleX": 1},{"scaleX": 0.8, "duration": 0.6, "ease": "none"},0.5500000000000007);window.__timelines=window.__timelines||{};window.__timelines["scene-dm-b"]=tl;})();</script><script>renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}]});</script></body></html>
