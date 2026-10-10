@@ -1,0 +1,26 @@
+* 전자회로2 설계과제1 - MOS differential amplifier (그림 1)
+.include core.inc
+.param VB1V=0.5966
+Vb1 vb1 0 {VB1V}
+* 차동 입력: Vin1 = VCM + vd/2, Vin2 = VCM - vd/2 (vd peak = 1 mV, 1 MHz)
+Vi1 in1 0 DC {VCM} AC 0.5      SIN({VCM} 0.5m 1MEG 0 0 0)
+Vi2 in2 0 DC {VCM} AC 0.5 180  SIN({VCM} 0.5m 1MEG 0 0 180)
+.control
+op
+echo "=== NODES ===" > op.txt
+print v(vdd) v(g7) v(op) v(on) v(x) v(y) v(s) v(vb1) v(vb2) v(in1) v(in2) >> op.txt
+print i(VDD) >> op.txt
+echo "=== DEVICES ===" >> op.txt
+show m : id : vgs : vth : vds : vdsat : gm : gds >> op.txt
+ac dec 50 1k 10G
+let av = mag(v(op)-v(on))
+let ph = 180/pi*cph(v(op)-v(on))
+meas ac av_1k  FIND av AT=1k
+meas ac av_1m  FIND av AT=1MEG
+let av3 = av_1k/sqrt(2)
+meas ac f3db WHEN av=av3 FALL=1
+wrdata ac.txt av ph
+tran 1n 5u 0 1n
+wrdata tran.txt v(in1) v(in2) v(op) v(on)
+.endc
+.end
