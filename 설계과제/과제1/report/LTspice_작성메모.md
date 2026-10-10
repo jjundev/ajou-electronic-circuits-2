@@ -4,13 +4,14 @@
 
 ## 회로도 작성 순서
 
-1. 과제 가이드대로 `standard.mos`를 교체한다(macOS: `~/Library/Application Support/LTspice/lib/cmp/`).
-2. 소자: `nmos4` / `pmos4`, Value = `NMOS` / `PMOS`. 모든 소자에 L = 0.18u를 넣고, W는 보고서 1-(b) W 표를 따른다.
-   Body는 NMOS → GND, PMOS → VDD에 연결한다(GAMMA = 0이라 결과에는 영향이 없다).
-3. 전원: VDD = 1.5 V, $V_{b1}$ = 0.5966 V, $V_{b2}$ = 1.0 V, I1 = 100 µA (VDD 쪽이 아니라 $M_7$ 드레인 → GND 방향).
-4. 입력: Vin1 = `SINE(0.7236 0.5m 1Meg)`. Vin2는 Advanced 탭에서 Phase = 180으로 둔다. AC 해석에는 각각 AC 0.5 / AC 0.5 (위상 180)을 넣는다.
-5. `.op`를 실행한 뒤 노드에 마우스를 대거나 우클릭 → "Place .op Data Label"로 회로도 위에 전압·전류를 표시한다.
-6. `.tran 0 5u 0 1n`으로 transient를, `.ac dec 50 1k 10G`으로 AC를 확인한다. 이득은 `V(op)-V(on)`으로 본다.
+회로도는 `sim/ltspice/make_asc.py` 가 `sim/ltspice/diffamp.asc` 로 만든다. 소자값·바이어스는 `sim/params.inc` 와 같고($V_{b1}$ 은 SPICE 조정값 0.5966 V), 모델은 `.include ../MOSFET_model.lib` 로 과제 제공 CMOSN/CMOSP 를 그대로 쓴다. LTspice 전역 라이브러리(`standard.mos`)는 바꾸지 않는다.
+
+1. `cd sim/ltspice && python3 make_asc.py` 로 `diffamp.asc` 를 만든다. 한글 표기 때문에 파일은 BOM 없는 UTF-16LE 로 저장된다.
+2. LTspice(Apple Silicon 은 Rosetta 2 필요)에서 `diffamp.asc` 를 열고 Run 을 누르면 `.op` 라벨(노드 전압, 각 MOSFET 의 Id)이 회로도에 표시된다.
+3. `.op` 결과 창은 닫고 Space(Zoom to Fit) 후 창을 캡처해 `report/figs/schematic.png` 로 저장한다.
+4. PMOS(M5·M6·M7)와 $M_{SS}$ 는 소스가 VDD·GND 라 body 를 소스에 묶는 3단자 기호를 쓴다(결선은 body → VDD/GND 와 같다). $M_1$~$M_4$ 는 body 를 GND 에 따로 잇는다.
+
+LTspice 배치 실행 결과(2026-10-11)는 ngspice 동작점과 표시 자릿수까지 같다: $V_{out\pm}$ 0.949156 V, $V_{X,Y}$ 0.403345 V, $V_S$ 0.251259 V, $V_{G7}$ 0.903431 V, $I_{D1\sim6}$ 100.109 µA, $I_{SS}$ 200.218 µA, $I_{D7}$ 100.000 µA.
 
 ## 시뮬레이션 파일 (`sim/`)
 
@@ -21,6 +22,7 @@
 | `tune.cir` | $V_{b1}$ DC sweep (출력 CM 0.95 V 맞추기) |
 | `diffamp.cir` | DC op / AC / Transient |
 | `post.py` | 그래프와 saturation 표 생성 |
+| `ltspice/make_asc.py` | LTspice 회로도 `diffamp.asc` 생성 |
 
 ```bash
 cd sim && python3 handcalc.py && ngspice -b diffamp.cir && python3 post.py
