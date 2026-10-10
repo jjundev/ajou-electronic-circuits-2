@@ -30,7 +30,8 @@ class TestAssemble(unittest.TestCase):
         self.assertEqual(sorted(p.name for p in self.tmp.iterdir()), ["problems.txt", "정리노트_0101-0102_Mini_Test.html"])
 
     def test_sections_toc_and_titles(self):
-        self.assertIn('<nav class="toc" aria-label="목차"><a href="#s1">1 기초</a><a href="#s2">2 요약·예고</a></nav>', self.html)
+        self.assertIn('<nav class="toc" aria-label="목차"><a href="#why">왜 쓸까</a><a href="#s1">1 기초</a><a href="#s2">2 요약·예고</a></nav>', self.html)
+        self.assertLess(self.html.index('<section id="why">'), self.html.index('<section id="s1">'))
         self.assertIn('<section id="s1"><h2>1. 기초 통계</h2>', self.html)
         self.assertIn("<h1>Mini — 테스트 정리노트</h1>", self.html)
         self.assertIn("<title>전자회로2 정리노트 0101-0102</title>", self.html)

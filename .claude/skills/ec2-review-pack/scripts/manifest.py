@@ -30,6 +30,13 @@ TEXTBOOK_ID_RE = re.compile(r"([EXP])(\d+)\.(\d{2})")
 EXAM_ID_RE = re.compile(r"(\d{4}-[12]_(?:중간|기말))-Q([1-9]\d*)")
 KIND_BY_PREFIX = {"E": "예제", "X": "연습문제", "P": "장말문제"}
 MAX_PROBLEMS = 12
+# 모든 정리노트의 첫 섹션: "왜 이런 회로를 쓸까" 페이지(토픽 1개). 기존 s0… id는 그대로 둔다.
+WHY_SECTION_ID = "why"
+WHY_TOPIC_ID = "why-circuit"
+WHY_TITLE = "들어가며: 왜 이런 회로를 쓸까"
+WHY_SHORT = "왜 쓸까"
+WHY_TOPIC_TITLE = "왜 이런 회로를 쓸까"
+WHY_REQUIRED_LAYERS = ("eli5", "formal")
 PROBLEMS_TXT = "problems.txt"
 
 
@@ -86,6 +93,26 @@ def problem_md_path(repo: Path | str, pid: str) -> Path:
     raise ValueError(f"workbook id 형식 오류: {pid}")
 
 
+def _check_why(m: dict, errors: list[str]) -> None:
+    """첫 섹션이 why 페이지인지 본다. 형식 오류는 validate가 이미 보고했으므로 여기서는 건너뛴다."""
+    if m["preview_topic"] == WHY_TOPIC_ID:
+        errors.append(f"preview_topic: {WHY_TOPIC_ID}은 예고 토픽이 될 수 없음")
+    if not m["sections"] or not isinstance(m["sections"][0], dict):
+        return
+    sec = m["sections"][0]
+    if sec.get("id") != WHY_SECTION_ID:
+        errors.append(f"sections[0].id: 첫 섹션은 {WHY_SECTION_ID}여야 함")
+        return
+    topics = sec.get("topics")
+    if not isinstance(topics, list):
+        return
+    if [t.get("id") if isinstance(t, dict) else None for t in topics] != [WHY_TOPIC_ID]:
+        errors.append(f"sections[0].topics: {WHY_SECTION_ID} 섹션의 토픽은 {WHY_TOPIC_ID} 하나여야 함")
+    layers = topics[0].get("layers") if topics and isinstance(topics[0], dict) else None
+    if isinstance(layers, list) and not all(l in layers for l in WHY_REQUIRED_LAYERS):
+        errors.append(f"sections[0].topics[0].layers: {WHY_TOPIC_ID}에는 eli5와 formal이 필요함")
+
+
 def validate(m: dict, repo: Path | str | None = None) -> list[str]:
     errors: list[str] = []
     if not isinstance(m, dict):
@@ -136,6 +163,7 @@ def validate(m: dict, repo: Path | str | None = None) -> list[str]:
             if unknown:
                 errors.append(f"{tw}.layers: 알 수 없는 레이어 {sorted(unknown)}")
 
+    _check_why(m, errors)
     _strings(m["forbidden_outside_preview"], "forbidden_outside_preview", errors)
     if m["preview_topic"] not in topic_ids:
         errors.append(f"preview_topic: 토픽 id가 아님: {m['preview_topic']}")

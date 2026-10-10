@@ -41,7 +41,7 @@ class TestManifest(unittest.TestCase):
 
     def test_duplicate_topic_id(self):
         m = mini()
-        m["sections"][0]["topics"][1]["id"] = "s1-mean"
+        m["sections"][1]["topics"][1]["id"] = "s1-mean"
         self.assertTrue(any("중복 id: s1-mean" in e for e in manifest.validate(m)))
 
     def test_unknown_layer(self):
@@ -53,6 +53,26 @@ class TestManifest(unittest.TestCase):
         m = copy.deepcopy(mini())
         m["preview_topic"] = "s9"
         self.assertIn("preview_topic: 토픽 id가 아님: s9", manifest.validate(m))
+
+    def test_first_section_must_be_why(self):
+        m = mini()
+        m["sections"] = m["sections"][1:]
+        self.assertIn("sections[0].id: 첫 섹션은 why여야 함", manifest.validate(m))
+
+    def test_why_must_have_single_why_circuit_topic(self):
+        m = mini()
+        m["sections"][0]["topics"].append(dict(m["sections"][0]["topics"][0], id="why-extra"))
+        self.assertIn("sections[0].topics: why 섹션의 토픽은 why-circuit 하나여야 함", manifest.validate(m))
+
+    def test_why_needs_eli5_and_formal(self):
+        m = mini()
+        m["sections"][0]["topics"][0]["layers"] = ["eli5"]
+        self.assertIn("sections[0].topics[0].layers: why-circuit에는 eli5와 formal이 필요함", manifest.validate(m))
+
+    def test_why_cannot_be_preview(self):
+        m = mini()
+        m["preview_topic"] = "why-circuit"
+        self.assertIn("preview_topic: why-circuit은 예고 토픽이 될 수 없음", manifest.validate(m))
 
     def test_problem_anchor_must_be_topic(self):
         m = mini()
