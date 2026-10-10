@@ -57,16 +57,18 @@ SRT 시간은 실측 voice_samples 안에서 원문 의미 단위의 글자 수 
 
 ## 렌더 작업자 설정
 
-신규 RUN은 현재 검증된 Darwin / Apple M5 / 물리 CPU 10코어 / 16GiB 이상에서 캡처 작업자 6개를 사용하며 다른 호스트와 탐지 실패에서는 2개를 사용한다. CPU 인코딩과 브라우저 GPU auto를 유지하고 실험적 고속 캡처는 명시적으로 끈다. 파트와 문항은 한 번에 하나씩 순차 렌더한다.
+신규 RUN은 `workers: "auto"`로 파트별 캡처 작업자 수를 선택한다. 현재 검증된 Darwin / Apple M5 / 물리 CPU 10코어 / 16GiB 이상에서는 30초 이상 파트의 움직임 비율이 50%를 넘으면 6개, 그 외에는 2개다. 다른 호스트·탐지 실패·누락된 움직임 메타데이터에서도 2개를 사용한다. CPU 인코딩과 브라우저 GPU auto를 유지하고 실험적 고속 캡처는 명시적으로 끈다. 파트와 문항은 한 번에 하나씩 순차 렌더한다.
 
-`source/render-options.json`은 음성 config와 별도다. 저장된 유효값은 다른 호스트에서도 유지하며 `render --render-workers N`이 최우선이다. N은 정수 1–6이다. 손상된 저장값은 override로 숨기지 않고 오류를 낸다. `resume-set`은 옵션 없는 이전 RUN에 파일을 추가하지 않는다. 렌더 요청 시만 저장하며 설정 변경은 render부터 재개한다. WAV·대본·타임라인은 그대로 사용한다.
+움직임 비율은 실제 HTML에 동결된 타임라인과 인접 timeline.json을 대조하여 계산한다. 연필 필기·이동, 회로 주석 작성·이동, 카메라 전환 시간을 겹침 없이 합산한다. 타이핑은 write 구간 시작부터 마지막 글자 공개까지를 작성 시간으로 계산한다. 설명·완성 hold와 주석 공백은 제외하며 순간 공개·카메라 변경은 한 프레임으로 센다. 화면 픽셀 분석이나 모든 문항에서 최단 시간을 보장하는 최적화는 아니다. 현재 조립기는 문항 전체를 하나의 파트로 만들므로 일반 실행은 문항 전체의 비율로 선택한다.
+
+`source/render-options.json`은 음성 config와 별도인 schema_version=2 정책이다. `render --render-workers auto|1..6`이 최우선이고 schema2의 숫자는 호스트가 바뀌어도 수동 고정값으로 유지한다. schema1의 숫자는 당시 자동 기본값과 수동값을 구별하지 않았으므로 읽을 때 auto로 전환한다. 수동 고정이 필요하면 CLI 숫자를 다시 지정한다. 손상된 저장 정책은 override로 숨기지 않고 오류를 낸다. auto 모드에서는 존재하는 타임라인의 손상·불일치를 누락 fallback으로 숨기지 않는다. 숫자 고정값은 움직임 분석을 생략한다. `resume-set`과 분석은 파일을 추가·수정하지 않는다. 렌더 요청 시만 정책을 저장하며 변경은 render부터 재개한다. WAV·대본·타임라인은 그대로 사용한다.
 
 ```sh
-python3 .agents/skills/ec2-solution-video/scripts/video.py render --run /ABS/RUN --hyperframes-entry /ABS/hyperframes/dist/cli.js --render-workers 6
-# 메모리 압박이 있으면 같은 명령의 값을 4 또는 2로 낮춰 직접 재시도한다.
+python3 .agents/skills/ec2-solution-video/scripts/video.py render --run /ABS/RUN --hyperframes-entry /ABS/hyperframes/dist/cli.js --render-workers auto
+# 수동 고정이나 메모리 압박이 있으면 같은 명령의 값을 4 또는 2로 낮춰 직접 재시도한다.
 ```
 
-GPU 인코딩/작업자 수를 자동 대체하지 않는다. 실패한 임시 출력은 제거하고 로그를 남긴다. 규격 검사를 통과한 파트만 교체하며 이전 마스터와 렌더 영수증은 실패 시 복구한다. `verification/render-receipt.json`에 실제 명령, workers, 경과 시간, 프레임 수와 출력 해시를 남긴다. 자막과 기존 최종 검토·게시 절차는 그대로 수행한다.
+선택 후 실패했다고 다른 인코더나 작업자 수로 자동 재시도하지 않는다. 실패한 임시 출력은 제거하고 로그를 남긴다. 규격 검사를 통과한 파트만 교체하며 이전 마스터와 렌더 영수증은 실패 시 복구한다. `verification/render-receipt.json`에 실제 명령, workers 선택 이유·움직임 비율, 경과 시간, 프레임 수와 출력 해시를 남긴다. 자막과 기존 최종 검토·게시 절차는 그대로 수행한다.
 
 ### 2026-10-10 생산 렌더러 수용 검증
 
@@ -75,3 +77,21 @@ GPU 인코딩/작업자 수를 자동 대체하지 않는다. 실패한 임시 �
 실제 수용검사는 EC2_RENDER_ACCEPTANCE=1, EC2_RENDER_FIXTURE(원본 또는 해시 일치 동결 RUN), EC2_RENDER_ACCEPTANCE_DEST(원본 외부의 새 폴더), EC2_HYPERFRAMES_ENTRY(검증된 로컬 CLI)를 지정하고 tests/test_render_performance_acceptance.py를 unittest discover로 실행한다. EC2_FFMPEG와 HYPERFRAMES_FFMPEG_PATH도 같은 검증된 FFmpeg에 고정한다. 미지정은 명시적으로 skip, 명시 실행의 누락 입력/다른 프레임 수는 실패다. 원본 승인/상태 영수증은 복사하지 않으며 유료 호출·게시를 금지한다.
 
 마스터/영수증 교체 도중 Ctrl+C도 이전 쌍으로 복구한다. 복구 자체가 실패하면 `.rollback` 사본을 보존하고 오류에 경로를 남기며, 남은 사본을 덮어쓰는 재시도는 차단한다. 해당 사본과 오류 로그를 확인해 이전 마스터/영수증을 복원한 다음 재시도한다. 사본을 무조건 삭제해 오류를 숨기지 않는다.
+
+### 자동 작업자 수용 검증
+
+`tests/auto_workers_acceptance.py`는 기존 P10.72의 동결 composition·narration.wav를 읽어 정지 화면 구간 0–900프레임과 필기 구간 6269–7169프레임을 각각 30초씩 렌더한다. 원본 PDF 윤곽·글로벌 타임라인은 보존하고 시험용 GSAP 시계만 해당 구간으로 제한한다. 각각 고정2·고정6·auto를 실제 render_master에서 실행하고 모든 프레임·PCM·AAC와 마스터 SHA256을 비교한다. 혼합60초의 auto [2,6]도 고정 기준본을 독립 mux한 결과와 대조한다. 실제 입력과 원본 전체 파일 해시를 전후 비교하며 수용 폴더는 원본 밖의 새 경로여야 한다.
+
+```sh
+PATH=/opt/homebrew/opt/ffmpeg-full/bin:$PATH \
+EC2_FFMPEG=/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg \
+HYPERFRAMES_FFMPEG_PATH=/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg \
+python3 .agents/skills/ec2-solution-video/tests/auto_workers_acceptance.py \
+  --fixture /ABS/FROZEN_P1072_RUN \
+  --destination /ABS/NEW_ACCEPTANCE_FOLDER \
+  --hyperframes-entry /ABS/hyperframes/dist/cli.js
+```
+
+시험은 기존 PCM을 재사용하며 유료 TTS·production publish를 금지한다. 자막을 제한된 구간에 다시 배분한 시험본은 원본 발화 경계의 정밀 정렬이나 새 교육·음성 의미 승인을 증명하지 않는다. 시간은 현재 부하에서 각 설정 한 번의 관측치이며 메타데이터 기반 50% 기준의 보편적인 속도 우위를 증명하지 않는다.
+
+`tests/auto_workers_browser_check.mjs`는 원본 전체 시계와 시험 구간 시계의 프레임·카메라 및 역방향 seek PNG를 소프트웨어 Chrome(`--disable-gpu`)으로 엄격 비교한다. GPU 기본 Chrome의 보조 탭 비교에서 정적 색상 24픽셀의 파랑 채널 차이 1이 관측되어 보조 화면 검사의 백엔드를 고정했다. 이는 생산 렌더의 브라우저 GPU auto/Metal과 별개다. 실제 인코딩 영상의 작업자별 전체 프레임·PCM·AAC 동일성은 GPU auto에서 검사하며 PNG 허용오차를 늘리지 않는다. 실행 백엔드·Chrome 경로와 비교 결과는 browser.json에 기록한다.

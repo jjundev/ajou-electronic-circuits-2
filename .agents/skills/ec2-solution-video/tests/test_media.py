@@ -207,3 +207,29 @@ class RenderOutputTests(Sandbox):
         with self.assertRaisesRegex(InputError,'recovery'):
             _commit_master_and_receipt(pending,dict(new=True),self.master,self.receipt)
         self.assertEqual(backup.read_bytes(),b'only old master');self.assert_preserved()
+    def test_auto_worker_selection_reaches_command_and_receipt(self):
+        from test_render_options import AUTO,M5
+        from test_workload import motion_fixture,span
+        from solution_video.util import write,read
+        from unittest.mock import patch
+        self.parts=[motion_fixture(self.run,writing_spans=[span(0,720)])]
+        self.timeline=dict(total_frames=900,total_samples=720000,segments=[])
+        write(self.run/'source/render-options.json',AUTO)
+        def metadata(path):
+            m=self.metadata('master' in path.name);m['streams'][0]['nb_frames']=900;return m
+        with patch('solution_video.render_options.detect_hardware',return_value=M5):self.invoke(probe=metadata)
+        row=read(self.receipt)['parts'][0]
+        self.assertEqual(row['worker_selection']['workers'],6)
+        self.assertEqual(row['worker_selection']['motion_ratio'],.8)
+        self.assertEqual(row['command'][row['command'].index('--workers')+1],'6')
+        self.assertEqual(read(self.receipt)['options'],AUTO)
+    def test_auto_preflights_all_parts_before_render(self):
+        from test_render_options import AUTO
+        from test_workload import motion_fixture
+        from solution_video.media import render_master
+        from unittest.mock import patch
+        part=motion_fixture(self.run);second=dict(part,entry='composition/second.html',key='second')
+        (self.run/'composition/second.html').write_text('window.solutionTimeline={broken;')
+        with patch('solution_video.media.source_checks',side_effect=AssertionError('renderer reached')):
+            with self.assertRaises(ValueError):render_master([part,second],self.timeline,[],self.run,self.entry,render_options=AUTO)
+        self.assert_preserved()
