@@ -14,6 +14,8 @@ class Ec2SttTests(unittest.TestCase):
             sys.path.insert(0, scripts_dir)
 
     def test_01_skill_entrypoints_and_metadata(self):
+        import yaml
+
         skill_md = SKILL_DIR / "SKILL.md"
         self.assertTrue(skill_md.is_file(), "SKILL.md must exist in .agents/skills/ec2-stt/")
         # Ensure it is NOT linked into .claude/skills (disallow Claude)
@@ -21,9 +23,17 @@ class Ec2SttTests(unittest.TestCase):
 
         content = skill_md.read_text(encoding="utf-8")
         self.assertTrue(content.startswith("---"), "SKILL.md must have frontmatter")
-        self.assertIn("name: ec2-stt", content)
-        self.assertIn("description:", content)
-        self.assertIn("Gemini Only", content, "SKILL.md must specify Gemini Only guard")
+
+        # Ensure frontmatter is valid YAML and parsed cleanly
+        parts = content.split("---", 2)
+        self.assertGreaterEqual(len(parts), 3, "SKILL.md must have valid frontmatter delimiters")
+        data = yaml.safe_load(parts[1])
+        self.assertIsInstance(data, dict, "Frontmatter must be a valid YAML dictionary")
+        self.assertEqual(data.get("name"), "ec2-stt")
+        self.assertIn("description", data)
+        self.assertIsInstance(data["description"], str)
+        self.assertIn("Gemini Only", data["description"], "description must specify Gemini Only guard")
+
         self.assertIn("Model Compatibility Gate", content, "SKILL.md must contain Model Compatibility Gate")
         self.assertIn("STT/<MMDD> 전회2.md", content, "SKILL.md must document standard output path")
 

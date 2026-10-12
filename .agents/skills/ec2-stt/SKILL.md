@@ -1,6 +1,6 @@
 ---
 name: ec2-stt
-description: [Gemini Only] Use when transcribing electronic circuits 2 lecture audio or video recordings (.m4a, .mp3, .wav) into a verbatim transcript under STT/<MMDD> 전회2.md with domain-specific terminology guidance for ajou-electronic-circuits-2, or when invoking /ec2-stt. Strictly requires Gemini models; fails on Claude/GPT.
+description: "[Gemini Only] Use when transcribing electronic circuits 2 lecture audio or video recordings (.m4a, .mp3, .wav) into a verbatim transcript under STT/<MMDD> 전회2.md with domain-specific terminology guidance for ajou-electronic-circuits-2, or when invoking /ec2-stt. Strictly requires Gemini models; fails on Claude/GPT."
 ---
 
 # EC2 STT (전자회로2 강의 음성 전사)
