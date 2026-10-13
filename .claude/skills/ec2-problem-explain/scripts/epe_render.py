@@ -1,5 +1,4 @@
 """Assemble explanation notes with local resources and auditable preservation."""
-import hashlib
 import html
 import json
 import os
@@ -9,7 +8,7 @@ from collections import Counter
 from pathlib import Path
 from urllib.parse import unquote, urlsplit, quote
 from epe_contract import validate_fragment, payload_hash, markup_errors
-from epe_shared import Node, parse, inner, outer, compact, Ctx, convert, check_md
+from epe_shared import parse, inner, outer, compact, Ctx, convert, check_md
 from epe_source import sha256, inside, existing_path
 from epe_types import ExplainError, Artifacts
 from epe_labels import normalize_subpart_labels

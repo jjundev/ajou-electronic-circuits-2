@@ -82,6 +82,15 @@ class ContractTests(unittest.TestCase):
             with self.subTest(markup=markup):
                 self.assertTrue(validate_fragment(problem(), fragment() + markup))
 
+    def test_math_delimiters_checked_per_text_node(self):
+        pitfall = '<p>행과 열을 바꾸지 않아요.</p>'
+        adjacent = with_recall().replace(pitfall, pitfall + '<p>$a$</p><p>$b$</p>')
+        self.assertEqual(validate_fragment(problem(), adjacent), [])
+        split = with_recall().replace(pitfall, pitfall + '<p>$a</p><p>b$</p>')
+        errors = validate_fragment(problem(), split)
+        self.assertTrue(any('unbalanced $' in e for e in errors), errors)
+        self.assertEqual(len(errors), len(set(errors)))
+
     def test_retry_and_missing_sections_refused(self):
         self.assertTrue(validate_fragment(
             problem(), fragment().replace('data-explanation="start"', 'data-explanation="solve"')))

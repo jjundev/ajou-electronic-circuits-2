@@ -191,9 +191,9 @@ class SourceTest(unittest.TestCase):
             subparts(ul('(a) x', '그냥', '(a) y'))
 
     def test_real_packs_with_figure_part_references_load(self):
-        repo = self.repo(ids=('P10.70', 'P10.35', 'P9.46', 'P10.52'))
+        repo = self.repo(ids=('P10.70', 'P10.35', 'P9.46', 'P10.52', 'P10.17'))
         pack = load_source(repo / '복습노트' / '1007' / 'problems.txt', repo)
-        self.assertEqual([p.subparts for p in pack.problems], [('main',), ('a', 'b', 'c'), ('main',), ('main',)])
+        self.assertEqual([p.subparts for p in pack.problems], [('main',), ('a', 'b', 'c'), ('main',), ('main',), ('main',)])
 
 
 if __name__ == '__main__':

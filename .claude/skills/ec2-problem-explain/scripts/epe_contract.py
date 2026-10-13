@@ -38,6 +38,20 @@ def _body_text(node):
         return ''
     return ''.join(_body_text(child) for child in node.children)
 
+def _text_leaves(node):
+    """KaTeX auto-render matches delimiters inside one text node, never across elements."""
+    for child in node.children:
+        if isinstance(child, str):
+            yield child
+        elif child.tag not in ('script', 'style'):
+            yield from _text_leaves(child)
+
+def math_errors(root):
+    errors = []
+    for leaf in _text_leaves(root):
+        errors.extend(e for e in math_delimiter_errors(leaf) if e not in errors)
+    return errors
+
 def validate_fragment(problem, fragment):
     root = parse(fragment)
     errors = markup_errors(root, allow_summary=True)
@@ -67,7 +81,7 @@ def validate_fragment(problem, fragment):
     summaries = list(root.find_all(lambda n: 'sum' in n.classes))
     if len(summaries) != 1 or summaries[0].parent is not root or 'hidden' not in summaries[0].attrs or not summaries[0].text().strip():
         errors.append('직계 sum[hidden] 요약 하나 필요')
-    errors.extend(math_delimiter_errors(root.text()))
+    errors.extend(math_errors(root))
     return [f'{problem.id}: {e}' for e in errors]
 
 def initial_reviews(pack, fragments):
