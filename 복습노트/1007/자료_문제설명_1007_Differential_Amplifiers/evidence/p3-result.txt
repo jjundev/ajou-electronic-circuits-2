@@ -1,0 +1,17 @@
+=== (a) PMOS loads M3,M4 (r_O3), tail = cascode M5 over M6 ===
+A_CM(a) exact = -g_m1*r_O1*r_O3/(2*g_m1*g_m5*r_O1*r_O5*r_O6 + 2*g_m1*r_O1*r_O5 + 2*g_m1*r_O1*r_O6 + 2*g_m5*r_O5*r_O6 + r_O1 + r_O3 + 2*r_O5 + 2*r_O6)
+differential output CM gain (o1-o2)/v = 0
+simplify(A - (-Gm*Rout)) = 0
+limit k->oo of A(a)/target = 1
+Approx: A_CM(a) ~ -r_O3/(2 g_m5 r_O5 r_O6)
+
+=== (b) cascode PMOS loads M3(top-of-M1)/M5, tail = M7 ===
+A_CM(b) exact = g_m1*r_O1*(-g_m3*r_O3*r_O5 - r_O3 - r_O5)/(2*g_m1*r_O1*r_O7 + g_m3*r_O3*r_O5 + r_O1 + r_O3 + r_O5 + 2*r_O7)
+differential output CM gain (o1-o2)/v = 0
+simplify(A - (-Gm*Rout)) = 0
+limit k->oo of A(b)/target = 1
+Approx: A_CM(b) ~ -(g_m3 r_O3 r_O5 || 2 g_m1 r_O1 r_O7)/(2 r_O7)
+same expression simplified: simplify(target_b - alt2) = 0
+
+numeric (gm=2mS, rO=10k all): A(a) exact = -0.021598272138228944  approx = -0.025
+numeric (gm=2mS, rO=10k all): A(b) exact = -6.769230769230769  approx = -6.666666666666667

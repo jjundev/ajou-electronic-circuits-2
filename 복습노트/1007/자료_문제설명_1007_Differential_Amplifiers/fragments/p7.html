@@ -1,0 +1,96 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 내 말로 읽어요</h4>
+  <p>두 회로 모두 저항 부하 MOS 차동쌍이에요. 입력은 $V_{in1}$, $V_{in2}$ 두 게이트이고, 출력은 두 드레인 $v_{out1}$, $v_{out2}$의 차이 $v_{out1}-v_{out2}$예요.</p>
+  <p>일부러 넣은 흠이 두 가지 있어요. 하나는 오른쪽 부하가 $R_D+\Delta R_D$로 왼쪽보다 조금 큰 부하 미스매치(mismatch)이고, 다른 하나는 테일 전류원이 이상적이지 않아 유한한 저항 $R_{SS}$를 갖는다는 점이에요.</p>
+  <p>두 회로는 테일만 달라요. (a)는 $M_3$ 하나, (b)는 $M_3$ 아래에 $M_4$를 쌓은 캐스코드(cascode) 테일이에요. $M_1$, $M_2$는 $\lambda=0$이고 $M_3$, $M_4$는 $\lambda\neq0$이라서, 테일의 $r_O$만 살아 있어요.</p>
+  <p>구할 것은 두 회로의 CMRR(common-mode rejection ratio, 공통 모드 제거비)과, 테일 구조가 바뀌면 CMRR이 몇 배 달라지는지 비교하는 거예요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4>
+  <p><strong>단서 1</strong>: 부하가 $R_D$와 $R_D+\Delta R_D$로 다르고 CMRR을 묻는다는 점에서 공통 모드에서 차동 출력으로 새는 이득 $A_{CM-DM}$(CM-to-DM conversion gain)을 떠올려요. 대칭이면 $A_{CM-DM}=0$이라 CMRR이 무한대가 되므로, 이 문제의 CMRR은 미스매치 $\Delta R_D$가 있어야만 유한해져요. (<a href="정리노트_1007_Differential_Amplifiers.html#s1-mismatch">부하 미스매치와 CM-to-DM 이득</a>)</p>
+  <p><strong>단서 2</strong>: "CMRR"이라는 말에서 정의 $\mathrm{CMRR}=\left|A_{DM}/A_{CM-DM}\right|$를 떠올려요. 분자는 원하는 차동 이득(differential-mode gain), 분모는 원하지 않는 CM 잡음이 차동 출력으로 바뀌는 이득이에요. (<a href="정리노트_1007_Differential_Amplifiers.html#s1-cmrr">CMRR</a>)</p>
+  <p><strong>단서 3</strong>: 테일이 트랜지스터이고 $\lambda\neq0$이라는 점에서 테일 소자의 출력 저항(output resistance)을 떠올려요. $R_{SS}$는 노드 $P$에서 아래 테일을 들여다본 소신호 저항이에요. (a)는 게이트·소스가 교류 접지인 단일 트랜지스터라 $r_{O3}$, (b)는 $M_4$의 $r_{O4}$가 $M_3$의 소스를 축퇴(degeneration)하는 캐스코드라 $r_{O3}+r_{O4}+g_{m3}r_{O3}r_{O4}$예요.</p>
+  <p><strong>기호의 뜻</strong>: $g_m$은 $M_1$·$M_2$의 트랜스컨덕턴스(게이트-소스 전압 변화가 드레인 전류를 얼마나 바꾸는지)예요. $g_{m3}$는 $M_3$의 트랜스컨덕턴스, $r_{O3}$, $r_{O4}$는 채널 길이 변조로 생기는 출력 저항 $1/(\lambda I_D)$예요.</p>
+  <p><strong>근사 조건</strong>: $M_1$·$M_2$는 $\lambda=0$이라 드레인 전류가 $v_{GS}$로만 정해지고 부하 저항 값에 영향을 받지 않아요. $A_{DM}$에는 $\Delta R_D\ll R_D$를 써서 $g_mR_D$로 근사해요. (b)의 $R_{SS}$에는 $g_{m3}r_{O4}\gg1$을 써요. 몸체 효과(body effect)는 문제에 없으니 무시해요.</p>
+  <p><strong>선택 이유</strong>: CMRR은 $R_{SS}$의 함수로 한 번만 유도해 두면, (a)와 (b)는 $R_{SS}$ 자리에 각 테일의 출력 저항만 바꿔 넣으면 끝나요. 그래서 일반식 → 테일 저항 두 개 순서로 풀어요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <p>소신호 등가회로에서 $V_{DD}$와 바이어스 $V_{b1}$, $V_{b2}$, $V_{b3}$를 교류 접지로 보내고, 테일 전체를 노드 $P$와 접지 사이의 저항 $R_{SS}$ 하나로 바꿔요.</p>
+  <p>CM 입력 $v_{in1}=v_{in2}=v_{CM}$을 넣고 $P$의 전압을 $v_P$라 두면, $M_1$·$M_2$는 $\lambda=0$이라 각각 같은 전류를 흘려요.</p>
+  $$i_1=i_2=g_m\left(v_{CM}-v_P\right)$$
+  <p>첫 식은 노드 $P$의 KCL이에요. 위에서 들어온 두 전류가 모두 $R_{SS}$로 빠져나가요.</p>
+  $$2g_m\left(v_{CM}-v_P\right)=\frac{v_P}{R_{SS}}$$
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>왜 이렇게 푸는지 함께 따라가요</h4>
+  <div data-subpart="main">
+    <h4>일반식 → (a) 단일 테일 → (b) 캐스코드 테일</h4>
+    <p><strong>1단계: 반쪽 전류.</strong> KCL을 $v_P$에 대해 풀어 각 트랜지스터 전류를 구해요.</p>
+    $$v_P=\frac{2g_mR_{SS}}{1+2g_mR_{SS}}\,v_{CM}$$
+    $$i_1=i_2=g_m\left(v_{CM}-v_P\right)=\frac{g_m}{1+2g_mR_{SS}}\,v_{CM}=\frac{v_{CM}}{1/g_m+2R_{SS}}$$
+    <p>분모가 $1/g_m+2R_{SS}$인 것은 CM 하프 서킷(CM half circuit)에서 반쪽이 $2R_{SS}$로 축퇴된 CS 단이라는 뜻과 같아요.</p>
+    <p><strong>2단계: 차동 출력으로 새는 양.</strong> 두 전류가 같아도 부하가 달라 두 출력의 흔들림이 달라요.</p>
+    $$v_{out1}=-R_D\,i_1,\qquad v_{out2}=-(R_D+\Delta R_D)\,i_2$$
+    $$v_{out1}-v_{out2}=\Delta R_D\,i_1=\frac{\Delta R_D}{1/g_m+2R_{SS}}\,v_{CM}$$
+    $$\left|A_{CM-DM}\right|=\frac{\Delta R_D}{1/g_m+2R_{SS}}=\frac{g_m\Delta R_D}{1+2g_mR_{SS}}$$
+    <p><strong>3단계: 차동 이득.</strong> $v_{in1}=+v_d/2$, $v_{in2}=-v_d/2$를 넣으면 $\lambda=0$인 $M_1$·$M_2$의 전류는 $\pm g_m(v_d/2-v_P)$로 부하와 무관하게 크기가 같고 부호만 반대예요. 그래서 $P$로 들어오는 전류 합이 0이 되어 $v_P=0$, 곧 $P$는 미스매치가 있어도 정확히 가상 접지예요.</p>
+    $$v_{out1}-v_{out2}=-R_D\,\frac{g_mv_d}{2}-(R_D+\Delta R_D)\,\frac{g_mv_d}{2}=-g_m\!\left(R_D+\frac{\Delta R_D}{2}\right)v_d$$
+    $$\left|A_{DM}\right|=g_m\!\left(R_D+\frac{\Delta R_D}{2}\right)\approx g_mR_D\qquad(\Delta R_D\ll R_D)$$
+    <p><strong>4단계: CMRR 일반식.</strong> 두 이득을 나눠요.</p>
+    $$\mathrm{CMRR}=\frac{\left|A_{DM}\right|}{\left|A_{CM-DM}\right|}=\frac{g_mR_D}{\Delta R_D}\left(\frac{1}{g_m}+2R_{SS}\right)=\frac{R_D}{\Delta R_D}\left(1+2g_mR_{SS}\right)$$
+    <p>이제 $R_{SS}$만 회로마다 구하면 돼요.</p>
+    <p><strong>5단계: (a)의 $R_{SS}$.</strong> $M_3$은 게이트가 $V_{b1}$(교류 접지), 소스가 접지라 $v_{gs3}=0$이에요. 드레인에서 본 저항은 $r_{O3}$뿐이에요.</p>
+    $$R_{SS,a}=r_{O3}\quad\Rightarrow\quad\mathrm{CMRR}_a=\frac{R_D}{\Delta R_D}\left(1+2g_mr_{O3}\right)$$
+    <p><strong>6단계: (b)의 $R_{SS}$.</strong> $M_4$는 게이트·소스가 교류 접지라 $r_{O4}$ 하나로 바뀌고, 이것이 $M_3$의 소스를 축퇴해요. 드레인에 시험 전류 $i_X$를 넣으면 $M_3$ 소스 전압은 $i_Xr_{O4}$, $v_{gs3}=-i_Xr_{O4}$예요. $r_{O3}$를 흐르는 전류는 $i_X-g_{m3}v_{gs3}=i_X(1+g_{m3}r_{O4})$이므로</p>
+    $$v_X=i_X(1+g_{m3}r_{O4})\,r_{O3}+i_Xr_{O4}$$
+    $$R_{SS,b}=r_{O3}+r_{O4}+g_{m3}r_{O3}r_{O4}\approx g_{m3}r_{O3}r_{O4}\quad(g_{m3}r_{O4}\gg1)$$
+    $$\mathrm{CMRR}_b=\frac{R_D}{\Delta R_D}\left(1+2g_mR_{SS,b}\right)\approx\frac{R_D}{\Delta R_D}\left(1+2g_mg_{m3}r_{O3}r_{O4}\right)$$
+    <p><strong>7단계: 비교.</strong> $2g_mr_{O3}\gg1$이면 두 식의 1을 버릴 수 있어요.</p>
+    $$\frac{\mathrm{CMRR}_b}{\mathrm{CMRR}_a}\approx\frac{2g_mg_{m3}r_{O3}r_{O4}}{2g_mr_{O3}}=g_{m3}r_{O4}$$
+    <p>캐스코드 테일은 $R_{SS}$를 약 $g_{m3}r_{O4}$배(트랜지스터 하나의 고유 이득만큼, 보통 수십 배) 키우고, CMRR도 그만큼 커져요. 대가는 테일에 트랜지스터가 하나 더 쌓여 전압 여유(headroom)가 줄어든다는 점이에요.</p>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <h4>완성 답과 검산</h4>
+    <p><strong>(a) $\mathrm{CMRR}=\dfrac{R_D}{\Delta R_D}\left(1+2g_mr_{O3}\right)$</strong></p>
+    <p><strong>(b) $\mathrm{CMRR}\approx\dfrac{R_D}{\Delta R_D}\left(1+2g_mg_{m3}r_{O3}r_{O4}\right)$</strong> (정확히는 $R_{SS}=r_{O3}+r_{O4}+g_{m3}r_{O3}r_{O4}$를 넣은 값)</p>
+    <p><strong>비교: (b)가 (a)보다 약 $g_{m3}r_{O4}$배 커요.</strong></p>
+    <p><strong>대칭 특수값</strong>: $\Delta R_D=0$이면 $A_{CM-DM}=0$이고 CMRR $\to\infty$예요. 미스매치가 없으면 CM 잡음이 차동 출력으로 새지 않는다는 사실과 맞아요.</p>
+    <p><strong>극한 대입</strong>: $R_{SS}\to\infty$(이상적 테일)이면 $|A_{CM-DM}|\to0$, CMRR $\to\infty$예요. $R_{SS}=0$(테일을 접지에 직결)이면 $|A_{CM-DM}|=g_m\Delta R_D$로 축퇴 없는 CS 단 두 개의 이득 차이와 같고, CMRR $=R_D/\Delta R_D$로 미스매치 비율만 남아요. (b)에서 $r_{O4}\to0$으로 두면 $R_{SS,b}\to r_{O3}$가 되어 (a)로 돌아와요.</p>
+    <p><strong>단위·차수</strong>: $g_mR_{SS}$, $g_{m3}r_{O4}$는 S·Ω이라 무차원이고, $R_D/\Delta R_D$도 무차원이라 CMRR이 무차원 비가 맞아요. $R_{SS,b}$의 세 항은 모두 Ω이에요.</p>
+    <p><strong>수치 감각 (예시값)</strong>: $g_m=g_{m3}=1$ mS, $r_{O3}=r_{O4}=10$ kΩ, $\Delta R_D/R_D=1\%$로 두면 (a)는 $100\times(1+20)=2100$(약 66 dB), (b)는 $R_{SS,b}=10+10+100=120$ kΩ이라 $100\times(1+240)=24100$(약 88 dB)이에요. 비는 약 11.5배로 $g_{m3}r_{O4}=10$에 가까워요(차이는 생략한 1과 $r_{O3}+r_{O4}$ 항 때문이에요).</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>하기 쉬운 실수</h4>
+  <ul>
+    <li>CM 하프 서킷에서 테일을 $R_{SS}$ 그대로 반쪽에 붙이는 실수예요. 두 반쪽 전류가 모두 $R_{SS}$를 지나므로 반쪽에는 $2R_{SS}$가 보여요. 그래서 분모가 $1/g_m+2R_{SS}$예요.</li>
+    <li>미스매치가 있으니 차동 입력에서도 $P$가 움직인다고 생각하는 실수예요. 여기서 $\Delta R_D$는 부하에만 있고 $M_1$·$M_2$는 $\lambda=0$이라 전류가 부하와 무관하므로, DM에서 $P$는 정확히 가상 접지예요.</li>
+    <li>CMRR 분모에 각 노드의 CM 이득 $A_{CM}\approx -R_D/(2R_{SS})$를 넣는 실수예요. 차동 출력 기준 CMRR의 분모는 $A_{CM-DM}$이에요.</li>
+    <li>(b)에서 $R_{SS}=r_{O3}+r_{O4}$처럼 직렬 합만 쓰는 실수예요. $M_3$은 소스가 $r_{O4}$로 축퇴되어 $g_{m3}r_{O3}r_{O4}$ 항이 생기고, 이것이 지배적이에요.</li>
+  </ul>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>설명을 닫고 다시 해 봐요</h4>
+  <ol>
+    <li>노드 $P$의 KCL 한 줄에서 $|A_{CM-DM}|=\dfrac{\Delta R_D}{1/g_m+2R_{SS}}$까지 혼자 유도해 보세요.</li>
+    <li>캐스코드 테일의 드레인에 시험 전류 $i_X$를 넣어 $R_{SS}=r_{O3}+r_{O4}+g_{m3}r_{O3}r_{O4}$를 다시 구해 보세요.</li>
+    <li>$\mathrm{CMRR}_b/\mathrm{CMRR}_a\approx g_{m3}r_{O4}$가 되는 근사 조건이 무엇인지 말해 보세요.</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>$\mathrm{CMRR}=|A_{DM}/A_{CM-DM}|$</p>
+    <p>$|A_{CM-DM}|=\dfrac{\Delta R_D}{1/g_m+2R_{SS}}$</p>
+    <p>$|A_{DM}|\approx g_mR_D$</p></div>
+  <div class="summary-group"><h4>첫 줄</h4><p>테일 → $R_{SS}$, 노드 $P$ KCL</p>
+    <p>$2g_m(v_{CM}-v_P)=v_P/R_{SS}$</p></div>
+  <div class="summary-group"><h4>핵심 판단</h4><p>$\mathrm{CMRR}=\dfrac{R_D}{\Delta R_D}(1+2g_mR_{SS})$</p>
+    <p>(a) $R_{SS}=r_{O3}$</p>
+    <p>(b) $R_{SS}\approx g_{m3}r_{O3}r_{O4}$</p>
+    <p>(b)/(a) $\approx g_{m3}r_{O4}$</p></div>
+  <div class="summary-group"><h4>검산</h4><p>$\Delta R_D=0$ → CMRR $\to\infty$</p>
+    <p>$r_{O4}\to0$ → (b)가 (a)로</p></div>
+</div>

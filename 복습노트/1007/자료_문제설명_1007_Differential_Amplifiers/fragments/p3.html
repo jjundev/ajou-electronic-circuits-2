@@ -1,0 +1,89 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 내 말로 읽어요</h4>
+  <p>문제 10.68은 PMOS 전류원 부하 $M_3$·$M_4$와 테일 트랜지스터 하나($M_5$)를 가진 MOS 차동쌍의 공통 모드 이득(common-mode gain)을 $A_v=-G_mR_{out}$로 구하라는 문제였어요. 조건은 $\lambda&gt;0$(모든 트랜지스터에 $r_O$가 있음)과 $g_mr_O\gg1$이에요. 이번 문제는 같은 일을 Fig. 10.90의 두 변형 회로에 반복해요.</p>
+  <ul>
+    <li>그림 (a): 부하는 그대로 $M_3$·$M_4$ 한 개씩이고, 테일만 $M_5$ 아래에 $M_6$를 쌓은 캐스코드(cascode) 전류원이에요.</li>
+    <li>그림 (b): 테일은 $M_7$ 하나이고, 부하를 $M_5$ 아래 $M_3$(오른쪽은 $M_6$ 아래 $M_4$)로 쌓은 캐스코드 부하로 바꿨어요.</li>
+  </ul>
+  <p>입력은 두 게이트에 똑같이 들어가는 $\Delta V_{in,CM}$이고, 출력은 한쪽 드레인($M_1$ 드레인) 전압 변화예요. 회로가 완전 대칭이면 두 드레인이 똑같이 움직여 차동 출력 $V_{out}$의 공통 모드 이득은 0이므로, 여기서 구하는 값은 한 출력 기준 $A_{CM}=\Delta V_{out1}/\Delta V_{in,CM}$이에요. 몸체 효과(body effect)는 문제 10.68처럼 무시해요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4>
+  <p><b>단서 → 개념.</b> "공통 모드 이득"과 좌우 대칭 그림에서 공통 모드 하프 서킷(CM half circuit)을 떠올려요(<a href="정리노트_1007_Differential_Amplifiers.html#s0-cm-half-recap">정리노트: CM 하프 서킷</a>). 공통 모드 입력에서는 두 반쪽이 같은 전류를 흘리므로, 테일 노드에서 아래로 본 소신호 저항 $R_T$를 $2R_T$ 두 개의 병렬로 쪼개면 대칭선으로 전류가 흐르지 않아요. 그래서 반쪽 회로는 "소스에 $2R_T$가 달린 $M_1$ + 위쪽 부하"인 축퇴(degenerated) CS 단이 돼요.</p>
+  <p><b>단서 → 개념.</b> 트랜지스터가 세로로 두 개 쌓인 테일·부하에서 캐스코드 출력 저항(output resistance)을 떠올려요. 소스에 $R_S$가 달린 트랜지스터의 드레인에서 본 저항은</p>
+  $$R_{D}=r_O+R_S+g_mr_OR_S\approx g_mr_OR_S\quad(g_mR_S\gg1)$$
+  <p><b>단서 → 공식.</b> 문제가 정해 준 $A_v=-G_mR_{out}$을 써요. $G_m$은 출력 노드를 교류 접지로 단락했을 때 입력 전압 대비 드레인 전류, $R_{out}$은 출력 노드에서 본 전체 저항(위로 본 저항 $\parallel$ 아래로 본 저항)이에요. 축퇴 저항 $2R_T$가 달린 $M_1$의 단락 트랜스컨덕턴스는</p>
+  $$G_m=\frac{g_{m1}r_{O1}}{r_{O1}+2R_T(1+g_{m1}r_{O1})}$$
+  <p><b>기호의 뜻.</b> $g_m$은 게이트 전압 변화가 드레인 전류를 얼마나 바꾸는지(트랜스컨덕턴스), $r_O=1/(\lambda I_D)$는 채널 길이 변조로 생기는 출력 저항, $R_T$는 테일 소자(들)가 공통 소스 노드에 보이는 저항이에요. 바이어스 게이트 $V_{b1},V_{b2},V_{b3}$는 소신호에서 교류 접지예요.</p>
+  <p><b>근사 조건.</b> $g_mr_O\gg1$을 쓰면 $g_{m1}\cdot2R_T\gg1$이 되어 $G_m\approx\dfrac{1}{2R_T}$이에요. 하지만 $R_{out}$의 병렬에서는 두 저항의 <em>차수</em>를 비교해서 한쪽을 버릴지 정해야 해요. 차수가 다르면 작은 쪽만 남고, 같으면 둘 다 남겨요.</p>
+  <p><b>선택 이유.</b> CM 이득을 $G_m$("테일이 얼마나 전류를 못 바꾸게 막나")과 $R_{out}$("그 전류가 얼마나 큰 전압이 되나")으로 나누면, 캐스코드를 테일에 넣었는지(분모 $G_m$ 쪽) 부하에 넣었는지(분자 $R_{out}$ 쪽)가 식에서 바로 보여요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <p>① $V_{DD}$와 바이어스 게이트를 교류 접지로 보내고, 테일 노드에서 아래로 본 저항 $R_T$를 먼저 적어요.</p>
+  $$\text{(a)}\;R_T=r_{O5}+r_{O6}+g_{m5}r_{O5}r_{O6},\qquad \text{(b)}\;R_T=r_{O7}$$
+  <p>② 테일을 $2R_T\parallel2R_T$로 쪼개 반쪽 회로를 그려요: 게이트에 $\Delta V_{in,CM}$, 소스–접지 사이 $2R_T$, 드레인 위쪽에 부하((a)는 $r_{O3}$, (b)는 $M_3$+$M_5$ 캐스코드).</p>
+  <p>③ 출력 노드에서 두 덩어리를 따로 적어요.</p>
+  $$A_{CM}=-G_m\,R_{out},\qquad G_m\approx\frac{1}{2R_T},\qquad R_{out}=R_{up}\parallel R_{down}$$
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>왜 이렇게 푸는지 함께 따라가요</h4>
+  <div data-subpart="main">
+    <h4>(a) 캐스코드 테일</h4>
+    <p>$M_5$의 소스에 $M_6$의 $r_{O6}$가 달려 있으니 $M_5$ 드레인에서 아래로 본 저항은 축퇴된 트랜지스터의 출력 저항이에요. $g_{m5}r_{O6}\gg1$이라</p>
+    $$R_T=r_{O5}+r_{O6}+g_{m5}r_{O5}r_{O6}\approx g_{m5}r_{O5}r_{O6}$$
+    <p>반쪽 회로의 $G_m$은 축퇴 저항 $2R_T$로 거의 정해져요.</p>
+    $$G_m\approx\frac{1}{2R_T}=\frac{1}{2g_{m5}r_{O5}r_{O6}}$$
+    <p>출력 노드에서 위로 보면 $M_3$ 하나라 $R_{up}=r_{O3}$이에요. 아래로 보면 $2R_T$로 축퇴된 $M_1$이라</p>
+    $$R_{down}\approx2g_{m1}r_{O1}R_T\approx2g_{m1}r_{O1}\,g_{m5}r_{O5}r_{O6}$$
+    <p>$R_{down}$은 $g_m^2r_O^3$ 차수, $r_{O3}$은 $r_O$ 차수라 $R_{down}$이 $(g_mr_O)^2$배쯤 커요. 병렬에서는 작은 쪽이 지배하므로 $R_{out}\approx r_{O3}$이에요.</p>
+    $$A_{CM}=-G_mR_{out}\approx-\frac{r_{O3}}{2g_{m5}r_{O5}r_{O6}}$$
+    <h4>(b) 캐스코드 부하</h4>
+    <p>테일은 $M_7$ 하나라 $R_T=r_{O7}$이고 $G_m\approx\dfrac{1}{2r_{O7}}$이에요.</p>
+    <p>위로 보면 $M_3$의 소스에 $M_5$의 $r_{O5}$가 달린 캐스코드라</p>
+    $$R_{up}=r_{O3}+r_{O5}+g_{m3}r_{O3}r_{O5}\approx g_{m3}r_{O3}r_{O5}$$
+    <p>아래로 보면 $2r_{O7}$로 축퇴된 $M_1$이라</p>
+    $$R_{down}=r_{O1}+2r_{O7}+2g_{m1}r_{O1}r_{O7}\approx2g_{m1}r_{O1}r_{O7}$$
+    <p>이번에는 두 저항이 모두 $g_mr_O^2$ 차수예요. 한쪽이 다른 쪽보다 $g_mr_O$배 크지 않으므로 어느 것도 버릴 수 없고 병렬을 그대로 남겨요.</p>
+    $$R_{out}\approx(g_{m3}r_{O3}r_{O5})\parallel(2g_{m1}r_{O1}r_{O7})$$
+    $$A_{CM}\approx-\frac{(g_{m3}r_{O3}r_{O5})\parallel(2g_{m1}r_{O1}r_{O7})}{2r_{O7}}$$
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <p><b>(a) $A_{CM}\approx-\dfrac{r_{O3}}{2g_{m5}r_{O5}r_{O6}}$, (b) $A_{CM}\approx-\dfrac{(g_{m3}r_{O3}r_{O5})\parallel(2g_{m1}r_{O1}r_{O7})}{2r_{O7}}$</b> (한 출력 기준, 차동 출력으로는 0)</p>
+    <p><b>단위.</b> (a) 분자 Ω, 분모 S·Ω·Ω = Ω라 무차원이에요. (b) 분자 $g_mr_O^2$는 S·Ω² = Ω, 분모 Ω라 무차원이에요.</p>
+    <p><b>극한 대입.</b> (a)에서 $M_6$를 단락($r_{O6}\to0$)하면 정확한 식 $R_T=r_{O5}+r_{O6}+g_{m5}r_{O5}r_{O6}\to r_{O5}$가 되어 문제 10.68의 $-r_{O3}/(2r_{O5})$로 돌아와요. (b)에서 $M_5$를 단락($r_{O5}\to0$)하면 $R_{up}\to r_{O3}$이고 $R_{down}$이 훨씬 커서 역시 $-r_{O3}/(2r_{O7})$로 돌아와요. (b)에서 $r_{O7}\to\infty$(이상적 테일)이면 $R_{out}$은 유한한 $g_{m3}r_{O3}r_{O5}$로 수렴하고 분모만 커져 $A_{CM}\to0$이에요.</p>
+    <p><b>수치 확인.</b> 모든 트랜지스터를 $g_m=1\,\text{mS}$, $r_O=100\,\text{k}\Omega$($g_mr_O=100$)로 두고 근사 없는 식($G_m$ 정확식, $R_{up}$·$R_{down}$ 정확식)으로 계산해요.</p>
+    <ul>
+      <li>(a) 정확값 $-4.85\times10^{-3}$, 근사식 $-1/(2g_mr_O)=-5.0\times10^{-3}$. 문제 10.68의 $-0.5$보다 $g_mr_O=100$배 작아졌어요.</li>
+      <li>(b) $R_{up}=10.2\,\text{M}\Omega$, $R_{down}=20.3\,\text{M}\Omega$, $R_{out}=6.79\,\text{M}\Omega$, $G_m=4.93\,\mu\text{S}$라 정확값 $-33.4$이고, 근사식은 $-\tfrac{(2/3)g_mr_O^2}{2r_O}=-g_mr_O/3=-33.3$이에요.</li>
+    </ul>
+    <p>(b)에서 $R_{down}$을 버리고 $R_{out}\approx g_{m3}r_{O3}r_{O5}$로 두면 $-50$이 되어 정확값과 50% 차이가 나요. 같은 차수라 둘 다 남겨야 한다는 판단이 숫자로도 확인돼요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>이 문항에서 하기 쉬운 오류</h4>
+  <ul>
+    <li>(b)에서 문제 10.68·(a)의 습관대로 아래로 본 저항 $2g_{m1}r_{O1}r_{O7}$을 버리는 실수예요. 버려도 되는 건 상대가 $r_O$ 하나짜리일 때뿐이고, 캐스코드 부하와는 같은 $g_mr_O^2$ 차수라 병렬로 남겨야 해요.</li>
+    <li>반쪽 회로의 축퇴 저항을 $R_T$로 두는 실수예요. 반쪽에는 $2R_T$가 붙으므로 분모에 2가 들어가요.</li>
+    <li>(a)의 캐스코드 테일을 $r_{O5}+r_{O6}$처럼 단순 직렬로 계산하는 실수예요. 축퇴로 생기는 $g_{m5}r_{O5}r_{O6}$ 항이 지배항이에요.</li>
+    <li>"캐스코드 = 좋은 것"으로 생각해 (b)도 CM 이득이 줄었다고 보는 실수예요. 부하 쪽 캐스코드는 $R_{out}$을 키워 한 출력 기준 $|A_{CM}|$을 오히려 $g_mr_O/3$ 수준으로 키워요. CM 이득을 줄이는 것은 테일 저항(분모)을 키우는 (a)의 방식이에요.</li>
+  </ul>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>설명을 닫고 다시 해 봐요</h4>
+  <ol>
+    <li>(a)·(b)의 테일 저항 $R_T$를 적고, 반쪽 회로를 그려 $G_m\approx1/(2R_T)$를 써 보세요.</li>
+    <li>각 회로의 출력 노드에서 $R_{up}$, $R_{down}$을 구하고 차수를 비교해 어느 쪽을 버릴 수 있는지 판단해 보세요.</li>
+    <li>(a)에서 $r_{O6}\to0$, (b)에서 $r_{O5}\to0$을 넣어 문제 10.68 답 $-r_{O3}/(2r_{O5})$ 꼴이 나오는지 확인해 보세요.</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>CM 하프 서킷: 테일 $R_T$ → 반쪽에 $2R_T$</p><p>$A_{CM}=-G_mR_{out}$, $G_m\approx\dfrac{1}{2R_T}$</p><p>축퇴 출력 저항 $\approx g_mr_OR_S$</p></div>
+  <div class="summary-group"><h4>첫 줄</h4><p>(a) $R_T\approx g_{m5}r_{O5}r_{O6}$</p><p>(b) $R_T=r_{O7}$</p><p>$R_{out}=R_{up}\parallel R_{down}$</p></div>
+  <div class="summary-group"><h4>핵심 판단</h4><p>(a) $R_{down}\gg r_{O3}$ → $R_{out}\approx r_{O3}$</p><p>(b) 둘 다 $g_mr_O^2$ 차수 → 병렬 유지</p></div>
+  <div class="summary-group"><h4>답</h4><p>(a) $-\dfrac{r_{O3}}{2g_{m5}r_{O5}r_{O6}}$</p><p>(b) $-\dfrac{(g_{m3}r_{O3}r_{O5})\parallel(2g_{m1}r_{O1}r_{O7})}{2r_{O7}}$</p></div>
+  <div class="summary-group"><h4>검산</h4><p>$r_{O6}\to0$ 또는 $r_{O5}\to0$ → 문제 10.68 답</p><p>수치: (a) $-0.005$, (b) $\approx-33$</p></div>
+</div>

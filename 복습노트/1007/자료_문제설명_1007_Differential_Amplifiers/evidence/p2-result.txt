@@ -1,0 +1,7 @@
+single-ended A_CM (exact) = -g_m1*r_O1*r_O3/(2*g_m1*r_O1*r_O5 + r_O1 + r_O3 + 2*r_O5)
+differential-output A_CM (vX - vY)/vin = 0
+-Gm*Rout - exact single-ended = 0
+limit ro1->oo (g_m r_O >> 1): -g_m1*r_O3/(2*g_m1*r_O5 + 1)
+check approx == -r_O3/(1/g_m1 + 2 r_O5): 0
+limit ro5 large ratio -> -r_O3/(2 r_O5): -r_O3/2 / r_O5
+numeric single-ended exact: -0.495049504950495  approx -r_O3/(1/gm+2rO5): -0.498753117206983

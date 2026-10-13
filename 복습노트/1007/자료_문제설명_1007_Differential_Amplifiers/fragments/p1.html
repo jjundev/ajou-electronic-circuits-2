@@ -1,0 +1,95 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 내 말로 읽어요</h4>
+  <p>저항 부하 $R_D$ 두 개를 단 NMOS 차동쌍(differential pair)이에요. 두 입력 트랜지스터 $M_1$, $M_2$의 소스가 한 점(테일 노드, tail node)에 모이고, 그 아래에 게이트가 $V_b$로 고정된 $M_3$가 테일 전류원(tail current source) 역할을 해요. $M_3$가 흘리는 직류 전류가 $I_{SS}$예요.</p>
+  <p>입력은 $V_{in1}$과 $V_{in2}$에 <strong>똑같이</strong> 들어오는 공통 모드(common-mode, CM) 변화 $\Delta V_{in,CM}$이고, 출력은 한쪽 드레인 $X$(또는 $Y$)의 변화예요. 구할 것은 $A_{CM}=\Delta V_X/\Delta V_{in,CM}$이고, 이것이 식 (10.224) 꼴이 됨을 보이는 것이에요.</p>
+  <p>핵심 가정은 "$\lambda$가 0이 아닌 것은 $M_3$뿐"이라는 점이에요. 그래서 $M_1$, $M_2$는 이상적인 전류 소자로 두고, 테일 전류원만 유한한 출력 저항을 가져요. 이상적인 테일이면 $A_{CM}=0$인데, 그 저항 때문에 공통 모드 신호가 출력으로 조금 새어 나온다는 이야기예요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4>
+  <p><strong>단서</strong>: "common-mode gain", 그리고 "$\lambda\neq0$ for $M_3$"이에요. 공통 모드 입력에 테일 전류원이 비이상적이라는 두 단서가 함께 나오면 공통 모드 하프 서킷(CM half circuit)과 소스 축퇴(source degeneration)를 떠올려요. (<a href="정리노트_1007_Differential_Amplifiers.html#s0-cm-half-recap">정리노트: CM 하프 서킷 복습</a>)</p>
+  <p><strong>기호의 뜻</strong>: $g_m$은 $M_1$(또는 $M_2$)의 트랜스컨덕턴스(transconductance)로, 게이트-소스 전압이 조금 변할 때 드레인 전류가 얼마나 변하는지를 나타내요. $r_{O3}$는 채널 길이 변조(channel-length modulation) 때문에 생기는 $M_3$의 출력 저항으로 $r_{O3}\approx 1/(\lambda I_{D3})=1/(\lambda I_{SS})$예요. $R_{SS}$는 테일 소자가 테일 노드에 보이는 소신호 저항이고, 여기서는 $R_{SS}=r_{O3}$예요. $(V_{GS}-V_{TH})_{eq.}$는 두 입력이 같을 때(평형) $M_1$, $M_2$의 오버드라이브(overdrive)예요.</p>
+  <p><strong>근사 조건</strong>: $M_1$, $M_2$는 $\lambda=0$이라 $r_{O1}, r_{O2}\to\infty$로 두고, $M_3$에만 $r_{O3}$를 남겨요. 몸체 효과(body effect)는 교과서 관례대로 무시해요. $r_{O3}=1/(\lambda I_{SS})$에서 $(1+\lambda V_{DS3})$ 보정은 버리는 1차 근사를 써요.</p>
+  <p><strong>선택 이유</strong>: 회로가 좌우 대칭이고 두 입력이 같으므로 $M_1$, $M_2$의 소신호 전류도 같아요. 그러면 테일 저항 $R_{SS}$를 $2R_{SS}$ 두 개의 병렬로 쪼개 반쪽마다 하나씩 붙여도 각 반쪽의 전압·전류가 그대로예요. 대칭선(두 $2R_{SS}$ 사이)에는 전류가 흐르지 않으니 끊을 수 있고, 남은 반쪽은 소스에 $2R_{SS}$가 달린 축퇴 공통 소스(degenerated common-source) 단이에요. 그 이득 공식 $A_v=-\dfrac{R_D}{1/g_m+R_S}$을 바로 쓸 수 있어요.</p>
+  <p>마지막으로 오버드라이브로 답을 표현해야 하므로 제곱 법칙(square law)에서 나온 $g_m=\dfrac{2I_D}{V_{GS}-V_{TH}}$를 떠올려요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 실제 첫 줄</h4>
+  <p>1. 소신호 등가회로로 바꿔요. $V_{DD}$와 $V_b$는 직류라 교류 접지(AC ground)로 보내요. 그러면 $M_3$는 게이트·소스가 모두 접지인 소자가 되어, 테일 노드에서 보면 저항 $r_{O3}$ 하나만 남아요.</p>
+  <p>$$R_{SS}=r_{O3}=\frac{1}{\lambda I_{SS}}$$</p>
+  <p>2. 공통 모드 하프 서킷을 그려요. $r_{O3}$를 $2r_{O3}\parallel 2r_{O3}$로 나누고 가운데를 끊어서, 왼쪽 반쪽만 남겨요.</p>
+  <svg viewBox="0 0 240 200" width="240" height="200" role="img" aria-label="공통 모드 하프 서킷: VDD, R_D, 출력 X, M1, 소스의 2 r_O3, 접지">
+    <line x1="60" y1="15" x2="160" y2="15" stroke="currentColor" stroke-width="2"/>
+    <text x="165" y="20" fill="currentColor" font-size="12">V_DD</text>
+    <line x1="110" y1="15" x2="110" y2="30" stroke="currentColor"/>
+    <rect x="102" y="30" width="16" height="36" fill="none" stroke="currentColor"/>
+    <text x="124" y="52" fill="currentColor" font-size="12">R_D</text>
+    <line x1="110" y1="66" x2="110" y2="86" stroke="currentColor"/>
+    <circle cx="110" cy="78" r="2.5" fill="currentColor"/>
+    <text x="118" y="82" fill="currentColor" font-size="12">X</text>
+    <rect x="96" y="86" width="28" height="30" fill="none" stroke="currentColor"/>
+    <text x="130" y="105" fill="currentColor" font-size="12">M1</text>
+    <line x1="50" y1="101" x2="96" y2="101" stroke="currentColor"/>
+    <text x="8" y="105" fill="currentColor" font-size="11">ΔV_in,CM</text>
+    <line x1="110" y1="116" x2="110" y2="130" stroke="currentColor"/>
+    <rect x="102" y="130" width="16" height="36" fill="none" stroke="currentColor"/>
+    <text x="124" y="152" fill="currentColor" font-size="12">2 r_O3</text>
+    <line x1="110" y1="166" x2="110" y2="180" stroke="currentColor"/>
+    <line x1="98" y1="180" x2="122" y2="180" stroke="currentColor"/>
+    <line x1="103" y1="185" x2="117" y2="185" stroke="currentColor"/>
+    <line x1="107" y1="190" x2="113" y2="190" stroke="currentColor"/>
+  </svg>
+  <p>3. 첫 식은 이 반쪽의 소스 노드 KCL과 출력 노드 식이에요. 소스 전압을 $v_s$, 드레인 소신호 전류를 $i_d$라 하면</p>
+  <p>$$i_d=g_m\,(\Delta V_{in,CM}-v_s),\qquad v_s=2r_{O3}\,i_d,\qquad \Delta V_X=-R_D\,i_d$$</p>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>왜 이렇게 푸는지 함께 따라가요</h4>
+  <div data-subpart="main">
+    <h4>공통 모드 이득 유도</h4>
+    <p>첫 두 식에서 $v_s$를 지우면 드레인 전류가 나와요. $v_s$를 대입한 뒤 $i_d$끼리 모아요.</p>
+    <p>$$i_d=g_m\,\Delta V_{in,CM}-2g_m r_{O3}\,i_d\;\Rightarrow\; i_d=\frac{g_m\,\Delta V_{in,CM}}{1+2g_m r_{O3}}=\frac{\Delta V_{in,CM}}{1/g_m+2r_{O3}}$$</p>
+    <p>소스 저항이 입력 전압의 일부를 가져가서 전류가 $g_m\Delta V_{in,CM}$보다 줄어드는 것, 이것이 축퇴의 효과예요. 출력은 $\Delta V_X=-R_D i_d$이므로</p>
+    <p>$$A_{CM}=\frac{\Delta V_X}{\Delta V_{in,CM}}=-\frac{R_D}{\dfrac{1}{g_m}+2r_{O3}}=-\frac{R_D/2}{\dfrac{1}{2g_m}+r_{O3}}$$</p>
+    <p>오른쪽 꼴은 분자·분모를 2로 나눈 것으로, 교과서의 $A_{CM}=-\dfrac{R_D/2}{1/(2g_m)+R_{SS}}$와 같아요. 두 반쪽을 병렬로 묶어 $2g_m$ 소자와 $R_D/2$ 부하로 본 결과와도 일치해요.</p>
+    <p>이제 $g_m$과 $r_{O3}$를 문제의 기호로 바꿔요. 평형에서 $I_{SS}$가 반씩 나뉘므로 $I_{D1}=I_{SS}/2$이고, 제곱 법칙에서</p>
+    <p>$$g_m=\frac{2I_{D1}}{(V_{GS}-V_{TH})_{eq.}}=\frac{I_{SS}}{(V_{GS}-V_{TH})_{eq.}}\;\Rightarrow\;\frac{1}{g_m}=\frac{(V_{GS}-V_{TH})_{eq.}}{I_{SS}}$$</p>
+    <p>$M_3$는 $I_{SS}$ 전체를 흘리므로 $2r_{O3}=\dfrac{2}{\lambda I_{SS}}$예요. 둘을 첫 꼴의 분모에 넣어요.</p>
+    <p>$$A_{CM}=-\frac{R_D}{\dfrac{(V_{GS}-V_{TH})_{eq.}}{I_{SS}}+\dfrac{2}{\lambda I_{SS}}}$$</p>
+    <p>분모의 두 항이 모두 $1/I_{SS}$를 가지므로 분자·분모에 $I_{SS}$를 곱해 정리하면</p>
+    <p>$$A_{CM}=\frac{-R_D I_{SS}}{\dfrac{2}{\lambda}+(V_{GS}-V_{TH})_{eq.}}$$</p>
+    <p>이것이 증명할 식 (10.224)예요. 여기서 $\lambda$는 $M_3$의 값이에요.</p>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <h4>식 (10.224) 검산</h4>
+    <p><strong>완성 답: $A_{CM}=\dfrac{-R_D I_{SS}}{2/\lambda+(V_{GS}-V_{TH})_{eq.}}=-\dfrac{R_D/2}{1/(2g_m)+r_{O3}}$</strong></p>
+    <p><strong>단위</strong>: 분자 $R_D I_{SS}$는 Ω·A = V, 분모의 $2/\lambda$는 $\lambda$가 V$^{-1}$이므로 V, 오버드라이브도 V예요. 이득은 무차원으로 맞아요.</p>
+    <p><strong>극한 1 ($\lambda\to0$)</strong>: $2/\lambda\to\infty$이므로 $A_{CM}\to0$이에요. 테일이 이상적인 전류원이면 공통 모드 입력이 전류를 바꾸지 못해 출력이 변하지 않는다는 기본 결과로 돌아와요.</p>
+    <p><strong>극한 2 ($r_{O3}\to0$, 즉 $2/\lambda\to0$)</strong>: $A_{CM}\to-\dfrac{R_D I_{SS}}{(V_{GS}-V_{TH})_{eq.}}=-g_m R_D$예요. 테일 노드가 접지되면 반쪽이 축퇴 없는 공통 소스 단이 되니 맞아요.</p>
+    <p><strong>수치 감각</strong>: $\lambda=0.1\ \text{V}^{-1}$, $(V_{GS}-V_{TH})_{eq.}=0.2$ V, $I_{SS}=1$ mA, $R_D=2$ kΩ이면 $A_{CM}=-\dfrac{2}{20+0.2}\approx-0.099$이에요. 같은 값에서 차동 이득 $g_mR_D=10$보다 약 100배 작아요. 분모에서 $2/\lambda$가 오버드라이브보다 훨씬 커서 $A_{CM}\approx-\lambda R_D I_{SS}/2$로 봐도 거의 같아요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>이 문항에서 하기 쉬운 오류</h4>
+  <ul>
+    <li>하프 서킷에 테일 저항을 $r_{O3}$ 그대로 붙이는 실수예요. 반쪽에는 $2r_{O3}$가 붙어요. 그대로 붙이면 분모가 $1/\lambda$가 되어 식의 2가 사라져요.</li>
+    <li>$g_m$을 구할 때 $I_D=I_{SS}$를 쓰는 실수예요. $M_1$에는 $I_{SS}/2$만 흐르므로 $g_m=I_{SS}/(V_{GS}-V_{TH})_{eq.}$이고, 반대로 $r_{O3}$에는 $I_{SS}$ 전체를 써요.</li>
+    <li>"$\lambda\neq0$"을 $M_1$, $M_2$에도 적용해 $r_{O1}$을 넣는 실수예요. 문제는 $M_3$만 $\lambda\neq0$으로 정했어요.</li>
+    <li>차동 출력 $V_X-V_Y$로 공통 모드 이득을 구하면 대칭 회로에서는 0이 나와요. 이 문제의 $A_{CM}$은 한쪽 출력 $X$ 기준이에요.</li>
+  </ul>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>설명을 닫고 다시 해 봐요</h4>
+  <ol>
+    <li>Fig. 10.88에서 $V_{DD}$, $V_b$를 접지로 보내고 테일 노드에서 본 저항이 왜 $r_{O3}$인지 한 줄로 써 보세요.</li>
+    <li>CM 하프 서킷을 그리고 $A_{CM}=-R_D/(1/g_m+2r_{O3})$를 KCL로 유도해 보세요.</li>
+    <li>$g_m=I_{SS}/(V_{GS}-V_{TH})_{eq.}$, $r_{O3}=1/(\lambda I_{SS})$를 넣어 식 (10.224)까지 정리하고, $\lambda\to0$일 때 0이 되는지 확인해 보세요.</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>CM 하프 서킷, 축퇴 CS 단</p><p>$R_{SS}=r_{O3}=1/(\lambda I_{SS})$</p><p>$g_m=2I_D/V_{ov}$</p></div>
+  <div class="summary-group"><h4>첫 줄</h4><p>반쪽 소스에 $2r_{O3}$</p><p>$i_d=g_m(\Delta V_{in}-v_s)$, $v_s=2r_{O3}i_d$</p></div>
+  <div class="summary-group"><h4>핵심 판단</h4><p>$A_{CM}=-\dfrac{R_D}{1/g_m+2r_{O3}}$</p><p>$g_m$은 $I_{SS}/2$로, $r_{O3}$는 $I_{SS}$로</p></div>
+  <div class="summary-group"><h4>검산</h4><p>$\lambda\to0$: $A_{CM}\to0$</p><p>$r_{O3}\to0$: $-g_mR_D$</p><p>단위: V/V</p></div>
+</div>

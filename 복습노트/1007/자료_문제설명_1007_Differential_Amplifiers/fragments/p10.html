@@ -1,0 +1,75 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 내 말로 읽어요</h4>
+  <p>npn 차동쌍 $Q_1$, $Q_2$가 입력을 받고, 위쪽 부하는 저항이 아니라 pnp 전류 거울(current mirror) $Q_3$(다이오드 연결)·$Q_4$예요. 테일은 이상적인 전류원 $I_{EE}$이고, 출력은 $Q_2$와 $Q_4$의 컬렉터가 만나는 한 점 $V_{out}$에서만 뽑아요(싱글엔디드 출력).</p>
+  <p>입력은 차동 전압 $V_{in1}-V_{in2}$, 출력은 $V_{out}$이에요. 회로 모양과 npn의 Early 전압 $V_{A,n}=5\ \text{V}$는 정해져 있고, 이득이 100이 되도록 pnp의 Early 전압 $V_{A,p}$를 거꾸로 구하라는 설계 문제예요. $I_{EE}$ 값은 주어지지 않았는데, 풀다 보면 전류가 약분되어 필요 없다는 걸 확인하게 돼요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4>
+  <p><b>단서.</b> "차동쌍 위에 다이오드 연결 pnp + 같은 베이스의 pnp", "출력은 한쪽 컬렉터에서만"이라는 그림이 능동 부하 차동쌍(differential pair with active load)을 불러요. "Early 전압을 구하라"는 말은 이득이 트랜지스터 출력 저항 $r_O$로 정해지는 구조라는 뜻이에요(<a href="정리노트_1007_Differential_Amplifiers.html#s2-bjt-active">7. BJT 능동 부하 차동쌍</a>).</p>
+  <p><b>개념.</b> 능동 부하 차동쌍의 소신호 전압 이득은 $|A_v| = G_m R_{out}$으로 나눠 봐요. 거울이 $Q_1$ 쪽 전류 변화를 출력 쪽으로 복사해 더해 주므로 $G_m \approx g_m$, 출력 노드에서 위아래로 보이는 저항은 $Q_2$와 $Q_4$의 출력 저항이 병렬이라 $R_{out}=r_{O2}\parallel r_{O4}$예요.</p>
+  <p>$$|A_v| = g_m\,(r_{O2}\parallel r_{O4})$$</p>
+  <p><b>기호의 뜻.</b> $g_m = I_C/V_T$는 $Q_1$, $Q_2$의 트랜스컨덕턴스(transconductance)로, 베이스-이미터 전압 변화가 컬렉터 전류를 얼마나 바꾸는지예요. $r_O = V_A/I_C$는 Early 효과(Early effect, 베이스 폭 변조)로 생기는 출력 저항이고, $V_A$가 그 트랜지스터의 Early 전압이에요. $V_T = kT/q \approx 26\ \text{mV}$는 열전압(thermal voltage)이에요.</p>
+  <p><b>근사 조건.</b> $\beta \gg 1$로 두어 거울의 베이스 전류 오차를 무시하고, 테일 $I_{EE}$는 이상 전류원으로 봐요. $Q_1$의 $r_{O1}$, $Q_3$의 $r_{O3}$은 다이오드 쪽 작은 저항 $1/g_{m3}$에 묻혀 이득에 거의 영향이 없어서 $G_m\approx g_m$으로 둬요.</p>
+  <p><b>선택 이유.</b> 대칭이 아니라 하프 서킷을 그대로 쓸 수 없으므로, 교과서와 강의에서 유도한 $G_m R_{out}$ 결과식을 바로 쓰는 게 가장 짧아요. 게다가 바이폴라는 $g_m r_O = V_A/V_T$로 전류가 약분되므로, 이득이 Early 전압만의 함수가 돼요. 그래서 $I_{EE}$ 없이도 $V_{A,p}$를 정할 수 있어요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <p>바이어스부터 적어요. 대칭 차동쌍이라 평형에서 $Q_1$, $Q_2$는 $I_{EE}/2$씩 흘리고, 거울 $Q_3$, $Q_4$도 같은 $I_{EE}/2$를 흘려요. 네 소자의 컬렉터 전류가 모두 $I_C = I_{EE}/2$예요.</p>
+  <p>$$g_m = \frac{I_{EE}/2}{V_T},\qquad r_{O2} = \frac{V_{A,n}}{I_{EE}/2},\qquad r_{O4} = \frac{V_{A,p}}{I_{EE}/2}$$</p>
+  <p>그다음 이득 식을 역수로 적어 두면 병렬 저항이 덧셈으로 풀려서 편해요.</p>
+  <p>$$\frac{1}{|A_v|} = \frac{1}{g_m r_{O2}} + \frac{1}{g_m r_{O4}}$$</p>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>왜 이렇게 푸는지 함께 따라가요</h4>
+  <div data-subpart="main">
+    <h4>pnp Early 전압</h4>
+    <p>첫 줄의 각 항에 바이어스 식을 넣어요. $I_{EE}/2$가 분자와 분모에서 약분돼요.</p>
+    <p>$$g_m r_{O2} = \frac{I_{EE}/2}{V_T}\cdot\frac{V_{A,n}}{I_{EE}/2} = \frac{V_{A,n}}{V_T}$$</p>
+    <p>$$g_m r_{O4} = \frac{V_{A,p}}{V_T}$$</p>
+    <p>그래서 이득은 두 Early 전압과 $V_T$만으로 정해져요. 이 회로의 "고유 이득(intrinsic gain)" $V_A/V_T$ 두 개가 병렬처럼 합쳐진 꼴이에요.</p>
+    <p>$$\frac{1}{|A_v|} = \frac{V_T}{V_{A,n}} + \frac{V_T}{V_{A,p}}$$</p>
+    <p>$|A_v| = 100$, $V_{A,n}=5\ \text{V}$, $V_T = 26\ \text{mV}$를 넣고 $V_{A,p}$ 항만 남겨요.</p>
+    <p>$$\frac{V_T}{V_{A,p}} = \frac{1}{100} - \frac{0.026}{5} = 0.0100 - 0.0052 = 4.80\times10^{-3}$$</p>
+    <p>$$V_{A,p} = \frac{0.026\ \text{V}}{4.80\times10^{-3}} \approx 5.42\ \text{V}$$</p>
+    <p>npn만으로 낼 수 있는 이득 상한이 $V_{A,n}/V_T = 5/0.026 \approx 192$이라, pnp 쪽도 비슷한 크기($\approx 208$)가 되어야 병렬 결과가 100이 돼요. $V_{A,p}$가 이 값보다 크면 이득이 100을 넘으므로, "이득 100 이상"이 목표라면 $V_{A,p}\ge 5.42\ \text{V}$가 조건이에요.</p>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <h4>검산</h4>
+    <p><b>$V_{A,p} \approx 5.42\ \text{V}$</b> (이보다 크면 이득이 100을 넘어요)</p>
+    <p><b>되대입.</b> $V_{A,n}/V_T = 192.3$, $V_{A,p}/V_T = 5.42/0.026 = 208.5$이고, 두 값의 병렬은 $\dfrac{192.3\times208.5}{192.3+208.5}\approx 100.0$이라 목표와 맞아요.</p>
+    <p><b>단위.</b> $V_T/V_A$는 V/V라 무차원이고, 이득도 무차원이에요. 답 $V_{A,p}$는 V로 나와요.</p>
+    <p><b>극한·특수값.</b> $V_{A,p}\to\infty$($r_{O4}\to\infty$, 이상적인 거울)이면 이득은 $V_{A,n}/V_T \approx 192$로 가요. 100이 이 상한보다 작으니 해가 존재해요. 만약 $V_{A,n}$이 $100V_T = 2.6\ \text{V}$보다 작았다면 $V_T/V_{A,p}$가 음수가 되어 어떤 pnp로도 이득 100을 못 만들어요. 대칭 특수값으로 $V_{A,p}=V_{A,n}$이면 이득은 $V_A/(2V_T)\approx 96$이라 100에 조금 못 미치므로, 답이 5 V보다 약간 큰 5.42 V인 것도 자연스러워요.</p>
+    <p><b>$V_T$ 민감도.</b> $V_T = 25\ \text{mV}$를 쓰면 $1/100 - 0.005 = 0.005$라 $V_{A,p} = 5.0\ \text{V}$가 나와요. 두 항의 차가 작아서 $V_T$ 값에 답이 민감하니, 쓴 $V_T$를 답과 함께 적어 두세요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>이 문항에서 하기 쉬운 오류</h4>
+  <ul>
+    <li>저항 부하 싱글엔디드 출력처럼 $g_m R/2$로 이득을 반으로 나누는 실수예요. 능동 부하는 거울이 $Q_1$ 쪽 전류를 복사해 더하므로 $G_m\approx g_m$이고 2로 나누지 않아요.</li>
+    <li>$R_{out}$을 $r_{O4}$ 하나로만 보거나 $r_{O2}+r_{O4}$로 더하는 실수예요. 출력 노드에서 $Q_2$는 아래로, $Q_4$는 위(교류 접지 $V_{CC}$)로 연결되어 둘이 병렬이에요.</li>
+    <li>$I_{EE}$가 없다고 막히는 경우예요. 바이폴라는 $g_m r_O = V_A/V_T$로 전류가 약분되므로 바이어스 전류가 필요 없어요.</li>
+    <li>$1/100 - V_T/V_{A,n}$을 계산할 때 자릿수를 놓쳐 $0.0048$ 대신 $0.048$로 쓰면 답이 10배 틀려요.</li>
+  </ul>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>설명을 닫고 다시 해 봐요</h4>
+  <ol>
+    <li>Fig. 10.96의 출력 노드에서 위아래로 보이는 저항을 표시하고, $|A_v| = g_m(r_{O2}\parallel r_{O4})$를 $V_{A,n}$, $V_{A,p}$, $V_T$만으로 다시 써 보세요.</li>
+    <li>$V_{A,n}=5\ \text{V}$, $V_T=26\ \text{mV}$에서 이득 100이 되는 $V_{A,p}$를 계산하고, 되대입해 100이 나오는지 확인해 보세요.</li>
+    <li>pnp가 이상적($V_{A,p}\to\infty$)일 때 얻을 수 있는 최대 이득은 얼마인지 말해 보세요.</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>능동 부하 차동쌍: $G_m\approx g_m$</p>
+    <p>$R_{out}=r_{O2}\parallel r_{O4}$</p>
+    <p>$|A_v|=g_m(r_{O2}\parallel r_{O4})$</p></div>
+  <div class="summary-group"><h4>첫 줄</h4><p>네 소자 모두 $I_C=I_{EE}/2$</p>
+    <p>역수 꼴: $1/|A_v|=V_T/V_{A,n}+V_T/V_{A,p}$</p></div>
+  <div class="summary-group"><h4>핵심 판단</h4><p>$g_m r_O=V_A/V_T$라 전류가 약분돼요.</p>
+    <p>$V_{A,p}\approx 5.42\ \text{V}$ ($V_T=26\ \text{mV}$)</p></div>
+  <div class="summary-group"><h4>검산</h4><p>$192\parallel208\approx100$</p>
+    <p>$V_{A,p}\to\infty$이면 상한 $\approx192$</p></div>
+</div>

@@ -1,0 +1,76 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 내 말로 읽어요</h4>
+  <p>NMOS 차동쌍 $M_1$·$M_2$ 위에는 저항 대신 PMOS 전류원 $M_3$·$M_4$가 부하(load)로 달려 있고, 아래 테일(tail)에는 이상적 전류원 대신 실제 트랜지스터 $M_5$가 있어요. $V_{b1}$, $V_{b2}$는 고정 바이어스라 소신호에서는 접지와 같아요.</p>
+  <p>입력은 두 게이트에 <strong>똑같이</strong> 들어오는 공통 모드(common-mode, CM) 변화 $\Delta V_{in,CM}$이고, 출력은 $M_1$ 드레인(= $M_3$ 드레인) 노드예요. $\lambda&gt;0$이라 모든 트랜지스터가 출력 저항 $r_O$를 가지므로, 테일 $M_5$도 무한대가 아닌 $r_{O5}$로 보여요. 이 유한한 테일 저항 때문에 CM 입력이 출력에 새어 나오는 정도, 즉 한 출력 기준 공통 모드 이득 $A_{CM}=\Delta V_{out1}/\Delta V_{in,CM}$을 구해요.</p>
+  <p>그림의 $V_{out}$은 두 출력의 차이에요. 회로가 완전 대칭이면 두 출력이 똑같이 움직여 차동 출력의 CM 이득은 0이 되므로, 의미 있는 값은 한쪽 출력 기준 이득이에요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4>
+  <p><strong>단서 → 개념.</strong> "common-mode gain"과 대칭 회로라는 단서에서 공통 모드 하프 서킷(CM half circuit)을 떠올려요(<a href="정리노트_1007_Differential_Amplifiers.html#s0-cm-half-recap">정리노트: 유한한 $R_{SS}$와 CM 하프 서킷</a>). "$A_v=-G_m R_{out}$을 쓰라"는 말에서는 이득을 트랜스컨덕턴스와 출력 저항 두 조각으로 나눠 구하는 방법을 떠올려요.</p>
+  <p><strong>기호의 뜻.</strong> $g_{m1}$은 $M_1$의 트랜스컨덕턴스(게이트-소스 전압 변화가 드레인 전류를 얼마나 바꾸는지), $r_{O}$는 채널 길이 변조로 생기는 출력 저항 $1/(\lambda I_D)$예요. 테일 $M_5$는 게이트가 고정이라 드레인에서 $R_{SS}=r_{O5}$로 보여요. $G_m$은 출력을 교류 접지에 단락했을 때 흐르는 출력 전류/입력 전압, $R_{out}$은 입력을 0으로 두고 출력 노드에서 본 저항이에요.</p>
+  <p><strong>근사 조건.</strong> $g_m r_O\gg1$을 써서 $1$이나 $r_O$ 단독 항보다 $g_m r_O\cdot r_O$ 항이 훨씬 크다고 봐요. 몸체 효과(body effect)는 문제에 없으므로 무시해요. $\lambda&gt;0$이므로 $r_{O1}$, $r_{O3}$, $r_{O5}$를 모두 남긴 채로 시작하고, 마지막에만 근사해요.</p>
+  <p><strong>선택 이유.</strong> 대칭이라 CM 입력에서는 두 반쪽이 같은 전류를 흘려요. 그래서 $r_{O5}$를 $2r_{O5}$ 두 개의 병렬로 쪼개면 대칭선을 지나는 전류가 0이 되어 끊을 수 있고, 반쪽은 "소스 축퇴(source degeneration) $2r_{O5}$ + 전류원 부하 $r_{O3}$"인 CS 단이 돼요. 부하가 저항이 아닌 $r_{O3}$이고 $M_1$의 $r_{O1}$까지 있으면 $-R_D/(1/g_m+R_S)$ 공식을 그대로 쓸 수 없으므로, $G_m$과 $R_{out}$을 따로 구하는 $A_v=-G_mR_{out}$이 가장 깔끔한 도구예요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <p>1) 소신호에서 $V_{DD}$, $V_{b1}$, $V_{b2}$를 접지로 보내요. 그러면 $M_3$는 출력과 접지 사이의 저항 $r_{O3}$, $M_5$는 꼬리 노드와 접지 사이의 저항 $r_{O5}$가 돼요.</p>
+  <p>2) CM 하프 서킷: $r_{O5}=2r_{O5}\parallel 2r_{O5}$로 나누고 대칭선을 끊어요. 왼쪽 반쪽은 게이트에 $v_{in}$, 소스에 $R_S=2r_{O5}$, 드레인(출력)에 $r_{O3}$가 달린 $M_1$이에요. $M_1$은 $g_{m1}v_{gs1}$ 전류원과 $r_{O1}$ 병렬로 바꿔요.</p>
+  <p>3) $G_m$을 위한 첫 식: 출력을 접지에 단락하고 드레인 전류를 $i$라 하면 소스 전압은 $v_s=iR_S$이고, 드레인 노드 KCL은</p>
+  $$i=g_{m1}(v_{in}-v_s)-\frac{v_s}{r_{O1}},\qquad v_s=2r_{O5}\,i$$
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>왜 이렇게 푸는지 함께 따라가요</h4>
+  <div data-subpart="main">
+    <h4>공통 모드 이득 $A_{CM}$</h4>
+    <p><strong>먼저 $G_m$ 구하기.</strong> 첫 식에 $v_s=2r_{O5}i$를 넣고 $i$를 모아요.</p>
+    $$i\left(1+2g_{m1}r_{O5}+\frac{2r_{O5}}{r_{O1}}\right)=g_{m1}v_{in}$$
+    <p>양변에 $r_{O1}$을 곱해 정리하면</p>
+    $$G_m=\frac{i}{v_{in}}=\frac{g_{m1}r_{O1}}{r_{O1}+2r_{O5}+2g_{m1}r_{O1}r_{O5}}$$
+    <p>분모에서 $2g_{m1}r_{O1}r_{O5}$는 $r_{O1}$, $2r_{O5}$보다 $g_mr_O$배쯤 커요($g_mr_O\gg1$). 그래서 분모를 이 항 하나로 두면</p>
+    $$G_m\approx\frac{g_{m1}r_{O1}}{2g_{m1}r_{O1}r_{O5}}=\frac{1}{2r_{O5}}$$
+    <p>뜻: 축퇴 저항 $2r_{O5}$가 $1/g_{m1}$보다 훨씬 크면 $M_1$이 소스 전압을 게이트에 거의 붙여 따라가게 해서, 전류는 "$v_{in}$이 $2r_{O5}$에 걸려 흐르는 만큼"으로 정해져요.</p>
+    <p><strong>다음 $R_{out}$ 구하기.</strong> 출력 노드에서 위로는 $r_{O3}$, 아래로는 소스에 $2r_{O5}$가 달린 $M_1$이 보여요. 축퇴된 트랜지스터의 드레인 쪽 저항 공식을 쓰면</p>
+    $$R_{down}=r_{O1}+2r_{O5}+2g_{m1}r_{O1}r_{O5}\approx2g_{m1}r_{O1}r_{O5}$$
+    <p>이 값은 $r_{O3}$보다 $g_mr_O$배쯤 크므로 병렬에서는 작은 쪽이 지배해요.</p>
+    $$R_{out}=r_{O3}\parallel R_{down}\approx r_{O3}$$
+    <p><strong>합치기.</strong> 근사 전 식을 그대로 곱하면 분모의 $R_{down}$이 $G_m$의 분모와 같다는 점이 보여요($G_m=g_{m1}r_{O1}/R_{down}$).</p>
+    $$A_{CM}=-G_mR_{out}=-\frac{g_{m1}r_{O1}}{R_{down}}\cdot\frac{r_{O3}R_{down}}{r_{O3}+R_{down}}=-\frac{g_{m1}r_{O1}r_{O3}}{r_{O3}+r_{O1}+2r_{O5}+2g_{m1}r_{O1}r_{O5}}$$
+    <p>분모에서 $2g_{m1}r_{O1}r_{O5}$만 남기면</p>
+    $$A_{CM}\approx-\frac{r_{O3}}{2r_{O5}}$$
+    <p>차동 출력 $V_{out}=V_{out1}-V_{out2}$로 보면 두 반쪽이 같은 값을 내므로 완전 대칭에서는 0이에요. 위 값은 한 출력 기준이에요.</p>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <h4>검산</h4>
+    <p><strong>완성 답: $A_{CM}\approx-\dfrac{r_{O3}}{2r_{O5}}$ (한 출력 기준, 정확식 $-\dfrac{g_{m1}r_{O1}r_{O3}}{r_{O3}+r_{O1}+2r_{O5}+2g_{m1}r_{O1}r_{O5}}$), 차동 출력 기준은 0.</strong></p>
+    <p><strong>단위·차수.</strong> $r_{O3}/r_{O5}$는 Ω/Ω라 무차원이에요. 정확식도 분자 $g_m r\cdot r$ = Ω, 분모 각 항 Ω라 무차원으로 맞아요.</p>
+    <p><strong>극한 대입.</strong> $r_{O5}\to\infty$(이상적 테일 전류원)이면 $A_{CM}\to0$이 되어 이상적인 경우(테일 전류 고정 → CM 입력에 전류 변화 없음)와 일치해요. 반대로 $r_{O5}\to0$(테일을 접지에 단락)이면 정확식이 $-g_{m1}(r_{O1}\parallel r_{O3})$, 즉 축퇴 없는 CS 단의 이득으로 돌아와요.</p>
+    <p><strong>저항 부하 공식과 비교.</strong> 저항 부하 차동쌍의 $A_{CM}=-\dfrac{R_D}{1/g_m+2R_{SS}}$에서 $R_D\to r_{O3}$, $R_{SS}\to r_{O5}$, $2R_{SS}\gg1/g_m$로 두면 같은 $-r_{O3}/(2r_{O5})$가 나와요.</p>
+    <p><strong>크기 감각(교과서 보충).</strong> $M_3$는 $I_{SS}/2$, $M_5$는 $I_{SS}$를 흘리므로 $\lambda$가 같다면 $r_{O3}=\dfrac{1}{\lambda I_{SS}/2}=2r_{O5}$이고, 이때 $|A_{CM}|\approx1$이에요. 전류원 부하는 차동 이득을 키우는 만큼 CM 이득도 키워서, 테일을 더 좋게(예: 캐스코드) 만들지 않으면 단일 출력 CM 이득이 1보다 많이 작아지지 않아요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>자주 하는 실수</h4>
+  <ul>
+    <li>테일을 쪼갤 때 $r_{O5}$를 반쪽마다 그대로 붙이는 실수. 두 반쪽 전류가 합쳐 흐르므로 반쪽에는 $2r_{O5}$가 달려요.</li>
+    <li>$R_{out}$을 $r_{O1}\parallel r_{O3}$로 쓰는 실수. $M_1$의 소스에 $2r_{O5}$가 있어 아래쪽 저항이 $2g_{m1}r_{O1}r_{O5}$로 크게 부풀어요.</li>
+    <li>$G_m$을 그냥 $g_{m1}$으로 두는 실수. 축퇴 때문에 $G_m\approx1/(2r_{O5})$로 크게 줄어요.</li>
+    <li>그림의 $V_{out}$(차동 출력)으로 답을 0이라고만 쓰고 끝내는 것. 문제가 $G_mR_{out}$을 요구하므로 한 출력 기준 값을 구해야 하고, 차동 출력이 0인 것은 대칭일 때의 부가 설명이에요.</li>
+  </ul>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>설명을 닫고 다시 해 봐요</h4>
+  <ol>
+    <li>CM 하프 서킷을 그리고, 테일이 반쪽에 $2r_{O5}$로 붙는 이유를 한 줄로 써 보세요.</li>
+    <li>출력 단락 KCL에서 $G_m$의 정확식을 유도하고 $g_mr_O\gg1$로 $1/(2r_{O5})$까지 줄여 보세요.</li>
+    <li>$\lambda$가 같을 때 $r_{O3}$와 $r_{O5}$의 비를 바이어스 전류로 구해 $|A_{CM}|$ 크기를 어림해 보세요.</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>CM 하프 서킷: 테일 $r_{O5}$는 반쪽마다 $2r_{O5}$</p><p>이득은 $A_v=-G_mR_{out}$로 나눠 구해요</p></div>
+  <div class="summary-group"><h4>첫 줄</h4><p>출력 단락 KCL: $i=g_{m1}(v_{in}-v_s)-v_s/r_{O1}$</p><p>소스 전압은 $v_s=2r_{O5}i$</p></div>
+  <div class="summary-group"><h4>핵심 판단</h4><p>트랜스컨덕턴스 $G_m\approx\dfrac{1}{2r_{O5}}$</p><p>출력 저항 $R_{out}\approx r_{O3}$ (아래쪽 $2g_{m1}r_{O1}r_{O5}$가 훨씬 큼)</p><p>답 $A_{CM}\approx-\dfrac{r_{O3}}{2r_{O5}}$</p></div>
+  <div class="summary-group"><h4>검산</h4><p>$r_{O5}\to\infty$이면 0</p><p>같은 $\lambda$면 $r_{O3}=2r_{O5}$라 $|A_{CM}|\approx1$</p></div>
+</div>

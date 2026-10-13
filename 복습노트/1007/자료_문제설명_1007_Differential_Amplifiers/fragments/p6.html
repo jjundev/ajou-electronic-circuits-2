@@ -1,0 +1,78 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 내 말로 읽어요</h4>
+  <p>바이폴라 차동쌍 $Q_1$·$Q_2$가 있고, 위쪽 부하 저항이 $R_C$와 $R_C+\Delta R_C$로 살짝 달라요(부하 미스매치, mismatch). 아래 테일(tail)에는 $Q_3$가 전류원 노릇을 하는데, 이미터에 $R_1$이 붙어 있어서(이미터 축퇴, emitter degeneration) $P$에서 내려다본 저항 $R_{out3}$가 아주 커요.</p>
+  <p>입력은 두 베이스, 출력은 두 컬렉터 사이의 차동 전압 $V_{out1}-V_{out2}$예요. 구할 것은 CMRR, 즉 "원하는 차동 신호는 얼마나 키우고, 원치 않는 공통 모드 변화가 차동 출력으로 새는 것은 얼마나 작은가"의 비율이에요.</p>
+  <p>예제 10.27에서 같은 회로의 $A_{CM-DM}$을 이미 구했으니, 이번에는 차동 이득 $A_{DM}$ 하나만 더 구해서 나누면 돼요. $Q_1$·$Q_2$는 $V_A=\infty$($r_o\to\infty$)이고 $Q_3$만 $r_{O3}$가 유한해요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4>
+  <p><b>단서</b>: "CMRR을 계산하라"와 부하 라벨 "$R_C+\Delta R_C$"가 함께 나오면, 공통 모드 제거비(common-mode rejection ratio)의 정의와 미스매치로 생기는 공통 모드→차동 변환 이득 $A_{CM-DM}$을 떠올려요(<a href="정리노트_1007_Differential_Amplifiers.html#s1-cmrr">CMRR 정리</a>, <a href="정리노트_1007_Differential_Amplifiers.html#s1-mismatch">미스매치 정리</a>).</p>
+  <p><b>개념과 공식</b>: $$\text{CMRR}=\left|\frac{A_{DM}}{A_{CM-DM}}\right|$$ 분자는 차동 이득(differential-mode gain), 분모는 공통 모드 입력이 차동 출력으로 바뀌는 이득이에요. 분모는 식 (10.191)을 바이폴라로 옮긴 $A_{CM-DM}=\dfrac{\Delta R_C}{1/g_{m1}+2R_{SS}}$이고, 여기서 $R_{SS}$ 자리에 테일의 출력 저항(output resistance) $R_{out3}$가 들어가요.</p>
+  <p><b>기호의 뜻</b>: $g_{m1}$은 $Q_1$의 트랜스컨덕턴스(베이스-이미터 전압 변화가 컬렉터 전류를 얼마나 바꾸는지, $I_C/V_T$), $r_{O3}$는 $Q_3$의 얼리 효과(Early effect) 출력 저항 $V_A/I_{C3}$, $r_{\pi3}=\beta/g_{m3}$는 $Q_3$의 베이스 입력 저항, $R_{out3}$는 $P$에서 $Q_3$ 컬렉터로 들여다본 소신호 저항이에요. 축퇴된 BJT의 출력 저항은 $$R_{out3}=\left[1+g_{m3}(R_1\parallel r_{\pi3})\right]r_{O3}+R_1\parallel r_{\pi3}$$ (식 10.193)이에요. $r_{\pi3}$가 들어가는 이유는 $Q_3$ 베이스가 소신호 접지($V_b$ 고정)라서 $r_{\pi3}$가 $R_1$과 나란히 이미터-접지 사이에 걸리기 때문이에요.</p>
+  <p><b>근사 조건</b>: $Q_1$·$Q_2$는 $r_o\to\infty$라서 컬렉터 전류가 부하 저항 값에 영향을 받지 않아요. 그래서 부하가 달라도 이미터 쪽에서 보면 두 반쪽이 대칭이에요. $\beta\gg1$이라 $Q_1$·$Q_2$의 베이스 전류는 무시해요. 미스매치는 작다($\Delta R_C\ll R_C$, 예: 1%)고 봐서 $A_{DM}$에서는 $\Delta R_C$를 버리지만, $A_{CM-DM}$에서는 $\Delta R_C$가 유일한 원인이라 절대 버리지 않아요.</p>
+  <p><b>선택 이유</b>: 분모는 이미 예제 10.27에서 얻었으니 새로 할 일은 차동 하프 서킷으로 $A_{DM}$을 구하는 것뿐이에요. 차동 입력에서는 $P$가 가상 접지(virtual ground)라 각 반쪽이 단순한 CE 단(common-emitter stage)이 되어 한 줄로 끝나요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <p>1) 정의부터 적어요: $\text{CMRR}=\left|A_{DM}\right|/\left|A_{CM-DM}\right|$.</p>
+  <p>2) 차동 입력 $V_{in1}=+V_{id}/2$, $V_{in2}=-V_{id}/2$를 넣어요. 두 이미터 전류 변화가 크기는 같고 부호가 반대라 $P$로 들어가는 합이 0이고, $\Delta V_P=0$이에요. 그래서 $P$를 접지로 보내고 테일 $Q_3$·$R_1$은 지워요.</p>
+  <p>3) 각 반쪽의 첫 식: $$\Delta I_{C1}=g_{m1}\frac{V_{id}}{2},\qquad \Delta I_{C2}=-g_{m1}\frac{V_{id}}{2}$$</p>
+  <p>4) 분모는 예제 10.27의 결과를 그대로 가져와요: 공통 모드 하프 서킷에서 각 이미터에 $2R_{out3}$가 붙어 $\Delta I_C=\dfrac{\Delta V_{CM}}{1/g_{m1}+2R_{out3}}$.</p>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>왜 이렇게 푸는지 함께 따라가요</h4>
+  <div data-subpart="main">
+    <h4>CMRR 유도</h4>
+    <p><b>차동 이득.</b> 컬렉터 전압은 부하 저항에 전류 변화를 곱한 만큼 내려가요.</p>
+    <p>$$\Delta V_{out1}=-R_C\,g_{m1}\frac{V_{id}}{2}$$</p>
+    <p>$$\Delta V_{out2}=+(R_C+\Delta R_C)\,g_{m1}\frac{V_{id}}{2}$$</p>
+    <p>차동 출력은 두 식을 빼서 얻어요.</p>
+    <p>$$\Delta V_{out1}-\Delta V_{out2}=-g_{m1}\left(R_C+\frac{\Delta R_C}{2}\right)V_{id}$$</p>
+    <p>$\Delta R_C\ll R_C$이므로 $\Delta R_C/2$를 버리면 $|A_{DM}|\approx g_{m1}R_C$예요. 미스매치는 차동 이득을 0.5% 정도만 바꾸므로 여기서는 무시해도 돼요.</p>
+    <p><b>공통 모드→차동 이득.</b> 두 베이스가 함께 $\Delta V_{CM}$만큼 움직이면 $Q_1$·$Q_2$ 전류가 똑같이 변해요. 대칭이라 $R_{out3}$를 $2R_{out3}$ 두 개로 나눠 각 이미터에 하나씩 붙인 축퇴 단으로 봐요.</p>
+    <p>$$\Delta I_{C1}=\Delta I_{C2}=\frac{\Delta V_{CM}}{1/g_{m1}+2R_{out3}}$$</p>
+    <p>같은 전류가 서로 다른 저항을 지나니 두 출력의 변화가 $\Delta R_C\,\Delta I_C$만큼 달라져요.</p>
+    <p>$$|A_{CM-DM}|=\left|\frac{\Delta V_{out1}-\Delta V_{out2}}{\Delta V_{CM}}\right|=\frac{\Delta R_C}{1/g_{m1}+2R_{out3}}$$</p>
+    <p><b>나누기.</b> 분모의 분수를 뒤집어 곱해요.</p>
+    <p>$$\text{CMRR}=\frac{g_{m1}R_C}{\Delta R_C}\left(\frac{1}{g_{m1}}+2R_{out3}\right)$$</p>
+    <p><b>$R_{out3}$ 대입.</b> 식 (10.193)을 넣으면 교과서 식 (10.196)과 같은 완성 답이에요.</p>
+    <p>$$\text{CMRR}=\frac{g_{m1}R_C}{\Delta R_C}\left\{\frac{1}{g_{m1}}+2\left[1+g_{m3}(R_1\parallel r_{\pi3})\right]r_{O3}+2(R_1\parallel r_{\pi3})\right\}$$</p>
+    <p>마지막 항 $2(R_1\parallel r_{\pi3})$는 $r_{O3}$ 항보다 훨씬 작아서($R_1\parallel r_{\pi3}\ll g_{m3}(R_1\parallel r_{\pi3})\,r_{O3}$) 실제로는 생략해도 값이 거의 같아요. $g_{m1}R_C/\Delta R_C\cdot1/g_{m1}=R_C/\Delta R_C$ 항도 $r_{O3}$ 항에 비하면 작아요.</p>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <h4>검산</h4>
+    <p><b>완성 답: $\text{CMRR}=\dfrac{g_{m1}R_C}{\Delta R_C}\left\{\dfrac{1}{g_{m1}}+2\left[1+g_{m3}(R_1\parallel r_{\pi3})\right]r_{O3}+2(R_1\parallel r_{\pi3})\right\}$</b></p>
+    <p><b>단위</b>: $g_{m1}R_C$는 S·Ω라 무차원, $1/\Delta R_C$는 1/Ω, 괄호 안 세 항은 모두 Ω(1/S, Ω, Ω)이에요. 전체가 무차원이라 이득의 비로 맞아요.</p>
+    <p><b>대칭 특수값</b>: $\Delta R_C\to0$이면 $A_{CM-DM}\to0$이라 CMRR $\to\infty$예요. 미스매치가 없으면 공통 모드가 차동 출력으로 전혀 새지 않는다는 뜻과 일치해요.</p>
+    <p><b>극한 대입 1</b>: $R_1\to0$이면 $R_1\parallel r_{\pi3}\to0$, $R_{out3}\to r_{O3}$라 $\text{CMRR}\to\dfrac{g_{m1}R_C}{\Delta R_C}\left(\dfrac{1}{g_{m1}}+2r_{O3}\right)$이에요. 축퇴 없는 단순 전류원의 결과로 돌아와요.</p>
+    <p><b>극한 대입 2</b>: $R_1\to\infty$이면 $R_1\parallel r_{\pi3}\to r_{\pi3}$이고 $g_{m3}r_{\pi3}=\beta$라 $R_{out3}\to(1+\beta)r_{O3}+r_{\pi3}\approx\beta r_{O3}$예요. BJT 축퇴로 얻는 출력 저항의 상한 $\beta r_O$와 맞아요.</p>
+    <p><b>극한 대입 3</b>: $r_{O3}\to\infty$(이상적 테일)이면 CMRR $\to\infty$예요. 테일 저항이 클수록 CMRR이 커진다는 수업 강조점과 같아요.</p>
+    <p><b>수치 감각</b>(예시 값): $I_{C1}=0.5$ mA라 $1/g_{m1}=52\ \Omega$, $R_C=10\ \text{k}\Omega$, $\Delta R_C=100\ \Omega$(1%), $I_{C3}=1$ mA라 $1/g_{m3}=26\ \Omega$, $\beta=100$이라 $r_{\pi3}=2.6\ \text{k}\Omega$, $V_A=100$ V라 $r_{O3}=100\ \text{k}\Omega$, $R_1=500\ \Omega$로 두어요. $R_1\parallel r_{\pi3}\approx419\ \Omega$, $1+g_{m3}\cdot419\approx17.1$이라 $R_{out3}\approx1.71\ \text{M}\Omega$예요. $g_{m1}R_C/\Delta R_C\approx1.92$, 괄호 $\approx3.42\ \text{M}\Omega$라 CMRR $\approx6.6\times10^6$, 약 136 dB예요. 괄호 안에서 $52\ \Omega$와 $2\times419\ \Omega$는 $3.42\ \text{M}\Omega$에 비해 무시할 만해요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>하기 쉬운 실수</h4>
+  <ul>
+    <li>CMRR 분모에 $A_{CM}$(공통 모드→공통 모드 이득)을 넣는 실수. 이 문제의 출력은 차동이라 분모는 $A_{CM-DM}$이에요.</li>
+    <li>$A_{CM-DM}$을 구할 때도 $\Delta R_C\ll R_C$라고 $\Delta R_C$를 0으로 버리는 실수. 그러면 분모가 0이 돼요. $\Delta R_C$는 $A_{DM}$에서만 버려요.</li>
+    <li>공통 모드 하프 서킷에서 테일을 $R_{out3}$ 그대로 붙이는 실수. 두 반쪽이 한 저항을 나눠 쓰므로 각 반쪽에는 $2R_{out3}$가 붙어요.</li>
+    <li>$R_{out3}$에서 $R_1$만 쓰고 $r_{\pi3}$와의 병렬을 빠뜨리는 실수. $Q_3$ 베이스가 소신호 접지라 $R_1\parallel r_{\pi3}$예요.</li>
+  </ul>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>설명을 닫고 다시 해 봐요</h4>
+  <ol>
+    <li>$P$를 가상 접지로 두고 $V_{out1}-V_{out2}$를 직접 써서 $|A_{DM}|\approx g_{m1}R_C$를 다시 얻어 보세요.</li>
+    <li>$Q_3$ 베이스 접지, 이미터에 $R_1$을 단 소신호 회로로 $R_{out3}$ 식을 유도해 보세요.</li>
+    <li>$R_1\to0$과 $R_1\to\infty$를 넣어 CMRR이 어떻게 바뀌는지 말로 설명해 보세요.</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>$\text{CMRR}=A_{DM}/A_{CM-DM}$</p><p>$A_{CM-DM}=\dfrac{\Delta R_C}{1/g_{m1}+2R_{out3}}$</p><p>$R_{out3}=[1+g_{m3}(R_1\parallel r_{\pi3})]r_{O3}$ $+R_1\parallel r_{\pi3}$</p></div>
+  <div class="summary-group"><h4>첫 줄</h4><p>차동 입력에서 $P$는 가상 접지, 각 반쪽은 CE 단: $|A_{DM}|\approx g_{m1}R_C$</p></div>
+  <div class="summary-group"><h4>핵심 판단</h4><p>$\Delta R_C$는 $A_{DM}$에서만 버리고 $A_{CM-DM}$에서는 남겨요.</p><p>$\text{CMRR}=\dfrac{g_{m1}R_C}{\Delta R_C}\left(\dfrac{1}{g_{m1}}+2R_{out3}\right)$</p></div>
+  <div class="summary-group"><h4>검산</h4><p>$\Delta R_C\to0$이면 $\infty$, $R_1\to0$이면 $R_{out3}=r_{O3}$, 무차원</p></div>
+</div>

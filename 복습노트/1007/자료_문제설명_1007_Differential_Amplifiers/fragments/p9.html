@@ -1,0 +1,78 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 내 말로 읽어요</h4>
+  <p>왼쪽의 $M_3$는 게이트와 드레인이 묶인 다이오드 연결(diode-connected) PMOS예요. $I_1$이 $M_3$에서 전류를 끌어내리면 그 전류에 맞는 $V_{SG}$가 생기고, 같은 게이트 전압을 받는 $M_4$가 그 전류를 오른쪽에 복사해요. 즉 이 회로는 PMOS 전류 거울(current mirror)이에요.</p>
+  <p>입력은 두 전류원 $I_1$, $I_2$이고 출력은 $M_4$ 드레인 노드의 전압 $V_{out}$이에요. 출력 노드에는 위에서 $M_4$가 전류 $I_{D4}$를 밀어 넣고, 아래로 $I_2$와 $R_L$이 전류를 빼가요. 두 전류원이 남긴 "차이"만 $R_L$로 흘러 전압이 돼요.</p>
+  <p>구할 것은 $I_1=I_2=I_0$일 때(전)와 $I_1=I_0+\Delta I$, $I_2=I_0-\Delta I$일 때(후)의 $V_{out}$이고, 거울 비율이 1:1인 (a)와 $M_4$가 $M_3$의 절반 크기인 (b)를 비교해요. 채널 길이 변조는 무시하니 $\lambda=0$이에요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4>
+  <p><strong>단서</strong>: "게이트와 드레인이 묶인 $M_3$와 그 게이트를 공유하는 $M_4$", "$(W/L)_3$와 $(W/L)_4$의 비"라는 표현이 전류 거울(current mirror)을 불러요. "$I_1$은 늘고 $I_2$는 같은 양만큼 줄어"라는 말은 능동 부하 차동쌍(active-load differential pair)에서 두 가지 전류가 반대로 변하는 상황과 같은 그림이에요.</p>
+  <p><strong>개념</strong>: 포화 영역 MOSFET의 제곱 법칙(square law) 전류 $I_D=\tfrac12\mu_pC_{ox}\tfrac{W}{L}(V_{SG}-|V_{TH}|)^2$와 전류 거울의 복사 비율이에요. $M_3$와 $M_4$는 소스(둘 다 $V_{DD}$)와 게이트가 같으니 $V_{SG}$가 같아요. 그래서 두 전류의 비는 $W/L$의 비만 남아요.</p>
+  $$I_{D4}=\frac{(W/L)_4}{(W/L)_3}\,I_{D3}=\frac{(W/L)_4}{(W/L)_3}\,I_1$$
+  <p><strong>기호의 뜻</strong>: $I_{D4}$는 $M_4$가 출력 노드로 내보내는 드레인 전류, $(W/L)$은 트랜지스터의 폭/길이 비(클수록 같은 $V_{SG}$에서 전류가 커요), $R_L$은 출력 노드에서 접지로 가는 부하 저항이에요.</p>
+  <p><strong>근사 조건</strong>: $\lambda=0$이라 $M_4$의 전류가 $V_{SD4}$와 무관해요. 그래서 $V_{out}$이 어디에 있든 $I_{D4}$는 위 식 그대로예요. 단, $M_4$가 포화에 머문다는 가정($V_{out}\le V_{DD}-(V_{SG}-|V_{TH}|)$)이 필요하고, $I_2$는 출력 전압과 무관한 이상 전류원으로 봐요. 이 문제는 대신호(large-signal) 계산이라 $g_m$이나 하프 서킷은 필요 없어요.</p>
+  <p><strong>선택 이유</strong>: $\lambda=0$이면 $M_4$는 출력 노드에서 보면 고정 전류원 하나예요. 그러면 출력 노드는 "전류원 두 개 + 저항 하나"뿐이라 KCL 한 줄로 $V_{out}$이 나와요. 정리노트의 <a href="정리노트_1007_Differential_Amplifiers.html#s2-mos-active">MOS 능동 부하 차동쌍</a>에서 본 "한쪽이 하나 더, 다른 쪽이 하나 덜이면 출력에는 두 개 차이"가 바로 (a)예요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <p>먼저 $M_3$ 쪽에서 $I_{D3}=I_1$을 적어요. 다이오드 연결이라 $M_3$는 항상 포화이고, $I_1$이 그대로 $M_3$를 지나요.</p>
+  <p>다음으로 거울 식을 적어요.</p>
+  $$I_{D4}=\frac{(W/L)_4}{(W/L)_3}\,I_1$$
+  <p>그다음 출력 노드 KCL을 "들어오는 전류 = 나가는 전류"로 적어요. $M_4$에서 들어오고, $I_2$와 $R_L$로 나가요.</p>
+  $$I_{D4}=I_2+\frac{V_{out}}{R_L}\quad\Rightarrow\quad V_{out}=R_L\,(I_{D4}-I_2)$$
+  <p>이제 각 경우에 $I_1$, $I_2$와 거울 비율만 대입하면 돼요.</p>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>왜 이렇게 푸는지 함께 따라가요</h4>
+  <div data-subpart="a"><h4>(a) $(W/L)_3=(W/L)_4$</h4>
+    <p>거울 비율이 1이라 $I_{D4}=I_1$이에요. $M_4$는 $I_1$을 그대로 복사해요.</p>
+    <p>변화 전에는 $I_1=I_2=I_0$이므로 $M_4$가 넣는 전류와 $I_2$가 빼는 전류가 정확히 같아요. $R_L$로 갈 전류가 남지 않아요.</p>
+    $$V_{out}=R_L\,(I_0-I_0)=0$$
+    <p>변화 후에는 $I_{D4}=I_0+\Delta I$로 늘고 $I_2=I_0-\Delta I$로 줄어요. 남는 전류는 늘어난 $\Delta I$와 덜 빠진 $\Delta I$를 더한 $2\Delta I$예요.</p>
+    $$V_{out}=R_L\big[(I_0+\Delta I)-(I_0-\Delta I)\big]=2\Delta I\,R_L$$
+    <p>그래서 출력 변화량은 $\Delta V_{out}=2\Delta I\,R_L$이에요.</p>
+  </div>
+  <div data-subpart="b"><h4>(b) $(W/L)_3=2(W/L)_4$</h4>
+    <p>$M_4$가 $M_3$보다 절반 크기라 거울 비율이 $1/2$이고 $I_{D4}=I_1/2$이에요.</p>
+    <p>변화 전에는 $I_{D4}=I_0/2$인데 $I_2$는 $I_0$를 빼가요. 모자란 $I_0/2$는 $R_L$을 거꾸로(접지에서 출력 쪽으로) 흘러야 하므로 $V_{out}$이 음수가 돼요.</p>
+    $$V_{out}=R_L\left(\frac{I_0}{2}-I_0\right)=-\frac{I_0R_L}{2}$$
+    <p>변화 후에는 $I_{D4}=(I_0+\Delta I)/2$이고 $I_2=I_0-\Delta I$예요.</p>
+    $$\begin{aligned}V_{out}&=R_L\left[\frac{I_0+\Delta I}{2}-(I_0-\Delta I)\right]\\&=R_L\left(\frac{3\Delta I}{2}-\frac{I_0}{2}\right)=\frac{R_L\,(3\Delta I-I_0)}{2}\end{aligned}$$
+    <p>출력 변화량은 $\Delta V_{out}=\tfrac32\Delta I\,R_L$이에요. 거울이 $\Delta I$의 절반만 복사하므로 위쪽 기여가 $\Delta I/2$, 아래쪽 $I_2$의 감소가 $\Delta I$로 합이 $1.5\Delta I$예요.</p>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="a"><h4>(a) 검산</h4>
+    <p><strong>전 $V_{out}=0$, 후 $V_{out}=2\Delta I\,R_L$</strong></p>
+    <p>단위: 전류×저항이라 V로 맞아요. 극한: $\Delta I=0$을 넣으면 후의 값이 전의 값 $0$으로 돌아와요. 대칭: 1:1 거울에 같은 전류를 넣으면 출력에 남는 전류가 없어야 하는데 실제로 $0$이에요. 이 결과는 능동 부하 차동쌍에서 거울이 "버려질 뻔한" 반쪽 신호 전류를 출력으로 옮겨 단일 출력 이득을 두 배로 만드는 원리와 같아요.</p>
+  </div>
+  <div data-subpart="b"><h4>(b) 검산</h4>
+    <p><strong>전 $V_{out}=-I_0R_L/2$, 후 $V_{out}=R_L(3\Delta I-I_0)/2$</strong></p>
+    <p>극한: $\Delta I=0$이면 후의 식이 $-I_0R_L/2$로 전의 값과 같아요. 일반화 확인: 거울 비율을 $k=(W/L)_4/(W/L)_3$로 두면 $V_{out}=R_L[k(I_0+\Delta I)-(I_0-\Delta I)]$이고, $k=1$이면 (a), $k=1/2$이면 (b)가 나와요. 변화량은 $(1+k)\Delta I\,R_L$이라 (a)의 $2\Delta I R_L$보다 (b)의 $1.5\Delta I R_L$가 작아요. 비대칭 거울은 직류 출력도 $0$에서 벗어나게 만들어요.</p>
+    <p>포화 확인: $V_{out}$이 음수이거나 작을수록 $V_{SD4}$가 커지므로 $M_4$의 포화 조건은 더 잘 만족돼요. 다만 $V_{out}$이 음수인 것은 $I_2$가 이상 전류원이라 출력 전압이 접지 아래로 내려가도 전류를 유지한다고 본 결과예요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>이 문항에서 하기 쉬운 오류</h4>
+  <ul>
+    <li>거울 비율을 뒤집는 실수: $(W/L)_3=2(W/L)_4$이면 $M_4$가 작으므로 $I_{D4}=I_1/2$예요. $2I_1$이 아니에요.</li>
+    <li>출력 노드 KCL에서 $I_2$의 변화를 빼먹고 $\Delta V_{out}=\Delta I\,R_L$로 쓰는 실수. $I_2$가 줄어드는 것도 $R_L$로 가는 전류를 늘려요.</li>
+    <li>(b)의 변화 전 값을 $0$으로 두는 실수. 거울 비율이 1이 아니면 같은 $I_0$를 넣어도 $I_{D4}\neq I_2$라 직류 출력이 $0$이 아니에요.</li>
+    <li>$\lambda=0$인데 $r_{O4}$를 $R_L$과 병렬로 넣는 실수. 이 문제에서 $M_4$는 이상 전류원이에요.</li>
+  </ul>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>설명을 닫고 다시 해 봐요</h4>
+  <ol>
+    <li>거울 비율 $k$와 출력 노드 KCL 두 줄로 $V_{out}=R_L[kI_1-I_2]$를 직접 적어 보세요.</li>
+    <li>$k=1$과 $k=1/2$를 넣어 변화 전·후 $V_{out}$ 네 개를 구하고, 변화량이 $(1+k)\Delta I\,R_L$인지 확인해 보세요.</li>
+    <li>$(W/L)_4=2(W/L)_3$이면 변화 전 $V_{out}$과 변화량이 얼마인지 예측해 보세요.</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>PMOS 전류 거울, $\lambda=0$ 가정</p><p>거울 식 $I_{D4}=\dfrac{(W/L)_4}{(W/L)_3}I_1$</p></div>
+  <div class="summary-group"><h4>첫 줄</h4><p>출력 노드 KCL에서 $V_{out}=R_L(I_{D4}-I_2)$</p></div>
+  <div class="summary-group"><h4>핵심 판단</h4><p>(a) 전 $0$, 후 $2\Delta I R_L$</p><p>(b) 전 $-I_0R_L/2$, 후 $R_L(3\Delta I-I_0)/2$</p></div>
+  <div class="summary-group"><h4>검산</h4><p>$\Delta I=0$이면 전 값으로 복귀</p><p>변화량은 $(1+k)\Delta I R_L$</p></div>
+</div>

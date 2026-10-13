@@ -1,0 +1,104 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 내 말로 읽어요</h4>
+  <p>저항 부하 NMOS 차동쌍(differential pair)이에요. 입력은 두 게이트 $V_{in1}$, $V_{in2}$이고 출력은 두 드레인 $v_{out1}$, $v_{out2}$예요. 아래쪽 $M_3$는 게이트가 고정 바이어스 $V_{b1}$에 묶인 테일 전류원(tail current source)이라서 $I_{D3}=1\ \text{mA}$를 공급하고, 평형 상태에서는 반씩 나눠 $M_1$, $M_2$에 $0.5\ \text{mA}$씩 흘러요.</p>
+  <p>이 회로의 특징은 오른쪽 부하만 $\Delta R_D=20\ \Omega$ 더 크다는 점이에요. 완전 대칭이면 두 입력에 똑같이 들어온 잡음(공통 모드, common mode)은 두 출력을 똑같이 흔들어서 차동 출력 $v_{out1}-v_{out2}$에는 안 나타나요. 부하가 조금 다르면 두 출력이 흔들리는 크기가 달라져 차동 출력에 잡음이 새어 나와요.</p>
+  <p>구할 것은 세 가지예요. (1) 세 트랜지스터가 모두 포화(saturation)에 머무는 입력 공통 모드 전압의 범위, (2) 공통 모드 이득 $A_{CM}$과 공통 모드가 차동 출력으로 바뀌는 이득 $A_{CM-DM}$, (3) 이 둘과 차동 이득의 비 CMRR이에요. $V_{b1}$ 값은 없지만 $M_3$의 전류와 $W/L$을 알면 $M_3$의 오버드라이브를 구할 수 있으니 문제를 푸는 데 지장이 없어요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4>
+  <p><strong>(1) "입력 CM level의 최대·최소"</strong>라는 말에서 입력 공통 모드 범위(input common-mode range)를 떠올려요. 핵심은 "어느 트랜지스터가 먼저 포화를 벗어나는가"예요. $V_{in,CM}$을 내리면 소스 노드 $P$가 같이 내려가 테일 $M_3$의 $V_{DS3}$가 줄어들고, 올리면 $M_1$·$M_2$의 게이트가 드레인보다 $V_{TH}$ 넘게 높아져 트라이오드로 들어가요. 포화 조건 $V_{DS}\ge V_{GS}-V_{TH}$를 각각 노드 전압으로 바꿔 쓰는 것이 도구예요. 여기서 $V_{ov}=V_{GS}-V_{TH}=\sqrt{2I_D/[\mu_nC_{ox}(W/L)]}$는 오버드라이브 전압(overdrive voltage)이에요.</p>
+  <p><strong>(2) "common-mode 이득"과 테일이 전류원 $M_3$</strong>라는 단서에서 공통 모드 하프 서킷(CM half circuit)을 떠올려요(<a href="정리노트_1007_Differential_Amplifiers.html#s0-cm-half-recap">CM 하프 서킷 복습</a>). $R_{SS}$는 테일 소자가 $P$ 노드에 보이는 소신호 저항이고, 여기서는 $M_3$의 출력 저항 $r_{O3}=1/(\lambda_n I_{D3})$예요. CM 입력에서는 두 반쪽 전류가 같이 변하므로 $R_{SS}$를 $2R_{SS}$ 두 개로 쪼개 반쪽마다 붙이면, 반쪽은 소스 축퇴(source degeneration) CS 단이 돼요.</p>
+  <p><strong>"$R_D$ 대 $R_D+\Delta R_D$"</strong>라는 비대칭에서 부하 미스매치에 의한 CM-to-DM 변환(<a href="정리노트_1007_Differential_Amplifiers.html#s1-mismatch">부하 미스매치</a>)을 떠올려요. 두 반쪽에 흐르는 소신호 전류는 같고 부하만 다르므로, 차동 출력은 그 전류에 $\Delta R_D$를 곱한 만큼 생겨요.</p>
+  $$A_{CM}=-\frac{R_D}{1/g_m+2R_{SS}},\qquad A_{CM-DM}=\frac{\Delta R_D}{1/g_m+2R_{SS}}$$
+  <p><strong>(3) CMRR</strong>은 원하는 신호의 이득과 원하지 않는 신호의 이득의 비 $\text{CMRR}=|A_{DM}/A_{CM-DM}|$예요(<a href="정리노트_1007_Differential_Amplifiers.html#s1-cmrr">CMRR</a>). 차동 입력에서는 $P$가 가상 접지(virtual ground)라 $|A_{DM}|=g_mR_D$예요.</p>
+  <p><strong>근사 조건</strong>: 문제가 $g_m r_o\gg1$을 주었으므로 $M_1$·$M_2$의 $r_o$는 <em>모든 이득에서 똑같이</em> 무시하고, 테일의 $r_{O3}$만 $R_{SS}$로 남겨요. CM 하프 서킷에서 $M_1$ 드레인으로 들여다본 저항 $r_{O1}+(1+g_{m1}r_{O1})(2R_{SS})$가 MΩ급이라는 점이 이 근사의 근거예요. 이렇게 하면 $A_{DM}$, $A_{CM-DM}$, CMRR이 모두 같은 가정 위에 서서 강의·Razavi 식과 일치해요. $r_{O1}$을 넣고 싶다면 $A_{DM}$과 $A_{CM-DM}$ 둘 다에 넣어야 해요. 두 출력의 전압이 다르면 $r_{O1}$, $r_{O2}$로 흐르는 전류도 달라져 $A_{CM-DM}$ 역시 약 5% 바뀌기 때문이에요. DC 바이어스 계산(전류·$V_{ov}$)에서는 관례대로 $\lambda$를 무시해요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <p>모든 소문항이 같은 바이어스 값을 쓰니 먼저 DC 값을 한 줄씩 정리해요.</p>
+  $$I_{D1}=I_{D2}=\frac{I_{D3}}{2}=0.5\ \text{mA}$$
+  $$V_{ov1}=\sqrt{\frac{2(0.5\ \text{mA})}{(100\ \mu\text{A/V}^2)(1000)}}=0.1\ \text{V},\qquad V_{ov3}=\sqrt{\frac{2(1\ \text{mA})}{(100\ \mu\text{A/V}^2)(2000)}}=0.1\ \text{V}$$
+  $$g_{m1}=\frac{2I_{D1}}{V_{ov1}}=10\ \text{mS},\quad r_{O1}=\frac{1}{\lambda_nI_{D1}}=20\ \text{k}\Omega,\quad R_{SS}=r_{O3}=\frac{1}{\lambda_nI_{D3}}=10\ \text{k}\Omega$$
+  <p>(1)의 첫 줄은 포화 조건을 노드 전압으로 쓴 두 부등식이에요.</p>
+  $$M_3:\ V_P\ge V_{ov3},\qquad M_{1,2}:\ V_{D}\ge V_{in,CM}-V_{TH,n}$$
+  <p>(2)의 첫 줄은 CM 하프 서킷이에요. $V_{DD}$와 $V_{b1}$을 소신호 접지로 보내고, $P$에서 $R_{SS}=r_{O3}$를 둘로 쪼개 왼쪽 반쪽은 $M_1$ + 소스 저항 $2R_{SS}$ + 드레인 저항 $R_D$, 오른쪽 반쪽은 $M_2$ + $2R_{SS}$ + $R_D+\Delta R_D$로 그려요. 반쪽 드레인 소신호 전류는 축퇴 CS 단의 유효 트랜스컨덕턴스로 써요.</p>
+  $$i_d=\frac{v_{in,CM}}{1/g_{m1}+2R_{SS}}$$
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>왜 이렇게 푸는지 함께 따라가요</h4>
+  <div data-subpart="1">
+    <h4>(1) 입력 공통 모드 범위</h4>
+    <p>최소값은 테일 $M_3$가 포화 경계에 닿을 때예요. $M_3$의 소스가 접지이므로 $V_{DS3}=V_P\ge V_{ov3}$이고, $V_P=V_{in,CM}-V_{GS1}$이에요.</p>
+    $$V_{in,CM}\ge V_{GS1}+V_{ov3}=(V_{TH,n}+V_{ov1})+V_{ov3}$$
+    $$V_{in,CM,min}=0.4+0.1+0.1=0.600\ \text{V}$$
+    <p>최대값은 $M_1$이나 $M_2$가 트라이오드 경계에 닿을 때예요. 포화 조건 $V_{DS}\ge V_{GS}-V_{TH}$에서 양변의 $V_P$가 지워져 $V_D\ge V_G-V_{TH}$, 곧 게이트가 드레인보다 $V_{TH}$ 넘게 높으면 안 돼요. 두 드레인 중 낮은 쪽이 먼저 걸리므로, 부하가 큰 오른쪽 $M_2$가 기준이에요.</p>
+    $$V_{out2}=V_{DD}-(R_D+\Delta R_D)I_{D2}=1.8-(1.02\ \text{k}\Omega)(0.5\ \text{mA})=1.29\ \text{V}$$
+    $$V_{in,CM}\le V_{out2}+V_{TH,n}=1.29+0.4=1.69\ \text{V}$$
+    <p>완성 답: $\mathbf{0.600\ V\le V_{in,CM}\le 1.69\ V}$예요.</p>
+  </div>
+  <div data-subpart="2">
+    <h4>(2) $A_{CM}$과 $A_{CM-DM}$</h4>
+    <p>CM 하프 서킷의 왼쪽 반쪽은 축퇴 CS 단이에요. $M_1$ 드레인으로 들여다본 저항은 $g_mr_o\gg1$ 근사식으로 $g_{m1}r_{O1}(2R_{SS})=200\times20\ \text{k}\Omega\approx4.00\ \text{M}\Omega$예요(정확식 $r_{O1}+(1+g_{m1}r_{O1})(2R_{SS})$로는 약 $4.04\ \text{M}\Omega$). 어느 쪽이든 $R_D=1\ \text{k}\Omega$에 비해 무시하고, 드레인 전류 $i_d$가 모두 $R_D$로 흐른다고 봐요.</p>
+    $$\frac{1}{g_{m1}}+2R_{SS}=0.1\ \text{k}\Omega+20\ \text{k}\Omega=20.1\ \text{k}\Omega$$
+    $$A_{CM}=\frac{v_{out1}}{v_{in,CM}}=-\frac{R_D}{1/g_{m1}+2R_{SS}}=-\frac{1\ \text{k}\Omega}{20.1\ \text{k}\Omega}=-4.98\times10^{-2}$$
+    <p>오른쪽 출력은 부하만 $R_D+\Delta R_D$로 바뀌어요: $v_{out2}/v_{in,CM}=-1.02/20.1=-5.07\times10^{-2}$. 대칭 회로의 정의대로 한쪽 출력 기준 값을 $A_{CM}$으로 적고, 비대칭 때문에 두 출력이 약간 다르다는 점을 함께 적어 두면 좋아요.</p>
+    <p>$A_{CM-DM}$은 차동 출력을 CM 입력으로 나눈 값이에요. 두 반쪽에 같은 $i_d$가 흐르니 차동 출력은 부하 차이에서만 생겨요.</p>
+    $$v_{out1}-v_{out2}=-i_dR_D+i_d(R_D+\Delta R_D)=i_d\,\Delta R_D$$
+    $$A_{CM-DM}=\frac{\Delta R_D}{1/g_{m1}+2R_{SS}}=\frac{20\ \Omega}{20.1\ \text{k}\Omega}=9.95\times10^{-4}$$
+  </div>
+  <div data-subpart="3">
+    <h4>(3) CMRR</h4>
+    <p>차동 입력에서는 두 반쪽 전류가 반대로 변해 $P$의 소신호 전압이 0, 곧 가상 접지예요. 그러면 반쪽은 축퇴 없는 CS 단이고, (2)와 같은 가정($M_1$·$M_2$의 $r_o$ 무시)을 지켜 차동 이득을 써요.</p>
+    $$|A_{DM}|=g_{m1}R_D=(10\ \text{mS})(1\ \text{k}\Omega)=10$$
+    $$\text{CMRR}=\left|\frac{A_{DM}}{A_{CM-DM}}\right|=\frac{g_{m1}R_D}{\Delta R_D}\left(\frac{1}{g_{m1}}+2R_{SS}\right)=\frac{(1+2g_{m1}r_{O3})R_D}{\Delta R_D}$$
+    $$\text{CMRR}=\frac{(1+200)(1\ \text{k}\Omega)}{20\ \Omega}=1.005\times10^4\approx1.01\times10^4$$
+    $$\text{CMRR}_{dB}=20\log_{10}(1.005\times10^4)=80.0\ \text{dB}$$
+    <p>보충: $r_{O1}$, $r_{O2}$를 <em>두 이득 모두</em>에 넣어 소신호 회로를 정확히 풀면 $|A_{DM}|\approx9.61$, $A_{CM-DM}\approx9.42\times10^{-4}$이라 CMRR $\approx1.02\times10^4$(80.2 dB)예요. 주 답과 1% 남짓 달라요.</p>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="1">
+    <h4>(1) 검산</h4>
+    <p><strong>$V_{in,CM,min}=0.600\ \text{V}$, $V_{in,CM,max}\approx1.69\ \text{V}$</strong></p>
+    <p>최소값에서 노드를 다시 계산해 보면 $V_P=0.6-0.5=0.1\ \text{V}=V_{ov3}$라 $M_3$가 정확히 경계예요. 최대값에서는 $V_{GS2}-V_{TH}=0.1\ \text{V}$, $V_{DS2}=1.29-(1.69-0.5)=0.1\ \text{V}$라 $M_2$가 경계예요. 이때 왼쪽 드레인은 $1.8-0.5=1.30\ \text{V}$이고 $V_{DS1}=0.11\ \text{V}>0.1\ \text{V}$라 $M_1$은 아직 포화예요. $\Delta R_D=0$이면 최대값이 $1.70\ \text{V}$로 돌아와 대칭 회로의 결과와 같아요.</p>
+  </div>
+  <div data-subpart="2">
+    <h4>(2) 검산</h4>
+    <p><strong>$A_{CM}\approx-4.98\times10^{-2}$ ($v_{out2}$ 기준 $-5.07\times10^{-2}$), $A_{CM-DM}\approx9.95\times10^{-4}$</strong></p>
+    <p>극한 대입: $R_{SS}\to\infty$(이상적 테일)이면 두 식 모두 0이 되어, 테일이 이상적 전류원이면 CM 입력이 전류를 바꾸지 못한다는 사실과 맞아요. $\Delta R_D=0$이면 $A_{CM-DM}=0$이라 대칭 회로에서 CM이 차동 출력으로 새지 않는다는 사실과도 맞아요.</p>
+    <p>단위: 분자·분모 모두 Ω이라 두 이득 모두 무차원이에요. 비율 확인: $A_{CM-DM}/|A_{CM}|=\Delta R_D/R_D=0.02$이고 실제로 $9.95\times10^{-4}/4.98\times10^{-2}=0.020$이에요.</p>
+    <p>근사의 크기: $r_{O1}$, $r_{O2}$까지 넣어 정확히 풀면 $A_{CM}\approx-4.95\times10^{-2}$라 0.6%만 달라요. 반면 $A_{CM-DM}$은 $9.42\times10^{-4}$로 약 5% 작아져요. 두 출력 전압이 서로 달라서 $r_{O1}$, $r_{O2}$로 흐르는 전류도 달라지고, 그 차이가 부하 차이를 일부 상쇄하기 때문이에요. 그래도 $g_mr_o\gg1$ 가정 아래의 표준 답은 $9.95\times10^{-4}$이고, 이 근사를 (3)에서도 똑같이 지켜야 해요.</p>
+  </div>
+  <div data-subpart="3">
+    <h4>(3) 검산</h4>
+    <p><strong>$\text{CMRR}\approx1.01\times10^4$ (80.0 dB)</strong> (계산값 $10050$, 보충: $r_{O1}$을 두 이득 모두에 넣으면 $1.02\times10^4$, 80.2 dB)</p>
+    <p>근사식 $\text{CMRR}\approx2g_mR_DR_{SS}/\Delta R_D=2(10\ \text{mS})(1\ \text{k}\Omega)(10\ \text{k}\Omega)/20\ \Omega=1.0\times10^4$과 맞아요. 비율 확인: $|A_{DM}|/|A_{CM}|=10/0.0498\approx201=1+2g_{m1}r_{O3}$이고, 여기에 $R_D/\Delta R_D=50$을 곱하면 $1.005\times10^4$이 되어 (2)의 값과 일관돼요. 극한: $\Delta R_D\to0$이면 CMRR$\to\infty$, $R_{SS}$를 키우면 CMRR이 비례해 커져요. 단위: 이득의 비라 무차원이고, $10^4$은 정확히 80 dB예요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>자주 하는 실수</h4>
+  <ul>
+    <li>최소 공통 모드를 $V_{TH}+V_{ov1}$(=0.5 V)로 쓰고 테일 $M_3$의 $V_{ov3}$를 빠뜨리는 실수. 테일이 전류원이면 그 전류원도 포화를 지킬 전압이 필요해요.</li>
+    <li>최대 공통 모드를 $V_{DD}-R_DI_D+V_{TH}=1.70\ \text{V}$로 계산하는 실수. 부하가 큰 쪽 드레인이 더 낮아서 먼저 트라이오드에 닿아요.</li>
+    <li>CM 하프 서킷에 $R_{SS}$를 그대로 붙이는 실수. 두 반쪽 전류가 모두 $R_{SS}$를 지나므로 반쪽에는 $2R_{SS}$가 보여요. $R_{SS}$를 쓰면 이득이 약 2배로 틀려요.</li>
+    <li>$I_{D3}$로 $r_{O1}$을 구하거나, $I_{D1}$로 $r_{O3}$를 구하는 실수. $r_o=1/(\lambda I_D)$의 $I_D$는 그 트랜지스터의 전류예요.</li>
+    <li>$r_{O1}$을 $A_{DM}=g_{m1}(R_D\parallel r_{O1})=9.52$에만 넣고 $A_{CM-DM}=9.95\times10^{-4}$은 그대로 두면 CMRR이 $9.57\times10^3$(79.6 dB)이 돼요. 분자와 분모의 모델이 섞인 값이라 어느 모델의 답도 아니에요. $r_{O1}$은 두 이득에서 똑같이 무시하거나 똑같이 넣어요.</li>
+    <li>CMRR을 $A_{DM}/A_{CM}$으로 계산하는 실수. 이 문제에서는 차동 출력에 섞이는 잡음이 기준이라 분모는 $A_{CM-DM}$이에요.</li>
+  </ul>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>설명을 닫고 다시 풀어 봐요</h4>
+  <ol>
+    <li>$V_{ov1}$, $V_{ov3}$, $g_{m1}$, $r_{O1}$, $r_{O3}$를 계산하고, 포화 조건 두 개로 $V_{in,CM}$의 최소·최대를 구해 보세요.</li>
+    <li>CM 하프 서킷을 그려 $A_{CM}$과 $A_{CM-DM}$을 구하고, 두 값의 비가 $\Delta R_D/R_D$인지 확인해 보세요.</li>
+    <li>$P$를 가상 접지로 두고 $|A_{DM}|$을 구한 뒤 CMRR을 배수와 dB로 적어 보세요.</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>포화 조건으로 입력 CM 범위, CM 하프 서킷($2R_{SS}$), 부하 미스매치 CM-to-DM, $\text{CMRR}=|A_{DM}/A_{CM-DM}|$</p></div>
+  <div class="summary-group"><h4>첫 줄</h4><p>$I_D=0.5\ \text{mA}$, $V_{ov1}=V_{ov3}=0.1\ \text{V}$</p><p>$g_{m1}=10\ \text{mS}$, $r_{O1}=20\ \text{k}\Omega$, $R_{SS}=r_{O3}=10\ \text{k}\Omega$</p></div>
+  <div class="summary-group"><h4>핵심 판단</h4><p>최소는 $M_3$, 최대는 부하가 큰 $M_2$가 먼저 포화를 벗어나요.</p><p>$A_{CM}=-R_D/(1/g_m+2R_{SS})$</p><p>$A_{CM-DM}=\Delta R_D/(1/g_m+2R_{SS})$</p><p>근사 일관성: $r_{O1}$은 $A_{DM}$·$A_{CM-DM}$에서 똑같이 무시해요.</p></div>
+  <div class="summary-group"><h4>답</h4><p>(1) $0.600\ \text{V}$ ~ $1.69\ \text{V}$</p><p>(2) $A_{CM}\approx-4.98\times10^{-2}$, $A_{CM-DM}\approx9.95\times10^{-4}$</p><p>(3) $\text{CMRR}\approx1.01\times10^4$ (80.0 dB)</p><p>보충: $r_{O1}$을 두 이득 모두에 넣으면 $1.02\times10^4$</p></div>
+  <div class="summary-group"><h4>검산</h4><p>$R_{SS}\to\infty$이면 두 CM 이득 0, $\Delta R_D=0$이면 CMRR$\to\infty$</p></div>
+</div>
