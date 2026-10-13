@@ -22,9 +22,6 @@ foreach ($d in $sel) {
     if ($Notes) { $files += @(Get-ChildItem $d.FullName -File -Filter "정리노트_*.html") }
     if ($files.Count -eq 0) { $skipped += $d.Name; continue }
     $files | Copy-Item -Destination $stage
-    if ($Notes) {
-        Get-ChildItem $d.FullName -Directory -Filter "figures_*" | Copy-Item -Destination $stage -Recurse
-    }
     $included += $d.Name
 }
 

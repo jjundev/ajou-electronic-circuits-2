@@ -9,7 +9,7 @@ class CourseSourcesTest(unittest.TestCase):
   (n/'정리노트_1002_DM.md').write_text('note')
   (n/'복습문제_1002.pdf').write_bytes(b'%PDF questions')
   (n/'답안_1002.pdf').write_bytes(b'%PDF answers')
-  (n/'problems.txt').write_text('E10.11 | gain\nP10.66 | CM\n2021-1_중간-Q3 | exam\nP10.99 | missing')
+  (n/'.assets').mkdir();(n/'.assets'/'problems.txt').write_text('E10.11 | gain\nP10.66 | CM\n2021-1_중간-Q3 | exam\nP10.99 | missing')
   p=r/'교과서/책/ch10/예제';p.mkdir(parents=True)
   self.md(p/'E10.11.md','E10.11','[E10.10]','![fig](../figures/f.png)')
   self.md(p/'E10.10.md','E10.10')
@@ -32,7 +32,7 @@ class CourseSourcesTest(unittest.TestCase):
    self.assertEqual({x['role'] for x in out['relations']},{'depends_on','figure'})
  def test_absent_problem_list_is_optional(self):
   with tempfile.TemporaryDirectory() as d:
-   r=Path(d);n=r/'복습노트/0902';n.mkdir(parents=True);(n/'정리노트_0902_intro.md').write_text('note')
+   r=Path(d);n=r/'복습노트/0902';(n/'.assets').mkdir(parents=True);(n/'.assets'/'정리노트_0902_intro.md').write_text('note')
    self.assertEqual(discover(r,'0902')['missing_problem_ids'],[])
  def test_duplicate_cycle_and_escape_rejected(self):
   for mode in ['duplicate','cycle','escape']:
