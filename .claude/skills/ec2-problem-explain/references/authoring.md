@@ -97,7 +97,7 @@ recall은 일반 개념을 고르는 과정이고 start는 주어진 기호로 �
 - `~해요` 체, 영어 전문용어 병기.
 - 수식은 `$...$`/`$$...$$`만. 수식이 아닌 곳에 `$`를 쓰지 않아요.
 - 금지: 본문 `hidden`(sum만 예외), `<details>`, `<script>`, `<style>`, `<iframe>`, `<form>`, `<input>`, `<link>`, `<meta>`, `<base>`, `style`·`on*`·`srcdoc` 속성, `http(s)` 외 URL 스킴.
-- 그림: 저장소 내부 파일을 `복습노트/<range>/` 기준 상대경로로(예: `figures_1007/…`, `../../교과서/마이크로전자회로/ch10/figures/…`), 또는 정적 inline SVG. SVG에도 `style` 속성을 쓰지 않고 `fill`·`stroke` 같은 표현 속성을 써요.
+- 그림: 저장소 내부 파일을 `복습노트/<range>/` 기준 상대경로로(예: `.assets/figures_1007/…`, `../../교과서/마이크로전자회로/ch10/figures/…`), 또는 정적 inline SVG. SVG에도 `style` 속성을 쓰지 않고 `fill`·`stroke` 같은 표현 속성을 써요.
 - 개념 링크: 실제 존재하는 파일과 anchor만, `복습노트/<range>/` 기준 상대경로로(예: `정리노트_1007_Differential_Amplifiers.html#<토픽 id>`). 외부 URL은 링크하지 않아요.
 
 ## 수식과 여백

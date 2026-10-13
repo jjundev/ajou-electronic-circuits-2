@@ -1464,11 +1464,11 @@ $M_2$는 전류를 전달만 하고, 캐스코드로 고이득 증폭기를 만�
 
 복습문제는 10개예요. 캐스코드 전류원의 바이어스와 $W/L$ 설계, PMOS·바이폴라 캐스코드의 $R_{out}$(전류 $I_D$에 따른 변화 포함), $G_m$과 캐스코드 증폭기 이득 순서로 골랐어요.
 
-- [복습문제 10개 (PDF)](복습문제_0911_Cascode_Amplifier-문제.pdf)
-- [답안 (PDF)](복습문제_0911_Cascode_Amplifier-답안.pdf)
-- [0904 정리노트: 채널 길이 변조와 출력저항 $r_O$](../0904/정리노트_0904_MOS_Small_Signal_Model.html#s1-ro)
-- [0904 정리노트: $r_O$를 넣으면 intrinsic gain](../0904/정리노트_0904_MOS_Small_Signal_Model.html#s3-intrinsic)
-- [9장 문제집 전체 (PDF)](../../workbook/pdf/ch09-문제.pdf)
+- [복습문제 10개 (PDF)](../복습문제_0911_Cascode_Amplifier-문제.pdf)
+- [답안 (PDF)](../복습문제_0911_Cascode_Amplifier-답안.pdf)
+- [0904 정리노트: 채널 길이 변조와 출력저항 $r_O$](../../0904/정리노트_0904_MOS_Small_Signal_Model.html#s1-ro)
+- [0904 정리노트: $r_O$를 넣으면 intrinsic gain](../../0904/정리노트_0904_MOS_Small_Signal_Model.html#s3-intrinsic)
+- [9장 문제집 전체 (PDF)](../../../workbook/pdf/ch09-문제.pdf)
 
 ---
 

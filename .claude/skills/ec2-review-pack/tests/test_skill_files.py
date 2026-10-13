@@ -1,5 +1,6 @@
 """참조 문서·SKILL.md 형식과, 본문이 가리키는 파일이 모두 있는지 확인한다."""
 
+import json
 import os
 from pathlib import Path
 import re
@@ -121,13 +122,15 @@ class TestBackupSnippet(unittest.TestCase):
 
     def test_backs_up_note_pdfs_and_problem_list(self):
         pack = self.notes / "0923"
-        (pack / "figures_0923").mkdir(parents=True)
-        (pack / "figures_0923" / "a.svg").write_text("<svg/>", encoding="utf-8")
+        assets = pack / ".assets"
+        (assets / "figures_0923").mkdir(parents=True)
+        (assets / "figures_0923" / "a.svg").write_text("<svg/>", encoding="utf-8")
         (pack / "정리노트_0923_A.html").write_text("n", encoding="utf-8")
-        (pack / unicodedata.normalize("NFD", "정리노트_0923_A.md")).write_text("m", encoding="utf-8")
+        (assets / unicodedata.normalize("NFD", "정리노트_0923_A.md")).write_text("m", encoding="utf-8")
         (pack / "복습문제_0923_A-문제.pdf").write_bytes(b"%PDF")
         (pack / unicodedata.normalize("NFD", "복습문제_0923_A-답안.pdf")).write_bytes(b"%PDF")
-        (pack / "problems.txt").write_text("P10.01 | x\n", encoding="utf-8")
+        (assets / "problems.txt").write_text("P10.01 | x\n", encoding="utf-8")
+        (assets / "문제설명_0923_A.md").write_text("다른 스킬 소유", encoding="utf-8")
         (self.notes / "0918").mkdir()
         (self.notes / "0918" / "정리노트_0918_B.html").write_text("other", encoding="utf-8")
         for _ in range(2):  # 같은 세션에서 다시 실행해도 이전 백업을 덮지 않는다
@@ -137,8 +140,9 @@ class TestBackupSnippet(unittest.TestCase):
         dirs = self.backups()
         self.assertEqual(len(dirs), 2)
         names = sorted(unicodedata.normalize("NFC", n) for n in os.listdir(dirs[0]))
-        self.assertEqual(names, ["figures_0923", "problems.txt", "복습문제_0923_A-답안.pdf",
-                                 "복습문제_0923_A-문제.pdf", "정리노트_0923_A.html", "정리노트_0923_A.md"])
+        self.assertEqual(names, [".assets", "복습문제_0923_A-답안.pdf", "복습문제_0923_A-문제.pdf", "정리노트_0923_A.html"])
+        names = sorted(unicodedata.normalize("NFC", n) for n in os.listdir(dirs[0] / ".assets"))
+        self.assertEqual(names, ["figures_0923", "problems.txt", "정리노트_0923_A.md"])
 
     def test_bad_range_fails_loudly(self):
         for bad in ("", "<range>", "923"):
@@ -154,6 +158,29 @@ class TestBackupSnippet(unittest.TestCase):
         self.assertEqual(r.returncode, 1)
         self.assertIn("백업 중단", r.stderr)
         self.assertEqual(self.backups(), [])
+
+
+class TestCleanupSnippet(unittest.TestCase):
+    """SKILL.md 4단계 정리 스니펫이 맨 위와 .assets/ 의 옛 산출물만 지우는지 실제로 실행한다."""
+
+    def test_removes_stale_outputs_in_both_levels(self):
+        text = SKILL_MD.read_text(encoding="utf-8")
+        m = re.search(r"```bash\npython3 - \"\$RUN/manifest.json\" \"\$REPO/복습노트/<range>\" <<'EOF'\n(.*?)\nEOF\n```", text, re.S)
+        self.assertIsNotNone(m, "SKILL.md 4단계 정리 스니펫을 찾지 못함")
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            (tmp / "manifest.json").write_text(json.dumps({"range": "0923", "slug": "A", "problems": []}), encoding="utf-8")
+            pack = tmp / "0923"
+            (pack / ".assets" / "figures_0923").mkdir(parents=True)
+            for rel in ("정리노트_0923_A.html", "정리노트_0923_Old.html", "복습문제_0923_A-문제.pdf",
+                        ".assets/정리노트_0923_A.md", ".assets/정리노트_0923_Old.md", ".assets/문제설명_0923_A.md"):
+                (pack / rel).write_text("x", encoding="utf-8")
+            r = subprocess.run([sys.executable, "-", str(tmp / "manifest.json"), str(pack)], input=m.group(1),
+                               capture_output=True, text=True)
+            self.assertEqual(r.returncode, 0, r.stderr)
+            left = sorted(p.relative_to(pack).as_posix() for p in pack.rglob("*"))
+            self.assertEqual(left, [".assets", ".assets/figures_0923", ".assets/문제설명_0923_A.md",
+                                    ".assets/정리노트_0923_A.md", "정리노트_0923_A.html"])
 
 
 class TestWhyPageDocs(unittest.TestCase):

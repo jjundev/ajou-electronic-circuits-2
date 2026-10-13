@@ -38,6 +38,8 @@ WHY_SHORT = "왜 쓸까"
 WHY_TOPIC_TITLE = "왜 이런 회로를 쓸까"
 WHY_REQUIRED_LAYERS = ("eli5", "formal")
 PROBLEMS_TXT = "problems.txt"
+# 팩 폴더 맨 위에는 .pack/·HTML·PDF만 두고, md·그림·problems.txt 등 나머지는 여기 모은다.
+BUNDLE = ".assets"
 
 
 class ManifestError(ValueError):

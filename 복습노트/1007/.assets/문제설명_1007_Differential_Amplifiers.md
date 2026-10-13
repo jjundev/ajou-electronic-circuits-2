@@ -26,7 +26,7 @@
 
 ### 테일 소자 M3만 λ ≠ 0인 MOS 차동쌍(Fig 10.88)의 공통 모드 이득 식 증명
 
-P10.67 · 장말문제 10.67 · [원 문제 보기](%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
+P10.67 · 장말문제 10.67 · [원 문제 보기](../%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
 
 #### 원문
 
@@ -65,7 +65,7 @@ where $(V_{GS} - V_{TH})_{eq.}$ denotes the equilibrium overdrive of $M_1$ and $
 
 #### 이 문제를 봤을 때 떠올릴 개념과 공식
 
-**단서**: "common-mode gain", 그리고 "$\lambda\neq0$ for $M_3$"이에요. 공통 모드 입력에 테일 전류원이 비이상적이라는 두 단서가 함께 나오면 공통 모드 하프 서킷(CM half circuit)과 소스 축퇴(source degeneration)를 떠올려요. ([정리노트: CM 하프 서킷 복습](%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s0-cm-half-recap))
+**단서**: "common-mode gain", 그리고 "$\lambda\neq0$ for $M_3$"이에요. 공통 모드 입력에 테일 전류원이 비이상적이라는 두 단서가 함께 나오면 공통 모드 하프 서킷(CM half circuit)과 소스 축퇴(source degeneration)를 떠올려요. ([정리노트: CM 하프 서킷 복습](../%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s0-cm-half-recap))
 
 **기호의 뜻**: $g_m$은 $M_1$(또는 $M_2$)의 트랜스컨덕턴스(transconductance)로, 게이트-소스 전압이 조금 변할 때 드레인 전류가 얼마나 변하는지를 나타내요. $r_{O3}$는 채널 길이 변조(channel-length modulation) 때문에 생기는 $M_3$의 출력 저항으로 $r_{O3}\approx 1/(\lambda I_{D3})=1/(\lambda I_{SS})$예요. $R_{SS}$는 테일 소자가 테일 노드에 보이는 소신호 저항이고, 여기서는 $R_{SS}=r_{O3}$예요. $(V_{GS}-V_{TH})_{eq.}$는 두 입력이 같을 때(평형) $M_1$, $M_2$의 오버드라이브(overdrive)예요.
 
@@ -194,7 +194,7 @@ $r_{O3}\to0$: $-g_mR_D$
 
 ### PMOS 전류원 부하와 테일 M5를 가진 MOS 차동쌍(Fig 10.89)의 공통 모드 이득
 
-P10.68 · 장말문제 10.68 · [원 문제 보기](%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
+P10.68 · 장말문제 10.68 · [원 문제 보기](../%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
 
 #### 원문
 
@@ -222,7 +222,7 @@ NMOS 차동쌍 $M_1$·$M_2$ 위에는 저항 대신 PMOS 전류원 $M_3$·$M_4$�
 
 #### 이 문제를 봤을 때 떠올릴 개념과 공식
 
-**단서 → 개념.** "common-mode gain"과 대칭 회로라는 단서에서 공통 모드 하프 서킷(CM half circuit)을 떠올려요([정리노트: 유한한 $R_{SS}$와 CM 하프 서킷](%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s0-cm-half-recap)). "$A_v=-G_m R_{out}$을 쓰라"는 말에서는 이득을 트랜스컨덕턴스와 출력 저항 두 조각으로 나눠 구하는 방법을 떠올려요.
+**단서 → 개념.** "common-mode gain"과 대칭 회로라는 단서에서 공통 모드 하프 서킷(CM half circuit)을 떠올려요([정리노트: 유한한 $R_{SS}$와 CM 하프 서킷](../%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s0-cm-half-recap)). "$A_v=-G_m R_{out}$을 쓰라"는 말에서는 이득을 트랜스컨덕턴스와 출력 저항 두 조각으로 나눠 구하는 방법을 떠올려요.
 
 **기호의 뜻.** $g_{m1}$은 $M_1$의 트랜스컨덕턴스(게이트-소스 전압 변화가 드레인 전류를 얼마나 바꾸는지), $r_{O}$는 채널 길이 변조로 생기는 출력 저항 $1/(\lambda I_D)$예요. 테일 $M_5$는 게이트가 고정이라 드레인에서 $R_{SS}=r_{O5}$로 보여요. $G_m$은 출력을 교류 접지에 단락했을 때 흐르는 출력 전류/입력 전압, $R_{out}$은 입력을 0으로 두고 출력 노드에서 본 저항이에요.
 
@@ -353,7 +353,7 @@ $r_{O5}\to\infty$이면 0
 
 ### Fig 10.90 (a)(b) 회로에 대해 문제 10.68(공통 모드 이득)을 되풀이
 
-P10.69 · 장말문제 10.69 · [원 문제 보기](%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
+P10.69 · 장말문제 10.69 · [원 문제 보기](../%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
 
 #### 원문
 
@@ -380,7 +380,7 @@ Repeat Problem 10.68 for the circuits shown in Fig. 10.90.
 
 #### 이 문제를 봤을 때 떠올릴 개념과 공식
 
-**단서 → 개념.** "공통 모드 이득"과 좌우 대칭 그림에서 공통 모드 하프 서킷(CM half circuit)을 떠올려요([정리노트: CM 하프 서킷](%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s0-cm-half-recap)). 공통 모드 입력에서는 두 반쪽이 같은 전류를 흘리므로, 테일 노드에서 아래로 본 소신호 저항 $R_T$를 $2R_T$ 두 개의 병렬로 쪼개면 대칭선으로 전류가 흐르지 않아요. 그래서 반쪽 회로는 "소스에 $2R_T$가 달린 $M_1$ + 위쪽 부하"인 축퇴(degenerated) CS 단이 돼요.
+**단서 → 개념.** "공통 모드 이득"과 좌우 대칭 그림에서 공통 모드 하프 서킷(CM half circuit)을 떠올려요([정리노트: CM 하프 서킷](../%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s0-cm-half-recap)). 공통 모드 입력에서는 두 반쪽이 같은 전류를 흘리므로, 테일 노드에서 아래로 본 소신호 저항 $R_T$를 $2R_T$ 두 개의 병렬로 쪼개면 대칭선으로 전류가 흐르지 않아요. 그래서 반쪽 회로는 "소스에 $2R_T$가 달린 $M_1$ + 위쪽 부하"인 축퇴(degenerated) CS 단이 돼요.
 
 **단서 → 개념.** 트랜지스터가 세로로 두 개 쌓인 테일·부하에서 캐스코드 출력 저항(output resistance)을 떠올려요. 소스에 $R_S$가 달린 트랜지스터의 드레인에서 본 저항은
 
@@ -540,7 +540,7 @@ $r_{O6}\to0$ 또는 $r_{O5}\to0$ → 문제 10.68 답
 
 ### 이미터 축퇴 테일 전류원을 가진 바이폴라 쌍의 A_CM−DM
 
-E10.27 · 예제 10.27 · [원 문제 보기](%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
+E10.27 · 예제 10.27 · [원 문제 보기](../%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
 
 #### 원문
 
@@ -570,9 +570,9 @@ E10.27 · 예제 10.27 · [원 문제 보기](%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%
 
 #### 이 문제를 봤을 때 떠올릴 개념과 공식
 
-**단서 1**: "두 베이스가 같은 $V_{CM}$", "부하가 $R_C$와 $R_C+\Delta R_C$". 이 조합은 부하 미스매치가 만드는 공통 모드→차동 모드 이득(CM-to-DM gain)이에요([정리노트 3절](%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s1-mismatch)). MOS 쌍에서 배운 결과는 $A_{CM-DM}=\dfrac{\Delta R_D}{1/g_m+2R_{SS}}$였어요.
+**단서 1**: "두 베이스가 같은 $V_{CM}$", "부하가 $R_C$와 $R_C+\Delta R_C$". 이 조합은 부하 미스매치가 만드는 공통 모드→차동 모드 이득(CM-to-DM gain)이에요([정리노트 3절](../%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s1-mismatch)). MOS 쌍에서 배운 결과는 $A_{CM-DM}=\dfrac{\Delta R_D}{1/g_m+2R_{SS}}$였어요.
 
-**단서 2**: 입력이 대칭이고 두 트랜지스터가 같으니 공통 모드 하프 서킷(CM half circuit)을 써요([정리노트 1절](%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s0-cm-half-recap)). 두 반쪽이 같은 전류를 흘리면 $P$의 테일 저항 $R_{SS}$를 $2R_{SS}$ 두 개로 나눠 각 이미터에 하나씩 붙일 수 있어요. 각 반쪽은 이미터 축퇴 공통 이미터 단이 되고, 컬렉터 전류 변화는 $\Delta I_C=\dfrac{\Delta V_{CM}}{1/g_{m1}+2R_{SS}}$예요.
+**단서 2**: 입력이 대칭이고 두 트랜지스터가 같으니 공통 모드 하프 서킷(CM half circuit)을 써요([정리노트 1절](../%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s0-cm-half-recap)). 두 반쪽이 같은 전류를 흘리면 $P$의 테일 저항 $R_{SS}$를 $2R_{SS}$ 두 개로 나눠 각 이미터에 하나씩 붙일 수 있어요. 각 반쪽은 이미터 축퇴 공통 이미터 단이 되고, 컬렉터 전류 변화는 $\Delta I_C=\dfrac{\Delta V_{CM}}{1/g_{m1}+2R_{SS}}$예요.
 
 **단서 3**: 테일이 "$Q_3$ + 이미터 저항 $R_1$"이에요. 여기서는 축퇴된 바이폴라 전류원의 출력 저항(output resistance)을 떠올려요(교과서 5장, 식 10.193).
 
@@ -722,7 +722,7 @@ $\Delta V_{out1}-\Delta V_{out2}=\Delta R_C\,\Delta I_C$
 
 ### 캐스코드 테일을 가진 MOS 차동 증폭기의 A_CM, A_CM-DM, 차동 이득, CMRR
 
-2021-1_중간-Q4 · 기출 4 · [원 문제 보기](%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
+2021-1_중간-Q4 · 기출 4 · [원 문제 보기](../%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
 
 #### 원문
 
@@ -763,11 +763,11 @@ NMOS 차동쌍 $M_1$·$M_2$가 입력을 받고, 위쪽 PMOS $M_3$·$M_4$는 게
 
 **단서 1: 테일에 트랜지스터가 두 개 쌓여 있어요.** 이것은 캐스코드 전류원이고, 위 트랜지스터 $M_5$가 아래 $M_6$의 $r_{O6}$로 소스 축퇴(source degeneration)된 구조예요. 출력 저항은 $R_{SS}=r_{O5}+r_{O6}+g_{m5}r_{O5}r_{O6}$이고, $g_m r_o\gg1$이면 $R_{SS}\approx g_{m5}r_{O5}r_{O6}$예요. 여기서 $R_{SS}$는 테일 소자가 공통 소스 노드에 보이는 소신호 저항이에요.
 
-**단서 2: "Common-mode 이득".** 두 입력에 같은 $\Delta V_{in,CM}$이 들어가면 두 반쪽 전류가 같아요. 그래서 공통 모드 하프 서킷(CM half circuit)을 써요. 테일을 $2R_{SS}$ 두 개로 쪼개 반쪽마다 하나씩 소스에 붙이면, 반쪽은 축퇴 CS 단이 돼요. 한 노드의 CM 이득은 $A_{CM}=-\dfrac{R_{out}}{1/g_m+2R_{SS}}$ 꼴이에요([CM 하프 서킷 복습](%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s0-cm-half-recap)).
+**단서 2: "Common-mode 이득".** 두 입력에 같은 $\Delta V_{in,CM}$이 들어가면 두 반쪽 전류가 같아요. 그래서 공통 모드 하프 서킷(CM half circuit)을 써요. 테일을 $2R_{SS}$ 두 개로 쪼개 반쪽마다 하나씩 소스에 붙이면, 반쪽은 축퇴 CS 단이 돼요. 한 노드의 CM 이득은 $A_{CM}=-\dfrac{R_{out}}{1/g_m+2R_{SS}}$ 꼴이에요([CM 하프 서킷 복습](../%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s0-cm-half-recap)).
 
-**단서 3: "출력 저항 차이 $50\ \Omega$".** 부하 미스매치(mismatch)가 있으면 같은 CM 전류가 두 노드에 다른 전압을 만들어 차동 출력으로 새요. 이것이 CM-to-DM 변환 이득이고 $A_{CM-DM}=\dfrac{\Delta R}{1/g_m+2R_{SS}}$예요([부하 미스매치와 CM-to-DM 이득](%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s1-mismatch)). 강의 식의 $\Delta R_D$ 자리에 여기서는 출력 노드 저항의 차이 $\Delta R$이 들어가요.
+**단서 3: "출력 저항 차이 $50\ \Omega$".** 부하 미스매치(mismatch)가 있으면 같은 CM 전류가 두 노드에 다른 전압을 만들어 차동 출력으로 새요. 이것이 CM-to-DM 변환 이득이고 $A_{CM-DM}=\dfrac{\Delta R}{1/g_m+2R_{SS}}$예요([부하 미스매치와 CM-to-DM 이득](../%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s1-mismatch)). 강의 식의 $\Delta R_D$ 자리에 여기서는 출력 노드 저항의 차이 $\Delta R$이 들어가요.
 
-**단서 4: "차동 전압 이득"과 CMRR.** 차동 입력에서는 대칭선(테일 노드)이 가상 접지(virtual ground)이므로 반쪽은 축퇴 없는 CS 단이고 $A_{DM}=-g_{m1}(r_{O1}\parallel r_{O3})$예요. CMRR(common-mode rejection ratio)은 $\left|A_{DM}/A_{CM-DM}\right|$로 정의해요([CMRR](%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s1-cmrr)).
+**단서 4: "차동 전압 이득"과 CMRR.** 차동 입력에서는 대칭선(테일 노드)이 가상 접지(virtual ground)이므로 반쪽은 축퇴 없는 CS 단이고 $A_{DM}=-g_{m1}(r_{O1}\parallel r_{O3})$예요. CMRR(common-mode rejection ratio)은 $\left|A_{DM}/A_{CM-DM}\right|$로 정의해요([CMRR](../%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s1-cmrr)).
 
 **기호의 뜻.** $g_m=\sqrt{2\mu C_{ox}(W/L)I_D}$는 게이트 전압 변화가 드레인 전류를 얼마나 바꾸는지, $r_o=1/(\lambda I_D)$는 채널 길이 변조로 생기는 출력 저항이에요. 이 문제는 $\lambda_n=\lambda_p=0.1\ \text{V}^{-1}$이라 모든 트랜지스터에 $r_o$가 있어요.
 
@@ -952,7 +952,7 @@ $R_{SS}\to\infty$이면 $A_{CM}\to0$이에요.
 
 ### 그림 10.48 회로의 CMRR
 
-E10.28 · 예제 10.28 · [원 문제 보기](%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
+E10.28 · 예제 10.28 · [원 문제 보기](../%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
 
 #### 원문
 
@@ -979,7 +979,7 @@ E10.28 · 예제 10.28 · [원 문제 보기](%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%
 
 #### 이 문제를 봤을 때 떠올릴 개념과 공식
 
-**단서**: "CMRR을 계산하라"와 부하 라벨 "$R_C+\Delta R_C$"가 함께 나오면, 공통 모드 제거비(common-mode rejection ratio)의 정의와 미스매치로 생기는 공통 모드→차동 변환 이득 $A_{CM-DM}$을 떠올려요([CMRR 정리](%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s1-cmrr), [미스매치 정리](%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s1-mismatch)).
+**단서**: "CMRR을 계산하라"와 부하 라벨 "$R_C+\Delta R_C$"가 함께 나오면, 공통 모드 제거비(common-mode rejection ratio)의 정의와 미스매치로 생기는 공통 모드→차동 변환 이득 $A_{CM-DM}$을 떠올려요([CMRR 정리](../%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s1-cmrr), [미스매치 정리](../%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s1-mismatch)).
 
 **개념과 공식**:
 
@@ -1124,7 +1124,7 @@ $\Delta R_C\to0$이면 $\infty$, $R_1\to0$이면 $R_{out3}=r_{O3}$, 무차원
 
 ### 부하 미스매치 ΔR_D가 있는 Fig 10.91 (a)(b) 두 단의 CMRR 비교
 
-P10.70 · 장말문제 10.70 · [원 문제 보기](%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
+P10.70 · 장말문제 10.70 · [원 문제 보기](../%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
 
 #### 원문
 
@@ -1153,9 +1153,9 @@ Compute the common-mode rejection ratio of the stages illustrated in Fig. 10.91 
 
 #### 이 문제를 봤을 때 떠올릴 개념과 공식
 
-**단서 1**: 부하가 $R_D$와 $R_D+\Delta R_D$로 다르고 CMRR을 묻는다는 점에서 공통 모드에서 차동 출력으로 새는 이득 $A_{CM-DM}$(CM-to-DM conversion gain)을 떠올려요. 대칭이면 $A_{CM-DM}=0$이라 CMRR이 무한대가 되므로, 이 문제의 CMRR은 미스매치 $\Delta R_D$가 있어야만 유한해져요. ([부하 미스매치와 CM-to-DM 이득](%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s1-mismatch))
+**단서 1**: 부하가 $R_D$와 $R_D+\Delta R_D$로 다르고 CMRR을 묻는다는 점에서 공통 모드에서 차동 출력으로 새는 이득 $A_{CM-DM}$(CM-to-DM conversion gain)을 떠올려요. 대칭이면 $A_{CM-DM}=0$이라 CMRR이 무한대가 되므로, 이 문제의 CMRR은 미스매치 $\Delta R_D$가 있어야만 유한해져요. ([부하 미스매치와 CM-to-DM 이득](../%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s1-mismatch))
 
-**단서 2**: "CMRR"이라는 말에서 정의 $\mathrm{CMRR}=\left|A_{DM}/A_{CM-DM}\right|$를 떠올려요. 분자는 원하는 차동 이득(differential-mode gain), 분모는 원하지 않는 CM 잡음이 차동 출력으로 바뀌는 이득이에요. ([CMRR](%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s1-cmrr))
+**단서 2**: "CMRR"이라는 말에서 정의 $\mathrm{CMRR}=\left|A_{DM}/A_{CM-DM}\right|$를 떠올려요. 분자는 원하는 차동 이득(differential-mode gain), 분모는 원하지 않는 CM 잡음이 차동 출력으로 바뀌는 이득이에요. ([CMRR](../%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s1-cmrr))
 
 **단서 3**: 테일이 트랜지스터이고 $\lambda\neq0$이라는 점에서 테일 소자의 출력 저항(output resistance)을 떠올려요. $R_{SS}$는 노드 $P$에서 아래 테일을 들여다본 소신호 저항이에요. (a)는 게이트·소스가 교류 접지인 단일 트랜지스터라 $r_{O3}$, (b)는 $M_4$의 $r_{O4}$가 $M_3$의 소스를 축퇴(degeneration)하는 캐스코드라 $r_{O3}+r_{O4}+g_{m3}r_{O3}r_{O4}$예요.
 
@@ -1326,7 +1326,7 @@ $r_{O4}\to0$ → (b)가 (a)로
 
 ### 부하 저항 불일치 ΔR_D가 있는 MOS 차동 증폭기의 입력 CM 범위, A_CM, A_CM-DM, CMRR
 
-2023-1_중간-Q4 · 기출 4 · [원 문제 보기](%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
+2023-1_중간-Q4 · 기출 4 · [원 문제 보기](../%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
 
 #### 원문
 
@@ -1369,15 +1369,15 @@ $r_{O4}\to0$ → (b)가 (a)로
 
 **(1) "입력 CM level의 최대·최소"**라는 말에서 입력 공통 모드 범위(input common-mode range)를 떠올려요. 핵심은 "어느 트랜지스터가 먼저 포화를 벗어나는가"예요. $V_{in,CM}$을 내리면 소스 노드 $P$가 같이 내려가 테일 $M_3$의 $V_{DS3}$가 줄어들고, 올리면 $M_1$·$M_2$의 게이트가 드레인보다 $V_{TH}$ 넘게 높아져 트라이오드로 들어가요. 포화 조건 $V_{DS}\ge V_{GS}-V_{TH}$를 각각 노드 전압으로 바꿔 쓰는 것이 도구예요. 여기서 $V_{ov}=V_{GS}-V_{TH}=\sqrt{2I_D/[\mu_nC_{ox}(W/L)]}$는 오버드라이브 전압(overdrive voltage)이에요.
 
-**(2) "common-mode 이득"과 테일이 전류원 $M_3$**라는 단서에서 공통 모드 하프 서킷(CM half circuit)을 떠올려요([CM 하프 서킷 복습](%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s0-cm-half-recap)). $R_{SS}$는 테일 소자가 $P$ 노드에 보이는 소신호 저항이고, 여기서는 $M_3$의 출력 저항 $r_{O3}=1/(\lambda_n I_{D3})$예요. CM 입력에서는 두 반쪽 전류가 같이 변하므로 $R_{SS}$를 $2R_{SS}$ 두 개로 쪼개 반쪽마다 붙이면, 반쪽은 소스 축퇴(source degeneration) CS 단이 돼요.
+**(2) "common-mode 이득"과 테일이 전류원 $M_3$**라는 단서에서 공통 모드 하프 서킷(CM half circuit)을 떠올려요([CM 하프 서킷 복습](../%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s0-cm-half-recap)). $R_{SS}$는 테일 소자가 $P$ 노드에 보이는 소신호 저항이고, 여기서는 $M_3$의 출력 저항 $r_{O3}=1/(\lambda_n I_{D3})$예요. CM 입력에서는 두 반쪽 전류가 같이 변하므로 $R_{SS}$를 $2R_{SS}$ 두 개로 쪼개 반쪽마다 붙이면, 반쪽은 소스 축퇴(source degeneration) CS 단이 돼요.
 
-**"$R_D$ 대 $R_D+\Delta R_D$"**라는 비대칭에서 부하 미스매치에 의한 CM-to-DM 변환([부하 미스매치](%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s1-mismatch))을 떠올려요. 두 반쪽에 흐르는 소신호 전류는 같고 부하만 다르므로, 차동 출력은 그 전류에 $\Delta R_D$를 곱한 만큼 생겨요.
+**"$R_D$ 대 $R_D+\Delta R_D$"**라는 비대칭에서 부하 미스매치에 의한 CM-to-DM 변환([부하 미스매치](../%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s1-mismatch))을 떠올려요. 두 반쪽에 흐르는 소신호 전류는 같고 부하만 다르므로, 차동 출력은 그 전류에 $\Delta R_D$를 곱한 만큼 생겨요.
 
 $$
 A_{CM}=-\frac{R_D}{1/g_m+2R_{SS}},\qquad A_{CM-DM}=\frac{\Delta R_D}{1/g_m+2R_{SS}}
 $$
 
-**(3) CMRR**은 원하는 신호의 이득과 원하지 않는 신호의 이득의 비 $\text{CMRR}=|A_{DM}/A_{CM-DM}|$예요([CMRR](%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s1-cmrr)). 차동 입력에서는 $P$가 가상 접지(virtual ground)라 $|A_{DM}|=g_mR_D$예요.
+**(3) CMRR**은 원하는 신호의 이득과 원하지 않는 신호의 이득의 비 $\text{CMRR}=|A_{DM}/A_{CM-DM}|$예요([CMRR](../%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s1-cmrr)). 차동 입력에서는 $P$가 가상 접지(virtual ground)라 $|A_{DM}|=g_mR_D$예요.
 
 **근사 조건**: 문제가 $g_m r_o\gg1$을 주었으므로 $M_1$·$M_2$의 $r_o$는 *모든 이득에서 똑같이* 무시하고, 테일의 $r_{O3}$만 $R_{SS}$로 남겨요. CM 하프 서킷에서 $M_1$ 드레인으로 들여다본 저항 $r_{O1}+(1+g_{m1}r_{O1})(2R_{SS})$가 MΩ급이라는 점이 이 근사의 근거예요. 이렇게 하면 $A_{DM}$, $A_{CM-DM}$, CMRR이 모두 같은 가정 위에 서서 강의·Razavi 식과 일치해요. $r_{O1}$을 넣고 싶다면 $A_{DM}$과 $A_{CM-DM}$ 둘 다에 넣어야 해요. 두 출력의 전압이 다르면 $r_{O1}$, $r_{O2}$로 흐르는 전류도 달라져 $A_{CM-DM}$ 역시 약 5% 바뀌기 때문이에요. DC 바이어스 계산(전류·$V_{ov}$)에서는 관례대로 $\lambda$를 무시해요.
 
@@ -1562,7 +1562,7 @@ $R_{SS}\to\infty$이면 두 CM 이득 0, $\Delta R_D=0$이면 CMRR$\to\infty$
 
 ### PMOS 전류 거울(Fig 10.93)에서 I_1, I_2가 반대로 ΔI 변할 때 V_out 변화
 
-P10.72 · 장말문제 10.72 · [원 문제 보기](%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
+P10.72 · 장말문제 10.72 · [원 문제 보기](../%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
 
 #### 원문
 
@@ -1607,7 +1607,7 @@ $$
 
 **근사 조건**: $\lambda=0$이라 $M_4$의 전류가 $V_{SD4}$와 무관해요. 그래서 $V_{out}$이 어디에 있든 $I_{D4}$는 위 식 그대로예요. 단, $M_4$가 포화에 머문다는 가정($V_{out}\le V_{DD}-(V_{SG}-|V_{TH}|)$)이 필요하고, $I_2$는 출력 전압과 무관한 이상 전류원으로 봐요. 이 문제는 대신호(large-signal) 계산이라 $g_m$이나 하프 서킷은 필요 없어요.
 
-**선택 이유**: $\lambda=0$이면 $M_4$는 출력 노드에서 보면 고정 전류원 하나예요. 그러면 출력 노드는 "전류원 두 개 + 저항 하나"뿐이라 KCL 한 줄로 $V_{out}$이 나와요. 정리노트의 [MOS 능동 부하 차동쌍](%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s2-mos-active)에서 본 "한쪽이 하나 더, 다른 쪽이 하나 덜이면 출력에는 두 개 차이"가 바로 (a)예요.
+**선택 이유**: $\lambda=0$이면 $M_4$는 출력 노드에서 보면 고정 전류원 하나예요. 그러면 출력 노드는 "전류원 두 개 + 저항 하나"뿐이라 KCL 한 줄로 $V_{out}$이 나와요. 정리노트의 [MOS 능동 부하 차동쌍](../%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s2-mos-active)에서 본 "한쪽이 하나 더, 다른 쪽이 하나 덜이면 출력에는 두 개 차이"가 바로 (a)예요.
 
 #### 종이에 쓸 첫 줄
 
@@ -1724,7 +1724,7 @@ $\Delta I=0$이면 전 값으로 복귀
 
 ### 능동 부하 바이폴라 쌍(Fig 10.96)의 이득 100을 위한 pnp Early 전압
 
-P10.75 · 장말문제 10.75 · [원 문제 보기](%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
+P10.75 · 장말문제 10.75 · [원 문제 보기](../%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
 
 #### 원문
 
@@ -1749,7 +1749,7 @@ npn 차동쌍 $Q_1$, $Q_2$가 입력을 받고, 위쪽 부하는 저항이 아�
 
 #### 이 문제를 봤을 때 떠올릴 개념과 공식
 
-**단서.** "차동쌍 위에 다이오드 연결 pnp + 같은 베이스의 pnp", "출력은 한쪽 컬렉터에서만"이라는 그림이 능동 부하 차동쌍(differential pair with active load)을 불러요. "Early 전압을 구하라"는 말은 이득이 트랜지스터 출력 저항 $r_O$로 정해지는 구조라는 뜻이에요([7. BJT 능동 부하 차동쌍](%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s2-bjt-active)).
+**단서.** "차동쌍 위에 다이오드 연결 pnp + 같은 베이스의 pnp", "출력은 한쪽 컬렉터에서만"이라는 그림이 능동 부하 차동쌍(differential pair with active load)을 불러요. "Early 전압을 구하라"는 말은 이득이 트랜지스터 출력 저항 $r_O$로 정해지는 구조라는 뜻이에요([7. BJT 능동 부하 차동쌍](../%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s2-bjt-active)).
 
 **개념.** 능동 부하 차동쌍의 소신호 전압 이득은 $|A_v| = G_m R_{out}$으로 나눠 봐요. 거울이 $Q_1$ 쪽 전류 변화를 출력 쪽으로 복사해 더해 주므로 $G_m \approx g_m$, 출력 노드에서 위아래로 보이는 저항은 $Q_2$와 $Q_4$의 출력 저항이 병렬이라 $R_{out}=r_{O2}\parallel r_{O4}$예요.
 

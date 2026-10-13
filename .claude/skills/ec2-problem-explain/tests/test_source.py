@@ -17,7 +17,8 @@ def add_pack(repo, name, problems=True, folder_form=lambda s: s):
     folder = Path(repo) / folder_form('복습노트') / name
     folder.mkdir(parents=True, exist_ok=True)
     if problems:
-        (folder / 'problems.txt').write_text('P10.02 | x\n', encoding='utf-8')
+        (folder / '.assets').mkdir()
+        (folder / '.assets' / 'problems.txt').write_text('P10.02 | x\n', encoding='utf-8')
     return folder
 
 
@@ -35,7 +36,7 @@ class SourceTest(unittest.TestCase):
         shutil.rmtree(repo / EXAM_FIG.parent / 'redrawn', ignore_errors=True)
 
     def names(self, paths):
-        return [unicodedata.normalize('NFC', p.parent.name) for p in paths]
+        return [unicodedata.normalize('NFC', p.parent.parent.name) for p in paths]
 
     def test_latest_pack_with_problems_is_default(self):
         repo = self.repo()
@@ -109,10 +110,10 @@ class SourceTest(unittest.TestCase):
 
     def test_slug_must_be_unique(self):
         repo = self.repo()
-        folder = resolve_sources(repo, '1007')[0].parent
+        folder = resolve_sources(repo, '1007')[0].parent.parent
         (folder / '정리노트_1007_Other.html').write_text('x', encoding='utf-8')
         with self.assertRaisesRegex(ExplainError, '정리노트'):
-            load_source(folder / 'problems.txt', repo)
+            load_source(folder / '.assets' / 'problems.txt', repo)
 
     def test_figure_src_is_relative_repo_file(self):
         repo = self.repo()
@@ -124,8 +125,8 @@ class SourceTest(unittest.TestCase):
         self.assertTrue(srcs)
         for src in srcs:
             self.assertTrue(src.endswith('.png'))
-            self.assertTrue((txt.parent / unquote(src)).resolve().is_file(), src)
-            self.assertEqual((txt.parent / unquote(src)).resolve().parts[:len(repo.resolve().parts)], repo.resolve().parts)
+            self.assertTrue((txt.parent.parent / unquote(src)).resolve().is_file(), src)
+            self.assertEqual((txt.parent.parent / unquote(src)).resolve().parts[:len(repo.resolve().parts)], repo.resolve().parts)
 
     def test_exam_prefers_redrawn_figure(self):
         repo = self.repo()
@@ -164,9 +165,10 @@ class SourceTest(unittest.TestCase):
         repo = self.repo()
         outside = Path(tempfile.mkdtemp())
         self.addCleanup(shutil.rmtree, outside)
-        (outside / 'problems.txt').write_text('P10.02 | x\n', encoding='utf-8')
+        (outside / '.assets').mkdir()
+        (outside / '.assets' / 'problems.txt').write_text('P10.02 | x\n', encoding='utf-8')
         with self.assertRaisesRegex(ExplainError, '저장소 밖'):
-            load_source(outside / 'problems.txt', repo)
+            load_source(outside / '.assets' / 'problems.txt', repo)
 
     def test_subparts_rules(self):
         self.assertEqual(subparts('<ul><li>구하라</li></ul>'), ('main',))
@@ -192,7 +194,7 @@ class SourceTest(unittest.TestCase):
 
     def test_real_packs_with_figure_part_references_load(self):
         repo = self.repo(ids=('P10.70', 'P10.35', 'P9.46', 'P10.52', 'P10.17'))
-        pack = load_source(repo / '복습노트' / '1007' / 'problems.txt', repo)
+        pack = load_source(repo / '복습노트' / '1007' / '.assets' / 'problems.txt', repo)
         self.assertEqual([p.subparts for p in pack.problems], [('main',), ('a', 'b', 'c'), ('main',), ('main',), ('main',)])
 
 

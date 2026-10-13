@@ -6,7 +6,7 @@ workbook 문제 목록 (복습문제 선별용). 문제 md는 workbook/problem.p
   id  kind  secnum  section  difficulty  used  title
 - secnum: 교과서는 section 앞 절 번호(예: 9.1.2. 번호가 없으면 section 그대로), 기출은 "ch" + textbook_chapters(예: ch9,10)
 - difficulty: 교과서 frontmatter 값, 기출은 "-"
-- used: 이전 팩 problems.txt에 있으면 "USED", 아니면 "-"
+- used: 이전 팩 .assets/problems.txt에 있으면 "USED", 아니면 "-"
 CLI: problem_index.py --repo REPO [--used REPO/복습노트] [--chapters 9,10]
 읽을 수 없는 md는 stderr에 `ERROR <경로>: <이유>`로 적고 건너뛴다(종료 코드 1).
 """
@@ -48,7 +48,7 @@ def secnum(meta: dict) -> str:
 
 
 def used_ids(notes_dir: Path | str, exclude: str | None = None) -> set[str]:
-    """<notes_dir>/*/problems.txt 의 id (줄 형식 `id | why`).
+    """<notes_dir>/*/.assets/problems.txt 의 id (줄 형식 `id | why`).
 
     exclude: 이 폴더 이름(NFC로 비교)의 problems.txt는 건너뛴다(같은 range를 다시 돌릴 때
     자기 자신의 이전 결과가 USED로 잡히지 않게 한다).
@@ -57,8 +57,8 @@ def used_ids(notes_dir: Path | str, exclude: str | None = None) -> set[str]:
     if not notes_dir.is_dir():
         return ids
     exclude_nfc = nfc(exclude) if exclude is not None else None
-    for path in notes_dir.glob("*/problems.txt"):
-        if exclude_nfc is not None and nfc(path.parent.name) == exclude_nfc:
+    for path in notes_dir.glob("*/.assets/problems.txt"):
+        if exclude_nfc is not None and nfc(path.parent.parent.name) == exclude_nfc:
             continue
         for line in path.read_text(encoding="utf-8").splitlines():
             pid = nfc(line.split("|", 1)[0].strip())

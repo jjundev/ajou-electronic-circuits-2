@@ -391,7 +391,7 @@ $$
 
 **정확히 말하면**
 
-포화 영역 전류는 channel-length modulation(채널 길이 변조) 때문에 $V_{DS}$에 따라 조금 늘어요. $\lambda$와 출력저항의 관계는 [0904 정리노트: 채널 길이 변조와 출력저항 r_O](../0904/정리노트_0904_MOS_Small_Signal_Model.html#s1-ro)에 있어요.
+포화 영역 전류는 channel-length modulation(채널 길이 변조) 때문에 $V_{DS}$에 따라 조금 늘어요. $\lambda$와 출력저항의 관계는 [0904 정리노트: 채널 길이 변조와 출력저항 r_O](../../0904/정리노트_0904_MOS_Small_Signal_Model.html#s1-ro)에 있어요.
 
 $$
 I_D=\frac{1}{2}\mu_n C_{ox}\frac{W}{L}(V_{GS}-V_{TH})^2(1+\lambda V_{DS})
@@ -1244,10 +1244,10 @@ PNP 미러의 기준 전류는 NPN 미러가 기존 $I_{REF}$를 복사해 끌�
 
 *0918 수업*
 
-- [복습문제 10개 (PDF)](복습문제_0918_Current_Mirrors-문제.pdf)
-- [답안 (PDF)](복습문제_0918_Current_Mirrors-답안.pdf)
-- [다음 수업 0923 정리노트: 차동 회로가 잡음에 강한 이유](../0923/정리노트_0923_Differential_Amplifiers.html#s0-noise)
-- [9장 전체 문제집 (PDF)](../../workbook/pdf/ch09-문제.pdf)
+- [복습문제 10개 (PDF)](../복습문제_0918_Current_Mirrors-문제.pdf)
+- [답안 (PDF)](../복습문제_0918_Current_Mirrors-답안.pdf)
+- [다음 수업 0923 정리노트: 차동 회로가 잡음에 강한 이유](../../0923/정리노트_0923_Differential_Amplifiers.html#s0-noise)
+- [9장 전체 문제집 (PDF)](../../../workbook/pdf/ch09-문제.pdf)
 
 복습문제에 든 문제예요.
 

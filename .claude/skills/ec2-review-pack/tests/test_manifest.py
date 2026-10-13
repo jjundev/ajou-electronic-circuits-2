@@ -243,6 +243,7 @@ class TestManifest(unittest.TestCase):
         self.assertEqual(manifest.answer_pdf_name(m), "복습문제_0101-0102_Mini_Test-답안.pdf")
         self.assertEqual(manifest.fig_dir_name("0101-0102"), "figures_0101-0102")
         self.assertEqual(manifest.PROBLEMS_TXT, "problems.txt")
+        self.assertEqual(manifest.BUNDLE, ".assets")
         self.assertFalse(hasattr(manifest, "review_name"))
 
 

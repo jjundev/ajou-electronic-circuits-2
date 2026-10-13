@@ -8,7 +8,10 @@ description: 전자회로2 수업의 STT·강의노트·Razavi 교과서로 ELI5
 수업 녹음 전사(STT)와 강의자료, Razavi 교과서로 한 기간의 정리노트를 만들고, workbook에서 그 범위 문제를 골라 복습문제 PDF를 만든다. 중간에 사용자에게 묻지 않고 끝에 한 번 보고한다. 커밋은 제안만 한다.
 
 **산출물** (`복습노트/<range>/`):
-`정리노트_<range>_<slug>.html`, 같은 이름의 `.md`, `figures_<range>/`, 그리고 문제가 1개 이상이면 `복습문제_<range>_<slug>-문제.pdf`, `복습문제_<range>_<slug>-답안.pdf`, `problems.txt`
+- 맨 위: `정리노트_<range>_<slug>.html`, 그리고 문제가 1개 이상이면 `복습문제_<range>_<slug>-문제.pdf`, `복습문제_<range>_<slug>-답안.pdf`
+- `.assets/`: 같은 이름의 `.md`, `figures_<range>/`, 그리고 문제가 1개 이상이면 `problems.txt`
+
+**폴더 규칙**: 날짜 폴더 맨 위에는 `.pack/`, `*.html`, `*.pdf`, `.assets/`만 둔다. md·그림·목록·데이터 등 나머지는 모두 `.assets/`에 둔다(`tests/test_pack_layout.py`가 실제 `복습노트/`를 검사한다).
 
 **PDF 규격**: 문제지·답안지는 16:9 페이지를 사용한다. 1920×1080 기준 하단 180px는 자막 전용 여백으로 비우고, 본문 기본값은 약 11.34pt이며 제목·수식·힌트도 같은 약 1.134배로 조정해 기존 A4 영상 전체 화면에서 보이던 텍스트 크기를 유지한다. 긴 문항의 기존 축소 배율도 보존한다.
 
@@ -83,7 +86,7 @@ description: 전자회로2 수업의 STT·강의노트·Razavi 교과서로 ELI5
 
 ### 4. 조립
 - PDF 빌드는 manifest만 있으면 되므로 3단계 작성자들이 도는 동안 먼저 돌려도 된다(백업·정리는 그보다 먼저 끝내 둔다).
-- **처음 조립할 때만**: `복습노트/<range>/`에 이번 `range`의 산출물(`정리노트_<range>_*`, `복습문제_<range>_*`, `problems.txt`, `figures_<range>/`)이 하나라도 있으면 먼저 백업한다. 다시 조립할 때(5~8단계에서 돌아온 경우)는 백업하지 않는다. 이미 스킬이 만든 초안이 백업에 섞이기 때문이다.
+- **처음 조립할 때만**: `복습노트/<range>/`에 이번 `range`의 산출물(맨 위의 `정리노트_<range>_*`·`복습문제_<range>_*`, `.assets/`의 `정리노트_<range>_*`·`problems.txt`·`figures_<range>/`)이 하나라도 있으면 먼저 백업한다. 다시 조립할 때(5~8단계에서 돌아온 경우)는 백업하지 않는다. 이미 스킬이 만든 초안이 백업에 섞이기 때문이다.
   - `RANGE`, `REPO`, `RUN`을 모두 실제 값으로 바꿔 한 명령으로 실행한다. 파일명은 NFC로 비교하므로 NFD 파일명도 잡힌다.
   - 백업은 매번 새 폴더 `RUN/previous-<시각>-<임의>/`에 만든다. `RANGE`가 형식에 안 맞거나, 대상이 있는데 복사된 파일 수가 다르면 종료 코드 1로 멈춘다. 이때는 조립하지 말고 원인을 고친다.
 ```bash
@@ -95,13 +98,13 @@ if not re.fullmatch(r"\d{4}(-\d{4})?", r) or not os.path.isdir(run):
 if not os.path.isdir(os.path.join(repo, "STT")):
     sys.exit(f"백업 중단: REPO={repo!r} 잘못됨")
 notes = os.path.join(repo, "복습노트")
-def want(n):
-    n = u.normalize("NFC", n)
-    return n.startswith((f"정리노트_{r}_", f"복습문제_{r}_")) or n in (f"figures_{r}", "problems.txt")
 def listdir_nfc(d):  # NFD 폴더명도 찾는다
-    return {u.normalize("NFC", n): os.path.join(d, n) for n in os.listdir(d)} if os.path.isdir(d) else {}
+    return {u.normalize("NFC", n): os.path.join(d, n) for n in os.listdir(d)} if d and os.path.isdir(d) else {}
 pack = listdir_nfc(notes).get(r)
-hits = sorted((n, p) for n, p in listdir_nfc(pack).items() if want(n)) if pack else []
+top = listdir_nfc(pack)
+hits = sorted((n, p) for n, p in top.items() if n.startswith((f"정리노트_{r}_", f"복습문제_{r}_")))
+hits += sorted((f".assets/{n}", p) for n, p in listdir_nfc(top.get(".assets")).items()
+               if n.startswith(f"정리노트_{r}_") or n in (f"figures_{r}", "problems.txt"))
 if not hits:
     print("백업할 기존 팩 없음"); sys.exit(0)
 def count(p):
@@ -109,6 +112,7 @@ def count(p):
 dst = tempfile.mkdtemp(prefix=time.strftime("previous-%Y%m%d-%H%M%S-"), dir=run)  # 항상 새 폴더
 for n, a in hits:
     b = os.path.join(dst, n)
+    os.makedirs(os.path.dirname(b), exist_ok=True)
     shutil.copytree(a, b) if os.path.isdir(a) else shutil.copy2(a, b)
 want_n, got_n = sum(count(a) for _, a in hits), count(dst)
 if got_n != want_n:
@@ -122,15 +126,17 @@ python3 - "$RUN/manifest.json" "$REPO/복습노트/<range>" <<'EOF'
 import json, os, sys, unicodedata as u
 m = json.load(open(sys.argv[1], encoding="utf-8"))
 r, slug, out = m["range"], m["slug"], sys.argv[2]
-keep = {f"정리노트_{r}_{slug}.html", f"정리노트_{r}_{slug}.md"}
+keep = {f"정리노트_{r}_{slug}.html", f".assets/정리노트_{r}_{slug}.md"}
 if m["problems"]:
     keep |= {f"복습문제_{r}_{slug}-문제.pdf", f"복습문제_{r}_{slug}-답안.pdf"}
 removed = []
-for n in (os.listdir(out) if os.path.isdir(out) else []):
-    nn = u.normalize("NFC", n)
-    if nn.startswith((f"정리노트_{r}_", f"복습문제_{r}_")) and nn not in keep:
-        os.remove(os.path.join(out, n))
-        removed.append(nn)
+for sub in ("", ".assets/"):  # 맨 위와 .assets/ 의 파일만 본다
+    d = os.path.join(out, sub)
+    for n in (os.listdir(d) if os.path.isdir(d) else []):
+        nn = u.normalize("NFC", n)
+        if nn.startswith((f"정리노트_{r}_", f"복습문제_{r}_")) and sub + nn not in keep and os.path.isfile(os.path.join(d, n)):
+            os.remove(os.path.join(d, n))
+            removed.append(sub + nn)
 print("제거:", ", ".join(removed) if removed else "없음")
 EOF
 ```
@@ -179,7 +185,7 @@ python3 "$SKILL/scripts/html2md.py" "$REPO/복습노트/<range>/<정리노트>.h
 다음 형식으로 끝낸다.
 ```
 ## 복습팩 <range> 완료
-- 파일: 복습노트/<range>/… (html 1, md 1, pdf 2, figures_<range>/ N개)
+- 파일: 복습노트/<range>/… (html 1, pdf 2, .assets/에 md 1·problems.txt·figures_<range>/ N개)
 - 범위: 배운 슬라이드 … / 교과서 절 … / 예고만: …
 - 문제 N개: P9.05(장말, 9.1.2) — <why>, … (문제가 0개면 "없음 — <이유>")
 - 스킬이 정한 사항: slug, 섹션 구성, 위젯, 문제 구성, 뺀 내용과 이유
@@ -190,13 +196,13 @@ python3 "$SKILL/scripts/html2md.py" "$REPO/복습노트/<range>/<정리노트>.h
 
 ## 기존 팩에 왜 페이지 붙이기
 첫 섹션 `why`가 생기기 전에 만든 팩에는 다시 조립하지 않고 조각만 끼워넣는다. 기존 토픽 id(`s0-…`)는 그대로라 팩 사이 링크와 읽음 표시가 유지된다.
-1. 대상 팩의 `정리노트_*.html`과 `.md`를 scratchpad에 백업한다(NFC로 찾는다).
+1. 대상 팩의 `정리노트_*.html`과 `.assets/정리노트_*.md`를 scratchpad에 백업한다(NFC로 찾는다).
 2. 팩마다 작성자 1명(opus, 병렬)에게 `references/content-rules.md`의 작성자 브리프를 섹션 `why`로 채워 넘긴다. manifest 대신 기존 노트를 계약으로 삼는다: 근거는 노트 자체(읽기 전용), 그 날짜 STT, 노트 태그의 강의자료, Razavi 장 도입부이고, `<뒤 섹션 토픽 id·제목 목록>`은 노트에서 `article class="topic" id=…`를 뽑아 채운다. 출력은 scratchpad의 `why.html` 한 파일이다.
 3. 끼워넣는다. 이미 why 섹션이 있으면 교체하므로 다시 실행해도 된다.
 ```bash
 python3 "$SKILL/scripts/insert_why.py" --note "$REPO/복습노트/<range>/<정리노트>.html" --fragment <why.html>
 ```
-4. `python3 "$SKILL/scripts/check_html.py" <정리노트>.html`이 `OK`, `html2md.py <정리노트>.html --check`가 `OK`(md와 `figures_<range>/fig-why.svg`를 새로 만든다)여야 한다. 커밋할 때 이 svg도 함께 넣는다.
+4. `python3 "$SKILL/scripts/check_html.py" <정리노트>.html`이 `OK`, `html2md.py <정리노트>.html --check`가 `OK`(`.assets/`의 md와 `.assets/figures_<range>/fig-why.svg`를 새로 만든다)여야 한다. 커밋할 때 이 svg도 함께 넣는다.
 5. 7단계처럼 브라우저로 본다: 표지 다음 첫 화면이 why 토픽인지, 오른쪽 요약 패널, 링크 이동, 다크모드, 375px.
 
 ## 오류 처리
@@ -211,6 +217,6 @@ python3 "$SKILL/scripts/insert_why.py" --note "$REPO/복습노트/<range>/<정�
 | `build_workbook.py`가 `ERROR <name>: …` (렌더링·Chrome·네트워크) 를 내거나 종료 코드 1 (OVERFLOW 없이) | md 문제가 아니므로 id를 바꾸지 않는다. "미해결"에 적고 다음 단계로 진행 |
 | `OVERFLOW <파일>: <id>` | 종료 코드 1이지만 PDF는 남음. id를 바꾸지 않고 "미해결"에 적음 |
 | 포트 사용 중 | 다른 빈 포트 사용 |
-| 같은 range의 팩이 이미 있음 | 4단계 첫 조립 전에 기존 html·md·pdf·`problems.txt`·`figures_<range>/`를 새 폴더 `RUN/previous-<시각>-<임의>/`에 복사하고(다시 조립할 때는 복사하지 않음) 백업 경로를 보고서에 적음. 백업 명령이 실패하면 조립하지 않고 원인을 고친다 |
+| 같은 range의 팩이 이미 있음 | 4단계 첫 조립 전에 기존 html·pdf와 `.assets/`의 md·`problems.txt`·`figures_<range>/`를 같은 상대 경로로 새 폴더 `RUN/previous-<시각>-<임의>/`에 복사하고(다시 조립할 때는 복사하지 않음) 백업 경로를 보고서에 적음. 백업 명령이 실패하면 조립하지 않고 원인을 고친다 |
 | `insert_why.py`가 `insert_why 실패: …` | 노트는 그대로다. 메시지대로 why 조각을 고쳐 다시 실행 |
 | 검사 2회 실패 | 멈추지 않고 나머지 단계를 끝낸 뒤 "미해결"로 보고 |

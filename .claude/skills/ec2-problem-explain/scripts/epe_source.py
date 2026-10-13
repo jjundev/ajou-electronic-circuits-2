@@ -7,7 +7,7 @@ from datetime import datetime
 from pathlib import Path
 from urllib.parse import quote
 
-from epe_types import ExplainError, Problem, SourcePack
+from epe_types import BUNDLE, ExplainError, Problem, SourcePack
 from epe_shared import (load_problem, html_fields, problem_figures, solution, ProblemError,
                         TEXTBOOK_ID_RE, EXAM_ID_RE, KIND_DIR, textbook_figure_filename,
                         exam_figure_filename, parse)
@@ -77,7 +77,7 @@ def _folders(repo: Path) -> dict:
     for path in sorted(root.iterdir()):
         name = nfc(path.name)
         if path.is_dir() and PACK_RE.fullmatch(name):
-            out[name] = (path, (path / 'problems.txt').is_file())
+            out[name] = (path, (path / BUNDLE / 'problems.txt').is_file())
     return out
 
 
@@ -116,7 +116,7 @@ def resolve_sources(repo: Path, target: str | None) -> tuple[Path, ...]:
             chosen = [ready[target]] if target in ready else [individual[n] for n in sorted(individual)]
             if not chosen:
                 raise ExplainError(f'문제 없는 팩: {target} (범위 안에 problems.txt가 있는 팩 없음)')
-    return tuple(inside(p / 'problems.txt', repo) for p in chosen)
+    return tuple(inside(p / BUNDLE / 'problems.txt', repo) for p in chosen)
 
 
 def md_path(repo: Path, pid: str) -> Path:
@@ -194,7 +194,9 @@ def load_source(path: Path, repo: Path) -> SourcePack:
     ids = _entries(text)
     if not ids:
         raise ExplainError('problems.txt에 문항이 없습니다')
-    folder = path.parent
+    if nfc(path.parent.name) != BUNDLE:
+        raise ExplainError(f'problems.txt는 팩 폴더의 {BUNDLE}/ 안에 있어야 합니다: {path}')
+    folder = path.parent.parent
     range_ = nfc(folder.name)
     slug = _slug(folder, range_)
     problems, mds, figs = [], [], []

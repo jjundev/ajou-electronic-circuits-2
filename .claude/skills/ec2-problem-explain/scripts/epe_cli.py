@@ -108,7 +108,7 @@ def build(item, fragments):
     dump(artifacts.manifest, manifest)
     artifacts = Artifacts(artifacts.html, artifacts.md, artifacts.manifest, files + (artifacts.manifest,))
     dump(folder / 'stage.json', {'stage': stage.relative_to(folder).as_posix(),
-                               'html': artifacts.html.name, 'md': artifacts.md.name,
+                               'html': artifacts.html.name, 'md': artifacts.md.relative_to(stage).as_posix(),
                                'manifest': artifacts.manifest.relative_to(stage).as_posix()})
     review = initial_reviews(item['pack'], fragments)
     review['artifact_hashes'] = artifact_hashes(artifacts)
@@ -156,7 +156,7 @@ def main(argv=None):
                     else:
                         review = read_json(inside(item['folder'] / 'review.json', item['run']))
                         published = publish_explanation(item['pack'], artifacts, fragments, review,
-                                                        item['pack'].path.parent, item['folder'] / 'backups',
+                                                        item['pack'].folder, item['folder'] / 'backups',
                                                         item['repo'])
                         print('publish:', published[0], 'backup:', item['folder'] / 'backups')
             except (ExplainError, OSError, ValueError, KeyError, TypeError) as exc:

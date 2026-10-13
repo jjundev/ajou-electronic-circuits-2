@@ -82,7 +82,7 @@ def discover(repo,selector,problem_ids=None,failures=None):
         failures.append({'problem_id':pid,'date':date,'reason':reason})
     pairs=[];listed=set()
     for folder in dates:
-        listing=folder/'problems.txt'
+        listing=folder/'.assets'/'problems.txt'
         if not listing.is_file(): fail(None,folder.name,'problems.txt missing');continue
         ids=[_norm(line.split('|',1)[0].strip()) for line in listing.read_text(encoding='utf-8-sig').splitlines() if line.strip()]
         listed.update(ids); ids=[pid for pid in ids if selected is None or pid in selected]

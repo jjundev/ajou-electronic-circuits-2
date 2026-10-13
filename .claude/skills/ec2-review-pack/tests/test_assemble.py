@@ -27,7 +27,8 @@ class TestAssemble(unittest.TestCase):
         self.assertEqual(self.note.name, "정리노트_0101-0102_Mini_Test.html")
 
     def test_only_note_is_written(self):
-        self.assertEqual(sorted(p.name for p in self.tmp.iterdir()), ["problems.txt", "정리노트_0101-0102_Mini_Test.html"])
+        self.assertEqual(sorted(p.name for p in self.tmp.iterdir()), [".assets", "정리노트_0101-0102_Mini_Test.html"])
+        self.assertEqual([p.name for p in (self.tmp / ".assets").iterdir()], ["problems.txt"])
 
     def test_sections_toc_and_titles(self):
         self.assertIn('<nav class="toc" aria-label="목차"><a href="#why">왜 쓸까</a><a href="#s1">1 기초</a><a href="#s2">2 요약·예고</a></nav>', self.html)
@@ -56,7 +57,7 @@ class TestAssemble(unittest.TestCase):
         self.assertEqual(ours, (ML_SKILL / "assets" / "note-template.html").read_bytes())
 
     def test_problems_txt(self):
-        self.assertEqual((self.tmp / "problems.txt").read_text(encoding="utf-8"),
+        self.assertEqual((self.tmp / ".assets" / "problems.txt").read_text(encoding="utf-8"),
                          "P9.01 | 테스트용 장말문제\n2023-1_기말-Q1 | 테스트용 기출\n")
 
     def test_zero_problems_removes_stale_problems_txt(self):
@@ -65,7 +66,7 @@ class TestAssemble(unittest.TestCase):
         m["problems"], m["links"] = [], []
         (run / "manifest.json").write_text(json.dumps(m, ensure_ascii=False), encoding="utf-8")
         assemble.assemble(run, self.tmp)
-        self.assertFalse((self.tmp / "problems.txt").exists())
+        self.assertFalse((self.tmp / ".assets" / "problems.txt").exists())
 
     def test_missing_fragment_writes_nothing(self):
         run = self.copy_run()

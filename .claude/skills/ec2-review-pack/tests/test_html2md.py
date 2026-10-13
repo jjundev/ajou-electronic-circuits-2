@@ -37,17 +37,17 @@ class TestHtml2Md(unittest.TestCase):
         shutil.rmtree(self.tmp)
 
     def test_output_and_check_pass(self):
-        self.assertEqual(Path(self.note_md).name, "정리노트_0101-0102_Mini_Test.md")
+        self.assertEqual(Path(self.note_md), self.tmp / ".assets" / "정리노트_0101-0102_Mini_Test.md")
         self.assertEqual(html2md.check_md(self.note, self.note_md), [])
 
     def test_pdf_links_kept_as_pdf(self):
-        self.assertIn("(복습문제_0101-0102_Mini_Test-문제.pdf)", self.md)
-        self.assertIn("(복습문제_0101-0102_Mini_Test-답안.pdf)", self.md)
+        self.assertIn("(../복습문제_0101-0102_Mini_Test-문제.pdf)", self.md)
+        self.assertIn("(../복습문제_0101-0102_Mini_Test-답안.pdf)", self.md)
 
     def test_missing_pdf_is_reported(self):
         (self.tmp / "복습문제_0101-0102_Mini_Test-답안.pdf").unlink()
         problems = html2md.check_md(self.note, self.note_md)
-        self.assertEqual(problems, ["링크 파일 없음: 복습문제_0101-0102_Mini_Test-답안.pdf"])
+        self.assertEqual(problems, ["링크 파일 없음: ../복습문제_0101-0102_Mini_Test-답안.pdf"])
 
     def test_page_summary_rendered(self):
         self.assertIn("**페이지 요약**", self.md)
@@ -56,20 +56,20 @@ class TestHtml2Md(unittest.TestCase):
 
     def test_widget_static_becomes_figure_and_table(self):
         self.assertEqual(self.figs, 1)
-        self.assertTrue((self.tmp / "figures_0101-0102" / "widget-mean-static.svg").exists())
+        self.assertTrue((self.tmp / ".assets" / "figures_0101-0102" / "widget-mean-static.svg").exists())
         self.assertIn('<a id="widget-mean"></a>', self.md)
         self.assertIn("![평균 1.5 막대](figures_0101-0102/widget-mean-static.svg)", self.md)
         self.assertIn("| 1, 2 | $\\frac{3}{2}$ |", self.md)
 
     def test_reconversion_removes_orphan_svgs_only(self):
-        fig = self.tmp / "figures_0101-0102"
+        fig = self.tmp / ".assets" / "figures_0101-0102"
         (fig / "old-orphan.svg").write_text("<svg/>", encoding="utf-8")
         (fig / "keep.txt").write_text("x", encoding="utf-8")
-        (self.tmp / "outside.svg").write_text("<svg/>", encoding="utf-8")
+        (self.tmp / ".assets" / "outside.svg").write_text("<svg/>", encoding="utf-8")
         _, figs = html2md.convert_note(self.note)
         self.assertEqual(figs, 1)
         self.assertEqual(sorted(p.name for p in fig.iterdir()), ["keep.txt", "widget-mean-static.svg"])
-        self.assertTrue((self.tmp / "outside.svg").exists())
+        self.assertTrue((self.tmp / ".assets" / "outside.svg").exists())
 
     def test_table_math_pipes(self):
         ctx = html2md.Ctx([], str(self.tmp), "figures_x")
@@ -113,7 +113,7 @@ class TestHtml2Md(unittest.TestCase):
         note = small_note(d, f'<section id="s"><h2>A</h2>{fig}{dup}{fig}{dup}</section>')
         note_md, figs = html2md.convert_note(note)
         self.assertEqual(figs, 4)
-        self.assertEqual(sorted(x.name for x in (d / "figures_0101").iterdir()),
+        self.assertEqual(sorted(x.name for x in (d / ".assets" / "figures_0101").iterdir()),
                          ["note-fig-1.svg", "note-fig-2.svg", "same-2.svg", "same.svg"])
         self.assertEqual(html2md.check_md(note, note_md), [])
 
@@ -132,7 +132,7 @@ class TestHtml2Md(unittest.TestCase):
         self.assertIn("(1/2)", html2md.check_md(note, note_md)[0])
 
     def test_check_md_detects_unrewritten_and_broken_links(self):
-        md = self.md + "\n[a](./정리노트_0101-0102_Mini_Test.html#s1)\n[x](../%EC%97%86%EC%9D%8C/x.html)\n"
+        md = self.md + "\n[a](./정리노트_0101-0102_Mini_Test.html#s1)\n[x](../../%EC%97%86%EC%9D%8C/x.html)\n"
         Path(self.note_md).write_text(md, encoding="utf-8")
         problems = html2md.check_md(self.note, self.note_md)
         self.assertEqual(len(problems), 2)
@@ -145,7 +145,7 @@ class TestHtml2Md(unittest.TestCase):
         note = small_note(d, '<section id="s"><h2>A</h2><p>그림 없는 문단</p></section>')
         note_md, figs = html2md.convert_note(note)
         self.assertEqual(figs, 0)
-        self.assertFalse((d / "figures_0101").exists())
+        self.assertFalse((d / ".assets" / "figures_0101").exists())
         self.assertTrue(Path(note_md).exists())
 
     def test_nfd_named_note_converts(self):
@@ -156,6 +156,23 @@ class TestHtml2Md(unittest.TestCase):
         note_md, _ = html2md.convert_note(note)
         self.assertEqual(Path(note_md).name, "정리노트_0101_X.md")
         self.assertIn("(./정리노트_0101_X.md#s)", Path(note_md).read_text(encoding="utf-8"))
+        self.assertEqual(html2md.check_md(note, note_md), [])
+
+    def test_relative_links_rebased_from_assets(self):
+        d = self.tmp / "links"
+        (d / "pack").mkdir(parents=True)
+        (d / "other").mkdir()
+        (d / "other" / "정리노트_0100_Y.html").write_text("<p id='t'>y</p>", encoding="utf-8")
+        (d / "w.pdf").write_bytes(b"%PDF")
+        body = ('<section id="s"><h2>A</h2><p><a href="../other/정리노트_0100_Y.html#t">o</a> '
+                '<a href="../w.pdf">w</a> <a href="https://example.com/x">e</a> <a href="#s">a</a></p></section>')
+        note = small_note(d / "pack", body)
+        note_md, _ = html2md.convert_note(note)
+        md = Path(note_md).read_text(encoding="utf-8")
+        self.assertIn("(../../other/정리노트_0100_Y.html#t)", md)
+        self.assertIn("(../../w.pdf)", md)
+        self.assertIn("(https://example.com/x)", md)
+        self.assertIn("(#s)", md)
         self.assertEqual(html2md.check_md(note, note_md), [])
 
 

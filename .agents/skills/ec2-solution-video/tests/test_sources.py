@@ -36,7 +36,7 @@ class SourceTests(Sandbox):
         root=self.run/'selected';folder=root/'복습노트/1002';folder.mkdir(parents=True)
         import shutil
         for p in (REPO/'복습노트/1002').glob('*.pdf'):shutil.copyfile(p,folder/p.name)
-        (folder/'problems.txt').write_text('E10.11 | valid\nE10.99 | unrelated missing page\n')
+        (folder/'.assets').mkdir(exist_ok=True);(folder/'.assets'/'problems.txt').write_text('E10.11 | valid\nE10.99 | unrelated missing page\n')
         self.assertEqual(len(discover(root,'1002',['E10.11'])),1)
     def test_pagination_is_not_a_different_solution(self):
         import fitz
@@ -50,7 +50,7 @@ class SourceTests(Sandbox):
         import fitz
         root=self.run/'dedup'
         for i,date in enumerate(['1001','1002']):
-            folder=root/'복습노트'/date;folder.mkdir(parents=True);(folder/'problems.txt').write_text('E10.11 | identical\n')
+            folder=root/'복습노트'/date;folder.mkdir(parents=True);(folder/'.assets').mkdir(exist_ok=True);(folder/'.assets'/'problems.txt').write_text('E10.11 | identical\n')
             for role in ['문제','답안']:
                 d=fitz.open();p=d.new_page(width=842,height=595);p.insert_text((25,35),'E10.11');p.insert_text((320,200),'x = 1');p.insert_text((700,585),f'{i+1} / 2');d.save(folder/f'{date}-{role}.pdf')
         pairs=discover(root,'1001-1002');self.assertEqual(len(pairs),1);self.assertEqual(pairs[0]['dates'],['1001','1002']);self.assertEqual(len(pairs[0]['sources']),2)
@@ -59,7 +59,7 @@ class SourceTests(Sandbox):
     def test_malformed_pdf_isolated_in_batch_discovery(self):
         import shutil
         root=self.run/'partial';bad=root/'복습노트/1001';good=root/'복습노트/1002';bad.mkdir(parents=True);good.mkdir()
-        (bad/'problems.txt').write_text('P10.01 | malformed\n');(good/'problems.txt').write_text('E10.11 | valid\n')
+        (bad/'.assets').mkdir(exist_ok=True);(bad/'.assets'/'problems.txt').write_text('P10.01 | malformed\n');(good/'.assets').mkdir(exist_ok=True);(good/'.assets'/'problems.txt').write_text('E10.11 | valid\n')
         for role in ['문제','답안']:(bad/f'bad-{role}.pdf').write_bytes(b'not a pdf')
         for p in (REPO/'복습노트/1002').glob('*.pdf'):shutil.copyfile(p,good/p.name)
         errors=[];pairs=discover(root,'1001-1002',failures=errors)

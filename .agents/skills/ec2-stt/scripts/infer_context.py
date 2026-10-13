@@ -102,11 +102,11 @@ def infer_chapter(repo_root: Path | str, mmdd: str) -> int:
         past_folders = [d for d in folders if d <= mmdd]
         target_folder = past_folders[-1] if past_folders else (folders[-1] if folders else None)
 
-        if target_folder:
-            f_dir = review_root / target_folder
+        f_dir = review_root / target_folder / ".assets" if target_folder else None
+        if f_dir and f_dir.is_dir():
             for f in f_dir.iterdir():
                 name = nfc(f.name)
-                # 정리노트_MMDD_<slug>.md 검사
+                # .assets/정리노트_MMDD_<slug>.md 검사
                 if name.startswith(f"정리노트_{target_folder}_") and name.endswith(".md"):
                     # 파일명 자체에서 우선 판정
                     if "Cascode" in name or "캐스코드" in name:

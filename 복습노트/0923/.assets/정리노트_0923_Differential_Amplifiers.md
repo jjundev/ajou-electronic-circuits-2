@@ -1229,8 +1229,8 @@ DC 전압원은 접지, 테일 전류원은 개방으로 바꾸고 두 트랜지
 
 *0923 수업*
 
-- [복습문제 10개 (PDF)](복습문제_0923_Differential_Amplifiers-문제.pdf)
-- [답안 (PDF)](복습문제_0923_Differential_Amplifiers-답안.pdf)
+- [복습문제 10개 (PDF)](../복습문제_0923_Differential_Amplifiers-문제.pdf)
+- [답안 (PDF)](../복습문제_0923_Differential_Amplifiers-답안.pdf)
 
 Razavi 10장의 예제와 장말문제에서 이번 수업 범위만 골랐어요.
 

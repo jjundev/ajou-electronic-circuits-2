@@ -22,7 +22,7 @@ class RenderTest(unittest.TestCase):
 
     def build(self, ids=('P10.02', '2023-1_중간-Q4'), take=None, name='stage', **kw):
         self.repo = make_repo(self.tmp / 'repo', ids=ids, **kw)
-        self.src = self.repo / '복습노트' / '1007' / 'problems.txt'
+        self.src = self.repo / '복습노트' / '1007' / '.assets' / 'problems.txt'
         pack = load_source(self.src, self.repo)
         if take is not None:
             pack = replace(pack, problems=pack.problems[take])
@@ -48,7 +48,7 @@ class RenderTest(unittest.TestCase):
         self.assertTrue(srcs)
         root = result.html.parent
         for src in srcs:
-            self.assertTrue(src.startswith('figures_문제설명_1007_Diff_Amp/'), src)
+            self.assertTrue(src.startswith('.assets/figures_문제설명_1007_Diff_Amp/'), src)
             self.assertTrue((root / src).is_file(), src)
         self.assertEqual(check_artifacts(pack, result), [])
 
@@ -125,12 +125,21 @@ class RenderTest(unittest.TestCase):
         self.assertFalse(any('원 문제 보기' in n.text() and '#' in n.attrs.get('href', '') for n in anchors))
         self.assertEqual(check_artifacts(pack, result), [])
 
+    def test_markdown_lives_in_assets_with_rebased_links(self):
+        pack, _, result = self.build(take=slice(0, 1))
+        stage = result.html.parent
+        self.assertEqual(result.md, stage / '.assets' / '문제설명_1007_Diff_Amp.md')
+        self.assertEqual(sorted(p.name for p in stage.iterdir()), ['.assets', '문제설명_1007_Diff_Amp.html'])
+        md = unquote(result.md.read_text(encoding='utf-8'))
+        self.assertIn('](../복습문제_1007_Diff_Amp-문제.pdf)', md)
+        self.assertEqual(check_artifacts(pack, result), [])
+
     def test_no_link_when_problem_pdf_missing(self):
         repo = make_repo(self.tmp / 'repo2')
         folder = repo / '복습노트' / '1007'
         for f in folder.glob('*-문제.pdf'):
             f.unlink()
-        pack = load_source(folder / 'problems.txt', repo)
+        pack = load_source(folder / '.assets' / 'problems.txt', repo)
         result = build_explanation(pack, {p.id: fragment(p) for p in pack.problems}, self.tmp / 'stage4', repo)
         self.assertNotIn('원 문제 보기', result.html.read_text(encoding='utf-8'))
         self.assertEqual(check_artifacts(pack, result), [])

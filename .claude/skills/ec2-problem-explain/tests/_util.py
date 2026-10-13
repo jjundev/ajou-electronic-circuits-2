@@ -59,8 +59,8 @@ def make_repo(tmp, *, range_='1007', slug='Diff_Amp', ids=('P10.02', '2023-1_중
     for pid in ids:
         _copy_problem(_nfc(pid), tmp)
     folder = tmp / form('복습노트') / range_
-    folder.mkdir(parents=True, exist_ok=True)
-    (folder / 'problems.txt').write_text(
+    (folder / '.assets').mkdir(parents=True, exist_ok=True)
+    (folder / '.assets' / 'problems.txt').write_text(
         ''.join(f'{pid} | 테스트용 설명 {i}\n' for i, pid in enumerate(ids, 1)), encoding='utf-8')
     (folder / form(f'정리노트_{range_}_{slug}.html')).write_text(
         '<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>정리노트</title></head>'
@@ -93,7 +93,7 @@ def fragment(p=None):
             '<div class="sum" hidden><p>시작·판단·검산</p></div>')
 
 
-def pack(path=Path('problems.txt')):
+def pack(path=Path('.assets/problems.txt')):
     return SourcePack('review', '1007', 'Diff_Amp', path, '0' * 64, (problem(),), ())
 
 
