@@ -1,6 +1,6 @@
 ---
 name: ec2-problem-explain
-description: "전자회로2 복습팩이 이미 고른 workbook 문제(복습노트/<range>/problems.txt)마다 문제의 단서·떠올릴 개념과 공식·첫 줄·단계별 이유·완성 답·검산·함정을 펼친 문제설명 HTML과 MD를 만들고, 원문 대조·내용·독립 검산·브라우저 검토를 통과한 뒤에만 복습노트에 발행한다. \"문제설명\", \"복습문제 풀이 설명\", \"1007 문제 풀이 설명해줘\"처럼 요청하거나 /ec2-problem-explain [MMDD|MMDD-MMDD]로 부를 때 사용한다. 새 출제·정리노트·PDF·영상은 별도 스킬(ec2-review-pack 등)이다."
+description: "전자회로2 복습팩이 이미 고른 workbook 문제(복습노트/<range>/.assets/problems.txt)마다 문제의 단서·떠올릴 개념과 공식·첫 줄·단계별 이유·완성 답·검산·함정을 펼친 문제설명 HTML과 MD를 만들고, 원문 대조·내용·독립 검산·브라우저 검토를 통과한 뒤에만 복습노트에 발행한다. \"문제설명\", \"복습문제 풀이 설명\", \"1007 문제 풀이 설명해줘\"처럼 요청하거나 /ec2-problem-explain [MMDD|MMDD-MMDD]로 부를 때 사용한다. 새 출제·정리노트·PDF·영상은 별도 스킬(ec2-review-pack 등)이다."
 ---
 
 # 전자회로2 문제풀이 입문 설명
@@ -13,7 +13,7 @@ Razavi 이론은 읽었지만 회로 문제풀이 경험이 적은 학생에게,
 
 ## 대상과 보존
 
-- `1007`: `복습노트/1007/problems.txt`의 순서대로 전 문항.
+- `1007`: `복습노트/1007/.assets/problems.txt`의 순서대로 전 문항.
 - `0923-1002`: 정확히 같은 이름의 통합 폴더가 있으면 그 팩, 없으면 범위 안 날짜별 팩을 각각 처리한다. 팩마다 독립 성공/실패다. 통합 폴더와 개별 폴더가 함께 있으면 후보 경로를 보여 주고 멈춘다.
 - 인자 없음: `problems.txt`가 있는 팩 중 폴더명 끝 날짜가 가장 늦은 팩. 같은 끝 날짜 후보가 여럿이면 후보를 보여 주고 멈춘다.
 - `problems.txt`가 없는 팩(예: 0902·0904)을 지정하면 "문제 없는 팩"으로 멈춘다. 기출 회차·임의 문제 id·설계과제는 대상이 아니다.
@@ -74,7 +74,7 @@ python3 "$SKILL/scripts/epe_cli.py" extract --repo "$REPO" --target 1007 --run "
 python3 "$SKILL/scripts/epe_cli.py" build --run "$RUN"
 python3 "$SKILL/scripts/epe_cli.py" check --run "$RUN"
 ```
-- build는 `BUCKET/stage/<id>/`에 `문제설명_<range>_<slug>.html/.md`, `figures_…/`, `자료_…/`를 만들고 `BUCKET/stage.json`, `BUCKET/review.json`(모든 검토 `not_run`, `artifact_hashes` 포함)을 새로 쓴다. **다시 build하면 review.json이 초기화되므로 검토 기록은 마지막 build 뒤에 쓴다.**
+- build는 `BUCKET/stage/<id>/`에 발행 위치와 같은 구조로 `문제설명_<range>_<slug>.html`과 `.assets/`의 `문제설명_<range>_<slug>.md`, `figures_…/`, `자료_…/`를 만들고 `BUCKET/stage.json`, `BUCKET/review.json`(모든 검토 `not_run`, `artifact_hashes` 포함)을 새로 쓴다. **다시 build하면 review.json이 초기화되므로 검토 기록은 마지막 build 뒤에 쓴다.**
 - check는 `BUCKET/machine.json`을 쓰고 `check: machine PASS (수학·화면 검토는 별도)`를 출력해야 한다. 실패 메시지(구역·소문항·수식 구분자·자원·해시)는 담당 작성자에게 되돌리고, 고친 뒤 build부터 다시 한다. 최대 2회, 그래도 남으면 그 팩을 withheld로 보고한다.
 
 ### 6. 검토 기록
@@ -102,19 +102,20 @@ python3 "$SKILL/scripts/epe_cli.py" publish --run "$RUN"
 - <range> (<slug>): published | withheld — <보류 이유>
   - 문항 N개 / 소문항 M개 (main 포함)
   - HTML: 복습노트/<range>/문제설명_<range>_<slug>.html
-  - MD: 복습노트/<range>/문제설명_<range>_<slug>.md
+  - MD: 복습노트/<range>/.assets/문제설명_<range>_<slug>.md
   - 백업: <RUN>/review-<range>-<slug>/backups
   - disputed: <pN(workbook id): md 풀이 값 vs 독립 검산 값> (없으면 "없음")
-- 커밋 제안: git add 복습노트/<range>/문제설명_<range>_<slug>.* "복습노트/<range>/figures_문제설명_<range>_<slug>" "복습노트/<range>/자료_문제설명_<range>_<slug>" && git commit -m "docs(notes): add problem explanations <range>"
+- 커밋 제안: git add 복습노트/<range>/문제설명_<range>_<slug>.html 복습노트/<range>/.assets && git commit -m "docs(notes): add problem explanations <range>"
 ```
 withheld 팩은 HTML·MD 줄 대신 stage 경로를 적는다.
 
 ## 산출 위치
 
 `복습노트/<range>/` 아래:
-- `문제설명_<range>_<slug>.html`, `문제설명_<range>_<slug>.md` (`slug`는 같은 폴더 `정리노트_<range>_<slug>.html`의 것)
-- `figures_문제설명_<range>_<slug>/`: 문제·설명 그림 복사본
-- `자료_문제설명_<range>_<slug>/`: manifest, 조각, evidence, 로컬 KaTeX·Pretendard, `validation.json`(발행 당시 review.json)
+- `문제설명_<range>_<slug>.html` (`slug`는 같은 폴더 `정리노트_<range>_<slug>.html`의 것)
+- `.assets/문제설명_<range>_<slug>.md`: 링크는 `../`로 팩 폴더를 가리킨다
+- `.assets/figures_문제설명_<range>_<slug>/`: 문제·설명 그림 복사본
+- `.assets/자료_문제설명_<range>_<slug>/`: manifest, 조각, evidence, 로컬 KaTeX·Pretendard, `validation.json`(발행 당시 review.json)
 
 읽음 상태는 원 정리노트와 다른 `ec2-problem-explain-review-<range>-<slug>` 키로 저장된다.
 

@@ -10,7 +10,7 @@ from urllib.parse import unquote, urlsplit, quote
 from epe_contract import validate_fragment, payload_hash, markup_errors
 from epe_shared import parse, inner, outer, compact, Ctx, convert, check_md
 from epe_source import sha256, inside, existing_path
-from epe_types import ExplainError, Artifacts
+from epe_types import BUNDLE, ExplainError, Artifacts
 from epe_labels import normalize_subpart_labels
 
 ASSETS = Path(__file__).resolve().parents[1] / 'assets'
@@ -28,7 +28,11 @@ def artifact_hashes(artifacts):
     return {p.relative_to(root).as_posix(): sha256(p) for p in artifacts.files}
 
 def convert_markdown(html_path, md_path, ctx):
-    """Reuse the converter while supplying its missing raster-image support."""
+    """Reuse the converter while supplying its missing raster-image support.
+
+    The md sits in .assets/ beside the HTML, so image paths are rebased onto the md's folder
+    and other relative links get ctx.rebase.
+    """
     document = parse(html_path.read_text(encoding='utf-8'))
     main = next(document.find_all(lambda n: n.tag == 'main'))
     for node in list(main.find_all(lambda n: n.tag == 'figure')):
@@ -36,7 +40,7 @@ def convert_markdown(html_path, md_path, ctx):
             node.tag = 'div'  # html2md's figure branch handles SVG only.
     for node in list(main.find_all(lambda n: n.tag == 'img')):
         alt = node.attrs.get('alt', '그림').replace('[', '(').replace(']', ')')
-        src = quote(node.attrs['src'], safe='/')
+        src = quote(os.path.relpath(html_path.parent / unquote(node.attrs['src']), md_path.parent).replace(os.sep, '/'), safe='/')
         node.tag, node.attrs, node.children = 'p', {}, [f'![{alt}]({src})']
     footer = next(document.find_all(lambda n: n.tag == 'footer'), None)
     temporary = html_path.with_name('.' + html_path.stem + '-md-input.html')
@@ -73,7 +77,7 @@ def resources(markup, problem, pack, repo, stage, fig_name, destination):
             url = urlsplit(node.attrs.get('src', ''))
             if url.scheme or url.netloc or not url.path:
                 raise ExplainError(f'{problem.id}: 저장소 내부 그림만 허용')
-            source = inside(existing_path(pack.path.parent / unquote(url.path)), repo)
+            source = inside(existing_path(pack.folder / unquote(url.path)), repo)
             if not source.is_file():
                 raise ExplainError(f'{problem.id}: 그림 없음: {source}')
             target = stage / fig_name / (sha256(source)[:16] + '-' + source.name)
@@ -88,7 +92,7 @@ def resources(markup, problem, pack, repo, stage, fig_name, destination):
                 raise ExplainError(f'{problem.id}: 개념 링크는 실제 저장소 자료만 허용')
             if not url.path:
                 continue
-            target = inside(existing_path(pack.path.parent / unquote(url.path)), repo)
+            target = inside(existing_path(pack.folder / unquote(url.path)), repo)
             if not target.is_file():
                 raise ExplainError(f'{problem.id}: 링크 파일 없음')
             if url.fragment:
@@ -110,10 +114,12 @@ def build_explanation(pack, fragments, stage: Path, repo: Path) -> Artifacts:
         raise ExplainError(' / '.join(errors))
     stage.mkdir(parents=True, exist_ok=True)
     stem, fig_name, data_name = names(pack)
-    html_path, md_path = stage / f'{stem}.html', stage / f'{stem}.md'
-    data_dir = stage / data_name
-    data_dir.mkdir()
-    (stage / fig_name).mkdir()
+    # Same layout as the destination: HTML on top, everything else in .assets/.
+    bundle = stage / BUNDLE
+    html_path, md_path = stage / f'{stem}.html', bundle / f'{stem}.md'
+    data_dir = bundle / data_name
+    data_dir.mkdir(parents=True)
+    (bundle / fig_name).mkdir()
     shutil.copytree(ASSETS / 'vendor', data_dir / 'vendor')
     shutil.copy2(ASSETS / 'template-provenance.json', data_dir / 'template-provenance.json')
     articles = []
@@ -127,12 +133,12 @@ def build_explanation(pack, fragments, stage: Path, repo: Path) -> Artifacts:
                    + '<div data-source-field="conditions">' + p.conditions_html + '</div><h4>구할 것</h4>'
                    + '<div data-source-field="ask">' + p.ask_html + '</div>' + ''.join(p.figures_html) + '</div>')
         # Validate each block separately: a summary remains a direct fragment child.
-        reading = resources(reading, p, pack, repo, stage, fig_name, pack.path.parent)
+        reading = resources(reading, p, pack, repo, stage, f'{BUNDLE}/{fig_name}', pack.folder)
         normalized = normalize_subpart_labels(fragments[p.id])
-        explanation = resources(normalized, p, pack, repo, stage, fig_name, pack.path.parent)
+        explanation = resources(normalized, p, pack, repo, stage, f'{BUNDLE}/{fig_name}', pack.folder)
         problem_pdf = f'복습문제_{pack.range}_{pack.slug}-문제.pdf'
         try:
-            has_pdf = existing_path(pack.path.parent / problem_pdf).is_file()
+            has_pdf = existing_path(pack.folder / problem_pdf).is_file()
         except ExplainError:
             has_pdf = False
         original_link = (f' · <a href="{quote(problem_pdf, safe="")}">원 문제 보기</a>' if has_pdf else '')
@@ -148,21 +154,21 @@ def build_explanation(pack, fragments, stage: Path, repo: Path) -> Artifacts:
               'SUBTITLE': '주어진 조건을 읽고, 첫 줄을 쓰고, 이유를 따라가며 답을 확인해요.',
               'SECTIONS': '<section id="problems"><h2>문항별 설명</h2>' + ''.join(articles) + '</section>',
               'FOOTER': '원 문제·정리노트·PDF는 보존해요.', 'SCRIPTS': '',
-              'RANGE': f'ec2-problem-explain-review-{pack.range}-{pack.slug}', 'VENDOR': data_name + '/vendor'}
+              'RANGE': f'ec2-problem-explain-review-{pack.range}-{pack.slug}', 'VENDOR': f'{BUNDLE}/{data_name}/vendor'}
     text = (ASSETS / 'note-template.html').read_text(encoding='utf-8')
     for key, value in values.items():
         text = text.replace('{{' + key + '}}', value)
     if re.search(r'\{\{[A-Z_]+\}\}', text):
         raise ExplainError('미치환 템플릿 슬롯')
     html_path.write_text(text, encoding='utf-8')
-    ctx = Ctx([(html_path.name, md_path.name)], str(stage / fig_name), fig_name, prefix='explain')
+    ctx = Ctx([(html_path.name, md_path.name)], str(bundle / fig_name), fig_name, prefix='explain', rebase='../')
     convert_markdown(html_path, md_path, ctx)
     manifest_path = data_dir / 'manifest.json'
     files = tuple(sorted(p for p in stage.rglob('*') if p.is_file()))
     dump(manifest_path, {'version': 1, 'profile': pack.profile, 'range': pack.range, 'slug': pack.slug,
                          'source': str(pack.path), 'source_sha256': pack.sha256, 'inputs': list(pack.inputs),
                          'input_hash': payload_hash(pack, fragments), 'reading_key': values['RANGE'],
-                         'destination': str(pack.path.parent), 'repo': str(repo.resolve()),
+                         'destination': str(pack.folder), 'repo': str(repo.resolve()),
                          'problems': [{'id': p.id, 'subparts': list(p.subparts)} for p in pack.problems],
                          'files': {p.relative_to(stage).as_posix(): sha256(p) for p in files}})
     return Artifacts(html_path, md_path, manifest_path, tuple(sorted((*files, manifest_path))))
@@ -186,7 +192,8 @@ def check_artifacts(pack, artifacts):
                 errors.append('생성 파일 변경/누락: ' + name)
         document = parse(artifacts.html.read_text(encoding='utf-8'))
         main = next(document.find_all(lambda n: n.tag == 'main'))
-        wanted_images = Counter(unquote(n.attrs.get('src', '')) for n in main.find_all(lambda n: n.tag == 'img'))
+        wanted_images = Counter(os.path.relpath(root / unquote(n.attrs.get('src', '')), artifacts.md.parent).replace(os.sep, '/')
+                                for n in main.find_all(lambda n: n.tag == 'img'))
         markdown = artifacts.md.read_text(encoding='utf-8')
         md_images = Counter(unquote(path) for path in re.findall(r'!\[[^\]]*\]\(([^)]+)\)', markdown))
         for image, count in wanted_images.items():

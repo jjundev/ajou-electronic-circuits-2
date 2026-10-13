@@ -16,7 +16,7 @@ class MakeRepoTests(unittest.TestCase):
             self.assertTrue((root / 'from_the_past/md/2023-1_중간/exam.yaml').exists())
             self.assertTrue((root / 'from_the_past/md/2023-1_중간/figures/figures.yaml').exists())
             note = root / '복습노트/1007'
-            lines = (note / 'problems.txt').read_text(encoding='utf-8').splitlines()
+            lines = (note / '.assets' / 'problems.txt').read_text(encoding='utf-8').splitlines()
             self.assertEqual([l.split(' | ')[0] for l in lines], ['P10.02', '2023-1_중간-Q4'])
             self.assertIn('id="s1-diff"', (note / '정리노트_1007_Diff_Amp.html').read_text(encoding='utf-8'))
             self.assertTrue((note / '복습문제_1007_Diff_Amp-문제.pdf').read_bytes())

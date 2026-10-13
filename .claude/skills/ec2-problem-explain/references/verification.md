@@ -77,7 +77,7 @@ method는 `exact|symbolic|numerical|proof|qualitative` 중 하나예요. 기호 
 }
 ```
 
-evidence 파일은 build 전에 써 둬야 stage의 `자료_…/evidence/`로 복사되어 함께 발행돼요. evidence에는 RUN 기준이 아닌 `evidence/…` 상대 이름을 적어요.
+evidence 파일은 build 전에 써 둬야 stage의 `.assets/자료_…/evidence/`로 복사되어 함께 발행돼요. evidence에는 RUN 기준이 아닌 `evidence/…` 상대 이름을 적어요.
 
 ## browser: 화면 검토 (메인 에이전트)
 
@@ -168,4 +168,4 @@ EOF
 
 ## 발행과 보류
 
-답 충돌·조건 모호함·원문 미확인은 그 팩을 `disputed`로 두고 이유를 보고해요. 다른 팩은 통과하면 발행해요. publish는 원본을 바꾸지 않고 설명 소유 파일(`문제설명_<range>_<slug>.html/.md`, `figures_문제설명_…/`, `자료_문제설명_…/`)만 `BUCKET/backups/`에 백업한 뒤 교체하고, 실패하면 복구해요. 발행된 `자료_문제설명_…/validation.json`이 그때의 review.json이에요.
+답 충돌·조건 모호함·원문 미확인은 그 팩을 `disputed`로 두고 이유를 보고해요. 다른 팩은 통과하면 발행해요. publish는 원본을 바꾸지 않고 설명 소유 파일(`문제설명_<range>_<slug>.html`, `.assets/`의 `문제설명_<range>_<slug>.md`·`figures_문제설명_…/`·`자료_문제설명_…/`)만 `BUCKET/backups/`에 백업한 뒤 교체하고, 실패하면 복구해요. 발행된 `.assets/자료_문제설명_…/validation.json`이 그때의 review.json이에요.

@@ -5,7 +5,7 @@ from epe_contract import validate_fragment, validate_reviews, payload_hash
 from epe_files import publish_files
 from epe_render import artifact_hashes, check_artifacts, dump, names
 from epe_source import sha256, inside, load_source
-from epe_types import ExplainError
+from epe_types import BUNDLE, ExplainError
 
 
 def publish_explanation(pack, artifacts, fragments, reviews, destination, backup_dir, repo):
@@ -14,7 +14,7 @@ def publish_explanation(pack, artifacts, fragments, reviews, destination, backup
         if load_source(pack.path, repo) != pack:
             raise ExplainError('입력 변경: 설명을 다시 검증하세요')
         destination = Path(destination).absolute()
-        if destination != pack.path.parent.absolute():
+        if destination != pack.folder.absolute():
             raise ExplainError('발행 위치는 입력 카드의 디렉터리여야 해요')
         errors = check_artifacts(pack, artifacts) + validate_reviews(pack, fragments, reviews)
         errors += [e for p in pack.problems for e in validate_fragment(p, fragments.get(p.id, ''))]
@@ -41,8 +41,9 @@ def publish_explanation(pack, artifacts, fragments, reviews, destination, backup
             src = Path(src).absolute()
             inside(src, stage_root)
             relative = src.relative_to(stage_root)
-            owned = (len(relative.parts) == 1 and relative.name in (stem + '.html', stem + '.md')) \
-                or (len(relative.parts) > 1 and relative.parts[0] in allowed_roots)
+            parts = relative.parts
+            owned = parts == (stem + '.html',) or parts == (BUNDLE, stem + '.md') \
+                or (len(parts) > 2 and parts[0] == BUNDLE and parts[1] in allowed_roots)
             if not owned or relative.name == 'validation.json':
                 raise ExplainError('소유하지 않은 산출 경로: ' + str(relative))
             dst = inside(destination / relative, repo)
@@ -50,7 +51,7 @@ def publish_explanation(pack, artifacts, fragments, reviews, destination, backup
                 raise ExplainError('원본 덮어쓰기 금지')
             mapping[dst] = src
         # Report is deliberately outside the reviewed hash set (avoids self-hashing).
-        report = stage_root / data_name / 'validation.json'
+        report = stage_root / BUNDLE / data_name / 'validation.json'
         dump(report, reviews)
         report_dst = inside(destination / report.relative_to(stage_root), repo)
         if report_dst.resolve() in protected:

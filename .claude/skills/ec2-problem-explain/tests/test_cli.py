@@ -77,7 +77,7 @@ class CliTest(unittest.TestCase):
     def test_one_failing_pack_does_not_block_other(self):
         self.repo(range_='0909', slug='Alpha', ids=('P10.02',))
         repo = self.repo(range_='0910', slug='Beta', ids=('P10.02',))
-        (repo / '복습노트/0910/problems.txt').write_text('P99.99 | 없는 문항\n', encoding='utf-8')
+        (repo / '복습노트/0910/.assets/problems.txt').write_text('P99.99 | 없는 문항\n', encoding='utf-8')
         result = call('extract', '--repo', repo, '--target', '0909-0910', '--run', self.run_dir)
         self.assertEqual(result.returncode, 1)
         self.assertTrue((self.run_dir / 'review-0909-Alpha/source.json').is_file())
@@ -89,7 +89,7 @@ class CliTest(unittest.TestCase):
         self.assertEqual(call('extract', '--repo', repo, '--target', '0909-0910', '--run', self.run_dir).returncode, 0)
         for item in load_run(self.run_dir):
             self.write_fragments(item)
-        later = repo / '복습노트/0910/problems.txt'
+        later = repo / '복습노트/0910/.assets/problems.txt'
         later.write_bytes(later.read_bytes() + b'\n')
         result = call('build', '--run', self.run_dir)
         self.assertEqual(result.returncode, 1)
@@ -111,10 +111,10 @@ class CliTest(unittest.TestCase):
     def test_end_to_end_publish(self):
         repo = self.repo(ids=('P10.02',))
         folder = repo / '복습노트/1007'
-        inputs = {p: p.read_bytes() for p in folder.iterdir() if p.is_file()}
+        inputs = {p: p.read_bytes() for p in folder.rglob('*') if p.is_file()}
         self.assertEqual(call('extract', '--repo', repo, '--target', '1007', '--run', self.run_dir).returncode, 0)
         item = load_run(self.run_dir)[0]
-        self.assertEqual(item['pack'], load_source(folder / 'problems.txt', repo))
+        self.assertEqual(item['pack'], load_source(folder / '.assets' / 'problems.txt', repo))
         self.write_fragments(item)
         for command in ('build', 'check'):
             result = call(command, '--run', self.run_dir)
@@ -130,7 +130,7 @@ class CliTest(unittest.TestCase):
         result = call('publish', '--run', self.run_dir)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertTrue((folder / '문제설명_1007_Diff_Amp.html').is_file())
-        self.assertTrue((folder / '문제설명_1007_Diff_Amp.md').is_file())
+        self.assertTrue((folder / '.assets' / '문제설명_1007_Diff_Amp.md').is_file())
         for path, data in inputs.items():
             self.assertEqual(path.read_bytes(), data)
 

@@ -2,6 +2,9 @@
 from dataclasses import dataclass
 from pathlib import Path
 
+# Pack folders keep only .pack/, HTML and PDF at the top; everything else lives here.
+BUNDLE = '.assets'
+
 class ExplainError(ValueError):
     pass
 
@@ -28,6 +31,11 @@ class SourcePack:
     sha256: str
     problems: tuple[Problem, ...]
     inputs: tuple[str, ...]
+
+    @property
+    def folder(self) -> Path:
+        """The review pack folder (path is <folder>/.assets/problems.txt)."""
+        return self.path.parent.parent
 
 @dataclass(frozen=True)
 class Artifacts:

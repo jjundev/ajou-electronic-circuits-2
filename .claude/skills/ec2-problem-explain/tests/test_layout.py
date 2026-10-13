@@ -21,7 +21,7 @@ class LayoutTest(unittest.TestCase):
         self.addCleanup(tmp.cleanup)
         self.tmp = Path(tmp.name)
         self.repo = make_repo(self.tmp / 'repo')
-        self.pack = load_source(self.repo / '복습노트' / '1007' / 'problems.txt', self.repo)
+        self.pack = load_source(self.repo / '복습노트' / '1007' / '.assets' / 'problems.txt', self.repo)
 
     def build(self, bodies=None, take=None):
         pack = self.pack if take is None else replace(self.pack, problems=self.pack.problems[take])

@@ -18,8 +18,8 @@ class PublishTest(unittest.TestCase):
         self.addCleanup(tmp.cleanup)
         self.tmp = Path(tmp.name)
         self.repo = make_repo(self.tmp / 'repo', ids=('P10.02',))
-        self.src = self.repo / '복습노트' / '1007' / 'problems.txt'
-        self.folder = self.src.parent
+        self.src = self.repo / '복습노트' / '1007' / '.assets' / 'problems.txt'
+        self.folder = self.src.parent.parent
         self.backup = self.tmp / 'backup'
         self.pack = load_source(self.src, self.repo)
         self.fragments = {p.id: fragment(p) for p in self.pack.problems}
