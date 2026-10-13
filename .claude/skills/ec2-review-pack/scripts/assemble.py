@@ -7,7 +7,7 @@ manifest + 섹션 조각 → 정리노트 HTML (표준 라이브러리만 사용
   RUN/sections/<section-id>.html   (섹션 안쪽: <article class="topic"> 들, <script> 가능)
 조각 안의 {{NOTE_HREF}} / {{PROBLEM_PDF}} / {{ANSWER_PDF}} 는 실제 파일명으로 바뀐다.
 <script> 블록은 조각에서 빼서 </body> 앞({{SCRIPTS}})으로 모은다.
-문제가 있으면 같은 폴더에 problems.txt(`id | why` 한 줄씩)를 쓰고, 없으면 예전 problems.txt를 지운다.
+문제가 있으면 같은 폴더의 .assets/problems.txt(`id | why` 한 줄씩)를 쓰고, 없으면 예전 problems.txt를 지운다.
 CLI: assemble.py --run RUN --out 복습노트/<range>
 """
 
@@ -88,8 +88,9 @@ def assemble(run_dir: Path | str, out_dir: Path | str) -> Path:
     out_dir.mkdir(parents=True, exist_ok=True)
     note_path = out_dir / manifest_mod.note_name(m)
     note_path.write_text(note_html, encoding="utf-8")
-    listing = out_dir / manifest_mod.PROBLEMS_TXT
+    listing = out_dir / manifest_mod.BUNDLE / manifest_mod.PROBLEMS_TXT
     if m["problems"]:
+        listing.parent.mkdir(exist_ok=True)
         listing.write_text(problems_txt(m), encoding="utf-8")
     elif listing.exists():
         listing.unlink()

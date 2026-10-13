@@ -3,11 +3,11 @@ r"""정리노트 HTML → GitHub 마크다운 변환기 (표준 라이브러리�
 
 - 본문, 수식($...$ / $$...$$), 목록, 표, 인용을 변환한다.
 - <details>(원문/힌트/풀이)는 접히는 HTML <details>로 남긴다.
-- 인라인 SVG 그림은 figures_<range>/ 에 스타일을 인라인한 독립 SVG로 내보낸다.
+- md는 HTML 옆 .assets/ 에 쓰고, 인라인 SVG 그림은 .assets/figures_<range>/ 에 스타일을 인라인한 독립 SVG로 내보낸다.
 - 위젯은 .widget-static(정적 SVG·표)으로 대체한다. 없으면 "HTML 버전에서 조작" 안내만 남긴다.
 - 표 안 수식의 \| 는 \Vert, | 는 \vert 로 바꾼다(GFM 표 구분자 충돌 방지).
 CLI:
-  html2md.py NOTE.html            # 같은 폴더에 .md + figures_<range>/
+  html2md.py NOTE.html            # 같은 폴더의 .assets/ 에 .md + figures_<range>/
   html2md.py NOTE.html --check    # 변환 후 누락 검사(수식·앵커·그림·링크)
 """
 from __future__ import annotations
@@ -23,6 +23,7 @@ from html.parser import HTMLParser
 from urllib.parse import unquote
 
 VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
+BUNDLE = ".assets"  # 팩 폴더 맨 위에는 .pack/·HTML·PDF만, 나머지는 여기
 NAME_RE = re.compile(r"^(정리노트|복습문제)_(\d{4}(?:-\d{4})?)_([A-Za-z0-9_]+)\.html$")
 FONT = "-apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif"
 LIGHT = {"ink": "#1b2130", "ink-2": "#4a5468", "line": "#dde2ea", "accent": "#2f6fdb", "warn": "#b54708",
@@ -154,28 +155,36 @@ def escape_text(s):
 
 
 class Ctx:
-    """변환 상태. registry는 팩 전체에서 공유하는 그림 파일명 집합(파일 간 덮어쓰기 방지)."""
+    """변환 상태. registry는 팩 전체에서 공유하는 그림 파일명 집합(파일 간 덮어쓰기 방지).
 
-    def __init__(self, link_map, fig_dir_abs, fig_dir_name, prefix="", registry=None):
+    rebase: md가 HTML보다 깊은 폴더에 있을 때 상대 링크 앞에 붙일 접두(예: "../").
+    """
+
+    def __init__(self, link_map, fig_dir_abs, fig_dir_name, prefix="", registry=None, rebase=""):
         self.link_map, self.fig_dir_abs, self.fig_dir_name, self.figs = link_map, fig_dir_abs, fig_dir_name, []
+        self.rebase = rebase
         self.prefix = prefix
         self.registry = registry if registry is not None else set()
         self.auto = 0
 
 
 def fix_href(href, ctx):
-    """팩 HTML(NFC·NFD, %-인코딩, ./ 접두 모두)을 가리키는 링크를 .md로 바꾼다."""
+    """팩 HTML(NFC·NFD, %-인코딩, ./ 접두 모두)을 가리키는 링크를 .md로 바꾼다.
+
+    나머지 상대 링크에는 ctx.rebase를 붙인다(md는 .assets/ 안에 있으므로 HTML 기준 경로가 한 단계 위).
+    """
     path, sep, frag = href.partition("#")
     if not path:
         return href
-    head, _, base = path.rpartition("/")
-    if head not in ("", "."):
+    if re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*:", path) or path.startswith("/"):
         return href
-    base = nfc(unquote(base))
-    for old, new in ctx.link_map:
-        if base == nfc(old):
-            return (f"{head}/" if head else "") + new + sep + frag
-    return href
+    head, _, base = path.rpartition("/")
+    if head in ("", "."):
+        base = nfc(unquote(base))
+        for old, new in ctx.link_map:
+            if base == nfc(old):
+                return (f"{head}/" if head else "") + new + sep + frag
+    return ctx.rebase + href
 
 
 def inline(node, ctx):
@@ -612,9 +621,10 @@ def check_md(html_path, md_path):
 
 
 def convert_note(note_path):
-    """정리노트 HTML을 같은 폴더에 .md로 변환한다. (md 경로, 그림 파일 수)를 돌려준다."""
+    """정리노트 HTML을 같은 폴더의 .assets/ 에 .md로 변환한다. (md 경로, 그림 파일 수)를 돌려준다."""
     src = os.path.abspath(note_path)
-    out_dir = os.path.dirname(src)
+    out_dir = os.path.join(os.path.dirname(src), BUNDLE)
+    os.makedirs(out_dir, exist_ok=True)
     name = nfc(os.path.basename(src))
     m = NAME_RE.match(name)
     if not m or m.group(1) != "정리노트":
@@ -630,7 +640,7 @@ def convert_note(note_path):
     intro = [f"> `{name}`를 마크다운으로 옮겼어요. 그림은 `{fig_name}/` 폴더의 SVG, "
              "위젯은 대표 설정의 정적 그림으로 바꿨어요. 수식은 `$…$` / `$$…$$`라서 GitHub, Obsidian, Typora에서 보여요."]
     registry = set()
-    ctx = Ctx(link_map, fig_abs, fig_name, prefix="note", registry=registry)
+    ctx = Ctx(link_map, fig_abs, fig_name, prefix="note", registry=registry, rebase="../")
     out = os.path.join(out_dir, name[:-5] + ".md")
     convert(src, out, ctx, intro)
     if not os.listdir(fig_abs):  # 그림이 하나도 없으면 빈 폴더를 남기지 않는다

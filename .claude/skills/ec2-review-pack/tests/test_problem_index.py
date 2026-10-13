@@ -25,19 +25,26 @@ class TestUnits(unittest.TestCase):
     def test_used_ids(self):
         with tempfile.TemporaryDirectory() as tmp:
             notes = Path(tmp)
-            (notes / "0909").mkdir()
-            (notes / "0909" / "problems.txt").write_text(
+            (notes / "0909" / ".assets").mkdir(parents=True)
+            (notes / "0909" / ".assets" / "problems.txt").write_text(
                 "P9.01 | 이유\n\n" + unicodedata.normalize("NFD", "2023-1_기말-Q1") + " | 기출\n", encoding="utf-8")
             self.assertEqual(problem_index.used_ids(notes), {"P9.01", "2023-1_기말-Q1"})
             self.assertEqual(problem_index.used_ids(notes / "missing"), set())
 
+    def test_used_ids_ignores_top_level_problems_txt(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            notes = Path(tmp)
+            (notes / "0909").mkdir()
+            (notes / "0909" / "problems.txt").write_text("P9.01 | 옛 위치\n", encoding="utf-8")
+            self.assertEqual(problem_index.used_ids(notes), set())
+
     def test_used_ids_exclude_range(self):
         with tempfile.TemporaryDirectory() as tmp:
             notes = Path(tmp)
-            (notes / "0918").mkdir()
-            (notes / "0918" / "problems.txt").write_text("P9.01 | 이유\n", encoding="utf-8")
-            (notes / "0923").mkdir()
-            (notes / "0923" / "problems.txt").write_text("P9.02 | 이유\n", encoding="utf-8")
+            (notes / "0918" / ".assets").mkdir(parents=True)
+            (notes / "0918" / ".assets" / "problems.txt").write_text("P9.01 | 이유\n", encoding="utf-8")
+            (notes / "0923" / ".assets").mkdir(parents=True)
+            (notes / "0923" / ".assets" / "problems.txt").write_text("P9.02 | 이유\n", encoding="utf-8")
             self.assertEqual(problem_index.used_ids(notes), {"P9.01", "P9.02"})
             self.assertEqual(problem_index.used_ids(notes, exclude="0923"), {"P9.01"})
 
@@ -71,8 +78,8 @@ class TestRealRepo(unittest.TestCase):
 
     def test_used_marker(self):
         with tempfile.TemporaryDirectory() as tmp:
-            (Path(tmp) / "0909").mkdir()
-            (Path(tmp) / "0909" / "problems.txt").write_text("P9.01 | x\n", encoding="utf-8")
+            (Path(tmp) / "0909" / ".assets").mkdir(parents=True)
+            (Path(tmp) / "0909" / ".assets" / "problems.txt").write_text("P9.01 | x\n", encoding="utf-8")
             rows, _ = problem_index.index(REPO, used_dir=Path(tmp), chapters={9})
         table = by_id(rows)
         self.assertEqual(table["P9.01"][5], "USED")
@@ -81,10 +88,10 @@ class TestRealRepo(unittest.TestCase):
     def test_index_exclude_range_keeps_other_ranges_used(self):
         with tempfile.TemporaryDirectory() as tmp:
             notes = Path(tmp)
-            (notes / "0918").mkdir()
-            (notes / "0918" / "problems.txt").write_text("P9.01 | x\n", encoding="utf-8")
-            (notes / "0923").mkdir()
-            (notes / "0923" / "problems.txt").write_text("P9.02 | x\n", encoding="utf-8")
+            (notes / "0918" / ".assets").mkdir(parents=True)
+            (notes / "0918" / ".assets" / "problems.txt").write_text("P9.01 | x\n", encoding="utf-8")
+            (notes / "0923" / ".assets").mkdir(parents=True)
+            (notes / "0923" / ".assets" / "problems.txt").write_text("P9.02 | x\n", encoding="utf-8")
             rows, _ = problem_index.index(REPO, used_dir=notes, chapters={9}, exclude_range="0923")
         table = by_id(rows)
         self.assertEqual(table["P9.01"][5], "USED")
@@ -93,8 +100,8 @@ class TestRealRepo(unittest.TestCase):
     def test_cli_exclude_range(self):
         with tempfile.TemporaryDirectory() as tmp:
             notes = Path(tmp)
-            (notes / "0923").mkdir()
-            (notes / "0923" / "problems.txt").write_text("P9.01 | x\n", encoding="utf-8")
+            (notes / "0923" / ".assets").mkdir(parents=True)
+            (notes / "0923" / ".assets" / "problems.txt").write_text("P9.01 | x\n", encoding="utf-8")
             with contextlib.redirect_stdout(io.StringIO()) as out:
                 self.assertEqual(problem_index.main(
                     ["--repo", str(REPO), "--used", str(notes), "--chapters", "9", "--exclude-range", "0923"]), 0)
