@@ -171,7 +171,7 @@ CS 증폭기를 말로 따라간 뒤에는 같은 회로를 소신호 모델로 
 - 대신호 모델(large-signal model): 신호 진폭이 크든 작든 상관없이 적용되는 일반적인 모델이에요.
 - 소신호 모델(small-signal model): 신호가 작을 때만 성립하는 모델이에요([소신호: 바이어스 위의 작은 흔들림](#s0-small-signal)).
 
-포화 영역 조건은 두 가지예요(자세한 영역 구분은 지난 수업의 [큰 V_DS: 전류원이 되는 saturation 영역](../0902/정리노트_0902_MOSFET_Review.html#s2-saturation)).
+포화 영역 조건은 두 가지예요(자세한 영역 구분은 지난 수업의 [큰 V_DS: 전류원이 되는 saturation 영역](../../0902/정리노트_0902_MOSFET_Review.html#s2-saturation)).
 
 - 채널이 생겨 전류가 흐르려면 $V_{GS} \gt V_{TH}$예요.
 - 포화 영역이려면 $V_{DS} \ge V_{GS}-V_{TH}$예요. 등호가 들어가도 상관없어요.
@@ -1338,8 +1338,8 @@ BJT는 세 영역 샌드위치이고, 두 접합 조건을 맞추면 $V_{BE}$의
 
 *0904 수업*
 
-- [지난 수업 정리노트 (0902): MOSFET 구조, triode, saturation](../0902/정리노트_0902_MOSFET_Review.html)
-- [나중 수업 정리노트 (0923): 차동 증폭기 — 여기서 배운 $g_m$, $r_O$, CS 이득이 계속 쓰여요](../0923/정리노트_0923_Differential_Amplifiers.html)
+- [지난 수업 정리노트 (0902): MOSFET 구조, triode, saturation](../../0902/정리노트_0902_MOSFET_Review.html)
+- [나중 수업 정리노트 (0923): 차동 증폭기 — 여기서 배운 $g_m$, $r_O$, CS 이득이 계속 쓰여요](../../0923/정리노트_0923_Differential_Amplifiers.html)
 
 이번 범위에는 workbook 문제가 없어요.
 

@@ -748,7 +748,7 @@ $R_S=r_{O1}$처럼 $R_S$가 $r_O$ 수준으로 크면 $r_{O2}$로 새는 전류�
 2. $g_m=\dfrac{\partial I_D}{\partial V_{GS}}=\mu C_{ox}\frac{W}{L}(V_{GS}-V_{TH})$
 3. 1번 식에서 $V_{GS}-V_{TH}=\sqrt{2I_D/(\mu C_{ox}W/L)}$를 넣으면 $g_m=\sqrt{2\mu C_{ox}\frac{W}{L}I_D}$
 
-오버드라이브 전압이 주어지면 2번 식, 전류가 주어지면 3번 식이 편해요. 이번에는 전류가 주어졌어요. 유도는 [0904 정리노트: 트랜스컨덕턴스 g_m](../0904/정리노트_0904_MOS_Small_Signal_Model.html#s1-gm)에도 있어요.
+오버드라이브 전압이 주어지면 2번 식, 전류가 주어지면 3번 식이 편해요. 이번에는 전류가 주어졌어요. 유도는 [0904 정리노트: 트랜스컨덕턴스 g_m](../../0904/정리노트_0904_MOS_Small_Signal_Model.html#s1-gm)에도 있어요.
 
 **$r_O$**: 채널 길이 변조를 넣은 전류식을 $V_{DS}$로 미분해요.
 
@@ -1443,10 +1443,10 @@ $g_m$이 $I_C/V_T$인지 $V_T/I_C$인지 외우면 헷갈리니, 전류식을 �
 
 *0916 수업*
 
-- [복습문제 10개 (PDF)](복습문제_0916_Cascode_Amplifier-문제.pdf)
-- [답안 (PDF)](복습문제_0916_Cascode_Amplifier-답안.pdf)
-- [0904 정리노트: 채널 길이 변조와 출력저항 $r_O$](../0904/정리노트_0904_MOS_Small_Signal_Model.html#s1-ro)
-- [9장 문제집 전체](../../workbook/pdf/ch09-문제.pdf)
+- [복습문제 10개 (PDF)](../복습문제_0916_Cascode_Amplifier-문제.pdf)
+- [답안 (PDF)](../복습문제_0916_Cascode_Amplifier-답안.pdf)
+- [0904 정리노트: 채널 길이 변조와 출력저항 $r_O$](../../0904/정리노트_0904_MOS_Small_Signal_Model.html#s1-ro)
+- [9장 문제집 전체](../../../workbook/pdf/ch09-문제.pdf)
 
 ---
 

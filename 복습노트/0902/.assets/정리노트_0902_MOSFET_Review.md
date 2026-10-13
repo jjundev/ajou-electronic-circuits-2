@@ -1161,7 +1161,7 @@ $V_{DS}$가 $V_{GS}-V_{TH}$ 이상이면 전류가 $V_{GS}$로만 정해지는 �
 
 이번 범위에는 workbook 문제가 없어요.
 
-- [0923 복습팩 정리노트 (Differential Amplifiers)](../0923/정리노트_0923_Differential_Amplifiers.html)
+- [0923 복습팩 정리노트 (Differential Amplifiers)](../../0923/정리노트_0923_Differential_Amplifiers.html)
 
 ---
 
