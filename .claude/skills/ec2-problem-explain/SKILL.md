@@ -65,7 +65,7 @@ python3 "$SKILL/scripts/epe_cli.py" extract --repo "$REPO" --target 1007 --run "
 ### 4. 독립 검산 (작성자와 다른 에이전트)
 - 문항마다 검산 에이전트 1명(opus, 병렬)을 띄운다. 그 문항의 작성자를 재사용하지 않는다.
 - [검토 기록](references/verification.md)의 `independent` 절을 따른다. 조건과 구할 것만으로 먼저 답을 구하고(SymPy 기호 계산 + 수치 대입, 증명·정성 문항은 논증 검토), 그 뒤에 md `## 풀이`와 조각의 답과 대조한다.
-- 산출: `BUCKET/evidence/pN-*.py`와 실행 출력 `BUCKET/evidence/pN-result.txt`, 그리고 소문항별 판정(JSON 형태로 응답: `pN:a` → status/method/conclusion/evidence).
+- 산출: SymPy 스크립트 `BUCKET/evidence/pN-sympy.py`와 실행 출력 `BUCKET/evidence/pN-result.txt`, 그리고 소문항별 판정(JSON 형태로 응답: `pN:a` → status/method/conclusion/evidence).
 - 조각 답이 틀렸으면 그 작성자에게 고치게 하고 같은 검산을 다시 한다. md `## 풀이`와 독립 검산이 다르면(조각을 어느 쪽에 맞춰도 해소되지 않음) 그 팩을 disputed로 표시한다. 다른 팩은 계속한다.
 - evidence는 build가 stage로 복사하므로 **build 전에** 모두 써 둔다.
 
@@ -82,7 +82,7 @@ python3 "$SKILL/scripts/epe_cli.py" check --run "$RUN"
 - `source_visual`: `workbook/source_pages.py render`로 원본 쪽을 렌더해 문항 조건·그림·소문항과 대조.
 - `content`: 작성자가 아닌 리뷰어 에이전트(opus) 1명이 팩의 모든 조각을 읽고 소문항별로 판정.
 - `independent`: 4의 판정을 그대로 옮긴다(evidence 경로는 stage에 복사된 `evidence/`와 같은 이름).
-- `browser`: 메인 에이전트가 stage HTML을 로컬 서버로 열어 확인.
+- `browser`: 메인 에이전트가 stage 폴더를 `python3 -m http.server`로 열고(몇 초 뒤 측정), 네 조합 측정은 헤드리스 Playwright [scripts/epe_browser_check.py](scripts/epe_browser_check.py)로 해요(`playwright`·chromium 필요). 내장 브라우저 창은 목차·pager·테마 토글을 눌러 보는 확인에만 쓰고, 그 페이지의 `document.visibilityState`가 `'visible'`일 때만 결과로 써요. `ERR_CONNECTION_RESET` 같은 연결 끊김은 fail이 아니라 다시 실행해요. evidence에 어느 경로로 확인했는지 적어요.
 - `references`: 실제로 읽은 저장소 자료의 절대 경로와 SHA-256.
 - 내용·화면 결함은 담당 작성자에게 모아서 한 번에 되돌리고, 고친 뒤 5부터 다시 한다(네 검토 모두 다시). 최대 2회.
 
@@ -123,7 +123,7 @@ withheld 팩은 HTML·MD 줄 대신 stage 경로를 적는다.
 |---|---|
 | 저장소가 아님 | 알리고 멈춤 |
 | 대상 없음·문제 없는 팩·여러 후보 | extract 메시지와 후보 경로를 보여 주고 멈춤 |
-| extract의 `문항 <id>: …`(소문항 표지 불일치·md 없음·그림 없음) | 그 팩만 withheld. 메시지와 md 경로를 보고하고 md는 고치지 않음 |
+| extract의 `문항 <id>: …`(소문항 표지 중복·md 없음·그림 없음) | 그 팩만 withheld. 메시지와 md 경로를 보고하고 md는 고치지 않음 |
 | `RUN은 비어 있어야 해요` | 새 실행ID로 RUN을 다시 정함 |
 | `추출 데이터 또는 원본 변경` | 원본이 실행 중 바뀜. 새 RUN으로 extract부터 다시 |
 | check 실패 2회 | 그 팩 withheld, 이유 보고 |
@@ -131,3 +131,5 @@ withheld 팩은 HTML·MD 줄 대신 stage 경로를 적는다.
 | `발행 보류: …` / `검토 후 생성 파일 변경` / `참조 자료 변경` | 원인을 고쳐 build부터 다시 검토. 안 되면 withheld |
 | SymPy 설치 실패 | 수치 대입만으로 검산하고 method와 evidence에 그 사실을 적음 |
 | 포트 사용 중 | 다른 빈 포트 사용 |
+| `playwright` 없음(epe_browser_check 종료 코드 2) | `pip3 install --user --break-system-packages playwright` 후 `python3 -m playwright install chromium` |
+| 화면 측정 중 `ERR_CONNECTION_RESET`(`flaky_rerun`) | 서버 연결 끊김이라 fail로 두지 않고 다시 실행 |

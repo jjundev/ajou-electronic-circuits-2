@@ -15,9 +15,9 @@
   "references": [{"path": "/abs/REPO/교과서/마이크로전자회로/10장.pdf", "sha256": "…"}],
   "source_visual": {"status": "pass", "reviewer": "…", "evidence": "…"},
   "content": {"status": "pass", "reviewer": "…", "evidence": "…",
-              "items": {"p1:main": {"status": "pass", "reviewer": "…", "evidence": "…"}}},
+              "items": {"pN:main": {"status": "pass", "reviewer": "…", "evidence": "…"}}},
   "independent": {"status": "pass", "reviewer": "…", "evidence": "…",
-                  "items": {"p1:main": {"status": "pass", "reviewer": "…", "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt: …",
+                  "items": {"pN:main": {"status": "pass", "reviewer": "…", "evidence": "evidence/pN-sympy.py, evidence/pN-result.txt: …",
                                         "method": "symbolic", "conclusion": "…"}}},
   "browser": {"status": "pass", "reviewer": "…", "evidence": "…"}
 }
@@ -55,20 +55,23 @@ python3 "$REPO/workbook/source_pages.py" render <문제 md 절대 경로…> --o
 2. 기호 계산 스크립트를 `BUCKET/evidence/pN-sympy.py`로 저장해요. 소신호 등가회로의 KCL/KVL을 `sympy.solve`로 풀고, 결과를 `simplify`해 목표 식과의 차이가 0인지 확인해요. 근사가 있으면 `sympy.limit`(예: $r_o\to\infty$, $\lambda\to0$)으로 근사 전후를 모두 보여요. 수치 문항은 주어진 값을 대입해요.
 3. 실행 출력을 `BUCKET/evidence/pN-result.txt`로 저장해요.
    ```bash
-   python3 "$BUCKET/evidence/p1-sympy.py" > "$BUCKET/evidence/p1-result.txt" 2>&1
+   python3 "$BUCKET/evidence/pN-sympy.py" > "$BUCKET/evidence/pN-result.txt" 2>&1
    ```
+   `pN`은 실제 문항 id(`p1`, `p2`…)로 바꿔 써요. 문항마다 이 두 파일 이름만 써요.
 4. 그다음 md `## 풀이`(source.json `reference_answer`)와 조각의 완성 답과 비교해요.
    - 셋이 같으면 `pass`.
    - 조각만 다르면 작성자에게 되돌려요(그 사이 상태는 `fail`).
    - md `## 풀이`와 독립 검산이 다르면 `disputed`이고 그 팩은 발행하지 않아요. conclusion에 두 값을 모두 적어요.
+   - 근사 수준의 차이는 `disputed`가 아니에요. 조각이 표준 근사 조건(예: $r_{O3}\gg R_1\parallel r_{\pi3}$, $g_m r_o\gg1$)을 명시하고 정확한 식도 함께 보이며, 독립 검산이 그 조건에서 두 값의 비가 1로(또는 차이가 0으로) 간다는 것을 보이면 `pass`로 두고 conclusion에 그 조건을 적어요.
+   - 실제 수치·구조 불일치(예: 한 식 안에서 서로 맞지 않는 모델을 섞음)는 근사 차이가 아니므로 `disputed`로 남겨요.
 
 method는 `exact|symbolic|numerical|proof|qualitative` 중 하나예요. 기호 유도는 `symbolic`, 증명은 `proof`(숫자 예만 있는 evidence는 승인하지 않아요), 정성 비교(예: "CM 이득이 커진다/작아진다")는 `qualitative`로 두고 논증과 극한 확인을 evidence에 적어요. `numerical`이면 유한한 `tolerance`>0과 0≤`residual`≤`tolerance`도 넣어요.
 
 ```json
 {
   "status": "pass",
-  "reviewer": "독립 검산 에이전트(opus, p1 작성자와 다름)",
-  "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt: CM 하프 서킷 KCL을 풀어 simplify(A_CM - 목표식) = 0",
+  "reviewer": "독립 검산 에이전트(opus, pN 작성자와 다름)",
+  "evidence": "evidence/pN-sympy.py, evidence/pN-result.txt: CM 하프 서킷 KCL을 풀어 simplify(A_CM - 목표식) = 0",
   "method": "symbolic",
   "conclusion": "A_CM = -(R_D/2)/(1/(2g_m)+r_O3), md 풀이·조각과 일치"
 }
@@ -80,11 +83,25 @@ evidence 파일은 build 전에 써 둬야 stage의 `자료_…/evidence/`로 �
 
 file:// 미리보기에서는 스크립트가 돌지 않으므로 stage 폴더를 서버로 열어요. 셸 상태가 이어지지 않으니 포트를 먼저 출력해 두고 숫자를 직접 써요.
 1. 빈 포트: `python3 -c "import socket; s=socket.socket(); s.bind(('',0)); print(s.getsockname()[1])"`
-2. Bash 도구의 `run_in_background: true`로 `python3 -m http.server <port> --bind 127.0.0.1 --directory "<BUCKET>/<stage>"`.
+2. Bash 도구의 `run_in_background: true`로 `python3 -m http.server <port> --bind 127.0.0.1 --directory "<BUCKET>/<stage>"`. 서버를 띄우고 몇 초 지난 뒤에 측정해요.
 3. URL: `http://127.0.0.1:<port>/문제설명_<range>_<slug>.html`(한글 그대로).
-4. `resize_window`로 1280×900을 명시하고 `document.documentElement.clientWidth > 0`을 확인한 뒤 측정해요.
 
-`javascript_tool`로 실행해요.
+**전제: 측정하는 페이지의 `document.visibilityState`가 `'visible'`이어야 해요.** 탭이 숨겨져 있으면 `requestAnimationFrame`이 돌지 않아 템플릿의 수식 줄 배치와 등장 애니메이션이 실행되지 않고, `hScroll`이 실제로 없는 넘침을 보고해요. visibilityState가 `'visible'`이 아닌 페이지에서 잰 값은 검토 결과로 쓰지 않아요. 내장 브라우저 창은 숨겨진 상태일 수 있어서 측정은 헤드리스 Playwright로 해요.
+
+### 측정: 헤드리스 Playwright (기본 경로)
+
+[scripts/epe_browser_check.py](../scripts/epe_browser_check.py)가 1280×900·375×812 × light·dark 네 조합을 새 컨텍스트로 열고, 문항마다 700ms 기다리며 아래 스크립트로 재고, 콘솔 오류를 모아 JSON으로 출력해요. 한 조합이라도 통과 기준을 넘지 못하면 종료 코드 1이에요.
+
+```bash
+python3 -c "import playwright" || pip3 install --user --break-system-packages playwright
+python3 -m playwright install chromium   # chromium이 없을 때만
+python3 "$SKILL/scripts/epe_browser_check.py" --url "http://127.0.0.1:<port>/문제설명_<range>_<slug>.html" --topics <문항 수> --shots "$RUN/shots" > "$RUN/browser.json"
+```
+
+- `--shots`는 선택이에요. 주면 조합×문항마다 `shot-<조합>-<pN>.png`를 저장하니 Read 도구로 열어 회로 그림과 수식이 잘리거나 겹치지 않는지, 글자가 다크 모드에서 보이는지 확인해요.
+- 콘솔 오류에 `ERR_CONNECTION_RESET`·`ERR_SOCKET_NOT_CONNECTED`가 있으면(출력의 `flaky_rerun`) 로컬 서버가 요청을 끊은 것이라 페이지 결함이 아니에요. fail로 두지 말고 같은 명령을 다시 실행해요. 두 번 연속 깨끗하지 않으면 원인을 살펴요.
+
+조합마다 재는 값(스크립트에 들어 있는 것과 같아요):
 ```js
 await new Promise((r) => setTimeout(r, 1500));
 const textNodes = Array.from(document.querySelectorAll('main *, #panel-right *')).filter((e) => !['SCRIPT', 'STYLE'].includes(e.tagName) && !e.closest('[hidden]'));
@@ -92,15 +109,17 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 const scroller = document.querySelector('.content') || document.documentElement;
 const over = [], panelOver = [];
 for (const t of document.querySelectorAll('main article.topic')) {
-  location.hash = '#' + t.id; await wait(250);
+  location.hash = '#' + t.id; await wait(700);
   document.getAnimations().forEach((a) => a.finish());
-  if (scroller.scrollWidth > scroller.clientWidth + 1 || document.documentElement.scrollWidth > window.innerWidth + 1) over.push(t.id);
+  await wait(100);
+  if (scroller.scrollWidth > scroller.clientWidth + 1 || document.documentElement.scrollWidth > window.innerWidth + 1) over.push(t.id + ':' + scroller.scrollWidth);
   for (const d of document.querySelectorAll('#panel-right .sum .katex-display')) {
     if (d.offsetParent !== null && d.scrollWidth > d.clientWidth + 1) panelOver.push(t.id);
   }
 }
 location.hash = '';
 ({
+  visibility: document.visibilityState,
   topics: document.querySelectorAll('main article.topic').length,
   katex: document.querySelectorAll('.katex').length,
   katexErrors: document.querySelectorAll('.katex-error').length,
@@ -113,15 +132,19 @@ location.hash = '';
   panelOverflow: panelOver,
 })
 ```
-통과: `topics`·`sumsInPanel`이 문항 수, `katexErrors: 0`, `rawDollar: false`, `sumsLeftInMain: 0`, `brokenImages: []`, `external: []`, `hScroll: []`, `panelOverflow: []`, `read_console_messages`에 오류 없음.
+통과(네 조합 모두): `visibility: "visible"`, `topics`·`sumsInPanel`이 문항 수, `katexErrors: 0`, `rawDollar: false`, `sumsLeftInMain: 0`, `brokenImages: []`, `external: []`, `hScroll: []`, `panelOverflow: []`, 콘솔 오류 없음(`consoleErrors: []`).
 
-그다음 실제로 눌러 봐요: 왼쪽 목차에서 문항 이동, `#pager-prev`/`#pager-next`, 오른쪽 요약 패널에 그 문항 요약이 보이는지(스크린샷), 회로 그림과 수식이 잘리거나 겹치지 않는지, 짧은 인라인 수식에 스크롤바가 없는지, 구역 24px·제목 아래 12px·소문항 16px 간격.
+### 손으로 누르는 확인: 내장 브라우저 창
 
-`resize_window`(`preset: "mobile"`, `colorScheme: "dark"`) → 새로고침 → 위 스크립트 재실행 → 스크린샷으로 그림·글자가 보이는지 확인 → `#theme-toggle`을 눌러 배경색과 `aria-label`이 바뀌는지 확인 → `localStorage.removeItem('od-theme')`. 1280×900 light/dark와 375×812 light/dark 네 조합을 모두 봐요. 끝나면 `preset: "desktop"`, `colorScheme: "light"`로 되돌리고 서버를 종료해요.
+측정은 위 스크립트로 끝내고, 내장 브라우저 창은 실제로 눌러 보는 확인에만 써요. 누르기 전에 `javascript_tool`로 `document.visibilityState`가 `'visible'`인지 확인해요. 아니면 창을 앞으로 보이게 한 뒤 다시 확인하고, 그래도 안 되면 이 확인은 `--shots` 스크린샷으로 대신하고 그 사실을 evidence에 적어요.
+- `resize_window`로 1280×900을 명시하고 `document.documentElement.clientWidth > 0`을 확인해요.
+- 왼쪽 목차에서 문항 이동, `#pager-prev`/`#pager-next`, 오른쪽 요약 패널에 그 문항 요약이 보이는지(스크린샷), 짧은 인라인 수식에 스크롤바가 없는지, 구역 24px·제목 아래 12px·소문항 16px 간격.
+- `resize_window`(`preset: "mobile"`, `colorScheme: "dark"`) → 새로고침 → `#theme-toggle`을 눌러 배경색과 `aria-label`이 바뀌는지 확인 → `localStorage.removeItem('od-theme')`.
+- 끝나면 `preset: "desktop"`, `colorScheme: "light"`로 되돌리고 서버를 종료해요.
 
 stage에서는 `복습문제_…-문제.pdf`나 정리노트로 가는 링크가 발행 위치(`복습노트/<range>/`) 기준이라 열리지 않아요. 이 링크는 check가 발행 위치 기준으로 파일·anchor를 검사하고, 메인 에이전트가 `href`의 대상 파일과 `id`가 실제로 있는지 한 번 더 확인해요.
 
-evidence에는 크기·테마 조합, 스크립트 결과 요약, 누른 항목을 적어요.
+evidence에는 쓴 경로(`playwright-headless` 측정 / 내장 브라우저 창 클릭 확인), 크기·테마 조합, 스크립트 결과 요약(재실행했다면 그 이유), 누른 항목을 적어요. 숨겨진 창에서 잰 값이나 경로가 적히지 않은 기록은 pass로 두지 않아요.
 
 ## references
 

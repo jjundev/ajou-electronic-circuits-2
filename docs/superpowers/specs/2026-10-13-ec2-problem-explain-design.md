@@ -32,7 +32,7 @@ A(채택): ML 스킬 포크 + 소스 어댑터만 workbook md로 교체 + 발행
 - 위치 `.claude/skills/ec2-problem-explain/`, 등록 `.agents/skills/ec2-problem-explain` → `../../.claude/skills/ec2-problem-explain` 상대 심볼릭 링크. 모듈 접두사 `epe_`.
 - 재사용(읽기 전용 import): `workbook/problem.py`(`load_problem`, `html_fields`, `problem_figures`, `solution`), `workbook/assemble.py`(`TEXTBOOK_ID_RE`, `EXAM_ID_RE`, `KIND_DIR`), `.claude/skills/ec2-review-pack/scripts/html2md.py`(`Node`, `Ctx`, `convert`, `check_md`), `check_html.math_delimiter_errors`.
 - 새로 소유: md 소스 어댑터, 발행(잠금·백업·교체·복구), ML 템플릿+vendor 자원(색 토큰은 EC2 정리노트 템플릿).
-- 소문항: `## 구할 것` 최상위 항목의 선두 `(1)`/`(a)` 표지. 없으면 `main`. 섞이면 오류.
+- 소문항(R3): `## 구할 것` 최상위 항목이 `(표지)`(`\d+` 또는 `[a-z]`) 뒤에 공백으로 시작할 때만 소문항이에요. `(a), (b) 각 단`·`(a)–(c)`처럼 그림 부분을 가리키는 표기는 표지가 아니에요. 표지 없는 항목은 함께 있어도 되고 무시해요. 표지가 하나도 없으면 `main`이에요. 표지가 중복되면 오류예요.
 - 입력 무결성: problems.txt + 각 md + 각 문제 그림 바이트를 순서대로 묶은 SHA-256. 발행 직전 재추출해 같아야 한다.
 - 산출: `복습노트/<range>/문제설명_<range>_<slug>.html/.md`, `figures_문제설명_<range>_<slug>/`, `자료_문제설명_<range>_<slug>/`. slug는 같은 폴더의 `정리노트_<range>_<slug>.html`. 읽음 키 `ec2-problem-explain-review-<range>-<slug>`.
 - 저작: 문항마다 opus 작성자 병렬. 독립 검산은 작성자와 다른 에이전트가 SymPy 기호 계산+수치 대입, 증명·정성은 논증 검토. `source_visual`은 frontmatter `pdf_page`와 `workbook/source_pages.py render`로 원본 쪽 대조.
