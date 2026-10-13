@@ -15,7 +15,7 @@ from epe_shared import (load_problem, html_fields, problem_figures, solution, Pr
 REVIEW_DIR = '복습노트'
 PACK_RE = re.compile(r'\d{4}(?:-\d{4})?')
 LINE_RE = re.compile(r'^\s*(\S+)\s*\|\s*(.*\S)\s*$')
-LABEL_RE = re.compile(r'^\s*\((\d+|[a-z])\)')
+LABEL_RE = re.compile(r'^\s*\((\d+|[a-z])\)\s')
 
 
 def nfc(value):
@@ -156,11 +156,9 @@ def subparts(ask_html: str) -> tuple[str, ...]:
     for lst in root.children:
         if not isinstance(lst, str) and lst.tag in ('ul', 'ol'):
             items += [n for n in lst.children if not isinstance(n, str) and n.tag == 'li']
-    labels = [m[1] if (m := LABEL_RE.match(n.text())) else None for n in items]
-    if not any(labels):
+    labels = [m[1] for n in items if (m := LABEL_RE.match(n.text()))]
+    if not labels:
         return ('main',)
-    if not all(labels):
-        raise ExplainError('소문항 표지 불일치')
     if len(set(labels)) != len(labels):
         raise ExplainError('소문항 표지 중복: ' + ', '.join(labels))
     return tuple(labels)

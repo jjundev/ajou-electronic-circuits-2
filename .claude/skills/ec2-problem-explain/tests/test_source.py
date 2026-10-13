@@ -172,10 +172,28 @@ class SourceTest(unittest.TestCase):
         self.assertEqual(subparts('<ul><li>구하라</li></ul>'), ('main',))
         self.assertEqual(subparts('<ol><li>(a) x</li><li>(b) y</li></ol>'), ('a', 'b'))
         self.assertEqual(subparts('<ul><li>(a) x<ul><li>(z) n</li></ul></li></ul>'), ('a',))
-        with self.assertRaisesRegex(ExplainError, '소문항 표지 불일치'):
-            subparts('<ul><li>(1) x</li><li>y</li></ul>')
+        # R3: unlabeled items coexist with labeled ones and are ignored (was: 소문항 표지 불일치 error)
+        self.assertEqual(subparts('<ul><li>(1) x</li><li>y</li></ul>'), ('1',))
         with self.assertRaises(ExplainError):
             subparts('<ul><li>(1) x</li><li>(1) y</li></ul>')
+
+    def test_subparts_figure_part_references_are_not_labels(self):
+        def ul(*items):
+            return '<ul>' + ''.join(f'<li>{i}</li>' for i in items) + '</ul>'
+        self.assertEqual(subparts(ul('(a), (b) 각 단의 공통 모드 제거비(CMRR)', '두 결과를 비교')), ('main',))
+        self.assertEqual(subparts(ul('(a)–(c) 각 회로의 $I_{copy}$', '오차를 정규화')), ('main',))
+        self.assertEqual(subparts(ul('다음 각 경우 테일 노드 전압은?', '(a) $M_1$과 x', '(b) $I_{SS}$가 두 배',
+                                     '(c) 게이트 y')), ('a', 'b', 'c'))
+        self.assertEqual(subparts(ul('(a)–(c) 각 회로의 차동 전압 이득')), ('main',))
+        self.assertEqual(subparts(ul('(a), (b), (c) 각 경우에')), ('main',))
+        self.assertEqual(subparts(ul('(a)-(c) 각 회로')), ('main',))
+        with self.assertRaisesRegex(ExplainError, '소문항 표지 중복'):
+            subparts(ul('(a) x', '그냥', '(a) y'))
+
+    def test_real_packs_with_figure_part_references_load(self):
+        repo = self.repo(ids=('P10.70', 'P10.35', 'P9.46', 'P10.52'))
+        pack = load_source(repo / '복습노트' / '1007' / 'problems.txt', repo)
+        self.assertEqual([p.subparts for p in pack.problems], [('main',), ('a', 'b', 'c'), ('main',), ('main',)])
 
 
 if __name__ == '__main__':
