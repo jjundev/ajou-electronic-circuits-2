@@ -19,7 +19,7 @@ from pathlib import Path
 from pypdf import PdfReader, PdfWriter
 
 from . import config
-from .check import _IMAGE_LOCAL
+from .check import EMOJI, _IMAGE_LOCAL
 from .cover import A4_H_MM, A4_W_MM, make_cover
 
 _VERSION = re.compile(r"(?<![A-Za-z])v(\d+)")
@@ -106,7 +106,7 @@ def find_body(n: int, root: Path, search_dirs: list[Path] | None = None) -> Body
 def lint_body(text: str, images: int, expected_images: int) -> list[str]:
     """노션에서 내보낸 본문 PDF 의 흔적 점검. 경고만 돌려주고 병합은 막지 않는다.
 
-    텍스트 추출은 수식을 깨뜨리므로 오검출이 적은 세 가지만 본다.
+    텍스트 추출은 수식을 깨뜨리므로 오검출이 적은 네 가지만 본다.
     """
     out = []
     m = _TITLE_VERSION.search(text)
@@ -115,6 +115,10 @@ def lint_body(text: str, images: int, expected_images: int) -> list[str]:
     if images != expected_images:
         out.append(f"본문 PDF 그림이 {images}장인데 md 의 그림 자리는 {expected_images}장이다 — "
                    "노션에 빠진 그림이 없는지 본다")
+    marks = sorted(set(EMOJI.findall(text)) - {"\ufe0f"})
+    if marks:
+        out.append("본문 PDF 에 이모지로 보이는 기호가 있다: " + " ".join(marks)
+                   + " — md 에서 지우고 다시 올린다")
     refs = sorted({re.sub(r"\s", "", r) for r in _OLD_REF.findall(text)})
     if refs:
         out.append("예전 문항 번호 표기가 남았다: " + ", ".join(refs)

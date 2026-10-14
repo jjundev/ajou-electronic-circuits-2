@@ -29,6 +29,9 @@ _ORDERED = re.compile(r"^\d+\.")
 # `2-(a)` 꼴 문항 참조. 대절 헤딩에 번호가 없으므로 'Spice Problem (a)' 처럼 이름으로 쓴다.
 _OLD_REF = re.compile(r"(?<![\w.])\d-\([a-z]\)")
 _CAPTION_ALT = re.compile(r"!\[(그림\s*\d+\.[^\]]*)\]\(")
+# 노션·PDF 뷰어가 컬러 이모지로 그리는 문자 (▶ ✔ ⭐ ↔ 등). →, ①, −, ° 는 보통 글자라 뺀다.
+EMOJI = re.compile("[\u2194-\u2199\u21a9\u21aa\u2300-\u23ff\u25a0-\u25ff\u2600-\u27bf"
+                   "\u2b00-\u2bff\ufe0f\U0001f000-\U0001faff]")
 _NOT_PROSE = ("#", "|", "-", "*", ">", "!", "<", "$$")
 MAX_COLUMNS = 11
 FIG_DIR = "figs"  # 보고서 그림은 md 옆 figs/ 한 폴더에만 둔다
@@ -141,9 +144,11 @@ def check_markdown(path: Path) -> list[Finding]:
             out.append(Finding("error", where, "h5 이상 헤딩은 노션이 h4 로 강등한다"))
         if _HEADING.match(line) and "`" in line:
             out.append(Finding("error", where, "헤딩 안 백틱은 노션에서 코드 서식으로 남는다"))
-        if line.startswith("▶"):
+        for ch in EMOJI.findall(line):
+            if ch == "\ufe0f":
+                continue
             out.append(Finding("error", where,
-                "줄 맨 앞 ▶ 는 노션이 토글 블록으로 바꾼다 — **▶** 로 쓴다 (docs/notion-probe.md)"))
+                f"'{ch}' 는 PDF 에서 컬러 이모지로 보인다 — 지우거나 '(만족)' 같은 글로 쓴다"))
         if _RAW_HTML.match(line):
             out.append(Finding("error", where, "열 0 의 원시 HTML 은 노션이 받지 않는다"))
         for ref in _OLD_REF.findall(line):

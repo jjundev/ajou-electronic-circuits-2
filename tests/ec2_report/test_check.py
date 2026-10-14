@@ -13,7 +13,7 @@ CLEAN = """# 1. Design Problem
 
 **(a) 이득을 구하라.**
 
-**▶** 반쪽 회로에서 $g_m$ 과 출력저항으로 이득을 구한다.
+반쪽 회로에서 $g_m$ 과 출력저항으로 이득을 구한다.
 
 $$
 A_v = G_m R_{out}
@@ -149,13 +149,16 @@ class CheckMarkdownTests(unittest.TestCase):
     def test_ai_standalone_blocked(self):
         self.assertEqual(len(self.errors("AI 도움을 받았다.\n")), 1)
 
-    def test_leading_arrow_becomes_toggle(self):
-        e = self.errors("▶ 풀이 문단\n")
-        self.assertEqual(len(e), 1)
-        self.assertIn("토글", e[0].msg)
+    def test_emoji_symbols_blocked(self):
+        for s in ("▶ 풀이", "**▶** 풀이", "| M1 | saturation ✔ |", "목표 달성 ⭐", "확인 ✔\ufe0f", "A ↔ B"):
+            e = self.errors(s + "\n")
+            self.assertEqual(len(e), 1, s)
+            self.assertIn("이모지", e[0].msg)
+        self.assertEqual(len(self.errors("✔ ✔ ▶\n")), 3)
 
-    def test_bold_or_escaped_arrow_allowed(self):
-        self.assertEqual(self.errors("**▶** 풀이\n\n\\▶ 풀이\n\n본문 ▶ 가운데\n"), [])
+    def test_plain_symbols_allowed(self):
+        text = "① 이득식, $V_{in1}$ 증가 → 감소, −3 dB, 180°, 0.5–1 V (만족)\n\n$$\n▶\n$$\n\n```\n✔\n```\n"
+        self.assertEqual(self.errors(text), [])
 
     def test_code_fence_lines_are_skipped(self):
         text = "넷리스트:\n\n```spice\nM1 x in1 s 0 CMOSN W=65u\nM2 y in2 s 0 CMOSN W=65u\necho $HOME\n<tag>\n```\n"

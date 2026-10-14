@@ -203,8 +203,13 @@ class MergeTests(MergeTestBase):
         self.assertTrue(any("3장" in x and "4장" in x for x in w))
         self.assertTrue(any("2-(d)" in x for x in w))
 
+    def test_lint_body_flags_emoji(self):
+        w = merge.lint_body("M1 saturation ✔\nM2 saturation ✔\n▶ 조건은", images=4, expected_images=4)
+        self.assertEqual(len(w), 1)
+        self.assertIn("▶ ✔", w[0])
+
     def test_lint_body_clean(self):
-        text = "전자회로2 설계과제1 보고서\n2(100 μ)/0.0736  V  (1+0.1×0.15)\nSpice Problem (d)\n"
+        text = "전자회로2 설계과제1 보고서\n2(100 μ)/0.0736  V  (1+0.1×0.15) → ① −3 dB 180°\nSpice Problem (d)\n"
         self.assertEqual(merge.lint_body(text, images=4, expected_images=4), [])
 
     def test_verify_rejects_page_mismatch(self):
