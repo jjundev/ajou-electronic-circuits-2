@@ -1,0 +1,45 @@
+{
+  "source_sha256": "94c2c9bf42e62de064f6133b2c5e7af51f3000f2d427eff7b86a716bb9766961",
+  "reviews": {
+    "machine": {
+      "status": "pass",
+      "evidence": [
+        "119/119 node:test; check.cjs ok; steps.json"
+      ]
+    },
+    "content": {
+      "status": "pass",
+      "evidence": [
+        "circuit-review.md: independent source comparison, all findings resolved"
+      ]
+    },
+    "numeric_independent": {
+      "status": "pass",
+      "evidence": [
+        "independent-numeric.json: 423 assertions; complex nodal transfer and cutoff bisection",
+        "184 scene/state assertions in independent review"
+      ]
+    },
+    "browser": {
+      "status": "pass",
+      "evidence": [
+        "browser-review.json",
+        "browser-actions.json",
+        "desktop-light.png",
+        "desktop-dark.png",
+        "mobile-light.png",
+        "mobile-dark.png"
+      ]
+    }
+  },
+  "assumptions": [
+    "gm=5mS fixed",
+    "ro=∞",
+    "independent input/output RC; Cgd and body effect omitted"
+  ],
+  "supplements": [],
+  "findings": [
+    "resolved: endpoint marker clipping, hidden gm and component values",
+    "resolved: mobile text size/pole label overlap; stable range position during pointer drag"
+  ]
+}

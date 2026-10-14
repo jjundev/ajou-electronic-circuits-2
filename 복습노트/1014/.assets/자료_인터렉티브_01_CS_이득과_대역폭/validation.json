@@ -1,0 +1,47 @@
+{
+  "source_sha256": "b92ed567735171ad29c805c08ee49f15cc641917846bb2305d690ac0385ce86e",
+  "reviews": {
+    "machine": {
+      "status": "pass",
+      "evidence": [
+        "119/119 node:test; check.cjs ok; steps.json"
+      ]
+    },
+    "content": {
+      "status": "pass",
+      "evidence": [
+        "circuit-review.md: independent source comparison, all findings resolved"
+      ]
+    },
+    "numeric_independent": {
+      "status": "pass",
+      "evidence": [
+        "independent-numeric.json: 423 assertions; complex nodal transfer and cutoff bisection",
+        "184 scene/state assertions in independent review"
+      ]
+    },
+    "browser": {
+      "status": "pass",
+      "evidence": [
+        "browser-review.json",
+        "browser-actions.json",
+        "desktop-light.png",
+        "desktop-dark.png",
+        "mobile-light.png",
+        "mobile-dark.png"
+      ]
+    }
+  },
+  "assumptions": [
+    "gm=2mS fixed",
+    "ro=∞",
+    "linear small-signal model; no clipping/transient"
+  ],
+  "supplements": [
+    "phase and steady-state waveform; textbook p575 Eq11.3; separately normalized amplitudes"
+  ],
+  "findings": [
+    "resolved: endpoint marker clipping, hidden gm and component values",
+    "resolved: mobile text size/pole label overlap; stable range position during pointer drag"
+  ]
+}
