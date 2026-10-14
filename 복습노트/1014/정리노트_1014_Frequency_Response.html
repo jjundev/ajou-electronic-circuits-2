@@ -1,0 +1,1772 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>전자회로2 정리노트 1014</title>
+  <meta name="description" content="권익진 교수님 전자회로2 · 1014 수업 (Lec5, Razavi 11장)">
+  <script>document.documentElement.classList.add('js');try{const t=localStorage.getItem('od-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false,ignoredTags:['script','noscript','style','textarea','pre','code']})"></script>
+  <style>
+    /* ---------- 토큰 ---------- */
+    :root {
+      color-scheme: light;
+      --scroll: #c9d0db; --scroll-hover: #9aa3b2;
+      --bg: #ffffff; --surface: #f7f8fa; --ink: #111111; --ink-2: #6b7280; --line: #d9dee7;
+      --accent: #1677ff; --accent-ink: #1b64da; --btn-bg: #1b64da; --on-btn: #ffffff;
+      --warn: #b54708; --prof: #6941c6; --supp: #067647; --danger: #d92d20;
+      --font: 'Pretendard', system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      --fs-title: clamp(28px, 6vw, 36px); --fs-h3: clamp(26px, 5.4vw, 32px); --fs-layer: 19px; --fs-lead: 22px; --fs-body: 17px; --fs-sub: 15px; --fs-small: 14px; --fs-label: 13px; --fs-fig: 12px;
+      --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px;
+      --radius: 8px; --measure: 680px; --tap: 48px; --btn-min: 160px;
+      --dur: 220ms; --dur-exit: 150ms; --ease-out: cubic-bezier(.2, .8, .2, 1);
+      /* 예전 조각이 참조할 수 있는 이름 */
+      --surface-2: var(--surface); --accent-soft: var(--surface); --warn-soft: var(--surface);
+      --prof-soft: var(--surface); --supp-soft: var(--surface); --eli5: var(--accent-ink); --eli5-soft: var(--surface);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        color-scheme: dark;
+        --scroll: #3f414b; --scroll-hover: #5b5e6a;
+        --bg: #17171c; --surface: #212128; --ink: #f2f4f6; --ink-2: #a3abb8; --line: #34353d;
+        --accent: #3182f6; --accent-ink: #6ea4ff; --btn-bg: #1b64da; --on-btn: #ffffff;
+        --warn: #f5a15c; --prof: #b69cff; --supp: #5fd39a; --danger: #ff6b61;
+      }
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --scroll: #3f414b; --scroll-hover: #5b5e6a;
+      --bg: #17171c; --surface: #212128; --ink: #f2f4f6; --ink-2: #a3abb8; --line: #34353d;
+      --accent: #3182f6; --accent-ink: #6ea4ff; --btn-bg: #1b64da; --on-btn: #ffffff;
+      --warn: #f5a15c; --prof: #b69cff; --supp: #5fd39a; --danger: #ff6b61;
+    }
+
+    /* ---------- 기본 ---------- */
+    * { box-sizing: border-box; }
+    html { scroll-padding-top: 72px; -webkit-text-size-adjust: 100%; }
+    body { margin: 0; min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column;
+      background: var(--bg); color: var(--ink); font-family: var(--font); font-size: var(--fs-body); line-height: 1.7; word-break: keep-all; overflow-wrap: anywhere; }
+    a { color: var(--accent-ink); text-underline-offset: 3px; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    [hidden] { display: none !important; }
+
+    /* ---------- 상단 바 ---------- */
+    .topbar { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line); }
+    .topbar-inner { max-width: var(--measure); margin: 0 auto; padding: var(--s2) var(--s4); display: flex; align-items: center; gap: var(--s3); min-height: 56px; }
+    .brand { flex: 1 1 auto; min-width: 0; font-size: var(--fs-body); font-weight: 700; white-space: nowrap; }
+    .text-btn { flex: none; min-height: 44px; min-width: 44px; padding: 0 var(--s3); border: 0; border-radius: var(--radius);
+      background: transparent; color: var(--ink); font: 600 var(--fs-small)/1 var(--font); cursor: pointer; }
+    .bar { height: 2px; background: var(--line); overflow: hidden; }
+    .bar > span { display: block; height: 100%; background: var(--accent); transform-origin: left; transform: scaleX(0); transition: transform var(--dur) var(--ease-out); }
+
+    /* ---------- 본문 ---------- */
+    main { flex: 1 0 auto; width: 100%; max-width: var(--measure); margin: 0 auto; padding: var(--s6) var(--s5) var(--s7); }
+    .hero h1 { font-size: var(--fs-title); line-height: 1.3; margin: 0 0 var(--s3); letter-spacing: -0.02em; }
+    .hero p { color: var(--ink-2); margin: 0; }
+    section { margin-top: var(--s7); }
+    section > h2 { font-size: 22px; line-height: 1.4; margin: 0 0 var(--s4); }
+    .topic { padding: var(--s6) 0; border-top: 1px solid var(--line); }
+    .topic h3 { margin: 0 0 var(--s2); font-size: var(--fs-h3); font-weight: 800; line-height: 1.3; letter-spacing: -0.02em; }
+    .tags { display: flex; flex-wrap: wrap; gap: var(--s2); margin-bottom: var(--s5); }
+    .tag { font-size: var(--fs-label); line-height: 1.5; padding: 2px var(--s2); border-radius: 6px; background: var(--surface); color: var(--ink-2); white-space: nowrap; }
+
+    /* 레이어: 배경 없이 라벨과 구분선으로 나눈다 */
+    .layer { margin-top: var(--s5); padding-top: var(--s5); border-top: 1px solid var(--line); }
+    .layer.eli5 { margin-top: 0; padding-top: 0; border-top: 0; }
+    .layer > :first-child { margin-top: 0; }
+    .layer > :last-child { margin-bottom: 0; }
+    .layer-title { display: block; font-size: var(--fs-layer); font-weight: 700; line-height: 1.4; letter-spacing: -0.01em; color: var(--ink); margin-bottom: var(--s3); }
+    .layer.eli5 .layer-title { color: var(--accent-ink); }
+    .layer.eli5 .lead { font-size: var(--fs-lead); font-weight: 700; line-height: 1.5; letter-spacing: -0.01em; margin: 0 0 var(--s4); }
+    /* 정확히 말하면: 본문 크기 그대로, 굵은 첫머리만 진하게 */
+    .layer.formal b { font-weight: 700; color: var(--ink); }
+    /* 교수님 말씀 · 주의: 보조 정보는 한 단계 작게 */
+    .layer.prof, .layer.warn { font-size: var(--fs-sub); line-height: 1.7; }
+    .layer.prof blockquote { font-size: var(--fs-sub); }
+    .layer.prof .layer-title { color: var(--prof); }
+    .layer.warn { background: var(--surface); border-top: 0; border-radius: var(--radius); padding: var(--s4); }
+    .layer.warn .layer-title { color: var(--warn); font-size: var(--fs-body); }
+    .layer.supp .badge.supp { margin-bottom: var(--s2); }
+    .badge { display: inline-block; font-size: var(--fs-label); font-weight: 600; line-height: 1.5; padding: 2px var(--s2); border-radius: 6px; background: var(--surface); color: var(--ink-2); }
+    .badge.supp { color: var(--supp); }
+    blockquote { margin: var(--s3) 0; padding: 0 0 0 var(--s3); border-left: 2px solid var(--line); color: var(--ink-2); }
+    ol.steps { padding-left: 1.4em; }
+    ol.steps li { margin: var(--s2) 0; }
+
+    /* 그림 · 수식 · 표 */
+    .figure { margin: var(--s4) 0; text-align: center; }
+    .figure svg { width: 100%; height: auto; max-width: 560px; color: var(--ink); }
+    .figure figcaption { font-size: var(--fs-small); color: var(--ink-2); margin-top: var(--s1); }
+    .katex-display { overflow-x: auto; overflow-y: hidden; padding: var(--s1) 0; }
+    .table-wrap { overflow-x: auto; }
+    table { border-collapse: collapse; width: 100%; font-size: var(--fs-small); }
+    th, td { border-bottom: 1px solid var(--line); padding: var(--s2); text-align: left; vertical-align: top; }
+    th { color: var(--ink-2); font-weight: 600; }
+    td:first-child, th:first-child { min-width: 6em; }
+
+    /* 위젯 */
+    .widget { background: var(--surface); border-radius: var(--radius); padding: var(--s4); margin: var(--s5) 0; }
+    .widget h4 { margin: 0 0 var(--s1); font-size: var(--fs-layer); line-height: 1.4; }
+    .widget-help { font-size: var(--fs-small); color: var(--ink-2); margin: 0 0 var(--s3); }
+    .controls { display: grid; gap: var(--s2); grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-bottom: var(--s2); font-size: var(--fs-small); }
+    .controls label { display: flex; align-items: center; gap: var(--s2); min-height: 44px; }
+    .controls input[type=range] { flex: 1; min-width: 0; accent-color: var(--accent); }
+    .widget svg { width: 100%; height: auto; background: var(--bg); border-radius: var(--radius); }
+    .readout { font-size: var(--fs-small); margin-top: var(--s2); }
+    .legend { font-size: var(--fs-label); color: var(--ink-2); display: flex; flex-wrap: wrap; gap: var(--s3); }
+    .sw { display: inline-block; width: 14px; height: 4px; vertical-align: middle; margin-right: var(--s1); border-radius: 2px; }
+    .sw.truth { background: var(--ink-2); } .sw.fit { background: var(--accent); } .sw.train { background: var(--accent); height: 10px; width: 10px; border-radius: 50%; }
+    .sw.test { background: var(--warn); height: 10px; width: 10px; border-radius: 50%; } .sw.like { background: var(--accent); } .sw.prior { background: var(--prof); } .sw.post { background: var(--supp); }
+    .axis { stroke: var(--line); stroke-width: 1.5; }
+    .tick { fill: var(--ink-2); font-size: 11px; }
+    .plot-truth { fill: none; stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 5 4; }
+    .plot-fit { fill: none; stroke: var(--accent); stroke-width: 2.5; }
+    .pt-train { fill: var(--accent); }
+    .pt-test { fill: var(--warn); }
+    .plot-like { fill: none; stroke: var(--accent); stroke-width: 2; }
+    .plot-prior { fill: none; stroke: var(--prof); stroke-width: 2; stroke-dasharray: 6 4; }
+    .plot-post { fill: none; stroke: var(--supp); stroke-width: 3; }
+    .mark-ml { stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 3 3; }
+    .mark-map { stroke: var(--supp); stroke-width: 1.5; stroke-dasharray: 3 3; }
+    .fig-ink { stroke: currentColor; fill: none; stroke-width: 2; }
+    .fig-accent { stroke: var(--accent); fill: none; stroke-width: 2.5; }
+    .fig-danger { stroke: var(--danger); fill: none; stroke-width: 2.5; }
+    .fig-dot { fill: var(--accent); }
+    .fig-text { fill: currentColor; font-size: 13px; font-family: inherit; }
+    .fig-muted { fill: var(--ink-2); font-size: var(--fs-fig); font-family: inherit; }
+
+    footer { width: 100%; max-width: var(--measure); margin: 0 auto; padding: 0 var(--s5) var(--s6); color: var(--ink-2); font-size: var(--fs-small); }
+
+    /* ---------- 하단 이동 바 ---------- */
+    .pager { position: sticky; bottom: 0; z-index: 10; background: var(--bg); border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom); }
+    .pager-inner { max-width: var(--measure); margin: 0 auto; padding: var(--s3) var(--s4); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: var(--s3); }
+    .pager-count { font-size: var(--fs-small); color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; text-align: center; min-width: 4em; }
+    .btn { min-height: var(--tap); min-width: var(--btn-min); padding: 0 var(--s6); border-radius: var(--radius); border: 0; font: 700 var(--fs-body)/1 var(--font); cursor: pointer; white-space: nowrap;
+      transition: background-color 150ms ease-out, opacity 150ms ease-out; }
+    .btn-ghost { justify-self: start; background: var(--surface); color: var(--ink); }
+    .btn-primary { justify-self: end; background: var(--btn-bg); color: var(--on-btn); }
+    .btn:disabled { opacity: .4; cursor: default; }
+    @media (hover: hover) {
+      .text-btn:hover, .btn-ghost:not(:disabled):hover { background: var(--line); }
+      .btn-primary:not(:disabled):hover { box-shadow: inset 0 0 0 100px rgba(0, 0, 0, .14); }
+    }
+
+    /* ---------- 목차 시트 ---------- */
+    .sheet { width: min(100%, var(--measure)); max-width: 100%; max-height: 80dvh; margin: auto auto 0; padding: 0; border: 0;
+      border-radius: 16px 16px 0 0; background: var(--bg); color: var(--ink); }
+    .sheet::backdrop { background: rgba(0, 0, 0, .4); }
+    .sheet-inner { padding: var(--s4) var(--s5) calc(var(--s5) + env(safe-area-inset-bottom)); }
+    .sheet-head { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); margin-bottom: var(--s2); }
+    .sheet-head h2 { margin: 0; font-size: var(--fs-lead); }
+    .toc { display: flex; flex-direction: column; }
+    .toc > a, .toc-group > a { display: block; padding: var(--s3) 0 var(--s1); font-size: var(--fs-label); font-weight: 600; color: var(--ink-2); text-decoration: none; }
+    .toc-list { list-style: none; margin: 0 0 var(--s2); padding: 0; }
+    .toc-list a { display: flex; align-items: center; gap: var(--s3); min-height: var(--tap); padding: var(--s2) var(--s3); margin: 0 calc(-1 * var(--s3));
+      border-radius: var(--radius); color: var(--ink); text-decoration: none; line-height: 1.4; }
+    .toc-list a[aria-current="true"] { background: var(--surface); font-weight: 700; color: var(--accent-ink); }
+    .toc-list .toc-title { flex: 1 1 0; min-width: 0; }
+    @media (hover: hover) { .toc-list a:hover { background: var(--surface); } }
+
+    /* ---------- 한 화면에 하나씩 (JS가 켤 때만) ---------- */
+    html:not(.js) .pager, html:not(.js) #toc-open { display: none; }
+    html:not(.js) .sheet { display: block; position: static; width: 100%; max-height: none; margin: 0 auto; border-radius: 0; border-bottom: 1px solid var(--line); }
+    html:not(.js) .sheet-close { display: none; }
+    .js main > .hero:not(.is-current), .js main > section:not(.is-on), .js .screen:not(.is-current) { display: none; }
+    .js main > section { margin-top: 0; }
+    .js main > section > h2 { font-size: var(--fs-small); font-weight: 600; color: var(--accent-ink); margin: 0 0 var(--s2); }
+    .js .topic { padding: 0; border-top: 0; }
+    .js .hero { padding-top: 12vh; }
+    .js footer { display: none; }
+    .js body.at-end footer { display: block; }
+    .screen.enter-next { animation: enter-next var(--dur) var(--ease-out); }
+    .screen.enter-prev { animation: enter-prev var(--dur) var(--ease-out); }
+    @keyframes enter-next { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: none; } }
+    @keyframes enter-prev { from { opacity: 0; transform: translateX(-24px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) {
+      .screen.enter-next, .screen.enter-prev { animation: none; }
+      .bar > span, .btn { transition: none; }
+    }
+    @media (max-width: 480px) {
+      main { padding: var(--s5) var(--s4) var(--s6); }
+      footer { padding: 0 var(--s4) var(--s5); }
+      .btn { min-width: 120px; padding: 0 var(--s5); }
+    }
+    @media print {
+      .topbar, .pager, .sheet { display: none !important; }
+      .js main > .hero, .js main > section, .js .screen, .js footer { display: block !important; }
+    }
+
+    /* ---------- 좌우 패널 (drawer) ---------- */
+    :root { --panel-l: clamp(240px, 18vw, 320px); --panel-r-min: 320px; --panel-r-max: 720px; --scrollbar: 16px; --drawer-l: 304px; --drawer-r: 360px; --fs-panel: 16px; --scrim: rgba(0, 0, 0, .4); }
+    body { height: 100vh; height: 100dvh; min-height: 0; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; overflow: hidden; }
+    .topbar-inner { max-width: none; padding: var(--s2) var(--s3); gap: var(--s2); }
+    .panel-toggle { display: inline-flex; align-items: center; gap: var(--s1); padding: 0 var(--s2); }
+    .panel-toggle svg { flex: none; width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .panel-toggle .strip { fill: transparent; stroke: none; transition: fill 150ms ease-out; }
+    .panel-toggle[aria-expanded="true"] { color: var(--accent-ink); }
+    .panel-toggle[aria-expanded="true"] .strip { fill: currentColor; }
+    .theme-toggle { display: inline-flex; align-items: center; justify-content: center; padding: 0; }
+    .theme-toggle svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .theme-toggle .i-sun { display: none; }
+    :root[data-theme="dark"] .theme-toggle .i-sun { display: block; }
+    :root[data-theme="dark"] .theme-toggle .i-moon { display: none; }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .theme-toggle .i-sun { display: block; }
+      :root:not([data-theme="light"]) .theme-toggle .i-moon { display: none; }
+    }
+
+    .layout { display: grid; grid-template-columns: auto minmax(320px, 1fr) auto; min-height: 0; }
+    .content { display: flex; flex-direction: column; min-width: 0; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scroll-padding-top: var(--s4); }
+    .panel { position: relative; display: flex; flex-direction: column; min-height: 0; overflow: hidden; background: var(--bg); color: var(--ink); font-size: var(--fs-panel); line-height: 1.6; }
+    .panel-left { grid-column: 1; border-right: 1px solid var(--line); }
+    .content { grid-column: 2; }
+    .panel-right { grid-column: 3; border-left: 1px solid var(--line); }
+    .panel-inner { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: var(--s4) var(--s4) var(--s6); }
+    .content::-webkit-scrollbar, .panel-inner::-webkit-scrollbar { width: 8px; }
+    .content::-webkit-scrollbar-track, .panel-inner::-webkit-scrollbar-track { background: transparent; }
+    .content::-webkit-scrollbar-thumb, .panel-inner::-webkit-scrollbar-thumb { background: var(--scroll); border-radius: 8px; border: 2px solid var(--bg); }
+    .content::-webkit-scrollbar-thumb:hover, .panel-inner::-webkit-scrollbar-thumb:hover { background: var(--scroll-hover); }
+    @supports (scrollbar-color: auto) { .content, .panel-inner { scrollbar-width: thin; scrollbar-color: var(--scroll) transparent; } }
+    .panel-resize { display: none; }
+    .panel-head { display: flex; align-items: center; gap: var(--s2); min-height: 44px; margin-bottom: var(--s2); }
+    .panel-head h2 { flex: 1 1 0; min-width: 0; margin: 0; font-size: var(--fs-lead); line-height: 1.4; }
+    .panel-sub { margin: 0 0 var(--s4); font-size: var(--fs-layer); font-weight: 700; line-height: 1.4; letter-spacing: -0.01em; }
+    .panel-empty { margin: 0; color: var(--ink-2); }
+    .panel-label { display: block; margin: var(--s5) 0 var(--s2); font-size: var(--fs-label); font-weight: 600; color: var(--ink-2); }
+
+    /* 진행 상태 */
+    .panel-meta { margin: 0 0 var(--s2); font-size: var(--fs-small); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+    .panel-meta b { color: var(--ink); }
+    .progress { height: 4px; margin-bottom: var(--s3); border-radius: 2px; background: var(--line); overflow: hidden; }
+    .progress > span { display: block; height: 100%; background: var(--accent); transform-origin: left; transform: scaleX(0); transition: transform var(--dur) var(--ease-out); }
+    .panel .toc-list a { margin: 0 calc(-1 * var(--s2)); padding: var(--s2); font-size: var(--fs-panel); }
+    .toc-mark { flex: none; display: block; width: 20px; height: 20px; color: var(--ink-2); }
+    .toc-mark svg { display: block; width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .toc-mark.is-done { color: var(--accent-ink); }
+
+    /* 복습문제: 원문 · 힌트 · 풀이 */
+    .aid details:last-of-type { border-bottom: 1px solid var(--line); }
+    .aid details.original > summary { font-size: var(--fs-panel); }
+    .solved-btn { display: flex; align-items: center; justify-content: center; gap: var(--s2); width: 100%; min-height: var(--tap); margin-top: var(--s5); padding: 0 var(--s4);
+      border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg); color: var(--ink); font: 700 var(--fs-panel)/1.2 var(--font); cursor: pointer; }
+    .solved-btn svg { flex: none; width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .solved-btn[aria-pressed="true"] { border-color: var(--accent); color: var(--accent-ink); }
+
+    /* 정리노트: 페이지 요약 */
+    .sum-lead { margin: 0; font-size: var(--fs-body); font-weight: 700; line-height: 1.6; }
+    .eq-list { list-style: none; margin: 0; padding: 0; }
+    .eq-list li { padding: var(--s2) 0; border-bottom: 1px solid var(--line); }
+    .eq-list li:first-child { padding-top: 0; }
+    .eq-name { display: block; font-size: var(--fs-label); font-weight: 600; color: var(--ink-2); }
+    .eq-list .katex-display { margin: var(--s1) 0 0; text-align: left; }
+    .eq-list .katex-display > .katex { text-align: left; }
+    .terms { margin: 0; }
+    .terms dt { font-size: var(--fs-panel); font-weight: 700; margin-top: var(--s4); }
+    .terms dt:first-child { margin-top: 0; }
+    .terms dd { margin: var(--s1) 0 0; font-size: var(--fs-sub); line-height: 1.6; color: var(--ink-2); }
+    .flow { margin: 0; padding-left: 1.4em; font-size: var(--fs-sub); }
+    .flow li { margin: var(--s2) 0; }
+
+    @media (hover: hover) { .solved-btn:hover { background: var(--surface); } }
+
+    /* 넓은 화면: 본문 옆에 붙는 패널 */
+    @media (min-width: 1024px) {
+      .layout { --l: var(--panel-l-user, var(--panel-l)); }
+      .layout[data-left="closed"] { --l: 0px; }
+      .panel-left { width: var(--l); }
+      /* 기본값: 왼쪽 패널과 본문 폭을 뺀 나머지를 오른쪽 패널이 차지 → 본문 옆 빈 여백이 생기지 않는다 */
+      .panel-right { width: var(--panel-r-user, clamp(var(--panel-r-min), calc(100vw - var(--l) - var(--measure) - var(--scrollbar)), var(--panel-r-max))); }
+      .panel-resize { display: block; position: absolute; top: 0; bottom: 0; z-index: 2; width: 12px; padding: 0; border: 0; background: transparent; cursor: col-resize; touch-action: none; }
+      .panel-left .panel-resize { right: 0; }
+      .panel-right .panel-resize { left: 0; }
+      .panel-resize::after { content: ""; position: absolute; top: 0; bottom: 0; width: 2px; background: var(--accent); opacity: 0; transition: opacity 150ms ease-out; }
+      .panel-left .panel-resize::after { right: 0; }
+      .panel-right .panel-resize::after { left: 0; }
+      .panel-resize:focus-visible { outline: none; }
+      .panel-resize:focus-visible::after, .is-resizing .panel-resize:active::after { opacity: 1; }
+      @media (hover: hover) { .panel-resize:hover::after { opacity: 1; } }
+      body.is-resizing { cursor: col-resize; user-select: none; }
+      .layout[data-left="closed"] .panel-left, .layout[data-right="closed"] .panel-right { display: none; }
+      .panel.is-shown { animation: panel-fade var(--dur) var(--ease-out); }
+      .scrim, .panel-close { display: none; }
+    }
+    @keyframes panel-fade { from { opacity: 0; } to { opacity: 1; } }
+
+    /* 좁은 화면: 가장자리에서 밀려 나오는 drawer */
+    @media (max-width: 1023.98px) {
+      .panel { position: fixed; top: 0; bottom: 0; z-index: 40; visibility: hidden;
+        transition: transform var(--dur-exit) ease-in, visibility 0s linear var(--dur-exit); }
+      .panel-left { left: 0; width: min(var(--drawer-l), 88vw); transform: translateX(-100%); }
+      .panel-right { right: 0; width: min(var(--drawer-r), 88vw); transform: translateX(100%); }
+      .panel.is-open { visibility: visible; transform: none; transition: transform var(--dur) var(--ease-out); }
+      .panel-inner { padding-top: calc(var(--s3) + env(safe-area-inset-top)); padding-bottom: calc(var(--s6) + env(safe-area-inset-bottom)); }
+      .scrim { position: fixed; inset: 0; z-index: 35; background: var(--scrim); opacity: 0; visibility: hidden;
+        transition: opacity var(--dur-exit) ease-in, visibility 0s linear var(--dur-exit); }
+      .scrim.is-on { opacity: 1; visibility: visible; transition: opacity var(--dur) var(--ease-out); }
+      html:not(.js) .panel-left { display: none; }
+    }
+    @media (max-width: 480px) { .panel-toggle { padding: 0 var(--s1); } }
+    html:not(.js) .panel-toggle, html:not(.js) .panel-right, html:not(.js) .scrim { display: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .panel, .panel.is-open, .scrim, .scrim.is-on, .progress > span, .panel-toggle .strip { transition: none; }
+      .panel.is-shown { animation: none; }
+      .panel-resize::after { transition: none; }
+    }
+    @media print {
+      body { display: block; height: auto; overflow: visible; }
+      .layout { display: block; }
+      .content { overflow: visible; }
+      .panel, .scrim { display: none !important; }
+    }
+  </style>
+</head>
+<body data-screens="article.topic" data-panels="note" data-range="1014">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <button class="text-btn panel-toggle" id="toggle-left" type="button" aria-controls="panel-left" aria-expanded="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="strip" x="3" y="4" width="6" height="16" rx="1"/><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg><span>목차</span></button>
+      <strong class="brand">정리노트</strong>
+      <button class="text-btn theme-toggle" id="theme-toggle" type="button" aria-label="다크 모드로 전환" title="다크 모드로 전환"><svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg><svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+      <button class="text-btn panel-toggle" id="toggle-right" type="button" aria-controls="panel-right" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="strip" x="15" y="4" width="6" height="16" rx="1"/><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M15 4v16"/></svg><span>요약</span></button>
+    </div>
+    <div class="bar" aria-hidden="true"><span id="pager-bar"></span></div>
+  </header>
+  <div class="layout" data-left="open" data-right="closed">
+    <aside class="panel panel-left" id="panel-left" aria-labelledby="panel-left-title">
+      <div class="panel-resize" data-side="left" role="separator" aria-orientation="vertical" aria-controls="panel-left" aria-label="왼쪽 패널 너비 조절. 좌우 화살표로 조절, Home으로 자동 너비" tabindex="0"></div>
+      <div class="panel-inner">
+        <div class="panel-head">
+          <h2 id="panel-left-title">목차</h2>
+          <button class="text-btn panel-close" type="button" data-panel-close>닫기</button>
+        </div>
+        <p class="panel-meta">읽은 토픽 <b id="progress-n">0</b> / <span id="progress-total">0</span></p>
+        <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+        <nav class="toc" aria-label="목차"><a href="#why">왜 쓸까</a><a href="#s0">1 커패시턴스</a><a href="#s1">2 보데</a><a href="#s2">3 노드와 극점</a><a href="#s3">4 요약·예고</a></nav>
+      </div>
+    </aside>
+    <div class="content">
+  <main>
+    <div class="hero">
+      <h1>주파수 응답 — 5살도 이해하는 정리노트</h1>
+      <p>권익진 교수님 전자회로2 · 1014 수업 (Lec5, Razavi 11장)</p>
+    </div>
+    <section id="why"><h2>들어가며: 왜 이런 회로를 쓸까</h2>
+<article class="topic" id="why-circuit"><h3>왜 이런 회로를 쓸까</h3><div class="tags"><span class="tag date">1014 수업</span><span class="tag slide">L05 s1–3</span></div>
+        <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+          <p class="lead">길 곳곳에 작은 물통이 숨어 있으면, 물을 빨리 넣었다 뺐다 할 때 물통을 채우느라 끝까지 다 못 가요.</p>
+          <figure class="figure"><svg id="fig-why" viewBox="0 0 470 210" role="img" aria-label="두 줄로 된 흐름도. 윗줄은 테두리 상자 세 개가 화살표로 이어진다. 빠른 흔들림을 크게 하고 싶어요, 위험색 테두리의 숨은 물통이 흔들림을 삼켜요, 강조색 테두리의 물통마다 느린 정도를 재요 순서다. 아랫줄에는 테두리 상자 두 개가 화살표로 이어진다. 크게 키울수록, 위험색 테두리의 더 느려져요 순서이고, 오른쪽에 색칠된 점과 알맞게 골라요라는 글이 있다.">
+            <rect class="fig-ink" x="10" y="20" width="130" height="56"/>
+            <text class="fig-text" x="75" y="44" text-anchor="middle">빠른 흔들림을</text>
+            <text class="fig-text" x="75" y="62" text-anchor="middle">크게 하고 싶어요</text>
+            <line class="fig-ink" x1="142" y1="48" x2="166" y2="48"/>
+            <polyline class="fig-ink" points="160,43 167,48 160,53"/>
+            <rect class="fig-danger" x="170" y="20" width="130" height="56"/>
+            <text class="fig-text" x="235" y="44" text-anchor="middle">숨은 물통이</text>
+            <text class="fig-text" x="235" y="62" text-anchor="middle">흔들림을 삼켜요</text>
+            <line class="fig-ink" x1="302" y1="48" x2="326" y2="48"/>
+            <polyline class="fig-ink" points="320,43 327,48 320,53"/>
+            <rect class="fig-accent" x="330" y="20" width="130" height="56"/>
+            <text class="fig-text" x="395" y="44" text-anchor="middle">물통마다</text>
+            <text class="fig-text" x="395" y="62" text-anchor="middle">느린 정도를 재요</text>
+            <rect class="fig-ink" x="10" y="115" width="130" height="56"/>
+            <text class="fig-text" x="75" y="139" text-anchor="middle">크게</text>
+            <text class="fig-text" x="75" y="157" text-anchor="middle">키울수록</text>
+            <line class="fig-ink" x1="142" y1="143" x2="166" y2="143"/>
+            <polyline class="fig-ink" points="160,138 167,143 160,148"/>
+            <rect class="fig-danger" x="170" y="115" width="130" height="56"/>
+            <text class="fig-text" x="235" y="139" text-anchor="middle">더</text>
+            <text class="fig-text" x="235" y="157" text-anchor="middle">느려져요</text>
+            <circle class="fig-dot" cx="340" cy="143" r="5"/>
+            <text class="fig-muted" x="352" y="148">알맞게 골라요</text>
+          </svg><figcaption>물통마다 얼마나 느린지 하나씩 재 보면, 얼마나 빠른 흔들림까지 크게 할 수 있는지 알 수 있어요.</figcaption></figure>
+        </div>
+        <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+          <p><b>1. 풀고 싶은 문제.</b> 이번 장은 증폭기가 어느 주파수까지 동작하는지를 해석해요. 시간 영역에서는 동작 속도(speed), 주파수 영역에서는 대역폭(bandwidth)이라 부르지만 같은 이야기예요. 빨리 변하는 신호는 주기가 짧고, 주기가 짧으면 주파수가 높아요. 해석은 시간 영역에서도 할 수 있지만, 전자회로에서는 주파수 영역이 더 직관적이에요(<a href="#s0-speed-bandwidth">1. 속도와 대역폭, 그리고 저주파 모델</a>). 스마트폰 무선 통신은 2–5 GHz, 자율주행 차량 레이더는 77 GHz를 써요. 더 많은 데이터를 보내려고 대역폭을 넓히다 보니 주파수가 계속 올라가요. 이런 GHz 신호를 증폭하려면 증폭기 자체의 대역폭이 그만큼 넓어야 해요.</p>
+          <p><b>2. 단순한 해법과 그 한계.</b> 지금까지 쓴 소신호 모델은 저주파 모델(low-frequency model)이에요. 커패시터의 임피던스 $1/(Cs)$가 저주파에서는 무한대에 가까워서 무시했어요. 주파수가 올라가면 이 임피던스가 작아져 더는 무시할 수 없고, 실제 증폭기는 고주파에서 이득이 떨어져요(roll-off). RC 저역통과 필터와 같은 꼴이에요(<a href="#s0-rc-lowpass">2. RC 저역통과 필터</a>). 커패시턴스는 일부러 달지 않아도 트랜지스터 안에, 그리고 다음 단의 입력에 이미 있어요. CS 단의 출력에 부하 커패시턴스(load capacitance) $C_L$을 넣기만 해도 이득이 주파수의 함수가 돼요(<a href="#s0-cs-cl">3. 부하 커패시턴스가 있는 CS 단</a>).</p>
+          <p>$$\frac{V_{out}}{V_{in}}=-\frac{g_mR_D}{1+R_DC_Ls}$$</p>
+          <p>노드가 하나 늘 때마다 전달 함수를 정직하게 구하면 노드 방정식이 길어지고, 극점(pole)과 영점(zero)을 찾기가 어려워요(<a href="#s1-bode">6. 보데 근사: 극점마다 기울기 −20 dB/dec</a>). 식이 복잡해지면 어떤 소자 값이 대역폭을 정하는지 보이지 않아요(<a href="#s2-node-rule">8. 노드마다 극점: 등가 저항과 등가 커패시턴스</a>).</p>
+          <p><b>3. 핵심 아이디어.</b> 전달 함수를 다 풀지 않고, 노드마다 극점이 하나씩 생긴다고 보고 그 노드와 AC 접지 사이의 등가 저항과 등가 커패시턴스로 극점 주파수를 바로 구해요(<a href="#s2-node-rule">8. 노드마다 극점: 등가 저항과 등가 커패시턴스</a>).</p>
+          <p>$$\omega_p=\frac{1}{R_{eq}C_{eq}}$$</p>
+          <p>극점을 알면 보데 근사로 크기 응답을 그려요. 극점을 지날 때마다 기울기가 20 dB/dec씩 줄어요(<a href="#s1-bode">6. 보데 근사: 극점마다 기울기 −20 dB/dec</a>). 같은 규칙을 CG 단의 입력 노드에도 그대로 써요(<a href="#s2-cg-poles">9. CG 단의 입력 극점</a>).</p>
+          <p><b>4. 대가와 쓰이는 곳.</b> 부하 커패시턴스가 있는 CS 단의 −3 dB 대역폭은 이득을 정하는 $R_D$에 반비례해요(<a href="#s0-3db">4. −3 dB 대역폭과 이득–대역폭 트레이드오프</a>).</p>
+          <p>$$\omega_{-3dB}=\frac{1}{R_DC_L}$$</p>
+          <p>이득 $g_mR_D$를 키우려고 $R_D$를 키우면 대역폭이 줄어요. 이 트레이드오프(trade-off) 때문에 이득을 무조건 크게 하는 게 좋은 설계가 아니에요. 반면 커패시턴스는 작을수록 좋아서, 공정이 미세해질수록 회로가 빨라져요. 노드–극점 규칙과 보데 근사는 약 10% 오차를 감수하는 손 해석이에요. 정확한 곡선은 SPICE 같은 툴로 구하고, 손 해석은 어떤 파라미터를 바꾸면 극점이 어떻게 움직이는지 보는 데 써요. 노드와 노드 사이에 걸린 부유 커패시터는 이 규칙에 바로 넣을 수 없어서 다음 도구가 필요해요(<a href="#s2-floating">10. 부유 커패시터: 어느 노드에 넣을까</a>). 이 해석법은 수십 GHz 무선 통신 회로와 77 GHz 차량 레이더처럼 고속 회로를 설계하는 출발점이에요.</p>
+        </div>
+        <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+          <p>교수님은 주파수가 계속 높아지는 이유를 대역폭에서 찾으셨어요.</p>
+          <blockquote>"대역폭을 넓히기 위해서 더 높은 주파수를 쓰고 있죠" (1014 P01·L17)</blockquote>
+          <p>해석의 목표는 설계라고 하시며 77 GHz 차량 레이더와 수십 GHz 무선 통신 회로를 예로 드셨어요.</p>
+          <blockquote>"그 해석을 하는 목표는 기본적으로 설계를 하기 위해서" (1014 P01·L25)</blockquote>
+          <p>지금까지 배운 모델의 한계를 이렇게 말씀하셨어요.</p>
+          <blockquote>"지금까지 살펴본 등가 모델은 저주파 모델이에요. 사실은 50%만 맞는" (1014 P01·L27–29)</blockquote>
+          <p>속도를 떨어뜨리는 가장 큰 원인은 트랜지스터의 커패시턴스라고 강조하셨어요.</p>
+          <blockquote>"트랜지스터의 커패시턴스들이 실제로 동작 속도를 저해하는 … 가장 크리티컬한 요인" (1014 P02·L89)</blockquote>
+          <p>이득과 속도는 함께 얻을 수 없다고 하셨어요.</p>
+          <blockquote>"무조건 게인을 크게 하는 게 좋은 설계는 아니에요." (1014 P03·L137)</blockquote>
+          <p>손 근사를 쓰는 이유는 정확한 식이 관계를 가리기 때문이라고 하셨어요.</p>
+          <blockquote>"어떤 파라미터가 이것과 어떻게 연결되는지를 알기가 어려운 거예요." (1014 P06·L374)</blockquote>
+        </div>
+        <div class="sum" hidden>
+          <p class="sum-lead">저주파 모델이 무시한 커패시턴스가 고주파 이득을 떨어뜨리고, 노드마다 극점 하나를 등가 RC로 구해 대역폭을 빠르게 읽어요.</p>
+          <p class="panel-label">핵심 식</p>
+          <ul class="eq-list">
+            <li><span class="eq-name">노드–극점 규칙</span>$$\omega_p=\frac{1}{R_{eq}C_{eq}}$$</li>
+            <li><span class="eq-name">CS 단 + 부하 커패시턴스</span>$$\frac{V_{out}}{V_{in}}=-\frac{g_mR_D}{1+R_DC_Ls}$$</li>
+            <li><span class="eq-name">−3 dB 대역폭</span>$$\omega_{-3dB}=\frac{1}{R_DC_L}$$</li>
+          </ul>
+          <p class="panel-label">용어</p>
+          <dl class="terms">
+            <dt>대역폭(bandwidth)</dt><dd>이득이 유지되는 주파수 범위로, 시간 영역의 동작 속도와 같은 말이에요.</dd>
+            <dt>저주파 모델(low-frequency model)</dt><dd>커패시턴스를 무시한 지금까지의 소신호 모델이에요.</dd>
+            <dt>극점(pole)</dt><dd>노드마다 하나씩 생기고, 지날 때마다 기울기가 20 dB/dec씩 줄어요.</dd>
+          </dl>
+        </div>
+</article>
+    </section>
+    <section id="s0"><h2>1. 이득이 떨어지는 이유: 커패시턴스</h2>
+<article class="topic" id="s0-speed-bandwidth"><h3>1. 속도와 대역폭, 그리고 저주파 모델</h3><div class="tags"><span class="tag date">1014 수업</span><span class="tag slide">L05 s1–3</span></div>
+  <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+    <p class="lead">증폭기는 천천히 변하는 신호는 잘 키우지만, 너무 빨리 변하는 신호는 잘 못 키워요.</p>
+    <figure class="figure"><svg id="fig-rolloff" viewBox="0 0 480 230" role="img" aria-label="가로축은 신호가 변하는 빠르기, 세로축은 키워 주는 정도다. 점선은 오른쪽 끝까지 평평하고, 강조색 선은 왼쪽에서는 점선과 겹치다가 오른쪽에서 아래로 꺾여 내려간다.">
+      <line class="fig-ink" x1="50" y1="190" x2="460" y2="190"/>
+      <line class="fig-ink" x1="50" y1="190" x2="50" y2="20"/>
+      <line class="fig-ink" x1="50" y1="60" x2="450" y2="60" stroke-dasharray="6 5"/>
+      <path class="fig-accent" d="M50 60 L250 60 C300 60 320 75 345 105 L440 180"/>
+      <text class="fig-text" x="330" y="50">바라는 모양</text>
+      <text class="fig-text" x="380" y="140">실제 모양</text>
+      <text class="fig-muted" x="60" y="212">느린 신호</text>
+      <text class="fig-muted" x="380" y="212">빠른 신호</text>
+      <text class="fig-muted" x="58" y="32">키워 주는 정도</text>
+    </svg><figcaption>빠른 신호 쪽으로 갈수록 실제 모양(강조색 선)이 바라는 평평한 점선보다 아래로 내려가요.</figcaption></figure>
+  </div>
+  <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <p>이 장(Razavi 11장)은 회로가 어느 주파수까지 동작하는지를 분석해요.</p>
+    <ul>
+      <li>시간 영역에서는 <strong>동작 속도</strong>(speed), 주파수 영역에서는 <strong>대역폭</strong>(bandwidth)이라고 불러요. 둘은 같은 이야기예요.</li>
+      <li>빨리 변하는 신호는 주기 $T$가 짧은 신호이고, 주기가 짧을수록 주파수가 높아요.
+        $$f = \frac{1}{T}$$</li>
+      <li>시간 영역으로도 해석할 수 있지만, 전자회로에서는 주파수 영역이 더 직관적이고 편해서 <strong>주파수 응답</strong>(frequency response)으로 다뤄요.</li>
+    </ul>
+    <p><strong>롤오프</strong>(roll-off): 이상적인 증폭기는 주파수와 상관없이 이득이 일정해야 해요. 실제 증폭기는 저주파에서 잘 증폭하다가, 어느 주파수 이상에서 이득이 떨어져요. 이 현상을 롤오프라고 해요.</p>
+    <p>왜 지금 중요한가:</p>
+    <ul>
+      <li>스마트폰 무선 통신은 주로 2–5 GHz, 자율주행 차량 레이더는 77 GHz를 써요.</li>
+      <li>더 많은 데이터를 보내려면 대역폭이 넓어야 해서, 쓰는 주파수가 계속 높아져요.</li>
+      <li>디지털 프로세서도 클럭이 GHz 대역이라, 0과 1이 아니라 연속적인 전압·전류로 해석해야 해요.</li>
+    </ul>
+    <p>앞으로의 순서(L05 s2 목차):</p>
+    <ol class="steps">
+      <li>기본 개념(이득이 왜 떨어지나, 전달 함수와 보데 근사)</li>
+      <li>속도를 떨어뜨리는 요인과 그 원인인 트랜지스터의 고주파 등가 모델(커패시턴스 포함)</li>
+      <li>지금까지 배운 증폭기들의 주파수 응답</li>
+    </ol>
+    <p>지금까지 쓴 소신호 모델은 커패시턴스를 뺀 <strong>저주파 모델</strong>(low-frequency model)이에요. 고주파에서는 고려할 소자가 더 있어요. 커패시턴스가 이득을 떨어뜨리는 과정은 <a href="#s0-rc-lowpass">RC 저역통과 필터</a>와 <a href="#s0-cs-cl">부하 커패시턴스가 있는 CS 단</a>에서 이어져요.</p>
+  </div>
+  <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+    <p>예전에는 전화·오디오 앰프처럼 음성 신호를 주로 다뤄서 속도가 크게 중요하지 않았어요. 지금은 무선 통신이 수 GHz에서 수십 GHz를 쓰고, 자동차 레이더는 77 GHz를 써요. 이 장의 해석은 결국 그런 고속 회로를 설계하기 위한 것이라고 하셨어요.</p>
+    <blockquote>"그 해석을 하는 목표는 기본적으로 설계를 하기 위해서" (1014 P01·L25)</blockquote>
+    <p class="note">(수업 중 음성 신호 대역을 "수십 Hz에서 수 MHz"라고 말했지만, 가청 대역은 대략 20 Hz–20 kHz예요.)</p>
+  </div>
+  <div class="layer warn"><span class="layer-title">꼭 기억해요</span>
+    <blockquote>"지금까지 살펴본 등가 모델은 저주파 모델이에요. 사실은 50%만 맞는 회로다." (1014 P01·L27–29)</blockquote>
+    <p>고주파에서는 커패시턴스를 넣은 모델로 다시 봐야 해요.</p>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">동작 속도와 대역폭은 같은 이야기이고, 지금까지 쓴 소신호 모델은 커패시턴스를 뺀 저주파 모델이에요.</p>
+    <p class="panel-label">핵심 식</p>
+    <ul class="eq-list"><li><span class="eq-name">주기와 주파수</span>$$f = \frac{1}{T}$$</li></ul>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>대역폭(bandwidth)</dt><dd>회로가 제대로 동작하는 주파수 범위, 동작 속도를 주파수 영역에서 본 것</dd>
+      <dt>롤오프(roll-off)</dt><dd>어느 주파수 이상에서 이득이 떨어지는 현상</dd>
+      <dt>저주파 모델(low-frequency model)</dt><dd>커패시턴스를 무시한, 지금까지 쓴 소신호 모델</dd>
+    </dl>
+  </div>
+</article>
+
+<article class="topic" id="s0-rc-lowpass"><h3>2. RC 저역통과 필터</h3><div class="tags"><span class="tag date">1014 수업</span><span class="tag slide">L05 s4</span></div>
+  <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+    <p class="lead">출력에 달린 작은 통은 느린 신호는 그냥 보내고, 빠른 신호는 땅으로 흘려보내요.</p>
+    <figure class="figure"><svg id="fig-rc-leak" viewBox="0 0 480 230" role="img" aria-label="왼쪽 입력에서 지그재그 선을 지나 오른쪽 출력으로 가는 선이 있다. 가운데 갈림점에서 두 평행판을 지나 아래 땅으로 내려가는 샛길이 강조색 선으로 그려져 있다.">
+      <circle class="fig-ink" cx="40" cy="70" r="6"/>
+      <line class="fig-ink" x1="46" y1="70" x2="120" y2="70"/>
+      <path class="fig-ink" d="M120 70 L130 58 L145 82 L160 58 L175 82 L190 58 L205 82 L215 70"/>
+      <line class="fig-ink" x1="215" y1="70" x2="420" y2="70"/>
+      <circle class="fig-ink" cx="426" cy="70" r="6"/>
+      <circle class="fig-dot" cx="300" cy="70" r="5"/>
+      <line class="fig-accent" x1="300" y1="75" x2="300" y2="130"/>
+      <line class="fig-accent" x1="275" y1="130" x2="325" y2="130"/>
+      <line class="fig-accent" x1="275" y1="142" x2="325" y2="142"/>
+      <line class="fig-accent" x1="300" y1="142" x2="300" y2="185"/>
+      <line class="fig-ink" x1="280" y1="185" x2="320" y2="185"/>
+      <line class="fig-ink" x1="288" y1="193" x2="312" y2="193"/>
+      <line class="fig-ink" x1="295" y1="201" x2="305" y2="201"/>
+      <text class="fig-text" x="22" y="100">입력</text>
+      <text class="fig-text" x="408" y="100">출력</text>
+      <text class="fig-text" x="335" y="141">통</text>
+      <text class="fig-text" x="335" y="190">땅</text>
+      <text class="fig-muted" x="150" y="160">빠른 신호가</text>
+      <text class="fig-muted" x="150" y="178">빠지는 샛길</text>
+    </svg><figcaption>신호가 빠를수록 강조색 샛길로 많이 새서, 출력에 남는 몫이 줄어요.</figcaption></figure>
+  </div>
+  <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <p>회로: 입력 $V_{in}$ → 직렬 저항 $R$ → 출력 $V_{out}$, 출력과 접지 사이에 커패시터 $C$. 가장 단순한 <strong>저역통과 필터</strong>(low-pass filter)예요.</p>
+    <ul>
+      <li>저항의 임피던스는 $R$로, 주파수와 무관해요.</li>
+      <li>커패시터의 임피던스는 주파수의 함수예요.
+        $$Z_C = \frac{1}{Cs}$$
+        $s = j\omega$를 넣으면 $Z_C = \frac{1}{j\omega C}$이고, 크기 $\frac{1}{\omega C}$는 주파수에 반비례해요.</li>
+      <li>$\omega = 0$이면 $Z_C \to \infty$(개방)라서 입력이 그대로 출력으로 나가요. 이득은 1이에요.</li>
+      <li>$\omega \to \infty$이면 $Z_C \to 0$(단락)이라 출력이 0이에요.</li>
+    </ul>
+    <p>전달 함수(전압 분배):</p>
+    <ol class="steps">
+      <li>$$\frac{V_{out}}{V_{in}} = \frac{Z_C}{R + Z_C}$$</li>
+      <li>$$= \frac{1/(Cs)}{R + 1/(Cs)}$$</li>
+      <li>분모·분자에 $Cs$를 곱해요. $$\frac{V_{out}}{V_{in}} = \frac{1}{1 + RCs}$$</li>
+      <li>$s = j\omega$를 넣고 크기를 구해요. $$\left|\frac{V_{out}}{V_{in}}\right| = \frac{1}{\sqrt{1 + R^2C^2\omega^2}}$$</li>
+    </ol>
+    <p>주파수가 올라갈수록 커패시터의 임피던스가 낮아져 출력 전압이, 곧 이득이 떨어져요. 증폭기에서도 같은 특성이 나타나고, 그 원인은 커패시턴스예요. 증폭기 쪽 이야기는 <a href="#s0-cs-cl">부하 커패시턴스가 있는 CS 단</a>에서 이어져요.</p>
+    <p>인덕턴스도 주파수에 영향을 주지만, 도선을 감아 일부러 만들지 않는 한 잘 생기지 않아요. 커패시턴스는 흔해요. 금속 사이에 절연체가 있으면 그게 커패시터예요.</p>
+  </div>
+  <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+    <p>커패시터는 일부러 달지 않아도 어디에나 생긴다고 강조하셨어요.</p>
+    <blockquote>"신호의 라인이 두 개만 지나가도 그 사이에는 … 커패시터가 생기는 거예요." (1014 P01·L41)</blockquote>
+    <p>인덕턴스는 도선을 감아서 만들어야 해서, 일부러 만들지 않는 이상 거의 없다고 하셨어요. (1014 P02·L71)</p>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">커패시터의 임피던스는 주파수에 반비례해서, 주파수가 오르면 출력이 접지로 새고 이득이 떨어져요.</p>
+    <p class="panel-label">핵심 식</p>
+    <ul class="eq-list">
+      <li><span class="eq-name">커패시터 임피던스</span>$$Z_C = \frac{1}{Cs}$$</li>
+      <li><span class="eq-name">RC 저역통과 필터</span>$$\frac{V_{out}}{V_{in}} = \frac{1}{1 + RCs}$$</li>
+    </ul>
+    <p class="panel-label">용어</p>
+    <dl class="terms"><dt>저역통과 필터(low-pass filter)</dt><dd>낮은 주파수는 통과시키고 높은 주파수는 줄이는 회로</dd></dl>
+  </div>
+</article>
+
+<article class="topic" id="s0-cs-cl"><h3>3. 부하 커패시턴스가 있는 CS 단</h3><div class="tags"><span class="tag date">1014 수업</span><span class="tag slide">L05 s5</span></div>
+  <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+    <p class="lead">증폭기 뒤에 다음 증폭기를 이으면, 그 입구에 작은 통이 숨어 있어요.</p>
+    <figure class="figure"><svg id="fig-hidden-load" viewBox="0 0 480 220" role="img" aria-label="왼쪽 상자 증폭기와 오른쪽 상자 다음 증폭기가 선으로 이어져 있다. 이음선의 갈림점에서 두 평행판을 지나 땅으로 내려가는 숨은 통이 강조색 선으로 그려져 있다.">
+      <rect class="fig-ink" x="30" y="40" width="120" height="60" rx="8"/>
+      <rect class="fig-ink" x="330" y="40" width="120" height="60" rx="8"/>
+      <line class="fig-ink" x1="150" y1="70" x2="330" y2="70"/>
+      <circle class="fig-dot" cx="240" cy="70" r="5"/>
+      <line class="fig-accent" x1="240" y1="75" x2="240" y2="120"/>
+      <line class="fig-accent" x1="215" y1="120" x2="265" y2="120"/>
+      <line class="fig-accent" x1="215" y1="132" x2="265" y2="132"/>
+      <line class="fig-accent" x1="240" y1="132" x2="240" y2="170"/>
+      <line class="fig-ink" x1="220" y1="170" x2="260" y2="170"/>
+      <line class="fig-ink" x1="228" y1="178" x2="252" y2="178"/>
+      <line class="fig-ink" x1="235" y1="186" x2="245" y2="186"/>
+      <text class="fig-text" x="90" y="75" text-anchor="middle">증폭기</text>
+      <text class="fig-text" x="390" y="75" text-anchor="middle">다음 증폭기</text>
+      <text class="fig-muted" x="275" y="131">숨은 통</text>
+      <text class="fig-muted" x="268" y="182">땅</text>
+    </svg><figcaption>이 숨은 통(강조색 선) 때문에 빠른 신호가 땅으로 새요.</figcaption></figure>
+    <p>이 통은 일부러 달지 않아도 부품 안에 이미 들어 있어요.</p>
+  </div>
+  <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <p><strong>부하 커패시턴스</strong>(load capacitance) $C_L$은 일부러 달 수도 있지만, 보통은 <strong>다음 단</strong>의 등가 입력 커패시턴스예요. 오디오 앰프라면 스피커가 부하이고, 증폭기가 여러 단이면 다음 단의 입력 임피던스가 부하예요.</p>
+    <figure class="figure"><svg id="fig-cs-cl-ss" viewBox="0 0 480 230" role="img" aria-label="CS 단의 소신호 등가회로. 왼쪽에 게이트–소스 전압 V_in, 오른쪽 위 강조색 가로선이 출력 노드 V_out이고, 그 아래로 종속 전류원 g_m V_in(원 안 아래 화살표), 저항 R_D, 커패시터 C_L이 각각 접지로 병렬 연결되어 있다.">
+      <circle class="fig-ink" cx="40" cy="60" r="6"/>
+      <line class="fig-ink" x1="40" y1="66" x2="40" y2="175"/>
+      <text class="fig-text" x="52" y="64">V<tspan baseline-shift="sub" font-size="10">in</tspan></text>
+      <text class="fig-text" x="30" y="100">+</text>
+      <text class="fig-text" x="30" y="160">−</text>
+      <line class="fig-ink" x1="25" y1="175" x2="55" y2="175"/>
+      <line class="fig-ink" x1="32" y1="182" x2="48" y2="182"/>
+      <line class="fig-accent" x1="150" y1="50" x2="440" y2="50"/>
+      <circle class="fig-ink" cx="446" cy="50" r="6"/>
+      <text class="fig-muted" x="420" y="36">V<tspan baseline-shift="sub" font-size="10">out</tspan></text>
+      <line class="fig-ink" x1="160" y1="50" x2="160" y2="88"/>
+      <circle class="fig-ink" cx="160" cy="110" r="22"/>
+      <line class="fig-ink" x1="160" y1="96" x2="160" y2="124"/>
+      <path class="fig-ink" d="M153 116 L160 125 L167 116"/>
+      <line class="fig-ink" x1="160" y1="132" x2="160" y2="175"/>
+      <text class="fig-text" x="190" y="115">g<tspan baseline-shift="sub" font-size="10">m</tspan>V<tspan baseline-shift="sub" font-size="10">in</tspan></text>
+      <line class="fig-ink" x1="290" y1="50" x2="290" y2="80"/>
+      <path class="fig-ink" d="M290 80 L280 86 L300 96 L280 106 L300 116 L280 126 L300 136 L290 142"/>
+      <line class="fig-ink" x1="290" y1="142" x2="290" y2="175"/>
+      <text class="fig-text" x="306" y="115">R<tspan baseline-shift="sub" font-size="10">D</tspan></text>
+      <line class="fig-ink" x1="390" y1="50" x2="390" y2="104"/>
+      <line class="fig-ink" x1="370" y1="104" x2="410" y2="104"/>
+      <line class="fig-ink" x1="370" y1="116" x2="410" y2="116"/>
+      <line class="fig-ink" x1="390" y1="116" x2="390" y2="175"/>
+      <text class="fig-text" x="416" y="115">C<tspan baseline-shift="sub" font-size="10">L</tspan></text>
+      <line class="fig-ink" x1="140" y1="175" x2="410" y2="175"/>
+      <line class="fig-ink" x1="260" y1="175" x2="260" y2="190"/>
+      <line class="fig-ink" x1="245" y1="190" x2="275" y2="190"/>
+      <line class="fig-ink" x1="251" y1="197" x2="269" y2="197"/>
+    </svg><figcaption>소신호 등가회로: 출력 노드(강조색 선)와 AC 접지 사이에 전류원, $R_D$, $C_L$이 병렬로 있어요.</figcaption></figure>
+    <p>소신호 해석($\lambda = 0$, Razavi 예제 11.4):</p>
+    <ol class="steps">
+      <li>입력 $V_{in}$은 게이트–소스에 걸리고, 종속 전류원 $g_m V_{in}$이 출력 노드에서 접지로 흘러요.</li>
+      <li>출력 노드와 AC 접지 사이에 $R_D$와 $C_L$이 병렬로 보여요. 전류가 노드에서 빠져나가는 방향이라 부호가 반대예요.
+        $$V_{out} = -g_m V_{in}\left(R_D \parallel \frac{1}{C_L s}\right)$$</li>
+      <li>병렬을 풀어요. $$R_D \parallel \frac{1}{C_L s} = \frac{R_D}{1 + R_D C_L s}$$</li>
+      <li>$$\frac{V_{out}}{V_{in}} = -\frac{g_m R_D}{1 + R_D C_L s}$$</li>
+    </ol>
+    <p class="note">(수업 중 출력 임피던스를 "R_D와 C_L의 곱의 역수"라고 말했지만, 곱이 아니라 병렬 $R_D \parallel \frac{1}{C_L s}$가 맞아요.)</p>
+    <p>$C_L$이 없으면 이득 $g_m R_D$는 주파수와 무관해요. $C_L$이 있으면 이득이 주파수의 함수가 돼요. <a href="#s0-rc-lowpass">RC 저역통과 필터</a>의 $\frac{1}{1 + RCs}$와 꼴이 같고, 다른 점은 저주파 이득이 1이 아니라 $g_m R_D$라는 것뿐이에요.</p>
+    <p><strong>커패시턴스는 어디서 오나</strong>: 많은 경우 트랜지스터 안에 이미 들어 있어요.</p>
+    <ul>
+      <li>MOS는 Metal–Oxide–Semiconductor 구조예요. 채널이 생기면 반도체가 도체처럼 행동해요.</li>
+      <li>그러면 "도체–절연체–도체" 구조가 되고, 이것이 곧 커패시터예요. 그래서 <strong>MOS 커패시터</strong>라고도 불러요.</li>
+      <li>트랜지스터 내부 커패시턴스의 자세한 모델은 뒤 강의(L05 s18 이후)에서 다뤄요.</li>
+    </ul>
+    <p><strong>왜 지금까지는 무시했나</strong>: 저주파에서는 $\left|Z_C\right| = \frac{1}{\omega C}$가 무한대에 가까워 개방으로 볼 수 있었어요. 주파수가 오르면 임피던스가 떨어져 더는 무시할 수 없어요. 지금까지의 해석은 모두 저주파 해석이에요.</p>
+  </div>
+  <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+    <p>"MOS 구조가 무슨 구조예요?" 하고 물으시며, 금속과 금속 사이에 절연체가 있으면 커패시터라서 MOS를 MOS 커패시터라고도 부른다고 설명하셨어요. (1014 P02·L75–81)</p>
+    <p>"지금까지 커패시터를 고려 안 했는데 갑자기 왜 생겼나?"라는 물음에는, 갑자기 생긴 게 아니라 저주파에서 임피던스가 무한대에 가까워 무시했던 것이라고 답하셨어요. (1014 P02·L83–87)</p>
+  </div>
+  <div class="layer warn"><span class="layer-title">꼭 기억해요</span>
+    <blockquote>"트랜지스터의 커패시턴스들이 실제로 동작 속도를 저해하는 … 가장 크리티컬한 요인" (1014 P02·L89)</blockquote>
+    <blockquote>"커패시턴스를 달아주지 않더라도 커패시턴스가 존재하는 게 그 트랜지스터 때문에" (1014 P02·L91)</blockquote>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">출력 노드의 $C_L$이 $R_D$와 병렬로 보여서, CS 단 이득이 저역통과 필터 꼴이 돼요.</p>
+    <p class="panel-label">핵심 식</p>
+    <ul class="eq-list">
+      <li><span class="eq-name">출력 전압</span>$$V_{out} = -g_m V_{in}$$ $$\times\left(R_D \parallel \frac{1}{C_L s}\right)$$</li>
+      <li><span class="eq-name">전달 함수</span>$$\frac{V_{out}}{V_{in}} = -\frac{g_m R_D}{1 + R_D C_L s}$$</li>
+    </ul>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>부하 커패시턴스(load capacitance)</dt><dd>출력 노드에 걸린 커패시턴스, 보통 다음 단의 입력 커패시턴스</dd>
+      <dt>MOS 커패시터</dt><dd>금속–산화막–반도체가 도체–절연체–도체를 이뤄 생기는 트랜지스터 안의 커패시터</dd>
+    </dl>
+  </div>
+</article>
+
+<article class="topic" id="s0-3db"><h3>4. −3 dB 대역폭과 이득–대역폭 트레이드오프</h3><div class="tags"><span class="tag date">1014 수업</span><span class="tag slide">L05 s6</span></div>
+  <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+    <p class="lead">많이 키우려 할수록 일찍 꺾여서, 크게 키우기와 빠르게 일하기를 둘 다 갖기는 어려워요.</p>
+    <figure class="figure"><svg id="fig-gain-tradeoff" viewBox="0 0 480 230" role="img" aria-label="가로축은 신호의 빠르기, 세로축은 키워 주는 정도다. 강조색 선은 높은 곳에서 평평하다가 일찍 꺾여 내려가고, 기본색 선은 낮은 곳에서 평평하다가 더 오른쪽에서 꺾인다.">
+      <line class="fig-ink" x1="50" y1="190" x2="460" y2="190"/>
+      <line class="fig-ink" x1="50" y1="190" x2="50" y2="20"/>
+      <path class="fig-accent" d="M50 45 L150 45 C185 45 200 58 220 80 L340 185"/>
+      <path class="fig-ink" d="M50 110 L290 110 C325 110 340 122 360 140 L420 185"/>
+      <text class="fig-text" x="160" y="35">높게 키우면 일찍 꺾여요</text>
+      <text class="fig-text" x="60" y="136">낮게 키우면 늦게 꺾여요</text>
+      <text class="fig-muted" x="60" y="212">느린 신호</text>
+      <text class="fig-muted" x="380" y="212">빠른 신호</text>
+    </svg><figcaption>강조색 선은 높지만 일찍 꺾이고, 기본색 선은 낮지만 더 멀리까지 평평해요.</figcaption></figure>
+  </div>
+  <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <p><a href="#s0-cs-cl">부하 커패시턴스가 있는 CS 단</a>의 전달 함수 $\frac{V_{out}}{V_{in}} = -\frac{g_m R_D}{1 + R_D C_L s}$에 $s = j\omega$를 넣고 크기를 구해요(Razavi 식 11.6).</p>
+    <ol class="steps">
+      <li>$$\left|1 + j\omega R_D C_L\right| = \sqrt{1 + R_D^2 C_L^2 \omega^2}$$</li>
+      <li>$$\left|\frac{V_{out}}{V_{in}}\right| = \frac{g_m R_D}{\sqrt{R_D^2 C_L^2 \omega^2 + 1}}$$</li>
+      <li>$\omega = \frac{1}{R_D C_L}$을 넣으면 분모가 $\sqrt{2}$예요. $$\left|\frac{V_{out}}{V_{in}}\right| = g_m R_D \cdot \frac{1}{\sqrt{2}}$$</li>
+      <li>$$20\log\frac{1}{\sqrt{2}} \approx -3\ \text{dB}$$</li>
+    </ol>
+    <p>그래서 이 주파수를 <strong>3 dB 주파수</strong>, 저주파부터 여기까지를 <strong>3 dB 대역폭</strong>(−3 dB bandwidth)이라고 해요.</p>
+    $$\omega_{-3dB} = \frac{1}{R_D C_L}$$
+    <ul>
+      <li>보통 "대역폭"이라고 하면 3 dB 대역폭을 뜻해요. 경우에 따라 10 dB 떨어지는 지점을 쓰기도 해요.</li>
+      <li>Hz 단위로는 $f_{-3dB} = \frac{\omega_{-3dB}}{2\pi}$예요.</li>
+      <li>$\omega \gg \omega_{-3dB}$이면 분모의 1을 무시해 $\left|\frac{V_{out}}{V_{in}}\right| \approx \frac{g_m}{C_L \omega}$이에요. 주파수에 반비례하니 약 −20 dB/dec로 떨어져요.</li>
+      <li>대역폭을 정하는 것은 $C_L$ 하나가 아니라 $R_D C_L$의 곱이에요. $R_D$가 클수록, $C_L$이 클수록 대역폭이 낮아져요.</li>
+    </ul>
+    <p><strong>트레이드오프</strong>(trade-off): 저주파 이득 $g_m R_D$를 키우려면 보통 $R_D$를 키워요. 그러면 $\omega_{-3dB} = \frac{1}{R_D C_L}$이 줄어요. 이득과 속도가 서로 맞바뀌니, 무조건 이득을 크게 하는 것이 좋은 설계는 아니에요. 반면 커패시턴스는 작을수록 좋아요.</p>
+    <div class="widget" id="widget-gainbw"><h4>직접 해 보기: 이득과 대역폭 맞바꾸기</h4>
+      <p class="widget-help">$g_m$ = 2 mS로 고정하고 $R_D$를 키우면 평평한 높이(저주파 이득)는 올라가지만 꺾이는 점($f_{-3dB}$)은 왼쪽으로 가요. $C_L$을 키우면 높이는 그대로 두고 꺾이는 점만 왼쪽으로 가요.</p>
+      <div class="controls">
+        <label>$R_D$ <input type="range" id="gainbw-rd" min="3" max="5" step="0.05" value="4"> <b id="gainbw-rd-val">10 kΩ</b></label>
+        <label>$C_L$ <input type="range" id="gainbw-cl" min="-14" max="-12" step="0.05" value="-13"> <b id="gainbw-cl-val">100 fF</b></label>
+      </div>
+      <svg id="gainbw-plot" viewBox="0 0 560 300" role="img" aria-label="CS 단 크기 응답. 가로축은 로그 주파수(100 kHz–100 GHz), 세로축은 이득(dB). 강조색 실선은 현재 설정, 회색 점선은 처음 설정(10 kΩ, 100 fF)이고, 점과 세로 점선이 −3 dB 지점을 표시한다."></svg>
+      <p class="readout">저주파 이득 $g_m R_D$ = <b id="gainbw-gain">20 (26.0 dB)</b>, $f_{-3dB}$ = <b id="gainbw-f3">159.2 MHz</b></p>
+      <p class="legend"><span><span class="sw fit"></span>현재 설정</span><span><span class="sw truth"></span>처음 설정(10 kΩ, 100 fF)</span><span><span class="sw train"></span>−3 dB 지점</span></p>
+      <div class="widget-static" hidden>
+      <figure class="figure"><svg id="widget-gainbw-static-1" viewBox="0 0 560 300" role="img" aria-label="처음 설정: RD = 10 kΩ, CL = 100 fF, 저주파 이득 26.0 dB, f-3dB 159.2 MHz"><line class="axis" x1="64" y1="250" x2="540" y2="250"/><line class="axis" x1="64" y1="18" x2="64" y2="250"/><line class="axis" x1="64" y1="250" x2="64" y2="255"/><text class="tick" x="64" y="268" text-anchor="middle">100k</text><line class="axis" x1="143.3" y1="250" x2="143.3" y2="255"/><text class="tick" x="143.3" y="268" text-anchor="middle">1M</text><line class="axis" x1="222.7" y1="250" x2="222.7" y2="255"/><text class="tick" x="222.7" y="268" text-anchor="middle">10M</text><line class="axis" x1="302" y1="250" x2="302" y2="255"/><text class="tick" x="302" y="268" text-anchor="middle">100M</text><line class="axis" x1="381.3" y1="250" x2="381.3" y2="255"/><text class="tick" x="381.3" y="268" text-anchor="middle">1G</text><line class="axis" x1="460.7" y1="250" x2="460.7" y2="255"/><text class="tick" x="460.7" y="268" text-anchor="middle">10G</text><line class="axis" x1="540" y1="250" x2="540" y2="255"/><text class="tick" x="540" y="268" text-anchor="middle">100G</text><line class="axis" x1="59" y1="250" x2="64" y2="250"/><text class="tick" x="56" y="254.0" text-anchor="end">-20</text><line class="axis" x1="59" y1="216.9" x2="64" y2="216.9"/><text class="tick" x="56" y="220.9" text-anchor="end">-10</text><line class="axis" x1="59" y1="183.7" x2="64" y2="183.7"/><text class="tick" x="56" y="187.7" text-anchor="end">0</text><line class="axis" x1="59" y1="150.6" x2="64" y2="150.6"/><text class="tick" x="56" y="154.6" text-anchor="end">10</text><line class="axis" x1="59" y1="117.4" x2="64" y2="117.4"/><text class="tick" x="56" y="121.4" text-anchor="end">20</text><line class="axis" x1="59" y1="84.3" x2="64" y2="84.3"/><text class="tick" x="56" y="88.3" text-anchor="end">30</text><line class="axis" x1="59" y1="51.1" x2="64" y2="51.1"/><text class="tick" x="56" y="55.1" text-anchor="end">40</text><line class="axis" x1="59" y1="18" x2="64" y2="18"/><text class="tick" x="56" y="22.0" text-anchor="end">50</text><text class="tick" x="302" y="290" text-anchor="middle">주파수 (Hz, 로그 축)</text><text class="tick" x="70" y="22">이득 (dB)</text><path class="plot-fit" d="M64 97.5L66 97.5L68 97.5L70 97.5L71.9 97.5L73.9 97.5L75.9 97.5L77.9 97.5L79.9 97.5L81.8 97.5L83.8 97.5L85.8 97.5L87.8 97.5L89.8 97.5L91.8 97.5L93.8 97.5L95.7 97.5L97.7 97.5L99.7 97.5L101.7 97.5L103.7 97.5L105.6 97.5L107.6 97.5L109.6 97.5L111.6 97.5L113.6 97.5L115.6 97.5L117.5 97.5L119.5 97.5L121.5 97.5L123.5 97.5L125.5 97.5L127.5 97.5L129.5 97.5L131.4 97.5L133.4 97.5L135.4 97.5L137.4 97.5L139.4 97.5L141.3 97.5L143.3 97.5L145.3 97.5L147.3 97.5L149.3 97.5L151.3 97.5L153.2 97.5L155.2 97.5L157.2 97.5L159.2 97.5L161.2 97.5L163.2 97.5L165.1 97.5L167.1 97.5L169.1 97.5L171.1 97.5L173.1 97.5L175.1 97.5L177 97.5L179 97.5L181 97.5L183 97.5L185 97.5L187 97.5L189 97.5L190.9 97.5L192.9 97.5L194.9 97.5L196.9 97.5L198.9 97.5L200.8 97.5L202.8 97.5L204.8 97.5L206.8 97.5L208.8 97.5L210.8 97.5L212.7 97.5L214.7 97.5L216.7 97.5L218.7 97.5L220.7 97.5L222.7 97.5L224.6 97.5L226.6 97.5L228.6 97.6L230.6 97.6L232.6 97.6L234.6 97.6L236.5 97.6L238.5 97.6L240.5 97.6L242.5 97.7L244.5 97.7L246.5 97.7L248.5 97.7L250.4 97.8L252.4 97.8L254.4 97.8L256.4 97.9L258.4 97.9L260.3 98L262.3 98L264.3 98.1L266.3 98.2L268.3 98.3L270.3 98.3L272.3 98.5L274.2 98.6L276.2 98.7L278.2 98.8L280.2 99L282.2 99.2L284.2 99.4L286.1 99.6L288.1 99.8L290.1 100.1L292.1 100.4L294.1 100.7L296 101L298 101.4L300 101.8L302 102.3L304 102.8L306 103.3L307.9 103.9L309.9 104.5L311.9 105.1L313.9 105.8L315.9 106.6L317.9 107.4L319.9 108.2L321.8 109.1L323.8 110.1L325.8 111.1L327.8 112.1L329.8 113.2L331.8 114.3L333.7 115.5L335.7 116.7L337.7 117.9L339.7 119.2L341.7 120.5L343.6 121.8L345.6 123.2L347.6 124.6L349.6 126L351.6 127.4L353.6 128.9L355.6 130.4L357.5 131.9L359.5 133.4L361.5 134.9L363.5 136.5L365.5 138L367.4 139.6L369.4 141.1L371.4 142.7L373.4 144.3L375.4 145.9L377.4 147.5L379.3 149.1L381.3 150.7L383.3 152.4L385.3 154L387.3 155.6L389.3 157.2L391.3 158.9L393.2 160.5L395.2 162.1L397.2 163.8L399.2 165.4L401.2 167.1L403.1 168.7L405.1 170.4L407.1 172L409.1 173.7L411.1 175.3L413.1 177L415.1 178.6L417 180.3L419 181.9L421 183.6L423 185.2L425 186.9L426.9 188.5L428.9 190.2L430.9 191.8L432.9 193.5L434.9 195.1L436.9 196.8L438.9 198.5L440.8 200.1L442.8 201.8L444.8 203.4L446.8 205.1L448.8 206.7L450.8 208.4L452.7 210L454.7 211.7L456.7 213.4L458.7 215L460.7 216.7L462.6 218.3L464.6 220L466.6 221.6L468.6 223.3L470.6 225L472.6 226.6L474.6 228.3L476.5 229.9L478.5 231.6L480.5 233.2L482.5 234.9L484.5 236.6L486.4 238.2L488.4 239.9L490.4 241.5L492.4 243.2L494.4 244.8L496.4 246.5L498.3 248.2L500.3 249.8"/><line class="mark-ml" x1="318" y1="107.5" x2="318" y2="250"/><circle class="pt-train" cx="318" cy="107.5" r="5"/></svg><figcaption>처음 설정: $R_D$ = 10 kΩ, $C_L$ = 100 fF</figcaption></figure>
+      <figure class="figure"><svg id="widget-gainbw-static-2" viewBox="0 0 560 300" role="img" aria-label="RD만 10배: RD = 100 kΩ, CL = 100 fF, 저주파 이득 46.0 dB, f-3dB 15.9 MHz"><line class="axis" x1="64" y1="250" x2="540" y2="250"/><line class="axis" x1="64" y1="18" x2="64" y2="250"/><line class="axis" x1="64" y1="250" x2="64" y2="255"/><text class="tick" x="64" y="268" text-anchor="middle">100k</text><line class="axis" x1="143.3" y1="250" x2="143.3" y2="255"/><text class="tick" x="143.3" y="268" text-anchor="middle">1M</text><line class="axis" x1="222.7" y1="250" x2="222.7" y2="255"/><text class="tick" x="222.7" y="268" text-anchor="middle">10M</text><line class="axis" x1="302" y1="250" x2="302" y2="255"/><text class="tick" x="302" y="268" text-anchor="middle">100M</text><line class="axis" x1="381.3" y1="250" x2="381.3" y2="255"/><text class="tick" x="381.3" y="268" text-anchor="middle">1G</text><line class="axis" x1="460.7" y1="250" x2="460.7" y2="255"/><text class="tick" x="460.7" y="268" text-anchor="middle">10G</text><line class="axis" x1="540" y1="250" x2="540" y2="255"/><text class="tick" x="540" y="268" text-anchor="middle">100G</text><line class="axis" x1="59" y1="250" x2="64" y2="250"/><text class="tick" x="56" y="254.0" text-anchor="end">-20</text><line class="axis" x1="59" y1="216.9" x2="64" y2="216.9"/><text class="tick" x="56" y="220.9" text-anchor="end">-10</text><line class="axis" x1="59" y1="183.7" x2="64" y2="183.7"/><text class="tick" x="56" y="187.7" text-anchor="end">0</text><line class="axis" x1="59" y1="150.6" x2="64" y2="150.6"/><text class="tick" x="56" y="154.6" text-anchor="end">10</text><line class="axis" x1="59" y1="117.4" x2="64" y2="117.4"/><text class="tick" x="56" y="121.4" text-anchor="end">20</text><line class="axis" x1="59" y1="84.3" x2="64" y2="84.3"/><text class="tick" x="56" y="88.3" text-anchor="end">30</text><line class="axis" x1="59" y1="51.1" x2="64" y2="51.1"/><text class="tick" x="56" y="55.1" text-anchor="end">40</text><line class="axis" x1="59" y1="18" x2="64" y2="18"/><text class="tick" x="56" y="22.0" text-anchor="end">50</text><text class="tick" x="302" y="290" text-anchor="middle">주파수 (Hz, 로그 축)</text><text class="tick" x="70" y="22">이득 (dB)</text><path class="plot-truth" d="M64 97.5L66 97.5L68 97.5L70 97.5L71.9 97.5L73.9 97.5L75.9 97.5L77.9 97.5L79.9 97.5L81.8 97.5L83.8 97.5L85.8 97.5L87.8 97.5L89.8 97.5L91.8 97.5L93.8 97.5L95.7 97.5L97.7 97.5L99.7 97.5L101.7 97.5L103.7 97.5L105.6 97.5L107.6 97.5L109.6 97.5L111.6 97.5L113.6 97.5L115.6 97.5L117.5 97.5L119.5 97.5L121.5 97.5L123.5 97.5L125.5 97.5L127.5 97.5L129.5 97.5L131.4 97.5L133.4 97.5L135.4 97.5L137.4 97.5L139.4 97.5L141.3 97.5L143.3 97.5L145.3 97.5L147.3 97.5L149.3 97.5L151.3 97.5L153.2 97.5L155.2 97.5L157.2 97.5L159.2 97.5L161.2 97.5L163.2 97.5L165.1 97.5L167.1 97.5L169.1 97.5L171.1 97.5L173.1 97.5L175.1 97.5L177 97.5L179 97.5L181 97.5L183 97.5L185 97.5L187 97.5L189 97.5L190.9 97.5L192.9 97.5L194.9 97.5L196.9 97.5L198.9 97.5L200.8 97.5L202.8 97.5L204.8 97.5L206.8 97.5L208.8 97.5L210.8 97.5L212.7 97.5L214.7 97.5L216.7 97.5L218.7 97.5L220.7 97.5L222.7 97.5L224.6 97.5L226.6 97.5L228.6 97.6L230.6 97.6L232.6 97.6L234.6 97.6L236.5 97.6L238.5 97.6L240.5 97.6L242.5 97.7L244.5 97.7L246.5 97.7L248.5 97.7L250.4 97.8L252.4 97.8L254.4 97.8L256.4 97.9L258.4 97.9L260.3 98L262.3 98L264.3 98.1L266.3 98.2L268.3 98.3L270.3 98.3L272.3 98.5L274.2 98.6L276.2 98.7L278.2 98.8L280.2 99L282.2 99.2L284.2 99.4L286.1 99.6L288.1 99.8L290.1 100.1L292.1 100.4L294.1 100.7L296 101L298 101.4L300 101.8L302 102.3L304 102.8L306 103.3L307.9 103.9L309.9 104.5L311.9 105.1L313.9 105.8L315.9 106.6L317.9 107.4L319.9 108.2L321.8 109.1L323.8 110.1L325.8 111.1L327.8 112.1L329.8 113.2L331.8 114.3L333.7 115.5L335.7 116.7L337.7 117.9L339.7 119.2L341.7 120.5L343.6 121.8L345.6 123.2L347.6 124.6L349.6 126L351.6 127.4L353.6 128.9L355.6 130.4L357.5 131.9L359.5 133.4L361.5 134.9L363.5 136.5L365.5 138L367.4 139.6L369.4 141.1L371.4 142.7L373.4 144.3L375.4 145.9L377.4 147.5L379.3 149.1L381.3 150.7L383.3 152.4L385.3 154L387.3 155.6L389.3 157.2L391.3 158.9L393.2 160.5L395.2 162.1L397.2 163.8L399.2 165.4L401.2 167.1L403.1 168.7L405.1 170.4L407.1 172L409.1 173.7L411.1 175.3L413.1 177L415.1 178.6L417 180.3L419 181.9L421 183.6L423 185.2L425 186.9L426.9 188.5L428.9 190.2L430.9 191.8L432.9 193.5L434.9 195.1L436.9 196.8L438.9 198.5L440.8 200.1L442.8 201.8L444.8 203.4L446.8 205.1L448.8 206.7L450.8 208.4L452.7 210L454.7 211.7L456.7 213.4L458.7 215L460.7 216.7L462.6 218.3L464.6 220L466.6 221.6L468.6 223.3L470.6 225L472.6 226.6L474.6 228.3L476.5 229.9L478.5 231.6L480.5 233.2L482.5 234.9L484.5 236.6L486.4 238.2L488.4 239.9L490.4 241.5L492.4 243.2L494.4 244.8L496.4 246.5L498.3 248.2L500.3 249.8"/><path class="plot-fit" d="M64 31.2L66 31.2L68 31.2L70 31.2L71.9 31.2L73.9 31.2L75.9 31.2L77.9 31.2L79.9 31.2L81.8 31.2L83.8 31.2L85.8 31.2L87.8 31.2L89.8 31.2L91.8 31.2L93.8 31.2L95.7 31.2L97.7 31.2L99.7 31.2L101.7 31.2L103.7 31.2L105.6 31.2L107.6 31.2L109.6 31.2L111.6 31.2L113.6 31.2L115.6 31.2L117.5 31.2L119.5 31.2L121.5 31.2L123.5 31.2L125.5 31.2L127.5 31.2L129.5 31.2L131.4 31.2L133.4 31.2L135.4 31.2L137.4 31.2L139.4 31.2L141.3 31.2L143.3 31.2L145.3 31.3L147.3 31.3L149.3 31.3L151.3 31.3L153.2 31.3L155.2 31.3L157.2 31.3L159.2 31.3L161.2 31.3L163.2 31.4L165.1 31.4L167.1 31.4L169.1 31.4L171.1 31.5L173.1 31.5L175.1 31.5L177 31.6L179 31.6L181 31.7L183 31.7L185 31.8L187 31.9L189 32L190.9 32.1L192.9 32.2L194.9 32.3L196.9 32.4L198.9 32.5L200.8 32.7L202.8 32.9L204.8 33.1L206.8 33.3L208.8 33.5L210.8 33.8L212.7 34.1L214.7 34.4L216.7 34.7L218.7 35.1L220.7 35.5L222.7 36L224.6 36.5L226.6 37L228.6 37.6L230.6 38.2L232.6 38.8L234.6 39.6L236.5 40.3L238.5 41.1L240.5 42L242.5 42.9L244.5 43.8L246.5 44.8L248.5 45.8L250.4 46.9L252.4 48L254.4 49.2L256.4 50.4L258.4 51.6L260.3 52.9L262.3 54.2L264.3 55.5L266.3 56.9L268.3 58.3L270.3 59.7L272.3 61.2L274.2 62.6L276.2 64.1L278.2 65.6L280.2 67.1L282.2 68.6L284.2 70.2L286.1 71.7L288.1 73.3L290.1 74.9L292.1 76.4L294.1 78L296 79.6L298 81.2L300 82.8L302 84.5L304 86.1L306 87.7L307.9 89.3L309.9 91L311.9 92.6L313.9 94.2L315.9 95.9L317.9 97.5L319.9 99.1L321.8 100.8L323.8 102.4L325.8 104.1L327.8 105.7L329.8 107.4L331.8 109L333.7 110.7L335.7 112.3L337.7 114L339.7 115.6L341.7 117.3L343.6 118.9L345.6 120.6L347.6 122.2L349.6 123.9L351.6 125.5L353.6 127.2L355.6 128.9L357.5 130.5L359.5 132.2L361.5 133.8L363.5 135.5L365.5 137.1L367.4 138.8L369.4 140.4L371.4 142.1L373.4 143.8L375.4 145.4L377.4 147.1L379.3 148.7L381.3 150.4L383.3 152L385.3 153.7L387.3 155.4L389.3 157L391.3 158.7L393.2 160.3L395.2 162L397.2 163.6L399.2 165.3L401.2 167L403.1 168.6L405.1 170.3L407.1 171.9L409.1 173.6L411.1 175.2L413.1 176.9L415.1 178.6L417 180.2L419 181.9L421 183.5L423 185.2L425 186.8L426.9 188.5L428.9 190.2L430.9 191.8L432.9 193.5L434.9 195.1L436.9 196.8L438.9 198.4L440.8 200.1L442.8 201.8L444.8 203.4L446.8 205.1L448.8 206.7L450.8 208.4L452.7 210L454.7 211.7L456.7 213.4L458.7 215L460.7 216.7L462.6 218.3L464.6 220L466.6 221.6L468.6 223.3L470.6 225L472.6 226.6L474.6 228.3L476.5 229.9L478.5 231.6L480.5 233.2L482.5 234.9L484.5 236.6L486.4 238.2L488.4 239.9L490.4 241.5L492.4 243.2L494.4 244.8L496.4 246.5L498.3 248.2L500.3 249.8"/><line class="mark-ml" x1="238.7" y1="41.2" x2="238.7" y2="250"/><circle class="pt-train" cx="238.7" cy="41.2" r="5"/></svg><figcaption>$R_D$만 10배: $R_D$ = 100 kΩ, $C_L$ = 100 fF</figcaption></figure>
+      <figure class="figure"><svg id="widget-gainbw-static-3" viewBox="0 0 560 300" role="img" aria-label="CL만 10배: RD = 10 kΩ, CL = 1 pF, 저주파 이득 26.0 dB, f-3dB 15.9 MHz"><line class="axis" x1="64" y1="250" x2="540" y2="250"/><line class="axis" x1="64" y1="18" x2="64" y2="250"/><line class="axis" x1="64" y1="250" x2="64" y2="255"/><text class="tick" x="64" y="268" text-anchor="middle">100k</text><line class="axis" x1="143.3" y1="250" x2="143.3" y2="255"/><text class="tick" x="143.3" y="268" text-anchor="middle">1M</text><line class="axis" x1="222.7" y1="250" x2="222.7" y2="255"/><text class="tick" x="222.7" y="268" text-anchor="middle">10M</text><line class="axis" x1="302" y1="250" x2="302" y2="255"/><text class="tick" x="302" y="268" text-anchor="middle">100M</text><line class="axis" x1="381.3" y1="250" x2="381.3" y2="255"/><text class="tick" x="381.3" y="268" text-anchor="middle">1G</text><line class="axis" x1="460.7" y1="250" x2="460.7" y2="255"/><text class="tick" x="460.7" y="268" text-anchor="middle">10G</text><line class="axis" x1="540" y1="250" x2="540" y2="255"/><text class="tick" x="540" y="268" text-anchor="middle">100G</text><line class="axis" x1="59" y1="250" x2="64" y2="250"/><text class="tick" x="56" y="254.0" text-anchor="end">-20</text><line class="axis" x1="59" y1="216.9" x2="64" y2="216.9"/><text class="tick" x="56" y="220.9" text-anchor="end">-10</text><line class="axis" x1="59" y1="183.7" x2="64" y2="183.7"/><text class="tick" x="56" y="187.7" text-anchor="end">0</text><line class="axis" x1="59" y1="150.6" x2="64" y2="150.6"/><text class="tick" x="56" y="154.6" text-anchor="end">10</text><line class="axis" x1="59" y1="117.4" x2="64" y2="117.4"/><text class="tick" x="56" y="121.4" text-anchor="end">20</text><line class="axis" x1="59" y1="84.3" x2="64" y2="84.3"/><text class="tick" x="56" y="88.3" text-anchor="end">30</text><line class="axis" x1="59" y1="51.1" x2="64" y2="51.1"/><text class="tick" x="56" y="55.1" text-anchor="end">40</text><line class="axis" x1="59" y1="18" x2="64" y2="18"/><text class="tick" x="56" y="22.0" text-anchor="end">50</text><text class="tick" x="302" y="290" text-anchor="middle">주파수 (Hz, 로그 축)</text><text class="tick" x="70" y="22">이득 (dB)</text><path class="plot-truth" d="M64 97.5L66 97.5L68 97.5L70 97.5L71.9 97.5L73.9 97.5L75.9 97.5L77.9 97.5L79.9 97.5L81.8 97.5L83.8 97.5L85.8 97.5L87.8 97.5L89.8 97.5L91.8 97.5L93.8 97.5L95.7 97.5L97.7 97.5L99.7 97.5L101.7 97.5L103.7 97.5L105.6 97.5L107.6 97.5L109.6 97.5L111.6 97.5L113.6 97.5L115.6 97.5L117.5 97.5L119.5 97.5L121.5 97.5L123.5 97.5L125.5 97.5L127.5 97.5L129.5 97.5L131.4 97.5L133.4 97.5L135.4 97.5L137.4 97.5L139.4 97.5L141.3 97.5L143.3 97.5L145.3 97.5L147.3 97.5L149.3 97.5L151.3 97.5L153.2 97.5L155.2 97.5L157.2 97.5L159.2 97.5L161.2 97.5L163.2 97.5L165.1 97.5L167.1 97.5L169.1 97.5L171.1 97.5L173.1 97.5L175.1 97.5L177 97.5L179 97.5L181 97.5L183 97.5L185 97.5L187 97.5L189 97.5L190.9 97.5L192.9 97.5L194.9 97.5L196.9 97.5L198.9 97.5L200.8 97.5L202.8 97.5L204.8 97.5L206.8 97.5L208.8 97.5L210.8 97.5L212.7 97.5L214.7 97.5L216.7 97.5L218.7 97.5L220.7 97.5L222.7 97.5L224.6 97.5L226.6 97.5L228.6 97.6L230.6 97.6L232.6 97.6L234.6 97.6L236.5 97.6L238.5 97.6L240.5 97.6L242.5 97.7L244.5 97.7L246.5 97.7L248.5 97.7L250.4 97.8L252.4 97.8L254.4 97.8L256.4 97.9L258.4 97.9L260.3 98L262.3 98L264.3 98.1L266.3 98.2L268.3 98.3L270.3 98.3L272.3 98.5L274.2 98.6L276.2 98.7L278.2 98.8L280.2 99L282.2 99.2L284.2 99.4L286.1 99.6L288.1 99.8L290.1 100.1L292.1 100.4L294.1 100.7L296 101L298 101.4L300 101.8L302 102.3L304 102.8L306 103.3L307.9 103.9L309.9 104.5L311.9 105.1L313.9 105.8L315.9 106.6L317.9 107.4L319.9 108.2L321.8 109.1L323.8 110.1L325.8 111.1L327.8 112.1L329.8 113.2L331.8 114.3L333.7 115.5L335.7 116.7L337.7 117.9L339.7 119.2L341.7 120.5L343.6 121.8L345.6 123.2L347.6 124.6L349.6 126L351.6 127.4L353.6 128.9L355.6 130.4L357.5 131.9L359.5 133.4L361.5 134.9L363.5 136.5L365.5 138L367.4 139.6L369.4 141.1L371.4 142.7L373.4 144.3L375.4 145.9L377.4 147.5L379.3 149.1L381.3 150.7L383.3 152.4L385.3 154L387.3 155.6L389.3 157.2L391.3 158.9L393.2 160.5L395.2 162.1L397.2 163.8L399.2 165.4L401.2 167.1L403.1 168.7L405.1 170.4L407.1 172L409.1 173.7L411.1 175.3L413.1 177L415.1 178.6L417 180.3L419 181.9L421 183.6L423 185.2L425 186.9L426.9 188.5L428.9 190.2L430.9 191.8L432.9 193.5L434.9 195.1L436.9 196.8L438.9 198.5L440.8 200.1L442.8 201.8L444.8 203.4L446.8 205.1L448.8 206.7L450.8 208.4L452.7 210L454.7 211.7L456.7 213.4L458.7 215L460.7 216.7L462.6 218.3L464.6 220L466.6 221.6L468.6 223.3L470.6 225L472.6 226.6L474.6 228.3L476.5 229.9L478.5 231.6L480.5 233.2L482.5 234.9L484.5 236.6L486.4 238.2L488.4 239.9L490.4 241.5L492.4 243.2L494.4 244.8L496.4 246.5L498.3 248.2L500.3 249.8"/><path class="plot-fit" d="M64 97.5L66 97.5L68 97.5L70 97.5L71.9 97.5L73.9 97.5L75.9 97.5L77.9 97.5L79.9 97.5L81.8 97.5L83.8 97.5L85.8 97.5L87.8 97.5L89.8 97.5L91.8 97.5L93.8 97.5L95.7 97.5L97.7 97.5L99.7 97.5L101.7 97.5L103.7 97.5L105.6 97.5L107.6 97.5L109.6 97.5L111.6 97.5L113.6 97.5L115.6 97.5L117.5 97.5L119.5 97.5L121.5 97.5L123.5 97.5L125.5 97.5L127.5 97.5L129.5 97.5L131.4 97.5L133.4 97.5L135.4 97.5L137.4 97.5L139.4 97.5L141.3 97.5L143.3 97.5L145.3 97.5L147.3 97.5L149.3 97.6L151.3 97.6L153.2 97.6L155.2 97.6L157.2 97.6L159.2 97.6L161.2 97.6L163.2 97.7L165.1 97.7L167.1 97.7L169.1 97.7L171.1 97.8L173.1 97.8L175.1 97.8L177 97.9L179 97.9L181 98L183 98L185 98.1L187 98.2L189 98.3L190.9 98.3L192.9 98.5L194.9 98.6L196.9 98.7L198.9 98.8L200.8 99L202.8 99.2L204.8 99.4L206.8 99.6L208.8 99.8L210.8 100.1L212.7 100.4L214.7 100.7L216.7 101L218.7 101.4L220.7 101.8L222.7 102.3L224.6 102.8L226.6 103.3L228.6 103.9L230.6 104.5L232.6 105.1L234.6 105.8L236.5 106.6L238.5 107.4L240.5 108.2L242.5 109.1L244.5 110.1L246.5 111.1L248.5 112.1L250.4 113.2L252.4 114.3L254.4 115.5L256.4 116.7L258.4 117.9L260.3 119.2L262.3 120.5L264.3 121.8L266.3 123.2L268.3 124.6L270.3 126L272.3 127.4L274.2 128.9L276.2 130.4L278.2 131.9L280.2 133.4L282.2 134.9L284.2 136.5L286.1 138L288.1 139.6L290.1 141.1L292.1 142.7L294.1 144.3L296 145.9L298 147.5L300 149.1L302 150.7L304 152.4L306 154L307.9 155.6L309.9 157.2L311.9 158.9L313.9 160.5L315.9 162.1L317.9 163.8L319.9 165.4L321.8 167.1L323.8 168.7L325.8 170.4L327.8 172L329.8 173.7L331.8 175.3L333.7 177L335.7 178.6L337.7 180.3L339.7 181.9L341.7 183.6L343.6 185.2L345.6 186.9L347.6 188.5L349.6 190.2L351.6 191.8L353.6 193.5L355.6 195.1L357.5 196.8L359.5 198.5L361.5 200.1L363.5 201.8L365.5 203.4L367.4 205.1L369.4 206.7L371.4 208.4L373.4 210L375.4 211.7L377.4 213.4L379.3 215L381.3 216.7L383.3 218.3L385.3 220L387.3 221.6L389.3 223.3L391.3 225L393.2 226.6L395.2 228.3L397.2 229.9L399.2 231.6L401.2 233.2L403.1 234.9L405.1 236.6L407.1 238.2L409.1 239.9L411.1 241.5L413.1 243.2L415.1 244.8L417 246.5L419 248.2L421 249.8"/><line class="mark-ml" x1="238.7" y1="107.5" x2="238.7" y2="250"/><circle class="pt-train" cx="238.7" cy="107.5" r="5"/></svg><figcaption>$C_L$만 10배: $R_D$ = 10 kΩ, $C_L$ = 1 pF</figcaption></figure>
+      <div class="table-wrap"><table><tr><th>설정</th><th>저주파 이득 $g_m R_D$</th><th>$f_{-3dB}$</th></tr><tr><td>처음 설정 ($R_D$ = 10 kΩ, $C_L$ = 100 fF)</td><td>20 (26.0 dB)</td><td>159.2 MHz</td></tr><tr><td>$R_D$만 10배 ($R_D$ = 100 kΩ, $C_L$ = 100 fF)</td><td>200 (46.0 dB)</td><td>15.9 MHz</td></tr><tr><td>$C_L$만 10배 ($R_D$ = 10 kΩ, $C_L$ = 1 pF)</td><td>20 (26.0 dB)</td><td>15.9 MHz</td></tr></table></div>
+      </div>
+    </div>
+    <p><strong>기술 스케일링</strong>(technology scaling): 커패시턴스를 줄이려면 트랜지스터를 작게 만들면 돼요.</p>
+    <ol class="steps">
+      <li>채널 길이 $L$을 줄여요(10 nm → 5 nm → 3 nm → 2 nm 공정).</li>
+      <li>전류가 $\frac{W}{L}$에 비례하므로 $W$도 같은 비율로 줄여요.</li>
+      <li>커패시턴스는 면적 $WL$에 비례해요. $L$과 $W$를 각각 절반으로 줄이면 면적이, 곧 커패시턴스가 약 $\frac{1}{4}$이 돼요.</li>
+      <li>그래서 속도가 약 4배 빨라지고, 같은 면적에 소자를 더 많이 넣을 수도 있어요.</li>
+    </ol>
+  </div>
+  <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+    <blockquote>"게인을 키우다 보면 동작 속도는 줄어드는 이런 트레이드오프 관계가 존재합니다." (1014 P03·L135)</blockquote>
+    <blockquote>"무조건 게인을 크게 하는 게 좋은 설계는 아니에요." (1014 P03·L137)</blockquote>
+    <p>커패시터는 작을수록 좋고, 그래서 요즘 프로세서가 3 nm, 2 nm 공정을 쓰는 것처럼 트랜지스터를 계속 작게 만든다고 하셨어요. (1014 P03·L139–145)</p>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">CS 단의 이득은 $\omega_{-3dB} = \frac{1}{R_D C_L}$에서 $\frac{1}{\sqrt{2}}$배(−3 dB)가 되고, $R_D$를 키우면 이득은 늘지만 대역폭은 줄어요.</p>
+    <p class="panel-label">핵심 식</p>
+    <ul class="eq-list">
+      <li><span class="eq-name">크기 응답</span>$$\left|\frac{V_{out}}{V_{in}}\right|$$ $$= \frac{g_m R_D}{\sqrt{R_D^2 C_L^2 \omega^2 + 1}}$$</li>
+      <li><span class="eq-name">3 dB 대역폭</span>$$\omega_{-3dB} = \frac{1}{R_D C_L}$$</li>
+    </ul>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>3 dB 대역폭(−3 dB bandwidth)</dt><dd>이득이 저주파 값의 $\frac{1}{\sqrt{2}}$배로 떨어지는 주파수까지의 범위</dd>
+      <dt>트레이드오프(trade-off)</dt><dd>$R_D$를 키우면 이득은 늘고 대역폭은 줄어드는 맞바꿈</dd>
+    </dl>
+  </div>
+</article>
+    </section>
+    <section id="s1"><h2>2. 전달 함수와 보데 근사</h2>
+<article class="topic" id="s1-transfer"><h3>5. 전달 함수: 극점과 영점</h3><div class="tags"><span class="tag date">1014 수업</span><span class="tag slide">L05 s7</span></div>
+  <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+    <p class="lead">회로는 물결을 받아서 크기를 바꾸고 조금 늦게 내보내는 상자예요.</p>
+    <figure class="figure"><svg id="fig-transfer-wave" viewBox="0 0 460 140" role="img" aria-label="왼쪽의 큰 물결 선이 가운데 테두리 상자를 지나 오른쪽에서 더 작고 조금 늦은 물결 선으로 나오는 그림">
+      <path class="fig-ink" d="M20.0,70.0 L22.5,60.7 L25.0,52.0 L27.5,44.5 L30.0,38.8 L32.5,35.2 L35.0,34.0 L37.5,35.2 L40.0,38.8 L42.5,44.5 L45.0,52.0 L47.5,60.7 L50.0,70.0 L52.5,79.3 L55.0,88.0 L57.5,95.5 L60.0,101.2 L62.5,104.8 L65.0,106.0 L67.5,104.8 L70.0,101.2 L72.5,95.5 L75.0,88.0 L77.5,79.3 L80.0,70.0 L82.5,60.7 L85.0,52.0 L87.5,44.5 L90.0,38.8 L92.5,35.2 L95.0,34.0 L97.5,35.2 L100.0,38.8 L102.5,44.5 L105.0,52.0 L107.5,60.7 L110.0,70.0 L112.5,79.3 L115.0,88.0 L117.5,95.5 L120.0,101.2 L122.5,104.8 L125.0,106.0 L127.5,104.8 L130.0,101.2 L132.5,95.5 L135.0,88.0 L137.5,79.3 L140.0,70.0" stroke-width="2"/>
+      <path class="fig-ink" d="M150,70 L180,70 M172,64 L180,70 L172,76" stroke-width="1.5"/>
+      <rect class="fig-ink" x="185" y="40" width="90" height="60" rx="8" stroke-width="2"/>
+      <text class="fig-text" x="230" y="75" text-anchor="middle" font-size="14">회로</text>
+      <path class="fig-ink" d="M280,70 L310,70 M302,64 L310,70 L302,76" stroke-width="1.5"/>
+      <path class="fig-accent" d="M320.0,83.5 L322.5,80.8 L325.0,77.3 L327.5,73.4 L330.0,69.2 L332.5,65.1 L335.0,61.4 L337.5,58.2 L340.0,55.8 L342.5,54.4 L345.0,54.0 L347.5,54.8 L350.0,56.5 L352.5,59.2 L355.0,62.7 L357.5,66.6 L360.0,70.8 L362.5,74.9 L365.0,78.6 L367.5,81.8 L370.0,84.2 L372.5,85.6 L375.0,86.0 L377.5,85.2 L380.0,83.5 L382.5,80.8 L385.0,77.3 L387.5,73.4 L390.0,69.2 L392.5,65.1 L395.0,61.4 L397.5,58.2 L400.0,55.8 L402.5,54.4 L405.0,54.0 L407.5,54.8 L410.0,56.5 L412.5,59.2 L415.0,62.7 L417.5,66.6 L420.0,70.8 L422.5,74.9 L425.0,78.6 L427.5,81.8 L430.0,84.2 L432.5,85.6 L435.0,86.0 L437.5,85.2 L440.0,83.5" stroke-width="2"/>
+      <text class="fig-muted" x="80" y="128" text-anchor="middle" font-size="13">들어가는 물결</text>
+      <text class="fig-muted" x="380" y="128" text-anchor="middle" font-size="13">나오는 물결</text>
+    </svg><figcaption>나오는 물결은 더 작아지고 조금 늦어져요. 얼마나 작아지는지가 우리가 가장 궁금한 거예요.</figcaption></figure>
+  </div>
+  <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <p>주파수 응답을 구하려면 먼저 회로의 전달 함수(transfer function) $H(s)$를 구해야 해요. 일반적인 꼴은 이래요.</p>
+    $$H(s)=A_0\,\frac{\left(1+\dfrac{s}{\omega_{z1}}\right)\left(1+\dfrac{s}{\omega_{z2}}\right)\cdots}{\left(1+\dfrac{s}{\omega_{p1}}\right)\left(1+\dfrac{s}{\omega_{p2}}\right)\cdots}$$
+    <p>곱 기호로 줄여 쓰면 $H(s)=A_0\,\dfrac{\prod_k(1+s/\omega_{zk})}{\prod_k(1+s/\omega_{pk})}$예요.</p>
+    <ul>
+      <li>$A_0$: DC 이득, 곧 저주파 이득(low-frequency gain)이에요. 지금까지 소신호 해석으로 구한 이득이 바로 이 $A_0$예요.</li>
+      <li>극점(pole): 분모를 0으로 만드는 $s$예요. 여러 개일 수 있어요.</li>
+      <li>영점(zero): 분자를 0으로 만드는 $s$예요. 여러 개일 수 있어요.</li>
+    </ul>
+    <p><strong>부호 표기.</strong> 분모 $1+s/\omega_{p1}$을 0으로 만드는 해는 $s=-\omega_{p1}$으로 음수예요. 위 식의 $\omega_{p}$, $\omega_{z}$는 극점·영점의 크기, 곧 극점 주파수·영점 주파수($\gt 0$)예요. 극점을 음수 값 그대로 $\omega_p$라 부르면 같은 식이 $(1-s/\omega_p)$ 꼴이 되고, Razavi 식 (11.2)는 이 표기를 써요. 두 표기는 같은 식이에요.</p>
+    <p class="note">(수업 중 슬라이드의 + 를 − 로 고치는 게 더 정확하다고 정정했어요. 이 노트는 슬라이드처럼 양수인 극점 주파수와 + 표기를 써요.)</p>
+    <p><strong>예: 부하 커패시턴스가 있는 CS 단.</strong> <a href="#s0-cs-cl">CS 단과 부하 커패시턴스</a>의 전달 함수는 영점이 없고 극점이 하나예요.</p>
+    $$\frac{V_{out}}{V_{in}}=\frac{-g_mR_D}{1+R_DC_Ls},\qquad A_0=-g_mR_D$$
+    <p>극점은 $s=-1/(R_DC_L)$이고, 극점 주파수는 그 크기인 $\omega_{p1}=1/(R_DC_L)$이에요.</p>
+    <p><strong>극점 수와 영점 수.</strong> 영점이 극점보다 많으면 $\omega\to\infty$에서 $|H|$가 끝없이 커져 발산해요. 그래서 실제 회로에서는 극점 수가 영점 수보다 같거나 많아요. 수업에서는 이를 "안정적인 시스템"이라고 불렀는데, 엄밀히는 적정(proper) 조건이고 안정성은 극점이 좌반 평면에 있는지로 정해져요.</p>
+    <p><strong>정현파 입력에 대한 출력.</strong></p>
+    <ol class="steps">
+      <li>입력 $x(t)=A\cos\omega t$를 넣어요.</li>
+      <li>$s=j\omega$를 대입해 복소수 $H(j\omega)$를 구해요.</li>
+      <li>출력은 크기가 $|H(j\omega)|$배, 위상이 $\angle H(j\omega)$만큼 바뀐 정현파예요. $$y(t)=A\,|H(j\omega)|\cos\big(\omega t+\angle H(j\omega)\big)$$</li>
+    </ol>
+    <ul>
+      <li>$|H(j\omega)|$: 크기 응답(magnitude response)</li>
+      <li>$\angle H(j\omega)$: 위상 응답(phase response)</li>
+    </ul>
+    <p>두 응답을 합쳐 주파수 응답(frequency response)이라 해요. 위 CS 단이면 크기 응답은 $|H(j\omega)|=\dfrac{g_mR_D}{\sqrt{R_D^2C_L^2\omega^2+1}}$이에요.</p>
+    <p>이 수업은 주로 크기 응답을 봐요. 크기 응답을 손으로 빨리 그리는 방법이 <a href="#s1-bode">보데 근사</a>예요.</p>
+  </div>
+  <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+    <p>슬라이드의 전달 함수에서 분모·분자의 + 를 − 로 고쳐 쓰는 게 더 정확하다고 하셨어요. 극점·영점 자체는 음수이기 때문이에요. 책에 따라 절댓값(크기)을 써서 + 로 적기도 한다고 덧붙이셨어요. (1014 P03·L153–157)</p>
+    <p>앰프에서는 위상보다 이득의 크기가 주파수에 따라 어떻게 변하는지가 더 관심사라서, 크기 응답 위주로 해석하겠다고 하셨어요.</p>
+  </div>
+  <div class="layer warn"><span class="layer-title">꼭 기억해요</span>
+    <blockquote>"앰프에서 중요한 거는 … 주파수에 따라서 이득의 크기가 어떻게 되느냐" (1014 P03·L177)</blockquote>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">전달 함수의 분모를 0으로 만드는 극점, 분자를 0으로 만드는 영점이 주파수 응답을 정해요.</p>
+    <p class="panel-label">핵심 식</p>
+    <ul class="eq-list">
+      <li><span class="eq-name">전달 함수</span>$$H(s)=A_0\,\dfrac{\prod_k(1+s/\omega_{zk})}{\prod_k(1+s/\omega_{pk})}$$</li>
+      <li><span class="eq-name">정현파 출력</span>$$y(t)=A\,|H(j\omega)|$$ $$\times\cos\big(\omega t+\angle H(j\omega)\big)$$</li>
+    </ul>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>극점(pole)</dt><dd>분모를 0으로 만드는 $s$예요.</dd>
+      <dt>영점(zero)</dt><dd>분자를 0으로 만드는 $s$예요.</dd>
+      <dt>크기 응답(magnitude response)</dt><dd>$|H(j\omega)|$, 주파수별 이득의 크기예요.</dd>
+    </dl>
+  </div>
+</article>
+
+<article class="topic" id="s1-bode"><h3>6. 보데 근사: 극점마다 기울기 −20 dB/dec</h3><div class="tags"><span class="tag date">1014 수업</span><span class="tag slide">L05 s8</span></div>
+  <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+    <p class="lead">구불구불한 곡선을 곧은 자 두 개로 대충 그려도 모양이 거의 맞아요.</p>
+    <figure class="figure"><svg id="fig-bode-easy" viewBox="0 0 360 150" role="img" aria-label="평평하다가 꺾여 일정하게 내려가는 두 개의 곧은 강조선과, 그 꺾인 곳 근처에서만 조금 벗어나는 둥근 점선 곡선을 겹쳐 그린 그림">
+      <path class="fig-ink" d="M30,20 L30,130 L340,130" stroke-width="1.5"/>
+      <path class="fig-ink" d="M40.0,40.0 L49.3,40.0 L58.7,40.0 L68.0,40.0 L77.3,40.0 L86.7,40.0 L96.0,40.0 L105.3,40.0 L114.7,40.1 L124.0,40.1 L133.3,40.2 L142.7,40.4 L152.0,40.6 L161.3,41.1 L170.7,41.8 L180.0,42.9 L189.3,44.5 L198.7,46.8 L208.0,49.9 L217.3,53.7 L226.7,58.0 L236.0,62.8 L245.3,67.9 L254.7,73.2 L264.0,78.7 L273.3,84.2 L282.7,89.7 L292.0,95.3 L301.3,100.8 L310.7,106.4 L320.0,112.0" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <path class="fig-accent" d="M40,40 L200,40 L320,112" stroke-width="2.5"/>
+      <text class="fig-text" x="110" y="30" text-anchor="middle" font-size="13">여기까지 평평</text>
+      <text class="fig-text" x="200" y="66" text-anchor="middle" font-size="13">꺾이는 곳</text>
+      <text class="fig-text" x="300" y="80" text-anchor="end" font-size="13">같은 기울기로 내려가요</text>
+    </svg><figcaption>꺾이는 곳 근처만 조금 틀리고, 나머지는 곧은 선이 곡선과 거의 겹쳐요.</figcaption></figure>
+  </div>
+  <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <p>정확한 $|H(j\omega)|$는 매끈한 곡선이에요. 극점과 영점을 알면 직선 몇 개로 이은 근사 그림인 보데 플롯(Bode plot)으로 쉽게 그릴 수 있어요. 보데(Bode)는 사람 이름이에요.</p>
+    <p><strong>그리는 축.</strong> 가로축 주파수 $\omega$는 로그 스케일, 세로축 크기는 dB 단위 $20\log|H(j\omega)|$로 그려요. 로그 스케일에서는 10배(decade, dec)마다 같은 간격이에요.</p>
+    <p><strong>보데 규칙.</strong></p>
+    <ul>
+      <li>$\omega$가 극점 주파수 $\omega_p$를 지날 때마다 $|H(j\omega)|$의 기울기가 20 dB/dec 감소해요.</li>
+      <li>$\omega$가 영점 주파수 $\omega_z$를 지날 때마다 기울기가 20 dB/dec 증가해요.</li>
+    </ul>
+    <p><strong>극점 항 하나의 유도.</strong></p>
+    <ol class="steps">
+      <li>$s=j\omega$: $\left|1+\dfrac{j\omega}{\omega_p}\right|=\sqrt{1+\left(\dfrac{\omega}{\omega_p}\right)^2}$ (실수부 1, 허수부 $\omega/\omega_p$)</li>
+      <li>분모에 있으므로 dB로는 $-20\log\sqrt{1+(\omega/\omega_p)^2}$</li>
+      <li>$\omega \ll \omega_p$일 때: $\approx -20\log 1 = 0$ dB, 곧 평평해요.</li>
+      <li>$\omega \gg \omega_p$일 때: 1을 무시하면 $\approx -20\log(\omega/\omega_p)$</li>
+      <li>$\omega=10\,\omega_p$이면 $-20$ dB, $100\,\omega_p$이면 $-40$ dB, $1000\,\omega_p$이면 $-60$ dB예요. 10배마다 20 dB씩 떨어지므로 기울기는 −20 dB/dec예요.</li>
+      <li>영점 항은 분자에 있으므로 $+20\log\sqrt{1+(\omega/\omega_z)^2}\approx+20\log(\omega/\omega_z)$, 기울기는 +20 dB/dec예요.</li>
+    </ol>
+    <p><strong>CS 단에 적용 (Razavi 예제 11.7).</strong> 부하 커패시턴스가 있는 CS 단은 영점이 없고 극점이 하나예요.</p>
+    $$\frac{V_{out}}{V_{in}}=\frac{-g_mR_D}{1+\dfrac{s}{1/(R_DC_L)}},\qquad \omega_{p1}=\frac{1}{R_DC_L}$$
+    <p>$20\log(g_mR_D)$에서 평평하게 가다가 $\omega_{p1}$에서 기울기가 0에서 −20 dB/dec로 바뀌어요.</p>
+    <figure class="figure"><svg id="fig-bode-cs" viewBox="0 0 520 230" role="img" aria-label="CS 단의 보데 플롯. 강조선은 20 log g m R D 높이에서 평평하다가 오메가 p1에서 꺾여 디케이드당 20 dB씩 내려가고, 점선 곡선은 실제 크기 응답으로 오메가 p1에서 강조선보다 3 dB 아래를 지난다">
+      <path class="fig-ink" d="M60,25 L60,190 L480,190" stroke-width="1.5"/>
+      <text class="fig-muted" x="64" y="20" font-size="12">20 log|V<tspan baseline-shift="sub" font-size="9">out</tspan>/V<tspan baseline-shift="sub" font-size="9">in</tspan>| (dB)</text>
+      <text class="fig-muted" x="480" y="210" text-anchor="end" font-size="12">ω (로그 스케일)</text>
+      <path class="fig-ink" d="M60.0,50.0 L70.0,50.0 L80.0,50.0 L90.0,50.0 L100.0,50.0 L110.0,50.0 L120.0,50.0 L130.0,50.0 L140.0,50.1 L150.0,50.1 L160.0,50.1 L170.0,50.2 L180.0,50.3 L190.0,50.5 L200.0,50.8 L210.0,51.2 L220.0,51.9 L230.0,52.9 L240.0,54.4 L250.0,56.4 L260.0,59.0 L270.0,62.4 L280.0,66.4 L290.0,70.9 L300.0,75.9 L310.0,81.2 L320.0,86.8 L330.0,92.5 L340.0,98.3 L350.0,104.2 L360.0,110.1 L370.0,116.1 L380.0,122.1 L390.0,128.0 L400.0,134.0 L410.0,140.0 L420.0,146.0 L430.0,152.0 L440.0,158.0 L450.0,164.0 L460.0,170.0" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <path class="fig-accent" d="M60,50 L260,50 L460,170" stroke-width="2.5"/>
+      <path class="fig-ink" d="M260,50 L260,190" stroke-width="1" stroke-dasharray="2 3"/>
+      <path class="fig-ink" d="M360,110 L360,190" stroke-width="1" stroke-dasharray="2 3"/>
+      <text class="fig-text" x="56" y="54" text-anchor="end" font-size="12">20 log g<tspan baseline-shift="sub" font-size="9">m</tspan>R<tspan baseline-shift="sub" font-size="9">D</tspan></text>
+      <text class="fig-text" x="260" y="206" text-anchor="middle" font-size="13">ω<tspan baseline-shift="sub" font-size="10">p1</tspan></text>
+      <text class="fig-text" x="360" y="206" text-anchor="middle" font-size="13">10ω<tspan baseline-shift="sub" font-size="10">p1</tspan></text>
+      <text class="fig-text" x="270" y="76" font-size="12">실제 곡선은 −3 dB</text>
+      <text class="fig-text" x="372" y="104" font-size="13">−20 dB/dec</text>
+    </svg><figcaption>강조선은 보데 근사, 점선은 실제 크기 응답이에요. $10\,\omega_{p1}$에서는 둘 다 $20\log(g_mR_D)$보다 약 20 dB 낮아요.</figcaption></figure>
+    <p><strong>오차.</strong> 실제 곡선은 극점 주파수에서 이미 3 dB 떨어져 있어요. 보데 근사는 극점까지 평평하다가 거기서 꺾이므로, 오차는 극점 근처에만 있어요. 대략적인 특성을 보기에는 충분해요.</p>
+    <p><strong>극점·영점이 여럿일 때.</strong> 지날 때마다 기울기를 더해요.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>지나는 순서</th><th>그 뒤 기울기</th></tr></thead>
+      <tbody>
+        <tr><td>극점 하나</td><td>−20 dB/dec</td></tr>
+        <tr><td>극점 다음 영점</td><td>−20 + 20 = 0 dB/dec (다시 평평)</td></tr>
+        <tr><td>극점 다음 극점</td><td>−20 − 20 = −40 dB/dec</td></tr>
+      </tbody>
+    </table></div>
+    <p>정확한 곡선이 필요하면 SPICE 같은 시뮬레이션 툴로 그려요. 손으로 그릴 때는 보데 근사로 충분해요.</p>
+    <p><strong>남은 문제: 극점 구하기.</strong> 보데 플롯은 극점·영점만 알면 쉽게 그려요. 어려운 것은 전달 함수를 구해 극점·영점을 찾는 일이에요. 저주파 이득 $A_0$만 구해도 노드 방정식이 복잡한데, 커패시턴스까지 들어가면 더 어려워요. 앰프의 주파수 응답은 주로 극점이 좌우해요. 영점은 보통 극점보다 훨씬 높은 주파수에 있어서, 이득이 먼저 떨어진 뒤에야 기울기를 다시 올려요. 극점을 빨리 찾는 손 규칙은 <a href="#s2-node-rule">노드마다 극점 하나</a>에서 다뤄요.</p>
+  </div>
+  <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+    <p>칠판에 $\omega=10\,\omega_p$, $100\,\omega_p$, $1000\,\omega_p$를 차례로 넣어 −20, −40, −60 dB가 되는 것을 보이셨어요. (1014 P04·L193–201)</p>
+    <p>"다음 폴이 나오면 어떻게 돼요?", "내려왔다가 올라가나요?" 하고 물으며 극점·영점 조합을 함께 그려 나가셨어요. (1014 P04·L221, P05·L238)</p>
+    <blockquote>"폴의 위치만 알고 있으면 … 쉽게 그릴 수가 있다는 거고요, 그게 장점이에요." (1014 P04·L221–223)</blockquote>
+    <p>극점·영점을 구하는 것, 곧 전달 함수를 구하는 것이 어려운 부분이라고 하셨어요. (1014 P05·L249–250)</p>
+  </div>
+  <div class="layer warn"><span class="layer-title">꼭 기억해요</span>
+    <blockquote>"손으로 그릴 때는요, 보드 플롯으로 예측하면 충분히 정확" (1014 P05·L244)</blockquote>
+    <blockquote>"일반적으로 폴이 중요한데" (1014 P05·L255)</blockquote>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">극점을 지날 때마다 기울기가 20 dB/dec 줄고, 영점을 지날 때마다 20 dB/dec 늘어요.</p>
+    <p class="panel-label">핵심 식</p>
+    <ul class="eq-list">
+      <li><span class="eq-name">극점 항 근사</span>$$-20\log\sqrt{1+(\omega/\omega_p)^2}$$ $$\approx -20\log(\omega/\omega_p)$$</li>
+      <li><span class="eq-name">CS 단 극점</span>$$\omega_{p1}=\frac{1}{R_DC_L}$$</li>
+    </ul>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>보데 플롯(Bode plot)</dt><dd>극점·영점에서 꺾이는 직선으로 그린 크기 응답 근사예요.</dd>
+      <dt>dB/dec</dt><dd>주파수가 10배 될 때 바뀌는 dB예요.</dd>
+    </dl>
+  </div>
+</article>
+    </section>
+    <section id="s2"><h2>3. 노드마다 극점 하나</h2>
+<article class="topic" id="s2-cs-two-poles"><h3>7. 입력 RC가 있는 CS 단의 두 극점</h3><div class="tags"><span class="tag date">1014 수업</span><span class="tag slide">L05 s9</span></div>
+  <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+    <p class="lead">신호가 좁은 문 두 개를 차례로 지나가는 것과 같아요.</p>
+    <figure class="figure"><svg id="fig-cs2p-gates" viewBox="0 0 400 206" role="img" aria-label="신호가 테두리로 그린 첫째 문과 둘째 문을 차례로 지나 밖으로 나가는 흐름도와, 그 아래 크기 그래프가 색칠된 점 두 곳에서 한 번씩 꺾여 내려가는 모습"><text class="fig-text" x="8" y="44" text-anchor="start">신호</text><path class="fig-ink" d="M44 40 H78 M70 34 l8 6 l-8 6"/><rect class="fig-accent" x="82" y="22" width="80" height="36"/><text class="fig-text" x="122" y="45" text-anchor="middle">첫째 문</text><path class="fig-ink" d="M166 40 H196 M188 34 l8 6 l-8 6"/><rect class="fig-accent" x="200" y="22" width="80" height="36"/><text class="fig-text" x="240" y="45" text-anchor="middle">둘째 문</text><path class="fig-ink" d="M284 40 H318 M310 34 l8 6 l-8 6"/><text class="fig-text" x="322" y="44" text-anchor="start">나가는 신호</text><path class="fig-ink" d="M40 80 V180 H340"/><path class="fig-accent" d="M40 100 H140 L220 130 L300 178"/><circle class="fig-dot" cx="140" cy="100" r="4.5"/><circle class="fig-dot" cx="220" cy="130" r="4.5"/><text class="fig-muted" x="122" y="92" text-anchor="start">한 번 꺾임</text><text class="fig-muted" x="226" y="124" text-anchor="start">또 꺾임</text><text class="fig-muted" x="340" y="198" text-anchor="end">빨리 떨수록</text><text class="fig-muted" x="6" y="96" text-anchor="start">크기</text></svg>
+      <figcaption>빨리 떨리는 신호일수록 문마다 조금씩 막혀서, 그래프가 두 번 꺾여요.</figcaption></figure>
+  </div>
+  <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <p>부하 커패시턴스만 있던 CS 단(<a href="#s0-cs-cl">부하 커패시턴스가 있는 CS 단</a>)에 입력 쪽 소자 두 개를 더해요. 입력 쪽 소자는 직렬 저항 $R_S$와, 게이트 노드 X와 접지 사이의 입력 등가 커패시턴스 $C_{in}$이에요.</p>
+    <figure class="figure"><svg id="fig-cs2p-circuit" viewBox="0 0 380 215" role="img" aria-label="입력 RC가 있는 CS 단 회로도. V_in이 직렬 R_S를 거쳐 게이트 노드 X로 들어가고, X와 접지 사이에 C_in, 드레인 노드 Y와 V_DD 사이에 R_D, Y와 접지 사이에 C_L이 있다. 두 노드 X와 Y는 색칠된 점으로 표시했다."><path class="fig-ink" d="M215 30 h30 M230 30 V40"/><text class="fig-text" x="250" y="34" text-anchor="start">V<tspan baseline-shift="sub" font-size="10">DD</tspan></text><path class="fig-ink" d="M230.0 40.0 L230.0 44.0 L237.0 47.9 L223.0 55.8 L237.0 63.6 L223.0 71.4 L237.0 79.2 L223.0 87.1 L230.0 91.0 L230.0 95.0"/><path class="fig-ink" d="M230 95 V120"/><path class="fig-ink" d="M200 135 V165 M208 132 V168 M208 136 H230 V120 M208 164 H230 V180 M222 160 l6 4 l-6 4"/><path class="fig-ink" d="M230 180 V195"/><path class="fig-ink" d="M220 195 h20 M224 200 h12 M228 205 h4"/><text class="fig-text" x="238" y="160" text-anchor="start">M<tspan baseline-shift="sub" font-size="10">1</tspan></text><path class="fig-ink" d="M230 100 H330"/><path class="fig-ink" d="M300 100 V141.0 M288 141.0 h24 M288 149.0 h24 M300 149.0 V190"/><path class="fig-ink" d="M290 190 h20 M294 195 h12 M298 200 h4"/><circle class="fig-ink" cx="334" cy="100" r="4"/><text class="fig-text" x="330" y="88" text-anchor="start">V<tspan baseline-shift="sub" font-size="10">out</tspan></text><text class="fig-text" x="314" y="150" text-anchor="start">C<tspan baseline-shift="sub" font-size="10">L</tspan></text><text class="fig-text" x="244" y="72" text-anchor="start">R<tspan baseline-shift="sub" font-size="10">D</tspan></text><path class="fig-ink" d="M150 150 H200"/><path class="fig-ink" d="M150 150 V168.5 M138 168.5 h24 M138 176.5 h24 M150 176.5 V195"/><path class="fig-ink" d="M140 195 h20 M144 200 h12 M148 205 h4"/><text class="fig-text" x="164" y="182" text-anchor="start">C<tspan baseline-shift="sub" font-size="10">in</tspan></text><path class="fig-ink" d="M66.0 150.0 L70.0 150.0 L74.0 143.0 L82.0 157.0 L90.0 143.0 L98.0 157.0 L106.0 143.0 L114.0 157.0 L118.0 150.0 L122.0 150.0"/><path class="fig-ink" d="M122 150 H150"/><text class="fig-text" x="84" y="134" text-anchor="start">R<tspan baseline-shift="sub" font-size="10">S</tspan></text><path class="fig-ink" d="M44 150 H66"/><circle class="fig-ink" cx="40" cy="150" r="4"/><text class="fig-text" x="10" y="138" text-anchor="start">V<tspan baseline-shift="sub" font-size="10">in</tspan></text><circle class="fig-dot" cx="150" cy="150" r="4.5"/><circle class="fig-dot" cx="230" cy="100" r="4.5"/><text class="fig-muted" x="134" y="144" text-anchor="start">X</text><text class="fig-muted" x="236" y="114" text-anchor="start">Y</text></svg>
+      <figcaption>입력 RC가 있는 CS 단(Razavi 그림 11.11). 색칠된 점이 입력 노드 X와 출력 노드 Y예요.</figcaption></figure>
+    <ul>
+      <li>$R_S$는 소스 임피던스(source impedance)예요. 회로 하나만 보면 신호원(펑션 제너레이터)의 내부 임피던스이고, 단이 여럿 이어지면 바로 <strong>앞단의 출력 임피던스</strong>예요.</li>
+      <li>$C_{in}$은 일부러 단 소자가 아니에요. 트랜지스터 커패시턴스가 입력에 등가적으로 나타난 것이에요(뒤에서 다뤄요).</li>
+      <li>소스는 접지이고, 출력 노드와 AC 접지 사이에 $R_D$와 $C_L$이 병렬로 보여요.</li>
+    </ul>
+    <p>노드 X의 전압을 $V_X$라 두고 전달 함수를 두 조각으로 나눠 구해요.</p>
+    <ol class="steps">
+      <li>두 조각의 곱으로 써요. $$\frac{V_{out}}{V_{in}} = \frac{V_X}{V_{in}} \cdot \frac{V_{out}}{V_X}$$</li>
+      <li>게이트로는 전류가 흐르지 않아요. 그래서 입력 쪽은 $R_S$와 $C_{in}$의 전압 분배예요. $$\frac{V_X}{V_{in}} = \frac{1/(C_{in}s)}{R_S + 1/(C_{in}s)}$$</li>
+      <li>분자·분모에 $C_{in}s$를 곱해요. $$\frac{V_X}{V_{in}} = \frac{1}{1 + R_S C_{in} s}$$</li>
+      <li>출력 쪽은 <a href="#s0-cs-cl">부하 커패시턴스가 있는 CS 단</a>의 결과 그대로예요. $$\frac{V_{out}}{V_X} = -\frac{g_m R_D}{1 + R_D C_L s}$$</li>
+      <li>둘을 곱해요. $$\frac{V_{out}}{V_{in}} = \frac{-g_m R_D}{(1 + R_S C_{in} s)(1 + R_D C_L s)}$$</li>
+      <li>극점 주파수로 다시 써요. $$\frac{V_{out}}{V_{in}} = \frac{-g_m R_D}{\left(1 + \dfrac{s}{\omega_{p1}}\right)\left(1 + \dfrac{s}{\omega_{p2}}\right)}$$</li>
+      <li>입력 극점과 출력 극점이에요. $$\omega_{p1} = \frac{1}{R_S C_{in}}$$ $$\omega_{p2} = \frac{1}{R_D C_L}$$</li>
+      <li>$s = j\omega$를 넣으면 크기 응답이에요. $$\left|\frac{V_{out}}{V_{in}}\right| = \frac{g_m R_D}{\sqrt{\left(1 + \omega^2/\omega_{p1}^2\right)\left(1 + \omega^2/\omega_{p2}^2\right)}}$$</li>
+    </ol>
+    <ul>
+      <li>저주파 이득은 $A_0 = -g_m R_D$로 전과 같아요. 극점은 두 개(입력 극점, 출력 극점)이고 영점은 없어요.</li>
+      <li>극점 자체는 음수 $-1/(R_S C_{in})$, $-1/(R_D C_L)$이에요. 그 크기 $1/(R_S C_{in})$, $1/(R_D C_L)$이 극점 주파수예요.</li>
+      <li>정확한 크기 곡선을 그려도 되지만, 극점 두 개만 알면 <a href="#s1-bode">보데 근사</a>로 그릴 수 있어요. 낮은 극점에서 기울기가 −20 dB/dec가 되고, 높은 극점을 지나면 −40 dB/dec가 돼요.</li>
+    </ul>
+    <div class="widget" id="widget-cs2p"><h4>직접 해 보기: 두 극점 따로 움직이기</h4>
+      <p class="widget-help">입력 쪽(R<sub>S</sub>, C<sub>in</sub>)을 바꾸면 입력 극점만, 출력 쪽(R<sub>D</sub>, C<sub>L</sub>)을 바꾸면 출력 극점만 움직여요. R<sub>D</sub>는 저주파 이득 g<sub>m</sub>R<sub>D</sub>도 바꿔요(g<sub>m</sub> = 5 mS 고정).</p>
+      <div class="controls">
+        <label><span>R<sub>S</sub></span> <input type="range" id="cs2p-rs" min="2" max="5" step="0.1" value="3"> <b id="cs2p-rs-val"></b></label>
+        <label><span>C<sub>in</sub></span> <input type="range" id="cs2p-cin" min="-14" max="-12" step="0.1" value="-13"> <b id="cs2p-cin-val"></b></label>
+        <label><span>R<sub>D</sub></span> <input type="range" id="cs2p-rd" min="2" max="4.3" step="0.1" value="3.3"> <b id="cs2p-rd-val"></b></label>
+        <label><span>C<sub>L</sub></span> <input type="range" id="cs2p-cl" min="-14" max="-12" step="0.1" value="-12.3"> <b id="cs2p-cl-val"></b></label>
+      </div>
+      <svg id="cs2p-plot" viewBox="0 0 560 300" role="img" aria-label="가로축은 로그 눈금 각주파수, 세로축은 dB인 크기 응답 그래프. 정확한 크기 곡선(강조색 실선)과 보데 근사(회색 점선), 입력 극점과 출력 극점 위치의 세로 점선이 슬라이더에 따라 바뀐다."></svg>
+      <p class="readout">입력 극점 ω<sub>p1</sub> = 1/(R<sub>S</sub>C<sub>in</sub>) = <b id="cs2p-p1"></b><br>출력 극점 ω<sub>p2</sub> = 1/(R<sub>D</sub>C<sub>L</sub>) = <b id="cs2p-p2"></b><br>저주파 이득 g<sub>m</sub>R<sub>D</sub> = <b id="cs2p-a0"></b><br><b id="cs2p-out"></b></p>
+      <p class="legend"><span><span class="sw fit"></span>정확한 크기 응답</span><span><span class="sw truth"></span>보데 근사(0, −20, −40 dB/dec)</span><span><span class="sw like"></span>ω<sub>p1</sub> 입력 극점</span><span><span class="sw post"></span>ω<sub>p2</sub> 출력 극점</span></p>
+      <div class="widget-static" hidden>
+        <figure class="figure"><svg id="widget-cs2p-static-1" viewBox="0 0 560 300" role="img" aria-label="대표 설정 1 (기본): R_S 1.00 kΩ, C_in 100 fF, R_D 2.00 kΩ, C_L 501 fF일 때 정확한 크기 응답(강조색 실선)과 보데 근사(회색 점선), 입력 극점과 출력 극점 위치의 세로 점선"><line class="axis" opacity="0.35" x1="56.0" y1="14" x2="56.0" y2="258"/><text class="tick" text-anchor="middle" x="56.0" y="274">10⁶</text><line class="axis" opacity="0.35" x1="125.9" y1="14" x2="125.9" y2="258"/><text class="tick" text-anchor="middle" x="125.9" y="274">10⁷</text><line class="axis" opacity="0.35" x1="195.7" y1="14" x2="195.7" y2="258"/><text class="tick" text-anchor="middle" x="195.7" y="274">10⁸</text><line class="axis" opacity="0.35" x1="265.6" y1="14" x2="265.6" y2="258"/><text class="tick" text-anchor="middle" x="265.6" y="274">10⁹</text><line class="axis" opacity="0.35" x1="335.4" y1="14" x2="335.4" y2="258"/><text class="tick" text-anchor="middle" x="335.4" y="274">10¹⁰</text><line class="axis" opacity="0.35" x1="405.3" y1="14" x2="405.3" y2="258"/><text class="tick" text-anchor="middle" x="405.3" y="274">10¹¹</text><line class="axis" opacity="0.35" x1="475.1" y1="14" x2="475.1" y2="258"/><text class="tick" text-anchor="middle" x="475.1" y="274">10¹²</text><line class="axis" opacity="0.35" x1="545.0" y1="14" x2="545.0" y2="258"/><text class="tick" text-anchor="middle" x="545.0" y="274">10¹³</text><line class="axis" opacity="0.35" x1="56" y1="258.0" x2="545" y2="258.0"/><text class="tick" text-anchor="end" x="50" y="262.0">-60</text><line class="axis" opacity="0.35" x1="56" y1="213.6" x2="545" y2="213.6"/><text class="tick" text-anchor="end" x="50" y="217.6">-40</text><line class="axis" opacity="0.35" x1="56" y1="169.3" x2="545" y2="169.3"/><text class="tick" text-anchor="end" x="50" y="173.3">-20</text><line class="axis" opacity="0.35" x1="56" y1="124.9" x2="545" y2="124.9"/><text class="tick" text-anchor="end" x="50" y="128.9">0</text><line class="axis" opacity="0.35" x1="56" y1="80.5" x2="545" y2="80.5"/><text class="tick" text-anchor="end" x="50" y="84.5">20</text><line class="axis" opacity="0.35" x1="56" y1="36.2" x2="545" y2="36.2"/><text class="tick" text-anchor="end" x="50" y="40.2">40</text><line class="axis" x1="56" y1="258" x2="545" y2="258"/><line class="axis" x1="56" y1="14" x2="56" y2="258"/><text class="tick" text-anchor="middle" x="300.5" y="292">ω (rad/s, 로그 눈금)</text><text class="tick" x="6" y="18">dB</text><line class="mark-ml" x1="335.4" y1="14" x2="335.4" y2="258"/><text class="fig-text" x="339.4" y="28">ωₚ₁</text><line class="mark-map" x1="265.6" y1="14" x2="265.6" y2="258"/><text class="fig-text" x="269.6" y="28">ωₚ₂</text><path class="plot-fit" d="M56.0 80.6L57.4 80.6L58.8 80.6L60.2 80.6L61.6 80.6L63.0 80.6L64.4 80.6L65.8 80.6L67.2 80.6L68.6 80.6L70.0 80.6L71.4 80.6L72.8 80.6L74.2 80.6L75.6 80.6L77.0 80.6L78.4 80.6L79.8 80.6L81.1 80.6L82.5 80.6L83.9 80.6L85.3 80.6L86.7 80.6L88.1 80.6L89.5 80.6L90.9 80.6L92.3 80.6L93.7 80.6L95.1 80.6L96.5 80.6L97.9 80.6L99.3 80.6L100.7 80.6L102.1 80.6L103.5 80.6L104.9 80.6L106.3 80.6L107.7 80.6L109.1 80.6L110.5 80.6L111.9 80.6L113.3 80.6L114.7 80.6L116.1 80.6L117.5 80.6L118.9 80.6L120.3 80.6L121.7 80.6L123.1 80.6L124.5 80.6L125.9 80.6L127.3 80.6L128.7 80.6L130.0 80.6L131.4 80.6L132.8 80.6L134.2 80.6L135.6 80.6L137.0 80.6L138.4 80.6L139.8 80.6L141.2 80.6L142.6 80.6L144.0 80.6L145.4 80.6L146.8 80.6L148.2 80.6L149.6 80.6L151.0 80.6L152.4 80.6L153.8 80.6L155.2 80.6L156.6 80.6L158.0 80.6L159.4 80.6L160.8 80.6L162.2 80.6L163.6 80.6L165.0 80.6L166.4 80.6L167.8 80.6L169.2 80.6L170.6 80.6L172.0 80.6L173.4 80.6L174.8 80.6L176.2 80.6L177.6 80.6L178.9 80.6L180.3 80.6L181.7 80.6L183.1 80.6L184.5 80.6L185.9 80.6L187.3 80.6L188.7 80.7L190.1 80.7L191.5 80.7L192.9 80.7L194.3 80.7L195.7 80.7L197.1 80.7L198.5 80.7L199.9 80.7L201.3 80.7L202.7 80.7L204.1 80.8L205.5 80.8L206.9 80.8L208.3 80.8L209.7 80.8L211.1 80.9L212.5 80.9L213.9 80.9L215.3 80.9L216.7 81.0L218.1 81.0L219.5 81.0L220.9 81.1L222.3 81.1L223.7 81.2L225.1 81.2L226.5 81.3L227.8 81.4L229.2 81.4L230.6 81.5L232.0 81.6L233.4 81.7L234.8 81.8L236.2 81.9L237.6 82.0L239.0 82.2L240.4 82.3L241.8 82.4L243.2 82.6L244.6 82.8L246.0 83.0L247.4 83.2L248.8 83.4L250.2 83.6L251.6 83.9L253.0 84.1L254.4 84.4L255.8 84.7L257.2 85.0L258.6 85.4L260.0 85.7L261.4 86.1L262.8 86.5L264.2 86.9L265.6 87.4L267.0 87.8L268.4 88.3L269.8 88.8L271.2 89.3L272.6 89.9L274.0 90.5L275.4 91.0L276.7 91.7L278.1 92.3L279.5 92.9L280.9 93.6L282.3 94.3L283.7 95.0L285.1 95.7L286.5 96.4L287.9 97.2L289.3 98.0L290.7 98.7L292.1 99.5L293.5 100.3L294.9 101.2L296.3 102.0L297.7 102.9L299.1 103.7L300.5 104.6L301.9 105.5L303.3 106.4L304.7 107.3L306.1 108.3L307.5 109.2L308.9 110.2L310.3 111.2L311.7 112.1L313.1 113.2L314.5 114.2L315.9 115.2L317.3 116.3L318.7 117.3L320.1 118.4L321.5 119.5L322.9 120.7L324.3 121.8L325.6 123.0L327.0 124.2L328.4 125.4L329.8 126.6L331.2 127.9L332.6 129.1L334.0 130.4L335.4 131.7L336.8 133.1L338.2 134.4L339.6 135.8L341.0 137.2L342.4 138.6L343.8 140.0L345.2 141.5L346.6 143.0L348.0 144.5L349.4 146.0L350.8 147.5L352.2 149.0L353.6 150.6L355.0 152.2L356.4 153.8L357.8 155.4L359.2 157.0L360.6 158.6L362.0 160.2L363.4 161.9L364.8 163.5L366.2 165.2L367.6 166.9L369.0 168.6L370.4 170.2L371.8 171.9L373.2 173.6L374.5 175.4L375.9 177.1L377.3 178.8L378.7 180.5L380.1 182.2L381.5 184.0L382.9 185.7L384.3 187.4L385.7 189.2L387.1 190.9L388.5 192.7L389.9 194.4L391.3 196.2L392.7 197.9L394.1 199.7L395.5 201.4L396.9 203.2L398.3 205.0L399.7 206.7L401.1 208.5L402.5 210.2L403.9 212.0L405.3 213.8L406.7 215.5L408.1 217.3L409.5 219.1L410.9 220.8L412.3 222.6L413.7 224.4L415.1 226.2L416.5 227.9L417.9 229.7L419.3 231.5L420.7 233.2L422.1 235.0L423.4 236.8L424.8 238.6L426.2 240.3L427.6 242.1L429.0 243.9L430.4 245.6L431.8 247.4L433.2 249.2L434.6 251.0L436.0 252.7L437.4 254.5L438.8 256.3"/><path class="plot-truth" d="M56.0 80.6L57.4 80.6L58.8 80.6L60.2 80.6L61.6 80.6L63.0 80.6L64.4 80.6L65.8 80.6L67.2 80.6L68.6 80.6L70.0 80.6L71.4 80.6L72.8 80.6L74.2 80.6L75.6 80.6L77.0 80.6L78.4 80.6L79.8 80.6L81.1 80.6L82.5 80.6L83.9 80.6L85.3 80.6L86.7 80.6L88.1 80.6L89.5 80.6L90.9 80.6L92.3 80.6L93.7 80.6L95.1 80.6L96.5 80.6L97.9 80.6L99.3 80.6L100.7 80.6L102.1 80.6L103.5 80.6L104.9 80.6L106.3 80.6L107.7 80.6L109.1 80.6L110.5 80.6L111.9 80.6L113.3 80.6L114.7 80.6L116.1 80.6L117.5 80.6L118.9 80.6L120.3 80.6L121.7 80.6L123.1 80.6L124.5 80.6L125.9 80.6L127.3 80.6L128.7 80.6L130.0 80.6L131.4 80.6L132.8 80.6L134.2 80.6L135.6 80.6L137.0 80.6L138.4 80.6L139.8 80.6L141.2 80.6L142.6 80.6L144.0 80.6L145.4 80.6L146.8 80.6L148.2 80.6L149.6 80.6L151.0 80.6L152.4 80.6L153.8 80.6L155.2 80.6L156.6 80.6L158.0 80.6L159.4 80.6L160.8 80.6L162.2 80.6L163.6 80.6L165.0 80.6L166.4 80.6L167.8 80.6L169.2 80.6L170.6 80.6L172.0 80.6L173.4 80.6L174.8 80.6L176.2 80.6L177.6 80.6L178.9 80.6L180.3 80.6L181.7 80.6L183.1 80.6L184.5 80.6L185.9 80.6L187.3 80.6L188.7 80.6L190.1 80.6L191.5 80.6L192.9 80.6L194.3 80.6L195.7 80.6L197.1 80.6L198.5 80.6L199.9 80.6L201.3 80.6L202.7 80.6L204.1 80.6L205.5 80.6L206.9 80.6L208.3 80.6L209.7 80.6L211.1 80.6L212.5 80.6L213.9 80.6L215.3 80.6L216.7 80.6L218.1 80.6L219.5 80.6L220.9 80.6L222.3 80.6L223.7 80.6L225.1 80.6L226.5 80.6L227.8 80.6L229.2 80.6L230.6 80.6L232.0 80.6L233.4 80.6L234.8 80.6L236.2 80.6L237.6 80.6L239.0 80.6L240.4 80.6L241.8 80.6L243.2 80.6L244.6 80.6L246.0 80.6L247.4 80.6L248.8 80.6L250.2 80.6L251.6 80.6L253.0 80.6L254.4 80.6L255.8 80.6L257.2 80.6L258.6 80.6L260.0 80.6L261.4 80.6L262.8 80.6L264.2 80.6L265.6 80.6L267.0 81.5L268.4 82.4L269.8 83.3L271.2 84.1L272.6 85.0L274.0 85.9L275.4 86.8L276.7 87.7L278.1 88.6L279.5 89.5L280.9 90.4L282.3 91.2L283.7 92.1L285.1 93.0L286.5 93.9L287.9 94.8L289.3 95.7L290.7 96.6L292.1 97.4L293.5 98.3L294.9 99.2L296.3 100.1L297.7 101.0L299.1 101.9L300.5 102.8L301.9 103.7L303.3 104.5L304.7 105.4L306.1 106.3L307.5 107.2L308.9 108.1L310.3 109.0L311.7 109.9L313.1 110.8L314.5 111.6L315.9 112.5L317.3 113.4L318.7 114.3L320.1 115.2L321.5 116.1L322.9 117.0L324.3 117.9L325.6 118.7L327.0 119.6L328.4 120.5L329.8 121.4L331.2 122.3L332.6 123.2L334.0 124.1L335.4 125.0L336.8 126.7L338.2 128.5L339.6 130.3L341.0 132.1L342.4 133.8L343.8 135.6L345.2 137.4L346.6 139.2L348.0 140.9L349.4 142.7L350.8 144.5L352.2 146.2L353.6 148.0L355.0 149.8L356.4 151.6L357.8 153.3L359.2 155.1L360.6 156.9L362.0 158.7L363.4 160.4L364.8 162.2L366.2 164.0L367.6 165.8L369.0 167.5L370.4 169.3L371.8 171.1L373.2 172.9L374.5 174.6L375.9 176.4L377.3 178.2L378.7 180.0L380.1 181.7L381.5 183.5L382.9 185.3L384.3 187.1L385.7 188.8L387.1 190.6L388.5 192.4L389.9 194.2L391.3 195.9L392.7 197.7L394.1 199.5L395.5 201.3L396.9 203.0L398.3 204.8L399.7 206.6L401.1 208.4L402.5 210.1L403.9 211.9L405.3 213.7L406.7 215.5L408.1 217.2L409.5 219.0L410.9 220.8L412.3 222.6L413.7 224.3L415.1 226.1L416.5 227.9L417.9 229.7L419.3 231.4L420.7 233.2L422.1 235.0L423.4 236.8L424.8 238.5L426.2 240.3L427.6 242.1L429.0 243.8L430.4 245.6L431.8 247.4L433.2 249.2L434.6 250.9L436.0 252.7L437.4 254.5L438.8 256.3"/></svg><figcaption>설정 1: 기본</figcaption></figure><figure class="figure"><svg id="widget-cs2p-static-2" viewBox="0 0 560 300" role="img" aria-label="대표 설정 2 (R_S를 키움): R_S 100 kΩ, C_in 100 fF, R_D 2.00 kΩ, C_L 501 fF일 때 정확한 크기 응답(강조색 실선)과 보데 근사(회색 점선), 입력 극점과 출력 극점 위치의 세로 점선"><line class="axis" opacity="0.35" x1="56.0" y1="14" x2="56.0" y2="258"/><text class="tick" text-anchor="middle" x="56.0" y="274">10⁶</text><line class="axis" opacity="0.35" x1="125.9" y1="14" x2="125.9" y2="258"/><text class="tick" text-anchor="middle" x="125.9" y="274">10⁷</text><line class="axis" opacity="0.35" x1="195.7" y1="14" x2="195.7" y2="258"/><text class="tick" text-anchor="middle" x="195.7" y="274">10⁸</text><line class="axis" opacity="0.35" x1="265.6" y1="14" x2="265.6" y2="258"/><text class="tick" text-anchor="middle" x="265.6" y="274">10⁹</text><line class="axis" opacity="0.35" x1="335.4" y1="14" x2="335.4" y2="258"/><text class="tick" text-anchor="middle" x="335.4" y="274">10¹⁰</text><line class="axis" opacity="0.35" x1="405.3" y1="14" x2="405.3" y2="258"/><text class="tick" text-anchor="middle" x="405.3" y="274">10¹¹</text><line class="axis" opacity="0.35" x1="475.1" y1="14" x2="475.1" y2="258"/><text class="tick" text-anchor="middle" x="475.1" y="274">10¹²</text><line class="axis" opacity="0.35" x1="545.0" y1="14" x2="545.0" y2="258"/><text class="tick" text-anchor="middle" x="545.0" y="274">10¹³</text><line class="axis" opacity="0.35" x1="56" y1="258.0" x2="545" y2="258.0"/><text class="tick" text-anchor="end" x="50" y="262.0">-60</text><line class="axis" opacity="0.35" x1="56" y1="213.6" x2="545" y2="213.6"/><text class="tick" text-anchor="end" x="50" y="217.6">-40</text><line class="axis" opacity="0.35" x1="56" y1="169.3" x2="545" y2="169.3"/><text class="tick" text-anchor="end" x="50" y="173.3">-20</text><line class="axis" opacity="0.35" x1="56" y1="124.9" x2="545" y2="124.9"/><text class="tick" text-anchor="end" x="50" y="128.9">0</text><line class="axis" opacity="0.35" x1="56" y1="80.5" x2="545" y2="80.5"/><text class="tick" text-anchor="end" x="50" y="84.5">20</text><line class="axis" opacity="0.35" x1="56" y1="36.2" x2="545" y2="36.2"/><text class="tick" text-anchor="end" x="50" y="40.2">40</text><line class="axis" x1="56" y1="258" x2="545" y2="258"/><line class="axis" x1="56" y1="14" x2="56" y2="258"/><text class="tick" text-anchor="middle" x="300.5" y="292">ω (rad/s, 로그 눈금)</text><text class="tick" x="6" y="18">dB</text><line class="mark-ml" x1="195.7" y1="14" x2="195.7" y2="258"/><text class="fig-text" x="199.7" y="28">ωₚ₁</text><line class="mark-map" x1="265.6" y1="14" x2="265.6" y2="258"/><text class="fig-text" x="269.6" y="28">ωₚ₂</text><path class="plot-fit" d="M56.0 80.6L57.4 80.6L58.8 80.6L60.2 80.6L61.6 80.6L63.0 80.6L64.4 80.6L65.8 80.6L67.2 80.6L68.6 80.6L70.0 80.6L71.4 80.6L72.8 80.6L74.2 80.6L75.6 80.6L77.0 80.6L78.4 80.6L79.8 80.6L81.1 80.6L82.5 80.6L83.9 80.6L85.3 80.6L86.7 80.6L88.1 80.6L89.5 80.6L90.9 80.6L92.3 80.6L93.7 80.6L95.1 80.6L96.5 80.6L97.9 80.6L99.3 80.6L100.7 80.6L102.1 80.6L103.5 80.6L104.9 80.6L106.3 80.6L107.7 80.6L109.1 80.6L110.5 80.6L111.9 80.6L113.3 80.6L114.7 80.6L116.1 80.6L117.5 80.6L118.9 80.7L120.3 80.7L121.7 80.7L123.1 80.7L124.5 80.7L125.9 80.7L127.3 80.7L128.7 80.7L130.0 80.7L131.4 80.7L132.8 80.7L134.2 80.8L135.6 80.8L137.0 80.8L138.4 80.8L139.8 80.8L141.2 80.9L142.6 80.9L144.0 80.9L145.4 80.9L146.8 81.0L148.2 81.0L149.6 81.0L151.0 81.1L152.4 81.1L153.8 81.2L155.2 81.2L156.6 81.3L158.0 81.4L159.4 81.4L160.8 81.5L162.2 81.6L163.6 81.7L165.0 81.8L166.4 81.9L167.8 82.0L169.2 82.2L170.6 82.3L172.0 82.4L173.4 82.6L174.8 82.8L176.2 83.0L177.6 83.2L178.9 83.4L180.3 83.6L181.7 83.9L183.1 84.1L184.5 84.4L185.9 84.7L187.3 85.0L188.7 85.4L190.1 85.7L191.5 86.1L192.9 86.5L194.3 86.9L195.7 87.4L197.1 87.8L198.5 88.3L199.9 88.8L201.3 89.3L202.7 89.9L204.1 90.5L205.5 91.0L206.9 91.7L208.3 92.3L209.7 92.9L211.1 93.6L212.5 94.3L213.9 95.0L215.3 95.7L216.7 96.4L218.1 97.2L219.5 98.0L220.9 98.7L222.3 99.5L223.7 100.3L225.1 101.2L226.5 102.0L227.8 102.9L229.2 103.7L230.6 104.6L232.0 105.5L233.4 106.4L234.8 107.3L236.2 108.3L237.6 109.2L239.0 110.2L240.4 111.2L241.8 112.1L243.2 113.2L244.6 114.2L246.0 115.2L247.4 116.3L248.8 117.3L250.2 118.4L251.6 119.5L253.0 120.7L254.4 121.8L255.8 123.0L257.2 124.2L258.6 125.4L260.0 126.6L261.4 127.9L262.8 129.1L264.2 130.4L265.6 131.7L267.0 133.1L268.4 134.4L269.8 135.8L271.2 137.2L272.6 138.6L274.0 140.0L275.4 141.5L276.7 143.0L278.1 144.5L279.5 146.0L280.9 147.5L282.3 149.0L283.7 150.6L285.1 152.2L286.5 153.8L287.9 155.4L289.3 157.0L290.7 158.6L292.1 160.2L293.5 161.9L294.9 163.5L296.3 165.2L297.7 166.9L299.1 168.6L300.5 170.2L301.9 171.9L303.3 173.6L304.7 175.4L306.1 177.1L307.5 178.8L308.9 180.5L310.3 182.2L311.7 184.0L313.1 185.7L314.5 187.4L315.9 189.2L317.3 190.9L318.7 192.7L320.1 194.4L321.5 196.2L322.9 197.9L324.3 199.7L325.6 201.4L327.0 203.2L328.4 205.0L329.8 206.7L331.2 208.5L332.6 210.2L334.0 212.0L335.4 213.8L336.8 215.5L338.2 217.3L339.6 219.1L341.0 220.8L342.4 222.6L343.8 224.4L345.2 226.2L346.6 227.9L348.0 229.7L349.4 231.5L350.8 233.2L352.2 235.0L353.6 236.8L355.0 238.6L356.4 240.3L357.8 242.1L359.2 243.9L360.6 245.6L362.0 247.4L363.4 249.2L364.8 251.0L366.2 252.7L367.6 254.5L369.0 256.3"/><path class="plot-truth" d="M56.0 80.6L57.4 80.6L58.8 80.6L60.2 80.6L61.6 80.6L63.0 80.6L64.4 80.6L65.8 80.6L67.2 80.6L68.6 80.6L70.0 80.6L71.4 80.6L72.8 80.6L74.2 80.6L75.6 80.6L77.0 80.6L78.4 80.6L79.8 80.6L81.1 80.6L82.5 80.6L83.9 80.6L85.3 80.6L86.7 80.6L88.1 80.6L89.5 80.6L90.9 80.6L92.3 80.6L93.7 80.6L95.1 80.6L96.5 80.6L97.9 80.6L99.3 80.6L100.7 80.6L102.1 80.6L103.5 80.6L104.9 80.6L106.3 80.6L107.7 80.6L109.1 80.6L110.5 80.6L111.9 80.6L113.3 80.6L114.7 80.6L116.1 80.6L117.5 80.6L118.9 80.6L120.3 80.6L121.7 80.6L123.1 80.6L124.5 80.6L125.9 80.6L127.3 80.6L128.7 80.6L130.0 80.6L131.4 80.6L132.8 80.6L134.2 80.6L135.6 80.6L137.0 80.6L138.4 80.6L139.8 80.6L141.2 80.6L142.6 80.6L144.0 80.6L145.4 80.6L146.8 80.6L148.2 80.6L149.6 80.6L151.0 80.6L152.4 80.6L153.8 80.6L155.2 80.6L156.6 80.6L158.0 80.6L159.4 80.6L160.8 80.6L162.2 80.6L163.6 80.6L165.0 80.6L166.4 80.6L167.8 80.6L169.2 80.6L170.6 80.6L172.0 80.6L173.4 80.6L174.8 80.6L176.2 80.6L177.6 80.6L178.9 80.6L180.3 80.6L181.7 80.6L183.1 80.6L184.5 80.6L185.9 80.6L187.3 80.6L188.7 80.6L190.1 80.6L191.5 80.6L192.9 80.6L194.3 80.6L195.7 80.6L197.1 81.5L198.5 82.4L199.9 83.3L201.3 84.1L202.7 85.0L204.1 85.9L205.5 86.8L206.9 87.7L208.3 88.6L209.7 89.5L211.1 90.4L212.5 91.2L213.9 92.1L215.3 93.0L216.7 93.9L218.1 94.8L219.5 95.7L220.9 96.6L222.3 97.4L223.7 98.3L225.1 99.2L226.5 100.1L227.8 101.0L229.2 101.9L230.6 102.8L232.0 103.7L233.4 104.5L234.8 105.4L236.2 106.3L237.6 107.2L239.0 108.1L240.4 109.0L241.8 109.9L243.2 110.8L244.6 111.6L246.0 112.5L247.4 113.4L248.8 114.3L250.2 115.2L251.6 116.1L253.0 117.0L254.4 117.9L255.8 118.7L257.2 119.6L258.6 120.5L260.0 121.4L261.4 122.3L262.8 123.2L264.2 124.1L265.6 125.0L267.0 126.7L268.4 128.5L269.8 130.3L271.2 132.1L272.6 133.8L274.0 135.6L275.4 137.4L276.7 139.2L278.1 140.9L279.5 142.7L280.9 144.5L282.3 146.2L283.7 148.0L285.1 149.8L286.5 151.6L287.9 153.3L289.3 155.1L290.7 156.9L292.1 158.7L293.5 160.4L294.9 162.2L296.3 164.0L297.7 165.8L299.1 167.5L300.5 169.3L301.9 171.1L303.3 172.9L304.7 174.6L306.1 176.4L307.5 178.2L308.9 180.0L310.3 181.7L311.7 183.5L313.1 185.3L314.5 187.1L315.9 188.8L317.3 190.6L318.7 192.4L320.1 194.2L321.5 195.9L322.9 197.7L324.3 199.5L325.6 201.3L327.0 203.0L328.4 204.8L329.8 206.6L331.2 208.4L332.6 210.1L334.0 211.9L335.4 213.7L336.8 215.5L338.2 217.2L339.6 219.0L341.0 220.8L342.4 222.6L343.8 224.3L345.2 226.1L346.6 227.9L348.0 229.7L349.4 231.4L350.8 233.2L352.2 235.0L353.6 236.8L355.0 238.5L356.4 240.3L357.8 242.1L359.2 243.8L360.6 245.6L362.0 247.4L363.4 249.2L364.8 250.9L366.2 252.7L367.6 254.5L369.0 256.3"/></svg><figcaption>설정 2: R<sub>S</sub>를 키움</figcaption></figure><figure class="figure"><svg id="widget-cs2p-static-3" viewBox="0 0 560 300" role="img" aria-label="대표 설정 3 (두 극점이 겹침): R_S 2.00 kΩ, C_in 501 fF, R_D 2.00 kΩ, C_L 501 fF일 때 정확한 크기 응답(강조색 실선)과 보데 근사(회색 점선), 입력 극점과 출력 극점 위치의 세로 점선"><line class="axis" opacity="0.35" x1="56.0" y1="14" x2="56.0" y2="258"/><text class="tick" text-anchor="middle" x="56.0" y="274">10⁶</text><line class="axis" opacity="0.35" x1="125.9" y1="14" x2="125.9" y2="258"/><text class="tick" text-anchor="middle" x="125.9" y="274">10⁷</text><line class="axis" opacity="0.35" x1="195.7" y1="14" x2="195.7" y2="258"/><text class="tick" text-anchor="middle" x="195.7" y="274">10⁸</text><line class="axis" opacity="0.35" x1="265.6" y1="14" x2="265.6" y2="258"/><text class="tick" text-anchor="middle" x="265.6" y="274">10⁹</text><line class="axis" opacity="0.35" x1="335.4" y1="14" x2="335.4" y2="258"/><text class="tick" text-anchor="middle" x="335.4" y="274">10¹⁰</text><line class="axis" opacity="0.35" x1="405.3" y1="14" x2="405.3" y2="258"/><text class="tick" text-anchor="middle" x="405.3" y="274">10¹¹</text><line class="axis" opacity="0.35" x1="475.1" y1="14" x2="475.1" y2="258"/><text class="tick" text-anchor="middle" x="475.1" y="274">10¹²</text><line class="axis" opacity="0.35" x1="545.0" y1="14" x2="545.0" y2="258"/><text class="tick" text-anchor="middle" x="545.0" y="274">10¹³</text><line class="axis" opacity="0.35" x1="56" y1="258.0" x2="545" y2="258.0"/><text class="tick" text-anchor="end" x="50" y="262.0">-60</text><line class="axis" opacity="0.35" x1="56" y1="213.6" x2="545" y2="213.6"/><text class="tick" text-anchor="end" x="50" y="217.6">-40</text><line class="axis" opacity="0.35" x1="56" y1="169.3" x2="545" y2="169.3"/><text class="tick" text-anchor="end" x="50" y="173.3">-20</text><line class="axis" opacity="0.35" x1="56" y1="124.9" x2="545" y2="124.9"/><text class="tick" text-anchor="end" x="50" y="128.9">0</text><line class="axis" opacity="0.35" x1="56" y1="80.5" x2="545" y2="80.5"/><text class="tick" text-anchor="end" x="50" y="84.5">20</text><line class="axis" opacity="0.35" x1="56" y1="36.2" x2="545" y2="36.2"/><text class="tick" text-anchor="end" x="50" y="40.2">40</text><line class="axis" x1="56" y1="258" x2="545" y2="258"/><line class="axis" x1="56" y1="14" x2="56" y2="258"/><text class="tick" text-anchor="middle" x="300.5" y="292">ω (rad/s, 로그 눈금)</text><text class="tick" x="6" y="18">dB</text><line class="mark-ml" x1="265.6" y1="14" x2="265.6" y2="258"/><text class="fig-text" x="269.6" y="28">ωₚ₁</text><line class="mark-map" x1="265.6" y1="14" x2="265.6" y2="258"/><text class="fig-text" x="269.6" y="44">ωₚ₂</text><path class="plot-fit" d="M56.0 80.6L57.4 80.6L58.8 80.6L60.2 80.6L61.6 80.6L63.0 80.6L64.4 80.6L65.8 80.6L67.2 80.6L68.6 80.6L70.0 80.6L71.4 80.6L72.8 80.6L74.2 80.6L75.6 80.6L77.0 80.6L78.4 80.6L79.8 80.6L81.1 80.6L82.5 80.6L83.9 80.6L85.3 80.6L86.7 80.6L88.1 80.6L89.5 80.6L90.9 80.6L92.3 80.6L93.7 80.6L95.1 80.6L96.5 80.6L97.9 80.6L99.3 80.6L100.7 80.6L102.1 80.6L103.5 80.6L104.9 80.6L106.3 80.6L107.7 80.6L109.1 80.6L110.5 80.6L111.9 80.6L113.3 80.6L114.7 80.6L116.1 80.6L117.5 80.6L118.9 80.6L120.3 80.6L121.7 80.6L123.1 80.6L124.5 80.6L125.9 80.6L127.3 80.6L128.7 80.6L130.0 80.6L131.4 80.6L132.8 80.6L134.2 80.6L135.6 80.6L137.0 80.6L138.4 80.6L139.8 80.6L141.2 80.6L142.6 80.6L144.0 80.6L145.4 80.6L146.8 80.6L148.2 80.6L149.6 80.6L151.0 80.6L152.4 80.6L153.8 80.6L155.2 80.6L156.6 80.6L158.0 80.6L159.4 80.6L160.8 80.6L162.2 80.6L163.6 80.6L165.0 80.6L166.4 80.6L167.8 80.6L169.2 80.6L170.6 80.6L172.0 80.6L173.4 80.6L174.8 80.6L176.2 80.6L177.6 80.6L178.9 80.7L180.3 80.7L181.7 80.7L183.1 80.7L184.5 80.7L185.9 80.7L187.3 80.7L188.7 80.7L190.1 80.7L191.5 80.7L192.9 80.8L194.3 80.8L195.7 80.8L197.1 80.8L198.5 80.8L199.9 80.8L201.3 80.9L202.7 80.9L204.1 80.9L205.5 81.0L206.9 81.0L208.3 81.0L209.7 81.1L211.1 81.1L212.5 81.2L213.9 81.2L215.3 81.3L216.7 81.3L218.1 81.4L219.5 81.5L220.9 81.6L222.3 81.7L223.7 81.8L225.1 81.9L226.5 82.0L227.8 82.1L229.2 82.3L230.6 82.4L232.0 82.6L233.4 82.8L234.8 83.0L236.2 83.2L237.6 83.4L239.0 83.7L240.4 84.0L241.8 84.2L243.2 84.6L244.6 84.9L246.0 85.3L247.4 85.7L248.8 86.1L250.2 86.6L251.6 87.0L253.0 87.6L254.4 88.1L255.8 88.7L257.2 89.3L258.6 90.0L260.0 90.7L261.4 91.5L262.8 92.3L264.2 93.1L265.6 93.9L267.0 94.9L268.4 95.8L269.8 96.8L271.2 97.8L272.6 98.9L274.0 100.0L275.4 101.1L276.7 102.3L278.1 103.5L279.5 104.8L280.9 106.1L282.3 107.4L283.7 108.7L285.1 110.1L286.5 111.5L287.9 113.0L289.3 114.4L290.7 115.9L292.1 117.4L293.5 118.9L294.9 120.5L296.3 122.0L297.7 123.6L299.1 125.2L300.5 126.8L301.9 128.4L303.3 130.0L304.7 131.7L306.1 133.3L307.5 135.0L308.9 136.7L310.3 138.4L311.7 140.1L313.1 141.7L314.5 143.5L315.9 145.2L317.3 146.9L318.7 148.6L320.1 150.3L321.5 152.1L322.9 153.8L324.3 155.5L325.6 157.3L327.0 159.0L328.4 160.7L329.8 162.5L331.2 164.2L332.6 166.0L334.0 167.8L335.4 169.5L336.8 171.3L338.2 173.0L339.6 174.8L341.0 176.5L342.4 178.3L343.8 180.1L345.2 181.8L346.6 183.6L348.0 185.4L349.4 187.1L350.8 188.9L352.2 190.7L353.6 192.4L355.0 194.2L356.4 196.0L357.8 197.8L359.2 199.5L360.6 201.3L362.0 203.1L363.4 204.8L364.8 206.6L366.2 208.4L367.6 210.2L369.0 211.9L370.4 213.7L371.8 215.5L373.2 217.2L374.5 219.0L375.9 220.8L377.3 222.6L378.7 224.3L380.1 226.1L381.5 227.9L382.9 229.7L384.3 231.4L385.7 233.2L387.1 235.0L388.5 236.8L389.9 238.5L391.3 240.3L392.7 242.1L394.1 243.9L395.5 245.6L396.9 247.4L398.3 249.2L399.7 251.0L401.1 252.7L402.5 254.5L403.9 256.3"/><path class="plot-truth" d="M56.0 80.6L57.4 80.6L58.8 80.6L60.2 80.6L61.6 80.6L63.0 80.6L64.4 80.6L65.8 80.6L67.2 80.6L68.6 80.6L70.0 80.6L71.4 80.6L72.8 80.6L74.2 80.6L75.6 80.6L77.0 80.6L78.4 80.6L79.8 80.6L81.1 80.6L82.5 80.6L83.9 80.6L85.3 80.6L86.7 80.6L88.1 80.6L89.5 80.6L90.9 80.6L92.3 80.6L93.7 80.6L95.1 80.6L96.5 80.6L97.9 80.6L99.3 80.6L100.7 80.6L102.1 80.6L103.5 80.6L104.9 80.6L106.3 80.6L107.7 80.6L109.1 80.6L110.5 80.6L111.9 80.6L113.3 80.6L114.7 80.6L116.1 80.6L117.5 80.6L118.9 80.6L120.3 80.6L121.7 80.6L123.1 80.6L124.5 80.6L125.9 80.6L127.3 80.6L128.7 80.6L130.0 80.6L131.4 80.6L132.8 80.6L134.2 80.6L135.6 80.6L137.0 80.6L138.4 80.6L139.8 80.6L141.2 80.6L142.6 80.6L144.0 80.6L145.4 80.6L146.8 80.6L148.2 80.6L149.6 80.6L151.0 80.6L152.4 80.6L153.8 80.6L155.2 80.6L156.6 80.6L158.0 80.6L159.4 80.6L160.8 80.6L162.2 80.6L163.6 80.6L165.0 80.6L166.4 80.6L167.8 80.6L169.2 80.6L170.6 80.6L172.0 80.6L173.4 80.6L174.8 80.6L176.2 80.6L177.6 80.6L178.9 80.6L180.3 80.6L181.7 80.6L183.1 80.6L184.5 80.6L185.9 80.6L187.3 80.6L188.7 80.6L190.1 80.6L191.5 80.6L192.9 80.6L194.3 80.6L195.7 80.6L197.1 80.6L198.5 80.6L199.9 80.6L201.3 80.6L202.7 80.6L204.1 80.6L205.5 80.6L206.9 80.6L208.3 80.6L209.7 80.6L211.1 80.6L212.5 80.6L213.9 80.6L215.3 80.6L216.7 80.6L218.1 80.6L219.5 80.6L220.9 80.6L222.3 80.6L223.7 80.6L225.1 80.6L226.5 80.6L227.8 80.6L229.2 80.6L230.6 80.6L232.0 80.6L233.4 80.6L234.8 80.6L236.2 80.6L237.6 80.6L239.0 80.6L240.4 80.6L241.8 80.6L243.2 80.6L244.6 80.6L246.0 80.6L247.4 80.6L248.8 80.6L250.2 80.6L251.6 80.6L253.0 80.6L254.4 80.6L255.8 80.6L257.2 80.6L258.6 80.6L260.0 80.6L261.4 80.6L262.8 80.6L264.2 80.6L265.6 80.6L267.0 82.4L268.4 84.1L269.8 85.9L271.2 87.7L272.6 89.5L274.0 91.2L275.4 93.0L276.7 94.8L278.1 96.6L279.5 98.3L280.9 100.1L282.3 101.9L283.7 103.7L285.1 105.4L286.5 107.2L287.9 109.0L289.3 110.8L290.7 112.5L292.1 114.3L293.5 116.1L294.9 117.9L296.3 119.6L297.7 121.4L299.1 123.2L300.5 125.0L301.9 126.7L303.3 128.5L304.7 130.3L306.1 132.1L307.5 133.8L308.9 135.6L310.3 137.4L311.7 139.2L313.1 140.9L314.5 142.7L315.9 144.5L317.3 146.2L318.7 148.0L320.1 149.8L321.5 151.6L322.9 153.3L324.3 155.1L325.6 156.9L327.0 158.7L328.4 160.4L329.8 162.2L331.2 164.0L332.6 165.8L334.0 167.5L335.4 169.3L336.8 171.1L338.2 172.9L339.6 174.6L341.0 176.4L342.4 178.2L343.8 180.0L345.2 181.7L346.6 183.5L348.0 185.3L349.4 187.1L350.8 188.8L352.2 190.6L353.6 192.4L355.0 194.2L356.4 195.9L357.8 197.7L359.2 199.5L360.6 201.3L362.0 203.0L363.4 204.8L364.8 206.6L366.2 208.4L367.6 210.1L369.0 211.9L370.4 213.7L371.8 215.5L373.2 217.2L374.5 219.0L375.9 220.8L377.3 222.6L378.7 224.3L380.1 226.1L381.5 227.9L382.9 229.7L384.3 231.4L385.7 233.2L387.1 235.0L388.5 236.8L389.9 238.5L391.3 240.3L392.7 242.1L394.1 243.8L395.5 245.6L396.9 247.4L398.3 249.2L399.7 250.9L401.1 252.7L402.5 254.5L403.9 256.3"/></svg><figcaption>설정 3: 두 극점이 겹침</figcaption></figure><figure class="figure"><svg id="widget-cs2p-static-4" viewBox="0 0 560 300" role="img" aria-label="대표 설정 4 (R_D를 키움): R_S 1.00 kΩ, C_in 100 fF, R_D 10.0 kΩ, C_L 501 fF일 때 정확한 크기 응답(강조색 실선)과 보데 근사(회색 점선), 입력 극점과 출력 극점 위치의 세로 점선"><line class="axis" opacity="0.35" x1="56.0" y1="14" x2="56.0" y2="258"/><text class="tick" text-anchor="middle" x="56.0" y="274">10⁶</text><line class="axis" opacity="0.35" x1="125.9" y1="14" x2="125.9" y2="258"/><text class="tick" text-anchor="middle" x="125.9" y="274">10⁷</text><line class="axis" opacity="0.35" x1="195.7" y1="14" x2="195.7" y2="258"/><text class="tick" text-anchor="middle" x="195.7" y="274">10⁸</text><line class="axis" opacity="0.35" x1="265.6" y1="14" x2="265.6" y2="258"/><text class="tick" text-anchor="middle" x="265.6" y="274">10⁹</text><line class="axis" opacity="0.35" x1="335.4" y1="14" x2="335.4" y2="258"/><text class="tick" text-anchor="middle" x="335.4" y="274">10¹⁰</text><line class="axis" opacity="0.35" x1="405.3" y1="14" x2="405.3" y2="258"/><text class="tick" text-anchor="middle" x="405.3" y="274">10¹¹</text><line class="axis" opacity="0.35" x1="475.1" y1="14" x2="475.1" y2="258"/><text class="tick" text-anchor="middle" x="475.1" y="274">10¹²</text><line class="axis" opacity="0.35" x1="545.0" y1="14" x2="545.0" y2="258"/><text class="tick" text-anchor="middle" x="545.0" y="274">10¹³</text><line class="axis" opacity="0.35" x1="56" y1="258.0" x2="545" y2="258.0"/><text class="tick" text-anchor="end" x="50" y="262.0">-60</text><line class="axis" opacity="0.35" x1="56" y1="213.6" x2="545" y2="213.6"/><text class="tick" text-anchor="end" x="50" y="217.6">-40</text><line class="axis" opacity="0.35" x1="56" y1="169.3" x2="545" y2="169.3"/><text class="tick" text-anchor="end" x="50" y="173.3">-20</text><line class="axis" opacity="0.35" x1="56" y1="124.9" x2="545" y2="124.9"/><text class="tick" text-anchor="end" x="50" y="128.9">0</text><line class="axis" opacity="0.35" x1="56" y1="80.5" x2="545" y2="80.5"/><text class="tick" text-anchor="end" x="50" y="84.5">20</text><line class="axis" opacity="0.35" x1="56" y1="36.2" x2="545" y2="36.2"/><text class="tick" text-anchor="end" x="50" y="40.2">40</text><line class="axis" x1="56" y1="258" x2="545" y2="258"/><line class="axis" x1="56" y1="14" x2="56" y2="258"/><text class="tick" text-anchor="middle" x="300.5" y="292">ω (rad/s, 로그 눈금)</text><text class="tick" x="6" y="18">dB</text><line class="mark-ml" x1="335.4" y1="14" x2="335.4" y2="258"/><text class="fig-text" x="339.4" y="28">ωₚ₁</text><line class="mark-map" x1="216.7" y1="14" x2="216.7" y2="258"/><text class="fig-text" x="220.7" y="28">ωₚ₂</text><path class="plot-fit" d="M56.0 49.5L57.4 49.5L58.8 49.5L60.2 49.5L61.6 49.5L63.0 49.5L64.4 49.5L65.8 49.5L67.2 49.5L68.6 49.5L70.0 49.5L71.4 49.5L72.8 49.5L74.2 49.5L75.6 49.5L77.0 49.5L78.4 49.5L79.8 49.5L81.1 49.5L82.5 49.5L83.9 49.5L85.3 49.5L86.7 49.5L88.1 49.5L89.5 49.5L90.9 49.5L92.3 49.5L93.7 49.5L95.1 49.5L96.5 49.5L97.9 49.5L99.3 49.5L100.7 49.5L102.1 49.5L103.5 49.5L104.9 49.5L106.3 49.5L107.7 49.5L109.1 49.5L110.5 49.5L111.9 49.5L113.3 49.5L114.7 49.5L116.1 49.5L117.5 49.6L118.9 49.6L120.3 49.6L121.7 49.6L123.1 49.6L124.5 49.6L125.9 49.6L127.3 49.6L128.7 49.6L130.0 49.6L131.4 49.6L132.8 49.6L134.2 49.6L135.6 49.6L137.0 49.6L138.4 49.6L139.8 49.6L141.2 49.6L142.6 49.6L144.0 49.6L145.4 49.6L146.8 49.6L148.2 49.6L149.6 49.7L151.0 49.7L152.4 49.7L153.8 49.7L155.2 49.7L156.6 49.7L158.0 49.7L159.4 49.8L160.8 49.8L162.2 49.8L163.6 49.8L165.0 49.9L166.4 49.9L167.8 49.9L169.2 49.9L170.6 50.0L172.0 50.0L173.4 50.1L174.8 50.1L176.2 50.2L177.6 50.2L178.9 50.3L180.3 50.4L181.7 50.5L183.1 50.5L184.5 50.6L185.9 50.7L187.3 50.8L188.7 51.0L190.1 51.1L191.5 51.2L192.9 51.4L194.3 51.5L195.7 51.7L197.1 51.9L198.5 52.1L199.9 52.3L201.3 52.5L202.7 52.8L204.1 53.0L205.5 53.3L206.9 53.6L208.3 53.9L209.7 54.3L211.1 54.6L212.5 55.0L213.9 55.4L215.3 55.8L216.7 56.2L218.1 56.7L219.5 57.1L220.9 57.6L222.3 58.2L223.7 58.7L225.1 59.2L226.5 59.8L227.8 60.4L229.2 61.0L230.6 61.6L232.0 62.3L233.4 63.0L234.8 63.6L236.2 64.3L237.6 65.0L239.0 65.7L240.4 66.5L241.8 67.2L243.2 68.0L244.6 68.7L246.0 69.5L247.4 70.3L248.8 71.1L250.2 71.9L251.6 72.7L253.0 73.5L254.4 74.3L255.8 75.1L257.2 76.0L258.6 76.8L260.0 77.6L261.4 78.5L262.8 79.3L264.2 80.2L265.6 81.1L267.0 81.9L268.4 82.8L269.8 83.7L271.2 84.5L272.6 85.4L274.0 86.3L275.4 87.2L276.7 88.1L278.1 89.0L279.5 89.9L280.9 90.8L282.3 91.7L283.7 92.6L285.1 93.5L286.5 94.4L287.9 95.3L289.3 96.2L290.7 97.1L292.1 98.1L293.5 99.0L294.9 99.9L296.3 100.9L297.7 101.8L299.1 102.8L300.5 103.7L301.9 104.7L303.3 105.7L304.7 106.7L306.1 107.6L307.5 108.7L308.9 109.7L310.3 110.7L311.7 111.7L313.1 112.8L314.5 113.8L315.9 114.9L317.3 116.0L318.7 117.1L320.1 118.2L321.5 119.3L322.9 120.5L324.3 121.6L325.6 122.8L327.0 124.0L328.4 125.2L329.8 126.5L331.2 127.7L332.6 129.0L334.0 130.3L335.4 131.6L336.8 133.0L338.2 134.3L339.6 135.7L341.0 137.1L342.4 138.5L343.8 140.0L345.2 141.4L346.6 142.9L348.0 144.4L349.4 145.9L350.8 147.5L352.2 149.0L353.6 150.6L355.0 152.1L356.4 153.7L357.8 155.3L359.2 157.0L360.6 158.6L362.0 160.2L363.4 161.9L364.8 163.5L366.2 165.2L367.6 166.9L369.0 168.5L370.4 170.2L371.8 171.9L373.2 173.6L374.5 175.3L375.9 177.1L377.3 178.8L378.7 180.5L380.1 182.2L381.5 184.0L382.9 185.7L384.3 187.4L385.7 189.2L387.1 190.9L388.5 192.7L389.9 194.4L391.3 196.2L392.7 197.9L394.1 199.7L395.5 201.4L396.9 203.2L398.3 205.0L399.7 206.7L401.1 208.5L402.5 210.2L403.9 212.0L405.3 213.8L406.7 215.5L408.1 217.3L409.5 219.1L410.9 220.8L412.3 222.6L413.7 224.4L415.1 226.2L416.5 227.9L417.9 229.7L419.3 231.5L420.7 233.2L422.1 235.0L423.4 236.8L424.8 238.6L426.2 240.3L427.6 242.1L429.0 243.9L430.4 245.6L431.8 247.4L433.2 249.2L434.6 251.0L436.0 252.7L437.4 254.5L438.8 256.3"/><path class="plot-truth" d="M56.0 49.5L57.4 49.5L58.8 49.5L60.2 49.5L61.6 49.5L63.0 49.5L64.4 49.5L65.8 49.5L67.2 49.5L68.6 49.5L70.0 49.5L71.4 49.5L72.8 49.5L74.2 49.5L75.6 49.5L77.0 49.5L78.4 49.5L79.8 49.5L81.1 49.5L82.5 49.5L83.9 49.5L85.3 49.5L86.7 49.5L88.1 49.5L89.5 49.5L90.9 49.5L92.3 49.5L93.7 49.5L95.1 49.5L96.5 49.5L97.9 49.5L99.3 49.5L100.7 49.5L102.1 49.5L103.5 49.5L104.9 49.5L106.3 49.5L107.7 49.5L109.1 49.5L110.5 49.5L111.9 49.5L113.3 49.5L114.7 49.5L116.1 49.5L117.5 49.5L118.9 49.5L120.3 49.5L121.7 49.5L123.1 49.5L124.5 49.5L125.9 49.5L127.3 49.5L128.7 49.5L130.0 49.5L131.4 49.5L132.8 49.5L134.2 49.5L135.6 49.5L137.0 49.5L138.4 49.5L139.8 49.5L141.2 49.5L142.6 49.5L144.0 49.5L145.4 49.5L146.8 49.5L148.2 49.5L149.6 49.5L151.0 49.5L152.4 49.5L153.8 49.5L155.2 49.5L156.6 49.5L158.0 49.5L159.4 49.5L160.8 49.5L162.2 49.5L163.6 49.5L165.0 49.5L166.4 49.5L167.8 49.5L169.2 49.5L170.6 49.5L172.0 49.5L173.4 49.5L174.8 49.5L176.2 49.5L177.6 49.5L178.9 49.5L180.3 49.5L181.7 49.5L183.1 49.5L184.5 49.5L185.9 49.5L187.3 49.5L188.7 49.5L190.1 49.5L191.5 49.5L192.9 49.5L194.3 49.5L195.7 49.5L197.1 49.5L198.5 49.5L199.9 49.5L201.3 49.5L202.7 49.5L204.1 49.5L205.5 49.5L206.9 49.5L208.3 49.5L209.7 49.5L211.1 49.5L212.5 49.5L213.9 49.5L215.3 49.5L216.7 49.5L218.1 50.4L219.5 51.3L220.9 52.2L222.3 53.1L223.7 54.0L225.1 54.9L226.5 55.7L227.8 56.6L229.2 57.5L230.6 58.4L232.0 59.3L233.4 60.2L234.8 61.1L236.2 62.0L237.6 62.8L239.0 63.7L240.4 64.6L241.8 65.5L243.2 66.4L244.6 67.3L246.0 68.2L247.4 69.1L248.8 69.9L250.2 70.8L251.6 71.7L253.0 72.6L254.4 73.5L255.8 74.4L257.2 75.3L258.6 76.2L260.0 77.0L261.4 77.9L262.8 78.8L264.2 79.7L265.6 80.6L267.0 81.5L268.4 82.4L269.8 83.3L271.2 84.1L272.6 85.0L274.0 85.9L275.4 86.8L276.7 87.7L278.1 88.6L279.5 89.5L280.9 90.4L282.3 91.2L283.7 92.1L285.1 93.0L286.5 93.9L287.9 94.8L289.3 95.7L290.7 96.6L292.1 97.4L293.5 98.3L294.9 99.2L296.3 100.1L297.7 101.0L299.1 101.9L300.5 102.8L301.9 103.7L303.3 104.5L304.7 105.4L306.1 106.3L307.5 107.2L308.9 108.1L310.3 109.0L311.7 109.9L313.1 110.8L314.5 111.6L315.9 112.5L317.3 113.4L318.7 114.3L320.1 115.2L321.5 116.1L322.9 117.0L324.3 117.9L325.6 118.7L327.0 119.6L328.4 120.5L329.8 121.4L331.2 122.3L332.6 123.2L334.0 124.1L335.4 125.0L336.8 126.7L338.2 128.5L339.6 130.3L341.0 132.1L342.4 133.8L343.8 135.6L345.2 137.4L346.6 139.2L348.0 140.9L349.4 142.7L350.8 144.5L352.2 146.2L353.6 148.0L355.0 149.8L356.4 151.6L357.8 153.3L359.2 155.1L360.6 156.9L362.0 158.7L363.4 160.4L364.8 162.2L366.2 164.0L367.6 165.8L369.0 167.5L370.4 169.3L371.8 171.1L373.2 172.9L374.5 174.6L375.9 176.4L377.3 178.2L378.7 180.0L380.1 181.7L381.5 183.5L382.9 185.3L384.3 187.1L385.7 188.8L387.1 190.6L388.5 192.4L389.9 194.2L391.3 195.9L392.7 197.7L394.1 199.5L395.5 201.3L396.9 203.0L398.3 204.8L399.7 206.6L401.1 208.4L402.5 210.1L403.9 211.9L405.3 213.7L406.7 215.5L408.1 217.2L409.5 219.0L410.9 220.8L412.3 222.6L413.7 224.3L415.1 226.1L416.5 227.9L417.9 229.7L419.3 231.4L420.7 233.2L422.1 235.0L423.4 236.8L424.8 238.5L426.2 240.3L427.6 242.1L429.0 243.8L430.4 245.6L431.8 247.4L433.2 249.2L434.6 250.9L436.0 252.7L437.4 254.5L438.8 256.3"/></svg><figcaption>설정 4: R<sub>D</sub>를 키움</figcaption></figure>
+        <div class="table-wrap"><table><tr><th>설정</th><th>R<sub>S</sub>, C<sub>in</sub>, R<sub>D</sub>, C<sub>L</sub></th><th>입력 극점 ω<sub>p1</sub></th><th>출력 극점 ω<sub>p2</sub></th><th>저주파 이득 g<sub>m</sub>R<sub>D</sub></th></tr><tr><td>1. 기본</td><td>1.00 kΩ, 100 fF, 2.00 kΩ, 501 fF</td><td>1.00×10¹⁰ rad/s (1.59 GHz)</td><td>1.00×10⁹ rad/s (159 MHz)</td><td>10.0 (20.0 dB)</td></tr><tr><td>2. R<sub>S</sub>를 키움</td><td>100 kΩ, 100 fF, 2.00 kΩ, 501 fF</td><td>1.00×10⁸ rad/s (15.9 MHz)</td><td>1.00×10⁹ rad/s (159 MHz)</td><td>10.0 (20.0 dB)</td></tr><tr><td>3. 두 극점이 겹침</td><td>2.00 kΩ, 501 fF, 2.00 kΩ, 501 fF</td><td>1.00×10⁹ rad/s (159 MHz)</td><td>1.00×10⁹ rad/s (159 MHz)</td><td>10.0 (20.0 dB)</td></tr><tr><td>4. R<sub>D</sub>를 키움</td><td>1.00 kΩ, 100 fF, 10.0 kΩ, 501 fF</td><td>1.00×10¹⁰ rad/s (1.59 GHz)</td><td>2.00×10⁸ rad/s (31.8 MHz)</td><td>50.0 (34.0 dB)</td></tr></table></div>
+      </div>
+    </div>
+  </div>
+  <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+    <p>$R_S$를 왜 넣는지 따로 짚으셨어요. 어떤 회로에 신호를 넣어 주는 소스는 대개 바로 앞단 회로예요. 그래서 소스 임피던스는 앞단의 출력 임피던스라는 뜻이에요.</p>
+    <blockquote>"RS는 일부러 달아준 게 아니라 그 전단의 출력 임피던스를 모델링해서 고려한 거예요." (1014 P06·L396)</blockquote>
+    <p>입력 극점이 앞단의 출력 임피던스에 좌우돼요. 이를 무시하고 설계하면 나중에 단을 붙였을 때 극점 주파수가 달라져요(1014 P06·L393–399).</p>
+    <blockquote>"두 개의 폴을 알고 있으면 보드 플롯을 이용해서 매그니튜드 플롯을 그릴 수가 있겠죠" (1014 P06·L323–324)</blockquote>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">입력 노드와 출력 노드가 극점을 하나씩 만들어서, 이득이 두 번 꺾여 떨어져요.</p>
+    <p class="panel-label">핵심 식</p>
+    <ul class="eq-list">
+      <li><span class="eq-name">전달 함수</span>$$\frac{V_{out}}{V_{in}}$$ $$= \frac{-g_m R_D}{(1 + R_S C_{in} s)(1 + R_D C_L s)}$$</li>
+      <li><span class="eq-name">입력 극점</span>$$\omega_{p1} = \frac{1}{R_S C_{in}}$$</li>
+      <li><span class="eq-name">출력 극점</span>$$\omega_{p2} = \frac{1}{R_D C_L}$$</li>
+    </ul>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>소스 임피던스(source impedance)</dt><dd>입력에 직렬로 보이는 $R_S$, 곧 앞단의 출력 임피던스</dd>
+      <dt>입력 등가 커패시턴스</dt><dd>트랜지스터 커패시턴스가 입력에 나타난 $C_{in}$</dd>
+    </dl>
+  </div>
+</article>
+
+<article class="topic" id="s2-node-rule"><h3>8. 노드마다 극점: 등가 저항과 등가 커패시턴스</h3><div class="tags"><span class="tag date">1014 수업</span><span class="tag slide">L05 s9</span></div>
+  <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+    <p class="lead">물통마다 물이 차는 데 걸리는 시간이 정해져 있어요.</p>
+    <figure class="figure"><svg id="fig-node-bucket" viewBox="0 0 340 204" role="img" aria-label="왼쪽은 좁은 관으로 물을 받는 큰 통이라 천천히 차고, 오른쪽은 넓은 관으로 물을 받는 작은 통이라 금방 찬다. 통은 테두리로, 통 안의 물은 색칠된 사각형으로 그렸다."><path class="fig-ink" d="M10 30 H70 M10 36 H70"/><path class="fig-ink" d="M70 30 Q82 30 82 44 M70 36 Q76 36 76 44"/><path class="fig-ink" d="M40 50 V150 H140 V50"/><rect class="fig-dot" opacity="0.45" x="42" y="120" width="96" height="28"/><text class="fig-text" x="90" y="176" text-anchor="middle">큰 통, 좁은 관</text><text class="fig-muted" x="90" y="194" text-anchor="middle">천천히 차요</text><path class="fig-ink" d="M200 22 H270 M200 42 H270"/><path class="fig-ink" d="M270 22 Q296 22 296 60 M270 42 Q276 42 276 60"/><path class="fig-ink" d="M256 90 V150 H316 V90"/><rect class="fig-dot" opacity="0.45" x="258" y="104" width="56" height="44"/><text class="fig-text" x="286" y="176" text-anchor="middle">작은 통, 넓은 관</text><text class="fig-muted" x="286" y="194" text-anchor="middle">금방 차요</text></svg>
+      <figcaption>통이 크고 관이 좁을수록 오래 걸리고, 오래 걸리는 통일수록 빨리 떨리는 신호를 못 따라가요.</figcaption></figure>
+  </div>
+  <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <p><a href="#s2-cs-two-poles">입력 RC가 있는 CS 단의 두 극점</a>은 둘 다 "저항 × 커패시턴스"의 역수 꼴이에요. 그 저항과 커패시턴스가 어디서 보이는지 따져 봐요.</p>
+    <figure class="figure"><svg id="fig-node-rc" viewBox="0 0 380 215" role="img" aria-label="입력 RC가 있는 CS 단에서 V_in을 0으로 두어 접지한 회로도. 노드 X에서 접지로 보이는 R_S와 C_in, 노드 Y에서 AC 접지로 보이는 R_D와 C_L을 강조색 선으로 그렸고, 두 노드는 색칠된 점이다."><path class="fig-ink" d="M215 30 h30 M230 30 V40"/><text class="fig-text" x="250" y="34" text-anchor="start">V<tspan baseline-shift="sub" font-size="10">DD</tspan></text><text class="fig-muted" x="250" y="50" text-anchor="start">(AC 접지)</text><path class="fig-accent" d="M230.0 40.0 L230.0 44.0 L237.0 47.9 L223.0 55.8 L237.0 63.6 L223.0 71.4 L237.0 79.2 L223.0 87.1 L230.0 91.0 L230.0 95.0"/><path class="fig-ink" d="M230 95 V120"/><path class="fig-ink" d="M200 135 V165 M208 132 V168 M208 136 H230 V120 M208 164 H230 V180 M222 160 l6 4 l-6 4"/><path class="fig-ink" d="M230 180 V195"/><path class="fig-ink" d="M220 195 h20 M224 200 h12 M228 205 h4"/><text class="fig-text" x="238" y="160" text-anchor="start">M<tspan baseline-shift="sub" font-size="10">1</tspan></text><path class="fig-ink" d="M230 100 H300"/><path class="fig-accent" d="M300 100 V141.0 M288 141.0 h24 M288 149.0 h24 M300 149.0 V190"/><path class="fig-ink" d="M290 190 h20 M294 195 h12 M298 200 h4"/><text class="fig-text" x="314" y="150" text-anchor="start">C<tspan baseline-shift="sub" font-size="10">L</tspan></text><text class="fig-text" x="244" y="72" text-anchor="start">R<tspan baseline-shift="sub" font-size="10">D</tspan></text><path class="fig-ink" d="M150 150 H200"/><path class="fig-accent" d="M150 150 V168.5 M138 168.5 h24 M138 176.5 h24 M150 176.5 V195"/><path class="fig-ink" d="M140 195 h20 M144 200 h12 M148 205 h4"/><text class="fig-text" x="164" y="182" text-anchor="start">C<tspan baseline-shift="sub" font-size="10">in</tspan></text><path class="fig-accent" d="M66.0 150.0 L70.0 150.0 L74.0 143.0 L82.0 157.0 L90.0 143.0 L98.0 157.0 L106.0 143.0 L114.0 157.0 L118.0 150.0 L122.0 150.0"/><path class="fig-ink" d="M122 150 H150"/><text class="fig-text" x="84" y="134" text-anchor="start">R<tspan baseline-shift="sub" font-size="10">S</tspan></text><path class="fig-ink" d="M66 150 H40 V170"/><path class="fig-ink" d="M30 170 h20 M34 175 h12 M38 180 h4"/><text class="fig-muted" x="4" y="136" text-anchor="start">V<tspan baseline-shift="sub" font-size="10">in</tspan></text><text class="fig-muted" x="30" y="136" text-anchor="start">= 0</text><circle class="fig-dot" cx="150" cy="150" r="4.5"/><circle class="fig-dot" cx="230" cy="100" r="4.5"/><text class="fig-muted" x="134" y="144" text-anchor="start">X</text><text class="fig-muted" x="236" y="114" text-anchor="start">Y</text></svg>
+      <figcaption>$V_{in} = 0$으로 두면 노드마다 AC 접지 쪽으로 보이는 소자(강조색 선)가 정해져요.</figcaption></figure>
+    <ul>
+      <li><strong>입력 노드 X</strong>: $V_{in} = 0$으로 두면 X에서 접지 쪽으로 $R_S$가 보여요. 게이트 쪽은 임피던스가 무한대라 전류가 흐르지 않아요. 그래서 등가 저항은 $R_S$, 등가 커패시턴스는 $C_{in}$이에요.</li>
+      <li><strong>출력 노드 Y</strong>: $V_{DD}$는 AC 접지예요. 채널 길이 변조까지 보면 등가 저항은 $R_D \parallel r_O \approx R_D$이고, 등가 커패시턴스는 $C_L$이에요.</li>
+      <li>여기서 "등가"는 그 노드와 AC 접지 사이에 보이는 임피던스라는 뜻이에요.</li>
+    </ul>
+    <p>이걸 일반화한 규칙이에요(슬라이드 s9 둘째 글머리). 노드마다 극점이 하나씩 생기고, 극점 주파수는 그 노드와 AC 접지 사이의 등가 저항과 등가 커패시턴스를 곱한 값의 역수예요.</p>
+    $$\omega_p = \frac{1}{R_{eq} C_{eq}}$$
+    <p>노드 방정식으로 전달 함수를 구하지 않고 이 순서로 크기 응답을 그려요.</p>
+    <ol class="steps">
+      <li>입력 신호원을 끄고($V_{in} = 0$) 전원도 AC 접지로 둬요.</li>
+      <li>노드마다 AC 접지 쪽으로 보이는 등가 저항 $R_{eq}$와 등가 커패시턴스 $C_{eq}$를 찾아요.</li>
+      <li>노드마다 $\omega_p = 1/(R_{eq} C_{eq})$를 계산해요.</li>
+      <li>저주파 이득 $A_0$에서 출발해 극점마다 기울기를 20 dB/dec씩 낮추는 <a href="#s1-bode">보데 근사</a>로 그려요.</li>
+    </ol>
+    <ul>
+      <li>이 방법은 근사예요. 정확한 값은 툴로 구하면 되고, 손 해석의 목적은 약 10% 오차 안에서 어떤 파라미터가 극점을 움직이는지 보는 것이에요.</li>
+      <li>영점은 구하지 않아요. 영점은 보통 극점보다 훨씬 높은 주파수에 있어요. 관심 있는 곳은 이득이 떨어지기 시작하는 지점이라 주로 극점이 영향을 줘요.</li>
+    </ul>
+  </div>
+  <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+    <blockquote>"폴을 확인해 보니까 … 저항과 커패시터의 곱의 역수로 나타나는 거죠." (1014 P06·L328–331)</blockquote>
+    <p>왜 정확한 식 대신 근사를 쓰는지도 말씀하셨어요. 정확히 풀면 식이 복잡해져요.</p>
+    <blockquote>"식이 복잡해지면 … 어떤 파라미터가 이것과 어떻게 연결되는지를 알기가 어려운 거예요." (1014 P06·L374)</blockquote>
+    <p>근사식을 쓰면 "이걸 조절하면 폴이 어떻게 변하겠구나" 하는 설계 힌트를 얻을 수 있다고 하셨어요(1014 P06·L375–376).</p>
+  </div>
+  <div class="layer warn"><span class="layer-title">꼭 기억해요</span>
+    <blockquote>"각 노드마다 폴이 생긴다 … 각 노드의 등가 저항과 등가 커패시턴스의 곱의 역수로 나타난다." (1014 P08·L523)</blockquote>
+    <blockquote>"폴을 구하는 게 이제 가장 키포인트고" (1014 P08·L529)</blockquote>
+    <p>영점을 안 구하는 이유도 함께 기억해요. 영점은 "충분히 높은 주파수"에 있어서 관심 밖이라고 하셨어요(1014 P08·L525).</p>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">노드마다 극점이 하나씩 생기고, 그 노드에서 AC 접지 쪽으로 보이는 R과 C의 곱의 역수가 극점 주파수예요.</p>
+    <p class="panel-label">핵심 식</p>
+    <ul class="eq-list">
+      <li><span class="eq-name">노드–극점 규칙</span>$$\omega_p = \frac{1}{R_{eq} C_{eq}}$$</li>
+      <li><span class="eq-name">출력 노드 저항</span>$$R_D \parallel r_O \approx R_D$$</li>
+    </ul>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>등가 저항(equivalent resistance)</dt><dd>그 노드와 AC 접지 사이에 보이는 저항</dd>
+      <dt>등가 커패시턴스(equivalent capacitance)</dt><dd>그 노드와 AC 접지 사이에 보이는 커패시턴스</dd>
+      <dt>AC 접지(AC ground)</dt><dd>소신호로는 0 V인 노드(꺼 둔 입력, 전원)</dd>
+    </dl>
+  </div>
+</article>
+
+<article class="topic" id="s2-cg-poles"><h3>9. CG 단의 입력 극점</h3><div class="tags"><span class="tag date">1014 수업</span><span class="tag slide">L05 s10</span></div>
+  <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+    <p class="lead">이번엔 물통에 큰 구멍이 하나 더 뚫려 있어요.</p>
+    <figure class="figure"><svg id="fig-cg-holes" viewBox="0 0 400 200" role="img" aria-label="테두리로 그린 물통 두 개. 왼쪽 통은 구멍이 하나라 천천히 바뀌고, 오른쪽 통은 강조색 선으로 그린 큰 구멍이 하나 더 있어 금방 바뀐다. 통 안의 물은 색칠된 사각형이다."><path class="fig-ink" d="M30 30 V140 H120 V134 M120 122 V30 M120 122 H142 M120 134 H142"/><rect class="fig-dot" opacity="0.45" x="32" y="60" width="86" height="78"/><text class="fig-text" x="75" y="170" text-anchor="middle">구멍 하나</text><text class="fig-muted" x="75" y="188" text-anchor="middle">천천히 바뀌어요</text><path class="fig-ink" d="M220 30 V140 H310 V134 M310 122 V108 M310 88 V30 M310 122 H332 M310 134 H332"/><path class="fig-accent" d="M310 88 H342 M310 108 H342"/><rect class="fig-dot" opacity="0.45" x="222" y="60" width="86" height="78"/><text class="fig-muted" x="348" y="102" text-anchor="start">큰 구멍</text><text class="fig-text" x="265" y="170" text-anchor="middle">구멍 둘</text><text class="fig-muted" x="265" y="188" text-anchor="middle">금방 바뀌어요</text></svg>
+      <figcaption>구멍이 둘이면 물이 빨리 빠져서, 더 빨리 떨리는 신호까지 따라가요.</figcaption></figure>
+  </div>
+  <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <p><a href="#s2-node-rule">노드마다 극점 규칙</a>을 CG 단에 써요. 입력은 소스로 넣고, 게이트는 DC 바이어스 $V_b$가 걸린 AC 접지이며, 출력은 드레인이에요. 소스에 DC 전류를 흘릴 바이어스 전류원은 그림에서 생략했어요.</p>
+    <figure class="figure"><svg id="fig-cg-circuit" viewBox="0 0 400 232" role="img" aria-label="입력 RC가 있는 CG 단 회로도. V_in이 R_S를 거쳐 소스 노드 X로 들어가고 X와 접지 사이에 C_in이 있다. 게이트는 V_b에 연결된 AC 접지이고, 드레인 노드 Y에는 R_D와 C_L이 있다. 강조색 화살표가 소스 쪽을 들여다본 저항 1/g_m을 가리킨다. 두 노드는 색칠된 점이다."><path class="fig-ink" d="M215 14 h30 M230 14 V22"/><text class="fig-text" x="250" y="18" text-anchor="start">V<tspan baseline-shift="sub" font-size="10">DD</tspan></text><path class="fig-ink" d="M230.0 22.0 L230.0 26.0 L237.0 29.0 L223.0 35.0 L237.0 41.0 L223.0 47.0 L237.0 53.0 L223.0 59.0 L230.0 62.0 L230.0 66.0"/><text class="fig-text" x="244" y="50" text-anchor="start">R<tspan baseline-shift="sub" font-size="10">D</tspan></text><path class="fig-ink" d="M230 66 V80"/><path class="fig-ink" d="M200 95 V125 M208 92 V128 M208 96 H230 V80 M208 124 H230 V140 M222 120 l6 4 l-6 4"/><text class="fig-text" x="238" y="102" text-anchor="start">M<tspan baseline-shift="sub" font-size="10">1</tspan></text><path class="fig-ink" d="M174 110 H200"/><circle class="fig-ink" cx="170" cy="110" r="4"/><text class="fig-text" x="118" y="106" text-anchor="start">V<tspan baseline-shift="sub" font-size="10">b</tspan></text><text class="fig-muted" x="102" y="124" text-anchor="start">(AC 접지)</text><path class="fig-ink" d="M230 70 H330"/><path class="fig-ink" d="M300 70 V101.0 M288 101.0 h24 M288 109.0 h24 M300 109.0 V140"/><path class="fig-ink" d="M290 140 h20 M294 145 h12 M298 150 h4"/><text class="fig-text" x="314" y="110" text-anchor="start">C<tspan baseline-shift="sub" font-size="10">L</tspan></text><circle class="fig-ink" cx="334" cy="70" r="4"/><text class="fig-text" x="330" y="58" text-anchor="start">V<tspan baseline-shift="sub" font-size="10">out</tspan></text><path class="fig-ink" d="M230 140 V170"/><path class="fig-ink" d="M230 170 V188.5 M218 188.5 h24 M218 196.5 h24 M230 196.5 V215"/><path class="fig-ink" d="M220 215 h20 M224 220 h12 M228 225 h4"/><text class="fig-text" x="244" y="200" text-anchor="start">C<tspan baseline-shift="sub" font-size="10">in</tspan></text><path class="fig-ink" d="M66.0 170.0 L70.0 170.0 L74.0 163.0 L82.0 177.0 L90.0 163.0 L98.0 177.0 L106.0 163.0 L114.0 177.0 L118.0 170.0 L122.0 170.0"/><path class="fig-ink" d="M122 170 H230"/><text class="fig-text" x="84" y="154" text-anchor="start">R<tspan baseline-shift="sub" font-size="10">S</tspan></text><path class="fig-ink" d="M44 170 H66"/><circle class="fig-ink" cx="40" cy="170" r="4"/><text class="fig-text" x="10" y="158" text-anchor="start">V<tspan baseline-shift="sub" font-size="10">in</tspan></text><circle class="fig-dot" cx="230" cy="170" r="4.5"/><circle class="fig-dot" cx="230" cy="70" r="4.5"/><text class="fig-muted" x="212" y="186" text-anchor="start">X</text><text class="fig-muted" x="237" y="88" text-anchor="start">Y</text><path class="fig-accent" d="M300 158 H240 M248 152 l-8 6 l8 6"/><text class="fig-text" x="306" y="162" text-anchor="start">1/g<tspan baseline-shift="sub" font-size="10">m</tspan></text><text class="fig-muted" x="306" y="180" text-anchor="start">소스 쪽 저항</text></svg>
+      <figcaption>입력 RC가 있는 CG 단(Razavi 그림 11.12). 강조색 화살표는 노드 X에서 트랜지스터 소스 쪽을 들여다본 저항이에요.</figcaption></figure>
+    <ul>
+      <li>입력 쪽에는 <a href="#s2-cs-two-poles">CS 단</a>처럼 앞단의 출력 임피던스 $R_S$와 입력 등가 커패시턴스 $C_{in}$(노드 X–접지)을 둬요. $C_{in}$은 트랜지스터 커패시턴스가 입력에 등가적으로 나타난 것이에요.</li>
+      <li>노드가 X와 Y 두 개이므로 극점도 두 개라고 예측해요.</li>
+    </ul>
+    <p>입력 노드 X의 등가 저항을 구해요($\lambda = 0$, 몸체 효과 무시).</p>
+    <ol class="steps">
+      <li>$V_{in} = 0$으로 두면 X에서 접지 쪽으로 $R_S$가 보여요.</li>
+      <li>X에는 트랜지스터의 소스도 붙어 있어요. CS 단처럼 게이트(무한대)를 보는 게 아니라 소스를 들여다봐요.</li>
+      <li>게이트가 AC 접지이므로 $V_{GS} = -V_X$예요.</li>
+      <li>$I_D = g_m V_{GS} = -g_m V_X$이므로 소스 쪽 저항의 크기는 $\left|V_X / I_D\right| = \frac{1}{g_m}$이에요.</li>
+      <li>두 저항이 X와 AC 접지 사이에 병렬이에요. 등가 저항은 $R_S \parallel \frac{1}{g_m}$, 등가 커패시턴스는 $C_{in}$이에요.</li>
+      <li>입력 극점이에요. $$\omega_{p,X} = \frac{1}{\left(R_S \parallel \frac{1}{g_m}\right) C_{in}}$$</li>
+      <li>출력 노드 Y는 CS 단과 같아요. 등가 저항은 $R_D$($\lambda = 0$이면 $r_O$ 쪽은 무한대), 등가 커패시턴스는 $C_L$이에요. $$\omega_{p,Y} = \frac{1}{R_D C_L}$$</li>
+    </ol>
+    <ul>
+      <li>병렬 저항은 둘 중 작은 쪽보다 작아요. 그래서 같은 $R_S$, $C_{in}$이라도 CG 단의 입력 극점은 게이트를 보는 CS 단의 $1/(R_S C_{in})$보다 높아요.</li>
+      <li>보데 근사: 저주파 이득 $A_0$로 평평하다가 낮은 쪽 극점에서 −20 dB/dec, 높은 쪽 극점을 지나면 −40 dB/dec로 떨어져요.</li>
+      <li>$\omega_{p,X}$와 $\omega_{p,Y}$ 중 어느 쪽이 낮은지는 소자 값에 따라 달라요. 순서가 바뀌어도 그림의 모양은 같아요.</li>
+    </ul>
+  </div>
+  <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+    <p>이 예제에서 "전달 함수를 구하지 말고 폴을 구하세요"라고 하셨어요(1014 P07·L406–407).</p>
+    <p>수업 중 질문이 있었어요. 앞단에 극점이 있다는 게 영점으로 작용하느냐는 질문이었어요. 교수님 답은 영점이 아니라는 것이었어요.</p>
+    <ul>
+      <li>앞단 출력이 실제 소스 전압이고, 이 단의 입력은 노드 X예요.</li>
+      <li>입력 커패시턴스가 있으면 주파수가 높아질수록 앞단이 보낸 신호가 감쇠되어 다 들어오지 못해요.</li>
+      <li>앞단에서 보면 이 $C_{in}$은 <strong>앞단의 부하 커패시턴스</strong>이고, 앞단의 출력 극점이에요. 이 단에서 보면 입력 극점이에요. 두 단을 붙이면 그 노드에 극점 하나로 나타나요.</li>
+    </ul>
+    <blockquote>"제로가 아니고 정확하게는 이제 그 전단에서도 이제 그게 폴로 나타나는 거죠." (1014 P07·L487)</blockquote>
+  </div>
+  <div class="layer warn"><span class="layer-title">꼭 기억해요</span>
+    <blockquote>"등가 저항이 더 이상 RS만으로 표현되지 않고 … gm분의 1이 병렬로 보이더라." (1014 P07·L430–431)</blockquote>
+    <blockquote>"우리는 각 노드의 등가 RC의 곱으로, RC의 곱의 역수로 구하자." (1014 P07·L461)</blockquote>
+    <p>극점을 구한 뒤에는 보데 근사로 크기 응답을 그리는 게 "가장 기본적인 방법"이라고 하셨어요(1014 P07·L462–463).</p>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">CG 단의 입력 노드에는 $R_S$와 소스 쪽 $\frac{1}{g_m}$이 병렬로 보여서 입력 극점이 올라가요.</p>
+    <p class="panel-label">핵심 식</p>
+    <ul class="eq-list">
+      <li><span class="eq-name">입력 극점</span>$$\omega_{p,X}$$ $$= \frac{1}{\left(R_S \parallel \frac{1}{g_m}\right) C_{in}}$$</li>
+      <li><span class="eq-name">출력 극점</span>$$\omega_{p,Y} = \frac{1}{R_D C_L}$$</li>
+    </ul>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>소스 쪽 저항</dt><dd>게이트가 AC 접지일 때 소스를 들여다본 저항 $\frac{1}{g_m}$</dd>
+      <dt>앞단의 부하 커패시턴스</dt><dd>이 단의 $C_{in}$을 앞단에서 본 이름, 같은 노드의 극점 하나</dd>
+    </dl>
+  </div>
+</article>
+
+<article class="topic" id="s2-floating"><h3>10. 부유 커패시터: 어느 노드에 넣을까</h3><div class="tags"><span class="tag date">1014 수업</span><span class="tag slide">L05 s11–12</span></div>
+  <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+    <p class="lead">두 물통 사이에 걸린 관은 어느 통 몫인지 정하기 어려워요.</p>
+    <figure class="figure"><svg id="fig-floating-bridge" viewBox="0 0 390 190" role="img" aria-label="왼쪽은 테두리로 그린 두 물통 사이에 경고색 선으로 그린 관이 걸려 있고 물음표가 붙어 있다. 오른쪽은 같은 두 물통에 강조색 선으로 그린 관이 바닥 쪽으로 하나씩 달려 있다. 통 안의 물은 색칠된 사각형이다."><path class="fig-ink" d="M10 50 V130 H70 V50"/><rect class="fig-dot" opacity="0.45" x="12" y="90" width="56" height="38"/><path class="fig-ink" d="M110 50 V130 H170 V50"/><rect class="fig-dot" opacity="0.45" x="112" y="90" width="56" height="38"/><path class="fig-danger" d="M70 100 H110 M70 108 H110"/><text class="fig-text" x="90" y="86" text-anchor="middle">?</text><text class="fig-text" x="90" y="160" text-anchor="middle">사이에 걸린 관</text><path class="fig-ink" d="M184 90 H214 M206 84 l8 6 l-8 6"/><path class="fig-ink" d="M230 50 V130 H290 V50"/><rect class="fig-dot" opacity="0.45" x="232" y="90" width="56" height="38"/><path class="fig-ink" d="M310 50 V130 H370 V50"/><rect class="fig-dot" opacity="0.45" x="312" y="90" width="56" height="38"/><path class="fig-accent" d="M254 130 V150 M262 130 V150 M334 130 V150 M342 130 V150"/><path class="fig-ink" d="M224 152 H376"/><text class="fig-text" x="300" y="176" text-anchor="middle">통마다 관 하나씩</text></svg>
+      <figcaption>그래서 사이에 걸린 관을 통마다 하나씩 달린 관 두 개로 바꿔 생각하려고 해요.</figcaption></figure>
+  </div>
+  <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <ul>
+      <li>노드와 노드 사이에 있는 커패시터를 <strong>부유 커패시터(floating capacitor)</strong>라고 해요.</li>
+      <li>노드와 접지 사이에 있는 커패시터를 <strong>접지 커패시터(grounded capacitor)</strong>라고 해요.</li>
+    </ul>
+    <p>입력 RC가 있는 CS 단에서 게이트(노드 X)와 드레인(노드 Y) 사이에 $C_F$가 있다고 해 봐요.</p>
+    <figure class="figure"><svg id="fig-floating-cf" viewBox="0 0 380 215" role="img" aria-label="입력 RC가 있는 CS 단에 게이트 노드 X와 드레인 노드 Y 사이를 잇는 커패시터 C_F를 경고색 선으로 그린 회로도. 두 노드는 색칠된 점이다."><path class="fig-ink" d="M215 30 h30 M230 30 V40"/><text class="fig-text" x="250" y="34" text-anchor="start">V<tspan baseline-shift="sub" font-size="10">DD</tspan></text><path class="fig-ink" d="M230.0 40.0 L230.0 44.0 L237.0 47.9 L223.0 55.8 L237.0 63.6 L223.0 71.4 L237.0 79.2 L223.0 87.1 L230.0 91.0 L230.0 95.0"/><path class="fig-ink" d="M230 95 V120"/><path class="fig-ink" d="M200 135 V165 M208 132 V168 M208 136 H230 V120 M208 164 H230 V180 M222 160 l6 4 l-6 4"/><path class="fig-ink" d="M230 180 V195"/><path class="fig-ink" d="M220 195 h20 M224 200 h12 M228 205 h4"/><text class="fig-text" x="238" y="160" text-anchor="start">M<tspan baseline-shift="sub" font-size="10">1</tspan></text><path class="fig-ink" d="M230 100 H330"/><path class="fig-ink" d="M300 100 V141.0 M288 141.0 h24 M288 149.0 h24 M300 149.0 V190"/><path class="fig-ink" d="M290 190 h20 M294 195 h12 M298 200 h4"/><circle class="fig-ink" cx="334" cy="100" r="4"/><text class="fig-text" x="330" y="88" text-anchor="start">V<tspan baseline-shift="sub" font-size="10">out</tspan></text><text class="fig-text" x="314" y="150" text-anchor="start">C<tspan baseline-shift="sub" font-size="10">L</tspan></text><text class="fig-text" x="244" y="72" text-anchor="start">R<tspan baseline-shift="sub" font-size="10">D</tspan></text><path class="fig-ink" d="M150 150 H200"/><path class="fig-ink" d="M150 150 V168.5 M138 168.5 h24 M138 176.5 h24 M150 176.5 V195"/><path class="fig-ink" d="M140 195 h20 M144 200 h12 M148 205 h4"/><text class="fig-text" x="164" y="182" text-anchor="start">C<tspan baseline-shift="sub" font-size="10">in</tspan></text><path class="fig-ink" d="M66.0 150.0 L70.0 150.0 L74.0 143.0 L82.0 157.0 L90.0 143.0 L98.0 157.0 L106.0 143.0 L114.0 157.0 L118.0 150.0 L122.0 150.0"/><path class="fig-ink" d="M122 150 H150"/><text class="fig-text" x="84" y="134" text-anchor="start">R<tspan baseline-shift="sub" font-size="10">S</tspan></text><path class="fig-ink" d="M44 150 H66"/><circle class="fig-ink" cx="40" cy="150" r="4"/><text class="fig-text" x="10" y="138" text-anchor="start">V<tspan baseline-shift="sub" font-size="10">in</tspan></text><path class="fig-ink" d="M150 150 V100 H176"/><path class="fig-danger" d="M176 100 H186.0 M186.0 88 v24 M194.0 88 v24 M194.0 100 H204"/><path class="fig-ink" d="M204 100 H230"/><text class="fig-text" x="178" y="80" text-anchor="start">C<tspan baseline-shift="sub" font-size="10">F</tspan></text><circle class="fig-dot" cx="150" cy="150" r="4.5"/><circle class="fig-dot" cx="230" cy="100" r="4.5"/><text class="fig-muted" x="134" y="144" text-anchor="start">X</text><text class="fig-muted" x="236" y="116" text-anchor="start">Y</text></svg>
+      <figcaption>경고색 선으로 그린 $C_F$는 두 단자 모두 접지에 닿지 않아요(슬라이드 s11).</figcaption></figure>
+    <ul>
+      <li>등가 저항은 바로 나와요. 입력 노드는 $R_S$(게이트 쪽은 무한대), 출력 노드는 $R_D \parallel r_O$예요.</li>
+      <li>등가 커패시턴스가 문제예요. $C_F$를 입력 노드에 넣을지, 출력 노드에 넣을지, 반씩 나눌지 분명하지 않아요.</li>
+      <li><a href="#s2-node-rule">노드마다 극점 규칙</a>은 노드와 접지 사이 소자가 분명할 때만 바로 쓸 수 있어요. 부유 커패시터가 있으면 다시 노드 방정식을 풀어야 하는 처지가 돼요.</li>
+    </ul>
+    <p>아이디어(슬라이드 s12): 노드 1과 노드 2 사이의 임피던스 $Z_F$를, 같은 효과를 내는 노드 1–접지 임피던스 $Z_1$과 노드 2–접지 임피던스 $Z_2$로 바꾸자는 거예요. 이렇게 나눌 수 있으면 노드마다 등가 임피던스를 분명히 구할 수 있어요. 이 변환이 <strong>밀러 정리(Miller's theorem)</strong>예요.</p>
+    <figure class="figure"><svg id="fig-floating-idea" viewBox="0 0 380 150" role="img" aria-label="왼쪽은 노드 1과 노드 2 사이에 경고색 테두리 상자 Z_F가 있고, 오른쪽은 노드 1과 접지 사이에 강조색 테두리 상자 Z_1, 노드 2와 접지 사이에 강조색 테두리 상자 Z_2가 있다. 노드는 색칠된 점이다."><path class="fig-ink" d="M30 40 H70 M110 40 H150"/><rect class="fig-danger" x="70" y="30" width="40" height="20"/><text class="fig-text" x="78" y="24" text-anchor="start">Z<tspan baseline-shift="sub" font-size="10">F</tspan></text><circle class="fig-dot" cx="30" cy="40" r="4.5"/><circle class="fig-dot" cx="150" cy="40" r="4.5"/><text class="fig-muted" x="14" y="64" text-anchor="start">노드 1</text><text class="fig-muted" x="132" y="64" text-anchor="start">노드 2</text><path class="fig-ink" d="M168 60 H198 M190 54 l8 6 l-8 6"/><circle class="fig-dot" cx="230" cy="40" r="4.5"/><circle class="fig-dot" cx="340" cy="40" r="4.5"/><path class="fig-ink" d="M230 40 V60 M230 90 V102 M340 40 V60 M340 90 V102"/><rect class="fig-accent" x="220" y="60" width="20" height="30"/><rect class="fig-accent" x="330" y="60" width="20" height="30"/><path class="fig-ink" d="M220 102 h20 M224 107 h12 M228 112 h4"/><path class="fig-ink" d="M330 102 h20 M334 107 h12 M338 112 h4"/><text class="fig-text" x="246" y="80" text-anchor="start">Z<tspan baseline-shift="sub" font-size="10">1</tspan></text><text class="fig-text" x="296" y="80" text-anchor="start">Z<tspan baseline-shift="sub" font-size="10">2</tspan></text><text class="fig-muted" x="214" y="30" text-anchor="start">노드 1</text><text class="fig-muted" x="322" y="30" text-anchor="start">노드 2</text><text class="fig-muted" x="232" y="138" text-anchor="start">식은 다음 시간</text></svg>
+      <figcaption>노드 사이의 $Z_F$를 접지로 가는 $Z_1$, $Z_2$ 두 개로 바꾸는 아이디어예요. $Z_1$, $Z_2$를 어떻게 정하는지는 다음 시간에 다뤄요.</figcaption></figure>
+  </div>
+  <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+    <blockquote>"노드와 노드 사이에 있는 이런 플로팅 커패시터 같은 경우에는 … 어떻게 해석해야 될지 어렵죠." (1014 P08·L511)</blockquote>
+    <blockquote>"노드와 노드 사이에 있는 커패시턴스를 노드와 그라운드 사이의 커패시턴스로 등가적으로 변환을 하자." (1014 P08·L515)</blockquote>
+    <p>여기서 이름만 밀러 정리라고 소개하고 수업을 마치셨어요. 변환식과 부유 커패시터를 넣은 극점 계산은 다음 시간에 이어서 해요(1014 P08·L521, L531).</p>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">노드 사이에 걸린 부유 커패시터는 어느 노드의 등가 커패시턴스인지 정할 수 없어서, 접지로 가는 둘로 바꾸려는 게 밀러 정리예요.</p>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>부유 커패시터(floating capacitor)</dt><dd>노드와 노드 사이에 있는 커패시터, 예: $C_F$</dd>
+      <dt>접지 커패시터(grounded capacitor)</dt><dd>노드와 접지 사이에 있는 커패시터</dd>
+      <dt>밀러 정리(Miller's theorem)</dt><dd>노드 사이 $Z_F$를 접지로 가는 $Z_1$, $Z_2$로 바꾸는 방법(식은 다음 시간)</dd>
+    </dl>
+  </div>
+</article>
+    </section>
+    <section id="s3"><h2>4. 요약 · 예고</h2>
+<article class="topic" id="s3-cheatsheet"><h3>11장 앞부분 핵심 정리</h3><div class="tags"><span class="tag date">1014 수업</span><span class="tag slide">L05 s3–11</span></div>
+  <p>이번 수업에 나온 식과 규칙을 한 표에 모았어요. 기호는 본문 토픽과 같아요.</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>무엇</th><th>식·규칙</th><th>조건·메모</th><th>토픽</th></tr></thead>
+    <tbody>
+      <tr><td>커패시터 임피던스</td><td>$Z_C = \frac{1}{Cs}$, $s = j\omega$</td><td>저주파에서는 무한대에 가까워 무시했어요. 주파수가 오르면 작아져요.</td><td><a href="#s0-rc-lowpass">2. RC 저역통과</a></td></tr>
+      <tr><td>RC 저역통과 필터</td><td>$\frac{V_{out}}{V_{in}} = \frac{1}{1 + RCs}$</td><td>앰프 롤오프와 같은 꼴이에요.</td><td><a href="#s0-rc-lowpass">2. RC 저역통과</a></td></tr>
+      <tr><td>CS 단 + 부하 커패시턴스</td><td>$V_{out} = -g_m V_{in} \left(R_D \parallel \frac{1}{C_L s}\right)$</td><td>출력 노드에 $R_D$와 $C_L$이 병렬로 보여요. $C_L$은 보통 다음 단의 입력 커패시턴스예요.</td><td><a href="#s0-cs-cl">3. CS + $C_L$</a></td></tr>
+      <tr><td>CS 단 전달 함수</td><td>$\frac{V_{out}}{V_{in}} = -\frac{g_m R_D}{1 + R_D C_L s}$</td><td>저주파 이득 $g_m R_D$인 저역통과 꼴이에요.</td><td><a href="#s0-cs-cl">3. CS + $C_L$</a></td></tr>
+      <tr><td>크기 응답</td><td>$\left|\frac{V_{out}}{V_{in}}\right| = \frac{g_m R_D}{\sqrt{R_D^2 C_L^2 \omega^2 + 1}}$</td><td>$s = j\omega$를 넣고 크기를 구해요.</td><td><a href="#s0-3db">4. −3 dB 대역폭</a></td></tr>
+      <tr><td>−3 dB 대역폭</td><td>$\omega_{-3dB} = \frac{1}{R_D C_L}$</td><td>이 주파수에서 크기가 $\frac{1}{\sqrt{2}}$배(약 −3 dB)예요. 그 위로는 −20 dB/dec로 떨어져요.</td><td><a href="#s0-3db">4. −3 dB 대역폭</a></td></tr>
+      <tr><td>이득–대역폭 트레이드오프</td><td>$R_D$를 키우면 이득 $g_m R_D$는 커지고 $\omega_{-3dB}$는 작아짐</td><td>무조건 이득이 큰 것이 좋은 설계는 아니에요. 커패시턴스는 작을수록 좋아요.</td><td><a href="#s0-3db">4. −3 dB 대역폭</a></td></tr>
+      <tr><td>일반 전달 함수</td><td>$H(s) = A_0 \frac{(1 + s/\omega_{z1})(1 + s/\omega_{z2}) \cdots}{(1 + s/\omega_{p1})(1 + s/\omega_{p2}) \cdots}$</td><td>$A_0$는 DC(저주파) 이득이에요. $\omega_p$, $\omega_z$는 극점·영점 주파수(크기)예요.</td><td><a href="#s1-transfer">5. 전달 함수</a></td></tr>
+      <tr><td>정현파 출력</td><td>$y(t) = A \left|H(j\omega)\right| \cos(\omega t + \angle H(j\omega))$</td><td>$\left|H(j\omega)\right|$는 크기 응답, $\angle H(j\omega)$는 위상 응답이에요. 앰프에서는 주로 크기를 봐요.</td><td><a href="#s1-transfer">5. 전달 함수</a></td></tr>
+      <tr><td>보데 규칙</td><td>극점 주파수를 지날 때마다 기울기 −20 dB/dec, 영점 주파수를 지날 때마다 +20 dB/dec</td><td>가로축은 로그 스케일, 세로축은 dB예요. 오차는 극점 근처에만 있고, 극점 하나당 최대 3 dB예요(겹친 두 극점이면 6 dB).</td><td><a href="#s1-bode">6. 보데 근사</a></td></tr>
+      <tr><td>보데 근사의 근거</td><td>$-20\log\sqrt{1 + (\omega/\omega_p)^2} \approx -20\log(\omega/\omega_p)$</td><td>$\omega \gg \omega_p$일 때. 10배마다 20 dB씩 떨어져요.</td><td><a href="#s1-bode">6. 보데 근사</a></td></tr>
+      <tr><td>입력 RC가 있는 CS 단</td><td>$\frac{V_{out}}{V_{in}} = \frac{-g_m R_D}{(1 + R_S C_{in} s)(1 + R_D C_L s)}$</td><td>입력 쪽 전압 분배와 출력 쪽 CS 이득을 곱해요. $R_S$는 앞단의 출력 임피던스예요.</td><td><a href="#s2-cs-two-poles">7. CS 두 극점</a></td></tr>
+      <tr><td>두 극점</td><td>$\omega_{p1} = \frac{1}{R_S C_{in}}$, $\omega_{p2} = \frac{1}{R_D C_L}$</td><td>입력 극점과 출력 극점이에요. 영점은 없어요.</td><td><a href="#s2-cs-two-poles">7. CS 두 극점</a></td></tr>
+      <tr><td>노드–극점 규칙</td><td>$\omega_p = \frac{1}{R_{eq} C_{eq}}$</td><td>노드마다 극점이 하나예요. $R_{eq}$, $C_{eq}$는 그 노드와 AC 접지 사이에 보이는 값이에요. 전달 함수 없이 약 10% 오차로 극점을 찾아요.</td><td><a href="#s2-node-rule">8. 노드와 극점</a></td></tr>
+      <tr><td>출력 노드 등가 저항</td><td>$R_D \parallel r_O \approx R_D$</td><td>$\lambda = 0$이면 $R_D$예요.</td><td><a href="#s2-node-rule">8. 노드와 극점</a></td></tr>
+      <tr><td>CG 단 입력 극점</td><td>$\omega_{p,X} = \frac{1}{\left(R_S \parallel \frac{1}{g_m}\right) C_{in}}$</td><td>소스 쪽을 들여다보면 $\frac{1}{g_m}$이 보여요($\lambda = 0$, 몸체 효과 무시).</td><td><a href="#s2-cg-poles">9. CG 극점</a></td></tr>
+      <tr><td>CG 단 출력 극점</td><td>$\omega_{p,Y} = \frac{1}{R_D C_L}$</td><td>낮은 극점에서 −20 dB/dec, 높은 극점에서 −40 dB/dec가 돼요.</td><td><a href="#s2-cg-poles">9. CG 극점</a></td></tr>
+      <tr><td>부유 커패시터</td><td>노드 사이의 $C_F$(임피던스 $Z_F$)</td><td>어느 노드의 $C_{eq}$에 넣을지 분명하지 않아요. 밀러 정리로 접지 임피던스 두 개로 바꿔요(다음 시간).</td><td><a href="#s2-floating">10. 부유 커패시터</a></td></tr>
+    </tbody>
+  </table></div>
+  <p>교수님이 수업 마지막에 이번 시간의 키포인트를 이렇게 정리했어요(1014 Part 08).</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>키포인트</th><th>내용</th></tr></thead>
+    <tbody>
+      <tr><td>주파수 응답이란</td><td>전달 함수의 크기를 주파수에 따라 구하는 것이에요.</td></tr>
+      <tr><td>극점 찾기</td><td>노드마다 극점이 하나 생기고, 극점 주파수는 그 노드의 등가 저항과 등가 커패시턴스를 곱한 값의 역수예요. 극점을 구하는 것이 가장 중요해요.</td></tr>
+      <tr><td>그리기</td><td>극점을 알면 보데 근사로 크기 응답을 그려요. 손으로는 이것으로 충분해요.</td></tr>
+      <tr><td>영점은 왜 덜 보나</td><td>영점은 보통 극점보다 훨씬 높은 주파수에 있어요. 이득이 떨어지기 시작하는 지점은 극점이 정해요.</td></tr>
+    </tbody>
+  </table></div>
+</article>
+
+<article class="topic" id="s3-next"><h3>다음 시간 예고</h3><div class="tags"><span class="tag date">1014 수업</span><span class="tag slide">L05 s12–26</span></div>
+  <ul>
+    <li>밀러 정리의 변환식과 부유 커패시터를 넣은 극점, 밀러 곱셈(Miller multiplication) — L05 s12–14</li>
+    <li>고역통과 필터와 AC 결합, 전형적인 주파수 응답 — L05 s15–17</li>
+    <li>트랜지스터 고주파 모델의 내부 커패시턴스($C_{GS}$, $C_{GD}$ 등) — L05 s18–23</li>
+    <li>transit frequency $f_T$ — L05 s24</li>
+    <li>각 증폭단(CS, CG, 폴로어, 캐스코드, 차동쌍)의 주파수 응답 — L05 s26 이후</li>
+    <li>중간시험 — 다음 주, 범위는 배운 데까지(정확한 경계는 말하지 않았어요)</li>
+  </ul>
+</article>
+
+<article class="topic" id="s3-links"><h3>함께 보면 좋은 자료</h3><div class="tags"><span class="tag date">1014 수업</span><span class="tag slide">L05 s3–11</span></div>
+  <ul>
+    <li><a href="복습문제_1014_Frequency_Response-문제.pdf">복습문제 10개 (PDF)</a></li>
+    <li><a href="복습문제_1014_Frequency_Response-답안.pdf">답안 (PDF)</a></li>
+    <li><a href="../../workbook/pdf/ch11-문제.pdf">11장 문제집 전체 (PDF)</a></li>
+    <li><a href="../0904/정리노트_0904_MOS_Small_Signal_Model.html#s3-cs-gain">0904 정리노트: CS 단의 이득 $g_m R_D$ 복습</a></li>
+  </ul>
+  <p>복습문제 10개는 이렇게 골랐어요.</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>문제</th><th>무엇을 연습하나</th></tr></thead>
+    <tbody>
+      <tr><td>E11.03</td><td>영상 시스템의 대역폭이 부족하면 무슨 일이 생기는지 그림으로 확인해요. 속도와 대역폭은 같은 이야기예요.</td></tr>
+      <tr><td>E11.04</td><td>부하 커패시턴스가 있는 CS 단의 전달 함수와 크기 응답을 유도해요(수업 칠판 유도 그대로).</td></tr>
+      <tr><td>P11.01</td><td>$R_D = 1\ \mathrm{k\Omega}$, $C_L = 1\ \mathrm{pF}$인 CS 단에서 이득이 10% 떨어지는 주파수를 계산해요.</td></tr>
+      <tr><td>P11.02</td><td>1 GHz 대역폭·2 mW 전력 조건에서 CE 단의 최대 이득을 구해요. 이득–대역폭 트레이드오프예요.</td></tr>
+      <tr><td>P11.06</td><td>극점 100 MHz·10 GHz, 영점 1 GHz의 보데 선도를 그려요. 기울기가 −20, 0, −20 dB/dec 순으로 바뀌어요.</td></tr>
+      <tr><td>P11.09</td><td>같은 CS 단 두 개를 이으면 극점이 겹쳐 −40 dB/dec가 돼요. 전달 함수를 곱하면 dB는 더해져요.</td></tr>
+      <tr><td>E11.08</td><td>입력 RC가 있는 CS 단의 두 극점 $\frac{1}{R_S C_{in}}$, $\frac{1}{R_D C_L}$을 구해요(슬라이드 s9).</td></tr>
+      <tr><td>E11.09</td><td>CG 단의 입력 극점에서 소스 쪽 $\frac{1}{g_m}$이 $R_S$와 병렬로 들어가요(슬라이드 s10).</td></tr>
+      <tr><td>X11.09</td><td>CG 단에서 출력 극점이 입력 극점의 10배가 되는 $R_D$를 역산해요.</td></tr>
+      <tr><td>P11.12</td><td>소스에 기생 저항 $R_p$가 붙은 CG 단이에요. 입력 노드 저항이 $R_S \parallel (R_p + \frac{1}{g_m})$로 바뀌어요.</td></tr>
+    </tbody>
+  </table></div>
+</article>
+    </section>
+  </main>
+  <footer>출처: 권익진 교수님 강의자료(Lec5) · 수업 녹음 전사(1014) · B. Razavi, <i>Microelectronics</i>, 2nd ed. (Wiley) 11장.</footer>
+    </div>
+    <aside class="panel panel-right" id="panel-right" aria-labelledby="panel-right-title">
+      <div class="panel-resize" data-side="right" role="separator" aria-orientation="vertical" aria-controls="panel-right" aria-label="오른쪽 패널 너비 조절. 좌우 화살표로 조절, Home으로 자동 너비" tabindex="0"></div>
+      <div class="panel-inner">
+        <div class="panel-head">
+          <h2 id="panel-right-title">페이지 요약</h2>
+          <button class="text-btn panel-close" type="button" data-panel-close>닫기</button>
+        </div>
+        <p class="panel-sub" id="sum-for">전체 흐름</p>
+        <p class="panel-empty" id="sum-empty">페이지를 넘기면 그 페이지의 핵심 식과 용어가 여기에 나옵니다.</p>
+        <div class="sums"></div>
+      </div>
+    </aside>
+  </div>
+  <div class="scrim" id="panel-scrim" aria-hidden="true"></div>
+  <nav class="pager" aria-label="화면 이동">
+    <div class="pager-inner">
+      <button class="btn btn-ghost" id="pager-prev" type="button">이전</button>
+      <span class="pager-count" id="pager-count"></span>
+      <button class="btn btn-primary" id="pager-next" type="button">시작하기</button>
+    </div>
+  </nav>
+  <p class="sr-only" id="pager-status" aria-live="polite"></p>
+  <script id="widget-gainbw-ui">(function () {
+var GM = 2e-3; /* g_m 고정: 2 mS */
+var P = { x0: 64, x1: 540, y0: 18, y1: 250, lf0: 5, lf1: 11, d0: -20, d1: 50 };
+function gainMag(R, C, f) { var w = 2 * Math.PI * f; return GM * R / Math.sqrt(R * R * C * C * w * w + 1); }
+function toDb(x) { return 20 * Math.log(x) / Math.LN10; }
+function f3db(R, C) { return 1 / (2 * Math.PI * R * C); }
+function xOf(f) { return P.x0 + (P.x1 - P.x0) * (Math.log(f) / Math.LN10 - P.lf0) / (P.lf1 - P.lf0); }
+function yOf(d) { return P.y1 - (P.y1 - P.y0) * (d - P.d0) / (P.d1 - P.d0); }
+function r1(v) { return (Math.round(v * 10) / 10).toString(); }
+function fmtR(R) { return R >= 1e3 ? r1(R / 1e3) + ' kΩ' : r1(R) + ' Ω'; }
+function fmtC(C) { return C >= 1e-12 ? r1(C * 1e12) + ' pF' : r1(C * 1e15) + ' fF'; }
+function fmtF(f) {
+  if (f >= 1e9) return r1(f / 1e9) + ' GHz';
+  if (f >= 1e6) return r1(f / 1e6) + ' MHz';
+  if (f >= 1e3) return r1(f / 1e3) + ' kHz';
+  return r1(f) + ' Hz';
+}
+function curvePath(R, C) {
+  var s = '', pen = false, N = 240;
+  for (var i = 0; i <= N; i++) {
+    var lf = P.lf0 + (P.lf1 - P.lf0) * i / N, f = Math.pow(10, lf), d = toDb(gainMag(R, C, f));
+    if (d < P.d0 || d > P.d1) { pen = false; continue; }
+    s += (pen ? 'L' : 'M') + r1(xOf(f)) + ' ' + r1(yOf(d));
+    pen = true;
+  }
+  return s;
+}
+function axesSvg() {
+  var s = '', names = ['100k', '1M', '10M', '100M', '1G', '10G', '100G'];
+  s += '<line class="axis" x1="' + P.x0 + '" y1="' + P.y1 + '" x2="' + P.x1 + '" y2="' + P.y1 + '"/>';
+  s += '<line class="axis" x1="' + P.x0 + '" y1="' + P.y0 + '" x2="' + P.x0 + '" y2="' + P.y1 + '"/>';
+  for (var k = 0; k <= 6; k++) {
+    var x = r1(xOf(Math.pow(10, P.lf0 + k)));
+    s += '<line class="axis" x1="' + x + '" y1="' + P.y1 + '" x2="' + x + '" y2="' + (P.y1 + 5) + '"/>';
+    s += '<text class="tick" x="' + x + '" y="' + (P.y1 + 18) + '" text-anchor="middle">' + names[k] + '</text>';
+  }
+  for (var d = P.d0; d <= P.d1; d += 10) {
+    var y = r1(yOf(d));
+    s += '<line class="axis" x1="' + (P.x0 - 5) + '" y1="' + y + '" x2="' + P.x0 + '" y2="' + y + '"/>';
+    s += '<text class="tick" x="' + (P.x0 - 8) + '" y="' + (yOf(d) + 4).toFixed(1) + '" text-anchor="end">' + d + '</text>';
+  }
+  s += '<text class="tick" x="' + ((P.x0 + P.x1) / 2) + '" y="' + (P.y1 + 40) + '" text-anchor="middle">주파수 (Hz, 로그 축)</text>';
+  s += '<text class="tick" x="' + (P.x0 + 6) + '" y="' + (P.y0 + 4) + '">이득 (dB)</text>';
+  return s;
+}
+function plotSvg(R, C, refR, refC) {
+  var s = axesSvg();
+  if (refR && (refR !== R || refC !== C)) s += '<path class="plot-truth" d="' + curvePath(refR, refC) + '"/>';
+  s += '<path class="plot-fit" d="' + curvePath(R, C) + '"/>';
+  var f3 = f3db(R, C), d3 = toDb(GM * R) - toDb(Math.SQRT2);
+  var x = r1(xOf(f3)), y = r1(yOf(d3));
+  s += '<line class="mark-ml" x1="' + x + '" y1="' + y + '" x2="' + x + '" y2="' + P.y1 + '"/>';
+  s += '<circle class="pt-train" cx="' + x + '" cy="' + y + '" r="5"/>';
+  return s;
+}
+function summary(R, C) {
+  var A = GM * R;
+  return { gain: r1(A), gainDb: toDb(A).toFixed(1), f3: fmtF(f3db(R, C)) };
+}
+if (typeof module !== 'undefined') { module.exports = { GM: GM, plotSvg: plotSvg, summary: summary, fmtR: fmtR, fmtC: fmtC, f3db: f3db }; }
+  var rd = document.getElementById('gainbw-rd'), cl = document.getElementById('gainbw-cl');
+  var svg = document.getElementById('gainbw-plot');
+  if (!rd || !cl || !svg) return;
+  var REF_R = 1e4, REF_C = 1e-13;
+  function update() {
+    var R = Math.pow(10, parseFloat(rd.value)), C = Math.pow(10, parseFloat(cl.value));
+    svg.innerHTML = plotSvg(R, C, REF_R, REF_C);
+    var s = summary(R, C);
+    document.getElementById('gainbw-rd-val').textContent = fmtR(R);
+    document.getElementById('gainbw-cl-val').textContent = fmtC(C);
+    document.getElementById('gainbw-gain').textContent = s.gain + ' (' + s.gainDb + ' dB)';
+    document.getElementById('gainbw-f3').textContent = s.f3;
+  }
+  rd.addEventListener('input', update);
+  cl.addEventListener('input', update);
+  update();
+})();</script>
+  <script id="widget-cs2p-ui">(function () {
+var CS2P = (function () {
+  var GM = 5e-3;            // g_m 고정 5 mS
+  var W0 = 6, W1 = 13;      // log10(ω) 축 범위 (rad/s)
+  var DB0 = -60, DB1 = 50;  // dB 축 범위
+  var X0 = 56, X1 = 545, Y0 = 14, Y1 = 258;
+  var SUP = { '-': '⁻', '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹' };
+  function sup(n) { return String(n).split('').map(function (c) { return SUP[c]; }).join(''); }
+  function xOf(lw) { return X0 + (lw - W0) / (W1 - W0) * (X1 - X0); }
+  function yOf(db) { return Y0 + (DB1 - db) / (DB1 - DB0) * (Y1 - Y0); }
+  function calc(p) {
+    var wp1 = 1 / (p.RS * p.Cin), wp2 = 1 / (p.RD * p.CL), A0 = GM * p.RD;
+    return { wp1: wp1, wp2: wp2, A0: A0, A0dB: 20 * Math.log10(A0) };
+  }
+  function exactDb(r, w) {
+    return r.A0dB - 10 * Math.log10(1 + Math.pow(w / r.wp1, 2)) - 10 * Math.log10(1 + Math.pow(w / r.wp2, 2));
+  }
+  function bodeDb(r, w) {
+    return r.A0dB - 20 * Math.max(0, Math.log10(w / r.wp1)) - 20 * Math.max(0, Math.log10(w / r.wp2));
+  }
+  function path(f, r) {
+    var d = '', pen = false, N = 350;
+    for (var i = 0; i <= N; i++) {
+      var lw = W0 + (W1 - W0) * i / N, db = f(r, Math.pow(10, lw));
+      if (db < DB0 || db > DB1) { pen = false; continue; }
+      d += (pen ? 'L' : 'M') + xOf(lw).toFixed(1) + ' ' + yOf(db).toFixed(1);
+      pen = true;
+    }
+    return d;
+  }
+  function eng(v, unit) {
+    var pre = [[1e9, 'G'], [1e6, 'M'], [1e3, 'k'], [1, ''], [1e-3, 'm'], [1e-12, 'p'], [1e-15, 'f']];
+    if (unit === 'F') pre = [[1e-12, 'p'], [1e-15, 'f']];
+    for (var i = 0; i < pre.length; i++) {
+      if (v >= pre[i][0] * 0.9995 || i === pre.length - 1) {
+        var x = v / pre[i][0];
+        return (x >= 100 ? x.toFixed(0) : x >= 10 ? x.toFixed(1) : x.toFixed(2)) + ' ' + pre[i][1] + unit;
+      }
+    }
+  }
+  function sci(w) {
+    var e = Math.floor(Math.log10(w) + 1e-9), m = w / Math.pow(10, e);
+    return m.toFixed(2) + '×10' + sup(e) + ' rad/s';
+  }
+  function hz(w) { return eng(w / (2 * Math.PI), 'Hz'); }
+  function marker(lw, cls, label, dy) {
+    if (lw < W0 || lw > W1) return '';
+    var x = xOf(lw).toFixed(1);
+    return '<line class="' + cls + '" x1="' + x + '" y1="' + Y0 + '" x2="' + x + '" y2="' + Y1 + '"/>' +
+      '<text class="fig-text" x="' + (xOf(lw) + 4).toFixed(1) + '" y="' + (Y0 + 14 + dy) + '">' + label + '</text>';
+  }
+  function svg(p) {
+    var r = calc(p), s = '';
+    for (var lw = W0; lw <= W1; lw++) {
+      var x = xOf(lw).toFixed(1);
+      s += '<line class="axis" opacity="0.35" x1="' + x + '" y1="' + Y0 + '" x2="' + x + '" y2="' + Y1 + '"/>';
+      s += '<text class="tick" text-anchor="middle" x="' + x + '" y="' + (Y1 + 16) + '">10' + sup(lw) + '</text>';
+    }
+    for (var db = DB0; db <= DB1; db += 20) {
+      var y = yOf(db).toFixed(1);
+      s += '<line class="axis" opacity="0.35" x1="' + X0 + '" y1="' + y + '" x2="' + X1 + '" y2="' + y + '"/>';
+      s += '<text class="tick" text-anchor="end" x="' + (X0 - 6) + '" y="' + (yOf(db) + 4).toFixed(1) + '">' + db + '</text>';
+    }
+    s += '<line class="axis" x1="' + X0 + '" y1="' + Y1 + '" x2="' + X1 + '" y2="' + Y1 + '"/>';
+    s += '<line class="axis" x1="' + X0 + '" y1="' + Y0 + '" x2="' + X0 + '" y2="' + Y1 + '"/>';
+    s += '<text class="tick" text-anchor="middle" x="' + ((X0 + X1) / 2) + '" y="' + (Y1 + 34) + '">ω (rad/s, 로그 눈금)</text>';
+    s += '<text class="tick" x="6" y="' + (Y0 + 4) + '">dB</text>';
+    var l1 = Math.log10(r.wp1), l2 = Math.log10(r.wp2), close = Math.abs(l1 - l2) < 0.6;
+    s += marker(l1, 'mark-ml', 'ωₚ₁', 0);
+    s += marker(l2, 'mark-map', 'ωₚ₂', close ? 16 : 0);
+    s += '<path class="plot-fit" d="' + path(exactDb, r) + '"/>';
+    s += '<path class="plot-truth" d="' + path(bodeDb, r) + '"/>';
+    return s;
+  }
+  return { GM: GM, calc: calc, svg: svg, eng: eng, sci: sci, hz: hz, exactDb: exactDb, bodeDb: bodeDb };
+})();
+
+
+  var root = document.getElementById('widget-cs2p');
+  if (!root) return;
+  var plot = document.getElementById('cs2p-plot');
+  var keys = [['rs', 'RS', 'Ω'], ['cin', 'Cin', 'F'], ['rd', 'RD', 'Ω'], ['cl', 'CL', 'F']];
+  function el(id) { return document.getElementById('cs2p-' + id); }
+  function draw() {
+    var p = {};
+    keys.forEach(function (k) {
+      p[k[1]] = Math.pow(10, parseFloat(el(k[0]).value));
+      el(k[0] + '-val').textContent = CS2P.eng(p[k[1]], k[2]);
+    });
+    var r = CS2P.calc(p);
+    plot.innerHTML = CS2P.svg(p);
+    el('p1').textContent = CS2P.sci(r.wp1) + ' (' + CS2P.hz(r.wp1) + ')';
+    el('p2').textContent = CS2P.sci(r.wp2) + ' (' + CS2P.hz(r.wp2) + ')';
+    el('a0').textContent = r.A0.toFixed(1) + ' (' + r.A0dB.toFixed(1) + ' dB)';
+    var ratio = r.wp1 / r.wp2;
+    el('out').textContent = ratio > 1.5 ? '출력 극점이 먼저 와요' : ratio < 1 / 1.5 ? '입력 극점이 먼저 와요' : '두 극점이 거의 겹쳐서 바로 −40 dB/dec로 꺾여요';
+  }
+  keys.forEach(function (k) { el(k[0]).addEventListener('input', draw); });
+  draw();
+})();</script>
+  <script id="theme-ui">
+    (function () {
+      const root = document.documentElement;
+      const btn = document.getElementById('theme-toggle');
+      const sysDark = matchMedia('(prefers-color-scheme: dark)');
+      const KEY = 'od-theme';
+      const isDark = () => root.dataset.theme ? root.dataset.theme === 'dark' : sysDark.matches;
+      function label() {
+        const next = isDark() ? '라이트 모드로 전환' : '다크 모드로 전환';
+        btn.setAttribute('aria-label', next);
+        btn.title = next;
+      }
+      btn.addEventListener('click', () => {
+        const t = isDark() ? 'light' : 'dark';
+        // 시스템 설정과 같아지면 저장을 지워 다시 시스템을 따른다
+        if ((t === 'dark') === sysDark.matches) { delete root.dataset.theme; try { localStorage.removeItem(KEY); } catch (e) {} }
+        else { root.dataset.theme = t; try { localStorage.setItem(KEY, t); } catch (e) { /* 저장 불가: 이번 방문에만 유지 */ } }
+        label();
+      });
+      sysDark.addEventListener('change', label);
+      window.addEventListener('storage', (e) => {
+        if (e.key !== KEY) return;
+        if (e.newValue === 'light' || e.newValue === 'dark') root.dataset.theme = e.newValue; else delete root.dataset.theme;
+        label();
+      });
+      label();
+    })();
+  </script>
+  <script id="panels-ui">
+    (function () {
+      const body = document.body;
+      const layout = document.querySelector('.layout');
+      const kind = body.dataset.panels;
+      const panels = { left: document.getElementById('panel-left'), right: document.getElementById('panel-right') };
+      const toggles = { left: document.getElementById('toggle-left'), right: document.getElementById('toggle-right') };
+      const scrim = document.getElementById('panel-scrim');
+      const blockers = [document.querySelector('.topbar'), document.querySelector('.content'), document.querySelector('.pager')];
+      const wideMq = matchMedia('(min-width: 1024px)');
+      const roomyMq = matchMedia('(min-width: 1280px)');
+      const store = {
+        get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+        set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* 저장 불가: 이번 방문에만 유지 */ } }
+      };
+      const PREF = 'od-panels:' + kind;
+      // 팩마다 문제·토픽 id가 p1, s1-…로 겹치므로 진행 기록은 기간별로 나눈다
+      const RANGE = body.dataset.range || '';
+      const ICON_TODO = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg>';
+      const ICON_DONE = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 10"/></svg>';
+      let overlay = null;
+
+      // ---------- 열고 닫기 ----------
+      function docked() {
+        const pref = store.get(PREF, {});
+        return { left: pref.left ?? true, right: pref.right ?? roomyMq.matches };
+      }
+      function sync() {
+        const wide = wideMq.matches;
+        const d = docked();
+        ['left', 'right'].forEach((side) => {
+          const open = wide ? d[side] : overlay === side;
+          const p = panels[side];
+          layout.dataset[side] = open ? 'open' : 'closed';
+          p.classList.toggle('is-open', !wide && open);
+          p.inert = !open;
+          if (!wide && open) { p.setAttribute('role', 'dialog'); p.setAttribute('aria-modal', 'true'); }
+          else { p.removeAttribute('role'); p.removeAttribute('aria-modal'); }
+          toggles[side].setAttribute('aria-expanded', String(open));
+        });
+        const drawer = !wide && overlay !== null;
+        scrim.classList.toggle('is-on', drawer);
+        body.classList.toggle('drawer-open', drawer);
+        blockers.forEach((el) => { el.inert = drawer; });
+      }
+      function openDrawer(side) {
+        overlay = side;
+        sync();
+        requestAnimationFrame(() => panels[side].querySelector('[data-panel-close]').focus());
+      }
+      function closeDrawer(refocus) {
+        if (overlay === null) return;
+        const side = overlay;
+        overlay = null;
+        sync();
+        if (refocus) toggles[side].focus();
+      }
+      function toggle(side) {
+        if (wideMq.matches) {
+          const d = docked();
+          d[side] = !d[side];
+          store.set(PREF, d);
+          sync();
+          if (d[side]) { const p = panels[side]; p.classList.remove('is-shown'); void p.offsetWidth; p.classList.add('is-shown'); }
+        } else if (overlay === side) closeDrawer(true);
+        else openDrawer(side);
+      }
+
+      toggles.left.addEventListener('click', () => toggle('left'));
+      toggles.right.addEventListener('click', () => toggle('right'));
+      scrim.addEventListener('click', () => closeDrawer(true));
+      document.querySelectorAll('[data-panel-close]').forEach((b) => b.addEventListener('click', () => closeDrawer(true)));
+      panels.left.addEventListener('click', (e) => { if (e.target.closest('.toc a')) closeDrawer(false); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && overlay !== null) { e.preventDefault(); closeDrawer(true); } });
+
+      // ---------- 패널 너비: 기본은 화면 폭에 맞춰 자동, 경계를 끌면 직접 조절 ----------
+      const WIDTH = { left: { min: 220, max: 480, prop: '--panel-l-user' }, right: { min: 280, max: 720, prop: '--panel-r-user' } };
+      function applyWidths() {
+        const w = store.get(PREF + ':w', {});
+        ['left', 'right'].forEach((side) => {
+          if (w[side]) layout.style.setProperty(WIDTH[side].prop, w[side] + 'px');
+          else layout.style.removeProperty(WIDTH[side].prop);
+        });
+      }
+      function maxFor(side) {
+        const other = side === 'left' ? panels.right : panels.left;
+        const otherW = layout.dataset[side === 'left' ? 'right' : 'left'] === 'open' ? other.getBoundingClientRect().width : 0;
+        return Math.max(WIDTH[side].min, Math.min(WIDTH[side].max, window.innerWidth - otherW - 400));
+      }
+      function setWidth(side, px, save) {
+        const v = Math.round(Math.min(Math.max(px, WIDTH[side].min), maxFor(side)));
+        layout.style.setProperty(WIDTH[side].prop, v + 'px');
+        panels[side].querySelector('.panel-resize').setAttribute('aria-valuenow', String(v));
+        if (save) { const w = store.get(PREF + ':w', {}); w[side] = v; store.set(PREF + ':w', w); }
+      }
+      function resetWidth(side) {
+        const w = store.get(PREF + ':w', {});
+        delete w[side];
+        store.set(PREF + ':w', w);
+        layout.style.removeProperty(WIDTH[side].prop);
+      }
+      document.querySelectorAll('.panel-resize').forEach((handle) => {
+        const side = handle.dataset.side;
+        const dir = side === 'left' ? 1 : -1;
+        handle.setAttribute('aria-valuemin', String(WIDTH[side].min));
+        handle.setAttribute('aria-valuemax', String(WIDTH[side].max));
+        handle.addEventListener('pointerdown', (e) => {
+          if (!wideMq.matches || e.button !== 0) return;
+          e.preventDefault();
+          const startX = e.clientX;
+          const startW = panels[side].getBoundingClientRect().width;
+          handle.setPointerCapture(e.pointerId);
+          body.classList.add('is-resizing');
+          const move = (ev) => setWidth(side, startW + dir * (ev.clientX - startX), false);
+          const up = () => {
+            handle.removeEventListener('pointermove', move);
+            handle.removeEventListener('pointerup', up);
+            handle.removeEventListener('pointercancel', up);
+            body.classList.remove('is-resizing');
+            setWidth(side, panels[side].getBoundingClientRect().width, true);
+          };
+          handle.addEventListener('pointermove', move);
+          handle.addEventListener('pointerup', up);
+          handle.addEventListener('pointercancel', up);
+        });
+        handle.addEventListener('dblclick', () => resetWidth(side));
+        handle.addEventListener('keydown', (e) => {
+          const step = e.shiftKey ? 64 : 16;
+          const cur = panels[side].getBoundingClientRect().width;
+          if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+            e.preventDefault();
+            e.stopPropagation();
+            setWidth(side, cur + (e.key === 'ArrowRight' ? step : -step) * dir, true);
+          } else if (e.key === 'Home') { e.preventDefault(); resetWidth(side); }
+        });
+      });
+      applyWidths();
+      const onMq = () => { overlay = null; sync(); };
+      wideMq.addEventListener('change', onMq);
+      roomyMq.addEventListener('change', onMq);
+
+      // ---------- 목차의 진행 표시 ----------
+      const progressN = document.getElementById('progress-n');
+      const progressBar = document.getElementById('progress-bar');
+      const progressTotal = document.getElementById('progress-total');
+      function markToc(done, total, doneLabel) {
+        panels.left.querySelectorAll('.toc-list a').forEach((a) => {
+          const id = decodeURIComponent(a.getAttribute('href').slice(1));
+          let mark = a.querySelector('.toc-mark');
+          if (!mark) {
+            mark = document.createElement('span');
+            mark.className = 'toc-mark';
+            mark.setAttribute('aria-hidden', 'true');
+            const state = document.createElement('span');
+            state.className = 'sr-only toc-state';
+            a.append(mark, state);
+          }
+          const isDone = done.has(id);
+          mark.classList.toggle('is-done', isDone);
+          mark.innerHTML = isDone ? ICON_DONE : ICON_TODO;
+          a.querySelector('.toc-state').textContent = isDone ? ' (' + doneLabel + ')' : '';
+        });
+        progressN.textContent = String(done.size);
+        progressTotal.textContent = String(total);
+        progressBar.style.transform = 'scaleX(' + (total ? done.size / total : 0) + ')';
+      }
+      function revealCurrent() {
+        const link = panels.left.querySelector('.toc-list a[aria-current="true"]');
+        if (link && layout.dataset.left === 'open') link.scrollIntoView({ block: 'nearest' });
+      }
+
+      // ---------- 복습문제: 오른쪽 = 원문 · 힌트 · 풀이 ----------
+      function setupReview() {
+        const KEY = 'od-review-solved:' + RANGE;
+        const cards = Array.from(document.querySelectorAll('main article.card'));
+        const aids = panels.right.querySelector('.aids');
+        const sub = document.getElementById('aid-for');
+        const empty = panels.right.querySelector('.panel-empty');
+        const btn = document.getElementById('solved-btn');
+        const groups = {};
+        const solved = new Set(store.get(KEY, []).filter((id) => cards.some((c) => c.id === id)));
+        cards.forEach((card) => {
+          const g = document.createElement('div');
+          g.className = 'aid';
+          g.hidden = true;
+          card.querySelectorAll(':scope > details').forEach((d) => g.appendChild(d));
+          aids.appendChild(g);
+          groups[card.id] = g;
+        });
+        let curId = null;
+        function paintBtn() {
+          const on = solved.has(curId);
+          btn.setAttribute('aria-pressed', String(on));
+          btn.innerHTML = (on ? ICON_DONE : ICON_TODO) + '<span>' + (on ? '푼 문제 · 표시 해제' : '푼 문제로 표시') + '</span>';
+        }
+        btn.addEventListener('click', () => {
+          if (!curId) return;
+          if (solved.has(curId)) solved.delete(curId); else solved.add(curId);
+          store.set(KEY, Array.from(solved));
+          paintBtn();
+          markToc(solved, cards.length, '푼 문제');
+        });
+        document.addEventListener('od:screen', (e) => {
+          const s = e.detail.screen;
+          curId = s.matches('article.card') ? s.id : null;
+          Object.keys(groups).forEach((id) => { groups[id].hidden = id !== curId; });
+          empty.hidden = Boolean(curId);
+          btn.hidden = !curId;
+          sub.textContent = curId ? ((s.querySelector('h3') || {}).textContent || '').trim() : '';
+          sub.hidden = !curId;
+          if (curId) paintBtn();
+          panels.right.querySelector('.panel-inner').scrollTop = 0;
+          markToc(solved, cards.length, '푼 문제');
+          revealCurrent();
+        });
+      }
+
+      // ---------- 정리노트: 오른쪽 = 페이지(토픽)별 요약 ----------
+      function setupNote() {
+        const KEY = 'od-note-read:' + RANGE;
+        const topics = Array.from(document.querySelectorAll('main article.topic'));
+        const read = new Set(store.get(KEY, []).filter((id) => topics.some((t) => t.id === id)));
+        // 조각의 <div class="sum" hidden> 을 오른쪽 패널로 옮긴다. 없으면 안내 문구만 보인다.
+        const box = panels.right.querySelector('.sums');
+        const sums = {};
+        topics.forEach((t) => {
+          const el = t.querySelector(':scope > .sum');
+          if (!el) return;
+          el.hidden = true;
+          box.appendChild(el);
+          sums[t.id] = el;
+        });
+        const sub = document.getElementById('sum-for');
+        const empty = document.getElementById('sum-empty');
+        document.addEventListener('od:screen', (e) => {
+          const s = e.detail.screen;
+          const key = s.matches('article.topic') ? s.id : 'intro';
+          Object.keys(sums).forEach((id) => { sums[id].hidden = id !== key; });
+          empty.hidden = Boolean(sums[key]);
+          sub.textContent = key === 'intro' ? '전체 흐름' : ((s.querySelector('h3') || {}).textContent || '').trim();
+          if (s.matches('article.topic') && !read.has(s.id)) { read.add(s.id); store.set(KEY, Array.from(read)); }
+          panels.right.querySelector('.panel-inner').scrollTop = 0;
+          markToc(read, topics.length, '읽음');
+          revealCurrent();
+        });
+      }
+
+      if (kind === 'review') setupReview();
+      if (kind === 'note') setupNote();
+      sync();
+    })();
+  </script>
+  <script id="pager-ui">
+    (function () {
+      const root = document.documentElement;
+      const main = document.querySelector('main');
+      const hero = main.querySelector('.hero');
+      const screens = [hero].concat(Array.from(main.querySelectorAll(document.body.dataset.screens)));
+      if (screens.length < 2) { root.classList.remove('js'); return; }
+      screens.forEach((s) => s.classList.add('screen'));
+
+      const last = screens.length - 1;
+      const prevBtn = document.getElementById('pager-prev');
+      const nextBtn = document.getElementById('pager-next');
+      const count = document.getElementById('pager-count');
+      const bar = document.getElementById('pager-bar');
+      const status = document.getElementById('pager-status');
+      const toc = document.querySelector('#panel-left .toc');
+      const scroller = document.querySelector('.content');
+      const titleOf = (s) => ((s.querySelector('h3') || s.querySelector('h1') || {}).textContent || '').trim();
+      let cur = -1;
+
+      // 목차: 섹션 링크 아래에 화면(토픽·카드) 목록을 붙인다
+      const tocLinks = [];
+      Array.from(toc.querySelectorAll(':scope > a')).forEach((a) => {
+        const sec = document.getElementById(decodeURIComponent(a.getAttribute('href').slice(1)));
+        const group = document.createElement('div');
+        group.className = 'toc-group';
+        a.replaceWith(group);
+        group.appendChild(a);
+        if (!sec) return;
+        const list = document.createElement('ol');
+        list.className = 'toc-list';
+        screens.forEach((s, i) => {
+          if (!sec.contains(s)) return;
+          const li = document.createElement('li');
+          const link = document.createElement('a');
+          link.href = '#' + s.id;
+          link.innerHTML = '<span class="toc-title"></span>';
+          link.firstChild.textContent = titleOf(s);
+          li.appendChild(link);
+          list.appendChild(li);
+          tocLinks[i] = link;
+        });
+        group.appendChild(list);
+      });
+
+      function indexFor(hash) {
+        const id = decodeURIComponent((hash || '').replace(/^#/, ''));
+        const el = id && document.getElementById(id);
+        if (!el || !main.contains(el)) return { i: 0 };
+        const i = screens.findIndex((s) => s.contains(el) || el.contains(s));
+        return { i: Math.max(i, 0), target: i >= 0 && screens[i].contains(el) && screens[i] !== el ? el : null };
+      }
+
+      function render(i, target) {
+        const dir = cur < 0 ? '' : i > cur ? 'enter-next' : 'enter-prev';
+        if (i !== cur) {
+          if (cur >= 0) screens[cur].classList.remove('is-current', 'enter-next', 'enter-prev');
+          main.querySelectorAll(':scope > section.is-on').forEach((sec) => sec.classList.remove('is-on'));
+          const s = screens[i];
+          const sec = s.closest('section');
+          if (sec) sec.classList.add('is-on');
+          s.classList.add('is-current');
+          if (dir) { s.classList.remove('enter-next', 'enter-prev'); void s.offsetWidth; s.classList.add(dir); }
+          cur = i;
+          document.body.classList.toggle('at-end', i === last);
+          prevBtn.disabled = i === 0;
+          nextBtn.textContent = i === 0 ? '시작하기' : i === last ? '처음으로' : '다음';
+          count.textContent = i === 0 ? '' : i + ' / ' + last;
+          bar.style.transform = 'scaleX(' + (i / last) + ')';
+          status.textContent = i === 0 ? titleOf(s) : i + ' / ' + last + ', ' + titleOf(s);
+          tocLinks.forEach((link, k) => link && link.setAttribute('aria-current', String(k === i)));
+          document.dispatchEvent(new CustomEvent('od:screen', { detail: { index: i, screen: s } }));
+        }
+        if (target) target.scrollIntoView({ block: 'start' });
+        else scroller.scrollTo(0, 0);
+      }
+
+      function go(i) {
+        i = Math.min(Math.max(i, 0), last);
+        if (i === cur) return;
+        const url = i === 0 ? location.pathname + location.search : '#' + screens[i].id;
+        history.pushState(null, '', url);
+        render(i);
+      }
+
+      prevBtn.addEventListener('click', () => go(cur - 1));
+      nextBtn.addEventListener('click', () => go(cur === last ? 0 : cur + 1));
+      const fromUrl = () => { const r = indexFor(location.hash); render(r.i, r.target); };
+      window.addEventListener('hashchange', fromUrl);
+      window.addEventListener('popstate', fromUrl);
+
+      document.addEventListener('keydown', (e) => {
+        if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || document.body.classList.contains('drawer-open')) return;
+        if (e.target.closest('input, select, textarea, [contenteditable="true"]')) return;
+        if (e.key === 'ArrowRight') { e.preventDefault(); go(cur + 1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); }
+      });
+
+      // 좌우로 밀어서 넘기기 (가로로 스크롤되는 영역은 제외)
+      let sx = 0, sy = 0, skip = true;
+      main.addEventListener('touchstart', (e) => {
+        const t = e.touches[0];
+        sx = t.clientX; sy = t.clientY;
+        skip = e.touches.length > 1 || Boolean(e.target.closest('.widget, .katex-display, .table-wrap, svg, input, details'));
+      }, { passive: true });
+      main.addEventListener('touchend', (e) => {
+        if (skip) return;
+        const t = e.changedTouches[0];
+        const dx = t.clientX - sx, dy = t.clientY - sy;
+        if (Math.abs(dx) > 64 && Math.abs(dx) > 2 * Math.abs(dy)) go(cur + (dx < 0 ? 1 : -1));
+      }, { passive: true });
+
+      fromUrl();
+    })();
+  </script>
+</body>
+</html>
