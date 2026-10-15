@@ -11,6 +11,11 @@ Razavi 이론은 읽었지만 회로 문제풀이 경험이 적은 학생에게,
 
 **진행 표시**: 단계마다 한 줄만 쓴다. 예: `3/8 작성 중: 문항 10개 (병렬)`
 
+## 호출 모드
+- 단독 호출은 아래 대상 선택과 최종 보고 형식을 유지한다.
+- 부모 `ec2-review-pack` 호출은 부모가 확정한 `range`를 `--target`에 명시한다. 최신 팩 자동 선택을 사용하지 않는다. 부모의 `RUN/problem-explain/<새 실행ID>/` 아래 없거나 비어 있는 폴더를 자식 `RUN`으로 쓴다.
+- 부모 호출도 저작·독립 검산·네 검토·publish를 모두 수행한다. 중간 단계 진행만 표시하고 최종 결과는 부모 보고에 합친다. 보호 대상·CLI 옵션·발행 게이트는 동일하다.
+
 ## 대상과 보존
 
 - `1007`: `복습노트/1007/.assets/problems.txt`의 순서대로 전 문항.
@@ -26,9 +31,9 @@ Razavi 이론은 읽었지만 회로 문제풀이 경험이 적은 학생에게,
 - `REPO` = 저장소 루트
 - `RUN` = `<scratchpad>/ec2-problem-explain/<실행ID>` (실행ID 예: `1007-20261013-1530`). 매번 새로 정하며, 없거나 빈 폴더여야 한다.
 - `BUCKET` = `RUN/review-<range>-<slug>/` (팩마다 하나, extract가 만든다)
-- 셸 상태는 Bash 호출 사이에 이어지지 않는다. 아래 명령의 `$SKILL`, `$RUN`, `$REPO`, `$BUCKET`은 실행할 때마다 실제 절대 경로로 바꿔 쓰거나, 같은 명령 앞에 `SKILL=… RUN=… REPO=…`를 붙여 설정한다. `cd`는 쓰지 않고 파일도 절대 경로로 넘긴다.
+- 셸 상태는 Bash 호출 사이에 이어지지 않는다. 아래 명령의 `$SKILL`, `$RUN`, `$REPO`, `$BUCKET`은 실행할 때마다 실제 절대 경로로 바꿔 쓰거나, 같은 셸 호출에서 `SKILL=…; RUN=…; REPO=…;`로 먼저 설정한다. `RUN=… python3 … "$RUN"`처럼 인자 확장과 같은 명령 앞에 설정하지 않는다. `cd`는 쓰지 않고 파일도 절대 경로로 넘긴다.
 
-CLI는 [scripts/epe_cli.py](scripts/epe_cli.py) 하나이며 `extract`, `build`, `check`, `publish` 네 명령이 있다. 설명은 에이전트가 저작한다. CLI만 실행하면 풀이가 자동으로 써지지 않는다.
+CLI는 [scripts/epe_cli.py](scripts/epe_cli.py) 하나이며 `extract`, `build`, `check`, `publish`, `rerender` 다섯 명령이 있다. 설명은 에이전트가 저작한다. CLI만 실행하면 풀이가 자동으로 써지지 않는다.
 
 ## 절차
 
@@ -95,7 +100,7 @@ python3 "$SKILL/scripts/epe_cli.py" publish --run "$RUN"
 - 사용자 호출 범위 안이므로 발행 전에 다시 묻지 않는다.
 
 ### 8. 보고
-다음 형식으로 끝낸다.
+부모 호출이면 아래 RUN·팩별 상태·문항/소문항 수·파일 또는 stage·백업·disputed·보류 이유를 부모에 반환하고 별도 최종 보고로 끝내지 않는다. 단독 호출은 다음 형식으로 끝낸다.
 ```
 ## 문제설명 <target> 완료
 - RUN: <RUN>
@@ -134,3 +139,23 @@ withheld 팩은 HTML·MD 줄 대신 stage 경로를 적는다.
 | 포트 사용 중 | 다른 빈 포트 사용 |
 | `playwright` 없음(epe_browser_check 종료 코드 2) | `pip3 install --user --break-system-packages playwright` 후 `python3 -m playwright install chromium` |
 | 화면 측정 중 `ERR_CONNECTION_RESET`(`flaky_rerun`) | 서버 연결 끊김이라 fail로 두지 않고 다시 실행 |
+
+
+## 공통 업데이트: 대상·화면·검토 기준
+
+- `all`: 기존 복습팩만 끝 날짜 내림차순으로 처리한다. 과제·forecast는 자동 선택하지 않는다. 전자회로2는 `.assets/problems.txt`가 있는 팩만 선택한다. 여러 후보는 명시 경로(전자회로2는 날짜 범위)로 해소하고 새 문제를 출제하지 않는다.
+- 화면: 1024px 이상은 목차와 문제 패널이 기본으로 함께 열린다. 저장된 닫힘 선택은 유지한다. 문제 패널은 `문제 | 원문` 탭, 왼쪽·오른쪽 붙이기·띄우기, 이동·크기 조절을 지원한다. 상태 키는 `od-panels:explain:v2:prob`다. 원문 없는 문항은 원문 탭을 숨기고, 모바일은 해설 위 `문제 보기`로 펼친다. 그림 확대와 인쇄 원문 보존도 검토한다.
+- 객관식: 입력에 명시된 정답 모델의 보기 ID·순서·정답·mode가 실제 보기와 맞을 때만 클릭 판정·알림·다시 풀기를 제공한다. 모델 없음/불일치는 정적 표시하고 진단한다. 해설 문장이나 보기 위치로 정답 모델을 추측하지 않는다. 전자회로2 workbook 입력은 정적 표시한다.
+- 현재 검토 기준은 `review_policy_version="problem-explain-2026-10-15"`다. build의 review.json과 manifest에 기록하며, 이전 기준이나 기준 없는 기록은 새 발행을 승인하지 못한다. 기존 발행 HTML의 열람에는 영향을 주지 않는다.
+
+### 레이아웃만 바뀐 기존 발행분 재발행
+
+발행 자료 `.assets/자료_문제설명_<range>_<slug>/`의 fragments·evidence를 새 RUN으로 복사하고 stage만 조립한다. CLI의 rerender는 자동 발행하지 않는다.
+
+```sh
+python3 ".claude/skills/ec2-problem-explain/scripts/epe_cli.py" rerender --repo "<저장소 절대경로>" --target 1007 --run "<비어 있는 새 RUN 절대경로>"
+```
+
+입력·설명 조각·입력 그림·검산 자료·참조 파일이 검증되고 검토 기준도 현재와 같을 때만 content·independent를 재사용한다. 전자회로2는 problems.txt뿐 아니라 문제 MD·그림 전체의 합성 해시가 같아야 한다. 참조 누락·내용 변경·기준 누락/변경이면 content·independent도 not_run으로 되돌리고 실제 검토를 다시 한다. 경로 이전은 실제 대상과 바이트/링크 동등성을 입증할 때만 허용하며, 입증하지 못하면 재검토한다. 원본 HTML의 스타일·실행 스크립트만 바뀐 경우는 과거 입력을 확인할 수 있을 때만 동일 문항으로 인정하고 JSON 정답 데이터는 내용으로 취급한다.
+
+`check` 뒤 source_visual·browser를 실제로 다시 확인한다. 검토 기준이 바뀐 이번 업데이트의 옛 발행분은 내용 검토·독립 검산도 새로 필요하다. 네 검토가 모두 pass인 뒤에만 별도 publish 절차를 사용한다. 사용자가 stage까지만 요청했다면 publish를 실행하지 않는다. 새로 해설을 저작해야 하면 기존 정상 저작 절차로 돌아간다.

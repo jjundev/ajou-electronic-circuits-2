@@ -63,7 +63,7 @@ class SkillFilesTest(unittest.TestCase):
 
     def test_cli_commands_in_skill_match_parser(self):
         documented = set(COMMAND_RE.findall(text()))
-        self.assertEqual(documented, {'extract', 'build', 'check', 'publish'})
+        self.assertEqual(documented, {'extract', 'build', 'check', 'publish', 'rerender'})
         self.assertEqual(documented, parser_commands())
 
     def test_agents_symlink_points_to_skill(self):

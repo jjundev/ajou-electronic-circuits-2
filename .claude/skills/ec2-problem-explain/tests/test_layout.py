@@ -92,7 +92,8 @@ class LayoutTest(unittest.TestCase):
             page.locator('#pager-next').click()
             page.wait_for_timeout(150)
             rows = page.locator('#p1 .math-row')
-            self.assertGreater(rows.count(), 0)
+            self.assertGreater(page.locator('#p1 .katex').count(), 0)
+            self.assertTrue(page.evaluate('document.documentElement.scrollWidth <= innerWidth'))
             for row in rows.all():
                 if row.evaluate('(e)=>e.scrollWidth>e.clientWidth+3'):
                     self.assertTrue(row.evaluate(

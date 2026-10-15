@@ -27,19 +27,25 @@ def sha256(path: Path) -> str:
 
 
 def inside(path: Path, repo: Path) -> Path:
-    path = Path(path).absolute()
+    path, repo = Path(path).absolute(), Path(repo).absolute()
+    # Normalize unresolved spellings only; two existing NFC/NFD sibling directories are distinct.
+    if not repo.exists():
+        repo = existing_path(repo)
     try:
         path.resolve().relative_to(repo.resolve())
-    except ValueError as exc:
-        raise ExplainError(f'저장소 밖 경로: {path}') from exc
-    # Symlinks in the resource path are refused, except the repository's own root.
+    except ValueError:
+        try:
+            if not path.exists():
+                path = existing_path(path)
+            path.resolve().relative_to(repo.resolve())
+        except (ValueError, OSError) as exc:
+            raise ExplainError(f'저장소 밖 경로: {path}') from exc
     current = path
-    while current != repo.absolute() and current != current.parent:
+    while current != repo and current != current.parent:
         if current.is_symlink():
             raise ExplainError(f'심볼릭 링크 입력 금지: {current}')
         current = current.parent
     return path
-
 
 def existing_path(path: Path) -> Path:
     """Resolve encoded/Unicode-normalized paths component by component."""
@@ -85,7 +91,11 @@ def resolve_sources(repo: Path, target: str | None) -> tuple[Path, ...]:
     repo = Path(repo).absolute()
     folders = _folders(repo)
     ready = {n: p for n, (p, ok) in folders.items() if ok}
-    if target is None:
+    if target == 'all':
+        chosen = [p for n,p in sorted(ready.items(),key=lambda pair:(pair[0].split('-')[-1],pair[0]),reverse=True)]
+        if not chosen:
+            raise ExplainError('대상 없음: problems.txt가 있는 복습 팩이 없습니다')
+    elif target is None:
         if not ready:
             raise ExplainError('대상 없음: problems.txt가 있는 복습 팩이 없습니다')
         latest = max(n.split('-')[-1] for n in ready)

@@ -1,3 +1,4 @@
+from epe_review_policy import POLICY_VERSION
 import unittest
 from copy import deepcopy
 from dataclasses import replace
@@ -28,7 +29,7 @@ def recall_block(text):
 def reviews():
     base = {'status': 'pass', 'reviewer': '검토자', 'evidence': '근거: Razavi p.1'}
     items = {f'p1:{s}': dict(base) for s in ('a', 'b')}
-    return {'input_hash': payload_hash(pack(), {'p1': fragment()}),
+    return {'review_policy_version': POLICY_VERSION, 'input_hash': payload_hash(pack(), {'p1': fragment()}),
             'source_visual': base, 'browser': base, 'content': {**base, 'items': items},
             'independent': {**base, 'items': {k: {**v, 'method': 'exact', 'conclusion': '1=1'}
                                               for k, v in items.items()}}}

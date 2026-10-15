@@ -25,7 +25,7 @@ class MakeRepoTests(unittest.TestCase):
     def test_nfd_names(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = _util.make_repo(Path(tmp), nfd=True, ids=('P10.02',))
-            names = {unicodedata.normalize('NFC', p.name) for p in (root / '복습노트/1007').iterdir()}
+            names = {unicodedata.normalize('NFC', p.name) for p in (root / unicodedata.normalize('NFD','복습노트') / '1007').iterdir()}
             self.assertIn('정리노트_1007_Diff_Amp.html', names)
 
     def test_shared_exports(self):

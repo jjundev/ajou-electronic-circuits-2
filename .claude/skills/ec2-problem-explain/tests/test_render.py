@@ -64,7 +64,7 @@ class RenderTest(unittest.TestCase):
             self.assertEqual(fields, {'conditions': compact(p.conditions_html), 'ask': compact(p.ask_html)})
             self.assertIn(f'<a id="{p.id}"></a>', md)
         self.assertNotIn('https://cdn.', text)
-        self.assertFalse(list(root.find_all(lambda n: n.tag == 'details')))
+        self.assertFalse(list(root.find_all(lambda n: n.tag == 'details' and 'original' not in n.classes)))
         self.assertEqual(set(artifact_hashes(result)),
                          {p.relative_to(result.html.parent).as_posix() for p in result.files})
         self.assertEqual(check_artifacts(pack, result), [])
@@ -111,8 +111,8 @@ class RenderTest(unittest.TestCase):
         result = build_explanation(pack, {p.id: fragment(p)}, self.tmp / 'stage3', self.repo)
         self.assertEqual(check_artifacts(pack, result), [])
         text = result.html.read_text(encoding='utf-8')
-        self.assertLess(text.index('data-original-problem'), text.index('data-source-problem'))
-        self.assertIn('<h4>원문</h4>', text)
+        self.assertIn('class="original" data-original-problem', text)
+        self.assertIn('<summary>원문 보기</summary>', text)
         # Dropping the preserved original is detected.
         result.html.write_text(text.replace('Original English text.', 'changed'), encoding='utf-8')
         self.assertTrue(any('원문 보존 실패' in e for e in check_artifacts(pack, result)))

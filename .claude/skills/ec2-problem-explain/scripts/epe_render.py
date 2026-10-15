@@ -1,3 +1,5 @@
+from epe_review_policy import POLICY_VERSION
+from epe_rerender import source_resources
 """Assemble explanation notes with local resources and auditable preservation."""
 import html
 import json
@@ -50,10 +52,26 @@ def convert_markdown(html_path, md_path, ctx):
     finally:
         temporary.unlink(missing_ok=True)
 
-def resources(markup, problem, pack, repo, stage, fig_name, destination):
+SVG_STROKE_TAGS = ('rect', 'circle', 'ellipse', 'line', 'polyline', 'polygon', 'path', 'g', 'text')
+
+def _inside_svg(node):
+    parent = node.parent
+    while parent is not None:
+        if getattr(parent, 'tag', None) == 'svg':
+            return True
+        parent = getattr(parent, 'parent', None)
+    return False
+
+def resources(markup, problem, pack, repo, stage, fig_name, destination, scope=""):
     root = parse(markup)
     nodes = list(root.find_all(lambda n: True))
     errors = markup_errors(root, allow_summary=True)
+    for node in nodes:
+        value = node.attrs.get('style', '')
+        if (node.tag in SVG_STROKE_TAGS and _inside_svg(node)
+                and re.fullmatch(r'stroke-width:[0-9]+(\.[0-9]+)?(px)?;?',value)
+                and '허용하지 않는 속성: style' in errors):
+            errors.remove('허용하지 않는 속성: style')
     if errors:
         raise ExplainError(f'{problem.id}: 원문/설명 마크업 오류: ' + ' / '.join(errors))
     # Scope SVG identifiers per occurrence (original English and reading may repeat media).
@@ -63,7 +81,7 @@ def resources(markup, problem, pack, repo, stage, fig_name, destination):
         if len(ids) != len(set(ids)):
             raise ExplainError(f'{problem.id}: 중복 SVG ID')
         suffix = '' if index == 0 else f'-svg{index+1}'
-        mapping = {id_: f'{problem.id}{suffix}-{id_}' for id_ in ids}
+        mapping = {id_: f'{problem.id}{"-"+scope if scope else ""}{suffix}-{id_}' for id_ in ids}
         for node in all_svg:
             for key, value in list(node.attrs.items()):
                 if key == 'id':
@@ -127,13 +145,16 @@ def build_explanation(pack, fragments, stage: Path, repo: Path) -> Artifacts:
     for p in pack.problems:
         original = ''
         if p.original_html.strip():
-            original = (f'<div class="layer formal" data-original-problem="{p.id}"><h4>원문</h4>'
-                        + p.original_html + '</div>')
-        reading = (original + f'<div class="layer formal" data-source-problem="{p.id}"><h4>주어진 조건</h4>'
+            original = resources(p.original_html, p, pack, repo, stage, f'{BUNDLE}/{fig_name}', pack.folder, scope='original')
+            original = (f'<details class="original" data-original-problem="{p.id}"><summary>원문 보기</summary>'
+                        + original + '</details>')
+        reading = (f'<div class="layer formal" data-source-problem="{p.id}"><h4>주어진 조건</h4>'
                    + '<div data-source-field="conditions">' + p.conditions_html + '</div><h4>구할 것</h4>'
                    + '<div data-source-field="ask">' + p.ask_html + '</div>' + ''.join(p.figures_html) + '</div>')
         # Validate each block separately: a summary remains a direct fragment child.
         reading = resources(reading, p, pack, repo, stage, f'{BUNDLE}/{fig_name}', pack.folder)
+        reading += original
+        reading = f'<div class="problem-pane" data-problem-for="{p.id}">'+reading+'</div>'
         normalized = normalize_subpart_labels(fragments[p.id])
         explanation = resources(normalized, p, pack, repo, stage, f'{BUNDLE}/{fig_name}', pack.folder)
         problem_pdf = f'복습문제_{pack.range}_{pack.slug}-문제.pdf'
@@ -166,7 +187,8 @@ def build_explanation(pack, fragments, stage: Path, repo: Path) -> Artifacts:
     manifest_path = data_dir / 'manifest.json'
     files = tuple(sorted(p for p in stage.rglob('*') if p.is_file()))
     dump(manifest_path, {'version': 1, 'profile': pack.profile, 'range': pack.range, 'slug': pack.slug,
-                         'source': str(pack.path), 'source_sha256': pack.sha256, 'inputs': list(pack.inputs),
+                         'source': str(pack.path), 'source_sha256': pack.sha256,
+                         'review_policy_version': POLICY_VERSION, 'source_resources': source_resources(pack,repo), 'inputs': list(pack.inputs),
                          'input_hash': payload_hash(pack, fragments), 'reading_key': values['RANGE'],
                          'destination': str(pack.folder), 'repo': str(repo.resolve()),
                          'problems': [{'id': p.id, 'subparts': list(p.subparts)} for p in pack.problems],
