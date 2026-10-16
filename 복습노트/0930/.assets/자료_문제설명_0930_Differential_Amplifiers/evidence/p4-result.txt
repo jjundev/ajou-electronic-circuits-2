@@ -1,0 +1,10 @@
+Independent derivation from blind conditions; author-early, not fragment author
+a gain= -g1/(g3 + o1 + o3)
+a outputKCL 0
+b gain= -g1/(g3 + o1 + o3 + o5)
+b outputKCL 0
+c gain= -R*g1/(R*o1 + R*o3 + 1)
+c outputKCL 0
+c midpoint under y=-x: 0
+c midpoint virtualground 0
+In c PMOS gate is midpoint0, so gm3 gate-source drive is zero; do not use diode-connected gm3 load.

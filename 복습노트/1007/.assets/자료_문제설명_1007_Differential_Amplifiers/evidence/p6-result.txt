@@ -1,12 +1,5 @@
-Rout3 = (R_1*g_m3*r_O3*r_pi3 + R_1*r_O3 + R_1*r_pi3 + r_O3*r_pi3)/(R_1 + r_pi3)
-Rout3 - [(1+gm3(R1||rpi3))ro3 + R1||rpi3] = 0
-A_CM-DM (exact, with rpi) = DeltaR_C*g_m*r_pi/(2*R_out3*g_m*r_pi + 2*R_out3 + r_pi)
-A_DM (exact) = -g_m*(DeltaR_C + 2*R_C)/2
-beta->inf: |A_CM-DM| = DeltaR_C*g_m/(2*R_out3*g_m + 1)  minus dRC/(1/gm+2Rout3): 0
-beta->inf: |A_DM| = g_m*(DeltaR_C + 2*R_C)/2 ; dRC->0: R_C*g_m
-CMRR (keeping dRC/2 in A_DM) = (DeltaR_C + 2*R_C)*(2*R_out3*g_m + 1)/(2*DeltaR_C)
-CMRR (A_DM = gm R_C) = R_C*(2*R_out3*g_m + 1)/DeltaR_C ; minus gm R_C(1/gm+2Rout3)/dRC = 0
-  = R_C(1+2 gm Rout3)/dRC check: 0
-CMRR full = R_C*g_m*(2*R_1*r_pi3/(R_1 + r_pi3) + 2*r_O3*(R_1*g_m3*r_pi3/(R_1 + r_pi3) + 1) + 1/g_m)/DeltaR_C
-limit ro3->oo of full/alt = 1
-limit Rout3->oo of CMRR/(2 gm R_C Rout3/dRC) = 1
+tail exact= (R1*g3*ro3*rpi + R1*ro3 + R1*rpi + ro3*rpi)/(R1 + rpi) book droppingRe= ro3*(g3/(1/rpi + 1/R1) + 1) ratio ro3infty= (R1*g3*rpi + R1 + rpi)/((R1 + rpi)*(g3/(1/rpi + 1/R1) + 1))
+CM current/input g/(2*Rt*g + 1) ACM= -R*g/(2*Rt*g + 1) ACM-DM= D*g/(2*Rt*g + 1)
+exact load-mismatch DM= g*(D/2 + R) CMRR= (D + 2*R)*(2*Rt*g + 1)/(2*D) small-mismatch= R*(2*Rt*g + 1)/D
+full tail vs book limit= (2*R1*g*g3*rpi/(R1 + rpi) + 2*R1*g/(R1 + rpi) + 2*g*rpi/(R1 + rpi))/(2*g*g3/(1/rpi + 1/R1) + 2*g)
+Re0 simple tail: R*(2*g*ro3 + 1)/D

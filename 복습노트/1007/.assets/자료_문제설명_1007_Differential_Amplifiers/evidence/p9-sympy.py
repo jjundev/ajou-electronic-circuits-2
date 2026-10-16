@@ -1,29 +1,11 @@
-# P10.72 (Fig 10.93): PMOS mirror M3 (diode) -> M4, I1 sinks from M3 drain,
-# I2 sinks from Vout node, R_L to ground. lambda = 0 (no CLM).
-import sympy as sp
-I0, dI, RL, k, VTH, VDD = sp.symbols('I_0 DeltaI R_L k V_TH V_DD', positive=True)
-Vsg, ID4, Vout, I1, I2, r = sp.symbols('V_SG I_D4 V_out I_1 I_2 r', real=True)
+import sympy as S
+from math import log10,pi,sqrt
 
-def solve_vout(I1v, I2v, ratio):
-    # (W/L)_4 = (W/L)_3 / ratio ; square law, lambda = 0
-    k3 = k; k4 = k/ratio
-    # M3 diode: I1 = k3/2 (Vsg-VTH)^2  -> (Vsg-VTH)^2 = 2 I1/k3
-    ov2 = 2*I1v/k3
-    id4 = sp.Rational(1, 2)*k4*ov2          # M4 shares V_SG, sat, no CLM
-    # KCL at Vout: I_D4 = I2 + Vout/RL
-    sol = sp.solve(sp.Eq(id4, I2v + Vout/RL), Vout)[0]
-    return sp.simplify(sol)
-
-for name, ratio in (('a', 1), ('b', 2)):
-    before = solve_vout(I0, I0, ratio)
-    after = solve_vout(I0 + dI, I0 - dI, ratio)
-    print(f"({name}) (W/L)3 = {ratio}(W/L)4")
-    print("   V_out before =", before)
-    print("   V_out after  =", sp.factor(after))
-    print("   Delta V_out  =", sp.simplify(after - before))
-    if name == 'a':
-        tb, ta = sp.Integer(0), 2*dI*RL
-    else:
-        tb, ta = -I0*RL/2, (3*dI - I0)*RL/2
-    print("   check before - target :", sp.simplify(before - tb))
-    print("   check after  - target :", sp.simplify(after - ta))
+m,I1,I2,R,V,I0,di=(S.Symbol('m',positive=True),S.Symbol('I1',positive=True),S.Symbol('I2',positive=True),S.Symbol('R',positive=True),S.Symbol('V',positive=True),S.Symbol('I0',positive=True),S.Symbol('di',positive=True))
+# Actual output node: mirrored incoming=m*I1; I2 sink and resistor outward.
+Vsol=S.solve(S.Eq(m*I1-I2-V/R,0),V)[0]
+for name,k in [('a',1),('b',S.Rational(1,2))]:
+ before=S.simplify(Vsol.subs({m:k,I1:I0,I2:I0}));after=S.simplify(Vsol.subs({m:k,I1:I0+di,I2:I0-di}));print(name,'before=',before,'after=',after)
+ if k==1:assert before==0 and S.simplify(after-2*di*R)==0
+ else:assert S.simplify(before+I0*R/2)==0 and S.simplify(after-R*(3*di-I0)/2)==0
+print('These formal ideal-source values require compliance/saturation; negative b equilibrium is formal, not guaranteed by grounded practical sinks.')

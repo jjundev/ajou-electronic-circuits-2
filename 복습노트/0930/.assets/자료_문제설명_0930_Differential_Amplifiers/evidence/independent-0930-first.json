@@ -1,0 +1,39 @@
+{
+  "reviewer": "author-early-independent",
+  "basis": "blind original/conditions/asks + PNG circuit and circuit-only md when needed; exposure flags explicit",
+  "records": {
+    "p1": {
+      "main": "Power max Iss=P/VDD=.002/1.8=1.111111mA. Headroom H=.2, RDmax=2H/Iss=360ohm; gm=5/360=.0138889S; WL=gm²/(mu Iss)=1736.111. Vov=Iss/gm=.08V."
+    },
+    "p2": {
+      "main": "AtVDD2, P2mW ->Iss1mA,H.4,RD800ohm,gm.00625S,WL390.625. General WL=A²P/[4mu VDD (VDD-VCMout)²] usingmaxRD andmaxpower. Higher supply lowers necessary WL at fixedP, gain,CM."
+    },
+    "p3": {
+      "main": "DM half circuit source virtualground. Diode PMOS load admittance gmp+gop, input ro contributes gon -> Av=-gmn/(gmp+gop+gon)."
+    },
+    "p4": {
+      "main": "Figure(a) NMOS loads gate/drainVDD sourceoutput -> load gm3+go3, Av=-gm1/(gm3+go3+go1). (b) add PMOS outputconductance go5, Av=-gm1/(gm3+go3+go1+go5). (c) PMOS common gates at resistor midpoint; symmetric DM midpoint0 -> gm3 vgate0, load1/R1+go3, Av=-gm1/(1/R1+go3+go1); R1=R2 by symmetry."
+    },
+    "p5": {
+      "main": "EXPOSED preceding reference answer while reading circuit section. Independent KCL still: halfRD=RDD/2,halfRS=RSS/2. is=gm(vi-vs), vs=is RSS/2, vo=-is RDD/2 ->Av=-(RDD/2)/(1/gm+RSS/2)."
+    },
+    "p6": {
+      "main": "Add diode PMOS gmp in parallel with halfRDD ->RL=1/(2/RDD+gmp). Halfsource resistanceRSS/2 unchanged. Av=-gm RL/(1+gm RSS/2)."
+    },
+    "p7": {
+      "main": "Fixed tail and noEarly ->eachIC fixed, VX=VCC-RC IC ->DeltaVX=DeltaVY=DeltaV, difference0."
+    },
+    "p8": {
+      "main": "Matched tail splits equally; DeltaIC=DeltaI/2 with beta infinity. DeltaVX=DeltaVY=-RC DeltaI/2, difference0. Finite beta gives alpha factor."
+    },
+    "p9": {
+      "main": "IC=IEE/2=.5mA, VC=VCC-.5V. Strict reverseBC givesVCMmax=VCC-.5V; common Razavi quasi-active convention allowing VBC up to .4V gives VCC-.1V. Must inspect actual assumed criterion before final status."
+    },
+    "p10": {
+      "main": "Differential1V>>VT so all tail1mA inQ1. VC1=2.5-.001RC. Strict active VC>=VB2V ->RCmax500ohm; allowing400mV BC ->RCmax900ohm. Need source convention."
+    },
+    "p11": {
+      "main": "Use IC1=IEE/(1+exp(-vid/VT)),IC2=IEE-IC1; VX=VCC-RC IC1,VY=VCC-RC IC2. (a) IEEhalf ->currentshalf, voltage dropshalf, transition width unchanged. (b)VCC+Delta ->currents unchanged, bothvoltages+Delta. (c)RChalf ->currents unchanged, dropshalf, differential voltage gainhalf. Active range assumption."
+    }
+  }
+}

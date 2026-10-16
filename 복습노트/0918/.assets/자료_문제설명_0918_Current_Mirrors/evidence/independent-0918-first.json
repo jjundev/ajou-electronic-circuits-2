@@ -1,0 +1,39 @@
+{
+  "reviewer": "author-early-independent",
+  "basis": "blind original/conditions/asks + PNG circuit and circuit-only md when needed; exposure flags explicit",
+  "records": {
+    "p1": {
+      "1": "Square law K=muCox W/L. Same gate: sqrt(2 Iref/K)-sqrt(2(Iref/2)/K)=(Iref/2)Rp. Rp=2(sqrt(2)-1)/sqrt(K Iref).",
+      "2": "Common base: VBEout-VBEref=Iref Rp=VT ln(Iout/Iref). Target2 -> Rp=VT ln2/Iref."
+    },
+    "p2": {
+      "a": "Iout/Iref=(1+lambda VDSout)/(1+lambda VGS). equality VDSout=VGS.",
+      "b": "VDSout=VGS-VTH -> (Iout-Iref)/Iref=-lambda VTH/(1+lambda VGS)."
+    },
+    "p3": {
+      "main": "Equal VGS/current mirror: WoverL reference:out1:out2=0.3:0.2:0.5=3:2:5, same L, NMOS sinks at source follower and CS source."
+    },
+    "p4": {
+      "main": "(a) middle NMOS draws (2/3)Iref; PMOS output/reference=3/5 => Icopy=(2/5)Iref. (b) PMOS diode draws5 Iref; output supplies10 Iref, output NMOS sinks3 Iref, external Icopy=7 Iref."
+    },
+    "p5": {
+      "main": "Unit density J; reference KCL Iref=Ar J+(Ar+sum Aoutputs)J/beta. (a) Ar1 output5 ->Icopy=5Iref/(1+6/beta). (b) Ar5 output1 ->Icopy=Iref/(5+6/beta). (c) Ar2 outputs3,5 ->Icopy=3Iref/(2+10/beta). Relative errors respectively -6/(beta+6), -6/(5beta+6), -5/(beta+5)."
+    },
+    "p6": {
+      "main": "Two stages: ratios a,b; Icopy=ab Iref/[(1+(1+a)/beta)(1+(1+b)/beta)]. (a)a=b=1 -> Iref/(1+2/beta)^2. (b)a2/3,b9/5 ->(6/5)Iref/[(1+5/(3beta))(1+14/(5beta))]. Relative error=1/denominator-1."
+    },
+    "p7": {
+      "main": "Shared VBE currents proportional emitter area: reference:50uA:230uA=13:5:23."
+    },
+    "p8": {
+      "main": "X1 X2=1000/25=40. Unit devices total T=2+X1+X2, continuous minimum by AMGM at sqrt40 each, T=2+2sqrt40. Integer factors min 5 and8 (or8 and5), T15."
+    },
+    "p9": {
+      "1": "First stage2, second5/2 -> output .5mA and Q1 .5mA. gm=.0005/.025=.02S; each ro=5/.0005=10k. CE with pnp load Av=-gm*(10k||10k)=-100.",
+      "2": "Q1 upper .5mA gm1 .02S ro1 10k rpi1 beta/gm1=10k. Q2 lower1mA ro2 5k gm2 .04S. Q3 .5mA ro3 10k. Emitter resistance at upper is ro2||ro3, with rpi1 parallel gives2.5k. Rout leading=.02*10k*2.5k=500k, Av≈-.04*500k=-20000. If base-current ignored is intended for AC too rpi omitted ->666.667k,-26666.7. beta given suggests retaining rpi for AC but explicit condition ambiguous."
+    },
+    "p10": {
+      "main": "EXPOSED prior answer during circuit section extraction; not blind. DC KCL VX=VCC-RC1 IC1, VY=VCC-RC2 IC2; common mode average, matched VCC-RC IC."
+    }
+  }
+}

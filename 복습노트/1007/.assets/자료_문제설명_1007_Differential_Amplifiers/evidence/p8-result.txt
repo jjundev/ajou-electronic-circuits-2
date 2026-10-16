@@ -1,19 +1,7 @@
-Vov1 = 1/10 V, Vov3 = 1/10 V, VGS1 = 1/2 V
-(1) VD1 = 13/10 V, VD2 = 129/100 V
-(1) VCM,min = 3/5 V = 0.6
-(1) VCM,max = 169/100 V = 1.69  (ΔR_D 무시 시 17/10 V)
-gm1,2 = 1/100 S, ro3 = 10000 ohm, ro1,2 = 20000 ohm
-A1(ro->oo) = -R_1*g_m/(2*R_SS*g_m + 1) ; A2(ro->oo) = -R_2*g_m/(2*R_SS*g_m + 1)
-check A1 - [-R1/(1/gm+2Rss)] = 0
-check A_CM-DM - (R2-R1)/(1/gm+2Rss) = 0
-check A1 - [-(RD/2)/(1/(2gm)+Rss)] = 0
-(2) A_CM (vout1, R_D 쪽) = -10/201 = -0.04975124378109453
-(2) A_CM (vout2, R_D+ΔR_D 쪽) = -17/335 = -0.050746268656716415
-(2) A_CM-DM = (vo1-vo2)/vcm = 1/1005 = 0.0009950248756218905
-   [참고 ro1,2=20k 포함] A_CM1 = -0.04951613408554513 , A_CM-DM = 0.0009422670615707922
-A_DM (exact, ro1,2->oo) = g_m*(-R_1 - R_2)/2 = -10.1
-(3) CMRR (A_DM=gmRD) = 10050 = 10050.0 -> 80.04332123513015 dB
-(3) CMRR (A_DM 정확) = 10150.5 -> 80.129748710783 dB
-check CMRR_razavi - (1+2gmRss)RD/ΔRD = 0
-[r_o1,2 양쪽 모두 포함] |A_DM| = 9.614469076090657 , |A_CM-DM| = 0.0009422670615707922 , CMRR = 10203.550000000001 -> 80.17502593951102 dB
-[혼합: A_DM에만 r_o1 포함, A_CM-DM은 r_o1 무시] gm(RD||ro1) = 9.523809523809524 , CMRR = 9571.428571428572 -> 79.61953525373139 dB
+3node exact CMleft= -R*g*ro*(D + R + ro)/(D*R + D*T*g*ro + D*T + D*ro + R**2 + 2*R*T*g*ro + 2*R*T + 2*R*ro + 2*T*g*ro**2 + 2*T*ro + ro**2) conversion= D*g*ro**2/(D*R + D*T*g*ro + D*T + D*ro + R**2 + 2*R*T*g*ro + 2*R*T + 2*R*ro + 2*T*g*ro**2 + 2*T*ro + ro**2) DM= -g*ro*(2*D*R + 2*D*T*g*ro + 2*D*T + D*ro + 2*R**2 + 4*R*T*g*ro + 4*R*T + 2*R*ro)/(2*(D*R + D*T*g*ro + D*T + D*ro + R**2 + 2*R*T*g*ro + 2*R*T + 2*R*ro + 2*T*g*ro**2 + 2*T*ro + ro**2)) CMRR= (2*D*R + 2*D*T*g*ro + 2*D*T + D*ro + 2*R**2 + 4*R*T*g*ro + 4*R*T + 2*R*ro)/(2*D*ro)
+numbers -0.0495161340855451 0.000942267061570792 -9.61446907609066 10203.5500000000
+CM ratio ro→inf g*(2*T + 1/g)/(2*T*g + 1)
+conversion ratio ro→inf g*(2*T + 1/g)/(2*T*g + 1)
+DM ratio remove ro then small mismatch (4*R*T*g + 2*R)/(2*R*(2*T*g + 1))
+CMRR ratio remove ro then mismatch (4*R*T*g + 2*R)/(2*R*g*(2*T + 1/g))
+VCMmin=.4+.1+.1= 0.6 max=1.8-.0005*1020+.4= 1.69

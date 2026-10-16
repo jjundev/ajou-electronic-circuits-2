@@ -1,61 +1,24 @@
-# p5 (2021-1 midterm Q4): NMOS diff pair M1,M2, PMOS current-source loads M3,M4, cascode tail M5/M6.
-import sympy as sp
+import sympy as S
+from math import log10,pi,sqrt
 
-# ---- bias / small-signal parameters ----
-ID6 = sp.Rational(2, 1000); ID1 = ID6/2
-un, up, lam = sp.Rational(100, 10**6), sp.Rational(50, 10**6), sp.Rational(1, 10)
-gm = lambda k, W_L, I: sp.sqrt(2*k*W_L*I)
-gm1v = gm(un, 500, ID1); ro1v = 1/(lam*ID1)
-gm3v = gm(up, 1000, ID1); ro3v = 1/(lam*ID1)
-gm5v = gm(un, 1000, ID6); ro5v = 1/(lam*ID6); ro6v = ro5v
-print("gm1 =", gm1v, "S, ro1 =", ro1v, "ohm, gm1*ro1 =", gm1v*ro1v)
-print("ro3 =", ro3v, "ohm (PMOS load, gm3 =", gm3v, ")")
-print("gm5 =", gm5v, "S, ro5 = ro6 =", ro5v, "ohm")
+g,ri,RL,T,vi,vs,vo=(S.Symbol('g',positive=True),S.Symbol('ri',positive=True),S.Symbol('RL',positive=True),S.Symbol('T',positive=True),S.Symbol('vi',real=True),S.Symbol('vs',real=True),S.Symbol('vo',real=True))
+# CM half source resistor2T, output loadRL, input output resistance ri.
+id=g*(vi-vs)+(vo-vs)/ri
+sol=S.solve([vo/RL+id,vs/(2*T)-id],[vo,vs]);A=S.factor(sol[vo]/vi)
+Q=ri+2*T*(1+g*ri);Gm=g*ri/Q;Rout=1/(1/RL+1/Q)
+assert S.simplify(A+Gm*Rout)==0
+assert S.simplify(A+g*ri*RL/(RL+Q))==0
+print('Exact CM KCL=',A,'Gm=',Gm,'Rout=',Rout)
 
-# ---- full-circuit small-signal KCL (symbolic) ----
-g1, r1, r3, dR, g5, r5, r6, vi1, vi2 = sp.symbols('g_m1 r_o1 r_o3 DeltaR g_m5 r_o5 r_o6 v_in1 v_in2', positive=True)
-vX, vY, vP, vQ = sp.symbols('v_X v_Y v_P v_Q')
-RL1, RL2 = r3, r3 + dR          # output-resistance mismatch DeltaR between the two loads
-i1 = g1*(vi1 - vP) + (vX - vP)/r1   # drain current of M1 (into drain, X -> P)
-i2 = g1*(vi2 - vP) + (vY - vP)/r1
-i5 = g5*(0 - vQ) + (vP - vQ)/r5     # M5 gate at ac ground
-eqs = [sp.Eq(-vX/RL1, i1),          # KCL at X: current from load = i1
-       sp.Eq(-vY/RL2, i2),
-       sp.Eq(i1 + i2, i5),          # KCL at P
-       sp.Eq(i5, vQ/r6)]            # KCL at Q (M6 = r_o6)
-sol = sp.solve(eqs, [vX, vY, vP, vQ], dict=True)[0]
-
-# Tail resistance (looking into M5 drain)
-Rss = r5 + r6 + g5*r5*r6
-print("\nR_SS exact =", sp.N(Rss.subs({g5: gm5v, r5: ro5v, r6: ro6v})), "ohm;  gm5*ro5*ro6 =", gm5v*ro5v*ro6v)
-
-vals = {g1: gm1v, r1: ro1v, r3: ro3v, g5: gm5v, r5: ro5v, r6: ro6v}
-vc = sp.symbols('v_c')
-
-# (1) A_CM (matched loads), single-ended
-ACM = sp.simplify((sol[vX]/vi1).subs({vi2: vi1, dR: 0}))
-ACM_target = -g1*r1*r3/(r3 + r1 + (1 + g1*r1)*2*Rss)
-print("\n(1) A_CM exact symbolic check: simplify(A_CM - target) =", sp.simplify(ACM - ACM_target))
-print("    A_CM exact numeric =", sp.N(ACM.subs(vals), 6))
-# approximation gm*ro >> 1 : r_o1 -> oo then gm5 large
-ACM_approx = -r3/(1/g1 + 2*Rss)
-print("    limit r_o1->oo of A_CM equals -r_o3/(1/gm1+2R_SS):", sp.simplify(sp.limit(ACM, r1, sp.oo) - ACM_approx) == 0)
-print("    -r_o3/(1/gm1 + 2 gm5 ro5 ro6) =", sp.N((-r3/(1/g1 + 2*g5*r5*r6)).subs(vals), 6), " ~ -r_o3/(2R_SS) =", sp.N((-r3/(2*g5*r5*r6)).subs(vals), 6))
-
-# A_CM-DM with DeltaR = 50 ohm
-ACMDM = sp.simplify(((sol[vX] - sol[vY])/vi1).subs({vi2: vi1}))
-ACMDM_lin = sp.simplify(sp.diff(ACMDM, dR).subs(dR, 0))          # first order in DeltaR
-print("\n    A_CM-DM exact (DeltaR=50) =", sp.N(ACMDM.subs(vals).subs(dR, 50), 6))
-print("    limit r_o1->oo of dA/dDeltaR = 1/(1/gm1+2R_SS):", sp.simplify(sp.limit(ACMDM_lin, r1, sp.oo) - 1/(1/g1 + 2*Rss)) == 0)
-print("    DeltaR/(1/gm1 + 2 gm5 ro5 ro6) =", sp.N((50/(1/g1 + 2*g5*r5*r6)).subs(vals), 6), " ~ DeltaR/(2R_SS) =", sp.N((50/(2*g5*r5*r6)).subs(vals), 6))
-
-# (2) differential gain (matched), (vX - vY)/(vin1 - vin2)
-vd = sp.symbols('v_d')
-Ad = sp.simplify(((sol[vX] - sol[vY]).subs({vi1: vd/2, vi2: -vd/2, dR: 0}))/vd)
-print("\n(2) A_d: simplify(A_d - (-gm1 (ro1||ro3))) =", sp.simplify(Ad - (-g1*r1*r3/(r1 + r3))))
-Ad_num = sp.N(Ad.subs(vals), 6)
-print("    A_d =", Ad_num)
-CMRR_exact = sp.N(abs(Ad.subs(vals)) / ACMDM.subs(vals).subs(dR, 50), 6)
-CMRR_approx = sp.N(abs(Ad.subs(vals)) / (50/(2*gm5v*ro5v*ro6v)), 6)
-print("    CMRR exact =", CMRR_exact, "=", sp.N(20*sp.log(CMRR_exact, 10), 5), "dB")
-print("    CMRR (gm ro>>1 approx) =", CMRR_approx, "=", sp.N(20*sp.log(CMRR_approx, 10), 5), "dB")
+# Cascode tail exact test: output upper device with ro5,source lowerro6.
+g5,r5,r6,x,y,it=(S.Symbol('g5',positive=True),S.Symbol('r5',positive=True),S.Symbol('r6',positive=True),S.Symbol('x',real=True),S.Symbol('y',real=True),S.Symbol('it',real=True))
+isrc=-g5*x+(y-x)/r5;test=S.solve([x/r6-isrc,isrc-it],[x,y]);Tex=S.factor(test[y]/it)
+assert S.simplify(Tex-r5-r6-g5*r5*r6)==0
+nums={g:.01,ri:10000,RL:10000,T:510000};print('CM finite-ro exact=',A.subs(nums))
+print('DM gain KCL=',-.01/(1/10000+1/10000),'tail exact=',Tex.subs({g5:.02,r5:5000,r6:5000}))
+print('textbook leading ACM=-.01,ACMDM=50/(2*500k)=',50/1e6,'CMRR=',50/(50/1e6))
+# Current-transfer and output-impedance mismatch method: conversion=Gm*deltaR.
+D=S.Symbol('D',positive=True);conv=Gm*D;lead=D/(2*T)
+print('conversion exact/leading gm limit',S.limit(conv/lead,g,S.oo));assert S.simplify(S.limit(conv/lead,g,S.oo)-1)==0
+print('CM exact/leading gm limit',S.limit(A/(-RL/(2*T)),g,S.oo));assert S.simplify(S.limit(A/(-RL/(2*T)),g,S.oo)-1)==0
+print('tail exact/leading gm5 limit',S.limit(Tex/(g5*r5*r6),g5,S.oo));assert S.simplify(S.limit(Tex/(g5*r5*r6),g5,S.oo)-1)==0

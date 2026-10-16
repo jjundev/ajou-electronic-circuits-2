@@ -1,0 +1,17 @@
+{
+  "reviewer": "author_middle independent of authors; blind conditions and figures only",
+  "blind_input": "C:\\Users\\Hyunjun\\AppData\\Local\\Temp\\ec2-explanations-20261015\\blind-1007.json",
+  "derivations": {
+    "p1": "CM half source2ro3, inputro∞; Av=-RD/(1/gm+2ro3); gm=ISS/Vov_eq,ro3=1/(lambda ISS) -> -RD ISS/(Vov_eq+2/lambda).",
+    "p2": "Finite ro CM full KCL (two equal branches) gives A=-gm1ro1 ro3/[ro1+ro3+2rt(1+gm1ro1)]. Rt=ro5. Large gmro and large source degeneration -> -ro3/(2ro5); derive Gm and Rout separately.",
+    "p3": "a Rt=ro5+ro6+gm5ro5ro6,RL=ro3. b Rt=ro7,RL=ro3+ro5+gm3ro3ro5. Apply finite-input-ro CM half. Asymptotic a -ro3/(2gm5ro5ro6), b -gm3ro3ro5/(2ro7), but second approximation requires input resistance-boosted output impedance >> cascoded load, not automatic gmro≫1. Must check conditions.",
+    "p4": "Tail output test with emitterR1 and rpi3: Rt=ro3+(1+gm3ro3)(R1||rpi3). Inputro∞, base-current neglected => ACM-DM=ΔRC/(1/gm1+2Rt); high gmRt and gm3ro3 -> ΔRC/[2gm3ro3(R1||rpi3)]. Sign for vo1−vo2 with right loadRC+ΔRC is positive.",
+    "p5": "Each input/PMOS1mA,gm1=.01,ro1=ro3=10k. Tail5,6=2mA,gm5=.02,ro5=ro6=5k, Rt≈500k exact510k. ACM≈-ro3/(2Rt)=-.01; output-R mismatch50 -> ACM-DM≈50/(2Rt)=5e-5. DM -gm1(ro1||ro3)=-50. CMRR=1e6=120dB. Need exact finite-ro CM corrections limits.",
+    "p6": "CMRR=|ADM/ACM-DM|=gm1 RC(1/gm1+2Rt)/|ΔRC|; high gmRt =>2gm1RC Rt/|ΔRC| and Rt≈gm3ro3(R1||rpi3).",
+    "p7": "M1M2ro∞. Rt(a)=ro3; Rt(b)=ro3+ro4+gm3ro3ro4. DM Av=-gm(RD+ΔRD/2) exact resistor average; firstorder mismatch nominal -gmRD. ACM-DM=ΔRD/(1/gm+2Rt). CMRR=(1+2gmRt)(RD+Δ/2)/|Δ|. b/a≈gm3ro4 if strong tail degeneration and cascode boost.",
+    "p8": "DC I=.5mA input K=.1,Vov=.1,tailK=.2,Vov3=.1. VCMmin=.4+.1+.1=.6V. Heavier right output1.8-.0005*1020=1.29 -> exact worst saturation maximum1.69V; nominal mismatch neglect1.70V. roinput20k,rotail10k,gm.01. ACMnom≈-.05; conversion≈20/(100+20000)=.000995; ADMnom-10 and CMRR10050 or high-degeneration1e4=80dB. Exact finite ro and mismatch can be computed via 3-node KCL; differences disclose.",
+    "p9": "PMOS mirror output current=m I1; RL goes from output to ground and sinkI2 removes current. KCL Vout/RL=mI1-I2. a m1 ->0 before,2ΔI RL after. b m1/2 ->-I0 RL/2 before,(-I0/2+3ΔI/2)RL after. Negative result impossible with NMOS ideal sink ground compliance and positive supply? Mathematical ideal sources support negative output; PMOS saturation may hold but current sink compliance unspecified. Must caveat.",
+    "p10": "Active-mirror bipolar load DM-to-single-ended transconductance gm; gain magnitude gm(ron||rop)=1/[VT(1/VAn+1/VAp)]. Set100,VAn5,VT.025 ->1/VAp=.4-.2=.2 so VAp5V. Finite beta corrections not requested."
+  },
+  "comparison_status": "not_started"
+}

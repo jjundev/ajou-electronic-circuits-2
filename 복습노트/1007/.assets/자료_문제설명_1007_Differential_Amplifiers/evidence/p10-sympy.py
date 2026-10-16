@@ -1,32 +1,17 @@
-# P10.75: active-load bipolar diff pair (Fig 10.96), |Av| = 100, V_A,n = 5 V -> V_A,p ?
-import sympy as sp
-gm1,gm2,gm3,gm4,ro1,ro2,ro3,ro4,vd = sp.symbols('g_m1 g_m2 g_m3 g_m4 r_o1 r_o2 r_o3 r_o4 v_d', positive=True)
-vP,vX,vo = sp.symbols('v_P v_X v_out')
-v1, v2 = vd/2, -vd/2
-# currents flowing down (collector->emitter) in Q1,Q2 ; Q3,Q4 pnp: current from VCC into X / out (beta->inf, r_pi->inf)
-i1 = gm1*(v1-vP) + (vX-vP)/ro1
-i2 = gm2*(v2-vP) + (vo-vP)/ro2
-i3 = gm3*(0-vX) + (0-vX)/ro3     # diode-connected pnp: v_EB = -vX
-i4 = gm4*(0-vX) + (0-vo)/ro4
-eqs = [sp.Eq(i3,i1), sp.Eq(i4,i2), sp.Eq(i1+i2,0)]  # ideal tail source
-sol = sp.solve(eqs,[vP,vX,vo],dict=True)[0]
-# symmetric pair: gm1=gm2=gm, gm3=gm4=gmp, ro1=ro2=ron, ro3=ro4=rop
-gm,gmp,ron,rop = sp.symbols('g_m g_mp r_on r_op', positive=True)
-Av = sp.simplify((sol[vo]/vd).subs({gm1:gm,gm2:gm,gm3:gmp,gm4:gmp,ro1:ron,ro2:ron,ro3:rop,ro4:rop}))
-print('Exact Av =', Av)
-target = gm*ron*rop/(ron+rop)
-print('Av - gm(ron||rop) =', sp.simplify(Av-target))
-print('lim gmp->inf (Av - gm(ron||rop)) =', sp.simplify(sp.limit(Av-target, gmp, sp.oo)))
-# substitute bipolar params: gm = IC/VT, ron = VAn/IC, rop = VAp/IC
-IC,VT,VAn,VAp = sp.symbols('I_C V_T V_An V_Ap', positive=True)
-A_bjt = sp.simplify(target.subs({gm:IC/VT, ron:VAn/IC, rop:VAp/IC}))
-print('Av (bipolar) =', A_bjt)
-VApsol = sp.solve(sp.Eq(A_bjt.subs({VAn:5, VT:sp.Rational(26,1000)}),100), VAp)
-print('V_A,p (VT=26mV) =', VApsol, '=', [sp.N(x,6) for x in VApsol], 'V')
-VApsol25 = sp.solve(sp.Eq(A_bjt.subs({VAn:5, VT:sp.Rational(25,1000)}),100), VAp)
-print('V_A,p (VT=25mV) =', VApsol25, '=', [sp.N(x,6) for x in VApsol25], 'V')
-# exact-gain check with numbers (I_C arbitrary, e.g. 1 mA)
-num = {gm:sp.Rational(1,26)/sp.Rational(1,1000)*sp.Rational(1,1000), ron:5/sp.Rational(1,1000), rop:VApsol[0]/sp.Rational(1,1000)}
-num[gmp]=num[gm]
-print('Exact Av with numbers (IC=1mA, VT=26mV) =', sp.N(Av.subs(num),8))
-print('approx Av with numbers =', sp.N(target.subs(num),8))
+import sympy as S
+from math import log10,pi,sqrt
+
+IC,VT,VA,VP,vo,vd=(S.Symbol('IC',positive=True),S.Symbol('VT',positive=True),S.Symbol('VA',positive=True),S.Symbol('VP',positive=True),S.Symbol('vo',real=True),S.Symbol('vd',real=True))
+g=IC/VT;rn=VA/IC;rp=VP/IC
+# Mirror doubles the half-input difference current; single output current=gm*vd.
+A=S.factor(S.solve(S.Eq(vo/rn+vo/rp-g*vd,0),vo)[0]/vd)
+print('active mirror KCL gain',A);assert S.simplify(1/A-VT/VA-VT/VP)==0
+req=S.solve(S.Eq(A,100),VP)[0];print('required VAp=',req,'atVT26=',req.subs({VT:S.Rational(26,1000),VA:5}),'VT25=',req.subs({VT:S.Rational(25,1000),VA:5}))
+assert S.simplify(A.subs(VP,req)-100)==0
+print('VAp infinity gain=',S.limit(A,VP,S.oo))
+
+# Full three-node finite-output-resistance mirror model (beta infinity).
+gm,rn,rp,vd=S.symbols('gm rn rp vd',positive=True);x,y,e=S.symbols('x y e',real=True)
+i1=gm*(vd/2-e)+(x-e)/rn;i2=gm*(-vd/2-e)+(y-e)/rn
+full=S.solve([i1+gm*x+x/rp,i2+gm*x+y/rp,i1+i2],[x,y,e]);Ae=S.factor(full[y]/vd);lead=gm/(1/rn+1/rp)
+print('Finite-ro full mirror gain',Ae,'leading=',lead);print('exact/leading intrinsic-gain limit',S.simplify(S.limit(Ae/lead,gm,S.oo)));assert S.simplify(S.limit(Ae/lead,gm,S.oo)-1)==0

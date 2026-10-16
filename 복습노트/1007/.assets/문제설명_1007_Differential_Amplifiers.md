@@ -28,16 +28,6 @@
 
 P10.67 · 장말문제 10.67 · [원 문제 보기](../%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
 
-#### 원문
-
-Compute the common-mode gain of the MOS differential pair shown in Fig. 10.88. Assume $\lambda = 0$ for $M_1$ and $M_2$ but $\lambda \neq 0$ for $M_3$. Prove
-
-$$
-A_{CM} = \frac{-R_D I_{SS}}{\dfrac{2}{\lambda} + (V_{GS} - V_{TH})_{eq.}}, \qquad (10.224)
-$$
-
-where $(V_{GS} - V_{TH})_{eq.}$ denotes the equilibrium overdrive of $M_1$ and $M_2$.
-
 #### 주어진 조건
 
 - $M_1$, $M_2$: $\lambda = 0$
@@ -54,6 +44,18 @@ where $(V_{GS} - V_{TH})_{eq.}$ denotes the equilibrium overdrive of $M_1$ and $
   $$
 
 ![그림 P10.67](figures_%EB%AC%B8%EC%A0%9C%EC%84%A4%EB%AA%85_1007_Differential_Amplifiers/b9fde612bff67b34-fig10-88.png)
+
+<details><summary>원문 보기</summary>
+
+Compute the common-mode gain of the MOS differential pair shown in Fig. 10.88. Assume $\lambda = 0$ for $M_1$ and $M_2$ but $\lambda \neq 0$ for $M_3$. Prove
+
+$$
+A_{CM} = \frac{-R_D I_{SS}}{\dfrac{2}{\lambda} + (V_{GS} - V_{TH})_{eq.}}, \qquad (10.224)
+$$
+
+where $(V_{GS} - V_{TH})_{eq.}$ denotes the equilibrium overdrive of $M_1$ and $M_2$.
+
+</details>
 
 #### 문제를 내 말로 읽어요
 
@@ -196,10 +198,6 @@ $r_{O3}\to0$: $-g_mR_D$
 
 P10.68 · 장말문제 10.68 · [원 문제 보기](../%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
 
-#### 원문
-
-Calculate the common-mode gain of the circuit depicted in Fig. 10.89. Assume $\lambda > 0$, $g_m r_O \gg 1$, and use the relationship $A_v = -G_m R_{out}$.
-
 #### 주어진 조건
 
 - $\lambda > 0$
@@ -211,6 +209,12 @@ Calculate the common-mode gain of the circuit depicted in Fig. 10.89. Assume $\l
 - 회로의 공통 모드 이득
 
 ![그림 P10.68](figures_%EB%AC%B8%EC%A0%9C%EC%84%A4%EB%AA%85_1007_Differential_Amplifiers/d93bd8d61a274e40-fig10-89.png)
+
+<details><summary>원문 보기</summary>
+
+Calculate the common-mode gain of the circuit depicted in Fig. 10.89. Assume $\lambda > 0$, $g_m r_O \gg 1$, and use the relationship $A_v = -G_m R_{out}$.
+
+</details>
 
 #### 문제를 내 말로 읽어요
 
@@ -355,10 +359,6 @@ $r_{O5}\to\infty$이면 0
 
 P10.69 · 장말문제 10.69 · [원 문제 보기](../%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
 
-#### 원문
-
-Repeat Problem 10.68 for the circuits shown in Fig. 10.90.
-
 #### 주어진 조건
 
 - 문제 10.68을 되풀이 (아래 상속·참조)
@@ -368,6 +368,12 @@ Repeat Problem 10.68 for the circuits shown in Fig. 10.90.
 - (a), (b) 각 회로의 공통 모드 이득 (소문항 표기 없음, 원문은 "the circuits shown in Fig. 10.90"으로 적음)
 
 ![그림 P10.69](figures_%EB%AC%B8%EC%A0%9C%EC%84%A4%EB%AA%85_1007_Differential_Amplifiers/20e246081cbe7165-fig10-90.png)
+
+<details><summary>원문 보기</summary>
+
+Repeat Problem 10.68 for the circuits shown in Fig. 10.90.
+
+</details>
 
 #### 문제를 내 말로 읽어요
 
@@ -542,10 +548,6 @@ $r_{O6}\to0$ 또는 $r_{O5}\to0$ → 문제 10.68 답
 
 E10.27 · 예제 10.27 · [원 문제 보기](../%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
 
-#### 원문
-
-그림 10.48에 보인 회로의 $A_{CM-DM}$을 구하라. $Q_1$과 $Q_2$의 $V_A = \infty$라고 가정한다.
-
 #### 주어진 조건
 
 - $Q_1$과 $Q_2$의 $V_A = \infty$
@@ -557,6 +559,12 @@ E10.27 · 예제 10.27 · [원 문제 보기](../%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%
 - 회로의 $A_{CM-DM}$
 
 ![그림 E10.27](figures_%EB%AC%B8%EC%A0%9C%EC%84%A4%EB%AA%85_1007_Differential_Amplifiers/2b6f582604e117f0-fig10-48.png)
+
+<details><summary>원문 보기</summary>
+
+그림 10.48에 보인 회로의 $A_{CM-DM}$을 구하라. $Q_1$과 $Q_2$의 $V_A = \infty$라고 가정한다.
+
+</details>
 
 #### 문제를 내 말로 읽어요
 
@@ -724,16 +732,6 @@ $\Delta V_{out1}-\Delta V_{out2}=\Delta R_C\,\Delta I_C$
 
 2021-1_중간-Q4 · 기출 4 · [원 문제 보기](../%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
 
-#### 원문
-
-다음 차동 증폭기에 대해 주어진 조건을 이용하여 질문에 답하시오.
-
-: $I_{D6} = 2\ \text{mA}$, $(W/L)_{1,2} = 100/0.2$, $(W/L)_{3,4} = 200/0.2$, $(W/L)_{5,6} = 200/0.2$, $\mu_n C_{ox} = 100\ \mu\text{A/V}^2$, $\mu_p C_{ox} = 50\ \mu\text{A/V}^2$, $\lambda_n = \lambda_p = 0.1\ \text{V}^{-1}$. 단, $g_m r_o \gg 1$로 가정한다.
-
-(1) Common-mode 이득($A_{CM}$)을 구하시오. 그리고, 차동 출력 양단에 $50\ \Omega$의 출력 저항 차이가 발생할 때, common-mode to differential-mode 변환 이득($A_{CM-DM}$)을 구하시오.
-
-(2) 차동 전압 이득을 구하시오. 그리고 위에서 구한 $A_{CM-DM}$ 값을 이용하여 common-mode rejection ratio (CMRR) 값을 구하시오.
-
 #### 주어진 조건
 
 - $I_{D6} = 2\ \text{mA}$
@@ -750,6 +748,18 @@ $\Delta V_{out1}-\Delta V_{out2}=\Delta R_C\,\Delta I_C$
 - (2) 차동 전압 이득. 그리고 (1)에서 구한 $A_{CM-DM}$ 값으로 common-mode rejection ratio (CMRR)
 
 ![그림 2021-1_중간-Q4](figures_%EB%AC%B8%EC%A0%9C%EC%84%A4%EB%AA%85_1007_Differential_Amplifiers/6749ad343267239c-fig-Q4.png)
+
+<details><summary>원문 보기</summary>
+
+다음 차동 증폭기에 대해 주어진 조건을 이용하여 질문에 답하시오.
+
+: $I_{D6} = 2\ \text{mA}$, $(W/L)_{1,2} = 100/0.2$, $(W/L)_{3,4} = 200/0.2$, $(W/L)_{5,6} = 200/0.2$, $\mu_n C_{ox} = 100\ \mu\text{A/V}^2$, $\mu_p C_{ox} = 50\ \mu\text{A/V}^2$, $\lambda_n = \lambda_p = 0.1\ \text{V}^{-1}$. 단, $g_m r_o \gg 1$로 가정한다.
+
+(1) Common-mode 이득($A_{CM}$)을 구하시오. 그리고, 차동 출력 양단에 $50\ \Omega$의 출력 저항 차이가 발생할 때, common-mode to differential-mode 변환 이득($A_{CM-DM}$)을 구하시오.
+
+(2) 차동 전압 이득을 구하시오. 그리고 위에서 구한 $A_{CM-DM}$ 값을 이용하여 common-mode rejection ratio (CMRR) 값을 구하시오.
+
+</details>
 
 #### 문제를 내 말로 읽어요
 
@@ -885,6 +895,8 @@ dB로 쓰면 $20\log_{10}(10^6)=120\ \text{dB}$예요.
 
 **비율 확인:** $A_{CM-DM}/A_{CM}=\Delta R/r_{O3}=50/10^4=5\times10^{-3}$이에요. 두 결과가 같은 $\Delta I_D$를 공유하므로 이 비율이 정확히 나와야 해요.
 
+유한한 입력 $r_o$까지 남긴 CM 반회로의 정확식도 있어요. $Q=r_{O1}+2R_{SS}(1+g_{m1}r_{O1})$라 놓으면 $G_{m,e}=g_{m1}r_{O1}/Q$, $A_{CM,e}=-G_{m,e}(Q\parallel r_{O3})$예요. 테일의 작은 항까지 넣은 $R_{SS}=510$ kΩ에서 $A_{CM,e}=-0.009705$이고 주 답 −0.0100과 약 3% 달라요. 출력 저항 차이를 작은 섭동으로 보는 같은 전달전류 모델의 변환 이득은 $G_{m,e}\Delta R$예요. $g_{m1}$을 크게 하는 극한에서 $G_{m,e}/[1/(2R_{SS})]\to1$, $A_{CM,e}/[-r_{O3}/(2R_{SS})]\to1$이고, 테일 역시 $g_{m5}\to\infty$에서 $R_{SS}/(g_{m5}r_{O5}r_{O6})\to1$이에요.
+
 #### (2) 검산
 
 **$A_{DM}\approx-50$, $\text{CMRR}\approx1.0\times10^{6}$ ($120\ \text{dB}$)**
@@ -954,10 +966,6 @@ $R_{SS}\to\infty$이면 $A_{CM}\to0$이에요.
 
 E10.28 · 예제 10.28 · [원 문제 보기](../%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
 
-#### 원문
-
-그림 10.48 회로의 CMRR을 계산하라.
-
 #### 주어진 조건
 
 - 예제 10.27의 가정($Q_1$, $Q_2$의 $V_A = \infty$) 유지
@@ -968,6 +976,12 @@ E10.28 · 예제 10.28 · [원 문제 보기](../%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%
 - 회로의 CMRR
 
 ![그림 E10.28](figures_%EB%AC%B8%EC%A0%9C%EC%84%A4%EB%AA%85_1007_Differential_Amplifiers/2b6f582604e117f0-fig10-48.png)
+
+<details><summary>원문 보기</summary>
+
+그림 10.48 회로의 CMRR을 계산하라.
+
+</details>
 
 #### 문제를 내 말로 읽어요
 
@@ -1035,7 +1049,7 @@ $$
 \Delta V_{out1}-\Delta V_{out2}=-g_{m1}\left(R_C+\frac{\Delta R_C}{2}\right)V_{id}
 $$
 
-$\Delta R_C\ll R_C$이므로 $\Delta R_C/2$를 버리면 $|A_{DM}|\approx g_{m1}R_C$예요. 미스매치는 차동 이득을 0.5% 정도만 바꾸므로 여기서는 무시해도 돼요.
+$\Delta R_C\ll R_C$이므로 $\Delta R_C/2$를 버리면 $|A_{DM}|\approx g_{m1}R_C$예요. 예를 들어 1% 부하 미스매치라면 차동 이득 변화는 약 0.5%여서 작은 미스매치 근사에서 생략해요.
 
 **공통 모드→차동 이득.** 두 베이스가 함께 $\Delta V_{CM}$만큼 움직이면 $Q_1$·$Q_2$ 전류가 똑같이 변해요. 대칭이라 $R_{out3}$를 $2R_{out3}$ 두 개로 나눠 각 이미터에 하나씩 붙인 축퇴 단으로 봐요.
 
@@ -1126,10 +1140,6 @@ $\Delta R_C\to0$이면 $\infty$, $R_1\to0$이면 $R_{out3}=r_{O3}$, 무차원
 
 P10.70 · 장말문제 10.70 · [원 문제 보기](../%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
 
-#### 원문
-
-Compute the common-mode rejection ratio of the stages illustrated in Fig. 10.91 and compare the results. For simplicity, neglect channel-length modulation in $M_1$ and $M_2$ but not in other transistors.
-
 #### 주어진 조건
 
 - 간단히 하기 위해 $M_1$, $M_2$의 채널 길이 변조는 무시, 다른 트랜지스터의 채널 길이 변조는 무시하지 않음
@@ -1140,6 +1150,12 @@ Compute the common-mode rejection ratio of the stages illustrated in Fig. 10.91 
 - 두 결과를 비교
 
 ![그림 P10.70](figures_%EB%AC%B8%EC%A0%9C%EC%84%A4%EB%AA%85_1007_Differential_Amplifiers/b5787a3f7fffbb71-fig10-91.png)
+
+<details><summary>원문 보기</summary>
+
+Compute the common-mode rejection ratio of the stages illustrated in Fig. 10.91 and compare the results. For simplicity, neglect channel-length modulation in $M_1$ and $M_2$ but not in other transistors.
+
+</details>
 
 #### 문제를 내 말로 읽어요
 
@@ -1328,18 +1344,6 @@ $r_{O4}\to0$ → (b)가 (a)로
 
 2023-1_중간-Q4 · 기출 4 · [원 문제 보기](../%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
 
-#### 원문
-
-다음 차동 증폭기에 대해 주어진 조건을 이용하여 질문에 답하시오.
-
-: $V_{DD} = 1.8\ \text{V}$, $I_{D3} = 1\ \text{mA}$, $R_D = 1\ \text{k}\Omega$, $\Delta R_D = 20\ \Omega$, $(W/L)_{1,2} = 200/0.2$, $(W/L)_3 = 400/0.2$, $V_{TH,n} = 0.4\ \text{V}$, $\mu_n C_{ox} = 100\ \mu\text{A/V}^2$, $\lambda_n = 0.1\ \text{V}^{-1}$. 단, $g_m r_o \gg 1$로 가정한다.
-
-(1) 입력 common-mode level($V_{CM,in}$)의 최대값과 최소값을 각각 구하시오.
-
-(2) Common-mode 이득($A_{CM}$)과 common-mode to differential-mode 변환 이득($A_{CM-DM}$)을 각각 구하시오.
-
-(3) Common-mode rejection ratio(CMRR)를 구하시오.
-
 #### 주어진 조건
 
 - $V_{DD} = 1.8\ \text{V}$, $I_{D3} = 1\ \text{mA}$
@@ -1357,6 +1361,20 @@ $r_{O4}\to0$ → (b)가 (a)로
 
 ![그림 2023-1_중간-Q4](figures_%EB%AC%B8%EC%A0%9C%EC%84%A4%EB%AA%85_1007_Differential_Amplifiers/d6de05b6f97931dd-fig-Q4.png)
 
+<details><summary>원문 보기</summary>
+
+다음 차동 증폭기에 대해 주어진 조건을 이용하여 질문에 답하시오.
+
+: $V_{DD} = 1.8\ \text{V}$, $I_{D3} = 1\ \text{mA}$, $R_D = 1\ \text{k}\Omega$, $\Delta R_D = 20\ \Omega$, $(W/L)_{1,2} = 200/0.2$, $(W/L)_3 = 400/0.2$, $V_{TH,n} = 0.4\ \text{V}$, $\mu_n C_{ox} = 100\ \mu\text{A/V}^2$, $\lambda_n = 0.1\ \text{V}^{-1}$. 단, $g_m r_o \gg 1$로 가정한다.
+
+(1) 입력 common-mode level($V_{CM,in}$)의 최대값과 최소값을 각각 구하시오.
+
+(2) Common-mode 이득($A_{CM}$)과 common-mode to differential-mode 변환 이득($A_{CM-DM}$)을 각각 구하시오.
+
+(3) Common-mode rejection ratio(CMRR)를 구하시오.
+
+</details>
+
 #### 문제를 내 말로 읽어요
 
 저항 부하 NMOS 차동쌍(differential pair)이에요. 입력은 두 게이트 $V_{in1}$, $V_{in2}$이고 출력은 두 드레인 $v_{out1}$, $v_{out2}$예요. 아래쪽 $M_3$는 게이트가 고정 바이어스 $V_{b1}$에 묶인 테일 전류원(tail current source)이라서 $I_{D3}=1\ \text{mA}$를 공급하고, 평형 상태에서는 반씩 나눠 $M_1$, $M_2$에 $0.5\ \text{mA}$씩 흘러요.
@@ -1364,6 +1382,8 @@ $r_{O4}\to0$ → (b)가 (a)로
 이 회로의 특징은 오른쪽 부하만 $\Delta R_D=20\ \Omega$ 더 크다는 점이에요. 완전 대칭이면 두 입력에 똑같이 들어온 잡음(공통 모드, common mode)은 두 출력을 똑같이 흔들어서 차동 출력 $v_{out1}-v_{out2}$에는 안 나타나요. 부하가 조금 다르면 두 출력이 흔들리는 크기가 달라져 차동 출력에 잡음이 새어 나와요.
 
 구할 것은 세 가지예요. (1) 세 트랜지스터가 모두 포화(saturation)에 머무는 입력 공통 모드 전압의 범위, (2) 공통 모드 이득 $A_{CM}$과 공통 모드가 차동 출력으로 바뀌는 이득 $A_{CM-DM}$, (3) 이 둘과 차동 이득의 비 CMRR이에요. $V_{b1}$ 값은 없지만 $M_3$의 전류와 $W/L$을 알면 $M_3$의 오버드라이브를 구할 수 있으니 문제를 푸는 데 지장이 없어요.
+
+주답은 채널 길이 변조를 DC 전류·과구동 계산에서 무시하고, 입력 소자의 $r_o$도 두 이득에서 함께 무시하는 교재 근사예요. $\Delta R_D/R_D=0.02$의 작은 미스매치로 차동 이득의 평균 부하 보정도 생략해요. $r_o$를 일관되게 남긴 보충 소신호 결과와 구분해요.
 
 #### 이 문제를 봤을 때 떠올릴 개념과 공식
 
@@ -1379,7 +1399,7 @@ $$
 
 **(3) CMRR**은 원하는 신호의 이득과 원하지 않는 신호의 이득의 비 $\text{CMRR}=|A_{DM}/A_{CM-DM}|$예요([CMRR](../%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s1-cmrr)). 차동 입력에서는 $P$가 가상 접지(virtual ground)라 $|A_{DM}|=g_mR_D$예요.
 
-**근사 조건**: 문제가 $g_m r_o\gg1$을 주었으므로 $M_1$·$M_2$의 $r_o$는 *모든 이득에서 똑같이* 무시하고, 테일의 $r_{O3}$만 $R_{SS}$로 남겨요. CM 하프 서킷에서 $M_1$ 드레인으로 들여다본 저항 $r_{O1}+(1+g_{m1}r_{O1})(2R_{SS})$가 MΩ급이라는 점이 이 근사의 근거예요. 이렇게 하면 $A_{DM}$, $A_{CM-DM}$, CMRR이 모두 같은 가정 위에 서서 강의·Razavi 식과 일치해요. $r_{O1}$을 넣고 싶다면 $A_{DM}$과 $A_{CM-DM}$ 둘 다에 넣어야 해요. 두 출력의 전압이 다르면 $r_{O1}$, $r_{O2}$로 흐르는 전류도 달라져 $A_{CM-DM}$ 역시 약 5% 바뀌기 때문이에요. DC 바이어스 계산(전류·$V_{ov}$)에서는 관례대로 $\lambda$를 무시해요.
+**근사 조건**: 문제가 $g_m r_o\gg1$을 주었으므로 $M_1$·$M_2$의 $r_o$는 *모든 이득에서 똑같이* 무시하고, 테일의 $r_{O3}$만 $R_{SS}$로 남겨요. CM 하프 서킷에서 $M_1$ 드레인으로 들여다본 저항 $r_{O1}+(1+g_{m1}r_{O1})(2R_{SS})$가 MΩ급이라는 점이 이 근사의 근거예요. 이렇게 하면 $A_{DM}$, $A_{CM-DM}$, CMRR이 모두 같은 가정 위에 서서 강의·Razavi 식과 일치해요. $r_{O1}$을 넣고 싶다면 $A_{DM}$과 $A_{CM-DM}$ 둘 다에 넣어야 해요. 두 출력의 전압이 다르면 $r_{O1}$, $r_{O2}$로 흐르는 전류도 달라져 $A_{CM-DM}$ 역시 약 5% 바뀌기 때문이에요. DM에서 $r_{O1}$을 생략하려면 추가로 $R_D/r_{O1}\ll1$도 필요해요. 여기서는 $R_D/r_{O1}=0.05$로 유한 출력저항 보정이 수%임을 아래에서 수치로 공개해요. 미스매치의 차동 이득 영향 $\Delta R_D/(2R_D)=0.01$도 생략하는 작은 미스매치 근사예요. DC 바이어스 계산(전류·$V_{ov}$)에서는 관례대로 $\lambda$를 무시해요.
 
 #### 종이에 쓸 첫 줄
 
@@ -1499,6 +1519,18 @@ $$
 
 근사의 크기: $r_{O1}$, $r_{O2}$까지 넣어 정확히 풀면 $A_{CM}\approx-4.95\times10^{-2}$라 0.6%만 달라요. 반면 $A_{CM-DM}$은 $9.42\times10^{-4}$로 약 5% 작아져요. 두 출력 전압이 서로 달라서 $r_{O1}$, $r_{O2}$로 흐르는 전류도 달라지고, 그 차이가 부하 차이를 일부 상쇄하기 때문이에요. 그래도 $g_mr_o\gg1$ 가정 아래의 표준 답은 $9.95\times10^{-4}$이고, 이 근사를 (3)에서도 똑같이 지켜야 해요.
 
+보충 수치의 정확한 KCL 형태를 적어요. $a=1+R_D/r_o$, $b=1+(R_D+\Delta R_D)/r_o$, $k=g_m+1/r_o$라 두면
+
+$$
+i_1=(g_mv_1-kv_P)/a,\qquad i_2=(g_mv_2-kv_P)/b,
+$$
+
+$$
+v_P/R_{SS}=i_1+i_2,\qquad v_{o1}=-R_Di_1,\quad v_{o2}=-(R_D+\Delta R_D)i_2
+$$
+
+예요. CM에는 $v_1=v_2=1$, 단위 DM에는 $v_1=1/2,v_2=-1/2$를 넣어 위 보충값들을 얻어요. $r_o\to\infty$에서 CM·변환 이득은 본문 축퇴식과 정확히 같아지고, DM에서는 추가로 $\Delta R_D/R_D\to0$일 때 본문의 $-g_mR_D$와 비가 1로 가요.
+
 #### (3) 검산
 
 **$\text{CMRR}\approx1.01\times10^4$ (80.0 dB)** (계산값 $10050$, 보충: $r_{O1}$을 두 이득 모두에 넣으면 $1.02\times10^4$, 80.2 dB)
@@ -1513,6 +1545,8 @@ $$
 - $I_{D3}$로 $r_{O1}$을 구하거나, $I_{D1}$로 $r_{O3}$를 구하는 실수. $r_o=1/(\lambda I_D)$의 $I_D$는 그 트랜지스터의 전류예요.
 - $r_{O1}$을 $A_{DM}=g_{m1}(R_D\parallel r_{O1})=9.52$에만 넣고 $A_{CM-DM}=9.95\times10^{-4}$은 그대로 두면 CMRR이 $9.57\times10^3$(79.6 dB)이 돼요. 분자와 분모의 모델이 섞인 값이라 어느 모델의 답도 아니에요. $r_{O1}$은 두 이득에서 똑같이 무시하거나 똑같이 넣어요.
 - CMRR을 $A_{DM}/A_{CM}$으로 계산하는 실수. 이 문제에서는 차동 출력에 섞이는 잡음이 기준이라 분모는 $A_{CM-DM}$이에요.
+
+주답의 $|A_{DM}|=10$은 작은 미스매치에서 평균 부하 보정을 생략한 값이에요. $r_o$와 미스매치를 남긴 보충 결과를 쓸 때는 CM-to-DM 이득도 같은 모델로 계산해요.
 
 #### 설명을 닫고 다시 풀어 봐요
 
@@ -1556,6 +1590,10 @@ $A_{CM-DM}=\Delta R_D/(1/g_m+2R_{SS})$
 
 $R_{SS}\to\infty$이면 두 CM 이득 0, $\Delta R_D=0$이면 CMRR$\to\infty$
 
+#### 적용 조건
+
+주답 모델: DC 제곱 법칙, 입력 $r_o$를 두 이득에서 함께 생략, 작은 미스매치의 DM 부하 보정 생략. 보충 정확 소신호 모델과 섞지 않아요.
+
 ---
 
 <a id="p9"></a>
@@ -1563,14 +1601,6 @@ $R_{SS}\to\infty$이면 두 CM 이득 0, $\Delta R_D=0$이면 CMRR$\to\infty$
 ### PMOS 전류 거울(Fig 10.93)에서 I_1, I_2가 반대로 ΔI 변할 때 V_out 변화
 
 P10.72 · 장말문제 10.72 · [원 문제 보기](../%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
-
-#### 원문
-
-In the circuit shown in Fig. 10.93, $I_1$ changes from $I_0$ to $I_0 + \Delta I$ and $I_2$ from $I_0$ to $I_0 - \Delta I$. Neglecting channel-length modulation, calculate $V_{out}$ before and after the change if
-
-(a) $(W/L)_3 = (W/L)_4$.
-
-(b) $(W/L)_3 = 2(W/L)_4$.
 
 #### 주어진 조건
 
@@ -1585,6 +1615,16 @@ In the circuit shown in Fig. 10.93, $I_1$ changes from $I_0$ to $I_0 + \Delta I$
 
 ![그림 P10.72](figures_%EB%AC%B8%EC%A0%9C%EC%84%A4%EB%AA%85_1007_Differential_Amplifiers/7cbdd14825907ca5-fig10-93.png)
 
+<details><summary>원문 보기</summary>
+
+In the circuit shown in Fig. 10.93, $I_1$ changes from $I_0$ to $I_0 + \Delta I$ and $I_2$ from $I_0$ to $I_0 - \Delta I$. Neglecting channel-length modulation, calculate $V_{out}$ before and after the change if
+
+(a) $(W/L)_3 = (W/L)_4$.
+
+(b) $(W/L)_3 = 2(W/L)_4$.
+
+</details>
+
 #### 문제를 내 말로 읽어요
 
 왼쪽의 $M_3$는 게이트와 드레인이 묶인 다이오드 연결(diode-connected) PMOS예요. $I_1$이 $M_3$에서 전류를 끌어내리면 그 전류에 맞는 $V_{SG}$가 생기고, 같은 게이트 전압을 받는 $M_4$가 그 전류를 오른쪽에 복사해요. 즉 이 회로는 PMOS 전류 거울(current mirror)이에요.
@@ -1592,6 +1632,8 @@ In the circuit shown in Fig. 10.93, $I_1$ changes from $I_0$ to $I_0 + \Delta I$
 입력은 두 전류원 $I_1$, $I_2$이고 출력은 $M_4$ 드레인 노드의 전압 $V_{out}$이에요. 출력 노드에는 위에서 $M_4$가 전류 $I_{D4}$를 밀어 넣고, 아래로 $I_2$와 $R_L$이 전류를 빼가요. 두 전류원이 남긴 "차이"만 $R_L$로 흘러 전압이 돼요.
 
 구할 것은 $I_1=I_2=I_0$일 때(전)와 $I_1=I_0+\Delta I$, $I_2=I_0-\Delta I$일 때(후)의 $V_{out}$이고, 거울 비율이 1:1인 (a)와 $M_4$가 $M_3$의 절반 크기인 (b)를 비교해요. 채널 길이 변조는 무시하니 $\lambda=0$이에요.
+
+(b)의 음의 출력은 $I_2$를 음의 출력 전압에서도 정해진 전류를 유지하는 이상적 전류원으로 보는 결과예요. 실제 전류원의 전압 여유는 주어지지 않았으므로 이 이상 모델과 $M_4$ 포화 범위에서 전후 전압을 계산해요.
 
 #### 이 문제를 봤을 때 떠올릴 개념과 공식
 
@@ -1605,7 +1647,7 @@ $$
 
 **기호의 뜻**: $I_{D4}$는 $M_4$가 출력 노드로 내보내는 드레인 전류, $(W/L)$은 트랜지스터의 폭/길이 비(클수록 같은 $V_{SG}$에서 전류가 커요), $R_L$은 출력 노드에서 접지로 가는 부하 저항이에요.
 
-**근사 조건**: $\lambda=0$이라 $M_4$의 전류가 $V_{SD4}$와 무관해요. 그래서 $V_{out}$이 어디에 있든 $I_{D4}$는 위 식 그대로예요. 단, $M_4$가 포화에 머문다는 가정($V_{out}\le V_{DD}-(V_{SG}-|V_{TH}|)$)이 필요하고, $I_2$는 출력 전압과 무관한 이상 전류원으로 봐요. 이 문제는 대신호(large-signal) 계산이라 $g_m$이나 하프 서킷은 필요 없어요.
+**근사 조건**: $\lambda=0$이라 $M_4$의 전류가 $V_{SD4}$와 무관해요. 그래서 포화 범위 안에서는 $V_{out}$ 변화와 무관하게 $I_{D4}$가 위 식을 따라요. 단, $M_4$가 포화에 머문다는 가정($V_{out}\le V_{DD}-(V_{SG}-|V_{TH}|)$)이 필요하고, $I_2$는 출력 전압과 무관한 이상 전류원으로 봐요. 이 문제는 대신호(large-signal) 계산이라 $g_m$이나 하프 서킷은 필요 없어요.
 
 **선택 이유**: $\lambda=0$이면 $M_4$는 출력 노드에서 보면 고정 전류원 하나예요. 그러면 출력 노드는 "전류원 두 개 + 저항 하나"뿐이라 KCL 한 줄로 $V_{out}$이 나와요. 정리노트의 [MOS 능동 부하 차동쌍](../%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1007_Differential_Amplifiers.html#s2-mos-active)에서 본 "한쪽이 하나 더, 다른 쪽이 하나 덜이면 출력에는 두 개 차이"가 바로 (a)예요.
 
@@ -1688,6 +1730,8 @@ $$
 - (b)의 변화 전 값을 $0$으로 두는 실수. 거울 비율이 1이 아니면 같은 $I_0$를 넣어도 $I_{D4}\neq I_2$라 직류 출력이 $0$이 아니에요.
 - $\lambda=0$인데 $r_{O4}$를 $R_L$과 병렬로 넣는 실수. 이 문제에서 $M_4$는 이상 전류원이에요.
 
+(b)의 음의 출력값을 접지에서 잘라 0 V로 바꾸지 않아요. 이상적 $I_2$의 전압 무관 전류를 가정한 답이며, 실제 전류원에는 별도의 전압 여유 확인이 필요해요.
+
 #### 설명을 닫고 다시 해 봐요
 
 1. 거울 비율 $k$와 출력 노드 KCL 두 줄로 $V_{out}=R_L[kI_1-I_2]$를 직접 적어 보세요.
@@ -1718,6 +1762,10 @@ $\Delta I=0$이면 전 값으로 복귀
 
 변화량은 $(1+k)\Delta I R_L$
 
+#### 적용 조건
+
+(b) 음의 출력은 이상적 $I_2$가 그 전압에서도 전류를 유지하는 모델의 값이에요. $M_4$ 포화 범위와 실제 전류원의 전압 여유를 구분해요.
+
 ---
 
 <a id="p10"></a>
@@ -1725,10 +1773,6 @@ $\Delta I=0$이면 전 값으로 복귀
 ### 능동 부하 바이폴라 쌍(Fig 10.96)의 이득 100을 위한 pnp Early 전압
 
 P10.75 · 장말문제 10.75 · [원 문제 보기](../%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf)
-
-#### 원문
-
-We wish to design the stage shown in Fig. 10.96 for a voltage gain of 100. If $V_{A,n} = 5\ \text{V}$, what is the required Early voltage for the pnp transistors?
 
 #### 주어진 조건
 
@@ -1740,6 +1784,12 @@ We wish to design the stage shown in Fig. 10.96 for a voltage gain of 100. If $V
 - pnp 트랜지스터에 필요한 Early 전압
 
 ![그림 P10.75](figures_%EB%AC%B8%EC%A0%9C%EC%84%A4%EB%AA%85_1007_Differential_Amplifiers/4ae920e792c52166-fig10-96.png)
+
+<details><summary>원문 보기</summary>
+
+We wish to design the stage shown in Fig. 10.96 for a voltage gain of 100. If $V_{A,n} = 5\ \text{V}$, what is the required Early voltage for the pnp transistors?
+
+</details>
 
 #### 문제를 내 말로 읽어요
 
@@ -1822,6 +1872,14 @@ npn만으로 낼 수 있는 이득 상한이 $V_{A,n}/V_T = 5/0.026 \approx 192$
 **극한·특수값.** $V_{A,p}\to\infty$($r_{O4}\to\infty$, 이상적인 거울)이면 이득은 $V_{A,n}/V_T \approx 192$로 가요. 100이 이 상한보다 작으니 해가 존재해요. 만약 $V_{A,n}$이 $100V_T = 2.6\ \text{V}$보다 작았다면 $V_T/V_{A,p}$가 음수가 되어 어떤 pnp로도 이득 100을 못 만들어요. 대칭 특수값으로 $V_{A,p}=V_{A,n}$이면 이득은 $V_A/(2V_T)\approx 96$이라 100에 조금 못 미치므로, 답이 5 V보다 약간 큰 5.42 V인 것도 자연스러워요.
 
 **$V_T$ 민감도.** $V_T = 25\ \text{mV}$를 쓰면 $1/100 - 0.005 = 0.005$라 $V_{A,p} = 5.0\ \text{V}$가 나와요. 두 항의 차가 작아서 $V_T$ 값에 답이 민감하니, 쓴 $V_T$를 답과 함께 적어 두세요.
+
+네 소자의 유한 $r_o$와 이상적 테일을 모두 남기고 베이스 전류만 무시하는 모델도 비교할 수 있어요. 동일 동작 전류에서 npn·pnp의 $g_m$은 같고, 다이오드 쪽 노드·출력 노드·공통 이미터에 KCL을 세워 풀면
+
+$$
+|A_e|=g_m(r_{ON}\parallel r_{OP})\frac{2g_mr_{OP}+1}{2(g_mr_{OP}+1)}
+$$
+
+예요. 본문의 주 답은 뒤 인자를 1로 둔 큰 고유 이득 근사예요. $g_mr_{OP}\to\infty$에서 정확식/근사식 비가 1로 가고, $V_T=26$ mV·$V_{A,p}=5.42$ V에서는 이 보정이 약 0.24%예요. 따라서 작은 보정을 정밀 결과와 구별하며 교과서 설계값을 사용해요.
 
 #### 이 문항에서 하기 쉬운 오류
 

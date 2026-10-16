@@ -1,0 +1,178 @@
+{
+  "date": "0909",
+  "independent": {
+    "status": "pass",
+    "reviewer": "author_late",
+    "evidence": "independent-0909-first.json before references; executed per-question SymPy scripts",
+    "items": {
+      "p1:a": {
+        "status": "pass",
+        "reviewer": "author_late (not early-group author)",
+        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt",
+        "method": "symbolic",
+        "conclusion": "Vov1=sqrt(.001/(.0001*30/.18))=.244949; Vov2=.300; Vb2=.700; Vb1min=.944949 V. gm1=.00408248S; ro=20k; Rout=gm1ro^2+2ro=1.672993M (dominant1.632993M). Compared after blind derivation: current reference and fragment agree within explicitly labeled dominant-term approximation."
+      },
+      "p1:b": {
+        "status": "pass",
+        "reviewer": "author_late (not early-group author)",
+        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt",
+        "method": "symbolic",
+        "conclusion": "Vov1=sqrt(.001/(.0001*30/.18))=.244949; Vov2=.300; Vb2=.700; Vb1min=.944949 V. gm1=.00408248S; ro=20k; Rout=gm1ro^2+2ro=1.672993M (dominant1.632993M). Compared after blind derivation: current reference and fragment agree within explicitly labeled dominant-term approximation."
+      },
+      "p2:main": {
+        "status": "pass",
+        "reviewer": "author_late (not early-group author)",
+        "evidence": "evidence/p2-sympy.py, evidence/p2-result.txt",
+        "method": "symbolic",
+        "conclusion": "ro20k; Rout=2ro+gmro². dominant gm1.25mS,W/L15.625; exact gm1.15mS,W/L13.225. Compared after blind derivation: current reference and fragment agree within explicitly labeled dominant-term approximation."
+      },
+      "p3:main": {
+        "status": "pass",
+        "reviewer": "author_late (not early-group author)",
+        "evidence": "evidence/p3-sympy.py, evidence/p3-result.txt",
+        "method": "symbolic",
+        "conclusion": "gm=sqrt(2*.0001*32*.0005)=1.788854mS. Rout dominant715541.75 ohm; exact755541.75ohm. Compared after blind derivation: current reference and fragment agree within explicitly labeled dominant-term approximation."
+      },
+      "p4:main": {
+        "status": "pass",
+        "reviewer": "author_late (not early-group author)",
+        "evidence": "evidence/p4-sympy.py, evidence/p4-result.txt",
+        "method": "symbolic",
+        "conclusion": "RP across upper M1: effective R1=ro1||RP; Rout=R1+ro2+gm1R1ro2. dominant gm1R1ro2. Compared after blind derivation: current reference and fragment agree within explicitly labeled dominant-term approximation."
+      },
+      "p5:main": {
+        "status": "pass",
+        "reviewer": "author_late (not early-group author)",
+        "evidence": "evidence/p5-sympy.py, evidence/p5-result.txt",
+        "method": "symbolic",
+        "conclusion": "For Rout target half no-RP exact: (1+gm1ro2)(ro1||RP)+ro2=[(1+gm1ro2)ro1+ro2]/2; RP=ro1*((1+gm1ro2)ro1-ro2)/((1+gm1ro2)ro1+ro2). dominant RP=ro1. Compared after blind derivation: current reference and fragment agree within explicitly labeled dominant-term approximation."
+      },
+      "p6:main": {
+        "status": "pass",
+        "reviewer": "author_late (not early-group author)",
+        "evidence": "evidence/p6-sympy.py, evidence/p6-result.txt",
+        "method": "symbolic",
+        "conclusion": "gm=.003333333S; Rout=2/(lambda I)+gm/(lambda² I²). positive lambda threshold=(1+sqrt(1+50000gm))/(50000I)=.557944655988134; dominant sqrt(gm/(50000 I²))=.516398. Compared after blind derivation: current reference and fragment agree within explicitly labeled dominant-term approximation."
+      },
+      "p7:main": {
+        "status": "pass",
+        "reviewer": "author_late (not early-group author)",
+        "evidence": "evidence/p7-sympy.py, evidence/p7-result.txt",
+        "method": "symbolic",
+        "conclusion": "W grows N fixedI,L: gm scales sqrtN; ro unchanged. exact Rout=ro1+ro2+sqrtN gmro1ro2, dominant sqrtN scaling. Compared after blind derivation: current reference and fragment agree within explicitly labeled dominant-term approximation."
+      },
+      "p8:a": {
+        "status": "pass",
+        "reviewer": "author_late (not early-group author)",
+        "evidence": "evidence/p8-sympy.py, evidence/p8-result.txt",
+        "method": "symbolic",
+        "conclusion": "VD=1.8-.001*500=1.3V. Upper saturation VG<=VD+Vth: Vb1max1.7V. Vov1sqrt(.002/(.0001*20/.18))=.424264; VX=1.7-.4-.424264=.875736V. Compared after blind derivation: current reference and fragment agree within explicitly labeled dominant-term approximation."
+      },
+      "p8:b": {
+        "status": "pass",
+        "reviewer": "author_late (not early-group author)",
+        "evidence": "evidence/p8-sympy.py, evidence/p8-result.txt",
+        "method": "symbolic",
+        "conclusion": "VD=1.8-.001*500=1.3V. Upper saturation VG<=VD+Vth: Vb1max1.7V. Vov1sqrt(.002/(.0001*20/.18))=.424264; VX=1.7-.4-.424264=.875736V. Compared after blind derivation: current reference and fragment agree within explicitly labeled dominant-term approximation."
+      }
+    }
+  },
+  "content": {
+    "status": "pass",
+    "reviewer": "author_late",
+    "evidence": "Per-question fragments reviewed after blind solutions. Mathematical agreement and seven sections checked. Final fragment hashes recorded after reviewer arithmetic and exact-model qualifications. Final fragment hashes recorded after reviewer arithmetic and exact-model qualifications.",
+    "items": {
+      "p1:a": {
+        "status": "pass",
+        "reviewer": "author_late (not early-group author)",
+        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt; read recall/start/solve/verify/pitfall/retry and summary; linked circuit and approximation choices, first equation, full answer and actual numerical/limit checks present."
+      },
+      "p1:b": {
+        "status": "pass",
+        "reviewer": "author_late (not early-group author)",
+        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt; read recall/start/solve/verify/pitfall/retry and summary; linked circuit and approximation choices, first equation, full answer and actual numerical/limit checks present."
+      },
+      "p2:main": {
+        "status": "pass",
+        "reviewer": "author_late (not early-group author)",
+        "evidence": "evidence/p2-sympy.py, evidence/p2-result.txt; read recall/start/solve/verify/pitfall/retry and summary; linked circuit and approximation choices, first equation, full answer and actual numerical/limit checks present."
+      },
+      "p3:main": {
+        "status": "pass",
+        "reviewer": "author_late (not early-group author)",
+        "evidence": "evidence/p3-sympy.py, evidence/p3-result.txt; read recall/start/solve/verify/pitfall/retry and summary; linked circuit and approximation choices, first equation, full answer and actual numerical/limit checks present."
+      },
+      "p4:main": {
+        "status": "pass",
+        "reviewer": "author_late (not early-group author)",
+        "evidence": "evidence/p4-sympy.py, evidence/p4-result.txt; read recall/start/solve/verify/pitfall/retry and summary; linked circuit and approximation choices, first equation, full answer and actual numerical/limit checks present."
+      },
+      "p5:main": {
+        "status": "pass",
+        "reviewer": "author_late (not early-group author)",
+        "evidence": "evidence/p5-sympy.py, evidence/p5-result.txt; read recall/start/solve/verify/pitfall/retry and summary; linked circuit and approximation choices, first equation, full answer and actual numerical/limit checks present."
+      },
+      "p6:main": {
+        "status": "pass",
+        "reviewer": "author_late (not early-group author)",
+        "evidence": "evidence/p6-sympy.py, evidence/p6-result.txt; read recall/start/solve/verify/pitfall/retry and summary; linked circuit and approximation choices, first equation, full answer and actual numerical/limit checks present."
+      },
+      "p7:main": {
+        "status": "pass",
+        "reviewer": "author_late (not early-group author)",
+        "evidence": "evidence/p7-sympy.py, evidence/p7-result.txt; read recall/start/solve/verify/pitfall/retry and summary; linked circuit and approximation choices, first equation, full answer and actual numerical/limit checks present."
+      },
+      "p8:a": {
+        "status": "pass",
+        "reviewer": "author_late (not early-group author)",
+        "evidence": "evidence/p8-sympy.py, evidence/p8-result.txt; read recall/start/solve/verify/pitfall/retry and summary; linked circuit and approximation choices, first equation, full answer and actual numerical/limit checks present."
+      },
+      "p8:b": {
+        "status": "pass",
+        "reviewer": "author_late (not early-group author)",
+        "evidence": "evidence/p8-sympy.py, evidence/p8-result.txt; read recall/start/solve/verify/pitfall/retry and summary; linked circuit and approximation choices, first equation, full answer and actual numerical/limit checks present."
+      }
+    }
+  },
+  "issues": [],
+  "fragment_hashes": {
+    "p1": "c8f9f4715a6a16768a2482e23fa2e794364c8c7f4f085cb6f4732f5d9c3f960a",
+    "p2": "4df1f9c1e417e79ee2c290074a468edcdb4735a324687e7f5e3ac024db25a8ad",
+    "p3": "3f6826e66c3571c81eff93ec5b0752529b06fb799e3346742a6e20b93478ac91",
+    "p4": "2614177ac2241ffbb684b8554988e11b09080fc4afa14bcce60bbd610f10fe71",
+    "p5": "6afd58261813e45ca0a1654bdf6e665621c2c318178c9c749d1a37b54d1d589e",
+    "p6": "050cf468bc461266aca56d004888447bb4baa43ced8bbcc330ca863f9489ec49",
+    "p7": "30af24c5a514fbfc4e810e878a3008be9437da7efbf4d16ba1d0c5b197ec1718",
+    "p8": "51d4a1b4f643967cb49321fa31a56caac3664336fd5dc20020462b107195af63"
+  },
+  "references": [
+    {
+      "path": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\교과서\\마이크로전자회로\\ch09\\figures\\fig9-50.png",
+      "sha256": "ec4907f729357cbdefc946f53268db79474aa787a54314e852b869247f1d6e67"
+    },
+    {
+      "path": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\교과서\\마이크로전자회로\\ch09\\figures\\fig9-51.png",
+      "sha256": "395427246ec753c7f0a9e8e98eb9a583961d727a706159a6523671d11a7615c4"
+    },
+    {
+      "path": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\교과서\\마이크로전자회로\\ch09\\figures\\fig9-11.png",
+      "sha256": "99856d8a775acc43f4d6cbd43ae6c03f2537e581908eece39cf4601931e394a9"
+    },
+    {
+      "path": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\교과서\\마이크로전자회로\\ch09\\figures\\fig9-56.png",
+      "sha256": "b59880b939839b5c2436d112cdb8216f84a309b282770b014f2b898fe9578551"
+    },
+    {
+      "path": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\교과서\\마이크로전자회로\\ch09\\figures\\fig9-13-a.png",
+      "sha256": "cdb0ef1d04d93605045165035e2e3ea7df31b7a4e486234a4cbe99d28ab0c376"
+    },
+    {
+      "path": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\교과서\\마이크로전자회로\\ch09\\figures\\fig9-20-b.png",
+      "sha256": "d8c9a96381b6b68b1641f10d0f0fe0c075bc93f162374e8e4d0aac257a83271c"
+    },
+    {
+      "path": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\교과서\\마이크로전자회로\\ch09\\figures\\fig9-19-b.png",
+      "sha256": "cb72ab597f6500f3faeb251f1cd757e4b91a6f225b15c93bc266770d4097b392"
+    }
+  ]
+}

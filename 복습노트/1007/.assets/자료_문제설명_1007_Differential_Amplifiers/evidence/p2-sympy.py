@@ -1,33 +1,15 @@
-# P10.68 (Fig 10.89) common-mode gain, independent check. No body effect.
-import sympy as sp
-gm1, ro1, ro3, ro5, vin = sp.symbols('g_m1 r_O1 r_O3 r_O5 v_in', positive=True)
-vP, vX, vY = sp.symbols('v_P v_X v_Y')
-# Full circuit, both inputs = vin (CM). M3/M4 gates at fixed Vb1 -> just r_O3 to AC ground.
-# X = drain M1, Y = drain M2, P = common source (tail M5 -> r_O5).
-i1 = gm1*(vin - vP) + (vX - vP)/ro1   # current into drain of M1 from X toward P
-i2 = gm1*(vin - vP) + (vY - vP)/ro1
-eqs = [sp.Eq(-vX/ro3, i1),            # KCL at X: current from r_O3 = i1
-       sp.Eq(-vY/ro3, i2),
-       sp.Eq(i1 + i2, vP/ro5)]       # KCL at P
-s = sp.solve(eqs, [vX, vY, vP], dict=True)[0]
-Acm_se = sp.simplify(s[vX]/vin)
-Acm_diff = sp.simplify((s[vX]-s[vY])/vin)
-print("single-ended A_CM (exact) =", sp.factor(Acm_se))
-print("differential-output A_CM (vX - vY)/vin =", Acm_diff)
+import sympy as S
+from math import log10,pi,sqrt
 
-# -Gm*Rout form with half circuit (tail -> 2 r_O5)
-RS = 2*ro5
-Gm = gm1*ro1/(ro1 + RS + gm1*ro1*RS)          # output shorted to ground
-Rdeg = ro1 + RS + gm1*ro1*RS                  # degenerated M1 output resistance
-Rout = ro3*Rdeg/(ro3 + Rdeg)
-Av = -Gm*Rout
-print("-Gm*Rout - exact single-ended =", sp.simplify(Av - Acm_se))
-# approximation gm1 ro1 >> 1: take ro1 -> oo
-approx = sp.limit(Acm_se, ro1, sp.oo)
-print("limit ro1->oo (g_m r_O >> 1):", sp.simplify(approx))
-print("check approx == -r_O3/(1/g_m1 + 2 r_O5):", sp.simplify(approx + ro3/(1/gm1 + 2*ro5)))
-# further gm1*2ro5 >> 1
-print("limit ro5 large ratio -> -r_O3/(2 r_O5):", sp.limit(approx*ro5, ro5, sp.oo), "/ r_O5")
-# numerical example
-vals = {gm1: sp.Rational(1,100), ro1: 20000, ro3: 20000, ro5: 20000}  # gm=10mS, rO=20k
-print("numeric single-ended exact:", sp.N(Acm_se.subs(vals)), " approx -r_O3/(1/gm+2rO5):", sp.N((-ro3/(1/gm1+2*ro5)).subs(vals)))
+g,ri,RL,T,vi,vs,vo=(S.Symbol('g',positive=True),S.Symbol('ri',positive=True),S.Symbol('RL',positive=True),S.Symbol('T',positive=True),S.Symbol('vi',real=True),S.Symbol('vs',real=True),S.Symbol('vo',real=True))
+# CM half source resistor2T, output loadRL, input output resistance ri.
+id=g*(vi-vs)+(vo-vs)/ri
+sol=S.solve([vo/RL+id,vs/(2*T)-id],[vo,vs]);A=S.factor(sol[vo]/vi)
+Q=ri+2*T*(1+g*ri);Gm=g*ri/Q;Rout=1/(1/RL+1/Q)
+assert S.simplify(A+Gm*Rout)==0
+assert S.simplify(A+g*ri*RL/(RL+Q))==0
+print('Exact CM KCL=',A,'Gm=',Gm,'Rout=',Rout)
+
+lead=-RL/(2*T);print('exact/leading gm limit',S.limit(A/lead,g,S.oo));assert S.simplify(S.limit(A/lead,g,S.oo)-1)==0
+print('ideal tail limit',S.limit(A,T,S.oo));assert S.limit(A,T,S.oo)==0
+print('zero-tail limit',S.limit(A,T,0));assert S.simplify(S.limit(A,T,0)+g/(1/ri+1/RL))==0

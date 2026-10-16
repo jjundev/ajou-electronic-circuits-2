@@ -1,0 +1,17 @@
+{
+  "reviewer": "author_middle independent of authors; blind conditions and figures only",
+  "blind_input": "C:\\Users\\Hyunjun\\AppData\\Local\\Temp\\ec2-explanations-20261015\\blind-1002.json",
+  "derivations": {
+    "p1": "Half-circuit emitter virtual ground, ideal source open. KCL gm vin+vo/ro1=0 => Av=-gm1 ro1.",
+    "p2": "PNP fixed base and emitter is AC-grounded ro3 load. KCL gm1vi+(1/ro1+1/ro3)vo=0 => -gm1(ro1||ro3).",
+    "p3": "Equal bridge resistors midpoint X virtual ground, PNP bases X fixed. Av=-gm1(ro1||ro3||R1).",
+    "p4": "Each IC=0.5mA, ro=4/.0005=8k; output R=8k||8k||10k=2857.14ohm; gm=.0005/VT => Av=-1.428571/VT=-57.1429 for VT25mV.",
+    "p5": "Unloaded MOS cascode two-node KCL: x/ro1+(x-y)/ro3+gm3*x+gm1vi=0; (y-x)/ro3-gm3*x=0. Exact A=-gm1ro1(1+gm3ro3). Matched approximate A=(gmro)^2=4K/(lambda²ISS); ISS=14.8148mA for300. Exact current slightly larger; must disclose gmro≈17.",
+    "p6": "Telescopic: I=.5mA, ron20k,rop10k; gmN=sqrt(1e-7 S),gmP=sqrt(5e-8 S). Rn=2ron+gmN ron²,Rp=2rop+gmP rop². Exact Gm=gmN(gmN+1/ron)/(gmN+2/ron); A=-Gm(Rn||Rp). Approx -gmN[(gmN ron²)||(gmP rop²)] gives S≈33.3? calculate executable before compare; exact likely29.8. Derive symbolic ratio→1 as gm scale→∞.",
+    "p7": "BJT finite beta upper base loading. Let z=VA/VT, rpi=beta/gm. Exact |A|=beta z(1+z)/(beta+z); high intrinsic approximate beta z²/(beta+z). beta100, target4000 gives z approx86.33,VA≈2.16V VT25mV. Finite correction 1/z; preserve exact formula.",
+    "p8": "Q3(a) pnp current injection has grounded base/emitter, appears ro3 shunt. gm1=.02 ro1=10k,rpi1=10k,gm2=.04 ro2=5k,ro3=10k; Re=2.5k; Rout exact512.5k approx500k; Aexact-20100 approx-20000. (b) upper ro3||RP=5k, lower ro1||rpi3=5k, gm=.02; single Rout510k approx500k, differential output Rout=1.02M approx1M; Avexact-10100 approx-10000. Need output resistance convention verified.",
+    "p9": "CM BJT tail IC=IEE, gm_input=IC/(2VT), rt=VA/IC. Half degeneration2rt -> ACM=-RC/(2VT/IC+2VA/IC)=-RC IC/[2(VA+VT)]. Bound gives RCIC<.02(VA+VT). Finite input beta neglected.",
+    "p10": "Parallel2REE reproduces REE. CM equal emitter currents permit each side2REE. Exact half KCL with beta∞ and ro_input∞ -> Av=-RC/(1/gm+2REE)=-(RC/2)/(1/(2gm)+REE)."
+  },
+  "comparison_status": "not_started"
+}

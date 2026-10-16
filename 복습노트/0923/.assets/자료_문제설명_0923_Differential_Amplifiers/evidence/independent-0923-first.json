@@ -1,0 +1,38 @@
+{
+  "reviewer": "author-early-independent",
+  "basis": "blind original/conditions/asks + PNG circuit and circuit-only md when needed; exposure flags explicit",
+  "records": {
+    "p1": {
+      "main": "Base AC fixed, emitter grounded ->gm term zero; output KCL (vo-vs)/RC+vo/ro=0. gain ro/(RC+ro)."
+    },
+    "p2": {
+      "main": "Each branch has gain ro/(RC+ro) so equal branches cancel in differential vo=VX-VY; gain0, individual gains nonzero."
+    },
+    "p3": {
+      "a": "Equilibrium ID=Iss/2, Vov=sqrt(Iss/K); VP=VCM-VTH-Vov. W doubled ->Vov/sqrt2 ->VP rises (1-1/sqrt2)Vov.",
+      "b": "Iss doubled ->sqrt2 Vov ->VP falls(sqrt2-1)Vov.",
+      "c": "tox doubled ->Cox/2 ->sqrt2 Vov ->VP falls(sqrt2-1)Vov, hold VTH constant assumption."
+    },
+    "p4": {
+      "main": "Saturation drain >=gate-VTH=1.1V; VD=1.8-(.5mA/2)RD. RD<=(1.8-1.1)/.25mA=2800ohm."
+    },
+    "p5": {
+      "main": "ID2=0, ID1=Iss; low gate at cutoff =>VGS2=VTH, differential=Vov1=sqrt(2Iss/K)=sqrt2 Vov_eq, positive root."
+    },
+    "p6": {
+      "main": "Use power boundary Iss=.003/1.8=1.666667mA. Full steering differential .5=sqrt(2Iss/(muWL)); WL=2Iss/(100u*.5^2)=133.333."
+    },
+    "p7": {
+      "main": "M2 off ->ID1=Iss, VD1=VDD-Iss RD. saturation VD1>=Vin1-VTH=1.5-VTH ->RD<=(VDD-1.5+VTH)/Iss. Self-consistency off requires sqrt(2Iss/K)<=1.2 and tail compliance separately."
+    },
+    "p8": {
+      "main": "Matched pair at0: current difference DeltaI= sqrt(K Iss) vid=gm vid. Output left-right=-RD DeltaI ->Av=-gm RD=-RD sqrt(K Iss). Derive derivative of full square-law expression."
+    },
+    "p9": {
+      "main": "At eq ID=Iss/2 so gm=Iss/Vov_eq; Av=-Iss RD/Vov_eq."
+    },
+    "p10": {
+      "main": "No small-signal model: sum square law K[(u-p)^2+d^2/4]=Iss+(p-P0)/RSS. At equilibrium derivative wrt d gives[-2K Vov-1/RSS]p_prime=0 ->p_prime0. Finite tail shift quadratic K d²/[4(2K Vov+1/RSS)] so virtual ground first order only."
+    }
+  }
+}
