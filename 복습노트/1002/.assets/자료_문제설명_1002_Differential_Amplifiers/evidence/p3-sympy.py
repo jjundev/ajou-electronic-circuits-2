@@ -1,8 +1,11 @@
-import sympy as S
-from math import log10,pi,sqrt
-
-gm,vi,vo=(S.Symbol('gm',positive=True),S.Symbol('vi',real=True),S.Symbol('vo',real=True)); rn,rp,R=(S.Symbol('rn',positive=True),S.Symbol('rp',positive=True),S.Symbol('R',positive=True))
-G=1/rn+1/rp+1/R
-h=S.factor(S.solve(S.Eq(gm*vi+G*vo,0),vo)[0]/vi)
-print('Output KCL gain=',h);assert S.simplify(h--gm/(1/rn+1/rp+1/R))==0
-print('Zero drive check',S.simplify((h*vi).subs(vi,0)));print('unit S*ohm=1')
+import sympy as s
+s.init_printing()
+gm,ro,rp,R,RC,RT=s.symbols('gm ro rp R RC RT', positive=True)
+vi,vo,vx,it=s.symbols('vi vo vx it',real=True)
+par=lambda a,b:s.simplify(a*b/(a+b))
+def show(label,x): print(label, '=',([s.simplify(v) for v in x] if isinstance(x,list) else s.simplify(x)))
+def ce(load):
+ sol=s.solve(vo/load+gm*vi,vo)[0];show('Av from output KCL',sol/vi)
+rn,rpp=s.symbols('ron rop',positive=True)
+print('Odd symmetry: middle X=0, upper PNP base/emitter=0; its gm source is zero.')
+ce(par(R,par(rn,rpp)))

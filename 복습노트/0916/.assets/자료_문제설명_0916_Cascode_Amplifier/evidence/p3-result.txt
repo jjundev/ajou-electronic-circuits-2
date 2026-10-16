@@ -1,6 +1,10 @@
-Test-current KCL Rout= (g*r1*r2*rp + r1*r2 + r1*rp + r2*rp)/(r1 + rp)
-RP absent= g*r1*r2 + r1 + r2
-dominant-term ratio as gm->infinity= 1
-Gm exact= (gm*rc*rpi - re)/(gm*rc*re*rpi + rc*re + rc*rpi + re*rpi) Av exact= -(gm*rc*rpi - re)/(re + rpi)
-Gm ratio to1/re, high gm AND high rpi= 1
-Av/leading term high gm= 1
+MOS output KCL: g*r1*r2 + r1 + r2 ; BJT output KCL: (g*r1*r2*rp + r1*r2 + r1*rp + r2*rp)/(r1 + rp) ; BJT voltage gain: -g*r1*rp*(g*r2 + 1)/(r1 + rp)
+Av exact (-g*r2*rp + r1)/(r1 + rp)
+Gm exact -(-g*r2*rp + r1)/(g*r1*r2*rp + r1*r2 + r1*rp + r2*rp) gm large Gm 1/r1
+Av approx -g*r2*rp/(r1 + rp)
+MOS exact/dominant gm scaled limit 1
+BJT R exact/dominant gm scaled limit 1
+BJT Av exact/dominant gm scaled limit 1
+short exact matches conductance KCL target=0
+open exact equals independently derived voltage formula
+finite-beta large-gmro example upper driven gain -65.1315789473684

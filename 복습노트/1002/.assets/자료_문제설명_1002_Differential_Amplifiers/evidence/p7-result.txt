@@ -1,5 +1,8 @@
-BJT exact= beta*z*(z + 1)/(beta + z) leading= beta*z**2/(beta + z)
-Exact/leading large intrinsic-gain limit= 1
-approx min VA at VT26mV= 2.24464489098481
-target= 4000.00000000000
-monotonic derivative= beta*z*(2*beta + z)/(beta + z)**2
+A(x,beta) = beta*x**2/(beta + x)
+x roots = [20 + 20*sqrt(11)]
+VA VT26mV = 0.52 + 0.52*sqrt(11)
+Dominant cascode gain gm^2 ro (ro||rpi); finite beta retained.
+exact magnitude from2KCL = gm*ro*rp*(gm*ro + 1)/(ro + rp)
+exact in X beta = B*X*(X + 1)/(B + X)
+exact over main = (X + 1)/X
+asymptotic ratio = 1

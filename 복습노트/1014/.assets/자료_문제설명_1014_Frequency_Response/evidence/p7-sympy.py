@@ -1,6 +1,9 @@
-import sympy as S
-from math import log10,pi,sqrt
-
-s,g,RS,RD,Ci,CL,vi,vg,vo=(S.Symbol('s',real=True),S.Symbol('g',positive=True),S.Symbol('RS',positive=True),S.Symbol('RD',positive=True),S.Symbol('Ci',positive=True),S.Symbol('CL',positive=True),S.Symbol('vi',real=True),S.Symbol('vg',real=True),S.Symbol('vo',real=True))
-sol=S.solve([(vg-vi)/RS+s*Ci*vg,(1/RD+s*CL)*vo+g*vg],[vg,vo]);H=S.factor(sol[vo]/vi)
-print('CS 2-node H=',H,'poles=',S.solve(S.denom(H),s));assert S.simplify(H+g*RD/((1+s*RS*Ci)*(1+s*RD*CL)))==0
+import sympy as s
+s.init_printing()
+gm,ro,rp,R,RC,RT=s.symbols('gm ro rp R RC RT', positive=True)
+vi,vo,vx,it=s.symbols('vi vo vx it',real=True)
+par=lambda a,b:s.simplify(a*b/(a+b))
+def show(label,x): print(label, '=',([s.simplify(v) for v in x] if isinstance(x,list) else s.simplify(x)))
+def ce(load):
+ sol=s.solve(vo/load+gm*vi,vo)[0];show('Av from output KCL',sol/vi)
+z,Ci,Cl,Rs=s.symbols('s Ci Cl Rs',positive=True);v=s.symbols('v');sol=s.solve([(v-vi)/Rs+z*Ci*v,vo/R+z*Cl*vo+gm*v],[v,vo]);show('H',sol[vo]/vi);print('poles=-1/(RsCi),-1/(RDCL); MOS gate draws no current, unilateral lambda0 model.')

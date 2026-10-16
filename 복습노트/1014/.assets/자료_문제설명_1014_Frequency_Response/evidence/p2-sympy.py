@@ -1,9 +1,9 @@
-import sympy as S
-from math import log10,pi,sqrt
-
-s,g,R,C,vi,vo=(S.Symbol('s',real=True),S.Symbol('g',positive=True),S.Symbol('R',positive=True),S.Symbol('C',positive=True),S.Symbol('vi',real=True),S.Symbol('vo',real=True))
-H=S.factor(S.solve(S.Eq((1/R+s*C)*vo+g*vi,0),vo)[0]/vi)
-print('CS output KCL H=',H);assert S.simplify(H+g*R/(1+s*R*C))==0
-
-print('poles=',S.solve(S.denom(H),s),'low=',H.subs(s,0),'high=',S.limit(H,s,S.oo));print('cornerdB=',20*log10(1/sqrt(2)))
-assert S.limit(H,s,S.oo)==0
+import sympy as s
+s.init_printing()
+gm,ro,rp,R,RC,RT=s.symbols('gm ro rp R RC RT', positive=True)
+vi,vo,vx,it=s.symbols('vi vo vx it',real=True)
+par=lambda a,b:s.simplify(a*b/(a+b))
+def show(label,x): print(label, '=',([s.simplify(v) for v in x] if isinstance(x,list) else s.simplify(x)))
+def ce(load):
+ sol=s.solve(vo/load+gm*vi,vo)[0];show('Av from output KCL',sol/vi)
+z,C=s.symbols('s C');sol=s.solve(vo/R+z*C*vo+gm*vi,vo)[0];show('H',sol/vi);show('pole',s.solve(1+z*R*C,z));print('Magnitude gmR/sqrt(1+(wRC)^2); phase -180deg-atan(wRC) modulo360; high slope-20dB/dec.')

@@ -1,2 +1,4 @@
-three-node CG KCL H= RD*g/((CL*RD*s + 1)*(Ci*RP*RS*g*s + Ci*RS*s + RP*g + RS*g + 1)) poles= [-1/(CL*RD), (-RP*g - RS*g - 1)/(Ci*RS*(RP*g + 1))]
-input pole= (1/(RP + 1/g) + 1/RS)/Ci RP0= (g + 1/RS)/Ci RPinf= 1/(Ci*RS)
+H = R*gm/(Ci*Cl*R*RP*Rs*gm*s**2 + Ci*Cl*R*Rs*s**2 + Ci*RP*Rs*gm*s + Ci*Rs*s + Cl*R*RP*gm*s + Cl*R*Rs*gm*s + Cl*R*s + RP*gm + Rs*gm + 1)
+input pole = (-RP*gm - Rs*gm - 1)/(Ci*Rs*(RP*gm + 1))
+output pole = -1/(Cl*R)
+RP=0 recovers common-gate input1/gm; RP->infty makes input pole1/RsCi.

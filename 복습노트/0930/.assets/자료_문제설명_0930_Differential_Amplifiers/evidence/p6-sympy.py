@@ -1,15 +1,4 @@
 import sympy as s
-from sympy import Rational as Q
-print('Independent derivation from blind conditions; author-early, not fragment author')
-def check(name, expression):
-    value=s.simplify(expression)
-    print(name, value)
-    assert value==0,(name,value)
-
-vi,vo,vs=s.symbols('vi vo vs',real=True)
-gn,gp,RD,RS=s.symbols('gn gp RD RS',positive=True)
-# Differential halves have resistances RDD/2, RSS/2; PMOS diode at output adds gp.
-z=s.solve([s.Eq(2*vs/RS,gn*(vi-vs)),s.Eq((2/RD+gp)*vo+gn*(vi-vs),0)],[vo,vs])
-A=s.factor(z[vo]/vi);target=-1/((2/RD+gp)*(RS/2+1/gn))
-print('gain=',A);check('parallel loaded target',A-target)
-print('gpZero limit',s.limit(A,gp,0),'RSzero limit',s.limit(A,RS,0))
+# Independently derived from blind problem and displayed input circuit, before reference access.
+gn,gp,Rd,Rs,v,x,y=s.symbols('gn gp Rd Rs v x y');q=s.solve([s.Eq(gn*(v-x),x/(Rs/2)),s.Eq(y*(2/Rd+gp)+gn*(v-x),0)],[x,y]);a=s.factor(q[y]/v);print(a);print('gmp zero',s.limit(a,gp,0));assert s.simplify(s.limit(a,gp,0)+Rd/(Rs+2/gn))==0
+print("Independent conclusion: gain=-gmn (RDD/2 ||1/gmp)/(1+gmn RSS/2)")

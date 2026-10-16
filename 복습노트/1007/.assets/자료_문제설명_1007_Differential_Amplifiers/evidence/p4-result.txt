@@ -1,4 +1,4 @@
-tail exact= (R1*g3*ro3*rpi + R1*ro3 + R1*rpi + ro3*rpi)/(R1 + rpi) book droppingRe= ro3*(g3/(1/rpi + 1/R1) + 1) ratio ro3infty= (R1*g3*rpi + R1 + rpi)/((R1 + rpi)*(g3/(1/rpi + 1/R1) + 1))
-CM current/input g/(2*Rt*g + 1) ACM= -R*g/(2*Rt*g + 1) ACM-DM= D*g/(2*Rt*g + 1)
-ACMDM exact/book limit= 1
-mismatch0= 0
+tail Rout exact = (R1*rpi*(g3*r3 + 1) + r3*(R1 + rpi))/(R1 + rpi)
+Acm-dm = dR*gm*(R1 + rpi)/(R1 + 2*gm*(R1*rpi*(g3*r3 + 1) + r3*(R1 + rpi)) + rpi)
+beta infinite dominant = dR*gm/(2*gm*(R1*g3*r3 + R1 + r3) + 1)
+dR0 = 0

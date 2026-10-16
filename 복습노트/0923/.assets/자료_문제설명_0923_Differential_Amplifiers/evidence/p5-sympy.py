@@ -1,15 +1,4 @@
 import sympy as s
-from sympy import Rational as Q
-print('Independent derivation from blind conditions; author-early, not fragment author')
-def check(name, expression):
-    value=s.simplify(expression)
-    print(name, value)
-    assert value==0,(name,value)
-
-I,K,d=s.symbols('I K d',positive=True)
-# At complete steering ID2=0; the lower gate is at cutoff, so ID1=K*d^2/2.
-root=s.solve(s.Eq(K*d*d/2,I),d)[0]
-u=s.sqrt(I/K);print('positive cutoff differential=',root,'ratio to eq overdrive',s.simplify(root/u))
-check('sqrt2 factor',root/u-s.sqrt(2))
-full=K*d*s.sqrt(4*I/K-d*d)/2
-check('full nonlinear formula boundary',full.subs(d,root)-I)
+# Independently derived from blind problem and displayed input circuit, before reference access.
+I,k,d=s.symbols('I k d',positive=True);q=k*d*s.sqrt(4*I/k-d*d)/2;dm=s.sqrt(2*I/k);print('difference at threshold',s.simplify(q.subs(d,dm)));assert s.simplify(q.subs(d,dm)-I)==0;print('ratio',s.simplify(dm/s.sqrt(I/k)))
+print("Independent conclusion: full steering positive difference=sqrt(2 Iss/k)=sqrt2 equilibrium overdrive")

@@ -1,16 +1,17 @@
 import sympy as s
-from sympy import sqrt
-par=lambda a,b:s.cancel(a*b/(a+b))
-g,r1,r2,rp=s.symbols('g r1 r2 rp', positive=True)
-vx,vo,it,vi=s.symbols('vx vo it vi', real=True)
-q=par(r1,rp)
-# Upper device gate at AC ground: output test-current KCL and source continuity.
-a=s.solve([s.Eq(it,(vo-vx)/q-g*vx),s.Eq(vx,it*r2)],[vo,vx],dict=True)[0]
-R=s.factor(a[vo]/it)
-assert s.simplify(R-(q+r2+g*q*r2))==0
-print('Test-current KCL Rout=',R)
-print('RP absent=',s.limit(R,rp,s.oo))
-print('dominant-term ratio as gm->infinity=',s.limit(R/(g*q*r2),g,s.oo))
-I=s.Rational(1,2000);mu=s.Rational(1,10000);ro=20000;target=500000
-gmd=target/ro**2;gme=(target-2*ro)/ro**2
-print('WL dominant, exact=',gmd**2/(2*mu*I),gme**2/(2*mu*I));assert abs(gmd**2/(2*mu*I)-15.625)<1e-10
+s.init_printing()
+g,r1,r2,Rp,i,v,x,y,rp,b,VT,I,VA,kn,kp,N=s.symbols('g r1 r2 Rp i v x y rp b VT I VA kn kp N', positive=True)
+i,v,x,y=s.symbols('i v x y', real=True)
+# MOS cascode output test: bottom ro=r2, top gm=g,ro=r1; top gate grounded.
+mos=s.solve([s.Eq(i,x/r2),s.Eq(i,(y-x)/r1-g*x)],[x,y]);Rmos=s.factor(mos[y]/i)
+# BJT top base grounded: lower ro=r1, upper ro=r2,rpi=rp.
+bjt=s.solve([s.Eq(i,x/r1+x/rp),s.Eq(i,(y-x)/r2-g*x)],[x,y]);Rbjt=s.factor(bjt[y]/i)
+# Lower-driven BJT exact open output KCL.
+amp=s.solve([s.Eq(x/r1+x/rp+(x-y)/r2+g*x+g*v,0),s.Eq((y-x)/r2-g*x,0)],[x,y]);Abjt=s.factor(amp[y]/v)
+print('MOS output KCL:',Rmos,'; BJT output KCL:',Rbjt,'; BJT voltage gain:',Abjt)
+I0=s.Rational(1,2000);ro=20000;gm=500000/ro**2;print('gm=',gm,'W/L=',gm**2/(2*100e-6*float(I0)));print('exact-design W/L=',((500000-2*ro)/ro**2)**2/(2*100e-6*float(I0)))
+
+t=s.symbols("t",positive=True)
+print("MOS exact/dominant gm scaled limit",s.limit(Rmos.subs(g,t*g)/(t*g*r1*r2),t,s.oo))
+print("BJT R exact/dominant gm scaled limit",s.limit(Rbjt.subs(g,t*g)/(t*g*r2*r1*rp/(r1+rp)),t,s.oo))
+print("BJT Av exact/dominant gm scaled limit",s.limit(Abjt.subs(g,t*g)/(-t**2*g**2*r2*r1*rp/(r1+rp)),t,s.oo))

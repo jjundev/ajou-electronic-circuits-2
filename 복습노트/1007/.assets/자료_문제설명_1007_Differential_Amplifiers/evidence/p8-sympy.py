@@ -1,17 +1,10 @@
-import sympy as S
-from math import log10,pi,sqrt
-
-g,ro,T,R,D,v1,v2,p,x,y=(S.Symbol('g',positive=True),S.Symbol('ro',positive=True),S.Symbol('T',positive=True),S.Symbol('R',positive=True),S.Symbol('D',positive=True),S.Symbol('v1',real=True),S.Symbol('v2',real=True),S.Symbol('p',real=True),S.Symbol('x',real=True),S.Symbol('y',real=True))
-i1=g*(v1-p)+(x-p)/ro;i2=g*(v2-p)+(y-p)/ro
-sol=S.solve([x/R+i1,y/(R+D)+i2,p/T-i1-i2],[x,y,p]);CM={v1:1,v2:1};DM={v1:S.Rational(1,2),v2:-S.Rational(1,2)}
-Ac=S.factor(sol[x].subs(CM));conv=S.factor((sol[x]-sol[y]).subs(CM));Ad=S.factor((sol[x]-sol[y]).subs(DM));c=S.factor(-Ad/conv)
-An=-R/(1/g+2*T);Cn=D/(1/g+2*T);Dn=-g*R;cn=-Dn/Cn
-print('3node exact CMleft=',Ac,'conversion=',conv,'DM=',Ad,'CMRR=',c)
-vals={g:.01,ro:20000,T:10000,R:1000,D:20}
-print('numbers',*[S.N(k.subs(vals)) for k in [Ac,conv,Ad,c]])
-print('CM ratio ro→inf',S.limit(Ac/An,ro,S.oo));assert S.simplify(S.limit(Ac/An,ro,S.oo)-1)==0
-print('conversion ratio ro→inf',S.limit(conv/Cn,ro,S.oo));assert S.simplify(S.limit(conv/Cn,ro,S.oo)-1)==0
-print('DM ratio remove ro then small mismatch',S.limit(S.limit(Ad/Dn,ro,S.oo),D,0));assert S.simplify(S.limit(S.limit(Ad/Dn,ro,S.oo),D,0)-1)==0
-print('CMRR ratio remove ro then mismatch',S.limit(S.limit(c/cn,ro,S.oo),D,0));assert S.simplify(S.limit(S.limit(c/cn,ro,S.oo),D,0)-1)==0
-print('VCMmin=.4+.1+.1=',.4+.1+.1,'max=1.8-.0005*1020+.4=',1.8-.0005*1020+.4)
-assert abs((1.8-.0005*1020+.4)-1.69)<1e-12
+import sympy as s
+s.init_printing()
+gm,ro,rp,R,RC,RT=s.symbols('gm ro rp R RC RT', positive=True)
+vi,vo,vx,it=s.symbols('vi vo vx it',real=True)
+par=lambda a,b:s.simplify(a*b/(a+b))
+def show(label,x): print(label, '=',([s.simplify(v) for v in x] if isinstance(x,list) else s.simplify(x)))
+def ce(load):
+ sol=s.solve(vo/load+gm*vi,vo)[0];show('Av from output KCL',sol/vi)
+I=.0005;g=s.sqrt(2*100e-6*1000*I);ov=s.sqrt(2*I/(100e-6*1000));ov3=s.sqrt(2*.001/(100e-6*2000));r3=1/(.1*.001)
+show('Vov1',ov);show('Vcm min',.4+ov+ov3);show('Vcm max matched load',1.8-I*1000+.4);show('Vcm max all branches',1.8-I*1020+.4);show('Acm',-1000/(1/g+2*r3));show('AcmDM',20/(1/g+2*r3));show('CMRR small mismatch',g*1000*(1/g+2*r3)/20);show('CMRR dB',20*s.log(g*1000*(1/g+2*r3)/20,10));print('ro1 ignored consistent dominant gmro assumption.')

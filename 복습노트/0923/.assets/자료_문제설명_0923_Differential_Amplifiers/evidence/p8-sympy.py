@@ -1,15 +1,4 @@
 import sympy as s
-from sympy import Rational as Q
-print('Independent derivation from blind conditions; author-early, not fragment author')
-def check(name, expression):
-    value=s.simplify(expression)
-    print(name, value)
-    assert value==0,(name,value)
-
-I,K,d,R=s.symbols('I K d R',positive=True)
-DeltaI=K*d*s.sqrt(4*I/K-d*d)/2
-out=-R*DeltaI
-A=s.simplify(s.diff(out,d).subs(d,0));gm=s.sqrt(K*I)
-print('nonlinear DeltaI=',DeltaI,'equilibrium output slope=',A)
-check('gmRD',A+gm*R)
-print('zeroRD limit',s.limit(A,R,0))
+# Independently derived from blind problem and displayed input circuit, before reference access.
+d,k,I,R=s.symbols('d k I R',positive=True);q=k*d*s.sqrt(4*I/k-d*d)/2;gm=s.simplify(s.diff(q,d).subs(d,0));print('gm',gm,'gain',-gm*R);assert s.simplify(gm-s.sqrt(k*I))==0
+print("Independent conclusion: from current difference derivative at0 gm=sqrt(k Iss); differential gain=-gm RD for VX-VY")

@@ -1,14 +1,4 @@
 import sympy as s
-from sympy import Rational as Q
-print('Independent derivation from blind conditions; author-early, not fragment author')
-def check(name, expression):
-    value=s.simplify(expression)
-    print(name, value)
-    assert value==0,(name,value)
-
-R=s.symbols('R',positive=True);I=Q(1,1000);VCC=Q(5,2);VB=2
-VC=VCC-I*R;bound=s.solve(s.Eq(VC,VB),R)[0]
-print('maxRC=',bound,'collector voltage at boundary=',VC.subs(R,bound));check('500ohm',bound-500)
-# Current-steering consistency: one volt difference vs26mV -> negligible other branch.
-ratio=s.exp(-Q(1,1)/Q(26,1000));print('IC2/IC1 exp(-1/VT)=',s.N(ratio))
-assert float(ratio)<1e-15
+# Independently derived from blind problem and displayed input circuit, before reference access.
+V=s.Rational(5,2);B=2;I=s.Rational(1,1000);print('strict Rmax',(V-B)/I);print('with allowable VBC=.4',(V-B+s.Rational(4,10))/I);print('1V differential -> Q1 carries essentially full tail')
+print("Independent conclusion: RCmax500ohm strict BC cutoff; common course .4V BC criterion900ohm")

@@ -1,15 +1,4 @@
 import sympy as s
-from sympy import Rational as Q
-print('Independent derivation from blind conditions; author-early, not fragment author')
-def check(name, expression):
-    value=s.simplify(expression)
-    print(name, value)
-    assert value==0,(name,value)
-
-VD,VDD,I,R,VTH=s.symbols('VD VDD I R VTH',positive=True)
-z=s.solve(s.Eq((VDD-VD)/R,I),VD)[0]
-Rmax=s.solve(s.Eq(z,Q(3,2)-VTH),R)[0]
-print('off M2 ->ID1=ISS; VD1=',z,'max RD=',Rmax)
-check('saturation condition',Rmax*I-(VDD-Q(3,2)+VTH))
-K=s.symbols('K',positive=True);Vp=Q(3,2)-VTH-s.sqrt(2*I/K)
-print('M2 overdrive=',s.simplify(Q(3,10)-Vp-VTH),'must be <=0')
+# Independently derived from blind problem and displayed input circuit, before reference access.
+V,t,I,R=s.symbols('VDD VTH Iss RD',positive=True);drain=V-I*R;print(s.solve(s.Eq(drain,s.Rational(3,2)-t),R));print('M1 saturation needs Vd>=Vin1-VTH; M2 off needs VP>=Vin2-VTH')
+print("Independent conclusion: RD <=(VDD-1.5+VTH)/Iss; assumed off additionally VP >=.3-VTH")

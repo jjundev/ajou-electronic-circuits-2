@@ -1,14 +1,21 @@
-import sympy as S
-from math import log10,pi,sqrt
+import sympy as s
+s.init_printing()
+gm,ro,rp,R,RC,RT=s.symbols('gm ro rp R RC RT', positive=True)
+vi,vo,vx,it=s.symbols('vi vo vx it',real=True)
+par=lambda a,b:s.simplify(a*b/(a+b))
+def show(label,x): print(label, '=',([s.simplify(v) for v in x] if isinstance(x,list) else s.simplify(x)))
+def ce(load):
+ sol=s.solve(vo/load+gm*vi,vo)[0];show('Av from output KCL',sol/vi)
+g1,g2,r1,r2,r3,rpi,RP=s.symbols('g1 g2 r1 r2 r3 rpi RP',positive=True)
+# Q1 upper common-base, Q2 input CE, Q3 middle PNP. rpi kept; DC base currents ignored.
+y,z,u=s.symbols('y z u')
+def derive(bridge,Rs,glo,gup,rup):
+ eqx=z/Rs+(z-y)/rup+(z-y)*bridge+gup*z+glo*u
+ eqy=(y-z)/rup+(y-z)*bridge-gup*z-it
+ sol=s.solve([eqx,eqy],[y,z]);show('Av',s.diff(sol[y],u));show('Rout',s.diff(sol[y],it));return sol
+print('(1)');a=derive(0,par(par(r2,r3),rpi),g2,g1,r1)
+vals={g1:.02,g2:.04,r1:10000,r2:5000,r3:10000,rpi:10000};show('exact Av1',s.diff(a[y],u).subs(vals));show('exact Ro1',s.diff(a[y],it).subs(vals))
+print('(2) bridge RP; each branch0.5mA');b=derive(1/RP,par(r1,rpi),g2,g1,r3)
+vals={g1:.02,g2:.02,r1:10000,r3:10000,rpi:10000,RP:10000};show('exact Av2',s.diff(b[y],u).subs(vals));show('exact Ro2',s.diff(b[y],it).subs(vals))
 
-g,rt,re,vi,x,y,it,gin=(S.Symbol('g',positive=True),S.Symbol('rt',positive=True),S.Symbol('re',positive=True),S.Symbol('vi',real=True),S.Symbol('x',real=True),S.Symbol('y',real=True),S.Symbol('it',real=True),S.Symbol('gin',positive=True))
-# re includes lower ro and upper rpi; rt upper ro||RP where present.
-eqx=x/re+(x-y)/rt+g*x+gin*vi;eqy=(y-x)/rt-g*x
-sol=S.solve([eqx,eqy],[x,y]);A=S.factor(sol[y]/vi)
-out=S.solve([eqx.subs(vi,0),eqy-it],[x,y]);R=S.factor(out[y]/it)
-assert S.simplify(R-(rt+re+g*rt*re))==0
-assert S.simplify(A+gin*re*(1+g*rt))==0
-for name,vals in [('a',{g:.02,rt:10000,re:2500,gin:.04}),('b',{g:.02,rt:5000,re:5000,gin:.02})]:print(name,'Rout_single exact=',R.subs(vals),'Avexact=',A.subs(vals),'leadingR=',(g*rt*re).subs(vals),'leadingA=',(-gin*g*rt*re).subs(vals))
-print('b differential exact R=',2*R.subs({g:.02,rt:5000,re:5000}));t=S.Symbol('t',positive=True)
-print('R exact/leading gm-scale limit',S.limit((R/(g*rt*re)).subs(g,t*g),t,S.oo));assert S.simplify(S.limit((R/(g*rt*re)).subs(g,t*g),t,S.oo)-1)==0
-print('A exact/leading gm-scale limit',S.limit((A/(-gin*g*rt*re)).subs(g,t*g),t,S.oo));assert S.simplify(S.limit((A/(-gin*g*rt*re)).subs(g,t*g),t,S.oo)-1)==0
+print('Dominant: (1) Rout500k, Av-20000. (2) half Rout500k, differential Rout1M, gain-10000. Exact half510k -> differential1.020M; approximations agree reference.')

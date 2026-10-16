@@ -1,8 +1,9 @@
-import sympy as S
-from math import log10,pi,sqrt
-
-t,tau=(S.Symbol('t',positive=True),S.Symbol('tau',positive=True));y=1-S.exp(-t/tau)
-assert S.simplify(tau*S.diff(y,t)+y-1)==0
-tr=S.simplify(-tau*S.log(S.Rational(1,10))+tau*S.log(S.Rational(9,10)))
-print('ODE step response=',y,'10–90 rise=',tr,'rise*BW=',S.N(tr/tau/(2*S.pi)),'5MHzrise=',float(tr.subs(tau,1/(2*pi*5e6))))
-print('Bandwidth→infinity(tau→0)step=',S.limit(y,tau,0));assert S.simplify(S.limit(y,tau,0)-1)==0
+import sympy as s
+s.init_printing()
+gm,ro,rp,R,RC,RT=s.symbols('gm ro rp R RC RT', positive=True)
+vi,vo,vx,it=s.symbols('vi vo vx it',real=True)
+par=lambda a,b:s.simplify(a*b/(a+b))
+def show(label,x): print(label, '=',([s.simplify(v) for v in x] if isinstance(x,list) else s.simplify(x)))
+def ce(load):
+ sol=s.solve(vo/load+gm*vi,vo)[0];show('Av from output KCL',sol/vi)
+w,wc=s.symbols('w wc',positive=True);H=1/s.sqrt(1+(w/wc)**2);show('high frequency limit',s.limit(H,w,s.oo));show('low frequency limit',s.limit(H,w,0));print('Video edges/rapid spatial detail contain high frequencies. Bandwidth too small attenuates them, slows transitions, creates blur/loss of fine detail; cannot claim all low-frequency image content vanishes.')

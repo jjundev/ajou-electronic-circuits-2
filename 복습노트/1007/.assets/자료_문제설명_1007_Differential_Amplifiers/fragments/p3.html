@@ -74,16 +74,12 @@
 </div>
 <div class="layer eli5" data-explanation="retry">
   <h4>설명을 닫고 다시 해 봐요</h4>
-  <ol>
-    <li>(a)·(b)의 테일 저항 $R_T$를 적고, 반쪽 회로를 그려 $G_m\approx1/(2R_T)$를 써 보세요.</li>
-    <li>각 회로의 출력 노드에서 $R_{up}$, $R_{down}$을 구하고 차수를 비교해 어느 쪽을 버릴 수 있는지 판단해 보세요.</li>
-    <li>(a)에서 $r_{O6}\to0$, (b)에서 $r_{O5}\to0$을 넣어 문제 10.68 답 $-r_{O3}/(2r_{O5})$ 꼴이 나오는지 확인해 보세요.</li>
-  </ol>
+  <ol><li>(a)의 큰 고유 이득 근사에서 다른 저항을 유지하고 테일 저항만 2배로 하면 $|A_{CM}|$은 몇 배인가요?</li><li>(b)의 같은 근사에서 위·아래 출력저항이 각각 200 kΩ이고 테일 저항이 10 kΩ이면 병렬 출력저항과 공통 모드 이득은 얼마인가요? $A_{CM}\approx-(R_{up}\parallel R_{down})/(2R_T)$를 사용해요.</li><li>테일 캐스코드의 $r_o$를 0으로 놓으면 큰 $g_mr_o$ 근사를 유지할 수 있나요? 극한을 보려면 어떤 식으로 돌아가야 하나요?</li></ol>
 </div>
 <div class="sum" hidden>
   <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>CM 하프 서킷: 테일 $R_T$ → 반쪽에 $2R_T$</p><p>$A_{CM}=-G_mR_{out}$, $G_m\approx\dfrac{1}{2R_T}$</p><p>축퇴 출력 저항 $\approx g_mr_OR_S$</p></div>
   <div class="summary-group"><h4>첫 줄</h4><p>(a) $R_T\approx g_{m5}r_{O5}r_{O6}$</p><p>(b) $R_T=r_{O7}$</p><p>$R_{out}=R_{up}\parallel R_{down}$</p></div>
   <div class="summary-group"><h4>핵심 판단</h4><p>(a) $R_{down}\gg r_{O3}$ → $R_{out}\approx r_{O3}$</p><p>(b) 둘 다 $g_mr_O^2$ 차수 → 병렬 유지</p></div>
   <div class="summary-group"><h4>답</h4><p>(a) $-\dfrac{r_{O3}}{2g_{m5}r_{O5}r_{O6}}$</p><p>(b) $-\dfrac{(g_{m3}r_{O3}r_{O5})\parallel(2g_{m1}r_{O1}r_{O7})}{2r_{O7}}$</p></div>
-  <div class="summary-group"><h4>검산</h4><p>$r_{O6}\to0$ 또는 $r_{O5}\to0$ → 문제 10.68 답</p><p>수치: (a) $-0.005$, (b) $\approx-33$</p></div>
+  <div class="summary-group"><h4>검산</h4><p>비지배 항을 복원한 정확식에서 $r_{O6}\to0$ 또는 $r_{O5}\to0$ → 문제 10.68 답</p><p>수치: (a) $-0.005$, (b) $\approx-33$</p></div>
 </div>

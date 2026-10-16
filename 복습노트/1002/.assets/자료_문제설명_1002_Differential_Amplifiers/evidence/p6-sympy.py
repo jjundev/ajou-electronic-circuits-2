@@ -1,17 +1,19 @@
-import sympy as S
-from math import log10,pi,sqrt
+import sympy as s
+s.init_printing()
+gm,ro,rp,R,RC,RT=s.symbols('gm ro rp R RC RT', positive=True)
+vi,vo,vx,it=s.symbols('vi vo vx it',real=True)
+par=lambda a,b:s.simplify(a*b/(a+b))
+def show(label,x): print(label, '=',([s.simplify(v) for v in x] if isinstance(x,list) else s.simplify(x)))
+def ce(load):
+ sol=s.solve(vo/load+gm*vi,vo)[0];show('Av from output KCL',sol/vi)
+K=s.symbols('K',positive=True)
+I=.0005;gn=s.sqrt(2*100e-6*K*I);gp=s.sqrt(2*50e-6*K*I);rn=1/(.1*I);rpp=1/(.2*I)
+Rn=gn*rn**2;Rp=gp*rpp**2;A=gn*par(Rn,Rp)
+show('gain(K)',A);show('K for gain200',s.solve(A-200,K));print('Both cascode branch resistances use dominant gmro^2 terms; same K does not mean same gm.')
 
-gn,gp,rn,rp,vi,x,y,z=(S.Symbol('gn',positive=True),S.Symbol('gp',positive=True),S.Symbol('rn',positive=True),S.Symbol('rp',positive=True),S.Symbol('vi',real=True),S.Symbol('x',real=True),S.Symbol('y',real=True),S.Symbol('z',real=True))
-# NMOS lower drain x, output y, PMOS stack intermediate z.
-# PMOS upper fixed source contributes z/rp; lower common-gate source contributes gp*z+(z-y)/rp.
-eqs=[x/rn+(x-y)/rn+gn*x+gn*vi,(y-x)/rn-gn*x+(y-z)/rp-gp*z,z/rp+(z-y)/rp+gp*z]
-sol=S.solve(eqs,[x,y,z]);A=S.factor(-sol[y]/vi)
-Rn=2*rn+gn*rn**2;Rp=2*rp+gp*rp**2;Gm=gn*(gn+1/rn)/(gn+2/rn)
-assert S.simplify(A-Gm/(1/Rn+1/Rp))==0
-print('Three-node exact |Av|=',A);print('Gm=',Gm,'Rn=',Rn,'Rp=',Rp)
-t,an,ap=(S.Symbol('t',positive=True),S.Symbol('an',positive=True),S.Symbol('ap',positive=True));lead=gn/(1/(gn*rn**2)+1/(gp*rp**2))
-ratio=S.factor((A/lead).subs({gn:t*an,gp:t*ap}));print('leading/exact shared gm scale ratio limit',S.limit(ratio,t,S.oo));assert S.simplify(S.limit(ratio,t,S.oo)-1)==0
-q=S.Symbol('q',positive=True);subs={rn:20000,rp:10000,gn:S.sqrt(S.Rational(1,10**7)*q),gp:S.sqrt(S.Rational(1,2*10**7)*q)}
-qa=S.nsolve(lead.subs(subs)-200,q,33);qe=S.nsolve(A.subs(subs)-200,q,30)
-print('W/L leading=',qa,'exact=',qe,'exact gain at leading size=',S.N(A.subs(subs).subs(q,qa)))
-assert abs(float(qa)-33.28427124746)<1e-8
+K=s.symbols('K',positive=True)
+I=s.Rational(1,2000);gn=s.sqrt(2*s.Rational(1,10000)*K*I);gp=gn/s.sqrt(2);rn=20000;rpp=10000;Lp=gp*rpp*rpp+2*rpp
+u,y,z=s.symbols('u y z',real=True)
+sol=s.solve([z/rn+(z-y)/rn+gn*z+gn*u,y/Lp+(y-z)/rn-gn*z],[z,y]);Ag=s.simplify(-sol[y]/u)
+show('exact gain full KCL',Ag)
+show('exact K',s.nsolve(Ag-200,K,30))

@@ -1,15 +1,11 @@
-import sympy as S
-from math import log10,pi,sqrt
-
-g,ri,RL,T,vi,vs,vo=(S.Symbol('g',positive=True),S.Symbol('ri',positive=True),S.Symbol('RL',positive=True),S.Symbol('T',positive=True),S.Symbol('vi',real=True),S.Symbol('vs',real=True),S.Symbol('vo',real=True))
-# CM half source resistor2T, output loadRL, input output resistance ri.
-id=g*(vi-vs)+(vo-vs)/ri
-sol=S.solve([vo/RL+id,vs/(2*T)-id],[vo,vs]);A=S.factor(sol[vo]/vi)
-Q=ri+2*T*(1+g*ri);Gm=g*ri/Q;Rout=1/(1/RL+1/Q)
-assert S.simplify(A+Gm*Rout)==0
-assert S.simplify(A+g*ri*RL/(RL+Q))==0
-print('Exact CM KCL=',A,'Gm=',Gm,'Rout=',Rout)
-
-lead=-RL/(2*T);print('exact/leading gm limit',S.limit(A/lead,g,S.oo));assert S.simplify(S.limit(A/lead,g,S.oo)-1)==0
-print('ideal tail limit',S.limit(A,T,S.oo));assert S.limit(A,T,S.oo)==0
-print('zero-tail limit',S.limit(A,T,0));assert S.simplify(S.limit(A,T,0)+g/(1/ri+1/RL))==0
+import sympy as s
+s.init_printing()
+gm,ro,rp,R,RC,RT=s.symbols('gm ro rp R RC RT', positive=True)
+vi,vo,vx,it=s.symbols('vi vo vx it',real=True)
+par=lambda a,b:s.simplify(a*b/(a+b))
+def show(label,x): print(label, '=',([s.simplify(v) for v in x] if isinstance(x,list) else s.simplify(x)))
+def ce(load):
+ sol=s.solve(vo/load+gm*vi,vo)[0];show('Av from output KCL',sol/vi)
+rn,rpp,tail=s.symbols('ron rop tail',positive=True)
+# Full CM: output shunt rop, channel ron between source/output, gm(vin-vs).
+sol=s.solve([vo/rpp+(vo-vx)/rn+gm*(vi-vx),vx/(2*tail)+(vx-vo)/rn-gm*(vi-vx)],[vo,vx]);A=s.factor(sol[vo]/vi);show('Acm exact',A);show('large tail coefficient',s.limit(A*tail,tail,s.oo));print('gmro>>1 plus tail dominant -> Acm~-rop/(2rtail).')

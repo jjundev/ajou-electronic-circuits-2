@@ -10,8 +10,8 @@
   <p>$$|A_v| = g_m\,(r_{O2}\parallel r_{O4})$$</p>
   <p><b>기호의 뜻.</b> $g_m = I_C/V_T$는 $Q_1$, $Q_2$의 트랜스컨덕턴스(transconductance)로, 베이스-이미터 전압 변화가 컬렉터 전류를 얼마나 바꾸는지예요. $r_O = V_A/I_C$는 Early 효과(Early effect, 베이스 폭 변조)로 생기는 출력 저항이고, $V_A$가 그 트랜지스터의 Early 전압이에요. $V_T = kT/q \approx 26\ \text{mV}$는 열전압(thermal voltage)이에요.</p>
   <p><b>근사 조건.</b> $\beta \gg 1$로 두어 거울의 베이스 전류 오차를 무시하고, 테일 $I_{EE}$는 이상 전류원으로 봐요. $Q_1$의 $r_{O1}$, $Q_3$의 $r_{O3}$은 다이오드 쪽 작은 저항 $1/g_{m3}$에 묻혀 이득에 거의 영향이 없어서 $G_m\approx g_m$으로 둬요.</p>
-  <p><b>선택 이유.</b> 대칭이 아니라 하프 서킷을 그대로 쓸 수 없으므로, 교과서와 강의에서 유도한 $G_m R_{out}$ 결과식을 바로 쓰는 게 가장 짧아요. 게다가 바이폴라는 $g_m r_O = V_A/V_T$로 전류가 약분되므로, 이득이 Early 전압만의 함수가 돼요. 그래서 $I_{EE}$ 없이도 $V_{A,p}$를 정할 수 있어요.</p>
-</div>
+  <p><b>선택 이유.</b> 대칭이 아니라 하프 서킷을 그대로 쓸 수 없으므로, 위에서 두 가지 전류를 합쳐 얻은 $G_m$과 출력 병렬 저항을 따로 구해 곱해요. 게다가 바이폴라는 $g_m r_O = V_A/V_T$로 전류가 약분되므로, 이득이 Early 전압만의 함수가 돼요. 그래서 $I_{EE}$ 없이도 $V_{A,p}$를 정할 수 있어요.</p>
+<p><strong>왜 반쪽 전류가 전체 $g_m$이 되나요?</strong> $v_d=v_{in1}-v_{in2}$라 하고, 이상적 테일·큰 고유 이득·거울 비율 1:1의 근사에서 $\Delta i_{C1}=+g_mv_d/2$, $\Delta i_{C2}=-g_mv_d/2$예요. 거울은 왼쪽의 증가분을 오른쪽 위에서 들어오는 전류 증가로 복사해요. 오른쪽 아래로 빠지는 전류는 같은 양만큼 줄어요.</p><p>$$\Delta i_{out}=\frac{g_mv_d}{2}-\left(-\frac{g_mv_d}{2}\right)=g_mv_d$$</p><p>이해를 위한 예시로 $g_m=2$ mS, $v_d=1$ mV이면 각 가지 변화는 +1 μA/−1 μA, 출력에 남는 전류는 2 μA예요. 양의 $v_d$는 출력을 올려요. p9의 $2\Delta I$와 같은 전류 차이 규칙이에요. 유한 $r_o$ 등의 작은 보정은 verify에서 구분해요.</p><figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 258" role="img" aria-label="출력에 남는 전류는 두 변화의 합"><rect width="440" height="258" fill="#ffffff"/><text x="18" y="30" fill="#111827" font-size="22">출력에 남는 전류는 두 변화의 합</text><text x="18" y="60" fill="#1d4ed8" font-size="20">1. 왼쪽 입력 가지: +1 μA</text><text x="32" y="86" fill="#111827" font-size="20">거울 → 출력으로 +1 μA 공급</text><text x="18" y="124" fill="#1d4ed8" font-size="20">2. 오른쪽 입력 가지: −1 μA</text><text x="32" y="150" fill="#111827" font-size="20">출력에서 빠지는 전류 1 μA 감소</text><text x="18" y="188" fill="#1d4ed8" font-size="20">3. 출력 순전류 증가</text><text x="32" y="214" fill="#111827" font-size="20">+1 μA − (−1 μA) = +2 μA</text></svg><figcaption>위에서 아래로 전압·전류 변화를 따라가요. 수치는 이해를 위한 예시예요.</figcaption></figure></div>
 <div class="layer formal" data-explanation="start">
   <h4>종이에 쓸 첫 줄</h4>
   <p>바이어스부터 적어요. 대칭 차동쌍이라 평형에서 $Q_1$, $Q_2$는 $I_{EE}/2$씩 흘리고, 거울 $Q_3$, $Q_4$도 같은 $I_{EE}/2$를 흘려요. 네 소자의 컬렉터 전류가 모두 $I_C = I_{EE}/2$예요.</p>
@@ -43,7 +43,7 @@
     <p><b>단위.</b> $V_T/V_A$는 V/V라 무차원이고, 이득도 무차원이에요. 답 $V_{A,p}$는 V로 나와요.</p>
     <p><b>극한·특수값.</b> $V_{A,p}\to\infty$($r_{O4}\to\infty$, 이상적인 거울)이면 이득은 $V_{A,n}/V_T \approx 192$로 가요. 100이 이 상한보다 작으니 해가 존재해요. 만약 $V_{A,n}$이 $100V_T = 2.6\ \text{V}$보다 작았다면 $V_T/V_{A,p}$가 음수가 되어 어떤 pnp로도 이득 100을 못 만들어요. 대칭 특수값으로 $V_{A,p}=V_{A,n}$이면 이득은 $V_A/(2V_T)\approx 96$이라 100에 조금 못 미치므로, 답이 5 V보다 약간 큰 5.42 V인 것도 자연스러워요.</p>
     <p><b>$V_T$ 민감도.</b> $V_T = 25\ \text{mV}$를 쓰면 $1/100 - 0.005 = 0.005$라 $V_{A,p} = 5.0\ \text{V}$가 나와요. 두 항의 차가 작아서 $V_T$ 값에 답이 민감하니, 쓴 $V_T$를 답과 함께 적어 두세요.</p>
-  <p>네 소자의 유한 $r_o$와 이상적 테일을 모두 남기고 베이스 전류만 무시하는 모델도 비교할 수 있어요. 동일 동작 전류에서 npn·pnp의 $g_m$은 같고, 다이오드 쪽 노드·출력 노드·공통 이미터에 KCL을 세워 풀면 $$|A_e|=g_m(r_{ON}\parallel r_{OP})\frac{2g_mr_{OP}+1}{2(g_mr_{OP}+1)}$$예요. 본문의 주 답은 뒤 인자를 1로 둔 큰 고유 이득 근사예요. $g_mr_{OP}\to\infty$에서 정확식/근사식 비가 1로 가고, $V_T=26$ mV·$V_{A,p}=5.42$ V에서는 이 보정이 약 0.24%예요. 따라서 작은 보정을 정밀 결과와 구별하며 교과서 설계값을 사용해요.</p></div>
+  <p>네 소자의 유한 $r_o$와 이상적 테일을 모두 남기고 베이스 전류만 무시하는 모델도 비교할 수 있어요. 동일 동작 전류에서 npn·pnp의 $g_m$은 같고, 다이오드 쪽 노드 $v_x$, 출력 $v_o$, 공통 이미터 $v_e$라 두고 $g_n=1/r_{ON}$, $g_p=1/r_{OP}$로 정의해요. 두 베이스에 $+v_d/2,-v_d/2$를 넣고 각 노드에서 나가는 전류를 쓰면</p><p>$$(g_m+g_p)v_x+g_n(v_x-v_e)+g_m(v_d/2-v_e)=0$$</p><p>$$g_pv_o+g_n(v_o-v_e)+g_m(-v_d/2-v_e)+g_mv_x=0$$</p><p>$$g_n(2v_e-v_x-v_o)+2g_mv_e=0$$</p><p>마지막 식에서 $v_e=g_n(v_x+v_o)/[2(g_m+g_n)]$예요. 이것을 앞의 두 식에 대입하여 $v_x$를 소거하면 $v_o/v_d=g_m(2g_m+g_p)/[2(g_m+g_p)(g_n+g_p)]$가 돼요. $1/(g_n+g_p)=r_{ON}\parallel r_{OP}$를 넣으면 $$|A_e|=g_m(r_{ON}\parallel r_{OP})\frac{2g_mr_{OP}+1}{2(g_mr_{OP}+1)}$$예요. 본문의 주 답은 뒤 인자를 1로 둔 큰 고유 이득 근사예요. $g_mr_{OP}\to\infty$에서 정확식/근사식 비가 1로 가고, $V_T=26$ mV·$V_{A,p}=5.42$ V에서는 이 보정이 약 0.24%예요. 따라서 작은 보정을 정밀 결과와 구별하며 교과서 설계값을 사용해요.</p></div>
 </div>
 <div class="layer warn" data-explanation="pitfall">
   <h4>이 문항에서 하기 쉬운 오류</h4>
@@ -72,4 +72,4 @@
     <p>$V_{A,p}\approx 5.42\ \text{V}$ ($V_T=26\ \text{mV}$)</p></div>
   <div class="summary-group"><h4>검산</h4><p>$192\parallel208\approx100$</p>
     <p>$V_{A,p}\to\infty$이면 상한 $\approx192$</p></div>
-</div>
+<div class="summary-group"><h4>규칙을 적용하는 순서</h4><p>각 가지 $\pm g_mv_d/2$ → 공급 증가와 배출 감소 → 출력 $g_mv_d$</p><p>1:1 거울·큰 고유 이득 근사에서 $G_m\approx g_m$예요.</p></div></div>

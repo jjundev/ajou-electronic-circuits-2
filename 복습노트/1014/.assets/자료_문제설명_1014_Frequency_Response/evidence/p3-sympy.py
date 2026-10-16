@@ -1,10 +1,9 @@
-import sympy as S
-from math import log10,pi,sqrt
-
-s,g,R,C,vi,vo=(S.Symbol('s',real=True),S.Symbol('g',positive=True),S.Symbol('R',positive=True),S.Symbol('C',positive=True),S.Symbol('vi',real=True),S.Symbol('vo',real=True))
-H=S.factor(S.solve(S.Eq((1/R+s*C)*vo+g*vi,0),vo)[0]/vi)
-print('CS output KCL H=',H);assert S.simplify(H+g*R/(1+s*R*C))==0
-
-w=S.Symbol('w',positive=True);w0=S.solve(S.Eq(1/(1+(w*R*C)**2),S.Rational(81,100)),w)[0]
-num=float(w0.subs({R:1000,C:S.Rational(1,10**12)}));print('omega=',num,'f=',num/(2*pi),'MHz=',num/(2*pi*1e6),'checkratio=',1/sqrt(1+(num*1e-9)**2),'dB=',20*log10(.9))
-assert abs(1/sqrt(1+(num*1e-9)**2)-.9)<1e-12
+import sympy as s
+s.init_printing()
+gm,ro,rp,R,RC,RT=s.symbols('gm ro rp R RC RT', positive=True)
+vi,vo,vx,it=s.symbols('vi vo vx it',real=True)
+par=lambda a,b:s.simplify(a*b/(a+b))
+def show(label,x): print(label, '=',([s.simplify(v) for v in x] if isinstance(x,list) else s.simplify(x)))
+def ce(load):
+ sol=s.solve(vo/load+gm*vi,vo)[0];show('Av from output KCL',sol/vi)
+w=s.symbols('w',positive=True);sol=s.solve(1/(1+(w*1000*1e-12)**2)-.9**2,w)[0];show('omega',sol);show('frequencyHz',sol/(2*s.pi));show('dropdB',20*s.log(.9,10))

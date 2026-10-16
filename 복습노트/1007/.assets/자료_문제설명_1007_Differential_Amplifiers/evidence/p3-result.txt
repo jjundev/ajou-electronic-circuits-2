@@ -1,5 +1,9 @@
-Exact CM KCL= -RL*g*ri/(RL + 2*T*g*ri + 2*T + ri) Gm= g*ri/(2*T*(g*ri + 1) + ri) Rout= 1/(1/(2*T*(g*ri + 1) + ri) + 1/RL)
-a exact/leading scale limit 1
-b exact/parallel-leading scale limit 2*a1*a3*r3*r5*r7*ri*(1/(a3*r3*r5) + 1/(2*a1*r7*ri))/(2*a1*r7*ri + a3*r3*r5)
-equal gm.001 ro100k exact a,b -0.00485295544986897 -33.4426229508197
-b wrong dropping lower= -50 correct leading= -33.3333333333333
+a tail cascode resistance = gn*rt**2
+a dominant Acm = -rp/(2*gn*rt**2)
+b upper cascode resistance = gp*rp**2
+b dominant Acm = -gp*rp**2/(2*rt)
+General CM expression with effective upper load L, input ro rn, tail T: -gm rn L/(rn+L+2T(1+gm rn)); dominant result requires gm rn>>1 and 2Tgm rn>>rn+L.
+full CM KCL gain = -L*g*r/(L + 2*T*g*r + 2*T + r)
+b leading gain/scale = -a*b*c*d*e/(2*T*a*e + b*c*d)
+parallel formula residual = 0
+Therefore(b) requires Rupper || Rlower, not Rupper alone. Rupper=gm3 rO3 rO5, Rlower=2gm1 rO1 rO7; source reference agrees.

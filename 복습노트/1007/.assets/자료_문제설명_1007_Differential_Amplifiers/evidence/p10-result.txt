@@ -1,5 +1,8 @@
-active mirror KCL gain VA*VP/(VT*(VA + VP))
-required VAp= 100*VA*VT/(VA - 100*VT) atVT26= 65/12 VT25= 5
-VAp infinity gain= VA/VT
-Finite-ro full mirror gain gm*rn*rp*(2*gm*rp + 1)/(2*(rn + rp)*(gm*rp + 1)) leading= gm/(1/rp + 1/rn)
-exact/leading intrinsic-gain limit 1
+DM input gives left +gm vd/2 and right -gm vd/2. Ideal1:1 PNP mirror sums to +gm vd at right output, hence positive gain.
+A = VAn*VAp/(VT*(VAn + VAp))
+VAp needed = [100*VAn*VT/(VAn - 100*VT)]
+at VAn5 VT26mV = 5.41666666666667
+Finite beta mirror transfer neglected in dominant model; output compliance assumed.
+exact3node gain = gm*(2*gm + gp)/(2*(gm + gp)*(gn + gp))
+rootformula residual = 0
+large intrinsic-gain correction = 1

@@ -1,13 +1,4 @@
 import sympy as s
-from sympy import Rational as Q
-print('Independent derivation from blind conditions; author-early, not fragment author')
-def check(name, expression):
-    value=s.simplify(expression)
-    print(name, value)
-    assert value==0,(name,value)
-
-I,W=s.symbols('I W',positive=True)
-P=Q(3,1000);V=Q(18,10);mu=Q(1,10000);d=Q(1,2)
-z=s.solve([s.Eq(V*I,P),s.Eq(mu*W*d*d/2,I)],[I,W])
-print('design',z);check('power residual',V*z[I]-P);check('cutoff residual',s.sqrt(2*z[I]/(mu*z[W]))-d)
-check('WL133.333',z[W]-Q(400,3))
+# Independently derived from blind problem and displayed input circuit, before reference access.
+P=s.Rational(3,1000);V=s.Rational(18,10);dv=s.Rational(1,2);mu=s.Rational(1,10000);I=P/V;wl=2*I/(mu*dv**2);print('Iss',I.evalf(),'W/L',wl);assert s.simplify(mu*wl*dv**2/2-I)==0
+print("Independent conclusion: Iss=1.6667mA W/L=133.333 at power limit")

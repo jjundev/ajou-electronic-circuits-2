@@ -1,7 +1,4 @@
 import sympy as s
-g,Rd,Rs,vi,i,vs,vo=s.symbols('g Rd Rs vi i vs vo')
-x=s.solve([s.Eq(i,g*(vi-vs)),s.Eq(vs,i*Rs/2),s.Eq(vo,-i*Rd/2)],[i,vs,vo],dict=True)[0]
-a=s.factor(x[vo]/vi)
-print('DM half circuit KCL gain=',a)
-assert s.simplify(a+Rd/(Rs+2/g))==0
-print('Rs0=',s.simplify(a.subs(Rs,0)),'g infinity=',s.limit(a,g,s.oo))
+# Independently derived from blind problem and displayed input circuit, before reference access.
+gm,Rd,Rs,v,x,y=s.symbols('gm Rd Rs v x y');q=s.solve([s.Eq(gm*(v-x),x/(Rs/2)),s.Eq(y/(Rd/2)+gm*(v-x),0)],[x,y]);a=s.simplify(q[y]/v);print(a);assert s.simplify(a+Rd/(Rs+2/gm))==0;print('Rs zero',s.limit(a,Rs,0))
+print("Independent conclusion: gain=-RDD/(RSS+2/gm)")

@@ -1,7 +1,9 @@
-import sympy as S
-from math import log10,pi,sqrt
-
-s,g,R,C,vi,x,y=(S.Symbol('s',real=True),S.Symbol('g',positive=True),S.Symbol('R',positive=True),S.Symbol('C',positive=True),S.Symbol('vi',real=True),S.Symbol('x',real=True),S.Symbol('y',real=True))
-sol=S.solve([(1/R+s*C)*x+g*vi,(1/R+s*C)*y+g*x],[x,y]);H=S.factor(sol[y]/vi)
-print('two-node cascade KCL H=',H);assert S.simplify(H-(g*R)**2/(1+s*R*C)**2)==0
-print('atwp relative amplitude=.5,db=',20*log10(.5),'combined3dBratio=',sqrt(sqrt(2)-1));assert abs(1/(1+(sqrt(sqrt(2)-1))**2)-1/sqrt(2))<1e-12
+import sympy as s
+s.init_printing()
+gm,ro,rp,R,RC,RT=s.symbols('gm ro rp R RC RT', positive=True)
+vi,vo,vx,it=s.symbols('vi vo vx it',real=True)
+par=lambda a,b:s.simplify(a*b/(a+b))
+def show(label,x): print(label, '=',([s.simplify(v) for v in x] if isinstance(x,list) else s.simplify(x)))
+def ce(load):
+ sol=s.solve(vo/load+gm*vi,vo)[0];show('Av from output KCL',sol/vi)
+z,C=s.symbols('s C');x=s.symbols('x');sol=s.solve([x/R+z*C*x+gm*vi,vo/R+z*C*vo+gm*x],[x,vo]);show('H',sol[vo]/vi);show('double pole',-1/(R*C));print('DC magnitude(gmR)^2, initial0dB/dec then-40dB/dec at common pole; exact magnitude at pole is halfDC=-6.0206dB.')

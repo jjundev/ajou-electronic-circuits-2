@@ -1,3 +1,7 @@
-a before= 0 after= 2*R*di
-b before= -I0*R/2 after= R*(-I0 + 3*di)/2
-These formal ideal-source values require compliance/saturation; negative b equilibrium is formal, not guaranteed by grounded practical sinks.
+before = I0*RL*(k - 1)
+after = RL*(-I0 + dI + k*(I0 + dI))
+a before = 0
+a after = 2*RL*dI
+b before = -I0*RL/2
+b after = RL*(-I0 + 3*dI)/2
+k= (W/L)4/(W/L)3. Physical saturation/compliance must hold; negative ideal output not realizable with sink compliance.

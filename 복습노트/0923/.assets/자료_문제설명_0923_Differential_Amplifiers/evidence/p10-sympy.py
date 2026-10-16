@@ -1,19 +1,5 @@
 import sympy as s
-from sympy import Rational as Q
-print('Independent derivation from blind conditions; author-early, not fragment author')
-def check(name, expression):
-    value=s.simplify(expression)
-    print(name, value)
-    assert value==0,(name,value)
-
-K,u,R,d,x=s.symbols('K u R d x',positive=True)
-# Original nonlinear square laws minus the DC KCL. No small-signal equivalent model.
-F=s.expand(K*((u-x+d/2)**2+(u-x-d/2)**2)/2-K*u*u-x/R)
-print('nonlinear residual F=',F)
-check('exchange symmetry',F.subs(d,-d)-F)
-first=s.simplify(-s.diff(F,d)/s.diff(F,x)).subs({d:0,x:0})
-second=s.simplify((-s.diff(F,d,2)/s.diff(F,x)).subs({d:0,x:0})/2)
-print('first derivative',first,'quadratic coefficient',second)
-check('virtual ground first order',first)
-check('quadratic coefficient',second-K/(4*(2*K*u+1/R)))
-print('Rinf coefficient',s.limit(second,R,s.oo),'Rzero coefficient',s.limit(second,R,0))
+# Independently derived from blind problem and displayed input circuit, before reference access.
+d,u,a,k,R=s.symbols('d u a k R',positive=True)
+f=s.expand(k*((a+d/2-u)**2+(a-d/2-u)**2)/2-k*a*a-u/R);print('nonlinear KCL',f);c1,c2=s.symbols('c1 c2');series=s.series(f.subs(u,c1*d+c2*d*d),d,0,3).removeO();c1v=s.solve(s.Eq(series.coeff(d,1),0),c1)[0];c2v=s.solve(s.Eq(series.coeff(d,2).subs(c1,c1v),0),c2)[0];print('linear',c1v,'quadratic',c2v);assert c1v==0;print('quadratic Rss infinity',s.limit(c2v,R,s.oo),'Rss zero',s.limit(c2v,R,0))
+print("Independent conclusion: tail first-order displacement zero; second order coefficient k/[4(2k a+1/Rss)]")

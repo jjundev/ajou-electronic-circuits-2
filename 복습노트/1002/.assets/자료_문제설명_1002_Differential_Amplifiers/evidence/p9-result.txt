@@ -1,4 +1,3 @@
-CM current/input g/(2*Rt*g + 1) ACM= -R*g/(2*Rt*g + 1) ACM-DM= D*g/(2*Rt*g + 1)
-TailIC convention ACM -I*R/(2*(VA + VT))
-At RC IC=.02(VA+VT),gain= -1/100
-VA infinite limit 0
+Acm = -Ic*RC/(2*VA + 2*VT)
+target difference = 0
+|Acm|<.01 iff RC Ic < .02(VA+VT). Ic is tail current, beta>>1.

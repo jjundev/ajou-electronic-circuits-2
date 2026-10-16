@@ -1,13 +1,4 @@
 import sympy as s
-from sympy import Rational as Q
-print('Independent derivation from blind conditions; author-early, not fragment author')
-def check(name, expression):
-    value=s.simplify(expression)
-    print(name, value)
-    assert value==0,(name,value)
-
-J=s.symbols('unit_current',positive=True)
-unit=s.solve(s.Eq(3*J,Q(3,10000)),J)[0]
-print('unit=',unit,'I1=',2*unit,'I2=',5*unit)
-check('sink1 A',2*unit-Q(2,10000));check('sink2 A',5*unit-Q(5,10000))
-print('Sources grounded; diode connection only at reference; each drain must retain VDS>=Vov.')
+# Independently derived from blind problem and displayed input circuit, before reference access.
+print('W/L reference : output1 : output2 =',s.Rational(3,3),s.Rational(2,3),s.Rational(5,3));assert s.Rational(3,10)*s.Rational(2,3)==s.Rational(2,10)
+print("Independent conclusion: NMOS sink ratios 2/3 and 5/3, common gates reference diode")

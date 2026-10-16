@@ -1,8 +1,9 @@
-import sympy as S
-from math import log10,pi,sqrt
-
-s,g,RS,RD,RP,Ci,CL,vi,vx,vs,vo=(S.Symbol('s',real=True),S.Symbol('g',positive=True),S.Symbol('RS',positive=True),S.Symbol('RD',positive=True),S.Symbol('RP',positive=True),S.Symbol('Ci',positive=True),S.Symbol('CL',positive=True),S.Symbol('vi',real=True),S.Symbol('vx',real=True),S.Symbol('vs',real=True),S.Symbol('vo',real=True))
-sol=S.solve([(vx-vi)/RS+s*Ci*vx+(vx-vs)/RP,(vs-vx)/RP+g*vs,(1/RD+s*CL)*vo-g*vs],[vx,vs,vo]);H=S.factor(sol[vo]/vi)
-print('three-node CG KCL H=',H,'poles=',S.solve(S.denom(H),s));win=(1/RS+1/(RP+1/g))/Ci
-expected=g*RD/((1+s*RD*CL)*((1+g*RP)*(1+s*RS*Ci)+g*RS));assert S.simplify(H-expected)==0
-print('input pole=',win,'RP0=',S.limit(win,RP,0),'RPinf=',S.limit(win,RP,S.oo));assert S.simplify(S.limit(win,RP,0)-(1/RS+g)/Ci)==0;assert S.simplify(S.limit(win,RP,S.oo)-1/(RS*Ci))==0
+import sympy as s
+s.init_printing()
+gm,ro,rp,R,RC,RT=s.symbols('gm ro rp R RC RT', positive=True)
+vi,vo,vx,it=s.symbols('vi vo vx it',real=True)
+par=lambda a,b:s.simplify(a*b/(a+b))
+def show(label,x): print(label, '=',([s.simplify(v) for v in x] if isinstance(x,list) else s.simplify(x)))
+def ce(load):
+ sol=s.solve(vo/load+gm*vi,vo)[0];show('Av from output KCL',sol/vi)
+z,Ci,Cl,Rs,RP=s.symbols('s Ci Cl Rs RP',positive=True);v,u=s.symbols('v u');sol=s.solve([(v-vi)/Rs+z*Ci*v+(v-u)/RP,(u-v)/RP+gm*u,vo/R+z*Cl*vo-gm*u],[v,u,vo]);show('H',sol[vo]/vi);show('input pole',-(1/Rs+1/(RP+1/gm))/Ci);show('output pole',-1/(R*Cl));print('RP=0 recovers common-gate input1/gm; RP->infty makes input pole1/RsCi.')

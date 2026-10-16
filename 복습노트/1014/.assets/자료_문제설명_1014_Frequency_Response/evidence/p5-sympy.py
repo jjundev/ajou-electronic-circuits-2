@@ -1,9 +1,10 @@
-import sympy as S
-from math import log10,pi,sqrt
-
-f=S.Symbol('f',positive=True);ratio=S.sqrt(1+(f/10**9)**2)/S.sqrt((1+(f/10**8)**2)*(1+(f/10**10)**2))
-for fv in [1e8,1e9,1e10]:print('exactcornerGHz',fv/1e9,'dB',20*log10(float(ratio.subs(f,fv))))
-# Rational H has two denominator factors and one numerator, hence high-f amplitude order -1.
-print('highfrequency amplitude coefficient=',S.limit(f*ratio,f,S.oo));assert S.simplify(S.limit(f*ratio,f,S.oo)-10**9)==0
-asym=lambda ff:0 if ff<=1e8 else -20*log10(ff/1e8) if ff<=1e9 else -20 if ff<=1e10 else -20-20*log10(ff/1e10)
-print('asymptotesdB',[asym(x) for x in [1e8,1e9,1e10,1e11]]);assert asym(1e11)==-40
+import sympy as s
+s.init_printing()
+gm,ro,rp,R,RC,RT=s.symbols('gm ro rp R RC RT', positive=True)
+vi,vo,vx,it=s.symbols('vi vo vx it',real=True)
+par=lambda a,b:s.simplify(a*b/(a+b))
+def show(label,x): print(label, '=',([s.simplify(v) for v in x] if isinstance(x,list) else s.simplify(x)))
+def ce(load):
+ sol=s.solve(vo/load+gm*vi,vo)[0];show('Av from output KCL',sol/vi)
+print('Ordered breakpoints100MHz pole,1GHz zero,10GHz pole; slopes0,-20,0,-20 dB/dec. Relative to DC:0dB to100MHz; -20dB at1GHz and10GHz; -40dB at100GHz. Unknown DC gain is an arbitrary vertical offset. All-pass/right-left zero phase cannot be inferred from magnitude.')
+f=s.symbols('f',positive=True);H=s.sqrt(1+(f/1e9)**2)/s.sqrt((1+(f/1e8)**2)*(1+(f/1e10)**2));show('relativeDC',s.limit(H,f,0));show('high coefficient',s.limit(f*H,f,s.oo))

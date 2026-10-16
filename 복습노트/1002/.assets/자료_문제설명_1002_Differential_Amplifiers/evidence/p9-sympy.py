@@ -1,12 +1,11 @@
-import sympy as S
-from math import log10,pi,sqrt
-
-g,Rt,R,D,vc,vs=(S.Symbol('g',positive=True),S.Symbol('Rt',positive=True),S.Symbol('R',positive=True),S.Symbol('D',positive=True),S.Symbol('vc',positive=True),S.Symbol('vs',real=True))
-sol=S.solve(S.Eq(2*g*(vc-vs),vs/Rt),vs)[0];i=S.factor(g*(vc-sol));Ac=S.factor(-R*i/vc);Adc=S.factor(D*i/vc)
-assert S.simplify(Ac+R/(1/g+2*Rt))==0
-assert S.simplify(Adc-D/(1/g+2*Rt))==0
-print('CM current/input',S.factor(i/vc),'ACM=',Ac,'ACM-DM=',Adc)
-
-I,VT,VA=(S.Symbol('I',positive=True),S.Symbol('VT',positive=True),S.Symbol('VA',positive=True));target=S.factor(Ac.subs({g:I/(2*VT),Rt:VA/I}));print('TailIC convention ACM',target);assert S.simplify(target+R*I/(2*(VA+VT)))==0
-print('At RC IC=.02(VA+VT),gain=',S.simplify(target.subs(R,S.Rational(2,100)*(VA+VT)/I)));assert S.simplify(target.subs(R,S.Rational(2,100)*(VA+VT)/I))==-S.Rational(1,100)
-print('VA infinite limit',S.limit(target,VA,S.oo));assert S.limit(target,VA,S.oo)==0
+import sympy as s
+s.init_printing()
+gm,ro,rp,R,RC,RT=s.symbols('gm ro rp R RC RT', positive=True)
+vi,vo,vx,it=s.symbols('vi vo vx it',real=True)
+par=lambda a,b:s.simplify(a*b/(a+b))
+def show(label,x): print(label, '=',([s.simplify(v) for v in x] if isinstance(x,list) else s.simplify(x)))
+def ce(load):
+ sol=s.solve(vo/load+gm*vi,vo)[0];show('Av from output KCL',sol/vi)
+Ic,VT,VA=s.symbols('Ic VT VA',positive=True)
+g=Ic/(2*VT);tail=VA/Ic
+sol=s.solve([vx/(2*tail)-g*(vi-vx),vo/RC+g*(vi-vx)],[vo,vx]);A=s.simplify(sol[vo]/vi);show('Acm',A);show('target difference',A+RC*Ic/(2*(VT+VA)));print('|Acm|<.01 iff RC Ic < .02(VA+VT). Ic is tail current, beta>>1.')

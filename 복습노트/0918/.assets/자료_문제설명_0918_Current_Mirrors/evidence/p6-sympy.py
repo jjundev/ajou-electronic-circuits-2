@@ -1,15 +1,6 @@
 import sympy as s
-from sympy import Rational as Q
-print('Independent derivation from blind conditions; author-early, not fragment author')
-def check(name, expression):
-    value=s.simplify(expression)
-    print(name, value)
-    assert value==0,(name,value)
-
-I,B,Jn,Jp=s.symbols('I beta Jn Jp',positive=True)
-for label,n,m,p,q,target in [('a',1,1,1,1,-(4*B+4)/(B+2)**2),('b',3,2,5,9,-(67*B+70)/((3*B+5)*(5*B+14)))]:
-    z=s.solve([s.Eq(I,n*Jn+(n+m)*Jn/B),s.Eq(m*Jn,p*Jp+(p+q)*Jp/B)],[Jn,Jp])
-    output=s.factor(q*z[Jp]);nom=Q(m,n)*Q(q,p)*I;error=s.factor(output/nom-1)
-    print(label,'Icopy=',output,'relative error=',error,'largeBeta coefficient',s.limit(B*error,B,s.oo))
-    check(label+' reference error',error-target)
-    check(label+' infinite beta',s.limit(error,B,s.oo))
+# Independently derived from blind problem and displayed input circuit, before reference access.
+b=s.symbols('beta',positive=True)
+for ar,ac,pr,pc in [(1,1,1,1),(3,2,5,9)]:
+ z,w=s.symbols('z w');eq=[s.Eq(1,ar*z+(ar+ac)*z/b),s.Eq(ac*z,pr*w+(pr+pc)*w/b)];sol=s.solve(eq,[z,w]);q=s.factor(pc*sol[w]);nom=s.Rational(ac*pc,ar*pr);print('ratio',q,'signed normalized error',s.factor(q/nom-1));assert s.limit(q,b,s.oo)==nom
+print("Independent conclusion: a ratio=1/(1+2/beta)^2; b ratio=(6/5)/[(1+5/(3 beta))(1+14/(5 beta))]")

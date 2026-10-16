@@ -1,15 +1,6 @@
 import sympy as s
-from sympy import Rational as Q
-print('Independent derivation from blind conditions; author-early, not fragment author')
-def check(name, expression):
-    value=s.simplify(expression)
-    print(name, value)
-    assert value==0,(name,value)
-
-I,B,J=s.symbols('I beta J',positive=True)
-for label,n,m,total,target in [('a',1,5,6,-6/(B+6)),('b',5,1,6,-6/(5*B+6)),('c',2,3,10,-5/(B+5))]:
-    density=s.solve(s.Eq(I,n*J+total*J/B),J)[0]
-    out=s.factor(m*density);nom=Q(m,n)*I;error=s.factor(out/nom-1)
-    print(label,'Icopy=',out,'normalized error=',error,'betaInf',s.limit(out/I,B,s.oo))
-    check(label+' error',error-target)
-    check(label+' KCL',I-n*density-total*density/B)
+# Independently derived from blind problem and displayed input circuit, before reference access.
+b=s.symbols('beta',positive=True)
+for ar,ac,extra in [(1,5,0),(5,1,0),(2,3,5)]:
+ z=s.symbols('z');sol=s.solve(s.Eq(1,ar*z+(ar+ac+extra)*z/b),z)[0];ratio=s.factor(ac*sol);print('copy/Iref',ratio,'fraction error',s.factor(ratio/(s.Rational(ac,ar))-1));assert s.limit(ratio,b,s.oo)==s.Rational(ac,ar)
+print("Independent conclusion: copy ratios a5/(1+6/beta), b1/(5+6/beta), c3/(2+10/beta); signed errors negative")

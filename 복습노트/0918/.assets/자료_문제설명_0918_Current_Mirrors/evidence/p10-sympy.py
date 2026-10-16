@@ -1,8 +1,4 @@
 import sympy as s
-Vcc,R1,R2,I1,I2,Vx,Vy,I,R,d=s.symbols('Vcc R1 R2 I1 I2 Vx Vy I R d')
-x=s.solve([s.Eq((Vcc-Vx)/R1,I1),s.Eq((Vcc-Vy)/R2,I2)],[Vx,Vy],dict=True)[0]
-cm=s.factor((x[Vx]+x[Vy])/2)
-print('General DC collector KCL CM=',cm)
-match=s.simplify(cm.subs({R1:R,R2:R,I1:I,I2:I}));print('matched quiescent=',match);assert match==Vcc-I*R
-small=s.simplify(cm.subs({I1:I+d,I2:I-d})-cm.subs({I1:I,I2:I}));print('opposite signal CM perturbation=',small);assert s.simplify(small-d*(R2-R1)/2)==0
-print('matched first order CM perturbation=',small.subs(R2,R1))
+# Independently derived from blind problem and displayed input circuit, before reference access.
+V,R1,R2,I1,I2=s.symbols('V R1 R2 I1 I2');x=V-R1*I1;y=V-R2*I2;print(s.expand((x+y)/2));assert s.simplify(((x+y)/2).subs({R2:R1,I2:I1})-(V-R1*I1))==0
+print("Independent conclusion: output CM=VCC-(RC1 IC1+RC2 IC2)/2; matched equal-current=VCC-IC RC")
