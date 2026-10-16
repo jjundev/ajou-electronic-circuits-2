@@ -791,22 +791,29 @@
 
 <article class="topic" id="s1-bode"><h3>6. 보데 근사: 극점마다 기울기 −20 dB/dec</h3><div class="tags"><span class="tag date">1014 수업</span><span class="tag slide">L05 s8</span></div>
   <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
-    <p class="lead">구불구불한 곡선을 곧은 자 두 개로 대충 그려도 모양이 거의 맞아요.</p>
-    <figure class="figure"><svg id="fig-bode-easy" viewBox="0 0 360 150" role="img" aria-label="평평하다가 꺾여 일정하게 내려가는 두 개의 곧은 강조선과, 그 꺾인 곳 근처에서만 조금 벗어나는 둥근 점선 곡선을 겹쳐 그린 그림">
-      <path class="fig-ink" d="M30,20 L30,130 L340,130" stroke-width="1.5"/>
-      <path class="fig-ink" d="M40.0,40.0 L49.3,40.0 L58.7,40.0 L68.0,40.0 L77.3,40.0 L86.7,40.0 L96.0,40.0 L105.3,40.0 L114.7,40.1 L124.0,40.1 L133.3,40.2 L142.7,40.4 L152.0,40.6 L161.3,41.1 L170.7,41.8 L180.0,42.9 L189.3,44.5 L198.7,46.8 L208.0,49.9 L217.3,53.7 L226.7,58.0 L236.0,62.8 L245.3,67.9 L254.7,73.2 L264.0,78.7 L273.3,84.2 L282.7,89.7 L292.0,95.3 L301.3,100.8 L310.7,106.4 L320.0,112.0" stroke-width="1.5" stroke-dasharray="5 4"/>
-      <path class="fig-accent" d="M40,40 L200,40 L320,112" stroke-width="2.5"/>
-      <text class="fig-text" x="110" y="30" text-anchor="middle" font-size="13">여기까지 평평</text>
-      <text class="fig-text" x="200" y="66" text-anchor="middle" font-size="13">꺾이는 곳</text>
-      <text class="fig-text" x="300" y="80" text-anchor="end" font-size="13">같은 기울기로 내려가요</text>
-    </svg><figcaption>꺾이는 곳 근처만 조금 틀리고, 나머지는 곧은 선이 곡선과 거의 겹쳐요.</figcaption></figure>
+    <p class="lead">주파수를 높이며 pole(극점) 주파수를 하나 지날 때마다, 기존 기울기에 −20 dB/dec를 더해요.</p>
+    <p>dec는 주파수가 10배 되는 구간이고, −20 dB/dec는 그 구간마다 이득이 20 dB 내려간다는 뜻이에요.</p>
+    <figure class="figure"><svg id="fig-bode-easy" viewBox="0 0 440 235" role="img" aria-label="가로축은 로그 주파수, 세로축은 이득 dB인 두 실수 극점의 직선 근사. 첫 극점 전은 기울기 0, 첫 극점 뒤는 마이너스 20, 둘째 극점 뒤는 마이너스 40 dB/dec로 연속해서 이어진다.">
+      <path class="fig-ink" d="M45 20 V190 H420"/>
+      <text class="fig-muted" x="45" y="14">이득 (dB)</text>
+      <text class="fig-muted" x="420" y="225" text-anchor="end">주파수 (로그 축)</text>
+      <path class="fig-accent" d="M50 50 H170 L280 90 L390 170" stroke-width="2.5"/>
+      <path class="fig-ink" d="M170 50 V190 M280 90 V190" stroke-dasharray="4 4"/>
+      <text class="fig-text" x="95" y="40">0</text>
+      <text class="fig-text" x="205" y="55">−20</text>
+      <text class="fig-text" x="337" y="113">−40</text>
+      <text class="fig-muted" x="420" y="30" text-anchor="end">기울기 단위: dB/dec</text>
+      <text class="fig-text" x="170" y="209" text-anchor="middle">첫 pole</text>
+      <text class="fig-text" x="280" y="209" text-anchor="middle">둘째 pole</text>
+    </svg><figcaption>pole에서 이득이 뚝 떨어지는 게 아니라 내려가는 기울기가 더 가팔라지고, 실제 곡선에서는 부드럽게 바뀌어요.</figcaption></figure>
   </div>
   <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <p><strong>먼저 적용해 봐요.</strong> 이 그림은 저주파에서 평평하고, 관심 주파수 범위에 실수 극점 두 개만 영향을 주는 저역통과 응답의 직선 근사예요. 기울기는 첫 극점 전 0, 첫 극점 뒤 −20, 둘째 극점 뒤 −40 dB/dec예요. 같은 조건에서 세 번째 극점을 더 지나면 기존 −40에 −20을 더해 −60 dB/dec가 돼요.</p>
     <p>정확한 $|H(j\omega)|$는 매끈한 곡선이에요. 극점과 영점을 알면 직선 몇 개로 이은 근사 그림인 보데 플롯(Bode plot)으로 쉽게 그릴 수 있어요. 보데(Bode)는 사람 이름이에요.</p>
     <p><strong>그리는 축.</strong> 가로축 주파수 $\omega$는 로그 스케일, 세로축 크기는 dB 단위 $20\log|H(j\omega)|$로 그려요. 로그 스케일에서는 10배(decade, dec)마다 같은 간격이에요.</p>
     <p><strong>보데 규칙.</strong></p>
     <ul>
-      <li>$\omega$가 극점 주파수 $\omega_p$를 지날 때마다 $|H(j\omega)|$의 기울기가 20 dB/dec 감소해요.</li>
+      <li>$\omega$가 극점 주파수 $\omega_p$를 지날 때마다 dB 크기 그래프의 기존 기울기에 −20 dB/dec를 더해요.</li>
       <li>$\omega$가 영점 주파수 $\omega_z$를 지날 때마다 기울기가 20 dB/dec 증가해요.</li>
     </ul>
     <p><strong>극점 항 하나의 유도.</strong></p>
@@ -861,7 +868,7 @@
     <blockquote>"일반적으로 폴이 중요한데" (1014 P05·L255)</blockquote>
   </div>
   <div class="sum" hidden>
-    <p class="sum-lead">극점을 지날 때마다 기울기가 20 dB/dec 줄고, 영점을 지날 때마다 20 dB/dec 늘어요.</p>
+    <p class="sum-lead">극점을 지날 때마다 기존 기울기에 −20 dB/dec를 더해요: 0 → −20 → −40. 영점은 +20 dB/dec를 더해요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
       <li><span class="eq-name">극점 항 근사</span>$$-20\log\sqrt{1+(\omega/\omega_p)^2}$$ $$\approx -20\log(\omega/\omega_p)$$</li>
@@ -878,11 +885,29 @@
     <section id="s2"><h2>3. 노드마다 극점 하나</h2>
 <article class="topic" id="s2-cs-two-poles"><h3>7. 입력 RC가 있는 CS 단의 두 극점</h3><div class="tags"><span class="tag date">1014 수업</span><span class="tag slide">L05 s9</span></div>
   <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
-    <p class="lead">신호가 좁은 문 두 개를 차례로 지나가는 것과 같아요.</p>
-    <figure class="figure"><svg id="fig-cs2p-gates" viewBox="0 0 400 206" role="img" aria-label="신호가 테두리로 그린 첫째 문과 둘째 문을 차례로 지나 밖으로 나가는 흐름도와, 그 아래 크기 그래프가 색칠된 점 두 곳에서 한 번씩 꺾여 내려가는 모습"><text class="fig-text" x="8" y="44" text-anchor="start">신호</text><path class="fig-ink" d="M44 40 H78 M70 34 l8 6 l-8 6"/><rect class="fig-accent" x="82" y="22" width="80" height="36"/><text class="fig-text" x="122" y="45" text-anchor="middle">첫째 문</text><path class="fig-ink" d="M166 40 H196 M188 34 l8 6 l-8 6"/><rect class="fig-accent" x="200" y="22" width="80" height="36"/><text class="fig-text" x="240" y="45" text-anchor="middle">둘째 문</text><path class="fig-ink" d="M284 40 H318 M310 34 l8 6 l-8 6"/><text class="fig-text" x="322" y="44" text-anchor="start">나가는 신호</text><path class="fig-ink" d="M40 80 V180 H340"/><path class="fig-accent" d="M40 100 H140 L220 130 L300 178"/><circle class="fig-dot" cx="140" cy="100" r="4.5"/><circle class="fig-dot" cx="220" cy="130" r="4.5"/><text class="fig-muted" x="122" y="92" text-anchor="start">한 번 꺾임</text><text class="fig-muted" x="226" y="124" text-anchor="start">또 꺾임</text><text class="fig-muted" x="340" y="198" text-anchor="end">빨리 떨수록</text><text class="fig-muted" x="6" y="96" text-anchor="start">크기</text></svg>
-      <figcaption>빨리 떨리는 신호일수록 문마다 조금씩 막혀서, 그래프가 두 번 꺾여요.</figcaption></figure>
+    <p class="lead">저주파 이득은 그래프의 시작 높이이고, 두 pole(극점) 주파수는 꺾을 위치예요.</p>
+    <p>낮은 pole에서 기울기를 0에서 −20으로, 높은 pole에서 −40 dB/dec로 바꾸면 직선 근사를 그릴 수 있어요.</p>
+    <figure class="figure"><svg id="fig-cs2p-gates" viewBox="0 0 440 240" role="img" aria-label="저주파 이득 40 dB, 극점 주파수 1 kHz와 10 kHz인 예시. 직선 근사는 1 kHz까지 40 dB, 10 kHz에서 20 dB, 100 kHz에서 마이너스 20 dB이고 기울기는 차례로 0, 마이너스 20, 마이너스 40 dB/dec다.">
+      <path class="fig-ink" d="M55 20 V190 H420"/>
+      <text class="fig-muted" x="55" y="14">이득 (dB)</text>
+      <text class="fig-muted" x="420" y="232" text-anchor="end">주파수 (로그 축)</text>
+      <path class="fig-accent" d="M60 40 H170 L280 80 L390 160" stroke-width="2.5"/>
+      <path class="fig-ink" d="M170 40 V190 M280 80 V190 M390 160 V190" stroke-dasharray="4 4"/>
+      <text class="fig-text" x="48" y="44" text-anchor="end">40</text>
+      <text class="fig-text" x="48" y="84" text-anchor="end">20</text>
+      <text class="fig-text" x="48" y="164" text-anchor="end">−20</text>
+      <text class="fig-text" x="95" y="31">0</text>
+      <text class="fig-text" x="210" y="44">−20</text>
+      <text class="fig-text" x="337" y="103">−40</text>
+      <text class="fig-muted" x="420" y="24" text-anchor="end">기울기: dB/dec</text>
+      <text class="fig-text" x="170" y="209" text-anchor="middle">1 kHz</text>
+      <text class="fig-text" x="280" y="209" text-anchor="middle">10 kHz</text>
+      <text class="fig-text" x="390" y="209" text-anchor="middle">100 kHz</text>
+    </svg><figcaption>시작 높이 40 dB, pole 주파수 1 kHz·10 kHz인 예시로, 10 kHz 이후에는 주파수 10배마다 40 dB씩 내려가요.</figcaption></figure>
   </div>
   <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <p><strong>그래프부터 그려 봐요.</strong> 위 예시는 이 회로에서 극점 두 개와 저주파 이득을 알았다고 가정한 직선 근사예요. 시작 높이 40 dB에서 첫 극점 1 kHz까지 평평하게, 다음 10 kHz까지 −20 dB/dec로, 그 뒤에는 −40 dB/dec로 이어요. dec는 주파수 10배 구간이므로 10 kHz에서는 20 dB, 100 kHz에서는 −20 dB예요. 실제 곡선은 극점 부근에서 둥글게 이어지고, 아래 유도는 이 회로의 두 극점과 시작 높이를 찾는 과정이에요.</p>
+
     <p>부하 커패시턴스만 있던 CS 단(<a href="#s0-cs-cl">부하 커패시턴스가 있는 CS 단</a>)에 입력 쪽 소자 두 개를 더해요. 입력 쪽 소자는 직렬 저항 $R_S$와, 게이트 노드 X와 접지 사이의 입력 등가 커패시턴스 $C_{in}$이에요.</p>
     <figure class="figure"><svg id="fig-cs2p-circuit" viewBox="0 0 380 215" role="img" aria-label="입력 RC가 있는 CS 단 회로도. V_in이 직렬 R_S를 거쳐 게이트 노드 X로 들어가고, X와 접지 사이에 C_in, 드레인 노드 Y와 V_DD 사이에 R_D, Y와 접지 사이에 C_L이 있다. 두 노드 X와 Y는 색칠된 점으로 표시했다."><path class="fig-ink" d="M215 30 h30 M230 30 V40"/><text class="fig-text" x="250" y="34" text-anchor="start">V<tspan baseline-shift="sub" font-size="10">DD</tspan></text><path class="fig-ink" d="M230.0 40.0 L230.0 44.0 L237.0 47.9 L223.0 55.8 L237.0 63.6 L223.0 71.4 L237.0 79.2 L223.0 87.1 L230.0 91.0 L230.0 95.0"/><path class="fig-ink" d="M230 95 V120"/><path class="fig-ink" d="M200 135 V165 M208 132 V168 M208 136 H230 V120 M208 164 H230 V180 M222 160 l6 4 l-6 4"/><path class="fig-ink" d="M230 180 V195"/><path class="fig-ink" d="M220 195 h20 M224 200 h12 M228 205 h4"/><text class="fig-text" x="238" y="160" text-anchor="start">M<tspan baseline-shift="sub" font-size="10">1</tspan></text><path class="fig-ink" d="M230 100 H330"/><path class="fig-ink" d="M300 100 V141.0 M288 141.0 h24 M288 149.0 h24 M300 149.0 V190"/><path class="fig-ink" d="M290 190 h20 M294 195 h12 M298 200 h4"/><circle class="fig-ink" cx="334" cy="100" r="4"/><text class="fig-text" x="330" y="88" text-anchor="start">V<tspan baseline-shift="sub" font-size="10">out</tspan></text><text class="fig-text" x="314" y="150" text-anchor="start">C<tspan baseline-shift="sub" font-size="10">L</tspan></text><text class="fig-text" x="244" y="72" text-anchor="start">R<tspan baseline-shift="sub" font-size="10">D</tspan></text><path class="fig-ink" d="M150 150 H200"/><path class="fig-ink" d="M150 150 V168.5 M138 168.5 h24 M138 176.5 h24 M150 176.5 V195"/><path class="fig-ink" d="M140 195 h20 M144 200 h12 M148 205 h4"/><text class="fig-text" x="164" y="182" text-anchor="start">C<tspan baseline-shift="sub" font-size="10">in</tspan></text><path class="fig-ink" d="M66.0 150.0 L70.0 150.0 L74.0 143.0 L82.0 157.0 L90.0 143.0 L98.0 157.0 L106.0 143.0 L114.0 157.0 L118.0 150.0 L122.0 150.0"/><path class="fig-ink" d="M122 150 H150"/><text class="fig-text" x="84" y="134" text-anchor="start">R<tspan baseline-shift="sub" font-size="10">S</tspan></text><path class="fig-ink" d="M44 150 H66"/><circle class="fig-ink" cx="40" cy="150" r="4"/><text class="fig-text" x="10" y="138" text-anchor="start">V<tspan baseline-shift="sub" font-size="10">in</tspan></text><circle class="fig-dot" cx="150" cy="150" r="4.5"/><circle class="fig-dot" cx="230" cy="100" r="4.5"/><text class="fig-muted" x="134" y="144" text-anchor="start">X</text><text class="fig-muted" x="236" y="114" text-anchor="start">Y</text></svg>
       <figcaption>입력 RC가 있는 CS 단(Razavi 그림 11.11). 색칠된 점이 입력 노드 X와 출력 노드 Y예요.</figcaption></figure>
@@ -933,7 +958,7 @@
     <blockquote>"두 개의 폴을 알고 있으면 보드 플롯을 이용해서 매그니튜드 플롯을 그릴 수가 있겠죠" (1014 P06·L323–324)</blockquote>
   </div>
   <div class="sum" hidden>
-    <p class="sum-lead">입력 노드와 출력 노드가 극점을 하나씩 만들어서, 이득이 두 번 꺾여 떨어져요.</p>
+    <p class="sum-lead">저주파 이득이 시작 높이, 두 극점 주파수가 꺾을 위치예요. 극점을 지날 때마다 기울기는 0 → −20 → −40 dB/dec로 바뀌어요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
       <li><span class="eq-name">전달 함수</span>$$\frac{V_{out}}{V_{in}}$$ $$= \frac{-g_m R_D}{(1 + R_S C_{in} s)(1 + R_D C_L s)}$$</li>

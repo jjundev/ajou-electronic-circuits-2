@@ -78,6 +78,7 @@ description: 전자회로2 수업의 STT·강의노트·Razavi 교과서로 ELI5
 - 검증: `python3 "$SKILL/scripts/manifest.py" "$RUN/manifest.json" "$REPO"` 결과가 `OK`여야 한다.
 
 ### 3. 작성
+- 작성·수정 모두 `references/content-rules.md`의 "이해되는 설명의 순서"를 적용한다. 작성자는 첫 설명과 작은 예시만으로 풀 수 있는 적용 질문·답·이유를 보고한다. `lite`도 이 자기 검사를 생략하지 않는다. 기존 팩을 수정할 때도 대상 토픽에 적용하고 HTML에서 MD·SVG를 다시 생성한다.
 - 섹션마다 작성자 1명을 띄운다. 브리프는 `references/content-rules.md`, 위젯 규칙은 `references/widget-rules.md`에 있다.
 - 모두 **한 메시지에서 병렬로** 띄운다. 모델은 opus(GPT: sol), `lite`이면 sonnet(GPT: luna)이다. 병렬 작성자끼리 임시 파일이 섞이지 않게 브리프에 각자의 임시 폴더 `<RUN>/work/<sid>/`를 적어 준다.
 - 브리프의 `<…>` 자리는 실제 경로, id, 금지어 목록(`<forbidden 목록>`), 예고 토픽 id(`<preview_topic>`), 섹션 작성자에게 필요한 교과서 장 PDF와 쪽(`<N>장.pdf`, `<쪽>`), 그리고 manifest `links` 중 그 섹션 토픽에 속한 것만(`<이 섹션의 links 목록>`) 채워 넣는다. 요약·예고 섹션 작성자에게는 문제 수(0이면 "문제 없음")도 알린다.
@@ -163,6 +164,7 @@ python3 "$SKILL/scripts/check_html.py" --manifest "$RUN/manifest.json" --note "$
 - 고친 뒤 4단계부터 다시 한다. PDF는 manifest `problems`가 바뀐 경우에만 다시 만든다. HTML·MD 조각만 고쳤으면 조립(`assemble.py`)만 다시 하면 된다. 최대 2회까지이며, 그래도 남으면 "미해결"로 보고한다.
 
 ### 6. 리뷰 (`lite`면 생략)
+- 리뷰어는 작성자의 적용 질문을 독립적으로 풀어 보고 핵심 규칙·예시·조건을 대조한다. 상세 기준은 `references/review-prompt.md`의 ELI5 품질 항목을 따른다.
 - 리뷰어 1명을 띄운다. 브리프는 `references/review-prompt.md`에 있다.
 - Critical과 Important는 모두, Minor는 쉬운 것만 고친다. 문제 선별 지적은 메인 에이전트가 manifest를 고치고 PDF를 다시 만든다.
 - 담당 작성자별로 **한 번에 모아서** 수정을 요청한다. 수정은 한 번만 한다.
