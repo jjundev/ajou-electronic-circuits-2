@@ -583,28 +583,12 @@
 </article>
 <article class="topic" id="s0-design-size"><h3>g_m 식 세 가지와 W/L 정하기</h3><div class="tags"><span class="tag date">0930 수업</span><span class="tag slide">L04 s15</span></div>
   <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
-    <p class="lead">힘을 두 배로 내려면 몸집은 네 배가 되어야 해요.</p>
-    <figure class="figure"><svg id="fig-s0-size-squares" viewBox="0 0 420 200" role="img" aria-label="테두리 네모 칸을 세 묶음으로 그린 그림. 왼쪽은 한 칸(힘 1배), 가운데는 가로 두 칸 세로 두 칸인 네 칸(힘 2배), 오른쪽은 강조색 테두리로 그린 가로 네 칸 세로 네 칸인 열여섯 칸(힘 4배)">
-      <rect class="fig-ink" x="45" y="118" width="22" height="22"/>
-      <text class="fig-text" x="56" y="164" text-anchor="middle">힘 1배</text>
-      <text class="fig-muted" x="56" y="184" text-anchor="middle">몸집 1칸</text>
-      <rect class="fig-ink" x="168" y="96" width="44" height="44"/>
-      <line class="fig-ink" x1="190" y1="96" x2="190" y2="140"/>
-      <line class="fig-ink" x1="168" y1="118" x2="212" y2="118"/>
-      <text class="fig-text" x="190" y="164" text-anchor="middle">힘 2배</text>
-      <text class="fig-muted" x="190" y="184" text-anchor="middle">몸집 4칸</text>
-      <rect class="fig-accent" x="290" y="52" width="88" height="88"/>
-      <line class="fig-accent" x1="312" y1="52" x2="312" y2="140"/>
-      <line class="fig-accent" x1="334" y1="52" x2="334" y2="140"/>
-      <line class="fig-accent" x1="356" y1="52" x2="356" y2="140"/>
-      <line class="fig-accent" x1="290" y1="74" x2="378" y2="74"/>
-      <line class="fig-accent" x1="290" y1="96" x2="378" y2="96"/>
-      <line class="fig-accent" x1="290" y1="118" x2="378" y2="118"/>
-      <text class="fig-text" x="334" y="164" text-anchor="middle">힘 4배</text>
-      <text class="fig-muted" x="334" y="184" text-anchor="middle">몸집 16칸</text>
-    </svg><figcaption>이 규칙을 알면 이것저것 바꿔 보지 않고 바로 크기를 정할 수 있어요.</figcaption></figure>
+    <p class="lead">전류와 부하저항을 그대로 두면, 이득의 크기를 두 배로 만들 때 트랜지스터의 폭·길이 비 $W/L$은 네 배로 키워야 해요.</p>
+    <figure class="figure"><svg id="fig-s0-size-squares" viewBox="0 0 520 220" role="img" aria-label="전류·RD 고정 · 같은 공정 · 포화 영역; 이득 크기 5 → 10 2배; gm 1 → 2배 이득과 비례; W/L 1 → 4배 gm의 제곱 비율; 이득 3배이면 W/L은 9배"><text class="fig-text" x="260" y="25" text-anchor="middle" font-size="15">전류·RD 고정 · 같은 공정 · 포화 영역</text><rect class="fig-ink" x="12" y="52" width="152" height="112" rx="6"/><text class="fig-muted" x="88" y="78" text-anchor="middle" font-size="14">이득 크기</text><text class="fig-text" x="88" y="112" text-anchor="middle" font-size="16">5 → 10</text><text class="fig-text" x="88" y="143" text-anchor="middle" font-size="14">2배</text><path class="fig-ink" d="M167,108 h14 m-5,-5 l5,5 -5,5"/><rect class="fig-ink" x="184" y="52" width="152" height="112" rx="6"/><text class="fig-muted" x="260" y="78" text-anchor="middle" font-size="14">gm</text><text class="fig-text" x="260" y="112" text-anchor="middle" font-size="16">1 → 2배</text><text class="fig-text" x="260" y="143" text-anchor="middle" font-size="14">이득과 비례</text><path class="fig-ink" d="M339,108 h14 m-5,-5 l5,5 -5,5"/><rect class="fig-accent" x="356" y="52" width="152" height="112" rx="6"/><text class="fig-muted" x="432" y="78" text-anchor="middle" font-size="14">W/L</text><text class="fig-text" x="432" y="112" text-anchor="middle" font-size="16">1 → 4배</text><text class="fig-text" x="432" y="143" text-anchor="middle" font-size="14">gm의 제곱 비율</text><text class="fig-muted" x="260" y="197" text-anchor="middle" font-size="14">이득 3배이면 W/L은 9배</text></svg><figcaption>같은 공정·포화 영역·제곱 법칙 근사에서, 이득 배율의 제곱만큼 W/L을 바꿔요.</figcaption></figure>
   </div>
+
   <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <p><strong>작은 예시.</strong> 같은 공정에서 바이어스 전류 $I_D$와 부하저항 $R_D$를 고정하고, 채널 길이 변조를 무시한 포화 영역 소신호 이득을 비교해요. 이득 크기 5를 10으로 두 배 키우려면 $g_m$도 두 배여야 하므로 $W/L$을 네 배로 해요. 이득 5를 15로 세 배 키우면 $W/L$은 아홉 배예요. 크기를 바꾼 뒤에도 포화 조건을 만족하도록 바이어스를 맞춰요.</p>
     <p><a href="#s0-design-bias">전력 예산과 출력 CM 레벨로 바이어스 정하기</a>에서 $I_{SS} = 1\ \text{mA}$, $R_D \le 400\ \Omega$까지 정했어요. 남은 조건은 이득 5예요.</p>
     <p><strong>$g_m$ 정하기</strong></p>
     <ol class="steps">
@@ -659,7 +643,7 @@
     <blockquote>"그건 이제 설계가 아니라 튜닝이고 그거는 뭐 여러분들보다 계산기가 더 잘해요." (0930 13:10)</blockquote>
   </div>
   <div class="sum" hidden>
-    <p class="sum-lead">이득 조건으로 $g_m$을 정하고, 전류로 쓴 $g_m$ 식에서 $W/L$을 구해요.</p>
+    <p class="sum-lead">전류·부하저항 고정의 제곱 법칙 근사에서 이득을 n배 키우려면 $W/L$을 n²배 키워요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
       <li><span class="eq-name">이득</span>$$A_v = -g_m R_D$$</li>
@@ -1468,44 +1452,35 @@
 
 <article class="topic" id="s3-small-signal-meaning"><h3>소신호의 뜻</h3><div class="tags"><span class="tag date">0930 수업</span><span class="tag slide">L04 s21</span></div>
   <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
-    <p class="lead">작은 신호는 크기가 작다는 뜻이 아니에요. 원래 서 있던 높이에 비해 살짝만 흔들린다는 뜻이에요.</p>
-    <figure class="figure"><svg id="fig-s3-small-wiggle" viewBox="0 0 400 190" role="img" aria-label="두 개의 물결선. 왼쪽은 원래 높이를 나타내는 점선 둘레에서 살짝만 흔들리는 강조색 선이고, 오른쪽은 같은 점선 둘레에서 바닥 가까이까지 크게 흔들리는 빨간 선이다.">
-      <line class="fig-ink" x1="20" y1="150" x2="380" y2="150"/>
-      <text class="fig-muted" x="380" y="166" text-anchor="end">바닥</text>
-      <line class="fig-ink" x1="30" y1="90" x2="170" y2="90" stroke-dasharray="5 5" stroke-width="1"/>
-      <line class="fig-ink" x1="220" y1="90" x2="360" y2="90" stroke-dasharray="5 5" stroke-width="1"/>
-      <text class="fig-muted" x="30" y="60">원래 높이</text>
-      <path class="fig-accent" d="M40 90 q15 -14 30 0 t30 0 t30 0 t30 0"/>
-      <path class="fig-danger" d="M230 90 q15 -104 30 0 t30 0 t30 0 t30 0"/>
-      <text class="fig-text" x="100" y="180" text-anchor="middle">살짝 흔들림</text>
-      <text class="fig-text" x="290" y="180" text-anchor="middle">크게 흔들림</text>
-    </svg><figcaption>크게 흔들면 서 있던 높이까지 바뀌어 버려요.</figcaption></figure>
+    <p class="lead">소신호는 동작점 근처의 곡선을 접선으로 바꾸어도 전류 변화를 충분히 정확하게 구할 수 있는 입력 범위예요.</p>
+    <figure class="figure"><svg id="fig-s3-small-wiggle" viewBox="0 0 520 236" role="img" aria-label="10밀리볼트에서는 실제 tanh 곡선과 접선이 가깝고 104밀리볼트에서는 접선이 실제 전류 차를 크게 과대평가함"><text class="fig-text" x="260" y="22" text-anchor="middle" font-size="14">BJT 차동쌍: 차동 입력과 전류 차 (VT = 26 mV)</text><path class="fig-ink" d="M55,45 V180 H475"/><text class="fig-muted" x="43" y="184" text-anchor="end" font-size="14">0</text><text class="fig-muted" x="43" y="123" text-anchor="end" font-size="14">1</text><text class="fig-muted" x="43" y="62" text-anchor="end" font-size="14">2</text><text class="fig-muted" x="60" y="40" text-anchor="start" font-size="12">전류 차 / 테일 전류</text><polyline class="fig-accent" points="55,180.0 59,178.8270676656086 63,177.6550023503058 67,176.4846685115087 71,175.31692549935784 75,174.152625043073 79,172.9926087848205 83,171.83770587613697 87,170.6887306512908 91,169.54648039115477 95,168.41173319022187 99,167.28524593833893 103,166.16775242757183 107,165.05996159337374 111,163.96255589791832 115,162.87618986210614 119,161.80148875136973 123,160.73904741901322 127,159.6894293094417 131,158.65316562228244 135,157.63075463709046 139,156.62266119707778 143,155.6293163491254 147,154.6511171362376 151,153.68842653758935 155,152.74157355040978 159,151.8108534071394 163,150.89652792060173 167,149.99882594934292 171,149.11794397481594 175,148.25404678171552 179,147.4072682325064 183,146.57771212702423 187,145.76545313795913 191,144.97053781305442 195,144.19298563495568 199,143.43279012982237 203,142.6899200160603 207,141.96432038483437 211,141.25591390437546 215,140.56460204049108 219,139.8902662861174 223,139.23276939320957 227,138.59195660074073 231,137.96765685307088 235,137.3596840034407 239,136.76783799784312 243,136.1919060350161 247,135.63166369878388 251,135.08687605944488 255,134.55729874135787 259,134.04267895431425 263,133.54275648669835 267,133.0572646588289 271,132.58593123524201 275,132.12847929501748 279,131.68462805956676 283,131.25409367759102 287,130.8365899671815 291,130.43182911527487 295,130.03952233488872 299,129.65938048075458 303,129.2911146241323 307,128.93443658773444 311,128.58905944181654 315,128.2546979625917 319,127.93106905421718 323,127.61789213567005 327,127.31488949388464 331,127.02178660456393 335,126.7383124221061 339,126.46419964010268 343,126.19918492386999 347,125.9430091164729 351,125.69541741968627 355,125.45615955132169 359,125.22498988032004 363,125.00166754098092 367,124.78595652766316 371,124.57762577125249 375,124.37644919864941 379,124.18220577648582 383,123.99467954023241 387,123.81365960981103 391,123.63894019277701 395,123.47032057608799 399,123.30760510742559 403,123.1506031669882 407,122.99912913062386 411,122.85300232512486 415,122.71204697645885 419,122.57609215166548 423,122.44497169510342 427,122.31852415968946 431,122.19659273372966 435,122.07902516390345 439,121.9656736749219 443,121.85639488634598 447,121.75104972701439 451,121.64950334749827 455,121.55162503096693 459,121.45728810282026 463,121.3663698394132 467,121.27875137617187 471,121.19431761537517"/><path class="fig-danger" d="M55,180 L471,58" stroke-dasharray="5 4"/><text class="fig-muted" x="345" y="75" text-anchor="middle" font-size="14">점선: 접선 근사</text><text class="fig-muted" x="345" y="143" text-anchor="middle" font-size="14">실선: 실제 곡선</text><text class="fig-muted" x="55" y="199" text-anchor="middle" font-size="12">0</text><text class="fig-muted" x="95" y="199" text-anchor="middle" font-size="12">10</text><text class="fig-muted" x="471" y="199" text-anchor="middle" font-size="12">104</text><text class="fig-muted" x="260" y="219" text-anchor="middle" font-size="12">차동 입력 (mV)</text></svg><figcaption>같은 회로에서도 입력 차가 커지면 접선이 실제 곡선에서 멀어져요.</figcaption></figure>
   </div>
+
   <div class="layer formal"><span class="layer-title">정확히 말하면</span>
-    <p>증폭기에서 관심 있는 것은 작은 입력 변화에 대한 출력 변화예요. 여기서 소신호(small signal)는 절댓값이 작은 신호가 아니에요. 바이어스 전압에 비해 변동이 작은 신호예요.</p>
+    <p><strong>작은 예시.</strong> 대칭인 BJT 차동쌍에서 $V_T=26\,\mathrm{mV}$로 두어요. 차동 입력 $10\,\mathrm{mV}$에서는 접선 근사가 실제 전류 차보다 약 1.2% 크지만, $104\,\mathrm{mV}$에서는 약 107.5% 커요. 오차는 (접선값 − 실제값) / 실제값으로 계산해요. 입력 CM이 $1\,\mathrm{V}$라고 해서 그 10%인 $100\,\mathrm{mV}$ 차동 입력을 소신호로 판단할 수는 없어요.</p>
+    <p>소신호(small signal) 모델은 정해 둔 동작점에서 실제 전압·전류 특성을 접선으로 선형화해요. 입력 범위에서 접선과 실제 곡선의 차이가 허용 오차 안에 있어야 같은 이득을 쓸 수 있어요.</p>
     <ul>
-      <li>1 µV냐 1 mV냐의 문제가 아니에요. DC 바이어스와 견준 크기가 기준이에요.</li>
-      <li>DC 바이어스가 1 V인데 진폭 1 V로 흔들면 신호와 함께 DC 동작점이 바뀌어요. 이것은 소신호가 아니에요.</li>
-      <li>경험칙(rule of thumb)으로 BJT 차동쌍에서는 차동 입력이 $10\ \text{mV}$보다 작으면 소신호로 봐요(교과서 10.2.3절 기준).</li>
+      <li>기준이 되는 전압 척도는 소자와 회로에 따라 달라요. 이 BJT 차동쌍은 차동 입력을 열전압 $V_T$와 비교하고, MOS 제곱 법칙은 게이트 변화량을 오버드라이브 전압과 비교해요.</li>
+      <li>BJT 차동쌍의 경험칙으로 차동 입력 $10\,\mathrm{mV}$ 미만을 소신호로 봐요(교과서 10.2.3절). 이는 정밀도 요구와 모델에 따라 확인해야 하는 기준이에요.</li>
+      <li>입력 CM의 DC 값이 커진다고 허용 차동 입력이 그 비율만큼 커지는 것은 아니에요.</li>
     </ul>
-    <p>수업에서는 "바이어스의 10 % 이내(100 mV까지)"와 "10 mV 이하"를 함께 말했어요. 교과서 기준은 차동 입력 $10\ \text{mV}$ 미만이에요. BJT 차동쌍은 입력 차가 약 100 mV면 한쪽이 거의 꺼지므로, 이 노트는 교과서 기준을 써요.</p>
-    <p><a href="#s3-bjt-large">BJT 차동쌍의 대신호 해석</a>의 $\tanh$ 식으로도 입력 변화에 대한 출력 변화를 구할 수 있어요. 하지만 식이 복잡해요. 그래서 처음부터 소신호를 가정하고 소신호 모델로 해석해요. 소신호 모델은 동작점 부근의 작은 변화량 사이의 관계만 선형으로 나타낸 것이에요.</p>
+    <p>수업에서는 "바이어스의 10 % 이내(100 mV까지)"와 "10 mV 이하"를 함께 말했어요. 이 BJT 차동쌍에는 DC 바이어스의 10%를 적용하지 않고, <a href="#s3-bjt-large">BJT 차동쌍의 대신호 해석</a>의 $\tanh$ 곡선과 접선의 차이를 확인해요. 입력 차가 약 100 mV이면 전류가 이미 한쪽으로 크게 몰려요.</p>
   </div>
   <div class="layer prof"><span class="layer-title">교수님 말씀</span>
-    <p>1 µV냐 1 mV냐의 문제가 아니라며, 기준은 절댓값이 아니라 바이어스라고 하셨어요. 바이어스가 1 V인데 1 V로 흔들면 동작점이 같이 움직인다는 예를 드셨어요 (0930 57:45–58:50).</p>
+    <p>수업에서는 바이어스 1 V에 진폭 1 V를 얹는 예로 작은 변화량 해석과 구별하셨어요 (0930 57:45–58:50). 이 예를 DC 대비 일정 비율이라는 판정식으로 쓰지는 않아요.</p>
     <p>마지막에 차동 회로의 두 가지 쓰임을 다시 말씀하셨어요.</p>
     <blockquote>"스몰 시그널 동작 이외에 … 라지 시그널 오퍼레이션에서는 두 입력의 차이에 의한 컴패레이터로도 사용될 수 있다." (0930 60:38)</blockquote>
   </div>
   <div class="layer warn"><span class="layer-title">꼭 기억해요</span>
     <blockquote>"작은 신호라고 하는 거는 … 절대값이 작다 이런 얘기가 아니라, 바이어스 전압에 대해서 … 변동이 작다라는 의미예요." (0930 57:45)</blockquote>
-    <p>소신호의 기준은 절댓값이 아니라 바이어스에 견준 변동의 크기예요.</p>
+    <p>이 설명을 특정 DC 전압의 일정 비율로 일반화하지 않아요. 이 차동쌍에서는 차동 입력에 대한 접선 근사 오차로 판단해요.</p>
   </div>
   <div class="sum" hidden>
-    <p class="sum-lead">소신호는 절댓값이 작은 신호가 아니라 바이어스에 비해 변동이 작아 동작점을 바꾸지 않는 신호예요.</p>
+    <p class="sum-lead">소신호의 기준은 DC 전압 대비 비율이 아니라, 동작점에서 선형화한 모델의 오차가 충분히 작은지예요.</p>
     <p class="panel-label">용어</p>
     <dl class="terms">
-      <dt>소신호(small signal)</dt><dd>바이어스 전압에 비해 변동이 작은 신호, BJT 차동쌍에서는 차동 입력 $10\ \text{mV}$ 미만</dd>
-      <dt>동작점</dt><dd>DC 바이어스가 정한 전압과 전류, 신호가 크면 함께 바뀜</dd>
+      <dt>소신호(small signal)</dt><dd>접선 근사 오차가 충분히 작은 입력 범위의 신호</dd>
+      <dt>동작점</dt><dd>선형화의 기준으로 정한 DC 전압과 전류</dd>
       <dt>소신호 모델</dt><dd>동작점 부근의 작은 변화량 사이의 관계를 선형으로 나타낸 모델</dd>
     </dl>
   </div>
@@ -1527,7 +1502,7 @@
       <tr><td>BJT 차동쌍의 CM 응답</td><td>$I_{C1} = I_{C2} = \frac{I_{EE}}{2}$, $V_X = V_Y = V_{CC} - R_C\frac{I_{EE}}{2}$ (입력 CM 레벨과 무관해요)</td><td><a href="#s3-bjt-cm">BJT 차동쌍의 CM 응답</a></td></tr>
       <tr><td>입력 CM 레벨의 상한</td><td>$V_{CC} - R_C\frac{I_{EE}}{2} \ge V_{CM}$ (활성 영역 조건)</td><td><a href="#s3-bjt-bias">활성 영역 조건과 공통 모드 제거</a></td></tr>
       <tr><td>BJT 대신호 특성</td><td>$V_{out1} - V_{out2} = -R_C I_{EE}\tanh\frac{V_{in1} - V_{in2}}{2V_T}$ (비선형이에요. 원점의 기울기가 이득이고, 양 끝은 크기 $R_C I_{EE}$에서 멈춰요)</td><td><a href="#s3-bjt-large">BJT 차동쌍의 대신호 해석</a></td></tr>
-      <tr><td>소신호의 기준</td><td>절댓값이 아니라 바이어스에 비해 변동이 작다는 뜻이에요. 대략 $10\ \text{mV}$ 이하로 봐요.</td><td><a href="#s3-small-signal-meaning">소신호의 뜻</a></td></tr>
+      <tr><td>소신호의 기준</td><td>접선 근사의 오차가 충분히 작다는 뜻이에요. 이 BJT 차동쌍에서는 차동 입력 약 $10\ \text{mV}$ 미만을 기준으로 봐요.</td><td><a href="#s3-small-signal-meaning">소신호의 뜻</a></td></tr>
     </tbody>
   </table></div>
   <p>교수님이 쓴 비유와 단어도 같이 기억해요.</p>

@@ -403,7 +403,7 @@
             <li>복사 소자는 $V_{DS1} \ge V_{GS}-V_{TH}$를 지켜야 해서, 그 드레인 전압을 이 값 아래로 내릴 수 없어요.</li>
             <li>소스에 저항이 붙으면 기준 쪽에도 저항을 달아 소스 전압을 맞춰야 해요(<a href="#s0-source-resistor">3. 소스에 저항이 있을 때</a>).</li>
           </ul>
-          <p>그 대신 기준 전류 하나로 칩의 모든 바이어스 전류를 만들어요. NMOS·PMOS 미러로 넣고 빼는 전류(<a href="#s1-cmos-mirror">6. PMOS 미러와 CMOS 전류 미러</a>), 이득을 키우는 전류원 부하, 병렬 연결로 만든 배수 전류(<a href="#s2-scaling">9. 병렬 연결로 배수·분수 전류 만들기</a>)가 모두 미러예요. 동작점만 정하므로 소신호 해석에서는 지워요(<a href="#s2-bias-role">11. 바이어스 회로와 소신호 해석</a>).</p>
+          <p>그 대신 기준 전류 하나로 칩의 모든 바이어스 전류를 만들어요. NMOS·PMOS 미러로 넣고 빼는 전류(<a href="#s1-cmos-mirror">6. PMOS 미러와 CMOS 전류 미러</a>), 이득을 키우는 전류원 부하, 병렬 연결로 만든 배수 전류(<a href="#s2-scaling">9. 병렬 연결로 배수·분수 전류 만들기</a>)가 모두 미러예요. 바이어스를 이상화할 때도 AC 접지 조건과 실제 소자의 출력저항을 구분해요(<a href="#s2-bias-role">11. 바이어스 회로와 소신호 해석</a>).</p>
           <p><b>차동 신호(differential signal): 10장 도입</b></p>
           <p><b>1. 풀고 싶은 문제.</b> 고성능 회로, 특히 주변 노이즈에 취약한 회로에서 작은 신호를 또렷하게 전달하고 싶어요(<a href="#s3-signals">12. 단일 종단 신호와 차동 신호</a>).</p>
           <p><b>2. 단순한 해법과 그 한계.</b> 지금까지는 단일 종단 신호(single-ended signal)로 보냈어요. 신호선 하나의 전압을 접지 기준으로 재요. 이 방식이 노이즈에 왜 약한지는 다음 수업에서 다루고, 미리 보는 설명은 보충에 있어요(<a href="#s3-signals">12. 단일 종단 신호와 차동 신호</a>).</p>
@@ -1542,52 +1542,34 @@
 
 <article class="topic" id="s2-bias-role"><h3>11. 바이어스 회로와 소신호 해석</h3><div class="tags"><span class="tag date">0918 수업</span><span class="tag slide">슬라이드 외</span></div>
   <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
-    <p class="lead">거울 회로는 소리를 키우는 일꾼이 아니라, 일꾼이 제자리에 서 있도록 받쳐 주는 받침대예요.</p>
-    <figure class="figure"><svg id="fig-bias-split" viewBox="0 0 600 190" role="img" aria-label="왼쪽 실제 회로에는 선으로 그린 증폭하는 부분 상자 아래에 강조색 테두리의 자리를 잡아 주는 부분 상자가 붙어 있어요. 오른쪽 작은 흔들림만 볼 때는 그 상자 대신 강조색 선 세 줄로 된 바닥 기호만 남아요.">
-      <text class="fig-text" x="140" y="24" font-size="14" text-anchor="middle">실제 회로</text>
-      <rect class="fig-ink" x="40" y="50" width="200" height="50" rx="6" stroke-width="2"/>
-      <text class="fig-text" x="140" y="80" font-size="13" text-anchor="middle">증폭하는 부분</text>
-      <rect class="fig-accent" x="40" y="120" width="200" height="50" rx="6" stroke-width="2"/>
-      <text class="fig-text" x="140" y="150" font-size="13" text-anchor="middle">자리를 잡아 주는 부분</text>
-      <line class="fig-ink" x1="140" y1="100" x2="140" y2="120" stroke-width="2"/>
-      <line class="fig-ink" x1="300" y1="95" x2="360" y2="95" stroke-width="2"/>
-      <polyline class="fig-ink" points="353.0,99.0 360,95 353.0,91.0" stroke-width="2"/>
-      <text class="fig-text" x="460" y="24" font-size="14" text-anchor="middle">작은 흔들림만 볼 때</text>
-      <rect class="fig-ink" x="360" y="50" width="200" height="50" rx="6" stroke-width="2"/>
-      <text class="fig-text" x="460" y="80" font-size="13" text-anchor="middle">증폭하는 부분</text>
-      <line class="fig-ink" x1="460" y1="100" x2="460" y2="130" stroke-width="2"/>
-      <line class="fig-accent" x1="420" y1="130" x2="500" y2="130" stroke-width="3"/>
-      <line class="fig-accent" x1="432" y1="138" x2="488" y2="138" stroke-width="2"/>
-      <line class="fig-accent" x1="446" y1="146" x2="474" y2="146" stroke-width="2"/>
-      <text class="fig-muted" x="460" y="172" font-size="12" text-anchor="middle">움직이지 않는 바닥처럼 봐요</text>
-    </svg><figcaption>작은 흔들림만 따질 때는 받침대가 움직이지 않으니 그냥 바닥처럼 봐요.</figcaption></figure>
+    <p class="lead">바이어스는 DC 동작점을 정하고, 소신호 해석에서는 전압 변화가 0인 노드만 AC 접지로 둬요.</p>
+    <figure class="figure"><svg id="fig-bias-split" viewBox="0 0 520 220" role="img" aria-label="DC 값이 같아도 전압 변화가 0인 노드만 AC 접지로 두며 출력저항은 남을 수 있음"><text class="fig-text" x="260" y="24" text-anchor="middle" font-size="15">AC 접지의 기준: 소신호 전압 변화가 0인가?</text><rect class="fig-accent" x="15" y="45" width="235" height="132" rx="6"/><text class="fig-text" x="132" y="70" text-anchor="middle" font-size="14">이상적 고정 전압원</text><text class="fig-text" x="132" y="102" text-anchor="middle" font-size="14">DC 1 V</text><text class="fig-text" x="132" y="130" text-anchor="middle" font-size="14">전압 변화 0 V</text><text class="fig-text" x="132" y="159" text-anchor="middle" font-size="14">AC 접지로 둬요</text><rect class="fig-danger" x="270" y="45" width="235" height="132" rx="6"/><text class="fig-text" x="387" y="70" text-anchor="middle" font-size="14">신호가 얹힌 노드</text><text class="fig-text" x="387" y="102" text-anchor="middle" font-size="14">DC 1 V + 작은 신호</text><text class="fig-text" x="387" y="130" text-anchor="middle" font-size="14">전압 변화 1 mV</text><text class="fig-text" x="387" y="159" text-anchor="middle" font-size="14">AC 접지가 아니에요</text><text class="fig-muted" x="260" y="205" text-anchor="middle" font-size="14">전류원 부하 MOS의 출력저항 rO는 남을 수 있어요</text></svg><figcaption>DC 전압이 있다는 이유만으로 노드를 접지하거나 바이어스 소자의 출력저항까지 없애면 안 돼요.</figcaption></figure>
   </div>
+
   <div class="layer formal"><span class="layer-title">정확히 말하면</span>
-    <p>전류 미러는 소신호를 증폭하는 회로가 아니에요. DC 전압과 전류, 곧 동작점(operating point)을 정하는 바이어스 회로(bias circuit)예요.</p>
-    <ul>
-      <li>모든 증폭기에는 동작점이 필요하므로, 바이어스 회로는 모든 회로에 기본으로 들어가요.</li>
-      <li>교재나 회로도는 보통 바이어스 회로를 빼고 코어만 그려요. 예를 들어 CS 단도 코어만 그리는 경우가 많아요.</li>
-      <li>실제로 회로를 만들 때는 거기에 DC 전압을 걸기 위해 전류 미러 같은 바이어스 회로가 함께 들어가요.</li>
-    </ul>
-    <p>소신호 해석에서는 바이어스 회로가 있든 없든 결과가 같아요.</p>
+    <p><strong>작은 예시.</strong> 이상적 전압원이 신호와 무관하게 $1\,\mathrm{V}$를 유지하는 노드는 전압 변화가 0이므로 AC 접지예요. 반면 $1\,\mathrm{V}$에 $1\,\mathrm{mV}$ 신호가 얹히는 노드는 DC 값이 있어도 AC 접지가 아니에요. 전류원 부하 MOS의 게이트를 AC 접지로 두더라도, 드레인에는 출력저항 $r_O$가 남을 수 있어요.</p>
+    <p>이 수업의 전류 미러는 증폭단에 DC 전압과 전류, 곧 동작점(operating point)을 공급하는 바이어스 회로로 사용해요. 실제 회로에는 바이어스 회로가 함께 있지만, 해석에서는 그 효과를 이상적 전압원·전류원으로 나타내기도 해요.</p>
     <ol class="steps">
-      <li>바이어스 회로는 DC 전압과 전류를 정하므로, 신호가 들어와도 그 값이 변하지 않아요.</li>
-      <li>DC 전압이 걸린 노드는 소신호 해석에서 모두 AC 접지로 봐요.</li>
-      <li>예를 들어 <a href="#s2-pnp-iref">10. PNP 전류 미러의 기준 전류 만들기</a>의 노드 $X_2$도 DC로 고정된 노드라서 AC 접지예요.</li>
+      <li>이상적 DC 전압원은 전압 변화가 0이므로 소신호에서 단락해요. 접지 기준의 고정 전압 노드는 AC 접지가 돼요.</li>
+      <li>이상적 DC 전류원은 전류 변화가 0이므로 소신호에서 개방해요. 그 출력 노드를 접지한다는 뜻은 아니에요.</li>
+      <li>실제 바이어스 MOS는 소신호 모델로 바꿔요. 게이트가 AC 접지여도 출력저항 $r_O$와 필요한 종속 전류원은 회로 연결에 따라 남아요.</li>
+      <li><a href="#s2-pnp-iref">10. PNP 전류 미러의 기준 전류 만들기</a>의 노드 $X_2$는 기준 전류와 공급 전압의 소신호 변화가 없고, 바이어스 노드로 신호가 되먹임되지 않는 근사에서 AC 접지로 둘 수 있어요.</li>
     </ol>
+    <p>따라서 바이어스 회로를 생략한 그림은 어떤 이상화가 적용됐는지 확인하고 읽어요. 전류원 부하의 유한한 출력저항이 이득을 정하면 반드시 남겨야 해요.</p>
   </div>
   <div class="layer prof"><span class="layer-title">교수님 말씀</span>
     <p>전류 미러 파트를 마치면서, 회로도에 보이지 않아도 바이어스 회로는 늘 들어간다고 정리하셨어요.</p>
     <blockquote>"바이어스 회로는 보통 제외하고 나타내는데 실제로 회로를 구성할 때 이게 들어가야" (0918 ~48:00)</blockquote>
     <blockquote>"소신호 해석에서는 뭐 있거나 없거나 차이는 없습니다." (0918 ~49:00)</blockquote>
+    <p>이 말씀은 바이어스를 이상적으로 고정해 생략하는 맥락으로 읽어요. 실제 바이어스 소자의 출력저항까지 없애도 된다는 뜻으로 일반화하지 않아요.</p>
   </div>
   <div class="sum" hidden>
-    <p class="sum-lead">전류 미러는 동작점을 정하는 바이어스 회로이고, 소신호 해석에서는 그 노드를 AC 접지로 봐요.</p>
+    <p class="sum-lead">AC 접지는 소신호 전압 변화가 0인 노드이며, 바이어스 소자의 출력저항까지 없어지는 뜻은 아니에요.</p>
     <p class="panel-label">용어</p>
     <dl class="terms">
       <dt>바이어스 회로(bias circuit)</dt><dd>DC 전압과 전류를 정하는 회로</dd>
       <dt>동작점(operating point)</dt><dd>신호가 없을 때의 DC 전압과 전류</dd>
-      <dt>AC 접지</dt><dd>DC로 고정되어 소신호에서 움직이지 않는 노드</dd>
+      <dt>AC 접지</dt><dd>소신호 전압 변화가 0인 노드</dd>
     </dl>
   </div>
 </article>
