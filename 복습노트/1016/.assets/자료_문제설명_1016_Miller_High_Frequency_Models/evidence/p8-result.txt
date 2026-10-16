@@ -1,0 +1,7 @@
+M2 control v_sg2: -v_out
+M1 drain->source current: g_m1*v_in
+M2 output->AC-ground current: g_m2*v_out
+KCL input: C_gd1*s*v_in - C_gd1*s*v_out + C_gs1*s*v_in
+KCL output: C_db1*s*v_out + C_db2*s*v_out - C_gd1*s*v_in + C_gd1*s*v_out + C_gs2*s*v_out + g_m1*v_in + g_m2*v_out + v_out/r_O2 + v_out/r_O1
+vo/vi for ideal voltage drive: r_O1*r_O2*(C_gd1*s - g_m1)/(C_db1*r_O1*r_O2*s + C_db2*r_O1*r_O2*s + C_gd1*r_O1*r_O2*s + C_gs2*r_O1*r_O2*s + g_m2*r_O1*r_O2 + r_O1 + r_O2)
+EXIT=0

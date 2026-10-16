@@ -1,0 +1,77 @@
+{
+  "status": "pass",
+  "reviewer": "independent blind SymPy derivation; compared after derivation against source.json reference_answer, all reference_steps, and explanations/p1.html through p10.html",
+  "evidence": "evidence/p1-sympy.py through evidence/p10-sympy.py and corresponding result.txt; all EXIT=0",
+  "items": {
+    "p1:main": {
+      "status": "pass",
+      "method": "symbolic",
+      "conclusion": "Reference answer, steps, and p1.html agree: Miller estimates are 1/[RS CF(1+gm RD)] and 1/[RD CF(1+1/(gm RD))]; exact original has one pole 1/[CF(RS+RD+gm RS RD)].",
+      "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt: KCL determinant and Miller split agree."
+    },
+    "p2:main": {
+      "status": "pass",
+      "method": "numerical",
+      "conclusion": "Reference answer, steps, and p2.html agree: Cin=3440/3 fF=1.1466667 pF, rounded 1.15 pF.",
+      "evidence": "evidence/p2-sympy.py, evidence/p2-result.txt: Exact rational substitution verifies the rounding."
+    },
+    "p3:main": {
+      "status": "pass",
+      "method": "symbolic",
+      "conclusion": "Reference answer, steps, and p3.html agree: RF,in=RF/(1+gm RC), RX=rpi||RF,in, Av≈-gm RC RX/(RB+RX).",
+      "evidence": "evidence/p3-sympy.py, evidence/p3-result.txt: Miller divider and full KCL limiting case agree."
+    },
+    "p4:main": {
+      "status": "pass",
+      "method": "symbolic",
+      "conclusion": "Main reference answer and revised p4.html agree with independent derivation. Miller input/output estimates remain correct. The source reference_steps sentence about proximity to input estimate is now explicitly bounded in p4.html by RC << (RB||rpi)(1+gm RC), with exact one-pole KCL and ratio; under that limit the ratio tends to 1. This meets the verification exception for approximation-level wording.",
+      "evidence": "evidence/p4-sympy.py, evidence/p4-result.txt: KCL gives omega_p=1/{CF[RC+R(1+gm RC)]}, R=RB||rpi; omega_p/omega_p,in=1/[1+RC/{R(1+gm RC)}] -> 1 as RC/{R(1+gm RC)} -> 0. Latest explanations/p4.html states condition and exact expression."
+    },
+    "p5:main": {
+      "status": "pass",
+      "method": "numerical",
+      "conclusion": "Reference answer, steps, and p5.html agree under stated conventional audio assumption: Ci≥79.5775 nF and CL≤39.7887 nF. R1 is read as circuit Ri=100 kohm.",
+      "evidence": "evidence/p5-sympy.py, evidence/p5-result.txt: Transfer function factors into coupling high-pass and follower low-pass; both corner substitutions return 20 Hz and 20 kHz."
+    },
+    "p6:main": {
+      "status": "pass",
+      "method": "symbolic",
+      "conclusion": "Reference answer, steps, and p6.html agree: simultaneous halving of W and ID halves gm; Ci stays 79.5775 nF and CL maximum halves to 19.8944 nF.",
+      "evidence": "evidence/p6-sympy.py, evidence/p6-result.txt: Symbolic gm ratio=1/2 and corner equations verify values."
+    },
+    "p7:main": {
+      "status": "pass",
+      "method": "qualitative",
+      "conclusion": "Reference answer, steps, and p7.html agree: active Cgs1 in-ground, Cgd1 in-out, and Cdb1+Cdb2+Cgs2 out-ground; Csb1,Csb2,Cgd2 have zero AC voltage.",
+      "evidence": "evidence/p7-sympy.py, evidence/p7-result.txt: Capacitor node-pair energy check retains exactly five capacitors."
+    },
+    "p8:main": {
+      "status": "pass",
+      "method": "symbolic",
+      "conclusion": "Reference answer, steps, and latest p8.html/SVG agree: M1 gm1 vin source out->ground; ro1, ro2, 1/gm2 and Cdb1+Cdb2+Cgs2 out-ground; Cgd1 bridges input-output; Cgs1 input-ground. PMOS vSG2=-vout produces positive output conductance gm2.",
+      "evidence": "evidence/p8-sympy.py, evidence/p8-result.txt: Signed PMOS conversion and output KCL give +(gm2+1/ro1+1/ro2)vout. SVG branch labels checked. Final SVG: 7 labeled branches, 7 paths, 14 endpoint circles; currentColor/outline repair preserves labels and node pairs."
+    },
+    "p9:main": {
+      "status": "pass",
+      "method": "qualitative",
+      "conclusion": "Reference answer, steps, and p9.html agree: Q1 Cpi1 in-ground, Cmu1 in-X, Ccs1 X-ground; Q2 Cpi2 X-ground, Cmu2 and Ccs2 out-ground.",
+      "evidence": "evidence/p9-sympy.py, evidence/p9-result.txt: BJT capacitor node-pair energy check verifies no missing or shorted active capacitance."
+    },
+    "p10:main": {
+      "status": "pass",
+      "method": "symbolic",
+      "conclusion": "Reference answer, steps, and latest p10.html/SVG agree: Q1 rpi1 in-ground, ro1 X-ground, gm1 vin X->ground; Q2 rpi2 X-ground, ro2 out-X, gm2 vpi2 out->X with vpi2=-vX; RC out-ground and six stated capacitors.",
+      "evidence": "evidence/p10-sympy.py, evidence/p10-result.txt: Node KCL has +gm2 vX at X and -gm2 vX at output, confirming signed control and SVG branch endpoints. Final SVG: 11 labeled branches, 11 paths, 22 endpoint circles; currentColor/outline repair preserves labels and node pairs."
+    }
+  },
+  "issues": [
+    {
+      "id": "p4:main",
+      "severity": "resolved_approximation_note",
+      "location": "source.json reference_steps final bullet; clarified in explanations/p4.html",
+      "detail": "The source step omits the regime for proximity to the Miller input estimate. The final explanation states the required regime, exact pole, and ratio tending to one; this is an approximation-level difference and is accepted under verification.md exception."
+    }
+  ],
+  "final_stage_reviewed": "8723c681c57b46ceb42e6608b563bba4",
+  "final_stage_note": "Rechecked all ten latest explanation fragments against prior blind derivations and source answers; p4 exact-pole condition and ratio remain; p8/p10 SVG labels and 7/11 branch rows retain the verified node pairs, directions, rO and rpi branches after color and outline repair."
+}

@@ -1,0 +1,9 @@
+node mapping: Q1 base=in emitter=ground collector=x; Q2 base=AC ground emitter=x collector=out
+Cpi1 : v_in <-> 0
+Cmu1 : v_in <-> v_x
+Ccs1 : v_x <-> 0
+Cpi2 : 0 <-> v_x
+Cmu2 : 0 <-> v_out
+Ccs2 : v_out <-> 0
+capacitor energy: C_cs1*v_x**2/2 + C_cs2*v_out**2/2 + C_mu1*v_in**2/2 - C_mu1*v_in*v_x + C_mu1*v_x**2/2 + C_mu2*v_out**2/2 + C_pi1*v_in**2/2 + C_pi2*v_x**2/2
+EXIT=0

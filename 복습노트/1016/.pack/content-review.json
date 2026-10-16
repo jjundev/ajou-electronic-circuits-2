@@ -1,0 +1,106 @@
+{
+  "status": "pass",
+  "reviewer": "independent content reviewer /root/summary",
+  "evidence": "source.json, original workbook MD, Lec5 s11-23, 1016 STT summary, authoring.md/verification.md; work/content-review.md. Final stage 8723c681c57b46ceb42e6608b563bba4: all 10 source fragments byte-identical to bundled fragments; 10 understand sections in HTML and four sum groups per item in MD; p4 exact pole and RC << R(1+gmRC) near-input condition in HTML/MD; p8/p10 SVG branch labels unchanged and theme-aware currentColor, no fixed hex colors. 21 blind retry answers written before author expectation files and matched. Content only; independent math/source visual/browser separate.",
+  "stage": "stage/8723c681c57b46ceb42e6608b563bba4/문제설명_1016_Miller_High_Frequency_Models.html",
+  "items": {
+    "p1:main": {
+      "status": "pass",
+      "reviewer": "independent content reviewer /root/summary",
+      "evidence": "E11.10: 게이트/드레인 전류 일치로 Cin/Cout 도출, RS·RD 극점 단위와 실제 한 극점 경고 확인; work/content-review.md blind retry 및 저작자 기대 답 대조"
+    },
+    "p2:main": {
+      "status": "pass",
+      "reviewer": "independent content reviewer /root/summary",
+      "evidence": "X11.10: 2000/150=13.333, 14.333×80 fF=1.1467 pF, RS 불필요·단위 확인; work/content-review.md blind retry 및 저작자 기대 답 대조"
+    },
+    "p3:main": {
+      "status": "pass",
+      "reviewer": "independent content reviewer /root/summary",
+      "evidence": "P11.16: iF=(vX-vout)/RF→RF/(1+gmRC), rπ 병렬·RB 분배, RF→∞ CE 극한 확인; work/content-review.md blind retry 및 저작자 기대 답 대조"
+    },
+    "p4:main": {
+      "status": "pass",
+      "reviewer": "independent content reviewer /root/summary",
+      "evidence": "P11.22 revised: base/collector KCL → D(s)=1+sCF[RC+R(1+gmRC)], exact single pole, ratio to Miller input estimate and RC << R(1+gmRC) condition; verify/pitfall/sum and retry3 consistent; work/content-review.md"
+    },
+    "p5:main": {
+      "status": "pass",
+      "reviewer": "independent content reviewer /root/summary",
+      "evidence": "E11.11: 원문 R1/Ri 오식과 오디오 대역 교재 풀이 가정 공개, 시험전류로 Rout=1/gm, 79.6/39.8 nF 검산; work/content-review.md blind retry 및 저작자 기대 답 대조"
+    },
+    "p6:main": {
+      "status": "pass",
+      "reviewer": "independent content reviewer /root/summary",
+      "evidence": "X11.11: W·ID 반감→gm 1/2, Ri와 Ci 유지, CL 19.9 nF·비율 검산; work/content-review.md blind retry 및 저작자 기대 답 대조"
+    },
+    "p7:main": {
+      "status": "pass",
+      "reviewer": "independent content reviewer /root/summary",
+      "evidence": "E11.13: M1/M2 GDSB 노드 대응, 동일노드 3개 소거, 남는 5개·출력 병렬 합 확인; work/content-review.md blind retry 및 저작자 기대 답 대조"
+    },
+    "p8:main": {
+      "status": "pass",
+      "reviewer": "independent content reviewer /root/summary",
+      "evidence": "X11.13: PMOS vSG=-Vout→출력 양의 gm 컨덕턴스, rO 보존, 3노드 가지 지도·SVG 일치; work/content-review.md blind retry 및 저작자 기대 답 대조"
+    },
+    "p9:main": {
+      "status": "pass",
+      "reviewer": "independent content reviewer /root/summary",
+      "evidence": "E11.12: Q1/Q2 BEC와 기판 대응, 6개 C 위치·CX/CY 병렬과 부유 Cmu1 확인; work/content-review.md blind retry 및 저작자 기대 답 대조"
+    },
+    "p10:main": {
+      "status": "pass",
+      "reviewer": "independent content reviewer /root/summary",
+      "evidence": "X11.12: vπ2=-VX, gm2 전류 방향, rO2 출력-X, RC 출력-접지, SVG 가지 지도 확인; work/content-review.md blind retry 및 저작자 기대 답 대조"
+    }
+  },
+  "retry_answers": {
+    "p1": {
+      "1": "$g_mR_D$를 두 배로 하면 $C_{in}=(1+g_mR_D)C_F$가 크게 늘고 $\\omega_{in}=1/(R_SC_{in})$은 내려간다. $C_{out}=(1+1/(g_mR_D))C_F$는 오히려 $C_F$에 가까워진다. $R_S,R_D,C_F$ 고정, 저주파 밀러 근사 조건이다.",
+      "2": "실제 회로의 에너지 저장 소자는 $C_F$ 하나여서 1차 회로다. 밀러 근사에서 저주파 이득을 고정해 입력·출력에 각각 접지된 등가 커패시터를 넣으면 두 개의 RC 추정치가 나오지만 실제 두 극점은 아니다."
+    },
+    "p2": {
+      "1": "$C_F$를 40 fF로 줄이면 배율 $1+2000/150=14.333…$는 그대로이므로 $C_{in}=573.3$ fF $\\approx0.573$ pF. $g_m,R_D$ 고정.",
+      "2": "$g_mR_D\\to0$이면 $A\\to0$이고 $C_{in}\\to C_F=80$ fF. $C_F$ 고정인 밀러 입력식 기준이다."
+    },
+    "p3": {
+      "1": "$R_F\\to\\infty$에서 $R_{F,X}=R_F/(1+g_mR_C)\\to\\infty$이고 $R_X=r_\\pi\\parallel R_{F,X}\\to r_\\pi$. $g_m,R_C,r_\\pi$ 유한·고정.",
+      "2": "$R_B$가 커지면 $v_X/v_{in}=R_X/(R_B+R_X)$가 작아져 $r_\\pi$와 밀러 입력 저항으로 흘러 만드는 $v_X$가 줄고, $v_{out}\\approx-g_mR_Cv_X$도 작아진다. 양의 저항, $R_X$ 고정 근사."
+    },
+    "p4": {
+      "1": "$r_\\pi\\ll R_B$이면 $R_B\\parallel r_\\pi\\approx r_\\pi$이므로 입력 추정 극점의 저항은 $r_\\pi$에 가깝다. 다른 양의 소자값 고정.",
+      "2": "원래 저장소자는 $C_F$ 하나이므로 실제 선형 회로는 1차다. 저주파 이득을 고정한 밀러 분리 회로의 두 RC 주파수는 추정치이며 실제 서로 독립인 두 극점이라고 셀 수 없다.",
+      "3": "R=R_B parallel r_pi일 때 R_C << R(1+g_m R_C). 실제 극점/입력 추정치 비가 이때 1로 수렴한다."
+    },
+    "p5": {
+      "1": "하한 요구를 20 Hz에서 10 Hz로 내리면 $C_{i,min}=1/(2\\pi f_LR_i)$는 두 배인 약 159.2 nF. $R_i$ 고정, 같은 $-3$ dB 경계 기준이다.",
+      "2": "$C_L=2(39.8\\,\\mathrm{nF})$이면 $f_H=g_m/(2\\pi C_L)$가 절반인 10 kHz. $g_m$와 소신호 모델 고정."
+    },
+    "p6": {
+      "1": "$W$만 절반, $I_D$ 같으면 $g_{m,new}/g_{m,old}=\\sqrt{1/2}\\approx0.7071$. $L,\\mu_n,C_{ox}$ 고정, 포화영역 제곱법칙 모델이다.",
+      "2": "새 $g_m=2.5$ mS를 다시 두 배로 5 mS로 하면 허용 $C_{L,max}$는 두 배인 39.8 nF. $f_H=20$ kHz 조건과 다른 저항 무시 조건 고정."
+    },
+    "p7": {
+      "1": "M2 게이트를 별도 고정 DC 바이어스에 잇고 드레인이 출력이면 $C_{GD2}$는 AC 접지–출력에 걸린다. 출력이 움직이면 지울 수 없고 출력 접지 커패시턴스에 합친다. 게이트 바이어스가 이상적 AC 접지인 조건.",
+      "2": "M1 벌크가 $v_b$로 움직이고 소스가 0이면 $C_{SB1}$은 소스 접지–벌크 $v_b$ 사이에 전압차가 생겨 전류를 흘리므로 다시 그린다. $v_b\\ne0$인 AC 성분이 조건."
+    },
+    "p8": {
+      "1": "$r_{O2}\\to\\infty$이면 출력–접지의 그 저항 가지 하나만 개방 제거한다. $g_{m2}$는 여전히 유한하고 게이트=드레인이라 $v_{SG2}=-V_{out}$이므로 출력에서 본 양의 컨덕턴스 $g_{m2}$와 $1/g_{m2}$는 남는다.",
+      "2": "$V_{out}$이 양으로 증가하면 $v_{SG2}$가 음으로 변해 소스→드레인 PMOS 전류가 감소한다. 등가적으로 출력→접지 증분 전류는 $+g_{m2}\\Delta V_{out}$, 즉 출력에서 접지 쪽 양의 방향이다. PMOS source와 bulk는 AC 접지."
+    },
+    "p9": {
+      "1": "Q2 베이스가 $v_b$이면 $C_{\\pi2}$는 $v_b$–$X$, $C_{\\mu2}$는 $v_b$–출력 사이에 놓여 더는 각각 단순 접지 커패시턴스가 아니다. 기판은 계속 접지.",
+      "2": "Q1 컬렉터를 $X$ 대신 최종 출력에 잇는 CE 구조라면 $C_{\\mu1}$은 입력 베이스–최종 출력 컬렉터 사이가 된다."
+    },
+    "p10": {
+      "1": "$V_X=+10$ mV, Q2 베이스 AC 접지이면 $v_{\\pi2}=v_{B2}-v_{E2}=-10$ mV. 정의한 컬렉터→이미터 기준 제어 전류 $g_{m2}v_{\\pi2}=-10\\,\\mathrm{mV}\\,g_{m2}$이므로 부호 음수, 실제 증분은 이미터→컬렉터.",
+      "2": "Q2 베이스가 $v_b$이면 $v_{\\pi2}=v_b-V_X$, $C_{\\pi2}$는 $v_b$와 $X$ 사이로 바뀐다. Q2 컬렉터는 그대로 출력."
+    }
+  },
+  "retry_comparison": "21 questions matched author expectations; revised p4 Q3 independently answered before author expectation read",
+  "artifact_hashes": {
+    "stage_html_sha256": "2151b2341e4a1c1b99a965f457e8fe9d505ec13857a214318ca60a1846bbf21d",
+    "stage_md_sha256": "38e2178240102991d51235c9fb83d95a50dcd9dd1d10595bce73e7b61a50615b"
+  }
+}

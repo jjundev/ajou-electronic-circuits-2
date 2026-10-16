@@ -1,0 +1,7 @@
+Q1 vpi, collector->emitter gm current: v_in g_m1*v_in
+Q2 vpi, collector->emitter gm current: -v_x -g_m2*v_x
+ro1=x-ground; ro2=out-x; rpi1=in-ground; rpi2=x-ground; RC=out-ground
+KCL in: C_mu1*s*v_in - C_mu1*s*v_x + C_pi1*s*v_in + v_in/r_pi1
+KCL x: C_cs1*s*v_x - C_mu1*s*v_in + C_mu1*s*v_x + C_pi2*s*v_x + g_m1*v_in + g_m2*v_x + v_x/r_pi2 - v_out/r_O2 + v_x/r_O2 + v_x/r_O1
+KCL out: C_cs2*s*v_out + C_mu2*s*v_out - g_m2*v_x + v_out/r_O2 - v_x/r_O2 + v_out/R_C
+EXIT=0

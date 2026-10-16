@@ -1,0 +1,344 @@
+{
+  "course": "전자회로2",
+  "range": "1016",
+  "slug": "Miller_High_Frequency_Models",
+  "note_title": "밀러 정리와 트랜지스터 고주파 모델 — 5살도 이해하는 정리노트",
+  "note_subtitle": "권익진 교수님 전자회로2 · 1016 수업 (Lec5 12–23쪽, Razavi 11장) · 시험범위 상한: Lec5 23쪽",
+  "footer_note": "출처: 권익진 교수님 강의자료 Lec5 11–23쪽 · 수업 녹음 전사 1016 · B. Razavi, <i>Microelectronics</i>, 2nd ed., 11장. 전사본에 시각이 없어 인용 위치는 Part 번호로 표시해요.",
+  "sessions": [
+    {
+      "date": "1016",
+      "stt": "STT/1016 전회2.md",
+      "summary": "summaries/stt-1016.md",
+      "slides": "L05 s12–23 (s11 연결)"
+    }
+  ],
+  "sections": [
+    {
+      "id": "why",
+      "title": "들어가며: 왜 이런 회로를 쓸까",
+      "short": "왜 쓸까",
+      "topics": [
+        {
+          "id": "why-circuit",
+          "title": "왜 이런 회로를 쓸까",
+          "required_terms": [
+            "주파수 응답",
+            "밀러",
+            "대역폭"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof"
+          ],
+          "supp": false
+        }
+      ]
+    },
+    {
+      "id": "s0",
+      "title": "1. 밀러 정리와 근사",
+      "short": "1 밀러",
+      "topics": [
+        {
+          "id": "s0-miller",
+          "title": "떠 있는 임피던스를 접지로 옮기기",
+          "required_terms": [
+            "밀러 정리",
+            "Z_F",
+            "A_v"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof"
+          ],
+          "supp": false
+        },
+        {
+          "id": "s0-multiplication",
+          "title": "반전 이득이 커패시턴스를 키워요",
+          "required_terms": [
+            "C_{in}",
+            "C_{out}",
+            "밀러 효과"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof",
+            "warn"
+          ],
+          "supp": false
+        },
+        {
+          "id": "s0-poles",
+          "title": "CS 예제: 저주파 이득으로 극점을 추정하기",
+          "required_terms": [
+            "R_S",
+            "R_D",
+            "밀러 근사"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof"
+          ],
+          "supp": false
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "title": "2. 저주파 끝과 AC 결합",
+      "short": "2 AC 결합",
+      "topics": [
+        {
+          "id": "s1-highpass",
+          "title": "직렬 커패시터는 저주파를 막아요",
+          "required_terms": [
+            "고역통과",
+            "원점",
+            "R_1"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof"
+          ],
+          "supp": false
+        },
+        {
+          "id": "s1-coupling",
+          "title": "바이어스를 분리하면 저주파 대가가 생겨요",
+          "required_terms": [
+            "AC 결합",
+            "직접 결합",
+            "바이어스"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof"
+          ],
+          "supp": false
+        },
+        {
+          "id": "s1-bandwidth",
+          "title": "증폭기의 통과 대역은 두 끝으로 정해요",
+          "required_terms": [
+            "하한",
+            "상한",
+            "대역폭"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof"
+          ],
+          "supp": false
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "title": "3. MOS 고주파 모델",
+      "short": "3 MOS",
+      "topics": [
+        {
+          "id": "s2-mos",
+          "title": "MOS의 네 커패시턴스",
+          "required_terms": [
+            "C_{GS}",
+            "C_{GD}",
+            "C_{SB}",
+            "C_{DB}"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof",
+            "warn"
+          ],
+          "supp": false
+        },
+        {
+          "id": "s2-mos-example",
+          "title": "다이오드 연결 부하: 두 끝의 노드부터 확인해요",
+          "required_terms": [
+            "다이오드 연결",
+            "C_{GD2}",
+            "C_{GS2}"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof"
+          ],
+          "supp": false
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "title": "4. BJT 고주파 모델",
+      "short": "4 BJT",
+      "topics": [
+        {
+          "id": "s3-bjt",
+          "title": "BJT에는 세 커패시턴스를 더해요",
+          "required_terms": [
+            "C_\\pi",
+            "C_\\mu",
+            "C_{CS}"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof",
+            "warn"
+          ],
+          "supp": false
+        },
+        {
+          "id": "s3-cascode",
+          "title": "캐스코드: 여섯 커패시턴스의 자리",
+          "required_terms": [
+            "C_{\\pi 2}",
+            "C_{\\mu 1}",
+            "AC 접지"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof"
+          ],
+          "supp": false
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "title": "5. 요약 · 예고",
+      "short": "5 요약·예고",
+      "topics": [
+        {
+          "id": "s4-cheatsheet",
+          "title": "시험범위 핵심 식",
+          "required_terms": [
+            "밀러",
+            "커패시턴스"
+          ],
+          "layers": [],
+          "supp": false
+        },
+        {
+          "id": "s4-next",
+          "title": "다음 시간 예고",
+          "required_terms": [
+            "트랜싯 주파수"
+          ],
+          "layers": [],
+          "supp": false
+        },
+        {
+          "id": "s4-links",
+          "title": "함께 보면 좋은 자료",
+          "required_terms": [
+            "복습문제"
+          ],
+          "layers": [],
+          "supp": false
+        }
+      ]
+    }
+  ],
+  "preview_topic": "s4-next",
+  "forbidden_outside_preview": [
+    "트랜싯 주파수",
+    "주극점 근사"
+  ],
+  "problems": [
+    {
+      "id": "E11.10",
+      "kind": "예제",
+      "anchor": "s0-poles",
+      "date": "1016",
+      "why": "CS 부유 커패시터의 밀러 근사 극점"
+    },
+    {
+      "id": "X11.10",
+      "kind": "연습문제",
+      "anchor": "s0-multiplication",
+      "date": "1016",
+      "why": "밀러 입력 커패시턴스 수치 계산"
+    },
+    {
+      "id": "P11.16",
+      "kind": "장말문제",
+      "anchor": "s0-miller",
+      "date": "1016",
+      "why": "일반 임피던스인 저항에 밀러 정리 적용"
+    },
+    {
+      "id": "P11.22",
+      "kind": "장말문제",
+      "anchor": "s0-poles",
+      "date": "1016",
+      "why": "BJT 입력저항을 포함한 밀러 근사 극점"
+    },
+    {
+      "id": "E11.11",
+      "kind": "예제",
+      "anchor": "s1-bandwidth",
+      "date": "1016",
+      "why": "외부 C_i·C_L와 기존 1/g_m·RC만으로 통과 대역 설계(내재 용량 응답식 제외)"
+    },
+    {
+      "id": "X11.11",
+      "kind": "연습문제",
+      "anchor": "s1-bandwidth",
+      "date": "1016",
+      "why": "E11.11의 외부 C_i·C_L에 전류·폭 변화 적용(내재 용량 응답식 제외)"
+    },
+    {
+      "id": "E11.13",
+      "kind": "예제",
+      "anchor": "s2-mos-example",
+      "date": "1016",
+      "why": "MOS 커패시턴스 위치와 소거"
+    },
+    {
+      "id": "X11.13",
+      "kind": "연습문제",
+      "anchor": "s2-mos-example",
+      "date": "1016",
+      "why": "다이오드 연결 부하의 고주파 소신호 회로"
+    },
+    {
+      "id": "E11.12",
+      "kind": "예제",
+      "anchor": "s3-cascode",
+      "date": "1016",
+      "why": "BJT 캐스코드의 커패시턴스 식별"
+    },
+    {
+      "id": "X11.12",
+      "kind": "연습문제",
+      "anchor": "s3-cascode",
+      "date": "1016",
+      "why": "BJT 캐스코드의 고주파 소신호 회로"
+    }
+  ],
+  "links": [
+    {
+      "topic": "s4-links",
+      "href": "복습문제_1016_Miller_High_Frequency_Models-문제.pdf"
+    },
+    {
+      "topic": "s4-links",
+      "href": "복습문제_1016_Miller_High_Frequency_Models-답안.pdf"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>무엇이 바뀌고 무엇이 그대로일까요?</h4>
+  <p>앞 소스 폴로어에서 $I_1$과 $M_1$의 폭을 반으로 줄여 같은 오디오 대역에 필요한 $C_i$와 $C_L$을 다시 구해요. 입력 바이어스 저항 $R_i=100\,\mathrm{k\Omega}$은 그대로예요. 앞 예제 원문의 $R_1$은 그림의 $R_i$로 읽고, 교재 풀이의 오디오 범위 20 Hz–20 kHz를 계속 적용해요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4>
+  <p>폭과 바이어스 전류가 함께 바뀌므로 먼저 트랜스컨덕턴스 $g_m$을 다시 구해야 해요. 포화 MOS의 $g_m=\sqrt{2\mu_nC_{ox}(W/L)I_D}$에서 $W$와 $I_D$가 각각 절반이면 $g_m$은 절반이에요. 입력의 직렬 $C_i$–$R_i$ 고역통과(high-pass)는 $g_m$과 무관해요. 출력은 $\lambda=0$과 이상적 $I_1$ 아래, 미리 배운 소스 폴로어(source follower)의 $1/g_m$에 외부 $C_L$을 붙인 RC예요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <p>새 $g_m$부터 써요: $g_{m,new}/g_{m,old}=\sqrt{(W_{new}/W_{old})(I_{D,new}/I_{D,old})}=\sqrt{(1/2)(1/2)}=1/2$예요. 따라서 $g_{m,new}=1/(400\,\Omega)$예요.</p>
+  <p>$V_{DD}$를 AC 접지로 놓으면 입력은 그대로 $C_i$–$R_i$의 $\omega_{low}=1/(R_iC_i)$예요. 출력에 $C_L$을 달기 전, 게이트를 AC 접지로 하고 소스 시험전압 $v_t$를 가하면 $i_t=g_{m,new}v_t$이므로 $R_{out}=1/g_{m,new}=400\,\Omega$예요.</p>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>왜 이렇게 푸는지 함께 따라가요</h4>
+  <div data-subpart="main">
+    <h4>두 경계 조건 다시 적용</h4>
+    <p>입력 조건은 그대로 $1/(R_iC_i)\le2\pi(20\,\mathrm{Hz})$예요. $R_i$가 변하지 않았으므로 $C_i\ge1/[2\pi(20\,\mathrm{Hz})(100\,\mathrm{k\Omega})]=79.58\,\mathrm{nF}$예요.</p>
+    <p>출력은 $g_{m,new}/C_L\ge2\pi(20\,\mathrm{kHz})$예요. $g_{m,new}=2.5\,\mathrm{mS}$를 넣으면 $C_L\le(2.5\,\mathrm{mS})/[2\pi(20\,\mathrm{kHz})]=19.89\,\mathrm{nF}$예요.</p>
+    <p><strong>최소 $C_i\approx79.6\,\mathrm{nF}$는 그대로, 최대 $C_L\approx19.9\,\mathrm{nF}$는 절반</strong>이에요.</p>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <h4>앞 예제와 비율 확인</h4>
+    <p><strong>$C_{i,min}=79.6\,\mathrm{nF}$, $C_{L,max}=19.9\,\mathrm{nF}$</strong>예요. $R_i$와 20 Hz가 그대로라 $C_i$는 변하지 않아요. $g_m$이 절반이므로 $C_{L,max}=g_m/[2\pi(20\,\mathrm{kHz})]$도 절반이어야 하고, $39.8/2=19.9\,\mathrm{nF}$로 맞아요.</p>
+    <p>경계 대입도 $1/[2\pi R_iC_{i,min}]=20\,\mathrm{Hz}$, $g_{m,new}/[2\pi C_{L,max}]=20\,\mathrm{kHz}$예요. 이 결과는 교재의 오디오 범위와 외부 $C_i,C_L$에 한정한 계산이에요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>여기서 틀리기 쉬워요</h4>
+  <p>폭만 반으로 줄 때의 $\sqrt{1/2}$을 적용하면 안 돼요. 이 문항은 전류도 절반이라 $g_m$이 $1/2$배예요. $g_m$이 바뀌었다고 입력 $C_i$까지 바꾸지 않아요. $R_i$와 입력의 20 Hz 조건은 그대로예요.</p>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>설명을 닫고 다시 해 봐요</h4>
+  <ol><li>$W$만 절반이고 $I_D$는 같다면 $g_m$의 비율은 얼마인지 식에서 구해 보세요.</li><li>$g_m$이 다시 두 배가 되면 20 kHz 조건에서 허용 $C_L$이 어떻게 바뀌는지 말해 보세요.</li></ol>
+</div>
+<div class="sum" hidden>
+  <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>$g_m\propto\sqrt{WI_D}$; 입력 $1/(R_iC_i)$, 출력 $g_m/C_L$.</p></div>
+  <div class="summary-group"><h4>첫 줄</h4><p>$g_{m,new}/g_{m,old}=\sqrt{(1/2)(1/2)}=1/2$.</p></div>
+  <div class="summary-group"><h4>핵심 판단</h4><p>교재의 20 Hz–20 kHz와 그림의 $R_i=100\,\mathrm{k\Omega}$를 유지해요.</p></div>
+  <div class="summary-group"><h4>검산</h4><p>$C_i\ge79.6\,\mathrm{nF}$ 그대로, $C_L\le19.9\,\mathrm{nF}$로 절반이에요.</p></div>
+</div>

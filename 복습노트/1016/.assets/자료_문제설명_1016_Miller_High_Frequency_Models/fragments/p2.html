@@ -1,0 +1,42 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>무엇을 계산하나요?</h4>
+  <p>앞 문제의 CS 단에서 게이트와 드레인을 잇는 $C_F=80\,\mathrm{fF}$가 입력 게이트에서 얼마나 크게 보이는지 구해요. 필요한 것은 드레인 쪽 저주파 반전 이득이며, $R_S$ 값은 $C_{in}$ 계산에 쓰지 않아요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4>
+  <p>$C_F$가 증폭기의 입력·출력 사이에 있다는 단서로 밀러 효과(Miller effect)를 떠올려요. $g_m$은 트랜스컨덕턴스, $R_D$는 드레인 저항이에요. $\lambda=0$인 CS 단의 저주파 게이트→드레인 이득은 $A=-g_mR_D$예요. 그 이득을 고정해 쓰는 밀러 근사에서 $C_{in}=(1-A)C_F$가 돼요. 출력이 입력과 반대 방향으로 움직여 $C_F$ 양단 전압 변화가 커지기 때문이에요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <p>$V_{DD}$를 AC 접지로 두고 커패시터를 잠시 열면, 드레인 전류 변화 $g_mv_g$가 $R_D$를 지나며 $v_o=-g_mR_Dv_g$를 만들어요. 그러므로 $A=v_o/v_g=-g_mR_D$를 먼저 써요.</p>
+  <p>게이트에서 $C_F$로 흐르는 전류 $sC_F(v_g-v_o)=sC_F(1-A)v_g$를 입력 접지 커패시터의 전류 $sC_{in}v_g$와 같게 두어요.</p>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>왜 이렇게 푸는지 함께 따라가요</h4>
+  <div data-subpart="main">
+    <h4>입력 등가 커패시턴스</h4>
+    <p>$g_m=(150\,\Omega)^{-1}$이므로 $g_mR_D=(2000\,\Omega)/(150\,\Omega)=13.333\ldots$예요. 따라서 $A=-13.333\ldots$이고, $C_{in}=(1+g_mR_D)C_F$예요.</p>
+    <p>$C_{in}=(1+13.333\ldots)(80\,\mathrm{fF})=1146.7\,\mathrm{fF}\approx\mathbf{1.15\,\mathrm{pF}}$예요.</p>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <h4>크기와 단위</h4>
+    <p><strong>$C_{in}\approx1.15\,\mathrm{pF}$</strong>예요. $g_mR_D$는 $\mathrm{S}\cdot\Omega=1$인 무차원 값이라 결과 단위는 $C_F$와 같은 패럿이에요. $C_{in}/C_F=14.333\ldots$이므로 $80\,\mathrm{fF}$보다 약 14.3배 큰 값이 맞아요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>여기서 틀리기 쉬워요</h4>
+  <p>$g_mR_D=13.3$을 곧바로 배율로 쓰면 원래의 $1C_F$ 항을 빠뜨려요. $C_{in}$의 배율은 $1+g_mR_D$예요. $\mathrm{fF}$를 $\mathrm{pF}$로 바꿀 때는 1000으로 나눠요.</p>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>설명을 닫고 다시 해 봐요</h4>
+  <ol><li>같은 $g_m,R_D$에서 $C_F$를 절반으로 줄이면 $C_{in}$은 얼마인지 계산해 보세요.</li><li>$g_mR_D$가 0에 가까워지면 $C_{in}$이 어떤 값으로 돌아가는지 설명해 보세요.</li></ol>
+</div>
+<div class="sum" hidden>
+  <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>밀러 효과: $C_{in}=(1+g_mR_D)C_F$.</p></div>
+  <div class="summary-group"><h4>첫 줄</h4><p>$A=-g_mR_D=-2000/150$.</p></div>
+  <div class="summary-group"><h4>핵심 판단</h4><p>$80\,\mathrm{fF}$에 $14.333\ldots$을 곱해요.</p></div>
+  <div class="summary-group"><h4>검산</h4><p>$C_{in}\approx1.15\,\mathrm{pF}$, 원래 값의 약 14.3배예요.</p></div>
+</div>
