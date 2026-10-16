@@ -1,0 +1,919 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>어떤 노드에서 극점이 생길까</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+.app{--radius:8px;--tap:48px;--s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s7:48px;--dur:220ms;--dur-exit:150ms;--ease-out:cubic-bezier(.2,.8,.2,1);--scrim:rgba(0,0,0,.4);
+  height:100vh;height:100dvh;display:grid;grid-template-rows:auto minmax(0,1fr);overflow:hidden;box-sizing:border-box;
+  background:var(--bg);color:var(--ink);font-family:'Pretendard',system-ui,sans-serif;font-size:16px;line-height:1.6;word-break:keep-all;overflow-wrap:anywhere}
+.app *,.app *::before,.app *::after{box-sizing:border-box}
+.app button{font-family:inherit;color:inherit}
+.app :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.num{font-variant-numeric:tabular-nums}
+
+.topbar{display:flex;align-items:center;gap:var(--s2);min-height:56px;padding:var(--s2) var(--s3);background:var(--bg);border-bottom:1px solid var(--line)}
+.brand{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;font-size:17px;font-weight:700;white-space:nowrap}
+.text-btn{flex:none;min-height:44px;min-width:44px;padding:0 var(--s3);border:0;border-radius:var(--radius);background:transparent;color:var(--ink);font:600 14px/1 'Pretendard',system-ui,sans-serif;cursor:pointer}
+.panel-toggle{display:inline-flex;align-items:center;gap:var(--s1);padding:0 var(--s2)}
+.panel-toggle svg,.theme-toggle svg{flex:none;width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.panel-toggle .strip{fill:transparent;stroke:none;transition:fill 150ms ease-out}
+.panel-toggle[aria-expanded="true"]{color:var(--accent-ink)}
+.panel-toggle[aria-expanded="true"] .strip{fill:currentColor}
+.theme-toggle{display:inline-flex;align-items:center;justify-content:center;padding:0}
+.seg{flex:none;display:flex;gap:2px;padding:2px;border:1px solid var(--line);border-radius:var(--radius)}
+.seg button{min-height:40px;padding:0 var(--s3);border:0;border-radius:6px;background:transparent;color:var(--ink-2);font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--btn-bg);color:var(--on-btn)}
+
+.layout{display:grid;grid-template-columns:auto minmax(320px,1fr) auto;min-height:0}
+.panel{position:relative;display:flex;flex-direction:column;min-height:0;overflow:hidden;background:var(--bg);color:var(--ink)}
+.panel-left{grid-column:1;width:clamp(260px,20vw,320px);border-right:1px solid var(--line)}
+.panel-right{grid-column:3;width:clamp(320px,24vw,400px);border-left:1px solid var(--line)}
+.panel-inner{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:var(--s4) var(--s4) var(--s6)}
+.panel-inner::-webkit-scrollbar{width:8px}
+.panel-inner::-webkit-scrollbar-track{background:transparent}
+.panel-inner::-webkit-scrollbar-thumb{background:var(--scroll);border-radius:8px;border:2px solid var(--bg)}
+.panel-inner::-webkit-scrollbar-thumb:hover{background:var(--scroll-hover)}
+@supports (scrollbar-color:auto){.panel-inner{scrollbar-width:thin;scrollbar-color:var(--scroll) transparent}}
+.panel-head{display:flex;align-items:center;gap:var(--s2);min-height:44px;margin-bottom:var(--s2)}
+.panel-head h2{flex:1 1 0;min-width:0;margin:0;font-size:22px;line-height:1.4}
+.stage{grid-column:2;position:relative;min-width:0;min-height:0;overflow:hidden;background:var(--bg)}
+.scrim{display:none}
+.panel-resize{display:none}
+
+.sec{margin-top:var(--s5);padding-top:var(--s5);border-top:1px solid var(--line)}
+.panel-head + .sec,.panel-head + div > .sec:first-child{margin-top:0;padding-top:0;border-top:0}
+.sec-title{display:block;margin:0 0 var(--s3);font-size:19px;font-weight:700;line-height:1.4;letter-spacing:-0.01em}
+.sub{margin:var(--s3) 0 0;font-size:14px;line-height:1.6;color:var(--ink-2)}
+
+.opt{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s2)}
+.btn{display:flex;align-items:center;gap:var(--s2);width:100%;min-height:var(--tap);padding:0 var(--s3);border:1px solid var(--line);border-radius:var(--radius);background:var(--bg);color:var(--ink);font-size:14px;font-weight:600;line-height:1.3;text-align:left;cursor:pointer}
+.btn[aria-pressed="true"]{border-color:var(--accent);color:var(--accent-ink)}
+.btn .box{flex:none;width:12px;height:12px;border-radius:3px;border:1.5px solid currentColor}
+.btn[aria-pressed="true"] .box{background:currentColor}
+.steps{display:flex;flex-direction:column;gap:var(--s2)}
+.steps .btn{padding:var(--s2) var(--s3);gap:var(--s3)}
+.step-num{flex:none;width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;border:2px solid;font-size:12px;font-weight:700;color:var(--ink)}
+.step-txt{display:flex;flex-direction:column;gap:1px;min-width:0}
+.step-txt b{font-size:15px;font-weight:700}
+.step-txt span{font-size:13px;font-weight:500;color:var(--ink-2)}
+.detail{margin-top:var(--s3);padding:var(--s4);border-radius:var(--radius);background:var(--surface);font-size:15px;line-height:1.7}
+
+
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s2)}
+.tiles.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.tile{padding:var(--s3);border-radius:var(--radius);background:var(--surface)}
+.tile b{display:block;font-size:20px;font-weight:700;line-height:1.3;font-variant-numeric:tabular-nums}
+.tile span{display:block;font-size:13px;line-height:1.4;color:var(--ink-2)}
+.events{display:flex;flex-direction:column;gap:var(--s2)}
+.event{display:flex;gap:10px;align-items:flex-start;font-size:15px;line-height:1.6}
+.dot{flex:none;width:10px;height:10px;margin-top:7px;border-radius:50%}
+.legend{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s2) var(--s3);font-size:13px;color:var(--ink-2)}
+.legend div{display:flex;align-items:center;gap:var(--s2)}
+.sw{flex:none;width:16px;height:6px;border-radius:3px}
+.sw.ball{width:12px;height:12px;border-radius:50%}
+.sec.warn{border-top:0;padding:var(--s4);border-radius:var(--radius);background:var(--surface);font-size:15px;line-height:1.7}
+.warn .sec-title{color:var(--warn);font-size:17px}
+.mistake{margin-top:var(--s3)}
+.mistake b{display:block;font-weight:700}
+.mistake span{color:var(--ink-2)}
+
+.canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+.canvas.is-fixed{cursor:default}
+.view-btns{position:absolute;top:var(--s3);right:var(--s3);display:flex;gap:6px}
+.icon-btn{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;padding:0;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg);color:var(--ink);cursor:pointer}
+.icon-btn[aria-pressed="true"]{border-color:var(--accent);color:var(--accent-ink)}
+.icon-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.float{background:var(--bg);border:1px solid var(--line);border-radius:var(--radius)}
+.hover-card{position:absolute;left:var(--s3);bottom:var(--s3);display:flex;flex-direction:column;gap:2px;padding:var(--s3) var(--s4);pointer-events:none}
+.hover-card .k{font-size:13px;color:var(--ink-2)}
+.hover-card .v{font-size:18px;font-weight:700}
+.playbar{position:absolute;left:var(--s3);right:var(--s3);bottom:var(--s3);display:flex;flex-wrap:wrap;align-items:center;gap:var(--s3);padding:var(--s2) var(--s3)}
+.play{flex:none;width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;border:0;border-radius:var(--radius);background:var(--btn-bg);color:var(--on-btn) !important;cursor:pointer}
+.play svg{width:18px;height:18px;fill:currentColor}
+.scrub{flex:1 1 200px;min-width:160px;display:flex;flex-direction:column;gap:2px}
+.scrub span{font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.scrub input{width:100%;height:24px;margin:0;accent-color:var(--accent)}
+.speeds{display:flex;gap:2px;padding:2px;border:1px solid var(--line);border-radius:var(--radius)}
+.speeds button{min-width:48px;height:40px;padding:0 var(--s2);border:0;border-radius:6px;background:transparent;color:var(--ink-2);font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;cursor:pointer}
+.speeds button[aria-pressed="true"]{background:var(--btn-bg);color:var(--on-btn)}
+
+@media (hover:hover){.btn:hover,.icon-btn:hover{background:var(--surface)}.text-btn:hover{background:var(--surface)}}
+@media (min-width:1024px){
+  .panel-head{display:none}
+  .layout{--pl:var(--pl-user,clamp(260px,20vw,320px));--pr:var(--pr-user,clamp(320px,24vw,400px))}
+  .panel{width:0;border-width:0;visibility:hidden;transition:width var(--dur-exit) ease-in,visibility 0s linear var(--dur-exit)}
+  .panel-left.is-open{width:var(--pl)}
+  .panel-right.is-open{width:var(--pr)}
+  .panel.is-open{visibility:visible;border-width:1px;transition:width var(--dur) var(--ease-out)}
+  .panel-left .panel-inner{width:var(--pl)}
+  .panel-right .panel-inner{width:var(--pr);align-self:flex-end}
+  .layout.is-resizing .panel{transition:none}
+  .layout.is-resizing{cursor:col-resize;user-select:none}
+  .panel-resize{display:block;position:absolute;top:0;bottom:0;z-index:2;width:12px;padding:0;border:0;background:transparent;cursor:col-resize;touch-action:none}
+  .panel-left .panel-resize{right:0}
+  .panel-right .panel-resize{left:0}
+  .panel-resize::after{content:"";position:absolute;top:0;bottom:0;width:2px;background:var(--accent);opacity:0;transition:opacity 150ms ease-out}
+  .panel-left .panel-resize::after{right:0}
+  .panel-right .panel-resize::after{left:0}
+  .panel-resize:focus-visible{outline:none}
+  .panel-resize:focus-visible::after,.is-resizing .panel-resize:active::after{opacity:1}
+  @media (hover:hover){.panel-resize:hover::after{opacity:1}}
+}
+@media (max-width: 1023.98px){
+  .layout{grid-template-columns:minmax(0,1fr)}
+  .stage{grid-column:1}
+  .panel{position:fixed;top:0;bottom:0;z-index:40;visibility:hidden;transition:transform var(--dur-exit) ease-in,visibility 0s linear var(--dur-exit)}
+  .panel-left{left:0;width:min(304px,88vw);transform:translateX(-100%)}
+  .panel-right{right:0;width:min(360px,88vw);transform:translateX(100%)}
+  .panel.is-open{visibility:visible;transform:none;transition:transform var(--dur) var(--ease-out)}
+  .panel-inner{padding-top:calc(var(--s3) + env(safe-area-inset-top));padding-bottom:calc(var(--s6) + env(safe-area-inset-bottom))}
+  .scrim{display:block;position:fixed;inset:0;z-index:35;background:var(--scrim);opacity:0;visibility:hidden;transition:opacity var(--dur-exit) ease-in,visibility 0s linear var(--dur-exit)}
+  .scrim.is-on{opacity:1;visibility:visible;transition:opacity var(--dur) var(--ease-out)}
+}
+@media (max-width:640px){.brand{display:none}.topbar{justify-content:space-between}}
+@media (max-width:480px){.panel-toggle span{display:none}.seg button{padding:0 var(--s2)}}
+@media (prefers-reduced-motion:reduce){.panel,.panel.is-open,.scrim,.scrim.is-on,.panel-toggle .strip,.panel-resize::after{transition:none}}
+</style>
+</helmet>
+<div class="app" onKeyDown="{{onKey}}" style="--bg: {{th.bg}}; --surface: {{th.surface}}; --ink: {{th.ink}}; --ink-2: {{th.ink2}}; --line: {{th.line}}; --accent: {{th.accent}}; --accent-ink: {{th.accentInk}}; --btn-bg: {{th.btnBg}}; --on-btn: {{th.onBtn}}; --warn: {{th.warn}}; --prof: {{th.prof}}; --supp: {{th.supp}}; --danger: {{th.danger}}; --scroll: {{th.scroll}}; --scroll-hover: {{th.scrollHover}}">
+<header class="topbar">
+<button class="text-btn panel-toggle" type="button" aria-label="조작 패널" aria-expanded="{{leftExpanded}}" onClick="{{toggleLeft}}"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="strip" x="3" y="4" width="6" height="16" rx="1"></rect><rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="M9 4v16"></path></svg><span>조작</span></button>
+<strong class="brand">어떤 노드에서 극점이 생길까</strong>
+<sc-if value="{{hasModes}}" hint-placeholder-val="{{ true }}">
+<div class="seg" role="group" aria-label="보기 선택">
+<sc-for list="{{modes}}" as="md" hint-placeholder-count="2">
+<button type="button" aria-pressed="{{md.pressed}}" onClick="{{md.pick}}">{{md.label}}</button>
+</sc-for>
+</div>
+</sc-if>
+<button class="text-btn theme-toggle" type="button" aria-label="{{themeLabel}}" title="{{themeLabel}}" onClick="{{toggleTheme}}">
+<sc-if value="{{isDark}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg></sc-if>
+<sc-if value="{{isLight}}" hint-placeholder-val="{{ true }}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"></path></svg></sc-if>
+</button>
+<button class="text-btn panel-toggle" type="button" aria-label="설명 패널" aria-expanded="{{rightExpanded}}" onClick="{{toggleRight}}"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="strip" x="15" y="4" width="6" height="16" rx="1"></rect><rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="M15 4v16"></path></svg><span>설명</span></button>
+</header>
+
+<div class="layout {{layoutCls}}" style="{{layoutStyle}}">
+<aside class="panel panel-left {{leftCls}}" aria-label="조작">
+<div class="panel-resize" role="separator" aria-orientation="vertical" tabindex="0" aria-label="왼쪽 패널 너비 조절. 좌우 화살표로 조절, Home으로 기본 너비" aria-valuemin="220" aria-valuemax="480" aria-valuenow="{{leftWNow}}" ref="{{leftHandleRef}}"></div>
+<div class="panel-inner">
+<div class="panel-head"><h2>조작</h2><button class="text-btn" type="button" onClick="{{closePanels}}">닫기</button></div>
+
+<sc-if value="{{hasToggles}}" hint-placeholder-val="{{ true }}">
+<div class="sec">
+<h3 class="sec-title">보기 옵션</h3>
+<div class="opt">
+<sc-for list="{{toggles}}" as="t" hint-placeholder-count="2">
+<button class="btn" type="button" aria-pressed="{{t.pressed}}" onClick="{{t.toggle}}"><span class="box" aria-hidden="true"></span>{{t.label}}</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<!-- SLOT:left -->
+<div class="sec"><h2 class="sec-title">어디를 볼까요?</h2><sc-for list="{{points}}" as="pt"><button class="btn" aria-pressed="{{pt.pressed}}" onClick="{{pt.pick}}">{{pt.label}}</button></sc-for></div><div class="sec"><h2 class="sec-title">회로 비교</h2><sc-for list="{{settings}}" as="cfg"><button class="btn" onClick="{{cfg.pick}}">{{cfg.label}}</button></sc-for><p class="sub">이상적 구동에서는 R_S 조절값을 쓰지 않아요.</p></div><div class="sec"><h2 class="sec-title">값 바꾸기</h2><sc-for list="{{controls}}" as="ctl"><div class="sub"><label style="display:block;min-height:2.8em" for="ec2-{{ctl.key}}">{{ctl.label}} · {{ctl.display}}</label><input style="display:block;width:100%;margin:8px 0 16px" id="ec2-{{ctl.key}}" type="range" min="{{ctl.min}}" max="{{ctl.max}}" step="any" value="{{ctl.value}}" onChange="{{ctl.change}}"></div></sc-for></div>
+<!-- /SLOT:left -->
+
+<sc-if value="{{hasSteps}}" hint-placeholder-val="{{ true }}">
+<div class="sec">
+<h3 class="sec-title">단계</h3>
+<div class="steps">
+<sc-for list="{{steps}}" as="s" hint-placeholder-count="2">
+<button class="btn" type="button" aria-pressed="{{s.pressed}}" onClick="{{s.pick}}"><span class="step-num num" style="border-color: {{s.c}}">{{s.num}}</span><span class="step-txt"><b>{{s.title}}</b><span>{{s.who}}</span></span></button>
+</sc-for>
+</div>
+<sc-if value="{{hasStep}}" hint-placeholder-val="{{ false }}">
+<div class="detail" aria-live="polite">{{stepDetail}}</div>
+</sc-if>
+</div>
+</sc-if>
+</div>
+</aside>
+
+<section class="stage" aria-label="모형 보기">
+<canvas class="canvas {{canvasCls}}" ref="{{canvasRef}}" role="img" aria-label="{{canvasLabel}}"></canvas>
+<div class="view-btns">
+<button class="icon-btn" type="button" aria-label="확대" onClick="{{zoomIn}}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+<button class="icon-btn" type="button" aria-label="축소" onClick="{{zoomOut}}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"></path></svg></button>
+<button class="icon-btn" type="button" aria-label="시점 처음으로" onClick="{{resetView}}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7"></path><path d="M4 4v5h5"></path></svg></button>
+</div>
+
+<sc-if value="{{hasPlayback}}" hint-placeholder-val="{{ false }}">
+<div class="playbar float">
+<button class="play" type="button" aria-label="{{playLabel}}" onClick="{{togglePlay}}">
+<sc-if value="{{isPlaying}}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg></sc-if>
+<sc-if value="{{notPlaying}}" hint-placeholder-val="{{ true }}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7z"></path></svg></sc-if>
+</button>
+<label class="scrub">
+<span>{{fLabel}}</span>
+<input type="range" min="0" max="{{fMax10}}" step="1" value="{{fInt}}" onChange="{{onScrub}}">
+</label>
+<div class="speeds" role="group" aria-label="재생 속도">
+<sc-for list="{{speeds}}" as="sp" hint-placeholder-count="3">
+<button type="button" aria-pressed="{{sp.pressed}}" onClick="{{sp.pick}}">{{sp.label}}</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+</section>
+
+<aside class="panel panel-right {{rightCls}}" aria-label="설명">
+<div class="panel-resize" role="separator" aria-orientation="vertical" tabindex="0" aria-label="오른쪽 패널 너비 조절. 좌우 화살표로 조절, Home으로 기본 너비" aria-valuemin="280" aria-valuemax="720" aria-valuenow="{{rightWNow}}" ref="{{rightHandleRef}}"></div>
+<div class="panel-inner">
+<div class="panel-head"><h2>설명</h2><button class="text-btn" type="button" onClick="{{closePanels}}">닫기</button></div>
+
+<!-- SLOT:right -->
+<div class="sec"><h2 class="sec-title">{{selectedTitle}}</h2><p class="sub">{{selectedText}}</p><p class="sub">{{sourceInfo}}</p></div><div class="sec"><div class="tiles"><sc-for list="{{tiles}}" as="tile"><div class="tile"><b>{{tile.value}}</b><span>{{tile.label}}</span></div></sc-for></div><p class="sub">{{inputInfo}}</p><p class="sub">{{outputInfo}}</p><p class="sub">ω_p=1/(R_eq C_eq), f_p=ω_p/(2π)</p></div><div class="sec"><p class="sub">{{current}}</p><p class="sub">{{equation}}</p><p class="sub">보데: 파랑 실선은 모델의 정확식, 회색 점선은 직선 근사예요. 가로축은 ω (rad/s)예요.</p><p class="sub">{{scope}}</p><p class="sub">이상적 구동과 같은 도선의 비교는 (교과서 보충)이에요. 부유 커패시터는 이번 조작 범위에서 제외해요.</p></div>
+<!-- /SLOT:right -->
+
+<div class="sec warn">
+<h3 class="sec-title">꼭 기억해요</h3>
+<sc-for list="{{mistakes}}" as="m" hint-placeholder-count="3">
+<div class="mistake"><b>{{m.title}}</b><span>{{m.text}}</span></div>
+</sc-for>
+</div>
+</div>
+</aside>
+</div>
+<div class="scrim {{scrimCls}}" aria-hidden="true" onClick="{{closePanels}}"></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+function createFrequencyModel() {
+  function positive(value,name) {
+    if (!Number.isFinite(value) || value <= 0) throw new RangeError(name + ' must be positive SI');
+    return value;
+  }
+  function frequency(w) {
+    if (!Number.isFinite(w) || w < 0) throw new RangeError('omega must be finite and nonnegative');
+    return w;
+  }
+  function response(A0,wp1,wp2,omega) {
+    frequency(omega);
+    const x = omega/wp1, y = wp2 ? omega/wp2 : 0;
+    const inputLossDb = wp2 ? -10*Math.log10(1+x*x) : 0;
+    const outputLossDb = -10*Math.log10(1+(wp2 ? y*y : x*x));
+    const db = 20*Math.log10(A0)+inputLossDb+outputLossDb;
+    const bodeDb = 20*Math.log10(A0)-20*Math.max(0,Math.log10(x))
+      -(wp2 ? 20*Math.max(0,Math.log10(y)) : 0);
+    let w3 = wp1;
+    if (wp2) {
+      const a = 1/(wp1*wp1)+1/(wp2*wp2);
+      const b = 1/((wp1*wp2)*(wp1*wp2));
+      w3 = Math.sqrt(2/(a+Math.sqrt(a*a+4*b)));
+    }
+    return {
+      A0,wp1,wp2:wp2 || null,fp1:wp1/(2*Math.PI),
+      fp2:wp2 ? wp2/(2*Math.PI) : null,f3db:w3/(2*Math.PI),
+      mag:10**(db/20),db,bodeDb,
+      phaseDeg:-180-(Math.atan(x)+(wp2 ? Math.atan(y) : 0))*180/Math.PI,
+      inputLossDb,outputLossDb
+    };
+  }
+  function cs(p,w=0) {
+    const A0=positive(p.gm,'gm')*positive(p.RD,'RD');
+    return response(A0,1/(p.RD*positive(p.CL,'CL')),null,w);
+  }
+  function two(p,w=0) {
+    const A0=positive(p.gm,'gm')*positive(p.RD,'RD');
+    const wp1=1/(positive(p.RS,'RS')*positive(p.Cin,'Cin'));
+    const wp2=1/(p.RD*positive(p.CL,'CL'));
+    return response(A0,wp1,wp2,w);
+  }
+  function wave(r,t,inputPeak=1e-4) {
+    if (!Number.isFinite(t)) throw new RangeError('t/T must be finite');
+    positive(inputPeak,'inputPeak');
+    const theta=2*Math.PI*t;
+    return {vin:inputPeak*Math.sin(theta),
+      vout:r.mag*inputPeak*Math.sin(theta+r.phaseDeg*Math.PI/180),
+      inputPeak,outputPeak:r.mag*inputPeak};
+  }
+  return Object.freeze({cs,two,wave});
+}
+const FM=createFrequencyModel();
+const CFG={"kind":"two","gm":0.005,"title":"두 극점과 보데 근사","initial":{"logRS":3,"logCin":-13,"logRD":3.3010299956639813,"logCL":-12.301029995663981,"logRatio":0,"showApprox":true},"controls":[{"key":"logRS","label":"R_S (Ω)","min":2,"max":4},{"key":"logCin","label":"C_in (F)","min":-14,"max":-12},{"key":"logRD","label":"R_D (Ω)","min":2,"max":5},{"key":"logCL","label":"C_L (F)","min":-14,"max":-12},{"key":"logRatio","label":"관찰 주파수 / 낮은 극점","min":-2,"max":2}],"presets":[{"key":"base","label":"기본","state":{"logRS":3,"logCin":-13,"logRD":3.3010299956639813,"logCL":-12.301029995663981,"logRatio":0}},{"key":"input","label":"입력 극점 먼저","state":{"logRS":4,"logCin":-12,"logRD":3.3010299956639813,"logCL":-13,"logRatio":0}},{"key":"equal","label":"극점 겹침","state":{"logRS":3.3010299956639813,"logCin":-12.301029995663981,"logRD":3.3010299956639813,"logCL":-12.301029995663981,"logRatio":0}},{"key":"rd","label":"R_D 증가","state":{"logRS":3,"logCin":-13,"logRD":4,"logCL":-12.301029995663981,"logRatio":0}}],"mistakes":[{"title":"극점과 전체 대역폭","text":"극점이 겹치면 그 주파수에서 전체 -6 dB예요. 전체 -3 dB 대역폭은 더 낮아요."},{"title":"rad/s와 Hz","text":"Hz로 바꾸려면 2π로 나눠요. 그래프 축의 단위를 먼저 확인해요."},{"title":"정확식과 보데 근사","text":"점선은 직선 근사예요. 극점 근처의 실제 곡률과 오차를 실선에서 확인해요."}],"steps":[{"mode":"bode","title":"입력 노드","who":"R_S C_in","text":"입력 RC가 첫 번째 극점을 만들어요. 입력 값을 바꾸며 해당 표식을 확인해요."},{"mode":"bode","title":"출력 노드","who":"R_D C_L","text":"출력 RC가 두 번째 극점을 만들어요. R_D는 저주파 이득도 바꿔요."},{"mode":"parts","title":"노드별 손실","who":"dB 합","text":"노드별 dB 손실을 더하면 전체 상대 손실이 돼요. 이 모델에서는 두 RC가 독립이에요."},{"mode":"bode","title":"겹친 극점","who":"극점 겹침 설정","text":"극점 겹침을 누르고 극점과 전체 -3 dB 대역폭 숫자를 비교해 보세요."}]};
+const BASE={topic:function() {
+    const other=CFG.kind==='cs'?'wave':'parts';
+    const mode=(key,label)=>({
+      key,label,cam:{yaw:0,pitch:0,zoom:1},fit:[16,14],D:60,
+      autoSpin:false,rotatable:false,
+      playback:key==='wave'?{fmax:4,rate:0.5,label:f=>'정현파 · '+f.toFixed(1)+' / 4'}:null,
+      canvasLabel:()=>CFG.title+'의 '+label+' 화면. 회로와 그래프를 함께 비교해요.'
+    });
+    return {
+      MODES:[mode('bode','응답'),mode(other,other==='wave'?'파형':'기여')],
+      STEPS:CFG.steps.map(s=>Object.assign({c:'#1677ff'},s)),
+      MISTAKES:{bode:CFG.mistakes,[other]:CFG.mistakes},
+      TOGGLES:{bode:[['showApprox','보데 근사']]},
+      PAL:{
+        light:{bg:'#ffffff',labelBg:'#f7f8fa',ink:'#111111',ring:'#111111',a:'#1677ff',b:'#d92d20',link:'#6b7280',blobAlpha:0.3},
+        dark:{bg:'#17171c',labelBg:'#212128',ink:'#f2f4f6',ring:'#f2f4f6',a:'#6ea4ff',b:'#ff8a7a',link:'#a3abb8',blobAlpha:0.42}
+      }
+    };
+  }};
+function drawFrequencyScene(c,mode,I,O,cfg,M) {
+  const st=c.state,pal=c.pal();
+  const p={gm:cfg.gm,RD:10**st.logRD,CL:10**st.logCL};
+  if(cfg.kind==='two') Object.assign(p,{RS:10**st.logRS,Cin:10**st.logCin});
+  const base=M[cfg.kind](p,0), low=Math.min(base.wp1,base.wp2||base.wp1);
+  const high=Math.max(base.wp1,base.wp2||base.wp1), w=low*10**st.logRatio;
+  const r=M[cfg.kind](p,w);
+  const line=(a,b,color=pal.link,width=0.035)=>I.push({k:1,p:[a[0],a[1],0],q:[b[0],b[1],0],w:width,c:color,flat:true});
+  const text=(x,y,value,color=pal.ink)=>I.push({k:3,p:[x,y,0],text:value,size:13,c:color});
+  const ground=(x,y)=>{line([x,y],[x,y-0.15]);for(let n=0;n<3;n++)line([x-0.3+n*0.07,y-0.15-n*0.1],[x+0.3-n*0.07,y-0.15-n*0.1]);};
+  const resistor=(x,y)=>{line([x,y],[x,y-0.35]);let a=[x,y-0.35];for(let n=0;n<6;n++){const b=[x+(n%2?0.18:-0.18),y-0.5-n*0.15];line(a,b);a=b;}line(a,[x,y-1.55]);};
+  const capacitor=(x,y)=>{line([x,y],[x,y-0.7]);line([x-0.35,y-0.7],[x+0.35,y-0.7]);line([x-0.35,y-0.9],[x+0.35,y-0.9]);line([x,y-0.9],[x,y-1.55]);};
+  // Output R_D, C_L and downward gm*v_in/v_X controlled current source are parallel.
+  line([2,4.8],[6,4.8]);line([2,2.5],[6,2.5]);
+  resistor(4,4.8);line([4,3.25],[4,2.5]);
+  capacitor(6,4.8);line([6,3.25],[6,2.5]);
+  line([2,4.8],[2,4.2]);line([2,3.2],[2,2.5]);
+  const diamond=[[2,4.2],[2.5,3.7],[2,3.2],[1.5,3.7],[2,4.2]];
+  for(let n=1;n<diamond.length;n++)line(diamond[n-1],diamond[n]);
+  line([2,4],[2,3.4],pal.b);I.push({k:4,p:[2,4,0],q:[2,3.4,0],c:pal.b});
+  ground(4,2.5);text(4.2,5.5,'v_out');text(4.8,4,'R_D');text(6.6,3.1,'C_L');
+  text(0.7,3,'g_m '+(cfg.kind==='two'?'v_X':'v_in'),pal.b);
+  if(cfg.kind==='two') {
+    line([-6,4.8],[-5.4,4.8]);
+    let a=[-5.4,4.8];for(let n=0;n<6;n++){const b=[-5.2+n*0.22,4.8+(n%2?0.18:-0.18)];line(a,b);a=b;}
+    line(a,[-2.5,4.8]);capacitor(-2.5,4.8);ground(-2.5,3.25);
+    text(-5,5.5,'R_S');text(-1.2,3.1,'C_in');text(-2.5,5.5,'v_X');
+  } else {line([-6,4.8],[-2.5,4.8]);text(-3.8,5.5,'v_in');}
+  line([-6,3.3],[-4.5,3.3]);ground(-4.5,3.3);
+  text(-6.1,4.4,'+');text(-6.1,3.3,'−');
+  if(cfg.kind==='two') text(-6.2,5.5,'v_in');
+  text(0,6.2,'AC 접지 기준 소신호 등가회로');
+  const eng=(v,unit)=>{
+    const powers=unit==='F'?[-15,-12,-9]:[0,3,6];
+    const prefixes=unit==='F'?['f','p','n']:['','k','M'];
+    let n=0;for(let i=0;i<powers.length;i++)if(v>=10**powers[i]*0.999999)n=i;
+    return (v/10**powers[n]).toPrecision(3)+prefixes[n]+unit;
+  };
+  text(0,1.65,'R_D='+eng(p.RD,'Ω')+' · C_L='+eng(p.CL,'F'));
+  if(cfg.kind==='two') text(0,7.05,'R_S='+eng(p.RS,'Ω')+' · C_in='+eng(p.Cin,'F'));
+  const x0=-6,x1=6,y0=-5.2,y1=0.8;
+  line([x0,y0],[x1,y0]);line([x0,y0],[x0,y1]);
+  if(mode==='wave') {
+    text(0,1,'정규화 파형');text(0,-6.55,'t/T');text(-6.1,0.2,'V/V_peak');
+    for(let n=0;n<=4;n++) text(x0+(x1-x0)*n/4,-5.7,String(n));
+    for(const v of [-1,0,1]) text(-6.4,-2.2+2*v,String(v));
+    let lastIn=null,lastOut=null;
+    for(let n=0;n<=240;n++){
+      const t=n/60, wave=M.wave(r,t);
+      const a=[x0+(x1-x0)*n/240,-2.2+2*wave.vin/wave.inputPeak];
+      const b=[a[0],-2.2+2*wave.vout/wave.outputPeak];
+      if(lastIn)line(lastIn,a,pal.a);if(lastOut)line(lastOut,b,pal.b);
+      lastIn=a;lastOut=b;
+    }
+    const now=x0+(x1-x0)*c.sim.f/4;line([now,y0],[now,y1],pal.link);
+    text(-2,0.5,'입력',pal.a);text(2,0.5,'출력',pal.b);
+    return;
+  }
+  const lf0=Math.log10(low)-2,lf1=Math.log10(high)+2;
+  const end=M[cfg.kind](p,high*100);
+  const endDb=mode==='parts'?end.inputLossDb+end.outputLossDb:end.db;
+  const maxDb=mode==='parts'?5:20*Math.log10(base.A0)+5;
+  const minDb=Math.floor(endDb/10)*10-5;
+  const xOf=q=>x0+(Math.log10(q)-lf0)/(lf1-lf0)*(x1-x0);
+  const yOf=db=>y0+(db-minDb)/(maxDb-minDb)*(y1-y0);
+  for(let n=0;n<=4;n++){const lf=lf0+(lf1-lf0)*n/4,x=xOf(10**lf);line([x,y0],[x,y1],pal.link,0.015);text(x,-5.7,'10^'+lf.toFixed(1));}
+  for(let n=0;n<=4;n++){const db=minDb+(maxDb-minDb)*n/4; text(-6.5,yOf(db),db.toFixed(0));}
+  text(0,-6.3,'ω (rad/s, 로그 축)');text(-6.2,1.3,mode==='parts'?'손실 dB':'|H| dB');
+  const curve=(key,color,dashed=false)=>{
+    let last=null;
+    for(let n=0;n<=240;n++){
+      const q=10**(lf0+(lf1-lf0)*n/240),value=M[cfg.kind](p,q);
+      const db=key==='sum'?value.inputLossDb+value.outputLossDb:value[key];
+      if(db<minDb||db>maxDb){last=null;continue;}
+      const point=[xOf(q),yOf(db)];
+      if(last&&(!dashed||n%4<2))line(last,point,color);
+      last=point;
+    }
+  };
+  if(mode==='parts'){curve('inputLossDb',pal.a);curve('outputLossDb',pal.b);curve('sum',pal.link);}
+  else {curve('db',pal.a);if(st.showApprox)curve('bodeDb',pal.link,true);}
+  const close=base.wp2&&Math.abs(xOf(base.wp1)-xOf(base.wp2))<1.8;
+  [base.wp1,base.wp2].filter(Boolean).forEach((q,n)=>{
+    line([xOf(q),y0],[xOf(q),y1],n?pal.b:pal.a,0.025);
+    if(!close) text(xOf(q),y1+0.22,'ω_p'+(n+1),n?pal.b:pal.a);
+  });
+  if(close) text((xOf(base.wp1)+xOf(base.wp2))/2,y1+0.22,
+    Math.abs(Math.log10(base.wp1/base.wp2))<1e-9?'ω_p1 = ω_p2':'ω_p1 · ω_p2',pal.ink);
+  const currentDb=mode==='parts'?r.inputLossDb+r.outputLossDb:r.db;
+  const markerY=yOf(currentDb);
+  if(markerY>=y0&&markerY<=y1)I.push({k:0,p:[xOf(w),markerY,0],r:0.1,c:pal.a,flat:true});
+}
+function nodeResult(st){
+ const p={gm:.005,RD:2000,CL:10**st.logCL,RS:10**st.logRS,Cin:10**st.logCin};
+ const kind=st.ideal?'cs':'two',b=FM[kind](p,0),low=Math.min(b.wp1,b.wp2||b.wp1),omega=low*10**st.logRatio;
+ return {p,b,omega,r:FM[kind](p,omega),kind,low};
+}
+class Component extends DCLogic {
+  // ================= 주제 훅: 주제마다 바꾸는 곳은 이 네 메서드뿐이에요 =================
+  // 계약은 ec2-interactive/references/scene-api.md에 있어요.
+
+  topic(){
+ const b=BASE.topic.call(this),mode=(key,label)=>({key,label,cam:{yaw:0,pitch:0,zoom:1},fit:[16,15],D:60,autoSpin:false,rotatable:false,playback:null,canvasLabel:()=>key==='nodes'?'CS 등가회로에서 같은 도선의 두 점과 입력·출력·전압원·접지를 비교해요.':'같은 회로의 극점과 보데 기울기를 비교해요.'});
+ b.MODES=[mode('nodes','노드'),mode('bode','보데')];
+ b.TOGGLES={nodes:[['kill','입력원 끄기 · Req 확인']],bode:[['showApprox','보데 근사']]};
+ b.STEPS=[
+ {mode:'nodes',c:'#1677ff',title:'같은 도선의 두 점',who:'X와 X′',text:'왼쪽에서 X′를 선택해 보세요. X와 X′ 사이에는 소자가 없어서 같은 전압, 같은 노드예요. 점을 더 찍어도 pole은 늘지 않아요.'},
+ {mode:'nodes',c:'#1677ff',title:'입력의 지연 찾기',who:'R_S와 C_in',text:'입력 노드 X를 선택하고 입력원 끄기를 켜 보세요. X에서 접지로 R_S가 보여요. R_S C_in이 입력 지연을 정해요.'},
+ {mode:'nodes',c:'#d92d20',title:'출력의 지연 찾기',who:'R_D와 C_L',text:'출력 노드 Y를 선택해 보세요. 입력원을 끄면 v_X=0이고 종속원 전류도 0이에요. 이 모델의 출력 등가 저항은 R_D예요.'},
+ {mode:'nodes',c:'#1677ff',title:'전압원이 직접 정하면?',who:'R_S=0 비교',text:'이상적 구동을 눌러 보세요. R_S가 사라져 X가 전압원 노드에 합쳐져요. C_in은 남지만 별도의 유한한 입력 pole은 없어요. (교과서 보충)'},
+ {mode:'bode',c:'#1677ff',title:'pole을 지나면 기울기 추가',who:'0 → −20 → −40',text:'관찰 주파수를 움직여 보세요. 각 실수 pole을 지날 때마다 직선 근사의 기울기가 −20 dB/dec씩 더해져요.'},
+ {mode:'bode',c:'#d92d20',title:'두 pole이 겹치면',who:'극점 겹침 설정',text:'극점 겹침을 눌러 보세요. 그 주파수에서 기울기가 0에서 −40으로 바뀌어요. 실제 곡선은 부드럽게 이어져요.'}
+ ];
+ const mistakes=[{title:'점의 수는 pole의 수가 아니에요',text:'같은 도선의 X와 X′는 같은 노드예요. 이 예제의 독립적인 RC 지연을 찾아요.'},{title:'커패시터만 있다고 충분하지 않아요',text:'이상적 전압원에 직접 연결되면 전압이 강제로 정해져요. C_in이 있어도 유한한 입력 pole은 없어요. (교과서 보충)'},{title:'일반 회로의 규칙에는 조건이 있어요',text:'여기는 독립된 두 RC의 CS 모델이에요. 부유 커패시터나 피드백이 있으면 각 노드의 RC를 그대로 pole로 둘 수 없어요.'}];
+ b.MISTAKES={nodes:mistakes,bode:mistakes}; return b;
+}
+
+  buildScene(mode,I,O){
+ const st=this.state,{p,b,kind}=nodeResult(st),pal=this.pal();
+ if(mode==='bode'){
+  const cfg={kind:'two',gm:.005};
+  if(st.ideal){
+   const proxy=Object.create(this);proxy.state=Object.assign({},st,{logRS:-Infinity});
+   drawFrequencyScene(proxy,'bode',I,O,cfg,{two:(p,w)=>FM.cs(p,w)});
+   for(let i=I.length-1;i>=0;i--){const z=I[i];if(z.k===1&&z.p[0]>=-5.41&&z.p[0]<=-3.79&&z.q[0]>=-5.41&&z.q[0]<=-2.49&&Math.abs(z.p[1]-4.8)<.21&&Math.abs(z.q[1]-4.8)<.21)I.splice(i,1);}
+   for(const z of I)if(z.k===3&&z.text==='R_S')z.text='R_S=0';
+   I.push({k:1,p:[-5.4,4.8,0],q:[-2.5,4.8,0],w:.035,c:pal.a,flat:true});
+  }else drawFrequencyScene(this,'bode',I,O,cfg,FM);
+  I.push({k:3,p:[0,7.5,0],text:st.ideal?'직접 구동: 입력 pole 없음':'두 RC: 각 pole마다 −20 dB/dec',size:13,c:pal.ink});
+  return;
+ }
+ const ln=(x,y,u,v,col=pal.link,w=.045)=>I.push({k:1,p:[x,y,0],q:[u,v,0],w,c:col,flat:true});
+ const tx=(x,y,text,col=pal.ink)=>I.push({k:3,p:[x,y,0],text,size:13,c:col});
+ const dot=(x,y,col)=>I.push({k:0,p:[x,y,0],r:.11,c:col,flat:true});
+ const gnd=(x,y)=>{for(let i=0;i<3;i++)ln(x-.32+i*.08,y-i*.12,x+.32-i*.08,y-i*.12);};
+ const cap=(x,y,col)=>{ln(x,y,x,y-.8,col);ln(x-.4,y-.8,x+.4,y-.8,col);ln(x-.4,y-1,x+.4,y-1,col);ln(x,y-1,x,y-2,col);gnd(x,y-2);};
+ const res=(x,y,u,v,col)=>{let last=[x,y];for(let i=0;i<9;i++){const t=i/8,bend=i===0||i===8?0:(i%2?.15:-.15),a=[x+(u-x)*t+(u===x?bend:0),y+(v-y)*t+(v===y?bend:0)];ln(...last,...a,col);last=a;}};
+ const sel=st.selected,inc=['x','wire'].includes(sel)?pal.a:pal.link,outc=sel==='y'?pal.b:pal.link;
+ tx(0,6.4,'어떤 점이 같은 노드일까요?');
+ tx(-5.7,4.7,'A',pal.ink);tx(-2.1,4.7,'X',pal.a);tx(-.3,4.7,'X′',pal.a);tx(4,4.7,'Y = v_out',pal.b);
+ ln(-5.7,4,-5,4);if(st.ideal)ln(-5,4,-3.3,4,pal.a);else res(-5,4,-3.3,4,pal.a);
+ ln(-3.3,4,-.3,4,inc,.07);dot(-2.1,4,pal.a);dot(-.3,4,pal.a);dot(-5.7,4,pal.ink);
+ tx(-4.1,5.4,st.ideal?'R_S = 0':'R_S',pal.a);cap(-2.1,4,pal.a);tx(-.65,2.4,'C_in',pal.a);
+ ln(-5.7,4,-5.7,3.5);if(st.kill){ln(-5.7,3.5,-5.7,2);tx(-6.2,2.8,'0 V');}else{
+ for(let n=0;n<32;n++){let a=2*Math.PI*n/32,c=2*Math.PI*(n+1)/32;ln(-5.7+.45*Math.cos(a),2.9+.6*Math.sin(a),-5.7+.45*Math.cos(c),2.9+.6*Math.sin(c));}tx(-5.7,3.1,'+');tx(-5.7,2.65,'−');ln(-5.7,2.3,-5.7,2);
+ }gnd(-5.7,2);tx(-5.7,1.4,st.kill?'v_in = 0':'v_in');
+ ln(2.1,4,6,4,outc);dot(4,4,pal.b);res(4,4,4,2.3,pal.b);ln(4,2.3,4,2,pal.b);gnd(4,2);tx(4.8,3,'R_D',pal.b);cap(6,4,pal.b);tx(6.5,1.5,'C_L',pal.b);
+ ln(2.1,4,2.1,3.5);const diamond=[[2.1,3.5],[2.55,2.95],[2.1,2.4],[1.65,2.95],[2.1,3.5]];for(let i=1;i<diamond.length;i++)ln(...diamond[i-1],...diamond[i]);ln(2.1,2.4,2.1,2);gnd(2.1,2);ln(2.1,3.25,2.1,2.65,pal.b);I.push({k:4,p:[2.1,3.25,0],q:[2.1,2.65,0],c:pal.b});tx(.7,1.2,st.kill?'g_m v_X = 0':'↓ g_m v_X',pal.b);
+ const targets={x:[-2.1,4],wire:[-.3,4],y:[4,4],source:[-5.7,4],ground:[4,2]};let q=targets[sel];I.push({k:0,p:[...q,0],r:.22,c:sel==='y'?pal.b:pal.a,flat:true,a:.3});
+ tx(0,.15,'X와 X′'+' 사이에는 도선만 있어요.',pal.a);
+ tx(0,-1,st.ideal?'X = X′ = A: 전압원이 직접 정해요.':'X = X′: 같은 전압, 같은 노드예요.');
+ tx(0,-2.1,st.ideal?'C_in은 남지만 유한한 입력 pole은 없어요.':'입력 R_S C_in → 입력 pole 하나',pal.a);
+ tx(0,-3.1,'출력 R_D C_L → 출력 pole 하나',pal.b);
+ tx(0,-4.4,st.ideal?'유한한 pole 1개 · 높은 주파수에서 −20 dB/dec':'유한한 pole 2개 · 높은 주파수에서 −40 dB/dec');
+ tx(0,-5.5,st.kill?'독립 전압원만 0 V로 두고 종속원은 유지해요.':'왼쪽에서 점을 고르고, 입력원을 꺼 보세요.');
+ tx(0,-6.5,'접지 표시는 모두 같은 AC 기준 노드예요.');
+}
+
+  extraState(){return {logRD:Math.log10(2000),logRS:3,logCin:-13,logCL:Math.log10(5e-13),logRatio:-1,showApprox:true,selected:'x',kill:false,ideal:false};}
+
+  extraVals(st){
+ const {p,b,omega,r}=nodeResult(st),fmt=(n,u)=>n.toPrecision(3)+' '+u;
+ const descriptions={x:['입력 노드 X',st.ideal?'전압원이 X의 전압을 직접 정해요. C_in이 있어도 별도 입력 지연은 없어요. (교과서 보충)':'R_S를 통해 C_in을 충전·방전해요. 게이트 전류는 0으로 둬요.'],wire:['같은 노드의 점 X′','X와 X′ 사이에는 도선만 있어요. 두 점의 전압은 같고, pole도 추가되지 않아요.'],y:['출력 노드 Y','R_D와 C_L이 출력 지연을 정해요. g_m v_X 종속원은 아래 방향이고 CS 출력은 반전돼요.'],source:['전압원 노드 A',st.ideal?'A와 X가 도선으로 합쳐져요. 전압원이 직접 정하는 전압에는 별도의 RC 지연이 없어요. (교과서 보충)':'A의 전압은 이상적 전압원이 정해요. R_S 뒤의 X는 별개의 노드예요.'],ground:['AC 접지','작은 신호 전압을 0으로 두는 기준이에요. 그림의 모든 접지 표시는 전기적으로 같은 기준 노드예요.']};
+ const chosen=descriptions[st.selected],inputTau=st.ideal?0:p.RS*p.Cin,outputTau=p.RD*p.CL;
+ const controls=[{key:'logRS',label:'R_S (Ω)',min:2,max:4},{key:'logCin',label:'C_in (F)',min:-14,max:-12},{key:'logCL',label:'C_L (F)',min:-14,max:-12},{key:'logRatio',label:'관찰 주파수 / 낮은 pole',min:-2,max:2}].map(d=>({...d,value:String(st[d.key]),display:fmt(10**st[d.key],d.key==='logRatio'?'배':d.key==='logRS'?'Ω':'F'),change:e=>{let v=Number(e.target.value);if(Number.isFinite(v))this.setState({[d.key]:Math.max(d.min,Math.min(d.max,v)),step:-1});}}));
+ const slope=-20*([b.wp1,b.wp2].filter(Boolean).filter(q=>omega>=q*(1-1e-12)).length);
+ return {controls,points:[['x','입력 X'],['wire','같은 도선 X′'],['y','출력 Y'],['source','전압원 A'],['ground','AC 접지']].map(([key,label])=>({label,pressed:st.selected===key,pick:()=>this.setState({selected:key,step:-1})})),
+ settings:[{label:'기본 · 두 RC',pick:()=>this.setState({ideal:false,kill:false,logRD:Math.log10(2000),logRS:3,logCin:-13,logCL:Math.log10(5e-13),logRatio:-1,step:-1})},{label:st.ideal?'저항 구동으로 복귀':'이상적 구동 · R_S=0',pick:()=>this.setState({ideal:!st.ideal,step:-1})},{label:'극점 겹침',pick:()=>this.setState({ideal:false,logRS:3,logCin:-12,logCL:Math.log10(5e-13),logRatio:0,step:-1})},{label:'입력 pole 먼저',pick:()=>this.setState({ideal:false,logRS:4,logCin:-12,logCL:-13,logRatio:0,step:-1})}],
+ selectedTitle:chosen[0],selectedText:chosen[1],sourceInfo:st.mode==='bode'?'보데 화면은 입력원이 동작하는 회로예요. 입력원 끄기는 노드 화면에서 R_eq를 확인할 때만 적용해요.':st.kill?'입력원을 0 V로 두어 R_eq를 보는 회로예요. 아래 주파수 응답은 입력원이 동작할 때의 전달함수예요.':'입력원이 동작하는 소신호 회로예요. R_eq 확인은 입력원 끄기를 켜요.',
+ inputInfo:st.ideal?'입력: R_eq=0 Ω · τ_in=0 · 유한한 입력 pole 없음':'입력: R_eq='+fmt(p.RS,'Ω')+' · τ_in='+fmt(inputTau,'s')+' · f_pin='+fmt(b.fp1,'Hz'),
+ outputInfo:'출력: R_eq=2.00 kΩ · τ_out='+fmt(outputTau,'s')+' · f_pout='+fmt(st.ideal?b.fp1:b.fp2,'Hz'),
+ tiles:[{label:'유한한 pole 수',value:st.ideal?'1개':'2개'},{label:'현재 근사 기울기',value:slope+' dB/dec'},{label:'현재 주파수',value:fmt(omega/(2*Math.PI),'Hz')},{label:'전체 −3 dB 대역폭',value:fmt(r.f3db,'Hz')}],
+ current:'|H|='+fmt(r.mag,'V/V')+' · '+r.db.toFixed(2)+' dB',
+ scope:'CS 모델 · g_m=5 mS · R_D=2 kΩ · r_o=∞ · 게이트 전류 0 · C_gd·몸체 효과·클리핑 제외. 입력·출력 RC는 독립이에요.',
+ numeric:{...r,omega,inputTau,outputTau,slope,ideal:st.ideal},
+ equation:st.ideal?'H(s)=−g_m R_D / (1+s R_D C_L)':'H(s)=−g_m R_D / [(1+s R_S C_in)(1+s R_D C_L)]'};
+}
+
+  // ================= 공통 셸: 아래는 주제와 무관해요. 고치지 않아요 =================
+  constructor(...args) {
+    super(...args);
+    let reduce = false;
+    try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+    let narrow = false;
+    try { narrow = window.matchMedia('(max-width: 1023.98px)').matches; } catch (e) {}
+    let saved = null;
+    try { saved = window.localStorage.getItem('od-theme'); } catch (e) {}
+    const PANEL_W = { left: { min: 220, max: 480 }, right: { min: 280, max: 720 } };
+    let widths = {};
+    try { widths = JSON.parse(window.localStorage.getItem('interactive-panel-w')) || {}; } catch (e) {}
+    const okW = (side) => { const v = widths[side]; return typeof v === 'number' && v >= PANEL_W[side].min && v <= PANEL_W[side].max ? v : null; };
+    this.T = this.topic();
+    this.state = Object.assign({
+      mode: this.T.MODES[0].key, f: 0, playing: false, speed: 1, step: -1, spin: !reduce,
+      theme: (saved === 'light' || saved === 'dark') ? saved : (this.systemDark() ? 'dark' : 'light'),
+      // leftOpen/rightOpen: docked panels on wide screens; drawer: the one open drawer on narrow screens
+      leftOpen: true, rightOpen: true, drawer: null, narrow: narrow,
+      // leftW/rightW: user-set docked widths in px (null = default); resizing: a handle is being dragged
+      leftW: okW('left'), rightW: okW('right'), resizing: false
+    }, this.extraState());
+    this.reduceMotion = reduce;
+    this.K = {
+      PANEL_W: PANEL_W, PANEL_W_KEY: 'interactive-panel-w', PANEL_DEFAULT: { left: 320, right: 400 },
+      THEMES: {
+        light: { bg: '#ffffff', surface: '#f7f8fa', ink: '#111111', ink2: '#6b7280', line: '#d9dee7', accent: '#1677ff', accentInk: '#1b64da', btnBg: '#1b64da', onBtn: '#ffffff', warn: '#b54708', prof: '#6941c6', supp: '#067647', danger: '#d92d20', scroll: '#c9d0db', scrollHover: '#9aa3b2' },
+        dark: { bg: '#17171c', surface: '#212128', ink: '#f2f4f6', ink2: '#a3abb8', line: '#34353d', accent: '#3182f6', accentInk: '#6ea4ff', btnBg: '#1b64da', onBtn: '#ffffff', warn: '#f5a15c', prof: '#b69cff', supp: '#5fd39a', danger: '#ff6b61', scroll: '#3f414b', scrollHover: '#5b5e6a' }
+      }
+    };
+    this.cam = Object.assign({}, this.modeDef().cam);
+    this.sim = { f: 0, cx: 0 };
+    this.pointer = { x: -1, y: -1, inside: false, drag: false, lx: 0, ly: 0 };
+    this.colorCache = {};
+    this._tick = (t) => this.tick(t);
+    this._canvasRef = (el) => this.attachCanvas(el);
+    this.handles = {};
+    this._handleRefL = (el) => this.attachHandle('left', el);
+    this._handleRefR = (el) => this.attachHandle('right', el);
+  }
+
+  componentWillUnmount() {
+    this.attachCanvas(null);
+    this.attachHandle('left', null);
+    this.attachHandle('right', null);
+  }
+
+  modeDef(key) {
+    const k = key || this.state.mode;
+    return this.T.MODES.find((m) => m.key === k) || this.T.MODES[0];
+  }
+  systemDark() {
+    try { return window.matchMedia('(prefers-color-scheme: dark)').matches; } catch (e) { return false; }
+  }
+  isNarrow() {
+    try { return window.matchMedia('(max-width: 1023.98px)').matches; } catch (e) { return false; }
+  }
+  syncBreakpoint() { this.setState({ narrow: this.isNarrow(), drawer: null }); }
+  // In drawer mode only one panel is open at a time.
+  togglePanel(side) {
+    const st = this.state;
+    if (st.narrow) this.setState({ drawer: st.drawer === side ? null : side });
+    else if (side === 'left') this.setState({ leftOpen: !st.leftOpen });
+    else this.setState({ rightOpen: !st.rightOpen });
+  }
+  // Docked panel width: the canvas column always keeps at least 400px.
+  panelMax(side) {
+    const lim = this.K.PANEL_W[side], other = side === 'left' ? 'right' : 'left', st = this.state;
+    const h = this.handles[other];
+    const otherOpen = other === 'left' ? st.leftOpen : st.rightOpen;
+    const otherW = !otherOpen ? 0 : h ? h.el.parentElement.getBoundingClientRect().width
+      : (st[other + 'W'] || this.K.PANEL_DEFAULT[other]);
+    return Math.max(lim.min, Math.min(lim.max, (window.innerWidth || 1440) - otherW - 400));
+  }
+  setPanelWidth(side, px, save) {
+    const v = Math.round(Math.min(Math.max(px, this.K.PANEL_W[side].min), this.panelMax(side)));
+    this.setState({ [side + 'W']: v });
+    if (save) this.savePanelWidths(side, v);
+  }
+  resetPanelWidth(side) {
+    this.setState({ [side + 'W']: null });
+    this.savePanelWidths(side, null);
+  }
+  savePanelWidths(side, v) {
+    try {
+      const key = this.K.PANEL_W_KEY;
+      let w = {};
+      try { w = JSON.parse(window.localStorage.getItem(key)) || {}; } catch (e) {}
+      if (v == null) delete w[side]; else w[side] = v;
+      window.localStorage.setItem(key, JSON.stringify(w));
+    } catch (e) { /* 저장 불가: 이번 방문에만 유지 */ }
+  }
+  // Re-fit user widths when the window shrinks (not saved).
+  refitPanels() {
+    ['left', 'right'].forEach((side) => {
+      const w = this.state[side + 'W'];
+      if (w != null && w > this.panelMax(side)) this.setPanelWidth(side, w, false);
+    });
+  }
+  attachHandle(side, el) {
+    const old = this.handles[side];
+    if (old && old.el === el) return;
+    if (old) {
+      Object.keys(old.on).forEach((ev) => old.el.removeEventListener(ev, old.on[ev]));
+      delete this.handles[side];
+      if (!Object.keys(this.handles).length) window.removeEventListener('resize', this._refit);
+    }
+    if (!el) return;
+    const dir = side === 'left' ? 1 : -1;
+    const width = () => el.parentElement.getBoundingClientRect().width;
+    let drag = null;
+    const on = {
+      pointerdown: (e) => {
+        if (this.state.narrow || e.button !== 0) return;
+        e.preventDefault();
+        drag = { x: e.clientX, w: width() };
+        try { el.setPointerCapture(e.pointerId); } catch (err) {}
+        this.setState({ resizing: true });
+      },
+      pointermove: (e) => { if (drag) this.setPanelWidth(side, drag.w + dir * (e.clientX - drag.x), false); },
+      pointerup: () => {
+        if (!drag) return;
+        drag = null;
+        this.setState({ resizing: false });
+        this.setPanelWidth(side, width(), true);
+      },
+      dblclick: () => this.resetPanelWidth(side),
+      keydown: (e) => {
+        const step = e.shiftKey ? 64 : 16;
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+          e.preventDefault(); e.stopPropagation();
+          this.setPanelWidth(side, width() + (e.key === 'ArrowRight' ? step : -step) * dir, true);
+        } else if (e.key === 'Home') { e.preventDefault(); e.stopPropagation(); this.resetPanelWidth(side); }
+      }
+    };
+    on.pointercancel = on.pointerup;
+    Object.keys(on).forEach((ev) => el.addEventListener(ev, on[ev]));
+    if (!Object.keys(this.handles).length) {
+      this._refit = this._refit || (() => this.refitPanels());
+      window.addEventListener('resize', this._refit);
+    }
+    this.handles[side] = { el: el, on: on };
+  }
+  textTone(hex) { return this.state.theme === 'light' ? this.mix(hex, '#000000', 0.4) : hex; }
+  pal() { return this.T.PAL[this.state.theme] || this.T.PAL.dark; }
+  setTheme(t) {
+    this.setState({ theme: t });
+    try {
+      if ((t === 'dark') === this.systemDark()) window.localStorage.removeItem('od-theme');
+      else window.localStorage.setItem('od-theme', t);
+    } catch (e) {}
+  }
+
+  attachCanvas(el) {
+    if (this.canvas === el) return;
+    if (this.canvas) {
+      const c = this.canvas;
+      c.removeEventListener('pointerdown', this._pd);
+      c.removeEventListener('pointermove', this._pm);
+      c.removeEventListener('pointerup', this._pu);
+      c.removeEventListener('pointercancel', this._pu);
+      c.removeEventListener('pointerleave', this._pl);
+      cancelAnimationFrame(this.raf);
+      try { this._mq.removeEventListener('change', this._mqH); } catch (err) {}
+    }
+    this.canvas = el || null;
+    if (!el) return;
+    this.ctx = el.getContext('2d');
+    const p = this.pointer;
+    this._pd = (e) => {
+      if (!this.modeDef().rotatable) return;
+      p.drag = true; p.lx = e.clientX; p.ly = e.clientY;
+      try { el.setPointerCapture(e.pointerId); } catch (err) {}
+      el.style.cursor = 'grabbing';
+    };
+    this._pm = (e) => {
+      const r = el.getBoundingClientRect();
+      p.x = e.clientX - r.left; p.y = e.clientY - r.top; p.inside = true;
+      if (p.drag && this.modeDef().rotatable) {
+        this.cam.yaw += (e.clientX - p.lx) * 0.008;
+        this.cam.pitch = Math.max(-1.45, Math.min(1.45, this.cam.pitch + (e.clientY - p.ly) * 0.008));
+        p.lx = e.clientX; p.ly = e.clientY;
+      }
+    };
+    this._pu = () => { p.drag = false; el.style.cursor = ''; };
+    this._pl = () => { p.inside = false; };
+    el.addEventListener('pointerdown', this._pd);
+    el.addEventListener('pointermove', this._pm);
+    el.addEventListener('pointerup', this._pu);
+    el.addEventListener('pointercancel', this._pu);
+    el.addEventListener('pointerleave', this._pl);
+    try {
+      this._mq = window.matchMedia('(max-width: 1023.98px)');
+      this._mqH = () => this.syncBreakpoint();
+      this._mq.addEventListener('change', this._mqH);
+    } catch (err) {}
+    this.last = 0;
+    this.raf = requestAnimationFrame(this._tick);
+  }
+
+  tick(t) {
+    if (!this.canvas) return;
+    const dt = this.last ? Math.min(0.05, (t - this.last) / 1000) : 0;
+    this.last = t;
+    const st = this.state, m = this.modeDef(), pb = m.playback;
+    if (m.autoSpin && st.spin && !this.pointer.drag) this.cam.yaw += dt * 0.3;
+    if (pb && st.playing) {
+      this.sim.f = Math.min(pb.fmax, this.sim.f + dt * pb.rate * st.speed);
+      if (this.sim.f >= pb.fmax) this.setState({ playing: false, f: this.sim.f });
+      else if (t - (this.lastPush || 0) > 120) { this.lastPush = t; this.setState({ f: this.sim.f }); }
+    }
+    // a broken scene keeps the page alive but is reported once for the browser check
+    try { this.draw(dt, t); } catch (err) { if (!this.drawErr) { this.drawErr = true; console.error(err); } }
+    this.raf = requestAnimationFrame(this._tick);
+  }
+
+  // ---------- math helpers (장면에서 써도 돼요) ----------
+  lerp(a, b, t) { return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t]; }
+  sm(x) { x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x); }
+  rgb(hex) { const n = parseInt(hex.slice(1), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; }
+  mix(hex, to, amt) {
+    const a = this.rgb(hex), b = this.rgb(to);
+    return 'rgb(' + Math.round(a[0] + (b[0] - a[0]) * amt) + ',' + Math.round(a[1] + (b[1] - a[1]) * amt) + ',' + Math.round(a[2] + (b[2] - a[2]) * amt) + ')';
+  }
+  rgba(hex, al) { const a = this.rgb(hex); return 'rgba(' + a[0] + ',' + a[1] + ',' + a[2] + ',' + al + ')'; }
+  shades(hex) {
+    let s = this.colorCache[hex];
+    if (!s) { s = { hi: this.mix(hex, '#FFFFFF', 0.55), mid: hex, lo: this.mix(hex, '#000000', 0.55) }; this.colorCache[hex] = s; }
+    return s;
+  }
+  proj(p, V) {
+    const x = p[0] - V.cx, y = p[1], z = p[2];
+    const x1 = x * V.cy + z * V.sy, z1 = -x * V.sy + z * V.cy;
+    const y2 = y * V.cp - z1 * V.sp, z2 = y * V.sp + z1 * V.cp;
+    const s = V.F / Math.max(2, V.D - z2);
+    return [V.ox + x1 * s, V.oy - y2 * s, z2, s];
+  }
+
+  // ---------- drawing ----------
+  draw(dt, now) {
+    const el = this.canvas, ctx = this.ctx, st = this.state, m = this.modeDef();
+    const dpr = window.devicePixelRatio || 1;
+    const W = el.clientWidth, H = el.clientHeight;
+    if (!W || !H) return;
+    if (el.width !== Math.round(W * dpr) || el.height !== Math.round(H * dpr)) { el.width = Math.round(W * dpr); el.height = Math.round(H * dpr); }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const pal = this.pal();
+    ctx.fillStyle = pal.bg; ctx.fillRect(0, 0, W, H);
+
+    const I = [], O = [];
+    this.buildScene(st.mode, I, O);
+    const scale = Math.min(W / m.fit[0], H / m.fit[1]), D = m.D, z = this.cam.zoom;
+    const V = {
+      cx: this.sim.cx, cy: Math.cos(this.cam.yaw), sy: Math.sin(this.cam.yaw), cp: Math.cos(this.cam.pitch), sp: Math.sin(this.cam.pitch),
+      F: scale * z * D, D: D, ox: W / 2, oy: H / 2 - (m.playback ? 20 : 0)
+    };
+    let zmin = Infinity, zmax = -Infinity;
+    for (const it of I) {
+      it.A = this.proj(it.p, V);
+      if (it.q) { it.B = this.proj(it.q, V); it.z = (it.A[2] + it.B[2]) / 2; } else it.z = it.A[2];
+      if (it.z < zmin) zmin = it.z;
+      if (it.z > zmax) zmax = it.z;
+    }
+    I.sort((a, b) => a.z - b.z);
+    // depth fog; a flat scene (all items at one depth) is drawn without it
+    const span = zmax - zmin;
+    for (const it of I) {
+      const fog = span < 0.01 ? 1 : 0.42 + 0.58 * ((it.z - zmin) / span);
+      ctx.globalAlpha = Math.max(0, (it.a == null ? 1 : it.a) * fog);
+      if (ctx.globalAlpha < 0.01) continue;
+      const x = it.A[0], y = it.A[1], s = it.A[3];
+      if (it.k === 0) {
+        const R = it.r * s;
+        if (R < 0.4) continue;
+        if (it.flat) { ctx.fillStyle = it.c; ctx.beginPath(); ctx.arc(x, y, Math.max(1.3, R), 0, 6.2832); ctx.fill(); }
+        else {
+          const sh = this.shades(it.c);
+          const g = ctx.createRadialGradient(x - R * 0.35, y - R * 0.4, R * 0.1, x, y, R);
+          g.addColorStop(0, sh.hi); g.addColorStop(0.5, sh.mid); g.addColorStop(1, sh.lo);
+          ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, R, 0, 6.2832); ctx.fill();
+        }
+      } else if (it.k === 1) {
+        const lw = Math.max(1, it.w * (s + it.B[3]) / 2);
+        ctx.lineCap = it.flat ? 'butt' : 'round';
+        if (it.rod) {
+          ctx.strokeStyle = this.shades(it.c).lo; ctx.lineWidth = lw + 2;
+          ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(it.B[0], it.B[1]); ctx.stroke();
+        }
+        ctx.strokeStyle = it.c; ctx.lineWidth = lw;
+        ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(it.B[0], it.B[1]); ctx.stroke();
+      } else if (it.k === 3) {
+        const fs = Math.max(8, Math.min(14, it.size * s / (scale * z) * 1.05));
+        ctx.font = '700 ' + fs + 'px "Pretendard", system-ui, sans-serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillStyle = it.c; ctx.fillText(it.text, x, y + 0.5);
+      } else if (it.k === 4) {
+        const ang = Math.atan2(it.B[1] - y, it.B[0] - x), mx = (x + it.B[0]) / 2, my = (y + it.B[1]) / 2, r = 6;
+        ctx.fillStyle = it.c; ctx.beginPath();
+        ctx.moveTo(mx + Math.cos(ang) * r, my + Math.sin(ang) * r);
+        ctx.lineTo(mx + Math.cos(ang + 2.5) * r, my + Math.sin(ang + 2.5) * r);
+        ctx.lineTo(mx + Math.cos(ang - 2.5) * r, my + Math.sin(ang - 2.5) * r);
+        ctx.closePath(); ctx.fill();
+      } else if (it.k === 5) {
+        // lit translucent sphere, highlight up-left like the solid spheres
+        const R = it.r * s, ba = pal.blobAlpha == null ? 0.3 : pal.blobAlpha;
+        const g = ctx.createRadialGradient(x - R * 0.35, y - R * 0.4, R * 0.1, x, y, R);
+        g.addColorStop(0, 'rgba(255,255,255,0.55)'); g.addColorStop(0.3, this.rgba(it.c, Math.min(1, ba + 0.15))); g.addColorStop(1, this.rgba(it.c, 0.18));
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, R, 0, 6.2832); ctx.fill();
+        ctx.strokeStyle = it.c; ctx.lineWidth = it.focus ? 3 : 1.5; ctx.stroke();
+      }
+    }
+    ctx.globalAlpha = 1;
+    for (const o of O) this.drawOverlay(o, V, now);
+  }
+
+  drawOverlay(o, V, now) {
+    const ctx = this.ctx, A = this.proj(o.p, V), pal = this.pal();
+    if (o.t === 'ring') {
+      const r = Math.max(6, 0.32 * A[3]) * (1 + (this.reduceMotion ? 0 : 0.15 * Math.sin((now || 0) / 160)));
+      ctx.globalAlpha = 1; ctx.strokeStyle = pal.ring; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(A[0], A[1], r, 0, 6.2832); ctx.stroke();
+      ctx.font = '600 11px "Pretendard", system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillStyle = pal.ring; ctx.fillText(o.text, A[0], A[1] + r + 10);
+      return;
+    }
+    const size = o.size || 12, x = A[0] + (o.dx || 0), y = A[1] + (o.dy || 0);
+    ctx.font = '600 ' + size + 'px "Pretendard", system-ui, sans-serif';
+    const tw = ctx.measureText(o.text).width, w = tw + 14, h = size + 10;
+    ctx.globalAlpha = o.a == null ? 1 : o.a;
+    if (o.lead) {
+      ctx.strokeStyle = this.rgba(o.c, 0.6); ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(A[0], A[1]); ctx.lineTo(x, y); ctx.stroke();
+    }
+    ctx.fillStyle = pal.labelBg;
+    ctx.strokeStyle = this.rgba(o.c, 0.55); ctx.lineWidth = 1;
+    ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(x - w / 2, y - h / 2, w, h, 6); else ctx.rect(x - w / 2, y - h / 2, w, h);
+    ctx.fill(); ctx.stroke();
+    ctx.fillStyle = pal.ink; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(o.text, x, y + 0.5);
+    ctx.globalAlpha = 1;
+  }
+
+  setMode(mode) {
+    this.cam = Object.assign({}, this.modeDef(mode).cam);
+    this.sim.f = 0;
+    this.pointer.drag = false;
+    this.setState({ mode: mode, f: 0, playing: false, step: -1 });
+  }
+
+  pickStep(i) {
+    const s = (this.T.STEPS || [])[i];
+    if (!s) return;
+    if (s.mode !== this.state.mode) this.setMode(s.mode);
+    if (s.f != null) this.sim.f = s.f;
+    this.setState({ f: this.sim.f, playing: false, step: i });
+  }
+
+  renderVals() {
+    const st = this.state, T = this.T, m = this.modeDef(), pb = m.playback;
+    const tg = T.TOGGLES ? (Array.isArray(T.TOGGLES) ? T.TOGGLES : (T.TOGGLES[st.mode] || [])) : [];
+    const togDefs = tg.concat(m.autoSpin ? [['spin', '자동 회전']] : []);
+    const toggles = togDefs.map((d) => ({
+      label: d[1], pressed: st[d[0]] ? 'true' : 'false',
+      toggle: () => { const o = {}; o[d[0]] = !st[d[0]]; this.setState(o); }
+    }));
+    const STEPS = T.STEPS || [];
+    const steps = STEPS.map((s, i) => ({ s: s, i: i })).filter((x) => x.s.mode === st.mode).map((x, k) => ({
+      num: k + 1, title: x.s.title, who: x.s.who, c: x.s.c, pressed: st.step === x.i ? 'true' : 'false',
+      pick: () => this.pickStep(x.i)
+    }));
+    const speeds = [0.5, 1, 2].map((v) => ({
+      label: v + '×', pressed: st.speed === v ? 'true' : 'false',
+      pick: () => this.setState({ speed: v })
+    }));
+    const is = {};
+    T.MODES.forEach((d) => { is[d.key] = d.key === st.mode; });
+    const f = st.f;
+    const isDark = st.theme === 'dark';
+    const leftOn = st.narrow ? st.drawer === 'left' : st.leftOpen, rightOn = st.narrow ? st.drawer === 'right' : st.rightOpen;
+    return Object.assign({
+      th: this.K.THEMES[st.theme], isDark: isDark, isLight: !isDark,
+      themeLabel: isDark ? '라이트 모드로 전환' : '다크 모드로 전환',
+      toggleTheme: () => this.setTheme(isDark ? 'light' : 'dark'),
+      canvasRef: this._canvasRef, canvasCls: m.rotatable ? '' : 'is-fixed',
+      hasModes: T.MODES.length > 1, is: is,
+      modes: T.MODES.map((d) => ({ label: d.label, pressed: d.key === st.mode ? 'true' : 'false', pick: () => { if (d.key !== this.state.mode) this.setMode(d.key); } })),
+      leftCls: leftOn ? 'is-open' : '', rightCls: rightOn ? 'is-open' : '',
+      leftExpanded: leftOn ? 'true' : 'false', rightExpanded: rightOn ? 'true' : 'false',
+      scrimCls: (st.narrow && st.drawer) ? 'is-on' : '',
+      toggleLeft: () => this.togglePanel('left'),
+      toggleRight: () => this.togglePanel('right'),
+      closePanels: () => this.setState({ drawer: null }),
+      layoutStyle: ((st.leftW ? '--pl-user: ' + st.leftW + 'px; ' : '') + (st.rightW ? '--pr-user: ' + st.rightW + 'px;' : '')).trim(),
+      layoutCls: st.resizing ? 'is-resizing' : '',
+      leftWNow: st.leftW ? String(st.leftW) : '', rightWNow: st.rightW ? String(st.rightW) : '',
+      leftHandleRef: this._handleRefL, rightHandleRef: this._handleRefR,
+      onKey: (e) => { if (e.key === 'Escape' && this.state.narrow && this.state.drawer) this.setState({ drawer: null }); },
+      hasToggles: toggles.length > 0, toggles: toggles,
+      hasSteps: steps.length > 0, steps: steps,
+      hasStep: st.step >= 0 && st.step < STEPS.length, stepDetail: st.step >= 0 && STEPS[st.step] ? STEPS[st.step].text : '',
+      mistakes: (T.MISTAKES && T.MISTAKES[st.mode]) || [],
+      canvasLabel: m.canvasLabel(f),
+      zoomIn: () => { this.cam.zoom = Math.min(3, this.cam.zoom * 1.2); },
+      zoomOut: () => { this.cam.zoom = Math.max(0.5, this.cam.zoom / 1.2); },
+      resetView: () => { this.cam = Object.assign({}, m.cam); },
+      hasPlayback: !!pb, isPlaying: st.playing, notPlaying: !st.playing, playLabel: st.playing ? '일시정지' : '재생',
+      togglePlay: () => {
+        if (!pb) return;
+        if (!st.playing && this.sim.f >= pb.fmax) this.sim.f = 0;
+        this.setState({ playing: !st.playing, step: -1, f: this.sim.f });
+      },
+      fInt: Math.round(f * 10), fLabel: pb ? pb.label(f) : '', fMax10: pb ? Math.round(pb.fmax * 10) : 0,
+      onScrub: (e) => { const v = Number(e.target.value) / 10; this.sim.f = v; this.setState({ f: v, playing: false, step: -1 }); },
+      speeds: speeds
+    }, this.extraVals(st));
+  }
+}
+</script>
+</body>
+</html>

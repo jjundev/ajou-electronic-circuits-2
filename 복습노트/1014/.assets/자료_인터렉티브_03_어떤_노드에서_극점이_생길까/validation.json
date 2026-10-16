@@ -1,0 +1,183 @@
+{
+  "source_sha256": "f0f5fd9924005e1ce402c4d9ec1613b434da0cbd46f432e87c7774138f0eab5c",
+  "machine": {
+    "status": "pass",
+    "evidence": [
+      "check.cjs ok",
+      "steps.cjs 6 stages",
+      "node --test 119 passed 0 failed"
+    ]
+  },
+  "content": {
+    "status": "pass",
+    "evidence": [
+      "Read actual STT 1014 Part05 lines 225-313 and Part06 lines 314-375: source resistance is prior-stage output impedance; independent input/output RC factors; deactivated voltage source gives input Req=RS; output Req=RD with ro neglected.",
+      "Read note s1-bode, s2-cs-two-poles, s2-node-rule: -20 dB/dec per pole; pole magnitude differs from negative s-plane pole; omega=1/RC and f=omega/(2pi).",
+      "Visually inspected slide9.png: grounded-source MOS, Cin from X to ground; RD to AC-ground VDD and CL to ground; two pole magnitude and gain formulas agree.",
+      "Reviewed controlled current source downward orientation, input gate-current-zero, no Cgd/body/clipping; CS inversion; source-off circuit retains dependent source with vx=0.",
+      "Reviewed X/Xprime same wire, A independent source node, Y output, all AC grounds; ideal RS=0 removes independent input degree while Cin remains. Supplemental ideal-source/direct-wire claims clearly marked textbook supplement.",
+      "Source-off numeric response explicitly remains active-source transfer; mode-dependent sourceInfo now describes active-source Bode correctly.",
+      "No waveform mode in topic; waveform-axis checks not applicable.",
+      "Final ideal Bode geometry independently asserted: Cin retained, all input link segments horizontal, full wire reaches Cin node; active-source sourceInfo consistent despite kill flag."
+    ],
+    "browser": "not_run; parent responsible"
+  },
+  "numeric_independent": {
+    "status": "pass",
+    "checks": 968,
+    "states": 105,
+    "method": "Explicit complex division; bisection half-power bandwidth; direct pole asymptote sum; no FM used for expected values",
+    "examples": [
+      {
+        "label": "default",
+        "omega": 100000000.00000001,
+        "mag": 9.949874420815572,
+        "db": 19.956351989404947,
+        "f3db": 157601880.52920198,
+        "slope": 0
+      },
+      {
+        "label": "preset 0",
+        "omega": 100000000.00000001,
+        "mag": 9.949874420815572,
+        "db": 19.956351989404947,
+        "f3db": 157601880.52920198,
+        "slope": 0
+      },
+      {
+        "label": "preset 1",
+        "omega": 100000000.00000001,
+        "mag": 9.95037190209989,
+        "db": 19.956786262173573,
+        "f3db": 159154943.09189537,
+        "slope": 0
+      },
+      {
+        "label": "preset 2",
+        "omega": 999999999.9999999,
+        "mag": 5.000000000000001,
+        "db": 13.979400086720377,
+        "f3db": 102431206.6954589,
+        "slope": -40
+      },
+      {
+        "label": "preset 3",
+        "omega": 100000000,
+        "mag": 7.069654022425801,
+        "db": 16.98796321277554,
+        "f3db": 15909134.469019128,
+        "slope": -20
+      }
+    ],
+    "source_sha256": {
+      "/private/var/folders/t7/zhvnpb1j4tb2pszpcnhlnt2h0000gn/T/ec2-nodes-1014-yia0g674/nodes/Main.dc.html": "f0f5fd9924005e1ce402c4d9ec1613b434da0cbd46f432e87c7774138f0eab5c",
+      "/private/var/folders/t7/zhvnpb1j4tb2pszpcnhlnt2h0000gn/T/ec2-nodes-1014-yia0g674/nodes/brief.md": "e775ec2a9855e6458011377ad3d86a4ba00487db6783ece44fc26f9cf075517a",
+      "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/STT/1014 전회2.md": "a61da38f293a381fd0d9508f34099a7ecd7ba94a8a30a46c6eb217ebe76c4d72",
+      "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/복습노트/1014/.assets/정리노트_1014_Frequency_Response.md": "1bc3a8f873a77ca53a56b59a67ea0e01df6f2e46966b9b5ed6f7996ccf6bf21a",
+      "/private/var/folders/t7/zhvnpb1j4tb2pszpcnhlnt2h0000gn/T/ec2-nodes-1014-yia0g674/slide9.png": "ef24a75d7bb402bf91fd93fd6806eab94b475910508d38f929fb6b44b06f4c61",
+      "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.agents/skills/ec2-interactive/references/circuit-verification.md": "be6eee8ab7c216d5106c53cea4acbeb88edb49d24f6abf45d92177ac37dff60f"
+    }
+  },
+  "browser": {
+    "status": "pass",
+    "pass": true,
+    "errors": [],
+    "checks": [
+      "select 같은 도선 X′",
+      "select 출력 Y",
+      "select 전압원 A",
+      "select AC 접지",
+      "select 입력 X",
+      "all 4 slider endpoints via keyboard",
+      "preset 기본 · 두 RC",
+      "preset 입력 pole 먼저",
+      "preset 극점 겹침",
+      "preset 이상적 구동 · R_S=0",
+      "preset 저항 구동으로 복귀",
+      "panel widths keyboard, zoom/reset",
+      "mobile-light.png drawers + Escape",
+      "mobile-dark.png drawers + Escape"
+    ],
+    "shots": [
+      "desktop-light.png",
+      "desktop-dark.png",
+      "mobile-light.png",
+      "mobile-dark.png"
+    ],
+    "playback": "not applicable: both inspection modes use no playback",
+    "source_sha256": "f0f5fd9924005e1ce402c4d9ec1613b434da0cbd46f432e87c7774138f0eab5c"
+  },
+  "assumptions": [
+    "CS independent RC model; ro infinite; gm=5mS, RD=2kΩ",
+    "Cgd/body/clipping excluded",
+    "source-off is node Req view only"
+  ],
+  "supplements": [
+    "same-wire node identity",
+    "ideal voltage source RS=0 limit"
+  ],
+  "findings": [
+    {
+      "severity": "Important",
+      "status": "fixed",
+      "issue": "Ideal Bode originally removed Cin although node view explicitly retained it.",
+      "resolution": "Bode keeps the two-branch physical topology, RS=0, while response is single-output-RC."
+    },
+    {
+      "severity": "Important",
+      "status": "fixed",
+      "issue": "Source-off message persisted into active-source Bode diagram.",
+      "resolution": "sourceInfo now explicitly scopes kill to node Req view."
+    },
+    {
+      "severity": "Important",
+      "status": "fixed",
+      "issue": "Ideal Bode replacement wire initially left the last diagonal RS lead and ended before capacitor node.",
+      "resolution": "Removed all original resistor segments and last diagonal lead; replacement horizontal wire joins x=-5.4 to -2.5 at y=4.8; RS=0 label shown. independent-scene-check.cjs passed on final file."
+    }
+  ],
+  "design_detector": {
+    "status": "reviewed",
+    "warnings": "3 existing shell padding warnings: seg/stage/speeds; shell retained per skill"
+  },
+  "visual_review": {
+    "status": "pass",
+    "method": "Independent view_image inspection of five parent browser screenshots. No browser control performed by reviewer.",
+    "screenshots_sha256": {
+      "desktop-light.png": "517facd43a368dbe1a00cb5d835d9d6adefc48af158179dc6a865810a04af1d1",
+      "desktop-dark.png": "a9753e6dd796a8ee12050c96a5be24769365268feabd2ef05a084e6b94f4255b",
+      "mobile-light.png": "4b8081b3ff323ac618b64da2188e3d8f76ca4185fbd4d7750d5e567ef485c3af",
+      "mobile-dark.png": "f44df24e86510d1787ff5720838f310626ec6481c87b59280bead971f9a1a93e",
+      "ideal-bode.png": "7e5766f6b85bec49db63735345b7c5884a4391fa293a3ae3a885ca7a346a7bd5"
+    },
+    "evidence": [
+      "Desktop light/dark: node X and Xprime on a shared blue wire; output separate in red; explanatory hierarchy and numeric panel visible; no clipping or overlap.",
+      "Mobile light/dark: circuit labels Cin, CL, RD and gm vX remain separate; text explains same-wire equivalence and pole count; blue/red on white or dark backgrounds remain visually distinct. Mobile top toolbar and zoom buttons do not cover circuit.",
+      "Ideal Bode: RS=0 is a continuous horizontal wire to X/Cin; Cin visibly remains; single output pole curve and zero current asymptotic slope agree with panel and explanatory model scope.",
+      "Main learning objective is immediately visible in central same-wire diagram and same-node statement."
+    ]
+  },
+  "saved_browser": {
+    "status": "pass",
+    "links": 2,
+    "sourceNoteRetained": true,
+    "popupErrors": []
+  },
+  "preservation": {
+    "note_byte_equivalent_after_removing_2_links": true,
+    "protected_files_unchanged": 56
+  },
+  "note_links": {
+    "added": 2,
+    "updated": 0,
+    "skipped": 0,
+    "rerun_changed": false,
+    "sections": [
+      "s1-bode",
+      "s2-node-rule"
+    ]
+  },
+  "run": "/var/folders/t7/zhvnpb1j4tb2pszpcnhlnt2h0000gn/T/ec2-nodes-1014-yia0g674",
+  "note_backup": "/var/folders/t7/zhvnpb1j4tb2pszpcnhlnt2h0000gn/T/ec2-nodes-1014-yia0g674/note-backup.html",
+  "saved_html_sha256": "40ceec46c3c6034e7475b8b9c36e5ebe83577c72db2091e29283f795ef22f0a1"
+}
