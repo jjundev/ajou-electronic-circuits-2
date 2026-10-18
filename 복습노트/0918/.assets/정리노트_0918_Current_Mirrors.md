@@ -66,8 +66,10 @@ $$
 **3. 핵심 아이디어.** 전압을 정하지 말고 믿을 만한 기준 전류 $I_{REF}$ 하나를 만든 뒤, 다이오드 연결 소자가 찾아낸 $V_{GS}$를 다른 소자에 그대로 걸어 전류를 크기 비만큼 복사해요.
 
 $$
-I_{copy} = \frac{(W/L)_1}{(W/L)_{REF}} I_{REF}
+I_{copy} : I_{REF} = (W/L)_1 : (W/L)_{REF}
 $$
+
+$\Rightarrow\ I_{copy}=\dfrac{(W/L)_1}{(W/L)_{REF}}\,I_{REF}$
 
 $\mu_n$과 $V_{TH}$가 식에서 지워지는 과정은 [2. MOS 전류 미러의 식](#s0-mos-mirror), 바이폴라 버전은 [7. 바이폴라 전류 미러의 식](#s2-bjt-mirror)에 있어요.
 
@@ -140,8 +142,10 @@ $$
 - 복사 전류
 
   $$
-  I_{copy} = \frac{(W/L)_1}{(W/L)_{REF}} I_{REF}
+  I_{copy} : I_{REF} = (W/L)_1 : (W/L)_{REF}
   $$
+
+  $\Rightarrow\ I_{copy}=\dfrac{(W/L)_1}{(W/L)_{REF}}\,I_{REF}$
 - 차동 신호
 
   $$
@@ -254,11 +258,13 @@ $$
    $$
    I_{copy}=\frac{1}{2}\mu_n C_{ox}\left(\frac{W}{L}\right)_1(V_X-V_{TH})^2
    $$
-5. 두 식을 나누면 $\frac{1}{2}\mu_n C_{ox}(V_X-V_{TH})^2$이 지워져요($V_{TH}$는 두 소자가 같다고 봐요).
+5. 두 식의 비를 쓰면 $\frac{1}{2}\mu_n C_{ox}(V_X-V_{TH})^2$이 지워져요($V_{TH}$는 두 소자가 같다고 봐요).
 
    $$
-   I_{copy} = \frac{(W/L)_1}{(W/L)_{REF}} I_{REF}
+   I_{copy} : I_{REF} = (W/L)_1 : (W/L)_{REF}
    $$
+
+   $\Rightarrow\ I_{copy}=\dfrac{(W/L)_1}{(W/L)_{REF}}\,I_{REF}$
 
 - 복사 비율은 두 소자의 크기 비, 곧 aspect ratio $W/L$의 비로만 정해져요. $\mu_n$과 $V_{TH}$가 식에서 사라지므로 온도에 따른 변화가 따라오지 않아요.
 - 1:1이면 $I_{copy}=I_{REF}$예요. $M_1$을 10배로 키우면 전류도 10배, $M_{REF}$를 10배로 키우면 1/10이 돼요.
@@ -285,8 +291,10 @@ $I_{REF}$가 일정하면 $I_{copy}$도 일정하지만, $V_{GS}$까지 일정�
 - 복사 전류
 
   $$
-  I_{copy} = \frac{(W/L)_1}{(W/L)_{REF}} I_{REF}
+  I_{copy} : I_{REF} = (W/L)_1 : (W/L)_{REF}
   $$
+
+  $\Rightarrow\ I_{copy}=\dfrac{(W/L)_1}{(W/L)_{REF}}\,I_{REF}$
 
 *용어*
 
@@ -407,10 +415,14 @@ $$
    $$
    I_{copy}=\frac{1}{2}\mu_n C_{ox}\left(\frac{W}{L}\right)_1(V_{GS}-V_{TH})^2(1+\lambda V_{DS1})
    $$
-3. 두 식을 나누면:
+3. 두 식의 비를 쓰면:
 
    $$
-   I_{copy}=\frac{(W/L)_1}{(W/L)_{REF}}\cdot\frac{1 + \lambda V_{DS1}}{1 + \lambda V_{DS,REF}}\,I_{REF}
+   \begin{aligned}I_{copy} : I_{REF} &= (W/L)_1(1+\lambda V_{DS1})\\ &\quad : (W/L)_{REF}(1+\lambda V_{DS,REF})\end{aligned}
+   $$
+
+   $$
+   \Rightarrow\ I_{copy}=\dfrac{(W/L)_1}{(W/L)_{REF}}\cdot\dfrac{1+\lambda V_{DS1}}{1+\lambda V_{DS,REF}}\,I_{REF}
    $$
 
 $V_{DS1}$은 $M_1$의 드레인에 달린 회로가 정하므로 보통 $V_{DS,REF}$와 달라요. 뒤의 비율만큼 복사 오차가 생겨요.
@@ -475,11 +487,11 @@ $V_{DS1}$과 $V_{DS,REF}$가 다르면 채널 길이 변조만큼 복사 오차�
 - λ를 넣은 복사 전류
 
   $$
-  I_{copy}=\frac{(W/L)_1}{(W/L)_{REF}}
+  \begin{aligned}I_{copy} : I_{REF} &= (W/L)_1(1+\lambda V_{DS1})\\ &\quad : (W/L)_{REF}(1+\lambda V_{DS,REF})\end{aligned}
   $$
 
   $$
-  \cdot\frac{1 + \lambda V_{DS1}}{1 + \lambda V_{DS,REF}}\,I_{REF}
+  \Rightarrow\ I_{copy}=\dfrac{(W/L)_1}{(W/L)_{REF}}\cdot\dfrac{1+\lambda V_{DS1}}{1+\lambda V_{DS,REF}}\,I_{REF}
   $$
 - 수업 수치 예
 
@@ -539,8 +551,10 @@ $V_{DS1}$과 $V_{DS,REF}$가 다르면 채널 길이 변조만큼 복사 오차�
 복사 전류는 [2. MOS 전류 미러의 식](#s0-mos-mirror)을 그대로 써요.
 
 $$
-I_{copy}=\dfrac{(W/L)_1}{(W/L)_{REF}}\,I_{REF}
+I_{copy} : I_{REF} = (W/L)_1 : (W/L)_{REF}
 $$
+
+$\Rightarrow\ I_{copy}=\dfrac{(W/L)_1}{(W/L)_{REF}}\,I_{REF}$
 
 1. 주어진 값: $I_{REF}=0.3$ mA, $M_{REF}=3(W/L)$, $M_{I1}=2(W/L)$, $M_{I2}=5(W/L)$
 2. $I_1=\dfrac{2}{3}\times 0.3\ \text{mA}=0.2\ \text{mA}$
@@ -583,8 +597,10 @@ $$
 - 복사 전류
 
   $$
-  I_{copy}=\dfrac{(W/L)_1}{(W/L)_{REF}}\,I_{REF}
+  I_{copy} : I_{REF} = (W/L)_1 : (W/L)_{REF}
   $$
+
+  $\Rightarrow\ I_{copy}=\dfrac{(W/L)_1}{(W/L)_{REF}}\,I_{REF}$
 - 팔로워 바이어스
 
   $$
@@ -624,7 +640,7 @@ NMOS CS 증폭기의 부하로 PMOS 전류원(능동 부하, active load)을 쓰
 - 기준 소자도 같은 PMOS여야 해요. NMOS와 PMOS는 이동도 같은 소자 특성이 달라서 서로 섞어 미러를 만들면 안 돼요.
 - 두 PMOS의 소스를 모두 $V_{DD}$에 붙이고 게이트를 묶으면 $|V_{GS}|$가 같아져요.
 - 기준 쪽 PMOS는 게이트와 드레인을 묶어 다이오드 연결로 만들어요. 그래야 게이트가 플로팅되지 않아요.
-- 채널 길이 변조를 무시하면 식은 NMOS 미러와 같은 꼴이에요: $I_{copy}=\dfrac{(W/L)_{P1}}{(W/L)_{P,REF}}\,I_{REF}$
+- 채널 길이 변조를 무시하면 식은 NMOS 미러와 같은 꼴이에요: $I_{copy} : I_{REF} = (W/L)_{P1} : (W/L)_{P,REF}$
 
 두 미러가 만드는 전류의 방향이 달라요.
 
@@ -646,7 +662,15 @@ PMOS 미러의 기준 전류는 이렇게 만들어요.
 두 번 복사하므로 크기비도 두 번 곱해져요.
 
 $$
-I_{P1}=\dfrac{(W/L)_{N1}}{(W/L)_{REF}}\cdot\dfrac{(W/L)_{P1}}{(W/L)_{P,REF}}\,I_{REF}
+I_{N1} : I_{REF} = (W/L)_{N1} : (W/L)_{REF}
+$$
+
+$$
+I_{P1} : I_{N1} = (W/L)_{P1} : (W/L)_{P,REF}
+$$
+
+$$
+\Rightarrow\ I_{P1}=\dfrac{(W/L)_{N1}}{(W/L)_{REF}}\cdot\dfrac{(W/L)_{P1}}{(W/L)_{P,REF}}\,I_{REF}
 $$
 
 슬라이드 28의 회로는 한 기준 전류로 네 단을 바이어스해요.
@@ -673,16 +697,22 @@ PMOS 미러는 전원에서 노드로 전류를 넣고, 그 기준 전류는 NMO
 - PMOS 미러
 
   $$
-  I_{copy}=\dfrac{(W/L)_{P1}}{(W/L)_{P,REF}}\,I_{REF}
+  I_{copy} : I_{REF} = (W/L)_{P1} : (W/L)_{P,REF}
   $$
+
+  $\Rightarrow\ I_{copy}=\dfrac{(W/L)_{P1}}{(W/L)_{P,REF}}\,I_{REF}$
 - 두 번 복사
 
   $$
-  I_{P1}=\dfrac{(W/L)_{N1}}{(W/L)_{REF}}
+  I_{N1} : I_{REF} = (W/L)_{N1} : (W/L)_{REF}
   $$
 
   $$
-  \cdot\dfrac{(W/L)_{P1}}{(W/L)_{P,REF}}\,I_{REF}
+  I_{P1} : I_{N1} = (W/L)_{P1} : (W/L)_{P,REF}
+  $$
+
+  $$
+  \Rightarrow\ I_{P1}=\dfrac{(W/L)_{N1}}{(W/L)_{REF}}\cdot\dfrac{(W/L)_{P1}}{(W/L)_{P,REF}}\,I_{REF}
   $$
 
 *용어*
@@ -729,8 +759,10 @@ $Q_{REF}$의 베이스와 컬렉터를 묶어 다이오드 연결(diode-connecte
 2. 복사 쪽: $I_{copy} = I_{S1}\exp\dfrac{V_X}{V_T}$
 3. 두 식을 나누면 $\exp(V_X/V_T)$가 지워져요.
 4. $$
-   I_{copy} = \frac{I_{S1}}{I_{S,REF}} I_{REF}
+   I_{copy} : I_{REF} = I_{S1} : I_{S,REF}
    $$
+
+   $\Rightarrow\ I_{copy}=\dfrac{I_{S1}}{I_{S,REF}}\,I_{REF}$
 
 $I_S$는 상수이지만 트랜지스터 크기로 정해지는 상수예요. 주로 이미터 면적(emitter area) $A_E$에 비례해요.
 
@@ -761,8 +793,10 @@ MOS 미러와 마찬가지로, $I_{REF}$가 온도와 전원에 무관하면 $I_
 - 바이폴라 미러
 
   $$
-  I_{copy} = \frac{I_{S1}}{I_{S,REF}} I_{REF}
+  I_{copy} : I_{REF} = I_{S1} : I_{S,REF}
   $$
+
+  $\Rightarrow\ I_{copy}=\dfrac{I_{S1}}{I_{S,REF}}\,I_{REF}$
 - 미러 조건
 
   $$
@@ -818,7 +852,7 @@ $\beta$가 100 정도이면 베이스 전류 하나는 컬렉터 전류의 약 1
 - $Q_1$의 $V_{CE1}$은 출력 쪽 회로가 정하므로 보통 이 값과 달라요.
 - 컬렉터 전압이 다르면 MOS의 채널 길이 변조와 같은 오차가 생겨요([4. 채널 길이 변조가 만드는 복사 오차](#s0-lambda)).
 
-두 오차 모두 손계산에서는 무시해요. $I_{copy} = \frac{I_{S1}}{I_{S,REF}} I_{REF}$는 베이스 전류와 Early 효과를 무시했을 때 성립하는 식이에요.
+두 오차 모두 손계산에서는 무시해요. $I_{copy} : I_{REF} = I_{S1} : I_{S,REF}$는 베이스 전류와 Early 효과를 무시했을 때 성립하는 식이에요.
 
 **교수님 말씀**
 
@@ -985,12 +1019,16 @@ $Q_{REF}$의 베이스와 컬렉터를 묶는 이유는 베이스가 플로팅(f
 베이스 전류를 무시하면 두 번의 복사가 곱으로 이어져요.
 
 $$
-I_{C,M} = \frac{I_{S,M}}{I_{S,REF1}} I_{REF}
+I_{C,M} : I_{REF} = I_{S,M} : I_{S,REF1}
 $$
 
+$\Rightarrow\ I_{C,M}=\dfrac{I_{S,M}}{I_{S,REF1}}\,I_{REF}$
+
 $$
-|I_{C2}| = \frac{I_{S2}}{I_{S,REF2}} I_{C,M}
+|I_{C2}| : I_{C,M} = I_{S2} : I_{S,REF2}
 $$
+
+$\Rightarrow\ |I_{C2}|=\dfrac{I_{S2}}{I_{S,REF2}}\,I_{C,M}$
 
 이렇게 기준 전류원 하나로 NPN 미러와 PNP 미러 모두에 전류를 공급해요.
 
@@ -1013,13 +1051,17 @@ PNP 미러의 기준 전류는 NPN 미러가 기존 $I_{REF}$를 복사해 끌�
 - NPN 미러
 
   $$
-  I_{C,M} = \frac{I_{S,M}}{I_{S,REF1}} I_{REF}
+  I_{C,M} : I_{REF} = I_{S,M} : I_{S,REF1}
   $$
+
+  $\Rightarrow\ I_{C,M}=\dfrac{I_{S,M}}{I_{S,REF1}}\,I_{REF}$
 - PNP 미러
 
   $$
-  |I_{C2}| = \frac{I_{S2}}{I_{S,REF2}} I_{C,M}
+  |I_{C2}| : I_{C,M} = I_{S2} : I_{S,REF2}
   $$
+
+  $\Rightarrow\ |I_{C2}|=\dfrac{I_{S2}}{I_{S,REF2}}\,I_{C,M}$
 
 *용어*
 
@@ -1208,11 +1250,11 @@ AC 접지는 소신호 전압 변화가 0인 노드이며, 바이어스 소자�
 
 | 이름 | 식 | 쓰는 곳 · 조건 |
 |---|---|---|
-| MOS 미러 | $I_{copy} = \frac{(W/L)_1}{(W/L)_{REF}} I_{REF}$ | 포화 영역, $V_{GS,REF}=V_{GS1}$일 때. [MOS 전류 미러의 식](#s0-mos-mirror) |
-| λ 오차 | $I_{copy} = \frac{(W/L)_1}{(W/L)_{REF}} \cdot \frac{1 + \lambda V_{DS1}}{1 + \lambda V_{DS,REF}} I_{REF}$ | $V_{DS1}$을 $V_{DS,REF}$에 맞추면 오차가 줄어요. 손계산에서는 무시해요. [채널 길이 변조가 만드는 복사 오차](#s0-lambda) |
+| MOS 미러 | $I_{copy} : I_{REF} = (W/L)_1 : (W/L)_{REF}$<br>$\Rightarrow\ I_{copy}=\dfrac{(W/L)_1}{(W/L)_{REF}}\,I_{REF}$ | 포화 영역, $V_{GS,REF}=V_{GS1}$일 때. [MOS 전류 미러의 식](#s0-mos-mirror) |
+| λ 오차 | $I_{copy} : I_{REF} = (W/L)_1(1+\lambda V_{DS1}) : (W/L)_{REF}(1+\lambda V_{DS,REF})$<br>$\Rightarrow\ I_{copy}=\dfrac{(W/L)_1}{(W/L)_{REF}}\cdot\dfrac{1+\lambda V_{DS1}}{1+\lambda V_{DS,REF}}\,I_{REF}$ | $V_{DS1}$을 $V_{DS,REF}$에 맞추면 오차가 줄어요. 손계산에서는 무시해요. [채널 길이 변조가 만드는 복사 오차](#s0-lambda) |
 | 스케일링 예 | $I_1 = \frac{2}{3} \times 0.3 = 0.2\ \text{mA}$ $I_2 = \frac{5}{3} \times 0.3 = 0.5\ \text{mA}$ | $I_{REF}=0.3$ mA, 크기 3 : 2 : 5. [소스 팔로워·CS 단 바이어스와 전류 스케일링](#s1-follower-scaling) |
 | 팔로워 출력 | $R_{out} \approx 1/g_m$ | 소스 팔로워(전압 버퍼)의 출력저항. 다이오드 연결 소자도 저항 $1/g_m$이에요. |
-| BJT 미러 | $I_{copy} = \frac{I_{S1}}{I_{S,REF}} I_{REF}$ | 활성 영역, $V_{BE,REF}=V_{BE1}$. $I_S$는 이미터 면적에 비례해요. [바이폴라 전류 미러의 식](#s2-bjt-mirror) |
+| BJT 미러 | $I_{copy} : I_{REF} = I_{S1} : I_{S,REF}$<br>$\Rightarrow\ I_{copy}=\dfrac{I_{S1}}{I_{S,REF}}\,I_{REF}$ | 활성 영역, $V_{BE,REF}=V_{BE1}$. $I_S$는 이미터 면적에 비례해요. [바이폴라 전류 미러의 식](#s2-bjt-mirror) |
 | 베이스 전류 | $I_B = I_C/\beta$ $I_{copy} = \frac{I_{REF}}{1 + 2/\beta}$ | 1:1 BJT 미러. $\beta \approx 100$이면 베이스 전류 하나가 약 1%, 1:1 미러에서 합친 오차 약 2%($\beta=100$)라 손계산에서는 무시해요. [베이스 전류가 만드는 오차](#s2-base-current) |
 | 병렬 스케일링 | $I_{copy} = 3 I_{REF}$ $I_{copy} = \frac{1}{3} I_{REF}$ | 같은 소자를 복사 쪽에 3개 병렬로 두면 3배, 기준 쪽에 3개 병렬로 두면 1/3이에요. [병렬 연결로 배수·분수 전류 만들기](#s2-scaling) |
 | PNP 기준 전류 | $I_{C,M} = I_{REF}$ | NPN 미러(1:1)로 $I_{REF}$를 복사해 $Q_{REF2}$에서 끌어내요. PNP 미러는 $\vert V_{EB}\vert $가 같아요. [PNP 전류 미러의 기준 전류 만들기](#s2-pnp-iref) |
