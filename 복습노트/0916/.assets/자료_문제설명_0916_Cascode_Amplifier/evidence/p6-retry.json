@@ -1,0 +1,18 @@
+{
+ "p6": [
+  {
+   "question": "다른 값은 그대로 두고 $\\beta\\to\\infty$로 보내면 주항 $R_{out}\\approx g_mr_O(r_O\\parallel r_\\pi)$와 $A_v$는 얼마가 되나요? 어느 저항이 사라지는지 먼저 정해 보세요.",
+   "expected_answer": "r_π→∞라 r_O∥r_π→r_O=5 kΩ. R_out ≈ 38.46 mS × 5 kΩ × 5 kΩ ≈ 962 kΩ, A_v ≈ −3.70×10⁴.",
+   "reason": "Q2 이미터에서 접지된 베이스로 가는 r_π2 경로가 끊겨 축퇴 저항이 r_O1만 남아요.",
+   "condition": "I_C=1 mA, V_A=5 V, V_T=26 mV, 이상 전류원 부하, G_m≈g_m.",
+   "check": "python: gm=1e-3/0.026; Rout=gm*5e3*5e3=961538; -gm*Rout=-36982"
+  },
+  {
+   "question": "부하 $I_1$을 이상적 전류원 대신 $R_L=10\\ \\mathrm{k}\\Omega$ 저항으로 바꾸면 $R_L$은 캐스코드 $R_{out}$과 출력 노드에서 어떻게 연결되고, $|A_v|$는 대략 얼마인가요?",
+   "expected_answer": "R_L은 V_CC(AC 접지)로 가므로 R_out과 병렬. 328.9 kΩ∥10 kΩ ≈ 9.70 kΩ, |A_v| ≈ 38.46 mS × 9.70 kΩ ≈ 373.",
+   "reason": "출력 노드에서 R_L과 캐스코드 모두 AC 접지로 가는 경로라 병렬이며, 작은 R_L이 이득을 좌우해요.",
+   "condition": "DC 바이어스는 1 mA로 유지된다고 가정, G_m≈g_m, R_out=328.9 kΩ.",
+   "check": "python: P=328947*1e4/(328947+1e4)=9705; 0.0384615*9705=373.3"
+  }
+ ]
+}

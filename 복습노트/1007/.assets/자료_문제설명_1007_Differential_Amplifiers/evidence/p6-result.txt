@@ -1,3 +1,6 @@
-CMRR exact load imbalance = (2*RC + dR)*(2*T*gm + 1)/(2*dR)
-small mismatch = RC*(2*T*gm + 1)/dR
-T is emitter-degenerated Q3 output resistance rO3+(1+gm3 rO3)(R1||rpi3).
+|A_DM| = R_C*g_m1
+CMRR = R_C*(R_1 + 2*g_m1*(R_1*r_pi3 + r_O3*(R_1*g_m3*r_pi3 + R_1 + r_pi3)) + r_pi3)/(DeltaR_C*(R_1 + r_pi3))
+CMRR - gm1 RC (1/gm1+2Rout3)/dRC = 0
+CMRR - (RC/dRC)(1+2gm1 Rout3) = 0
+ratio with mismatch DM gain gm1(RC+dRC/2), dRC->0: 1
+md form (drops 2(R1||rpi3)): ratio CMRR/md as rO3->oo = 1

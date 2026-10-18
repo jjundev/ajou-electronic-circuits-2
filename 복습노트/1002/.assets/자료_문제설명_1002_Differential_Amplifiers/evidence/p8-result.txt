@@ -1,11 +1,7 @@
-(1)
-Av = g2*r2*r3*rpi*(-g1*r1 - 1)/(r2*r3 + r2*rpi + r3*rpi)
-Rout = (g1*r1*r2*r3*rpi + r1*r2*r3 + r1*r2*rpi + r1*r3*rpi + r2*r3*rpi)/(r2*r3 + r2*rpi + r3*rpi)
-exact Av1 = -20100.0000000000
-exact Ro1 = 512500.000000000
-(2) bridge RP; each branch0.5mA
-Av = g2*r1*rpi*(-RP*g1*r3 - RP - r3)/(RP*r1 + RP*rpi + r1*r3 + r3*rpi)
-Rout = (RP*g1*r1*r3*rpi + RP*r1*r3 + RP*r1*rpi + RP*r3*rpi + r1*r3*rpi)/(RP*r1 + RP*rpi + r1*r3 + r3*rpi)
-exact Av2 = -10100.0000000000
-exact Ro2 = 510000.000000000
-Dominant: (1) Rout500k, Av-20000. (2) half Rout500k, differential Rout1M, gain-10000. Exact half510k -> differential1.020M; approximations agree reference.
+(a) ro1,ro2,ro3,rpi1 = 10000 5000 10000 10000  R=ro2||ro3||rpi1 = 2500.00000000000
+(a) Rout exact = 512500.  approx g_m1 r_O1 R = 500000.
+(a) Av exact = -20100.0  approx -g_m2 * g_m1 r_O1 R = -20000.0
+(b) ro= 10000  rpi= 10000  ro3||RP= 5000.00000000000  ro1||rpi3= 5000.00000000000
+(b) Rout per side exact = 510000.  approx g_m3(r_O3||R_P)(r_O1||r_pi3)= 500000.
+(b) Rout differential (out1-out2) exact = 1.02000e+6  approx = 1.00000e+6
+(b) A_d=(vo1-vo2)/(vi1-vi2) exact = -10100.0  approx -g_m1*g_m3(r_O3||R_P)(r_O1||r_pi3) = -10000.0

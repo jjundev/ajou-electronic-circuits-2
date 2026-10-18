@@ -1,9 +1,4 @@
-MOS output KCL: g*r1*r2 + r1 + r2 ; BJT output KCL: (g*r1*r2*rp + r1*r2 + r1*rp + r2*rp)/(r1 + rp) ; BJT voltage gain: -g*r1*rp*(g*r2 + 1)/(r1 + rp)
-RP parallel upper ro: (Rp*g*r1*r2 + Rp*r1 + Rp*r2 + r1*r2)/(Rp + r1)
-RP infinity g*r1*r2 + r1 + r2
-RP zero r2
-MOS exact/dominant gm scaled limit 1
-BJT R exact/dominant gm scaled limit 1
-BJT Av exact/dominant gm scaled limit 1
-teaching example vx,vt,R 1/5000 23/10000 230000
-resistor current 21/100000000 controlled reverse current 1/5000000
+Rout exact = (R_P*g_m1*r_O1*r_O2 + R_P*r_O1 + R_P*r_O2 + r_O1*r_O2)/(R_P + r_O1)
+simplify(Rout - [(1+gm1 rO2)(rO1||RP) + rO2]) = 0
+ratio exact/approx(gm1 rO2 (rO1||RP)) as gm1->oo : 1
+RP->oo limit (ordinary cascode): g_m1*r_O1*r_O2 + r_O1 + r_O2

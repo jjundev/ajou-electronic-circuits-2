@@ -1,9 +1,16 @@
-import sympy as s
-s.init_printing()
-gm,ro,rp,R,RC,RT=s.symbols('gm ro rp R RC RT', positive=True)
-vi,vo,vx,it=s.symbols('vi vo vx it',real=True)
-par=lambda a,b:s.simplify(a*b/(a+b))
-def show(label,x): print(label, '=',([s.simplify(v) for v in x] if isinstance(x,list) else s.simplify(x)))
-def ce(load):
- sol=s.solve(vo/load+gm*vi,vo)[0];show('Av from output KCL',sol/vi)
-z,Ci,Cl,Rs,RP=s.symbols('s Ci Cl Rs RP',positive=True);v,u=s.symbols('v u');sol=s.solve([(v-vi)/Rs+z*Ci*v+(v-u)/RP,(u-v)/RP+gm*u,vo/R+z*Cl*vo-gm*u],[v,u,vo]);show('H',sol[vo]/vi);show('input pole',-(1/Rs+1/(RP+1/gm))/Ci);show('output pole',-1/(R*Cl));print('RP=0 recovers common-gate input1/gm; RP->infty makes input pole1/RsCi.')
+import sympy as sp
+s, gm, RD, CL, RS, Cin, RP = sp.symbols('s g_m R_D C_L R_S C_in R_P', positive=True)
+VX, VS, Vout, Vin = sp.symbols('V_X V_S V_out V_in')
+# X: node at Cin/RS; S: source of M1; gate AC ground; id (drain->source) = gm*(0-VS)
+idd = -gm*VS
+eqs = [sp.Eq((Vin-VX)/RS - s*Cin*VX - (VX-VS)/RP, 0),
+       sp.Eq((VX-VS)/RP + idd, 0),
+       sp.Eq(Vout/RD + s*CL*Vout + idd, 0)]
+sol = sp.solve(eqs, [VX, VS, Vout]); H = sp.factor(sp.simplify(sol[Vout]/Vin)); print('H(s) =', H)
+poles = [sp.simplify(p) for p in sp.solve(sp.denom(sp.together(H)).subs(s, sp.Symbol('p')), sp.Symbol('p'))]; print('poles:', poles)
+Rin = RP + 1/gm; Rpar = RS*Rin/(RS+Rin)
+print('target win = 1/([RS||(RP+1/gm)]Cin), wout = 1/(RD CL)')
+print('-pole - win:', [sp.simplify(-p - 1/(Rpar*Cin)) for p in poles])
+print('-pole - wout:', [sp.simplify(-p - 1/(RD*CL)) for p in poles])
+print('limit RP->0 of win:', sp.simplify(sp.limit(1/(Rpar*Cin), RP, 0)), ' (recovers p8)')
+print('low-frequency gain:', sp.simplify(H.subs(s, 0)))

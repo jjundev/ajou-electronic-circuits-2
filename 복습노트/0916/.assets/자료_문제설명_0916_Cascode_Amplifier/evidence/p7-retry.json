@@ -1,0 +1,18 @@
+{
+ "p7": [
+  {
+   "question": "목표 이득을 500에서 1000으로 올리면 교재 근사의 최소 $V_A$는 얼마인가요? 2배가 되는지 먼저 예측해 보세요.",
+   "expected_answer": "100V_A² = 1000(0.026)(V_A+2.6) → V_A ≈ 0.962 V. 2배(1.30 V)가 아니라 약 1.48배예요.",
+   "reason": "|A_v| = βV_A²/[V_T(V_A+βV_T)]은 V_A에 대해 선형이 아니라(작은 V_A에서 ∝V_A², 큰 V_A에서 ∝V_A) 이득 2배에 V_A가 2배 필요하지 않아요.",
+   "condition": "β=100, V_T=26 mV, 같은 전류·같은 V_A, 교재 주항 근사.",
+   "check": "python: V=(26+sqrt(26**2+4*100*67.6))/200=0.96241; 100*V**2/(0.026*(V+2.6))=1000.0"
+  },
+  {
+   "question": "$I_1$을 1 mA에서 2 mA로 바꾸면 최소 $V_A$는 바뀌나요? 이유를 식의 어느 인수에서 찾을 수 있는지 말해 보세요.",
+   "expected_answer": "바뀌지 않아요(0.650 V 그대로).",
+   "reason": "g_m∝I_C, r_O·r_π∝1/I_C라 g_m²r_O(r_O∥r_π)에서 I_C가 약분되어 βV_A²/[V_T(V_A+βV_T)]만 남아요.",
+   "condition": "β, V_A, V_T 고정, 두 소자 같은 전류.",
+   "check": "sympy: gm=I/VT, rO=VA/I, rpi=b*VT/I; simplify(gm**2*rO*(rO*rpi/(rO+rpi))) has no I"
+  }
+ ]
+}

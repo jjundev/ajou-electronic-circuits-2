@@ -1,0 +1,18 @@
+{
+ "p9": [
+  {
+   "question": "I_SS=1 mA, R_D=2 kΩ, (V_GS−V_TH)_equil=0.2 V이면 A_v는?",
+   "expected_answer": "A_v = −(1 mA)(2 kΩ)/0.2 V = −10.",
+   "reason": "g_m = 2(I_SS/2)/V_ov,eq = 5 mS, A_v = −g_m R_D.",
+   "condition": "평형 각 소자 I_D = I_SS/2, λ=0, 작은 차동 입력.",
+   "check": "python: -(1e-3*2e3)/0.2 = -10"
+  },
+  {
+   "question": "R_D와 (V_GS−V_TH)_equil은 그대로 두고 I_SS만 두 배로 하면 A_v와 평형 R_D 전압강하는 각각 몇 배?",
+   "expected_answer": "둘 다 2배(A_v = −20, 각 R_D 강하 1 V → 2 V).",
+   "reason": "A_v = −I_SS R_D/V_ov,eq에서 분자만 2배이고, 평형 강하 I_SS R_D/2도 같은 비율로 늘어요. 이득과 전압 여유가 맞바뀌는 관계예요.",
+   "condition": "V_ov,eq 유지를 위해 W/L도 2배, R_D 고정, 포화 유지.",
+   "check": "python: -(2e-3*2e3)/0.2 = -20; 2e-3*2e3/2 = 2.0"
+  }
+ ]
+}

@@ -1,9 +1,10 @@
-import sympy as s
-s.init_printing()
-gm,ro,rp,R,RC,RT=s.symbols('gm ro rp R RC RT', positive=True)
-vi,vo,vx,it=s.symbols('vi vo vx it',real=True)
-par=lambda a,b:s.simplify(a*b/(a+b))
-def show(label,x): print(label, '=',([s.simplify(v) for v in x] if isinstance(x,list) else s.simplify(x)))
-def ce(load):
- sol=s.solve(vo/load+gm*vi,vo)[0];show('Av from output KCL',sol/vi)
-w=s.symbols('w',positive=True);sol=s.solve(1/(1+(w*1000*1e-12)**2)-.9**2,w)[0];show('omega',sol);show('frequencyHz',sol/(2*s.pi));show('dropdB',20*s.log(.9,10))
+import sympy as sp
+x = sp.symbols('x', positive=True)
+RD = sp.Integer(1000); CL = sp.Rational(1, 10**12)
+# H = -gm RD/(1+s RD CL); |H|/|H0| = 1/sqrt(1+(w RD CL)^2) = 0.9
+xs = sp.solve(sp.Eq(1/sp.sqrt(1+x**2), sp.Rational(9, 10)), x)[0]
+print('w RD CL =', xs, '=', sp.N(xs))
+w = xs/(RD*CL); f = w/(2*sp.pi)
+print('omega =', sp.N(w), 'rad/s ; f =', sp.N(f), 'Hz')
+print('check |H|/H0 at w:', sp.N(1/sp.sqrt(1+(w*RD*CL)**2)))
+print('dB drop:', sp.N(20*sp.log(sp.Rational(9, 10), 10)))

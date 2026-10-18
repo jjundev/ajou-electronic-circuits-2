@@ -1,0 +1,18 @@
+{
+ "p8": [
+  {
+   "question": "$g_{m1}=2\\ \\mathrm{mS}$인 이 CS 단에서 출력을 AC 접지에 단락하고 입력을 $+1\\ \\mathrm{mV}$ 바꾸면 그림의 $i_{out}$(단락선에서 노드로 들어가는 방향)은 얼마인가요? 단락을 풀고 $R_D=5\\ \\mathrm{k\\Omega}$, $r_{O1}=20\\ \\mathrm{k\\Omega}$이면 $v_{out}$은요?",
+   "expected_answer": "i_out = +2 μA (M_1이 그만큼 더 끌어내림). 단락을 풀면 v_out = −g_m1(R_D ∥ r_O1)·1 mV = −2 mS × 4 kΩ × 1 mV = −8 mV",
+   "reason": "단락에서는 R_D, r_O1 양끝 AC 전압이 0이라 g_m1 v_in만 남고, 무부하 이득은 A_v = −G_m R_out예요.",
+   "condition": "소스 접지, V_DD AC 접지, 같은 동작점",
+   "check": "2e-3*1e-3=2e-6; -2e-3*(5e3*20e3/25e3)*1e-3=-8e-3"
+  },
+  {
+   "question": "$M_1$ 소스와 접지 사이에 $R_S=500\\ \\Omega$을 넣으면($\\lambda=0$, $g_{m1}=2\\ \\mathrm{mS}$) $G_m$은 $g_{m1}$보다 커질까요 작아질까요? 값은?",
+   "expected_answer": "작아져요. G_m = g_m1/(1 + g_m1 R_S) = 2 mS/2 = 1 mS",
+   "reason": "소스 전압이 v_in을 따라 올라가 v_gs1이 v_in보다 작아져요(축퇴).",
+   "condition": "λ = 0, 출력 단락",
+   "check": "2e-3/(1+2e-3*500)=1e-3"
+  }
+ ]
+}

@@ -1,5 +1,8 @@
-branch current = k/(150*lam**2)
-tail current = 0.0148148148148148
-Dominant cascode model gmro>>1.
-exact gmro = -1/2 + sqrt(1201)/2
-exact Iss = 17.7777777777778/(1 - sqrt(1201))**2
+|A_v| exact = g_m*r_o*(g_m*r_o + 1)
+check exact = g_m r_o (g_m r_o + 1): 0
+limit A/(g_m^2 r_o^2), g_m r_o->oo : 1
+g_m r_o = 2*sqrt(5)/(3*sqrt(I_D))
+approx (A = g_m^2 r_o^2):  I_D = 0.00740741  I_SS = 0.0148148 A
+exact  (A = g_m r_o(g_m r_o+1)): I_D = 0.00784760  I_SS = 0.0156952 A
+g_m r_o at approx solution = 17.320
+ratio exact/approx I_SS = 1.0594

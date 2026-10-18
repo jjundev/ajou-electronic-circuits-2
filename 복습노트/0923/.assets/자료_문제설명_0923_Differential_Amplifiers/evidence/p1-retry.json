@@ -1,0 +1,18 @@
+{
+ "p1": [
+  {
+   "question": "$r_o=20R_C$이면 $v_{out}/v_{cc}$는 얼마일까요? 1보다 큰지 작은지 먼저 판단해 보세요.",
+   "expected_answer": "v_out/v_cc = 20/21 ≈ 0.952, 1보다 작은 양수.",
+   "reason": "v_be=0이라 출력 노드는 R_C와 r_o의 분압이며 분압비는 항상 0과 1 사이예요.",
+   "condition": "v_be=0(베이스 바이어스가 리플과 독립, 이미터 접지), r_o=20R_C.",
+   "check": "python: 20/21 = 0.95238"
+  },
+  {
+   "question": "베이스 바이어스를 V_CC에서 저항 분압으로 만들어 v_b=k v_cc(0<k<1)로 따라간다면, 첫 KCL의 어느 항이 0이 아니게 되고 이득은 어떻게 바뀔까요?",
+   "expected_answer": "g_m v_be = g_m k v_cc 항이 살아나 v_out/v_cc = r_o(1 − g_m k R_C)/(R_C + r_o). g_m k R_C>1이면 부호가 음으로 뒤집히고 크기가 커질 수 있어요.",
+   "reason": "이미터가 접지라 v_be = k v_cc가 되어 제어 전류원이 v_out에서 나가는 전류를 추가해요(위 저항 경로와 반대 효과).",
+   "condition": "이미터 AC 접지, 베이스 소신호 전압 k v_cc, 다른 값은 원 문제와 같음.",
+   "check": "sympy: solve((vo-vc)/Rc+gm*k*vc+vo/ro, vo)/vc -> r_o*(1-R_C*g_m*k)/(R_C+r_o)"
+  }
+ ]
+}

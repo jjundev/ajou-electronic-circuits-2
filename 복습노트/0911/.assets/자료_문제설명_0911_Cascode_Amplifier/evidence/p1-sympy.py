@@ -1,20 +1,21 @@
-import sympy as s
-s.init_printing()
-g,r1,r2,Rp,i,v,x,y,rp,b,VT,I,VA,kn,kp,N=s.symbols('g r1 r2 Rp i v x y rp b VT I VA kn kp N', positive=True)
-i,v,x,y=s.symbols('i v x y', real=True)
-# MOS cascode output test: bottom ro=r2, top gm=g,ro=r1; top gate grounded.
-mos=s.solve([s.Eq(i,x/r2),s.Eq(i,(y-x)/r1-g*x)],[x,y]);Rmos=s.factor(mos[y]/i)
-# BJT top base grounded: lower ro=r1, upper ro=r2,rpi=rp.
-bjt=s.solve([s.Eq(i,x/r1+x/rp),s.Eq(i,(y-x)/r2-g*x)],[x,y]);Rbjt=s.factor(bjt[y]/i)
-# Lower-driven BJT exact open output KCL.
-amp=s.solve([s.Eq(x/r1+x/rp+(x-y)/r2+g*x+g*v,0),s.Eq((y-x)/r2-g*x,0)],[x,y]);Abjt=s.factor(amp[y]/v)
-print('MOS output KCL:',Rmos,'; BJT output KCL:',Rbjt,'; BJT voltage gain:',Abjt)
-I0=s.Rational(1,2000);a=s.Rational(100,10**6);top=s.Rational(30,1)/s.Rational(18,100);bot=s.Rational(20,1)/s.Rational(18,100)
-ovt=s.sqrt(2*I0/(a*top));ovb=s.sqrt(2*I0/(a*bot));print('Vb2=',s.N(s.Rational(2,5)+ovb),'Vb1min=',s.N(s.Rational(2,5)+ovt+ovb))
-ro=1/(s.Rational(1,10)*I0);gm=s.sqrt(2*a*top*I0);print('Rout leading=',s.N(gm*ro**2),'exact=',s.N(gm*ro**2+2*ro))
-
-
-t=s.symbols("t",positive=True)
-print("MOS exact/dominant gm scaled limit",s.limit(Rmos.subs(g,t*g)/(t*g*r1*r2),t,s.oo))
-print("BJT R exact/dominant gm scaled limit",s.limit(Rbjt.subs(g,t*g)/(t*g*r2*r1*rp/(r1+rp)),t,s.oo))
-print("BJT Av exact/dominant gm scaled limit",s.limit(Abjt.subs(g,t*g)/(-t**2*g**2*r2*r1*rp/(r1+rp)),t,s.oo))
+# P9.14 independent check
+import sympy as sp
+k=sp.Rational(100,10**6); I=sp.Rational(5,10**4); Vth=sp.Rational(2,5)
+WL1=sp.Rational(30,1)/sp.Rational(18,100); WL2=sp.Rational(20,1)/sp.Rational(18,100)
+v=sp.symbols('v',positive=True)
+Vov2=sp.solve(sp.Eq(I,k/2*WL2*v**2),v)[0]; Vov1=sp.solve(sp.Eq(I,k/2*WL1*v**2),v)[0]
+Vb2=Vth+Vov2; Vb1min=Vov2+Vth+Vov1
+print("(a) Vov2 =",Vov2," Vb2 =",Vb2,"=",float(Vb2),"V")
+print("    Vov1 =",sp.nsimplify(Vov1),"=",float(Vov1)," Vb1,min = Vov2+VGS1 =",float(Vb1min),"V")
+# (b) small-signal KCL: test voltage vx at drain of M1 (top), M2 bottom = ro2 to ground, gates AC ground
+gm1,ro1,ro2,vx,vs,ix=sp.symbols('g_m1 r_o1 r_o2 v_x v_s i_x',positive=True)
+sol=sp.solve([sp.Eq(ix, gm1*(0-vs)+(vx-vs)/ro1), sp.Eq(ix, vs/ro2)],[ix,vs],dict=True)[0]
+Rout=sp.simplify(vx/sol[ix])
+print("(b) Rout symbolic =",sp.expand(Rout))
+print("    Rout - [(1+gm1 ro1)ro2+ro1] =",sp.simplify(Rout-((1+gm1*ro1)*ro2+ro1)))
+lam=sp.Rational(1,10); ro=1/(lam*I); g1=sp.sqrt(2*k*WL1*I)
+val=Rout.subs({gm1:g1,ro1:ro,ro2:ro}); approx=g1*ro*ro
+print("    ro =",ro,"ohm, gm1 =",float(g1),"S")
+print("    Rout exact =",float(val),"ohm ; approx gm1 ro1 ro2 =",float(approx),"ohm")
+x=sp.symbols('x',positive=True)
+print("    limit (exact/approx) as gm*ro->inf:",sp.limit(((1+x)*1+1)/x,x,sp.oo))

@@ -1,4 +1,10 @@
-import sympy as s
-# Independently derived from blind problem and displayed input circuit, before reference access.
-I,k,d=s.symbols('I k d',positive=True);q=k*d*s.sqrt(4*I/k-d*d)/2;dm=s.sqrt(2*I/k);print('difference at threshold',s.simplify(q.subs(d,dm)));assert s.simplify(q.subs(d,dm)-I)==0;print('ratio',s.simplify(dm/s.sqrt(I/k)))
-print("Independent conclusion: full steering positive difference=sqrt(2 Iss/k)=sqrt2 equilibrium overdrive")
+# P10.45 independent: solve Eq.(10.147) = I_SS for dV = Vin1 - Vin2
+import sympy as sp
+k,Iss,x=sp.symbols('k I_SS x',positive=True)  # k = mu_n Cox W/L
+eq=sp.Eq(sp.Rational(1,2)*k*x*sp.sqrt(4*Iss/k-x**2),Iss)
+sols=sp.solve(eq,x)
+print('solutions dV =',sols)
+Vov_eq=sp.sqrt(Iss/k)
+for s in sols:
+    print('dV/Vov_equil =',sp.simplify(s/Vov_eq),'; dV - sqrt(2 Iss/k) =',sp.simplify(s-sp.sqrt(2*Iss/k)))
+print('residual of eq at sqrt(2)Vov:',sp.simplify(eq.lhs.subs(x,sp.sqrt(2)*Vov_eq)-Iss))

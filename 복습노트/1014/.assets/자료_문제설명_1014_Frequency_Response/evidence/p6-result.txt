@@ -1,3 +1,5 @@
-H = R**2*gm**2/(C**2*R**2*s**2 + 2*C*R*s + 1)
-double pole = -1/(C*R)
-DC magnitude(gmR)^2, initial0dB/dec then-40dB/dec at common pole; exact magnitude at pole is halfDC=-6.0206dB.
+H(s) = R_D**2*g_m**2/(C_L*R_D*s + 1)**2
+H - (gmRD)^2/(1+sRDCL)^2 = 0
+|H(j wp)|/|H0| at wp=1/(RDCL): 1/2 (-6 dB)
+limit w->oo w^2|H| = g_m**2/C_L**2  -> -40 dB/dec beyond the double pole
+-3dB freq: [sqrt(-1 + sqrt(2))/(C_L*R_D)]  sqrt(sqrt2-1) = 0.643594252905583

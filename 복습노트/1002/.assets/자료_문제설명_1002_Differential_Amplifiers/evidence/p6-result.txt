@@ -1,5 +1,6 @@
-gain(K) = 6.00884419289339*K
-K for gain200 = [33.2842712474619]
-Both cascode branch resistances use dominant gmro^2 terms; same K does not mean same gm.
-exact gain full KCL = 2*(20*sqrt(5)*K**(3/2) + 2*sqrt(10)*sqrt(K) + 5*sqrt(2)*K + 40*K)/(sqrt(5)*sqrt(K) + 4*sqrt(10)*sqrt(K) + 6)
-exact K = 29.8481644222048
+A_approx(WL) = g_m1[(g_m3 r_o3 r_o1)||(g_m5 r_o5 r_o7)] = -40*WL/31 + 160*sqrt(2)*WL/31 = 6.00884 * WL
+approx  W/L = [33.2843]
+exact (full KCL) W/L = 29.8482
+exact A at approx W/L = 221.838
+g_m r_o (n,p) at approx W/L: 36.49 12.90
+limit A_exact/A_approx as W/L -> oo (g_m r_o >> 1): 1

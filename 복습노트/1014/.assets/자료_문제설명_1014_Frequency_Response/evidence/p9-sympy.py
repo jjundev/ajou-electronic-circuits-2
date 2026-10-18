@@ -1,9 +1,8 @@
-import sympy as s
-s.init_printing()
-gm,ro,rp,R,RC,RT=s.symbols('gm ro rp R RC RT', positive=True)
-vi,vo,vx,it=s.symbols('vi vo vx it',real=True)
-par=lambda a,b:s.simplify(a*b/(a+b))
-def show(label,x): print(label, '=',([s.simplify(v) for v in x] if isinstance(x,list) else s.simplify(x)))
-def ce(load):
- sol=s.solve(vo/load+gm*vi,vo)[0];show('Av from output KCL',sol/vi)
-Ci,Cl,Rs=s.symbols('Ci Cl Rs',positive=True);RD=s.solve(1/(R*Cl)-10*(1/Rs+gm)/Ci,R)[0];show('RD',RD);show('ratio check',s.simplify((1/(RD*Cl))/((1/Rs+gm)/Ci)))
+import sympy as sp
+gm, RD, CL, RS, Cin = sp.symbols('g_m R_D C_L R_S C_in', positive=True)
+# From the CG stage (p8): win = (1+gm RS)/(RS Cin) = 1/((RS||1/gm)Cin), wout = 1/(RD CL)
+win = (1+gm*RS)/(RS*Cin); wout = 1/(RD*CL)
+RDs = sp.solve(sp.Eq(wout, 10*win), RD)[0]; print('R_D =', RDs)
+Rpar = RS/(1+gm*RS)
+print('R_D - (RS||1/gm)Cin/(10CL) =', sp.simplify(RDs - Rpar*Cin/(10*CL)))
+print('check wout/win =', sp.simplify(wout.subs(RD, RDs)/win))

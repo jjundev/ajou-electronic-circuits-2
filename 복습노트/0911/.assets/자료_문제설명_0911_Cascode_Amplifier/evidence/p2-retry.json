@@ -1,0 +1,18 @@
+{
+ "p2": [
+  {
+   "question": "$I_D=0.5\\ \\mathrm{mA}$와 $\\lambda=0.1\\ \\mathrm{V^{-1}}$를 유지하고 목표를 $R_{out}=1\\ \\mathrm{M\\Omega}$으로 2배 하면 주항 설계의 $W/L$은 얼마인가요?",
+   "expected_answer": "g_m = 1 MΩ/(20 kΩ)² = 2.5 mS, W/L = 62.5 (4배)",
+   "reason": "r_O는 전류·λ로 고정이라 g_m만 2배가 되어야 하고, W/L ∝ g_m²이에요.",
+   "condition": "μnCox = 100 μA/V², M_1 = M_2, 주항 R_out ≈ g_m r_O²",
+   "check": "gm=1e6/(2e4)**2=2.5e-3; WL=gm**2/(2*100e-6*0.5e-3)=62.5"
+  },
+  {
+   "question": "$W/L=15.625$를 고정하고 $I_D$만 $1\\ \\mathrm{mA}$로 2배 하면 주항 $R_{out}$은 커질까요 작아질까요? 몇 kΩ인가요?",
+   "expected_answer": "작아져요. g_m = 1.77 mS, r_O = 10 kΩ, R_out ≈ 177 kΩ (= 500/2^1.5)",
+   "reason": "g_m ∝ √I_D이지만 r_O² ∝ 1/I_D²이라 R_out ∝ I_D^(-3/2)이에요.",
+   "condition": "μnCox = 100 μA/V², λ = 0.1 V⁻¹, M_1 = M_2",
+   "check": "gm=sqrt(2*100e-6*15.625*1e-3)=1.7678e-3; ro=1e4; gm*ro**2=176.8e3"
+  }
+ ]
+}

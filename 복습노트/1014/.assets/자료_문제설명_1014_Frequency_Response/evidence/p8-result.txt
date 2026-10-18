@@ -1,3 +1,5 @@
-H = R*gm/(Ci*Cl*R*Rs*s**2 + Ci*Rs*s + Cl*R*Rs*gm*s + Cl*R*s + Rs*gm + 1)
-input pole = (-Rs*gm - 1)/(Ci*Rs)
-output pole = -1/(Cl*R)
+H(s) = R_D*g_m/((C_L*R_D*s + 1)*(C_in*R_S*s + R_S*g_m + 1))
+poles: [-1/(C_L*R_D), (-R_S*g_m - 1)/(C_in*R_S)]
+win - 1/((RS||1/gm)Cin) = 0
+H - target = 0
+low-frequency gain = R_D*g_m/(R_S*g_m + 1)

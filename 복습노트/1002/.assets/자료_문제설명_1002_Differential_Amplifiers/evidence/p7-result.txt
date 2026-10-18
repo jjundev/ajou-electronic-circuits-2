@@ -1,8 +1,8 @@
-A(x,beta) = beta*x**2/(beta + x)
-x roots = [20 + 20*sqrt(11)]
-VA VT26mV = 0.52 + 0.52*sqrt(11)
-Dominant cascode gain gm^2 ro (ro||rpi); finite beta retained.
-exact magnitude from2KCL = gm*ro*rp*(gm*ro + 1)/(ro + rp)
-exact in X beta = B*X*(X + 1)/(B + X)
-exact over main = (X + 1)/X
-asymptotic ratio = 1
+exact |A| = g_m*r_O*r_pi*(g_m*r_O + 1)/(r_O + r_pi)
+simplify(exact - g_m (r_O||r_pi)(1+g_m r_O)) : 0
+limit exact/std (g_m r_O -> oo, fixed beta):  1
+A_std(u) = 100*u**2/(u + 100)  ; A_exact(u) = 100*u*(u + 1)/(u + 100)
+std:   V_A/V_T = 20 + 20*sqrt(11) = 86.3325  -> V_A = 2.2446 V (V_T=26mV), 2.1583 V (25mV)
+exact: V_A/V_T = 85.6835  -> V_A = 2.2278 V (V_T=26mV), 2.1421 V (25mV)
+ratio A_exact/A_std as u->oo: 1
+ratio at u_std: 1.0116

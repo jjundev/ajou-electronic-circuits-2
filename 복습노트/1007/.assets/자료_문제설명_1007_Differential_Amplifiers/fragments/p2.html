@@ -15,7 +15,9 @@
   <h4>종이에 쓸 첫 줄</h4>
   <p>1) 소신호에서 $V_{DD}$, $V_{b1}$, $V_{b2}$를 접지로 보내요. 그러면 $M_3$는 출력과 접지 사이의 저항 $r_{O3}$, $M_5$는 꼬리 노드와 접지 사이의 저항 $r_{O5}$가 돼요.</p>
   <p>2) CM 하프 서킷: $r_{O5}=2r_{O5}\parallel 2r_{O5}$로 나누고 대칭선을 끊어요. 왼쪽 반쪽은 게이트에 $v_{in}$, 소스에 $R_S=2r_{O5}$, 드레인(출력)에 $r_{O3}$가 달린 $M_1$이에요. $M_1$은 $g_{m1}v_{gs1}$ 전류원과 $r_{O1}$ 병렬로 바꿔요.</p>
-  <p>3) $G_m$을 위한 첫 식: 출력을 접지에 단락하고 드레인 전류를 $i$라 하면 소스 전압은 $v_s=iR_S$이고, 드레인 노드 KCL은</p>
+  <p>3) $G_m$을 위한 첫 식: 출력을 AC 접지에 단락하고, 단락선에서 출력 노드로 들어가 $M_1$을 지나 내려가는 전류를 $i$로 둬요. 출력이 0 V라 $r_{O3}$에는 전류가 흐르지 않아요. 제어 전압은 게이트 쪽이 $+$라 $v_{gs1}=v_{in}-v_s$이고, $r_{O1}$에는 출력(0 V)에서 소스 쪽으로 $(0-v_s)/r_{O1}$가 흘러요.</p>
+  <figure class="figure"><svg viewBox="0 0 400 320" role="img" aria-label="G_m을 구하는 CM 하프 서킷: 출력 노드는 AC 접지에 단락되어 0 V이고 단락선에서 출력 노드로 전류 i가 들어가요. 출력 노드와 AC 접지 V_DD 사이에 r_O3, 출력 노드와 소스 노드 v_s 사이에 아래 방향 제어 전류원 g_m1 v_gs1과 r_O1이 병렬로 있고, v_s에서 접지로 2r_O5가 연결돼요. 게이트에는 v_in이 걸리고 v_gs1은 게이트가 +, v_s가 −예요."><path class="fig-ink" d="M190 24 H250"/><text class="fig-muted" x="258" y="28">V<tspan baseline-shift="sub">DD</tspan> (AC 접지)</text><path class="fig-ink" d="M220 24 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M220 92 V110 M180 110 H260"/><path class="fig-accent" d="M220 100 H330 V112"/><path class="fig-accent" d="M330 112 v8 M320 120 H340 M324 125 H336 M328 130 H332"/><path class="fig-accent" d="M312 90 H292 M297 85 L292 90 L297 95"/><text class="fig-text" x="316" y="94">i</text><text class="fig-muted" x="296" y="148">출력 단락</text><circle class="fig-dot" cx="220" cy="100" r="3.5"/><text class="fig-text" x="234" y="62">r<tspan baseline-shift="sub">O3</tspan></text><text class="fig-text" x="134" y="98">v<tspan baseline-shift="sub">out</tspan> = 0</text><path class="fig-ink" d="M180 110 V149"/><polygon class="fig-ink" points="180,149 194,165 180,181 166,165"/><path class="fig-ink" d="M180 155 V174 M175 169 L180 174 L185 169"/><path class="fig-ink" d="M180 181 V200 H260 M260 110 V131"/><path class="fig-ink" d="M260 131 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M260 199 V200"/><text class="fig-text" x="100" y="170">g<tspan baseline-shift="sub">m1</tspan>v<tspan baseline-shift="sub">gs1</tspan></text><text class="fig-text" x="274" y="170">r<tspan baseline-shift="sub">O1</tspan></text><path class="fig-accent" d="M220 200 V220"/><circle class="fig-dot" cx="220" cy="220" r="3.5"/><text class="fig-text" x="232" y="216">v<tspan baseline-shift="sub">s</tspan></text><path class="fig-ink" d="M220 220 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M220 288 v8 M210 296 H230 M214 301 H226 M218 306 H222"/><text class="fig-text" x="236" y="258">2r<tspan baseline-shift="sub">O5</tspan></text><path class="fig-ink" d="M50 240 V220 H100"/><circle class="fig-ink" cx="100" cy="220" r="3.5"/><text class="fig-text" x="112" y="225">+</text><text class="fig-text" x="140" y="225">v<tspan baseline-shift="sub">gs1</tspan></text><text class="fig-text" x="198" y="225">−</text><circle class="fig-ink" cx="50" cy="254" r="14"/><text class="fig-muted" x="46" y="251">+</text><text class="fig-muted" x="46" y="265">−</text><path class="fig-ink" d="M50 268 V288"/><path class="fig-ink" d="M50 288 v8 M40 296 H60 M44 301 H56 M48 306 H52"/><text class="fig-text" x="16" y="210">v<tspan baseline-shift="sub">in</tspan></text></svg><figcaption>$V_{DD}$, $V_{b1}$, $V_{b2}$를 AC 접지로 보내 $M_3$는 $r_{O3}$, $M_5$는 $r_{O5}$가 되고, CM 하프 서킷이라 소스에 $2r_{O5}$가 붙어요. $M_1$은 $g_{m1}v_{gs1}$과 $r_{O1}$로 바꿨고, $G_m$을 구하려고 출력을 AC 접지에 단락했어요.</figcaption></figure>
+  <p>출력 노드 KCL(들어온 $i$ = 제어 전류원 + $r_{O1}$ 가지)과 소스 노드 KCL($i$가 모두 $2r_{O5}$로 빠짐)을 나란히 적어요.</p>
   $$i=g_{m1}(v_{in}-v_s)-\frac{v_s}{r_{O1}},\qquad v_s=2r_{O5}\,i$$
 </div>
 <div class="layer formal" data-explanation="solve">
@@ -63,9 +65,9 @@
 <div class="layer eli5" data-explanation="retry">
   <h4>설명을 닫고 다시 해 봐요</h4>
   <ol>
-    <li>CM 하프 서킷을 그리고, 테일이 반쪽에 $2r_{O5}$로 붙는 이유를 한 줄로 써 보세요.</li>
-    <li>출력 단락 KCL에서 $G_m$의 정확식을 유도하고 $g_mr_O\gg1$로 $1/(2r_{O5})$까지 줄여 보세요.</li>
-    <li>$\lambda$가 같을 때 $r_{O3}$와 $r_{O5}$의 비를 바이어스 전류로 구해 $|A_{CM}|$ 크기를 어림해 보세요.</li>
+    <li>$g_mr_O\gg1$ 근사에서 테일 전류는 그대로 두고 $M_5$의 채널을 길게 해 $r_{O5}$만 두 배로 만들면 한 출력 기준 $A_{CM}$은 몇 배가 될지 예측해 보세요.</li>
+    <li>$\lambda_n=0.1\ \text{V}^{-1}$, $\lambda_p=0.2\ \text{V}^{-1}$, $I_{SS}=1$ mA($M_3$는 $I_{SS}/2$, $M_5$는 $I_{SS}$)이면 $r_{O3}$, $r_{O5}$와 $A_{CM}$은 대략 얼마인가요?</li>
+    <li>$R_{out}$을 구할 때 입력을 0으로 두고 출력에 시험 전압을 걸면 시험 전류는 어느 두 경로로 나뉘나요? 반대로 $G_m$의 단락 회로에서 $r_{O3}$가 식에서 빠지는 이유는 무엇인가요?</li>
   </ol>
 </div>
 <div class="sum" hidden>

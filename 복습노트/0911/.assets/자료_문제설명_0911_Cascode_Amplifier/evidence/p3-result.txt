@@ -1,5 +1,3 @@
-MOS output KCL: g*r1*r2 + r1 + r2 ; BJT output KCL: (g*r1*r2*rp + r1*r2 + r1*rp + r2*rp)/(r1 + rp) ; BJT voltage gain: -g*r1*rp*(g*r2 + 1)/(r1 + rp)
-gm sqrt(5)/1250 Rleading 320000*sqrt(5) Rexact 40000 + 320000*sqrt(5)
-MOS exact/dominant gm scaled limit 1
-BJT R exact/dominant gm scaled limit 1
-BJT Av exact/dominant gm scaled limit 1
+gm = sqrt(5)/1250 = 0.0017888543819998318 S; ro = 20000
+Rout approx gm ro^2 = 715541.7527999327 ohm
+Rout exact (1+gm ro)ro+ro = 755541.7527999327 ohm

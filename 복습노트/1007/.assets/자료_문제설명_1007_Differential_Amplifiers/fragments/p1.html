@@ -17,28 +17,9 @@
   <p>1. 소신호 등가회로로 바꿔요. $V_{DD}$와 $V_b$는 직류라 교류 접지(AC ground)로 보내요. 그러면 $M_3$는 게이트·소스가 모두 접지인 소자가 되어, 테일 노드에서 보면 저항 $r_{O3}$ 하나만 남아요.</p>
   <p>$$R_{SS}=r_{O3}=\frac{1}{\lambda I_{SS}}$$</p>
   <p>2. 공통 모드 하프 서킷을 그려요. $r_{O3}$를 $2r_{O3}\parallel 2r_{O3}$로 나누고 가운데를 끊어서, 왼쪽 반쪽만 남겨요.</p>
-  <svg viewBox="0 0 240 200" width="240" height="200" role="img" aria-label="공통 모드 하프 서킷: VDD, R_D, 출력 X, M1, 소스의 2 r_O3, 접지">
-    <line x1="60" y1="15" x2="160" y2="15" stroke="currentColor" stroke-width="2"/>
-    <text x="165" y="20" fill="currentColor" font-size="12">V_DD</text>
-    <line x1="110" y1="15" x2="110" y2="30" stroke="currentColor"/>
-    <rect x="102" y="30" width="16" height="36" fill="none" stroke="currentColor"/>
-    <text x="124" y="52" fill="currentColor" font-size="12">R_D</text>
-    <line x1="110" y1="66" x2="110" y2="86" stroke="currentColor"/>
-    <circle cx="110" cy="78" r="2.5" fill="currentColor"/>
-    <text x="118" y="82" fill="currentColor" font-size="12">X</text>
-    <rect x="96" y="86" width="28" height="30" fill="none" stroke="currentColor"/>
-    <text x="130" y="105" fill="currentColor" font-size="12">M1</text>
-    <line x1="50" y1="101" x2="96" y2="101" stroke="currentColor"/>
-    <text x="8" y="105" fill="currentColor" font-size="11">ΔV_in,CM</text>
-    <line x1="110" y1="116" x2="110" y2="130" stroke="currentColor"/>
-    <rect x="102" y="130" width="16" height="36" fill="none" stroke="currentColor"/>
-    <text x="124" y="152" fill="currentColor" font-size="12">2 r_O3</text>
-    <line x1="110" y1="166" x2="110" y2="180" stroke="currentColor"/>
-    <line x1="98" y1="180" x2="122" y2="180" stroke="currentColor"/>
-    <line x1="103" y1="185" x2="117" y2="185" stroke="currentColor"/>
-    <line x1="107" y1="190" x2="113" y2="190" stroke="currentColor"/>
-  </svg>
-  <p>3. 첫 식은 이 반쪽의 소스 노드 KCL과 출력 노드 식이에요. 소스 전압을 $v_s$, 드레인 소신호 전류를 $i_d$라 하면</p>
+  <p>3. 노드와 방향을 정해요. 소스 노드 전압은 $v_s$, 드레인 소신호 전류 $i_d$는 $X$에서 $M_1$을 지나 소스 노드로 내려가는 방향을 양으로 둬요. 제어 전압은 게이트 쪽이 $+$라 $v_{gs}=\Delta V_{in,CM}-v_s$예요.</p>
+  <figure class="figure"><svg viewBox="0 0 400 300" role="img" aria-label="CM 하프 서킷 소신호 등가회로: AC 접지된 V_DD에서 R_D를 거쳐 드레인 노드 X로, X에서 소스 노드 v_s로 아래 방향 제어 전류원 g_m v_gs가 있고, v_s에서 접지로 2r_O3가 연결돼요. 게이트에는 입력 ΔV_in,CM이 걸리고 v_gs는 게이트가 +, 소스 v_s가 −예요. 드레인 전류 i_d는 X에서 소스로 내려가는 방향이에요."><path class="fig-ink" d="M190 30 H250"/><text class="fig-muted" x="258" y="34">V<tspan baseline-shift="sub">DD</tspan> (AC 접지)</text><path class="fig-ink" d="M220 30 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M220 98 V139"/><polygon class="fig-ink" points="220,139 234,155 220,171 206,155"/><path class="fig-ink" d="M220 145 V164 M215 159 L220 164 L225 159"/><path class="fig-accent" d="M220 171 V200"/><path class="fig-ink" d="M220 200 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M220 268 v8 M210 276 H230 M214 281 H226 M218 286 H222"/><circle class="fig-dot" cx="220" cy="120" r="3.5"/><circle class="fig-dot" cx="220" cy="200" r="3.5"/><path class="fig-accent" d="M204 100 V116 M199 111 L204 116 L209 111"/><text class="fig-text" x="184" y="112">i<tspan baseline-shift="sub">d</tspan></text><text class="fig-text" x="234" y="68">R<tspan baseline-shift="sub">D</tspan></text><text class="fig-text" x="230" y="124">X: ΔV<tspan baseline-shift="sub">X</tspan></text><text class="fig-text" x="242" y="160">g<tspan baseline-shift="sub">m</tspan>v<tspan baseline-shift="sub">gs</tspan></text><text class="fig-text" x="230" y="196">v<tspan baseline-shift="sub">s</tspan></text><text class="fig-text" x="236" y="240">2r<tspan baseline-shift="sub">O3</tspan></text><path class="fig-ink" d="M60 220 V200 H110"/><circle class="fig-ink" cx="110" cy="200" r="3.5"/><text class="fig-text" x="122" y="205">+</text><text class="fig-text" x="146" y="205">v<tspan baseline-shift="sub">gs</tspan></text><text class="fig-text" x="198" y="205">−</text><circle class="fig-ink" cx="60" cy="234" r="14"/><text class="fig-muted" x="56" y="231">+</text><text class="fig-muted" x="56" y="245">−</text><path class="fig-ink" d="M60 248 V268"/><path class="fig-ink" d="M60 268 v8 M50 276 H70 M54 281 H66 M58 286 H62"/><text class="fig-text" x="8" y="188">ΔV<tspan baseline-shift="sub">in,CM</tspan></text></svg><figcaption>$V_{DD}$와 $V_b$를 AC 접지로 보내 $M_3$는 $r_{O3}$ 하나가 되고, 이를 $2r_{O3}\parallel2r_{O3}$로 나눈 왼쪽 반쪽이에요. $M_1$은 $\lambda=0$이라 $g_mv_{gs}$ 전류원만으로 바꿨어요.</figcaption></figure>
+  <p>4. 첫 식은 소스 노드 KCL이에요. 제어 전류원으로 들어온 $i_d$가 전부 $2r_{O3}$로 빠져나가요. 같은 $i_d$가 $R_D$를 지나 내려오므로 $X$의 전압은 그만큼 내려가요.</p>
   <p>$$i_d=g_m\,(\Delta V_{in,CM}-v_s),\qquad v_s=2r_{O3}\,i_d,\qquad \Delta V_X=-R_D\,i_d$$</p>
 </div>
 <div class="layer formal" data-explanation="solve">
@@ -82,9 +63,9 @@
 <div class="layer eli5" data-explanation="retry">
   <h4>설명을 닫고 다시 해 봐요</h4>
   <ol>
-    <li>Fig. 10.88에서 $V_{DD}$, $V_b$를 접지로 보내고 테일 노드에서 본 저항이 왜 $r_{O3}$인지 한 줄로 써 보세요.</li>
-    <li>CM 하프 서킷을 그리고 $A_{CM}=-R_D/(1/g_m+2r_{O3})$를 KCL로 유도해 보세요.</li>
-    <li>$g_m=I_{SS}/(V_{GS}-V_{TH})_{eq.}$, $r_{O3}=1/(\lambda I_{SS})$를 넣어 식 (10.224)까지 정리하고, $\lambda\to0$일 때 0이 되는지 확인해 보세요.</li>
+    <li>$(V_{GS}-V_{TH})_{eq.}=0.2$ V, $I_{SS}=1$ mA, $R_D=2$ kΩ에서 $M_3$의 $\lambda$만 $0.1\ \text{V}^{-1}$에서 $0.05\ \text{V}^{-1}$로 줄이면 $|A_{CM}|$은 대략 몇 배가 될지 먼저 예측해 보세요. 분모에서 어느 항이 지배하는지부터 판단해요.</li>
+    <li>문제와 달리 $M_1$도 $\lambda\neq0$이라면 CM 하프 서킷의 어느 두 노드 사이에 어떤 가지가 추가되고, 소스 노드 KCL 첫 식에는 어떤 항이 더해지나요?</li>
+    <li>출력을 $X$ 한쪽이 아니라 차동 출력 $V_X-V_Y$로 잡으면 이 대칭 회로의 공통 모드 이득은 얼마이고, 그 이유는 무엇인가요?</li>
   </ol>
 </div>
 <div class="sum" hidden>

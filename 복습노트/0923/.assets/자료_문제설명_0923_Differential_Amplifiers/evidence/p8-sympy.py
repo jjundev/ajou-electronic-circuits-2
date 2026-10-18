@@ -1,4 +1,11 @@
-import sympy as s
-# Independently derived from blind problem and displayed input circuit, before reference access.
-d,k,I,R=s.symbols('d k I R',positive=True);q=k*d*s.sqrt(4*I/k-d*d)/2;gm=s.simplify(s.diff(q,d).subs(d,0));print('gm',gm,'gain',-gm*R);assert s.simplify(gm-s.sqrt(k*I))==0
-print("Independent conclusion: from current difference derivative at0 gm=sqrt(k Iss); differential gain=-gm RD for VX-VY")
+# E10.21 independent: from (10.156) and (10.132), Av = -gm RD with gm at ID=Iss/2
+import sympy as sp
+k,Iss,RD,dV=sp.symbols('k I_SS R_D dV',positive=True)
+dI=sp.sqrt(k*Iss)*dV
+dVout=-RD*dI
+Av=sp.simplify(dVout/dV)
+gm=sp.sqrt(2*k*Iss/2)
+print('Av =',Av,'; simplify(Av-(-gm RD)) =',sp.simplify(Av+gm*RD))
+# also: small-dV limit of exact (10.147) derivative equals sqrt(k Iss)
+exact=sp.Rational(1,2)*k*dV*sp.sqrt(4*Iss/k-dV**2)
+print('d(exact)/d(dV) at 0 =',sp.simplify(sp.diff(exact,dV).subs(dV,0)),'; lim exact/dV dV->0 =',sp.simplify(sp.limit(exact/dV,dV,0)))

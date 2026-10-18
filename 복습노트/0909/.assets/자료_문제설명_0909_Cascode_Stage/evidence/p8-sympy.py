@@ -1,17 +1,11 @@
-import sympy as s
-s.init_printing()
-g,r1,r2,Rp,i,v,x,y,rp,b,VT,I,VA,kn,kp,N=s.symbols('g r1 r2 Rp i v x y rp b VT I VA kn kp N', positive=True)
-i,v,x,y=s.symbols('i v x y', real=True)
-# MOS cascode output test: bottom ro=r2, top gm=g,ro=r1; top gate grounded.
-mos=s.solve([s.Eq(i,x/r2),s.Eq(i,(y-x)/r1-g*x)],[x,y]);Rmos=s.factor(mos[y]/i)
-# BJT top base grounded: lower ro=r1, upper ro=r2,rpi=rp.
-bjt=s.solve([s.Eq(i,x/r1+x/rp),s.Eq(i,(y-x)/r2-g*x)],[x,y]);Rbjt=s.factor(bjt[y]/i)
-# Lower-driven BJT exact open output KCL.
-amp=s.solve([s.Eq(x/r1+x/rp+(x-y)/r2+g*x+g*v,0),s.Eq((y-x)/r2-g*x,0)],[x,y]);Abjt=s.factor(amp[y]/v)
-print('MOS output KCL:',Rmos,'; BJT output KCL:',Rbjt,'; BJT voltage gain:',Abjt)
-out=s.Rational(18,10)-s.Rational(1,1000)*500;ov=s.sqrt(2*s.Rational(1,1000)/(s.Rational(1,10000)*s.Rational(20,1)/s.Rational(18,100)));print('Vb1max',out+s.Rational(2,5),'VX',s.N(out-ov))
-
-t=s.symbols("t",positive=True)
-print("MOS exact/dominant gm scaled limit",s.limit(Rmos.subs(g,t*g)/(t*g*r1*r2),t,s.oo))
-print("BJT R exact/dominant gm scaled limit",s.limit(Rbjt.subs(g,t*g)/(t*g*r2*r1*rp/(r1+rp)),t,s.oo))
-print("BJT Av exact/dominant gm scaled limit",s.limit(Abjt.subs(g,t*g)/(-t**2*g**2*r2*r1*rp/(r1+rp)),t,s.oo))
+# Independent check P9.15 (Fig 9.51): max Vb1 and V_X, lambda=0
+import sympy as sp
+V=sp.symbols('Vov1',positive=True)
+k=sp.Rational(1,10**4); I=sp.Rational(1,1000); VTH=sp.Rational(2,5); VDD=sp.Rational(18,10); RD=500
+W1=sp.Rational(20)/sp.Rational(18,100); W2=sp.Rational(40)/sp.Rational(18,100)
+V1=VDD-I*RD; print('V1 = VDD - I RD =',V1)
+Vb1max=V1+VTH; print('(a) M1 sat: V1 >= Vb1 - VTH -> Vb1,max =',Vb1max,'V')
+o1=sp.solve(sp.Eq(I,k/2*W1*V**2),V)[0]; o2=sp.sqrt(2*I/(k*W2))
+VX=Vb1max-VTH-o1
+print('(b) Vov1 =',sp.nsimplify(o1),'=',float(o1),' V_X = Vb1 - VTH - Vov1 =',sp.nsimplify(VX),'=',float(VX),'V')
+print('    check M2 sat: Vov2 =',float(o2),' V_X >= Vov2 ?',bool(VX>=o2))

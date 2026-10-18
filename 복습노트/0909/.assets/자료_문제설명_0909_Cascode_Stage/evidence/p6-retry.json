@@ -1,0 +1,18 @@
+{
+ "p6": [
+  {
+   "question": "전류와 $W/L$은 그대로 두고 출력 임피던스 사양을 $200\\ \\mathrm{k\\Omega}$ 이상으로 4배 올리면 지배항 근사의 $\\lambda_{\\max}$는 얼마인가요?",
+   "expected_answer": "λ_max = √(g_m/(R_min I_D²))이므로 R_min이 4배면 λ_max는 1/2배: 0.516/2 ≈ 0.258 V⁻¹.",
+   "reason": "지배항 R_out ≈ g_m/(λ²I_D²)에서 g_m은 고정이라 λ_max ∝ R_min^(-1/2)이에요.",
+   "condition": "I_D = 0.5 mA, W/L = 20/0.18, g_m = 3.333 mS, 지배항 근사.",
+   "check": "python: sqrt(3.3333e-3/(200e3*(0.5e-3)**2)) = 0.2582"
+  },
+  {
+   "question": "사양 $50\\ \\mathrm{k\\Omega}$와 $W/L=20/0.18$은 그대로 두고 바이어스 전류를 $1\\ \\mathrm{mA}$로 두 배 늘리면 지배항 근사의 $\\lambda_{\\max}$는 커지나요, 작아지나요? 대략 얼마인가요?",
+   "expected_answer": "작아져요. g_m = √(2·100 μA/V²·(20/0.18)·1 mA) = 4.71 mS, λ_max = √(4.71 mS/(50 kΩ·(1 mA)²)) ≈ 0.307 V⁻¹.",
+   "reason": "R_out ≈ g_m/(λ²I_D²)에서 g_m ∝ √I_D, 분모 ∝ I_D²이라 λ_max ∝ I_D^(-3/4)로 줄어요.",
+   "condition": "W/L = 20/0.18, μnCox = 100 μA/V², R_min = 50 kΩ, 지배항 근사.",
+   "check": "python: gm=sqrt(2*100e-6*(20/0.18)*1e-3)=4.714e-3; sqrt(gm/(50e3*1e-6))=0.3071"
+  }
+ ]
+}

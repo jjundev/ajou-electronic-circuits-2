@@ -1,0 +1,18 @@
+{
+ "p7": [
+  {
+   "question": "$\\lambda=0$이고 게이트 전류와 다른 기생을 무시할 때 $R_S$만 2배로 하면 두 극점은 각각 어떻게 되나요?",
+   "expected_answer": "입력 극점 1/(R_S C_in)만 절반으로 내려가고 출력 극점 1/(R_D C_L)은 그대로.",
+   "reason": "게이트 전류 0이라 C_in은 R_S만 보고, lambda=0이라 출력 노드는 R_D만 봐요. 두 노드가 분리돼 있어요.",
+   "condition": "lambda=0, 게이트 전류·C_GD 등 다른 기생 무시.",
+   "check": "sympy: H=-gm*RD/((1+s*RS*Cin)(1+s*RD*CL)); RS->2RS 이면 첫 극점만 1/2"
+  },
+  {
+   "question": "같은 회로에서 $\\lambda\\neq0$이라 $M_1$에 $r_o$가 생기면(다른 기생은 여전히 무시) 입력 극점과 출력 극점 식은 각각 어떻게 바뀌나요? $r_o$는 그림의 어느 두 노드 사이에 들어가나요?",
+   "expected_answer": "r_o는 v_out(드레인)과 접지(소스) 사이에 R_D와 병렬로 들어가요. 출력 극점 1/[(R_D∥r_o)C_L]로 올라가고 입력 극점 1/(R_S C_in)은 그대로.",
+   "reason": "소스 접지라 r_o는 출력 노드-접지 사이 가지가 되고, 게이트 쪽 노드와는 연결이 없어요.",
+   "condition": "lambda≠0, 다른 기생은 여전히 무시.",
+   "check": "sympy: solve(v_out/RD+v_out/ro+s*CL*v_out+gm*vg) -> pole -1/((RD*ro/(RD+ro))*CL)"
+  }
+ ]
+}

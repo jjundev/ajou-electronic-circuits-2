@@ -1,4 +1,6 @@
-1/1000 800 3125/8
-tradeoff a**2*p/(4*m*v*(v - vc)**2)
-Independent conclusion: Iss1mA,RD800ohm,W/L781.25; W/L=A²P/[4mu VDD(VDD-VCMout)²]
-Correct W/L = 3125/8
+W/L(VDD) = A_v**2*P/(4*V_DD*muCox*(V_CMout - V_DD)**2)
+simplify(WL - Av^2 P/(4 muCox VDD (VDD-VCMout)^2)) = 0
+R_D(VDD) = 2*V_DD*(-V_CMout + V_DD)/P  I_SS = P/V_DD
+VDD=2.0: {'I_SS': 0.00100000, 'R_D': 800.000, 'WL': 390.625}
+VDD=1.8: {'I_SS': 0.00111111, 'R_D': 360.000, 'WL': 1736.11}
+d(W/L)/dVDD at VDD=2 = -2148.44 (negative: higher VDD -> smaller W/L)

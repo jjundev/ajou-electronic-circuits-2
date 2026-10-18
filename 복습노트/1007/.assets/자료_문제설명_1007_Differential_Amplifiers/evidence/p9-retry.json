@@ -1,0 +1,25 @@
+{
+ "p9": [
+  {
+   "question": "거울을 반대로 키워 $(W/L)_4=2(W/L)_3$로 하면 변화 전·후 $V_{out}$과 변화량은 얼마일지, 출력 노드 KCL 한 줄로 예측해 보세요.",
+   "expected_answer": "k = 2. 전: V_out = R_L(2I_0 − I_0) = I_0 R_L, 후: V_out = R_L[2(I_0 + ΔI) − (I_0 − ΔI)] = R_L(I_0 + 3ΔI), 변화량 3ΔI R_L.",
+   "reason": "I_D4 = kI_1, 출력 노드 KCL V_out = R_L(kI_1 − I_2), 변화량 (1 + k)ΔI R_L이에요.",
+   "condition": "λ = 0, M4 포화 유지(V_out가 V_DD − |V_ov4| 이하), I_2는 이상 전류원.",
+   "check": "sympy: k=2; RL*(k*I0-I0) = I0*RL; RL*(k*(I0+dI)-(I0-dI)) = RL*(I0+3dI)"
+  },
+  {
+   "question": "(a)에서 $I_1=I_0$로 고정하고 $I_2$만 $I_0-\\Delta I$로 바뀌면 $V_{out}$ 변화량은 얼마인가요? 어느 전류 경로가 빠졌는지 판단해요.",
+   "expected_answer": "ΔV_out = ΔI R_L. 거울을 통한 위쪽 공급 증가(+ΔI)가 없고 아래 I_2 감소분만 R_L로 가요.",
+   "reason": "V_out = R_L(I_D4 − I_2)에서 I_D4 = I_1 = I_0가 그대로라 I_2 변화만 남아요. 원래 2ΔI R_L의 절반은 거울이 복사한 몫이었어요.",
+   "condition": "(W/L)_3 = (W/L)_4, λ = 0, M4 포화.",
+   "check": "RL*(I0-(I0-dI)) - 0 = dI*RL"
+  },
+  {
+   "question": "(a)에서 반대로 $I_1$이 $I_0-\\Delta I$로 줄고 $I_2$가 $I_0+\\Delta I$로 늘면 $V_{out}$은 얼마이고, 이때 $R_L$의 전류는 어느 방향으로 흐르나요?",
+   "expected_answer": "V_out = R_L[(I_0 − ΔI) − (I_0 + ΔI)] = −2ΔI R_L. R_L 전류가 접지에서 출력 노드 쪽으로(위로) 2ΔI 흘러요.",
+   "reason": "M4가 공급하는 전류보다 I_2가 더 많이 빼가서 부족분을 R_L이 접지에서 끌어와야 하므로 출력이 음수가 돼요.",
+   "condition": "λ = 0, I_2는 음의 출력 전압에서도 전류를 유지하는 이상 전류원, M4 포화.",
+   "check": "RL*((I0-dI)-(I0+dI)) = -2*dI*RL"
+  }
+ ]
+}

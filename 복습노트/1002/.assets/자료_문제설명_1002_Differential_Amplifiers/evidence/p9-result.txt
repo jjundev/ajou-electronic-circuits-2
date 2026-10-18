@@ -1,3 +1,5 @@
-Acm = -Ic*RC/(2*VA + 2*VT)
-target difference = 0
-|Acm|<.01 iff RC Ic < .02(VA+VT). Ic is tail current, beta>>1.
+A_CM exact = -R_C*g_m*r_pi/(2*g_m*r_O3*r_pi + 2*r_O3 + r_pi)
+limit beta->oo (r_pi->oo) of A_CM - std: 0
+|A_CM| = I_C*R_C/(2*(V_A + V_T))   -> check equals R_C I_C/(2(V_A+V_T)): 0
+solve |A_CM| = 1/100 for R_C*I_C: V_A/50 + V_T/50
+exact/std ratio: r_pi*(2*g_m*r_O3 + 1)/(2*g_m*r_O3*r_pi + 2*r_O3 + r_pi)  (-> 1 as r_pi->oo)

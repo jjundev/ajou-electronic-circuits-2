@@ -1,0 +1,18 @@
+{
+ "p8": [
+  {
+   "question": "$\\beta$, $V_A$를 고정하고 네 소자의 전류를 모두 2배로 하면 $g_{m1}$, $R_{on}$, $R_{op}$, $A_v$는 각각 몇 배인가요?",
+   "expected_answer": "g_m1 2배, R_on·R_op 각각 1/2배, A_v 그대로.",
+   "reason": "R_on=B_N/I_C, R_op=B_P/I_C이고 g_m1=I_C/V_T라 곱에서 I_C가 약분돼요.",
+   "condition": "V_A3=V_A4=V_A,P 해석, 곱 항 근사, 네 소자 같은 전류.",
+   "check": "python: 2*(1/2)=1"
+  },
+  {
+   "question": "$\\beta_N=100$, $V_{A,N}=5\\ \\mathrm V$, $V_T=26\\ \\mathrm{mV}$에서 $B_N$은 몇 V이고, $\\beta_N\\to\\infty$이면 $B_N$은 무엇으로 가나요?",
+   "expected_answer": "B_N = 100·25/(5+2.6) ≈ 329 V. β_N→∞이면 B_N → V_A,N²/V_T ≈ 962 V(즉 R_on → g_m r_O²).",
+   "reason": "β→∞에서 r_π→∞라 r_O∥r_π→r_O이고 B_N=βV_A²/(V_A+βV_T)→V_A²/V_T예요.",
+   "condition": "같은 바이어스 전류, 곱 항 근사.",
+   "check": "python: 100*25/7.6=328.95; 25/0.026=961.54; sympy limit(b*VA**2/(VA+b*VT), b, oo)=VA**2/VT"
+  }
+ ]
+}

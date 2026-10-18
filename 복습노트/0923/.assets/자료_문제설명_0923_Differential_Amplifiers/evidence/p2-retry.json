@@ -1,0 +1,18 @@
+{
+ "p2": [
+  {
+   "question": "R_C1=R_C, R_C2=1.1R_C이고 r_o1=r_o2=20R_C이면 v_out/v_cc의 부호와 크기는?",
+   "expected_answer": "v_out/v_cc = 20/21 − 20/21.1 ≈ +4.51×10⁻³ (양수, X가 Y보다 조금 더 따라감).",
+   "reason": "각 노드 이득 r_o/(R_C+r_o)가 저항 미스매치로 달라져 차동 출력에 차이만큼 남아요.",
+   "condition": "v_be1=v_be2=0, r_o1=r_o2=20R_C, v_out=v_X−v_Y.",
+   "check": "python: 20/21-20/21.1 = 0.004514"
+  },
+  {
+   "question": "R_C1=R_C2 그대로 두고 출력을 v_X 하나(single-ended)로 받으면 리플 이득은 0일까요?",
+   "expected_answer": "0이 아니라 r_o/(R_C+r_o)예요(보통 1에 가까움).",
+   "reason": "대칭 상쇄는 두 노드의 차를 취할 때만 일어나요. 한 노드는 공통 모드 리플을 그대로 따라가요.",
+   "condition": "R_C1=R_C2=R_C, r_o1=r_o2=r_o, v_be=0.",
+   "check": "sympy: solve((vX-vcc)/Rc+vX/ro, vX)/vcc -> r_o/(R_C+r_o)"
+  }
+ ]
+}

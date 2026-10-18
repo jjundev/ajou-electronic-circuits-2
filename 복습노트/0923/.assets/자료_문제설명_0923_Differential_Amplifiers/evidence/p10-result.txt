@@ -1,4 +1,3 @@
-nonlinear KCL -2*a*k*u + d**2*k/4 + k*u**2 - u/R
-linear 0 quadratic R*k/(4*(2*R*a*k + 1))
-quadratic Rss infinity 1/(8*a) Rss zero 0
-Independent conclusion: tail first-order displacement zero; second order coefficient k/[4(2k a+1/Rss)]
+ID1+ID2 = V_CM**2*k - 2*V_CM*V_P*k - 2*V_CM*V_TH*k + V_P**2*k + 2*V_P*V_TH*k + V_TH**2*k + d**2*k  -> only even powers of d (d^2 term)
+dV_P/dd = 2*R_SS*d*k/(2*R_SS*k*(V_CM - V_P - V_TH) + 1) ; at d=0: 0
+F(d)-F(-d) = 0

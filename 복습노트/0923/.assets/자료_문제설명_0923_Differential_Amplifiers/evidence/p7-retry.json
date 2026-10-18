@@ -1,0 +1,18 @@
+{
+ "p7": [
+  {
+   "question": "V_DD=1.8 V, V_TH=0.4 V를 대입하면 R_D I_SS의 상한은?",
+   "expected_answer": "R_D I_SS ≤ 1.8 − 1.5 + 0.4 = 0.70 V.",
+   "reason": "M2 off라 M1이 I_SS 전체를 흘리고, 포화 조건 V_X ≥ V_in1 − V_TH에 넣어요.",
+   "condition": "V_in1=1.5 V, M2 off 가정 유지.",
+   "check": "python: 1.8-1.5+0.4 = 0.7"
+  },
+  {
+   "question": "M2가 여전히 꺼져 있다고 두고 V_in1만 1.2 V로 낮추면 M1 포화 조건은 엄격해질까요 느슨해질까요?",
+   "expected_answer": "느슨해져요: R_D I_SS ≤ V_DD − 1.2 V + V_TH (상한이 0.3 V 커짐).",
+   "reason": "게이트가 낮아지면 드레인이 지켜야 할 최소 전압 V_G − V_TH도 낮아져요.",
+   "condition": "M2 off 가정 유지(V_ov1 ≤ V_in1 − V_in2 = 0.9 V일 때 일관), 테일 전류원 포화.",
+   "check": "sympy: (VDD-1.2+VTH) - (VDD-1.5+VTH) = 0.3"
+  }
+ ]
+}

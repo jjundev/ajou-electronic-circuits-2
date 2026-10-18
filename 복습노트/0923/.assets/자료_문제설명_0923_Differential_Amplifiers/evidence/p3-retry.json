@@ -1,0 +1,18 @@
+{
+ "p3": [
+  {
+   "question": "M1·M2의 폭과 I_SS를 모두 두 배로 하면 테일 노드 전압은 얼마나 움직일까요?",
+   "expected_answer": "움직이지 않아요(ΔV_P = 0). V_ov,new = sqrt(2I_SS/(2K)) = V_ov.",
+   "reason": "게이트 고정이므로 ΔV_P = −ΔV_ov이고, 각 소자 전류와 K가 같은 배율로 늘면 과구동이 그대로예요.",
+   "condition": "V_CM 고정, λ=0, V_TH·L·μ_n·C_ox 고정, 제곱 법칙.",
+   "check": "sympy: sqrt((2*I)/(2*K)) - sqrt(I/K) = 0"
+  },
+  {
+   "question": "W·t_ox는 그대로 두고 I_SS만 네 배로 하면 ΔV_P는 V_ov의 몇 배이고 방향은?",
+   "expected_answer": "ΔV_P = −V_ov (V_ov만큼 내려가요).",
+   "reason": "V_ov ∝ sqrt(I_SS)라 과구동이 2배가 되고, 늘어난 V_GS만큼 소스(테일)가 내려가요.",
+   "condition": "V_CM 고정, λ=0, V_TH 고정, 테일 전류원이 계속 포화.",
+   "check": "sympy: -(sqrt(4*I/K)-sqrt(I/K)) = -sqrt(I/K)"
+  }
+ ]
+}

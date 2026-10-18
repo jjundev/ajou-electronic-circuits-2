@@ -1,19 +1,16 @@
-import sympy as s
-s.init_printing()
-g,r1,r2,Rp,i,v,x,y,rp,b,VT,I,VA,kn,kp,N=s.symbols('g r1 r2 Rp i v x y rp b VT I VA kn kp N', positive=True)
-i,v,x,y=s.symbols('i v x y', real=True)
-# MOS cascode output test: bottom ro=r2, top gm=g,ro=r1; top gate grounded.
-mos=s.solve([s.Eq(i,x/r2),s.Eq(i,(y-x)/r1-g*x)],[x,y]);Rmos=s.factor(mos[y]/i)
-# BJT top base grounded: lower ro=r1, upper ro=r2,rpi=rp.
-bjt=s.solve([s.Eq(i,x/r1+x/rp),s.Eq(i,(y-x)/r2-g*x)],[x,y]);Rbjt=s.factor(bjt[y]/i)
-# Lower-driven BJT exact open output KCL.
-amp=s.solve([s.Eq(x/r1+x/rp+(x-y)/r2+g*x+g*v,0),s.Eq((y-x)/r2-g*x,0)],[x,y]);Abjt=s.factor(amp[y]/v)
-print('MOS output KCL:',Rmos,'; BJT output KCL:',Rbjt,'; BJT voltage gain:',Abjt)
-R=s.factor(Rmos.subs(r1,r1*Rp/(r1+Rp)));print('RP parallel upper ro:',R);print('RP infinity',s.limit(R,Rp,s.oo));print('RP zero',s.limit(R,Rp,0))
-
-t=s.symbols("t",positive=True)
-print("MOS exact/dominant gm scaled limit",s.limit(Rmos.subs(g,t*g)/(t*g*r1*r2),t,s.oo))
-print("BJT R exact/dominant gm scaled limit",s.limit(Rbjt.subs(g,t*g)/(t*g*r2*r1*rp/(r1+rp)),t,s.oo))
-print("BJT Av exact/dominant gm scaled limit",s.limit(Abjt.subs(g,t*g)/(-t**2*g**2*r2*r1*rp/(r1+rp)),t,s.oo))
-
-q=s.Rational(10000);r=20000;gg=s.Rational(1,1000);it=s.Rational(10,10**9);vx=it*r;vt=it*(q+r+gg*q*r);print('teaching example vx,vt,R',vx,vt,vt/it);print('resistor current',(vt-vx)/q,'controlled reverse current',gg*vx);assert vt/it==230000
+# P1 (E9.6): MOS cascode, M1 top (gate Vb1) with parasitic R_P across D-S of M1, M2 bottom (gate Vb2) -> r_O2.
+# Test: drive output with v_x, find i_x. Gates are AC ground.
+import sympy as sp
+gm1, ro1, ro2, RP, vx, vs, ix = sp.symbols('g_m1 r_O1 r_O2 R_P v_x v_s i_x', positive=True)
+# node s (M1 source = M2 drain): ix flows down through M2 (r_O2, vgs2=0): vs = ix*ro2
+# ix through M1 branch: gm1*vgs1 + (vx-vs)/ro1 + (vx-vs)/RP, vgs1 = -vs
+eqs = [sp.Eq(vs, ix*ro2), sp.Eq(ix, gm1*(-vs) + (vx-vs)/ro1 + (vx-vs)/RP)]
+sol = sp.solve(eqs, [vs, ix], dict=True)[0]
+Rout = sp.simplify(vx/sol[ix])
+print('Rout exact =', sp.factor(Rout))
+rp = ro1*RP/(ro1+RP)
+target = (1+gm1*ro2)*rp + ro2
+print('simplify(Rout - [(1+gm1 rO2)(rO1||RP) + rO2]) =', sp.simplify(Rout-target))
+approx = gm1*ro2*rp
+print('ratio exact/approx(gm1 rO2 (rO1||RP)) as gm1->oo :', sp.limit(Rout/approx, gm1, sp.oo))
+print('RP->oo limit (ordinary cascode):', sp.simplify(sp.limit(Rout, RP, sp.oo)))

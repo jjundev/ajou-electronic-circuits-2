@@ -1,10 +1,11 @@
-MOS output KCL: g*r1*r2 + r1 + r2 ; BJT output KCL: (g*r1*r2*rp + r1*r2 + r1*rp + r2*rp)/(r1 + rp) ; BJT voltage gain: -g*r1*rp*(g*r2 + 1)/(r1 + rp)
-Av exact (-g*r2*rp + r1)/(r1 + rp)
-Gm exact -(-g*r2*rp + r1)/(g*r1*r2*rp + r1*r2 + r1*rp + r2*rp) gm large Gm 1/r1
-Av approx -g*r2*rp/(r1 + rp)
-MOS exact/dominant gm scaled limit 1
-BJT R exact/dominant gm scaled limit 1
-BJT Av exact/dominant gm scaled limit 1
-short exact matches conductance KCL target=0
-open exact equals independently derived voltage formula
-finite-beta large-gmro example upper driven gain -65.1315789473684
+Gm exact = (g_m*r_O2*r_pi - r_O1)/(g_m*r_O1*r_O2*r_pi + r_O1*r_O2 + r_O1*r_pi + r_O2*r_pi)
+Av exact = -(g_m*r_O2*r_pi - r_O1)/(r_O1 + r_pi)
+check Av + Gm*Rout = 0
+Gm * rO1 as gm->oo (beta fixed) -> (beta*r_O2 - r_O1)/(r_O2*(beta + 1))   => Gm ~ beta/((beta+1) rO1) ~ 1/rO1 (for rO1~rO2, beta>>1)
+Av / [-gm rO2 rpi/(rpi+rO1)] as gm->oo: 1 - r_O1/(beta*r_O2)
+-gm rO2 rpi/(rpi+rO1) == -beta rO2/(rpi+rO1): 0
+Gm_approx*Rout_approx check: -Gm*gm rO2 (rO1||rpi) with Gm=1/rO1 -> -g_m*r_O2*r_pi/(r_O1 + r_pi)  (same as Avt: 0 )
+rpi -> oo (no base current): Av -> -g_m*r_O2   (single-CE level, not gm^2 rO^2)
+rO1 >> rpi: Av ~ -beta rO2/rO1 ; with rO1=rO2: ~ -beta
+same-current form: simplify(Avt + beta VA/(VA+beta VT)) = 0
+beta->oo (rpi->oo) exact Gm - gm/(1+gm rO1 + rO1/rO2) = 0

@@ -1,0 +1,18 @@
+{
+ "p3": [
+  {
+   "question": "$M_3$·$M_4$의 게이트를 드레인에서 떼어 고정 바이어스 $V_b$에 연결하면(전류원 부하) 출력 KCL에서 어떤 항이 사라지고 $A_v$는 무엇이 될까요?",
+   "expected_answer": "g_m3 v_o1 항이 사라져 A_v=−g_m1(r_o1∥r_o3)",
+   "reason": "게이트·소스가 모두 고정되면 v_sg3=0이라 제어 전류원이 0이고 r_o3만 남아요.",
+   "condition": "λ≠0, 대칭, 순수 차동 입력",
+   "check": "solve(gm1*vi+vo/ro1+vo/ro3, vo)/vi = -gm1*ro1*ro3/(ro1+ro3)"
+  },
+  {
+   "question": "$g_{m1}=g_{m3}=1$ mS, $r_{o1}=r_{o3}=20$ kΩ이면 $A_v$는 얼마일까요? $\\lambda\\to0$ 값 $-1$과 비교해 보세요.",
+   "expected_answer": "A_v=−1 mS/(1 mS+0.05 mS+0.05 mS)≈−0.909",
+   "reason": "출력 컨덕턴스에 1/r_o1, 1/r_o3가 더해져 |A_v|가 g_m1/g_m3보다 작아져요.",
+   "condition": "주어진 수치, 대칭",
+   "check": "-1e-3/(1e-3+1/20e3+1/20e3) = -0.9091"
+  }
+ ]
+}

@@ -1,0 +1,18 @@
+{
+ "p4": [
+  {
+   "question": "그림 (b)에서 $M_5$의 게이트를 $V_b$ 대신 자기 드레인(출력)에 연결하면 출력 KCL에 무엇이 더해지나요?",
+   "expected_answer": "g_m5 v_o 항이 더해져 A_v=−g_m1/(g_m3+g_m5+1/r_o1+1/r_o3+1/r_o5)",
+   "reason": "M5가 다이오드 연결이 되어 v_sg5=−v_o, 출력에서 위로 g_m5 v_o가 나가요.",
+   "condition": "λ>0, 완전 대칭, 순수 차동 입력, 바디 효과 무시",
+   "check": "solve(gm1*vi+vo*(gm3+gm5+1/ro1+1/ro3+1/ro5), vo)/vi"
+  },
+  {
+   "question": "그림 (c)에서 $g_{m1}=2$ mS, $r_{o1}=r_{o3}=20$ kΩ, $R_1=R_2=10$ kΩ이면 $A_v$는 얼마일까요?",
+   "expected_answer": "r_o1∥r_o3∥R_1=5 kΩ, A_v=−10",
+   "reason": "중점이 차동 가상 접지라 R_1은 출력에서 AC 접지까지의 한쪽 저항이고, M3는 v_sg3=0이라 r_o3만 남아요.",
+   "condition": "R_1=R_2, 순수 차동 입력",
+   "check": "-2e-3/(1/20e3+1/20e3+1/10e3) = -10"
+  }
+ ]
+}

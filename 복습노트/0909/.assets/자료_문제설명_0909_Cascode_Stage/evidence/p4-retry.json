@@ -1,0 +1,18 @@
+{
+ "p4": [
+  {
+   "question": "$g_{m1}=2\\ \\mathrm{mS}$, $r_{O1}=20\\ \\mathrm{k\\Omega}$, $r_{O2}=40\\ \\mathrm{k\\Omega}$, $R_P=20\\ \\mathrm{k\\Omega}$일 때 정확 출력저항은 얼마이고, $R_P$가 없을 때보다 몇 배인가요? 먼저 $R_P$를 어느 저항과 병렬로 묶을지 정해 보세요.",
+   "expected_answer": "R_P는 r_O1과 같은 두 노드(출력–v_x)에 걸리므로 q = r_O1∥R_P = 10 kΩ. R_out = q + r_O2 + g_m1 q r_O2 = 10k+40k+800k = 850 kΩ. R_P가 없으면 20k+40k+1600k = 1.66 MΩ이라 약 0.51배.",
+   "reason": "시험전류 KCL i_t = (v_t−v_x)/q − g_m1 v_x, v_x = i_t r_O2에서 R_out = q + r_O2 + g_m1 q r_O2이고, 같은 노드 쌍의 저항만 병렬로 묶어요.",
+   "condition": "g_m1 = 2 mS, r_O1 = 20 kΩ, r_O2 = 40 kΩ, R_P = 20 kΩ, V_b1·V_b2 AC 접지.",
+   "check": "python: q=1/(1/20e3+1/20e3)=1e4; q+40e3+2e-3*q*40e3=8.5e5; 20e3+40e3+2e-3*20e3*40e3=1.66e6"
+  },
+  {
+   "question": "같은 값에서 $R_P$가 출력–$v_x$ 사이가 아니라 $v_x$와 접지 사이에 생겼다면 $R_P$는 어느 저항과 병렬이 되고 $R_{out}$은 얼마인가요?",
+   "expected_answer": "R_P는 r_O2와 병렬이 되어 축퇴 저항 R_S = r_O2∥R_P = 13.3 kΩ. R_out = r_O1 + R_S + g_m1 r_O1 R_S = 20k+13.3k+533.3k ≈ 567 kΩ.",
+   "reason": "기생 저항이 걸린 노드 쌍이 v_x–접지로 바뀌면 출력–v_x 가지는 r_O1만 남고, 축퇴 저항 자리에 병렬값이 들어가요.",
+   "condition": "같은 값 g_m1 = 2 mS, r_O1 = 20 kΩ, r_O2 = 40 kΩ, R_P = 20 kΩ.",
+   "check": "python: Rs=1/(1/40e3+1/20e3)=13333.3; 20e3+Rs+2e-3*20e3*Rs=566666.7"
+  }
+ ]
+}

@@ -1,0 +1,18 @@
+{
+ "p3": [
+  {
+   "question": "$W/L=32$, $I_D=0.5\\ \\mathrm{mA}$를 유지하고 $\\lambda$만 $0.2\\ \\mathrm{V^{-1}}$로 2배 하면 주항 $R_{out}$은 몇 kΩ인가요?",
+   "expected_answer": "r_O = 10 kΩ, g_m = 1.79 mS 그대로, R_out ≈ 179 kΩ (1/4배)",
+   "reason": "g_m은 λ와 무관하고 주항에 r_O가 제곱으로 들어가요.",
+   "condition": "μnCox = 100 μA/V², M_1 = M_2",
+   "check": "gm=sqrt(2*100e-6*32*0.5e-3)=1.78885e-3; ro=1/(0.2*0.5e-3)=1e4; gm*ro**2=178.9e3"
+  },
+  {
+   "question": "같은 전류에서 예제의 $W/L=15.625$를 4배인 $62.5$로 하면 주항 $R_{out}$은 예제의 500 kΩ에서 몇 kΩ가 될지 예측해 보세요.",
+   "expected_answer": "g_m이 √4 = 2배인 2.5 mS라 R_out ≈ 1.00 MΩ (2배)",
+   "reason": "전류 고정에서 g_m ∝ √(W/L), r_O는 그대로예요.",
+   "condition": "I_D = 0.5 mA, λ = 0.1 V⁻¹, μnCox = 100 μA/V²",
+   "check": "gm=sqrt(2*100e-6*62.5*0.5e-3)=2.5e-3; gm*(2e4)**2=1.0e6"
+  }
+ ]
+}

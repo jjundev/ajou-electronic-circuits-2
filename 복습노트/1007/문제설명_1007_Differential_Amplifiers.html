@@ -567,28 +567,9 @@
   <p>1. 소신호 등가회로로 바꿔요. $V_{DD}$와 $V_b$는 직류라 교류 접지(AC ground)로 보내요. 그러면 $M_3$는 게이트·소스가 모두 접지인 소자가 되어, 테일 노드에서 보면 저항 $r_{O3}$ 하나만 남아요.</p>
   <p>$$R_{SS}=r_{O3}=\frac{1}{\lambda I_{SS}}$$</p>
   <p>2. 공통 모드 하프 서킷을 그려요. $r_{O3}$를 $2r_{O3}\parallel 2r_{O3}$로 나누고 가운데를 끊어서, 왼쪽 반쪽만 남겨요.</p>
-  <svg viewBox="0 0 240 200" width="240" height="200" role="img" aria-label="공통 모드 하프 서킷: VDD, R_D, 출력 X, M1, 소스의 2 r_O3, 접지">
-    <line x1="60" y1="15" x2="160" y2="15" stroke="currentColor" stroke-width="2"/>
-    <text x="165" y="20" fill="currentColor" font-size="12">V_DD</text>
-    <line x1="110" y1="15" x2="110" y2="30" stroke="currentColor"/>
-    <rect x="102" y="30" width="16" height="36" fill="none" stroke="currentColor"/>
-    <text x="124" y="52" fill="currentColor" font-size="12">R_D</text>
-    <line x1="110" y1="66" x2="110" y2="86" stroke="currentColor"/>
-    <circle cx="110" cy="78" r="2.5" fill="currentColor"/>
-    <text x="118" y="82" fill="currentColor" font-size="12">X</text>
-    <rect x="96" y="86" width="28" height="30" fill="none" stroke="currentColor"/>
-    <text x="130" y="105" fill="currentColor" font-size="12">M1</text>
-    <line x1="50" y1="101" x2="96" y2="101" stroke="currentColor"/>
-    <text x="8" y="105" fill="currentColor" font-size="11">ΔV_in,CM</text>
-    <line x1="110" y1="116" x2="110" y2="130" stroke="currentColor"/>
-    <rect x="102" y="130" width="16" height="36" fill="none" stroke="currentColor"/>
-    <text x="124" y="152" fill="currentColor" font-size="12">2 r_O3</text>
-    <line x1="110" y1="166" x2="110" y2="180" stroke="currentColor"/>
-    <line x1="98" y1="180" x2="122" y2="180" stroke="currentColor"/>
-    <line x1="103" y1="185" x2="117" y2="185" stroke="currentColor"/>
-    <line x1="107" y1="190" x2="113" y2="190" stroke="currentColor"/>
-  </svg>
-  <p>3. 첫 식은 이 반쪽의 소스 노드 KCL과 출력 노드 식이에요. 소스 전압을 $v_s$, 드레인 소신호 전류를 $i_d$라 하면</p>
+  <p>3. 노드와 방향을 정해요. 소스 노드 전압은 $v_s$, 드레인 소신호 전류 $i_d$는 $X$에서 $M_1$을 지나 소스 노드로 내려가는 방향을 양으로 둬요. 제어 전압은 게이트 쪽이 $+$라 $v_{gs}=\Delta V_{in,CM}-v_s$예요.</p>
+  <figure class="figure"><svg viewBox="0 0 400 300" role="img" aria-label="CM 하프 서킷 소신호 등가회로: AC 접지된 V_DD에서 R_D를 거쳐 드레인 노드 X로, X에서 소스 노드 v_s로 아래 방향 제어 전류원 g_m v_gs가 있고, v_s에서 접지로 2r_O3가 연결돼요. 게이트에는 입력 ΔV_in,CM이 걸리고 v_gs는 게이트가 +, 소스 v_s가 −예요. 드레인 전류 i_d는 X에서 소스로 내려가는 방향이에요."><path class="fig-ink" d="M190 30 H250"/><text class="fig-muted" x="258" y="34">V<tspan baseline-shift="sub">DD</tspan> (AC 접지)</text><path class="fig-ink" d="M220 30 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M220 98 V139"/><polygon class="fig-ink" points="220,139 234,155 220,171 206,155"/><path class="fig-ink" d="M220 145 V164 M215 159 L220 164 L225 159"/><path class="fig-accent" d="M220 171 V200"/><path class="fig-ink" d="M220 200 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M220 268 v8 M210 276 H230 M214 281 H226 M218 286 H222"/><circle class="fig-dot" cx="220" cy="120" r="3.5"/><circle class="fig-dot" cx="220" cy="200" r="3.5"/><path class="fig-accent" d="M204 100 V116 M199 111 L204 116 L209 111"/><text class="fig-text" x="184" y="112">i<tspan baseline-shift="sub">d</tspan></text><text class="fig-text" x="234" y="68">R<tspan baseline-shift="sub">D</tspan></text><text class="fig-text" x="230" y="124">X: ΔV<tspan baseline-shift="sub">X</tspan></text><text class="fig-text" x="242" y="160">g<tspan baseline-shift="sub">m</tspan>v<tspan baseline-shift="sub">gs</tspan></text><text class="fig-text" x="230" y="196">v<tspan baseline-shift="sub">s</tspan></text><text class="fig-text" x="236" y="240">2r<tspan baseline-shift="sub">O3</tspan></text><path class="fig-ink" d="M60 220 V200 H110"/><circle class="fig-ink" cx="110" cy="200" r="3.5"/><text class="fig-text" x="122" y="205">+</text><text class="fig-text" x="146" y="205">v<tspan baseline-shift="sub">gs</tspan></text><text class="fig-text" x="198" y="205">−</text><circle class="fig-ink" cx="60" cy="234" r="14"/><text class="fig-muted" x="56" y="231">+</text><text class="fig-muted" x="56" y="245">−</text><path class="fig-ink" d="M60 248 V268"/><path class="fig-ink" d="M60 268 v8 M50 276 H70 M54 281 H66 M58 286 H62"/><text class="fig-text" x="8" y="188">ΔV<tspan baseline-shift="sub">in,CM</tspan></text></svg><figcaption>$V_{DD}$와 $V_b$를 AC 접지로 보내 $M_3$는 $r_{O3}$ 하나가 되고, 이를 $2r_{O3}\parallel2r_{O3}$로 나눈 왼쪽 반쪽이에요. $M_1$은 $\lambda=0$이라 $g_mv_{gs}$ 전류원만으로 바꿨어요.</figcaption></figure>
+  <p>4. 첫 식은 소스 노드 KCL이에요. 제어 전류원으로 들어온 $i_d$가 전부 $2r_{O3}$로 빠져나가요. 같은 $i_d$가 $R_D$를 지나 내려오므로 $X$의 전압은 그만큼 내려가요.</p>
   <p>$$i_d=g_m\,(\Delta V_{in,CM}-v_s),\qquad v_s=2r_{O3}\,i_d,\qquad \Delta V_X=-R_D\,i_d$$</p>
 </div>
 <div class="layer formal" data-explanation="solve">
@@ -632,9 +613,9 @@
 <div class="layer eli5" data-explanation="retry">
   <h4>설명을 닫고 다시 해 봐요</h4>
   <ol>
-    <li>Fig. 10.88에서 $V_{DD}$, $V_b$를 접지로 보내고 테일 노드에서 본 저항이 왜 $r_{O3}$인지 한 줄로 써 보세요.</li>
-    <li>CM 하프 서킷을 그리고 $A_{CM}=-R_D/(1/g_m+2r_{O3})$를 KCL로 유도해 보세요.</li>
-    <li>$g_m=I_{SS}/(V_{GS}-V_{TH})_{eq.}$, $r_{O3}=1/(\lambda I_{SS})$를 넣어 식 (10.224)까지 정리하고, $\lambda\to0$일 때 0이 되는지 확인해 보세요.</li>
+    <li>$(V_{GS}-V_{TH})_{eq.}=0.2$ V, $I_{SS}=1$ mA, $R_D=2$ kΩ에서 $M_3$의 $\lambda$만 $0.1\ \text{V}^{-1}$에서 $0.05\ \text{V}^{-1}$로 줄이면 $|A_{CM}|$은 대략 몇 배가 될지 먼저 예측해 보세요. 분모에서 어느 항이 지배하는지부터 판단해요.</li>
+    <li>문제와 달리 $M_1$도 $\lambda\neq0$이라면 CM 하프 서킷의 어느 두 노드 사이에 어떤 가지가 추가되고, 소스 노드 KCL 첫 식에는 어떤 항이 더해지나요?</li>
+    <li>출력을 $X$ 한쪽이 아니라 차동 출력 $V_X-V_Y$로 잡으면 이 대칭 회로의 공통 모드 이득은 얼마이고, 그 이유는 무엇인가요?</li>
   </ol>
 </div>
 <div class="sum" hidden="">
@@ -660,7 +641,9 @@
   <h4>종이에 쓸 첫 줄</h4>
   <p>1) 소신호에서 $V_{DD}$, $V_{b1}$, $V_{b2}$를 접지로 보내요. 그러면 $M_3$는 출력과 접지 사이의 저항 $r_{O3}$, $M_5$는 꼬리 노드와 접지 사이의 저항 $r_{O5}$가 돼요.</p>
   <p>2) CM 하프 서킷: $r_{O5}=2r_{O5}\parallel 2r_{O5}$로 나누고 대칭선을 끊어요. 왼쪽 반쪽은 게이트에 $v_{in}$, 소스에 $R_S=2r_{O5}$, 드레인(출력)에 $r_{O3}$가 달린 $M_1$이에요. $M_1$은 $g_{m1}v_{gs1}$ 전류원과 $r_{O1}$ 병렬로 바꿔요.</p>
-  <p>3) $G_m$을 위한 첫 식: 출력을 접지에 단락하고 드레인 전류를 $i$라 하면 소스 전압은 $v_s=iR_S$이고, 드레인 노드 KCL은</p>
+  <p>3) $G_m$을 위한 첫 식: 출력을 AC 접지에 단락하고, 단락선에서 출력 노드로 들어가 $M_1$을 지나 내려가는 전류를 $i$로 둬요. 출력이 0 V라 $r_{O3}$에는 전류가 흐르지 않아요. 제어 전압은 게이트 쪽이 $+$라 $v_{gs1}=v_{in}-v_s$이고, $r_{O1}$에는 출력(0 V)에서 소스 쪽으로 $(0-v_s)/r_{O1}$가 흘러요.</p>
+  <figure class="figure"><svg viewBox="0 0 400 320" role="img" aria-label="G_m을 구하는 CM 하프 서킷: 출력 노드는 AC 접지에 단락되어 0 V이고 단락선에서 출력 노드로 전류 i가 들어가요. 출력 노드와 AC 접지 V_DD 사이에 r_O3, 출력 노드와 소스 노드 v_s 사이에 아래 방향 제어 전류원 g_m1 v_gs1과 r_O1이 병렬로 있고, v_s에서 접지로 2r_O5가 연결돼요. 게이트에는 v_in이 걸리고 v_gs1은 게이트가 +, v_s가 −예요."><path class="fig-ink" d="M190 24 H250"/><text class="fig-muted" x="258" y="28">V<tspan baseline-shift="sub">DD</tspan> (AC 접지)</text><path class="fig-ink" d="M220 24 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M220 92 V110 M180 110 H260"/><path class="fig-accent" d="M220 100 H330 V112"/><path class="fig-accent" d="M330 112 v8 M320 120 H340 M324 125 H336 M328 130 H332"/><path class="fig-accent" d="M312 90 H292 M297 85 L292 90 L297 95"/><text class="fig-text" x="316" y="94">i</text><text class="fig-muted" x="296" y="148">출력 단락</text><circle class="fig-dot" cx="220" cy="100" r="3.5"/><text class="fig-text" x="234" y="62">r<tspan baseline-shift="sub">O3</tspan></text><text class="fig-text" x="134" y="98">v<tspan baseline-shift="sub">out</tspan> = 0</text><path class="fig-ink" d="M180 110 V149"/><polygon class="fig-ink" points="180,149 194,165 180,181 166,165"/><path class="fig-ink" d="M180 155 V174 M175 169 L180 174 L185 169"/><path class="fig-ink" d="M180 181 V200 H260 M260 110 V131"/><path class="fig-ink" d="M260 131 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M260 199 V200"/><text class="fig-text" x="100" y="170">g<tspan baseline-shift="sub">m1</tspan>v<tspan baseline-shift="sub">gs1</tspan></text><text class="fig-text" x="274" y="170">r<tspan baseline-shift="sub">O1</tspan></text><path class="fig-accent" d="M220 200 V220"/><circle class="fig-dot" cx="220" cy="220" r="3.5"/><text class="fig-text" x="232" y="216">v<tspan baseline-shift="sub">s</tspan></text><path class="fig-ink" d="M220 220 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M220 288 v8 M210 296 H230 M214 301 H226 M218 306 H222"/><text class="fig-text" x="236" y="258">2r<tspan baseline-shift="sub">O5</tspan></text><path class="fig-ink" d="M50 240 V220 H100"/><circle class="fig-ink" cx="100" cy="220" r="3.5"/><text class="fig-text" x="112" y="225">+</text><text class="fig-text" x="140" y="225">v<tspan baseline-shift="sub">gs1</tspan></text><text class="fig-text" x="198" y="225">−</text><circle class="fig-ink" cx="50" cy="254" r="14"/><text class="fig-muted" x="46" y="251">+</text><text class="fig-muted" x="46" y="265">−</text><path class="fig-ink" d="M50 268 V288"/><path class="fig-ink" d="M50 288 v8 M40 296 H60 M44 301 H56 M48 306 H52"/><text class="fig-text" x="16" y="210">v<tspan baseline-shift="sub">in</tspan></text></svg><figcaption>$V_{DD}$, $V_{b1}$, $V_{b2}$를 AC 접지로 보내 $M_3$는 $r_{O3}$, $M_5$는 $r_{O5}$가 되고, CM 하프 서킷이라 소스에 $2r_{O5}$가 붙어요. $M_1$은 $g_{m1}v_{gs1}$과 $r_{O1}$로 바꿨고, $G_m$을 구하려고 출력을 AC 접지에 단락했어요.</figcaption></figure>
+  <p>출력 노드 KCL(들어온 $i$ = 제어 전류원 + $r_{O1}$ 가지)과 소스 노드 KCL($i$가 모두 $2r_{O5}$로 빠짐)을 나란히 적어요.</p>
   $$i=g_{m1}(v_{in}-v_s)-\frac{v_s}{r_{O1}},\qquad v_s=2r_{O5}\,i$$
 </div>
 <div class="layer formal" data-explanation="solve">
@@ -708,9 +691,9 @@
 <div class="layer eli5" data-explanation="retry">
   <h4>설명을 닫고 다시 해 봐요</h4>
   <ol>
-    <li>CM 하프 서킷을 그리고, 테일이 반쪽에 $2r_{O5}$로 붙는 이유를 한 줄로 써 보세요.</li>
-    <li>출력 단락 KCL에서 $G_m$의 정확식을 유도하고 $g_mr_O\gg1$로 $1/(2r_{O5})$까지 줄여 보세요.</li>
-    <li>$\lambda$가 같을 때 $r_{O3}$와 $r_{O5}$의 비를 바이어스 전류로 구해 $|A_{CM}|$ 크기를 어림해 보세요.</li>
+    <li>$g_mr_O\gg1$ 근사에서 테일 전류는 그대로 두고 $M_5$의 채널을 길게 해 $r_{O5}$만 두 배로 만들면 한 출력 기준 $A_{CM}$은 몇 배가 될지 예측해 보세요.</li>
+    <li>$\lambda_n=0.1\ \text{V}^{-1}$, $\lambda_p=0.2\ \text{V}^{-1}$, $I_{SS}=1$ mA($M_3$는 $I_{SS}/2$, $M_5$는 $I_{SS}$)이면 $r_{O3}$, $r_{O5}$와 $A_{CM}$은 대략 얼마인가요?</li>
+    <li>$R_{out}$을 구할 때 입력을 0으로 두고 출력에 시험 전압을 걸면 시험 전류는 어느 두 경로로 나뉘나요? 반대로 $G_m$의 단락 회로에서 $r_{O3}$가 식에서 빠지는 이유는 무엇인가요?</li>
   </ol>
 </div>
 <div class="sum" hidden="">
@@ -719,7 +702,7 @@
   <div class="summary-group"><h4>핵심 판단</h4><p>트랜스컨덕턴스 $G_m\approx\dfrac{1}{2r_{O5}}$</p><p>출력 저항 $R_{out}\approx r_{O3}$ (아래쪽 $2g_{m1}r_{O1}r_{O5}$가 훨씬 큼)</p><p>답 $A_{CM}\approx-\dfrac{r_{O3}}{2r_{O5}}$</p></div>
   <div class="summary-group"><h4>검산</h4><p>$r_{O5}\to\infty$이면 0</p><p>같은 $\lambda$면 $r_{O3}=2r_{O5}$라 $|A_{CM}|\approx1$</p></div>
 </div>
-</article><article class="topic" id="p3"><h3>Fig 10.90 (a)(b) 회로에 대해 문제 10.68(공통 모드 이득)을 되풀이</h3><p class="panel-meta">P10.69 · 장말문제 10.69 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p3"><div class="layer formal" data-source-problem="p3"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>문제 10.68을 되풀이 (아래 상속·참조)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>(a), (b) 각 회로의 공통 모드 이득 (소문항 표기 없음, 원문은 "the circuits shown in Fig. 10.90"으로 적음)</li></ul></div><figure><img src=".assets/figures_문제설명_1007_Differential_Amplifiers/20e246081cbe7165-fig10-90.png" alt="그림 P10.69"></figure></div><details class="original" data-original-problem="p3"><summary>원문 보기</summary><p>Repeat Problem 10.68 for the circuits shown in Fig. 10.90.</p></details></div><div class="layer eli5" data-explanation="understand">
+</article><article class="topic" id="p3"><h3>Fig 10.90 (a)(b) 회로에 대해 문제 10.68(공통 모드 이득)을 되풀이</h3><p class="panel-meta">P10.69 · 장말문제 10.69 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p3"><div class="layer formal" data-source-problem="p3"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>문제 10.68을 되풀이</li><li>문제 10.68에서 이어받는 가정: 공통 모드 이득을 구함, $\lambda &gt; 0$, $g_m r_O \gg 1$, $A_v = -G_m R_{out}$ 관계를 사용</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>(a), (b) 각 회로의 공통 모드 이득 (소문항 표기 없음, 원문은 "the circuits shown in Fig. 10.90"으로 적음)</li></ul></div><figure><img src=".assets/figures_문제설명_1007_Differential_Amplifiers/20e246081cbe7165-fig10-90.png" alt="그림 P10.69"></figure></div><details class="original" data-original-problem="p3"><summary>원문 보기</summary><p>Repeat Problem 10.68 for the circuits shown in Fig. 10.90.</p></details></div><div class="layer eli5" data-explanation="understand">
   <h4>문제를 내 말로 읽어요</h4>
   <p>문제 10.68은 PMOS 전류원 부하 $M_3$·$M_4$와 테일 트랜지스터 하나($M_5$)를 가진 MOS 차동쌍의 공통 모드 이득(common-mode gain)을 $A_v=-G_mR_{out}$로 구하라는 문제였어요. 조건은 $\lambda&gt;0$(모든 트랜지스터에 $r_O$가 있음)과 $g_mr_O\gg1$이에요. 이번 문제는 같은 일을 Fig. 10.90의 두 변형 회로에 반복해요.</p>
   <ul>
@@ -795,7 +778,7 @@
 </div>
 <div class="layer eli5" data-explanation="retry">
   <h4>설명을 닫고 다시 해 봐요</h4>
-  <ol><li>(a)의 큰 고유 이득 근사에서 다른 저항을 유지하고 테일 저항만 2배로 하면 $|A_{CM}|$은 몇 배인가요?</li><li>(b)의 같은 근사에서 위·아래 출력저항이 각각 200 kΩ이고 테일 저항이 10 kΩ이면 병렬 출력저항과 공통 모드 이득은 얼마인가요? $A_{CM}\approx-(R_{up}\parallel R_{down})/(2R_T)$를 사용해요.</li><li>테일 캐스코드의 $r_o$를 0으로 놓으면 큰 $g_mr_o$ 근사를 유지할 수 있나요? 극한을 보려면 어떤 식으로 돌아가야 하나요?</li></ol>
+  <ol><li>(a)의 $g_mr_O\gg1$ 근사에서 다른 소자는 그대로 두고 테일 저항 $R_T$만 2배로 하면 $|A_{CM}|$은 몇 배인가요? $R_{out}$이 바뀌는지도 함께 판단해 보세요.</li><li>(b)의 같은 근사에서 위·아래 출력저항이 각각 200 kΩ이고 테일 저항이 10 kΩ이면 병렬 출력저항과 공통 모드 이득은 얼마인가요? $A_{CM}\approx-(R_{up}\parallel R_{down})/(2R_T)$를 사용해요.</li><li>(b)의 캐스코드 부하는 그대로 두고 테일도 (a)처럼 캐스코드($R_T\approx g_mr_O^2$)로 바꾸면 $R_{out}$의 병렬에서 어느 쪽이 지배하고 $A_{CM}$은 대략 얼마인가요? 모든 트랜지스터를 $g_m=1$ mS, $r_O=100$ kΩ로 둬요.</li></ol>
 </div>
 <div class="sum" hidden="">
   <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>CM 하프 서킷: 테일 $R_T$ → 반쪽에 $2R_T$</p><p>$A_{CM}=-G_mR_{out}$, $G_m\approx\dfrac{1}{2R_T}$</p><p>축퇴 출력 저항 $\approx g_mr_OR_S$</p></div>
@@ -804,7 +787,7 @@
   <div class="summary-group"><h4>답</h4><p>(a) $-\dfrac{r_{O3}}{2g_{m5}r_{O5}r_{O6}}$</p><p>(b) $-\dfrac{(g_{m3}r_{O3}r_{O5})\parallel(2g_{m1}r_{O1}r_{O7})}{2r_{O7}}$</p></div>
   <div class="summary-group"><h4>검산</h4><p>비지배 항을 복원한 정확식에서 $r_{O6}\to0$ 또는 $r_{O5}\to0$ → 문제 10.68 답</p><p>수치: (a) $-0.005$, (b) $\approx-33$</p></div>
 </div>
-</article><article class="topic" id="p4"><h3>이미터 축퇴 테일 전류원을 가진 바이폴라 쌍의 A_CM−DM</h3><p class="panel-meta">E10.27 · 예제 10.27 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p4"><div class="layer formal" data-source-problem="p4"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>$Q_1$과 $Q_2$의 $V_A = \infty$</li><li>$Q_3$의 $V_A$는 유한 (답에 $r_{O3}$가 들어감)</li><li>소자 값은 주어지지 않음 (답은 기호로)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>회로의 $A_{CM-DM}$</li></ul></div><figure><img src=".assets/figures_문제설명_1007_Differential_Amplifiers/2b6f582604e117f0-fig10-48.png" alt="그림 E10.27"></figure></div><details class="original" data-original-problem="p4"><summary>원문 보기</summary><p>그림 10.48에 보인 회로의 $A_{CM-DM}$을 구하라. $Q_1$과 $Q_2$의 $V_A = \infty$라고 가정한다.</p></details></div><div class="layer eli5" data-explanation="understand">
+</article><article class="topic" id="p4"><h3>이미터 축퇴 테일 전류원을 가진 바이폴라 쌍의 A_CM−DM</h3><p class="panel-meta">E10.27 · 예제 10.27 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p4"><div class="layer formal" data-source-problem="p4"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>$Q_1$과 $Q_2$의 $V_A = \infty$</li><li>$A_{CM-DM}$: 입력 공통 모드 변화가 차동 출력으로 바뀌는 이득 $A_{CM-DM} = \left|\Delta V_{out}/\Delta V_{CM}\right|$, $\Delta V_{out}$은 차동 출력 변화</li><li>식 (10.191): 부하 미스매치 $\Delta R_D$, 테일 출력 저항 $R_{SS}$인 MOS 쌍에서 $A_{CM-DM} = \dfrac{\Delta R_D}{1/g_m + 2R_{SS}}$</li><li>$Q_3$의 $V_A$는 유한 (답에 $r_{O3}$가 들어감)</li><li>소자 값은 주어지지 않음 (답은 기호로)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>회로의 $A_{CM-DM}$</li></ul></div><figure><img src=".assets/figures_문제설명_1007_Differential_Amplifiers/2b6f582604e117f0-fig10-48.png" alt="그림 E10.27"></figure></div><details class="original" data-original-problem="p4"><summary>원문 보기</summary><p>그림 10.48에 보인 회로의 $A_{CM-DM}$을 구하라. $Q_1$과 $Q_2$의 $V_A = \infty$라고 가정한다.</p></details></div><div class="layer eli5" data-explanation="understand">
 <h4>문제를 내 말로 읽어요</h4>
 <p>바이폴라 차동쌍(bipolar differential pair) $Q_1$·$Q_2$의 두 베이스가 같은 전압원 $V_{CM}$에 묶여 있어요. 그러니 입력은 순수한 공통 모드(common mode, CM) 변화 $\Delta V_{CM}$ 하나뿐이에요.</p>
 <p>출력은 두 컬렉터 사이의 차동 전압 $V_{out1}-V_{out2}$예요. 부하가 $R_C$와 $R_C+\Delta R_C$로 조금 달라서, 두 쪽에 같은 전류 변화가 흘러도 전압 변화는 $\Delta R_C$만큼 어긋나요.</p>
@@ -823,7 +806,8 @@ $$R_{out3}=\big[1+g_{m3}(R_1\parallel r_{\pi3})\big]r_{O3}+R_1\parallel r_{\pi3}
 </div>
 <div class="layer formal" data-explanation="start">
 <h4>종이에 쓰는 첫 줄</h4>
-<p>1) 테일부터 떼어 내요. $V_b$·$V_{CC}$는 소신호 접지로 보내고 $Q_3$를 $r_{\pi3}$, $g_{m3}v_\pi$, $r_{O3}$로 바꿔요. 컬렉터에 시험 전압 $V_X$를 걸고 흘러드는 전류를 $I_X$라고 써요.</p>
+<p>1) 테일부터 떼어 내요. $V_b$·$V_{CC}$는 소신호 접지로 보내고 $Q_3$를 $r_{\pi3}$, $g_{m3}v_\pi$, $r_{O3}$로 바꿔요. 컬렉터에 시험 전압 $V_X$를 걸고, 컬렉터로 흘러드는 전류를 $I_X$(양의 방향)라고 써요. 이미터 노드 전압은 $v_E$, 제어 전압 $v_\pi$는 베이스 쪽이 $+$, 이미터 쪽이 $-$예요. 제어 전류원 $g_{m3}v_\pi$는 컬렉터에서 이미터 쪽으로 흐르는 방향이에요.</p>
+<figure class="figure"><svg viewBox="0 0 420 300" role="img" aria-label="Q3 소신호 등가회로: 시험 전압 V_X가 컬렉터 노드에 걸리고 전류 I_X가 컬렉터로 들어가요. 컬렉터와 이미터 노드 v_E 사이에 컬렉터에서 이미터 방향의 제어 전류원 g_m3 v_π와 r_O3가 병렬로 있고, v_E에서 접지로 R_1과 r_π3이 병렬로 연결돼요. r_π3의 아래 끝은 AC 접지된 베이스이고 v_π는 베이스가 +, 이미터가 −라서 v_π = −v_E예요."><path class="fig-accent" d="M60 146 V60 H200"/><circle class="fig-accent" cx="60" cy="160" r="14"/><text class="fig-muted" x="56" y="157">+</text><text class="fig-muted" x="56" y="171">−</text><path class="fig-ink" d="M60 174 V258"/><path class="fig-ink" d="M60 258 v8 M50 266 H70 M54 271 H66 M58 276 H62"/><text class="fig-text" x="14" y="165">V<tspan baseline-shift="sub">X</tspan></text><path class="fig-accent" d="M110 48 H130 M125 43 L130 48 L125 53"/><text class="fig-text" x="108" y="36">I<tspan baseline-shift="sub">X</tspan></text><circle class="fig-dot" cx="200" cy="60" r="3.5"/><text class="fig-text" x="210" y="54">V<tspan baseline-shift="sub">X</tspan> (C₃)</text><path class="fig-ink" d="M200 60 V80 M170 80 H240 M170 80 V119 M170 151 V170 H240 M240 80 V101 M240 169 V170 M200 170 V190"/><polygon class="fig-ink" points="170,119 184,135 170,151 156,135"/><path class="fig-ink" d="M170 125 V144 M165 139 L170 144 L175 139"/><path class="fig-ink" d="M240 101 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><text class="fig-text" x="96" y="140">g<tspan baseline-shift="sub">m3</tspan>v<tspan baseline-shift="sub">π</tspan></text><text class="fig-text" x="254" y="140">r<tspan baseline-shift="sub">O3</tspan></text><circle class="fig-dot" cx="200" cy="190" r="3.5"/><text class="fig-text" x="168" y="186">v<tspan baseline-shift="sub">E</tspan></text><path class="fig-ink" d="M200 190 H300"/><path class="fig-ink" d="M200 190 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M200 258 v8 M190 266 H210 M194 271 H206 M198 276 H202"/><path class="fig-ink" d="M300 190 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M300 258 v8 M290 266 H310 M294 271 H306 M298 276 H302"/><text class="fig-text" x="166" y="228">R<tspan baseline-shift="sub">1</tspan></text><text class="fig-text" x="258" y="228">r<tspan baseline-shift="sub">π3</tspan></text><text class="fig-text" x="314" y="206">−</text><text class="fig-text" x="316" y="230">v<tspan baseline-shift="sub">π</tspan></text><text class="fig-text" x="314" y="254">+</text><text class="fig-muted" x="316" y="292">B₃ (AC 접지)</text></svg><figcaption>$V_{CC}$와 $V_b$를 AC 접지로 보내 $Q_3$ 베이스가 접지되고, $Q_3$를 $r_{\pi3}$, $g_{m3}v_\pi$, $r_{O3}$로 바꿨어요. $P$ 쪽 회로는 떼어 내고 컬렉터에 시험 전압 $V_X$를 걸었어요.</figcaption></figure>
 <p>2) 베이스가 접지이므로 $r_{\pi3}$는 이미터와 접지 사이에서 $R_1$과 병렬이에요. $I_X$는 모두 이 병렬 조합으로 흘러요.</p>
 $$v_E=I_X\,(R_1\parallel r_{\pi3}),\qquad v_\pi=-v_E$$
 <p>3) 첫 KCL은 컬렉터 노드에서 써요.</p>
@@ -855,7 +839,8 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
 <h4>완성 답과 검산</h4>
 <div data-subpart="main">
 <h4>극한·단위 확인</h4>
-<p><strong>완성 답</strong>: $A_{CM-DM}=\dfrac{\Delta R_C}{1/g_{m1}+2\{[1+g_{m3}(R_1\parallel r_{\pi3})]r_{O3}+R_1\parallel r_{\pi3}\}}$</p>
+<p><strong>완성 답</strong>: $A_{CM-DM}=\dfrac{\Delta R_C}{1/g_{m1}+2\{[1+g_{m3}(R_1\parallel r_{\pi3})]r_{O3}+R_1\parallel r_{\pi3}\}}$ (이 소신호 모델의 정확한 값)</p>
+<p><strong>$r_{O3}\gg R_1\parallel r_{\pi3}$에서</strong>: $A_{CM-DM}\approx\dfrac{\Delta R_C}{1/g_{m1}+2[1+g_{m3}(R_1\parallel r_{\pi3})]\,r_{O3}}$이고, 문제 md의 풀이와 같은 꼴이에요. 버린 항 $2(R_1\parallel r_{\pi3})$와 남긴 항의 비는 $(R_1\parallel r_{\pi3})/\{[1+g_{m3}(R_1\parallel r_{\pi3})]r_{O3}\}\lt (R_1\parallel r_{\pi3})/r_{O3}$라서 $r_{O3}\to\infty$에서 두 값의 비가 1로 가요.</p>
 <p><strong>대칭 특수값</strong>: $\Delta R_C=0$이면 분자가 0이라 $A_{CM-DM}=0$이에요. 완전 대칭이면 CM 입력이 차동 출력으로 새지 않는다는 사실과 맞아요.</p>
 <p><strong>극한 1</strong>: $R_1=0$이면 $R_1\parallel r_{\pi3}=0$이라 $R_{out3}=r_{O3}$예요. 축퇴 없는 전류원을 테일로 쓴 경우로 돌아와요.</p>
 <p><strong>극한 2</strong>: $R_1\gg r_{\pi3}$이면 $R_1\parallel r_{\pi3}\to r_{\pi3}$이고 $g_{m3}r_{\pi3}=\beta$라서 $R_{out3}\to(1+\beta)r_{O3}+r_{\pi3}\approx\beta r_{O3}$예요. 바이폴라 축퇴 전류원 출력 저항의 상한과 맞아요.</p>
@@ -876,9 +861,9 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
 <div class="layer eli5" data-explanation="retry">
 <h4>설명을 닫고 다시 해 봐요</h4>
 <ol>
-<li>$Q_3$ 컬렉터에 시험 전원을 걸고 KCL 한 줄로 $R_{out3}$를 유도해 보세요. $R_1\parallel r_{\pi3}$가 어디서 나오는지 말할 수 있나요?</li>
-<li>CM 하프 서킷을 그리고 $\Delta I_C=\Delta V_{CM}/(1/g_{m1}+2R_{out3})$를 적은 뒤, 두 출력을 빼서 $\Delta R_C\,\Delta I_C$가 남는 것을 확인해 보세요.</li>
-<li>$R_1=0$과 $\Delta R_C=0$을 넣어 답이 예상과 맞는지 확인해 보세요.</li>
+<li>$I_{C3}=1$ mA($g_{m3}\approx38.5$ mS, $\beta=100$이라 $r_{\pi3}=2.6$ kΩ), $r_{O3}=50$ kΩ에서 $R_1=260\ \Omega$을 넣으면 $R_{out3}$은 $R_1=0$일 때의 대략 몇 배가 될지 예측해 보세요.</li>
+<li>$Q_3$ 베이스가 AC 접지가 아니라 이상 전류원으로 구동되어 소신호로 개방이라면 $r_{\pi3}$ 가지와 $g_{m3}v_\pi$는 어떻게 되고, $R_{out3}$은 무엇이 되나요?</li>
+<li>미스매치를 왼쪽으로 옮겨 $Q_1$ 쪽 부하가 $R_C+\Delta R_C$, $Q_2$ 쪽이 $R_C$가 되면 $\Delta V_{out1}-\Delta V_{out2}$의 부호와 $A_{CM-DM}$의 크기는 어떻게 되나요?</li>
 </ol>
 </div>
 <div class="sum" hidden="">
@@ -952,9 +937,18 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
     <p><b>$A_{CM}\approx-1.0\times10^{-2}$, $\left|A_{CM-DM}\right|\approx5.0\times10^{-5}$ (교재 부호 관례로 $-5.0\times10^{-5}$)</b></p>
     <p><b>극한 대입:</b> $R_{SS}\to\infty$이면 두 식의 분모가 무한대라 $A_{CM}\to0$, $A_{CM-DM}\to0$이에요. 이상적인 테일은 CM 신호를 완전히 막는다는 직관과 맞아요. $\Delta R=0$(완전 대칭)이면 $A_{CM-DM}=0$이에요.</p>
     <p><b>단위:</b> 두 식 모두 Ω/Ω이라 무차원이에요. $1/g_{m1}=100\ \Omega$은 $2R_{SS}=1\ \text{M}\Omega$의 만 분의 일이라, $A_{CM}\approx-r_{O3}/(2R_{SS})$로 줄여도 같은 값이 나와요.</p>
-    <p><b>근사 영향 확인:</b> $M_1$의 $r_{O1}$까지 넣은 축퇴 CS 식 $-\dfrac{g_{m1}r_{O1}\,r_{O3}}{r_{O3}+r_{O1}+(1+g_{m1}r_{O1})2R_{SS}}$로 다시 계산하면 $-0.0099$예요. $R_{SS}$에 $r_{O5}+r_{O6}$을 더해 $510\ \text{k}\Omega$로 써도 $-0.0097$이에요. 모두 유효숫자 두 자리에서 $-1.0\times10^{-2}$ 근처라 $g_m r_o\gg1$ 근사가 결론을 바꾸지 않아요.</p>
-    <p><b>비율 확인:</b> $A_{CM-DM}/A_{CM}=\Delta R/r_{O3}=50/10^4=5\times10^{-3}$이에요. 두 결과가 같은 $\Delta I_D$를 공유하므로 이 비율이 정확히 나와야 해요.</p>
-  <p>유한한 입력 $r_o$까지 남긴 CM 반회로의 정확식도 있어요. $Q=r_{O1}+2R_{SS}(1+g_{m1}r_{O1})$라 놓으면 $G_{m,e}=g_{m1}r_{O1}/Q$, $A_{CM,e}=-G_{m,e}(Q\parallel r_{O3})$예요. 테일의 작은 항까지 넣은 $R_{SS}=510$ kΩ에서 $A_{CM,e}=-0.009705$이고 주 답 −0.0100과 약 3% 달라요. 출력 저항 차이를 작은 섭동으로 보는 같은 전달전류 모델의 변환 이득은 $G_{m,e}\Delta R$예요. $g_{m1}$을 크게 하는 극한에서 $G_{m,e}/[1/(2R_{SS})]\to1$, $A_{CM,e}/[-r_{O3}/(2R_{SS})]\to1$이고, 테일 역시 $g_{m5}\to\infty$에서 $R_{SS}/(g_{m5}r_{O5}r_{O6})\to1$이에요.</p></div>
+    <p><b>근사 영향 확인 ($r_{O1}$을 남긴 정확식):</b> 주 답에서 버린 $r_{O1}$과 $R_{SS}$의 작은 항을 되살려도 결론이 같은지 봐요. CM 반회로의 $M_1$은 소스에 $R_S=2R_{SS}$가 달린 축퇴 트랜지스터이므로 두 블록 공식을 그대로 써요.</p>
+    <p>① 드레인 쪽 저항: 드레인에 시험 전류 $i_t$를 넣으면 $i_t$가 모두 $R_S$로 빠져 $v_s=i_tR_S$, 게이트가 AC 접지라 $v_{gs}=-i_tR_S$예요. $r_{O1}$에는 $i_t-g_{m1}v_{gs}=i_t(1+g_{m1}R_S)$가 흐르므로 $v_t=i_t(1+g_{m1}R_S)r_{O1}+i_tR_S$이고, 이 값을 $Q$라 둬요.</p>
+    <p>$$Q=\frac{v_t}{i_t}=r_{O1}+2R_{SS}(1+g_{m1}r_{O1})$$</p>
+    <p>② 단락 트랜스컨덕턴스: 출력을 단락하면 드레인 전류 $i$가 $R_S$로 흘러 $v_s=iR_S$이고, $i=g_{m1}(v_{in}-v_s)-v_s/r_{O1}$(출력 노드 단락 KCL)을 $i$에 대해 풀면 분모가 다시 $Q$가 돼요.</p>
+    <p>$$G_{m,e}=\frac{g_{m1}r_{O1}}{Q},\qquad A_{CM,e}=-G_{m,e}\,(Q\parallel r_{O3})=-\frac{g_{m1}r_{O1}\,r_{O3}}{r_{O3}+Q}$$</p>
+    <p>마지막 꼴은 $A_v=-G_mR_{out}$에 $R_{out}=Q\parallel r_{O3}$를 넣고 $Q$를 약분한 것이에요. 수치를 넣어요($g_{m1}r_{O1}=100$, $r_{O1}=r_{O3}=10$ kΩ).</p>
+    <ul>
+      <li>$R_{SS}=500$ kΩ(주 답의 근사값): $Q=10\ \text{k}+1\ \text{M}\times101=101.01\ \text{M}\Omega$, $G_{m,e}=100/101.01\ \text{M}\Omega=0.990\ \mu\text{S}$, $Q\parallel r_{O3}\approx9.999$ kΩ라 $A_{CM,e}=-9.90\times10^{-3}$예요.</li>
+      <li>$R_{SS}=r_{O5}+r_{O6}+g_{m5}r_{O5}r_{O6}=510$ kΩ(테일의 작은 항 포함): $Q=103.03\ \text{M}\Omega$, $G_{m,e}=0.971\ \mu\text{S}$라 $A_{CM,e}=-9.70\times10^{-3}$이고 주 답 $-1.00\times10^{-2}$와 약 3% 달라요.</li>
+    </ul>
+    <p>같은 전달전류 모델에서 변환 이득은 같은 CM 전류가 두 출력 저항 차이 $\Delta R$를 지나는 몫이라 $|A_{CM-DM,e}|=G_{m,e}\Delta R$예요. $R_{SS}=500$ kΩ이면 $0.990\ \mu\text{S}\times50\ \Omega=4.95\times10^{-5}$, $510$ kΩ이면 $0.971\ \mu\text{S}\times50\ \Omega=4.85\times10^{-5}$로, 주 답 $5.0\times10^{-5}$와 각각 1%, 3% 차이예요. CMRR도 같은 비율만큼만 바뀌어 $10^6$ 수준(120 dB 근처)이 그대로예요. 극한으로 보면 $g_{m1}r_{O1}\to\infty$에서 $G_{m,e}\to1/(2R_{SS})$, $A_{CM,e}\to-r_{O3}/(2R_{SS})$이고, 테일도 $g_{m5}r_{O6}\to\infty$에서 $R_{SS}/(g_{m5}r_{O5}r_{O6})\to1$이라 주 답의 $g_mr_o\gg1$ 근사로 돌아와요.</p>
+    <p><b>비율 확인:</b> $A_{CM-DM}/A_{CM}=\Delta R/r_{O3}=50/10^4=5\times10^{-3}$이에요. 두 결과가 같은 $\Delta I_D$를 공유하므로 이 비율이 정확히 나와야 해요.</p></div>
   <div data-subpart="2">
     <h4>(2) 검산</h4>
     <p><b>$A_{DM}\approx-50$, $\text{CMRR}\approx1.0\times10^{6}$ ($120\ \text{dB}$)</b></p>
@@ -975,9 +969,9 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
 <div class="layer eli5" data-explanation="retry">
   <h4>설명을 닫고 다시 풀어 봐요</h4>
   <ol>
-    <li>$M_1$과 $M_5$의 $g_m$, $r_o$를 전류부터 다시 구하고, 캐스코드 테일의 $R_{SS}$가 $500\ \text{k}\Omega$이 되는지 확인해요.</li>
-    <li>CM 하프 서킷과 DM 하프 서킷을 나란히 그리고, 출력 노드에서 보이는 저항이 각각 왜 $r_{O3}$와 $r_{O1}\parallel r_{O3}$인지 한 줄로 써 봐요.</li>
-    <li>$\Delta R=50\ \Omega$에서 $A_{CM-DM}$과 CMRR을 구하고, $\Delta R$이 $100\ \Omega$이면 CMRR이 몇 dB가 되는지 예측해요.</li>
+    <li>다른 값은 그대로 두고 출력 저항 차이만 $\Delta R=100\ \Omega$으로 두 배가 되면 $|A_{CM-DM}|$과 CMRR(dB)은 어떻게 될지 먼저 예측해 보세요.</li>
+    <li>캐스코드 테일 대신 $M_6$ 하나($r_{O6}=5\ \text{k}\Omega$)만 테일로 쓰면 $A_{CM}$, $|A_{CM-DM}|$($\Delta R=50\ \Omega$), CMRR은 대략 얼마인가요? $A_{DM}$이 바뀌는지도 판단해요.</li>
+    <li>DM 하프 서킷에서는 출력 노드 저항이 $r_{O1}\parallel r_{O3}$인데 CM 하프 서킷에서는 $r_{O3}$만 남는 이유를, $M_1$ 소스에 무엇이 달려 있는지로 설명해 보세요. 이 문제 값($r_{O1}=r_{O3}=10\ \text{k}\Omega$, $g_{m1}=10$ mS, $2R_{SS}=1\ \text{M}\Omega$)으로 아래로 본 저항의 크기도 어림해요.</li>
   </ol>
 </div>
 <div class="sum" hidden="">
@@ -987,7 +981,7 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
   <div class="summary-group"><h4>답</h4><p>(1) $A_{CM}\approx-1.0\times10^{-2}$, $\left|A_{CM-DM}\right|\approx5.0\times10^{-5}$이에요.</p><p>(2) $A_{DM}\approx-50$, $\text{CMRR}\approx10^6$ ($120\ \text{dB}$)이에요.</p></div>
   <div class="summary-group"><h4>검산</h4><p>$R_{SS}\to\infty$이면 $A_{CM}\to0$이에요.</p><p>비율 $A_{CM-DM}/A_{CM}=\Delta R/r_{O3}$로 맞춰 봐요.</p></div>
 </div>
-</article><article class="topic" id="p6"><h3>그림 10.48 회로의 CMRR</h3><p class="panel-meta">E10.28 · 예제 10.28 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p6"><div class="layer formal" data-source-problem="p6"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>예제 10.27의 가정($Q_1$, $Q_2$의 $V_A = \infty$) 유지</li><li>소자 값은 주어지지 않음 (답은 기호로)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>회로의 CMRR</li></ul></div><figure><img src=".assets/figures_문제설명_1007_Differential_Amplifiers/2b6f582604e117f0-fig10-48.png" alt="그림 E10.28"></figure></div><details class="original" data-original-problem="p6"><summary>원문 보기</summary><p>그림 10.48 회로의 CMRR을 계산하라.</p></details></div><div class="layer eli5" data-explanation="understand">
+</article><article class="topic" id="p6"><h3>그림 10.48 회로의 CMRR</h3><p class="panel-meta">E10.28 · 예제 10.28 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1007_Differential_Amplifiers-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p6"><div class="layer formal" data-source-problem="p6"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>예제 10.27의 가정($Q_1$, $Q_2$의 $V_A = \infty$) 유지</li><li>식 (10.195): $\text{CMRR} = A_{DM}/A_{CM-DM}$, $A_{DM}$은 차동 이득</li><li>예제 10.27의 결과: $A_{CM-DM} = \dfrac{\Delta R_C}{\dfrac{1}{g_{m1}} + 2\{[1 + g_{m3}(R_1 \| r_{\pi 3})] r_{O3} + R_1 \| r_{\pi 3}\}}$</li><li>소자 값은 주어지지 않음 (답은 기호로)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>회로의 CMRR</li></ul></div><figure><img src=".assets/figures_문제설명_1007_Differential_Amplifiers/2b6f582604e117f0-fig10-48.png" alt="그림 E10.28"></figure></div><details class="original" data-original-problem="p6"><summary>원문 보기</summary><p>그림 10.48 회로의 CMRR을 계산하라.</p></details></div><div class="layer eli5" data-explanation="understand">
   <h4>문제를 내 말로 읽어요</h4>
   <p>바이폴라 차동쌍 $Q_1$·$Q_2$가 있고, 위쪽 부하 저항이 $R_C$와 $R_C+\Delta R_C$로 살짝 달라요(부하 미스매치, mismatch). 아래 테일(tail)에는 $Q_3$가 전류원 노릇을 하는데, 이미터에 $R_1$이 붙어 있어서(이미터 축퇴, emitter degeneration) $P$에서 내려다본 저항 $R_{out3}$가 아주 커요.</p>
   <p>입력은 두 베이스, 출력은 두 컬렉터 사이의 차동 전압 $V_{out1}-V_{out2}$예요. 구할 것은 CMRR, 즉 "원하는 차동 신호는 얼마나 키우고, 원치 않는 공통 모드 변화가 차동 출력으로 새는 것은 얼마나 작은가"의 비율이에요.</p>
@@ -1033,7 +1027,8 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
   <h4>완성 답과 검산</h4>
   <div data-subpart="main">
     <h4>검산</h4>
-    <p><b>완성 답: $\text{CMRR}=\dfrac{g_{m1}R_C}{\Delta R_C}\left\{\dfrac{1}{g_{m1}}+2\left[1+g_{m3}(R_1\parallel r_{\pi3})\right]r_{O3}+2(R_1\parallel r_{\pi3})\right\}$</b></p>
+    <p><b>완성 답: $\text{CMRR}=\dfrac{g_{m1}R_C}{\Delta R_C}\left\{\dfrac{1}{g_{m1}}+2\left[1+g_{m3}(R_1\parallel r_{\pi3})\right]r_{O3}+2(R_1\parallel r_{\pi3})\right\}$</b> (이 소신호 모델의 값, $\Delta R_C\ll R_C$)</p>
+    <p><b>$r_{O3}\gg R_1\parallel r_{\pi3}$에서</b>: 끝의 $2(R_1\parallel r_{\pi3})$를 버리면 $\text{CMRR}\approx\dfrac{g_{m1}R_C}{\Delta R_C}\left\{\dfrac{1}{g_{m1}}+2\left[1+g_{m3}(R_1\parallel r_{\pi3})\right]r_{O3}\right\}$로, 문제 md의 풀이와 같은 꼴이에요. 버린 항과 남긴 $r_{O3}$ 항의 비는 $(R_1\parallel r_{\pi3})/r_{O3}$보다 작아서 $r_{O3}\to\infty$에서 두 값의 비가 1로 가요(아래 예시 값에서는 약 $2\times10^{-4}$ 차이).</p>
     <p><b>단위</b>: $g_{m1}R_C$는 S·Ω라 무차원, $1/\Delta R_C$는 1/Ω, 괄호 안 세 항은 모두 Ω(1/S, Ω, Ω)이에요. 전체가 무차원이라 이득의 비로 맞아요.</p>
     <p><b>대칭 특수값</b>: $\Delta R_C\to0$이면 $A_{CM-DM}\to0$이라 CMRR $\to\infty$예요. 미스매치가 없으면 공통 모드가 차동 출력으로 전혀 새지 않는다는 뜻과 일치해요.</p>
     <p><b>극한 대입 1</b>: $R_1\to0$이면 $R_1\parallel r_{\pi3}\to0$, $R_{out3}\to r_{O3}$라 $\text{CMRR}\to\dfrac{g_{m1}R_C}{\Delta R_C}\left(\dfrac{1}{g_{m1}}+2r_{O3}\right)$이에요. 축퇴 없는 단순 전류원의 결과로 돌아와요.</p>
@@ -1054,9 +1049,9 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
 <div class="layer eli5" data-explanation="retry">
   <h4>설명을 닫고 다시 해 봐요</h4>
   <ol>
-    <li>$P$를 가상 접지로 두고 $V_{out1}-V_{out2}$를 직접 써서 $|A_{DM}|\approx g_{m1}R_C$를 다시 얻어 보세요.</li>
-    <li>$Q_3$ 베이스 접지, 이미터에 $R_1$을 단 소신호 회로로 $R_{out3}$ 식을 유도해 보세요.</li>
-    <li>$R_1\to0$과 $R_1\to\infty$를 넣어 CMRR이 어떻게 바뀌는지 말로 설명해 보세요.</li>
+    <li>verify의 예시 값($1/g_{m1}=52\ \Omega$, $R_C=10$ kΩ, $\Delta R_C=100\ \Omega$, $r_{O3}=100$ kΩ)에서 $R_1$만 0으로 바꾸면 CMRR은 약 몇 dB가 될지 예측해 보세요. 136 dB에서 얼마나 떨어지나요?</li>
+    <li>출력을 차동이 아니라 $V_{out1}$ 한쪽에서만 뽑는다면, 미스매치가 없어도 CMRR이 유한해요. 이때 분모로 쓸 이득과 분자의 차동 이득은 각각 무엇이고, CMRR은 $g_{m1}$과 $R_{out3}$로 어떻게 쓰이나요?</li>
+    <li>미스매치를 $\Delta R_C=100\ \Omega$에서 $200\ \Omega$으로 두 배로 키우면 $A_{DM}$과 $A_{CM-DM}$ 중 어느 쪽이 실질적으로 바뀌고, CMRR은 몇 dB 달라지나요?</li>
   </ol>
 </div>
 <div class="sum" hidden="">
@@ -1084,9 +1079,11 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
 <div class="layer formal" data-explanation="start">
   <h4>종이에 쓸 첫 줄</h4>
   <p>소신호 등가회로에서 $V_{DD}$와 바이어스 $V_{b1}$, $V_{b2}$, $V_{b3}$를 교류 접지로 보내고, 테일 전체를 노드 $P$와 접지 사이의 저항 $R_{SS}$ 하나로 바꿔요.</p>
-  <p>CM 입력 $v_{in1}=v_{in2}=v_{CM}$을 넣고 $P$의 전압을 $v_P$라 두면, $M_1$·$M_2$는 $\lambda=0$이라 각각 같은 전류를 흘려요.</p>
-  $$i_1=i_2=g_m\left(v_{CM}-v_P\right)$$
+  <p>노드 $P$의 전압을 $v_P$로, 두 드레인 전류 $i_1$, $i_2$는 부하에서 $P$ 쪽으로 내려가는 방향을 양으로 둬요. $M_1$·$M_2$는 $\lambda=0$이라 제어 전류원 하나씩으로 바뀌고, 제어 전압은 게이트 쪽이 $+$라 $v_{gs1}=v_{in1}-v_P$, $v_{gs2}=v_{in2}-v_P$예요.</p>
+  <figure class="figure"><svg viewBox="0 0 460 300" role="img" aria-label="테일을 R_SS로 바꾼 소신호 등가회로: AC 접지된 V_DD에서 R_D를 거쳐 v_out1 노드로, R_D+ΔR_D를 거쳐 v_out2 노드로 연결돼요. v_out1에서 노드 P로 아래 방향 제어 전류원 i_1 = g_m(v_in1 − v_P), v_out2에서 P로 i_2 = g_m(v_in2 − v_P)가 있고, P에서 접지로 R_SS가 연결돼요."><path class="fig-ink" d="M140 24 H320"/><text class="fig-muted" x="30" y="28">V<tspan baseline-shift="sub">DD</tspan> (AC 접지)</text><path class="fig-ink" d="M140 24 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M140 92 V134"/><polygon class="fig-ink" points="140,134 154,150 140,166 126,150"/><path class="fig-ink" d="M140 140 V159 M135 154 L140 159 L145 154"/><circle class="fig-dot" cx="140" cy="108" r="3.5"/><path class="fig-ink" d="M320 24 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M320 92 V134"/><polygon class="fig-ink" points="320,134 334,150 320,166 306,150"/><path class="fig-ink" d="M320 140 V159 M315 154 L320 159 L325 154"/><circle class="fig-dot" cx="320" cy="108" r="3.5"/><text class="fig-text" x="154" y="62">R<tspan baseline-shift="sub">D</tspan></text><text class="fig-text" x="334" y="62">R<tspan baseline-shift="sub">D</tspan> + ΔR<tspan baseline-shift="sub">D</tspan></text><text class="fig-text" x="70" y="112">v<tspan baseline-shift="sub">out1</tspan></text><text class="fig-text" x="332" y="112">v<tspan baseline-shift="sub">out2</tspan></text><text class="fig-text" x="20" y="146">i<tspan baseline-shift="sub">1</tspan> =</text><text class="fig-text" x="20" y="164">g<tspan baseline-shift="sub">m</tspan>(v<tspan baseline-shift="sub">in1</tspan> − v<tspan baseline-shift="sub">P</tspan>)</text><text class="fig-text" x="346" y="146">i<tspan baseline-shift="sub">2</tspan> =</text><text class="fig-text" x="346" y="164">g<tspan baseline-shift="sub">m</tspan>(v<tspan baseline-shift="sub">in2</tspan> − v<tspan baseline-shift="sub">P</tspan>)</text><path class="fig-ink" d="M140 166 V200 M320 166 V200"/><path class="fig-accent" d="M140 200 H320"/><circle class="fig-dot" cx="230" cy="200" r="3.5"/><text class="fig-text" x="240" y="188">P: v<tspan baseline-shift="sub">P</tspan></text><path class="fig-ink" d="M230 200 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M230 268 v8 M220 276 H240 M224 281 H236 M228 286 H232"/><text class="fig-text" x="246" y="232">R<tspan baseline-shift="sub">SS</tspan></text><text class="fig-muted" x="246" y="262">(a) r<tspan baseline-shift="sub">O3</tspan> · (b) 캐스코드</text></svg><figcaption>$V_{DD}$와 $V_{b1}$–$V_{b3}$를 AC 접지로 보내고 테일 전체를 $P$–접지 사이 $R_{SS}$ 하나로 바꿨어요. $\lambda=0$인 $M_1$·$M_2$는 게이트 입력으로 제어되는 전류원 $g_mv_{gs}$만 남겼어요. 같은 그림에 CM은 $v_{in1}=v_{in2}=v_{CM}$, DM은 $\pm v_d/2$를 넣어요.</figcaption></figure>
   <p>첫 식은 노드 $P$의 KCL이에요. 위에서 들어온 두 전류가 모두 $R_{SS}$로 빠져나가요.</p>
+  $$i_1=g_m\left(v_{in1}-v_P\right),\qquad i_2=g_m\left(v_{in2}-v_P\right),\qquad i_1+i_2=\frac{v_P}{R_{SS}}$$
+  <p>CM 입력 $v_{in1}=v_{in2}=v_{CM}$을 넣으면 두 전류가 같아져 한 줄로 줄어요.</p>
   $$2g_m\left(v_{CM}-v_P\right)=\frac{v_P}{R_{SS}}$$
 </div>
 <div class="layer formal" data-explanation="solve">
@@ -1109,7 +1106,9 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
     <p>이제 $R_{SS}$만 회로마다 구하면 돼요.</p>
     <p><strong>5단계: (a)의 $R_{SS}$.</strong> $M_3$은 게이트가 $V_{b1}$(교류 접지), 소스가 접지라 $v_{gs3}=0$이에요. 드레인에서 본 저항은 $r_{O3}$뿐이에요.</p>
     $$R_{SS,a}=r_{O3}\quad\Rightarrow\quad\mathrm{CMRR}_a=\frac{R_D}{\Delta R_D}\left(1+2g_mr_{O3}\right)$$
-    <p><strong>6단계: (b)의 $R_{SS}$.</strong> $M_4$는 게이트·소스가 교류 접지라 $r_{O4}$ 하나로 바뀌고, 이것이 $M_3$의 소스를 축퇴해요. 드레인에 시험 전류 $i_X$를 넣으면 $M_3$ 소스 전압은 $i_Xr_{O4}$, $v_{gs3}=-i_Xr_{O4}$예요. $r_{O3}$를 흐르는 전류는 $i_X-g_{m3}v_{gs3}=i_X(1+g_{m3}r_{O4})$이므로</p>
+    <p><strong>6단계: (b)의 $R_{SS}$.</strong> 테일만 떼어 내 $P$ 자리(드레인 $v_X$)에 시험 전류 $i_X$를 넣어요. $M_4$는 게이트·소스가 교류 접지라 $r_{O4}$ 하나로 바뀌고, 이것이 $M_3$의 소스를 축퇴해요. 회로의 경계가 바뀌므로(입력쌍 대신 시험원) 그림을 새로 그려요.</p>
+    <figure class="figure"><svg viewBox="0 0 400 280" role="img" aria-label="(b) 캐스코드 테일의 시험 회로: 시험 전류원 i_X가 접지에서 M3 드레인 노드 v_X로 전류를 넣어요. v_X와 M3 소스 노드 S3 사이에 아래 방향 제어 전류원 g_m3 v_gs3과 r_O3가 병렬로 있고, S3에서 접지로 r_O4가 연결돼요. M3 게이트는 AC 접지이고 v_gs3은 게이트가 +, S3가 −예요."><path class="fig-accent" d="M70 127 V50 H200"/><circle class="fig-accent" cx="70" cy="140" r="13"/><path class="fig-accent" d="M70 149 V131 M65 136 L70 131 L75 136"/><path class="fig-ink" d="M70 153 V250"/><path class="fig-ink" d="M70 250 v8 M60 258 H80 M64 263 H76 M68 268 H72"/><text class="fig-text" x="88" y="145">i<tspan baseline-shift="sub">X</tspan></text><circle class="fig-dot" cx="200" cy="50" r="3.5"/><text class="fig-text" x="210" y="44">v<tspan baseline-shift="sub">X</tspan></text><path class="fig-ink" d="M200 50 V70 M170 70 H240 M170 70 V104 M170 136 V160 H240 M240 70 V86 M240 154 V160 M200 160 V180"/><polygon class="fig-ink" points="170,104 184,120 170,136 156,120"/><path class="fig-ink" d="M170 110 V129 M165 124 L170 129 L175 124"/><path class="fig-ink" d="M240 86 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><text class="fig-text" x="94" y="110">g<tspan baseline-shift="sub">m3</tspan>v<tspan baseline-shift="sub">gs3</tspan></text><text class="fig-text" x="254" y="124">r<tspan baseline-shift="sub">O3</tspan></text><circle class="fig-dot" cx="200" cy="180" r="3.5"/><text class="fig-text" x="212" y="176">S₃: i<tspan baseline-shift="sub">X</tspan>r<tspan baseline-shift="sub">O4</tspan></text><path class="fig-ink" d="M200 180 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M200 248 v8 M190 256 H210 M194 261 H206 M198 266 H202"/><text class="fig-text" x="216" y="220">r<tspan baseline-shift="sub">O4</tspan></text><circle class="fig-ink" cx="110" cy="180" r="3.5"/><path class="fig-ink" d="M110 184 V200"/><path class="fig-ink" d="M110 200 v8 M100 208 H120 M104 213 H116 M108 218 H112"/><text class="fig-text" x="120" y="176">+</text><text class="fig-text" x="140" y="176">v<tspan baseline-shift="sub">gs3</tspan></text><text class="fig-text" x="182" y="176">−</text><text class="fig-muted" x="80" y="236">G₃ (AC 접지)</text></svg><figcaption>(b)의 테일만 떼어 $V_{b2}$, $V_{b3}$를 AC 접지로 보냈어요. $M_4$는 $v_{gs4}=0$이라 $r_{O4}$ 하나, $M_3$는 $g_{m3}v_{gs3}$와 $r_{O3}$로 바꾸고 드레인에 시험 전류 $i_X$(강조)를 넣었어요.</figcaption></figure>
+    <p>$i_X$는 모두 $r_{O4}$로 빠지므로 $M_3$ 소스 전압은 $i_Xr_{O4}$이고, 게이트가 접지라 $v_{gs3}=-i_Xr_{O4}$예요. 드레인 노드 KCL은 $i_X=g_{m3}v_{gs3}+(v_X-i_Xr_{O4})/r_{O3}$이에요. 따라서 $r_{O3}$를 흐르는 전류는 $i_X-g_{m3}v_{gs3}=i_X(1+g_{m3}r_{O4})$이므로</p>
     $$v_X=i_X(1+g_{m3}r_{O4})\,r_{O3}+i_Xr_{O4}$$
     $$R_{SS,b}=r_{O3}+r_{O4}+g_{m3}r_{O3}r_{O4}\approx g_{m3}r_{O3}r_{O4}\quad(g_{m3}r_{O4}\gg1)$$
     $$\mathrm{CMRR}_b=\frac{R_D}{\Delta R_D}\left(1+2g_mR_{SS,b}\right)\approx\frac{R_D}{\Delta R_D}\left(1+2g_mg_{m3}r_{O3}r_{O4}\right)$$
@@ -1143,9 +1142,9 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
 <div class="layer eli5" data-explanation="retry">
   <h4>설명을 닫고 다시 해 봐요</h4>
   <ol>
-    <li>노드 $P$의 KCL 한 줄에서 $|A_{CM-DM}|=\dfrac{\Delta R_D}{1/g_m+2R_{SS}}$까지 혼자 유도해 보세요.</li>
-    <li>캐스코드 테일의 드레인에 시험 전류 $i_X$를 넣어 $R_{SS}=r_{O3}+r_{O4}+g_{m3}r_{O3}r_{O4}$를 다시 구해 보세요.</li>
-    <li>$\mathrm{CMRR}_b/\mathrm{CMRR}_a\approx g_{m3}r_{O4}$가 되는 근사 조건이 무엇인지 말해 보세요.</li>
+    <li>(a)에서 $g_m=2$ mS, $r_{O3}=20$ kΩ, $\Delta R_D/R_D=0.5\%$이면 CMRR은 배수와 dB로 얼마인가요? 어느 항이 CMRR을 키우는지 먼저 판단해요.</li>
+    <li>(b)에서 캐스코드 소자의 $g_{m3}r_{O4}=50$이면 CMRR이 (a)보다 대략 몇 dB 높아질지 예측해 보세요. 이 근사가 성립하는 조건도 말해요.</li>
+    <li>문제와 달리 $M_1$·$M_2$도 $\lambda\neq0$이고 $\Delta R_D\neq0$이면 DM 입력에서 $P$가 여전히 정확한 가상 접지인가요? 노드 $P$의 KCL에서 $i_1+i_2$가 0이 되는지로 판단해 보세요.</li>
   </ol>
 </div>
 <div class="sum" hidden="">
@@ -1166,7 +1165,7 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
   <p>저항 부하 NMOS 차동쌍(differential pair)이에요. 입력은 두 게이트 $V_{in1}$, $V_{in2}$이고 출력은 두 드레인 $v_{out1}$, $v_{out2}$예요. 아래쪽 $M_3$는 게이트가 고정 바이어스 $V_{b1}$에 묶인 테일 전류원(tail current source)이라서 $I_{D3}=1\ \text{mA}$를 공급하고, 평형 상태에서는 반씩 나눠 $M_1$, $M_2$에 $0.5\ \text{mA}$씩 흘러요.</p>
   <p>이 회로의 특징은 오른쪽 부하만 $\Delta R_D=20\ \Omega$ 더 크다는 점이에요. 완전 대칭이면 두 입력에 똑같이 들어온 잡음(공통 모드, common mode)은 두 출력을 똑같이 흔들어서 차동 출력 $v_{out1}-v_{out2}$에는 안 나타나요. 부하가 조금 다르면 두 출력이 흔들리는 크기가 달라져 차동 출력에 잡음이 새어 나와요.</p>
   <p>구할 것은 세 가지예요. (1) 세 트랜지스터가 모두 포화(saturation)에 머무는 입력 공통 모드 전압의 범위, (2) 공통 모드 이득 $A_{CM}$과 공통 모드가 차동 출력으로 바뀌는 이득 $A_{CM-DM}$, (3) 이 둘과 차동 이득의 비 CMRR이에요. $V_{b1}$ 값은 없지만 $M_3$의 전류와 $W/L$을 알면 $M_3$의 오버드라이브를 구할 수 있으니 문제를 푸는 데 지장이 없어요.</p>
-<p>주답은 채널 길이 변조를 DC 전류·과구동 계산에서 무시하고, 입력 소자의 $r_o$도 두 이득에서 함께 무시하는 교재 근사예요. $\Delta R_D/R_D=0.02$의 작은 미스매치로 차동 이득의 평균 부하 보정도 생략해요. $r_o$를 일관되게 남긴 보충 소신호 결과와 구분해요.</p></div>
+<p>주답은 채널 길이 변조를 DC 전류·오버드라이브 계산에서 무시하고, 입력 소자의 $r_o$도 두 이득에서 함께 무시하는 교재 근사예요. $\Delta R_D/R_D=0.02$의 작은 미스매치로 차동 이득의 평균 부하 보정도 생략해요. $r_o$를 일관되게 남긴 보충 소신호 결과와 구분해요.</p></div>
 <div class="layer formal" data-explanation="recall">
   <h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4>
   <p><strong>(1) "입력 CM level의 최대·최소"</strong>라는 말에서 입력 공통 모드 범위(input common-mode range)를 떠올려요. 핵심은 "어느 트랜지스터가 먼저 포화를 벗어나는가"예요. $V_{in,CM}$을 내리면 소스 노드 $P$가 같이 내려가 테일 $M_3$의 $V_{DS3}$가 줄어들고, 올리면 $M_1$·$M_2$의 게이트가 드레인보다 $V_{TH}$ 넘게 높아져 트라이오드로 들어가요. 포화 조건 $V_{DS}\ge V_{GS}-V_{TH}$를 각각 노드 전압으로 바꿔 쓰는 것이 도구예요. 여기서 $V_{ov}=V_{GS}-V_{TH}=\sqrt{2I_D/[\mu_nC_{ox}(W/L)]}$는 오버드라이브 전압(overdrive voltage)이에요.</p>
@@ -1216,7 +1215,7 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
     $$\text{CMRR}=\left|\frac{A_{DM}}{A_{CM-DM}}\right|=\frac{g_{m1}R_D}{\Delta R_D}\left(\frac{1}{g_{m1}}+2R_{SS}\right)=\frac{(1+2g_{m1}r_{O3})R_D}{\Delta R_D}$$
     $$\text{CMRR}=\frac{(1+200)(1\ \text{k}\Omega)}{20\ \Omega}=1.005\times10^4\approx1.01\times10^4$$
     $$\text{CMRR}_{dB}=20\log_{10}(1.005\times10^4)=80.0\ \text{dB}$$
-    <p>보충: $r_{O1}$, $r_{O2}$를 <em>두 이득 모두</em>에 넣어 소신호 회로를 정확히 풀면 $|A_{DM}|\approx9.61$, $A_{CM-DM}\approx9.42\times10^{-4}$이라 CMRR $\approx1.02\times10^4$(80.2 dB)예요. 주 답과 1% 남짓 달라요.</p>
+    <p>보충(유도는 verify (2)의 KCL): $r_{O1}$, $r_{O2}$를 <em>두 이득 모두</em>에 넣어 소신호 회로를 정확히 풀면 $|A_{DM}|\approx9.61$, $A_{CM-DM}\approx9.42\times10^{-4}$이라 CMRR $\approx1.02\times10^4$(80.2 dB)예요. 주 답과 1% 남짓 달라요.</p>
   </div>
 </div>
 <div class="layer formal" data-explanation="verify">
@@ -1232,7 +1231,11 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
     <p>극한 대입: $R_{SS}\to\infty$(이상적 테일)이면 두 식 모두 0이 되어, 테일이 이상적 전류원이면 CM 입력이 전류를 바꾸지 못한다는 사실과 맞아요. $\Delta R_D=0$이면 $A_{CM-DM}=0$이라 대칭 회로에서 CM이 차동 출력으로 새지 않는다는 사실과도 맞아요.</p>
     <p>단위: 분자·분모 모두 Ω이라 두 이득 모두 무차원이에요. 비율 확인: $A_{CM-DM}/|A_{CM}|=\Delta R_D/R_D=0.02$이고 실제로 $9.95\times10^{-4}/4.98\times10^{-2}=0.020$이에요.</p>
     <p>근사의 크기: $r_{O1}$, $r_{O2}$까지 넣어 정확히 풀면 $A_{CM}\approx-4.95\times10^{-2}$라 0.6%만 달라요. 반면 $A_{CM-DM}$은 $9.42\times10^{-4}$로 약 5% 작아져요. 두 출력 전압이 서로 달라서 $r_{O1}$, $r_{O2}$로 흐르는 전류도 달라지고, 그 차이가 부하 차이를 일부 상쇄하기 때문이에요. 그래도 $g_mr_o\gg1$ 가정 아래의 표준 답은 $9.95\times10^{-4}$이고, 이 근사를 (3)에서도 똑같이 지켜야 해요.</p>
-  <p>보충 수치의 정확한 KCL 형태를 적어요. $a=1+R_D/r_o$, $b=1+(R_D+\Delta R_D)/r_o$, $k=g_m+1/r_o$라 두면 $$i_1=(g_mv_1-kv_P)/a,\qquad i_2=(g_mv_2-kv_P)/b,$$ $$v_P/R_{SS}=i_1+i_2,\qquad v_{o1}=-R_Di_1,\quad v_{o2}=-(R_D+\Delta R_D)i_2$$예요. CM에는 $v_1=v_2=1$, 단위 DM에는 $v_1=1/2,v_2=-1/2$를 넣어 위 보충값들을 얻어요. $r_o\to\infty$에서 CM·변환 이득은 본문 축퇴식과 정확히 같아지고, DM에서는 추가로 $\Delta R_D/R_D\to0$일 때 본문의 $-g_mR_D$와 비가 1로 가요.</p></div>
+  <p>보충 수치의 출발 KCL을 적어요. 입력 소자의 $r_o$($=r_{O1}=r_{O2}$)를 남기면 각 드레인과 $P$ 사이에 제어 전류원과 $r_o$가 병렬로 걸려요. $i_1$, $i_2$는 부하에서 드레인 노드로 내려오는 전류로, 제어 전압은 게이트 쪽이 $+$라 $v_{gs1}=v_1-v_P$, $v_{gs2}=v_2-v_P$로 둬요($v_1$, $v_2$는 두 게이트 입력).</p>
+  <figure class="figure"><svg viewBox="0 0 460 320" role="img" aria-label="입력 소자 r_o를 남긴 소신호 등가회로: AC 접지된 V_DD에서 R_D를 거쳐 v_o1 노드로 i_1이, R_D+ΔR_D를 거쳐 v_o2 노드로 i_2가 내려가요. v_o1과 노드 P 사이에 아래 방향 제어 전류원 g_m(v_1 − v_P)와 r_o가 병렬로, v_o2와 P 사이에 g_m(v_2 − v_P)와 r_o가 병렬로 있고, P에서 접지로 R_SS = r_O3가 연결돼요."><path class="fig-ink" d="M130 24 H330"/><text class="fig-muted" x="20" y="28">V<tspan baseline-shift="sub">DD</tspan> (AC 접지)</text><path class="fig-ink" d="M130 24 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M130 92 V110"/><circle class="fig-dot" cx="130" cy="100" r="3.5"/><path class="fig-ink" d="M100 110 H160 M100 110 V139 M100 171 V200 M160 110 V121 M160 189 V200 M100 200 H160 M130 200 V220"/><polygon class="fig-ink" points="100,139 114,155 100,171 86,155"/><path class="fig-ink" d="M100 145 V164 M95 159 L100 164 L105 159"/><path class="fig-ink" d="M160 121 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M330 24 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M330 92 V110"/><circle class="fig-dot" cx="330" cy="100" r="3.5"/><path class="fig-ink" d="M300 110 H360 M360 110 V139 M360 171 V200 M300 110 V121 M300 189 V200 M300 200 H360 M330 200 V220"/><polygon class="fig-ink" points="360,139 374,155 360,171 346,155"/><path class="fig-ink" d="M360 145 V164 M355 159 L360 164 L365 159"/><path class="fig-ink" d="M300 121 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-accent" d="M106 66 V82 M101 77 L106 82 L111 77"/><text class="fig-text" x="88" y="78">i<tspan baseline-shift="sub">1</tspan></text><path class="fig-accent" d="M314 66 V82 M309 77 L314 82 L319 77"/><text class="fig-text" x="294" y="78">i<tspan baseline-shift="sub">2</tspan></text><text class="fig-text" x="144" y="62">R<tspan baseline-shift="sub">D</tspan></text><text class="fig-text" x="344" y="62">R<tspan baseline-shift="sub">D</tspan> + ΔR<tspan baseline-shift="sub">D</tspan></text><text class="fig-text" x="58" y="104">v<tspan baseline-shift="sub">o1</tspan></text><text class="fig-text" x="366" y="104">v<tspan baseline-shift="sub">o2</tspan></text><text class="fig-text" x="4" y="160">g<tspan baseline-shift="sub">m</tspan>(v<tspan baseline-shift="sub">1</tspan>−v<tspan baseline-shift="sub">P</tspan>)</text><text class="fig-text" x="384" y="160">g<tspan baseline-shift="sub">m</tspan>(v<tspan baseline-shift="sub">2</tspan>−v<tspan baseline-shift="sub">P</tspan>)</text><text class="fig-text" x="172" y="160">r<tspan baseline-shift="sub">o</tspan></text><text class="fig-text" x="272" y="160">r<tspan baseline-shift="sub">o</tspan></text><path class="fig-accent" d="M130 220 H330"/><circle class="fig-dot" cx="230" cy="220" r="3.5"/><text class="fig-text" x="240" y="206">v<tspan baseline-shift="sub">P</tspan></text><path class="fig-ink" d="M230 220 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M230 288 v8 M220 296 H240 M224 301 H236 M228 306 H232"/><text class="fig-text" x="246" y="262">R<tspan baseline-shift="sub">SS</tspan> = r<tspan baseline-shift="sub">O3</tspan></text></svg><figcaption>$V_{DD}$와 $V_{b1}$을 AC 접지로 보내 $M_3$는 $R_{SS}=r_{O3}$ 하나로, $M_1$·$M_2$는 $g_m(v_{1,2}-v_P)$ 전류원과 $r_o$의 병렬로 바꿨어요. 주 답과 달리 보충 정확식에서만 입력 소자 $r_o$를 남겨요.</figcaption></figure>
+  <p>드레인 노드 $v_{o1}$의 KCL(들어온 $i_1$ = 제어 전류원 + $r_o$ 가지)과 부하 식은 다음과 같아요.</p>
+  <p>$$i_1=g_m(v_1-v_P)+\frac{v_{o1}-v_P}{r_o},\qquad v_{o1}=-R_Di_1$$</p>
+  <p>$v_{o1}$을 대입하고 $i_1$을 모으면 $i_1(1+R_D/r_o)=g_mv_1-(g_m+1/r_o)v_P$예요. $a=1+R_D/r_o$, $b=1+(R_D+\Delta R_D)/r_o$, $k=g_m+1/r_o$라 두고 오른쪽도 같은 방법으로 정리하면 $$i_1=(g_mv_1-kv_P)/a,\qquad i_2=(g_mv_2-kv_P)/b,$$ 노드 $P$의 KCL과 두 출력은 $$v_P/R_{SS}=i_1+i_2,\qquad v_{o1}=-R_Di_1,\quad v_{o2}=-(R_D+\Delta R_D)i_2$$예요. CM에는 $v_1=v_2=1$, 단위 DM에는 $v_1=1/2,v_2=-1/2$를 넣어 위 보충값들을 얻어요. $r_o\to\infty$에서 CM·변환 이득은 본문 축퇴식과 정확히 같아지고, DM에서는 추가로 $\Delta R_D/R_D\to0$일 때 본문의 $-g_mR_D$와 비가 1로 가요.</p></div>
   <div data-subpart="3">
     <h4>(3) 검산</h4>
     <p><strong>$\text{CMRR}\approx1.01\times10^4$ (80.0 dB)</strong> (계산값 $10050$, 보충: $r_{O1}$을 두 이득 모두에 넣으면 $1.02\times10^4$, 80.2 dB)</p>
@@ -1253,9 +1256,9 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
 <div class="layer eli5" data-explanation="retry">
   <h4>설명을 닫고 다시 풀어 봐요</h4>
   <ol>
-    <li>$V_{ov1}$, $V_{ov3}$, $g_{m1}$, $r_{O1}$, $r_{O3}$를 계산하고, 포화 조건 두 개로 $V_{in,CM}$의 최소·최대를 구해 보세요.</li>
-    <li>CM 하프 서킷을 그려 $A_{CM}$과 $A_{CM-DM}$을 구하고, 두 값의 비가 $\Delta R_D/R_D$인지 확인해 보세요.</li>
-    <li>$P$를 가상 접지로 두고 $|A_{DM}|$을 구한 뒤 CMRR을 배수와 dB로 적어 보세요.</li>
+    <li>다른 값은 그대로 두고 미스매치만 $\Delta R_D=40\ \Omega$으로 두 배가 되면 $V_{CM,in}$의 최대값, $A_{CM-DM}$, CMRR(dB)은 각각 어떻게 될지 예측해 보세요.</li>
+    <li>$W/L$은 그대로 두고 $I_{D3}$만 $2$ mA로 두 배가 되면 $V_{ov1}$, $V_{ov3}$와 입력 CM 범위의 최소·최대값, $R_{SS}$는 얼마가 되나요?</li>
+    <li>출력을 차동이 아니라 $v_{out1}$ 한쪽에서만 본다면 CMRR의 분자·분모로 각각 무엇을 쓰고, 이 문제 값으로 몇 dB인가요?</li>
   </ol>
 </div>
 <div class="sum" hidden="">
@@ -1332,9 +1335,9 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
 <div class="layer eli5" data-explanation="retry">
   <h4>설명을 닫고 다시 해 봐요</h4>
   <ol>
-    <li>거울 비율 $k$와 출력 노드 KCL 두 줄로 $V_{out}=R_L[kI_1-I_2]$를 직접 적어 보세요.</li>
-    <li>$k=1$과 $k=1/2$를 넣어 변화 전·후 $V_{out}$ 네 개를 구하고, 변화량이 $(1+k)\Delta I\,R_L$인지 확인해 보세요.</li>
-    <li>$(W/L)_4=2(W/L)_3$이면 변화 전 $V_{out}$과 변화량이 얼마인지 예측해 보세요.</li>
+    <li>거울을 반대로 키워 $(W/L)_4=2(W/L)_3$로 하면 변화 전·후 $V_{out}$과 변화량은 얼마일지, 출력 노드 KCL 한 줄로 예측해 보세요.</li>
+    <li>(a)에서 $I_1=I_0$로 고정하고 $I_2$만 $I_0-\Delta I$로 바뀌면 $V_{out}$ 변화량은 얼마인가요? 어느 전류 경로가 빠졌는지 판단해요.</li>
+    <li>(a)에서 반대로 $I_1$이 $I_0-\Delta I$로 줄고 $I_2$가 $I_0+\Delta I$로 늘면 $V_{out}$은 얼마이고, 이때 $R_L$의 전류는 어느 방향으로 흐르나요?</li>
   </ol>
 </div>
 <div class="sum" hidden="">
@@ -1356,7 +1359,7 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
   <p><b>기호의 뜻.</b> $g_m = I_C/V_T$는 $Q_1$, $Q_2$의 트랜스컨덕턴스(transconductance)로, 베이스-이미터 전압 변화가 컬렉터 전류를 얼마나 바꾸는지예요. $r_O = V_A/I_C$는 Early 효과(Early effect, 베이스 폭 변조)로 생기는 출력 저항이고, $V_A$가 그 트랜지스터의 Early 전압이에요. $V_T = kT/q \approx 26\ \text{mV}$는 열전압(thermal voltage)이에요.</p>
   <p><b>근사 조건.</b> $\beta \gg 1$로 두어 거울의 베이스 전류 오차를 무시하고, 테일 $I_{EE}$는 이상 전류원으로 봐요. $Q_1$의 $r_{O1}$, $Q_3$의 $r_{O3}$은 다이오드 쪽 작은 저항 $1/g_{m3}$에 묻혀 이득에 거의 영향이 없어서 $G_m\approx g_m$으로 둬요.</p>
   <p><b>선택 이유.</b> 대칭이 아니라 하프 서킷을 그대로 쓸 수 없으므로, 위에서 두 가지 전류를 합쳐 얻은 $G_m$과 출력 병렬 저항을 따로 구해 곱해요. 게다가 바이폴라는 $g_m r_O = V_A/V_T$로 전류가 약분되므로, 이득이 Early 전압만의 함수가 돼요. 그래서 $I_{EE}$ 없이도 $V_{A,p}$를 정할 수 있어요.</p>
-<p><strong>왜 반쪽 전류가 전체 $g_m$이 되나요?</strong> $v_d=v_{in1}-v_{in2}$라 하고, 이상적 테일·큰 고유 이득·거울 비율 1:1의 근사에서 $\Delta i_{C1}=+g_mv_d/2$, $\Delta i_{C2}=-g_mv_d/2$예요. 거울은 왼쪽의 증가분을 오른쪽 위에서 들어오는 전류 증가로 복사해요. 오른쪽 아래로 빠지는 전류는 같은 양만큼 줄어요.</p><p>$$\Delta i_{out}=\frac{g_mv_d}{2}-\left(-\frac{g_mv_d}{2}\right)=g_mv_d$$</p><p>이해를 위한 예시로 $g_m=2$ mS, $v_d=1$ mV이면 각 가지 변화는 +1 μA/−1 μA, 출력에 남는 전류는 2 μA예요. 양의 $v_d$는 출력을 올려요. p9의 $2\Delta I$와 같은 전류 차이 규칙이에요. 유한 $r_o$ 등의 작은 보정은 verify에서 구분해요.</p><figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 258" role="img" aria-label="출력에 남는 전류는 두 변화의 합"><rect width="440" height="258" fill="#ffffff"/><text x="18" y="30" fill="#111827" font-size="22">출력에 남는 전류는 두 변화의 합</text><text x="18" y="60" fill="#1d4ed8" font-size="20">1. 왼쪽 입력 가지: +1 μA</text><text x="32" y="86" fill="#111827" font-size="20">거울 → 출력으로 +1 μA 공급</text><text x="18" y="124" fill="#1d4ed8" font-size="20">2. 오른쪽 입력 가지: −1 μA</text><text x="32" y="150" fill="#111827" font-size="20">출력에서 빠지는 전류 1 μA 감소</text><text x="18" y="188" fill="#1d4ed8" font-size="20">3. 출력 순전류 증가</text><text x="32" y="214" fill="#111827" font-size="20">+1 μA − (−1 μA) = +2 μA</text></svg><figcaption>위에서 아래로 전압·전류 변화를 따라가요. 수치는 이해를 위한 예시예요.</figcaption></figure></div>
+<p><strong>왜 반쪽 전류가 전체 $g_m$이 되나요?</strong> $v_d=v_{in1}-v_{in2}$라 하고, 이상적 테일·큰 고유 이득·거울 비율 1:1의 근사에서 $\Delta i_{C1}=+g_mv_d/2$, $\Delta i_{C2}=-g_mv_d/2$예요. 거울은 왼쪽의 증가분을 오른쪽 위에서 들어오는 전류 증가로 복사해요. 오른쪽 아래로 빠지는 전류는 같은 양만큼 줄어요.</p><p>$$\Delta i_{out}=\frac{g_mv_d}{2}-\left(-\frac{g_mv_d}{2}\right)=g_mv_d$$</p><p>이해를 위한 예시로 $g_m=2$ mS, $v_d=1$ mV이면 각 가지 변화는 +1 μA/−1 μA, 출력에 남는 전류는 2 μA예요. 양의 $v_d$는 출력을 올려요. p9의 $2\Delta I$와 같은 전류 차이 규칙이에요. 유한 $r_o$ 등의 작은 보정은 verify에서 구분해요.</p></div>
 <div class="layer formal" data-explanation="start">
   <h4>종이에 쓸 첫 줄</h4>
   <p>바이어스부터 적어요. 대칭 차동쌍이라 평형에서 $Q_1$, $Q_2$는 $I_{EE}/2$씩 흘리고, 거울 $Q_3$, $Q_4$도 같은 $I_{EE}/2$를 흘려요. 네 소자의 컬렉터 전류가 모두 $I_C = I_{EE}/2$예요.</p>
@@ -1388,7 +1391,7 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
     <p><b>단위.</b> $V_T/V_A$는 V/V라 무차원이고, 이득도 무차원이에요. 답 $V_{A,p}$는 V로 나와요.</p>
     <p><b>극한·특수값.</b> $V_{A,p}\to\infty$($r_{O4}\to\infty$, 이상적인 거울)이면 이득은 $V_{A,n}/V_T \approx 192$로 가요. 100이 이 상한보다 작으니 해가 존재해요. 만약 $V_{A,n}$이 $100V_T = 2.6\ \text{V}$보다 작았다면 $V_T/V_{A,p}$가 음수가 되어 어떤 pnp로도 이득 100을 못 만들어요. 대칭 특수값으로 $V_{A,p}=V_{A,n}$이면 이득은 $V_A/(2V_T)\approx 96$이라 100에 조금 못 미치므로, 답이 5 V보다 약간 큰 5.42 V인 것도 자연스러워요.</p>
     <p><b>$V_T$ 민감도.</b> $V_T = 25\ \text{mV}$를 쓰면 $1/100 - 0.005 = 0.005$라 $V_{A,p} = 5.0\ \text{V}$가 나와요. 두 항의 차가 작아서 $V_T$ 값에 답이 민감하니, 쓴 $V_T$를 답과 함께 적어 두세요.</p>
-  <p>네 소자의 유한 $r_o$와 이상적 테일을 모두 남기고 베이스 전류만 무시하는 모델도 비교할 수 있어요. 동일 동작 전류에서 npn·pnp의 $g_m$은 같고, 다이오드 쪽 노드 $v_x$, 출력 $v_o$, 공통 이미터 $v_e$라 두고 $g_n=1/r_{ON}$, $g_p=1/r_{OP}$로 정의해요. 두 베이스에 $+v_d/2,-v_d/2$를 넣고 각 노드에서 나가는 전류를 쓰면</p><p>$$(g_m+g_p)v_x+g_n(v_x-v_e)+g_m(v_d/2-v_e)=0$$</p><p>$$g_pv_o+g_n(v_o-v_e)+g_m(-v_d/2-v_e)+g_mv_x=0$$</p><p>$$g_n(2v_e-v_x-v_o)+2g_mv_e=0$$</p><p>마지막 식에서 $v_e=g_n(v_x+v_o)/[2(g_m+g_n)]$예요. 이것을 앞의 두 식에 대입하여 $v_x$를 소거하면 $v_o/v_d=g_m(2g_m+g_p)/[2(g_m+g_p)(g_n+g_p)]$가 돼요. $1/(g_n+g_p)=r_{ON}\parallel r_{OP}$를 넣으면 $$|A_e|=g_m(r_{ON}\parallel r_{OP})\frac{2g_mr_{OP}+1}{2(g_mr_{OP}+1)}$$예요. 본문의 주 답은 뒤 인자를 1로 둔 큰 고유 이득 근사예요. $g_mr_{OP}\to\infty$에서 정확식/근사식 비가 1로 가고, $V_T=26$ mV·$V_{A,p}=5.42$ V에서는 이 보정이 약 0.24%예요. 따라서 작은 보정을 정밀 결과와 구별하며 교과서 설계값을 사용해요.</p></div>
+  <p>네 소자의 유한 $r_o$와 이상적 테일을 모두 남기고 베이스 전류만 무시하는 모델도 비교할 수 있어요. 동일 동작 전류에서 npn·pnp의 $g_m$은 같고, 다이오드 쪽 노드 $v_x$, 출력 $v_o$, 공통 이미터 $v_e$라 두고 $g_n=1/r_{ON}$, $g_p=1/r_{OP}$로 정의해요. 두 베이스에 $+v_d/2,-v_d/2$를 넣어요. 제어 전압은 베이스 쪽이 $+$라 $v_{be1}=v_d/2-v_e$, $v_{be2}=-v_d/2-v_e$이고, $Q_1$·$Q_2$의 제어 전류원은 컬렉터에서 $v_e$ 쪽으로 흘러요. pnp $Q_4$는 $v_{eb4}=0-v_x$라 출력 노드에서 위로 $g_mv_x$가 나가는 전류원이 돼요. 각 가지 전류는 노드에서 나가는 방향을 양으로 둬요.</p><figure class="figure"><svg viewBox="0 0 480 290" role="img" aria-label="능동 부하 차동쌍의 소신호 등가회로: AC 접지된 V_CC와 노드 v_x 사이에 다이오드 연결 Q3의 1/g_m과 r_OP가 병렬로, V_CC와 출력 노드 v_o 사이에 Q4의 r_OP와 v_o에서 위로 흐르는 제어 전류원 g_m v_x가 병렬로 있어요. v_x와 공통 이미터 노드 v_e 사이에 Q1의 아래 방향 제어 전류원 g_m(v_d/2 − v_e)와 r_ON이, v_o와 v_e 사이에 Q2의 g_m(−v_d/2 − v_e)와 r_ON이 병렬로 있고, 이상 테일은 개방이에요."><path class="fig-ink" d="M130 24 H350"/><text class="fig-muted" x="20" y="28">V<tspan baseline-shift="sub">CC</tspan> (AC 접지)</text><path class="fig-ink" d="M130 24 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M190 24 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M130 92 V100 M190 92 V100 M130 100 H190"/><path class="fig-ink" d="M290 24 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M350 24 V42 M350 74 V100 M290 92 V100 M290 100 H350"/><polygon class="fig-ink" points="350,42 364,58 350,74 336,58"/><path class="fig-ink" d="M350 68 V49 M345 54 L350 49 L355 54"/><text class="fig-text" x="90" y="62">1/g<tspan baseline-shift="sub">m</tspan></text><text class="fig-text" x="202" y="62">r<tspan baseline-shift="sub">OP</tspan></text><text class="fig-text" x="252" y="62">r<tspan baseline-shift="sub">OP</tspan></text><text class="fig-text" x="372" y="62">g<tspan baseline-shift="sub">m</tspan>v<tspan baseline-shift="sub">x</tspan></text><path class="fig-accent" d="M160 100 V120 M320 100 V120"/><circle class="fig-dot" cx="160" cy="100" r="3.5"/><circle class="fig-dot" cx="320" cy="100" r="3.5"/><text class="fig-text" x="100" y="108">v<tspan baseline-shift="sub">x</tspan></text><text class="fig-text" x="362" y="108">v<tspan baseline-shift="sub">o</tspan></text><path class="fig-ink" d="M130 120 H190 M130 120 V159 M130 191 V230 M190 120 V141 M190 209 V230 M130 230 H190"/><polygon class="fig-ink" points="130,159 144,175 130,191 116,175"/><path class="fig-ink" d="M130 165 V184 M125 179 L130 184 L135 179"/><path class="fig-ink" d="M190 141 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M290 120 H350 M350 120 V159 M350 191 V230 M290 120 V141 M290 209 V230 M290 230 H350"/><polygon class="fig-ink" points="350,159 364,175 350,191 336,175"/><path class="fig-ink" d="M350 165 V184 M345 179 L350 184 L355 179"/><path class="fig-ink" d="M290 141 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><text class="fig-text" x="6" y="180">g<tspan baseline-shift="sub">m</tspan>(v<tspan baseline-shift="sub">d</tspan>/2 − v<tspan baseline-shift="sub">e</tspan>)</text><text class="fig-text" x="372" y="172">g<tspan baseline-shift="sub">m</tspan>(−v<tspan baseline-shift="sub">d</tspan>/2</text><text class="fig-text" x="384" y="194">− v<tspan baseline-shift="sub">e</tspan>)</text><text class="fig-text" x="202" y="180">r<tspan baseline-shift="sub">ON</tspan></text><text class="fig-text" x="252" y="180">r<tspan baseline-shift="sub">ON</tspan></text><path class="fig-ink" d="M160 230 V250 M320 230 V250"/><path class="fig-accent" d="M160 250 H320"/><circle class="fig-dot" cx="240" cy="250" r="3.5"/><text class="fig-text" x="250" y="238">v<tspan baseline-shift="sub">e</tspan></text><text class="fig-muted" x="160" y="276">테일 I<tspan baseline-shift="sub">EE</tspan>: 이상 전류원 → 개방</text><text class="fig-muted" x="148" y="44">Q₃</text><text class="fig-muted" x="310" y="44">Q₄</text><text class="fig-muted" x="148" y="214">Q₁</text><text class="fig-muted" x="310" y="214">Q₂</text></svg><figcaption>$V_{CC}$를 AC 접지로, 이상적 테일 $I_{EE}$는 개방으로 보내고 베이스 전류는 무시했어요. 다이오드 연결 $Q_3$는 $1/g_m$과 $r_{OP}$, $Q_4$는 $g_mv_x$ 전류원과 $r_{OP}$, $Q_1$·$Q_2$는 $g_mv_{be}$ 전류원과 $r_{ON}$으로 바꿨어요.</figcaption></figure><p>$v_x$, $v_o$, $v_e$ 세 노드의 KCL은</p><p>$$(g_m+g_p)v_x+g_n(v_x-v_e)+g_m(v_d/2-v_e)=0$$</p><p>$$g_pv_o+g_n(v_o-v_e)+g_m(-v_d/2-v_e)+g_mv_x=0$$</p><p>$$g_n(2v_e-v_x-v_o)+2g_mv_e=0$$</p><p>마지막 식에서 $v_e=g_n(v_x+v_o)/[2(g_m+g_n)]$예요. 첫 식에서는 $v_x=\dfrac{(g_m+g_n)v_e-g_mv_d/2}{g_m+g_n+g_p}$예요. 이것과 $v_e$ 식을 둘째 식에 대입하여 $v_x$, $v_e$를 소거하면 $v_o/v_d=g_m(2g_m+g_p)/[2(g_m+g_p)(g_n+g_p)]$가 돼요. $1/(g_n+g_p)=r_{ON}\parallel r_{OP}$를 넣으면 $$|A_e|=g_m(r_{ON}\parallel r_{OP})\frac{2g_mr_{OP}+1}{2(g_mr_{OP}+1)}$$예요. 본문의 주 답은 뒤 인자를 1로 둔 큰 고유 이득 근사예요. $g_mr_{OP}\to\infty$에서 정확식/근사식 비가 1로 가고, $V_T=26$ mV·$V_{A,p}=5.42$ V에서는 이 보정이 약 0.24%예요. 따라서 작은 보정을 정밀 결과와 구별하며 교과서 설계값을 사용해요.</p></div>
 </div>
 <div class="layer warn" data-explanation="pitfall">
   <h4>이 문항에서 하기 쉬운 오류</h4>
@@ -1402,9 +1405,9 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
 <div class="layer eli5" data-explanation="retry">
   <h4>설명을 닫고 다시 해 봐요</h4>
   <ol>
-    <li>Fig. 10.96의 출력 노드에서 위아래로 보이는 저항을 표시하고, $|A_v| = g_m(r_{O2}\parallel r_{O4})$를 $V_{A,n}$, $V_{A,p}$, $V_T$만으로 다시 써 보세요.</li>
-    <li>$V_{A,n}=5\ \text{V}$, $V_T=26\ \text{mV}$에서 이득 100이 되는 $V_{A,p}$를 계산하고, 되대입해 100이 나오는지 확인해 보세요.</li>
-    <li>pnp가 이상적($V_{A,p}\to\infty$)일 때 얻을 수 있는 최대 이득은 얼마인지 말해 보세요.</li>
+    <li>$V_{A,p}=5.42\ \text{V}$는 그대로 두고 npn만 개선해 $V_{A,n}=10\ \text{V}$가 되면 이득은 대략 얼마가 될지 예측해 보세요($V_T=26$ mV).</li>
+    <li>목표 이득을 100이 아니라 200으로 바꾸면 $V_{A,n}=5\ \text{V}$인 이 회로에서 어떤 $V_{A,p}$로도 가능한가요? 계산 전에 무엇부터 확인해야 하는지 판단해요.</li>
+    <li>$I_{EE}$를 두 배로 키우면 $g_m$, $r_{O2}$, $r_{O4}$와 전압 이득은 각각 어떻게 바뀌나요?</li>
   </ol>
 </div>
 <div class="sum" hidden="">

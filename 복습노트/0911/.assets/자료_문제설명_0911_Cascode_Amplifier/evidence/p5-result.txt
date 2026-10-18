@@ -1,5 +1,4 @@
-MOS output KCL: g*r1*r2 + r1 + r2 ; BJT output KCL: (g*r1*r2*rp + r1*r2 + r1*rp + r2*rp)/(r1 + rp) ; BJT voltage gain: -g*r1*rp*(g*r2 + 1)/(r1 + rp)
-ro 10000.0 gm 0.0004 W/L 3.1999999999999997
-MOS exact/dominant gm scaled limit 1
-BJT R exact/dominant gm scaled limit 1
-BJT Av exact/dominant gm scaled limit 1
+ro = 10000 ohm
+approx gm ro^2: gm = 0.0004 S, gm*ro = 4 , W/L = 16/5 = 3.2
+exact (1+gm ro)ro+ro: gm = 0.0002 S, gm*ro = 2 , W/L = 4/5 = 0.8
+note: gm*ro is only 2..4 here, so gm ro >> 1 is not satisfied; ratio approx/exact W/L = 4

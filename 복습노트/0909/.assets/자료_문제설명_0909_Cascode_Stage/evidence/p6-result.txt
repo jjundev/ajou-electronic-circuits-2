@@ -1,6 +1,4 @@
-MOS output KCL: g*r1*r2 + r1 + r2 ; BJT output KCL: (g*r1*r2*rp + r1*r2 + r1*rp + r2*rp)/(r1 + rp) ; BJT voltage gain: -g*r1*rp*(g*r2 + 1)/(r1 + rp)
-gm 0.00333333333333333 lambda maximum 0.516397779494322
-MOS exact/dominant gm scaled limit 1
-BJT R exact/dominant gm scaled limit 1
-BJT Av exact/dominant gm scaled limit 1
-exact ro 3584.58491991101 exact lambda 0.557944655988134
+gm = 1/300 = 0.0033333333333333335 S
+approx gm ro^2 = 50k -> lambda_max = [2*sqrt(15)/15] = [0.5163977794943222] 1/V
+exact (1+gm ro)ro+ro = 50k -> lambda_max = [1/25 + sqrt(1509)/75] = [0.5579446559881341] 1/V
+gm ro at approx lambda = 12.909944487358056  ratio lam_exact/lam_approx = 1.080455180373735

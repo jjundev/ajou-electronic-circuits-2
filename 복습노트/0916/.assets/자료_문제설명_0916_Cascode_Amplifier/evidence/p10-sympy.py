@@ -1,17 +1,13 @@
-import sympy as s
-s.init_printing()
-g,r1,r2,Rp,i,v,x,y,rp,b,VT,I,VA,kn,kp,N=s.symbols('g r1 r2 Rp i v x y rp b VT I VA kn kp N', positive=True)
-i,v,x,y=s.symbols('i v x y', real=True)
-# MOS cascode output test: bottom ro=r2, top gm=g,ro=r1; top gate grounded.
-mos=s.solve([s.Eq(i,x/r2),s.Eq(i,(y-x)/r1-g*x)],[x,y]);Rmos=s.factor(mos[y]/i)
-# BJT top base grounded: lower ro=r1, upper ro=r2,rpi=rp.
-bjt=s.solve([s.Eq(i,x/r1+x/rp),s.Eq(i,(y-x)/r2-g*x)],[x,y]);Rbjt=s.factor(bjt[y]/i)
-# Lower-driven BJT exact open output KCL.
-amp=s.solve([s.Eq(x/r1+x/rp+(x-y)/r2+g*x+g*v,0),s.Eq((y-x)/r2-g*x,0)],[x,y]);Abjt=s.factor(amp[y]/v)
-print('MOS output KCL:',Rmos,'; BJT output KCL:',Rbjt,'; BJT voltage gain:',Abjt)
-Vg,Vth,k=s.symbols('Vg Vth k',positive=True);cur=k*(Vg-Vth)**2/2;print('dI/dVth',s.diff(cur,Vth),'fractional',s.simplify(s.diff(cur,Vth)/cur));print('low overdrive increases fractional sensitivity; derivative magnitude alone shrinks')
-
-t=s.symbols("t",positive=True)
-print("MOS exact/dominant gm scaled limit",s.limit(Rmos.subs(g,t*g)/(t*g*r1*r2),t,s.oo))
-print("BJT R exact/dominant gm scaled limit",s.limit(Rbjt.subs(g,t*g)/(t*g*r2*r1*rp/(r1+rp)),t,s.oo))
-print("BJT Av exact/dominant gm scaled limit",s.limit(Abjt.subs(g,t*g)/(-t**2*g**2*r2*r1*rp/(r1+rp)),t,s.oo))
+# P10 (P9.37): sensitivity of I1 to VTH
+import sympy as sp
+k, WL, R1, R2, VDD, VTH = sp.symbols('muCox WL R1 R2 V_DD V_TH', positive=True)
+Vov = R2*VDD/(R1+R2) - VTH
+I1 = k*WL/2*Vov**2
+d = sp.diff(I1, VTH)
+print('dI1/dVTH =', sp.factor(d))
+print('simplify(d + muCox WL (R2VDD/(R1+R2)-VTH)) =', sp.simplify(d + k*WL*Vov))
+print('simplify(d + 2 I1/Vov) =', sp.simplify(d + 2*I1/Vov))
+print('relative (dI1/I1)/dVTH =', sp.simplify(d/I1), '  = -2/(V_GS - V_TH)')
+for vdd in [3.0, 1.8, 1.2]:
+    vals = {R1: 1, R2: 1, VDD: vdd, VTH: 0.4}
+    print('VDD=%.1f: Vov=%.3f V, (dI1/I1)/dVTH = %.2f /V' % (vdd, float(Vov.subs(vals)), float((d/I1).subs(vals))))

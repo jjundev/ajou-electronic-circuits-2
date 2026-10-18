@@ -1,9 +1,13 @@
-import sympy as s
-s.init_printing()
-gm,ro,rp,R,RC,RT=s.symbols('gm ro rp R RC RT', positive=True)
-vi,vo,vx,it=s.symbols('vi vo vx it',real=True)
-par=lambda a,b:s.simplify(a*b/(a+b))
-def show(label,x): print(label, '=',([s.simplify(v) for v in x] if isinstance(x,list) else s.simplify(x)))
-def ce(load):
- sol=s.solve(vo/load+gm*vi,vo)[0];show('Av from output KCL',sol/vi)
-z,Ci,Cl,Rs=s.symbols('s Ci Cl Rs',positive=True);v=s.symbols('v');sol=s.solve([(v-vi)/Rs+z*Ci*v+gm*v,vo/R+z*Cl*vo-gm*v],[v,vo]);show('H',sol[vo]/vi);show('input pole',-(1/Rs+gm)/Ci);show('output pole',-1/(R*Cl))
+import sympy as sp
+s, gm, RD, CL, RS, Cin = sp.symbols('s g_m R_D C_L R_S C_in', positive=True)
+VX, Vout, Vin = sp.symbols('V_X V_out V_in')
+# Gate AC ground, source node X. Drain->source current id = gm*VGS = -gm*VX (lambda = 0).
+idd = -gm*VX
+eqs = [sp.Eq((Vin-VX)/RS - s*Cin*VX + idd, 0),      # KCL at X: in from RS + id = into Cin
+       sp.Eq(Vout/RD + s*CL*Vout + idd, 0)]           # KCL at output
+sol = sp.solve(eqs, [VX, Vout]); H = sp.factor(sp.simplify(sol[Vout]/Vin)); print('H(s) =', H)
+print('poles:', [sp.simplify(p) for p in sp.solve(sp.denom(sp.together(H)).subs(s, sp.Symbol('p')), sp.Symbol('p'))])
+Rpar = RS*(1/gm)/(RS+1/gm)
+print('win - 1/((RS||1/gm)Cin) =', sp.simplify(-sp.solve(1+gm*RS+sp.Symbol('p')*RS*Cin, sp.Symbol('p'))[0] - 1/(Rpar*Cin)))
+print('H - target =', sp.simplify(H - (gm*RD/(1+gm*RS))/((1+s*Rpar*Cin)*(1+s*RD*CL))))
+print('low-frequency gain =', sp.simplify(H.subs(s, 0)))

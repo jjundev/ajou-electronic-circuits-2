@@ -17,7 +17,8 @@ $$R_{out3}=\big[1+g_{m3}(R_1\parallel r_{\pi3})\big]r_{O3}+R_1\parallel r_{\pi3}
 </div>
 <div class="layer formal" data-explanation="start">
 <h4>종이에 쓰는 첫 줄</h4>
-<p>1) 테일부터 떼어 내요. $V_b$·$V_{CC}$는 소신호 접지로 보내고 $Q_3$를 $r_{\pi3}$, $g_{m3}v_\pi$, $r_{O3}$로 바꿔요. 컬렉터에 시험 전압 $V_X$를 걸고 흘러드는 전류를 $I_X$라고 써요.</p>
+<p>1) 테일부터 떼어 내요. $V_b$·$V_{CC}$는 소신호 접지로 보내고 $Q_3$를 $r_{\pi3}$, $g_{m3}v_\pi$, $r_{O3}$로 바꿔요. 컬렉터에 시험 전압 $V_X$를 걸고, 컬렉터로 흘러드는 전류를 $I_X$(양의 방향)라고 써요. 이미터 노드 전압은 $v_E$, 제어 전압 $v_\pi$는 베이스 쪽이 $+$, 이미터 쪽이 $-$예요. 제어 전류원 $g_{m3}v_\pi$는 컬렉터에서 이미터 쪽으로 흐르는 방향이에요.</p>
+<figure class="figure"><svg viewBox="0 0 420 300" role="img" aria-label="Q3 소신호 등가회로: 시험 전압 V_X가 컬렉터 노드에 걸리고 전류 I_X가 컬렉터로 들어가요. 컬렉터와 이미터 노드 v_E 사이에 컬렉터에서 이미터 방향의 제어 전류원 g_m3 v_π와 r_O3가 병렬로 있고, v_E에서 접지로 R_1과 r_π3이 병렬로 연결돼요. r_π3의 아래 끝은 AC 접지된 베이스이고 v_π는 베이스가 +, 이미터가 −라서 v_π = −v_E예요."><path class="fig-accent" d="M60 146 V60 H200"/><circle class="fig-accent" cx="60" cy="160" r="14"/><text class="fig-muted" x="56" y="157">+</text><text class="fig-muted" x="56" y="171">−</text><path class="fig-ink" d="M60 174 V258"/><path class="fig-ink" d="M60 258 v8 M50 266 H70 M54 271 H66 M58 276 H62"/><text class="fig-text" x="14" y="165">V<tspan baseline-shift="sub">X</tspan></text><path class="fig-accent" d="M110 48 H130 M125 43 L130 48 L125 53"/><text class="fig-text" x="108" y="36">I<tspan baseline-shift="sub">X</tspan></text><circle class="fig-dot" cx="200" cy="60" r="3.5"/><text class="fig-text" x="210" y="54">V<tspan baseline-shift="sub">X</tspan> (C₃)</text><path class="fig-ink" d="M200 60 V80 M170 80 H240 M170 80 V119 M170 151 V170 H240 M240 80 V101 M240 169 V170 M200 170 V190"/><polygon class="fig-ink" points="170,119 184,135 170,151 156,135"/><path class="fig-ink" d="M170 125 V144 M165 139 L170 144 L175 139"/><path class="fig-ink" d="M240 101 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><text class="fig-text" x="96" y="140">g<tspan baseline-shift="sub">m3</tspan>v<tspan baseline-shift="sub">π</tspan></text><text class="fig-text" x="254" y="140">r<tspan baseline-shift="sub">O3</tspan></text><circle class="fig-dot" cx="200" cy="190" r="3.5"/><text class="fig-text" x="168" y="186">v<tspan baseline-shift="sub">E</tspan></text><path class="fig-ink" d="M200 190 H300"/><path class="fig-ink" d="M200 190 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M200 258 v8 M190 266 H210 M194 271 H206 M198 276 H202"/><path class="fig-ink" d="M300 190 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M300 258 v8 M290 266 H310 M294 271 H306 M298 276 H302"/><text class="fig-text" x="166" y="228">R<tspan baseline-shift="sub">1</tspan></text><text class="fig-text" x="258" y="228">r<tspan baseline-shift="sub">π3</tspan></text><text class="fig-text" x="314" y="206">−</text><text class="fig-text" x="316" y="230">v<tspan baseline-shift="sub">π</tspan></text><text class="fig-text" x="314" y="254">+</text><text class="fig-muted" x="316" y="292">B₃ (AC 접지)</text></svg><figcaption>$V_{CC}$와 $V_b$를 AC 접지로 보내 $Q_3$ 베이스가 접지되고, $Q_3$를 $r_{\pi3}$, $g_{m3}v_\pi$, $r_{O3}$로 바꿨어요. $P$ 쪽 회로는 떼어 내고 컬렉터에 시험 전압 $V_X$를 걸었어요.</figcaption></figure>
 <p>2) 베이스가 접지이므로 $r_{\pi3}$는 이미터와 접지 사이에서 $R_1$과 병렬이에요. $I_X$는 모두 이 병렬 조합으로 흘러요.</p>
 $$v_E=I_X\,(R_1\parallel r_{\pi3}),\qquad v_\pi=-v_E$$
 <p>3) 첫 KCL은 컬렉터 노드에서 써요.</p>
@@ -49,7 +50,8 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
 <h4>완성 답과 검산</h4>
 <div data-subpart="main">
 <h4>극한·단위 확인</h4>
-<p><strong>완성 답</strong>: $A_{CM-DM}=\dfrac{\Delta R_C}{1/g_{m1}+2\{[1+g_{m3}(R_1\parallel r_{\pi3})]r_{O3}+R_1\parallel r_{\pi3}\}}$</p>
+<p><strong>완성 답</strong>: $A_{CM-DM}=\dfrac{\Delta R_C}{1/g_{m1}+2\{[1+g_{m3}(R_1\parallel r_{\pi3})]r_{O3}+R_1\parallel r_{\pi3}\}}$ (이 소신호 모델의 정확한 값)</p>
+<p><strong>$r_{O3}\gg R_1\parallel r_{\pi3}$에서</strong>: $A_{CM-DM}\approx\dfrac{\Delta R_C}{1/g_{m1}+2[1+g_{m3}(R_1\parallel r_{\pi3})]\,r_{O3}}$이고, 문제 md의 풀이와 같은 꼴이에요. 버린 항 $2(R_1\parallel r_{\pi3})$와 남긴 항의 비는 $(R_1\parallel r_{\pi3})/\{[1+g_{m3}(R_1\parallel r_{\pi3})]r_{O3}\}\lt (R_1\parallel r_{\pi3})/r_{O3}$라서 $r_{O3}\to\infty$에서 두 값의 비가 1로 가요.</p>
 <p><strong>대칭 특수값</strong>: $\Delta R_C=0$이면 분자가 0이라 $A_{CM-DM}=0$이에요. 완전 대칭이면 CM 입력이 차동 출력으로 새지 않는다는 사실과 맞아요.</p>
 <p><strong>극한 1</strong>: $R_1=0$이면 $R_1\parallel r_{\pi3}=0$이라 $R_{out3}=r_{O3}$예요. 축퇴 없는 전류원을 테일로 쓴 경우로 돌아와요.</p>
 <p><strong>극한 2</strong>: $R_1\gg r_{\pi3}$이면 $R_1\parallel r_{\pi3}\to r_{\pi3}$이고 $g_{m3}r_{\pi3}=\beta$라서 $R_{out3}\to(1+\beta)r_{O3}+r_{\pi3}\approx\beta r_{O3}$예요. 바이폴라 축퇴 전류원 출력 저항의 상한과 맞아요.</p>
@@ -70,9 +72,9 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
 <div class="layer eli5" data-explanation="retry">
 <h4>설명을 닫고 다시 해 봐요</h4>
 <ol>
-<li>$Q_3$ 컬렉터에 시험 전원을 걸고 KCL 한 줄로 $R_{out3}$를 유도해 보세요. $R_1\parallel r_{\pi3}$가 어디서 나오는지 말할 수 있나요?</li>
-<li>CM 하프 서킷을 그리고 $\Delta I_C=\Delta V_{CM}/(1/g_{m1}+2R_{out3})$를 적은 뒤, 두 출력을 빼서 $\Delta R_C\,\Delta I_C$가 남는 것을 확인해 보세요.</li>
-<li>$R_1=0$과 $\Delta R_C=0$을 넣어 답이 예상과 맞는지 확인해 보세요.</li>
+<li>$I_{C3}=1$ mA($g_{m3}\approx38.5$ mS, $\beta=100$이라 $r_{\pi3}=2.6$ kΩ), $r_{O3}=50$ kΩ에서 $R_1=260\ \Omega$을 넣으면 $R_{out3}$은 $R_1=0$일 때의 대략 몇 배가 될지 예측해 보세요.</li>
+<li>$Q_3$ 베이스가 AC 접지가 아니라 이상 전류원으로 구동되어 소신호로 개방이라면 $r_{\pi3}$ 가지와 $g_{m3}v_\pi$는 어떻게 되고, $R_{out3}$은 무엇이 되나요?</li>
+<li>미스매치를 왼쪽으로 옮겨 $Q_1$ 쪽 부하가 $R_C+\Delta R_C$, $Q_2$ 쪽이 $R_C$가 되면 $\Delta V_{out1}-\Delta V_{out2}$의 부호와 $A_{CM-DM}$의 크기는 어떻게 되나요?</li>
 </ol>
 </div>
 <div class="sum" hidden>

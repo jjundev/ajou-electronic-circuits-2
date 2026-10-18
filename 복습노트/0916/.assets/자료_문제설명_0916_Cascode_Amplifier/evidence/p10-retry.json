@@ -1,0 +1,18 @@
+{
+ "p10": [
+  {
+   "question": "분배비 $a=R_2/(R_1+R_2)=0.5$, $V_{TH}=0.5\\ \\mathrm V$일 때 $V_{DD}$를 3.3 V에서 1.8 V로 낮추면, $\\Delta V_{TH}=+10\\ \\mathrm{mV}$에 대한 상대 전류 변화 $\\Delta I_1/I_1$은 각각 대략 얼마인가요?",
+   "expected_answer": "3.3 V: V_ov=1.15 V → ≈ −1.74%. 1.8 V: V_ov=0.40 V → ≈ −5.0%.",
+   "reason": "ΔI_1/I_1 ≈ −2ΔV_TH/V_ov이고 V_ov=aV_DD−V_TH가 낮은 전원에서 작아져요.",
+   "condition": "같은 분배비, 포화 강반전 제곱 법칙, |ΔV_TH|≪V_ov 선형 근사.",
+   "check": "python: -2*0.01/1.15=-0.01739; -2*0.01/0.40=-0.05"
+  },
+  {
+   "question": "게이트 전압을 분배기로 고정한 채 $V_{TH}$가 조금 오르면 $I_1$은 늘어나나요, 줄어드나요? $\\partial I_1/\\partial V_{TH}$의 부호와 단위를 함께 말해 보세요.",
+   "expected_answer": "줄어들어요. ∂I_1/∂V_TH = −μ_nC_ox(W/L)V_ov = −g_m < 0, 단위 A/V.",
+   "reason": "V_GS가 고정이라 V_TH 상승은 과구동 V_ov를 줄이고, 전류는 V_ov²에 비례해요.",
+   "condition": "R_1, R_2, V_DD, μ_nC_ox 고정, 포화 영역.",
+   "check": "sympy: diff(K/2*(a*VDD-VTH)**2, VTH) = -K*(a*VDD-VTH)"
+  }
+ ]
+}

@@ -1,0 +1,18 @@
+{
+ "p2": [
+  {
+   "question": "같은 이득·전력·출력 CM에서 $V_{DD}=2.4$ V이면 $W/L$은 얼마일지 트레이드오프 식으로 바로 예측해 보세요.",
+   "expected_answer": "W/L=A_v²P/(4μnCox V_DD (V_DD−V_CM,out)²)=25·2 mW/(4·100 μ·2.4·0.8²)≈81.4 (I_SS=0.833 mA, R_D=1.92 kΩ)",
+   "reason": "전원을 올리면 전류가 1/V_DD로 줄지만 저항 전압 여유 H가 커져 W/L이 1/(V_DD H²)로 빨리 줄어요.",
+   "condition": "|A_v|=5, P=2 mW, V_CM,out=1.6 V, μnCox=100 μA/V², λ=0",
+   "check": "Iss=2e-3/2.4; Rd=2*0.8/Iss; gm=5/Rd; gm**2/(1e-4*Iss)=81.4"
+  },
+  {
+   "question": "$V_{DD}=2$ V는 그대로 두고 전력 예산을 $4$ mW로 두 배 늘리면 $W/L$은 커질까요, 작아질까요? 몇 배인가요?",
+   "expected_answer": "커져요. W/L∝P이므로 2배, 약 781.",
+   "reason": "전류가 2배가 되면 같은 H에서 R_D가 절반이라 g_m이 2배 필요하고, g_m²=μnCox(W/L)I_SS에서 W/L=g_m²/(μnCox I_SS)가 2배가 돼요.",
+   "condition": "V_DD=2 V, V_CM,out=1.6 V, |A_v|=5, μnCox=100 μA/V², λ=0",
+   "check": "25*4e-3/(4*1e-4*2*0.4**2)=781.25"
+  }
+ ]
+}

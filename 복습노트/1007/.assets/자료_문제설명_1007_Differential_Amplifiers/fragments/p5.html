@@ -63,9 +63,18 @@
     <p><b>$A_{CM}\approx-1.0\times10^{-2}$, $\left|A_{CM-DM}\right|\approx5.0\times10^{-5}$ (교재 부호 관례로 $-5.0\times10^{-5}$)</b></p>
     <p><b>극한 대입:</b> $R_{SS}\to\infty$이면 두 식의 분모가 무한대라 $A_{CM}\to0$, $A_{CM-DM}\to0$이에요. 이상적인 테일은 CM 신호를 완전히 막는다는 직관과 맞아요. $\Delta R=0$(완전 대칭)이면 $A_{CM-DM}=0$이에요.</p>
     <p><b>단위:</b> 두 식 모두 Ω/Ω이라 무차원이에요. $1/g_{m1}=100\ \Omega$은 $2R_{SS}=1\ \text{M}\Omega$의 만 분의 일이라, $A_{CM}\approx-r_{O3}/(2R_{SS})$로 줄여도 같은 값이 나와요.</p>
-    <p><b>근사 영향 확인:</b> $M_1$의 $r_{O1}$까지 넣은 축퇴 CS 식 $-\dfrac{g_{m1}r_{O1}\,r_{O3}}{r_{O3}+r_{O1}+(1+g_{m1}r_{O1})2R_{SS}}$로 다시 계산하면 $-0.0099$예요. $R_{SS}$에 $r_{O5}+r_{O6}$을 더해 $510\ \text{k}\Omega$로 써도 $-0.0097$이에요. 모두 유효숫자 두 자리에서 $-1.0\times10^{-2}$ 근처라 $g_m r_o\gg1$ 근사가 결론을 바꾸지 않아요.</p>
-    <p><b>비율 확인:</b> $A_{CM-DM}/A_{CM}=\Delta R/r_{O3}=50/10^4=5\times10^{-3}$이에요. 두 결과가 같은 $\Delta I_D$를 공유하므로 이 비율이 정확히 나와야 해요.</p>
-  <p>유한한 입력 $r_o$까지 남긴 CM 반회로의 정확식도 있어요. $Q=r_{O1}+2R_{SS}(1+g_{m1}r_{O1})$라 놓으면 $G_{m,e}=g_{m1}r_{O1}/Q$, $A_{CM,e}=-G_{m,e}(Q\parallel r_{O3})$예요. 테일의 작은 항까지 넣은 $R_{SS}=510$ kΩ에서 $A_{CM,e}=-0.009705$이고 주 답 −0.0100과 약 3% 달라요. 출력 저항 차이를 작은 섭동으로 보는 같은 전달전류 모델의 변환 이득은 $G_{m,e}\Delta R$예요. $g_{m1}$을 크게 하는 극한에서 $G_{m,e}/[1/(2R_{SS})]\to1$, $A_{CM,e}/[-r_{O3}/(2R_{SS})]\to1$이고, 테일 역시 $g_{m5}\to\infty$에서 $R_{SS}/(g_{m5}r_{O5}r_{O6})\to1$이에요.</p></div>
+    <p><b>근사 영향 확인 ($r_{O1}$을 남긴 정확식):</b> 주 답에서 버린 $r_{O1}$과 $R_{SS}$의 작은 항을 되살려도 결론이 같은지 봐요. CM 반회로의 $M_1$은 소스에 $R_S=2R_{SS}$가 달린 축퇴 트랜지스터이므로 두 블록 공식을 그대로 써요.</p>
+    <p>① 드레인 쪽 저항: 드레인에 시험 전류 $i_t$를 넣으면 $i_t$가 모두 $R_S$로 빠져 $v_s=i_tR_S$, 게이트가 AC 접지라 $v_{gs}=-i_tR_S$예요. $r_{O1}$에는 $i_t-g_{m1}v_{gs}=i_t(1+g_{m1}R_S)$가 흐르므로 $v_t=i_t(1+g_{m1}R_S)r_{O1}+i_tR_S$이고, 이 값을 $Q$라 둬요.</p>
+    <p>$$Q=\frac{v_t}{i_t}=r_{O1}+2R_{SS}(1+g_{m1}r_{O1})$$</p>
+    <p>② 단락 트랜스컨덕턴스: 출력을 단락하면 드레인 전류 $i$가 $R_S$로 흘러 $v_s=iR_S$이고, $i=g_{m1}(v_{in}-v_s)-v_s/r_{O1}$(출력 노드 단락 KCL)을 $i$에 대해 풀면 분모가 다시 $Q$가 돼요.</p>
+    <p>$$G_{m,e}=\frac{g_{m1}r_{O1}}{Q},\qquad A_{CM,e}=-G_{m,e}\,(Q\parallel r_{O3})=-\frac{g_{m1}r_{O1}\,r_{O3}}{r_{O3}+Q}$$</p>
+    <p>마지막 꼴은 $A_v=-G_mR_{out}$에 $R_{out}=Q\parallel r_{O3}$를 넣고 $Q$를 약분한 것이에요. 수치를 넣어요($g_{m1}r_{O1}=100$, $r_{O1}=r_{O3}=10$ kΩ).</p>
+    <ul>
+      <li>$R_{SS}=500$ kΩ(주 답의 근사값): $Q=10\ \text{k}+1\ \text{M}\times101=101.01\ \text{M}\Omega$, $G_{m,e}=100/101.01\ \text{M}\Omega=0.990\ \mu\text{S}$, $Q\parallel r_{O3}\approx9.999$ kΩ라 $A_{CM,e}=-9.90\times10^{-3}$예요.</li>
+      <li>$R_{SS}=r_{O5}+r_{O6}+g_{m5}r_{O5}r_{O6}=510$ kΩ(테일의 작은 항 포함): $Q=103.03\ \text{M}\Omega$, $G_{m,e}=0.971\ \mu\text{S}$라 $A_{CM,e}=-9.70\times10^{-3}$이고 주 답 $-1.00\times10^{-2}$와 약 3% 달라요.</li>
+    </ul>
+    <p>같은 전달전류 모델에서 변환 이득은 같은 CM 전류가 두 출력 저항 차이 $\Delta R$를 지나는 몫이라 $|A_{CM-DM,e}|=G_{m,e}\Delta R$예요. $R_{SS}=500$ kΩ이면 $0.990\ \mu\text{S}\times50\ \Omega=4.95\times10^{-5}$, $510$ kΩ이면 $0.971\ \mu\text{S}\times50\ \Omega=4.85\times10^{-5}$로, 주 답 $5.0\times10^{-5}$와 각각 1%, 3% 차이예요. CMRR도 같은 비율만큼만 바뀌어 $10^6$ 수준(120 dB 근처)이 그대로예요. 극한으로 보면 $g_{m1}r_{O1}\to\infty$에서 $G_{m,e}\to1/(2R_{SS})$, $A_{CM,e}\to-r_{O3}/(2R_{SS})$이고, 테일도 $g_{m5}r_{O6}\to\infty$에서 $R_{SS}/(g_{m5}r_{O5}r_{O6})\to1$이라 주 답의 $g_mr_o\gg1$ 근사로 돌아와요.</p>
+    <p><b>비율 확인:</b> $A_{CM-DM}/A_{CM}=\Delta R/r_{O3}=50/10^4=5\times10^{-3}$이에요. 두 결과가 같은 $\Delta I_D$를 공유하므로 이 비율이 정확히 나와야 해요.</p></div>
   <div data-subpart="2">
     <h4>(2) 검산</h4>
     <p><b>$A_{DM}\approx-50$, $\text{CMRR}\approx1.0\times10^{6}$ ($120\ \text{dB}$)</b></p>
@@ -86,9 +95,9 @@
 <div class="layer eli5" data-explanation="retry">
   <h4>설명을 닫고 다시 풀어 봐요</h4>
   <ol>
-    <li>$M_1$과 $M_5$의 $g_m$, $r_o$를 전류부터 다시 구하고, 캐스코드 테일의 $R_{SS}$가 $500\ \text{k}\Omega$이 되는지 확인해요.</li>
-    <li>CM 하프 서킷과 DM 하프 서킷을 나란히 그리고, 출력 노드에서 보이는 저항이 각각 왜 $r_{O3}$와 $r_{O1}\parallel r_{O3}$인지 한 줄로 써 봐요.</li>
-    <li>$\Delta R=50\ \Omega$에서 $A_{CM-DM}$과 CMRR을 구하고, $\Delta R$이 $100\ \Omega$이면 CMRR이 몇 dB가 되는지 예측해요.</li>
+    <li>다른 값은 그대로 두고 출력 저항 차이만 $\Delta R=100\ \Omega$으로 두 배가 되면 $|A_{CM-DM}|$과 CMRR(dB)은 어떻게 될지 먼저 예측해 보세요.</li>
+    <li>캐스코드 테일 대신 $M_6$ 하나($r_{O6}=5\ \text{k}\Omega$)만 테일로 쓰면 $A_{CM}$, $|A_{CM-DM}|$($\Delta R=50\ \Omega$), CMRR은 대략 얼마인가요? $A_{DM}$이 바뀌는지도 판단해요.</li>
+    <li>DM 하프 서킷에서는 출력 노드 저항이 $r_{O1}\parallel r_{O3}$인데 CM 하프 서킷에서는 $r_{O3}$만 남는 이유를, $M_1$ 소스에 무엇이 달려 있는지로 설명해 보세요. 이 문제 값($r_{O1}=r_{O3}=10\ \text{k}\Omega$, $g_{m1}=10$ mS, $2R_{SS}=1\ \text{M}\Omega$)으로 아래로 본 저항의 크기도 어림해요.</li>
   </ol>
 </div>
 <div class="sum" hidden>

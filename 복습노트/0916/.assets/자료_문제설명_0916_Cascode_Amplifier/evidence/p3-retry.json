@@ -1,0 +1,18 @@
+{
+ "p3": [
+  {
+   "question": "start의 이미터 KCL $(G_1+g_o+g_\\pi+g_m)v_e=(g_m+g_\\pi)v_{in}+g_ov_{out}$에서, $G_m$을 구할 때와 무부하 $A_v$를 구할 때 $g_ov_{out}$ 항은 각각 어떻게 처리하나요?",
+   "expected_answer": "G_m: 출력을 AC 접지로 단락해 v_out=0이므로 그 항이 사라져요. A_v: 외부 출력 전류를 0으로 두고 컬렉터 KCL g_m(v_in−v_e)+(v_out−v_e)/r_O2=0으로 v_out을 v_e로 바꿔 넣어 없애요.",
+   "reason": "G_m은 출력 단락 전류로 정의되고, 전압 이득은 I_1이 이상 전류원(AC 개방)인 무부하 조건이라 경계 조건이 달라요.",
+   "condition": "I_1 이상 전류원, Q_1은 r_O1로 대체.",
+   "check": "sympy: 단락식 v_e=(gm+gpi)/(G1+go+gpi+gm)*vin; 무부하에서 v_e/vin = rO1/(rO1+rpi2)"
+  },
+  {
+   "question": "두 소자의 전류가 같고 $\\beta=100$, $V_A=5\\ \\mathrm V$, $V_T=26\\ \\mathrm{mV}$이면 교재 근사 $A_v\\approx-\\beta V_A/(V_A+\\beta V_T)$는 얼마이고, 입력을 $Q_1$ 베이스에 넣은 보통 캐스코드(같은 값에서 약 $-1.27\\times10^4$)보다 몇 배 작나요?",
+   "expected_answer": "A_v ≈ −65.8. 약 192배(= g_m r_O = V_A/V_T) 작아요.",
+   "reason": "출력 저항은 비슷하지만 G_m이 g_m 대신 약 1/r_O1이라 이득이 g_m r_O배 줄어요.",
+   "condition": "같은 I_C(1 mA), β=100, V_A=5 V, V_T=26 mV, I_1 이상 전류원.",
+   "check": "python: 100*5/(5+2.6)=65.789; 12651.8/65.789=192.3; 5/0.026=192.3"
+  }
+ ]
+}

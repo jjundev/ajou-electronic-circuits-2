@@ -1,8 +1,7 @@
-DM input gives left +gm vd/2 and right -gm vd/2. Ideal1:1 PNP mirror sums to +gm vd at right output, hence positive gain.
-A = VAn*VAp/(VT*(VAn + VAp))
-VAp needed = [100*VAn*VT/(VAn - 100*VT)]
-at VAn5 VT26mV = 5.41666666666667
-Finite beta mirror transfer neglected in dominant model; output compliance assumed.
-exact3node gain = gm*(2*gm + gp)/(2*(gm + gp)*(gn + gp))
-rootformula residual = 0
-large intrinsic-gain correction = 1
+Av = gm (rO2||rO4) = V_An*V_Ap/(V_T*(V_An + V_Ap))  (I_C cancels)
+V_A,p = 100*V_An*V_T/(V_An - 100*V_T)
+VT = 13/500 V: V_A,p = 5.41666666666667 V
+VT = 1/40 V: V_A,p = 5.00000000000000 V
+full KCL (finite rO all, base current neglected): |A| = g_m*(2*g_m + g_p)/(2*(g_m*g_n + g_m*g_p + g_n*g_p + g_p**2))
+  minus gm(2gm+gp)/(2(gm+gp)(gn+gp)): 0
+  at VT=26mV, VAp=5.4167: |A_exact| = 99.7611  (correction -0.239%)

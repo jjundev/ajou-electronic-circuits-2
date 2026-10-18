@@ -1,3 +1,6 @@
-high frequency limit = 0
-low frequency limit = 1
-Video edges/rapid spatial detail contain high frequencies. Bandwidth too small attenuates them, slows transitions, creates blur/loss of fine detail; cannot claim all low-frequency image content vanishes.
+step response: 1 - exp(-omega_p*t)
+rise time 10-90% = 2*log(3)/omega_p = 2.19722457733622 /omega_p
+limit wp->oo of rise time: 0  (ideal sharp edge only with infinite bandwidth)
+f_-3dB = 5e+06 Hz -> rise time 69.9 ns
+f_-3dB = 1e+06 Hz -> rise time 349.7 ns
+Conclusion: smaller bandwidth -> slower edges -> sharp black/white transitions smear; image looks blurry, fine detail lost.

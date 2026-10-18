@@ -1,0 +1,18 @@
+{
+ "p7": [
+  {
+   "question": "두 부하가 $R_{C1}=1.0$ kΩ, $R_{C2}=1.1$ kΩ으로 어긋나 있고 $V_{CC}$가 $50$ mV 오르면 $\\Delta(V_X-V_Y)$는 얼마일까요? (Early 효과 무시, 이상 테일)",
+   "expected_answer": "0이에요. ΔV_X=ΔV_Y=50 mV.",
+   "reason": "전원 변화가 컬렉터 전류를 바꾸지 않으므로 저항 강하가 그대로이고, 저항값과 무관하게 두 출력 모두 ΔV만큼 올라가요.",
+   "condition": "Early 효과 무시, 이상 테일 전류원, 활성 영역 유지",
+   "check": "dVx=dV-R1*0=50mV; dVy=dV-R2*0=50mV; diff=0"
+  },
+  {
+   "question": "$V_{CC}$ 대신 입력 $V_{CM}$이 $\\Delta V$만큼 오르면(활성 영역 유지) $V_X$는 얼마나 변할까요?",
+   "expected_answer": "0이에요(이상 테일·Early 무시).",
+   "reason": "테일이 I_EE를 고정하고 대칭이라 각 컬렉터 전류가 I_EE/2로 그대로예요. 전원이 아니라 입력이 움직이므로 V_CC 항도 변하지 않아요.",
+   "condition": "이상 테일 전류원, Early 효과 무시, 활성 영역 유지",
+   "check": "Vx=Vcc-Rc*Iee/2 independent of Vcm"
+  }
+ ]
+}

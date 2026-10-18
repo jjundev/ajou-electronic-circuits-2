@@ -1,26 +1,30 @@
-import sympy as s
-s.init_printing()
-g,r1,r2,Rp,i,v,x,y,rp,b,VT,I,VA,kn,kp,N=s.symbols('g r1 r2 Rp i v x y rp b VT I VA kn kp N', positive=True)
-i,v,x,y=s.symbols('i v x y', real=True)
-# MOS cascode output test: bottom ro=r2, top gm=g,ro=r1; top gate grounded.
-mos=s.solve([s.Eq(i,x/r2),s.Eq(i,(y-x)/r1-g*x)],[x,y]);Rmos=s.factor(mos[y]/i)
-# BJT top base grounded: lower ro=r1, upper ro=r2,rpi=rp.
-bjt=s.solve([s.Eq(i,x/r1+x/rp),s.Eq(i,(y-x)/r2-g*x)],[x,y]);Rbjt=s.factor(bjt[y]/i)
-# Lower-driven BJT exact open output KCL.
-amp=s.solve([s.Eq(x/r1+x/rp+(x-y)/r2+g*x+g*v,0),s.Eq((y-x)/r2-g*x,0)],[x,y]);Abjt=s.factor(amp[y]/v)
-print('MOS output KCL:',Rmos,'; BJT output KCL:',Rbjt,'; BJT voltage gain:',Abjt)
-ee=s.solve([s.Eq(x/r1+(x-v)/rp+(x-y)/r2-g*(v-x),0),s.Eq((y-x)/r2+g*(v-x),0)],[x,y]);print('Av exact',s.factor(ee[y]/v));xs=s.solve(s.Eq(x/r1+(x-v)/rp+x/r2-g*(v-x),0),x)[0];G=s.factor((g*(v-xs)-xs/r2)/v);print('Gm exact',G,'gm large Gm',s.limit(G,g,s.oo));print('Av approx',-g*r2*rp/(r1+rp))
-
-t=s.symbols("t",positive=True)
-print("MOS exact/dominant gm scaled limit",s.limit(Rmos.subs(g,t*g)/(t*g*r1*r2),t,s.oo))
-print("BJT R exact/dominant gm scaled limit",s.limit(Rbjt.subs(g,t*g)/(t*g*r2*r1*rp/(r1+rp)),t,s.oo))
-print("BJT Av exact/dominant gm scaled limit",s.limit(Abjt.subs(g,t*g)/(-t**2*g**2*r2*r1*rp/(r1+rp)),t,s.oo))
-
-# Verify explicitly both exact expressions and the independent lower-driven contrast.
-G1,go,gpi=s.symbols('G1 go gpi',positive=True)
-G_target=(g*G1-go*gpi)/(G1+go+gpi+g)
-assert s.simplify(G-G_target.subs({G1:1/r1,go:1/r2,gpi:1/rp}))==0
-print('short exact matches conductance KCL target=0')
-A_target=(r1-g*r2*rp)/(r1+rp);assert s.simplify(ee[y]/v-A_target)==0
-print('open exact equals independently derived voltage formula')
-print('finite-beta large-gmro example upper driven gain',s.N(A_target.subs({g:s.Rational(1,26),r1:5000,r2:5000,rp:2600})))
+# P3 (P9.23): input at base of Q2 (top), Q1 (bottom, base Vb1 AC ground) -> r_O1, ideal current-source load.
+import sympy as sp
+gm, rpi, ro1, ro2, vin, x, i, vout, beta = sp.symbols('g_m r_pi r_O1 r_O2 v_in v_x i v_out beta', positive=True)
+# (b) short-circuit Gm: vout=0, i = current into Q2 collector from output node
+eqs = [sp.Eq(i, gm*(vin-x) + (0-x)/ro2), sp.Eq(i + (vin-x)/rpi, x/ro1)]
+s = sp.solve(eqs, [i, x], dict=True)[0]
+Gm = sp.simplify(s[i]/vin)
+print('Gm exact =', sp.factor(Gm))
+# open-circuit gain (ideal current source => collector current = 0)
+eqs2 = [sp.Eq(0, gm*(vin-x) + (vout-x)/ro2), sp.Eq((vin-x)/rpi, x/ro1)]
+s2 = sp.solve(eqs2, [vout, x], dict=True)[0]
+Av = sp.simplify(s2[vout]/vin)
+print('Av exact =', sp.factor(Av))
+rp = ro1*rpi/(ro1+rpi)
+Rout = (1+gm*rp)*ro2 + rp
+print('check Av + Gm*Rout =', sp.simplify(Av + Gm*Rout))
+# gm rO >> 1 with beta fixed (rpi = beta/gm)
+Gm_b = Gm.subs(rpi, beta/gm)
+print('Gm * rO1 as gm->oo (beta fixed) ->', sp.simplify(sp.limit(Gm_b*ro1, gm, sp.oo)), '  => Gm ~ beta/((beta+1) rO1) ~ 1/rO1 (for rO1~rO2, beta>>1)')
+Gm_t = 1/ro1 + 1/(beta*ro1)
+Avt = -gm*ro2*rpi/(rpi+ro1)
+print('Av / [-gm rO2 rpi/(rpi+rO1)] as gm->oo:', sp.limit(sp.simplify((Av/Avt).subs(rpi, beta/gm)), gm, sp.oo))
+print('-gm rO2 rpi/(rpi+rO1) == -beta rO2/(rpi+rO1):', sp.simplify(Avt.subs(rpi, beta/gm) + beta*ro2/(beta/gm+ro1)))
+print('Gm_approx*Rout_approx check: -Gm*gm rO2 (rO1||rpi) with Gm=1/rO1 ->', sp.simplify(-(1/ro1)*gm*ro2*rp), ' (same as Avt:', sp.simplify(-(1/ro1)*gm*ro2*rp - Avt), ')')
+print('rpi -> oo (no base current): Av ->', sp.limit(Av, rpi, sp.oo), '  (single-CE level, not gm^2 rO^2)')
+print('rO1 >> rpi: Av ~ -beta rO2/rO1 ; with rO1=rO2: ~ -beta')
+VA, VT, Ic = sp.symbols('V_A V_T I_C', positive=True)
+same = Avt.subs({rpi: beta*VT/Ic, ro1: VA/Ic, ro2: VA/Ic, gm: Ic/VT})
+print('same-current form: simplify(Avt + beta VA/(VA+beta VT)) =', sp.simplify(same + beta*VA/(VA+beta*VT)))
+print('beta->oo (rpi->oo) exact Gm - gm/(1+gm rO1 + rO1/rO2) =', sp.simplify(sp.limit(Gm, rpi, sp.oo) - gm/(1+gm*ro1+ro1/ro2)))

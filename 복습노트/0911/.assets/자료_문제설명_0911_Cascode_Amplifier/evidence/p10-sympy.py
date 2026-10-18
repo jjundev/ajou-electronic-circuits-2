@@ -1,19 +1,17 @@
-import sympy as s
-s.init_printing()
-g,r1,r2,Rp,i,v,x,y,rp,b,VT,I,VA,kn,kp,N=s.symbols('g r1 r2 Rp i v x y rp b VT I VA kn kp N', positive=True)
-i,v,x,y=s.symbols('i v x y', real=True)
-# MOS cascode output test: bottom ro=r2, top gm=g,ro=r1; top gate grounded.
-mos=s.solve([s.Eq(i,x/r2),s.Eq(i,(y-x)/r1-g*x)],[x,y]);Rmos=s.factor(mos[y]/i)
-# BJT top base grounded: lower ro=r1, upper ro=r2,rpi=rp.
-bjt=s.solve([s.Eq(i,x/r1+x/rp),s.Eq(i,(y-x)/r2-g*x)],[x,y]);Rbjt=s.factor(bjt[y]/i)
-# Lower-driven BJT exact open output KCL.
-amp=s.solve([s.Eq(x/r1+x/rp+(x-y)/r2+g*x+g*v,0),s.Eq((y-x)/r2-g*x,0)],[x,y]);Abjt=s.factor(amp[y]/v)
-print('MOS output KCL:',Rmos,'; BJT output KCL:',Rbjt,'; BJT voltage gain:',Abjt)
-gm=s.symbols('gm',positive=True);ro=10000;rr=s.solve(s.Eq((gm*ro)**2,200),gm)[0];print('gm',s.N(rr),'W/L',s.N(rr**2/(2*s.Rational(1,10000)*s.Rational(1,1000))));sol=s.solve([s.Eq(x/ro+(x-y)/ro+gm*x+gm*v,0),s.Eq((y-x)/ro-gm*x,0)],[x,y]);print('exact Av',s.factor(sol[y]/v));print('exact gmro',s.solve(s.Eq(gm*ro*(1+gm*ro),200),gm))
-
-t=s.symbols("t",positive=True)
-print("MOS exact/dominant gm scaled limit",s.limit(Rmos.subs(g,t*g)/(t*g*r1*r2),t,s.oo))
-print("BJT R exact/dominant gm scaled limit",s.limit(Rbjt.subs(g,t*g)/(t*g*r2*r1*rp/(r1+rp)),t,s.oo))
-print("BJT Av exact/dominant gm scaled limit",s.limit(Abjt.subs(g,t*g)/(-t**2*g**2*r2*r1*rp/(r1+rp)),t,s.oo))
-
-z=(s.sqrt(801)-1)/2;print('exact design W/L',s.N(z**2/20));assert s.simplify(z*(z+1)-200)==0
+# P9.29 independent check: MOS cascode amp, ideal current-source load
+import sympy as sp
+gm1,gm2,ro1,ro2,vin,vx,vo=sp.symbols('g_m1 g_m2 r_o1 r_o2 v_in v_x v_o')
+# KCL: output node (ideal load -> no current), node X
+eqs=[sp.Eq(gm2*(0-vx)+(vo-vx)/ro2,0), sp.Eq(gm2*(0-vx)+(vo-vx)/ro2, gm1*vin+vx/ro1)]
+s=sp.solve(eqs,[vo,vx],dict=True)[0]; Av=sp.simplify(s[vo]/vin)
+print("Av =",sp.factor(Av))
+print("Av + gm1 ro1(1+gm2 ro2) =",sp.simplify(Av+gm1*ro1*(1+gm2*ro2)))
+print("(note: -gm1*Rout differs by gm1*ro2, i.e. Gm<gm1; ratio ->1 as gm ro->inf)")
+k=sp.Rational(100,10**6); I=sp.Rational(1,1000); lam=sp.Rational(1,10); ro=1/(lam*I)
+g,WL=sp.symbols('g WL',positive=True)
+ga=sp.solve(sp.Eq(g**2*ro**2,200),g)[0]
+ge=[x for x in sp.solve(sp.Eq(-Av.subs({gm1:g,gm2:g,ro1:ro,ro2:ro}),200),g) if x.is_positive][0]
+f=lambda gg: sp.solve(sp.Eq(2*k*WL*I,gg**2),WL)[0]
+print("ro =",ro)
+print("approx (gm ro)^2=200: gm =",float(ga),", W/L =",f(ga),"=",float(f(ga)))
+print("exact: gm =",float(ge),", gm ro =",float(ge*ro),", W/L =",float(f(ge)))

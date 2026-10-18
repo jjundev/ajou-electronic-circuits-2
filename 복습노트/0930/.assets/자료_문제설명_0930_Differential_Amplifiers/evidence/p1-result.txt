@@ -1,3 +1,6 @@
-Iss RD gm W/L Vov 0.00111111111111111 360 0.0138888888888889 1736.11111111111 0.0800000000000000
-Independent conclusion: Iss=1.111mA,RD=360ohm,W/L=3472.22,Vov=.08V
-Correct W/L = 15625/9
+symbolic: {I_SS: P/V_DD, R_D: 2*V_DD*(-V_CMout + V_DD)/P, WL: A_v**2*P/(4*V_DD*muCox*(V_CMout - V_DD)**2)}
+simplify(WL - Av^2 P/(4 muCox VDD (VDD-VCMout)^2)) = 0
+I_SS = 0.00111111
+R_D = 360.000
+WL = 1736.11
+g_m = 0.0138889 S  (1/g_m = 72.000 ohm)

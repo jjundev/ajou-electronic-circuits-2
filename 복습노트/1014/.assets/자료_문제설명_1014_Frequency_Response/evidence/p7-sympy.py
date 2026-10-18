@@ -1,9 +1,8 @@
-import sympy as s
-s.init_printing()
-gm,ro,rp,R,RC,RT=s.symbols('gm ro rp R RC RT', positive=True)
-vi,vo,vx,it=s.symbols('vi vo vx it',real=True)
-par=lambda a,b:s.simplify(a*b/(a+b))
-def show(label,x): print(label, '=',([s.simplify(v) for v in x] if isinstance(x,list) else s.simplify(x)))
-def ce(load):
- sol=s.solve(vo/load+gm*vi,vo)[0];show('Av from output KCL',sol/vi)
-z,Ci,Cl,Rs=s.symbols('s Ci Cl Rs',positive=True);v=s.symbols('v');sol=s.solve([(v-vi)/Rs+z*Ci*v,vo/R+z*Cl*vo+gm*v],[v,vo]);show('H',sol[vo]/vi);print('poles=-1/(RsCi),-1/(RDCL); MOS gate draws no current, unilateral lambda0 model.')
+import sympy as sp
+s, gm, RD, CL, RS, Cin = sp.symbols('s g_m R_D C_L R_S C_in', positive=True)
+VA, Vout, Vin = sp.symbols('V_A V_out V_in')
+# VA = gate node; lambda = 0, gate draws no current
+eqs = [sp.Eq((VA-Vin)/RS + s*Cin*VA, 0), sp.Eq(gm*VA + Vout/RD + s*CL*Vout, 0)]
+sol = sp.solve(eqs, [VA, Vout]); H = sp.factor(sp.simplify(sol[Vout]/Vin)); print('H(s) =', H)
+print('poles:', sp.solve(sp.denom(sp.together(H)).subs(s, sp.Symbol('p')), sp.Symbol('p')))
+print('H - target =', sp.simplify(H - (-gm*RD)/((1+s*RS*Cin)*(1+s*RD*CL))))

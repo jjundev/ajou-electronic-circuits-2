@@ -1,0 +1,18 @@
+{
+ "p8": [
+  {
+   "question": "출력을 V_out2 − V_out1로 정의하면 차동 이득의 부호는?",
+   "expected_answer": "+g_m R_D (양수).",
+   "reason": "V_out2 − V_out1 = +R_D(I_D1 − I_D2)로 차의 순서만 바뀌어 부호가 뒤집혀요.",
+   "condition": "작은 차동 입력, 동일 R_D·소자, λ=0.",
+   "check": "sympy: -( -R_D*sqrt(K*I)*d ) / d = R_D*sqrt(K*I)"
+  },
+  {
+   "question": "W/L과 R_D는 그대로 두고 I_SS만 네 배로 하면 작은 차동 입력 이득 크기는 몇 배?",
+   "expected_answer": "2배.",
+   "reason": "식 (10.156)의 계수 sqrt(μ_nC_ox(W/L) I_SS) = g_m이 sqrt(I_SS)에 비례해요.",
+   "condition": "W/L·R_D 고정, 모든 소자가 계속 포화, 작은 입력 범위 d² ≪ 4I_SS/K.",
+   "check": "sympy: sqrt(K*4*I)/sqrt(K*I) = 2"
+  }
+ ]
+}

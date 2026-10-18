@@ -3,7 +3,7 @@
   <p>저항 부하 NMOS 차동쌍(differential pair)이에요. 입력은 두 게이트 $V_{in1}$, $V_{in2}$이고 출력은 두 드레인 $v_{out1}$, $v_{out2}$예요. 아래쪽 $M_3$는 게이트가 고정 바이어스 $V_{b1}$에 묶인 테일 전류원(tail current source)이라서 $I_{D3}=1\ \text{mA}$를 공급하고, 평형 상태에서는 반씩 나눠 $M_1$, $M_2$에 $0.5\ \text{mA}$씩 흘러요.</p>
   <p>이 회로의 특징은 오른쪽 부하만 $\Delta R_D=20\ \Omega$ 더 크다는 점이에요. 완전 대칭이면 두 입력에 똑같이 들어온 잡음(공통 모드, common mode)은 두 출력을 똑같이 흔들어서 차동 출력 $v_{out1}-v_{out2}$에는 안 나타나요. 부하가 조금 다르면 두 출력이 흔들리는 크기가 달라져 차동 출력에 잡음이 새어 나와요.</p>
   <p>구할 것은 세 가지예요. (1) 세 트랜지스터가 모두 포화(saturation)에 머무는 입력 공통 모드 전압의 범위, (2) 공통 모드 이득 $A_{CM}$과 공통 모드가 차동 출력으로 바뀌는 이득 $A_{CM-DM}$, (3) 이 둘과 차동 이득의 비 CMRR이에요. $V_{b1}$ 값은 없지만 $M_3$의 전류와 $W/L$을 알면 $M_3$의 오버드라이브를 구할 수 있으니 문제를 푸는 데 지장이 없어요.</p>
-<p>주답은 채널 길이 변조를 DC 전류·과구동 계산에서 무시하고, 입력 소자의 $r_o$도 두 이득에서 함께 무시하는 교재 근사예요. $\Delta R_D/R_D=0.02$의 작은 미스매치로 차동 이득의 평균 부하 보정도 생략해요. $r_o$를 일관되게 남긴 보충 소신호 결과와 구분해요.</p></div>
+<p>주답은 채널 길이 변조를 DC 전류·오버드라이브 계산에서 무시하고, 입력 소자의 $r_o$도 두 이득에서 함께 무시하는 교재 근사예요. $\Delta R_D/R_D=0.02$의 작은 미스매치로 차동 이득의 평균 부하 보정도 생략해요. $r_o$를 일관되게 남긴 보충 소신호 결과와 구분해요.</p></div>
 <div class="layer formal" data-explanation="recall">
   <h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4>
   <p><strong>(1) "입력 CM level의 최대·최소"</strong>라는 말에서 입력 공통 모드 범위(input common-mode range)를 떠올려요. 핵심은 "어느 트랜지스터가 먼저 포화를 벗어나는가"예요. $V_{in,CM}$을 내리면 소스 노드 $P$가 같이 내려가 테일 $M_3$의 $V_{DS3}$가 줄어들고, 올리면 $M_1$·$M_2$의 게이트가 드레인보다 $V_{TH}$ 넘게 높아져 트라이오드로 들어가요. 포화 조건 $V_{DS}\ge V_{GS}-V_{TH}$를 각각 노드 전압으로 바꿔 쓰는 것이 도구예요. 여기서 $V_{ov}=V_{GS}-V_{TH}=\sqrt{2I_D/[\mu_nC_{ox}(W/L)]}$는 오버드라이브 전압(overdrive voltage)이에요.</p>
@@ -53,7 +53,7 @@
     $$\text{CMRR}=\left|\frac{A_{DM}}{A_{CM-DM}}\right|=\frac{g_{m1}R_D}{\Delta R_D}\left(\frac{1}{g_{m1}}+2R_{SS}\right)=\frac{(1+2g_{m1}r_{O3})R_D}{\Delta R_D}$$
     $$\text{CMRR}=\frac{(1+200)(1\ \text{k}\Omega)}{20\ \Omega}=1.005\times10^4\approx1.01\times10^4$$
     $$\text{CMRR}_{dB}=20\log_{10}(1.005\times10^4)=80.0\ \text{dB}$$
-    <p>보충: $r_{O1}$, $r_{O2}$를 <em>두 이득 모두</em>에 넣어 소신호 회로를 정확히 풀면 $|A_{DM}|\approx9.61$, $A_{CM-DM}\approx9.42\times10^{-4}$이라 CMRR $\approx1.02\times10^4$(80.2 dB)예요. 주 답과 1% 남짓 달라요.</p>
+    <p>보충(유도는 verify (2)의 KCL): $r_{O1}$, $r_{O2}$를 <em>두 이득 모두</em>에 넣어 소신호 회로를 정확히 풀면 $|A_{DM}|\approx9.61$, $A_{CM-DM}\approx9.42\times10^{-4}$이라 CMRR $\approx1.02\times10^4$(80.2 dB)예요. 주 답과 1% 남짓 달라요.</p>
   </div>
 </div>
 <div class="layer formal" data-explanation="verify">
@@ -69,7 +69,11 @@
     <p>극한 대입: $R_{SS}\to\infty$(이상적 테일)이면 두 식 모두 0이 되어, 테일이 이상적 전류원이면 CM 입력이 전류를 바꾸지 못한다는 사실과 맞아요. $\Delta R_D=0$이면 $A_{CM-DM}=0$이라 대칭 회로에서 CM이 차동 출력으로 새지 않는다는 사실과도 맞아요.</p>
     <p>단위: 분자·분모 모두 Ω이라 두 이득 모두 무차원이에요. 비율 확인: $A_{CM-DM}/|A_{CM}|=\Delta R_D/R_D=0.02$이고 실제로 $9.95\times10^{-4}/4.98\times10^{-2}=0.020$이에요.</p>
     <p>근사의 크기: $r_{O1}$, $r_{O2}$까지 넣어 정확히 풀면 $A_{CM}\approx-4.95\times10^{-2}$라 0.6%만 달라요. 반면 $A_{CM-DM}$은 $9.42\times10^{-4}$로 약 5% 작아져요. 두 출력 전압이 서로 달라서 $r_{O1}$, $r_{O2}$로 흐르는 전류도 달라지고, 그 차이가 부하 차이를 일부 상쇄하기 때문이에요. 그래도 $g_mr_o\gg1$ 가정 아래의 표준 답은 $9.95\times10^{-4}$이고, 이 근사를 (3)에서도 똑같이 지켜야 해요.</p>
-  <p>보충 수치의 정확한 KCL 형태를 적어요. $a=1+R_D/r_o$, $b=1+(R_D+\Delta R_D)/r_o$, $k=g_m+1/r_o$라 두면 $$i_1=(g_mv_1-kv_P)/a,\qquad i_2=(g_mv_2-kv_P)/b,$$ $$v_P/R_{SS}=i_1+i_2,\qquad v_{o1}=-R_Di_1,\quad v_{o2}=-(R_D+\Delta R_D)i_2$$예요. CM에는 $v_1=v_2=1$, 단위 DM에는 $v_1=1/2,v_2=-1/2$를 넣어 위 보충값들을 얻어요. $r_o\to\infty$에서 CM·변환 이득은 본문 축퇴식과 정확히 같아지고, DM에서는 추가로 $\Delta R_D/R_D\to0$일 때 본문의 $-g_mR_D$와 비가 1로 가요.</p></div>
+  <p>보충 수치의 출발 KCL을 적어요. 입력 소자의 $r_o$($=r_{O1}=r_{O2}$)를 남기면 각 드레인과 $P$ 사이에 제어 전류원과 $r_o$가 병렬로 걸려요. $i_1$, $i_2$는 부하에서 드레인 노드로 내려오는 전류로, 제어 전압은 게이트 쪽이 $+$라 $v_{gs1}=v_1-v_P$, $v_{gs2}=v_2-v_P$로 둬요($v_1$, $v_2$는 두 게이트 입력).</p>
+  <figure class="figure"><svg viewBox="0 0 460 320" role="img" aria-label="입력 소자 r_o를 남긴 소신호 등가회로: AC 접지된 V_DD에서 R_D를 거쳐 v_o1 노드로 i_1이, R_D+ΔR_D를 거쳐 v_o2 노드로 i_2가 내려가요. v_o1과 노드 P 사이에 아래 방향 제어 전류원 g_m(v_1 − v_P)와 r_o가 병렬로, v_o2와 P 사이에 g_m(v_2 − v_P)와 r_o가 병렬로 있고, P에서 접지로 R_SS = r_O3가 연결돼요."><path class="fig-ink" d="M130 24 H330"/><text class="fig-muted" x="20" y="28">V<tspan baseline-shift="sub">DD</tspan> (AC 접지)</text><path class="fig-ink" d="M130 24 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M130 92 V110"/><circle class="fig-dot" cx="130" cy="100" r="3.5"/><path class="fig-ink" d="M100 110 H160 M100 110 V139 M100 171 V200 M160 110 V121 M160 189 V200 M100 200 H160 M130 200 V220"/><polygon class="fig-ink" points="100,139 114,155 100,171 86,155"/><path class="fig-ink" d="M100 145 V164 M95 159 L100 164 L105 159"/><path class="fig-ink" d="M160 121 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M330 24 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M330 92 V110"/><circle class="fig-dot" cx="330" cy="100" r="3.5"/><path class="fig-ink" d="M300 110 H360 M360 110 V139 M360 171 V200 M300 110 V121 M300 189 V200 M300 200 H360 M330 200 V220"/><polygon class="fig-ink" points="360,139 374,155 360,171 346,155"/><path class="fig-ink" d="M360 145 V164 M355 159 L360 164 L365 159"/><path class="fig-ink" d="M300 121 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-accent" d="M106 66 V82 M101 77 L106 82 L111 77"/><text class="fig-text" x="88" y="78">i<tspan baseline-shift="sub">1</tspan></text><path class="fig-accent" d="M314 66 V82 M309 77 L314 82 L319 77"/><text class="fig-text" x="294" y="78">i<tspan baseline-shift="sub">2</tspan></text><text class="fig-text" x="144" y="62">R<tspan baseline-shift="sub">D</tspan></text><text class="fig-text" x="344" y="62">R<tspan baseline-shift="sub">D</tspan> + ΔR<tspan baseline-shift="sub">D</tspan></text><text class="fig-text" x="58" y="104">v<tspan baseline-shift="sub">o1</tspan></text><text class="fig-text" x="366" y="104">v<tspan baseline-shift="sub">o2</tspan></text><text class="fig-text" x="4" y="160">g<tspan baseline-shift="sub">m</tspan>(v<tspan baseline-shift="sub">1</tspan>−v<tspan baseline-shift="sub">P</tspan>)</text><text class="fig-text" x="384" y="160">g<tspan baseline-shift="sub">m</tspan>(v<tspan baseline-shift="sub">2</tspan>−v<tspan baseline-shift="sub">P</tspan>)</text><text class="fig-text" x="172" y="160">r<tspan baseline-shift="sub">o</tspan></text><text class="fig-text" x="272" y="160">r<tspan baseline-shift="sub">o</tspan></text><path class="fig-accent" d="M130 220 H330"/><circle class="fig-dot" cx="230" cy="220" r="3.5"/><text class="fig-text" x="240" y="206">v<tspan baseline-shift="sub">P</tspan></text><path class="fig-ink" d="M230 220 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M230 288 v8 M220 296 H240 M224 301 H236 M228 306 H232"/><text class="fig-text" x="246" y="262">R<tspan baseline-shift="sub">SS</tspan> = r<tspan baseline-shift="sub">O3</tspan></text></svg><figcaption>$V_{DD}$와 $V_{b1}$을 AC 접지로 보내 $M_3$는 $R_{SS}=r_{O3}$ 하나로, $M_1$·$M_2$는 $g_m(v_{1,2}-v_P)$ 전류원과 $r_o$의 병렬로 바꿨어요. 주 답과 달리 보충 정확식에서만 입력 소자 $r_o$를 남겨요.</figcaption></figure>
+  <p>드레인 노드 $v_{o1}$의 KCL(들어온 $i_1$ = 제어 전류원 + $r_o$ 가지)과 부하 식은 다음과 같아요.</p>
+  <p>$$i_1=g_m(v_1-v_P)+\frac{v_{o1}-v_P}{r_o},\qquad v_{o1}=-R_Di_1$$</p>
+  <p>$v_{o1}$을 대입하고 $i_1$을 모으면 $i_1(1+R_D/r_o)=g_mv_1-(g_m+1/r_o)v_P$예요. $a=1+R_D/r_o$, $b=1+(R_D+\Delta R_D)/r_o$, $k=g_m+1/r_o$라 두고 오른쪽도 같은 방법으로 정리하면 $$i_1=(g_mv_1-kv_P)/a,\qquad i_2=(g_mv_2-kv_P)/b,$$ 노드 $P$의 KCL과 두 출력은 $$v_P/R_{SS}=i_1+i_2,\qquad v_{o1}=-R_Di_1,\quad v_{o2}=-(R_D+\Delta R_D)i_2$$예요. CM에는 $v_1=v_2=1$, 단위 DM에는 $v_1=1/2,v_2=-1/2$를 넣어 위 보충값들을 얻어요. $r_o\to\infty$에서 CM·변환 이득은 본문 축퇴식과 정확히 같아지고, DM에서는 추가로 $\Delta R_D/R_D\to0$일 때 본문의 $-g_mR_D$와 비가 1로 가요.</p></div>
   <div data-subpart="3">
     <h4>(3) 검산</h4>
     <p><strong>$\text{CMRR}\approx1.01\times10^4$ (80.0 dB)</strong> (계산값 $10050$, 보충: $r_{O1}$을 두 이득 모두에 넣으면 $1.02\times10^4$, 80.2 dB)</p>
@@ -90,9 +94,9 @@
 <div class="layer eli5" data-explanation="retry">
   <h4>설명을 닫고 다시 풀어 봐요</h4>
   <ol>
-    <li>$V_{ov1}$, $V_{ov3}$, $g_{m1}$, $r_{O1}$, $r_{O3}$를 계산하고, 포화 조건 두 개로 $V_{in,CM}$의 최소·최대를 구해 보세요.</li>
-    <li>CM 하프 서킷을 그려 $A_{CM}$과 $A_{CM-DM}$을 구하고, 두 값의 비가 $\Delta R_D/R_D$인지 확인해 보세요.</li>
-    <li>$P$를 가상 접지로 두고 $|A_{DM}|$을 구한 뒤 CMRR을 배수와 dB로 적어 보세요.</li>
+    <li>다른 값은 그대로 두고 미스매치만 $\Delta R_D=40\ \Omega$으로 두 배가 되면 $V_{CM,in}$의 최대값, $A_{CM-DM}$, CMRR(dB)은 각각 어떻게 될지 예측해 보세요.</li>
+    <li>$W/L$은 그대로 두고 $I_{D3}$만 $2$ mA로 두 배가 되면 $V_{ov1}$, $V_{ov3}$와 입력 CM 범위의 최소·최대값, $R_{SS}$는 얼마가 되나요?</li>
+    <li>출력을 차동이 아니라 $v_{out1}$ 한쪽에서만 본다면 CMRR의 분자·분모로 각각 무엇을 쓰고, 이 문제 값으로 몇 dB인가요?</li>
   </ol>
 </div>
 <div class="sum" hidden>

@@ -1,5 +1,4 @@
-MOS output KCL: g*r1*r2 + r1 + r2 ; BJT output KCL: (g*r1*r2*rp + r1*r2 + r1*rp + r2*rp)/(r1 + rp) ; BJT voltage gain: -g*r1*rp*(g*r2 + 1)/(r1 + rp)
-Vb1max 17/10 VX 0.875735931288071
-MOS exact/dominant gm scaled limit 1
-BJT R exact/dominant gm scaled limit 1
-BJT Av exact/dominant gm scaled limit 1
+V1 = VDD - I RD = 13/10
+(a) M1 sat: V1 >= Vb1 - VTH -> Vb1,max = 17/10 V
+(b) Vov1 = 3*sqrt(2)/10 = 0.4242640687119285  V_X = Vb1 - VTH - Vov1 = 13/10 - 3*sqrt(2)/10 = 0.8757359312880715 V
+    check M2 sat: Vov2 = 0.3  V_X >= Vov2 ? True

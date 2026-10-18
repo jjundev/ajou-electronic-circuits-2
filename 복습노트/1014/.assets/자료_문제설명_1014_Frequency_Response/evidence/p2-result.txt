@@ -1,3 +1,7 @@
-H = -R*gm/(C*R*s + 1)
-pole = [-1/(C*R)]
-Magnitude gmR/sqrt(1+(wRC)^2); phase -180deg-atan(wRC) modulo360; high slope-20dB/dec.
+H(s) = -R_D*g_m/(C_L*R_D*s + 1)
+H - target = 0
+|H(jw)| = R_D*g_m/sqrt(C_L**2*R_D**2*omega**2 + 1)
+|H| - gmRD/sqrt(1+w^2RD^2CL^2) = 0
+pole s = [-1/(C_L*R_D)]  -> omega_p = 1/(R_D C_L)
+|H(j wp)|/|H(0)| = sqrt(2)/2  (-3 dB)
+limit w->oo of w*|H| = g_m/C_L  -> -20 dB/dec, |H|=1 near w = gm/CL

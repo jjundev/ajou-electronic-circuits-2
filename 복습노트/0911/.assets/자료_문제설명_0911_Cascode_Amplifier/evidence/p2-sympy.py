@@ -1,17 +1,11 @@
-import sympy as s
-s.init_printing()
-g,r1,r2,Rp,i,v,x,y,rp,b,VT,I,VA,kn,kp,N=s.symbols('g r1 r2 Rp i v x y rp b VT I VA kn kp N', positive=True)
-i,v,x,y=s.symbols('i v x y', real=True)
-# MOS cascode output test: bottom ro=r2, top gm=g,ro=r1; top gate grounded.
-mos=s.solve([s.Eq(i,x/r2),s.Eq(i,(y-x)/r1-g*x)],[x,y]);Rmos=s.factor(mos[y]/i)
-# BJT top base grounded: lower ro=r1, upper ro=r2,rpi=rp.
-bjt=s.solve([s.Eq(i,x/r1+x/rp),s.Eq(i,(y-x)/r2-g*x)],[x,y]);Rbjt=s.factor(bjt[y]/i)
-# Lower-driven BJT exact open output KCL.
-amp=s.solve([s.Eq(x/r1+x/rp+(x-y)/r2+g*x+g*v,0),s.Eq((y-x)/r2-g*x,0)],[x,y]);Abjt=s.factor(amp[y]/v)
-print('MOS output KCL:',Rmos,'; BJT output KCL:',Rbjt,'; BJT voltage gain:',Abjt)
-I0=s.Rational(1,2000);ro=20000;gm=500000/ro**2;print('gm=',gm,'W/L=',gm**2/(2*100e-6*float(I0)));print('exact-design W/L=',((500000-2*ro)/ro**2)**2/(2*100e-6*float(I0)))
-
-t=s.symbols("t",positive=True)
-print("MOS exact/dominant gm scaled limit",s.limit(Rmos.subs(g,t*g)/(t*g*r1*r2),t,s.oo))
-print("BJT R exact/dominant gm scaled limit",s.limit(Rbjt.subs(g,t*g)/(t*g*r2*r1*rp/(r1+rp)),t,s.oo))
-print("BJT Av exact/dominant gm scaled limit",s.limit(Abjt.subs(g,t*g)/(-t**2*g**2*r2*r1*rp/(r1+rp)),t,s.oo))
+# E9.05 independent check
+import sympy as sp
+k=sp.Rational(100,10**6); I=sp.Rational(5,10**4); lam=sp.Rational(1,10); R=500000
+ro=1/(lam*I); gm,WL=sp.symbols('g_m WL',positive=True)
+# exact cascode Rout = (1+gm ro)ro + ro (from KCL, see p1)
+gma=sp.solve(sp.Eq(gm*ro**2,R),gm)[0]; gme=sp.solve(sp.Eq((1+gm*ro)*ro+ro,R),gm)[0]
+WLa=sp.solve(sp.Eq(sp.sqrt(2*k*WL*I),gma),WL)[0]; WLe=sp.solve(sp.Eq(sp.sqrt(2*k*WL*I),gme),WL)[0]
+print("ro =",ro)
+print("approx (Rout=gm ro^2): gm =",float(gma),"S, W/L =",WLa,"=",float(WLa))
+print("exact  (Rout=(1+gm ro)ro+ro): gm =",float(gme),"S, W/L =",WLe,"=",float(WLe))
+print("gm*ro (approx) =",float(gma*ro))

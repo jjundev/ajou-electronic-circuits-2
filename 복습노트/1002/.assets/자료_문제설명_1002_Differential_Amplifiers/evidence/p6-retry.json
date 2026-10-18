@@ -1,0 +1,25 @@
+{
+ "p6": [
+  {
+   "question": "$\\lambda_p$만 $0.1\\ \\mathrm{V^{-1}}$로 낮추면(나머지 조건 동일) 어느 캐스코드가 출력저항을 제한하나요? 주항 설계에서 공통 $W/L$은 얼마가 되나요?",
+   "expected_answer": "여전히 p 캐스코드(R_p=R_n/√2)가 제한, W/L ≈ 12.1",
+   "reason": "r_n=r_p=20 kΩ이 되어도 g_mp=g_mn/√2라 R_p가 작아요. 200=g_mn^2[r_n^2∥(r_p^2/√2)]에서 g_mn^2=1.207e-6 S^2.",
+   "condition": "λ_n=λ_p=0.1 V^-1, I_D=0.5 mA, 주항 모델",
+   "check": "X=4e8; Y=4e8/sqrt(2); 200/(X*Y/(X+Y))/(2*100e-6*0.5e-3) = 12.07"
+  },
+  {
+   "question": "모든 $W/L$이 같고 $I_D$도 같을 때 $g_{mp}/g_{mn}$은 얼마인가요? 어떤 식에서 나오는지 함께 말해 보세요.",
+   "expected_answer": "1/√2 ≈ 0.707",
+   "reason": "g_m=√(2μC_ox(W/L)I_D)이라 같은 W/L·I_D에서 √(μ_p/μ_n)=√(50/100).",
+   "condition": "W/L·I_D 동일",
+   "check": "sqrt(50/100) = 0.7071"
+  },
+  {
+   "question": "$a=3$, $X=6$ kΩ, $Y=12$ kΩ에서 $(aX)\\parallel(aY)$와 $a(X\\parallel Y)$를 각각 계산해 같은지 확인해 보세요.",
+   "expected_answer": "둘 다 12 kΩ",
+   "reason": "(aX)∥(aY)=a^2XY/(a(X+Y))=a(X∥Y).",
+   "condition": "a=3, X=6 kΩ, Y=12 kΩ",
+   "check": "18e3*36e3/54e3 = 3*(6e3*12e3/18e3) = 12000"
+  }
+ ]
+}

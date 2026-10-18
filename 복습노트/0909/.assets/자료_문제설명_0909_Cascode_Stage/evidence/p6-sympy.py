@@ -1,19 +1,9 @@
-import sympy as s
-s.init_printing()
-g,r1,r2,Rp,i,v,x,y,rp,b,VT,I,VA,kn,kp,N=s.symbols('g r1 r2 Rp i v x y rp b VT I VA kn kp N', positive=True)
-i,v,x,y=s.symbols('i v x y', real=True)
-# MOS cascode output test: bottom ro=r2, top gm=g,ro=r1; top gate grounded.
-mos=s.solve([s.Eq(i,x/r2),s.Eq(i,(y-x)/r1-g*x)],[x,y]);Rmos=s.factor(mos[y]/i)
-# BJT top base grounded: lower ro=r1, upper ro=r2,rpi=rp.
-bjt=s.solve([s.Eq(i,x/r1+x/rp),s.Eq(i,(y-x)/r2-g*x)],[x,y]);Rbjt=s.factor(bjt[y]/i)
-# Lower-driven BJT exact open output KCL.
-amp=s.solve([s.Eq(x/r1+x/rp+(x-y)/r2+g*x+g*v,0),s.Eq((y-x)/r2-g*x,0)],[x,y]);Abjt=s.factor(amp[y]/v)
-print('MOS output KCL:',Rmos,'; BJT output KCL:',Rbjt,'; BJT voltage gain:',Abjt)
-gm=s.sqrt(2*s.Rational(1,10000)*s.Rational(1000,9)*s.Rational(1,2000));lam=s.sqrt(gm/(50000*s.Rational(1,2000)**2));print('gm',s.N(gm),'lambda maximum',s.N(lam))
-
-t=s.symbols("t",positive=True)
-print("MOS exact/dominant gm scaled limit",s.limit(Rmos.subs(g,t*g)/(t*g*r1*r2),t,s.oo))
-print("BJT R exact/dominant gm scaled limit",s.limit(Rbjt.subs(g,t*g)/(t*g*r2*r1*rp/(r1+rp)),t,s.oo))
-print("BJT Av exact/dominant gm scaled limit",s.limit(Abjt.subs(g,t*g)/(-t**2*g**2*r2*r1*rp/(r1+rp)),t,s.oo))
-
-ro=s.symbols('ro',positive=True);gm=s.Rational(1,300);rstar=s.solve(s.Eq(gm*ro**2+2*ro,50000),ro)[0];print('exact ro',s.N(rstar),'exact lambda',s.N(1/(s.Rational(1,2000)*rstar)))
+# Independent check P9.12 (Fig 9.49): max lambda for Rout >= 50k
+import sympy as sp
+lam,ro=sp.symbols('lambda r_o',positive=True)
+k=sp.Rational(1,10**4); I=sp.Rational(5,10**4); WL=sp.Rational(20)/sp.Rational(18,100)
+gm=sp.sqrt(2*k*WL*I); print('gm =',sp.nsimplify(gm),'=',float(gm),'S')
+r=1/(lam*I)
+la=sp.solve(sp.Eq(gm*r*r,50000),lam); print('approx gm ro^2 = 50k -> lambda_max =',la,'=',[float(v) for v in la],'1/V')
+le=sp.solve(sp.Eq((1+gm*r)*r+r,50000),lam); print('exact (1+gm ro)ro+ro = 50k -> lambda_max =',[sp.nsimplify(v) for v in le],'=',[float(v) for v in le],'1/V')
+print('gm ro at approx lambda =',float(gm*r.subs(lam,la[0])),' ratio lam_exact/lam_approx =',float(le[0]/la[0]))

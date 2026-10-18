@@ -1,0 +1,18 @@
+{
+ "p4": [
+  {
+   "question": "MOS 캐스코드에서 $W/L$을 고정하고 $I_D$를 4배로 하면 (a)의 근사 $R_{out}$은 몇 배인가요? $\\beta$, $V_A$, $V_T$가 같은 바이폴라 캐스코드에서 $I_C$를 4배로 하면요?",
+   "expected_answer": "MOS: 4^(-3/2) = 1/8배. BJT: 1/4배",
+   "reason": "MOS는 G_m ∝ I_D^(1/2), r_O1 r_O2 ∝ I_D^(-2)이고, BJT 식 (9.9)는 1/I_C에 상수 인자가 곱해진 꼴이에요.",
+   "condition": "강반전 제곱 법칙, g_m r_O ≫ 1, 같은 공정·형상비·온도",
+   "check": "sympy: (4)**sympy.Rational(-3,2) = 1/8; 1/4"
+  },
+  {
+   "question": "이번에는 $I_D$를 고정하고 $W/L$만 4배로 하면 (a)의 MOS $R_{out}$은 몇 배인가요? 바이폴라 식 (9.9)에는 이에 해당하는 변수가 있나요?",
+   "expected_answer": "MOS: G_m이 2배라 R_out 2배. BJT 식 (9.9)에는 소자 크기 변수가 없어 1차 근사에서 그대로예요.",
+   "reason": "MOS G_m = √(2μnCox(W/L)I_D)는 형상비에 의존하지만 BJT g_m = I_C/V_T, r_O = V_A/I_C, r_π = βV_T/I_C는 전류로만 정해져요.",
+   "condition": "같은 전류, g_m r_O ≫ 1, β·V_A가 면적과 무관하다고 가정",
+   "check": "sympy: sqrt(4)=2"
+  }
+ ]
+}

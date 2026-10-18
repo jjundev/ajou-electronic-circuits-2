@@ -1,11 +1,19 @@
-import sympy as s
-s.init_printing()
-gm,ro,rp,R,RC,RT=s.symbols('gm ro rp R RC RT', positive=True)
-vi,vo,vx,it=s.symbols('vi vo vx it',real=True)
-par=lambda a,b:s.simplify(a*b/(a+b))
-def show(label,x): print(label, '=',([s.simplify(v) for v in x] if isinstance(x,list) else s.simplify(x)))
-def ce(load):
- sol=s.solve(vo/load+gm*vi,vo)[0];show('Av from output KCL',sol/vi)
-dR,r3,r4,g3=s.symbols('dR r3 r4 g3',positive=True)
-C=lambda T:gm*(R+dR/2)*(1/gm+2*T)/dR
-show('a CMRR',C(r3));show('b CMRR',C(r3+r4+g3*r3*r4));show('improvement ratio',s.simplify(C(r3+r4+g3*r3*r4)/C(r3)));print('For small dR and gm ro>>1: a~2gm RD rO3/dR, b~2gm RD gm3 rO3rO4/dR.')
+# P10.70 independent check: CMRR of Fig 10.91 (a) tail M3, (b) cascode tail M3 over M4; lambda=0 for M1,M2
+from sympy import *
+gm1,gm3,rO3,rO4,RD,dRD,vcm,vp,vt,vm = symbols('g_m1 g_m3 r_O3 r_O4 R_D DeltaR_D v_cm v_p v_t v_m', positive=True)
+def acmdm(Rt):
+    ic = gm1*(vcm - vp)
+    s = solve(Eq(2*ic, vp/Rt), vp, dict=True)[0]
+    return simplify(dRD*ic.subs(s)/vcm)
+s = solve(Eq(gm3*(0-vm) + (vt-vm)/rO3, vm/rO4), vm, dict=True)[0]
+Rtb = simplify(vt/(vm/rO4).subs(s))
+print('(b) R_tail =', Rtb, ' minus (1+gm3 rO4) rO3 + rO4:', simplify(Rtb - ((1+gm3*rO4)*rO3 + rO4)))
+Adm = gm1*RD
+Ca = simplify(Adm/acmdm(rO3)); Cb = simplify(Adm/acmdm(Rtb))
+print('(a) CMRR =', Ca, ' minus (RD/dRD)(1+2gm1 rO3):', simplify(Ca - RD/dRD*(1+2*gm1*rO3)))
+print('(b) CMRR =', Cb, ' minus (RD/dRD)(1+2gm1[(1+gm3 rO4)rO3+rO4]):', simplify(Cb - RD/dRD*(1+2*gm1*((1+gm3*rO4)*rO3+rO4))))
+r = simplify(Cb/Ca)
+print('CMRR_b/CMRR_a =', r)
+print('(CMRR_b/CMRR_a)/(gm3 rO4) with gm1->oo, gm3->oo:', limit(limit(r/(gm3*rO4), gm1, oo), gm3, oo))
+md_b = RD/dRD*(1+2*gm1*gm3*rO3*rO4)
+print('(b) md approx: ratio exact/md with gm3->oo =', limit(Cb/md_b, gm3, oo))

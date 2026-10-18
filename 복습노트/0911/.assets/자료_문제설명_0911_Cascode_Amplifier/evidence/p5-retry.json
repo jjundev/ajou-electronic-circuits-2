@@ -1,0 +1,18 @@
+{
+ "p5": [
+  {
+   "question": "같은 $0.5\\ \\mathrm{mA}$, $\\lambda=0.2\\ \\mathrm{V^{-1}}$, $\\mu_pC_{ox}=50\\ \\mu\\mathrm{A/V^2}$에서 목표를 $80\\ \\mathrm{k\\Omega}$로 바꾸면 주항 설계와 정확식 설계의 $W/L$은 각각 얼마인가요?",
+   "expected_answer": "주항: g_m = 0.8 mS, W/L = 12.8. 정확식: g_m = (80−20)/100 = 0.6 mS, W/L = 7.2",
+   "reason": "r_O = 10 kΩ 고정, 주항은 g_m = R/r_O², 정확식은 g_m = (R − 2r_O)/r_O²이고 W/L = g_m²/(2μpCox|I_D|)예요.",
+   "condition": "(W/L)_1 = (W/L)_2, 두 소자 λ 같음",
+   "check": "(0.8e-3)**2/(2*50e-6*0.5e-3)=12.8; (0.6e-3)**2/5e-8=7.2"
+  },
+  {
+   "question": "$k=g_mr_O$가 얼마 이상이어야 주항 $kr_O$만 쓴 $R_{out}$이 정확식 $(2+k)r_O$보다 10% 이내로만 작을지 판단해 보세요.",
+   "expected_answer": "2/(2+k) ≤ 0.1 → k ≥ 18. 이 문제의 k = 4는 크게 못 미쳐요.",
+   "reason": "상대 오차 = 2r_O/((2+k)r_O)이에요.",
+   "condition": "두 소자의 g_m, r_O가 같은 캐스코드",
+   "check": "sympy.solve(sympy.Eq(2/(2+k), sympy.Rational(1,10)), k) -> [18]"
+  }
+ ]
+}

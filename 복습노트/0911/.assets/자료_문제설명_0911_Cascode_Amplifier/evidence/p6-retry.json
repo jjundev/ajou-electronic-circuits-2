@@ -1,0 +1,18 @@
+{
+ "p6": [
+  {
+   "question": "다른 값은 그대로 두고 $\\beta\\to\\infty$라고 가정하면 주항 $R_{out}$은 몇 kΩ가 될지 예측해 보세요. 이미터에서 보는 저항이 어떻게 바뀌는지 먼저 판단해 보세요.",
+   "expected_answer": "r_π → ∞라 R_E = r_O = 5 kΩ, R_out ≈ g_m r_O² = 38.46 mS × (5 kΩ)² ≈ 962 kΩ",
+   "reason": "r_π 가지가 끊기면 이미터 축퇴 저항이 r_O ∥ r_π에서 r_O로 커져요.",
+   "condition": "I_C = 1 mA, V_A = 5 V, V_T = 26 mV",
+   "check": "gm=1e-3/0.026; gm*5000*5000=961.5e3"
+  },
+  {
+   "question": "$\\beta=100$, $V_A=5\\ \\mathrm{V}$를 유지하고 두 트랜지스터를 $I_C=2\\ \\mathrm{mA}$로 바이어스하면 주항 $R_{out}$은?",
+   "expected_answer": "g_m = 76.9 mS, r_π = 1.30 kΩ, r_O = 2.50 kΩ, R_E = 855 Ω, R_out ≈ 164 kΩ (절반)",
+   "reason": "g_m ∝ I_C, r_O·r_π ∝ 1/I_C라 g_m r_O R_E ∝ 1/I_C예요.",
+   "condition": "V_T = 26 mV, 두 트랜지스터 같은 전류",
+   "check": "gm=2e-3/0.026; rpi=100/gm; ro=2500; RE=ro*rpi/(ro+rpi); gm*ro*RE=164.5e3"
+  }
+ ]
+}

@@ -1,0 +1,18 @@
+{
+ "p5": [
+  {
+   "question": "기존 기울기가 −20 dB/dec일 때 1차 영점을 하나 지나면 기울기는 얼마인가요? 영점 대신 극점이었다면요?",
+   "expected_answer": "영점: -20 -> 0 dB/dec. 극점이었다면 -20 -> -40 dB/dec.",
+   "reason": "1차 영점은 기울기에 +20, 1차 극점은 -20 dB/dec를 더해요.",
+   "condition": "단순 1차 극점·영점, 직선(점근선) 근사, 크기 선도.",
+   "check": "slope = -20*(#poles passed) + 20*(#zeros passed)"
+  },
+  {
+   "question": "극점은 $100\\,\\mathrm{MHz}$, $10\\,\\mathrm{GHz}$ 그대로 두고 영점만 $10\\,\\mathrm{GHz}$로 옮기면 $100\\,\\mathrm{MHz}$ 이후 직선 근사의 기울기는 구간별로 어떻게 되나요?",
+   "expected_answer": "100 MHz~10 GHz -20 dB/dec, 10 GHz에서 극점과 영점이 상쇄되어 그 뒤에도 -20 dB/dec 유지(전체가 100 MHz 단일 극점처럼 보여요).",
+   "reason": "10 GHz에서 극점의 -20과 영점의 +20이 동시에 더해져 기울기 변화가 0이에요.",
+   "condition": "극점 100 MHz·10 GHz, 영점 10 GHz, 1차 근사.",
+   "check": "sympy: |(1+s/wz)/((1+s/wp1)(1+s/wp2))| with wz=wp2 -> 1/|1+s/wp1|"
+  }
+ ]
+}

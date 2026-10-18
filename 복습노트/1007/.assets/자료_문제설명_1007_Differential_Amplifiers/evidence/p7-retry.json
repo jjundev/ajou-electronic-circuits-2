@@ -1,0 +1,25 @@
+{
+ "p7": [
+  {
+   "question": "(a)에서 $g_m=2$ mS, $r_{O3}=20$ kΩ, $\\Delta R_D/R_D=0.5\\%$이면 CMRR은 배수와 dB로 얼마인가요? 어느 항이 CMRR을 키우는지 먼저 판단해요.",
+   "expected_answer": "CMRR = (R_D/ΔR_D)(1 + 2g_m r_O3) = 200 × (1 + 80) = 1.62 × 10^4 ≈ 84.2 dB. 테일 항 2g_m r_O3 = 80이 지배해요.",
+   "reason": "A_CM-DM = ΔR_D/(1/g_m + 2R_SS)의 분모를 테일 저항이 키우고, A_DM ≈ g_m R_D는 미스매치와 무관해서 CMRR = (R_D/ΔR_D)(1 + 2g_m R_SS)예요.",
+   "condition": "M1·M2는 λ = 0, (a)는 R_SS = r_O3, ΔR_D ≪ R_D.",
+   "check": "python: 200*(1+2*2e-3*20e3) = 16200; 20*log10(16200) = 84.19"
+  },
+  {
+   "question": "(b)에서 캐스코드 소자의 $g_{m3}r_{O4}=50$이면 CMRR이 (a)보다 대략 몇 dB 높아질지 예측해 보세요. 이 근사가 성립하는 조건도 말해요.",
+   "expected_answer": "약 50배, 20log50 ≈ 34 dB 높아져요. 조건: g_m3 r_O4 ≫ 1(R_SS,b ≈ g_m3 r_O3 r_O4)과 2g_m r_O3 ≫ 1(두 CMRR 식의 1을 버림).",
+   "reason": "CMRR은 1 + 2g_m R_SS에 비례하고, 캐스코드는 R_SS를 r_O3에서 약 g_m3 r_O3 r_O4로 g_m3 r_O4배 키워요.",
+   "condition": "같은 g_m, R_D, ΔR_D, 같은 r_O3; 큰 항 근사.",
+   "check": "python: 20*log10(50) = 33.98 dB; ratio = (1+2gm*gm3*ro3*ro4)/(1+2gm*ro3) -> gm3*ro4 as gm*ro3 -> oo"
+  },
+  {
+   "question": "문제와 달리 $M_1$·$M_2$도 $\\lambda\\neq0$이고 $\\Delta R_D\\neq0$이면 DM 입력에서 $P$가 여전히 정확한 가상 접지인가요? 노드 $P$의 KCL에서 $i_1+i_2$가 0이 되는지로 판단해 보세요.",
+   "expected_answer": "아니에요. 두 드레인 전압이 달라 r_o 가지 전류가 달라지므로 i_1 + i_2 ≠ 0이고 v_P가 0이 아닌 작은 값(ΔR_D에 비례)이 돼요. ΔR_D = 0이거나 r_o → ∞이면 v_P = 0으로 돌아와요.",
+   "reason": "λ = 0일 때는 전류가 g_m(v_in − v_P)로만 정해져 ±v_d/2가 정확히 상쇄됐지만, r_o가 있으면 드레인 전압에 의존하는 항 (v_out − v_P)/r_o가 대칭을 깨요.",
+   "condition": "M1, M2에 유한 r_o, 부하 R_D와 R_D + ΔR_D, 테일 R_SS, DM 입력 v_in1 = +1/2, v_in2 = −1/2.",
+   "check": "sympy: solve P-node KCL with r_o -> v_P = R_SS*dR*g_m*r_o/(2*(...)) != 0; limit r_o->oo = 0; dR=0 -> 0"
+  }
+ ]
+}

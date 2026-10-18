@@ -1,0 +1,18 @@
+{
+ "p6": [
+  {
+   "question": "ΔV_in,max=500 mV 유지, 전력 예산을 1.8 mW로 줄여 모두 쓰면 I_SS와 W/L은?",
+   "expected_answer": "I_SS = 1.00 mA, W/L = 2(1 mA)/(100 μA/V²·0.25 V²) = 80.",
+   "reason": "P = V_DD I_SS로 전류를 먼저 정하고, 차단 경계식 W/L = 2I_SS/(μ_nC_ox ΔV²)에 넣어요.",
+   "condition": "V_DD=1.8 V, μ_nC_ox=100 μA/V², 제곱 법칙.",
+   "check": "python: 1.8e-3/1.8 = 1e-3; 2*1e-3/(100e-6*0.25) = 80"
+  },
+  {
+   "question": "전력 3 mW를 모두 쓰면서 ΔV_in,max를 250 mV로 줄이면 W/L은 원래의 몇 배?",
+   "expected_answer": "4배(약 533).",
+   "reason": "W/L ∝ 1/ΔV_in,max²이므로 입력 범위를 절반으로 줄이면 W/L이 네 배예요.",
+   "condition": "I_SS = 1.667 mA 고정, μ_nC_ox=100 μA/V².",
+   "check": "python: 2*(3e-3/1.8)/(100e-6*0.25**2) = 533.3 = 4*133.3"
+  }
+ ]
+}

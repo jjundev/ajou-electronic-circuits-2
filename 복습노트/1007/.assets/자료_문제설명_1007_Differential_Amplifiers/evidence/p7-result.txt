@@ -1,4 +1,6 @@
-a CMRR = (2*R + dR)*(2*gm*r3 + 1)/(2*dR)
-b CMRR = (2*R + dR)*(2*gm*(g3*r3*r4 + r3 + r4) + 1)/(2*dR)
-improvement ratio = (2*gm*(g3*r3*r4 + r3 + r4) + 1)/(2*gm*r3 + 1)
-For small dR and gm ro>>1: a~2gm RD rO3/dR, b~2gm RD gm3 rO3rO4/dR.
+(b) R_tail = g_m3*r_O3*r_O4 + r_O3 + r_O4  minus (1+gm3 rO4) rO3 + rO4: 0
+(a) CMRR = R_D*(2*g_m1*r_O3 + 1)/DeltaR_D  minus (RD/dRD)(1+2gm1 rO3): 0
+(b) CMRR = R_D*(2*g_m1*g_m3*r_O3*r_O4 + 2*g_m1*r_O3 + 2*g_m1*r_O4 + 1)/DeltaR_D  minus (RD/dRD)(1+2gm1[(1+gm3 rO4)rO3+rO4]): 0
+CMRR_b/CMRR_a = (2*g_m1*g_m3*r_O3*r_O4 + 2*g_m1*r_O3 + 2*g_m1*r_O4 + 1)/(2*g_m1*r_O3 + 1)
+(CMRR_b/CMRR_a)/(gm3 rO4) with gm1->oo, gm3->oo: 1
+(b) md approx: ratio exact/md with gm3->oo = 1

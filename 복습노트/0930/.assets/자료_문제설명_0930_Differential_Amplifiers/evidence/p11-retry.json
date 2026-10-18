@@ -1,0 +1,18 @@
+{
+ "p11": [
+  {
+   "question": "$I_{EE}$를 두 배로, $R_C$를 절반으로 동시에 바꾸면 전류 곡선과 전압 곡선은 각각 어떻게 될까요?",
+   "expected_answer": "전류 곡선 높이 2배(교차 I_EE), 전압 곡선은 R_C I_EE가 같아 그대로",
+   "reason": "전류는 I_EE f(d)로 I_EE만, 전압 강하는 R_C I_C로 두 계수의 곱만 보아요.",
+   "condition": "큰 β, Early 효과 무시, 활성 영역 유지",
+   "check": "(2*Iee)*(Rc/2) == Rc*Iee"
+  },
+  {
+   "question": "온도가 올라 $V_T$가 커지면 가로축 전이 폭과 $d=0$에서의 전류 기울기는 어떻게 될까요?",
+   "expected_answer": "전이 폭은 V_T에 비례해 넓어지고, 기울기 I_EE/(4V_T)는 작아져요. 높이·교차점은 그대로.",
+   "reason": "f(d)=1/(1+e^{−d/V_T})에서 V_T는 가로축 배율만 바꿔요.",
+   "condition": "I_EE, R_C 고정, 큰 β",
+   "check": "diff(Iee/(1+exp(-d/VT)), d).subs(d,0) = Iee/(4*VT)"
+  }
+ ]
+}

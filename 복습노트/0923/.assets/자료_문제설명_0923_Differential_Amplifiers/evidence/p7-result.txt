@@ -1,3 +1,2 @@
-[(VDD + VTH - 3/2)/Iss]
-M1 saturation needs Vd>=Vin1-VTH; M2 off needs VP>=Vin2-VTH
-Independent conclusion: RD <=(VDD-1.5+VTH)/Iss; assumed off additionally VP >=.3-VTH
+V_X = -I_SS*R_D + V_DD ; saturation requires -I_SS*R_D + V_DD + V_TH - 3/2 >= 0  i.e. R_D*I_SS <= V_DD - 1.5 + V_TH
+V_P = -sqrt(2)*sqrt(I_SS)/sqrt(k) - V_TH + 3/2 ; M2 off needs Vin2 - V_P < V_TH -> sqrt(2)*sqrt(I_SS)/sqrt(k) - 6/5 < 0 (i.e. sqrt(2Iss/k) < 1.2 V)

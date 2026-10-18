@@ -1,16 +1,22 @@
-import sympy as s
-s.init_printing()
-gm,ro,rp,R,RC,RT=s.symbols('gm ro rp R RC RT', positive=True)
-vi,vo,vx,it=s.symbols('vi vo vx it',real=True)
-par=lambda a,b:s.simplify(a*b/(a+b))
-def show(label,x): print(label, '=',([s.simplify(v) for v in x] if isinstance(x,list) else s.simplify(x)))
-def ce(load):
- sol=s.solve(vo/load+gm*vi,vo)[0];show('Av from output KCL',sol/vi)
-VAn,VAp,VT,I=s.symbols('VAn VAp VT I',positive=True)
-print('DM input gives left +gm vd/2 and right -gm vd/2. Ideal1:1 PNP mirror sums to +gm vd at right output, hence positive gain.')
-A=(I/VT)*par(VAn/I,VAp/I);show('A',A);show('VAp needed',s.solve(A-100,VAp));show('at VAn5 VT26mV',s.solve(A-100,VAp)[0].subs({VAn:5,VT:.026}));print('Finite beta mirror transfer neglected in dominant model; output compliance assumed.')
-
-# Full three node small signal model, beta infinity; matched npn and pnp gm, no tail current variation.
-x,y,e,vd=s.symbols('x y e vd',real=True);gn,gp=s.symbols('gn gp',positive=True)
-eq=[(gm+gp)*x+gn*(x-e)+gm*(vd/2-e),gp*y+gn*(y-e)+gm*(-vd/2-e)+gm*x,gn*(2*e-x-y)+2*gm*e]
-sol=s.solve(eq,[x,y,e]);gain=s.factor(sol[y]/vd);target=gm*(2*gm+gp)/(2*(gm+gp)*(gn+gp));show('exact3node gain',gain);show('rootformula residual',s.simplify(gain-target));show('large intrinsic-gain correction',s.limit(gain/(gm/(gn+gp)),gm,s.oo))
+# P10.75 independent check: active-load bipolar pair, Av = gm1 (rO2||rO4) = 100, VA,n = 5 V
+from sympy import *
+IC, VT, VAn, VAp = symbols('I_C V_T V_An V_Ap', positive=True)
+vin, vout = symbols('v_in v_out')
+gm = IC/VT; rO2 = VAn/IC; rO4 = VAp/IC
+# short-circuit Gm of mirror-loaded pair = gm (Razavi), Rout = rO2||rO4
+Av = simplify(gm*rO2*rO4/(rO2+rO4))
+print('Av = gm (rO2||rO4) =', Av, ' (I_C cancels)')
+sol = solve(Eq(Av, 100), VAp)[0]
+print('V_A,p =', simplify(sol))
+for vt in (Rational(26, 1000), Rational(25, 1000)):
+    print('VT = %s V: V_A,p =' % vt, N(sol.subs({VAn: 5, VT: vt})), 'V')
+gmx,gn,gp,vd,vx_,vo_,ve_ = symbols('g_m g_n g_p v_d v_x v_o v_e')
+s=solve([Eq((gmx+gp)*vx_+gn*(vx_-ve_)+gmx*(vd/2-ve_),0),
+         Eq(gp*vo_+gn*(vo_-ve_)+gmx*(-vd/2-ve_)+gmx*vx_,0),
+         Eq(gn*(2*ve_-vx_-vo_)+2*gmx*ve_,0)],[vx_,vo_,ve_],dict=True)[0]
+Ae=simplify(s[vo_]/vd)
+print('full KCL (finite rO all, base current neglected): |A| =',Ae)
+print('  minus gm(2gm+gp)/(2(gm+gp)(gn+gp)):',simplify(Ae-gmx*(2*gmx+gp)/(2*(gmx+gp)*(gn+gp))))
+vt=Rational(26,1000); Ic=1; vap=N(sol.subs({VAn:5,VT:vt}))
+num={gmx:Ic/vt,gn:Ic/5,gp:Ic/vap}
+print('  at VT=26mV, VAp=%.4f: |A_exact| = %.4f  (correction %.3f%%)'%(vap,N(Ae.subs(num)),100*(N(Ae.subs(num))/100-1)))

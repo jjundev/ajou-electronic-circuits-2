@@ -1,5 +1,4 @@
-a current factor 1/2 output drop factor 1/2
-b output delta DeltaV
-c output drop factor 1/2
-switching width VT unchanged
-Independent conclusion: Iss half halves current curves and output drops; VCC rise translates output curves;RC half halves voltage excursions only
+nominal {'IC1_max': I_EE, 'I_cross': I_EE/2, 'VX_max': V_CC, 'VX_min': -I_EE*R_C + V_CC, 'V_cross': -I_EE*R_C/2 + V_CC, 'slope_VY_minus_VX_at0': I_EE*R_C/(2*V_T), 'v_for_90pct': log(9**V_T)}
+(a) IEE/2 {'IC1_max': I_EE/2, 'I_cross': I_EE/4, 'VX_max': V_CC, 'VX_min': -I_EE*R_C/2 + V_CC, 'V_cross': -I_EE*R_C/4 + V_CC, 'slope_VY_minus_VX_at0': I_EE*R_C/(4*V_T), 'v_for_90pct': log(9**V_T)}
+(b) VCC+dV {'IC1_max': I_EE, 'I_cross': I_EE/2, 'VX_max': DeltaV + V_CC, 'VX_min': DeltaV - I_EE*R_C + V_CC, 'V_cross': DeltaV - I_EE*R_C/2 + V_CC, 'slope_VY_minus_VX_at0': I_EE*R_C/(2*V_T), 'v_for_90pct': log(9**V_T)}
+(c) RC/2 {'IC1_max': I_EE, 'I_cross': I_EE/2, 'VX_max': V_CC, 'VX_min': -I_EE*R_C/2 + V_CC, 'V_cross': -I_EE*R_C/4 + V_CC, 'slope_VY_minus_VX_at0': I_EE*R_C/(4*V_T), 'v_for_90pct': log(9**V_T)}

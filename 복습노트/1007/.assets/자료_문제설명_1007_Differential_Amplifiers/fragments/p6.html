@@ -44,7 +44,8 @@
   <h4>완성 답과 검산</h4>
   <div data-subpart="main">
     <h4>검산</h4>
-    <p><b>완성 답: $\text{CMRR}=\dfrac{g_{m1}R_C}{\Delta R_C}\left\{\dfrac{1}{g_{m1}}+2\left[1+g_{m3}(R_1\parallel r_{\pi3})\right]r_{O3}+2(R_1\parallel r_{\pi3})\right\}$</b></p>
+    <p><b>완성 답: $\text{CMRR}=\dfrac{g_{m1}R_C}{\Delta R_C}\left\{\dfrac{1}{g_{m1}}+2\left[1+g_{m3}(R_1\parallel r_{\pi3})\right]r_{O3}+2(R_1\parallel r_{\pi3})\right\}$</b> (이 소신호 모델의 값, $\Delta R_C\ll R_C$)</p>
+    <p><b>$r_{O3}\gg R_1\parallel r_{\pi3}$에서</b>: 끝의 $2(R_1\parallel r_{\pi3})$를 버리면 $\text{CMRR}\approx\dfrac{g_{m1}R_C}{\Delta R_C}\left\{\dfrac{1}{g_{m1}}+2\left[1+g_{m3}(R_1\parallel r_{\pi3})\right]r_{O3}\right\}$로, 문제 md의 풀이와 같은 꼴이에요. 버린 항과 남긴 $r_{O3}$ 항의 비는 $(R_1\parallel r_{\pi3})/r_{O3}$보다 작아서 $r_{O3}\to\infty$에서 두 값의 비가 1로 가요(아래 예시 값에서는 약 $2\times10^{-4}$ 차이).</p>
     <p><b>단위</b>: $g_{m1}R_C$는 S·Ω라 무차원, $1/\Delta R_C$는 1/Ω, 괄호 안 세 항은 모두 Ω(1/S, Ω, Ω)이에요. 전체가 무차원이라 이득의 비로 맞아요.</p>
     <p><b>대칭 특수값</b>: $\Delta R_C\to0$이면 $A_{CM-DM}\to0$이라 CMRR $\to\infty$예요. 미스매치가 없으면 공통 모드가 차동 출력으로 전혀 새지 않는다는 뜻과 일치해요.</p>
     <p><b>극한 대입 1</b>: $R_1\to0$이면 $R_1\parallel r_{\pi3}\to0$, $R_{out3}\to r_{O3}$라 $\text{CMRR}\to\dfrac{g_{m1}R_C}{\Delta R_C}\left(\dfrac{1}{g_{m1}}+2r_{O3}\right)$이에요. 축퇴 없는 단순 전류원의 결과로 돌아와요.</p>
@@ -65,9 +66,9 @@
 <div class="layer eli5" data-explanation="retry">
   <h4>설명을 닫고 다시 해 봐요</h4>
   <ol>
-    <li>$P$를 가상 접지로 두고 $V_{out1}-V_{out2}$를 직접 써서 $|A_{DM}|\approx g_{m1}R_C$를 다시 얻어 보세요.</li>
-    <li>$Q_3$ 베이스 접지, 이미터에 $R_1$을 단 소신호 회로로 $R_{out3}$ 식을 유도해 보세요.</li>
-    <li>$R_1\to0$과 $R_1\to\infty$를 넣어 CMRR이 어떻게 바뀌는지 말로 설명해 보세요.</li>
+    <li>verify의 예시 값($1/g_{m1}=52\ \Omega$, $R_C=10$ kΩ, $\Delta R_C=100\ \Omega$, $r_{O3}=100$ kΩ)에서 $R_1$만 0으로 바꾸면 CMRR은 약 몇 dB가 될지 예측해 보세요. 136 dB에서 얼마나 떨어지나요?</li>
+    <li>출력을 차동이 아니라 $V_{out1}$ 한쪽에서만 뽑는다면, 미스매치가 없어도 CMRR이 유한해요. 이때 분모로 쓸 이득과 분자의 차동 이득은 각각 무엇이고, CMRR은 $g_{m1}$과 $R_{out3}$로 어떻게 쓰이나요?</li>
+    <li>미스매치를 $\Delta R_C=100\ \Omega$에서 $200\ \Omega$으로 두 배로 키우면 $A_{DM}$과 $A_{CM-DM}$ 중 어느 쪽이 실질적으로 바뀌고, CMRR은 몇 dB 달라지나요?</li>
   </ol>
 </div>
 <div class="sum" hidden>

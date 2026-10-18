@@ -1,11 +1,10 @@
-import sympy as s
-s.init_printing()
-gm,ro,rp,R,RC,RT=s.symbols('gm ro rp R RC RT', positive=True)
-vi,vo,vx,it=s.symbols('vi vo vx it',real=True)
-par=lambda a,b:s.simplify(a*b/(a+b))
-def show(label,x): print(label, '=',([s.simplify(v) for v in x] if isinstance(x,list) else s.simplify(x)))
-def ce(load):
- sol=s.solve(vo/load+gm*vi,vo)[0];show('Av from output KCL',sol/vi)
-I0,dI,RL=s.symbols('I0 dI RL',positive=True)
-k=s.symbols('k',positive=True)
-V=(k*(I0+dI)-(I0-dI))*RL;show('before',V.subs(dI,0));show('after',V);show('a before',V.subs({k:1,dI:0}));show('a after',V.subs(k,1));show('b before',V.subs({k:s.Rational(1,2),dI:0}));show('b after',V.subs(k,s.Rational(1,2)));print('k= (W/L)4/(W/L)3. Physical saturation/compliance must hold; negative ideal output not realizable with sink compliance.')
+# P10.72 independent check: PMOS mirror M3 (diode, I1) / M4 -> output node with I2 sink and RL to ground, lambda=0
+from sympy import *
+I0, dI, RL = symbols('I_0 DeltaI R_L', positive=True)
+Vout = symbols('V_out')
+def vout(I1, I2, ratio):          # ratio = (W/L)4/(W/L)3
+    ID4 = ratio*I1
+    return solve(Eq(ID4, I2 + Vout/RL), Vout)[0]   # KCL at output node
+for name, ratio in (('(a) (W/L)3=(W/L)4', 1), ('(b) (W/L)3=2(W/L)4', Rational(1, 2))):
+    b = simplify(vout(I0, I0, ratio)); a = expand(vout(I0+dI, I0-dI, ratio))
+    print(name, ': before =', b, '  after =', a, '  change =', simplify(a-b))

@@ -1,11 +1,17 @@
-import sympy as s
-s.init_printing()
-gm,ro,rp,R,RC,RT=s.symbols('gm ro rp R RC RT', positive=True)
-vi,vo,vx,it=s.symbols('vi vo vx it',real=True)
-par=lambda a,b:s.simplify(a*b/(a+b))
-def show(label,x): print(label, '=',([s.simplify(v) for v in x] if isinstance(x,list) else s.simplify(x)))
-def ce(load):
- sol=s.solve(vo/load+gm*vi,vo)[0];show('Av from output KCL',sol/vi)
-rn,rpp,tail=s.symbols('ron rop tail',positive=True)
-# Full CM: output shunt rop, channel ron between source/output, gm(vin-vs).
-sol=s.solve([vo/rpp+(vo-vx)/rn+gm*(vi-vx),vx/(2*tail)+(vx-vo)/rn-gm*(vi-vx)],[vo,vx]);A=s.factor(sol[vo]/vi);show('Acm exact',A);show('large tail coefficient',s.limit(A*tail,tail,s.oo));print('gmro>>1 plus tail dominant -> Acm~-rop/(2rtail).')
+# P10.68 independent check: CM gain of NMOS pair with PMOS current-source loads M3,M4 and tail M5
+from sympy import *
+gm1, rO1, rO3, rO5, vin, vx, vs = symbols('g_m1 r_O1 r_O3 r_O5 v_in v_x v_s', positive=True)
+vin, vx, vs = symbols('v_in v_x v_s')  # node voltages: no sign assumption
+i1 = gm1*(vin - vs) + (vx - vs)/rO1      # M1 drain->source current
+sol = solve([Eq(vx/rO3 + i1, 0), Eq(i1, vs/(2*rO5))], [vx, vs], dict=True)[0]
+A = simplify(sol[vx]/vin)
+print('A_CM exact (single-ended, CM half circuit) =', A)
+Gm = gm1*rO1/(rO1 + (1 + gm1*rO1)*2*rO5)
+Rdown = (1 + gm1*2*rO5)*rO1 + 2*rO5
+Rout = rO3*Rdown/(rO3 + Rdown)
+print('A - (-Gm*Rout) =', simplify(A + Gm*Rout))
+print('limit gm1->oo :', simplify(limit(A, gm1, oo)))
+print('ratio exact/(-rO3/(2 rO5)) for gm1->oo then rO1->oo:', limit(limit(A/(-rO3/(2*rO5)), gm1, oo), rO1, oo))
+nv = {gm1: 1e-3, rO1: 2e4, rO3: 2e4, rO5: 2e4}
+print('numeric example exact:', N(A.subs(nv)), ' approx -rO3/(2rO5):', N((-rO3/(2*rO5)).subs(nv)))
+print('Note: differential output (vx - vy) of a perfectly symmetric circuit has CM gain 0.')

@@ -1,0 +1,18 @@
+{
+ "p5": [
+  {
+   "question": "식 (10.147)에서 I_D1 − I_D2 = I_SS/2가 되는 V_in1 − V_in2는 평형 과구동의 몇 배? 두 근 중 유효한 것은?",
+   "expected_answer": "d = sqrt(2 − √3)·V_ov,eq ≈ 0.518 V_ov,eq. u=Kd²의 두 근 (2∓√3)I_SS 중 (2+√3)I_SS는 차단 경계 2I_SS를 넘어 버려요.",
+   "reason": "제곱하면 u(4I_SS − u) = I_SS²이 되고, 두 소자 전도 식은 Kd² ≤ 2I_SS 범위에서만 유효해요.",
+   "condition": "제곱 법칙, λ=0, 동일 소자, d>0.",
+   "check": "sympy: solve(u*(4*I-u)-I**2,u) -> [(2-sqrt3)I,(2+sqrt3)I]; sqrt(2-sqrt(3)) = 0.5176"
+  },
+  {
+   "question": "V_in1 − V_in2 = −√2·(V_GS−V_TH)_equil이면 I_D1 − I_D2는 얼마이고 어느 소자가 꺼질까요?",
+   "expected_answer": "I_D1 − I_D2 = −I_SS, M1이 꺼지고 M2가 I_SS를 모두 흘려요.",
+   "reason": "식 (10.147)은 d에 대해 홀함수라 부호만 바뀌고, 경계 |d| = sqrt(2I_SS/K)는 대칭이에요.",
+   "condition": "제곱 법칙, 동일 소자, 이상적 테일.",
+   "check": "sympy: f(d)=K/2*d*sqrt(4I/K-d**2); f(-sqrt(2I/K)) = -I"
+  }
+ ]
+}
