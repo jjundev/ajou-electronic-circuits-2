@@ -1,0 +1,18 @@
+{
+  "p2": [
+    {
+      "question": "(a)를 바꿔서 복사 소자 $M_1$만 $2(W/L)$로 키우고 목표를 $I_{copy}=2I_{REF}$로 정하면 $V_{DS1}$ 조건은 달라지나요? ($\\lambda\\ne0$, 같은 $V_{TH}$, 포화)",
+      "expected_answer": "달라지지 않음: V_DS1=V_GS (=V_DS,REF)",
+      "reason": "전류비 = 2(1+λV_DS1)/(1+λV_GS). 크기비 2는 분자의 상수 인자로만 들어가므로 정확한 2배가 되려면 여전히 (1+λV_DS1)=(1+λV_GS)",
+      "condition": "M_REF 다이오드 연결(V_DS,REF=V_GS), 같은 V_GS·V_TH·λ, 두 소자 포화, M_1=2(W/L)",
+      "check": "sympy: solve(2(1+l*Vd)/(1+l*VGS) = 2, Vd) -> [V_GS]"
+    },
+    {
+      "question": "(b)를 바꿔서 $V_{DS1}=V_{GS}+0.5\\ \\mathrm{V}$이면 정규화 오차 $\\epsilon=(I_{copy1}-I_{REF})/I_{REF}$의 부호와 크기는 어떻게 되나요? $\\lambda=0.1\\ \\mathrm{V^{-1}}$, $V_{GS}=1\\ \\mathrm{V}$이면 몇 %인가요?",
+      "expected_answer": "ε=+0.5λ/(1+λV_GS) > 0 (I_copy1이 I_REF보다 큼); λ=0.1 V⁻¹, V_GS=1 V이면 0.05/1.1≈+4.5 %",
+      "reason": "비 (1+λV_DS1)/(1+λV_GS)에서 V_DS1이 기준 V_DS보다 0.5 V 높으므로 분자가 커져 오차가 양수",
+      "condition": "두 소자 동일, λ>0, M_1 포화(V_DS1>V_GS−V_TH 만족), M_REF 다이오드 연결",
+      "check": "sympy: simplify((1+l*(V+1/2))/(1+l*V) - 1) = l/(2(1+l*V)); subs l=0.1,V=1 -> 0.04545"
+    }
+  ]
+}

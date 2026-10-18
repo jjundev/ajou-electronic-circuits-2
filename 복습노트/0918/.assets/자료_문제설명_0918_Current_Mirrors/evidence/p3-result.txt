@@ -1,2 +1,6 @@
-W/L reference : output1 : output2 = 1 2/3 5/3
-Independent conclusion: NMOS sink ratios 2/3 and 5/3, common gates reference diode
+I1/IREF = WL_3/WL_REF  I2/IREF = WL_4/WL_REF
+(W/L)3 = 2*WL_REF/3   (W/L)4 = 5*WL_REF/3
+ratio (W/L)REF:(W/L)3:(W/L)4 = 3:2:5 check -> 2 5
+units: REF = 3  M3 = 2  M4 = 5
+with CLM I1/IREF = WL_3*(V_DS*lambda + 1)/(WL_REF*(V_GS*lambda + 1))  limit lambda->0: WL_3/WL_REF
+ANSWER p3:main: NMOS mirror from diode M_REF (I_REF=0.3 mA): (W/L)3=(2/3)(W/L)REF -> I1=0.2 mA, (W/L)4=(5/3)(W/L)REF -> I2=0.5 mA; i.e. (W/L)REF:(W/L)3:(W/L)4 = 3:2:5 (unit 0.1 mA device: 3,2,5 copies), lambda=0

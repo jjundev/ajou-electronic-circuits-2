@@ -1,10 +1,16 @@
-Rout gm*r1*re + r1 + re Av g2*re*(-gm*r1 - 1)
-exact 680000 -26800
-dominant 2000000/3 -80000/3
-part1 current .5mA gm .02 ro1=ro2=10k Av=-50
-Independent conclusion: (1)Ic1=.5mA Av=-50; (2)Re=ro2||ro3=3333ohm,Rout approx666667ohm,Av approx-26667; exact Rout676667 Av-26800 without base-current loading
-finite-beta Rout exact (gm*r1*re*rpi + r1*(re + rpi) + re*rpi)/(re + rpi) Av exact -g2*re*rpi*(gm*r1 + 1)/(re + rpi)
-finite-beta exact 512500 -20100
-finite-beta dominant 500000 -20000
-gmro scaled limit exact/dominant re*rpi*(1/rpi + 1/re)/(re + rpi)
-part1 corrected arithmetic: .02*(10000||10000)=-100
+=== p9 (2023-1 midterm Q2) ===
+(1) I_C,M = 200.000000000000 uA ; I_C1 = I_C2 = 500.000000000000 uA
+(1) Av_a symbolic = -g_m1*r_o1*r_o2/(r_o1 + r_o2)
+(1) gm1 = 1/50 S, ro1 = ro2 = 10000 ohm, Av_a = -100 = -100.000000000000
+(2) [with rpi1 (Razavi model)] Rout exact symbolic = (g1*r1*r2*r3*rpi1 + r1*r2*r3 + r1*r2*rpi1 + r1*r3*rpi1 + r2*r3*rpi1)/(r2*r3 + r2*rpi1 + r3*rpi1)
+(2) [with rpi1 (Razavi model)] Av exact symbolic = g2*r2*r3*rpi1*(-g1*r1 - 1)/(r2*r3 + r2*rpi1 + r3*rpi1)
+(2) [with rpi1 (Razavi model)] Rout approx (gm1 ro1>>1) = k* r2*r3*rpi1/(r2*r3 + r2*rpi1 + r3*rpi1)  with k=gm1*ro1 -> 500000.000000000 ohm
+(2) [with rpi1 (Razavi model)] Av   approx (gm1 ro1>>1) = -20000.0000000000
+(2) [with rpi1 (Razavi model)] Rout exact = 512500.000000000 ohm, Av exact = -20100.0000000000
+(2) [rpi1 -> inf (base current ignored)] Rout exact symbolic = (g1*r1*r2*r3 + r1*r2 + r1*r3 + r2*r3)/(r2 + r3)
+(2) [rpi1 -> inf (base current ignored)] Av exact symbolic = g2*r2*r3*(-g1*r1 - 1)/(r2 + r3)
+(2) [rpi1 -> inf (base current ignored)] Rout approx (gm1 ro1>>1) = k* r2*r3/(r2 + r3)  with k=gm1*ro1 -> 666666.666666667 ohm
+(2) [rpi1 -> inf (base current ignored)] Av   approx (gm1 ro1>>1) = -26666.6666666667
+(2) [rpi1 -> inf (base current ignored)] Rout exact = 680000.000000000 ohm, Av exact = -26800.0000000000
+ANSWER (1): I_C1 = 500 uA, Av = -gm1(ro1||ro2) = -100
+ANSWER (2): Rout ~= gm1 ro1 (ro2||ro3||rpi1) = 500 kohm (exact 512.5k); Av = -gm2 Rout ~= -2.0e4 (exact -20100); if rpi1 ignored: 666.7k (exact 680k), Av ~ -2.67e4 (exact -26800)

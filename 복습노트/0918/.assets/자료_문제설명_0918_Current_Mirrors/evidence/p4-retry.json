@@ -1,0 +1,18 @@
+{
+  "p4": [
+    {
+      "question": "그림 (a)에서 다이오드 연결 PMOS를 $3(W/L)_p$로, 출력 PMOS를 $5(W/L)_p$로 서로 바꾸면 $I_{copy}$는 $I_{REF}$의 몇 배인가요? 나머지 NMOS 크기는 그대로예요.",
+      "expected_answer": "I_copy = (5/3)(2/3)I_REF = (10/9)I_REF ≈ 1.11 I_REF",
+      "reason": "직렬로 이어진 두 거울이므로 각 거울 안의 비(NMOS 2/3, PMOS 5/3)를 곱함",
+      "condition": "모든 소자 포화, λ=0, 각 거울 안에서 같은 극성 소자끼리 크기비 사용",
+      "check": "sympy: Rational(5,3)*Rational(2,3) = 10/9"
+    },
+    {
+      "question": "그림 (b)에서 출력 노드의 $3(W/L)_n$ NMOS를 $12(W/L)_n$으로 바꾸면 $I_{copy}$의 크기와 방향은 어떻게 되나요? 다른 소자는 그대로이고 모두 포화라고 가정해요.",
+      "expected_answer": "I_copy = 10I_REF − 12I_REF = −2I_REF: 크기 2I_REF, 방향이 반대(외부에서 출력 노드로 2I_REF가 들어옴)",
+      "reason": "출력 노드 KCL I_P = I_N + I_copy. PMOS는 여전히 2·5I_REF=10I_REF를 밀어 넣고 NMOS는 12I_REF를 끌어가므로 차이가 음수",
+      "condition": "모든 소자 포화, λ=0, I_copy는 원래 그림의 화살표 방향(노드에서 오른쪽으로 나감)을 양으로 정의",
+      "check": "sympy: 2*5*I - 12*I = -2*I"
+    }
+  ]
+}

@@ -1,4 +1,15 @@
-copy/Iref 5*beta/(beta + 6) fraction error -6/(beta + 6)
-copy/Iref beta/(5*beta + 6) fraction error -6/(5*beta + 6)
-copy/Iref 3*beta/(2*(beta + 5)) fraction error -5/(beta + 5)
-Independent conclusion: copy ratios a5/(1+6/beta), b1/(5+6/beta), c3/(2+10/beta); signed errors negative
+--- (a) Q_REF area 1A_E, outputs [('I_copy', 5)]
+(a) I_copy = 5*I_REF*beta/(beta + 6) ; nominal = 5*I_REF
+(a) I_copy normalized error = -6/(beta + 6) ; leading order (beta->oo) = -6/beta
+(a) I_copy check beta=100: Icopy/I_REF = 4.71698, error = -0.0566038
+--- (b) Q_REF area 5A_E, outputs [('I_copy', 1)]
+(b) I_copy = I_REF*beta/(5*beta + 6) ; nominal = I_REF/5
+(b) I_copy normalized error = -6/(5*beta + 6) ; leading order (beta->oo) = -6/5/beta
+(b) I_copy check beta=100: Icopy/I_REF = 0.197628, error = -0.0118577
+--- (c) Q_REF area 2A_E, outputs [('I_copy', 3), ('I_2', 5)]
+(c) I_copy = 3*I_REF*beta/(2*(beta + 5)) ; nominal = 3*I_REF/2
+(c) I_copy normalized error = -5/(beta + 5) ; leading order (beta->oo) = -5/beta
+(c) I_copy check beta=100: Icopy/I_REF = 1.42857, error = -0.0476190
+(c) I_2 = 5*I_REF*beta/(2*(beta + 5)) ; nominal = 5*I_REF/2
+(c) I_2 normalized error = -5/(beta + 5) ; leading order (beta->oo) = -5/beta
+(c) I_2 check beta=100: Icopy/I_REF = 2.38095, error = -0.0476190

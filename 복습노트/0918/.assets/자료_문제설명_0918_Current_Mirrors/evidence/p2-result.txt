@@ -1,2 +1,7 @@
-ratio (lambda*(VGS - VTH) + 1)/(VGS*lambda + 1) signed error -VTH*lambda/(VGS*lambda + 1)
-Independent conclusion: VDS1=VGS; fractional signed error=-lambda VTH/(1+lambda VGS)
+(a) V_DS1 for Icopy=IREF: [V_GS]
+(b) Icopy/IREF = (lambda*(V_GS - V_TH) + 1)/(V_GS*lambda + 1)
+(b) Icopy - IREF = -V_TH*W*k*lambda*(V_GS - V_TH)**2/(2*L)  =  -V_TH*lambda/(V_GS*lambda + 1) * I_REF
+(b) relative error = -V_TH*lambda/(V_GS*lambda + 1)
+(b) first-order in lambda: -V_TH*lambda
+(b) limit rel/lambda as lambda->0: -V_TH
+(b) numeric check VGS=1,VTH=0.4,lam=0.1: rel err = -0.03636363636363637  approx -lam*VTH = -0.04

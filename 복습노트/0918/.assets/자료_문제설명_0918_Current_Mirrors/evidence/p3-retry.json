@@ -1,0 +1,18 @@
+{
+  "p3": [
+    {
+      "question": "기준 전류를 $0.3\\ \\mathrm{mA}$ 대신 $0.1\\ \\mathrm{mA}$로 바꾸고 $I_1=0.2\\ \\mathrm{mA}$, $I_2=0.5\\ \\mathrm{mA}$는 그대로 두면 기준:출력1:출력2의 단위 소자 개수는 어떻게 되나요?",
+      "expected_answer": "1 : 2 : 5 (기준 1단위, I_1 쪽 2단위, I_2 쪽 5단위)",
+      "reason": "I_out/I_REF=(W/L)_out/(W/L)_REF → 0.2/0.1=2, 0.5/0.1=5. 기준 비가 정수라 기준을 여러 단위로 나눌 필요가 없음",
+      "condition": "같은 V_TH, λ=0, 모든 NMOS 포화, 같은 길이의 단위 소자 병렬",
+      "check": "sympy: Rational(2,10)/Rational(1,10)=2, Rational(5,10)/Rational(1,10)=5"
+    },
+    {
+      "question": "두 단이 바이어스 전류를 접지로 내보내는 대신 $V_{DD}$ 쪽에서 0.2 mA, 0.5 mA를 공급받아야 한다면 어떤 극성의 거울을 쓰고, 소스는 어디에 연결하나요? 기준 0.3 mA일 때 크기비는 어떻게 되나요?",
+      "expected_answer": "PMOS 거울(전류 소스): 세 PMOS 소스를 V_DD에, 다이오드 연결 PMOS 기준에 0.3 mA를 흘림. 크기비는 그대로 3:2:5",
+      "reason": "전류가 V_DD에서 노드로 들어가야 하므로 소스가 V_DD인 PMOS가 전류를 밀어 줌. 크기비는 같은 극성 거울 안에서의 전류비라 극성과 무관하게 2/3, 5/3",
+      "condition": "같은 |V_TH|, λ=0, 모든 PMOS 포화, 기준 전류 0.3 mA가 PMOS 다이오드에서 아래로 흘러나감",
+      "check": "sympy: Rational(2,10)/Rational(3,10)=2/3, Rational(5,10)/Rational(3,10)=5/3 -> 3:2:5"
+    }
+  ]
+}

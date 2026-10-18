@@ -1,4 +1,13 @@
-integer choices [(1, 40), (2, 20), (4, 10), (5, 8), (8, 5), (10, 4), (20, 2), (40, 1)]
-minimum (5, 8)
-continuous 2*sqrt(10)
-Independent conclusion: cascade area factors n,m with nm=40; real minimum sqrt40 each, integer minimum5 and8
+I_C,M/I_REF = n
+required n*m = 40
+units=15  n=5  m=8
+units=15  n=8  m=5
+units=16  n=4  m=10
+units=16  n=10  m=4
+units=24  n=2  m=20
+units=24  n=20  m=2
+units=43  n=1  m=40
+units=43  n=40  m=1
+continuous optimum n=m=sqrt(40)= [2*sqrt(10)] 6.324555320336759
+check: I_C,M = 125 uA ; |I_C2| = 1 mA
+ANSWER p8:main: I_C,M/I_REF = 5, |I_C2|/I_C,M = 8 (or 8 and 5); I_C,M = 125 uA, |I_C1|=|I_C2| = 1 mA; 15 unit mirror transistors (1+5+1+8)

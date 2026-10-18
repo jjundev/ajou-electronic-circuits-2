@@ -1,0 +1,18 @@
+{
+  "p1": [
+    {
+      "question": "(1) 회로 (a)에서 $M_{REF}=M_1=W/L$, $\\lambda=0$은 그대로 두고 목표만 $I_1=I_{REF}/4$로 바꾸면 $R_P$는 어떤 식이 되고, 1/2일 때보다 커지나요 작아지나요?",
+      "expected_answer": "R_P=2√2/√(μnCox(W/L)·I_REF) ≈ 2.83/√(K I_REF); 1/2일 때(≈0.83/√(K I_REF))보다 커짐",
+      "reason": "KVL V_GS,REF=V_GS1+I_1R_P에서 √(2I_REF/K)−√(2(I_REF/4)/K)=(1/2)√(2I_REF/K)를 I_REF/4로 나눔. 전류를 더 줄이려면 소스 상승이 커야 하고 그 전압을 더 작은 전류로 만들어야 하므로 R_P가 커짐",
+      "condition": "회로 (a), 같은 V_TH, λ=0, 두 MOS 포화, M_REF=M_1=W/L",
+      "check": "sympy: solve(sqrt(2I/K) = sqrt(2(I/4)/K) + (I/4)R) -> R = 2*sqrt(2)/sqrt(K*I)"
+    },
+    {
+      "question": "(2) 회로 (b)처럼 $R_P$를 $Q_{REF}$ 이미터에 둔 채로 목표를 $I_1=I_{REF}/2$로 바꾸면 $R_P\\ge0$으로 만들 수 있나요? 안 된다면 저항을 어느 이미터로 옮기고 값은 얼마인가요? ($Q_{REF}=Q_1$, 베이스 전류 무시)",
+      "expected_answer": "불가능(R_P≥0이면 I_1/I_REF=exp(I_REF R_P/V_T)≥1). 저항을 Q_1 이미터로 옮기면 R_P=2V_T ln2/I_REF",
+      "reason": "Q_REF 이미터 저항은 Q_1의 V_BE를 키워 전류비를 1 이상으로만 만듦. Q_1 이미터에 두면 V_BE,REF=V_BE1+I_1R_P → V_T ln(I_REF/I_1)=I_1R_P, 저항 전류는 I_1=I_REF/2",
+      "condition": "회로 (b) 구조, Q_REF=Q_1, 베이스 전류 무시, V_A=∞, 두 BJT 활성 영역",
+      "check": "sympy: ratio=exp(I*R/VT); ratio(0)=1, d/dR>0, solve(ratio=1/2) -> [] ; solve(VT*log2 = (I/2)*R) -> R = 2*VT*log(2)/I"
+    }
+  ]
+}

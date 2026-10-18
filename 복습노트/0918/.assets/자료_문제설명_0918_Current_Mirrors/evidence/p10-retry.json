@@ -1,0 +1,18 @@
+{
+ "p10": [
+  {
+   "question": "$I_{C1}=I_{C2}=I_C$는 그대로이고 저항만 $R_{C1}=1.1R_C$, $R_{C2}=R_C$로 어긋나면 출력 공통 모드 레벨과 $V_X-V_Y$는 각각 어떻게 될지 예측해 보세요. $V_{CC}=2.5\\ \\mathrm V$, $R_C=1\\ \\mathrm{k}\\Omega$, $I_C=1\\ \\mathrm{mA}$로 숫자도 넣어 보세요.",
+   "expected_answer": "V_CM,out = V_CC - 1.05 R_C I_C = 1.45 V, V_X - V_Y = -0.1 R_C I_C = -0.1 V.",
+   "reason": "V_X=V_CC-1.1R_C I_C, V_Y=V_CC-R_C I_C를 평균하면 저항 평균 1.05R_C가 남고, 차에는 불일치 0.1R_C만 남아요. 큰 저항 쪽(X)이 더 낮아 차가 음수예요.",
+   "condition": "V_X는 R_C1 쪽 출력, 두 바이어스 전류 같음, v_in=0의 DC 동작점, 활성 영역 유지.",
+   "check": "sympy: (VX+VY)/2 = V_CC-21/20 R_C I_C → 1.45; VX-VY=-R_C I_C/10 → -0.1"
+  },
+  {
+   "question": "대칭 회로($R_{C1}=R_{C2}$, $I_{C1}=I_{C2}$)에서 $V_{CC}$에 리플 $\\Delta V$가 실리면 그 리플은 출력 공통 모드와 $V_X-V_Y$ 중 어디에 나타날지 판단해 보세요.",
+   "expected_answer": "공통 모드가 ΔV만큼 같이 움직이고, V_X-V_Y는 0으로 변하지 않아요.",
+   "reason": "V_X=V_CC-R_C I_C, V_Y=V_CC-R_C I_C 모두 V_CC를 계수 1로 포함하므로 같은 양이 실려 평균에는 남고 차에서는 지워져요.",
+   "condition": "바이어스 전류 I_C가 V_CC 리플에 무관(이상적 바이어스, Early 효과 무시), 완전 대칭.",
+   "check": "sympy: VX=VY=(V_CC+dV)-R_C I_C → CM shift dV, VX-VY=0"
+  }
+ ]
+}

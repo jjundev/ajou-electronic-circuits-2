@@ -1,3 +1,16 @@
-ratio beta**2/(beta + 2)**2 signed normalized error -4*(beta + 1)/(beta + 2)**2
-ratio 18*beta**2/((3*beta + 5)*(5*beta + 14)) signed normalized error -(67*beta + 70)/((3*beta + 5)*(5*beta + 14))
-Independent conclusion: a ratio=1/(1+2/beta)^2; b ratio=(6/5)/[(1+5/(3 beta))(1+14/(5 beta))]
+[a] I_copy = I_REF*beta**2/(beta + 2)**2
+[a] ideal I_copy = I_REF
+[a] error (ideal - actual) = 4*I_REF*(beta + 1)/(beta + 2)**2
+[a] relative error = 4*(beta + 1)/(beta + 2)**2
+[a] large-beta: relative error ~ 4/beta ; abs error ~ 4*I_REF/beta
+[a] check beta->oo I_copy -> I_REF
+[a] beta=100: I_copy/I_REF = 0.961169, rel err = 0.0388312
+[b] I_copy = 18*I_REF*beta**2/((3*beta + 5)*(5*beta + 14))
+[b] ideal I_copy = 6*I_REF/5
+[b] error (ideal - actual) = 6*I_REF*(67*beta + 70)/(5*(3*beta + 5)*(5*beta + 14))
+[b] relative error = (67*beta + 70)/((3*beta + 5)*(5*beta + 14))
+[b] large-beta: relative error ~ 67/15/beta ; abs error ~ 134*I_REF/25/beta
+[b] check beta->oo I_copy -> 6*I_REF/5
+[b] beta=100: I_copy/I_REF = 1.14818, rel err = 0.0431843
+ANSWER p6:main (a): I_copy = I_REF*beta^2/(beta+2)^2, error = I_REF*4(beta+1)/(beta+2)^2 ~ 4 I_REF/beta
+ANSWER p6:main (b): I_copy = 18 beta^2 I_REF/((3beta+5)(5beta+14)), error = (6/5)I_REF - I_copy ~ (6/5)(5/3+14/5)/beta I_REF = 5.36 I_REF/beta

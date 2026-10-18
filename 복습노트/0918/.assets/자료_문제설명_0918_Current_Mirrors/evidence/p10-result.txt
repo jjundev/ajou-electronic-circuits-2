@@ -1,2 +1,5 @@
--I1*R1/2 - I2*R2/2 + V
-Independent conclusion: output CM=VCC-(RC1 IC1+RC2 IC2)/2; matched equal-current=VCC-IC RC
+V_X(vin=0) = -I_S*R_C*exp(V_inCM/V_T) + V_CC
+V_Y(vin=0) = -I_S*R_C*exp(V_inCM/V_T) + V_CC
+d(V_CM,out)/d(vin) at vin=0 = 0
+main: V_CM,out = V_CC - R_C*I_C = -I_S*R_C*exp(V_inCM/V_T) + V_CC
+dV_CM,out/dV_inCM = -I_S*R_C*exp(V_inCM/V_T)/V_T  = -R_C*I_C/V_T = -g_m*R_C
