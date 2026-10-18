@@ -75,7 +75,7 @@ def panel_a(d):
     d.add(elm.Line().right().length(0.6))
     d.add(Resistor().right().tox(xr - 0.6).label(r"$R_\mathrm{E}$", "bottom", ofst=0.25))
     d.add(elm.Line().right().tox(xr)); d.add(elm.Line().up().toy(q2.emitter.y))
-    label(d, (xm - 0.35, yr - 0.25), r"$P$", "right", "top")
+    label(d, (xm - 0.35, yr - 0.27), r"$P$", "right", "top")
     iee_ground(d, p.center, 1.3, drop=0.7)
     caption(d, (xm - 0.3, CAP_Y), "(a)")
 
@@ -108,7 +108,7 @@ def panel_b(d):
     d.add(elm.Line().down().at(q1.emitter).toy(ybot))
     d.add(elm.Line().right().tox(xm)); p = dot(d)
     d.add(elm.Line().right().tox(xr)); d.add(elm.Line().up().toy(q2.emitter.y))
-    label(d, (xm - 0.35, ybot - 0.25), r"$P$", "right", "top")
+    label(d, (xm - 0.35, ybot - 0.27), r"$P$", "right", "top")
     iee_ground(d, p.center, 1.3, drop=0.4)
     caption(d, (xm - 0.3, CAP_Y), "(b)")
 

@@ -32,7 +32,7 @@ def draw():
     d.add(elm.Line().left().at(xgd.center).tox(mref.gate))
     m1 = nmos(d, at=(x1, mref.drain.y), anchor="drain", label=r"$M_\mathrm{1}$")
     d.add(elm.Line().right().at(xgd.center).tox(m1.gate))
-    d.add(elm.Label().right().at(((xg + m1.gate.x) / 2, mref.gate.y - 0.25)).label(r"$X$", valign="top"))
+    d.add(elm.Label().right().at(((xg + m1.gate.x) / 2, mref.gate.y - 0.27)).label(r"$X$", valign="top"))
     d.add(elm.Ground().at(m1.source).scale(0.8))
     # M1 드레인 선: V_DD 높이의 선 끝에서 아래로 I_copy 화살표, M1 드레인까지
     d.add(elm.Arrow(arrowwidth=0.22, arrowlength=0.35).down().at((x1, TOP)).length(1.0)

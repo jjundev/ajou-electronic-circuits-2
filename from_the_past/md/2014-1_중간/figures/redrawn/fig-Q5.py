@@ -17,11 +17,11 @@ def label(d, xy, text, ha="center", va="center"):
     d.add(elm.Label().right().at(xy).label(text, halign=ha, valign=va))
 
 
-def facing_outputs(d, j1, j2):
-    """두 출력 원이 가운데에서 마주 보고 그 사이에 V_out."""
+def facing_outputs(d, j1, j2, dx=0.0):
+    """두 출력 원이 가운데에서 마주 보고 그 사이에 V_out (dx: 라벨 가로 보정)."""
     d.add(elm.Line().right().at(j1.center).length(0.6)); dot(d, open_=True)
     d.add(elm.Line().left().at(j2.center).length(0.6)); dot(d, open_=True)
-    label(d, ((j1.center.x + j2.center.x) / 2, j1.center.y), r"$V_\mathrm{out}$")
+    label(d, ((j1.center.x + j2.center.x) / 2 + dx, j1.center.y), r"$V_\mathrm{out}$")
 
 
 def input_pair(d, top1, top2, gap=0.3):
@@ -79,7 +79,7 @@ def panel_a(d, x0):
     d.add(elm.Line().down().at(m6.drain).toy(yo)); d.add(elm.Line().left().tox(c4))
     label(d, (c5 - 0.3, m5.drain.y - 0.1), r"$M_\mathrm{5}$", "right", "top")
     label(d, (c6 + 0.3, m6.drain.y - 0.1), r"$M_\mathrm{6}$", "left", "top")
-    facing_outputs(d, o1, o2)
+    facing_outputs(d, o1, o2, dx=-0.04)   # 글자 모양 때문에 오른쪽 원 쪽으로 치우쳐 조금 왼쪽으로
     m1, m2 = input_pair(d, o1.center, o2.center)
     label(d, (c3 + 0.3, m1.center.y - 0.25), r"$M_\mathrm{1}$", "left")
     label(d, (c4 - 0.3, m2.center.y - 0.25), r"$M_\mathrm{2}$", "right")
@@ -210,7 +210,7 @@ def panel_d(d, x0):
     # M5·M6: 게이트 공통선 아래, 게이트 판 왼쪽. M3: 게이트 공통선 위, 게이트 판 왼쪽
     for m, text in ((m5, r"$M_\mathrm{5}$"), (m6, r"$M_\mathrm{6}$")):
         label(d, (m.gate.x + 0.2, m.gate.y - 0.65), text, "right")
-    label(d, (m3.gate.x + 0.2, m3.gate.y + 0.5), r"$M_\mathrm{3}$", "right")
+    label(d, (m3.gate.x + 0.1, m3.gate.y + 0.5), r"$M_\mathrm{3}$", "right")
     tail(d, m1, m2, 0.25, 1.2)
     caption(d, ((cl + cr) / 2 - 0.3, CAP_Y), "(d)")
 
