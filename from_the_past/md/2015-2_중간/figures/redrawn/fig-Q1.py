@@ -32,7 +32,7 @@ def draw():
     d.add(elm.Line().left().tox(xm))
     # 오른쪽 세로줄: M3 → I_copy2 화살표 → Vout 접속점 → M1(좌우 반전) → 긴 세로선 → M2 → 접지
     d.add(elm.Arrow(**ARROW).down().at(m3.drain).length(0.75))
-    text(d, (xr - 0.25, m3.drain.y - 0.35), r"$I_\mathrm{copy2}$", halign="right")
+    text(d, (xr - 0.4, m3.drain.y - 0.35), r"$I_\mathrm{copy2}$", halign="right")
     d.add(elm.Line().down().length(0.25)); vout = dot(d)
     d.add(elm.Line().right().at(vout.center).length(1.0))
     d.add(elm.Dot(open=True, radius=OPEN_R).label(r"$V_\mathrm{out}$", "right", ofst=GAP))

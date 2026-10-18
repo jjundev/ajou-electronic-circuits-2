@@ -59,7 +59,7 @@ def draw():
     d.add(elm.Line().right().tox(xr))
     d.add(elm.Line().up().toy(q2.emitter.y))
     d.add(elm.Line().down().at(p.center).length(0.6))
-    d.add(elm.Label().right().at((xm - 0.35, ybot - 0.12)).label(r"$P$", halign="right", valign="top"))
+    d.add(elm.Label().right().at((xm - 0.35, ybot - 0.25)).label(r"$P$", halign="right", valign="top"))
     iee = d.add(elm.SourceI().down().length(1.4).scale(0.6)
                 .label(r"$I_\mathrm{EE}$", "top", ofst=0.35))
     d.add(elm.Ground().at(iee.end).scale(0.8))

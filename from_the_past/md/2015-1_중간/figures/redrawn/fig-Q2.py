@@ -46,7 +46,7 @@ def draw():
     # 오른쪽 세로줄: Q3 컬렉터 → out 접속점(I_copy 화살표 오른쪽) → Q4 → 접지
     d.add(elm.Line().down().at(q3.collector).length(0.55)); out = dot(d)
     d.add(elm.Arrow(arrowwidth=0.22, arrowlength=0.35).right().at(out.center).length(1.9))
-    text(d, (xq3 + 1.05, out.center.y - 0.3), r"$I_\mathrm{copy}$", halign="center", valign="top")
+    text(d, (xq3 + 1.05, out.center.y - 0.4), r"$I_\mathrm{copy}$", halign="center", valign="top")
     d.add(elm.Line().down().at(out.center).length(0.85))
     q4 = bjt(d, elm.BjtNpn, d.here, "collector", label=r"$Q_\mathrm{4}$")
     d.add(elm.Ground().at(q4.emitter).scale(0.8))

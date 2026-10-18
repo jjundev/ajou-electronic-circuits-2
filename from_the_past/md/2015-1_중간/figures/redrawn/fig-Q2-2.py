@@ -19,7 +19,7 @@ def draw():
     R = RAIL_Y
     xl, xm, xr = 0, 5.0, 8.2       # M_REF, M2·M1, M3 세로줄
     rail(d, (xl - 0.3, R), (xr + 0.35, R))
-    text(d, (xl - 0.45, R + 0.05), r"$V_{DD}$", halign="right")
+    text(d, (xl - 0.65, R + 0.05), r"$V_{DD}$", halign="right")
     # 위 pmos: M2 좌우 반전(게이트 오른쪽), M3 보통. 소스가 레일
     m2 = pmos(d, at=(xm, R), anchor="source", mirror=True)
     m3 = pmos(d, at=(xr, R), anchor="source")

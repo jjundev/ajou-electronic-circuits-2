@@ -45,10 +45,10 @@ def draw():
     d.add(elm.Line().down().at(q7.collector).length(1.1)); a = dot(d)
     d.add(elm.Line().down().at(q8.collector).length(1.1)); b = dot(d)
     d.add(Resistor().right().at(a.center).to(b.center).label(r"$R_\mathrm{1}$", "bottom", ofst=0.2))
-    text(d, (xl - 0.25, a.center.y), r"$A$", halign="right")
+    text(d, (xl - 0.4, a.center.y), r"$A$", halign="right")
     text(d, (xr + 0.25, b.center.y), r"$B$")
-    text(d, (xl + 0.3, a.center.y + 0.2), r"$Q_\mathrm{7}$", valign="bottom")
-    text(d, (xr - 0.3, b.center.y + 0.2), r"$Q_\mathrm{8}$", halign="right", valign="bottom")
+    text(d, (xl - 0.3, a.center.y + 0.5), r"$Q_\mathrm{7}$", halign="right", valign="bottom")
+    text(d, (xr - 0.3, b.center.y + 0.5), r"$Q_\mathrm{8}$", halign="right", valign="bottom")
     # Q5, Q6: pnp, 이미터가 A, B
     q5, q6 = pair(d, elm.BjtPnp, xl, xr, a.center.y - 0.85, "emitter", r"$V_\mathrm{b2}$")
     for q, n in ((q5, a), (q6, b)):
@@ -65,8 +65,8 @@ def draw():
     q3, q4 = pair(d, elm.BjtNpn, xl, xr, out1.center.y - 1.4, "collector", r"$V_\mathrm{b1}$")
     for q, n in ((q3, out1), (q4, out2)):
         d.add(elm.Line().down().at(n.center).toy(q.collector.y))
-    text(d, (xl + 0.3, q3.collector.y + 0.15), r"$Q_\mathrm{3}$", valign="bottom")
-    text(d, (xr + 0.3, q4.collector.y + 0.15), r"$Q_\mathrm{4}$", valign="bottom")
+    text(d, (xl - 0.3, q3.collector.y + 0.15), r"$Q_\mathrm{3}$", halign="right", valign="bottom")
+    text(d, (xr - 0.3, q4.collector.y + 0.15), r"$Q_\mathrm{4}$", halign="right", valign="bottom")
     # Q1 (보통): Q3 이미터 아래. Q2 (좌우 반전): Q4 이미터 → 아래 → 오른쪽 → Q2 컬렉터
     d.add(elm.Line().down().at(q3.emitter).length(1.9))
     q1 = bjt(d, elm.BjtNpn, d.here, "collector", label=r"$Q_\mathrm{1}$")
