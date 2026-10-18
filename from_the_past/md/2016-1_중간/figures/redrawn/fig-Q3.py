@@ -63,7 +63,7 @@ def draw():
     d.add(elm.Line().right().tox(xm)); p = dot(d)
     d.add(elm.Line().right().tox(xr))
     d.add(elm.Line().up().toy(q2.emitter.y))
-    d.add(elm.Label().right().at((xm - 0.25, yt - 0.3)).label(r"$P$", halign="right"))
+    d.add(elm.Label().right().at((xm - 0.2, yt - 0.2)).label(r"$P$", halign="right", valign="top"))
     d.add(elm.Line().down().at(p.center).length(0.6))
     iee = d.add(elm.SourceI().down().length(1.6).scale(0.6).label(r"$I_\mathrm{EE}$", "top", ofst=0.3))
     d.add(elm.Ground().at(iee.end).scale(0.8))

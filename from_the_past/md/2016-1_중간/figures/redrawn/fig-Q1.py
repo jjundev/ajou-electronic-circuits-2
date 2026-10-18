@@ -12,7 +12,7 @@ def line_terminal(d, at, label, length, right=False):
     line = elm.Line().at(at).length(length)
     d.add(line.right() if right else line.left())
     x, y = d.here
-    d.add(elm.Label().right().at((x + 0.1 if right else x - 0.1, y))
+    d.add(elm.Label().right().at((x + 0.1 if right else x - 0.25, y))
           .label(label, halign="left" if right else "right"))
 
 
@@ -80,5 +80,5 @@ def draw():
     d.add(elm.Line().at(m1.gate).tox(xref)); vref = dot(d)
     d.add(elm.Line().at(vref.center).tox(m2.gate))
     d.add(elm.Line().down().at(vref.center).length(1.7))
-    d.add(elm.Label().right().at((xref, d.here.y - 0.15)).label(r"$V_\mathrm{REF}$", halign="center", valign="top"))
+    d.add(elm.Label().right().at((xref, d.here.y - 0.3)).label(r"$V_\mathrm{REF}$", halign="center", valign="top"))
     return d

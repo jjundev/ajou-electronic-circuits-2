@@ -22,7 +22,7 @@ def line_terminal(d, at, label, length, right=False):
     line = elm.Line().at(at).length(length)
     d.add(line.right() if right else line.left())
     x, y = d.here
-    d.add(elm.Label().right().at((x + 0.1 if right else x - 0.1, y))
+    d.add(elm.Label().right().at((x + 0.1 if right else x - 0.25, y))
           .label(label, halign="left" if right else "right"))
 
 
