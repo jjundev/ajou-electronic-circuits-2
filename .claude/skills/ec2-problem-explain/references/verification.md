@@ -51,6 +51,7 @@ python3 "$REPO/workbook/source_pages.py" render <문제 md 절대 경로…> --o
 - KCL의 방향·노드·제어 전압 정의와 가지별 전류, 시험전류 귀환 경로가 보여서 첫 식을 재구성할 수 있는지.
 - 반회로 전환·병렬 공통 인자·기호 치환·차수 판단·보충 정확식에 숨은 중간 단계가 없는지. 보충식도 본문과 같은 기준이에요.
 - 예시가 원문 조건과 구분되고, 근사·단위·부호가 본문·요약·MD·그림에 일치하는지. 증명은 예시 뒤에도 일반 논증을 유지하는지.
+- 소신호 등가회로 그림: 문항마다 start·solve가 소신호 KCL/KVL을 세우는지 먼저 판정해요. 세우는데 [저작 규칙](authoring.md)의 "소신호 등가회로 그림"이 없으면 fail이에요. 그림이 있으면 원 문제 그림과 토폴로지(어느 노드 사이에 어느 소자가 있는지, 무엇을 AC 접지로 보냈는지)가 같은지, 노드 이름·전류 방향·제어 전압 극성이 첫 KCL 식과 같은지 대조해요. 그림이 2개면 각 그림의 경계 조건(단락·무부하·CM·DM)이 해당 식과 맞는지도 봐요. 판정과 대조 결과를 evidence에 문항마다 적어요. DC KCL만 있어 제외한 문항도 이유를 적어요.
 - retry를 예상 답 없이 먼저 풀어 답·이유·적용 조건을 기록한 뒤 작성자 evidence와 대조해요. 값이 부족하거나 조건 밖인 질문은 보강해요. 범용 재계산 지시만 있거나 본문 복사만으로 끝나면 fail이에요.
 
 교육적 연결 검토와 독립 수학 검산, 원문 시각 대조, 브라우저 검토는 각각 수행 사실과 범위를 기록해요. 한 검토의 통과를 다른 검토의 통과로 대신하지 않아요.
@@ -107,7 +108,7 @@ python3 -m playwright install chromium   # chromium이 없을 때만
 python3 "$SKILL/scripts/epe_browser_check.py" --url "http://127.0.0.1:<port>/문제설명_<range>_<slug>.html" --topics <문항 수> --shots "$RUN/shots" > "$RUN/browser.json"
 ```
 
-- `--shots`는 선택이에요. 주면 조합×문항마다 `shot-<조합>-<pN>.png`를 저장하니 Read 도구로 열어 회로 그림과 수식이 잘리거나 겹치지 않는지, 글자가 다크 모드에서 보이는지 확인해요.
+- `--shots`는 선택이에요. 주면 조합×문항마다 `shot-<조합>-<pN>.png`를 저장하니 Read 도구로 열어 회로 그림과 수식이 잘리거나 겹치지 않는지, 글자가 다크 모드에서 보이는지 확인해요. 소신호 등가회로 그림이 있는 팩은 `--shots`를 반드시 주고, 다크 모드에서 선·글자·노드 점이 모두 보이는지 봐요.
 - 콘솔 오류에 `ERR_CONNECTION_RESET`·`ERR_SOCKET_NOT_CONNECTED`가 있으면(출력의 `flaky_rerun`) 로컬 서버가 요청을 끊은 것이라 페이지 결함이 아니에요. fail로 두지 말고 같은 명령을 다시 실행해요. 두 번 연속 깨끗하지 않으면 원인을 살펴요.
 
 조합마다 재는 값(스크립트에 들어 있는 것과 같아요):
@@ -182,7 +183,7 @@ EOF
 
 ## 현재 기준과 재렌더링 검토 계약
 
-현재 `review_policy_version`은 `problem-explain-2026-10-16-teaching`다. 새 review.json·manifest의 버전이 일치해야 발행된다. 구버전/버전 없는 검토를 단순히 현재 버전으로 바꾸거나 pass를 복사하지 않는다. 기준 변경은 실제 content·independent 재검토를 요구한다.
+현재 `review_policy_version`은 `problem-explain-2026-10-18-smallsignal`다. 새 review.json·manifest의 버전이 일치해야 발행된다. 구버전/버전 없는 검토를 단순히 현재 버전으로 바꾸거나 pass를 복사하지 않는다. 기준 변경은 실제 content·independent 재검토를 요구한다.
 
 content는 recall의 근거 있는 명칭 대응, pitfall의 오답 판별 기준, 부정형의 참·거짓과 선택 적합성, understand·solve·verify·pitfall·sum의 결함 공개·공식 답 확인 여부가 일관적인지 확인한다. 과목별 disputed 규칙은 유지한다. 독립 검산은 작성자와 다른 검산자가 정답·참고 풀이·설명 조각을 보지 않고 문제·그림·필요한 이론 자료만으로 먼저 수행한다. 컨트롤러가 그 결과를 참고 답과 대조한다.
 
