@@ -178,6 +178,9 @@ def check_body(body, path, kind):
     for h in ("## 조건", "## 구할 것"):
         if h not in headings:
             errors.append(f"절 누락: {h}")
+    for name, text in split_sections(body):
+        if name in ("조건", "구할 것") and "상속·참조" in text:
+            errors.append(f"## {name}: '상속·참조'를 가리키지 않음 (문제지에 나오지 않음) — 필요한 내용을 조건에 적음")
     circuit_headings = [h for h in headings if h.startswith("## 회로")]
     if not circuit_headings:
         errors.append("절 누락: ## 회로 …")
