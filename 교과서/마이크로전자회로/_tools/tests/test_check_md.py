@@ -109,6 +109,28 @@ class NetlistLineTest(unittest.TestCase):
                 self.assertIsNotNone(check_netlist_line(line))
 
 
+class HiddenSectionReferenceTest(unittest.TestCase):
+    def run_check(self, text):
+        with tempfile.TemporaryDirectory() as t:
+            ch = make_chapter(Path(t), {"예제/E9.01.md": text})
+            return check_file(ch / "예제/E9.01.md", ch)
+
+    def test_conditions_pointing_to_ref_section_is_error(self):
+        text = VALID_MD.replace("- I_C = 1 mA", "- I_C = 1 mA\n- 나머지 조건은 예제 9.1과 같음 (아래 상속·참조)")
+        errors, _ = self.run_check(text)
+        self.assertTrue(any(e.startswith("## 조건:") and "상속·참조" in e for e in errors), errors)
+
+    def test_ask_pointing_to_ref_section_is_error(self):
+        text = VALID_MD.replace("- R_out", "- R_out (상속·참조의 요구)")
+        errors, _ = self.run_check(text)
+        self.assertTrue(any(e.startswith("## 구할 것:") and "상속·참조" in e for e in errors), errors)
+
+    def test_ref_section_itself_is_ok(self):
+        text = VALID_MD.replace("## 회로 — Fig 9.2(a)", "## 상속·참조\n- 예제 9.1 값\n\n## 회로 — Fig 9.2(a)")
+        errors, _ = self.run_check(text)
+        self.assertEqual(errors, [])
+
+
 class CheckFileTest(unittest.TestCase):
     def run_check(self, text, rel="예제/E9.01.md", with_png=True):
         with tempfile.TemporaryDirectory() as t:
