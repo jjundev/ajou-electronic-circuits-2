@@ -22,6 +22,12 @@ class ExamTitleTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             exam_title("2023_기말")
 
+    def test_section_suffix(self):
+        self.assertEqual(exam_title("2017-1_중간_D반"), "2017-1 중간고사 (D반)")
+        self.assertEqual(exam_title("2017-1_중간_C030"), "2017-1 중간고사 (C030)")
+        with self.assertRaises(ValueError):
+            exam_title("2017-1_중간_")
+
 
 class CheckFileTest(unittest.TestCase):
     def setUp(self):

@@ -101,6 +101,8 @@ def index(repo: Path | str, used_dir: Path | str | None = None,
             exam = meta.get("kind") == "기출"
             if exam and chapters and not set(meta.get("textbook_chapters") or []) & chapters:
                 continue
+            if p.section("풀이") is None:   # 답안지를 만들 수 없으므로 후보가 아니다 (풀이 전인 새 기출 등)
+                continue
             rows.append([pid, str(meta["kind"]), secnum(meta), str(meta.get("section", "-")),
                          "-" if exam else str(meta.get("difficulty", "-")),
                          "USED" if pid in used else "-", p.title.replace("\t", " ")])

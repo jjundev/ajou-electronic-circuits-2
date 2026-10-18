@@ -131,6 +131,24 @@ class TestRealRepo(unittest.TestCase):
                 self.assertEqual(problem_index.main(["--repo", str(repo)]), 1)
             self.assertIn("ERROR", err.getvalue())
 
+    def test_problem_without_solution_is_skipped(self):
+        # 풀이가 아직 없는 문제(새로 옮긴 기출 등)는 답안지를 만들 수 없으므로 후보가 아니다.
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            (repo / "workbook").symlink_to(REPO / "workbook", target_is_directory=True)
+            exam = repo / "from_the_past" / "md" / "2099-1_중간"
+            exam.mkdir(parents=True)
+            head = ("---\nid: 2099-1_중간-Q{n}\nkind: 기출\nexam: \"2099-1 중간고사\"\nnumber: \"{n}\"\n"
+                    "points: 10\nsource: ../../x.pdf\npdf_page: 1\nsource_lang: ko\nfigures: []\n"
+                    "textbook_chapters: [9]\ndepends_on: []\nrefs: []\n---\n# 기출 2099-1 중간 {n} — 제목\n\n"
+                    "## 조건\n- $R = 1$\n\n## 구할 것\n- (1) $A_v$\n\n## 회로 — 없음 (서술형)\n")
+            (exam / "Q1.md").write_text(head.format(n=1), encoding="utf-8")
+            (exam / "Q2.md").write_text(head.format(n=2) + "\n## 풀이\n### (1) 이득\n- $A_v = 1$\n### 답\n- (1) $A_v = 1$\n",
+                                        encoding="utf-8")
+            rows, errors = problem_index.index(repo)
+            self.assertEqual(errors, [])
+            self.assertEqual([r[0] for r in rows], ["2099-1_중간-Q2"])
+
     def test_non_dict_frontmatter_is_reported_and_skipped(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)

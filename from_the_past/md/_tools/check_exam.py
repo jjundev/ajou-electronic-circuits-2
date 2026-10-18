@@ -20,8 +20,8 @@ from crop_exam import FIG_ID_RE, figure_filename  # noqa: E402
 KIND = "기출"
 REQUIRED_KEYS = ["id", "kind", "exam", "number", "points", "source", "pdf_page", "source_lang",
                  "figures", "textbook_chapters", "depends_on", "refs"]
-EXAM_DIR_RE = re.compile(r"^(\d{4})-([12])_(중간|기말)$")
-ID_RE = re.compile(r"^(\d{4}-[12]_(?:중간|기말))-Q([1-9]\d*)$")
+EXAM_DIR_RE = re.compile(r"^(\d{4})-([12])_(중간|기말)(?:_([0-9A-Za-z가-힣]+))?$")   # 끝 _<분반>은 같은 학기 시험이 둘일 때만
+ID_RE = re.compile(r"^(\d{4}-[12]_(?:중간|기말)(?:_[0-9A-Za-z가-힣]+)?)-Q([1-9]\d*)$")
 FILE_RE = re.compile(r"^Q([1-9]\d*)\.md$")
 SOURCE_LANGS = {"ko", "en"}
 ANSWER_RE = re.compile(r"^## 답", re.M)
@@ -40,8 +40,9 @@ def exam_title(dir_name):
     dir_name = nfc(dir_name)
     m = EXAM_DIR_RE.match(dir_name)
     if not m:
-        raise ValueError(f"시험 폴더 이름 형식 오류: {dir_name!r} (예: 2021-1_중간)")
-    return f"{m.group(1)}-{m.group(2)} {m.group(3)}고사"
+        raise ValueError(f"시험 폴더 이름 형식 오류: {dir_name!r} (예: 2021-1_중간, 2017-1_중간_D반)")
+    title = f"{m.group(1)}-{m.group(2)} {m.group(3)}고사"
+    return f"{title} ({m.group(4)})" if m.group(4) else title
 
 
 def md_files(exam_dir):

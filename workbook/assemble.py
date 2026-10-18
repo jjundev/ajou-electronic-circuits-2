@@ -10,8 +10,8 @@ from paths import EXAMS, TEXTBOOK
 from problem import ProblemError, exam_info, figures, hints, html_fields, load_problem, solution
 
 TEXTBOOK_ID_RE = re.compile(r"^([EXP])(\d+)\.(\d{2})$")
-EXAM_ID_RE = re.compile(r"^(\d{4}-[12]_(?:중간|기말))-Q([1-9]\d*)$")
-EXAM_DIR_RE = re.compile(r"^\d{4}-[12]_(?:중간|기말)$")
+EXAM_ID_RE = re.compile(r"^(\d{4}-[12]_(?:중간|기말)(?:_[0-9A-Za-z가-힣]+)?)-Q([1-9]\d*)$")
+EXAM_DIR_RE = re.compile(r"^\d{4}-[12]_(?:중간|기말)(?:_[0-9A-Za-z가-힣]+)?$")
 EXAM_FILE_RE = re.compile(r"^Q([1-9]\d*)\.md$")
 CHAPTER_RE = re.compile(r"^ch(\d{2})$")
 KIND_DIR = {"E": "예제", "X": "연습문제", "P": "장말문제"}

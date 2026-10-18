@@ -96,6 +96,7 @@ class TestManifest(unittest.TestCase):
         self.assertEqual(manifest.problem_kind("X11.12"), "연습문제")
         self.assertEqual(manifest.problem_kind("P9.40"), "장말문제")
         self.assertEqual(manifest.problem_kind("2021-1_중간-Q7"), "기출")
+        self.assertEqual(manifest.problem_kind("2017-1_중간_D반-Q2"), "기출")
         self.assertIsNone(manifest.problem_kind("E10.3"))
 
     def test_nfd_exam_id_is_accepted(self):

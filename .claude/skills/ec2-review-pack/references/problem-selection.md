@@ -10,6 +10,7 @@ python3 <SKILL>/scripts/problem_index.py --repo <REPO> --used <REPO>/복습노�
 - `--exclude-range <range>`: 이번 range를 다시 돌릴 때, 이번 range 자신의 이전 `.assets/problems.txt`가 USED로 잡혀 같은 문제를 다시 못 고르는 일을 막는다.
 - 종료 코드 1이면 stderr의 `ERROR` md는 후보에서 빠진 것이다. 보고서 "미해결"에 적는다(md는 고치지 않는다).
 - `used`가 `USED`인 id는 이전 팩(이번 range 제외)에서 썼으므로 고르지 않는다.
+- `## 풀이`가 없는 문제(예: 아직 풀이 전인 2013–2019 중간고사)는 목록에 나오지 않는다.
 
 ## 2. 범위 맞추기
 - 요약의 `## 교과서 절 대조`에서 "다룸"인 절 번호 집합을 만든다(예: `{9.1.1, 9.1.2}`).

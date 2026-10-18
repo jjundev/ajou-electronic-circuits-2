@@ -27,7 +27,7 @@ ID_RE = re.compile(r"[A-Za-z][A-Za-z0-9-]*")
 DATE_RE = re.compile(r"\d{4}")
 # workbook/assemble.py의 TEXTBOOK_ID_RE·EXAM_ID_RE·KIND_DIR와 같은 규칙
 TEXTBOOK_ID_RE = re.compile(r"([EXP])(\d+)\.(\d{2})")
-EXAM_ID_RE = re.compile(r"(\d{4}-[12]_(?:중간|기말))-Q([1-9]\d*)")
+EXAM_ID_RE = re.compile(r"(\d{4}-[12]_(?:중간|기말)(?:_[0-9A-Za-z가-힣]+)?)-Q([1-9]\d*)")
 KIND_BY_PREFIX = {"E": "예제", "X": "연습문제", "P": "장말문제"}
 MAX_PROBLEMS = 12
 # 모든 정리노트의 첫 섹션: "왜 이런 회로를 쓸까" 페이지(토픽 1개). 기존 s0… id는 그대로 둔다.
