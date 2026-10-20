@@ -1,0 +1,182 @@
+[
+  {
+    "topic": "p1",
+    "category": "일반",
+    "body_claim": "입력λ0테일만유한ro·CM반회로2ro·각소자ISS/2로gm·테일전체ISSro",
+    "before": "pass",
+    "summary_sentence": "몸체 효과와 $r_{O3}$의 $1+\\lambda V_{DS3}$ 보정을 무시해요. $A_{CM}=-R_DI_{SS}/[2/\\lambda+(V_{GS}-V_{TH})_{eq}]$는 한쪽 출력 기준이고 대칭 차동 출력의 CM 이득은 0이에요. 떠올릴 개념·공식CM 하프 서킷, 축퇴 CS 단$R_{SS}=r_{O3}=1/(\\lambda I_{SS})$$g_m=2I_D/V_{ov}$ 첫 줄반쪽 소스에 $2r_{O3}$$i_d=g_m(\\Delta V_{in}-v_s)$, $v_s=2r_{O3}i_d$ 핵심 판단$A_{CM}=-\\dfrac{R_D}{1/g_m+2r_{O3}}$$g_m$은 $I_{SS}/2$로, $r_{O3}$는 $I_{SS}$로 검산$\\lambda\\to0$: $A_{CM}\\to0$$r_{O3}\\to0$: $-g_mR_D$단위: V/V",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p1",
+    "category": "주의",
+    "body_claim": "몸체무시·roCLM1차근사·식10.224와단일출력기준",
+    "before": "unresolved",
+    "summary_sentence": "몸체 효과와 $r_{O3}$의 $1+\\lambda V_{DS3}$ 보정을 무시해요. $A_{CM}=-R_DI_{SS}/[2/\\lambda+(V_{GS}-V_{TH})_{eq}]$는 한쪽 출력 기준이고 대칭 차동 출력의 CM 이득은 0이에요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p2",
+    "category": "일반",
+    "body_claim": "모든ro유지 Gm출력단락·Rout입력0·CM2ro테일로 -ro3/2ro5",
+    "before": "pass",
+    "summary_sentence": "$\\lambda>0$로 모든 관련 $r_O$를 남긴 뒤 $g_mr_O\\gg1$·몸체 효과 무시로 근사해요. 한 출력 기준 이득이며 완전 대칭의 차동 CM 이득은 0이에요. 떠올릴 개념·공식CM 하프 서킷: 테일 $r_{O5}$는 반쪽마다 $2r_{O5}$이득은 $A_v=-G_mR_{out}$로 나눠 구해요 첫 줄출력 단락 KCL: $i=g_{m1}(v_{in}-v_s)-v_s/r_{O1}$소스 전압은 $v_s=2r_{O5}i$ 핵심 판단트랜스컨덕턴스 $G_m\\approx\\dfrac{1}{2r_{O5}}$출력 저항 $R_{out}\\approx r_{O3}$ (아래쪽 $2g_{m1}r_{O1}r_{O5}$가 훨씬 큼)답 $A_{CM}\\approx-\\dfrac{r_{O3}}{2r_{O5}}$ 검산$r_{O5}\\to\\infty$이면 0같은 $\\lambda$면 $r_{O3}=2r_{O5}$라 $|A_{CM}|\\approx1$",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p2",
+    "category": "주의",
+    "body_claim": "gmro큼·몸체무시·단일출력기준차동0",
+    "before": "unresolved",
+    "summary_sentence": "$\\lambda>0$로 모든 관련 $r_O$를 남긴 뒤 $g_mr_O\\gg1$·몸체 효과 무시로 근사해요. 한 출력 기준 이득이며 완전 대칭의 차동 CM 이득은 0이에요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p3",
+    "category": "일반",
+    "body_claim": "cascode테일CM억제·cascode부하는같은차수병렬을유지해야함",
+    "before": "pass",
+    "summary_sentence": "문제 10.68의 $\\lambda>0$·$g_mr_O\\gg1$·몸체 효과 무시를 이어받아요. 부하 캐스코드는 출력저항을 높여 한쪽 CM 이득을 키울 수 있고, 대칭 차동 출력의 CM 이득은 0이에요. 떠올릴 개념·공식CM 하프 서킷: 테일 $R_T$ → 반쪽에 $2R_T$$A_{CM}=-G_mR_{out}$, $G_m\\approx\\dfrac{1}{2R_T}$축퇴 출력 저항 $\\approx g_mr_OR_S$ 첫 줄(a) $R_T\\approx g_{m5}r_{O5}r_{O6}$(b) $R_T=r_{O7}$$R_{out}=R_{up}\\parallel R_{down}$ 핵심 판단(a) $R_{down}\\gg r_{O3}$ → $R_{out}\\approx r_{O3}$(b) 둘 다 $g_mr_O^2$ 차수 → 병렬 유지 답(a) $-\\dfrac{r_{O3}}{2g_{m5}r_{O5}r_{O6}}$(b) $-\\dfrac{(g_{m3}r_{O3}r_{O5})\\parallel(2g_{m1}r_{O1}r_{O7})}{2r_{O7}}$ 검산비지배 항을 복원한 정확식에서 $r_{O6}\\to0$ 또는 $r_{O5}\\to0$ → 문제 10.68 답수치: (a) $-0.005$, (b) $\\approx-33$",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p3",
+    "category": "주의",
+    "body_claim": "상속λ양수 gmro큼·차동0·테일과부하의반대효과",
+    "before": "unresolved",
+    "summary_sentence": "문제 10.68의 $\\lambda>0$·$g_mr_O\\gg1$·몸체 효과 무시를 이어받아요. 부하 캐스코드는 출력저항을 높여 한쪽 CM 이득을 키울 수 있고, 대칭 차동 출력의 CM 이득은 0이에요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p4",
+    "category": "일반",
+    "body_claim": "입력VA무한으로부하달라도같은전류·Q3축퇴rpi병렬·완전테일저항식",
+    "before": "pass",
+    "summary_sentence": "입력쌍의 전류식에는 $\\beta\\gg1$을 써요. $R_1$이 작을 수 있어 $1+g_{m3}(R_1\\parallel r_{\\pi3})$의 1을 남기고, $r_{O3}\\gg R_1\\parallel r_{\\pi3}$일 때만 마지막 덧셈항을 버려요. 떠올릴 개념·공식부하 미스매치 CM-DM 이득과 CM 하프 서킷, 축퇴 전류원 출력 저항$A_{CM-DM}=\\dfrac{\\Delta R_C}{1/g_{m1}+2R_{SS}}$테일 저항은 $R_{SS}=R_{out3}$로 바꿔요. 첫 줄이미터 전압은 $v_E=I_X(R_1\\parallel r_{\\pi3})$예요.컬렉터 KCL은 $I_X=g_{m3}v_\\pi+\\dfrac{V_X-v_E}{r_{O3}}$예요. 핵심 판단테일 출력 저항은 $R_{out3}=[1+g_{m3}R_E']r_{O3}+R_E'$이고, $R_E'=R_1\\parallel r_{\\pi3}$예요.$V_A=\\infty$라 두 쪽 $\\Delta I_C$가 같아요.$\\Delta V_{out1}-\\Delta V_{out2}=\\Delta R_C\\,\\Delta I_C$ 검산미스매치가 없으면 $\\Delta R_C=0\\Rightarrow0$이에요.축퇴가 없으면 $R_1=0\\Rightarrow R_{out3}=r_{O3}$예요.이상적 테일이면 $r_{O3}\\to\\infty\\Rightarrow0$이에요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p4",
+    "category": "주의",
+    "body_claim": "입력큰beta근사·R1작으면1유지·ro3큼에서만끝항생략",
+    "before": "unresolved",
+    "summary_sentence": "입력쌍의 전류식에는 $\\beta\\gg1$을 써요. $R_1$이 작을 수 있어 $1+g_{m3}(R_1\\parallel r_{\\pi3})$의 1을 남기고, $r_{O3}\\gg R_1\\parallel r_{\\pi3}$일 때만 마지막 덧셈항을 버려요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p5",
+    "category": "일반",
+    "body_claim": "테일2mA 가지1mA·캐스코드500k·CM DM저항구별·누설과CMRR수치",
+    "before": "pass",
+    "summary_sentence": "주 답은 $g_mr_o\\gg1$의 근사와 50 Ω 차이를 작은 섭동으로 쓰는 모델이에요. 테일의 작은 항·입력 $r_{O1}$을 남긴 보충은 CM·변환 이득을 약 3% 바꾸며 같은 정밀도의 답으로 섞지 않아요. 떠올릴 개념·공식캐스코드 테일은 $R_{SS}\\approx g_{m5}r_{O5}r_{O6}$예요.CM 하프 서킷은 소스에 $2R_{SS}$를 달아요.미스매치 누설은 $A_{CM-DM}=\\dfrac{\\Delta R}{1/g_m+2R_{SS}}$예요.차동 이득은 $A_{DM}=-g_{m1}(r_{O1}\\parallel r_{O3})$예요. 첫 줄전류는 $I_{D1}=1\\ \\text{mA}$, $I_{D5}=2\\ \\text{mA}$예요.입력쌍은 $g_{m1}=10\\ \\text{mS}$, $r_{O1}=10\\ \\text{k}\\Omega$예요.테일은 $g_{m5}=20\\ \\text{mS}$, $r_{O5}=5\\ \\text{k}\\Omega$예요. 핵심 판단CM에서 노드 저항은 $r_{O3}$예요(아래쪽은 축퇴로 매우 큼).DM에서 테일은 가상 접지라 노드 저항이 $r_{O1}\\parallel r_{O3}$예요. 답(1) $A_{CM}\\approx-1.0\\times10^{-2}$, $\\left|A_{CM-DM}\\right|\\approx5.0\\times10^{-5}$이에요.(2) $A_{DM}\\approx-50$, $\\text{CMRR}\\approx10^6$ ($120\\ \\text{dB}$)이에요. 검산$R_{SS}\\to\\infty$이면 $A_{CM}\\to0$이에요.비율 $A_{CM-DM}/A_{CM}=\\Delta R/r_{O3}$로 맞춰 봐요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p5",
+    "category": "주의",
+    "body_claim": "gmro큼주답·미스매치작은섭동·유한ro보정약3%",
+    "before": "unresolved",
+    "summary_sentence": "주 답은 $g_mr_o\\gg1$의 근사와 50 Ω 차이를 작은 섭동으로 쓰는 모델이에요. 테일의 작은 항·입력 $r_{O1}$을 남긴 보충은 CM·변환 이득을 약 3% 바꾸며 같은 정밀도의 답으로 섞지 않아요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p6",
+    "category": "일반",
+    "body_claim": "DM가상접지 gmRC·CM누설나누기·Rout3전체식·미스매치DM에서만생략",
+    "before": "pass",
+    "summary_sentence": "입력 $V_A=\\infty$, $\\beta\\gg1$, $\\Delta R_C\\ll R_C$의 근사예요. CMRR 분모는 한 노드의 $A_{CM}$이 아니라 차동 출력으로 새는 $A_{CM-DM}$이에요. 떠올릴 개념·공식$\\text{CMRR}=A_{DM}/A_{CM-DM}$$A_{CM-DM}=\\dfrac{\\Delta R_C}{1/g_{m1}+2R_{out3}}$$R_{out3}=[1+g_{m3}(R_1\\parallel r_{\\pi3})]r_{O3}$ $+R_1\\parallel r_{\\pi3}$ 첫 줄차동 입력에서 $P$는 가상 접지, 각 반쪽은 CE 단: $|A_{DM}|\\approx g_{m1}R_C$ 핵심 판단$\\Delta R_C$는 $A_{DM}$에서만 버리고 $A_{CM-DM}$에서는 남겨요.$\\text{CMRR}=\\dfrac{g_{m1}R_C}{\\Delta R_C}\\left(\\dfrac{1}{g_{m1}}+2R_{out3}\\right)$ 검산$\\Delta R_C\\to0$이면 $\\infty$, $R_1\\to0$이면 $R_{out3}=r_{O3}$, 무차원",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p6",
+    "category": "주의",
+    "body_claim": "입력VA무한·큰beta·작은ΔRC조건·분모는CM-DM",
+    "before": "unresolved",
+    "summary_sentence": "입력 $V_A=\\infty$, $\\beta\\gg1$, $\\Delta R_C\\ll R_C$의 근사예요. CMRR 분모는 한 노드의 $A_{CM}$이 아니라 차동 출력으로 새는 $A_{CM-DM}$이에요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p7",
+    "category": "일반",
+    "body_claim": "λ입력0·테일ro유지·CMRR(RD/ΔRD)(1+2gmRSS)·단일vs캐스코드비",
+    "before": "pass",
+    "summary_sentence": "작은 부하 미스매치·몸체 효과 무시에서 비교해요. $g_{m3}r_{O4}\\gg1$과 $2g_mr_{O3}\\gg1$일 때 CMRR 비는 약 $g_{m3}r_{O4}$이며, 추가 적층은 테일 헤드룸을 써요. 떠올릴 개념·공식$\\mathrm{CMRR}=|A_{DM}/A_{CM-DM}|$ $|A_{CM-DM}|=\\dfrac{\\Delta R_D}{1/g_m+2R_{SS}}$ $|A_{DM}|\\approx g_mR_D$ 첫 줄테일 → $R_{SS}$, 노드 $P$ KCL $2g_m(v_{CM}-v_P)=v_P/R_{SS}$ 핵심 판단$\\mathrm{CMRR}=\\dfrac{R_D}{\\Delta R_D}(1+2g_mR_{SS})$ (a) $R_{SS}=r_{O3}$ (b) $R_{SS}\\approx g_{m3}r_{O3}r_{O4}$ (b)/(a) $\\approx g_{m3}r_{O4}$ 검산$\\Delta R_D=0$ → CMRR $\\to\\infty$ $r_{O4}\\to0$ → (b)가 (a)로",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p7",
+    "category": "주의",
+    "body_claim": "작은미스매치·몸체무시·비근사조건과헤드룸대가",
+    "before": "unresolved",
+    "summary_sentence": "작은 부하 미스매치·몸체 효과 무시에서 비교해요. $g_{m3}r_{O4}\\gg1$과 $2g_mr_{O3}\\gg1$일 때 CMRR 비는 약 $g_{m3}r_{O4}$이며, 추가 적층은 테일 헤드룸을 써요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p8",
+    "category": "일반",
+    "body_claim": "입력CM최소테일·최대큰부하·일관된ro생략모델·누설/CMRR수치",
+    "before": "pass",
+    "summary_sentence": "떠올릴 개념·공식포화 조건으로 입력 CM 범위, CM 하프 서킷($2R_{SS}$), 부하 미스매치 CM-to-DM, $\\text{CMRR}=|A_{DM}/A_{CM-DM}|$ 첫 줄$I_D=0.5\\ \\text{mA}$, $V_{ov1}=V_{ov3}=0.1\\ \\text{V}$$g_{m1}=10\\ \\text{mS}$, $r_{O1}=20\\ \\text{k}\\Omega$, $R_{SS}=r_{O3}=10\\ \\text{k}\\Omega$ 핵심 판단최소는 $M_3$, 최대는 부하가 큰 $M_2$가 먼저 포화를 벗어나요.$A_{CM}=-R_D/(1/g_m+2R_{SS})$$A_{CM-DM}=\\Delta R_D/(1/g_m+2R_{SS})$근사 일관성: $r_{O1}$은 $A_{DM}$·$A_{CM-DM}$에서 똑같이 무시해요. 답(1) $0.600\\ \\text{V}$ ~ $1.69\\ \\text{V}$(2) $A_{CM}\\approx-4.98\\times10^{-2}$, $A_{CM-DM}\\approx9.95\\times10^{-4}$(3) $\\text{CMRR}\\approx1.01\\times10^4$ (80.0 dB)보충: $r_{O1}$을 두 이득 모두에 넣으면 $1.02\\times10^4$ 검산$R_{SS}\\to\\infty$이면 두 CM 이득 0, $\\Delta R_D=0$이면 CMRR$\\to\\infty$ 적용 조건주답 모델: DC 제곱 법칙, 입력 $r_o$를 두 이득에서 함께 생략, 작은 미스매치의 DM 부하 보정 생략. 보충 정확 소신호 모델과 섞지 않아요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p8",
+    "category": "주의",
+    "body_claim": "DC제곱법칙·두이득동일모델·작은미스매치·보충분리",
+    "before": "pass",
+    "summary_sentence": "떠올릴 개념·공식포화 조건으로 입력 CM 범위, CM 하프 서킷($2R_{SS}$), 부하 미스매치 CM-to-DM, $\\text{CMRR}=|A_{DM}/A_{CM-DM}|$ 첫 줄$I_D=0.5\\ \\text{mA}$, $V_{ov1}=V_{ov3}=0.1\\ \\text{V}$$g_{m1}=10\\ \\text{mS}$, $r_{O1}=20\\ \\text{k}\\Omega$, $R_{SS}=r_{O3}=10\\ \\text{k}\\Omega$ 핵심 판단최소는 $M_3$, 최대는 부하가 큰 $M_2$가 먼저 포화를 벗어나요.$A_{CM}=-R_D/(1/g_m+2R_{SS})$$A_{CM-DM}=\\Delta R_D/(1/g_m+2R_{SS})$근사 일관성: $r_{O1}$은 $A_{DM}$·$A_{CM-DM}$에서 똑같이 무시해요. 답(1) $0.600\\ \\text{V}$ ~ $1.69\\ \\text{V}$(2) $A_{CM}\\approx-4.98\\times10^{-2}$, $A_{CM-DM}\\approx9.95\\times10^{-4}$(3) $\\text{CMRR}\\approx1.01\\times10^4$ (80.0 dB)보충: $r_{O1}$을 두 이득 모두에 넣으면 $1.02\\times10^4$ 검산$R_{SS}\\to\\infty$이면 두 CM 이득 0, $\\Delta R_D=0$이면 CMRR$\\to\\infty$ 적용 조건주답 모델: DC 제곱 법칙, 입력 $r_o$를 두 이득에서 함께 생략, 작은 미스매치의 DM 부하 보정 생략. 보충 정확 소신호 모델과 섞지 않아요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p9",
+    "category": "일반",
+    "body_claim": "거울비4/3·KCL차전류·전후식·음출력은이상I2가정",
+    "before": "pass",
+    "summary_sentence": "떠올릴 개념·공식PMOS 전류 거울, $\\lambda=0$ 가정거울 식 $I_{D4}=\\dfrac{(W/L)_4}{(W/L)_3}I_1$ 첫 줄출력 노드 KCL에서 $V_{out}=R_L(I_{D4}-I_2)$ 핵심 판단(a) 전 $0$, 후 $2\\Delta I R_L$(b) 전 $-I_0R_L/2$, 후 $R_L(3\\Delta I-I_0)/2$ 검산$\\Delta I=0$이면 전 값으로 복귀변화량은 $(1+k)\\Delta I R_L$ 적용 조건(b) 음의 출력은 이상적 $I_2$가 그 전압에서도 전류를 유지하는 모델의 값이에요. $M_4$ 포화 범위와 실제 전류원의 전압 여유를 구분해요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p9",
+    "category": "주의",
+    "body_claim": "λ0포화범위·일반변화(1+k)·실제전류원여유별도",
+    "before": "pass",
+    "summary_sentence": "떠올릴 개념·공식PMOS 전류 거울, $\\lambda=0$ 가정거울 식 $I_{D4}=\\dfrac{(W/L)_4}{(W/L)_3}I_1$ 첫 줄출력 노드 KCL에서 $V_{out}=R_L(I_{D4}-I_2)$ 핵심 판단(a) 전 $0$, 후 $2\\Delta I R_L$(b) 전 $-I_0R_L/2$, 후 $R_L(3\\Delta I-I_0)/2$ 검산$\\Delta I=0$이면 전 값으로 복귀변화량은 $(1+k)\\Delta I R_L$ 적용 조건(b) 음의 출력은 이상적 $I_2$가 그 전압에서도 전류를 유지하는 모델의 값이에요. $M_4$ 포화 범위와 실제 전류원의 전압 여유를 구분해요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p10",
+    "category": "일반",
+    "body_claim": "능동부하Gm근사gm·두ro병렬·Early비로전류상쇄·26mV에서5.42V",
+    "before": "pass",
+    "summary_sentence": "큰 $\\beta$·이상적 테일·1:1 거울·큰 고유 이득의 근사예요. $V_T=26$ mV를 채택한 5.42 V이며 25 mV면 5.0 V예요. 목표는 npn 상한 $V_{A,n}/V_T$보다 작아야 유한한 양의 pnp Early 전압으로 실현할 수 있어요. 떠올릴 개념·공식능동 부하 차동쌍: $G_m\\approx g_m$ $R_{out}=r_{O2}\\parallel r_{O4}$ $|A_v|=g_m(r_{O2}\\parallel r_{O4})$ 첫 줄네 소자 모두 $I_C=I_{EE}/2$ 역수 꼴: $1/|A_v|=V_T/V_{A,n}+V_T/V_{A,p}$ 핵심 판단$g_m r_O=V_A/V_T$라 전류가 약분돼요. $V_{A,p}\\approx 5.42\\ \\text{V}$ ($V_T=26\\ \\text{mV}$) 검산$192\\parallel208\\approx100$ $V_{A,p}\\to\\infty$이면 상한 $\\approx192$ 규칙을 적용하는 순서각 가지 $\\pm g_mv_d/2$ → 공급 증가와 배출 감소 → 출력 $g_mv_d$1:1 거울·큰 고유 이득 근사에서 $G_m\\approx g_m$예요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p10",
+    "category": "주의",
+    "body_claim": "큰beta이상테일·큰고유이득·VT추가가정민감도·실현가능상한",
+    "before": "unresolved",
+    "summary_sentence": "큰 $\\beta$·이상적 테일·1:1 거울·큰 고유 이득의 근사예요. $V_T=26$ mV를 채택한 5.42 V이며 25 mV면 5.0 V예요. 목표는 npn 상한 $V_{A,n}/V_T$보다 작아야 유한한 양의 pnp Early 전압으로 실현할 수 있어요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  }
+]

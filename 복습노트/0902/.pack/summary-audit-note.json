@@ -1,0 +1,209 @@
+[
+  {
+    "topic": "why-circuit",
+    "category": "일반",
+    "body_claim": "작은 신호 증폭; 포화 MOS 전류원과 CS 변환",
+    "before": "pass",
+    "summary_sentence": "증폭 중에도 포화 영역을 유지하도록 바이어스 전압·전류를 공급해야 해요.보충(수업에서 유도하지 않음): 저항 분배만으로는 이득이 1보다 커지지 않으며, 능동 소자는 전원 에너지를 사용해요. L02 s17의 $R_D$ 전압 강하는 $V_{DD}$로 제한돼요. 작은 아날로그 신호는 키워야 디지털로 바꿀 수 있고, saturation 영역의 MOSFET이 전압제어 전류원으로 동작해서 증폭이 돼요. 핵심 식 common-source 전압 이득$$A_v = -g_m R_D$$ saturation 조건$$V_{DS} \\ge V_{GS}-V_{TH}$$ 용어 증폭(amplification)작은 신호를 노이즈에 묻히지 않게 키우는 일 voltage-controlled current source$V_{GS}$가 값을 정하는 전류원. 증폭의 바탕이에요 current mirror바이어스 전압·전류를 공급하는 회로",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "why-circuit",
+    "category": "주의",
+    "body_claim": "증폭 바이어스가 포화를 유지해야 함",
+    "before": "unresolved",
+    "summary_sentence": "증폭 중에도 포화 영역을 유지하도록 바이어스 전압·전류를 공급해야 해요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "why-circuit",
+    "category": "보충",
+    "body_claim": "저항 분배의 한계와 전원 에너지; RD 전압강하 제한은 미강의 보충",
+    "before": "unresolved",
+    "summary_sentence": "보충(수업에서 유도하지 않음): 저항 분배만으로는 이득이 1보다 커지지 않으며, 능동 소자는 전원 에너지를 사용해요. L02 s17의 $R_D$ 전압 강하는 $V_{DD}$로 제한돼요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s0-rules",
+    "category": "주의",
+    "body_claim": "과제 양쪽 0점; 출석 사후 인정 불가; 질문 가산",
+    "before": "pass",
+    "summary_sentence": "평가 비율은 중간 35%, 기말 40%, 설계과제 20%, 출석 5%예요. 중간·기말 비율은 녹음 전 설명이라 슬라이드 기준이에요. 설계과제는 Copy는 모두 0점이고, 출석은 수업 중에만 인정하며, 질문하면 가산점을 받아요. 용어 설계과제20%. 보여 준 사람과 본 사람 모두 0점 처리 출석5%. 수업 중 무작위 확인, 수업 뒤 인정 불가 가산점질의응답 참여도에 따라 더해 주는 점수",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s0-rules",
+    "category": "일반",
+    "body_claim": "시험 35/40와 과제20 출석5; 시험비율 슬라이드 출처",
+    "before": "unresolved",
+    "summary_sentence": "평가 비율은 중간 35%, 기말 40%, 설계과제 20%, 출석 5%예요. 중간·기말 비율은 녹음 전 설명이라 슬라이드 기준이에요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s0-why",
+    "category": "일반",
+    "body_claim": "전압전류 등가모델이 회로해석에 필요; 하드웨어 역량",
+    "before": "pass",
+    "summary_sentence": "회로 해석에는 소자 물리보다 전기적 특성, 곧 등가 모델이 필요하고, 하드웨어를 아는 것이 전자공학의 강점이에요. 용어 등가 모델(equivalent model)노드 사이 전압과 전류의 관계로 소자를 나타낸 모델 전기적 특성각 노드의 전압과 전류의 관계 부가가치(added value)완제품에서 프로세서·메모리 같은 부품으로 옮겨 갔어요",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s0-philosophy",
+    "category": "강조",
+    "body_claim": "이해 손계산 설계 검증 순서; 식으로 설계 방향; 튜닝 위험",
+    "before": "pass",
+    "summary_sentence": "회로를 이해하고 손으로 설계한 뒤 시뮬레이터는 검증에만 쓰고, 식은 설계 방향을 찾는 데 써요. 핵심 식 common-source 전압 이득$$A_v = -g_m R_D$$ 이득 크기$$|A_v| = g_m R_D$$ 용어 계산기SPICE·Cadence는 node equation으로 전압·전류를 계산할 뿐 설계해 주지 않아요 튜닝(tuning)이유를 모른 채 파라미터를 바꿔 가며 돌리는 것. 위험하고 남는 것이 없어요",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s0-roadmap",
+    "category": "일반",
+    "body_claim": "단단 증폭기 이후 mirror cascode 차동 주파수 feedback filter",
+    "before": "pass",
+    "summary_sentence": "single-stage 증폭기에서 출발해 current mirror, cascode, 차동 증폭기, frequency response, feedback, filter 순서로 가요. 용어 current mirror바이어스 전압·전류를 공급하는 회로 frequency response넓은 bandwidth에서의 고주파 특성 feedback정확도를 높이는 방법",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s1-history",
+    "category": "일반",
+    "body_claim": "진공관 대체 트랜지스터와 planar 집적; discrete에서 IC로",
+    "before": "pass",
+    "summary_sentence": "진공관을 대신한 트랜지스터가 IC로 모이면서, 지금 회로 설계는 곧 반도체 설계가 됐어요. 용어 진공관(vacuum tube)트랜지스터 이전의 스위치 소자. 부피가 크고 잘 깨져요 planar IC반도체 공정으로 소자와 연결까지 기판 위에 만든 IC(1961) Intel 4004트랜지스터 2,250개로 만든 세계 최초의 마이크로프로세서(1971)",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s1-analog-digital",
+    "category": "일반",
+    "body_claim": "메모리의 디지털 주소계산과 아날로그 감지; 응용별 spec",
+    "before": "pass",
+    "summary_sentence": "메모리를 포함한 대부분의 시스템에는 디지털과 아날로그 회로가 함께 들어 있고, 응용에 따라 사양(spec)이 달라져요. 용어 sense amp메모리 셀의 아주 작은 전압 차를 증폭해 1과 0을 판단하는 회로 PMIC(Power Management IC)배터리 기기의 전력을 관리하는 아날로그 IC 사양(spec)응용이 요구하는 성능 조건. 달라지면 설계도 달라져요",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s1-analog-digital",
+    "category": "강조",
+    "body_claim": "배터리 전력관리가 핵심",
+    "before": "pass",
+    "summary_sentence": "메모리를 포함한 대부분의 시스템에는 디지털과 아날로그 회로가 함께 들어 있고, 응용에 따라 사양(spec)이 달라져요. 용어 sense amp메모리 셀의 아주 작은 전압 차를 증폭해 1과 0을 판단하는 회로 PMIC(Power Management IC)배터리 기기의 전력을 관리하는 아날로그 IC 사양(spec)응용이 요구하는 성능 조건. 달라지면 설계도 달라져요",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s1-jobs",
+    "category": "일반",
+    "body_claim": "schematic과 Verilog 설계 구별; 고속 디지털 아날로그 해석",
+    "before": "pass",
+    "summary_sentence": "아날로그 설계는 schematic을 그려 계산하고, 디지털 설계는 Verilog로 코딩하지만, 고속에서는 디지털도 아날로그처럼 해석해야 해요. 용어 아날로그 IP메모리·시스템 반도체에 들어가는 아날로그 기본 단위 블록(ADC, amplifier, regulator 등) layout설계된 회로를 반도체로 만들기 위한 물리적 패턴 Verilog디지털 회로 설계에 쓰는 코딩 언어",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s1-apps",
+    "category": "일반",
+    "body_claim": "현실 센싱과 소신호 증폭; edge 저전력",
+    "before": "pass",
+    "summary_sentence": "RF 수신은 작은 신호 증폭 → carrier 주파수 낮추기 → 원하는 신호 필터링 → 디지털 변환의 흐름이에요. 디지털이 뇌라면 아날로그는 센서로 세상을 느끼고 신호를 키우는 몸이고, 작은 신호는 노이즈 때문에 먼저 키워야 디지털로 바꿀 수 있어요. 용어 op-amp(operational amplifier, 연산 증폭기)예전에 적분·미분·덧셈·뺄셈을 아날로그로 하던 증폭기 edge computing서버 대신 단말기가 간단한 AI 처리를 직접 하는 방식. 저전력이 필요해요 carrier 주파수신호를 변조해 실어 보내는 높은 주파수. 받을 때 낮은 주파수로 내려요",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s1-apps",
+    "category": "일반",
+    "body_claim": "RF 증폭 주파수하향 필터 ADC 순서",
+    "before": "unresolved",
+    "summary_sentence": "RF 수신은 작은 신호 증폭 → carrier 주파수 낮추기 → 원하는 신호 필터링 → 디지털 변환의 흐름이에요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s2-review-map",
+    "category": "일반",
+    "body_claim": "IV 대신호 소신호 CMOS BJT 사전지식; 이날 범위",
+    "before": "pass",
+    "summary_sentence": "전자회로2를 따라가려면 I/V 특성, 두 등가 모델, CMOS 증폭기, BJT를 알고 있어야 해요. 용어 I/V 특성회로 설계에 쓰는 소자의 전압과 전류 관계large-signal model / small-signal modelMOS 등가 회로 모델 두 가지. 차이를 구분해야 해요CMOS 증폭기트랜지스터로 만든 증폭기. 다음 시간에 복습해요",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s2-structure",
+    "category": "일반",
+    "body_claim": "대칭 소스드레인; NMOS 전자와 전류 반대; body",
+    "before": "pass",
+    "summary_sentence": "MOSFET은 Metal–Oxide–Semiconductor 구조이고, 두 n+ 영역이 대칭이라 어느 쪽이든 소스나 드레인이 될 수 있어요. 용어 소스(source)캐리어를 공급하는 곳드레인(drain)캐리어가 빠져나가는 곳. 전류는 드레인에서 소스로 흘러요body(substrate)넷째 단자. 보통 ground나 소스에 연결해요",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s2-channel",
+    "category": "주의",
+    "body_claim": "VGS 문턱 초과로 반전층; 채널 생성만으로 전류 아님",
+    "before": "unresolved",
+    "summary_sentence": "채널은 $V_{GS}>V_{TH}$에서 생기며, 전류가 흐르려면 드레인–소스 사이 전압 차도 필요해요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s2-triode",
+    "category": "일반",
+    "body_claim": "작은 VDS에서만 저항 근사; VGS 증가 Ron 감소; 디지털 switch",
+    "before": "unresolved",
+    "summary_sentence": "게이트 오버드라이브 $V_{GS}-V_{TH}$가 커질수록 $R_{on}$은 작아져요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s2-saturation",
+    "category": "주의",
+    "body_claim": "켜짐 조건과 포화조건 동시; triode와 구별",
+    "before": "unresolved",
+    "summary_sentence": "먼저 $V_{GS}>V_{TH}$로 채널이 켜져 있어야 해요. 이때 $V_{DS}<V_{GS}-V_{TH}$이면 triode, 그 이상이면 saturation이에요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s2-saturation",
+    "category": "강조",
+    "body_claim": "전압제어전류원 증폭의 기본",
+    "before": "pass",
+    "summary_sentence": "먼저 $V_{GS}>V_{TH}$로 채널이 켜져 있어야 해요. 이때 $V_{DS}<V_{GS}-V_{TH}$이면 triode, 그 이상이면 saturation이에요. $V_{DS}$가 $V_{GS}-V_{TH}$ 이상이면 전류가 $V_{GS}$로만 정해지는 전류원이 되고, 그래서 증폭이 돼요. 핵심 식 saturation 전류$$I_D = \\frac{1}{2}\\mu_n C_{ox}\\frac{W}{L}(V_{GS}-V_{TH})^2$$saturation 조건$$V_{DS} \\ge V_{GS}-V_{TH}$$ 용어 saturation region(포화 영역)$I_D$가 $V_{DS}$와 무관하게 일정한 영역voltage-controlled current source$V_{GS}$가 값을 정하는 전류원. 증폭의 바탕이에요",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s3-cheatsheet",
+    "category": "구조",
+    "body_claim": "앞 토픽의 식과 링크를 모은 한장요약",
+    "before": "pass",
+    "summary_sentence": "기존 요약표·예고·링크 화면 구조 유지",
+    "status": "pass",
+    "reason": "요약·예고·링크에는 별도 패널을 만들지 않음"
+  },
+  {
+    "topic": "s3-next",
+    "category": "구조",
+    "body_claim": "다음 수업 미강의 범위 안내",
+    "before": "pass",
+    "summary_sentence": "기존 요약표·예고·링크 화면 구조 유지",
+    "status": "pass",
+    "reason": "요약·예고·링크에는 별도 패널을 만들지 않음"
+  },
+  {
+    "topic": "s3-links",
+    "category": "구조",
+    "body_claim": "관련 자료 링크와 workbook 없음",
+    "before": "pass",
+    "summary_sentence": "기존 요약표·예고·링크 화면 구조 유지",
+    "status": "pass",
+    "reason": "요약·예고·링크에는 별도 패널을 만들지 않음"
+  }
+]

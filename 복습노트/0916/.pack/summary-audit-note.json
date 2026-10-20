@@ -1,0 +1,263 @@
+[
+  {
+    "topic": "why-circuit",
+    "category": "일반",
+    "body_claim": "양쪽캐스코드 병렬로 제한완화; 정확DC바이어스필요",
+    "before": "pass",
+    "summary_sentence": "네 소자의 포화에 필요한 전압 여유 때문에 낮은 전원에서는 캐스코드 사용이 제한돼요. 저항 분배 전압이 일정해도 이동도·문턱전압의 온도 변화로 전류는 달라져요.보충(Razavi 9.2.1, 수업 미유도): 밴드갭 회로로 정확한 기준 전류 하나를 만들고, 전류 거울로 여러 곳에 복사해요. 전류 거울 자체가 기준 전류의 정확성을 새로 만드는 것은 아니에요. 부하까지 캐스코드로 만들어야 $R_{out}$과 이득이 커지고, 그 증폭기에 줄 정확한 바이어스 전류는 저항 분배기가 아니라 전류 거울로 만들어요. 핵심 식 PMOS 한 개 부하$$R_{out}=(g_{m2}r_{O2}r_{O1})\\parallel r_{O3}$$ $$\\approx r_{O3}$$ 캐스코드 부하일 때 이득$$A_v\\approx-g_{m1}(R_{on}\\parallel R_{op})$$ 분배기 게이트 전압$$V_{GS}=\\frac{R_2}{R_1+R_2}V_{DD}$$ 용어 캐스코드 부하(cascode load)두 개를 쌓아 만든, 이상적 전류원에 가까운 부하 헤드룸(headroom)전원과 접지 사이에서 신호가 쓸 수 있는 전압 여유 전류 거울(current mirror)온도·전원 전압과 무관하게 정확한 바이어스 전류를 공급하려는 회로",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "why-circuit",
+    "category": "주의",
+    "body_claim": "4개소자 headroom와 온도전원변동",
+    "before": "unresolved",
+    "summary_sentence": "네 소자의 포화에 필요한 전압 여유 때문에 낮은 전원에서는 캐스코드 사용이 제한돼요. 저항 분배 전압이 일정해도 이동도·문턱전압의 온도 변화로 전류는 달라져요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "why-circuit",
+    "category": "보충",
+    "body_claim": "bandgap 하나 기준전류 mirror복사 Razavi9.2.1 미강의",
+    "before": "unresolved",
+    "summary_sentence": "보충(Razavi 9.2.1, 수업 미유도): 밴드갭 회로로 정확한 기준 전류 하나를 만들고, 전류 거울로 여러 곳에 복사해요. 전류 거울 자체가 기준 전류의 정확성을 새로 만드는 것은 아니에요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s0-split",
+    "category": "일반",
+    "body_claim": "소스1/gm 드레인ro와 전류분배",
+    "before": "pass",
+    "summary_sentence": "소스 저항 $1/g_m$ 유도는 $r_O$를 무시해요. 전류 분배는 출력을 AC 접지로 둔 $G_m$ 측정 조건이며 $g_{m2}r_{O1}\\gg1$일 때 $i_{out}\\approx i_{D1}$이에요. 소스 쪽 저항은 작고 드레인 쪽 저항은 커서, M1 전류는 거의 다 M2로 흘러요. 핵심 식 소스 쪽에서 본 저항$$R=\\frac{V_x}{I_x}=\\frac{1}{g_m}$$ 노드 X 전류 분배$$i_{out}=i_{D1}\\frac{r_{O1}}{r_{O1}+1/g_{m2}}\\approx i_{D1}$$ 용어 다이오드 연결(diode-connected)게이트와 드레인을 묶은 연결, 약 $\\frac{1}{g_m}$으로 보여요. 출력저항(output resistance)드레인 쪽에서 본 $r_O$, 채널 길이 변조로 생겨요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s0-split",
+    "category": "주의",
+    "body_claim": "ro무시 유도와 출력단락 gm2ro1>>1",
+    "before": "unresolved",
+    "summary_sentence": "소스 저항 $1/g_m$ 유도는 $r_O$를 무시해요. 전류 분배는 출력을 AC 접지로 둔 $G_m$ 측정 조건이며 $g_{m2}r_{O1}\\gg1$일 때 $i_{out}\\approx i_{D1}$이에요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s0-rp",
+    "category": "일반",
+    "body_claim": "X접지 RP와 ro1병렬로 누설 증가 Gm감소",
+    "before": "pass",
+    "summary_sentence": "여기서 $R_P$는 X–접지 사이예요. 교과서 예제 9.6의 출력–중간 노드 사이 저항과 위치도, 구하는 양도 달라요. 병렬값이 $1/g_{m2}$보다 충분히 크지 않으면 누설을 무시하지 않아요. X 노드에 $R_P$가 달리면 전류 일부가 새서 $G_m$과 이득이 줄어요. 핵심 식 $R_P$가 있을 때 전류 분배$$i_{out}=i_{D1}$$$$\\times\\frac{r_{O1}\\parallel R_P}{(r_{O1}\\parallel R_P)+1/g_{m2}}$$ 접지 쪽 갈래$$r_{O1}\\parallel R_P$$",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s0-rp",
+    "category": "주의",
+    "body_claim": "교과서9.6 RP위치와 구할양 다름",
+    "before": "unresolved",
+    "summary_sentence": "여기서 $R_P$는 X–접지 사이예요. 교과서 예제 9.6의 출력–중간 노드 사이 저항과 위치도, 구하는 양도 달라요. 병렬값이 $1/g_{m2}$보다 충분히 크지 않으면 누설을 무시하지 않아요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s1-load",
+    "category": "강조",
+    "body_claim": "한쪽작은부하 병렬이 Rout제한; 양쪽적층 필요",
+    "before": "pass",
+    "summary_sentence": "부하를 PMOS 한 개로 달면 출력저항이 $r_{O3}$ 근처로 떨어져서, 부하도 캐스코드로 만들어요. 핵심 식 PMOS 한 개 부하$$R_{out}=(g_{m2}r_{O2}r_{O1})\\parallel r_{O3}$$ $$\\approx r_{O3}$$ 용어 캐스코드 부하(cascode load)PMOS 두 개를 쌓아 만든, 이상적 전류원에 가까운 부하",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s1-bias",
+    "category": "일반",
+    "body_claim": "레일붙은 M1 M4 전류맞춤; M2M3 포화설정",
+    "before": "unresolved",
+    "summary_sentence": "직렬인 $M_1$과 $M_4$의 DC 전류가 같도록 맞춰요. $V_{b1}$이 낮으면 $M_1$, 높으면 $M_2$가 포화를 벗어날 수 있어요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s1-headroom",
+    "category": "일반",
+    "body_claim": "4개Vov 예산 낮은전원 제한",
+    "before": "pass",
+    "summary_sentence": "오버드라이브는 $\\sqrt{2I_D/[\\mu C_{ox}(W/L)]}$로 정해져요. 전류를 키우면 커지고, $W/L$을 키우면 줄어요. 네 소자 식은 각 소자의 오버드라이브를 같게 본 예예요. 소자마다 오버드라이브 전압이 필요해서, 네 개를 쌓는 캐스코드는 전원 전압(헤드룸)이 더 필요해요. 핵심 식 캐스코드 최소 전원$$V_{DD}\\ge4(V_{GS}-V_{TH})$$소모 전력$$P=V_{DD}I$$ 용어 오버드라이브(overdrive) 전압포화 유지에 필요한 최소 $V_{DS}$, $V_{GS}-V_{TH}$헤드룸(headroom)전원과 접지 사이에서 신호가 쓸 수 있는 전압 여유",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s1-headroom",
+    "category": "일반",
+    "body_claim": "Vov ID와 W/L에 따라 조절",
+    "before": "unresolved",
+    "summary_sentence": "오버드라이브는 $\\sqrt{2I_D/[\\mu C_{ox}(W/L)]}$로 정해져요. 전류를 키우면 커지고, $W/L$을 키우면 줄어요. 네 소자 식은 각 소자의 오버드라이브를 같게 본 예예요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s1-gain",
+    "category": "일반",
+    "body_claim": "입력0 Rout양쪽 병렬; 출력0 Gm",
+    "before": "pass",
+    "summary_sentence": "저항 곱 항 근사는 $g_mr_O\\gg1$에서 써요. $G_m\\approx g_{m1}$은 단락 출력에서 $g_{m2}r_{O1}\\gg1$이라 아래 $r_{O1}$로 새는 몫을 무시한 결과예요. $G_m$은 CS 단과 같은 $g_{m1}$이고, 위아래 캐스코드로 $R_{out}$이 커진 만큼 이득이 커져요. 핵심 식 아래쪽·위쪽 출력저항$$R_{on}\\approx g_{m2}r_{O2}r_{O1}$$ $$R_{op}\\approx g_{m3}r_{O3}r_{O4}$$출력저항$$R_{out}=R_{on}\\parallel R_{op}$$이득$$G_m=g_{m1}$$ $$A_v=-G_mR_{out}$$ 용어 트랜스컨덕턴스 $G_m$(transconductance)출력을 교류 접지로 두었을 때 $i_{out}/v_{in}$",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s1-gain",
+    "category": "주의",
+    "body_claim": "지배항과 누설무시 조건",
+    "before": "unresolved",
+    "summary_sentence": "저항 곱 항 근사는 $g_mr_O\\gg1$에서 써요. $G_m\\approx g_{m1}$은 단락 출력에서 $g_{m2}r_{O1}\\gg1$이라 아래 $r_{O1}$로 새는 몫을 무시한 결과예요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s1-input",
+    "category": "일반",
+    "body_claim": "입력위치 바꿔도 Rout같음 Gm달라짐",
+    "before": "pass",
+    "summary_sentence": "보충(수업 결과식의 미유도 전개): $G_m=g_m/(1+g_mR_S)$는 $r_O$를 무시한 식이에요. $R_S=r_{O1}$처럼 크면 유한 $r_{O2}$ 경로도 보되, $g_mr_O\\gg1$에서 $G_m\\approx1/r_{O1}$로 줄어요. 입력 위치를 바꿔도 $R_{out}$은 그대로이고, $M_2$ 게이트에 넣으면 $r_{O1}$이 소스 축퇴 저항이 되어 $G_m$이 크게 줄어요. 핵심 식 PMOS 입력$$G_m=g_{m4}$$소스 축퇴$$G_m=\\frac{g_m}{1+g_mR_S}$$ 용어 소스 축퇴(source degeneration)소스에 달린 저항이 전류 변화를 되돌려 $G_m$을 줄이는 것",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s1-input",
+    "category": "보충",
+    "body_claim": "소스축퇴식 ro무시 유도 보충",
+    "before": "unresolved",
+    "summary_sentence": "보충(수업 결과식의 미유도 전개): $G_m=g_m/(1+g_mR_S)$는 $r_O$를 무시한 식이에요. $R_S=r_{O1}$처럼 크면 유한 $r_{O2}$ 경로도 보되, $g_mr_O\\gg1$에서 $G_m\\approx1/r_{O1}$로 줄어요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s1-example",
+    "category": "일반",
+    "body_claim": "크기고정 공통ID4배 이득1/4 포화지배항조건",
+    "before": "pass",
+    "summary_sentence": "중간값을 반올림하면 약 −318, 마지막에 반올림하면 약 −320이에요. 전류 고정에서 입력 $(W/L)_1$만 4배면 이득 약 2배, $(W/L)_2$도 4배면 아래 출력저항도 늘어 약 2.3배예요. 크기 고정·포화 영역·지배항 근사에서 공통 전류를 4배 키우면 $g_m$은 2배지만 이득 크기는 ¼배로 줄어요. 핵심 식 트랜스컨덕턴스$$g_m=\\sqrt{2\\mu C_{ox}\\frac{W}{L}I_D}$$출력저항$$r_O=\\frac{1}{\\lambda I_D}$$예제 결과$$A_v=-g_{m1}(R_{on}\\parallel R_{op})$$ $$A_v\\approx-318$$ 용어 aspect ratio트랜지스터의 폭과 길이의 비 $W/L$",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s1-example",
+    "category": "주의",
+    "body_claim": "반올림318대320; 입력만크기4배와둘다 구별",
+    "before": "unresolved",
+    "summary_sentence": "중간값을 반올림하면 약 −318, 마지막에 반올림하면 약 −320이에요. 전류 고정에서 입력 $(W/L)_1$만 4배면 이득 약 2배, $(W/L)_2$도 4배면 아래 출력저항도 늘어 약 2.3배예요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s2-bjt",
+    "category": "일반",
+    "body_claim": "Q2 rpi2와 ro1 병렬; Gm근사gm1",
+    "before": "pass",
+    "summary_sentence": "$g_{m2}(r_{O1}\\parallel r_{\\pi2})\\gg1$에서 출력저항의 곱 항을 써요. X–접지에 $R_P$가 추가되면 병렬 저항과 전류 분배를 함께 바꿔 $G_m$도 다시 확인해요. 바이폴라 캐스코드는 MOS와 같고, 노드 X에 $r_{\\pi2}$가 $r_{O1}$과 병렬로 붙는 것만 달라요. 핵심 식 트랜스컨덕턴스$$G_m\\approx g_{m1}$$ 출력저항$$R_{out}\\approx g_{m2}r_{O2}(r_{O1}\\parallel r_{\\pi2})$$ 전압 이득$$A_v\\approx-g_{m1}$$$$\\times\\big[g_{m2}r_{O2}(r_{O1}\\parallel r_{\\pi2})\\big]$$ 용어 CE 단(common-emitter stage)이미터가 접지, 베이스 입력, 컬렉터 출력인 단 $r_{\\pi2}$캐스코드 소자 $Q_2$의 베이스-이미터 소신호 저항, 노드 X에 $r_{O1}$과 병렬로 보여요",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s2-bjt",
+    "category": "주의",
+    "body_claim": "축퇴지배조건; RP추가시 Gm도 변함",
+    "before": "unresolved",
+    "summary_sentence": "$g_{m2}(r_{O1}\\parallel r_{\\pi2})\\gg1$에서 출력저항의 곱 항을 써요. X–접지에 $R_P$가 추가되면 병렬 저항과 전류 분배를 함께 바꿔 $G_m$도 다시 확인해요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s2-cecb",
+    "category": "일반",
+    "body_claim": "CE+CB 곱과 한덩어리GmRout",
+    "before": "pass",
+    "summary_sentence": "CE 이득 $-g_{m1}/g_{m2}$는 컬렉터 부하가 작아 이미터 쪽을 $1/g_{m2}$로 근사할 때예요. 이상적 전류원 부하에서는 $v_X/v_{in}\\approx-g_{m1}(r_{O1}\\parallel r_{\\pi2})$로 달라져요. 캐스코드는 CE 단 + CB 단으로 봐도 같은 이득이 나오지만, 한 덩어리로 $G_m$과 $R_{out}$을 구하는 편이 쉬워요. 핵심 식 CE 단 이득$$\\frac{v_X}{v_{in}}\\approx-\\frac{g_{m1}}{g_{m2}}$$ 두 단의 곱$$\\frac{v_{out}}{v_{in}}\\approx-\\frac{g_{m1}}{g_{m2}}\\cdot g_{m2}R_{out}$$$$=-g_{m1}R_{out}$$ 용어 CB 단(common-base stage)베이스가 교류 접지, 이미터 입력, 컬렉터 출력인 단(위상 반전 없음)",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s2-cecb",
+    "category": "주의",
+    "body_claim": "CE -gm1/gm2 제한 부하조건",
+    "before": "unresolved",
+    "summary_sentence": "CE 이득 $-g_{m1}/g_{m2}$는 컬렉터 부하가 작아 이미터 쪽을 $1/g_{m2}$로 근사할 때예요. 이상적 전류원 부하에서는 $v_X/v_{in}\\approx-g_{m1}(r_{O1}\\parallel r_{\\pi2})$로 달라져요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s2-improved",
+    "category": "일반",
+    "body_claim": "PNP cascode 부하와 아래 병렬; Q4입력 Gm4",
+    "before": "pass",
+    "summary_sentence": "그림에서 전원 쪽이 $Q_4$이고, 그 아래 출력 쪽에 $Q_3$를 쌓아요. 병렬로 붙는 것은 쌓은 $Q_3$의 $r_{\\pi3}$예요. 위쪽 부하도 PNP 캐스코드로 만들어야 캐스코드의 큰 출력저항이 살아남아요. 핵심 식 위쪽 저항$$R_{op}\\approx g_{m3}r_{O3}(r_{O4}\\parallel r_{\\pi3})$$ 출력저항$$R_{out}=R_{on}\\parallel R_{op}$$ 이득$$A_v\\approx-g_{m1}(R_{on}\\parallel R_{op})$$ 용어 PNP 캐스코드 부하(PNP cascode load)$Q_4$ 위에 $Q_3$를 쌓아 만든 위쪽 전류원 $G_m=g_{m4}$입력을 $Q_4$ 베이스에 넣을 때의 트랜스컨덕턴스",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s2-improved",
+    "category": "주의",
+    "body_claim": "그림방향 Q4전원쪽 Q3아래출력쪽",
+    "before": "unresolved",
+    "summary_sentence": "그림에서 전원 쪽이 $Q_4$이고, 그 아래 출력 쪽에 $Q_3$를 쌓아요. 병렬로 붙는 것은 쌓은 $Q_3$의 $r_{\\pi3}$예요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s2-example",
+    "category": "일반",
+    "body_claim": "BJT gm ro rpi 미분 대입 3981",
+    "before": "pass",
+    "summary_sentence": "네 소자가 같은 전류를 흘리는 이 모델에서 $g_m\\propto I_C$, $r_O,r_\\pi\\propto1/I_C$가 약분돼요. 전력을 줄이는 설계도 이득뿐 아니라 동작 속도 등 다른 사양을 함께 만족해야 해요. 소신호 파라미터를 미분으로 구해 대입하면 $A_v\\approx-3981$이고, 이 이득은 바이어스 전류와 무관해요. 핵심 식 소신호 파라미터$$g_m=I_C/V_T$$$$r_\\pi=\\beta/g_m$$$$r_O=V_A/I_C$$ 이득$$A_v=-g_{m1}(R_{on}\\parallel R_{op})$$$$A_v\\approx-3981$$ 용어 얼리 전압(Early voltage) $V_A$컬렉터 전류가 $V_{CE}$에 따라 늘어나는 정도, $r_O=V_A/I_C$를 정해요",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s2-example",
+    "category": "주의",
+    "body_claim": "공통전류와 고정소자조건에서 이득전류약분; 속도설계별도",
+    "before": "unresolved",
+    "summary_sentence": "네 소자가 같은 전류를 흘리는 이 모델에서 $g_m\\propto I_C$, $r_O,r_\\pi\\propto1/I_C$가 약분돼요. 전력을 줄이는 설계도 이득뿐 아니라 동작 속도 등 다른 사양을 함께 만족해야 해요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s3-divider",
+    "category": "주의",
+    "body_claim": "분배기 온도 mu VTH와 VDD 민감",
+    "before": "unresolved",
+    "summary_sentence": "온도는 $\\mu_n,V_{TH}$를, 전원 변화는 분배된 $V_{GS}$를 바꿔요. 포화 전류식은 $\\lambda$를 무시하며, 이 부분은 소신호 증폭 해석이 아니라 DC 바이어스 이야기예요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s4-cheatsheet",
+    "category": "구조",
+    "body_claim": "핵심표와 연결",
+    "before": "pass",
+    "summary_sentence": "기존 요약표·예고·링크 화면 구조 유지",
+    "status": "pass",
+    "reason": "요약·예고·링크에는 별도 패널을 만들지 않음"
+  },
+  {
+    "topic": "s4-next",
+    "category": "구조",
+    "body_claim": "0918 예고범위",
+    "before": "pass",
+    "summary_sentence": "기존 요약표·예고·링크 화면 구조 유지",
+    "status": "pass",
+    "reason": "요약·예고·링크에는 별도 패널을 만들지 않음"
+  },
+  {
+    "topic": "s4-links",
+    "category": "구조",
+    "body_claim": "관련자료 링크",
+    "before": "pass",
+    "summary_sentence": "기존 요약표·예고·링크 화면 구조 유지",
+    "status": "pass",
+    "reason": "요약·예고·링크에는 별도 패널을 만들지 않음"
+  }
+]

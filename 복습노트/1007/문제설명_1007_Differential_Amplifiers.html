@@ -618,7 +618,7 @@
     <li>출력을 $X$ 한쪽이 아니라 차동 출력 $V_X-V_Y$로 잡으면 이 대칭 회로의 공통 모드 이득은 얼마이고, 그 이유는 무엇인가요?</li>
   </ol>
 </div>
-<div class="sum" hidden="">
+<div class="sum" hidden=""><p>몸체 효과와 $r_{O3}$의 $1+\lambda V_{DS3}$ 보정을 무시해요. $A_{CM}=-R_DI_{SS}/[2/\lambda+(V_{GS}-V_{TH})_{eq}]$는 한쪽 출력 기준이고 대칭 차동 출력의 CM 이득은 0이에요.</p>
   <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>CM 하프 서킷, 축퇴 CS 단</p><p>$R_{SS}=r_{O3}=1/(\lambda I_{SS})$</p><p>$g_m=2I_D/V_{ov}$</p></div>
   <div class="summary-group"><h4>첫 줄</h4><p>반쪽 소스에 $2r_{O3}$</p><p>$i_d=g_m(\Delta V_{in}-v_s)$, $v_s=2r_{O3}i_d$</p></div>
   <div class="summary-group"><h4>핵심 판단</h4><p>$A_{CM}=-\dfrac{R_D}{1/g_m+2r_{O3}}$</p><p>$g_m$은 $I_{SS}/2$로, $r_{O3}$는 $I_{SS}$로</p></div>
@@ -696,7 +696,7 @@
     <li>$R_{out}$을 구할 때 입력을 0으로 두고 출력에 시험 전압을 걸면 시험 전류는 어느 두 경로로 나뉘나요? 반대로 $G_m$의 단락 회로에서 $r_{O3}$가 식에서 빠지는 이유는 무엇인가요?</li>
   </ol>
 </div>
-<div class="sum" hidden="">
+<div class="sum" hidden=""><p>$\lambda&gt;0$로 모든 관련 $r_O$를 남긴 뒤 $g_mr_O\gg1$·몸체 효과 무시로 근사해요. 한 출력 기준 이득이며 완전 대칭의 차동 CM 이득은 0이에요.</p>
   <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>CM 하프 서킷: 테일 $r_{O5}$는 반쪽마다 $2r_{O5}$</p><p>이득은 $A_v=-G_mR_{out}$로 나눠 구해요</p></div>
   <div class="summary-group"><h4>첫 줄</h4><p>출력 단락 KCL: $i=g_{m1}(v_{in}-v_s)-v_s/r_{O1}$</p><p>소스 전압은 $v_s=2r_{O5}i$</p></div>
   <div class="summary-group"><h4>핵심 판단</h4><p>트랜스컨덕턴스 $G_m\approx\dfrac{1}{2r_{O5}}$</p><p>출력 저항 $R_{out}\approx r_{O3}$ (아래쪽 $2g_{m1}r_{O1}r_{O5}$가 훨씬 큼)</p><p>답 $A_{CM}\approx-\dfrac{r_{O3}}{2r_{O5}}$</p></div>
@@ -780,7 +780,7 @@
   <h4>설명을 닫고 다시 해 봐요</h4>
   <ol><li>(a)의 $g_mr_O\gg1$ 근사에서 다른 소자는 그대로 두고 테일 저항 $R_T$만 2배로 하면 $|A_{CM}|$은 몇 배인가요? $R_{out}$이 바뀌는지도 함께 판단해 보세요.</li><li>(b)의 같은 근사에서 위·아래 출력저항이 각각 200 kΩ이고 테일 저항이 10 kΩ이면 병렬 출력저항과 공통 모드 이득은 얼마인가요? $A_{CM}\approx-(R_{up}\parallel R_{down})/(2R_T)$를 사용해요.</li><li>(b)의 캐스코드 부하는 그대로 두고 테일도 (a)처럼 캐스코드($R_T\approx g_mr_O^2$)로 바꾸면 $R_{out}$의 병렬에서 어느 쪽이 지배하고 $A_{CM}$은 대략 얼마인가요? 모든 트랜지스터를 $g_m=1$ mS, $r_O=100$ kΩ로 둬요.</li></ol>
 </div>
-<div class="sum" hidden="">
+<div class="sum" hidden=""><p>문제 10.68의 $\lambda&gt;0$·$g_mr_O\gg1$·몸체 효과 무시를 이어받아요. 부하 캐스코드는 출력저항을 높여 한쪽 CM 이득을 키울 수 있고, 대칭 차동 출력의 CM 이득은 0이에요.</p>
   <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>CM 하프 서킷: 테일 $R_T$ → 반쪽에 $2R_T$</p><p>$A_{CM}=-G_mR_{out}$, $G_m\approx\dfrac{1}{2R_T}$</p><p>축퇴 출력 저항 $\approx g_mr_OR_S$</p></div>
   <div class="summary-group"><h4>첫 줄</h4><p>(a) $R_T\approx g_{m5}r_{O5}r_{O6}$</p><p>(b) $R_T=r_{O7}$</p><p>$R_{out}=R_{up}\parallel R_{down}$</p></div>
   <div class="summary-group"><h4>핵심 판단</h4><p>(a) $R_{down}\gg r_{O3}$ → $R_{out}\approx r_{O3}$</p><p>(b) 둘 다 $g_mr_O^2$ 차수 → 병렬 유지</p></div>
@@ -866,7 +866,7 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
 <li>미스매치를 왼쪽으로 옮겨 $Q_1$ 쪽 부하가 $R_C+\Delta R_C$, $Q_2$ 쪽이 $R_C$가 되면 $\Delta V_{out1}-\Delta V_{out2}$의 부호와 $A_{CM-DM}$의 크기는 어떻게 되나요?</li>
 </ol>
 </div>
-<div class="sum" hidden="">
+<div class="sum" hidden=""><p>입력쌍의 전류식에는 $\beta\gg1$을 써요. $R_1$이 작을 수 있어 $1+g_{m3}(R_1\parallel r_{\pi3})$의 1을 남기고, $r_{O3}\gg R_1\parallel r_{\pi3}$일 때만 마지막 덧셈항을 버려요.</p>
 <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>부하 미스매치 CM-DM 이득과 CM 하프 서킷, 축퇴 전류원 출력 저항</p><p>$A_{CM-DM}=\dfrac{\Delta R_C}{1/g_{m1}+2R_{SS}}$</p><p>테일 저항은 $R_{SS}=R_{out3}$로 바꿔요.</p></div>
 <div class="summary-group"><h4>첫 줄</h4><p>이미터 전압은 $v_E=I_X(R_1\parallel r_{\pi3})$예요.</p><p>컬렉터 KCL은 $I_X=g_{m3}v_\pi+\dfrac{V_X-v_E}{r_{O3}}$예요.</p></div>
 <div class="summary-group"><h4>핵심 판단</h4><p>테일 출력 저항은 $R_{out3}=[1+g_{m3}R_E']r_{O3}+R_E'$이고, $R_E'=R_1\parallel r_{\pi3}$예요.</p><p>$V_A=\infty$라 두 쪽 $\Delta I_C$가 같아요.</p><p>$\Delta V_{out1}-\Delta V_{out2}=\Delta R_C\,\Delta I_C$</p></div>
@@ -974,7 +974,7 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
     <li>DM 하프 서킷에서는 출력 노드 저항이 $r_{O1}\parallel r_{O3}$인데 CM 하프 서킷에서는 $r_{O3}$만 남는 이유를, $M_1$ 소스에 무엇이 달려 있는지로 설명해 보세요. 이 문제 값($r_{O1}=r_{O3}=10\ \text{k}\Omega$, $g_{m1}=10$ mS, $2R_{SS}=1\ \text{M}\Omega$)으로 아래로 본 저항의 크기도 어림해요.</li>
   </ol>
 </div>
-<div class="sum" hidden="">
+<div class="sum" hidden=""><p>주 답은 $g_mr_o\gg1$의 근사와 50 Ω 차이를 작은 섭동으로 쓰는 모델이에요. 테일의 작은 항·입력 $r_{O1}$을 남긴 보충은 CM·변환 이득을 약 3% 바꾸며 같은 정밀도의 답으로 섞지 않아요.</p>
   <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>캐스코드 테일은 $R_{SS}\approx g_{m5}r_{O5}r_{O6}$예요.</p><p>CM 하프 서킷은 소스에 $2R_{SS}$를 달아요.</p><p>미스매치 누설은 $A_{CM-DM}=\dfrac{\Delta R}{1/g_m+2R_{SS}}$예요.</p><p>차동 이득은 $A_{DM}=-g_{m1}(r_{O1}\parallel r_{O3})$예요.</p></div>
   <div class="summary-group"><h4>첫 줄</h4><p>전류는 $I_{D1}=1\ \text{mA}$, $I_{D5}=2\ \text{mA}$예요.</p><p>입력쌍은 $g_{m1}=10\ \text{mS}$, $r_{O1}=10\ \text{k}\Omega$예요.</p><p>테일은 $g_{m5}=20\ \text{mS}$, $r_{O5}=5\ \text{k}\Omega$예요.</p></div>
   <div class="summary-group"><h4>핵심 판단</h4><p>CM에서 노드 저항은 $r_{O3}$예요(아래쪽은 축퇴로 매우 큼).</p><p>DM에서 테일은 가상 접지라 노드 저항이 $r_{O1}\parallel r_{O3}$예요.</p></div>
@@ -1054,7 +1054,7 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
     <li>미스매치를 $\Delta R_C=100\ \Omega$에서 $200\ \Omega$으로 두 배로 키우면 $A_{DM}$과 $A_{CM-DM}$ 중 어느 쪽이 실질적으로 바뀌고, CMRR은 몇 dB 달라지나요?</li>
   </ol>
 </div>
-<div class="sum" hidden="">
+<div class="sum" hidden=""><p>입력 $V_A=\infty$, $\beta\gg1$, $\Delta R_C\ll R_C$의 근사예요. CMRR 분모는 한 노드의 $A_{CM}$이 아니라 차동 출력으로 새는 $A_{CM-DM}$이에요.</p>
   <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>$\text{CMRR}=A_{DM}/A_{CM-DM}$</p><p>$A_{CM-DM}=\dfrac{\Delta R_C}{1/g_{m1}+2R_{out3}}$</p><p>$R_{out3}=[1+g_{m3}(R_1\parallel r_{\pi3})]r_{O3}$ $+R_1\parallel r_{\pi3}$</p></div>
   <div class="summary-group"><h4>첫 줄</h4><p>차동 입력에서 $P$는 가상 접지, 각 반쪽은 CE 단: $|A_{DM}|\approx g_{m1}R_C$</p></div>
   <div class="summary-group"><h4>핵심 판단</h4><p>$\Delta R_C$는 $A_{DM}$에서만 버리고 $A_{CM-DM}$에서는 남겨요.</p><p>$\text{CMRR}=\dfrac{g_{m1}R_C}{\Delta R_C}\left(\dfrac{1}{g_{m1}}+2R_{out3}\right)$</p></div>
@@ -1147,7 +1147,7 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
     <li>문제와 달리 $M_1$·$M_2$도 $\lambda\neq0$이고 $\Delta R_D\neq0$이면 DM 입력에서 $P$가 여전히 정확한 가상 접지인가요? 노드 $P$의 KCL에서 $i_1+i_2$가 0이 되는지로 판단해 보세요.</li>
   </ol>
 </div>
-<div class="sum" hidden="">
+<div class="sum" hidden=""><p>작은 부하 미스매치·몸체 효과 무시에서 비교해요. $g_{m3}r_{O4}\gg1$과 $2g_mr_{O3}\gg1$일 때 CMRR 비는 약 $g_{m3}r_{O4}$이며, 추가 적층은 테일 헤드룸을 써요.</p>
   <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>$\mathrm{CMRR}=|A_{DM}/A_{CM-DM}|$</p>
     <p>$|A_{CM-DM}|=\dfrac{\Delta R_D}{1/g_m+2R_{SS}}$</p>
     <p>$|A_{DM}|\approx g_mR_D$</p></div>
@@ -1410,7 +1410,7 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
     <li>$I_{EE}$를 두 배로 키우면 $g_m$, $r_{O2}$, $r_{O4}$와 전압 이득은 각각 어떻게 바뀌나요?</li>
   </ol>
 </div>
-<div class="sum" hidden="">
+<div class="sum" hidden=""><p>큰 $\beta$·이상적 테일·1:1 거울·큰 고유 이득의 근사예요. $V_T=26$ mV를 채택한 5.42 V이며 25 mV면 5.0 V예요. 목표는 npn 상한 $V_{A,n}/V_T$보다 작아야 유한한 양의 pnp Early 전압으로 실현할 수 있어요.</p>
   <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>능동 부하 차동쌍: $G_m\approx g_m$</p>
     <p>$R_{out}=r_{O2}\parallel r_{O4}$</p>
     <p>$|A_v|=g_m(r_{O2}\parallel r_{O4})$</p></div>
@@ -1433,9 +1433,8 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
           <button class="text-btn panel-close" type="button" data-panel-close>닫기</button>
         </div>
         <div class="sum-tab">
-          <p class="panel-sub" id="sum-for">전체 흐름</p>
           <p class="panel-empty" id="sum-empty">페이지를 넘기면 그 페이지의 핵심 식과 용어가 여기에 나옵니다.</p>
-          <div class="sums"></div>
+          <div class="sums" id="sum-for"></div>
         </div>
       </div>
     </aside>
@@ -1851,7 +1850,6 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
         const KEY = 'od-review-solved:' + RANGE;
         const cards = Array.from(document.querySelectorAll('main article.card'));
         const aids = panels.right.querySelector('.aids');
-        const sub = document.getElementById('aid-for');
         const empty = panels.right.querySelector('.panel-empty');
         const btn = document.getElementById('solved-btn');
         const groups = {};
@@ -1883,8 +1881,6 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
           Object.keys(groups).forEach((id) => { groups[id].hidden = id !== curId; });
           empty.hidden = Boolean(curId);
           btn.hidden = !curId;
-          sub.textContent = curId ? ((s.querySelector('h3') || {}).textContent || '').trim() : '';
-          sub.hidden = !curId;
           if (curId) paintBtn();
           panels.right.querySelector('.panel-inner').scrollTop = 0;
           markToc(solved, cards.length, '푼 문제');
@@ -1904,7 +1900,6 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
         const origBtn = document.getElementById('tab-original');
         const tabList = panels.prob.querySelector('.panel-tabs');
         const tabs = Array.from(tabList.querySelectorAll('[role="tab"]'));
-        const sub = document.getElementById('sum-for');
         const empty = document.getElementById('sum-empty');
         const probEmpty = document.getElementById('prob-empty');
         const sums = {};
@@ -2219,8 +2214,6 @@ $$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\paralle
           curId = key === 'intro' ? null : key;
           Object.keys(sums).forEach((id) => { sums[id].hidden = id !== key; });
           empty.hidden = Boolean(sums[key]);
-          if (key === 'intro') sub.textContent = '전체 흐름';
-          else sub.innerHTML = (s.querySelector('h3') || {}).innerHTML || ''; // preserve rendered title math
           if (wideMq.matches) {
             Object.keys(panes).forEach((id) => { panes[id].hidden = id !== curId; });
             Object.keys(origs).forEach((id) => { origs[id].hidden = id !== curId; });

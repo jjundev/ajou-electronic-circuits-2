@@ -410,7 +410,7 @@
           <p>손 근사를 쓰는 이유는 정확한 식이 관계를 가리기 때문이라고 하셨어요.</p>
           <blockquote>"어떤 파라미터가 이것과 어떻게 연결되는지를 알기가 어려운 거예요." (1014 P06·L374)</blockquote>
         </div>
-        <div class="sum" hidden>
+        <div class="sum" hidden><p>$R_D$를 키우면 저주파 이득은 커지지만 대역폭은 줄어요. 노드 RC와 보데는 파라미터 영향을 보는 손 근사이며, 부유 커패시터는 이 규칙에 바로 넣을 수 없어요.</p>
           <p class="sum-lead">저주파 모델이 무시한 커패시턴스가 고주파 이득을 떨어뜨리고, 노드마다 극점 하나를 등가 RC로 구해 대역폭을 빠르게 읽어요.</p>
           <p class="panel-label">핵심 식</p>
           <ul class="eq-list">
@@ -538,7 +538,7 @@
     <blockquote>"신호의 라인이 두 개만 지나가도 그 사이에는 … 커패시터가 생기는 거예요." (1014 P01·L41)</blockquote>
     <p>인덕턴스는 도선을 감아서 만들어야 해서, 일부러 만들지 않는 이상 거의 없다고 하셨어요. (1014 P02·L71)</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>$\omega=0$이면 커패시터가 개방되어 이득 1, $\omega\to\infty$이면 단락되어 출력 0으로 가요.</p>
     <p class="sum-lead">커패시터의 임피던스는 주파수에 반비례해서, 주파수가 오르면 출력이 접지로 새고 이득이 떨어져요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -631,7 +631,7 @@
     <blockquote>"트랜지스터의 커패시턴스들이 실제로 동작 속도를 저해하는 … 가장 크리티컬한 요인" (1014 P02·L89)</blockquote>
     <blockquote>"커패시턴스를 달아주지 않더라도 커패시턴스가 존재하는 게 그 트랜지스터 때문에" (1014 P02·L91)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>채널 길이 변조를 무시한($\lambda=0$) 소신호 식이에요. 커패시턴스는 원래 소자 안에 있으며 저주파에서는 큰 임피던스라 개방으로 근사했던 거예요.</p>
     <p class="sum-lead">출력 노드의 $C_L$이 $R_D$와 병렬로 보여서, CS 단 이득이 저역통과 필터 꼴이 돼요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -708,7 +708,7 @@
     <blockquote>"무조건 게인을 크게 하는 게 좋은 설계는 아니에요." (1014 P03·L137)</blockquote>
     <p>커패시터는 작을수록 좋고, 그래서 요즘 프로세서가 3 nm, 2 nm 공정을 쓰는 것처럼 트랜지스터를 계속 작게 만든다고 하셨어요. (1014 P03·L139–145)</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>$f_{-3dB}=\omega_{-3dB}/(2\pi)$로 Hz로 바꿔요. 훨씬 높은 주파수에서는 약 −20 dB/dec이고, $C_L$만 키우면 저주파 이득은 그대로지만 대역폭은 줄어요.</p><p>같은 비율로 W와 L을 줄이는 수업의 단순 면적 모델에서 둘을 절반으로 하면 $WL$과 커패시턴스는 약 1/4이 되어 속도가 빨라져요.</p>
     <p class="sum-lead">CS 단의 이득은 $\omega_{-3dB} = \frac{1}{R_D C_L}$에서 $\frac{1}{\sqrt{2}}$배(−3 dB)가 되고, $R_D$를 키우면 이득은 늘지만 대역폭은 줄어요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -773,7 +773,7 @@
   <div class="layer warn"><span class="layer-title">꼭 기억해요</span>
     <blockquote>"앰프에서 중요한 거는 … 주파수에 따라서 이득의 크기가 어떻게 되느냐" (1014 P03·L177)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>이 식의 $\omega_p,\omega_z&gt;0$는 주파수 크기예요. $1+s/\omega_p=0$의 실제 극점 위치는 $s=-\omega_p$예요.</p><p>극점 수가 영점 수 이상인 것은 적정(proper) 조건이고, 안정성은 극점이 좌반 평면에 있는지로 판단해요.</p>
     <p class="sum-lead">전달 함수의 분모를 0으로 만드는 극점, 분자를 0으로 만드는 영점이 주파수 응답을 정해요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -869,7 +869,7 @@
     <blockquote>"손으로 그릴 때는요, 보드 플롯으로 예측하면 충분히 정확" (1014 P05·L244)</blockquote>
     <blockquote>"일반적으로 폴이 중요한데" (1014 P05·L255)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>극점 항의 로그 근사는 $\omega\gg\omega_p$에서 써요. 실제 응답은 코너에서 부드럽고, 단일 극점의 코너 크기는 직선 근사보다 약 3 dB 낮아요.</p>
     <p class="sum-lead">극점을 지날 때마다 기존 기울기에 −20 dB/dec를 더해요: 0 → −20 → −40. 영점은 +20 dB/dec를 더해요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -959,7 +959,7 @@
     <p>입력 극점이 앞단의 출력 임피던스에 좌우돼요. 이를 무시하고 설계하면 나중에 단을 붙였을 때 극점 주파수가 달라져요(1014 P06·L393–399).</p>
     <blockquote>"두 개의 폴을 알고 있으면 보드 플롯을 이용해서 매그니튜드 플롯을 그릴 수가 있겠죠" (1014 P06·L323–324)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>이 분리된 입력·출력 RC 모델은 영점이 없고 두 극점이 있어요. 두 극점이 같은 위치면 이중 극점이며 각각의 기울기를 더해요.</p>
     <p class="sum-lead">저주파 이득이 시작 높이, 두 극점 주파수가 꺾을 위치예요. 극점을 지날 때마다 기울기는 0 → −20 → −40 dB/dec로 바뀌어요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1017,7 +1017,7 @@
     <blockquote>"폴을 구하는 게 이제 가장 키포인트고" (1014 P08·L529)</blockquote>
     <p>영점을 안 구하는 이유도 함께 기억해요. 영점은 "충분히 높은 주파수"에 있어서 관심 밖이라고 하셨어요(1014 P08·L525).</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>약 10% 오차를 목표로 파라미터 영향을 읽는 손 근사이며 영점은 구하지 않아요. 출력에서 $r_O\gg R_D$일 때만 $R_D\parallel r_O\approx R_D$로 써요.</p>
     <p class="sum-lead">노드마다 극점이 하나씩 생기고, 그 노드에서 AC 접지 쪽으로 보이는 R과 C의 곱의 역수가 극점 주파수예요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1078,7 +1078,7 @@
     <blockquote>"우리는 각 노드의 등가 RC의 곱으로, RC의 곱의 역수로 구하자." (1014 P07·L461)</blockquote>
     <p>극점을 구한 뒤에는 보데 근사로 크기 응답을 그리는 게 "가장 기본적인 방법"이라고 하셨어요(1014 P07·L462–463).</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>$\lambda=0$·몸체 효과 무시에서 게이트는 AC 접지라 $v_{gs}=-v_X$예요. 입력·출력 중 어느 극점이 낮은지는 소자 값에 따라 달라요.</p>
     <p class="sum-lead">CG 단의 입력 노드에는 $R_S$와 소스 쪽 $\frac{1}{g_m}$이 병렬로 보여서 입력 극점이 올라가요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1216,9 +1216,8 @@
           <h2 id="panel-right-title">페이지 요약</h2>
           <button class="text-btn panel-close" type="button" data-panel-close>닫기</button>
         </div>
-        <p class="panel-sub" id="sum-for">전체 흐름</p>
         <p class="panel-empty" id="sum-empty">페이지를 넘기면 그 페이지의 핵심 식과 용어가 여기에 나옵니다.</p>
-        <div class="sums"></div>
+        <div class="sums" id="sum-for"></div>
       </div>
     </aside>
   </div>
@@ -1612,7 +1611,6 @@ var CS2P = (function () {
         const KEY = 'od-review-solved:' + RANGE;
         const cards = Array.from(document.querySelectorAll('main article.card'));
         const aids = panels.right.querySelector('.aids');
-        const sub = document.getElementById('aid-for');
         const empty = panels.right.querySelector('.panel-empty');
         const btn = document.getElementById('solved-btn');
         const groups = {};
@@ -1644,8 +1642,6 @@ var CS2P = (function () {
           Object.keys(groups).forEach((id) => { groups[id].hidden = id !== curId; });
           empty.hidden = Boolean(curId);
           btn.hidden = !curId;
-          sub.textContent = curId ? ((s.querySelector('h3') || {}).textContent || '').trim() : '';
-          sub.hidden = !curId;
           if (curId) paintBtn();
           panels.right.querySelector('.panel-inner').scrollTop = 0;
           markToc(solved, cards.length, '푼 문제');
@@ -1668,14 +1664,12 @@ var CS2P = (function () {
           box.appendChild(el);
           sums[t.id] = el;
         });
-        const sub = document.getElementById('sum-for');
         const empty = document.getElementById('sum-empty');
         document.addEventListener('od:screen', (e) => {
           const s = e.detail.screen;
           const key = s.matches('article.topic') ? s.id : 'intro';
           Object.keys(sums).forEach((id) => { sums[id].hidden = id !== key; });
           empty.hidden = Boolean(sums[key]);
-          sub.textContent = key === 'intro' ? '전체 흐름' : ((s.querySelector('h3') || {}).textContent || '').trim();
           if (s.matches('article.topic') && !read.has(s.id)) { read.add(s.id); store.set(KEY, Array.from(read)); }
           panels.right.querySelector('.panel-inner').scrollTop = 0;
           markToc(read, topics.length, '읽음');

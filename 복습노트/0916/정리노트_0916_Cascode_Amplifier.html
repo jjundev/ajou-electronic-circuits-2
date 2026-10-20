@@ -413,7 +413,7 @@
           <p>온도와 전원에 거의 무관한 전류는 밴드갭 기준 회로로 만들 수 있지만, 소자가 수십 개 필요해요. 집적회로에는 전류원이 수백 개라서 전류원마다 밴드갭 회로를 둘 수 없어요.</p>
           <p>그래서 밴드갭 회로로 정확한 기준 전류 $I_{REF}$ 하나만 만들고, 그 전류를 여러 곳에 복사해요. 이 복사기가 전류 거울이에요(예: $I_{copy}=I_{REF}$, $I_{copy}=2I_{REF}$).</p>
         </div>
-        <div class="sum" hidden>
+        <div class="sum" hidden><p>네 소자의 포화에 필요한 전압 여유 때문에 낮은 전원에서는 캐스코드 사용이 제한돼요. 저항 분배 전압이 일정해도 이동도·문턱전압의 온도 변화로 전류는 달라져요.</p><p>보충(Razavi 9.2.1, 수업 미유도): 밴드갭 회로로 정확한 기준 전류 하나를 만들고, 전류 거울로 여러 곳에 복사해요. 전류 거울 자체가 기준 전류의 정확성을 새로 만드는 것은 아니에요.</p>
           <p class="sum-lead">부하까지 캐스코드로 만들어야 $R_{out}$과 이득이 커지고, 그 증폭기에 줄 정확한 바이어스 전류는 저항 분배기가 아니라 전류 거울로 만들어요.</p>
           <p class="panel-label">핵심 식</p>
           <ul class="eq-list">
@@ -510,7 +510,7 @@
     <blockquote>"소스 쪽으로 바라보는 거는 gm분의 1이죠 … 어마어마한 차이죠." (0916 03:41)</blockquote>
     <blockquote>"대부분의 전류가 M2의 소스로 흐른다고 가정해도 무리가 없습니다. 사실 무리가 전혀 없어요." (0916 05:53)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>소스 저항 $1/g_m$ 유도는 $r_O$를 무시해요. 전류 분배는 출력을 AC 접지로 둔 $G_m$ 측정 조건이며 $g_{m2}r_{O1}\gg1$일 때 $i_{out}\approx i_{D1}$이에요.</p>
     <p class="sum-lead">소스 쪽 저항은 작고 드레인 쪽 저항은 커서, M1 전류는 거의 다 M2로 흘러요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -586,7 +586,7 @@
     <blockquote>"그래서 문제가 이렇게 주어질 수도 있죠." (0916 08:20)</blockquote>
     <p>노드 X에 저항이 더해지면 $r_{O1}$ 자리를 $r_{O1}\parallel R_P$로 바꿔 전류 분배를 다시 계산해요.</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>여기서 $R_P$는 X–접지 사이예요. 교과서 예제 9.6의 출력–중간 노드 사이 저항과 위치도, 구하는 양도 달라요. 병렬값이 $1/g_{m2}$보다 충분히 크지 않으면 누설을 무시하지 않아요.</p>
     <p class="sum-lead">X 노드에 $R_P$가 달리면 전류 일부가 새서 $G_m$과 이득이 줄어요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -684,7 +684,7 @@
     <blockquote>"모든 트랜지스터가 saturation 영역에서 동작하도록 바이어스 전압을 설정해 줘야" (0916 16:12)</blockquote>
     <p>전류는 $M_1$, $M_4$가 정하고, $V_{b1}$, $V_{b2}$는 포화 조건으로 정해요.</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>직렬인 $M_1$과 $M_4$의 DC 전류가 같도록 맞춰요. $V_{b1}$이 낮으면 $M_1$, 높으면 $M_2$가 포화를 벗어날 수 있어요.</p>
     <p class="sum-lead">DC 전류는 소스가 레일에 붙은 $M_1$, $M_4$가 정하고, $V_{b1}$, $V_{b2}$는 모든 소자를 포화에 두도록 잡아요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list"><li><span class="eq-name">M1 포화 조건</span>$$V_{b1}\ge V_{GS2}+(V_{GS1}-V_{TH})$$</li><li><span class="eq-name">노드 X 전압</span>$$V_X=V_{b1}-V_{GS2}$$</li></ul>
@@ -733,7 +733,7 @@
     <blockquote>"모바일 시스템에서는 … 전압을 계속 낮추는데 … 캐스코드 구조에는 … 한계가 있어요." (0916 19:37–19:56)</blockquote>
     <p>캐스코드는 이득을 얻는 대신 헤드룸을 잃어요. 쌓은 소자 수만큼 오버드라이브 전압이 필요해요.</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>오버드라이브는 $\sqrt{2I_D/[\mu C_{ox}(W/L)]}$로 정해져요. 전류를 키우면 커지고, $W/L$을 키우면 줄어요. 네 소자 식은 각 소자의 오버드라이브를 같게 본 예예요.</p>
     <p class="sum-lead">소자마다 오버드라이브 전압이 필요해서, 네 개를 쌓는 캐스코드는 전원 전압(헤드룸)이 더 필요해요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list"><li><span class="eq-name">캐스코드 최소 전원</span>$$V_{DD}\ge4(V_{GS}-V_{TH})$$</li><li><span class="eq-name">소모 전력</span>$$P=V_{DD}I$$</li></ul>
@@ -786,7 +786,7 @@
   <div class="layer prof"><span class="layer-title">교수님 말씀</span>
     <p>$G_m$은 CS 단과 같은데 출력 임피던스가 커져서 이득이 "대폭" 커진다고 하셨어요. 위쪽 PMOS는 DC 바이어스 전류만 흘리는 부하라고 강조하셨어요 (0916 20:12–24:19).</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>저항 곱 항 근사는 $g_mr_O\gg1$에서 써요. $G_m\approx g_{m1}$은 단락 출력에서 $g_{m2}r_{O1}\gg1$이라 아래 $r_{O1}$로 새는 몫을 무시한 결과예요.</p>
     <p class="sum-lead">$G_m$은 CS 단과 같은 $g_{m1}$이고, 위아래 캐스코드로 $R_{out}$이 커진 만큼 이득이 커져요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list"><li><span class="eq-name">아래쪽·위쪽 출력저항</span>$$R_{on}\approx g_{m2}r_{O2}r_{O1}$$ $$R_{op}\approx g_{m3}r_{O3}r_{O4}$$</li><li><span class="eq-name">출력저항</span>$$R_{out}=R_{on}\parallel R_{op}$$</li><li><span class="eq-name">이득</span>$$G_m=g_{m1}$$ $$A_v=-G_mR_{out}$$</li></ul>
@@ -844,7 +844,7 @@
     </ol>
     <p>$R_S=r_{O1}$처럼 $R_S$가 $r_O$ 수준으로 크면 $r_{O2}$로 새는 전류까지 따져야 정확하지만, $g_mr_O\gg1$이면 결과는 $G_m\approx1/r_{O1}$로 같아요(Razavi P9.23이 바이폴라판 같은 문제예요).</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>보충(수업 결과식의 미유도 전개): $G_m=g_m/(1+g_mR_S)$는 $r_O$를 무시한 식이에요. $R_S=r_{O1}$처럼 크면 유한 $r_{O2}$ 경로도 보되, $g_mr_O\gg1$에서 $G_m\approx1/r_{O1}$로 줄어요.</p>
     <p class="sum-lead">입력 위치를 바꿔도 $R_{out}$은 그대로이고, $M_2$ 게이트에 넣으면 $r_{O1}$이 소스 축퇴 저항이 되어 $G_m$이 크게 줄어요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list"><li><span class="eq-name">PMOS 입력</span>$$G_m=g_{m4}$$</li><li><span class="eq-name">소스 축퇴</span>$$G_m=\frac{g_m}{1+g_mR_S}$$</li></ul>
@@ -921,7 +921,7 @@
     <blockquote>"여러분들이 식을 이해하면 … 식을 이용하면 되겠습니다." (0916 37:38)</blockquote>
     <p>$W/L$을 고정하고 전류를 키우면 $g_m$은 $\sqrt{I_D}$로 늘지만 $r_O$는 $1/I_D$로 줄어서, MOS 캐스코드 이득은 $1/I_D$로 줄어요. 이 근사에서 이득을 2배로 하려면 전류를 고정하고 $(W/L)_1$을 4배로 해요.</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>중간값을 반올림하면 약 −318, 마지막에 반올림하면 약 −320이에요. 전류 고정에서 입력 $(W/L)_1$만 4배면 이득 약 2배, $(W/L)_2$도 4배면 아래 출력저항도 늘어 약 2.3배예요.</p>
     <p class="sum-lead">크기 고정·포화 영역·지배항 근사에서 공통 전류를 4배 키우면 $g_m$은 2배지만 이득 크기는 ¼배로 줄어요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list"><li><span class="eq-name">트랜스컨덕턴스</span>$$g_m=\sqrt{2\mu C_{ox}\frac{W}{L}I_D}$$</li><li><span class="eq-name">출력저항</span>$$r_O=\frac{1}{\lambda I_D}$$</li><li><span class="eq-name">예제 결과</span>$$A_v=-g_{m1}(R_{on}\parallel R_{op})$$ $$A_v\approx-318$$</li></ul>
@@ -970,7 +970,7 @@
     <blockquote>"BJT와 모스의 차이점은 … r_π2 정도, 나머지는 … 비슷하죠." (0916 45:01)</blockquote>
     <p>바이폴라 캐스코드의 $R_{out}$에는 $r_{O1}$ 대신 $r_{O1}\parallel r_{\pi2}$가 들어가요. $G_m\approx g_{m1}$은 MOS와 같아요.</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>$g_{m2}(r_{O1}\parallel r_{\pi2})\gg1$에서 출력저항의 곱 항을 써요. X–접지에 $R_P$가 추가되면 병렬 저항과 전류 분배를 함께 바꿔 $G_m$도 다시 확인해요.</p>
     <p class="sum-lead">바이폴라 캐스코드는 MOS와 같고, 노드 X에 $r_{\pi2}$가 $r_{O1}$과 병렬로 붙는 것만 달라요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1011,7 +1011,7 @@
   <div class="layer warn"><span class="layer-title">꼭 기억해요</span>
     <blockquote>"캐스코드 스테이지는 그냥 한 덩어리로 보는 게 조금 더 해석해서 편합니다." (0916 52:51)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>CE 이득 $-g_{m1}/g_{m2}$는 컬렉터 부하가 작아 이미터 쪽을 $1/g_{m2}$로 근사할 때예요. 이상적 전류원 부하에서는 $v_X/v_{in}\approx-g_{m1}(r_{O1}\parallel r_{\pi2})$로 달라져요.</p>
     <p class="sum-lead">캐스코드는 CE 단 + CB 단으로 봐도 같은 이득이 나오지만, 한 덩어리로 $G_m$과 $R_{out}$을 구하는 편이 쉬워요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1055,7 +1055,7 @@
     <p>아래가 캐스코드면 위 부하도 캐스코드여야 해요. 병렬에서는 작은 쪽이 $R_{out}$을 정하기 때문이에요.</p>
     <blockquote>"저항이 증가하는 효과를 그대로 얻으려면 아랫쪽도 캐스코드, 위쪽도 캐스코드" (0916 54:34)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>그림에서 전원 쪽이 $Q_4$이고, 그 아래 출력 쪽에 $Q_3$를 쌓아요. 병렬로 붙는 것은 쌓은 $Q_3$의 $r_{\pi3}$예요.</p>
     <p class="sum-lead">위쪽 부하도 PNP 캐스코드로 만들어야 캐스코드의 큰 출력저항이 살아남아요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1121,7 +1121,7 @@
     <blockquote>"계산이 중요한 게 아니라 … 대입하면 되겠죠." (0916 62:49)</blockquote>
     <p>숫자보다 $g_m=I_C/V_T$, $r_\pi=\beta/g_m$, $r_O=V_A/I_C$를 유도하고 이득 식에 대입하는 흐름이 중요해요.</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>네 소자가 같은 전류를 흘리는 이 모델에서 $g_m\propto I_C$, $r_O,r_\pi\propto1/I_C$가 약분돼요. 전력을 줄이는 설계도 이득뿐 아니라 동작 속도 등 다른 사양을 함께 만족해야 해요.</p>
     <p class="sum-lead">소신호 파라미터를 미분으로 구해 대입하면 $A_v\approx-3981$이고, 이 이득은 바이어스 전류와 무관해요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1226,7 +1226,7 @@
     <p>저항 분배기 바이어스의 전류는 온도($\mu_n$, $V_{TH}$)와 전원 전압($V_{DD}$)에 따라 변해요. 이 두 가지가 이유예요.</p>
     <blockquote>"정확하다는 말은 온도가 바뀌어도 서플라이가 바뀌어도 … 일정한 정확한 전류" (0916 71:02)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>온도는 $\mu_n,V_{TH}$를, 전원 변화는 분배된 $V_{GS}$를 바꿔요. 포화 전류식은 $\lambda$를 무시하며, 이 부분은 소신호 증폭 해석이 아니라 DC 바이어스 이야기예요.</p>
     <p class="sum-lead">저항 분배기로 게이트 전압을 정하면 전류가 온도와 전원 전압에 따라 변해서, 전류 거울이 필요해요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1302,9 +1302,8 @@
           <h2 id="panel-right-title">페이지 요약</h2>
           <button class="text-btn panel-close" type="button" data-panel-close>닫기</button>
         </div>
-        <p class="panel-sub" id="sum-for">전체 흐름</p>
         <p class="panel-empty" id="sum-empty">페이지를 넘기면 그 페이지의 핵심 식과 용어가 여기에 나옵니다.</p>
-        <div class="sums"></div>
+        <div class="sums" id="sum-for"></div>
       </div>
     </aside>
   </div>
@@ -1605,7 +1604,6 @@ update();
         const KEY = 'od-review-solved:' + RANGE;
         const cards = Array.from(document.querySelectorAll('main article.card'));
         const aids = panels.right.querySelector('.aids');
-        const sub = document.getElementById('aid-for');
         const empty = panels.right.querySelector('.panel-empty');
         const btn = document.getElementById('solved-btn');
         const groups = {};
@@ -1637,8 +1635,6 @@ update();
           Object.keys(groups).forEach((id) => { groups[id].hidden = id !== curId; });
           empty.hidden = Boolean(curId);
           btn.hidden = !curId;
-          sub.textContent = curId ? ((s.querySelector('h3') || {}).textContent || '').trim() : '';
-          sub.hidden = !curId;
           if (curId) paintBtn();
           panels.right.querySelector('.panel-inner').scrollTop = 0;
           markToc(solved, cards.length, '푼 문제');
@@ -1661,14 +1657,12 @@ update();
           box.appendChild(el);
           sums[t.id] = el;
         });
-        const sub = document.getElementById('sum-for');
         const empty = document.getElementById('sum-empty');
         document.addEventListener('od:screen', (e) => {
           const s = e.detail.screen;
           const key = s.matches('article.topic') ? s.id : 'intro';
           Object.keys(sums).forEach((id) => { sums[id].hidden = id !== key; });
           empty.hidden = Boolean(sums[key]);
-          sub.textContent = key === 'intro' ? '전체 흐름' : ((s.querySelector('h3') || {}).textContent || '').trim();
           if (s.matches('article.topic') && !read.has(s.id)) { read.add(s.id); store.set(KEY, Array.from(read)); }
           panels.right.querySelector('.panel-inner').scrollTop = 0;
           markToc(read, topics.length, '읽음');

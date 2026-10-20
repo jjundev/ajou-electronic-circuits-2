@@ -1,0 +1,155 @@
+[
+  {
+    "topic": "p1",
+    "category": "일반",
+    "body_claim": "CF밀러근사·게이트드레인저주파이득·각RC추정·실제단일극점",
+    "before": "pass",
+    "summary_sentence": "$\\lambda=0$은 $r_o\\to\\infty$라는 뜻이에요. 출력 등가 커패시턴스는 $(1+1/(g_mR_D))C_F$라 입력의 $(1+g_mR_D)C_F$와 달라요. 떠올릴 개념·공식밀러 근사: $A=-g_mR_D$, $C_{in}=(1-A)C_F$, $C_{out}=(1-1/A)C_F$. 첫 줄$v_o=-g_mv_gR_D$에서 두 노드의 저주파 이득을 정해요. 핵심 판단입력은 $R_SC_{in}$, 출력은 $R_DC_{out}$의 역수로 추정해요. 검산단위는 rad/s. 실제 $C_F$ 하나의 회로는 극점 하나예요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p1",
+    "category": "주의",
+    "body_claim": "λ0는ro무한대·출력증배입력과다름",
+    "before": "unresolved",
+    "summary_sentence": "$\\lambda=0$은 $r_o\\to\\infty$라는 뜻이에요. 출력 등가 커패시턴스는 $(1+1/(g_mR_D))C_F$라 입력의 $(1+g_mR_D)C_F$와 달라요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p2",
+    "category": "일반",
+    "body_claim": "저주파CS밀러1+gmRD 배율14.333·1.15pF·단위",
+    "before": "pass",
+    "summary_sentence": "떠올릴 개념·공식밀러 효과: $C_{in}=(1+g_mR_D)C_F$. 첫 줄$A=-g_mR_D=-2000/150$. 핵심 판단$80\\,\\mathrm{fF}$에 $14.333\\ldots$을 곱해요. 검산$C_{in}\\approx1.15\\,\\mathrm{pF}$, 원래 값의 약 14.3배예요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p3",
+    "category": "일반",
+    "body_claim": "밀러저항 입력축소·rpi병렬·RB분압후 CE이득",
+    "before": "pass",
+    "summary_sentence": "$V_A=\\infty$이고 $R_F$가 충분히 커 출력 쪽 밀러 저항의 부하를 무시할 때의 추정이에요. 입력에서는 축소된 $R_F/(1+g_mR_C)$를 지우지 않아요. 떠올릴 개념·공식밀러 저항: $R_{F,X}=R_F/(1+g_mR_C)$. 첫 줄$i_F=(v_X-v_{out})/R_F$와 $v_{out}\\approx-g_mR_Cv_X$. 핵심 판단$R_X=r_\\pi\\parallel R_{F,X}$를 $R_B$와 분배한 뒤 $-g_mR_C$를 곱해요. 검산$R_F\\to\\infty$이면 일반 CE의 입력 분배로 돌아가요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p3",
+    "category": "주의",
+    "body_claim": "VA무한·RF충분히커출력부하무시의근사",
+    "before": "unresolved",
+    "summary_sentence": "$V_A=\\infty$이고 $R_F$가 충분히 커 출력 쪽 밀러 저항의 부하를 무시할 때의 추정이에요. 입력에서는 축소된 $R_F/(1+g_mR_C)$를 지우지 않아요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p4",
+    "category": "일반",
+    "body_claim": "입력RB병렬rpi·밀러RC추정·실제단일극점과접근조건",
+    "before": "pass",
+    "summary_sentence": "$V_A=\\infty$·다른 커패시턴스 무시에서 저주파 $A=-g_mR_C$를 고정한 근사예요. 출력 등가값은 $C_{out}=(1+1/(g_mR_C))C_F$예요. 떠올릴 개념·공식밀러 근사: $A=-g_mR_C$, $C_{in}=(1-A)C_F$. 첫 줄$v_o=-g_mR_Cv_b$; 베이스에서는 $R_B\\parallel r_\\pi$가 보여요. 핵심 판단입력은 $(R_B\\parallel r_\\pi)C_{in}$, 출력은 $R_CC_{out}$. 검산실제 극점은 $1/[C_F(R_C+R(1+g_mR_C))]$ 하나예요. $R=R_B\\parallel r_\\pi$이고 $R_C\\ll R(1+g_mR_C)$일 때 입력 추정치에 가까워요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p4",
+    "category": "주의",
+    "body_claim": "VA무한·다른C무시·상수저주파근사",
+    "before": "unresolved",
+    "summary_sentence": "$V_A=\\infty$·다른 커패시턴스 무시에서 저주파 $A=-g_mR_C$를 고정한 근사예요. 출력 등가값은 $C_{out}=(1+1/(g_mR_C))C_F$예요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p5",
+    "category": "일반",
+    "body_claim": "입력highpass·출력follower저항1/gm·Ci최소CL최대·20Hz20k관례·오식",
+    "before": "pass",
+    "summary_sentence": "이상적 전류원·$\\lambda=0$·외부 $C_i,C_L$ 모델의 결과예요. 경계를 대역 끝에 맞추면 해당 1차 응답은 약 3 dB 낮으므로 감쇠를 더 줄이려면 $C_i$를 키우고 $C_L$을 줄여요. 떠올릴 개념·공식입력 고역통과 $1/(R_iC_i)$, 출력 외부 부하 RC $g_m/C_L$. 첫 줄$V_{DD}$를 AC 접지로: 입력 $C_i$–$R_i$, 출력 $1/g_m$–$C_L$. 핵심 판단교재의 20 Hz–20 kHz를 경계 조건으로 써요. 원문 $R_1$은 그림의 $R_i$로 읽어요. 검산$C_i\\ge79.6\\,\\mathrm{nF}$, $C_L\\le39.8\\,\\mathrm{nF}$; 경계 대입은 20 Hz와 20 kHz예요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p5",
+    "category": "주의",
+    "body_claim": "이상전류원 λ0 외부C모델·경계끝3dB감쇠",
+    "before": "unresolved",
+    "summary_sentence": "이상적 전류원·$\\lambda=0$·외부 $C_i,C_L$ 모델의 결과예요. 경계를 대역 끝에 맞추면 해당 1차 응답은 약 3 dB 낮으므로 감쇠를 더 줄이려면 $C_i$를 키우고 $C_L$을 줄여요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p6",
+    "category": "일반",
+    "body_claim": "폭과전류절반으로gm절반·입력C같음·CL절반·관례조건",
+    "before": "pass",
+    "summary_sentence": "$\\lambda=0$·이상적 전류원의 외부 $C_i,C_L$ 모델이에요. 폭만 절반일 때의 $1/\\sqrt2$와 달리 전류도 절반이라 $g_m$은 $1/2$이에요. 떠올릴 개념·공식$g_m\\propto\\sqrt{WI_D}$; 입력 $1/(R_iC_i)$, 출력 $g_m/C_L$. 첫 줄$g_{m,new}/g_{m,old}=\\sqrt{(1/2)(1/2)}=1/2$. 핵심 판단교재의 20 Hz–20 kHz와 그림의 $R_i=100\\,\\mathrm{k\\Omega}$를 유지해요. 검산$C_i\\ge79.6\\,\\mathrm{nF}$ 그대로, $C_L\\le19.9\\,\\mathrm{nF}$로 절반이에요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p6",
+    "category": "주의",
+    "body_claim": "λ0이상전류원외부C·폭만절반과구분",
+    "before": "unresolved",
+    "summary_sentence": "$\\lambda=0$·이상적 전류원의 외부 $C_i,C_L$ 모델이에요. 폭만 절반일 때의 $1/\\sqrt2$와 달리 전류도 절반이라 $g_m$은 $1/2$이에요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p7",
+    "category": "일반",
+    "body_claim": "8C노드표·동일AC노드전류0·GS1와GD1와출력합",
+    "before": "pass",
+    "summary_sentence": "떠올릴 개념·공식MOS 네 커패시턴스의 두 단자를 AC 노드에 대응해요. 같은 노드 양 끝이면 $i_C=0$이에요.첫 줄$M_1:(G,D,S,B)=(V_{in},V_{out},0,0)$; $M_2:(V_{out},V_{out},0,0)$.핵심 판단$C_{GS1}$ 입력 접지, $C_{GD1}$ 입력 출력, $C_{DB1}+C_{DB2}+C_{GS2}$ 출력 접지예요.검산$C_{SB1}, C_{SB2}, C_{GD2}$는 같은 AC 노드 양 끝이라 빠져요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p8",
+    "category": "일반",
+    "body_claim": "PMOS다이오드양의컨덕턴스·ro유지·노드모델·CT합",
+    "before": "pass",
+    "summary_sentence": "입력–접지 $C_{GS1}$, 입력–출력 부유 $C_{GD1}$도 남겨요. $C_T=C_{DB1}+C_{DB2}+C_{GS2}$이며 $C_{GD1}$을 여기에 바로 합치지 않아요.떠올릴 개념·공식MOS 고주파 모델과 다이오드 연결 PMOS의 양의 컨덕턴스 $g_{m2}$.첫 줄$M_1:(V_{in},V_{out},0,0)$, $M_2:(V_{out},V_{out},0,0)$ 순서 $G,D,S,B$.핵심 판단출력–접지에 $g_{m1}V_{in}$, $r_{O1}$, $r_{O2}$, $1/g_{m2}$, $C_T$가 병렬이에요.검산$V_{in}=0$에서 출력 컨덕턴스는 $1/r_{O1}+1/r_{O2}+g_{m2}>0$이에요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p8",
+    "category": "주의",
+    "body_claim": "부유GD1와접지GS1도회로필수",
+    "before": "unresolved",
+    "summary_sentence": "입력–접지 $C_{GS1}$, 입력–출력 부유 $C_{GD1}$도 남겨요. $C_T=C_{DB1}+C_{DB2}+C_{GS2}$이며 $C_{GD1}$을 여기에 바로 합치지 않아요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p9",
+    "category": "일반",
+    "body_claim": "두BJT여섯C모든노드·Cpi2잔존·Cmu1입력X",
+    "before": "pass",
+    "summary_sentence": "떠올릴 개념·공식BJT 고주파 모델의 $C_\\pi$ B–E, $C_\\mu$ B–C, $C_{CS}$ C–기판.첫 줄$Q_1:(B,E,C)=(V_{in},0,X)$, $Q_2:(0,X,V_{out})$.핵심 판단$C_{\\pi1}$ 입력 접지, $C_{\\mu1}$ 입력 $X$, $C_{CS1}+C_{\\pi2}$는 $X$ 접지, $C_{\\mu2}+C_{CS2}$는 출력 접지예요.검산세 개씩 총 여섯 개이며 같은 노드 쌍끼리만 합해요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p10",
+    "category": "일반",
+    "body_claim": "기존rpi gmro와여섯C·vpi2음부호·ro2출력X",
+    "before": "pass",
+    "summary_sentence": "$r_{O1},r_{O2}$를 버리거나 두 BJT 값을 같게 둘 조건이 없으므로 1·2를 유지해요. Q2 베이스가 접지라도 중간 노드 X는 움직여요.떠올릴 개념·공식고주파 하이브리드 파이: B–E $r_\\pi,C_\\pi$; B–C $C_\\mu$; C–E $g_mv_\\pi,r_O$; C–기판 $C_{CS}$.첫 줄$Q_1:(B,E,C)=(V_{in},0,X)$; $Q_2:(0,X,V_{out})$. $v_{\\pi2}=-V_X$.핵심 판단출력–$X$에 $g_{m2}v_{\\pi2},r_{O2}$. $X$–접지에 $C_{CS1}+C_{\\pi2}$.검산$C_{\\mu1}$은 입력–$X$; $C_{\\mu2}+C_{CS2}$는 출력–접지예요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p10",
+    "category": "주의",
+    "body_claim": "ro제거·소자동일조건없으므로 1,2보존",
+    "before": "unresolved",
+    "summary_sentence": "$r_{O1},r_{O2}$를 버리거나 두 BJT 값을 같게 둘 조건이 없으므로 1·2를 유지해요. Q2 베이스가 접지라도 중간 노드 X는 움직여요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  }
+]

@@ -1,0 +1,200 @@
+[
+  {
+    "topic": "p1",
+    "category": "일반",
+    "body_claim": "전력·출력CM·차동이득 순서 설계, 전체예산·CM경계 선택",
+    "before": "unresolved",
+    "summary_sentence": "한 설계는 $I_{SS}=1.11\\,\\mathrm{mA}$, $R_D=360\\,\\Omega$, 각 $W/L\\approx1.74\\times10^3$예요. 평형 소자 전류는 $I_{SS}/2$이고 $\\lambda=0$에서 작은 차동 이득을 맞춰요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p1",
+    "category": "주의",
+    "body_claim": "출력CM조건이며 입력CM은 별도포화·테일여유; 수업설계도 유효",
+    "before": "unresolved",
+    "summary_sentence": "1.6 V는 내 출력 CM 조건이에요. 입력 CM은 별도로 포화·테일 전압 여유를 만족시켜야 하며 수업의 1 mA·400 Ω도 예산 안의 다른 설계예요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p2",
+    "category": "일반",
+    "body_claim": "전력고정 공급변경이면 전류도변경; H출력여유와 W/L트레이드오프",
+    "before": "pass",
+    "summary_sentence": "$W/L=A_v^2P/[4\\mu_nC_{ox}V_{DD}(V_{DD}-V_{CM,out})^2]$예요. 고정 전력·이득·출력 CM에서 $V_{DD}>V_{CM,out}$이고 포화·테일 여유를 확보한 범위로 비교해요.떠올릴 개념·공식전원과 소자 크기의 교환관계첫 줄ISS=P/VDD, RD=2H/ISS핵심 판단W/L∝1/(VDD H²)검산391, 이전 크기의 0.225배",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p2",
+    "category": "주의",
+    "body_claim": "고정P·이득·출력CM 경계의 일반식과 조건",
+    "before": "unresolved",
+    "summary_sentence": "$W/L=A_v^2P/[4\\mu_nC_{ox}V_{DD}(V_{DD}-V_{CM,out})^2]$예요. 고정 전력·이득·출력 CM에서 $V_{DD}>V_{CM,out}$이고 포화·테일 여유를 확보한 범위로 비교해요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p3",
+    "category": "일반",
+    "body_claim": "순수차동 반회로·PMOS다이오드 컨덕턴스·양의gm; 유한ro모두유지",
+    "before": "unresolved",
+    "summary_sentence": "이득은 $A_v=-g_{m1}(1/g_{m3}\\parallel r_{o3}\\parallel r_{o1})$예요. $\\lambda\\ne0$이라 두 $r_o$를 남기고, $r_o\\gg1/g_{m3}$일 때만 $-g_{m1}/g_{m3}$로 근사해요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p3",
+    "category": "주의",
+    "body_claim": "다이오드부하와 전류원부하 구별·반회로이득 차동같음",
+    "before": "unresolved",
+    "summary_sentence": "PMOS 다이오드는 게이트도 출력과 움직여 양의 부하 컨덕턴스를 만들어요. 고정 바이어스 전류원 부하 $r_o$와 구별해요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p4",
+    "category": "일반",
+    "body_claim": "대칭반회로 λ양수·소스출력의 gm잔존",
+    "before": "pass",
+    "summary_sentence": "(a)는 $1/g_{m3}\\parallel r_{o3}\\parallel r_{o1}$, (b)는 여기에 $r_{o5}$ 병렬, (c)는 $r_{o1}\\parallel r_{o3}\\parallel R_1$을 $-g_{m1}$에 곱해요. (c)의 $R_1$은 이미 출력부터 중점까지라 다시 반으로 나누지 않아요.떠올릴 개념·공식대칭 반회로와 소스 입력 저항첫 줄Av=−gm1/GL핵심 판단게이트 고정이어도 소스 출력은 gm 존재검산λ→0 극한 세 가지 비교",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p4",
+    "category": "주의",
+    "body_claim": "세부하의 실제 결론과 중점저항분할 혼동금지",
+    "before": "unresolved",
+    "summary_sentence": "(a)는 $1/g_{m3}\\parallel r_{o3}\\parallel r_{o1}$, (b)는 여기에 $r_{o5}$ 병렬, (c)는 $r_{o1}\\parallel r_{o3}\\parallel R_1$을 $-g_{m1}$에 곱해요. (c)의 $R_1$은 이미 출력부터 중점까지라 다시 반으로 나누지 않아요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p5",
+    "category": "일반",
+    "body_claim": "저항중점 가상접지·전체연결저항 절반·소스축퇴식",
+    "before": "unresolved",
+    "summary_sentence": "이득은 $A_v=-(R_{DD}/2)/(1/g_m+R_{SS}/2)$예요. $\\lambda=0$·이상 전류원 개방에서 소스 자체가 아니라 두 저항의 중점이 차동 가상 접지예요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p5",
+    "category": "주의",
+    "body_claim": "강축퇴 근사조건과 이득감소",
+    "before": "unresolved",
+    "summary_sentence": "$g_mR_{SS}/2\\gg1$에서만 $-R_{DD}/R_{SS}$로 근사하며 소스 저항이 커지면 이득 크기는 줄어요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p6",
+    "category": "일반",
+    "body_claim": "위부하만 PMOS다이오드로 교체·소스축퇴 유지·병렬부하",
+    "before": "unresolved",
+    "summary_sentence": "이득은 $-[(R_{DD}/2)\\parallel(1/g_{mP})]/(R_{SS}/2+1/g_m)$예요. $\\lambda=0$에서 위 부하만 바꾸고 아래 이상 전류원은 개방해요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p6",
+    "category": "주의",
+    "body_claim": "gmP와입력gm 구별·실제DC와포화확보",
+    "before": "unresolved",
+    "summary_sentence": "PMOS의 양의 크기 $g_{mP}$를 입력 NMOS의 $g_m$과 구별해요. 같은 동작점에서는 추가 병렬 부하로 이득이 줄고, 실제 교체에는 DC 동작점·PMOS 포화도 확보해야 해요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p7",
+    "category": "일반",
+    "body_claim": "Early무시 테일고정이면 각출력 전원변화그대로·차동0",
+    "before": "pass",
+    "summary_sentence": "큰 $\\beta$, Early 효과 무시, 활성 영역·정상 테일 동작을 유지할 때예요. 차동 출력만 변하지 않고 출력 CM은 $\\Delta V$ 올라가 다음 단의 허용 범위를 확인해요.떠올릴 개념·공식전원 잡음의 공통 모드 전달첫 줄VX=VCC−RC IEE/2핵심 판단각 출력은 ΔV, 차는 0검산단일 출력 이득 1, 차동 0",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p7",
+    "category": "주의",
+    "body_claim": "개별출력은변화·차동제거; 큰beta·활성테일·다음단CM",
+    "before": "unresolved",
+    "summary_sentence": "큰 $\\beta$, Early 효과 무시, 활성 영역·정상 테일 동작을 유지할 때예요. 차동 출력만 변하지 않고 출력 CM은 $\\Delta V$ 올라가 다음 단의 허용 범위를 확인해요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p8",
+    "category": "일반",
+    "body_claim": "대칭 전류변화절반·두출력 -RCΔI/2",
+    "before": "pass",
+    "summary_sentence": "대칭이면 차동 변화는 0이지만 출력 CM은 $-R_C\\Delta I/2$ 변해요. 유한 $\\beta$를 남기면 각 출력 변화에 $\\alpha=\\beta/(\\beta+1)$를 곱해요.떠올릴 개념·공식테일 변화의 대칭 분배첫 줄ΔIC=ΔI/2핵심 판단출력 둘 다 −RC ΔI/2검산ΔI 부호와 단위 확인",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p8",
+    "category": "주의",
+    "body_claim": "차동0·CM변화; 유한beta 보정",
+    "before": "unresolved",
+    "summary_sentence": "대칭이면 차동 변화는 0이지만 출력 CM은 $-R_C\\Delta I/2$ 변해요. 유한 $\\beta$를 남기면 각 출력 변화에 $\\alpha=\\beta/(\\beta+1)$를 곱해요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p9",
+    "category": "일반",
+    "body_claim": "BJT활성 VC≥VB로 CM전원간격0.5V",
+    "before": "pass",
+    "summary_sentence": "큰 $\\beta$·대칭·정상 테일 동작의 각 전류는 $I_{EE}/2$예요. 등호는 B–C 전압 0 경계이며 $V_{CE,sat}\\approx0.2$ V를 쓰면 이 활성 조건보다 느슨해져요.떠올릴 개념·공식BJT 활성 영역과 CM 상한첫 줄VCM≤VCC−RC IEE/2핵심 판단베이스는 컬렉터보다 높지 않게검산최소 간격 0.500 V",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p9",
+    "category": "주의",
+    "body_claim": "BC경계와 VCEsat0.2V 구별·큰beta정상테일",
+    "before": "unresolved",
+    "summary_sentence": "큰 $\\beta$·대칭·정상 테일 동작의 각 전류는 $I_{EE}/2$예요. 등호는 B–C 전압 0 경계이며 $V_{CE,sat}\\approx0.2$ V를 쓰면 이 활성 조건보다 느슨해져요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p10",
+    "category": "일반",
+    "body_claim": "1V입력차 VT보다큼 전체전류 Q1·BC활성경계저항500",
+    "before": "pass",
+    "summary_sentence": "큰 $\\beta$에서 1 V 입력 차는 약 $40V_T$라 작은 쪽 전류를 무시해요. $V_{CE,sat}$ 대신 $V_{C1}\\ge V_{B1}$를 적용해 그 전류 법칙의 활성 조건을 지켜요.떠올릴 개념·공식큰 입력 BJT 전류 조향첫 줄VX=2.5−RC·1 mA≥2핵심 판단Q1이 전체 전류를 담당검산500 Ω에서 BC 경계",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p10",
+    "category": "주의",
+    "body_claim": "큰beta·활성전류법칙 사용·VCEsat아님",
+    "before": "unresolved",
+    "summary_sentence": "큰 $\\beta$에서 1 V 입력 차는 약 $40V_T$라 작은 쪽 전류를 무시해요. $V_{CE,sat}$ 대신 $V_{C1}\\ge V_{B1}$를 적용해 그 전류 법칙의 활성 조건을 지켜요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p11",
+    "category": "일반",
+    "body_claim": "분배함수와 KVL로 수직배율·평행이동 구별",
+    "before": "unresolved",
+    "summary_sentence": "(a) 테일 반감은 전류·전압 스윙·기울기 절반, (b) 전원 상승은 전압만 $\\Delta V$ 평행 이동, (c) 저항 반감은 전류 그대로·전압 스윙과 기울기 절반이에요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p11",
+    "category": "주의",
+    "body_claim": "BJT가로폭 VT기준 불변·각변경독립·모델조건",
+    "before": "unresolved",
+    "summary_sentence": "각 변경을 따로 적용하고 대칭·큰 $\\beta$·Early 무시·활성 영역을 가정해요. 세 경우 모두 $V_T$가 같아 가로 전이 폭은 변하지 않아요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  }
+]

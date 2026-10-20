@@ -1,0 +1,254 @@
+[
+  {
+    "topic": "why-circuit",
+    "category": "일반",
+    "body_claim": "DC 동작점 접선 선형화로 증폭과 임피던스 해석",
+    "before": "pass",
+    "summary_sentence": "DC 해석으로 $g_m,r_O$를 먼저 정하고, 작은 변화량에만 접선 근사를 적용해요. 유한한 $r_O$는 CS 이득을 $g_mr_O$ 이하로 제한해요.보충(수업에서 유도하지 않음): 선형 근사 후에는 중첩과 테브난 등가 같은 선형 회로 도구를 쓸 수 있어요. 비선형인 트랜지스터를 동작점 근처에서 선형으로 근사한 것이 소신호 모델이고, 이걸로 증폭기 이득을 쉽게 구해요. 핵심 식 트랜스컨덕턴스$$g_m = \\frac{\\partial I_D}{\\partial V_{GS}}$$CS 이득$$A_v = -g_m R_D$$ 용어 소신호 모델(small-signal model)동작점 근처 변화량의 관계만 나타낸 선형 모델동작점(operating point)DC 바이어스로 정해지며 $g_m$, $r_O$를 결정비선형(nonlinear)MOSFET은 제곱, BJT는 지수 관계",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "why-circuit",
+    "category": "주의",
+    "body_claim": "유효범위와 DC 선행; intrinsic 한계",
+    "before": "unresolved",
+    "summary_sentence": "DC 해석으로 $g_m,r_O$를 먼저 정하고, 작은 변화량에만 접선 근사를 적용해요. 유한한 $r_O$는 CS 이득을 $g_mr_O$ 이하로 제한해요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "why-circuit",
+    "category": "보충",
+    "body_claim": "선형회로 도구 사용은 미강의 보충",
+    "before": "unresolved",
+    "summary_sentence": "보충(수업에서 유도하지 않음): 선형 근사 후에는 중첩과 테브난 등가 같은 선형 회로 도구를 쓸 수 있어요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s0-large-signal",
+    "category": "일반",
+    "body_claim": "대신호 일반 모델; NMOS sink PMOS source",
+    "before": "pass",
+    "summary_sentence": "포화식은 $V_{GS}>V_{TH}$와 $V_{DS}\\ge V_{GS}-V_{TH}$에서 써요. 대신호는 전체 전압·전류, 소신호는 작은 변화량의 관계예요. 포화 영역의 MOSFET은 게이트 전압으로 크기가 정해지는 전류원이고, 그 관계는 비선형이에요. 핵심 식 포화 영역 드레인 전류$$I_D = \\frac{1}{2}\\mu_n C_{ox}\\frac{W}{L}$$ $$\\times(V_{GS}-V_{TH})^2$$ NMOS 전류 싱크$$I_D=\\frac{1}{2}k(V_b-V_{TH})^2$$ 용어 대신호 모델(large-signal model)신호 크기와 상관없이 적용되는 일반 모델 전류 싱크(current sink)한 노드에서 접지로 일정한 전류를 빼내는 NMOS 전류 소스(current source)$V_{DD}$에서 한 노드로 일정한 전류를 넣는 PMOS",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s0-large-signal",
+    "category": "주의",
+    "body_claim": "켜짐과 포화조건; 소신호와 혼동 금지",
+    "before": "unresolved",
+    "summary_sentence": "포화식은 $V_{GS}>V_{TH}$와 $V_{DS}\\ge V_{GS}-V_{TH}$에서 써요. 대신호는 전체 전압·전류, 소신호는 작은 변화량의 관계예요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s0-small-signal",
+    "category": "일반",
+    "body_claim": "바이어스 더하기 변화량; 접선근사",
+    "before": "pass",
+    "summary_sentence": "수업의 바이어스 약 10%는 경험칙이고, 슬라이드의 상한은 드레인 전류 변화 약 10%예요. 게이트 변화는 오버드라이브 대비로 근사 오차를 확인하며 두 기준을 같게 쓰지 않아요. 바이어스점 위의 작은 변화량만 보면 비선형 곡선을 직선으로 근사할 수 있고, 그 변화량의 관계가 소신호 모델이에요. 핵심 식 입력 = 바이어스 + 변화량$$V_{GS}=V_{GS0}+\\Delta V$$ 전류 = 바이어스 + 변화량$$I_D=I_{D0}+\\Delta I_D$$ 용어 소신호 모델(small-signal model)변화량 사이의 관계만 나타낸 모델, DC 바이어스는 0으로 봐요 바이어스점(bias point)DC 값 $(V_{GS0}, I_{D0})$으로 정해지는 동작점 선형 근사바이어스점 근처의 곡선을 접선으로 바꿔 보는 것. 허용 입력은 근사 오차로 확인해요",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s0-small-signal",
+    "category": "주의",
+    "body_claim": "10% 경험칙과 전류 상한 구분; 오버드라이브 오차검사",
+    "before": "unresolved",
+    "summary_sentence": "수업의 바이어스 약 10%는 경험칙이고, 슬라이드의 상한은 드레인 전류 변화 약 10%예요. 게이트 변화는 오버드라이브 대비로 근사 오차를 확인하며 두 기준을 같게 쓰지 않아요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s1-gm",
+    "category": "일반",
+    "body_claim": "gm 미분 정의; 전압입력 전류출력; 동작점",
+    "before": "pass",
+    "summary_sentence": "포화 영역에서 채널 길이 변조를 무시한 식이에요. 소문자 $v_{gs},i_d$는 변화량이고 대문자는 바이어스 값이에요.$g_m=\\mu_nC_{ox}\\frac{W}{L}(V_{GS}-V_{TH})=\\frac{2I_D}{V_{GS}-V_{TH}}$로도 써요. 주어진 바이어스 값에 맞는 식을 골라요. $g_m$은 작은 전압 변화에 곱해 전류 변화를 구하는 계수이고, 같은 동작점 근처에서 $i_d=g_mv_{gs}$예요. 핵심 식 정의$$g_m = \\frac{\\partial I_D}{\\partial V_{GS}}$$ 전류로 쓴 꼴$$g_m = \\sqrt{2\\mu_n C_{ox}\\frac{W}{L} I_D}$$ 소신호 모델$$i_d = g_m v_{gs}$$ 용어 트랜스컨덕턴스(transconductance)입력 $V_{GS}$ 변화에 대한 출력 $I_D$ 변화의 비 동작점(operating point)$g_m$을 정하는 DC 바이어스점",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s1-gm",
+    "category": "주의",
+    "body_claim": "포화 CLM무시 근사와 대소문자 구분",
+    "before": "unresolved",
+    "summary_sentence": "포화 영역에서 채널 길이 변조를 무시한 식이에요. 소문자 $v_{gs},i_d$는 변화량이고 대문자는 바이어스 값이에요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s1-gm",
+    "category": "일반",
+    "body_claim": "같은 gm의 전압식 및 전류식",
+    "before": "unresolved",
+    "summary_sentence": "$g_m=\\mu_nC_{ox}\\frac{W}{L}(V_{GS}-V_{TH})=\\frac{2I_D}{V_{GS}-V_{TH}}$로도 써요. 주어진 바이어스 값에 맞는 식을 골라요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s1-ro",
+    "category": "일반",
+    "body_claim": "CLM 유한 ro; 바이어스 전류 반비례",
+    "before": "pass",
+    "summary_sentence": "DC 전류에서는 작은 채널 길이 변조를 무시해도, 소신호 $r_O$까지 없애면 유한한 저항을 무한대로 바꾸므로 이득 영향은 클 수 있어요. 채널 길이 변조로 $I_D$가 $V_{DS}$에 따라 조금 늘어나고, 이를 D–S 사이의 병렬 저항 $r_O$로 모델링해요. 핵심 식 채널 길이 변조$$I_D = \\frac{1}{2}\\mu_n C_{ox}\\frac{W}{L}(V_{GS}-V_{TH})^2$$ $$\\times(1+\\lambda V_{DS})$$ 출력저항$$r_O = \\frac{1}{\\lambda I_D}$$ 용어 채널 길이 변조(channel-length modulation)포화 영역에서 $V_{DS}$가 커지면 $I_D$가 조금 늘어나는 효과, 계수 $\\lambda$ 출력저항(output resistance)D–S 사이 병렬 저항 $r_O$, 무시하면 $\\infty$",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s1-ro",
+    "category": "주의",
+    "body_claim": "DC CLM무시와 소신호 ro제거는 다름",
+    "before": "unresolved",
+    "summary_sentence": "DC 전류에서는 작은 채널 길이 변조를 무시해도, 소신호 $r_O$까지 없애면 유한한 저항을 무한대로 바꾸므로 이득 영향은 클 수 있어요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s2-pmos-eq",
+    "category": "일반",
+    "body_claim": "PMOS 전압전류 방향; 절댓값 포화식과 조건",
+    "before": "pass",
+    "summary_sentence": "PMOS는 정공이 전류를 나르고 부호가 NMOS와 모두 반대라서, 절댓값을 씌운 식 하나로 기억해요. 핵심 식 PMOS 포화 전류$$|I_D| = \\frac{1}{2}\\mu_p C_{ox}\\frac{W}{L}$$ $$\\times(|V_{GS}|-|V_{TH}|)^2$$ $$\\times(1+\\lambda |V_{DS}|)$$ 포화 조건$$|V_{GS}|\\gt|V_{TH}|,$$ $$|V_{DS}|\\ge|V_{GS}|-|V_{TH}|$$ 용어 정공(hole)PMOS에서 전류를 나르는 전하. 소스가 공급하고 드레인으로 빠져나가요 전류 방향PMOS는 소스에서 드레인으로 흘러요. 소스는 보통 $V_{DD}$ 쪽이에요",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s2-pmos-model",
+    "category": "일반",
+    "body_claim": "VDD 변화0 AC ground; NMOS와 같은 gm vgs ro",
+    "before": "pass",
+    "summary_sentence": "$v_{gs}$의 부호에 따라 소신호 전류 방향이 달라질 수 있어도 등가 모델 자체는 같아요. PMOS 소신호 등가회로는 소스의 $V_{DD}$를 AC 접지로 두고 위아래를 뒤집으면 NMOS와 같아요. 핵심 식 드레인 소신호 전류$$i_d = g_m v_{gs}$$ 용어 AC 접지(AC ground)DC 전압원은 변화량이 0이라서 소신호 모델에서 접지로 둬요 소신호 등가회로G–S 개방, D에서 S로 $g_m v_{gs}$, D–S에 $r_O$ 병렬",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s2-pmos-model",
+    "category": "주의",
+    "body_claim": "제어전압 부호에 따라 전류변화 방향 달라짐",
+    "before": "unresolved",
+    "summary_sentence": "$v_{gs}$의 부호에 따라 소신호 전류 방향이 달라질 수 있어도 등가 모델 자체는 같아요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s3-dc-ac",
+    "category": "일반",
+    "body_claim": "DC 영역바이어스 후 gm ro; AC 전압단락 전류개방",
+    "before": "pass",
+    "summary_sentence": "변화량이 있는 신호원은 그대로 두며, DC 소스처럼 단락하거나 개방하지 않아요. DC 해석으로 오퍼레이팅 포인트를 정하고, 소신호 해석은 변화량끼리의 관계만 봐요. 핵심 식 트랜스컨덕턴스$$g_m=\\sqrt{2kI_D}=k(V_{GS}-V_{TH})$$출력저항$$r_O=\\frac{1}{\\lambda I_D}$$ 용어 AC 접지(AC ground)소신호에서 DC 전압원을 단락한 것개방(open)소신호에서 DC 전류원을 끊은 것오퍼레이팅 포인트(operating point)소신호 파라미터를 정하는 바이어스점",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s3-dc-ac",
+    "category": "주의",
+    "body_claim": "신호원 보존",
+    "before": "unresolved",
+    "summary_sentence": "변화량이 있는 신호원은 그대로 두며, DC 소스처럼 단락하거나 개방하지 않아요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s3-cs-intuition",
+    "category": "일반",
+    "body_claim": "Vin 증가 ID 증가 RD강하 증가 Vout감소",
+    "before": "pass",
+    "summary_sentence": "증폭에는 전원에서 공급하는 바이어스 전류와 포화 동작이 필요해요. $|g_mR_D|>1$일 때만 출력 변화가 입력보다 커져요. 입력이 오르면 전류가 늘고 $R_D$ 강하가 커져서, 출력은 거꾸로 내려가요. 핵심 식 전류 변화$$\\Delta I_D = g_m \\Delta V$$출력 변화$$\\Delta V_{out} = -g_m \\Delta V R_D$$ 용어 common-source(CS)소스가 접지에 붙은 증폭기 구조위상 반전입력이 오를 때 출력이 내려가는 것(이득의 음의 부호)",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s3-cs-intuition",
+    "category": "주의",
+    "body_claim": "포화 바이어스 에너지와 |gain|>1 조건",
+    "before": "unresolved",
+    "summary_sentence": "증폭에는 전원에서 공급하는 바이어스 전류와 포화 동작이 필요해요. $|g_mR_D|>1$일 때만 출력 변화가 입력보다 커져요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s3-cs-gain",
+    "category": "일반",
+    "body_claim": "포화 소신호 CS KCL과 gm 설계변수",
+    "before": "pass",
+    "summary_sentence": "이 식은 채널 길이 변조를 무시해요. $R_D$나 $I_D$를 키우면 $V_{DS}=V_{DD}-I_DR_D$가 줄어 포화를 벗어날 수 있으므로 전압 여유를 함께 확인해요. 포화 영역의 소신호에서 $A_v=-g_mR_D$이고, 입력 변화에 이득을 곱하면 출력 변화가 돼요. 핵심 식 CS 이득$$A_v = -g_m R_D$$트랜스컨덕턴스$$g_m=\\sqrt{2\\mu_nC_{ox}\\frac{W}{L}I_D}$$ 용어 설계 변수$W/L$, $I_D$, $R_D$로 이득을 맞춰요AC 접지(AC ground)$V_{DD}$는 소신호에서 접지가 돼요",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s3-cs-gain",
+    "category": "주의",
+    "body_claim": "CLM 무시 조건 및 전압여유 tradeoff",
+    "before": "unresolved",
+    "summary_sentence": "이 식은 채널 길이 변조를 무시해요. $R_D$나 $I_D$를 키우면 $V_{DS}=V_{DD}-I_DR_D$가 줄어 포화를 벗어날 수 있으므로 전압 여유를 함께 확인해요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s3-intrinsic",
+    "category": "일반",
+    "body_claim": "RD 병렬 ro 이득상한",
+    "before": "pass",
+    "summary_sentence": "출력저항은 입력을 0으로 두고 구해요. $R_D\\ll r_O$일 때만 $r_O$의 영향이 작고, $R_D\\to\\infty$이면 이득 크기는 $g_mr_O$에 접근해요.슬라이드에만 적힌 $R_{in}=\\infty$는 게이트 전류가 없기 때문이에요. $r_O$가 $R_D$와 병렬로 붙어서, 이득은 intrinsic gain $g_m r_O$를 넘지 못해요. 핵심 식 CS 이득(r_O 포함)$$A_v = -g_m (R_D \\parallel r_O)$$출력저항$$R_{out} = R_D \\parallel r_O$$ 용어 intrinsic gain$g_m r_O$, 트랜지스터 하나로 얻는 최대 이득",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s3-intrinsic",
+    "category": "주의",
+    "body_claim": "Rout 입력0에서 구함; RD작을때만 ro 무시",
+    "before": "unresolved",
+    "summary_sentence": "출력저항은 입력을 0으로 두고 구해요. $R_D\\ll r_O$일 때만 $r_O$의 영향이 작고, $R_D\\to\\infty$이면 이득 크기는 $g_mr_O$에 접근해요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s3-intrinsic",
+    "category": "보충",
+    "body_claim": "슬라이드 Rin 무한대 말로 미언급",
+    "before": "unresolved",
+    "summary_sentence": "슬라이드에만 적힌 $R_{in}=\\infty$는 게이트 전류가 없기 때문이에요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s4-bjt-intro",
+    "category": "일반",
+    "body_claim": "npn pnp 구조 단자 대응; 지수전류와 BE순 BC역 활성",
+    "before": "pass",
+    "summary_sentence": "BJT는 세 영역 샌드위치이고, 두 접합 조건을 맞추면 $V_{BE}$의 지수 함수로 전류가 흐르는 전류원이 돼요. 핵심 식 컬렉터 전류$$I_C = I_S \\exp(V_{BE}/V_T)$$ npn 활성 조건$$V_{BE} \\gt 0$$ $$V_{BC} \\lt 0$$ 용어 컬렉터·베이스·에미터(C, B, E)MOSFET의 드레인·게이트·소스에 대응 npn / pnp바깥 두 영역의 도핑 극성으로 나눈 두 종류",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s5-cheatsheet",
+    "category": "구조",
+    "body_claim": "전체요약 표와 링크",
+    "before": "pass",
+    "summary_sentence": "기존 요약표·예고·링크 화면 구조 유지",
+    "status": "pass",
+    "reason": "요약·예고·링크에는 별도 패널을 만들지 않음"
+  },
+  {
+    "topic": "s5-next",
+    "category": "구조",
+    "body_claim": "다음시간 예고",
+    "before": "pass",
+    "summary_sentence": "기존 요약표·예고·링크 화면 구조 유지",
+    "status": "pass",
+    "reason": "요약·예고·링크에는 별도 패널을 만들지 않음"
+  },
+  {
+    "topic": "s5-links",
+    "category": "구조",
+    "body_claim": "함께볼 자료 안내",
+    "before": "pass",
+    "summary_sentence": "기존 요약표·예고·링크 화면 구조 유지",
+    "status": "pass",
+    "reason": "요약·예고·링크에는 별도 패널을 만들지 않음"
+  }
+]

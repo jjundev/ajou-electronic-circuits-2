@@ -418,7 +418,7 @@
           <p>Razavi 10.6절(551쪽 상자 글)에 따르면, 예전 op-amp는 입력에 차동쌍을 쓰고도 마지막 출력에서 한쪽 신호를 버렸어요. 능동 부하는 1967년 Widlar가 설계한 LM101A에서 처음 쓰였어요. 칩 면적을 많이 차지하는 큰 저항 대신 트랜지스터 부하를 쓰면 전압 여유(headroom)를 아끼면서 높은 이득을 얻어요. 이 차동쌍은 "5-트랜지스터 OTA"라고도 불러요.</p>
           <p>캐스코드 전류원은 $R_{SS}$를 크게 키우지만, 트랜지스터를 하나 더 쌓으므로 테일에서 전압 여유를 더 써요. CMRR과 입력 CM 범위가 서로 맞바뀌는 셈이에요.</p>
         </div>
-        <div class="sum" hidden>
+        <div class="sum" hidden><p>M3만 다이오드 연결이라 능동 부하는 대칭 하프 서킷으로 자를 수 없어요. $r_{O2}\parallel r_{O4}$가 유한하며 외부 $R_L$도 병렬로 붙어 이득을 줄여요.</p><p>보충(Razavi 10.6절, 수업 미유도): 이 능동 부하는 5 트랜지스터 OTA라고도 불러요. 캐스코드 테일로 CMRR을 높이면 추가 헤드룸 때문에 입력 CM 범위가 줄 수 있어요.</p>
           <p class="sum-lead">CMRR은 CM 잡음이 차동 출력으로 새는 정도를 이득과 함께 한 숫자로 재고, 능동 부하는 싱글엔디드 출력에서도 이득을 반으로 잃지 않게 해요.</p>
           <p class="panel-label">핵심 식</p>
           <ul class="eq-list">
@@ -486,7 +486,7 @@
     <blockquote>"대칭으로 만들긴 하지만 … 테일 노드가 그라운드는 아니에요." (1007 Part 08)</blockquote>
     <p>차동 입력이면 테일 노드가 가상 접지이지만, CM 입력이면 테일 노드가 접지가 아니에요. 그래서 CM에는 소스에 $2R_{SS}$가 남은 커먼 모드 하프 서킷을 써요.</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>CM에서는 P가 AC 접지가 아니므로 소스에 $2R_{SS}$를 남겨요. DM 반회로는 P를 가상 접지로 두어 차동 이득을 구하는 다른 회로예요.</p>
     <p class="sum-lead">$R_{SS}$를 $2R_{SS}$ 두 개로 나눠 자른 커먼 모드 하프 서킷으로 CM 이득을 구하고, 대칭이면 차동 출력에는 영향이 없어요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -540,7 +540,7 @@
     <blockquote>"MOSFET이나 BJT는 사실은 같다" (1007 Part 02)</blockquote>
     <p>슬라이드 그림이 BJT 회로인 이유는 책의 BJT 그림을 그대로 가져왔기 때문이라고 설명했어요.</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>이 결론은 두 쪽의 완전 대칭을 가정해요. 원하는 신호는 반대 위상이라 차에서 더해지고, 불일치가 있으면 CM 잡음도 차동 출력에 새어요.</p>
     <p class="sum-lead">실제 테일에서는 각 출력 노드에 CM 잡음이 실리지만, 같은 위상·같은 크기라 차동 출력에서는 상쇄돼요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -649,7 +649,7 @@
     <blockquote>커먼 모드 리젝션 특성을 이상적인 값에 가깝도록 설계하는 게 굉장히 중요해요. (1007 Part 04)</blockquote>
     <blockquote>커먼 모드 리젝션 특성 이해가 굉장히 중요합니다. (1007 Part 04)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>집적 저항의 절댓값 ±20% 편차와 같은 칩의 두 저항 사이 미스매치는 달라요. 여기서는 트랜지스터는 같고 부하만 다르다고 두며, 캐스코드 테일로 $R_{SS}$를 키워 누설을 줄여요.</p>
     <p class="sum-lead">부하 미스매치 $\Delta R_D$ 때문에 입력 CM 변화가 차동 출력에 새어 나와요. $R_{SS}$를 키우면 줄어요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -745,7 +745,7 @@
     </ol>
     <p>예: $g_m = 5$ mS, $R_D = 2$ kΩ, $R_{SS} = 100$ kΩ, $\Delta R_D/R_D = 1\%$이면 $\Delta R_D = 20$ Ω이에요. 그러면 $\mathrm{CMRR} = 100 + 100000 \approx 1.0\times10^5$, 곧 약 100 dB예요.</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>$\Delta R_D\ll R_D$에서 $A_{DM}=g_mR_D$로 두고, $2g_mR_{SS}\gg1$에서 제시한 CMRR 근사를 써요. 원하는 것/원치 않는 것이라는 SNR 비유와 닮았지만 잡음 전력비 SNR 자체는 아니에요.</p><p>보충(수업 미유도): 근사 전에는 $\mathrm{CMRR}=(R_D/\Delta R_D)(1+2g_mR_{SS})$로, 큰 테일 저항에서 1을 버려요.</p>
     <p class="sum-lead">CMRR은 원하는 차동 이득을 CM-to-DM 이득으로 나눈 값이고, $R_{SS}$를 키우면 커져요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -847,7 +847,7 @@
     <blockquote>"이득이 문제가 아니라 … 커먼 모드 리젝션 특성이 굉장히 떨어지는" (1007 Part 05)</blockquote>
     <p>다만 커먼 모드 리젝션이 완전히 없어지는 것은 아니라고 덧붙이셨어요. 한쪽 노드의 커먼 모드 게인도 1보다 훨씬 작아서 싱글엔디드 구조보다는 낫다고 하셨어요.</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>한 노드의 CM 이득도 1보다 훨씬 작아 단일 증폭단보다 잡음이 줄지만, 두 출력의 차로 상쇄할 때보다 CM 리젝션이 나빠져요.</p>
     <p class="sum-lead">차동쌍에서 한쪽 출력만 쓰면 이득이 절반이 되고, 커먼 모드 리젝션도 크게 나빠져요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1020,7 +1020,7 @@
     <blockquote>"싱글 엔디드 구조로 구현하는 대표적인 방법이 되겠어요." (1007 Part 07)</blockquote>
     <blockquote>"중요한 부분입니다. 다시 한번 보세요." (1007 Part 07)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>대칭 입력 쌍·1:1 거울의 소신호 근사예요. M3만 다이오드 연결이라 전체는 비대칭이고 대칭 하프 서킷을 쓸 수 없어요.</p><p>$R_L$이 있으면 $A_v=g_m(r_{O2}\parallel r_{O4}\parallel R_L)$이고 $R_L\ll r_{O2}\parallel r_{O4}$일 때만 $g_mR_L$예요. 거울을 고정 바이어스로 끊으면 전류 변화 하나만 남아 이득이 절반이에요.</p>
     <p class="sum-lead">출력에 넣는 전류는 $\Delta I$ 늘고 빼는 전류는 $\Delta I$ 줄어서 순전류 변화 $2\Delta I$가 생겨요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1132,7 +1132,7 @@
     <p>다른 학생이 소신호 모델을 다 그려 풀어도 같은 결과가 나오냐고 물었어요. 교수님은 앞의 $\Delta I$ 해석이 곧 소신호 해석이라고 답하고, 그 자리에서 $i_{c1}$, $i_{c2}$로 다시 풀어 보이셨어요.</p>
     <blockquote>"아까는 그냥 DC만 더 추가해서 이제 한 거고" (1007 Part 08)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>외부 $R_L$도 출력저항에 병렬이고 거울을 끊으면 이득이 절반이에요. $r_{\pi2}$는 B–E 사이여서 출력 컬렉터의 $r_{O4}$와 병렬이 아니며, 위 이미터와 아래 컬렉터가 연결되는 캐스코드와 구별해요.</p>
     <p class="sum-lead">pnp 전류 거울을 부하로 쓴 BJT 차동쌍도 출력 전류가 두 배가 되어, 이득이 $g_m R_{out}$으로 유지돼요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1233,9 +1233,8 @@
           <h2 id="panel-right-title">페이지 요약</h2>
           <button class="text-btn panel-close" type="button" data-panel-close>닫기</button>
         </div>
-        <p class="panel-sub" id="sum-for">전체 흐름</p>
         <p class="panel-empty" id="sum-empty">페이지를 넘기면 그 페이지의 핵심 식과 용어가 여기에 나옵니다.</p>
-        <div class="sums"></div>
+        <div class="sums" id="sum-for"></div>
       </div>
     </aside>
   </div>
@@ -1518,7 +1517,6 @@ function cmrrSvg(m) {
         const KEY = 'od-review-solved:' + RANGE;
         const cards = Array.from(document.querySelectorAll('main article.card'));
         const aids = panels.right.querySelector('.aids');
-        const sub = document.getElementById('aid-for');
         const empty = panels.right.querySelector('.panel-empty');
         const btn = document.getElementById('solved-btn');
         const groups = {};
@@ -1550,8 +1548,6 @@ function cmrrSvg(m) {
           Object.keys(groups).forEach((id) => { groups[id].hidden = id !== curId; });
           empty.hidden = Boolean(curId);
           btn.hidden = !curId;
-          sub.textContent = curId ? ((s.querySelector('h3') || {}).textContent || '').trim() : '';
-          sub.hidden = !curId;
           if (curId) paintBtn();
           panels.right.querySelector('.panel-inner').scrollTop = 0;
           markToc(solved, cards.length, '푼 문제');
@@ -1574,14 +1570,12 @@ function cmrrSvg(m) {
           box.appendChild(el);
           sums[t.id] = el;
         });
-        const sub = document.getElementById('sum-for');
         const empty = document.getElementById('sum-empty');
         document.addEventListener('od:screen', (e) => {
           const s = e.detail.screen;
           const key = s.matches('article.topic') ? s.id : 'intro';
           Object.keys(sums).forEach((id) => { sums[id].hidden = id !== key; });
           empty.hidden = Boolean(sums[key]);
-          sub.textContent = key === 'intro' ? '전체 흐름' : ((s.querySelector('h3') || {}).textContent || '').trim();
           if (s.matches('article.topic') && !read.has(s.id)) { read.add(s.id); store.set(KEY, Array.from(read)); }
           panels.right.querySelector('.panel-inner').scrollTop = 0;
           markToc(read, topics.length, '읽음');

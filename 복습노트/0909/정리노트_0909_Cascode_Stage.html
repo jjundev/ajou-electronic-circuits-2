@@ -417,7 +417,7 @@
           <p>Razavi 9장 도입부(449쪽)는 캐스코드 단을 공통 이미터·공통 소스 구조를 고친 형태로 소개하고, 이 장의 각 기본 구성 요소를 바이폴라와 MOS 두 가지로 구현해 본다고 해요. BJT 소신호 모델을 MOS와 같은 틀로 정리해 두면 두 구현을 같은 식으로 읽을 수 있어요. 캐스코드라는 이름은 진공관 시대의 "cascaded triode"를 줄인 말로 여겨진다고 해요.</p>
           <p>출력저항을 키우는 다른 단순한 방법은 이미터나 소스에 축퇴 저항을 다는 거예요(Razavi 9.1.1, 450쪽). 저항을 키울수록 그 위의 전압 강하도 커져서 여유 전압을 더 먹어요. 캐스코드는 저항 대신 트랜지스터를 두어, 큰 소신호 저항 $r_{O2}$를 얻으면서 전류와 무관한 헤드룸만 써요.</p>
         </div>
-        <div class="sum" hidden>
+        <div class="sum" hidden><p>BJT의 유한한 베이스 전류는 B–E 저항 $r_\pi$로 추가해요.</p><p>보충(Razavi 9.1.1, 수업 미유도): 소스 축퇴 저항도 출력저항을 키우지만 전압 강하를 늘려요. 캐스코드는 트랜지스터의 큰 소신호 저항을 활용해요.</p>
           <p class="sum-lead">BJT도 MOS와 같은 소신호 틀로 보면, 하나짜리 전류원의 유한한 $r_O$가 보이고, 트랜지스터를 쌓는 캐스코드로 헤드룸을 내주고 출력저항을 키워요.</p>
           <p class="panel-label">핵심 식</p>
           <ul class="eq-list">
@@ -504,7 +504,7 @@
     <blockquote>모스가 더 중요하기도 하고, 모스를 알면 BJT로 큰 어려움이 없으니까 (0909 03:17)</blockquote>
     <p>MOSFET과 BJT의 가장 큰 차이는 입력 전류예요. 게이트 전류는 0이고, 베이스 전류는 작지만 유한해요(0909 00:51).</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>MOSFET은 saturation, BJT는 forward active에서 전류원으로 동작해요. 베이스 전류는 누설이 아니라 정상 동작 전류예요.</p>
     <p class="sum-lead">MOSFET과 BJT는 둘 다 전류원인데, BJT만 입력 단자로 베이스 전류가 흘러요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list"><li><span class="eq-name">베이스 전류</span>$$I_B = \frac{I_C}{\beta}$$</li></ul>
@@ -689,7 +689,7 @@
     <blockquote>"구별해야 됩니다. IC와 V_BE의 관계를 나타내는 게 아니고요, V_BE의 변화량과 IC의 변화량의 관계를 나타냅니다." (0909 14:21)</blockquote>
     <blockquote>"전압 이득을 결정하는 가장 중요한 것이 트랜스컨덕턴스이다 보니까" (0909 15:38)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>위젯의 접선 오차 비율은 $\Delta V$가 $V_T$보다 얼마나 작은지로 정해져요. 같은 $\Delta V$에서 바이어스를 바꿔 $g_m$을 키워도 상대 오차는 줄지 않아요.</p>
     <p class="sum-lead">$g_m$은 동작점에서 그은 접선의 기울기이고, 바이어스 전류에 비례해요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -811,7 +811,7 @@
     <p>부하 저항을 무한대로 두는 것은 개념상 극단이라 실제로는 불가능하다고 덧붙이셨어요(0909 32:57).</p>
     <blockquote>"트랜지스터의 유한한 출력 저항 때문에 이득을 무한한 이득으로 얻을 수는 없습니다." (0909 33:13)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>DC 전류에서 Early 효과를 무시하는 것과 소신호 $r_O$를 무한대로 두는 것은 달라요. $R_D\ll r_O$일 때만 부하에 비해 $r_O$ 영향이 작아요.</p>
     <p class="sum-lead">Early 효과 때문에 BJT 전류원도 유한한 출력저항 $r_O$를 가지고, 이득의 크기는 $g_m r_O$에서 멈춰요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -874,7 +874,7 @@
     <blockquote>"NPN 트랜지스터의 식을 기억할 텐데, 다 절댓값을 씌우면 됩니다." (0909 35:01)</blockquote>
     <blockquote>"각각의 파라미터의 의미가 뭐냐? 이런 것들을 좀 잘 기억해 두면, 사실은 회로를 해석하는 데 큰 어려움이 없겠습니다." (0909 36:52)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>$I_C=I_S\exp(|V_{BE}|/V_T)$에서는 $I_C$를 전류 크기로 읽어요. 소신호 전류 방향은 $v_{be}$의 극성으로 정해요.</p>
     <p class="sum-lead">PNP는 극성만 반대라서 NPN 식에 절댓값을 씌우면 되고, 소신호 모델은 NPN과 같아요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -936,7 +936,7 @@
     <blockquote>"어떻게 하면 키울 수 있느냐. 이게 … 앰프 설계에서는 아주 중요한 이슈가 되고요." (0909 43:38)</blockquote>
     <p>출력저항을 키운다는 말은 곧 이상적인 전류원에 더 가깝게 만든다는 말이에요.</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>출력저항 증가는 양단 전압 변화에 따른 전류 오차를 줄이고, 증폭기의 이득 제한도 완화해요.</p>
     <p class="sum-lead">트랜지스터 하나로 만든 전류원은 출력저항이 $r_O$로 유한해서, 트랜지스터를 쌓는 캐스코드로 출력저항을 키워요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1030,7 +1030,7 @@
     <blockquote>"위에는 소스 전압이 플로팅돼 있으니까 게이트 전압이 올라가면 소스 전압도 같이 올라가서 VGS가 안 바뀌는 거예요." (0909 49:44)</blockquote>
     <p>"그 원리를 잘 기억해 두시기 바랍니다." (0909 49:51)</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>DC 전류식은 채널 길이 변조를 무시해요. $V_{b1}$이 변하면 떠 있는 소스 X가 따라 움직여 $V_{GS1}$과 전류를 유지해요.</p>
     <p class="sum-lead">게이트 전류가 없어 쌓은 트랜지스터에도 같은 전류가 흐르고, 전류는 아래 $M_2$가 정해요. 위 $M_1$은 전류의 통로예요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1164,7 +1164,7 @@
     <blockquote>"요 정도를 기억하면 됩니다. … 요 두 번째 텀이 도미넌트한 값이에요." (0909 66:01)</blockquote>
     <p>기억할 식은 $R_{out} \approx g_{m1} r_{O1} r_{O2}$예요.</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>두 MOS가 포화이고 바디 효과를 무시한 소신호 결과예요. $M_2$는 $v_{gs2}=0$이지만 $M_1$은 소스가 움직여 종속 전류원이 남아요.</p><p>보충(슬라이드 제목의 해석, 칠판 미언급): $M_1$의 소스 축퇴 저항을 $R_S=r_{O2}$로 보면 같은 출력저항 식을 얻어요.</p>
     <p class="sum-lead">포화 영역에서 캐스코드 출력저항은 단순 합이 아니라 약 $g_{m1}r_{O1}$배 커지고, 이 예시는 근사 500 kΩ·정확 540 kΩ이에요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1236,7 +1236,7 @@
     </ul>
     <p>P9.15의 수치($V_{ov1} \approx 0.42$ V, $V_{ov2} = 0.30$ V)로 보면 $V_{ov1} + V_{ov2} \approx 0.72$ V예요. $V_{DD} = 1.8$ V에서는 전원의 약 40 %이지만, 같은 오버드라이브로 공급 전압이 1 V라면 약 72 %를 쌓은 두 트랜지스터가 먹어요. 남는 출력 스윙이 그만큼 좁아지므로 공급 전압이 낮을수록 캐스코드의 헤드룸 문제가 커져요. 교수님이 이어서 할 설명은 <a href="#s3-next">다음 시간 예고</a>에 이어져요.</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>보충(수업 미유도): $V_{b1}$을 $M_2$ 포화 경계의 최솟값으로 잡을 때 최소 출력이 $V_{ov1}+V_{ov2}$예요. 낮은 공급 전압에서 이 여유가 더 부담된다는 설명은 배경지식이며 교과서 9장의 직접 설명은 아니에요.</p>
     <p class="sum-lead">캐스코드는 전력이나 개수보다 헤드룸이 문제예요. 두 트랜지스터가 모두 포화여야 해서 출력에 최소 $V_{ov1} + V_{ov2}$가 필요해요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1300,9 +1300,8 @@
           <h2 id="panel-right-title">페이지 요약</h2>
           <button class="text-btn panel-close" type="button" data-panel-close>닫기</button>
         </div>
-        <p class="panel-sub" id="sum-for">전체 흐름</p>
         <p class="panel-empty" id="sum-empty">페이지를 넘기면 그 페이지의 핵심 식과 용어가 여기에 나옵니다.</p>
-        <div class="sums"></div>
+        <div class="sums" id="sum-for"></div>
       </div>
     </aside>
   </div>
@@ -1719,7 +1718,6 @@ var CR = (function () {
         const KEY = 'od-review-solved:' + RANGE;
         const cards = Array.from(document.querySelectorAll('main article.card'));
         const aids = panels.right.querySelector('.aids');
-        const sub = document.getElementById('aid-for');
         const empty = panels.right.querySelector('.panel-empty');
         const btn = document.getElementById('solved-btn');
         const groups = {};
@@ -1751,8 +1749,6 @@ var CR = (function () {
           Object.keys(groups).forEach((id) => { groups[id].hidden = id !== curId; });
           empty.hidden = Boolean(curId);
           btn.hidden = !curId;
-          sub.textContent = curId ? ((s.querySelector('h3') || {}).textContent || '').trim() : '';
-          sub.hidden = !curId;
           if (curId) paintBtn();
           panels.right.querySelector('.panel-inner').scrollTop = 0;
           markToc(solved, cards.length, '푼 문제');
@@ -1775,14 +1771,12 @@ var CR = (function () {
           box.appendChild(el);
           sums[t.id] = el;
         });
-        const sub = document.getElementById('sum-for');
         const empty = document.getElementById('sum-empty');
         document.addEventListener('od:screen', (e) => {
           const s = e.detail.screen;
           const key = s.matches('article.topic') ? s.id : 'intro';
           Object.keys(sums).forEach((id) => { sums[id].hidden = id !== key; });
           empty.hidden = Boolean(sums[key]);
-          sub.textContent = key === 'intro' ? '전체 흐름' : ((s.querySelector('h3') || {}).textContent || '').trim();
           if (s.matches('article.topic') && !read.has(s.id)) { read.add(s.id); store.set(KEY, Array.from(read)); }
           panels.right.querySelector('.panel-inner').scrollTop = 0;
           markToc(read, topics.length, '읽음');

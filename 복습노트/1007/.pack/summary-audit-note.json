@@ -1,0 +1,200 @@
+[
+  {
+    "topic": "why-circuit",
+    "category": "일반",
+    "body_claim": "유한테일·미스매치의CM누설과CMRR; 한출력절반손실·거울합산해회복",
+    "before": "pass",
+    "summary_sentence": "M3만 다이오드 연결이라 능동 부하는 대칭 하프 서킷으로 자를 수 없어요. $r_{O2}\\parallel r_{O4}$가 유한하며 외부 $R_L$도 병렬로 붙어 이득을 줄여요.보충(Razavi 10.6절, 수업 미유도): 이 능동 부하는 5 트랜지스터 OTA라고도 불러요. 캐스코드 테일로 CMRR을 높이면 추가 헤드룸 때문에 입력 CM 범위가 줄 수 있어요. CMRR은 CM 잡음이 차동 출력으로 새는 정도를 이득과 함께 한 숫자로 재고, 능동 부하는 싱글엔디드 출력에서도 이득을 반으로 잃지 않게 해요. 핵심 식 CMRR 정의$$\\mathrm{CMRR} = \\frac{A_{DM}}{A_{CM-DM}}$$ 한쪽만 쓸 때 이득$$|A_v|=\\frac{g_mR_D}{2}$$ 능동 부하 이득$$A_v = g_m (r_{O2} \\parallel r_{O4})$$ 용어 CMRR(common-mode rejection ratio)원하는 신호 이득 대 CM 잡음이 차동 출력으로 바뀌는 이득의 비예요. 능동 부하(active load)저항 대신 전류 거울로 만든 부하로, 한쪽 전류 변화를 출력으로 복사해요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "why-circuit",
+    "category": "주의",
+    "body_claim": "능동부하비대칭으로반회로불가·출력저항과RL유한",
+    "before": "unresolved",
+    "summary_sentence": "M3만 다이오드 연결이라 능동 부하는 대칭 하프 서킷으로 자를 수 없어요. $r_{O2}\\parallel r_{O4}$가 유한하며 외부 $R_L$도 병렬로 붙어 이득을 줄여요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "why-circuit",
+    "category": "보충",
+    "body_claim": "교과서5트랜지스터OTA·테일캐스코드CMRR헤드룸대가 보충",
+    "before": "unresolved",
+    "summary_sentence": "보충(Razavi 10.6절, 수업 미유도): 이 능동 부하는 5 트랜지스터 OTA라고도 불러요. 캐스코드 테일로 CMRR을 높이면 추가 헤드룸 때문에 입력 CM 범위가 줄 수 있어요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s0-cm-half-recap",
+    "category": "일반",
+    "body_claim": "테일2RSS분할·CM이득근사조건·대칭차동출력0",
+    "before": "pass",
+    "summary_sentence": "CM에서는 P가 AC 접지가 아니므로 소스에 $2R_{SS}$를 남겨요. DM 반회로는 P를 가상 접지로 두어 차동 이득을 구하는 다른 회로예요. $R_{SS}$를 $2R_{SS}$ 두 개로 나눠 자른 커먼 모드 하프 서킷으로 CM 이득을 구하고, 대칭이면 차동 출력에는 영향이 없어요. 핵심 식 커먼 모드 게인$$\\frac{\\Delta V_{out,CM}}{\\Delta V_{in,CM}}$$ $$= -\\frac{R_D}{1/g_m + 2R_{SS}}$$ $R_{SS} \\gg 1/g_m$일 때$$\\approx -\\frac{R_D}{2R_{SS}}$$ 용어 커먼 모드 하프 서킷(common-mode half circuit)소스와 접지 사이에 $2R_{SS}$가 달린 반쪽 회로 가상 접지(virtual ground)차동 입력에서만 테일 노드 P가 AC 접지가 되는 것",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s0-cm-half-recap",
+    "category": "주의",
+    "body_claim": "CM P접지아님·DM반회로와목적구분",
+    "before": "unresolved",
+    "summary_sentence": "CM에서는 P가 AC 접지가 아니므로 소스에 $2R_{SS}$를 남겨요. DM 반회로는 P를 가상 접지로 두어 차동 이득을 구하는 다른 회로예요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s0-cm-noise",
+    "category": "일반",
+    "body_claim": "이상테일각노드잡음0·실제테일각노드동일잡음차에서상쇄",
+    "before": "pass",
+    "summary_sentence": "이 결론은 두 쪽의 완전 대칭을 가정해요. 원하는 신호는 반대 위상이라 차에서 더해지고, 불일치가 있으면 CM 잡음도 차동 출력에 새어요. 실제 테일에서는 각 출력 노드에 CM 잡음이 실리지만, 같은 위상·같은 크기라 차동 출력에서는 상쇄돼요. 핵심 식 이상적 테일$$\\Delta V_{out,CM} = 0$$ 실제 테일, 각 노드$$\\Delta V_{out,CM} \\neq 0$$ 용어 차동 출력(differential output)$v_{out1} - v_{out2}$, 같은 위상 잡음이 빠지고 신호는 2배가 돼요 CM 리젝션(CM rejection)입력 CM 변화가 출력에 나타나지 않게 하는 성질",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s0-cm-noise",
+    "category": "주의",
+    "body_claim": "완전대칭조건·신호반대위상합산",
+    "before": "unresolved",
+    "summary_sentence": "이 결론은 두 쪽의 완전 대칭을 가정해요. 원하는 신호는 반대 위상이라 차에서 더해지고, 불일치가 있으면 CM 잡음도 차동 출력에 새어요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s1-mismatch",
+    "category": "일반",
+    "body_claim": "같은변화전류·다른부하로차동누설·CM이득과CM-DM구별",
+    "before": "pass",
+    "summary_sentence": "집적 저항의 절댓값 ±20% 편차와 같은 칩의 두 저항 사이 미스매치는 달라요. 여기서는 트랜지스터는 같고 부하만 다르다고 두며, 캐스코드 테일로 $R_{SS}$를 키워 누설을 줄여요. 부하 미스매치 $\\Delta R_D$ 때문에 입력 CM 변화가 차동 출력에 새어 나와요. $R_{SS}$를 키우면 줄어요. 핵심 식 차동 출력(교재 식 10.188 부호 관례)$$\\Delta V_{out} = -\\Delta I_D \\Delta R_D$$ $$|\\Delta V_{out}| = \\Delta I_D \\Delta R_D$$ CM-to-DM 이득$$A_{CM-DM} = \\frac{\\Delta R_D}{1/g_m + 2R_{SS}}$$ $2R_{SS} \\gg 1/g_m$일 때$$A_{CM-DM} \\approx \\frac{\\Delta R_D}{2R_{SS}}$$ 용어 미스매치(mismatch)똑같이 만들려던 두 소자 사이의 차이예요. CM-to-DM 이득입력 CM 변화가 차동 출력으로 바뀌는 비율이에요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s1-mismatch",
+    "category": "주의",
+    "body_claim": "절대저항20%편차와인접저항불일치구별·테일설계변수",
+    "before": "unresolved",
+    "summary_sentence": "집적 저항의 절댓값 ±20% 편차와 같은 칩의 두 저항 사이 미스매치는 달라요. 여기서는 트랜지스터는 같고 부하만 다르다고 두며, 캐스코드 테일로 $R_{SS}$를 키워 누설을 줄여요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s1-cmrr",
+    "category": "일반",
+    "body_claim": "원하는DM/원치않는CM-DM·RSS증대·dB20log",
+    "before": "pass",
+    "summary_sentence": "$\\Delta R_D\\ll R_D$에서 $A_{DM}=g_mR_D$로 두고, $2g_mR_{SS}\\gg1$에서 제시한 CMRR 근사를 써요. 원하는 것/원치 않는 것이라는 SNR 비유와 닮았지만 잡음 전력비 SNR 자체는 아니에요.보충(수업 미유도): 근사 전에는 $\\mathrm{CMRR}=(R_D/\\Delta R_D)(1+2g_mR_{SS})$로, 큰 테일 저항에서 1을 버려요. CMRR은 원하는 차동 이득을 CM-to-DM 이득으로 나눈 값이고, $R_{SS}$를 키우면 커져요. 핵심 식 정의$$\\mathrm{CMRR} = \\frac{A_{DM}}{A_{CM-DM}}$$ 저항 부하 차동쌍$$A_{DM} = g_m R_D$$ $$\\mathrm{CMRR} \\approx \\frac{2 g_m R_D R_{SS}}{\\Delta R_D}$$ dB 표시$$\\mathrm{CMRR}_{dB} = 20\\log_{10}\\mathrm{CMRR}$$ 용어 CMRR(common-mode rejection ratio)원하는 신호 이득 대 CM 잡음이 차동 출력으로 바뀌는 이득의 비예요. dB$20\\log_{10}$으로 나타낸 로그 눈금이에요. 60 dB는 1,000배예요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s1-cmrr",
+    "category": "주의",
+    "body_claim": "근사조건smallmismatch와2gmRSS큼·SNR비유와구별",
+    "before": "unresolved",
+    "summary_sentence": "$\\Delta R_D\\ll R_D$에서 $A_{DM}=g_mR_D$로 두고, $2g_mR_{SS}\\gg1$에서 제시한 CMRR 근사를 써요. 원하는 것/원치 않는 것이라는 SNR 비유와 닮았지만 잡음 전력비 SNR 자체는 아니에요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s1-cmrr",
+    "category": "보충",
+    "body_claim": "수업미유도확장식의누락1항",
+    "before": "unresolved",
+    "summary_sentence": "보충(수업 미유도): 근사 전에는 $\\mathrm{CMRR}=(R_D/\\Delta R_D)(1+2g_mR_{SS})$로, 큰 테일 저항에서 1을 버려요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s2-single-ended",
+    "category": "일반",
+    "body_claim": "한출력은전체차동입력에절반이득·CM상쇄손해",
+    "before": "pass",
+    "summary_sentence": "한 노드의 CM 이득도 1보다 훨씬 작아 단일 증폭단보다 잡음이 줄지만, 두 출력의 차로 상쇄할 때보다 CM 리젝션이 나빠져요. 차동쌍에서 한쪽 출력만 쓰면 이득이 절반이 되고, 커먼 모드 리젝션도 크게 나빠져요. 핵심 식 한쪽만 쓸 때 이득$$|A_v|=\\frac{g_mR_D\\Delta V}{2\\Delta V}=\\frac{g_mR_D}{2}$$ 한 노드의 CM 이득$$\\frac{\\Delta V_{out,CM}}{\\Delta V_{in,CM}}$$ $$=-\\frac{R_D}{1/g_m+2R_{SS}}$$ 용어 싱글엔디드(single-ended) 출력접지를 기준으로 한 노드 하나로 내보내는 출력 차동→싱글엔디드 변환(differential to single-ended conversion)차동 신호를 출력 하나로 바꾸는 일. op-amp 출력단이 예",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s2-single-ended",
+    "category": "주의",
+    "body_claim": "CM제거전무아님·단일CS보다개선",
+    "before": "unresolved",
+    "summary_sentence": "한 노드의 CM 이득도 1보다 훨씬 작아 단일 증폭단보다 잡음이 줄지만, 두 출력의 차로 상쇄할 때보다 CM 리젝션이 나빠져요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s2-mos-active",
+    "category": "일반",
+    "body_claim": "mirror로+ΔI넣고−ΔI빼순2ΔI·양의gmRout·ro병렬",
+    "before": "pass",
+    "summary_sentence": "대칭 입력 쌍·1:1 거울의 소신호 근사예요. M3만 다이오드 연결이라 전체는 비대칭이고 대칭 하프 서킷을 쓸 수 없어요.$R_L$이 있으면 $A_v=g_m(r_{O2}\\parallel r_{O4}\\parallel R_L)$이고 $R_L\\ll r_{O2}\\parallel r_{O4}$일 때만 $g_mR_L$예요. 거울을 고정 바이어스로 끊으면 전류 변화 하나만 남아 이득이 절반이에요. 출력에 넣는 전류는 $\\Delta I$ 늘고 빼는 전류는 $\\Delta I$ 줄어서 순전류 변화 $2\\Delta I$가 생겨요. 핵심 식 출력 전류 변화$$(I_{SS}/2+\\Delta I)$$ $$-(I_{SS}/2-\\Delta I)$$ $$=2\\Delta I$$ 출력저항$$R_{out} = r_{O2} \\parallel r_{O4}$$ 이득$$A_v = g_m (r_{O2} \\parallel r_{O4})$$ 용어 능동 부하(active load)저항 대신 트랜지스터로 만든 부하 다이오드 연결(diode-connected)게이트를 자기 드레인에 이은 연결. 여기서는 M3",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s2-mos-active",
+    "category": "주의",
+    "body_claim": "비대칭반회로금지·1:1거울소신호근사·P접지근사",
+    "before": "unresolved",
+    "summary_sentence": "대칭 입력 쌍·1:1 거울의 소신호 근사예요. M3만 다이오드 연결이라 전체는 비대칭이고 대칭 하프 서킷을 쓸 수 없어요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s2-mos-active",
+    "category": "주의",
+    "body_claim": "외부RL병렬조건·거울끊으면절반",
+    "before": "unresolved",
+    "summary_sentence": "$R_L$이 있으면 $A_v=g_m(r_{O2}\\parallel r_{O4}\\parallel R_L)$이고 $R_L\\ll r_{O2}\\parallel r_{O4}$일 때만 $g_mR_L$예요. 거울을 고정 바이어스로 끊으면 전류 변화 하나만 남아 이득이 절반이에요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s2-bjt-active",
+    "category": "일반",
+    "body_claim": "pnp거울변화복사·두전류합산·양의이득·ro병렬",
+    "before": "pass",
+    "summary_sentence": "외부 $R_L$도 출력저항에 병렬이고 거울을 끊으면 이득이 절반이에요. $r_{\\pi2}$는 B–E 사이여서 출력 컬렉터의 $r_{O4}$와 병렬이 아니며, 위 이미터와 아래 컬렉터가 연결되는 캐스코드와 구별해요. pnp 전류 거울을 부하로 쓴 BJT 차동쌍도 출력 전류가 두 배가 되어, 이득이 $g_m R_{out}$으로 유지돼요. 핵심 식 출력 전류$$I_{out} = 2 g_m v_{in1}$$ 이득$$\\frac{v_{out}}{v_{in1}-v_{in2}}$$ $$=\\frac{2g_mv_{in1}R_{out}}{2v_{in1}}=g_m R_{out}$$ 출력저항$$R_{out}=r_{O2}\\parallel r_{O4}$$ 용어 pnp 전류 거울(pnp current mirror)Q3, Q4. Q3의 전류 변화를 Q4로 복사하는 부하",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s2-bjt-active",
+    "category": "주의",
+    "body_claim": "RL병렬·거울끊음절반·출력rpi배제이유",
+    "before": "unresolved",
+    "summary_sentence": "외부 $R_L$도 출력저항에 병렬이고 거울을 끊으면 이득이 절반이에요. $r_{\\pi2}$는 B–E 사이여서 출력 컬렉터의 $r_{O4}$와 병렬이 아니며, 위 이미터와 아래 컬렉터가 연결되는 캐스코드와 구별해요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s3-cheatsheet",
+    "category": "구조",
+    "body_claim": "식조건·시험유형 연결표",
+    "before": "pass",
+    "summary_sentence": "기존 요약표·예고·링크 화면 구조 유지",
+    "status": "pass",
+    "reason": "요약·예고·링크에는 별도 패널을 만들지 않음"
+  },
+  {
+    "topic": "s3-next",
+    "category": "구조",
+    "body_claim": "다음시간주파수응답·과제공지예고",
+    "before": "pass",
+    "summary_sentence": "기존 요약표·예고·링크 화면 구조 유지",
+    "status": "pass",
+    "reason": "요약·예고·링크에는 별도 패널을 만들지 않음"
+  },
+  {
+    "topic": "s3-links",
+    "category": "구조",
+    "body_claim": "범위10문제와답안연결",
+    "before": "pass",
+    "summary_sentence": "기존 요약표·예고·링크 화면 구조 유지",
+    "status": "pass",
+    "reason": "요약·예고·링크에는 별도 패널을 만들지 않음"
+  }
+]

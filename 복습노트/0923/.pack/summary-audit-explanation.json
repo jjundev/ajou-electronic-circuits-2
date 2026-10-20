@@ -1,0 +1,182 @@
+[
+  {
+    "topic": "p1",
+    "category": "일반",
+    "body_claim": "조사 전원리플만 남기고 베이스·이미터AC접지라 vbe0; ro RC 분압의 양의 이득",
+    "before": "unresolved",
+    "summary_sentence": "베이스 바이어스가 리플과 독립이라 $v_{be}=0$이에요. 조사 중인 $v_{cc}$는 남기고 $v_{out}/v_{cc}=r_o/(R_C+r_o)>0$를 구해요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p1",
+    "category": "주의",
+    "body_claim": "CE 입력이득 -gmRC 적용금지; ro극한 확인",
+    "before": "pass",
+    "summary_sentence": "베이스 바이어스가 리플과 독립이라 $v_{be}=0$이에요. 조사 중인 $v_{cc}$는 남기고 $v_{out}/v_{cc}=r_o/(R_C+r_o)>0$를 구해요.떠올릴 개념·공식전원 리플의 중첩·분압첫 줄vout 노드 KCL, vbe=0핵심 판단gm vbe=0, ro만 남음검산ro→∞이면 이득 1",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p2",
+    "category": "일반",
+    "body_claim": "각 전달비를 뺀 차동리플0; 개별노드는 움직임",
+    "before": "pass",
+    "summary_sentence": "베이스 바이어스가 리플과 독립이고 $R_{C1}=R_{C2}$뿐 아니라 동일 소자·바이어스로 $r_{o1}=r_{o2}$여야 정확히 상쇄돼요.떠올릴 개념·공식대칭과 공통 모드 제거첫 줄두 출력 KCL핵심 판단각 노드는 이동, 차는 상쇄검산유한 ro에서도 0",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p2",
+    "category": "주의",
+    "body_claim": "저항뿐 아니라 ro·바이어스 동일 필요; 베이스리플 독립",
+    "before": "unresolved",
+    "summary_sentence": "베이스 바이어스가 리플과 독립이고 $R_{C1}=R_{C2}$뿐 아니라 동일 소자·바이어스로 $r_{o1}=r_{o2}$여야 정확히 상쇄돼요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p3",
+    "category": "일반",
+    "body_claim": "VP=VCM−VTH−Vov; W배수와 ISS·tox배수의 과구동변화",
+    "before": "unresolved",
+    "summary_sentence": "폭 두 배는 $V_{ov}/\\sqrt2$로 테일이 $0.293V_{ov}$ 올라가고, 전류 또는 산화막 두께 두 배는 $\\sqrt2V_{ov}$로 $0.414V_{ov}$ 내려가요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p3",
+    "category": "주의",
+    "body_claim": "tox변경은 VTH고정단순화, 실제 VTH변화 추가",
+    "before": "pass",
+    "summary_sentence": "폭 두 배는 $V_{ov}/\\sqrt2$로 테일이 $0.293V_{ov}$ 올라가고, 전류 또는 산화막 두께 두 배는 $\\sqrt2V_{ov}$로 $0.414V_{ov}$ 내려가요.떠올릴 개념·공식제곱 법칙과 테일 높이첫 줄VP=VCM−VTH−Vov핵심 판단W 두 배 ↑; 전류·tox 두 배 ↓검산전류식을 역대입해 확인해석 조건(c)는 $V_{TH}$ 고정·$C_{ox}$만 절반인 모델에서 $0.414V_{ov}$ 하강해요. $V_{TH}$도 변하면 $-\\Delta V_{TH}$를 추가해요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p4",
+    "category": "일반",
+    "body_claim": "평형 소자전류0.25mA; 드레인 포화경계로 최대부하2.8k",
+    "before": "pass",
+    "summary_sentence": "$R_D\\le2.80\\,\\mathrm{k}\\Omega$가 입력쌍 포화 조건이고 등호는 경계예요. 안쪽 여유에는 더 작은 값을 택하며, 테일 최소 전압은 별도 조건이에요.떠올릴 개념·공식포화 영역 전압 여유첫 줄VD≥VCM−VTH핵심 판단각 가지는 0.25 mA검산2.80 kΩ에서 VD=1.10 V",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p4",
+    "category": "주의",
+    "body_claim": "경계값과 여유설계 구분; 테일하한 미주어짐",
+    "before": "unresolved",
+    "summary_sentence": "$R_D\\le2.80\\,\\mathrm{k}\\Omega$가 입력쌍 포화 조건이고 등호는 경계예요. 안쪽 여유에는 더 작은 값을 택하며, 테일 최소 전압은 별도 조건이에요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p5",
+    "category": "일반",
+    "body_claim": "전류합차로 전체조향; d 양의 근 sqrt2평형Vov",
+    "before": "pass",
+    "summary_sentence": "두 소자 전도 식은 $|d|\\le\\sqrt{2I_{SS}/K}$에서만 유효해요. 양의 전류 차이 $I_{SS}$에는 $d>0$인 근을 고르고, 음의 근은 반대 전류 차이에 해당해요.떠올릴 개념·공식전류 조향의 차단 경계첫 줄대신호 차 전류=ISS핵심 판단d=√2 Vov,eq검산합·차로 ID1=ISS, ID2=0",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p5",
+    "category": "주의",
+    "body_claim": "제곱근 실수조건으로 원식을 차단밖 연장하면 안 됨",
+    "before": "unresolved",
+    "summary_sentence": "두 소자 전도 식은 $|d|\\le\\sqrt{2I_{SS}/K}$에서만 유효해요. 양의 전류 차이 $I_{SS}$에는 $d>0$인 근을 고르고, 음의 근은 반대 전류 차이에 해당해요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p6",
+    "category": "일반",
+    "body_claim": "전력예산 전부 쓰는 설계1.67mA, W/L133; 선택적 설계",
+    "before": "pass",
+    "summary_sentence": "$\\lambda=0$·이상적 테일에서 $d_{max}$는 한쪽 차단 경계이며 선형 보장 범위가 아니에요. 부하·출력 사양이 없어 $R_D$는 유일하게 정해지지 않아요.떠올릴 개념·공식전력과 완전 조향 범위첫 줄P=VDD ISS핵심 판단예산 전부 쓰는 한 설계검산1.67 mA, 133, 0.500 V",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p6",
+    "category": "주의",
+    "body_claim": "dmax는 차단경계·선형한계아님; 부하미결정; 이상테일 CLM0",
+    "before": "unresolved",
+    "summary_sentence": "$\\lambda=0$·이상적 테일에서 $d_{max}$는 한쪽 차단 경계이며 선형 보장 범위가 아니에요. 부하·출력 사양이 없어 $R_D$는 유일하게 정해지지 않아요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p7",
+    "category": "일반",
+    "body_claim": "M2off로 전체ISS RD강하; VX포화부등식",
+    "before": "unresolved",
+    "summary_sentence": "$R_DI_{SS}\\le V_{DD}-1.5\\,\\mathrm V+V_{TH}$이며, 우변이 음수면 양의 저항·전류로 포화를 유지할 수 없어요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p7",
+    "category": "주의",
+    "body_claim": "M2off가정 일관성·테일여유 별도",
+    "before": "unresolved",
+    "summary_sentence": "제곱 법칙의 $M_2$ 차단 가정은 $\\sqrt{2I_{SS}/K}\\le1.2\\,\\mathrm V$로 확인해요. 테일 전류원의 전압 여유도 필요해요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p8",
+    "category": "일반",
+    "body_claim": "전류차기울기 gm, 출력차 -RD로 -gmRD; 각 전류 ISS/2",
+    "before": "pass",
+    "summary_sentence": "동일 소자·부하, 이상적 테일, $\\lambda=0$에서 $d^2\\ll4I_{SS}/K$인 평형 근처의 이득이에요. 출력은 1−2 순서라 음수이고 차동 차이에 2를 다시 곱하지 않아요.떠올릴 개념·공식대신호 특성의 평형 선형화첫 줄vod=−RD ΔID핵심 판단√(K ISS)=gm검산차동 이득 −gm RD",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p8",
+    "category": "주의",
+    "body_claim": "대칭 이상테일 CLM0·작은입력·출력순서·2중복 금지",
+    "before": "unresolved",
+    "summary_sentence": "동일 소자·부하, 이상적 테일, $\\lambda=0$에서 $d^2\\ll4I_{SS}/K$인 평형 근처의 이득이에요. 출력은 1−2 순서라 음수이고 차동 차이에 2를 다시 곱하지 않아요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p9",
+    "category": "일반",
+    "body_claim": "각소자 ISS/2에서 gm=ISS/Vov와 이득 -ISSRD/Vov",
+    "before": "pass",
+    "summary_sentence": "작은 차동 입력·$\\lambda=0$에서 쓰며, 같은 전류에서 과구동을 반으로 줄여 이득을 두 배로 하려면 $W/L$을 네 배로 키워야 해요. 대신호 입력 범위도 좁아져요.떠올릴 개념·공식gm의 과구동 표현첫 줄gm=ISS/Vov,eq핵심 판단Av=−ISS RD/Vov,eq검산√(K ISS) 표현과 일치",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p9",
+    "category": "주의",
+    "body_claim": "고정ISS에서 과구동작으면 gm증가하나 크기와 대신호범위 대가",
+    "before": "unresolved",
+    "summary_sentence": "작은 차동 입력·$\\lambda=0$에서 쓰며, 같은 전류에서 과구동을 반으로 줄여 이득을 두 배로 하려면 $W/L$을 네 배로 키워야 해요. 대신호 입력 범위도 좁아져요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p10",
+    "category": "일반",
+    "body_claim": "교환대칭과 원제곱법칙 KCL, 1차상쇄로 VP미분0·2차변화",
+    "before": "pass",
+    "summary_sentence": "기생 저항이 있어 실제 평형 전류 합은 $I_{SS}+V_{P0}/R_{SS}$예요. 동일 소자의 교환 대칭이 1차 항을 지우며, 가상 접지는 DC 전압 0이 아니라 작은 차동 변화 0을 뜻해요.떠올릴 개념·공식교환 대칭·제곱 법칙 KCL첫 줄원래 전류 합=ISS+VP/RSS핵심 판단VP 변화는 입력 차의 이차부터검산미분계수 0, RSS 극한 확인규칙을 적용하는 순서$(a+\\delta)^2+(a-\\delta)^2=2a^2+2\\delta^2$1차 항 상쇄 → 테일 변화는 2차부터예요. DC 전압이 0이라는 뜻은 아니에요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p10",
+    "category": "주의",
+    "body_claim": "실제 기생저항 평형전류 ISS+VP0/RSS; DC접지와 구분",
+    "before": "unresolved",
+    "summary_sentence": "기생 저항이 있어 실제 평형 전류 합은 $I_{SS}+V_{P0}/R_{SS}$예요. 동일 소자의 교환 대칭이 1차 항을 지우며, 가상 접지는 DC 전압 0이 아니라 작은 차동 변화 0을 뜻해요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  }
+]

@@ -424,7 +424,7 @@
         <div class="layer supp"><span class="badge supp">보충 · 수업에서 유도하진 않았어요</span>
           <p>선형 근사가 주는 이점은 계산이 짧아지는 것만이 아니에요. 회로가 선형이 되면 중첩의 원리(superposition), 테브난 등가(Thevenin equivalent) 같은 선형 회로 도구를 그대로 쓸 수 있어요. 여러 단을 이어 붙인 증폭기도 단마다 나눠 풀고 결과를 곱하거나 더하면 돼요.</p>
         </div>
-        <div class="sum" hidden>
+        <div class="sum" hidden><p>DC 해석으로 $g_m,r_O$를 먼저 정하고, 작은 변화량에만 접선 근사를 적용해요. 유한한 $r_O$는 CS 이득을 $g_mr_O$ 이하로 제한해요.</p><p>보충(수업에서 유도하지 않음): 선형 근사 후에는 중첩과 테브난 등가 같은 선형 회로 도구를 쓸 수 있어요.</p>
           <p class="sum-lead">비선형인 트랜지스터를 동작점 근처에서 선형으로 근사한 것이 소신호 모델이고, 이걸로 증폭기 이득을 쉽게 구해요.</p>
           <p class="panel-label">핵심 식</p>
           <ul class="eq-list"><li><span class="eq-name">트랜스컨덕턴스</span>$$g_m = \frac{\partial I_D}{\partial V_{GS}}$$</li><li><span class="eq-name">CS 이득</span>$$A_v = -g_m R_D$$</li></ul>
@@ -566,7 +566,7 @@
     <blockquote>"특히나 중요한 게 전류원의 역할을 한다는 거" (0904 62:54)</blockquote>
     <p>MOSFET 부분을 마무리하며, 포화 영역의 트랜지스터가 전류원이라는 점을 기억하라고 하셨어요.</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>포화식은 $V_{GS}&gt;V_{TH}$와 $V_{DS}\ge V_{GS}-V_{TH}$에서 써요. 대신호는 전체 전압·전류, 소신호는 작은 변화량의 관계예요.</p>
     <p class="sum-lead">포화 영역의 MOSFET은 게이트 전압으로 크기가 정해지는 전류원이고, 그 관계는 비선형이에요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -656,7 +656,7 @@
     <p>MOSFET 부분을 마치며 두 모델의 관계를 한 번 더 짚으셨어요.</p>
     <blockquote>"사실 둘에 별개의 게 아닙니다." (0904 63:05)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>수업의 바이어스 약 10%는 경험칙이고, 슬라이드의 상한은 드레인 전류 변화 약 10%예요. 게이트 변화는 오버드라이브 대비로 근사 오차를 확인하며 두 기준을 같게 쓰지 않아요.</p>
     <p class="sum-lead">바이어스점 위의 작은 변화량만 보면 비선형 곡선을 직선으로 근사할 수 있고, 그 변화량의 관계가 소신호 모델이에요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -723,7 +723,7 @@
     <blockquote>"가장 간단한 스몰 시그널 모델을 표현하라. … 델타 ID는 gm VGS." (0904 24:27)</blockquote>
     <blockquote>"둘을 헷갈려 쓰면 안 돼요." (0904 25:17) 대문자(대신호)와 소문자(소신호) 표기를 구별하라는 말이에요.</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>포화 영역에서 채널 길이 변조를 무시한 식이에요. 소문자 $v_{gs},i_d$는 변화량이고 대문자는 바이어스 값이에요.</p><p>$g_m=\mu_nC_{ox}\frac{W}{L}(V_{GS}-V_{TH})=\frac{2I_D}{V_{GS}-V_{TH}}$로도 써요. 주어진 바이어스 값에 맞는 식을 골라요.</p>
     <p class="sum-lead">$g_m$은 작은 전압 변화에 곱해 전류 변화를 구하는 계수이고, 같은 동작점 근처에서 $i_d=g_mv_{gs}$예요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -814,7 +814,7 @@
     <blockquote>"스몰 시그널 모델을 그리시오 하면 이렇게 그리면 돼요." (0904 33:49) 전류원 $g_m v_{gs}$와 병렬 $r_O$를 그리면 돼요.</blockquote>
     <blockquote>"ro는 고려하지 않으면 무한대 저항인데" (0904 32:44) 그래서 $r_O$는 일반적으로 고려해요.</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>DC 전류에서는 작은 채널 길이 변조를 무시해도, 소신호 $r_O$까지 없애면 유한한 저항을 무한대로 바꾸므로 이득 영향은 클 수 있어요.</p>
     <p class="sum-lead">채널 길이 변조로 $I_D$가 $V_{DS}$에 따라 조금 늘어나고, 이를 D–S 사이의 병렬 저항 $r_O$로 모델링해요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1014,7 +1014,7 @@
     <blockquote>"변화량의 관계로 표현할 때는 0이에요, 0. 0은 뭐야? 그라운드." (0904 39:43)</blockquote>
     <blockquote>"결론적으로 얘기하면 PMOS의 스몰 시그널 모델은 NMOS와 동일하다." (0904 40:43)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>$v_{gs}$의 부호에 따라 소신호 전류 방향이 달라질 수 있어도 등가 모델 자체는 같아요.</p>
     <p class="sum-lead">PMOS 소신호 등가회로는 소스의 $V_{DD}$를 AC 접지로 두고 위아래를 뒤집으면 NMOS와 같아요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1105,7 +1105,7 @@
     <blockquote>"우리가 gm을 바꾸고 싶으면 오퍼레이팅 포인트를 바꿔야 돼요." (0904 42:09)</blockquote>
     <p>소신호 해석에서 DC 전압원은 단락(AC 접지), DC 전류원은 개방이에요. 신호원은 그대로 둬요 (0904 45:54–46:23).</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>변화량이 있는 신호원은 그대로 두며, DC 소스처럼 단락하거나 개방하지 않아요.</p>
     <p class="sum-lead">DC 해석으로 오퍼레이팅 포인트를 정하고, 소신호 해석은 변화량끼리의 관계만 봐요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list"><li><span class="eq-name">트랜스컨덕턴스</span>$$g_m=\sqrt{2kI_D}=k(V_{GS}-V_{TH})$$</li><li><span class="eq-name">출력저항</span>$$r_O=\frac{1}{\lambda I_D}$$</li></ul>
@@ -1176,7 +1176,7 @@
     <blockquote>"무조건 증폭이 되는 게 아니라 오히려 감소할 수도 있어요." (0904 52:41)</blockquote>
     <p>이 따라가기는 소신호 모델 없이 정성적으로 본 것이고, 소신호 모델을 쓰면 더 쉽게 볼 수 있다고 하셨어요. 이어지는 해석은 <a href="#s3-cs-gain">CS 증폭기 이득 A_v = -g_m R_D</a>에 있어요.</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>증폭에는 전원에서 공급하는 바이어스 전류와 포화 동작이 필요해요. $|g_mR_D|&gt;1$일 때만 출력 변화가 입력보다 커져요.</p>
     <p class="sum-lead">입력이 오르면 전류가 늘고 $R_D$ 강하가 커져서, 출력은 거꾸로 내려가요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list"><li><span class="eq-name">전류 변화</span>$$\Delta I_D = g_m \Delta V$$</li><li><span class="eq-name">출력 변화</span>$$\Delta V_{out} = -g_m \Delta V R_D$$</li></ul>
@@ -1257,7 +1257,7 @@
     <blockquote>"우리가 이 식을 배우는 거는 이 식을 외우기 위한 목적이 아니에요." (0904 56:31)</blockquote>
     <blockquote>"RD를 무조건 크게 하는 거는 답이 아니다" (0904 58:10)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>이 식은 채널 길이 변조를 무시해요. $R_D$나 $I_D$를 키우면 $V_{DS}=V_{DD}-I_DR_D$가 줄어 포화를 벗어날 수 있으므로 전압 여유를 함께 확인해요.</p>
     <p class="sum-lead">포화 영역의 소신호에서 $A_v=-g_mR_D$이고, 입력 변화에 이득을 곱하면 출력 변화가 돼요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list"><li><span class="eq-name">CS 이득</span>$$A_v = -g_m R_D$$</li><li><span class="eq-name">트랜스컨덕턴스</span>$$g_m=\sqrt{2\mu_nC_{ox}\frac{W}{L}I_D}$$</li></ul>
@@ -1373,7 +1373,7 @@
     <blockquote>"최대 이득은 gm ro보다 커질 수는 없다." (0904 61:21)</blockquote>
     <blockquote>"그래서 무한대의 이득은 얻을 수가 없어요." (0904 62:01)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>출력저항은 입력을 0으로 두고 구해요. $R_D\ll r_O$일 때만 $r_O$의 영향이 작고, $R_D\to\infty$이면 이득 크기는 $g_mr_O$에 접근해요.</p><p>슬라이드에만 적힌 $R_{in}=\infty$는 게이트 전류가 없기 때문이에요.</p>
     <p class="sum-lead">$r_O$가 $R_D$와 병렬로 붙어서, 이득은 intrinsic gain $g_m r_O$를 넘지 못해요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list"><li><span class="eq-name">CS 이득(r_O 포함)</span>$$A_v = -g_m (R_D \parallel r_O)$$</li><li><span class="eq-name">출력저항</span>$$R_{out} = R_D \parallel r_O$$</li></ul>
@@ -1518,9 +1518,8 @@
           <h2 id="panel-right-title">페이지 요약</h2>
           <button class="text-btn panel-close" type="button" data-panel-close>닫기</button>
         </div>
-        <p class="panel-sub" id="sum-for">전체 흐름</p>
         <p class="panel-empty" id="sum-empty">페이지를 넘기면 그 페이지의 핵심 식과 용어가 여기에 나옵니다.</p>
-        <div class="sums"></div>
+        <div class="sums" id="sum-for"></div>
       </div>
     </aside>
   </div>
@@ -1935,7 +1934,6 @@ var CSI = (function () {
         const KEY = 'od-review-solved:' + RANGE;
         const cards = Array.from(document.querySelectorAll('main article.card'));
         const aids = panels.right.querySelector('.aids');
-        const sub = document.getElementById('aid-for');
         const empty = panels.right.querySelector('.panel-empty');
         const btn = document.getElementById('solved-btn');
         const groups = {};
@@ -1967,8 +1965,6 @@ var CSI = (function () {
           Object.keys(groups).forEach((id) => { groups[id].hidden = id !== curId; });
           empty.hidden = Boolean(curId);
           btn.hidden = !curId;
-          sub.textContent = curId ? ((s.querySelector('h3') || {}).textContent || '').trim() : '';
-          sub.hidden = !curId;
           if (curId) paintBtn();
           panels.right.querySelector('.panel-inner').scrollTop = 0;
           markToc(solved, cards.length, '푼 문제');
@@ -1991,14 +1987,12 @@ var CSI = (function () {
           box.appendChild(el);
           sums[t.id] = el;
         });
-        const sub = document.getElementById('sum-for');
         const empty = document.getElementById('sum-empty');
         document.addEventListener('od:screen', (e) => {
           const s = e.detail.screen;
           const key = s.matches('article.topic') ? s.id : 'intro';
           Object.keys(sums).forEach((id) => { sums[id].hidden = id !== key; });
           empty.hidden = Boolean(sums[key]);
-          sub.textContent = key === 'intro' ? '전체 흐름' : ((s.querySelector('h3') || {}).textContent || '').trim();
           if (s.matches('article.topic') && !read.has(s.id)) { read.add(s.id); store.set(KEY, Array.from(read)); }
           panels.right.querySelector('.panel-inner').scrollTop = 0;
           markToc(read, topics.length, '읽음');

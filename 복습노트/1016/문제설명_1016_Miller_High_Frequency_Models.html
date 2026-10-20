@@ -586,7 +586,7 @@
   <h4>설명을 닫고 다시 해 봐요</h4>
   <ol><li>$g_mR_D$를 두 배로 키우면 어느 쪽 등가 커패시턴스가 크게 늘고, 어느 추정 극점이 내려가는지 말해 보세요.</li><li>원래 $C_F$가 한 개인데 입력·출력 RC 추정치가 두 개인 이유를 설명해 보세요.</li></ol>
 </div>
-<div class="sum" hidden="">
+<div class="sum" hidden=""><p>$\lambda=0$은 $r_o\to\infty$라는 뜻이에요. 출력 등가 커패시턴스는 $(1+1/(g_mR_D))C_F$라 입력의 $(1+g_mR_D)C_F$와 달라요.</p>
   <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>밀러 근사: $A=-g_mR_D$, $C_{in}=(1-A)C_F$, $C_{out}=(1-1/A)C_F$.</p></div>
   <div class="summary-group"><h4>첫 줄</h4><p>$v_o=-g_mv_gR_D$에서 두 노드의 저주파 이득을 정해요.</p></div>
   <div class="summary-group"><h4>핵심 판단</h4><p>입력은 $R_SC_{in}$, 출력은 $R_DC_{out}$의 역수로 추정해요.</p></div>
@@ -671,7 +671,7 @@
   <h4>설명을 닫고 다시 해 봐요</h4>
   <ol><li>$R_F$를 매우 크게 만들면 $X$의 저항이 무엇으로 수렴하는지 말해 보세요.</li><li>$R_B$가 커질 때 $|v_{out}/v_{in}|$이 왜 줄어드는지 입력 전류 경로로 설명해 보세요.</li></ol>
 </div>
-<div class="sum" hidden="">
+<div class="sum" hidden=""><p>$V_A=\infty$이고 $R_F$가 충분히 커 출력 쪽 밀러 저항의 부하를 무시할 때의 추정이에요. 입력에서는 축소된 $R_F/(1+g_mR_C)$를 지우지 않아요.</p>
   <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>밀러 저항: $R_{F,X}=R_F/(1+g_mR_C)$.</p></div>
   <div class="summary-group"><h4>첫 줄</h4><p>$i_F=(v_X-v_{out})/R_F$와 $v_{out}\approx-g_mR_Cv_X$.</p></div>
   <div class="summary-group"><h4>핵심 판단</h4><p>$R_X=r_\pi\parallel R_{F,X}$를 $R_B$와 분배한 뒤 $-g_mR_C$를 곱해요.</p></div>
@@ -715,7 +715,7 @@
   <h4>설명을 닫고 다시 해 봐요</h4>
   <ol><li>$r_\pi$가 $R_B$보다 매우 작다면 입력 RC 추정식의 저항은 어느 값에 가까운가요?</li><li>$C_F$ 한 개를 두 접지 커패시터로 바꾼 뒤 실제 극점 수를 두 개라고 단정하면 왜 틀릴까요?</li><li>$R=R_B\parallel r_\pi$일 때, 실제 극점이 밀러 입력 추정치에 가까우려면 $R_C$와 $R(1+g_mR_C)$ 사이에 어떤 크기 관계가 필요한가요?</li></ol>
 </div>
-<div class="sum" hidden="">
+<div class="sum" hidden=""><p>$V_A=\infty$·다른 커패시턴스 무시에서 저주파 $A=-g_mR_C$를 고정한 근사예요. 출력 등가값은 $C_{out}=(1+1/(g_mR_C))C_F$예요.</p>
   <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>밀러 근사: $A=-g_mR_C$, $C_{in}=(1-A)C_F$.</p></div>
   <div class="summary-group"><h4>첫 줄</h4><p>$v_o=-g_mR_Cv_b$; 베이스에서는 $R_B\parallel r_\pi$가 보여요.</p></div>
   <div class="summary-group"><h4>핵심 판단</h4><p>입력은 $(R_B\parallel r_\pi)C_{in}$, 출력은 $R_CC_{out}$.</p></div>
@@ -760,7 +760,7 @@
   <h4>설명을 닫고 다시 해 봐요</h4>
   <ol><li>최저 주파수 조건을 10 Hz로 낮추면 필요한 $C_i$의 최소값이 몇 배가 되는지 말해 보세요.</li><li>$C_L$을 허용 최대값보다 두 배 크게 달면 출력 경계 주파수는 얼마가 되는지 계산해 보세요.</li></ol>
 </div>
-<div class="sum" hidden="">
+<div class="sum" hidden=""><p>이상적 전류원·$\lambda=0$·외부 $C_i,C_L$ 모델의 결과예요. 경계를 대역 끝에 맞추면 해당 1차 응답은 약 3 dB 낮으므로 감쇠를 더 줄이려면 $C_i$를 키우고 $C_L$을 줄여요.</p>
   <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>입력 고역통과 $1/(R_iC_i)$, 출력 외부 부하 RC $g_m/C_L$.</p></div>
   <div class="summary-group"><h4>첫 줄</h4><p>$V_{DD}$를 AC 접지로: 입력 $C_i$–$R_i$, 출력 $1/g_m$–$C_L$.</p></div>
   <div class="summary-group"><h4>핵심 판단</h4><p>교재의 20 Hz–20 kHz를 경계 조건으로 써요. 원문 $R_1$은 그림의 $R_i$로 읽어요.</p></div>
@@ -804,7 +804,7 @@
   <h4>설명을 닫고 다시 해 봐요</h4>
   <ol><li>$W$만 절반이고 $I_D$는 같다면 $g_m$의 비율은 얼마인지 식에서 구해 보세요.</li><li>$g_m$이 다시 두 배가 되면 20 kHz 조건에서 허용 $C_L$이 어떻게 바뀌는지 말해 보세요.</li></ol>
 </div>
-<div class="sum" hidden="">
+<div class="sum" hidden=""><p>$\lambda=0$·이상적 전류원의 외부 $C_i,C_L$ 모델이에요. 폭만 절반일 때의 $1/\sqrt2$와 달리 전류도 절반이라 $g_m$은 $1/2$이에요.</p>
   <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>$g_m\propto\sqrt{WI_D}$; 입력 $1/(R_iC_i)$, 출력 $g_m/C_L$.</p></div>
   <div class="summary-group"><h4>첫 줄</h4><p>$g_{m,new}/g_{m,old}=\sqrt{(1/2)(1/2)}=1/2$.</p></div>
   <div class="summary-group"><h4>핵심 판단</h4><p>교재의 20 Hz–20 kHz와 그림의 $R_i=100\,\mathrm{k\Omega}$를 유지해요.</p></div>
@@ -824,7 +824,7 @@
 <div class="layer formal" data-explanation="verify"><h4>완성 답과 검산</h4><div data-subpart="main"><h4>노드와 전류 방향 확인</h4><p><b>입력–접지 $C_{GS1}$, 입력–출력 $C_{GD1}$; 출력–접지 $g_{m1}V_{in}$ 전류원, $r_{O1}\parallel r_{O2}\parallel(1/g_{m2})$, $C_T=C_{DB1}+C_{DB2}+C_{GS2}$.</b> $V_{in}=0$일 때 출력에서 접지로 흐르는 저항성 전류는 $V_{out}(1/r_{O1}+1/r_{O2}+g_{m2})$예요. 모두 양의 컨덕턴스이므로 수동 다이오드 연결 부하의 방향과 맞아요. $1/g_m$은 Ω 단위예요.</p></div></div>
 <div class="layer warn" data-explanation="pitfall"><h4>이 문항에서 조심할 점</h4><p>$M_2$에 NMOS의 "드레인→소스 $g_m v_{GS}$" 화살표를 그대로 붙여 $g_{m2}V_{out}$이 위쪽으로 흐른다고 보면 부하가 음의 저항처럼 바뀌어요. PMOS는 $v_{SG2}=-V_{out}$와 소스→드레인 전류를 먼저 정의해야 해요. $C_{GD1}$도 두 움직이는 노드 사이이므로 출력 커패시턴스 합에 바로 넣지 않아요.</p></div>
 <div class="layer eli5" data-explanation="retry"><h4>설명을 닫고 다시 해 봐요</h4><ol><li>$M_2$의 $r_{O2}$가 무한대라면 등가회로에서 어느 가지만 지우며, $1/g_{m2}$는 왜 남나요?</li><li>$V_{out}$이 AC로 조금 증가할 때 다이오드 연결 PMOS의 출력→접지 소신호 전류 변화는 어느 방향인가요?</li></ol></div>
-<div class="sum" hidden=""><div class="summary-group"><h4>떠올릴 개념·공식</h4><p>MOS 고주파 모델과 다이오드 연결 PMOS의 양의 컨덕턴스 $g_{m2}$.</p></div><div class="summary-group"><h4>첫 줄</h4><p>$M_1:(V_{in},V_{out},0,0)$, $M_2:(V_{out},V_{out},0,0)$ 순서 $G,D,S,B$.</p></div><div class="summary-group"><h4>핵심 판단</h4><p>출력–접지에 $g_{m1}V_{in}$, $r_{O1}$, $r_{O2}$, $1/g_{m2}$, $C_T$가 병렬이에요.</p></div><div class="summary-group"><h4>검산</h4><p>$V_{in}=0$에서 출력 컨덕턴스는 $1/r_{O1}+1/r_{O2}+g_{m2}&gt;0$이에요.</p></div></div></article><article class="topic" id="p9"><h3>바이폴라 캐스코드 단의 모든 커패시턴스</h3><p class="panel-meta">E11.12 · 예제 11.12 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1016_Miller_High_Frequency_Models-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p9"><div class="layer formal" data-source-problem="p9"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>소자 값은 주어지지 않음 (답은 커패시턴스 기호로)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>회로의 모든 커패시턴스 확인</li></ul></div><figure><img src=".assets/figures_문제설명_1016_Miller_High_Frequency_Models/0a58bc2b53d772d6-fig11-24-a.png" alt="그림 E11.12"></figure></div><details class="original" data-original-problem="p9"><summary>원문 보기</summary><p>그림 11.24(a)에 그려진 회로의 모든 커패시턴스를 확인하라.</p></details></div><div class="layer eli5" data-explanation="understand"><h4>여섯 커패시터의 자리를 찾아요</h4><p>아래 $Q_1$의 베이스가 입력이고, 위 $Q_2$의 컬렉터가 출력인 바이폴라 캐스코드예요. $Q_1$ 컬렉터와 $Q_2$ 이미터가 만나는 중간점 $X$도 신호가 움직이는 노드예요. 트랜지스터 두 개에 커패시터 세 개씩 붙이고 실제 연결 노드를 적어요.</p></div>
+<div class="sum" hidden=""><p>입력–접지 $C_{GS1}$, 입력–출력 부유 $C_{GD1}$도 남겨요. $C_T=C_{DB1}+C_{DB2}+C_{GS2}$이며 $C_{GD1}$을 여기에 바로 합치지 않아요.</p><div class="summary-group"><h4>떠올릴 개념·공식</h4><p>MOS 고주파 모델과 다이오드 연결 PMOS의 양의 컨덕턴스 $g_{m2}$.</p></div><div class="summary-group"><h4>첫 줄</h4><p>$M_1:(V_{in},V_{out},0,0)$, $M_2:(V_{out},V_{out},0,0)$ 순서 $G,D,S,B$.</p></div><div class="summary-group"><h4>핵심 판단</h4><p>출력–접지에 $g_{m1}V_{in}$, $r_{O1}$, $r_{O2}$, $1/g_{m2}$, $C_T$가 병렬이에요.</p></div><div class="summary-group"><h4>검산</h4><p>$V_{in}=0$에서 출력 컨덕턴스는 $1/r_{O1}+1/r_{O2}+g_{m2}&gt;0$이에요.</p></div></div></article><article class="topic" id="p9"><h3>바이폴라 캐스코드 단의 모든 커패시턴스</h3><p class="panel-meta">E11.12 · 예제 11.12 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1016_Miller_High_Frequency_Models-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p9"><div class="layer formal" data-source-problem="p9"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>소자 값은 주어지지 않음 (답은 커패시턴스 기호로)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>회로의 모든 커패시턴스 확인</li></ul></div><figure><img src=".assets/figures_문제설명_1016_Miller_High_Frequency_Models/0a58bc2b53d772d6-fig11-24-a.png" alt="그림 E11.12"></figure></div><details class="original" data-original-problem="p9"><summary>원문 보기</summary><p>그림 11.24(a)에 그려진 회로의 모든 커패시턴스를 확인하라.</p></details></div><div class="layer eli5" data-explanation="understand"><h4>여섯 커패시터의 자리를 찾아요</h4><p>아래 $Q_1$의 베이스가 입력이고, 위 $Q_2$의 컬렉터가 출력인 바이폴라 캐스코드예요. $Q_1$ 컬렉터와 $Q_2$ 이미터가 만나는 중간점 $X$도 신호가 움직이는 노드예요. 트랜지스터 두 개에 커패시터 세 개씩 붙이고 실제 연결 노드를 적어요.</p></div>
 <div class="layer formal" data-explanation="recall"><h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4><p>"바이폴라 캐스코드의 모든 커패시턴스"에서 고주파 하이브리드 파이 모델(high-frequency hybrid-π model)을 떠올려요. 각 BJT의 $C_\pi$는 베이스–이미터, $C_\mu$는 베이스–컬렉터, $C_{CS}$는 컬렉터–기판 사이예요. 집적 회로의 기판은 AC 접지예요.</p><p>$V_{b1}$과 $V_{CC}$는 고정 DC 전압이므로 AC 접지로 바꿔요. $X$는 $Q_2$ 이미터이지만 접지가 아니에요. 따라서 모델 커패시터마다 원래 단자를 실제 회로의 입력·$X$·출력·접지에 대응하는 것이 첫 도구예요.</p></div>
 <div class="layer formal" data-explanation="start"><h4>종이에 쓸 첫 줄</h4><p>$Q_1:(B,E,C,\text{기판})=(V_{in},0,X,0)$, $Q_2:(B,E,C,\text{기판})=(0,X,V_{out},0)$이라고 써요. $X=Q_1$ 컬렉터 $=Q_2$ 이미터예요. 예를 들어 $C_{\pi2}$의 두 끝 $B_2$–$E_2$를 이 표에 대입하면 $0$–$X$이므로 중간점–접지 가지예요.</p></div>
 <div class="layer formal" data-explanation="solve"><h4>왜 이렇게 푸는지 함께 따라가요</h4><div data-subpart="main"><h4>각 소자의 세 커패시턴스</h4><p>$Q_1$: $C_{\pi1}$은 $V_{in}$–접지, $C_{\mu1}$은 $V_{in}$–$X$, $C_{CS1}$은 $X$–접지예요. $C_{\mu1}$만 입력과 중간점 사이에 떠 있어요.</p><p>$Q_2$: $C_{\pi2}$는 AC 접지된 베이스–$X$, $C_{\mu2}$는 AC 접지된 베이스–$V_{out}$, $C_{CS2}$는 $V_{out}$–접지예요. 따라서 중간점의 병렬 커패시턴스는 $C_X=C_{CS1}+C_{\pi2}$, 출력의 병렬 커패시턴스는 $C_Y=C_{\mu2}+C_{CS2}$예요. $C_{\mu1}$은 양쪽이 모두 움직이는 노드라 이 두 합에 넣지 않아요.</p></div></div>
@@ -838,7 +838,7 @@
 <div class="layer formal" data-explanation="verify"><h4>완성 답과 검산</h4><div data-subpart="main"><h4>가지별 연결 검산</h4><p><b>입력–접지 $r_{\pi1}\parallel C_{\pi1}$; 입력–$X$ $C_{\mu1}$; $X$–접지 $g_{m1}V_{in}$, $r_{O1}$, $r_{\pi2}$, $C_{CS1}+C_{\pi2}$; 출력–$X$ $g_{m2}v_{\pi2}$, $r_{O2}$; 출력–접지 $R_C$, $C_{\mu2}+C_{CS2}$.</b> 입력을 0으로 놓으면 $Q_1$ 제어 전류가 0이고, $V_X=0$이면 $Q_2$ 제어 전류도 0이에요. $v_{\pi2}=0-V_X$이므로 부호가 반대로 들어가는 것이 맞아요. 커패시터도 $Q_1$ 세 개와 $Q_2$ 세 개가 모두 있어요.</p></div></div>
 <div class="layer warn" data-explanation="pitfall"><h4>이 문항에서 조심할 점</h4><p>$Q_2$ 베이스가 AC 접지라도 $v_{\pi2}=+V_X$가 아니에요. 정의는 베이스 전압 빼기 이미터 전압이므로 $-V_X$예요. $Q_2$의 $r_{O2}$는 출력–접지가 아니라 컬렉터–이미터인 출력–$X$ 사이예요. $C_{\mu1}$도 최종 출력까지 이어지지 않아요.</p></div>
 <div class="layer eli5" data-explanation="retry"><h4>설명을 닫고 다시 해 봐요</h4><ol><li>중간 노드 $V_X$가 $+10\,\text{mV}$ 변하고 $Q_2$ 베이스는 AC 접지라면 $v_{\pi2}$는 얼마이며, 표시된 컬렉터→이미터 제어 전류의 부호는 무엇인가요?</li><li>$V_{b1}$이 AC 접지가 아닌 신호 $v_b$라면 $Q_2$의 $v_{\pi2}$와 $C_{\pi2}$의 두 끝을 어떻게 고쳐야 하나요?</li></ol></div>
-<div class="sum" hidden=""><div class="summary-group"><h4>떠올릴 개념·공식</h4><p>고주파 하이브리드 파이: B–E $r_\pi,C_\pi$; B–C $C_\mu$; C–E $g_mv_\pi,r_O$; C–기판 $C_{CS}$.</p></div><div class="summary-group"><h4>첫 줄</h4><p>$Q_1:(B,E,C)=(V_{in},0,X)$; $Q_2:(0,X,V_{out})$. $v_{\pi2}=-V_X$.</p></div><div class="summary-group"><h4>핵심 판단</h4><p>출력–$X$에 $g_{m2}v_{\pi2},r_{O2}$. $X$–접지에 $C_{CS1}+C_{\pi2}$.</p></div><div class="summary-group"><h4>검산</h4><p>$C_{\mu1}$은 입력–$X$; $C_{\mu2}+C_{CS2}$는 출력–접지예요.</p></div></div></article></section>
+<div class="sum" hidden=""><p>$r_{O1},r_{O2}$를 버리거나 두 BJT 값을 같게 둘 조건이 없으므로 1·2를 유지해요. Q2 베이스가 접지라도 중간 노드 X는 움직여요.</p><div class="summary-group"><h4>떠올릴 개념·공식</h4><p>고주파 하이브리드 파이: B–E $r_\pi,C_\pi$; B–C $C_\mu$; C–E $g_mv_\pi,r_O$; C–기판 $C_{CS}$.</p></div><div class="summary-group"><h4>첫 줄</h4><p>$Q_1:(B,E,C)=(V_{in},0,X)$; $Q_2:(0,X,V_{out})$. $v_{\pi2}=-V_X$.</p></div><div class="summary-group"><h4>핵심 판단</h4><p>출력–$X$에 $g_{m2}v_{\pi2},r_{O2}$. $X$–접지에 $C_{CS1}+C_{\pi2}$.</p></div><div class="summary-group"><h4>검산</h4><p>$C_{\mu1}$은 입력–$X$; $C_{\mu2}+C_{CS2}$는 출력–접지예요.</p></div></div></article></section>
   </main>
   <footer>원 문제·정리노트·PDF는 보존해요.</footer>
     </div>
@@ -850,9 +850,8 @@
           <button class="text-btn panel-close" type="button" data-panel-close>닫기</button>
         </div>
         <div class="sum-tab">
-          <p class="panel-sub" id="sum-for">전체 흐름</p>
           <p class="panel-empty" id="sum-empty">페이지를 넘기면 그 페이지의 핵심 식과 용어가 여기에 나옵니다.</p>
-          <div class="sums"></div>
+          <div class="sums" id="sum-for"></div>
         </div>
       </div>
     </aside>
@@ -1268,7 +1267,6 @@
         const KEY = 'od-review-solved:' + RANGE;
         const cards = Array.from(document.querySelectorAll('main article.card'));
         const aids = panels.right.querySelector('.aids');
-        const sub = document.getElementById('aid-for');
         const empty = panels.right.querySelector('.panel-empty');
         const btn = document.getElementById('solved-btn');
         const groups = {};
@@ -1300,8 +1298,6 @@
           Object.keys(groups).forEach((id) => { groups[id].hidden = id !== curId; });
           empty.hidden = Boolean(curId);
           btn.hidden = !curId;
-          sub.textContent = curId ? ((s.querySelector('h3') || {}).textContent || '').trim() : '';
-          sub.hidden = !curId;
           if (curId) paintBtn();
           panels.right.querySelector('.panel-inner').scrollTop = 0;
           markToc(solved, cards.length, '푼 문제');
@@ -1321,7 +1317,6 @@
         const origBtn = document.getElementById('tab-original');
         const tabList = panels.prob.querySelector('.panel-tabs');
         const tabs = Array.from(tabList.querySelectorAll('[role="tab"]'));
-        const sub = document.getElementById('sum-for');
         const empty = document.getElementById('sum-empty');
         const probEmpty = document.getElementById('prob-empty');
         const sums = {};
@@ -1636,8 +1631,6 @@
           curId = key === 'intro' ? null : key;
           Object.keys(sums).forEach((id) => { sums[id].hidden = id !== key; });
           empty.hidden = Boolean(sums[key]);
-          if (key === 'intro') sub.textContent = '전체 흐름';
-          else sub.innerHTML = (s.querySelector('h3') || {}).innerHTML || ''; // preserve rendered title math
           if (wideMq.matches) {
             Object.keys(panes).forEach((id) => { panes[id].hidden = id !== curId; });
             Object.keys(origs).forEach((id) => { origs[id].hidden = id !== curId; });

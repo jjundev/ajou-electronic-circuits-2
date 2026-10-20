@@ -238,11 +238,27 @@ $$
 
 #### 떠올릴 개념·공식
 
-식 (9.72)와 전류 함수라는 단서에서 $A_v\approx-g_{m1}(R_{on}\parallel R_{op})$를 출발점으로 골라요. $g_{m1}$은 입력 소자의 트랜스컨덕턴스, $R_{on},R_{op}$는 출력에서 아래·위를 본 저항이에요. 네 $r_O=1/(\lambda I_D)$는 같지만 PMOS의 $g_m$에는 $\mu_p$가 들어가요. 각 캐스코드의 $g_mr_O\gg1$과 강반전 제곱 법칙을 가정해요.
+식 (9.72)와 전류 함수라는 단서에서
+
+$$
+A_v\approx-g_{m1}(R_{on}\parallel R_{op})
+$$
+
+를 출발점으로 골라요. $g_{m1}$은 입력 소자의 트랜스컨덕턴스, $R_{on},R_{op}$는 출력에서 아래·위를 본 저항이에요. 네 $r_O=1/(\lambda I_D)$는 같지만 PMOS의 $g_m$에는 $\mu_p$가 들어가요. 각 캐스코드의 $g_mr_O\gg1$과 강반전 제곱 법칙을 가정해요.
 
 #### 첫 줄
 
-$a_k=\sqrt{2\mu_kC_{ox}(W/L)_k},\quad g_{mk}=a_k\sqrt{I_D},\quad r_O=\frac1{\lambda I_D}$
+$$
+a_k=\sqrt{2\mu_kC_{ox}(W/L)_k}
+$$
+
+$$
+g_{mk}=a_k\sqrt{I_D}
+$$
+
+$$
+r_O=\frac1{\lambda I_D}
+$$
 
 #### 핵심 판단
 
@@ -753,11 +769,27 @@ $$
 
 #### 떠올릴 개념·공식
 
-이상적 부하 바이폴라 캐스코드(bipolar cascode)에서는 $A_v=-G_mR_{out}$를 써요. $G_m\approx g_{m1}$, $R_{out}\approx g_{m2}r_{O2}(r_{O1}\parallel r_{\pi2})$예요. $r_\pi=\beta/g_m$는 베이스 전류 경로라 무시하지 않아요. $V_T=26\mathrm{mV}$와 큰 $g_m(r_O\parallel r_\pi)$ 근사를 사용해요.
+이상적 부하 바이폴라 캐스코드(bipolar cascode)에서는 $A_v=-G_mR_{out}$를 써요. $G_m\approx g_{m1}$, $R_{out}\approx g_{m2}r_{O2}(r_{O1}\parallel r_{\pi2})$예요.
+
+$$
+r_\pi=\beta/g_m
+$$
+
+는 베이스 전류 경로라 무시하지 않아요. $V_T=26\mathrm{mV}$와 큰 $g_m(r_O\parallel r_\pi)$ 근사를 사용해요.
 
 #### 첫 줄
 
-$g_m=\frac{1\mathrm{mA}}{26\mathrm{mV}}=38.4615\mathrm{mS},\quad A_v=-G_mR_{out}$
+$$
+g_m=\frac{1\mathrm{mA}}{26\mathrm{mV}}
+$$
+
+$$
+=38.4615\mathrm{mS}
+$$
+
+$$
+A_v=-G_mR_{out}
+$$
 
 #### 핵심 판단
 

@@ -5,7 +5,7 @@ import threading
 from dataclasses import replace
 from pathlib import Path
 import pytest
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright, expect
 from test_sync import synthetic
 from epe_render import build_explanation,check_artifacts
 
@@ -18,11 +18,10 @@ def make_stage(root):
     p=pack.problems[0]
     conditions=('<p>$A=1$</p><pre><code>if (x &lt; 2) { printf("value", x); }</code></pre>'
                 '<svg viewBox="0 0 100 40" role="img" aria-label="합성 그림"><path d="M1 1L90 30" stroke="currentColor"/></svg>')
-    pass
-    p=replace(p,conditions_html=conditions)
+    p=replace(p,conditions_html=conditions,title=r'전압 이득 $A_v$',original_html='<p>합성 원문</p>')
     p2=replace(p,id='p2',number=2,title='두 번째 문항',original_html='')
     pack=replace(pack,problems=(p,p2))
-    fragments={q.id:fragments['p1'] for q in pack.problems}
+    fragments={q.id:fragments['p1'].replace('시작·판단·검산', '첫 문항 요약' if q.id=='p1' else '둘째 문항 요약') for q in pack.problems}
     a=build_explanation(pack,fragments,root/'stage',repo)
     assert check_artifacts(pack,a)==[]
     return a
@@ -36,16 +35,20 @@ def stage_url(tmp_path_factory):
         def log_message(self,*args): pass
     server=http.server.ThreadingHTTPServer(('127.0.0.1',0),functools.partial(Quiet,directory=str(root)))
     thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
-    yield f'http://127.0.0.1:{server.server_port}/stage/{a.html.name}#p1'
-    server.shutdown();thread.join();server.server_close()
+    try:
+        yield f'http://127.0.0.1:{server.server_port}/stage/{a.html.name}#p1'
+    finally:
+        server.shutdown();thread.join();server.server_close()
 
 
 @pytest.fixture(scope='module')
 def browser():
     with sync_playwright() as pw:
         b=pw.chromium.launch()
-        yield b
-        b.close()
+        try:
+            yield b
+        finally:
+            b.close()
 
 
 @pytest.mark.parametrize('width,height',[(1024,900),(1280,900),(375,812)])
@@ -98,7 +101,7 @@ def test_breakpoint_and_saved_closed_toc(browser,stage_url):
         page.goto(stage_url,wait_until='networkidle')
         assert page.locator('#panel-prob').is_hidden()
         page.set_viewport_size({'width':1024,'height':900})
-        page.wait_for_timeout(150)
+        expect(page.locator('#panel-left')).to_be_visible()
         assert page.locator('#panel-left').is_visible()
         assert page.locator('#panel-prob').is_visible()
         page.locator('#toggle-left').click()
@@ -135,3 +138,32 @@ def test_dock_float_drag_resize_and_restore(browser,stage_url):
         assert page.evaluate('document.documentElement.scrollWidth<=innerWidth')
     finally:
         context.close()
+
+
+@pytest.mark.parametrize('width,height',[(1280,900),(375,812)])
+@pytest.mark.parametrize('theme',['light','dark'])
+def test_summary_switch_with_math_title(browser,stage_url,width,height,theme):
+    context=browser.new_context(viewport={'width':width,'height':height},color_scheme=theme)
+    page=context.new_page();errors=[]
+    page.on('pageerror',lambda e:errors.append(str(e)))
+    try:
+        page.goto(stage_url,wait_until='networkidle')
+        if not page.locator('#panel-right').is_visible(): page.locator('#toggle-right').click()
+        for topic in ['p1','p2','p1']:
+            page.evaluate('(id)=>{location.hash=id}',topic)
+            expect(page.locator(f'main #{topic}')).to_be_visible()
+            title=page.locator(f'main #{topic} h3').text_content()
+            assert page.locator('main h3',has_text=title).is_visible()
+            assert page.locator('#panel-right').get_by_text(title,exact=True).count()==0
+            assert page.locator('#sum-for.sums').count()==1
+            assert page.locator('[id="sum-for"]').count()==1
+            assert page.locator('#panel-right .sum:not([hidden])').count()==1
+            assert page.locator('#panel-right .sum:not([hidden])').inner_text()==('첫 문항 요약' if topic=='p1' else '둘째 문항 요약')
+            assert page.locator('.katex-error').count()==0
+        key='od-note-read:ec2-problem-explain-review-1007-Test'
+        saved=page.evaluate('(key)=>JSON.parse(localStorage.getItem(key))',key)
+        assert {'p1','p2'}<=set(saved)
+        page.reload(wait_until='networkidle')
+        assert page.evaluate('(key)=>JSON.parse(localStorage.getItem(key))',key)==saved
+        assert errors==[]
+    finally: context.close()

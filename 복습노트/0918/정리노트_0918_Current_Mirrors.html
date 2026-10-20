@@ -430,7 +430,7 @@
           <p>그래서 $V_{DD}$의 잡음이 이득 1로 출력에 그대로 실려요. 같은 CS 단 두 개를 대칭으로 두고 두 출력 사이 전압을 출력으로 쓰면, 전원 잡음은 $V_X$와 $V_Y$에 똑같이 실려 차에서 지워져요(L04 s4, Razavi 10.1.1, 498–499쪽).</p>
           $$V_{out}=V_X-V_Y$$
         </div>
-        <div class="sum" hidden>
+        <div class="sum" hidden><p>미러는 같은 $V_{GS}$와 두 소자의 포화를 전제로 하며, 드레인 전압 차이·베이스 전류는 복사 오차를 만들어요. 차동 신호는 반대 위상 신호를 따로 만들고 선·회로·전력 비용을 더 써요.</p><p>보충(수업 미유도, Razavi 9.2.1·10.1.1): 복잡한 밴드갭 기준 회로 하나의 전류를 복사해요. 대칭 출력에 같은 전원 잡음이 실리면 $V_X-V_Y$에서 지워지는 것이 차동의 장점이에요.</p>
           <p class="sum-lead">전압으로 정한 바이어스는 전원·온도에 흔들려서 기준 전류 하나를 미러로 복사해 쓰고, 노이즈에 약한 회로는 차동 신호로 보내요.</p>
           <p class="panel-label">핵심 식</p>
           <ul class="eq-list"><li><span class="eq-name">복사 전류</span>$$I_{copy} : I_{REF} = (W/L)_1 : (W/L)_{REF}$$<p class="eq-sub">$\Rightarrow\ I_{copy}=\dfrac{(W/L)_1}{(W/L)_{REF}}\,I_{REF}$</p></li><li><span class="eq-name">차동 신호</span>$$V_X = V_{CM} + V_0 \sin\omega t$$$$V_Y = V_{CM} - V_0 \sin\omega t$$</li></ul>
@@ -483,7 +483,7 @@
     <p>미러는 모든 회로에 들어가지만, 기준 전류원은 하나예요.</p>
     <blockquote>"근데 이거는 시스템에 보통 하나 달려 있는 거죠." (0918 03:44)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>분배기 바이어스는 $V_{DD}$와 온도에 따른 $\mu_n,V_{TH}$ 변화에 영향을 받아요. 복사 전류의 안정성은 기준 전류 $I_{REF}$가 안정적이라는 조건에 기대요.</p>
     <p class="sum-lead">온도와 전원에 무관한 기준 전류 하나를 만들고, 전류 미러로 블록마다 복사해 써요.</p>
     <p class="panel-label">용어</p>
     <dl class="terms"><dt>기준 전류(reference current)</dt><dd>칩에 하나만 두는 믿을 만한 전류 $I_{REF}$</dd><dt>전류 미러(current mirror)</dt><dd>$I_{REF}$를 복사해 블록마다 나눠 주는 회로</dd></dl>
@@ -560,7 +560,7 @@
     <p>교수님은 크기가 1:1이면 같은 전류가 복사되고, 한쪽을 10배로 하면 10배 또는 1/10이 된다고 했어요. 그래서 이 회로를 current mirror, current copier라고 부른다고 했어요(0918 01:34–01:50).</p>
     <p>$I_{REF}$가 일정하면 $I_{copy}$도 일정하지만, $V_{GS}$까지 일정한 것은 아니라고 덧붙였어요. 온도에 따라 이동도와 $V_{TH}$가 변하면, 전류를 지키도록 $V_{GS}$가 스스로 조금씩 바뀌어요(0918 02:18).</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>같은 문턱전압, 같은 $V_{GS}$, 두 소자의 포화와 채널 길이 변조 무시가 전제예요. 온도가 변하면 전류를 지키도록 $V_{GS}$ 자체는 바뀔 수 있어요.</p>
     <p class="sum-lead">두 소자의 $V_{GS}$를 같게 묶으면 전류 비는 크기 비 $W/L$로만 정해져요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list"><li><span class="eq-name">미러 조건</span>$$V_{GS,REF}=V_{GS1}=V_X$$</li><li><span class="eq-name">복사 전류</span>$$I_{copy} : I_{REF} = (W/L)_1 : (W/L)_{REF}$$<p class="eq-sub">$\Rightarrow\ I_{copy}=\dfrac{(W/L)_1}{(W/L)_{REF}}\,I_{REF}$</p></li></ul>
@@ -716,10 +716,10 @@
     <p>"$M_1$을 다이오드 연결하면 이건 뭐예요?"라고 여러 번 물은 뒤, 스스로 "$1/g_m$인 저항"이라고 정리했어요(0918 10:26–10:43).</p>
     <blockquote>"실제 설계해보니까 차이가 나네? 그 차이는 … V_DS의 차이 때문에 생기는 거다" (0918 11:40)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>복사 소자까지 다이오드 연결하면 약 $1/g_m$ 저항이 되어 전류원으로 쓰지 못해요. 위에 소자를 쌓으면 $V_{DS1}=V_b-V_{GS2}$로 조절해 기준 드레인 전압에 맞출 수 있어요.</p>
     <p class="sum-lead">$V_{DS1}$과 $V_{DS,REF}$가 다르면 채널 길이 변조만큼 복사 오차가 생기지만, 포화 영역에서는 작아요.</p>
     <p class="panel-label">핵심 식</p>
-    <ul class="eq-list"><li><span class="eq-name">λ를 넣은 복사 전류</span>$$\begin{aligned}I_{copy} : I_{REF} &= (W/L)_1(1+\lambda V_{DS1})\\ &\quad : (W/L)_{REF}(1+\lambda V_{DS,REF})\end{aligned}$$<p class="eq-sub">$$\Rightarrow\ I_{copy}=\dfrac{(W/L)_1}{(W/L)_{REF}}\cdot\dfrac{1+\lambda V_{DS1}}{1+\lambda V_{DS,REF}}\,I_{REF}$$</p></li><li><span class="eq-name">수업 수치 예</span>$$\frac{1.2}{1.1}\approx 1.09$$</li></ul>
+    <ul class="eq-list"><li><span class="eq-name">λ를 넣은 복사 전류</span>$$I_{copy} : I_{REF}$$$$=(W/L)_1(1+\lambda V_{DS1})$$$$:(W/L)_{REF}(1+\lambda V_{DS,REF})$$<p class="eq-sub">$$\Rightarrow\ I_{copy}=\dfrac{(W/L)_1}{(W/L)_{REF}}\cdot\dfrac{1+\lambda V_{DS1}}{1+\lambda V_{DS,REF}}\,I_{REF}$$</p></li><li><span class="eq-name">수업 수치 예</span>$$\frac{1.2}{1.1}\approx 1.09$$</li></ul>
     <p class="panel-label">용어</p>
     <dl class="terms"><dt>채널 길이 변조(channel-length modulation)</dt><dd>$V_{DS}$가 커지면 포화 전류가 조금 느는 효과</dd><dt>선형 영역(triode region)</dt><dd>$V_{DS1}$이 $V_{GS}-V_{TH}$보다 작은 구간, 미러로 쓰면 안 돼요</dd></dl>
   </div>
@@ -911,7 +911,7 @@
     <blockquote>"이득이 1보다 작은데 왜 쓰냐? … 전압을 낮은 임피던스로 전달하는 … 볼티지 버퍼입니다." (0918 16:39)</blockquote>
     <p>소스 팔로워는 이득을 얻으려고 쓰는 단이 아니에요. 큰 출력 임피던스 뒤에 작은 부하를 달아야 할 때 끼워 넣는 전압 버퍼예요.</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>CS 출력에 작은 부하를 바로 달면 $R_D\parallel R_L$이 되어 이득이 무너져요. 입력 임피던스가 크고 출력 임피던스가 작은 팔로워가 그 사이를 전달해요.</p>
     <p class="sum-lead">기준 전류 하나를 크기비로 복사해서 소스 팔로워와 CS 단의 바이어스 전류를 만들어요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1081,12 +1081,12 @@
     <p>한 학생이 "PMOS 미러와 NMOS 미러에 흐르는 $I_{REF}$는 같은 값으로 가정하나요?"라고 물었어요(0918 28:41). 교수님은 칩 안에 기준 전류 발생기가 하나뿐이고, 그것을 1:1로 복사해 반대 타입의 기준을 만드니 같은 전류라고 답하셨어요. bandgap reference 같은 회로는 복잡하고 전력과 면적을 쓰니 하나만 만들어 복사하는 게 정석이라는 설명이었어요(0918 28:53–29:41).</p>
     <p>슬라이드 28 오른쪽 위처럼 PMOS 전류원을 쓰는 소스 팔로워는 "잘 안 쓰는 구조"라고 하셨어요(0918 30:00).</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>NMOS와 PMOS는 이동도 등 특성이 달라 한 미러의 기준·복사 소자로 섞지 않아요. 각 같은 극성 미러 안에서 크기비를 구해 곱하며 채널 길이 변조를 무시해요.</p>
     <p class="sum-lead">PMOS 미러는 전원에서 노드로 전류를 넣고, 그 기준 전류는 NMOS 미러가 끌어내 줘요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
-      <li><span class="eq-name">PMOS 미러</span>$$I_{copy} : I_{REF} = (W/L)_{P1} : (W/L)_{P,REF}$$<p class="eq-sub">$\Rightarrow\ I_{copy}=\dfrac{(W/L)_{P1}}{(W/L)_{P,REF}}\,I_{REF}$</p></li>
-      <li><span class="eq-name">두 번 복사</span>$$I_{N1} : I_{REF} = (W/L)_{N1} : (W/L)_{REF}$$ $$I_{P1} : I_{N1} = (W/L)_{P1} : (W/L)_{P,REF}$$<p class="eq-sub">$$\Rightarrow\ I_{P1}=\dfrac{(W/L)_{N1}}{(W/L)_{REF}}\cdot\dfrac{(W/L)_{P1}}{(W/L)_{P,REF}}\,I_{REF}$$</p></li>
+      <li><span class="eq-name">PMOS 미러</span>$$I_{copy} : I_{REF}$$$$= (W/L)_{P1} : (W/L)_{P,REF}$$<p class="eq-sub">$\Rightarrow\ I_{copy}=\dfrac{(W/L)_{P1}}{(W/L)_{P,REF}}\,I_{REF}$</p></li>
+      <li><span class="eq-name">두 번 복사</span>$$I_{N1} : I_{REF}$$$$= (W/L)_{N1} : (W/L)_{REF}$$ $$I_{P1} : I_{N1}$$$$= (W/L)_{P1} : (W/L)_{P,REF}$$<p class="eq-sub">$$\Rightarrow\ I_{P1}=\dfrac{(W/L)_{N1}}{(W/L)_{REF}}\cdot\dfrac{(W/L)_{P1}}{(W/L)_{P,REF}}\,I_{REF}$$</p></li>
     </ul>
     <p class="panel-label">용어</p>
     <dl class="terms">
@@ -1173,7 +1173,7 @@
     <p>요즘 BJT는 잘 쓰지 않는다고 하셨어요. 주파수가 아주 높거나 고출력인 특수한 응용에만 일부 쓰고, 대부분은 MOS를 써요.</p>
     <blockquote>"BJT 잘 안 씁니다, 요새. 모스 베이스로 주로 쓰기 때문에." (0918 38:14)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>두 소자가 활성 영역에 있고 베이스 전류를 무시한 식이에요. 유한한 베이스 전류를 고려하면 기준 전류 전체가 기준 컬렉터로 들어가지는 않아요.</p>
     <p class="sum-lead">두 BJT의 $V_{BE}$가 같으면 전류는 $I_S$, 곧 이미터 면적의 비로 복사돼요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1266,7 +1266,7 @@
     <blockquote>"1%기 때문에 우리가 핸드 캘큘레이션 할 때는 거의 무시해도 되겠습니다." (0918 36:50)</blockquote>
     <p>문제에서 베이스 전류를 고려하라고 하면, 두 베이스 전류를 모두 넣은 $I_{copy} = \frac{I_{REF}}{1 + 2/\beta}$를 써요.</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>문제에서 베이스 전류를 고려하라고 하면 두 베이스 전류를 모두 넣어요. 면적비만의 복사는 베이스 전류뿐 아니라 서로 다른 $V_{CE}$의 Early 효과도 무시한 결과예요.</p>
     <p class="sum-lead">$I_{REF}$가 두 베이스 전류까지 대야 해서 복사 전류가 조금 작아지지만, 손계산에서는 무시해요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1526,7 +1526,7 @@
     <blockquote>"저항을 이용해서 디바이딩 해서 … 그렇게 하지 않고 부정확하기 때문에" (0918 ~43:30)</blockquote>
     <blockquote>"요거 하나를 이용해서 NPN도 흘려 줄 수 있고 PNP 커런트 미러도" (0918 ~46:00)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>두 번의 복사비는 베이스 전류를 무시했을 때 곱으로 이어져요. PNP 전류는 크기 $|I_{C2}|$로 읽어요.</p>
     <p class="sum-lead">PNP 미러의 기준 전류는 NPN 미러가 기존 $I_{REF}$를 복사해 끌어내서 만들어요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1564,7 +1564,7 @@
     <blockquote>"소신호 해석에서는 뭐 있거나 없거나 차이는 없습니다." (0918 ~49:00)</blockquote>
     <p>이 말씀은 바이어스를 이상적으로 고정해 생략하는 맥락으로 읽어요. 실제 바이어스 소자의 출력저항까지 없애도 된다는 뜻으로 일반화하지 않아요.</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>이상적 DC 전압원은 단락, 전류원은 개방하며 전류원 출력 노드를 접지하지 않아요. $X_2$의 AC 접지는 기준·전원 변화와 바이어스 노드로의 신호 되먹임이 없다는 근사예요.</p>
     <p class="sum-lead">AC 접지는 소신호 전압 변화가 0인 노드이며, 바이어스 소자의 출력저항까지 없어지는 뜻은 아니에요.</p>
     <p class="panel-label">용어</p>
     <dl class="terms">
@@ -1655,7 +1655,7 @@
     <blockquote>특히 굉장히 주변의 노이즈에 취약한 회로들 같은 경우 … (0918 54:18)</blockquote>
     <p>그 장점이 무엇인지는 다음 수업에서 이어서 봐요.</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>반대 위상 신호는 따로 만들어야 해요. 수업의 두 회로 구성에서는 신호선·회로·전력이 두 배 필요하며, 장점의 본 설명은 다음 수업 범위예요.</p>
     <p class="sum-lead">차동 신호는 같은 $V_{CM}$을 공유하고, 두 선의 AC 성분은 크기가 같고 위상이 반대예요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1736,9 +1736,8 @@
           <h2 id="panel-right-title">페이지 요약</h2>
           <button class="text-btn panel-close" type="button" data-panel-close>닫기</button>
         </div>
-        <p class="panel-sub" id="sum-for">전체 흐름</p>
         <p class="panel-empty" id="sum-empty">페이지를 넘기면 그 페이지의 핵심 식과 용어가 여기에 나옵니다.</p>
-        <div class="sums"></div>
+        <div class="sums" id="sum-for"></div>
       </div>
     </aside>
   </div>
@@ -2040,7 +2039,6 @@ var ML = (function () {
         const KEY = 'od-review-solved:' + RANGE;
         const cards = Array.from(document.querySelectorAll('main article.card'));
         const aids = panels.right.querySelector('.aids');
-        const sub = document.getElementById('aid-for');
         const empty = panels.right.querySelector('.panel-empty');
         const btn = document.getElementById('solved-btn');
         const groups = {};
@@ -2072,8 +2070,6 @@ var ML = (function () {
           Object.keys(groups).forEach((id) => { groups[id].hidden = id !== curId; });
           empty.hidden = Boolean(curId);
           btn.hidden = !curId;
-          sub.textContent = curId ? ((s.querySelector('h3') || {}).textContent || '').trim() : '';
-          sub.hidden = !curId;
           if (curId) paintBtn();
           panels.right.querySelector('.panel-inner').scrollTop = 0;
           markToc(solved, cards.length, '푼 문제');
@@ -2096,14 +2092,12 @@ var ML = (function () {
           box.appendChild(el);
           sums[t.id] = el;
         });
-        const sub = document.getElementById('sum-for');
         const empty = document.getElementById('sum-empty');
         document.addEventListener('od:screen', (e) => {
           const s = e.detail.screen;
           const key = s.matches('article.topic') ? s.id : 'intro';
           Object.keys(sums).forEach((id) => { sums[id].hidden = id !== key; });
           empty.hidden = Boolean(sums[key]);
-          sub.textContent = key === 'intro' ? '전체 흐름' : ((s.querySelector('h3') || {}).textContent || '').trim();
           if (s.matches('article.topic') && !read.has(s.id)) { read.add(s.id); store.set(KEY, Array.from(read)); }
           panels.right.querySelector('.panel-inner').scrollTop = 0;
           markToc(read, topics.length, '읽음');

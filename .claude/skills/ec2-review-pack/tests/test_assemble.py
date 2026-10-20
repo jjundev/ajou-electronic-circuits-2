@@ -52,9 +52,22 @@ class TestAssemble(unittest.TestCase):
         self.assertIn("localStorage.getItem('od-theme')", self.html.split("</head>", 1)[0])
 
     @unittest.skipUnless((ML_SKILL / "assets" / "note-template.html").exists(), "ML 스킬 없음")
-    def test_template_is_identical_to_ml(self):
-        ours = (SKILL / "assets" / "note-template.html").read_bytes()
-        self.assertEqual(ours, (ML_SKILL / "assets" / "note-template.html").read_bytes())
+    def test_template_preserves_shared_panel_contract(self):
+        # Upstream is a historical source; EC2 has intentional local authoring/UI rules.
+        # Compare the shared interface, with generated behavior covered in browser tests.
+        ours = (SKILL / "assets" / "note-template.html").read_text()
+        upstream = (ML_SKILL / "assets" / "note-template.html").read_text()
+        for token in ('{{SECTIONS}}', '{{TOC}}', '{{RANGE}}', 'id="panel-right"',
+                      'id="sum-empty"', "const KEY = 'od-note-read:' + RANGE;",
+                      'id="pager-next"', 'id="pager-prev"'):
+            self.assertIn(token, ours)
+            self.assertIn(token, upstream)
+        self.assertEqual(ours.count('id="sum-for"'), 1)
+        self.assertIn('<div class="sums" id="sum-for"></div>', ours)
+        self.assertNotIn("getElementById('aid-for')", ours)
+        self.assertNotIn('sub.textContent =', ours)
+        self.assertIn('페이지 요약', ours)
+        self.assertIn('<title>전자회로2 정리노트 0101-0102</title>', self.html)
 
     def test_problems_txt(self):
         self.assertEqual((self.tmp / ".assets" / "problems.txt").read_text(encoding="utf-8"),

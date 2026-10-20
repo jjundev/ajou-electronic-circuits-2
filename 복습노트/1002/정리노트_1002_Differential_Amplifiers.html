@@ -419,7 +419,7 @@
           <p>교과서 10.4절 도입부(538쪽)는 캐스코드 차동쌍의 동기를 한 줄로 이어요. 캐스코드 단은 CE·CS 단보다 이득이 훨씬 크고, 차동 이득은 절반 회로의 이득과 같아요. 그래서 입력 쌍을 캐스코드로 만들면 차동 이득도 같이 올라가요. 같은 절의 상자 글(541쪽)은 이런 텔레스코픽 캐스코드 OP 앰프가 고주파 동작이 좋아 휴대폰 수신기의 아날로그 필터나 A/D 변환기에 쓰인다고 소개해요.</p>
           <p>교과서 10.5절(543쪽, 그림 10.45)은 테일 임피던스가 유한하면 입력 CM 변화가 출력 CM 변화를 만들지만, 출력은 차이만 보므로 이것만으로는 문제가 되지 않는다고 해요. 문제는 비대칭과 겹칠 때 생겨요.</p>
         </div>
-        <div class="sum" hidden>
+        <div class="sum" hidden><p>이상적 테일·완전 대칭이면 CM 이득은 0이에요. 유한한 테일에서 각 출력이 움직여도 대칭이면 출력 차는 0이고 비대칭과 겹칠 때 차동으로 새어요.</p><p>부하도 캐스코드로 만들고, 쌓인 다섯 소자의 최소 $5V_{ov}$에 출력 스윙 여유를 더해야 해요. BJT는 $r_{\pi3}$가 병렬로 끼어 MOS보다 출력저항 증대가 작아요.</p><p>보충(교과서 10.4절, 수업 미유도): 텔레스코픽 캐스코드 OP 앰프는 고주파 동작 때문에 수신기 아날로그 필터·A/D 변환기에 쓰여요.</p>
           <p class="sum-lead">차동 이득을 키우려고 출력저항을 키우고(전류원 부하, 캐스코드), CM이 새지 않게 테일 저항을 키우는 대신 헤드룸과 소자 수를 내줘요.</p>
           <p class="panel-label">핵심 식</p>
           <ul class="eq-list">
@@ -539,7 +539,7 @@
     <blockquote>"커먼 모드 리젝션 특성. 그게 가장 차동 회로에서의 가장 중요한 특성" (1002 05:56)</blockquote>
     <p>차동 회로는 차동 입력에만 반응하고, 공통 모드 변화는 출력에 나타나지 않아요. 이것이 CM 제거예요.</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>두 출력의 차는 $-R_C(I_{C1}-I_{C2})=-2R_C\Delta I$예요. 공통 성분은 같아서 차에서 사라져요.</p><p>$I_{C1}+I_{C2}=I_{EE}$는 베이스 전류를 무시한 근사이며, 작은 대칭 차동 입력의 평형 근처를 해석해요.</p>
     <p class="sum-lead">차동 입력을 넣으면 한쪽 전류가 는 만큼 다른 쪽이 줄고, 합은 테일 전류로 그대로예요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -694,7 +694,7 @@
       <li>$v_P=0$을 컬렉터 KCL에 넣으면 $v_{out1}=-g_m(R_C\parallel r_{O1})v_{in1}$이에요. 위 정확한 이득과 같아요.</li>
     </ol>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>DC 전압은 AC 접지, 이상적 테일 전류원은 개방이에요. $r_{O1}\gg R_C$일 때만 $-g_mR_C$로 줄여 써요.</p><p>보충(수업 미유도): 완전 대칭·반대 입력의 KCL을 더하면 양의 계수에 $v_P$를 곱한 값이 0이어서, $r_\pi$와 $r_O$를 남겨도 $v_P=0$이에요.</p>
     <p class="sum-lead">차동 입력에서 P는 가상 접지라서, 차동 이득은 CE 단 절반 회로 하나의 이득과 같아요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -757,7 +757,7 @@
     <blockquote>"그냥 게인을 구하시오라고 하면 차동 이득을 구하라는 얘기예요." (1002 14:16)</blockquote>
     <blockquote>"Ro3니까 Ro1을 무시할 수가 없죠, 그렇죠? 두 개가 비슷한 크기니까." (1002 18:06)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>$r_{O1}$과 $r_{O3}$는 비슷한 크기라 모두 남겨요. pnp는 이미터–베이스 순방향·베이스–컬렉터 역방향의 활성 영역을 유지해야 해요.</p>
     <p class="sum-lead">절반 회로에서 $Q_3$는 $r_{O3}$만 남아 $r_{O1}$과 병렬이 되고, 전류원 부하는 큰 IR 드롭 없이 큰 소신호 저항을 줘요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list"><li><span class="eq-name">pnp 전류원 부하 차동 이득</span>$$A_v=-g_{m1}(r_{O1}\parallel r_{O3})$$</li></ul>
@@ -829,7 +829,7 @@
     <blockquote>"DC로 DC가 0이 된다는 게 아니야. AC 그라운드예요." (1002 21:16)</blockquote>
     <blockquote>"차동 신호가 동작하는 조건에서만 버추얼 그라운드의 개념이 성립됩니다." (1002 24:23)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>P와 X의 가상 접지는 매칭된 순수 차동 입력에서만 성립해요. 공통 모드에서는 접지로 볼 수 없고, DC 전압 0이라는 뜻도 아니에요.</p>
     <p class="sum-lead">$R_1=R_2$의 가운데 X가 AC 접지라 $R_1$이 $r_{O1}$, $r_{O3}$와 병렬로 붙고, $R_1$에 따라 이득이 0과 전류원 부하 이득 사이에서 바뀌어요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list"><li><span class="eq-name">R1, R2 부하 차동 이득</span>$$A_v=-g_{m1}(r_{O1}\parallel r_{O3}\parallel R_1)$$</li><li><span class="eq-name">가운데 노드 X</span>$$v_X=\frac{v_{out1}+v_{out2}}{2}=0$$</li></ul>
@@ -914,7 +914,7 @@
     <blockquote>"그냥 이제 전류가 흘러가는 패스를 만들어 주는 거고" (1002 30:34)</blockquote>
     <blockquote>"출력 저항을 이만큼 부스팅해주는 역할을 하는 거죠." (1002 30:43)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>이 이득은 이상적 전류원 부하와 $g_mr_O\gg1$의 근사예요. 실제 부하도 캐스코드로 만들어야 큰 출력저항을 유지해요.</p>
     <p class="sum-lead">캐스코드를 쌓아도 $G_m$은 그대로이고 $R_{out}$만 $g_{m3}r_{O3}$배 커져서, 이득이 그만큼 커져요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1014,7 +1014,7 @@
     <p>디지털 회로는 공급 전압을 낮추면 전력이 그만큼 줄어서 계속 낮추고 있고, 아날로그 회로도 따라 낮춰야 한다고 하셨어요. 실험의 15 V에서는 "그렇게 크리티컬하지 않죠"라고 덧붙이셨어요 (1002 38:51).</p>
     <p>질문(1002 39:09): PMOS 쪽에 입력을 넣을 때 바이어스는 어떻게 하나요? 답: 보통 테일 전류원을 위쪽($V_{DD}$ 쪽)에 달고 아래쪽은 접지로 바꿔요. 테일 없이도 동작은 하지만, 입력 CM 레벨에 따라 전류가 바뀌는 단점이 있어요.</p>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>같은 소자 크기·전류에서 NMOS의 큰 이동도가 큰 $g_m$을 줘요. 테일과 네 적층 소자에 최소 $5V_{ov}$가 들고 실제 전원에는 출력 스윙 여유도 필요해요.</p><p>$V_{b3}$는 위 부하 전류를 $I_{SS}/2$에 맞춰야 해요. 틀리면 위아래 전류 불일치로 출력이 극단으로 가며, 다른 바이어스는 소자의 정상 동작 범위 안에서 정해요.</p>
     <p class="sum-lead">부하도 캐스코드 전류원으로 만들어야 캐스코드 이득이 살고, 대가는 헤드룸이에요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1111,7 +1111,7 @@
     <p>무한 이득 증폭기는 "에너지 보존 법칙을 위배"하므로 없다고 하셨어요 (1002 48:00).</p>
     <blockquote>"OP 앰프를 그냥 간단하게 그냥 얘기하면 하이 게인 디퍼렌셜 앰프예요." (1002 48:23)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>$G_m\approx g_{m1}$은 큰 $\beta$에서의 근사예요. $g_{m3}(r_{O1}\parallel r_{\pi3})\gg1$에서 출력저항의 지배항만 남기며, 슬라이드와 교과서의 작은 덧셈항 차이는 이 근사에서 사라져요.</p>
     <p class="sum-lead">바이폴라 캐스코드는 $r_{\pi3}$가 $r_{O1}$과 병렬로 붙어 축퇴 저항이 $r_{\pi3}$ 수준으로 작아지고, OP 앰프의 대표 구조예요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1159,7 +1159,7 @@
     <p>완전한 제거는 이상적인 가정에서만 성립해요.</p>
     <blockquote>"실제로는 완전히 제거되지는 않는다." (1002 56:03)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>완전 제거는 이상적인 테일과 완전 대칭의 결과예요. 실제 전류원의 유한 출력저항과 불일치를 따로 확인해요.</p>
     <p class="sum-lead">대칭 차동쌍에 이상적인 테일 전류원이면 CM 입력이 들어와도 P가 따라 올라가 전류와 출력이 변하지 않아요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1226,7 +1226,7 @@
     <p>식을 얻은 뒤에는 극한으로 검토하셨어요.</p>
     <blockquote>"rss가 무한대면 어떻게 돼요? … 이 식은 0이죠" (1002 64:47)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>입력 MOS의 $r_O$와 몸체 효과를 무시한 식이에요. $R_{SS}\to\infty$이면 CM 이득은 0으로 돌아가며, 캐스코드 테일로 $R_{SS}$를 키울 수 있어요.</p>
     <p class="sum-lead">테일 임피던스 $R_{SS}$가 유한하면 P가 입력을 완전히 따라가지 못해 각 출력의 CM 레벨이 조금 움직여요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1330,7 +1330,7 @@
     <p>차동 출력에는 영향이 없어요.</p>
     <blockquote>"차동 출력에선 영향이 나타나지 않으니까 … 출력에 영향을 주지 않는다고 볼 수 있어요." (1002 74:25)</blockquote>
   </div>
-  <div class="sum" hidden>
+  <div class="sum" hidden><p>$R_{SS}\gg1/g_m$일 때만 $A_{CM}\approx-R_D/(2R_{SS})$예요. 작은 CM 누설도 중요할 수 있어 확인하며 줄이려면 $R_{SS}$를 키워요.</p>
     <p class="sum-lead">유한한 $R_{SS}$는 각 출력을 조금 움직이지만 두 출력이 같은 양만큼 움직여 차동 출력은 0이고, 남은 문제는 비대칭이에요.</p>
     <p class="panel-label">핵심 식</p>
     <ul class="eq-list">
@@ -1418,9 +1418,8 @@
           <h2 id="panel-right-title">페이지 요약</h2>
           <button class="text-btn panel-close" type="button" data-panel-close>닫기</button>
         </div>
-        <p class="panel-sub" id="sum-for">전체 흐름</p>
         <p class="panel-empty" id="sum-empty">페이지를 넘기면 그 페이지의 핵심 식과 용어가 여기에 나옵니다.</p>
-        <div class="sums"></div>
+        <div class="sums" id="sum-for"></div>
       </div>
     </aside>
   </div>
@@ -1811,7 +1810,6 @@ var CMW = (function () {
         const KEY = 'od-review-solved:' + RANGE;
         const cards = Array.from(document.querySelectorAll('main article.card'));
         const aids = panels.right.querySelector('.aids');
-        const sub = document.getElementById('aid-for');
         const empty = panels.right.querySelector('.panel-empty');
         const btn = document.getElementById('solved-btn');
         const groups = {};
@@ -1843,8 +1841,6 @@ var CMW = (function () {
           Object.keys(groups).forEach((id) => { groups[id].hidden = id !== curId; });
           empty.hidden = Boolean(curId);
           btn.hidden = !curId;
-          sub.textContent = curId ? ((s.querySelector('h3') || {}).textContent || '').trim() : '';
-          sub.hidden = !curId;
           if (curId) paintBtn();
           panels.right.querySelector('.panel-inner').scrollTop = 0;
           markToc(solved, cards.length, '푼 문제');
@@ -1867,14 +1863,12 @@ var CMW = (function () {
           box.appendChild(el);
           sums[t.id] = el;
         });
-        const sub = document.getElementById('sum-for');
         const empty = document.getElementById('sum-empty');
         document.addEventListener('od:screen', (e) => {
           const s = e.detail.screen;
           const key = s.matches('article.topic') ? s.id : 'intro';
           Object.keys(sums).forEach((id) => { sums[id].hidden = id !== key; });
           empty.hidden = Boolean(sums[key]);
-          sub.textContent = key === 'intro' ? '전체 흐름' : ((s.querySelector('h3') || {}).textContent || '').trim();
           if (s.matches('article.topic') && !read.has(s.id)) { read.add(s.id); store.set(KEY, Array.from(read)); }
           panels.right.querySelector('.panel-inner').scrollTop = 0;
           markToc(read, topics.length, '읽음');

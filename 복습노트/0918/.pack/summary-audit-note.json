@@ -1,0 +1,254 @@
+[
+  {
+    "topic": "why-circuit",
+    "category": "일반",
+    "body_claim": "기준전류크기비복사와 차동신호 같은CM 반대AC",
+    "before": "pass",
+    "summary_sentence": "미러는 같은 $V_{GS}$와 두 소자의 포화를 전제로 하며, 드레인 전압 차이·베이스 전류는 복사 오차를 만들어요. 차동 신호는 반대 위상 신호를 따로 만들고 선·회로·전력 비용을 더 써요.보충(수업 미유도, Razavi 9.2.1·10.1.1): 복잡한 밴드갭 기준 회로 하나의 전류를 복사해요. 대칭 출력에 같은 전원 잡음이 실리면 $V_X-V_Y$에서 지워지는 것이 차동의 장점이에요. 전압으로 정한 바이어스는 전원·온도에 흔들려서 기준 전류 하나를 미러로 복사해 쓰고, 노이즈에 약한 회로는 차동 신호로 보내요. 핵심 식 복사 전류$$I_{copy} : I_{REF} = (W/L)_1 : (W/L)_{REF}$$$\\Rightarrow\\ I_{copy}=\\dfrac{(W/L)_1}{(W/L)_{REF}}\\,I_{REF}$차동 신호$$V_X = V_{CM} + V_0 \\sin\\omega t$$$$V_Y = V_{CM} - V_0 \\sin\\omega t$$ 용어 전류 미러(current mirror)기준 전류 $I_{REF}$를 크기 비만큼 복사하는 바이어스 회로차동 신호(differential signal)같은 $V_{CM}$에 크기 같고 위상이 반대인 AC를 실은 두 선",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "why-circuit",
+    "category": "주의",
+    "body_claim": "mirror두소자포화 VGS공유 오차; 차동비용",
+    "before": "unresolved",
+    "summary_sentence": "미러는 같은 $V_{GS}$와 두 소자의 포화를 전제로 하며, 드레인 전압 차이·베이스 전류는 복사 오차를 만들어요. 차동 신호는 반대 위상 신호를 따로 만들고 선·회로·전력 비용을 더 써요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "why-circuit",
+    "category": "보충",
+    "body_claim": "bandgap기준하나; 전원잡음같이실리면차에서상쇄 미강의",
+    "before": "unresolved",
+    "summary_sentence": "보충(수업 미유도, Razavi 9.2.1·10.1.1): 복잡한 밴드갭 기준 회로 하나의 전류를 복사해요. 대칭 출력에 같은 전원 잡음이 실리면 $V_X-V_Y$에서 지워지는 것이 차동의 장점이에요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s0-concept",
+    "category": "일반",
+    "body_claim": "분배기VDD mu VTH변동과 기준전류 하나복사",
+    "before": "unresolved",
+    "summary_sentence": "분배기 바이어스는 $V_{DD}$와 온도에 따른 $\\mu_n,V_{TH}$ 변화에 영향을 받아요. 복사 전류의 안정성은 기준 전류 $I_{REF}$가 안정적이라는 조건에 기대요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s0-mos-mirror",
+    "category": "일반",
+    "body_claim": "다이오드연결이 기준VGS찾고 크기비복사",
+    "before": "pass",
+    "summary_sentence": "같은 문턱전압, 같은 $V_{GS}$, 두 소자의 포화와 채널 길이 변조 무시가 전제예요. 온도가 변하면 전류를 지키도록 $V_{GS}$ 자체는 바뀔 수 있어요. 두 소자의 $V_{GS}$를 같게 묶으면 전류 비는 크기 비 $W/L$로만 정해져요. 핵심 식 미러 조건$$V_{GS,REF}=V_{GS1}=V_X$$복사 전류$$I_{copy} : I_{REF} = (W/L)_1 : (W/L)_{REF}$$$\\Rightarrow\\ I_{copy}=\\dfrac{(W/L)_1}{(W/L)_{REF}}\\,I_{REF}$ 용어 다이오드 연결(diode-connected)게이트와 드레인을 묶어 $V_{DS}=V_{GS}$로 만든 연결aspect ratio소자 크기 비 $W/L$current copiercurrent mirror의 다른 이름",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s0-mos-mirror",
+    "category": "주의",
+    "body_claim": "같은문턱 두소자포화 CLM무시; VGS자체변함",
+    "before": "unresolved",
+    "summary_sentence": "같은 문턱전압, 같은 $V_{GS}$, 두 소자의 포화와 채널 길이 변조 무시가 전제예요. 온도가 변하면 전류를 지키도록 $V_{GS}$ 자체는 바뀔 수 있어요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s0-source-resistor",
+    "category": "일반",
+    "body_claim": "소스전압맞춰 VGS공유; 전류비에 반비례저항",
+    "before": "pass",
+    "summary_sentence": "한쪽 소스에만 저항이 있으면 $V_{GS}$가 달라지니, 양쪽 소스 전압을 같게 맞춰요. 핵심 식 한쪽만 저항$$V_{GS1}=V_X-I_{copy}R_1$$소스 전압 맞추기$$I_{REF}R_{REF}=I_{copy}R_1$$ 용어 커패시터(capacitor)DC에서 개방이라 바이어스 전류를 맞추는 데 쓸 수 없어요",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s0-source-resistor",
+    "category": "주의",
+    "body_claim": "DC커패시터개방 해결못함",
+    "before": "pass",
+    "summary_sentence": "한쪽 소스에만 저항이 있으면 $V_{GS}$가 달라지니, 양쪽 소스 전압을 같게 맞춰요. 핵심 식 한쪽만 저항$$V_{GS1}=V_X-I_{copy}R_1$$소스 전압 맞추기$$I_{REF}R_{REF}=I_{copy}R_1$$ 용어 커패시터(capacitor)DC에서 개방이라 바이어스 전류를 맞추는 데 쓸 수 없어요",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s0-lambda",
+    "category": "일반",
+    "body_claim": "CLM비율오차와 포화경계",
+    "before": "pass",
+    "summary_sentence": "복사 소자까지 다이오드 연결하면 약 $1/g_m$ 저항이 되어 전류원으로 쓰지 못해요. 위에 소자를 쌓으면 $V_{DS1}=V_b-V_{GS2}$로 조절해 기준 드레인 전압에 맞출 수 있어요. $V_{DS1}$과 $V_{DS,REF}$가 다르면 채널 길이 변조만큼 복사 오차가 생기지만, 포화 영역에서는 작아요. 핵심 식 λ를 넣은 복사 전류$$I_{copy} : I_{REF}$$$$=(W/L)_1(1+\\lambda V_{DS1})$$$$:(W/L)_{REF}(1+\\lambda V_{DS,REF})$$$$\\Rightarrow\\ I_{copy}=\\dfrac{(W/L)_1}{(W/L)_{REF}}\\cdot\\dfrac{1+\\lambda V_{DS1}}{1+\\lambda V_{DS,REF}}\\,I_{REF}$$수업 수치 예$$\\frac{1.2}{1.1}\\approx 1.09$$ 용어 채널 길이 변조(channel-length modulation)$V_{DS}$가 커지면 포화 전류가 조금 느는 효과선형 영역(triode region)$V_{DS1}$이 $V_{GS}-V_{TH}$보다 작은 구간, 미러로 쓰면 안 돼요",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s0-lambda",
+    "category": "주의",
+    "body_claim": "다이오드출력연결은 전류원아님; cascode로VDS조절",
+    "before": "unresolved",
+    "summary_sentence": "복사 소자까지 다이오드 연결하면 약 $1/g_m$ 저항이 되어 전류원으로 쓰지 못해요. 위에 소자를 쌓으면 $V_{DS1}=V_b-V_{GS2}$로 조절해 기준 드레인 전압에 맞출 수 있어요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s1-follower-scaling",
+    "category": "일반",
+    "body_claim": "동일게이트NMOS 기준3 출력2 5; follower버퍼",
+    "before": "pass",
+    "summary_sentence": "CS 출력에 작은 부하를 바로 달면 $R_D\\parallel R_L$이 되어 이득이 무너져요. 입력 임피던스가 크고 출력 임피던스가 작은 팔로워가 그 사이를 전달해요. 기준 전류 하나를 크기비로 복사해서 소스 팔로워와 CS 단의 바이어스 전류를 만들어요. 핵심 식 복사 전류$$I_{copy} : I_{REF} = (W/L)_1 : (W/L)_{REF}$$$\\Rightarrow\\ I_{copy}=\\dfrac{(W/L)_1}{(W/L)_{REF}}\\,I_{REF}$ 팔로워 바이어스$$I_1=\\dfrac{2}{3}\\times 0.3\\ \\text{mA}=0.2\\ \\text{mA}$$ CS 단 바이어스$$I_2=\\dfrac{5}{3}\\times 0.3\\ \\text{mA}=0.5\\ \\text{mA}$$ 용어 소스 팔로워(source follower)입력 게이트, 출력 소스인 공통 드레인 단. 출력 임피던스 $1/g_m$ 전압 버퍼(voltage buffer)이득은 1보다 작지만 전압을 낮은 임피던스로 넘겨주는 단",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s1-follower-scaling",
+    "category": "강조",
+    "body_claim": "버퍼필요한 이유 CS큰Rout 작은부하이득붕괴",
+    "before": "unresolved",
+    "summary_sentence": "CS 출력에 작은 부하를 바로 달면 $R_D\\parallel R_L$이 되어 이득이 무너져요. 입력 임피던스가 크고 출력 임피던스가 작은 팔로워가 그 사이를 전달해요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s1-cmos-mirror",
+    "category": "일반",
+    "body_claim": "NMOSsink가 PMOS기준제공 두미러비곱",
+    "before": "pass",
+    "summary_sentence": "NMOS와 PMOS는 이동도 등 특성이 달라 한 미러의 기준·복사 소자로 섞지 않아요. 각 같은 극성 미러 안에서 크기비를 구해 곱하며 채널 길이 변조를 무시해요. PMOS 미러는 전원에서 노드로 전류를 넣고, 그 기준 전류는 NMOS 미러가 끌어내 줘요. 핵심 식 PMOS 미러$$I_{copy} : I_{REF}$$$$= (W/L)_{P1} : (W/L)_{P,REF}$$$\\Rightarrow\\ I_{copy}=\\dfrac{(W/L)_{P1}}{(W/L)_{P,REF}}\\,I_{REF}$ 두 번 복사$$I_{N1} : I_{REF}$$$$= (W/L)_{N1} : (W/L)_{REF}$$ $$I_{P1} : I_{N1}$$$$= (W/L)_{P1} : (W/L)_{P,REF}$$$$\\Rightarrow\\ I_{P1}=\\dfrac{(W/L)_{N1}}{(W/L)_{REF}}\\cdot\\dfrac{(W/L)_{P1}}{(W/L)_{P,REF}}\\,I_{REF}$$ 용어 sink / source노드에서 접지로 빼내는 전류(NMOS 미러) / $V_{DD}$에서 노드로 넣는 전류(PMOS 미러) CMOS 전류 미러NMOS 미러와 PMOS 미러를 함께 쓰는 바이어스 구조 bandgap reference칩에 하나만 두는 기준 전류 생성 회로",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s1-cmos-mirror",
+    "category": "주의",
+    "body_claim": "동일극성끼리 비교; CLM무시",
+    "before": "unresolved",
+    "summary_sentence": "NMOS와 PMOS는 이동도 등 특성이 달라 한 미러의 기준·복사 소자로 섞지 않아요. 각 같은 극성 미러 안에서 크기비를 구해 곱하며 채널 길이 변조를 무시해요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s2-bjt-mirror",
+    "category": "일반",
+    "body_claim": "같은VBE IS면적비",
+    "before": "pass",
+    "summary_sentence": "두 소자가 활성 영역에 있고 베이스 전류를 무시한 식이에요. 유한한 베이스 전류를 고려하면 기준 전류 전체가 기준 컬렉터로 들어가지는 않아요. 두 BJT의 $V_{BE}$가 같으면 전류는 $I_S$, 곧 이미터 면적의 비로 복사돼요. 핵심 식 바이폴라 미러$$I_{copy} : I_{REF} = I_{S1} : I_{S,REF}$$$\\Rightarrow\\ I_{copy}=\\dfrac{I_{S1}}{I_{S,REF}}\\,I_{REF}$ 미러 조건$$V_{BE,REF} = V_{BE1} = V_X$$ 용어 $I_S$이미터 면적 $A_E$에 비례하는 상수 이미터 면적(emitter area)같은 소자 병렬 연결 = 면적 배수",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s2-bjt-mirror",
+    "category": "주의",
+    "body_claim": "활성영역과 베이스전류무시",
+    "before": "unresolved",
+    "summary_sentence": "두 소자가 활성 영역에 있고 베이스 전류를 무시한 식이에요. 유한한 베이스 전류를 고려하면 기준 전류 전체가 기준 컬렉터로 들어가지는 않아요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s2-base-current",
+    "category": "일반",
+    "body_claim": "1대1 두베이스 KCL beta100 2%손실",
+    "before": "pass",
+    "summary_sentence": "문제에서 베이스 전류를 고려하라고 하면 두 베이스 전류를 모두 넣어요. 면적비만의 복사는 베이스 전류뿐 아니라 서로 다른 $V_{CE}$의 Early 효과도 무시한 결과예요. $I_{REF}$가 두 베이스 전류까지 대야 해서 복사 전류가 조금 작아지지만, 손계산에서는 무시해요. 핵심 식 베이스 전류$$I_B = I_C/\\beta$$ KCL$$I_{REF} = I_C\\left(1 + \\dfrac{2}{\\beta}\\right)$$ 1:1 미러 복사 전류$$I_{copy} = \\frac{I_{REF}}{1 + 2/\\beta}$$ 용어 Early 효과(Early effect)컬렉터 전압 차이로 생기는 복사 오차",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s2-base-current",
+    "category": "주의",
+    "body_claim": "베이스고려명시시식적용; Early별도",
+    "before": "unresolved",
+    "summary_sentence": "문제에서 베이스 전류를 고려하라고 하면 두 베이스 전류를 모두 넣어요. 면적비만의 복사는 베이스 전류뿐 아니라 서로 다른 $V_{CE}$의 Early 효과도 무시한 결과예요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s2-scaling",
+    "category": "일반",
+    "body_claim": "병렬복사쪽배수 기준쪽분수; floating방지",
+    "before": "pass",
+    "summary_sentence": "복사 쪽에 같은 소자를 병렬로 붙이면 배수, 기준 쪽에 붙이면 분수 전류가 돼요. 핵심 식 배수(3개 병렬)$$3 \\times 0.25 = 0.75$$ 분수(기준 쪽 3개)$$I_{copy} = \\frac{1}{3} I_{REF}$$ 용어 병렬 연결같은 소자 $n$개 = 이미터 면적 $n$배 플로팅(floating)어디에도 전압이 정해지지 않은 노드. 다이오드 연결로 막아요",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s2-pnp-iref",
+    "category": "일반",
+    "body_claim": "NPN→PNP기준 연속복사 방향",
+    "before": "pass",
+    "summary_sentence": "두 번의 복사비는 베이스 전류를 무시했을 때 곱으로 이어져요. PNP 전류는 크기 $|I_{C2}|$로 읽어요. PNP 미러의 기준 전류는 NPN 미러가 기존 $I_{REF}$를 복사해 끌어내서 만들어요. 핵심 식 NPN 미러$$I_{C,M} : I_{REF} = I_{S,M} : I_{S,REF1}$$$\\Rightarrow\\ I_{C,M}=\\dfrac{I_{S,M}}{I_{S,REF1}}\\,I_{REF}$ PNP 미러$$|I_{C2}| : I_{C,M} = I_{S2} : I_{S,REF2}$$$\\Rightarrow\\ |I_{C2}|=\\dfrac{I_{S2}}{I_{S,REF2}}\\,I_{C,M}$ 용어 NPN 전류원(sink)노드에서 접지로 흐르는 전류 PNP 전류원(source)$V_{CC}$에서 노드로 흐르는 전류, $|V_{EB}|$가 같게 맞춰요",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s2-pnp-iref",
+    "category": "주의",
+    "body_claim": "베이스전류무시 전류크기표기",
+    "before": "unresolved",
+    "summary_sentence": "두 번의 복사비는 베이스 전류를 무시했을 때 곱으로 이어져요. PNP 전류는 크기 $|I_{C2}|$로 읽어요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s2-bias-role",
+    "category": "일반",
+    "body_claim": "ACground 변화0 실제ro남음",
+    "before": "pass",
+    "summary_sentence": "이상적 DC 전압원은 단락, 전류원은 개방하며 전류원 출력 노드를 접지하지 않아요. $X_2$의 AC 접지는 기준·전원 변화와 바이어스 노드로의 신호 되먹임이 없다는 근사예요. AC 접지는 소신호 전압 변화가 0인 노드이며, 바이어스 소자의 출력저항까지 없어지는 뜻은 아니에요. 용어 바이어스 회로(bias circuit)DC 전압과 전류를 정하는 회로 동작점(operating point)신호가 없을 때의 DC 전압과 전류 AC 접지소신호 전압 변화가 0인 노드",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s2-bias-role",
+    "category": "주의",
+    "body_claim": "전압단락 전류개방; bias노드피드백근사",
+    "before": "unresolved",
+    "summary_sentence": "이상적 DC 전압원은 단락, 전류원은 개방하며 전류원 출력 노드를 접지하지 않아요. $X_2$의 AC 접지는 기준·전원 변화와 바이어스 노드로의 신호 되먹임이 없다는 근사예요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s3-signals",
+    "category": "일반",
+    "body_claim": "같은DC 반대AC 정의",
+    "before": "pass",
+    "summary_sentence": "반대 위상 신호는 따로 만들어야 해요. 수업의 두 회로 구성에서는 신호선·회로·전력이 두 배 필요하며, 장점의 본 설명은 다음 수업 범위예요. 차동 신호는 같은 $V_{CM}$을 공유하고, 두 선의 AC 성분은 크기가 같고 위상이 반대예요. 핵심 식 한쪽 선$$V_X = V_{CM} + V_0 \\sin\\omega t$$ 다른 쪽 선$$V_Y = V_{CM} - V_0 \\sin\\omega t$$ 용어 단일 종단 신호(single-ended)신호선 하나, 접지 기준으로 잰 전압 차동 신호(differential)두 선, 같은 DC에 크기 같고 위상이 반대인 AC 공통 모드 레벨 $V_{CM}$두 선이 공유하는 DC 레벨",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s3-signals",
+    "category": "주의",
+    "body_claim": "반전신호생성 선회로전력비용",
+    "before": "unresolved",
+    "summary_sentence": "반대 위상 신호는 따로 만들어야 해요. 수업의 두 회로 구성에서는 신호선·회로·전력이 두 배 필요하며, 장점의 본 설명은 다음 수업 범위예요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s4-cheatsheet",
+    "category": "구조",
+    "body_claim": "공식표와 링크",
+    "before": "pass",
+    "summary_sentence": "기존 요약표·예고·링크 화면 구조 유지",
+    "status": "pass",
+    "reason": "요약·예고·링크에는 별도 패널을 만들지 않음"
+  },
+  {
+    "topic": "s4-next",
+    "category": "구조",
+    "body_claim": "다음범위 예고",
+    "before": "pass",
+    "summary_sentence": "기존 요약표·예고·링크 화면 구조 유지",
+    "status": "pass",
+    "reason": "요약·예고·링크에는 별도 패널을 만들지 않음"
+  },
+  {
+    "topic": "s4-links",
+    "category": "구조",
+    "body_claim": "문제및자료목록",
+    "before": "pass",
+    "summary_sentence": "기존 요약표·예고·링크 화면 구조 유지",
+    "status": "pass",
+    "reason": "요약·예고·링크에는 별도 패널을 만들지 않음"
+  }
+]

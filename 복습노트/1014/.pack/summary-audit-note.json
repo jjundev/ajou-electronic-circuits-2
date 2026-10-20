@@ -1,0 +1,227 @@
+[
+  {
+    "topic": "why-circuit",
+    "category": "일반",
+    "body_claim": "기생C로고주파이득감소·RC노드규칙과보드로대역폭읽음",
+    "before": "pass",
+    "summary_sentence": "$R_D$를 키우면 저주파 이득은 커지지만 대역폭은 줄어요. 노드 RC와 보데는 파라미터 영향을 보는 손 근사이며, 부유 커패시터는 이 규칙에 바로 넣을 수 없어요. 저주파 모델이 무시한 커패시턴스가 고주파 이득을 떨어뜨리고, 노드마다 극점 하나를 등가 RC로 구해 대역폭을 빠르게 읽어요. 핵심 식 노드–극점 규칙$$\\omega_p=\\frac{1}{R_{eq}C_{eq}}$$ CS 단 + 부하 커패시턴스$$\\frac{V_{out}}{V_{in}}=-\\frac{g_mR_D}{1+R_DC_Ls}$$ −3 dB 대역폭$$\\omega_{-3dB}=\\frac{1}{R_DC_L}$$ 용어 대역폭(bandwidth)이득이 유지되는 주파수 범위로, 시간 영역의 동작 속도와 같은 말이에요. 저주파 모델(low-frequency model)커패시턴스를 무시한 지금까지의 소신호 모델이에요. 극점(pole)노드마다 하나씩 생기고, 지날 때마다 기울기가 20 dB/dec씩 줄어요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "why-circuit",
+    "category": "주의",
+    "body_claim": "이득대역폭교환·손근사10%목표·부유C직접불가",
+    "before": "unresolved",
+    "summary_sentence": "$R_D$를 키우면 저주파 이득은 커지지만 대역폭은 줄어요. 노드 RC와 보데는 파라미터 영향을 보는 손 근사이며, 부유 커패시터는 이 규칙에 바로 넣을 수 없어요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s0-speed-bandwidth",
+    "category": "일반",
+    "body_claim": "속도주파수대역폭관계·rolloff와저주파모델한계",
+    "before": "pass",
+    "summary_sentence": "동작 속도와 대역폭은 같은 이야기이고, 지금까지 쓴 소신호 모델은 커패시턴스를 뺀 저주파 모델이에요. 핵심 식 주기와 주파수$$f = \\frac{1}{T}$$ 용어 대역폭(bandwidth)회로가 제대로 동작하는 주파수 범위, 동작 속도를 주파수 영역에서 본 것 롤오프(roll-off)어느 주파수 이상에서 이득이 떨어지는 현상 저주파 모델(low-frequency model)커패시턴스를 무시한, 지금까지 쓴 소신호 모델",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s0-rc-lowpass",
+    "category": "일반",
+    "body_claim": "RC분압·C임피던스역주파수·저역통과",
+    "before": "pass",
+    "summary_sentence": "$\\omega=0$이면 커패시터가 개방되어 이득 1, $\\omega\\to\\infty$이면 단락되어 출력 0으로 가요. 커패시터의 임피던스는 주파수에 반비례해서, 주파수가 오르면 출력이 접지로 새고 이득이 떨어져요. 핵심 식 커패시터 임피던스$$Z_C = \\frac{1}{Cs}$$ RC 저역통과 필터$$\\frac{V_{out}}{V_{in}} = \\frac{1}{1 + RCs}$$ 용어 저역통과 필터(low-pass filter)낮은 주파수는 통과시키고 높은 주파수는 줄이는 회로",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s0-rc-lowpass",
+    "category": "일반",
+    "body_claim": "DC개방이득1·고주파단락0극한",
+    "before": "unresolved",
+    "summary_sentence": "$\\omega=0$이면 커패시터가 개방되어 이득 1, $\\omega\\to\\infty$이면 단락되어 출력 0으로 가요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s0-cs-cl",
+    "category": "일반",
+    "body_claim": "출력RDC병렬·KCL음부호·단일극점함수·다음단C",
+    "before": "pass",
+    "summary_sentence": "채널 길이 변조를 무시한($\\lambda=0$) 소신호 식이에요. 커패시턴스는 원래 소자 안에 있으며 저주파에서는 큰 임피던스라 개방으로 근사했던 거예요. 출력 노드의 $C_L$이 $R_D$와 병렬로 보여서, CS 단 이득이 저역통과 필터 꼴이 돼요. 핵심 식 출력 전압$$V_{out} = -g_m V_{in}$$ $$\\times\\left(R_D \\parallel \\frac{1}{C_L s}\\right)$$ 전달 함수$$\\frac{V_{out}}{V_{in}} = -\\frac{g_m R_D}{1 + R_D C_L s}$$ 용어 부하 커패시턴스(load capacitance)출력 노드에 걸린 커패시턴스, 보통 다음 단의 입력 커패시턴스 MOS 커패시터금속–산화막–반도체가 도체–절연체–도체를 이뤄 생기는 트랜지스터 안의 커패시터",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s0-cs-cl",
+    "category": "주의",
+    "body_claim": "λ0소신호·C는원래존재저주파개방근사",
+    "before": "unresolved",
+    "summary_sentence": "채널 길이 변조를 무시한($\\lambda=0$) 소신호 식이에요. 커패시턴스는 원래 소자 안에 있으며 저주파에서는 큰 임피던스라 개방으로 근사했던 거예요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s0-3db",
+    "category": "일반",
+    "body_claim": "크기1/sqrt2 −3dB·RD증가이득대역폭교환",
+    "before": "pass",
+    "summary_sentence": "$f_{-3dB}=\\omega_{-3dB}/(2\\pi)$로 Hz로 바꿔요. 훨씬 높은 주파수에서는 약 −20 dB/dec이고, $C_L$만 키우면 저주파 이득은 그대로지만 대역폭은 줄어요.같은 비율로 W와 L을 줄이는 수업의 단순 면적 모델에서 둘을 절반으로 하면 $WL$과 커패시턴스는 약 1/4이 되어 속도가 빨라져요. CS 단의 이득은 $\\omega_{-3dB} = \\frac{1}{R_D C_L}$에서 $\\frac{1}{\\sqrt{2}}$배(−3 dB)가 되고, $R_D$를 키우면 이득은 늘지만 대역폭은 줄어요. 핵심 식 크기 응답$$\\left|\\frac{V_{out}}{V_{in}}\\right|$$ $$= \\frac{g_m R_D}{\\sqrt{R_D^2 C_L^2 \\omega^2 + 1}}$$ 3 dB 대역폭$$\\omega_{-3dB} = \\frac{1}{R_D C_L}$$ 용어 3 dB 대역폭(−3 dB bandwidth)이득이 저주파 값의 $\\frac{1}{\\sqrt{2}}$배로 떨어지는 주파수까지의 범위 트레이드오프(trade-off)$R_D$를 키우면 이득은 늘고 대역폭은 줄어드는 맞바꿈",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s0-3db",
+    "category": "주의",
+    "body_claim": "rad/s와Hz·고주파−20·C증대저주파이득불변",
+    "before": "unresolved",
+    "summary_sentence": "$f_{-3dB}=\\omega_{-3dB}/(2\\pi)$로 Hz로 바꿔요. 훨씬 높은 주파수에서는 약 −20 dB/dec이고, $C_L$만 키우면 저주파 이득은 그대로지만 대역폭은 줄어요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s0-3db",
+    "category": "일반",
+    "body_claim": "고정W/L로크기축소·면적비C와속도",
+    "before": "unresolved",
+    "summary_sentence": "같은 비율로 W와 L을 줄이는 수업의 단순 면적 모델에서 둘을 절반으로 하면 $WL$과 커패시턴스는 약 1/4이 되어 속도가 빨라져요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s1-transfer",
+    "category": "일반",
+    "body_claim": "분모극점분자영점·정현파크기위상응답",
+    "before": "pass",
+    "summary_sentence": "이 식의 $\\omega_p,\\omega_z>0$는 주파수 크기예요. $1+s/\\omega_p=0$의 실제 극점 위치는 $s=-\\omega_p$예요.극점 수가 영점 수 이상인 것은 적정(proper) 조건이고, 안정성은 극점이 좌반 평면에 있는지로 판단해요. 전달 함수의 분모를 0으로 만드는 극점, 분자를 0으로 만드는 영점이 주파수 응답을 정해요. 핵심 식 전달 함수$$H(s)=A_0\\,\\dfrac{\\prod_k(1+s/\\omega_{zk})}{\\prod_k(1+s/\\omega_{pk})}$$ 정현파 출력$$y(t)=A\\,|H(j\\omega)|$$ $$\\times\\cos\\big(\\omega t+\\angle H(j\\omega)\\big)$$ 용어 극점(pole)분모를 0으로 만드는 $s$예요. 영점(zero)분자를 0으로 만드는 $s$예요. 크기 응답(magnitude response)$|H(j\\omega)|$, 주파수별 이득의 크기예요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s1-transfer",
+    "category": "주의",
+    "body_claim": "양수주파수크기와음수s위치 구별",
+    "before": "unresolved",
+    "summary_sentence": "이 식의 $\\omega_p,\\omega_z>0$는 주파수 크기예요. $1+s/\\omega_p=0$의 실제 극점 위치는 $s=-\\omega_p$예요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s1-transfer",
+    "category": "주의",
+    "body_claim": "proper극점수조건과안정성구별",
+    "before": "unresolved",
+    "summary_sentence": "극점 수가 영점 수 이상인 것은 적정(proper) 조건이고, 안정성은 극점이 좌반 평면에 있는지로 판단해요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s1-bode",
+    "category": "일반",
+    "body_claim": "로그주파수·dB축·극점−20 영점+20 기존기울기에가산",
+    "before": "pass",
+    "summary_sentence": "극점 항의 로그 근사는 $\\omega\\gg\\omega_p$에서 써요. 실제 응답은 코너에서 부드럽고, 단일 극점의 코너 크기는 직선 근사보다 약 3 dB 낮아요. 극점을 지날 때마다 기존 기울기에 −20 dB/dec를 더해요: 0 → −20 → −40. 영점은 +20 dB/dec를 더해요. 핵심 식 극점 항 근사$$-20\\log\\sqrt{1+(\\omega/\\omega_p)^2}$$ $$\\approx -20\\log(\\omega/\\omega_p)$$ CS 단 극점$$\\omega_{p1}=\\frac{1}{R_DC_L}$$ 용어 보데 플롯(Bode plot)극점·영점에서 꺾이는 직선으로 그린 크기 응답 근사예요. dB/dec주파수가 10배 될 때 바뀌는 dB예요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s1-bode",
+    "category": "주의",
+    "body_claim": "고주파근사조건·실제곡선부드럽고단일극점코너3dB오차",
+    "before": "unresolved",
+    "summary_sentence": "극점 항의 로그 근사는 $\\omega\\gg\\omega_p$에서 써요. 실제 응답은 코너에서 부드럽고, 단일 극점의 코너 크기는 직선 근사보다 약 3 dB 낮아요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s2-cs-two-poles",
+    "category": "일반",
+    "body_claim": "게이트RC분압과CS출력곱·2극점·소스임피던스앞단출력",
+    "before": "pass",
+    "summary_sentence": "이 분리된 입력·출력 RC 모델은 영점이 없고 두 극점이 있어요. 두 극점이 같은 위치면 이중 극점이며 각각의 기울기를 더해요. 저주파 이득이 시작 높이, 두 극점 주파수가 꺾을 위치예요. 극점을 지날 때마다 기울기는 0 → −20 → −40 dB/dec로 바뀌어요. 핵심 식 전달 함수$$\\frac{V_{out}}{V_{in}}$$ $$= \\frac{-g_m R_D}{(1 + R_S C_{in} s)(1 + R_D C_L s)}$$ 입력 극점$$\\omega_{p1} = \\frac{1}{R_S C_{in}}$$ 출력 극점$$\\omega_{p2} = \\frac{1}{R_D C_L}$$ 용어 소스 임피던스(source impedance)입력에 직렬로 보이는 $R_S$, 곧 앞단의 출력 임피던스 입력 등가 커패시턴스트랜지스터 커패시턴스가 입력에 나타난 $C_{in}$",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s2-cs-two-poles",
+    "category": "일반",
+    "body_claim": "분리된두RC회로의같은극점은이중극점·영점없음",
+    "before": "unresolved",
+    "summary_sentence": "이 분리된 입력·출력 RC 모델은 영점이 없고 두 극점이 있어요. 두 극점이 같은 위치면 이중 극점이며 각각의 기울기를 더해요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s2-node-rule",
+    "category": "일반",
+    "body_claim": "독립입력0·전원접지에서ReqCeq규칙·ro병렬",
+    "before": "pass",
+    "summary_sentence": "약 10% 오차를 목표로 파라미터 영향을 읽는 손 근사이며 영점은 구하지 않아요. 출력에서 $r_O\\gg R_D$일 때만 $R_D\\parallel r_O\\approx R_D$로 써요. 노드마다 극점이 하나씩 생기고, 그 노드에서 AC 접지 쪽으로 보이는 R과 C의 곱의 역수가 극점 주파수예요. 핵심 식 노드–극점 규칙$$\\omega_p = \\frac{1}{R_{eq} C_{eq}}$$ 출력 노드 저항$$R_D \\parallel r_O \\approx R_D$$ 용어 등가 저항(equivalent resistance)그 노드와 AC 접지 사이에 보이는 저항 등가 커패시턴스(equivalent capacitance)그 노드와 AC 접지 사이에 보이는 커패시턴스 AC 접지(AC ground)소신호로는 0 V인 노드(꺼 둔 입력, 전원)",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s2-node-rule",
+    "category": "주의",
+    "body_claim": "약10%손근사목표·영점미계산·ro무시조건",
+    "before": "unresolved",
+    "summary_sentence": "약 10% 오차를 목표로 파라미터 영향을 읽는 손 근사이며 영점은 구하지 않아요. 출력에서 $r_O\\gg R_D$일 때만 $R_D\\parallel r_O\\approx R_D$로 써요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s2-cg-poles",
+    "category": "일반",
+    "body_claim": "소스본1/gm RS병렬·출력RDCL·같은노드극점중복금지",
+    "before": "pass",
+    "summary_sentence": "$\\lambda=0$·몸체 효과 무시에서 게이트는 AC 접지라 $v_{gs}=-v_X$예요. 입력·출력 중 어느 극점이 낮은지는 소자 값에 따라 달라요. CG 단의 입력 노드에는 $R_S$와 소스 쪽 $\\frac{1}{g_m}$이 병렬로 보여서 입력 극점이 올라가요. 핵심 식 입력 극점$$\\omega_{p,X}$$ $$= \\frac{1}{\\left(R_S \\parallel \\frac{1}{g_m}\\right) C_{in}}$$ 출력 극점$$\\omega_{p,Y} = \\frac{1}{R_D C_L}$$ 용어 소스 쪽 저항게이트가 AC 접지일 때 소스를 들여다본 저항 $\\frac{1}{g_m}$ 앞단의 부하 커패시턴스이 단의 $C_{in}$을 앞단에서 본 이름, 같은 노드의 극점 하나",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s2-cg-poles",
+    "category": "주의",
+    "body_claim": "λ0몸체효과무시·게이트AC접지·극점순서값따름",
+    "before": "unresolved",
+    "summary_sentence": "$\\lambda=0$·몸체 효과 무시에서 게이트는 AC 접지라 $v_{gs}=-v_X$예요. 입력·출력 중 어느 극점이 낮은지는 소자 값에 따라 달라요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "s2-floating",
+    "category": "일반",
+    "body_claim": "부유C두신호노드라ReqCeq바로배정불가·밀러접지등가예고",
+    "before": "pass",
+    "summary_sentence": "노드 사이에 걸린 부유 커패시터는 어느 노드의 등가 커패시턴스인지 정할 수 없어서, 접지로 가는 둘로 바꾸려는 게 밀러 정리예요. 용어 부유 커패시터(floating capacitor)노드와 노드 사이에 있는 커패시터, 예: $C_F$ 접지 커패시터(grounded capacitor)노드와 접지 사이에 있는 커패시터 밀러 정리(Miller's theorem)노드 사이 $Z_F$를 접지로 가는 $Z_1$, $Z_2$로 바꾸는 방법(식은 다음 시간)",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "s3-cheatsheet",
+    "category": "구조",
+    "body_claim": "기본식·조건·핵심정리 연결표",
+    "before": "pass",
+    "summary_sentence": "기존 요약표·예고·링크 화면 구조 유지",
+    "status": "pass",
+    "reason": "요약·예고·링크에는 별도 패널을 만들지 않음"
+  },
+  {
+    "topic": "s3-next",
+    "category": "구조",
+    "body_claim": "다음시간밀러이후범위·중간경계미확정예고",
+    "before": "pass",
+    "summary_sentence": "기존 요약표·예고·링크 화면 구조 유지",
+    "status": "pass",
+    "reason": "요약·예고·링크에는 별도 패널을 만들지 않음"
+  },
+  {
+    "topic": "s3-links",
+    "category": "구조",
+    "body_claim": "10문제와답안·과거노트연결",
+    "before": "pass",
+    "summary_sentence": "기존 요약표·예고·링크 화면 구조 유지",
+    "status": "pass",
+    "reason": "요약·예고·링크에는 별도 패널을 만들지 않음"
+  }
+]

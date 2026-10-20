@@ -1,0 +1,182 @@
+[
+  {
+    "topic": "p1",
+    "category": "일반",
+    "body_claim": "빠른밝기경계고주파감쇠로전이지연·세로테두리번짐",
+    "before": "pass",
+    "summary_sentence": "보충의 단일 극점 모델은 실제 영상 회로 전체를 뜻하지 않아요. 대역폭 부족은 경계 전이를 늦추며, 균일한 영역의 최종 밝기까지 반드시 줄어드는 것은 아니에요.핵심 개념·답빠른 경계 → 고주파 성분 → 대역폭 부족 → 전이 지연과 세로 테두리 번짐첫 줄흰색에서 검은색으로 바뀌는 경계를 계단 입력으로 두고 $\\tau\\,dy/dt+y=u(t)$부터 적어요.검산$f_B\\to\\infty$이면 전이 시간은 0으로 가요. 단일 극점 예: $t_r\\approx0.350/f_B$.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p1",
+    "category": "보충",
+    "body_claim": "단일극점은교과서보충모델·균일밝기감소단정금지",
+    "before": "unresolved",
+    "summary_sentence": "보충의 단일 극점 모델은 실제 영상 회로 전체를 뜻하지 않아요. 대역폭 부족은 경계 전이를 늦추며, 균일한 영역의 최종 밝기까지 반드시 줄어드는 것은 아니에요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p2",
+    "category": "일반",
+    "body_claim": "출력KCL·음의단일극점함수·3dB조건",
+    "before": "pass",
+    "summary_sentence": "채널 길이 변조·다른 기생 커패시턴스를 무시해요. $1/(R_DC_L)$는 rad/s라 Hz에는 $2\\pi$로 나누며, −3 dB는 전압 절반이 아니라 $1/\\sqrt2$배예요.핵심 개념·답출력 KCL → $H=-g_mR_D/(1+sR_DC_L)$$\\omega_B=1/(R_DC_L)$첫 줄$V_{DD}$ AC 접지, $M_1\\to g_mv_{gs}$, $v_{gs}=v_{in}$$v_{out}/R_D+sC_Lv_{out}+g_mv_{in}=0$검산$\\omega=\\omega_B$에서 크기 비 $1/\\sqrt2$, 즉 −3.01 dB예요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p2",
+    "category": "주의",
+    "body_claim": "λ0다른기생무시·주파수와크기구별",
+    "before": "unresolved",
+    "summary_sentence": "채널 길이 변조·다른 기생 커패시턴스를 무시해요. $1/(R_DC_L)$는 rad/s라 Hz에는 $2\\pi$로 나누며, −3 dB는 전압 절반이 아니라 $1/\\sqrt2$배예요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p3",
+    "category": "일반",
+    "body_claim": "10%감소는0.9·gm정규화소거·77.1MHz",
+    "before": "pass",
+    "summary_sentence": "채널 길이 변조와 다른 커패시턴스를 무시한 단일 극점 모델이에요. 정확한 비 0.9로 계산하며 이는 −0.915 dB이고, −3 dB 극점 자체를 묻는 것이 아니에요.핵심 개념·답정규화 크기 0.9 → $\\omega=0.4843\\omega_p$ → $77.1\\,\\mathrm{MHz}$첫 줄$1/\\sqrt{1+(\\omega R_DC_L)^2}=0.9$부터 적어요.검산$\\omega/\\omega_p=0.48432$를 넣으면 크기 비 0.9000이에요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p3",
+    "category": "주의",
+    "body_claim": "CL하나모델·1dB근사와정확0.9구분",
+    "before": "unresolved",
+    "summary_sentence": "채널 길이 변조와 다른 커패시턴스를 무시한 단일 극점 모델이에요. 정확한 비 0.9로 계산하며 이는 −0.915 dB이고, −3 dB 극점 자체를 묻는 것이 아니에요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p4",
+    "category": "일반",
+    "body_claim": "전력gm·대역폭R상한동시활용·활성바이어스조건최대2.45",
+    "before": "pass",
+    "summary_sentence": "수치에는 교과서의 $V_T=26\\,\\mathrm{mV}$를 쓰고 베이스 전류·Early 효과·다른 커패시턴스를 무시해요. 1 GHz는 $2\\pi10^9$ rad/s로 넣어요.핵심 개념·답전력 → $I_C=0.8\\,\\mathrm{mA}$; 대역폭 → $R_1=79.6\\,\\Omega$; 활성 영역을 유지하는 베이스 바이어스에서 최대 $|A_0|=2.45$첫 줄$I_C\\le P/V_{CC}$와 $R_1\\le1/(2\\pi f_BC_L)$ 두 제한을 나란히 적어요.검산$I_CR_1=63.7\\,\\mathrm{mV}$, $f_B=1\\,\\mathrm{GHz}$를 확인해요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p4",
+    "category": "주의",
+    "body_claim": "VT26·베이스전류Early다른C무시추가가정",
+    "before": "unresolved",
+    "summary_sentence": "수치에는 교과서의 $V_T=26\\,\\mathrm{mV}$를 쓰고 베이스 전류·Early 효과·다른 커패시턴스를 무시해요. 1 GHz는 $2\\pi10^9$ rad/s로 넣어요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p5",
+    "category": "일반",
+    "body_claim": "미주어진A0로정규화상대보드·기울기0−20 0−20",
+    "before": "pass",
+    "summary_sentence": "절대 높이는 $20\\log_{10}|A_0|$만큼 더해요. 영점은 기존 −20 기울기를 상쇄해 0으로 만들며, 그 뒤 반드시 이득이 증가한다는 뜻은 아니에요.핵심 개념·답코너 $0.1,1,10\\,\\mathrm{GHz}$; 상대 기울기 $0,-20,0,-20$첫 줄$M(f)=20\\log_{10}|H(f)/A_0|$로 정규화하고 코너를 $0.1,1,10\\,\\mathrm{GHz}$ 순으로 표시해요.검산극점2개−영점1개라 최종 기울기는 −20 dB/dec예요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p5",
+    "category": "주의",
+    "body_claim": "절대높이미정·영점이이득증가보장아님",
+    "before": "unresolved",
+    "summary_sentence": "절대 높이는 $20\\log_{10}|A_0|$만큼 더해요. 영점은 기존 −20 기울기를 상쇄해 0으로 만들며, 그 뒤 반드시 이득이 증가한다는 뜻은 아니에요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p6",
+    "category": "일반",
+    "body_claim": "단별KCL곱·같은극점중복·두번반전양수·코너−6dB",
+    "before": "pass",
+    "summary_sentence": "게이트 입력 커패시턴스와 채널 길이 변조를 무시해 뒷단이 앞단을 부하하지 않아요. 보충의 전체 −3 dB 주파수는 $0.6436\\omega_p$로, 한 단의 극점과 달라요.핵심 개념·답$H=(g_mR_D)^2/(1+s\\tau)^2$, $\\tau=R_DC_L$중복 극점 → 코너 뒤 −40 dB/dec첫 줄노드 $v_X$, $v_{out}$의 KCL 두 개$v_{gs1}=v_{in}$, $v_{gs2}=v_X$검산$\\omega_p$에서 전체 크기 비 $1/2$, 즉 −6.02 dB예요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p6",
+    "category": "주의",
+    "body_claim": "뒷단부하없음가정·전체3dB는코너아님·보충값",
+    "before": "unresolved",
+    "summary_sentence": "게이트 입력 커패시턴스와 채널 길이 변조를 무시해 뒷단이 앞단을 부하하지 않아요. 보충의 전체 −3 dB 주파수는 $0.6436\\omega_p$로, 한 단의 극점과 달라요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p7",
+    "category": "일반",
+    "body_claim": "입출력KCL한방향·각RC극점·Cin0극한",
+    "before": "pass",
+    "summary_sentence": "$\\lambda=0$·게이트–드레인 커패시턴스 없음에서 두 RC 인자가 분리돼요. CS 게이트에는 $1/g_m$을 넣지 않으며, 같은 시간상수는 소거가 아닌 이중 극점이에요.핵심 개념·답입력 $|\\omega_{p1}|=1/(R_SC_{in})$출력 $|\\omega_{p2}|=1/(R_DC_L)$첫 줄$v_g$ 노드: $(v_g-v_{in})/R_S+sC_{in}v_g=0$$v_{out}$ 노드: $v_{out}/R_D+sC_Lv_{out}+g_mv_g=0$검산$C_{in}\\to0$이면 입력 극점만 무한대로 가요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p7",
+    "category": "주의",
+    "body_claim": "λ0 Cgd없음·게이트1/gm금지·동일RC이중",
+    "before": "unresolved",
+    "summary_sentence": "$\\lambda=0$·게이트–드레인 커패시턴스 없음에서 두 RC 인자가 분리돼요. CS 게이트에는 $1/g_m$을 넣지 않으며, 같은 시간상수는 소거가 아닌 이중 극점이에요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p8",
+    "category": "일반",
+    "body_claim": "CG소스전류gmvs·입력병렬1/gm·출력극점",
+    "before": "pass",
+    "summary_sentence": "$\\lambda=0$·몸체 효과 무시이며 종속 전류원은 꺼지지 않아요. 저주파 이득은 $g_mR_D/(1+g_mR_S)>0$라 CG는 비반전이에요.핵심 개념·답$\\omega_{p,in}=1/[(R_S\\parallel1/g_m)C_{in}]$$\\omega_{p,out}=1/(R_DC_L)$첫 줄$v_{gs}=-v_s$$(v_s-v_{in})/R_S+sC_{in}v_s+g_mv_s=0$검산$g_m\\to0$이면 입력 극점은 $1/(R_SC_{in})$이에요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p8",
+    "category": "주의",
+    "body_claim": "λ0몸체무시·종속원유지·양의저주파이득",
+    "before": "unresolved",
+    "summary_sentence": "$\\lambda=0$·몸체 효과 무시이며 종속 전류원은 꺼지지 않아요. 저주파 이득은 $g_mR_D/(1+g_mR_S)>0$라 CG는 비반전이에요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p9",
+    "category": "일반",
+    "body_claim": "출력극점10배→출력시상수1/10→RD역산",
+    "before": "pass",
+    "summary_sentence": "$\\lambda=0$·몸체 효과 무시의 CG 식이에요. 출력 극점을 더 높이려고 $R_D$를 줄이면 저주파 이득 $g_mR_D/(1+g_mR_S)$도 줄어요.핵심 개념·답$\\omega_{out}=10\\omega_{in}$ → $R_D=R_{in}C_{in}/(10C_L)$첫 줄$1/(R_DC_L)=10/[R_{in}C_{in}]$, $R_{in}=R_S\\parallel1/g_m$부터 적어요.검산$R_D$를 되넣으면 출력/입력 극점 비가 10이에요.",
+    "status": "pass",
+    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+  },
+  {
+    "topic": "p9",
+    "category": "주의",
+    "body_claim": "λ0몸체무시·RD줄이면이득도감소",
+    "before": "unresolved",
+    "summary_sentence": "$\\lambda=0$·몸체 효과 무시의 CG 식이에요. 출력 극점을 더 높이려고 $R_D$를 줄이면 저주파 이득 $g_mR_D/(1+g_mR_S)$도 줄어요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p10",
+    "category": "일반",
+    "body_claim": "기생RP는소스1/gm와직렬·RS와병렬·입력하강출력같음",
+    "before": "unresolved",
+    "summary_sentence": "입력 극점은 $1/\\{[R_S\\parallel(R_P+1/g_m)]C_{in}\\}$, 출력은 $1/(R_DC_L)$예요. $R_P$가 커지면 입력 극점만 내려가요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  },
+  {
+    "topic": "p10",
+    "category": "주의",
+    "body_claim": "Cin노드가RS RP사이·λ0몸체다른C무시",
+    "before": "unresolved",
+    "summary_sentence": "$C_{in}$은 $R_S$와 $R_P$ 사이 노드에 있어요. $\\lambda=0$·몸체 효과와 다른 커패시턴스 무시에서 $R_P$와 $1/g_m$은 직렬, 그 합과 $R_S$는 병렬이에요.",
+    "status": "pass",
+    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  }
+]
