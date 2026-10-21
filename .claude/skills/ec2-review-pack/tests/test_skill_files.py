@@ -159,6 +159,24 @@ class TestBackupSnippet(unittest.TestCase):
         self.assertIn("백업 중단", r.stderr)
         self.assertEqual(self.backups(), [])
 
+    def test_backup_records_hashes_and_rejects_symlink(self):
+        pack = self.notes / "0923"
+        pack.mkdir()
+        note = pack / "정리노트_0923_A.html"
+        note.write_text("old coherent note")
+        result = self.backup("0923")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        record = json.loads((self.run_dir / "basic-pack-backup.json").read_text())
+        import hashlib
+        self.assertEqual(record["files"][note.name], hashlib.sha256(note.read_bytes()).hexdigest())
+        target = self.tmp / "outside"
+        target.write_text("outside original")
+        note.unlink()
+        note.symlink_to(target)
+        result = self.backup("0923")
+        self.assertEqual(result.returncode, 1)
+        self.assertTrue(note.is_symlink())
+
 
 class TestCleanupSnippet(unittest.TestCase):
     """SKILL.md 4단계 정리 스니펫이 맨 위와 .assets/ 의 옛 산출물만 지우는지 실제로 실행한다."""
@@ -205,6 +223,20 @@ class TestWhyPageDocs(unittest.TestCase):
         t = self.read("SKILL.md")
         self.assertIn("scripts/insert_why.py", t)
         self.assertIn("## 기존 팩에 왜 페이지 붙이기", t)
+
+
+class TestLearningStyleBriefs(unittest.TestCase):
+    def test_parent_briefs_include_profile_and_audit(self):
+        author = (SKILL / "references/content-rules.md").read_text()
+        reviewer = (SKILL / "references/review-prompt.md").read_text()
+        for brief in (author, reviewer):
+            self.assertIn("<REPO>/docs/learning/solution-style.md", brief)
+            self.assertIn("learning_style", brief)
+            self.assertIn("핵심 관계", brief)
+        self.assertIn("learning-style-audit.json", reviewer)
+        skill = SKILL_MD.read_text()
+        for required in ("--mode problems", "--mode answers --answer-overlay", "--defer-answer-pdf", "publish_answer.py", "answer-review.json"):
+            self.assertIn(required, skill)
 
 
 if __name__ == "__main__":

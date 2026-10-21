@@ -12,6 +12,7 @@ CLI:
 from __future__ import annotations
 
 import argparse
+import json
 from collections import defaultdict
 from dataclasses import dataclass, field
 from html.parser import HTMLParser
@@ -22,6 +23,7 @@ from urllib.parse import unquote
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import manifest as manifest_mod  # noqa: E402
+from learning_style import validate_style_audit  # noqa: E402
 
 VOID_TAGS = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
 CONTAINER_CLASSES = {"topic", "card"}
@@ -289,10 +291,33 @@ def check_file(path: Path | str) -> list[Problem]:
     return check_common(parse_html(source), source, Path(path))
 
 
-def check_pack(m: dict, note_path: Path | str) -> list[Problem]:
-    source = Path(note_path).read_text(encoding="utf-8")
+def check_pack(m: dict, note_path: Path | str, *, repo: Path, style_audit: dict,
+               defer_answer_pdf: bool = False) -> list[Problem]:
+    note_path = Path(note_path)
+    validation = manifest_mod.validate(m, repo=repo)
+    out = [Problem("learning-style" if "learning_style" in e else "manifest", note_path.name, e)
+           for e in validation]
+    if not validation:
+        topics = [t["id"] for s in m["sections"] for t in s["topics"]]
+        out += [Problem("learning-style", note_path.name, e)
+                for e in validate_style_audit(style_audit, m["learning_style"], topics)]
+    source = note_path.read_text(encoding="utf-8")
     doc = parse_html(source)
-    return check_common(doc, source, Path(note_path)) + check_note(doc, m)
+    common = check_common(doc, source, note_path)
+    # Only the literal expected answer path's missing-file error is deferred.
+    # An anchor, different directory/name, or any other check still fails.
+    expected = manifest_mod.answer_pdf_name(m)
+    if defer_answer_pdf and m["problems"] and not (note_path.parent / expected).exists():
+        for index, problem in enumerate(common):
+            if problem.code == "broken-link" and problem.detail == expected:
+                del common[index]
+                break
+    if m["problems"]:
+        for pdf in (manifest_mod.problem_pdf_name(m), expected):
+            target = note_path.parent / pdf
+            if target.exists() and not target.is_file():
+                common.append(Problem("pdf-file", note_path.name, f"PDF 파일이 아님: {pdf}"))
+    return out + common + check_note(doc, m)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -300,17 +325,32 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("files", nargs="*")
     ap.add_argument("--manifest")
     ap.add_argument("--note")
+    ap.add_argument("--repo", type=Path, default=manifest_mod.DEFAULT_REPO)
+    ap.add_argument("--defer-answer-pdf", action="store_true")
     args = ap.parse_args(argv)
+    if args.defer_answer_pdf and not args.manifest:
+        ap.error("--defer-answer-pdf에는 --manifest가 필요")
     problems: list[Problem] = []
     if args.manifest:
         if not args.note:
             ap.error("--manifest에는 --note가 필요")
-        problems += check_pack(manifest_mod.load(args.manifest), args.note)
+        try:
+            m = manifest_mod.load(args.manifest, repo=args.repo)
+            audit = json.loads((Path(args.manifest).parent / "learning-style-audit.json").read_text(encoding="utf-8"))
+            problems += check_pack(m, args.note, repo=args.repo, style_audit=audit,
+                                   defer_answer_pdf=args.defer_answer_pdf)
+        except (manifest_mod.ManifestError, OSError, UnicodeError, json.JSONDecodeError) as exc:
+            problems.append(Problem("manifest-or-audit", str(args.manifest), str(exc)))
     for name in args.files:
         problems += check_file(name)
     for p in problems:
         print(p)
-    print("OK" if not problems else f"FAIL ({len(problems)})")
+    if problems:
+        print(f"FAIL ({len(problems)})")
+    elif args.defer_answer_pdf:
+        print("PRELIMINARY: answer PDF pending")
+    else:
+        print("OK")
     return int(bool(problems))
 
 

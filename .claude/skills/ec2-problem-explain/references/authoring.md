@@ -4,9 +4,29 @@ Razavi 이론은 읽었지만 회로 문제풀이 경험이 적은 학생에게 
 
 출력은 브리프가 정한 `explanations/pN.html` 한 파일이에요. 원문·조건·구할 것·문제 그림은 조립기가 md에서 붙이므로 다시 쓰지 않아요.
 
+## 핵심 풀이 먼저 저작
+
+필수 읽기 입력은 `<REPO>/docs/learning/solution-style.md`(메인이 실제 저장소 절대 경로로 채움)와 `BUCKET/source.json`의 `learning_style` snapshot이다. 명세는 관찰된 사고 순서·표기의 범위를 정한다. 원문 조건·소문항·정답 정확성이 먼저이며 미관찰 분야를 확인된 성향으로 확장하지 않는다.
+
+핵심 route를 먼저 쓰고 그 선택 이유·개념·중간 유도를 아래 일곱 구역에서 자세히 설명한다. 핵심의 끝은 답을 바로 읽을 수 있어야 한다. 조각 맨 앞에 다음 직계 영역 한 개를 둔다.
+
+```html
+<div class="layer formal solution-route" data-personalization="route">
+  <h4>핵심 풀이</h4>
+  <div data-core-subpart="main">
+    <div data-solution-core="step" data-core-label="회로 판단"><p>핵심 회로·판단·계산</p></div>
+    <div data-solution-core="answer"><p>단위·부호·조건을 포함한 최종 답</p></div>
+  </div>
+</div>
+```
+
+`source.json` subparts 순서대로 `data-core-subpart` 그룹을 정확히 한 번씩 두고 각 그룹에 비어 있지 않은 step 1개 이상, 마지막 answer 1개를 둔다. step의 `data-core-label`은 일반 텍스트다. 기존 `data-subpart`는 solve/verify 전용으로 유지한다. 회로 판단에 필요한 그림은 step 안에 아래 SVG 규칙의 figure로 넣고 start의 상세 그림과 노드·전류·극성을 맞춘다. 정성 문항은 논증 step과 결론 answer를 쓴다. 핵심의 조건·근사·단위·답은 상세·sum·MD와 일치한다.
+
+최종 stage DOM의 route에서 `answer-overlay.json`이 자동 추출된다. 별도 요약이나 PDF를 작성하지 않고 핵심을 고칠 때 상세도 함께 대조한다. 원문·조건·그림을 core로 다시 쓰지 않고 필요한 회로 판단만 담는다.
+
 ## 일곱 구역
 
-각 조각은 다음 직계 구역을 표 순서대로 하나씩 포함해요. 모든 구역은 `class="layer …"`가 있는 직계 `div`이고, 본문 답은 모두 펼쳐요.
+핵심 route 다음에 각 조각은 다음 직계 구역을 표 순서대로 하나씩 포함해요. 모든 구역은 `class="layer …"`가 있는 직계 `div`이고, 본문 답은 모두 펼쳐요.
 
 | data-explanation | layer | 작성할 내용 |
 |---|---|---|

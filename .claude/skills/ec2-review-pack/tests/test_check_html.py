@@ -6,7 +6,7 @@ import shutil
 import tempfile
 import unittest
 
-from _util import MINI_RUN
+from _util import MINI_RUN, REPO
 
 import assemble
 import check_html
@@ -63,7 +63,7 @@ class TestPack(unittest.TestCase):
 
     def codes(self, note: Path | None = None) -> list[str]:
         note = note or self.build()
-        return sorted(p.code for p in check_html.check_pack(self.m(), note))
+        return sorted(p.code for p in check_html.check_pack(self.m(), note, repo=REPO, style_audit=json.loads((self.run / "learning-style-audit.json").read_text())))
 
     def edit(self, rel: str, old: str, new: str):
         path = self.run / rel

@@ -19,7 +19,9 @@
   "independent": {"status": "pass", "reviewer": "…", "evidence": "…",
                   "items": {"pN:main": {"status": "pass", "reviewer": "…", "evidence": "evidence/pN-sympy.py, evidence/pN-result.txt: …",
                                         "method": "symbolic", "conclusion": "…"}}},
-  "browser": {"status": "pass", "reviewer": "…", "evidence": "…"}
+  "browser": {"status": "pass", "reviewer": "…", "evidence": "…"},
+  "learning_style_audit": {"learning_style": {"path": "docs/learning/solution-style.md", "sha256": "…", "rule_ids": ["…"]},
+    "items": {"pN:main": {"status": "not_run", "reviewer": "", "rules": {"<규칙 ID>": {"disposition": "applied", "evidence": ""}}}}}
 }
 ```
 
@@ -40,6 +42,7 @@ python3 "$REPO/workbook/source_pages.py" render <문제 md 절대 경로…> --o
 ## content: 내용 리뷰 (작성자가 아닌 opus 리뷰어 1명)
 
 리뷰어에게 stage HTML 경로, `source.json`, 이 문서와 [저작 규칙](authoring.md)의 경로, 참고 자료 경로를 넘기고, 모든 `pN:<subpart>`에 대해 판정을 JSON으로 받아요. 확인할 것:
+- 핵심 route: source.json 소문항 순서·개수대로 핵심 회로·판단·계산·최종 답을 먼저 읽고, 상세 일곱 구역·sum·MD의 답·단위·부호·조건·근사·그림과 대조한다. core 그림도 노드·전류·극성과 첫 KCL이 일치해야 한다.
 - recall: 문제의 단서 → 개념 → 기호의 뜻 → 근사 조건 → 선택 이유가 이어지는지. 제목만 있거나 공식만 나열하면 fail.
 - start: 실제 첫 줄(등가회로·하프 서킷·KCL 첫 식)인지, recall의 긴 설명을 복제하지 않았는지.
 - solve: 유도 이유·근사의 적용 범위·소문항별 누락 여부, 모든 답.
@@ -57,6 +60,12 @@ python3 "$REPO/workbook/source_pages.py" render <문제 md 절대 경로…> --o
 교육적 연결 검토와 독립 수학 검산, 원문 시각 대조, 브라우저 검토는 각각 수행 사실과 범위를 기록해요. 한 검토의 통과를 다른 검토의 통과로 대신하지 않아요.
 
 결함이 있으면 그 항목을 `fail`로 두고 작성자에게 되돌려요. 고친 뒤 build부터 다시 해요.
+
+## learning_style_audit: 모든 소문항의 개인화 감사
+
+content 리뷰어 브리프의 필수 입력은 `<REPO>/docs/learning/solution-style.md` 절대 경로, `source.json.learning_style`, stage HTML, 저작·검토 규칙이다. 마지막 build가 만든 `review.json.learning_style_audit`의 각 `pN:<subpart>`를 실제 의미 검토한 뒤 채운다. 모든 소문항·모든 rule_ids에 `reviewer`, `status=pass`, `rules[ID]={disposition: applied|not_applicable, evidence: 적용 위치/내용 또는 비적용 이유}`가 필요하다. 수치 계산이 없는 문항에는 이유 있는 `not_applicable`를 사용한다.
+
+snapshot은 path·sha256·rule_ids를 그대로 보존하고 references에 실제 읽은 명세의 절대 경로·현재 SHA-256을 유지한다. core에서 관찰된 사고 순서를 확인하고 상세 유도가 사라지지 않았는지도 본다. 명세 바이트 변경은 HTML 동등성으로 대체할 수 없고 실제 재검토가 필요하다. 형식 검증이 evidence의 의미를 승인하지 않는다. 현재 네 검토와 개인화 감사가 모두 pass인 발행 `validation.json`만 overlay를 승인한다.
 
 ## independent: 독립 검산 (작성자와 다른 에이전트)
 
@@ -183,7 +192,7 @@ EOF
 
 ## 현재 기준과 재렌더링 검토 계약
 
-현재 `review_policy_version`은 `problem-explain-2026-10-18-smallsignal`다. 새 review.json·manifest의 버전이 일치해야 발행된다. 구버전/버전 없는 검토를 단순히 현재 버전으로 바꾸거나 pass를 복사하지 않는다. 기준 변경은 실제 content·independent 재검토를 요구한다.
+현재 `review_policy_version`은 `problem-explain-2026-10-21-learning-style`다. 새 review.json·manifest의 버전이 일치해야 발행된다. 구버전/버전 없는 검토를 단순히 현재 버전으로 바꾸거나 pass를 복사하지 않는다. 기준 변경은 실제 content·independent 재검토를 요구한다.
 
 content는 recall의 근거 있는 명칭 대응, pitfall의 오답 판별 기준, 부정형의 참·거짓과 선택 적합성, understand·solve·verify·pitfall·sum의 결함 공개·공식 답 확인 여부가 일관적인지 확인한다. 과목별 disputed 규칙은 유지한다. 독립 검산은 작성자와 다른 검산자가 정답·참고 풀이·설명 조각을 보지 않고 문제·그림·필요한 이론 자료만으로 먼저 수행한다. 컨트롤러가 그 결과를 참고 답과 대조한다.
 

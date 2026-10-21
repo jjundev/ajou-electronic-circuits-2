@@ -5,7 +5,7 @@ description: "전자회로2 복습팩이 이미 고른 workbook 문제(날짜별
 
 # 전자회로2 문제풀이 입문 설명
 
-Razavi 이론은 읽었지만 회로 문제풀이 경험이 적은 학생에게, 복습팩 문제마다 **문제의 단서 → 떠올릴 개념과 공식 → 첫 줄 → 단계별 이유 → 완성 답 → 검산 → 함정 → 다시 풀기**를 모두 펼쳐 보여 준다. 중간에 사용자에게 묻지 않고 끝에 한 번 보고한다. 커밋은 제안만 한다.
+Razavi 이론은 읽었지만 회로 문제풀이 경험이 적은 학생에게, 복습팩 문제마다 개인 명세에 맞춘 **핵심 회로·판단·계산·최종 답**을 먼저 보여 주고, **문제의 단서 → 떠올릴 개념과 공식 → 첫 줄 → 단계별 이유 → 완성 답 → 검산 → 함정 → 다시 풀기**를 모두 펼쳐 보여 준다. 중간에 사용자에게 묻지 않고 끝에 한 번 보고한다. 커밋은 제안만 한다.
 
 **모델 이름**: 이 문서의 opus는 Claude 기준이다. Claude가 아닌 환경(GPT)에서는 opus 대신 sol을 쓴다.
 
@@ -28,7 +28,8 @@ Razavi 이론은 읽었지만 회로 문제풀이 경험이 적은 학생에게,
 ## 경로 약속
 
 - `SKILL` = 이 파일이 있는 폴더(`.claude/skills/ec2-problem-explain`)의 절대 경로
-- `REPO` = 저장소 루트
+- `REPO` = 이 checkout의 저장소 루트 절대 경로
+- `PROFILE` = `<REPO>/docs/learning/solution-style.md`의 실제 절대 경로. 작성자·내용 리뷰어가 필수로 읽고 `source.json.learning_style` snapshot과 대조한다.
 - `RUN` = `<scratchpad>/ec2-problem-explain/<실행ID>` (실행ID 예: `1007-20261013-1530`). 매번 새로 정하며, 없거나 빈 폴더여야 한다.
 - `BUCKET` = `RUN/review-<range>-<slug>/` (팩마다 하나, extract가 만든다)
 - 셸 상태는 Bash 호출 사이에 이어지지 않는다. 아래 명령의 `$SKILL`, `$RUN`, `$REPO`, `$BUCKET`은 실행할 때마다 실제 절대 경로로 바꿔 쓰거나, 같은 셸 호출에서 `SKILL=…; RUN=…; REPO=…;`로 먼저 설정한다. `RUN=… python3 … "$RUN"`처럼 인자 확장과 같은 명령 앞에 설정하지 않는다. `cd`는 쓰지 않고 파일도 절대 경로로 넘긴다.
@@ -44,6 +45,8 @@ CLI는 [scripts/epe_cli.py](scripts/epe_cli.py) 하나이며 `extract`, `build`,
    ```bash
    python3 -c "import sympy; print(sympy.__version__)" || pip3 install --user --break-system-packages sympy
    ```
+
+4. `PROFILE`을 실제로 읽는다. extract는 현재 명세의 원본 바이트 snapshot을 필수로 저장한다. 누락·변경은 새 저작/검토 대상이며 구버전 검토로 대체하지 않는다.
 
 ### 1. extract
 ```bash
@@ -68,6 +71,7 @@ python3 "$SKILL/scripts/epe_cli.py" extract --repo "$REPO" --target 1007 --run "
 
 ### 3. 저작 (문항마다 opus 작성자, 병렬)
 - 문항마다 작성자 1명을 **한 메시지에서 병렬로** 띄운다. 모델은 opus(GPT: sol)다.
+- 브리프 필수 슬롯: `<REPO>/docs/learning/solution-style.md` 실제 절대 경로, `BUCKET/source.json.learning_style` snapshot, 원문 `subparts` 순서, 핵심 route(`data-core-subpart`) 먼저 → 상세 일곱 구역·sum 순서, 규칙별 적용 위치 또는 비적용 이유 보고.
 - 브리프에 적을 것: [저작 규칙](references/authoring.md)의 절대 경로를 먼저 읽으라는 지시, `BUCKET/source.json` 경로와 문항 id(`pN`), 그 문항의 `subparts`, 2에서 정한 참고 자료 경로와 쪽, 출력 파일 `BUCKET/explanations/pN.html` 하나(다른 곳에는 쓰지 않는다), 임시 파일은 `RUN/work/pN/`에만.
 - 작성자는 원문·조건·구할 것·그림을 다시 쓰지 않는다(조립기가 md에서 붙인다).
 - 브리프에 "소신호 KCL/KVL을 세우는 문항이면 저작 규칙의 '소신호 등가회로 그림'을 start에 넣고(경계 조건이 회로를 바꾸면 solve에 하나 더, 최대 2개), DC KCL만 있으면 넣지 않는다"를 적는다.
@@ -89,9 +93,9 @@ python3 "$SKILL/scripts/epe_cli.py" check --run "$RUN"
 - check는 `BUCKET/machine.json`을 쓰고 `check: machine PASS (수학·화면 검토는 별도)`를 출력해야 한다. 실패 메시지(구역·소문항·수식 구분자·자원·해시)는 담당 작성자에게 되돌리고, 고친 뒤 build부터 다시 한다. 최대 2회, 그래도 남으면 그 팩을 withheld로 보고한다.
 
 ### 6. 검토 기록
-[검토 기록](references/verification.md)을 읽고 네 검토를 실제로 수행해 `BUCKET/review.json`에 기록한다.
+[검토 기록](references/verification.md)을 읽고 네 검토와 `learning_style_audit`의 모든 소문항·규칙 감사를 실제로 수행해 `BUCKET/review.json`에 기록한다.
 - `source_visual`: `workbook/source_pages.py render`로 원본 쪽을 렌더해 문항 조건·그림·소문항과 대조.
-- `content`: 작성자가 아닌 리뷰어 에이전트(opus) 1명이 팩의 모든 조각을 읽고 소문항별로 판정.
+- `content`: 필수 읽기 `<REPO>/docs/learning/solution-style.md` 절대 경로와 `source.json.learning_style`을 브리프에 넣는다. 핵심 route와 상세의 답·단위·근사·그림을 대조하고 `learning_style_audit`를 작성한다. 작성자가 아닌 리뷰어 에이전트(opus) 1명이 팩의 모든 조각을 읽고 소문항별로 판정.
 - `independent`: 4의 판정을 그대로 옮긴다(evidence 경로는 stage에 복사된 `evidence/`와 같은 이름).
 - `browser`: 메인 에이전트가 stage 폴더를 `python3 -m http.server`로 열고(몇 초 뒤 측정), 네 조합 측정은 헤드리스 Playwright [scripts/epe_browser_check.py](scripts/epe_browser_check.py)로 해요(`playwright`·chromium 필요). 내장 브라우저 창은 목차·pager·테마 토글을 눌러 보는 확인에만 쓰고, 그 페이지의 `document.visibilityState`가 `'visible'`일 때만 결과로 써요. `ERR_CONNECTION_RESET` 같은 연결 끊김은 fail이 아니라 다시 실행해요. evidence에 어느 경로로 확인했는지 적어요.
 - `references`: 실제로 읽은 저장소 자료의 절대 경로와 SHA-256.
@@ -101,8 +105,9 @@ python3 "$SKILL/scripts/epe_cli.py" check --run "$RUN"
 ```bash
 python3 "$SKILL/scripts/epe_cli.py" publish --run "$RUN"
 ```
-- 모든 검토가 `pass`이고 입력·조각·참조·산출 해시가 그대로일 때만 발행된다. 하나라도 `not_run`·`fail`·`disputed`이거나 해시가 바뀌면 그 팩은 보류된다. 다른 팩은 독립으로 발행된다.
+- 네 검토와 전체 `learning_style_audit`가 실제 `pass`이고 입력·조각·참조·산출 해시가 그대로일 때만 발행된다. 하나라도 `not_run`·`fail`·`disputed`이거나 해시가 바뀌면 그 팩은 보류된다. 다른 팩은 독립으로 발행된다.
 - 발행은 설명 소유 파일만 `복습노트/<range>/`로 교체하고, 기존 파일은 `BUCKET/backups/`에 백업하며, 실패하면 복구한다. 출력의 `publish: … backup: …` 줄을 보고에 쓴다.
+- `answer-overlay.json`은 자료 폴더에 발행되고 같은 폴더 `validation.json`이 이를 승인한다. 자식은 PDF를 직접 교체하지 않는다. 부모가 이 overlay로 RUN 안의 답안을 빌드·렌더 검토한 후 `publish_answer.py`로 교체한다. 단독 호출의 PDF는 기존 파일을 유지한다.
 - 사용자 호출 범위 안이므로 발행 전에 다시 묻지 않는다.
 
 ### 8. 보고
@@ -126,7 +131,7 @@ withheld 팩은 HTML·MD 줄 대신 stage 경로를 적는다.
 - `문제설명_<range>_<slug>.html` (`slug`는 같은 폴더 `정리노트_<range>_<slug>.html`의 것)
 - `.assets/문제설명_<range>_<slug>.md`: 링크는 `../`로 팩 폴더를 가리킨다
 - `.assets/figures_문제설명_<range>_<slug>/`: 문제·설명 그림 복사본
-- `.assets/자료_문제설명_<range>_<slug>/`: manifest, 조각, evidence, 로컬 KaTeX·Pretendard, `validation.json`(발행 당시 review.json)
+- `.assets/자료_문제설명_<range>_<slug>/`: manifest, 조각, evidence, `answer-overlay.json`, 로컬 KaTeX·Pretendard, `validation.json`(발행 당시 review.json)
 
 읽음 상태는 원 정리노트와 다른 `ec2-problem-explain-review-<range>-<slug>` 키로 저장된다.
 
@@ -152,7 +157,7 @@ withheld 팩은 HTML·MD 줄 대신 stage 경로를 적는다.
 - `all`: 기존 복습팩만 끝 날짜 내림차순으로 처리한다. 과제·forecast는 자동 선택하지 않는다. 전자회로2는 `.assets/problems.txt`가 있는 팩만 선택한다. 여러 후보는 명시 경로(전자회로2는 날짜 범위)로 해소하고 새 문제를 출제하지 않는다.
 - 화면: 1024px 이상은 목차와 문제 패널이 기본으로 함께 열린다. 저장된 닫힘 선택은 유지한다. 문제 패널은 `문제 | 원문` 탭, 왼쪽·오른쪽 붙이기·띄우기, 이동·크기 조절을 지원한다. 상태 키는 `od-panels:explain:v2:prob`다. 원문 없는 문항은 원문 탭을 숨기고, 모바일은 해설 위 `문제 보기`로 펼친다. 그림 확대와 인쇄 원문 보존도 검토한다.
 - 객관식: 입력에 명시된 정답 모델의 보기 ID·순서·정답·mode가 실제 보기와 맞을 때만 클릭 판정·알림·다시 풀기를 제공한다. 모델 없음/불일치는 정적 표시하고 진단한다. 해설 문장이나 보기 위치로 정답 모델을 추측하지 않는다. 전자회로2 workbook 입력은 정적 표시한다.
-- 현재 검토 기준은 `review_policy_version="problem-explain-2026-10-18-smallsignal"`다. build의 review.json과 manifest에 기록하며, 이전 기준이나 기준 없는 기록은 새 발행을 승인하지 못한다. 기존 발행 HTML의 열람에는 영향을 주지 않는다.
+- 현재 검토 기준은 `review_policy_version="problem-explain-2026-10-21-learning-style"`다. build의 review.json과 manifest에 기록하며, 이전 기준이나 기준 없는 기록은 새 발행을 승인하지 못한다. 기존 발행 HTML의 열람에는 영향을 주지 않는다.
 
 ### 레이아웃만 바뀐 기존 발행분 재발행
 
@@ -162,7 +167,7 @@ withheld 팩은 HTML·MD 줄 대신 stage 경로를 적는다.
 python3 ".claude/skills/ec2-problem-explain/scripts/epe_cli.py" rerender --repo "<저장소 절대경로>" --target 1007 --run "<비어 있는 새 RUN 절대경로>"
 ```
 
-입력·설명 조각·입력 그림·검산 자료·참조 파일이 검증되고 검토 기준도 현재와 같을 때만 content·independent를 재사용한다. 전자회로2는 problems.txt뿐 아니라 문제 MD·그림 전체의 합성 해시가 같아야 한다. 참조 누락·내용 변경·기준 누락/변경이면 content·independent도 not_run으로 되돌리고 실제 검토를 다시 한다. 경로 이전은 실제 대상과 바이트/링크 동등성을 입증할 때만 허용하며, 입증하지 못하면 재검토한다. 원본 HTML의 스타일·실행 스크립트만 바뀐 경우는 과거 입력을 확인할 수 있을 때만 동일 문항으로 인정하고 JSON 정답 데이터는 내용으로 취급한다.
+입력·설명 조각·입력 그림·검산 자료·참조 파일이 검증되고 검토 기준도 현재와 같을 때만 content·independent와 개인화 감사를 재사용한다. 현재 명세 바이트와 snapshot·전체 소문항 감사도 일치해야 한다. 전자회로2는 problems.txt뿐 아니라 문제 MD·그림 전체의 합성 해시가 같아야 한다. 참조 누락·내용 변경·기준 누락/변경이면 content·independent도 not_run으로 되돌리고 실제 검토를 다시 한다. 경로 이전은 실제 대상과 바이트/링크 동등성을 입증할 때만 허용하며, 입증하지 못하면 재검토한다. 원본 HTML의 스타일·실행 스크립트만 바뀐 경우는 과거 입력을 확인할 수 있을 때만 동일 문항으로 인정하고 JSON 정답 데이터는 내용으로 취급한다.
 
 `check` 뒤 source_visual·browser를 실제로 다시 확인한다. 검토 기준이 바뀐 이번 업데이트의 옛 발행분은 내용 검토·독립 검산도 새로 필요하다. 네 검토가 모두 pass인 뒤에만 별도 publish 절차를 사용한다. 사용자가 stage까지만 요청했다면 publish를 실행하지 않는다. 새로 해설을 저작해야 하면 기존 정상 저작 절차로 돌아간다.
 

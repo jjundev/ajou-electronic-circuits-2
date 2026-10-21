@@ -72,5 +72,18 @@ class SkillFilesTest(unittest.TestCase):
         self.assertEqual(link.resolve(), SKILL.resolve())
 
 
+class LearningStyleBriefTest(unittest.TestCase):
+    def test_child_briefs_include_profile_and_core_contract(self):
+        skill = text()
+        for required in ("<REPO>/docs/learning/solution-style.md", "learning_style", "data-core-subpart", "learning_style_audit", "answer-overlay.json"):
+            self.assertIn(required, skill)
+        author = (SKILL / "references/authoring.md").read_text()
+        for required in ("data-personalization", "data-solution-core", "data-core-label", "data-core-subpart", "<REPO>/docs/learning/solution-style.md"):
+            self.assertIn(required, author)
+        review = (SKILL / "references/verification.md").read_text()
+        for required in ("learning_style_audit", "not_applicable", "핵심", "단위", "근사", "그림"):
+            self.assertIn(required, review)
+
+
 if __name__ == '__main__':
     unittest.main()

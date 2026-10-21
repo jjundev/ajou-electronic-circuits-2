@@ -5,6 +5,9 @@
 ---
 전자회로2 정리노트의 섹션 `<sid>`(`<섹션 title>`)를 쓴다.
 
+- 개인 명세(필수 읽기): `<REPO>/docs/learning/solution-style.md`의 현재 바이트와 `<RUN>/manifest.json`의 `learning_style` snapshot(path·sha256·rule_ids). 메인이 실제 REPO 절대 경로로 채운다. 이 명세는 설명 순서·표기를 정하고, 원문 조건과 회로 정확성은 자료로 확인한다.
+- 첫 설명 계약: 회로 역할과 핵심 관계 → 작은 예시 → formal의 상세 정의·중간 식·유도. why·eli5·formal·prof·warn·supp·sum의 기존 범위와 상세 설명을 유지한다.
+- 개인화 보고: 토픽 ID별 적용 규칙 ID와 HTML 위치·적용 내용, 비적용 규칙의 이유를 보고한다. 메인/리뷰어가 실제 의미 검토 후 감사에 기록한다.
 - 읽기: `<SKILL>/references/content-rules.md`(이 파일 전체), 위젯이 있으면 `<SKILL>/references/widget-rules.md`
 - 위젯: <위젯> (메인 에이전트가 정한 것만 만든다. "위젯 없음"이면 이 섹션에는 위젯을 넣지 않는다)
 - 뒤 섹션 토픽: <뒤 섹션 토픽 id·제목 목록> (섹션 `why` 작성자에게만 채운다. 다른 섹션은 "해당 없음")

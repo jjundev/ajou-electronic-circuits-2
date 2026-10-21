@@ -1,12 +1,13 @@
 # manifest.json 작성 규칙 (메인 에이전트)
 
 manifest는 이번 팩의 계약이다. 작성자, 검사기, 조립기가 모두 이 파일을 기준으로 삼는다.
-정본 예시: `tests/fixtures/mini-run/manifest.json`.
+구조 예시(learning_style의 0 해시는 테스트용 placeholder이며 실행에 쓰지 않는다): `tests/fixtures/mini-run/manifest.json`.
 작성 후 반드시 `python3 <SKILL>/scripts/manifest.py <RUN>/manifest.json <REPO>` → `OK`(REPO를 주면 문제 md가 있는지도 본다).
 
 ## 최상위
 | 키 | 값 |
 |---|---|
+| `learning_style` | 준비에서 만든 `RUN/learning-style-snapshot.json`의 객체 전체(path·원본 바이트 SHA-256·문서 순서 rule_ids). 필수이며 SourcePack의 profile과 별개다. |
 | `course` | `"전자회로2"` |
 | `range` | `"0923"` 또는 `"0916-0918"` (첫 STT–마지막 STT 날짜) |
 | `slug` | 이번 범위 대표 주제의 영문 밑줄 형태, 예: `"Cascode_Stage"`, `"Differential_Amplifiers"`. 두 주제에 걸치면 뒤쪽 것 |
@@ -51,3 +52,11 @@ manifest는 이번 팩의 계약이다. 작성자, 검사기, 조립기가 모�
 - 문제가 1개 이상이면 `{"topic": "s<N>-links", "href": "복습문제_<range>_<slug>-문제.pdf"}`와 `…-답안.pdf` 두 항목을 **반드시** 넣는다(없으면 manifest.py 실패). 문제가 0개면 두 항목을 넣지 않는다.
 - 이전 복습팩과 이어지는 개념이면 `../<이전 range>/정리노트_<이전 range>_<slug>.html#<토픽>` 링크를 건다(팩마다 `복습노트/<range>/` 폴더라 한 단계 위로 올라간다).
 - 문제집 전체를 보고 싶을 때를 위해 `../../workbook/pdf/chNN-문제.pdf` 링크를 걸어도 된다(그 장을 다뤘을 때만, 파일이 있을 때만).
+
+
+## 개인화 입력과 감사
+`python3 "$REPO/workbook/learning_style.py" snapshot --repo "$REPO" --out "$RUN/learning-style-snapshot.json"`으로 명세를 읽고 manifest를 쓸 때 해당 JSON을 `learning_style`에 넣는다. `<REPO>/docs/learning/solution-style.md`의 절대 경로와 snapshot을 작성자·리뷰어 브리프에 함께 넣는다. 저장된 0 해시나 이전 실행 해시는 재사용하지 않는다.
+
+조립은 `assemble.py --repo "$REPO" --run "$RUN" --out <팩 절대경로>`로 하고 쓰기 전에 snapshot을 검사한다. `check_html.py --repo "$REPO" --manifest "$RUN/manifest.json" --note <노트 절대경로>`는 같은 RUN의 `learning-style-audit.json`을 필수로 읽는다. 명시 repo를 생략하면 실행 스크립트의 저장소를 확인한다. 모든 topic ID에 현재 snapshot·전체 규칙별 실제 pass 감사가 필요하다(lite·문제 0개도 포함). 명세가 바뀌면 작성·감사부터 다시 한다.
+
+답안 PDF 준비 중에만 `--defer-answer-pdf`로 manifest가 정한 정확한 answer PDF 경로의 파일 없음 한 건을 유예한다. 이 실행은 `PRELIMINARY: answer PDF pending`이며 최종 pass가 아니다. 다른 링크·앵커·내용·명세·감사는 그대로 검사한다. 답안 발행 후 같은 명령을 유예 없이 실행한다.

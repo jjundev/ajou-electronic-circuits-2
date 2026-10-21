@@ -47,12 +47,12 @@ python3 <SKILL>/scripts/problem_index.py --repo <REPO> --used <REPO>/복습노�
 - 후보 외/USED/중복 ID, 일부 소문항 선택, 전제 누락·역순을 거부한다. 순환 의존성은 어떤 순서도 통과하지 못한다.
 - PDF 빌드 전 manifest와 selection.json의 ID·순서를 대조한다. 선별을 바꾸면 기록도 다시 만든다.
 
-## 5. PDF 만들기 (4단계 조립에서)
+## 5. 문제지 먼저 만들기 (4단계 조립에서)
 ```bash
 python3 <REPO>/workbook/build_workbook.py --ids <id1,id2,…(manifest 순서)> --name 복습문제_<range>_<slug> \
-  --layout video-16x9 --pdf-dir <REPO>/복습노트/<range> --build-dir <RUN>/workbook-build
+  --mode problems --layout video-16x9 --pdf-dir <REPO>/복습노트/<range> --build-dir <RUN>/workbook-build
 ```
-- 결과: `복습노트/<range>/복습문제_<range>_<slug>-문제.pdf`, `-답안.pdf`.
+- 초기 결과는 `복습노트/<range>/복습문제_<range>_<slug>-문제.pdf` 하나다. 답안은 자식의 새 핵심 풀이·네 검토·개인화 감사·publish 후 발행된 overlay에서 부모가 만든다. [부모 통합 계약](problem-explain-integration.md)의 답안 제작·렌더 검토·원자적 교체 순서를 따른다. 원본 MD의 참고 풀이로 답안을 선행 제작하지 않는다.
 - stderr 줄로 원인을 구분한다.
   - `ERROR <md 경로>: …`(문제 md 자체 오류, 종료 코드 2): 그 id를 후보에서 같은 절의 다른 문제로 바꿔 manifest를 고치고 한 번만 다시 만든다. 또 실패하면 그 id를 빼고 "미해결"로 보고한다.
   - `ERROR <name>: …`(렌더링·Chrome·네트워크 오류, 종료 코드 1): md 문제가 아니므로 id를 바꾸지 않는다. "미해결"로 보고한다.

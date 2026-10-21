@@ -14,12 +14,16 @@ import re
 import sys
 import unicodedata
 
+DEFAULT_REPO = Path(__file__).resolve().parents[4]
+sys.path.append(str(DEFAULT_REPO / "workbook"))
+from learning_style import STYLE_PATH, LearningStyleError, check_style  # noqa: E402
+
 LAYER_NAMES = {"eli5", "formal", "prof", "warn"}
 TOP_LEVEL_TYPES = {
     "course": str, "range": str, "slug": str,
     "note_title": str, "note_subtitle": str, "footer_note": str,
     "sessions": list, "sections": list, "preview_topic": str, "forbidden_outside_preview": list,
-    "problems": list, "links": list,
+    "problems": list, "links": list, "learning_style": dict,
 }
 RANGE_RE = re.compile(r"\d{4}(-\d{4})?")
 SLUG_RE = re.compile(r"[A-Za-z0-9_]+")
@@ -115,6 +119,22 @@ def _check_why(m: dict, errors: list[str]) -> None:
         errors.append(f"sections[0].topics[0].layers: {WHY_TOPIC_ID}에는 eli5와 formal이 필요함")
 
 
+def _check_snapshot(snapshot: dict, errors: list[str]) -> None:
+    if set(snapshot) != {"path", "sha256", "rule_ids"}:
+        errors.append("manifest.learning_style: path/sha256/rule_ids 필요")
+    if snapshot.get("path") != STYLE_PATH:
+        errors.append(f"manifest.learning_style.path: {STYLE_PATH} 필요")
+    digest = snapshot.get("sha256")
+    if not isinstance(digest, str) or not re.fullmatch(r"[0-9a-f]{64}", digest):
+        errors.append("manifest.learning_style.sha256: SHA-256 필요")
+    rules = snapshot.get("rule_ids")
+    if (not isinstance(rules, list) or not rules
+            or any(not isinstance(r, str) or not re.fullmatch(r"[A-Z][A-Z0-9]*-[0-9]{2}", r) for r in rules)):
+        errors.append("manifest.learning_style.rule_ids: 규칙 ID 목록 필요")
+    elif len(rules) != len(set(rules)):
+        errors.append("manifest.learning_style.rule_ids: 중복 규칙 ID")
+
+
 def validate(m: dict, repo: Path | str | None = None) -> list[str]:
     errors: list[str] = []
     if not isinstance(m, dict):
@@ -123,6 +143,12 @@ def validate(m: dict, repo: Path | str | None = None) -> list[str]:
         _need(m, key, typ, "manifest", errors)
     if errors:
         return errors
+    _check_snapshot(m["learning_style"], errors)
+    if repo is not None and not errors:
+        try:
+            check_style(Path(repo), m["learning_style"])
+        except LearningStyleError as exc:
+            errors.append(f"manifest.learning_style: {exc}")
     if not RANGE_RE.fullmatch(m["range"]):
         errors.append(f"manifest.range: MMDD 또는 MMDD-MMDD 형식이어야 함: {m['range']}")
     if not SLUG_RE.fullmatch(m["slug"]):

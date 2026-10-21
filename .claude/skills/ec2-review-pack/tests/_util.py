@@ -3,6 +3,9 @@
 from __future__ import annotations
 
 import os
+import json
+import shutil
+import tempfile
 from pathlib import Path
 import sys
 import unicodedata
@@ -36,3 +39,27 @@ def find_nfc(directory: Path, name: str) -> Path | None:
         if unicodedata.normalize("NFC", entry) == name:
             return directory / entry
     return None
+
+
+# The tracked mini-run is a portable template; no environment-specific profile
+# hash or claimed real review is committed. These approvals are synthetic tests.
+sys.path.append(str(REPO / "workbook"))
+from learning_style import read_style
+
+
+def prepare_mini_run(destination: Path, repo: Path = REPO) -> Path:
+    shutil.copytree(FIXTURES / "mini-run", destination)
+    m = json.loads((destination / "manifest.json").read_text(encoding="utf-8"))
+    m["learning_style"] = read_style(repo)
+    (destination / "manifest.json").write_text(json.dumps(m, ensure_ascii=False), encoding="utf-8")
+    audit = {"learning_style": m["learning_style"], "items": {
+        topic["id"]: {"status": "pass", "reviewer": "synthetic test reviewer", "rules": {
+            rid: {"disposition": "not_applicable", "evidence": "synthetic fixture; no semantic approval"}
+            for rid in m["learning_style"]["rule_ids"]}}
+        for section in m["sections"] for topic in section["topics"]}}
+    (destination / "learning-style-audit.json").write_text(json.dumps(audit), encoding="utf-8")
+    return destination
+
+
+_mini_temp = tempfile.TemporaryDirectory(prefix="ec2-mini-run-")
+MINI_RUN = prepare_mini_run(Path(_mini_temp.name) / "run")

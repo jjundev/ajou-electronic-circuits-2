@@ -81,9 +81,9 @@ def problems_txt(m: dict) -> str:
     return "".join(f"{q['id']} | {q['why']}\n" for q in m["problems"])
 
 
-def assemble(run_dir: Path | str, out_dir: Path | str) -> Path:
+def assemble(run_dir: Path | str, out_dir: Path | str, *, repo: Path | None = None) -> Path:
     run_dir, out_dir = Path(run_dir), Path(out_dir)
-    m = manifest_mod.load(run_dir / "manifest.json")
+    m = manifest_mod.load(run_dir / "manifest.json", repo=repo if repo is not None else manifest_mod.DEFAULT_REPO)
     note_html = build_note(m, run_dir)  # 조각이 하나라도 없으면 아무것도 쓰지 않는다
     out_dir.mkdir(parents=True, exist_ok=True)
     note_path = out_dir / manifest_mod.note_name(m)
@@ -101,9 +101,10 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--run", required=True)
     ap.add_argument("--out", required=True)
+    ap.add_argument("--repo", type=Path, default=manifest_mod.DEFAULT_REPO)
     args = ap.parse_args(argv)
     try:
-        print(assemble(args.run, args.out))
+        print(assemble(args.run, args.out, repo=args.repo))
     except (AssembleError, manifest_mod.ManifestError) as e:
         print(f"assemble 실패: {e}", file=sys.stderr)
         return 1

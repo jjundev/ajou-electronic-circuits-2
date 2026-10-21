@@ -1,8 +1,10 @@
-# 리뷰어 지시문 (lite에서는 생략)
+# 리뷰어 지시문 (lite에서는 부모가 개인화 감사를 수행)
 
 ---
-전자회로2 복습팩 초안을 검토한다. 파일은 수정하지 않는다.
+전자회로2 복습팩 초안을 검토한다. 학습 산출물은 읽기 전용이며 아래 개인화 감사 기록만 쓴다.
 
+- 개인 명세(필수 읽기): `<REPO>/docs/learning/solution-style.md` 절대 경로와 `<RUN>/manifest.json`의 `learning_style` snapshot. 현재 바이트와 snapshot이 일치하는지 확인한다.
+- 개인화 감사 산출: `<RUN>/learning-style-audit.json`. 대상은 manifest의 **모든 topic ID**(why·요약·예고·링크 포함), 규칙은 snapshot의 모든 rule_ids다. 각 토픽의 첫 설명에서 회로 역할과 핵심 관계가 먼저 보이고 formal에 상세 유도가 이어지는지 실제로 읽는다. `lite`는 메인 에이전트가 같은 감사를 수행한다.
 - 대상: `<RUN>/repo/복습노트/<range>/<정리노트 html>`, `<RUN>/manifest.json`의 `problems`
 - 근거: `<RUN>/summaries/stt-*.md`, `<RUN>/slides.txt`, `<RUN>/candidates.tsv`, Razavi `<RUN>/repo/교과서/마이크로전자회로/<N>장.pdf`, 문제 md(`<RUN>/repo/교과서/마이크로전자회로/chNN/…`, `<RUN>/repo/from_the_past/md/…`)
 - 규칙: `<SKILL>/references/content-rules.md`, `problem-selection.md`
@@ -16,7 +18,13 @@
 6. **표현**: 표 첫 열이 한 글자씩 줄바꿈되거나 빈 칸이 있는 표, 잘린 문장.
 7. **첫 페이지(`why-circuit`)**: `content-rules.md` "왜 쓰는가 페이지"의 4단계(문제 / 단순 해법과 한계 / 핵심 아이디어 / 대가와 쓰이는 곳)를 모두 갖췄는가. 뒤 토픽의 유도를 되풀이하지 않는가. `<a href="#…">` 링크가 실제로 그 내용을 다루는 토픽을 가리키는가. 범위의 회로가 모두 나오는가.
 
-출력 형식(이것만):
+개인화 감사는 다음 형태로 실제 검토 후 기록한다. `not_run`을 시작 상태로 쓰고, 적용 위치/내용 또는 `not_applicable` 이유와 reviewer를 채운 뒤에만 해당 토픽을 `pass`로 둔다. 기계 검사는 형식·집합·해시만 확인한다.
+```json
+{"learning_style": {"path": "docs/learning/solution-style.md", "sha256": "<현재 snapshot>", "rule_ids": ["<전체 규칙 ID>"]},
+ "items": {"<topic ID>": {"status": "not_run", "reviewer": "", "rules": {
+   "<규칙 ID>": {"disposition": "applied", "evidence": ""}}}}}
+```
+문제 없는 토픽도 감사하며 회로/계산 규칙이 비적용이면 구체적 이유를 쓴다. `learning-style-audit.json` 외 리뷰 보고 형식:
 ```
 ## Critical
 - [s2-rout] 문제 → 고칠 내용

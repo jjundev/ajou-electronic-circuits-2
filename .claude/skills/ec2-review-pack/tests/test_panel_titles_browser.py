@@ -11,7 +11,7 @@ from pathlib import Path
 import importlib.util
 import sys
 SKILL=Path(__file__).resolve().parents[1]
-MINI_RUN=SKILL/'tests/fixtures/mini-run'
+from _util import MINI_RUN
 sys.path.append(str(SKILL/'scripts'))
 spec=importlib.util.spec_from_file_location('ec2_note_assemble',SKILL/'scripts/assemble.py')
 assemble=importlib.util.module_from_spec(spec);spec.loader.exec_module(assemble)
