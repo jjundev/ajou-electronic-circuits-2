@@ -70,7 +70,9 @@ class PersonalizedVideoLayoutTests(unittest.TestCase):
                 '<path class="fig-ink" d="M20 40 H180" marker-end="url(#arrow)"/>'
                 '<circle class="fig-dot" cx="20" cy="40" r="4"/>'
                 '<text class="fig-text" x="70" y="26">R_out</text></svg></figure>')
-            bundle.overlay['problems'][0]['steps'][0]['html'] += svg
+            bundle.overlay['problems'][0]['steps'][0]['html'] += svg + r'<p>$g_m=\sqrt{3}$</p>'
+            # Answer blocks accept the same reviewed figure contract as steps.
+            bundle.overlay['problems'][1]['answers'][0]['html'] += svg + r'<p>$A=\sqrt{N}$</p>'
             bundle.sync()
             pdf_dir = bundle.build_dir/'pdf'
             pdf_dir.mkdir(parents=True)
@@ -94,6 +96,13 @@ class PersonalizedVideoLayoutTests(unittest.TestCase):
                     page.goto((bundle.build_dir/'personal-답안.html').as_uri())
                     page.wait_for_selector('html[data-ready="true"]')
                     style = page.locator('.sol-step-body svg .fig-ink').first.evaluate('(n) => ({stroke:getComputedStyle(n).stroke, fill:getComputedStyle(n).fill, marker:getComputedStyle(n).markerEnd})')
+                    # Radical SVGs must retain a visible height, not collapse under figure sizing.
+                    for scope in ('.sol-step-body', '.sol-answer'):
+                        radical = page.locator(scope + ' .sqrt svg').first.bounding_box()
+                        self.assertGreater(radical['height'], 5, 'KaTeX radical collapsed by figure CSS')
+                    answer_style = page.locator('.sol-answer svg .fig-ink').first.evaluate('(n) => ({stroke:getComputedStyle(n).stroke, fill:getComputedStyle(n).fill})')
+                    self.assertNotEqual(answer_style['stroke'], 'none')
+                    self.assertEqual(answer_style['fill'], 'none')
                     self.assertNotEqual(style['stroke'],'none')
                     self.assertEqual(style['fill'],'none')
                     self.assertIn('#arrow',style['marker'])
