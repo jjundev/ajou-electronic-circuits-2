@@ -155,10 +155,11 @@ record.write_text(json.dumps({"range": r, "backup": str(Path(dst).resolve()), "r
 print(f"백업 {len(hits)}항목(파일 {got_n}개): {dst}", *(a for _, a in hits), sep="\n")
 EOF
 ```
-  - 백업 직후(처음 조립이고 백업이 성공했을 때만): 이전 problems.txt의 ID·순서와 새 목록이 다르면 같은 slug의 이전 답안도 백업에 보관하고 발행 위치에서 제거한다. 이번 manifest가 만들 이름과 다른, 이번 range의 이전 산출물(문제가 0개로 바뀌었거나 slug가 바뀐 경우의 옛 `정리노트_<range>_*`/`복습문제_<range>_*`)을 지운다. 위에서 이미 백업했으므로 지워도 안전하다.
+  - 백업 직후(처음 조립이고 백업이 성공했을 때만): 이전 problems.txt의 ID·순서와 새 목록이 다르면 같은 slug의 이전 답안도 백업에 보관하고 발행 위치에서 제거한다. 이번 manifest가 만들 이름과 다른, 이번 range의 이전 산출물(문제가 0개로 바뀌었거나 slug가 바뀐 경우의 옛 `정리노트_<range>_*`/`복습문제_<range>_*`)을 지운다. 정확한 소유 패턴과 검증된 basic-pack-backup.json의 roots에 함께 속하는 파일만 정리하며, 삭제 전 원본·백업 해시를 다시 확인한다.
 ```bash
 python3 - "$RUN/manifest.json" "$REPO/복습노트/<range>" <<'EOF'
-import json, os, sys, unicodedata as u
+import hashlib, json, os, re, sys, unicodedata as u
+from pathlib import Path
 m = json.load(open(sys.argv[1], encoding="utf-8"))
 r, slug, out = m["range"], m["slug"], sys.argv[2]
 keep = {f"정리노트_{r}_{slug}.html", f".assets/정리노트_{r}_{slug}.md"}
@@ -169,15 +170,32 @@ previous_ids = ([line.split("|", 1)[0].strip() for line in open(previous_list, e
                  if line.strip()] if os.path.isfile(previous_list) else [])
 if previous_ids != [q["id"] for q in m["problems"]]:
     keep.discard(f"복습문제_{r}_{slug}-답안.pdf")
-removed = []
+record = json.loads((Path(sys.argv[1]).parent / "basic-pack-backup.json").read_text(encoding="utf-8"))
+if record["range"] != r:
+    sys.exit("정리 중단: 백업 range 불일치")
+roots = set(record["roots"])
+backup = Path(record["backup"]) if record["backup"] is not None else None
+def owned(rel):
+    return bool(re.fullmatch(rf"정리노트_{r}_.+\.html|복습문제_{r}_.+-(문제|답안)\.pdf|\.assets/정리노트_{r}_.+\.md", rel))
+def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
+pending = []
 for sub in ("", ".assets/"):  # 맨 위와 .assets/ 의 파일만 본다
     d = os.path.join(out, sub)
     for n in (os.listdir(d) if os.path.isdir(d) else []):
         nn = u.normalize("NFC", n)
-        if nn.startswith((f"정리노트_{r}_", f"복습문제_{r}_")) and sub + nn not in keep and os.path.isfile(os.path.join(d, n)):
-            os.remove(os.path.join(d, n))
-            removed.append(sub + nn)
-print("제거:", ", ".join(removed) if removed else "없음")
+        rel, target = sub + nn, Path(d) / n
+        if not (owned(rel) and rel in roots and rel not in keep):
+            continue
+        saved = backup / rel if backup is not None else None
+        if (target.is_symlink() or not target.is_file() or saved is None or saved.is_symlink()
+                or not saved.is_file() or not saved.resolve().is_relative_to(backup.resolve())
+                or sha(saved) != record["files"].get(rel) or sha(target) != record["files"].get(rel)):
+            sys.exit(f"정리 중단: 검증된 백업/현재 파일 불일치: {rel}")
+        pending.append((rel, target))
+# 모든 삭제 후보를 검증한 뒤에만 변경한다.
+for rel, target in pending:
+    target.unlink()
+print("제거:", ", ".join(rel for rel, _ in pending) if pending else "없음")
 EOF
 ```
 - 정리노트를 조립한다.

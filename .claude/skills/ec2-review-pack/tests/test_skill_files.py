@@ -188,17 +188,62 @@ class TestCleanupSnippet(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             tmp = Path(tmp)
             (tmp / "manifest.json").write_text(json.dumps({"range": "0923", "slug": "A", "problems": []}), encoding="utf-8")
-            pack = tmp / "0923"
+            (tmp / "STT").mkdir()
+            pack = tmp / "복습노트" / "0923"
             (pack / ".assets" / "figures_0923").mkdir(parents=True)
             for rel in ("정리노트_0923_A.html", "정리노트_0923_Old.html", "복습문제_0923_A-문제.pdf",
                         ".assets/정리노트_0923_A.md", ".assets/정리노트_0923_Old.md", ".assets/문제설명_0923_A.md"):
                 (pack / rel).write_text("x", encoding="utf-8")
+            backup = re.search(r"RANGE=<range> REPO=… RUN=… python3 - <<'EOF'\n(.*?)\nEOF", text, re.S).group(1)
+            r = subprocess.run([sys.executable, "-"], input=backup,
+                env=dict(os.environ, RANGE="0923", REPO=str(tmp), RUN=str(tmp)), capture_output=True, text=True)
+            self.assertEqual(r.returncode, 0, r.stderr)
             r = subprocess.run([sys.executable, "-", str(tmp / "manifest.json"), str(pack)], input=m.group(1),
                                capture_output=True, text=True)
             self.assertEqual(r.returncode, 0, r.stderr)
             left = sorted(p.relative_to(pack).as_posix() for p in pack.rglob("*"))
             self.assertEqual(left, [".assets", ".assets/figures_0923", ".assets/문제설명_0923_A.md",
                                     ".assets/정리노트_0923_A.md", "정리노트_0923_A.html"])
+
+
+    def test_cleanup_preserves_same_prefix_non_owned_and_unrecorded_files(self):
+        text = SKILL_MD.read_text(encoding="utf-8")
+        backup = re.search(r"RANGE=<range> REPO=… RUN=… python3 - <<'EOF'\n(.*?)\nEOF", text, re.S).group(1)
+        cleanup = re.search(r"python3 - \"\$RUN/manifest.json\" \"\$REPO/복습노트/<range>\" <<'EOF'\n(.*?)\nEOF", text, re.S).group(1)
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp = Path(tmp)
+            repo, run = tmp / "repo", tmp / "run"
+            run.mkdir()
+            (repo / "STT").mkdir(parents=True)
+            pack = repo / "복습노트/0923"
+            (pack / ".assets").mkdir(parents=True)
+            owned = ("정리노트_0923_A.html", "정리노트_0923_Old.html", ".assets/정리노트_0923_A.md",
+                     ".assets/정리노트_0923_Old.md", "복습문제_0923_Old-문제.pdf", "복습문제_0923_Old-답안.pdf")
+            preserved = ("정리노트_0923_Old-feedback.txt", "복습문제_0923_Old-feedback.pdf",
+                         ".assets/정리노트_0923_Old-feedback.txt", ".assets/복습문제_0923_Old-답안.pdf",
+                         "정리노트_0918_Old.html", ".assets/정리노트_0918_Old.md")
+            for rel in (*owned, *preserved):
+                (pack / rel).write_text(rel, encoding="utf-8")
+            other = repo / "복습노트/0918/정리노트_0918_A.html"
+            other.parent.mkdir(); other.write_text("other date", encoding="utf-8")
+            result = subprocess.run([sys.executable, "-"], input=backup,
+                env=dict(os.environ, RANGE="0923", REPO=str(repo), RUN=str(run)), capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            record = json.loads((run / "basic-pack-backup.json").read_text())
+            self.assertEqual(set(record["roots"]), set(owned))
+            self.assertEqual(set(record["files"]), set(owned))
+            self.assertTrue(all((Path(record["backup"]) / rel).read_bytes() == (pack / rel).read_bytes() for rel in owned))
+            unrecorded = pack / "정리노트_0923_Unrecorded.html"
+            unrecorded.write_text("created after backup", encoding="utf-8")
+            manifest = run / "manifest.json"
+            manifest.write_text(json.dumps({"range": "0923", "slug": "A", "problems": []}), encoding="utf-8")
+            result = subprocess.run([sys.executable, "-", str(manifest), str(pack)], input=cleanup, capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertTrue(all((pack / rel).read_text(encoding="utf-8") == rel for rel in preserved))
+            self.assertEqual(unrecorded.read_text(encoding="utf-8"), "created after backup")
+            self.assertEqual(other.read_text(encoding="utf-8"), "other date")
+            retained = {"정리노트_0923_A.html", ".assets/정리노트_0923_A.md"}
+            self.assertTrue(all((pack / rel).exists() == (rel in retained) for rel in owned))
 
 
 class TestWhyPageDocs(unittest.TestCase):
