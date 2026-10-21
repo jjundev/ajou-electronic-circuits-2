@@ -66,3 +66,9 @@ Skip은 분리 worktree의 형제 ML 템플릿이 없는 cross-course 비교 1�
 신규 `test_personalized_pipeline.py` 7개는 실제 CLI subprocess로 extract→build→합성 검토→publish→workbook answers를 연결한다. 합성 승인은 실제 corpus에 옮기지 않았다. a/b·그림 문항, core→JSON, 원본 바이트 보존, 미검토/명세/overlay/원문/그림 변경 거부, 기존 답안 sentinel 보존을 확인한다. 부모 복구 검사는 실제 발행 묶음을 백업하고 실제 자식 입력 검증 실패를 발생시킨 뒤 문서의 복구 recipe를 실행해 노트·목록·PDF·설명 전체 바이트와 실제 consumer의 재사용을 확인한다. 이미 정상인 경로는 회귀 테스트로 기록했으며 가짜 생산 코드 실패를 만들지 않았다.
 
 실제 실행은 `epe_cli.py build/check/publish --run <RUN>/explain`, `render-answers.py`의 실제 workbook CLI (`--mode answers --answer-overlay … --layout video-16x9`), `publish_answer.py --repo <RUN>/corpus …`로 재현 가능하다. 원본/corpus 15파일 해시 동등성은 `copied-source-preservation.json`, 손풀이 원본 보존은 메인 에이전트의 `source-preservation.json`에 있다. 전체 수업 팩 재생성, merge, push는 하지 않았다.
+
+## 최종 전체 브랜치 검토
+
+독립 리뷰어가 코드 기준 `0b71eaa..d1f49b1`의 변경 52파일과 발행·검토 증거를 대조했다. 판정은 **Ready to merge: Yes**이며 Critical·Important·새로 조치할 Minor 이슈는 없다. 코드·테스트를 바꾸지 않고 이 최종 기록만 덧붙였다.
+
+[전체 코드 리뷰와 실행 중 판단 기록](2026-10-21-ec2-learning-style-final-review.md)에 범위·근거·기존 경고·미판정 경계를 기록했다. 생성물을 포함한 보존 RUN과 작업 브랜치는 통합 선택 전까지 유지한다.
