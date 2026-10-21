@@ -92,5 +92,51 @@ class TestErrors(BuildCase):
         self.assertIn("ERROR t: 크롬 없음", err)
 
 
+class TestAnswerModes(BuildCase):
+    def test_answers_mode_leaves_problem_pdf_untouched(self):
+        self.pdf.mkdir()
+        self.build.mkdir()
+        original = {}
+        for root, extensions in [(self.pdf, ['pdf']), (self.build, ['json','html'])]:
+            for ext in extensions:
+                path = root / f't-문제.{ext}'
+                path.write_bytes(b'original problem output')
+                original[path] = (path.read_bytes(), path.stat().st_mtime_ns)
+        code, _, err = self.run_cli('--ids','E9.05','--name','t','--mode','answers','--json-only')
+        self.assertEqual(code,0,err)
+        for path, before in original.items():
+            self.assertEqual((path.read_bytes(),path.stat().st_mtime_ns),before)
+        self.assertTrue((self.build/'t-답안.json').exists())
+        self.assertFalse((self.build/'t-문제-typography.html').exists())
+
+    def test_problems_mode_writes_no_answers(self):
+        code, _, err = self.run_cli('--ids','E9.05','--name','t','--mode','problems','--json-only')
+        self.assertEqual(code,0,err)
+        self.assertTrue((self.build/'t-문제.json').exists())
+        self.assertFalse((self.build/'t-답안.json').exists())
+
+    def test_legacy_without_overlay_preserves_json(self):
+        from assemble import build_data, ids_selection
+        for mode, suffix in [('problems','문제'),('answers','답안')]:
+            expected = build_data(ids_selection(['E9.05'],'t'),mode)
+            expected['meta']['layout'] = 'a4'
+            code, _, err = self.run_cli('--ids','E9.05','--name','t','--json-only')
+            self.assertEqual(code,0,err)
+            self.assertEqual(self.read_json(f't-{suffix}.json'),expected)
+
+    def test_overlay_usage_errors_exit_2(self):
+        for args in [('ch09',), ('--all',), ('--ids','E9.05','--name','t','--mode','problems')]:
+            with self.subTest(args=args), self.assertRaises(SystemExit) as error:
+                self.run_cli(*args,'--answer-overlay','missing.json','--json-only')
+            self.assertEqual(error.exception.code,2)
+
+    def test_invalid_overlay_writes_no_outputs(self):
+        code, _, err = self.run_cli('--ids','E9.05','--name','t','--answer-overlay',str(self.build/'missing.json'),'--json-only')
+        self.assertEqual(code,1,err)
+        self.assertIn('ERROR',err)
+        self.assertFalse(self.build.exists())
+        self.assertFalse(self.pdf.exists())
+
+
 if __name__ == "__main__":
     unittest.main()

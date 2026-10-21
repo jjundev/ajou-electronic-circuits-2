@@ -233,6 +233,30 @@ a:focus-visible { outline: .5mm solid var(--focus); outline-offset: .5mm; }
 .sol-step-body .katex-display { overflow-x: clip; }
 .sol-answer { flex: none; }
 
+/* 검토된 핵심 풀이의 그림: 원래 설명 HTML과 같은 SVG 클래스 계약. */
+.sol-step-body figure { margin: 2mm 0; break-inside: avoid; }
+.sol-step-body img, .sol-step-body svg {
+  display: block; max-width: 100%; max-height: 45mm; height: auto; color: var(--ink);
+}
+.sol-step-body svg { width: 90mm; }
+.sol-step-body .fig-ink { stroke: currentColor; fill: none; stroke-width: 2; }
+.sol-step-body .fig-accent { stroke: var(--kind); fill: none; stroke-width: 2.5; }
+.sol-step-body .fig-danger { stroke: var(--overflow); fill: none; stroke-width: 2.5; }
+.sol-step-body .fig-dot { fill: var(--kind); }
+.sol-step-body .fig-text { fill: currentColor; font-size: 13px; font-family: inherit; }
+.sol-step-body .fig-muted { fill: var(--muted); font-size: 12px; font-family: inherit; }
+.sol-step-body svg marker { fill: currentColor; }
+.sol-step-body .axis { stroke: var(--muted); stroke-width: 1.5; }
+.sol-step-body .tick { fill: var(--muted); font-size: 11px; }
+.sol-step-body .plot-truth { fill: none; stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.sol-step-body .plot-fit, .sol-step-body .plot-like { fill: none; stroke: var(--kind); stroke-width: 2.5; }
+.sol-step-body .plot-prior { fill: none; stroke: var(--muted); stroke-width: 2; stroke-dasharray: 6 4; }
+.sol-step-body .plot-post { fill: none; stroke: var(--kind); stroke-width: 3; }
+.sol-step-body .pt-train { fill: var(--kind); }
+.sol-step-body .pt-test { fill: var(--overflow); }
+.sol-step-body .mark-ml, .sol-step-body .mark-map { stroke: var(--kind); stroke-width: 1.5; stroke-dasharray: 3 3; }
+
+
 /* Hint 띠: 전체가 Hint 쪽 링크 */
 .hint-strip {
   display: block; flex: none; width: var(--strip-w); overflow: hidden;

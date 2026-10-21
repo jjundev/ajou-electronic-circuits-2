@@ -57,4 +57,53 @@ class VideoLayoutTests(unittest.TestCase):
                 self.assertAlmostEqual(body[0]['size'], 11.34, delta=.03)
 
 
-if __name__ == '__main__': unittest.main()
+class PersonalizedVideoLayoutTests(unittest.TestCase):
+    def test_personalized_core_svg_and_images_render_above_caption_band(self):
+        from overlay_fixture import OverlayBundle
+        from test_answer_overlay import _cli
+        from playwright.sync_api import sync_playwright
+        with tempfile.TemporaryDirectory() as td:
+            bundle = OverlayBundle(Path(td))
+            svg = ('<figure class="figure"><svg viewBox="0 0 240 80" role="img">'
+                '<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">'
+                '<path d="M0 0 L8 4 L0 8 Z"/></marker></defs>'
+                '<path class="fig-ink" d="M20 40 H180" marker-end="url(#arrow)"/>'
+                '<circle class="fig-dot" cx="20" cy="40" r="4"/>'
+                '<text class="fig-text" x="70" y="26">R_out</text></svg></figure>')
+            bundle.overlay['problems'][0]['steps'][0]['html'] += svg
+            bundle.sync()
+            pdf_dir = bundle.build_dir/'pdf'
+            pdf_dir.mkdir(parents=True)
+            untouched = pdf_dir/'personal-문제.pdf'
+            untouched.write_bytes(b'Existing problem PDF')
+            before = (untouched.read_bytes(), untouched.stat().st_mtime_ns)
+            result = _cli(bundle, '--mode','answers','--answer-overlay',str(bundle.path),'--layout','video-16x9')
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual((untouched.read_bytes(),untouched.stat().st_mtime_ns),before)
+            pdf = pdf_dir/'personal-답안.pdf'
+            with fitz.open(pdf) as doc:
+                self.assertEqual(len(doc),2)
+                self.assertIn('R_out',doc[0].get_text())
+                for page in doc:
+                    self.assertAlmostEqual(page.rect.width/page.rect.height,16/9,delta=.002)
+                    self.assertFalse(page.get_text(clip=fitz.Rect(0,page.rect.height*5/6,page.rect.width,page.rect.height)).strip())
+            with sync_playwright() as pw:
+                browser = pw.chromium.launch(channel='chrome',headless=True)
+                try:
+                    page = browser.new_page(viewport={'width':1920,'height':1080})
+                    page.goto((bundle.build_dir/'personal-답안.html').as_uri())
+                    page.wait_for_selector('html[data-ready="true"]')
+                    style = page.locator('.sol-step-body svg .fig-ink').first.evaluate('(n) => ({stroke:getComputedStyle(n).stroke, fill:getComputedStyle(n).fill, marker:getComputedStyle(n).markerEnd})')
+                    self.assertNotEqual(style['stroke'],'none')
+                    self.assertEqual(style['fill'],'none')
+                    self.assertIn('#arrow',style['marker'])
+                    marker = page.locator('.sol-step-body marker path').first.evaluate('(n) => getComputedStyle(n).fill')
+                    self.assertNotEqual(marker,'none')
+                    self.assertEqual(page.locator('.sol-step-label').first.inner_text(),'판단 & 계산')
+                    self.assertTrue(page.locator('.sol-step-body img').first.evaluate('(n) => n.complete && n.naturalWidth > 0'))
+                finally:
+                    browser.close()
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -18,7 +18,8 @@ import sys
 from pathlib import Path
 
 import paths
-from assemble import MODE_SUFFIX, BuildError, all_selections, build_data, ids_selection, resolve_target
+from assemble import MODE_SUFFIX, BuildError, all_selections, build_data, ids_selection, resolve_target, nfc
+from answer_overlay import AnswerOverlayError, load_answer_overlay, apply_answer_overlay
 from render import RenderError, inject, load_template, render_pdf, measure_typography
 
 
@@ -28,6 +29,9 @@ def parse_args(argv):
     ap.add_argument("--ids", help="쉼표로 구분한 문제 id (예: P9.05,E9.01,2023-1_기말-Q1)")
     ap.add_argument("--name", help="--ids 묶음의 이름 (파일 이름과 제목)")
     ap.add_argument("--all", action="store_true", help="모든 장과 기출 회차")
+    ap.add_argument("--mode", choices=("both", "problems", "answers"), default="both",
+                    help="문제지·답안지 모두 또는 하나만 생성")
+    ap.add_argument("--answer-overlay", type=Path, help="현재 검토를 통과한 발행 답안 overlay")
     ap.add_argument("--json-only", action="store_true", help="PDF 없이 JSON·HTML만 만든다")
     ap.add_argument("--pdf-dir", type=Path, default=paths.WORKBOOK / "pdf")
     ap.add_argument("--build-dir", type=Path, default=paths.WORKBOOK / "build")
@@ -42,6 +46,8 @@ def parse_args(argv):
         ap.error("대상은 target, --ids, --all 중 하나만 준다")
     if args.ids and not args.name:
         ap.error("--ids 에는 --name 이 필요하다")
+    if args.answer_overlay and (not args.ids or args.mode == "problems"):
+        ap.error("--answer-overlay 는 --ids 및 --mode answers/both 에서만 쓸 수 있다")
     return args
 
 
@@ -56,8 +62,16 @@ def selections(args):
 def build_one(sel, args):
     """선택 하나를 문제지·답안지로 만든다. 넘친 쪽을 '<파일 이름>: <id>' 목록으로 돌려준다."""
     overflow = []
+    overlay = None
+    if args.answer_overlay:
+        overlay = load_answer_overlay(args.answer_overlay, paths.ROOT,
+                                      [nfc(pid.strip()) for pid in args.ids.split(",")])
     for mode, suffix in MODE_SUFFIX.items():
+        if args.mode != "both" and args.mode != mode:
+            continue
         data = build_data(sel, mode)
+        if mode == 'answers' and overlay is not None:
+            data = apply_answer_overlay(data, overlay, html_dir=args.build_dir)
         data['meta']['layout'] = args.layout
         stem = f"{sel.name}-{suffix}"
         args.build_dir.mkdir(parents=True, exist_ok=True)
@@ -98,7 +112,7 @@ def main(argv):
             for msg in e.errors:
                 print(f"ERROR {msg}", file=sys.stderr)
             code = 1
-        except RenderError as e:
+        except (RenderError, AnswerOverlayError) as e:
             print(f"ERROR {sel.name}: {e}", file=sys.stderr)
             code = 1
     for item in overflow:

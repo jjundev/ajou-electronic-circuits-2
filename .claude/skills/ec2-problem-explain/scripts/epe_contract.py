@@ -102,17 +102,18 @@ def initial_reviews(pack, fragments):
             'content': {**pending, 'items': {k: dict(pending) for k in keys}},
             'independent': {**pending, 'items': {k: {**pending, 'method': '', 'conclusion': ''} for k in keys}}}
 
-def validate_reviews(pack, fragments, reviews):
+def validate_review_records(snapshot, item_ids, reviews, *, input_hash):
+    """Check published review records without requiring unpublished raw fragments."""
     errors = []
     if not isinstance(reviews, dict):
         return ['검토 기록은 JSON 객체여야 해요']
     if reviews.get('review_policy_version') != POLICY_VERSION:
         errors.append('검토 기준 변경: 현재 기준으로 실제 검토가 필요해요')
-    if reviews.get('input_hash') != payload_hash(pack, fragments):
+    if reviews.get('input_hash') != input_hash:
         errors.append('입력·조각 hash가 검토와 달라요')
-    expected = {f'{p.id}:{s}' for p in pack.problems for s in p.subparts}
+    expected = set(item_ids)
     errors.extend('개인화: ' + error for error in validate_style_audit(
-        reviews.get('learning_style_audit'), pack.learning_style, sorted(expected)))
+        reviews.get('learning_style_audit'), snapshot, sorted(expected)))
     def check(entry, label):
         if not isinstance(entry, dict):
             errors.append(f'{label}: 검토 없음')
@@ -137,6 +138,13 @@ def validate_reviews(pack, fragments, reviews):
                 tolerance, residual = item.get('tolerance'), item.get('residual')
                 if any(isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v) for v in (tolerance, residual)) or not 0 <= residual <= tolerance or tolerance <= 0:
                     errors.append(f'{key}: 유한한 tolerance>0 및 0<=residual<=tolerance 필요')
+    return errors
+
+
+def validate_reviews(pack, fragments, reviews):
+    errors = validate_review_records(pack.learning_style,
+        [f'{p.id}:{s}' for p in pack.problems for s in p.subparts], reviews,
+        input_hash=payload_hash(pack, fragments))
     if set(fragments) != {p.id for p in pack.problems}:
         errors.append('문항별 설명 조각 집합 불일치')
     return errors

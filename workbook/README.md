@@ -25,6 +25,26 @@ python3 workbook/build_workbook.py --all                                 # 모�
   - 1: md 오류(`ERROR` 줄), 렌더링 실패, 쪽 넘침(`OVERFLOW <파일>: <id>` 줄. PDF는 남는다)
   - 2: 사용법·대상 오류
 
+## 검토된 개인화 답안
+
+`--mode both|problems|answers`로 출력 종류를 고른다. 기본값은 기존과 같은 `both`다.
+`--mode answers`는 기존 문제지 JSON·HTML·PDF를 건드리지 않는다.
+
+```bash
+python3 workbook/build_workbook.py --ids E9.05,E9.06 --name 복습 \
+  --mode answers --answer-overlay 복습노트/1008/.assets/자료_문제설명_1008_주제/answer-overlay.json
+```
+
+`--answer-overlay`는 `--ids`와 `answers` 또는 `both`에서만 쓸 수 있다. 문제 ID와 순서는
+발행 overlay 전체와 정확히 같아야 한다. 같은 자료 폴더의 `manifest.json`과 `validation.json`,
+현재 개인 명세·원문·참조 그림의 해시, 네 검토와 모든 소문항의 개인화 감사가 유효해야 한다.
+누락·변경·미실행 검토는 출력 전에 종료 코드 1로 중단하며 기존 풀이로 대체하지 않는다.
+사용법 오류는 종료 코드 2다. 검토 형식과 해시 확인 자체가 수학·내용 검토를 대신하지는 않는다.
+
+답안은 설명 HTML의 검토된 핵심 풀이·최종 답만 사용한다. 문제 본문과 기존 힌트는 유지하며,
+그림은 검증된 바이트를 data URI로 넣어 빌드 폴더 위치에 영향받지 않는다. 상세 설명 링크는
+텍스트로 남는다. overlay를 주지 않으면 개인 명세 없이도 기존 풀이로 빌드한다.
+
 ## md에서 PDF로 가는 것
 | PDF | md |
 |---|---|
@@ -43,7 +63,7 @@ python3 workbook/build_workbook.py --all                                 # 모�
 
 ## 테스트
 ```bash
-python3 -m unittest discover -s workbook/tests
+python3 -m pytest workbook/tests -q
 ```
 
 ## AI 기출 선별 카탈로그
