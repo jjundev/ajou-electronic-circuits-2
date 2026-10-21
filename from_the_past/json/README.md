@@ -22,11 +22,13 @@ python3 workbook/exam_catalog.py check
 문항 MD frontmatter의 `selection`이 분류의 원본이다. topics/circuit_types/required_concepts/learning_goals/evidence_sections는 문자열 목록이고 subpart_requirements는 `{label, required_concepts}` 목록이다. 태그는 초기 탐색용이며 원문 사실과 구분한다.
 
 - `unclassified`: 분류 없음. 후보에서 자동 제외하지 않는다.
-- `draft`: 초기 분류. 현재 61문항의 분류는 제목·구할 것·풀이 구획에 근거한 초안이다. 수업 범위 적합성이나 정답을 검증한 상태가 아니다.
+- `draft`: 아직 원문·회로·풀이를 함께 대조하지 않은 초기 분류. 수업 범위 적합성이나 정답을 검증한 상태가 아니다.
 - `reviewed`: 해당 내용에 대해 분류를 검토하고 해시를 맞춘 상태. 정답 검산이나 특정 수업 범위 승인은 아니다.
 - `stale`: MD 내용·시험 정보·그림/그림 설정과 분류 당시 해시가 달라짐. 다시 읽고 분류를 검토한다.
 
 `reviewed_content_sha256`는 selection 자체를 제외한 메타데이터·본문·시험/그림 입력의 해시다. 검토 후 `workbook/exam_catalog.py`의 `content_hash(Path(md))`로 구한 값을 넣는다. 해시만 새로 대입해 검토를 생략하지 않는다. 소문항 개념은 비망라적이므로 전역 필요 개념과 전체 내용을 함께 읽는다.
+
+61문항의 분류 대조 결과와 문항별 주의점은 [분류 검토 기록](../classification-review.md)에 둔다. `classification_note`에는 해당 문항의 회로 구조·조건·풀이에 근거한 분류 이유를 적는다. 원문 오식·출력 정의·근사 등 해석상 주의점이 있으면 함께 읽고 채택을 판단한다.
 
 ## 복습팩에서 사용
 

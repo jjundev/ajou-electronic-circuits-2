@@ -22,7 +22,7 @@
   ],
   "id": "2013-1_중간-Q3",
   "input_hashes": {
-    "from_the_past/md/2013-1_중간/Q3.md": "6908596d64bb34641dc74e876656ed927655c33a2b406e119c9c525d4573e471",
+    "from_the_past/md/2013-1_중간/Q3.md": "783898e1c924ec6ca19302f5f7d1aafea6e5b96c508659000fad47b72ddbfef2",
     "from_the_past/md/2013-1_중간/exam.yaml": "9e6e7dea05eb7083897440a3dadcfc17e22d3d54ebcbf9cbc9b5f4f7819861ed",
     "from_the_past/md/2013-1_중간/figures/fig-Q3.png": "50c7486ade285242a0374c225ad58826452dd040691903da302ef131927067ef",
     "from_the_past/md/2013-1_중간/figures/figures.yaml": "a7ca2c22c05f98a080da6189bd5509830db376228ff592a273e6888d02c43a4f",
@@ -50,11 +50,16 @@
     "selection": {
       "circuit_types": [
         "MOS",
-        "차동"
+        "차동",
+        "저항 부하",
+        "트랜지스터 꼬리 전류원"
       ],
-      "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+      "classification_note": "M3 꼬리의 rO3가 공통 모드 이득을 정하고 RD+ΔRD의 불일치가 CM-DM 변환을 만든다. (1)은 입력쌍 포화 상한, (3)은 단일 출력/차동 출력 정의를 구별해야 하며 (4)는 ΔRD 식을 요구한다. 전사 원문·조건·회로 원본 크롭과 재작성 그림·풀이를 대조한 분류 검토이며 정답 독립 검산이나 수업 범위 승인이 아니다.",
       "evidence_sections": [
+        "원문",
+        "조건",
         "구할 것",
+        "회로 — Fig Q3",
         "풀이"
       ],
       "learning_goals": [
@@ -66,53 +71,78 @@
       ],
       "required_concepts": [
         "차동 증폭기",
+        "DC 바이어스와 동작 영역",
         "공통 모드·차동 입력 범위",
+        "차동 반회로와 가상 접지",
+        "소신호 파라미터 gm·rO",
+        "소신호 전압 이득",
         "공통 모드 해석",
+        "유한 출력 저항(ro)",
+        "꼬리 전류원의 유한 출력 저항",
         "소자·부하 불일치와 CM-DM 변환",
-        "CMRR",
-        "소신호 전압 이득"
+        "CMRR"
       ],
-      "review_status": "draft",
+      "review_status": "reviewed",
       "reviewed_content_sha256": "2795284eef36ef2c5a028f61f999cca9dbb3df1b2f5d000743139e25a5bb9cc9",
       "subpart_requirements": [
         {
           "label": "1",
           "required_concepts": [
-            "공통 모드 해석",
-            "공통 모드·차동 입력 범위",
-            "DC 바이어스와 동작 영역"
+            "차동 증폭기",
+            "DC 바이어스와 동작 영역",
+            "공통 모드·차동 입력 범위"
           ]
         },
         {
           "label": "2",
           "required_concepts": [
+            "차동 증폭기",
+            "차동 반회로와 가상 접지",
+            "소신호 파라미터 gm·rO",
             "소신호 전압 이득"
           ]
         },
         {
           "label": "3",
           "required_concepts": [
+            "차동 증폭기",
             "공통 모드 해석",
+            "소신호 파라미터 gm·rO",
+            "유한 출력 저항(ro)",
+            "꼬리 전류원의 유한 출력 저항",
             "소신호 전압 이득"
           ]
         },
         {
           "label": "4",
           "required_concepts": [
+            "차동 증폭기",
             "공통 모드 해석",
+            "소신호 파라미터 gm·rO",
+            "유한 출력 저항(ro)",
+            "꼬리 전류원의 유한 출력 저항",
+            "소자·부하 불일치와 CM-DM 변환",
             "소신호 전압 이득"
           ]
         },
         {
           "label": "5",
           "required_concepts": [
-            "CMRR",
-            "공통 모드 해석"
+            "차동 증폭기",
+            "차동 반회로와 가상 접지",
+            "공통 모드 해석",
+            "소신호 파라미터 gm·rO",
+            "유한 출력 저항(ro)",
+            "꼬리 전류원의 유한 출력 저항",
+            "소자·부하 불일치와 CM-DM 변환",
+            "소신호 전압 이득",
+            "CMRR"
           ]
         }
       ],
       "topics": [
-        "차동 증폭기"
+        "차동 증폭기",
+        "공통 모드와 CMRR"
       ]
     },
     "source": "../../2013-2019_중간/2013-1_중간_모범답안.pdf",
@@ -121,7 +151,7 @@
       10
     ]
   },
-  "raw_md": "---\nid: 2013-1_중간-Q3\nkind: 기출\nexam: \"2013-1 중간고사\"\nnumber: \"3\"\npoints: 20\nsource: ../../2013-2019_중간/2013-1_중간_모범답안.pdf\npdf_page: 3\nsource_lang: ko\nfigures:\n  - {id: \"Q3\", role: problem, panels: []}\ntextbook_chapters: [10]\ndepends_on: []\nrefs: [\"2023-1_중간-Q4, 2015-1_중간-Q4와 같은 회로 (값과 질문은 다름)\"]\nselection:\n  topics:\n  - 차동 증폭기\n  circuit_types:\n  - MOS\n  - 차동\n  required_concepts:\n  - 차동 증폭기\n  - 공통 모드·차동 입력 범위\n  - 공통 모드 해석\n  - 소자·부하 불일치와 CM-DM 변환\n  - CMRR\n  - 소신호 전압 이득\n  learning_goals:\n  - $M_1$, $M_2$가 saturation 영역에서 동작하기 위한 입력 CM level $V_{CM}$의 최대값\n  - 차동 전압 이득\n  - Common-mode 전압 이득\n  - Common mode to differential mode 전압 이득 $A_{CM-DM}$\n  - $\\Delta R_D / R_D = 1\\ \\%$일 때 common-mode rejection ratio (CMRR)\n  evidence_sections:\n  - 구할 것\n  - 풀이\n  subpart_requirements:\n  - label: '1'\n    required_concepts:\n    - 공통 모드 해석\n    - 공통 모드·차동 입력 범위\n    - DC 바이어스와 동작 영역\n  - label: '2'\n    required_concepts:\n    - 소신호 전압 이득\n  - label: '3'\n    required_concepts:\n    - 공통 모드 해석\n    - 소신호 전압 이득\n  - label: '4'\n    required_concepts:\n    - 공통 모드 해석\n    - 소신호 전압 이득\n  - label: '5'\n    required_concepts:\n    - CMRR\n    - 공통 모드 해석\n  review_status: draft\n  reviewed_content_sha256: 2795284eef36ef2c5a028f61f999cca9dbb3df1b2f5d000743139e25a5bb9cc9\n  classification_note: 제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.\n---\n# 기출 2013-1 중간 3 — 부하 저항 불일치 ΔR_D가 있는 MOS 차동쌍의 입력 CM 최대값, 차동·CM 이득, A_CM-DM, CMRR\n\n## 원문\nMOS differential pair가 다음 조건으로 동작할 때, 질문에 답하시오.\n\n$V_{DD} = 1.8\\ \\text{V}$, $I_{D3} = 2\\ \\text{mA}$, $(W/L)_{1,2} = 500$, $R_D = 1\\ \\text{k}\\Omega$, $\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$, $\\lambda_n = 0.1\\ \\text{V}^{-1}$, $V_{TH,N} = 0.4\\ \\text{V}$\n\n이 때, $r_{o1,2} >> R_D$ 로 가정한다.\n\n(1) $M_1$, $M_2$가 saturation 영역에서 동작하기 위한 입력 CM level ($V_{CM}$)의 최대값을 구하시오. ($\\Delta R_D = 0$으로 가정)\n\n(2) 차동 전압이득을 구하시오. ($\\Delta R_D = 0$으로 가정)\n\n(3) Common-mode 전압이득을 구하시오. ($\\Delta R_D = 0$으로 가정)\n\n(4) Common mode to differential mode 전압이득($A_{CM-DM}$)을 구하시오.\n\n(5) $\\Delta R_D / R_D = 1\\ \\%$ 일 때, common-mode rejection ratio (CMRR)를 구하시오.\n\n## 조건\n- 회로: 그림의 MOS 차동 증폭기\n- $V_{DD} = 1.8\\ \\text{V}$, $I_{D3} = 2\\ \\text{mA}$\n- $(W/L)_{1,2} = 500$, $R_D = 1\\ \\text{k}\\Omega$\n- $\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$, $\\lambda_n = 0.1\\ \\text{V}^{-1}$, $V_{TH,N} = 0.4\\ \\text{V}$\n- $r_{o1,2} \\gg R_D$로 가정\n- (1), (2), (3) 전용: $\\Delta R_D = 0$으로 가정\n- (5) 전용: $\\Delta R_D / R_D = 1\\ \\%$\n- (4)에는 $\\Delta R_D$ 값이 인쇄돼 있지 않음 (원문에 없음)\n- 바이어스 전압 $V_{b1}$ 값과 $(W/L)_3$은 주어지지 않음 (원문에 없음)\n\n## 구할 것\n- (1) $M_1$, $M_2$가 saturation 영역에서 동작하기 위한 입력 CM level $V_{CM}$의 최대값\n- (2) 차동 전압 이득\n- (3) Common-mode 전압 이득\n- (4) Common mode to differential mode 전압 이득 $A_{CM-DM}$\n- (5) $\\Delta R_D / R_D = 1\\ \\%$일 때 common-mode rejection ratio (CMRR)\n\n## 회로 — Fig Q3\n```spice\nRD1  VDD    vout1  {R_D}          ; 인쇄 라벨 R_D\nRD2  VDD    vout2  {R_D+ΔR_D}     ; 인쇄 라벨 R_D + ΔR_D\nM1   vout1  Vin1   P    nmos\nM2   vout2  Vin2   P    nmos      ; 좌우 반전 (게이트 오른쪽)\nM3   P      Vb1    0    nmos\n```\n- 단자: VDD = 1.8 V 전원 (가로 레일) / Vb1 = 이상적 DC 바이어스, 값 미지정 (점 단자) / Vin1, Vin2 = 입력 (개방 원) / vout1, vout2 = 출력 (개방 원)\n- 표시: 노드 라벨 V_DD (레일 오른쪽 끝), v_out1 (왼쪽 출력 원 왼쪽), v_out2 (오른쪽 출력 원 오른쪽), V_in1 (왼쪽 입력 원 왼쪽), V_in2 (오른쪽 입력 원 오른쪽), P (P 접속점 위), V_b1 (점 단자 왼쪽) / 소자 라벨 R_D (왼쪽 저항 왼쪽), R_D + ΔR_D (오른쪽 저항 오른쪽), M_1 (M1 오른쪽), M_2 (M2 왼쪽), M_3 (M3 오른쪽) / 부호 없음 / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 맨 위 굵은 가로 레일 V_DD / 왼쪽 세로줄 위→아래 R_D, vout1 접속점, M1 / 오른쪽 세로줄 위→아래 R_D + ΔR_D, vout2 접속점, M2 / vout1 접속점에서 가로선이 왼쪽 v_out1 원, vout2 접속점에서 가로선이 오른쪽 v_out2 원 (두 출력 원이 바깥쪽을 향함) / M1 nmos 보통 방향(게이트 왼쪽, 드레인 위, 소스 아래·화살표 바깥), M2 nmos 좌우 반전(게이트 막대 오른쪽, 드레인 왼쪽 위, 소스 왼쪽 아래·화살표 바깥) / V_in1 원 → 가로선 → M1 게이트, M2 게이트 → 가로선 → V_in2 원 / 두 소스는 아래로 내려가 가로선으로 가운데 P 점에서 만남 / P 아래 M3 (nmos 보통 방향, 게이트 왼쪽), V_b1 점 단자 → 가로선 → M3 게이트, M3 소스 아래 접지 / 접속점 (세 갈래 이상, 3곳): ① vout1 = 위 R_D + 아래 M1 드레인 + 왼쪽 출력선 (점) ② vout2 = 위 R_D + ΔR_D + 아래 M2 드레인 + 오른쪽 출력선 (점) ③ P = 왼쪽 M1 소스 선 + 오른쪽 M2 소스 선 + 아래 M3 드레인 (점) / 교차: 없음\n\n![Q3](figures/fig-Q3.png)\n> 참고: 크롭 안에는 손글씨가 없음. 두 출력 라벨의 v는 소문자로 인쇄됨\n\n## 풀이\n### (1) 입력 CM 최대값\n- $I_D = 1\\ \\text{mA}$, 포화 $V_{DS} \\ge V_{GS} - V_{TH,N}$에서 $V_{CM} \\le V_{DD} - R_D I_D + V_{TH,N}$이라 최대 $1.20\\ \\text{V}$\n### (2) 차동 전압 이득\n- $g_m = \\sqrt{2\\mu_n C_{ox}(W/L)I_D}$는 $10.0\\ \\text{mS}$\n- 차동 출력의 차동 이득 ($r_{o1,2} \\gg R_D$): $A_{DM} = -g_m R_D = -10.0$\n### (3) Common-mode 전압 이득\n- 꼬리 저항 $r_{O3} = 1/(\\lambda_n I_{D3})$은 $5.00\\ \\text{k}\\Omega$\n- 단일 출력 CM 이득 $A_{CM} = -R_D/(1/g_m + 2r_{O3})$은 $-0.0990$\n### (4) $A_{CM-DM}$\n- 두 쪽 전류 변화는 같고 부하만 $\\Delta R_D$ 다르다: $A_{CM-DM} = \\Delta R_D/(1/g_m + 2r_{O3})$\n### (5) CMRR\n- $\\Delta R_D = 10\\ \\Omega$이면 $A_{CM-DM} = 9.90 \\times 10^{-4}$, $\\text{CMRR} = |A_{DM}|/A_{CM-DM}$은 $1.01 \\times 10^4$ ($80.1\\ \\text{dB}$)\n### 답\n- (1) $V_{CM,max} = 1.20\\ \\text{V}$\n- (2) $A_{DM} = -10.0$\n- (3) 단일 출력 $A_{CM} = -0.0990$ (차동 출력이면 0)\n- (4) $A_{CM-DM} = \\Delta R_D/10.1\\ \\text{k}\\Omega$ (1 %이면 $9.90 \\times 10^{-4}$)\n- (5) $\\text{CMRR} \\approx 1.01 \\times 10^4$ ($80.1\\ \\text{dB}$)\n",
+  "raw_md": "---\nid: 2013-1_중간-Q3\nkind: 기출\nexam: \"2013-1 중간고사\"\nnumber: \"3\"\npoints: 20\nsource: ../../2013-2019_중간/2013-1_중간_모범답안.pdf\npdf_page: 3\nsource_lang: ko\nfigures:\n  - {id: \"Q3\", role: problem, panels: []}\ntextbook_chapters: [10]\ndepends_on: []\nrefs: [\"2023-1_중간-Q4, 2015-1_중간-Q4와 같은 회로 (값과 질문은 다름)\"]\nselection:\n  topics:\n  - 차동 증폭기\n  - 공통 모드와 CMRR\n  circuit_types:\n  - MOS\n  - 차동\n  - 저항 부하\n  - 트랜지스터 꼬리 전류원\n  required_concepts:\n  - 차동 증폭기\n  - DC 바이어스와 동작 영역\n  - 공통 모드·차동 입력 범위\n  - 차동 반회로와 가상 접지\n  - 소신호 파라미터 gm·rO\n  - 소신호 전압 이득\n  - 공통 모드 해석\n  - 유한 출력 저항(ro)\n  - 꼬리 전류원의 유한 출력 저항\n  - 소자·부하 불일치와 CM-DM 변환\n  - CMRR\n  learning_goals:\n  - $M_1$, $M_2$가 saturation 영역에서 동작하기 위한 입력 CM level $V_{CM}$의 최대값\n  - 차동 전압 이득\n  - Common-mode 전압 이득\n  - Common mode to differential mode 전압 이득 $A_{CM-DM}$\n  - $\\Delta R_D / R_D = 1\\ \\%$일 때 common-mode rejection ratio (CMRR)\n  evidence_sections:\n  - 원문\n  - 조건\n  - 구할 것\n  - 회로 — Fig Q3\n  - 풀이\n  subpart_requirements:\n  - label: '1'\n    required_concepts:\n    - 차동 증폭기\n    - DC 바이어스와 동작 영역\n    - 공통 모드·차동 입력 범위\n  - label: '2'\n    required_concepts:\n    - 차동 증폭기\n    - 차동 반회로와 가상 접지\n    - 소신호 파라미터 gm·rO\n    - 소신호 전압 이득\n  - label: '3'\n    required_concepts:\n    - 차동 증폭기\n    - 공통 모드 해석\n    - 소신호 파라미터 gm·rO\n    - 유한 출력 저항(ro)\n    - 꼬리 전류원의 유한 출력 저항\n    - 소신호 전압 이득\n  - label: '4'\n    required_concepts:\n    - 차동 증폭기\n    - 공통 모드 해석\n    - 소신호 파라미터 gm·rO\n    - 유한 출력 저항(ro)\n    - 꼬리 전류원의 유한 출력 저항\n    - 소자·부하 불일치와 CM-DM 변환\n    - 소신호 전압 이득\n  - label: '5'\n    required_concepts:\n    - 차동 증폭기\n    - 차동 반회로와 가상 접지\n    - 공통 모드 해석\n    - 소신호 파라미터 gm·rO\n    - 유한 출력 저항(ro)\n    - 꼬리 전류원의 유한 출력 저항\n    - 소자·부하 불일치와 CM-DM 변환\n    - 소신호 전압 이득\n    - CMRR\n  review_status: reviewed\n  reviewed_content_sha256: 2795284eef36ef2c5a028f61f999cca9dbb3df1b2f5d000743139e25a5bb9cc9\n  classification_note: M3 꼬리의 rO3가 공통 모드 이득을 정하고 RD+ΔRD의 불일치가 CM-DM 변환을 만든다. (1)은 입력쌍 포화 상한, (3)은 단일 출력/차동 출력 정의를 구별해야 하며 (4)는 ΔRD 식을 요구한다. 전사 원문·조건·회로 원본 크롭과 재작성 그림·풀이를 대조한 분류 검토이며 정답 독립 검산이나 수업 범위 승인이 아니다.\n---\n# 기출 2013-1 중간 3 — 부하 저항 불일치 ΔR_D가 있는 MOS 차동쌍의 입력 CM 최대값, 차동·CM 이득, A_CM-DM, CMRR\n\n## 원문\nMOS differential pair가 다음 조건으로 동작할 때, 질문에 답하시오.\n\n$V_{DD} = 1.8\\ \\text{V}$, $I_{D3} = 2\\ \\text{mA}$, $(W/L)_{1,2} = 500$, $R_D = 1\\ \\text{k}\\Omega$, $\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$, $\\lambda_n = 0.1\\ \\text{V}^{-1}$, $V_{TH,N} = 0.4\\ \\text{V}$\n\n이 때, $r_{o1,2} >> R_D$ 로 가정한다.\n\n(1) $M_1$, $M_2$가 saturation 영역에서 동작하기 위한 입력 CM level ($V_{CM}$)의 최대값을 구하시오. ($\\Delta R_D = 0$으로 가정)\n\n(2) 차동 전압이득을 구하시오. ($\\Delta R_D = 0$으로 가정)\n\n(3) Common-mode 전압이득을 구하시오. ($\\Delta R_D = 0$으로 가정)\n\n(4) Common mode to differential mode 전압이득($A_{CM-DM}$)을 구하시오.\n\n(5) $\\Delta R_D / R_D = 1\\ \\%$ 일 때, common-mode rejection ratio (CMRR)를 구하시오.\n\n## 조건\n- 회로: 그림의 MOS 차동 증폭기\n- $V_{DD} = 1.8\\ \\text{V}$, $I_{D3} = 2\\ \\text{mA}$\n- $(W/L)_{1,2} = 500$, $R_D = 1\\ \\text{k}\\Omega$\n- $\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$, $\\lambda_n = 0.1\\ \\text{V}^{-1}$, $V_{TH,N} = 0.4\\ \\text{V}$\n- $r_{o1,2} \\gg R_D$로 가정\n- (1), (2), (3) 전용: $\\Delta R_D = 0$으로 가정\n- (5) 전용: $\\Delta R_D / R_D = 1\\ \\%$\n- (4)에는 $\\Delta R_D$ 값이 인쇄돼 있지 않음 (원문에 없음)\n- 바이어스 전압 $V_{b1}$ 값과 $(W/L)_3$은 주어지지 않음 (원문에 없음)\n\n## 구할 것\n- (1) $M_1$, $M_2$가 saturation 영역에서 동작하기 위한 입력 CM level $V_{CM}$의 최대값\n- (2) 차동 전압 이득\n- (3) Common-mode 전압 이득\n- (4) Common mode to differential mode 전압 이득 $A_{CM-DM}$\n- (5) $\\Delta R_D / R_D = 1\\ \\%$일 때 common-mode rejection ratio (CMRR)\n\n## 회로 — Fig Q3\n```spice\nRD1  VDD    vout1  {R_D}          ; 인쇄 라벨 R_D\nRD2  VDD    vout2  {R_D+ΔR_D}     ; 인쇄 라벨 R_D + ΔR_D\nM1   vout1  Vin1   P    nmos\nM2   vout2  Vin2   P    nmos      ; 좌우 반전 (게이트 오른쪽)\nM3   P      Vb1    0    nmos\n```\n- 단자: VDD = 1.8 V 전원 (가로 레일) / Vb1 = 이상적 DC 바이어스, 값 미지정 (점 단자) / Vin1, Vin2 = 입력 (개방 원) / vout1, vout2 = 출력 (개방 원)\n- 표시: 노드 라벨 V_DD (레일 오른쪽 끝), v_out1 (왼쪽 출력 원 왼쪽), v_out2 (오른쪽 출력 원 오른쪽), V_in1 (왼쪽 입력 원 왼쪽), V_in2 (오른쪽 입력 원 오른쪽), P (P 접속점 위), V_b1 (점 단자 왼쪽) / 소자 라벨 R_D (왼쪽 저항 왼쪽), R_D + ΔR_D (오른쪽 저항 오른쪽), M_1 (M1 오른쪽), M_2 (M2 왼쪽), M_3 (M3 오른쪽) / 부호 없음 / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 맨 위 굵은 가로 레일 V_DD / 왼쪽 세로줄 위→아래 R_D, vout1 접속점, M1 / 오른쪽 세로줄 위→아래 R_D + ΔR_D, vout2 접속점, M2 / vout1 접속점에서 가로선이 왼쪽 v_out1 원, vout2 접속점에서 가로선이 오른쪽 v_out2 원 (두 출력 원이 바깥쪽을 향함) / M1 nmos 보통 방향(게이트 왼쪽, 드레인 위, 소스 아래·화살표 바깥), M2 nmos 좌우 반전(게이트 막대 오른쪽, 드레인 왼쪽 위, 소스 왼쪽 아래·화살표 바깥) / V_in1 원 → 가로선 → M1 게이트, M2 게이트 → 가로선 → V_in2 원 / 두 소스는 아래로 내려가 가로선으로 가운데 P 점에서 만남 / P 아래 M3 (nmos 보통 방향, 게이트 왼쪽), V_b1 점 단자 → 가로선 → M3 게이트, M3 소스 아래 접지 / 접속점 (세 갈래 이상, 3곳): ① vout1 = 위 R_D + 아래 M1 드레인 + 왼쪽 출력선 (점) ② vout2 = 위 R_D + ΔR_D + 아래 M2 드레인 + 오른쪽 출력선 (점) ③ P = 왼쪽 M1 소스 선 + 오른쪽 M2 소스 선 + 아래 M3 드레인 (점) / 교차: 없음\n\n![Q3](figures/fig-Q3.png)\n> 참고: 크롭 안에는 손글씨가 없음. 두 출력 라벨의 v는 소문자로 인쇄됨\n\n## 풀이\n### (1) 입력 CM 최대값\n- $I_D = 1\\ \\text{mA}$, 포화 $V_{DS} \\ge V_{GS} - V_{TH,N}$에서 $V_{CM} \\le V_{DD} - R_D I_D + V_{TH,N}$이라 최대 $1.20\\ \\text{V}$\n### (2) 차동 전압 이득\n- $g_m = \\sqrt{2\\mu_n C_{ox}(W/L)I_D}$는 $10.0\\ \\text{mS}$\n- 차동 출력의 차동 이득 ($r_{o1,2} \\gg R_D$): $A_{DM} = -g_m R_D = -10.0$\n### (3) Common-mode 전압 이득\n- 꼬리 저항 $r_{O3} = 1/(\\lambda_n I_{D3})$은 $5.00\\ \\text{k}\\Omega$\n- 단일 출력 CM 이득 $A_{CM} = -R_D/(1/g_m + 2r_{O3})$은 $-0.0990$\n### (4) $A_{CM-DM}$\n- 두 쪽 전류 변화는 같고 부하만 $\\Delta R_D$ 다르다: $A_{CM-DM} = \\Delta R_D/(1/g_m + 2r_{O3})$\n### (5) CMRR\n- $\\Delta R_D = 10\\ \\Omega$이면 $A_{CM-DM} = 9.90 \\times 10^{-4}$, $\\text{CMRR} = |A_{DM}|/A_{CM-DM}$은 $1.01 \\times 10^4$ ($80.1\\ \\text{dB}$)\n### 답\n- (1) $V_{CM,max} = 1.20\\ \\text{V}$\n- (2) $A_{DM} = -10.0$\n- (3) 단일 출력 $A_{CM} = -0.0990$ (차동 출력이면 0)\n- (4) $A_{CM-DM} = \\Delta R_D/10.1\\ \\text{k}\\Omega$ (1 %이면 $9.90 \\times 10^{-4}$)\n- (5) $\\text{CMRR} \\approx 1.01 \\times 10^4$ ($80.1\\ \\text{dB}$)\n",
   "schema_version": 1,
   "sections": [
     {
@@ -148,11 +178,16 @@
   "selection": {
     "circuit_types": [
       "MOS",
-      "차동"
+      "차동",
+      "저항 부하",
+      "트랜지스터 꼬리 전류원"
     ],
-    "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+    "classification_note": "M3 꼬리의 rO3가 공통 모드 이득을 정하고 RD+ΔRD의 불일치가 CM-DM 변환을 만든다. (1)은 입력쌍 포화 상한, (3)은 단일 출력/차동 출력 정의를 구별해야 하며 (4)는 ΔRD 식을 요구한다. 전사 원문·조건·회로 원본 크롭과 재작성 그림·풀이를 대조한 분류 검토이며 정답 독립 검산이나 수업 범위 승인이 아니다.",
     "evidence_sections": [
+      "원문",
+      "조건",
       "구할 것",
+      "회로 — Fig Q3",
       "풀이"
     ],
     "learning_goals": [
@@ -164,54 +199,79 @@
     ],
     "required_concepts": [
       "차동 증폭기",
+      "DC 바이어스와 동작 영역",
       "공통 모드·차동 입력 범위",
+      "차동 반회로와 가상 접지",
+      "소신호 파라미터 gm·rO",
+      "소신호 전압 이득",
       "공통 모드 해석",
+      "유한 출력 저항(ro)",
+      "꼬리 전류원의 유한 출력 저항",
       "소자·부하 불일치와 CM-DM 변환",
-      "CMRR",
-      "소신호 전압 이득"
+      "CMRR"
     ],
-    "review_status": "draft",
+    "review_status": "reviewed",
     "reviewed_content_sha256": "2795284eef36ef2c5a028f61f999cca9dbb3df1b2f5d000743139e25a5bb9cc9",
-    "status": "draft",
+    "status": "reviewed",
     "subpart_requirements": [
       {
         "label": "1",
         "required_concepts": [
-          "공통 모드 해석",
-          "공통 모드·차동 입력 범위",
-          "DC 바이어스와 동작 영역"
+          "차동 증폭기",
+          "DC 바이어스와 동작 영역",
+          "공통 모드·차동 입력 범위"
         ]
       },
       {
         "label": "2",
         "required_concepts": [
+          "차동 증폭기",
+          "차동 반회로와 가상 접지",
+          "소신호 파라미터 gm·rO",
           "소신호 전압 이득"
         ]
       },
       {
         "label": "3",
         "required_concepts": [
+          "차동 증폭기",
           "공통 모드 해석",
+          "소신호 파라미터 gm·rO",
+          "유한 출력 저항(ro)",
+          "꼬리 전류원의 유한 출력 저항",
           "소신호 전압 이득"
         ]
       },
       {
         "label": "4",
         "required_concepts": [
+          "차동 증폭기",
           "공통 모드 해석",
+          "소신호 파라미터 gm·rO",
+          "유한 출력 저항(ro)",
+          "꼬리 전류원의 유한 출력 저항",
+          "소자·부하 불일치와 CM-DM 변환",
           "소신호 전압 이득"
         ]
       },
       {
         "label": "5",
         "required_concepts": [
-          "CMRR",
-          "공통 모드 해석"
+          "차동 증폭기",
+          "차동 반회로와 가상 접지",
+          "공통 모드 해석",
+          "소신호 파라미터 gm·rO",
+          "유한 출력 저항(ro)",
+          "꼬리 전류원의 유한 출력 저항",
+          "소자·부하 불일치와 CM-DM 변환",
+          "소신호 전압 이득",
+          "CMRR"
         ]
       }
     ],
     "topics": [
-      "차동 증폭기"
+      "차동 증폭기",
+      "공통 모드와 CMRR"
     ]
   },
   "subparts": [
@@ -219,15 +279,18 @@
       "ask_md": "$M_1$, $M_2$가 saturation 영역에서 동작하기 위한 입력 CM level $V_{CM}$의 최대값",
       "label": "1",
       "required_concepts": [
-        "공통 모드 해석",
-        "공통 모드·차동 입력 범위",
-        "DC 바이어스와 동작 영역"
+        "차동 증폭기",
+        "DC 바이어스와 동작 영역",
+        "공통 모드·차동 입력 범위"
       ]
     },
     {
       "ask_md": "차동 전압 이득",
       "label": "2",
       "required_concepts": [
+        "차동 증폭기",
+        "차동 반회로와 가상 접지",
+        "소신호 파라미터 gm·rO",
         "소신호 전압 이득"
       ]
     },
@@ -235,7 +298,11 @@
       "ask_md": "Common-mode 전압 이득",
       "label": "3",
       "required_concepts": [
+        "차동 증폭기",
         "공통 모드 해석",
+        "소신호 파라미터 gm·rO",
+        "유한 출력 저항(ro)",
+        "꼬리 전류원의 유한 출력 저항",
         "소신호 전압 이득"
       ]
     },
@@ -243,7 +310,12 @@
       "ask_md": "Common mode to differential mode 전압 이득 $A_{CM-DM}$",
       "label": "4",
       "required_concepts": [
+        "차동 증폭기",
         "공통 모드 해석",
+        "소신호 파라미터 gm·rO",
+        "유한 출력 저항(ro)",
+        "꼬리 전류원의 유한 출력 저항",
+        "소자·부하 불일치와 CM-DM 변환",
         "소신호 전압 이득"
       ]
     },
@@ -251,8 +323,15 @@
       "ask_md": "$\\Delta R_D / R_D = 1\\ \\%$일 때 common-mode rejection ratio (CMRR)",
       "label": "5",
       "required_concepts": [
-        "CMRR",
-        "공통 모드 해석"
+        "차동 증폭기",
+        "차동 반회로와 가상 접지",
+        "공통 모드 해석",
+        "소신호 파라미터 gm·rO",
+        "유한 출력 저항(ro)",
+        "꼬리 전류원의 유한 출력 저항",
+        "소자·부하 불일치와 CM-DM 변환",
+        "소신호 전압 이득",
+        "CMRR"
       ]
     }
   ],

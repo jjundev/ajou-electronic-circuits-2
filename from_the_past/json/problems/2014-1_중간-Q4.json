@@ -24,7 +24,7 @@
   ],
   "id": "2014-1_중간-Q4",
   "input_hashes": {
-    "from_the_past/md/2014-1_중간/Q4.md": "5c49e2b45dbdc10b598cdfd8c1ae70c413ee368e81c0e88d79bbdde2e6d44d62",
+    "from_the_past/md/2014-1_중간/Q4.md": "d9d6ed9eff9f3b4c7531312915cb2094baddfb40a1faacfc848652506d6955ef",
     "from_the_past/md/2014-1_중간/exam.yaml": "c06fd0dd4c3478cd5a5d6089e67fece40a6fc044a964b83703fff2b0bcae93d4",
     "from_the_past/md/2014-1_중간/figures/fig-Q4.png": "95772ea18896087799b26879d42bf456d9b51c6ccf5c08eb90f91b6e6ed6624a",
     "from_the_past/md/2014-1_중간/figures/figures.yaml": "fa37f3e77b15af51134f05539f41fe0d442a474026ab4ffefc328314cc704caa",
@@ -56,11 +56,16 @@
       "circuit_types": [
         "바이폴라",
         "캐스코드",
-        "CE"
+        "CE",
+        "이미터 축퇴"
       ],
-      "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+      "classification_note": "(a)의 Q3는 Q1 이미터에서 rO2와 병렬인 rO3이고 (b)의 바이어스 Q1은 rO1 축퇴 부하다. β≫1이어도 Rout의 rπ 병렬은 남아 (1)(2)(4)에 유한 β가 필요하다. iout 방향은 원문 그림에 없어 (3)은 기존 풀이의 단락 출력 전류 정의를 따른다. 전사 원문·조건·회로 원본 크롭과 재작성 그림·풀이를 대조한 분류 검토이며 정답 독립 검산이나 수업 범위 승인이 아니다.",
       "evidence_sections": [
+        "원문",
+        "조건",
         "구할 것",
+        "회로 — Fig Q4(a)",
+        "회로 — Fig Q4(b)",
         "풀이"
       ],
       "learning_goals": [
@@ -70,46 +75,66 @@
         "회로 (b)의 전압 이득 $V_{out}/V_{in}$ 식"
       ],
       "required_concepts": [
+        "능동 부하의 소신호 등가회로",
+        "유한 출력 저항(ro)",
+        "유한 β와 rπ",
         "캐스코드",
-        "소스·이미터 축퇴",
         "출력 저항",
         "등가 트랜스컨덕턴스",
-        "소신호 전압 이득"
+        "소신호 전압 이득",
+        "소스·이미터 축퇴"
       ],
-      "review_status": "draft",
+      "review_status": "reviewed",
       "reviewed_content_sha256": "f57b3fcb84edab462f57dd5e6e333b78cd630a19806f60aeadedcaaf52b78c46",
       "subpart_requirements": [
         {
           "label": "1",
           "required_concepts": [
+            "능동 부하의 소신호 등가회로",
+            "유한 출력 저항(ro)",
+            "유한 β와 rπ",
+            "캐스코드",
             "출력 저항"
           ]
         },
         {
           "label": "2",
           "required_concepts": [
-            "소신호 전압 이득"
-          ]
-        },
-        {
-          "label": "3",
-          "required_concepts": [
+            "능동 부하의 소신호 등가회로",
+            "유한 출력 저항(ro)",
+            "유한 β와 rπ",
             "캐스코드",
-            "소스·이미터 축퇴",
             "출력 저항",
             "등가 트랜스컨덕턴스",
             "소신호 전압 이득"
           ]
         },
         {
+          "label": "3",
+          "required_concepts": [
+            "능동 부하의 소신호 등가회로",
+            "유한 출력 저항(ro)",
+            "소스·이미터 축퇴",
+            "등가 트랜스컨덕턴스"
+          ]
+        },
+        {
           "label": "4",
           "required_concepts": [
+            "능동 부하의 소신호 등가회로",
+            "유한 출력 저항(ro)",
+            "유한 β와 rπ",
+            "소스·이미터 축퇴",
+            "출력 저항",
+            "등가 트랜스컨덕턴스",
             "소신호 전압 이득"
           ]
         }
       ],
       "topics": [
-        "캐스코드"
+        "캐스코드",
+        "이미터 축퇴",
+        "등가 트랜스컨덕턴스"
       ]
     },
     "source": "../../2013-2019_중간/2014-1_중간_모범답안.pdf",
@@ -118,7 +143,7 @@
       9
     ]
   },
-  "raw_md": "---\nid: 2014-1_중간-Q4\nkind: 기출\nexam: \"2014-1 중간고사\"\nnumber: \"4\"\npoints: 20\nsource: ../../2013-2019_중간/2014-1_중간_모범답안.pdf\npdf_page: 3\nsource_lang: ko\nfigures:\n  - {id: \"Q4\", role: problem, panels: [a, b]}\ntextbook_chapters: [9]\ndepends_on: []\nrefs: [\"회로 (a)는 2023-1_중간-Q2 (b), 2021-1_중간-Q3 (a)와 같은 회로\"]\nselection:\n  topics:\n  - 캐스코드\n  circuit_types:\n  - 바이폴라\n  - 캐스코드\n  - CE\n  required_concepts:\n  - 캐스코드\n  - 소스·이미터 축퇴\n  - 출력 저항\n  - 등가 트랜스컨덕턴스\n  - 소신호 전압 이득\n  learning_goals:\n  - 회로 (a)의 출력 저항 식\n  - 회로 (a)의 전압 이득 $V_{out}/V_{in}$ 식\n  - 회로 (b)의 transconductance $G_m (= i_{out}/V_{in})$ 식\n  - 회로 (b)의 전압 이득 $V_{out}/V_{in}$ 식\n  evidence_sections:\n  - 구할 것\n  - 풀이\n  subpart_requirements:\n  - label: '1'\n    required_concepts:\n    - 출력 저항\n  - label: '2'\n    required_concepts:\n    - 소신호 전압 이득\n  - label: '3'\n    required_concepts:\n    - 캐스코드\n    - 소스·이미터 축퇴\n    - 출력 저항\n    - 등가 트랜스컨덕턴스\n    - 소신호 전압 이득\n  - label: '4'\n    required_concepts:\n    - 소신호 전압 이득\n  review_status: draft\n  reviewed_content_sha256: f57b3fcb84edab462f57dd5e6e333b78cd630a19806f60aeadedcaaf52b78c46\n  classification_note: 제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.\n---\n# 기출 2014-1 중간 4 — 전류를 넣는 pnp Q3가 붙은 바이폴라 캐스코드와 Q1을 이미터 쪽에 단 CE 단의 출력 저항·G_m·이득 식\n\n## 원문\n다음 회로에 대해 질문에 답하시오. $V_A < \\infty$ 이고, $\\beta \\gg 1$, $g_m r_o \\gg 1$로 가정한다.\n\n(1) 회로 (a)의 출력 저항 식을 구하시오.\n\n(2) 회로 (a)의 전압이득 ($V_{out}/V_{in}$) 식을 구하시오.\n\n(3) 회로 (b)의 transconductance $G_m (= i_{out}/V_{in})$ 식을 구하시오.\n\n(4) 회로 (b)의 전압이득 ($V_{out}/V_{in}$) 식을 구하시오.\n\n## 조건\n- 회로: 그림 (a), (b)\n- $V_A < \\infty$ (Early 효과 고려)\n- $\\beta \\gg 1$, $g_m r_o \\gg 1$로 가정\n- 값은 주어지지 않음, 식으로 답함 (원문에 없음)\n- (3) 전용: $G_m = i_{out}/V_{in}$ ($i_{out}$의 위치·방향은 그림에 인쇄돼 있지 않음 (원문에 없음))\n\n## 구할 것\n- (1) 회로 (a)의 출력 저항 식\n- (2) 회로 (a)의 전압 이득 $V_{out}/V_{in}$ 식\n- (3) 회로 (b)의 transconductance $G_m (= i_{out}/V_{in})$ 식\n- (4) 회로 (b)의 전압 이득 $V_{out}/V_{in}$ 식\n\n## 회로 — Fig Q4(a)\n```spice\nI1  VCC   Vout  {I_1}\nQ1  Vout  Vb1   n1   npn\nQ2  n1    Vin   0    npn\nQ3  n1    Vb3   VCC  pnp    ; 좌우 반전 (베이스 오른쪽), 컬렉터 = n1\n* VCC는 T 전원 기호 두 개 (I1 위, Q3 이미터 위)\n```\n- 단자: VCC = 전원, 값 미지정 (T 전원 기호 2개, 둘 다 V_CC로 인쇄) / Vb1, Vb3 = 이상적 DC 바이어스, 값 미지정 (점 단자) / Vin = 입력 (개방 원) / Vout = 출력 (개방 원)\n- 표시: 노드 라벨 V_CC (위 T 기호 오른쪽), V_CC (Q3 위 T 기호 오른쪽), V_out (출력 원 오른쪽), V_b1 (점 단자 왼쪽), V_in (입력 원 왼쪽), V_b3 (점 단자 오른쪽) / 소자 라벨 I_1 (전류원 왼쪽), Q_1, Q_2 (각 트랜지스터 오른쪽), Q_3 (Q3 왼쪽, 컬렉터 옆) / 부호 없음 / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 왼쪽 세로줄 위→아래 VCC T 기호, I_1 전류원 (화살표 아래), Vout 접속점, Q1, n1 접속점, Q2, 접지 / Q1, Q2 npn 보통 방향 (베이스 왼쪽, 컬렉터 위, 이미터 아래·화살표 바깥) / Vout 접속점에서 가로선이 오른쪽 V_out 원 / V_b1 점 단자 → 가로선 → Q1 베이스, V_in 원 → 가로선 → Q2 베이스 / Q3은 오른쪽, Q1 높이보다 조금 아래, pnp 좌우 반전 (베이스 막대 오른쪽, 이미터 왼쪽 위·화살표가 막대 쪽으로 들어감, 컬렉터 왼쪽 아래) / Q3 이미터에서 세로선이 위로 따로 그린 VCC T 기호 / Q3 베이스 → 가로선 → 오른쪽 V_b3 점 단자 / Q3 컬렉터에서 세로선이 n1 높이까지 내려가 모서리에서 왼쪽으로 꺾여 긴 가로선으로 n1 접속점 / Q2 이미터 아래 접지 / 접속점 (세 갈래 이상, 2곳): ① Vout = 위 I_1 + 아래 Q1 컬렉터 + 오른쪽 V_out 가로선 (점) ② n1 = 위 Q1 이미터 + 아래 Q2 컬렉터 + 오른쪽 Q3 컬렉터로 가는 가로선 (점) / 교차: 없음\n\n## 회로 — Fig Q4(b)\n```spice\nI1  VCC   Vout  {I_1}\nQ2  Vout  Vin   n1   npn\nQ1  n1    Vb1   0    npn\n* n1 = Q2 이미터·Q1 컬렉터 (라벨 없음)\n```\n- 단자: VCC = 전원, 값 미지정 (T 전원 기호) / Vin = 입력 (개방 원) / Vb1 = 이상적 DC 바이어스, 값 미지정 (점 단자) / Vout = 출력 (개방 원)\n- 표시: 노드 라벨 V_CC (T 기호 오른쪽), V_out (출력 원 오른쪽), V_in (입력 원 왼쪽), V_b1 (점 단자 왼쪽) / 소자 라벨 I_1 (전류원 왼쪽), Q_2 (위 트랜지스터 오른쪽), Q_1 (아래 트랜지스터 오른쪽) / 부호 없음 / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 한 세로줄 위→아래 VCC T 기호, I_1 전류원 (화살표 아래), Vout 접속점, Q2, Q1, 접지 / Q2, Q1 npn 보통 방향 (베이스 왼쪽, 컬렉터 위, 이미터 아래·화살표 바깥), Q2 이미터에서 세로선이 바로 Q1 컬렉터 / Vout 접속점에서 가로선이 오른쪽 V_out 원 / V_in 원 → 가로선 → Q2 베이스, V_b1 점 단자 → 가로선 → Q1 베이스 / Q1 이미터 아래 접지 / 위가 입력 소자 Q2, 아래가 바이어스 소자 Q1 (회로 (a)와 위아래가 바뀜) / 접속점 (세 갈래 이상, 1곳): Vout = 위 I_1 + 아래 Q2 컬렉터 + 오른쪽 V_out 가로선 (점) / 교차: 없음\n\n![Q4](figures/fig-Q4.png)\n\n## 힌트\n### (1) $Q_3$는 $r_{O3}$ 하나로\n- $Q_3$ 베이스는 DC 바이어스, 이미터는 $V_{CC}$라 소신호가 없고, 컬렉터에서 AC 접지까지의 $r_{O3}$만 남는다\n- 그래서 $Q_1$ 이미터에 달린 저항은 $r_{O2}$ 하나가 아니다\n### (3) $Q_1$은 $Q_2$의 퇴화 저항\n- $Q_1$ 베이스는 DC 바이어스라 $Q_1$은 $Q_2$ 이미터와 접지 사이의 $r_{O1}$로만 보인다\n- 그래서 회로 (b)는 아주 큰 저항으로 퇴화된 CE 단이다\n\n## 풀이\n### (1) 출력 저항\n- $Q_3$ 베이스는 DC 바이어스, 이미터는 $V_{CC}$라 소신호로는 $r_{O3}$만 남아 $Q_1$ 이미터 저항 $R_E = r_{O2} \\parallel r_{O3}$\n- $I_1$은 이상 전류원이고 $g_{m1}(R_E \\parallel r_{\\pi 1}) \\gg 1$: $R_{out} \\approx g_{m1} r_{O1} (r_{O2} \\parallel r_{O3} \\parallel r_{\\pi 1})$\n### (2) 전압 이득\n- $Q_1$ 이미터에서 본 저항 $\\approx 1/g_{m1} \\ll R_E$라 $Q_2$ 신호 전류가 거의 다 $Q_1$로 간다: $G_m \\approx g_{m2}$\n- $A_v = -G_m R_{out} \\approx -g_{m2} g_{m1} r_{O1} (r_{O2} \\parallel r_{O3} \\parallel r_{\\pi 1})$\n### (3) 회로 (b)의 $G_m$\n- $Q_1$ 베이스는 DC 바이어스라 $Q_1$은 $Q_2$ 이미터의 퇴화 저항 $r_{O1}$이다\n- $i_{out}$을 출력 AC 접지 때 $Q_2$ 컬렉터로 들어가는 전류로 잡으면 ($\\beta \\gg 1$): $G_m \\approx g_{m2}/(1 + g_{m2} r_{O1}) \\approx 1/r_{O1}$\n### (4) 회로 (b)의 전압 이득\n- 퇴화 저항이 $r_{O1}$ 수준이라 $R_{out} \\approx g_{m2} r_{O2} (r_{O1} \\parallel r_{\\pi 2})$\n- $A_v = -G_m R_{out} \\approx -g_{m2} r_{O2} (r_{O1} \\parallel r_{\\pi 2})/r_{O1} = -\\beta r_{O2}/(r_{O1} + r_{\\pi 2})$\n### 답\n- (1) $R_{out} \\approx g_{m1} r_{O1} (r_{O2} \\parallel r_{O3} \\parallel r_{\\pi 1})$\n- (2) $A_v \\approx -g_{m2} g_{m1} r_{O1} (r_{O2} \\parallel r_{O3} \\parallel r_{\\pi 1})$\n- (3) $G_m \\approx 1/r_{O1}$\n- (4) $A_v \\approx -\\beta r_{O2}/(r_{O1} + r_{\\pi 2})$\n",
+  "raw_md": "---\nid: 2014-1_중간-Q4\nkind: 기출\nexam: \"2014-1 중간고사\"\nnumber: \"4\"\npoints: 20\nsource: ../../2013-2019_중간/2014-1_중간_모범답안.pdf\npdf_page: 3\nsource_lang: ko\nfigures:\n  - {id: \"Q4\", role: problem, panels: [a, b]}\ntextbook_chapters: [9]\ndepends_on: []\nrefs: [\"회로 (a)는 2023-1_중간-Q2 (b), 2021-1_중간-Q3 (a)와 같은 회로\"]\nselection:\n  topics:\n  - 캐스코드\n  - 이미터 축퇴\n  - 등가 트랜스컨덕턴스\n  circuit_types:\n  - 바이폴라\n  - 캐스코드\n  - CE\n  - 이미터 축퇴\n  required_concepts:\n  - 능동 부하의 소신호 등가회로\n  - 유한 출력 저항(ro)\n  - 유한 β와 rπ\n  - 캐스코드\n  - 출력 저항\n  - 등가 트랜스컨덕턴스\n  - 소신호 전압 이득\n  - 소스·이미터 축퇴\n  learning_goals:\n  - 회로 (a)의 출력 저항 식\n  - 회로 (a)의 전압 이득 $V_{out}/V_{in}$ 식\n  - 회로 (b)의 transconductance $G_m (= i_{out}/V_{in})$ 식\n  - 회로 (b)의 전압 이득 $V_{out}/V_{in}$ 식\n  evidence_sections:\n  - 원문\n  - 조건\n  - 구할 것\n  - 회로 — Fig Q4(a)\n  - 회로 — Fig Q4(b)\n  - 풀이\n  subpart_requirements:\n  - label: '1'\n    required_concepts:\n    - 능동 부하의 소신호 등가회로\n    - 유한 출력 저항(ro)\n    - 유한 β와 rπ\n    - 캐스코드\n    - 출력 저항\n  - label: '2'\n    required_concepts:\n    - 능동 부하의 소신호 등가회로\n    - 유한 출력 저항(ro)\n    - 유한 β와 rπ\n    - 캐스코드\n    - 출력 저항\n    - 등가 트랜스컨덕턴스\n    - 소신호 전압 이득\n  - label: '3'\n    required_concepts:\n    - 능동 부하의 소신호 등가회로\n    - 유한 출력 저항(ro)\n    - 소스·이미터 축퇴\n    - 등가 트랜스컨덕턴스\n  - label: '4'\n    required_concepts:\n    - 능동 부하의 소신호 등가회로\n    - 유한 출력 저항(ro)\n    - 유한 β와 rπ\n    - 소스·이미터 축퇴\n    - 출력 저항\n    - 등가 트랜스컨덕턴스\n    - 소신호 전압 이득\n  review_status: reviewed\n  reviewed_content_sha256: f57b3fcb84edab462f57dd5e6e333b78cd630a19806f60aeadedcaaf52b78c46\n  classification_note: (a)의 Q3는 Q1 이미터에서 rO2와 병렬인 rO3이고 (b)의 바이어스 Q1은 rO1 축퇴 부하다. β≫1이어도 Rout의 rπ 병렬은 남아 (1)(2)(4)에 유한 β가 필요하다. iout 방향은 원문 그림에 없어 (3)은 기존 풀이의 단락 출력 전류 정의를 따른다. 전사 원문·조건·회로 원본 크롭과 재작성 그림·풀이를 대조한 분류 검토이며 정답 독립 검산이나 수업 범위 승인이 아니다.\n---\n# 기출 2014-1 중간 4 — 전류를 넣는 pnp Q3가 붙은 바이폴라 캐스코드와 Q1을 이미터 쪽에 단 CE 단의 출력 저항·G_m·이득 식\n\n## 원문\n다음 회로에 대해 질문에 답하시오. $V_A < \\infty$ 이고, $\\beta \\gg 1$, $g_m r_o \\gg 1$로 가정한다.\n\n(1) 회로 (a)의 출력 저항 식을 구하시오.\n\n(2) 회로 (a)의 전압이득 ($V_{out}/V_{in}$) 식을 구하시오.\n\n(3) 회로 (b)의 transconductance $G_m (= i_{out}/V_{in})$ 식을 구하시오.\n\n(4) 회로 (b)의 전압이득 ($V_{out}/V_{in}$) 식을 구하시오.\n\n## 조건\n- 회로: 그림 (a), (b)\n- $V_A < \\infty$ (Early 효과 고려)\n- $\\beta \\gg 1$, $g_m r_o \\gg 1$로 가정\n- 값은 주어지지 않음, 식으로 답함 (원문에 없음)\n- (3) 전용: $G_m = i_{out}/V_{in}$ ($i_{out}$의 위치·방향은 그림에 인쇄돼 있지 않음 (원문에 없음))\n\n## 구할 것\n- (1) 회로 (a)의 출력 저항 식\n- (2) 회로 (a)의 전압 이득 $V_{out}/V_{in}$ 식\n- (3) 회로 (b)의 transconductance $G_m (= i_{out}/V_{in})$ 식\n- (4) 회로 (b)의 전압 이득 $V_{out}/V_{in}$ 식\n\n## 회로 — Fig Q4(a)\n```spice\nI1  VCC   Vout  {I_1}\nQ1  Vout  Vb1   n1   npn\nQ2  n1    Vin   0    npn\nQ3  n1    Vb3   VCC  pnp    ; 좌우 반전 (베이스 오른쪽), 컬렉터 = n1\n* VCC는 T 전원 기호 두 개 (I1 위, Q3 이미터 위)\n```\n- 단자: VCC = 전원, 값 미지정 (T 전원 기호 2개, 둘 다 V_CC로 인쇄) / Vb1, Vb3 = 이상적 DC 바이어스, 값 미지정 (점 단자) / Vin = 입력 (개방 원) / Vout = 출력 (개방 원)\n- 표시: 노드 라벨 V_CC (위 T 기호 오른쪽), V_CC (Q3 위 T 기호 오른쪽), V_out (출력 원 오른쪽), V_b1 (점 단자 왼쪽), V_in (입력 원 왼쪽), V_b3 (점 단자 오른쪽) / 소자 라벨 I_1 (전류원 왼쪽), Q_1, Q_2 (각 트랜지스터 오른쪽), Q_3 (Q3 왼쪽, 컬렉터 옆) / 부호 없음 / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 왼쪽 세로줄 위→아래 VCC T 기호, I_1 전류원 (화살표 아래), Vout 접속점, Q1, n1 접속점, Q2, 접지 / Q1, Q2 npn 보통 방향 (베이스 왼쪽, 컬렉터 위, 이미터 아래·화살표 바깥) / Vout 접속점에서 가로선이 오른쪽 V_out 원 / V_b1 점 단자 → 가로선 → Q1 베이스, V_in 원 → 가로선 → Q2 베이스 / Q3은 오른쪽, Q1 높이보다 조금 아래, pnp 좌우 반전 (베이스 막대 오른쪽, 이미터 왼쪽 위·화살표가 막대 쪽으로 들어감, 컬렉터 왼쪽 아래) / Q3 이미터에서 세로선이 위로 따로 그린 VCC T 기호 / Q3 베이스 → 가로선 → 오른쪽 V_b3 점 단자 / Q3 컬렉터에서 세로선이 n1 높이까지 내려가 모서리에서 왼쪽으로 꺾여 긴 가로선으로 n1 접속점 / Q2 이미터 아래 접지 / 접속점 (세 갈래 이상, 2곳): ① Vout = 위 I_1 + 아래 Q1 컬렉터 + 오른쪽 V_out 가로선 (점) ② n1 = 위 Q1 이미터 + 아래 Q2 컬렉터 + 오른쪽 Q3 컬렉터로 가는 가로선 (점) / 교차: 없음\n\n## 회로 — Fig Q4(b)\n```spice\nI1  VCC   Vout  {I_1}\nQ2  Vout  Vin   n1   npn\nQ1  n1    Vb1   0    npn\n* n1 = Q2 이미터·Q1 컬렉터 (라벨 없음)\n```\n- 단자: VCC = 전원, 값 미지정 (T 전원 기호) / Vin = 입력 (개방 원) / Vb1 = 이상적 DC 바이어스, 값 미지정 (점 단자) / Vout = 출력 (개방 원)\n- 표시: 노드 라벨 V_CC (T 기호 오른쪽), V_out (출력 원 오른쪽), V_in (입력 원 왼쪽), V_b1 (점 단자 왼쪽) / 소자 라벨 I_1 (전류원 왼쪽), Q_2 (위 트랜지스터 오른쪽), Q_1 (아래 트랜지스터 오른쪽) / 부호 없음 / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 한 세로줄 위→아래 VCC T 기호, I_1 전류원 (화살표 아래), Vout 접속점, Q2, Q1, 접지 / Q2, Q1 npn 보통 방향 (베이스 왼쪽, 컬렉터 위, 이미터 아래·화살표 바깥), Q2 이미터에서 세로선이 바로 Q1 컬렉터 / Vout 접속점에서 가로선이 오른쪽 V_out 원 / V_in 원 → 가로선 → Q2 베이스, V_b1 점 단자 → 가로선 → Q1 베이스 / Q1 이미터 아래 접지 / 위가 입력 소자 Q2, 아래가 바이어스 소자 Q1 (회로 (a)와 위아래가 바뀜) / 접속점 (세 갈래 이상, 1곳): Vout = 위 I_1 + 아래 Q2 컬렉터 + 오른쪽 V_out 가로선 (점) / 교차: 없음\n\n![Q4](figures/fig-Q4.png)\n\n## 힌트\n### (1) $Q_3$는 $r_{O3}$ 하나로\n- $Q_3$ 베이스는 DC 바이어스, 이미터는 $V_{CC}$라 소신호가 없고, 컬렉터에서 AC 접지까지의 $r_{O3}$만 남는다\n- 그래서 $Q_1$ 이미터에 달린 저항은 $r_{O2}$ 하나가 아니다\n### (3) $Q_1$은 $Q_2$의 퇴화 저항\n- $Q_1$ 베이스는 DC 바이어스라 $Q_1$은 $Q_2$ 이미터와 접지 사이의 $r_{O1}$로만 보인다\n- 그래서 회로 (b)는 아주 큰 저항으로 퇴화된 CE 단이다\n\n## 풀이\n### (1) 출력 저항\n- $Q_3$ 베이스는 DC 바이어스, 이미터는 $V_{CC}$라 소신호로는 $r_{O3}$만 남아 $Q_1$ 이미터 저항 $R_E = r_{O2} \\parallel r_{O3}$\n- $I_1$은 이상 전류원이고 $g_{m1}(R_E \\parallel r_{\\pi 1}) \\gg 1$: $R_{out} \\approx g_{m1} r_{O1} (r_{O2} \\parallel r_{O3} \\parallel r_{\\pi 1})$\n### (2) 전압 이득\n- $Q_1$ 이미터에서 본 저항 $\\approx 1/g_{m1} \\ll R_E$라 $Q_2$ 신호 전류가 거의 다 $Q_1$로 간다: $G_m \\approx g_{m2}$\n- $A_v = -G_m R_{out} \\approx -g_{m2} g_{m1} r_{O1} (r_{O2} \\parallel r_{O3} \\parallel r_{\\pi 1})$\n### (3) 회로 (b)의 $G_m$\n- $Q_1$ 베이스는 DC 바이어스라 $Q_1$은 $Q_2$ 이미터의 퇴화 저항 $r_{O1}$이다\n- $i_{out}$을 출력 AC 접지 때 $Q_2$ 컬렉터로 들어가는 전류로 잡으면 ($\\beta \\gg 1$): $G_m \\approx g_{m2}/(1 + g_{m2} r_{O1}) \\approx 1/r_{O1}$\n### (4) 회로 (b)의 전압 이득\n- 퇴화 저항이 $r_{O1}$ 수준이라 $R_{out} \\approx g_{m2} r_{O2} (r_{O1} \\parallel r_{\\pi 2})$\n- $A_v = -G_m R_{out} \\approx -g_{m2} r_{O2} (r_{O1} \\parallel r_{\\pi 2})/r_{O1} = -\\beta r_{O2}/(r_{O1} + r_{\\pi 2})$\n### 답\n- (1) $R_{out} \\approx g_{m1} r_{O1} (r_{O2} \\parallel r_{O3} \\parallel r_{\\pi 1})$\n- (2) $A_v \\approx -g_{m2} g_{m1} r_{O1} (r_{O2} \\parallel r_{O3} \\parallel r_{\\pi 1})$\n- (3) $G_m \\approx 1/r_{O1}$\n- (4) $A_v \\approx -\\beta r_{O2}/(r_{O1} + r_{\\pi 2})$\n",
   "schema_version": 1,
   "sections": [
     {
@@ -154,11 +179,16 @@
     "circuit_types": [
       "바이폴라",
       "캐스코드",
-      "CE"
+      "CE",
+      "이미터 축퇴"
     ],
-    "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+    "classification_note": "(a)의 Q3는 Q1 이미터에서 rO2와 병렬인 rO3이고 (b)의 바이어스 Q1은 rO1 축퇴 부하다. β≫1이어도 Rout의 rπ 병렬은 남아 (1)(2)(4)에 유한 β가 필요하다. iout 방향은 원문 그림에 없어 (3)은 기존 풀이의 단락 출력 전류 정의를 따른다. 전사 원문·조건·회로 원본 크롭과 재작성 그림·풀이를 대조한 분류 검토이며 정답 독립 검산이나 수업 범위 승인이 아니다.",
     "evidence_sections": [
+      "원문",
+      "조건",
       "구할 것",
+      "회로 — Fig Q4(a)",
+      "회로 — Fig Q4(b)",
       "풀이"
     ],
     "learning_goals": [
@@ -168,47 +198,67 @@
       "회로 (b)의 전압 이득 $V_{out}/V_{in}$ 식"
     ],
     "required_concepts": [
+      "능동 부하의 소신호 등가회로",
+      "유한 출력 저항(ro)",
+      "유한 β와 rπ",
       "캐스코드",
-      "소스·이미터 축퇴",
       "출력 저항",
       "등가 트랜스컨덕턴스",
-      "소신호 전압 이득"
+      "소신호 전압 이득",
+      "소스·이미터 축퇴"
     ],
-    "review_status": "draft",
+    "review_status": "reviewed",
     "reviewed_content_sha256": "f57b3fcb84edab462f57dd5e6e333b78cd630a19806f60aeadedcaaf52b78c46",
-    "status": "draft",
+    "status": "reviewed",
     "subpart_requirements": [
       {
         "label": "1",
         "required_concepts": [
+          "능동 부하의 소신호 등가회로",
+          "유한 출력 저항(ro)",
+          "유한 β와 rπ",
+          "캐스코드",
           "출력 저항"
         ]
       },
       {
         "label": "2",
         "required_concepts": [
-          "소신호 전압 이득"
-        ]
-      },
-      {
-        "label": "3",
-        "required_concepts": [
+          "능동 부하의 소신호 등가회로",
+          "유한 출력 저항(ro)",
+          "유한 β와 rπ",
           "캐스코드",
-          "소스·이미터 축퇴",
           "출력 저항",
           "등가 트랜스컨덕턴스",
           "소신호 전압 이득"
         ]
       },
       {
+        "label": "3",
+        "required_concepts": [
+          "능동 부하의 소신호 등가회로",
+          "유한 출력 저항(ro)",
+          "소스·이미터 축퇴",
+          "등가 트랜스컨덕턴스"
+        ]
+      },
+      {
         "label": "4",
         "required_concepts": [
+          "능동 부하의 소신호 등가회로",
+          "유한 출력 저항(ro)",
+          "유한 β와 rπ",
+          "소스·이미터 축퇴",
+          "출력 저항",
+          "등가 트랜스컨덕턴스",
           "소신호 전압 이득"
         ]
       }
     ],
     "topics": [
-      "캐스코드"
+      "캐스코드",
+      "이미터 축퇴",
+      "등가 트랜스컨덕턴스"
     ]
   },
   "subparts": [
@@ -216,6 +266,10 @@
       "ask_md": "회로 (a)의 출력 저항 식",
       "label": "1",
       "required_concepts": [
+        "능동 부하의 소신호 등가회로",
+        "유한 출력 저항(ro)",
+        "유한 β와 rπ",
+        "캐스코드",
         "출력 저항"
       ]
     },
@@ -223,6 +277,12 @@
       "ask_md": "회로 (a)의 전압 이득 $V_{out}/V_{in}$ 식",
       "label": "2",
       "required_concepts": [
+        "능동 부하의 소신호 등가회로",
+        "유한 출력 저항(ro)",
+        "유한 β와 rπ",
+        "캐스코드",
+        "출력 저항",
+        "등가 트랜스컨덕턴스",
         "소신호 전압 이득"
       ]
     },
@@ -230,17 +290,22 @@
       "ask_md": "회로 (b)의 transconductance $G_m (= i_{out}/V_{in})$ 식",
       "label": "3",
       "required_concepts": [
-        "캐스코드",
+        "능동 부하의 소신호 등가회로",
+        "유한 출력 저항(ro)",
         "소스·이미터 축퇴",
-        "출력 저항",
-        "등가 트랜스컨덕턴스",
-        "소신호 전압 이득"
+        "등가 트랜스컨덕턴스"
       ]
     },
     {
       "ask_md": "회로 (b)의 전압 이득 $V_{out}/V_{in}$ 식",
       "label": "4",
       "required_concepts": [
+        "능동 부하의 소신호 등가회로",
+        "유한 출력 저항(ro)",
+        "유한 β와 rπ",
+        "소스·이미터 축퇴",
+        "출력 저항",
+        "등가 트랜스컨덕턴스",
         "소신호 전압 이득"
       ]
     }

@@ -26,7 +26,7 @@
   ],
   "id": "2023-1_기말-Q4",
   "input_hashes": {
-    "from_the_past/md/2023-1_기말/Q4.md": "50c00c7d22e7df05bb60765ba4303f9f99d861b9960c3e81797e517e88bc09ff",
+    "from_the_past/md/2023-1_기말/Q4.md": "e405675b74b81769882237da5d6c7c2abd0092754743c221974b9cc356b77a14",
     "from_the_past/md/2023-1_기말/exam.yaml": "ab0ba61cf0eca4adaf236ab020c51e7ac967f29a2feb119f6efd6445e86a8f8d",
     "from_the_past/md/2023-1_기말/figures/fig-Q4.png": "428737c44e59c9c0a9b5f47c98134889aa5be8908a34facb3ee0dcb1c5d04cfe",
     "from_the_past/md/2023-1_기말/figures/figures.yaml": "b29af69d5be97ade730ae27efe75b7dbe8d3e39260ef590173b2400e19c3c919",
@@ -51,11 +51,16 @@
     "refs": [],
     "selection": {
       "circuit_types": [
-        "연산증폭기"
+        "연산증폭기",
+        "Sallen-Key",
+        "고역 통과 필터"
       ],
-      "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+      "classification_note": "C1·C2 직렬, R1 접지와 R2 출력 귀환, 단위 이득 버퍼인 Sallen-Key 고역 통과 회로를 확인했다. (2) R1과 Q를 구하려면 전달함수 분모의 ωn²·ωn/Q 계수 비교가 필요하다. 전사 원문·조건·회로 crop/재그림·기존 풀이에 근거한 분류 검토이며 정답 독립 검산이나 수업 범위 승인이 아니다.",
       "evidence_sections": [
+        "원문",
+        "조건",
         "구할 것",
+        "회로 — Fig Q4",
         "풀이"
       ],
       "learning_goals": [
@@ -63,23 +68,31 @@
         "$\\omega_n = 50\\ \\text{M rad/s}$가 되도록 하는 $R_1$ 값, 그리고 2차 filter의 $Q$ 값"
       ],
       "required_concepts": [
+        "이상적 연산증폭기와 가상 단락",
+        "전압 팔로워",
         "연산증폭기 2차 능동 필터",
-        "s 영역 KCL과 전달 함수"
+        "s 영역 KCL과 전달 함수",
+        "고유 주파수와 Q의 계수 비교"
       ],
-      "review_status": "draft",
+      "review_status": "reviewed",
       "reviewed_content_sha256": "92774df7fc772a54f1ece37dc996fa4338ded4359a7e580aae41e47291f7b4f1",
       "subpart_requirements": [
         {
           "label": "1",
           "required_concepts": [
+            "이상적 연산증폭기와 가상 단락",
+            "전압 팔로워",
+            "연산증폭기 2차 능동 필터",
             "s 영역 KCL과 전달 함수"
           ]
         },
         {
           "label": "2",
           "required_concepts": [
+            "이상적 연산증폭기와 가상 단락",
             "연산증폭기 2차 능동 필터",
-            "s 영역 KCL과 전달 함수"
+            "s 영역 KCL과 전달 함수",
+            "고유 주파수와 Q의 계수 비교"
           ]
         }
       ],
@@ -93,7 +106,7 @@
       14
     ]
   },
-  "raw_md": "---\nid: 2023-1_기말-Q4\nkind: 기출\nexam: \"2023-1 기말고사\"\nnumber: \"4\"\npoints: 20\nsource: \"../../2023-1/23-1 기말/기말고사.pdf\"\npdf_page: 4\nsource_lang: ko\nfigures:\n  - {id: \"Q4\", role: problem, panels: []}\ntextbook_chapters: [14]\ndepends_on: []\nrefs: []\nselection:\n  topics:\n  - 연산증폭기 2차 능동 필터\n  circuit_types:\n  - 연산증폭기\n  required_concepts:\n  - 연산증폭기 2차 능동 필터\n  - s 영역 KCL과 전달 함수\n  learning_goals:\n  - 회로의 전달함수 $V_{out}/V_{in}$을 $R_1$, $R_2$, $C_1$, $C_2$로 나타낸 식\n  - $\\omega_n = 50\\ \\text{M rad/s}$가 되도록 하는 $R_1$ 값, 그리고 2차 filter의 $Q$ 값\n  evidence_sections:\n  - 구할 것\n  - 풀이\n  subpart_requirements:\n  - label: '1'\n    required_concepts:\n    - s 영역 KCL과 전달 함수\n  - label: '2'\n    required_concepts:\n    - 연산증폭기 2차 능동 필터\n    - s 영역 KCL과 전달 함수\n  review_status: draft\n  reviewed_content_sha256: 92774df7fc772a54f1ece37dc996fa4338ded4359a7e580aae41e47291f7b4f1\n  classification_note: 제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.\n---\n# 기출 2023-1 기말 4 — 단위 이득 연산증폭기 2차 high-pass filter의 전달 함수와 R1, Q 설계\n\n## 원문\n다음 회로를 이용한 2차 high-pass filter를 설계한다. 단, 이상적인 op amp를 가정한다.\n\n(1) 회로의 전달함수($V_{out}/V_{in}$)를 $R_1$, $R_2$, $C_1$, $C_2$에 관한 식으로 구하시오.\n\n(2) Biquad filter에서, $C_1 = C_2 = 1\\ \\text{pF}$, $R_2 = 10\\ \\text{K}\\Omega$으로 설계한다. $\\omega_n = 50\\ \\text{M rad/s}$ ($\\approx 2\\pi \\times 8\\ \\text{MHz}$)가 되도록 $R_1$ 값을 구하고, 2차 filter의 $Q$ 값을 구하시오.\n\n## 조건\n- 그림의 회로를 이용해 2차 high-pass filter를 설계\n- 이상적인 op amp로 가정\n- (2) 전용: Biquad filter에서 $C_1 = C_2 = 1\\ \\text{pF}$, $R_2 = 10\\ \\text{k}\\Omega$으로 설계\n- (2) 전용: 목표 $\\omega_n = 50\\ \\text{M rad/s}$ ($\\approx 2\\pi \\times 8\\ \\text{MHz}$)\n\n## 구할 것\n- (1) 회로의 전달함수 $V_{out}/V_{in}$을 $R_1$, $R_2$, $C_1$, $C_2$로 나타낸 식\n- (2) $\\omega_n = 50\\ \\text{M rad/s}$가 되도록 하는 $R_1$ 값, 그리고 2차 filter의 $Q$ 값\n\n## 회로 — Fig Q4\n```spice\nVIN  n1    0     {V_in}    ; + 단자 위\nC1   n1    n2    {C_1}\nC2   n2    n3    {C_2}\nR1   n3    0     {R_1}\nR2   n2    Vout  {R_2}\nX1   n3    Vout  Vout  opamp    ; in+ = n3, in- = Vout (단위 이득 귀환)\n```\n- 단자: Vout = 출력 (개방 원)\n- 표시: 노드 라벨 V_out (출력 원 오른쪽) / 소자 라벨 V_in (전압원 왼쪽), C1 (커패시터 아래), C2 (커패시터 아래), R1 (저항 오른쪽), R2 (가로 저항 위), 연산증폭기 (라벨 없음) / 부호 전압원 V_in \"+\" (원 오른쪽 위), \"−\" (원 오른쪽 아래); 연산증폭기 \"+\" (위 입력, 삼각형 안), \"−\" (아래 입력, 삼각형 안) / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 왼쪽 원형 전압원 V_in (아래 접지), 위 단자에서 세로선이 올라가 오른쪽으로 꺾여 가로 C1, n2 접속점, 가로 C2, n3 접속점, 연산증폭기 + 입력이 한 가로선 높이 / n2 접속점에서 세로선이 위로 올라가 오른쪽으로 꺾여 가로 R2를 지나 연산증폭기 위를 넘어 모서리에서 아래로 꺾여 Vout 접속점 / n3 접속점에서 아래로 세로 R1, 그 아래 접지 / 연산증폭기는 오른쪽을 향한 삼각형, 출력 → Vout 접속점 → V_out 원 / − 입력에서 왼쪽으로 짧게 나가 모서리에서 아래로 꺾여 연산증폭기 아래를 지나 오른쪽으로 가고, 모서리에서 위로 꺾여 Vout 접속점 / 접속점 (세 갈래 이상, 3곳): n2 = 왼쪽 C1 + 오른쪽 C2 + 위 R2 선 (점), n3 = 왼쪽 C2 + 오른쪽 + 입력 + 아래 R1 (점), Vout = 왼쪽 연산증폭기 출력 + 위 R2 선 + 아래 − 입력 귀환선 + 오른쪽 V_out 원 (점) / 교차: 없음\n\n![Q4](figures/fig-Q4.png)\n> 참고: 답안지 손글씨가 겹침 (n2 접속점 아래 \"Y\", n3 접속점 오른쪽 아래 \"x\", R1 아래 \"k₁\" 비슷한 글자, C2 위와 R2 아래의 흐린 획). \"Y\", \"x\"는 손글씨라 노드 라벨로 넣지 않음. 원문 \"10 KΩ\"은 kΩ으로 적음\n\n## 풀이\n### (1) 노드 방정식\n- 연산증폭기는 단위 이득 버퍼라 $C_2$와 $R_1$ 사이 노드 전압이 $V_{out}$ (이상적, 가상 단락)\n- $C_1$과 $C_2$ 사이 노드 $V_A$: $sC_1(V_{in} - V_A) = (sC_2 + 1/R_2)(V_A - V_{out})$\n- $R_1$ 위 노드: $sC_2(V_A - V_{out}) = V_{out}/R_1$ → $V_A = V_{out}[1 + 1/(sR_1C_2)]$\n### (1) 전달함수\n- 대입해 정리한다: $\\dfrac{V_{out}}{V_{in}} = \\dfrac{s^2R_1R_2C_1C_2}{s^2R_1R_2C_1C_2 + sR_2(C_1 + C_2) + 1}$\n### (2) $R_1$과 $Q$\n- $\\omega_n^2 = 1/(R_1R_2C_1C_2)$: $R_1 = 1/(\\omega_n^2R_2C_1C_2) = 1/[(50\\ \\text{M rad/s})^2(10\\ \\text{k}\\Omega)(1\\ \\text{pF})^2] = 40.0\\ \\text{k}\\Omega$\n- $\\omega_n/Q = (C_1 + C_2)/(R_1C_1C_2)$: $Q = \\sqrt{R_1/R_2}\\,\\sqrt{C_1C_2}/(C_1 + C_2) = 2 \\times 0.5 = 1.00$\n### 답\n- (1) $\\dfrac{V_{out}}{V_{in}} = \\dfrac{s^2R_1R_2C_1C_2}{s^2R_1R_2C_1C_2 + sR_2(C_1 + C_2) + 1}$\n- (2) $R_1 = 40.0\\ \\text{k}\\Omega$, $Q = 1.00$\n",
+  "raw_md": "---\nid: 2023-1_기말-Q4\nkind: 기출\nexam: \"2023-1 기말고사\"\nnumber: \"4\"\npoints: 20\nsource: \"../../2023-1/23-1 기말/기말고사.pdf\"\npdf_page: 4\nsource_lang: ko\nfigures:\n  - {id: \"Q4\", role: problem, panels: []}\ntextbook_chapters: [14]\ndepends_on: []\nrefs: []\nselection:\n  topics:\n  - 연산증폭기 2차 능동 필터\n  circuit_types:\n  - 연산증폭기\n  - Sallen-Key\n  - 고역 통과 필터\n  required_concepts:\n  - 이상적 연산증폭기와 가상 단락\n  - 전압 팔로워\n  - 연산증폭기 2차 능동 필터\n  - s 영역 KCL과 전달 함수\n  - 고유 주파수와 Q의 계수 비교\n  learning_goals:\n  - 회로의 전달함수 $V_{out}/V_{in}$을 $R_1$, $R_2$, $C_1$, $C_2$로 나타낸 식\n  - $\\omega_n = 50\\ \\text{M rad/s}$가 되도록 하는 $R_1$ 값, 그리고 2차 filter의 $Q$ 값\n  evidence_sections:\n  - 원문\n  - 조건\n  - 구할 것\n  - 회로 — Fig Q4\n  - 풀이\n  subpart_requirements:\n  - label: '1'\n    required_concepts:\n    - 이상적 연산증폭기와 가상 단락\n    - 전압 팔로워\n    - 연산증폭기 2차 능동 필터\n    - s 영역 KCL과 전달 함수\n  - label: '2'\n    required_concepts:\n    - 이상적 연산증폭기와 가상 단락\n    - 연산증폭기 2차 능동 필터\n    - s 영역 KCL과 전달 함수\n    - 고유 주파수와 Q의 계수 비교\n  review_status: reviewed\n  reviewed_content_sha256: 92774df7fc772a54f1ece37dc996fa4338ded4359a7e580aae41e47291f7b4f1\n  classification_note: C1·C2 직렬, R1 접지와 R2 출력 귀환, 단위 이득 버퍼인 Sallen-Key 고역 통과 회로를 확인했다. (2) R1과 Q를 구하려면 전달함수 분모의 ωn²·ωn/Q 계수 비교가 필요하다. 전사 원문·조건·회로 crop/재그림·기존 풀이에 근거한 분류 검토이며 정답 독립 검산이나 수업 범위 승인이 아니다.\n---\n# 기출 2023-1 기말 4 — 단위 이득 연산증폭기 2차 high-pass filter의 전달 함수와 R1, Q 설계\n\n## 원문\n다음 회로를 이용한 2차 high-pass filter를 설계한다. 단, 이상적인 op amp를 가정한다.\n\n(1) 회로의 전달함수($V_{out}/V_{in}$)를 $R_1$, $R_2$, $C_1$, $C_2$에 관한 식으로 구하시오.\n\n(2) Biquad filter에서, $C_1 = C_2 = 1\\ \\text{pF}$, $R_2 = 10\\ \\text{K}\\Omega$으로 설계한다. $\\omega_n = 50\\ \\text{M rad/s}$ ($\\approx 2\\pi \\times 8\\ \\text{MHz}$)가 되도록 $R_1$ 값을 구하고, 2차 filter의 $Q$ 값을 구하시오.\n\n## 조건\n- 그림의 회로를 이용해 2차 high-pass filter를 설계\n- 이상적인 op amp로 가정\n- (2) 전용: Biquad filter에서 $C_1 = C_2 = 1\\ \\text{pF}$, $R_2 = 10\\ \\text{k}\\Omega$으로 설계\n- (2) 전용: 목표 $\\omega_n = 50\\ \\text{M rad/s}$ ($\\approx 2\\pi \\times 8\\ \\text{MHz}$)\n\n## 구할 것\n- (1) 회로의 전달함수 $V_{out}/V_{in}$을 $R_1$, $R_2$, $C_1$, $C_2$로 나타낸 식\n- (2) $\\omega_n = 50\\ \\text{M rad/s}$가 되도록 하는 $R_1$ 값, 그리고 2차 filter의 $Q$ 값\n\n## 회로 — Fig Q4\n```spice\nVIN  n1    0     {V_in}    ; + 단자 위\nC1   n1    n2    {C_1}\nC2   n2    n3    {C_2}\nR1   n3    0     {R_1}\nR2   n2    Vout  {R_2}\nX1   n3    Vout  Vout  opamp    ; in+ = n3, in- = Vout (단위 이득 귀환)\n```\n- 단자: Vout = 출력 (개방 원)\n- 표시: 노드 라벨 V_out (출력 원 오른쪽) / 소자 라벨 V_in (전압원 왼쪽), C1 (커패시터 아래), C2 (커패시터 아래), R1 (저항 오른쪽), R2 (가로 저항 위), 연산증폭기 (라벨 없음) / 부호 전압원 V_in \"+\" (원 오른쪽 위), \"−\" (원 오른쪽 아래); 연산증폭기 \"+\" (위 입력, 삼각형 안), \"−\" (아래 입력, 삼각형 안) / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 왼쪽 원형 전압원 V_in (아래 접지), 위 단자에서 세로선이 올라가 오른쪽으로 꺾여 가로 C1, n2 접속점, 가로 C2, n3 접속점, 연산증폭기 + 입력이 한 가로선 높이 / n2 접속점에서 세로선이 위로 올라가 오른쪽으로 꺾여 가로 R2를 지나 연산증폭기 위를 넘어 모서리에서 아래로 꺾여 Vout 접속점 / n3 접속점에서 아래로 세로 R1, 그 아래 접지 / 연산증폭기는 오른쪽을 향한 삼각형, 출력 → Vout 접속점 → V_out 원 / − 입력에서 왼쪽으로 짧게 나가 모서리에서 아래로 꺾여 연산증폭기 아래를 지나 오른쪽으로 가고, 모서리에서 위로 꺾여 Vout 접속점 / 접속점 (세 갈래 이상, 3곳): n2 = 왼쪽 C1 + 오른쪽 C2 + 위 R2 선 (점), n3 = 왼쪽 C2 + 오른쪽 + 입력 + 아래 R1 (점), Vout = 왼쪽 연산증폭기 출력 + 위 R2 선 + 아래 − 입력 귀환선 + 오른쪽 V_out 원 (점) / 교차: 없음\n\n![Q4](figures/fig-Q4.png)\n> 참고: 답안지 손글씨가 겹침 (n2 접속점 아래 \"Y\", n3 접속점 오른쪽 아래 \"x\", R1 아래 \"k₁\" 비슷한 글자, C2 위와 R2 아래의 흐린 획). \"Y\", \"x\"는 손글씨라 노드 라벨로 넣지 않음. 원문 \"10 KΩ\"은 kΩ으로 적음\n\n## 풀이\n### (1) 노드 방정식\n- 연산증폭기는 단위 이득 버퍼라 $C_2$와 $R_1$ 사이 노드 전압이 $V_{out}$ (이상적, 가상 단락)\n- $C_1$과 $C_2$ 사이 노드 $V_A$: $sC_1(V_{in} - V_A) = (sC_2 + 1/R_2)(V_A - V_{out})$\n- $R_1$ 위 노드: $sC_2(V_A - V_{out}) = V_{out}/R_1$ → $V_A = V_{out}[1 + 1/(sR_1C_2)]$\n### (1) 전달함수\n- 대입해 정리한다: $\\dfrac{V_{out}}{V_{in}} = \\dfrac{s^2R_1R_2C_1C_2}{s^2R_1R_2C_1C_2 + sR_2(C_1 + C_2) + 1}$\n### (2) $R_1$과 $Q$\n- $\\omega_n^2 = 1/(R_1R_2C_1C_2)$: $R_1 = 1/(\\omega_n^2R_2C_1C_2) = 1/[(50\\ \\text{M rad/s})^2(10\\ \\text{k}\\Omega)(1\\ \\text{pF})^2] = 40.0\\ \\text{k}\\Omega$\n- $\\omega_n/Q = (C_1 + C_2)/(R_1C_1C_2)$: $Q = \\sqrt{R_1/R_2}\\,\\sqrt{C_1C_2}/(C_1 + C_2) = 2 \\times 0.5 = 1.00$\n### 답\n- (1) $\\dfrac{V_{out}}{V_{in}} = \\dfrac{s^2R_1R_2C_1C_2}{s^2R_1R_2C_1C_2 + sR_2(C_1 + C_2) + 1}$\n- (2) $R_1 = 40.0\\ \\text{k}\\Omega$, $Q = 1.00$\n",
   "schema_version": 1,
   "sections": [
     {
@@ -119,11 +132,16 @@
   ],
   "selection": {
     "circuit_types": [
-      "연산증폭기"
+      "연산증폭기",
+      "Sallen-Key",
+      "고역 통과 필터"
     ],
-    "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+    "classification_note": "C1·C2 직렬, R1 접지와 R2 출력 귀환, 단위 이득 버퍼인 Sallen-Key 고역 통과 회로를 확인했다. (2) R1과 Q를 구하려면 전달함수 분모의 ωn²·ωn/Q 계수 비교가 필요하다. 전사 원문·조건·회로 crop/재그림·기존 풀이에 근거한 분류 검토이며 정답 독립 검산이나 수업 범위 승인이 아니다.",
     "evidence_sections": [
+      "원문",
+      "조건",
       "구할 것",
+      "회로 — Fig Q4",
       "풀이"
     ],
     "learning_goals": [
@@ -131,24 +149,32 @@
       "$\\omega_n = 50\\ \\text{M rad/s}$가 되도록 하는 $R_1$ 값, 그리고 2차 filter의 $Q$ 값"
     ],
     "required_concepts": [
+      "이상적 연산증폭기와 가상 단락",
+      "전압 팔로워",
       "연산증폭기 2차 능동 필터",
-      "s 영역 KCL과 전달 함수"
+      "s 영역 KCL과 전달 함수",
+      "고유 주파수와 Q의 계수 비교"
     ],
-    "review_status": "draft",
+    "review_status": "reviewed",
     "reviewed_content_sha256": "92774df7fc772a54f1ece37dc996fa4338ded4359a7e580aae41e47291f7b4f1",
-    "status": "draft",
+    "status": "reviewed",
     "subpart_requirements": [
       {
         "label": "1",
         "required_concepts": [
+          "이상적 연산증폭기와 가상 단락",
+          "전압 팔로워",
+          "연산증폭기 2차 능동 필터",
           "s 영역 KCL과 전달 함수"
         ]
       },
       {
         "label": "2",
         "required_concepts": [
+          "이상적 연산증폭기와 가상 단락",
           "연산증폭기 2차 능동 필터",
-          "s 영역 KCL과 전달 함수"
+          "s 영역 KCL과 전달 함수",
+          "고유 주파수와 Q의 계수 비교"
         ]
       }
     ],
@@ -161,6 +187,9 @@
       "ask_md": "회로의 전달함수 $V_{out}/V_{in}$을 $R_1$, $R_2$, $C_1$, $C_2$로 나타낸 식",
       "label": "1",
       "required_concepts": [
+        "이상적 연산증폭기와 가상 단락",
+        "전압 팔로워",
+        "연산증폭기 2차 능동 필터",
         "s 영역 KCL과 전달 함수"
       ]
     },
@@ -168,8 +197,10 @@
       "ask_md": "$\\omega_n = 50\\ \\text{M rad/s}$가 되도록 하는 $R_1$ 값, 그리고 2차 filter의 $Q$ 값",
       "label": "2",
       "required_concepts": [
+        "이상적 연산증폭기와 가상 단락",
         "연산증폭기 2차 능동 필터",
-        "s 영역 KCL과 전달 함수"
+        "s 영역 KCL과 전달 함수",
+        "고유 주파수와 Q의 계수 비교"
       ]
     }
   ],

@@ -24,7 +24,7 @@
   ],
   "id": "2016-1_중간-Q2",
   "input_hashes": {
-    "from_the_past/md/2016-1_중간/Q2.md": "4112f42d28f8ee3a055176e3024f7173677a8c1ebf1915ed47a26b62dca16be1",
+    "from_the_past/md/2016-1_중간/Q2.md": "4a46b4ddad17f9053173dfbaa8b32f7019ba3c6fcb9c0f19d3e62c9436b56271",
     "from_the_past/md/2016-1_중간/exam.yaml": "f279eef434d2fa9bed0572476f81b3e5601d3f087e6822a76e77a5ecef130801",
     "from_the_past/md/2016-1_중간/figures/fig-Q2.png": "dce87befad5da857950b3731302e4aa42a2b42b7b720fcaac74767a9ba325228",
     "from_the_past/md/2016-1_중간/figures/figures.yaml": "56bcf2f85f19883d51c37a6e6c7cb3024c9f1a31cd0e467793ef613e3784a235",
@@ -53,9 +53,12 @@
         "캐스코드",
         "차동"
       ],
-      "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+      "classification_note": "Q3·Q4 전류비의 IS 소거가 (1), RC∥ro가 차동 이득, Q1·Q2 캐스코드 꼬리의 ro1∥rπ2가 CM 이득의 근거다. ΔRC가 CM-DM 변환을 만들므로 (4)·(5)에 불일치를 명시했다. VT=26mV와 차동 출력 위치·부호는 원문 미지정인 본문 가정이며 CM은 단일 출력이다. 원문 전사·회로 원본 크롭·재작성 이미지·풀이를 대조한 분류 검토이며 정답 검산이나 수업 범위 승인이 아니다.",
       "evidence_sections": [
+        "원문",
+        "조건",
         "구할 것",
+        "회로 — Fig Q2",
         "풀이"
       ],
       "learning_goals": [
@@ -67,31 +70,49 @@
       ],
       "required_concepts": [
         "차동 증폭기",
-        "캐스코드",
         "공통 모드·차동 입력 범위",
+        "BJT 지수 전류식과 전류비",
+        "차동 반회로와 가상 접지",
+        "소신호 파라미터(gm)",
+        "유한 출력 저항(ro)",
+        "소신호 전압 이득",
+        "캐스코드",
+        "유한 β와 rπ",
+        "출력 저항",
         "공통 모드 해석",
         "소자·부하 불일치와 CM-DM 변환",
-        "CMRR",
-        "소신호 전압 이득"
+        "CMRR"
       ],
-      "review_status": "draft",
+      "review_status": "reviewed",
       "reviewed_content_sha256": "6803f3ca3a25b15d689866da64b8afc77621f1f9b0c20e4b18d205cd2e4ac85b",
       "subpart_requirements": [
         {
           "label": "1",
           "required_concepts": [
-            "공통 모드·차동 입력 범위"
+            "차동 증폭기",
+            "공통 모드·차동 입력 범위",
+            "BJT 지수 전류식과 전류비"
           ]
         },
         {
           "label": "2",
           "required_concepts": [
+            "차동 증폭기",
+            "차동 반회로와 가상 접지",
+            "소신호 파라미터(gm)",
+            "유한 출력 저항(ro)",
             "소신호 전압 이득"
           ]
         },
         {
           "label": "3",
           "required_concepts": [
+            "차동 증폭기",
+            "캐스코드",
+            "소신호 파라미터(gm)",
+            "유한 β와 rπ",
+            "유한 출력 저항(ro)",
+            "출력 저항",
             "공통 모드 해석",
             "소신호 전압 이득"
           ]
@@ -99,21 +120,40 @@
         {
           "label": "4",
           "required_concepts": [
+            "차동 증폭기",
+            "캐스코드",
+            "소신호 파라미터(gm)",
+            "유한 β와 rπ",
+            "유한 출력 저항(ro)",
+            "출력 저항",
             "공통 모드 해석",
+            "소자·부하 불일치와 CM-DM 변환",
             "소신호 전압 이득"
           ]
         },
         {
           "label": "5",
           "required_concepts": [
-            "CMRR",
-            "공통 모드 해석"
+            "차동 증폭기",
+            "차동 반회로와 가상 접지",
+            "캐스코드",
+            "소신호 파라미터(gm)",
+            "유한 β와 rπ",
+            "유한 출력 저항(ro)",
+            "출력 저항",
+            "공통 모드 해석",
+            "소자·부하 불일치와 CM-DM 변환",
+            "소신호 전압 이득",
+            "CMRR"
           ]
         }
       ],
       "topics": [
         "차동 증폭기",
-        "캐스코드"
+        "캐스코드",
+        "공통 모드 해석",
+        "소자·부하 불일치와 CM-DM 변환",
+        "CMRR"
       ]
     },
     "source": "../../2013-2019_중간/2016-1_중간_모범답안.pdf",
@@ -123,7 +163,7 @@
       10
     ]
   },
-  "raw_md": "---\nid: 2016-1_중간-Q2\nkind: 기출\nexam: \"2016-1 중간고사\"\nnumber: \"2\"\npoints: 25\nsource: ../../2013-2019_중간/2016-1_중간_모범답안.pdf\npdf_page: 3\nsource_lang: en\nfigures:\n  - {id: \"Q2\", role: problem, panels: []}\ntextbook_chapters: [9, 10]\ndepends_on: []\nrefs: []\nselection:\n  topics:\n  - 차동 증폭기\n  - 캐스코드\n  circuit_types:\n  - 바이폴라\n  - 캐스코드\n  - 차동\n  required_concepts:\n  - 차동 증폭기\n  - 캐스코드\n  - 공통 모드·차동 입력 범위\n  - 공통 모드 해석\n  - 소자·부하 불일치와 CM-DM 변환\n  - CMRR\n  - 소신호 전압 이득\n  learning_goals:\n  - $Q_3$, $Q_4$의 베이스 폭을 두 배로 하면 차동 입력 범위가 늘어나는지 O / X로 답함\n  - $\\Delta R_C = 0$일 때 차동 이득 $A_{DM}$\n  - $\\Delta R_C = 0$일 때 공통 모드 이득 $A_{CM}$\n  - $\\Delta R_C/R_C = 1\\%$일 때 공통 모드 입력 → 차동 출력 이득 $A_{CM-DM}$\n  - CMRR\n  evidence_sections:\n  - 구할 것\n  - 풀이\n  subpart_requirements:\n  - label: '1'\n    required_concepts:\n    - 공통 모드·차동 입력 범위\n  - label: '2'\n    required_concepts:\n    - 소신호 전압 이득\n  - label: '3'\n    required_concepts:\n    - 공통 모드 해석\n    - 소신호 전압 이득\n  - label: '4'\n    required_concepts:\n    - 공통 모드 해석\n    - 소신호 전압 이득\n  - label: '5'\n    required_concepts:\n    - CMRR\n    - 공통 모드 해석\n  review_status: draft\n  reviewed_content_sha256: 6803f3ca3a25b15d689866da64b8afc77621f1f9b0c20e4b18d205cd2e4ac85b\n  classification_note: 제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.\n---\n# 기출 2016-1 중간 2 — 캐스코드 꼬리 전류원과 컬렉터 저항 불일치 ΔR_C가 있는 바이폴라 차동쌍의 A_DM, A_CM, A_CM-DM, CMRR\n\n## 원문\n$I_{Q1,E} = 2\\text{mA}$, $V_{A,n} = 10\\text{V}$, $R_C = 10\\text{kohm}$, $\\beta = 100$ (25pt)\n\n1) Doubling base width of Q3 and Q4 increases differential input range ( O / X ) (5pt)\n\n2) Calculate differential gain $A_{DM}$ when $\\Delta R_C = 0$ (5pt)\n\n3) Calculate common-mode gain $A_{CM}$ when $\\Delta R_C = 0$ (5pt)\n\n4) Calculate common-mode input to differential output gain $A_{CM-DM}$ when $\\Delta R_C/R_C = 1\\%$ (5pt)\n\n5) Calculate CMRR (5pt)\n\n## 조건\n- 회로: 그림 Q2\n- $I_{Q1,E} = 2\\ \\text{mA}$ ($Q_1$ 이미터 전류, 괄호 안은 원문에 없음)\n- $V_{A,n} = 10\\ \\text{V}$\n- $R_C = 10\\ \\text{k}\\Omega$ (원문은 \"10kohm\"으로 적음)\n- $\\beta = 100$\n- 오른쪽 컬렉터 저항은 $R_C + \\Delta R_C$ (그림 라벨)\n- (2), (3) 전용: $\\Delta R_C = 0$\n- (4) 전용: $\\Delta R_C/R_C = 1\\%$\n- $V_T$ 값과 바이어스 전압 $V_{b1}$, $V_{b2}$, $V_{CC}$ 값은 주어지지 않음 (원문에 없음)\n- 출력 단자는 그림에 인쇄되지 않음. 차동 출력은 $Q_3$, $Q_4$ 컬렉터 사이로 봄 (원문에 없음)\n\n## 구할 것\n- (1) $Q_3$, $Q_4$의 베이스 폭을 두 배로 하면 차동 입력 범위가 늘어나는지 O / X로 답함\n- (2) $\\Delta R_C = 0$일 때 차동 이득 $A_{DM}$\n- (3) $\\Delta R_C = 0$일 때 공통 모드 이득 $A_{CM}$\n- (4) $\\Delta R_C/R_C = 1\\%$일 때 공통 모드 입력 → 차동 출력 이득 $A_{CM-DM}$\n- (5) CMRR\n\n## 회로 — Fig Q2\n```spice\nRC1  VCC  n1    {R_C}\nRC2  VCC  n2    {R_C+ΔR_C}   ; 인쇄 라벨 \"R_C +\" / \"ΔR_C\" (두 줄)\nQ3   n1   Vin1  n3   npn\nQ4   n2   Vin2  n3   npn     ; 좌우 반전 (베이스 오른쪽)\nQ2   n3   Vb2   n4   npn\nQ1   n4   Vb1   0    npn\n* n1, n2 = Q3, Q4 컬렉터 (출력 단자·라벨 인쇄 없음, 원문에 없음). n3 = 꼬리 노드, n4 = Q2 이미터–Q1 컬렉터 (라벨 없음)\n```\n- 단자: VCC = 전원, 값 미지정 (가로 레일) / Vin1, Vin2 = 입력 (선 끝) / Vb2, Vb1 = 바이어스 전압, 값 미지정 (선 끝)\n- 표시: 노드 라벨 V_CC (레일 오른쪽 끝), V_in1 (왼쪽 입력 선 왼쪽), V_in2 (오른쪽 입력 선 오른쪽), V_b2, V_b1 (각 선 끝 왼쪽) / 소자 라벨 R_C (왼쪽 저항 왼쪽), R_C + ΔR_C (오른쪽 저항 오른쪽, \"R_C +\"와 \"ΔR_C\" 두 줄), Q_3 (Q3 오른쪽), Q_4 (Q4 왼쪽), Q_2 (Q2 오른쪽), Q_1 (Q1 오른쪽) / 부호 없음 / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 맨 위 굵은 가로 레일 V_CC (오른쪽 끝에 라벨) / 왼쪽 세로줄 위→아래 R_C, Q3 / 오른쪽 세로줄 위→아래 R_C + ΔR_C, Q4 / 두 저항은 레일에 매달린 세로 저항 / Q3 npn 보통 방향(베이스 왼쪽, 컬렉터 오른쪽 위, 이미터 오른쪽 아래·화살표 바깥), Q4 npn 좌우 반전(베이스 오른쪽, 컬렉터 왼쪽 위, 이미터 왼쪽 아래·화살표 바깥) / Q3, Q4 이미터에서 세로선이 내려가 가로선으로 이어지고, 가운데 n3 접속점에서 아래로 Q2 컬렉터 / 가운데 세로줄 위→아래 n3, Q2, Q1, 접지 / Q2, Q1 npn 보통 방향(베이스 왼쪽, 컬렉터 위, 이미터 오른쪽 아래·화살표 바깥) / Q2 이미터에서 세로선이 아래로 내려가 Q1 컬렉터 / V_in1 선 → Q3 베이스, Q4 베이스 → V_in2 선, V_b2 선 → Q2 베이스, V_b1 선 → Q1 베이스 / Q1 이미터 아래 접지 / 접속점 (세 갈래 이상, 1곳): ① n3 = 왼쪽 Q3 이미터 선 + 오른쪽 Q4 이미터 선 + 아래 Q2 컬렉터 (점) / 교차: 없음\n\n![Q2](figures/fig-Q2.png)\n> 참고: 답안지 손글씨가 겹침 (두 컬렉터 옆에 손으로 그린 출력 원과 \"+ Vout −\", n3 아래 가로 획과 \"↓ Rout,2\"). 출력 원과 V_out 라벨은 손글씨라 넷리스트에 넣지 않음\n\n## 힌트\n### (3) 꼬리는 캐스코드 전류원\n- $V_{b1}$, $V_{b2}$는 DC라 $Q_1$은 $Q_2$ 이미터에 달린 저항 $r_{O1}$로만 보이고, 꼬리는 퇴화된 $Q_2$의 컬렉터에서 본 저항이 된다\n- 공통 모드 입력에서는 두 반쪽이 같은 꼬리를 나눠 쓰므로 반회로의 이미터 저항은 꼬리 저항의 두 배다\n\n## 풀이\n### (1) 베이스 폭과 입력 범위\n- $I_{C3}/I_{C4} = \\exp[(V_{in1} - V_{in2})/V_T]$에 $I_S$가 없어 차동 입력 범위는 $V_T$로만 정해진다\n- 베이스 폭을 두 배로 해 $I_S$가 절반이 되어도 범위는 그대로: **X**\n### (2) $A_{DM}$\n- $V_T = 26\\ \\text{mV}$(조건에 없음), 베이스 전류 무시: $I_{C3} = I_{Q1,E}/2 = 1\\ \\text{mA}$, $g_{m3} = 38.5\\ \\text{mS}$\n- $Q_3$, $Q_4$ 컬렉터 전압 차, 이미터가 가상 접지라 $r_{O3} = V_{A,n}/I_{C3} = 10.0\\ \\text{k}\\Omega$가 $R_C$와 병렬: $A_{DM} = -g_{m3}(R_C \\parallel r_{O3}) = -192$\n### (3) 꼬리 저항과 $A_{CM}$\n- $Q_2$: $g_{m2} = 76.9\\ \\text{mS}$, $r_{\\pi 2} = 1.30\\ \\text{k}\\Omega$, $r_{O1} = r_{O2} = 5.00\\ \\text{k}\\Omega$\n- $Q_1$은 $Q_2$ 이미터의 $r_{O1}$: 꼬리 저항 $R_{EE} \\approx g_{m2} r_{O2}(r_{O1} \\parallel r_{\\pi 2}) = 397\\ \\text{k}\\Omega$\n- 반회로 이미터 $2R_{EE}$, $r_{O3}$ 무시(교재 식): $A_{CM} = -R_C/(1/g_{m3} + 2R_{EE}) = -0.0126$\n### (4)·(5) $A_{CM-DM}$와 CMRR\n- (4) $A_{CM-DM} = \\Delta R_C/(1/g_{m3} + 2R_{EE}) = 1.26 \\times 10^{-4}$\n- (5) $\\text{CMRR} = |A_{DM}/A_{CM-DM}| = 1.53 \\times 10^{6}$\n### 답\n- (1) X\n- (2) $A_{DM} = -192$\n- (3) $A_{CM} = -0.0126$ (한쪽 출력)\n- (4) $A_{CM-DM} = 1.26 \\times 10^{-4}$\n- (5) $\\text{CMRR} = 1.53 \\times 10^{6}$ ($123.7\\ \\text{dB}$)\n",
+  "raw_md": "---\nid: 2016-1_중간-Q2\nkind: 기출\nexam: \"2016-1 중간고사\"\nnumber: \"2\"\npoints: 25\nsource: ../../2013-2019_중간/2016-1_중간_모범답안.pdf\npdf_page: 3\nsource_lang: en\nfigures:\n  - {id: \"Q2\", role: problem, panels: []}\ntextbook_chapters: [9, 10]\ndepends_on: []\nrefs: []\nselection:\n  topics:\n  - 차동 증폭기\n  - 캐스코드\n  - 공통 모드 해석\n  - 소자·부하 불일치와 CM-DM 변환\n  - CMRR\n  circuit_types:\n  - 바이폴라\n  - 캐스코드\n  - 차동\n  required_concepts:\n  - 차동 증폭기\n  - 공통 모드·차동 입력 범위\n  - BJT 지수 전류식과 전류비\n  - 차동 반회로와 가상 접지\n  - 소신호 파라미터(gm)\n  - 유한 출력 저항(ro)\n  - 소신호 전압 이득\n  - 캐스코드\n  - 유한 β와 rπ\n  - 출력 저항\n  - 공통 모드 해석\n  - 소자·부하 불일치와 CM-DM 변환\n  - CMRR\n  learning_goals:\n  - $Q_3$, $Q_4$의 베이스 폭을 두 배로 하면 차동 입력 범위가 늘어나는지 O / X로 답함\n  - $\\Delta R_C = 0$일 때 차동 이득 $A_{DM}$\n  - $\\Delta R_C = 0$일 때 공통 모드 이득 $A_{CM}$\n  - $\\Delta R_C/R_C = 1\\%$일 때 공통 모드 입력 → 차동 출력 이득 $A_{CM-DM}$\n  - CMRR\n  evidence_sections:\n  - 원문\n  - 조건\n  - 구할 것\n  - 회로 — Fig Q2\n  - 풀이\n  subpart_requirements:\n  - label: '1'\n    required_concepts:\n    - 차동 증폭기\n    - 공통 모드·차동 입력 범위\n    - BJT 지수 전류식과 전류비\n  - label: '2'\n    required_concepts:\n    - 차동 증폭기\n    - 차동 반회로와 가상 접지\n    - 소신호 파라미터(gm)\n    - 유한 출력 저항(ro)\n    - 소신호 전압 이득\n  - label: '3'\n    required_concepts:\n    - 차동 증폭기\n    - 캐스코드\n    - 소신호 파라미터(gm)\n    - 유한 β와 rπ\n    - 유한 출력 저항(ro)\n    - 출력 저항\n    - 공통 모드 해석\n    - 소신호 전압 이득\n  - label: '4'\n    required_concepts:\n    - 차동 증폭기\n    - 캐스코드\n    - 소신호 파라미터(gm)\n    - 유한 β와 rπ\n    - 유한 출력 저항(ro)\n    - 출력 저항\n    - 공통 모드 해석\n    - 소자·부하 불일치와 CM-DM 변환\n    - 소신호 전압 이득\n  - label: '5'\n    required_concepts:\n    - 차동 증폭기\n    - 차동 반회로와 가상 접지\n    - 캐스코드\n    - 소신호 파라미터(gm)\n    - 유한 β와 rπ\n    - 유한 출력 저항(ro)\n    - 출력 저항\n    - 공통 모드 해석\n    - 소자·부하 불일치와 CM-DM 변환\n    - 소신호 전압 이득\n    - CMRR\n  review_status: reviewed\n  reviewed_content_sha256: 6803f3ca3a25b15d689866da64b8afc77621f1f9b0c20e4b18d205cd2e4ac85b\n  classification_note: Q3·Q4 전류비의 IS 소거가 (1), RC∥ro가 차동 이득, Q1·Q2 캐스코드 꼬리의 ro1∥rπ2가 CM 이득의 근거다. ΔRC가 CM-DM 변환을 만들므로 (4)·(5)에 불일치를 명시했다. VT=26mV와 차동 출력 위치·부호는 원문 미지정인 본문 가정이며 CM은 단일 출력이다. 원문 전사·회로 원본 크롭·재작성 이미지·풀이를 대조한 분류 검토이며 정답 검산이나 수업 범위 승인이 아니다.\n---\n# 기출 2016-1 중간 2 — 캐스코드 꼬리 전류원과 컬렉터 저항 불일치 ΔR_C가 있는 바이폴라 차동쌍의 A_DM, A_CM, A_CM-DM, CMRR\n\n## 원문\n$I_{Q1,E} = 2\\text{mA}$, $V_{A,n} = 10\\text{V}$, $R_C = 10\\text{kohm}$, $\\beta = 100$ (25pt)\n\n1) Doubling base width of Q3 and Q4 increases differential input range ( O / X ) (5pt)\n\n2) Calculate differential gain $A_{DM}$ when $\\Delta R_C = 0$ (5pt)\n\n3) Calculate common-mode gain $A_{CM}$ when $\\Delta R_C = 0$ (5pt)\n\n4) Calculate common-mode input to differential output gain $A_{CM-DM}$ when $\\Delta R_C/R_C = 1\\%$ (5pt)\n\n5) Calculate CMRR (5pt)\n\n## 조건\n- 회로: 그림 Q2\n- $I_{Q1,E} = 2\\ \\text{mA}$ ($Q_1$ 이미터 전류, 괄호 안은 원문에 없음)\n- $V_{A,n} = 10\\ \\text{V}$\n- $R_C = 10\\ \\text{k}\\Omega$ (원문은 \"10kohm\"으로 적음)\n- $\\beta = 100$\n- 오른쪽 컬렉터 저항은 $R_C + \\Delta R_C$ (그림 라벨)\n- (2), (3) 전용: $\\Delta R_C = 0$\n- (4) 전용: $\\Delta R_C/R_C = 1\\%$\n- $V_T$ 값과 바이어스 전압 $V_{b1}$, $V_{b2}$, $V_{CC}$ 값은 주어지지 않음 (원문에 없음)\n- 출력 단자는 그림에 인쇄되지 않음. 차동 출력은 $Q_3$, $Q_4$ 컬렉터 사이로 봄 (원문에 없음)\n\n## 구할 것\n- (1) $Q_3$, $Q_4$의 베이스 폭을 두 배로 하면 차동 입력 범위가 늘어나는지 O / X로 답함\n- (2) $\\Delta R_C = 0$일 때 차동 이득 $A_{DM}$\n- (3) $\\Delta R_C = 0$일 때 공통 모드 이득 $A_{CM}$\n- (4) $\\Delta R_C/R_C = 1\\%$일 때 공통 모드 입력 → 차동 출력 이득 $A_{CM-DM}$\n- (5) CMRR\n\n## 회로 — Fig Q2\n```spice\nRC1  VCC  n1    {R_C}\nRC2  VCC  n2    {R_C+ΔR_C}   ; 인쇄 라벨 \"R_C +\" / \"ΔR_C\" (두 줄)\nQ3   n1   Vin1  n3   npn\nQ4   n2   Vin2  n3   npn     ; 좌우 반전 (베이스 오른쪽)\nQ2   n3   Vb2   n4   npn\nQ1   n4   Vb1   0    npn\n* n1, n2 = Q3, Q4 컬렉터 (출력 단자·라벨 인쇄 없음, 원문에 없음). n3 = 꼬리 노드, n4 = Q2 이미터–Q1 컬렉터 (라벨 없음)\n```\n- 단자: VCC = 전원, 값 미지정 (가로 레일) / Vin1, Vin2 = 입력 (선 끝) / Vb2, Vb1 = 바이어스 전압, 값 미지정 (선 끝)\n- 표시: 노드 라벨 V_CC (레일 오른쪽 끝), V_in1 (왼쪽 입력 선 왼쪽), V_in2 (오른쪽 입력 선 오른쪽), V_b2, V_b1 (각 선 끝 왼쪽) / 소자 라벨 R_C (왼쪽 저항 왼쪽), R_C + ΔR_C (오른쪽 저항 오른쪽, \"R_C +\"와 \"ΔR_C\" 두 줄), Q_3 (Q3 오른쪽), Q_4 (Q4 왼쪽), Q_2 (Q2 오른쪽), Q_1 (Q1 오른쪽) / 부호 없음 / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 맨 위 굵은 가로 레일 V_CC (오른쪽 끝에 라벨) / 왼쪽 세로줄 위→아래 R_C, Q3 / 오른쪽 세로줄 위→아래 R_C + ΔR_C, Q4 / 두 저항은 레일에 매달린 세로 저항 / Q3 npn 보통 방향(베이스 왼쪽, 컬렉터 오른쪽 위, 이미터 오른쪽 아래·화살표 바깥), Q4 npn 좌우 반전(베이스 오른쪽, 컬렉터 왼쪽 위, 이미터 왼쪽 아래·화살표 바깥) / Q3, Q4 이미터에서 세로선이 내려가 가로선으로 이어지고, 가운데 n3 접속점에서 아래로 Q2 컬렉터 / 가운데 세로줄 위→아래 n3, Q2, Q1, 접지 / Q2, Q1 npn 보통 방향(베이스 왼쪽, 컬렉터 위, 이미터 오른쪽 아래·화살표 바깥) / Q2 이미터에서 세로선이 아래로 내려가 Q1 컬렉터 / V_in1 선 → Q3 베이스, Q4 베이스 → V_in2 선, V_b2 선 → Q2 베이스, V_b1 선 → Q1 베이스 / Q1 이미터 아래 접지 / 접속점 (세 갈래 이상, 1곳): ① n3 = 왼쪽 Q3 이미터 선 + 오른쪽 Q4 이미터 선 + 아래 Q2 컬렉터 (점) / 교차: 없음\n\n![Q2](figures/fig-Q2.png)\n> 참고: 답안지 손글씨가 겹침 (두 컬렉터 옆에 손으로 그린 출력 원과 \"+ Vout −\", n3 아래 가로 획과 \"↓ Rout,2\"). 출력 원과 V_out 라벨은 손글씨라 넷리스트에 넣지 않음\n\n## 힌트\n### (3) 꼬리는 캐스코드 전류원\n- $V_{b1}$, $V_{b2}$는 DC라 $Q_1$은 $Q_2$ 이미터에 달린 저항 $r_{O1}$로만 보이고, 꼬리는 퇴화된 $Q_2$의 컬렉터에서 본 저항이 된다\n- 공통 모드 입력에서는 두 반쪽이 같은 꼬리를 나눠 쓰므로 반회로의 이미터 저항은 꼬리 저항의 두 배다\n\n## 풀이\n### (1) 베이스 폭과 입력 범위\n- $I_{C3}/I_{C4} = \\exp[(V_{in1} - V_{in2})/V_T]$에 $I_S$가 없어 차동 입력 범위는 $V_T$로만 정해진다\n- 베이스 폭을 두 배로 해 $I_S$가 절반이 되어도 범위는 그대로: **X**\n### (2) $A_{DM}$\n- $V_T = 26\\ \\text{mV}$(조건에 없음), 베이스 전류 무시: $I_{C3} = I_{Q1,E}/2 = 1\\ \\text{mA}$, $g_{m3} = 38.5\\ \\text{mS}$\n- $Q_3$, $Q_4$ 컬렉터 전압 차, 이미터가 가상 접지라 $r_{O3} = V_{A,n}/I_{C3} = 10.0\\ \\text{k}\\Omega$가 $R_C$와 병렬: $A_{DM} = -g_{m3}(R_C \\parallel r_{O3}) = -192$\n### (3) 꼬리 저항과 $A_{CM}$\n- $Q_2$: $g_{m2} = 76.9\\ \\text{mS}$, $r_{\\pi 2} = 1.30\\ \\text{k}\\Omega$, $r_{O1} = r_{O2} = 5.00\\ \\text{k}\\Omega$\n- $Q_1$은 $Q_2$ 이미터의 $r_{O1}$: 꼬리 저항 $R_{EE} \\approx g_{m2} r_{O2}(r_{O1} \\parallel r_{\\pi 2}) = 397\\ \\text{k}\\Omega$\n- 반회로 이미터 $2R_{EE}$, $r_{O3}$ 무시(교재 식): $A_{CM} = -R_C/(1/g_{m3} + 2R_{EE}) = -0.0126$\n### (4)·(5) $A_{CM-DM}$와 CMRR\n- (4) $A_{CM-DM} = \\Delta R_C/(1/g_{m3} + 2R_{EE}) = 1.26 \\times 10^{-4}$\n- (5) $\\text{CMRR} = |A_{DM}/A_{CM-DM}| = 1.53 \\times 10^{6}$\n### 답\n- (1) X\n- (2) $A_{DM} = -192$\n- (3) $A_{CM} = -0.0126$ (한쪽 출력)\n- (4) $A_{CM-DM} = 1.26 \\times 10^{-4}$\n- (5) $\\text{CMRR} = 1.53 \\times 10^{6}$ ($123.7\\ \\text{dB}$)\n",
   "schema_version": 1,
   "sections": [
     {
@@ -157,9 +197,12 @@
       "캐스코드",
       "차동"
     ],
-    "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+    "classification_note": "Q3·Q4 전류비의 IS 소거가 (1), RC∥ro가 차동 이득, Q1·Q2 캐스코드 꼬리의 ro1∥rπ2가 CM 이득의 근거다. ΔRC가 CM-DM 변환을 만들므로 (4)·(5)에 불일치를 명시했다. VT=26mV와 차동 출력 위치·부호는 원문 미지정인 본문 가정이며 CM은 단일 출력이다. 원문 전사·회로 원본 크롭·재작성 이미지·풀이를 대조한 분류 검토이며 정답 검산이나 수업 범위 승인이 아니다.",
     "evidence_sections": [
+      "원문",
+      "조건",
       "구할 것",
+      "회로 — Fig Q2",
       "풀이"
     ],
     "learning_goals": [
@@ -171,32 +214,50 @@
     ],
     "required_concepts": [
       "차동 증폭기",
-      "캐스코드",
       "공통 모드·차동 입력 범위",
+      "BJT 지수 전류식과 전류비",
+      "차동 반회로와 가상 접지",
+      "소신호 파라미터(gm)",
+      "유한 출력 저항(ro)",
+      "소신호 전압 이득",
+      "캐스코드",
+      "유한 β와 rπ",
+      "출력 저항",
       "공통 모드 해석",
       "소자·부하 불일치와 CM-DM 변환",
-      "CMRR",
-      "소신호 전압 이득"
+      "CMRR"
     ],
-    "review_status": "draft",
+    "review_status": "reviewed",
     "reviewed_content_sha256": "6803f3ca3a25b15d689866da64b8afc77621f1f9b0c20e4b18d205cd2e4ac85b",
-    "status": "draft",
+    "status": "reviewed",
     "subpart_requirements": [
       {
         "label": "1",
         "required_concepts": [
-          "공통 모드·차동 입력 범위"
+          "차동 증폭기",
+          "공통 모드·차동 입력 범위",
+          "BJT 지수 전류식과 전류비"
         ]
       },
       {
         "label": "2",
         "required_concepts": [
+          "차동 증폭기",
+          "차동 반회로와 가상 접지",
+          "소신호 파라미터(gm)",
+          "유한 출력 저항(ro)",
           "소신호 전압 이득"
         ]
       },
       {
         "label": "3",
         "required_concepts": [
+          "차동 증폭기",
+          "캐스코드",
+          "소신호 파라미터(gm)",
+          "유한 β와 rπ",
+          "유한 출력 저항(ro)",
+          "출력 저항",
           "공통 모드 해석",
           "소신호 전압 이득"
         ]
@@ -204,21 +265,40 @@
       {
         "label": "4",
         "required_concepts": [
+          "차동 증폭기",
+          "캐스코드",
+          "소신호 파라미터(gm)",
+          "유한 β와 rπ",
+          "유한 출력 저항(ro)",
+          "출력 저항",
           "공통 모드 해석",
+          "소자·부하 불일치와 CM-DM 변환",
           "소신호 전압 이득"
         ]
       },
       {
         "label": "5",
         "required_concepts": [
-          "CMRR",
-          "공통 모드 해석"
+          "차동 증폭기",
+          "차동 반회로와 가상 접지",
+          "캐스코드",
+          "소신호 파라미터(gm)",
+          "유한 β와 rπ",
+          "유한 출력 저항(ro)",
+          "출력 저항",
+          "공통 모드 해석",
+          "소자·부하 불일치와 CM-DM 변환",
+          "소신호 전압 이득",
+          "CMRR"
         ]
       }
     ],
     "topics": [
       "차동 증폭기",
-      "캐스코드"
+      "캐스코드",
+      "공통 모드 해석",
+      "소자·부하 불일치와 CM-DM 변환",
+      "CMRR"
     ]
   },
   "subparts": [
@@ -226,13 +306,19 @@
       "ask_md": "$Q_3$, $Q_4$의 베이스 폭을 두 배로 하면 차동 입력 범위가 늘어나는지 O / X로 답함",
       "label": "1",
       "required_concepts": [
-        "공통 모드·차동 입력 범위"
+        "차동 증폭기",
+        "공통 모드·차동 입력 범위",
+        "BJT 지수 전류식과 전류비"
       ]
     },
     {
       "ask_md": "$\\Delta R_C = 0$일 때 차동 이득 $A_{DM}$",
       "label": "2",
       "required_concepts": [
+        "차동 증폭기",
+        "차동 반회로와 가상 접지",
+        "소신호 파라미터(gm)",
+        "유한 출력 저항(ro)",
         "소신호 전압 이득"
       ]
     },
@@ -240,6 +326,12 @@
       "ask_md": "$\\Delta R_C = 0$일 때 공통 모드 이득 $A_{CM}$",
       "label": "3",
       "required_concepts": [
+        "차동 증폭기",
+        "캐스코드",
+        "소신호 파라미터(gm)",
+        "유한 β와 rπ",
+        "유한 출력 저항(ro)",
+        "출력 저항",
         "공통 모드 해석",
         "소신호 전압 이득"
       ]
@@ -248,7 +340,14 @@
       "ask_md": "$\\Delta R_C/R_C = 1\\%$일 때 공통 모드 입력 → 차동 출력 이득 $A_{CM-DM}$",
       "label": "4",
       "required_concepts": [
+        "차동 증폭기",
+        "캐스코드",
+        "소신호 파라미터(gm)",
+        "유한 β와 rπ",
+        "유한 출력 저항(ro)",
+        "출력 저항",
         "공통 모드 해석",
+        "소자·부하 불일치와 CM-DM 변환",
         "소신호 전압 이득"
       ]
     },
@@ -256,8 +355,17 @@
       "ask_md": "CMRR",
       "label": "5",
       "required_concepts": [
-        "CMRR",
-        "공통 모드 해석"
+        "차동 증폭기",
+        "차동 반회로와 가상 접지",
+        "캐스코드",
+        "소신호 파라미터(gm)",
+        "유한 β와 rπ",
+        "유한 출력 저항(ro)",
+        "출력 저항",
+        "공통 모드 해석",
+        "소자·부하 불일치와 CM-DM 변환",
+        "소신호 전압 이득",
+        "CMRR"
       ]
     }
   ],

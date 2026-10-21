@@ -24,7 +24,7 @@
   ],
   "id": "2014-1_중간-Q3",
   "input_hashes": {
-    "from_the_past/md/2014-1_중간/Q3.md": "75b1d1ff3267a0e557c5a66e844508b8126572de9b993c98ffa4841209c9d965",
+    "from_the_past/md/2014-1_중간/Q3.md": "93419fd9574180b244253e77d4e60714c54c85b544a966b3f28c5da7d398c10e",
     "from_the_past/md/2014-1_중간/exam.yaml": "c06fd0dd4c3478cd5a5d6089e67fece40a6fc044a964b83703fff2b0bcae93d4",
     "from_the_past/md/2014-1_중간/figures/fig-Q3.png": "ec8f74e90555534f5ba4e7850b4879533355a5f11de17747b798d4f96cff2a8b",
     "from_the_past/md/2014-1_중간/figures/figures.yaml": "fa37f3e77b15af51134f05539f41fe0d442a474026ab4ffefc328314cc704caa",
@@ -52,9 +52,12 @@
         "MOS",
         "전류 거울"
       ],
-      "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+      "classification_note": "동일 소자의 VGS는 같지만 λ≠0이므로 VDS도 같아야 같은 전류가 흐른다. (2)는 포화 경계 VDS1=VGS−VTH에서 복사 전류를 나눠 상대·절대 오차를 구하는 문제로 단순 크기비 문제가 아니다. 전사 원문·조건·회로 원본 크롭과 재작성 그림·풀이를 대조한 분류 검토이며 정답 독립 검산이나 수업 범위 승인이 아니다.",
       "evidence_sections": [
+        "원문",
+        "조건",
         "구할 것",
+        "회로 — Fig Q3",
         "풀이"
       ],
       "learning_goals": [
@@ -63,26 +66,34 @@
       ],
       "required_concepts": [
         "전류 거울",
-        "채널 길이 변조와 전류 복사 오차"
+        "다이오드 연결 부하",
+        "채널 길이 변조와 전류 복사 오차",
+        "DC 바이어스와 동작 영역"
       ],
-      "review_status": "draft",
+      "review_status": "reviewed",
       "reviewed_content_sha256": "8c093837101af48a25f4b05dfa9d9f6c10248e8b74549d743c3a309afc258bf7",
       "subpart_requirements": [
         {
           "label": "1",
           "required_concepts": [
-            "전류 거울"
+            "전류 거울",
+            "다이오드 연결 부하",
+            "채널 길이 변조와 전류 복사 오차"
           ]
         },
         {
           "label": "2",
           "required_concepts": [
-            "전류 거울"
+            "전류 거울",
+            "다이오드 연결 부하",
+            "DC 바이어스와 동작 영역",
+            "채널 길이 변조와 전류 복사 오차"
           ]
         }
       ],
       "topics": [
-        "전류 거울"
+        "전류 거울",
+        "전류 복사 오차"
       ]
     },
     "source": "../../2013-2019_중간/2014-1_중간_모범답안.pdf",
@@ -91,7 +102,7 @@
       9
     ]
   },
-  "raw_md": "---\nid: 2014-1_중간-Q3\nkind: 기출\nexam: \"2014-1 중간고사\"\nnumber: \"3\"\npoints: 10\nsource: ../../2013-2019_중간/2014-1_중간_모범답안.pdf\npdf_page: 2\nsource_lang: ko\nfigures:\n  - {id: \"Q3\", role: problem, panels: []}\ntextbook_chapters: [9]\ndepends_on: []\nrefs: []\nselection:\n  topics:\n  - 전류 거울\n  circuit_types:\n  - MOS\n  - 전류 거울\n  required_concepts:\n  - 전류 거울\n  - 채널 길이 변조와 전류 복사 오차\n  learning_goals:\n  - $I_{copy} = I_{REF}$가 되기 위한 $M_1$의 $V_{DS1}$\n  - $I_{REF}$에 대한 $I_{copy}$의 오차 (식)\n  evidence_sections:\n  - 구할 것\n  - 풀이\n  subpart_requirements:\n  - label: '1'\n    required_concepts:\n    - 전류 거울\n  - label: '2'\n    required_concepts:\n    - 전류 거울\n  review_status: draft\n  reviewed_content_sha256: 8c093837101af48a25f4b05dfa9d9f6c10248e8b74549d743c3a309afc258bf7\n  classification_note: 제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.\n---\n# 기출 2014-1 중간 3 — λ≠0인 MOS 전류 거울에서 I_copy = I_REF가 되는 V_DS1과 복사 전류 오차\n\n## 원문\nMOS current mirror에 대해 질문에 답하시오.\n\n이 때, $M_{REF}$와 $M_1$은 동일하고 $\\lambda \\neq 0$으로 가정한다.\n\n(1) $\\lambda \\neq 0$일 때, $I_{copy} = I_{REF}$ 가 되기 위한 $M_1$의 $V_{DS1}$을 구하시오.\n\n(2) 만약 $V_{DS1} = V_{GS} - V_{TH}$ 일 때, $I_{REF}$ 에 관해 $I_{copy}$의 오차를 식으로 구하시오.\n\n## 조건\n- 회로: 그림의 MOS 전류 거울 ($M_{REF}$ 다이오드 연결, $M_1$ 복사)\n- $M_{REF}$와 $M_1$은 동일\n- $\\lambda \\neq 0$\n- (2) 전용: $V_{DS1} = V_{GS} - V_{TH}$\n- $I_{REF}$, $V_{DD}$ 값은 주어지지 않음 (원문에 없음)\n\n## 구할 것\n- (1) $I_{copy} = I_{REF}$가 되기 위한 $M_1$의 $V_{DS1}$\n- (2) $I_{REF}$에 대한 $I_{copy}$의 오차 (식)\n\n## 회로 — Fig Q3\n```spice\nIREF  VDD  X    {I_REF}\nMREF  X    X    0    nmos    ; 좌우 반전 (게이트 오른쪽), 다이오드 연결\nM1    out  X    0    nmos\n* out = I_copy 화살표가 붙은 M1 드레인 선 끝 (라벨 없음)\n* 점선 상자 \"Current Mirror\"가 M_REF, M1을 둘러쌈 (블랙박스가 아니라 묶음 표시)\n```\n- 단자: VDD = 전원, 값 미지정 (T 전원 기호) / out = I_copy 측정 단자 (선 끝)\n- 표시: 노드 라벨 V_DD (T 기호 오른쪽), X (게이트 공통선 아래, M_REF와 M1 사이) / 소자 라벨 I_REF (전류원 왼쪽), M_REF (M_REF 왼쪽), M_1 (M1 오른쪽), \"Current Mirror\" (점선 상자 안 오른쪽 끝, 두 줄) / 부호 없음 / 화살표 \"I_copy\": M1 드레인 위 세로선, 아래 방향 (M1 드레인으로 들어감), 도선 위, 글자는 화살표 오른쪽 / 수치·면적 라벨 없음\n- 배치: 왼쪽 세로줄 위→아래 VDD T 기호, I_REF 전류원 (화살표 아래), X 위 접속점, M_REF, 접지 / M_REF nmos 좌우 반전 (게이트 막대 오른쪽, 드레인 왼쪽 위, 소스 왼쪽 아래·화살표 바깥) / X 위 접속점에서 가로선이 오른쪽으로 나가 아래로 꺾여 M_REF 게이트 오른쪽의 X 게이트 접속점 (다이오드 연결) / X 게이트 접속점에서 가로선이 게이트 높이로 오른쪽 M1 게이트 / M1 nmos 보통 방향 (게이트 왼쪽, 드레인 오른쪽 위, 소스 오른쪽 아래·화살표 바깥), 드레인에서 세로선이 위로 V_DD 높이까지 올라가 선 끝 (I_copy 화살표), 소스 아래 접지 / 점선 직사각형이 X 위 접속점 바로 위부터 두 접지 아래까지 M_REF와 M1을 둘러싸고, I_REF 아래 선과 I_copy 선은 상자 위 변을 지나 들어감 / 접속점 (세 갈래 이상, 2곳): ① X 위 = 위 I_REF + 아래 M_REF 드레인 + 오른쪽 다이오드 연결선 (점) ② X 게이트 = 왼쪽 M_REF 게이트 + 위 다이오드 연결선 + 오른쪽 M1 게이트 선 (점) / 교차: 없음 (점선 상자 변은 도선이 아님)\n\n![Q3](figures/fig-Q3.png)\n\n## 풀이\n### (1) 두 소자의 전류 식\n- $M_{REF}$는 다이오드 연결이라 $V_{DS,REF} = V_{GS}$: $I_{REF} = \\frac{1}{2}\\mu_n C_{ox}\\frac{W}{L}(V_{GS} - V_{TH})^2(1 + \\lambda V_{GS})$\n- $M_1$은 같은 $V_{GS}$를 받는다: $I_{copy} = \\frac{1}{2}\\mu_n C_{ox}\\frac{W}{L}(V_{GS} - V_{TH})^2(1 + \\lambda V_{DS1})$\n### (1) $I_{copy} = I_{REF}$인 조건\n- 나누면 $I_{copy}/I_{REF} = (1 + \\lambda V_{DS1})/(1 + \\lambda V_{GS})$이고, 1이 되려면 $V_{DS1} = V_{GS}$\n### (2) 복사 전류 오차\n- $V_{DS1} = V_{GS} - V_{TH}$를 넣으면 $I_{copy} = I_{REF}\\,[1 + \\lambda(V_{GS} - V_{TH})]/(1 + \\lambda V_{GS})$\n- 오차 $\\Delta I = I_{copy} - I_{REF} = -\\lambda V_{TH} I_{REF}/(1 + \\lambda V_{GS})$\n- 상대 오차는 $-\\lambda V_{TH}/(1 + \\lambda V_{GS}) \\approx -\\lambda V_{TH}$ ($\\lambda V_{GS} \\ll 1$일 때)\n### 답\n- (1) $V_{DS1} = V_{GS}$ ($M_{REF}$의 $V_{DS}$와 같게)\n- (2) $I_{copy} - I_{REF} = -\\lambda V_{TH} I_{REF}/(1 + \\lambda V_{GS})$, 즉 $I_{copy}$가 $I_{REF}$보다 작다\n",
+  "raw_md": "---\nid: 2014-1_중간-Q3\nkind: 기출\nexam: \"2014-1 중간고사\"\nnumber: \"3\"\npoints: 10\nsource: ../../2013-2019_중간/2014-1_중간_모범답안.pdf\npdf_page: 2\nsource_lang: ko\nfigures:\n  - {id: \"Q3\", role: problem, panels: []}\ntextbook_chapters: [9]\ndepends_on: []\nrefs: []\nselection:\n  topics:\n  - 전류 거울\n  - 전류 복사 오차\n  circuit_types:\n  - MOS\n  - 전류 거울\n  required_concepts:\n  - 전류 거울\n  - 다이오드 연결 부하\n  - 채널 길이 변조와 전류 복사 오차\n  - DC 바이어스와 동작 영역\n  learning_goals:\n  - $I_{copy} = I_{REF}$가 되기 위한 $M_1$의 $V_{DS1}$\n  - $I_{REF}$에 대한 $I_{copy}$의 오차 (식)\n  evidence_sections:\n  - 원문\n  - 조건\n  - 구할 것\n  - 회로 — Fig Q3\n  - 풀이\n  subpart_requirements:\n  - label: '1'\n    required_concepts:\n    - 전류 거울\n    - 다이오드 연결 부하\n    - 채널 길이 변조와 전류 복사 오차\n  - label: '2'\n    required_concepts:\n    - 전류 거울\n    - 다이오드 연결 부하\n    - DC 바이어스와 동작 영역\n    - 채널 길이 변조와 전류 복사 오차\n  review_status: reviewed\n  reviewed_content_sha256: 8c093837101af48a25f4b05dfa9d9f6c10248e8b74549d743c3a309afc258bf7\n  classification_note: 동일 소자의 VGS는 같지만 λ≠0이므로 VDS도 같아야 같은 전류가 흐른다. (2)는 포화 경계 VDS1=VGS−VTH에서 복사 전류를 나눠 상대·절대 오차를 구하는 문제로 단순 크기비 문제가 아니다. 전사 원문·조건·회로 원본 크롭과 재작성 그림·풀이를 대조한 분류 검토이며 정답 독립 검산이나 수업 범위 승인이 아니다.\n---\n# 기출 2014-1 중간 3 — λ≠0인 MOS 전류 거울에서 I_copy = I_REF가 되는 V_DS1과 복사 전류 오차\n\n## 원문\nMOS current mirror에 대해 질문에 답하시오.\n\n이 때, $M_{REF}$와 $M_1$은 동일하고 $\\lambda \\neq 0$으로 가정한다.\n\n(1) $\\lambda \\neq 0$일 때, $I_{copy} = I_{REF}$ 가 되기 위한 $M_1$의 $V_{DS1}$을 구하시오.\n\n(2) 만약 $V_{DS1} = V_{GS} - V_{TH}$ 일 때, $I_{REF}$ 에 관해 $I_{copy}$의 오차를 식으로 구하시오.\n\n## 조건\n- 회로: 그림의 MOS 전류 거울 ($M_{REF}$ 다이오드 연결, $M_1$ 복사)\n- $M_{REF}$와 $M_1$은 동일\n- $\\lambda \\neq 0$\n- (2) 전용: $V_{DS1} = V_{GS} - V_{TH}$\n- $I_{REF}$, $V_{DD}$ 값은 주어지지 않음 (원문에 없음)\n\n## 구할 것\n- (1) $I_{copy} = I_{REF}$가 되기 위한 $M_1$의 $V_{DS1}$\n- (2) $I_{REF}$에 대한 $I_{copy}$의 오차 (식)\n\n## 회로 — Fig Q3\n```spice\nIREF  VDD  X    {I_REF}\nMREF  X    X    0    nmos    ; 좌우 반전 (게이트 오른쪽), 다이오드 연결\nM1    out  X    0    nmos\n* out = I_copy 화살표가 붙은 M1 드레인 선 끝 (라벨 없음)\n* 점선 상자 \"Current Mirror\"가 M_REF, M1을 둘러쌈 (블랙박스가 아니라 묶음 표시)\n```\n- 단자: VDD = 전원, 값 미지정 (T 전원 기호) / out = I_copy 측정 단자 (선 끝)\n- 표시: 노드 라벨 V_DD (T 기호 오른쪽), X (게이트 공통선 아래, M_REF와 M1 사이) / 소자 라벨 I_REF (전류원 왼쪽), M_REF (M_REF 왼쪽), M_1 (M1 오른쪽), \"Current Mirror\" (점선 상자 안 오른쪽 끝, 두 줄) / 부호 없음 / 화살표 \"I_copy\": M1 드레인 위 세로선, 아래 방향 (M1 드레인으로 들어감), 도선 위, 글자는 화살표 오른쪽 / 수치·면적 라벨 없음\n- 배치: 왼쪽 세로줄 위→아래 VDD T 기호, I_REF 전류원 (화살표 아래), X 위 접속점, M_REF, 접지 / M_REF nmos 좌우 반전 (게이트 막대 오른쪽, 드레인 왼쪽 위, 소스 왼쪽 아래·화살표 바깥) / X 위 접속점에서 가로선이 오른쪽으로 나가 아래로 꺾여 M_REF 게이트 오른쪽의 X 게이트 접속점 (다이오드 연결) / X 게이트 접속점에서 가로선이 게이트 높이로 오른쪽 M1 게이트 / M1 nmos 보통 방향 (게이트 왼쪽, 드레인 오른쪽 위, 소스 오른쪽 아래·화살표 바깥), 드레인에서 세로선이 위로 V_DD 높이까지 올라가 선 끝 (I_copy 화살표), 소스 아래 접지 / 점선 직사각형이 X 위 접속점 바로 위부터 두 접지 아래까지 M_REF와 M1을 둘러싸고, I_REF 아래 선과 I_copy 선은 상자 위 변을 지나 들어감 / 접속점 (세 갈래 이상, 2곳): ① X 위 = 위 I_REF + 아래 M_REF 드레인 + 오른쪽 다이오드 연결선 (점) ② X 게이트 = 왼쪽 M_REF 게이트 + 위 다이오드 연결선 + 오른쪽 M1 게이트 선 (점) / 교차: 없음 (점선 상자 변은 도선이 아님)\n\n![Q3](figures/fig-Q3.png)\n\n## 풀이\n### (1) 두 소자의 전류 식\n- $M_{REF}$는 다이오드 연결이라 $V_{DS,REF} = V_{GS}$: $I_{REF} = \\frac{1}{2}\\mu_n C_{ox}\\frac{W}{L}(V_{GS} - V_{TH})^2(1 + \\lambda V_{GS})$\n- $M_1$은 같은 $V_{GS}$를 받는다: $I_{copy} = \\frac{1}{2}\\mu_n C_{ox}\\frac{W}{L}(V_{GS} - V_{TH})^2(1 + \\lambda V_{DS1})$\n### (1) $I_{copy} = I_{REF}$인 조건\n- 나누면 $I_{copy}/I_{REF} = (1 + \\lambda V_{DS1})/(1 + \\lambda V_{GS})$이고, 1이 되려면 $V_{DS1} = V_{GS}$\n### (2) 복사 전류 오차\n- $V_{DS1} = V_{GS} - V_{TH}$를 넣으면 $I_{copy} = I_{REF}\\,[1 + \\lambda(V_{GS} - V_{TH})]/(1 + \\lambda V_{GS})$\n- 오차 $\\Delta I = I_{copy} - I_{REF} = -\\lambda V_{TH} I_{REF}/(1 + \\lambda V_{GS})$\n- 상대 오차는 $-\\lambda V_{TH}/(1 + \\lambda V_{GS}) \\approx -\\lambda V_{TH}$ ($\\lambda V_{GS} \\ll 1$일 때)\n### 답\n- (1) $V_{DS1} = V_{GS}$ ($M_{REF}$의 $V_{DS}$와 같게)\n- (2) $I_{copy} - I_{REF} = -\\lambda V_{TH} I_{REF}/(1 + \\lambda V_{GS})$, 즉 $I_{copy}$가 $I_{REF}$보다 작다\n",
   "schema_version": 1,
   "sections": [
     {
@@ -120,9 +131,12 @@
       "MOS",
       "전류 거울"
     ],
-    "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+    "classification_note": "동일 소자의 VGS는 같지만 λ≠0이므로 VDS도 같아야 같은 전류가 흐른다. (2)는 포화 경계 VDS1=VGS−VTH에서 복사 전류를 나눠 상대·절대 오차를 구하는 문제로 단순 크기비 문제가 아니다. 전사 원문·조건·회로 원본 크롭과 재작성 그림·풀이를 대조한 분류 검토이며 정답 독립 검산이나 수업 범위 승인이 아니다.",
     "evidence_sections": [
+      "원문",
+      "조건",
       "구할 것",
+      "회로 — Fig Q3",
       "풀이"
     ],
     "learning_goals": [
@@ -131,27 +145,35 @@
     ],
     "required_concepts": [
       "전류 거울",
-      "채널 길이 변조와 전류 복사 오차"
+      "다이오드 연결 부하",
+      "채널 길이 변조와 전류 복사 오차",
+      "DC 바이어스와 동작 영역"
     ],
-    "review_status": "draft",
+    "review_status": "reviewed",
     "reviewed_content_sha256": "8c093837101af48a25f4b05dfa9d9f6c10248e8b74549d743c3a309afc258bf7",
-    "status": "draft",
+    "status": "reviewed",
     "subpart_requirements": [
       {
         "label": "1",
         "required_concepts": [
-          "전류 거울"
+          "전류 거울",
+          "다이오드 연결 부하",
+          "채널 길이 변조와 전류 복사 오차"
         ]
       },
       {
         "label": "2",
         "required_concepts": [
-          "전류 거울"
+          "전류 거울",
+          "다이오드 연결 부하",
+          "DC 바이어스와 동작 영역",
+          "채널 길이 변조와 전류 복사 오차"
         ]
       }
     ],
     "topics": [
-      "전류 거울"
+      "전류 거울",
+      "전류 복사 오차"
     ]
   },
   "subparts": [
@@ -159,14 +181,19 @@
       "ask_md": "$I_{copy} = I_{REF}$가 되기 위한 $M_1$의 $V_{DS1}$",
       "label": "1",
       "required_concepts": [
-        "전류 거울"
+        "전류 거울",
+        "다이오드 연결 부하",
+        "채널 길이 변조와 전류 복사 오차"
       ]
     },
     {
       "ask_md": "$I_{REF}$에 대한 $I_{copy}$의 오차 (식)",
       "label": "2",
       "required_concepts": [
-        "전류 거울"
+        "전류 거울",
+        "다이오드 연결 부하",
+        "DC 바이어스와 동작 영역",
+        "채널 길이 변조와 전류 복사 오차"
       ]
     }
   ],

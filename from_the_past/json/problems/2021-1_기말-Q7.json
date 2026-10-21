@@ -17,7 +17,7 @@
   "figures": [],
   "id": "2021-1_기말-Q7",
   "input_hashes": {
-    "from_the_past/md/2021-1_기말/Q7.md": "03fb00e193c1699f432c6683a041fa4415340dfd1fa3407ccb1c13a98785a2e7",
+    "from_the_past/md/2021-1_기말/Q7.md": "18492fd9a229c5a842c05c7ada0f47ae6f7fc28ce5ce71837ea66cbd6c090d81",
     "from_the_past/md/2021-1_기말/exam.yaml": "bf4144b20de31b19ee273ef1f948399d29f99531d14dbfa5cf4542f41bf722aa",
     "from_the_past/md/2021-1_기말/figures/figures.yaml": "868e1927572ab223a4b07069f4cef61a6ead8489536424474910eaddf443f0b8"
   },
@@ -36,9 +36,12 @@
       "circuit_types": [
         "MOS"
       ],
-      "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+      "classification_note": "회로 그림 없는 서술형이며 드레인 AC 단락 전류 이득 1의 정의→ωT=gm/CGS→gm·CGS 대입을 모두 요구한다. CGD 무시 조건으로 Miller 효과는 요구하지 않는다. 전사 원문·조건·회로 crop/재그림·기존 풀이에 근거한 분류 검토이며 정답 독립 검산이나 수업 범위 승인이 아니다.",
       "evidence_sections": [
+        "원문",
+        "조건",
         "구할 것",
+        "회로 — 없음 (서술형)",
         "풀이"
       ],
       "learning_goals": [
@@ -46,15 +49,22 @@
       ],
       "required_concepts": [
         "MOSFET 천이 주파수",
-        "주파수 응답과 기생 커패시턴스"
+        "단락 전류 이득",
+        "주파수 응답과 기생 커패시턴스",
+        "MOS 포화 영역 전류식",
+        "MOS 트랜스컨덕턴스 gm"
       ],
-      "review_status": "draft",
+      "review_status": "reviewed",
       "reviewed_content_sha256": "27e94b97d85cfbf8be5b80ead9ea043fde099178f7d000d50be0e64987aaee9f",
       "subpart_requirements": [
         {
           "label": "main",
           "required_concepts": [
-            "MOSFET 천이 주파수"
+            "MOSFET 천이 주파수",
+            "단락 전류 이득",
+            "주파수 응답과 기생 커패시턴스",
+            "MOS 포화 영역 전류식",
+            "MOS 트랜스컨덕턴스 gm"
           ]
         }
       ],
@@ -69,7 +79,7 @@
       11
     ]
   },
-  "raw_md": "---\nid: 2021-1_기말-Q7\nkind: 기출\nexam: \"2021-1 기말고사\"\nnumber: \"7\"\npoints: 10\nsource: ../../2021중간_기말/기말/Final0617_3p_rev.pdf\npdf_page: 1\nsource_lang: ko\nfigures: []\ntextbook_chapters: [11]\ndepends_on: []\nrefs: []\nselection:\n  topics:\n  - MOSFET 천이 주파수\n  - 주파수 응답과 기생 커패시턴스\n  circuit_types:\n  - MOS\n  required_concepts:\n  - MOSFET 천이 주파수\n  - 주파수 응답과 기생 커패시턴스\n  learning_goals:\n  - '- MOSFET의 transit frequency ($f_T$)의 정의를 설명\n\n    - 그 정의를 이용해 $\\omega_T\\ (= 2\\pi f_T)$의 식을 구함\n\n    - $C_{GS} = (2/3)WLC_{ox}$일 때 $\\omega_T\\ (= 2\\pi f_T)$의 식을 $\\mu_n$, $L$ (channel length), $V_{GS} - V_{TH}$로 나타냄'\n  evidence_sections:\n  - 구할 것\n  - 풀이\n  subpart_requirements:\n  - label: main\n    required_concepts:\n    - MOSFET 천이 주파수\n  review_status: draft\n  reviewed_content_sha256: 27e94b97d85cfbf8be5b80ead9ea043fde099178f7d000d50be0e64987aaee9f\n  classification_note: 제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.\n---\n# 기출 2021-1 기말 7 — MOSFET transit frequency f_T의 정의와 ω_T 식\n\n## 원문\nMOSFET에서 transit frequency($f_T$)의 정의를 설명하고, 이를 이용하여 $\\omega_T\\ (= 2\\pi f_T)$의 식을 구하시오. 그리고, $C_{GS} = (2/3)WLC_{ox}$일 때, $\\omega_T\\ (= 2\\pi f_T)$의 식을 $\\mu_n$, $L$ (channel length), $V_{GS} - V_{TH}$에 관한 식으로 구하시오. 단, MOSFET은 saturation 영역에서 동작하고, $C_{GD}$는 무시한다.\n\n## 조건\n- MOSFET은 saturation 영역에서 동작\n- $C_{GD}$는 무시\n- 둘째 식에서는 $C_{GS} = (2/3)WLC_{ox}$\n\n## 구할 것\n- MOSFET의 transit frequency ($f_T$)의 정의를 설명\n- 그 정의를 이용해 $\\omega_T\\ (= 2\\pi f_T)$의 식을 구함\n- $C_{GS} = (2/3)WLC_{ox}$일 때 $\\omega_T\\ (= 2\\pi f_T)$의 식을 $\\mu_n$, $L$ (channel length), $V_{GS} - V_{TH}$로 나타냄\n\n## 회로 — 없음 (서술형)\n\n## 풀이\n### $f_T$의 정의\n- 드레인을 AC 접지하고 게이트에 소신호 전류 $I_{in}$을 넣었을 때, 드레인 전류 $I_{out}$과의 전류 이득 $|I_{out}/I_{in}|$이 1로 떨어지는 주파수가 $f_T$다\n### $\\omega_T$ 식\n- $C_{GD}$를 무시하면 $I_{in} = sC_{GS}V_{GS}$, $I_{out} = g_mV_{GS}$ → $|I_{out}/I_{in}| = g_m/(\\omega C_{GS})$\n- 이 값이 1인 주파수: $\\omega_T = g_m/C_{GS}$\n### $\\mu_n$, $L$, $V_{GS} - V_{TH}$로\n- 포화 영역: $g_m = \\mu_nC_{ox}(W/L)(V_{GS} - V_{TH})$\n- $\\omega_T = \\dfrac{\\mu_nC_{ox}(W/L)(V_{GS} - V_{TH})}{(2/3)WLC_{ox}} = \\dfrac{3\\mu_n(V_{GS} - V_{TH})}{2L^2}$\n### 답\n- $f_T$: 드레인을 AC 접지한 MOSFET의 소신호 전류 이득 $|I_{out}/I_{in}|$ (드레인 전류/게이트 전류)이 1이 되는 주파수\n- $\\omega_T = g_m/C_{GS}$\n- $\\omega_T = \\dfrac{3\\mu_n(V_{GS} - V_{TH})}{2L^2}$\n",
+  "raw_md": "---\nid: 2021-1_기말-Q7\nkind: 기출\nexam: \"2021-1 기말고사\"\nnumber: \"7\"\npoints: 10\nsource: ../../2021중간_기말/기말/Final0617_3p_rev.pdf\npdf_page: 1\nsource_lang: ko\nfigures: []\ntextbook_chapters: [11]\ndepends_on: []\nrefs: []\nselection:\n  topics:\n  - MOSFET 천이 주파수\n  - 주파수 응답과 기생 커패시턴스\n  circuit_types:\n  - MOS\n  required_concepts:\n  - MOSFET 천이 주파수\n  - 단락 전류 이득\n  - 주파수 응답과 기생 커패시턴스\n  - MOS 포화 영역 전류식\n  - MOS 트랜스컨덕턴스 gm\n  learning_goals:\n  - '- MOSFET의 transit frequency ($f_T$)의 정의를 설명\n\n    - 그 정의를 이용해 $\\omega_T\\ (= 2\\pi f_T)$의 식을 구함\n\n    - $C_{GS} = (2/3)WLC_{ox}$일 때 $\\omega_T\\ (= 2\\pi f_T)$의 식을 $\\mu_n$, $L$ (channel length), $V_{GS} - V_{TH}$로 나타냄'\n  evidence_sections:\n  - 원문\n  - 조건\n  - 구할 것\n  - 회로 — 없음 (서술형)\n  - 풀이\n  subpart_requirements:\n  - label: main\n    required_concepts:\n    - MOSFET 천이 주파수\n    - 단락 전류 이득\n    - 주파수 응답과 기생 커패시턴스\n    - MOS 포화 영역 전류식\n    - MOS 트랜스컨덕턴스 gm\n  review_status: reviewed\n  reviewed_content_sha256: 27e94b97d85cfbf8be5b80ead9ea043fde099178f7d000d50be0e64987aaee9f\n  classification_note: 회로 그림 없는 서술형이며 드레인 AC 단락 전류 이득 1의 정의→ωT=gm/CGS→gm·CGS 대입을 모두 요구한다. CGD 무시 조건으로 Miller 효과는 요구하지 않는다. 전사 원문·조건·회로 crop/재그림·기존 풀이에 근거한 분류 검토이며 정답 독립 검산이나 수업 범위 승인이 아니다.\n---\n# 기출 2021-1 기말 7 — MOSFET transit frequency f_T의 정의와 ω_T 식\n\n## 원문\nMOSFET에서 transit frequency($f_T$)의 정의를 설명하고, 이를 이용하여 $\\omega_T\\ (= 2\\pi f_T)$의 식을 구하시오. 그리고, $C_{GS} = (2/3)WLC_{ox}$일 때, $\\omega_T\\ (= 2\\pi f_T)$의 식을 $\\mu_n$, $L$ (channel length), $V_{GS} - V_{TH}$에 관한 식으로 구하시오. 단, MOSFET은 saturation 영역에서 동작하고, $C_{GD}$는 무시한다.\n\n## 조건\n- MOSFET은 saturation 영역에서 동작\n- $C_{GD}$는 무시\n- 둘째 식에서는 $C_{GS} = (2/3)WLC_{ox}$\n\n## 구할 것\n- MOSFET의 transit frequency ($f_T$)의 정의를 설명\n- 그 정의를 이용해 $\\omega_T\\ (= 2\\pi f_T)$의 식을 구함\n- $C_{GS} = (2/3)WLC_{ox}$일 때 $\\omega_T\\ (= 2\\pi f_T)$의 식을 $\\mu_n$, $L$ (channel length), $V_{GS} - V_{TH}$로 나타냄\n\n## 회로 — 없음 (서술형)\n\n## 풀이\n### $f_T$의 정의\n- 드레인을 AC 접지하고 게이트에 소신호 전류 $I_{in}$을 넣었을 때, 드레인 전류 $I_{out}$과의 전류 이득 $|I_{out}/I_{in}|$이 1로 떨어지는 주파수가 $f_T$다\n### $\\omega_T$ 식\n- $C_{GD}$를 무시하면 $I_{in} = sC_{GS}V_{GS}$, $I_{out} = g_mV_{GS}$ → $|I_{out}/I_{in}| = g_m/(\\omega C_{GS})$\n- 이 값이 1인 주파수: $\\omega_T = g_m/C_{GS}$\n### $\\mu_n$, $L$, $V_{GS} - V_{TH}$로\n- 포화 영역: $g_m = \\mu_nC_{ox}(W/L)(V_{GS} - V_{TH})$\n- $\\omega_T = \\dfrac{\\mu_nC_{ox}(W/L)(V_{GS} - V_{TH})}{(2/3)WLC_{ox}} = \\dfrac{3\\mu_n(V_{GS} - V_{TH})}{2L^2}$\n### 답\n- $f_T$: 드레인을 AC 접지한 MOSFET의 소신호 전류 이득 $|I_{out}/I_{in}|$ (드레인 전류/게이트 전류)이 1이 되는 주파수\n- $\\omega_T = g_m/C_{GS}$\n- $\\omega_T = \\dfrac{3\\mu_n(V_{GS} - V_{TH})}{2L^2}$\n",
   "schema_version": 1,
   "sections": [
     {
@@ -97,9 +107,12 @@
     "circuit_types": [
       "MOS"
     ],
-    "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+    "classification_note": "회로 그림 없는 서술형이며 드레인 AC 단락 전류 이득 1의 정의→ωT=gm/CGS→gm·CGS 대입을 모두 요구한다. CGD 무시 조건으로 Miller 효과는 요구하지 않는다. 전사 원문·조건·회로 crop/재그림·기존 풀이에 근거한 분류 검토이며 정답 독립 검산이나 수업 범위 승인이 아니다.",
     "evidence_sections": [
+      "원문",
+      "조건",
       "구할 것",
+      "회로 — 없음 (서술형)",
       "풀이"
     ],
     "learning_goals": [
@@ -107,16 +120,23 @@
     ],
     "required_concepts": [
       "MOSFET 천이 주파수",
-      "주파수 응답과 기생 커패시턴스"
+      "단락 전류 이득",
+      "주파수 응답과 기생 커패시턴스",
+      "MOS 포화 영역 전류식",
+      "MOS 트랜스컨덕턴스 gm"
     ],
-    "review_status": "draft",
+    "review_status": "reviewed",
     "reviewed_content_sha256": "27e94b97d85cfbf8be5b80ead9ea043fde099178f7d000d50be0e64987aaee9f",
-    "status": "draft",
+    "status": "reviewed",
     "subpart_requirements": [
       {
         "label": "main",
         "required_concepts": [
-          "MOSFET 천이 주파수"
+          "MOSFET 천이 주파수",
+          "단락 전류 이득",
+          "주파수 응답과 기생 커패시턴스",
+          "MOS 포화 영역 전류식",
+          "MOS 트랜스컨덕턴스 gm"
         ]
       }
     ],
@@ -130,7 +150,11 @@
       "ask_md": "- MOSFET의 transit frequency ($f_T$)의 정의를 설명\n- 그 정의를 이용해 $\\omega_T\\ (= 2\\pi f_T)$의 식을 구함\n- $C_{GS} = (2/3)WLC_{ox}$일 때 $\\omega_T\\ (= 2\\pi f_T)$의 식을 $\\mu_n$, $L$ (channel length), $V_{GS} - V_{TH}$로 나타냄",
       "label": "main",
       "required_concepts": [
-        "MOSFET 천이 주파수"
+        "MOSFET 천이 주파수",
+        "단락 전류 이득",
+        "주파수 응답과 기생 커패시턴스",
+        "MOS 포화 영역 전류식",
+        "MOS 트랜스컨덕턴스 gm"
       ]
     }
   ],

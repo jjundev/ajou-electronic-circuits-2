@@ -23,7 +23,7 @@
   ],
   "id": "2021-1_기말-Q2",
   "input_hashes": {
-    "from_the_past/md/2021-1_기말/Q2.md": "33b55607aa42af3d8cba5877d17f957b928e3d7bada863f09f61c681323007ed",
+    "from_the_past/md/2021-1_기말/Q2.md": "428543798b15f71f6be12b485caa4568671a5847907729a90591499f767f1600",
     "from_the_past/md/2021-1_기말/exam.yaml": "bf4144b20de31b19ee273ef1f948399d29f99531d14dbfa5cf4542f41bf722aa",
     "from_the_past/md/2021-1_기말/figures/fig-Q2.png": "52d3fab02842c9e312e751f1e85ab20c82a88f4e6f8b65b3999399710d30fa5a",
     "from_the_past/md/2021-1_기말/figures/figures.yaml": "868e1927572ab223a4b07069f4cef61a6ead8489536424474910eaddf443f0b8",
@@ -48,27 +48,42 @@
     "refs": [],
     "selection": {
       "circuit_types": [
-        "CE"
+        "바이폴라",
+        "CE",
+        "전류원 부하"
       ],
-      "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+      "classification_note": "Q1 CE, Q2 pnp 전류원 부하이며 입력 RS∥rπ, 출력 ro1∥ro2와 Cμ1 Miller 분할이 필요하다. 원문 ID1 표기는 BJT 컬렉터 전류로 해석한 기존 풀이의 불확실성이다. 전사 원문·조건·회로 crop/재그림·기존 풀이에 근거한 분류 검토이며 정답 독립 검산이나 수업 범위 승인이 아니다.",
       "evidence_sections": [
+        "원문",
+        "조건",
         "구할 것",
+        "회로 — Fig Q2",
         "풀이"
       ],
       "learning_goals": [
         "- 입력 노드의 극점 주파수와 출력 노드의 극점 주파수를 각각 $Q_1$, $Q_2$의 커패시턴스로 나타낸 식"
       ],
       "required_concepts": [
+        "바이폴라 소신호 파라미터 gm과 ro",
+        "유한 β와 rπ",
+        "유한 출력 저항(ro)",
+        "소신호 전압 이득",
         "주파수 응답과 기생 커패시턴스",
-        "노드 저항과 극점",
-        "Miller 정리"
+        "Miller 정리",
+        "노드 저항과 극점"
       ],
-      "review_status": "draft",
+      "review_status": "reviewed",
       "reviewed_content_sha256": "edfae8738d00f1aab4cce43e149ec9f515434d096f657a38d67b71ed338a8ec8",
       "subpart_requirements": [
         {
           "label": "main",
           "required_concepts": [
+            "바이폴라 소신호 파라미터 gm과 ro",
+            "유한 β와 rπ",
+            "유한 출력 저항(ro)",
+            "소신호 전압 이득",
+            "주파수 응답과 기생 커패시턴스",
+            "Miller 정리",
             "노드 저항과 극점"
           ]
         }
@@ -84,7 +99,7 @@
       11
     ]
   },
-  "raw_md": "---\nid: 2021-1_기말-Q2\nkind: 기출\nexam: \"2021-1 기말고사\"\nnumber: \"2\"\npoints: 10\nsource: ../../2021중간_기말/기말/Final0617_1p_rev.pdf\npdf_page: 1\nsource_lang: ko\nfigures:\n  - {id: \"Q2\", role: problem, panels: []}\ntextbook_chapters: [11]\ndepends_on: []\nrefs: []\nselection:\n  topics:\n  - 주파수 응답과 기생 커패시턴스\n  - Miller 정리\n  circuit_types:\n  - CE\n  required_concepts:\n  - 주파수 응답과 기생 커패시턴스\n  - 노드 저항과 극점\n  - Miller 정리\n  learning_goals:\n  - '- 입력 노드의 극점 주파수와 출력 노드의 극점 주파수를 각각 $Q_1$, $Q_2$의 커패시턴스로 나타낸 식'\n  evidence_sections:\n  - 구할 것\n  - 풀이\n  subpart_requirements:\n  - label: main\n    required_concepts:\n    - 노드 저항과 극점\n  review_status: draft\n  reviewed_content_sha256: edfae8738d00f1aab4cce43e149ec9f515434d096f657a38d67b71ed338a8ec8\n  classification_note: 제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.\n---\n# 기출 2021-1 기말 2 — pnp 전류원 부하 CE 단의 입력·출력 노드 극점\n\n## 원문\n다음 회로에 대해 주어진 조건을 이용하여, 입력과 출력 노드의 pole 주파수를 $Q_1$, $Q_2$의 capacitance들에 관한 식으로 각각 구하시오.\n\n: $R_S = 10\\ \\text{K}\\Omega$, $I_{D1} = 0.5\\ \\text{mA}$, $V_T = 25\\ \\text{mV}$, $\\beta = 200$, $V_{A,n} = V_{A,p} = 5\\ \\text{V}$.\n\n## 조건\n- 회로: 그림 ($Q_1$ 공통 이미터 증폭기, $Q_2$ pnp 전류원 부하)\n- $R_S = 10\\ \\text{k}\\Omega$\n- $I_{D1} = 0.5\\ \\text{mA}$\n- BJT 회로이므로 $I_{D1}$은 $Q_1$의 컬렉터 바이어스 전류로 보임 (원문에 없음)\n- $V_T = 25\\ \\text{mV}$, $\\beta = 200$\n- $V_{A,n} = V_{A,p} = 5\\ \\text{V}$\n- 바이어스 전압 $V_b$와 $V_{CC}$ 값은 주어지지 않음 (원문에 없음)\n\n## 구할 것\n- 입력 노드의 극점 주파수와 출력 노드의 극점 주파수를 각각 $Q_1$, $Q_2$의 커패시턴스로 나타낸 식\n\n## 회로 — Fig Q2\n```spice\nQ2  Vout  Vb   VCC  pnp\nQ1  Vout  n1   0    npn\nRS  Vin   n1   {R_S}\n```\n- 단자: VCC = 전원, 값 미지정 (T 전원 기호) / Vb = 이상적 DC 바이어스, 값 미지정 (점 단자) / Vin = 입력 (개방 원) / Vout = 출력 (개방 원)\n- 표시: 노드 라벨 V_CC (T 기호 오른쪽), V_b (점 단자 왼쪽), V_out (출력 원 오른쪽), V_in (입력 원 왼쪽) / 소자 라벨 Q2 (Q2 오른쪽), R_S (가로 저항 위), Q1 (Q1 오른쪽) / 부호 없음 / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 한 세로줄 위→아래 V_CC T 기호, Q2, Vout 접속점, Q1, 접지 / Q2 pnp (베이스 왼쪽, 이미터 위·화살표가 막대 쪽으로 들어감, 컬렉터 아래) / Q1 npn 보통 방향(베이스 왼쪽, 컬렉터 위, 이미터 아래·화살표 바깥) / Vout 접속점에서 가로선이 오른쪽 Vout 원 / V_b 점 단자 → 가로선 → Q2 베이스 / V_in 원 → 가로 R_S → Q1 베이스 (n1, 라벨 없음) / 접속점 (세 갈래 이상, 1곳): Vout = 위 Q2 컬렉터 + 아래 Q1 컬렉터 + 오른쪽 Vout 선 (점) / 교차: 없음\n\n![Q2](figures/fig-Q2.png)\n\n## 풀이\n### 소신호 파라미터\n- $I_{D1}$을 $Q_1$ 컬렉터 전류 $I_{C1}$로 본다: $g_{m1} = I_{C1}/V_T = 20.0\\ \\text{mS}$, $r_{\\pi 1} = \\beta/g_{m1} = 10.0\\ \\text{k}\\Omega$\n- $Q_2$도 같은 전류: $r_{O1} = r_{O2} = V_A/I_{C1} = 10.0\\ \\text{k}\\Omega$\n- $Q_2$는 전류원 부하: $R_{out} = r_{O1} \\parallel r_{O2} = 5.00\\ \\text{k}\\Omega$, $A_v = -g_{m1}R_{out} = -100$\n### 입력 노드의 극점\n- 본 저항 $R_S \\parallel r_{\\pi 1} = 5.00\\ \\text{k}\\Omega$\n- Miller: $C_{in} = C_{\\pi 1} + (1 + g_{m1}R_{out})C_{\\mu 1} = C_{\\pi 1} + 101C_{\\mu 1}$\n### 출력 노드의 극점\n- $C_{CS}$: 컬렉터–기판 커패시턴스. 본 저항 $R_{out} = 5.00\\ \\text{k}\\Omega$. $Q_2$ 베이스·이미터는 AC 접지라 $C_{\\mu 2}$, $C_{CS2}$가 붙는다\n- $C_{\\mu 1}$의 출력쪽 계수 $1 + 1/(g_{m1}R_{out}) = 1.01$: $C_{out} = 1.01C_{\\mu 1} + C_{CS1} + C_{\\mu 2} + C_{CS2}$\n### 답\n- 입력: $|\\omega_{p,in}| = 1/[5\\ \\text{k}\\Omega\\,(C_{\\pi 1} + 101C_{\\mu 1})]$\n- 출력: $|\\omega_{p,out}| = 1/[5\\ \\text{k}\\Omega\\,(1.01C_{\\mu 1} + C_{CS1} + C_{\\mu 2} + C_{CS2})]$\n",
+  "raw_md": "---\nid: 2021-1_기말-Q2\nkind: 기출\nexam: \"2021-1 기말고사\"\nnumber: \"2\"\npoints: 10\nsource: ../../2021중간_기말/기말/Final0617_1p_rev.pdf\npdf_page: 1\nsource_lang: ko\nfigures:\n  - {id: \"Q2\", role: problem, panels: []}\ntextbook_chapters: [11]\ndepends_on: []\nrefs: []\nselection:\n  topics:\n  - 주파수 응답과 기생 커패시턴스\n  - Miller 정리\n  circuit_types:\n  - 바이폴라\n  - CE\n  - 전류원 부하\n  required_concepts:\n  - 바이폴라 소신호 파라미터 gm과 ro\n  - 유한 β와 rπ\n  - 유한 출력 저항(ro)\n  - 소신호 전압 이득\n  - 주파수 응답과 기생 커패시턴스\n  - Miller 정리\n  - 노드 저항과 극점\n  learning_goals:\n  - '- 입력 노드의 극점 주파수와 출력 노드의 극점 주파수를 각각 $Q_1$, $Q_2$의 커패시턴스로 나타낸 식'\n  evidence_sections:\n  - 원문\n  - 조건\n  - 구할 것\n  - 회로 — Fig Q2\n  - 풀이\n  subpart_requirements:\n  - label: main\n    required_concepts:\n    - 바이폴라 소신호 파라미터 gm과 ro\n    - 유한 β와 rπ\n    - 유한 출력 저항(ro)\n    - 소신호 전압 이득\n    - 주파수 응답과 기생 커패시턴스\n    - Miller 정리\n    - 노드 저항과 극점\n  review_status: reviewed\n  reviewed_content_sha256: edfae8738d00f1aab4cce43e149ec9f515434d096f657a38d67b71ed338a8ec8\n  classification_note: Q1 CE, Q2 pnp 전류원 부하이며 입력 RS∥rπ, 출력 ro1∥ro2와 Cμ1 Miller 분할이 필요하다. 원문 ID1 표기는 BJT 컬렉터 전류로 해석한 기존 풀이의 불확실성이다. 전사 원문·조건·회로 crop/재그림·기존 풀이에 근거한 분류 검토이며 정답 독립 검산이나 수업 범위 승인이 아니다.\n---\n# 기출 2021-1 기말 2 — pnp 전류원 부하 CE 단의 입력·출력 노드 극점\n\n## 원문\n다음 회로에 대해 주어진 조건을 이용하여, 입력과 출력 노드의 pole 주파수를 $Q_1$, $Q_2$의 capacitance들에 관한 식으로 각각 구하시오.\n\n: $R_S = 10\\ \\text{K}\\Omega$, $I_{D1} = 0.5\\ \\text{mA}$, $V_T = 25\\ \\text{mV}$, $\\beta = 200$, $V_{A,n} = V_{A,p} = 5\\ \\text{V}$.\n\n## 조건\n- 회로: 그림 ($Q_1$ 공통 이미터 증폭기, $Q_2$ pnp 전류원 부하)\n- $R_S = 10\\ \\text{k}\\Omega$\n- $I_{D1} = 0.5\\ \\text{mA}$\n- BJT 회로이므로 $I_{D1}$은 $Q_1$의 컬렉터 바이어스 전류로 보임 (원문에 없음)\n- $V_T = 25\\ \\text{mV}$, $\\beta = 200$\n- $V_{A,n} = V_{A,p} = 5\\ \\text{V}$\n- 바이어스 전압 $V_b$와 $V_{CC}$ 값은 주어지지 않음 (원문에 없음)\n\n## 구할 것\n- 입력 노드의 극점 주파수와 출력 노드의 극점 주파수를 각각 $Q_1$, $Q_2$의 커패시턴스로 나타낸 식\n\n## 회로 — Fig Q2\n```spice\nQ2  Vout  Vb   VCC  pnp\nQ1  Vout  n1   0    npn\nRS  Vin   n1   {R_S}\n```\n- 단자: VCC = 전원, 값 미지정 (T 전원 기호) / Vb = 이상적 DC 바이어스, 값 미지정 (점 단자) / Vin = 입력 (개방 원) / Vout = 출력 (개방 원)\n- 표시: 노드 라벨 V_CC (T 기호 오른쪽), V_b (점 단자 왼쪽), V_out (출력 원 오른쪽), V_in (입력 원 왼쪽) / 소자 라벨 Q2 (Q2 오른쪽), R_S (가로 저항 위), Q1 (Q1 오른쪽) / 부호 없음 / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 한 세로줄 위→아래 V_CC T 기호, Q2, Vout 접속점, Q1, 접지 / Q2 pnp (베이스 왼쪽, 이미터 위·화살표가 막대 쪽으로 들어감, 컬렉터 아래) / Q1 npn 보통 방향(베이스 왼쪽, 컬렉터 위, 이미터 아래·화살표 바깥) / Vout 접속점에서 가로선이 오른쪽 Vout 원 / V_b 점 단자 → 가로선 → Q2 베이스 / V_in 원 → 가로 R_S → Q1 베이스 (n1, 라벨 없음) / 접속점 (세 갈래 이상, 1곳): Vout = 위 Q2 컬렉터 + 아래 Q1 컬렉터 + 오른쪽 Vout 선 (점) / 교차: 없음\n\n![Q2](figures/fig-Q2.png)\n\n## 풀이\n### 소신호 파라미터\n- $I_{D1}$을 $Q_1$ 컬렉터 전류 $I_{C1}$로 본다: $g_{m1} = I_{C1}/V_T = 20.0\\ \\text{mS}$, $r_{\\pi 1} = \\beta/g_{m1} = 10.0\\ \\text{k}\\Omega$\n- $Q_2$도 같은 전류: $r_{O1} = r_{O2} = V_A/I_{C1} = 10.0\\ \\text{k}\\Omega$\n- $Q_2$는 전류원 부하: $R_{out} = r_{O1} \\parallel r_{O2} = 5.00\\ \\text{k}\\Omega$, $A_v = -g_{m1}R_{out} = -100$\n### 입력 노드의 극점\n- 본 저항 $R_S \\parallel r_{\\pi 1} = 5.00\\ \\text{k}\\Omega$\n- Miller: $C_{in} = C_{\\pi 1} + (1 + g_{m1}R_{out})C_{\\mu 1} = C_{\\pi 1} + 101C_{\\mu 1}$\n### 출력 노드의 극점\n- $C_{CS}$: 컬렉터–기판 커패시턴스. 본 저항 $R_{out} = 5.00\\ \\text{k}\\Omega$. $Q_2$ 베이스·이미터는 AC 접지라 $C_{\\mu 2}$, $C_{CS2}$가 붙는다\n- $C_{\\mu 1}$의 출력쪽 계수 $1 + 1/(g_{m1}R_{out}) = 1.01$: $C_{out} = 1.01C_{\\mu 1} + C_{CS1} + C_{\\mu 2} + C_{CS2}$\n### 답\n- 입력: $|\\omega_{p,in}| = 1/[5\\ \\text{k}\\Omega\\,(C_{\\pi 1} + 101C_{\\mu 1})]$\n- 출력: $|\\omega_{p,out}| = 1/[5\\ \\text{k}\\Omega\\,(1.01C_{\\mu 1} + C_{CS1} + C_{\\mu 2} + C_{CS2})]$\n",
   "schema_version": 1,
   "sections": [
     {
@@ -110,28 +125,43 @@
   ],
   "selection": {
     "circuit_types": [
-      "CE"
+      "바이폴라",
+      "CE",
+      "전류원 부하"
     ],
-    "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+    "classification_note": "Q1 CE, Q2 pnp 전류원 부하이며 입력 RS∥rπ, 출력 ro1∥ro2와 Cμ1 Miller 분할이 필요하다. 원문 ID1 표기는 BJT 컬렉터 전류로 해석한 기존 풀이의 불확실성이다. 전사 원문·조건·회로 crop/재그림·기존 풀이에 근거한 분류 검토이며 정답 독립 검산이나 수업 범위 승인이 아니다.",
     "evidence_sections": [
+      "원문",
+      "조건",
       "구할 것",
+      "회로 — Fig Q2",
       "풀이"
     ],
     "learning_goals": [
       "- 입력 노드의 극점 주파수와 출력 노드의 극점 주파수를 각각 $Q_1$, $Q_2$의 커패시턴스로 나타낸 식"
     ],
     "required_concepts": [
+      "바이폴라 소신호 파라미터 gm과 ro",
+      "유한 β와 rπ",
+      "유한 출력 저항(ro)",
+      "소신호 전압 이득",
       "주파수 응답과 기생 커패시턴스",
-      "노드 저항과 극점",
-      "Miller 정리"
+      "Miller 정리",
+      "노드 저항과 극점"
     ],
-    "review_status": "draft",
+    "review_status": "reviewed",
     "reviewed_content_sha256": "edfae8738d00f1aab4cce43e149ec9f515434d096f657a38d67b71ed338a8ec8",
-    "status": "draft",
+    "status": "reviewed",
     "subpart_requirements": [
       {
         "label": "main",
         "required_concepts": [
+          "바이폴라 소신호 파라미터 gm과 ro",
+          "유한 β와 rπ",
+          "유한 출력 저항(ro)",
+          "소신호 전압 이득",
+          "주파수 응답과 기생 커패시턴스",
+          "Miller 정리",
           "노드 저항과 극점"
         ]
       }
@@ -146,6 +176,12 @@
       "ask_md": "- 입력 노드의 극점 주파수와 출력 노드의 극점 주파수를 각각 $Q_1$, $Q_2$의 커패시턴스로 나타낸 식",
       "label": "main",
       "required_concepts": [
+        "바이폴라 소신호 파라미터 gm과 ro",
+        "유한 β와 rπ",
+        "유한 출력 저항(ro)",
+        "소신호 전압 이득",
+        "주파수 응답과 기생 커패시턴스",
+        "Miller 정리",
         "노드 저항과 극점"
       ]
     }

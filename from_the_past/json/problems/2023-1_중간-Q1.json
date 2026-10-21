@@ -14,7 +14,7 @@
   "figures": [],
   "id": "2023-1_중간-Q1",
   "input_hashes": {
-    "from_the_past/md/2023-1_중간/Q1.md": "d0fd4154b58eb4d941c7124d5c2ab56ab6693cdbe24fc4c3b306cd65107cdbba",
+    "from_the_past/md/2023-1_중간/Q1.md": "1481423460ba41d8df917c5ce8e620af62fc35c2788639dfe3a3c4a3704aa747",
     "from_the_past/md/2023-1_중간/exam.yaml": "a1d17be4ac39e66cf15ebd3b2ea76bd2b86724623e418f7ec9757f55c6ea5bd8",
     "from_the_past/md/2023-1_중간/figures/figures.yaml": "3ec47892e01d0660883e4057145e61fd9d52addd60bd878f852d320856e8531c"
   },
@@ -33,9 +33,12 @@
       "circuit_types": [
         "차동"
       ],
-      "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+      "classification_note": "그림 없는 (1)은 테일 유한 저항·부하/소자 불일치, (2)는 주어진 −gmRD에서 CF의 입력 등가 임피던스와 대역폭 감소를 연결한다. Miller 계산과 실제 차동쌍 제한을 소문항별로 분리했다. 전사 원문·조건·회로 crop/재그림·기존 풀이에 근거한 분류 검토이며 정답 독립 검산이나 수업 범위 승인이 아니다.",
       "evidence_sections": [
+        "원문",
+        "조건",
         "구할 것",
+        "회로 — 없음 (서술형)",
         "풀이"
       ],
       "learning_goals": [
@@ -45,23 +48,32 @@
       "required_concepts": [
         "차동 증폭기",
         "공통 모드 해석",
+        "테일 전류원의 유한 출력 저항",
         "소자·부하 불일치와 CM-DM 변환",
         "Miller 정리",
-        "주파수 응답과 기생 커패시턴스"
+        "주파수 응답과 기생 커패시턴스",
+        "커패시터 입력 임피던스",
+        "노드 저항과 극점"
       ],
-      "review_status": "draft",
+      "review_status": "reviewed",
       "reviewed_content_sha256": "69ff816b7401a54adf882ee8deecbf2d15fddd9bcabf091bcfd55d9c5b50c07f",
       "subpart_requirements": [
         {
           "label": "1",
           "required_concepts": [
-            "공통 모드 해석"
+            "차동 증폭기",
+            "공통 모드 해석",
+            "테일 전류원의 유한 출력 저항",
+            "소자·부하 불일치와 CM-DM 변환"
           ]
         },
         {
           "label": "2",
           "required_concepts": [
-            "Miller 정리"
+            "Miller 정리",
+            "주파수 응답과 기생 커패시턴스",
+            "커패시터 입력 임피던스",
+            "노드 저항과 극점"
           ]
         }
       ],
@@ -78,7 +90,7 @@
       11
     ]
   },
-  "raw_md": "---\nid: 2023-1_중간-Q1\nkind: 기출\nexam: \"2023-1 중간고사\"\nnumber: \"1\"\npoints: 20\nsource: ../../2023-1/중간고사.pdf\npdf_page: 1\nsource_lang: ko\nfigures: []\ntextbook_chapters: [10, 11]\ndepends_on: []\nrefs: []\nselection:\n  topics:\n  - 차동 증폭기\n  - Miller 정리\n  - 주파수 응답과 기생 커패시턴스\n  circuit_types:\n  - 차동\n  required_concepts:\n  - 차동 증폭기\n  - 공통 모드 해석\n  - 소자·부하 불일치와 CM-DM 변환\n  - Miller 정리\n  - 주파수 응답과 기생 커패시턴스\n  learning_goals:\n  - 이상적인 differential pair에서 \"common-mode (CM) rejection\" 특성의 의미를 설명. 그리고 실제 differential pair에서 CM rejection 특성이 제한되는 이유 2가지를 설명\n  - 등가 입력 임피던스를 구함. 그리고 Miller effect가 주파수 응답 특성에서 대역폭(bandwidth)에 미치는 영향을 설명\n  evidence_sections:\n  - 구할 것\n  - 풀이\n  subpart_requirements:\n  - label: '1'\n    required_concepts:\n    - 공통 모드 해석\n  - label: '2'\n    required_concepts:\n    - Miller 정리\n  review_status: draft\n  reviewed_content_sha256: 69ff816b7401a54adf882ee8deecbf2d15fddd9bcabf091bcfd55d9c5b50c07f\n  classification_note: 제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.\n---\n# 기출 2023-1 중간 1 — 차동쌍 CM 제거와 Miller 효과 서술형\n\n## 원문\n다음 질문에 간략히 답하시오.\n\n(1) 이상적인 differential pair에서 \"common-mode (CM) rejection\" 특성의 의미를 설명하시오. 그리고 실제 differential pair에서 CM rejection 특성이 제한되는 2가지 이유를 설명하시오.\n\n(2) 전압 이득 $A_V = -g_m R_D$인 증폭기에서 입력과 출력 사이의 capacitance를 $C_F$라 할 때, 등가 입력 임피던스를 구하시오. 그리고, Miller effect가 주파수 응답 특성에서 대역폭(bandwidth)에 미치는 영향을 설명하시오.\n\n## 조건\n- 소문항 두 개에 간략히 답하는 서술형 문제\n- (2) 전용: 전압 이득이 $A_V = -g_m R_D$인 증폭기의 입력과 출력 사이에 커패시턴스 $C_F$가 있음\n\n## 구할 것\n- (1) 이상적인 differential pair에서 \"common-mode (CM) rejection\" 특성의 의미를 설명. 그리고 실제 differential pair에서 CM rejection 특성이 제한되는 이유 2가지를 설명\n- (2) 등가 입력 임피던스를 구함. 그리고 Miller effect가 주파수 응답 특성에서 대역폭(bandwidth)에 미치는 영향을 설명\n\n## 회로 — 없음 (서술형)\n\n## 풀이\n### (1) CM 제거의 의미\n- 두 입력에 똑같이 더해진 신호(잡음, 전원 흔들림)에는 출력이 반응하지 않고, 두 입력의 차에만 반응하는 성질\n- 이상적 차동쌍은 테일 전류원이 이상적이라 두 드레인 전류의 합이 테일 전류 $I_{SS}$로 고정되고($I_{D1} + I_{D2} = I_{SS}$) 두 쪽이 대칭이다. CM 입력이 변해도 각 전류가 $I_{SS}/2$ 그대로라 출력이 변하지 않는다 ($A_{CM} = 0$)\n### (1) 실제 차동쌍의 제한\n- 테일 전류원의 출력 저항 $R_{SS}$가 유한: CM 입력이 변하면 테일 전류가 변해 각 출력이 변한다. 부하 $R_D$, 입력 소자 $g_m$이면 단일 출력 $A_{CM} \\approx -R_D/(1/g_m + 2R_{SS})$\n- 두 쪽의 부조화(부하 저항 차 $\\Delta R_D$, 소자 $g_m$ 차): $R_{SS}$로 생긴 CM 전류 변화가 두 출력에 다르게 나타나 차동 출력이 생긴다. 예: $A_{CM-DM} \\approx \\Delta R_D/(1/g_m + 2R_{SS})$\n### (2) 등가 입력 임피던스\n- $C_F$가 이득을 바꾸지 않는다고 보면(Miller 근사) $C_F$ 양단 전압은 $v_{in} - A_V v_{in} = (1 + g_m R_D) v_{in}$ ($v_{in}$은 입력 전압)\n- 입력 전류 $sC_F(1 + g_m R_D) v_{in}$: $Z_{in} = \\dfrac{1}{sC_F(1 + g_m R_D)}$, 곧 입력에서 접지로 $C_{in} = (1 + g_m R_D) C_F$가 달린 것과 같다\n### (2) 대역폭에 미치는 영향\n- 입력 신호원 저항을 $R_S$라 하면 입력 극점은 $\\omega_{p,in} = 1/[R_S (1 + g_m R_D) C_F]$\n- $C_F$가 $(1 + g_m R_D)$배로 커 보여 입력 극점이 낮은 주파수로 내려가고 대역폭이 줄어든다. 이득 $g_m R_D$가 클수록 더 심하다\n### 답\n- (1) CM 입력에는 반응하지 않고 차동 입력에만 반응하는 성질이다. 실제로는 테일 전류원의 출력 저항이 유한해 테일 전류가 CM 입력에 따라 변하고, 두 쪽 소자·부하의 부조화로 CM 신호가 차동 출력으로 바뀐다\n- (2) $Z_{in} = 1/[sC_F(1 + g_m R_D)]$ (입력 커패시턴스 $(1 + g_m R_D) C_F$). Miller 효과로 입력 커패시턴스가 커져 입력 극점이 낮아지고 대역폭이 줄어든다\n",
+  "raw_md": "---\nid: 2023-1_중간-Q1\nkind: 기출\nexam: \"2023-1 중간고사\"\nnumber: \"1\"\npoints: 20\nsource: ../../2023-1/중간고사.pdf\npdf_page: 1\nsource_lang: ko\nfigures: []\ntextbook_chapters: [10, 11]\ndepends_on: []\nrefs: []\nselection:\n  topics:\n  - 차동 증폭기\n  - Miller 정리\n  - 주파수 응답과 기생 커패시턴스\n  circuit_types:\n  - 차동\n  required_concepts:\n  - 차동 증폭기\n  - 공통 모드 해석\n  - 테일 전류원의 유한 출력 저항\n  - 소자·부하 불일치와 CM-DM 변환\n  - Miller 정리\n  - 주파수 응답과 기생 커패시턴스\n  - 커패시터 입력 임피던스\n  - 노드 저항과 극점\n  learning_goals:\n  - 이상적인 differential pair에서 \"common-mode (CM) rejection\" 특성의 의미를 설명. 그리고 실제 differential pair에서 CM rejection 특성이 제한되는 이유 2가지를 설명\n  - 등가 입력 임피던스를 구함. 그리고 Miller effect가 주파수 응답 특성에서 대역폭(bandwidth)에 미치는 영향을 설명\n  evidence_sections:\n  - 원문\n  - 조건\n  - 구할 것\n  - 회로 — 없음 (서술형)\n  - 풀이\n  subpart_requirements:\n  - label: '1'\n    required_concepts:\n    - 차동 증폭기\n    - 공통 모드 해석\n    - 테일 전류원의 유한 출력 저항\n    - 소자·부하 불일치와 CM-DM 변환\n  - label: '2'\n    required_concepts:\n    - Miller 정리\n    - 주파수 응답과 기생 커패시턴스\n    - 커패시터 입력 임피던스\n    - 노드 저항과 극점\n  review_status: reviewed\n  reviewed_content_sha256: 69ff816b7401a54adf882ee8deecbf2d15fddd9bcabf091bcfd55d9c5b50c07f\n  classification_note: 그림 없는 (1)은 테일 유한 저항·부하/소자 불일치, (2)는 주어진 −gmRD에서 CF의 입력 등가 임피던스와 대역폭 감소를 연결한다. Miller 계산과 실제 차동쌍 제한을 소문항별로 분리했다. 전사 원문·조건·회로 crop/재그림·기존 풀이에 근거한 분류 검토이며 정답 독립 검산이나 수업 범위 승인이 아니다.\n---\n# 기출 2023-1 중간 1 — 차동쌍 CM 제거와 Miller 효과 서술형\n\n## 원문\n다음 질문에 간략히 답하시오.\n\n(1) 이상적인 differential pair에서 \"common-mode (CM) rejection\" 특성의 의미를 설명하시오. 그리고 실제 differential pair에서 CM rejection 특성이 제한되는 2가지 이유를 설명하시오.\n\n(2) 전압 이득 $A_V = -g_m R_D$인 증폭기에서 입력과 출력 사이의 capacitance를 $C_F$라 할 때, 등가 입력 임피던스를 구하시오. 그리고, Miller effect가 주파수 응답 특성에서 대역폭(bandwidth)에 미치는 영향을 설명하시오.\n\n## 조건\n- 소문항 두 개에 간략히 답하는 서술형 문제\n- (2) 전용: 전압 이득이 $A_V = -g_m R_D$인 증폭기의 입력과 출력 사이에 커패시턴스 $C_F$가 있음\n\n## 구할 것\n- (1) 이상적인 differential pair에서 \"common-mode (CM) rejection\" 특성의 의미를 설명. 그리고 실제 differential pair에서 CM rejection 특성이 제한되는 이유 2가지를 설명\n- (2) 등가 입력 임피던스를 구함. 그리고 Miller effect가 주파수 응답 특성에서 대역폭(bandwidth)에 미치는 영향을 설명\n\n## 회로 — 없음 (서술형)\n\n## 풀이\n### (1) CM 제거의 의미\n- 두 입력에 똑같이 더해진 신호(잡음, 전원 흔들림)에는 출력이 반응하지 않고, 두 입력의 차에만 반응하는 성질\n- 이상적 차동쌍은 테일 전류원이 이상적이라 두 드레인 전류의 합이 테일 전류 $I_{SS}$로 고정되고($I_{D1} + I_{D2} = I_{SS}$) 두 쪽이 대칭이다. CM 입력이 변해도 각 전류가 $I_{SS}/2$ 그대로라 출력이 변하지 않는다 ($A_{CM} = 0$)\n### (1) 실제 차동쌍의 제한\n- 테일 전류원의 출력 저항 $R_{SS}$가 유한: CM 입력이 변하면 테일 전류가 변해 각 출력이 변한다. 부하 $R_D$, 입력 소자 $g_m$이면 단일 출력 $A_{CM} \\approx -R_D/(1/g_m + 2R_{SS})$\n- 두 쪽의 부조화(부하 저항 차 $\\Delta R_D$, 소자 $g_m$ 차): $R_{SS}$로 생긴 CM 전류 변화가 두 출력에 다르게 나타나 차동 출력이 생긴다. 예: $A_{CM-DM} \\approx \\Delta R_D/(1/g_m + 2R_{SS})$\n### (2) 등가 입력 임피던스\n- $C_F$가 이득을 바꾸지 않는다고 보면(Miller 근사) $C_F$ 양단 전압은 $v_{in} - A_V v_{in} = (1 + g_m R_D) v_{in}$ ($v_{in}$은 입력 전압)\n- 입력 전류 $sC_F(1 + g_m R_D) v_{in}$: $Z_{in} = \\dfrac{1}{sC_F(1 + g_m R_D)}$, 곧 입력에서 접지로 $C_{in} = (1 + g_m R_D) C_F$가 달린 것과 같다\n### (2) 대역폭에 미치는 영향\n- 입력 신호원 저항을 $R_S$라 하면 입력 극점은 $\\omega_{p,in} = 1/[R_S (1 + g_m R_D) C_F]$\n- $C_F$가 $(1 + g_m R_D)$배로 커 보여 입력 극점이 낮은 주파수로 내려가고 대역폭이 줄어든다. 이득 $g_m R_D$가 클수록 더 심하다\n### 답\n- (1) CM 입력에는 반응하지 않고 차동 입력에만 반응하는 성질이다. 실제로는 테일 전류원의 출력 저항이 유한해 테일 전류가 CM 입력에 따라 변하고, 두 쪽 소자·부하의 부조화로 CM 신호가 차동 출력으로 바뀐다\n- (2) $Z_{in} = 1/[sC_F(1 + g_m R_D)]$ (입력 커패시턴스 $(1 + g_m R_D) C_F$). Miller 효과로 입력 커패시턴스가 커져 입력 극점이 낮아지고 대역폭이 줄어든다\n",
   "schema_version": 1,
   "sections": [
     {
@@ -106,9 +118,12 @@
     "circuit_types": [
       "차동"
     ],
-    "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+    "classification_note": "그림 없는 (1)은 테일 유한 저항·부하/소자 불일치, (2)는 주어진 −gmRD에서 CF의 입력 등가 임피던스와 대역폭 감소를 연결한다. Miller 계산과 실제 차동쌍 제한을 소문항별로 분리했다. 전사 원문·조건·회로 crop/재그림·기존 풀이에 근거한 분류 검토이며 정답 독립 검산이나 수업 범위 승인이 아니다.",
     "evidence_sections": [
+      "원문",
+      "조건",
       "구할 것",
+      "회로 — 없음 (서술형)",
       "풀이"
     ],
     "learning_goals": [
@@ -118,24 +133,33 @@
     "required_concepts": [
       "차동 증폭기",
       "공통 모드 해석",
+      "테일 전류원의 유한 출력 저항",
       "소자·부하 불일치와 CM-DM 변환",
       "Miller 정리",
-      "주파수 응답과 기생 커패시턴스"
+      "주파수 응답과 기생 커패시턴스",
+      "커패시터 입력 임피던스",
+      "노드 저항과 극점"
     ],
-    "review_status": "draft",
+    "review_status": "reviewed",
     "reviewed_content_sha256": "69ff816b7401a54adf882ee8deecbf2d15fddd9bcabf091bcfd55d9c5b50c07f",
-    "status": "draft",
+    "status": "reviewed",
     "subpart_requirements": [
       {
         "label": "1",
         "required_concepts": [
-          "공통 모드 해석"
+          "차동 증폭기",
+          "공통 모드 해석",
+          "테일 전류원의 유한 출력 저항",
+          "소자·부하 불일치와 CM-DM 변환"
         ]
       },
       {
         "label": "2",
         "required_concepts": [
-          "Miller 정리"
+          "Miller 정리",
+          "주파수 응답과 기생 커패시턴스",
+          "커패시터 입력 임피던스",
+          "노드 저항과 극점"
         ]
       }
     ],
@@ -150,14 +174,20 @@
       "ask_md": "이상적인 differential pair에서 \"common-mode (CM) rejection\" 특성의 의미를 설명. 그리고 실제 differential pair에서 CM rejection 특성이 제한되는 이유 2가지를 설명",
       "label": "1",
       "required_concepts": [
-        "공통 모드 해석"
+        "차동 증폭기",
+        "공통 모드 해석",
+        "테일 전류원의 유한 출력 저항",
+        "소자·부하 불일치와 CM-DM 변환"
       ]
     },
     {
       "ask_md": "등가 입력 임피던스를 구함. 그리고 Miller effect가 주파수 응답 특성에서 대역폭(bandwidth)에 미치는 영향을 설명",
       "label": "2",
       "required_concepts": [
-        "Miller 정리"
+        "Miller 정리",
+        "주파수 응답과 기생 커패시턴스",
+        "커패시터 입력 임피던스",
+        "노드 저항과 극점"
       ]
     }
   ],

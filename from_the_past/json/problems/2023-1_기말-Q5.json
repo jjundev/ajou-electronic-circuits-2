@@ -26,7 +26,7 @@
   ],
   "id": "2023-1_기말-Q5",
   "input_hashes": {
-    "from_the_past/md/2023-1_기말/Q5.md": "37ae811b79ac2d27ef73569362c19d3db7c291a44d3bda6d8ba16fb6f5f9adc7",
+    "from_the_past/md/2023-1_기말/Q5.md": "7aab230b35f7c28f84ae80d2df9fcf1362ed65b54e54e77dbc85e69f7c3dd425",
     "from_the_past/md/2023-1_기말/exam.yaml": "ab0ba61cf0eca4adaf236ab020c51e7ac967f29a2feb119f6efd6445e86a8f8d",
     "from_the_past/md/2023-1_기말/figures/fig-Q5.png": "eb12ca4daa685389ab49fe720e02834bbc78ff118ec03ebd41fd6a7a66a86046",
     "from_the_past/md/2023-1_기말/figures/figures.yaml": "b29af69d5be97ade730ae27efe75b7dbe8d3e39260ef590173b2400e19c3c919",
@@ -51,27 +51,38 @@
     "refs": [],
     "selection": {
       "circuit_types": [
-        "biquad"
+        "연산증폭기",
+        "biquad",
+        "저역 통과 필터"
       ],
-      "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+      "classification_note": "첫 단은 R3∥C1 누설 적분기/가산기, 둘째는 C2 반전 적분기, −1 블록이 R4로 되먹임된다. 구하는 출력은 그림 Vout이 아니라 Y의 저역 통과 전달함수이므로 부호·적분기 연결을 보강했다. 전사 원문·조건·회로 crop/재그림·기존 풀이에 근거한 분류 검토이며 정답 독립 검산이나 수업 범위 승인이 아니다.",
       "evidence_sections": [
+        "원문",
+        "조건",
         "구할 것",
+        "회로 — Fig Q5",
         "풀이"
       ],
       "learning_goals": [
         "- Low-pass filter의 전달함수 $V_Y/V_{in}(s)$를 $R_1$, $R_2$, $R_3$, $R_4$, $C_1$, $C_2$로 나타낸 식"
       ],
       "required_concepts": [
+        "이상적 연산증폭기와 가상 단락",
         "연산증폭기 2차 능동 필터",
         "적분기와 biquad",
+        "반전 가산기와 부호 반전",
         "s 영역 KCL과 전달 함수"
       ],
-      "review_status": "draft",
+      "review_status": "reviewed",
       "reviewed_content_sha256": "5f96fff0b5ed55f14b0e59f22a7503cef99214db632b24ddbfd03dac6c8acaa8",
       "subpart_requirements": [
         {
           "label": "main",
           "required_concepts": [
+            "이상적 연산증폭기와 가상 단락",
+            "연산증폭기 2차 능동 필터",
+            "적분기와 biquad",
+            "반전 가산기와 부호 반전",
             "s 영역 KCL과 전달 함수"
           ]
         }
@@ -86,7 +97,7 @@
       14
     ]
   },
-  "raw_md": "---\nid: 2023-1_기말-Q5\nkind: 기출\nexam: \"2023-1 기말고사\"\nnumber: \"5\"\npoints: 10\nsource: \"../../2023-1/23-1 기말/기말고사.pdf\"\npdf_page: 5\nsource_lang: ko\nfigures:\n  - {id: \"Q5\", role: problem, panels: []}\ntextbook_chapters: [14]\ndepends_on: []\nrefs: []\nselection:\n  topics:\n  - 연산증폭기 2차 능동 필터\n  circuit_types:\n  - biquad\n  required_concepts:\n  - 연산증폭기 2차 능동 필터\n  - 적분기와 biquad\n  - s 영역 KCL과 전달 함수\n  learning_goals:\n  - '- Low-pass filter의 전달함수 $V_Y/V_{in}(s)$를 $R_1$, $R_2$, $R_3$, $R_4$, $C_1$, $C_2$로 나타낸 식'\n  evidence_sections:\n  - 구할 것\n  - 풀이\n  subpart_requirements:\n  - label: main\n    required_concepts:\n    - s 영역 KCL과 전달 함수\n  review_status: draft\n  reviewed_content_sha256: 5f96fff0b5ed55f14b0e59f22a7503cef99214db632b24ddbfd03dac6c8acaa8\n  classification_note: 제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.\n---\n# 기출 2023-1 기말 5 — 두 적분기와 반전기로 된 biquad의 low-pass 전달 함수 V_Y/V_in\n\n## 원문\n다음 회로를 이용한 filter를 설계한다. 단, 이상적인 op amp를 가정한다. Low-pass filter의 전달함수($V_Y/V_{in}(s)$)를 $R_1$, $R_2$, $R_3$, $R_4$, $C_1$, $C_2$에 관한 식으로 구하시오.\n\n## 조건\n- 그림의 회로를 이용해 filter를 설계\n- 이상적인 op amp로 가정\n- 소자 값은 주어지지 않음 (원문에 없음)\n\n## 구할 것\n- Low-pass filter의 전달함수 $V_Y/V_{in}(s)$를 $R_1$, $R_2$, $R_3$, $R_4$, $C_1$, $C_2$로 나타낸 식\n\n## 회로 — Fig Q5\n```spice\nR1   Vin   n1    {R_1}\nX1   0     n1    Vout  opamp    ; in+ = 접지, in- = n1\nR3   n1    Vout  {R_3}\nC1   n1    Vout  {C_1}\nR2   Vout  n2    {R_2}\nX2   0     n2    Y     opamp    ; in+ = 접지, in- = n2\nC2   n2    Y     {C_2}\nX3   Y     X     box \"-1\"       ; 이득 −1 블록 (삼각형, 점선 원 안)\nR4   X     n1    {R_4}\n```\n- 단자: Vin = 입력 (개방 원) / Vout = 출력 (개방 원)\n- 표시: 노드 라벨 V_in (입력 원 왼쪽), V_out (출력 원 오른쪽), Y (Y 접속점 왼쪽 위, 둘째 연산증폭기 출력 위), X (−1 블록 출력선 오른쪽 위, 오른쪽 세로선 옆) / 소자 라벨 R1 (가로 저항 아래), R3 (가로 저항 위), C1 (커패시터 위), R4 (맨 위 가로 저항 아래), R2 (가로 저항 아래), C2 (커패시터 위), \"−1\" (삼각형 블록 안), 연산증폭기 둘 (라벨 없음) / 부호 두 연산증폭기 모두 \"−\" (위 입력, 삼각형 안), \"+\" (아래 입력, 삼각형 안) / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 왼쪽→오른쪽 V_in 원, 가로 R1, n1 아래 접속점, 첫째 연산증폭기, 아래 Vout 접속점, 가로 R2, n2 접속점, 둘째 연산증폭기, Y 접속점, −1 블록, X 선 / 연산증폭기와 −1 블록은 모두 오른쪽을 향한 삼각형 / 첫째 연산증폭기 위에 R3(위)과 C1(아래)이 나란히 n1 세로선과 Vout 세로선 사이에 걸림 / n1 세로선은 맨 위 R4 선 높이에서 − 입력 높이까지 내려오며 R3 높이, C1 높이, − 입력 높이에 접속점 / Vout 세로선은 R3 오른쪽 끝 모서리에서 아래로 내려와 C1 높이의 위 Vout 접속점(오른쪽 V_out 원), 연산증폭기 출력 높이의 아래 Vout 접속점까지 / 두 연산증폭기의 + 입력은 왼쪽으로 짧게 나가 아래로 꺾여 접지 / C2는 n2에서 세로선이 위로 올라가 오른쪽으로 꺾여 둘째 연산증폭기 위를 지나 모서리에서 아래로 꺾여 Y 접속점 (귀환 커패시터) / −1 블록 출력에서 가로선이 오른쪽으로 가 모서리에서 위로 꺾여 그림 맨 위 높이까지 올라가, 왼쪽으로 꺾여 가로 R4를 지나 n1 세로선 위 끝 / −1 블록 둘레에 점선 원이 있고, 점선 원 오른쪽 위에서 점선이 오른쪽 아래로 뻗어 나감 / 접속점 (세 갈래 이상, 7곳): n1 위 = 위 R4 선 + 오른쪽 R3 + 아래 세로선 (점), n1 가운데 = 위 세로선 + 오른쪽 C1 + 아래 세로선 (점), n1 아래 = 왼쪽 R1 + 오른쪽 − 입력 + 위 세로선 (점), 위 Vout = 위 R3 선 + 왼쪽 C1 + 오른쪽 V_out 원 + 아래 세로선 (점), 아래 Vout = 왼쪽 연산증폭기 출력 + 위 세로선 + 오른쪽 R2 (점), n2 = 왼쪽 R2 + 오른쪽 − 입력 + 위 C2 선 (점), Y = 왼쪽 둘째 연산증폭기 출력 + 위 C2 선 + 오른쪽 −1 블록 입력 (점) / 교차: 없음\n\n![Q5](figures/fig-Q5.png)\n> 참고: 답안지 손글씨가 겹침 (n1 아래 접속점 아래의 \"o\" 비슷한 글자, 크롭 오른쪽 위에 문제 글의 $V_Y/V_{in}(s)$를 두른 손글씨 곡선 끝). −1 블록 둘레의 점선 원과 점선은 인쇄된 것 (보조 출처: 손정리 노트에 실린 같은 그림에도 있음)\n\n## 풀이\n### 가상 접지 노드의 KCL\n- 두 연산증폭기의 − 입력은 가상 접지(이상적, + 입력이 접지)\n- 첫째: $V_{in}/R_1 + V_X/R_4 + V_{out}(1/R_3 + sC_1) = 0$\n- 둘째: $V_{out}/R_2 + sC_2V_Y = 0$ → $V_{out} = -sR_2C_2V_Y$. $-1$ 블록: $V_X = -V_Y$\n### 전달함수\n- 대입: $V_{in}/R_1 = V_Y[1/R_4 + sR_2C_2/R_3 + s^2R_2C_1C_2]$\n- $\\dfrac{V_Y}{V_{in}}(s) = \\dfrac{R_4/R_1}{s^2R_2R_4C_1C_2 + sR_2R_4C_2/R_3 + 1}$\n### 답\n- $\\dfrac{V_Y}{V_{in}}(s) = \\dfrac{R_4/R_1}{s^2R_2R_4C_1C_2 + sR_2R_4C_2/R_3 + 1}$\n",
+  "raw_md": "---\nid: 2023-1_기말-Q5\nkind: 기출\nexam: \"2023-1 기말고사\"\nnumber: \"5\"\npoints: 10\nsource: \"../../2023-1/23-1 기말/기말고사.pdf\"\npdf_page: 5\nsource_lang: ko\nfigures:\n  - {id: \"Q5\", role: problem, panels: []}\ntextbook_chapters: [14]\ndepends_on: []\nrefs: []\nselection:\n  topics:\n  - 연산증폭기 2차 능동 필터\n  circuit_types:\n  - 연산증폭기\n  - biquad\n  - 저역 통과 필터\n  required_concepts:\n  - 이상적 연산증폭기와 가상 단락\n  - 연산증폭기 2차 능동 필터\n  - 적분기와 biquad\n  - 반전 가산기와 부호 반전\n  - s 영역 KCL과 전달 함수\n  learning_goals:\n  - '- Low-pass filter의 전달함수 $V_Y/V_{in}(s)$를 $R_1$, $R_2$, $R_3$, $R_4$, $C_1$, $C_2$로 나타낸 식'\n  evidence_sections:\n  - 원문\n  - 조건\n  - 구할 것\n  - 회로 — Fig Q5\n  - 풀이\n  subpart_requirements:\n  - label: main\n    required_concepts:\n    - 이상적 연산증폭기와 가상 단락\n    - 연산증폭기 2차 능동 필터\n    - 적분기와 biquad\n    - 반전 가산기와 부호 반전\n    - s 영역 KCL과 전달 함수\n  review_status: reviewed\n  reviewed_content_sha256: 5f96fff0b5ed55f14b0e59f22a7503cef99214db632b24ddbfd03dac6c8acaa8\n  classification_note: 첫 단은 R3∥C1 누설 적분기/가산기, 둘째는 C2 반전 적분기, −1 블록이 R4로 되먹임된다. 구하는 출력은 그림 Vout이 아니라 Y의 저역 통과 전달함수이므로 부호·적분기 연결을 보강했다. 전사 원문·조건·회로 crop/재그림·기존 풀이에 근거한 분류 검토이며 정답 독립 검산이나 수업 범위 승인이 아니다.\n---\n# 기출 2023-1 기말 5 — 두 적분기와 반전기로 된 biquad의 low-pass 전달 함수 V_Y/V_in\n\n## 원문\n다음 회로를 이용한 filter를 설계한다. 단, 이상적인 op amp를 가정한다. Low-pass filter의 전달함수($V_Y/V_{in}(s)$)를 $R_1$, $R_2$, $R_3$, $R_4$, $C_1$, $C_2$에 관한 식으로 구하시오.\n\n## 조건\n- 그림의 회로를 이용해 filter를 설계\n- 이상적인 op amp로 가정\n- 소자 값은 주어지지 않음 (원문에 없음)\n\n## 구할 것\n- Low-pass filter의 전달함수 $V_Y/V_{in}(s)$를 $R_1$, $R_2$, $R_3$, $R_4$, $C_1$, $C_2$로 나타낸 식\n\n## 회로 — Fig Q5\n```spice\nR1   Vin   n1    {R_1}\nX1   0     n1    Vout  opamp    ; in+ = 접지, in- = n1\nR3   n1    Vout  {R_3}\nC1   n1    Vout  {C_1}\nR2   Vout  n2    {R_2}\nX2   0     n2    Y     opamp    ; in+ = 접지, in- = n2\nC2   n2    Y     {C_2}\nX3   Y     X     box \"-1\"       ; 이득 −1 블록 (삼각형, 점선 원 안)\nR4   X     n1    {R_4}\n```\n- 단자: Vin = 입력 (개방 원) / Vout = 출력 (개방 원)\n- 표시: 노드 라벨 V_in (입력 원 왼쪽), V_out (출력 원 오른쪽), Y (Y 접속점 왼쪽 위, 둘째 연산증폭기 출력 위), X (−1 블록 출력선 오른쪽 위, 오른쪽 세로선 옆) / 소자 라벨 R1 (가로 저항 아래), R3 (가로 저항 위), C1 (커패시터 위), R4 (맨 위 가로 저항 아래), R2 (가로 저항 아래), C2 (커패시터 위), \"−1\" (삼각형 블록 안), 연산증폭기 둘 (라벨 없음) / 부호 두 연산증폭기 모두 \"−\" (위 입력, 삼각형 안), \"+\" (아래 입력, 삼각형 안) / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 왼쪽→오른쪽 V_in 원, 가로 R1, n1 아래 접속점, 첫째 연산증폭기, 아래 Vout 접속점, 가로 R2, n2 접속점, 둘째 연산증폭기, Y 접속점, −1 블록, X 선 / 연산증폭기와 −1 블록은 모두 오른쪽을 향한 삼각형 / 첫째 연산증폭기 위에 R3(위)과 C1(아래)이 나란히 n1 세로선과 Vout 세로선 사이에 걸림 / n1 세로선은 맨 위 R4 선 높이에서 − 입력 높이까지 내려오며 R3 높이, C1 높이, − 입력 높이에 접속점 / Vout 세로선은 R3 오른쪽 끝 모서리에서 아래로 내려와 C1 높이의 위 Vout 접속점(오른쪽 V_out 원), 연산증폭기 출력 높이의 아래 Vout 접속점까지 / 두 연산증폭기의 + 입력은 왼쪽으로 짧게 나가 아래로 꺾여 접지 / C2는 n2에서 세로선이 위로 올라가 오른쪽으로 꺾여 둘째 연산증폭기 위를 지나 모서리에서 아래로 꺾여 Y 접속점 (귀환 커패시터) / −1 블록 출력에서 가로선이 오른쪽으로 가 모서리에서 위로 꺾여 그림 맨 위 높이까지 올라가, 왼쪽으로 꺾여 가로 R4를 지나 n1 세로선 위 끝 / −1 블록 둘레에 점선 원이 있고, 점선 원 오른쪽 위에서 점선이 오른쪽 아래로 뻗어 나감 / 접속점 (세 갈래 이상, 7곳): n1 위 = 위 R4 선 + 오른쪽 R3 + 아래 세로선 (점), n1 가운데 = 위 세로선 + 오른쪽 C1 + 아래 세로선 (점), n1 아래 = 왼쪽 R1 + 오른쪽 − 입력 + 위 세로선 (점), 위 Vout = 위 R3 선 + 왼쪽 C1 + 오른쪽 V_out 원 + 아래 세로선 (점), 아래 Vout = 왼쪽 연산증폭기 출력 + 위 세로선 + 오른쪽 R2 (점), n2 = 왼쪽 R2 + 오른쪽 − 입력 + 위 C2 선 (점), Y = 왼쪽 둘째 연산증폭기 출력 + 위 C2 선 + 오른쪽 −1 블록 입력 (점) / 교차: 없음\n\n![Q5](figures/fig-Q5.png)\n> 참고: 답안지 손글씨가 겹침 (n1 아래 접속점 아래의 \"o\" 비슷한 글자, 크롭 오른쪽 위에 문제 글의 $V_Y/V_{in}(s)$를 두른 손글씨 곡선 끝). −1 블록 둘레의 점선 원과 점선은 인쇄된 것 (보조 출처: 손정리 노트에 실린 같은 그림에도 있음)\n\n## 풀이\n### 가상 접지 노드의 KCL\n- 두 연산증폭기의 − 입력은 가상 접지(이상적, + 입력이 접지)\n- 첫째: $V_{in}/R_1 + V_X/R_4 + V_{out}(1/R_3 + sC_1) = 0$\n- 둘째: $V_{out}/R_2 + sC_2V_Y = 0$ → $V_{out} = -sR_2C_2V_Y$. $-1$ 블록: $V_X = -V_Y$\n### 전달함수\n- 대입: $V_{in}/R_1 = V_Y[1/R_4 + sR_2C_2/R_3 + s^2R_2C_1C_2]$\n- $\\dfrac{V_Y}{V_{in}}(s) = \\dfrac{R_4/R_1}{s^2R_2R_4C_1C_2 + sR_2R_4C_2/R_3 + 1}$\n### 답\n- $\\dfrac{V_Y}{V_{in}}(s) = \\dfrac{R_4/R_1}{s^2R_2R_4C_1C_2 + sR_2R_4C_2/R_3 + 1}$\n",
   "schema_version": 1,
   "sections": [
     {
@@ -112,28 +123,39 @@
   ],
   "selection": {
     "circuit_types": [
-      "biquad"
+      "연산증폭기",
+      "biquad",
+      "저역 통과 필터"
     ],
-    "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+    "classification_note": "첫 단은 R3∥C1 누설 적분기/가산기, 둘째는 C2 반전 적분기, −1 블록이 R4로 되먹임된다. 구하는 출력은 그림 Vout이 아니라 Y의 저역 통과 전달함수이므로 부호·적분기 연결을 보강했다. 전사 원문·조건·회로 crop/재그림·기존 풀이에 근거한 분류 검토이며 정답 독립 검산이나 수업 범위 승인이 아니다.",
     "evidence_sections": [
+      "원문",
+      "조건",
       "구할 것",
+      "회로 — Fig Q5",
       "풀이"
     ],
     "learning_goals": [
       "- Low-pass filter의 전달함수 $V_Y/V_{in}(s)$를 $R_1$, $R_2$, $R_3$, $R_4$, $C_1$, $C_2$로 나타낸 식"
     ],
     "required_concepts": [
+      "이상적 연산증폭기와 가상 단락",
       "연산증폭기 2차 능동 필터",
       "적분기와 biquad",
+      "반전 가산기와 부호 반전",
       "s 영역 KCL과 전달 함수"
     ],
-    "review_status": "draft",
+    "review_status": "reviewed",
     "reviewed_content_sha256": "5f96fff0b5ed55f14b0e59f22a7503cef99214db632b24ddbfd03dac6c8acaa8",
-    "status": "draft",
+    "status": "reviewed",
     "subpart_requirements": [
       {
         "label": "main",
         "required_concepts": [
+          "이상적 연산증폭기와 가상 단락",
+          "연산증폭기 2차 능동 필터",
+          "적분기와 biquad",
+          "반전 가산기와 부호 반전",
           "s 영역 KCL과 전달 함수"
         ]
       }
@@ -147,6 +169,10 @@
       "ask_md": "- Low-pass filter의 전달함수 $V_Y/V_{in}(s)$를 $R_1$, $R_2$, $R_3$, $R_4$, $C_1$, $C_2$로 나타낸 식",
       "label": "main",
       "required_concepts": [
+        "이상적 연산증폭기와 가상 단락",
+        "연산증폭기 2차 능동 필터",
+        "적분기와 biquad",
+        "반전 가산기와 부호 반전",
         "s 영역 KCL과 전달 함수"
       ]
     }

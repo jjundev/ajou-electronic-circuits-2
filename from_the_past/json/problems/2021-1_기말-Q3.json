@@ -23,7 +23,7 @@
   ],
   "id": "2021-1_기말-Q3",
   "input_hashes": {
-    "from_the_past/md/2021-1_기말/Q3.md": "af3f2e401b7366fe299cbc5c3bf0006ac8d5db4ed21c46fcc31d74d2f9492182",
+    "from_the_past/md/2021-1_기말/Q3.md": "9335df6b20cfe671c77f376faa39ff29f5325cc2c2b054c6167f422db3cf39ae",
     "from_the_past/md/2021-1_기말/exam.yaml": "bf4144b20de31b19ee273ef1f948399d29f99531d14dbfa5cf4542f41bf722aa",
     "from_the_past/md/2021-1_기말/figures/fig-Q3.png": "8671fa78b38715ee6ed276b2d9e378bcfd90244c4a49445f3873a60346893dd6",
     "from_the_past/md/2021-1_기말/figures/figures.yaml": "868e1927572ab223a4b07069f4cef61a6ead8489536424474910eaddf443f0b8",
@@ -48,11 +48,17 @@
     "refs": [],
     "selection": {
       "circuit_types": [
-        "공통 게이트"
+        "MOS",
+        "공통 게이트",
+        "소스 팔로워",
+        "병렬·병렬 귀환"
       ],
-      "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+      "classification_note": "원본·재그림은 CG→NMOS 소스 팔로워로 비반전이며 RF가 입력 전류 합산점으로 돌아와 기존 풀이도 양의 귀환이라 명시한다. 부귀환 단정 태그를 제거했다. RF가 크지 않아 양단 부하를 유지하며 이득은 Vout/Iin(Ω)이다. 안정성·정확한 양방향 귀환 공식은 독립 검산하지 않았다. 전사 원문·조건·회로 crop/재그림·기존 풀이에 근거한 분류 검토이며 정답 독립 검산이나 수업 범위 승인이 아니다.",
       "evidence_sections": [
+        "원문",
+        "조건",
         "구할 것",
+        "회로 — Fig Q3",
         "풀이"
       ],
       "learning_goals": [
@@ -60,30 +66,45 @@
         "Closed-loop input impedance와 closed-loop output impedance를 각각 구함"
       ],
       "required_concepts": [
-        "부귀환·개루프·루프 이득·폐루프 이득",
         "공통 게이트 증폭기",
         "소스 팔로워",
+        "귀환망의 입력·출력 부하",
+        "전압 감지·전류 귀환",
+        "트랜스임피던스 이득",
+        "양의 귀환과 루프 부호",
+        "개루프·루프 이득·폐루프 이득",
         "귀환 입출력 임피던스"
       ],
-      "review_status": "draft",
+      "review_status": "reviewed",
       "reviewed_content_sha256": "cd0c5dd035411d2bce588ade3256072bc2a70f69ee904a2f8c543be0d2d0e7cd",
       "subpart_requirements": [
         {
           "label": "1",
           "required_concepts": [
-            "소신호 전압 이득",
-            "부귀환·개루프·루프 이득·폐루프 이득"
+            "공통 게이트 증폭기",
+            "소스 팔로워",
+            "귀환망의 입력·출력 부하",
+            "전압 감지·전류 귀환",
+            "트랜스임피던스 이득",
+            "양의 귀환과 루프 부호",
+            "개루프·루프 이득·폐루프 이득"
           ]
         },
         {
           "label": "2",
           "required_concepts": [
-            "부귀환·개루프·루프 이득·폐루프 이득"
+            "공통 게이트 증폭기",
+            "소스 팔로워",
+            "귀환망의 입력·출력 부하",
+            "전압 감지·전류 귀환",
+            "양의 귀환과 루프 부호",
+            "귀환 입출력 임피던스"
           ]
         }
       ],
       "topics": [
-        "부귀환·개루프·루프 이득·폐루프 이득"
+        "개루프·루프 이득·폐루프 이득",
+        "양의 귀환과 루프 부호"
       ]
     },
     "source": "../../2021중간_기말/기말/Final0617_1p_rev.pdf",
@@ -92,7 +113,7 @@
       12
     ]
   },
-  "raw_md": "---\nid: 2021-1_기말-Q3\nkind: 기출\nexam: \"2021-1 기말고사\"\nnumber: \"3\"\npoints: 20\nsource: ../../2021중간_기말/기말/Final0617_1p_rev.pdf\npdf_page: 1\nsource_lang: ko\nfigures:\n  - {id: \"Q3\", role: problem, panels: []}\ntextbook_chapters: [12]\ndepends_on: []\nrefs: []\nselection:\n  topics:\n  - 부귀환·개루프·루프 이득·폐루프 이득\n  circuit_types:\n  - 공통 게이트\n  required_concepts:\n  - 부귀환·개루프·루프 이득·폐루프 이득\n  - 공통 게이트 증폭기\n  - 소스 팔로워\n  - 귀환 입출력 임피던스\n  learning_goals:\n  - Feedback factor와 closed-loop gain을 각각 구함\n  - Closed-loop input impedance와 closed-loop output impedance를 각각 구함\n  evidence_sections:\n  - 구할 것\n  - 풀이\n  subpart_requirements:\n  - label: '1'\n    required_concepts:\n    - 소신호 전압 이득\n    - 부귀환·개루프·루프 이득·폐루프 이득\n  - label: '2'\n    required_concepts:\n    - 부귀환·개루프·루프 이득·폐루프 이득\n  review_status: draft\n  reviewed_content_sha256: cd0c5dd035411d2bce588ade3256072bc2a70f69ee904a2f8c543be0d2d0e7cd\n  classification_note: 제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.\n---\n# 기출 2021-1 기말 3 — R_F 귀환이 있는 공통 게이트–소스 팔로워 증폭기의 귀환 해석\n\n## 원문\n다음 회로에서 $R_F$는 매우 크지 않다고 가정하며, $\\lambda = 0$으로 가정한다.\n\n(1) Feedback factor와 closed-loop gain을 각각 구하시오.\n\n(2) Closed-loop input impedance와 closed-loop output impedance를 각각 구하시오.\n\n## 조건\n- 회로: 그림 (입력 전류 $I_{in}$, 출력 전압 $V_{out}$)\n- $R_F$는 매우 크지 않다고 가정\n- $\\lambda = 0$으로 가정\n- 소자 값($R_D$, $R_F$, $R_M$, $V_b$, $V_{DD}$, 트랜지스터 크기)은 주어지지 않음 (원문에 없음)\n\n## 구할 것\n- (1) Feedback factor와 closed-loop gain을 각각 구함\n- (2) Closed-loop input impedance와 closed-loop output impedance를 각각 구함\n\n## 회로 — Fig Q3\n```spice\nRD   VDD  n1    {R_D}\nM1   n1   Vb    n2    nmos    ; 좌우 반전 (게이트 오른쪽)\nM2   VDD  n1    Vout  nmos\nRF   n2   Vout  {R_F}\nRM   Vout 0     {R_M}\nIin  0    n2    {I_in}\n```\n- 단자: VDD = 전원, 값 미지정 (가로 레일) / Vb = 이상적 DC 바이어스, 값 미지정 (점 단자) / Vout = 출력 (개방 원)\n- 표시: 노드 라벨 V_DD (레일 오른쪽 끝), V_b (점 단자 오른쪽), V_out (출력 원 오른쪽) / 소자 라벨 R_D (저항 왼쪽), M2 (M2 오른쪽), M1 (M1 왼쪽, 소스 화살표 높이), R_F (가로 저항 아래), R_M (저항 오른쪽), I_in (전류원 왼쪽) / 부호 없음 / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 맨 위 가로 레일 V_DD / 왼쪽 세로줄 위→아래 R_D, n1 접속점, M1, n2 접속점 / 오른쪽 세로줄 위→아래 M2, Vout 접속점, R_M, 접지 / M1 nmos 좌우 반전 (게이트 오른쪽, 드레인 왼쪽 위, 소스 왼쪽 아래·화살표가 왼쪽 바깥으로) / M2 nmos 보통 방향 (게이트 왼쪽, 드레인 위가 레일로, 소스 아래·화살표 바깥) / n1 접속점에서 가로선이 오른쪽으로 가 M2 게이트 / M1 게이트에서 짧은 가로선이 오른쪽 V_b 점 단자 / n2 접속점에서 가로선이 왼쪽으로 가 모서리에서 아래로 꺾여 I_in 전류원(화살표 위 방향), 그 아래 접지 / n2에서 오른쪽으로 가로 R_F를 지나 Vout 접속점 / Vout 접속점에서 가로선이 오른쪽 Vout 원 / 접속점 (세 갈래 이상, 3곳): n1 = 위 R_D + 아래 M1 드레인 + 오른쪽 M2 게이트 선 (점), n2 = 위 M1 소스 + 왼쪽 I_in 선 + 오른쪽 R_F (점), Vout = 위 M2 소스 + 왼쪽 R_F + 아래 R_M + 오른쪽 Vout 선 (점) / 교차: 없음\n\n![Q3](figures/fig-Q3.png)\n> 참고: 원본 PDF에서 R_M과 그 접지 부분은 본 그림 위에 작은 이미지가 덧붙여진 것 (밑 그림은 아래 방향 전류원, 인쇄되지 않음). 넷리스트는 인쇄된 R_M을 따름\n\n## 힌트\n### (1) $R_F$ 부하는 반대쪽 끝을 접지\n- $R_F$는 출력 전압을 감지해 $M_1$ 소스 노드에 전류로 되돌리므로, 매우 크지 않으면 개루프 이득을 구할 때 부하로 넣어야 한다\n- 입력 쪽 부하는 $V_{out}$을 접지하고, 출력 쪽 부하는 $M_1$ 소스 노드를 접지하고 $R_F$를 본다\n\n## 풀이\n### (1) 귀환 구조와 개루프 이득\n- $R_F$가 $V_{out}$을 감지해 $M_1$ 소스에 전류로 되돌린다(전압 감지·전류 귀환). 양쪽 모두 병렬이라 부하는 반대쪽 끝을 접지한 $R_F$\n- $I_{in}$ 중 $g_{m1}R_F/(1 + g_{m1}R_F)$가 $M_1$로 흘러 $R_D$에, $M_2$ 부하는 $R_M \\parallel R_F$ (몸체 효과 무시)\n- $A_{OL} = \\dfrac{g_{m1}R_F R_D}{1 + g_{m1}R_F} \\cdot \\dfrac{R_M \\parallel R_F}{R_M \\parallel R_F + 1/g_{m2}}$\n### (1) 귀환 계수와 폐루프 이득\n- 소스 노드를 접지했을 때 그 노드에서 $R_F$로 빠지는 전류 $-V_{out}/R_F$: $\\beta = -1/R_F$\n- $A_{CL} = A_{OL}/(1 + \\beta A_{OL}) = A_{OL}/(1 - A_{OL}/R_F)$\n- 공통 게이트·소스 팔로워가 비반전이라 $\\beta A_{OL} < 0$, 그림대로면 양의 귀환이다 ($A_{OL} < R_F$여야 안정)\n### (2) 폐루프 입출력 임피던스\n- 개루프 $R_{in} = R_F \\parallel (1/g_{m1})$, $R_{out} = R_M \\parallel R_F \\parallel (1/g_{m2})$\n- 입력(전류 귀환)·출력(전압 감지) 모두 병렬이라 $1 + \\beta A_{OL}$로 나눈다\n### 답\n- (1) $\\beta = -1/R_F$, $A_{CL} = A_{OL}/(1 - A_{OL}/R_F)$ 여기서 $A_{OL} = \\dfrac{g_{m1}R_FR_D}{1 + g_{m1}R_F} \\cdot \\dfrac{R_M \\parallel R_F}{R_M \\parallel R_F + 1/g_{m2}}$\n- (2) $R_{in,CL} = [R_F \\parallel (1/g_{m1})]/(1 - A_{OL}/R_F)$, $R_{out,CL} = [R_M \\parallel R_F \\parallel (1/g_{m2})]/(1 - A_{OL}/R_F)$\n",
+  "raw_md": "---\nid: 2021-1_기말-Q3\nkind: 기출\nexam: \"2021-1 기말고사\"\nnumber: \"3\"\npoints: 20\nsource: ../../2021중간_기말/기말/Final0617_1p_rev.pdf\npdf_page: 1\nsource_lang: ko\nfigures:\n  - {id: \"Q3\", role: problem, panels: []}\ntextbook_chapters: [12]\ndepends_on: []\nrefs: []\nselection:\n  topics:\n  - 개루프·루프 이득·폐루프 이득\n  - 양의 귀환과 루프 부호\n  circuit_types:\n  - MOS\n  - 공통 게이트\n  - 소스 팔로워\n  - 병렬·병렬 귀환\n  required_concepts:\n  - 공통 게이트 증폭기\n  - 소스 팔로워\n  - 귀환망의 입력·출력 부하\n  - 전압 감지·전류 귀환\n  - 트랜스임피던스 이득\n  - 양의 귀환과 루프 부호\n  - 개루프·루프 이득·폐루프 이득\n  - 귀환 입출력 임피던스\n  learning_goals:\n  - Feedback factor와 closed-loop gain을 각각 구함\n  - Closed-loop input impedance와 closed-loop output impedance를 각각 구함\n  evidence_sections:\n  - 원문\n  - 조건\n  - 구할 것\n  - 회로 — Fig Q3\n  - 풀이\n  subpart_requirements:\n  - label: '1'\n    required_concepts:\n    - 공통 게이트 증폭기\n    - 소스 팔로워\n    - 귀환망의 입력·출력 부하\n    - 전압 감지·전류 귀환\n    - 트랜스임피던스 이득\n    - 양의 귀환과 루프 부호\n    - 개루프·루프 이득·폐루프 이득\n  - label: '2'\n    required_concepts:\n    - 공통 게이트 증폭기\n    - 소스 팔로워\n    - 귀환망의 입력·출력 부하\n    - 전압 감지·전류 귀환\n    - 양의 귀환과 루프 부호\n    - 귀환 입출력 임피던스\n  review_status: reviewed\n  reviewed_content_sha256: cd0c5dd035411d2bce588ade3256072bc2a70f69ee904a2f8c543be0d2d0e7cd\n  classification_note: 원본·재그림은 CG→NMOS 소스 팔로워로 비반전이며 RF가 입력 전류 합산점으로 돌아와 기존 풀이도 양의 귀환이라 명시한다. 부귀환 단정 태그를 제거했다. RF가 크지 않아 양단 부하를 유지하며 이득은 Vout/Iin(Ω)이다. 안정성·정확한 양방향 귀환 공식은 독립 검산하지 않았다. 전사 원문·조건·회로 crop/재그림·기존 풀이에 근거한 분류 검토이며 정답 독립 검산이나 수업 범위 승인이 아니다.\n---\n# 기출 2021-1 기말 3 — R_F 귀환이 있는 공통 게이트–소스 팔로워 증폭기의 귀환 해석\n\n## 원문\n다음 회로에서 $R_F$는 매우 크지 않다고 가정하며, $\\lambda = 0$으로 가정한다.\n\n(1) Feedback factor와 closed-loop gain을 각각 구하시오.\n\n(2) Closed-loop input impedance와 closed-loop output impedance를 각각 구하시오.\n\n## 조건\n- 회로: 그림 (입력 전류 $I_{in}$, 출력 전압 $V_{out}$)\n- $R_F$는 매우 크지 않다고 가정\n- $\\lambda = 0$으로 가정\n- 소자 값($R_D$, $R_F$, $R_M$, $V_b$, $V_{DD}$, 트랜지스터 크기)은 주어지지 않음 (원문에 없음)\n\n## 구할 것\n- (1) Feedback factor와 closed-loop gain을 각각 구함\n- (2) Closed-loop input impedance와 closed-loop output impedance를 각각 구함\n\n## 회로 — Fig Q3\n```spice\nRD   VDD  n1    {R_D}\nM1   n1   Vb    n2    nmos    ; 좌우 반전 (게이트 오른쪽)\nM2   VDD  n1    Vout  nmos\nRF   n2   Vout  {R_F}\nRM   Vout 0     {R_M}\nIin  0    n2    {I_in}\n```\n- 단자: VDD = 전원, 값 미지정 (가로 레일) / Vb = 이상적 DC 바이어스, 값 미지정 (점 단자) / Vout = 출력 (개방 원)\n- 표시: 노드 라벨 V_DD (레일 오른쪽 끝), V_b (점 단자 오른쪽), V_out (출력 원 오른쪽) / 소자 라벨 R_D (저항 왼쪽), M2 (M2 오른쪽), M1 (M1 왼쪽, 소스 화살표 높이), R_F (가로 저항 아래), R_M (저항 오른쪽), I_in (전류원 왼쪽) / 부호 없음 / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 맨 위 가로 레일 V_DD / 왼쪽 세로줄 위→아래 R_D, n1 접속점, M1, n2 접속점 / 오른쪽 세로줄 위→아래 M2, Vout 접속점, R_M, 접지 / M1 nmos 좌우 반전 (게이트 오른쪽, 드레인 왼쪽 위, 소스 왼쪽 아래·화살표가 왼쪽 바깥으로) / M2 nmos 보통 방향 (게이트 왼쪽, 드레인 위가 레일로, 소스 아래·화살표 바깥) / n1 접속점에서 가로선이 오른쪽으로 가 M2 게이트 / M1 게이트에서 짧은 가로선이 오른쪽 V_b 점 단자 / n2 접속점에서 가로선이 왼쪽으로 가 모서리에서 아래로 꺾여 I_in 전류원(화살표 위 방향), 그 아래 접지 / n2에서 오른쪽으로 가로 R_F를 지나 Vout 접속점 / Vout 접속점에서 가로선이 오른쪽 Vout 원 / 접속점 (세 갈래 이상, 3곳): n1 = 위 R_D + 아래 M1 드레인 + 오른쪽 M2 게이트 선 (점), n2 = 위 M1 소스 + 왼쪽 I_in 선 + 오른쪽 R_F (점), Vout = 위 M2 소스 + 왼쪽 R_F + 아래 R_M + 오른쪽 Vout 선 (점) / 교차: 없음\n\n![Q3](figures/fig-Q3.png)\n> 참고: 원본 PDF에서 R_M과 그 접지 부분은 본 그림 위에 작은 이미지가 덧붙여진 것 (밑 그림은 아래 방향 전류원, 인쇄되지 않음). 넷리스트는 인쇄된 R_M을 따름\n\n## 힌트\n### (1) $R_F$ 부하는 반대쪽 끝을 접지\n- $R_F$는 출력 전압을 감지해 $M_1$ 소스 노드에 전류로 되돌리므로, 매우 크지 않으면 개루프 이득을 구할 때 부하로 넣어야 한다\n- 입력 쪽 부하는 $V_{out}$을 접지하고, 출력 쪽 부하는 $M_1$ 소스 노드를 접지하고 $R_F$를 본다\n\n## 풀이\n### (1) 귀환 구조와 개루프 이득\n- $R_F$가 $V_{out}$을 감지해 $M_1$ 소스에 전류로 되돌린다(전압 감지·전류 귀환). 양쪽 모두 병렬이라 부하는 반대쪽 끝을 접지한 $R_F$\n- $I_{in}$ 중 $g_{m1}R_F/(1 + g_{m1}R_F)$가 $M_1$로 흘러 $R_D$에, $M_2$ 부하는 $R_M \\parallel R_F$ (몸체 효과 무시)\n- $A_{OL} = \\dfrac{g_{m1}R_F R_D}{1 + g_{m1}R_F} \\cdot \\dfrac{R_M \\parallel R_F}{R_M \\parallel R_F + 1/g_{m2}}$\n### (1) 귀환 계수와 폐루프 이득\n- 소스 노드를 접지했을 때 그 노드에서 $R_F$로 빠지는 전류 $-V_{out}/R_F$: $\\beta = -1/R_F$\n- $A_{CL} = A_{OL}/(1 + \\beta A_{OL}) = A_{OL}/(1 - A_{OL}/R_F)$\n- 공통 게이트·소스 팔로워가 비반전이라 $\\beta A_{OL} < 0$, 그림대로면 양의 귀환이다 ($A_{OL} < R_F$여야 안정)\n### (2) 폐루프 입출력 임피던스\n- 개루프 $R_{in} = R_F \\parallel (1/g_{m1})$, $R_{out} = R_M \\parallel R_F \\parallel (1/g_{m2})$\n- 입력(전류 귀환)·출력(전압 감지) 모두 병렬이라 $1 + \\beta A_{OL}$로 나눈다\n### 답\n- (1) $\\beta = -1/R_F$, $A_{CL} = A_{OL}/(1 - A_{OL}/R_F)$ 여기서 $A_{OL} = \\dfrac{g_{m1}R_FR_D}{1 + g_{m1}R_F} \\cdot \\dfrac{R_M \\parallel R_F}{R_M \\parallel R_F + 1/g_{m2}}$\n- (2) $R_{in,CL} = [R_F \\parallel (1/g_{m1})]/(1 - A_{OL}/R_F)$, $R_{out,CL} = [R_M \\parallel R_F \\parallel (1/g_{m2})]/(1 - A_{OL}/R_F)$\n",
   "schema_version": 1,
   "sections": [
     {
@@ -122,11 +143,17 @@
   ],
   "selection": {
     "circuit_types": [
-      "공통 게이트"
+      "MOS",
+      "공통 게이트",
+      "소스 팔로워",
+      "병렬·병렬 귀환"
     ],
-    "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+    "classification_note": "원본·재그림은 CG→NMOS 소스 팔로워로 비반전이며 RF가 입력 전류 합산점으로 돌아와 기존 풀이도 양의 귀환이라 명시한다. 부귀환 단정 태그를 제거했다. RF가 크지 않아 양단 부하를 유지하며 이득은 Vout/Iin(Ω)이다. 안정성·정확한 양방향 귀환 공식은 독립 검산하지 않았다. 전사 원문·조건·회로 crop/재그림·기존 풀이에 근거한 분류 검토이며 정답 독립 검산이나 수업 범위 승인이 아니다.",
     "evidence_sections": [
+      "원문",
+      "조건",
       "구할 것",
+      "회로 — Fig Q3",
       "풀이"
     ],
     "learning_goals": [
@@ -134,31 +161,46 @@
       "Closed-loop input impedance와 closed-loop output impedance를 각각 구함"
     ],
     "required_concepts": [
-      "부귀환·개루프·루프 이득·폐루프 이득",
       "공통 게이트 증폭기",
       "소스 팔로워",
+      "귀환망의 입력·출력 부하",
+      "전압 감지·전류 귀환",
+      "트랜스임피던스 이득",
+      "양의 귀환과 루프 부호",
+      "개루프·루프 이득·폐루프 이득",
       "귀환 입출력 임피던스"
     ],
-    "review_status": "draft",
+    "review_status": "reviewed",
     "reviewed_content_sha256": "cd0c5dd035411d2bce588ade3256072bc2a70f69ee904a2f8c543be0d2d0e7cd",
-    "status": "draft",
+    "status": "reviewed",
     "subpart_requirements": [
       {
         "label": "1",
         "required_concepts": [
-          "소신호 전압 이득",
-          "부귀환·개루프·루프 이득·폐루프 이득"
+          "공통 게이트 증폭기",
+          "소스 팔로워",
+          "귀환망의 입력·출력 부하",
+          "전압 감지·전류 귀환",
+          "트랜스임피던스 이득",
+          "양의 귀환과 루프 부호",
+          "개루프·루프 이득·폐루프 이득"
         ]
       },
       {
         "label": "2",
         "required_concepts": [
-          "부귀환·개루프·루프 이득·폐루프 이득"
+          "공통 게이트 증폭기",
+          "소스 팔로워",
+          "귀환망의 입력·출력 부하",
+          "전압 감지·전류 귀환",
+          "양의 귀환과 루프 부호",
+          "귀환 입출력 임피던스"
         ]
       }
     ],
     "topics": [
-      "부귀환·개루프·루프 이득·폐루프 이득"
+      "개루프·루프 이득·폐루프 이득",
+      "양의 귀환과 루프 부호"
     ]
   },
   "subparts": [
@@ -166,15 +208,25 @@
       "ask_md": "Feedback factor와 closed-loop gain을 각각 구함",
       "label": "1",
       "required_concepts": [
-        "소신호 전압 이득",
-        "부귀환·개루프·루프 이득·폐루프 이득"
+        "공통 게이트 증폭기",
+        "소스 팔로워",
+        "귀환망의 입력·출력 부하",
+        "전압 감지·전류 귀환",
+        "트랜스임피던스 이득",
+        "양의 귀환과 루프 부호",
+        "개루프·루프 이득·폐루프 이득"
       ]
     },
     {
       "ask_md": "Closed-loop input impedance와 closed-loop output impedance를 각각 구함",
       "label": "2",
       "required_concepts": [
-        "부귀환·개루프·루프 이득·폐루프 이득"
+        "공통 게이트 증폭기",
+        "소스 팔로워",
+        "귀환망의 입력·출력 부하",
+        "전압 감지·전류 귀환",
+        "양의 귀환과 루프 부호",
+        "귀환 입출력 임피던스"
       ]
     }
   ],
