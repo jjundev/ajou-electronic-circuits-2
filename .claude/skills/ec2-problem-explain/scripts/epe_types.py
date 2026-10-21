@@ -2,6 +2,8 @@
 from dataclasses import dataclass
 from pathlib import Path
 
+from epe_shared import StyleSnapshot
+
 # Pack folders keep only .pack/, HTML and PDF at the top; everything else lives here.
 BUNDLE = '.assets'
 
@@ -21,6 +23,7 @@ class Problem:
     reference_steps: tuple[str, ...]
     reference_answer: str
     subparts: tuple[str, ...]
+    workbook_id: str
 
 @dataclass(frozen=True)
 class SourcePack:
@@ -31,6 +34,7 @@ class SourcePack:
     sha256: str
     problems: tuple[Problem, ...]
     inputs: tuple[str, ...]
+    learning_style: StyleSnapshot
 
     @property
     def folder(self) -> Path:

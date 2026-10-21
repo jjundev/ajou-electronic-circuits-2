@@ -56,6 +56,7 @@ def _copy_problem(pid, dest_root):
 def make_repo(tmp, *, range_='1007', slug='Diff_Amp', ids=('P10.02', '2023-1_중간-Q4'), nfd=False):
     tmp = Path(tmp)
     form = (lambda s: unicodedata.normalize('NFD', s)) if nfd else (lambda s: s)
+    _copy(Path('docs/learning/solution-style.md'), tmp)
     for pid in ids:
         _copy_problem(_nfc(pid), tmp)
     folder = tmp / form('복습노트') / range_
@@ -73,14 +74,27 @@ def make_repo(tmp, *, range_='1007', slug='Diff_Amp', ids=('P10.02', '2023-1_중
 def problem():
     return Problem('p1', 1, '행렬', 'HW1 Problem 1', '<p>Find (a), (b).</p>',
                    '<p>$A=1$</p>', '<ol><li>(a) $A$</li><li>(b) $A^2$</li></ol>',
-                   (), ('계산',), '1', ('a', 'b'))
+                   (), ('계산',), '1', ('a', 'b'), 'E9.05')
+
+
+def core_route(p):
+    groups = ''.join(f'<div data-core-subpart="{key}">'
+                     '<div data-solution-core="step" data-core-label="회로 판단">'
+                     '<p>판단과 식은 $1=1$이에요.</p></div>'
+                     '<div data-solution-core="answer"><p>최종 답은 $1$이에요.</p></div></div>'
+                     for key in p.subparts)
+    return '<div class="layer formal solution-route" data-personalization="route"><h4>핵심 풀이</h4>' + groups + '</div>'
+
+
+def core_fragment(p):
+    return fragment(p)
 
 
 def fragment(p=None):
     p = p or problem()
     parts = ''.join(f'<div data-subpart="{key}"><p>첫 식에서 계산하고 대입해 확인해요. $1=1$</p></div>'
                     for key in p.subparts)
-    return ('<div class="layer eli5" data-explanation="understand"><p>구할 것을 읽어요.</p></div>'
+    return (core_route(p) + '<div class="layer eli5" data-explanation="understand"><p>구할 것을 읽어요.</p></div>'
             '<div class="layer formal" data-explanation="recall">'
             '<h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4>'
             '<p>제곱을 구하라는 단서에서 같은 수의 곱을 떠올려요. '
@@ -94,7 +108,8 @@ def fragment(p=None):
 
 
 def pack(path=Path('.assets/problems.txt')):
-    return SourcePack('review', '1007', 'Diff_Amp', path, '0' * 64, (problem(),), ())
+    from epe_shared import read_style
+    return SourcePack('review', '1007', 'Diff_Amp', path, '0' * 64, (problem(),), (), read_style(REPO))
 
 
 def approved(pack, fragments, artifacts=None):

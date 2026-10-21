@@ -10,7 +10,7 @@ from urllib.parse import quote
 from epe_types import BUNDLE, ExplainError, Problem, SourcePack
 from epe_shared import (load_problem, html_fields, problem_figures, solution, ProblemError,
                         TEXTBOOK_ID_RE, EXAM_ID_RE, KIND_DIR, textbook_figure_filename,
-                        exam_figure_filename, parse)
+                        exam_figure_filename, parse, read_style, LearningStyleError)
 
 REVIEW_DIR = '복습노트'
 PACK_RE = re.compile(r'\d{4}(?:-\d{4})?')
@@ -201,6 +201,11 @@ def load_source(path: Path, repo: Path) -> SourcePack:
         text = path.read_text(encoding='utf-8')
     except OSError as exc:
         raise ExplainError(f'problems.txt 읽기 실패: {exc}') from exc
+    try:
+        learning_style = read_style(repo)
+        style_path = inside(repo / learning_style['path'], repo)
+    except LearningStyleError as exc:
+        raise ExplainError(str(exc)) from exc
     ids = _entries(text)
     if not ids:
         raise ExplainError('problems.txt에 문항이 없습니다')
@@ -236,12 +241,12 @@ def load_source(path: Path, repo: Path) -> SourcePack:
             original_html=fields.get('original', ''), conditions_html=fields['conditions'],
             ask_html=fields['ask'],
             figures_html=tuple(f'<figure><img src="{rel}" alt="그림 {p.id}"></figure>' for rel in rels),
-            reference_steps=steps, reference_answer=answer, subparts=subs))
+            reference_steps=steps, reference_answer=answer, subparts=subs, workbook_id=p.id))
         mds.append(md)
         figs += [f for f in paths if f not in figs]
-    inputs = [path, *mds, *figs]
+    inputs = [path, *mds, *figs, style_path]
     digest = hashlib.sha256()
     for item in inputs:
         digest.update(sha256(item).encode())
     return SourcePack('review', range_, slug, path, digest.hexdigest(), tuple(problems),
-                      tuple(str(item) for item in inputs))
+                      tuple(str(item) for item in inputs), learning_style)

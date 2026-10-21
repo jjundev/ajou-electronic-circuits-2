@@ -38,6 +38,30 @@ class SourceTest(unittest.TestCase):
     def names(self, paths):
         return [unicodedata.normalize('NFC', p.parent.parent.name) for p in paths]
 
+    def test_workbook_identity_and_style_snapshot_are_source_inputs(self):
+        repo = self.repo(ids=('E9.05',))
+        txt = resolve_sources(repo, '1007')[0]
+        pack = load_source(txt, repo)
+        self.assertEqual(pack.problems[0].workbook_id, 'E9.05')
+        self.assertEqual(pack.problems[0].id, 'p1')
+        self.assertIn(str(repo / 'docs/learning/solution-style.md'), pack.inputs)
+        self.assertEqual(pack.learning_style['path'], 'docs/learning/solution-style.md')
+        before = pack.sha256
+        style = repo / 'docs/learning/solution-style.md'
+        style.write_bytes(style.read_bytes() + b'\n')
+        self.assertNotEqual(load_source(txt, repo).sha256, before)
+
+    def test_missing_or_invalid_style_is_refused(self):
+        repo = self.repo(ids=('E9.05',))
+        txt = resolve_sources(repo, '1007')[0]
+        style = repo / 'docs/learning/solution-style.md'
+        style.unlink()
+        with self.assertRaisesRegex(ExplainError, '명세'):
+            load_source(txt, repo)
+        style.write_text('no rules', encoding='utf-8')
+        with self.assertRaisesRegex(ExplainError, '명세'):
+            load_source(txt, repo)
+
     def test_latest_pack_with_problems_is_default(self):
         repo = self.repo()
         add_pack(repo, '0904', problems=False)
