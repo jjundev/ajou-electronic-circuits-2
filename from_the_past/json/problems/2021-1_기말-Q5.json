@@ -1,0 +1,185 @@
+{
+  "body_md": "# 기출 2021-1 기말 5 — KHN biquad 대역 통과 필터의 전달 함수와 R5, R6 설계\n\n## 원문\n그림과 같은 KHN biquad 회로를 이용한 filter를 설계한다.\n\n(1) 회로에서 $V_{out}$을 $V_{in}$, $V_X$, $V_Y$, $R_3$, $R_4$, $R_5$, $R_6$에 관한 식으로 구하시오. 그리고, KHN biquad band-pass filter의 전달함수를 $R_1$, $R_2$, $R_3$, $R_4$, $R_5$, $R_6$, $C_1$, $C_2$에 관한 식으로 구하시오.\n\n(2) KHN biquad filter의 $\\omega_n = 200\\ \\text{M rad/s}$ ($\\approx 2\\pi \\times 32\\ \\text{MHz}$), $Q = 4$가 되도록 하는 $R_5$, $R_6$ 값을 각각 구하시오. 단, $C_1 = C_2 = 10\\ \\text{pF}$, $R_1 = R_2 = 1\\ \\text{K}\\Omega$, $R_3 = R_4 = 1\\ \\text{K}\\Omega$으로 설계한다.\n\n## 조건\n- 그림의 KHN biquad 회로를 이용해 filter를 설계\n- 그림 오른쪽 회로는 첫 연산증폭기 단을 따로 그린 것으로, 입력 $V_{in}$, $V_X$, $V_Y$가 각각 $R_4$, $R_5$, $R_3$을 거쳐 들어감 (원문에 없음)\n- 연산증폭기에 대한 가정은 적혀 있지 않음 (원문에 없음)\n- (2) 전용: $C_1 = C_2 = 10\\ \\text{pF}$, $R_1 = R_2 = 1\\ \\text{k}\\Omega$, $R_3 = R_4 = 1\\ \\text{k}\\Omega$으로 설계\n- (2) 전용: 목표 $\\omega_n = 200\\ \\text{M rad/s}$ ($\\approx 2\\pi \\times 32\\ \\text{MHz}$), $Q = 4$\n\n## 구할 것\n- (1) 회로에서 $V_{out}$을 $V_{in}$, $V_X$, $V_Y$, $R_3$, $R_4$, $R_5$, $R_6$으로 나타낸 식. 그리고 KHN biquad band-pass filter의 전달 함수를 $R_1$, $R_2$, $R_3$, $R_4$, $R_5$, $R_6$, $C_1$, $C_2$로 나타낸 식\n- (2) KHN biquad filter의 $\\omega_n = 200\\ \\text{M rad/s}$, $Q = 4$가 되도록 하는 $R_5$, $R_6$ 값\n\n## 회로 — Fig Q5\n```spice\nR4  Vin   n2    {R_4}\nX1  n2    n1    Vout  opamp    ; in+ = n2, in- = n1\nR6  n1    Vout  {R_6}\nR3  n1    Y     {R_3}\nR5  n2    X     {R_5}\nR1  Vout  n3    {R_1}\nX2  0     n3    X     opamp    ; in+ = 접지\nC1  n3    X     {C_1}\nR2  X     n4    {R_2}\nX3  0     n4    Y     opamp    ; in+ = 접지\nC2  n4    Y     {C_2}\n```\n- 단자: Vin = 입력 (개방 원) / Vout = 출력 (개방 원)\n- 표시: 노드 라벨 V_in (입력 원 왼쪽), V_out (출력 원 오른쪽), X (X 접속점 위, 둘째 연산증폭기 출력 오른쪽), Y (셋째 연산증폭기 출력 오른쪽 아래) / 소자 라벨 R4 (가로 저항 위), R6 (가로 저항 위), R3 (맨 위 가로 저항 아래), R1 (가로 저항 아래), C1 (커패시터 위), R2 (가로 저항 아래), C2 (커패시터 위), R5 (맨 아래 가로 저항 위), 연산증폭기 셋 (라벨 없음) / 부호 세 연산증폭기 모두 \"−\" (위 입력, 삼각형 안), \"+\" (아래 입력, 삼각형 안) / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 왼쪽→오른쪽 V_in 원, 가로 R4, n2 접속점, 첫째 연산증폭기, Vout 아래 접속점, 가로 R1, n3 접속점, 둘째 연산증폭기, X 접속점, 가로 R2, n4 접속점, 셋째 연산증폭기, Y 선 / 세 연산증폭기 모두 오른쪽을 향한 삼각형 / 첫째: n1 접속점(− 입력 왼쪽 위)에서 세로선이 위로 맨 위 R3 선, 아래로 내려가 모서리에서 오른쪽으로 꺾여 − 입력 / n1에서 가로 R6이 오른쪽 Vout 위 접속점으로, 거기서 가로선이 오른쪽 Vout 원, 세로선이 아래로 Vout 아래 접속점(첫째 출력) / n2 접속점에서 오른쪽 + 입력, 아래로 세로선이 그림 맨 아래 높이까지 내려가 오른쪽으로 꺾여 가로 R5를 지나 X 접속점 아래까지 가서 위로 꺾여 X 접속점 / 둘째: + 입력에서 왼쪽으로 짧게 나가 아래로 꺾여 접지, C1은 n3에서 세로선이 위로 올라가 오른쪽으로 꺾여 연산증폭기 위를 지나고, 모서리에서 아래로 꺾여 X 접속점 (귀환 커패시터) / 셋째: + 입력 접지 모양은 둘째와 같음, C2는 n4에서 세로선이 위로 올라가 오른쪽으로 꺾여 연산증폭기 위를 지나 Y 접속점, 출력에서 가로선이 오른쪽으로 가 모서리에서 위로 꺾여 Y 접속점 / Y 접속점에서 세로선이 그림 맨 위 높이까지 올라가 왼쪽으로 꺾여 가로 R3을 지나 n1 위 세로선으로 / 접속점 (세 갈래 이상, 8곳): n1 = 위 R3 선 + 오른쪽 R6 + 아래 − 입력 선 (점), Vout 위 = 왼쪽 R6 + 오른쪽 Vout 원 + 아래 세로선 (점), Vout 아래 = 왼쪽 첫째 출력 + 위 세로선 + 오른쪽 R1 (점), n2 = 왼쪽 R4 + 오른쪽 + 입력 + 아래 R5 선 (점), n3 = 왼쪽 R1 + 오른쪽 − 입력 + 위 C1 (점), X = 왼쪽 둘째 출력 + 위 C1 선 + 아래 R5 선 + 오른쪽 R2 (점), n4 = 왼쪽 R2 + 오른쪽 − 입력 + 위 C2 (점), Y = 왼쪽 C2 + 위 R3 선 + 아래 셋째 출력 선 (점) / 교차: 없음\n\n## 회로 — Fig Q5(eq)\n```spice\nR3  VY    n1    {R_3}\nR4  Vin   n2    {R_4}\nR5  VX    n2    {R_5}\nX1  n2    n1    Vout  opamp    ; in+ = n2, in- = n1\nR6  n1    Vout  {R_6}\n```\n- 단자: VY, Vin, VX = 입력 (개방 원) / Vout = 출력 (개방 원)\n- 표시: 노드 라벨 V_Y, V_in, V_X (각 입력 원 왼쪽), V_out (출력 원 오른쪽) / 소자 라벨 R3 (가로 저항 위), R4 (가로 저항 아래), R5 (가로 저항 아래), R6 (위 가로 저항 위), 연산증폭기 (라벨 없음) / 부호 연산증폭기 \"−\" (위 입력, 삼각형 안), \"+\" (아래 입력, 삼각형 안) / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 왼쪽 회로 오른쪽에 따로 그려짐 (⇒나 패널 글자 없음) / 왼쪽에 입력 원 세 개가 위→아래 V_Y, V_in, V_X 순으로 세로로 나란히, 각각 가로 저항 R3, R4, R5 / R3 → n1 접속점 → − 입력, n1에서 세로선이 위로 올라가 오른쪽으로 꺾여 가로 R6을 지나 아래로 꺾여 Vout 접속점 / R4 → n2 접속점, n2에서 세로선이 위로 올라가 오른쪽으로 꺾여 + 입력, 아래로 내려가 R5 오른쪽 끝과 모서리로 이어짐 / 연산증폭기 출력 → Vout 접속점 → Vout 원 / 접속점 (세 갈래 이상, 3곳): n1 = 왼쪽 R3 + 오른쪽 − 입력 + 위 R6 선 (점), n2 = 왼쪽 R4 + 위 + 입력 선 + 아래 R5 선 (점), Vout = 왼쪽 연산증폭기 출력 + 위 R6 선 + 오른쪽 Vout 원 (점) / 교차: 없음\n\n![Q5](figures/fig-Q5.png)\n> 참고: 원문 그림에는 패널 글자가 없음. 오른쪽 회로를 (eq)로 적음\n\n## 풀이\n### (1) 첫 연산증폭기 단\n- 연산증폭기를 이상적으로 가정한다 (원문에 가정이 없음, KHN 설계의 통상 가정)\n- $V_+ = (R_5V_{in} + R_4V_X)/(R_4 + R_5)$\n- $V_{out} = (1 + R_6/R_3)V_+ - (R_6/R_3)V_Y$\n### (1) 대역 통과 전달 함수\n- 적분기: $V_X = -V_{out}/(sR_1C_1)$, $V_Y = -V_X/(sR_2C_2)$. 대역 통과 출력은 $V_X$\n- $a = 1 + R_6/R_3$, $b = R_4/(R_4 + R_5)$로 두고 정리한다\n- $V_X/V_{in} = -\\dfrac{a(1 - b)s/(R_1C_1)}{s^2 + abs/(R_1C_1) + R_6/(R_1R_2R_3C_1C_2)}$\n### (2) $R_6$, $R_5$\n- $\\omega_n^2 = (R_6/R_3)/(R_1R_2C_1C_2)$: $R_1C_1 = R_2C_2 = 10\\ \\text{ns}$, $R_6/R_3 = (200\\ \\text{M rad/s})^2 (10\\ \\text{ns})^2 = 4.00$ → $R_6 = 4R_3$\n- $\\omega_n/Q = ab/(R_1C_1)$: $b = (50\\ \\text{M rad/s})(10\\ \\text{ns})/5 = 0.100$ → $R_5 = 9R_4$\n### 답\n- (1) $V_{out} = (1 + R_6/R_3)(R_5V_{in} + R_4V_X)/(R_4 + R_5) - (R_6/R_3)V_Y$, $V_X/V_{in} = -\\dfrac{(1 + R_6/R_3)[R_5/(R_4 + R_5)]\\,s/(R_1C_1)}{s^2 + (1 + R_6/R_3)[R_4/(R_4 + R_5)]\\,s/(R_1C_1) + R_6/(R_1R_2R_3C_1C_2)}$\n- (2) $R_5 = 9.00\\ \\text{k}\\Omega$, $R_6 = 4.00\\ \\text{k}\\Omega$\n",
+  "content_sha256": "ee34cfe1afdf920ea2a498d249c8baa750a2b4c94bda5a8d99f900e9d018dd66",
+  "exam": {
+    "exam": "2021-1 기말고사",
+    "header": "Closed book, 풀이과정 필수 (풀이과정이 없으면 점수 미부여)",
+    "notes": [
+      "원본은 1쪽짜리 PDF 3개다 (Q1–Q3, Q4–Q5, Q6–Q7).",
+      "`2023-1/23-1 기말/23-1.pdf`는 이 시험과 세 쪽 모두 같은 사본이라 쓰지 않았다."
+    ],
+    "sources": [
+      "../../2021중간_기말/기말/Final0617_1p_rev.pdf",
+      "../../2021중간_기말/기말/Final0617_2p_rev.pdf",
+      "../../2021중간_기말/기말/Final0617_3p_rev.pdf"
+    ]
+  },
+  "figures": [
+    {
+      "display_path": "from_the_past/md/2021-1_기말/figures/redrawn/fig-Q5.png",
+      "id": "Q5",
+      "original_path": "from_the_past/md/2021-1_기말/figures/fig-Q5.png"
+    }
+  ],
+  "id": "2021-1_기말-Q5",
+  "input_hashes": {
+    "from_the_past/md/2021-1_기말/Q5.md": "c1ec4ac89aacefdd01bad045e11d05c6c1a947fff312092262d198954c611175",
+    "from_the_past/md/2021-1_기말/exam.yaml": "bf4144b20de31b19ee273ef1f948399d29f99531d14dbfa5cf4542f41bf722aa",
+    "from_the_past/md/2021-1_기말/figures/fig-Q5.png": "7fc00f64aabc6eeffd0a8f2a4e33d688425e60eed668beb432686a4ba8d181fe",
+    "from_the_past/md/2021-1_기말/figures/figures.yaml": "868e1927572ab223a4b07069f4cef61a6ead8489536424474910eaddf443f0b8",
+    "from_the_past/md/2021-1_기말/figures/redrawn/fig-Q5.png": "17e03a6ec1a75a218b483980bd318fc503b4d78e42744d0179deac2471cf69f2"
+  },
+  "md_path": "from_the_past/md/2021-1_기말/Q5.md",
+  "metadata": {
+    "depends_on": [],
+    "exam": "2021-1 기말고사",
+    "figures": [
+      {
+        "id": "Q5",
+        "panels": [
+          "eq"
+        ],
+        "role": "problem"
+      }
+    ],
+    "id": "2021-1_기말-Q5",
+    "kind": "기출",
+    "number": "5",
+    "pdf_page": 1,
+    "points": 20,
+    "refs": [],
+    "selection": {
+      "circuit_types": [
+        "biquad"
+      ],
+      "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+      "evidence_sections": [
+        "구할 것",
+        "풀이"
+      ],
+      "learning_goals": [
+        "회로에서 $V_{out}$을 $V_{in}$, $V_X$, $V_Y$, $R_3$, $R_4$, $R_5$, $R_6$으로 나타낸 식. 그리고 KHN biquad band-pass filter의 전달 함수를 $R_1$, $R_2$, $R_3$, $R_4$, $R_5$, $R_6$, $C_1$, $C_2$로 나타낸 식",
+        "KHN biquad filter의 $\\omega_n = 200\\ \\text{M rad/s}$, $Q = 4$가 되도록 하는 $R_5$, $R_6$ 값"
+      ],
+      "required_concepts": [
+        "연산증폭기 2차 능동 필터",
+        "적분기와 biquad",
+        "s 영역 KCL과 전달 함수"
+      ],
+      "review_status": "draft",
+      "reviewed_content_sha256": "ee34cfe1afdf920ea2a498d249c8baa750a2b4c94bda5a8d99f900e9d018dd66",
+      "subpart_requirements": [
+        {
+          "label": "1",
+          "required_concepts": [
+            "s 영역 KCL과 전달 함수"
+          ]
+        },
+        {
+          "label": "2",
+          "required_concepts": [
+            "연산증폭기 2차 능동 필터",
+            "적분기와 biquad",
+            "s 영역 KCL과 전달 함수"
+          ]
+        }
+      ],
+      "topics": [
+        "연산증폭기 2차 능동 필터"
+      ]
+    },
+    "source": "../../2021중간_기말/기말/Final0617_2p_rev.pdf",
+    "source_lang": "ko",
+    "textbook_chapters": [
+      14
+    ]
+  },
+  "raw_md": "---\nid: 2021-1_기말-Q5\nkind: 기출\nexam: \"2021-1 기말고사\"\nnumber: \"5\"\npoints: 20\nsource: ../../2021중간_기말/기말/Final0617_2p_rev.pdf\npdf_page: 1\nsource_lang: ko\nfigures:\n  - {id: \"Q5\", role: problem, panels: [eq]}\ntextbook_chapters: [14]\ndepends_on: []\nrefs: []\nselection:\n  topics:\n  - 연산증폭기 2차 능동 필터\n  circuit_types:\n  - biquad\n  required_concepts:\n  - 연산증폭기 2차 능동 필터\n  - 적분기와 biquad\n  - s 영역 KCL과 전달 함수\n  learning_goals:\n  - 회로에서 $V_{out}$을 $V_{in}$, $V_X$, $V_Y$, $R_3$, $R_4$, $R_5$, $R_6$으로 나타낸 식. 그리고 KHN biquad band-pass filter의 전달 함수를 $R_1$, $R_2$, $R_3$, $R_4$, $R_5$, $R_6$, $C_1$, $C_2$로 나타낸 식\n  - KHN biquad filter의 $\\omega_n = 200\\ \\text{M rad/s}$, $Q = 4$가 되도록 하는 $R_5$, $R_6$ 값\n  evidence_sections:\n  - 구할 것\n  - 풀이\n  subpart_requirements:\n  - label: '1'\n    required_concepts:\n    - s 영역 KCL과 전달 함수\n  - label: '2'\n    required_concepts:\n    - 연산증폭기 2차 능동 필터\n    - 적분기와 biquad\n    - s 영역 KCL과 전달 함수\n  review_status: draft\n  reviewed_content_sha256: ee34cfe1afdf920ea2a498d249c8baa750a2b4c94bda5a8d99f900e9d018dd66\n  classification_note: 제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.\n---\n# 기출 2021-1 기말 5 — KHN biquad 대역 통과 필터의 전달 함수와 R5, R6 설계\n\n## 원문\n그림과 같은 KHN biquad 회로를 이용한 filter를 설계한다.\n\n(1) 회로에서 $V_{out}$을 $V_{in}$, $V_X$, $V_Y$, $R_3$, $R_4$, $R_5$, $R_6$에 관한 식으로 구하시오. 그리고, KHN biquad band-pass filter의 전달함수를 $R_1$, $R_2$, $R_3$, $R_4$, $R_5$, $R_6$, $C_1$, $C_2$에 관한 식으로 구하시오.\n\n(2) KHN biquad filter의 $\\omega_n = 200\\ \\text{M rad/s}$ ($\\approx 2\\pi \\times 32\\ \\text{MHz}$), $Q = 4$가 되도록 하는 $R_5$, $R_6$ 값을 각각 구하시오. 단, $C_1 = C_2 = 10\\ \\text{pF}$, $R_1 = R_2 = 1\\ \\text{K}\\Omega$, $R_3 = R_4 = 1\\ \\text{K}\\Omega$으로 설계한다.\n\n## 조건\n- 그림의 KHN biquad 회로를 이용해 filter를 설계\n- 그림 오른쪽 회로는 첫 연산증폭기 단을 따로 그린 것으로, 입력 $V_{in}$, $V_X$, $V_Y$가 각각 $R_4$, $R_5$, $R_3$을 거쳐 들어감 (원문에 없음)\n- 연산증폭기에 대한 가정은 적혀 있지 않음 (원문에 없음)\n- (2) 전용: $C_1 = C_2 = 10\\ \\text{pF}$, $R_1 = R_2 = 1\\ \\text{k}\\Omega$, $R_3 = R_4 = 1\\ \\text{k}\\Omega$으로 설계\n- (2) 전용: 목표 $\\omega_n = 200\\ \\text{M rad/s}$ ($\\approx 2\\pi \\times 32\\ \\text{MHz}$), $Q = 4$\n\n## 구할 것\n- (1) 회로에서 $V_{out}$을 $V_{in}$, $V_X$, $V_Y$, $R_3$, $R_4$, $R_5$, $R_6$으로 나타낸 식. 그리고 KHN biquad band-pass filter의 전달 함수를 $R_1$, $R_2$, $R_3$, $R_4$, $R_5$, $R_6$, $C_1$, $C_2$로 나타낸 식\n- (2) KHN biquad filter의 $\\omega_n = 200\\ \\text{M rad/s}$, $Q = 4$가 되도록 하는 $R_5$, $R_6$ 값\n\n## 회로 — Fig Q5\n```spice\nR4  Vin   n2    {R_4}\nX1  n2    n1    Vout  opamp    ; in+ = n2, in- = n1\nR6  n1    Vout  {R_6}\nR3  n1    Y     {R_3}\nR5  n2    X     {R_5}\nR1  Vout  n3    {R_1}\nX2  0     n3    X     opamp    ; in+ = 접지\nC1  n3    X     {C_1}\nR2  X     n4    {R_2}\nX3  0     n4    Y     opamp    ; in+ = 접지\nC2  n4    Y     {C_2}\n```\n- 단자: Vin = 입력 (개방 원) / Vout = 출력 (개방 원)\n- 표시: 노드 라벨 V_in (입력 원 왼쪽), V_out (출력 원 오른쪽), X (X 접속점 위, 둘째 연산증폭기 출력 오른쪽), Y (셋째 연산증폭기 출력 오른쪽 아래) / 소자 라벨 R4 (가로 저항 위), R6 (가로 저항 위), R3 (맨 위 가로 저항 아래), R1 (가로 저항 아래), C1 (커패시터 위), R2 (가로 저항 아래), C2 (커패시터 위), R5 (맨 아래 가로 저항 위), 연산증폭기 셋 (라벨 없음) / 부호 세 연산증폭기 모두 \"−\" (위 입력, 삼각형 안), \"+\" (아래 입력, 삼각형 안) / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 왼쪽→오른쪽 V_in 원, 가로 R4, n2 접속점, 첫째 연산증폭기, Vout 아래 접속점, 가로 R1, n3 접속점, 둘째 연산증폭기, X 접속점, 가로 R2, n4 접속점, 셋째 연산증폭기, Y 선 / 세 연산증폭기 모두 오른쪽을 향한 삼각형 / 첫째: n1 접속점(− 입력 왼쪽 위)에서 세로선이 위로 맨 위 R3 선, 아래로 내려가 모서리에서 오른쪽으로 꺾여 − 입력 / n1에서 가로 R6이 오른쪽 Vout 위 접속점으로, 거기서 가로선이 오른쪽 Vout 원, 세로선이 아래로 Vout 아래 접속점(첫째 출력) / n2 접속점에서 오른쪽 + 입력, 아래로 세로선이 그림 맨 아래 높이까지 내려가 오른쪽으로 꺾여 가로 R5를 지나 X 접속점 아래까지 가서 위로 꺾여 X 접속점 / 둘째: + 입력에서 왼쪽으로 짧게 나가 아래로 꺾여 접지, C1은 n3에서 세로선이 위로 올라가 오른쪽으로 꺾여 연산증폭기 위를 지나고, 모서리에서 아래로 꺾여 X 접속점 (귀환 커패시터) / 셋째: + 입력 접지 모양은 둘째와 같음, C2는 n4에서 세로선이 위로 올라가 오른쪽으로 꺾여 연산증폭기 위를 지나 Y 접속점, 출력에서 가로선이 오른쪽으로 가 모서리에서 위로 꺾여 Y 접속점 / Y 접속점에서 세로선이 그림 맨 위 높이까지 올라가 왼쪽으로 꺾여 가로 R3을 지나 n1 위 세로선으로 / 접속점 (세 갈래 이상, 8곳): n1 = 위 R3 선 + 오른쪽 R6 + 아래 − 입력 선 (점), Vout 위 = 왼쪽 R6 + 오른쪽 Vout 원 + 아래 세로선 (점), Vout 아래 = 왼쪽 첫째 출력 + 위 세로선 + 오른쪽 R1 (점), n2 = 왼쪽 R4 + 오른쪽 + 입력 + 아래 R5 선 (점), n3 = 왼쪽 R1 + 오른쪽 − 입력 + 위 C1 (점), X = 왼쪽 둘째 출력 + 위 C1 선 + 아래 R5 선 + 오른쪽 R2 (점), n4 = 왼쪽 R2 + 오른쪽 − 입력 + 위 C2 (점), Y = 왼쪽 C2 + 위 R3 선 + 아래 셋째 출력 선 (점) / 교차: 없음\n\n## 회로 — Fig Q5(eq)\n```spice\nR3  VY    n1    {R_3}\nR4  Vin   n2    {R_4}\nR5  VX    n2    {R_5}\nX1  n2    n1    Vout  opamp    ; in+ = n2, in- = n1\nR6  n1    Vout  {R_6}\n```\n- 단자: VY, Vin, VX = 입력 (개방 원) / Vout = 출력 (개방 원)\n- 표시: 노드 라벨 V_Y, V_in, V_X (각 입력 원 왼쪽), V_out (출력 원 오른쪽) / 소자 라벨 R3 (가로 저항 위), R4 (가로 저항 아래), R5 (가로 저항 아래), R6 (위 가로 저항 위), 연산증폭기 (라벨 없음) / 부호 연산증폭기 \"−\" (위 입력, 삼각형 안), \"+\" (아래 입력, 삼각형 안) / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 왼쪽 회로 오른쪽에 따로 그려짐 (⇒나 패널 글자 없음) / 왼쪽에 입력 원 세 개가 위→아래 V_Y, V_in, V_X 순으로 세로로 나란히, 각각 가로 저항 R3, R4, R5 / R3 → n1 접속점 → − 입력, n1에서 세로선이 위로 올라가 오른쪽으로 꺾여 가로 R6을 지나 아래로 꺾여 Vout 접속점 / R4 → n2 접속점, n2에서 세로선이 위로 올라가 오른쪽으로 꺾여 + 입력, 아래로 내려가 R5 오른쪽 끝과 모서리로 이어짐 / 연산증폭기 출력 → Vout 접속점 → Vout 원 / 접속점 (세 갈래 이상, 3곳): n1 = 왼쪽 R3 + 오른쪽 − 입력 + 위 R6 선 (점), n2 = 왼쪽 R4 + 위 + 입력 선 + 아래 R5 선 (점), Vout = 왼쪽 연산증폭기 출력 + 위 R6 선 + 오른쪽 Vout 원 (점) / 교차: 없음\n\n![Q5](figures/fig-Q5.png)\n> 참고: 원문 그림에는 패널 글자가 없음. 오른쪽 회로를 (eq)로 적음\n\n## 풀이\n### (1) 첫 연산증폭기 단\n- 연산증폭기를 이상적으로 가정한다 (원문에 가정이 없음, KHN 설계의 통상 가정)\n- $V_+ = (R_5V_{in} + R_4V_X)/(R_4 + R_5)$\n- $V_{out} = (1 + R_6/R_3)V_+ - (R_6/R_3)V_Y$\n### (1) 대역 통과 전달 함수\n- 적분기: $V_X = -V_{out}/(sR_1C_1)$, $V_Y = -V_X/(sR_2C_2)$. 대역 통과 출력은 $V_X$\n- $a = 1 + R_6/R_3$, $b = R_4/(R_4 + R_5)$로 두고 정리한다\n- $V_X/V_{in} = -\\dfrac{a(1 - b)s/(R_1C_1)}{s^2 + abs/(R_1C_1) + R_6/(R_1R_2R_3C_1C_2)}$\n### (2) $R_6$, $R_5$\n- $\\omega_n^2 = (R_6/R_3)/(R_1R_2C_1C_2)$: $R_1C_1 = R_2C_2 = 10\\ \\text{ns}$, $R_6/R_3 = (200\\ \\text{M rad/s})^2 (10\\ \\text{ns})^2 = 4.00$ → $R_6 = 4R_3$\n- $\\omega_n/Q = ab/(R_1C_1)$: $b = (50\\ \\text{M rad/s})(10\\ \\text{ns})/5 = 0.100$ → $R_5 = 9R_4$\n### 답\n- (1) $V_{out} = (1 + R_6/R_3)(R_5V_{in} + R_4V_X)/(R_4 + R_5) - (R_6/R_3)V_Y$, $V_X/V_{in} = -\\dfrac{(1 + R_6/R_3)[R_5/(R_4 + R_5)]\\,s/(R_1C_1)}{s^2 + (1 + R_6/R_3)[R_4/(R_4 + R_5)]\\,s/(R_1C_1) + R_6/(R_1R_2R_3C_1C_2)}$\n- (2) $R_5 = 9.00\\ \\text{k}\\Omega$, $R_6 = 4.00\\ \\text{k}\\Omega$\n",
+  "schema_version": 1,
+  "sections": [
+    {
+      "heading": "원문",
+      "markdown": "그림과 같은 KHN biquad 회로를 이용한 filter를 설계한다.\n\n(1) 회로에서 $V_{out}$을 $V_{in}$, $V_X$, $V_Y$, $R_3$, $R_4$, $R_5$, $R_6$에 관한 식으로 구하시오. 그리고, KHN biquad band-pass filter의 전달함수를 $R_1$, $R_2$, $R_3$, $R_4$, $R_5$, $R_6$, $C_1$, $C_2$에 관한 식으로 구하시오.\n\n(2) KHN biquad filter의 $\\omega_n = 200\\ \\text{M rad/s}$ ($\\approx 2\\pi \\times 32\\ \\text{MHz}$), $Q = 4$가 되도록 하는 $R_5$, $R_6$ 값을 각각 구하시오. 단, $C_1 = C_2 = 10\\ \\text{pF}$, $R_1 = R_2 = 1\\ \\text{K}\\Omega$, $R_3 = R_4 = 1\\ \\text{K}\\Omega$으로 설계한다."
+    },
+    {
+      "heading": "조건",
+      "markdown": "- 그림의 KHN biquad 회로를 이용해 filter를 설계\n- 그림 오른쪽 회로는 첫 연산증폭기 단을 따로 그린 것으로, 입력 $V_{in}$, $V_X$, $V_Y$가 각각 $R_4$, $R_5$, $R_3$을 거쳐 들어감 (원문에 없음)\n- 연산증폭기에 대한 가정은 적혀 있지 않음 (원문에 없음)\n- (2) 전용: $C_1 = C_2 = 10\\ \\text{pF}$, $R_1 = R_2 = 1\\ \\text{k}\\Omega$, $R_3 = R_4 = 1\\ \\text{k}\\Omega$으로 설계\n- (2) 전용: 목표 $\\omega_n = 200\\ \\text{M rad/s}$ ($\\approx 2\\pi \\times 32\\ \\text{MHz}$), $Q = 4$"
+    },
+    {
+      "heading": "구할 것",
+      "markdown": "- (1) 회로에서 $V_{out}$을 $V_{in}$, $V_X$, $V_Y$, $R_3$, $R_4$, $R_5$, $R_6$으로 나타낸 식. 그리고 KHN biquad band-pass filter의 전달 함수를 $R_1$, $R_2$, $R_3$, $R_4$, $R_5$, $R_6$, $C_1$, $C_2$로 나타낸 식\n- (2) KHN biquad filter의 $\\omega_n = 200\\ \\text{M rad/s}$, $Q = 4$가 되도록 하는 $R_5$, $R_6$ 값"
+    },
+    {
+      "heading": "회로 — Fig Q5",
+      "markdown": "```spice\nR4  Vin   n2    {R_4}\nX1  n2    n1    Vout  opamp    ; in+ = n2, in- = n1\nR6  n1    Vout  {R_6}\nR3  n1    Y     {R_3}\nR5  n2    X     {R_5}\nR1  Vout  n3    {R_1}\nX2  0     n3    X     opamp    ; in+ = 접지\nC1  n3    X     {C_1}\nR2  X     n4    {R_2}\nX3  0     n4    Y     opamp    ; in+ = 접지\nC2  n4    Y     {C_2}\n```\n- 단자: Vin = 입력 (개방 원) / Vout = 출력 (개방 원)\n- 표시: 노드 라벨 V_in (입력 원 왼쪽), V_out (출력 원 오른쪽), X (X 접속점 위, 둘째 연산증폭기 출력 오른쪽), Y (셋째 연산증폭기 출력 오른쪽 아래) / 소자 라벨 R4 (가로 저항 위), R6 (가로 저항 위), R3 (맨 위 가로 저항 아래), R1 (가로 저항 아래), C1 (커패시터 위), R2 (가로 저항 아래), C2 (커패시터 위), R5 (맨 아래 가로 저항 위), 연산증폭기 셋 (라벨 없음) / 부호 세 연산증폭기 모두 \"−\" (위 입력, 삼각형 안), \"+\" (아래 입력, 삼각형 안) / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 왼쪽→오른쪽 V_in 원, 가로 R4, n2 접속점, 첫째 연산증폭기, Vout 아래 접속점, 가로 R1, n3 접속점, 둘째 연산증폭기, X 접속점, 가로 R2, n4 접속점, 셋째 연산증폭기, Y 선 / 세 연산증폭기 모두 오른쪽을 향한 삼각형 / 첫째: n1 접속점(− 입력 왼쪽 위)에서 세로선이 위로 맨 위 R3 선, 아래로 내려가 모서리에서 오른쪽으로 꺾여 − 입력 / n1에서 가로 R6이 오른쪽 Vout 위 접속점으로, 거기서 가로선이 오른쪽 Vout 원, 세로선이 아래로 Vout 아래 접속점(첫째 출력) / n2 접속점에서 오른쪽 + 입력, 아래로 세로선이 그림 맨 아래 높이까지 내려가 오른쪽으로 꺾여 가로 R5를 지나 X 접속점 아래까지 가서 위로 꺾여 X 접속점 / 둘째: + 입력에서 왼쪽으로 짧게 나가 아래로 꺾여 접지, C1은 n3에서 세로선이 위로 올라가 오른쪽으로 꺾여 연산증폭기 위를 지나고, 모서리에서 아래로 꺾여 X 접속점 (귀환 커패시터) / 셋째: + 입력 접지 모양은 둘째와 같음, C2는 n4에서 세로선이 위로 올라가 오른쪽으로 꺾여 연산증폭기 위를 지나 Y 접속점, 출력에서 가로선이 오른쪽으로 가 모서리에서 위로 꺾여 Y 접속점 / Y 접속점에서 세로선이 그림 맨 위 높이까지 올라가 왼쪽으로 꺾여 가로 R3을 지나 n1 위 세로선으로 / 접속점 (세 갈래 이상, 8곳): n1 = 위 R3 선 + 오른쪽 R6 + 아래 − 입력 선 (점), Vout 위 = 왼쪽 R6 + 오른쪽 Vout 원 + 아래 세로선 (점), Vout 아래 = 왼쪽 첫째 출력 + 위 세로선 + 오른쪽 R1 (점), n2 = 왼쪽 R4 + 오른쪽 + 입력 + 아래 R5 선 (점), n3 = 왼쪽 R1 + 오른쪽 − 입력 + 위 C1 (점), X = 왼쪽 둘째 출력 + 위 C1 선 + 아래 R5 선 + 오른쪽 R2 (점), n4 = 왼쪽 R2 + 오른쪽 − 입력 + 위 C2 (점), Y = 왼쪽 C2 + 위 R3 선 + 아래 셋째 출력 선 (점) / 교차: 없음"
+    },
+    {
+      "heading": "회로 — Fig Q5(eq)",
+      "markdown": "```spice\nR3  VY    n1    {R_3}\nR4  Vin   n2    {R_4}\nR5  VX    n2    {R_5}\nX1  n2    n1    Vout  opamp    ; in+ = n2, in- = n1\nR6  n1    Vout  {R_6}\n```\n- 단자: VY, Vin, VX = 입력 (개방 원) / Vout = 출력 (개방 원)\n- 표시: 노드 라벨 V_Y, V_in, V_X (각 입력 원 왼쪽), V_out (출력 원 오른쪽) / 소자 라벨 R3 (가로 저항 위), R4 (가로 저항 아래), R5 (가로 저항 아래), R6 (위 가로 저항 위), 연산증폭기 (라벨 없음) / 부호 연산증폭기 \"−\" (위 입력, 삼각형 안), \"+\" (아래 입력, 삼각형 안) / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 왼쪽 회로 오른쪽에 따로 그려짐 (⇒나 패널 글자 없음) / 왼쪽에 입력 원 세 개가 위→아래 V_Y, V_in, V_X 순으로 세로로 나란히, 각각 가로 저항 R3, R4, R5 / R3 → n1 접속점 → − 입력, n1에서 세로선이 위로 올라가 오른쪽으로 꺾여 가로 R6을 지나 아래로 꺾여 Vout 접속점 / R4 → n2 접속점, n2에서 세로선이 위로 올라가 오른쪽으로 꺾여 + 입력, 아래로 내려가 R5 오른쪽 끝과 모서리로 이어짐 / 연산증폭기 출력 → Vout 접속점 → Vout 원 / 접속점 (세 갈래 이상, 3곳): n1 = 왼쪽 R3 + 오른쪽 − 입력 + 위 R6 선 (점), n2 = 왼쪽 R4 + 위 + 입력 선 + 아래 R5 선 (점), Vout = 왼쪽 연산증폭기 출력 + 위 R6 선 + 오른쪽 Vout 원 (점) / 교차: 없음\n\n![Q5](figures/fig-Q5.png)\n> 참고: 원문 그림에는 패널 글자가 없음. 오른쪽 회로를 (eq)로 적음"
+    },
+    {
+      "heading": "풀이",
+      "markdown": "### (1) 첫 연산증폭기 단\n- 연산증폭기를 이상적으로 가정한다 (원문에 가정이 없음, KHN 설계의 통상 가정)\n- $V_+ = (R_5V_{in} + R_4V_X)/(R_4 + R_5)$\n- $V_{out} = (1 + R_6/R_3)V_+ - (R_6/R_3)V_Y$\n### (1) 대역 통과 전달 함수\n- 적분기: $V_X = -V_{out}/(sR_1C_1)$, $V_Y = -V_X/(sR_2C_2)$. 대역 통과 출력은 $V_X$\n- $a = 1 + R_6/R_3$, $b = R_4/(R_4 + R_5)$로 두고 정리한다\n- $V_X/V_{in} = -\\dfrac{a(1 - b)s/(R_1C_1)}{s^2 + abs/(R_1C_1) + R_6/(R_1R_2R_3C_1C_2)}$\n### (2) $R_6$, $R_5$\n- $\\omega_n^2 = (R_6/R_3)/(R_1R_2C_1C_2)$: $R_1C_1 = R_2C_2 = 10\\ \\text{ns}$, $R_6/R_3 = (200\\ \\text{M rad/s})^2 (10\\ \\text{ns})^2 = 4.00$ → $R_6 = 4R_3$\n- $\\omega_n/Q = ab/(R_1C_1)$: $b = (50\\ \\text{M rad/s})(10\\ \\text{ns})/5 = 0.100$ → $R_5 = 9R_4$\n### 답\n- (1) $V_{out} = (1 + R_6/R_3)(R_5V_{in} + R_4V_X)/(R_4 + R_5) - (R_6/R_3)V_Y$, $V_X/V_{in} = -\\dfrac{(1 + R_6/R_3)[R_5/(R_4 + R_5)]\\,s/(R_1C_1)}{s^2 + (1 + R_6/R_3)[R_4/(R_4 + R_5)]\\,s/(R_1C_1) + R_6/(R_1R_2R_3C_1C_2)}$\n- (2) $R_5 = 9.00\\ \\text{k}\\Omega$, $R_6 = 4.00\\ \\text{k}\\Omega$"
+    }
+  ],
+  "selection": {
+    "circuit_types": [
+      "biquad"
+    ],
+    "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+    "evidence_sections": [
+      "구할 것",
+      "풀이"
+    ],
+    "learning_goals": [
+      "회로에서 $V_{out}$을 $V_{in}$, $V_X$, $V_Y$, $R_3$, $R_4$, $R_5$, $R_6$으로 나타낸 식. 그리고 KHN biquad band-pass filter의 전달 함수를 $R_1$, $R_2$, $R_3$, $R_4$, $R_5$, $R_6$, $C_1$, $C_2$로 나타낸 식",
+      "KHN biquad filter의 $\\omega_n = 200\\ \\text{M rad/s}$, $Q = 4$가 되도록 하는 $R_5$, $R_6$ 값"
+    ],
+    "required_concepts": [
+      "연산증폭기 2차 능동 필터",
+      "적분기와 biquad",
+      "s 영역 KCL과 전달 함수"
+    ],
+    "review_status": "draft",
+    "reviewed_content_sha256": "ee34cfe1afdf920ea2a498d249c8baa750a2b4c94bda5a8d99f900e9d018dd66",
+    "status": "draft",
+    "subpart_requirements": [
+      {
+        "label": "1",
+        "required_concepts": [
+          "s 영역 KCL과 전달 함수"
+        ]
+      },
+      {
+        "label": "2",
+        "required_concepts": [
+          "연산증폭기 2차 능동 필터",
+          "적분기와 biquad",
+          "s 영역 KCL과 전달 함수"
+        ]
+      }
+    ],
+    "topics": [
+      "연산증폭기 2차 능동 필터"
+    ]
+  },
+  "subparts": [
+    {
+      "ask_md": "회로에서 $V_{out}$을 $V_{in}$, $V_X$, $V_Y$, $R_3$, $R_4$, $R_5$, $R_6$으로 나타낸 식. 그리고 KHN biquad band-pass filter의 전달 함수를 $R_1$, $R_2$, $R_3$, $R_4$, $R_5$, $R_6$, $C_1$, $C_2$로 나타낸 식",
+      "label": "1",
+      "required_concepts": [
+        "s 영역 KCL과 전달 함수"
+      ]
+    },
+    {
+      "ask_md": "KHN biquad filter의 $\\omega_n = 200\\ \\text{M rad/s}$, $Q = 4$가 되도록 하는 $R_5$, $R_6$ 값",
+      "label": "2",
+      "required_concepts": [
+        "연산증폭기 2차 능동 필터",
+        "적분기와 biquad",
+        "s 영역 KCL과 전달 함수"
+      ]
+    }
+  ],
+  "title": "KHN biquad 대역 통과 필터의 전달 함수와 R5, R6 설계"
+}

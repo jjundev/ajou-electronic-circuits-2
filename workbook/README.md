@@ -46,6 +46,10 @@ python3 workbook/build_workbook.py --all                                 # 모�
 python3 -m unittest discover -s workbook/tests
 ```
 
+## AI 기출 선별 카탈로그
+
+`python3 workbook/exam_catalog.py build`로 `from_the_past/json/index.json`과 문항별 상세 JSON을 재생성하고 `python3 workbook/exam_catalog.py check`로 최신 상태를 검사한다. 원본은 기출 MD이며 긴 풀이·수식·회로 설명·출처를 Markdown 문자열로 보존한다. 사용법과 분류 상태는 [카탈로그 README](../from_the_past/json/README.md)에 있다. 이 데이터는 출력용 `workbook/build` JSON과 별개다. 복습팩 실행 시에는 저장소를 수정하지 않고 `--catalog-out <RUN>/exam-catalog`로 실행별 사본을 생성한다.
+
 ## 원문 옮기기 도구
 `source_pages.py`는 md frontmatter의 `pdf_page`로 원본 PDF 쪽을 찾는다. 규칙은 `교과서/마이크로전자회로/FORMAT.md` '문제집용 절'.
 ```bash

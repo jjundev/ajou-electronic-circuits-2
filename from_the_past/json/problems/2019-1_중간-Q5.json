@@ -1,0 +1,217 @@
+{
+  "body_md": "# 기출 2019-1 중간 5 — 전압 바이어스의 문제점, CM 제거와 CMRR, Miller 등가 커패시턴스 서술형\n\n## 원문\n다음 질문에 간략히 답하시오.\n\n(1) 전압 바이어스 방법의 문제점을 설명하고, 이 문제점을 해결하기 위한 바이어스 방법을 설명하시오.\n\n(2) Differential pair에서 \"common-mode (CM) rejection\" 특성의 의미를 설명하고, 실제 회로에서 CM rejection 특성이 제한되는 이유를 설명하시오.\n\n(3) Common-mode rejection ratio (CMRR)의 정의를 쓰고, 의미를 설명하시오.\n\n(4) 전압 이득이 $-A_0$인 증폭기에서 입력과 출력 사이의 capacitance를 $C_F$라 할 때, 입력 등가 capacitance와 출력 등가 capacitance를 각각 구하시오.\n\n## 조건\n- 소문항 네 개에 간략히 답하는 서술형 문제\n- (4) 전용: 전압 이득이 $-A_0$인 증폭기의 입력과 출력 사이에 커패시턴스 $C_F$가 있음\n\n## 구할 것\n- (1) 전압 바이어스 방법의 문제점을 설명. 그리고 이 문제점을 해결하기 위한 바이어스 방법을 설명\n- (2) Differential pair에서 \"common-mode (CM) rejection\" 특성의 의미를 설명. 그리고 실제 회로에서 CM rejection 특성이 제한되는 이유를 설명\n- (3) Common-mode rejection ratio (CMRR)의 정의를 쓰고 의미를 설명\n- (4) 입력 등가 capacitance와 출력 등가 capacitance\n\n## 회로 — 없음 (서술형)\n\n## 풀이\n### (1) 전압 바이어스와 전류 거울\n- 전압 바이어스는 $V_{GS}$·$V_{BE}$를 저항 분배로 정한다. $I_D = \\tfrac{1}{2}\\mu_n C_{ox}(W/L)(V_{GS} - V_{TH})^2$, $I_C = I_S e^{V_{BE}/V_T}$라 전류가 $V_{DD}$, 온도, 공정($V_{TH}$, $\\mu_n$, $I_S$)에 민감하다\n- 해결: 정확한 기준 전류 $I_{REF}$를 다이오드 연결 소자에 흘려 $V_{GS}$·$V_{BE}$를 만들고, 같은 전압을 복사 소자에 거는 전류 거울로 바이어스한다\n- 두 소자의 $V_{TH}$, $\\mu_n C_{ox}$, $I_S$가 같이 변해 비에서 지워지므로 복사 전류는 크기 비만 남는다: $I_{copy} = [(W/L)/(W/L)_{REF}] I_{REF}$\n### (2) CM 제거와 그 한계\n- 의미: 두 입력에 똑같이 더해진 신호(잡음, 전원 흔들림)에는 출력이 반응하지 않고 두 입력의 차에만 반응하는 성질. 이상적 테일 전류원이면 두 전류의 합이 고정되고 대칭이라 각 전류가 그대로다\n- 한계: 테일 전류원의 출력 저항 $R_{SS}$가 유한해 CM 입력에 따라 테일 전류가 변하고($A_{CM} \\approx -R_D/(1/g_m + 2R_{SS})$, $R_D$는 부하, $g_m$은 입력 소자), 두 쪽 부하·$g_m$의 부조화로 그 변화가 두 출력에 다르게 나타나 차동 출력이 생긴다\n### (3) CMRR\n- 정의: $\\text{CMRR} = |A_{DM}/A_{CM-DM}|$ ($A_{DM}$은 차동 이득, $A_{CM-DM}$은 CM 입력이 차동 출력으로 나타나는 이득)\n- 의미: 원하는 차동 신호를 CM 신호보다 몇 배 더 크게 증폭하는지를 나타내며, 클수록 CM 잡음을 잘 억제한다\n### (4) Miller 등가 커패시턴스\n- 입력 전압 $v_X$일 때 $C_F$ 양단 전압은 $v_X(1 + A_0)$: 입력에서 접지로 $C_{in} = (1 + A_0) C_F$\n- 출력 전압 $v_Y$일 때 양단 전압은 $v_Y(1 + 1/A_0)$: 출력에서 접지로 $C_{out} = (1 + 1/A_0) C_F$\n### 답\n- (1) 전압 바이어스는 전류가 전원·온도·공정에 민감하다. 기준 전류를 같은 종류 소자로 복사하는 전류 거울로 바이어스하면 소자 파라미터가 지워지고 전류가 크기 비로만 정해진다\n- (2) CM 입력에는 반응하지 않고 차동 입력에만 반응하는 성질이다. 실제로는 테일 전류원의 출력 저항이 유한하고 두 쪽 소자·부하가 부조화라 CM 신호가 출력에 나타난다\n- (3) $\\text{CMRR} = |A_{DM}/A_{CM-DM}|$. 차동 이득이 CM 입력이 차동 출력으로 새는 이득보다 몇 배 큰지를 나타내며, 클수록 CM 잡음 억제가 좋다\n- (4) $C_{in} = (1 + A_0) C_F$, $C_{out} = (1 + 1/A_0) C_F$\n",
+  "content_sha256": "1a0223dc41a178de9d5d614ae815e6a8b8fcef5c380b96bb56a2919743467d80",
+  "exam": {
+    "exam": "2019-1 중간고사",
+    "header": "Closed book, 풀이과정 필수 (풀이과정이 없으면 점수 미부여), 계산결과 필수 (근사계산 가능)",
+    "notes": [
+      "원본 파일의 원래 이름은 2019중간.pdf다 (5쪽, 한 쪽에 한 문제).",
+      "2013–2019 중간고사 중 이 시험만 손글씨 없는 깨끗한 문제지다 (모범답안 없음).",
+      "이미지 PDF라 텍스트 레이어가 없다. 판독은 렌더링한 이미지로 했다."
+    ],
+    "sources": [
+      "../../2013-2019_중간/2019-1_중간.pdf"
+    ]
+  },
+  "figures": [],
+  "id": "2019-1_중간-Q5",
+  "input_hashes": {
+    "from_the_past/md/2019-1_중간/Q5.md": "ef6db453b87a853cc93ff4daf8701844dd6c0ea137df91b54b3c27aaa3557790",
+    "from_the_past/md/2019-1_중간/exam.yaml": "b649fd19e134975ae079a0e93808f0012c2992a29084473d4bb6d7b7fd8da5c1",
+    "from_the_past/md/2019-1_중간/figures/figures.yaml": "ab2fb4c596544dccbd807fecf4aed123d41eccf17eccad4ac358bb5a75fbc7f3"
+  },
+  "md_path": "from_the_past/md/2019-1_중간/Q5.md",
+  "metadata": {
+    "depends_on": [],
+    "exam": "2019-1 중간고사",
+    "figures": [],
+    "id": "2019-1_중간-Q5",
+    "kind": "기출",
+    "number": "5",
+    "pdf_page": 5,
+    "points": 20,
+    "refs": [
+      "(1)은 2021-1_중간-Q1 (1)과 비슷한 질문",
+      "(2)는 2023-1_중간-Q1 (1)과 비슷한 질문",
+      "(4)는 2023-1_중간-Q1 (2)와 비슷한 질문 (Miller 효과)"
+    ],
+    "selection": {
+      "circuit_types": [],
+      "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+      "evidence_sections": [
+        "구할 것",
+        "풀이"
+      ],
+      "learning_goals": [
+        "전압 바이어스 방법의 문제점을 설명. 그리고 이 문제점을 해결하기 위한 바이어스 방법을 설명",
+        "Differential pair에서 \"common-mode (CM) rejection\" 특성의 의미를 설명. 그리고 실제 회로에서 CM rejection 특성이 제한되는 이유를 설명",
+        "Common-mode rejection ratio (CMRR)의 정의를 쓰고 의미를 설명",
+        "입력 등가 capacitance와 출력 등가 capacitance"
+      ],
+      "required_concepts": [
+        "전류 거울",
+        "DC 바이어스와 동작 영역",
+        "차동 증폭기",
+        "공통 모드 해석",
+        "소자·부하 불일치와 CM-DM 변환",
+        "CMRR",
+        "Miller 정리"
+      ],
+      "review_status": "draft",
+      "reviewed_content_sha256": "1a0223dc41a178de9d5d614ae815e6a8b8fcef5c380b96bb56a2919743467d80",
+      "subpart_requirements": [
+        {
+          "label": "1",
+          "required_concepts": [
+            "DC 바이어스와 동작 영역"
+          ]
+        },
+        {
+          "label": "2",
+          "required_concepts": [
+            "공통 모드 해석"
+          ]
+        },
+        {
+          "label": "3",
+          "required_concepts": [
+            "CMRR",
+            "공통 모드 해석"
+          ]
+        },
+        {
+          "label": "4",
+          "required_concepts": [
+            "Miller 정리"
+          ]
+        }
+      ],
+      "topics": [
+        "전류 거울",
+        "차동 증폭기",
+        "Miller 정리"
+      ]
+    },
+    "source": "../../2013-2019_중간/2019-1_중간.pdf",
+    "source_lang": "ko",
+    "textbook_chapters": [
+      9,
+      10,
+      11
+    ]
+  },
+  "raw_md": "---\nid: 2019-1_중간-Q5\nkind: 기출\nexam: \"2019-1 중간고사\"\nnumber: \"5\"\npoints: 20\nsource: ../../2013-2019_중간/2019-1_중간.pdf\npdf_page: 5\nsource_lang: ko\nfigures: []\ntextbook_chapters: [9, 10, 11]\ndepends_on: []\nrefs: [\"(1)은 2021-1_중간-Q1 (1)과 비슷한 질문\", \"(2)는 2023-1_중간-Q1 (1)과 비슷한 질문\", \"(4)는 2023-1_중간-Q1 (2)와 비슷한 질문 (Miller 효과)\"]\nselection:\n  topics:\n  - 전류 거울\n  - 차동 증폭기\n  - Miller 정리\n  circuit_types: []\n  required_concepts:\n  - 전류 거울\n  - DC 바이어스와 동작 영역\n  - 차동 증폭기\n  - 공통 모드 해석\n  - 소자·부하 불일치와 CM-DM 변환\n  - CMRR\n  - Miller 정리\n  learning_goals:\n  - 전압 바이어스 방법의 문제점을 설명. 그리고 이 문제점을 해결하기 위한 바이어스 방법을 설명\n  - Differential pair에서 \"common-mode (CM) rejection\" 특성의 의미를 설명. 그리고 실제 회로에서 CM rejection 특성이 제한되는 이유를 설명\n  - Common-mode rejection ratio (CMRR)의 정의를 쓰고 의미를 설명\n  - 입력 등가 capacitance와 출력 등가 capacitance\n  evidence_sections:\n  - 구할 것\n  - 풀이\n  subpart_requirements:\n  - label: '1'\n    required_concepts:\n    - DC 바이어스와 동작 영역\n  - label: '2'\n    required_concepts:\n    - 공통 모드 해석\n  - label: '3'\n    required_concepts:\n    - CMRR\n    - 공통 모드 해석\n  - label: '4'\n    required_concepts:\n    - Miller 정리\n  review_status: draft\n  reviewed_content_sha256: 1a0223dc41a178de9d5d614ae815e6a8b8fcef5c380b96bb56a2919743467d80\n  classification_note: 제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.\n---\n# 기출 2019-1 중간 5 — 전압 바이어스의 문제점, CM 제거와 CMRR, Miller 등가 커패시턴스 서술형\n\n## 원문\n다음 질문에 간략히 답하시오.\n\n(1) 전압 바이어스 방법의 문제점을 설명하고, 이 문제점을 해결하기 위한 바이어스 방법을 설명하시오.\n\n(2) Differential pair에서 \"common-mode (CM) rejection\" 특성의 의미를 설명하고, 실제 회로에서 CM rejection 특성이 제한되는 이유를 설명하시오.\n\n(3) Common-mode rejection ratio (CMRR)의 정의를 쓰고, 의미를 설명하시오.\n\n(4) 전압 이득이 $-A_0$인 증폭기에서 입력과 출력 사이의 capacitance를 $C_F$라 할 때, 입력 등가 capacitance와 출력 등가 capacitance를 각각 구하시오.\n\n## 조건\n- 소문항 네 개에 간략히 답하는 서술형 문제\n- (4) 전용: 전압 이득이 $-A_0$인 증폭기의 입력과 출력 사이에 커패시턴스 $C_F$가 있음\n\n## 구할 것\n- (1) 전압 바이어스 방법의 문제점을 설명. 그리고 이 문제점을 해결하기 위한 바이어스 방법을 설명\n- (2) Differential pair에서 \"common-mode (CM) rejection\" 특성의 의미를 설명. 그리고 실제 회로에서 CM rejection 특성이 제한되는 이유를 설명\n- (3) Common-mode rejection ratio (CMRR)의 정의를 쓰고 의미를 설명\n- (4) 입력 등가 capacitance와 출력 등가 capacitance\n\n## 회로 — 없음 (서술형)\n\n## 풀이\n### (1) 전압 바이어스와 전류 거울\n- 전압 바이어스는 $V_{GS}$·$V_{BE}$를 저항 분배로 정한다. $I_D = \\tfrac{1}{2}\\mu_n C_{ox}(W/L)(V_{GS} - V_{TH})^2$, $I_C = I_S e^{V_{BE}/V_T}$라 전류가 $V_{DD}$, 온도, 공정($V_{TH}$, $\\mu_n$, $I_S$)에 민감하다\n- 해결: 정확한 기준 전류 $I_{REF}$를 다이오드 연결 소자에 흘려 $V_{GS}$·$V_{BE}$를 만들고, 같은 전압을 복사 소자에 거는 전류 거울로 바이어스한다\n- 두 소자의 $V_{TH}$, $\\mu_n C_{ox}$, $I_S$가 같이 변해 비에서 지워지므로 복사 전류는 크기 비만 남는다: $I_{copy} = [(W/L)/(W/L)_{REF}] I_{REF}$\n### (2) CM 제거와 그 한계\n- 의미: 두 입력에 똑같이 더해진 신호(잡음, 전원 흔들림)에는 출력이 반응하지 않고 두 입력의 차에만 반응하는 성질. 이상적 테일 전류원이면 두 전류의 합이 고정되고 대칭이라 각 전류가 그대로다\n- 한계: 테일 전류원의 출력 저항 $R_{SS}$가 유한해 CM 입력에 따라 테일 전류가 변하고($A_{CM} \\approx -R_D/(1/g_m + 2R_{SS})$, $R_D$는 부하, $g_m$은 입력 소자), 두 쪽 부하·$g_m$의 부조화로 그 변화가 두 출력에 다르게 나타나 차동 출력이 생긴다\n### (3) CMRR\n- 정의: $\\text{CMRR} = |A_{DM}/A_{CM-DM}|$ ($A_{DM}$은 차동 이득, $A_{CM-DM}$은 CM 입력이 차동 출력으로 나타나는 이득)\n- 의미: 원하는 차동 신호를 CM 신호보다 몇 배 더 크게 증폭하는지를 나타내며, 클수록 CM 잡음을 잘 억제한다\n### (4) Miller 등가 커패시턴스\n- 입력 전압 $v_X$일 때 $C_F$ 양단 전압은 $v_X(1 + A_0)$: 입력에서 접지로 $C_{in} = (1 + A_0) C_F$\n- 출력 전압 $v_Y$일 때 양단 전압은 $v_Y(1 + 1/A_0)$: 출력에서 접지로 $C_{out} = (1 + 1/A_0) C_F$\n### 답\n- (1) 전압 바이어스는 전류가 전원·온도·공정에 민감하다. 기준 전류를 같은 종류 소자로 복사하는 전류 거울로 바이어스하면 소자 파라미터가 지워지고 전류가 크기 비로만 정해진다\n- (2) CM 입력에는 반응하지 않고 차동 입력에만 반응하는 성질이다. 실제로는 테일 전류원의 출력 저항이 유한하고 두 쪽 소자·부하가 부조화라 CM 신호가 출력에 나타난다\n- (3) $\\text{CMRR} = |A_{DM}/A_{CM-DM}|$. 차동 이득이 CM 입력이 차동 출력으로 새는 이득보다 몇 배 큰지를 나타내며, 클수록 CM 잡음 억제가 좋다\n- (4) $C_{in} = (1 + A_0) C_F$, $C_{out} = (1 + 1/A_0) C_F$\n",
+  "schema_version": 1,
+  "sections": [
+    {
+      "heading": "원문",
+      "markdown": "다음 질문에 간략히 답하시오.\n\n(1) 전압 바이어스 방법의 문제점을 설명하고, 이 문제점을 해결하기 위한 바이어스 방법을 설명하시오.\n\n(2) Differential pair에서 \"common-mode (CM) rejection\" 특성의 의미를 설명하고, 실제 회로에서 CM rejection 특성이 제한되는 이유를 설명하시오.\n\n(3) Common-mode rejection ratio (CMRR)의 정의를 쓰고, 의미를 설명하시오.\n\n(4) 전압 이득이 $-A_0$인 증폭기에서 입력과 출력 사이의 capacitance를 $C_F$라 할 때, 입력 등가 capacitance와 출력 등가 capacitance를 각각 구하시오."
+    },
+    {
+      "heading": "조건",
+      "markdown": "- 소문항 네 개에 간략히 답하는 서술형 문제\n- (4) 전용: 전압 이득이 $-A_0$인 증폭기의 입력과 출력 사이에 커패시턴스 $C_F$가 있음"
+    },
+    {
+      "heading": "구할 것",
+      "markdown": "- (1) 전압 바이어스 방법의 문제점을 설명. 그리고 이 문제점을 해결하기 위한 바이어스 방법을 설명\n- (2) Differential pair에서 \"common-mode (CM) rejection\" 특성의 의미를 설명. 그리고 실제 회로에서 CM rejection 특성이 제한되는 이유를 설명\n- (3) Common-mode rejection ratio (CMRR)의 정의를 쓰고 의미를 설명\n- (4) 입력 등가 capacitance와 출력 등가 capacitance"
+    },
+    {
+      "heading": "회로 — 없음 (서술형)",
+      "markdown": ""
+    },
+    {
+      "heading": "풀이",
+      "markdown": "### (1) 전압 바이어스와 전류 거울\n- 전압 바이어스는 $V_{GS}$·$V_{BE}$를 저항 분배로 정한다. $I_D = \\tfrac{1}{2}\\mu_n C_{ox}(W/L)(V_{GS} - V_{TH})^2$, $I_C = I_S e^{V_{BE}/V_T}$라 전류가 $V_{DD}$, 온도, 공정($V_{TH}$, $\\mu_n$, $I_S$)에 민감하다\n- 해결: 정확한 기준 전류 $I_{REF}$를 다이오드 연결 소자에 흘려 $V_{GS}$·$V_{BE}$를 만들고, 같은 전압을 복사 소자에 거는 전류 거울로 바이어스한다\n- 두 소자의 $V_{TH}$, $\\mu_n C_{ox}$, $I_S$가 같이 변해 비에서 지워지므로 복사 전류는 크기 비만 남는다: $I_{copy} = [(W/L)/(W/L)_{REF}] I_{REF}$\n### (2) CM 제거와 그 한계\n- 의미: 두 입력에 똑같이 더해진 신호(잡음, 전원 흔들림)에는 출력이 반응하지 않고 두 입력의 차에만 반응하는 성질. 이상적 테일 전류원이면 두 전류의 합이 고정되고 대칭이라 각 전류가 그대로다\n- 한계: 테일 전류원의 출력 저항 $R_{SS}$가 유한해 CM 입력에 따라 테일 전류가 변하고($A_{CM} \\approx -R_D/(1/g_m + 2R_{SS})$, $R_D$는 부하, $g_m$은 입력 소자), 두 쪽 부하·$g_m$의 부조화로 그 변화가 두 출력에 다르게 나타나 차동 출력이 생긴다\n### (3) CMRR\n- 정의: $\\text{CMRR} = |A_{DM}/A_{CM-DM}|$ ($A_{DM}$은 차동 이득, $A_{CM-DM}$은 CM 입력이 차동 출력으로 나타나는 이득)\n- 의미: 원하는 차동 신호를 CM 신호보다 몇 배 더 크게 증폭하는지를 나타내며, 클수록 CM 잡음을 잘 억제한다\n### (4) Miller 등가 커패시턴스\n- 입력 전압 $v_X$일 때 $C_F$ 양단 전압은 $v_X(1 + A_0)$: 입력에서 접지로 $C_{in} = (1 + A_0) C_F$\n- 출력 전압 $v_Y$일 때 양단 전압은 $v_Y(1 + 1/A_0)$: 출력에서 접지로 $C_{out} = (1 + 1/A_0) C_F$\n### 답\n- (1) 전압 바이어스는 전류가 전원·온도·공정에 민감하다. 기준 전류를 같은 종류 소자로 복사하는 전류 거울로 바이어스하면 소자 파라미터가 지워지고 전류가 크기 비로만 정해진다\n- (2) CM 입력에는 반응하지 않고 차동 입력에만 반응하는 성질이다. 실제로는 테일 전류원의 출력 저항이 유한하고 두 쪽 소자·부하가 부조화라 CM 신호가 출력에 나타난다\n- (3) $\\text{CMRR} = |A_{DM}/A_{CM-DM}|$. 차동 이득이 CM 입력이 차동 출력으로 새는 이득보다 몇 배 큰지를 나타내며, 클수록 CM 잡음 억제가 좋다\n- (4) $C_{in} = (1 + A_0) C_F$, $C_{out} = (1 + 1/A_0) C_F$"
+    }
+  ],
+  "selection": {
+    "circuit_types": [],
+    "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+    "evidence_sections": [
+      "구할 것",
+      "풀이"
+    ],
+    "learning_goals": [
+      "전압 바이어스 방법의 문제점을 설명. 그리고 이 문제점을 해결하기 위한 바이어스 방법을 설명",
+      "Differential pair에서 \"common-mode (CM) rejection\" 특성의 의미를 설명. 그리고 실제 회로에서 CM rejection 특성이 제한되는 이유를 설명",
+      "Common-mode rejection ratio (CMRR)의 정의를 쓰고 의미를 설명",
+      "입력 등가 capacitance와 출력 등가 capacitance"
+    ],
+    "required_concepts": [
+      "전류 거울",
+      "DC 바이어스와 동작 영역",
+      "차동 증폭기",
+      "공통 모드 해석",
+      "소자·부하 불일치와 CM-DM 변환",
+      "CMRR",
+      "Miller 정리"
+    ],
+    "review_status": "draft",
+    "reviewed_content_sha256": "1a0223dc41a178de9d5d614ae815e6a8b8fcef5c380b96bb56a2919743467d80",
+    "status": "draft",
+    "subpart_requirements": [
+      {
+        "label": "1",
+        "required_concepts": [
+          "DC 바이어스와 동작 영역"
+        ]
+      },
+      {
+        "label": "2",
+        "required_concepts": [
+          "공통 모드 해석"
+        ]
+      },
+      {
+        "label": "3",
+        "required_concepts": [
+          "CMRR",
+          "공통 모드 해석"
+        ]
+      },
+      {
+        "label": "4",
+        "required_concepts": [
+          "Miller 정리"
+        ]
+      }
+    ],
+    "topics": [
+      "전류 거울",
+      "차동 증폭기",
+      "Miller 정리"
+    ]
+  },
+  "subparts": [
+    {
+      "ask_md": "전압 바이어스 방법의 문제점을 설명. 그리고 이 문제점을 해결하기 위한 바이어스 방법을 설명",
+      "label": "1",
+      "required_concepts": [
+        "DC 바이어스와 동작 영역"
+      ]
+    },
+    {
+      "ask_md": "Differential pair에서 \"common-mode (CM) rejection\" 특성의 의미를 설명. 그리고 실제 회로에서 CM rejection 특성이 제한되는 이유를 설명",
+      "label": "2",
+      "required_concepts": [
+        "공통 모드 해석"
+      ]
+    },
+    {
+      "ask_md": "Common-mode rejection ratio (CMRR)의 정의를 쓰고 의미를 설명",
+      "label": "3",
+      "required_concepts": [
+        "CMRR",
+        "공통 모드 해석"
+      ]
+    },
+    {
+      "ask_md": "입력 등가 capacitance와 출력 등가 capacitance",
+      "label": "4",
+      "required_concepts": [
+        "Miller 정리"
+      ]
+    }
+  ],
+  "title": "전압 바이어스의 문제점, CM 제거와 CMRR, Miller 등가 커패시턴스 서술형"
+}

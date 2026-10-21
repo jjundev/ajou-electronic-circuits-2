@@ -67,14 +67,15 @@ description: 전자회로2 수업의 STT·강의노트·Razavi 교과서로 ELI5
    - `<YYYY-MM-DD>`: 연도는 이번 학기 연도(오늘 날짜 기준), 월·일은 `<MMDD>`.
 3. **요약이 모두 끝난 뒤** 메인 에이전트는 후보 문제 목록을 만든다(`references/problem-selection.md` 1).
    ```bash
-   python3 "$SKILL/scripts/problem_index.py" --repo "$REPO" --used "$REPO/복습노트" --exclude-range <range> --chapters <장> > "$RUN/candidates.tsv"
+   python3 "$SKILL/scripts/problem_index.py" --repo "$REPO" --used "$REPO/복습노트" --exclude-range <range> --chapters <장> --format json --catalog-out "$RUN/exam-catalog" > "$RUN/candidates.json"
    ```
    장은 각 요약의 `## 교과서 절 대조`에서 "다룸"·"일부"로 적힌 절 번호마다 **첫 번째 숫자**(예: `9.1.2` → `9`)를 모아 만든 집합이다(슬라이드 제목이 아니다). 어떤 요약에도 Razavi 절이 없으면(순수 전자회로1 복습, Lec1–2뿐) 이 단계를 건너뛴다(문제 0개).
 
 ### 2. manifest
 - 요약들의 슬라이드 대조표와 용어·식 목록으로 `RUN/manifest.json`을 쓴다. 규칙은 `references/manifest-guide.md`에 있다.
 - 첫 섹션은 항상 `why`(토픽 `why-circuit`, "들어가며: 왜 이런 회로를 쓸까")다. 요약의 `## 동기 발언`으로 `required_terms`를 고른다(`references/manifest-guide.md`).
-- 문제 선별은 `references/problem-selection.md`를 따른다. 요약의 `## 교과서 절 대조`와 `RUN/candidates.tsv`로 고른다.
+- 문제 선별은 `references/problem-selection.md`를 따른다. 요약의 `## 교과서 절 대조`와 `RUN/candidates.json`으로 후보를 좁히고, 기출은 상세 JSON의 원문·전체 소문항·풀이와 실제 회로 그림까지 읽어 고른다. 미분류·draft·stale은 자동 제외하지 않고 MD로 재확인한다. 전체 문항만 채택하며 소문항 하나라도 범위 밖이면 제외한다.
+- 문제가 1개 이상이면 manifest 검증 후 `references/problem-selection.md` 4의 명령으로 `RUN/selection.json`을 만든다. 원본/사용 이력 변경이면 새 후보로 다시 선별한다. 문제 목록이 바뀔 때마다 선택 기록도 갱신한다. PDF 빌드 전 선택 기록의 ID·순서가 manifest와 같아야 한다. 문제 0개이면 후보/선택 기록 없이 기존 문제 없는 팩 절차를 따른다.
 - 검증: `python3 "$SKILL/scripts/manifest.py" "$RUN/manifest.json" "$REPO"` 결과가 `OK`여야 한다.
 
 ### 3. 작성

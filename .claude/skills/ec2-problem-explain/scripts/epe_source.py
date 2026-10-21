@@ -15,7 +15,7 @@ from epe_shared import (load_problem, html_fields, problem_figures, solution, Pr
 REVIEW_DIR = '복습노트'
 PACK_RE = re.compile(r'\d{4}(?:-\d{4})?')
 LINE_RE = re.compile(r'^\s*(\S+)\s*\|\s*(.*\S)\s*$')
-LABEL_RE = re.compile(r'^\s*\((\d+|[a-z])\)\s')
+LABEL_RE = re.compile(r'^\s*\(?(\d+|[a-z])\)\s')
 
 
 def nfc(value):

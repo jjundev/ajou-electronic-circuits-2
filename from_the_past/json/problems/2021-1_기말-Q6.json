@@ -1,0 +1,150 @@
+{
+  "body_md": "# 기출 2021-1 기말 6 — 연산증폭기 2차 필터의 전달 함수\n\n## 원문\n다음 회로를 이용한 2차 filter를 설계한다. 회로의 전달함수($V_{out}/V_{in}$)를 $R_1$, $R_2$, $R_3$, $R_4$, $C_1$, $C_2$에 관한 식으로 구하시오. 단, 이상적인 op amp를 가정한다.\n\n## 조건\n- 그림의 회로를 이용한 2차 filter를 설계\n- 이상적인 op amp로 가정\n- 소자 값은 주어지지 않음 (원문에 없음)\n\n## 구할 것\n- 회로의 전달 함수 $V_{out}/V_{in}$을 $R_1$, $R_2$, $R_3$, $R_4$, $C_1$, $C_2$로 나타낸 식\n\n## 회로 — Fig Q6\n```spice\nVIN  n1   0     {V_in}    ; + 단자 위\nR1   n1   Y     {R_1}\nR2   Y    X     {R_2}\nC1   Y    Vout  {C_1}\nC2   X    0     {C_2}\nX1   X    n2    Vout  opamp    ; in+ = X, in- = n2\nR3   n2   Vout  {R_3}\nR4   n2   0     {R_4}\n```\n- 단자: Vout = 출력 (개방 원)\n- 표시: 노드 라벨 Y (Y 접속점 아래), X (X 접속점 위), V_out (출력 원 오른쪽) / 소자 라벨 V_in (전압원 왼쪽), R1 (가로 저항 아래), R2 (가로 저항 아래), C1 (커패시터 위), C2 (커패시터 왼쪽), R3 (가로 저항 아래), R4 (저항 오른쪽), 연산증폭기 (라벨 없음) / 부호 전압원 V_in \"+\" (원 오른쪽 위), \"−\" (원 오른쪽 아래); 연산증폭기 \"+\" (위 입력, 삼각형 안), \"−\" (아래 입력, 삼각형 안) / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 왼쪽 원형 전압원 V_in (아래 접지), 위 단자에서 세로선이 올라가 오른쪽으로 꺾여 가로 R1, Y 접속점, 가로 R2, X 접속점, 연산증폭기 + 입력이 한 가로선 높이 / Y 접속점에서 세로선이 위로 올라가 오른쪽으로 꺾여 가로 C1을 지나 연산증폭기 위를 넘어 모서리에서 아래로 꺾여 Vout 접속점 / X 접속점에서 아래로 세로 C2, 그 아래 접지 / 연산증폭기는 오른쪽을 향한 삼각형, 출력 → Vout 접속점 → Vout 원 / − 입력에서 왼쪽으로 짧게 나가 모서리에서 아래로 꺾여 n2 접속점, n2에서 아래로 세로 R4, 그 아래 접지 / n2에서 오른쪽으로 가로 R3을 지나 모서리에서 위로 꺾여 Vout 접속점 / 접속점 (세 갈래 이상, 4곳): Y = 왼쪽 R1 + 오른쪽 R2 + 위 C1 선 (점), X = 왼쪽 R2 + 오른쪽 + 입력 + 아래 C2 (점), Vout = 왼쪽 연산증폭기 출력 + 위 C1 선 + 아래 R3 선 + 오른쪽 Vout 원 (점), n2 = 위 − 입력 선 + 아래 R4 + 오른쪽 R3 (점) / 교차: 없음\n\n![Q6](figures/fig-Q6.png)\n\n## 풀이\n### 비반전 증폭기\n- 이상적 연산증폭기라 $V_- = V_X$. $K = 1 + R_3/R_4$로 두면 $V_{out} = KV_X$\n### 노드 X와 Y의 KCL\n- X: $(V_Y - V_X)/R_2 = sC_2V_X$ → $V_Y = (1 + sR_2C_2)V_X$\n- Y: $(V_{in} - V_Y)/R_1 = (V_Y - V_X)/R_2 + sC_1(V_Y - V_{out})$\n### 전달 함수 정리\n- 대입: $V_{in} = V_X[s^2R_1R_2C_1C_2 + s((R_1 + R_2)C_2 + (1 - K)R_1C_1) + 1]$, $1 - K = -R_3/R_4$\n### 답\n- $V_{out}/V_{in} = (1 + R_3/R_4)/\\{s^2R_1R_2C_1C_2 + s[(R_1 + R_2)C_2 - (R_3/R_4)R_1C_1] + 1\\}$\n",
+  "content_sha256": "719422e4cda15e0b8700191d4e31db04388c43510f606898490eddc2a2c7feb3",
+  "exam": {
+    "exam": "2021-1 기말고사",
+    "header": "Closed book, 풀이과정 필수 (풀이과정이 없으면 점수 미부여)",
+    "notes": [
+      "원본은 1쪽짜리 PDF 3개다 (Q1–Q3, Q4–Q5, Q6–Q7).",
+      "`2023-1/23-1 기말/23-1.pdf`는 이 시험과 세 쪽 모두 같은 사본이라 쓰지 않았다."
+    ],
+    "sources": [
+      "../../2021중간_기말/기말/Final0617_1p_rev.pdf",
+      "../../2021중간_기말/기말/Final0617_2p_rev.pdf",
+      "../../2021중간_기말/기말/Final0617_3p_rev.pdf"
+    ]
+  },
+  "figures": [
+    {
+      "display_path": "from_the_past/md/2021-1_기말/figures/redrawn/fig-Q6.png",
+      "id": "Q6",
+      "original_path": "from_the_past/md/2021-1_기말/figures/fig-Q6.png"
+    }
+  ],
+  "id": "2021-1_기말-Q6",
+  "input_hashes": {
+    "from_the_past/md/2021-1_기말/Q6.md": "5488f09187fd95d2ccbe04b7873681c585291a4fbc6e5c76822367bbefde929f",
+    "from_the_past/md/2021-1_기말/exam.yaml": "bf4144b20de31b19ee273ef1f948399d29f99531d14dbfa5cf4542f41bf722aa",
+    "from_the_past/md/2021-1_기말/figures/fig-Q6.png": "2d3b99d558de14c94012fec0a968ec407352a22d30ff809bc5217149b4a2626c",
+    "from_the_past/md/2021-1_기말/figures/figures.yaml": "868e1927572ab223a4b07069f4cef61a6ead8489536424474910eaddf443f0b8",
+    "from_the_past/md/2021-1_기말/figures/redrawn/fig-Q6.png": "aeac88ab0d2c9225a24d6b8ffb97ec7ecb01724adf8cb0a11324c0f3a96b5b9d"
+  },
+  "md_path": "from_the_past/md/2021-1_기말/Q6.md",
+  "metadata": {
+    "depends_on": [],
+    "exam": "2021-1 기말고사",
+    "figures": [
+      {
+        "id": "Q6",
+        "panels": [],
+        "role": "problem"
+      }
+    ],
+    "id": "2021-1_기말-Q6",
+    "kind": "기출",
+    "number": "6",
+    "pdf_page": 1,
+    "points": 10,
+    "refs": [],
+    "selection": {
+      "circuit_types": [
+        "연산증폭기"
+      ],
+      "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+      "evidence_sections": [
+        "구할 것",
+        "풀이"
+      ],
+      "learning_goals": [
+        "- 회로의 전달 함수 $V_{out}/V_{in}$을 $R_1$, $R_2$, $R_3$, $R_4$, $C_1$, $C_2$로 나타낸 식"
+      ],
+      "required_concepts": [
+        "연산증폭기 2차 능동 필터",
+        "s 영역 KCL과 전달 함수"
+      ],
+      "review_status": "draft",
+      "reviewed_content_sha256": "719422e4cda15e0b8700191d4e31db04388c43510f606898490eddc2a2c7feb3",
+      "subpart_requirements": [
+        {
+          "label": "main",
+          "required_concepts": [
+            "s 영역 KCL과 전달 함수"
+          ]
+        }
+      ],
+      "topics": [
+        "연산증폭기 2차 능동 필터"
+      ]
+    },
+    "source": "../../2021중간_기말/기말/Final0617_3p_rev.pdf",
+    "source_lang": "ko",
+    "textbook_chapters": [
+      14
+    ]
+  },
+  "raw_md": "---\nid: 2021-1_기말-Q6\nkind: 기출\nexam: \"2021-1 기말고사\"\nnumber: \"6\"\npoints: 10\nsource: ../../2021중간_기말/기말/Final0617_3p_rev.pdf\npdf_page: 1\nsource_lang: ko\nfigures:\n  - {id: \"Q6\", role: problem, panels: []}\ntextbook_chapters: [14]\ndepends_on: []\nrefs: []\nselection:\n  topics:\n  - 연산증폭기 2차 능동 필터\n  circuit_types:\n  - 연산증폭기\n  required_concepts:\n  - 연산증폭기 2차 능동 필터\n  - s 영역 KCL과 전달 함수\n  learning_goals:\n  - '- 회로의 전달 함수 $V_{out}/V_{in}$을 $R_1$, $R_2$, $R_3$, $R_4$, $C_1$, $C_2$로 나타낸 식'\n  evidence_sections:\n  - 구할 것\n  - 풀이\n  subpart_requirements:\n  - label: main\n    required_concepts:\n    - s 영역 KCL과 전달 함수\n  review_status: draft\n  reviewed_content_sha256: 719422e4cda15e0b8700191d4e31db04388c43510f606898490eddc2a2c7feb3\n  classification_note: 제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.\n---\n# 기출 2021-1 기말 6 — 연산증폭기 2차 필터의 전달 함수\n\n## 원문\n다음 회로를 이용한 2차 filter를 설계한다. 회로의 전달함수($V_{out}/V_{in}$)를 $R_1$, $R_2$, $R_3$, $R_4$, $C_1$, $C_2$에 관한 식으로 구하시오. 단, 이상적인 op amp를 가정한다.\n\n## 조건\n- 그림의 회로를 이용한 2차 filter를 설계\n- 이상적인 op amp로 가정\n- 소자 값은 주어지지 않음 (원문에 없음)\n\n## 구할 것\n- 회로의 전달 함수 $V_{out}/V_{in}$을 $R_1$, $R_2$, $R_3$, $R_4$, $C_1$, $C_2$로 나타낸 식\n\n## 회로 — Fig Q6\n```spice\nVIN  n1   0     {V_in}    ; + 단자 위\nR1   n1   Y     {R_1}\nR2   Y    X     {R_2}\nC1   Y    Vout  {C_1}\nC2   X    0     {C_2}\nX1   X    n2    Vout  opamp    ; in+ = X, in- = n2\nR3   n2   Vout  {R_3}\nR4   n2   0     {R_4}\n```\n- 단자: Vout = 출력 (개방 원)\n- 표시: 노드 라벨 Y (Y 접속점 아래), X (X 접속점 위), V_out (출력 원 오른쪽) / 소자 라벨 V_in (전압원 왼쪽), R1 (가로 저항 아래), R2 (가로 저항 아래), C1 (커패시터 위), C2 (커패시터 왼쪽), R3 (가로 저항 아래), R4 (저항 오른쪽), 연산증폭기 (라벨 없음) / 부호 전압원 V_in \"+\" (원 오른쪽 위), \"−\" (원 오른쪽 아래); 연산증폭기 \"+\" (위 입력, 삼각형 안), \"−\" (아래 입력, 삼각형 안) / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 왼쪽 원형 전압원 V_in (아래 접지), 위 단자에서 세로선이 올라가 오른쪽으로 꺾여 가로 R1, Y 접속점, 가로 R2, X 접속점, 연산증폭기 + 입력이 한 가로선 높이 / Y 접속점에서 세로선이 위로 올라가 오른쪽으로 꺾여 가로 C1을 지나 연산증폭기 위를 넘어 모서리에서 아래로 꺾여 Vout 접속점 / X 접속점에서 아래로 세로 C2, 그 아래 접지 / 연산증폭기는 오른쪽을 향한 삼각형, 출력 → Vout 접속점 → Vout 원 / − 입력에서 왼쪽으로 짧게 나가 모서리에서 아래로 꺾여 n2 접속점, n2에서 아래로 세로 R4, 그 아래 접지 / n2에서 오른쪽으로 가로 R3을 지나 모서리에서 위로 꺾여 Vout 접속점 / 접속점 (세 갈래 이상, 4곳): Y = 왼쪽 R1 + 오른쪽 R2 + 위 C1 선 (점), X = 왼쪽 R2 + 오른쪽 + 입력 + 아래 C2 (점), Vout = 왼쪽 연산증폭기 출력 + 위 C1 선 + 아래 R3 선 + 오른쪽 Vout 원 (점), n2 = 위 − 입력 선 + 아래 R4 + 오른쪽 R3 (점) / 교차: 없음\n\n![Q6](figures/fig-Q6.png)\n\n## 풀이\n### 비반전 증폭기\n- 이상적 연산증폭기라 $V_- = V_X$. $K = 1 + R_3/R_4$로 두면 $V_{out} = KV_X$\n### 노드 X와 Y의 KCL\n- X: $(V_Y - V_X)/R_2 = sC_2V_X$ → $V_Y = (1 + sR_2C_2)V_X$\n- Y: $(V_{in} - V_Y)/R_1 = (V_Y - V_X)/R_2 + sC_1(V_Y - V_{out})$\n### 전달 함수 정리\n- 대입: $V_{in} = V_X[s^2R_1R_2C_1C_2 + s((R_1 + R_2)C_2 + (1 - K)R_1C_1) + 1]$, $1 - K = -R_3/R_4$\n### 답\n- $V_{out}/V_{in} = (1 + R_3/R_4)/\\{s^2R_1R_2C_1C_2 + s[(R_1 + R_2)C_2 - (R_3/R_4)R_1C_1] + 1\\}$\n",
+  "schema_version": 1,
+  "sections": [
+    {
+      "heading": "원문",
+      "markdown": "다음 회로를 이용한 2차 filter를 설계한다. 회로의 전달함수($V_{out}/V_{in}$)를 $R_1$, $R_2$, $R_3$, $R_4$, $C_1$, $C_2$에 관한 식으로 구하시오. 단, 이상적인 op amp를 가정한다."
+    },
+    {
+      "heading": "조건",
+      "markdown": "- 그림의 회로를 이용한 2차 filter를 설계\n- 이상적인 op amp로 가정\n- 소자 값은 주어지지 않음 (원문에 없음)"
+    },
+    {
+      "heading": "구할 것",
+      "markdown": "- 회로의 전달 함수 $V_{out}/V_{in}$을 $R_1$, $R_2$, $R_3$, $R_4$, $C_1$, $C_2$로 나타낸 식"
+    },
+    {
+      "heading": "회로 — Fig Q6",
+      "markdown": "```spice\nVIN  n1   0     {V_in}    ; + 단자 위\nR1   n1   Y     {R_1}\nR2   Y    X     {R_2}\nC1   Y    Vout  {C_1}\nC2   X    0     {C_2}\nX1   X    n2    Vout  opamp    ; in+ = X, in- = n2\nR3   n2   Vout  {R_3}\nR4   n2   0     {R_4}\n```\n- 단자: Vout = 출력 (개방 원)\n- 표시: 노드 라벨 Y (Y 접속점 아래), X (X 접속점 위), V_out (출력 원 오른쪽) / 소자 라벨 V_in (전압원 왼쪽), R1 (가로 저항 아래), R2 (가로 저항 아래), C1 (커패시터 위), C2 (커패시터 왼쪽), R3 (가로 저항 아래), R4 (저항 오른쪽), 연산증폭기 (라벨 없음) / 부호 전압원 V_in \"+\" (원 오른쪽 위), \"−\" (원 오른쪽 아래); 연산증폭기 \"+\" (위 입력, 삼각형 안), \"−\" (아래 입력, 삼각형 안) / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 왼쪽 원형 전압원 V_in (아래 접지), 위 단자에서 세로선이 올라가 오른쪽으로 꺾여 가로 R1, Y 접속점, 가로 R2, X 접속점, 연산증폭기 + 입력이 한 가로선 높이 / Y 접속점에서 세로선이 위로 올라가 오른쪽으로 꺾여 가로 C1을 지나 연산증폭기 위를 넘어 모서리에서 아래로 꺾여 Vout 접속점 / X 접속점에서 아래로 세로 C2, 그 아래 접지 / 연산증폭기는 오른쪽을 향한 삼각형, 출력 → Vout 접속점 → Vout 원 / − 입력에서 왼쪽으로 짧게 나가 모서리에서 아래로 꺾여 n2 접속점, n2에서 아래로 세로 R4, 그 아래 접지 / n2에서 오른쪽으로 가로 R3을 지나 모서리에서 위로 꺾여 Vout 접속점 / 접속점 (세 갈래 이상, 4곳): Y = 왼쪽 R1 + 오른쪽 R2 + 위 C1 선 (점), X = 왼쪽 R2 + 오른쪽 + 입력 + 아래 C2 (점), Vout = 왼쪽 연산증폭기 출력 + 위 C1 선 + 아래 R3 선 + 오른쪽 Vout 원 (점), n2 = 위 − 입력 선 + 아래 R4 + 오른쪽 R3 (점) / 교차: 없음\n\n![Q6](figures/fig-Q6.png)"
+    },
+    {
+      "heading": "풀이",
+      "markdown": "### 비반전 증폭기\n- 이상적 연산증폭기라 $V_- = V_X$. $K = 1 + R_3/R_4$로 두면 $V_{out} = KV_X$\n### 노드 X와 Y의 KCL\n- X: $(V_Y - V_X)/R_2 = sC_2V_X$ → $V_Y = (1 + sR_2C_2)V_X$\n- Y: $(V_{in} - V_Y)/R_1 = (V_Y - V_X)/R_2 + sC_1(V_Y - V_{out})$\n### 전달 함수 정리\n- 대입: $V_{in} = V_X[s^2R_1R_2C_1C_2 + s((R_1 + R_2)C_2 + (1 - K)R_1C_1) + 1]$, $1 - K = -R_3/R_4$\n### 답\n- $V_{out}/V_{in} = (1 + R_3/R_4)/\\{s^2R_1R_2C_1C_2 + s[(R_1 + R_2)C_2 - (R_3/R_4)R_1C_1] + 1\\}$"
+    }
+  ],
+  "selection": {
+    "circuit_types": [
+      "연산증폭기"
+    ],
+    "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+    "evidence_sections": [
+      "구할 것",
+      "풀이"
+    ],
+    "learning_goals": [
+      "- 회로의 전달 함수 $V_{out}/V_{in}$을 $R_1$, $R_2$, $R_3$, $R_4$, $C_1$, $C_2$로 나타낸 식"
+    ],
+    "required_concepts": [
+      "연산증폭기 2차 능동 필터",
+      "s 영역 KCL과 전달 함수"
+    ],
+    "review_status": "draft",
+    "reviewed_content_sha256": "719422e4cda15e0b8700191d4e31db04388c43510f606898490eddc2a2c7feb3",
+    "status": "draft",
+    "subpart_requirements": [
+      {
+        "label": "main",
+        "required_concepts": [
+          "s 영역 KCL과 전달 함수"
+        ]
+      }
+    ],
+    "topics": [
+      "연산증폭기 2차 능동 필터"
+    ]
+  },
+  "subparts": [
+    {
+      "ask_md": "- 회로의 전달 함수 $V_{out}/V_{in}$을 $R_1$, $R_2$, $R_3$, $R_4$, $C_1$, $C_2$로 나타낸 식",
+      "label": "main",
+      "required_concepts": [
+        "s 영역 KCL과 전달 함수"
+      ]
+    }
+  ],
+  "title": "연산증폭기 2차 필터의 전달 함수"
+}

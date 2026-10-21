@@ -1,0 +1,247 @@
+{
+  "body_md": "# 기출 2015-2 중간 1 — 전류 거울 두 단으로 바이어스한 PMOS 전류원 부하 NMOS 캐스코드 증폭기\n\n## 원문\nWith device parameters below,\n\n$V_{DD}=1.8\\text{V}$, $\\mu_n C_{ox} = 100\\ \\text{uA/V}^2$, $\\mu_p C_{ox} = 50\\ \\text{uA/V}^2$, $\\lambda_n=0.1\\ \\text{V}^{-1}$, $\\lambda_p=0.2\\ \\text{V}^{-1}$, $V_{TH,N} =0.4\\text{V}$,\n\n$I_{REF}=1\\text{mA}$\n\n$(W/L)_1=(W/L)_2=50$\n\n1) Derive $I_{copy1}$(5pt)\n\n2) Derive $I_{copy2}$(5pt)\n\n3) Determine minimum $V_b$ to operate $M_2$ in saturation region. (10pt)\n\n4) Derive output impedance. (10pt)\n\n5) Derive gain ($v_{out}/v_{in}$). (10pt)\n\n## 조건\n- 회로: 그림 Q1\n- $V_{DD} = 1.8\\ \\text{V}$\n- $\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$, $\\mu_p C_{ox} = 50\\ \\mu\\text{A/V}^2$ (원문 표기는 \"uA/V²\")\n- $\\lambda_n = 0.1\\ \\text{V}^{-1}$, $\\lambda_p = 0.2\\ \\text{V}^{-1}$\n- $V_{TH,N} = 0.4\\ \\text{V}$\n- $I_{REF} = 1\\ \\text{mA}$\n- $(W/L)_1 = (W/L)_2 = 50$\n- 그림의 크기 라벨: $M_{REF}$는 $5(W/L)_{REF}$, $M_5$는 $3(W/L)_5$, $M_4$는 $(W/L)_4$, $M_3$은 $2(W/L)_3$\n- $(W/L)_{REF}$, $(W/L)_3$, $(W/L)_4$, $(W/L)_5$의 값과 PMOS 문턱 전압은 주어지지 않음 (원문에 없음)\n- 그림의 배수만으로 복사 비를 정함: $(W/L)_{REF} = (W/L)_5$, $(W/L)_4 = (W/L)_3$ (원문에 없음)\n\n## 구할 것\n- 1) $I_{copy1}$\n- 2) $I_{copy2}$\n- 3) $M_2$가 포화 영역에서 동작하도록 하는 최소 $V_b$\n- 4) 출력 임피던스\n- 5) 이득 $v_{out}/v_{in}$\n\n## 회로 — Fig Q1\n```spice\nIREF  VDD   n1    {I_REF}\nMREF  n1    n1    0     nmos  W/L={(W/L)_REF} m=5   ; 좌우 반전 (게이트 오른쪽), 다이오드 연결\nM5    n2    n1    0     nmos  W/L={(W/L)_5} m=3\nM4    n2    n2    VDD   pmos  W/L={(W/L)_4}         ; 좌우 반전 (게이트 오른쪽), 다이오드 연결\nM3    Vout  n2    VDD   pmos  W/L={(W/L)_3} m=2\nM1    Vout  Vb    n3    nmos                        ; 좌우 반전 (게이트 오른쪽)\nM2    n3    Vin   0     nmos\n* (W/L)_1 = (W/L)_2 = 50 은 문제 문장에만 인쇄됨 (그림에는 없음)\n```\n- 단자: VDD = 1.8 V 전원 (가로 레일) / Vb = DC 바이어스, 값은 3)에서 구함 (점 단자) / Vin = 입력 (개방 원) / Vout = 출력 (개방 원)\n- 표시: 노드 라벨 V_DD (레일 오른쪽 끝, 위), V_out (출력 원 오른쪽), V_b (점 단자 오른쪽), V_in (입력 원 왼쪽, M_5 라벨 바로 오른쪽) / 소자 라벨 I_REF (전류원 왼쪽), M_REF (M_REF 왼쪽), M_5 (M5 오른쪽), M_4 (M4 왼쪽), M_3 (M3 오른쪽), M_1 (M1 왼쪽), M_2 (M2 오른쪽) / 부호 없음 / 화살표 \"I_copy1\": M4 드레인–M5 드레인 세로선, 아래 방향, 도선 위 (회색 화살촉), 글자는 화살표 왼쪽 위 / \"I_copy2\": M3 드레인–Vout 세로선, 아래 방향, 도선 위 (회색 화살촉), 글자는 화살표 왼쪽 / 수치·면적 라벨 \"(W/L)_4\" (M4 위, 레일 위), \"2(W/L)_3\" (M3 위, 레일 위), \"5(W/L)_REF\" (M_REF 아래 접지 아래), \"3(W/L)_5\" (M5 아래 접지 아래)\n- 배치: 맨 위 굵은 가로 레일 V_DD (왼쪽 끝은 I_REF 세로선 위, 오른쪽 끝은 M3 소스 너머) / 왼쪽 세로줄 위→아래 레일에서 내려오는 긴 세로선, I_REF 전류원(화살표 아래), n1 접속점, M_REF, 접지 / M_REF nmos 좌우 반전(게이트 막대 오른쪽, 드레인 왼쪽 위, 소스 왼쪽 아래·화살표 바깥) / n1 접속점에서 가로선이 오른쪽으로 나가 아래로 꺾여 게이트 높이의 접속점 (다이오드 연결) / 게이트 공통선은 M_REF 게이트에서 M5 게이트까지 게이트 높이로 가로지름 / 가운데 세로줄 위→아래 레일, M4, n2 접속점, I_copy1 화살표가 붙은 긴 세로선, M5, 접지 / M4 pmos 좌우 반전(게이트 막대 오른쪽, 소스 왼쪽 위·화살표가 채널 쪽으로 들어감, 드레인 왼쪽 아래) / M4 게이트 오른쪽 접속점에서 가로선이 오른쪽 M3 게이트로, 같은 접속점에서 세로선이 아래로 내려가 왼쪽으로 꺾여 n2 접속점 (다이오드 연결) / M5 nmos 보통 방향(게이트 왼쪽, 드레인 위, 소스 아래·화살표 바깥) / 오른쪽 세로줄 위→아래 레일, M3, I_copy2 화살표, Vout 접속점, M1, 긴 세로선, M2, 접지 / M3 pmos 보통 방향(게이트 왼쪽, 소스 오른쪽 위·화살표가 채널 쪽으로 들어감, 드레인 오른쪽 아래) / Vout 접속점에서 가로선이 오른쪽 V_out 원 / M1 nmos 좌우 반전(게이트 막대 오른쪽, 드레인 왼쪽 위, 소스 왼쪽 아래·화살표 바깥), 게이트 → 가로선 → 오른쪽 V_b 점 단자 / M2 nmos 보통 방향, V_in 원 → 가로선 → M2 게이트 / 접속점 (세 갈래 이상, 5곳): ① n1 = 위 I_REF + 아래 M_REF 드레인 + 오른쪽 다이오드 연결선 (점) ② M_REF 게이트 높이 = 왼쪽 M_REF 게이트 + 위 다이오드 연결선 + 오른쪽 M5 게이트로 가는 선 (점) ③ M4 게이트 오른쪽 = 왼쪽 M4 게이트 + 오른쪽 M3 게이트로 가는 선 + 아래 다이오드 연결선 (점) ④ n2 = 위 M4 드레인 + 오른쪽 다이오드 연결선 + 아래 M5 드레인으로 가는 세로선 (점) ⑤ Vout = 위 M3 드레인 + 아래 M1 드레인 + 오른쪽 V_out 선 (점) / 교차: 없음\n\n![Q1](figures/fig-Q1.png)\n> 참고: 두 I_copy 라벨은 다른 라벨과 글꼴이 다름(세리프 글꼴), 두 화살촉은 회색\n\n## 풀이\n### (1)(2) 거울 전류\n- $I_{copy1} = \\dfrac{3(W/L)_5}{5(W/L)_{REF}} I_{REF} = 0.600\\ \\text{mA}$ ($\\lambda$ 무시)\n- $M_4$가 받아 $M_3$로: $I_{copy2} = \\dfrac{2(W/L)_3}{(W/L)_4} I_{copy1} = 1.20\\ \\text{mA}$\n### (3) $M_2$ 포화 경계의 $V_b$\n- $M_1$, $M_2$의 $V_{ov}$ (같은 $W/L$, 같은 전류): $V_{ov} = \\sqrt{2I_{copy2}/[\\mu_n C_{ox}(W/L)_1]} = 0.693\\ \\text{V}$\n- $V_{DS2} = V_b - V_{GS1} \\ge V_{ov}$: $V_{b,min} = V_{TH,N} + 2V_{ov} = 1.79\\ \\text{V}$\n### (4) 출력 임피던스\n- $g_{m1} = g_{m2} = 2I_{copy2}/V_{ov} = 3.46\\ \\text{mS}$\n- $r_O = 1/(\\lambda I_{copy2})$: $r_{O1} = r_{O2} = 8.33\\ \\text{k}\\Omega$, $r_{O3} = 4.17\\ \\text{k}\\Omega$\n- $g_{m1} r_{O2} = 28.9 \\gg 1$, $M_3$ 게이트는 AC 접지: $R_{out} = r_{O3} \\parallel g_{m1} r_{O1} r_{O2} = 4.10\\ \\text{k}\\Omega$\n### (5) 이득\n- $A_v = -g_{m2} R_{out} = -14.2$\n### 답\n- 1) $I_{copy1} = 0.600\\ \\text{mA}$\n- 2) $I_{copy2} = 1.20\\ \\text{mA}$\n- 3) $V_{b,min} = 1.79\\ \\text{V}$\n- 4) $R_{out} = 4.10\\ \\text{k}\\Omega$\n- 5) $A_v = -14.2$\n",
+  "content_sha256": "7ac58613d1a5d842036fbf2706a31e4522333573f75b3736fa7f457115eb56af",
+  "exam": {
+    "exam": "2015-2 중간고사",
+    "header": "2015.10.21. Electronic Circuits II Midterm",
+    "notes": [
+      "원본 파일의 원래 이름은 `15-2 중간고사.pdf`이다. 2학기 시험이다.",
+      "원본은 모범답안이다. 인쇄된 문제 위에 손글씨 풀이가 겹친다 (FORMAT-EXAM.md의 스캔 답안지 규칙). 인쇄된 글자만 옮겼다.",
+      "PDF는 5쪽이다. 1쪽은 표지(\"2015.10.21. Electronic Circuits II Midterm\", 손글씨 \"Solution\", 배점표 1 /40, 2 /30, 3 /30, Total /100)라 문항이 없다. Q1은 2쪽, Q2는 3쪽(1)과 4쪽(2), Q3은 5쪽이다.",
+      "영문 시험지다 (source_lang: en). 배점은 표지 배점표를 따른다.",
+      "Q2 번호 \"2.\"와 Q2 (2)의 \"2)\"는 빨간 별표 손글씨에 일부 가려졌지만 순서로 번호를 알 수 있다."
+    ],
+    "sources": [
+      "../../2013-2019_중간/2015-2_중간_모범답안.pdf"
+    ]
+  },
+  "figures": [
+    {
+      "display_path": "from_the_past/md/2015-2_중간/figures/redrawn/fig-Q1.png",
+      "id": "Q1",
+      "original_path": "from_the_past/md/2015-2_중간/figures/fig-Q1.png"
+    }
+  ],
+  "id": "2015-2_중간-Q1",
+  "input_hashes": {
+    "from_the_past/md/2015-2_중간/Q1.md": "ef8a949ec09b1d439c185f6560018d60a4925795d81106937120d75b593f1219",
+    "from_the_past/md/2015-2_중간/exam.yaml": "07182d95c77667c069bbe29b29256fdb3144096a2153522ee782ac7fe8b8bbc2",
+    "from_the_past/md/2015-2_중간/figures/fig-Q1.png": "b6a2e8ca716dd84afb80945760e98185e23c5ae595f82e6087b7b60b66412f57",
+    "from_the_past/md/2015-2_중간/figures/figures.yaml": "e057ba74a2cf1bfe86e0105cd03e055aba97080e5fdf5190c4d8ea8ab405f38c",
+    "from_the_past/md/2015-2_중간/figures/redrawn/fig-Q1.png": "b24117efba60493272207f0d39aa2ad20a8cf591f2bc76a99ecbece9777e8bb4"
+  },
+  "md_path": "from_the_past/md/2015-2_중간/Q1.md",
+  "metadata": {
+    "depends_on": [],
+    "exam": "2015-2 중간고사",
+    "figures": [
+      {
+        "id": "Q1",
+        "panels": [],
+        "role": "problem"
+      }
+    ],
+    "id": "2015-2_중간-Q1",
+    "kind": "기출",
+    "number": "1",
+    "pdf_page": 2,
+    "points": 40,
+    "refs": [],
+    "selection": {
+      "circuit_types": [
+        "MOS",
+        "캐스코드",
+        "전류 거울"
+      ],
+      "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+      "evidence_sections": [
+        "구할 것",
+        "풀이"
+      ],
+      "learning_goals": [
+        "$I_{copy1}$",
+        "$I_{copy2}$",
+        "$M_2$가 포화 영역에서 동작하도록 하는 최소 $V_b$",
+        "출력 임피던스",
+        "이득 $v_{out}/v_{in}$"
+      ],
+      "required_concepts": [
+        "전류 거울",
+        "캐스코드",
+        "DC 바이어스와 동작 영역",
+        "출력 저항",
+        "소신호 전압 이득"
+      ],
+      "review_status": "draft",
+      "reviewed_content_sha256": "7ac58613d1a5d842036fbf2706a31e4522333573f75b3736fa7f457115eb56af",
+      "subpart_requirements": [
+        {
+          "label": "1",
+          "required_concepts": [
+            "전류 거울"
+          ]
+        },
+        {
+          "label": "2",
+          "required_concepts": [
+            "전류 거울"
+          ]
+        },
+        {
+          "label": "3",
+          "required_concepts": [
+            "DC 바이어스와 동작 영역"
+          ]
+        },
+        {
+          "label": "4",
+          "required_concepts": [
+            "출력 저항"
+          ]
+        },
+        {
+          "label": "5",
+          "required_concepts": [
+            "소신호 전압 이득"
+          ]
+        }
+      ],
+      "topics": [
+        "전류 거울",
+        "캐스코드"
+      ]
+    },
+    "source": "../../2013-2019_중간/2015-2_중간_모범답안.pdf",
+    "source_lang": "en",
+    "textbook_chapters": [
+      9
+    ]
+  },
+  "raw_md": "---\nid: 2015-2_중간-Q1\nkind: 기출\nexam: \"2015-2 중간고사\"\nnumber: \"1\"\npoints: 40\nsource: ../../2013-2019_중간/2015-2_중간_모범답안.pdf\npdf_page: 2\nsource_lang: en\nfigures:\n  - {id: \"Q1\", role: problem, panels: []}\ntextbook_chapters: [9]\ndepends_on: []\nrefs: []\nselection:\n  topics:\n  - 전류 거울\n  - 캐스코드\n  circuit_types:\n  - MOS\n  - 캐스코드\n  - 전류 거울\n  required_concepts:\n  - 전류 거울\n  - 캐스코드\n  - DC 바이어스와 동작 영역\n  - 출력 저항\n  - 소신호 전압 이득\n  learning_goals:\n  - $I_{copy1}$\n  - $I_{copy2}$\n  - $M_2$가 포화 영역에서 동작하도록 하는 최소 $V_b$\n  - 출력 임피던스\n  - 이득 $v_{out}/v_{in}$\n  evidence_sections:\n  - 구할 것\n  - 풀이\n  subpart_requirements:\n  - label: '1'\n    required_concepts:\n    - 전류 거울\n  - label: '2'\n    required_concepts:\n    - 전류 거울\n  - label: '3'\n    required_concepts:\n    - DC 바이어스와 동작 영역\n  - label: '4'\n    required_concepts:\n    - 출력 저항\n  - label: '5'\n    required_concepts:\n    - 소신호 전압 이득\n  review_status: draft\n  reviewed_content_sha256: 7ac58613d1a5d842036fbf2706a31e4522333573f75b3736fa7f457115eb56af\n  classification_note: 제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.\n---\n# 기출 2015-2 중간 1 — 전류 거울 두 단으로 바이어스한 PMOS 전류원 부하 NMOS 캐스코드 증폭기\n\n## 원문\nWith device parameters below,\n\n$V_{DD}=1.8\\text{V}$, $\\mu_n C_{ox} = 100\\ \\text{uA/V}^2$, $\\mu_p C_{ox} = 50\\ \\text{uA/V}^2$, $\\lambda_n=0.1\\ \\text{V}^{-1}$, $\\lambda_p=0.2\\ \\text{V}^{-1}$, $V_{TH,N} =0.4\\text{V}$,\n\n$I_{REF}=1\\text{mA}$\n\n$(W/L)_1=(W/L)_2=50$\n\n1) Derive $I_{copy1}$(5pt)\n\n2) Derive $I_{copy2}$(5pt)\n\n3) Determine minimum $V_b$ to operate $M_2$ in saturation region. (10pt)\n\n4) Derive output impedance. (10pt)\n\n5) Derive gain ($v_{out}/v_{in}$). (10pt)\n\n## 조건\n- 회로: 그림 Q1\n- $V_{DD} = 1.8\\ \\text{V}$\n- $\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$, $\\mu_p C_{ox} = 50\\ \\mu\\text{A/V}^2$ (원문 표기는 \"uA/V²\")\n- $\\lambda_n = 0.1\\ \\text{V}^{-1}$, $\\lambda_p = 0.2\\ \\text{V}^{-1}$\n- $V_{TH,N} = 0.4\\ \\text{V}$\n- $I_{REF} = 1\\ \\text{mA}$\n- $(W/L)_1 = (W/L)_2 = 50$\n- 그림의 크기 라벨: $M_{REF}$는 $5(W/L)_{REF}$, $M_5$는 $3(W/L)_5$, $M_4$는 $(W/L)_4$, $M_3$은 $2(W/L)_3$\n- $(W/L)_{REF}$, $(W/L)_3$, $(W/L)_4$, $(W/L)_5$의 값과 PMOS 문턱 전압은 주어지지 않음 (원문에 없음)\n- 그림의 배수만으로 복사 비를 정함: $(W/L)_{REF} = (W/L)_5$, $(W/L)_4 = (W/L)_3$ (원문에 없음)\n\n## 구할 것\n- 1) $I_{copy1}$\n- 2) $I_{copy2}$\n- 3) $M_2$가 포화 영역에서 동작하도록 하는 최소 $V_b$\n- 4) 출력 임피던스\n- 5) 이득 $v_{out}/v_{in}$\n\n## 회로 — Fig Q1\n```spice\nIREF  VDD   n1    {I_REF}\nMREF  n1    n1    0     nmos  W/L={(W/L)_REF} m=5   ; 좌우 반전 (게이트 오른쪽), 다이오드 연결\nM5    n2    n1    0     nmos  W/L={(W/L)_5} m=3\nM4    n2    n2    VDD   pmos  W/L={(W/L)_4}         ; 좌우 반전 (게이트 오른쪽), 다이오드 연결\nM3    Vout  n2    VDD   pmos  W/L={(W/L)_3} m=2\nM1    Vout  Vb    n3    nmos                        ; 좌우 반전 (게이트 오른쪽)\nM2    n3    Vin   0     nmos\n* (W/L)_1 = (W/L)_2 = 50 은 문제 문장에만 인쇄됨 (그림에는 없음)\n```\n- 단자: VDD = 1.8 V 전원 (가로 레일) / Vb = DC 바이어스, 값은 3)에서 구함 (점 단자) / Vin = 입력 (개방 원) / Vout = 출력 (개방 원)\n- 표시: 노드 라벨 V_DD (레일 오른쪽 끝, 위), V_out (출력 원 오른쪽), V_b (점 단자 오른쪽), V_in (입력 원 왼쪽, M_5 라벨 바로 오른쪽) / 소자 라벨 I_REF (전류원 왼쪽), M_REF (M_REF 왼쪽), M_5 (M5 오른쪽), M_4 (M4 왼쪽), M_3 (M3 오른쪽), M_1 (M1 왼쪽), M_2 (M2 오른쪽) / 부호 없음 / 화살표 \"I_copy1\": M4 드레인–M5 드레인 세로선, 아래 방향, 도선 위 (회색 화살촉), 글자는 화살표 왼쪽 위 / \"I_copy2\": M3 드레인–Vout 세로선, 아래 방향, 도선 위 (회색 화살촉), 글자는 화살표 왼쪽 / 수치·면적 라벨 \"(W/L)_4\" (M4 위, 레일 위), \"2(W/L)_3\" (M3 위, 레일 위), \"5(W/L)_REF\" (M_REF 아래 접지 아래), \"3(W/L)_5\" (M5 아래 접지 아래)\n- 배치: 맨 위 굵은 가로 레일 V_DD (왼쪽 끝은 I_REF 세로선 위, 오른쪽 끝은 M3 소스 너머) / 왼쪽 세로줄 위→아래 레일에서 내려오는 긴 세로선, I_REF 전류원(화살표 아래), n1 접속점, M_REF, 접지 / M_REF nmos 좌우 반전(게이트 막대 오른쪽, 드레인 왼쪽 위, 소스 왼쪽 아래·화살표 바깥) / n1 접속점에서 가로선이 오른쪽으로 나가 아래로 꺾여 게이트 높이의 접속점 (다이오드 연결) / 게이트 공통선은 M_REF 게이트에서 M5 게이트까지 게이트 높이로 가로지름 / 가운데 세로줄 위→아래 레일, M4, n2 접속점, I_copy1 화살표가 붙은 긴 세로선, M5, 접지 / M4 pmos 좌우 반전(게이트 막대 오른쪽, 소스 왼쪽 위·화살표가 채널 쪽으로 들어감, 드레인 왼쪽 아래) / M4 게이트 오른쪽 접속점에서 가로선이 오른쪽 M3 게이트로, 같은 접속점에서 세로선이 아래로 내려가 왼쪽으로 꺾여 n2 접속점 (다이오드 연결) / M5 nmos 보통 방향(게이트 왼쪽, 드레인 위, 소스 아래·화살표 바깥) / 오른쪽 세로줄 위→아래 레일, M3, I_copy2 화살표, Vout 접속점, M1, 긴 세로선, M2, 접지 / M3 pmos 보통 방향(게이트 왼쪽, 소스 오른쪽 위·화살표가 채널 쪽으로 들어감, 드레인 오른쪽 아래) / Vout 접속점에서 가로선이 오른쪽 V_out 원 / M1 nmos 좌우 반전(게이트 막대 오른쪽, 드레인 왼쪽 위, 소스 왼쪽 아래·화살표 바깥), 게이트 → 가로선 → 오른쪽 V_b 점 단자 / M2 nmos 보통 방향, V_in 원 → 가로선 → M2 게이트 / 접속점 (세 갈래 이상, 5곳): ① n1 = 위 I_REF + 아래 M_REF 드레인 + 오른쪽 다이오드 연결선 (점) ② M_REF 게이트 높이 = 왼쪽 M_REF 게이트 + 위 다이오드 연결선 + 오른쪽 M5 게이트로 가는 선 (점) ③ M4 게이트 오른쪽 = 왼쪽 M4 게이트 + 오른쪽 M3 게이트로 가는 선 + 아래 다이오드 연결선 (점) ④ n2 = 위 M4 드레인 + 오른쪽 다이오드 연결선 + 아래 M5 드레인으로 가는 세로선 (점) ⑤ Vout = 위 M3 드레인 + 아래 M1 드레인 + 오른쪽 V_out 선 (점) / 교차: 없음\n\n![Q1](figures/fig-Q1.png)\n> 참고: 두 I_copy 라벨은 다른 라벨과 글꼴이 다름(세리프 글꼴), 두 화살촉은 회색\n\n## 풀이\n### (1)(2) 거울 전류\n- $I_{copy1} = \\dfrac{3(W/L)_5}{5(W/L)_{REF}} I_{REF} = 0.600\\ \\text{mA}$ ($\\lambda$ 무시)\n- $M_4$가 받아 $M_3$로: $I_{copy2} = \\dfrac{2(W/L)_3}{(W/L)_4} I_{copy1} = 1.20\\ \\text{mA}$\n### (3) $M_2$ 포화 경계의 $V_b$\n- $M_1$, $M_2$의 $V_{ov}$ (같은 $W/L$, 같은 전류): $V_{ov} = \\sqrt{2I_{copy2}/[\\mu_n C_{ox}(W/L)_1]} = 0.693\\ \\text{V}$\n- $V_{DS2} = V_b - V_{GS1} \\ge V_{ov}$: $V_{b,min} = V_{TH,N} + 2V_{ov} = 1.79\\ \\text{V}$\n### (4) 출력 임피던스\n- $g_{m1} = g_{m2} = 2I_{copy2}/V_{ov} = 3.46\\ \\text{mS}$\n- $r_O = 1/(\\lambda I_{copy2})$: $r_{O1} = r_{O2} = 8.33\\ \\text{k}\\Omega$, $r_{O3} = 4.17\\ \\text{k}\\Omega$\n- $g_{m1} r_{O2} = 28.9 \\gg 1$, $M_3$ 게이트는 AC 접지: $R_{out} = r_{O3} \\parallel g_{m1} r_{O1} r_{O2} = 4.10\\ \\text{k}\\Omega$\n### (5) 이득\n- $A_v = -g_{m2} R_{out} = -14.2$\n### 답\n- 1) $I_{copy1} = 0.600\\ \\text{mA}$\n- 2) $I_{copy2} = 1.20\\ \\text{mA}$\n- 3) $V_{b,min} = 1.79\\ \\text{V}$\n- 4) $R_{out} = 4.10\\ \\text{k}\\Omega$\n- 5) $A_v = -14.2$\n",
+  "schema_version": 1,
+  "sections": [
+    {
+      "heading": "원문",
+      "markdown": "With device parameters below,\n\n$V_{DD}=1.8\\text{V}$, $\\mu_n C_{ox} = 100\\ \\text{uA/V}^2$, $\\mu_p C_{ox} = 50\\ \\text{uA/V}^2$, $\\lambda_n=0.1\\ \\text{V}^{-1}$, $\\lambda_p=0.2\\ \\text{V}^{-1}$, $V_{TH,N} =0.4\\text{V}$,\n\n$I_{REF}=1\\text{mA}$\n\n$(W/L)_1=(W/L)_2=50$\n\n1) Derive $I_{copy1}$(5pt)\n\n2) Derive $I_{copy2}$(5pt)\n\n3) Determine minimum $V_b$ to operate $M_2$ in saturation region. (10pt)\n\n4) Derive output impedance. (10pt)\n\n5) Derive gain ($v_{out}/v_{in}$). (10pt)"
+    },
+    {
+      "heading": "조건",
+      "markdown": "- 회로: 그림 Q1\n- $V_{DD} = 1.8\\ \\text{V}$\n- $\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$, $\\mu_p C_{ox} = 50\\ \\mu\\text{A/V}^2$ (원문 표기는 \"uA/V²\")\n- $\\lambda_n = 0.1\\ \\text{V}^{-1}$, $\\lambda_p = 0.2\\ \\text{V}^{-1}$\n- $V_{TH,N} = 0.4\\ \\text{V}$\n- $I_{REF} = 1\\ \\text{mA}$\n- $(W/L)_1 = (W/L)_2 = 50$\n- 그림의 크기 라벨: $M_{REF}$는 $5(W/L)_{REF}$, $M_5$는 $3(W/L)_5$, $M_4$는 $(W/L)_4$, $M_3$은 $2(W/L)_3$\n- $(W/L)_{REF}$, $(W/L)_3$, $(W/L)_4$, $(W/L)_5$의 값과 PMOS 문턱 전압은 주어지지 않음 (원문에 없음)\n- 그림의 배수만으로 복사 비를 정함: $(W/L)_{REF} = (W/L)_5$, $(W/L)_4 = (W/L)_3$ (원문에 없음)"
+    },
+    {
+      "heading": "구할 것",
+      "markdown": "- 1) $I_{copy1}$\n- 2) $I_{copy2}$\n- 3) $M_2$가 포화 영역에서 동작하도록 하는 최소 $V_b$\n- 4) 출력 임피던스\n- 5) 이득 $v_{out}/v_{in}$"
+    },
+    {
+      "heading": "회로 — Fig Q1",
+      "markdown": "```spice\nIREF  VDD   n1    {I_REF}\nMREF  n1    n1    0     nmos  W/L={(W/L)_REF} m=5   ; 좌우 반전 (게이트 오른쪽), 다이오드 연결\nM5    n2    n1    0     nmos  W/L={(W/L)_5} m=3\nM4    n2    n2    VDD   pmos  W/L={(W/L)_4}         ; 좌우 반전 (게이트 오른쪽), 다이오드 연결\nM3    Vout  n2    VDD   pmos  W/L={(W/L)_3} m=2\nM1    Vout  Vb    n3    nmos                        ; 좌우 반전 (게이트 오른쪽)\nM2    n3    Vin   0     nmos\n* (W/L)_1 = (W/L)_2 = 50 은 문제 문장에만 인쇄됨 (그림에는 없음)\n```\n- 단자: VDD = 1.8 V 전원 (가로 레일) / Vb = DC 바이어스, 값은 3)에서 구함 (점 단자) / Vin = 입력 (개방 원) / Vout = 출력 (개방 원)\n- 표시: 노드 라벨 V_DD (레일 오른쪽 끝, 위), V_out (출력 원 오른쪽), V_b (점 단자 오른쪽), V_in (입력 원 왼쪽, M_5 라벨 바로 오른쪽) / 소자 라벨 I_REF (전류원 왼쪽), M_REF (M_REF 왼쪽), M_5 (M5 오른쪽), M_4 (M4 왼쪽), M_3 (M3 오른쪽), M_1 (M1 왼쪽), M_2 (M2 오른쪽) / 부호 없음 / 화살표 \"I_copy1\": M4 드레인–M5 드레인 세로선, 아래 방향, 도선 위 (회색 화살촉), 글자는 화살표 왼쪽 위 / \"I_copy2\": M3 드레인–Vout 세로선, 아래 방향, 도선 위 (회색 화살촉), 글자는 화살표 왼쪽 / 수치·면적 라벨 \"(W/L)_4\" (M4 위, 레일 위), \"2(W/L)_3\" (M3 위, 레일 위), \"5(W/L)_REF\" (M_REF 아래 접지 아래), \"3(W/L)_5\" (M5 아래 접지 아래)\n- 배치: 맨 위 굵은 가로 레일 V_DD (왼쪽 끝은 I_REF 세로선 위, 오른쪽 끝은 M3 소스 너머) / 왼쪽 세로줄 위→아래 레일에서 내려오는 긴 세로선, I_REF 전류원(화살표 아래), n1 접속점, M_REF, 접지 / M_REF nmos 좌우 반전(게이트 막대 오른쪽, 드레인 왼쪽 위, 소스 왼쪽 아래·화살표 바깥) / n1 접속점에서 가로선이 오른쪽으로 나가 아래로 꺾여 게이트 높이의 접속점 (다이오드 연결) / 게이트 공통선은 M_REF 게이트에서 M5 게이트까지 게이트 높이로 가로지름 / 가운데 세로줄 위→아래 레일, M4, n2 접속점, I_copy1 화살표가 붙은 긴 세로선, M5, 접지 / M4 pmos 좌우 반전(게이트 막대 오른쪽, 소스 왼쪽 위·화살표가 채널 쪽으로 들어감, 드레인 왼쪽 아래) / M4 게이트 오른쪽 접속점에서 가로선이 오른쪽 M3 게이트로, 같은 접속점에서 세로선이 아래로 내려가 왼쪽으로 꺾여 n2 접속점 (다이오드 연결) / M5 nmos 보통 방향(게이트 왼쪽, 드레인 위, 소스 아래·화살표 바깥) / 오른쪽 세로줄 위→아래 레일, M3, I_copy2 화살표, Vout 접속점, M1, 긴 세로선, M2, 접지 / M3 pmos 보통 방향(게이트 왼쪽, 소스 오른쪽 위·화살표가 채널 쪽으로 들어감, 드레인 오른쪽 아래) / Vout 접속점에서 가로선이 오른쪽 V_out 원 / M1 nmos 좌우 반전(게이트 막대 오른쪽, 드레인 왼쪽 위, 소스 왼쪽 아래·화살표 바깥), 게이트 → 가로선 → 오른쪽 V_b 점 단자 / M2 nmos 보통 방향, V_in 원 → 가로선 → M2 게이트 / 접속점 (세 갈래 이상, 5곳): ① n1 = 위 I_REF + 아래 M_REF 드레인 + 오른쪽 다이오드 연결선 (점) ② M_REF 게이트 높이 = 왼쪽 M_REF 게이트 + 위 다이오드 연결선 + 오른쪽 M5 게이트로 가는 선 (점) ③ M4 게이트 오른쪽 = 왼쪽 M4 게이트 + 오른쪽 M3 게이트로 가는 선 + 아래 다이오드 연결선 (점) ④ n2 = 위 M4 드레인 + 오른쪽 다이오드 연결선 + 아래 M5 드레인으로 가는 세로선 (점) ⑤ Vout = 위 M3 드레인 + 아래 M1 드레인 + 오른쪽 V_out 선 (점) / 교차: 없음\n\n![Q1](figures/fig-Q1.png)\n> 참고: 두 I_copy 라벨은 다른 라벨과 글꼴이 다름(세리프 글꼴), 두 화살촉은 회색"
+    },
+    {
+      "heading": "풀이",
+      "markdown": "### (1)(2) 거울 전류\n- $I_{copy1} = \\dfrac{3(W/L)_5}{5(W/L)_{REF}} I_{REF} = 0.600\\ \\text{mA}$ ($\\lambda$ 무시)\n- $M_4$가 받아 $M_3$로: $I_{copy2} = \\dfrac{2(W/L)_3}{(W/L)_4} I_{copy1} = 1.20\\ \\text{mA}$\n### (3) $M_2$ 포화 경계의 $V_b$\n- $M_1$, $M_2$의 $V_{ov}$ (같은 $W/L$, 같은 전류): $V_{ov} = \\sqrt{2I_{copy2}/[\\mu_n C_{ox}(W/L)_1]} = 0.693\\ \\text{V}$\n- $V_{DS2} = V_b - V_{GS1} \\ge V_{ov}$: $V_{b,min} = V_{TH,N} + 2V_{ov} = 1.79\\ \\text{V}$\n### (4) 출력 임피던스\n- $g_{m1} = g_{m2} = 2I_{copy2}/V_{ov} = 3.46\\ \\text{mS}$\n- $r_O = 1/(\\lambda I_{copy2})$: $r_{O1} = r_{O2} = 8.33\\ \\text{k}\\Omega$, $r_{O3} = 4.17\\ \\text{k}\\Omega$\n- $g_{m1} r_{O2} = 28.9 \\gg 1$, $M_3$ 게이트는 AC 접지: $R_{out} = r_{O3} \\parallel g_{m1} r_{O1} r_{O2} = 4.10\\ \\text{k}\\Omega$\n### (5) 이득\n- $A_v = -g_{m2} R_{out} = -14.2$\n### 답\n- 1) $I_{copy1} = 0.600\\ \\text{mA}$\n- 2) $I_{copy2} = 1.20\\ \\text{mA}$\n- 3) $V_{b,min} = 1.79\\ \\text{V}$\n- 4) $R_{out} = 4.10\\ \\text{k}\\Omega$\n- 5) $A_v = -14.2$"
+    }
+  ],
+  "selection": {
+    "circuit_types": [
+      "MOS",
+      "캐스코드",
+      "전류 거울"
+    ],
+    "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+    "evidence_sections": [
+      "구할 것",
+      "풀이"
+    ],
+    "learning_goals": [
+      "$I_{copy1}$",
+      "$I_{copy2}$",
+      "$M_2$가 포화 영역에서 동작하도록 하는 최소 $V_b$",
+      "출력 임피던스",
+      "이득 $v_{out}/v_{in}$"
+    ],
+    "required_concepts": [
+      "전류 거울",
+      "캐스코드",
+      "DC 바이어스와 동작 영역",
+      "출력 저항",
+      "소신호 전압 이득"
+    ],
+    "review_status": "draft",
+    "reviewed_content_sha256": "7ac58613d1a5d842036fbf2706a31e4522333573f75b3736fa7f457115eb56af",
+    "status": "draft",
+    "subpart_requirements": [
+      {
+        "label": "1",
+        "required_concepts": [
+          "전류 거울"
+        ]
+      },
+      {
+        "label": "2",
+        "required_concepts": [
+          "전류 거울"
+        ]
+      },
+      {
+        "label": "3",
+        "required_concepts": [
+          "DC 바이어스와 동작 영역"
+        ]
+      },
+      {
+        "label": "4",
+        "required_concepts": [
+          "출력 저항"
+        ]
+      },
+      {
+        "label": "5",
+        "required_concepts": [
+          "소신호 전압 이득"
+        ]
+      }
+    ],
+    "topics": [
+      "전류 거울",
+      "캐스코드"
+    ]
+  },
+  "subparts": [
+    {
+      "ask_md": "$I_{copy1}$",
+      "label": "1",
+      "required_concepts": [
+        "전류 거울"
+      ]
+    },
+    {
+      "ask_md": "$I_{copy2}$",
+      "label": "2",
+      "required_concepts": [
+        "전류 거울"
+      ]
+    },
+    {
+      "ask_md": "$M_2$가 포화 영역에서 동작하도록 하는 최소 $V_b$",
+      "label": "3",
+      "required_concepts": [
+        "DC 바이어스와 동작 영역"
+      ]
+    },
+    {
+      "ask_md": "출력 임피던스",
+      "label": "4",
+      "required_concepts": [
+        "출력 저항"
+      ]
+    },
+    {
+      "ask_md": "이득 $v_{out}/v_{in}$",
+      "label": "5",
+      "required_concepts": [
+        "소신호 전압 이득"
+      ]
+    }
+  ],
+  "title": "전류 거울 두 단으로 바이어스한 PMOS 전류원 부하 NMOS 캐스코드 증폭기"
+}

@@ -1,0 +1,160 @@
+{
+  "body_md": "# 기출 2021-1 기말 1 — 전류원 M3가 붙은 캐스코드 증폭기의 노드 X, Y 극점\n\n## 원문\n다음 증폭기에 대해 주어진 조건을 이용하여, 노드 X와 노드 Y의 pole 주파수를 $M_1$, $M_2$, $M_3$의 capacitance들에 관한 식으로 각각 구하시오.\n\n: $I_{D1} = 2\\ \\text{mA}$, $I_{D3} = 1\\ \\text{mA}$, $(W/L)_1 = 200/0.2$, $(W/L)_2 = 100/0.2$, $(W/L)_3 = 200/0.2$, $R_S = 100\\ \\Omega$, $R_L = 500\\ \\Omega$, $\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$, $\\mu_p C_{ox} = 50\\ \\mu\\text{A/V}^2$, $\\lambda_n = \\lambda_p = 0$.\n\n## 조건\n- 회로: 그림의 증폭기 ($M_1$ 공통 소스 + $M_2$ 캐스코드, $M_3$가 노드 Y에 전류를 공급)\n- $I_{D1} = 2\\ \\text{mA}$, $I_{D3} = 1\\ \\text{mA}$\n- $(W/L)_1 = 200/0.2$, $(W/L)_2 = 100/0.2$, $(W/L)_3 = 200/0.2$\n- $R_S = 100\\ \\Omega$, $R_L = 500\\ \\Omega$\n- $\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$, $\\mu_p C_{ox} = 50\\ \\mu\\text{A/V}^2$\n- $\\lambda_n = \\lambda_p = 0$\n- 바이어스 전압 $V_{b1}$, $V_{b2}$와 $V_{DD}$ 값은 주어지지 않음 (원문에 없음)\n\n## 구할 것\n- 노드 X의 극점 주파수와 노드 Y의 극점 주파수를 각각 $M_1$, $M_2$, $M_3$의 커패시턴스로 나타낸 식\n\n## 회로 — Fig Q1\n```spice\nM3  Y     Vb2  VDD   pmos\nRL  VDD   Vout {R_L}\nM2  Vout  Vb1  Y     nmos\nM1  Y     X    0     nmos\nRS  Vin   X    {R_S}\n```\n- 단자: VDD = 전원, 값 미지정 (가로 레일) / Vb2, Vb1 = 이상적 DC 바이어스, 값 미지정 (점 단자) / Vin = 입력 (개방 원) / Vout = 출력 (개방 원)\n- 표시: 노드 라벨 V_DD (레일 오른쪽 끝), V_b2 (점 단자 왼쪽), V_b1 (점 단자 왼쪽), V_out (출력 원 오른쪽), Y (Y 접속점 오른쪽 아래), V_in (입력 원 왼쪽), X (M1 게이트 선 아래, R_S와 M1 게이트 사이) / 소자 라벨 M3 (M3 오른쪽), R_L (저항 오른쪽), M2 (M2 오른쪽), R_S (가로 저항 위), M1 (M1 오른쪽) / 부호 없음 / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 맨 위 가로 레일 V_DD / 왼쪽에 M3 (pmos, 게이트 왼쪽, 소스 위·화살표가 채널 쪽으로 들어감, 드레인 아래), 소스가 레일에 붙음 / 오른쪽 세로줄 위→아래 R_L, Vout 접속점, M2, Y 접속점, M1, 접지 / M2, M1 nmos 보통 방향(게이트 왼쪽, 드레인 위, 소스 아래·화살표 바깥) / M3 드레인에서 세로선이 Y 높이까지 내려가 모서리에서 오른쪽으로 꺾여 Y 접속점에 닿음 / Vout 접속점에서 가로선이 오른쪽 Vout 원 / V_b2, V_b1 점 단자 → 가로선 → 각 게이트 / V_in 원 → 가로 R_S → M1 게이트 (X) / 접속점 (세 갈래 이상, 2곳): Vout = 위 R_L + 아래 M2 드레인 + 오른쪽 Vout 선 (점), Y = 위 M2 소스 + 아래 M1 드레인 + 왼쪽 M3 드레인 선 (점) / 교차: 없음\n\n![Q1](figures/fig-Q1.png)\n\n## 힌트\n### $M_3$가 $M_1$ 전류 일부를 대 줌\n- $M_3$가 Y에 DC 전류를 넣으므로 $M_1$의 전류 중 일부만 $M_2$로 흐르고, $g_{m2}$는 그 줄어든 전류로 정해진다\n- $\\lambda = 0$이라 $M_3$는 Y에 저항을 더하지 않고 커패시턴스만 더한다. Y에서 본 저항과 X→Y Miller 이득은 $M_2$만으로 정해진다\n\n## 풀이\n### 바이어스 전류와 $g_m$\n- $M_3$가 Y에 $I_{D3}$를 대 주므로 $I_{D2} = I_{D1} - I_{D3} = 1.00\\ \\text{mA}$\n- $g_m = \\sqrt{2\\mu_n C_{ox}(W/L) I_D}$: $g_{m1} = 20.0\\ \\text{mS}$, $g_{m2} = 10.0\\ \\text{mS}$ ($1/g_{m2} = 100\\ \\Omega$)\n### $M_3$가 Y에 더하는 것\n- $\\lambda = 0$이라 $M_3$는 Y에 저항을 더하지 않는다. Y에서 본 저항은 $1/g_{m2}$ (몸체 효과 무시)\n- $M_3$ 게이트·소스는 AC 접지라 Y에는 $C_{GD3}$, $C_{DB3}$만 붙는다\n- X→Y 이득 $-g_{m1}/g_{m2} = -2.00$ ($M_3$가 $g_{m2}$를 줄여 커짐)\n### 노드 X와 Y의 극점\n- X: Miller로 $C_{GS1} + (1 + g_{m1}/g_{m2})C_{GD1} = C_{GS1} + 3C_{GD1}$, 저항 $R_S$\n- Y: $C_{GD1}$의 계수 $1 + g_{m2}/g_{m1} = 1.5$, $C_Y = C_{DB1} + C_{GS2} + C_{SB2} + 1.5C_{GD1} + C_{GD3} + C_{DB3}$\n- $|\\omega_{p,X}| = 1/[R_S(C_{GS1} + 3C_{GD1})]$, $|\\omega_{p,Y}| = g_{m2}/C_Y$\n### 답\n- 노드 X: $|\\omega_{p,X}| = 1/[100\\ \\Omega\\,(C_{GS1} + 3C_{GD1})]$\n- 노드 Y: $|\\omega_{p,Y}| = 1/[100\\ \\Omega\\,(C_{DB1} + C_{GS2} + C_{SB2} + 1.5C_{GD1} + C_{GD3} + C_{DB3})]$\n",
+  "content_sha256": "9332296bcf5e0ba075e56d5918222f2e4af41f24be34d9ae2c6539df537a8fe6",
+  "exam": {
+    "exam": "2021-1 기말고사",
+    "header": "Closed book, 풀이과정 필수 (풀이과정이 없으면 점수 미부여)",
+    "notes": [
+      "원본은 1쪽짜리 PDF 3개다 (Q1–Q3, Q4–Q5, Q6–Q7).",
+      "`2023-1/23-1 기말/23-1.pdf`는 이 시험과 세 쪽 모두 같은 사본이라 쓰지 않았다."
+    ],
+    "sources": [
+      "../../2021중간_기말/기말/Final0617_1p_rev.pdf",
+      "../../2021중간_기말/기말/Final0617_2p_rev.pdf",
+      "../../2021중간_기말/기말/Final0617_3p_rev.pdf"
+    ]
+  },
+  "figures": [
+    {
+      "display_path": "from_the_past/md/2021-1_기말/figures/redrawn/fig-Q1.png",
+      "id": "Q1",
+      "original_path": "from_the_past/md/2021-1_기말/figures/fig-Q1.png"
+    }
+  ],
+  "id": "2021-1_기말-Q1",
+  "input_hashes": {
+    "from_the_past/md/2021-1_기말/Q1.md": "dbf92175a851ef0510235b9120a664217e1ee258a3954fa1b58bf7df56590bb0",
+    "from_the_past/md/2021-1_기말/exam.yaml": "bf4144b20de31b19ee273ef1f948399d29f99531d14dbfa5cf4542f41bf722aa",
+    "from_the_past/md/2021-1_기말/figures/fig-Q1.png": "b5f949120f04a251e7024f9889c14308b362ac786d1b7163c2eed6b2efeb9c5c",
+    "from_the_past/md/2021-1_기말/figures/figures.yaml": "868e1927572ab223a4b07069f4cef61a6ead8489536424474910eaddf443f0b8",
+    "from_the_past/md/2021-1_기말/figures/redrawn/fig-Q1.png": "4e95f5269dc1f66f13fa4bc736a0d4eb2a676d8e8066042fdcc2877455b660b2"
+  },
+  "md_path": "from_the_past/md/2021-1_기말/Q1.md",
+  "metadata": {
+    "depends_on": [],
+    "exam": "2021-1 기말고사",
+    "figures": [
+      {
+        "id": "Q1",
+        "panels": [],
+        "role": "problem"
+      }
+    ],
+    "id": "2021-1_기말-Q1",
+    "kind": "기출",
+    "number": "1",
+    "pdf_page": 1,
+    "points": 10,
+    "refs": [
+      "교과서 E11.26 (Fig 11.54)과 같은 회로"
+    ],
+    "selection": {
+      "circuit_types": [
+        "캐스코드"
+      ],
+      "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+      "evidence_sections": [
+        "구할 것",
+        "풀이"
+      ],
+      "learning_goals": [
+        "- 노드 X의 극점 주파수와 노드 Y의 극점 주파수를 각각 $M_1$, $M_2$, $M_3$의 커패시턴스로 나타낸 식"
+      ],
+      "required_concepts": [
+        "캐스코드",
+        "주파수 응답과 기생 커패시턴스",
+        "노드 저항과 극점"
+      ],
+      "review_status": "draft",
+      "reviewed_content_sha256": "9332296bcf5e0ba075e56d5918222f2e4af41f24be34d9ae2c6539df537a8fe6",
+      "subpart_requirements": [
+        {
+          "label": "main",
+          "required_concepts": [
+            "노드 저항과 극점"
+          ]
+        }
+      ],
+      "topics": [
+        "캐스코드",
+        "주파수 응답과 기생 커패시턴스"
+      ]
+    },
+    "source": "../../2021중간_기말/기말/Final0617_1p_rev.pdf",
+    "source_lang": "ko",
+    "textbook_chapters": [
+      11
+    ]
+  },
+  "raw_md": "---\nid: 2021-1_기말-Q1\nkind: 기출\nexam: \"2021-1 기말고사\"\nnumber: \"1\"\npoints: 10\nsource: ../../2021중간_기말/기말/Final0617_1p_rev.pdf\npdf_page: 1\nsource_lang: ko\nfigures:\n  - {id: \"Q1\", role: problem, panels: []}\ntextbook_chapters: [11]\ndepends_on: []\nrefs: [\"교과서 E11.26 (Fig 11.54)과 같은 회로\"]\nselection:\n  topics:\n  - 캐스코드\n  - 주파수 응답과 기생 커패시턴스\n  circuit_types:\n  - 캐스코드\n  required_concepts:\n  - 캐스코드\n  - 주파수 응답과 기생 커패시턴스\n  - 노드 저항과 극점\n  learning_goals:\n  - '- 노드 X의 극점 주파수와 노드 Y의 극점 주파수를 각각 $M_1$, $M_2$, $M_3$의 커패시턴스로 나타낸 식'\n  evidence_sections:\n  - 구할 것\n  - 풀이\n  subpart_requirements:\n  - label: main\n    required_concepts:\n    - 노드 저항과 극점\n  review_status: draft\n  reviewed_content_sha256: 9332296bcf5e0ba075e56d5918222f2e4af41f24be34d9ae2c6539df537a8fe6\n  classification_note: 제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.\n---\n# 기출 2021-1 기말 1 — 전류원 M3가 붙은 캐스코드 증폭기의 노드 X, Y 극점\n\n## 원문\n다음 증폭기에 대해 주어진 조건을 이용하여, 노드 X와 노드 Y의 pole 주파수를 $M_1$, $M_2$, $M_3$의 capacitance들에 관한 식으로 각각 구하시오.\n\n: $I_{D1} = 2\\ \\text{mA}$, $I_{D3} = 1\\ \\text{mA}$, $(W/L)_1 = 200/0.2$, $(W/L)_2 = 100/0.2$, $(W/L)_3 = 200/0.2$, $R_S = 100\\ \\Omega$, $R_L = 500\\ \\Omega$, $\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$, $\\mu_p C_{ox} = 50\\ \\mu\\text{A/V}^2$, $\\lambda_n = \\lambda_p = 0$.\n\n## 조건\n- 회로: 그림의 증폭기 ($M_1$ 공통 소스 + $M_2$ 캐스코드, $M_3$가 노드 Y에 전류를 공급)\n- $I_{D1} = 2\\ \\text{mA}$, $I_{D3} = 1\\ \\text{mA}$\n- $(W/L)_1 = 200/0.2$, $(W/L)_2 = 100/0.2$, $(W/L)_3 = 200/0.2$\n- $R_S = 100\\ \\Omega$, $R_L = 500\\ \\Omega$\n- $\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$, $\\mu_p C_{ox} = 50\\ \\mu\\text{A/V}^2$\n- $\\lambda_n = \\lambda_p = 0$\n- 바이어스 전압 $V_{b1}$, $V_{b2}$와 $V_{DD}$ 값은 주어지지 않음 (원문에 없음)\n\n## 구할 것\n- 노드 X의 극점 주파수와 노드 Y의 극점 주파수를 각각 $M_1$, $M_2$, $M_3$의 커패시턴스로 나타낸 식\n\n## 회로 — Fig Q1\n```spice\nM3  Y     Vb2  VDD   pmos\nRL  VDD   Vout {R_L}\nM2  Vout  Vb1  Y     nmos\nM1  Y     X    0     nmos\nRS  Vin   X    {R_S}\n```\n- 단자: VDD = 전원, 값 미지정 (가로 레일) / Vb2, Vb1 = 이상적 DC 바이어스, 값 미지정 (점 단자) / Vin = 입력 (개방 원) / Vout = 출력 (개방 원)\n- 표시: 노드 라벨 V_DD (레일 오른쪽 끝), V_b2 (점 단자 왼쪽), V_b1 (점 단자 왼쪽), V_out (출력 원 오른쪽), Y (Y 접속점 오른쪽 아래), V_in (입력 원 왼쪽), X (M1 게이트 선 아래, R_S와 M1 게이트 사이) / 소자 라벨 M3 (M3 오른쪽), R_L (저항 오른쪽), M2 (M2 오른쪽), R_S (가로 저항 위), M1 (M1 오른쪽) / 부호 없음 / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 맨 위 가로 레일 V_DD / 왼쪽에 M3 (pmos, 게이트 왼쪽, 소스 위·화살표가 채널 쪽으로 들어감, 드레인 아래), 소스가 레일에 붙음 / 오른쪽 세로줄 위→아래 R_L, Vout 접속점, M2, Y 접속점, M1, 접지 / M2, M1 nmos 보통 방향(게이트 왼쪽, 드레인 위, 소스 아래·화살표 바깥) / M3 드레인에서 세로선이 Y 높이까지 내려가 모서리에서 오른쪽으로 꺾여 Y 접속점에 닿음 / Vout 접속점에서 가로선이 오른쪽 Vout 원 / V_b2, V_b1 점 단자 → 가로선 → 각 게이트 / V_in 원 → 가로 R_S → M1 게이트 (X) / 접속점 (세 갈래 이상, 2곳): Vout = 위 R_L + 아래 M2 드레인 + 오른쪽 Vout 선 (점), Y = 위 M2 소스 + 아래 M1 드레인 + 왼쪽 M3 드레인 선 (점) / 교차: 없음\n\n![Q1](figures/fig-Q1.png)\n\n## 힌트\n### $M_3$가 $M_1$ 전류 일부를 대 줌\n- $M_3$가 Y에 DC 전류를 넣으므로 $M_1$의 전류 중 일부만 $M_2$로 흐르고, $g_{m2}$는 그 줄어든 전류로 정해진다\n- $\\lambda = 0$이라 $M_3$는 Y에 저항을 더하지 않고 커패시턴스만 더한다. Y에서 본 저항과 X→Y Miller 이득은 $M_2$만으로 정해진다\n\n## 풀이\n### 바이어스 전류와 $g_m$\n- $M_3$가 Y에 $I_{D3}$를 대 주므로 $I_{D2} = I_{D1} - I_{D3} = 1.00\\ \\text{mA}$\n- $g_m = \\sqrt{2\\mu_n C_{ox}(W/L) I_D}$: $g_{m1} = 20.0\\ \\text{mS}$, $g_{m2} = 10.0\\ \\text{mS}$ ($1/g_{m2} = 100\\ \\Omega$)\n### $M_3$가 Y에 더하는 것\n- $\\lambda = 0$이라 $M_3$는 Y에 저항을 더하지 않는다. Y에서 본 저항은 $1/g_{m2}$ (몸체 효과 무시)\n- $M_3$ 게이트·소스는 AC 접지라 Y에는 $C_{GD3}$, $C_{DB3}$만 붙는다\n- X→Y 이득 $-g_{m1}/g_{m2} = -2.00$ ($M_3$가 $g_{m2}$를 줄여 커짐)\n### 노드 X와 Y의 극점\n- X: Miller로 $C_{GS1} + (1 + g_{m1}/g_{m2})C_{GD1} = C_{GS1} + 3C_{GD1}$, 저항 $R_S$\n- Y: $C_{GD1}$의 계수 $1 + g_{m2}/g_{m1} = 1.5$, $C_Y = C_{DB1} + C_{GS2} + C_{SB2} + 1.5C_{GD1} + C_{GD3} + C_{DB3}$\n- $|\\omega_{p,X}| = 1/[R_S(C_{GS1} + 3C_{GD1})]$, $|\\omega_{p,Y}| = g_{m2}/C_Y$\n### 답\n- 노드 X: $|\\omega_{p,X}| = 1/[100\\ \\Omega\\,(C_{GS1} + 3C_{GD1})]$\n- 노드 Y: $|\\omega_{p,Y}| = 1/[100\\ \\Omega\\,(C_{DB1} + C_{GS2} + C_{SB2} + 1.5C_{GD1} + C_{GD3} + C_{DB3})]$\n",
+  "schema_version": 1,
+  "sections": [
+    {
+      "heading": "원문",
+      "markdown": "다음 증폭기에 대해 주어진 조건을 이용하여, 노드 X와 노드 Y의 pole 주파수를 $M_1$, $M_2$, $M_3$의 capacitance들에 관한 식으로 각각 구하시오.\n\n: $I_{D1} = 2\\ \\text{mA}$, $I_{D3} = 1\\ \\text{mA}$, $(W/L)_1 = 200/0.2$, $(W/L)_2 = 100/0.2$, $(W/L)_3 = 200/0.2$, $R_S = 100\\ \\Omega$, $R_L = 500\\ \\Omega$, $\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$, $\\mu_p C_{ox} = 50\\ \\mu\\text{A/V}^2$, $\\lambda_n = \\lambda_p = 0$."
+    },
+    {
+      "heading": "조건",
+      "markdown": "- 회로: 그림의 증폭기 ($M_1$ 공통 소스 + $M_2$ 캐스코드, $M_3$가 노드 Y에 전류를 공급)\n- $I_{D1} = 2\\ \\text{mA}$, $I_{D3} = 1\\ \\text{mA}$\n- $(W/L)_1 = 200/0.2$, $(W/L)_2 = 100/0.2$, $(W/L)_3 = 200/0.2$\n- $R_S = 100\\ \\Omega$, $R_L = 500\\ \\Omega$\n- $\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$, $\\mu_p C_{ox} = 50\\ \\mu\\text{A/V}^2$\n- $\\lambda_n = \\lambda_p = 0$\n- 바이어스 전압 $V_{b1}$, $V_{b2}$와 $V_{DD}$ 값은 주어지지 않음 (원문에 없음)"
+    },
+    {
+      "heading": "구할 것",
+      "markdown": "- 노드 X의 극점 주파수와 노드 Y의 극점 주파수를 각각 $M_1$, $M_2$, $M_3$의 커패시턴스로 나타낸 식"
+    },
+    {
+      "heading": "회로 — Fig Q1",
+      "markdown": "```spice\nM3  Y     Vb2  VDD   pmos\nRL  VDD   Vout {R_L}\nM2  Vout  Vb1  Y     nmos\nM1  Y     X    0     nmos\nRS  Vin   X    {R_S}\n```\n- 단자: VDD = 전원, 값 미지정 (가로 레일) / Vb2, Vb1 = 이상적 DC 바이어스, 값 미지정 (점 단자) / Vin = 입력 (개방 원) / Vout = 출력 (개방 원)\n- 표시: 노드 라벨 V_DD (레일 오른쪽 끝), V_b2 (점 단자 왼쪽), V_b1 (점 단자 왼쪽), V_out (출력 원 오른쪽), Y (Y 접속점 오른쪽 아래), V_in (입력 원 왼쪽), X (M1 게이트 선 아래, R_S와 M1 게이트 사이) / 소자 라벨 M3 (M3 오른쪽), R_L (저항 오른쪽), M2 (M2 오른쪽), R_S (가로 저항 위), M1 (M1 오른쪽) / 부호 없음 / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 맨 위 가로 레일 V_DD / 왼쪽에 M3 (pmos, 게이트 왼쪽, 소스 위·화살표가 채널 쪽으로 들어감, 드레인 아래), 소스가 레일에 붙음 / 오른쪽 세로줄 위→아래 R_L, Vout 접속점, M2, Y 접속점, M1, 접지 / M2, M1 nmos 보통 방향(게이트 왼쪽, 드레인 위, 소스 아래·화살표 바깥) / M3 드레인에서 세로선이 Y 높이까지 내려가 모서리에서 오른쪽으로 꺾여 Y 접속점에 닿음 / Vout 접속점에서 가로선이 오른쪽 Vout 원 / V_b2, V_b1 점 단자 → 가로선 → 각 게이트 / V_in 원 → 가로 R_S → M1 게이트 (X) / 접속점 (세 갈래 이상, 2곳): Vout = 위 R_L + 아래 M2 드레인 + 오른쪽 Vout 선 (점), Y = 위 M2 소스 + 아래 M1 드레인 + 왼쪽 M3 드레인 선 (점) / 교차: 없음\n\n![Q1](figures/fig-Q1.png)"
+    },
+    {
+      "heading": "힌트",
+      "markdown": "### $M_3$가 $M_1$ 전류 일부를 대 줌\n- $M_3$가 Y에 DC 전류를 넣으므로 $M_1$의 전류 중 일부만 $M_2$로 흐르고, $g_{m2}$는 그 줄어든 전류로 정해진다\n- $\\lambda = 0$이라 $M_3$는 Y에 저항을 더하지 않고 커패시턴스만 더한다. Y에서 본 저항과 X→Y Miller 이득은 $M_2$만으로 정해진다"
+    },
+    {
+      "heading": "풀이",
+      "markdown": "### 바이어스 전류와 $g_m$\n- $M_3$가 Y에 $I_{D3}$를 대 주므로 $I_{D2} = I_{D1} - I_{D3} = 1.00\\ \\text{mA}$\n- $g_m = \\sqrt{2\\mu_n C_{ox}(W/L) I_D}$: $g_{m1} = 20.0\\ \\text{mS}$, $g_{m2} = 10.0\\ \\text{mS}$ ($1/g_{m2} = 100\\ \\Omega$)\n### $M_3$가 Y에 더하는 것\n- $\\lambda = 0$이라 $M_3$는 Y에 저항을 더하지 않는다. Y에서 본 저항은 $1/g_{m2}$ (몸체 효과 무시)\n- $M_3$ 게이트·소스는 AC 접지라 Y에는 $C_{GD3}$, $C_{DB3}$만 붙는다\n- X→Y 이득 $-g_{m1}/g_{m2} = -2.00$ ($M_3$가 $g_{m2}$를 줄여 커짐)\n### 노드 X와 Y의 극점\n- X: Miller로 $C_{GS1} + (1 + g_{m1}/g_{m2})C_{GD1} = C_{GS1} + 3C_{GD1}$, 저항 $R_S$\n- Y: $C_{GD1}$의 계수 $1 + g_{m2}/g_{m1} = 1.5$, $C_Y = C_{DB1} + C_{GS2} + C_{SB2} + 1.5C_{GD1} + C_{GD3} + C_{DB3}$\n- $|\\omega_{p,X}| = 1/[R_S(C_{GS1} + 3C_{GD1})]$, $|\\omega_{p,Y}| = g_{m2}/C_Y$\n### 답\n- 노드 X: $|\\omega_{p,X}| = 1/[100\\ \\Omega\\,(C_{GS1} + 3C_{GD1})]$\n- 노드 Y: $|\\omega_{p,Y}| = 1/[100\\ \\Omega\\,(C_{DB1} + C_{GS2} + C_{SB2} + 1.5C_{GD1} + C_{GD3} + C_{DB3})]$"
+    }
+  ],
+  "selection": {
+    "circuit_types": [
+      "캐스코드"
+    ],
+    "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+    "evidence_sections": [
+      "구할 것",
+      "풀이"
+    ],
+    "learning_goals": [
+      "- 노드 X의 극점 주파수와 노드 Y의 극점 주파수를 각각 $M_1$, $M_2$, $M_3$의 커패시턴스로 나타낸 식"
+    ],
+    "required_concepts": [
+      "캐스코드",
+      "주파수 응답과 기생 커패시턴스",
+      "노드 저항과 극점"
+    ],
+    "review_status": "draft",
+    "reviewed_content_sha256": "9332296bcf5e0ba075e56d5918222f2e4af41f24be34d9ae2c6539df537a8fe6",
+    "status": "draft",
+    "subpart_requirements": [
+      {
+        "label": "main",
+        "required_concepts": [
+          "노드 저항과 극점"
+        ]
+      }
+    ],
+    "topics": [
+      "캐스코드",
+      "주파수 응답과 기생 커패시턴스"
+    ]
+  },
+  "subparts": [
+    {
+      "ask_md": "- 노드 X의 극점 주파수와 노드 Y의 극점 주파수를 각각 $M_1$, $M_2$, $M_3$의 커패시턴스로 나타낸 식",
+      "label": "main",
+      "required_concepts": [
+        "노드 저항과 극점"
+      ]
+    }
+  ],
+  "title": "전류원 M3가 붙은 캐스코드 증폭기의 노드 X, Y 극점"
+}

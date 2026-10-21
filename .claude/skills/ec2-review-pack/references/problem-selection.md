@@ -1,22 +1,26 @@
 # 복습문제 선별 규칙 (메인 에이전트)
 
-복습문제는 **workbook에 이미 있는 문제를 고르기만** 한다. 자작·변형 문제는 만들지 않는다. 모든 문제에 `## 풀이`가 있으므로 정답을 따로 계산하지 않는다.
+복습문제는 **workbook에 이미 있는 문항 전체를 고르기만** 한다. 자작·변형·일부 소문항 절취는 하지 않는다. 후보에는 `## 풀이`가 있는 문항만 들어가며, 참고 풀이의 정확성은 자식 문제설명의 독립 검산에서 확인한다.
 
 ## 1. 후보 목록
 ```bash
-python3 <SKILL>/scripts/problem_index.py --repo <REPO> --used <REPO>/복습노트 --exclude-range <range> --chapters <이번 범위 장, 예: 9,10> > <RUN>/candidates.tsv
+python3 <SKILL>/scripts/problem_index.py --repo <REPO> --used <REPO>/복습노트 --exclude-range <range> --chapters <이번 범위 장, 예: 9,10> --format json --catalog-out <RUN>/exam-catalog > <RUN>/candidates.json
 ```
-- 열: `id  kind  secnum  section  difficulty  used  title`
+- JSON의 `problems`에는 교과서의 기존 절/난이도 정보와 기출의 `selection`(주제·필요 개념·학습 목표·분류 근거/상태), `subparts`, `depends_on`, `detail_path`가 있다. 기출의 `detail_path`는 `catalog_root` 기준이다.
+- 상세 JSON은 원본 MD 전체·구획별 본문·exam.yaml·원본/다시 그린 그림 경로를 보존한다. 그림 경로와 `md_path`는 REPO 기준이다. JSON은 출력용 workbook JSON과 다른 선별 자료다.
+- 기본 TSV 인터페이스도 유지한다(`--format`을 생략). 새 복습팩은 JSON을 사용한다.
 - `--exclude-range <range>`: 이번 range를 다시 돌릴 때, 이번 range 자신의 이전 `.assets/problems.txt`가 USED로 잡혀 같은 문제를 다시 못 고르는 일을 막는다.
 - 종료 코드 1이면 stderr의 `ERROR` md는 후보에서 빠진 것이다. 보고서 "미해결"에 적는다(md는 고치지 않는다).
-- `used`가 `USED`인 id는 이전 팩(이번 range 제외)에서 썼으므로 고르지 않는다.
+- `used: true`인 id는 이전 팩(이번 range 제외)에서 썼으므로 고르지 않는다. 전제 문항도 사용 이력과 범위를 확인한다.
 - `## 풀이`가 없는 문제(예: 아직 풀이 전인 2013–2019 중간고사)는 목록에 나오지 않는다.
+- 저장된 `from_the_past/json`은 전체 기출 보관본이며 매 실행에 신뢰하지 않는다. 후보 명령은 최신 MD로 RUN 카탈로그를 생성한다. 파싱·그림·중복 ID·의존성 오류가 있으면 고치거나 보고하고 기출 선별을 중단한다. 손상된 카탈로그를 정상 후보로 사용하지 않는다. 복습팩 실행 중 저장소 원본이나 저장 JSON을 갱신하지 않는다.
 
 ## 2. 범위 맞추기
 - 요약의 `## 교과서 절 대조`에서 "다룸"인 절 번호 집합을 만든다(예: `{9.1.1, 9.1.2}`).
 - 교과서 문제: `secnum`이 그 집합의 절이거나 그 하위 절(9.1.2 → 9.1.2.x)인 것만 후보다. `secnum`이 `10.2`처럼 상위 절이면 제목과 원문을 읽고 다룬 내용만으로 풀리는지 판단한다.
 - `Design Problems`: 도전 문제로 최대 1개. 원문을 읽고 다룬 절만으로 풀리는 것만.
-- 기출: `secnum`이 `ch9,10`처럼 장만 알려 주므로 **md 원문(`## 원문`)과 `## 풀이`를 읽고** 배운 내용만으로 풀리는지 확인한다.
+- 기출: 관련 장 → 전역 `selection.required_concepts`와 소문항별 필요 개념 → 의존성·중복 여부 순으로 후보를 좁힌다. 소문항 태그는 비망라적이므로 전역 개념과 함께 읽는다. 그 뒤 상세 JSON의 **원문·조건·구할 것·회로 설명·풀이와 실제 그림**을 읽고 전체가 배운 내용만으로 풀리는지 확인한다.
+- `selection.status`는 `unclassified | draft | reviewed | stale`다. 초안/누락/오래된 분류는 힌트일 뿐 범위 일치 증거가 아니다. reviewed도 현재 수업 범위 적합성이나 정답 검산을 승인한 뜻이 아니다. 분류가 없다는 이유만으로 좋은 문제를 누락시키지 않는다.
 - 풀이에 수업에서 안 다룬 개념(예: 아직 안 배운 주파수 응답, 피드백)이 한 단계라도 필요하면 제외.
 - `forbidden_outside_preview` 용어가 핵심인 문제는 제외.
 
@@ -34,6 +38,14 @@ python3 <SKILL>/scripts/problem_index.py --repo <REPO> --used <REPO>/복습노�
 
 ## 4. manifest에 적기
 각 문제를 `{id, kind, anchor, date, why}`로 적는다(`references/manifest-guide.md`). `why`는 "캐스코드 출력저항 $g_m r_O^2$ 수치 계산"처럼 무엇을 연습하는지 한 줄.
+
+문제가 1개 이상이면 확정 뒤 **처음 후보와 같은 `--chapters`, `--used`, `--exclude-range`**로 실행해 선택 근거·카탈로그/내용 해시·전체 소문항·의존성을 기록한다. 이 명령은 AI의 실제 범위 검토를 대신하지 않는다. 문제 0개이면 생략한다.
+```bash
+python3 <SKILL>/scripts/problem_index.py --repo <REPO> --used <REPO>/복습노트 --exclude-range <range> --chapters <장> --format json --catalog-out <RUN>/exam-catalog --candidates-input <RUN>/candidates.json --selection-manifest <RUN>/manifest.json --selection-out <RUN>/selection.json > <RUN>/selection-candidates.json
+```
+- 원본·후보·사용 이력이 달라지면 기록을 거부한다. `candidates.json`을 새로 만들고 내용을 다시 검토한다. 입력 `candidates.json`에 stdout을 덮어쓰지 않는다.
+- 후보 외/USED/중복 ID, 일부 소문항 선택, 전제 누락·역순을 거부한다. 순환 의존성은 어떤 순서도 통과하지 못한다.
+- PDF 빌드 전 manifest와 selection.json의 ID·순서를 대조한다. 선별을 바꾸면 기록도 다시 만든다.
 
 ## 5. PDF 만들기 (4단계 조립에서)
 ```bash

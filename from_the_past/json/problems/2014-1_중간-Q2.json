@@ -1,0 +1,178 @@
+{
+  "body_md": "# 기출 2014-1 중간 2 — PMOS 전류 거울 부하 공통 소스 증폭기의 입력 DC 바이어스와 전압 이득\n\n## 원문\n다음 회로에 대해 다음 조건을 이용하여 질문에 답하시오.\n\n$(W/L)_1 = 50/0.2$, $(W/L)_2 = 100/0.2$, $(W/L)_{REF} = 10/0.2$, $I_{REF} = 50\\ \\mu\\text{A}$, $V_{DD} = 1.8\\ \\text{V}$\n\n$\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$, $\\mu_p C_{ox} = 50\\ \\mu\\text{A/V}^2$, $V_{TH,N} = 0.4\\ \\text{V}$, $V_{TH,P} = -0.5\\ \\text{V}$, $\\lambda_n = \\lambda_p = 0.1\\ \\text{V}^{-1}$\n\n(1) 입력($V_{in}$)의 DC 바이어스 전압을 구하시오.\n\n(2) 전압이득 ($V_{out}/V_{in}$)을 구하시오.\n\n## 조건\n- 회로: 그림의 PMOS 전류 거울($M_{REF}$, $M_2$) 부하 공통 소스 증폭기\n- $(W/L)_1 = 50/0.2$, $(W/L)_2 = 100/0.2$, $(W/L)_{REF} = 10/0.2$\n- $I_{REF} = 50\\ \\mu\\text{A}$, $V_{DD} = 1.8\\ \\text{V}$\n- $\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$, $\\mu_p C_{ox} = 50\\ \\mu\\text{A/V}^2$\n- $V_{TH,N} = 0.4\\ \\text{V}$, $V_{TH,P} = -0.5\\ \\text{V}$\n- $\\lambda_n = \\lambda_p = 0.1\\ \\text{V}^{-1}$\n\n## 구할 것\n- (1) 입력 $V_{in}$의 DC 바이어스 전압\n- (2) 전압 이득 $V_{out}/V_{in}$\n\n## 회로 — Fig Q2\n```spice\nMREF  n1    n1   VDD  pmos    ; 좌우 반전 (게이트 오른쪽), 다이오드 연결\nIREF  n1    0    {I_REF}      ; 화살표 아래 (n1 → 접지)\nM2    Vout  n1   VDD  pmos\nM1    Vout  Vin  0    nmos\n* n1 = M_REF 드레인·게이트, M2 게이트 (라벨 없음)\n* W/L 값은 문제 문장에만 인쇄됨 (그림에는 없음)\n```\n- 단자: VDD = 1.8 V 전원 (가로 레일) / Vin = 입력 (개방 원) / Vout = 출력 (개방 원)\n- 표시: 노드 라벨 V_DD (레일 오른쪽 끝), V_in (입력 원 왼쪽), V_out (출력 원 오른쪽) / 소자 라벨 M_REF (M_REF 왼쪽), M_2 (M2 오른쪽), M_1 (M1 오른쪽), I_REF (전류원 왼쪽) / 부호 없음 / 화살표 없음 / 수치·면적 라벨 \"= 1.8 V\" (V_DD 라벨 바로 뒤, 레일 오른쪽 끝)\n- 배치: 맨 위 굵은 가로 레일 V_DD / 왼쪽 세로줄 위→아래 M_REF, n1 아래 접속점, I_REF 전류원 (화살표 아래), 접지 / M_REF pmos 좌우 반전 (게이트 막대 오른쪽, 소스 왼쪽 위·화살표가 막대 쪽으로 들어감, 드레인 왼쪽 아래), 레일에서 세로선이 내려와 오른쪽으로 꺾여 소스, 드레인에서 세로선이 내려가 n1 아래 접속점 / M_REF 게이트 오른쪽 n1 위 접속점에서 가로선이 게이트 높이로 오른쪽 M2 게이트, 같은 접속점에서 세로선이 내려가 n1 아래 접속점 높이에서 왼쪽으로 꺾여 n1 아래 접속점 (다이오드 연결) / 오른쪽 세로줄 위→아래 M2, Vout 접속점, M1, 접지 / M2 pmos 보통 방향 (게이트 왼쪽, 소스 오른쪽 위·화살표가 막대 쪽으로 들어감, 드레인 오른쪽 아래), 소스에서 세로선이 위로 레일 / M1 nmos 보통 방향 (게이트 왼쪽, 드레인 오른쪽 위, 소스 오른쪽 아래·화살표 바깥), V_in 원 → 가로선 → M1 게이트, 소스 아래 접지 / Vout 접속점에서 가로선이 오른쪽 V_out 원 / 접속점 (세 갈래 이상, 3곳): ① n1 위 = 왼쪽 M_REF 게이트 + 오른쪽 M2 게이트 선 + 아래 다이오드 연결선 (점) ② n1 아래 = 위 M_REF 드레인 + 아래 I_REF + 오른쪽 다이오드 연결선 (점) ③ Vout = 위 M2 드레인 + 아래 M1 드레인 + 오른쪽 출력선 (점) / 교차: 없음\n\n![Q2](figures/fig-Q2.png)\n\n## 풀이\n### (1) 거울 전류\n- DC 바이어스에서는 채널 길이 변조를 무시한다: $I_{D2} = [(W/L)_2/(W/L)_{REF}]\\, I_{REF} = (500/50) \\times 50\\ \\mu\\text{A} = 500\\ \\mu\\text{A}$\n- $M_1$은 $M_2$와 직렬이라 $I_{D1} = 500\\ \\mu\\text{A}$\n### (1) 입력 DC 바이어스\n- $V_{GS1} - V_{TH,N} = \\sqrt{2I_{D1}/[\\mu_n C_{ox}(W/L)_1]} = \\sqrt{1\\ \\text{mA}/(100\\ \\mu\\text{A/V}^2 \\times 250)} = 0.200\\ \\text{V}$\n- $V_{in} = V_{GS1} = 0.4 + 0.200 = 0.600\\ \\text{V}$\n### (2) 전압 이득\n- $g_{m1} = 2I_{D1}/(V_{GS1} - V_{TH,N}) = 5.00\\ \\text{mS}$, $r_{O1} = r_{O2} = 1/(\\lambda I_{D1}) = 20.0\\ \\text{k}\\Omega$\n- $M_2$ 게이트는 신호가 없는 DC 노드라 부하는 $r_{O2}$: $A_v = -g_{m1}(r_{O1} \\parallel r_{O2}) = -5.00\\ \\text{mS} \\times 10.0\\ \\text{k}\\Omega = -50.0$\n### 답\n- (1) $V_{in} = 0.600\\ \\text{V}$\n- (2) $V_{out}/V_{in} = -50.0$\n",
+  "content_sha256": "bdc6a672e724aab914139a88ef19017bfb5352bd3c455f3dc128bd3f888a81e3",
+  "exam": {
+    "exam": "2014-1 중간고사",
+    "header": "Closed book, 과정 필수",
+    "notes": [
+      "원본 파일의 원래 이름은 2014-1_전자회로2_중간고사_모범답안_A반.PDF다 (5쪽 스캔). 같은 내용의 2014중간.PDF도 있었으나 중복이라 보관하지 않았다.",
+      "시험지 제목은 \"전자회로2 중간시험 (2014년 1학기)\", A반 시험이다. 6문항, 배점 20/10/10/20/20/20 (1쪽 배점표).",
+      "원본은 모범답안이다. 인쇄된 문제 위에 손글씨 풀이가 겹친다 (FORMAT-EXAM.md의 스캔 답안지 규칙). 손글씨는 대부분 문항 아래 빈칸에 있고 그림과는 거의 겹치지 않는다.",
+      "스캔이 흐려 그림 속 MOSFET 화살표 방향은 확대해도 판독되지 않는다. 소자 종류는 화살표가 붙은 단자(소스) 위치와 회로 문맥으로 정했다 (Q5 (d) 참고 줄).",
+      "이미지 PDF라 텍스트 레이어는 OCR 쓰레기다. 판독은 렌더링한 이미지로 했다."
+    ],
+    "sources": [
+      "../../2013-2019_중간/2014-1_중간_모범답안.pdf"
+    ]
+  },
+  "figures": [
+    {
+      "display_path": "from_the_past/md/2014-1_중간/figures/redrawn/fig-Q2.png",
+      "id": "Q2",
+      "original_path": "from_the_past/md/2014-1_중간/figures/fig-Q2.png"
+    }
+  ],
+  "id": "2014-1_중간-Q2",
+  "input_hashes": {
+    "from_the_past/md/2014-1_중간/Q2.md": "f7c01b2bc839208026250be420f3af633249bb57c593bc1357ccb1a10218cd6b",
+    "from_the_past/md/2014-1_중간/exam.yaml": "c06fd0dd4c3478cd5a5d6089e67fece40a6fc044a964b83703fff2b0bcae93d4",
+    "from_the_past/md/2014-1_중간/figures/fig-Q2.png": "e33be80e2b2513f2572a3066836a31ae6d18c102bf94003d991fa19ea48e4deb",
+    "from_the_past/md/2014-1_중간/figures/figures.yaml": "fa37f3e77b15af51134f05539f41fe0d442a474026ab4ffefc328314cc704caa",
+    "from_the_past/md/2014-1_중간/figures/redrawn/fig-Q2.png": "5ba3cc3e62e901b9a7237dd3d9a3cb399dffb9f59cd18d0ac75a2be18ff57031"
+  },
+  "md_path": "from_the_past/md/2014-1_중간/Q2.md",
+  "metadata": {
+    "depends_on": [],
+    "exam": "2014-1 중간고사",
+    "figures": [
+      {
+        "id": "Q2",
+        "panels": [],
+        "role": "problem"
+      }
+    ],
+    "id": "2014-1_중간-Q2",
+    "kind": "기출",
+    "number": "2",
+    "pdf_page": 2,
+    "points": 10,
+    "refs": [],
+    "selection": {
+      "circuit_types": [
+        "MOS",
+        "공통 소스",
+        "전류 거울"
+      ],
+      "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+      "evidence_sections": [
+        "구할 것",
+        "풀이"
+      ],
+      "learning_goals": [
+        "입력 $V_{in}$의 DC 바이어스 전압",
+        "전압 이득 $V_{out}/V_{in}$"
+      ],
+      "required_concepts": [
+        "전류 거울",
+        "DC 바이어스와 동작 영역",
+        "소신호 전압 이득"
+      ],
+      "review_status": "draft",
+      "reviewed_content_sha256": "bdc6a672e724aab914139a88ef19017bfb5352bd3c455f3dc128bd3f888a81e3",
+      "subpart_requirements": [
+        {
+          "label": "1",
+          "required_concepts": [
+            "DC 바이어스와 동작 영역"
+          ]
+        },
+        {
+          "label": "2",
+          "required_concepts": [
+            "소신호 전압 이득"
+          ]
+        }
+      ],
+      "topics": [
+        "전류 거울"
+      ]
+    },
+    "source": "../../2013-2019_중간/2014-1_중간_모범답안.pdf",
+    "source_lang": "ko",
+    "textbook_chapters": [
+      9
+    ]
+  },
+  "raw_md": "---\nid: 2014-1_중간-Q2\nkind: 기출\nexam: \"2014-1 중간고사\"\nnumber: \"2\"\npoints: 10\nsource: ../../2013-2019_중간/2014-1_중간_모범답안.pdf\npdf_page: 2\nsource_lang: ko\nfigures:\n  - {id: \"Q2\", role: problem, panels: []}\ntextbook_chapters: [9]\ndepends_on: []\nrefs: []\nselection:\n  topics:\n  - 전류 거울\n  circuit_types:\n  - MOS\n  - 공통 소스\n  - 전류 거울\n  required_concepts:\n  - 전류 거울\n  - DC 바이어스와 동작 영역\n  - 소신호 전압 이득\n  learning_goals:\n  - 입력 $V_{in}$의 DC 바이어스 전압\n  - 전압 이득 $V_{out}/V_{in}$\n  evidence_sections:\n  - 구할 것\n  - 풀이\n  subpart_requirements:\n  - label: '1'\n    required_concepts:\n    - DC 바이어스와 동작 영역\n  - label: '2'\n    required_concepts:\n    - 소신호 전압 이득\n  review_status: draft\n  reviewed_content_sha256: bdc6a672e724aab914139a88ef19017bfb5352bd3c455f3dc128bd3f888a81e3\n  classification_note: 제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.\n---\n# 기출 2014-1 중간 2 — PMOS 전류 거울 부하 공통 소스 증폭기의 입력 DC 바이어스와 전압 이득\n\n## 원문\n다음 회로에 대해 다음 조건을 이용하여 질문에 답하시오.\n\n$(W/L)_1 = 50/0.2$, $(W/L)_2 = 100/0.2$, $(W/L)_{REF} = 10/0.2$, $I_{REF} = 50\\ \\mu\\text{A}$, $V_{DD} = 1.8\\ \\text{V}$\n\n$\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$, $\\mu_p C_{ox} = 50\\ \\mu\\text{A/V}^2$, $V_{TH,N} = 0.4\\ \\text{V}$, $V_{TH,P} = -0.5\\ \\text{V}$, $\\lambda_n = \\lambda_p = 0.1\\ \\text{V}^{-1}$\n\n(1) 입력($V_{in}$)의 DC 바이어스 전압을 구하시오.\n\n(2) 전압이득 ($V_{out}/V_{in}$)을 구하시오.\n\n## 조건\n- 회로: 그림의 PMOS 전류 거울($M_{REF}$, $M_2$) 부하 공통 소스 증폭기\n- $(W/L)_1 = 50/0.2$, $(W/L)_2 = 100/0.2$, $(W/L)_{REF} = 10/0.2$\n- $I_{REF} = 50\\ \\mu\\text{A}$, $V_{DD} = 1.8\\ \\text{V}$\n- $\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$, $\\mu_p C_{ox} = 50\\ \\mu\\text{A/V}^2$\n- $V_{TH,N} = 0.4\\ \\text{V}$, $V_{TH,P} = -0.5\\ \\text{V}$\n- $\\lambda_n = \\lambda_p = 0.1\\ \\text{V}^{-1}$\n\n## 구할 것\n- (1) 입력 $V_{in}$의 DC 바이어스 전압\n- (2) 전압 이득 $V_{out}/V_{in}$\n\n## 회로 — Fig Q2\n```spice\nMREF  n1    n1   VDD  pmos    ; 좌우 반전 (게이트 오른쪽), 다이오드 연결\nIREF  n1    0    {I_REF}      ; 화살표 아래 (n1 → 접지)\nM2    Vout  n1   VDD  pmos\nM1    Vout  Vin  0    nmos\n* n1 = M_REF 드레인·게이트, M2 게이트 (라벨 없음)\n* W/L 값은 문제 문장에만 인쇄됨 (그림에는 없음)\n```\n- 단자: VDD = 1.8 V 전원 (가로 레일) / Vin = 입력 (개방 원) / Vout = 출력 (개방 원)\n- 표시: 노드 라벨 V_DD (레일 오른쪽 끝), V_in (입력 원 왼쪽), V_out (출력 원 오른쪽) / 소자 라벨 M_REF (M_REF 왼쪽), M_2 (M2 오른쪽), M_1 (M1 오른쪽), I_REF (전류원 왼쪽) / 부호 없음 / 화살표 없음 / 수치·면적 라벨 \"= 1.8 V\" (V_DD 라벨 바로 뒤, 레일 오른쪽 끝)\n- 배치: 맨 위 굵은 가로 레일 V_DD / 왼쪽 세로줄 위→아래 M_REF, n1 아래 접속점, I_REF 전류원 (화살표 아래), 접지 / M_REF pmos 좌우 반전 (게이트 막대 오른쪽, 소스 왼쪽 위·화살표가 막대 쪽으로 들어감, 드레인 왼쪽 아래), 레일에서 세로선이 내려와 오른쪽으로 꺾여 소스, 드레인에서 세로선이 내려가 n1 아래 접속점 / M_REF 게이트 오른쪽 n1 위 접속점에서 가로선이 게이트 높이로 오른쪽 M2 게이트, 같은 접속점에서 세로선이 내려가 n1 아래 접속점 높이에서 왼쪽으로 꺾여 n1 아래 접속점 (다이오드 연결) / 오른쪽 세로줄 위→아래 M2, Vout 접속점, M1, 접지 / M2 pmos 보통 방향 (게이트 왼쪽, 소스 오른쪽 위·화살표가 막대 쪽으로 들어감, 드레인 오른쪽 아래), 소스에서 세로선이 위로 레일 / M1 nmos 보통 방향 (게이트 왼쪽, 드레인 오른쪽 위, 소스 오른쪽 아래·화살표 바깥), V_in 원 → 가로선 → M1 게이트, 소스 아래 접지 / Vout 접속점에서 가로선이 오른쪽 V_out 원 / 접속점 (세 갈래 이상, 3곳): ① n1 위 = 왼쪽 M_REF 게이트 + 오른쪽 M2 게이트 선 + 아래 다이오드 연결선 (점) ② n1 아래 = 위 M_REF 드레인 + 아래 I_REF + 오른쪽 다이오드 연결선 (점) ③ Vout = 위 M2 드레인 + 아래 M1 드레인 + 오른쪽 출력선 (점) / 교차: 없음\n\n![Q2](figures/fig-Q2.png)\n\n## 풀이\n### (1) 거울 전류\n- DC 바이어스에서는 채널 길이 변조를 무시한다: $I_{D2} = [(W/L)_2/(W/L)_{REF}]\\, I_{REF} = (500/50) \\times 50\\ \\mu\\text{A} = 500\\ \\mu\\text{A}$\n- $M_1$은 $M_2$와 직렬이라 $I_{D1} = 500\\ \\mu\\text{A}$\n### (1) 입력 DC 바이어스\n- $V_{GS1} - V_{TH,N} = \\sqrt{2I_{D1}/[\\mu_n C_{ox}(W/L)_1]} = \\sqrt{1\\ \\text{mA}/(100\\ \\mu\\text{A/V}^2 \\times 250)} = 0.200\\ \\text{V}$\n- $V_{in} = V_{GS1} = 0.4 + 0.200 = 0.600\\ \\text{V}$\n### (2) 전압 이득\n- $g_{m1} = 2I_{D1}/(V_{GS1} - V_{TH,N}) = 5.00\\ \\text{mS}$, $r_{O1} = r_{O2} = 1/(\\lambda I_{D1}) = 20.0\\ \\text{k}\\Omega$\n- $M_2$ 게이트는 신호가 없는 DC 노드라 부하는 $r_{O2}$: $A_v = -g_{m1}(r_{O1} \\parallel r_{O2}) = -5.00\\ \\text{mS} \\times 10.0\\ \\text{k}\\Omega = -50.0$\n### 답\n- (1) $V_{in} = 0.600\\ \\text{V}$\n- (2) $V_{out}/V_{in} = -50.0$\n",
+  "schema_version": 1,
+  "sections": [
+    {
+      "heading": "원문",
+      "markdown": "다음 회로에 대해 다음 조건을 이용하여 질문에 답하시오.\n\n$(W/L)_1 = 50/0.2$, $(W/L)_2 = 100/0.2$, $(W/L)_{REF} = 10/0.2$, $I_{REF} = 50\\ \\mu\\text{A}$, $V_{DD} = 1.8\\ \\text{V}$\n\n$\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$, $\\mu_p C_{ox} = 50\\ \\mu\\text{A/V}^2$, $V_{TH,N} = 0.4\\ \\text{V}$, $V_{TH,P} = -0.5\\ \\text{V}$, $\\lambda_n = \\lambda_p = 0.1\\ \\text{V}^{-1}$\n\n(1) 입력($V_{in}$)의 DC 바이어스 전압을 구하시오.\n\n(2) 전압이득 ($V_{out}/V_{in}$)을 구하시오."
+    },
+    {
+      "heading": "조건",
+      "markdown": "- 회로: 그림의 PMOS 전류 거울($M_{REF}$, $M_2$) 부하 공통 소스 증폭기\n- $(W/L)_1 = 50/0.2$, $(W/L)_2 = 100/0.2$, $(W/L)_{REF} = 10/0.2$\n- $I_{REF} = 50\\ \\mu\\text{A}$, $V_{DD} = 1.8\\ \\text{V}$\n- $\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$, $\\mu_p C_{ox} = 50\\ \\mu\\text{A/V}^2$\n- $V_{TH,N} = 0.4\\ \\text{V}$, $V_{TH,P} = -0.5\\ \\text{V}$\n- $\\lambda_n = \\lambda_p = 0.1\\ \\text{V}^{-1}$"
+    },
+    {
+      "heading": "구할 것",
+      "markdown": "- (1) 입력 $V_{in}$의 DC 바이어스 전압\n- (2) 전압 이득 $V_{out}/V_{in}$"
+    },
+    {
+      "heading": "회로 — Fig Q2",
+      "markdown": "```spice\nMREF  n1    n1   VDD  pmos    ; 좌우 반전 (게이트 오른쪽), 다이오드 연결\nIREF  n1    0    {I_REF}      ; 화살표 아래 (n1 → 접지)\nM2    Vout  n1   VDD  pmos\nM1    Vout  Vin  0    nmos\n* n1 = M_REF 드레인·게이트, M2 게이트 (라벨 없음)\n* W/L 값은 문제 문장에만 인쇄됨 (그림에는 없음)\n```\n- 단자: VDD = 1.8 V 전원 (가로 레일) / Vin = 입력 (개방 원) / Vout = 출력 (개방 원)\n- 표시: 노드 라벨 V_DD (레일 오른쪽 끝), V_in (입력 원 왼쪽), V_out (출력 원 오른쪽) / 소자 라벨 M_REF (M_REF 왼쪽), M_2 (M2 오른쪽), M_1 (M1 오른쪽), I_REF (전류원 왼쪽) / 부호 없음 / 화살표 없음 / 수치·면적 라벨 \"= 1.8 V\" (V_DD 라벨 바로 뒤, 레일 오른쪽 끝)\n- 배치: 맨 위 굵은 가로 레일 V_DD / 왼쪽 세로줄 위→아래 M_REF, n1 아래 접속점, I_REF 전류원 (화살표 아래), 접지 / M_REF pmos 좌우 반전 (게이트 막대 오른쪽, 소스 왼쪽 위·화살표가 막대 쪽으로 들어감, 드레인 왼쪽 아래), 레일에서 세로선이 내려와 오른쪽으로 꺾여 소스, 드레인에서 세로선이 내려가 n1 아래 접속점 / M_REF 게이트 오른쪽 n1 위 접속점에서 가로선이 게이트 높이로 오른쪽 M2 게이트, 같은 접속점에서 세로선이 내려가 n1 아래 접속점 높이에서 왼쪽으로 꺾여 n1 아래 접속점 (다이오드 연결) / 오른쪽 세로줄 위→아래 M2, Vout 접속점, M1, 접지 / M2 pmos 보통 방향 (게이트 왼쪽, 소스 오른쪽 위·화살표가 막대 쪽으로 들어감, 드레인 오른쪽 아래), 소스에서 세로선이 위로 레일 / M1 nmos 보통 방향 (게이트 왼쪽, 드레인 오른쪽 위, 소스 오른쪽 아래·화살표 바깥), V_in 원 → 가로선 → M1 게이트, 소스 아래 접지 / Vout 접속점에서 가로선이 오른쪽 V_out 원 / 접속점 (세 갈래 이상, 3곳): ① n1 위 = 왼쪽 M_REF 게이트 + 오른쪽 M2 게이트 선 + 아래 다이오드 연결선 (점) ② n1 아래 = 위 M_REF 드레인 + 아래 I_REF + 오른쪽 다이오드 연결선 (점) ③ Vout = 위 M2 드레인 + 아래 M1 드레인 + 오른쪽 출력선 (점) / 교차: 없음\n\n![Q2](figures/fig-Q2.png)"
+    },
+    {
+      "heading": "풀이",
+      "markdown": "### (1) 거울 전류\n- DC 바이어스에서는 채널 길이 변조를 무시한다: $I_{D2} = [(W/L)_2/(W/L)_{REF}]\\, I_{REF} = (500/50) \\times 50\\ \\mu\\text{A} = 500\\ \\mu\\text{A}$\n- $M_1$은 $M_2$와 직렬이라 $I_{D1} = 500\\ \\mu\\text{A}$\n### (1) 입력 DC 바이어스\n- $V_{GS1} - V_{TH,N} = \\sqrt{2I_{D1}/[\\mu_n C_{ox}(W/L)_1]} = \\sqrt{1\\ \\text{mA}/(100\\ \\mu\\text{A/V}^2 \\times 250)} = 0.200\\ \\text{V}$\n- $V_{in} = V_{GS1} = 0.4 + 0.200 = 0.600\\ \\text{V}$\n### (2) 전압 이득\n- $g_{m1} = 2I_{D1}/(V_{GS1} - V_{TH,N}) = 5.00\\ \\text{mS}$, $r_{O1} = r_{O2} = 1/(\\lambda I_{D1}) = 20.0\\ \\text{k}\\Omega$\n- $M_2$ 게이트는 신호가 없는 DC 노드라 부하는 $r_{O2}$: $A_v = -g_{m1}(r_{O1} \\parallel r_{O2}) = -5.00\\ \\text{mS} \\times 10.0\\ \\text{k}\\Omega = -50.0$\n### 답\n- (1) $V_{in} = 0.600\\ \\text{V}$\n- (2) $V_{out}/V_{in} = -50.0$"
+    }
+  ],
+  "selection": {
+    "circuit_types": [
+      "MOS",
+      "공통 소스",
+      "전류 거울"
+    ],
+    "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+    "evidence_sections": [
+      "구할 것",
+      "풀이"
+    ],
+    "learning_goals": [
+      "입력 $V_{in}$의 DC 바이어스 전압",
+      "전압 이득 $V_{out}/V_{in}$"
+    ],
+    "required_concepts": [
+      "전류 거울",
+      "DC 바이어스와 동작 영역",
+      "소신호 전압 이득"
+    ],
+    "review_status": "draft",
+    "reviewed_content_sha256": "bdc6a672e724aab914139a88ef19017bfb5352bd3c455f3dc128bd3f888a81e3",
+    "status": "draft",
+    "subpart_requirements": [
+      {
+        "label": "1",
+        "required_concepts": [
+          "DC 바이어스와 동작 영역"
+        ]
+      },
+      {
+        "label": "2",
+        "required_concepts": [
+          "소신호 전압 이득"
+        ]
+      }
+    ],
+    "topics": [
+      "전류 거울"
+    ]
+  },
+  "subparts": [
+    {
+      "ask_md": "입력 $V_{in}$의 DC 바이어스 전압",
+      "label": "1",
+      "required_concepts": [
+        "DC 바이어스와 동작 영역"
+      ]
+    },
+    {
+      "ask_md": "전압 이득 $V_{out}/V_{in}$",
+      "label": "2",
+      "required_concepts": [
+        "소신호 전압 이득"
+      ]
+    }
+  ],
+  "title": "PMOS 전류 거울 부하 공통 소스 증폭기의 입력 DC 바이어스와 전압 이득"
+}

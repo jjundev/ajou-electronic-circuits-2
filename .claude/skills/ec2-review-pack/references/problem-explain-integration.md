@@ -5,6 +5,7 @@
 1. 부모의 기계·내용·브라우저 검토(lite의 부모 내용 리뷰 생략 규칙 포함)와 MD 변환을 끝낸다. 확정된 `range`, `slug`, manifest `problems`, 절대 경로 `RUN`을 입력으로 삼는다.
 2. 문제가 0개이면 `skipped-no-problems`로 기록하고 자식을 실행하지 않는다.
 3. manifest 문제 id 순서와 `.assets/problems.txt`의 id 순서가 같은지 확인한다. 다르면 부모 조립을 고친다.
+   새 JSON 선별 흐름에서는 `RUN/selection.json`의 ID·순서도 같아야 한다. 기출은 문항 전체를 전달한다. 선택용 JSON을 자식의 `source.json`이나 독립 검산 근거로 대체하지 않는다.
 4. **필수 하위 스킬: ec2-problem-explain.** 형제 `../ec2-problem-explain/SKILL.md`를 읽고 전체 절차를 수행한다. 부모 `range`를 명시하며 최신 팩 자동 선택을 사용하지 않는다. 통합/개별 팩 후보가 모호하면 오류와 후보 경로를 보고하고 임의 선택하지 않는다.
 5. `EXPLAIN_RUN = RUN/problem-explain/<새 실행ID>/`를 없거나 빈 폴더로 정한다. `python3 <자식 SKILL>/scripts/epe_cli.py extract --repo <REPO> --target <range> --run <EXPLAIN_RUN>`을 실행한다. 상태 이름은 보고용이며 CLI 인자가 아니다.
 6. extract → 자료 읽기 → 문항별 저작 → 별도 독립 검산 → build/check → 네 검토 → publish를 끝까지 수행한다. CLI만으로 저작은 되지 않는다.

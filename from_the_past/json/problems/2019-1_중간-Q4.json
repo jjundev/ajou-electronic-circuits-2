@@ -1,0 +1,190 @@
+{
+  "body_md": "# 기출 2019-1 중간 4 — PMOS 캐스코드 부하 MOS 차동 증폭기의 차동 이득과 A_CM\n\n## 원문\n다음 회로에 대해 주어진 조건을 이용하여 질문에 답하시오.\n\n: $V_{DD} = 1.8\\ \\text{V}$, $I_{D7} = 2\\ \\text{mA}$, $(W/L)_{1,2} = 100/0.2$, $(W/L)_{3,4} = (W/L)_{5,6} = 200/0.2$, $(W/L)_7 = 200/0.2$, $\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$, $\\mu_p C_{ox} = 50\\ \\mu\\text{A/V}^2$, $\\lambda_n = \\lambda_p = 0.1\\ \\text{V}^{-1}$, $g_m r_o \\gg 1$로 가정한다.\n\n(1) 차동 전압 이득을 구하시오.\n\n(2) Common-mode 이득($A_{CM}$)을 구하시오.\n\n## 조건\n- 회로: 그림\n- $V_{DD} = 1.8\\ \\text{V}$, $I_{D7} = 2\\ \\text{mA}$\n- $(W/L)_{1,2} = 100/0.2$, $(W/L)_{3,4} = (W/L)_{5,6} = 200/0.2$, $(W/L)_7 = 200/0.2$\n- $\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$, $\\mu_p C_{ox} = 50\\ \\mu\\text{A/V}^2$\n- $\\lambda_n = \\lambda_p = 0.1\\ \\text{V}^{-1}$\n- $g_m r_o \\gg 1$로 가정\n- 바이어스 전압 $V_{b1}$, $V_{b2}$, $V_{b3}$ 값은 주어지지 않음 (원문에 없음)\n\n## 구할 것\n- (1) 차동 전압 이득\n- (2) Common-mode 이득 $A_{CM}$\n\n## 회로 — Fig Q4\n```spice\nM5  n1    Vb3   VDD  pmos\nM6  n2    Vb3   VDD  pmos\nM3  out1  Vb1   n1   pmos\nM4  out2  Vb1   n2   pmos\nM1  out1  Vin1  n3   nmos\nM2  out2  Vin2  n3   nmos    ; 좌우 반전 (게이트 오른쪽)\nM7  n3    Vb2   0    nmos\n* out1, out2 = 두 출력 원. 원 사이에 V_out 라벨 하나 (차동 출력)\n* n3 = 공통 소스(테일) 노드, 라벨 없음\n```\n- 단자: VDD = 1.8 V 전원 (가로 레일, 그림에는 값 없음) / Vb3, Vb1, Vb2 = 이상적 DC 바이어스, 값 미지정 (점 단자) / Vin1, Vin2 = 입력 (개방 원) / out1, out2 = 차동 출력 V_out의 두 단자 (개방 원, 각각에는 라벨 없음)\n- 표시: 노드 라벨 V_DD (레일 오른쪽 끝), V_b3, V_b1 (각 점 단자 왼쪽), V_out (두 출력 원 사이), V_in1 (왼쪽 입력 원 왼쪽), V_in2 (오른쪽 입력 원 오른쪽), V_b2 (점 단자 왼쪽) / 소자 라벨 M_5 (M5 오른쪽 아래, 드레인 선 오른쪽), M_6 (M6 오른쪽), M_3 (M3 아래 왼쪽, 드레인 선 왼쪽), M_4 (M4 오른쪽), M_1 (M1 오른쪽), M_2 (M2 왼쪽), M_7 (M7 오른쪽) / 부호 없음 / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 맨 위 굵은 가로 레일 V_DD / 왼쪽 세로줄 위→아래 M5, M3, out1 접속점, M1 / 오른쪽 세로줄 위→아래 M6, M4, out2 접속점, M2 / M5, M6, M3, M4 pmos 보통 방향(게이트 왼쪽, 소스 위·화살표가 채널 쪽으로 들어감, 드레인 아래), M5, M6 소스에서 세로선이 위로 레일 / M5 드레인에서 곧은 세로선이 M3 소스로 (n1, 라벨 없음), M6 드레인에서 곧은 세로선이 M4 소스로 (n2, 라벨 없음) / V_b3 점 단자 → 가로선 → M5 게이트, 같은 높이의 가로선이 M5 기호 오른쪽(채널 막대)에서 이어져 오른쪽 M6 게이트까지 감 (M5, M6 게이트 공통선) / V_b1 점 단자 → 가로선 → M3 게이트, 같은 방식으로 M4 게이트까지 (M3, M4 게이트 공통선) / out1 접속점에서 가로선이 오른쪽 출력 원, out2 접속점에서 가로선이 왼쪽 출력 원 (두 원이 가운데에서 마주 보고 그 사이에 V_out) / M1 nmos 보통 방향(게이트 왼쪽, 드레인 위, 소스 아래·화살표 바깥), M2 nmos 좌우 반전(게이트 막대 오른쪽, 드레인 왼쪽 위, 소스 왼쪽 아래·화살표 바깥) / V_in1 원 → 가로선 → M1 게이트, M2 게이트 → 가로선 → V_in2 원 / 두 소스는 아래로 내려가 가로선으로 가운데 n3 점에서 만남 / n3 아래 M7 nmos 보통 방향(게이트 왼쪽), V_b2 점 단자 → 가로선 → M7 게이트, M7 소스 아래 접지 / 접속점 (세 갈래 이상, 3곳): ① out1 = 위 M3 드레인 + 아래 M1 드레인 + 오른쪽 출력선 (점) ② out2 = 위 M4 드레인 + 아래 M2 드레인 + 왼쪽 출력선 (점) ③ n3 = 왼쪽 M1 소스 선 + 오른쪽 M2 소스 선 + 아래 M7 드레인 (점) / 교차: 없음\n\n![Q4](figures/fig-Q4.png)\n> 참고: 두 게이트 공통선은 원본에서 M5, M3 기호의 채널 막대를 가로질러 그려져 있음 (넷리스트는 M5, M6 게이트를 Vb3, M3, M4 게이트를 Vb1로 둠)\n\n## 힌트\n### (2) 꼬리 $r_{O7}$을 $2r_{O7}$ 둘로 나눔\n- CM 입력에서는 두 쪽이 똑같이 움직여 두 소스 사이로 전류가 오가지 않으므로, $M_7$을 $2r_{O7}$ 두 개의 병렬로 쪼개 한쪽만 볼 수 있다\n- 캐스코드 부하가 매우 커서, 출력에서 아래로 본 $M_1$ 쪽 저항도 무시할 수 없다\n\n## 풀이\n### 소신호 파라미터\n- $g_{mk}$, $r_{Ok}$는 $M_k$의 값. 각 쪽 $I_D = I_{D7}/2 = 1\\ \\text{mA}$\n- $g_m = \\sqrt{2\\mu C_{ox}(W/L) I_D}$, $r_O = 1/(\\lambda I_D)$: $g_{m1} = g_{m3} = 10.0\\ \\text{mS}$, $r_{O1} = r_{O3} = r_{O5} = 10.0\\ \\text{k}\\Omega$, $r_{O7} = 5.00\\ \\text{k}\\Omega$\n- 위로 본 캐스코드 ($g_{m3} r_{O5} = 100 \\gg 1$): $R_{up} \\approx g_{m3} r_{O3} r_{O5} = 1.00\\ \\text{M}\\Omega$\n### (1) 차동 이득\n- 테일 노드는 가상 접지라 아래로 본 저항은 $r_{O1}$. $V_{out}$은 $M_1$ 쪽 − $M_2$ 쪽: 차동 이득 $A_{DM} = -g_{m1}(r_{O1} \\parallel R_{up}) = -99.0$\n### (2) CM 반회로와 $A_{CM}$\n- 두 쪽이 똑같이 움직여 테일을 $2r_{O7}$ 둘로 나눈다: $M_1$이 $2r_{O7} = 10.0\\ \\text{k}\\Omega$로 축퇴\n- $R_{up}$이 커서 (1)처럼 $r_{O1}$을 넣는다. $g_{m1} \\cdot 2r_{O7} = 100 \\gg 1$: 아래 $R_{dn} \\approx 2g_{m1} r_{O1} r_{O7} = 1.00\\ \\text{M}\\Omega$, 한쪽 출력 $R_h = R_{up} \\parallel R_{dn} = 500\\ \\text{k}\\Omega$\n- $G_m \\approx 1/(2r_{O7})$, 단일 출력: $A_{CM} = -R_h/(2r_{O7}) = -50.0$. 두 출력 사이로는 대칭이라 0\n### 답\n- (1) $A_{DM} \\approx -99.0$ ($V_{out}/(V_{in1} - V_{in2})$)\n- (2) $A_{CM} \\approx -50.0$ (한쪽 출력, 두 출력 사이로는 대칭이라 0)\n",
+  "content_sha256": "16505e58e7d8ad75f9ef5b20e6c91678d86f0e7e876adce89ce649b097c3bc48",
+  "exam": {
+    "exam": "2019-1 중간고사",
+    "header": "Closed book, 풀이과정 필수 (풀이과정이 없으면 점수 미부여), 계산결과 필수 (근사계산 가능)",
+    "notes": [
+      "원본 파일의 원래 이름은 2019중간.pdf다 (5쪽, 한 쪽에 한 문제).",
+      "2013–2019 중간고사 중 이 시험만 손글씨 없는 깨끗한 문제지다 (모범답안 없음).",
+      "이미지 PDF라 텍스트 레이어가 없다. 판독은 렌더링한 이미지로 했다."
+    ],
+    "sources": [
+      "../../2013-2019_중간/2019-1_중간.pdf"
+    ]
+  },
+  "figures": [
+    {
+      "display_path": "from_the_past/md/2019-1_중간/figures/redrawn/fig-Q4.png",
+      "id": "Q4",
+      "original_path": "from_the_past/md/2019-1_중간/figures/fig-Q4.png"
+    }
+  ],
+  "id": "2019-1_중간-Q4",
+  "input_hashes": {
+    "from_the_past/md/2019-1_중간/Q4.md": "d9de84f173a8864334aba777e715cb0116835de23ebad15c88299ea340722111",
+    "from_the_past/md/2019-1_중간/exam.yaml": "b649fd19e134975ae079a0e93808f0012c2992a29084473d4bb6d7b7fd8da5c1",
+    "from_the_past/md/2019-1_중간/figures/fig-Q4.png": "2ea6ecb8e79f804f23ce716c230539c6dbb6f5d15fb29dea8aecf89c9c00940e",
+    "from_the_past/md/2019-1_중간/figures/figures.yaml": "ab2fb4c596544dccbd807fecf4aed123d41eccf17eccad4ac358bb5a75fbc7f3",
+    "from_the_past/md/2019-1_중간/figures/redrawn/fig-Q4.png": "dafeb615173c3160f404afff74aa8372111d3b3ff58a237fb182f98357ea49ad"
+  },
+  "md_path": "from_the_past/md/2019-1_중간/Q4.md",
+  "metadata": {
+    "depends_on": [],
+    "exam": "2019-1 중간고사",
+    "figures": [
+      {
+        "id": "Q4",
+        "panels": [],
+        "role": "problem"
+      }
+    ],
+    "id": "2019-1_중간-Q4",
+    "kind": "기출",
+    "number": "4",
+    "pdf_page": 4,
+    "points": 20,
+    "refs": [
+      "2021-1_중간-Q4와 비슷한 차동 증폭기 (이 문제는 부하가 PMOS 캐스코드이고 테일이 트랜지스터 하나)"
+    ],
+    "selection": {
+      "circuit_types": [
+        "MOS",
+        "캐스코드",
+        "차동"
+      ],
+      "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+      "evidence_sections": [
+        "구할 것",
+        "풀이"
+      ],
+      "learning_goals": [
+        "차동 전압 이득",
+        "Common-mode 이득 $A_{CM}$"
+      ],
+      "required_concepts": [
+        "차동 증폭기",
+        "캐스코드",
+        "공통 모드 해석",
+        "소신호 전압 이득"
+      ],
+      "review_status": "draft",
+      "reviewed_content_sha256": "16505e58e7d8ad75f9ef5b20e6c91678d86f0e7e876adce89ce649b097c3bc48",
+      "subpart_requirements": [
+        {
+          "label": "1",
+          "required_concepts": [
+            "소신호 전압 이득"
+          ]
+        },
+        {
+          "label": "2",
+          "required_concepts": [
+            "공통 모드 해석",
+            "소신호 전압 이득"
+          ]
+        }
+      ],
+      "topics": [
+        "차동 증폭기",
+        "캐스코드"
+      ]
+    },
+    "source": "../../2013-2019_중간/2019-1_중간.pdf",
+    "source_lang": "ko",
+    "textbook_chapters": [
+      9,
+      10
+    ]
+  },
+  "raw_md": "---\nid: 2019-1_중간-Q4\nkind: 기출\nexam: \"2019-1 중간고사\"\nnumber: \"4\"\npoints: 20\nsource: ../../2013-2019_중간/2019-1_중간.pdf\npdf_page: 4\nsource_lang: ko\nfigures:\n  - {id: \"Q4\", role: problem, panels: []}\ntextbook_chapters: [9, 10]\ndepends_on: []\nrefs: [\"2021-1_중간-Q4와 비슷한 차동 증폭기 (이 문제는 부하가 PMOS 캐스코드이고 테일이 트랜지스터 하나)\"]\nselection:\n  topics:\n  - 차동 증폭기\n  - 캐스코드\n  circuit_types:\n  - MOS\n  - 캐스코드\n  - 차동\n  required_concepts:\n  - 차동 증폭기\n  - 캐스코드\n  - 공통 모드 해석\n  - 소신호 전압 이득\n  learning_goals:\n  - 차동 전압 이득\n  - Common-mode 이득 $A_{CM}$\n  evidence_sections:\n  - 구할 것\n  - 풀이\n  subpart_requirements:\n  - label: '1'\n    required_concepts:\n    - 소신호 전압 이득\n  - label: '2'\n    required_concepts:\n    - 공통 모드 해석\n    - 소신호 전압 이득\n  review_status: draft\n  reviewed_content_sha256: 16505e58e7d8ad75f9ef5b20e6c91678d86f0e7e876adce89ce649b097c3bc48\n  classification_note: 제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.\n---\n# 기출 2019-1 중간 4 — PMOS 캐스코드 부하 MOS 차동 증폭기의 차동 이득과 A_CM\n\n## 원문\n다음 회로에 대해 주어진 조건을 이용하여 질문에 답하시오.\n\n: $V_{DD} = 1.8\\ \\text{V}$, $I_{D7} = 2\\ \\text{mA}$, $(W/L)_{1,2} = 100/0.2$, $(W/L)_{3,4} = (W/L)_{5,6} = 200/0.2$, $(W/L)_7 = 200/0.2$, $\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$, $\\mu_p C_{ox} = 50\\ \\mu\\text{A/V}^2$, $\\lambda_n = \\lambda_p = 0.1\\ \\text{V}^{-1}$, $g_m r_o \\gg 1$로 가정한다.\n\n(1) 차동 전압 이득을 구하시오.\n\n(2) Common-mode 이득($A_{CM}$)을 구하시오.\n\n## 조건\n- 회로: 그림\n- $V_{DD} = 1.8\\ \\text{V}$, $I_{D7} = 2\\ \\text{mA}$\n- $(W/L)_{1,2} = 100/0.2$, $(W/L)_{3,4} = (W/L)_{5,6} = 200/0.2$, $(W/L)_7 = 200/0.2$\n- $\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$, $\\mu_p C_{ox} = 50\\ \\mu\\text{A/V}^2$\n- $\\lambda_n = \\lambda_p = 0.1\\ \\text{V}^{-1}$\n- $g_m r_o \\gg 1$로 가정\n- 바이어스 전압 $V_{b1}$, $V_{b2}$, $V_{b3}$ 값은 주어지지 않음 (원문에 없음)\n\n## 구할 것\n- (1) 차동 전압 이득\n- (2) Common-mode 이득 $A_{CM}$\n\n## 회로 — Fig Q4\n```spice\nM5  n1    Vb3   VDD  pmos\nM6  n2    Vb3   VDD  pmos\nM3  out1  Vb1   n1   pmos\nM4  out2  Vb1   n2   pmos\nM1  out1  Vin1  n3   nmos\nM2  out2  Vin2  n3   nmos    ; 좌우 반전 (게이트 오른쪽)\nM7  n3    Vb2   0    nmos\n* out1, out2 = 두 출력 원. 원 사이에 V_out 라벨 하나 (차동 출력)\n* n3 = 공통 소스(테일) 노드, 라벨 없음\n```\n- 단자: VDD = 1.8 V 전원 (가로 레일, 그림에는 값 없음) / Vb3, Vb1, Vb2 = 이상적 DC 바이어스, 값 미지정 (점 단자) / Vin1, Vin2 = 입력 (개방 원) / out1, out2 = 차동 출력 V_out의 두 단자 (개방 원, 각각에는 라벨 없음)\n- 표시: 노드 라벨 V_DD (레일 오른쪽 끝), V_b3, V_b1 (각 점 단자 왼쪽), V_out (두 출력 원 사이), V_in1 (왼쪽 입력 원 왼쪽), V_in2 (오른쪽 입력 원 오른쪽), V_b2 (점 단자 왼쪽) / 소자 라벨 M_5 (M5 오른쪽 아래, 드레인 선 오른쪽), M_6 (M6 오른쪽), M_3 (M3 아래 왼쪽, 드레인 선 왼쪽), M_4 (M4 오른쪽), M_1 (M1 오른쪽), M_2 (M2 왼쪽), M_7 (M7 오른쪽) / 부호 없음 / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 맨 위 굵은 가로 레일 V_DD / 왼쪽 세로줄 위→아래 M5, M3, out1 접속점, M1 / 오른쪽 세로줄 위→아래 M6, M4, out2 접속점, M2 / M5, M6, M3, M4 pmos 보통 방향(게이트 왼쪽, 소스 위·화살표가 채널 쪽으로 들어감, 드레인 아래), M5, M6 소스에서 세로선이 위로 레일 / M5 드레인에서 곧은 세로선이 M3 소스로 (n1, 라벨 없음), M6 드레인에서 곧은 세로선이 M4 소스로 (n2, 라벨 없음) / V_b3 점 단자 → 가로선 → M5 게이트, 같은 높이의 가로선이 M5 기호 오른쪽(채널 막대)에서 이어져 오른쪽 M6 게이트까지 감 (M5, M6 게이트 공통선) / V_b1 점 단자 → 가로선 → M3 게이트, 같은 방식으로 M4 게이트까지 (M3, M4 게이트 공통선) / out1 접속점에서 가로선이 오른쪽 출력 원, out2 접속점에서 가로선이 왼쪽 출력 원 (두 원이 가운데에서 마주 보고 그 사이에 V_out) / M1 nmos 보통 방향(게이트 왼쪽, 드레인 위, 소스 아래·화살표 바깥), M2 nmos 좌우 반전(게이트 막대 오른쪽, 드레인 왼쪽 위, 소스 왼쪽 아래·화살표 바깥) / V_in1 원 → 가로선 → M1 게이트, M2 게이트 → 가로선 → V_in2 원 / 두 소스는 아래로 내려가 가로선으로 가운데 n3 점에서 만남 / n3 아래 M7 nmos 보통 방향(게이트 왼쪽), V_b2 점 단자 → 가로선 → M7 게이트, M7 소스 아래 접지 / 접속점 (세 갈래 이상, 3곳): ① out1 = 위 M3 드레인 + 아래 M1 드레인 + 오른쪽 출력선 (점) ② out2 = 위 M4 드레인 + 아래 M2 드레인 + 왼쪽 출력선 (점) ③ n3 = 왼쪽 M1 소스 선 + 오른쪽 M2 소스 선 + 아래 M7 드레인 (점) / 교차: 없음\n\n![Q4](figures/fig-Q4.png)\n> 참고: 두 게이트 공통선은 원본에서 M5, M3 기호의 채널 막대를 가로질러 그려져 있음 (넷리스트는 M5, M6 게이트를 Vb3, M3, M4 게이트를 Vb1로 둠)\n\n## 힌트\n### (2) 꼬리 $r_{O7}$을 $2r_{O7}$ 둘로 나눔\n- CM 입력에서는 두 쪽이 똑같이 움직여 두 소스 사이로 전류가 오가지 않으므로, $M_7$을 $2r_{O7}$ 두 개의 병렬로 쪼개 한쪽만 볼 수 있다\n- 캐스코드 부하가 매우 커서, 출력에서 아래로 본 $M_1$ 쪽 저항도 무시할 수 없다\n\n## 풀이\n### 소신호 파라미터\n- $g_{mk}$, $r_{Ok}$는 $M_k$의 값. 각 쪽 $I_D = I_{D7}/2 = 1\\ \\text{mA}$\n- $g_m = \\sqrt{2\\mu C_{ox}(W/L) I_D}$, $r_O = 1/(\\lambda I_D)$: $g_{m1} = g_{m3} = 10.0\\ \\text{mS}$, $r_{O1} = r_{O3} = r_{O5} = 10.0\\ \\text{k}\\Omega$, $r_{O7} = 5.00\\ \\text{k}\\Omega$\n- 위로 본 캐스코드 ($g_{m3} r_{O5} = 100 \\gg 1$): $R_{up} \\approx g_{m3} r_{O3} r_{O5} = 1.00\\ \\text{M}\\Omega$\n### (1) 차동 이득\n- 테일 노드는 가상 접지라 아래로 본 저항은 $r_{O1}$. $V_{out}$은 $M_1$ 쪽 − $M_2$ 쪽: 차동 이득 $A_{DM} = -g_{m1}(r_{O1} \\parallel R_{up}) = -99.0$\n### (2) CM 반회로와 $A_{CM}$\n- 두 쪽이 똑같이 움직여 테일을 $2r_{O7}$ 둘로 나눈다: $M_1$이 $2r_{O7} = 10.0\\ \\text{k}\\Omega$로 축퇴\n- $R_{up}$이 커서 (1)처럼 $r_{O1}$을 넣는다. $g_{m1} \\cdot 2r_{O7} = 100 \\gg 1$: 아래 $R_{dn} \\approx 2g_{m1} r_{O1} r_{O7} = 1.00\\ \\text{M}\\Omega$, 한쪽 출력 $R_h = R_{up} \\parallel R_{dn} = 500\\ \\text{k}\\Omega$\n- $G_m \\approx 1/(2r_{O7})$, 단일 출력: $A_{CM} = -R_h/(2r_{O7}) = -50.0$. 두 출력 사이로는 대칭이라 0\n### 답\n- (1) $A_{DM} \\approx -99.0$ ($V_{out}/(V_{in1} - V_{in2})$)\n- (2) $A_{CM} \\approx -50.0$ (한쪽 출력, 두 출력 사이로는 대칭이라 0)\n",
+  "schema_version": 1,
+  "sections": [
+    {
+      "heading": "원문",
+      "markdown": "다음 회로에 대해 주어진 조건을 이용하여 질문에 답하시오.\n\n: $V_{DD} = 1.8\\ \\text{V}$, $I_{D7} = 2\\ \\text{mA}$, $(W/L)_{1,2} = 100/0.2$, $(W/L)_{3,4} = (W/L)_{5,6} = 200/0.2$, $(W/L)_7 = 200/0.2$, $\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$, $\\mu_p C_{ox} = 50\\ \\mu\\text{A/V}^2$, $\\lambda_n = \\lambda_p = 0.1\\ \\text{V}^{-1}$, $g_m r_o \\gg 1$로 가정한다.\n\n(1) 차동 전압 이득을 구하시오.\n\n(2) Common-mode 이득($A_{CM}$)을 구하시오."
+    },
+    {
+      "heading": "조건",
+      "markdown": "- 회로: 그림\n- $V_{DD} = 1.8\\ \\text{V}$, $I_{D7} = 2\\ \\text{mA}$\n- $(W/L)_{1,2} = 100/0.2$, $(W/L)_{3,4} = (W/L)_{5,6} = 200/0.2$, $(W/L)_7 = 200/0.2$\n- $\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$, $\\mu_p C_{ox} = 50\\ \\mu\\text{A/V}^2$\n- $\\lambda_n = \\lambda_p = 0.1\\ \\text{V}^{-1}$\n- $g_m r_o \\gg 1$로 가정\n- 바이어스 전압 $V_{b1}$, $V_{b2}$, $V_{b3}$ 값은 주어지지 않음 (원문에 없음)"
+    },
+    {
+      "heading": "구할 것",
+      "markdown": "- (1) 차동 전압 이득\n- (2) Common-mode 이득 $A_{CM}$"
+    },
+    {
+      "heading": "회로 — Fig Q4",
+      "markdown": "```spice\nM5  n1    Vb3   VDD  pmos\nM6  n2    Vb3   VDD  pmos\nM3  out1  Vb1   n1   pmos\nM4  out2  Vb1   n2   pmos\nM1  out1  Vin1  n3   nmos\nM2  out2  Vin2  n3   nmos    ; 좌우 반전 (게이트 오른쪽)\nM7  n3    Vb2   0    nmos\n* out1, out2 = 두 출력 원. 원 사이에 V_out 라벨 하나 (차동 출력)\n* n3 = 공통 소스(테일) 노드, 라벨 없음\n```\n- 단자: VDD = 1.8 V 전원 (가로 레일, 그림에는 값 없음) / Vb3, Vb1, Vb2 = 이상적 DC 바이어스, 값 미지정 (점 단자) / Vin1, Vin2 = 입력 (개방 원) / out1, out2 = 차동 출력 V_out의 두 단자 (개방 원, 각각에는 라벨 없음)\n- 표시: 노드 라벨 V_DD (레일 오른쪽 끝), V_b3, V_b1 (각 점 단자 왼쪽), V_out (두 출력 원 사이), V_in1 (왼쪽 입력 원 왼쪽), V_in2 (오른쪽 입력 원 오른쪽), V_b2 (점 단자 왼쪽) / 소자 라벨 M_5 (M5 오른쪽 아래, 드레인 선 오른쪽), M_6 (M6 오른쪽), M_3 (M3 아래 왼쪽, 드레인 선 왼쪽), M_4 (M4 오른쪽), M_1 (M1 오른쪽), M_2 (M2 왼쪽), M_7 (M7 오른쪽) / 부호 없음 / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 맨 위 굵은 가로 레일 V_DD / 왼쪽 세로줄 위→아래 M5, M3, out1 접속점, M1 / 오른쪽 세로줄 위→아래 M6, M4, out2 접속점, M2 / M5, M6, M3, M4 pmos 보통 방향(게이트 왼쪽, 소스 위·화살표가 채널 쪽으로 들어감, 드레인 아래), M5, M6 소스에서 세로선이 위로 레일 / M5 드레인에서 곧은 세로선이 M3 소스로 (n1, 라벨 없음), M6 드레인에서 곧은 세로선이 M4 소스로 (n2, 라벨 없음) / V_b3 점 단자 → 가로선 → M5 게이트, 같은 높이의 가로선이 M5 기호 오른쪽(채널 막대)에서 이어져 오른쪽 M6 게이트까지 감 (M5, M6 게이트 공통선) / V_b1 점 단자 → 가로선 → M3 게이트, 같은 방식으로 M4 게이트까지 (M3, M4 게이트 공통선) / out1 접속점에서 가로선이 오른쪽 출력 원, out2 접속점에서 가로선이 왼쪽 출력 원 (두 원이 가운데에서 마주 보고 그 사이에 V_out) / M1 nmos 보통 방향(게이트 왼쪽, 드레인 위, 소스 아래·화살표 바깥), M2 nmos 좌우 반전(게이트 막대 오른쪽, 드레인 왼쪽 위, 소스 왼쪽 아래·화살표 바깥) / V_in1 원 → 가로선 → M1 게이트, M2 게이트 → 가로선 → V_in2 원 / 두 소스는 아래로 내려가 가로선으로 가운데 n3 점에서 만남 / n3 아래 M7 nmos 보통 방향(게이트 왼쪽), V_b2 점 단자 → 가로선 → M7 게이트, M7 소스 아래 접지 / 접속점 (세 갈래 이상, 3곳): ① out1 = 위 M3 드레인 + 아래 M1 드레인 + 오른쪽 출력선 (점) ② out2 = 위 M4 드레인 + 아래 M2 드레인 + 왼쪽 출력선 (점) ③ n3 = 왼쪽 M1 소스 선 + 오른쪽 M2 소스 선 + 아래 M7 드레인 (점) / 교차: 없음\n\n![Q4](figures/fig-Q4.png)\n> 참고: 두 게이트 공통선은 원본에서 M5, M3 기호의 채널 막대를 가로질러 그려져 있음 (넷리스트는 M5, M6 게이트를 Vb3, M3, M4 게이트를 Vb1로 둠)"
+    },
+    {
+      "heading": "힌트",
+      "markdown": "### (2) 꼬리 $r_{O7}$을 $2r_{O7}$ 둘로 나눔\n- CM 입력에서는 두 쪽이 똑같이 움직여 두 소스 사이로 전류가 오가지 않으므로, $M_7$을 $2r_{O7}$ 두 개의 병렬로 쪼개 한쪽만 볼 수 있다\n- 캐스코드 부하가 매우 커서, 출력에서 아래로 본 $M_1$ 쪽 저항도 무시할 수 없다"
+    },
+    {
+      "heading": "풀이",
+      "markdown": "### 소신호 파라미터\n- $g_{mk}$, $r_{Ok}$는 $M_k$의 값. 각 쪽 $I_D = I_{D7}/2 = 1\\ \\text{mA}$\n- $g_m = \\sqrt{2\\mu C_{ox}(W/L) I_D}$, $r_O = 1/(\\lambda I_D)$: $g_{m1} = g_{m3} = 10.0\\ \\text{mS}$, $r_{O1} = r_{O3} = r_{O5} = 10.0\\ \\text{k}\\Omega$, $r_{O7} = 5.00\\ \\text{k}\\Omega$\n- 위로 본 캐스코드 ($g_{m3} r_{O5} = 100 \\gg 1$): $R_{up} \\approx g_{m3} r_{O3} r_{O5} = 1.00\\ \\text{M}\\Omega$\n### (1) 차동 이득\n- 테일 노드는 가상 접지라 아래로 본 저항은 $r_{O1}$. $V_{out}$은 $M_1$ 쪽 − $M_2$ 쪽: 차동 이득 $A_{DM} = -g_{m1}(r_{O1} \\parallel R_{up}) = -99.0$\n### (2) CM 반회로와 $A_{CM}$\n- 두 쪽이 똑같이 움직여 테일을 $2r_{O7}$ 둘로 나눈다: $M_1$이 $2r_{O7} = 10.0\\ \\text{k}\\Omega$로 축퇴\n- $R_{up}$이 커서 (1)처럼 $r_{O1}$을 넣는다. $g_{m1} \\cdot 2r_{O7} = 100 \\gg 1$: 아래 $R_{dn} \\approx 2g_{m1} r_{O1} r_{O7} = 1.00\\ \\text{M}\\Omega$, 한쪽 출력 $R_h = R_{up} \\parallel R_{dn} = 500\\ \\text{k}\\Omega$\n- $G_m \\approx 1/(2r_{O7})$, 단일 출력: $A_{CM} = -R_h/(2r_{O7}) = -50.0$. 두 출력 사이로는 대칭이라 0\n### 답\n- (1) $A_{DM} \\approx -99.0$ ($V_{out}/(V_{in1} - V_{in2})$)\n- (2) $A_{CM} \\approx -50.0$ (한쪽 출력, 두 출력 사이로는 대칭이라 0)"
+    }
+  ],
+  "selection": {
+    "circuit_types": [
+      "MOS",
+      "캐스코드",
+      "차동"
+    ],
+    "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+    "evidence_sections": [
+      "구할 것",
+      "풀이"
+    ],
+    "learning_goals": [
+      "차동 전압 이득",
+      "Common-mode 이득 $A_{CM}$"
+    ],
+    "required_concepts": [
+      "차동 증폭기",
+      "캐스코드",
+      "공통 모드 해석",
+      "소신호 전압 이득"
+    ],
+    "review_status": "draft",
+    "reviewed_content_sha256": "16505e58e7d8ad75f9ef5b20e6c91678d86f0e7e876adce89ce649b097c3bc48",
+    "status": "draft",
+    "subpart_requirements": [
+      {
+        "label": "1",
+        "required_concepts": [
+          "소신호 전압 이득"
+        ]
+      },
+      {
+        "label": "2",
+        "required_concepts": [
+          "공통 모드 해석",
+          "소신호 전압 이득"
+        ]
+      }
+    ],
+    "topics": [
+      "차동 증폭기",
+      "캐스코드"
+    ]
+  },
+  "subparts": [
+    {
+      "ask_md": "차동 전압 이득",
+      "label": "1",
+      "required_concepts": [
+        "소신호 전압 이득"
+      ]
+    },
+    {
+      "ask_md": "Common-mode 이득 $A_{CM}$",
+      "label": "2",
+      "required_concepts": [
+        "공통 모드 해석",
+        "소신호 전압 이득"
+      ]
+    }
+  ],
+  "title": "PMOS 캐스코드 부하 MOS 차동 증폭기의 차동 이득과 A_CM"
+}

@@ -115,6 +115,29 @@ class SourceTest(unittest.TestCase):
         with self.assertRaisesRegex(ExplainError, '정리노트'):
             load_source(folder / '.assets' / 'problems.txt', repo)
 
+    def test_catalog_exam_id_reaches_explanation_with_all_subparts(self):
+        from exam_catalog import build_catalog
+        repo = self.repo(ids=('2023-1_중간-Q4', 'P9.01'))
+        catalog, _ = build_catalog(repo)
+        exam = catalog['problems'][0]
+        pack = load_source(resolve_sources(repo, '1007')[0], repo)
+        self.assertEqual(exam['adoption_unit'], 'whole')
+        self.assertTrue(pack.problems[0].source.startswith(exam['id'] + ' · '))
+        self.assertEqual(pack.problems[0].subparts, tuple(p['label'] for p in exam['subparts']))
+        self.assertTrue(pack.problems[1].source.startswith('P9.01 · '))
+        self.assertTrue(pack.problems[0].reference_answer)
+        self.assertTrue(pack.problems[0].figures_html)
+
+    def test_all_catalog_exam_subpart_labels_match_explanation_parser(self):
+        from exam_catalog import build_catalog
+        from epe_shared import html_fields
+        catalog, _ = build_catalog(REPO)
+        for exam in catalog['problems']:
+            with self.subTest(id=exam['id']):
+                problem = load_problem(REPO / exam['md_path'])
+                self.assertEqual(subparts(html_fields(problem)['ask']),
+                                 tuple(p['label'] for p in exam['subparts']))
+
     def test_figure_src_is_relative_repo_file(self):
         repo = self.repo()
         txt = resolve_sources(repo, '1007')[0]
@@ -173,6 +196,7 @@ class SourceTest(unittest.TestCase):
     def test_subparts_rules(self):
         self.assertEqual(subparts('<ul><li>구하라</li></ul>'), ('main',))
         self.assertEqual(subparts('<ol><li>(a) x</li><li>(b) y</li></ol>'), ('a', 'b'))
+        self.assertEqual(subparts('<ul><li>1) x</li><li>2) y</li></ul>'), ('1', '2'))
         self.assertEqual(subparts('<ul><li>(a) x<ul><li>(z) n</li></ul></li></ul>'), ('a',))
         # R3: unlabeled items coexist with labeled ones and are ignored (was: 소문항 표지 불일치 error)
         self.assertEqual(subparts('<ul><li>(1) x</li><li>y</li></ul>'), ('1',))

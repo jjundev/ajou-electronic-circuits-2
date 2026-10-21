@@ -56,6 +56,7 @@ python3 "$SKILL/scripts/epe_cli.py" extract --repo "$REPO" --target 1007 --run "
 ### 2. 자료 읽기
 `BUCKET/source.json`에서 팩의 `range`·`slug`, 문항마다 `id`(`p1`…)·`source`(`<workbook id> · <종류> <번호>`)·`original_html`·`conditions_html`·`ask_html`·`figures_html`·`reference_steps`·`reference_answer`·`subparts`, 그리고 `inputs`(problems.txt·문제 md·그림의 절대 경로)를 확인한다. 작성자에게 넘길 참고 자료를 문항마다 정한다.
 - 문제 md: `inputs`의 해당 md(frontmatter의 `section`, `book_page`, `pdf_page`, 그림 id). 기출(`from_the_past/md/…`)은 `textbook_chapters`로 관련 장을 정한다.
+- 기출 선별 JSON은 부모가 문제를 고를 때 사용하는 자료다. 선택 후에는 기존 기출 ID를 `problems.txt`로 받고 MD·그림에서 extract한다. `selection`의 필요 개념은 참고 자료를 찾는 보조 정보이며 draft·stale을 검토 완료로 해석하지 않는다. 문항 전체와 모든 소문항을 설명한다. JSON의 분류 상태나 MD 참고 풀이가 원문 대조·독립 검산·네 검토를 대신하지 않는다.
 - Razavi 교과서: `교과서/마이크로전자회로/<N>장.pdf`의 그 절 쪽(교과서 문항은 md frontmatter `section`·`pdf_page` 근처)과, 같은 장 md 폴더의 관련 예제(`교과서/마이크로전자회로/chNN/README.md` 인덱스로 찾는다).
 - 강의자료: 그 절을 다루는 `강의노트/2026F_Lec*_*.pdf`의 슬라이드.
 - 같은 날 정리노트: `복습노트/<range>/정리노트_<range>_<slug>.html`(개념 링크의 anchor도 여기서 고른다).

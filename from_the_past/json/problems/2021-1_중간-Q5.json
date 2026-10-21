@@ -1,0 +1,187 @@
+{
+  "body_md": "# 기출 2021-1 중간 5 — 축퇴 저항 R_P로 복사 전류비를 정하는 MOS·바이폴라 전류 거울\n\n## 원문\n다음 회로에 대해 질문에 답하시오. $V_{TH}$는 동일하고, $\\lambda = 0$, $V_A = \\infty$로 가정한다.\n\n(1) 회로 (a)에서 $I_1 = I_{REF}/2$가 되는 $R_P$ 값을 식으로 구하시오. 단, $M_{REF} = M_1 = W/L$이다.\n\n(2) 회로 (b)에서 $I_1 = 2I_{REF}$가 되는 $R_P$ 값을 식으로 구하시오. 단, $Q_{REF} = Q_1$이고, 베이스 전류는 무시한다.\n\n## 조건\n- 회로: 그림 (a) MOS 전류 거울, (b) 바이폴라 전류 거울 (회로 종류 이름은 원문에 없음, 원문은 \"다음 회로\"만 적음)\n- $V_{TH}$는 모두 같음\n- $\\lambda = 0$, $V_A = \\infty$로 가정\n- (1) 전용 (회로 (a)): $M_{REF} = M_1 = W/L$ (두 트랜지스터의 크기가 같음) (괄호 안은 원문에 없음)\n- (2) 전용 (회로 (b)): $Q_{REF} = Q_1$ (두 트랜지스터가 같음), 베이스 전류는 무시 (첫 괄호 안은 원문에 없음)\n- $I_{REF}$, $V_{DD}$, $V_{CC}$의 값은 주어지지 않음. 답은 기호로 나타냄 (원문에 없음)\n\n## 구할 것\n- (1) 회로 (a)에서 $I_1 = I_{REF}/2$가 되는 $R_P$ 값 (식으로)\n- (2) 회로 (b)에서 $I_1 = 2 I_{REF}$가 되는 $R_P$ 값 (식으로)\n\n## 회로 — Fig Q5(a)\n```spice\nIREF  VDD  n1   {I_REF}\nMREF  n1   n1   0    nmos  W/L={W/L}    ; 좌우 반전 (게이트 오른쪽), 다이오드 연결\nM1    out  n1   n2   nmos  W/L={W/L}\nRP    n2   0    {R_P}                   ; M1 소스 ↔ 접지\n```\n- 단자: VDD = 전원, 값 미지정 (T 전원 기호) / out = M1 드레인, I_1이 들어가는 단자 (선 끝)\n- 표시: 노드 라벨 V_DD (T 기호 오른쪽) / 소자 라벨 I_REF (전류원 왼쪽), M_REF (M_REF 아래 오른쪽, 접지 기호 오른쪽), M1 (M1 위 왼쪽, 드레인 선 왼쪽), R_P (세로 저항 오른쪽) / 부호 없음 / 화살표 \"I_1\": out, 아래 방향(M1 드레인으로 들어감), 도선 위, 글자는 화살표 오른쪽 / 수치·면적 라벨 \"W/L\" (분수 꼴, M_REF 왼쪽), \"W/L\" (분수 꼴, M1 오른쪽)\n- 배치: 왼쪽 세로줄 위→아래 VDD T 기호, I_REF 전류원(화살표 아래), n1 접속점, M_REF, 접지 / M_REF nmos 좌우 반전(게이트 막대 오른쪽, 드레인 왼쪽 위, 소스 왼쪽 아래·화살표 바깥), 소스 아래 접지 / n1 접속점에서 세로선이 아래로 내려가 모서리에서 오른쪽으로 꺾여 M_REF 드레인 / n1 접속점에서 가로선이 오른쪽으로 나가 M_REF 게이트보다 조금 오른쪽에서 아래로 꺾여 게이트 접속점 / 게이트 접속점에서 게이트 높이의 가로선이 왼쪽 M_REF 게이트, 오른쪽 M1 게이트로 / M1은 오른쪽, nmos 보통 방향(게이트 왼쪽, 드레인 위, 소스 아래·화살표 바깥) / M1 드레인에서 세로선이 위로 올라가 선 끝, 그 선 위에 I_1 화살표 / M1 소스 → 세로 저항 R_P → 접지 / 접속점 (세 갈래 이상, 2곳): ① n1 = 위 I_REF + 아래 M_REF 드레인 + 오른쪽 다이오드 연결선 (점) ② 게이트 접속점 = 위 다이오드 연결선 + 왼쪽 M_REF 게이트 + 오른쪽 M1 게이트 (점) / 교차: 없음\n\n## 회로 — Fig Q5(b)\n```spice\nIREF  VCC  n1   {I_REF}\nQREF  n1   n1   n2   npn    ; 좌우 반전 (베이스 오른쪽), 다이오드 연결\nRP    n2   0    {R_P}       ; Q_REF 이미터 ↔ 접지\nQ1    out  n1   0    npn\n```\n- 단자: VCC = 전원, 값 미지정 (T 전원 기호) / out = Q1 컬렉터, I_1이 들어가는 단자 (선 끝)\n- 표시: 노드 라벨 V_CC (T 기호 오른쪽) / 소자 라벨 I_REF (전류원 왼쪽), Q_REF (Q_REF 왼쪽, 이미터 높이), Q1 (Q1 오른쪽, 이미터 옆), R_P (세로 저항 오른쪽) / 부호 없음 / 화살표 \"I_1\": out, 아래 방향(Q1 컬렉터로 들어감), 도선 위, 글자는 화살표 오른쪽 / 수치·면적 라벨 없음\n- 배치: 왼쪽 세로줄 위→아래 VCC T 기호, I_REF 전류원(화살표 아래), n1 접속점, Q_REF, R_P, 접지 / Q_REF npn 좌우 반전(베이스 막대 오른쪽, 컬렉터 왼쪽 위, 이미터 왼쪽 아래·화살표 바깥) / n1 접속점에서 세로선이 아래로 Q_REF 컬렉터 / n1 접속점에서 가로선이 오른쪽으로 나가 Q_REF 베이스보다 조금 오른쪽에서 아래로 꺾여 베이스 접속점 / 베이스 접속점에서 베이스 높이의 가로선이 왼쪽 Q_REF 베이스, 오른쪽 Q1 베이스로 / Q_REF 이미터 → 세로 저항 R_P → 접지 / Q1은 오른쪽, npn 보통 방향(베이스 왼쪽, 컬렉터 위, 이미터 아래·화살표 바깥) / Q1 컬렉터에서 세로선이 위로 올라가 선 끝, 그 선 위에 I_1 화살표 / Q1 이미터 아래 접지 / 접속점 (세 갈래 이상, 2곳): ① n1 = 위 I_REF + 아래 Q_REF 컬렉터 + 오른쪽 다이오드 연결선 (점) ② 베이스 접속점 = 위 다이오드 연결선 + 왼쪽 Q_REF 베이스 + 오른쪽 Q1 베이스 (점) / 교차: 없음\n\n![Q5](figures/fig-Q5.png)\n\n## 풀이\n### (1) 두 게이트–소스 전압\n- 게이트가 공통이므로 $V_{GS,REF} = V_{GS1} + I_1 R_P$\n- $V_{GS} = V_{TH} + \\sqrt{2 I_D/(\\mu_n C_{ox} W/L)}$ ($\\lambda = 0$): $V_{GS,REF} = V_{TH} + \\sqrt{2 I_{REF}/(\\mu_n C_{ox} W/L)}$, $I_1 = I_{REF}/2$이면 $V_{GS1} = V_{TH} + \\sqrt{I_{REF}/(\\mu_n C_{ox} W/L)}$\n### (1) $R_P$\n- $V_{TH}$가 같아 지워진다: $I_1 R_P = (\\sqrt{2} - 1)\\sqrt{I_{REF}/(\\mu_n C_{ox} W/L)}$\n- $R_P = \\dfrac{2(\\sqrt{2} - 1)}{\\sqrt{\\mu_n C_{ox} (W/L) I_{REF}}} \\approx \\dfrac{0.828}{\\sqrt{\\mu_n C_{ox} (W/L) I_{REF}}}$\n### (2) 두 베이스–이미터 전압\n- 베이스가 공통이므로 $V_{BE,REF} + I_{REF} R_P = V_{BE1}$ (베이스 전류 무시, $R_P$에는 $I_{REF}$가 흐름)\n- $V_{BE} = V_T \\ln(I_C/I_S)$, 같은 소자라 $I_S$가 같다: $V_{BE1} - V_{BE,REF} = V_T \\ln(I_1/I_{REF}) = V_T \\ln 2$\n### (2) $R_P$\n- $R_P = V_T \\ln 2 / I_{REF} \\approx 0.693\\, V_T/I_{REF}$\n### 답\n- (1) $R_P = \\dfrac{2(\\sqrt{2} - 1)}{\\sqrt{\\mu_n C_{ox} (W/L) I_{REF}}}$\n- (2) $R_P = \\dfrac{V_T \\ln 2}{I_{REF}}$\n",
+  "content_sha256": "d375033134972e4e339e3451ced170616142d417709cd39280575cc25aadfacc",
+  "exam": {
+    "exam": "2021-1 중간고사",
+    "header": "Closed book, 풀이과정 필수 (풀이과정이 없으면 점수 미부여), 계산결과 필수 (근사계산 가능)",
+    "notes": [
+      "원본은 1쪽짜리 PDF 3개다 (Q1–Q2, Q3–Q4, Q5)."
+    ],
+    "sources": [
+      "../../2021중간_기말/중간/Midterm0422_1p_rev.pdf",
+      "../../2021중간_기말/중간/Midterm0422_2p_rev.pdf",
+      "../../2021중간_기말/중간/Midterm0422_3p_rev.pdf"
+    ]
+  },
+  "figures": [
+    {
+      "display_path": "from_the_past/md/2021-1_중간/figures/redrawn/fig-Q5.png",
+      "id": "Q5",
+      "original_path": "from_the_past/md/2021-1_중간/figures/fig-Q5.png"
+    }
+  ],
+  "id": "2021-1_중간-Q5",
+  "input_hashes": {
+    "from_the_past/md/2021-1_중간/Q5.md": "b32224107194c8d2e33ec272dc5ec65ae6c50d785bb2fe175472e4d8864ce45d",
+    "from_the_past/md/2021-1_중간/exam.yaml": "99f0ef81b4386a392f6686415617c58879948dabb06edd3fec1449fea5b47e54",
+    "from_the_past/md/2021-1_중간/figures/fig-Q5.png": "4b3946330a07e55b0919d1946ad6d46c8ead399b6ebcb49ad59779558e9e154e",
+    "from_the_past/md/2021-1_중간/figures/figures.yaml": "42969aa0b00ef75f548d5ae12cd99f2c832f19d7e6bd7394e74dc0c53f3306bb",
+    "from_the_past/md/2021-1_중간/figures/redrawn/fig-Q5.png": "70ac34cacd6357c9b9e8a8b9cf217e899a850dcfb4c59b211cbc80404e900840"
+  },
+  "md_path": "from_the_past/md/2021-1_중간/Q5.md",
+  "metadata": {
+    "depends_on": [],
+    "exam": "2021-1 중간고사",
+    "figures": [
+      {
+        "id": "Q5",
+        "panels": [
+          "a",
+          "b"
+        ],
+        "role": "problem"
+      }
+    ],
+    "id": "2021-1_중간-Q5",
+    "kind": "기출",
+    "number": "5",
+    "pdf_page": 1,
+    "points": 20,
+    "refs": [],
+    "selection": {
+      "circuit_types": [
+        "MOS",
+        "바이폴라",
+        "전류 거울"
+      ],
+      "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+      "evidence_sections": [
+        "구할 것",
+        "풀이"
+      ],
+      "learning_goals": [
+        "회로 (a)에서 $I_1 = I_{REF}/2$가 되는 $R_P$ 값 (식으로)",
+        "회로 (b)에서 $I_1 = 2 I_{REF}$가 되는 $R_P$ 값 (식으로)"
+      ],
+      "required_concepts": [
+        "전류 거울",
+        "소스·이미터 축퇴"
+      ],
+      "review_status": "draft",
+      "reviewed_content_sha256": "d375033134972e4e339e3451ced170616142d417709cd39280575cc25aadfacc",
+      "subpart_requirements": [
+        {
+          "label": "1",
+          "required_concepts": [
+            "전류 거울",
+            "소스·이미터 축퇴"
+          ]
+        },
+        {
+          "label": "2",
+          "required_concepts": [
+            "전류 거울",
+            "소스·이미터 축퇴"
+          ]
+        }
+      ],
+      "topics": [
+        "전류 거울"
+      ]
+    },
+    "source": "../../2021중간_기말/중간/Midterm0422_3p_rev.pdf",
+    "source_lang": "ko",
+    "textbook_chapters": [
+      9
+    ]
+  },
+  "raw_md": "---\nid: 2021-1_중간-Q5\nkind: 기출\nexam: \"2021-1 중간고사\"\nnumber: \"5\"\npoints: 20\nsource: ../../2021중간_기말/중간/Midterm0422_3p_rev.pdf\npdf_page: 1\nsource_lang: ko\nfigures:\n  - {id: \"Q5\", role: problem, panels: [a, b]}\ntextbook_chapters: [9]\ndepends_on: []\nrefs: []\nselection:\n  topics:\n  - 전류 거울\n  circuit_types:\n  - MOS\n  - 바이폴라\n  - 전류 거울\n  required_concepts:\n  - 전류 거울\n  - 소스·이미터 축퇴\n  learning_goals:\n  - 회로 (a)에서 $I_1 = I_{REF}/2$가 되는 $R_P$ 값 (식으로)\n  - 회로 (b)에서 $I_1 = 2 I_{REF}$가 되는 $R_P$ 값 (식으로)\n  evidence_sections:\n  - 구할 것\n  - 풀이\n  subpart_requirements:\n  - label: '1'\n    required_concepts:\n    - 전류 거울\n    - 소스·이미터 축퇴\n  - label: '2'\n    required_concepts:\n    - 전류 거울\n    - 소스·이미터 축퇴\n  review_status: draft\n  reviewed_content_sha256: d375033134972e4e339e3451ced170616142d417709cd39280575cc25aadfacc\n  classification_note: 제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.\n---\n# 기출 2021-1 중간 5 — 축퇴 저항 R_P로 복사 전류비를 정하는 MOS·바이폴라 전류 거울\n\n## 원문\n다음 회로에 대해 질문에 답하시오. $V_{TH}$는 동일하고, $\\lambda = 0$, $V_A = \\infty$로 가정한다.\n\n(1) 회로 (a)에서 $I_1 = I_{REF}/2$가 되는 $R_P$ 값을 식으로 구하시오. 단, $M_{REF} = M_1 = W/L$이다.\n\n(2) 회로 (b)에서 $I_1 = 2I_{REF}$가 되는 $R_P$ 값을 식으로 구하시오. 단, $Q_{REF} = Q_1$이고, 베이스 전류는 무시한다.\n\n## 조건\n- 회로: 그림 (a) MOS 전류 거울, (b) 바이폴라 전류 거울 (회로 종류 이름은 원문에 없음, 원문은 \"다음 회로\"만 적음)\n- $V_{TH}$는 모두 같음\n- $\\lambda = 0$, $V_A = \\infty$로 가정\n- (1) 전용 (회로 (a)): $M_{REF} = M_1 = W/L$ (두 트랜지스터의 크기가 같음) (괄호 안은 원문에 없음)\n- (2) 전용 (회로 (b)): $Q_{REF} = Q_1$ (두 트랜지스터가 같음), 베이스 전류는 무시 (첫 괄호 안은 원문에 없음)\n- $I_{REF}$, $V_{DD}$, $V_{CC}$의 값은 주어지지 않음. 답은 기호로 나타냄 (원문에 없음)\n\n## 구할 것\n- (1) 회로 (a)에서 $I_1 = I_{REF}/2$가 되는 $R_P$ 값 (식으로)\n- (2) 회로 (b)에서 $I_1 = 2 I_{REF}$가 되는 $R_P$ 값 (식으로)\n\n## 회로 — Fig Q5(a)\n```spice\nIREF  VDD  n1   {I_REF}\nMREF  n1   n1   0    nmos  W/L={W/L}    ; 좌우 반전 (게이트 오른쪽), 다이오드 연결\nM1    out  n1   n2   nmos  W/L={W/L}\nRP    n2   0    {R_P}                   ; M1 소스 ↔ 접지\n```\n- 단자: VDD = 전원, 값 미지정 (T 전원 기호) / out = M1 드레인, I_1이 들어가는 단자 (선 끝)\n- 표시: 노드 라벨 V_DD (T 기호 오른쪽) / 소자 라벨 I_REF (전류원 왼쪽), M_REF (M_REF 아래 오른쪽, 접지 기호 오른쪽), M1 (M1 위 왼쪽, 드레인 선 왼쪽), R_P (세로 저항 오른쪽) / 부호 없음 / 화살표 \"I_1\": out, 아래 방향(M1 드레인으로 들어감), 도선 위, 글자는 화살표 오른쪽 / 수치·면적 라벨 \"W/L\" (분수 꼴, M_REF 왼쪽), \"W/L\" (분수 꼴, M1 오른쪽)\n- 배치: 왼쪽 세로줄 위→아래 VDD T 기호, I_REF 전류원(화살표 아래), n1 접속점, M_REF, 접지 / M_REF nmos 좌우 반전(게이트 막대 오른쪽, 드레인 왼쪽 위, 소스 왼쪽 아래·화살표 바깥), 소스 아래 접지 / n1 접속점에서 세로선이 아래로 내려가 모서리에서 오른쪽으로 꺾여 M_REF 드레인 / n1 접속점에서 가로선이 오른쪽으로 나가 M_REF 게이트보다 조금 오른쪽에서 아래로 꺾여 게이트 접속점 / 게이트 접속점에서 게이트 높이의 가로선이 왼쪽 M_REF 게이트, 오른쪽 M1 게이트로 / M1은 오른쪽, nmos 보통 방향(게이트 왼쪽, 드레인 위, 소스 아래·화살표 바깥) / M1 드레인에서 세로선이 위로 올라가 선 끝, 그 선 위에 I_1 화살표 / M1 소스 → 세로 저항 R_P → 접지 / 접속점 (세 갈래 이상, 2곳): ① n1 = 위 I_REF + 아래 M_REF 드레인 + 오른쪽 다이오드 연결선 (점) ② 게이트 접속점 = 위 다이오드 연결선 + 왼쪽 M_REF 게이트 + 오른쪽 M1 게이트 (점) / 교차: 없음\n\n## 회로 — Fig Q5(b)\n```spice\nIREF  VCC  n1   {I_REF}\nQREF  n1   n1   n2   npn    ; 좌우 반전 (베이스 오른쪽), 다이오드 연결\nRP    n2   0    {R_P}       ; Q_REF 이미터 ↔ 접지\nQ1    out  n1   0    npn\n```\n- 단자: VCC = 전원, 값 미지정 (T 전원 기호) / out = Q1 컬렉터, I_1이 들어가는 단자 (선 끝)\n- 표시: 노드 라벨 V_CC (T 기호 오른쪽) / 소자 라벨 I_REF (전류원 왼쪽), Q_REF (Q_REF 왼쪽, 이미터 높이), Q1 (Q1 오른쪽, 이미터 옆), R_P (세로 저항 오른쪽) / 부호 없음 / 화살표 \"I_1\": out, 아래 방향(Q1 컬렉터로 들어감), 도선 위, 글자는 화살표 오른쪽 / 수치·면적 라벨 없음\n- 배치: 왼쪽 세로줄 위→아래 VCC T 기호, I_REF 전류원(화살표 아래), n1 접속점, Q_REF, R_P, 접지 / Q_REF npn 좌우 반전(베이스 막대 오른쪽, 컬렉터 왼쪽 위, 이미터 왼쪽 아래·화살표 바깥) / n1 접속점에서 세로선이 아래로 Q_REF 컬렉터 / n1 접속점에서 가로선이 오른쪽으로 나가 Q_REF 베이스보다 조금 오른쪽에서 아래로 꺾여 베이스 접속점 / 베이스 접속점에서 베이스 높이의 가로선이 왼쪽 Q_REF 베이스, 오른쪽 Q1 베이스로 / Q_REF 이미터 → 세로 저항 R_P → 접지 / Q1은 오른쪽, npn 보통 방향(베이스 왼쪽, 컬렉터 위, 이미터 아래·화살표 바깥) / Q1 컬렉터에서 세로선이 위로 올라가 선 끝, 그 선 위에 I_1 화살표 / Q1 이미터 아래 접지 / 접속점 (세 갈래 이상, 2곳): ① n1 = 위 I_REF + 아래 Q_REF 컬렉터 + 오른쪽 다이오드 연결선 (점) ② 베이스 접속점 = 위 다이오드 연결선 + 왼쪽 Q_REF 베이스 + 오른쪽 Q1 베이스 (점) / 교차: 없음\n\n![Q5](figures/fig-Q5.png)\n\n## 풀이\n### (1) 두 게이트–소스 전압\n- 게이트가 공통이므로 $V_{GS,REF} = V_{GS1} + I_1 R_P$\n- $V_{GS} = V_{TH} + \\sqrt{2 I_D/(\\mu_n C_{ox} W/L)}$ ($\\lambda = 0$): $V_{GS,REF} = V_{TH} + \\sqrt{2 I_{REF}/(\\mu_n C_{ox} W/L)}$, $I_1 = I_{REF}/2$이면 $V_{GS1} = V_{TH} + \\sqrt{I_{REF}/(\\mu_n C_{ox} W/L)}$\n### (1) $R_P$\n- $V_{TH}$가 같아 지워진다: $I_1 R_P = (\\sqrt{2} - 1)\\sqrt{I_{REF}/(\\mu_n C_{ox} W/L)}$\n- $R_P = \\dfrac{2(\\sqrt{2} - 1)}{\\sqrt{\\mu_n C_{ox} (W/L) I_{REF}}} \\approx \\dfrac{0.828}{\\sqrt{\\mu_n C_{ox} (W/L) I_{REF}}}$\n### (2) 두 베이스–이미터 전압\n- 베이스가 공통이므로 $V_{BE,REF} + I_{REF} R_P = V_{BE1}$ (베이스 전류 무시, $R_P$에는 $I_{REF}$가 흐름)\n- $V_{BE} = V_T \\ln(I_C/I_S)$, 같은 소자라 $I_S$가 같다: $V_{BE1} - V_{BE,REF} = V_T \\ln(I_1/I_{REF}) = V_T \\ln 2$\n### (2) $R_P$\n- $R_P = V_T \\ln 2 / I_{REF} \\approx 0.693\\, V_T/I_{REF}$\n### 답\n- (1) $R_P = \\dfrac{2(\\sqrt{2} - 1)}{\\sqrt{\\mu_n C_{ox} (W/L) I_{REF}}}$\n- (2) $R_P = \\dfrac{V_T \\ln 2}{I_{REF}}$\n",
+  "schema_version": 1,
+  "sections": [
+    {
+      "heading": "원문",
+      "markdown": "다음 회로에 대해 질문에 답하시오. $V_{TH}$는 동일하고, $\\lambda = 0$, $V_A = \\infty$로 가정한다.\n\n(1) 회로 (a)에서 $I_1 = I_{REF}/2$가 되는 $R_P$ 값을 식으로 구하시오. 단, $M_{REF} = M_1 = W/L$이다.\n\n(2) 회로 (b)에서 $I_1 = 2I_{REF}$가 되는 $R_P$ 값을 식으로 구하시오. 단, $Q_{REF} = Q_1$이고, 베이스 전류는 무시한다."
+    },
+    {
+      "heading": "조건",
+      "markdown": "- 회로: 그림 (a) MOS 전류 거울, (b) 바이폴라 전류 거울 (회로 종류 이름은 원문에 없음, 원문은 \"다음 회로\"만 적음)\n- $V_{TH}$는 모두 같음\n- $\\lambda = 0$, $V_A = \\infty$로 가정\n- (1) 전용 (회로 (a)): $M_{REF} = M_1 = W/L$ (두 트랜지스터의 크기가 같음) (괄호 안은 원문에 없음)\n- (2) 전용 (회로 (b)): $Q_{REF} = Q_1$ (두 트랜지스터가 같음), 베이스 전류는 무시 (첫 괄호 안은 원문에 없음)\n- $I_{REF}$, $V_{DD}$, $V_{CC}$의 값은 주어지지 않음. 답은 기호로 나타냄 (원문에 없음)"
+    },
+    {
+      "heading": "구할 것",
+      "markdown": "- (1) 회로 (a)에서 $I_1 = I_{REF}/2$가 되는 $R_P$ 값 (식으로)\n- (2) 회로 (b)에서 $I_1 = 2 I_{REF}$가 되는 $R_P$ 값 (식으로)"
+    },
+    {
+      "heading": "회로 — Fig Q5(a)",
+      "markdown": "```spice\nIREF  VDD  n1   {I_REF}\nMREF  n1   n1   0    nmos  W/L={W/L}    ; 좌우 반전 (게이트 오른쪽), 다이오드 연결\nM1    out  n1   n2   nmos  W/L={W/L}\nRP    n2   0    {R_P}                   ; M1 소스 ↔ 접지\n```\n- 단자: VDD = 전원, 값 미지정 (T 전원 기호) / out = M1 드레인, I_1이 들어가는 단자 (선 끝)\n- 표시: 노드 라벨 V_DD (T 기호 오른쪽) / 소자 라벨 I_REF (전류원 왼쪽), M_REF (M_REF 아래 오른쪽, 접지 기호 오른쪽), M1 (M1 위 왼쪽, 드레인 선 왼쪽), R_P (세로 저항 오른쪽) / 부호 없음 / 화살표 \"I_1\": out, 아래 방향(M1 드레인으로 들어감), 도선 위, 글자는 화살표 오른쪽 / 수치·면적 라벨 \"W/L\" (분수 꼴, M_REF 왼쪽), \"W/L\" (분수 꼴, M1 오른쪽)\n- 배치: 왼쪽 세로줄 위→아래 VDD T 기호, I_REF 전류원(화살표 아래), n1 접속점, M_REF, 접지 / M_REF nmos 좌우 반전(게이트 막대 오른쪽, 드레인 왼쪽 위, 소스 왼쪽 아래·화살표 바깥), 소스 아래 접지 / n1 접속점에서 세로선이 아래로 내려가 모서리에서 오른쪽으로 꺾여 M_REF 드레인 / n1 접속점에서 가로선이 오른쪽으로 나가 M_REF 게이트보다 조금 오른쪽에서 아래로 꺾여 게이트 접속점 / 게이트 접속점에서 게이트 높이의 가로선이 왼쪽 M_REF 게이트, 오른쪽 M1 게이트로 / M1은 오른쪽, nmos 보통 방향(게이트 왼쪽, 드레인 위, 소스 아래·화살표 바깥) / M1 드레인에서 세로선이 위로 올라가 선 끝, 그 선 위에 I_1 화살표 / M1 소스 → 세로 저항 R_P → 접지 / 접속점 (세 갈래 이상, 2곳): ① n1 = 위 I_REF + 아래 M_REF 드레인 + 오른쪽 다이오드 연결선 (점) ② 게이트 접속점 = 위 다이오드 연결선 + 왼쪽 M_REF 게이트 + 오른쪽 M1 게이트 (점) / 교차: 없음"
+    },
+    {
+      "heading": "회로 — Fig Q5(b)",
+      "markdown": "```spice\nIREF  VCC  n1   {I_REF}\nQREF  n1   n1   n2   npn    ; 좌우 반전 (베이스 오른쪽), 다이오드 연결\nRP    n2   0    {R_P}       ; Q_REF 이미터 ↔ 접지\nQ1    out  n1   0    npn\n```\n- 단자: VCC = 전원, 값 미지정 (T 전원 기호) / out = Q1 컬렉터, I_1이 들어가는 단자 (선 끝)\n- 표시: 노드 라벨 V_CC (T 기호 오른쪽) / 소자 라벨 I_REF (전류원 왼쪽), Q_REF (Q_REF 왼쪽, 이미터 높이), Q1 (Q1 오른쪽, 이미터 옆), R_P (세로 저항 오른쪽) / 부호 없음 / 화살표 \"I_1\": out, 아래 방향(Q1 컬렉터로 들어감), 도선 위, 글자는 화살표 오른쪽 / 수치·면적 라벨 없음\n- 배치: 왼쪽 세로줄 위→아래 VCC T 기호, I_REF 전류원(화살표 아래), n1 접속점, Q_REF, R_P, 접지 / Q_REF npn 좌우 반전(베이스 막대 오른쪽, 컬렉터 왼쪽 위, 이미터 왼쪽 아래·화살표 바깥) / n1 접속점에서 세로선이 아래로 Q_REF 컬렉터 / n1 접속점에서 가로선이 오른쪽으로 나가 Q_REF 베이스보다 조금 오른쪽에서 아래로 꺾여 베이스 접속점 / 베이스 접속점에서 베이스 높이의 가로선이 왼쪽 Q_REF 베이스, 오른쪽 Q1 베이스로 / Q_REF 이미터 → 세로 저항 R_P → 접지 / Q1은 오른쪽, npn 보통 방향(베이스 왼쪽, 컬렉터 위, 이미터 아래·화살표 바깥) / Q1 컬렉터에서 세로선이 위로 올라가 선 끝, 그 선 위에 I_1 화살표 / Q1 이미터 아래 접지 / 접속점 (세 갈래 이상, 2곳): ① n1 = 위 I_REF + 아래 Q_REF 컬렉터 + 오른쪽 다이오드 연결선 (점) ② 베이스 접속점 = 위 다이오드 연결선 + 왼쪽 Q_REF 베이스 + 오른쪽 Q1 베이스 (점) / 교차: 없음\n\n![Q5](figures/fig-Q5.png)"
+    },
+    {
+      "heading": "풀이",
+      "markdown": "### (1) 두 게이트–소스 전압\n- 게이트가 공통이므로 $V_{GS,REF} = V_{GS1} + I_1 R_P$\n- $V_{GS} = V_{TH} + \\sqrt{2 I_D/(\\mu_n C_{ox} W/L)}$ ($\\lambda = 0$): $V_{GS,REF} = V_{TH} + \\sqrt{2 I_{REF}/(\\mu_n C_{ox} W/L)}$, $I_1 = I_{REF}/2$이면 $V_{GS1} = V_{TH} + \\sqrt{I_{REF}/(\\mu_n C_{ox} W/L)}$\n### (1) $R_P$\n- $V_{TH}$가 같아 지워진다: $I_1 R_P = (\\sqrt{2} - 1)\\sqrt{I_{REF}/(\\mu_n C_{ox} W/L)}$\n- $R_P = \\dfrac{2(\\sqrt{2} - 1)}{\\sqrt{\\mu_n C_{ox} (W/L) I_{REF}}} \\approx \\dfrac{0.828}{\\sqrt{\\mu_n C_{ox} (W/L) I_{REF}}}$\n### (2) 두 베이스–이미터 전압\n- 베이스가 공통이므로 $V_{BE,REF} + I_{REF} R_P = V_{BE1}$ (베이스 전류 무시, $R_P$에는 $I_{REF}$가 흐름)\n- $V_{BE} = V_T \\ln(I_C/I_S)$, 같은 소자라 $I_S$가 같다: $V_{BE1} - V_{BE,REF} = V_T \\ln(I_1/I_{REF}) = V_T \\ln 2$\n### (2) $R_P$\n- $R_P = V_T \\ln 2 / I_{REF} \\approx 0.693\\, V_T/I_{REF}$\n### 답\n- (1) $R_P = \\dfrac{2(\\sqrt{2} - 1)}{\\sqrt{\\mu_n C_{ox} (W/L) I_{REF}}}$\n- (2) $R_P = \\dfrac{V_T \\ln 2}{I_{REF}}$"
+    }
+  ],
+  "selection": {
+    "circuit_types": [
+      "MOS",
+      "바이폴라",
+      "전류 거울"
+    ],
+    "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+    "evidence_sections": [
+      "구할 것",
+      "풀이"
+    ],
+    "learning_goals": [
+      "회로 (a)에서 $I_1 = I_{REF}/2$가 되는 $R_P$ 값 (식으로)",
+      "회로 (b)에서 $I_1 = 2 I_{REF}$가 되는 $R_P$ 값 (식으로)"
+    ],
+    "required_concepts": [
+      "전류 거울",
+      "소스·이미터 축퇴"
+    ],
+    "review_status": "draft",
+    "reviewed_content_sha256": "d375033134972e4e339e3451ced170616142d417709cd39280575cc25aadfacc",
+    "status": "draft",
+    "subpart_requirements": [
+      {
+        "label": "1",
+        "required_concepts": [
+          "전류 거울",
+          "소스·이미터 축퇴"
+        ]
+      },
+      {
+        "label": "2",
+        "required_concepts": [
+          "전류 거울",
+          "소스·이미터 축퇴"
+        ]
+      }
+    ],
+    "topics": [
+      "전류 거울"
+    ]
+  },
+  "subparts": [
+    {
+      "ask_md": "회로 (a)에서 $I_1 = I_{REF}/2$가 되는 $R_P$ 값 (식으로)",
+      "label": "1",
+      "required_concepts": [
+        "전류 거울",
+        "소스·이미터 축퇴"
+      ]
+    },
+    {
+      "ask_md": "회로 (b)에서 $I_1 = 2 I_{REF}$가 되는 $R_P$ 값 (식으로)",
+      "label": "2",
+      "required_concepts": [
+        "전류 거울",
+        "소스·이미터 축퇴"
+      ]
+    }
+  ],
+  "title": "축퇴 저항 R_P로 복사 전류비를 정하는 MOS·바이폴라 전류 거울"
+}

@@ -1,0 +1,284 @@
+{
+  "body_md": "# 기출 2017-1 중간 (C030) 2 — R_E 축퇴 테일과 부하 저항 불일치 ΔR_C가 있는 MOS 차동 증폭기의 입력 범위, A_DM, A_CM, A_CM-DM, CMRR\n\n## 원문\n$V_{DD}=3\\text{V}$, $\\mu_n C_{ox} = 100\\ \\text{uA/V}^2$, $V_{TH,N} =0.4\\text{V}$, $\\lambda_n=0.1\\ \\text{V}^{-1}$,\n\n$I_{D1}=100\\text{uA}$, $(W/L)_1=50$, $(W/L)_{2,3} = 25$ , $R_E=R_c=10\\ \\text{kohm}$\n\n1) Calculate input range of common-mode input of $V_{in1,2}$ (5pt)\n\n2) Calculate input range of differential input ($V_{in1}$-$V_{in2}$) (5pt)\n\n3) Calculate small signal differential gain $A_{DM}$ ($V_{out}/(V_{in1}$-$V_{in2}$)) when $\\Delta R_C=0$ (5pt)\n\n4) Calculate common-mode gain $A_{CM}$ when $\\Delta R_C=0$ (5pt)\n\n5) Calculate common-mode input to differential output gain $A_{CM-DM}$ when $\\Delta R_C = 10\\text{ohm}$ (5pt)\n\n6) Calculate CMRR (5pt)\n\n## 조건\n- 회로: 그림의 차동 증폭기 ($M_2$–$M_3$ 차동쌍, 테일은 $R_E$와 $V_{b1}$로 바이어스한 $M_1$ 전류원) (괄호 안은 원문에 없음)\n- $V_{DD} = 3\\ \\text{V}$\n- 그림에는 전원이 $V_{CC}$로 인쇄됨. 문제 문장의 $V_{DD}$를 이 전원 값으로 봄 (원문에 없음)\n- $\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$ (원문 표기는 uA/V²)\n- $V_{TH,N} = 0.4\\ \\text{V}$, $\\lambda_n = 0.1\\ \\text{V}^{-1}$\n- $I_{D1} = 100\\ \\mu\\text{A}$ (원문 표기는 100uA)\n- $(W/L)_1 = 50$, $(W/L)_2 = (W/L)_3 = 25$ (원문 표기 $(W/L)_{2,3} = 25$)\n- $R_E = R_C = 10\\ \\text{k}\\Omega$ (원문 표기 $R_c$ = 10 kohm, 그림 라벨은 $R_C$)\n- 3), 4) 전용: $\\Delta R_C = 0$\n- 5) 전용: $\\Delta R_C = 10\\ \\Omega$ (원문 표기 10ohm)\n- 바이어스 전압 $V_{b1}$ 값은 주어지지 않음 (원문에 없음)\n\n## 구할 것\n- 1) $V_{in1,2}$ 공통 모드 입력의 입력 범위\n- 2) 차동 입력 $V_{in1} - V_{in2}$의 입력 범위\n- 3) $\\Delta R_C = 0$일 때 소신호 차동 이득 $A_{DM} = V_{out}/(V_{in1} - V_{in2})$\n- 4) $\\Delta R_C = 0$일 때 공통 모드 이득 $A_{CM}$\n- 5) $\\Delta R_C = 10\\ \\Omega$일 때 공통 모드 입력에서 차동 출력으로의 이득 $A_{CM-DM}$\n- 6) CMRR\n\n## 회로 — Fig Q2\n```spice\nRC1  VCC   out1  {R_C}          ; 인쇄 라벨 R_C\nRC2  VCC   out2  {R_C+ΔR_C}     ; 인쇄 라벨 R_C + ΔR_C\nM2   out1  Vin1  n1    nmos\nM3   out2  Vin2  n1    nmos     ; 좌우 반전 (게이트 오른쪽)\nRE   n1    n2    {R_E}\nM1   n2    Vb1   0     nmos\n* out1, out2 = 두 출력 선 끝. 그 사이에 + V_out − 라벨 하나 (차동 출력, out1 쪽 +)\n```\n- 단자: VCC = 전원, 그림에는 값 없음 (가로 레일, 문제 문장에 V_DD = 3 V) / Vb1 = 이상적 DC 바이어스, 값 미지정 (선 끝) / Vin1, Vin2 = 입력 (선 끝) / out1, out2 = 차동 출력 V_out의 두 단자 (선 끝, 각각에는 라벨 없음)\n- 표시: 노드 라벨 V_CC (레일 오른쪽 끝), V_out (두 출력 선 끝 사이), V_in1 (M2 게이트 선 왼쪽 끝), V_in2 (M3 게이트 선 오른쪽 끝), V_b1 (M1 게이트 선 왼쪽 끝) / 소자 라벨 R_C (왼쪽 저항 왼쪽), R_C + ΔR_C (오른쪽 저항 오른쪽), M_2 (M2 오른쪽), M_3 (M3 왼쪽), R_E (R_E 오른쪽), M_1 (M1 오른쪽) / 부호 + (out1 선 끝 오른쪽 위, V_out 왼쪽), − (out2 선 끝 왼쪽 위, V_out 오른쪽 위) / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 맨 위 굵은 가로 레일 V_CC (왼쪽 끝은 R_C 세로선 조금 왼쪽, 오른쪽 끝에 라벨) / 왼쪽 세로줄 위→아래 R_C, out1 접속점, M2 / 오른쪽 세로줄 위→아래 R_C + ΔR_C, out2 접속점, M3 / 세 MOSFET 모두 소스 화살표 없는 기호 / M2 nmos 보통 방향(게이트 왼쪽, 드레인 위, 소스 아래), M3 nmos 좌우 반전(게이트 막대 오른쪽, 드레인 왼쪽 위, 소스 왼쪽 아래) / out1 접속점에서 짧은 가로선이 오른쪽으로, out2 접속점에서 짧은 가로선이 왼쪽으로 나가 가운데에서 마주 보고 끝남 (그 사이에 + V_out −) / V_in1 → 가로선 → M2 게이트, M3 게이트 → 가로선 → V_in2 / 두 소스는 아래로 내려가 가로선으로 가운데 n1 점에서 만남, n1에서 아래로 R_E, 그 아래 M1 (nmos 보통 방향, 게이트 왼쪽), V_b1 → 가로선 → M1 게이트, M1 소스 아래 접지 / 접속점 (세 갈래 이상, 3곳): ① out1 = 위 R_C + 아래 M2 드레인 + 오른쪽 출력선 (점) ② out2 = 위 R_C + ΔR_C + 아래 M3 드레인 + 왼쪽 출력선 (점) ③ n1 = 왼쪽 M2 소스 선 + 오른쪽 M3 소스 선 + 아래 R_E (점) / 교차: 없음\n\n![Q2](figures/fig-Q2.png)\n\n## 힌트\n### (4) 공통 모드 반회로로 보기\n- 두 입력이 같이 움직이면 두 소스 전류가 함께 꼬리로 흘러, 반쪽 회로에서는 꼬리 저항이 두 배로 보인다\n- $M_1$은 게이트가 DC 바이어스라 소신호로는 $r_{O1}$만 남고, 그 위에 $R_E$가 직렬로 쌓인다\n\n## 풀이\n### (1)–(3) 입력 범위와 차동 이득\n- 바이어스에서는 $\\lambda_n$ 무시, $I_{D2} = I_{D1}/2 = 50\\ \\mu\\text{A}$, $V_{ov} = \\sqrt{2I_D/(\\mu_n C_{ox} W/L)}$: $V_{ov1} = V_{ov2} = 0.200\\ \\text{V}$, $V_{GS2} = 0.600\\ \\text{V}$\n- (1) 아래 한계 $V_{GS2} + I_{D1}R_E + V_{ov1}$ ($M_1$ 포화)는 $1.80\\ \\text{V}$, 위 한계 $V_{DD} - I_{D2}R_C + V_{TH,N}$ ($M_2$ 포화)는 $2.90\\ \\text{V}$\n- (2) 한쪽이 $I_{D1}$을 다 받을 때까지: $|V_{in1}-V_{in2}|_{max}=\\sqrt{2}V_{ov2}$, 곧 $0.283\\ \\text{V}$\n- (3) $g_m = 2I_{D2}/V_{ov2} = 0.500\\ \\text{mS}$, $r_{O2} = 1/(\\lambda_n I_{D2})$, 곧 $200\\ \\text{k}\\Omega$. 꼬리 노드는 가상 접지라 $A_{DM}=-g_m(R_C\\parallel r_{O2})=-4.76$ ($r_{O2}$를 빼면 $-5.00$, CMRR $1.11 \\times 10^5$)\n### (4)–(6) 공통 모드 이득과 CMRR\n- (4) 두 소스 전류가 함께 꼬리로 흘러 반회로의 꼬리 저항은 $2R_{SS}$다. $M_1$은 게이트가 DC라 $r_{O1} = 100\\ \\text{k}\\Omega$만 남아 $R_{SS}=R_E+r_{O1}=110\\ \\text{k}\\Omega$\n- 단일 출력 $A_{CM}=-R_C/(1/g_m+2R_{SS})=-0.0450$이고, 차동 출력 $V_{out}$으로는 두 출력이 같이 움직여 0이다\n- (5) 전류 변화는 같고 부하만 $\\Delta R_C$ 다르다: $A_{CM-DM}=\\Delta R_C/(1/g_m+2R_{SS})$, 곧 $4.50 \\times 10^{-5}$\n- (6) $\\text{CMRR}=|A_{DM}/A_{CM-DM}|$, 곧 $1.06 \\times 10^5$ (100 dB)\n### 답\n- (1) $1.80$–$2.90\\ \\text{V}$\n- (2) $\\pm 0.283\\ \\text{V}$\n- (3) $A_{DM} \\approx -4.76$\n- (4) 단일 출력 $A_{CM} \\approx -0.0450$ (차동 출력으로는 0)\n- (5) $A_{CM-DM} \\approx 4.50 \\times 10^{-5}$\n- (6) $\\text{CMRR} \\approx 1.06 \\times 10^5$ (100 dB)\n",
+  "content_sha256": "bbdac9c0e14ce8f017e34d8203a89063095adafaa119eb920b0e55efa7ad6eb0",
+  "exam": {
+    "exam": "2017-1 중간고사 (C030)",
+    "header": "2017.4.21. Electronic Circuits II Midterm (Class : C030 / C031)",
+    "notes": [
+      "원본 파일의 원래 이름은 2017_04_21_Mid_Solution.pdf다. 4쪽이고 1쪽은 표지(시험 날짜·과목, 분반, Name·ID 칸, 배점표)라 문항이 없다.",
+      "같은 학기 다른 분반 시험(2017-1_중간_D반)이 따로 있어 폴더에 분반 접미사를 붙였다. 표지에는 \"Class : C030 / C031\"로 두 분반 공통이라 접미사는 첫 분반 C030을 썼다.",
+      "영문 시험지다. 배점은 표지 배점표로 확인했다: 1번 30, 2번 30, 3번 40 (총 100). 소문항 배점 (10pt), (5pt), (20pt)는 원문에 인쇄된 대로 각 문제의 원문 절에 남겼다.",
+      "원본은 모범답안이다. 인쇄된 문제 위에 손글씨 풀이(파란·검은 펜)와 빨간 별표(1번 번호 옆, 3번 번호와 소문항 1) 옆)가 겹친다. 이것들은 옮기지 않았다 (FORMAT-EXAM.md의 스캔 답안지 규칙). 별표가 겹친 글자(1번 \"With\"의 W, 3번 \"Calculate\"의 C, 3번 1)의 번호와 I_EE)는 모두 판독됐다.",
+      "이미지 PDF라 텍스트 레이어가 없다. 판독은 렌더링한 이미지로 했다.",
+      "3번은 한 쪽(4쪽)에 회로 두 개가 위아래로 떨어져 있어 그림을 Q3(소문항 1)), Q3-2(소문항 2))로 나눴다."
+    ],
+    "sources": [
+      "../../2013-2019_중간/2017-1_중간_C030_모범답안.pdf"
+    ]
+  },
+  "figures": [
+    {
+      "display_path": "from_the_past/md/2017-1_중간_C030/figures/redrawn/fig-Q2.png",
+      "id": "Q2",
+      "original_path": "from_the_past/md/2017-1_중간_C030/figures/fig-Q2.png"
+    }
+  ],
+  "id": "2017-1_중간_C030-Q2",
+  "input_hashes": {
+    "from_the_past/md/2017-1_중간_C030/Q2.md": "42cec8c71062f836e101d86c4bd6f82badb6a2c719fd25e7d2558e33e5d4537c",
+    "from_the_past/md/2017-1_중간_C030/exam.yaml": "4b1f565a7d577a96dfdb1a28205690f9963f38ee22433b77933d94b77fa76304",
+    "from_the_past/md/2017-1_중간_C030/figures/fig-Q2.png": "4d38c0dd5f4d03bf7ba096e91b4409bb291df50bb0dfb999157985670627d080",
+    "from_the_past/md/2017-1_중간_C030/figures/figures.yaml": "0121fa0d34d341eecd99c7cc8e6a7dd23fe78018b906f97e433c7bd38cd0e690",
+    "from_the_past/md/2017-1_중간_C030/figures/redrawn/fig-Q2.png": "482116614420740f5a2785b4cd2954858ecbe37885765ddbe8e9945a7bb42c40"
+  },
+  "md_path": "from_the_past/md/2017-1_중간_C030/Q2.md",
+  "metadata": {
+    "depends_on": [],
+    "exam": "2017-1 중간고사 (C030)",
+    "figures": [
+      {
+        "id": "Q2",
+        "panels": [],
+        "role": "problem"
+      }
+    ],
+    "id": "2017-1_중간_C030-Q2",
+    "kind": "기출",
+    "number": "2",
+    "pdf_page": 3,
+    "points": 30,
+    "refs": [
+      "2023-1_중간-Q4와 비슷한 질문 (부하 저항 불일치가 있는 MOS 차동 증폭기의 입력 CM 범위, A_CM, A_CM-DM, CMRR; 이 문제는 테일에 R_E가 더 있음)"
+    ],
+    "selection": {
+      "circuit_types": [
+        "MOS",
+        "차동"
+      ],
+      "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+      "evidence_sections": [
+        "구할 것",
+        "풀이"
+      ],
+      "learning_goals": [
+        "$V_{in1,2}$ 공통 모드 입력의 입력 범위",
+        "차동 입력 $V_{in1} - V_{in2}$의 입력 범위",
+        "$\\Delta R_C = 0$일 때 소신호 차동 이득 $A_{DM} = V_{out}/(V_{in1} - V_{in2})$",
+        "$\\Delta R_C = 0$일 때 공통 모드 이득 $A_{CM}$",
+        "$\\Delta R_C = 10\\ \\Omega$일 때 공통 모드 입력에서 차동 출력으로의 이득 $A_{CM-DM}$",
+        "CMRR"
+      ],
+      "required_concepts": [
+        "차동 증폭기",
+        "소스·이미터 축퇴",
+        "공통 모드·차동 입력 범위",
+        "공통 모드 해석",
+        "소자·부하 불일치와 CM-DM 변환",
+        "CMRR",
+        "소신호 전압 이득"
+      ],
+      "review_status": "draft",
+      "reviewed_content_sha256": "bbdac9c0e14ce8f017e34d8203a89063095adafaa119eb920b0e55efa7ad6eb0",
+      "subpart_requirements": [
+        {
+          "label": "1",
+          "required_concepts": [
+            "공통 모드·차동 입력 범위"
+          ]
+        },
+        {
+          "label": "2",
+          "required_concepts": [
+            "공통 모드·차동 입력 범위"
+          ]
+        },
+        {
+          "label": "3",
+          "required_concepts": [
+            "소신호 전압 이득"
+          ]
+        },
+        {
+          "label": "4",
+          "required_concepts": [
+            "공통 모드 해석",
+            "소신호 전압 이득"
+          ]
+        },
+        {
+          "label": "5",
+          "required_concepts": [
+            "공통 모드 해석",
+            "소신호 전압 이득"
+          ]
+        },
+        {
+          "label": "6",
+          "required_concepts": [
+            "CMRR",
+            "공통 모드 해석"
+          ]
+        }
+      ],
+      "topics": [
+        "차동 증폭기"
+      ]
+    },
+    "source": "../../2013-2019_중간/2017-1_중간_C030_모범답안.pdf",
+    "source_lang": "en",
+    "textbook_chapters": [
+      10
+    ]
+  },
+  "raw_md": "---\nid: 2017-1_중간_C030-Q2\nkind: 기출\nexam: \"2017-1 중간고사 (C030)\"\nnumber: \"2\"\npoints: 30\nsource: ../../2013-2019_중간/2017-1_중간_C030_모범답안.pdf\npdf_page: 3\nsource_lang: en\nfigures:\n  - {id: \"Q2\", role: problem, panels: []}\ntextbook_chapters: [10]\ndepends_on: []\nrefs: [\"2023-1_중간-Q4와 비슷한 질문 (부하 저항 불일치가 있는 MOS 차동 증폭기의 입력 CM 범위, A_CM, A_CM-DM, CMRR; 이 문제는 테일에 R_E가 더 있음)\"]\nselection:\n  topics:\n  - 차동 증폭기\n  circuit_types:\n  - MOS\n  - 차동\n  required_concepts:\n  - 차동 증폭기\n  - 소스·이미터 축퇴\n  - 공통 모드·차동 입력 범위\n  - 공통 모드 해석\n  - 소자·부하 불일치와 CM-DM 변환\n  - CMRR\n  - 소신호 전압 이득\n  learning_goals:\n  - $V_{in1,2}$ 공통 모드 입력의 입력 범위\n  - 차동 입력 $V_{in1} - V_{in2}$의 입력 범위\n  - $\\Delta R_C = 0$일 때 소신호 차동 이득 $A_{DM} = V_{out}/(V_{in1} - V_{in2})$\n  - $\\Delta R_C = 0$일 때 공통 모드 이득 $A_{CM}$\n  - $\\Delta R_C = 10\\ \\Omega$일 때 공통 모드 입력에서 차동 출력으로의 이득 $A_{CM-DM}$\n  - CMRR\n  evidence_sections:\n  - 구할 것\n  - 풀이\n  subpart_requirements:\n  - label: '1'\n    required_concepts:\n    - 공통 모드·차동 입력 범위\n  - label: '2'\n    required_concepts:\n    - 공통 모드·차동 입력 범위\n  - label: '3'\n    required_concepts:\n    - 소신호 전압 이득\n  - label: '4'\n    required_concepts:\n    - 공통 모드 해석\n    - 소신호 전압 이득\n  - label: '5'\n    required_concepts:\n    - 공통 모드 해석\n    - 소신호 전압 이득\n  - label: '6'\n    required_concepts:\n    - CMRR\n    - 공통 모드 해석\n  review_status: draft\n  reviewed_content_sha256: bbdac9c0e14ce8f017e34d8203a89063095adafaa119eb920b0e55efa7ad6eb0\n  classification_note: 제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.\n---\n# 기출 2017-1 중간 (C030) 2 — R_E 축퇴 테일과 부하 저항 불일치 ΔR_C가 있는 MOS 차동 증폭기의 입력 범위, A_DM, A_CM, A_CM-DM, CMRR\n\n## 원문\n$V_{DD}=3\\text{V}$, $\\mu_n C_{ox} = 100\\ \\text{uA/V}^2$, $V_{TH,N} =0.4\\text{V}$, $\\lambda_n=0.1\\ \\text{V}^{-1}$,\n\n$I_{D1}=100\\text{uA}$, $(W/L)_1=50$, $(W/L)_{2,3} = 25$ , $R_E=R_c=10\\ \\text{kohm}$\n\n1) Calculate input range of common-mode input of $V_{in1,2}$ (5pt)\n\n2) Calculate input range of differential input ($V_{in1}$-$V_{in2}$) (5pt)\n\n3) Calculate small signal differential gain $A_{DM}$ ($V_{out}/(V_{in1}$-$V_{in2}$)) when $\\Delta R_C=0$ (5pt)\n\n4) Calculate common-mode gain $A_{CM}$ when $\\Delta R_C=0$ (5pt)\n\n5) Calculate common-mode input to differential output gain $A_{CM-DM}$ when $\\Delta R_C = 10\\text{ohm}$ (5pt)\n\n6) Calculate CMRR (5pt)\n\n## 조건\n- 회로: 그림의 차동 증폭기 ($M_2$–$M_3$ 차동쌍, 테일은 $R_E$와 $V_{b1}$로 바이어스한 $M_1$ 전류원) (괄호 안은 원문에 없음)\n- $V_{DD} = 3\\ \\text{V}$\n- 그림에는 전원이 $V_{CC}$로 인쇄됨. 문제 문장의 $V_{DD}$를 이 전원 값으로 봄 (원문에 없음)\n- $\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$ (원문 표기는 uA/V²)\n- $V_{TH,N} = 0.4\\ \\text{V}$, $\\lambda_n = 0.1\\ \\text{V}^{-1}$\n- $I_{D1} = 100\\ \\mu\\text{A}$ (원문 표기는 100uA)\n- $(W/L)_1 = 50$, $(W/L)_2 = (W/L)_3 = 25$ (원문 표기 $(W/L)_{2,3} = 25$)\n- $R_E = R_C = 10\\ \\text{k}\\Omega$ (원문 표기 $R_c$ = 10 kohm, 그림 라벨은 $R_C$)\n- 3), 4) 전용: $\\Delta R_C = 0$\n- 5) 전용: $\\Delta R_C = 10\\ \\Omega$ (원문 표기 10ohm)\n- 바이어스 전압 $V_{b1}$ 값은 주어지지 않음 (원문에 없음)\n\n## 구할 것\n- 1) $V_{in1,2}$ 공통 모드 입력의 입력 범위\n- 2) 차동 입력 $V_{in1} - V_{in2}$의 입력 범위\n- 3) $\\Delta R_C = 0$일 때 소신호 차동 이득 $A_{DM} = V_{out}/(V_{in1} - V_{in2})$\n- 4) $\\Delta R_C = 0$일 때 공통 모드 이득 $A_{CM}$\n- 5) $\\Delta R_C = 10\\ \\Omega$일 때 공통 모드 입력에서 차동 출력으로의 이득 $A_{CM-DM}$\n- 6) CMRR\n\n## 회로 — Fig Q2\n```spice\nRC1  VCC   out1  {R_C}          ; 인쇄 라벨 R_C\nRC2  VCC   out2  {R_C+ΔR_C}     ; 인쇄 라벨 R_C + ΔR_C\nM2   out1  Vin1  n1    nmos\nM3   out2  Vin2  n1    nmos     ; 좌우 반전 (게이트 오른쪽)\nRE   n1    n2    {R_E}\nM1   n2    Vb1   0     nmos\n* out1, out2 = 두 출력 선 끝. 그 사이에 + V_out − 라벨 하나 (차동 출력, out1 쪽 +)\n```\n- 단자: VCC = 전원, 그림에는 값 없음 (가로 레일, 문제 문장에 V_DD = 3 V) / Vb1 = 이상적 DC 바이어스, 값 미지정 (선 끝) / Vin1, Vin2 = 입력 (선 끝) / out1, out2 = 차동 출력 V_out의 두 단자 (선 끝, 각각에는 라벨 없음)\n- 표시: 노드 라벨 V_CC (레일 오른쪽 끝), V_out (두 출력 선 끝 사이), V_in1 (M2 게이트 선 왼쪽 끝), V_in2 (M3 게이트 선 오른쪽 끝), V_b1 (M1 게이트 선 왼쪽 끝) / 소자 라벨 R_C (왼쪽 저항 왼쪽), R_C + ΔR_C (오른쪽 저항 오른쪽), M_2 (M2 오른쪽), M_3 (M3 왼쪽), R_E (R_E 오른쪽), M_1 (M1 오른쪽) / 부호 + (out1 선 끝 오른쪽 위, V_out 왼쪽), − (out2 선 끝 왼쪽 위, V_out 오른쪽 위) / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 맨 위 굵은 가로 레일 V_CC (왼쪽 끝은 R_C 세로선 조금 왼쪽, 오른쪽 끝에 라벨) / 왼쪽 세로줄 위→아래 R_C, out1 접속점, M2 / 오른쪽 세로줄 위→아래 R_C + ΔR_C, out2 접속점, M3 / 세 MOSFET 모두 소스 화살표 없는 기호 / M2 nmos 보통 방향(게이트 왼쪽, 드레인 위, 소스 아래), M3 nmos 좌우 반전(게이트 막대 오른쪽, 드레인 왼쪽 위, 소스 왼쪽 아래) / out1 접속점에서 짧은 가로선이 오른쪽으로, out2 접속점에서 짧은 가로선이 왼쪽으로 나가 가운데에서 마주 보고 끝남 (그 사이에 + V_out −) / V_in1 → 가로선 → M2 게이트, M3 게이트 → 가로선 → V_in2 / 두 소스는 아래로 내려가 가로선으로 가운데 n1 점에서 만남, n1에서 아래로 R_E, 그 아래 M1 (nmos 보통 방향, 게이트 왼쪽), V_b1 → 가로선 → M1 게이트, M1 소스 아래 접지 / 접속점 (세 갈래 이상, 3곳): ① out1 = 위 R_C + 아래 M2 드레인 + 오른쪽 출력선 (점) ② out2 = 위 R_C + ΔR_C + 아래 M3 드레인 + 왼쪽 출력선 (점) ③ n1 = 왼쪽 M2 소스 선 + 오른쪽 M3 소스 선 + 아래 R_E (점) / 교차: 없음\n\n![Q2](figures/fig-Q2.png)\n\n## 힌트\n### (4) 공통 모드 반회로로 보기\n- 두 입력이 같이 움직이면 두 소스 전류가 함께 꼬리로 흘러, 반쪽 회로에서는 꼬리 저항이 두 배로 보인다\n- $M_1$은 게이트가 DC 바이어스라 소신호로는 $r_{O1}$만 남고, 그 위에 $R_E$가 직렬로 쌓인다\n\n## 풀이\n### (1)–(3) 입력 범위와 차동 이득\n- 바이어스에서는 $\\lambda_n$ 무시, $I_{D2} = I_{D1}/2 = 50\\ \\mu\\text{A}$, $V_{ov} = \\sqrt{2I_D/(\\mu_n C_{ox} W/L)}$: $V_{ov1} = V_{ov2} = 0.200\\ \\text{V}$, $V_{GS2} = 0.600\\ \\text{V}$\n- (1) 아래 한계 $V_{GS2} + I_{D1}R_E + V_{ov1}$ ($M_1$ 포화)는 $1.80\\ \\text{V}$, 위 한계 $V_{DD} - I_{D2}R_C + V_{TH,N}$ ($M_2$ 포화)는 $2.90\\ \\text{V}$\n- (2) 한쪽이 $I_{D1}$을 다 받을 때까지: $|V_{in1}-V_{in2}|_{max}=\\sqrt{2}V_{ov2}$, 곧 $0.283\\ \\text{V}$\n- (3) $g_m = 2I_{D2}/V_{ov2} = 0.500\\ \\text{mS}$, $r_{O2} = 1/(\\lambda_n I_{D2})$, 곧 $200\\ \\text{k}\\Omega$. 꼬리 노드는 가상 접지라 $A_{DM}=-g_m(R_C\\parallel r_{O2})=-4.76$ ($r_{O2}$를 빼면 $-5.00$, CMRR $1.11 \\times 10^5$)\n### (4)–(6) 공통 모드 이득과 CMRR\n- (4) 두 소스 전류가 함께 꼬리로 흘러 반회로의 꼬리 저항은 $2R_{SS}$다. $M_1$은 게이트가 DC라 $r_{O1} = 100\\ \\text{k}\\Omega$만 남아 $R_{SS}=R_E+r_{O1}=110\\ \\text{k}\\Omega$\n- 단일 출력 $A_{CM}=-R_C/(1/g_m+2R_{SS})=-0.0450$이고, 차동 출력 $V_{out}$으로는 두 출력이 같이 움직여 0이다\n- (5) 전류 변화는 같고 부하만 $\\Delta R_C$ 다르다: $A_{CM-DM}=\\Delta R_C/(1/g_m+2R_{SS})$, 곧 $4.50 \\times 10^{-5}$\n- (6) $\\text{CMRR}=|A_{DM}/A_{CM-DM}|$, 곧 $1.06 \\times 10^5$ (100 dB)\n### 답\n- (1) $1.80$–$2.90\\ \\text{V}$\n- (2) $\\pm 0.283\\ \\text{V}$\n- (3) $A_{DM} \\approx -4.76$\n- (4) 단일 출력 $A_{CM} \\approx -0.0450$ (차동 출력으로는 0)\n- (5) $A_{CM-DM} \\approx 4.50 \\times 10^{-5}$\n- (6) $\\text{CMRR} \\approx 1.06 \\times 10^5$ (100 dB)\n",
+  "schema_version": 1,
+  "sections": [
+    {
+      "heading": "원문",
+      "markdown": "$V_{DD}=3\\text{V}$, $\\mu_n C_{ox} = 100\\ \\text{uA/V}^2$, $V_{TH,N} =0.4\\text{V}$, $\\lambda_n=0.1\\ \\text{V}^{-1}$,\n\n$I_{D1}=100\\text{uA}$, $(W/L)_1=50$, $(W/L)_{2,3} = 25$ , $R_E=R_c=10\\ \\text{kohm}$\n\n1) Calculate input range of common-mode input of $V_{in1,2}$ (5pt)\n\n2) Calculate input range of differential input ($V_{in1}$-$V_{in2}$) (5pt)\n\n3) Calculate small signal differential gain $A_{DM}$ ($V_{out}/(V_{in1}$-$V_{in2}$)) when $\\Delta R_C=0$ (5pt)\n\n4) Calculate common-mode gain $A_{CM}$ when $\\Delta R_C=0$ (5pt)\n\n5) Calculate common-mode input to differential output gain $A_{CM-DM}$ when $\\Delta R_C = 10\\text{ohm}$ (5pt)\n\n6) Calculate CMRR (5pt)"
+    },
+    {
+      "heading": "조건",
+      "markdown": "- 회로: 그림의 차동 증폭기 ($M_2$–$M_3$ 차동쌍, 테일은 $R_E$와 $V_{b1}$로 바이어스한 $M_1$ 전류원) (괄호 안은 원문에 없음)\n- $V_{DD} = 3\\ \\text{V}$\n- 그림에는 전원이 $V_{CC}$로 인쇄됨. 문제 문장의 $V_{DD}$를 이 전원 값으로 봄 (원문에 없음)\n- $\\mu_n C_{ox} = 100\\ \\mu\\text{A/V}^2$ (원문 표기는 uA/V²)\n- $V_{TH,N} = 0.4\\ \\text{V}$, $\\lambda_n = 0.1\\ \\text{V}^{-1}$\n- $I_{D1} = 100\\ \\mu\\text{A}$ (원문 표기는 100uA)\n- $(W/L)_1 = 50$, $(W/L)_2 = (W/L)_3 = 25$ (원문 표기 $(W/L)_{2,3} = 25$)\n- $R_E = R_C = 10\\ \\text{k}\\Omega$ (원문 표기 $R_c$ = 10 kohm, 그림 라벨은 $R_C$)\n- 3), 4) 전용: $\\Delta R_C = 0$\n- 5) 전용: $\\Delta R_C = 10\\ \\Omega$ (원문 표기 10ohm)\n- 바이어스 전압 $V_{b1}$ 값은 주어지지 않음 (원문에 없음)"
+    },
+    {
+      "heading": "구할 것",
+      "markdown": "- 1) $V_{in1,2}$ 공통 모드 입력의 입력 범위\n- 2) 차동 입력 $V_{in1} - V_{in2}$의 입력 범위\n- 3) $\\Delta R_C = 0$일 때 소신호 차동 이득 $A_{DM} = V_{out}/(V_{in1} - V_{in2})$\n- 4) $\\Delta R_C = 0$일 때 공통 모드 이득 $A_{CM}$\n- 5) $\\Delta R_C = 10\\ \\Omega$일 때 공통 모드 입력에서 차동 출력으로의 이득 $A_{CM-DM}$\n- 6) CMRR"
+    },
+    {
+      "heading": "회로 — Fig Q2",
+      "markdown": "```spice\nRC1  VCC   out1  {R_C}          ; 인쇄 라벨 R_C\nRC2  VCC   out2  {R_C+ΔR_C}     ; 인쇄 라벨 R_C + ΔR_C\nM2   out1  Vin1  n1    nmos\nM3   out2  Vin2  n1    nmos     ; 좌우 반전 (게이트 오른쪽)\nRE   n1    n2    {R_E}\nM1   n2    Vb1   0     nmos\n* out1, out2 = 두 출력 선 끝. 그 사이에 + V_out − 라벨 하나 (차동 출력, out1 쪽 +)\n```\n- 단자: VCC = 전원, 그림에는 값 없음 (가로 레일, 문제 문장에 V_DD = 3 V) / Vb1 = 이상적 DC 바이어스, 값 미지정 (선 끝) / Vin1, Vin2 = 입력 (선 끝) / out1, out2 = 차동 출력 V_out의 두 단자 (선 끝, 각각에는 라벨 없음)\n- 표시: 노드 라벨 V_CC (레일 오른쪽 끝), V_out (두 출력 선 끝 사이), V_in1 (M2 게이트 선 왼쪽 끝), V_in2 (M3 게이트 선 오른쪽 끝), V_b1 (M1 게이트 선 왼쪽 끝) / 소자 라벨 R_C (왼쪽 저항 왼쪽), R_C + ΔR_C (오른쪽 저항 오른쪽), M_2 (M2 오른쪽), M_3 (M3 왼쪽), R_E (R_E 오른쪽), M_1 (M1 오른쪽) / 부호 + (out1 선 끝 오른쪽 위, V_out 왼쪽), − (out2 선 끝 왼쪽 위, V_out 오른쪽 위) / 화살표 없음 / 수치·면적 라벨 없음\n- 배치: 맨 위 굵은 가로 레일 V_CC (왼쪽 끝은 R_C 세로선 조금 왼쪽, 오른쪽 끝에 라벨) / 왼쪽 세로줄 위→아래 R_C, out1 접속점, M2 / 오른쪽 세로줄 위→아래 R_C + ΔR_C, out2 접속점, M3 / 세 MOSFET 모두 소스 화살표 없는 기호 / M2 nmos 보통 방향(게이트 왼쪽, 드레인 위, 소스 아래), M3 nmos 좌우 반전(게이트 막대 오른쪽, 드레인 왼쪽 위, 소스 왼쪽 아래) / out1 접속점에서 짧은 가로선이 오른쪽으로, out2 접속점에서 짧은 가로선이 왼쪽으로 나가 가운데에서 마주 보고 끝남 (그 사이에 + V_out −) / V_in1 → 가로선 → M2 게이트, M3 게이트 → 가로선 → V_in2 / 두 소스는 아래로 내려가 가로선으로 가운데 n1 점에서 만남, n1에서 아래로 R_E, 그 아래 M1 (nmos 보통 방향, 게이트 왼쪽), V_b1 → 가로선 → M1 게이트, M1 소스 아래 접지 / 접속점 (세 갈래 이상, 3곳): ① out1 = 위 R_C + 아래 M2 드레인 + 오른쪽 출력선 (점) ② out2 = 위 R_C + ΔR_C + 아래 M3 드레인 + 왼쪽 출력선 (점) ③ n1 = 왼쪽 M2 소스 선 + 오른쪽 M3 소스 선 + 아래 R_E (점) / 교차: 없음\n\n![Q2](figures/fig-Q2.png)"
+    },
+    {
+      "heading": "힌트",
+      "markdown": "### (4) 공통 모드 반회로로 보기\n- 두 입력이 같이 움직이면 두 소스 전류가 함께 꼬리로 흘러, 반쪽 회로에서는 꼬리 저항이 두 배로 보인다\n- $M_1$은 게이트가 DC 바이어스라 소신호로는 $r_{O1}$만 남고, 그 위에 $R_E$가 직렬로 쌓인다"
+    },
+    {
+      "heading": "풀이",
+      "markdown": "### (1)–(3) 입력 범위와 차동 이득\n- 바이어스에서는 $\\lambda_n$ 무시, $I_{D2} = I_{D1}/2 = 50\\ \\mu\\text{A}$, $V_{ov} = \\sqrt{2I_D/(\\mu_n C_{ox} W/L)}$: $V_{ov1} = V_{ov2} = 0.200\\ \\text{V}$, $V_{GS2} = 0.600\\ \\text{V}$\n- (1) 아래 한계 $V_{GS2} + I_{D1}R_E + V_{ov1}$ ($M_1$ 포화)는 $1.80\\ \\text{V}$, 위 한계 $V_{DD} - I_{D2}R_C + V_{TH,N}$ ($M_2$ 포화)는 $2.90\\ \\text{V}$\n- (2) 한쪽이 $I_{D1}$을 다 받을 때까지: $|V_{in1}-V_{in2}|_{max}=\\sqrt{2}V_{ov2}$, 곧 $0.283\\ \\text{V}$\n- (3) $g_m = 2I_{D2}/V_{ov2} = 0.500\\ \\text{mS}$, $r_{O2} = 1/(\\lambda_n I_{D2})$, 곧 $200\\ \\text{k}\\Omega$. 꼬리 노드는 가상 접지라 $A_{DM}=-g_m(R_C\\parallel r_{O2})=-4.76$ ($r_{O2}$를 빼면 $-5.00$, CMRR $1.11 \\times 10^5$)\n### (4)–(6) 공통 모드 이득과 CMRR\n- (4) 두 소스 전류가 함께 꼬리로 흘러 반회로의 꼬리 저항은 $2R_{SS}$다. $M_1$은 게이트가 DC라 $r_{O1} = 100\\ \\text{k}\\Omega$만 남아 $R_{SS}=R_E+r_{O1}=110\\ \\text{k}\\Omega$\n- 단일 출력 $A_{CM}=-R_C/(1/g_m+2R_{SS})=-0.0450$이고, 차동 출력 $V_{out}$으로는 두 출력이 같이 움직여 0이다\n- (5) 전류 변화는 같고 부하만 $\\Delta R_C$ 다르다: $A_{CM-DM}=\\Delta R_C/(1/g_m+2R_{SS})$, 곧 $4.50 \\times 10^{-5}$\n- (6) $\\text{CMRR}=|A_{DM}/A_{CM-DM}|$, 곧 $1.06 \\times 10^5$ (100 dB)\n### 답\n- (1) $1.80$–$2.90\\ \\text{V}$\n- (2) $\\pm 0.283\\ \\text{V}$\n- (3) $A_{DM} \\approx -4.76$\n- (4) 단일 출력 $A_{CM} \\approx -0.0450$ (차동 출력으로는 0)\n- (5) $A_{CM-DM} \\approx 4.50 \\times 10^{-5}$\n- (6) $\\text{CMRR} \\approx 1.06 \\times 10^5$ (100 dB)"
+    }
+  ],
+  "selection": {
+    "circuit_types": [
+      "MOS",
+      "차동"
+    ],
+    "classification_note": "제목·구할 것·풀이 구획 기반 초기 분류. 소문항 개념은 비망라적이며 전역 필요 개념과 원문·회로·풀이를 함께 확인한다. 수업 범위 적합성 및 정답 검산 승인이 아니다.",
+    "evidence_sections": [
+      "구할 것",
+      "풀이"
+    ],
+    "learning_goals": [
+      "$V_{in1,2}$ 공통 모드 입력의 입력 범위",
+      "차동 입력 $V_{in1} - V_{in2}$의 입력 범위",
+      "$\\Delta R_C = 0$일 때 소신호 차동 이득 $A_{DM} = V_{out}/(V_{in1} - V_{in2})$",
+      "$\\Delta R_C = 0$일 때 공통 모드 이득 $A_{CM}$",
+      "$\\Delta R_C = 10\\ \\Omega$일 때 공통 모드 입력에서 차동 출력으로의 이득 $A_{CM-DM}$",
+      "CMRR"
+    ],
+    "required_concepts": [
+      "차동 증폭기",
+      "소스·이미터 축퇴",
+      "공통 모드·차동 입력 범위",
+      "공통 모드 해석",
+      "소자·부하 불일치와 CM-DM 변환",
+      "CMRR",
+      "소신호 전압 이득"
+    ],
+    "review_status": "draft",
+    "reviewed_content_sha256": "bbdac9c0e14ce8f017e34d8203a89063095adafaa119eb920b0e55efa7ad6eb0",
+    "status": "draft",
+    "subpart_requirements": [
+      {
+        "label": "1",
+        "required_concepts": [
+          "공통 모드·차동 입력 범위"
+        ]
+      },
+      {
+        "label": "2",
+        "required_concepts": [
+          "공통 모드·차동 입력 범위"
+        ]
+      },
+      {
+        "label": "3",
+        "required_concepts": [
+          "소신호 전압 이득"
+        ]
+      },
+      {
+        "label": "4",
+        "required_concepts": [
+          "공통 모드 해석",
+          "소신호 전압 이득"
+        ]
+      },
+      {
+        "label": "5",
+        "required_concepts": [
+          "공통 모드 해석",
+          "소신호 전압 이득"
+        ]
+      },
+      {
+        "label": "6",
+        "required_concepts": [
+          "CMRR",
+          "공통 모드 해석"
+        ]
+      }
+    ],
+    "topics": [
+      "차동 증폭기"
+    ]
+  },
+  "subparts": [
+    {
+      "ask_md": "$V_{in1,2}$ 공통 모드 입력의 입력 범위",
+      "label": "1",
+      "required_concepts": [
+        "공통 모드·차동 입력 범위"
+      ]
+    },
+    {
+      "ask_md": "차동 입력 $V_{in1} - V_{in2}$의 입력 범위",
+      "label": "2",
+      "required_concepts": [
+        "공통 모드·차동 입력 범위"
+      ]
+    },
+    {
+      "ask_md": "$\\Delta R_C = 0$일 때 소신호 차동 이득 $A_{DM} = V_{out}/(V_{in1} - V_{in2})$",
+      "label": "3",
+      "required_concepts": [
+        "소신호 전압 이득"
+      ]
+    },
+    {
+      "ask_md": "$\\Delta R_C = 0$일 때 공통 모드 이득 $A_{CM}$",
+      "label": "4",
+      "required_concepts": [
+        "공통 모드 해석",
+        "소신호 전압 이득"
+      ]
+    },
+    {
+      "ask_md": "$\\Delta R_C = 10\\ \\Omega$일 때 공통 모드 입력에서 차동 출력으로의 이득 $A_{CM-DM}$",
+      "label": "5",
+      "required_concepts": [
+        "공통 모드 해석",
+        "소신호 전압 이득"
+      ]
+    },
+    {
+      "ask_md": "CMRR",
+      "label": "6",
+      "required_concepts": [
+        "CMRR",
+        "공통 모드 해석"
+      ]
+    }
+  ],
+  "title": "R_E 축퇴 테일과 부하 저항 불일치 ΔR_C가 있는 MOS 차동 증폭기의 입력 범위, A_DM, A_CM, A_CM-DM, CMRR"
+}
