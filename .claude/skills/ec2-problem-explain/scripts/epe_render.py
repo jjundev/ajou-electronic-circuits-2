@@ -14,6 +14,7 @@ from epe_shared import parse, inner, outer, compact, Ctx, convert, check_md
 from epe_source import sha256, inside, existing_path
 from epe_types import BUNDLE, ExplainError, Artifacts
 from epe_labels import normalize_subpart_labels
+from epe_core import make_overlay
 
 ASSETS = Path(__file__).resolve().parents[1] / 'assets'
 
@@ -185,14 +186,21 @@ def build_explanation(pack, fragments, stage: Path, repo: Path) -> Artifacts:
     ctx = Ctx([(html_path.name, md_path.name)], str(bundle / fig_name), fig_name, prefix='explain', rebase='../')
     convert_markdown(html_path, md_path, ctx)
     manifest_path = data_dir / 'manifest.json'
-    files = tuple(sorted(p for p in stage.rglob('*') if p.is_file()))
-    dump(manifest_path, {'version': 1, 'profile': pack.profile, 'range': pack.range, 'slug': pack.slug,
-                         'source': str(pack.path), 'source_sha256': pack.sha256,
-                         'review_policy_version': POLICY_VERSION, 'source_resources': source_resources(pack,repo), 'inputs': list(pack.inputs),
-                         'input_hash': payload_hash(pack, fragments), 'reading_key': values['RANGE'],
-                         'destination': str(pack.folder), 'repo': str(repo.resolve()),
-                         'problems': [{'id': p.id, 'subparts': list(p.subparts)} for p in pack.problems],
-                         'files': {p.relative_to(stage).as_posix(): sha256(p) for p in files}})
+    overlay_path = data_dir / 'answer-overlay.json'
+    manifest = {'version': 1, 'profile': pack.profile, 'range': pack.range, 'slug': pack.slug,
+                'source': str(pack.path), 'source_sha256': pack.sha256,
+                'review_policy_version': POLICY_VERSION, 'source_resources': source_resources(pack, repo),
+                'inputs': list(pack.inputs), 'input_hash': payload_hash(pack, fragments),
+                'reading_key': values['RANGE'], 'destination': str(pack.folder), 'repo': str(repo.resolve()),
+                'problems': [{'id': p.id, 'subparts': list(p.subparts)} for p in pack.problems],
+                'learning_style': pack.learning_style,
+                'answer_overlay': overlay_path.relative_to(stage).as_posix(), 'files': {}}
+    # The exporter reads the original-fragment hash from this provisional manifest.
+    dump(manifest_path, manifest)
+    dump(overlay_path, make_overlay(pack, html_path, repo))
+    files = tuple(sorted(p for p in stage.rglob('*') if p.is_file() and p != manifest_path))
+    manifest['files'] = {p.relative_to(stage).as_posix(): sha256(p) for p in files}
+    dump(manifest_path, manifest)
     return Artifacts(html_path, md_path, manifest_path, tuple(sorted((*files, manifest_path))))
 
 def check_artifacts(pack, artifacts):
@@ -200,6 +208,21 @@ def check_artifacts(pack, artifacts):
     try:
         root = artifacts.html.parent.resolve()
         manifest = json.loads(artifacts.manifest.read_text(encoding='utf-8'))
+        if type(manifest.get('version')) is not int or manifest['version'] != 1:
+            errors.append('지원하지 않는 manifest version')
+        if manifest.get('learning_style') != pack.learning_style:
+            errors.append('manifest 개인 명세 불일치')
+        overlay_name = f'{BUNDLE}/{names(pack)[2]}/answer-overlay.json'
+        if manifest.get('answer_overlay') != overlay_name or overlay_name not in manifest['files']:
+            errors.append('답안 overlay 경로/파일 hash 누락')
+        else:
+            overlay = json.loads((root / overlay_name).read_text(encoding='utf-8'))
+            if (not isinstance(overlay, dict)
+                    or type(overlay.get('schema_version')) is not int or overlay['schema_version'] != 1
+                    or overlay.get('review_policy_version') != POLICY_VERSION
+                    or overlay.get('learning_style') != pack.learning_style
+                    or overlay.get('input_hash') != manifest['input_hash']):
+                errors.append('답안 overlay version/개인 명세/입력 불일치')
         if manifest['source_sha256'] != pack.sha256 or manifest['source'] != str(pack.path) \
                 or manifest.get('inputs') != list(pack.inputs):
             errors.append('manifest 입력 불일치')

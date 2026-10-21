@@ -30,7 +30,11 @@ class LayoutTest(unittest.TestCase):
                                  self.tmp / 'stage', self.repo)
 
     def test_summary_preserves_math_when_navigating_after_render(self):
-        artifact = self.build()
+        self.pack = replace(self.pack, problems=tuple(
+            replace(p, title=p.title + f' $H_{{{i}}}$') for i, p in enumerate(self.pack.problems, 1)))
+        bodies = {p.id: fragment(p).replace('시작·판단·검산', f'요약 $S_{{{i}}}$')
+                  for i, p in enumerate(self.pack.problems, 1)}
+        artifact = self.build(bodies)
         for width in (375, 1440):
             with sync_playwright() as playwright:
                 browser = playwright.chromium.launch(headless=True)
@@ -40,13 +44,18 @@ class LayoutTest(unittest.TestCase):
                     page.evaluate('(id)=>{location.hash=id}', problem_id)
                     page.wait_for_function('(id)=>document.querySelector("#"+id).hidden===false', arg=problem_id)
                     heading = page.locator(f'#{problem_id} h3')
-                    summary = page.locator('#sum-for')
-                    self.assertEqual(summary.locator('.katex').count(), heading.locator('.katex').count())
-                    self.assertEqual(summary.inner_html(), heading.inner_html())
+                    # #sum-for owns the authored summaries; article headings stay in the article.
+                    summary = page.locator('#sum-for > .sum:not([hidden])')
+                    self.assertEqual(summary.count(), 1)
+                    index = problem_id[1:]
+                    self.assertEqual(heading.locator('.katex annotation').all_text_contents(), [f'H_{{{index}}}'])
+                    self.assertEqual(summary.locator('.katex annotation').all_text_contents(), [f'S_{{{index}}}'])
+                    self.assertIn('요약', summary.text_content())
                 self.assertEqual(page.locator('.katex-error').count(), 0)
                 page.evaluate('location.hash="intro"')
-                page.wait_for_function('document.querySelector("#sum-for").textContent==="전체 흐름"')
-                self.assertEqual(page.locator('#sum-for .katex').count(), 0)
+                page.wait_for_function('!document.querySelector("#sum-empty").hidden')
+                self.assertEqual(page.locator('#sum-for > .sum:not([hidden])').count(), 0)
+                self.assertEqual(page.locator('#sum-for .katex').count(), 2)
                 browser.close()
 
     def test_short_math_and_layer_spacing_remain_readable(self):

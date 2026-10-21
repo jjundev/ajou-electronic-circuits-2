@@ -8,11 +8,14 @@ from epe_files import publish_files
 from epe_render import artifact_hashes, check_artifacts, dump, names
 from epe_source import sha256, inside, load_source
 from epe_types import BUNDLE, ExplainError
+from epe_shared import check_style
+from epe_core import make_overlay
 
 
 def publish_explanation(pack, artifacts, fragments, reviews, destination, backup_dir, repo):
     try:
         repo = Path(repo)
+        check_style(repo, pack.learning_style)
         if load_source(pack.path, repo) != pack:
             raise ExplainError('입력 변경: 설명을 다시 검증하세요')
         destination = Path(destination).absolute()
@@ -32,12 +35,20 @@ def publish_explanation(pack, artifacts, fragments, reviews, destination, backup
         references = reviews.get('references')
         if not isinstance(references, list):
             raise ExplainError('참조 자료 hash 목록 필요')
+        style_path = inside(repo / pack.learning_style['path'], repo)
+        if not any(isinstance(ref, dict) and isinstance(ref.get('path'), str)
+                   and Path(ref['path']).resolve() == style_path.resolve()
+                   and ref.get('sha256') == pack.learning_style['sha256'] for ref in references):
+            raise ExplainError('개인 명세 참조 hash 누락/불일치')
         for reference in references:
             path = inside(Path(reference['path']), repo)
             if not path.is_file() or sha256(path) != reference['sha256']:
                 raise ExplainError('참조 자료 변경: ' + str(path))
         if not verified_references(references,repo,repo)[1]:
             raise ExplainError('발행 보류: 참조 그림을 포함한 모든 참조 hash 필요')
+        overlay = json.loads((artifacts.html.parent / manifest['answer_overlay']).read_text(encoding='utf-8'))
+        if overlay != make_overlay(pack, artifacts.html, repo):
+            raise ExplainError('답안 overlay와 최종 stage/입력 불일치')
         stage_root = artifacts.html.parent.resolve()
         stem, fig_name, data_name = names(pack)
         allowed_roots = {fig_name, data_name}

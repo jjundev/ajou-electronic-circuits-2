@@ -45,8 +45,12 @@ def test_legacy_policy_cannot_reuse_approval():
 
 def test_current_policy_reuses_only_when_inputs_and_references_verified():
     from epe_review_policy import carry_reviews, POLICY_VERSION
-    old={'review_policy_version':POLICY_VERSION,'content':{'status':'pass'},'independent':{'status':'pass'}}
-    fresh={'content':{'status':'not_run'},'independent':{'status':'not_run'},'browser':{'status':'not_run'}}
+    from _util import approved, pack
+    from epe_contract import initial_reviews
+    source = pack()
+    fragments = {p.id: fragment(p) for p in source.problems}
+    old = approved(source, fragments)
+    fresh = initial_reviews(source, fragments)
     assert carry_reviews(old,fresh,[],True)['content']['status']=='pass'
     assert carry_reviews(old,fresh,[],True)['browser']['status']=='not_run'
     assert carry_reviews(old,fresh,[],False)['independent']['status']=='not_run'
@@ -81,10 +85,23 @@ def test_canonically_equal_sibling_directory_is_not_inside_repo(tmp_path):
     from epe_types import ExplainError
     repo=tmp_path/'저장소'
     other=tmp_path/unicodedata.normalize('NFD','저장소')
-    repo.mkdir();other.mkdir()
+    repo.mkdir()
+    other.mkdir(exist_ok=True)
     source=other/'outside.txt';source.write_text('outside')
+    if repo.samefile(other):
+        # APFS treats the two spellings as one directory: this is actually inside.
+        canonical = repo / source.name
+        assert canonical.samefile(source)
+        assert inside(canonical, repo).samefile(source)
+    else:
+        # Filesystems retaining distinct NFC/NFD siblings must reject the lookalike.
+        with pytest.raises(ExplainError,match='저장소 밖'):
+            inside(source,repo)
+    distinct = tmp_path / 'distinct-outside'
+    distinct.mkdir()
+    outside = distinct / 'outside.txt'; outside.write_text('outside')
     with pytest.raises(ExplainError,match='저장소 밖'):
-        inside(source,repo)
+        inside(outside,repo)
 
 
 def published_fixture(tmp_path, reference=False):
@@ -107,7 +124,7 @@ def published_fixture(tmp_path, reference=False):
     if reference:
         from epe_source import sha256
         ref=repo/'reference.html';ref.write_text('<p>theory</p>',encoding='utf-8')
-        reviews['references']=[{'path':str(ref),'sha256':sha256(ref)}]
+        reviews['references'].append({'path':str(ref),'sha256':sha256(ref)})
     destination=item['pack'].folder
     shutil.copytree(artifacts.html.parent,destination,dirs_exist_ok=True)
     data=destination/artifacts.manifest.relative_to(artifacts.html.parent).parent

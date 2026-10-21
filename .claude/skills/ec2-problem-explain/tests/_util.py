@@ -121,7 +121,14 @@ def approved(pack, fragments, artifacts=None):
               'source_visual': dict(base), 'browser': dict(base),
               'content': {**base, 'items': {k: dict(base) for k in keys}},
               'independent': {**base, 'items': {k: {**base, 'method': 'exact', 'conclusion': '1=1'} for k in keys}},
-              'references': []}
+              'learning_style_audit': {'learning_style': pack.learning_style, 'items': {k: {
+                  'status': 'pass', 'reviewer': 'unit test fixture (not actual review)',
+                  'rules': {rule: {'disposition': 'not_applicable',
+                      'evidence': 'unit test fixture only; no actual semantic review'}
+                      for rule in pack.learning_style['rule_ids']}} for k in keys}},
+              'references': [{'path': next((name for name in pack.inputs
+                  if name.endswith('/' + pack.learning_style['path'])),
+                  str(REPO / pack.learning_style['path'])), 'sha256': pack.learning_style['sha256']}]}
     if artifacts:
         from epe_render import artifact_hashes
         result['artifact_hashes'] = artifact_hashes(artifacts)

@@ -10,9 +10,9 @@ from dataclasses import replace, fields
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 from epe_source import inside, load_source, sha256, existing_path
-from epe_shared import parse
+from epe_shared import parse, STYLE_PATH
 from epe_types import ExplainError
-from epe_review_policy import carry_reviews
+from epe_review_policy import carry_reviews, POLICY_VERSION
 
 CODE_RE = re.compile(r'<style\b[^>]*>.*?</style>|<script\b(?![^>]*application/json)[^>]*>.*?</script>',re.S|re.I)
 
@@ -135,6 +135,9 @@ def verified_references(references, old_repo, repo):
             return carried,False
         digest=sha256(current)
         if digest != ref['sha256']:
+            if current.resolve() == (repo / STYLE_PATH).resolve():
+                print('rerender: 개인 명세 바이트 변경: 개인화 검토를 다시 하세요')
+                return carried,False
             old=git_blob(path,ref['sha256'])
             if old is None or current.suffix.lower() not in ('.html','.md') or not equivalent_text(old,current.read_bytes(),path,current,repo):
                 print('rerender: 참조 자료 변경: 검토를 다시 하세요: '+path.name)
@@ -204,7 +207,13 @@ def rerender(repo,target,run):
                     inside(child,repo)
                 shutil.copytree(evidence,folder/'evidence',dirs_exist_ok=True)
             fragments=load_fragments(item)
-            same=stored.get('input_hash')==payload_hash(pack,fragments)
+            if any(not list(parse(fragments[p.id]).find_all(
+                    lambda n: n.attrs.get('data-personalization') == 'route')) for p in pack.problems):
+                raise ExplainError('핵심 풀이 route 없음: 새 저작 필요')
+            same=(stored.get('input_hash')==payload_hash(pack,fragments)
+                  and manifest.get('learning_style')==pack.learning_style
+                  and manifest.get('review_policy_version')==POLICY_VERSION
+                  and type(manifest.get('version')) is int and manifest['version']==1)
             # Only HTML adapters can recover a style-only historical input. EC2's digest covers all MD/images.
             if not same and False and pack.profile=='review' and stored.get('input_hash'):
                 old=git_blob(pack.path,manifest.get('source_sha256',''))

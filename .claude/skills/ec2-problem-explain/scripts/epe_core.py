@@ -4,10 +4,10 @@ from pathlib import Path
 import re
 from urllib.parse import unquote, urlsplit
 
-from epe_shared import Node, parse, inner, check_style
+from epe_shared import Node, parse, inner, check_style, PERSONALIZED_REVIEW_POLICY
 from epe_types import ExplainError, Problem, SourcePack
 
-OVERLAY_POLICY_VERSION = 'problem-explain-2026-10-21-learning-style'
+OVERLAY_POLICY_VERSION = PERSONALIZED_REVIEW_POLICY
 CORE_MARKERS = ('data-core-subpart', 'data-solution-core', 'data-core-label')
 
 

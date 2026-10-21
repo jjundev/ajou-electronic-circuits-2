@@ -5,13 +5,13 @@ import json
 import math
 from collections import Counter
 from urllib.parse import urlsplit
-from epe_shared import Node, parse, math_delimiter_errors
+from epe_shared import Node, parse, math_delimiter_errors, validate_style_audit
 from epe_core import validate_core
 
 KEYS = ('understand', 'recall', 'start', 'solve', 'verify', 'pitfall', 'retry')
 
 def payload_hash(pack, fragments):
-    payload = {'source_sha256': pack.sha256, 'fragments': fragments}
+    payload = {'source_sha256': pack.sha256, 'fragments': fragments, 'learning_style': pack.learning_style}
     return hashlib.sha256(json.dumps(payload, ensure_ascii=False, sort_keys=True,
                                     separators=(',', ':')).encode('utf-8')).hexdigest()
 
@@ -90,7 +90,14 @@ def validate_fragment(problem, fragment):
 def initial_reviews(pack, fragments):
     keys = [f'{p.id}:{s}' for p in pack.problems for s in p.subparts]
     pending = {'status': 'not_run', 'reviewer': '', 'evidence': ''}
-    return {'review_policy_version': POLICY_VERSION, 'input_hash': payload_hash(pack, fragments), 'references': [],
+    style_path = next((name for name in pack.inputs
+                       if name.endswith('/' + pack.learning_style['path'])), None)
+    references = [{'path': style_path, 'sha256': pack.learning_style['sha256']}] if style_path else []
+    audit = {'learning_style': pack.learning_style, 'items': {k: {
+        'status': 'not_run', 'reviewer': '', 'rules': {rule: {
+            'disposition': '', 'evidence': ''} for rule in pack.learning_style['rule_ids']}} for k in keys}}
+    return {'review_policy_version': POLICY_VERSION, 'input_hash': payload_hash(pack, fragments),
+            'references': references, 'learning_style_audit': audit,
             'source_visual': dict(pending), 'browser': dict(pending),
             'content': {**pending, 'items': {k: dict(pending) for k in keys}},
             'independent': {**pending, 'items': {k: {**pending, 'method': '', 'conclusion': ''} for k in keys}}}
@@ -104,6 +111,8 @@ def validate_reviews(pack, fragments, reviews):
     if reviews.get('input_hash') != payload_hash(pack, fragments):
         errors.append('입력·조각 hash가 검토와 달라요')
     expected = {f'{p.id}:{s}' for p in pack.problems for s in p.subparts}
+    errors.extend('개인화: ' + error for error in validate_style_audit(
+        reviews.get('learning_style_audit'), pack.learning_style, sorted(expected)))
     def check(entry, label):
         if not isinstance(entry, dict):
             errors.append(f'{label}: 검토 없음')
