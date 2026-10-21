@@ -244,6 +244,8 @@ a:focus-visible { outline: .5mm solid var(--focus); outline-offset: .5mm; }
 :is(.sol-step-body, .sol-answer) .fig-danger { stroke: var(--overflow); fill: none; stroke-width: 2.5; }
 :is(.sol-step-body, .sol-answer) .fig-dot { fill: var(--kind); }
 :is(.sol-step-body, .sol-answer) .fig-text { fill: currentColor; font-size: 13px; font-family: inherit; }
+:is(.sol-step-body, .sol-answer) svg :is(.fig-dot, .fig-text)[data-node-color="blue"] { fill: #2563eb; }
+:is(.sol-step-body, .sol-answer) svg :is(.fig-dot, .fig-text)[data-node-color="red"] { fill: #dc2626; }
 :is(.sol-step-body, .sol-answer) .fig-muted { fill: var(--muted); font-size: 12px; font-family: inherit; }
 :is(.sol-step-body, .sol-answer) svg marker { fill: currentColor; }
 :is(.sol-step-body, .sol-answer) .axis { stroke: var(--muted); stroke-width: 1.5; }

@@ -35,6 +35,8 @@ svg {{ color: {LIGHT['ink']}; font-family: {FONT}; }}
 .fig-danger {{ stroke: {LIGHT['danger']}; fill: none; stroke-width: 2.5; }}
 .fig-dot {{ fill: {LIGHT['accent']}; }}
 .fig-text {{ fill: {LIGHT['ink']}; font-size: 13px; }}
+svg :is(.fig-dot, .fig-text)[data-node-color="blue"] {{ fill: {LIGHT['accent']}; }}
+svg :is(.fig-dot, .fig-text)[data-node-color="red"] {{ fill: {LIGHT['danger']}; }}
 .fig-muted {{ fill: {LIGHT['ink-2']}; font-size: 12px; }}
 .axis {{ stroke: {LIGHT['line']}; stroke-width: 1.5; }}
 .tick {{ fill: {LIGHT['ink-2']}; font-size: 11px; }}

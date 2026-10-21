@@ -149,6 +149,8 @@
     .fig-danger { stroke: var(--danger); fill: none; stroke-width: 2.5; }
     .fig-dot { fill: var(--accent); }
     .fig-text { fill: currentColor; font-size: 13px; font-family: inherit; }
+    svg :is(.fig-dot, .fig-text)[data-node-color="blue"] { fill: var(--accent, #2563eb); }
+    svg :is(.fig-dot, .fig-text)[data-node-color="red"] { fill: var(--danger, #dc2626); }
     .fig-muted { fill: var(--ink-2); font-size: var(--fs-fig); font-family: inherit; }
 
     footer { width: 100%; max-width: var(--measure); margin: 0 auto; padding: 0 var(--s5) var(--s6); color: var(--ink-2); font-size: var(--fs-small); }
