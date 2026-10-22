@@ -1,0 +1,332 @@
+{
+  "schema_version": 1,
+  "review_policy_version": "problem-explain-2026-10-21-learning-style",
+  "range": "1016",
+  "slug": "Miller_High_Frequency_Models",
+  "learning_style": {
+    "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
+    "sha256": "15dd74dba003093e0a3e627a7531d1b89dbc4b081ebfb2f04245d065758f62fe",
+    "rule_ids": [
+      "UNIT-01",
+      "CALC-01",
+      "CALC-02",
+      "CIRCUIT-01",
+      "CIRCUIT-02",
+      "GAIN-01",
+      "DEGEN-01",
+      "SCALE-01",
+      "BIAS-01",
+      "NOTATION-01",
+      "EXPLAIN-01",
+      "CORRECT-01"
+    ]
+  },
+  "input_hash": "b7ded7809712b2c29ffc8e665e73122940ca5d6c827b3afdaf16db170a4c2fc6",
+  "source_inputs": {
+    "복습노트/1016/.assets/problems.txt": "1bbbb0148cda2b6ed0d8ffe7d66bc6fe0339a206fcbd7428110107741743e3b8",
+    "복습노트/1016/.assets/display-titles.json": "878e396ffe812cde29dd97d916f3f63e528c8ad1ef26fefe023db9cc34370ff5",
+    "복습노트/1016/.assets/selection.json": "d447cf639b8ff7c66eb4f94644a8c91c2ddbfa46666ac34191aeea65628c9b5e",
+    "from_the_past/md/2023-1_중간/Q1.md": "eddf9e6e8977482418d9f600155ecfedd31c99560b8412e008fe30a7a48fd871",
+    "from_the_past/md/2019-1_중간/Q5.md": "d450e0278cf638bc3d8916b10f8fa32c5a829cea5c63b7698fa2be1afe1ef75a",
+    "교과서/마이크로전자회로/ch11/예제/E11.10.md": "6380019f02302a2ad0d137799569c114a55f127035d6956f44a1581ea9fbf162",
+    "교과서/마이크로전자회로/ch11/연습문제/X11.10.md": "2203f85710076dc0e1b6984aac3ac7ecb8d1b3b3b4c7f9cf70e17268634842b9",
+    "교과서/마이크로전자회로/ch11/장말문제/P11.16.md": "08baea0a857992d96fb09e0959ac2dc92359baec954357558dfbc79978644861",
+    "교과서/마이크로전자회로/ch11/장말문제/P11.22.md": "afa38325fa8b72c13a0f4444201dd30199dd7cc21ccf07346295c9a0123e39ec",
+    "교과서/마이크로전자회로/ch11/예제/E11.11.md": "2d032035e9f9f99233943b218f2ce38209339d28bf53217128766c6e0e6de0f3",
+    "교과서/마이크로전자회로/ch11/연습문제/X11.11.md": "d262d2327e86d7385b781c2d4363511bfce72a60459b404a3d4410f7aa2ce1a9",
+    "교과서/마이크로전자회로/ch11/예제/E11.13.md": "8fbf4399d2028eaa612157264c3e7daffcf107f1da3204cbed28b962d6fd640a",
+    "교과서/마이크로전자회로/ch11/연습문제/X11.13.md": "daa5db9495df806b2c6ba474af250efbb169a4815048c781f33337ba56c1ab35",
+    "교과서/마이크로전자회로/ch11/예제/E11.12.md": "0e8a0943e48b4011d426c84397749c1161da520b355d10df36b22aef880d68c6",
+    "교과서/마이크로전자회로/ch11/연습문제/X11.12.md": "4a03371291c9067eabe8c020aacefafbee8f559fd18ddde30fdb7485a684fce5",
+    "교과서/마이크로전자회로/ch11/figures/fig11-16-a.png": "654cc11a78cb4ec038adbf1fa33969708009ce71f16dba3bedea8ad3e9f48aff",
+    "교과서/마이크로전자회로/ch11/figures/fig11-70.png": "19fd8508ebbcc2dd7094b7e20df14c2b17c2cc5f3d77068a7a6dbbf20c44f779",
+    "교과서/마이크로전자회로/ch11/figures/fig11-76.png": "45e89623e13b6ae376cc352b5ee4e247c0bfa1ff3e26e6f1e9e3df7e3ee5d39d",
+    "교과서/마이크로전자회로/ch11/figures/fig11-18.png": "73c05d212e4444a2fd3cdcb3cea3a73be6047d5c47634a7cf8f88871b2009d77",
+    "교과서/마이크로전자회로/ch11/figures/fig11-28-a.png": "aa86e35636c569fbf2a7a8f651609f6c72288207b9c3382b9d1ae21bb522a181",
+    "교과서/마이크로전자회로/ch11/figures/fig11-24-a.png": "0a58bc2b53d772d66a101f349e6196aff64d5d67886a573b263130f1b4f04565",
+    ".claude/skills/ec2-review-pack/references/solution-style.md": "15dd74dba003093e0a3e627a7531d1b89dbc4b081ebfb2f04245d065758f62fe"
+  },
+  "problems": [
+    {
+      "id": "2023-1_중간-Q1",
+      "explanation_id": "p1",
+      "subparts": [
+        "1",
+        "2"
+      ],
+      "steps": [
+        {
+          "subpart": "1",
+          "label": "공통 모드 제거 의미와 한계",
+          "html": "\n      <p><strong>CM rejection의 의미:</strong> 전원 잡음이나 외부 간섭처럼 두 입력 노드에 동일하게 유입되는 공통 모드 신호를 억제하고, 오직 원하는 차동 신호 $V_{in1} - V_{in2}$만을 증폭하는 특성이에요.</p>\n      <p><strong>제한 이유 1 (테일 전류원의 유한한 출력 저항):</strong> 실제 테일 전류원의 출력 저항 $R_{SS}$가 유한하므로, 공통 모드 입력 전압이 변하면 테일 전류 자체가 변하여 단일 출력 공통 모드 전압이 변해요 ($A_{CM} \\approx -\\dfrac{R_D}{1/g_m + 2R_{SS}} \\neq 0$).</p>\n      <p><strong>제한 이유 2 (양쪽 소자 및 부하 저항의 불일치):</strong> 두 입력 트랜지스터의 $g_m$이나 드레인 부하 저항 $R_D$ 사이에 오차($\\Delta g_m, \\Delta R_D$)가 존재하면 대칭성이 깨져 공통 모드 입력 신호가 차동 출력 신호로 변환돼요 ($A_{CM-DM} \\neq 0$).</p>\n    "
+        },
+        {
+          "subpart": "2",
+          "label": "밀러 입력 임피던스와 대역폭",
+          "html": "\n      <p>입력에서 부유 커패시터 $C_F$로 흘러 들어가는 전류는 다음과 같아요.</p>\n      $$I_{in} = \\frac{v_{in} - v_{out}}{1/(sC_F)} = sC_F(1 + g_m R_D)v_{in}$$\n      <p>따라서 입력에서 접지로 바라본 등가 입력 임피던스 $Z_{in}$은 다음과 같아요.</p>\n      $$Z_{in} = \\frac{v_{in}}{I_{in}} = \\frac{1}{s(1 + g_m R_D)C_F}$$\n      <p>이는 입력에서 접지 사이에 등가 커패시턴스 $C_{in} = (1 + g_m R_D)C_F$가 연결된 것과 같아요.</p>\n      <p><strong>대역폭에 미치는 영향:</strong> 신호원 저항을 $R_S$라 할 때 증폭기 입력 노드에 형성되는 극점 주파수는 $\\omega_{p,in} = \\dfrac{1}{R_S C_{in}} = \\dfrac{1}{R_S (1 + g_m R_D) C_F}$예요. 반전 이득 크기 $g_m R_D$에 의해 등가 입력 커패시턴스가 $(1 + g_m R_D)$배로 크게 증배(Miller effect)되어 입력 극점이 낮은 주파수로 내려가므로, 증폭기의 대역폭(bandwidth)이 크게 감소해요.</p>\n    "
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "1",
+          "html": "<p data-answer-final=\"\"><strong>(1) 의미:</strong> 두 입력에 공통으로 인가된 노이즈·신호를 제거하고 차동 입력 신호에만 반응하여 증폭하는 특성이에요.<br><strong>제한 이유 2가지:</strong><br>① 테일 전류원의 출력 저항 $R_{SS}$가 유한하여 공통 모드 전압에 따라 테일 전류가 변하기 때문이에요.<br>② 양쪽 트랜지스터($g_m$)와 부하 저항($R_D$)의 불일치로 인해 공통 모드 신호가 차동 출력 신호로 변환($A_{CM-DM}$)되기 때문이에요.</p>"
+        },
+        {
+          "subpart": "2",
+          "html": "<p data-answer-final=\"\"><strong>(2) 등가 입력 임피던스:</strong> $Z_{in} = \\dfrac{1}{s(1 + g_m R_D)C_F}$ (등가 입력 커패시턴스 $C_{in} = (1 + g_m R_D)C_F$)<br><strong>대역폭에 미치는 영향:</strong> Miller 효과에 의해 입력 등가 커패시턴스가 $(1 + g_m R_D)$배로 증가하여 입력 극점 주파수 $\\omega_{p,in} = \\dfrac{1}{R_S (1 + g_m R_D) C_F}$가 낮아지므로, 증폭기의 대역폭(bandwidth)이 감소해요.</p>"
+        }
+      ]
+    },
+    {
+      "id": "2019-1_중간-Q5",
+      "explanation_id": "p2",
+      "subparts": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "steps": [
+        {
+          "subpart": "1",
+          "label": "전압 바이어스 문제점과 전류 거울 해결책",
+          "html": "\n      <p><strong>전압 바이어스의 문제점:</strong> 저항 분배로 $V_{GS}$를 인가하면 포화 영역 전류식 $I_D = \\frac{1}{2}\\mu_n C_{ox}\\frac{W}{L}(V_{GS} - V_{TH})^2$에서 공정 편차에 따른 $V_{TH}$ 변화, 온도에 따른 이동도 $\\mu_n$ 감소, $V_{DD}$ 변동에 따라 $I_D$가 크게 흔들려 동작점이 불안정해져요.</p>\n      <p><strong>해결 바이어스 방법:</strong> 정밀한 기준 전류원 $I_{REF}$를 다이오드 연결 트랜지스터에 흘려 $V_{GS}$를 생성하고, 이를 복사 트랜지스터의 게이트에 공유하는 <strong>전류 거울(current mirror)</strong> 방식을 사용해요. 같은 칩 내의 두 트랜지스터는 공정·온도 파라미터가 동일하게 변해 상쇄되므로, 복사 전류는 트랜지스터 종횡비 크기 비율($W/L$)로 정확하고 안정하게 결정돼요.</p>\n    "
+        },
+        {
+          "subpart": "2",
+          "label": "CM 제거 의미와 제한 이유",
+          "html": "\n      <p><strong>CM rejection의 의미:</strong> 차동 증폭기가 두 입력에 공통으로 들어오는 노이즈(전원 리플, 공통 간섭 등)를 증폭하지 않고 0으로 상쇄하며, 오직 두 입력 전압의 차이(차동 신호)만을 선택적으로 증폭하는 능력이에요.</p>\n      <p><strong>실제 회로에서 제한되는 이유:</strong><br>\n      ① <strong>테일 전류원의 유한한 출력 저항 $R_{SS}$:</strong> 공통 모드 입력 전압이 변할 때 테일 전류가 변하여 단일 출력 공통 모드 이득이 0이 되지 않아요 ($A_{CM} \\approx -R_D/(1/g_m + 2R_{SS})$).<br>\n      ② <strong>소자 파라미터 및 부하 저항의 불일치:</strong> 양쪽 입력 트랜지스터의 $g_m$이나 부하 저항 $R_D$ 사이에 비대칭 오차($\\Delta g_m, \\Delta R_D$)가 존재하면, 공통 모드 입력 신호가 차동 출력 신호로 새어 나오는 CM-to-DM 변환($A_{CM-DM}$)이 발생해요.</p>\n    "
+        },
+        {
+          "subpart": "3",
+          "label": "CMRR 정의와 의미",
+          "html": "\n      <p><strong>CMRR의 정의:</strong> 차동 신호에 대한 전압 이득 $A_{DM}$과 공통 모드 신호가 차동 출력으로 변환되는 이득 $A_{CM-DM}$ (또는 공통 모드 이득 $A_{CM}$)의 비의 절댓값으로 정의해요.</p>\n      $$\\text{CMRR} = \\left|\\frac{A_{DM}}{A_{CM-DM}}\\right|$$\n      <p><strong>CMRR의 의미:</strong> 증폭기가 원하는 차동 신호를 원치 않는 공통 모드 잡음 대비 몇 배나 더 우세하게 증폭하는지를 나타내는 성능 지표예요. CMRR 값이 클수록 공통 모드 간섭 신호를 효과적으로 차단할 수 있어요.</p>\n    "
+        },
+        {
+          "subpart": "4",
+          "label": "밀러 입력 및 출력 커패시턴스",
+          "html": "\n      <p>전압 이득이 $A_v = -A_0$일 때 Miller 정리를 적용해요.</p>\n      $$C_{in} = (1 - A_v)C_F = (1 - (-A_0))C_F = (1 + A_0)C_F$$\n      $$C_{out} = \\left(1 - \\frac{1}{A_v}\\right)C_F = \\left(1 - \\frac{1}{-A_0}\\right)C_F = \\left(1 + \\frac{1}{A_0}\\right)C_F$$\n    "
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "1",
+          "html": "<p data-answer-final=\"\"><strong>(1) 문제점:</strong> $V_{GS}$ 고정 전압 바이어스는 $V_{TH}$, 온도, $V_{DD}$ 변동에 따라 $I_D$가 민감하게 변해 동작점이 흔들려요.<br><strong>해결 방법:</strong> 기준 전류를 다이오드 연결 소자에 흘리고 같은 게이트 전압을 공유하는 <strong>전류 거울(current mirror)</strong>을 사용하면 공정·온도 변화가 상쇄되어 크기 비로 안정적인 바이어스를 얻을 수 있어요.</p>"
+        },
+        {
+          "subpart": "2",
+          "html": "<p data-answer-final=\"\"><strong>(2) 의미:</strong> 두 입력의 동일한 공통 모드 잡음을 상쇄하고 차동 신호에만 반응하는 특성이에요.<br><strong>제한 이유:</strong> 테일 전류원의 유한한 출력 저항 $R_{SS}$와 양쪽 소자($g_m$) 및 부하 저항($R_D$)의 불일치 때문이에요.</p>"
+        },
+        {
+          "subpart": "3",
+          "html": "<p data-answer-final=\"\"><strong>(3) 정의:</strong> $\\text{CMRR} = \\left|\\dfrac{A_{DM}}{A_{CM-DM}}\\right|$ (또는 $\\left|\\dfrac{A_{DM}}{A_{CM}}\\right|$)<br><strong>의미:</strong> 원하는 차동 신호를 공통 모드 잡음보다 몇 배 더 우세하게 증폭하는지 나타내며, 클수록 잡음 제거 능력이 우수해요.</p>"
+        },
+        {
+          "subpart": "4",
+          "html": "<p data-answer-final=\"\"><strong>(4) 입력 등가 capacitance:</strong> $C_{in} = (1 + A_0)C_F$<br><strong>출력 등가 capacitance:</strong> $C_{out} = \\left(1 + \\dfrac{1}{A_0}\\right)C_F$</p>"
+        }
+      ]
+    },
+    {
+      "id": "E11.10",
+      "explanation_id": "p3",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "단계별 풀이",
+          "html": "\n\n<p>$A=-g_mR_D$를 입력식에 대입하면 $C_{in}=(1+g_mR_D)C_F$예요. 출력에서도 원래 전류 $sC_F(v_o-v_g)=sC_F(1-1/A)v_o$를 맞추므로 $C_{out}=(1+1/(g_mR_D))C_F$예요.</p>\n<p>$V_{in}=0$일 때 게이트에서는 $R_S$와 $C_{in}$이 접지로, 드레인에서는 $R_D$와 $C_{out}$이 접지로 이어져요. 따라서 <strong>$\\omega_{in}\\approx\\dfrac{1}{R_S(1+g_mR_D)C_F}$</strong>, <strong>$\\omega_{out}\\approx\\dfrac{1}{R_D(1+1/(g_mR_D))C_F}$</strong>예요.</p>\n"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "<p data-answer-final=\"\"><strong>입력 $1/[R_S(1+g_mR_D)C_F]$, 출력 $1/[R_D(1+1/(g_mR_D))C_F]$ rad/s</strong>예요. 두 분모의 $RC$ 단위가 초이므로 역수는 rad/s예요. $g_mR_D$가 커지면 입력 등가 커패시턴스가 커져 입력 추정 극점이 내려가는 방향도 맞아요.</p>"
+        }
+      ]
+    },
+    {
+      "id": "X11.10",
+      "explanation_id": "p4",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "단계별 풀이",
+          "html": "\n\n<p>$g_m=(150\\,\\Omega)^{-1}$이므로 $g_mR_D=(2000\\,\\Omega)/(150\\,\\Omega)=13.333\\ldots$예요. 따라서 $A=-13.333\\ldots$이고, $C_{in}=(1+g_mR_D)C_F$예요.</p>\n<p>$C_{in}=(1+13.333\\ldots)(80\\,\\mathrm{fF})=1146.7\\,\\mathrm{fF}\\approx\\mathbf{1.15\\,\\mathrm{pF}}$예요.</p>\n"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "<p data-answer-final=\"\"><strong>$C_{in}\\approx1.15\\,\\mathrm{pF}$</strong>예요. $g_mR_D$는 $\\mathrm{S}\\cdot\\Omega=1$인 무차원 값이라 결과 단위는 $C_F$와 같은 패럿이에요. $C_{in}/C_F=14.333\\ldots$이므로 $80\\,\\mathrm{fF}$보다 약 14.3배 큰 값이 맞아요.</p>"
+        }
+      ]
+    },
+    {
+      "id": "P11.16",
+      "explanation_id": "p5",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "단계별 풀이",
+          "html": "\n\n<p>$A\\approx-g_mR_C$이므로 $R_{F,X}=R_F/(1+g_mR_C)$예요. $X$에서 접지로 향하는 길은 $r_\\pi$와 $R_{F,X}$ 두 개라서 $R_X=r_\\pi\\parallel R_F/(1+g_mR_C)$예요.</p>\n<p>$R_B$와 $R_X$의 분배로 $v_X/v_{in}=R_X/(R_B+R_X)$예요. 여기에 $v_{out}/v_X\\approx-g_mR_C$를 곱하면 <strong>$\\dfrac{v_{out}}{v_{in}}\\approx-g_mR_C\\dfrac{r_\\pi\\parallel\\dfrac{R_F}{1+g_mR_C}}{R_B+r_\\pi\\parallel\\dfrac{R_F}{1+g_mR_C}}$</strong>예요.</p>\n<p>병렬항을 통분하면 $R_X=r_\\pi R_F/[R_F+(1+g_mR_C)r_\\pi]$예요. 따라서 같은 답을 $\\dfrac{v_{out}}{v_{in}}\\approx\\dfrac{-g_mR_Cr_\\pi R_F}{R_B[R_F+(1+g_mR_C)r_\\pi]+r_\\pi R_F}$로도 쓸 수 있어요.</p>\n"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "<p data-answer-final=\"\"><strong>$v_{out}/v_{in}\\approx-g_mR_C\\,R_X/(R_B+R_X)$, $R_X=r_\\pi\\parallel[R_F/(1+g_mR_C)]$</strong>예요. 저항 분배는 0과 1 사이이므로 전체 이득은 음수이고 크기는 $g_mR_C$보다 작아요. $R_F\\to\\infty$이면 $R_X\\to r_\\pi$가 되어 일반 CE 입력 분배 $-g_mR_Cr_\\pi/(R_B+r_\\pi)$로 돌아가요. 분자와 분모는 모두 저항의 제곱 차수여서 이득은 무차원이에요.</p>"
+        }
+      ]
+    },
+    {
+      "id": "P11.22",
+      "explanation_id": "p6",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "단계별 풀이",
+          "html": "\n<p>$A=-g_mR_C$를 대입하면 $C_{in}=(1+g_mR_C)C_F$예요. 출력 쪽도 $sC_F(v_o-v_b)=s(1-1/A)C_Fv_o$이므로 $C_{out}=(1+1/(g_mR_C))C_F$예요.</p>\n<p>독립 입력을 0으로 둔 베이스에서 $R_B$와 $r_\\pi$가 모두 접지로 향하므로 $R_{in,eq}=R_B\\parallel r_\\pi$예요. 출력에서는 $r_o\\to\\infty$여서 $R_{out,eq}=R_C$예요. 따라서 <strong>$|\\omega_{p,in}|\\approx\\dfrac{1}{(R_B\\parallel r_\\pi)(1+g_mR_C)C_F}$</strong>, <strong>$|\\omega_{p,out}|\\approx\\dfrac{1}{R_C(1+1/(g_mR_C))C_F}=\\dfrac{g_m}{(1+g_mR_C)C_F}$</strong>예요.</p>\n"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "<p data-answer-final=\"\"><strong>밀러 입력 추정치는 $1/[(R_B\\parallel r_\\pi)(1+g_mR_C)C_F]$, 출력 추정치는 $g_m/[(1+g_mR_C)C_F]$ rad/s</strong>예요. 출력식은 $R_C(1+1/(g_mR_C))=R_C+1/g_m$로 써도 같아 단위가 $\\Omega\\cdot\\mathrm F=\\mathrm s$인지 확인할 수 있어요.</p>"
+        }
+      ]
+    },
+    {
+      "id": "E11.11",
+      "explanation_id": "p7",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "단계별 풀이",
+          "html": "\n<p>20 Hz가 입력 고역통과 경계 이상이어야 하므로 $1/(R_iC_i)\\le2\\pi(20\\,\\mathrm{Hz})$예요. $R_i=100\\,\\mathrm{k\\Omega}$를 넣으면 $C_i\\ge1/[2\\pi(20\\,\\mathrm{Hz})(100\\,\\mathrm{k\\Omega})]=79.58\\,\\mathrm{nF}$예요.</p>\n<p>출력 경계는 20 kHz 이상이어야 하므로 $g_m/C_L\\ge2\\pi(20\\,\\mathrm{kHz})$예요. $g_m=1/(200\\,\\Omega)=5\\,\\mathrm{mS}$를 넣으면 $C_L\\le(5\\,\\mathrm{mS})/[2\\pi(20\\,\\mathrm{kHz})]=39.79\\,\\mathrm{nF}$예요.</p>\n<p><strong>따라서 최소 $C_i\\approx79.6\\,\\mathrm{nF}$, 최대 $C_L\\approx39.8\\,\\mathrm{nF}$</strong>예요. 경계값을 정확히 대역 끝에 두면 그 끝에서 해당 1차 RC 응답은 통과 대역값보다 약 3 dB 낮아요. 더 작은 감쇠가 필요하면 $C_i$를 더 키우고 $C_L$을 더 줄여야 해요.</p>\n"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "<p data-answer-final=\"\"><strong>$C_{i,min}=79.6\\,\\mathrm{nF}$, $C_{L,max}=39.8\\,\\mathrm{nF}$</strong>예요. $1/[2\\pi R_iC_{i,min}]=20\\,\\mathrm{Hz}$, $g_m/[2\\pi C_{L,max}]=20\\,\\mathrm{kHz}$로 경계가 되돌아와요. $1/(\\Omega\\cdot\\mathrm{Hz})$와 $\\mathrm S/\\mathrm{Hz}$는 모두 패럿이에요.</p>"
+        }
+      ]
+    },
+    {
+      "id": "X11.11",
+      "explanation_id": "p8",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "단계별 풀이",
+          "html": "\n\n<p>입력 조건은 그대로 $1/(R_iC_i)\\le2\\pi(20\\,\\mathrm{Hz})$예요. $R_i$가 변하지 않았으므로 $C_i\\ge1/[2\\pi(20\\,\\mathrm{Hz})(100\\,\\mathrm{k\\Omega})]=79.58\\,\\mathrm{nF}$예요.</p>\n<p>출력은 $g_{m,new}/C_L\\ge2\\pi(20\\,\\mathrm{kHz})$예요. $g_{m,new}=2.5\\,\\mathrm{mS}$를 넣으면 $C_L\\le(2.5\\,\\mathrm{mS})/[2\\pi(20\\,\\mathrm{kHz})]=19.89\\,\\mathrm{nF}$예요.</p>\n<p><strong>최소 $C_i\\approx79.6\\,\\mathrm{nF}$는 그대로, 최대 $C_L\\approx19.9\\,\\mathrm{nF}$는 절반</strong>이에요.</p>\n"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "<p data-answer-final=\"\"><strong>$C_{i,min}=79.6\\,\\mathrm{nF}$, $C_{L,max}=19.9\\,\\mathrm{nF}$</strong>예요. $R_i$와 20 Hz가 그대로라 $C_i$는 변하지 않아요. $g_m$이 절반이므로 $C_{L,max}=g_m/[2\\pi(20\\,\\mathrm{kHz})]$도 절반이어야 하고, $39.8/2=19.9\\,\\mathrm{nF}$로 맞아요.</p>"
+        }
+      ]
+    },
+    {
+      "id": "E11.13",
+      "explanation_id": "p9",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "단계별 풀이",
+          "html": "<p>$M_1$은 $C_{GS1}:V_{in}$–$0$, $C_{GD1}:V_{in}$–$V_{out}$, $C_{DB1}:V_{out}$–$0$예요. $C_{SB1}:0$–$0$은 양 끝 전압 차가 항상 0이에요.</p><p>$M_2$는 $C_{GS2}:V_{out}$–$0$, $C_{GD2}:V_{out}$–$V_{out}$, $C_{DB2}:V_{out}$–$0$, $C_{SB2}:0$–$0$예요. 따라서 $C_{GD2}, C_{SB2}$는 신호에 영향을 주지 않아요.</p><p>출력과 접지 사이의 세 커패시터에는 똑같은 전압 $V_{out}$이 걸려 전류가 더해져요. $i_{out}=(C_{DB1}+C_{DB2}+C_{GS2})\\,dV_{out}/dt$이므로 병렬 합 $C_{out,0}=C_{DB1}+C_{DB2}+C_{GS2}$로 그릴 수 있어요. $C_{GD1}$은 입력과 출력 사이에 그대로 남아요.</p>"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "<p data-answer-final=\"\"><b>$V_{in}$–접지: $C_{GS1}$; $V_{in}$–$V_{out}$: $C_{GD1}$; $V_{out}$–접지: $C_{DB1}+C_{DB2}+C_{GS2}$.</b> $M_1$의 네 가지 중 하나가 같은 노드, $M_2$의 네 가지 중 둘이 같은 노드라서 여덟 개 중 다섯 개가 남아요. 출력 커패시턴스 합의 단위도 F예요.</p>"
+        }
+      ]
+    },
+    {
+      "id": "X11.13",
+      "explanation_id": "p10",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "단계별 풀이",
+          "html": "<p>입력–접지에 $C_{GS1}$, 입력–출력에 $C_{GD1}$을 그려요. 출력–접지에는 $M_1$의 종속 전류원 $g_{m1}V_{in}$ (아래 방향), $r_{O1}$, $C_{DB1}$을 놓아요.</p><p>$M_2$의 드레인·게이트는 출력이고 소스는 AC 접지이므로 $r_{O2}$와 $g_{m2}V_{out}$에 해당하는 양의 컨덕턴스가 출력–접지에 놓여요. 후자는 $1/g_{m2}$ 저항과 동등해요. 같은 두 노드의 $C_{GS2}$와 $C_{DB2}$는 $C_{DB1}$과 합쳐 $C_T=C_{DB1}+C_{DB2}+C_{GS2}$예요. $C_{GD2}$와 두 $C_{SB}$는 양 끝이 같은 AC 노드여서 빠져요.</p><figure class=\"figure\"><svg aria-label=\"MOS 소신호 등가회로의 가지 연결\" role=\"img\" viewBox=\"0 0 900 547\"><text fill=\"currentColor\" font-size=\"21\" x=\"24\" y=\"37\">MOS 소신호 등가회로의 가지 연결</text><text fill=\"currentColor\" font-size=\"19\" x=\"25\" y=\"88\">입력</text><path d=\"M160 80 H330 M570 80 H740\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\"/><circle cx=\"160\" cy=\"80\" fill=\"currentColor\" r=\"4\"/><circle cx=\"740\" cy=\"80\" fill=\"currentColor\" r=\"4\"/><rect fill=\"none\" height=\"48\" rx=\"6\" stroke=\"currentColor\" width=\"240\" x=\"330\" y=\"56\"/><text fill=\"currentColor\" font-size=\"19\" text-anchor=\"middle\" x=\"450\" y=\"87\">C GS1</text><text fill=\"currentColor\" font-size=\"19\" x=\"765\" y=\"88\">접지</text><text fill=\"currentColor\" font-size=\"19\" x=\"25\" y=\"154\">입력</text><path d=\"M160 146 H330 M570 146 H740\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\"/><circle cx=\"160\" cy=\"146\" fill=\"currentColor\" r=\"4\"/><circle cx=\"740\" cy=\"146\" fill=\"currentColor\" r=\"4\"/><rect fill=\"none\" height=\"48\" rx=\"6\" stroke=\"currentColor\" width=\"240\" x=\"330\" y=\"122\"/><text fill=\"currentColor\" font-size=\"19\" text-anchor=\"middle\" x=\"450\" y=\"153\">C GD1</text><text fill=\"currentColor\" font-size=\"19\" x=\"765\" y=\"154\">출력</text><text fill=\"currentColor\" font-size=\"19\" x=\"25\" y=\"220\">출력</text><path d=\"M160 212 H330 M570 212 H740\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\"/><circle cx=\"160\" cy=\"212\" fill=\"currentColor\" r=\"4\"/><circle cx=\"740\" cy=\"212\" fill=\"currentColor\" r=\"4\"/><rect fill=\"none\" height=\"48\" rx=\"6\" stroke=\"currentColor\" width=\"240\" x=\"330\" y=\"188\"/><text fill=\"currentColor\" font-size=\"19\" text-anchor=\"middle\" x=\"450\" y=\"219\">gₘ₁Vᵢₙ ↓</text><text fill=\"currentColor\" font-size=\"19\" x=\"765\" y=\"220\">접지</text><text fill=\"currentColor\" font-size=\"19\" x=\"25\" y=\"286\">출력</text><path d=\"M160 278 H330 M570 278 H740\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\"/><circle cx=\"160\" cy=\"278\" fill=\"currentColor\" r=\"4\"/><circle cx=\"740\" cy=\"278\" fill=\"currentColor\" r=\"4\"/><rect fill=\"none\" height=\"48\" rx=\"6\" stroke=\"currentColor\" width=\"240\" x=\"330\" y=\"254\"/><text fill=\"currentColor\" font-size=\"19\" text-anchor=\"middle\" x=\"450\" y=\"285\">rₒ₁</text><text fill=\"currentColor\" font-size=\"19\" x=\"765\" y=\"286\">접지</text><text fill=\"currentColor\" font-size=\"19\" x=\"25\" y=\"352\">출력</text><path d=\"M160 344 H330 M570 344 H740\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\"/><circle cx=\"160\" cy=\"344\" fill=\"currentColor\" r=\"4\"/><circle cx=\"740\" cy=\"344\" fill=\"currentColor\" r=\"4\"/><rect fill=\"none\" height=\"48\" rx=\"6\" stroke=\"currentColor\" width=\"240\" x=\"330\" y=\"320\"/><text fill=\"currentColor\" font-size=\"19\" text-anchor=\"middle\" x=\"450\" y=\"351\">rₒ₂</text><text fill=\"currentColor\" font-size=\"19\" x=\"765\" y=\"352\">접지</text><text fill=\"currentColor\" font-size=\"19\" x=\"25\" y=\"418\">출력</text><path d=\"M160 410 H330 M570 410 H740\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\"/><circle cx=\"160\" cy=\"410\" fill=\"currentColor\" r=\"4\"/><circle cx=\"740\" cy=\"410\" fill=\"currentColor\" r=\"4\"/><rect fill=\"none\" height=\"48\" rx=\"6\" stroke=\"currentColor\" width=\"240\" x=\"330\" y=\"386\"/><text fill=\"currentColor\" font-size=\"19\" text-anchor=\"middle\" x=\"450\" y=\"417\">1/gₘ₂</text><text fill=\"currentColor\" font-size=\"19\" x=\"765\" y=\"418\">접지</text><text fill=\"currentColor\" font-size=\"19\" x=\"25\" y=\"484\">출력</text><path d=\"M160 476 H330 M570 476 H740\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\"/><circle cx=\"160\" cy=\"476\" fill=\"currentColor\" r=\"4\"/><circle cx=\"740\" cy=\"476\" fill=\"currentColor\" r=\"4\"/><rect fill=\"none\" height=\"48\" rx=\"6\" stroke=\"currentColor\" width=\"240\" x=\"330\" y=\"452\"/><text fill=\"currentColor\" font-size=\"19\" text-anchor=\"middle\" x=\"450\" y=\"483\">Cₜ</text><text fill=\"currentColor\" font-size=\"19\" x=\"765\" y=\"484\">접지</text></svg><figcaption>같은 두 노드를 잇는 행의 소자들은 병렬이에요. $C_T=C_{DB1}+C_{DB2}+C_{GS2}$예요.</figcaption></figure>"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "<p data-answer-final=\"\"><b>입력–접지 $C_{GS1}$, 입력–출력 $C_{GD1}$; 출력–접지 $g_{m1}V_{in}$ 전류원, $r_{O1}\\parallel r_{O2}\\parallel(1/g_{m2})$, $C_T=C_{DB1}+C_{DB2}+C_{GS2}$.</b> $V_{in}=0$일 때 출력에서 접지로 흐르는 저항성 전류는 $V_{out}(1/r_{O1}+1/r_{O2}+g_{m2})$예요. 모두 양의 컨덕턴스이므로 수동 다이오드 연결 부하의 방향과 맞아요. $1/g_m$은 Ω 단위예요.</p>"
+        }
+      ]
+    },
+    {
+      "id": "E11.12",
+      "explanation_id": "p11",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "단계별 풀이",
+          "html": "<p>$Q_1$: $C_{\\pi1}$은 $V_{in}$–접지, $C_{\\mu1}$은 $V_{in}$–$X$, $C_{CS1}$은 $X$–접지예요. $C_{\\mu1}$만 입력과 중간점 사이에 떠 있어요.</p><p>$Q_2$: $C_{\\pi2}$는 AC 접지된 베이스–$X$, $C_{\\mu2}$는 AC 접지된 베이스–$V_{out}$, $C_{CS2}$는 $V_{out}$–접지예요. 따라서 중간점의 병렬 커패시턴스는 $C_X=C_{CS1}+C_{\\pi2}$, 출력의 병렬 커패시턴스는 $C_Y=C_{\\mu2}+C_{CS2}$예요. $C_{\\mu1}$은 양쪽이 모두 움직이는 노드라 이 두 합에 넣지 않아요.</p>"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "<p data-answer-final=\"\"><b>$V_{in}$–접지: $C_{\\pi1}$; $V_{in}$–$X$: $C_{\\mu1}$; $X$–접지: $C_{CS1}+C_{\\pi2}$; $V_{out}$–접지: $C_{\\mu2}+C_{CS2}$.</b> $Q_1$에서 세 개, $Q_2$에서 세 개로 총 여섯 개를 모두 배치했어요. $C_X,C_Y$는 각각 F 단위이고, 같은 두 노드에 걸린 것끼리만 합했어요.</p>"
+        }
+      ]
+    },
+    {
+      "id": "X11.12",
+      "explanation_id": "p12",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "단계별 풀이",
+          "html": "<p>입력–접지에는 $r_{\\pi1}\\parallel C_{\\pi1}$, 입력–$X$에는 $C_{\\mu1}$을 연결해요. $X$–접지에는 $Q_1$의 $g_{m1}V_{in}$ 전류원(아래 방향), $r_{O1}$, $C_{CS1}$과 $Q_2$의 $r_{\\pi2},C_{\\pi2}$를 놓아요. 두 커패시터는 $C_X=C_{CS1}+C_{\\pi2}$로 합칠 수 있어요.</p><p>출력–$X$에는 $Q_2$의 $g_{m2}v_{\\pi2}$ 전류원(출력→$X$ 기준)과 $r_{O2}$를 병렬로 놓아요. 출력–접지에는 $R_C$와 $C_{\\mu2},C_{CS2}$를 놓아요. $C_Y=C_{\\mu2}+C_{CS2}$예요.</p><figure class=\"figure\"><svg aria-label=\"BJT 캐스코드 고주파 등가회로의 가지 연결\" role=\"img\" viewBox=\"0 0 900 811\"><text fill=\"currentColor\" font-size=\"21\" x=\"24\" y=\"37\">BJT 캐스코드 고주파 등가회로의 가지 연결</text><text fill=\"currentColor\" font-size=\"19\" x=\"25\" y=\"88\">입력</text><path d=\"M160 80 H330 M570 80 H740\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\"/><circle cx=\"160\" cy=\"80\" fill=\"currentColor\" r=\"4\"/><circle cx=\"740\" cy=\"80\" fill=\"currentColor\" r=\"4\"/><rect fill=\"none\" height=\"48\" rx=\"6\" stroke=\"currentColor\" width=\"240\" x=\"330\" y=\"56\"/><text fill=\"currentColor\" font-size=\"19\" text-anchor=\"middle\" x=\"450\" y=\"87\">rπ₁</text><text fill=\"currentColor\" font-size=\"19\" x=\"765\" y=\"88\">접지</text><text fill=\"currentColor\" font-size=\"19\" x=\"25\" y=\"154\">입력</text><path d=\"M160 146 H330 M570 146 H740\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\"/><circle cx=\"160\" cy=\"146\" fill=\"currentColor\" r=\"4\"/><circle cx=\"740\" cy=\"146\" fill=\"currentColor\" r=\"4\"/><rect fill=\"none\" height=\"48\" rx=\"6\" stroke=\"currentColor\" width=\"240\" x=\"330\" y=\"122\"/><text fill=\"currentColor\" font-size=\"19\" text-anchor=\"middle\" x=\"450\" y=\"153\">Cπ₁</text><text fill=\"currentColor\" font-size=\"19\" x=\"765\" y=\"154\">접지</text><text fill=\"currentColor\" font-size=\"19\" x=\"25\" y=\"220\">입력</text><path d=\"M160 212 H330 M570 212 H740\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\"/><circle cx=\"160\" cy=\"212\" fill=\"currentColor\" r=\"4\"/><circle cx=\"740\" cy=\"212\" fill=\"currentColor\" r=\"4\"/><rect fill=\"none\" height=\"48\" rx=\"6\" stroke=\"currentColor\" width=\"240\" x=\"330\" y=\"188\"/><text fill=\"currentColor\" font-size=\"19\" text-anchor=\"middle\" x=\"450\" y=\"219\">C μ1</text><text fill=\"currentColor\" font-size=\"19\" x=\"765\" y=\"220\">X</text><text fill=\"currentColor\" font-size=\"19\" x=\"25\" y=\"286\">X</text><path d=\"M160 278 H330 M570 278 H740\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\"/><circle cx=\"160\" cy=\"278\" fill=\"currentColor\" r=\"4\"/><circle cx=\"740\" cy=\"278\" fill=\"currentColor\" r=\"4\"/><rect fill=\"none\" height=\"48\" rx=\"6\" stroke=\"currentColor\" width=\"240\" x=\"330\" y=\"254\"/><text fill=\"currentColor\" font-size=\"19\" text-anchor=\"middle\" x=\"450\" y=\"285\">gₘ₁Vᵢₙ ↓</text><text fill=\"currentColor\" font-size=\"19\" x=\"765\" y=\"286\">접지</text><text fill=\"currentColor\" font-size=\"19\" x=\"25\" y=\"352\">X</text><path d=\"M160 344 H330 M570 344 H740\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\"/><circle cx=\"160\" cy=\"344\" fill=\"currentColor\" r=\"4\"/><circle cx=\"740\" cy=\"344\" fill=\"currentColor\" r=\"4\"/><rect fill=\"none\" height=\"48\" rx=\"6\" stroke=\"currentColor\" width=\"240\" x=\"330\" y=\"320\"/><text fill=\"currentColor\" font-size=\"19\" text-anchor=\"middle\" x=\"450\" y=\"351\">rₒ₁</text><text fill=\"currentColor\" font-size=\"19\" x=\"765\" y=\"352\">접지</text><text fill=\"currentColor\" font-size=\"19\" x=\"25\" y=\"418\">X</text><path d=\"M160 410 H330 M570 410 H740\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\"/><circle cx=\"160\" cy=\"410\" fill=\"currentColor\" r=\"4\"/><circle cx=\"740\" cy=\"410\" fill=\"currentColor\" r=\"4\"/><rect fill=\"none\" height=\"48\" rx=\"6\" stroke=\"currentColor\" width=\"240\" x=\"330\" y=\"386\"/><text fill=\"currentColor\" font-size=\"19\" text-anchor=\"middle\" x=\"450\" y=\"417\">rπ₂</text><text fill=\"currentColor\" font-size=\"19\" x=\"765\" y=\"418\">접지</text><text fill=\"currentColor\" font-size=\"19\" x=\"25\" y=\"484\">X</text><path d=\"M160 476 H330 M570 476 H740\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\"/><circle cx=\"160\" cy=\"476\" fill=\"currentColor\" r=\"4\"/><circle cx=\"740\" cy=\"476\" fill=\"currentColor\" r=\"4\"/><rect fill=\"none\" height=\"48\" rx=\"6\" stroke=\"currentColor\" width=\"240\" x=\"330\" y=\"452\"/><text fill=\"currentColor\" font-size=\"19\" text-anchor=\"middle\" x=\"450\" y=\"483\">Cₓ = C CS1 + Cπ2</text><text fill=\"currentColor\" font-size=\"19\" x=\"765\" y=\"484\">접지</text><text fill=\"currentColor\" font-size=\"19\" x=\"25\" y=\"550\">출력</text><path d=\"M160 542 H330 M570 542 H740\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\"/><circle cx=\"160\" cy=\"542\" fill=\"currentColor\" r=\"4\"/><circle cx=\"740\" cy=\"542\" fill=\"currentColor\" r=\"4\"/><rect fill=\"none\" height=\"48\" rx=\"6\" stroke=\"currentColor\" width=\"240\" x=\"330\" y=\"518\"/><text fill=\"currentColor\" font-size=\"19\" text-anchor=\"middle\" x=\"450\" y=\"549\">gₘ₂vπ₂ (출력→X)</text><text fill=\"currentColor\" font-size=\"19\" x=\"765\" y=\"550\">X</text><text fill=\"currentColor\" font-size=\"19\" x=\"25\" y=\"616\">출력</text><path d=\"M160 608 H330 M570 608 H740\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\"/><circle cx=\"160\" cy=\"608\" fill=\"currentColor\" r=\"4\"/><circle cx=\"740\" cy=\"608\" fill=\"currentColor\" r=\"4\"/><rect fill=\"none\" height=\"48\" rx=\"6\" stroke=\"currentColor\" width=\"240\" x=\"330\" y=\"584\"/><text fill=\"currentColor\" font-size=\"19\" text-anchor=\"middle\" x=\"450\" y=\"615\">rₒ₂</text><text fill=\"currentColor\" font-size=\"19\" x=\"765\" y=\"616\">X</text><text fill=\"currentColor\" font-size=\"19\" x=\"25\" y=\"682\">출력</text><path d=\"M160 674 H330 M570 674 H740\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\"/><circle cx=\"160\" cy=\"674\" fill=\"currentColor\" r=\"4\"/><circle cx=\"740\" cy=\"674\" fill=\"currentColor\" r=\"4\"/><rect fill=\"none\" height=\"48\" rx=\"6\" stroke=\"currentColor\" width=\"240\" x=\"330\" y=\"650\"/><text fill=\"currentColor\" font-size=\"19\" text-anchor=\"middle\" x=\"450\" y=\"681\">R꜀</text><text fill=\"currentColor\" font-size=\"19\" x=\"765\" y=\"682\">접지</text><text fill=\"currentColor\" font-size=\"19\" x=\"25\" y=\"748\">출력</text><path d=\"M160 740 H330 M570 740 H740\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\"/><circle cx=\"160\" cy=\"740\" fill=\"currentColor\" r=\"4\"/><circle cx=\"740\" cy=\"740\" fill=\"currentColor\" r=\"4\"/><rect fill=\"none\" height=\"48\" rx=\"6\" stroke=\"currentColor\" width=\"240\" x=\"330\" y=\"716\"/><text fill=\"currentColor\" font-size=\"19\" text-anchor=\"middle\" x=\"450\" y=\"747\">Cᵧ = C μ2 + C CS2</text><text fill=\"currentColor\" font-size=\"19\" x=\"765\" y=\"748\">접지</text></svg><figcaption>같은 두 노드를 잇는 행의 소자들은 병렬이에요. $C_X=C_{CS1}+C_{\\pi2}$, $C_Y=C_{\\mu2}+C_{CS2}$예요.</figcaption></figure>"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "<p data-answer-final=\"\"><b>입력–접지 $r_{\\pi1}\\parallel C_{\\pi1}$; 입력–$X$ $C_{\\mu1}$; $X$–접지 $g_{m1}V_{in}$, $r_{O1}$, $r_{\\pi2}$, $C_{CS1}+C_{\\pi2}$; 출력–$X$ $g_{m2}v_{\\pi2}$, $r_{O2}$; 출력–접지 $R_C$, $C_{\\mu2}+C_{CS2}$.</b> 입력을 0으로 놓으면 $Q_1$ 제어 전류가 0이고, $V_X=0$이면 $Q_2$ 제어 전류도 0이에요. $v_{\\pi2}=0-V_X$이므로 부호가 반대로 들어가는 것이 맞아요. 커패시터도 $Q_1$ 세 개와 $Q_2$ 세 개가 모두 있어요.</p>"
+        }
+      ]
+    }
+  ],
+  "assets": {}
+}

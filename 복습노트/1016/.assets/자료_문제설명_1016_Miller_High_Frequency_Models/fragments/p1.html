@@ -1,44 +1,57 @@
 <div class="layer eli5" data-explanation="understand">
-  <h4>회로를 먼저 읽어요</h4>
-  <p>입력 $V_{in}$은 $R_S$를 지나 $M_1$의 게이트에 들어가고, 드레인 전압이 출력 $V_{out}$이에요. $C_F$는 게이트와 드레인을 잇는 부유 커패시터예요. $\lambda=0$이므로 $M_1$의 출력 저항은 무한대로 보고, 밀러 근사로 입력과 출력의 RC 극점을 각각 예측해요.</p>
+  <h4>문제를 읽어요</h4>
+  <p>차동 증폭기의 공통 모드 제거(CM rejection) 의미와 실제 회로에서 제한되는 이유 두 가지를 묻고, Miller 효과가 적용된 증폭기의 등가 입력 임피던스와 대역폭에 미치는 영향을 묻는 서술형 문제예요.</p>
+  <p>구할 것은 (1) CM rejection의 의미 및 제한 이유 2가지, (2) $C_F$에 의한 등가 입력 임피던스 $Z_{in}$ 식과 대역폭 변화 설명이에요.</p>
 </div>
 <div class="layer formal" data-explanation="recall">
-  <h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4>
-  <p>두 신호 노드 사이에 $C_F$가 놓인 것이 밀러 정리(Miller's theorem)의 단서예요. $g_m$은 게이트 전압이 드레인 전류를 바꾸는 비율이고, $R_D$는 드레인 부하예요. 저주파에서 게이트→드레인 이득 $A=v_{out}/v_g=-g_mR_D$를 쓰면, $C_F$는 입력 접지 쪽 $(1-A)C_F$, 출력 접지 쪽 $(1-1/A)C_F$로 보입니다. 이 이득을 주파수와 무관한 상수로 놓는 단계가 밀러 근사(Miller approximation)예요.</p>
-  <p>입력 쪽 저항은 전압원을 0으로 했을 때의 $R_S$, 출력 쪽은 $\lambda=0$이므로 $R_D$예요. 각 접지 커패시터에 $\omega\approx1/(RC)$를 적용하는 까닭이에요.</p>
+  <h4>이 개념과 공식을 떠올려요</h4>
+  <p>(1)에서 “CM rejection”은 두 입력에 동시에 들어오는 동위상 잡음을 걸러내고 순수 차동 신호만 증폭하는 성질이에요. 이상적 테일 전류원은 $R_{SS}=\infty$이지만, 실제 회로에서는 유한한 $R_{SS}$와 양쪽 소자/부하 불일치 때문에 CM 신호가 출력에 나타나요.</p>
+  <p>(2)에서 입력과 출력 사이 부유 커패시턴스 $C_F$는 <a href="정리노트_1016_Miller_High_Frequency_Models.html#s0-miller">밀러 정리(Miller's theorem)</a>에 의해 각 노드와 접지 사이의 임피던스로 변환돼요. 반전 전압 이득이 $A_V = -g_m R_D$이므로 입력 쪽 등가 임피던스는 $Z_{in} = \dfrac{Z_F}{1 - A_V} = \dfrac{1}{s(1 + g_m R_D)C_F}$예요.</p>
+  <p>신호원 저항 $R_S$와 입력 커패시턴스가 만드는 극점 주파수 $\omega_{p,in} = \dfrac{1}{R_S C_{in}}$이 대역폭을 결정해요.</p>
 </div>
 <div class="layer formal" data-explanation="start">
   <h4>종이에 쓸 첫 줄</h4>
-  <p>$V_{DD}$를 AC 접지로 놓고, 게이트 노드를 $v_g$, 드레인을 $v_o$라 써요. 커패시터를 잠시 열면 드레인 전류 변화는 $g_mv_g$이므로 $v_o=-g_mv_gR_D$예요. 따라서 밀러에 넣을 첫 값은 $A=v_o/v_g=-g_mR_D$예요.</p>
-  <p>게이트에서 $C_F$로 나가는 전류는 $sC_F(v_g-v_o)=sC_F(1-A)v_g$예요. 입력에서 접지로 향하는 등가 커패시터 전류 $sC_{in}v_g$와 맞추면 $C_{in}=(1-A)C_F$가 나와요.</p>
+  <p>차동쌍의 대칭성과 테일 전류원의 역할로 공통 모드 동작을 정리하고, Miller 정리를 적용해 부유 커패시터 $C_F$ 양단 전압을 입력 전압 $v_{in}$으로 나타내요.</p>
 </div>
 <div class="layer formal" data-explanation="solve">
-  <h4>왜 이렇게 푸는지 함께 따라가요</h4>
-  <div data-subpart="main">
-    <h4>입력·출력 극점 추정</h4>
-    <p>$A=-g_mR_D$를 입력식에 대입하면 $C_{in}=(1+g_mR_D)C_F$예요. 출력에서도 원래 전류 $sC_F(v_o-v_g)=sC_F(1-1/A)v_o$를 맞추므로 $C_{out}=(1+1/(g_mR_D))C_F$예요.</p>
-    <p>$V_{in}=0$일 때 게이트에서는 $R_S$와 $C_{in}$이 접지로, 드레인에서는 $R_D$와 $C_{out}$이 접지로 이어져요. 따라서 <strong>$\omega_{in}\approx\dfrac{1}{R_S(1+g_mR_D)C_F}$</strong>, <strong>$\omega_{out}\approx\dfrac{1}{R_D(1+1/(g_mR_D))C_F}$</strong>예요.</p>
+  <h4>이렇게 풀어요</h4>
+  <div data-subpart="1">
+    <div data-answer-step="공통 모드 제거 의미와 한계">
+      <p><strong>CM rejection의 의미:</strong> 전원 잡음이나 외부 간섭처럼 두 입력 노드에 동일하게 유입되는 공통 모드 신호를 억제하고, 오직 원하는 차동 신호 $V_{in1} - V_{in2}$만을 증폭하는 특성이에요.</p>
+      <p><strong>제한 이유 1 (테일 전류원의 유한한 출력 저항):</strong> 실제 테일 전류원의 출력 저항 $R_{SS}$가 유한하므로, 공통 모드 입력 전압이 변하면 테일 전류 자체가 변하여 단일 출력 공통 모드 전압이 변해요 ($A_{CM} \approx -\dfrac{R_D}{1/g_m + 2R_{SS}} \neq 0$).</p>
+      <p><strong>제한 이유 2 (양쪽 소자 및 부하 저항의 불일치):</strong> 두 입력 트랜지스터의 $g_m$이나 드레인 부하 저항 $R_D$ 사이에 오차($\Delta g_m, \Delta R_D$)가 존재하면 대칭성이 깨져 공통 모드 입력 신호가 차동 출력 신호로 변환돼요 ($A_{CM-DM} \neq 0$).</p>
+    </div>
+  </div>
+  <div data-subpart="2">
+    <div data-answer-step="밀러 입력 임피던스와 대역폭">
+      <p>입력에서 부유 커패시터 $C_F$로 흘러 들어가는 전류는 다음과 같아요.</p>
+      $$I_{in} = \frac{v_{in} - v_{out}}{1/(sC_F)} = sC_F(1 + g_m R_D)v_{in}$$
+      <p>따라서 입력에서 접지로 바라본 등가 입력 임피던스 $Z_{in}$은 다음과 같아요.</p>
+      $$Z_{in} = \frac{v_{in}}{I_{in}} = \frac{1}{s(1 + g_m R_D)C_F}$$
+      <p>이는 입력에서 접지 사이에 등가 커패시턴스 $C_{in} = (1 + g_m R_D)C_F$가 연결된 것과 같아요.</p>
+      <p><strong>대역폭에 미치는 영향:</strong> 신호원 저항을 $R_S$라 할 때 증폭기 입력 노드에 형성되는 극점 주파수는 $\omega_{p,in} = \dfrac{1}{R_S C_{in}} = \dfrac{1}{R_S (1 + g_m R_D) C_F}$예요. 반전 이득 크기 $g_m R_D$에 의해 등가 입력 커패시턴스가 $(1 + g_m R_D)$배로 크게 증배(Miller effect)되어 입력 극점이 낮은 주파수로 내려가므로, 증폭기의 대역폭(bandwidth)이 크게 감소해요.</p>
+    </div>
   </div>
 </div>
 <div class="layer formal" data-explanation="verify">
   <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <h4>근사 범위 확인</h4>
-    <p><strong>입력 $1/[R_S(1+g_mR_D)C_F]$, 출력 $1/[R_D(1+1/(g_mR_D))C_F]$ rad/s</strong>예요. 두 분모의 $RC$ 단위가 초이므로 역수는 rad/s예요. $g_mR_D$가 커지면 입력 등가 커패시턴스가 커져 입력 추정 극점이 내려가는 방향도 맞아요.</p>
-    <p>원래 회로에는 $C_F$ 하나만 있으므로 실제 전달 함수의 극점은 하나예요. 위 두 값은 저주파 이득으로 $C_F$를 둘로 분리한 모델의 RC 추정치이며, 실제 극점 두 개를 뜻하지 않아요.</p>
+  <div data-subpart="1">
+    <p data-answer-final><strong>(1) 의미:</strong> 두 입력에 공통으로 인가된 노이즈·신호를 제거하고 차동 입력 신호에만 반응하여 증폭하는 특성이에요.<br><strong>제한 이유 2가지:</strong><br>① 테일 전류원의 출력 저항 $R_{SS}$가 유한하여 공통 모드 전압에 따라 테일 전류가 변하기 때문이에요.<br>② 양쪽 트랜지스터($g_m$)와 부하 저항($R_D$)의 불일치로 인해 공통 모드 신호가 차동 출력 신호로 변환($A_{CM-DM}$)되기 때문이에요.</p>
+  </div>
+  <div data-subpart="2">
+    <p data-answer-final><strong>(2) 등가 입력 임피던스:</strong> $Z_{in} = \dfrac{1}{s(1 + g_m R_D)C_F}$ (등가 입력 커패시턴스 $C_{in} = (1 + g_m R_D)C_F$)<br><strong>대역폭에 미치는 영향:</strong> Miller 효과에 의해 입력 등가 커패시턴스가 $(1 + g_m R_D)$배로 증가하여 입력 극점 주파수 $\omega_{p,in} = \dfrac{1}{R_S (1 + g_m R_D) C_F}$가 낮아지므로, 증폭기의 대역폭(bandwidth)이 감소해요.</p>
   </div>
 </div>
 <div class="layer warn" data-explanation="pitfall">
-  <h4>여기서 틀리기 쉬워요</h4>
-  <p>출력 쪽에도 $(1+g_mR_D)C_F$를 쓰면 안 돼요. 출력 계수는 $1-1/A$예요. 또 $\lambda=0$은 출력 저항을 없앤다는 뜻이 아니라 무한대로 보아 $R_D$만 남긴다는 뜻이에요.</p>
+  <h4>주의할 점</h4>
+  <p>밀러 정리에서 전압 이득이 반전 증폭기($A_V = -g_m R_D$)이므로 분모의 $1 - A_V$가 $1 - (-g_m R_D) = 1 + g_m R_D$로 부호가 플러스가 된다는 점에 주의해요.</p>
+  <p>대역폭 영향을 답할 때는 신호원 저항 $R_S$와 커진 $C_{in}$이 입력 극점 $\omega_{p,in}$을 낮추기 때문이라는 물리적 메커니즘을 함께 기술해야 해요.</p>
 </div>
 <div class="layer eli5" data-explanation="retry">
-  <h4>설명을 닫고 다시 해 봐요</h4>
-  <ol><li>$g_mR_D$를 두 배로 키우면 어느 쪽 등가 커패시턴스가 크게 늘고, 어느 추정 극점이 내려가는지 말해 보세요.</li><li>원래 $C_F$가 한 개인데 입력·출력 RC 추정치가 두 개인 이유를 설명해 보세요.</li></ol>
+  <h4>조건을 바꾸어 생각해요</h4>
+  <ol><li>만약 증폭기의 전압 이득이 음의 반전 이득이 아니라 양의 비반전 이득 $A_V = +1$ (예: 이상적 소스 폴로어)이라면, 입력에서 바라본 등가 입력 임피던스와 커패시턴스는 어떻게 될까요?</li></ol>
 </div>
-<div class="sum" hidden=""><p>$\lambda=0$은 $r_o\to\infty$라는 뜻이에요. 출력 등가 커패시턴스는 $(1+1/(g_mR_D))C_F$라 입력의 $(1+g_mR_D)C_F$와 달라요.</p>
-  <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>밀러 근사: $A=-g_mR_D$, $C_{in}=(1-A)C_F$, $C_{out}=(1-1/A)C_F$.</p></div>
-  <div class="summary-group"><h4>첫 줄</h4><p>$v_o=-g_mv_gR_D$에서 두 노드의 저주파 이득을 정해요.</p></div>
-  <div class="summary-group"><h4>핵심 판단</h4><p>입력은 $R_SC_{in}$, 출력은 $R_DC_{out}$의 역수로 추정해요.</p></div>
-  <div class="summary-group"><h4>검산</h4><p>단위는 rad/s. 실제 $C_F$ 하나의 회로는 극점 하나예요.</p></div>
+<div class="sum" hidden>
+  <p>차동쌍은 대칭성과 테일 저항으로 CM을 억제해요.</p>
+  <p>반전 증폭기의 $C_F$는 Miller 증배로 대역폭을 줄여요.</p>
 </div>

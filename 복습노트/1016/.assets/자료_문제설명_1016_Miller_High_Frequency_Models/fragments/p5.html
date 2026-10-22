@@ -1,45 +1,43 @@
 <div class="layer eli5" data-explanation="understand">
-  <h4>오디오 대역의 두 끝을 지켜요</h4>
-  <p>입력 결합 커패시터 $C_i$는 낮은 소리를 약하게 하고, 출력 부하 커패시터 $C_L$는 높은 소리를 약하게 해요. 따라서 $C_i$의 최소값과 $C_L$의 최대값을 찾아요. 원문의 $R_1=100\,\mathrm{k\Omega}$은 그림에 있는 $R_i$를 가리키는 오식으로 읽어요. 원문은 오디오 대역 수치를 직접 쓰지 않지만 교재 풀이의 관례인 20 Hz–20 kHz를 적용해요.</p>
+<h4>문제를 읽어요</h4>
+<p>$v_{in}$은 $R_B$를 지나 베이스 노드 $X$로 들어가고, $Q_1$의 컬렉터가 $v_{out}$이에요. $R_F$는 $X$와 출력을 이어 입력을 되먹여요. 주어진 $v_{out}/v_X\approx-g_mR_C$를 이용해 $R_F$가 $X$에서 보이는 저항을 구한 다음 전체 전압 이득을 추정해요.</p>
 </div>
 <div class="layer formal" data-explanation="recall">
-  <h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4>
-  <p>입력의 직렬 $C_i$와 게이트 바이어스 저항 $R_i$는 고역통과(high-pass) RC를 만들어요. 게이트는 전류를 거의 끌지 않으므로 입력 경계는 $\omega_{low}=1/(R_iC_i)$예요. 출력에서는 $\lambda=0$이고 전류원 $I_1$을 이상적으로 보아, 미리 배운 소스 폴로어(source follower)의 소스 저항 $1/g_m$과 외부 $C_L$만 써요. 이 저역통과 RC 경계는 $\omega_{high}=g_m/C_L$예요.</p>
-  <p>여기서 $g_m$은 게이트–소스 전압 변화에 대한 드레인 전류 변화율이에요. $C_i$는 저주파 경계를 아래로 내리려면 키우고, $C_L$은 고주파 경계를 위로 올리려면 줄여요.</p>
+<h4>이 개념과 공식을 떠올려요</h4>
+<p>입력·출력 사이의 $R_F$가 밀러 정리(Miller's theorem)의 단서예요. $g_m$은 $Q_1$의 트랜스컨덕턴스, $R_C$는 컬렉터 부하, $r_\pi$는 베이스–이미터 입력 저항이에요. $V_A=\infty$이므로 출력 저항 $r_o$는 무한대예요. 문제에서 허용한 $A=v_{out}/v_X\approx-g_mR_C$를 쓰면, $X$에서 보는 귀환 저항은 $R_{F,X}=R_F/(1-A)$예요.</p>
+<p>$R_F$가 충분히 커 출력 쪽 밀러 저항이 $R_C$에 주는 부하를 무시할 수 있다는 가정 아래, $X$의 저항 분배와 $X\to v_{out}$ 이득을 곱할 수 있어요.</p>
 </div>
 <div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <p>$V_{DD}$를 AC 접지로 두면 입력 신호는 $C_i$를 거쳐 게이트에 도달하고, 게이트에서 $R_i$가 접지로 가요. 따라서 $v_g/v_{in}=R_i/[R_i+1/(sC_i)]=sR_iC_i/(1+sR_iC_i)$가 첫 식이에요.</p>
-  <p>출력에서는 $C_L$을 잠시 제거하고 게이트를 AC 접지로 두어요. 소스 시험전압 $v_t$에 대한 작은 전류 변화가 $i_t=g_mv_t$이므로, 이상적 전류원과 $r_o\to\infty$ 조건에서 $R_{out}=v_t/i_t=1/g_m$예요.</p>
+<h4>종이에 쓸 첫 줄</h4>
+<p>$V_{CC}$를 AC 접지로 놓고 $Q_1$의 이미터도 접지예요. $X$에서 $R_F$로 나가는 전류를 $i_F=(v_X-v_{out})/R_F$라 써요. $v_{out}=Av_X$를 넣으면 $i_F=(1-A)v_X/R_F=v_X/R_{F,X}$이므로 $R_{F,X}=R_F/(1-A)$예요.</p>
 </div>
 <div class="layer formal" data-explanation="solve">
-  <h4>왜 이렇게 푸는지 함께 따라가요</h4>
-  <div data-subpart="main">
-    <h4>최소 $C_i$, 최대 $C_L$</h4>
-    <p>20 Hz가 입력 고역통과 경계 이상이어야 하므로 $1/(R_iC_i)\le2\pi(20\,\mathrm{Hz})$예요. $R_i=100\,\mathrm{k\Omega}$를 넣으면 $C_i\ge1/[2\pi(20\,\mathrm{Hz})(100\,\mathrm{k\Omega})]=79.58\,\mathrm{nF}$예요.</p>
-    <p>출력 경계는 20 kHz 이상이어야 하므로 $g_m/C_L\ge2\pi(20\,\mathrm{kHz})$예요. $g_m=1/(200\,\Omega)=5\,\mathrm{mS}$를 넣으면 $C_L\le(5\,\mathrm{mS})/[2\pi(20\,\mathrm{kHz})]=39.79\,\mathrm{nF}$예요.</p>
-    <p><strong>따라서 최소 $C_i\approx79.6\,\mathrm{nF}$, 최대 $C_L\approx39.8\,\mathrm{nF}$</strong>예요. 경계값을 정확히 대역 끝에 두면 그 끝에서 해당 1차 RC 응답은 통과 대역값보다 약 3 dB 낮아요. 더 작은 감쇠가 필요하면 $C_i$를 더 키우고 $C_L$을 더 줄여야 해요.</p>
-  </div>
+<h4>이렇게 풀어요</h4>
+<div data-subpart="main"><h4>저항 분배 뒤 반전 이득</h4><div data-answer-step="단계별 풀이">
+
+<p>$A\approx-g_mR_C$이므로 $R_{F,X}=R_F/(1+g_mR_C)$예요. $X$에서 접지로 향하는 길은 $r_\pi$와 $R_{F,X}$ 두 개라서 $R_X=r_\pi\parallel R_F/(1+g_mR_C)$예요.</p>
+<p>$R_B$와 $R_X$의 분배로 $v_X/v_{in}=R_X/(R_B+R_X)$예요. 여기에 $v_{out}/v_X\approx-g_mR_C$를 곱하면 <strong>$\dfrac{v_{out}}{v_{in}}\approx-g_mR_C\dfrac{r_\pi\parallel\dfrac{R_F}{1+g_mR_C}}{R_B+r_\pi\parallel\dfrac{R_F}{1+g_mR_C}}$</strong>예요.</p>
+<p>병렬항을 통분하면 $R_X=r_\pi R_F/[R_F+(1+g_mR_C)r_\pi]$예요. 따라서 같은 답을 $\dfrac{v_{out}}{v_{in}}\approx\dfrac{-g_mR_Cr_\pi R_F}{R_B[R_F+(1+g_mR_C)r_\pi]+r_\pi R_F}$로도 쓸 수 있어요.</p>
+</div></div>
 </div>
 <div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <h4>경계와 단위 대입</h4>
-    <p><strong>$C_{i,min}=79.6\,\mathrm{nF}$, $C_{L,max}=39.8\,\mathrm{nF}$</strong>예요. $1/[2\pi R_iC_{i,min}]=20\,\mathrm{Hz}$, $g_m/[2\pi C_{L,max}]=20\,\mathrm{kHz}$로 경계가 되돌아와요. $1/(\Omega\cdot\mathrm{Hz})$와 $\mathrm S/\mathrm{Hz}$는 모두 패럿이에요.</p>
-    <p>이 수치는 교재가 채택한 오디오 대역과 이상적 전류원·$\lambda=0$·외부 $C_i,C_L$에 대한 결과예요.</p>
-  </div>
+<h4>완성 답과 검산</h4>
+<div data-subpart="main">
+<h4>방향과 극한 확인</h4>
+<p data-answer-final=""><strong>$v_{out}/v_{in}\approx-g_mR_C\,R_X/(R_B+R_X)$, $R_X=r_\pi\parallel[R_F/(1+g_mR_C)]$</strong>예요. 저항 분배는 0과 1 사이이므로 전체 이득은 음수이고 크기는 $g_mR_C$보다 작아요. $R_F\to\infty$이면 $R_X\to r_\pi$가 되어 일반 CE 입력 분배 $-g_mR_Cr_\pi/(R_B+r_\pi)$로 돌아가요. 분자와 분모는 모두 저항의 제곱 차수여서 이득은 무차원이에요.</p>
+</div>
 </div>
 <div class="layer warn" data-explanation="pitfall">
-  <h4>여기서 틀리기 쉬워요</h4>
-  <p>Hz와 rad/s를 섞으면 $2\pi$가 빠져요. 입력은 $C_i$가 커질수록 저주파 경계가 내려가지만, 출력은 $C_L$이 커질수록 고주파 경계가 내려가므로 부등호 방향이 반대예요. $R_1$을 새 저항으로 추가하지 않아요.</p>
+<h4>주의할 점</h4>
+<p>$R_F$가 크다고 입력의 영향을 지우면 안 돼요. $X$에서는 $R_F/(1+g_mR_C)$로 작아져 $r_\pi$와 병렬이 돼요. $R_B$도 이 입력 부하와 전압을 나누므로 전체 이득에서 빠지면 안 돼요.</p>
 </div>
 <div class="layer eli5" data-explanation="retry">
-  <h4>설명을 닫고 다시 해 봐요</h4>
-  <ol><li>최저 주파수 조건을 10 Hz로 낮추면 필요한 $C_i$의 최소값이 몇 배가 되는지 말해 보세요.</li><li>$C_L$을 허용 최대값보다 두 배 크게 달면 출력 경계 주파수는 얼마가 되는지 계산해 보세요.</li></ol>
+<h4>조건을 바꾸어 생각해요</h4>
+<ol><li>$R_F$를 매우 크게 만들면 $X$의 저항이 무엇으로 수렴하는지 말해 보세요.</li><li>$R_B$가 커질 때 $|v_{out}/v_{in}|$이 왜 줄어드는지 입력 전류 경로로 설명해 보세요.</li></ol>
 </div>
-<div class="sum" hidden=""><p>이상적 전류원·$\lambda=0$·외부 $C_i,C_L$ 모델의 결과예요. 경계를 대역 끝에 맞추면 해당 1차 응답은 약 3 dB 낮으므로 감쇠를 더 줄이려면 $C_i$를 키우고 $C_L$을 줄여요.</p>
-  <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>입력 고역통과 $1/(R_iC_i)$, 출력 외부 부하 RC $g_m/C_L$.</p></div>
-  <div class="summary-group"><h4>첫 줄</h4><p>$V_{DD}$를 AC 접지로: 입력 $C_i$–$R_i$, 출력 $1/g_m$–$C_L$.</p></div>
-  <div class="summary-group"><h4>핵심 판단</h4><p>교재의 20 Hz–20 kHz를 경계 조건으로 써요. 원문 $R_1$은 그림의 $R_i$로 읽어요.</p></div>
-  <div class="summary-group"><h4>검산</h4><p>$C_i\ge79.6\,\mathrm{nF}$, $C_L\le39.8\,\mathrm{nF}$; 경계 대입은 20 Hz와 20 kHz예요.</p></div>
+<div class="sum" hidden=""><p>$V_A=\infty$이고 $R_F$가 충분히 커 출력 쪽 밀러 저항의 부하를 무시할 때의 추정이에요.</p><p>입력에서는 축소된 $R_F/(1+g_mR_C)$를 지우지 않아요.</p>
+<div class="summary-group"><h4>떠올릴 개념·공식</h4><p>밀러 저항: $R_{F,X}=R_F/(1+g_mR_C)$.</p></div>
+<div class="summary-group"><h4>첫 줄</h4><p>$i_F=(v_X-v_{out})/R_F$와 $v_{out}\approx-g_mR_Cv_X$.</p></div>
+<div class="summary-group"><h4>핵심 판단</h4><p>$R_X=r_\pi\parallel R_{F,X}$를 $R_B$와 분배한 뒤 $-g_mR_C$를 곱해요.</p></div>
+<div class="summary-group"><h4>검산</h4><p>$R_F\to\infty$이면 일반 CE의 입력 분배로 돌아가요.</p></div>
 </div>

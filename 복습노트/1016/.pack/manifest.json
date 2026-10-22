@@ -1,10 +1,28 @@
 {
+  "learning_style": {
+    "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
+    "sha256": "15dd74dba003093e0a3e627a7531d1b89dbc4b081ebfb2f04245d065758f62fe",
+    "rule_ids": [
+      "UNIT-01",
+      "CALC-01",
+      "CALC-02",
+      "CIRCUIT-01",
+      "CIRCUIT-02",
+      "GAIN-01",
+      "DEGEN-01",
+      "SCALE-01",
+      "BIAS-01",
+      "NOTATION-01",
+      "EXPLAIN-01",
+      "CORRECT-01"
+    ]
+  },
   "course": "전자회로2",
   "range": "1016",
   "slug": "Miller_High_Frequency_Models",
   "note_title": "밀러 정리와 트랜지스터 고주파 모델 — 5살도 이해하는 정리노트",
   "note_subtitle": "권익진 교수님 전자회로2 · 1016 수업 (Lec5 12–23쪽, Razavi 11장) · 시험범위 상한: Lec5 23쪽",
-  "footer_note": "출처: 권익진 교수님 강의자료 Lec5 11–23쪽 · 수업 녹음 전사 1016 · B. Razavi, <i>Microelectronics</i>, 2nd ed., 11장. 전사본에 시각이 없어 인용 위치는 Part 번호로 표시해요.",
+  "footer_note": "출처: 권익진 교수님 강의자료 Lec5 11–23쪽 · 수업 녹음 전사 1016 · B. Razavi, <i>Microelectronics</i>, 2nd ed., 11장.",
   "sessions": [
     {
       "date": "1016",
@@ -261,74 +279,148 @@
   ],
   "problems": [
     {
+      "id": "2023-1_중간-Q1",
+      "kind": "기출",
+      "anchor": "s0-multiplication",
+      "date": "1016",
+      "why": "차동쌍 CM 제거와 Miller 효과의 대역폭 영향을 묻는 핵심 최신 기출이다.",
+      "priority": "core",
+      "learning_goals": [
+        "차동쌍 CM 제거와 Miller 효과의 대역폭 영향"
+      ],
+      "estimated_minutes": 20
+    },
+    {
+      "id": "2019-1_중간-Q5",
+      "kind": "기출",
+      "anchor": "s0-multiplication",
+      "date": "1016",
+      "why": "전압 바이어스, CM 제거/CMRR, Miller 등가 커패시턴스를 포괄하는 중간고사 종합 기출이다.",
+      "priority": "core",
+      "learning_goals": [
+        "바이어스·CM 제거·Miller 등가 커패시턴스 종합"
+      ],
+      "estimated_minutes": 20
+    },
+    {
       "id": "E11.10",
       "kind": "예제",
       "anchor": "s0-poles",
       "date": "1016",
-      "why": "CS 부유 커패시터의 밀러 근사 극점"
+      "why": "CS 부유 커패시터의 밀러 근사 극점을 구하는 수업 핵심 표준 예제이다.",
+      "priority": "core",
+      "learning_goals": [
+        "CS 부유 커패시터의 밀러 근사 극점"
+      ],
+      "estimated_minutes": 12
     },
     {
       "id": "X11.10",
       "kind": "연습문제",
       "anchor": "s0-multiplication",
       "date": "1016",
-      "why": "밀러 입력 커패시턴스 수치 계산"
+      "why": "밀러 입력 커패시턴스 수치 계산",
+      "priority": "extra",
+      "learning_goals": [
+        "밀러 입력 커패시턴스 수치 계산"
+      ],
+      "estimated_minutes": 8
     },
     {
       "id": "P11.16",
       "kind": "장말문제",
       "anchor": "s0-miller",
       "date": "1016",
-      "why": "일반 임피던스인 저항에 밀러 정리 적용"
+      "why": "일반 임피던스인 저항에 밀러 정리 적용",
+      "priority": "core",
+      "learning_goals": [
+        "일반 저항 임피던스의 밀러 정리 적용"
+      ],
+      "estimated_minutes": 15
     },
     {
       "id": "P11.22",
       "kind": "장말문제",
       "anchor": "s0-poles",
       "date": "1016",
-      "why": "BJT 입력저항을 포함한 밀러 근사 극점"
+      "why": "BJT 입력저항을 포함한 밀러 근사 극점",
+      "priority": "extra",
+      "learning_goals": [
+        "BJT 입력저항을 포함한 밀러 극점"
+      ],
+      "estimated_minutes": 15
     },
     {
       "id": "E11.11",
       "kind": "예제",
       "anchor": "s1-bandwidth",
       "date": "1016",
-      "why": "외부 C_i·C_L와 기존 1/g_m·RC만으로 통과 대역 설계(내재 용량 응답식 제외)"
+      "why": "외부 C_i·C_L와 기존 1/g_m·RC만으로 통과 대역 설계",
+      "priority": "core",
+      "learning_goals": [
+        "외부 결합·부하 커패시터와 통과 대역 설계"
+      ],
+      "estimated_minutes": 15
     },
     {
       "id": "X11.11",
       "kind": "연습문제",
       "anchor": "s1-bandwidth",
       "date": "1016",
-      "why": "E11.11의 외부 C_i·C_L에 전류·폭 변화 적용(내재 용량 응답식 제외)"
+      "why": "E11.11의 외부 C_i·C_L에 전류·폭 변화 적용",
+      "priority": "extra",
+      "learning_goals": [
+        "바이어스 전류와 소자 폭에 따른 대역폭 재설계"
+      ],
+      "estimated_minutes": 10
     },
     {
       "id": "E11.13",
       "kind": "예제",
       "anchor": "s2-mos-example",
       "date": "1016",
-      "why": "MOS 커패시턴스 위치와 소거"
+      "why": "MOS 커패시턴스 위치와 소거",
+      "priority": "core",
+      "learning_goals": [
+        "MOS 내재 커패시턴스 위치와 소거"
+      ],
+      "estimated_minutes": 12
     },
     {
       "id": "X11.13",
       "kind": "연습문제",
       "anchor": "s2-mos-example",
       "date": "1016",
-      "why": "다이오드 연결 부하의 고주파 소신호 회로"
+      "why": "다이오드 연결 부하의 고주파 소신호 회로",
+      "priority": "extra",
+      "learning_goals": [
+        "다이오드 연결 부하의 고주파 소신호 회로"
+      ],
+      "estimated_minutes": 10
     },
     {
       "id": "E11.12",
       "kind": "예제",
       "anchor": "s3-cascode",
       "date": "1016",
-      "why": "BJT 캐스코드의 커패시턴스 식별"
+      "why": "BJT 캐스코드의 커패시턴스 식별",
+      "priority": "core",
+      "learning_goals": [
+        "BJT 캐스코드의 커패시턴스 식별"
+      ],
+      "estimated_minutes": 12
     },
     {
       "id": "X11.12",
       "kind": "연습문제",
       "anchor": "s3-cascode",
       "date": "1016",
-      "why": "BJT 캐스코드의 고주파 소신호 회로"
+      "why": "BJT 캐스코드의 고주파 소신호 회로",
+      "priority": "extra",
+      "learning_goals": [
+        "BJT 캐스코드의 고주파 소신호 회로"
+      ],
+      "estimated_minutes": 10
     }
   ],
   "links": [
@@ -340,5 +432,15 @@
       "topic": "s4-links",
       "href": "복습문제_1016_Miller_High_Frequency_Models-답안.pdf"
     }
-  ]
+  ],
+  "selection_policy": "exam-first-v2",
+  "duplicate_policy_override": {
+    "exclude_only_ranges": [
+      "1002",
+      "1007",
+      "1012",
+      "1014"
+    ],
+    "authority": "user request 2026-10-22"
+  }
 }

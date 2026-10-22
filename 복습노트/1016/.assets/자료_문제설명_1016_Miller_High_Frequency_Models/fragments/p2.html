@@ -1,42 +1,75 @@
 <div class="layer eli5" data-explanation="understand">
-  <h4>무엇을 계산하나요?</h4>
-  <p>앞 문제의 CS 단에서 게이트와 드레인을 잇는 $C_F=80\,\mathrm{fF}$가 입력 게이트에서 얼마나 크게 보이는지 구해요. 필요한 것은 드레인 쪽 저주파 반전 이득이며, $R_S$ 값은 $C_{in}$ 계산에 쓰지 않아요.</p>
+  <h4>문제를 읽어요</h4>
+  <p>전자회로2 전반부(바이어스, 차동 증폭기, CMRR, Miller 정리)를 종합적으로 점검하는 네 가지 핵심 서술형 질문이에요.</p>
+  <p>구할 것은 (1) 전압 바이어스의 문제점과 해결책(전류 거울), (2) 차동쌍 CM rejection의 의미와 제한 원인, (3) CMRR의 정의 및 의미, (4) 이득 $-A_0$ 증폭기에서 $C_F$의 입력/출력 등가 커패시턴스예요.</p>
 </div>
 <div class="layer formal" data-explanation="recall">
-  <h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4>
-  <p>$C_F$가 증폭기의 입력·출력 사이에 있다는 단서로 밀러 효과(Miller effect)를 떠올려요. $g_m$은 트랜스컨덕턴스, $R_D$는 드레인 저항이에요. $\lambda=0$인 CS 단의 저주파 게이트→드레인 이득은 $A=-g_mR_D$예요. 그 이득을 고정해 쓰는 밀러 근사에서 $C_{in}=(1-A)C_F$가 돼요. 출력이 입력과 반대 방향으로 움직여 $C_F$ 양단 전압 변화가 커지기 때문이에요.</p>
+  <h4>이 개념과 공식을 떠올려요</h4>
+  <p>(1)에서 단순 저항 분배 전압 바이어스는 소자의 문턱전압 $V_{TH}$와 이동도 $\mu_n$, 공급 전원 $V_{DD}$ 변동에 드레인 전류가 매우 민감하게 변해요. <a href="정리노트_1016_Miller_High_Frequency_Models.html#s1-coupling">바이어스 독립성</a>을 보장하려면 기준 전류를 크기 비로 복사하는 전류 거울(current mirror)을 써야 해요.</p>
+  <p>(2)와 (3)에서 공통 모드 제거(CM rejection)는 동위상 잡음을 걸러내는 능력이며, $\text{CMRR} = |A_{DM} / A_{CM-DM}|$로 정의돼요. 테일 전류원의 유한한 출력 저항 $R_{SS}$와 양쪽 소자/부하 불일치가 주된 제한 요인이에요.</p>
+  <p>(4)에서 입력과 출력 사이에 놓인 $C_F$는 <a href="정리노트_1016_Miller_High_Frequency_Models.html#s0-multiplication">밀러 효과(Miller effect)</a>에 의해 반전 이득 크기 $A_0$만큼 커져 $C_{in} = (1 + A_0)C_F$, $C_{out} = (1 + 1/A_0)C_F$로 분리돼요.</p>
 </div>
 <div class="layer formal" data-explanation="start">
   <h4>종이에 쓸 첫 줄</h4>
-  <p>$V_{DD}$를 AC 접지로 두고 커패시터를 잠시 열면, 드레인 전류 변화 $g_mv_g$가 $R_D$를 지나며 $v_o=-g_mR_Dv_g$를 만들어요. 그러므로 $A=v_o/v_g=-g_mR_D$를 먼저 써요.</p>
-  <p>게이트에서 $C_F$로 흐르는 전류 $sC_F(v_g-v_o)=sC_F(1-A)v_g$를 입력 접지 커패시터의 전류 $sC_{in}v_g$와 같게 두어요.</p>
+  <p>전압 바이어스의 안정성 한계, 차동쌍의 공통 모드 대칭성, CMRR의 비율 정의, 그리고 Miller 정리의 등가 변환 공식으로 각 질문을 순서대로 해결해요.</p>
 </div>
 <div class="layer formal" data-explanation="solve">
-  <h4>왜 이렇게 푸는지 함께 따라가요</h4>
-  <div data-subpart="main">
-    <h4>입력 등가 커패시턴스</h4>
-    <p>$g_m=(150\,\Omega)^{-1}$이므로 $g_mR_D=(2000\,\Omega)/(150\,\Omega)=13.333\ldots$예요. 따라서 $A=-13.333\ldots$이고, $C_{in}=(1+g_mR_D)C_F$예요.</p>
-    <p>$C_{in}=(1+13.333\ldots)(80\,\mathrm{fF})=1146.7\,\mathrm{fF}\approx\mathbf{1.15\,\mathrm{pF}}$예요.</p>
+  <h4>이렇게 풀어요</h4>
+  <div data-subpart="1">
+    <div data-answer-step="전압 바이어스 문제점과 전류 거울 해결책">
+      <p><strong>전압 바이어스의 문제점:</strong> 저항 분배로 $V_{GS}$를 인가하면 포화 영역 전류식 $I_D = \frac{1}{2}\mu_n C_{ox}\frac{W}{L}(V_{GS} - V_{TH})^2$에서 공정 편차에 따른 $V_{TH}$ 변화, 온도에 따른 이동도 $\mu_n$ 감소, $V_{DD}$ 변동에 따라 $I_D$가 크게 흔들려 동작점이 불안정해져요.</p>
+      <p><strong>해결 바이어스 방법:</strong> 정밀한 기준 전류원 $I_{REF}$를 다이오드 연결 트랜지스터에 흘려 $V_{GS}$를 생성하고, 이를 복사 트랜지스터의 게이트에 공유하는 <strong>전류 거울(current mirror)</strong> 방식을 사용해요. 같은 칩 내의 두 트랜지스터는 공정·온도 파라미터가 동일하게 변해 상쇄되므로, 복사 전류는 트랜지스터 종횡비 크기 비율($W/L$)로 정확하고 안정하게 결정돼요.</p>
+    </div>
+  </div>
+  <div data-subpart="2">
+    <div data-answer-step="CM 제거 의미와 제한 이유">
+      <p><strong>CM rejection의 의미:</strong> 차동 증폭기가 두 입력에 공통으로 들어오는 노이즈(전원 리플, 공통 간섭 등)를 증폭하지 않고 0으로 상쇄하며, 오직 두 입력 전압의 차이(차동 신호)만을 선택적으로 증폭하는 능력이에요.</p>
+      <p><strong>실제 회로에서 제한되는 이유:</strong><br>
+      ① <strong>테일 전류원의 유한한 출력 저항 $R_{SS}$:</strong> 공통 모드 입력 전압이 변할 때 테일 전류가 변하여 단일 출력 공통 모드 이득이 0이 되지 않아요 ($A_{CM} \approx -R_D/(1/g_m + 2R_{SS})$).<br>
+      ② <strong>소자 파라미터 및 부하 저항의 불일치:</strong> 양쪽 입력 트랜지스터의 $g_m$이나 부하 저항 $R_D$ 사이에 비대칭 오차($\Delta g_m, \Delta R_D$)가 존재하면, 공통 모드 입력 신호가 차동 출력 신호로 새어 나오는 CM-to-DM 변환($A_{CM-DM}$)이 발생해요.</p>
+    </div>
+  </div>
+  <div data-subpart="3">
+    <div data-answer-step="CMRR 정의와 의미">
+      <p><strong>CMRR의 정의:</strong> 차동 신호에 대한 전압 이득 $A_{DM}$과 공통 모드 신호가 차동 출력으로 변환되는 이득 $A_{CM-DM}$ (또는 공통 모드 이득 $A_{CM}$)의 비의 절댓값으로 정의해요.</p>
+      $$\text{CMRR} = \left|\frac{A_{DM}}{A_{CM-DM}}\right|$$
+      <p><strong>CMRR의 의미:</strong> 증폭기가 원하는 차동 신호를 원치 않는 공통 모드 잡음 대비 몇 배나 더 우세하게 증폭하는지를 나타내는 성능 지표예요. CMRR 값이 클수록 공통 모드 간섭 신호를 효과적으로 차단할 수 있어요.</p>
+    </div>
+  </div>
+  <div data-subpart="4">
+    <div data-answer-step="밀러 입력 및 출력 커패시턴스">
+      <p>전압 이득이 $A_v = -A_0$일 때 Miller 정리를 적용해요.</p>
+      $$C_{in} = (1 - A_v)C_F = (1 - (-A_0))C_F = (1 + A_0)C_F$$
+      $$C_{out} = \left(1 - \frac{1}{A_v}\right)C_F = \left(1 - \frac{1}{-A_0}\right)C_F = \left(1 + \frac{1}{A_0}\right)C_F$$
+    </div>
   </div>
 </div>
 <div class="layer formal" data-explanation="verify">
   <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <h4>크기와 단위</h4>
-    <p><strong>$C_{in}\approx1.15\,\mathrm{pF}$</strong>예요. $g_mR_D$는 $\mathrm{S}\cdot\Omega=1$인 무차원 값이라 결과 단위는 $C_F$와 같은 패럿이에요. $C_{in}/C_F=14.333\ldots$이므로 $80\,\mathrm{fF}$보다 약 14.3배 큰 값이 맞아요.</p>
+  <div data-subpart="1">
+    <p data-answer-final><strong>(1) 문제점:</strong> $V_{GS}$ 고정 전압 바이어스는 $V_{TH}$, 온도, $V_{DD}$ 변동에 따라 $I_D$가 민감하게 변해 동작점이 흔들려요.<br><strong>해결 방법:</strong> 기준 전류를 다이오드 연결 소자에 흘리고 같은 게이트 전압을 공유하는 <strong>전류 거울(current mirror)</strong>을 사용하면 공정·온도 변화가 상쇄되어 크기 비로 안정적인 바이어스를 얻을 수 있어요.</p>
+  </div>
+  <div data-subpart="2">
+    <p data-answer-final><strong>(2) 의미:</strong> 두 입력의 동일한 공통 모드 잡음을 상쇄하고 차동 신호에만 반응하는 특성이에요.<br><strong>제한 이유:</strong> 테일 전류원의 유한한 출력 저항 $R_{SS}$와 양쪽 소자($g_m$) 및 부하 저항($R_D$)의 불일치 때문이에요.</p>
+  </div>
+  <div data-subpart="3">
+    <p data-answer-final><strong>(3) 정의:</strong> $\text{CMRR} = \left|\dfrac{A_{DM}}{A_{CM-DM}}\right|$ (또는 $\left|\dfrac{A_{DM}}{A_{CM}}\right|$)<br><strong>의미:</strong> 원하는 차동 신호를 공통 모드 잡음보다 몇 배 더 우세하게 증폭하는지 나타내며, 클수록 잡음 제거 능력이 우수해요.</p>
+  </div>
+  <div data-subpart="4">
+    <p data-answer-final><strong>(4) 입력 등가 capacitance:</strong> $C_{in} = (1 + A_0)C_F$<br><strong>출력 등가 capacitance:</strong> $C_{out} = \left(1 + \dfrac{1}{A_0}\right)C_F$</p>
   </div>
 </div>
 <div class="layer warn" data-explanation="pitfall">
-  <h4>여기서 틀리기 쉬워요</h4>
-  <p>$g_mR_D=13.3$을 곧바로 배율로 쓰면 원래의 $1C_F$ 항을 빠뜨려요. $C_{in}$의 배율은 $1+g_mR_D$예요. $\mathrm{fF}$를 $\mathrm{pF}$로 바꿀 때는 1000으로 나눠요.</p>
+  <h4>주의할 점</h4>
+  <p>전압 이득이 $-A_0$로 이미 음의 부호가 주어졌으므로, Miller 공식 $1 - A_v$에 대입할 때 마이너스 부호가 상쇄되어 $1 + A_0$가 됨을 명확히 써야 해요.</p>
+  <p>CMRR 정의에서 분모에 들어가는 이득이 단일 출력 기준인지, 차동 출력의 CM-to-DM 변환 이득인지 명시하면 좋아요.</p>
 </div>
 <div class="layer eli5" data-explanation="retry">
-  <h4>설명을 닫고 다시 해 봐요</h4>
-  <ol><li>같은 $g_m,R_D$에서 $C_F$를 절반으로 줄이면 $C_{in}$은 얼마인지 계산해 보세요.</li><li>$g_mR_D$가 0에 가까워지면 $C_{in}$이 어떤 값으로 돌아가는지 설명해 보세요.</li></ol>
+  <h4>조건을 바꾸어 생각해요</h4>
+  <ol><li>만약 증폭기의 이득 $A_0$가 0에 가깝다면(즉 전압 전달이 거의 없는 경우), 입력 및 출력에서 보이는 등가 커패시턴스는 각각 어떤 값으로 접근할까요?</li></ol>
 </div>
-<div class="sum" hidden="">
-  <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>밀러 효과: $C_{in}=(1+g_mR_D)C_F$.</p></div>
-  <div class="summary-group"><h4>첫 줄</h4><p>$A=-g_mR_D=-2000/150$.</p></div>
-  <div class="summary-group"><h4>핵심 판단</h4><p>$80\,\mathrm{fF}$에 $14.333\ldots$을 곱해요.</p></div>
-  <div class="summary-group"><h4>검산</h4><p>$C_{in}\approx1.15\,\mathrm{pF}$, 원래 값의 약 14.3배예요.</p></div>
+<div class="sum" hidden>
+  <p>전류 거울로 바이어스를 안정화해요.</p>
+  <p>차동쌍은 대칭성으로 CM을 제거해요.</p>
+  <p>반전 이득 $-A_0$는 Miller 커패시턴스를 키워요.</p>
 </div>

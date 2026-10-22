@@ -1,8 +1,44 @@
-<div class="layer eli5" data-explanation="understand"><h4>커패시터뿐 아니라 전류 길도 그려요</h4><p>예제 11.13의 입력 NMOS와 다이오드 연결 PMOS를 고주파 소신호 회로로 바꾸는 문제예요. 입력 $V_{in}$, 출력 $V_{out}$, AC 접지 세 노드가 있고, 각 노드 사이의 커패시터·저항·종속 전류원을 모두 그려야 해요.</p></div>
-<div class="layer formal" data-explanation="recall"><h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4><p>"소신호 등가 회로"와 "다이오드 연결"에서 MOS 고주파 모델(high-frequency MOS model)을 선택해요. 각 소자의 드레인–소스 사이에는 $r_O$와 제어 전류원이 있고, $C_{GS},C_{GD},C_{SB},C_{DB}$가 단자 사이에 붙어요. $g_m$은 게이트 제어 전압에 대한 드레인 전류 변화율, $r_O$는 유한 출력 저항이에요.</p><p>$V_{DD}$는 AC 접지이고 $M_2$의 게이트와 드레인은 출력으로 단락되어 있어요. $r_{O1},r_{O2}$를 무한대로 보내라는 조건은 없으므로 남겨요. PMOS 전류 방향을 NMOS의 $g_m v_{GS}$와 기계적으로 동일하게 적지 않고, 출력에서 접지로 빠지는 소신호 전류로 환산하면 $g_{m2}V_{out}$이에요.</p></div>
-<div class="layer formal" data-explanation="start"><h4>종이에 쓸 첫 줄</h4><p>노드 표부터 써요: $M_1:(G,D,S,B)=(V_{in},V_{out},0,0)$, $M_2:(G,D,S,B)=(V_{out},V_{out},0,0)$. $M_1$의 $v_{GS1}=V_{in}$이고 출력→접지 종속 전류는 $g_{m1}V_{in}$이에요. $M_2$에서는 $v_{SG2}=0-V_{out}=-V_{out}$이에요. PMOS 소스→드레인 전류 변화 $g_{m2}v_{SG2}=-g_{m2}V_{out}$은 출력→접지로 환산하면 $+g_{m2}V_{out}$이므로 출력–접지의 양의 컨덕턴스 $g_{m2}$가 돼요.</p></div>
-<div class="layer formal" data-explanation="solve"><h4>왜 이렇게 푸는지 함께 따라가요</h4><div data-subpart="main"><h4>고주파 소신호 등가 회로</h4><p>입력–접지에 $C_{GS1}$, 입력–출력에 $C_{GD1}$을 그려요. 출력–접지에는 $M_1$의 종속 전류원 $g_{m1}V_{in}$ (아래 방향), $r_{O1}$, $C_{DB1}$을 놓아요.</p><p>$M_2$의 드레인·게이트는 출력이고 소스는 AC 접지이므로 $r_{O2}$와 $g_{m2}V_{out}$에 해당하는 양의 컨덕턴스가 출력–접지에 놓여요. 후자는 $1/g_{m2}$ 저항과 동등해요. 같은 두 노드의 $C_{GS2}$와 $C_{DB2}$는 $C_{DB1}$과 합쳐 $C_T=C_{DB1}+C_{DB2}+C_{GS2}$예요. $C_{GD2}$와 두 $C_{SB}$는 양 끝이 같은 AC 노드여서 빠져요.</p><figure class="figure"><svg viewBox="0 0 900 547" role="img" aria-label="MOS 소신호 등가회로의 가지 연결"><text x="24" y="37" font-size="21" fill="currentColor">MOS 소신호 등가회로의 가지 연결</text><text x="25" y="88" font-size="19" fill="currentColor">입력</text><path d="M160 80 H330 M570 80 H740" stroke="currentColor" stroke-width="3" fill="none"/><circle cx="160" cy="80" r="4" fill="currentColor"/><circle cx="740" cy="80" r="4" fill="currentColor"/><rect x="330" y="56" width="240" height="48" rx="6" fill="none" stroke="currentColor"/><text x="450" y="87" font-size="19" text-anchor="middle" fill="currentColor">C GS1</text><text x="765" y="88" font-size="19" fill="currentColor">접지</text><text x="25" y="154" font-size="19" fill="currentColor">입력</text><path d="M160 146 H330 M570 146 H740" stroke="currentColor" stroke-width="3" fill="none"/><circle cx="160" cy="146" r="4" fill="currentColor"/><circle cx="740" cy="146" r="4" fill="currentColor"/><rect x="330" y="122" width="240" height="48" rx="6" fill="none" stroke="currentColor"/><text x="450" y="153" font-size="19" text-anchor="middle" fill="currentColor">C GD1</text><text x="765" y="154" font-size="19" fill="currentColor">출력</text><text x="25" y="220" font-size="19" fill="currentColor">출력</text><path d="M160 212 H330 M570 212 H740" stroke="currentColor" stroke-width="3" fill="none"/><circle cx="160" cy="212" r="4" fill="currentColor"/><circle cx="740" cy="212" r="4" fill="currentColor"/><rect x="330" y="188" width="240" height="48" rx="6" fill="none" stroke="currentColor"/><text x="450" y="219" font-size="19" text-anchor="middle" fill="currentColor">gₘ₁Vᵢₙ ↓</text><text x="765" y="220" font-size="19" fill="currentColor">접지</text><text x="25" y="286" font-size="19" fill="currentColor">출력</text><path d="M160 278 H330 M570 278 H740" stroke="currentColor" stroke-width="3" fill="none"/><circle cx="160" cy="278" r="4" fill="currentColor"/><circle cx="740" cy="278" r="4" fill="currentColor"/><rect x="330" y="254" width="240" height="48" rx="6" fill="none" stroke="currentColor"/><text x="450" y="285" font-size="19" text-anchor="middle" fill="currentColor">rₒ₁</text><text x="765" y="286" font-size="19" fill="currentColor">접지</text><text x="25" y="352" font-size="19" fill="currentColor">출력</text><path d="M160 344 H330 M570 344 H740" stroke="currentColor" stroke-width="3" fill="none"/><circle cx="160" cy="344" r="4" fill="currentColor"/><circle cx="740" cy="344" r="4" fill="currentColor"/><rect x="330" y="320" width="240" height="48" rx="6" fill="none" stroke="currentColor"/><text x="450" y="351" font-size="19" text-anchor="middle" fill="currentColor">rₒ₂</text><text x="765" y="352" font-size="19" fill="currentColor">접지</text><text x="25" y="418" font-size="19" fill="currentColor">출력</text><path d="M160 410 H330 M570 410 H740" stroke="currentColor" stroke-width="3" fill="none"/><circle cx="160" cy="410" r="4" fill="currentColor"/><circle cx="740" cy="410" r="4" fill="currentColor"/><rect x="330" y="386" width="240" height="48" rx="6" fill="none" stroke="currentColor"/><text x="450" y="417" font-size="19" text-anchor="middle" fill="currentColor">1/gₘ₂</text><text x="765" y="418" font-size="19" fill="currentColor">접지</text><text x="25" y="484" font-size="19" fill="currentColor">출력</text><path d="M160 476 H330 M570 476 H740" stroke="currentColor" stroke-width="3" fill="none"/><circle cx="160" cy="476" r="4" fill="currentColor"/><circle cx="740" cy="476" r="4" fill="currentColor"/><rect x="330" y="452" width="240" height="48" rx="6" fill="none" stroke="currentColor"/><text x="450" y="483" font-size="19" text-anchor="middle" fill="currentColor">Cₜ</text><text x="765" y="484" font-size="19" fill="currentColor">접지</text></svg><figcaption>같은 두 노드를 잇는 행의 소자들은 병렬이에요. $C_T=C_{DB1}+C_{DB2}+C_{GS2}$예요.</figcaption></figure></div></div>
-<div class="layer formal" data-explanation="verify"><h4>완성 답과 검산</h4><div data-subpart="main"><h4>노드와 전류 방향 확인</h4><p><b>입력–접지 $C_{GS1}$, 입력–출력 $C_{GD1}$; 출력–접지 $g_{m1}V_{in}$ 전류원, $r_{O1}\parallel r_{O2}\parallel(1/g_{m2})$, $C_T=C_{DB1}+C_{DB2}+C_{GS2}$.</b> $V_{in}=0$일 때 출력에서 접지로 흐르는 저항성 전류는 $V_{out}(1/r_{O1}+1/r_{O2}+g_{m2})$예요. 모두 양의 컨덕턴스이므로 수동 다이오드 연결 부하의 방향과 맞아요. $1/g_m$은 Ω 단위예요.</p></div></div>
-<div class="layer warn" data-explanation="pitfall"><h4>이 문항에서 조심할 점</h4><p>$M_2$에 NMOS의 "드레인→소스 $g_m v_{GS}$" 화살표를 그대로 붙여 $g_{m2}V_{out}$이 위쪽으로 흐른다고 보면 부하가 음의 저항처럼 바뀌어요. PMOS는 $v_{SG2}=-V_{out}$와 소스→드레인 전류를 먼저 정의해야 해요. $C_{GD1}$도 두 움직이는 노드 사이이므로 출력 커패시턴스 합에 바로 넣지 않아요.</p></div>
-<div class="layer eli5" data-explanation="retry"><h4>설명을 닫고 다시 해 봐요</h4><ol><li>$M_2$의 $r_{O2}$가 무한대라면 등가회로에서 어느 가지만 지우며, $1/g_{m2}$는 왜 남나요?</li><li>$V_{out}$이 AC로 조금 증가할 때 다이오드 연결 PMOS의 출력→접지 소신호 전류 변화는 어느 방향인가요?</li></ol></div>
-<div class="sum" hidden=""><p>입력–접지 $C_{GS1}$, 입력–출력 부유 $C_{GD1}$도 남겨요. $C_T=C_{DB1}+C_{DB2}+C_{GS2}$이며 $C_{GD1}$을 여기에 바로 합치지 않아요.</p><div class="summary-group"><h4>떠올릴 개념·공식</h4><p>MOS 고주파 모델과 다이오드 연결 PMOS의 양의 컨덕턴스 $g_{m2}$.</p></div><div class="summary-group"><h4>첫 줄</h4><p>$M_1:(V_{in},V_{out},0,0)$, $M_2:(V_{out},V_{out},0,0)$ 순서 $G,D,S,B$.</p></div><div class="summary-group"><h4>핵심 판단</h4><p>출력–접지에 $g_{m1}V_{in}$, $r_{O1}$, $r_{O2}$, $1/g_{m2}$, $C_T$가 병렬이에요.</p></div><div class="summary-group"><h4>검산</h4><p>$V_{in}=0$에서 출력 컨덕턴스는 $1/r_{O1}+1/r_{O2}+g_{m2}&gt;0$이에요.</p></div></div>
+<div class="layer eli5" data-explanation="understand">
+<h4>문제를 읽어요</h4>
+<p>앞 소스 폴로어에서 $I_1$과 $M_1$의 폭을 반으로 줄여 같은 오디오 대역에 필요한 $C_i$와 $C_L$을 다시 구해요. 입력 바이어스 저항 $R_i=100\,\mathrm{k\Omega}$은 그대로예요. 앞 예제 원문의 $R_1$은 그림의 $R_i$로 읽고, 교재 풀이의 오디오 범위 20 Hz–20 kHz를 계속 적용해요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+<h4>이 개념과 공식을 떠올려요</h4>
+<p>폭과 바이어스 전류가 함께 바뀌므로 먼저 트랜스컨덕턴스 $g_m$을 다시 구해야 해요. 포화 MOS의 $g_m=\sqrt{2\mu_nC_{ox}(W/L)I_D}$에서 $W$와 $I_D$가 각각 절반이면 $g_m$은 절반이에요. 입력의 직렬 $C_i$–$R_i$ 고역통과(high-pass)는 $g_m$과 무관해요. 출력은 $\lambda=0$과 이상적 $I_1$ 아래, 미리 배운 소스 폴로어(source follower)의 $1/g_m$에 외부 $C_L$을 붙인 RC예요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+<h4>종이에 쓸 첫 줄</h4>
+<p>새 $g_m$부터 써요: $g_{m,new}/g_{m,old}=\sqrt{(W_{new}/W_{old})(I_{D,new}/I_{D,old})}=\sqrt{(1/2)(1/2)}=1/2$예요. 따라서 $g_{m,new}=1/(400\,\Omega)$예요.</p>
+<p>$V_{DD}$를 AC 접지로 놓으면 입력은 그대로 $C_i$–$R_i$의 $\omega_{low}=1/(R_iC_i)$예요. 출력에 $C_L$을 달기 전, 게이트를 AC 접지로 하고 소스 시험전압 $v_t$를 가하면 $i_t=g_{m,new}v_t$이므로 $R_{out}=1/g_{m,new}=400\,\Omega$예요.</p>
+</div>
+<div class="layer formal" data-explanation="solve">
+<h4>이렇게 풀어요</h4>
+<div data-subpart="main"><h4>두 경계 조건 다시 적용</h4><div data-answer-step="단계별 풀이">
+
+<p>입력 조건은 그대로 $1/(R_iC_i)\le2\pi(20\,\mathrm{Hz})$예요. $R_i$가 변하지 않았으므로 $C_i\ge1/[2\pi(20\,\mathrm{Hz})(100\,\mathrm{k\Omega})]=79.58\,\mathrm{nF}$예요.</p>
+<p>출력은 $g_{m,new}/C_L\ge2\pi(20\,\mathrm{kHz})$예요. $g_{m,new}=2.5\,\mathrm{mS}$를 넣으면 $C_L\le(2.5\,\mathrm{mS})/[2\pi(20\,\mathrm{kHz})]=19.89\,\mathrm{nF}$예요.</p>
+<p><strong>최소 $C_i\approx79.6\,\mathrm{nF}$는 그대로, 최대 $C_L\approx19.9\,\mathrm{nF}$는 절반</strong>이에요.</p>
+</div></div>
+</div>
+<div class="layer formal" data-explanation="verify">
+<h4>완성 답과 검산</h4>
+<div data-subpart="main">
+<h4>앞 예제와 비율 확인</h4>
+<p data-answer-final=""><strong>$C_{i,min}=79.6\,\mathrm{nF}$, $C_{L,max}=19.9\,\mathrm{nF}$</strong>예요. $R_i$와 20 Hz가 그대로라 $C_i$는 변하지 않아요. $g_m$이 절반이므로 $C_{L,max}=g_m/[2\pi(20\,\mathrm{kHz})]$도 절반이어야 하고, $39.8/2=19.9\,\mathrm{nF}$로 맞아요.</p>
+<p>경계 대입도 $1/[2\pi R_iC_{i,min}]=20\,\mathrm{Hz}$, $g_{m,new}/[2\pi C_{L,max}]=20\,\mathrm{kHz}$예요. 이 결과는 교재의 오디오 범위와 외부 $C_i,C_L$에 한정한 계산이에요.</p>
+</div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+<h4>주의할 점</h4>
+<p>폭만 반으로 줄 때의 $\sqrt{1/2}$을 적용하면 안 돼요. 이 문항은 전류도 절반이라 $g_m$이 $1/2$배예요. $g_m$이 바뀌었다고 입력 $C_i$까지 바꾸지 않아요. $R_i$와 입력의 20 Hz 조건은 그대로예요.</p>
+</div>
+<div class="layer eli5" data-explanation="retry">
+<h4>조건을 바꾸어 생각해요</h4>
+<ol><li>$W$만 절반이고 $I_D$는 같다면 $g_m$의 비율은 얼마인지 식에서 구해 보세요.</li><li>$g_m$이 다시 두 배가 되면 20 kHz 조건에서 허용 $C_L$이 어떻게 바뀌는지 말해 보세요.</li></ol>
+</div>
+<div class="sum" hidden=""><p>$\lambda=0$·이상적 전류원의 외부 $C_i,C_L$ 모델이에요.</p><p>폭만 절반일 때의 $1/\sqrt2$와 달리 전류도 절반이라 $g_m$은 $1/2$이에요.</p>
+<div class="summary-group"><h4>떠올릴 개념·공식</h4><p>$g_m\propto\sqrt{WI_D}$; 입력 $1/(R_iC_i)$, 출력 $g_m/C_L$.</p></div>
+<div class="summary-group"><h4>첫 줄</h4><p>$g_{m,new}/g_{m,old}=\sqrt{(1/2)(1/2)}=1/2$.</p></div>
+<div class="summary-group"><h4>핵심 판단</h4><p>교재의 20 Hz–20 kHz와 그림의 $R_i=100\,\mathrm{k\Omega}$를 유지해요.</p></div>
+<div class="summary-group"><h4>검산</h4><p>$C_i\ge79.6\,\mathrm{nF}$ 그대로, $C_L\le19.9\,\mathrm{nF}$로 절반이에요.</p></div>
+</div>
