@@ -84,11 +84,16 @@
     .layer [data-source-field] + h4 { margin-top: var(--s5); }
     .layer p { margin: var(--s3) 0; }
     .verdict-card { padding: var(--s3) var(--s4); border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
-    .layer .part, .layer [data-subpart] + [data-subpart] { margin-top: var(--s4); }
+    .layer .part { margin-top: var(--s4); }
+    /* Same-level solve groups own their spacing once; inner paragraphs cannot collapse out. */
+    .layer:is([data-explanation="solve"], [data-explanation="verify"]) > [data-subpart] { display: flow-root; margin: var(--s5) 0 0; }
+    .layer:is([data-explanation="solve"], [data-explanation="verify"]) > [data-subpart] + [data-subpart] { margin-top: var(--s6); }
+    .layer:is([data-explanation="solve"], [data-explanation="verify"]) > [data-subpart] > :first-child { margin-top: 0; }
+    .layer:is([data-explanation="solve"], [data-explanation="verify"]) > [data-subpart] > :last-child { margin-bottom: 0; }
+    @media (max-width: 1023px) {
+      .layer:is([data-explanation="solve"], [data-explanation="verify"]) > [data-subpart] + [data-subpart] { margin-top: var(--s5); }
+    }
     .layer li + li { margin-top: var(--s3); }
-    .sum > p + p, .sum > .summary-group + .summary-group { margin-top: var(--s5); }
-    .sum h4 { margin: 0 0 var(--s3); font-size: inherit; line-height: 1.5; }
-    .sum .summary-group > p { margin: 0; }
     .layer-title { display: block; font-size: var(--fs-layer); font-weight: 700; line-height: 1.4; letter-spacing: -0.01em; color: var(--ink); margin-bottom: var(--s3); }
     .layer.eli5 .layer-title { color: var(--accent-ink); }
     .layer.eli5 .lead { font-size: var(--fs-lead); font-weight: 700; line-height: 1.5; letter-spacing: -0.01em; margin: 0 0 var(--s4); }
@@ -277,6 +282,21 @@
     .solved-btn[aria-pressed="true"] { border-color: var(--accent); color: var(--accent-ink); }
 
     /* 정리노트: 페이지 요약 */
+    /* readability-20261022:start */
+    /* Shared summary layout: explicit blocks, no runtime sentence split. */
+    .sum { display: flow-root; }
+    .sum > *, .sum p, .sum ul, .sum ol, .sum dl { margin: 0; }
+    .sum > * + * { margin-top: var(--s5); }
+    .sum > p + p:not(.panel-label) { margin-top: var(--s2); }
+    .sum > .sum-lead + * { margin-top: var(--s5); }
+    .sum > .panel-label + *, .sum > h4 + * { margin-top: var(--s3); }
+    .sum .summary-group { display: flex; flex-direction: column; gap: var(--s2); }
+    .sum h4 { margin: 0 0 var(--s1); font-size: inherit; line-height: 1.5; }
+    .sum .summary-group > p { margin: 0; }
+    .sum .terms dt { margin-top: var(--s3); }
+    .sum .terms dt:first-child { margin-top: 0; }
+    .sum .terms dd { margin: var(--s2) 0 0; }
+    /* readability-20261022:end */
     .sum-lead { margin: 0; font-size: var(--fs-body); font-weight: 700; line-height: 1.6; }
     .eq-list { list-style: none; margin: 0; padding: 0; }
     .eq-list li { padding: var(--s2) 0; border-bottom: 1px solid var(--line); }

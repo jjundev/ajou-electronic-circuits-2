@@ -15,6 +15,7 @@ from epe_source import sha256, inside, existing_path
 from epe_types import BUNDLE, ExplainError, Artifacts
 from epe_labels import normalize_subpart_labels
 from epe_core import make_overlay
+from readability import readability_errors, public_location_errors
 
 ASSETS = Path(__file__).resolve().parents[1] / 'assets'
 
@@ -166,7 +167,6 @@ def build_explanation(pack, fragments, stage: Path, repo: Path) -> Artifacts:
         original_link = (f' · <a href="{quote(problem_pdf, safe="")}">원 문제 보기</a>' if has_pdf else '')
         articles.append(f'<article class="topic" id="{p.id}"><h3>{html.escape(p.title)}</h3>'
                         + f'<p class="panel-meta">{html.escape(p.source)}{original_link}</p>'
-                        + (f'<p class="panel-meta review-workload">{html.escape(p.workload_label)}</p>' if p.workload_label else '')
                         + reading + explanation + '</article>')
         toc.append(f'<li><a href="#{p.id}">{html.escape(p.title)}</a></li>')
         (data_dir / 'fragments').mkdir(exist_ok=True)
@@ -241,6 +241,8 @@ def check_artifacts(pack, artifacts):
         wanted_images = Counter(os.path.relpath(root / unquote(n.attrs.get('src', '')), artifacts.md.parent).replace(os.sep, '/')
                                 for n in main.find_all(lambda n: n.tag == 'img'))
         markdown = artifacts.md.read_text(encoding='utf-8')
+        errors.extend(f'{code}: {detail}' for code, detail in readability_errors(artifacts.html.read_text(encoding='utf-8')))
+        errors.extend(f'MD {code}: {detail}' for code, detail in public_location_errors(markdown))
         md_images = Counter(unquote(path) for path in re.findall(r'!\[[^\]]*\]\(([^)]+)\)', markdown))
         for image, count in wanted_images.items():
             if md_images[image] < count:

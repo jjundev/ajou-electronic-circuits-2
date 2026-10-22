@@ -1,0 +1,89 @@
+{
+  "pass": true,
+  "checks": [
+    {
+      "command": [
+        "C:\\Users\\Hyunjun\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+        ".claude/skills/ec2-review-pack/scripts/check_html.py",
+        "--repo",
+        "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2",
+        "--manifest",
+        "C:\\Users\\Hyunjun\\.codex\\scratch\\review-pack\\1007-exam-first-20261022\\manifest.json",
+        "--note",
+        "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\복습노트\\1007\\정리노트_1007_Differential_Amplifiers.html"
+      ],
+      "exit_code": 0,
+      "stdout": "OK\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\Users\\Hyunjun\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+        ".claude/skills/ec2-review-pack/scripts/html2md.py",
+        "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\복습노트\\1007\\정리노트_1007_Differential_Amplifiers.html",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\복습노트\\1007\\.assets\\정리노트_1007_Differential_Amplifiers.md\nfigures: 16\nOK\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\Users\\Hyunjun\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+        ".claude/skills/ec2-problem-explain/scripts/epe_cli.py",
+        "check",
+        "--run",
+        "C:\\Users\\Hyunjun\\.codex\\scratch\\review-pack\\1007-exam-first-20261022\\explain-final"
+      ],
+      "exit_code": 0,
+      "stdout": "warning: The `fitz` API is deprecated and will be removed in future. Use `import pymupdf` instead.\ncheck: machine PASS (수학·화면 검토는 별도) C:\\Users\\Hyunjun\\.codex\\scratch\\review-pack\\1007-exam-first-20261022\\explain-final\\review-1007-Differential_Amplifiers\\stage\\1a1b32f85cb44916b9ae057656ac8407\\문제설명_1007_Differential_Amplifiers.html\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\Users\\Hyunjun\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        ".claude/skills/ec2-review-pack/tests",
+        "-p",
+        "test_pack_layout.py"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.022s\n\nOK\n"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 2,
+      "stdout": "복습노트/1007/.assets/자료_문제설명_1007_Differential_Amplifiers/fragments/p10.html:82: new blank line at EOF.\n",
+      "stderr": "",
+      "status": "non_blocking_historical_approved_fragment_format"
+    }
+  ],
+  "selected_ids": [
+    "P10.67",
+    "P10.68",
+    "2018-2_중간-Q3",
+    "2018-2_중간-Q4",
+    "2023-1_중간-Q4",
+    "2015-1_중간-Q4",
+    "2015-2_중간-Q3",
+    "2017-1_중간_C030-Q2",
+    "2019-1_중간-Q4",
+    "P10.71",
+    "P10.72",
+    "2013-1_중간-Q4",
+    "2015-1_중간-Q3",
+    "P10.75"
+  ],
+  "other_pack_reuse": [],
+  "source_and_generation_code_unchanged_since_policy_commit": true,
+  "overlay_approved_ids_order_valid": true,
+  "format_note": "Default diff-check reports a trailing blank line in p10, byte-identical to previously approved P10.71 at oldp8. Preserve approved fragment hash; Default diff-check is not fully clean; its sole historical format warning is recorded and no approved bytes or checks/config were altered."
+}

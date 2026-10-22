@@ -37,6 +37,24 @@ def reviews():
 
 
 class ContractTests(unittest.TestCase):
+    def test_declared_gain_route_is_allowed_and_enforced(self):
+        route = ('<div data-gain-route="gm-rout">'
+                 '<p data-gain-stage="gm">$$G_m=i_{sc}/v_{in}$$</p>'
+                 '<p data-gain-stage="rout">$$R_{out}\\approx R_L$$</p>'
+                 '<p data-gain-stage="gain">$$A_v=-G_mR_{out}$$</p></div>')
+        text = with_recall().replace('<h4>이렇게 풀어요</h4>', '<h4>이렇게 풀어요</h4>' + route)
+        self.assertEqual(validate_fragment(problem(), text), [])
+        bad = text.replace('<p data-gain-stage="rout">$$R_{out}\\approx R_L$$</p>', '')
+        self.assertTrue(any('gain-route' in e for e in validate_fragment(problem(), bad)))
+
+    def test_public_source_locator_and_multi_sentence_summary_refused(self):
+        text = fragment()
+        bad = text.replace('<div class="sum" hidden>',
+            '<div class="sum" hidden><p>테일 저항을 구해요. 반회로로 풀어요.</p>')
+        self.assertTrue(any('summary-sentence' in e for e in validate_fragment(problem(), bad)))
+        self.assertTrue(any('public-source-location' in e for e in
+            validate_fragment(problem(), text + '<p title="STT L182–186">설명</p>')))
+
     def test_recall_required_and_legacy_fragment_refused(self):
         text = with_recall()
         self.assertEqual(validate_fragment(problem(), text), [])

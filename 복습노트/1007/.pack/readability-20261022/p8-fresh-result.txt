@@ -1,0 +1,36 @@
+{
+  "source": "from_the_past/md/2017-1_중간_C030/Q2.md",
+  "circuit_observation": "RE at drain of tail M1, NOT source; M1 gate+source AC ground -> tail=RE+ro1",
+  "1": {
+    "min": 1.8,
+    "max_with_explicit_10ohm": 2.8994999999999997,
+    "max_symmetric": 2.9
+  },
+  "2_cutoff": 0.28284271247461906,
+  "3_symmetric": -4.761904761904762,
+  "4_single_course": -0.045454545454545456,
+  "4_diff": "0 when deltaRC=0",
+  "5_course": 4.545454545454545e-05,
+  "6_course_using_same_roignored_model": 110000.0,
+  "full_cm": {
+    "left": -0.04458419911018014,
+    "right": -0.04462665823032693,
+    "diff": 4.2459120146789986e-05,
+    "avg": -0.044605428670253536,
+    "tail_node": 0.9808290279077844
+  },
+  "full_dm": {
+    "left": -2.38089622371133,
+    "right": 2.383276057395557,
+    "diff": -4.764172281106887,
+    "avg": 0.0011899168421136697,
+    "tail_node": 1.1676258040365735e-05
+  },
+  "full_CMRR": 112206.10000009787,
+  "note": "ro=20RD. RDparallelro retained in ADM and equal-branch-current approx in ACM is mixed-order if called exact. State leading-course or full-linear explicitly."
+}
+Symmetric CM exact internal = -G*O*R/(O + R + 2*T*(G*O + 1))
+First-order leakage from full coupled KCL = D*G*O**2/((O + R)*(2*G*O*T + O + R + 2*T))
+limit CM/CMlead for G->infinity: 1
+limit leakage/large-product leakage for G->infinity: O*(1 + R/O)/(O + R)
+limit same-model CMRR/leading CMRR: (O + R)/(O*(1 + R/O))

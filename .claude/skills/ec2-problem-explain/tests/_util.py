@@ -145,7 +145,7 @@ def approved(pack, fragments, artifacts=None):
                       'evidence': 'unit test fixture only; no actual semantic review'}
                       for rule in pack.learning_style['rule_ids']}} for k in keys}},
               'references': [{'path': next((name for name in pack.inputs
-                  if name.endswith('/' + pack.learning_style['path'])),
+                  if name.replace('\\', '/').endswith('/' + pack.learning_style['path'])),
                   str(REPO / pack.learning_style['path'])), 'sha256': pack.learning_style['sha256']}]}
     if artifacts:
         from epe_render import artifact_hashes

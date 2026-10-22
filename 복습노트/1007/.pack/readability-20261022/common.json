@@ -1,0 +1,127 @@
+{
+  "status": "complete_with_preexisting_backup_test_failure",
+  "files": {
+    ".claude/skills/ec2-problem-explain/SKILL.md": "63ce1595ed0b5de2bdd5371031d8cb4ff8427cf2183ce921447c63bb35d999e1",
+    ".claude/skills/ec2-problem-explain/assets/note-template.html": "5dd956d28096feac1bf98d45e2cbdcc30fdf45517804f523eddb8e16c6c42707",
+    ".claude/skills/ec2-problem-explain/assets/template-provenance.json": "df58e3bc22a94c057389598742586ab4ec80b9ad9e584abf4b48f2fc735c4f17",
+    ".claude/skills/ec2-problem-explain/references/authoring.md": "866ab61fc7e11e0b9c1f2e312c33c527512509a22d235f99cd68fae7b14fad6c",
+    ".claude/skills/ec2-problem-explain/references/verification.md": "d5a08745adb330c9305f6622ad19812891e385ad6aa26fa5f23e5e89fec1f303",
+    ".claude/skills/ec2-problem-explain/scripts/epe_contract.py": "8fe8c839ec5c572f06a79187a4d4abd7d1247a97b510dae7d7b22a3dd7d7780e",
+    ".claude/skills/ec2-problem-explain/scripts/epe_render.py": "d4a94e3c91eadd08a36d161801d94e6e503813598f17d6762b68266da4a105fa",
+    ".claude/skills/ec2-problem-explain/tests/_util.py": "4683a08a7a46b0d3f2413ac59c7518f4e59476ccc8b3747a2c35dd2da6ee0bb0",
+    ".claude/skills/ec2-problem-explain/tests/test_contract.py": "2525ef2eba29523ad3152fa750cac56422999d7fe2de15fcc86d536470870814",
+    ".claude/skills/ec2-problem-explain/tests/test_render.py": "0b9c8a8100c930fb1be7548aa63d09538dcdd42a7ea6005a07b904e4f769a19e",
+    ".claude/skills/ec2-problem-explain/tests/test_util.py": "9afe1abf23554452e146178455f75fb69630ddcd97f0082867b1e43c7f6d49b1",
+    ".claude/skills/ec2-review-pack/SKILL.md": "09b02133fbf511747bb6d9ba7941304dda29ee22f9e194091ed6d9d67c23a50c",
+    ".claude/skills/ec2-review-pack/assets/note-template.html": "bf6247bac5827a873c64a3eee1d6a9e43a426950d521bf229055f4c7486d825b",
+    ".claude/skills/ec2-review-pack/references/browser-check.md": "6cbacc75b71bb16316b6f026a482061265746c60602aa3e69cd84ff706c554a8",
+    ".claude/skills/ec2-review-pack/references/content-rules.md": "34218d74c9d11d0e3706a917909c46f4a352c801ca1fa271e7b37f97d434394a",
+    ".claude/skills/ec2-review-pack/references/manifest-guide.md": "83b837019556c578d12f402be357dca3de78e3c4c2a7d643e7a1957021bf6a7f",
+    ".claude/skills/ec2-review-pack/references/problem-explain-integration.md": "dbed74e5d675aa64a8e4b198bf96fe26ac47d0341201a18aaa61cdc5a95850e9",
+    ".claude/skills/ec2-review-pack/references/problem-selection.md": "512c7023a057eb6beb25da2b3e0b81a587e1beb84fcd2caabb8d63cfb827a8df",
+    ".claude/skills/ec2-review-pack/references/stt-summary-prompt.md": "e8e30b9a6c655711388a5f4f6bad361643dad3a8a97f76cbfcd5fca265d9f20e",
+    ".claude/skills/ec2-review-pack/scripts/check_html.py": "dc34f4e6de96bad63841a20ab7a47af5b1d223bd86d6b4d14f8375c399fd8115",
+    ".claude/skills/ec2-review-pack/scripts/html2md.py": "29e93d63155b2b9c225fe05b191b0198477d2f1d8f4e9f397f1ea49125cafd40",
+    ".claude/skills/ec2-review-pack/tests/fixtures/mini-run/sections/s1.html": "242f13a7c69002fa79350cd3422ba7ad24b7f3c241c2b74c3e1849c793321439",
+    ".claude/skills/ec2-review-pack/tests/test_check_html.py": "056500d1d7ed2b42b911f364baa03416be4169b08d110f0b8c9457237e8836d1",
+    ".claude/skills/ec2-review-pack/scripts/readability.py": "a0830e293a87fc94dd3337431de731a6dac23e1ed6ce7ef71093e70b7facbd28",
+    ".claude/skills/ec2-review-pack/tests/test_readability.py": "7b2f5f7f646397f1e94f78ea7392d0f13028614ee6a2d9bed6ab669b0a04dcef",
+    ".claude/skills/ec2-review-pack/tests/test_readability_browser.py": "d4d3bad2973237025b991ec8c34f64b73d1ccc6202f548e700ceeed886fad333"
+  },
+  "solution_style_unchanged": true,
+  "runtime_publication_gate_unchanged": true,
+  "pdf_templates_unchanged": true,
+  "unit_tests": {
+    "ec2_problem_explain": {
+      "total": 103,
+      "passed": 103,
+      "failed": 0,
+      "log": "C:\\Users\\Hyunjun\\.codex\\scratch\\review-pack\\1007-readability-20261022\\review\\common-epe-tests-final.txt"
+    },
+    "ec2_review_pack": {
+      "total": 158,
+      "passed": 156,
+      "failed": 1,
+      "skipped": 1,
+      "log": "C:\\Users\\Hyunjun\\.codex\\scratch\\review-pack\\1007-readability-20261022\\review\\common-pack-tests-final.txt",
+      "baseline_failure": {
+        "test": "test_skill_files.TestBackupSnippet.test_backs_up_note_pdfs_and_problem_list",
+        "reason": "Existing backup snippet stores NFC root keys, then inventories original source using NFC paths while actual source MD/PDF may have NFD names. Source inventory misses those files; destination NFC inventory includes them, failing hash/path equality. Valid NFD test retained; production backup rules outside this task unchanged."
+      }
+    }
+  },
+  "regressions": {
+    "observed_red_before_fix": [
+      "public STT citation text/title",
+      "multi-sentence summary paragraph",
+      "empty p / repeated br spacing",
+      "public review-workload row",
+      "Windows test approval helper uses fixture style reference"
+    ],
+    "new_static_tests": 7,
+    "measured_browser_test": {
+      "passed": true,
+      "templates": 2,
+      "widths": [
+        1280,
+        1024,
+        1023,
+        375
+      ],
+      "summary_gaps": {
+        "lead_to_group": 24,
+        "group_to_group": 24,
+        "sentence": 8,
+        "heading_to_text": 12
+      },
+      "explanation_gaps": {
+        "first_subpart": 24,
+        "sibling_desktop": 32,
+        "sibling_mobile": 24,
+        "heading": 12,
+        "paragraph": 12
+      },
+      "hidden_summary_display": "none"
+    }
+  },
+  "authored_content_checks": {
+    "content\\note.html": [],
+    "content\\explanations\\p1.html": [],
+    "content\\explanations\\p10.html": [],
+    "content\\explanations\\p11.html": [],
+    "content\\explanations\\p12.html": [],
+    "content\\explanations\\p13.html": [],
+    "content\\explanations\\p14.html": [],
+    "content\\explanations\\p2.html": [],
+    "content\\explanations\\p3.html": [],
+    "content\\explanations\\p4.html": [],
+    "content\\explanations\\p5.html": [],
+    "content\\explanations\\p6.html": [],
+    "content\\explanations\\p7.html": [],
+    "content\\explanations\\p8.html": [],
+    "content\\explanations\\p9.html": []
+  },
+  "git_diff_check_common": {
+    "exit_code": 0
+  },
+  "post_review_docs_only_correction": {
+    "status": "complete",
+    "runtime_changes": false,
+    "files": [
+      "ec2-problem-explain/SKILL.md",
+      "ec2-review-pack/references/content-rules.md",
+      "ec2-problem-explain/references/verification.md",
+      "ec2-problem-explain/references/authoring.md",
+      "ec2-review-pack/references/problem-explain-integration.md",
+      "ec2-review-pack/references/problem-selection.md",
+      "ec2-review-pack/references/stt-summary-prompt.md"
+    ],
+    "changes": [
+      "Remove residual HTML/MD workload display requirements while retaining selection JSON and current PDF policy",
+      "Remove public STT timestamp from warn markup example",
+      "Mark RUN STT summary timestamps as private evidence only"
+    ],
+    "reference_hashes_require_rebinding": true,
+    "existing_runtime_test_logs_preserved": true
+  }
+}

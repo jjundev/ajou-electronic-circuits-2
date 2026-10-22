@@ -1,0 +1,73 @@
+<div class="layer eli5" data-explanation="understand">
+<h4>문제를 읽어요</h4>
+<p>원 그림에서 아래 $Q_1,Q_2$는 NPN 입력쌍이고, 위 $Q_3,Q_4$는 PNP 전류 거울(current mirror)이에요. $Q_3$만 베이스–컬렉터를 연결하고, 출력은 오른쪽 $Q_2,Q_4$ 컬렉터의 공통 노드에서 읽어요. 입력은 $v_{id}=v_{in1}-v_{in2}$로 정의해요.</p>
+<p>구할 것은 전류가 아니라 PNP의 Early 전압 크기 $V_{A,p}$예요. 원문은 열전압 $V_T$를 지정하지 않았으므로 <strong>수업값 $V_T=26\,\mathrm{mV}$를 가정</strong>해요. 짝이 맞는 입력쌍과 1:1 거울, 큰 $\beta$, 각 소자의 $g_mr_O\gg1$, 순방향 활성 영역의 저주파 소신호 근사를 사용해요. 외부 부하 저항은 연결하지 않아요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+<h4>이 개념과 공식을 떠올려요</h4>
+<p>“전류 거울 부하”와 “Early 전압으로 이득 설계”라는 단서에서 <a href="정리노트_1007_Differential_Amplifiers.html#s2-bjt-active">BJT 능동 부하(active load)</a>의 알려진 블록식을 떠올려요. $g_m$은 입력 소자 하나의 전압–전류 변환율이고, $G_m$은 두 입력과 거울 전체의 변환율이에요. 큰 $\beta$로 베이스 전류 오차를 무시하면 거울이 한쪽 신호를 복사해 $G_m\approx g_m$이 돼요.</p>
+<p>$G_m$은 출력을 접지로 단락한 상태에서 출력으로 공급되는 신호 전류를 입력 차전압으로 나눈 값이에요. 반면 $R_{out}$은 두 입력을 영점으로 놓고 출력에 시험원을 연결해서 보는 저항이에요. 이 문제는 두 값을 새로 측정·유도하지 않고, 조건을 확인한 주도항 블록식을 적용해요.</p>
+<div class="equation">$$G_m\approx g_m$$</div>
+<div class="equation">$$R_{out}\approx r_{O2}\parallel r_{O4}$$</div>
+<p>$r_{O2}$는 NPN 출력저항, $r_{O4}$는 PNP 출력저항이에요. 두 Early 전압을 각각 저항으로 바꿔 병렬 합성하면 목표 이득에서 미지의 $V_{A,p}$를 역산할 수 있어요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+<h4>종이에 쓸 첫 줄</h4>
+<p>먼저 부호를 정해요. 왼쪽 입력을 올리고 오른쪽 입력을 내리면 $Q_1$ 전류는 늘고 $Q_2$ 전류는 줄어요. $Q_3,Q_4$ 거울을 통해 위에서 공급하는 전류도 늘기 때문에 오른쪽 출력은 올라가요. 따라서 이 입력 정의의 전압이득은 양수예요.</p>
+<div data-answer-step="입출력 정의와 능동 부하 블록식">
+<p>$v_{id}=v_{in1}-v_{in2}$, 오른쪽 무부하 출력이에요. 큰 $\beta$, $g_mr_O\gg1$에서 $G_m\approx g_m$, $R_{out}\approx r_{O2}\parallel r_{O4}$를 사용해요. $V_T=26\,\mathrm{mV}=0.026\,\mathrm V$는 수업 가정이에요.</p>
+<div class="equation">$$A_v=\frac{v_{out}}{v_{id}}\approx+G_mR_{out}\approx+g_m(r_{O2}\parallel r_{O4})$$</div>
+</div>
+<p>출력에 공급하는 전류를 양으로 잡았으므로 $+G_mR_{out}$이에요. 전류를 출력에서 빼내는 방향으로 정의한 공식의 마이너스를 그대로 옮기지 않아요. 조건을 확인한 능동 부하 블록식에서 병렬저항과 Early 전압의 관계를 계산해요.</p>
+</div>
+<div class="layer formal" data-explanation="solve">
+<h4>이렇게 풀어요</h4>
+<div data-subpart="main">
+<p>먼저 소자별 중간값을 같은 가지 전류로 표현해요. 큰 $\beta$에서 각 컬렉터의 DC 전류를 $I_C\approx I_{EE}/2$로 놓아요. $I_C$를 mA, $V_T,V_A$를 V로 쓰면 $g_m$은 mS, $r_O$는 kΩ가 되어 곱이 무차원이에요.</p>
+<div data-answer-step="중간값과 전류 소거">
+<div class="equation">$$g_m=\frac{I_C}{V_T}$$</div>
+<div class="equation">$$r_{O2}=\frac{V_{A,n}}{I_C}$$</div>
+<div class="equation">$$r_{O4}=\frac{V_{A,p}}{I_C}$$</div>
+<p>병렬저항의 역수는 가지별 역수의 합이므로 이득의 역수로 바꾸어요.</p>
+<div class="equation">$$\frac{1}{|A_v|}\approx\frac{1}{g_mr_{O2}}+\frac{1}{g_mr_{O4}}$$</div>
+<div class="equation">$$g_mr_{O2}=\frac{I_C}{V_T}\frac{V_{A,n}}{I_C}=\frac{V_{A,n}}{V_T}$$</div>
+<div class="equation">$$g_mr_{O4}=\frac{I_C}{V_T}\frac{V_{A,p}}{I_C}=\frac{V_{A,p}}{V_T}$$</div>
+<div class="equation">$$\frac{1}{|A_v|}\approx\frac{V_T}{V_{A,n}}+\frac{V_T}{V_{A,p}}$$</div>
+</div>
+<p>전류를 높이면 $g_m$은 커지지만 두 $r_O$는 같은 비율로 작아져요. 그래서 이 모델의 이득에서는 $I_C$가 소거돼요. 전류값이 원문에 없어도 Early 전압을 구할 수 있는 이유예요.</p>
+<div data-answer-step="목표 이득에서 PNP Early 전압 역산">
+<p>주도항 설계식에 목표 크기 100과 $V_{A,n}=5\,\mathrm V$를 넣고 PNP 항만 남겨요.</p>
+<div class="equation">$$\frac{0.026\,\mathrm V}{V_{A,p}}=\frac{1}{100}-\frac{0.026\,\mathrm V}{5\,\mathrm V}=4.8\times10^{-3}$$</div>
+<div class="equation">$$V_{A,p}=\frac{0.026\,\mathrm V}{4.8\times10^{-3}}=\frac{65}{12}\,\mathrm V\approx5.42\,\mathrm V$$</div>
+</div>
+<p>차이 $4.8\times10^{-3}$은 양수이므로 양의 Early 전압 크기로 실현할 수 있어요. 이 값을 0으로 둬 버리면 필요한 PNP 출력저항을 무한대로 만드는 다른 설계가 돼요.</p>
+</div>
+</div>
+<div class="layer formal" data-explanation="verify">
+<h4>완성 답과 검산</h4>
+<div data-subpart="main">
+<div data-answer-final><p><strong>필요한 PNP Early 전압 크기는 $V_{A,p}=65/12\,\mathrm V\approx5.42\,\mathrm V$예요.</strong> $V_T=26\,\mathrm{mV}$, 큰 $\beta$, $g_mr_O\gg1$인 주도항 설계에서 $A_v\approx+100$이에요.</p></div>
+<p><strong>목표에 역대입해요.</strong> 반올림 전 분수로 확인하면 이득 크기가 100으로 돌아와요.</p>
+<div class="equation">$$\frac{0.026}{5}+\frac{0.026}{65/12}=0.0052+0.0048=0.01$$</div>
+<div class="equation">$$|A_v|\approx\frac{1}{0.01}=100$$</div>
+<p><strong>근사와 단위를 확인해요.</strong> Early 전압과 열전압의 비는 무차원이고 두 소자 모두 큰 고유 이득을 가져요.</p>
+<div class="equation">$$g_mr_{O2}=\frac{5}{0.026}\approx192.31$$</div>
+<div class="equation">$$g_mr_{O4}=\frac{65/12}{0.026}\approx208.33$$</div>
+<p><strong>PNP를 아무리 좋게 만들어도 NPN 한계가 남아요.</strong> $V_{A,p}\to\infty$이면 아래 NPN의 출력저항만 이득을 제한해요.</p>
+<div class="equation">$$|A_v|_{\mathrm{limit}}\approx\frac{V_{A,n}}{V_T}=\frac{5}{0.026}\approx192.31$$</div>
+<p>목표 100은 이 한계보다 작아요. $V_{A,p}$를 5.42 V보다 높이면 같은 주도항 모델에서 이득은 100보다 커지지만 이 한계를 넘지는 못해요. $v_{id}>0$일 때 오른쪽 출력이 올라가므로 부호도 $+$예요. 두 Early 전압이 같아지는 특수값에서는 병렬저항이 한 소자 저항의 절반이 되는 결과와 일치해요.</p>
+</div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+<h4>주의할 점</h4>
+<ul><li>단일 출력이라고 $g_m/2$를 쓰면 거울이 복사하는 신호를 빠뜨려요. 여기서는 두 경로가 합쳐져 $G_m\approx g_m$이에요.</li><li>$r_{\pi2}$는 베이스–이미터 사이예요. 출력 컬렉터와 AC 접지 사이의 $r_{O4}$에 직접 병렬로 붙이지 않아요.</li><li>$V_{A,p}$는 PNP의 Early 전압 <strong>크기</strong>예요. 소자 극성이 PNP라고 음수 답을 만들지 않아요.</li><li>26 mV는 원문의 주어진 값이 아니에요. 온도에 따라 $V_T$가 달라지면 요구되는 Early 전압도 달라져요. 전류 독립성 역시 위 주도항 모델 안에서의 결론이에요.</li><li>$Q_3$만 다이오드 연결이므로 전체를 완전히 대칭인 두 반회로로 잘라 출력 신호를 버리면 안 돼요.</li></ul>
+</div>
+<div class="layer eli5" data-explanation="retry">
+<h4>조건을 바꾸어 생각해요</h4>
+<ol><li>$V_A$와 $V_T$를 고정하고 모든 가지 전류를 두 배로 하면 이득도 두 배일까요? <strong>아니에요.</strong> $g_m$은 두 배, 두 $r_O$는 절반이므로 병렬 합성 저항도 절반이고 곱은 같아요.</li><li>$V_{A,n}=5\,\mathrm V$, $V_T=26\,\mathrm{mV}$를 유지하며 이득 200을 요구하면 가능한가요? <strong>이 주도항 모델에서 양의 유한 $V_{A,p}$로는 불가능해요.</strong> NPN 한계 192.31보다 큰 목표이고, $1/200-0.026/5&lt;0$이 돼요.</li><li>수업 가정 대신 $V_T=25\,\mathrm{mV}$라면 목표 100에 필요한 값은 무엇일까요? <strong>$V_{A,p}=5\,\mathrm V$예요.</strong> $1/100-0.025/5=0.005$이므로 $0.025/0.005=5\,\mathrm V$예요.</li></ol>
+</div>
+<div class="sum" hidden>
+<p class="sum-lead">능동 부하의 $g_m$과 Early 저항을 곱하면 바이어스 전류가 소거돼요.</p>
+<div class="summary-group"><h4>목표에서 역산</h4><div class="equation">$$\frac{1}{|A_v|}\approx\frac{V_T}{V_{A,n}}+\frac{V_T}{V_{A,p}}$$</div><p>큰 $\beta$·큰 $g_mr_O$의 거울 주항이며 왼쪽−오른쪽 입력과 오른쪽 출력의 이득은 양수예요.</p></div>
+<div class="summary-group"><h4>결과</h4><p>$V_T=26\,\mathrm{mV}$를 가정하면 $V_{A,p}=65/12\,\mathrm V\approx5.42\,\mathrm V$예요.</p><p>이때 목표 이득은 $A_v\approx+100$이에요.</p></div>
+</div>

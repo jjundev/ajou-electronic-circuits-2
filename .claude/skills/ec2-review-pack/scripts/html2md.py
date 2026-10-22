@@ -603,6 +603,8 @@ def check_md(html_path, md_path):
     md = _read(md_path)
     md_dir = os.path.dirname(os.path.abspath(md_path))
     problems = []
+    from readability import public_location_errors
+    problems.extend(f'{code}: {detail}' for code, detail in public_location_errors(md))
     maths, ids = html_math_and_ids(html_path)
     want = Counter(_norm_math(m) for m in maths)
     have = Counter(_norm_math(m) for m in MD_MATH_RE.findall(md))

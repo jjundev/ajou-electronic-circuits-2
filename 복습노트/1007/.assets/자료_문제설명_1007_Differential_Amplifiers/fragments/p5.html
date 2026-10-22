@@ -1,81 +1,11 @@
-<div class="layer eli5" data-explanation="understand">
-<h4>문제를 읽어요</h4>
-<p>같은 차동 출력에서 원하는 신호가 얼마나 커지고, 두 입력에 함께 들어온 변화가 얼마나 새어 나오는지 비교해요. 앞 문제에서 구한 CM-to-DM 이득을 분모에 쓰고 차동 이득을 새로 구하면 돼요. 소자 수치는 없으므로 기호로 답해요.</p>
-<p>$Q_1,Q_2$는 일치하고 $V_A=\infty$이며, 입력쌍에는 큰 $\beta$를 적용해요. 교과서 예제의 작은 미스매치 $|\Delta R_C|\ll R_C$를 사용해요. $Q_3$의 유한한 $r_{\pi3}$와 $r_{O3}$는 남겨요. 축퇴 테일의 구체적인 전개는 교과서 보충이고, CMRR의 정의와 근사 범위는 수업 내용이에요.</p>
+<div class="layer eli5" data-explanation="understand"><h4>문제를 읽어요</h4><p>같은 회로로 DC 허용 범위와 작은 신호의 누출을 모두 묻고 있어요. (1)은 모든 MOS가 포화에 남는 입력 CM 구간, (2)는 한 출력의 CM 이득과 두 출력 차의 누출, (3)은 원하는 차동 이득과 누출의 비예요. $A_{CM}$은 왼쪽 출력 $v_{o1}$, 차동 출력은 왼쪽−오른쪽으로 정해요.</p><p>DC는 제곱법칙에서 CLM 보정인자를 생략하는 수업 근사를 사용해요. 이득에서는 입력쌍 $r_o=20\,\mathrm{k\Omega}$가 $R_D=1\,\mathrm{k\Omega}$보다 크다는 추가 근사를 명시해 두 입력쌍 $r_o$를 일관되게 생략해요. 테일 $r_{o3}$는 남기며 모든 결과는 이 수업 모델의 주항이에요.</p></div>
+<div class="layer formal" data-explanation="recall"><h4>이 개념과 공식을 떠올려요</h4><p>두 게이트가 같이 움직이는 단서에서 공통 모드 반회로(CM half circuit)를 떠올려요. 대칭 CM에서는 한 가지 전류가 $i$일 때 꼬리에는 $2i$가 흘러 $v_P=(2i)R_{SS}=i(2R_{SS})$예요. 따라서 반쪽 소스 아래 저항은 $2R_{SS}$예요. 소스가 따라 올라가 $v_{gs}=v_{CM}-v_P$를 줄이는 소스 축퇴(source degeneration)가 CM 전류 변화를 억제해요.</p><p>CM 입력 범위는 입력 MOS와 테일 MOS의 포화 조건으로 양 끝을 따로 구해요. NMOS 포화는 $V_{DS}\ge V_{OV}$ 또는 $V_D\ge V_G-V_{TH}$예요. CMRR은 같은 차동 출력에서 $|A_{DM}|/|A_{CM-DM}|$로 정의해요. 불일치는 작으므로 분자의 차동 이득은 대칭 기준값을 써요.</p></div>
+<div class="layer formal" data-explanation="start"><h4>종이에 쓸 첫 줄</h4><p>먼저 $I_D=I_{D3}/2$로 나누어 각 소자 오버드라이브를 구해요. DC 경계와 AC 변화량을 같은 전압으로 혼동하지 않아요.</p><div data-answer-step="소자별 DC·소신호 중간값" data-answer-subpart="1"><div class="equation">$$I_D=0.5\,\mathrm{mA}$$</div><div class="equation">$$\mu_nC_{ox}=0.1\,\mathrm{mA/V^2}$$</div><div class="equation">$$V_{OV1}=\sqrt{\frac{2(0.5)}{(0.1)(200/0.2)}}=0.1\,\mathrm V$$</div><div class="equation">$$V_{OV3}=\sqrt{\frac{2(1)}{(0.1)(400/0.2)}}=0.1\,\mathrm V$$</div><div class="equation">$$g_m=\frac{2(0.5\,\mathrm{mA})}{0.1\,\mathrm V}=10\,\mathrm{mS}$$</div><div class="equation">$$R_{SS}=r_{o3}=10\,\mathrm{k\Omega}$$</div></div><div data-answer-step="CM 반회로와 전류 변환" data-answer-subpart="2"><figure class="figure"><svg viewBox="0 0 760 350" role="img" aria-label="공통 모드 반회로: 입력은 왼쪽, 제어 전류원과 병렬 출력저항, 부하와 출력은 오른쪽, 소스 아래 두 배 꼬리 저항"><path class="fig-ink" fill="none" d="M55 140 H145 M145 123 V157 M270 75 H690 M270 75 V110 M270 170 V220 H420 M270 220 V250 M270 300 V320 M253 320 H287 M259 327 H281 M265 334 H275 M570 75 V110 M570 170 V190 M553 190 H587 M559 197 H581 M565 204 H575"/><polygon class="fig-ink" fill="none" points="270,110 290,140 270,170 250,140"/><path class="fig-ink" fill="none" d="M270 122 V156 M262 146 L270 157 L278 146"/><rect class="fig-ink" fill="none" x="560" y="110" width="20" height="60"/><rect class="fig-ink" fill="none" x="260" y="250" width="20" height="50"/><text x="75" y="116" class="fig-text fig-math" font-family="Pretendard" font-weight="600" font-style="normal" data-node="p5-g" data-node-color="blue" fill="#2563eb" stroke="none">v<tspan baseline-shift="sub" font-size="78%">CM</tspan></text><circle cx="55" cy="140" r="4" data-node="p5-g" data-node-color="blue" fill="#2563eb" stroke="none"/><text x="188" y="197" class="fig-text fig-math" font-family="Pretendard" font-weight="600" font-style="normal">g<tspan baseline-shift="sub" font-size="78%">m</tspan></text><text x="228" y="197" class="fig-text fig-math" font-family="Pretendard" font-weight="600" font-style="normal">v<tspan baseline-shift="sub" font-size="78%">gs</tspan></text><text x="591" y="145" class="fig-text fig-math" font-family="Pretendard" font-weight="600" font-style="normal">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text><text x="300" y="283" class="fig-text fig-math" font-family="Pretendard" font-weight="600" font-style="normal">2R<tspan baseline-shift="sub" font-size="78%">SS</tspan></text><circle cx="270" cy="220" r="4" data-node="p5-s" data-node-color="red" fill="#dc2626" stroke="none"/><text x="213" y="240" class="fig-text fig-math" font-family="Pretendard" font-weight="600" font-style="normal" data-node="p5-s" data-node-color="red" fill="#dc2626" stroke="none">v<tspan baseline-shift="sub" font-size="78%">P</tspan></text><circle cx="570" cy="75" r="4" data-node="p5-o" data-node-color="blue" fill="#2563eb" stroke="none"/><circle cx="690" cy="75" r="4" data-node="p5-o" data-node-color="blue" fill="#2563eb" stroke="none"/><text x="690" y="52" class="fig-text fig-math" font-family="Pretendard" font-weight="600" font-style="normal" data-node="p5-o" data-node-color="blue" fill="#2563eb" stroke="none" text-anchor="end">v<tspan baseline-shift="sub" font-size="78%">o</tspan></text></svg><figcaption>두 입력에 같은 $v_{CM}$을 가해요. 전원과 고정 바이어스는 AC 접지이고 출력은 단락하지 않아요. $v_{gs}=v_{CM}-v_P$이며 입력쌍의 $r_o$를 생략한 수업 모델이에요. 반쪽 소스 아래의 $2R_{SS}$는 공유 꼬리를 나눈 값이에요.</figcaption></figure><div class="equation">$$\frac{i}{v_{CM}}=\frac1{1/g_m+2R_{SS}}\approx\frac1{2R_{SS}}$$</div></div></div>
+<div class="layer formal" data-explanation="solve"><h4>이렇게 풀어요</h4><div data-subpart="1"><h4>(1) 입력 CM 범위</h4><p>아래 한계는 테일 $M_3$의 포화가 정해요. 공통 소스 $P$가 $V_{OV3}$ 이상이어야 하고, 입력 게이트는 그보다 $V_{GS1}=V_{TH}+V_{OV1}$ 높아요.</p><div data-answer-step="하한과 상한을 각각 포화 부등식으로 계산"><div class="equation">$$V_P=V_{CM,in}-(V_{TH}+V_{OV1})\ge V_{OV3}$$</div><div class="equation">$$V_{CM,in,min}=0.4+0.1+0.1=0.6\,\mathrm V$$</div><p>큰 오른쪽 부하가 더 낮은 드레인 전압을 만들므로 입력쌍 포화 상한을 먼저 제한해요.</p><div class="equation">$$V_{D2}=1.8-(0.5\,\mathrm{mA})(1.02\,\mathrm{k\Omega})=1.29\,\mathrm V$$</div><div class="equation">$$V_{CM,in}\le V_{D2}+V_{TH}=1.69\,\mathrm V$$</div></div><p>두 경계 등호는 포화가 막 유지되는 경계예요. 실제 증폭에는 여유를 두어 경계 안쪽에서 동작시켜요.</p></div><div data-subpart="2"><h4>(2) 한 출력 CM 이득과 차동 누출</h4><p>수업 모델에서 두 가지 CM 전류는 같아요. 출력 변화는 각각 부하 저항에 음의 전류 변화를 곱한 값이에요.</p><div data-answer-step="CM 전류를 각 부하와 출력 차에 적용"><div class="equation">$$A_{CM,1}\approx-\frac{R_D}{2R_{SS}}=-0.05$$</div><div class="equation">$$A_{CM,2}\approx-\frac{R_D+\Delta R_D}{2R_{SS}}=-5.1\times10^{-2}$$</div><div class="equation">$$A_{CM-DM}=A_{CM,1}-A_{CM,2}\approx+10^{-3}$$</div></div><p>평균 출력의 CM 이득을 정의했다면 두 이득의 평균 $-5.05\times10^{-2}$예요. 원문이 한쪽 출력 선택을 지정하지 않아 여기서는 왼쪽 기준을 명시해요.</p></div><div data-subpart="3"><h4>(3) CMRR</h4><p>분자와 분모를 같은 차동 출력으로 맞춰요. 작은 부하 불일치에서 분자는 수업의 대칭 기준 차동 이득이에요.</p><div data-answer-step="원하는 이득과 누출의 비"><div class="equation">$$A_{DM}\approx-g_mR_D=-(10\,\mathrm{mS})(1\,\mathrm{k\Omega})=-10$$</div><div class="equation">$$\mathrm{CMRR}\approx\frac{10}{10^{-3}}=10000$$</div><div class="equation">$$\mathrm{CMRR}_{dB}\approx20\log_{10}(10000)=80\,\mathrm{dB}$$</div></div></div></div>
+<div class="layer formal" data-explanation="verify"><h4>완성 답과 검산</h4><div data-subpart="1"><h4>(1) DC 범위 확인</h4><div data-answer-final><p>$0.6\,\mathrm V\le V_{CM,in}\le1.69\,\mathrm V$예요. 제곱법칙 DC·포화 경계 기준이며 증폭에는 경계 안쪽 여유가 필요해요.</p></div><p>최솟값에서 $V_P=0.1$ V라 테일 포화 경계, 최댓값에서 오른쪽 $V_{GD2}=0.4$ V라 입력 포화 경계가 맞아요.</p></div><div data-subpart="2"><h4>(2) CM 이득과 부호 확인</h4><div data-answer-final><p>왼쪽 기준 $A_{CM}\approx-0.05$, 왼쪽−오른쪽 차동 누출 $A_{CM-DM}\approx+10^{-3}$예요. 입력쌍 $r_o$ 생략·큰 축퇴 모델이에요.</p></div><p>오른쪽 출력이 더 많이 내려가므로 차동 누출은 양수예요. 부하 차이가 0이면 차동 누출은 지워져도 각 출력 CM 이득은 남아요.</p></div><div data-subpart="3"><h4>(3) 비와 단위 확인</h4><div data-answer-final><p>작은 불일치·대칭 기준 DM 이득·큰 축퇴 주항에서 CMRR $\approx10000$ 또는 $80\,\mathrm{dB}$예요.</p></div><p>이득 비는 무차원이며 $10^4$의 전압비는 80 dB예요. 입력쌍 $r_o$와 불일치의 DM 보정을 모두 포함한 다른 모델의 값과 섞지 않아요.</p></div></div>
+<div class="layer warn" data-explanation="pitfall"><h4>주의할 점</h4><p>입력 CM 범위와 차동 입력 범위는 다른 질문이에요. 상한은 더 낮은 오른쪽 드레인으로 판단해요. $A_{CM}$을 CMRR 분모에 넣으면 단일 출력 이득과 차동 누출을 섞게 돼요. $g_mr_o\gg1$만으로 입력 $r_o$ 생략이 보장되지는 않으며, 여기서는 $r_o/R_D=20$을 이용한 별도 수업 근사예요.</p></div>
+<div class="layer eli5" data-explanation="retry"><h4>조건을 바꾸어 생각해요</h4><ol><li>부하 차이를 20 Ω에서 10 Ω로 줄이되 바이어스와 다른 값은 같다면 CMRR은 얼마일까요?</li><li>입력 CM을 1.7 V로 올리면 먼저 포화 경계를 벗어나는 입력 소자는 어느 쪽일까요?</li></ol></div><div class="sum" hidden>
+<p class="sum-lead">CM 입력 범위는 테일 MOS와 입력 MOS의 포화 경계로 정해요.</p>
+<div class="summary-group"><h4>입력 범위</h4><p>제곱법칙 DC의 CM 범위는 0.6–1.69 V예요.</p></div>
+<div class="summary-group"><h4>CM 이득과 CMRR</h4><p>입력쌍 $r_o$ 생략·큰 축퇴 모델에서 왼쪽 $A_{CM}\approx-0.05$예요.</p><p>왼쪽−오른쪽 누출은 $A_{CM-DM}\approx+10^{-3}$예요.</p><p>작은 불일치에서 대칭 기준 DM 이득을 쓰면 CMRR은 약 10000, 80 dB예요.</p></div>
 </div>
-<div class="layer formal" data-explanation="recall">
-<h4>이 개념과 공식을 떠올려요</h4>
-<p>“CMRR”이라는 요구에서 공통 모드 제거비(common-mode rejection ratio)를 떠올려요. 차동 모드(differential mode, DM)는 두 입력을 반대로, 공통 모드(common mode, CM)는 함께 움직여요. 둘 다 $v_{od}=v_{out1}-v_{out2}$를 읽어 비교해요.</p>
-<div class="equation">$$\mathrm{CMRR}=\frac{|A_{DM}|}{A_{CM-DM}}$$</div>
-<p>$g_{m1}$은 입력 BJT의 베이스–이미터 전압 변화를 컬렉터 전류 변화로 바꾸는 계수예요. $R_{SS}$는 공통 이미터 노드 $P$에서 테일 $Q_3$ 쪽을 본 소신호 출력저항이에요. $r_{\pi3}$는 $Q_3$의 베이스–이미터 소신호 저항, $r_{O3}$는 Early 효과에 의한 컬렉터–이미터 출력저항이에요.</p>
-<p>CM에서는 이미터 아래 $2R_{SS}$를 둔 축퇴 CE 반회로, DM에서는 이미터를 가상 접지한 CE(common-emitter) 반회로를 사용해요. 입력쌍의 큰 $\beta$·Early 효과 무시, 작은 부하 미스매치를 확인한 뒤 적용해요. 분모에 각 출력 하나의 $A_{CM}$을 넣으면 다른 비율이 돼요.</p>
-</div>
-<div class="layer formal" data-explanation="start">
-<h4>종이에 쓸 첫 줄</h4>
-<p>정의의 분자부터 정해요. $v_{id}=v_{in1}-v_{in2}$라 두고 $+v_{id}/2,-v_{id}/2$를 각각 가하면 입력쌍의 전류 변화가 서로 상쇄되어 $P$는 가상 접지예요. $V_A=\infty$라 부하 미스매치가 컬렉터 전류에 되먹임되지 않아요. 큰 $\beta$에서 베이스 전류를 무시하고, 작은 미스매치의 차동 이득에는 양쪽 부하를 $R_C$로 보아요.</p>
-<div data-answer-step="차동 반회로와 첫 이득">
-<figure class="figure"><svg viewBox="0 0 460 245" role="img" aria-label="차동 입력의 왼쪽 CE 반회로. 입력 vid의 절반이 제어 전압이며 이미터 P는 가상 접지이다. 출력과 접지 사이에 아래 방향 gm1 vpi1 제어 전류원과 RC가 병렬이고 출력은 맨 오른쪽이다.">
-<path class="fig-ink" d="M35 85 H95 M180 70 H400 M180 70 V105 M180 145 V205 H280 V160 M280 70 V95 M280 95 l8 5 l-16 10 l16 10 l-16 10 l16 10 l-8 5 V160 M230 205 V218 M216 218 H244 M221 224 H239 M226 230 H234" fill="none"/>
-<polygon class="fig-ink" points="180,105 196,125 180,145 164,125" fill="none"/>
-<path class="fig-ink" d="M180 113 V137 M174 131 L180 137 L186 131" fill="none"/>
-<circle class="fig-dot" cx="35" cy="85" r="4" fill="#2563eb" stroke="#2563eb" data-node="in" data-node-color="blue"/>
-<text class="fig-text fig-math" x="28" y="61" fill="#2563eb" data-node="in" data-node-color="blue" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">v</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">π1</tspan> = <tspan font-family="Pretendard" font-weight="600" font-style="normal">v</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">id</tspan> / 2</text>
-<circle class="fig-dot" cx="180" cy="70" r="4" fill="#dc2626" stroke="#dc2626" data-node="out1" data-node-color="red"/>
-<circle class="fig-dot" cx="280" cy="70" r="4" fill="#dc2626" stroke="#dc2626" data-node="out1" data-node-color="red"/>
-<circle class="fig-dot" cx="400" cy="70" r="4" fill="#dc2626" stroke="#dc2626" data-node="out1" data-node-color="red"/>
-<text class="fig-text fig-math" x="350" y="48" fill="#dc2626" data-node="out1" data-node-color="red" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">v</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">out1</tspan></text>
-<text class="fig-text fig-math" x="105" y="170" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">g</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">m1</tspan><tspan font-family="Pretendard" font-weight="600" font-style="normal">v</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">π1</tspan></text><text class="fig-text fig-math" x="303" y="127" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">R</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">C</tspan></text>
-<text class="fig-text" x="298" y="206" font-family="Pretendard" font-weight="600" font-style="normal">P: 가상 접지</text>
-<circle cx="230" cy="205" r="3" fill="currentColor" data-ground-branch="true"/></svg><figcaption>왼쪽 DM 반회로예요. $V_{CC}$는 AC 접지, $P$는 가상 접지예요. 큰 $\beta$로 입력 베이스 전류를 무시하고 $r_{O1}=\infty$를 적용했어요. 출력 부하는 $R_C$이며 출력은 단락하지 않아요.</figcaption></figure>
-<div class="equation">$$\frac{v_{out1}}{v_{id}/2}\approx-g_{m1}R_C$$</div>
-</div>
-<p>이는 부하가 연결된 CE 전압이득 블록의 적용이에요. 출력저항의 전체 모델을 다시 유도하거나 출력 단락의 $G_m$ 측정을 할 필요는 없어요. 오른쪽은 입력 부호가 반대이므로 출력도 반대로 움직여요.</p>
-</div>
-<div class="layer formal" data-explanation="solve">
-<h4>이렇게 풀어요</h4>
-<div data-subpart="main">
-<p>양쪽 출력의 차를 취하면 입력의 $1/2$ 두 개가 합쳐져요. 작은 미스매치에서 오른쪽 부하도 $R_C$로 근사해 차동 이득을 얻어요.</p>
-<div data-answer-step="차동 이득의 크기">
-<div class="equation">$$v_{od}\approx-g_{m1}R_C\frac{v_{id}}2-g_{m1}R_C\frac{v_{id}}2=-g_{m1}R_Cv_{id}$$</div>
-<div class="equation">$$|A_{DM}|\approx g_{m1}R_C$$</div>
-</div>
-<p>테일에는 앞 문제의 축퇴 출력저항 블록을 써요. $R_E^*$는 $Q_3$ 이미터에서 AC 접지로 연결된 $R_1$과 $r_{\pi3}$의 병렬값이에요. 수업의 기본 가정 $g_{m3}r_{O3}\gg1$, $g_{m3}R_E^*\gg1$에서 이미터 쪽 저항에 $g_{m3}r_{O3}$를 곱해요.</p>
-<div data-answer-step="테일 근사와 공통 모드 누출">
-<div class="equation">$$R_E^*=R_1\parallel r_{\pi3}$$</div>
-<div class="equation">$$R_{SS}\approx g_{m3}R_E^*r_{O3}$$</div>
-<div class="equation">$$\frac{\Delta i_C}{\Delta v_{CM}}\approx\frac1{2R_{SS}}$$</div><p>CM 반회로는 같은 가지 전류와 이미터 전압을 재현해요. 큰 축퇴 조건 $2g_{m1}R_{SS}\gg1$에서 전류 변환율은 $1/(2R_{SS})$이고, 출력 차에는 부하 차 $\Delta R_C$만 곱해져요.</p><div class="equation">$$A_{CM-DM}\approx\frac{|\Delta R_C|}{2R_{SS}}$$</div>
-</div>
-<p>입력쌍의 큰 $\beta$는 $Q_3$의 $r_{\pi3}$까지 무한대로 두라는 뜻이 아니에요.</p>
-<p>테일 출력저항은 위의 큰 곱항 근사로 계산해요. CM에서 두 가지의 증분 전류는 같고, 그 전류에 부하 저항 차가 곱해진 만큼 차동 출력으로 새어 나온다는 앞 문제의 결과예요.</p>
-<div data-answer-step="정의에 대입하여 정리">
-<div class="equation">$$\mathrm{CMRR}\approx\frac{g_{m1}R_C}{|\Delta R_C|/(2R_{SS})}$$</div>
-<div class="equation">$$\mathrm{CMRR}\approx2g_{m1}R_{SS}\frac{R_C}{|\Delta R_C|}$$</div>
-</div>
-<p>분수로 나눌 때는 그 역수를 곱해요. 반회로의 큰 축퇴 주항을 처음부터 사용했으므로 CMRR도 같은 근사 차수로 정리돼요.</p>
-</div>
-</div>
-<div class="layer formal" data-explanation="verify">
-<h4>완성 답과 검산</h4>
-<div data-subpart="main">
-<div data-answer-final>
-<p><strong>작은 미스매치·큰 입력쌍 $\beta$·$Q_1,Q_2$의 $V_A=\infty$와 위 큰 곱항 근사 조건에서의 CMRR이에요.</strong></p>
-<div class="equation">$$\boxed{\mathrm{CMRR}\approx\frac{R_C}{|\Delta R_C|}2g_{m1}g_{m3}(R_1\parallel r_{\pi3})r_{O3}}$$</div>
-</div>
-<p>$g_mR$은 S·Ω=1이므로 괄호는 무차원이고 $R_C/|\Delta R_C|$도 무차원이에요. $v_{od}=v_{out1}-v_{out2}$의 차동 이득은 음수지만 크기를 취한 CMRR은 양수예요.</p>
-<p>$\Delta R_C\to0$이면 CM-to-DM 누출은 0으로 가므로 CMRR은 무한대로 가요. 각 출력 하나의 CM 이득까지 0이어야 한다는 뜻은 아니에요. $R_{SS}\to\infty$에서도 누출이 사라져 CMRR이 커져요. $R_1$을 키워도 $R_E^*$는 $r_{\pi3}$에 가까워질 뿐이므로, 다른 소신호 파라미터가 고정되면 테일 저항이 끝없이 커지지는 않아요.</p>
-</div></div>
-<div class="layer warn" data-explanation="pitfall">
-<h4>주의할 점</h4>
-<p>CMRR의 분모는 차동 출력의 $A_{CM-DM}$이에요. 한쪽 출력의 $A_{CM}$이나 부호 있는 $A_{DM}$을 그대로 넣지 않아요. 입력쌍의 큰 $\beta$ 가정을 $Q_3$까지 확장해 $r_{\pi3}$를 지우지 않아요.</p>
-<p>테일 출력저항에는 수업의 기본 가정 $g_{m3}r_{O3}\gg1$, $g_{m3}R_E^*\gg1$을 적용해요. 여기서 $R_E^*$는 축퇴 저항의 병렬값이며, $1/g_m$인 내부 이미터 저항이 아니에요. 작은 미스매치가 아니면 차동 이득을 $g_{m1}R_C$로 두는 근사도 재검토해야 해요.</p>
-</div>
-<div class="layer eli5" data-explanation="retry">
-<h4>조건을 바꾸어 생각해요</h4>
-<ol><li>다른 인자와 바이어스를 고정하고 작은 미스매치 $|\Delta R_C|$만 절반으로 줄이면 CMRR은 몇 배일까요? <strong>약 2배예요.</strong> 분자의 차동 이득은 같은 근사값이고 분모의 CM-to-DM 누출이 절반이 되기 때문이에요.</li><li>$g_{m1}$과 부하 미스매치를 고정하고 테일 저항 $R_{SS}$만 2배로 만들면 CMRR은 몇 배일까요? <strong>수업의 기본 큰 축퇴 조건에서 약 2배예요.</strong> $\mathrm{CMRR}\approx2g_{m1}R_{SS}R_C/|\Delta R_C|$이므로 다른 인자가 같으면 테일 저항의 배율을 따라가요.</li></ol>
-</div>
-<div class="sum" hidden>
-<div class="summary-group"><h4>개념과 첫 줄</h4><p>같은 차동 출력에서 $\mathrm{CMRR}=|A_{DM}|/A_{CM-DM}$. CM 반회로는 이미터 아래 $2R_{SS}$로 $\Delta i_C/\Delta v_{CM}\approx1/(2R_{SS})$예요. DM의 $P$는 가상 접지이며 작은 미스매치에서 $|A_{DM}|\approx g_{m1}R_C$예요.</p></div>
-<div class="summary-group"><h4>핵심 판단과 결과</h4><p>$R_E^*=R_1\parallel r_{\pi3}$, $g_{m3}r_{O3}\gg1$, $g_{m3}R_E^*\gg1$에서 $R_{SS}\approx g_{m3}R_E^*r_{O3}$예요.</p><div class="equation">$$\mathrm{CMRR}\approx\frac{R_C}{|\Delta R_C|}\,2g_{m1}R_{SS}$$</div><p>작은 미스매치, 큰 입력쌍 $\beta$, 입력쌍의 Early 효과 무시 조건이에요.</p></div>
-<div class="summary-group"><h4>혼동과 검산</h4><p>분모는 한쪽 $A_{CM}$이 아니에요. 비는 무차원·양수이고 미스매치가 0이면 이상적 CMRR은 무한대예요. 기본 큰 축퇴 조건 $2g_{m1}R_{SS}\gg1$에서 테일 2배는 CMRR 약 2배예요.</p></div>
-</div>
-

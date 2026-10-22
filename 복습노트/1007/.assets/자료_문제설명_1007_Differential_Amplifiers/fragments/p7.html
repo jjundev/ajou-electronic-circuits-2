@@ -20,7 +20,7 @@
 <div class="equation">$$g_{m1}=g_{m2}=\sqrt{2\mu_nC_{ox}(W/L)_1I_{D1}}=1\,\mathrm{mS}$$</div>
 <div class="equation">$$r_{o3}=\frac1{\lambda_n I_{SS}}=50\,\mathrm{k\Omega}$$</div>
 </div>
-<p>출력에는 외부 부하를 연결하지 않아요. DM은 $+v_{id}/2,-v_{id}/2$를 가하고 두 출력을 빼요. CM은 두 게이트에 $v_{CM}$을 같이 가해, 각 반회로의 소스 아래 $2r_{o3}$가 붙는 알려진 축퇴 블록을 적용해요. 전원·고정 바이어스는 AC 접지이고 입력쌍 $r_o$는 수업 근사로 생략해요. 새 KCL 유도 없이 이 블록 관계로 계산해요.</p>
+<p>출력에는 외부 부하를 연결하지 않아요. DM은 $+v_{id}/2,-v_{id}/2$를 가하고 두 출력을 빼요. CM은 두 게이트에 $v_{CM}$을 같이 가해, 각 반회로의 소스 아래 $2r_{o3}$가 붙는 알려진 축퇴 블록을 적용해요. 전원·고정 바이어스는 AC 접지이고 입력쌍 $r_o$는 수업 근사로 생략해요. 반회로의 소스 축퇴 블록에 전류와 저항을 대입해요.</p>
 <div class="equation">$$\frac{\Delta i_D}{v_{CM}}\approx\frac1{2r_{o3}}\qquad(2g_{m1}r_{o3}\gg1)$$</div>
 </div>
 <div class="layer formal" data-explanation="solve">
@@ -73,10 +73,9 @@
 <div class="layer warn" data-explanation="pitfall"><h4>주의할 점</h4><ul><li>$\lambda_n\ne0$인데 입력쌍 $r_o$를 없앤 것은 원문 자체의 조건이 아니라 참고답의 수업 근사예요. $r_{o3}$까지 없애면 CM 누출을 계산할 수 없어요. 전원과 입력 DC CM이 없는 상태에서 정확 CLM 바이어스를 만들어 넣지 않아요.</li><li>$A_{CM}$은 한쪽 출력, $A_{CM-DM}$은 두 출력의 차예요. CMRR 분모는 후자예요.</li><li>테일 크기 두 배에서 전류를 고정하면 안 돼요. 이 문제는 $V_{b1}$가 고정되어 전류가 두 배가 돼요.</li><li>1% 미스매치의 CMRR은 수업처럼 대칭 기준 DM 이득을 사용했어요. 이득 정의·근사 차수를 계산 도중 바꾸지 않아요.</li></ul></div>
 <div class="layer eli5" data-explanation="retry"><h4>조건을 바꾸어 생각해요</h4><ol><li>부하를 완전히 맞추면 각 출력의 CM 이득도 0일까요? 아니에요. 유한 테일 저항 때문에 각 출력은 같이 움직이지만 두 출력의 차만 0이 돼요.</li><li>다른 조건을 유지하고 불일치만 1%에서 0.5%로 줄이면? 누출은 절반, CMRR은 두 배가 되어 약 $86.02\,\mathrm{dB}$예요. 차이를 만드는 저항이 절반이기 때문이에요.</li><li>테일 폭을 늘리면서 전류가 원래 값이 되도록 바이어스를 다시 조절하면 입력 범위도 늘까요? 이 제곱법칙 모델에서는 아니에요. 입력쌍 크기와 테일 전류가 같으므로 범위와 $g_m$이 같아요.</li></ol></div>
 <div class="sum" hidden>
-<div class="summary-group"><h4>개념과 모델</h4><p>DM 가상 접지, CM의 $2r_{o3}$ 축퇴. 제곱법칙 DC와 입력쌍 $r_o$ 무시·테일 $r_{o3}$ 유지의 수업 근사예요. 정확 CLM DC는 전원·입력 CM 미지정으로 결정하지 않아요.</p></div>
-<div class="summary-group"><h4>첫 줄과 판단</h4><p>$I_{SS}=0.2\,\mathrm{mA}$, $g_m=1\,\mathrm{mS}$, $r_{o3}=50\,\mathrm{k\Omega}$. 기본 큰 축퇴 가정 $2g_mr_{o3}\gg1$에서 CM 전류 변환율은 약 $1/(2r_{o3})$예요.</p></div>
-<div class="summary-group"><h4>여섯 답</h4><p>(1) O, 범위 $\sqrt2$배. (2) $-10$. (3) 각 출력 $-0.1$. (4) 왼쪽−오른쪽 누출 $+0.001$. (5) 1% 미스매치에서 $10000$, $80\,\mathrm{dB}$. (6) 고정 $V_{b1}$에서 전류 두 배·$g_m$ $\sqrt2$배·테일 저항 절반: $7071.07$, $76.99\,\mathrm{dB}$로 악화해요.</p></div>
-<div class="summary-group"><h4>구분과 검산</h4><p>CMRR은 같은 차동 출력의 이득 비이며 수업의 대칭 기준 DM 이득을 써요. 대칭 부하에서는 CM-to-DM만 0, 테일 저항 무한대에서는 각 출력 CM 이득도 0이에요.</p></div>
+<p class="sum-lead">고정 $V_{b1}$에서 테일 폭을 늘리면 전류와 테일 저항이 함께 바뀌어요.</p>
+<div class="summary-group"><h4>적용 모델</h4><p>제곱법칙 DC와 입력쌍 $r_o$ 생략·테일 $r_{o3}$ 유지의 수업 모델이에요.</p><p>큰 축퇴의 CM 반회로는 소스 아래 $2r_{o3}$를 둬요.</p></div>
+<div class="summary-group"><h4>변경 전후</h4><p>1% 불일치에서 대칭 기준 CMRR은 약 10000, 80 dB예요.</p><p>테일 폭 2배이면 $g_m$은 $\sqrt2$배이고 테일 저항은 절반이에요.</p><p>따라서 CMRR은 $1/\sqrt2$배인 약 7071.07, 76.99 dB로 낮아져요.</p></div>
 </div>
 
 

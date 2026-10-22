@@ -1,2 +1,30 @@
-P10.70 general load mismatch Adm= g*(R + delta/2) CMRR a= g*r3*(2*R + delta)/delta CMRR b= g*g3*r3*r4*(2*R + delta)/delta improvement= g3*r4
-For small delta/R, replace R+delta/2 by R. Cascode transistor M3 is upper => gm3 ro3 ro4
+{
+  "source": "from_the_past/md/2015-1_중간/Q4.md",
+  "1": "X; vdiff cutoff =sqrt(2 ISS/K), K doubled ->1/sqrt2",
+  "2_course": -10.0,
+  "3_course": -0.1,
+  "4_course": 0.001,
+  "5_course": 33.333333333333336,
+  "5_retained1_roignored": 33.666666666666664,
+  "5_fulllinear": 34.09140235534527,
+  "full_cm": {
+    "left": -0.09798721271324011,
+    "right": -0.09887719647993622,
+    "diff": 0.0008899837666961063,
+    "avg": -0.09843220459658816,
+    "tail_node": 0.979427135249053
+  },
+  "full_dm": {
+    "left": -4.543411628171902,
+    "right": 4.588800800273403,
+    "diff": -9.132212428445305,
+    "avg": 0.022694586050750587,
+    "tail_node": 0.0002224959416740261
+  },
+  "note": "原문 ro1≫RD 명시없음; ro=10RD. 강의모델 -10과 완전 -9.1을 같은 근사 수준으로 표시하지 말 것."
+}
+Symmetric CM exact internal = -G*O*R/(O + R + 2*T*(G*O + 1))
+First-order leakage from full coupled KCL = D*G*O**2/((O + R)*(2*G*O*T + O + R + 2*T))
+limit CM/CMlead for G->infinity: 1
+limit leakage/large-product leakage for G->infinity: O*(1 + R/O)/(O + R)
+limit same-model CMRR/leading CMRR: (O + R)/(O*(1 + R/O))

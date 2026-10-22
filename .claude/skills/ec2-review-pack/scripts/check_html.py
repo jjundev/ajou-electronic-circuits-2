@@ -24,6 +24,7 @@ from urllib.parse import unquote
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import manifest as manifest_mod  # noqa: E402
 from learning_style import validate_style_audit  # noqa: E402
+from readability import readability_errors  # noqa: E402
 
 VOID_TAGS = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
 CONTAINER_CLASSES = {"topic", "card"}
@@ -241,6 +242,7 @@ def check_common(doc: Doc, source: str, path: Path) -> list[Problem]:
     out += [Problem("broken-link", name, h) for h in broken_links(doc, Path(path).parent)]
     out += [Problem("leftover-slot", name, s) for s in sorted(set(SLOT_RE.findall(source)))]
     out += [Problem("markdown-link", name, s) for s in MD_LINK_RE.findall(doc.body_text)]
+    out += [Problem(code, name, detail) for code, detail in readability_errors(source)]
     out += [Problem("widget-static-missing", wid, "위젯에 .widget-static 정적 대체물이 없음")
             for wid, classes in sorted(doc.widgets.items()) if "widget-static" not in classes]
     return out

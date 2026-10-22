@@ -1,0 +1,86 @@
+[
+  {
+    "id": "p1",
+    "exit": 0,
+    "script_sha256": "088c6f912eecdd51392c7eb82548cede400fafb4a365a4477b667131e02fc596",
+    "result": "main CM half-circuit KCL: -RD*gm/(2*gm*rt + 1) original proof: -I*RD*lam/(Vov*lam + 2)\nLarge degeneration leading term: -RD/(2*rt)\n"
+  },
+  {
+    "id": "p2",
+    "exit": 0,
+    "script_sha256": "7940f8f2a9387144083f363bcba6c412e91440b287938a2b93d7c17fc9d0b9bc",
+    "result": "CM full half-circuit gain: -gm*rL*ro/(2*gm*ro*rt + rL + ro + 2*rt)\nSpecified method: output short Gm=gm/(1+2rt(gm+1/ro)); inputzero Rout=rL||[ro+2rt(1+gmro)]\nFor gmro>>1 and 2gmro rt >>rL, Gm~1/(2rt), Rout~rL; ACM~-rL/(2rt). Matched CM differential0.\n"
+  },
+  {
+    "id": "p3",
+    "exit": 0,
+    "script_sha256": "944a81a7299b7b25ac15b36542366adefec373a9ce3a5d494471cf480477444b",
+    "result": "1 gm= 1/100 roN= 20000 roP= 20000 DM= -100\n2 tail gm= 1/50 Rtail= 2000000 2RSS= 4000000 SE/average CM= -1/200 symmetric differential CM=0\n"
+  },
+  {
+    "id": "p4",
+    "exit": 0,
+    "script_sha256": "deb28a3f83b6c8b00789c5fd33ce628e96e202eab2163bc29749f6bb928d238f",
+    "result": "{\n  \"source\": \"from_the_past/md/2018-2_중간/Q4.md\",\n  \"first_principles\": \"i=gm(vcm-vp), vp=2 RSS i; v1=-RD i, v2=-(RD+dRD)i\",\n  \"1\": \"이상 테일+대칭이면 CM 변화에 DC 가지 전류 불변. 현실에서 유한 테일과 비대칭이 CM→DM을 만든다.\",\n  \"2_leading_course\": 0.001,\n  \"2_ro_ignored_unsimplified\": 0.0009950248756218905,\n  \"2_full_finite_input_ro\": {\n    \"left\": -0.04951613408554514,\n    \"right\": -0.05045840114711617,\n    \"diff\": 0.0009422670615710366,\n    \"avg\": -0.049987267616330655,\n    \"tail_node\": 0.9898515481801172\n  },\n  \"scope\": \"ro≫RD 원문 가정: 강의 주도항9.999999e-4, 일반분모9.95025e-4. 완전회로 차이는 내부 검산.\"\n}\n"
+  },
+  {
+    "id": "p5",
+    "exit": 0,
+    "script_sha256": "a13199b1c38a201e4b94150903074875096b34236331f0fcbd5693f11d3cec26",
+    "result": "{\n  \"source\": \"from_the_past/md/2023-1_중간/Q4.md\",\n  \"1\": {\n    \"min\": 0.6,\n    \"max\": 1.69\n  },\n  \"2_course_leading\": {\n    \"ACM_left\": -0.05,\n    \"ACM_right\": -0.051,\n    \"ACM_mean\": -0.0505,\n    \"ACM_DM\": 0.001\n  },\n  \"3_course\": {\n    \"ADM_small_mismatch\": -10.0,\n    \"CMRR\": 10000.0,\n    \"dB\": 80.0\n  },\n  \"full_linear_cm\": {\n    \"left\": -0.04951613408554514,\n    \"right\": -0.05045840114711617,\n    \"diff\": 0.0009422670615710366,\n    \"avg\": -0.049987267616330655,\n    \"tail_node\": 0.9898515481801172\n  },\n  \"full_linear_dm\": {\n    \"left\": -4.759650051436003,\n    \"right\": 4.854819024654678,\n    \"diff\": -9.614469076090682,\n    \"avg\": 0.047584486609337784,\n    \"tail_node\": 0.0002355667653927605\n  },\n  \"full_linear_CMRR\": 10203.54999999738,\n  \"note\": \"출력 정의를 반드시 선언; 입력ro=20RD의 수치 영향과 부하 불일치 ADM 보정은 강의 근사와 분리.\"\n}\n"
+  },
+  {
+    "id": "p6",
+    "exit": 0,
+    "script_sha256": "0bc59399ecd2b319002975373f7bc28ef973cb973a54aa200fd91ca9f77f6c2c",
+    "result": "{\n  \"source\": \"from_the_past/md/2015-1_중간/Q4.md\",\n  \"1\": \"X; vdiff cutoff =sqrt(2 ISS/K), K doubled ->1/sqrt2\",\n  \"2_course\": -10.0,\n  \"3_course\": -0.1,\n  \"4_course\": 0.001,\n  \"5_course\": 33.333333333333336,\n  \"5_retained1_roignored\": 33.666666666666664,\n  \"5_fulllinear\": 34.09140235534527,\n  \"full_cm\": {\n    \"left\": -0.09798721271324011,\n    \"right\": -0.09887719647993622,\n    \"diff\": 0.0008899837666961063,\n    \"avg\": -0.09843220459658816,\n    \"tail_node\": 0.979427135249053\n  },\n  \"full_dm\": {\n    \"left\": -4.543411628171902,\n    \"right\": 4.588800800273403,\n    \"diff\": -9.132212428445305,\n    \"avg\": 0.022694586050750587,\n    \"tail_node\": 0.0002224959416740261\n  },\n  \"note\": \"原문 ro1≫RD 명시없음; ro=10RD. 강의모델 -10과 완전 -9.1을 같은 근사 수준으로 표시하지 말 것.\"\n}\nSymmetric CM exact internal = -G*O*R/(O + R + 2*T*(G*O + 1))\nFirst-order leakage from full coupled KCL = D*G*O**2/((O + R)*(2*G*O*T + O + R + 2*T))\nlimit CM/CMlead for G->infinity: 1\nlimit leakage/large-product leakage for G->infinity: O*(1 + R/O)/(O + R)\nlimit same-model CMRR/leading CMRR: (O + R)/(O*(1 + R/O))\n"
+  },
+  {
+    "id": "p7",
+    "exit": 0,
+    "script_sha256": "6e98afafbeddfe99669d658737ba549214100615196d1ceb7d22551916b72f5f",
+    "result": "1 fixedVb tailW doubles I -> steering limit sqrt2 times; O\nI= 1/5000 gm= 1/1000 RSS= 50000\n2 DM= -10 3 CM= -1/10 4 leak= 1/1000 5 CMRR= 10000 6 newCMRR= 7071.06781186548\nModel: textbook rO_input omitted consistently in gain/CMtoDM; big-gmRSS leading terms. Full-model finite-rO differences are not hidden exactness.\n"
+  },
+  {
+    "id": "p8",
+    "exit": 0,
+    "script_sha256": "717f207fc0c309c6342c3c4aa6011ecf98759adde975b6e5a919641e0858b4c4",
+    "result": "{\n  \"source\": \"from_the_past/md/2017-1_중간_C030/Q2.md\",\n  \"circuit_observation\": \"RE at drain of tail M1, NOT source; M1 gate+source AC ground -> tail=RE+ro1\",\n  \"1\": {\n    \"min\": 1.8,\n    \"max_with_explicit_10ohm\": 2.8994999999999997,\n    \"max_symmetric\": 2.9\n  },\n  \"2_cutoff\": 0.28284271247461906,\n  \"3_symmetric\": -4.761904761904762,\n  \"4_single_course\": -0.045454545454545456,\n  \"4_diff\": \"0 when deltaRC=0\",\n  \"5_course\": 4.545454545454545e-05,\n  \"6_course_using_same_roignored_model\": 110000.0,\n  \"full_cm\": {\n    \"left\": -0.04458419911018014,\n    \"right\": -0.04462665823032693,\n    \"diff\": 4.2459120146789986e-05,\n    \"avg\": -0.044605428670253536,\n    \"tail_node\": 0.9808290279077844\n  },\n  \"full_dm\": {\n    \"left\": -2.38089622371133,\n    \"right\": 2.383276057395557,\n    \"diff\": -4.764172281106887,\n    \"avg\": 0.0011899168421136697,\n    \"tail_node\": 1.1676258040365735e-05\n  },\n  \"full_CMRR\": 112206.10000009787,\n  \"note\": \"ro=20RD. RDparallelro retained in ADM and equal-branch-current approx in ACM is mixed-order if called exact. State leading-course or full-linear explicitly.\"\n}\nSymmetric CM exact internal = -G*O*R/(O + R + 2*T*(G*O + 1))\nFirst-order leakage from full coupled KCL = D*G*O**2/((O + R)*(2*G*O*T + O + R + 2*T))\nlimit CM/CMlead for G->infinity: 1\nlimit leakage/large-product leakage for G->infinity: O*(1 + R/O)/(O + R)\nlimit same-model CMRR/leading CMRR: (O + R)/(O*(1 + R/O))\n"
+  },
+  {
+    "id": "p9",
+    "exit": 0,
+    "script_sha256": "1760291d2f5d092abacd17774eed815be6d46b6ee37823845a6608f4aed5afa9",
+    "result": "exact upper cascode internal: ro*(gm*ro + 2)\nexact CM half KCL: -gm*ro**2*(gm*ro + 2)/(RS*gm*ro + RS + gm*ro**2 + 3*ro)\nexact DM half: -gm*ro*(gm*ro + 2)/(gm*ro + 3)\n{\n  \"source\": \"from_the_past/md/2019-1_중간/Q4.md\",\n  \"bias\": {\n    \"ID1_6\": 0.001,\n    \"ID7\": 0.002,\n    \"gm1_6\": 0.01,\n    \"gm7\": 0.02,\n    \"ro1_6\": 10000.0,\n    \"ro7\": 5000.0\n  },\n  \"1_course\": -99.00990099009901,\n  \"1_exact_linear\": -99.02912621359222,\n  \"2_course\": -50.0,\n  \"2_exact_linear\": -50.0,\n  \"CM_differential_output\": 0,\n  \"CM_half_reason\": \"두입력이같아두소스동일; 테일ro7을2ro7둘의병렬로분할. PMOS상부큰Rup에대해입력ro1는소스움직임으로커져Rdn≈gm1ro1*2ro7이고Rup와비슷하다. 소스는AC접지가아니다.\",\n  \"source_figure\": \"from_the_past/md/2019-1_중간/figures/fig-Q4.png\"\n}\nlimit exactCM/courseCM at gmro infinity: 1\nlimit exactDM/courseDM at gmro infinity: 1\n"
+  },
+  {
+    "id": "p10",
+    "exit": 0,
+    "script_sha256": "a1f82ca58f237fe5f5829b1e7946fd1e95602083fa7bdcdc3d16176dc71c86e7",
+    "result": "main: diode-node KCL vg=-i1/gm3; mirror gm4/gm3=1/N; vo/i1= RL/N ohms\n"
+  },
+  {
+    "id": "p11",
+    "exit": 0,
+    "script_sha256": "d4e30a82cce2e166d8190e516803344b7dac0955dd3119ea5dfdb6c2f3cc59d6",
+    "result": "a before= 0 after= 2*D*R change= 2*D*R\nb before= -I*R/2 after= 3*D*R/2 - I*R/2 change= 3*D*R/2\nOutput KCL supply kI1 minus sinkI2, mirror remains saturation; no common-source symmetry assumption.\n"
+  },
+  {
+    "id": "p12",
+    "exit": 0,
+    "script_sha256": "b28e466480ffe9370b799ad707dc376f77f3d20dda7189b26876772b614c8c91",
+    "result": "{\n  \"source\": \"from_the_past/md/2013-1_중간/Q4.md\",\n  \"1_mirror\": \"io=gm vid/2 +gm vid/2=gm vid; gain positive gm(ro2||ro4)\",\n  \"2_course_mirror\": 50.0,\n  \"2_full_mirror\": {\n    \"a\": -0.24752475247524752,\n    \"o\": 49.75247524752475,\n    \"p\": 0.24507401235173024\n  },\n  \"3_diode\": -0.9803921568627451,\n  \"4_gmRe\": 1.0,\n  \"4_full_linear\": -2.4271844660194173,\n  \"4_no_ro\": -2.5,\n  \"4_cascode_Rout_separation_approx\": -2.4390243902439024,\n  \"note\": \"RSS/2=100ohm yields gmRe=1 -> cannot drop1. Full finite-ro gain -2.427184466; source -2.44 uses additional Rout separation approx; label clearly.\"\n}\nlimit exact/block ro->infinity= 1\n"
+  },
+  {
+    "id": "p13",
+    "exit": 0,
+    "script_sha256": "8cedd9d992c81db61be703641bd8386de871eea961f337b8a59b9b5015708dfc",
+    "result": "{\n  \"source\": \"from_the_past/md/2015-1_중간/Q3.md\",\n  \"VT_assumption\": 0.026,\n  \"1_load\": 123.21533346371993,\n  \"1_gain\": -4.681369635001784,\n  \"2_course_Gm\": 0.0038461538461538464,\n  \"2_course_Rout\": 22222.222222222223,\n  \"2_course_gain\": 85.47008547008548,\n  \"2_finitebeta_mirror_Gm_correction_only\": 0.0038084464555052794,\n  \"2_finitebeta_mirror_gain_correction_only\": 84.63214345567287,\n  \"3_unsimplified_degenerated_gain\": -0.36231884057971014,\n  \"3_large_gmRe_course\": -0.4,\n  \"3_gmRe\": 9.615384615384617,\n  \"note\": \"미러 부분 보통β≫1 주도항에 따른85.47. 실제DC+finitebeta+ro 동시해석은 별도전체노드모델필요;소신호보정만정확이라고부르지않는다.축퇴정밀참고-0.3623 vs큰곱주도항-0.4 차이구분.\"\n}\nlimit finite-degeneration/source to leading as gmRE grows: 1\n"
+  },
+  {
+    "id": "p14",
+    "exit": 0,
+    "script_sha256": "5ad5bf0e39a838681bf022999e7e5de2a73e1a4ff92e237ade3aa78d1e6d5bd6",
+    "result": "main: Gm=Ic/VT, Rout=(VAn/Ic)||(VAp/Ic). Target100 => VAp= 65/12 V ≈ 5.416666666666667 V; substituted gain= 100\nFeasibility: limit VAp infinity gives VAn/VT= 192.307692307692  >100; increasing VAp increasesgain.\n"
+  }
+]

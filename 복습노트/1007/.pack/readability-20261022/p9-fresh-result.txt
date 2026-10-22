@@ -1,0 +1,23 @@
+exact upper cascode internal: ro*(gm*ro + 2)
+exact CM half KCL: -gm*ro**2*(gm*ro + 2)/(RS*gm*ro + RS + gm*ro**2 + 3*ro)
+exact DM half: -gm*ro*(gm*ro + 2)/(gm*ro + 3)
+{
+  "source": "from_the_past/md/2019-1_중간/Q4.md",
+  "bias": {
+    "ID1_6": 0.001,
+    "ID7": 0.002,
+    "gm1_6": 0.01,
+    "gm7": 0.02,
+    "ro1_6": 10000.0,
+    "ro7": 5000.0
+  },
+  "1_course": -99.00990099009901,
+  "1_exact_linear": -99.02912621359222,
+  "2_course": -50.0,
+  "2_exact_linear": -50.0,
+  "CM_differential_output": 0,
+  "CM_half_reason": "두입력이같아두소스동일; 테일ro7을2ro7둘의병렬로분할. PMOS상부큰Rup에대해입력ro1는소스움직임으로커져Rdn≈gm1ro1*2ro7이고Rup와비슷하다. 소스는AC접지가아니다.",
+  "source_figure": "from_the_past/md/2019-1_중간/figures/fig-Q4.png"
+}
+limit exactCM/courseCM at gmro infinity: 1
+limit exactDM/courseDM at gmro infinity: 1

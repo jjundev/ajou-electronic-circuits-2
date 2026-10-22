@@ -1,9 +1,8 @@
 import sympy as s
-import json
 
-g,R,T,I,V,lam=s.symbols('g R T I V lam', positive=True)
-vx=s.solve(s.Eq(g*(1-s.Symbol('x')),s.Symbol('x')/(2*T)),s.Symbol('x'))[0]
-a=s.factor(-g*(1-vx)*R)
-print('half circuit Rs=2T; A=',a)
-print('substituted=',s.factor(a.subs({g:I/V,T:1/(lam*I)})))
-print('numeric=',a.subs({g:.001,R:10000,T:100000}))
+gm,RD,rt,vin,vo,vs,I,lam,Vov=s.symbols('gm RD rt vin vo vs I lam Vov')
+x=s.solve([vo/RD+gm*(vin-vs),vs/(2*rt)-gm*(vin-vs)],(vo,vs));A=s.factor(x[vo]/vin)
+assert s.simplify(A+gm*RD/(1+2*gm*rt))==0
+proof=s.simplify(A.subs({gm:I/Vov,rt:1/(lam*I)}));assert s.simplify(proof+RD*I/(2/lam+Vov))==0
+print('main CM half-circuit KCL:',A,'original proof:',proof)
+print('Large degeneration leading term:',s.limit(A*rt,rt,s.oo)/rt)

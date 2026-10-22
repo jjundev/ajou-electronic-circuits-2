@@ -43,7 +43,7 @@
 <p>CM 반회로는 소스 아래 $2R_{SS}$를 둔 축퇴 CS 단이에요. 큰 $g_{m1}r_{o1}$, $2g_{m1}R_{SS}\gg1$ 및 $r_{o3}/(2R_{SS})\ll g_{m1}r_{o1}$의 주항 이득을 바로 적용해요. 이는 유한 $r_{o1}$ 모델의 주항 근사예요.</p>
 <div class="equation">$$A_{CM}\approx-\frac{r_{o3}}{2R_{SS}}$$</div>
 </div>
-<p>별도로 출력 단락의 $G_m$이나 입력 영점의 출력저항을 새로 측정하는 경로는 쓰지 않아요. 여기서는 알려진 CS 전압 이득과 캐스코드 블록을 반회로에 적용하므로, 필요한 조건은 출력 무부하·내부 부하·소스 축퇴예요.</p>
+<p>알려진 CS 전압 이득과 캐스코드 블록을 같은 반회로에 적용해요. 출력 무부하·내부 부하·소스 축퇴 조건을 확인한 뒤 수업의 큰 곱 근사로 계산해요.</p>
 </div>
 <div class="layer formal" data-explanation="solve">
 <h4>이렇게 풀어요</h4>
@@ -100,9 +100,9 @@
 <ol><li>동작 전류·입력쌍·부하를 유지하고 테일 저항만 두 배로 키우면 $A_{DM}$과 $A_{CM}$은 각각 어떻게 변할까요?</li><li>입력은 같은 CM 자극 그대로 두고, 관측 출력을 평균 대신 왼쪽−오른쪽 차로 바꾸면 대칭 회로의 이득은 얼마일까요?</li></ol>
 </div>
 <div class="sum" hidden>
-<div class="summary-group"><h4>개념·첫 줄</h4><p>DM은 P가 가상 접지인 CS 반회로, CM은 소스 아래 $2R_{SS}$인 축퇴 CS 반회로예요.</p><div class="equation">$$v_{gs1}=v_{CM}-v_P$$</div></div>
-<div class="summary-group"><h4>핵심 판단·답</h4><div class="equation">$$A_{DM}=-g_{m1}(r_{o1}\parallel r_{o3})=-100$$</div><div class="equation">$$R_{SS}\approx g_{m5}r_{o5}r_{o6}=2\,\mathrm{M\Omega}$$</div><div class="equation">$$A_{CM}\approx-\frac{r_{o3}}{2R_{SS}}$$</div><div class="equation">$$A_{CM}\approx-5\times10^{-3}$$</div><p>CM 결과는 큰 $g_mr_o$의 주항 근사예요.</p></div>
-<div class="summary-group"><h4>혼동·검산</h4><p>테일 전류는 $1\,\mathrm{mA}$, 각 가지는 $0.5\,\mathrm{mA}$예요. 평균 출력의 CM 이득은 작고 음수이며, 대칭 차동 출력의 CM 이득은 0이에요. $R_{SS}\to\infty$에서 각 출력의 CM 이득도 0이 돼요.</p></div>
+<p class="sum-lead">DM은 P를 가상 접지로, CM은 소스 아래를 $2R_{SS}$로 두어요.</p>
+<div class="summary-group"><h4>캐스코드 테일</h4><div class="equation">$$R_{SS}\approx g_{m5}r_{o5}r_{o6}=2\,\mathrm{M\Omega}$$</div></div>
+<div class="summary-group"><h4>두 자극의 이득</h4><div class="equation">$$A_{DM}=-g_{m1}(r_{o1}\parallel r_{o3})=-100$$</div><div class="equation">$$A_{CM}\approx-\frac{r_{o3}}{2R_{SS}}$$</div><p>큰 $g_mr_o$ 주항에서 각 출력의 $A_{CM}\approx-5\times10^{-3}$예요.</p><p>완전 대칭 차동 출력의 CM 이득은 0이에요.</p></div>
 </div>
 
 

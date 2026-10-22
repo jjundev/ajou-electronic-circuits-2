@@ -1,0 +1,363 @@
+{
+  "author": "readability_content",
+  "scope": "summary-only and public STT citation removal",
+  "note": [
+    {
+      "topic": "why-circuit",
+      "before": "<div class=\"sum\" hidden=\"\"><p class=\"sum-lead\">차동 구조로 CM 잡음을 줄이고, 전류 거울로 두 가지의 신호 전류를 한 출력에 모아요.</p><dl class=\"terms\"><dt>풀고 싶은 문제</dt><dd>같이 섞인 CM 성분을 줄이면서 원하는 차동 신호를 한 출력으로 전달해요. 대칭이면 각 출력 CM 흔들림이 남아도 차에서는 지워져요.</dd><dt>단순한 해법의 한계</dt><dd>한쪽 출력만 고르면 같은 차동 입력에서 신호가 절반이고 마지막 CM 상쇄도 잃어요. 테일 저항이 크면 한쪽 CM 이득도 작을 수 있어요.</dd><dt>핵심 아이디어</dt><dd>전류 거울이 다른 가지 전류 변화를 복사해 출력의 두 신호 기여를 합쳐요. 절반 손실 회복은 같은 유효 출력저항 기준이에요.</dd><dt>성능과 조건</dt><dd>CMRR로 원하는 이득과 CM-to-DM 누출을 함께 비교해요. 실제 미스매치·출력저항·부하가 영향을 줘요. 미러 비대칭에는 대칭 하프 회로를 그대로 쓰지 않아요.</dd><dt>쓰임과 대가</dt><dd>op-amp의 차동 입력·한 개 출력 연결에 쓰여요. 미러 매칭과 소자의 동작 영역을 확인해요. 전류와 차동 신호 생성의 대가가 있으며 전류 2배는 강의의 비교 조건에 한정해요.</dd><dt>교과서 보충</dt><dd>큰 저항의 면적 부담을 줄이는 배경, Widlar의 LM101A, 5-트랜지스터 OTA 명칭은 수업 밖 교과서 배경이에요. 캐스코드 테일은 저항을 키우지만 헤드룸·입력 CM 범위 제약을 더할 수 있어요.</dd></dl></div>",
+      "after": "<div class=\"sum\" hidden>\n<p class=\"sum-lead\">차동 구조로 CM 잡음을 줄이고, 전류 거울로 두 가지 신호를 한 출력에 모아요.</p>\n<div class=\"summary-group\"><h4>풀고 싶은 문제</h4><p>같이 들어온 CM 성분은 줄이고 원하는 차동 신호는 한 출력으로 전달해요.</p></div>\n<div class=\"summary-group\"><h4>핵심 아이디어</h4><p>전류 거울이 반대쪽 가지의 전류 변화를 복사해 두 신호 기여를 합쳐요.</p></div>\n<div class=\"summary-group\"><h4>확인할 조건</h4><p>같은 유효 출력저항 기준으로 한쪽 취출의 절반 손실을 회복해요.</p><p>거울의 매칭과 소자의 동작 영역을 확인해요.</p></div>\n</div>",
+      "retained": "차동 구조로 CM 잡음을 줄이고, 전류 거울로 두 가지 신호를 한 출력에 모아요. 풀고 싶은 문제 같이 들어온 CM 성분은 줄이고 원하는 차동 신호는 한 출력으로 전달해요. 핵심 아이디어 전류 거울이 반대쪽 가지의 전류 변화를 복사해 두 신호 기여를 합쳐요. 확인할 조건 같은 유효 출력저항 기준으로 한쪽 취출의 절반 손실을 회복해요. 거울의 매칭과 소자의 동작 영역을 확인해요.",
+      "omitted": [
+        "CMRR 용어 풀이·교과서 역사·전력 비교 조건·캐스코드 헤드룸의 상세 설명"
+      ],
+      "reason": "중복·유도·예시는 본문에 유지하고, 요약에는 핵심 판단과 필요한 조건·부호를 남김"
+    },
+    {
+      "topic": "s0-cm-half-recap",
+      "before": "<div class=\"sum\" hidden=\"\"><p class=\"sum-lead\">CM에서는 P가 움직여요. 소스 아래 $2R_{SS}$인 축퇴 반회로를 그리고, 전압이득의 큰 축퇴 주항을 바로 적용해요.</p><p class=\"panel-label\">핵심 식</p><ul class=\"eq-list\"><li><span class=\"eq-name\">원 테일 KCL</span><div class=\"equation\">$$\\Delta v_P=2R_{SS}\\Delta i_D$$</div></li><li><span class=\"eq-name\">$2g_mR_{SS}\\gg1$</span><div class=\"equation\">$$A_{CM}\\approx-\\frac{R_D}{2R_{SS}}$$</div></li><li><span class=\"eq-name\">완전 대칭의 CM 응답</span><div class=\"equation\">$$\\Delta v_{od}=\\Delta v_{out1}-\\Delta v_{out2}=0$$</div></li></ul><p>보통 $R_{SS}\\gg R_D$이면 각 출력의 CM 흔들림도 작아요. 차동 자극의 P 가상 접지와 CM 자극의 움직이는 P를 구별해요. 큰 $\\beta$의 BJT는 $R_C,R_{EE}$로 대응해요.</p><p class=\"panel-label\">용어</p><dl class=\"terms\"><dt>CM 하프 서킷</dt><dd>같은 입력 자극에 대한 소스 축퇴 반회로</dd><dt>CM 이득</dt><dd>CM 입력에서 출력 CM으로의 비이며 차동 출력 누출과 달라요.</dd><dt>CM 잡음 제거</dt><dd>두 입력에 같은 잡음 성분을 제거하는 성질이며 모든 잡음을 제거한다는 뜻은 아니에요.</dd></dl></div>",
+      "after": "<div class=\"sum\" hidden>\n<p class=\"sum-lead\">CM에서는 소스 아래에 $2R_{SS}$를 둔 축퇴 반회로를 써요.</p>\n<div class=\"summary-group\"><h4>반회로의 첫 식</h4><div class=\"equation\">$$\\Delta v_P=2R_{SS}\\Delta i_D$$</div></div>\n<div class=\"summary-group\"><h4>각 출력의 CM 이득</h4><div class=\"equation\">$$A_{CM}\\approx-\\frac{R_D}{2R_{SS}}$$</div><p>같은 입력쌍·부하에서 입력 $r_O$와 몸체 효과를 생략하고 $2g_mR_{SS}\\gg1$을 적용해요.</p></div>\n<div class=\"summary-group\"><h4>구별할 점</h4><p>CM에서 P는 움직이며, 차동 자극의 가상 접지와 달라요.</p><p>완전 대칭이면 각 출력이 함께 흔들려도 두 출력의 차는 0이에요.</p></div>\n</div>",
+      "retained": "CM에서는 소스 아래에 $2R_{SS}$를 둔 축퇴 반회로를 써요. 반회로의 첫 식 $$\\Delta v_P=2R_{SS}\\Delta i_D$$ 각 출력의 CM 이득 $$A_{CM}\\approx-\\frac{R_D}{2R_{SS}}$$ 같은 입력쌍·부하에서 입력 $r_O$와 몸체 효과를 생략하고 $2g_mR_{SS}\\gg1$을 적용해요. 구별할 점 CM에서 P는 움직이며, 차동 자극의 가상 접지와 달라요. 완전 대칭이면 각 출력이 함께 흔들려도 두 출력의 차는 0이에요.",
+      "omitted": [
+        "BJT 치환·용어 사전·테일 저항비의 보충 설명"
+      ],
+      "reason": "중복·유도·예시는 본문에 유지하고, 요약에는 핵심 판단과 필요한 조건·부호를 남김"
+    },
+    {
+      "topic": "s0-cm-noise",
+      "before": "<div class=\"sum\" hidden=\"\"><p class=\"sum-lead\">대칭이면 유한한 테일에서 각 출력에 남은 같은 CM 잡음도 두 출력의 차에서 상쇄돼요.</p><p class=\"panel-label\">핵심 식</p><ul class=\"eq-list\"><li><span class=\"eq-name\">같은 출력 잡음</span><div class=\"equation\">$$n_o(t)=A_{CM}n(t)$$</div></li><li><span class=\"eq-name\">공통 출력</span><div class=\"equation\">$$v_{out,CM}(t)=n_o(t)$$</div></li><li><span class=\"eq-name\">차동 출력</span><div class=\"equation\">$$v_{od}(t)=2s_o(t)$$</div></li><li><span class=\"eq-name\">이상적 테일의 CM 응답</span><div class=\"equation\">$$n_o(t)=0$$</div></li></ul><p>이상적 테일은 각 출력에서도 입력 CM 잡음을 없애요. 유한한 테일은 각 출력에 같은 잡음을 남기며, 보통 큰 $R_{SS}$로 그 크기가 감쇠돼요. 출력 잡음 두 개는 같은 위상이며 입력과는 반전될 수 있어요. 원하는 반대 위상 성분은 차에서 한쪽의 2배가 돼요.</p><p>상쇄에는 부하·소자의 대칭과 선형 소신호 조건이 필요해요. 비대칭이면 CM 잡음이 차동 출력에 샐 수 있고, 한쪽 출력만 읽으면 최종 뺄셈 상쇄를 잃어요. 모든 잡음이 CM은 아니에요.</p><p class=\"panel-label\">용어</p><dl class=\"terms\"><dt>출력 CM</dt><dd>두 출력의 평균으로, 차동 출력과 달라요.</dd><dt>CM 리젝션</dt><dd>입력의 같은 잡음 성분이 원하는 출력에 나타나는 것을 억제하는 성질이에요.</dd><dt>DC CM 레벨</dt><dd>동작점의 공통 전압이며, 여기서 다룬 작은 CM 변화와 구별해요.</dd></dl></div>",
+      "after": "<div class=\"sum\" hidden>\n<p class=\"sum-lead\">대칭 회로에서는 두 출력에 남은 같은 CM 잡음도 차동 출력에서 상쇄돼요.</p>\n<div class=\"summary-group\"><h4>남는 신호와 잡음</h4><div class=\"equation\">$$n_o(t)=A_{CM}n(t)$$</div><div class=\"equation\">$$v_{od}(t)=2s_o(t)$$</div></div>\n<div class=\"summary-group\"><h4>테일과 대칭의 역할</h4><p>이상적 테일은 각 출력의 입력 CM 잡음도 없애요.</p><p>유한한 테일에서는 각 출력에 같은 잡음이 남을 수 있어요.</p><p>상쇄에는 좌우 대칭과 선형 소신호 조건이 필요해요.</p></div>\n</div>",
+      "retained": "대칭 회로에서는 두 출력에 남은 같은 CM 잡음도 차동 출력에서 상쇄돼요. 남는 신호와 잡음 $$n_o(t)=A_{CM}n(t)$$ $$v_{od}(t)=2s_o(t)$$ 테일과 대칭의 역할 이상적 테일은 각 출력의 입력 CM 잡음도 없애요. 유한한 테일에서는 각 출력에 같은 잡음이 남을 수 있어요. 상쇄에는 좌우 대칭과 선형 소신호 조건이 필요해요.",
+      "omitted": [
+        "동일 정보를 반복하는 출력 CM식·이상적 테일식·위상 설명·용어 사전"
+      ],
+      "reason": "중복·유도·예시는 본문에 유지하고, 요약에는 핵심 판단과 필요한 조건·부호를 남김"
+    },
+    {
+      "topic": "s1-mismatch",
+      "before": "<div class=\"sum\" hidden=\"\"><p class=\"sum-lead\">유한 테일 저항과 부하 불일치가 함께 있으면 CM 입력이 차동 출력으로 새어요.</p><ul class=\"eq-list\"><li>가지 전류<div class=\"equation\">$$\\Delta i_D\\approx\\frac{\\Delta v_{in,CM}}{2R_{SS}}$$</div></li><li>차동 출력<div class=\"equation\">$$\\Delta v_{od}=\\Delta R_D\\Delta i_D$$</div></li><li>크기 이득<div class=\"equation\">$$A_{CM-DM}\\approx\\frac{|\\Delta R_D|}{2R_{SS}}$$</div></li></ul><p>입력쌍 일치, $r_O$·몸체 효과 무시 모델이에요. 마지막 근사는 $2g_mR_{SS}\\gg1$일 때예요. BJT 대응은 큰 $\\beta$와 Early 효과 무시가 필요해요.</p><p>오른쪽이 더 큰 부하이고 $v_{od}=v_{out1}-v_{out2}$이면 부호 전달비는 양수예요. $A_{CM-DM}$은 크기이며 $A_{CM}$과 달라요. 완전 대칭이면 각 출력의 CM 변화가 남아도 차에서는 상쇄돼요.</p><p>공정 절대 오차와 두 소자 사이 미스매치는 달라요. 테일 저항 증대가 누출을 줄이며, 무작위 오차를 마음대로 지정할 수 없다는 말은 매칭 설계가 무의미하다는 뜻이 아니에요.</p></div>",
+      "after": "<div class=\"sum\" hidden>\n<p class=\"sum-lead\">유한 테일 저항과 부하 불일치가 함께 있으면 CM 입력이 차동 출력으로 새어요.</p>\n<div class=\"summary-group\"><h4>누출의 크기</h4><div class=\"equation\">$$A_{CM-DM}\\approx\\frac{|\\Delta R_D|}{2R_{SS}}$$</div><p>입력쌍 일치·입력 $r_O$와 몸체 효과 생략·$2g_mR_{SS}\\gg1$ 조건이에요.</p></div>\n<div class=\"summary-group\"><h4>부호와 상쇄</h4><p>오른쪽 부하가 더 크고 왼쪽−오른쪽 출력을 읽으면 부호 있는 전달비는 양수예요.</p><p>$A_{CM-DM}$은 그 크기이며 각 출력의 $A_{CM}$과 달라요.</p><p>부하가 같아지거나 테일 저항이 무한대로 가면 이 누출은 0이에요.</p></div>\n</div>",
+      "retained": "유한 테일 저항과 부하 불일치가 함께 있으면 CM 입력이 차동 출력으로 새어요. 누출의 크기 $$A_{CM-DM}\\approx\\frac{|\\Delta R_D|}{2R_{SS}}$$ 입력쌍 일치·입력 $r_O$와 몸체 효과 생략·$2g_mR_{SS}\\gg1$ 조건이에요. 부호와 상쇄 오른쪽 부하가 더 크고 왼쪽−오른쪽 출력을 읽으면 부호 있는 전달비는 양수예요. $A_{CM-DM}$은 그 크기이며 각 출력의 $A_{CM}$과 달라요. 부하가 같아지거나 테일 저항이 무한대로 가면 이 누출은 0이에요.",
+      "omitted": [
+        "중간 전류·출력 유도식·BJT 대응·공정오차 부연"
+      ],
+      "reason": "중복·유도·예시는 본문에 유지하고, 요약에는 핵심 판단과 필요한 조건·부호를 남김"
+    },
+    {
+      "topic": "s1-cmrr",
+      "before": "<div class=\"sum\" hidden=\"\"><p class=\"sum-lead\">CMRR은 같은 차동 출력에서 원하는 차동 이득과 원치 않는 CM-to-DM 이득의 크기를 비교해요.</p><ul class=\"eq-list\"><li>정의<div class=\"equation\">$$\\mathrm{CMRR}=\\frac{|A_{DM}|}{A_{CM-DM}}$$</div></li><li>dB<div class=\"equation\">$$\\mathrm{CMRR}_{dB}=20\\log_{10}(\\mathrm{CMRR})$$</div></li><li>작은 미스매치의 보충식<div class=\"equation\">$$\\mathrm{CMRR}\\approx\\frac{R_D}{|\\Delta R_D|}$$</div> <div class=\"equation\">$$\\times2g_mR_{SS}$$</div></li></ul><p>저항 부하 차동쌍에서 $v_{id}=v_{in1}-v_{in2}$, $v_{od}=v_{out1}-v_{out2}$이면 $A_{DM}\\approx-g_mR_D$예요. CMRR에는 그 크기를 써요. 완전 대칭에서는 차동 누출이 0이므로 이상적 CMRR이 무한대여도 각 출력은 CM으로 흔들릴 수 있어요.</p><p>보충식은 입력쌍 일치, $r_O$·몸체 효과 무시, 작은 부하 미스매치 조건이에요. BJT 대응은 큰 $\\beta$와 Early 효과 무시가 필요해요. 기본 큰 축퇴 조건 $2g_mR_{SS}\\gg1$에서 다른 인자를 고정할 때 테일 저항 10배 또는 미스매치 10분의 1이 CMRR 약 10배, 20 dB 증가를 만들어요.</p><p>60 dB는 전압비 1000이에요. SNR 비유는 같은 크기 입력끼리의 비교이며 실제 출력 SNR을 CMRR만으로 결정하지 않아요. CM·CM-to-DM·CMRR의 구별과 의미 설명이 교수님 강조점이에요.</p></div>",
+      "after": "<div class=\"sum\" hidden>\n<p class=\"sum-lead\">CMRR은 같은 차동 출력에서 원하는 이득과 CM 누출 이득의 크기를 비교해요.</p>\n<div class=\"summary-group\"><h4>정의</h4><div class=\"equation\">$$\\mathrm{CMRR}=\\frac{|A_{DM}|}{A_{CM-DM}}$$</div><div class=\"equation\">$$\\mathrm{CMRR}_{dB}=20\\log_{10}(\\mathrm{CMRR})$$</div></div>\n<div class=\"summary-group\"><h4>작은 부하 불일치</h4><div class=\"equation\">$$\\begin{aligned}\\mathrm{CMRR}&\\approx\\frac{R_D}{|\\Delta R_D|}\\\\&\\quad\\times2g_mR_{SS}\\end{aligned}$$</div><p>입력쌍 일치·입력 $r_O$와 몸체 효과 생략·작은 불일치·큰 축퇴 조건이에요.</p><p>분모에는 각 출력의 $A_{CM}$ 대신 차동 출력의 누출을 써요.</p></div>\n</div>",
+      "retained": "CMRR은 같은 차동 출력에서 원하는 이득과 CM 누출 이득의 크기를 비교해요. 정의 $$\\mathrm{CMRR}=\\frac{|A_{DM}|}{A_{CM-DM}}$$ $$\\mathrm{CMRR}_{dB}=20\\log_{10}(\\mathrm{CMRR})$$ 작은 부하 불일치 $$\\begin{aligned}\\mathrm{CMRR}&\\approx\\frac{R_D}{|\\Delta R_D|}\\\\&\\quad\\times2g_mR_{SS}\\end{aligned}$$ 입력쌍 일치·입력 $r_O$와 몸체 효과 생략·작은 불일치·큰 축퇴 조건이에요. 분모에는 각 출력의 $A_{CM}$ 대신 차동 출력의 누출을 써요.",
+      "omitted": [
+        "10배/20dB 예시·SNR 비유·BJT 대응·강조 발언 설명"
+      ],
+      "reason": "중복·유도·예시는 본문에 유지하고, 요약에는 핵심 판단과 필요한 조건·부호를 남김"
+    },
+    {
+      "topic": "s2-single-ended",
+      "before": "<div class=\"sum\" hidden=\"\"><p class=\"sum-lead\">같은 차동 입력에서 한쪽 출력은 신호가 절반이고 공통 변화의 마지막 상쇄를 잃어요.</p><ul><li>예: −10 mV와 +10 mV의 차는 −20 mV, 오른쪽은 +10 mV예요.</li><li>차동 출력은 왼쪽 빼기 오른쪽, 싱글엔디드 출력은 오른쪽으로 정의해요.</li><li>유한 테일에서 각 출력 CM 변화는 남지만 대칭인 두 출력의 차에서는 사라져요.</li><li>테일 감쇠는 남아요. 이상적 테일이면 한쪽 CM 이득도 0이에요.</li><li>한쪽의 $A_{CM}$과 차동 출력의 $A_{CM-DM}$은 구별해요.</li></ul><p class=\"panel-label\">핵심 식</p><ul class=\"eq-list\"><li><div class=\"equation\">$$A_{SE}=+\\frac{g_mR_D}{2}.$$</div></li><li><div class=\"equation\">$$|A_{SE}|=\\frac{|A_{DM}|}{2}.$$</div></li><li><div class=\"equation\">$$A_{CM}\\approx-\\frac{R_D}{2R_{SS}}.$$</div></li></ul><dl class=\"terms\"><dt>싱글엔디드 출력</dt><dd>접지를 기준으로 출력 노드 하나를 읽어요.</dd></dl></div>",
+      "after": "<div class=\"sum\" hidden>\n<p class=\"sum-lead\">한쪽 출력만 읽으면 같은 차동 입력의 신호가 절반이고 마지막 CM 상쇄를 잃어요.</p>\n<div class=\"summary-group\"><h4>오른쪽 출력의 이득</h4><div class=\"equation\">$$A_{SE}=+\\frac{g_mR_D}{2}.$$</div><div class=\"equation\">$$|A_{SE}|=\\frac{|A_{DM}|}{2}.$$</div><p>왼쪽−오른쪽 입력과 오른쪽 출력 기준의 대칭 저항 부하·입력 $r_O$ 생략 모델이에요.</p></div>\n<div class=\"summary-group\"><h4>남는 CM 응답</h4><div class=\"equation\">$$A_{CM}\\approx-\\frac{R_D}{2R_{SS}}.$$</div><p>이 식은 큰 축퇴 주항이며 테일에 의한 감쇠는 한쪽 출력에도 남아요.</p><p>이상적 테일이면 한쪽 CM 이득도 0이에요.</p></div>\n</div>",
+      "retained": "한쪽 출력만 읽으면 같은 차동 입력의 신호가 절반이고 마지막 CM 상쇄를 잃어요. 오른쪽 출력의 이득 $$A_{SE}=+\\frac{g_mR_D}{2}.$$ $$|A_{SE}|=\\frac{|A_{DM}|}{2}.$$ 왼쪽−오른쪽 입력과 오른쪽 출력 기준의 대칭 저항 부하·입력 $r_O$ 생략 모델이에요. 남는 CM 응답 $$A_{CM}\\approx-\\frac{R_D}{2R_{SS}}.$$ 이 식은 큰 축퇴 주항이며 테일에 의한 감쇠는 한쪽 출력에도 남아요. 이상적 테일이면 한쪽 CM 이득도 0이에요.",
+      "omitted": [
+        "수치 예시·중복 출력 정의·용어 사전"
+      ],
+      "reason": "중복·유도·예시는 본문에 유지하고, 요약에는 핵심 판단과 필요한 조건·부호를 남김"
+    },
+    {
+      "topic": "s2-mos-active",
+      "before": "<div class=\"sum\" hidden=\"\"><p class=\"sum-lead\">전류 거울이 한쪽 변화를 복사해 공급 증가와 흡수 감소를 합쳐요.</p><ul><li>M1·M2는 NMOS 입력 쌍, M3·M4는 PMOS 거울이며 M3만 다이오드 연결이에요.</li><li>각 DC 전류는 $I_{SS}/2$, 공급 0.6 mA와 흡수 0.4 mA의 예에서는 순변화 +0.2 mA예요.</li><li>같은 입력 쌍·1:1 거울·포화·작은 입력·$g_mr_O\\gg1$인 주도항 모델이에요.</li><li>전체는 비대칭이라 동일 반회로로 자르지 않아요.</li><li>전류 생성은 출력 단락, 출력저항은 입력 0·시험원으로 구별해요.</li><li>외부 부하가 없어도 유한 $r_O$는 남아요.</li><li>고정 바이어스로 거울의 복사 신호를 없애면 같은 부하에서 이득이 절반이에요. DC나 $r_{O4}$가 사라지는 것은 아니에요.</li><li>이득 회복만으로 CM 이득 0을 주장하지 않아요.</li></ul><p class=\"panel-label\">핵심 식</p><ul class=\"eq-list\"><li><div class=\"equation\">$$i_{sig}\\approx g_mv_{id}.$$</div></li><li><div class=\"equation\">$$G_m\\approx g_m.$$</div></li><li><div class=\"equation\">$$R_{out}\\approx r_{O2}\\parallel r_{O4}.$$</div></li><li><div class=\"equation\">$$R_{eff}\\approx r_{O2}\\parallel r_{O4}$$</div><div class=\"equation\">$$\\parallel R_L.$$</div></li><li><div class=\"equation\">$$A_v\\approx+g_mR_{eff}.$$</div></li><li><div class=\"equation\">$$A_{v,\\,fixed}\\approx+\\frac{g_mR_{eff}}2.$$</div></li></ul><p>$R_L\\ll r_{O2}\\parallel r_{O4}$일 때만 $A_v\\approx+g_mR_L$로 줄여요. 부호는 왼쪽−오른쪽 입력과 오른쪽 출력 정의예요.</p><dl class=\"terms\"><dt>능동 부하</dt><dd>트랜지스터로 만든 부하예요.</dd><dt>다이오드 연결</dt><dd>여기서는 M3 게이트–드레인을 연결해요.</dd></dl></div>",
+      "after": "<div class=\"sum\" hidden>\n<p class=\"sum-lead\">PMOS 전류 거울은 공급 증가와 흡수 감소를 합쳐 오른쪽 출력을 올려요.</p>\n<div class=\"summary-group\"><h4>신호 합성과 이득</h4><div class=\"equation\">$$G_m\\approx g_m.$$</div><div class=\"equation\">$$\\begin{aligned}R_{eff}&\\approx r_{O2}\\parallel r_{O4}\\\\&\\quad\\parallel R_L.\\end{aligned}$$</div><div class=\"equation\">$$A_v\\approx+g_mR_{eff}.$$</div><p>왼쪽−오른쪽 입력·오른쪽 출력 기준이며, 같은 입력쌍·1:1 거울·포화·작은 입력·큰 $g_mr_O$의 주항이에요.</p></div>\n<div class=\"summary-group\"><h4>연결에서 판단할 점</h4><p>M3만 다이오드 연결이므로 전체를 동일 반회로로 자르지 않아요.</p><p>거울을 고정 바이어스로 바꾸면 같은 유효 부하에서 이득이 절반이에요.</p></div>\n</div>",
+      "retained": "PMOS 전류 거울은 공급 증가와 흡수 감소를 합쳐 오른쪽 출력을 올려요. 신호 합성과 이득 $$G_m\\approx g_m.$$ $$\\begin{aligned}R_{eff}&\\approx r_{O2}\\parallel r_{O4}\\\\&\\quad\\parallel R_L.\\end{aligned}$$ $$A_v\\approx+g_mR_{eff}.$$ 왼쪽−오른쪽 입력·오른쪽 출력 기준이며, 같은 입력쌍·1:1 거울·포화·작은 입력·큰 $g_mr_O$의 주항이에요. 연결에서 판단할 점 M3만 다이오드 연결이므로 전체를 동일 반회로로 자르지 않아요. 거울을 고정 바이어스로 바꾸면 같은 유효 부하에서 이득이 절반이에요.",
+      "omitted": [
+        "수치 예시·소자 역할 나열·중복 등가식·고정 바이어스 상세·용어 사전"
+      ],
+      "reason": "중복·유도·예시는 본문에 유지하고, 요약에는 핵심 판단과 필요한 조건·부호를 남김"
+    },
+    {
+      "topic": "s2-bjt-active",
+      "before": "<div class=\"sum\" hidden=\"\"><p class=\"sum-lead\">바이폴라 전류 거울도 공급 증가와 흡수 감소를 합쳐 단일 출력의 1/2 손실을 회복해요.</p><ul><li>NPN Q1·Q2 입력 쌍과 PNP Q3·Q4 거울이에요. Q3는 B–C 연결이에요.</li><li>큰 $\\beta$로 베이스 전류 오차를 무시하고 $g_mr_O\\gg1$인 주도항이에요. 각 DC는 약 $I_{EE}/2$예요.</li><li>10 μA 증가와 10 μA 감소는 순변화 20 μA예요.</li><li>전류 생성은 출력 단락, 저항은 입력 0·시험원으로 확인해요.</li><li>왼쪽−오른쪽 입력과 오른쪽 출력이면 양의 이득이에요.</li><li>외부 부하는 병렬이고 충분히 작을 때만 $A_v\\approx+g_mR_L$이에요.</li><li>거울을 고정 바이어스로 바꾸면 같은 부하에서 이득이 절반이에요. Q4의 DC·Early 저항은 남아요.</li><li>$r_{\\pi2}$는 B–E, 출력은 C여서 $r_{O4}$와 직접 병렬이 아니에요. 유한 $\\beta$가 중요하면 내부 모델에 남겨요.</li><li>DC를 지우고 변화량을 추적하는 것이 소신호 분석이에요.</li></ul><p class=\"panel-label\">핵심 식</p><ul class=\"eq-list\"><li><div class=\"equation\">$$i_{sig}\\approx g_mv_{id}.$$</div></li><li><div class=\"equation\">$$G_m\\approx g_m.$$</div></li><li><div class=\"equation\">$$R_{out}\\approx r_{O2}\\parallel r_{O4}.$$</div></li><li><div class=\"equation\">$$R_{eff}\\approx r_{O2}\\parallel r_{O4}$$</div><div class=\"equation\">$$\\parallel R_L.$$</div></li><li><div class=\"equation\">$$A_v\\approx+g_mR_{eff}.$$</div></li><li><div class=\"equation\">$$A_{v,\\,fixed}\\approx+\\frac{g_mR_{eff}}2.$$</div></li></ul><dl class=\"terms\"><dt>PNP 전류 거울</dt><dd>Q3의 전류 변화를 Q4 공급 전류로 전달해요.</dd></dl></div>",
+      "after": "<div class=\"sum\" hidden>\n<p class=\"sum-lead\">PNP 전류 거울도 두 가지 신호를 합쳐 단일 출력의 절반 손실을 회복해요.</p>\n<div class=\"summary-group\"><h4>오른쪽 출력의 이득</h4><div class=\"equation\">$$G_m\\approx g_m.$$</div><div class=\"equation\">$$\\begin{aligned}R_{eff}&\\approx r_{O2}\\parallel r_{O4}\\\\&\\quad\\parallel R_L.\\end{aligned}$$</div><div class=\"equation\">$$A_v\\approx+g_mR_{eff}.$$</div><p>왼쪽−오른쪽 입력·오른쪽 출력 기준이며, 같은 입력쌍·1:1 거울·활성 영역·큰 $\\beta$·큰 $g_mr_O$의 주항이에요.</p></div>\n<div class=\"summary-group\"><h4>연결에서 판단할 점</h4><p>Q3는 베이스–컬렉터 연결이고 Q4가 그 신호를 출력에 공급해요.</p><p>$r_{\\pi2}$는 출력 컬렉터 저항과 직접 병렬이 아니에요.</p></div>\n</div>",
+      "retained": "PNP 전류 거울도 두 가지 신호를 합쳐 단일 출력의 절반 손실을 회복해요. 오른쪽 출력의 이득 $$G_m\\approx g_m.$$ $$\\begin{aligned}R_{eff}&\\approx r_{O2}\\parallel r_{O4}\\\\&\\quad\\parallel R_L.\\end{aligned}$$ $$A_v\\approx+g_mR_{eff}.$$ 왼쪽−오른쪽 입력·오른쪽 출력 기준이며, 같은 입력쌍·1:1 거울·활성 영역·큰 $\\beta$·큰 $g_mr_O$의 주항이에요. 연결에서 판단할 점 Q3는 베이스–컬렉터 연결이고 Q4가 그 신호를 출력에 공급해요. $r_{\\pi2}$는 출력 컬렉터 저항과 직접 병렬이 아니에요.",
+      "omitted": [
+        "수치 예시·소자 역할 나열·중복 등가식·고정 바이어스 상세·일반 소신호 설명"
+      ],
+      "reason": "중복·유도·예시는 본문에 유지하고, 요약에는 핵심 판단과 필요한 조건·부호를 남김"
+    }
+  ],
+  "explanations": [
+    {
+      "id": "p1",
+      "before": "<div class=\"sum\" hidden>\n<div class=\"summary-group\"><h4>떠올릴 개념</h4><p>대칭 CM 반회로는 소스 아래 $2r_{O3}$를 가진 축퇴 CS 단이에요. $M_3$의 $v_{gs3}=0$이라 테일에는 $r_{O3}=1/(\\lambda I_{SS})$만 남아요.</p></div>\n<div class=\"summary-group\"><h4>첫 식과 판단</h4><div class=\"equation\">$$i_d=g_m(v_{CM}-v_P)$$</div><div class=\"equation\">$$v_P=2r_{O3}i_d$$</div><p>소스 상승이 제어 전압을 줄여요. X의 KCL은 $v_X=-R_Di_d$예요.</p></div>\n<div class=\"summary-group\"><h4>결과와 조건</h4><div class=\"equation\">$$g_m=I_{SS}/V_{ov}$$</div><div class=\"equation\">$$A_{CM}=-\\frac{R_DI_{SS}}{2/\\lambda+V_{ov}}$$</div><p>$V_{ov}=(V_{GS}-V_{TH})_{eq.}$예요. 입력 $\\lambda=0$·몸체 효과 생략·포화 소신호 모델이며 원문이 요구한 증명식은 보존해요. 수업의 기본 큰 테일 저항 근사에서는 $A_{CM}\\approx-R_D/(2r_{O3})$예요.</p></div>\n<div class=\"summary-group\"><h4>혼동 구분·검산</h4><p>한쪽 출력 CM 이득은 음수이고 무차원이에요. $\\lambda\\to0$이면 0이에요. 완전 대칭에서 X−Y의 CM 전달은 항상 0이에요.</p></div>\n</div>",
+      "after": "<div class=\"sum\" hidden>\n<p class=\"sum-lead\">CM 반회로의 소스 아래에는 $2r_{O3}$가 남아요.</p>\n<div class=\"summary-group\"><h4>첫 식</h4><div class=\"equation\">$$i_d=g_m(v_{CM}-v_P)$$</div><div class=\"equation\">$$v_P=2r_{O3}i_d$$</div></div>\n<div class=\"summary-group\"><h4>원문이 요구한 결과</h4><div class=\"equation\">$$A_{CM}=-\\frac{R_DI_{SS}}{2/\\lambda+V_{ov}}$$</div><p>$V_{ov}=(V_{GS}-V_{TH})_{eq.}$이며, 입력 $\\lambda=0$·몸체 효과 생략·포화 소신호 모델이에요.</p><p>큰 테일 저항 근사에서는 $A_{CM}\\approx-R_D/(2r_{O3})$예요.</p></div>\n<div class=\"summary-group\"><h4>출력 구분</h4><p>한쪽 출력 CM 이득은 음수이고, 완전 대칭에서 X−Y의 CM 전달은 0이에요.</p></div>\n</div>",
+      "retained": "CM 반회로의 소스 아래에는 $2r_{O3}$가 남아요. 첫 식 $$i_d=g_m(v_{CM}-v_P)$$ $$v_P=2r_{O3}i_d$$ 원문이 요구한 결과 $$A_{CM}=-\\frac{R_DI_{SS}}{2/\\lambda+V_{ov}}$$ $V_{ov}=(V_{GS}-V_{TH})_{eq.}$이며, 입력 $\\lambda=0$·몸체 효과 생략·포화 소신호 모델이에요. 큰 테일 저항 근사에서는 $A_{CM}\\approx-R_D/(2r_{O3})$예요. 출력 구분 한쪽 출력 CM 이득은 음수이고, 완전 대칭에서 X−Y의 CM 전달은 0이에요.",
+      "omitted": [
+        "gm 대입식·기본 단위/극한 검산의 반복"
+      ],
+      "reason": "중복·유도·예시는 본문에 유지하고, 요약에는 핵심 판단과 필요한 조건·부호를 남김",
+      "non_summary_identical": true
+    },
+    {
+      "id": "p2",
+      "before": "<div class=\"sum\" hidden>\n<div class=\"summary-group\"><h4>개념과 첫 줄</h4><p>CM 대칭으로 테일을 반쪽마다 $2r_{o5}$로 바꿔요. 출력 단락에서 $v_s=2r_{o5}i_o$, $i_o=g_{m1}(v_{CM}-v_s)-v_s/r_{o1}$로 시작해요.</p></div>\n<div class=\"summary-group\"><h4>핵심 판단</h4><p>큰 $g_mr_o$에서 $G_m\\approx1/(2r_{o5})$예요. 입력 영점의 $R_{out}\\approx r_{o3}$는 아래쪽 축퇴 저항 $2g_{m1}r_{o1}r_{o5}\\gg r_{o3}$일 때예요. 단락과 시험원 측정을 구별해요.</p></div>\n<div class=\"summary-group\"><h4>답과 검산</h4><p>몸체 효과를 무시하면 $A_{CM,SE}\\approx-r_{o3}/(2r_{o5})$예요. 무차원·음의 부호이며 부하 고정에서 테일 저항을 키우면 0으로 가요. 원 그림의 완전 대칭 차동 출력 CM 이득은 0이에요.</p></div>\n</div>",
+      "after": "<div class=\"sum\" hidden>\n<p class=\"sum-lead\">CM 대칭을 이용해 테일을 반쪽마다 $2r_{o5}$로 바꿔요.</p>\n<div class=\"summary-group\"><h4>측정과 근사</h4><p>출력 단락에서 $G_m\\approx1/(2r_{o5})$를 구해요.</p><p>입력 영점에서 아래쪽 저항 $2g_{m1}r_{o1}r_{o5}\\gg r_{o3}$이면 $R_{out}\\approx r_{o3}$예요.</p></div>\n<div class=\"summary-group\"><h4>각 출력의 CM 이득</h4><div class=\"equation\">$$A_{CM,SE}\\approx-r_{o3}/(2r_{o5})$$</div><p>몸체 효과를 생략한 큰 $g_mr_o$ 주항이에요.</p><p>완전 대칭 차동 출력의 CM 이득은 0이에요.</p></div>\n</div>",
+      "retained": "CM 대칭을 이용해 테일을 반쪽마다 $2r_{o5}$로 바꿔요. 측정과 근사 출력 단락에서 $G_m\\approx1/(2r_{o5})$를 구해요. 입력 영점에서 아래쪽 저항 $2g_{m1}r_{o1}r_{o5}\\gg r_{o3}$이면 $R_{out}\\approx r_{o3}$예요. 각 출력의 CM 이득 $$A_{CM,SE}\\approx-r_{o3}/(2r_{o5})$$ 몸체 효과를 생략한 큰 $g_mr_o$ 주항이에요. 완전 대칭 차동 출력의 CM 이득은 0이에요.",
+      "omitted": [
+        "두 측정의 상세 첫 KCL·일반 부호/단위/극한 설명"
+      ],
+      "reason": "중복·유도·예시는 본문에 유지하고, 요약에는 핵심 판단과 필요한 조건·부호를 남김",
+      "non_summary_identical": true
+    },
+    {
+      "id": "p3",
+      "before": "<div class=\"sum\" hidden>\n<div class=\"summary-group\"><h4>개념·첫 줄</h4><p>DM은 P가 가상 접지인 CS 반회로, CM은 소스 아래 $2R_{SS}$인 축퇴 CS 반회로예요.</p><div class=\"equation\">$$v_{gs1}=v_{CM}-v_P$$</div></div>\n<div class=\"summary-group\"><h4>핵심 판단·답</h4><div class=\"equation\">$$A_{DM}=-g_{m1}(r_{o1}\\parallel r_{o3})=-100$$</div><div class=\"equation\">$$R_{SS}\\approx g_{m5}r_{o5}r_{o6}=2\\,\\mathrm{M\\Omega}$$</div><div class=\"equation\">$$A_{CM}\\approx-\\frac{r_{o3}}{2R_{SS}}$$</div><div class=\"equation\">$$A_{CM}\\approx-5\\times10^{-3}$$</div><p>CM 결과는 큰 $g_mr_o$의 주항 근사예요.</p></div>\n<div class=\"summary-group\"><h4>혼동·검산</h4><p>테일 전류는 $1\\,\\mathrm{mA}$, 각 가지는 $0.5\\,\\mathrm{mA}$예요. 평균 출력의 CM 이득은 작고 음수이며, 대칭 차동 출력의 CM 이득은 0이에요. $R_{SS}\\to\\infty$에서 각 출력의 CM 이득도 0이 돼요.</p></div>\n</div>",
+      "after": "<div class=\"sum\" hidden>\n<p class=\"sum-lead\">DM은 P를 가상 접지로, CM은 소스 아래를 $2R_{SS}$로 두어요.</p>\n<div class=\"summary-group\"><h4>캐스코드 테일</h4><div class=\"equation\">$$R_{SS}\\approx g_{m5}r_{o5}r_{o6}=2\\,\\mathrm{M\\Omega}$$</div></div>\n<div class=\"summary-group\"><h4>두 자극의 이득</h4><div class=\"equation\">$$A_{DM}=-g_{m1}(r_{o1}\\parallel r_{o3})=-100$$</div><div class=\"equation\">$$A_{CM}\\approx-\\frac{r_{o3}}{2R_{SS}}$$</div><p>큰 $g_mr_o$ 주항에서 각 출력의 $A_{CM}\\approx-5\\times10^{-3}$예요.</p><p>완전 대칭 차동 출력의 CM 이득은 0이에요.</p></div>\n</div>",
+      "retained": "DM은 P를 가상 접지로, CM은 소스 아래를 $2R_{SS}$로 두어요. 캐스코드 테일 $$R_{SS}\\approx g_{m5}r_{o5}r_{o6}=2\\,\\mathrm{M\\Omega}$$ 두 자극의 이득 $$A_{DM}=-g_{m1}(r_{o1}\\parallel r_{o3})=-100$$ $$A_{CM}\\approx-\\frac{r_{o3}}{2R_{SS}}$$ 큰 $g_mr_o$ 주항에서 각 출력의 $A_{CM}\\approx-5\\times10^{-3}$예요. 완전 대칭 차동 출력의 CM 이득은 0이에요.",
+      "omitted": [
+        "중복 CM 수치식·가지 DC 전류·테일 무한대 검산"
+      ],
+      "reason": "중복·유도·예시는 본문에 유지하고, 요약에는 핵심 판단과 필요한 조건·부호를 남김",
+      "non_summary_identical": true
+    },
+    {
+      "id": "p4",
+      "before": "<div class=\"sum\" hidden><p>공통 모드 제거는 두 입력에 함께 들어온 변화를 차동 출력에서 억제하는 성질이에요. 실제 회로에서는 테일 전류원의 유한한 출력저항과 좌우 소자·부하 불일치 때문에 제한돼요.</p><div class=\"summary-group\"><h4>판단·첫 줄·답</h4><p>CM 반회로의 소스 저항은 $2r_{o3}$예요. 입력쌍 $r_o$ 생략·큰 축퇴에서 $i/v_{CM}\\approx1/(2r_{o3})$, $v_{od}=\\Delta R_Di$이므로 $A_{CM-DM}\\approx+10^{-3}$예요. 유한 테일과 불일치의 역할을 구분해요.</p></div></div>",
+      "after": "<div class=\"sum\" hidden>\n<p class=\"sum-lead\">CM 제거는 함께 들어온 입력 변화를 차동 출력에서 억제하는 성질이에요.</p>\n<div class=\"summary-group\"><h4>제한되는 이유</h4><p>유한 테일 출력저항과 좌우 소자·부하 불일치가 제거 성능을 제한해요.</p></div>\n<div class=\"summary-group\"><h4>부하 불일치의 누출</h4><p>입력쌍 $r_o$를 생략하면 부하가 달라도 CM 가지 전류가 같아요.</p><div class=\"equation\">$$v_{od}=\\Delta R_Di$$</div><p>큰 축퇴 주항에서 왼쪽−오른쪽 누출은 $A_{CM-DM}\\approx+10^{-3}$예요.</p></div>\n</div>",
+      "retained": "CM 제거는 함께 들어온 입력 변화를 차동 출력에서 억제하는 성질이에요. 제한되는 이유 유한 테일 출력저항과 좌우 소자·부하 불일치가 제거 성능을 제한해요. 부하 불일치의 누출 입력쌍 $r_o$를 생략하면 부하가 달라도 CM 가지 전류가 같아요. $$v_{od}=\\Delta R_Di$$ 큰 축퇴 주항에서 왼쪽−오른쪽 누출은 $A_{CM-DM}\\approx+10^{-3}$예요.",
+      "omitted": [
+        "소스저항·CM 전류 첫 식 반복"
+      ],
+      "reason": "중복·유도·예시는 본문에 유지하고, 요약에는 핵심 판단과 필요한 조건·부호를 남김",
+      "non_summary_identical": true
+    },
+    {
+      "id": "p5",
+      "before": "<div class=\"sum\" hidden><div class=\"summary-group\"><h4>판단·첫 줄·답</h4><p>제곱법칙 DC에서 CM 범위는 0.6–1.69 V예요. 입력쌍 $r_o$ 생략·큰 축퇴의 CM 반회로는 $2r_{o3}=20$ kΩ예요. 왼쪽 $A_{CM}\\approx-0.05$, 좌−우 누출 $+10^{-3}$, 대칭 기준 CMRR $10000$=80 dB예요.</p></div></div>",
+      "after": "<div class=\"sum\" hidden>\n<p class=\"sum-lead\">CM 입력 범위는 테일 MOS와 입력 MOS의 포화 경계로 정해요.</p>\n<div class=\"summary-group\"><h4>입력 범위</h4><p>제곱법칙 DC의 CM 범위는 0.6–1.69 V예요.</p></div>\n<div class=\"summary-group\"><h4>CM 이득과 CMRR</h4><p>입력쌍 $r_o$ 생략·큰 축퇴 모델에서 왼쪽 $A_{CM}\\approx-0.05$예요.</p><p>왼쪽−오른쪽 누출은 $A_{CM-DM}\\approx+10^{-3}$예요.</p><p>작은 불일치에서 대칭 기준 DM 이득을 쓰면 CMRR은 약 10000, 80 dB예요.</p></div>\n</div>",
+      "retained": "CM 입력 범위는 테일 MOS와 입력 MOS의 포화 경계로 정해요. 입력 범위 제곱법칙 DC의 CM 범위는 0.6–1.69 V예요. CM 이득과 CMRR 입력쌍 $r_o$ 생략·큰 축퇴 모델에서 왼쪽 $A_{CM}\\approx-0.05$예요. 왼쪽−오른쪽 누출은 $A_{CM-DM}\\approx+10^{-3}$예요. 작은 불일치에서 대칭 기준 DM 이득을 쓰면 CMRR은 약 10000, 80 dB예요.",
+      "omitted": [
+        "반회로 저항 수치 반복"
+      ],
+      "reason": "중복·유도·예시는 본문에 유지하고, 요약에는 핵심 판단과 필요한 조건·부호를 남김",
+      "non_summary_identical": true
+    },
+    {
+      "id": "p6",
+      "before": "<div class=\"sum\" hidden><div class=\"summary-group\"><h4>판단·첫 줄·답</h4><p>입력쌍 폭 2배·테일 전류 고정은 범위를 줄여 X예요. $r_o=100$ kΩ를 유지해 DM $-9.09$, CM 큰 곱 주항 $-0.1$, 100 Ω 누출 $+9.09\\times10^{-4}$예요. 작은 불일치에서 동일 모델의 비를 쓰면 목표 CMRR30000의 $|\\Delta R_D|\\approx33.33$ Ω예요. 참고 풀이의 다른 근사 차수와 구분해요.</p></div></div>",
+      "after": "<div class=\"sum\" hidden>\n<p class=\"sum-lead\">입력쌍 폭을 2배로 키워도 테일 전류가 고정이면 차동 입력 범위는 줄어요.</p>\n<div class=\"summary-group\"><h4>이득의 모델</h4><p>입력 $r_o=100$ kΩ를 유지하면 $A_{DM}\\approx-9.09$예요.</p><p>큰 곱·작은 불일치 주항에서 각 출력 CM 이득은 약 $-0.1$, 왼쪽−오른쪽 누출은 약 $+9.09\\times10^{-4}$예요.</p></div>\n<div class=\"summary-group\"><h4>목표에서 역산</h4><p>같은 모델로 CMRR 30000을 맞추는 저항 차이는 $|\\Delta R_D|\\approx33.33$ Ω예요.</p></div>\n</div>",
+      "retained": "입력쌍 폭을 2배로 키워도 테일 전류가 고정이면 차동 입력 범위는 줄어요. 이득의 모델 입력 $r_o=100$ kΩ를 유지하면 $A_{DM}\\approx-9.09$예요. 큰 곱·작은 불일치 주항에서 각 출력 CM 이득은 약 $-0.1$, 왼쪽−오른쪽 누출은 약 $+9.09\\times10^{-4}$예요. 목표에서 역산 같은 모델로 CMRR 30000을 맞추는 저항 차이는 $|\\Delta R_D|\\approx33.33$ Ω예요.",
+      "omitted": [
+        "참고 풀이 근사 차수의 비교 설명"
+      ],
+      "reason": "중복·유도·예시는 본문에 유지하고, 요약에는 핵심 판단과 필요한 조건·부호를 남김",
+      "non_summary_identical": true
+    },
+    {
+      "id": "p7",
+      "before": "<div class=\"sum\" hidden>\n<div class=\"summary-group\"><h4>개념과 모델</h4><p>DM 가상 접지, CM의 $2r_{o3}$ 축퇴. 제곱법칙 DC와 입력쌍 $r_o$ 무시·테일 $r_{o3}$ 유지의 수업 근사예요. 정확 CLM DC는 전원·입력 CM 미지정으로 결정하지 않아요.</p></div>\n<div class=\"summary-group\"><h4>첫 줄과 판단</h4><p>$I_{SS}=0.2\\,\\mathrm{mA}$, $g_m=1\\,\\mathrm{mS}$, $r_{o3}=50\\,\\mathrm{k\\Omega}$. 기본 큰 축퇴 가정 $2g_mr_{o3}\\gg1$에서 CM 전류 변환율은 약 $1/(2r_{o3})$예요.</p></div>\n<div class=\"summary-group\"><h4>여섯 답</h4><p>(1) O, 범위 $\\sqrt2$배. (2) $-10$. (3) 각 출력 $-0.1$. (4) 왼쪽−오른쪽 누출 $+0.001$. (5) 1% 미스매치에서 $10000$, $80\\,\\mathrm{dB}$. (6) 고정 $V_{b1}$에서 전류 두 배·$g_m$ $\\sqrt2$배·테일 저항 절반: $7071.07$, $76.99\\,\\mathrm{dB}$로 악화해요.</p></div>\n<div class=\"summary-group\"><h4>구분과 검산</h4><p>CMRR은 같은 차동 출력의 이득 비이며 수업의 대칭 기준 DM 이득을 써요. 대칭 부하에서는 CM-to-DM만 0, 테일 저항 무한대에서는 각 출력 CM 이득도 0이에요.</p></div>\n</div>",
+      "after": "<div class=\"sum\" hidden>\n<p class=\"sum-lead\">고정 $V_{b1}$에서 테일 폭을 늘리면 전류와 테일 저항이 함께 바뀌어요.</p>\n<div class=\"summary-group\"><h4>적용 모델</h4><p>제곱법칙 DC와 입력쌍 $r_o$ 생략·테일 $r_{o3}$ 유지의 수업 모델이에요.</p><p>큰 축퇴의 CM 반회로는 소스 아래 $2r_{o3}$를 둬요.</p></div>\n<div class=\"summary-group\"><h4>변경 전후</h4><p>1% 불일치에서 대칭 기준 CMRR은 약 10000, 80 dB예요.</p><p>테일 폭 2배이면 $g_m$은 $\\sqrt2$배이고 테일 저항은 절반이에요.</p><p>따라서 CMRR은 $1/\\sqrt2$배인 약 7071.07, 76.99 dB로 낮아져요.</p></div>\n</div>",
+      "retained": "고정 $V_{b1}$에서 테일 폭을 늘리면 전류와 테일 저항이 함께 바뀌어요. 적용 모델 제곱법칙 DC와 입력쌍 $r_o$ 생략·테일 $r_{o3}$ 유지의 수업 모델이에요. 큰 축퇴의 CM 반회로는 소스 아래 $2r_{o3}$를 둬요. 변경 전후 1% 불일치에서 대칭 기준 CMRR은 약 10000, 80 dB예요. 테일 폭 2배이면 $g_m$은 $\\sqrt2$배이고 테일 저항은 절반이에요. 따라서 CMRR은 $1/\\sqrt2$배인 약 7071.07, 76.99 dB로 낮아져요.",
+      "omitted": [
+        "여섯 소문항 답의 일괄 나열·중간 파라미터·정확 CLM DC 결정 불가 부연·극한 검산"
+      ],
+      "reason": "중복·유도·예시는 본문에 유지하고, 요약에는 핵심 판단과 필요한 조건·부호를 남김",
+      "non_summary_identical": true
+    },
+    {
+      "id": "p8",
+      "before": "<div class=\"sum\" hidden><div class=\"summary-group\"><h4>판단·첫 줄·답</h4><p>$R_E$는 테일 드레인 위 직렬저항이라 $R_{SS}=110$ kΩ예요. DC CM 범위는 1.8–2.9 V, 차동 한쪽 꺼짐 경계는 약 $\\pm0.28$ V예요. 유한 입력 $r_o$에서 $A_{DM}\\approx-4.76$, 대칭 차동 CM은 0, 각 출력 $A_{CM,SE}\\approx-4.55\\times10^{-2}$, 누출은 $+4.33\\times10^{-5}$예요. 동일 모델의 큰 곱·작은 불일치 주항 CMRR은 약 110000(100.83 dB)이에요.</p></div></div>",
+      "after": "<div class=\"sum\" hidden>\n<p class=\"sum-lead\">$R_E$는 테일 드레인 위 직렬저항이므로 $R_{SS}=R_E+r_{o1}$로 합쳐요.</p>\n<div class=\"summary-group\"><h4>입력 경계</h4><p>대칭 DC의 CM 범위는 1.8–2.9 V예요.</p><p>고정 테일 전류에서 한쪽이 꺼지는 차동 경계는 약 $\\pm0.28$ V예요.</p></div>\n<div class=\"summary-group\"><h4>이득과 제거비</h4><p>유한 입력 $r_o$를 유지하면 $A_{DM}\\approx-4.76$예요.</p><p>대칭 차동 CM 전달은 0이고 각 출력은 $A_{CM,SE}\\approx-4.55\\times10^{-2}$예요.</p><p>같은 모델의 큰 곱·작은 불일치 주항 CMRR은 약 110000, 100.83 dB예요.</p></div>\n</div>",
+      "retained": "$R_E$는 테일 드레인 위 직렬저항이므로 $R_{SS}=R_E+r_{o1}$로 합쳐요. 입력 경계 대칭 DC의 CM 범위는 1.8–2.9 V예요. 고정 테일 전류에서 한쪽이 꺼지는 차동 경계는 약 $\\pm0.28$ V예요. 이득과 제거비 유한 입력 $r_o$를 유지하면 $A_{DM}\\approx-4.76$예요. 대칭 차동 CM 전달은 0이고 각 출력은 $A_{CM,SE}\\approx-4.55\\times10^{-2}$예요. 같은 모델의 큰 곱·작은 불일치 주항 CMRR은 약 110000, 100.83 dB예요.",
+      "omitted": [
+        "작은 불일치 누출 수치·긴 수치 나열의 중복"
+      ],
+      "reason": "중복·유도·예시는 본문에 유지하고, 요약에는 핵심 판단과 필요한 조건·부호를 남김",
+      "non_summary_identical": true
+    },
+    {
+      "id": "p9",
+      "before": "<div class=\"sum\" hidden><div class=\"summary-group\"><h4>떠올릴 개념·공식</h4><p>DM 가상 접지, CM 소스 아래 $2r_{o7}$, 캐스코드 부하의 $g_{m3}r_{o3}$ 배율.</p></div><div class=\"summary-group\"><h4>첫 줄</h4><p>$R_{up}\\approx1000\\,\\mathrm{k\\Omega}$, $r_{o7}=5\\,\\mathrm{k\\Omega}$.</p></div><div class=\"summary-group\"><h4>핵심 판단</h4><p>DM은 $-99.01$. CM에서는 아래쪽도 축퇴되어 $R_{dn}\\approx1000\\,\\mathrm{k\\Omega}$이므로 한쪽 이득은 $-50$.</p></div><div class=\"summary-group\"><h4>검산</h4><p>입력 $r_o$를 빠뜨리면 CM 이득이 두 배가 돼요. 완전 대칭의 CM-to-DM 이득은0이에요.</p></div></div>",
+      "after": "<div class=\"sum\" hidden>\n<p class=\"sum-lead\">캐스코드 부하는 크므로 CM 계산에서도 입력쌍 $r_o$를 남겨요.</p>\n<div class=\"summary-group\"><h4>위아래 출력저항</h4><p>위쪽 캐스코드 부하는 $R_{up}\\approx1000\\,\\mathrm{k\\Omega}$예요.</p><p>CM의 $2r_{o7}$ 축퇴로 아래쪽도 $R_{dn}\\approx1000\\,\\mathrm{k\\Omega}$이 되어 둘을 병렬로 합쳐요.</p></div>\n<div class=\"summary-group\"><h4>큰 곱 주항의 이득</h4><p>차동 이득은 약 $-99.01$이고 한쪽 CM 이득은 약 $-50$이에요.</p><p>완전 대칭 차동 출력의 CM 전달은 0이에요.</p></div>\n</div>",
+      "retained": "캐스코드 부하는 크므로 CM 계산에서도 입력쌍 $r_o$를 남겨요. 위아래 출력저항 위쪽 캐스코드 부하는 $R_{up}\\approx1000\\,\\mathrm{k\\Omega}$예요. CM의 $2r_{o7}$ 축퇴로 아래쪽도 $R_{dn}\\approx1000\\,\\mathrm{k\\Omega}$이 되어 둘을 병렬로 합쳐요. 큰 곱 주항의 이득 차동 이득은 약 $-99.01$이고 한쪽 CM 이득은 약 $-50$이에요. 완전 대칭 차동 출력의 CM 전달은 0이에요.",
+      "omitted": [
+        "테일 중간값·입력 ro 생략 오차의 재설명"
+      ],
+      "reason": "중복·유도·예시는 본문에 유지하고, 요약에는 핵심 판단과 필요한 조건·부호를 남김",
+      "non_summary_identical": true
+    },
+    {
+      "id": "p10",
+      "before": "<div class=\"sum\" hidden>\n<div class=\"summary-group\"><h4>떠올릴 개념</h4><p>공통 $V_{OV}$의 PMOS 거울: 전류비와 $g_m$비 모두 $1/N$이에요.</p></div>\n<div class=\"summary-group\"><h4>첫 식</h4><div class=\"equation\">$$i_1+g_{m3}v_g=0$$</div><p>입력은 아래로 흡수, $v_{sg4}=-v_g$예요.</p></div>\n<div class=\"summary-group\"><h4>핵심 판단과 결과</h4><div class=\"equation\">$$i_4=-g_{m4}v_g=i_1/N$$</div><div class=\"equation\">$$v_{out}/i_1=+R_L/N\\ [\\Omega]$$</div><p>포화·소신호·$\\lambda=0$, 출력에 $R_L$이 연결된 조건이에요.</p></div>\n<div class=\"summary-group\"><h4>혼동과 검산</h4><p>전류도 바뀌므로 $1/\\sqrt N$이 아니에요. 입력 흡수 증가가 출력 상승을 만들어요. $N=1$이면 $R_L$, $R_L\\to0$이면 0이에요.</p></div>\n</div>",
+      "after": "<div class=\"sum\" hidden>\n<p class=\"sum-lead\">공통 $V_{OV}$의 PMOS 거울에서는 전류비와 $g_m$비가 모두 $1/N$이에요.</p>\n<div class=\"summary-group\"><h4>전류와 출력의 방향</h4><div class=\"equation\">$$i_4=-g_{m4}v_g=i_1/N$$</div><div class=\"equation\">$$v_{out}/i_1=+R_L/N\\ [\\Omega]$$</div><p>포화·소신호·$\\lambda=0$이며 출력에 $R_L$이 연결된 조건이에요.</p><p>입력 흡수 전류가 증가하면 오른쪽 출력은 올라가요.</p></div>\n</div>",
+      "retained": "공통 $V_{OV}$의 PMOS 거울에서는 전류비와 $g_m$비가 모두 $1/N$이에요. 전류와 출력의 방향 $$i_4=-g_{m4}v_g=i_1/N$$ $$v_{out}/i_1=+R_L/N\\ [\\Omega]$$ 포화·소신호·$\\lambda=0$이며 출력에 $R_L$이 연결된 조건이에요. 입력 흡수 전류가 증가하면 오른쪽 출력은 올라가요.",
+      "omitted": [
+        "첫 KCL·비율 오답 비교·극한 검산"
+      ],
+      "reason": "중복·유도·예시는 본문에 유지하고, 요약에는 핵심 판단과 필요한 조건·부호를 남김",
+      "non_summary_identical": true
+    },
+    {
+      "id": "p11",
+      "before": "<div class=\"sum\" hidden>\n<div class=\"summary-group\"><h4>떠올릴 개념·공식</h4><p>포화 PMOS 전류 거울, $\\lambda=0$. $k=(W/L)_4/(W/L)_3$, $I_4=kI_1$이에요.</p></div>\n<div class=\"summary-group\"><h4>첫 줄</h4><p>$I_4$는 출력 유입, $I_2$와 $V_{out}/R_L$는 출력 유출로 정해요.</p><div class=\"equation\">$$V_{out}=R_L(kI_1-I_2)$$</div></div>\n<div class=\"summary-group\"><h4>핵심 판단·결과</h4><p>(a) $k=1$: 전 0, 후 $2\\Delta I R_L$. (b) $k=1/2$: 전 $-I_0R_L/2$, 후 $(3\\Delta I-I_0)R_L/2$예요.</p></div>\n<div class=\"summary-group\"><h4>혼동 구분·검산</h4><p>(b)의 변화량은 $1.5\\Delta I R_L$이고 최종값과 달라요. $\\Delta I=0$이면 초기값을 회복해요. 전류×저항은 V이며, 전후 모두 $M_4$ 포화와 이상 전류원의 전압 여유를 전제로 해요.</p></div>\n</div>",
+      "after": "<div class=\"sum\" hidden>\n<p class=\"sum-lead\">출력 유입 전류에서 유출 전류를 빼고 $R_L$을 곱해요.</p>\n<div class=\"summary-group\"><h4>첫 식</h4><div class=\"equation\">$$V_{out}=R_L(kI_1-I_2)$$</div><p>$k=(W/L)_4/(W/L)_3$이며 포화 PMOS 거울·$\\lambda=0$ 모델이에요.</p></div>\n<div class=\"summary-group\"><h4>전후 값과 변화량</h4><p>$k=1$이면 초기 출력은 0이고 최종 출력은 $2\\Delta I R_L$예요.</p><p>$k=1/2$이면 초기 출력은 $-I_0R_L/2$이고 최종 출력은 $(3\\Delta I-I_0)R_L/2$예요.</p><p>이때 변화량 $1.5\\Delta I R_L$과 최종값을 구별해요.</p><p>전후 모두 $M_4$ 포화와 이상 전류원의 전압 여유가 필요해요.</p></div>\n</div>",
+      "retained": "출력 유입 전류에서 유출 전류를 빼고 $R_L$을 곱해요. 첫 식 $$V_{out}=R_L(kI_1-I_2)$$ $k=(W/L)_4/(W/L)_3$이며 포화 PMOS 거울·$\\lambda=0$ 모델이에요. 전후 값과 변화량 $k=1$이면 초기 출력은 0이고 최종 출력은 $2\\Delta I R_L$예요. $k=1/2$이면 초기 출력은 $-I_0R_L/2$이고 최종 출력은 $(3\\Delta I-I_0)R_L/2$예요. 이때 변화량 $1.5\\Delta I R_L$과 최종값을 구별해요. 전후 모두 $M_4$ 포화와 이상 전류원의 전압 여유가 필요해요.",
+      "omitted": [
+        "단위·극한 검산의 반복"
+      ],
+      "reason": "중복·유도·예시는 본문에 유지하고, 요약에는 핵심 판단과 필요한 조건·부호를 남김",
+      "non_summary_identical": true
+    },
+    {
+      "id": "p12",
+      "before": "<div class=\"sum\" hidden><p>원본 모범답안 손글씨의 거울 부하 음의 이득은 정정했어요. 왼쪽−오른쪽 입력과 오른쪽 출력 정의에서는 양의 이득이며, 이 회로의 값은 +50이에요.</p><div class=\"summary-group\"><h4>떠올릴 개념·공식</h4><p>거울은 전류 합성, 다이오드는 작은 부하, 두 저항 사이 DM 중간점은 가상 접지예요.</p></div><div class=\"summary-group\"><h4>첫 줄</h4><p>평형1mA에서 $g_m=10\\,\\mathrm{mS}$, $r_o=10\\,\\mathrm{k\\Omega}$.</p></div><div class=\"summary-group\"><h4>핵심 판단</h4><p>(1) $+g_m(r_{o2}\\parallel r_{o4})$, (2) $+50$, (3) $-0.98$, (4) $-2.43$.</p></div><div class=\"summary-group\"><h4>검산</h4><p>(c)는 $R_S=R_{SS}/2$, $g_mR_S=1$이라1을 유지해요. $r_o$를 없애면 (4)는$-2.5$예요.</p></div></div>",
+      "after": "<div class=\"sum\" hidden>\n<p class=\"sum-lead\">거울은 전류 합성으로, 다이오드·축퇴 부하는 DM 반회로로 풀어요.</p>\n<div class=\"summary-group\"><h4>거울과 다이오드</h4><p>왼쪽−오른쪽 입력·오른쪽 출력의 거울 이득은 $+50$이며 원본 손글씨의 음의 부호를 정정해요.</p><p>다이오드 부하는 유한 $r_o$를 유지하면 이득이 약 $-0.98$예요.</p></div>\n<div class=\"summary-group\"><h4>축퇴의 수치 예외</h4><p>(c)는 $R_S=R_{SS}/2$이고 $g_mR_S=1$이므로 분모의 1을 유지해요.</p><p>유한 $r_o$를 남긴 전압이득은 약 $-2.43$예요.</p></div>\n</div>",
+      "retained": "거울은 전류 합성으로, 다이오드·축퇴 부하는 DM 반회로로 풀어요. 거울과 다이오드 왼쪽−오른쪽 입력·오른쪽 출력의 거울 이득은 $+50$이며 원본 손글씨의 음의 부호를 정정해요. 다이오드 부하는 유한 $r_o$를 유지하면 이득이 약 $-0.98$예요. 축퇴의 수치 예외 (c)는 $R_S=R_{SS}/2$이고 $g_mR_S=1$이므로 분모의 1을 유지해요. 유한 $r_o$를 남긴 전압이득은 약 $-2.43$예요.",
+      "omitted": [
+        "중간 파라미터·기호식·ro 무한대 참고값"
+      ],
+      "reason": "중복·유도·예시는 본문에 유지하고, 요약에는 핵심 판단과 필요한 조건·부호를 남김",
+      "non_summary_identical": true
+    },
+    {
+      "id": "p13",
+      "before": "<div class=\"sum\" hidden><div class=\"summary-group\"><h4>떠올릴 개념·공식</h4><p>자기 B–C 저항 부하, 전류 거울, DM 이미터 축퇴를 연결로 구분해요.</p></div><div class=\"summary-group\"><h4>첫 줄</h4><p>$V_T=26\\,\\mathrm{mV}$ 가정. (1)(2)는 테일을 절반, (3)은 각 전류원값 그대로예요.</p></div><div class=\"summary-group\"><h4>핵심 판단</h4><p>(1) 유한 $r_\\pi$ 부하로$-4.68$, (2) 큰 $\\beta$ 거울 주항$+85.47$, (3) 큰 축퇴 주항$-0.4$.</p></div><div class=\"summary-group\"><h4>검산</h4><p>(1)의 두 베이스를 묶지 않아요. (3)의1/gm을 남긴 참고값과 큰 축퇴 최종값은 근사 수준이 달라요.</p></div></div>",
+      "after": "<div class=\"sum\" hidden>\n<p class=\"sum-lead\">자기 B–C 저항 부하·전류 거울·이미터 축퇴를 실제 연결로 구분해요.</p>\n<div class=\"summary-group\"><h4>바이어스와 부하</h4><p>$V_T=26\\,\\mathrm{mV}$를 가정하고 (1)(2)는 테일 전류를 절반으로 나눠요.</p><p>(1)은 두 베이스를 묶지 않으며 유한 $r_\\pi$ 부하에서 이득이 약 $-4.68$예요.</p><p>(2)는 큰 $\\beta$ 거울 주항에서 오른쪽 출력 이득이 약 $+85.47$예요.</p></div>\n<div class=\"summary-group\"><h4>이미터 축퇴</h4><p>(3)은 각 전류원값을 그대로 쓰며 큰 $\\beta$·큰 외부 축퇴 주항에서 이득이 약 $-0.4$예요.</p></div>\n</div>",
+      "retained": "자기 B–C 저항 부하·전류 거울·이미터 축퇴를 실제 연결로 구분해요. 바이어스와 부하 $V_T=26\\,\\mathrm{mV}$를 가정하고 (1)(2)는 테일 전류를 절반으로 나눠요. (1)은 두 베이스를 묶지 않으며 유한 $r_\\pi$ 부하에서 이득이 약 $-4.68$예요. (2)는 큰 $\\beta$ 거울 주항에서 오른쪽 출력 이득이 약 $+85.47$예요. 이미터 축퇴 (3)은 각 전류원값을 그대로 쓰며 큰 $\\beta$·큰 외부 축퇴 주항에서 이득이 약 $-0.4$예요.",
+      "omitted": [
+        "VT를 반복하는 수치 검산·참고 풀이 근사 차이"
+      ],
+      "reason": "중복·유도·예시는 본문에 유지하고, 요약에는 핵심 판단과 필요한 조건·부호를 남김",
+      "non_summary_identical": true
+    },
+    {
+      "id": "p14",
+      "before": "<div class=\"sum\" hidden>\n<div class=\"summary-group\"><h4>떠올릴 개념·첫 식</h4><p>큰 $\\beta$, $g_mr_O\\gg1$의 능동 부하에서 $G_m\\approx g_m$, $R_{out}\\approx r_{O2}\\parallel r_{O4}$예요. 왼쪽−오른쪽 차동 입력과 오른쪽 출력이면 $A_v\\approx+G_mR_{out}$이에요.</p></div>\n<div class=\"summary-group\"><h4>핵심 판단</h4><p>$g_m\\propto I_C$, $r_O\\propto1/I_C$이므로 전류가 소거돼요.</p><div class=\"equation\">$$\\frac{1}{|A_v|}\\approx\\frac{V_T}{V_{A,n}}+\\frac{V_T}{V_{A,p}}$$</div></div>\n<div class=\"summary-group\"><h4>결과와 조건</h4><p>원문 미지정 $V_T$를 수업값 26 mV로 가정하면 $V_{A,p}=65/12\\,\\mathrm V\\approx5.42\\,\\mathrm V$, $A_v\\approx+100$이에요.</p></div>\n<div class=\"summary-group\"><h4>혼동 구분·검산</h4><p>거울 신호를 빼면 안 돼요. $r_{\\pi2}$를 출력에 병렬로 놓지 않아요. 역대입은 $0.0052+0.0048=0.01$, NPN 한계는 $V_{A,n}/V_T\\approx192.31$이에요.</p></div>\n</div>",
+      "after": "<div class=\"sum\" hidden>\n<p class=\"sum-lead\">능동 부하의 $g_m$과 Early 저항을 곱하면 바이어스 전류가 소거돼요.</p>\n<div class=\"summary-group\"><h4>목표에서 역산</h4><div class=\"equation\">$$\\frac{1}{|A_v|}\\approx\\frac{V_T}{V_{A,n}}+\\frac{V_T}{V_{A,p}}$$</div><p>큰 $\\beta$·큰 $g_mr_O$의 거울 주항이며 왼쪽−오른쪽 입력과 오른쪽 출력의 이득은 양수예요.</p></div>\n<div class=\"summary-group\"><h4>결과</h4><p>$V_T=26\\,\\mathrm{mV}$를 가정하면 $V_{A,p}=65/12\\,\\mathrm V\\approx5.42\\,\\mathrm V$예요.</p><p>이때 목표 이득은 $A_v\\approx+100$이에요.</p></div>\n</div>",
+      "retained": "능동 부하의 $g_m$과 Early 저항을 곱하면 바이어스 전류가 소거돼요. 목표에서 역산 $$\\frac{1}{|A_v|}\\approx\\frac{V_T}{V_{A,n}}+\\frac{V_T}{V_{A,p}}$$ 큰 $\\beta$·큰 $g_mr_O$의 거울 주항이며 왼쪽−오른쪽 입력과 오른쪽 출력의 이득은 양수예요. 결과 $V_T=26\\,\\mathrm{mV}$를 가정하면 $V_{A,p}=65/12\\,\\mathrm V\\approx5.42\\,\\mathrm V$예요. 이때 목표 이득은 $A_v\\approx+100$이에요.",
+      "omitted": [
+        "gm/Rout 중복 정의·회로 주의 반복·역대입 산술·NPN 한계"
+      ],
+      "reason": "중복·유도·예시는 본문에 유지하고, 요약에는 핵심 판단과 필요한 조건·부호를 남김",
+      "non_summary_identical": true
+    }
+  ],
+  "citations_removed": [
+    {
+      "document": "note",
+      "text": " (1007 STT L7, Part 01; 시각 정보 없음)"
+    },
+    {
+      "document": "note",
+      "text": " (1007 STT L177, Part 04; 시각 정보 없음)"
+    },
+    {
+      "document": "note",
+      "text": " (1007 STT L188–214, Part 04; L236–250, Part 05; 시각 정보 없음)"
+    },
+    {
+      "document": "note",
+      "text": " (1007 STT L296, Part 06; 시각 정보 없음)"
+    },
+    {
+      "document": "note",
+      "text": " (1007 STT L369, Part 06; 시각 정보 없음)"
+    },
+    {
+      "document": "note",
+      "text": " (1007 STT L230, Part 05; L369–377, Part 06–07; 시각 정보 없음)"
+    },
+    {
+      "document": "note",
+      "text": " (1007 STT L33, Part 01; 시각 정보 없음)"
+    },
+    {
+      "document": "note",
+      "text": " (1007 STT L67–81, Part 02; 시각 정보 없음)"
+    },
+    {
+      "document": "note",
+      "text": " (1007 STT L7, Part 01; 시각 정보 없음)"
+    },
+    {
+      "document": "note",
+      "text": " (1007 STT L35, Part 01; 시각 정보 없음)"
+    },
+    {
+      "document": "note",
+      "text": "(1007 STT L83–89, Part 02; 시각 정보 없음)"
+    },
+    {
+      "document": "note",
+      "text": " (1007 STT L111, Part 03; 시각 정보 없음)"
+    },
+    {
+      "document": "note",
+      "text": " (1007 STT L182–186, Part 04; 시각 정보 없음)"
+    },
+    {
+      "document": "note",
+      "text": " (1007 STT L177, Part 04; 시각 정보 없음)"
+    },
+    {
+      "document": "note",
+      "text": " (1007 STT L212–214, Part 04; 시각 정보 없음)"
+    },
+    {
+      "document": "note",
+      "text": " (1007 STT L228, Part 05; 시각 정보 없음)"
+    },
+    {
+      "document": "note",
+      "text": " (1007 STT L483–485, Part 08; 시각 정보 없음)"
+    },
+    {
+      "document": "note",
+      "text": "(1007 STT L244, Part 05; 시각 정보 없음)"
+    },
+    {
+      "document": "note",
+      "text": "(1007 STT L290, Part 06; 시각 정보 없음)"
+    },
+    {
+      "document": "note",
+      "text": "(1007 STT L294, Part 06; 시각 정보 없음)"
+    },
+    {
+      "document": "note",
+      "text": "(1007 STT L379, Part 07; 시각 정보 없음)"
+    },
+    {
+      "document": "note",
+      "text": "(1007 STT L381, Part 07; 시각 정보 없음)"
+    }
+  ],
+  "note_non_summary_changes": "Only listed public STT citation parentheses/standalone paragraphs removed; surrounding prose unchanged.",
+  "all_inline_svg_unchanged": true,
+  "note_summary_count": 8,
+  "explanation_summary_count": 14,
+  "independent_review_fixes": [
+    {
+      "id": "p12",
+      "change": "거울은 전류 합성, 다이오드·축퇴만 DM 반회로로 구분하여 오해 방지"
+    },
+    {
+      "id": "p11",
+      "change": "(b)의 초기·최종값 및 변화량 구별을 각각 보존"
+    }
+  ],
+  "output_sha256": {
+    "note.html": "78677dcad6dc3a556bad8d5e2ecadc4f04bcd9cde46b4822e6a8540f052a49af",
+    "explanations\\p1.html": "66ab6113cd9e1ee015b57a0245e8aa2e2c4122fbb33fe2bf98927b6b3076519e",
+    "explanations\\p10.html": "e8496f063e097b3af3bcc6df7d2f508383c5f0d14e4297be8e6ff4f10528357b",
+    "explanations\\p11.html": "1b1e21b3520fbd7b39cf4048d09b4022458a25fc3e892eee2aea55a58c4bae4d",
+    "explanations\\p12.html": "bf90cb1508f9b90918afac748ccc6fcf4e575ea9b84af12b52f8eb9c07743db3",
+    "explanations\\p13.html": "c83fb0b97d54ec5c3acb92e6afd90c717ebe9fe54e0f26da5bd907610c2754ad",
+    "explanations\\p14.html": "7cf3f033bc0a4b0a350b069e08382139f91d861e5030c4b9fd023e578f1bab88",
+    "explanations\\p2.html": "08bfd7badbaf91a8ec898f636e0650d6e46962d0f58797b57e9dfa0641f954d2",
+    "explanations\\p3.html": "c07e2951701ddafcc66075aa5642bd6f5cff810e6ccc87e2990bb799ed398f96",
+    "explanations\\p4.html": "117efd178753eff34251d327194b4dd550d99897d2cfd70487bfa8d63b8de5ae",
+    "explanations\\p5.html": "2133d7f980271328fb9109a1c81ccd4fda8b72039a36e58be05e7596a1344353",
+    "explanations\\p6.html": "7b234926e012c9009dcf3d1c60dc992918fdfb3e32078e60e582aabace31a3a7",
+    "explanations\\p7.html": "87d89d4ebd6904ee1aa8d31485af30a158e787036478cccce515230d74a4a1a0",
+    "explanations\\p8.html": "69d2aec9e6b9309b16fa0252d5c35f460d5e57ddcf39c0f66d4f840147f7e006",
+    "explanations\\p9.html": "f2652720d51094b29127fede477bc56e928dab1bcff8dba43b1607427433b5c8"
+  }
+}

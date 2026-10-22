@@ -1,6 +1,5 @@
 import sympy as s
-import json
 
-Vp,Vn,Vt,A,I=s.symbols('Vp Vn Vt A Ic',positive=True)
-g=I/Vt;rn=Vn/I;rp=Vp/I;gain=s.factor(g/(1/rn+1/rp));ans=s.solve(s.Eq(gain,A),Vp)[0]
-print('gain=',gain,'Early P=',ans,'numeric VT=26mV=',ans.subs({Vn:5,Vt:s.Rational(26,1000),A:100}),'VT=25mV=',ans.subs({Vn:5,Vt:s.Rational(25,1000),A:100}))
+N,gm3,RL,i=s.symbols('N gm3 RL i');gm4=gm3/N;vg=-i/gm3;io=-gm4*vg;vo=io*RL
+assert s.simplify(vo/i-RL/N)==0
+print('main: diode-node KCL vg=-i1/gm3; mirror gm4/gm3=1/N; vo/i1=',s.factor(vo/i),'ohms')

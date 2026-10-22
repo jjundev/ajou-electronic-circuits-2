@@ -1,1 +1,31 @@
-P10.71 KCL gain= R/N positive, not RL/sqrt(N); equal VSG means Id4=Id3/N and gm4=gm3/N
+INTERNAL exact KCL: ['G*(vL - z) + x/R + (x - z)/O', 'G*(vR - z) + y/(R + d) + (y - z)/O', '-G*(vL - z) - G*(vR - z) + z/T - (x - z)/O - (y - z)/O']
+Exact symmetric differential gain: -G*O*R/(O + R)
+Exact symmetric single-ended CM: -G*O*R/(2*G*O*T + O + R + 2*T)
+Exact unequal-load CM-DM: G*O**2*d/(2*G*O**2*T + 2*G*O*R*T + G*O*T*d + O**2 + 2*O*R + 2*O*T + O*d + R**2 + 2*R*T + R*d + T*d)
+First derivative at deltaR=0: G*O**2/((O + R)*(2*G*O*T + O + R + 2*T))
+Large G limit CM/shortCM: 1
+Large G limit first-order leak/shortLeak: O*(1 + R/O)/(O + R)
+Reference ro-omission limit: d/(2*T)
+DC intermediate: {'VOV1': 1/5, 'VOV2': 1/5, 'gm': 1/2000, 'ro_input': 200000, 'ro_tail': 100000, 'RSS': 110000}
+(1) CM interval: 9/5 29/10 V; explicit 10-ohm upper: 5799/2000
+(2) steering boundary: +/- sqrt(2)/5 = 0.282842712474619 V; requires adequate CM headroom
+(3) ADM: -100/21 = -4.761904761904762
+(4) differential CM=0; SE short: -1/22 = -0.045454545454545456
+(5) short CM-DM: 1/23100 = 4.329004329004329e-05
+(6) same-model CMRR: 110000 dB: 100.82785370316451
+INTERNAL exact finite CMSE: -0.04458314757021846 CM-DM: 4.245912014682703e-05
+INTERNAL exact first-order leakage: 4.24601405430652e-05 CMRR exact: 112152.69523809524
+PASS: all six parts; short route is large-product limit of full finite-ro KCL.
+NEW CM measurement boundaries: output short; independently input zero and drain test.
+INTERNAL short-current Gm exact: G*O/(G*O*Rs + O + Rs) = 4.460303300624443e-06 S
+INTERNAL input-zero transistor resistance exact: G*O*Rs + O + Rs = 22420000.0 ohm
+INTERNAL loaded output resistance exact: R*(G*O*Rs + O + Rs)/(G*O*Rs + O + R + Rs) = 9995.541685242979 ohm
+INTERNAL product equals full symmetric CM KCL: 0
+Displayed Gm leading: 1/220000 S = 4.545454545454546 uS
+Displayed Rtrans leading: 22000000 ohm = 22.0 Mohm
+Displayed loaded Rout ~ RC: 10000 ohm
+Displayed signed gain: -1/22 = -0.045454545454545456
+Independent retry: RE=20kohm -> CMmin 14/5 V; RSS= 120000 ohm
+Independent retry: deltaRC=5ohm -> CMRR= 220000 dB= 106.84845361644412
+Independent retry: matched loads -> differential CM= 0
+PASS: Gm -> loaded Rout -> signed gain uses one CM input/single-ended output port.

@@ -1,0 +1,83 @@
+<div class="layer eli5" data-explanation="understand">
+<h4>문제를 읽어요</h4>
+<p>왼쪽 전류를 정하는 $I_1$이 커지면 거울이 오른쪽에 공급하는 전류도 커져요. 동시에 $I_2$는 줄어들므로 출력에서 빼내는 전류는 작아져요. 두 효과가 함께 부하 저항의 전압을 올려요. 구할 것은 변화량만이 아니라 <strong>변화 전과 후의 출력 전압 각각</strong>이에요.</p>
+<p>출력 전압은 접지 기준이에요. 전류원은 그림의 방향으로 주어진 전류를 유지하는 이상 전류원으로 해석하고, 두 PMOS는 같은 공정 파라미터를 갖는 전류 거울로 다뤄요. 결과는 $M_4$가 포화 영역에 머물고 전류원들이 요구 전압에서 동작할 수 있을 때 유효해요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+<h4>이 개념과 공식을 떠올려요</h4>
+<p>공통 게이트·공통 소스의 PMOS와 다이오드 연결 $M_3$가 단서이므로 <strong>전류 거울(current mirror)</strong>의 크기 비를 먼저 떠올려요. 두 소자의 $V_{SG}$가 같고 채널 길이 변조를 무시하면, 포화 전류는 $W/L$에 비례해요. $I_4$는 $M_4$가 출력에 공급하는 전류의 양의 크기이고, $k$는 기준 소자에 대한 출력 소자의 크기 비예요.</p>
+<div class="equation">$$k=\frac{(W/L)_4}{(W/L)_3}$$</div>
+<div class="equation">$$I_4=kI_1$$</div>
+<p>그다음 출력 노드의 전류 법칙(Kirchhoff’s current law, KCL)을 써요. 저항은 공급과 흡수의 차이만 받으므로, 두 전류를 각각 구한 뒤 빼는 것이 전압을 바로 추측하는 것보다 안전해요. 이 관계는 <a href="정리노트_1007_Differential_Amplifiers.html#s2-mos-active">MOS 능동 부하의 두 신호 경로</a>와 같아요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+<h4>종이에 쓸 첫 줄</h4>
+<p>원 회로의 실제 부하 $R_L$를 그대로 두고 DC 전류 균형을 써요. $I_1$은 $M_3$ 아래쪽으로 흐르는 기준 전류, $I_4$는 위에서 출력 노드로 들어오는 전류, $I_2$와 $I_L$은 출력에서 접지 쪽으로 나가는 전류를 양으로 정해요. 그러면 저항 가지는 $I_L=V_{out}/R_L$예요. 예를 들어 공급이 흡수보다 작으면 $I_L&lt;0$이므로 실제 저항 전류는 접지에서 출력으로 흘러요.</p>
+<div class="equation">$$I_4=I_2+\frac{V_{out}}{R_L}$$</div>
+<div class="equation">$$V_{out}=R_L(kI_1-I_2)$$</div>
+<p>이는 변화 전후의 DC 동작점을 각각 구하는 문제라서 소신호 등가회로·출력 단락·시험원을 도입하지 않아요. $\lambda=0$이므로 별도의 유한 출력저항 보정도 넣지 않아요.</p>
+</div>
+<div class="layer formal" data-explanation="solve">
+<h4>이렇게 풀어요</h4>
+<div data-subpart="a">
+<h4>(a) 같은 크기의 거울</h4>
+<p>기준 소자와 출력 소자의 크기가 같으므로 거울은 기준 전류를 그대로 복사해요.</p>
+<div data-answer-step="1 대 1 거울의 전후 출력 계산">
+<p>$\lambda=0$, $M_4$ 포화에서 $k=1$, $I_4=I_1$이에요. 출력 KCL은 $V_{out}=R_L(I_4-I_2)$예요.</p>
+<div class="equation">$$V_{out,\mathrm{전}}=R_L(I_0-I_0)=0$$</div>
+<div class="equation">$$V_{out,\mathrm{후}}=R_L[(I_0+\Delta I)-(I_0-\Delta I)]=2\Delta I R_L$$</div>
+</div>
+<p>후 상태에서 공급의 증가 $+\Delta I$와 흡수의 감소 $-\Delta I$가 차이에 함께 더해져요. 따라서 저항 전류는 $2\Delta I$만큼 증가해요.</p>
+</div>
+<div data-subpart="b">
+<h4>(b) 출력 소자가 기준 소자의 절반인 거울</h4>
+<p>조건에서 두 배인 것은 기준 소자 $M_3$예요. 따라서 출력 소자 $M_4$가 공급하는 전류는 기준 전류의 절반이에요.</p>
+<div data-answer-step="절반 거울의 전후 출력 계산">
+<p>$\lambda=0$, $M_4$ 포화에서 $k=1/2$, $I_4=I_1/2$이고 $V_{out}=R_L(I_4-I_2)$예요.</p>
+<div class="equation">$$V_{out,\mathrm{전}}=R_L\left(\frac{I_0}{2}-I_0\right)=-\frac{I_0R_L}{2}$$</div>
+<div class="equation">$$V_{out,\mathrm{후}}=R_L\left[\frac{I_0+\Delta I}{2}-(I_0-\Delta I)\right]=\frac{(3\Delta I-I_0)R_L}{2}$$</div>
+<div class="equation">$$\Delta V_{out}=V_{out,\mathrm{후}}-V_{out,\mathrm{전}}=\frac32\Delta I R_L$$</div>
+</div>
+<p>거울이 복사하는 증가분은 $\Delta I/2$이지만, 직접 흡수하는 가지의 감소분은 여전히 $\Delta I$예요. 두 효과를 합치면 $1.5\Delta I$예요. 이 증가량을 초기 전압 $-I_0R_L/2$에 더해야 최종 출력이 나와요.</p>
+</div>
+</div>
+<div class="layer formal" data-explanation="verify">
+<h4>완성 답과 검산</h4>
+<div data-subpart="a">
+<h4>(a) 답과 대칭 검산</h4>
+<div data-answer-final="a">
+<p><strong>전에는 $V_{out}=0$, 후에는 $V_{out}=2\Delta I R_L$예요.</strong> 채널 길이 변조 무시, $M_4$ 포화 및 이상 전류원의 동작 가능 범위에서의 결과예요.</p>
+</div>
+<p>$\Delta I=0$이면 전후 모두 0이에요. $\Delta I&gt;0$이면 공급은 늘고 흡수는 줄므로 출력이 양으로 올라가며 전류 경로와 부호가 맞아요.</p>
+</div>
+<div data-subpart="b">
+<h4>(b) 답과 초기값 검산</h4>
+<div data-answer-final="b">
+<p><strong>전에는 $V_{out}=-I_0R_L/2$, 후에는 $V_{out}=(3\Delta I-I_0)R_L/2$예요.</strong> 변화량은 $\Delta V_{out}=1.5\Delta I R_L$예요. 채널 길이 변조 무시, $M_4$ 포화 및 음의 출력을 포함한 전류원 동작 가능 범위를 전제로 해요.</p>
+</div>
+<p>$\Delta I=0$을 후 식에 넣으면 초기값 $-I_0R_L/2$가 나와요. $\Delta I=I_0/3$에서는 공급과 흡수가 모두 $2I_0/3$이 되어 후 출력이 0이에요. 따라서 출력이 증가해도 $0&lt;\Delta I&lt;I_0/3$이면 최종 출력은 여전히 음수예요.</p>
+</div>
+<p>두 답 모두 전류×저항이라 전압 단위예요. mA와 kΩ를 쓰면 그 곱은 V예요. $M_4$의 포화 조건은 $V_{SD4}=V_{DD}-V_{out}\ge V_{SG4}-|V_{TP}|$예요. 전류가 바뀌면 필요한 $V_{SG4}$도 달라지므로 전후 모두 확인해야 해요. 이 조건은 상한을 주며, 실제 하한은 특히 $I_2$ 전류원의 전압 여유(compliance)에 달려 있어요. 원문에는 그 수치가 없어 허용 출력 범위를 수치로 확정하지 않아요.</p>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+<h4>주의할 점</h4>
+<ul>
+<li>거울 비는 출력 $M_4$의 크기 ÷ 기준 $M_3$의 크기예요. (b)에서 $I_4=2I_1$로 뒤집지 않아요.</li>
+<li>$I_2$는 출력에서 빠져나가므로 $V_{out}=R_L(I_4-I_2)$예요. $I_2$가 줄면 출력 상승에 기여해요.</li>
+<li>(b)의 $1.5\Delta I R_L$는 변화량이에요. 초기값을 생략하면 원문이 요구하는 변화 후 전압을 잘못 답하게 돼요.</li>
+<li>음의 출력은 음의 저항을 뜻하지 않아요. 저항 전류가 정의한 방향의 반대로 흐른다는 뜻이에요. 다만 접지에 연결된 실제 전류원이 음의 단자 전압에서 그 전류를 유지할 수 있는지는 별도 확인이 필요해요. 포화·전압 여유가 깨지면 이 이상 거울 답을 그대로 적용하지 않아요.</li>
+</ul>
+</div>
+<div class="layer eli5" data-explanation="retry">
+<h4>조건을 바꾸어 생각해요</h4>
+<ol>
+<li>출력 소자 크기가 기준 소자의 두 배여서 $k=2$라면, 같은 전류 변화에서 초기 출력과 출력 증가량은 각각 얼마일까요?</li>
+<li>(b)에서 $\Delta I=I_0/4$라면 후 출력은 양수일까요, 음수일까요? 출력이 증가했다는 사실과 최종 전압의 부호를 구별해 보세요.</li>
+</ol>
+</div>
+<div class="sum" hidden>
+<p class="sum-lead">출력 유입 전류에서 유출 전류를 빼고 $R_L$을 곱해요.</p>
+<div class="summary-group"><h4>첫 식</h4><div class="equation">$$V_{out}=R_L(kI_1-I_2)$$</div><p>$k=(W/L)_4/(W/L)_3$이며 포화 PMOS 거울·$\lambda=0$ 모델이에요.</p></div>
+<div class="summary-group"><h4>전후 값과 변화량</h4><p>$k=1$이면 초기 출력은 0이고 최종 출력은 $2\Delta I R_L$예요.</p><p>$k=1/2$이면 초기 출력은 $-I_0R_L/2$이고 최종 출력은 $(3\Delta I-I_0)R_L/2$예요.</p><p>이때 변화량 $1.5\Delta I R_L$과 최종값을 구별해요.</p><p>전후 모두 $M_4$ 포화와 이상 전류원의 전압 여유가 필요해요.</p></div>
+</div>
+

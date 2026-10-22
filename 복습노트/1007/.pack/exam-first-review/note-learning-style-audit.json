@@ -1,0 +1,620 @@
+{
+  "learning_style": {
+    "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
+    "sha256": "6c6ece1e37f6aeee28cef59c241a32cb26f40e8a45c3151e02551edaf318874a",
+    "rule_ids": [
+      "UNIT-01",
+      "CALC-01",
+      "CALC-02",
+      "CIRCUIT-01",
+      "CIRCUIT-02",
+      "GAIN-01",
+      "DEGEN-01",
+      "SCALE-01",
+      "BIAS-01",
+      "NOTATION-01",
+      "EXPLAIN-01",
+      "CORRECT-01"
+    ]
+  },
+  "html": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\복습노트\\1007\\정리노트_1007_Differential_Amplifiers.html",
+  "html_sha256": "c2efbd1e4ff9ff92866bfdca94c49615e61e1ad2f82792fe8b6894352fe1e1b9",
+  "reviewer": "/root/author_retained",
+  "items": {
+    "why-circuit": {
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "No numericalengineeringconversion orrequestedcalculation inwhy/navigationtopic."
+        },
+        "CALC-01": {
+          "disposition": "not_applicable",
+          "evidence": "No multistepnumericalinversion inthiswhy/navigationtopic."
+        },
+        "CALC-02": {
+          "disposition": "not_applicable",
+          "evidence": "No roundedcalculatedanswer inthisoverview/navigationtopic."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "Four-stepwhy page has problem, one-outputloss, mirrorcurrentaddition, headroom/matching/use; historicalWidlar1967LM101A and5-transistorOTA directlyverified book551image; professorcitations nowmatchcurrentSTTlines."
+        },
+        "CIRCUIT-02": {
+          "disposition": "not_applicable",
+          "evidence": "This topic is conceptualsignal/ratio comparison; no newnodalKCL/testsource derivation torequireanewmeasurementcircuit."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "vid=2ΔV, outputs±gmRDΔV: difference magnitude2gmRDΔV, one outputgmRDΔV. Same input denominator; 1/2. 대칭 저항부하·동일 입력·유효부하 기준 비교. 각 출력 테일 CM 감쇠는 여전히 남음."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "Noexternalsource/emitter-degenerationevaluation inthismirror/overview/navigationtopic."
+        },
+        "SCALE-01": {
+          "disposition": "not_applicable",
+          "evidence": "No requestedwidth/currentratio orparameter-scalingderivation; illustrativeadditiononly."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "No numericalbiasboundary orVGDinequality solving requested. Saturation/active-region/headroomconditions preserved; inventinginputs orboundarynumbers wouldbeunwarranted."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "All1SVGlabelinventories read; nativePretendard600 uprighttext/subtspan78%, explicitblue/rednodemetadata retained; bodyLaTex distinct. Realface-loadedvisualquality verifiedbyrootseparately, notclaimedbythiscontentreview."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "Pureconcepttopiclayerstructureappropriatelyretained; why-circuit four-stepmotivation orconciseaggregate/navigationpurpose, noforcedsevenproblemsections."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "Four-stepwhy page has problem, one-outputloss, mirrorcurrentaddition, headroom/matching/use; historicalWidlar1967LM101A and5-transistorOTA directlyverified book551image; professorcitations nowmatchcurrentSTTlines."
+        }
+      }
+    },
+    "s0-cm-half-recap": {
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "Formal1uA=.001mA,2uA*100k=.2V; figures/summary agree."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "Formal/bodyrelations arebuilt fromdefinedcurrent,tailresistance,outputdefinition beforegain orratio; cheatsheet maps totheseintermediates."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "Numericalexamples areexactshortdecimals/integers; powersavoidroundingtosmallgainzero; no roundedvalues fedintolatercalculation."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "Explicitinputro/bodyomission, sameCMbranches,2RSS notRSS/2. Source-feedback equation derived independently; CM average=SE under symmetry; BJT needslargeβ."
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "CM modelSVG leavesPnonground,2RSSunder source,gateinputleft/outputright; caption names inputro/bodyeffectomission; firstformula appliesCSdegeneration toactualsameCMstimulus. Noextraneousoutputtestsource used forvoltagegain."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "vP=2RSSi; i=gm(vCM-vP) => i/vCM=gm/(1+2gmRSS)≈1/(2RSS), gain=-RD/(2RSS). RD,gm,bias fixed; largegmRSS remains valid."
+        },
+        "DEGEN-01": {
+          "disposition": "applied",
+          "evidence": "CM feedbackvP=2RSSi reducesvgs;largegmRSS leadinggaincondition retained. BJT mappingrequireslargeβ; finiteβ warning prevents IC=IE generalization."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "RSS doubledatfixedgm,RD givesCMgainhalf inlarge-degenerationlimit."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "No numericalbiasboundary orVGDinequality solving requested. Saturation/active-region/headroomconditions preserved; inventinginputs orboundarynumbers wouldbeunwarranted."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "All2SVGlabelinventories read; nativePretendard600 uprighttext/subtspan78%, explicitblue/rednodemetadata retained; bodyLaTex distinct. Realface-loadedvisualquality verifiedbyrootseparately, notclaimedbythiscontentreview."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "Pureconcepttopiclayerstructureappropriatelyretained; ELI5principle/smallcurrentorvoltageexample precedes formalderivation andsummarykeepsmechanism/conditions."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "Explicitinputro/bodyomission, sameCMbranches,2RSS notRSS/2. Source-feedback equation derived independently; CM average=SE under symmetry; BJT needslargeβ."
+        }
+      }
+    },
+    "s0-cm-noise": {
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "Formal12mV−(-8mV)=20mV example anddimensionlessCMgain."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "Formal/bodyrelations arebuilt fromdefinedcurrent,tailresistance,outputdefinition beforegain orratio; cheatsheet maps totheseintermediates."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "Numericalexamples areexactshortdecimals/integers; powersavoidroundingtosmallgainzero; no roundedvalues fedintolatercalculation."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "Ideal tail makesincrementCMcurrents0 whileDC remains; finite tail commonnoise survivesSE but cancelsDM. Distinguishesinputnoise fromoutputnoise and correctsign ofnegativeCM gain."
+        },
+        "CIRCUIT-02": {
+          "disposition": "not_applicable",
+          "evidence": "This topic is conceptualsignal/ratio comparison; no newnodalKCL/testsource derivation torequireanewmeasurementcircuit."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "(so+no)-(-so+no)=2so; no cancels even finiteRSS. Same outputnoise in amplitude/phase and same output definition; not allphysicalnoise isCM."
+        },
+        "DEGEN-01": {
+          "disposition": "applied",
+          "evidence": "CM feedbackvP=2RSSi reducesvgs;largegmRSS leadinggaincondition retained. BJT mappingrequireslargeβ; finiteβ warning prevents IC=IE generalization."
+        },
+        "SCALE-01": {
+          "disposition": "not_applicable",
+          "evidence": "No requestedwidth/currentratio orparameter-scalingderivation; illustrativeadditiononly."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "No numericalbiasboundary orVGDinequality solving requested. Saturation/active-region/headroomconditions preserved; inventinginputs orboundarynumbers wouldbeunwarranted."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "All1SVGlabelinventories read; nativePretendard600 uprighttext/subtspan78%, explicitblue/rednodemetadata retained; bodyLaTex distinct. Realface-loadedvisualquality verifiedbyrootseparately, notclaimedbythiscontentreview."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "Pureconcepttopiclayerstructureappropriatelyretained; ELI5principle/smallcurrentorvoltageexample precedes formalderivation andsummarykeepsmechanism/conditions."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "Ideal tail makesincrementCMcurrents0 whileDC remains; finite tail commonnoise survivesSE but cancelsDM. Distinguishesinputnoise fromoutputnoise and correctsign ofnegativeCM gain."
+        }
+      }
+    },
+    "s1-mismatch": {
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "1uA=.001mA;1uA*10/11kΩ gives−10/−11mV anddifference+1mV."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "Formal/bodyrelations arebuilt fromdefinedcurrent,tailresistance,outputdefinition beforegain orratio; cheatsheet maps totheseintermediates."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "Numericalexamples areexactshortdecimals/integers; powersavoidroundingtosmallgainzero; no roundedvalues fedintolatercalculation."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "Samecurrentunderdeclaredinputro-ignoredmodel, rightloadhigher =>positive left-right leak; noteperformanceACM-DM explicitlymagnitude. BJTemitter-versuscollector caveatkept."
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "CM modelSVG leavesPnonground,2RSSunder source,gateinputleft/outputright; caption names inputro/bodyeffectomission; firstformula appliesCSdegeneration toactualsameCMstimulus. Noextraneousoutputtestsource used forvoltagegain."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "vo1=-RDi; vo2=-(RD+ΔRD)i => vod=ΔRD i; positiveCM makes positivei. Inputro/bodyeffect ignored, matchedgm; ΔRDpositive; finiteRSS."
+        },
+        "DEGEN-01": {
+          "disposition": "applied",
+          "evidence": "CM feedbackvP=2RSSi reducesvgs;largegmRSS leadinggaincondition retained. BJT mappingrequireslargeβ; finiteβ warning prevents IC=IE generalization."
+        },
+        "SCALE-01": {
+          "disposition": "not_applicable",
+          "evidence": "No requestedwidth/currentratio orparameter-scalingderivation; illustrativeadditiononly."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "No numericalbiasboundary orVGDinequality solving requested. Saturation/active-region/headroomconditions preserved; inventinginputs orboundarynumbers wouldbeunwarranted."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "All2SVGlabelinventories read; nativePretendard600 uprighttext/subtspan78%, explicitblue/rednodemetadata retained; bodyLaTex distinct. Realface-loadedvisualquality verifiedbyrootseparately, notclaimedbythiscontentreview."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "Pureconcepttopiclayerstructureappropriatelyretained; ELI5principle/smallcurrentorvoltageexample precedes formalderivation andsummarykeepsmechanism/conditions."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "Samecurrentunderdeclaredinputro-ignoredmodel, rightloadhigher =>positive left-right leak; noteperformanceACM-DM explicitlymagnitude. BJTemitter-versuscollector caveatkept."
+        }
+      }
+    },
+    "s1-cmrr": {
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "Example5mS*2k=10,ΔRD=.02k,RSS100k givesleak1e−4 andratio1e5,100dB."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "Formal/bodyrelations arebuilt fromdefinedcurrent,tailresistance,outputdefinition beforegain orratio; cheatsheet maps totheseintermediates."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "Numericalexamples areexactshortdecimals/integers; powersavoidroundingtosmallgainzero; no roundedvalues fedintolatercalculation."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "Bothgains measuredsameDMoutput; ratio notoutputSNRwithoutinputmagnitudes. Independentexample gm5mS,RD2k,RSS100k,ΔR.02k givesDM10,leak1e-4,ratio1e5,100dB. Supplementformula conditionsexplicit."
+        },
+        "CIRCUIT-02": {
+          "disposition": "not_applicable",
+          "evidence": "This topic is conceptualsignal/ratio comparison; no newnodalKCL/testsource derivation torequireanewmeasurementcircuit."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "CMRR≈2gmRSS RD/absΔRD; RSSx10 gives ratiox10,20log10(10)=20dB. Othergm,relative mismatch,RD fixed andlarge-degeneration limit."
+        },
+        "DEGEN-01": {
+          "disposition": "applied",
+          "evidence": "CM feedbackvP=2RSSi reducesvgs;largegmRSS leadinggaincondition retained. BJT mappingrequireslargeβ; finiteβ warning prevents IC=IE generalization."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "RSS10x =>CMRR10x=>+20dB atfixedgm,mismatch,RD; samevidsingleoutputhalf andfixedbiasmirrorhalf comparisons explicitlyholdloads."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "No numericalbiasboundary orVGDinequality solving requested. Saturation/active-region/headroomconditions preserved; inventinginputs orboundarynumbers wouldbeunwarranted."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "All1SVGlabelinventories read; nativePretendard600 uprighttext/subtspan78%, explicitblue/rednodemetadata retained; bodyLaTex distinct. Realface-loadedvisualquality verifiedbyrootseparately, notclaimedbythiscontentreview."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "Pureconcepttopiclayerstructureappropriatelyretained; ELI5principle/smallcurrentorvoltageexample precedes formalderivation andsummarykeepsmechanism/conditions."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "Bothgains measuredsameDMoutput; ratio notoutputSNRwithoutinputmagnitudes. Independentexample gm5mS,RD2k,RSS100k,ΔR.02k givesDM10,leak1e-4,ratio1e5,100dB. Supplementformula conditionsexplicit."
+        }
+      }
+    },
+    "s2-single-ended": {
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "FormalinputΔV,outputgmRDΔV; gainmS*kΩ dimensionless."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "Formal/bodyrelations arebuilt fromdefinedcurrent,tailresistance,outputdefinition beforegain orratio; cheatsheet maps totheseintermediates."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "Numericalexamples areexactshortdecimals/integers; powersavoidroundingtosmallgainzero; no roundedvalues fedintolatercalculation."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "Samevid remains2ΔV; rightSEpositivegmRD/2 whileDMnegativegmRD. Finalnoise subtractionlost buttailattenuation remains; idealtaillimit respected."
+        },
+        "CIRCUIT-02": {
+          "disposition": "not_applicable",
+          "evidence": "This topic is conceptualsignal/ratio comparison; no newnodalKCL/testsource derivation torequireanewmeasurementcircuit."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "vid=vin1-vin2=2ΔV held; ASE=+gmRD/2 vs ADM=-gmRD. Same branch load, symmetricinputpair, rightSEoutput versusleft-rightDM."
+        },
+        "DEGEN-01": {
+          "disposition": "applied",
+          "evidence": "CM feedbackvP=2RSSi reducesvgs;largegmRSS leadinggaincondition retained. BJT mappingrequireslargeβ; finiteβ warning prevents IC=IE generalization."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "RSS10x =>CMRR10x=>+20dB atfixedgm,mismatch,RD; samevidsingleoutputhalf andfixedbiasmirrorhalf comparisons explicitlyholdloads."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "No numericalbiasboundary orVGDinequality solving requested. Saturation/active-region/headroomconditions preserved; inventinginputs orboundarynumbers wouldbeunwarranted."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "All1SVGlabelinventories read; nativePretendard600 uprighttext/subtspan78%, explicitblue/rednodemetadata retained; bodyLaTex distinct. Realface-loadedvisualquality verifiedbyrootseparately, notclaimedbythiscontentreview."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "Pureconcepttopiclayerstructureappropriatelyretained; ELI5principle/smallcurrentorvoltageexample precedes formalderivation andsummarykeepsmechanism/conditions."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "Samevid remains2ΔV; rightSEpositivegmRD/2 whileDMnegativegmRD. Finalnoise subtractionlost buttailattenuation remains; idealtaillimit respected."
+        }
+      }
+    },
+    "s2-mos-active": {
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "Currentexample .6−.4=.2mA; gainmS*kΩ dimensionless."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "Formal/bodyrelations arebuilt fromdefinedcurrent,tailresistance,outputdefinition beforegain orratio; cheatsheet maps totheseintermediates."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "Numericalexamples areexactshortdecimals/integers; powersavoidroundingtosmallgainzero; no roundedvalues fedintolatercalculation."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "M3G-Ddiode only =>not globally symmetric. Supplyincreaseandsinkdecrease add; outputshortGm andinputzeroRout blocks distinguished; finite outputro remains. Positive rightgain followsdeclaredvid."
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "fig-s2-mos-real mapsmirrorandinputroles; -short rightoutputactuallygrounded,vout0 andisc out. -test leftinputground,rightVt+ andleft-incomingit; bodyNortonGm/parallelRout firstformulas andcaptions match. Parallel sourceleft/resistorright/outputfarright. Nativeproperties inspected; normal-sizedvisualglyphspacing remainsrootbrowserwork."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "Fixed gate => δvsg4=0; δigenerator4=0. Finite ro4 still carriesoutputvoltage-induced current. Same output load gives only lowerinput branch gmvid/2. Fixed DCbias not floatinggate; transistor remains saturated."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "Noexternalsource/emitter-degenerationevaluation inthismirror/overview/navigationtopic."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "RSS10x =>CMRR10x=>+20dB atfixedgm,mismatch,RD; samevidsingleoutputhalf andfixedbiasmirrorhalf comparisons explicitlyholdloads."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "No numericalbiasboundary orVGDinequality solving requested. Saturation/active-region/headroomconditions preserved; inventinginputs orboundarynumbers wouldbeunwarranted."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "All4SVGlabelinventories read; nativePretendard600 uprighttext/subtspan78%, explicitblue/rednodemetadata retained; bodyLaTex distinct. Realface-loadedvisualquality verifiedbyrootseparately, notclaimedbythiscontentreview."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "Pureconcepttopiclayerstructureappropriatelyretained; ELI5principle/smallcurrentorvoltageexample precedes formalderivation andsummarykeepsmechanism/conditions."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "M3G-Ddiode only =>not globally symmetric. Supplyincreaseandsinkdecrease add; outputshortGm andinputzeroRout blocks distinguished; finite outputro remains. Positive rightgain followsdeclaredvid."
+        }
+      }
+    },
+    "s2-bjt-active": {
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "10uA−(-10uA)=20uA=.02mA andgmRdimensionless."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "Formal/bodyrelations arebuilt fromdefinedcurrent,tailresistance,outputdefinition beforegain orratio; cheatsheet maps totheseintermediates."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "Numericalexamples areexactshortdecimals/integers; powersavoidroundingtosmallgainzero; no roundedvalues fedintolatercalculation."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "Q3B-CnotB-E; largeβandgmro premise; mirrorcopy adds; rπnodeschecked. Positivegaincorrectsoral sign while acknowledging definition. FixedbiasdoesnotremoveDCorEarlyro."
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "fig-s2-bjt-real mapsmirrorandinputroles; -short rightoutputactuallygrounded,vout0 andisc out. -test leftinputground,rightVt+ andleft-incomingit; bodyNortonGm/parallelRout firstformulas andcaptions match. Parallel sourceleft/resistorright/outputfarright. Nativeproperties inspected; normal-sizedvisualglyphspacing remainsrootbrowserwork."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "SetinputB2=0: rπ2 spansground-toP, ro4 spansoutput-toACground; P≠output. Actual statedconnection; finitebeta fullmodel mayretainrπinternally."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "Noexternalsource/emitter-degenerationevaluation inthismirror/overview/navigationtopic."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "RSS10x =>CMRR10x=>+20dB atfixedgm,mismatch,RD; samevidsingleoutputhalf andfixedbiasmirrorhalf comparisons explicitlyholdloads."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "No numericalbiasboundary orVGDinequality solving requested. Saturation/active-region/headroomconditions preserved; inventinginputs orboundarynumbers wouldbeunwarranted."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "All4SVGlabelinventories read; nativePretendard600 uprighttext/subtspan78%, explicitblue/rednodemetadata retained; bodyLaTex distinct. Realface-loadedvisualquality verifiedbyrootseparately, notclaimedbythiscontentreview."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "Pureconcepttopiclayerstructureappropriatelyretained; ELI5principle/smallcurrentorvoltageexample precedes formalderivation andsummarykeepsmechanism/conditions."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "Q3B-CnotB-E; largeβandgmro premise; mirrorcopy adds; rπnodeschecked. Positivegaincorrectsoral sign while acknowledging definition. FixedbiasdoesnotremoveDCorEarlyro."
+        }
+      }
+    },
+    "s3-cheatsheet": {
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "Summarytable retains dimensionlessratios andvoltage-ratiodB factor20."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "Formal/bodyrelations arebuilt fromdefinedcurrent,tailresistance,outputdefinition beforegain orratio; cheatsheet maps totheseintermediates."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "Numericalexamples areexactshortdecimals/integers; powersavoidroundingtosmallgainzero; no roundedvalues fedintolatercalculation."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "Everytable row comparedwithfulltopic definitions/conditions. Newexam-firstlinechecks inputs,outputs,tail/symmetry,mismatch,currentmirror,fixedconditions accurately. Cascodegmroleading alreadyexplainedwhy supplement."
+        },
+        "CIRCUIT-02": {
+          "disposition": "not_applicable",
+          "evidence": "This topic is aggregateformula/navigationwithoutnewcircuitmeasurements; tablepreservesunderlyingconditions andCM2RSSrule."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "Crosschecked table formulas against their full topic bodies; noaddedsolutionmethod beyondCascodeleading gmro already inwhy-circuit supplement. A retrieval aid, not proof of studentmastery."
+        },
+        "DEGEN-01": {
+          "disposition": "applied",
+          "evidence": "CM feedbackvP=2RSSi reducesvgs;largegmRSS leadinggaincondition retained. BJT mappingrequireslargeβ; finiteβ warning prevents IC=IE generalization."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "RSS10x =>CMRR10x=>+20dB atfixedgm,mismatch,RD; samevidsingleoutputhalf andfixedbiasmirrorhalf comparisons explicitlyholdloads."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "No numericalbiasboundary orVGDinequality solving requested. Saturation/active-region/headroomconditions preserved; inventinginputs orboundarynumbers wouldbeunwarranted."
+        },
+        "NOTATION-01": {
+          "disposition": "not_applicable",
+          "evidence": "No generatedcircuitSVGinthissummary/navigationtopic; standardbodyLaTex symbols retained."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "Pureconcepttopiclayerstructureappropriatelyretained; ELI5principle/smallcurrentorvoltageexample precedes formalderivation andsummarykeepsmechanism/conditions."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "Everytable row comparedwithfulltopic definitions/conditions. Newexam-firstlinechecks inputs,outputs,tail/symmetry,mismatch,currentmirror,fixedconditions accurately. Cascodegmroleading alreadyexplainedwhy supplement."
+        }
+      }
+    },
+    "s3-next": {
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "No numericalengineeringconversion orrequestedcalculation inwhy/navigationtopic."
+        },
+        "CALC-01": {
+          "disposition": "not_applicable",
+          "evidence": "No multistepnumericalinversion inthiswhy/navigationtopic."
+        },
+        "CALC-02": {
+          "disposition": "not_applicable",
+          "evidence": "No roundedcalculatedanswer inthisoverview/navigationtopic."
+        },
+        "CIRCUIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "Titleforecastonly, so noout-of-scopetreatment."
+        },
+        "CIRCUIT-02": {
+          "disposition": "not_applicable",
+          "evidence": "This topic is aggregateformula/navigationwithoutnewcircuitmeasurements; tablepreservesunderlyingconditions andCM2RSSrule."
+        },
+        "GAIN-01": {
+          "disposition": "not_applicable",
+          "evidence": "Only frequency-response title shown; nofrequencyanalysis derived in1007body. Navigationonly; lecturePart08 forecastsnextchapter."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "Noexternalsource/emitter-degenerationevaluation inthismirror/overview/navigationtopic."
+        },
+        "SCALE-01": {
+          "disposition": "not_applicable",
+          "evidence": "No requestedwidth/currentratio orparameter-scalingderivation; illustrativeadditiononly."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "No numericalbiasboundary orVGDinequality solving requested. Saturation/active-region/headroomconditions preserved; inventinginputs orboundarynumbers wouldbeunwarranted."
+        },
+        "NOTATION-01": {
+          "disposition": "not_applicable",
+          "evidence": "No generatedcircuitSVGinthissummary/navigationtopic; standardbodyLaTex symbols retained."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "Pureconcepttopiclayerstructureappropriatelyretained; why-circuit four-stepmotivation orconciseaggregate/navigationpurpose, noforcedsevenproblemsections."
+        },
+        "CORRECT-01": {
+          "disposition": "not_applicable",
+          "evidence": "Titleforecastonly, so noout-of-scopetreatment."
+        }
+      }
+    },
+    "s3-links": {
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "No numericalengineeringconversion orrequestedcalculation inwhy/navigationtopic."
+        },
+        "CALC-01": {
+          "disposition": "not_applicable",
+          "evidence": "No multistepnumericalinversion inthiswhy/navigationtopic."
+        },
+        "CALC-02": {
+          "disposition": "not_applicable",
+          "evidence": "No roundedcalculatedanswer inthisoverview/navigationtopic."
+        },
+        "CIRCUIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "Currentlinks andcore/extra estimatedtime guidance; no obsoletecounts."
+        },
+        "CIRCUIT-02": {
+          "disposition": "not_applicable",
+          "evidence": "This topic is aggregateformula/navigationwithoutnewcircuitmeasurements; tablepreservesunderlyingconditions andCM2RSSrule."
+        },
+        "GAIN-01": {
+          "disposition": "not_applicable",
+          "evidence": "No stale10problem count/2-6-2 quota; estimatedtime caveat isaccurate. Currentlocalhref existence/publishedPDF expected; finalfilechecks byroot."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "Noexternalsource/emitter-degenerationevaluation inthismirror/overview/navigationtopic."
+        },
+        "SCALE-01": {
+          "disposition": "not_applicable",
+          "evidence": "No requestedwidth/currentratio orparameter-scalingderivation; illustrativeadditiononly."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "No numericalbiasboundary orVGDinequality solving requested. Saturation/active-region/headroomconditions preserved; inventinginputs orboundarynumbers wouldbeunwarranted."
+        },
+        "NOTATION-01": {
+          "disposition": "not_applicable",
+          "evidence": "No generatedcircuitSVGinthissummary/navigationtopic; standardbodyLaTex symbols retained."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "Pureconcepttopiclayerstructureappropriatelyretained; why-circuit four-stepmotivation orconciseaggregate/navigationpurpose, noforcedsevenproblemsections."
+        },
+        "CORRECT-01": {
+          "disposition": "not_applicable",
+          "evidence": "Currentlinks andcore/extra estimatedtime guidance; no obsoletecounts."
+        }
+      }
+    }
+  },
+  "scope_note": "Freshcontent/styleauditaftercitationfix; browseractualfont/glyphboundsandPDFchecks mustremainseparategates."
+}

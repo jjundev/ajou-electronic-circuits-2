@@ -53,7 +53,7 @@ python3 <SKILL>/scripts/problem_index.py --repo <REPO> --used <REPO>/복습노�
 - 후보 외/USED/중복 ID, 일부 소문항 선택, 전제 누락·역순을 거부한다. 순환 의존성은 어떤 순서도 통과하지 못한다.
 - PDF 빌드 전 manifest와 selection.json의 ID·순서를 대조한다. 선별을 바꾸면 기록도 다시 만든다.
 - selection v2에는 원문/카탈로그 해시·검토 기록·각 문항 핵심/추가·학습 목표·소문항 수·풀이 상태·예상 시간과 총량이 저장된다. 범위·기출 우선의 의미 판단은 사람이 읽을 수 있는 이유와 에이전트 검토가 담당하며 자동 최적 선발/정답 승인으로 해석하지 않는다.
-- 조립기는 `RUN/selection.json`을 `.assets/selection.json`에, 검토 기록을 `.pack/selection-review.json`에 보존한다. 새 팩의 설명 로더는 selection.json을 원본 입력 해시에 포함한다. 문제지 빌드에 `--selection <팩>/.assets/selection.json`을 전달한다. 답안은 승인된 overlay에 묶인 같은 파일을 자동 사용하며 승인 뒤 메타데이터를 바꾸면 재검토한다.
+- 조립기는 `RUN/selection.json`을 `.assets/selection.json`에, 검토 기록을 `.pack/selection-review.json`에 보존한다. 새 팩의 설명 로더는 selection.json을 원본 입력 해시에 포함한다. 문제지 빌드에 `--selection <팩>/.assets/selection.json`을 전달한다. 답안은 승인된 overlay에 묶인 같은 파일을 자동 사용하며 승인 뒤 메타데이터를 바꾸면 재검토한다. 핵심/추가·소문항 묶음 수·예상 시간은 선발 JSON에 유지하되 해설 HTML·동반 MD에는 학습량 행을 출력하지 않는다. PDF 표시는 기존 PDF 정책을 따른다.
 
 ## 4.1 참고 풀이 없는 문항의 검증
 - 후보 자격과 최종 발행 자격을 구분한다. 작성자는 원문에서 직접 풀고 독립 검토자는 작성자의 결과를 보기 전에 원문/그림에서 따로 푼다. 회로 연결·극성·출력 정의·근사 조건 및 식·수치·단위·극한 조건을 대조한다.

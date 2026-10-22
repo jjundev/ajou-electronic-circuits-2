@@ -1,6 +1,7 @@
 import tempfile
 import unittest
 import unicodedata
+from dataclasses import replace
 from pathlib import Path
 
 import _util
@@ -8,6 +9,13 @@ from epe_shared import load_problem, REPO, compact, parse, TEXTBOOK_ID_RE, EXAM_
 
 
 class MakeRepoTests(unittest.TestCase):
+    def test_approval_references_own_windows_fixture_style(self):
+        source = _util.pack()
+        fixture = 'C:\\fixture\\' + source.learning_style['path'].replace('/', '\\')
+        source = replace(source, inputs=(fixture,))
+        review = _util.approved(source, {'p1': _util.fragment()})
+        self.assertEqual(review['references'][0]['path'], fixture)
+
     def test_default_repo_layout(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = _util.make_repo(Path(tmp))

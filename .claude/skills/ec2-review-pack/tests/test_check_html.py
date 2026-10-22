@@ -83,7 +83,7 @@ class TestPack(unittest.TestCase):
         self.assertEqual(self.codes(), ["forbidden-term"])
 
     def test_missing_layer(self):
-        self.edit("sections/s1.html", '<div class="layer prof"><span class="layer-title">교수님 말씀</span><p>"평균부터 봐요." (0101 01:00)</p></div>', "")
+        self.edit("sections/s1.html", '<div class="layer prof"><span class="layer-title">교수님 말씀</span><p>"평균부터 봐요."</p></div>', "")
         self.assertEqual(self.codes(), ["missing-layer"])
 
     def test_missing_supp_badge(self):

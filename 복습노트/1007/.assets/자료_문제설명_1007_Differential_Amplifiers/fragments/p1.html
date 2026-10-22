@@ -74,8 +74,8 @@
 <ol><li><strong>다른 바이어스와 소자는 그대로 두고 $R_D$만 두 배로 하면?</strong> 같은 포화 영역을 유지한다면 $g_m$과 $r_{O3}$가 같으므로 $A_{CM}$은 두 배가 돼요. 단, DC 드레인 전압이 낮아져 포화를 잃지 않는지 확인해야 해요.</li><li><strong>한쪽 출력 대신 X−Y를 읽으면?</strong> 완전 대칭에서는 0이에요. 두 반회로가 같은 $i_d$와 같은 출력 전압 변화를 만들기 때문에 뺄셈에서 사라져요.</li><li><strong>테일 $\lambda$만 더 작게 만들고 평형 $I_{SS}$·입력쌍 $V_{ov}$를 유지하면?</strong> $2/\lambda$가 커져 $|A_{CM}|$이 작아져요. 무조건 정확히 $\lambda$에 비례하는 것은 아니며, 그 비례는 $2/\lambda\gg V_{ov}$일 때예요.</li></ol>
 </div>
 <div class="sum" hidden>
-<div class="summary-group"><h4>떠올릴 개념</h4><p>대칭 CM 반회로는 소스 아래 $2r_{O3}$를 가진 축퇴 CS 단이에요. $M_3$의 $v_{gs3}=0$이라 테일에는 $r_{O3}=1/(\lambda I_{SS})$만 남아요.</p></div>
-<div class="summary-group"><h4>첫 식과 판단</h4><div class="equation">$$i_d=g_m(v_{CM}-v_P)$$</div><div class="equation">$$v_P=2r_{O3}i_d$$</div><p>소스 상승이 제어 전압을 줄여요. X의 KCL은 $v_X=-R_Di_d$예요.</p></div>
-<div class="summary-group"><h4>결과와 조건</h4><div class="equation">$$g_m=I_{SS}/V_{ov}$$</div><div class="equation">$$A_{CM}=-\frac{R_DI_{SS}}{2/\lambda+V_{ov}}$$</div><p>$V_{ov}=(V_{GS}-V_{TH})_{eq.}$예요. 입력 $\lambda=0$·몸체 효과 생략·포화 소신호 모델이며 원문이 요구한 증명식은 보존해요. 수업의 기본 큰 테일 저항 근사에서는 $A_{CM}\approx-R_D/(2r_{O3})$예요.</p></div>
-<div class="summary-group"><h4>혼동 구분·검산</h4><p>한쪽 출력 CM 이득은 음수이고 무차원이에요. $\lambda\to0$이면 0이에요. 완전 대칭에서 X−Y의 CM 전달은 항상 0이에요.</p></div>
+<p class="sum-lead">CM 반회로의 소스 아래에는 $2r_{O3}$가 남아요.</p>
+<div class="summary-group"><h4>첫 식</h4><div class="equation">$$i_d=g_m(v_{CM}-v_P)$$</div><div class="equation">$$v_P=2r_{O3}i_d$$</div></div>
+<div class="summary-group"><h4>원문이 요구한 결과</h4><div class="equation">$$A_{CM}=-\frac{R_DI_{SS}}{2/\lambda+V_{ov}}$$</div><p>$V_{ov}=(V_{GS}-V_{TH})_{eq.}$이며, 입력 $\lambda=0$·몸체 효과 생략·포화 소신호 모델이에요.</p><p>큰 테일 저항 근사에서는 $A_{CM}\approx-R_D/(2r_{O3})$예요.</p></div>
+<div class="summary-group"><h4>출력 구분</h4><p>한쪽 출력 CM 이득은 음수이고, 완전 대칭에서 X−Y의 CM 전달은 0이에요.</p></div>
 </div>

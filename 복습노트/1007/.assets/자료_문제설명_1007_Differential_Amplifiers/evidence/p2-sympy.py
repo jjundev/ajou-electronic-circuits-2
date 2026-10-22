@@ -1,10 +1,8 @@
 import sympy as s
-import json
 
-g,r,p,T=s.symbols('g r p T',positive=True);v,x=s.symbols('v x')
-sol=s.solve([v/p+(v-x)/r+g*(1-x),x/(2*T)+(x-v)/r-g*(1-x)],(v,x))
-a=s.factor(sol[v]);G=s.factor(g*r/(r+2*T*(1+g*r)));Ro=1/(1/p+1/(r+2*T*(1+g*r)))
-assert s.simplify(a+G*Ro)==0
-print('Gm=',G,'Rout=',s.factor(Ro),'A=',a)
-print('large-tail limit relative rp/2T=',s.limit(a/(-p/(2*T)),T,s.oo))
-print('numeric=',a.subs({g:.01,r:20000,p:20000,T:100000}))
+gm,ro,rL,rt,v,d,z=s.symbols('gm ro rL rt v d z')
+x=s.solve([d/rL+(d-z)/ro+gm*(v-z),z/(2*rt)+(z-d)/ro-gm*(v-z)],(d,z));A=s.factor(x[d]/v)
+G=s.factor(-s.solve([z/(2*rt)+z/ro-gm*(v-z)],z)[z]/(2*rt)/v)
+print('CM full half-circuit gain:',A)
+print('Specified method: output short Gm=gm/(1+2rt(gm+1/ro)); inputzero Rout=rL||[ro+2rt(1+gmro)]')
+print('For gmro>>1 and 2gmro rt >>rL, Gm~1/(2rt), Rout~rL; ACM~-rL/(2rt). Matched CM differential0.')

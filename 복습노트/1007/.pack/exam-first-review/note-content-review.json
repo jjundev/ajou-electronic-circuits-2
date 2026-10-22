@@ -1,0 +1,520 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "reviewer": "/root/author_retained",
+  "role": "independent_note_content_reviewer_not_note_author",
+  "html": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\복습노트\\1007\\정리노트_1007_Differential_Amplifiers.html",
+  "html_sha256": "c2efbd1e4ff9ff92866bfdca94c49615e61e1ad2f82792fe8b6894352fe1e1b9",
+  "learning_style": {
+    "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
+    "sha256": "6c6ece1e37f6aeee28cef59c241a32cb26f40e8a45c3151e02551edaf318874a",
+    "rule_ids": [
+      "UNIT-01",
+      "CALC-01",
+      "CALC-02",
+      "CIRCUIT-01",
+      "CIRCUIT-02",
+      "GAIN-01",
+      "DEGEN-01",
+      "SCALE-01",
+      "BIAS-01",
+      "NOTATION-01",
+      "EXPLAIN-01",
+      "CORRECT-01"
+    ]
+  },
+  "scope": "Current1007note11topics+body/summary/circuitmarkup semantics; no browsercomputedfont orPDFvisualapproval inthisreview.",
+  "independence_note": "Initial tool output exposed authorquestion+answerrecord while loading; equations andexamples independently recomputed ratherthan claimingblind studentrecall. Didnotauthor note. Oldsummaryaudit usedonly toinspectfieldnames, nooldverdictreused.",
+  "topics": [
+    {
+      "topic": "why-circuit",
+      "status": "pass",
+      "semantic_math_status": "pass",
+      "question": "왜 한쪽 출력을 고르는 데서 멈추지 않나요?",
+      "reviewer_answer": "한쪽 취출에서는 같은 차동 입력에 대한 신호 크기가 절반이며 마지막 CM 뺄셈 상쇄를 잃어요. 전류 거울로 다른 가지의 신호도 단일 출력에 합쳐요.",
+      "independent_reasoning": "vid=2ΔV, outputs±gmRDΔV: difference magnitude2gmRDΔV, one outputgmRDΔV. Same input denominator; 1/2.",
+      "conditions": "대칭 저항부하·동일 입력·유효부하 기준 비교. 각 출력 테일 CM 감쇠는 여전히 남음.",
+      "body_and_summary_evidence": "Four-stepwhy page has problem, one-outputloss, mirrorcurrentaddition, headroom/matching/use; historicalWidlar1967LM101A and5-transistorOTA directlyverified book551image; professorcitations nowmatchcurrentSTTlines.",
+      "svg_count": 1,
+      "source_citation_status": "verified_current_STT_lines",
+      "student_mastery_claim": false
+    },
+    {
+      "topic": "s0-cm-half-recap",
+      "status": "pass",
+      "semantic_math_status": "pass",
+      "question": "테일 저항을 두 배로 키우면 무엇이 바뀌나요?",
+      "reviewer_answer": "큰 축퇴 주항에서 각 출력 CM 이득의 크기가 절반이에요.",
+      "independent_reasoning": "vP=2RSSi; i=gm(vCM-vP) => i/vCM=gm/(1+2gmRSS)≈1/(2RSS), gain=-RD/(2RSS).",
+      "conditions": "RD,gm,bias fixed; largegmRSS remains valid.",
+      "body_and_summary_evidence": "Explicitinputro/bodyomission, sameCMbranches,2RSS notRSS/2. Source-feedback equation derived independently; CM average=SE under symmetry; BJT needslargeβ.",
+      "svg_count": 2,
+      "source_citation_status": "verified_current_STT_lines",
+      "student_mastery_claim": false
+    },
+    {
+      "topic": "s0-cm-noise",
+      "status": "pass",
+      "semantic_math_status": "pass",
+      "question": "각 출력에 같은 잡음이 남으면 차동 출력도 반드시 오염되나요?",
+      "reviewer_answer": "반드시 오염되지 않아요. 완전 대칭·선형이면 같은 출력 잡음이 차에서 상쇄돼요.",
+      "independent_reasoning": "(so+no)-(-so+no)=2so; no cancels even finiteRSS.",
+      "conditions": "Same outputnoise in amplitude/phase and same output definition; not allphysicalnoise isCM.",
+      "body_and_summary_evidence": "Ideal tail makesincrementCMcurrents0 whileDC remains; finite tail commonnoise survivesSE but cancelsDM. Distinguishesinputnoise fromoutputnoise and correctsign ofnegativeCM gain.",
+      "svg_count": 1,
+      "source_citation_status": "verified_current_STT_lines",
+      "student_mastery_claim": false
+    },
+    {
+      "topic": "s1-mismatch",
+      "status": "pass",
+      "semantic_math_status": "pass",
+      "question": "오른쪽 부하만 커지면 CM 입력의 차동 출력 부호는?",
+      "reviewer_answer": "오른쪽 부하가 더 크면 왼쪽−오른쪽 CM 출력 전달 부호는 양수예요.",
+      "independent_reasoning": "vo1=-RDi; vo2=-(RD+ΔRD)i => vod=ΔRD i; positiveCM makes positivei.",
+      "conditions": "Inputro/bodyeffect ignored, matchedgm; ΔRDpositive; finiteRSS.",
+      "body_and_summary_evidence": "Samecurrentunderdeclaredinputro-ignoredmodel, rightloadhigher =>positive left-right leak; noteperformanceACM-DM explicitlymagnitude. BJTemitter-versuscollector caveatkept.",
+      "svg_count": 2,
+      "source_citation_status": "verified_current_STT_lines",
+      "student_mastery_claim": false
+    },
+    {
+      "topic": "s1-cmrr",
+      "status": "pass",
+      "semantic_math_status": "pass",
+      "question": "같은 바이어스와 미스매치에서 R_SS가 10배면 CMRR dB는?",
+      "reviewer_answer": "약20dB 증가해요.",
+      "independent_reasoning": "CMRR≈2gmRSS RD/absΔRD; RSSx10 gives ratiox10,20log10(10)=20dB.",
+      "conditions": "Othergm,relative mismatch,RD fixed andlarge-degeneration limit.",
+      "body_and_summary_evidence": "Bothgains measuredsameDMoutput; ratio notoutputSNRwithoutinputmagnitudes. Independentexample gm5mS,RD2k,RSS100k,ΔR.02k givesDM10,leak1e-4,ratio1e5,100dB. Supplementformula conditionsexplicit.",
+      "svg_count": 1,
+      "source_citation_status": "verified_current_STT_lines",
+      "student_mastery_claim": false
+    },
+    {
+      "topic": "s2-single-ended",
+      "status": "pass",
+      "semantic_math_status": "pass",
+      "question": "한쪽 출력 이득을 비교할 때 입력도 절반으로 바꾸나요?",
+      "reviewer_answer": "아니요. 입력 차전압은 그대로 두고 관측 출력만 바꿔야 해요.",
+      "independent_reasoning": "vid=vin1-vin2=2ΔV held; ASE=+gmRD/2 vs ADM=-gmRD.",
+      "conditions": "Same branch load, symmetricinputpair, rightSEoutput versusleft-rightDM.",
+      "body_and_summary_evidence": "Samevid remains2ΔV; rightSEpositivegmRD/2 whileDMnegativegmRD. Finalnoise subtractionlost buttailattenuation remains; idealtaillimit respected.",
+      "svg_count": 1,
+      "source_citation_status": "verified_current_STT_lines",
+      "student_mastery_claim": false
+    },
+    {
+      "topic": "s2-mos-active",
+      "status": "pass",
+      "semantic_math_status": "pass",
+      "question": "거울 출력을 고정 바이어스로 바꾸면 M4는 꺼지나요?",
+      "reviewer_answer": "DC에서 꺼지는 것이 아니에요. 게이트·소스가 AC 접지라 복사되는 gm 제어 전류만 사라지고 DC 및 ro4는 남아요.",
+      "independent_reasoning": "Fixed gate => δvsg4=0; δigenerator4=0. Finite ro4 still carriesoutputvoltage-induced current. Same output load gives only lowerinput branch gmvid/2.",
+      "conditions": "Fixed DCbias not floatinggate; transistor remains saturated.",
+      "body_and_summary_evidence": "M3G-Ddiode only =>not globally symmetric. Supplyincreaseandsinkdecrease add; outputshortGm andinputzeroRout blocks distinguished; finite outputro remains. Positive rightgain followsdeclaredvid.",
+      "svg_count": 4,
+      "source_citation_status": "verified_current_STT_lines",
+      "student_mastery_claim": false
+    },
+    {
+      "topic": "s2-bjt-active",
+      "status": "pass",
+      "semantic_math_status": "pass",
+      "question": "r_pi2를 출력의 r_o4에 곧바로 병렬로 묶나요?",
+      "reviewer_answer": "곧바로 병렬로 묶지 않아요. rπ2는B–E이고 ro4는출력C–ACground라 두 끝 노드가 달라요.",
+      "independent_reasoning": "SetinputB2=0: rπ2 spansground-toP, ro4 spansoutput-toACground; P≠output.",
+      "conditions": "Actual statedconnection; finitebeta fullmodel mayretainrπinternally.",
+      "body_and_summary_evidence": "Q3B-CnotB-E; largeβandgmro premise; mirrorcopy adds; rπnodeschecked. Positivegaincorrectsoral sign while acknowledging definition. FixedbiasdoesnotremoveDCorEarlyro.",
+      "svg_count": 4,
+      "source_citation_status": "verified_current_STT_lines",
+      "student_mastery_claim": false
+    },
+    {
+      "topic": "s3-cheatsheet",
+      "status": "pass",
+      "semantic_math_status": "pass",
+      "question": "이 토픽이 복습에 필요한 이유는?",
+      "reviewer_answer": "입출력 정의→CM/DM 대칭→첫 식→고정조건 순서로 문제의 출발을 고르고, 같은 정의의 결과를 교차 확인할 수 있어요.",
+      "independent_reasoning": "Crosschecked table formulas against their full topic bodies; noaddedsolutionmethod beyondCascodeleading gmro already inwhy-circuit supplement.",
+      "conditions": "A retrieval aid, not proof of studentmastery.",
+      "body_and_summary_evidence": "Everytable row comparedwithfulltopic definitions/conditions. Newexam-firstlinechecks inputs,outputs,tail/symmetry,mismatch,currentmirror,fixedconditions accurately. Cascodegmroleading alreadyexplainedwhy supplement.",
+      "svg_count": 0,
+      "source_citation_status": "no_STTcitationneeded",
+      "student_mastery_claim": false
+    },
+    {
+      "topic": "s3-next",
+      "status": "pass",
+      "semantic_math_status": "pass",
+      "question": "이 토픽이 복습에 필요한 이유는?",
+      "reviewer_answer": "다음 장이 주파수 응답임을 범위 밖 예고로 구분해요.",
+      "independent_reasoning": "Only frequency-response title shown; nofrequencyanalysis derived in1007body.",
+      "conditions": "Navigationonly; lecturePart08 forecastsnextchapter.",
+      "body_and_summary_evidence": "Titleforecastonly, so noout-of-scopetreatment.",
+      "svg_count": 0,
+      "source_citation_status": "no_STTcitationneeded",
+      "student_mastery_claim": false
+    },
+    {
+      "topic": "s3-links",
+      "status": "pass",
+      "semantic_math_status": "pass",
+      "question": "이 토픽이 복습에 필요한 이유는?",
+      "reviewer_answer": "핵심 문제→추가 연습 순서로 현재 문제지·답안을 찾아 연결해요.",
+      "independent_reasoning": "No stale10problem count/2-6-2 quota; estimatedtime caveat isaccurate.",
+      "conditions": "Currentlocalhref existence/publishedPDF expected; finalfilechecks byroot.",
+      "body_and_summary_evidence": "Currentlinks andcore/extra estimatedtime guidance; no obsoletecounts.",
+      "svg_count": 0,
+      "source_citation_status": "no_STTcitationneeded",
+      "student_mastery_claim": false
+    }
+  ],
+  "critical": [],
+  "important": [],
+  "minor": [],
+  "mathematical_selfcheck": {
+    "CM": "i=gm(vcm-2RSSi) => gain=-gmRD/(1+2gmRSS), leading -RD/(2RSS).",
+    "CM_DM": "vo1-vo2=ΔRD*i => signedpositive forpositiveΔRD; performancegainabsolute.",
+    "CMRR_example": {
+      "gm_mS": 5,
+      "RD_kohm": 2,
+      "RSS_kohm": 100,
+      "deltaRD_kohm": 0.02,
+      "ADM_magnitude": 10,
+      "leak": 0.0001,
+      "CMRR": 100000,
+      "CMRR_dB": 100
+    },
+    "active_load": "Supply gmvid/2 plus reducedsink gmvid/2 =>gmvid; outputvoltage=+isigReff. Fixedbiassupplysignal0 leaveshalf.",
+    "Rout_internal": "Leading commonoutputadmittance go2+go4, currentmirror/internalnodecorrections order1/(gmro), henceRout≈1/(go2+go4), notallfinite-beta exactmodel."
+  },
+  "unresolved": [],
+  "resolved_findings": [
+    {
+      "issue": "Stale paragraphcitation offsets",
+      "fix": "All22 replaced by actualcurrentSTT1basedline+Part references; paragraph-countdefinitionremoved.",
+      "verification": "Freshcurrentnotequote+source excerpts re-read andmatched inthisreview."
+    }
+  ],
+  "citation_review": [
+    {
+      "topic": "s0-cm-half-recap",
+      "note_text": "“커먼 모드 하프 서킷을 이용하면 조금 편하다고 그랬죠.” (1007 STT L33, Part 01; 시각 정보 없음)",
+      "source_excerpts": [
+        {
+          "first": 33,
+          "last": 33,
+          "actual_stt": "그러면 여기에 전압의 변화량도 생기겠죠? 그 전압의 변화량이 실제로 0이 아니라 유한한 값으로 나타나고, 그게 요렇게 요만큼이나 나타나더라는 거죠. 이걸 구할 때 이제 여러분들이 조금 쉽게 구하는 방법은 물론 뭐 이제 어 VGS를 구해서 이제 구해도 되지만, 커먼 모드 하프 서킷을 이용하면 조금 편하다고 그랬죠."
+        }
+      ],
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "evidence": "Compared currentnotecitation against actualSTTlinecontents; quotation/teachingclaim andPart match. No timestamps invented."
+    },
+    {
+      "topic": "s0-cm-half-recap",
+      "note_text": "학생이 CM에서도 같은 하프 서킷을 쓰는지 질문했어요. 교수님은 같은 반쪽 두 개로 나눌 수 있다는 뜻은 같지만, 차동 하프 서킷과 CM 하프 서킷의 소스 연결은 다르다고 설명했어요. (1007 STT L67–81, Part 02; 시각 정보 없음).",
+      "source_excerpts": [
+        {
+          "first": 67,
+          "last": 81,
+          "actual_stt": "\"게인 신호가 원래 합성 이렇게 신호가 차동 증폭기 증폭돼서 나와야 하잖아요. 그러면 커먼 모드일 때 앞의 합성 신호가 어떤 신호가 증폭돼서 나오는 건가요?\"\n\n질문이 지금 이제... 그 차동 신호가 인가될 때는 스몰 시그널 하프 서킷... \"네, 그렇죠.\" 인데, 예. \"커먼 모드일 때 어떻게...\" 아, 근데 이제 커먼 모드 하프 서킷도 동일하게 표현하느냐? \"네.\"\n\n어, 그렇죠. 대칭이니까. 여기 이제 우리가 이제 일부러 대칭을 만든 거죠. 그래서 요걸 반으로 딱 자르면 동일하니까 사실 여기에 변화된 거 여기에 변화된 거 같죠. 그러니까 어느 쪽을 계산해도 사실 같은 거죠.\n\n그러니까 그 동일한 대칭 하프 서킷을 만들기 위해서 우리가 RSS를 요 절반으로 나눈, 그러니까 2배의 저항으로 나눈 거잖아요. 그죠? 그래서 같은 하프 서킷인데, 이거는 이제 차동 신호가 인가될 때 우리가 이제 차동 이득을 구할 때 하프 서킷이 아니라, 이건 커먼 모드 입력에 대해서 하프 서킷, 커먼 모드 하프 서킷이라고 커먼 모드...\n\n그러니까 그냥 하프 서킷이라고 하면 차동 신호가 당연히 이제 차동 증폭기는 차동 입력을 가정하고 있기 때문에 그냥 하프 서킷이라고 하면 우리가 차동 이득을 가정한 거고, 앞에 커먼 모드라고 붙이면 커먼 모드 입력이 들어가는 조건에서의 하프 서킷.\n\n\"아, 그러면 그게 다른...\" 다르죠. 차동 회로에서의 하프 서킷과 이건 다릅니다. 왜냐면 여기 차동 회로에서는 여기가 그라운드잖아요. 회로가 다르죠. 근데 그라운드 된 조건은 차동 신호가 인가될 때만 그라운드가 되는 거고요.\n\n근데 일반적으로 우리가 차동 증폭기를 해석한다는 거는 그냥 하프 서킷 차동 신호를 가정하고 이제 해석하는 거고, 요거는 특별히 이제 노이즈가 인가됐을 노이즈에 대해서 출력이 어떻게 될까를 이걸 해석하기 위해서 커먼 모드 하프 서킷을 도입하는 거죠.\n\n신호가 들어갈 때 우리가 차동 신호에 대해서 커먼 모드 하프 서킷을 우리가 해석할 의미는 없죠, 그죠? 그거는 이제 커먼 모드 신호에 대해서, 커먼 모드의 변화에 대해서 우리가 해석할 때 여기를 AC 그라운드로 할 수가 없으니까 그걸 해석하기 위해서 커먼 모드 하프 서킷을 이용하는 거죠. 질문이 됐습니까? 예. 또 다른 질문 있습니까?"
+        }
+      ],
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "evidence": "Compared currentnotecitation against actualSTTlinecontents; quotation/teachingclaim andPart match. No timestamps invented."
+    },
+    {
+      "topic": "s0-cm-half-recap",
+      "note_text": "“가장 중요한 이유가 뭐라고 그랬죠? 노이즈.” (1007 STT L7, Part 01; 시각 정보 없음)",
+      "source_excerpts": [
+        {
+          "first": 7,
+          "last": 7,
+          "actual_stt": "실제로는 이제 그래서 우리가 이 차동 증폭기는 어 왜 쓴다고 그랬죠? 가장 중요한 이유가 뭐라고 그랬죠? 노이즈. 그죠? 노이즈가 우리 앞에 이제 좀 보조된 설명 보시면 어 커먼 모드 노이즈를 이제 제거하는 거. 커먼 모드 노이즈."
+        }
+      ],
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "evidence": "Compared currentnotecitation against actualSTTlinecontents; quotation/teachingclaim andPart match. No timestamps invented."
+    },
+    {
+      "topic": "s0-cm-half-recap",
+      "note_text": "“커먼 모드 신호가 들어올 때는 여기를 그라운드로 할 수 없다” (1007 STT L35, Part 01; 시각 정보 없음)",
+      "source_excerpts": [
+        {
+          "first": 35,
+          "last": 35,
+          "actual_stt": "우리가 이제 차동 회로의 소신호 해석을 할 때는 여기를 노드 P가 어떻게 됩니까? 차동 신호가 입력될 때는? AC 그라운드가 되기 때문에 여기를 이제 하프 서킷이라고, 스몰 시그널 하프 서킷이 차동 신호일 때 여기가 그라운드가 되지만, 커먼 모드 신호가 들어올 때는 여기를 그라운드로 할 수 없다 그랬죠. 그죠? 어."
+        }
+      ],
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "evidence": "Compared currentnotecitation against actualSTTlinecontents; quotation/teachingclaim andPart match. No timestamps invented."
+    },
+    {
+      "topic": "s0-cm-noise",
+      "note_text": "교수님은 원하는 신호를 음악 신호에 빗대고, 외부 잡음은 두 입력에 같은 위상으로 함께 들어오는 경우로 설명했어요(1007 STT L83–89, Part 02; 시각 정보 없음). 각 출력에 남은 잡음과 최종 차동 출력에 남은 잡음을 구별해야 해요.",
+      "source_excerpts": [
+        {
+          "first": 83,
+          "last": 89,
+          "actual_stt": "자, 그러면 이걸 이제 조금 더 파형으로 좀 보면 여러분이 이해가 될 텐데. 실제로 우리가 이제 차동 증폭기에서는 우리가 원하는 신호가 있어요. 그 원하는 신호, 크기가 같고 위상이 반대인 신호. 이게 우리가 원하는 신호고, 원치 않는 신호도 있겠죠. 예를 들면 대표적인 노이즈 같은 거. 이게 커먼 모드 신호죠. 이게 아까 했던 커먼 모드 신호죠.\n\n물론 DC 레벨도 커먼 모드 신호에 포함되긴 하지만, 커먼 모드 레벨이라고 하죠, 그 DC는. 이제 우리가 보통 커먼 모드의 변화라고 하는 거는 DC 레벨의 변화를 나타내기보다는 이제 노이즈 같은 갑작스러운 잡음, 요거는 이제 이쪽과 노드 두 노드에 같이 들어가는 거죠.\n\n차동 신호는 두 개가 서로 위상이 크기가 같고 위상이 반대인 신호고. 그래서 이제 실제로 노드 A와 두 입력 노드를 찍어 보면, 내가 원하는 이렇게 깨끗한 신호도 있고, 예를 들어 음악 신호라면 음악 신호가 이렇게 차동으로 우리가 이제 일부러 차동으로 인가하는 거고, 여기에 실제로 외부에서 들어오는 이런 노이즈들도 있기 때문에 실제로는 이러한 노이즈가 같이 포함된 신호가 들어옵니다.\n\n근데 노이즈는 뭐 같은 위상의 신호를 가지고 같은 위상으로 들어오는 거죠. 근데 우리가 이상적인 테일 커런트 소스를 가정하면, 이상적인 테일 커런트 소스를 가정하면 전류가 변하지 않기 때문에, 여기가 전류가 변하지 않기 때문에"
+        }
+      ],
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "evidence": "Compared currentnotecitation against actualSTTlinecontents; quotation/teachingclaim andPart match. No timestamps invented."
+    },
+    {
+      "topic": "s0-cm-noise",
+      "note_text": "“MOSFET이나 BJT는 사실은 같아요.” (1007 STT L111, Part 03; 시각 정보 없음)",
+      "source_excerpts": [
+        {
+          "first": 111,
+          "last": 111,
+          "actual_stt": "그거고요. 근데 이제 그림은 조금 뭐 정확하게 표현되지 않았는데 실제로 노이즈가 이만큼 들어간다고 하더라도 출력에서는 노이즈가 굉장히 감소돼서 나오게 됩니다. 맞죠? RSS가 충분히 크기 때문에... 아 아 여기서 RE... 여기는 이제 BJT라서 테일 커런트 소스를 IEE라고 표현했고 그 저항을 RE라고 표현했습니다. MOSFET이나 BJT는 사실은 같아요. 책에는 이제 BJT 그림이 있어서 그걸 가져왔습니다."
+        }
+      ],
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "evidence": "Compared currentnotecitation against actualSTTlinecontents; quotation/teachingclaim andPart match. No timestamps invented."
+    },
+    {
+      "topic": "s1-mismatch",
+      "note_text": "테일 저항을 키우는 방법으로 캐스코드 전류원을 언급했어요. 무작위 $\\Delta R_D$를 독립 바이어스처럼 원하는 값으로 지정할 수 없다는 설명이며, 레이아웃과 매칭 설계의 효과를 부정하는 말은 아니에요. (1007 STT L182–186, Part 04; 시각 정보 없음)",
+      "source_excerpts": [
+        {
+          "first": 182,
+          "last": 186,
+          "actual_stt": "$R_{SS}$를... $R_{SS}$를 크게 설계한다. 네, 아주 큰 $R_{SS}$를 크게. 그래서 $R_{SS}$를 키우고, 그러기 위해서는 테일 커런트 소스를 어떤 방법이 있죠? 캐스코드 커런트 소스 같은 걸로 만드는 방법이 있고.\n\n물론 $\\Delta R_D$를 줄이는 것도 뭐 가... 여기서 뭐 뭐 식으로는 이제 $\\Delta R_D$를 줄이는 이것도 줄어들지만, $\\Delta R_D$는 설계자가 할 수 있는 게 아니에요. 그거는 공정에서 어 랜덤 미스매치에 의해 생기는 건데, 제조상에 이제 설계자가 할 수 있는 게 아니에요. 설계자가 할 수 있는 거는 $R_{SS}$를 키우는, 그렇죠?\n\n자, 그래서 이제 이게 차동 증폭에서 나온 이 요 커먼 모드 리젝션 특성 이해가 굉장히 중요합니다."
+        }
+      ],
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "evidence": "Compared currentnotecitation against actualSTTlinecontents; quotation/teachingclaim andPart match. No timestamps invented."
+    },
+    {
+      "topic": "s1-mismatch",
+      "note_text": "커먼 모드 리젝션 특성을 이상적인 값에 가깝도록 설계하는 게 굉장히 중요해요. (1007 STT L177, Part 04; 시각 정보 없음)",
+      "source_excerpts": [
+        {
+          "first": 177,
+          "last": 177,
+          "actual_stt": "그래서 좋은 차동 증폭기를 설계한다는 건 뭐냐면, 물론 증폭기에는 이득도 중요하지만, 차동 증폭기에서는 이 커먼 모드 리젝션 특성을 이상적인 값에 가깝도록 설계하는 게 굉장히 중요해요. 그것 때문에 차동 증폭기를 쓰는 거니까요. 그래서 이 CM-to-DM 게인은 0에 가깝게 만들면 좋은 거죠, 그렇죠? 0에 가깝게 만들면 좋은 겁니다."
+        }
+      ],
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "evidence": "Compared currentnotecitation against actualSTTlinecontents; quotation/teachingclaim andPart match. No timestamps invented."
+    },
+    {
+      "topic": "s1-cmrr",
+      "note_text": "교수님은 같은 크기의 입력 신호와 잡음을 넣었을 때 출력에서 원하는 것과 원치 않는 것의 상대적인 비라고 설명했어요. “SNR이 크다”는 직관을 빌린 설명이에요. CMRR은 전압 전달 이득의 비이며, 실제 신호와 잡음 입력의 크기나 잡음의 종류까지 정하는 지표는 아니에요. (1007 STT L212–214, Part 04; 시각 정보 없음)",
+      "source_excerpts": [
+        {
+          "first": 212,
+          "last": 214,
+          "actual_stt": "그러니까 요거는 이제 의미로 보면 출력에서의 상대적인 비를 나타낸 거죠. 내가 원하는 신호와 원하지 않는 신호의 상대적인 비.\n\n네, 같은 입력과 이제 노이즈가 갑자기 같- 같은 크기로 들어왔을 때 출력에서의 내가 원하는 신호와 원하지 않는 신호의 상대적인 크기의 비로 나- 를 비로 나타냈다고 보면 되고, 이게 이제 크면 클수록 좋은 거죠, 당연히. SNR이 크- 크다는 의미이기 때문에 그죠? 음."
+        }
+      ],
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "evidence": "Compared currentnotecitation against actualSTTlinecontents; quotation/teachingclaim andPart match. No timestamps invented."
+    },
+    {
+      "topic": "s1-cmrr",
+      "note_text": "차동 증폭기에서는 굉장히 중요한 개념이 되겠습니다. (1007 STT L228, Part 05; 시각 정보 없음)",
+      "source_excerpts": [
+        {
+          "first": 228,
+          "last": 228,
+          "actual_stt": "차동 증폭기에서는 굉장히 중요한 개념이 되겠습니다. 여러분들이 잘 이해를 하면 좋겠고요. 자, 질문 없습니까?"
+        }
+      ],
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "evidence": "Compared currentnotecitation against actualSTTlinecontents; quotation/teachingclaim andPart match. No timestamps invented."
+    },
+    {
+      "topic": "s1-cmrr",
+      "note_text": "교수님은 CM 이득, CM-to-DM 이득, CMRR을 구하고 CM 리젝션의 의미를 설명할 수 있어야 한다고 강조했어요. (1007 STT L483–485, Part 08; 시각 정보 없음)",
+      "source_excerpts": [
+        {
+          "first": 483,
+          "last": 485,
+          "actual_stt": "그다음에 커먼 모드 리젝션 특성의 개념.\n커먼 모드 리젝션이 뭔지, 그리고 CMRR이 뭔지, 그리고 커먼 모드 게인을 어떻게 잡는지.\n그래서 커먼 모드 게인을 구하시오, 커먼 투 디퍼렌셜 모드 게인을 구하시오, CMRR을 구하시오, 커먼 모드 리젝션의 의미를 설명하시오, 라고 하면 답을 할 수 있어야 됩니다, 그죠? 어."
+        }
+      ],
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "evidence": "Compared currentnotecitation against actualSTTlinecontents; quotation/teachingclaim andPart match. No timestamps invented."
+    },
+    {
+      "topic": "s2-single-ended",
+      "note_text": "(1007 STT L244, Part 05; 시각 정보 없음)",
+      "source_excerpts": [
+        {
+          "first": 244,
+          "last": 244,
+          "actual_stt": "근데 한쪽만 뽑으면 절반이 되는 거예요, 그죠? 그래서 이득도 절반이 되고 무엇보다도 뭐 이득이 문제가 아니라 이렇게 되면 커먼 모드 리젝션 특성이 굉장히 떨어지는 거예요, 그죠?"
+        }
+      ],
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "evidence": "Compared currentnotecitation against actualSTTlinecontents; quotation/teachingclaim andPart match. No timestamps invented."
+    },
+    {
+      "topic": "s2-mos-active",
+      "note_text": "(1007 STT L290, Part 06; 시각 정보 없음)",
+      "source_excerpts": [
+        {
+          "first": 290,
+          "last": 290,
+          "actual_stt": "M1의 출력의 전류의 변화가 커런트 미러에서 카피돼서 출력으로 전달되는 거죠. 근데 두 개가 상쇄되는 게 아니라 위상이 서로 반대이기 때문에 두 개가 더해지는 거죠. 그죠?"
+        }
+      ],
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "evidence": "Compared currentnotecitation against actualSTTlinecontents; quotation/teachingclaim andPart match. No timestamps invented."
+    },
+    {
+      "topic": "s2-mos-active",
+      "note_text": "(1007 STT L294, Part 06; 시각 정보 없음)",
+      "source_excerpts": [
+        {
+          "first": 294,
+          "last": 294,
+          "actual_stt": "근데 이거 완전 대칭인 회로는 아니에요, 기본적으로. 대칭 회로는 아니다. 왜냐면 이렇게 대칭으로 자를 수 없죠, 왜냐면 이 두 개가 대칭이 아니기 때문에."
+        }
+      ],
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "evidence": "Compared currentnotecitation against actualSTTlinecontents; quotation/teachingclaim andPart match. No timestamps invented."
+    },
+    {
+      "topic": "s2-mos-active",
+      "note_text": "M3만 다이오드 연결이에요. 대칭 반회로를 그대로 쓰지 말고 거울의 전류 전달과 출력 KCL을 연결해요. “중요한 부분입니다. 다시 한번 보세요.”라는 강조도 있었어요(1007 STT L379, Part 07; 시각 정보 없음).",
+      "source_excerpts": [
+        {
+          "first": 379,
+          "last": 379,
+          "actual_stt": "자. 좀 빠른가? 이해 이해가 돼요? 이해돼요? 어. 중요한 부분입니다. 다시 한번 보세요. 응."
+        }
+      ],
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "evidence": "Compared currentnotecitation against actualSTTlinecontents; quotation/teachingclaim andPart match. No timestamps invented."
+    },
+    {
+      "topic": "s2-bjt-active",
+      "note_text": "(1007 STT L381, Part 07; 시각 정보 없음)",
+      "source_excerpts": [
+        {
+          "first": 381,
+          "last": 381,
+          "actual_stt": "자 이제 BJT에서도 마찬가지로 이게 이제 어 디퍼렌셜 구조를 어 입력은 차동인데 어 출력에서 이제 싱글 엔디드 출력을 얻을 수 있습니다. 뭐 같은 사실 원리는 같기 때문에 뭐 다시 반복해서 좀 설명을 합니다."
+        }
+      ],
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "evidence": "Compared currentnotecitation against actualSTTlinecontents; quotation/teachingclaim andPart match. No timestamps invented."
+    },
+    {
+      "topic": "why-circuit",
+      "note_text": "가장 중요한 이유가 뭐라고 그랬죠? 노이즈. (1007 STT L7, Part 01; 시각 정보 없음)",
+      "source_excerpts": [
+        {
+          "first": 7,
+          "last": 7,
+          "actual_stt": "실제로는 이제 그래서 우리가 이 차동 증폭기는 어 왜 쓴다고 그랬죠? 가장 중요한 이유가 뭐라고 그랬죠? 노이즈. 그죠? 노이즈가 우리 앞에 이제 좀 보조된 설명 보시면 어 커먼 모드 노이즈를 이제 제거하는 거. 커먼 모드 노이즈."
+        }
+      ],
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "evidence": "Compared currentnotecitation against actualSTTlinecontents; quotation/teachingclaim andPart match. No timestamps invented."
+    },
+    {
+      "topic": "why-circuit",
+      "note_text": "커먼 모드 리젝션 특성을 이상적인 값에 가깝도록 설계하는 게 굉장히 중요해요. (1007 STT L177, Part 04; 시각 정보 없음)",
+      "source_excerpts": [
+        {
+          "first": 177,
+          "last": 177,
+          "actual_stt": "그래서 좋은 차동 증폭기를 설계한다는 건 뭐냐면, 물론 증폭기에는 이득도 중요하지만, 차동 증폭기에서는 이 커먼 모드 리젝션 특성을 이상적인 값에 가깝도록 설계하는 게 굉장히 중요해요. 그것 때문에 차동 증폭기를 쓰는 거니까요. 그래서 이 CM-to-DM 게인은 0에 가깝게 만들면 좋은 거죠, 그렇죠? 0에 가깝게 만들면 좋은 겁니다."
+        }
+      ],
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "evidence": "Compared currentnotecitation against actualSTTlinecontents; quotation/teachingclaim andPart match. No timestamps invented."
+    },
+    {
+      "topic": "why-circuit",
+      "note_text": "교수님은 CM-to-DM 누출을 줄이면서 원하는 차동 이득도 확보해야 하므로 CMRR로 비교한다고 설명했어요. 한쪽 취출의 잡음 상쇄 손실을 지적한 뒤에는, 테일 저항이 크면 그 한쪽 CM 이득도 작다는 점을 덧붙였어요. (1007 STT L188–214, Part 04; L236–250, Part 05; 시각 정보 없음)",
+      "source_excerpts": [
+        {
+          "first": 188,
+          "last": 214,
+          "actual_stt": "\n자, 그래서 이제 CM to DM 게인을 낮추는 것도 낮추는 것도 이제 굉장히 중요한 이슈고, 근데 이제 CM to DM 게인만으로는 이제 어 성능을 표현하지 않고 우리가 이제 차동 증폭기에서는 또 차동 증폭 이득도 큰 걸, 크기를 원하기 때문에 우리가 이제 앞에서 얘기했던 Common-Mode to Differential-Mode gain을 아까 이제 정의를 했었는데 요것도 물론 중요하고요.\n그리고 이제 아까 얘기했듯이 커먼 모드 입력에 대해서, 입력 커먼 모드 레벨에 대해서 차동 출력이...\n\n나와 있고, 그리고 자 식이 다시 한번 정리하면 어 두 배 RSS 플러스 gm분의 1 분의 델타 RD. 요거는 이제 일반적으로, 일반적으로 두 배 RSS가 gm분의 1보다 훨씬 크면은 대략 요렇게 볼 수 있습니다. 그러니까 이렇게 테일 커런트 소스의 저항, 그러니까 출력 저항을 키우는 게 유리하고요.\n\n자, 근데 이제 일반적으로 차동 증폭기의 성능을 표현할 때는 요 ACM-DM을 그대로 쓰는 게 아니라 뭘로 정의하느냐면 CMRR이라고 하는 걸 정의하게 됩니다. CMRR이고요. 요거는 이제 어 뭐의 줄임말이냐면 Common-Mode Rejection Ratio라고 하는 거로 정의되는 거고, 요거 이제 앞 글자를 따서 CMRR이라고 부르는 거고요.\n\n차동 증폭기에는 CMRR이 얼마다라고 나와 있습니다, 모든 증폭기에는. 그러니까 ACM-DM이 얼마다 이렇게 나와 있지 않고, CMRR이 얼마다라고 돼 있는데 요거는 어 별건 아니고, 요거는 정의가 어떻게 되냐면 우리 앞에서 얘기했듯이 이게 작으면 좋은 특성이긴 한데 차동 증폭기 이득도 또 또한 중요하잖아요, 그죠?\n\n이 두 가지를 같이 고려해서 차동 증폭기 이득을 A_diff라고 하고, 요거 이제 AD는 딴 서적에는 그냥 우리가 알고 있는 차동 증폭기 이득 Av라고, 그 차동 증폭기 이득, 전압 이득이라고 봐도 되겠고요. 걔를 ACM-DM으로 나눈 값입니다.\n\n즉, 요거 요거는 우리가 차동 증폭기 이득으로 원하는 신호의 이득을 나타내는 거고, 원하는 신호의 이득. 어. 요거는 원하지 않는 신호의 이득이죠, 그죠? 어. 그러니까 요거는 크면 클수록 좋은 거고, 요거는 0에 가까우면, 0에 가까울수록 좋은 겁니다.\n\n그래서 이상적으로 CMRR이 아이디얼하게는 무한대가 되는 거죠, 그죠? 무한대. 이게 0이고, 이건 크면 클수록 좋은 건데 이득은 이제 클수록 좋은 건데, 클수록. 예, 클수록 좋은 건데 왜냐하면 분모, 분자는 이제 원하는 신호에 대한 이득의 크기, 분자는 크면 클수록...\n\n총.. 2번 작은 자습... 요거는 이제 어 전압 이득과 차동 증폭기의 전압 이득과 커먼 모드 디퍼렌셜 모드 게인을 같이 구해서 이렇게 지표로 보면 되겠고요. 앞에서 식이 이제 차동 증폭기의 이득은 우리가 이제 gm과 RD 곱으로 나타나죠. 요- 기본적인 것에서.\n\n그다음에 이제 어 핵심 포인트 2번은... 그다음에... 그래서 이렇게 되고, 이제 요거를 조금 더 확장해서 해보면...\n\n요런 식으로 정리할 수가 있어요. 음. 뭐 복잡하지는 않-않을 것 같아요.\n\n질문 있습니까? 이거 띄워놓고 하지 왜 안 띄워놓고... 그래서 이제 요거는 이제 우리가 공정에서 반도체의 공정별로 델타 RD는 이제 차이가 날 수 있는데, 어쨌든 설계자가 델타 RD를 줄이는 것도 이제 중요하지만 요 RSS 요거를 키워야지 CMRR이 증가하겠습니다. 네.\n\n그러니까 요거는 이제 의미로 보면 출력에서의 상대적인 비를 나타낸 거죠. 내가 원하는 신호와 원하지 않는 신호의 상대적인 비.\n\n네, 같은 입력과 이제 노이즈가 갑자기 같- 같은 크기로 들어왔을 때 출력에서의 내가 원하는 신호와 원하지 않는 신호의 상대적인 크기의 비로 나- 를 비로 나타냈다고 보면 되고, 이게 이제 크면 클수록 좋은 거죠, 당연히. SNR이 크- 크다는 의미이기 때문에 그죠? 음."
+        },
+        {
+          "first": 236,
+          "last": 250,
+          "actual_stt": "자 그런데, 그런데 우리가 이제 앞에서도 이런 디퍼렌셜 페어에서 이걸 차동 회로를 싱글 엔디드로 바꿀 수 있는 가장 그냥 쉬운 방법은 출력에 하나만 이렇게 출력을 취하면 취하면 되겠죠, 그죠? 그런데 이 구조는 안 쓰겠죠? 왜 안 쓸까요?\n\n굳이 차동으로 만들어서 한쪽으로 뽑으면... 어우, 노이즈 제거가 안 되잖아요. 우리가 원하는 커먼 모드 리젝션 특성이 안 나오는 거잖아요, 그죠?\n\n노이즈 신호가 어쨌든 이거는 이제, 그리고 이득도 어떻게 돼요? 이득도 절반으로 떨어져요. 왜냐면 우리가 여기에서의 이득 차이가 크기가 2배가 돼서 차동 출력에 출력이 2배가 된 거죠.\n\n그렇다고 해서 이득이 2배가 된 게 아니라 입력도 2배니까 사실 출력이 2배가 된 거예요. 입력도 각각 차동 신호가 들어가기 때문에 이제 입력도 2배 출력도 2배이기 때문에 약간 하프 서킷에서의 이득과 같죠, 그죠?\n\n근데 한쪽만 뽑으면 절반이 되는 거예요, 그죠? 그래서 이득도 절반이 되고 무엇보다도 뭐 이득이 문제가 아니라 이렇게 되면 커먼 모드 리젝션 특성이 굉장히 떨어지는 거예요, 그죠?\n\n물론 이제 여기서 커먼 모드 리젝션 특성이 완전히 없어진다고 볼 수는 없죠. 왜냐하면 이제 실제로 커먼 모드 특성이 차동 구조의, 그러니까 싱글 엔디드 구조에 비해서는 훨씬 더 좋죠. 한쪽만 취하더라도, 한쪽만 취하더라도 커먼 모드 게인이 굉장히 작죠.\n\n커먼 모드 게인이 0은 아니지만 굉장히 작은 값, 다시 가볼까요? 커먼 모드 투 디퍼렌셜 모드 게인은 실제로 차동 출력으로 나온 거지만 커먼 모드 게인을 우리가 앞에서...\n\n자, 요것도 사실은 이제 커먼 모드 게인도 실은 요렇게 나타나기 때문에 상당히 1보다 훨씬 더 작은 값입니다. 그래서 어 한쪽만 취하더라도 사실 노이즈가 상당히 줄어들긴 하지만 차이를 취하는 것보다 훨씬 크죠, 그죠?"
+        }
+      ],
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "evidence": "Compared currentnotecitation against actualSTTlinecontents; quotation/teachingclaim andPart match. No timestamps invented."
+    },
+    {
+      "topic": "why-circuit",
+      "note_text": "커런트 미러에서 전류의 변화를 카피해서 출력으로 전달하는 역할을 하는 거죠. (1007 STT L296, Part 06; 시각 정보 없음)",
+      "source_excerpts": [
+        {
+          "first": 296,
+          "last": 296,
+          "actual_stt": "대칭 회로는 아닌데 이 커런트 미러에서 전류의 변화를 카피해서 출력으로 전달하는 역할을 하는 거죠. 전달하는 역할을 하는 거죠."
+        }
+      ],
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "evidence": "Compared currentnotecitation against actualSTTlinecontents; quotation/teachingclaim andPart match. No timestamps invented."
+    },
+    {
+      "topic": "why-circuit",
+      "note_text": "이거는 사실은 굉장히 많이 쓰는 구조예요. (1007 STT L369, Part 06; 시각 정보 없음)",
+      "source_excerpts": [
+        {
+          "first": 369,
+          "last": 369,
+          "actual_stt": "어, 이거는 사실은 굉장히 많이 쓰는 구조예요."
+        }
+      ],
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "evidence": "Compared currentnotecitation against actualSTTlinecontents; quotation/teachingclaim andPart match. No timestamps invented."
+    },
+    {
+      "topic": "why-circuit",
+      "note_text": "op-amp의 차동 입력과 한 개의 출력을 실제 쓰임으로 들었어요. 차동 구조의 대가로 전류와 차동 신호 생성도 언급했어요. 강의의 “전류가 2배”는 두 가지를 구성하는 비교의 설명이며, 서로 다른 모든 증폭기 설계가 정확히 같은 전력비를 갖는다는 법칙은 아니에요. (1007 STT L230, Part 05; L369–377, Part 06–07; 시각 정보 없음)",
+      "source_excerpts": [
+        {
+          "first": 230,
+          "last": 230,
+          "actual_stt": "자, 어 그래서 이제 어 어쨌든 차동 증폭기 여기에 나와 있는 것 같이 노이즈는 최대한 제거하고, 내가 원하는 신호만 크게 증폭을 하는, 이게 이제 가장 기본적인 차동 증폭기의 장점이 되겠죠. 물론 단점은 전류가 2배로 쓰이고, 그죠? 또 차동 신호를 만들어야 되는 단점이 있습니다, 음."
+        },
+        {
+          "first": 369,
+          "last": 377,
+          "actual_stt": "어, 이거는 사실은 굉장히 많이 쓰는 구조예요.\n여러분들이 이제 op-amp도, op-amp도 차동 입력, 싱글 출력을 가진 op-amp잖아요, 그죠?\n여러분들 기존에 이렇게 이거 많이 배우지 않았어요? 피드백에서 뭐 저항 피드백에서 앰프를 만들고 이렇게, 그냥 연결하면 유니티 게인이 되게 되는 거.\n\n## Part 07\n\n차동으로 해도 되지만, 차동으로 구현해도 돼요. 어. 근데 이제 싱글 엔디드로 어 구현해도 됩니다.\n\n자. 이게 싱글 엔디드 구조로 구현하는 대표적인 방법이 되겠어요. 출력에서 싱글 엔디드 출력하는 대표적인 방법."
+        }
+      ],
+      "status": "pass",
+      "reviewer": "/root/author_retained",
+      "evidence": "Compared currentnotecitation against actualSTTlinecontents; quotation/teachingclaim andPart match. No timestamps invented."
+    }
+  ]
+}

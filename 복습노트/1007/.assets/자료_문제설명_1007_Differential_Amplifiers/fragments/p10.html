@@ -1,74 +1,80 @@
 <div class="layer eli5" data-explanation="understand">
 <h4>문제를 읽어요</h4>
-<p>원 그림에서 아래 $Q_1,Q_2$는 NPN 입력쌍이고, 위 $Q_3,Q_4$는 PNP 전류 거울(current mirror)이에요. $Q_3$만 베이스–컬렉터를 연결하고, 출력은 오른쪽 $Q_2,Q_4$ 컬렉터의 공통 노드에서 읽어요. 입력은 $v_{id}=v_{in1}-v_{in2}$로 정의해요.</p>
-<p>구할 것은 전류가 아니라 PNP의 Early 전압 크기 $V_{A,p}$예요. 원문은 열전압 $V_T$를 지정하지 않았으므로 <strong>수업값 $V_T=26\,\mathrm{mV}$를 가정</strong>해요. 짝이 맞는 입력쌍과 1:1 거울, 큰 $\beta$, 각 소자의 $g_mr_O\gg1$, 순방향 활성 영역의 저주파 소신호 근사를 사용해요. 외부 부하 저항은 연결하지 않아요.</p>
+<p>왼쪽 $I_1$은 전류를 아래로 빼내고, 위쪽 PMOS 거울은 그만큼을 공급해요. 작은 변화 $i_1$도 원 그림의 아래 방향을 양으로 잡아요. $M_3$의 게이트·드레인과 $M_4$의 게이트가 만나는 전압을 $v_g$라 부를게요.</p>
+<p>왼쪽에서 더 빼내면 $v_g$가 내려가고, 두 PMOS의 소스–게이트 전압이 커져요. 그러면 오른쪽 $M_4$도 더 공급하고 $R_L$의 전압이 올라가요. 구할 것은 전압/전류인 <strong>트랜스임피던스(transimpedance)</strong>이며 단위는 Ω예요. 두 소자가 포화 상태인 바이어스점 근처의 저주파 작은 변화를 해석해요.</p>
 </div>
 <div class="layer formal" data-explanation="recall">
 <h4>이 개념과 공식을 떠올려요</h4>
-<p>“전류 거울 부하”와 “Early 전압으로 이득 설계”라는 단서에서 <a href="정리노트_1007_Differential_Amplifiers.html#s2-bjt-active">BJT 능동 부하(active load)</a>의 알려진 블록식을 떠올려요. $g_m$은 입력 소자 하나의 전압–전류 변환율이고, $G_m$은 두 입력과 거울 전체의 변환율이에요. 큰 $\beta$로 베이스 전류 오차를 무시하면 거울이 한쪽 신호를 복사해 $G_m\approx g_m$이 돼요.</p>
-<p>$G_m$은 출력을 접지로 단락한 상태에서 출력으로 공급되는 신호 전류를 입력 차전압으로 나눈 값이에요. 반면 $R_{out}$은 두 입력을 영점으로 놓고 출력에 시험원을 연결해서 보는 저항이에요. 이 문제는 두 값을 새로 측정·유도하지 않고, 조건을 확인한 주도항 블록식을 적용해요.</p>
-<div class="equation">$$G_m\approx g_m$$</div>
-<div class="equation">$$R_{out}\approx r_{O2}\parallel r_{O4}$$</div>
-<p>$r_{O2}$는 NPN 출력저항, $r_{O4}$는 PNP 출력저항이에요. 두 Early 전압을 각각 저항으로 바꿔 병렬 합성하면 목표 이득에서 미지의 $V_{A,p}$를 역산할 수 있어요.</p>
+<p>게이트끼리 연결되고 소스끼리 연결된 두 PMOS라는 단서에서 전류 거울(current mirror)을 떠올려요. 같은 공정의 두 소자는 같은 $V_{SG}$와 문턱전압 크기를 가져 과구동 전압 $V_{OV}=V_{SG}-|V_{TH}|$가 같아요. 포화 영역에서 전류는 $(W/L)$에 비례해요.</p>
+<div class="equation">$$I_D=\frac12\mu_p C_{ox}\frac WL V_{OV}^2$$</div>
+<p>$g_m$은 소스–드레인 전류 크기가 $V_{SG}$에 따라 변하는 기울기이며 양수로 정의해요.</p>
+<div class="equation">$$g_m=\frac{2I_D}{V_{OV}}=\mu_p C_{ox}\frac WL V_{OV}$$</div>
+<p>다이오드 연결 $M_3$는 소신호에서 $1/g_{m3}$로 바꿀 수 있어요. 채널 길이 변조를 무시하므로 두 소자의 $r_o$는 무한대예요. 이 문제는 전압 입력의 $-G_mR_{out}$ 공식을 적용하기보다, 입력 전류 → 게이트 전압 → 복사 전류 → 부하 전압 순서로 풀면 부호까지 드러나요. 수업의 <a href="정리노트_1007_Differential_Amplifiers.html#s2-mos-active">MOS 능동 부하의 전류 복사</a>와 같은 원리예요.</p>
 </div>
 <div class="layer formal" data-explanation="start">
 <h4>종이에 쓸 첫 줄</h4>
-<p>먼저 부호를 정해요. 왼쪽 입력을 올리고 오른쪽 입력을 내리면 $Q_1$ 전류는 늘고 $Q_2$ 전류는 줄어요. $Q_3,Q_4$ 거울을 통해 위에서 공급하는 전류도 늘기 때문에 오른쪽 출력은 올라가요. 따라서 이 입력 정의의 전압이득은 양수예요.</p>
-<div data-answer-step="입출력 정의와 능동 부하 블록식">
-<p>$v_{id}=v_{in1}-v_{in2}$, 오른쪽 무부하 출력이에요. 큰 $\beta$, $g_mr_O\gg1$에서 $G_m\approx g_m$, $R_{out}\approx r_{O2}\parallel r_{O4}$를 사용해요. $V_T=26\,\mathrm{mV}=0.026\,\mathrm V$는 수업 가정이에요.</p>
-<div class="equation">$$A_v=\frac{v_{out}}{v_{id}}\approx+G_mR_{out}\approx+g_m(r_{O2}\parallel r_{O4})$$</div>
+<p>DC 전원 $V_{DD}$를 AC 접지로 보내면 PMOS 소스의 소신호 전압은 0이에요. 따라서 $v_{sg3}=v_{sg4}=-v_g$이고, $v_g$가 조금 내려갈수록 PMOS 공급 전류는 늘어요. 게이트 전류는 0이므로 $M_3$의 공급 변화와 입력 흡수 변화가 같아야 해요.</p>
+<div data-answer-step="입력 흡수 방향과 부하를 보존한 소신호 회로" data-answer-subpart="main">
+<figure class="figure"><svg viewBox="0 0 500 240" role="img" aria-label="왼쪽 vg 노드에서 i1 전류원과 다이오드 등가저항 1/gm3가 접지로 연결된다. 오른쪽 출력에는 접지에서 위로 공급하는 종속 전류원 -gm4 vg와 RL이 병렬이며 출력 단자는 맨 오른쪽이다.">
+<path class="fig-ink" d="M55 65 H180 M55 65 V110 M55 146 V195 M180 65 V95 l7 4 -14 8 14 8 -14 8 14 8 -7 4 V195 M55 195 H180 M118 195 V208 M108 208 H128 M112 213 H124 M116 218 H120" fill="none"/>
+<circle class="fig-ink" cx="55" cy="128" r="18" fill="none"/>
+<path class="fig-ink" d="M55 117 V139 M50 133 L55 139 60 133" fill="none"/>
+<text class="fig-text fig-math" x="22" y="132" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">i</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">1</tspan></text><text class="fig-text fig-math" x="192" y="122" font-family="Pretendard" font-weight="600" font-style="normal">1/<tspan font-family="Pretendard" font-weight="600" font-style="normal">g</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">m3</tspan></text>
+<circle class="fig-dot" data-node="g" data-node-color="blue" fill="#2563eb" stroke="#2563eb" cx="55" cy="65" r="3.5"/>
+<circle class="fig-dot" data-node="g" data-node-color="blue" fill="#2563eb" stroke="#2563eb" cx="180" cy="65" r="3.5"/>
+<text class="fig-text fig-math" data-node="g" data-node-color="blue" fill="#2563eb" stroke="none" x="91" y="51" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">v</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">g</tspan> (+)</text>
+<path class="fig-ink" d="M300 65 H470 M300 65 V108 M300 148 V195 H400 M400 65 V95 l7 4 -14 8 14 8 -14 8 14 8 -7 4 V195 M350 195 V208 M340 208 H360 M344 213 H356 M348 218 H352" fill="none"/>
+<polygon class="fig-ink" points="300,108 316,128 300,148 284,128" fill="none"/>
+<path class="fig-ink" d="M300 139 V117 M295 123 L300 117 305 123" fill="none"/>
+<text class="fig-text fig-math" x="270" y="165" text-anchor="end" font-family="Pretendard" font-weight="600" font-style="normal">−<tspan font-family="Pretendard" font-weight="600" font-style="normal">g</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">m4</tspan><tspan font-family="Pretendard" font-weight="600" font-style="normal">v</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">g</tspan></text><text class="fig-text fig-math" x="413" y="122" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">R</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">L</tspan></text>
+<circle class="fig-dot" data-node="out" data-node-color="red" fill="#dc2626" stroke="#dc2626" cx="300" cy="65" r="3.5"/>
+<circle class="fig-dot" data-node="out" data-node-color="red" fill="#dc2626" stroke="#dc2626" cx="400" cy="65" r="3.5"/>
+<circle class="fig-dot" data-node="out" data-node-color="red" fill="#dc2626" stroke="#dc2626" cx="470" cy="65" r="3.5"/>
+<text class="fig-text fig-math" data-node="out" data-node-color="red" fill="#dc2626" stroke="none" x="404" y="49" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">v</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">out</tspan> (+)</text>
+<circle cx="118" cy="195" r="3" fill="currentColor" data-ground-branch="true"/><circle cx="350" cy="195" r="3" fill="currentColor" data-ground-branch="true"/></svg><figcaption>$V_{DD}$는 AC 접지예요. $M_3$는 다이오드 등가저항, $M_4$는 $v_g$로 제어되는 공급 전류원으로 바꿨어요. $\lambda=0$이므로 $r_{o3},r_{o4}$ 가지는 없고, 실제 부하 $R_L$은 남겨요. 두 신호 노드는 게이트의 제어 관계로 연결되며 도선으로 단락되지 않아요.</figcaption></figure>
+<p>$v_g$ 노드에서 아래로 나가는 전류는 전류원의 $i_1$과 저항의 $g_{m3}v_g$예요. 두 전류를 더해 0으로 놓아요.</p>
+<div class="equation">$$i_1+g_{m3}v_g=0$$</div>
+<div class="equation">$$v_g=-\frac{i_1}{g_{m3}}$$</div>
 </div>
-<p>출력에 공급하는 전류를 양으로 잡았으므로 $+G_mR_{out}$이에요. 전류를 출력에서 빼내는 방향으로 정의한 공식의 마이너스를 그대로 옮기지 않아요. 여기서는 알려진 블록식을 이용하므로 소신호 노드의 KCL이나 시험원 회로를 새로 전개하지 않아요.</p>
 </div>
 <div class="layer formal" data-explanation="solve">
 <h4>이렇게 풀어요</h4>
 <div data-subpart="main">
-<p>먼저 소자별 중간값을 같은 가지 전류로 표현해요. 큰 $\beta$에서 각 컬렉터의 DC 전류를 $I_C\approx I_{EE}/2$로 놓아요. $I_C$를 mA, $V_T,V_A$를 V로 쓰면 $g_m$은 mS, $r_O$는 kΩ가 되어 곱이 무차원이에요.</p>
-<div data-answer-step="중간값과 전류 소거">
-<div class="equation">$$g_m=\frac{I_C}{V_T}$$</div>
-<div class="equation">$$r_{O2}=\frac{V_{A,n}}{I_C}$$</div>
-<div class="equation">$$r_{O4}=\frac{V_{A,p}}{I_C}$$</div>
-<p>병렬저항의 역수는 가지별 역수의 합이므로 이득의 역수로 바꾸어요.</p>
-<div class="equation">$$\frac{1}{|A_v|}\approx\frac{1}{g_mr_{O2}}+\frac{1}{g_mr_{O4}}$$</div>
-<div class="equation">$$g_mr_{O2}=\frac{I_C}{V_T}\frac{V_{A,n}}{I_C}=\frac{V_{A,n}}{V_T}$$</div>
-<div class="equation">$$g_mr_{O4}=\frac{I_C}{V_T}\frac{V_{A,p}}{I_C}=\frac{V_{A,p}}{V_T}$$</div>
-<div class="equation">$$\frac{1}{|A_v|}\approx\frac{V_T}{V_{A,n}}+\frac{V_T}{V_{A,p}}$$</div>
+<p>먼저 미러의 전류비를 구해요. 같은 $V_{OV}$에서 크기가 $1/N$인 $M_4$는 DC 전류도 $1/N$만 흘려요. 여기서 $I_{D3},I_{D4}$는 PMOS 전류의 양의 크기예요.</p>
+<div data-answer-step="같은 과구동 전압에서 전류비와 gm비">
+<div class="equation">$$\frac{I_{D4}}{I_{D3}}=\frac{(W/L)_4}{(W/L)_3}=\frac1N$$</div>
+<div class="equation">$$\frac{g_{m4}}{g_{m3}}=\frac{2I_{D4}/V_{OV}}{2I_{D3}/V_{OV}}=\frac1N$$</div>
 </div>
-<p>전류를 높이면 $g_m$은 커지지만 두 $r_O$는 같은 비율로 작아져요. 그래서 이 모델의 이득에서는 $I_C$가 소거돼요. 전류값이 원문에 없어도 Early 전압을 구할 수 있는 이유예요.</p>
-<div data-answer-step="목표 이득에서 PNP Early 전압 역산">
-<p>주도항 설계식에 목표 크기 100과 $V_{A,n}=5\,\mathrm V$를 넣고 PNP 항만 남겨요.</p>
-<div class="equation">$$\frac{0.026\,\mathrm V}{V_{A,p}}=\frac{1}{100}-\frac{0.026\,\mathrm V}{5\,\mathrm V}=4.8\times10^{-3}$$</div>
-<div class="equation">$$V_{A,p}=\frac{0.026\,\mathrm V}{4.8\times10^{-3}}=\frac{65}{12}\,\mathrm V\approx5.42\,\mathrm V$$</div>
+<p>제곱근 식 $g_m=\sqrt{2\mu_p C_{ox}(W/L)I_D}$를 써도 크기비와 전류비가 각각 $1/N$이므로 $\sqrt{(1/N)(1/N)}=1/N$이에요. 전류를 고정한 채 폭만 바꾼 상황과 달라요.</p>
+<div data-answer-step="복사 공급 전류와 실제 부하의 출력 KCL">
+<p>$M_4$가 출력으로 공급하는 소신호 전류를 $i_4$라 두면 다음과 같아요.</p>
+<div class="equation">$$i_4=g_{m4}v_{sg4}=-g_{m4}v_g=\frac{g_{m4}}{g_{m3}}i_1=\frac{i_1}{N}$$</div>
+<p>출력 노드에서 $R_L$로 나가는 전류와 위로부터 들어오는 $i_4$가 같아요. 출력은 단락하지 않고 $R_L$에 걸린 전압을 구해요.</p>
+<div class="equation">$$\frac{v_{out}}{R_L}-i_4=0$$</div>
+<div class="equation">$$v_{out}=\frac{R_L}{N}i_1$$</div>
 </div>
-<p>차이 $4.8\times10^{-3}$은 양수이므로 양의 Early 전압 크기로 실현할 수 있어요. 이 값을 0으로 둬 버리면 필요한 PNP 출력저항을 무한대로 만드는 다른 설계가 돼요.</p>
 </div>
 </div>
 <div class="layer formal" data-explanation="verify">
 <h4>완성 답과 검산</h4>
 <div data-subpart="main">
-<div data-answer-final><p><strong>필요한 PNP Early 전압 크기는 $V_{A,p}=65/12\,\mathrm V\approx5.42\,\mathrm V$예요.</strong> $V_T=26\,\mathrm{mV}$, 큰 $\beta$, $g_mr_O\gg1$인 주도항 설계에서 $A_v\approx+100$이에요.</p></div>
-<p><strong>목표에 역대입해요.</strong> 반올림 전 분수로 확인하면 이득 크기가 100으로 돌아와요.</p>
-<div class="equation">$$\frac{0.026}{5}+\frac{0.026}{65/12}=0.0052+0.0048=0.01$$</div>
-<div class="equation">$$|A_v|\approx\frac{1}{0.01}=100$$</div>
-<p><strong>근사와 단위를 확인해요.</strong> Early 전압과 열전압의 비는 무차원이고 두 소자 모두 큰 고유 이득을 가져요.</p>
-<div class="equation">$$g_mr_{O2}=\frac{5}{0.026}\approx192.31$$</div>
-<div class="equation">$$g_mr_{O4}=\frac{65/12}{0.026}\approx208.33$$</div>
-<p><strong>PNP를 아무리 좋게 만들어도 NPN 한계가 남아요.</strong> $V_{A,p}\to\infty$이면 아래 NPN의 출력저항만 이득을 제한해요.</p>
-<div class="equation">$$|A_v|_{\mathrm{limit}}\approx\frac{V_{A,n}}{V_T}=\frac{5}{0.026}\approx192.31$$</div>
-<p>목표 100은 이 한계보다 작아요. $V_{A,p}$를 5.42 V보다 높이면 같은 주도항 모델에서 이득은 100보다 커지지만 이 한계를 넘지는 못해요. $v_{id}>0$일 때 오른쪽 출력이 올라가므로 부호도 $+$예요. 두 Early 전압이 같아지는 특수값에서는 병렬저항이 한 소자 저항의 절반이 되는 결과와 일치해요.</p>
+<div data-answer-final><p><strong>아래 방향 입력 전류 $i_1$에 대한 트랜스임피던스는 양수예요.</strong></p><div class="equation">$$\boxed{\frac{v_{out}}{i_1}=+\frac{R_L}{N}\quad[\Omega]}$$</div><p>두 PMOS의 포화 동작·작은 신호·채널 길이 변조 무시와 실제 부하 $R_L$ 조건에서의 결과예요.</p></div>
+<p><strong>부호:</strong> $i_1$ 증가 → $v_g$ 감소 → $V_{SG4}$ 증가 → $M_4$ 공급 증가 → $v_{out}$ 상승이므로 +예요. <strong>단위:</strong> V/A=Ω이고 $N$은 무차원이라 $R_L/N$과 맞아요.</p>
+<p><strong>비율 검산:</strong> $N=1$이면 입력 전류가 그대로 복사되어 이득은 $R_L$이에요. 같은 $R_L$에서 $N$을 두 배로 하면 복사 전류와 이득은 절반이 돼요. $R_L\to0$이면 출력도 0으로 가요. $R_L$을 무한히 키우는 극한은 DC 출력 전압과 포화 여유를 함께 확인해야 하므로 실제 무한 이득을 뜻하지 않아요.</p>
 </div>
 </div>
 <div class="layer warn" data-explanation="pitfall">
 <h4>주의할 점</h4>
-<ul><li>단일 출력이라고 $g_m/2$를 쓰면 거울이 복사하는 신호를 빠뜨려요. 여기서는 두 경로가 합쳐져 $G_m\approx g_m$이에요.</li><li>$r_{\pi2}$는 베이스–이미터 사이예요. 출력 컬렉터와 AC 접지 사이의 $r_{O4}$에 직접 병렬로 붙이지 않아요.</li><li>$V_{A,p}$는 PNP의 Early 전압 <strong>크기</strong>예요. 소자 극성이 PNP라고 음수 답을 만들지 않아요.</li><li>26 mV는 원문의 주어진 값이 아니에요. 온도에 따라 $V_T$가 달라지면 요구되는 Early 전압도 달라져요. 전류 독립성 역시 위 주도항 모델 안에서의 결론이에요.</li><li>$Q_3$만 다이오드 연결이므로 전체를 완전히 대칭인 두 반회로로 잘라 출력 신호를 버리면 안 돼요.</li></ul>
+<p>$g_{m4}/g_{m3}=1/\sqrt N$으로 쓰면 안 돼요. 그 배율은 전류를 고정했을 때 폭만 바꾸는 경우예요. 여기서는 공통 게이트·소스가 $V_{OV}$를 같게 만들고 전류비도 $1/N$으로 바꿔요.</p>
+<p>PMOS라는 이유만으로 음의 이득을 붙이지 않아요. 입력은 아래로 흡수하는 방향이고 출력은 접지 기준 전압이에요. 또한 $\lambda=0$은 $M_4$가 꺼진다는 뜻이 아니라 출력 전압에 따른 전류 변화가 없다는 뜻이에요. $R_L$에는 여전히 복사 전류가 흘러요.</p>
 </div>
 <div class="layer eli5" data-explanation="retry">
 <h4>조건을 바꾸어 생각해요</h4>
-<ol><li>$V_A$와 $V_T$를 고정하고 모든 가지 전류를 두 배로 하면 이득도 두 배일까요? <strong>아니에요.</strong> $g_m$은 두 배, 두 $r_O$는 절반이므로 병렬 합성 저항도 절반이고 곱은 같아요.</li><li>$V_{A,n}=5\,\mathrm V$, $V_T=26\,\mathrm{mV}$를 유지하며 이득 200을 요구하면 가능한가요? <strong>이 주도항 모델에서 양의 유한 $V_{A,p}$로는 불가능해요.</strong> NPN 한계 192.31보다 큰 목표이고, $1/200-0.026/5&lt;0$이 돼요.</li><li>수업 가정 대신 $V_T=25\,\mathrm{mV}$라면 목표 100에 필요한 값은 무엇일까요? <strong>$V_{A,p}=5\,\mathrm V$예요.</strong> $1/100-0.025/5=0.005$이므로 $0.025/0.005=5\,\mathrm V$예요.</li></ol>
+<ul><li><p><strong>질문:</strong> $M_4$의 크기는 그대로 두고 $M_3$의 $(W/L)$만 두 배로 늘리며 DC 입력 전류 $I_1$과 $R_L$을 유지하면, 새 소신호 이득은 몇 배가 될까요? 두 소자는 계속 포화 상태라고 해요.</p>
+<p><strong>답과 이유:</strong> 절반이에요. 새 $V_{OV}$는 달라져도 두 PMOS 사이에서는 여전히 같아요. 크기비를 뜻하는 $N$이 $2N$이 되어 복사 전류는 $i_1/(2N)$, 이득은 $R_L/(2N)$이 돼요. 개별 $g_m$의 변화만 보고 결론을 내리기보다 두 소자의 비를 구해요.</p></li></ul>
 </div>
 <div class="sum" hidden>
-<div class="summary-group"><h4>떠올릴 개념·첫 식</h4><p>큰 $\beta$, $g_mr_O\gg1$의 능동 부하에서 $G_m\approx g_m$, $R_{out}\approx r_{O2}\parallel r_{O4}$예요. 왼쪽−오른쪽 차동 입력과 오른쪽 출력이면 $A_v\approx+G_mR_{out}$이에요.</p></div>
-<div class="summary-group"><h4>핵심 판단</h4><p>$g_m\propto I_C$, $r_O\propto1/I_C$이므로 전류가 소거돼요.</p><div class="equation">$$\frac{1}{|A_v|}\approx\frac{V_T}{V_{A,n}}+\frac{V_T}{V_{A,p}}$$</div></div>
-<div class="summary-group"><h4>결과와 조건</h4><p>원문 미지정 $V_T$를 수업값 26 mV로 가정하면 $V_{A,p}=65/12\,\mathrm V\approx5.42\,\mathrm V$, $A_v\approx+100$이에요.</p></div>
-<div class="summary-group"><h4>혼동 구분·검산</h4><p>거울 신호를 빼면 안 돼요. $r_{\pi2}$를 출력에 병렬로 놓지 않아요. 역대입은 $0.0052+0.0048=0.01$, NPN 한계는 $V_{A,n}/V_T\approx192.31$이에요.</p></div>
+<p class="sum-lead">공통 $V_{OV}$의 PMOS 거울에서는 전류비와 $g_m$비가 모두 $1/N$이에요.</p>
+<div class="summary-group"><h4>전류와 출력의 방향</h4><div class="equation">$$i_4=-g_{m4}v_g=i_1/N$$</div><div class="equation">$$v_{out}/i_1=+R_L/N\ [\Omega]$$</div><p>포화·소신호·$\lambda=0$이며 출력에 $R_L$이 연결된 조건이에요.</p><p>입력 흡수 전류가 증가하면 오른쪽 출력은 올라가요.</p></div>
 </div>
+

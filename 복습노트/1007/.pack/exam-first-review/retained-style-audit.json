@@ -1,0 +1,778 @@
+{
+  "learning_style": {
+    "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
+    "sha256": "6c6ece1e37f6aeee28cef59c241a32cb26f40e8a45c3151e02551edaf318874a",
+    "rule_ids": [
+      "UNIT-01",
+      "CALC-01",
+      "CALC-02",
+      "CIRCUIT-01",
+      "CIRCUIT-02",
+      "GAIN-01",
+      "DEGEN-01",
+      "SCALE-01",
+      "BIAS-01",
+      "NOTATION-01",
+      "EXPLAIN-01",
+      "CORRECT-01"
+    ]
+  },
+  "items": {
+    "p1:main": {
+      "status": "pass",
+      "reviewer": "main /root",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "p1:main current start/solve/verify inspection: verify: RD ISS and Vov,2/lambda all volts; ACM dimensionless."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "p1:main current start/solve/verify inspection: start/solve: i=gm(vCM-vP);vP=2ro3 i;vX=-RD i; remaining equation list gives staged assembly or target inversion."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "p1:main current start/solve/verify inspection: Keep exact symbolic/fraction/sqrt values internally; displayed derived decimals rounded2places. Small CM values retain scientific notation."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "p1:main current start/solve/verify inspection: understand/start define source device roles and actual output; Specific proof requested. Preserve 1/gm in requested ACM identity, then display course leading term. Rout exactness restriction does not erase demanded voltage-gain proof."
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "p1:main current start/solve/verify inspection: CM factor2 and circuit/known-block route retained; source requirement determines proof or GmRout exception."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "p1:main current start/solve/verify inspection: solve: gm=ISS/Vov;ro3=1/(lambda ISS) => ACM=-RD ISS/(Vov+2/lambda); sign set by explicit signal/current direction."
+        },
+        "DEGEN-01": {
+          "disposition": "applied",
+          "evidence": "p1:main current start/solve/verify inspection: CM source rise subtracts input control;half-tail2RSS and large gmRS principal term, with original proof exception atp1."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "p1:main current start/solve/verify inspection: retry: RD x2 and lambda decrease with explicit fixed bias."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "p1:main current start/solve/verify inspection: not_applicable: no requested numerical bias-boundary design; stated saturation/active-region constraints are preserved."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "p1:main current start/solve/verify inspection: Native text/tspan Pretendard600 upright and78% subscript retained on generated SVG; Native SVG structure inspected; actual glyph-face browser evidence remains separate."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "p1:main current start/solve/verify inspection: Seven sections ordered; solve title 이렇게 풀어요; judgment→formula→substitution→result; concise answer markers on existing visible elements."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "p1:main current start/solve/verify inspection: Specific proof requested. Preserve 1/gm in requested ACM identity, then display course leading term. Rout exactness restriction does not erase demanded voltage-gain proof. Reference approximation boundary independently compared, not a source correction."
+        }
+      }
+    },
+    "p2:main": {
+      "status": "pass",
+      "reviewer": "main /root",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "p2:main current start/solve/verify inspection: Gm S, Rout ohms, voltage-gain product dimensionless."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "p2:main current start/solve/verify inspection: start/solve: RS=2ro5;vs=RS io;io=gm1(vCM-vs)-vs/ro1; remaining equation list gives staged assembly or target inversion."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "p2:main current start/solve/verify inspection: Keep exact symbolic/fraction/sqrt values internally; displayed derived decimals rounded2places. Small CM values retain scientific notation."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "p2:main current start/solve/verify inspection: understand/start define source device roles and actual output; Original explicitly requires Av=-Gm Rout, so that method follows the CM half circuit. Distinguish drawn differential output from nonzero SE result; both supplied."
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "p2:main current start/solve/verify inspection: CM factor2 and circuit/known-block route retained; source requirement determines proof or GmRout exception."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "p2:main current start/solve/verify inspection: solve: Rdown~gm1 ro1 RS;Rout~ro3||Rdown~ro3;ACM,SE~-ro3/(2ro5);ACM,DM=0; sign set by explicit signal/current direction."
+        },
+        "DEGEN-01": {
+          "disposition": "applied",
+          "evidence": "p2:main current start/solve/verify inspection: CM source rise subtracts input control;half-tail2RSS and large gmRS principal term, with original proof exception atp1."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "p2:main current start/solve/verify inspection: retry: only tail resistance varied; bias/other small-signal parameters fixed."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "p2:main current start/solve/verify inspection: not_applicable: no requested numerical bias-boundary design; stated saturation/active-region constraints are preserved."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "p2:main current start/solve/verify inspection: Native text/tspan Pretendard600 upright and78% subscript retained on generated SVG; Native SVG structure inspected; actual glyph-face browser evidence remains separate."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "p2:main current start/solve/verify inspection: Seven sections ordered; solve title 이렇게 풀어요; judgment→formula→substitution→result; concise answer markers on existing visible elements."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "p2:main current start/solve/verify inspection: Original explicitly requires Av=-Gm Rout, so that method follows the CM half circuit. Distinguish drawn differential output from nonzero SE result; both supplied. Reference approximation boundary independently compared, not a source correction."
+        }
+      }
+    },
+    "p3:1": {
+      "status": "pass",
+      "reviewer": "main /root",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "p3:1 current start/solve/verify inspection: solve1 conversion100uA/V2=0.1mA/V2; mS*kohm dimensionless and mS*kohm2=kohm."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "p3:1 current start/solve/verify inspection: start/solve: ID1=ID3=0.5mA;gm1=10mS;ro1=ro3=20kohm; remaining equation list gives staged assembly or target inversion."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "p3:1 current start/solve/verify inspection: Keep exact symbolic/fraction/sqrt values internally; displayed derived decimals rounded2places. Small CM values retain scientific notation."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "p3:1 current start/solve/verify inspection: understand/start define source device roles and actual output; CM output is average explicitly requested; not the differential output pair drawn in source. ro1 retained for DM and finite-model leading CM conditions."
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "p3:1 current start/solve/verify inspection: CM factor2 and circuit/known-block route retained; source requirement determines proof or GmRout exception."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "p3:1 current start/solve/verify inspection: solve: RS=2RSS=4Mohm;ACM~-20k/4M=-0.005; sign set by explicit signal/current direction."
+        },
+        "DEGEN-01": {
+          "disposition": "applied",
+          "evidence": "p3:1 current start/solve/verify inspection: CM source rise subtracts input control;half-tail2RSS and large gmRS principal term, with original proof exception atp1."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "p3:1 current start/solve/verify inspection: retry: tail resistance doubles with branch current held constant."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "p3:1 current start/solve/verify inspection: not_applicable: no requested numerical bias-boundary design; stated saturation/active-region constraints are preserved."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "p3:1 current start/solve/verify inspection: Native text/tspan Pretendard600 upright and78% subscript retained on generated SVG; Native SVG structure inspected; actual glyph-face browser evidence remains separate."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "p3:1 current start/solve/verify inspection: Seven sections ordered; solve title 이렇게 풀어요; judgment→formula→substitution→result; concise answer markers on existing visible elements."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "p3:1 current start/solve/verify inspection: CM output is average explicitly requested; not the differential output pair drawn in source. ro1 retained for DM and finite-model leading CM conditions. Reference approximation boundary independently compared, not a source correction."
+        }
+      }
+    },
+    "p3:2": {
+      "status": "pass",
+      "reviewer": "main /root",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "p3:2 current start/solve/verify inspection: solve1 conversion100uA/V2=0.1mA/V2; mS*kohm dimensionless and mS*kohm2=kohm."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "p3:2 current start/solve/verify inspection: start/solve: ID1=ID3=0.5mA;gm1=10mS;ro1=ro3=20kohm; remaining equation list gives staged assembly or target inversion."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "p3:2 current start/solve/verify inspection: Keep exact symbolic/fraction/sqrt values internally; displayed derived decimals rounded2places. Small CM values retain scientific notation."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "p3:2 current start/solve/verify inspection: understand/start define source device roles and actual output; CM output is average explicitly requested; not the differential output pair drawn in source. ro1 retained for DM and finite-model leading CM conditions."
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "p3:2 current start/solve/verify inspection: CM factor2 and circuit/known-block route retained; source requirement determines proof or GmRout exception."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "p3:2 current start/solve/verify inspection: solve: RS=2RSS=4Mohm;ACM~-20k/4M=-0.005; sign set by explicit signal/current direction."
+        },
+        "DEGEN-01": {
+          "disposition": "applied",
+          "evidence": "p3:2 current start/solve/verify inspection: CM source rise subtracts input control;half-tail2RSS and large gmRS principal term, with original proof exception atp1."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "p3:2 current start/solve/verify inspection: retry: tail resistance doubles with branch current held constant."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "p3:2 current start/solve/verify inspection: not_applicable: no requested numerical bias-boundary design; stated saturation/active-region constraints are preserved."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "p3:2 current start/solve/verify inspection: Native text/tspan Pretendard600 upright and78% subscript retained on generated SVG; Native SVG structure inspected; actual glyph-face browser evidence remains separate."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "p3:2 current start/solve/verify inspection: Seven sections ordered; solve title 이렇게 풀어요; judgment→formula→substitution→result; concise answer markers on existing visible elements."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "p3:2 current start/solve/verify inspection: CM output is average explicitly requested; not the differential output pair drawn in source. ro1 retained for DM and finite-model leading CM conditions. Reference approximation boundary independently compared, not a source correction."
+        }
+      }
+    },
+    "p7:1": {
+      "status": "pass",
+      "reviewer": "main /root",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "p7:1 current start/solve/verify inspection: start converts100uA/V2 to0.1mA/V2; 100ohm=0.1kohm."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "p7:1 current start/solve/verify inspection: start/solve: ISS=0.5*(0.1mA/V2)*100*(0.2V)^2=0.2mA;gm=1mS;ro3=50kohm; remaining equation list gives staged assembly or target inversion."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "p7:1 current start/solve/verify inspection: Keep exact symbolic/fraction/sqrt values internally; displayed derived decimals rounded2places. Small CM values retain scientific notation."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "p7:1 current start/solve/verify inspection: understand/start define source device roles and actual output; Source reference keeps1/gm and gives-0.099,10100,7170. Author uses user-required uniform large-degeneration leading terms -0.1,10000,7071.07. Model distinction documented in understand/solve/verify/pitfall/sum; input ro ignored as source-reference course model, not as original given. Full CLM DC not reconstructible without VDD/input CM. Reviewer rederived the declared model and compared reference approximation order."
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "p7:1 current start/solve/verify inspection: CM factor2 and circuit/known-block route retained; source requirement determines proof or GmRout exception."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "p7:1 current start/solve/verify inspection: solve: CMRR~10000=80dB; doubled ISS:gm=sqrt2mS;ro3=25kohm;CMRR~5000sqrt2=7071.07;76.99dB; sign set by explicit signal/current direction."
+        },
+        "DEGEN-01": {
+          "disposition": "applied",
+          "evidence": "p7:1 current start/solve/verify inspection: CM source rise subtracts input control;half-tail2RSS and large gmRS principal term, with original proof exception atp1."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "p7:1 current start/solve/verify inspection: solve1+6: fixed Vb;ISS x2, gm x sqrt2,ro3 /2, CMRR /sqrt2."
+        },
+        "BIAS-01": {
+          "disposition": "applied",
+          "evidence": "p7:1 current start/solve/verify inspection: solve1 and6 use fixedVb and cutoff input boundary; no unspecified VDD/headroom numerical assumptions."
+        },
+        "NOTATION-01": {
+          "disposition": "not_applicable",
+          "evidence": "p7:1 current start/solve/verify inspection: No generated SVG for this block/DC computation; body math standardLaTex retained."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "p7:1 current start/solve/verify inspection: Seven sections ordered; solve title 이렇게 풀어요; judgment→formula→substitution→result; concise answer markers on existing visible elements."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "p7:1 current start/solve/verify inspection: Source reference keeps1/gm and gives-0.099,10100,7170. Author uses user-required uniform large-degeneration leading terms -0.1,10000,7071.07. Model distinction documented in understand/solve/verify/pitfall/sum; input ro ignored as source-reference course model, not as original given. Full CLM DC not reconstructible without VDD/input CM. Reviewer rederived the declared model and compared reference approximation order. Reference approximation boundary independently compared, not a source correction."
+        }
+      }
+    },
+    "p7:2": {
+      "status": "pass",
+      "reviewer": "main /root",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "p7:2 current start/solve/verify inspection: start converts100uA/V2 to0.1mA/V2; 100ohm=0.1kohm."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "p7:2 current start/solve/verify inspection: start/solve: ISS=0.5*(0.1mA/V2)*100*(0.2V)^2=0.2mA;gm=1mS;ro3=50kohm; remaining equation list gives staged assembly or target inversion."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "p7:2 current start/solve/verify inspection: Keep exact symbolic/fraction/sqrt values internally; displayed derived decimals rounded2places. Small CM values retain scientific notation."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "p7:2 current start/solve/verify inspection: understand/start define source device roles and actual output; Source reference keeps1/gm and gives-0.099,10100,7170. Author uses user-required uniform large-degeneration leading terms -0.1,10000,7071.07. Model distinction documented in understand/solve/verify/pitfall/sum; input ro ignored as source-reference course model, not as original given. Full CLM DC not reconstructible without VDD/input CM. Reviewer rederived the declared model and compared reference approximation order."
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "p7:2 current start/solve/verify inspection: CM factor2 and circuit/known-block route retained; source requirement determines proof or GmRout exception."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "p7:2 current start/solve/verify inspection: solve: CMRR~10000=80dB; doubled ISS:gm=sqrt2mS;ro3=25kohm;CMRR~5000sqrt2=7071.07;76.99dB; sign set by explicit signal/current direction."
+        },
+        "DEGEN-01": {
+          "disposition": "applied",
+          "evidence": "p7:2 current start/solve/verify inspection: CM source rise subtracts input control;half-tail2RSS and large gmRS principal term, with original proof exception atp1."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "p7:2 current start/solve/verify inspection: solve1+6: fixed Vb;ISS x2, gm x sqrt2,ro3 /2, CMRR /sqrt2."
+        },
+        "BIAS-01": {
+          "disposition": "applied",
+          "evidence": "p7:2 current start/solve/verify inspection: solve1 and6 use fixedVb and cutoff input boundary; no unspecified VDD/headroom numerical assumptions."
+        },
+        "NOTATION-01": {
+          "disposition": "not_applicable",
+          "evidence": "p7:2 current start/solve/verify inspection: No generated SVG for this block/DC computation; body math standardLaTex retained."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "p7:2 current start/solve/verify inspection: Seven sections ordered; solve title 이렇게 풀어요; judgment→formula→substitution→result; concise answer markers on existing visible elements."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "p7:2 current start/solve/verify inspection: Source reference keeps1/gm and gives-0.099,10100,7170. Author uses user-required uniform large-degeneration leading terms -0.1,10000,7071.07. Model distinction documented in understand/solve/verify/pitfall/sum; input ro ignored as source-reference course model, not as original given. Full CLM DC not reconstructible without VDD/input CM. Reviewer rederived the declared model and compared reference approximation order. Reference approximation boundary independently compared, not a source correction."
+        }
+      }
+    },
+    "p7:3": {
+      "status": "pass",
+      "reviewer": "main /root",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "p7:3 current start/solve/verify inspection: start converts100uA/V2 to0.1mA/V2; 100ohm=0.1kohm."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "p7:3 current start/solve/verify inspection: start/solve: ISS=0.5*(0.1mA/V2)*100*(0.2V)^2=0.2mA;gm=1mS;ro3=50kohm; remaining equation list gives staged assembly or target inversion."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "p7:3 current start/solve/verify inspection: Keep exact symbolic/fraction/sqrt values internally; displayed derived decimals rounded2places. Small CM values retain scientific notation."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "p7:3 current start/solve/verify inspection: understand/start define source device roles and actual output; Source reference keeps1/gm and gives-0.099,10100,7170. Author uses user-required uniform large-degeneration leading terms -0.1,10000,7071.07. Model distinction documented in understand/solve/verify/pitfall/sum; input ro ignored as source-reference course model, not as original given. Full CLM DC not reconstructible without VDD/input CM. Reviewer rederived the declared model and compared reference approximation order."
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "p7:3 current start/solve/verify inspection: CM factor2 and circuit/known-block route retained; source requirement determines proof or GmRout exception."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "p7:3 current start/solve/verify inspection: solve: CMRR~10000=80dB; doubled ISS:gm=sqrt2mS;ro3=25kohm;CMRR~5000sqrt2=7071.07;76.99dB; sign set by explicit signal/current direction."
+        },
+        "DEGEN-01": {
+          "disposition": "applied",
+          "evidence": "p7:3 current start/solve/verify inspection: CM source rise subtracts input control;half-tail2RSS and large gmRS principal term, with original proof exception atp1."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "p7:3 current start/solve/verify inspection: solve1+6: fixed Vb;ISS x2, gm x sqrt2,ro3 /2, CMRR /sqrt2."
+        },
+        "BIAS-01": {
+          "disposition": "applied",
+          "evidence": "p7:3 current start/solve/verify inspection: solve1 and6 use fixedVb and cutoff input boundary; no unspecified VDD/headroom numerical assumptions."
+        },
+        "NOTATION-01": {
+          "disposition": "not_applicable",
+          "evidence": "p7:3 current start/solve/verify inspection: No generated SVG for this block/DC computation; body math standardLaTex retained."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "p7:3 current start/solve/verify inspection: Seven sections ordered; solve title 이렇게 풀어요; judgment→formula→substitution→result; concise answer markers on existing visible elements."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "p7:3 current start/solve/verify inspection: Source reference keeps1/gm and gives-0.099,10100,7170. Author uses user-required uniform large-degeneration leading terms -0.1,10000,7071.07. Model distinction documented in understand/solve/verify/pitfall/sum; input ro ignored as source-reference course model, not as original given. Full CLM DC not reconstructible without VDD/input CM. Reviewer rederived the declared model and compared reference approximation order. Reference approximation boundary independently compared, not a source correction."
+        }
+      }
+    },
+    "p7:4": {
+      "status": "pass",
+      "reviewer": "main /root",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "p7:4 current start/solve/verify inspection: start converts100uA/V2 to0.1mA/V2; 100ohm=0.1kohm."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "p7:4 current start/solve/verify inspection: start/solve: ISS=0.5*(0.1mA/V2)*100*(0.2V)^2=0.2mA;gm=1mS;ro3=50kohm; remaining equation list gives staged assembly or target inversion."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "p7:4 current start/solve/verify inspection: Keep exact symbolic/fraction/sqrt values internally; displayed derived decimals rounded2places. Small CM values retain scientific notation."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "p7:4 current start/solve/verify inspection: understand/start define source device roles and actual output; Source reference keeps1/gm and gives-0.099,10100,7170. Author uses user-required uniform large-degeneration leading terms -0.1,10000,7071.07. Model distinction documented in understand/solve/verify/pitfall/sum; input ro ignored as source-reference course model, not as original given. Full CLM DC not reconstructible without VDD/input CM. Reviewer rederived the declared model and compared reference approximation order."
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "p7:4 current start/solve/verify inspection: CM factor2 and circuit/known-block route retained; source requirement determines proof or GmRout exception."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "p7:4 current start/solve/verify inspection: solve: CMRR~10000=80dB; doubled ISS:gm=sqrt2mS;ro3=25kohm;CMRR~5000sqrt2=7071.07;76.99dB; sign set by explicit signal/current direction."
+        },
+        "DEGEN-01": {
+          "disposition": "applied",
+          "evidence": "p7:4 current start/solve/verify inspection: CM source rise subtracts input control;half-tail2RSS and large gmRS principal term, with original proof exception atp1."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "p7:4 current start/solve/verify inspection: solve1+6: fixed Vb;ISS x2, gm x sqrt2,ro3 /2, CMRR /sqrt2."
+        },
+        "BIAS-01": {
+          "disposition": "applied",
+          "evidence": "p7:4 current start/solve/verify inspection: solve1 and6 use fixedVb and cutoff input boundary; no unspecified VDD/headroom numerical assumptions."
+        },
+        "NOTATION-01": {
+          "disposition": "not_applicable",
+          "evidence": "p7:4 current start/solve/verify inspection: No generated SVG for this block/DC computation; body math standardLaTex retained."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "p7:4 current start/solve/verify inspection: Seven sections ordered; solve title 이렇게 풀어요; judgment→formula→substitution→result; concise answer markers on existing visible elements."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "p7:4 current start/solve/verify inspection: Source reference keeps1/gm and gives-0.099,10100,7170. Author uses user-required uniform large-degeneration leading terms -0.1,10000,7071.07. Model distinction documented in understand/solve/verify/pitfall/sum; input ro ignored as source-reference course model, not as original given. Full CLM DC not reconstructible without VDD/input CM. Reviewer rederived the declared model and compared reference approximation order. Reference approximation boundary independently compared, not a source correction."
+        }
+      }
+    },
+    "p7:5": {
+      "status": "pass",
+      "reviewer": "main /root",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "p7:5 current start/solve/verify inspection: start converts100uA/V2 to0.1mA/V2; 100ohm=0.1kohm."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "p7:5 current start/solve/verify inspection: start/solve: ISS=0.5*(0.1mA/V2)*100*(0.2V)^2=0.2mA;gm=1mS;ro3=50kohm; remaining equation list gives staged assembly or target inversion."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "p7:5 current start/solve/verify inspection: Keep exact symbolic/fraction/sqrt values internally; displayed derived decimals rounded2places. Small CM values retain scientific notation."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "p7:5 current start/solve/verify inspection: understand/start define source device roles and actual output; Source reference keeps1/gm and gives-0.099,10100,7170. Author uses user-required uniform large-degeneration leading terms -0.1,10000,7071.07. Model distinction documented in understand/solve/verify/pitfall/sum; input ro ignored as source-reference course model, not as original given. Full CLM DC not reconstructible without VDD/input CM. Reviewer rederived the declared model and compared reference approximation order."
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "p7:5 current start/solve/verify inspection: CM factor2 and circuit/known-block route retained; source requirement determines proof or GmRout exception."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "p7:5 current start/solve/verify inspection: solve: CMRR~10000=80dB; doubled ISS:gm=sqrt2mS;ro3=25kohm;CMRR~5000sqrt2=7071.07;76.99dB; sign set by explicit signal/current direction."
+        },
+        "DEGEN-01": {
+          "disposition": "applied",
+          "evidence": "p7:5 current start/solve/verify inspection: CM source rise subtracts input control;half-tail2RSS and large gmRS principal term, with original proof exception atp1."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "p7:5 current start/solve/verify inspection: solve1+6: fixed Vb;ISS x2, gm x sqrt2,ro3 /2, CMRR /sqrt2."
+        },
+        "BIAS-01": {
+          "disposition": "applied",
+          "evidence": "p7:5 current start/solve/verify inspection: solve1 and6 use fixedVb and cutoff input boundary; no unspecified VDD/headroom numerical assumptions."
+        },
+        "NOTATION-01": {
+          "disposition": "not_applicable",
+          "evidence": "p7:5 current start/solve/verify inspection: No generated SVG for this block/DC computation; body math standardLaTex retained."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "p7:5 current start/solve/verify inspection: Seven sections ordered; solve title 이렇게 풀어요; judgment→formula→substitution→result; concise answer markers on existing visible elements."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "p7:5 current start/solve/verify inspection: Source reference keeps1/gm and gives-0.099,10100,7170. Author uses user-required uniform large-degeneration leading terms -0.1,10000,7071.07. Model distinction documented in understand/solve/verify/pitfall/sum; input ro ignored as source-reference course model, not as original given. Full CLM DC not reconstructible without VDD/input CM. Reviewer rederived the declared model and compared reference approximation order. Reference approximation boundary independently compared, not a source correction."
+        }
+      }
+    },
+    "p7:6": {
+      "status": "pass",
+      "reviewer": "main /root",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "p7:6 current start/solve/verify inspection: start converts100uA/V2 to0.1mA/V2; 100ohm=0.1kohm."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "p7:6 current start/solve/verify inspection: start/solve: ISS=0.5*(0.1mA/V2)*100*(0.2V)^2=0.2mA;gm=1mS;ro3=50kohm; remaining equation list gives staged assembly or target inversion."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "p7:6 current start/solve/verify inspection: Keep exact symbolic/fraction/sqrt values internally; displayed derived decimals rounded2places. Small CM values retain scientific notation."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "p7:6 current start/solve/verify inspection: understand/start define source device roles and actual output; Source reference keeps1/gm and gives-0.099,10100,7170. Author uses user-required uniform large-degeneration leading terms -0.1,10000,7071.07. Model distinction documented in understand/solve/verify/pitfall/sum; input ro ignored as source-reference course model, not as original given. Full CLM DC not reconstructible without VDD/input CM. Reviewer rederived the declared model and compared reference approximation order."
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "p7:6 current start/solve/verify inspection: CM factor2 and circuit/known-block route retained; source requirement determines proof or GmRout exception."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "p7:6 current start/solve/verify inspection: solve: CMRR~10000=80dB; doubled ISS:gm=sqrt2mS;ro3=25kohm;CMRR~5000sqrt2=7071.07;76.99dB; sign set by explicit signal/current direction."
+        },
+        "DEGEN-01": {
+          "disposition": "applied",
+          "evidence": "p7:6 current start/solve/verify inspection: CM source rise subtracts input control;half-tail2RSS and large gmRS principal term, with original proof exception atp1."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "p7:6 current start/solve/verify inspection: solve1+6: fixed Vb;ISS x2, gm x sqrt2,ro3 /2, CMRR /sqrt2."
+        },
+        "BIAS-01": {
+          "disposition": "applied",
+          "evidence": "p7:6 current start/solve/verify inspection: solve1 and6 use fixedVb and cutoff input boundary; no unspecified VDD/headroom numerical assumptions."
+        },
+        "NOTATION-01": {
+          "disposition": "not_applicable",
+          "evidence": "p7:6 current start/solve/verify inspection: No generated SVG for this block/DC computation; body math standardLaTex retained."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "p7:6 current start/solve/verify inspection: Seven sections ordered; solve title 이렇게 풀어요; judgment→formula→substitution→result; concise answer markers on existing visible elements."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "p7:6 current start/solve/verify inspection: Source reference keeps1/gm and gives-0.099,10100,7170. Author uses user-required uniform large-degeneration leading terms -0.1,10000,7071.07. Model distinction documented in understand/solve/verify/pitfall/sum; input ro ignored as source-reference course model, not as original given. Full CLM DC not reconstructible without VDD/input CM. Reviewer rederived the declared model and compared reference approximation order. Reference approximation boundary independently compared, not a source correction."
+        }
+      }
+    },
+    "p10:main": {
+      "status": "pass",
+      "reviewer": "main /root",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "p10:main current start/solve/verify inspection: V/A=ohms; N dimensionless."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "p10:main current start/solve/verify inspection: start/solve: i1+gm3 vg=0; remaining equation list gives staged assembly or target inversion."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "p10:main current start/solve/verify inspection: Keep exact symbolic/fraction/sqrt values internally; displayed derived decimals rounded2places. Small CM values retain scientific notation."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "p10:main current start/solve/verify inspection: understand/start define source device roles and actual output; Input current sink downward. Positive mirror supply change raises output; gain unit ohms not dimensionless. Source VG common and each device current changes, so gm ratio1/N not1/sqrtN."
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "p10:main current start/solve/verify inspection: Mirror connection retained; no symmetric half-circuit assumption. Small-signal input/output KCL SVG present."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "p10:main current start/solve/verify inspection: solve: i4=-gm4 vg=i1/N;vout/i1=+RL/N; sign set by explicit signal/current direction."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "p10:main current start/solve/verify inspection: not_applicable: no external source/emitter-degeneration computation in requested mirror/DC/active-load design."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "p10:main current start/solve/verify inspection: solve ratio and retry: both width and DC current ratios considered."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "p10:main current start/solve/verify inspection: not_applicable: no requested numerical bias-boundary design; stated saturation/active-region constraints are preserved."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "p10:main current start/solve/verify inspection: Native text/tspan Pretendard600 upright and78% subscript retained on generated SVG; Native SVG structure inspected; actual glyph-face browser evidence remains separate."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "p10:main current start/solve/verify inspection: Seven sections ordered; solve title 이렇게 풀어요; judgment→formula→substitution→result; concise answer markers on existing visible elements."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "p10:main current start/solve/verify inspection: Input current sink downward. Positive mirror supply change raises output; gain unit ohms not dimensionless. Source VG common and each device current changes, so gm ratio1/N not1/sqrtN. Reference approximation boundary independently compared, not a source correction."
+        }
+      }
+    },
+    "p11:a": {
+      "status": "pass",
+      "reviewer": "main /root",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "p11:a current start/solve/verify inspection: A*ohm=V; mA*kohm=V explicitly checked."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "p11:a current start/solve/verify inspection: start/solve: k=(W/L)4/(W/L)3;I4=kI1; remaining equation list gives staged assembly or target inversion."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "p11:a current start/solve/verify inspection: Keep exact symbolic/fraction/sqrt values internally; displayed derived decimals rounded2places. Small CM values retain scientific notation."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "p11:a current start/solve/verify inspection: understand/start define source device roles and actual output; DC before/after, so no small-signal KCL SVG required. Negative algebraic output allowed only by ideal current-source compliance; actual compliance unspecified."
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "p11:a current start/solve/verify inspection: Mirror connection retained; no symmetric half-circuit assumption. DC KCL only, no small-signal drawing necessary."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "p11:a current start/solve/verify inspection: solve: b:before-I0 RL/2;after(3deltaI-I0)RL/2;change1.5deltaI RL; sign set by explicit signal/current direction."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "p11:a current start/solve/verify inspection: not_applicable: no external source/emitter-degeneration computation in requested mirror/DC/active-load design."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "p11:a current start/solve/verify inspection: mirror geometry ratio1 and1/2; no unsupported current-fixed gm scaling."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "p11:a current start/solve/verify inspection: not_applicable: no requested numerical bias-boundary design; stated saturation/active-region constraints are preserved."
+        },
+        "NOTATION-01": {
+          "disposition": "not_applicable",
+          "evidence": "p11:a current start/solve/verify inspection: No generated SVG for this block/DC computation; body math standardLaTex retained."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "p11:a current start/solve/verify inspection: Seven sections ordered; solve title 이렇게 풀어요; judgment→formula→substitution→result; concise answer markers on existing visible elements."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "p11:a current start/solve/verify inspection: DC before/after, so no small-signal KCL SVG required. Negative algebraic output allowed only by ideal current-source compliance; actual compliance unspecified. Reference approximation boundary independently compared, not a source correction."
+        }
+      }
+    },
+    "p11:b": {
+      "status": "pass",
+      "reviewer": "main /root",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "p11:b current start/solve/verify inspection: A*ohm=V; mA*kohm=V explicitly checked."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "p11:b current start/solve/verify inspection: start/solve: k=(W/L)4/(W/L)3;I4=kI1; remaining equation list gives staged assembly or target inversion."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "p11:b current start/solve/verify inspection: Keep exact symbolic/fraction/sqrt values internally; displayed derived decimals rounded2places. Small CM values retain scientific notation."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "p11:b current start/solve/verify inspection: understand/start define source device roles and actual output; DC before/after, so no small-signal KCL SVG required. Negative algebraic output allowed only by ideal current-source compliance; actual compliance unspecified."
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "p11:b current start/solve/verify inspection: Mirror connection retained; no symmetric half-circuit assumption. DC KCL only, no small-signal drawing necessary."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "p11:b current start/solve/verify inspection: solve: b:before-I0 RL/2;after(3deltaI-I0)RL/2;change1.5deltaI RL; sign set by explicit signal/current direction."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "p11:b current start/solve/verify inspection: not_applicable: no external source/emitter-degeneration computation in requested mirror/DC/active-load design."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "p11:b current start/solve/verify inspection: mirror geometry ratio1 and1/2; no unsupported current-fixed gm scaling."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "p11:b current start/solve/verify inspection: not_applicable: no requested numerical bias-boundary design; stated saturation/active-region constraints are preserved."
+        },
+        "NOTATION-01": {
+          "disposition": "not_applicable",
+          "evidence": "p11:b current start/solve/verify inspection: No generated SVG for this block/DC computation; body math standardLaTex retained."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "p11:b current start/solve/verify inspection: Seven sections ordered; solve title 이렇게 풀어요; judgment→formula→substitution→result; concise answer markers on existing visible elements."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "p11:b current start/solve/verify inspection: DC before/after, so no small-signal KCL SVG required. Negative algebraic output allowed only by ideal current-source compliance; actual compliance unspecified. Reference approximation boundary independently compared, not a source correction."
+        }
+      }
+    },
+    "p14:main": {
+      "status": "pass",
+      "reviewer": "main /root",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "p14:main current start/solve/verify inspection: 26mV=0.026V; VAp answervolts; Early/thermal ratios dimensionless."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "p14:main current start/solve/verify inspection: start/solve: Gm~gm;Rout~ro2||ro4;Av~+gm(ro2||ro4) for vid=vin1-vin2,right output; remaining equation list gives staged assembly or target inversion."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "p14:main current start/solve/verify inspection: Keep exact symbolic/fraction/sqrt values internally; displayed derived decimals rounded2places. Small CM values retain scientific notation."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "p14:main current start/solve/verify inspection: understand/start define source device roles and actual output; VT unspecified in original; explicitly assume26mV in all result surfaces. Large beta/leading mirror model. Right output gain is positive for chosen differential input; no erroneous minus."
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "p14:main current start/solve/verify inspection: Mirror connection retained; no symmetric half-circuit assumption. Known active-load block no new KCL drawing required."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "p14:main current start/solve/verify inspection: solve: VAp=0.026/(0.01-0.026/5)=65/12V~5.42V; sign set by explicit signal/current direction."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "p14:main current start/solve/verify inspection: not_applicable: no external source/emitter-degeneration computation in requested mirror/DC/active-load design."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "p14:main current start/solve/verify inspection: IC cancels via gm proportional IC and ro proportional reciprocal IC."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "p14:main current start/solve/verify inspection: not_applicable: no requested numerical bias-boundary design; stated saturation/active-region constraints are preserved."
+        },
+        "NOTATION-01": {
+          "disposition": "not_applicable",
+          "evidence": "p14:main current start/solve/verify inspection: No generated SVG for this block/DC computation; body math standardLaTex retained."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "p14:main current start/solve/verify inspection: Seven sections ordered; solve title 이렇게 풀어요; judgment→formula→substitution→result; concise answer markers on existing visible elements."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "p14:main current start/solve/verify inspection: VT unspecified in original; explicitly assume26mV in all result surfaces. Large beta/leading mirror model. Right output gain is positive for chosen differential input; no erroneous minus. Reference approximation boundary independently compared, not a source correction."
+        }
+      }
+    }
+  }
+}
