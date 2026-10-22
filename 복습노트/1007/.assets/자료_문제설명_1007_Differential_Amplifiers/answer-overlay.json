@@ -1,0 +1,432 @@
+{
+  "schema_version": 1,
+  "review_policy_version": "problem-explain-2026-10-21-learning-style",
+  "range": "1007",
+  "slug": "Differential_Amplifiers",
+  "learning_style": {
+    "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
+    "sha256": "6c6ece1e37f6aeee28cef59c241a32cb26f40e8a45c3151e02551edaf318874a",
+    "rule_ids": [
+      "UNIT-01",
+      "CALC-01",
+      "CALC-02",
+      "CIRCUIT-01",
+      "CIRCUIT-02",
+      "GAIN-01",
+      "DEGEN-01",
+      "SCALE-01",
+      "BIAS-01",
+      "NOTATION-01",
+      "EXPLAIN-01",
+      "CORRECT-01"
+    ]
+  },
+  "input_hash": "9d659632ed9e1f5f88893832ce1d4fe4281c10a22cff8bf2956714e61aa8e146",
+  "source_inputs": {
+    "복습노트/1007/.assets/problems.txt": "9dd757909dbb93bbe93d51121b9a33bd1900283762f650585ee9dea1091cce49",
+    "복습노트/1007/.assets/display-titles.json": "b102f7f9ec0ba0d4e4496ad3d6e16056f5386f2b4bc40aa5ca7793c0e39dbae5",
+    "교과서/마이크로전자회로/ch10/장말문제/P10.67.md": "42956102b01f27599cc14d2b7060ca13df83eaaf3c003e14d98f25eab2c2721b",
+    "교과서/마이크로전자회로/ch10/장말문제/P10.68.md": "551488ba761c6c0589d56d643fb91f710a62db25ec1cb0e55e6d059fbac1505a",
+    "from_the_past/md/2018-2_중간/Q3.md": "f8ebdf901327db7f8de13e13a54c74f9af229d29cc08abeeef011eff10244c6b",
+    "교과서/마이크로전자회로/ch10/예제/E10.27.md": "2308cbe6669212f43299d8ee20d9b1d5c646d02fdc2dd54b8b8f39cbb0ae6cce",
+    "교과서/마이크로전자회로/ch10/예제/E10.28.md": "2bfa69b085c95b42ad1fd4c6ed62ab12463e4b84985b896a50b74ecb56358e21",
+    "교과서/마이크로전자회로/ch10/장말문제/P10.70.md": "1606c63e6d7d991c4776ad65755f241f64bc9231c3e75008599b1db23c4dd61f",
+    "from_the_past/md/2015-2_중간/Q3.md": "6cf6400d5bb90688ee2bf8decf432f01e31ad381d9714eb924de449a429c1202",
+    "교과서/마이크로전자회로/ch10/장말문제/P10.71.md": "8b1b3362d5e00b0b2f8fe9aabca2a3fefd6c56344e0f50f3a38f6ab2ad2b89ca",
+    "교과서/마이크로전자회로/ch10/장말문제/P10.72.md": "6dac4d31c5e962dadca69c907bf14737db4662c8450f86e596e8164cb0284c4b",
+    "교과서/마이크로전자회로/ch10/장말문제/P10.75.md": "1c2500f4791b40a201185cbe0614e2f68fd36d4a2f43548671ddc090b7ab0e3e",
+    "교과서/마이크로전자회로/ch10/figures/fig10-88.png": "b9fde612bff67b3445fbe1e7dd883705ca64cefe3a0fc8f3f7d63bb2f94bc46a",
+    "교과서/마이크로전자회로/ch10/figures/fig10-89.png": "d93bd8d61a274e40c625397b47ca21344339939d1ee7789dd2b2a5e4080e2ed5",
+    "from_the_past/md/2018-2_중간/figures/redrawn/fig-Q3.png": "d6e21119d9b2f5cc395475928fbc7ba27fcd960707c030daab42e43ae2da4674",
+    "교과서/마이크로전자회로/ch10/figures/fig10-48.png": "2b6f582604e117f0090e12d146fe47c389730ddf3222e02ec60867c5f9765450",
+    "교과서/마이크로전자회로/ch10/figures/fig10-91.png": "b5787a3f7fffbb71b890a64f92bf7bad487f44df1c17ce21778e0e271e4d69c7",
+    "from_the_past/md/2015-2_중간/figures/redrawn/fig-Q3.png": "4229e80202226b98078563f5c9a4a28f8b9e242a1ec4787371d8f84450a73234",
+    "교과서/마이크로전자회로/ch10/figures/fig10-92.png": "80011cc16d445340faf64df0d3b72e5f51494398f229b24626bd0e02479c4b7a",
+    "교과서/마이크로전자회로/ch10/figures/fig10-93.png": "7cbdd14825907ca57703aff97856af2526098713d740f07142f91570d3c61ebd",
+    "교과서/마이크로전자회로/ch10/figures/fig10-96.png": "4ae920e792c521668e640337a98e5b370becff4777f42df5962b05b77feebf89",
+    ".claude/skills/ec2-review-pack/references/solution-style.md": "6c6ece1e37f6aeee28cef59c241a32cb26f40e8a45c3151e02551edaf318874a"
+  },
+  "problems": [
+    {
+      "id": "P10.67",
+      "explanation_id": "p1",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "공통 모드 반회로와 첫 식",
+          "html": "\n<figure class=\"figure\"><svg viewBox=\"0 0 700 370\" role=\"img\" aria-label=\"공통 모드 소신호 반회로. 왼쪽 게이트 입력, 가운데 아래 방향 제어 전류원, 소스 P 아래 2rO3, RD 부하와 맨 오른쪽 X 출력\">\n<path class=\"fig-ink\" fill=\"none\" d=\"M70 170 H185 M185 145 V195 M320 100 H620 M320 100 V133 M320 207 V250 M320 250 V272 M310 272 H330 V314 H310 Z M320 314 V337 M304 337 H336 M309 344 H331 M315 351 H325 M500 100 V78 M490 78 H510 V36 H490 Z M500 36 V20 M484 20 H516 M489 13 H511 M495 6 H505\"/>\n<circle class=\"fig-ink\" fill=\"none\" cx=\"320\" cy=\"170\" r=\"37\"/>\n<path class=\"fig-ink\" fill=\"none\" d=\"M320 150 V190 M313 181 L320 191 L327 181\"/>\n<text class=\"fig-text fig-math\" x=\"367\" y=\"174\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">g</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">m</tspan>(<tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">CM</tspan> − <tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">P</tspan>)</text>\n<text class=\"fig-text fig-math\" x=\"522\" y=\"63\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">R</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">D</tspan></text>\n<text class=\"fig-text fig-math\" x=\"345\" y=\"302\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">2<tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">r</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">o3</tspan></text>\n<text class=\"fig-text fig-math\" x=\"152\" y=\"224\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">M</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">1</tspan> gate</text>\n<path class=\"fig-ink\" fill=\"none\" d=\"M280 211 V241 M274 233 L280 242 L286 233\"/>\n<text class=\"fig-text fig-math\" x=\"245\" y=\"235\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">i</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">d</tspan></text>\n<circle data-node=\"p1-g\" data-node-color=\"blue\" fill=\"#2563eb\" stroke=\"#2563eb\" cx=\"70\" cy=\"170\" r=\"4\"/>\n<text data-node=\"p1-g\" data-node-color=\"blue\" fill=\"#2563eb\" stroke=\"none\" x=\"70\" y=\"150\" class=\"fig-math\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">CM</tspan></text>\n<circle data-node=\"p1-p\" data-node-color=\"red\" fill=\"#dc2626\" stroke=\"#dc2626\" cx=\"320\" cy=\"250\" r=\"4\"/>\n<text data-node=\"p1-p\" data-node-color=\"red\" fill=\"#dc2626\" stroke=\"none\" x=\"337\" y=\"246\" class=\"fig-math\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">P</tspan></text>\n<circle data-node=\"p1-x\" data-node-color=\"blue\" fill=\"#2563eb\" stroke=\"#2563eb\" cx=\"320\" cy=\"100\" r=\"4\"/>\n<circle data-node=\"p1-x\" data-node-color=\"blue\" fill=\"#2563eb\" stroke=\"#2563eb\" cx=\"500\" cy=\"100\" r=\"4\"/>\n<circle data-node=\"p1-x\" data-node-color=\"blue\" fill=\"#2563eb\" stroke=\"#2563eb\" cx=\"620\" cy=\"100\" r=\"4\"/>\n<text data-node=\"p1-x\" data-node-color=\"blue\" fill=\"#2563eb\" stroke=\"none\" x=\"620\" y=\"80\" text-anchor=\"end\" class=\"fig-math\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">X</tspan> (+)</text>\n</svg><figcaption>두 게이트에 같은 $v_{CM}$을 가하고 전원 $V_{DD}$와 바이어스 $V_b$를 AC 접지로 둔 전압 이득 회로예요. 입력 MOS의 $r_o$와 몸체 효과는 생략하고 실제 부하 $R_D$를 남겨요. 출력 X는 단락하지 않아요. 반회로의 $2r_{O3}$는 실제 테일 $r_{O3}$와 구별해요.</figcaption></figure>\n<div class=\"equation\">$$i_d=g_m(v_{CM}-v_P)$$</div>\n<div class=\"equation\">$$\\frac{v_P}{2r_{O3}}=i_d$$</div>\n<div class=\"equation\">$$\\frac{v_X}{R_D}+i_d=0$$</div>\n"
+        },
+        {
+          "subpart": "main",
+          "label": "소스 축퇴에서 한쪽 출력 이득",
+          "html": "\n<div class=\"equation\">$$\\frac{i_d}{v_{CM}}=\\frac{g_m}{1+2g_mr_{O3}}=\\frac{1}{1/g_m+2r_{O3}}$$</div>\n<div class=\"equation\">$$A_{CM}=\\frac{v_X}{v_{CM}}=-\\frac{R_D}{1/g_m+2r_{O3}}$$</div>\n"
+        },
+        {
+          "subpart": "main",
+          "label": "평형 오버드라이브로 요구식 증명",
+          "html": "\n<div class=\"equation\">$$g_m=\\frac{2(I_{SS}/2)}{V_{ov}}=\\frac{I_{SS}}{V_{ov}}$$</div>\n<div class=\"equation\">$$A_{CM}=-\\frac{R_D}{V_{ov}/I_{SS}+2/(\\lambda I_{SS})}$$</div>\n<div class=\"equation\">$$A_{CM}=\\frac{-R_DI_{SS}}{V_{ov}+2/\\lambda}$$</div>\n"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "<p><strong>한쪽 출력의 공통 모드 이득</strong>은 다음과 같아요. 대칭·포화·저주파 소신호, 입력 MOS의 $\\lambda=0$, 몸체 효과 생략 모델이에요.</p><div class=\"equation\">$$\\boxed{A_{CM}=\\frac{-R_DI_{SS}}{2/\\lambda+(V_{GS}-V_{TH})_{eq.}}}$$</div>"
+        }
+      ]
+    },
+    {
+      "id": "P10.68",
+      "explanation_id": "p2",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "공통 모드 반회로와 출력 단락 측정",
+          "html": "\n<p>대칭 CM 반회로에서 $R_S=2r_{o5}$로 두고, $G_m$ 측정에는 출력을 실제로 접지에 단락해요. $i_o$는 접지 쪽에서 출력 단자로 들어오는 방향이에요.</p>\n<figure class=\"figure\"><svg viewBox=\"0 0 600 300\" role=\"img\" aria-label=\"왼쪽 입력 vCM, 가운데 왼쪽 종속전류원 gm1(vCM-vs)와 오른쪽 ro1이 드레인과 소스 사이 병렬이다. 소스 아래에 2ro5가 있다. 맨 오른쪽 출력은 실제 도선으로 접지에 단락되며 io는 왼쪽으로 유입한다.\">\n<path class=\"fig-ink\" d=\"M40 104 H125 M125 87 V121 M210 68 H535 V245 M210 68 V112 M210 158 V195 H340 M340 68 V100 M210 195 V210 M210 266 V278 M200 278 H220 M204 283 H216 M208 288 H212 M535 245 v10 M525 255 H545 M529 260 H541 M533 265 H537\"/>\n<polygon class=\"fig-ink\" points=\"210,112 226,135 210,158 194,135\"/>\n<path class=\"fig-ink\" d=\"M210 122 V147 M205 141 L210 147 L215 141 M340 100 v10 l8 5 l-16 8 l16 8 l-16 8 l16 8 l-8 5 v43 M210 210 v5 l8 5 l-16 8 l16 8 l-16 8 l16 8 l-8 5 v9 M510 88 H463 M471 83 L463 88 L471 93\"/>\n<circle class=\"fig-dot\" cx=\"40\" cy=\"104\" r=\"4\" fill=\"#2563eb\" data-node=\"vin\" data-node-color=\"blue\"/>\n<circle class=\"fig-dot\" cx=\"210\" cy=\"195\" r=\"4\" fill=\"#dc2626\" data-node=\"vs\" data-node-color=\"red\"/>\n<circle class=\"fig-dot\" cx=\"340\" cy=\"195\" r=\"4\" fill=\"#dc2626\" data-node=\"vs\" data-node-color=\"red\"/>\n<circle class=\"fig-dot\" cx=\"340\" cy=\"68\" r=\"4\" fill=\"#2563eb\" data-node=\"out\" data-node-color=\"blue\"/>\n<circle class=\"fig-dot\" cx=\"535\" cy=\"68\" r=\"4\" fill=\"#2563eb\" data-node=\"out\" data-node-color=\"blue\"/>\n<text class=\"fig-text fig-math\" x=\"28\" y=\"85\" fill=\"#2563eb\" data-node=\"vin\" data-node-color=\"blue\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">CM</tspan></text>\n<text class=\"fig-text fig-math\" x=\"221\" y=\"181\" fill=\"#dc2626\" data-node=\"vs\" data-node-color=\"red\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">s</tspan></text>\n<text class=\"fig-text fig-math\" x=\"450\" y=\"48\" fill=\"#2563eb\" data-node=\"out\" data-node-color=\"blue\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">out</tspan> = 0</text>\n<text class=\"fig-text fig-math\" x=\"466\" y=\"110\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">i</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">o</tspan></text><text class=\"fig-text\" x=\"134\" y=\"86\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">+</text><text class=\"fig-text\" x=\"134\" y=\"127\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">−</text>\n<text class=\"fig-text fig-math\" x=\"55\" y=\"173\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">g</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">m1</tspan>(<tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">CM</tspan> − <tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">s</tspan>)</text><text class=\"fig-text fig-math\" x=\"355\" y=\"139\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">r</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">o1</tspan></text><text class=\"fig-text fig-math\" x=\"230\" y=\"245\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">2<tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">r</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">o5</tspan></text>\n</svg><figcaption>$G_m$ 측정: 출력 단락이므로 $r_{o3}$ 양단 전압도 0이라 그 가지는 생략했어요. $M_1$의 $r_{o1}$은 유지했어요. 입력의 +/−는 $v_{gs1}=v_{CM}-v_s$를 나타내요.</figcaption></figure>\n<div class=\"equation\">$$v_s=2r_{o5}i_o$$</div>\n<div class=\"equation\">$$i_o=g_{m1}(v_{CM}-v_s)-\\frac{v_s}{r_{o1}}$$</div>\n"
+        },
+        {
+          "subpart": "main",
+          "label": "출력 단락 트랜스컨덕턴스",
+          "html": "\n<div class=\"equation\">$$G_m=\\frac{i_o}{v_{CM}}=\\frac{1}{1/g_{m1}+2r_{o5}+2r_{o5}/(g_{m1}r_{o1})}\\approx\\frac1{2r_{o5}}$$</div>\n<p>$g_{m1}r_{o1}\\gg1$, $2g_{m1}r_{o5}\\gg1$에서 $2r_{o5}$가 분모를 지배해요.</p>\n"
+        },
+        {
+          "subpart": "main",
+          "label": "입력 영점과 출력 시험원 및 저항 판단",
+          "html": "\n<figure class=\"figure\"><svg viewBox=\"0 0 640 330\" role=\"img\" aria-label=\"왼쪽 게이트 입력은 접지되고, 종속전류원 gm1(-vs)가 ro1 왼쪽에 놓인다. 소스 아래에 2ro5가 있고 출력에는 ro3가 접지로 연결된다. 가장 오른쪽 출력 끝점 Vt에서 시험전압원을 접지로 연결하며 it는 끝점 왼쪽에서 왼쪽으로 유입한다.\">\n<path class=\"fig-ink\" d=\"M40 110 H125 M125 93 V127 M40 110 V146 M30 146 H50 M34 151 H46 M38 156 H42 M210 70 H590 M210 70 V123 M210 169 V205 H340 M340 70 V107 M210 205 V222 M210 278 V295 M200 295 H220 M204 300 H216 M208 305 H212 M455 70 V121 M455 184 V295 M445 295 H465 M449 300 H461 M453 305 H457 M590 70 V135 M590 167 V295 M580 295 H600 M584 300 H596 M588 305 H592\"/>\n<polygon class=\"fig-ink\" points=\"210,123 226,146 210,169 194,146\"/>\n<path class=\"fig-ink\" d=\"M210 133 V158 M205 152 L210 158 L215 152 M340 107 v10 l8 5 l-16 8 l16 8 l-16 8 l16 8 l-8 5 v47 M210 222 v5 l8 5 l-16 8 l16 8 l-16 8 l16 8 l-8 5 v9 M455 121 v5 l8 5 l-16 8 l16 8 l-16 8 l16 8 l-8 5 v16 M570 89 H520 M528 84 L520 89 L528 94\"/>\n<circle class=\"fig-ink\" cx=\"590\" cy=\"151\" r=\"16\"/><path class=\"fig-ink\" d=\"M584 145 H596 M590 139 V151 M584 158 H596\"/>\n<circle class=\"fig-dot\" cx=\"210\" cy=\"205\" r=\"4\" fill=\"#dc2626\" data-node=\"vs\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"340\" cy=\"205\" r=\"4\" fill=\"#dc2626\" data-node=\"vs\" data-node-color=\"red\"/>\n<circle class=\"fig-dot\" cx=\"340\" cy=\"70\" r=\"4\" fill=\"#2563eb\" data-node=\"test\" data-node-color=\"blue\"/><circle class=\"fig-dot\" cx=\"455\" cy=\"70\" r=\"4\" fill=\"#2563eb\" data-node=\"test\" data-node-color=\"blue\"/><circle class=\"fig-dot\" cx=\"590\" cy=\"70\" r=\"4\" fill=\"#2563eb\" data-node=\"test\" data-node-color=\"blue\"/>\n<text class=\"fig-text fig-math\" x=\"49\" y=\"92\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">in</tspan> = 0</text><text class=\"fig-text fig-math\" x=\"221\" y=\"191\" fill=\"#dc2626\" data-node=\"vs\" data-node-color=\"red\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">s</tspan></text><text class=\"fig-text fig-math\" x=\"563\" y=\"49\" fill=\"#2563eb\" data-node=\"test\" data-node-color=\"blue\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">V</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">t</tspan> (+)</text><text class=\"fig-text fig-math\" x=\"535\" y=\"111\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">i</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">t</tspan></text>\n<text class=\"fig-text fig-math\" x=\"65\" y=\"188\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">g</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">m1</tspan>(−<tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">s</tspan>)</text><text class=\"fig-text fig-math\" x=\"353\" y=\"147\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">r</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">o1</tspan></text><text class=\"fig-text fig-math\" x=\"468\" y=\"155\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">r</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">o3</tspan></text><text class=\"fig-text fig-math\" x=\"231\" y=\"259\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">2<tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">r</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">o5</tspan></text>\n</svg><figcaption>$R_{out}$ 측정: 게이트 입력을 접지하고 오른쪽 시험원 $V_t$를 걸어요. $i_t$는 출력으로 유입하며 $R_{out}=V_t/i_t$예요. 제어원·$r_{o1}$·출력의 좌우 순서를 유지하고 테일 축퇴를 소스 아래에 두었어요.</figcaption></figure>\n<p>$M_1$ 아래쪽은 소스 축퇴로 저항이 커져요. 큰 곱 항이 지배하는 조건에서 다음 근사를 사용해요.</p>\n<div class=\"equation\">$$R_{\\downarrow}\\approx 2g_{m1}r_{o1}r_{o5}$$</div>\n<div class=\"equation\">$$R_{out}\\approx r_{o3}\\parallel\\left(2g_{m1}r_{o1}r_{o5}\\right)\\approx r_{o3}$$</div>\n<p>마지막 근사는 $2g_{m1}r_{o1}r_{o5}\\gg r_{o3}$일 때예요. 곱 항은 $r_{o1},2r_{o5}$보다 커야 해요.</p>\n"
+        },
+        {
+          "subpart": "main",
+          "label": "전류 생성과 출력 저항을 이득으로 연결",
+          "html": "\n<div class=\"equation\">$$A_{CM,SE}=-G_mR_{out}\\approx-\\frac{r_{o3}}{2r_{o5}}$$</div>\n"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "<p><strong>한 출력 기준 공통 모드 이득</strong>은 큰 $g_mr_o$, 몸체 효과 무시 및 $2g_{m1}r_{o1}r_{o5}\\gg r_{o3}$에서 다음과 같아요.</p><div class=\"equation\">$$\\boxed{A_{CM,SE}\\approx-\\frac{r_{o3}}{2r_{o5}}}$$</div><p>완전 대칭인 원 그림의 두 단자 차동 출력은 $A_{CM,DM}=(v_{out1}-v_{out2})/v_{CM}=0$이에요.</p>"
+        }
+      ]
+    },
+    {
+      "id": "2018-2_중간-Q3",
+      "explanation_id": "p3",
+      "subparts": [
+        "1",
+        "2"
+      ],
+      "steps": [
+        {
+          "subpart": "1",
+          "label": "DM 반회로와 첫 식",
+          "html": "\n<p>DM 자극은 $v_{in1}=v_{id}/2$, $v_{in2}=-v_{id}/2$예요. P는 가상 접지이므로 왼쪽은 부하가 $r_{o1}\\parallel r_{o3}$인 공통 소스(common-source, CS) 단이에요.</p>\n<div class=\"equation\">$$\\frac{v_{o1}}{v_{id}/2}=-g_{m1}(r_{o1}\\parallel r_{o3})$$</div>\n"
+        },
+        {
+          "subpart": "1",
+          "label": "동작 전류와 소신호 파라미터",
+          "html": "\n<p>대칭인 평형 상태에서 입력쌍과 PMOS 부하의 전류는 각각 테일 전류의 절반이에요. 먼저 $100\\,\\mu\\mathrm{A/V^2}=0.1\\,\\mathrm{mA/V^2}$로 바꾸어요.</p>\n<div class=\"equation\">$$I_{D1}=I_{D2}=I_{D3}=I_{D4}=\\frac{1\\,\\mathrm{mA}}2=0.5\\,\\mathrm{mA}$$</div>\n<div class=\"equation\">$$g_{m1}=g_{m2}=\\sqrt{2(0.1\\,\\mathrm{mA/V^2})(200/0.2)(0.5\\,\\mathrm{mA})}=10\\,\\mathrm{mS}$$</div>\n<div class=\"equation\">$$r_{o1}=r_{o2}=r_{o3}=r_{o4}=\\frac1{(0.1\\,\\mathrm{V^{-1}})(0.5\\,\\mathrm{mA})}=20\\,\\mathrm{k\\Omega}$$</div>\n"
+        },
+        {
+          "subpart": "1",
+          "label": "두 반회로를 차동 출력으로 합치기",
+          "html": "\n<div class=\"equation\">$$r_{o1}\\parallel r_{o3}=20\\,\\mathrm{k\\Omega}\\parallel20\\,\\mathrm{k\\Omega}=10\\,\\mathrm{k\\Omega}$$</div>\n<div class=\"equation\">$$v_{o1}=-g_{m1}(r_{o1}\\parallel r_{o3})\\frac{v_{id}}2$$</div>\n<div class=\"equation\">$$v_{o2}=+g_{m1}(r_{o1}\\parallel r_{o3})\\frac{v_{id}}2$$</div>\n<div class=\"equation\">$$A_{DM}=\\frac{v_{o1}-v_{o2}}{v_{id}}=-g_{m1}(r_{o1}\\parallel r_{o3})=-(10\\,\\mathrm{mS})(10\\,\\mathrm{k\\Omega})=-100$$</div>\n"
+        },
+        {
+          "subpart": "2",
+          "label": "CM 반회로의 실제 연결",
+          "html": "\n<figure class=\"figure\"><svg viewBox=\"0 0 660 370\" role=\"img\" aria-label=\"CM 반회로. 왼쪽 입력 vCM, 제어원 왼쪽, ro1 오른쪽, 부하 ro3와 출력 맨 오른쪽. 공통 소스 P 아래 2RSS가 접지에 연결된다.\">\n<path class=\"fig-ink\" fill=\"none\" d=\"M55 145 H145 M235 85 H570 M235 85 V125 M235 175 V235 H380 M380 125 V85 M380 175 V235 M235 235 V265 M235 305 V330 M220 330 H250 M225 336 H245 M231 342 H239 M485 85 V125 M485 175 V210 M470 210 H500 M475 216 H495 M481 222 H489\"/>\n<circle class=\"fig-ink\" fill=\"none\" cx=\"235\" cy=\"150\" r=\"25\"/>\n<path class=\"fig-ink\" fill=\"none\" d=\"M235 134 V165 M229 157 L235 165 L241 157\"/>\n<rect class=\"fig-ink\" fill=\"none\" x=\"370\" y=\"125\" width=\"20\" height=\"50\"/>\n<rect class=\"fig-ink\" fill=\"none\" x=\"475\" y=\"125\" width=\"20\" height=\"50\"/>\n<rect class=\"fig-ink\" fill=\"none\" x=\"225\" y=\"265\" width=\"20\" height=\"40\"/>\n<text class=\"fig-text\" x=\"86\" y=\"131\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">+</text><text class=\"fig-text\" x=\"86\" y=\"170\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">−</text>\n<text class=\"fig-text fig-math\" x=\"110\" y=\"174\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">gs1</tspan></text><text class=\"fig-text fig-math\" x=\"160\" y=\"199\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">g</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">m1</tspan><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">gs1</tspan></text>\n<text class=\"fig-text fig-math\" x=\"399\" y=\"155\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">r</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">o1</tspan></text><text class=\"fig-text fig-math\" x=\"511\" y=\"155\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">r</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">o3</tspan></text><text class=\"fig-text fig-math\" x=\"266\" y=\"292\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">2<tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">R</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">SS</tspan></text>\n<circle class=\"fig-dot\" cx=\"55\" cy=\"145\" r=\"4\" fill=\"#2563eb\" stroke=\"#2563eb\" data-node=\"vin\" data-node-color=\"blue\"/>\n<text class=\"fig-text fig-math\" x=\"38\" y=\"117\" fill=\"#2563eb\" stroke=\"none\" data-node=\"vin\" data-node-color=\"blue\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">CM</tspan></text>\n<circle class=\"fig-dot\" cx=\"235\" cy=\"235\" r=\"4\" fill=\"#dc2626\" stroke=\"#dc2626\" data-node=\"p\" data-node-color=\"red\"/>\n<text class=\"fig-text fig-math\" x=\"174\" y=\"245\" fill=\"#dc2626\" stroke=\"none\" data-node=\"p\" data-node-color=\"red\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">P</tspan></text>\n<circle class=\"fig-dot\" cx=\"380\" cy=\"235\" r=\"4\" fill=\"#dc2626\" stroke=\"#dc2626\" data-node=\"p\" data-node-color=\"red\"/>\n<circle class=\"fig-dot\" cx=\"235\" cy=\"85\" r=\"4\" fill=\"#2563eb\" stroke=\"#2563eb\" data-node=\"out\" data-node-color=\"blue\"/>\n<circle class=\"fig-dot\" cx=\"380\" cy=\"85\" r=\"4\" fill=\"#2563eb\" stroke=\"#2563eb\" data-node=\"out\" data-node-color=\"blue\"/>\n<circle class=\"fig-dot\" cx=\"485\" cy=\"85\" r=\"4\" fill=\"#2563eb\" stroke=\"#2563eb\" data-node=\"out\" data-node-color=\"blue\"/>\n<circle class=\"fig-dot\" cx=\"570\" cy=\"85\" r=\"4\" fill=\"#2563eb\" stroke=\"#2563eb\" data-node=\"out\" data-node-color=\"blue\"/>\n<text class=\"fig-text fig-math\" x=\"535\" y=\"61\" fill=\"#2563eb\" stroke=\"none\" data-node=\"out\" data-node-color=\"blue\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">o1</tspan> (+)</text>\n</svg><figcaption>CM 전압 이득을 구하는 왼쪽 반회로예요. 출력은 외부 무부하이고 $r_{o3}$는 내부 부하예요. 입력 $v_{CM}$은 $M_1$의 게이트 제어 전압을 정하며, $v_{gs1}=v_{CM}-v_P$예요. $r_{o1}$을 포함한 CS 블록에 알려진 축퇴 이득의 큰 $g_mr_o$ 근사를 적용해요. DM에서는 같은 그림의 P를 접지로 바꾸어요.</figcaption></figure>\n<p>캐스코드 테일은 $g_{m5}r_{o5}r_{o6}\\gg r_{o5},r_{o6}$에서 알려진 주항 블록으로 써요.</p>\n<div class=\"equation\">$$R_{SS}\\approx g_{m5}r_{o5}r_{o6}$$</div>\n<p>CM 반회로는 소스 아래 $2R_{SS}$를 둔 축퇴 CS 단이에요. 큰 $g_{m1}r_{o1}$, $2g_{m1}R_{SS}\\gg1$ 및 $r_{o3}/(2R_{SS})\\ll g_{m1}r_{o1}$의 주항 이득을 바로 적용해요. 이는 유한 $r_{o1}$ 모델의 주항 근사예요.</p>\n<div class=\"equation\">$$A_{CM}\\approx-\\frac{r_{o3}}{2R_{SS}}$$</div>\n"
+        },
+        {
+          "subpart": "2",
+          "label": "캐스코드 테일의 주항 저항",
+          "html": "\n<div class=\"equation\">$$g_{m5}=g_{m6}=\\sqrt{2(0.1\\,\\mathrm{mA/V^2})(400/0.2)(1\\,\\mathrm{mA})}=20\\,\\mathrm{mS}$$</div>\n<div class=\"equation\">$$r_{o5}=r_{o6}=\\frac1{(0.1\\,\\mathrm{V^{-1}})(1\\,\\mathrm{mA})}=10\\,\\mathrm{k\\Omega}$$</div>\n<div class=\"equation\">$$g_{m5}r_{o6}=(20\\,\\mathrm{mS})(10\\,\\mathrm{k\\Omega})=200\\gg1$$</div>\n<div class=\"equation\">$$R_{SS}\\approx(20\\,\\mathrm{mS})(10\\,\\mathrm{k\\Omega})(10\\,\\mathrm{k\\Omega})=2000\\,\\mathrm{k\\Omega}=2\\,\\mathrm{M\\Omega}$$</div>\n"
+        },
+        {
+          "subpart": "2",
+          "label": "CM 축퇴 이득에 대입",
+          "html": "\n<div class=\"equation\">$$\\frac1{g_{m1}}=\\frac1{10\\,\\mathrm{mS}}=0.1\\,\\mathrm{k\\Omega}$$</div>\n<div class=\"equation\">$$2R_{SS}\\approx4000\\,\\mathrm{k\\Omega}\\gg0.1\\,\\mathrm{k\\Omega}$$</div>\n<div class=\"equation\">$$A_{CM}\\approx-\\frac{20\\,\\mathrm{k\\Omega}}{4000\\,\\mathrm{k\\Omega}}=-5\\times10^{-3}$$</div>\n"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "1",
+          "html": "<p><strong>$A_{DM}=-100\\,\\mathrm{V/V}$</strong>예요. 왼쪽−오른쪽 출력과 왼쪽−오른쪽 입력을 사용한 대칭 소신호 이득이에요.</p>"
+        },
+        {
+          "subpart": "2",
+          "html": "<p><strong>$A_{CM}\\approx-5\\times10^{-3}\\,\\mathrm{V/V}$</strong>예요. $g_mr_o\\gg1$의 주항, 캐스코드 테일 $R_{SS}\\approx2\\,\\mathrm{M\\Omega}$, 완전 대칭인 포화 소신호 동작 조건이에요.</p>"
+        }
+      ]
+    },
+    {
+      "id": "E10.27",
+      "explanation_id": "p4",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "테일 모델과 근사 조건",
+          "html": "\n\n<div class=\"equation\">$$R_e^*=R_1\\parallel r_{\\pi3}$$</div>\n<div class=\"equation\">$$R_{out3}\\approx g_{m3}R_e^*r_{O3}$$</div>\n<p>수업의 기본 가정 $g_{m3}r_{O3}\\gg1$, $g_{m3}R_e^*\\gg1$에서 큰 곱항만 써요. 즉, 이미터 쪽 저항 $R_e^*$에 $Q_3$의 $g_{m3}r_{O3}$를 곱해 출력저항을 구해요.</p>\n"
+        },
+        {
+          "subpart": "main",
+          "label": "CM 반회로에서 가지 전류",
+          "html": "\n<figure class=\"figure\"><svg viewBox=\"0 -20 520 320\" role=\"img\" aria-label=\"CM 입력이 왼쪽 베이스에 연결되고 오른쪽 컬렉터에 부하 RCj가 접지로 연결된 반회로. 이미터 아래에는 2Rout3가 있다.\">\n<path class=\"fig-ink\" d=\"M40 132 H115 M115 110 V155 M215 55 H470 M215 55 V96 M215 144 V190 M215 190 V215 M215 255 V275 M203 275 H227 M208 281 H222 M213 287 H217 M370 55 V35 M370 5 V0 M358 0 H382 M362 -6 H378 M367 -12 H373\"/>\n<circle class=\"fig-ink\" cx=\"215\" cy=\"120\" r=\"24\"/><path class=\"fig-ink\" d=\"M215 106 V134 M210 128 L215 134 L220 128\"/>\n<rect class=\"fig-ink\" x=\"362\" y=\"5\" width=\"16\" height=\"30\"/><rect class=\"fig-ink\" x=\"207\" y=\"215\" width=\"16\" height=\"40\"/>\n<circle cx=\"40\" cy=\"132\" r=\"4\" fill=\"#2563eb\" stroke=\"#2563eb\" data-node=\"in\" data-node-color=\"blue\"/><text x=\"25\" y=\"108\" fill=\"#2563eb\" data-node=\"in\" data-node-color=\"blue\" class=\"fig-math\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">Δ<tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">CM</tspan></text>\n<circle cx=\"215\" cy=\"190\" r=\"4\" fill=\"#dc2626\" stroke=\"#dc2626\" data-node=\"p\" data-node-color=\"red\"/><text x=\"229\" y=\"192\" fill=\"#dc2626\" data-node=\"p\" data-node-color=\"red\" class=\"fig-math\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">Δ<tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">P</tspan></text>\n<circle cx=\"370\" cy=\"55\" r=\"3\" fill=\"#2563eb\" stroke=\"#2563eb\" data-node=\"out\" data-node-color=\"blue\"/><circle cx=\"470\" cy=\"55\" r=\"4\" fill=\"#2563eb\" stroke=\"#2563eb\" data-node=\"out\" data-node-color=\"blue\"/><text x=\"414\" y=\"36\" fill=\"#2563eb\" data-node=\"out\" data-node-color=\"blue\" class=\"fig-math\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">Δ<tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">out,j</tspan></text>\n<text class=\"fig-text fig-math\" x=\"247\" y=\"123\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">g</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">m1</tspan>(Δ<tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">CM</tspan> − Δ<tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">P</tspan>)</text><text class=\"fig-text fig-math\" x=\"237\" y=\"240\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">2<tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">R</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">out3</tspan></text><text class=\"fig-text fig-math\" x=\"390\" y=\"25\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">R</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">C,j</tspan></text><text class=\"fig-text fig-math\" x=\"170\" y=\"174\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">Δ<tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">i</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">C</tspan> ↓</text>\n</svg><figcaption>출력은 무부하 전압을 읽어요. $V_{CC}$는 AC 접지이며 $R_{C,1}=R_C$, $R_{C,2}=R_C+\\Delta R_C$예요. $V_A=\\infty$라 입력쌍의 $r_O$는 없고, 큰 $\\beta$로 입력쌍 베이스 전류만 생략해요. $Q_3$의 $r_{\\pi3}$는 앞의 테일 블록 안에 남아 있어요.</figcaption></figure>\n<p>양의 $\\Delta i_C$는 컬렉터에서 이미터로 흘러요. 큰 $\\beta$에서 이미터 전류도 이에 가까우므로 이미터 상승분이 제어 전압에서 빠져요.</p>\n<div class=\"equation\">$$\\Delta v_P\\approx2R_{out3}\\Delta i_C$$</div>\n<div class=\"equation\">$$\\Delta i_C=g_{m1}(\\Delta v_{CM}-\\Delta v_P)$$</div>\n<div class=\"equation\">$$\\Delta i_C(1+2g_{m1}R_{out3})\\approx g_{m1}\\Delta v_{CM}$$</div>\n<div class=\"equation\">$$\\frac{\\Delta i_C}{\\Delta v_{CM}}\\approx\\frac1{2R_{out3}}$$</div>\n"
+        },
+        {
+          "subpart": "main",
+          "label": "부하 전압과 차동 출력",
+          "html": "\n<p>AC 접지에서 저항을 따라 전압이 떨어져 두 출력은 모두 내려가요. $v_{od}=v_{out1}-v_{out2}$로 정해요.</p>\n<div class=\"equation\">$$\\Delta v_{out1}=-R_C\\Delta i_C$$</div>\n<div class=\"equation\">$$\\Delta v_{out2}=-(R_C+\\Delta R_C)\\Delta i_C$$</div>\n<div class=\"equation\">$$\\Delta v_{od}=-R_C\\Delta i_C+(R_C+\\Delta R_C)\\Delta i_C=\\Delta R_C\\Delta i_C$$</div>\n<div class=\"equation\">$$A_{CM-DM}=\\left|\\frac{\\Delta v_{od}}{\\Delta v_{CM}}\\right|\\approx\\frac{|\\Delta R_C|}{2R_{out3}}$$</div>\n"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n<p><strong>CM 입력에서 차동 출력으로 새는 이득의 크기</strong>는 다음과 같아요. 원문처럼 $\\Delta R_C\\ge0$로 읽으면 절댓값을 빼도 돼요.</p>\n<div class=\"equation\">$$\\boxed{A_{CM-DM}\\approx\\frac{|\\Delta R_C|}{2g_{m3}(R_1\\parallel r_{\\pi3})r_{O3}}}$$</div>\n<p>입력쌍의 $V_A=\\infty$와 큰 $\\beta$, 동일한 $g_m$, $g_{m3}r_{O3}\\gg1$, $g_{m3}R_e^*\\gg1$인 소신호 활성 영역의 수업 근사예요. $Q_3$의 유한한 $r_{\\pi3}$는 병렬 저항에 남겨요.</p>\n"
+        }
+      ]
+    },
+    {
+      "id": "E10.28",
+      "explanation_id": "p5",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "차동 반회로와 첫 이득",
+          "html": "\n<figure class=\"figure\"><svg viewBox=\"0 0 460 245\" role=\"img\" aria-label=\"차동 입력의 왼쪽 CE 반회로. 입력 vid의 절반이 제어 전압이며 이미터 P는 가상 접지이다. 출력과 접지 사이에 아래 방향 gm1 vpi1 제어 전류원과 RC가 병렬이고 출력은 맨 오른쪽이다.\">\n<path class=\"fig-ink\" d=\"M35 85 H95 M180 70 H400 M180 70 V105 M180 145 V205 H280 V160 M280 70 V95 M280 95 l8 5 l-16 10 l16 10 l-16 10 l16 10 l-8 5 V160 M230 205 V218 M216 218 H244 M221 224 H239 M226 230 H234\" fill=\"none\"/>\n<polygon class=\"fig-ink\" points=\"180,105 196,125 180,145 164,125\" fill=\"none\"/>\n<path class=\"fig-ink\" d=\"M180 113 V137 M174 131 L180 137 L186 131\" fill=\"none\"/>\n<circle class=\"fig-dot\" cx=\"35\" cy=\"85\" r=\"4\" fill=\"#2563eb\" stroke=\"#2563eb\" data-node=\"in\" data-node-color=\"blue\"/>\n<text class=\"fig-text fig-math\" x=\"28\" y=\"61\" fill=\"#2563eb\" data-node=\"in\" data-node-color=\"blue\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">π1</tspan> = <tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">id</tspan> / 2</text>\n<circle class=\"fig-dot\" cx=\"180\" cy=\"70\" r=\"4\" fill=\"#dc2626\" stroke=\"#dc2626\" data-node=\"out1\" data-node-color=\"red\"/>\n<circle class=\"fig-dot\" cx=\"280\" cy=\"70\" r=\"4\" fill=\"#dc2626\" stroke=\"#dc2626\" data-node=\"out1\" data-node-color=\"red\"/>\n<circle class=\"fig-dot\" cx=\"400\" cy=\"70\" r=\"4\" fill=\"#dc2626\" stroke=\"#dc2626\" data-node=\"out1\" data-node-color=\"red\"/>\n<text class=\"fig-text fig-math\" x=\"350\" y=\"48\" fill=\"#dc2626\" data-node=\"out1\" data-node-color=\"red\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">out1</tspan></text>\n<text class=\"fig-text fig-math\" x=\"105\" y=\"170\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">g</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">m1</tspan><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">π1</tspan></text><text class=\"fig-text fig-math\" x=\"303\" y=\"127\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">R</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">C</tspan></text>\n<text class=\"fig-text\" x=\"298\" y=\"206\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">P: 가상 접지</text>\n<circle cx=\"230\" cy=\"205\" r=\"3\" fill=\"currentColor\" data-ground-branch=\"true\"/></svg><figcaption>왼쪽 DM 반회로예요. $V_{CC}$는 AC 접지, $P$는 가상 접지예요. 큰 $\\beta$로 입력 베이스 전류를 무시하고 $r_{O1}=\\infty$를 적용했어요. 출력 부하는 $R_C$이며 출력은 단락하지 않아요.</figcaption></figure>\n<div class=\"equation\">$$\\frac{v_{out1}}{v_{id}/2}\\approx-g_{m1}R_C$$</div>\n"
+        },
+        {
+          "subpart": "main",
+          "label": "차동 이득의 크기",
+          "html": "\n<div class=\"equation\">$$v_{od}\\approx-g_{m1}R_C\\frac{v_{id}}2-g_{m1}R_C\\frac{v_{id}}2=-g_{m1}R_Cv_{id}$$</div>\n<div class=\"equation\">$$|A_{DM}|\\approx g_{m1}R_C$$</div>\n"
+        },
+        {
+          "subpart": "main",
+          "label": "테일 근사와 공통 모드 누출",
+          "html": "\n<div class=\"equation\">$$R_E^*=R_1\\parallel r_{\\pi3}$$</div>\n<div class=\"equation\">$$R_{SS}\\approx g_{m3}R_E^*r_{O3}$$</div>\n<div class=\"equation\">$$\\frac{\\Delta i_C}{\\Delta v_{CM}}\\approx\\frac1{2R_{SS}}$$</div><p>CM 반회로는 같은 가지 전류와 이미터 전압을 재현해요. 큰 축퇴 조건 $2g_{m1}R_{SS}\\gg1$에서 전류 변환율은 $1/(2R_{SS})$이고, 출력 차에는 부하 차 $\\Delta R_C$만 곱해져요.</p><div class=\"equation\">$$A_{CM-DM}\\approx\\frac{|\\Delta R_C|}{2R_{SS}}$$</div>\n"
+        },
+        {
+          "subpart": "main",
+          "label": "정의에 대입하여 정리",
+          "html": "\n<div class=\"equation\">$$\\mathrm{CMRR}\\approx\\frac{g_{m1}R_C}{|\\Delta R_C|/(2R_{SS})}$$</div>\n<div class=\"equation\">$$\\mathrm{CMRR}\\approx2g_{m1}R_{SS}\\frac{R_C}{|\\Delta R_C|}$$</div>\n"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n<p><strong>작은 미스매치·큰 입력쌍 $\\beta$·$Q_1,Q_2$의 $V_A=\\infty$와 위 큰 곱항 근사 조건에서의 CMRR이에요.</strong></p>\n<div class=\"equation\">$$\\boxed{\\mathrm{CMRR}\\approx\\frac{R_C}{|\\Delta R_C|}2g_{m1}g_{m3}(R_1\\parallel r_{\\pi3})r_{O3}}$$</div>\n"
+        }
+      ]
+    },
+    {
+      "id": "P10.70",
+      "explanation_id": "p6",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "공통 모드 반회로와 첫 식",
+          "html": "\n<figure class=\"figure\"><svg viewBox=\"0 0 660 390\" role=\"img\" aria-label=\"공통 모드 반회로: 왼쪽 입력 vCM, 종속 전류원 gm(vCM-vP), 소스 아래 2RSS, 오른쪽 부하 RL과 출력 vo\">\n<g class=\"fig-ink\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\">\n<path d=\"M70 135H130 M70 135V157 M70 203V330 M57 330H83 M61 337H79 M65 344H75\"/>\n<circle cx=\"70\" cy=\"180\" r=\"23\"/>\n<path d=\"M250 90H440 M250 90V120 M250 180V220 M250 220V250 M250 290V330 M237 330H263 M241 337H259 M245 344H255\"/>\n<path d=\"M250 120L275 150L250 180L225 150Z M250 133V165 M244 157L250 165L256 157\"/>\n<path d=\"M250 250L240 255L260 265L240 275L260 285L250 290\"/>\n<path d=\"M440 90V80L430 75L450 65L430 55L440 50V30 M427 30H453 M431 23H449 M435 16H445 M440 90H580\"/>\n</g>\n<circle class=\"fig-dot\" cx=\"70\" cy=\"135\" r=\"4\" fill=\"#2563eb\" data-node=\"in\" data-node-color=\"blue\"/>\n<text class=\"fig-text fig-math\" x=\"25\" y=\"116\" fill=\"#2563eb\" data-node=\"in\" data-node-color=\"blue\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">CM</tspan></text>\n<circle class=\"fig-dot\" cx=\"250\" cy=\"220\" r=\"4\" fill=\"#dc2626\" data-node=\"P\" data-node-color=\"red\"/>\n<text class=\"fig-text fig-math\" x=\"268\" y=\"226\" fill=\"#dc2626\" data-node=\"P\" data-node-color=\"red\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">P</tspan> = 2<tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">i</tspan><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">R</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">SS</tspan></text>\n<circle class=\"fig-dot\" cx=\"440\" cy=\"90\" r=\"4\" fill=\"#2563eb\" data-node=\"out\" data-node-color=\"blue\"/>\n<circle class=\"fig-dot\" cx=\"580\" cy=\"90\" r=\"4\" fill=\"#2563eb\" data-node=\"out\" data-node-color=\"blue\"/>\n<text class=\"fig-text fig-math\" x=\"565\" y=\"69\" fill=\"#2563eb\" data-node=\"out\" data-node-color=\"blue\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">o</tspan></text>\n<g class=\"fig-text\" fill=\"currentColor\"><text x=\"64\" y=\"174\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">+</text><text x=\"64\" y=\"195\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">−</text><text x=\"288\" y=\"156\" class=\"fig-math\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">g</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">m</tspan>(<tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">CM</tspan> − <tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">P</tspan>)</text><text x=\"285\" y=\"183\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">i</tspan> ↓</text><text x=\"274\" y=\"278\" class=\"fig-math\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">2<tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">R</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">SS</tspan></text><text x=\"465\" y=\"63\" class=\"fig-math\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">R</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">L</tspan></text></g>\n</svg><figcaption>CM 전압이득 반회로예요. 외부 출력 부하는 없고 $R_L$은 원래의 드레인 부하($R_D$ 또는 $R_D+\\Delta R_D$)예요. $M_1,M_2$의 $r_o$만 원문에 따라 생략했어요. (a) $R_{SS}=r_{o3}$, (b) $R_{SS}\\approx g_{m3}r_{o3}r_{o4}$인 테일 블록을 넣어요. (b)의 곱 항 근사는 $g_{m3}r_{o3}r_{o4}\\gg r_{o3},r_{o4}$일 때 써요.</figcaption></figure>\n<div class=\"equation\">$$i=g_m(v_{CM}-v_P)=g_m(v_{CM}-2iR_{SS})$$</div>\n"
+        },
+        {
+          "subpart": "main",
+          "label": "공통 모드 전류와 차동 누출",
+          "html": "\n<div class=\"equation\">$$\\frac{i}{v_{CM}}\\approx\\frac1{2R_{SS}}\\qquad(2g_mR_{SS}\\gg1)$$</div>\n<div class=\"equation\">$$v_{out1}=-iR_D$$</div>\n<div class=\"equation\">$$v_{out2}=-i(R_D+\\Delta R_D)$$</div>\n<div class=\"equation\">$$v_{od}=v_{out1}-v_{out2}=i\\Delta R_D$$</div>\n<div class=\"equation\">$$|A_{CM-DM}|\\approx\\frac{|\\Delta R_D|}{2R_{SS}}$$</div>\n"
+        },
+        {
+          "subpart": "main",
+          "label": "차동 이득과 일반 CMRR",
+          "html": "\n<div class=\"equation\">$$v_{out1}=-g_mR_D\\frac{v_{id}}2$$</div>\n<div class=\"equation\">$$v_{out2}=+g_m(R_D+\\Delta R_D)\\frac{v_{id}}2$$</div>\n<div class=\"equation\">$$|A_{DM}|=g_m\\left(R_D+\\frac{\\Delta R_D}{2}\\right)$$</div>\n<div class=\"equation\">$$\\mathrm{CMRR}\\approx2g_mR_{SS}\\left|\\frac{R_D+\\Delta R_D/2}{\\Delta R_D}\\right|$$</div>\n<p>두 부하는 양의 저항이며 $\\Delta R_D\\ne0$이에요. $|\\Delta R_D|\\ll R_D$를 추가할 때만 수업의 작은 미스매치 식으로 줄어요.</p>\n<div class=\"equation\">$$\\mathrm{CMRR}\\approx2g_mR_{SS}\\frac{R_D}{|\\Delta R_D|}$$</div>\n"
+        },
+        {
+          "subpart": "main",
+          "label": "두 테일 저항의 대입과 비교",
+          "html": "\n<div class=\"equation\">$$R_{SS,a}=r_{o3}$$</div>\n<div class=\"equation\">$$R_{SS,b}\\approx g_{m3}r_{o3}r_{o4}\\qquad(g_{m3}r_{o3}r_{o4}\\gg r_{o3},r_{o4})$$</div>\n<div class=\"equation\">$$\\frac{\\mathrm{CMRR}_b}{\\mathrm{CMRR}_a}\\approx g_{m3}r_{o4}$$</div>\n<p>같은 입력쌍 $g_m$과 부하, 같은 $r_{o3}$로 비교해요. 수업의 기본 큰 곱항 가정 $2g_mr_{o3}\\gg1$을 적용하면 CMRR의 개선 배율도 약 $g_{m3}r_{o4}$예요. 아래쪽 $r_{o4}$에 위 캐스코드 $M_3$의 $g_{m3}r_{o3}$를 곱한 테일 저항을 쓰는 거예요.</p>\n"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n<div class=\"equation\">$$|A_{CM-DM}|\\approx\\frac{|\\Delta R_D|}{2R_{SS}}$$</div>\n<p><strong>(a) 단일 테일</strong></p>\n<div class=\"equation\">$$\\mathrm{CMRR}_a\\approx 2g_mr_{o3}\\frac{R_D+\\Delta R_D/2}{|\\Delta R_D|}$$</div>\n<p><strong>(b) 캐스코드 테일</strong></p>\n<div class=\"equation\">$$\\mathrm{CMRR}_b\\approx 2g_mg_{m3}r_{o3}r_{o4}\\frac{R_D+\\Delta R_D/2}{|\\Delta R_D|}$$</div>\n<p>(b)는 $g_{m3}r_{o3}r_{o4}\\gg r_{o3},r_{o4}$인 주항 근사예요. 두 결과는 기본 큰 축퇴 조건 $2g_mR_{SS}\\gg1$을 적용했어요. 두 결과 모두 입력쌍 일치, $r_{o1},r_{o2}\\to\\infty$, 포화 소신호 모델이에요. $|\\Delta R_D|\\ll R_D$이면 앞 인자를 $R_D/|\\Delta R_D|$로 근사해요. 같은 $g_m,r_{o3}$와 부하에서 (b)가 CM 누출을 줄여 CMRR을 높이며, $2g_mr_{o3}\\gg1$이면 개선 배율은 약 $g_{m3}r_{o4}$예요.</p>\n"
+        }
+      ]
+    },
+    {
+      "id": "2015-2_중간-Q3",
+      "explanation_id": "p7",
+      "subparts": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "steps": [
+        {
+          "subpart": "1",
+          "label": "공통 바이어스와 소신호 값",
+          "html": "\n<div class=\"equation\">$$100\\,\\mu\\mathrm{A/V^2}=0.1\\,\\mathrm{mA/V^2}$$</div>\n<div class=\"equation\">$$I_{SS}=\\frac12(0.1)(100)(0.6-0.4)^2=0.2\\,\\mathrm{mA}$$</div>\n<div class=\"equation\">$$I_{D1}=I_{D2}=I_{SS}/2=0.1\\,\\mathrm{mA}$$</div>\n<div class=\"equation\">$$g_{m1}=g_{m2}=\\sqrt{2\\mu_nC_{ox}(W/L)_1I_{D1}}=1\\,\\mathrm{mS}$$</div>\n<div class=\"equation\">$$r_{o3}=\\frac1{\\lambda_n I_{SS}}=50\\,\\mathrm{k\\Omega}$$</div>\n"
+        },
+        {
+          "subpart": "1",
+          "label": "고정 바이어스에서 전류와 범위 배율",
+          "html": "\n<p>$V_{b1}$ 고정, 제곱법칙 DC 근사에서 $(W/L)_3$ 두 배 → $I_{SS}$ 두 배예요.</p>\n<div class=\"equation\">$$|v_{id}|_{\\rm cutoff}=\\sqrt{\\frac{2I_{SS}}{\\mu_nC_{ox}(W/L)_1}}=\\sqrt{0.08}\\,\\mathrm V\\approx0.28\\,\\mathrm V$$</div>\n<div class=\"equation\">$$\\frac{|v'_{id}|_{\\rm cutoff}}{|v_{id}|_{\\rm cutoff}}=\\sqrt2$$</div>\n<p>두 배 후 경계는 $0.4\\,\\mathrm V$이므로 <b>O</b>예요. 전후 모두 포화·테일 전류원 동작이 유지되어야 해요.</p>\n"
+        },
+        {
+          "subpart": "2",
+          "label": "DM 가상 접지와 이득",
+          "html": "<p>$\\Delta R_D=0$, 입력쌍 $r_o$ 무시인 수업 모델이에요.</p><div class=\"equation\">$$A_{DM}=-g_{m1}R_D=-(1\\,\\mathrm{mS})(10\\,\\mathrm{k\\Omega})=-10$$</div>"
+        },
+        {
+          "subpart": "3",
+          "label": "CM 반회로의 축퇴 이득",
+          "html": "<p>$\\Delta R_D=0$, $r_{o1},r_{o2}$ 무시·$r_{o3}$ 유지예요. 각 출력은 같은 이득으로 움직여요.</p><div class=\"equation\">$$A_{CM}\\approx-\\frac{R_D}{2r_{o3}}=-\\frac{10}{100}=-0.1$$</div>"
+        },
+        {
+          "subpart": "4",
+          "label": "부하 차이가 만드는 양의 누출",
+          "html": "\n<div class=\"equation\">$$\\Delta R_D=0.01R_D=0.1\\,\\mathrm{k\\Omega}$$</div>\n<div class=\"equation\">$$v_{od}=(-R_D\\Delta i_D)-[-(R_D+\\Delta R_D)\\Delta i_D]=\\Delta R_D\\Delta i_D$$</div>\n<div class=\"equation\">$$A_{CM-DM}\\approx\\frac{\\Delta R_D}{2r_{o3}}=\\frac{0.1}{100}=+0.001$$</div>"
+        },
+        {
+          "subpart": "5",
+          "label": "동일 차동 출력의 이득 비",
+          "html": "<p>1% 불일치에서, 분자는 수업의 대칭 기준 $A_{DM}=-10$을 사용해요.</p><div class=\"equation\">$$\\mathrm{CMRR}\\approx\\frac{10}{0.001}=10000$$</div><div class=\"equation\">$$\\mathrm{CMRR}_{dB}\\approx20\\log_{10}(10000)=80\\,\\mathrm{dB}$$</div>"
+        },
+        {
+          "subpart": "6",
+          "label": "전류 증가와 테일 저항 감소를 함께 반영",
+          "html": "\n<div class=\"equation\">$$I'_{SS}=0.4\\,\\mathrm{mA}$$</div>\n<div class=\"equation\">$$g'_{m1}=\\sqrt2\\,\\mathrm{mS}\\approx1.41\\,\\mathrm{mS}$$</div>\n<div class=\"equation\">$$r'_{o3}=25\\,\\mathrm{k\\Omega}$$</div>\n<div class=\"equation\">$$A'_{DM}=-10\\sqrt2\\approx-14.14$$</div>\n<div class=\"equation\">$$A'_{CM-DM}\\approx\\frac{0.1}{50}=0.002$$</div>\n<div class=\"equation\">$$\\mathrm{CMRR}'\\approx\\frac{10\\sqrt2}{0.002}=5000\\sqrt2\\approx7071.07$$</div>\n<div class=\"equation\">$$\\mathrm{CMRR}'_{dB}\\approx76.99\\,\\mathrm{dB}$$</div>"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "1",
+          "html": "<p data-answer-final=\"\"><b>O: 경계 약 $\\pm0.28\\to\\pm0.4\\,\\mathrm V$, $\\sqrt2$배</b> ($V_{b1}$ 고정·포화·테일 동작).</p>"
+        },
+        {
+          "subpart": "2",
+          "html": "<p data-answer-final=\"\"><b>$A_{DM}=-10$</b> (대칭·입력 $r_o$ 무시).</p>"
+        },
+        {
+          "subpart": "3",
+          "html": "<p data-answer-final=\"\"><b>$A_{CM}\\approx-0.1$</b> (각 출력·대칭·입력 $r_o$ 무시·테일 유지).</p>"
+        },
+        {
+          "subpart": "4",
+          "html": "<p data-answer-final=\"\"><b>$A_{CM-DM}\\approx+0.001$</b> (1%·좌−우·입력 $r_o$ 무시).</p>"
+        },
+        {
+          "subpart": "5",
+          "html": "<p data-answer-final=\"\"><b>CMRR $\\approx10000$ / $80\\,\\mathrm{dB}$</b> (1%·대칭 기준 $A_{DM}$).</p>"
+        },
+        {
+          "subpart": "6",
+          "html": "<p data-answer-final=\"\"><b>$\\mathrm{CMRR}'\\approx7071.07$ / $76.99\\,\\mathrm{dB}$</b> ($V_{b1}$ 고정·테일 폭 2배·1%·수업 모델).</p>"
+        }
+      ]
+    },
+    {
+      "id": "P10.71",
+      "explanation_id": "p8",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "입력 흡수 방향과 부하를 보존한 소신호 회로",
+          "html": "\n<figure class=\"figure\"><svg viewBox=\"0 0 500 240\" role=\"img\" aria-label=\"왼쪽 vg 노드에서 i1 전류원과 다이오드 등가저항 1/gm3가 접지로 연결된다. 오른쪽 출력에는 접지에서 위로 공급하는 종속 전류원 -gm4 vg와 RL이 병렬이며 출력 단자는 맨 오른쪽이다.\">\n<path class=\"fig-ink\" d=\"M55 65 H180 M55 65 V110 M55 146 V195 M180 65 V95 l7 4 -14 8 14 8 -14 8 14 8 -7 4 V195 M55 195 H180 M118 195 V208 M108 208 H128 M112 213 H124 M116 218 H120\" fill=\"none\"/>\n<circle class=\"fig-ink\" cx=\"55\" cy=\"128\" r=\"18\" fill=\"none\"/>\n<path class=\"fig-ink\" d=\"M55 117 V139 M50 133 L55 139 60 133\" fill=\"none\"/>\n<text class=\"fig-text fig-math\" x=\"22\" y=\"132\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">i</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">1</tspan></text><text class=\"fig-text fig-math\" x=\"192\" y=\"122\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">1/<tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">g</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">m3</tspan></text>\n<circle class=\"fig-dot\" data-node=\"g\" data-node-color=\"blue\" fill=\"#2563eb\" stroke=\"#2563eb\" cx=\"55\" cy=\"65\" r=\"3.5\"/>\n<circle class=\"fig-dot\" data-node=\"g\" data-node-color=\"blue\" fill=\"#2563eb\" stroke=\"#2563eb\" cx=\"180\" cy=\"65\" r=\"3.5\"/>\n<text class=\"fig-text fig-math\" data-node=\"g\" data-node-color=\"blue\" fill=\"#2563eb\" stroke=\"none\" x=\"91\" y=\"51\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">g</tspan> (+)</text>\n<path class=\"fig-ink\" d=\"M300 65 H470 M300 65 V108 M300 148 V195 H400 M400 65 V95 l7 4 -14 8 14 8 -14 8 14 8 -7 4 V195 M350 195 V208 M340 208 H360 M344 213 H356 M348 218 H352\" fill=\"none\"/>\n<polygon class=\"fig-ink\" points=\"300,108 316,128 300,148 284,128\" fill=\"none\"/>\n<path class=\"fig-ink\" d=\"M300 139 V117 M295 123 L300 117 305 123\" fill=\"none\"/>\n<text class=\"fig-text fig-math\" x=\"270\" y=\"165\" text-anchor=\"end\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">−<tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">g</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">m4</tspan><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">g</tspan></text><text class=\"fig-text fig-math\" x=\"413\" y=\"122\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">R</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">L</tspan></text>\n<circle class=\"fig-dot\" data-node=\"out\" data-node-color=\"red\" fill=\"#dc2626\" stroke=\"#dc2626\" cx=\"300\" cy=\"65\" r=\"3.5\"/>\n<circle class=\"fig-dot\" data-node=\"out\" data-node-color=\"red\" fill=\"#dc2626\" stroke=\"#dc2626\" cx=\"400\" cy=\"65\" r=\"3.5\"/>\n<circle class=\"fig-dot\" data-node=\"out\" data-node-color=\"red\" fill=\"#dc2626\" stroke=\"#dc2626\" cx=\"470\" cy=\"65\" r=\"3.5\"/>\n<text class=\"fig-text fig-math\" data-node=\"out\" data-node-color=\"red\" fill=\"#dc2626\" stroke=\"none\" x=\"404\" y=\"49\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\"><tspan font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">v</tspan><tspan baseline-shift=\"sub\" font-size=\"78%\" font-family=\"Pretendard\" font-weight=\"600\" font-style=\"normal\">out</tspan> (+)</text>\n<circle cx=\"118\" cy=\"195\" r=\"3\" fill=\"currentColor\" data-ground-branch=\"true\"/><circle cx=\"350\" cy=\"195\" r=\"3\" fill=\"currentColor\" data-ground-branch=\"true\"/></svg><figcaption>$V_{DD}$는 AC 접지예요. $M_3$는 다이오드 등가저항, $M_4$는 $v_g$로 제어되는 공급 전류원으로 바꿨어요. $\\lambda=0$이므로 $r_{o3},r_{o4}$ 가지는 없고, 실제 부하 $R_L$은 남겨요. 두 신호 노드는 게이트의 제어 관계로 연결되며 도선으로 단락되지 않아요.</figcaption></figure>\n<p>$v_g$ 노드에서 아래로 나가는 전류는 전류원의 $i_1$과 저항의 $g_{m3}v_g$예요. 두 전류를 더해 0으로 놓아요.</p>\n<div class=\"equation\">$$i_1+g_{m3}v_g=0$$</div>\n<div class=\"equation\">$$v_g=-\\frac{i_1}{g_{m3}}$$</div>\n"
+        },
+        {
+          "subpart": "main",
+          "label": "같은 과구동 전압에서 전류비와 gm비",
+          "html": "\n<div class=\"equation\">$$\\frac{I_{D4}}{I_{D3}}=\\frac{(W/L)_4}{(W/L)_3}=\\frac1N$$</div>\n<div class=\"equation\">$$\\frac{g_{m4}}{g_{m3}}=\\frac{2I_{D4}/V_{OV}}{2I_{D3}/V_{OV}}=\\frac1N$$</div>\n"
+        },
+        {
+          "subpart": "main",
+          "label": "복사 공급 전류와 실제 부하의 출력 KCL",
+          "html": "\n<p>$M_4$가 출력으로 공급하는 소신호 전류를 $i_4$라 두면 다음과 같아요.</p>\n<div class=\"equation\">$$i_4=g_{m4}v_{sg4}=-g_{m4}v_g=\\frac{g_{m4}}{g_{m3}}i_1=\\frac{i_1}{N}$$</div>\n<p>출력 노드에서 $R_L$로 나가는 전류와 위로부터 들어오는 $i_4$가 같아요. 출력은 단락하지 않고 $R_L$에 걸린 전압을 구해요.</p>\n<div class=\"equation\">$$\\frac{v_{out}}{R_L}-i_4=0$$</div>\n<div class=\"equation\">$$v_{out}=\\frac{R_L}{N}i_1$$</div>\n"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "<p><strong>아래 방향 입력 전류 $i_1$에 대한 트랜스임피던스는 양수예요.</strong></p><div class=\"equation\">$$\\boxed{\\frac{v_{out}}{i_1}=+\\frac{R_L}{N}\\quad[\\Omega]}$$</div><p>두 PMOS의 포화 동작·작은 신호·채널 길이 변조 무시와 실제 부하 $R_L$ 조건에서의 결과예요.</p>"
+        }
+      ]
+    },
+    {
+      "id": "P10.72",
+      "explanation_id": "p9",
+      "subparts": [
+        "a",
+        "b"
+      ],
+      "steps": [
+        {
+          "subpart": "a",
+          "label": "1 대 1 거울의 전후 출력 계산",
+          "html": "\n<p>$\\lambda=0$, $M_4$ 포화에서 $k=1$, $I_4=I_1$이에요. 출력 KCL은 $V_{out}=R_L(I_4-I_2)$예요.</p>\n<div class=\"equation\">$$V_{out,\\mathrm{전}}=R_L(I_0-I_0)=0$$</div>\n<div class=\"equation\">$$V_{out,\\mathrm{후}}=R_L[(I_0+\\Delta I)-(I_0-\\Delta I)]=2\\Delta I R_L$$</div>\n"
+        },
+        {
+          "subpart": "b",
+          "label": "절반 거울의 전후 출력 계산",
+          "html": "\n<p>$\\lambda=0$, $M_4$ 포화에서 $k=1/2$, $I_4=I_1/2$이고 $V_{out}=R_L(I_4-I_2)$예요.</p>\n<div class=\"equation\">$$V_{out,\\mathrm{전}}=R_L\\left(\\frac{I_0}{2}-I_0\\right)=-\\frac{I_0R_L}{2}$$</div>\n<div class=\"equation\">$$V_{out,\\mathrm{후}}=R_L\\left[\\frac{I_0+\\Delta I}{2}-(I_0-\\Delta I)\\right]=\\frac{(3\\Delta I-I_0)R_L}{2}$$</div>\n<div class=\"equation\">$$\\Delta V_{out}=V_{out,\\mathrm{후}}-V_{out,\\mathrm{전}}=\\frac32\\Delta I R_L$$</div>\n"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "a",
+          "html": "\n<p><strong>전에는 $V_{out}=0$, 후에는 $V_{out}=2\\Delta I R_L$예요.</strong> 채널 길이 변조 무시, $M_4$ 포화 및 이상 전류원의 동작 가능 범위에서의 결과예요.</p>\n"
+        },
+        {
+          "subpart": "b",
+          "html": "\n<p><strong>전에는 $V_{out}=-I_0R_L/2$, 후에는 $V_{out}=(3\\Delta I-I_0)R_L/2$예요.</strong> 변화량은 $\\Delta V_{out}=1.5\\Delta I R_L$예요. 채널 길이 변조 무시, $M_4$ 포화 및 음의 출력을 포함한 전류원 동작 가능 범위를 전제로 해요.</p>\n"
+        }
+      ]
+    },
+    {
+      "id": "P10.75",
+      "explanation_id": "p10",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "입출력 정의와 능동 부하 블록식",
+          "html": "\n<p>$v_{id}=v_{in1}-v_{in2}$, 오른쪽 무부하 출력이에요. 큰 $\\beta$, $g_mr_O\\gg1$에서 $G_m\\approx g_m$, $R_{out}\\approx r_{O2}\\parallel r_{O4}$를 사용해요. $V_T=26\\,\\mathrm{mV}=0.026\\,\\mathrm V$는 수업 가정이에요.</p>\n<div class=\"equation\">$$A_v=\\frac{v_{out}}{v_{id}}\\approx+G_mR_{out}\\approx+g_m(r_{O2}\\parallel r_{O4})$$</div>\n"
+        },
+        {
+          "subpart": "main",
+          "label": "중간값과 전류 소거",
+          "html": "\n<div class=\"equation\">$$g_m=\\frac{I_C}{V_T}$$</div>\n<div class=\"equation\">$$r_{O2}=\\frac{V_{A,n}}{I_C}$$</div>\n<div class=\"equation\">$$r_{O4}=\\frac{V_{A,p}}{I_C}$$</div>\n<p>병렬저항의 역수는 가지별 역수의 합이므로 이득의 역수로 바꾸어요.</p>\n<div class=\"equation\">$$\\frac{1}{|A_v|}\\approx\\frac{1}{g_mr_{O2}}+\\frac{1}{g_mr_{O4}}$$</div>\n<div class=\"equation\">$$g_mr_{O2}=\\frac{I_C}{V_T}\\frac{V_{A,n}}{I_C}=\\frac{V_{A,n}}{V_T}$$</div>\n<div class=\"equation\">$$g_mr_{O4}=\\frac{I_C}{V_T}\\frac{V_{A,p}}{I_C}=\\frac{V_{A,p}}{V_T}$$</div>\n<div class=\"equation\">$$\\frac{1}{|A_v|}\\approx\\frac{V_T}{V_{A,n}}+\\frac{V_T}{V_{A,p}}$$</div>\n"
+        },
+        {
+          "subpart": "main",
+          "label": "목표 이득에서 PNP Early 전압 역산",
+          "html": "\n<p>주도항 설계식에 목표 크기 100과 $V_{A,n}=5\\,\\mathrm V$를 넣고 PNP 항만 남겨요.</p>\n<div class=\"equation\">$$\\frac{0.026\\,\\mathrm V}{V_{A,p}}=\\frac{1}{100}-\\frac{0.026\\,\\mathrm V}{5\\,\\mathrm V}=4.8\\times10^{-3}$$</div>\n<div class=\"equation\">$$V_{A,p}=\\frac{0.026\\,\\mathrm V}{4.8\\times10^{-3}}=\\frac{65}{12}\\,\\mathrm V\\approx5.42\\,\\mathrm V$$</div>\n"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "<p><strong>필요한 PNP Early 전압 크기는 $V_{A,p}=65/12\\,\\mathrm V\\approx5.42\\,\\mathrm V$예요.</strong> $V_T=26\\,\\mathrm{mV}$, 큰 $\\beta$, $g_mr_O\\gg1$인 주도항 설계에서 $A_v\\approx+100$이에요.</p>"
+        }
+      ]
+    }
+  ],
+  "assets": {}
+}

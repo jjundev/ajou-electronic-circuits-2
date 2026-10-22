@@ -29,6 +29,8 @@ description: 전자회로2 수업의 STT·강의노트·Razavi 교과서로 ELI5
 - `RUN` = `<scratchpad>/review-pack/<range>/`
 - 셸 상태는 Bash 호출 사이에 이어지지 않는다. 아래 명령의 `$SKILL`, `$RUN`, `$REPO`는 실행할 때마다 실제 절대 경로로 바꿔 쓰거나, 같은 명령 앞에 `SKILL=… RUN=… REPO=…`를 붙여 설정한다. `cd`는 쓰지 않고 파일도 절대 경로로 넘긴다.
 
+**기본 근사와 회로 표기:** 공통 `solution-style.md`의 수업 기본 근사를 적용한다. $g_mr_o\gg1$, $g_mR_e\gg1$의 주항을 쓰고 캐스코드의 곱 인자 소자를 밝힌다. 내부 $r_e=1/g_m$는 축퇴 저항과 구분하고 유한 $r_\pi$는 보존한다. 생성 SVG는 NOTATION-01의 native text/tspan 실제 첨자(기본 78%)·Pretendard 600 정체로 통일하고 실제 face 사용을 HTML·독립 SVG·PDF에서 검토한다. CM 이득은 성립 조건을 확인한 $2R_{SS}$ 반회로를 본풀이에 앞세우고 테일 저항 유도는 보충으로 분리한다. 부하 불일치·거울 결합·원문 지정 방법의 예외는 PROFILE CIRCUIT-02를 따른다.
+
 ## 확정한 문제 해설 형식
 
 자식 ec2-problem-explain의 문제 해설은 **문제를 읽어요 → 이 개념과 공식을 떠올려요 → 종이에 쓸 첫 줄 → 이렇게 풀어요 → 완성 답과 검산 → 주의할 점 → 조건을 바꾸어 생각해요** 순서다. 사용자 방식의 풀이를 start/solve/verify의 정식 본문으로 삼고 필요한 이유·유도를 각 단계에 연결한다. 앞에 별도 핵심 풀이를 추가하거나 뒤에 같은 상세 풀이를 반복하지 않는다. 요약·동반 MD·답안 PDF는 이 경로와 결과를 따른다. 순수 개념 정리노트는 기존 토픽/레이어 구조를 유지한다.
@@ -102,7 +104,7 @@ description: 전자회로2 수업의 STT·강의노트·Razavi 교과서로 ELI5
 - 노드 점과 시험 표기 필수: 접지 표기만 하는 비분기 단자와 접지 기호의 직접 접속점을 제외하고, 입력·출력·시험 노드와 이름을 붙인 전압 노드에는 연결 위치가 분명한 눈에 보이는 점을 찍는다. 출력 시험전압 노드의 점은 출력 도선의 실제 맨 끝이자 가장 오른쪽 단자에 둔다. 점 오른쪽으로 도선(ink)이 더 이어지거나 연장된 도선 중간에 점이 놓이면 안 된다. 시험 노드 전압 $V_t(+)$는 그 끝점 위에 둔다. 유입 시험전류는 오른쪽에서 왼쪽으로 흐르며, 왼쪽을 향하는 $i_t$ 화살표는 $V_t$ 점 왼쪽의 도선 구간에 둔다. $i_t$ 라벨도 점 왼쪽에서 그 화살표 아래나 곁에 둔다. 화살표 전체가 점 왼쪽에 머물고 점을 덮지 않도록 화살표 꼬리와 점 사이에 작은 간격을 남긴다. 화살표나 전류 라벨을 점 오른쪽에 놓지 않는다. 다른 시험 기호($v_x/i_x$ 등)를 쓰면 같은 배치와 정의를 적용한다. 선 교차만 있고 연결되지 않은 곳에는 점을 찍지 않는다. 라이트·다크 HTML과 실제 답안 PDF에서 점·라벨·화살표의 분리와 가시성을 각각 확인한다.
 - 회로 안 글자와 점의 정돈: SVG 안에는 소자 이름·값·제어 전류원 라벨(예: $g_mv_\pi$), 노드 이름·극성·방향처럼 실제 회로를 읽는 표기를 남긴다. 분석용 $G_m$ 제목·측정 조건 문구·유도 설명은 그림 아래 figcaption이나 수식 문단에 둔다. 출력 단락·입력 영점의 실제 연결은 그림에 보존한다. 접지 입력 위의 독립 제목 `Rout`처럼 불필요한 제목은 옮겨 중복하지 않고 삭제한다. 가까운 노드 관계는 유도 설명이 아니고 겹치지 않을 때만 남길 수 있다. 접지 표기만 하는 비분기 단자·접지 기호의 직접 접속점은 제외하고 입력·출력·시험 단자, 이름 붙인 내부 전압 노드, 실제 분기 접속점의 점은 유지하되 이름도 분기도 없는 직선 도선 중간의 장식 점은 없앤다. 모든 도선에 점을 추가하라는 규칙이 아니다. $V_{out}(+)$·$V_t$ 등 라벨은 아래첨자까지 포함한 실제 글리프 경계상자가 도선에서 최소 0.6em(보통 화면에서 약 8px) 떨어지게 배치한다. 텍스트 기준선 간격만 확인하지 않는다. 필요하면 라벨을 옮기고 viewBox 위쪽 여백을 늘린다. 풀이 본문의 모든 SVG를 열거하여 라이트·다크 HTML과 실제 답안 PDF의 보통 보기 크기에서 이 간격·클리핑·겹침을 확인한다. 병렬 제어원 왼쪽/$r_o$ 오른쪽/출력 맨 오른쪽, 맨 끝 $V_t$ 점 오른쪽 도선 없음, 점 왼쪽의 왼쪽 방향 $i_t$와 라벨 배치도 유지한다.
 - 접지·전압 라벨·노드 색 대응: 접지 기호에 직접 닿는 점과 접지만 표시하는 비분기 입력 단자의 점은 생략한다. 접지로 이어지는 회로라도 별도의 실제 분기 접속점·이름 있는 비접지 노드는 유지한다. $v_e$ 등 전압 이름은 다른 소자나 저항 옆으로 멀리 밀지 않고 해당 노드 바로 곁에 둔다. 아래첨자·극성을 포함한 실제 글리프 경계로 도선과 최소 0.6em 간격을 확보하면서 가능하면 0.6–1em 정도의 가까운 간격을 목표로 한다. 혼잡 때문에 더 벌리면 배치 이유를 검토에 기록한다. 노드 점과 해당 전압 이름·극성은 같은 파랑 또는 빨강으로 묶는다. 주요 신호 경로를 따라 파랑·빨강을 교대하고 가까운 전압 라벨끼리 최대한 다른 색을 쓴다. 같은 전기적 노드는 다른 위치의 점도 같은 색이며, 모든 인접 노드를 반대색으로 만드는 그래프 채색을 강제하지 않는다. 접지 표기·도선·소자/제어원 라벨·전류 화살표/라벨·본문 수식의 색은 이 노드 색 규칙으로 바꾸지 않는다. 색 없이도 노드 이름과 극성으로 구분되어야 한다. SVG에는 대응 노드 식별자와 색을 명시하고, HTML 테마와 PDF에서 실제 계산된 색이 파랑/빨강인지 확인한다. PDF의 문항 종류별 초록/주황 `--kind`를 노드 파랑의 대체값으로 사용하지 않는다. 풀이 본문의 모든 SVG와 MD에 참조된 같은 그림, 라이트·다크 HTML 및 실제 답안 PDF에서 접지 점 생략·가까운 라벨·점/전압 색 일치를 검토한다.
-- 출력저항 표시/검산 경계: $R_{out}$은 처음부터 유효한 근사식으로 시작하고 조건과 $\approx$를 유지한다. 이 규칙은 생성하는 풀이 본문(start/solve/verify·formal/보충 포함) HTML·요약·동반 MD·답안 PDF 모두에 적용한다. 정확식 → 근사식 유도나 정확식과 수치 비교를 학습 본문에 추가하지 않는다. 정확한 $R_{out}$의 전체 모델·유도·수치/극한 대조는 내부 독립 검산 evidence에만 둔다. 원문이 정확식·유한 β 전체 결과를 명시적으로 요구하거나 근사 조건이 성립하지 않으면 예외 이유를 짧게 밝히고 필요한 모델과 결과를 제시한다. 유한 β 또는 $r_o$가 있다는 사실만으로 예외를 선언하지 않는다. 이 제한은 $R_{out}$에 한정하며 다른 개념의 필요한 상세 유도를 줄이지 않는다.
+- 출력저항 표시/검산 경계: $R_{out}$은 처음부터 유효한 근사식으로 시작하고 조건과 $\approx$를 유지한다. 이 규칙은 생성하는 풀이 본문(start/solve/verify·formal/보충 포함) HTML·요약·동반 MD·답안 PDF 모두에 적용한다. 정확식 → 근사식 유도나 정확식과 수치 비교를 학습 본문에 추가하지 않는다. 정확한 $R_{out}$의 전체 모델·유도·수치/극한 대조는 내부 독립 검산 evidence에만 둔다. 원문이 정확식·유한 β 전체 결과 또는 수업 기본 큰 곱 근사와 반대인 조건·수치를 명시하면 예외 이유를 짧게 밝히고 필요한 모델과 결과를 제시한다. 유한 β 또는 $r_o$가 있다는 사실만으로 예외를 선언하지 않는다. 이 제한은 $R_{out}$에 한정하며 다른 개념의 필요한 상세 유도를 줄이지 않는다.
 - 섹션마다 작성자 1명을 띄운다. 브리프는 `references/content-rules.md`, 위젯 규칙은 `references/widget-rules.md`에 있다.
 - 모두 **한 메시지에서 병렬로** 띄운다. 모델은 opus(GPT: sol), `lite`이면 sonnet(GPT: luna)이다. 병렬 작성자끼리 임시 파일이 섞이지 않게 브리프에 각자의 임시 폴더 `<RUN>/work/<sid>/`를 적어 준다.
 - 브리프의 `<…>` 자리는 실제 경로, id, 금지어 목록(`<forbidden 목록>`), 예고 토픽 id(`<preview_topic>`), 섹션 작성자에게 필요한 교과서 장 PDF와 쪽(`<N>장.pdf`, `<쪽>`), 그리고 manifest `links` 중 그 섹션 토픽에 속한 것만(`<이 섹션의 links 목록>`) 채워 넣는다. 요약·예고 섹션 작성자에게는 문제 수(0이면 "문제 없음")도 알린다.
@@ -111,9 +113,9 @@ description: 전자회로2 수업의 STT·강의노트·Razavi 교과서로 ELI5
 
 ### 4. 조립
 - `manifest.py "$RUN/manifest.json" "$REPO"`로 현재 snapshot을 검증한 후에만 발행 경로를 변경한다.
-- **부모가 problems.txt·slug·정리노트를 처음 변경하기 전에** `references/problem-explain-integration.md`의 기존 설명 백업·정리 절차를 먼저 끝낸다. 문제지 빌드도 그 뒤에 한다. 재조립마다 반복하지 않는다. 기본 팩 재생성이 실패하면 해당 참조의 복원 순서를 따른다.
+- **부모가 problems.txt·display-titles.json·slug·정리노트를 처음 변경하기 전에** `references/problem-explain-integration.md`의 기존 설명 백업·정리 절차를 먼저 끝낸다. 문제지 빌드도 그 뒤에 한다. 재조립마다 반복하지 않는다. 기본 팩 재생성이 실패하면 해당 참조의 복원 순서를 따른다.
 - 초기 빌드는 문제지(`--mode problems`)만 만든다. 답안은 9단계 자식 승인 이후에 만든다.
-- **처음 조립할 때만**: `복습노트/<range>/`에 이번 `range`의 산출물(맨 위의 `정리노트_<range>_*`·`복습문제_<range>_*`, `.assets/`의 `정리노트_<range>_*`·`problems.txt`·`figures_<range>/`)이 하나라도 있으면 먼저 백업한다. 다시 조립할 때(5~8단계에서 돌아온 경우)는 백업하지 않는다. 이미 스킬이 만든 초안이 백업에 섞이기 때문이다.
+- **처음 조립할 때만**: `복습노트/<range>/`에 이번 `range`의 산출물(맨 위의 `정리노트_<range>_*`·`복습문제_<range>_*`, `.assets/`의 `정리노트_<range>_*`·`problems.txt`·`display-titles.json`·`figures_<range>/`)이 하나라도 있으면 먼저 백업한다. 다시 조립할 때(5~8단계에서 돌아온 경우)는 백업하지 않는다. 이미 스킬이 만든 초안이 백업에 섞이기 때문이다.
   - `RANGE`, `REPO`, `RUN`을 모두 실제 값으로 바꿔 한 명령으로 실행한다. 파일명은 NFC로 비교하므로 NFD 파일명도 잡힌다.
   - 백업 파일·경로 집합·SHA-256은 `RUN/basic-pack-backup.json`에 기록하고 재조립 시 유지한다. 백업은 매번 새 폴더 `RUN/previous-<시각>-<임의>/`에 만든다. `RANGE`가 형식에 안 맞거나, 대상이 있는데 복사된 파일 수가 다르면 종료 코드 1로 멈춘다. 이때는 조립하지 말고 원인을 고친다.
 ```bash
@@ -132,7 +134,7 @@ pack = listdir_nfc(notes).get(r)
 top = listdir_nfc(pack)
 hits = sorted((n, p) for n, p in top.items() if re.fullmatch(rf"정리노트_{r}_.+\.html|복습문제_{r}_.+-(문제|답안)\.pdf", n))
 hits += sorted((f".assets/{n}", p) for n, p in listdir_nfc(top.get(".assets")).items()
-               if re.fullmatch(rf"정리노트_{r}_.+\.md", n) or n in (f"figures_{r}", "problems.txt"))
+               if re.fullmatch(rf"정리노트_{r}_.+\.md", n) or n in (f"figures_{r}", "problems.txt", "display-titles.json"))
 record = Path(run) / "basic-pack-backup.json"
 if not hits:
     record.write_text(json.dumps({"range": r, "backup": None, "roots": [], "files": {}, "dirs": []}), encoding="utf-8")
@@ -213,6 +215,8 @@ for rel, target in pending:
 print("제거:", ", ".join(rel for rel, _ in pending) if pending else "없음")
 EOF
 ```
+- **기본 팩·설명 백업이 모두 검증된 뒤에만** 표시 제목 맵을 발행 폴더에 작성/갱신한다. 작성 전까지 후보 맵은 RUN/work에 둔다.
+- 선발 문항마다 짧은 표시 제목을 작성해 `.assets/display-titles.json`에 `{ "workbook ID": "짧은 제목" }` 객체로 저장한다. 키는 선발 ID 전체와 정확히 일치해야 한다. 값에 `P1.` 접두사·Fig 번호·긴 조건 나열을 넣지 않는다. 생성기가 순서에 따라 `P1. …`를 붙인다. 문제은행 원제목·원문·출처는 보존한다. 문제설명은 자동으로 이 파일을 읽고 입력 해시에 포함하며, 두 PDF 빌드는 같은 파일을 `--display-titles`로 받는다.
 - 정리노트를 조립한다.
 ```bash
 python3 "$SKILL/scripts/assemble.py" --repo "$REPO" --run "$RUN" --out "$REPO/복습노트/<range>"
@@ -222,7 +226,7 @@ python3 "$SKILL/scripts/assemble.py" --repo "$REPO" --run "$RUN" --out "$REPO/�
 python3 -c "import json,sys;print(','.join(q['id'] for q in json.load(open(sys.argv[1]))['problems']))" "$RUN/manifest.json"
 ```
 ```bash
-python3 "$REPO/workbook/build_workbook.py" --ids <위 결과> --name 복습문제_<range>_<slug> --mode problems --layout video-16x9 --pdf-dir "$REPO/복습노트/<range>" --build-dir "$RUN/workbook-build"
+python3 "$REPO/workbook/build_workbook.py" --ids <위 결과> --name 복습문제_<range>_<slug> --mode problems --display-titles "$REPO/복습노트/<range>/.assets/display-titles.json" --layout video-16x9 --pdf-dir "$REPO/복습노트/<range>" --build-dir "$RUN/workbook-build"
 ```
   - stderr에 `ERROR <md 경로>: …`(문제 md 자체 오류, 종료 코드 2)가 나오면 해당 id를 같은 절 후보로 한 번 바꿔 manifest를 고치고 2단계 검증부터 다시 하고 이 단계를 다시 한다(백업은 하지 않는다). `ERROR <name>: …`(렌더링·Chrome·네트워크, 종료 코드 1)나 `OVERFLOW`는 md 문제가 아니므로 id를 바꾸지 않고 "미해결"로 보고한다(`references/problem-selection.md` 5).
 
@@ -265,7 +269,7 @@ python3 "$SKILL/scripts/html2md.py" "$REPO/복습노트/<range>/<정리노트>.h
 - extract 이후 정리노트 바이트를 바꾸지 않는다. 자식은 확정한 일곱 구역의 통합 풀이 저작 → 독립 검산 → build/check → 네 검토 + 전체 개인화 감사 → publish까지 완료한다. 자식은 PDF를 직접 교체하지 않는다.
 - 자식 publish 성공 후 같은 팩의 발행 overlay를 쓴다. `<위 결과>`는 4단계처럼 manifest ID 순서를 추출한 값이다.
 ```bash
-python3 "$REPO/workbook/build_workbook.py" --ids <위 결과> --name 복습문제_<range>_<slug> --mode answers --answer-overlay "$REPO/복습노트/<range>/.assets/자료_문제설명_<range>_<slug>/answer-overlay.json" --layout video-16x9 --pdf-dir "$RUN/answers" --build-dir "$RUN/answer-build"
+python3 "$REPO/workbook/build_workbook.py" --ids <위 결과> --name 복습문제_<range>_<slug> --mode answers --answer-overlay "$REPO/복습노트/<range>/.assets/자료_문제설명_<range>_<slug>/answer-overlay.json" --display-titles "$REPO/복습노트/<range>/.assets/display-titles.json" --layout video-16x9 --pdf-dir "$RUN/answers" --build-dir "$RUN/answer-build"
 ```
 - [통합 계약](references/problem-explain-integration.md)의 명령으로 PDF 실제 렌더 페이지를 확인하고 `RUN/answer-review.json`을 기록한다. 핵심 회로·판단·계산·최종 답과 자막 여백·넘침을 실제 확인한 기록만 pass다. 빌드 종료 코드가 0이고 OVERFLOW가 없어야 한다.
 ```bash
@@ -314,7 +318,7 @@ python3 "$SKILL/scripts/insert_why.py" --note "$REPO/복습노트/<range>/<정�
 | 포트 사용 중 | 다른 빈 포트 사용 |
 | 문제설명·개인화 감사·답안·최종 검사 실패 / disputed | 통합 계약대로 이번 실행 전 기본 팩과 대응 설명을 복원한다. 새 팩은 이번 파일만 RUN/withheld에 보관한다. 전체 완료를 보고하지 않고 다른 팩은 계속한다 |
 | 기존 설명 백업·해시 검증 실패 | 원본을 유지하고 부모 첫 조립을 중단한다 |
-| 같은 range의 팩이 이미 있음 | 4단계 첫 조립 전에 기존 html·pdf와 `.assets/`의 md·`problems.txt`·`figures_<range>/`를 같은 상대 경로로 새 폴더 `RUN/previous-<시각>-<임의>/`에 복사하고(다시 조립할 때는 복사하지 않음) 백업 경로를 보고서에 적음. 백업 명령이 실패하면 조립하지 않고 원인을 고친다 |
+| 같은 range의 팩이 이미 있음 | 4단계 첫 조립 전에 기존 html·pdf와 `.assets/`의 md·`problems.txt`·`display-titles.json`·`figures_<range>/`를 같은 상대 경로로 새 폴더 `RUN/previous-<시각>-<임의>/`에 복사하고(다시 조립할 때는 복사하지 않음) 백업 경로를 보고서에 적음. 백업 명령이 실패하면 조립하지 않고 원인을 고친다 |
 | `insert_why.py`가 `insert_why 실패: …` | 노트는 그대로다. 메시지대로 why 조각을 고쳐 다시 실행 |
 | 검사 2회 실패 | 해당 팩을 통합 계약대로 복구/보류하고 미해결로 보고한다. 다른 팩은 계속한다 |
 

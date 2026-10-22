@@ -1,0 +1,23 @@
+INDEPENDENT CONDITIONS-ONLY VERIFICATION: PASS
+No workbook answer, previous derivation, or agent fragment was read.
+Emitter KCL (sum of outgoing currents)= ve/R1 + ve/rpi3 + (ve-vx)/ro3 + gm3*ve = 0
+ve = R1*rpi3*vx/(R1*gm3*ro3*rpi3 + R1*ro3 + R1*rpi3 + ro3*rpi3)
+itest = vx*(R1 + rpi3)/(R1*gm3*ro3*rpi3 + R1*ro3 + R1*rpi3 + ro3*rpi3)
+Let Re_star = R1 || rpi3.
+EXACT Rout = ro3 + (1 + gm3*ro3)*Re_star.
+EXACT Acm_to_diff = gm1*DeltaRC / (1 + 2*gm1*Rout). Sign is positive for RC at Q1 and RC+DeltaRC at Q2.
+EXACT Adm = -gm1*(RC + DeltaRC/2).
+Using requested small-mismatch |ADM| approx gm1*RC:
+CMRR = RC*(1 + 2*gm1*Rout)/abs(DeltaRC).
+With gm1*Rout >> 1: |Acm_to_diff| approx abs(DeltaRC)/(2*Rout), CMRR approx 2*gm1*Rout*RC/abs(DeltaRC).
+With gm3*ro3 >> 1 and gm3*Re_star >> 1: Rout approx gm3*ro3*Re_star.
+Thus |Acm_to_diff| approx abs(DeltaRC)/(2*gm3*ro3*Re_star).
+CMRR approx 2*gm1*gm3*ro3*Re_star*RC/abs(DeltaRC).
+gm3*ro3 multiplies (R1 || rpi3), not bare R1. No gm1*ro1 term exists: ro1=infinite.
+Finite rpi3 limits Re_star. Replacing Re_star by R1 additionally requires rpi3 >> R1.
+Numeric test: gm3=.04 S, ro3=100000 ohm, rpi3=2500 ohm, R1=1000 ohm, gm1=.02 S, RC=10000 ohm, DeltaRC=100 ohm.
+Re_star=714.285714286 ohm; Rout_exact=2957857.14286 ohm; Rout_leading=2857142.85714 ohm.
+gm3*Re_star=28.5714285714; gm3*ro3=4000; gm1*Rout=59157.1428571.
+Acm_to_diff_exact=1.69039865637e-05; CMRR_small_mismatch_exact=11831528.5714.
+Leading Acm=1.75e-05; leading CMRR=11428571.4286.
+All symbolic equality assertions and full-pair superposition checks passed.

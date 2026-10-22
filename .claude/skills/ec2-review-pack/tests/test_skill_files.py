@@ -144,6 +144,38 @@ class TestBackupSnippet(unittest.TestCase):
         names = sorted(unicodedata.normalize("NFC", n) for n in os.listdir(dirs[0] / ".assets"))
         self.assertEqual(names, ["figures_0923", "problems.txt", "정리노트_0923_A.md"])
 
+    def test_title_map_rolls_back_with_its_published_pack(self):
+        integration = (SKILL / "references/problem-explain-integration.md").read_text(encoding="utf-8")
+        match = re.search(r'python3 - "\$REPO" "\$RUN" "\$RANGE" <<\'EOF\'\n(.*?)\nEOF', integration, re.S)
+        self.assertIsNotNone(match)
+        pack = self.notes / "0923"
+        assets = pack / ".assets"
+        assets.mkdir(parents=True)
+        note = pack / "정리노트_0923_A.html"
+        note.write_text("old published note", encoding="utf-8")
+        titles = assets / "display-titles.json"
+        for had_titles in (True, False):
+            with self.subTest(had_titles=had_titles):
+                if had_titles:
+                    titles.write_text('{"E9.05":"old"}', encoding="utf-8")
+                else:
+                    titles.unlink(missing_ok=True)
+                backup = self.backup("0923")
+                self.assertEqual(backup.returncode, 0, backup.stderr)
+                record = json.loads((self.run_dir / "basic-pack-backup.json").read_text())
+                self.assertEqual(".assets/display-titles.json" in record["files"], had_titles)
+                (self.run_dir / "explanations-backup.json").write_text(json.dumps(
+                    {"range":"0923", "backup":None, "roots":[], "files":{}, "dirs":[]}), encoding="utf-8")
+                titles.write_text('{"E9.05":"new"}', encoding="utf-8")
+                note.write_text("unfinished note", encoding="utf-8")
+                result = subprocess.run([sys.executable, "-", str(self.tmp / "repo"), str(self.run_dir), "0923"],
+                    input=match.group(1), capture_output=True, text=True)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(note.read_text(encoding="utf-8"), "old published note")
+                self.assertEqual(titles.exists(), had_titles)
+                if had_titles:
+                    self.assertEqual(titles.read_text(encoding="utf-8"), '{"E9.05":"old"}')
+
     def test_bad_range_fails_loudly(self):
         for bad in ("", "<range>", "923"):
             with self.subTest(bad=bad):

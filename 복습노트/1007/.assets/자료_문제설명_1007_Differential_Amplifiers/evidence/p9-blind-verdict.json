@@ -1,0 +1,22 @@
+{
+  "a": {
+    "status": "pass",
+    "method": "Blind visual circuit inspection; matched saturated PMOS ratio from square law; SymPy KCL solve; signed numerical current balance before and after",
+    "conclusion": "Vout_before=0; Vout_after=2*RL*dI; delta=2*RL*dI",
+    "evidence": [
+      "independent-sympy.py",
+      "p9-result.txt"
+    ],
+    "assumptions": "Matched PMOS parameters, zero channel-length modulation, M4 saturated, ideal current sinks with adequate compliance; RL tied to ground."
+  },
+  "b": {
+    "status": "pass",
+    "method": "Blind visual circuit inspection; matched saturated PMOS ratio from square law; SymPy KCL solve; signed numerical current balance before and after",
+    "conclusion": "Vout_before=-I0*RL/2; Vout_after=-RL*(I0 - 3*dI)/2; delta=3*RL*dI/2",
+    "evidence": [
+      "independent-sympy.py",
+      "p9-result.txt"
+    ],
+    "assumptions": "Matched PMOS parameters, zero channel-length modulation, M4 saturated, ideal current sinks with adequate compliance; RL tied to ground."
+  }
+}

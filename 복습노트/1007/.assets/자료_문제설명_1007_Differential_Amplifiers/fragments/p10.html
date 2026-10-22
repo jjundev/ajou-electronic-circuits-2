@@ -1,75 +1,74 @@
 <div class="layer eli5" data-explanation="understand">
-  <h4>문제를 내 말로 읽어요</h4>
-  <p>npn 차동쌍 $Q_1$, $Q_2$가 입력을 받고, 위쪽 부하는 저항이 아니라 pnp 전류 거울(current mirror) $Q_3$(다이오드 연결)·$Q_4$예요. 테일은 이상적인 전류원 $I_{EE}$이고, 출력은 $Q_2$와 $Q_4$의 컬렉터가 만나는 한 점 $V_{out}$에서만 뽑아요(싱글엔디드 출력).</p>
-  <p>입력은 차동 전압 $V_{in1}-V_{in2}$, 출력은 $V_{out}$이에요. 회로 모양과 npn의 Early 전압 $V_{A,n}=5\ \text{V}$는 정해져 있고, 이득이 100이 되도록 pnp의 Early 전압 $V_{A,p}$를 거꾸로 구하라는 설계 문제예요. $I_{EE}$ 값은 주어지지 않았는데, 풀다 보면 전류가 약분되어 필요 없다는 걸 확인하게 돼요.</p>
+<h4>문제를 읽어요</h4>
+<p>원 그림에서 아래 $Q_1,Q_2$는 NPN 입력쌍이고, 위 $Q_3,Q_4$는 PNP 전류 거울(current mirror)이에요. $Q_3$만 베이스–컬렉터를 연결하고, 출력은 오른쪽 $Q_2,Q_4$ 컬렉터의 공통 노드에서 읽어요. 입력은 $v_{id}=v_{in1}-v_{in2}$로 정의해요.</p>
+<p>구할 것은 전류가 아니라 PNP의 Early 전압 크기 $V_{A,p}$예요. 원문은 열전압 $V_T$를 지정하지 않았으므로 <strong>수업값 $V_T=26\,\mathrm{mV}$를 가정</strong>해요. 짝이 맞는 입력쌍과 1:1 거울, 큰 $\beta$, 각 소자의 $g_mr_O\gg1$, 순방향 활성 영역의 저주파 소신호 근사를 사용해요. 외부 부하 저항은 연결하지 않아요.</p>
 </div>
 <div class="layer formal" data-explanation="recall">
-  <h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4>
-  <p><b>단서.</b> "차동쌍 위에 다이오드 연결 pnp + 같은 베이스의 pnp", "출력은 한쪽 컬렉터에서만"이라는 그림이 능동 부하 차동쌍(differential pair with active load)을 불러요. "Early 전압을 구하라"는 말은 이득이 트랜지스터 출력 저항 $r_O$로 정해지는 구조라는 뜻이에요(<a href="정리노트_1007_Differential_Amplifiers.html#s2-bjt-active">7. BJT 능동 부하 차동쌍</a>).</p>
-  <p><b>개념.</b> 능동 부하 차동쌍의 소신호 전압 이득은 $|A_v| = G_m R_{out}$으로 나눠 봐요. 거울이 $Q_1$ 쪽 전류 변화를 출력 쪽으로 복사해 더해 주므로 $G_m \approx g_m$, 출력 노드에서 위아래로 보이는 저항은 $Q_2$와 $Q_4$의 출력 저항이 병렬이라 $R_{out}=r_{O2}\parallel r_{O4}$예요.</p>
-  <p>$$|A_v| = g_m\,(r_{O2}\parallel r_{O4})$$</p>
-  <p><b>기호의 뜻.</b> $g_m = I_C/V_T$는 $Q_1$, $Q_2$의 트랜스컨덕턴스(transconductance)로, 베이스-이미터 전압 변화가 컬렉터 전류를 얼마나 바꾸는지예요. $r_O = V_A/I_C$는 Early 효과(Early effect, 베이스 폭 변조)로 생기는 출력 저항이고, $V_A$가 그 트랜지스터의 Early 전압이에요. $V_T = kT/q \approx 26\ \text{mV}$는 열전압(thermal voltage)이에요.</p>
-  <p><b>근사 조건.</b> $\beta \gg 1$로 두어 거울의 베이스 전류 오차를 무시하고, 테일 $I_{EE}$는 이상 전류원으로 봐요. $Q_1$의 $r_{O1}$, $Q_3$의 $r_{O3}$은 다이오드 쪽 작은 저항 $1/g_{m3}$에 묻혀 이득에 거의 영향이 없어서 $G_m\approx g_m$으로 둬요.</p>
-  <p><b>선택 이유.</b> 대칭이 아니라 하프 서킷을 그대로 쓸 수 없으므로, 위에서 두 가지 전류를 합쳐 얻은 $G_m$과 출력 병렬 저항을 따로 구해 곱해요. 게다가 바이폴라는 $g_m r_O = V_A/V_T$로 전류가 약분되므로, 이득이 Early 전압만의 함수가 돼요. 그래서 $I_{EE}$ 없이도 $V_{A,p}$를 정할 수 있어요.</p>
-<p><strong>왜 반쪽 전류가 전체 $g_m$이 되나요?</strong> $v_d=v_{in1}-v_{in2}$라 하고, 이상적 테일·큰 고유 이득·거울 비율 1:1의 근사에서 $\Delta i_{C1}=+g_mv_d/2$, $\Delta i_{C2}=-g_mv_d/2$예요. 거울은 왼쪽의 증가분을 오른쪽 위에서 들어오는 전류 증가로 복사해요. 오른쪽 아래로 빠지는 전류는 같은 양만큼 줄어요.</p><p>$$\Delta i_{out}=\frac{g_mv_d}{2}-\left(-\frac{g_mv_d}{2}\right)=g_mv_d$$</p><p>이해를 위한 예시로 $g_m=2$ mS, $v_d=1$ mV이면 각 가지 변화는 +1 μA/−1 μA, 출력에 남는 전류는 2 μA예요. 양의 $v_d$는 출력을 올려요. p9의 $2\Delta I$와 같은 전류 차이 규칙이에요. 유한 $r_o$ 등의 작은 보정은 verify에서 구분해요.</p></div>
+<h4>이 개념과 공식을 떠올려요</h4>
+<p>“전류 거울 부하”와 “Early 전압으로 이득 설계”라는 단서에서 <a href="정리노트_1007_Differential_Amplifiers.html#s2-bjt-active">BJT 능동 부하(active load)</a>의 알려진 블록식을 떠올려요. $g_m$은 입력 소자 하나의 전압–전류 변환율이고, $G_m$은 두 입력과 거울 전체의 변환율이에요. 큰 $\beta$로 베이스 전류 오차를 무시하면 거울이 한쪽 신호를 복사해 $G_m\approx g_m$이 돼요.</p>
+<p>$G_m$은 출력을 접지로 단락한 상태에서 출력으로 공급되는 신호 전류를 입력 차전압으로 나눈 값이에요. 반면 $R_{out}$은 두 입력을 영점으로 놓고 출력에 시험원을 연결해서 보는 저항이에요. 이 문제는 두 값을 새로 측정·유도하지 않고, 조건을 확인한 주도항 블록식을 적용해요.</p>
+<div class="equation">$$G_m\approx g_m$$</div>
+<div class="equation">$$R_{out}\approx r_{O2}\parallel r_{O4}$$</div>
+<p>$r_{O2}$는 NPN 출력저항, $r_{O4}$는 PNP 출력저항이에요. 두 Early 전압을 각각 저항으로 바꿔 병렬 합성하면 목표 이득에서 미지의 $V_{A,p}$를 역산할 수 있어요.</p>
+</div>
 <div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <p>바이어스부터 적어요. 대칭 차동쌍이라 평형에서 $Q_1$, $Q_2$는 $I_{EE}/2$씩 흘리고, 거울 $Q_3$, $Q_4$도 같은 $I_{EE}/2$를 흘려요. 네 소자의 컬렉터 전류가 모두 $I_C = I_{EE}/2$예요.</p>
-  <p>$$g_m = \frac{I_{EE}/2}{V_T},\qquad r_{O2} = \frac{V_{A,n}}{I_{EE}/2},\qquad r_{O4} = \frac{V_{A,p}}{I_{EE}/2}$$</p>
-  <p>그다음 이득 식을 역수로 적어 두면 병렬 저항이 덧셈으로 풀려서 편해요.</p>
-  <p>$$\frac{1}{|A_v|} = \frac{1}{g_m r_{O2}} + \frac{1}{g_m r_{O4}}$$</p>
+<h4>종이에 쓸 첫 줄</h4>
+<p>먼저 부호를 정해요. 왼쪽 입력을 올리고 오른쪽 입력을 내리면 $Q_1$ 전류는 늘고 $Q_2$ 전류는 줄어요. $Q_3,Q_4$ 거울을 통해 위에서 공급하는 전류도 늘기 때문에 오른쪽 출력은 올라가요. 따라서 이 입력 정의의 전압이득은 양수예요.</p>
+<div data-answer-step="입출력 정의와 능동 부하 블록식">
+<p>$v_{id}=v_{in1}-v_{in2}$, 오른쪽 무부하 출력이에요. 큰 $\beta$, $g_mr_O\gg1$에서 $G_m\approx g_m$, $R_{out}\approx r_{O2}\parallel r_{O4}$를 사용해요. $V_T=26\,\mathrm{mV}=0.026\,\mathrm V$는 수업 가정이에요.</p>
+<div class="equation">$$A_v=\frac{v_{out}}{v_{id}}\approx+G_mR_{out}\approx+g_m(r_{O2}\parallel r_{O4})$$</div>
+</div>
+<p>출력에 공급하는 전류를 양으로 잡았으므로 $+G_mR_{out}$이에요. 전류를 출력에서 빼내는 방향으로 정의한 공식의 마이너스를 그대로 옮기지 않아요. 여기서는 알려진 블록식을 이용하므로 소신호 노드의 KCL이나 시험원 회로를 새로 전개하지 않아요.</p>
 </div>
 <div class="layer formal" data-explanation="solve">
-  <h4>왜 이렇게 푸는지 함께 따라가요</h4>
-  <div data-subpart="main">
-    <h4>pnp Early 전압</h4>
-    <p>첫 줄의 각 항에 바이어스 식을 넣어요. $I_{EE}/2$가 분자와 분모에서 약분돼요.</p>
-    <p>$$g_m r_{O2} = \frac{I_{EE}/2}{V_T}\cdot\frac{V_{A,n}}{I_{EE}/2} = \frac{V_{A,n}}{V_T}$$</p>
-    <p>$$g_m r_{O4} = \frac{V_{A,p}}{V_T}$$</p>
-    <p>그래서 이득은 두 Early 전압과 $V_T$만으로 정해져요. 이 회로의 "고유 이득(intrinsic gain)" $V_A/V_T$ 두 개가 병렬처럼 합쳐진 꼴이에요.</p>
-    <p>$$\frac{1}{|A_v|} = \frac{V_T}{V_{A,n}} + \frac{V_T}{V_{A,p}}$$</p>
-    <p>$|A_v| = 100$, $V_{A,n}=5\ \text{V}$, $V_T = 26\ \text{mV}$를 넣고 $V_{A,p}$ 항만 남겨요.</p>
-    <p>$$\frac{V_T}{V_{A,p}} = \frac{1}{100} - \frac{0.026}{5} = 0.0100 - 0.0052 = 4.80\times10^{-3}$$</p>
-    <p>$$V_{A,p} = \frac{0.026\ \text{V}}{4.80\times10^{-3}} \approx 5.42\ \text{V}$$</p>
-    <p>npn만으로 낼 수 있는 이득 상한이 $V_{A,n}/V_T = 5/0.026 \approx 192$이라, pnp 쪽도 비슷한 크기($\approx 208$)가 되어야 병렬 결과가 100이 돼요. $V_{A,p}$가 이 값보다 크면 이득이 100을 넘으므로, "이득 100 이상"이 목표라면 $V_{A,p}\ge 5.42\ \text{V}$가 조건이에요.</p>
-  </div>
+<h4>이렇게 풀어요</h4>
+<div data-subpart="main">
+<p>먼저 소자별 중간값을 같은 가지 전류로 표현해요. 큰 $\beta$에서 각 컬렉터의 DC 전류를 $I_C\approx I_{EE}/2$로 놓아요. $I_C$를 mA, $V_T,V_A$를 V로 쓰면 $g_m$은 mS, $r_O$는 kΩ가 되어 곱이 무차원이에요.</p>
+<div data-answer-step="중간값과 전류 소거">
+<div class="equation">$$g_m=\frac{I_C}{V_T}$$</div>
+<div class="equation">$$r_{O2}=\frac{V_{A,n}}{I_C}$$</div>
+<div class="equation">$$r_{O4}=\frac{V_{A,p}}{I_C}$$</div>
+<p>병렬저항의 역수는 가지별 역수의 합이므로 이득의 역수로 바꾸어요.</p>
+<div class="equation">$$\frac{1}{|A_v|}\approx\frac{1}{g_mr_{O2}}+\frac{1}{g_mr_{O4}}$$</div>
+<div class="equation">$$g_mr_{O2}=\frac{I_C}{V_T}\frac{V_{A,n}}{I_C}=\frac{V_{A,n}}{V_T}$$</div>
+<div class="equation">$$g_mr_{O4}=\frac{I_C}{V_T}\frac{V_{A,p}}{I_C}=\frac{V_{A,p}}{V_T}$$</div>
+<div class="equation">$$\frac{1}{|A_v|}\approx\frac{V_T}{V_{A,n}}+\frac{V_T}{V_{A,p}}$$</div>
+</div>
+<p>전류를 높이면 $g_m$은 커지지만 두 $r_O$는 같은 비율로 작아져요. 그래서 이 모델의 이득에서는 $I_C$가 소거돼요. 전류값이 원문에 없어도 Early 전압을 구할 수 있는 이유예요.</p>
+<div data-answer-step="목표 이득에서 PNP Early 전압 역산">
+<p>주도항 설계식에 목표 크기 100과 $V_{A,n}=5\,\mathrm V$를 넣고 PNP 항만 남겨요.</p>
+<div class="equation">$$\frac{0.026\,\mathrm V}{V_{A,p}}=\frac{1}{100}-\frac{0.026\,\mathrm V}{5\,\mathrm V}=4.8\times10^{-3}$$</div>
+<div class="equation">$$V_{A,p}=\frac{0.026\,\mathrm V}{4.8\times10^{-3}}=\frac{65}{12}\,\mathrm V\approx5.42\,\mathrm V$$</div>
+</div>
+<p>차이 $4.8\times10^{-3}$은 양수이므로 양의 Early 전압 크기로 실현할 수 있어요. 이 값을 0으로 둬 버리면 필요한 PNP 출력저항을 무한대로 만드는 다른 설계가 돼요.</p>
+</div>
 </div>
 <div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <h4>검산</h4>
-    <p><b>$V_{A,p} \approx 5.42\ \text{V}$</b> (이보다 크면 이득이 100을 넘어요)</p>
-    <p><b>되대입.</b> $V_{A,n}/V_T = 192.3$, $V_{A,p}/V_T = 5.42/0.026 = 208.5$이고, 두 값의 병렬은 $\dfrac{192.3\times208.5}{192.3+208.5}\approx 100.0$이라 목표와 맞아요.</p>
-    <p><b>단위.</b> $V_T/V_A$는 V/V라 무차원이고, 이득도 무차원이에요. 답 $V_{A,p}$는 V로 나와요.</p>
-    <p><b>극한·특수값.</b> $V_{A,p}\to\infty$($r_{O4}\to\infty$, 이상적인 거울)이면 이득은 $V_{A,n}/V_T \approx 192$로 가요. 100이 이 상한보다 작으니 해가 존재해요. 만약 $V_{A,n}$이 $100V_T = 2.6\ \text{V}$보다 작았다면 $V_T/V_{A,p}$가 음수가 되어 어떤 pnp로도 이득 100을 못 만들어요. 대칭 특수값으로 $V_{A,p}=V_{A,n}$이면 이득은 $V_A/(2V_T)\approx 96$이라 100에 조금 못 미치므로, 답이 5 V보다 약간 큰 5.42 V인 것도 자연스러워요.</p>
-    <p><b>$V_T$ 민감도.</b> $V_T = 25\ \text{mV}$를 쓰면 $1/100 - 0.005 = 0.005$라 $V_{A,p} = 5.0\ \text{V}$가 나와요. 두 항의 차가 작아서 $V_T$ 값에 답이 민감하니, 쓴 $V_T$를 답과 함께 적어 두세요.</p>
-  <p>네 소자의 유한 $r_o$와 이상적 테일을 모두 남기고 베이스 전류만 무시하는 모델도 비교할 수 있어요. 동일 동작 전류에서 npn·pnp의 $g_m$은 같고, 다이오드 쪽 노드 $v_x$, 출력 $v_o$, 공통 이미터 $v_e$라 두고 $g_n=1/r_{ON}$, $g_p=1/r_{OP}$로 정의해요. 두 베이스에 $+v_d/2,-v_d/2$를 넣어요. 제어 전압은 베이스 쪽이 $+$라 $v_{be1}=v_d/2-v_e$, $v_{be2}=-v_d/2-v_e$이고, $Q_1$·$Q_2$의 제어 전류원은 컬렉터에서 $v_e$ 쪽으로 흘러요. pnp $Q_4$는 $v_{eb4}=0-v_x$라 출력 노드에서 위로 $g_mv_x$가 나가는 전류원이 돼요. 각 가지 전류는 노드에서 나가는 방향을 양으로 둬요.</p><figure class="figure"><svg viewBox="0 0 480 290" role="img" aria-label="능동 부하 차동쌍의 소신호 등가회로: AC 접지된 V_CC와 노드 v_x 사이에 다이오드 연결 Q3의 1/g_m과 r_OP가 병렬로, V_CC와 출력 노드 v_o 사이에 Q4의 r_OP와 v_o에서 위로 흐르는 제어 전류원 g_m v_x가 병렬로 있어요. v_x와 공통 이미터 노드 v_e 사이에 Q1의 아래 방향 제어 전류원 g_m(v_d/2 − v_e)와 r_ON이, v_o와 v_e 사이에 Q2의 g_m(−v_d/2 − v_e)와 r_ON이 병렬로 있고, 이상 테일은 개방이에요."><path class="fig-ink" d="M130 24 H350"/><text class="fig-muted" x="20" y="28">V<tspan baseline-shift="sub">CC</tspan> (AC 접지)</text><path class="fig-ink" d="M130 24 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M190 24 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M130 92 V100 M190 92 V100 M130 100 H190"/><path class="fig-ink" d="M290 24 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M350 24 V42 M350 74 V100 M290 92 V100 M290 100 H350"/><polygon class="fig-ink" points="350,42 364,58 350,74 336,58"/><path class="fig-ink" d="M350 68 V49 M345 54 L350 49 L355 54"/><text class="fig-text" x="90" y="62">1/g<tspan baseline-shift="sub">m</tspan></text><text class="fig-text" x="202" y="62">r<tspan baseline-shift="sub">OP</tspan></text><text class="fig-text" x="252" y="62">r<tspan baseline-shift="sub">OP</tspan></text><text class="fig-text" x="372" y="62">g<tspan baseline-shift="sub">m</tspan>v<tspan baseline-shift="sub">x</tspan></text><path class="fig-accent" d="M160 100 V120 M320 100 V120"/><circle class="fig-dot" cx="160" cy="100" r="3.5"/><circle class="fig-dot" cx="320" cy="100" r="3.5"/><text class="fig-text" x="100" y="108">v<tspan baseline-shift="sub">x</tspan></text><text class="fig-text" x="362" y="108">v<tspan baseline-shift="sub">o</tspan></text><path class="fig-ink" d="M130 120 H190 M130 120 V159 M130 191 V230 M190 120 V141 M190 209 V230 M130 230 H190"/><polygon class="fig-ink" points="130,159 144,175 130,191 116,175"/><path class="fig-ink" d="M130 165 V184 M125 179 L130 184 L135 179"/><path class="fig-ink" d="M190 141 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M290 120 H350 M350 120 V159 M350 191 V230 M290 120 V141 M290 209 V230 M290 230 H350"/><polygon class="fig-ink" points="350,159 364,175 350,191 336,175"/><path class="fig-ink" d="M350 165 V184 M345 179 L350 184 L355 179"/><path class="fig-ink" d="M290 141 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><text class="fig-text" x="6" y="180">g<tspan baseline-shift="sub">m</tspan>(v<tspan baseline-shift="sub">d</tspan>/2 − v<tspan baseline-shift="sub">e</tspan>)</text><text class="fig-text" x="372" y="172">g<tspan baseline-shift="sub">m</tspan>(−v<tspan baseline-shift="sub">d</tspan>/2</text><text class="fig-text" x="384" y="194">− v<tspan baseline-shift="sub">e</tspan>)</text><text class="fig-text" x="202" y="180">r<tspan baseline-shift="sub">ON</tspan></text><text class="fig-text" x="252" y="180">r<tspan baseline-shift="sub">ON</tspan></text><path class="fig-ink" d="M160 230 V250 M320 230 V250"/><path class="fig-accent" d="M160 250 H320"/><circle class="fig-dot" cx="240" cy="250" r="3.5"/><text class="fig-text" x="250" y="238">v<tspan baseline-shift="sub">e</tspan></text><text class="fig-muted" x="160" y="276">테일 I<tspan baseline-shift="sub">EE</tspan>: 이상 전류원 → 개방</text><text class="fig-muted" x="148" y="44">Q₃</text><text class="fig-muted" x="310" y="44">Q₄</text><text class="fig-muted" x="148" y="214">Q₁</text><text class="fig-muted" x="310" y="214">Q₂</text></svg><figcaption>$V_{CC}$를 AC 접지로, 이상적 테일 $I_{EE}$는 개방으로 보내고 베이스 전류는 무시했어요. 다이오드 연결 $Q_3$는 $1/g_m$과 $r_{OP}$, $Q_4$는 $g_mv_x$ 전류원과 $r_{OP}$, $Q_1$·$Q_2$는 $g_mv_{be}$ 전류원과 $r_{ON}$으로 바꿨어요.</figcaption></figure><p>$v_x$, $v_o$, $v_e$ 세 노드의 KCL은</p><p>$$(g_m+g_p)v_x+g_n(v_x-v_e)+g_m(v_d/2-v_e)=0$$</p><p>$$g_pv_o+g_n(v_o-v_e)+g_m(-v_d/2-v_e)+g_mv_x=0$$</p><p>$$g_n(2v_e-v_x-v_o)+2g_mv_e=0$$</p><p>마지막 식에서 $v_e=g_n(v_x+v_o)/[2(g_m+g_n)]$예요. 첫 식에서는 $v_x=\dfrac{(g_m+g_n)v_e-g_mv_d/2}{g_m+g_n+g_p}$예요. 이것과 $v_e$ 식을 둘째 식에 대입하여 $v_x$, $v_e$를 소거하면 $v_o/v_d=g_m(2g_m+g_p)/[2(g_m+g_p)(g_n+g_p)]$가 돼요. $1/(g_n+g_p)=r_{ON}\parallel r_{OP}$를 넣으면 $$|A_e|=g_m(r_{ON}\parallel r_{OP})\frac{2g_mr_{OP}+1}{2(g_mr_{OP}+1)}$$예요. 본문의 주 답은 뒤 인자를 1로 둔 큰 고유 이득 근사예요. $g_mr_{OP}\to\infty$에서 정확식/근사식 비가 1로 가고, $V_T=26$ mV·$V_{A,p}=5.42$ V에서는 이 보정이 약 0.24%예요. 따라서 작은 보정을 정밀 결과와 구별하며 교과서 설계값을 사용해요.</p></div>
+<h4>완성 답과 검산</h4>
+<div data-subpart="main">
+<div data-answer-final><p><strong>필요한 PNP Early 전압 크기는 $V_{A,p}=65/12\,\mathrm V\approx5.42\,\mathrm V$예요.</strong> $V_T=26\,\mathrm{mV}$, 큰 $\beta$, $g_mr_O\gg1$인 주도항 설계에서 $A_v\approx+100$이에요.</p></div>
+<p><strong>목표에 역대입해요.</strong> 반올림 전 분수로 확인하면 이득 크기가 100으로 돌아와요.</p>
+<div class="equation">$$\frac{0.026}{5}+\frac{0.026}{65/12}=0.0052+0.0048=0.01$$</div>
+<div class="equation">$$|A_v|\approx\frac{1}{0.01}=100$$</div>
+<p><strong>근사와 단위를 확인해요.</strong> Early 전압과 열전압의 비는 무차원이고 두 소자 모두 큰 고유 이득을 가져요.</p>
+<div class="equation">$$g_mr_{O2}=\frac{5}{0.026}\approx192.31$$</div>
+<div class="equation">$$g_mr_{O4}=\frac{65/12}{0.026}\approx208.33$$</div>
+<p><strong>PNP를 아무리 좋게 만들어도 NPN 한계가 남아요.</strong> $V_{A,p}\to\infty$이면 아래 NPN의 출력저항만 이득을 제한해요.</p>
+<div class="equation">$$|A_v|_{\mathrm{limit}}\approx\frac{V_{A,n}}{V_T}=\frac{5}{0.026}\approx192.31$$</div>
+<p>목표 100은 이 한계보다 작아요. $V_{A,p}$를 5.42 V보다 높이면 같은 주도항 모델에서 이득은 100보다 커지지만 이 한계를 넘지는 못해요. $v_{id}>0$일 때 오른쪽 출력이 올라가므로 부호도 $+$예요. 두 Early 전압이 같아지는 특수값에서는 병렬저항이 한 소자 저항의 절반이 되는 결과와 일치해요.</p>
+</div>
 </div>
 <div class="layer warn" data-explanation="pitfall">
-  <h4>이 문항에서 하기 쉬운 오류</h4>
-  <ul>
-    <li>저항 부하 싱글엔디드 출력처럼 $g_m R/2$로 이득을 반으로 나누는 실수예요. 능동 부하는 거울이 $Q_1$ 쪽 전류를 복사해 더하므로 $G_m\approx g_m$이고 2로 나누지 않아요.</li>
-    <li>$R_{out}$을 $r_{O4}$ 하나로만 보거나 $r_{O2}+r_{O4}$로 더하는 실수예요. 출력 노드에서 $Q_2$는 아래로, $Q_4$는 위(교류 접지 $V_{CC}$)로 연결되어 둘이 병렬이에요.</li>
-    <li>$I_{EE}$가 없다고 막히는 경우예요. 바이폴라는 $g_m r_O = V_A/V_T$로 전류가 약분되므로 바이어스 전류가 필요 없어요.</li>
-    <li>$1/100 - V_T/V_{A,n}$을 계산할 때 자릿수를 놓쳐 $0.0048$ 대신 $0.048$로 쓰면 답이 10배 틀려요.</li>
-  </ul>
+<h4>주의할 점</h4>
+<ul><li>단일 출력이라고 $g_m/2$를 쓰면 거울이 복사하는 신호를 빠뜨려요. 여기서는 두 경로가 합쳐져 $G_m\approx g_m$이에요.</li><li>$r_{\pi2}$는 베이스–이미터 사이예요. 출력 컬렉터와 AC 접지 사이의 $r_{O4}$에 직접 병렬로 붙이지 않아요.</li><li>$V_{A,p}$는 PNP의 Early 전압 <strong>크기</strong>예요. 소자 극성이 PNP라고 음수 답을 만들지 않아요.</li><li>26 mV는 원문의 주어진 값이 아니에요. 온도에 따라 $V_T$가 달라지면 요구되는 Early 전압도 달라져요. 전류 독립성 역시 위 주도항 모델 안에서의 결론이에요.</li><li>$Q_3$만 다이오드 연결이므로 전체를 완전히 대칭인 두 반회로로 잘라 출력 신호를 버리면 안 돼요.</li></ul>
 </div>
 <div class="layer eli5" data-explanation="retry">
-  <h4>설명을 닫고 다시 해 봐요</h4>
-  <ol>
-    <li>$V_{A,p}=5.42\ \text{V}$는 그대로 두고 npn만 개선해 $V_{A,n}=10\ \text{V}$가 되면 이득은 대략 얼마가 될지 예측해 보세요($V_T=26$ mV).</li>
-    <li>목표 이득을 100이 아니라 200으로 바꾸면 $V_{A,n}=5\ \text{V}$인 이 회로에서 어떤 $V_{A,p}$로도 가능한가요? 계산 전에 무엇부터 확인해야 하는지 판단해요.</li>
-    <li>$I_{EE}$를 두 배로 키우면 $g_m$, $r_{O2}$, $r_{O4}$와 전압 이득은 각각 어떻게 바뀌나요?</li>
-  </ol>
+<h4>조건을 바꾸어 생각해요</h4>
+<ol><li>$V_A$와 $V_T$를 고정하고 모든 가지 전류를 두 배로 하면 이득도 두 배일까요? <strong>아니에요.</strong> $g_m$은 두 배, 두 $r_O$는 절반이므로 병렬 합성 저항도 절반이고 곱은 같아요.</li><li>$V_{A,n}=5\,\mathrm V$, $V_T=26\,\mathrm{mV}$를 유지하며 이득 200을 요구하면 가능한가요? <strong>이 주도항 모델에서 양의 유한 $V_{A,p}$로는 불가능해요.</strong> NPN 한계 192.31보다 큰 목표이고, $1/200-0.026/5&lt;0$이 돼요.</li><li>수업 가정 대신 $V_T=25\,\mathrm{mV}$라면 목표 100에 필요한 값은 무엇일까요? <strong>$V_{A,p}=5\,\mathrm V$예요.</strong> $1/100-0.025/5=0.005$이므로 $0.025/0.005=5\,\mathrm V$예요.</li></ol>
 </div>
-<div class="sum" hidden=""><p>큰 $\beta$·이상적 테일·1:1 거울·큰 고유 이득의 근사예요. $V_T=26$ mV를 채택한 5.42 V이며 25 mV면 5.0 V예요. 목표는 npn 상한 $V_{A,n}/V_T$보다 작아야 유한한 양의 pnp Early 전압으로 실현할 수 있어요.</p>
-  <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>능동 부하 차동쌍: $G_m\approx g_m$</p>
-    <p>$R_{out}=r_{O2}\parallel r_{O4}$</p>
-    <p>$|A_v|=g_m(r_{O2}\parallel r_{O4})$</p></div>
-  <div class="summary-group"><h4>첫 줄</h4><p>네 소자 모두 $I_C=I_{EE}/2$</p>
-    <p>역수 꼴: $1/|A_v|=V_T/V_{A,n}+V_T/V_{A,p}$</p></div>
-  <div class="summary-group"><h4>핵심 판단</h4><p>$g_m r_O=V_A/V_T$라 전류가 약분돼요.</p>
-    <p>$V_{A,p}\approx 5.42\ \text{V}$ ($V_T=26\ \text{mV}$)</p></div>
-  <div class="summary-group"><h4>검산</h4><p>$192\parallel208\approx100$</p>
-    <p>$V_{A,p}\to\infty$이면 상한 $\approx192$</p></div>
-<div class="summary-group"><h4>규칙을 적용하는 순서</h4><p>각 가지 $\pm g_mv_d/2$ → 공급 증가와 배출 감소 → 출력 $g_mv_d$</p><p>1:1 거울·큰 고유 이득 근사에서 $G_m\approx g_m$예요.</p></div></div>
+<div class="sum" hidden>
+<div class="summary-group"><h4>떠올릴 개념·첫 식</h4><p>큰 $\beta$, $g_mr_O\gg1$의 능동 부하에서 $G_m\approx g_m$, $R_{out}\approx r_{O2}\parallel r_{O4}$예요. 왼쪽−오른쪽 차동 입력과 오른쪽 출력이면 $A_v\approx+G_mR_{out}$이에요.</p></div>
+<div class="summary-group"><h4>핵심 판단</h4><p>$g_m\propto I_C$, $r_O\propto1/I_C$이므로 전류가 소거돼요.</p><div class="equation">$$\frac{1}{|A_v|}\approx\frac{V_T}{V_{A,n}}+\frac{V_T}{V_{A,p}}$$</div></div>
+<div class="summary-group"><h4>결과와 조건</h4><p>원문 미지정 $V_T$를 수업값 26 mV로 가정하면 $V_{A,p}=65/12\,\mathrm V\approx5.42\,\mathrm V$, $A_v\approx+100$이에요.</p></div>
+<div class="summary-group"><h4>혼동 구분·검산</h4><p>거울 신호를 빼면 안 돼요. $r_{\pi2}$를 출력에 병렬로 놓지 않아요. 역대입은 $0.0052+0.0048=0.01$, NPN 한계는 $V_{A,n}/V_T\approx192.31$이에요.</p></div>
+</div>

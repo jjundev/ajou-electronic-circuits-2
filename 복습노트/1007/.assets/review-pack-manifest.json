@@ -1,0 +1,311 @@
+{
+  "learning_style": {
+    "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
+    "sha256": "6c6ece1e37f6aeee28cef59c241a32cb26f40e8a45c3151e02551edaf318874a",
+    "rule_ids": [
+      "UNIT-01",
+      "CALC-01",
+      "CALC-02",
+      "CIRCUIT-01",
+      "CIRCUIT-02",
+      "GAIN-01",
+      "DEGEN-01",
+      "SCALE-01",
+      "BIAS-01",
+      "NOTATION-01",
+      "EXPLAIN-01",
+      "CORRECT-01"
+    ]
+  },
+  "course": "전자회로2",
+  "range": "1007",
+  "slug": "Differential_Amplifiers",
+  "note_title": "차동 증폭기 — 5살도 이해하는 정리노트",
+  "note_subtitle": "권익진 교수님 전자회로2 · 1007 수업 (Lec4, Razavi 10장)",
+  "footer_note": "출처: 권익진 교수님 강의자료(Lec4) · 수업 녹음 전사(1007) · B. Razavi, <i>Microelectronics</i>, 2nd ed. (Wiley) 10장.",
+  "sessions": [
+    {
+      "date": "1007",
+      "stt": "STT/1007 전회2.md",
+      "summary": "summaries/stt-1007.md",
+      "slides": "L04 s32–40"
+    }
+  ],
+  "sections": [
+    {
+      "id": "why",
+      "title": "들어가며: 왜 이런 회로를 쓸까",
+      "short": "왜 쓸까",
+      "topics": [
+        {
+          "id": "why-circuit",
+          "title": "왜 이런 회로를 쓸까",
+          "required_terms": [
+            "공통 모드",
+            "전류 거울",
+            "차동"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof"
+          ],
+          "supp": true
+        }
+      ]
+    },
+    {
+      "id": "s0",
+      "title": "1. 공통 모드 잡음은 어디로 가나",
+      "short": "1 공통 모드",
+      "topics": [
+        {
+          "id": "s0-cm-half-recap",
+          "title": "1. 복습: 유한한 R_SS와 커먼 모드 하프 서킷",
+          "required_terms": [
+            "공통 모드",
+            "2R_{SS}",
+            "반회로"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof",
+            "warn"
+          ],
+          "supp": false
+        },
+        {
+          "id": "s0-cm-noise",
+          "title": "2. 이상적인 테일과 실제 테일에서 본 CM 잡음",
+          "required_terms": [
+            "잡음",
+            "대칭",
+            "R_{SS}"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof"
+          ],
+          "supp": false
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "title": "2. 비대칭과 CMRR",
+      "short": "2 CMRR",
+      "topics": [
+        {
+          "id": "s1-mismatch",
+          "title": "3. 부하 미스매치와 CM-to-DM 이득",
+          "required_terms": [
+            "불일치",
+            "차동 출력",
+            "A_{CM-DM}"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof",
+            "warn"
+          ],
+          "supp": false
+        },
+        {
+          "id": "s1-cmrr",
+          "title": "4. CMRR: 원하는 신호 대 원하지 않는 신호",
+          "required_terms": [
+            "CMRR",
+            "차동",
+            "공통 모드"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof",
+            "warn"
+          ],
+          "supp": true
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "title": "3. 싱글엔디드 출력과 능동 부하",
+      "short": "3 능동 부하",
+      "topics": [
+        {
+          "id": "s2-single-ended",
+          "title": "5. 한쪽 출력만 쓰면 생기는 두 가지 손해",
+          "required_terms": [
+            "절반",
+            "공통 모드",
+            "싱글엔디드"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof"
+          ],
+          "supp": false
+        },
+        {
+          "id": "s2-mos-active",
+          "title": "6. MOS 능동 부하 차동쌍",
+          "required_terms": [
+            "전류 거울",
+            "g_m",
+            "출력"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof",
+            "warn"
+          ],
+          "supp": false
+        },
+        {
+          "id": "s2-bjt-active",
+          "title": "7. BJT 능동 부하 차동쌍",
+          "required_terms": [
+            "바이폴라",
+            "전류 거울",
+            "출력"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof"
+          ],
+          "supp": false
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "title": "4. 요약 · 예고",
+      "short": "4 요약·예고",
+      "topics": [
+        {
+          "id": "s3-cheatsheet",
+          "title": "10장 핵심 정리",
+          "required_terms": [
+            "CMRR",
+            "공통 모드"
+          ],
+          "layers": [],
+          "supp": false
+        },
+        {
+          "id": "s3-next",
+          "title": "다음 시간 예고",
+          "required_terms": [
+            "주파수 응답"
+          ],
+          "layers": [],
+          "supp": false
+        },
+        {
+          "id": "s3-links",
+          "title": "함께 보면 좋은 자료",
+          "required_terms": [
+            "복습문제"
+          ],
+          "layers": [],
+          "supp": false
+        }
+      ]
+    }
+  ],
+  "preview_topic": "s3-next",
+  "forbidden_outside_preview": [
+    "보드선도",
+    "밀러 정리",
+    "테브난 등가"
+  ],
+  "problems": [
+    {
+      "id": "P10.67",
+      "kind": "장말문제",
+      "anchor": "s0-cm-half-recap",
+      "date": "1007",
+      "why": "테일만 유한 출력저항인 MOS 차동쌍의 CM 하프 서킷과 식 증명"
+    },
+    {
+      "id": "P10.68",
+      "kind": "장말문제",
+      "anchor": "s0-cm-noise",
+      "date": "1007",
+      "why": "PMOS 전류원 부하와 유한 테일 저항이 CM 이득에 미치는 영향"
+    },
+    {
+      "id": "2018-2_중간-Q3",
+      "kind": "기출",
+      "anchor": "s0-cm-noise",
+      "date": "1007",
+      "why": "캐스코드 테일·PMOS 부하의 DM/CM 이득을 실제 수치로 비교"
+    },
+    {
+      "id": "E10.27",
+      "kind": "예제",
+      "anchor": "s1-mismatch",
+      "date": "1007",
+      "why": "축퇴 BJT 테일과 부하 미스매치에서 CM-to-DM 이득 구하기"
+    },
+    {
+      "id": "E10.28",
+      "kind": "예제",
+      "anchor": "s1-cmrr",
+      "date": "1007",
+      "why": "E10.27 결과를 이용해 CMRR을 구하고 개선 방향 설명"
+    },
+    {
+      "id": "P10.70",
+      "kind": "장말문제",
+      "anchor": "s1-cmrr",
+      "date": "1007",
+      "why": "단일 테일과 캐스코드 테일의 CMRR 비교"
+    },
+    {
+      "id": "2015-2_중간-Q3",
+      "kind": "기출",
+      "anchor": "s1-cmrr",
+      "date": "1007",
+      "why": "미스매치 CM-to-DM·CMRR와 테일 폭 변경의 효과를 함께 계산"
+    },
+    {
+      "id": "P10.71",
+      "kind": "장말문제",
+      "anchor": "s2-mos-active",
+      "date": "1007",
+      "why": "비대칭 폭 비율의 PMOS 거울에서 전류-전압 이득 구하기"
+    },
+    {
+      "id": "P10.72",
+      "kind": "장말문제",
+      "anchor": "s2-mos-active",
+      "date": "1007",
+      "why": "서로 반대인 두 전류 변화가 능동 부하 출력에서 합쳐지는 과정"
+    },
+    {
+      "id": "P10.75",
+      "kind": "장말문제",
+      "anchor": "s2-bjt-active",
+      "date": "1007",
+      "why": "능동 부하 BJT 차동쌍의 목표 이득에서 pnp Early 전압 역산"
+    }
+  ],
+  "links": [
+    {
+      "topic": "s3-links",
+      "href": "복습문제_1007_Differential_Amplifiers-문제.pdf"
+    },
+    {
+      "topic": "s3-links",
+      "href": "복습문제_1007_Differential_Amplifiers-답안.pdf"
+    }
+  ]
+}

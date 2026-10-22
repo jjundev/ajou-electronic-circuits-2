@@ -13,6 +13,9 @@ CLI:
 from __future__ import annotations
 
 import argparse
+import base64
+from functools import lru_cache
+from pathlib import Path
 import html
 import os
 import re
@@ -25,7 +28,7 @@ from urllib.parse import unquote
 VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
 BUNDLE = ".assets"  # 팩 폴더 맨 위에는 .pack/·HTML·PDF만, 나머지는 여기
 NAME_RE = re.compile(r"^(정리노트|복습문제)_(\d{4}(?:-\d{4})?)_([A-Za-z0-9_]+)\.html$")
-FONT = "-apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif"
+FONT = "Pretendard, -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif"
 LIGHT = {"ink": "#1b2130", "ink-2": "#4a5468", "line": "#dde2ea", "accent": "#2f6fdb", "warn": "#b54708",
          "prof": "#6941c6", "supp": "#067647", "danger": "#d92d20", "surface": "#ffffff"}
 SVG_CSS = f"""
@@ -35,6 +38,8 @@ svg {{ color: {LIGHT['ink']}; font-family: {FONT}; }}
 .fig-danger {{ stroke: {LIGHT['danger']}; fill: none; stroke-width: 2.5; }}
 .fig-dot {{ fill: {LIGHT['accent']}; }}
 .fig-text {{ fill: {LIGHT['ink']}; font-size: 13px; }}
+svg text, svg text[class], svg text tspan, .fig-math, .fig-math tspan {{ font-family: Pretendard, sans-serif; font-weight: 600; font-style: normal; }}
+svg tspan[baseline-shift="sub"], svg tspan[baseline-shift="super"] {{ font-size: 78%; }}
 svg :is(.fig-dot, .fig-text)[data-node-color="blue"] {{ fill: {LIGHT['accent']}; }}
 svg :is(.fig-dot, .fig-text)[data-node-color="red"] {{ fill: {LIGHT['danger']}; }}
 .fig-muted {{ fill: {LIGHT['ink-2']}; font-size: 12px; }}
@@ -50,6 +55,18 @@ svg :is(.fig-dot, .fig-text)[data-node-color="red"] {{ fill: {LIGHT['danger']}; 
 .plot-prior {{ fill: none; stroke: {LIGHT['prof']}; stroke-width: 2; stroke-dasharray: 6 4; }}
 .plot-post {{ fill: none; stroke: {LIGHT['supp']}; stroke-width: 3; }}
 """
+
+
+@lru_cache(maxsize=1)
+def svg_font_css():
+    """Embed the actual 600 face: SVG image documents cannot inherit page fonts."""
+    vendor = Path(__file__).resolve().parents[2] / "ec2-problem-explain/assets/vendor/pretendard"
+    font = vendor / "woff2/Pretendard-SemiBold.woff2"
+    license_text = (vendor / "LICENSE").read_text(encoding="utf-8").replace("*/", "* /")
+    encoded = base64.b64encode(font.read_bytes()).decode("ascii")
+    return (f"/* {license_text} */\n"
+            "@font-face { font-family: Pretendard; font-style: normal; font-weight: 600; "
+            f"src: url(data:font/woff2;base64,{encoded}) format('woff2'); }}\n")
 
 
 # HTMLParser는 태그·속성 이름을 소문자로 바꾼다. 독립 SVG(XML)는 대소문자를 구분하므로 되돌린다.
@@ -352,7 +369,7 @@ def export_svg(svg, ctx, name=None):
         attrs["xmlns:xlink"] = "http://www.w3.org/1999/xlink"
     doc = (f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="{" ".join(vb)}"'
            f"{_svg_attrs(attrs)}>"
-           f"<style>{SVG_CSS}</style>"
+           f"<style>{html.escape(svg_font_css() + SVG_CSS, quote=False)}</style>"
            f'<rect x="{vb[0]}" y="{vb[1]}" width="{w}" height="{h}" rx="10" fill="{LIGHT["surface"]}"/>'
            f"{body}</svg>\n")
     fname = _fig_name(svg, ctx, name)

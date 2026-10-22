@@ -56,10 +56,12 @@ EOF
 3. 상대 경로대로 복사하고 원본·백업의 전체 파일 상대 경로 집합과 각 SHA-256이 같은지 확인한다. 빈 폴더도 보존한다. 목록·해시·백업 경로를 `RUN/explanations-backup.json`에 기록한다. 형식은 부모 `basic-pack-backup.json`과 같이 `{range, backup, roots, files, dirs}`다. roots·files·dirs는 팩 상대 경로, files의 값은 SHA-256, backup은 전용 백업 절대 경로다. 대상이 없으면 backup=null, roots=[], files={}, dirs=[]로 기록한다.
 4. 검증 후에만 목록화한 설명 소유 파일·폴더를 팩에서 제거한다. 복사·검증 실패면 원본을 유지하고 부모 첫 조립을 중단한다. 제거 도중 실패하면 검증된 백업으로 설명을 복원하고 부모 조립을 중단한다.
 5. 이 선제 정리 덕분에 문제 0개 전환·slug 변경·새 설명 보류 시에도 이전 설명이 최신 파일처럼 남지 않는다.
-6. 자식/PDF/최종 검사를 포함해 재생성이 실패하면 **이번 실행 전 기본 팩(노트·MD·문제 목록·문제/답안 PDF·노트 그림)부터** 복원하고 그 입력과 대응되는 설명 소유 파일을 복원한다. 기본 팩과 설명 백업은 같은 첫 변경 전 상태여야 한다. 입력 대응을 확인하지 못하면 설명은 백업에 유지하고 전체 보류로 보고한다.
+6. 자식/PDF/최종 검사를 포함해 재생성이 실패하면 **이번 실행 전 기본 팩(노트·MD·문제 목록·표시 제목 맵·문제/답안 PDF·노트 그림)부터** 복원하고 그 입력과 대응되는 설명 소유 파일을 복원한다. 기본 팩과 설명 백업은 같은 첫 변경 전 상태여야 한다. 입력 대응을 확인하지 못하면 설명은 백업에 유지하고 전체 보류로 보고한다.
 7. 이전 답안의 문제 ID·순서와 새 목록이 다르면 검증된 기본 팩 백업에 이전 답안을 보관하고 발행 위치에서 치운다. 같아도 이전 답안을 이번 승인 답안으로 보고하지 않는다. 새 팩이면 이번 실행이 만든 허용 파일만 RUN/withheld에 옮겨 발행 위치에 미완성 팩을 남기지 않는다. 다른 날짜나 이번 실행 전의 비소유 파일은 건드리지 않는다.
 
 ## 실패 시 전체 팩 복구
+
+표시 제목 맵 `.assets/display-titles.json`도 기본 팩 입력이다. 기존 맵은 문제 목록과 함께 백업·복원하고, 실행 전 없던 새 맵은 실패 시 withheld로 보관한 뒤 발행 위치에서 제거한다. 제목 맵을 먼저 변경하지 않는다.
 
 먼저 두 백업 기록의 range·전체 경로 집합·SHA-256과 실제 백업을 대조한다. 이번 실행에서 만든 같은 range의 허용 산출을 `RUN/withheld/<고유ID>/`에 상대 경로로 보관한 뒤 제거한다. 기본 팩 → 설명 순서로 복원하고 모든 파일 해시를 다시 확인한다. 새 팩은 두 기록이 빈 목록이므로 복원 없이 withheld로 끝난다.
 
@@ -80,7 +82,7 @@ def allowed(rel):
         return bool(re.fullmatch(rf"(?:정리노트|문제설명)_{r}_[^/]+\.html|복습문제_{r}_[^/]+-(?:문제|답안)\.pdf", rel))
     if len(parts) >= 2 and parts[0] == ".assets":
         name = parts[1]
-        return (len(parts) == 2 and (name == "problems.txt" or bool(re.fullmatch(rf"(?:정리노트|문제설명)_{r}_.+\.md", name)))
+        return (len(parts) == 2 and (name in ("problems.txt", "display-titles.json") or bool(re.fullmatch(rf"(?:정리노트|문제설명)_{r}_.+\.md", name)))
             or name == f"figures_{r}" or name.startswith((f"figures_문제설명_{r}_", f"자료_문제설명_{r}_")))
     return False
 def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()

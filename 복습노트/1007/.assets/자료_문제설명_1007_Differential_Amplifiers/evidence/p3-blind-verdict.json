@@ -1,0 +1,20 @@
+{
+  "source_policy": "Blind question and original diagram only; no reference answer read",
+  "convention": "vid=Vin1-Vin2; vod=Vout_left-Vout_right; voutCM=(vout_left+vout_right)/2",
+  "subquestions": [
+    {
+      "id": "(1)",
+      "method": "Symmetric DM half circuit, virtual AC ground, symbolic drain KCL and exact numerical substitution",
+      "status": "independently_verified",
+      "conclusion": "Ad=-100 V/V; magnitude 100",
+      "evidence": "independent-result.txt; independent-sympy.py"
+    },
+    {
+      "id": "(2)",
+      "method": "Exact cascode tail KCL then common-mode half circuit with 2RSS, symbolic two-node KCL, numeric and asymptotic verification",
+      "status": "independently_verified",
+      "conclusion": "ACM approximately -0.005 V/V; finite-ro exact -0.0049256230913211 V/V",
+      "evidence": "independent-result.txt; independent-sympy.py"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "status": "independent_answers_locked_before_reference",
+  "sources": [
+    "question.md",
+    "fig-Q3.png"
+  ],
+  "sign": "vid=vin1-vin2; vod=vout1-vout2 (R_D side minus R_D+DeltaR_D side)",
+  "dc_assumption": "nominal square-law neglect CLM; finite-ro small-signal refinement at same nominal bias",
+  "results": [
+    {
+      "mult": 1,
+      "model": "input-ro ignored",
+      "ADM_bal": -10.0,
+      "ADM_mismatch": -10.05,
+      "ACM": -0.09900990099009901,
+      "ACM_DM": 0.0009900990099009901,
+      "CMRR": 10100.0,
+      "CMRR_dB": 80.08642747565285,
+      "CMRR_actual_mismatched": 10150.5,
+      "CMRR_actual_dB": 80.129748710783
+    },
+    {
+      "mult": 1,
+      "model": "finite input-ro",
+      "ADM_bal": -9.090909090909092,
+      "ADM_mismatch": -9.132212428445305,
+      "ACM": -0.0979431929480901,
+      "ACM_DM": 0.0008899837666960955,
+      "CMRR": 10214.690909090908,
+      "CMRR_dB": 80.18450459311937,
+      "CMRR_actual_mismatched": 10261.1,
+      "CMRR_actual_dB": 80.22387840133065
+    },
+    {
+      "mult": 2,
+      "model": "input-ro ignored",
+      "ADM_bal": -14.142135623730951,
+      "ADM_mismatch": -14.212846301849606,
+      "ACM": -0.19721101507826946,
+      "ACM_DM": 0.0019721101507826945,
+      "CMRR": 7171.067811865475,
+      "CMRR_dB": 77.11167658691829,
+      "CMRR_actual_mismatched": 7206.923150924803,
+      "CMRR_actual_dB": 77.15499782204846
+    },
+    {
+      "mult": 2,
+      "model": "finite input-ro",
+      "ADM_bal": -11.785113019775793,
+      "ADM_mismatch": -11.834176098538876,
+      "ACM": -0.19396521865721858,
+      "ACM_DM": 0.0016150088309393083,
+      "CMRR": 7297.243701708697,
+      "CMRR_dB": 77.26317700738852,
+      "CMRR_actual_mismatched": 7327.623150924803,
+      "CMRR_actual_dB": 77.29926252192327
+    }
+  ],
+  "answer1": "O",
+  "approximation_verdict": "input-ro neglect must be explicit: ro1/RD=10, gain deviation about 9%; not exact",
+  "cmrr_convention": "balanced ADM divided by mismatch ACM-DM; actual mismatch ADM also provided"
+}

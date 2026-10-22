@@ -1,85 +1,83 @@
 <div class="layer eli5" data-explanation="understand">
-<h4>문제를 내 말로 읽어요</h4>
-<p>바이폴라 차동쌍(bipolar differential pair) $Q_1$·$Q_2$의 두 베이스가 같은 전압원 $V_{CM}$에 묶여 있어요. 그러니 입력은 순수한 공통 모드(common mode, CM) 변화 $\Delta V_{CM}$ 하나뿐이에요.</p>
-<p>출력은 두 컬렉터 사이의 차동 전압 $V_{out1}-V_{out2}$예요. 부하가 $R_C$와 $R_C+\Delta R_C$로 조금 달라서, 두 쪽에 같은 전류 변화가 흘러도 전압 변화는 $\Delta R_C$만큼 어긋나요.</p>
-<p>테일(tail)은 이상적인 전류원이 아니라 $R_1$로 이미터 축퇴(emitter degeneration)된 $Q_3$예요. 그래서 노드 $P$에서 아래를 보면 유한한 저항 $R_{out3}$가 보여요.</p>
-<p>구할 것은 공통 모드 입력이 차동 출력으로 새는 비율 $A_{CM-DM}=\left|\dfrac{\Delta V_{out1}-\Delta V_{out2}}{\Delta V_{CM}}\right|$이에요. 값이 없으니 답은 기호로 써요.</p>
+<h4>문제를 읽어요</h4>
+<p>두 베이스를 함께 올렸을 때 출력 두 개의 <strong>차이</strong>가 얼마나 생기는지 구해요. 오른쪽 부하가 더 크므로 같은 전류 변화도 오른쪽 출력에서 더 큰 전압 하강이 돼요. $Q_3$의 이미터 저항은 테일을 더 좋은 전류원으로 만들어 이 변화를 줄여요.</p>
+<p>$Q_1,Q_2$의 $V_A=\infty$는 $r_{O1},r_{O2}$를 없애는 조건이에요. 베이스 전류까지 없애는 조건은 아니므로, 아래에서는 교과서 대응식과 같이 <strong>입력쌍의 큰 $\beta$ 근사</strong>를 추가해요. $Q_3$의 유한 $r_{\pi3}$와 $r_{O3}$는 남겨요.</p>
 </div>
 <div class="layer formal" data-explanation="recall">
-<h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4>
-<p><strong>단서 1</strong>: "두 베이스가 같은 $V_{CM}$", "부하가 $R_C$와 $R_C+\Delta R_C$". 이 조합은 부하 미스매치가 만드는 공통 모드→차동 모드 이득(CM-to-DM gain)이에요(<a href="정리노트_1007_Differential_Amplifiers.html#s1-mismatch">정리노트 3절</a>). MOS 쌍에서 배운 결과는 $A_{CM-DM}=\dfrac{\Delta R_D}{1/g_m+2R_{SS}}$였어요.</p>
-<p><strong>단서 2</strong>: 입력이 대칭이고 두 트랜지스터가 같으니 공통 모드 하프 서킷(CM half circuit)을 써요(<a href="정리노트_1007_Differential_Amplifiers.html#s0-cm-half-recap">정리노트 1절</a>). 두 반쪽이 같은 전류를 흘리면 $P$의 테일 저항 $R_{SS}$를 $2R_{SS}$ 두 개로 나눠 각 이미터에 하나씩 붙일 수 있어요. 각 반쪽은 이미터 축퇴 공통 이미터 단이 되고, 컬렉터 전류 변화는 $\Delta I_C=\dfrac{\Delta V_{CM}}{1/g_{m1}+2R_{SS}}$예요.</p>
-<p><strong>단서 3</strong>: 테일이 "$Q_3$ + 이미터 저항 $R_1$"이에요. 여기서는 축퇴된 바이폴라 전류원의 출력 저항(output resistance)을 떠올려요(교과서 5장, 식 10.193).</p>
-$$R_{out3}=\big[1+g_{m3}(R_1\parallel r_{\pi3})\big]r_{O3}+R_1\parallel r_{\pi3}$$
-<p><strong>기호의 뜻</strong>: $g_{m1}=I_C/V_T$는 $Q_1$의 트랜스컨덕턴스(transconductance)로, 베이스-이미터 전압 변화가 컬렉터 전류를 얼마나 바꾸는지예요. $r_{\pi3}=\beta/g_{m3}$는 $Q_3$의 베이스-이미터 소신호 저항이고, $r_{O3}=V_{A3}/I_{C3}$는 Early 효과로 생기는 $Q_3$의 출력 저항이에요. $R_{out3}$는 $P$에서 $Q_3$ 컬렉터로 들여다본 저항으로, 이 문제의 $R_{SS}$ 역할을 해요.</p>
-<p><strong>근사 조건</strong>: $Q_1$·$Q_2$는 $V_A=\infty$라서 $r_{O1},r_{O2}\to\infty$예요. 그래서 컬렉터 쪽 부하가 달라도 두 컬렉터 전류는 똑같이 움직여요. $Q_3$만 $r_{O3}$를 남겨요. $R_1$은 작을 수 있으니 $1+g_{m3}(\cdot)$의 1을 버리지 않아요. 하프 서킷의 $\Delta I_C$ 식은 $\beta\gg1$로 베이스 전류와 $\alpha\approx1$의 차이를 무시한 형태예요.</p>
-<p><strong>선택 이유</strong>: 회로가 MOS 예제와 구조적으로 같고 테일만 바뀌었어요. 그래서 새로 KCL을 세우기보다 $R_{SS}\to R_{out3}$, $\Delta R_D\to\Delta R_C$로 바꿔 넣는 것이 가장 빠르고 실수가 적어요. 남은 일은 $R_{out3}$를 정확히 구하는 것뿐이에요.</p>
+<h4>이 개념과 공식을 떠올려요</h4>
+<p>같은 입력과 부하 불일치라는 단서에서 <a href="정리노트_1007_Differential_Amplifiers.html#s1-mismatch">공통 모드 하프 회로(common-mode half circuit)</a>를 골라요. $g_{m1}=g_{m2}$는 베이스–이미터 전압 변화가 컬렉터 전류로 바뀌는 비율이고, $R_{out3}$는 공통 이미터 노드 $P$에서 테일을 내려다본 소신호 저항이에요.</p>
+<p>$Q_3$ 베이스는 AC 접지이므로 이미터에서 본 $R_1$과 $r_{\pi3}$는 병렬이에요. 이를 $R_e^*$라 불러요. 이미터 축퇴(degeneration)는 이 저항을 통한 되먹임으로 테일 출력저항을 키워요. 입력쌍은 큰 $\beta$와 Early 효과 무시 조건에서 두 컬렉터의 전류 변화가 같으므로, 테일을 반쪽마다 $2R_{out3}$로 나눌 수 있어요.</p>
 </div>
 <div class="layer formal" data-explanation="start">
-<h4>종이에 쓰는 첫 줄</h4>
-<p>1) 테일부터 떼어 내요. $V_b$·$V_{CC}$는 소신호 접지로 보내고 $Q_3$를 $r_{\pi3}$, $g_{m3}v_\pi$, $r_{O3}$로 바꿔요. 컬렉터에 시험 전압 $V_X$를 걸고, 컬렉터로 흘러드는 전류를 $I_X$(양의 방향)라고 써요. 이미터 노드 전압은 $v_E$, 제어 전압 $v_\pi$는 베이스 쪽이 $+$, 이미터 쪽이 $-$예요. 제어 전류원 $g_{m3}v_\pi$는 컬렉터에서 이미터 쪽으로 흐르는 방향이에요.</p>
-<figure class="figure"><svg viewBox="0 0 420 300" role="img" aria-label="Q3 소신호 등가회로: 시험 전압 V_X가 컬렉터 노드에 걸리고 전류 I_X가 컬렉터로 들어가요. 컬렉터와 이미터 노드 v_E 사이에 컬렉터에서 이미터 방향의 제어 전류원 g_m3 v_π와 r_O3가 병렬로 있고, v_E에서 접지로 R_1과 r_π3이 병렬로 연결돼요. r_π3의 아래 끝은 AC 접지된 베이스이고 v_π는 베이스가 +, 이미터가 −라서 v_π = −v_E예요."><path class="fig-accent" d="M60 146 V60 H200"/><circle class="fig-accent" cx="60" cy="160" r="14"/><text class="fig-muted" x="56" y="157">+</text><text class="fig-muted" x="56" y="171">−</text><path class="fig-ink" d="M60 174 V258"/><path class="fig-ink" d="M60 258 v8 M50 266 H70 M54 271 H66 M58 276 H62"/><text class="fig-text" x="14" y="165">V<tspan baseline-shift="sub">X</tspan></text><path class="fig-accent" d="M110 48 H130 M125 43 L130 48 L125 53"/><text class="fig-text" x="108" y="36">I<tspan baseline-shift="sub">X</tspan></text><circle class="fig-dot" cx="200" cy="60" r="3.5"/><text class="fig-text" x="210" y="54">V<tspan baseline-shift="sub">X</tspan> (C₃)</text><path class="fig-ink" d="M200 60 V80 M170 80 H240 M170 80 V119 M170 151 V170 H240 M240 80 V101 M240 169 V170 M200 170 V190"/><polygon class="fig-ink" points="170,119 184,135 170,151 156,135"/><path class="fig-ink" d="M170 125 V144 M165 139 L170 144 L175 139"/><path class="fig-ink" d="M240 101 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><text class="fig-text" x="96" y="140">g<tspan baseline-shift="sub">m3</tspan>v<tspan baseline-shift="sub">π</tspan></text><text class="fig-text" x="254" y="140">r<tspan baseline-shift="sub">O3</tspan></text><circle class="fig-dot" cx="200" cy="190" r="3.5"/><text class="fig-text" x="168" y="186">v<tspan baseline-shift="sub">E</tspan></text><path class="fig-ink" d="M200 190 H300"/><path class="fig-ink" d="M200 190 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M200 258 v8 M190 266 H210 M194 271 H206 M198 276 H202"/><path class="fig-ink" d="M300 190 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M300 258 v8 M290 266 H310 M294 271 H306 M298 276 H302"/><text class="fig-text" x="166" y="228">R<tspan baseline-shift="sub">1</tspan></text><text class="fig-text" x="258" y="228">r<tspan baseline-shift="sub">π3</tspan></text><text class="fig-text" x="314" y="206">−</text><text class="fig-text" x="316" y="230">v<tspan baseline-shift="sub">π</tspan></text><text class="fig-text" x="314" y="254">+</text><text class="fig-muted" x="316" y="292">B₃ (AC 접지)</text></svg><figcaption>$V_{CC}$와 $V_b$를 AC 접지로 보내 $Q_3$ 베이스가 접지되고, $Q_3$를 $r_{\pi3}$, $g_{m3}v_\pi$, $r_{O3}$로 바꿨어요. $P$ 쪽 회로는 떼어 내고 컬렉터에 시험 전압 $V_X$를 걸었어요.</figcaption></figure>
-<p>2) 베이스가 접지이므로 $r_{\pi3}$는 이미터와 접지 사이에서 $R_1$과 병렬이에요. $I_X$는 모두 이 병렬 조합으로 흘러요.</p>
-$$v_E=I_X\,(R_1\parallel r_{\pi3}),\qquad v_\pi=-v_E$$
-<p>3) 첫 KCL은 컬렉터 노드에서 써요.</p>
-$$I_X=g_{m3}v_\pi+\frac{V_X-v_E}{r_{O3}}$$
-<p>4) 그다음 CM 하프 서킷을 그려요. $Q_1$ 반쪽은 베이스에 $\Delta V_{CM}$, 이미터에 $2R_{out3}$, 컬렉터에 $R_C$가 달린 축퇴 CE 단이에요. $Q_2$ 반쪽은 컬렉터 저항만 $R_C+\Delta R_C$로 달라요.</p>
+<h4>종이에 쓸 첫 줄</h4>
+<p>먼저 CM 반회로를 골라요. 두 입력이 같고 입력쌍의 $r_O$를 무시하므로 부하가 달라도 두 가지 전류 변화는 같아요. 테일을 $2R_{out3}$ 두 개로 나누면 원래 저항이 유지되므로, 반쪽 이미터 아래에는 $2R_{out3}$를 붙여요. 테일 자체는 알려진 축퇴 출력저항 블록의 주항을 바로 사용해요.</p>
+<div data-answer-step="테일 모델과 근사 조건">
+
+<div class="equation">$$R_e^*=R_1\parallel r_{\pi3}$$</div>
+<div class="equation">$$R_{out3}\approx g_{m3}R_e^*r_{O3}$$</div>
+<p>수업의 기본 가정 $g_{m3}r_{O3}\gg1$, $g_{m3}R_e^*\gg1$에서 큰 곱항만 써요. 즉, 이미터 쪽 저항 $R_e^*$에 $Q_3$의 $g_{m3}r_{O3}$를 곱해 출력저항을 구해요.</p>
+</div>
 </div>
 <div class="layer formal" data-explanation="solve">
-<h4>왜 이렇게 푸는지 함께 따라가요</h4>
+<h4>이렇게 풀어요</h4>
+<p>반회로는 이미터 축퇴 CE 단이에요. 수업의 큰 축퇴 근사 $2g_{m1}R_{out3}\gg1$로 가지 전류를 바로 정리해요.</p>
 <div data-subpart="main">
-<h4>테일 출력 저항에서 $A_{CM-DM}$까지</h4>
-<p>컬렉터 KCL에 $v_\pi=-I_X(R_1\parallel r_{\pi3})$와 $v_E$를 넣어요. 편의상 $R_E'=R_1\parallel r_{\pi3}$로 써요.</p>
-$$I_X=-g_{m3}R_E'I_X+\frac{V_X-R_E'I_X}{r_{O3}}$$
-<p>양변에 $r_{O3}$를 곱하고 $V_X$만 남겨요.</p>
-$$V_X=I_X\big(r_{O3}+g_{m3}R_E'r_{O3}+R_E'\big)$$
-$$R_{out3}=\frac{V_X}{I_X}=\big[1+g_{m3}(R_1\parallel r_{\pi3})\big]r_{O3}+R_1\parallel r_{\pi3}$$
-<p>이제 하프 서킷으로 가요. $V_A=\infty$이므로 컬렉터 저항은 컬렉터 전류에 영향을 주지 않아요. 두 반쪽은 베이스 입력·이미터 저항·$g_m$이 같으니 같은 전류 변화를 흘려요. 그래서 $P$를 둘로 쪼개는 하프 서킷 분할이 $\Delta R_C$가 있어도 그대로 성립해요.</p>
-$$\Delta I_{C1}=\Delta I_{C2}=\Delta I_C=\frac{\Delta V_{CM}}{\dfrac{1}{g_{m1}}+2R_{out3}}$$
-<p>각 컬렉터 전압은 전류 증가만큼 부하 양단 강하가 늘어서 내려가요.</p>
-$$\Delta V_{out1}=-R_C\,\Delta I_C,\qquad \Delta V_{out2}=-(R_C+\Delta R_C)\,\Delta I_C$$
-<p>빼면 $R_C$ 항이 지워지고 미스매치 몫만 남아요.</p>
-$$\Delta V_{out1}-\Delta V_{out2}=\Delta R_C\,\Delta I_C$$
-$$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2R_{out3}}$$
-<p>$R_{out3}$를 넣으면 최종 답이에요.</p>
-$$A_{CM-DM}=\frac{\Delta R_C}{\dfrac{1}{g_{m1}}+2\Big\{\big[1+g_{m3}(R_1\parallel r_{\pi3})\big]r_{O3}+R_1\parallel r_{\pi3}\Big\}}$$
-<p>보통 $r_{O3}\gg R_1\parallel r_{\pi3}$이라 끝의 $R_1\parallel r_{\pi3}$ 항은 작아요. 이를 버리면 $A_{CM-DM}\approx\dfrac{\Delta R_C}{1/g_{m1}+2[1+g_{m3}(R_1\parallel r_{\pi3})]r_{O3}}$이에요.</p>
+<div data-answer-step="CM 반회로에서 가지 전류">
+<figure class="figure"><svg viewBox="0 -20 520 320" role="img" aria-label="CM 입력이 왼쪽 베이스에 연결되고 오른쪽 컬렉터에 부하 RCj가 접지로 연결된 반회로. 이미터 아래에는 2Rout3가 있다.">
+<path class="fig-ink" d="M40 132 H115 M115 110 V155 M215 55 H470 M215 55 V96 M215 144 V190 M215 190 V215 M215 255 V275 M203 275 H227 M208 281 H222 M213 287 H217 M370 55 V35 M370 5 V0 M358 0 H382 M362 -6 H378 M367 -12 H373"/>
+<circle class="fig-ink" cx="215" cy="120" r="24"/><path class="fig-ink" d="M215 106 V134 M210 128 L215 134 L220 128"/>
+<rect class="fig-ink" x="362" y="5" width="16" height="30"/><rect class="fig-ink" x="207" y="215" width="16" height="40"/>
+<circle cx="40" cy="132" r="4" fill="#2563eb" stroke="#2563eb" data-node="in" data-node-color="blue"/><text x="25" y="108" fill="#2563eb" data-node="in" data-node-color="blue" class="fig-math" font-family="Pretendard" font-weight="600" font-style="normal">Δ<tspan font-family="Pretendard" font-weight="600" font-style="normal">v</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">CM</tspan></text>
+<circle cx="215" cy="190" r="4" fill="#dc2626" stroke="#dc2626" data-node="p" data-node-color="red"/><text x="229" y="192" fill="#dc2626" data-node="p" data-node-color="red" class="fig-math" font-family="Pretendard" font-weight="600" font-style="normal">Δ<tspan font-family="Pretendard" font-weight="600" font-style="normal">v</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">P</tspan></text>
+<circle cx="370" cy="55" r="3" fill="#2563eb" stroke="#2563eb" data-node="out" data-node-color="blue"/><circle cx="470" cy="55" r="4" fill="#2563eb" stroke="#2563eb" data-node="out" data-node-color="blue"/><text x="414" y="36" fill="#2563eb" data-node="out" data-node-color="blue" class="fig-math" font-family="Pretendard" font-weight="600" font-style="normal">Δ<tspan font-family="Pretendard" font-weight="600" font-style="normal">v</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">out,j</tspan></text>
+<text class="fig-text fig-math" x="247" y="123" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">g</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">m1</tspan>(Δ<tspan font-family="Pretendard" font-weight="600" font-style="normal">v</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">CM</tspan> − Δ<tspan font-family="Pretendard" font-weight="600" font-style="normal">v</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">P</tspan>)</text><text class="fig-text fig-math" x="237" y="240" font-family="Pretendard" font-weight="600" font-style="normal">2<tspan font-family="Pretendard" font-weight="600" font-style="normal">R</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">out3</tspan></text><text class="fig-text fig-math" x="390" y="25" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">R</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">C,j</tspan></text><text class="fig-text fig-math" x="170" y="174" font-family="Pretendard" font-weight="600" font-style="normal">Δ<tspan font-family="Pretendard" font-weight="600" font-style="normal">i</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">C</tspan> ↓</text>
+</svg><figcaption>출력은 무부하 전압을 읽어요. $V_{CC}$는 AC 접지이며 $R_{C,1}=R_C$, $R_{C,2}=R_C+\Delta R_C$예요. $V_A=\infty$라 입력쌍의 $r_O$는 없고, 큰 $\beta$로 입력쌍 베이스 전류만 생략해요. $Q_3$의 $r_{\pi3}$는 앞의 테일 블록 안에 남아 있어요.</figcaption></figure>
+<p>양의 $\Delta i_C$는 컬렉터에서 이미터로 흘러요. 큰 $\beta$에서 이미터 전류도 이에 가까우므로 이미터 상승분이 제어 전압에서 빠져요.</p>
+<div class="equation">$$\Delta v_P\approx2R_{out3}\Delta i_C$$</div>
+<div class="equation">$$\Delta i_C=g_{m1}(\Delta v_{CM}-\Delta v_P)$$</div>
+<div class="equation">$$\Delta i_C(1+2g_{m1}R_{out3})\approx g_{m1}\Delta v_{CM}$$</div>
+<div class="equation">$$\frac{\Delta i_C}{\Delta v_{CM}}\approx\frac1{2R_{out3}}$$</div>
 </div>
+<p>부하가 달라도 $V_A=\infty$인 입력쌍의 전류는 컬렉터 전압에 의존하지 않아요. 동일한 베이스–이미터 변화가 같은 가지 전류를 만들므로 이 반회로를 두 부하에 각각 적용할 수 있어요.</p>
+<div data-answer-step="부하 전압과 차동 출력">
+<p>AC 접지에서 저항을 따라 전압이 떨어져 두 출력은 모두 내려가요. $v_{od}=v_{out1}-v_{out2}$로 정해요.</p>
+<div class="equation">$$\Delta v_{out1}=-R_C\Delta i_C$$</div>
+<div class="equation">$$\Delta v_{out2}=-(R_C+\Delta R_C)\Delta i_C$$</div>
+<div class="equation">$$\Delta v_{od}=-R_C\Delta i_C+(R_C+\Delta R_C)\Delta i_C=\Delta R_C\Delta i_C$$</div>
+<div class="equation">$$A_{CM-DM}=\left|\frac{\Delta v_{od}}{\Delta v_{CM}}\right|\approx\frac{|\Delta R_C|}{2R_{out3}}$$</div>
+</div>
+<div class="supplement"><h5>보충: 테일 출력저항의 시험 회로</h5><p>CM 이득 계산에 필요한 테일 값은 위의 근사 블록식으로 충분해요. 다음 그림은 그 저항을 어느 단자에서 보는지 확인하는 보충이며, CM 반회로의 출력 부하와는 다른 측정이에요.</p><figure class="figure"><svg viewBox="0 0 520 260" role="img" aria-label="Q3 베이스를 접지하고 컬렉터 오른쪽 끝에 시험전압 Vt를 인가한다. 제어 전류원 왼쪽, ro3 오른쪽, 이미터 아래 R1과 rpi3가 병렬이다.">
+<path class="fig-ink" d="M40 130 V210 M30 210 H50 M34 216 H46 M38 222 H42 M110 140 H180 M110 140 V150 M110 190 V210 H270 M270 140 V150 M270 190 V210 M180 55 H475 M180 55 V90 M180 130 V140 H325 M325 55 V80 M325 120 V140 M180 210 V230 M168 230 H192 M173 236 H187 M178 242 H182"/>
+<rect class="fig-ink" x="102" y="150" width="16" height="40"/><rect class="fig-ink" x="262" y="150" width="16" height="40"/><rect class="fig-ink" x="317" y="80" width="16" height="40"/>
+<polygon class="fig-ink" points="180,90 194,110 180,130 166,110"/><path class="fig-ink" d="M180 98 V121 M175 115 L180 121 L185 115 M455 42 H400 M407 37 L400 42 L407 47"/>
+<circle cx="475" cy="55" r="4" fill="#2563eb" stroke="#2563eb" data-node="t" data-node-color="blue"/><text x="445" y="27" fill="#2563eb" data-node="t" data-node-color="blue" class="fig-math" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">V</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">t</tspan> (+)</text>
+<circle cx="180" cy="140" r="4" fill="#dc2626" stroke="#dc2626" data-node="e3" data-node-color="red"/><text x="193" y="158" fill="#dc2626" data-node="e3" data-node-color="red" class="fig-math" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">v</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">e3</tspan></text>
+<circle cx="325" cy="55" r="3" fill="#2563eb" stroke="#2563eb" data-node="t" data-node-color="blue"/><circle cx="325" cy="140" r="3" fill="#dc2626" stroke="#dc2626" data-node="e3" data-node-color="red"/>
+<text class="fig-text fig-math" x="416" y="76" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">i</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">t</tspan> ←</text><text class="fig-text fig-math" x="348" y="108" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">r</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">o3</tspan></text><text class="fig-text fig-math" x="199" y="108" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">g</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">m3</tspan><tspan font-family="Pretendard" font-weight="600" font-style="normal">v</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">π3</tspan> ↓</text><text class="fig-text fig-math" x="64" y="176" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">r</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">π3</tspan></text><text class="fig-text fig-math" x="286" y="176" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">R</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">1</tspan></text><text class="fig-text fig-math" x="25" y="112" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">b</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">3</tspan> = 0</text>
+<circle cx="270" cy="140" r="3" fill="#dc2626" stroke="#dc2626" data-node="e3" data-node-color="red"/><circle cx="180" cy="210" r="3" fill="currentColor" data-ground-branch="true"/></svg><figcaption>$V_b$와 전원은 AC 접지예요. $Q_3$의 베이스 입력을 영점으로 놓고 오른쪽 컬렉터에 시험전압을 가해 $R_{out3}=V_t/i_t$로 읽어요. $v_{\pi3}=-v_{e3}$이며 $R_1,r_{\pi3}$는 같은 이미터–접지 사이예요.</figcaption></figure><p>베이스가 접지이므로 $r_{\pi3}$와 $R_1$의 병렬값을 이미터 축퇴 저항으로 보고, 수업의 큰 곱 근사에서 그 값에 $g_{m3}r_{O3}$를 곱해요. 이 그림으로 CM 이득을 다시 계산하지 않아요.</p></div></div>
 </div>
 <div class="layer formal" data-explanation="verify">
 <h4>완성 답과 검산</h4>
 <div data-subpart="main">
-<h4>극한·단위 확인</h4>
-<p><strong>완성 답</strong>: $A_{CM-DM}=\dfrac{\Delta R_C}{1/g_{m1}+2\{[1+g_{m3}(R_1\parallel r_{\pi3})]r_{O3}+R_1\parallel r_{\pi3}\}}$ (이 소신호 모델의 정확한 값)</p>
-<p><strong>$r_{O3}\gg R_1\parallel r_{\pi3}$에서</strong>: $A_{CM-DM}\approx\dfrac{\Delta R_C}{1/g_{m1}+2[1+g_{m3}(R_1\parallel r_{\pi3})]\,r_{O3}}$이고, 문제 md의 풀이와 같은 꼴이에요. 버린 항 $2(R_1\parallel r_{\pi3})$와 남긴 항의 비는 $(R_1\parallel r_{\pi3})/\{[1+g_{m3}(R_1\parallel r_{\pi3})]r_{O3}\}\lt (R_1\parallel r_{\pi3})/r_{O3}$라서 $r_{O3}\to\infty$에서 두 값의 비가 1로 가요.</p>
-<p><strong>대칭 특수값</strong>: $\Delta R_C=0$이면 분자가 0이라 $A_{CM-DM}=0$이에요. 완전 대칭이면 CM 입력이 차동 출력으로 새지 않는다는 사실과 맞아요.</p>
-<p><strong>극한 1</strong>: $R_1=0$이면 $R_1\parallel r_{\pi3}=0$이라 $R_{out3}=r_{O3}$예요. 축퇴 없는 전류원을 테일로 쓴 경우로 돌아와요.</p>
-<p><strong>극한 2</strong>: $R_1\gg r_{\pi3}$이면 $R_1\parallel r_{\pi3}\to r_{\pi3}$이고 $g_{m3}r_{\pi3}=\beta$라서 $R_{out3}\to(1+\beta)r_{O3}+r_{\pi3}\approx\beta r_{O3}$예요. 바이폴라 축퇴 전류원 출력 저항의 상한과 맞아요.</p>
-<p><strong>극한 3</strong>: $r_{O3}\to\infty$(이상적인 테일)이면 분모가 무한대라 $A_{CM-DM}\to0$이에요. 테일이 이상적이면 CM 입력으로 전류 자체가 바뀌지 않으니 미스매치가 있어도 출력이 생기지 않아요.</p>
-<p><strong>단위</strong>: 분자 $\Delta R_C$는 Ω이고, 분모의 $1/g_{m1}$, $r_{O3}$, $R_1\parallel r_{\pi3}$도 모두 Ω이에요. $g_{m3}(R_1\parallel r_{\pi3})$는 S·Ω이라 무차원이니 1과 더할 수 있어요. 결과는 무차원 이득이에요.</p>
+<div data-answer-final>
+<p><strong>CM 입력에서 차동 출력으로 새는 이득의 크기</strong>는 다음과 같아요. 원문처럼 $\Delta R_C\ge0$로 읽으면 절댓값을 빼도 돼요.</p>
+<div class="equation">$$\boxed{A_{CM-DM}\approx\frac{|\Delta R_C|}{2g_{m3}(R_1\parallel r_{\pi3})r_{O3}}}$$</div>
+<p>입력쌍의 $V_A=\infty$와 큰 $\beta$, 동일한 $g_m$, $g_{m3}r_{O3}\gg1$, $g_{m3}R_e^*\gg1$인 소신호 활성 영역의 수업 근사예요. $Q_3$의 유한한 $r_{\pi3}$는 병렬 저항에 남겨요.</p>
+</div>
+<p>분자와 분모는 모두 Ω이므로 이득은 무차원이에요. $\Delta R_C=0$이면 답은 0이에요. 유한 테일 때문에 각 출력이 변해도 차에서는 상쇄돼요. 테일 저항을 크게 하면 가지 전류 변화가 작아져 누출도 작아져요. 오른쪽 부하가 더 클 때 오른쪽 출력이 더 내려가므로 정의한 $v_{od}$의 부호 전달비는 양수예요.</p>
 </div>
 </div>
 <div class="layer warn" data-explanation="pitfall">
-<h4>이 문항에서 하기 쉬운 오류</h4>
-<ul>
-<li>테일을 $2R_{out3}$로 나누지 않고 반쪽에 $R_{out3}$를 그대로 붙이는 실수예요. 두 반쪽 전류가 모두 $R_{out3}$로 흐르니 반쪽에서 보면 2배로 보여요.</li>
-<li>$R_{out3}$에서 $r_{\pi3}$를 빼먹고 $(1+g_{m3}R_1)r_{O3}$로 쓰는 실수예요. $Q_3$ 베이스가 소신호 접지라서 $r_{\pi3}$가 $R_1$과 병렬로 들어가요.</li>
-<li>$R_1$이 작다고 1을 버리고 $g_{m3}(R_1\parallel r_{\pi3})r_{O3}$만 쓰면 $R_1\to0$에서 $R_{out3}=0$이 되는 엉뚱한 결과가 나와요.</li>
-<li>차동 출력을 구할 때 $R_C$ 항이 지워지는 것을 놓치고 $(2R_C+\Delta R_C)\Delta I_C$처럼 더하는 실수예요. 두 출력은 같은 방향으로 움직이므로 빼야 해요.</li>
-<li>$Q_1$·$Q_2$의 $V_A=\infty$ 조건을 무시하면 안 돼요. 이 가정이 있어야 부하가 달라도 두 컬렉터 전류가 같다고 둘 수 있어요.</li>
-</ul>
+<h4>주의할 점</h4>
+<ul><li>$V_A=\infty$와 $\beta\to\infty$는 다른 조건이에요. 전자는 $r_O$를 없애고 후자는 베이스 전류를 무시하게 해요.</li><li>입력쌍의 큰 $\beta$ 근사를 $Q_3$에 확대해 $r_{\pi3}$를 지우지 않아요. $R_1\to\infty$여도 $R_e^*\to r_{\pi3}$예요.</li><li>CM에서는 $P$가 움직여요. $P$를 가상 접지로 두거나 테일을 반쪽에 $R_{out3}$로 붙이면 되먹임을 잘못 계산해요.</li><li>$A_{CM-DM}$은 두 출력의 차이에 대한 크기예요. 한쪽 출력의 $A_{CM}$과 다르며, 테일 출력저항은 수업의 큰 곱항 근사로 계산해요.</li></ul>
 </div>
 <div class="layer eli5" data-explanation="retry">
-<h4>설명을 닫고 다시 해 봐요</h4>
-<ol>
-<li>$I_{C3}=1$ mA($g_{m3}\approx38.5$ mS, $\beta=100$이라 $r_{\pi3}=2.6$ kΩ), $r_{O3}=50$ kΩ에서 $R_1=260\ \Omega$을 넣으면 $R_{out3}$은 $R_1=0$일 때의 대략 몇 배가 될지 예측해 보세요.</li>
-<li>$Q_3$ 베이스가 AC 접지가 아니라 이상 전류원으로 구동되어 소신호로 개방이라면 $r_{\pi3}$ 가지와 $g_{m3}v_\pi$는 어떻게 되고, $R_{out3}$은 무엇이 되나요?</li>
-<li>미스매치를 왼쪽으로 옮겨 $Q_1$ 쪽 부하가 $R_C+\Delta R_C$, $Q_2$ 쪽이 $R_C$가 되면 $\Delta V_{out1}-\Delta V_{out2}$의 부호와 $A_{CM-DM}$의 크기는 어떻게 되나요?</li>
-</ol>
+<h4>조건을 바꾸어 생각해요</h4>
+<ol><li>테일 저항은 그대로 두고 $\Delta R_C=0$으로 바꾸면, 각 출력 변화와 차동 출력 변화는 각각 어떻게 되나요?</li><li>$Q_3$의 $g_{m3},r_{\pi3},r_{O3}$를 고정하고 $R_1$만 매우 크게 하면 테일 저항과 CM 누출은 끝없이 개선되나요? 병렬 연결로 답해 보세요.</li></ol>
 </div>
-<div class="sum" hidden=""><p>입력쌍의 전류식에는 $\beta\gg1$을 써요. $R_1$이 작을 수 있어 $1+g_{m3}(R_1\parallel r_{\pi3})$의 1을 남기고, $r_{O3}\gg R_1\parallel r_{\pi3}$일 때만 마지막 덧셈항을 버려요.</p>
-<div class="summary-group"><h4>떠올릴 개념·공식</h4><p>부하 미스매치 CM-DM 이득과 CM 하프 서킷, 축퇴 전류원 출력 저항</p><p>$A_{CM-DM}=\dfrac{\Delta R_C}{1/g_{m1}+2R_{SS}}$</p><p>테일 저항은 $R_{SS}=R_{out3}$로 바꿔요.</p></div>
-<div class="summary-group"><h4>첫 줄</h4><p>이미터 전압은 $v_E=I_X(R_1\parallel r_{\pi3})$예요.</p><p>컬렉터 KCL은 $I_X=g_{m3}v_\pi+\dfrac{V_X-v_E}{r_{O3}}$예요.</p></div>
-<div class="summary-group"><h4>핵심 판단</h4><p>테일 출력 저항은 $R_{out3}=[1+g_{m3}R_E']r_{O3}+R_E'$이고, $R_E'=R_1\parallel r_{\pi3}$예요.</p><p>$V_A=\infty$라 두 쪽 $\Delta I_C$가 같아요.</p><p>$\Delta V_{out1}-\Delta V_{out2}=\Delta R_C\,\Delta I_C$</p></div>
-<div class="summary-group"><h4>검산</h4><p>미스매치가 없으면 $\Delta R_C=0\Rightarrow0$이에요.</p><p>축퇴가 없으면 $R_1=0\Rightarrow R_{out3}=r_{O3}$예요.</p><p>이상적 테일이면 $r_{O3}\to\infty\Rightarrow0$이에요.</p></div>
+<div class="sum" hidden>
+<div class="summary-group"><h4>개념·첫 식</h4><p>CM 반회로는 $2R_{out3}$, $\Delta v_P\approx2R_{out3}\Delta i_C$예요.</p><div class="equation">$$R_e^*=R_1\parallel r_{\pi3}$$</div><div class="equation">$$R_{out3}\approx g_{m3}R_e^*r_{O3}$$</div></div>
+<div class="summary-group"><h4>핵심 판단·답</h4><p>같은 전류 × 다른 부하가 출력 차이를 만들어요. 수업의 큰 축퇴 근사 $2g_{m1}R_{out3}\gg1$로 $1/g_{m1}$도 생략해요.</p><div class="equation">$$A_{CM-DM}\approx\frac{|\Delta R_C|}{2R_{out3}}$$</div><p>입력쌍 $V_A=\infty$와 큰 $\beta$, 같은 $g_m$을 써요. 테일은 $g_{m3}r_{O3}\gg1$, $g_{m3}R_e^*\gg1$의 큰 곱항 근사예요. $r_{\pi3}$는 병렬값에 남겨요.</p></div>
+<div class="summary-group"><h4>혼동 구분·검산</h4><p>Early 효과 무시와 베이스 전류 무시는 달라요. $A_{CM}$과 $A_{CM-DM}$을 구별해요. 저항/저항은 무차원이고 부하가 같으면 차동 누출은 0이에요.</p></div>
 </div>
+

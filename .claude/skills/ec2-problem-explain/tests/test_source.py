@@ -1,3 +1,4 @@
+import json
 import shutil
 import tempfile
 import unittest
@@ -50,6 +51,20 @@ class SourceTest(unittest.TestCase):
         style = repo / '.claude/skills/ec2-review-pack/references/solution-style.md'
         style.write_bytes(style.read_bytes() + b'\n')
         self.assertNotEqual(load_source(txt, repo).sha256, before)
+
+    def test_pack_display_titles_are_numbered_and_hashed(self):
+        repo = self.repo(ids=('E9.05',))
+        txt = resolve_sources(repo, '1007')[0]
+        original = load_source(txt, repo)
+        mapping = txt.with_name('display-titles.json')
+        mapping.write_text(json.dumps({'E9.05': '캐스코드 출력저항'}), encoding='utf-8')
+        pack = load_source(txt, repo)
+        self.assertEqual(pack.problems[0].title, 'P1. 캐스코드 출력저항')
+        self.assertIn(str(mapping), pack.inputs)
+        self.assertNotEqual(pack.sha256, original.sha256)
+        self.assertEqual(pack.problems[0].conditions_html, original.problems[0].conditions_html)
+        mapping.write_text(json.dumps({'E9.05': '출력저항'}), encoding='utf-8')
+        self.assertNotEqual(load_source(txt, repo).sha256, pack.sha256)
 
     def test_missing_or_invalid_style_is_refused(self):
         repo = self.repo(ids=('E9.05',))

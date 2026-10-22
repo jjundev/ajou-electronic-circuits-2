@@ -1,78 +1,92 @@
 <div class="layer eli5" data-explanation="understand">
-  <h4>문제를 내 말로 읽어요</h4>
-  <p>NMOS 차동쌍 $M_1$·$M_2$ 위에는 저항 대신 PMOS 전류원 $M_3$·$M_4$가 부하(load)로 달려 있고, 아래 테일(tail)에는 이상적 전류원 대신 실제 트랜지스터 $M_5$가 있어요. $V_{b1}$, $V_{b2}$는 고정 바이어스라 소신호에서는 접지와 같아요.</p>
-  <p>입력은 두 게이트에 <strong>똑같이</strong> 들어오는 공통 모드(common-mode, CM) 변화 $\Delta V_{in,CM}$이고, 출력은 $M_1$ 드레인(= $M_3$ 드레인) 노드예요. $\lambda&gt;0$이라 모든 트랜지스터가 출력 저항 $r_O$를 가지므로, 테일 $M_5$도 무한대가 아닌 $r_{O5}$로 보여요. 이 유한한 테일 저항 때문에 CM 입력이 출력에 새어 나오는 정도, 즉 한 출력 기준 공통 모드 이득 $A_{CM}=\Delta V_{out1}/\Delta V_{in,CM}$을 구해요.</p>
-  <p>그림의 $V_{out}$은 두 출력의 차이에요. 회로가 완전 대칭이면 두 출력이 똑같이 움직여 차동 출력의 CM 이득은 0이 되므로, 의미 있는 값은 한쪽 출력 기준 이득이에요.</p>
+<h4>문제를 읽어요</h4>
+<p>두 입력을 함께 $v_{CM}$만큼 올렸을 때, 한쪽 출력이 얼마나 움직이는지 구해요. 테일 $M_5$가 완벽한 전류원은 아니어서 공통 소스 전압이 움직이면 전류도 조금 변해요. 위의 PMOS 부하도 유한한 저항이므로 그 전류 변화가 출력 전압 변화로 바뀌어요.</p>
+<p><strong>출력의 정의부터 구별해요.</strong> 원 그림의 두 단자 사이 $V_{out}$은 차동 출력으로 읽혀요. 완전 대칭이면 두 출력은 똑같이 움직여 차동 출력의 CM 이득은 0이에요. 여기서는 지시한 $-G_mR_{out}$으로 구하는 <strong>한 출력 기준</strong> 이득을 $A_{CM,SE}=v_{out1}/v_{CM}$으로 정의해요. 몸체 효과는 무시하는 저주파 소신호 모델을 사용해요.</p>
 </div>
 <div class="layer formal" data-explanation="recall">
-  <h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4>
-  <p><strong>단서 → 개념.</strong> "common-mode gain"과 대칭 회로라는 단서에서 공통 모드 하프 서킷(CM half circuit)을 떠올려요(<a href="정리노트_1007_Differential_Amplifiers.html#s0-cm-half-recap">정리노트: 유한한 $R_{SS}$와 CM 하프 서킷</a>). "$A_v=-G_m R_{out}$을 쓰라"는 말에서는 이득을 트랜스컨덕턴스와 출력 저항 두 조각으로 나눠 구하는 방법을 떠올려요.</p>
-  <p><strong>기호의 뜻.</strong> $g_{m1}$은 $M_1$의 트랜스컨덕턴스(게이트-소스 전압 변화가 드레인 전류를 얼마나 바꾸는지), $r_{O}$는 채널 길이 변조로 생기는 출력 저항 $1/(\lambda I_D)$예요. 테일 $M_5$는 게이트가 고정이라 드레인에서 $R_{SS}=r_{O5}$로 보여요. $G_m$은 출력을 교류 접지에 단락했을 때 흐르는 출력 전류/입력 전압, $R_{out}$은 입력을 0으로 두고 출력 노드에서 본 저항이에요.</p>
-  <p><strong>근사 조건.</strong> $g_m r_O\gg1$을 써서 $1$이나 $r_O$ 단독 항보다 $g_m r_O\cdot r_O$ 항이 훨씬 크다고 봐요. 몸체 효과(body effect)는 문제에 없으므로 무시해요. $\lambda&gt;0$이므로 $r_{O1}$, $r_{O3}$, $r_{O5}$를 모두 남긴 채로 시작하고, 마지막에만 근사해요.</p>
-  <p><strong>선택 이유.</strong> 대칭이라 CM 입력에서는 두 반쪽이 같은 전류를 흘려요. 그래서 $r_{O5}$를 $2r_{O5}$ 두 개의 병렬로 쪼개면 대칭선을 지나는 전류가 0이 되어 끊을 수 있고, 반쪽은 "소스 축퇴(source degeneration) $2r_{O5}$ + 전류원 부하 $r_{O3}$"인 CS 단이 돼요. 부하가 저항이 아닌 $r_{O3}$이고 $M_1$의 $r_{O1}$까지 있으면 $-R_D/(1/g_m+R_S)$ 공식을 그대로 쓸 수 없으므로, $G_m$과 $R_{out}$을 따로 구하는 $A_v=-G_mR_{out}$이 가장 깔끔한 도구예요.</p>
+<h4>이 개념과 공식을 떠올려요</h4>
+<p>“공통 모드”와 대칭인 두 가지가 단서예요. 공통 모드 반회로(CM half circuit)는 두 반쪽의 전류가 같다는 성질을 이용해요. $M_5$는 게이트와 소스가 AC 접지여서 제어 전류는 0이지만, 채널 길이 변조의 $r_{o5}$는 남아요.</p>
+<p>$g_{m1}$은 $M_1$ 자체의 트랜스컨덕턴스이고 $r_{o1}$은 드레인–소스 소신호 저항이에요. $G_m$은 <em>반회로 전체</em>의 출력 단락 전류를 입력 전압으로 나눈 값이에요. $R_{out}$은 같은 반회로에서 입력을 0으로 두고 출력에서 본 저항이에요. 둘을 곱하면 전압 이득이 돼요.</p>
+<p>$V_{DD},V_{b1},V_{b2}$는 AC 접지예요. PMOS $M_3$의 소스와 게이트가 모두 AC 접지이므로 $g_{m3}v_{gs3}=0$이고 부하는 $r_{o3}$예요. 이것은 PMOS가 DC에서 꺼졌다는 뜻이 아니에요. $g_mr_o\gg1$은 뒤에서 곱 항을 남길 때 사용해요. 반회로를 고르면 테일의 축퇴와 부하의 역할을 따로 볼 수 있어요.</p>
 </div>
 <div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <p>1) 소신호에서 $V_{DD}$, $V_{b1}$, $V_{b2}$를 접지로 보내요. 그러면 $M_3$는 출력과 접지 사이의 저항 $r_{O3}$, $M_5$는 꼬리 노드와 접지 사이의 저항 $r_{O5}$가 돼요.</p>
-  <p>2) CM 하프 서킷: $r_{O5}=2r_{O5}\parallel 2r_{O5}$로 나누고 대칭선을 끊어요. 왼쪽 반쪽은 게이트에 $v_{in}$, 소스에 $R_S=2r_{O5}$, 드레인(출력)에 $r_{O3}$가 달린 $M_1$이에요. $M_1$은 $g_{m1}v_{gs1}$ 전류원과 $r_{O1}$ 병렬로 바꿔요.</p>
-  <p>3) $G_m$을 위한 첫 식: 출력을 AC 접지에 단락하고, 단락선에서 출력 노드로 들어가 $M_1$을 지나 내려가는 전류를 $i$로 둬요. 출력이 0 V라 $r_{O3}$에는 전류가 흐르지 않아요. 제어 전압은 게이트 쪽이 $+$라 $v_{gs1}=v_{in}-v_s$이고, $r_{O1}$에는 출력(0 V)에서 소스 쪽으로 $(0-v_s)/r_{O1}$가 흘러요.</p>
-  <figure class="figure"><svg viewBox="0 0 400 320" role="img" aria-label="G_m을 구하는 CM 하프 서킷: 출력 노드는 AC 접지에 단락되어 0 V이고 단락선에서 출력 노드로 전류 i가 들어가요. 출력 노드와 AC 접지 V_DD 사이에 r_O3, 출력 노드와 소스 노드 v_s 사이에 아래 방향 제어 전류원 g_m1 v_gs1과 r_O1이 병렬로 있고, v_s에서 접지로 2r_O5가 연결돼요. 게이트에는 v_in이 걸리고 v_gs1은 게이트가 +, v_s가 −예요."><path class="fig-ink" d="M190 24 H250"/><text class="fig-muted" x="258" y="28">V<tspan baseline-shift="sub">DD</tspan> (AC 접지)</text><path class="fig-ink" d="M220 24 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M220 92 V110 M180 110 H260"/><path class="fig-accent" d="M220 100 H330 V112"/><path class="fig-accent" d="M330 112 v8 M320 120 H340 M324 125 H336 M328 130 H332"/><path class="fig-accent" d="M312 90 H292 M297 85 L292 90 L297 95"/><text class="fig-text" x="316" y="94">i</text><text class="fig-muted" x="296" y="148">출력 단락</text><circle class="fig-dot" cx="220" cy="100" r="3.5"/><text class="fig-text" x="234" y="62">r<tspan baseline-shift="sub">O3</tspan></text><text class="fig-text" x="134" y="98">v<tspan baseline-shift="sub">out</tspan> = 0</text><path class="fig-ink" d="M180 110 V149"/><polygon class="fig-ink" points="180,149 194,165 180,181 166,165"/><path class="fig-ink" d="M180 155 V174 M175 169 L180 174 L185 169"/><path class="fig-ink" d="M180 181 V200 H260 M260 110 V131"/><path class="fig-ink" d="M260 131 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M260 199 V200"/><text class="fig-text" x="100" y="170">g<tspan baseline-shift="sub">m1</tspan>v<tspan baseline-shift="sub">gs1</tspan></text><text class="fig-text" x="274" y="170">r<tspan baseline-shift="sub">O1</tspan></text><path class="fig-accent" d="M220 200 V220"/><circle class="fig-dot" cx="220" cy="220" r="3.5"/><text class="fig-text" x="232" y="216">v<tspan baseline-shift="sub">s</tspan></text><path class="fig-ink" d="M220 220 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/><path class="fig-ink" d="M220 288 v8 M210 296 H230 M214 301 H226 M218 306 H222"/><text class="fig-text" x="236" y="258">2r<tspan baseline-shift="sub">O5</tspan></text><path class="fig-ink" d="M50 240 V220 H100"/><circle class="fig-ink" cx="100" cy="220" r="3.5"/><text class="fig-text" x="112" y="225">+</text><text class="fig-text" x="140" y="225">v<tspan baseline-shift="sub">gs1</tspan></text><text class="fig-text" x="198" y="225">−</text><circle class="fig-ink" cx="50" cy="254" r="14"/><text class="fig-muted" x="46" y="251">+</text><text class="fig-muted" x="46" y="265">−</text><path class="fig-ink" d="M50 268 V288"/><path class="fig-ink" d="M50 288 v8 M40 296 H60 M44 301 H56 M48 306 H52"/><text class="fig-text" x="16" y="210">v<tspan baseline-shift="sub">in</tspan></text></svg><figcaption>$V_{DD}$, $V_{b1}$, $V_{b2}$를 AC 접지로 보내 $M_3$는 $r_{O3}$, $M_5$는 $r_{O5}$가 되고, CM 하프 서킷이라 소스에 $2r_{O5}$가 붙어요. $M_1$은 $g_{m1}v_{gs1}$과 $r_{O1}$로 바꿨고, $G_m$을 구하려고 출력을 AC 접지에 단락했어요.</figcaption></figure>
-  <p>출력 노드 KCL(들어온 $i$ = 제어 전류원 + $r_{O1}$ 가지)과 소스 노드 KCL($i$가 모두 $2r_{O5}$로 빠짐)을 나란히 적어요.</p>
-  $$i=g_{m1}(v_{in}-v_s)-\frac{v_s}{r_{O1}},\qquad v_s=2r_{O5}\,i$$
+<h4>종이에 쓸 첫 줄</h4>
+<p>공통 소스 전압을 $v_s$, 한 가지 증분 전류를 $i$라 하면 테일에는 $2i$가 흘러요. 따라서 $v_s=(2i)r_{o5}=i(2r_{o5})$예요. 반쪽마다 $R_S=2r_{o5}$를 붙여야 원래 테일 전류가 재현돼요. $2r_{o5}$ 두 개의 병렬값도 원래 $r_{o5}$예요.</p>
+<div data-answer-step="공통 모드 반회로와 출력 단락 측정">
+<p>대칭 CM 반회로에서 $R_S=2r_{o5}$로 두고, $G_m$ 측정에는 출력을 실제로 접지에 단락해요. $i_o$는 접지 쪽에서 출력 단자로 들어오는 방향이에요.</p>
+<figure class="figure"><svg viewBox="0 0 600 300" role="img" aria-label="왼쪽 입력 vCM, 가운데 왼쪽 종속전류원 gm1(vCM-vs)와 오른쪽 ro1이 드레인과 소스 사이 병렬이다. 소스 아래에 2ro5가 있다. 맨 오른쪽 출력은 실제 도선으로 접지에 단락되며 io는 왼쪽으로 유입한다.">
+<path class="fig-ink" d="M40 104 H125 M125 87 V121 M210 68 H535 V245 M210 68 V112 M210 158 V195 H340 M340 68 V100 M210 195 V210 M210 266 V278 M200 278 H220 M204 283 H216 M208 288 H212 M535 245 v10 M525 255 H545 M529 260 H541 M533 265 H537"/>
+<polygon class="fig-ink" points="210,112 226,135 210,158 194,135"/>
+<path class="fig-ink" d="M210 122 V147 M205 141 L210 147 L215 141 M340 100 v10 l8 5 l-16 8 l16 8 l-16 8 l16 8 l-8 5 v43 M210 210 v5 l8 5 l-16 8 l16 8 l-16 8 l16 8 l-8 5 v9 M510 88 H463 M471 83 L463 88 L471 93"/>
+<circle class="fig-dot" cx="40" cy="104" r="4" fill="#2563eb" data-node="vin" data-node-color="blue"/>
+<circle class="fig-dot" cx="210" cy="195" r="4" fill="#dc2626" data-node="vs" data-node-color="red"/>
+<circle class="fig-dot" cx="340" cy="195" r="4" fill="#dc2626" data-node="vs" data-node-color="red"/>
+<circle class="fig-dot" cx="340" cy="68" r="4" fill="#2563eb" data-node="out" data-node-color="blue"/>
+<circle class="fig-dot" cx="535" cy="68" r="4" fill="#2563eb" data-node="out" data-node-color="blue"/>
+<text class="fig-text fig-math" x="28" y="85" fill="#2563eb" data-node="vin" data-node-color="blue" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">v</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">CM</tspan></text>
+<text class="fig-text fig-math" x="221" y="181" fill="#dc2626" data-node="vs" data-node-color="red" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">v</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">s</tspan></text>
+<text class="fig-text fig-math" x="450" y="48" fill="#2563eb" data-node="out" data-node-color="blue" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">v</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">out</tspan> = 0</text>
+<text class="fig-text fig-math" x="466" y="110" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">i</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">o</tspan></text><text class="fig-text" x="134" y="86" font-family="Pretendard" font-weight="600" font-style="normal">+</text><text class="fig-text" x="134" y="127" font-family="Pretendard" font-weight="600" font-style="normal">−</text>
+<text class="fig-text fig-math" x="55" y="173" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">g</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">m1</tspan>(<tspan font-family="Pretendard" font-weight="600" font-style="normal">v</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">CM</tspan> − <tspan font-family="Pretendard" font-weight="600" font-style="normal">v</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">s</tspan>)</text><text class="fig-text fig-math" x="355" y="139" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">r</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">o1</tspan></text><text class="fig-text fig-math" x="230" y="245" font-family="Pretendard" font-weight="600" font-style="normal">2<tspan font-family="Pretendard" font-weight="600" font-style="normal">r</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">o5</tspan></text>
+</svg><figcaption>$G_m$ 측정: 출력 단락이므로 $r_{o3}$ 양단 전압도 0이라 그 가지는 생략했어요. $M_1$의 $r_{o1}$은 유지했어요. 입력의 +/−는 $v_{gs1}=v_{CM}-v_s$를 나타내요.</figcaption></figure>
+<div class="equation">$$v_s=2r_{o5}i_o$$</div>
+<div class="equation">$$i_o=g_{m1}(v_{CM}-v_s)-\frac{v_s}{r_{o1}}$$</div>
+</div>
+<p>MOS 게이트 전류가 0이므로 드레인에서 들어온 순전류가 그대로 $R_S$로 나가요. $r_{o1}$에는 소스에서 접지된 드레인 쪽으로 $v_s/r_{o1}$이 흘러요. 따라서 이 전류를 제어 전류에서 빼야 해요. 소스 전압 상승이 $v_{gs1}$을 줄이는 것이 축퇴(degeneration)의 핵심이에요.</p>
 </div>
 <div class="layer formal" data-explanation="solve">
-  <h4>왜 이렇게 푸는지 함께 따라가요</h4>
-  <div data-subpart="main">
-    <h4>공통 모드 이득 $A_{CM}$</h4>
-    <p><strong>먼저 $G_m$ 구하기.</strong> 첫 식에 $v_s=2r_{O5}i$를 넣고 $i$를 모아요.</p>
-    $$i\left(1+2g_{m1}r_{O5}+\frac{2r_{O5}}{r_{O1}}\right)=g_{m1}v_{in}$$
-    <p>양변에 $r_{O1}$을 곱해 정리하면</p>
-    $$G_m=\frac{i}{v_{in}}=\frac{g_{m1}r_{O1}}{r_{O1}+2r_{O5}+2g_{m1}r_{O1}r_{O5}}$$
-    <p>분모에서 $2g_{m1}r_{O1}r_{O5}$는 $r_{O1}$, $2r_{O5}$보다 $g_mr_O$배쯤 커요($g_mr_O\gg1$). 그래서 분모를 이 항 하나로 두면</p>
-    $$G_m\approx\frac{g_{m1}r_{O1}}{2g_{m1}r_{O1}r_{O5}}=\frac{1}{2r_{O5}}$$
-    <p>뜻: 축퇴 저항 $2r_{O5}$가 $1/g_{m1}$보다 훨씬 크면 $M_1$이 소스 전압을 게이트에 거의 붙여 따라가게 해서, 전류는 "$v_{in}$이 $2r_{O5}$에 걸려 흐르는 만큼"으로 정해져요.</p>
-    <p><strong>다음 $R_{out}$ 구하기.</strong> 출력 노드에서 위로는 $r_{O3}$, 아래로는 소스에 $2r_{O5}$가 달린 $M_1$이 보여요. 축퇴된 트랜지스터의 드레인 쪽 저항 공식을 쓰면</p>
-    $$R_{down}=r_{O1}+2r_{O5}+2g_{m1}r_{O1}r_{O5}\approx2g_{m1}r_{O1}r_{O5}$$
-    <p>이 값은 $r_{O3}$보다 $g_mr_O$배쯤 크므로 병렬에서는 작은 쪽이 지배해요.</p>
-    $$R_{out}=r_{O3}\parallel R_{down}\approx r_{O3}$$
-    <p><strong>합치기.</strong> 근사 전 식을 그대로 곱하면 분모의 $R_{down}$이 $G_m$의 분모와 같다는 점이 보여요($G_m=g_{m1}r_{O1}/R_{down}$).</p>
-    $$A_{CM}=-G_mR_{out}=-\frac{g_{m1}r_{O1}}{R_{down}}\cdot\frac{r_{O3}R_{down}}{r_{O3}+R_{down}}=-\frac{g_{m1}r_{O1}r_{O3}}{r_{O3}+r_{O1}+2r_{O5}+2g_{m1}r_{O1}r_{O5}}$$
-    <p>분모에서 $2g_{m1}r_{O1}r_{O5}$만 남기면</p>
-    $$A_{CM}\approx-\frac{r_{O3}}{2r_{O5}}$$
-    <p>차동 출력 $V_{out}=V_{out1}-V_{out2}$로 보면 두 반쪽이 같은 값을 내므로 완전 대칭에서는 0이에요. 위 값은 한 출력 기준이에요.</p>
-  </div>
+<h4>이렇게 풀어요</h4>
+<div data-subpart="main">
+<p>먼저 $v_s=2r_{o5}i_o$를 단락 전류식에 넣어 같은 $i_o$ 항끼리 모아요.</p>
+<div class="equation">$$i_o=g_{m1}(v_{CM}-2r_{o5}i_o)-\frac{2r_{o5}}{r_{o1}}i_o$$</div>
+<div class="equation">$$i_o\left(1+2g_{m1}r_{o5}+\frac{2r_{o5}}{r_{o1}}\right)=g_{m1}v_{CM}$$</div>
+<p>양변을 입력과 괄호로 나눈 뒤 역수 꼴로 쓰면 어떤 저항 항이 지배하는지 보여요.</p>
+<div data-answer-step="출력 단락 트랜스컨덕턴스">
+<div class="equation">$$G_m=\frac{i_o}{v_{CM}}=\frac{1}{1/g_{m1}+2r_{o5}+2r_{o5}/(g_{m1}r_{o1})}\approx\frac1{2r_{o5}}$$</div>
+<p>$g_{m1}r_{o1}\gg1$, $2g_{m1}r_{o5}\gg1$에서 $2r_{o5}$가 분모를 지배해요.</p>
 </div>
+<p>이제 입력을 0으로 바꾸고 출력에서 저항을 봐요. 아래 그림은 <strong>같은 CM 반회로</strong>의 저항 측정이에요. 원래 두 출력 중 한쪽만 비대칭으로 자극하는 별도 측정과 구별해요. $r_{o3}$는 이번에는 출력–접지 사이 전압이 생기므로 반드시 남겨요.</p>
+<div data-answer-step="입력 영점과 출력 시험원 및 저항 판단">
+<figure class="figure"><svg viewBox="0 0 640 330" role="img" aria-label="왼쪽 게이트 입력은 접지되고, 종속전류원 gm1(-vs)가 ro1 왼쪽에 놓인다. 소스 아래에 2ro5가 있고 출력에는 ro3가 접지로 연결된다. 가장 오른쪽 출력 끝점 Vt에서 시험전압원을 접지로 연결하며 it는 끝점 왼쪽에서 왼쪽으로 유입한다.">
+<path class="fig-ink" d="M40 110 H125 M125 93 V127 M40 110 V146 M30 146 H50 M34 151 H46 M38 156 H42 M210 70 H590 M210 70 V123 M210 169 V205 H340 M340 70 V107 M210 205 V222 M210 278 V295 M200 295 H220 M204 300 H216 M208 305 H212 M455 70 V121 M455 184 V295 M445 295 H465 M449 300 H461 M453 305 H457 M590 70 V135 M590 167 V295 M580 295 H600 M584 300 H596 M588 305 H592"/>
+<polygon class="fig-ink" points="210,123 226,146 210,169 194,146"/>
+<path class="fig-ink" d="M210 133 V158 M205 152 L210 158 L215 152 M340 107 v10 l8 5 l-16 8 l16 8 l-16 8 l16 8 l-8 5 v47 M210 222 v5 l8 5 l-16 8 l16 8 l-16 8 l16 8 l-8 5 v9 M455 121 v5 l8 5 l-16 8 l16 8 l-16 8 l16 8 l-8 5 v16 M570 89 H520 M528 84 L520 89 L528 94"/>
+<circle class="fig-ink" cx="590" cy="151" r="16"/><path class="fig-ink" d="M584 145 H596 M590 139 V151 M584 158 H596"/>
+<circle class="fig-dot" cx="210" cy="205" r="4" fill="#dc2626" data-node="vs" data-node-color="red"/><circle class="fig-dot" cx="340" cy="205" r="4" fill="#dc2626" data-node="vs" data-node-color="red"/>
+<circle class="fig-dot" cx="340" cy="70" r="4" fill="#2563eb" data-node="test" data-node-color="blue"/><circle class="fig-dot" cx="455" cy="70" r="4" fill="#2563eb" data-node="test" data-node-color="blue"/><circle class="fig-dot" cx="590" cy="70" r="4" fill="#2563eb" data-node="test" data-node-color="blue"/>
+<text class="fig-text fig-math" x="49" y="92" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">v</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">in</tspan> = 0</text><text class="fig-text fig-math" x="221" y="191" fill="#dc2626" data-node="vs" data-node-color="red" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">v</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">s</tspan></text><text class="fig-text fig-math" x="563" y="49" fill="#2563eb" data-node="test" data-node-color="blue" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">V</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">t</tspan> (+)</text><text class="fig-text fig-math" x="535" y="111" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">i</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">t</tspan></text>
+<text class="fig-text fig-math" x="65" y="188" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">g</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">m1</tspan>(−<tspan font-family="Pretendard" font-weight="600" font-style="normal">v</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">s</tspan>)</text><text class="fig-text fig-math" x="353" y="147" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">r</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">o1</tspan></text><text class="fig-text fig-math" x="468" y="155" font-family="Pretendard" font-weight="600" font-style="normal"><tspan font-family="Pretendard" font-weight="600" font-style="normal">r</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">o3</tspan></text><text class="fig-text fig-math" x="231" y="259" font-family="Pretendard" font-weight="600" font-style="normal">2<tspan font-family="Pretendard" font-weight="600" font-style="normal">r</tspan><tspan baseline-shift="sub" font-size="78%" font-family="Pretendard" font-weight="600" font-style="normal">o5</tspan></text>
+</svg><figcaption>$R_{out}$ 측정: 게이트 입력을 접지하고 오른쪽 시험원 $V_t$를 걸어요. $i_t$는 출력으로 유입하며 $R_{out}=V_t/i_t$예요. 제어원·$r_{o1}$·출력의 좌우 순서를 유지하고 테일 축퇴를 소스 아래에 두었어요.</figcaption></figure>
+<p>$M_1$ 아래쪽은 소스 축퇴로 저항이 커져요. 큰 곱 항이 지배하는 조건에서 다음 근사를 사용해요.</p>
+<div class="equation">$$R_{\downarrow}\approx 2g_{m1}r_{o1}r_{o5}$$</div>
+<div class="equation">$$R_{out}\approx r_{o3}\parallel\left(2g_{m1}r_{o1}r_{o5}\right)\approx r_{o3}$$</div>
+<p>마지막 근사는 $2g_{m1}r_{o1}r_{o5}\gg r_{o3}$일 때예요. 곱 항은 $r_{o1},2r_{o5}$보다 커야 해요.</p>
+</div>
+<p>통상 같은 차수의 $r_o$를 가진 소자와 $g_mr_o\gg1$에서는 아래쪽 저항이 부하보다 훨씬 커서 병렬값은 작은 $r_{o3}$가 정해요. $r_{o3}$가 특별히 큰 설계라면 병렬 근사에서 멈춰야 해요. $R_{out}$은 소자 하나의 $r_o$와 다른 전체 출력 저항이에요.</p>
+<div data-answer-step="전류 생성과 출력 저항을 이득으로 연결">
+<div class="equation">$$A_{CM,SE}=-G_mR_{out}\approx-\frac{r_{o3}}{2r_{o5}}$$</div>
+</div>
+<p>입력이 올라가면 출력에서 아래로 빠지는 전류가 늘어요. 무부하 출력은 그 증가를 부하 전압으로 맞추려고 내려가므로 부호는 음수예요.</p>
+</div></div>
 <div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <h4>검산</h4>
-    <p><strong>완성 답: $A_{CM}\approx-\dfrac{r_{O3}}{2r_{O5}}$ (한 출력 기준, 정확식 $-\dfrac{g_{m1}r_{O1}r_{O3}}{r_{O3}+r_{O1}+2r_{O5}+2g_{m1}r_{O1}r_{O5}}$), 차동 출력 기준은 0.</strong></p>
-    <p><strong>단위·차수.</strong> $r_{O3}/r_{O5}$는 Ω/Ω라 무차원이에요. 정확식도 분자 $g_m r\cdot r$ = Ω, 분모 각 항 Ω라 무차원으로 맞아요.</p>
-    <p><strong>극한 대입.</strong> $r_{O5}\to\infty$(이상적 테일 전류원)이면 $A_{CM}\to0$이 되어 이상적인 경우(테일 전류 고정 → CM 입력에 전류 변화 없음)와 일치해요. 반대로 $r_{O5}\to0$(테일을 접지에 단락)이면 정확식이 $-g_{m1}(r_{O1}\parallel r_{O3})$, 즉 축퇴 없는 CS 단의 이득으로 돌아와요.</p>
-    <p><strong>저항 부하 공식과 비교.</strong> 저항 부하 차동쌍의 $A_{CM}=-\dfrac{R_D}{1/g_m+2R_{SS}}$에서 $R_D\to r_{O3}$, $R_{SS}\to r_{O5}$, $2R_{SS}\gg1/g_m$로 두면 같은 $-r_{O3}/(2r_{O5})$가 나와요.</p>
-    <p><strong>크기 감각(교과서 보충).</strong> $M_3$는 $I_{SS}/2$, $M_5$는 $I_{SS}$를 흘리므로 $\lambda$가 같다면 $r_{O3}=\dfrac{1}{\lambda I_{SS}/2}=2r_{O5}$이고, 이때 $|A_{CM}|\approx1$이에요. 전류원 부하는 차동 이득을 키우는 만큼 CM 이득도 키워서, 테일을 더 좋게(예: 캐스코드) 만들지 않으면 단일 출력 CM 이득이 1보다 많이 작아지지 않아요.</p>
-  </div>
-</div>
+<h4>완성 답과 검산</h4>
+<div data-subpart="main">
+<div data-answer-final><p><strong>한 출력 기준 공통 모드 이득</strong>은 큰 $g_mr_o$, 몸체 효과 무시 및 $2g_{m1}r_{o1}r_{o5}\gg r_{o3}$에서 다음과 같아요.</p><div class="equation">$$\boxed{A_{CM,SE}\approx-\frac{r_{o3}}{2r_{o5}}}$$</div><p>완전 대칭인 원 그림의 두 단자 차동 출력은 $A_{CM,DM}=(v_{out1}-v_{out2})/v_{CM}=0$이에요.</p></div>
+<p><strong>단위:</strong> $G_m$은 $1/\Omega=\mathrm S$, $R_{out}$은 $\Omega$이므로 곱은 V/V인 무차원 이득이에요. <strong>극한:</strong> 부하 $r_{o3}$를 고정하고 테일 $r_{o5}\to\infty$로 보내면 한 출력의 CM 이득도 0으로 가요.</p>
+<p><strong>대칭:</strong> 두 출력은 같은 음의 이득으로 움직여 서로 빼면 0이에요. 예를 들어 $r_{o3}=r_{o5}$이고 근사 조건이 유지되면 한 출력 이득은 약 $-1/2$지만 차동 CM 이득은 여전히 0이에요. 이 비교는 수치 소자값을 추가한 계산이 아니라 저항비를 확인하는 특수 경우예요.</p>
+</div></div>
 <div class="layer warn" data-explanation="pitfall">
-  <h4>자주 하는 실수</h4>
-  <ul>
-    <li>테일을 쪼갤 때 $r_{O5}$를 반쪽마다 그대로 붙이는 실수. 두 반쪽 전류가 합쳐 흐르므로 반쪽에는 $2r_{O5}$가 달려요.</li>
-    <li>$R_{out}$을 $r_{O1}\parallel r_{O3}$로 쓰는 실수. $M_1$의 소스에 $2r_{O5}$가 있어 아래쪽 저항이 $2g_{m1}r_{O1}r_{O5}$로 크게 부풀어요.</li>
-    <li>$G_m$을 그냥 $g_{m1}$으로 두는 실수. 축퇴 때문에 $G_m\approx1/(2r_{O5})$로 크게 줄어요.</li>
-    <li>그림의 $V_{out}$(차동 출력)으로 답을 0이라고만 쓰고 끝내는 것. 문제가 $G_mR_{out}$을 요구하므로 한 출력 기준 값을 구해야 하고, 차동 출력이 0인 것은 대칭일 때의 부가 설명이에요.</li>
-  </ul>
+<h4>주의할 점</h4>
+<ul><li>CM에서는 테일을 반쪽마다 $2r_{o5}$로 나눠요. $r_{o5}/2$를 붙이면 총전류가 맞지 않아요.</li><li>$\lambda&gt;0$이므로 모든 $r_o$를 지우면 안 돼요. 특히 $r_{o3}$는 $G_m$ 측정에서는 단락 때문에 기여가 0이고, $R_{out}$ 측정에서는 이득을 결정해요.</li><li>$G_m\approx1/(2r_{o5})$는 전체 반회로의 값이에요. $g_{m1}$과 같다고 두면 축퇴가 사라져요.</li><li>원 그림의 차동 출력과 한 출력 기준 답을 바꾸어 쓰지 않아요. 완전 대칭이면 한 출력의 흔들림이 남아도 두 출력의 차에서는 지워져요.</li><li>$R_{out}\approx r_{o3}$에는 아래쪽 저항이 $r_{o3}$보다 크다는 비교가 필요해요. $g_mr_o\gg1$만으로 임의의 극단적인 소자 저항비까지 보장하지 않아요.</li></ul>
 </div>
 <div class="layer eli5" data-explanation="retry">
-  <h4>설명을 닫고 다시 해 봐요</h4>
-  <ol>
-    <li>$g_mr_O\gg1$ 근사에서 테일 전류는 그대로 두고 $M_5$의 채널을 길게 해 $r_{O5}$만 두 배로 만들면 한 출력 기준 $A_{CM}$은 몇 배가 될지 예측해 보세요.</li>
-    <li>$\lambda_n=0.1\ \text{V}^{-1}$, $\lambda_p=0.2\ \text{V}^{-1}$, $I_{SS}=1$ mA($M_3$는 $I_{SS}/2$, $M_5$는 $I_{SS}$)이면 $r_{O3}$, $r_{O5}$와 $A_{CM}$은 대략 얼마인가요?</li>
-    <li>$R_{out}$을 구할 때 입력을 0으로 두고 출력에 시험 전압을 걸면 시험 전류는 어느 두 경로로 나뉘나요? 반대로 $G_m$의 단락 회로에서 $r_{O3}$가 식에서 빠지는 이유는 무엇인가요?</li>
-  </ol>
+<h4>조건을 바꾸어 생각해요</h4>
+<ol><li>부하 $r_{o3}$와 다른 소신호 파라미터는 고정하고 테일 $r_{o5}$만 2배로 키우면 한 출력 CM 이득의 크기는 어떻게 변할까요? <strong>약 절반</strong>이에요. $G_m$이 절반으로 줄고 $R_{out}\approx r_{o3}$는 유지되기 때문이에요. 바뀐 조건에서도 큰 곱 항 근사가 성립한다고 가정해요.</li><li>$r_{o3}=r_{o5}$라 한 출력 이득이 약 $-1/2$라면 완전 대칭인 두 출력의 차에도 그 이득이 남을까요? <strong>0이에요.</strong> 두 출력이 같은 양만큼 움직여 뺄셈에서 상쇄되기 때문이에요.</li></ol>
 </div>
-<div class="sum" hidden=""><p>$\lambda&gt;0$로 모든 관련 $r_O$를 남긴 뒤 $g_mr_O\gg1$·몸체 효과 무시로 근사해요. 한 출력 기준 이득이며 완전 대칭의 차동 CM 이득은 0이에요.</p>
-  <div class="summary-group"><h4>떠올릴 개념·공식</h4><p>CM 하프 서킷: 테일 $r_{O5}$는 반쪽마다 $2r_{O5}$</p><p>이득은 $A_v=-G_mR_{out}$로 나눠 구해요</p></div>
-  <div class="summary-group"><h4>첫 줄</h4><p>출력 단락 KCL: $i=g_{m1}(v_{in}-v_s)-v_s/r_{O1}$</p><p>소스 전압은 $v_s=2r_{O5}i$</p></div>
-  <div class="summary-group"><h4>핵심 판단</h4><p>트랜스컨덕턴스 $G_m\approx\dfrac{1}{2r_{O5}}$</p><p>출력 저항 $R_{out}\approx r_{O3}$ (아래쪽 $2g_{m1}r_{O1}r_{O5}$가 훨씬 큼)</p><p>답 $A_{CM}\approx-\dfrac{r_{O3}}{2r_{O5}}$</p></div>
-  <div class="summary-group"><h4>검산</h4><p>$r_{O5}\to\infty$이면 0</p><p>같은 $\lambda$면 $r_{O3}=2r_{O5}$라 $|A_{CM}|\approx1$</p></div>
+<div class="sum" hidden>
+<div class="summary-group"><h4>개념과 첫 줄</h4><p>CM 대칭으로 테일을 반쪽마다 $2r_{o5}$로 바꿔요. 출력 단락에서 $v_s=2r_{o5}i_o$, $i_o=g_{m1}(v_{CM}-v_s)-v_s/r_{o1}$로 시작해요.</p></div>
+<div class="summary-group"><h4>핵심 판단</h4><p>큰 $g_mr_o$에서 $G_m\approx1/(2r_{o5})$예요. 입력 영점의 $R_{out}\approx r_{o3}$는 아래쪽 축퇴 저항 $2g_{m1}r_{o1}r_{o5}\gg r_{o3}$일 때예요. 단락과 시험원 측정을 구별해요.</p></div>
+<div class="summary-group"><h4>답과 검산</h4><p>몸체 효과를 무시하면 $A_{CM,SE}\approx-r_{o3}/(2r_{o5})$예요. 무차원·음의 부호이며 부하 고정에서 테일 저항을 키우면 0으로 가요. 원 그림의 완전 대칭 차동 출력 CM 이득은 0이에요.</p></div>
 </div>
+
+

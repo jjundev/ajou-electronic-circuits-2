@@ -40,6 +40,26 @@ class TestHtml2Md(unittest.TestCase):
         self.assertEqual(Path(self.note_md), self.tmp / ".assets" / "정리노트_0101-0102_Mini_Test.md")
         self.assertEqual(html2md.check_md(self.note, self.note_md), [])
 
+    def test_exported_svg_contains_real_semibold_and_native_subscripts(self):
+        import base64
+        import re
+        note = small_note(self.tmp, '<figure><svg viewBox="0 0 240 120"><text class="fig-text fig-math" font-family="Times New Roman" font-style="italic" x="12" y="30">g<tspan baseline-shift="sub" font-size="72%">m3</tspan></text></svg></figure>')
+        _, count = html2md.convert_note(note)
+        self.assertEqual(count, 1)
+        svg = next((self.tmp / '.assets/figures_0101').glob('*.svg')).read_text(encoding='utf-8')
+        doc = xml.dom.minidom.parseString(svg)
+        css = doc.getElementsByTagName('style')[0].firstChild.data
+        data = re.search(r'data:font/woff2;base64,([A-Za-z0-9+/=]+)', css)
+        self.assertIsNotNone(data, 'Standalone SVG must load its own actual 600 font')
+        font = Path(html2md.__file__).resolve().parents[2] / 'ec2-problem-explain/assets/vendor/pretendard/woff2/Pretendard-SemiBold.woff2'
+        self.assertEqual(base64.b64decode(data.group(1)), font.read_bytes())
+        self.assertIn('font-weight: 600', css)
+        self.assertIn('font-style: normal', css)
+        self.assertIn('svg text tspan', css)
+        self.assertIn('font-size: 78%', css)
+        self.assertIn('baseline-shift="sub"', svg)
+        self.assertIn('SIL OPEN FONT LICENSE', css)
+
     def test_pdf_links_kept_as_pdf(self):
         self.assertIn("(../복습문제_0101-0102_Mini_Test-문제.pdf)", self.md)
         self.assertIn("(../복습문제_0101-0102_Mini_Test-답안.pdf)", self.md)

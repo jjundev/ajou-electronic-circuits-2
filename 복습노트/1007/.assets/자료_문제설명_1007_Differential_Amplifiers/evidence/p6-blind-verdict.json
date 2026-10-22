@@ -1,0 +1,27 @@
+{
+  "problem": "P10.70",
+  "blind": true,
+  "source_panel_markers": [
+    "a",
+    "b"
+  ],
+  "conditions": {
+    "lambda_M1_M2": "zero",
+    "lambda_other_transistors": "finite",
+    "small_DeltaRD": "not explicitly stated; approximation only"
+  },
+  "subparts": {
+    "a": {
+      "status": "pass",
+      "method": "independent symbolic DM/CM node KCL, cascoded-tail test-source KCL, numerical substitution",
+      "evidence": "independent-sympy.py and independent-result.txt; actual fig10-91.png inspected",
+      "conclusion": "CMRR=abs((RD+DeltaRD/2)/DeltaRD)*(1+2*gm*Rtail), Rtail=ro3. Finite lambda3 limits rejection."
+    },
+    "b": {
+      "status": "pass",
+      "method": "independent symbolic DM/CM node KCL, cascoded-tail test-source KCL, numerical substitution",
+      "evidence": "independent-sympy.py and independent-result.txt; actual fig10-91.png inspected",
+      "conclusion": "CMRR=abs((RD+DeltaRD/2)/DeltaRD)*(1+2*gm*Rtail), Rtail=approximately gm3*ro3*ro4 at high intrinsic gain. Cascoding raises tail resistance, suppresses differential common-mode output, and increases CMRR; high-gain improvement approximately gm3*ro4."
+    }
+  }
+}

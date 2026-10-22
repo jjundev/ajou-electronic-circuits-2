@@ -1,0 +1,18 @@
+{
+  "main": "PASS: independent hybrid-pi nodal derivation and symbolic/numeric checks agree.",
+  "method": "Tail collector test voltage; pair emitter KCL separately under common and antisymmetric differential drive; vo1-vo2 gains then magnitude ratio.",
+  "conclusion": {
+    "Rout3_exact": "ro3+(1+gm3*ro3)*(R1||rpi3)",
+    "Rout3_teaching_approx": "[1+gm3*(R1||rpi3)]*ro3",
+    "approx_condition": "Neglect additive Re only if Re << [1+gm3*Re]*ro3. Re=R1||rpi3.",
+    "CMRR_finite_beta_pair": "abs((Rc+dRc/2)/dRc)*[1+2*(gm1+1/rpi1)*Rout3]",
+    "CMRR_large_beta_small_mismatch": "abs(Rc/dRc)*[1+2*gm1*Rout3]",
+    "CMRR_usual_large_tail": "abs(2*gm1*Rc*Rout3/dRc)",
+    "distinctions": "Finite beta of input pair adds factor 1+1/beta1 to tail term; finite beta Q3 is separately represented by R1||rpi3. Exact DM gain uses mean load Rc+dRc/2; replacing it by Rc is small-mismatch leading-order approximation. Dropping unity additionally requires 2*gm1*Rout3 >> 1."
+  },
+  "evidence": [
+    "independent-sympy.py",
+    "p5-result.txt"
+  ],
+  "reference_comparison": "Not performed; no answer or previous explanation read."
+}

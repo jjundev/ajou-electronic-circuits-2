@@ -1,0 +1,23 @@
+{
+  "main_method": "symbolic",
+  "status": "pass",
+  "reference_seen": false,
+  "circuit_image_viewed": true,
+  "conclusions": {
+    "half_circuit": "Rs=2rO5",
+    "gm": "gm1/[1+2rO5(gm1+1/rO1)] ~ 1/(2rO5)",
+    "rout": "leading rO3; full exact expression retained only in internal evidence",
+    "acm_single_ended": "-gm1*rO1*rO3/[rO1+rO3+2rO5(1+gm1*rO1)] ~ -rO3/(2rO5)",
+    "acm_differential": "0 for perfectly matched pair"
+  },
+  "evidence": [
+    "independent-sympy.py",
+    "p2-result.txt"
+  ],
+  "checks": [
+    "Direct two-node KCL agrees with -Gm*Rout exactly",
+    "Three ratios tend to 1 for gm->infinity at fixed positive ro",
+    "Three numerical checks gmro=100,1000,10000"
+  ],
+  "caveat": "Figure output is differential; explain single-ended common-mode convention explicitly. Large gmro alone with arbitrary unbounded rp/rn is not sufficient to replace Rout by rp."
+}

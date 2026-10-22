@@ -1,0 +1,222 @@
+{
+  "adoption_unit": "whole",
+  "catalog_sha256": "b263be0a3948494434d6e75159ab65b9f4b569755a1ef7d26ad6dd53819cb681",
+  "problems": [
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "bd9b03a2ca367f1bb07cbe856c76596f3692655c1af23bb4a94d47800ec2aa8d",
+      "depends_on": [],
+      "id": "P10.67",
+      "kind": "장말문제",
+      "subparts": [],
+      "why": "테일만 유한 출력저항인 MOS 차동쌍의 CM 하프 서킷과 식 증명"
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "c17eb19a3af6d66284b58de7d9e5f8e81666ae59d0a7d07c59cb7375c62f4df3",
+      "depends_on": [],
+      "id": "P10.68",
+      "kind": "장말문제",
+      "subparts": [],
+      "why": "PMOS 전류원 부하와 유한 테일 저항이 CM 이득에 미치는 영향"
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": "stale",
+      "content_sha256": "9f9ed42323f321069d8e231750f36bb5dd6d8efbf35f3f84905c5b77841a1b8d",
+      "depends_on": [],
+      "id": "2018-2_중간-Q3",
+      "kind": "기출",
+      "subparts": [
+        {
+          "ask_md": "차동 전압 이득",
+          "label": "1",
+          "required_concepts": [
+            "차동 증폭기",
+            "차동 반회로와 가상 접지",
+            "소신호 파라미터(gm)",
+            "유한 출력 저항(ro)",
+            "능동 부하의 소신호 등가회로",
+            "소신호 전압 이득"
+          ]
+        },
+        {
+          "ask_md": "Common-mode 이득 $A_{CM} = \\Delta V_{out,CM}/\\Delta V_{in,CM}$",
+          "label": "2",
+          "required_concepts": [
+            "차동 증폭기",
+            "캐스코드",
+            "소신호 파라미터(gm)",
+            "유한 출력 저항(ro)",
+            "출력 저항",
+            "소스·이미터 축퇴",
+            "공통 모드 해석",
+            "능동 부하의 소신호 등가회로",
+            "소신호 전압 이득"
+          ]
+        }
+      ],
+      "why": "캐스코드 테일·PMOS 부하의 DM/CM 이득을 실제 수치로 비교"
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "303faad031d79c59d70edb0f70eb1cdc12d68845dfc1e6e948550cda43f16077",
+      "depends_on": [],
+      "id": "E10.27",
+      "kind": "예제",
+      "subparts": [],
+      "why": "축퇴 BJT 테일과 부하 미스매치에서 CM-to-DM 이득 구하기"
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "664fe97d640979c8684fa541430fc54e20ce9ad74432865526cd861b2b103cc7",
+      "depends_on": [
+        "E10.27"
+      ],
+      "id": "E10.28",
+      "kind": "예제",
+      "subparts": [],
+      "why": "E10.27 결과를 이용해 CMRR을 구하고 개선 방향 설명"
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "42f28eebefeda00e10fab534c1e0ed4a856fb515f6e872184529a130231c6d56",
+      "depends_on": [],
+      "id": "P10.70",
+      "kind": "장말문제",
+      "subparts": [],
+      "why": "단일 테일과 캐스코드 테일의 CMRR 비교"
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": "stale",
+      "content_sha256": "ab32f0e5102546e34d8d5e99d5298ef88e1c0d565be6c4adfec2b7f5b06d892f",
+      "depends_on": [],
+      "id": "2015-2_중간-Q3",
+      "kind": "기출",
+      "subparts": [
+        {
+          "ask_md": "$(W/L)_3$를 두 배로 하면 차동 입력 범위가 늘어나는지 O / X로 답함",
+          "label": "1",
+          "required_concepts": [
+            "차동 증폭기",
+            "DC 바이어스와 동작 영역",
+            "공통 모드·차동 입력 범위",
+            "꼬리 소자 크기와 바이어스 전류",
+            "MOS 차동쌍의 전류 조향과 입력 범위"
+          ]
+        },
+        {
+          "ask_md": "$\\Delta R_D = 0$일 때 차동 이득 $A_{DM}$",
+          "label": "2",
+          "required_concepts": [
+            "차동 증폭기",
+            "차동 반회로와 가상 접지",
+            "DC 바이어스와 동작 영역",
+            "소신호 파라미터 gm·rO",
+            "소신호 전압 이득"
+          ]
+        },
+        {
+          "ask_md": "$\\Delta R_D = 0$일 때 공통 모드 이득 $A_{CM}$",
+          "label": "3",
+          "required_concepts": [
+            "차동 증폭기",
+            "공통 모드 해석",
+            "DC 바이어스와 동작 영역",
+            "소신호 파라미터 gm·rO",
+            "유한 출력 저항(ro)",
+            "꼬리 전류원의 유한 출력 저항",
+            "소신호 전압 이득"
+          ]
+        },
+        {
+          "ask_md": "$\\Delta R_D / R_D = 1\\%$일 때 공통 모드 입력에서 차동 출력으로의 이득 $A_{CM-DM}$",
+          "label": "4",
+          "required_concepts": [
+            "차동 증폭기",
+            "공통 모드 해석",
+            "DC 바이어스와 동작 영역",
+            "소신호 파라미터 gm·rO",
+            "유한 출력 저항(ro)",
+            "꼬리 전류원의 유한 출력 저항",
+            "소자·부하 불일치와 CM-DM 변환",
+            "소신호 전압 이득"
+          ]
+        },
+        {
+          "ask_md": "CMRR",
+          "label": "5",
+          "required_concepts": [
+            "차동 증폭기",
+            "차동 반회로와 가상 접지",
+            "공통 모드 해석",
+            "DC 바이어스와 동작 영역",
+            "소신호 파라미터 gm·rO",
+            "유한 출력 저항(ro)",
+            "꼬리 전류원의 유한 출력 저항",
+            "소자·부하 불일치와 CM-DM 변환",
+            "소신호 전압 이득",
+            "CMRR"
+          ]
+        },
+        {
+          "ask_md": "$(W/L)_3$를 두 배로 했을 때의 CMRR",
+          "label": "6",
+          "required_concepts": [
+            "차동 증폭기",
+            "차동 반회로와 가상 접지",
+            "공통 모드 해석",
+            "DC 바이어스와 동작 영역",
+            "소신호 파라미터 gm·rO",
+            "유한 출력 저항(ro)",
+            "꼬리 전류원의 유한 출력 저항",
+            "소자·부하 불일치와 CM-DM 변환",
+            "소신호 전압 이득",
+            "CMRR",
+            "꼬리 소자 크기와 바이어스 전류"
+          ]
+        }
+      ],
+      "why": "미스매치 CM-to-DM·CMRR와 테일 폭 변경의 효과를 함께 계산"
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "13cf0683b8816f1e4cbf344f9088ea80cf7606629089b0d61185bf5ae71c1202",
+      "depends_on": [],
+      "id": "P10.71",
+      "kind": "장말문제",
+      "subparts": [],
+      "why": "비대칭 폭 비율의 PMOS 거울에서 전류-전압 이득 구하기"
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "205cfd2870edd5af656eed05aa6859bec3ff52f0ae79e1491dc6a61acb81d7ea",
+      "depends_on": [],
+      "id": "P10.72",
+      "kind": "장말문제",
+      "subparts": [],
+      "why": "서로 반대인 두 전류 변화가 능동 부하 출력에서 합쳐지는 과정"
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "a5c64281e3def1f024c4b6d57d443a0ded00396b918a9f05dbbc95a70cfce92f",
+      "depends_on": [],
+      "id": "P10.75",
+      "kind": "장말문제",
+      "subparts": [],
+      "why": "능동 부하 BJT 차동쌍의 목표 이득에서 pnp Early 전압 역산"
+    }
+  ],
+  "range": "1007",
+  "schema_version": 1,
+  "scope_check": "AI must verify every subpart and figure against the taught scope"
+}
