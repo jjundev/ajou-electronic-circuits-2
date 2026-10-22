@@ -15,7 +15,7 @@ def synthetic(tmp_path):
     src=repo/'복습노트/1007/복습문제_1007_Test.html'
     src.parent.mkdir(parents=True)
     src.write_text('<html><body id="p1">fixture</body></html>',encoding='utf-8')
-    _copy(Path('docs/learning/solution-style.md'), repo)
+    _copy(Path('.claude/skills/ec2-review-pack/references/solution-style.md'), repo)
     from epe_shared import read_style
     p=problem()
     pack=SourcePack('review','1007','Test',src.parent/'.assets/problems.txt','0'*64,(p,),(),read_style(repo))

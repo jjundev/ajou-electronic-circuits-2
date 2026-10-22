@@ -20,7 +20,7 @@
                   "items": {"pN:main": {"status": "pass", "reviewer": "…", "evidence": "evidence/pN-sympy.py, evidence/pN-result.txt: …",
                                         "method": "symbolic", "conclusion": "…"}}},
   "browser": {"status": "pass", "reviewer": "…", "evidence": "…"},
-  "learning_style_audit": {"learning_style": {"path": "docs/learning/solution-style.md", "sha256": "…", "rule_ids": ["…"]},
+  "learning_style_audit": {"learning_style": {"path": ".claude/skills/ec2-review-pack/references/solution-style.md", "sha256": "…", "rule_ids": ["…"]},
     "items": {"pN:main": {"status": "not_run", "reviewer": "", "rules": {"<규칙 ID>": {"disposition": "applied", "evidence": ""}}}}}
 }
 ```
@@ -70,7 +70,7 @@ python3 "$REPO/workbook/source_pages.py" render <문제 md 절대 경로…> --o
 
 ## learning_style_audit: 모든 소문항의 개인화 감사
 
-content 리뷰어 브리프의 필수 입력은 `<REPO>/docs/learning/solution-style.md` 절대 경로, `source.json.learning_style`, stage HTML, 저작·검토 규칙이다. 마지막 build가 만든 `review.json.learning_style_audit`의 각 `pN:<subpart>`를 실제 의미 검토한 뒤 채운다. 모든 소문항·모든 rule_ids에 `reviewer`, `status=pass`, `rules[ID]={disposition: applied|not_applicable, evidence: 적용 위치/내용 또는 비적용 이유}`가 필요하다. 수치 계산이 없는 문항에는 이유 있는 `not_applicable`를 사용한다.
+content 리뷰어 브리프의 필수 입력은 `<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md` 절대 경로, `source.json.learning_style`, stage HTML, 저작·검토 규칙이다. 마지막 build가 만든 `review.json.learning_style_audit`의 각 `pN:<subpart>`를 실제 의미 검토한 뒤 채운다. 모든 소문항·모든 rule_ids에 `reviewer`, `status=pass`, `rules[ID]={disposition: applied|not_applicable, evidence: 적용 위치/내용 또는 비적용 이유}`가 필요하다. 수치 계산이 없는 문항에는 이유 있는 `not_applicable`를 사용한다.
 
 snapshot은 path·sha256·rule_ids를 그대로 보존하고 references에 실제 읽은 명세의 절대 경로·현재 SHA-256을 유지한다. start/solve/verify에서 관찰된 사고 순서를 확인하고 필요한 상세 유도가 사라지지 않았는지도 본다. $R_{out}$ 정확식은 위 예외가 아닌 한 내부 검산에만 보존한다. 명세 바이트 변경은 HTML 동등성으로 대체할 수 없고 실제 재검토가 필요하다. 형식 검증이 evidence의 의미를 승인하지 않는다. 현재 네 검토와 개인화 감사가 모두 pass인 발행 `validation.json`만 overlay를 승인한다.
 

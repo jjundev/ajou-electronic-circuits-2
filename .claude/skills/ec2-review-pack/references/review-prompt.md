@@ -12,7 +12,7 @@
 ---
 전자회로2 복습팩 초안을 검토한다. 학습 산출물은 읽기 전용이며 아래 개인화 감사 기록만 쓴다.
 
-- 개인 명세(필수 읽기): `<REPO>/docs/learning/solution-style.md` 절대 경로와 `<RUN>/manifest.json`의 `learning_style` snapshot. 현재 바이트와 snapshot이 일치하는지 확인한다.
+- 개인 명세(필수 읽기): `<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md` 절대 경로와 `<RUN>/manifest.json`의 `learning_style` snapshot. 현재 바이트와 snapshot이 일치하는지 확인한다.
 - 개인화 감사 산출: `<RUN>/learning-style-audit.json`. 대상은 manifest의 **모든 topic ID**(why·요약·예고·링크 포함), 규칙은 snapshot의 모든 rule_ids다. 각 토픽의 첫 설명에서 회로 역할과 핵심 관계가 먼저 보이고 formal에 상세 유도가 이어지는지 실제로 읽는다. `lite`는 메인 에이전트가 같은 감사를 수행한다.
 - 대상: `<RUN>/repo/복습노트/<range>/<정리노트 html>`, `<RUN>/manifest.json`의 `problems`
 - 근거: `<RUN>/summaries/stt-*.md`, `<RUN>/slides.txt`, `<RUN>/candidates.tsv`, Razavi `<RUN>/repo/교과서/마이크로전자회로/<N>장.pdf`, 문제 md(`<RUN>/repo/교과서/마이크로전자회로/chNN/…`, `<RUN>/repo/from_the_past/md/…`)
@@ -36,7 +36,7 @@
 
 개인화 감사는 다음 형태로 실제 검토 후 기록한다. `not_run`을 시작 상태로 쓰고, 적용 위치/내용 또는 `not_applicable` 이유와 reviewer를 채운 뒤에만 해당 토픽을 `pass`로 둔다. 기계 검사는 형식·집합·해시만 확인한다.
 ```json
-{"learning_style": {"path": "docs/learning/solution-style.md", "sha256": "<현재 snapshot>", "rule_ids": ["<전체 규칙 ID>"]},
+{"learning_style": {"path": ".claude/skills/ec2-review-pack/references/solution-style.md", "sha256": "<현재 snapshot>", "rule_ids": ["<전체 규칙 ID>"]},
  "items": {"<topic ID>": {"status": "not_run", "reviewer": "", "rules": {
    "<규칙 ID>": {"disposition": "applied", "evidence": ""}}}}}
 ```

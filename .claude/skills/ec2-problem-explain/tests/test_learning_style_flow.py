@@ -23,7 +23,7 @@ def bundle(tmp_path):
     build(item, fragments)
     artifacts = load_artifacts(item)
     review = approved(item['pack'], fragments, artifacts)
-    profile = repo / 'docs/learning/solution-style.md'
+    profile = repo / '.claude/skills/ec2-review-pack/references/solution-style.md'
     overlay = artifacts.manifest.parent / 'answer-overlay.json'
     def publish():
         return publish_explanation(item['pack'], artifacts, fragments, review,
@@ -75,7 +75,7 @@ def test_missing_style_reference_rejected(bundle):
 
 def test_profile_missing_before_extract(tmp_path):
     repo = make_repo(tmp_path / 'repo', ids=('E9.05',))
-    (repo / 'docs/learning/solution-style.md').unlink()
+    (repo / '.claude/skills/ec2-review-pack/references/solution-style.md').unlink()
     assert extract(repo, '1007', tmp_path / 'run') == 1
     assert not list((tmp_path / 'run').rglob('source.json'))
 
@@ -145,7 +145,7 @@ def test_legacy_fragment_requires_new_authoring_and_preserves_publication(bundle
 def test_style_reference_bytes_cannot_use_git_html_equivalence(bundle):
     import subprocess
     from epe_rerender import verified_references
-    for args in (['init', '-q'], ['add', 'docs/learning/solution-style.md'],
+    for args in (['init', '-q'], ['add', '.claude/skills/ec2-review-pack/references/solution-style.md'],
                  ['-c', 'user.name=Unit Test', '-c', 'user.email=fixture@example.invalid',
                   'commit', '-qm', 'synthetic fixture profile']):
         subprocess.run(['git', *args], cwd=bundle.repo, check=True, capture_output=True)

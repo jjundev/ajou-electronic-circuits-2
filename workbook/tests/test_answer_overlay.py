@@ -44,7 +44,7 @@ def test_invalid_overlay_fails_without_fallback(bundle, mutation):
     elif mutation == 'duplicate_id': bundle.overlay['problems'][1]['id'] = 'E9.05'
     elif mutation == 'reordered_ids': bundle.overlay['problems'].reverse()
     elif mutation == 'missing_subpart': bundle.overlay['problems'][1]['answers'].pop()
-    elif mutation == 'modified_profile': (bundle.repo/'docs/learning/solution-style.md').write_text('Changed')
+    elif mutation == 'modified_profile': (bundle.repo/'.claude/skills/ec2-review-pack/references/solution-style.md').write_text('Changed')
     elif mutation == 'modified_source': bundle.source_files[1].write_text('Changed')
     elif mutation == 'modified_asset': bundle.asset.write_bytes(b'changed')
     elif mutation == 'not_run_review': bundle.validation['browser']['status'] = 'not_run'
@@ -115,7 +115,7 @@ def test_cli_personalized_answers_from_published_bundle(bundle):
 
 
 def test_profile_missing_fails_personalized_only(bundle):
-    (bundle.repo/'docs/learning/solution-style.md').unlink()
+    (bundle.repo/'.claude/skills/ec2-review-pack/references/solution-style.md').unlink()
     result = _cli(bundle,'--answer-overlay',str(bundle.path),'--json-only')
     assert result.returncode == 1, result.stderr
     assert not bundle.build_dir.exists()

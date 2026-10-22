@@ -88,7 +88,7 @@ def test_unreviewed_or_changed_bundle_never_replaces_answer(pipeline, mutation):
     else:
         p.approve_publish()
         overlay = p.overlay
-        if mutation == 'profile': target = p.repo / 'docs/learning/solution-style.md'
+        if mutation == 'profile': target = p.repo / '.claude/skills/ec2-review-pack/references/solution-style.md'
         elif mutation == 'overlay': target = p.overlay
         elif mutation == 'source': target = next((p.repo / '교과서').rglob('P9.23.md'))
         else: target = next((p.repo / '교과서').rglob('*.png'))

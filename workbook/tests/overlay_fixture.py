@@ -27,7 +27,7 @@ class OverlayBundle:
         self.build_dir = root / 'moved build'
         self.path = self.data / 'answer-overlay.json'
         self.ids = ['E9.05', 'E9.06']
-        profile = self.repo / 'docs/learning/solution-style.md'
+        profile = self.repo / '.claude/skills/ec2-review-pack/references/solution-style.md'
         profile.parent.mkdir(parents=True)
         profile.write_text('# Style\n### UNIT-01\nUse units.\n')
         snapshot = read_style(self.repo)

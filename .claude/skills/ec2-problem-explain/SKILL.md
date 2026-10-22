@@ -38,7 +38,7 @@ PDF에는 [저작 규칙](references/authoring.md)의 선택 표지를 쓴 핵�
 
 - `SKILL` = 이 파일이 있는 폴더(`.claude/skills/ec2-problem-explain`)의 절대 경로
 - `REPO` = 이 checkout의 저장소 루트 절대 경로
-- `PROFILE` = `<REPO>/docs/learning/solution-style.md`의 실제 절대 경로. 작성자·내용 리뷰어가 필수로 읽고 `source.json.learning_style` snapshot과 대조한다.
+- `PROFILE` = `<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md`의 실제 절대 경로. 작성자·내용 리뷰어가 필수로 읽고 `source.json.learning_style` snapshot과 대조한다.
 - `RUN` = `<scratchpad>/ec2-problem-explain/<실행ID>` (실행ID 예: `1007-20261013-1530`). 매번 새로 정하며, 없거나 빈 폴더여야 한다.
 - `BUCKET` = `RUN/review-<range>-<slug>/` (팩마다 하나, extract가 만든다)
 - 셸 상태는 Bash 호출 사이에 이어지지 않는다. 아래 명령의 `$SKILL`, `$RUN`, `$REPO`, `$BUCKET`은 실행할 때마다 실제 절대 경로로 바꿔 쓰거나, 같은 셸 호출에서 `SKILL=…; RUN=…; REPO=…;`로 먼저 설정한다. `RUN=… python3 … "$RUN"`처럼 인자 확장과 같은 명령 앞에 설정하지 않는다. `cd`는 쓰지 않고 파일도 절대 경로로 넘긴다.
@@ -80,7 +80,7 @@ python3 "$SKILL/scripts/epe_cli.py" extract --repo "$REPO" --target 1007 --run "
 
 ### 3. 저작 (문항마다 opus 작성자, 병렬)
 - 문항마다 작성자 1명을 **한 메시지에서 병렬로** 띄운다. 모델은 opus(GPT: sol)다.
-- 브리프 필수 슬롯: `<REPO>/docs/learning/solution-style.md` 실제 절대 경로, `BUCKET/source.json.learning_style` snapshot, 원문 `subparts` 순서, 통합 일곱 구역(understand → recall → start → solve → verify → pitfall → retry), solve 제목 `이렇게 풀어요`, 마지막 sum, 독립 계산 한 행 규칙, 규칙별 적용 위치 또는 비적용 이유 보고.
+- 브리프 필수 슬롯: `<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md` 실제 절대 경로, `BUCKET/source.json.learning_style` snapshot, 원문 `subparts` 순서, 통합 일곱 구역(understand → recall → start → solve → verify → pitfall → retry), solve 제목 `이렇게 풀어요`, 마지막 sum, 독립 계산 한 행 규칙, 규칙별 적용 위치 또는 비적용 이유 보고.
 - 브리프에 적을 것: [저작 규칙](references/authoring.md)의 절대 경로를 먼저 읽으라는 지시, `BUCKET/source.json` 경로와 문항 id(`pN`), 그 문항의 `subparts`, 2에서 정한 참고 자료 경로와 쪽, 출력 파일 `BUCKET/explanations/pN.html` 하나(다른 곳에는 쓰지 않는다), 임시 파일은 `RUN/work/pN/`에만.
 - 작성자는 원문·조건·구할 것·그림을 다시 쓰지 않는다(조립기가 md에서 붙인다).
 - 브리프의 회로 슬롯: PROFILE의 `CIRCUIT-02`와 [저작 규칙](references/authoring.md)의 “소신호 등가회로 그림”을 적용한다. start/solve의 해당 계산 앞에는 측정 조건을 실제 연결한 회로·생략 근거·노드 관계를 보인다. $G_m$의 출력 단락 접지와 $R_{out}$의 입력 영점·시험원을 구별하고, 입력·노드·축퇴 저항을 식과 대응시키고, 병렬쌍은 전류원 왼쪽/$r_o$ 오른쪽으로 둔다. 상세 KCL/KVL에 필요한 모델은 start(필요시 solve)에 보존한다. $R_{out}$ 정확 전체 모델은 아래 예외가 아니면 내부 검산에만 둔다. 유한 β·$r_o$가 필요한 핵심을 큰 β 그림으로 바꾸지 않는다. 순수 DC는 제외한다. 같은 목적의 그림을 핵심/상세로 복제하지 않으며 측정 조건·필수 모델이 다르면 필요한 그림을 해당 단계에 둔다.
@@ -110,7 +110,7 @@ python3 "$SKILL/scripts/epe_cli.py" check --run "$RUN"
 ### 6. 검토 기록
 [검토 기록](references/verification.md)을 읽고 네 검토와 `learning_style_audit`의 모든 소문항·규칙 감사를 실제로 수행해 `BUCKET/review.json`에 기록한다.
 - `source_visual`: `workbook/source_pages.py render`로 원본 쪽을 렌더해 문항 조건·그림·소문항과 대조.
-- `content`: 필수 읽기 `<REPO>/docs/learning/solution-style.md` 절대 경로와 `source.json.learning_style`을 브리프에 넣는다. 일곱 구역 순서·`이렇게 풀어요` 제목·식별 행 분리와 본문·요약·MD의 답·단위·근사·그림을 대조하고 `learning_style_audit`를 작성한다. 작성자가 아닌 리뷰어 에이전트(opus) 1명이 팩의 모든 조각을 읽고 소문항별로 판정.
+- `content`: 필수 읽기 `<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md` 절대 경로와 `source.json.learning_style`을 브리프에 넣는다. 일곱 구역 순서·`이렇게 풀어요` 제목·식별 행 분리와 본문·요약·MD의 답·단위·근사·그림을 대조하고 `learning_style_audit`를 작성한다. 작성자가 아닌 리뷰어 에이전트(opus) 1명이 팩의 모든 조각을 읽고 소문항별로 판정.
 - `independent`: 4의 판정을 그대로 옮긴다(evidence 경로는 stage에 복사된 `evidence/`와 같은 이름).
 - `browser`: 메인 에이전트가 stage 폴더를 `python3 -m http.server`로 열고(몇 초 뒤 측정), 네 조합 측정은 헤드리스 Playwright [scripts/epe_browser_check.py](scripts/epe_browser_check.py)로 해요(`playwright`·chromium 필요). 내장 브라우저 창은 목차·pager·테마 토글을 눌러 보는 확인에만 쓰고, 그 페이지의 `document.visibilityState`가 `'visible'`일 때만 결과로 써요. `ERR_CONNECTION_RESET` 같은 연결 끊김은 fail이 아니라 다시 실행해요. evidence에 어느 경로로 확인했는지 적어요.
 - `references`: 실제로 읽은 저장소 자료의 절대 경로와 SHA-256.

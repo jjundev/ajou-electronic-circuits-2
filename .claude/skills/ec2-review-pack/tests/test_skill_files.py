@@ -275,7 +275,7 @@ class TestLearningStyleBriefs(unittest.TestCase):
         author = (SKILL / "references/content-rules.md").read_text()
         reviewer = (SKILL / "references/review-prompt.md").read_text()
         for brief in (author, reviewer):
-            self.assertIn("<REPO>/docs/learning/solution-style.md", brief)
+            self.assertIn("<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md", brief)
             self.assertIn("learning_style", brief)
             self.assertIn("핵심 관계", brief)
         self.assertIn("learning-style-audit.json", reviewer)

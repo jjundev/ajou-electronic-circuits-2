@@ -25,7 +25,7 @@ description: 전자회로2 수업의 STT·강의노트·Razavi 교과서로 ELI5
 **경로 약속**
 - `SKILL` = 이 파일이 있는 폴더(`.claude/skills/ec2-review-pack`)의 절대 경로
 - `REPO` = 이 checkout의 저장소 루트 절대 경로(`git rev-parse --show-toplevel`로 확인)
-- `PROFILE` = `<REPO>/docs/learning/solution-style.md`의 실제 절대 경로. 작성자·리뷰어 필수 입력이다.
+- `PROFILE` = `<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md`의 실제 절대 경로. 작성자·리뷰어 필수 입력이다.
 - `RUN` = `<scratchpad>/review-pack/<range>/`
 - 셸 상태는 Bash 호출 사이에 이어지지 않는다. 아래 명령의 `$SKILL`, `$RUN`, `$REPO`는 실행할 때마다 실제 절대 경로로 바꿔 쓰거나, 같은 명령 앞에 `SKILL=… RUN=… REPO=…`를 붙여 설정한다. `cd`는 쓰지 않고 파일도 절대 경로로 넘긴다.
 

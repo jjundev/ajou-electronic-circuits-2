@@ -6,7 +6,7 @@ Razavi 이론은 읽었지만 회로 문제풀이 경험이 적은 학생에게 
 
 ## 사용자 방식의 통합 풀이 저작
 
-필수 읽기 입력은 `<REPO>/docs/learning/solution-style.md`(메인이 실제 저장소 절대 경로로 채움)와 `BUCKET/source.json`의 `learning_style` snapshot이다. 원문 조건·소문항·정답 정확성이 우선이다.
+필수 읽기 입력은 `<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md`(메인이 실제 저장소 절대 경로로 채움)와 `BUCKET/source.json`의 `learning_style` snapshot이다. 원문 조건·소문항·정답 정확성이 우선이다.
 
 문제 읽기와 개념·공식을 먼저 제시하고, 사용자 방식의 계산 경로를 start/solve/verify의 정식 풀이로 통합한다. 별도 핵심 풀이 route를 앞에 두지 않는다. 짧은 판단 → 대응 식 → 변형·대입 → 결과에 이유·유도를 연결하고 같은 풀이를 다시 반복하지 않는다. `source.json`의 모든 소문항을 원문 순서대로 solve/verify의 `data-subpart`에 각각 한 번씩 둔다. 본문·요약·MD·답안의 조건·근사·단위·부호·답을 맞춘다.
 

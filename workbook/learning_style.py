@@ -15,7 +15,7 @@ from typing import Literal, TypedDict
 
 
 PERSONALIZED_REVIEW_POLICY = 'problem-explain-2026-10-21-learning-style'
-STYLE_PATH = 'docs/learning/solution-style.md'
+STYLE_PATH = '.claude/skills/ec2-review-pack/references/solution-style.md'
 RULE_HEADING = re.compile(r'^### ([A-Z][A-Z0-9]*-[0-9]{2})(?=[ \t:]|$)')
 
 

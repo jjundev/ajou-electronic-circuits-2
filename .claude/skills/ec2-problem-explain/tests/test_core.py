@@ -129,7 +129,7 @@ def test_overlay_uses_stage_image_paths(tmp_path):
     src = next(parse(item['steps'][0]['html']).find_all(lambda n: n.tag == 'img')).attrs['src']
     assert src.startswith('.assets/figures_') and src != 'core.png'
     assert overlay['assets'][src] == hashlib.sha256(b'route-image').hexdigest()
-    assert overlay['source_inputs']['docs/learning/solution-style.md'] == pack.learning_style['sha256']
+    assert overlay['source_inputs']['.claude/skills/ec2-review-pack/references/solution-style.md'] == pack.learning_style['sha256']
     assert overlay['source_inputs']['복습노트/1007/.assets/problems.txt'] == hashlib.sha256(pfile.read_bytes()).hexdigest()
     image_stage = artifacts.html.parent / src
     image_stage.unlink()

@@ -6,7 +6,7 @@
 
 실행 순서는 명세 snapshot → 범위/manifest → 작성/조립 → 문제지만 빌드 → 부모 내용/화면/MD/개인화 감사 + 답안 링크 예비 검사 → 자식 → 승인 overlay 답안 빌드 → PDF 화면 검토 → 답안 발행 → 유예 없는 최종 검사다.
 
-1. 부모의 기계 예비 검사·내용 리뷰(lite는 부모 내용 리뷰만 생략)·브라우저·MD 변환과 모든 topic ID의 개인화 감사를 끝낸다. `<REPO>/docs/learning/solution-style.md`의 실제 절대 경로와 manifest `learning_style` snapshot이 필수 입력이다.
+1. 부모의 기계 예비 검사·내용 리뷰(lite는 부모 내용 리뷰만 생략)·브라우저·MD 변환과 모든 topic ID의 개인화 감사를 끝낸다. `<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md`의 실제 절대 경로와 manifest `learning_style` snapshot이 필수 입력이다.
 2. 문제가 0개면 `skipped-no-problems`다. 자식·PDF 없이 현재 snapshot·모든 토픽 감사·유예 없는 최종 노트 검사를 수행한다.
 3. manifest `problems`·`RUN/selection.json`·`.assets/problems.txt`의 ID·순서를 대조한다. 선택용 JSON은 자식 원문이나 독립 검산 근거를 대신하지 않는다.
 4. **필수 하위 스킬: ec2-problem-explain.** 형제 `../ec2-problem-explain/SKILL.md`를 읽는다. 부모 `range`를 명시하고 `EXPLAIN_RUN=RUN/problem-explain/<새 실행ID>`를 없거나 빈 폴더로 정한다. 아래 변수는 명령 전에 같은 셸에서 실제 절대 경로로 설정한다.

@@ -17,9 +17,9 @@ import manifest
 @pytest.fixture
 def note_fixture(tmp_path):
     repo = tmp_path / "repo"
-    profile = repo / "docs/learning/solution-style.md"
+    profile = repo / ".claude/skills/ec2-review-pack/references/solution-style.md"
     profile.parent.mkdir(parents=True)
-    shutil.copyfile(REPO / "docs/learning/solution-style.md", profile)
+    shutil.copyfile(REPO / ".claude/skills/ec2-review-pack/references/solution-style.md", profile)
     run = tmp_path / "run"
     shutil.copytree(MINI_RUN, run)
     m = json.loads((run / "manifest.json").read_text())
@@ -60,8 +60,8 @@ def test_manifest_missing_snapshot_fails(note_fixture):
 
 
 @pytest.mark.parametrize("snapshot", [{}, {"path": "elsewhere", "sha256": "0"*64, "rule_ids": ["UNIT-01"]},
-    {"path": "docs/learning/solution-style.md", "sha256": "bad", "rule_ids": ["UNIT-01"]},
-    {"path": "docs/learning/solution-style.md", "sha256": "0"*64, "rule_ids": ["UNIT-01", "UNIT-01"]}])
+    {"path": ".claude/skills/ec2-review-pack/references/solution-style.md", "sha256": "bad", "rule_ids": ["UNIT-01"]},
+    {"path": ".claude/skills/ec2-review-pack/references/solution-style.md", "sha256": "0"*64, "rule_ids": ["UNIT-01", "UNIT-01"]}])
 def test_manifest_rejects_malformed_snapshot(note_fixture, snapshot):
     m = dict(note_fixture.m, learning_style=snapshot)
     assert manifest.validate(m)

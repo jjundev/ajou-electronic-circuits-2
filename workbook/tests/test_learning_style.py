@@ -18,7 +18,7 @@ from learning_style import (
 
 
 def write_profile(tmp_path, ids):
-    profile = tmp_path / 'docs/learning/solution-style.md'
+    profile = tmp_path / '.claude/skills/ec2-review-pack/references/solution-style.md'
     profile.parent.mkdir(parents=True)
     profile.write_text('# Profile\n\n' + '\n'.join(f'### {rule_id}\nRule.\n' for rule_id in ids), encoding='utf-8')
     return tmp_path
@@ -47,7 +47,7 @@ def test_snapshot_detects_any_byte_change(tmp_path):
     repo = write_profile(tmp_path, ['UNIT-01', 'EXPLAIN-01'])
     snapshot = read_style(repo)
     assert snapshot['rule_ids'] == ['UNIT-01', 'EXPLAIN-01']
-    assert snapshot['path'] == 'docs/learning/solution-style.md'
+    assert snapshot['path'] == '.claude/skills/ec2-review-pack/references/solution-style.md'
     profile = repo / snapshot['path']
     assert snapshot['sha256'] == hashlib.sha256(profile.read_bytes()).hexdigest()
     check_style(repo, snapshot)
@@ -73,7 +73,7 @@ def test_no_rule_headings_fails(tmp_path):
 
 def test_titled_headings_keep_document_order_and_ignore_code(tmp_path):
     repo = write_profile(tmp_path, [])
-    (repo / 'docs/learning/solution-style.md').write_text(
+    (repo / '.claude/skills/ec2-review-pack/references/solution-style.md').write_text(
         '# Profile\n### EXPLAIN-01: 설명\n```md\n### FAKE-01\n```\n'
         '~~~md\n### FAKE-02\n~~~\n### UNIT-01: 단위\n', encoding='utf-8')
     assert read_style(repo)['rule_ids'] == ['EXPLAIN-01', 'UNIT-01']

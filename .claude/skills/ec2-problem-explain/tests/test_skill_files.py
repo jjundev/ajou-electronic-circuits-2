@@ -75,10 +75,10 @@ class SkillFilesTest(unittest.TestCase):
 class LearningStyleBriefTest(unittest.TestCase):
     def test_child_briefs_include_profile_and_integrated_contract(self):
         skill = text()
-        for required in ("<REPO>/docs/learning/solution-style.md", "learning_style", "data-answer-step", "learning_style_audit", "answer-overlay.json"):
+        for required in ("<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md", "learning_style", "data-answer-step", "learning_style_audit", "answer-overlay.json"):
             self.assertIn(required, skill)
         author = (SKILL / "references/authoring.md").read_text()
-        for required in ("data-personalization", "data-solution-core", "data-core-label", "data-answer-step", "<REPO>/docs/learning/solution-style.md"):
+        for required in ("data-personalization", "data-solution-core", "data-core-label", "data-answer-step", "<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md"):
             self.assertIn(required, author)
         review = (SKILL / "references/verification.md").read_text()
         for required in ("learning_style_audit", "not_applicable", "핵심", "단위", "근사", "그림"):

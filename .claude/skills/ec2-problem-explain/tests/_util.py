@@ -56,7 +56,7 @@ def _copy_problem(pid, dest_root):
 def make_repo(tmp, *, range_='1007', slug='Diff_Amp', ids=('P10.02', '2023-1_중간-Q4'), nfd=False):
     tmp = Path(tmp)
     form = (lambda s: unicodedata.normalize('NFD', s)) if nfd else (lambda s: s)
-    _copy(Path('docs/learning/solution-style.md'), tmp)
+    _copy(Path('.claude/skills/ec2-review-pack/references/solution-style.md'), tmp)
     for pid in ids:
         _copy_problem(_nfc(pid), tmp)
     folder = tmp / form('복습노트') / range_
