@@ -207,9 +207,9 @@ def rerender(repo,target,run):
                     inside(child,repo)
                 shutil.copytree(evidence,folder/'evidence',dirs_exist_ok=True)
             fragments=load_fragments(item)
-            if any(not list(parse(fragments[p.id]).find_all(
-                    lambda n: n.attrs.get('data-personalization') == 'route')) for p in pack.problems):
-                raise ExplainError('핵심 풀이 route 없음: 새 저작 필요')
+            from epe_contract import validate_fragment
+            if any(validate_fragment(p, fragments[p.id]) for p in pack.problems):
+                raise ExplainError('통합 본문/답안 선택 형식 불일치: 새 저작 필요')
             same=(stored.get('input_hash')==payload_hash(pack,fragments)
                   and manifest.get('learning_style')==pack.learning_style
                   and manifest.get('review_policy_version')==POLICY_VERSION

@@ -6,7 +6,7 @@ import math
 from collections import Counter
 from urllib.parse import urlsplit
 from epe_shared import Node, parse, math_delimiter_errors, validate_style_audit
-from epe_core import validate_core
+from epe_solution import solution_nodes
 
 KEYS = ('understand', 'recall', 'start', 'solve', 'verify', 'pitfall', 'retry')
 
@@ -57,7 +57,7 @@ def math_errors(root):
 def validate_fragment(problem, fragment):
     root = parse(fragment)
     errors = markup_errors(root, allow_summary=True)
-    errors.extend(validate_core(problem, fragment))
+    errors.extend(solution_nodes(problem, fragment)[2])
     sections = list(root.find_all(lambda n: 'data-explanation' in n.attrs))
     counts = Counter(n.attrs['data-explanation'] for n in sections)
     if counts != Counter(KEYS):

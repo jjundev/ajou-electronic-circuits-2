@@ -87,16 +87,16 @@ def core_route(p):
 
 
 def core_fragment(p):
-    return fragment(p)
+    return legacy_fragment(p)
 
 
-def fragment(p=None):
+def legacy_fragment(p=None):
     p = p or problem()
     parts = ''.join(f'<div data-subpart="{key}"><p>첫 식에서 계산하고 대입해 확인해요. $1=1$</p></div>'
                     for key in p.subparts)
     return (core_route(p) + '<div class="layer eli5" data-explanation="understand"><p>구할 것을 읽어요.</p></div>'
             '<div class="layer formal" data-explanation="recall">'
-            '<h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4>'
+            '<h4>이 개념과 공식을 떠올려요</h4>'
             '<p>제곱을 구하라는 단서에서 같은 수의 곱을 떠올려요. '
             '$A^2=A\\cdot A$이며 A는 주어진 스칼라예요.</p></div>'
             '<div class="layer formal" data-explanation="start"><p>$A=1$부터 써요.</p></div>'
@@ -105,6 +105,24 @@ def fragment(p=None):
             '<div class="layer warn" data-explanation="pitfall"><p>행과 열을 바꾸지 않아요.</p></div>'
             '<div class="layer formal" data-explanation="retry"><ul><li>다시 계산해요.</li></ul></div>'
             '<div class="sum" hidden><p>시작·판단·검산</p></div>')
+
+
+def fragment(p=None):
+    """New authoring fixture: selected body, never a separate core copy."""
+    from epe_solution import SECTION_TITLES
+    p = p or problem()
+    solve = ''.join(f'<div data-subpart="{key}"><div data-answer-step="회로 판단">'
+        '<p>판단과 식은 $1=1$이에요.</p></div></div>' for key in p.subparts)
+    verify = ''.join(f'<div data-subpart="{key}"><div data-answer-final>'
+        '<p>최종 답은 $1$이에요.</p></div></div>' for key in p.subparts)
+    bodies = ['<p>구할 것을 읽어요.</p>',
+        '<p>제곱을 구하라는 단서에서 같은 수의 곱을 떠올려요. '
+        '$A^2=A\\cdot A$이며 A는 주어진 스칼라예요.</p>',
+        '<p>$A=1$부터 써요.</p>', solve, verify,
+        '<p>행과 열을 바꾸지 않아요.</p>', '<ul><li>다시 계산해요.</li></ul>']
+    return ''.join(f'<div class="layer {layer}" data-explanation="{key}"><h4>{title}</h4>{body}</div>'
+        for (key,title),body,layer in zip(SECTION_TITLES.items(),bodies,
+        ('eli5','formal','formal','formal','formal','warn','formal'))) + '<div class="sum" hidden><p>시작·판단·검산</p></div>'
 
 
 def pack(path=Path('.assets/problems.txt')):

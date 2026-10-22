@@ -80,9 +80,9 @@ def test_profile_missing_before_extract(tmp_path):
     assert not list((tmp_path / 'run').rglob('source.json'))
 
 
-def test_final_core_and_details_are_both_in_md(bundle):
+def test_integrated_formal_body_is_in_md(bundle):
     md = bundle.artifacts.md.read_text()
-    for text in ('핵심 풀이', '최종 답은', '이 문제를 봤을 때 떠올릴 개념과 공식', '첫 식에서 계산하고'):
+    for text in ('이렇게 풀어요', '최종 답은', '이 개념과 공식을 떠올려요', '판단과 식은'):
         assert text in md
 
 
@@ -130,10 +130,8 @@ def test_legacy_fragment_requires_new_authoring_and_preserves_publication(bundle
     folder = bundle.item['pack'].folder
     data = folder / bundle.artifacts.manifest.relative_to(bundle.artifacts.html.parent).parent
     fragment_path = data / 'fragments/p1.html'
-    from epe_shared import parse, outer
-    root = parse(fragment_path.read_text())
-    fragment_path.write_text(''.join(outer(n) for n in root.children
-        if not (getattr(n, 'attrs', {}).get('data-personalization') == 'route')))
+    from _util import core_fragment
+    fragment_path.write_text(core_fragment(bundle.item['pack'].problems[0]))
     manifest_path = data / 'manifest.json'
     manifest = json.loads(manifest_path.read_text())
     manifest['files'][fragment_path.relative_to(folder).as_posix()] = sha256(fragment_path)

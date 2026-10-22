@@ -591,6 +591,7 @@ function solutionArea(p) {
 function problemPage(p, n, total) {
   const { page, head, body } = makePage(kindSlug(p.kind), 'page--problem');
   page.id = p.id;
+  if (p.solution?.paginate) page.dataset.solutionPagination = '';
   head.append(problemHead(p, n, total));
 
   const row = el('div', 'page-row');
@@ -638,15 +639,22 @@ function fitSolution(page) {
   const work = page.querySelector('.work');
   const flow = work.querySelector('.sol-flow');
   const last = flow && flow.querySelector('.sol-step:last-child');
-  if (!last) return true;
+  const final = work.querySelector('.sol-answer');
+  const answerFits = () => {
+    if (!final) return true;
+    const a = final.getBoundingClientRect(), w = work.getBoundingClientRect();
+    return a.bottom <= w.bottom + 1 && a.height <= w.height + 1;
+  };
+  if (!last) return answerFits();
   const fits = () => {
     fitDisplayMath(flow);
     const f = flow.getBoundingClientRect(), l = last.getBoundingClientRect();
-    return l.bottom <= f.bottom + 1 && l.right <= f.right + 1;
+    return l.bottom <= f.bottom + 1 && l.right <= f.right + 1 && answerFits();
   };
   const band = page.querySelector('.fig-band');
   const state = { sfs: work.style.getPropertyValue('--sfs') || '1', fig: '0.40', cols: '1' };
   for (const [key, val] of SOL_FIT_STEPS) {
+    if (key === 'sfs' && page.hasAttribute('data-solution-pagination')) continue;
     if (fits()) break;
     if (key === 'fig') {
       if (!band) continue;
@@ -662,6 +670,71 @@ function fitSolution(page) {
   page.dataset.fit += ` sfs=${state.sfs} fig=${state.fig} cols=${state.cols}`;
   if (!ok) page.dataset.overflow = '';
   return ok;
+}
+
+// Reviewed routes may continue on extra pages. Move the rendered DOM nodes;
+// do not truncate equations, change their order, or regenerate their content.
+async function paginateSolution(page, p, n, total) {
+  if (!p.solution?.paginate || fitSolution(page)) return;
+  const steps = [...page.querySelectorAll('.sol-step')];
+  const answer = page.querySelector('.sol-answer');
+  steps.forEach(node => node.remove());
+  if (answer) answer.remove();
+  let current = page, continuation = 0;
+  const newPage = async () => {
+    const next = problemPage({...p, figures: [], hints: [],
+      solution: {steps: [], answer: ''}}, n, total);
+    next.id = `${p.id}-solution-${++continuation}`;
+    next.dataset.solutionFor = p.id;
+    next.dataset.solutionPagination = '';
+    next.querySelector('.page-title').append(document.createTextNode(' · 풀이 계속'));
+    current.after(next);
+    current = next;
+    renderMath(next);
+    await nextLayout();
+    fitProblemPage(next);
+    return next;
+  };
+  // Earlier fitting may have switched to two columns. Keep that readable
+  // layout, but test each additional step before committing it to this page.
+  for (const step of steps) {
+    let list = current.querySelector('.sol-steps');
+    list.append(step);
+    if (!fitSolution(current) && list.children.length > 1) {
+      step.remove();
+      current.removeAttribute('data-overflow');
+      await newPage();
+      list = current.querySelector('.sol-steps');
+      list.append(step);
+      fitSolution(current); // an individually oversized step remains an error
+    }
+  }
+  if (answer) {
+    current.querySelector('.work').append(answer);
+    const fits = () => {
+      const work = current.querySelector('.work');
+      const a = answer.getBoundingClientRect(), w = work.getBoundingClientRect();
+      return a.bottom <= w.bottom + 1 && a.height <= w.height + 1 && fitSolution(current);
+    };
+    if (!fits()) {
+      answer.remove();
+      current.removeAttribute('data-overflow');
+      await newPage();
+      current.querySelector('.work').append(answer);
+      fitDisplayMath(answer);
+      if (!fits()) current.dataset.overflow = '';
+    }
+  }
+  // Fitting marks provisional failures. Only the final page geometry decides.
+  for (const item of [page, ...book.querySelectorAll('[data-solution-for]')]) {
+    if ((item === page || item.dataset.solutionFor === p.id) && fitSolution(item)) {
+      const final = item.querySelector('.sol-answer');
+      const work = item.querySelector('.work');
+      if (!final || (final.getBoundingClientRect().height <= work.getBoundingClientRect().height + 1
+          && final.getBoundingClientRect().bottom <= work.getBoundingClientRect().bottom + 1))
+        item.removeAttribute('data-overflow');
+    }
+  }
 }
 
 /* ---------- Hint 쪽 ---------- */
@@ -767,11 +840,15 @@ async function main() {
     renderMath(staging);
     await nextLayout();
 
+    for (const [i, p] of problems.entries()) {
+      await paginateSolution(document.getElementById(p.id), p, i + 1, total);
+    }
+
     const overflow = [];
     for (const page of book.querySelectorAll('.page--problem')) {
       const panelOk = fitProblemPage(page);
       const solOk = fitSolution(page);
-      if (!panelOk || !solOk) overflow.push(page.id);
+      if (!panelOk || !solOk || page.hasAttribute('data-overflow')) overflow.push(page.id);
     }
     overflow.push(...flowHints(meta, problems, staged));
     staging.remove();

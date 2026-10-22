@@ -5,7 +5,7 @@ import json
 
 import pytest
 
-from _util import problem, core_fragment, core_route, make_repo
+from _util import problem, core_fragment, core_route, make_repo, fragment
 from epe_core import validate_core, extract_core, make_overlay
 from epe_contract import validate_fragment
 from epe_render import build_explanation
@@ -79,7 +79,8 @@ def test_malformed_core_is_rejected(mutation):
 
 
 def test_original_seven_sections_still_required():
-    assert validate_fragment(problem(), core_fragment(problem())) == []
+    assert validate_fragment(problem(), fragment(problem())) == []
+    assert validate_fragment(problem(), core_fragment(problem()))
     assert validate_fragment(problem(), core_route(problem()))
     markup = core_fragment(problem())
     recall = next(parse(markup).find_all(lambda n: n.attrs.get('data-explanation') == 'recall'))
@@ -111,7 +112,7 @@ def test_overlay_uses_stage_image_paths(tmp_path):
     pack = load_source(pfile, repo)
     image = pack.folder / 'core.png'
     image.write_bytes(b'route-image')
-    fragments = {p.id: core_fragment(p).replace('<p>판단과 식은 $1=1$이에요.</p>',
+    fragments = {p.id: fragment(p).replace('<p>판단과 식은 $1=1$이에요.</p>',
                  '<p>판단과 식은 $1=1$이에요.</p><figure><img src="core.png" alt="회로"></figure>') for p in pack.problems}
     artifacts = build_explanation(pack, fragments, tmp_path / 'stage', repo)
     overlay = make_overlay(pack, artifacts.html, repo)

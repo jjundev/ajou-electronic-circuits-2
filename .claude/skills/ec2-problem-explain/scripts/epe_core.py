@@ -85,6 +85,12 @@ def validate_core(problem: Problem, markup: str) -> list[str]:
 
 def extract_core(problem: Problem, markup: str) -> dict:
     """Keep equations and HTML content; labels remain plain text for consumers to escape."""
+    if not list(parse(markup).find_all(lambda n: n.attrs.get("data-personalization") == "route")):
+        from epe_solution import extract_solution
+        return extract_solution(problem, markup)
+    if list(parse(markup).find_all(lambda n: any(k in n.attrs for k in
+            ('data-answer-step', 'data-answer-final', 'data-answer-subpart')))):
+        raise ExplainError(f'{problem.id}: 구형 route와 통합 답안 표지 혼합 금지')
     _, _, groups, errors = _core_nodes(problem, markup)
     if errors:
         raise ExplainError(f'{problem.id}: ' + ' / '.join(errors))

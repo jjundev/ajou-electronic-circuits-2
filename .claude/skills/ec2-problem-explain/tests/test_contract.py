@@ -9,7 +9,7 @@ from epe_contract import validate_fragment, validate_reviews, payload_hash
 from epe_shared import parse, outer
 
 RECALL = ('<div class="layer formal" data-explanation="recall">'
-          '<h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4>'
+          '<h4>이 개념과 공식을 떠올려요</h4>'
           '<p>제곱을 구하라는 단서에서 같은 수의 곱을 떠올려요. '
           '$A^2=A\\cdot A$이며 A는 주어진 스칼라예요.</p></div>')
 

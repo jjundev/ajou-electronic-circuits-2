@@ -204,5 +204,5 @@ def apply_answer_overlay(data: dict, overlay: dict, *, html_dir: Path) -> dict:
                 if answer['subpart'] == subpart:
                     body = _answer_html(answer['html'], assets)
                     answers.append((f'<p><strong>{html.escape(prefix.strip())}</strong></p>' if prefix else '') + body)
-        problem['solution'] = {'steps': steps, 'answer': ''.join(answers)}
+        problem['solution'] = {'steps': steps, 'answer': ''.join(answers), 'paginate': True}
     return result

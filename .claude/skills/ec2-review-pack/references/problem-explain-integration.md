@@ -2,6 +2,8 @@
 
 ## 부모 복습팩에서 호출
 
+공통 조립·검사는 통합 일곱 구역을 검증하고, 본문의 `data-answer-step`/`data-answer-final` 선택 요소에서 overlay를 추출한다. 새 원고에 구형 route를 요구하지 않는다. 표지 누락·검토 실패 시 설명/답안 발행을 withheld로 보고하며 검사 우회·숨긴 중복 핵심·구버전 승인을 사용하지 않는다. 과거 발행 자료의 구형 추출 검증은 새 저작 승인과 구분한다.
+
 실행 순서는 명세 snapshot → 범위/manifest → 작성/조립 → 문제지만 빌드 → 부모 내용/화면/MD/개인화 감사 + 답안 링크 예비 검사 → 자식 → 승인 overlay 답안 빌드 → PDF 화면 검토 → 답안 발행 → 유예 없는 최종 검사다.
 
 1. 부모의 기계 예비 검사·내용 리뷰(lite는 부모 내용 리뷰만 생략)·브라우저·MD 변환과 모든 topic ID의 개인화 감사를 끝낸다. `<REPO>/docs/learning/solution-style.md`의 실제 절대 경로와 manifest `learning_style` snapshot이 필수 입력이다.
@@ -11,7 +13,7 @@
 ```bash
 python3 "$REPO/.claude/skills/ec2-problem-explain/scripts/epe_cli.py" extract --repo "$REPO" --target "$RANGE" --run "$EXPLAIN_RUN"
 ```
-5. extract 뒤 정리노트 바이트·목록·참고 자료를 고정한다. 바뀌면 부모 검토를 다시 하고 새 EXPLAIN_RUN으로 시작한다. 자식은 핵심 route → 상세 일곱 구역 → 독립 검산 → build/check → 네 검토와 전체 개인화 감사 → publish까지 수행한다. lite도 자식 모델·검토를 유지한다. 자식은 PDF를 직접 교체하지 않는다.
+5. extract 뒤 정리노트 바이트·목록·참고 자료를 고정한다. 바뀌면 부모 검토를 다시 하고 새 EXPLAIN_RUN으로 시작한다. 자식은 understand → recall → start → solve(`이렇게 풀어요`) → verify → pitfall → retry의 통합 본문 → 독립 검산 → build/check → 네 검토와 전체 개인화 감사 → publish까지 수행한다. lite도 자식 모델·검토를 유지한다. 자식은 PDF를 직접 교체하지 않는다.
 6. 자식의 `source_visual/content/independent/browser`와 `learning_style_audit`가 모두 실제 pass여야 한다. 성공은 `published`, 현재 snapshot/전체 감사까지 입증된 재사용만 `reused-verified`다. 실패/disputed는 `withheld`이며 아래 전체 팩 복구 계약을 따른다.
 7. 부모 SKILL 9단계의 `--mode answers --answer-overlay`로 발행 자료의 `answer-overlay.json`을 소비해 **RUN 안**에 답안 PDF를 만든다. 같은 폴더 `validation.json`이 현재 검토를 승인해야 한다. 원본 MD 참고 풀이로 조용히 대체하지 않는다.
 8. 아래 렌더 페이지 검토를 수행하고 부모 SKILL의 `publish_answer.py`를 실행한다. 이후 `check_html.py --repo "$REPO" --manifest "$RUN/manifest.json" --note <실제 노트 절대경로>`를 **유예 없이** 실행한다. extract 뒤 노트 링크를 자동 삽입하지 않는다.
@@ -24,7 +26,7 @@ python3 "$REPO/.claude/skills/ec2-problem-explain/scripts/epe_cli.py" extract --
 mkdir -p "$RUN/answer-pages"
 pdftoppm -png -r 120 "$RUN/answers/복습문제_<range>_<slug>-답안.pdf" "$RUN/answer-pages/page"
 ```
-각 PNG를 이미지 도구로 열어 모든 문항/소문항의 핵심 회로·판단·계산·최종 답을 발행 HTML route와 대조한다. 답·단위·조건·근사·그림, 16:9 규격과 하단 180px/1080px 자막 여백, 잘림·겹침·누락을 검토해 `RUN/answer-review.md`에 페이지별 판정과 근거를 쓴다. 검토를 못 하면 보류다.
+각 PNG를 이미지 도구로 열어 모든 문항/소문항의 핵심 회로·판단·계산·최종 답을 검토한 통합 HTML 본문의 start/solve/verify와 대조한다. 답·단위·조건·근사·그림, 16:9 규격과 하단 180px/1080px 자막 여백, 잘림·겹침·누락을 검토해 `RUN/answer-review.md`에 페이지별 판정과 근거를 쓴다. 검토를 못 하면 보류다.
 
 다음은 해시를 묶는 **미승인** 기록을 만든다. `PDF`, `OVERLAY`는 부모 SKILL에 나온 실제 절대 경로로 설정한다. PNG와 보고서가 실제로 있어야 한다.
 ```bash

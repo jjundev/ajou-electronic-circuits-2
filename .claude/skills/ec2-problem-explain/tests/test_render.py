@@ -82,7 +82,7 @@ class RenderTest(unittest.TestCase):
         node = next(parse(html).find_all(lambda n: n.attrs.get('data-explanation') == 'recall'))
         self.assertNotIn('hidden', node.attrs)
         for output in (html, md):
-            self.assertIn('이 문제를 봤을 때 떠올릴 개념과 공식', output)
+            self.assertIn('이 개념과 공식을 떠올려요', output)
             self.assertIn('떠올릴 개념·공식', output)
             self.assertIn('$n\\times m$', output)
         self.assertIn('A\\cdot A', md)
@@ -173,16 +173,16 @@ class RenderTest(unittest.TestCase):
         pack, _, _ = self.build(take=slice(0, 1))
         p = pack.problems[0]
         with self.assertRaisesRegex(ExplainError, '경로|그림'):
-            build_explanation(pack, {p.id: fragment(p) + '<img src="missing.png">'}, self.tmp / 'missing', self.repo)
+            build_explanation(pack, {p.id: fragment(p).replace('<p>$A=1$부터 써요.</p>', '<p>$A=1$부터 써요.</p><img src="missing.png">')}, self.tmp / 'missing', self.repo)
         with self.assertRaisesRegex(ExplainError, '중복.*ID'):
-            build_explanation(pack, {p.id: fragment(p) + '<svg><g id="a"></g><g id="a"></g></svg>'},
+            build_explanation(pack, {p.id: fragment(p).replace('<p>$A=1$부터 써요.</p>', '<p>$A=1$부터 써요.</p><svg><g id="a"></g><g id="a"></g></svg>')},
                               self.tmp / 'dup', self.repo)
 
     def test_inline_svg_ids_rewritten_per_problem(self):
         pack, _, _ = self.build()
         svg = ('<svg viewBox="0 0 10 10"><defs><clipPath id="clip"><rect width="5" height="5"/></clipPath></defs>'
                '<rect clip-path="url(#clip)" width="10" height="10"/></svg>')
-        result = build_explanation(pack, {p.id: fragment(p) + svg for p in pack.problems},
+        result = build_explanation(pack, {p.id: fragment(p).replace('<p>$A=1$부터 써요.</p>', '<p>$A=1$부터 써요.</p>'+svg) for p in pack.problems},
                                    self.tmp / 'stage5', self.repo)
         self.assertEqual(check_artifacts(pack, result), [])
         text = result.html.read_text(encoding='utf-8')
