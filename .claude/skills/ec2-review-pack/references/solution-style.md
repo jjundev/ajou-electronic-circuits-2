@@ -48,7 +48,7 @@ $$r_o=V_A/I_C=5\,\mathrm{k\Omega}$$
 
 ## 근거 자료와 해석 경계
 
-아래 기록은 [동반 설계](../superpowers/specs/2026-10-21-ec2-learning-style-design.md)의
+아래 기록은 [동반 설계](../../../../docs/superpowers/specs/2026-10-21-ec2-learning-style-design.md)의
 2026-10-21 관찰을 옮겼다. 이 명세 작성 중 손풀이 PDF를 재열람한 것은 아니다.
 설계 작성자는 29쪽 전체를 이미지로 확인했다고 기록했다. 원본은 당시
 `/Users/hyunjun_macbook_pro/Downloads/`에 있었으며, 이후 자료 생성에 원본의 존재를
