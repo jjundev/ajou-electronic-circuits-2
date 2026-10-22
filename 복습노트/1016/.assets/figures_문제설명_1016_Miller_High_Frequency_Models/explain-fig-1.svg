@@ -1,4 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="900" height="547" viewBox="0 0 900 547" aria-label="MOS 소신호 등가회로의 가지 연결" role="img"><style>/* Copyright (c) 2021, Kil Hyung-jin (https://github.com/orioncactus/pretendard),
+<svg xmlns="http://www.w3.org/2000/svg" width="580" height="250" viewBox="0 0 580 250" role="img" aria-label="입력 NMOS M1과 다이오드 연결 PMOS M2의 정식 고주파 소신호 등가회로">
+<style>/* Copyright (c) 2021, Kil Hyung-jin (https://github.com/orioncactus/pretendard),
 with Reserved Font Name Pretendard.
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
@@ -117,4 +118,63 @@ svg :is(.fig-dot, .fig-text)[data-node-color="red"] { fill: #d92d20; }
 .plot-like { fill: none; stroke: #2f6fdb; stroke-width: 2; }
 .plot-prior { fill: none; stroke: #6941c6; stroke-width: 2; stroke-dasharray: 6 4; }
 .plot-post { fill: none; stroke: #067647; stroke-width: 3; }
-</style><rect x="0" y="0" width="900" height="547" rx="10" fill="#ffffff"/><text fill="currentColor" font-size="21" x="24" y="37">MOS 소신호 등가회로의 가지 연결</text><text fill="currentColor" font-size="19" x="25" y="88">입력</text><path d="M160 80 H330 M570 80 H740" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="160" cy="80" fill="currentColor" r="4"/><circle cx="740" cy="80" fill="currentColor" r="4"/><rect fill="none" height="48" rx="6" stroke="currentColor" width="240" x="330" y="56"/><text fill="currentColor" font-size="19" text-anchor="middle" x="450" y="87">C GS1</text><text fill="currentColor" font-size="19" x="765" y="88">접지</text><text fill="currentColor" font-size="19" x="25" y="154">입력</text><path d="M160 146 H330 M570 146 H740" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="160" cy="146" fill="currentColor" r="4"/><circle cx="740" cy="146" fill="currentColor" r="4"/><rect fill="none" height="48" rx="6" stroke="currentColor" width="240" x="330" y="122"/><text fill="currentColor" font-size="19" text-anchor="middle" x="450" y="153">C GD1</text><text fill="currentColor" font-size="19" x="765" y="154">출력</text><text fill="currentColor" font-size="19" x="25" y="220">출력</text><path d="M160 212 H330 M570 212 H740" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="160" cy="212" fill="currentColor" r="4"/><circle cx="740" cy="212" fill="currentColor" r="4"/><rect fill="none" height="48" rx="6" stroke="currentColor" width="240" x="330" y="188"/><text fill="currentColor" font-size="19" text-anchor="middle" x="450" y="219">gₘ₁Vᵢₙ ↓</text><text fill="currentColor" font-size="19" x="765" y="220">접지</text><text fill="currentColor" font-size="19" x="25" y="286">출력</text><path d="M160 278 H330 M570 278 H740" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="160" cy="278" fill="currentColor" r="4"/><circle cx="740" cy="278" fill="currentColor" r="4"/><rect fill="none" height="48" rx="6" stroke="currentColor" width="240" x="330" y="254"/><text fill="currentColor" font-size="19" text-anchor="middle" x="450" y="285">rₒ₁</text><text fill="currentColor" font-size="19" x="765" y="286">접지</text><text fill="currentColor" font-size="19" x="25" y="352">출력</text><path d="M160 344 H330 M570 344 H740" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="160" cy="344" fill="currentColor" r="4"/><circle cx="740" cy="344" fill="currentColor" r="4"/><rect fill="none" height="48" rx="6" stroke="currentColor" width="240" x="330" y="320"/><text fill="currentColor" font-size="19" text-anchor="middle" x="450" y="351">rₒ₂</text><text fill="currentColor" font-size="19" x="765" y="352">접지</text><text fill="currentColor" font-size="19" x="25" y="418">출력</text><path d="M160 410 H330 M570 410 H740" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="160" cy="410" fill="currentColor" r="4"/><circle cx="740" cy="410" fill="currentColor" r="4"/><rect fill="none" height="48" rx="6" stroke="currentColor" width="240" x="330" y="386"/><text fill="currentColor" font-size="19" text-anchor="middle" x="450" y="417">1/gₘ₂</text><text fill="currentColor" font-size="19" x="765" y="418">접지</text><text fill="currentColor" font-size="19" x="25" y="484">출력</text><path d="M160 476 H330 M570 476 H740" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="160" cy="476" fill="currentColor" r="4"/><circle cx="740" cy="476" fill="currentColor" r="4"/><rect fill="none" height="48" rx="6" stroke="currentColor" width="240" x="330" y="452"/><text fill="currentColor" font-size="19" text-anchor="middle" x="450" y="483">Cₜ</text><text fill="currentColor" font-size="19" x="765" y="484">접지</text></svg>
+</style>
+
+  <!-- 입력 노드 Vin -->
+  <text class="fig-muted" x="20" y="25" font-size="12">입력단 (NMOS M₁ 게이트)</text>
+  <path class="fig-ink" d="M20 70 H70"/>
+  <circle class="fig-dot" data-node-color="blue" cx="70" cy="70" r="4"/>
+  <text class="fig-text" x="60" y="60">V<tspan baseline-shift="sub">in</tspan></text>
+
+  <!-- C_GS1 (Vin - 접지) -->
+  <path class="fig-ink" d="M70 70 H100 V95 M100 105 V135"/>
+  <path class="fig-accent" d="M90 95 H110 M90 105 H110" stroke-width="2.5"/>
+  <path class="fig-ink" d="M92 135 H108 M95 139 H105 M98 143 H102"/>
+  <text class="fig-text" x="114" y="105" font-size="11">C<tspan baseline-shift="sub">GS1</tspan></text>
+
+  <!-- C_GD1 (Vin - Vout 피드백) -->
+  <path class="fig-accent" d="M70 70 V35 H250 M270 35 H450 V70"/>
+  <path class="fig-accent" d="M250 25 V45 M260 25 V45" stroke-width="2.5"/>
+  <text class="fig-text" x="245" y="20" font-size="12">C<tspan baseline-shift="sub">GD1</tspan></text>
+
+  <!-- 출력 노드 Vout -->
+  <circle class="fig-dot" data-node-color="red" cx="450" cy="70" r="4"/>
+  <text class="fig-text" x="445" y="60">V<tspan baseline-shift="sub">out</tspan></text>
+  <path class="fig-ink" d="M450 70 H520"/>
+  <text class="fig-muted" x="430" y="25" font-size="12">출력단 부하 (M₂ 다이오드 연결)</text>
+
+  <!-- 출력-접지 병렬 소자들 -->
+  <!-- 1. M1 제어 전류원 gm1*Vin (하향) -->
+  <path class="fig-ink" d="M450 70 H180 V95"/>
+  <polygon class="fig-ink" points="180,95 192,110 180,125 168,110"/>
+  <path class="fig-ink" d="M180 102 V118 M176 113 L180 118 L184 113"/>
+  <path class="fig-ink" d="M180 125 V145"/>
+  <path class="fig-ink" d="M172 145 H188 M175 149 H185 M178 153 H182"/>
+  <text class="fig-text" x="135" y="115" font-size="11">g<tspan baseline-shift="sub">m1</tspan>V<tspan baseline-shift="sub">in</tspan></text>
+
+  <!-- 2. M1 출력저항 r_O1 -->
+  <path class="fig-ink" d="M450 70 H250 V85 l-4 3 l8 4 l-8 4 l8 4 l-8 4 l8 4 l-4 3 V145"/>
+  <path class="fig-ink" d="M242 145 H258 M245 149 H255 M248 153 H252"/>
+  <text class="fig-text" x="256" y="115" font-size="11">r<tspan baseline-shift="sub">O1</tspan></text>
+
+  <!-- 3. M2 다이오드 연결 저항 1/gm2 -->
+  <path class="fig-ink" d="M450 70 H320 V85 l-4 3 l8 4 l-8 4 l8 4 l-8 4 l8 4 l-4 3 V145"/>
+  <path class="fig-ink" d="M312 145 H328 M315 149 H325 M318 153 H322"/>
+  <text class="fig-text" x="326" y="115" font-size="11">1/g<tspan baseline-shift="sub">m2</tspan></text>
+
+  <!-- 4. M2 출력저항 r_O2 -->
+  <path class="fig-ink" d="M450 70 H390 V85 l-4 3 l8 4 l-8 4 l8 4 l-8 4 l8 4 l-4 3 V145"/>
+  <path class="fig-ink" d="M382 145 H398 M385 149 H395 M388 153 H392"/>
+  <text class="fig-text" x="396" y="115" font-size="11">r<tspan baseline-shift="sub">O2</tspan></text>
+
+  <!-- 5. 합산 출력 커패시터 C_T = C_DB1 + C_GS2 + C_DB2 -->
+  <path class="fig-ink" d="M450 70 H470 V95 M470 105 V145"/>
+  <path class="fig-accent" d="M460 95 H480 M460 105 H480" stroke-width="2.5"/>
+  <path class="fig-ink" d="M462 145 H478 M465 149 H475 M468 153 H472"/>
+  <text class="fig-text" x="484" y="105" font-size="11">C<tspan baseline-shift="sub">T</tspan></text>
+
+  <!-- 하단 요약 문구 -->
+  <text class="fig-muted" x="140" y="185" font-size="11">C<tspan baseline-shift="sub">T</tspan> = C<tspan baseline-shift="sub">DB1</tspan> + C<tspan baseline-shift="sub">GS2</tspan> + C<tspan baseline-shift="sub">DB2</tspan> (C<tspan baseline-shift="sub">GD2</tspan>는 단락 소거)</text>
+  <text class="fig-muted" x="140" y="205" font-size="11">출력 저항 R<tspan baseline-shift="sub">out</tspan> = r<tspan baseline-shift="sub">O1</tspan> ‖ r<tspan baseline-shift="sub">O2</tspan> ‖ (1/g<tspan baseline-shift="sub">m2</tspan>) ≈ 1/g<tspan baseline-shift="sub">m2</tspan></text>
+
+</svg>

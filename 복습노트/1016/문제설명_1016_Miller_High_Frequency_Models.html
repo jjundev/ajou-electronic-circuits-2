@@ -717,6 +717,55 @@
 <h4>종이에 쓸 첫 줄</h4>
 <p>$V_{DD}$를 AC 접지로 놓고, 게이트 노드를 $v_g$, 드레인을 $v_o$라 써요. 커패시터를 잠시 열면 드레인 전류 변화는 $g_mv_g$이므로 $v_o=-g_mv_gR_D$예요. 따라서 밀러에 넣을 첫 값은 $A=v_o/v_g=-g_mR_D$예요.</p>
 <p>게이트에서 $C_F$로 나가는 전류는 $sC_F(v_g-v_o)=sC_F(1-A)v_g$예요. 입력에서 접지로 향하는 등가 커패시터 전류 $sC_{in}v_g$와 맞추면 $C_{in}=(1-A)C_F$가 나와요.</p>
+<figure class="figure"><svg viewBox="0 0 540 160" role="img" aria-label="밀러 변환 전후 비교: 왼쪽은 게이트와 드레인 사이의 부유 커패시터 C_F, 오른쪽은 입력 접지 커패시터 (1-A)C_F와 출력 접지 커패시터 (1-1/A)C_F로 분할된 회로">
+  <!-- 좌측: 변환 전 (Before) -->
+  <text class="fig-muted" x="20" y="24" font-size="12">변환 전 (Before)</text>
+  <!-- 입력 단자 및 노드 vg -->
+  <path class="fig-ink" d="M20 70 H60"/>
+  <circle class="fig-dot" data-node-color="blue" cx="60" cy="70" r="4"/>
+  <text class="fig-text" x="52" y="60">v<tspan baseline-shift="sub">g</tspan></text>
+  <!-- 반전 증폭기 심볼 -->
+  <polygon class="fig-ink" points="75,45 145,70 75,95"/>
+  <text class="fig-text" x="85" y="74" font-size="11">A = -g<tspan baseline-shift="sub">m</tspan>R<tspan baseline-shift="sub">D</tspan></text>
+  <!-- 출력 노드 vo -->
+  <path class="fig-ink" d="M145 70 H185"/>
+  <circle class="fig-dot" data-node-color="red" cx="185" cy="70" r="4"/>
+  <text class="fig-text" x="180" y="60">v<tspan baseline-shift="sub">o</tspan></text>
+  <!-- 부유 피드백 커패시터 C_F -->
+  <path class="fig-accent" d="M60 70 V36 H105 M135 36 H185 V70"/>
+  <path class="fig-accent" d="M105 26 V46 M115 26 V46" stroke-width="2.5"/>
+  <text class="fig-text" x="102" y="20" font-size="12">C<tspan baseline-shift="sub">F</tspan></text>
+
+  <!-- 중앙: 변환 화살표 -->
+  <path class="fig-ink" d="M220 70 H255 M247 64 L255 70 L247 76" stroke-width="2"/>
+  <text class="fig-muted" x="216" y="92" font-size="11">밀러 정리</text>
+
+  <!-- 우측: 변환 후 (After) -->
+  <text class="fig-muted" x="280" y="24" font-size="12">변환 후 (After: 접지 분할)</text>
+  <!-- 입력 단자 및 노드 vg -->
+  <path class="fig-ink" d="M280 70 H330"/>
+  <circle class="fig-dot" data-node-color="blue" cx="330" cy="70" r="4"/>
+  <text class="fig-text" x="322" y="60">v<tspan baseline-shift="sub">g</tspan></text>
+  <!-- 증폭기 -->
+  <polygon class="fig-ink" points="345,45 415,70 345,95"/>
+  <text class="fig-text" x="355" y="74" font-size="11">A</text>
+  <!-- 출력 노드 vo -->
+  <path class="fig-ink" d="M415 70 H465"/>
+  <circle class="fig-dot" data-node-color="red" cx="465" cy="70" r="4"/>
+  <text class="fig-text" x="460" y="60">v<tspan baseline-shift="sub">o</tspan></text>
+  
+  <!-- 입력측 접지 커패시터 C_in,M -->
+  <path class="fig-ink" d="M330 70 V95 M330 105 V125"/>
+  <path class="fig-accent" d="M320 95 H340 M320 105 H340" stroke-width="2.5"/>
+  <path class="fig-ink" d="M322 125 H338 M325 129 H335 M328 133 H332"/>
+  <text class="fig-text" x="250" y="105" font-size="11">C<tspan baseline-shift="sub">in,M</tspan>=(1-A)C<tspan baseline-shift="sub">F</tspan></text>
+
+  <!-- 출력측 접지 커패시터 C_out,M -->
+  <path class="fig-ink" d="M465 70 V95 M465 105 V125"/>
+  <path class="fig-accent" d="M455 95 H475 M455 105 H475" stroke-width="2.5"/>
+  <path class="fig-ink" d="M457 125 H473 M460 129 H470 M463 133 H467"/>
+  <text class="fig-text" x="478" y="105" font-size="11">C<tspan baseline-shift="sub">out,M</tspan>=(1-1/A)C<tspan baseline-shift="sub">F</tspan></text>
+</svg><figcaption>밀러 정리를 통해 피드백 커패시터 $C_F$가 입력 노드와 출력 노드의 독립된 접지 커패시터로 분할돼요.</figcaption></figure>
 </div>
 <div class="layer formal" data-explanation="solve">
 <h4>이렇게 풀어요</h4>
@@ -724,6 +773,40 @@
 
 <p>$A=-g_mR_D$를 입력식에 대입하면 $C_{in}=(1+g_mR_D)C_F$예요. 출력에서도 원래 전류 $sC_F(v_o-v_g)=sC_F(1-1/A)v_o$를 맞추므로 $C_{out}=(1+1/(g_mR_D))C_F$예요.</p>
 <p>$V_{in}=0$일 때 게이트에서는 $R_S$와 $C_{in}$이 접지로, 드레인에서는 $R_D$와 $C_{out}$이 접지로 이어져요. 따라서 <strong>$\omega_{in}\approx\dfrac{1}{R_S(1+g_mR_D)C_F}$</strong>, <strong>$\omega_{out}\approx\dfrac{1}{R_D(1+1/(g_mR_D))C_F}$</strong>예요.</p>
+<figure class="figure"><svg viewBox="0 0 520 135" role="img" aria-label="입력 노드와 출력 노드의 RC 병렬 극점 루프 회로">
+  <!-- 입력 노드 RC 루프 -->
+  <text class="fig-muted" x="20" y="20" font-size="12">입력 극점 루프 (Node v<tspan baseline-shift="sub">g</tspan>)</text>
+  <circle class="fig-dot" data-node-color="blue" cx="80" cy="40" r="4"/>
+  <text class="fig-text" x="72" y="32">v<tspan baseline-shift="sub">g</tspan></text>
+  <!-- 저항 R_S -->
+  <path class="fig-ink" d="M80 40 H50 V60 l-5 3 l10 5 l-10 5 l10 5 l-10 5 l10 5 l-5 3 V105"/>
+  <path class="fig-ink" d="M42 105 H58 M45 109 H55 M48 113 H52"/>
+  <text class="fig-text" x="18" y="78" font-size="12">R<tspan baseline-shift="sub">S</tspan></text>
+  <!-- 커패시터 C_in -->
+  <path class="fig-ink" d="M80 40 H120 V65 M120 75 V105"/>
+  <path class="fig-accent" d="M110 65 H130 M110 75 H130" stroke-width="2.5"/>
+  <path class="fig-ink" d="M112 105 H128 M115 109 H125 M118 113 H122"/>
+  <text class="fig-text" x="134" y="74" font-size="11">C<tspan baseline-shift="sub">in</tspan>=(1+g<tspan baseline-shift="sub">m</tspan>R<tspan baseline-shift="sub">D</tspan>)C<tspan baseline-shift="sub">F</tspan></text>
+  <text class="fig-muted" x="35" y="128" font-size="11">ω<tspan baseline-shift="sub">in</tspan> ≈ 1 / [R<tspan baseline-shift="sub">S</tspan>C<tspan baseline-shift="sub">in</tspan>]</text>
+
+  <!-- 구분선 -->
+  <path class="fig-ink" d="M260 20 V115" stroke-dasharray="3 3"/>
+
+  <!-- 출력 노드 RC 루프 -->
+  <text class="fig-muted" x="290" y="20" font-size="12">출력 극점 루프 (Node v<tspan baseline-shift="sub">o</tspan>)</text>
+  <circle class="fig-dot" data-node-color="red" cx="350" cy="40" r="4"/>
+  <text class="fig-text" x="342" y="32">v<tspan baseline-shift="sub">o</tspan></text>
+  <!-- 저항 R_D -->
+  <path class="fig-ink" d="M350 40 H320 V60 l-5 3 l10 5 l-10 5 l10 5 l-10 5 l10 5 l-5 3 V105"/>
+  <path class="fig-ink" d="M312 105 H328 M315 109 H325 M318 113 H322"/>
+  <text class="fig-text" x="288" y="78" font-size="12">R<tspan baseline-shift="sub">D</tspan></text>
+  <!-- 커패시터 C_out -->
+  <path class="fig-ink" d="M350 40 H390 V65 M390 75 V105"/>
+  <path class="fig-accent" d="M380 65 H400 M380 75 H400" stroke-width="2.5"/>
+  <path class="fig-ink" d="M382 105 H398 M385 109 H395 M388 113 H392"/>
+  <text class="fig-text" x="404" y="74" font-size="11">C<tspan baseline-shift="sub">out</tspan>=(1+1/g<tspan baseline-shift="sub">m</tspan>R<tspan baseline-shift="sub">D</tspan>)C<tspan baseline-shift="sub">F</tspan></text>
+  <text class="fig-muted" x="305" y="128" font-size="11">ω<tspan baseline-shift="sub">out</tspan> ≈ 1 / [R<tspan baseline-shift="sub">D</tspan>C<tspan baseline-shift="sub">out</tspan>]</text>
+</svg><figcaption>입력과 출력 노드에서 각각 신호원이 꺼진 저항과 밀러 커패시터가 병렬 RC를 이뤄 극점을 만들어요.</figcaption></figure>
 </div></div>
 </div>
 <div class="layer formal" data-explanation="verify">
@@ -802,6 +885,47 @@
 <div class="layer formal" data-explanation="start">
 <h4>종이에 쓸 첫 줄</h4>
 <p>$V_{CC}$를 AC 접지로 놓고 $Q_1$의 이미터도 접지예요. $X$에서 $R_F$로 나가는 전류를 $i_F=(v_X-v_{out})/R_F$라 써요. $v_{out}=Av_X$를 넣으면 $i_F=(1-A)v_X/R_F=v_X/R_{F,X}$이므로 $R_{F,X}=R_F/(1-A)$예요.</p>
+<figure class="figure"><svg viewBox="0 0 540 160" role="img" aria-label="피드백 저항 R_F의 밀러 정리 적용 전후 비교 회로">
+  <!-- 좌측: 변환 전 -->
+  <text class="fig-muted" x="20" y="24" font-size="12">변환 전 (피드백 저항 R<tspan baseline-shift="sub">F</tspan>)</text>
+  <path class="fig-ink" d="M20 70 H60"/>
+  <circle class="fig-dot" data-node-color="blue" cx="60" cy="70" r="4"/>
+  <text class="fig-text" x="52" y="60">X</text>
+  <polygon class="fig-ink" points="75,45 145,70 75,95"/>
+  <text class="fig-text" x="80" y="74" font-size="11">A ≈ -g<tspan baseline-shift="sub">m</tspan>R<tspan baseline-shift="sub">C</tspan></text>
+  <path class="fig-ink" d="M145 70 H185"/>
+  <circle class="fig-dot" data-node-color="red" cx="185" cy="70" r="4"/>
+  <text class="fig-text" x="180" y="60">v<tspan baseline-shift="sub">out</tspan></text>
+  <!-- 피드백 저항 R_F -->
+  <path class="fig-accent" d="M60 70 V36 H95 l4 -5 l6 10 l6 -10 l6 10 l6 -10 l6 10 l4 -5 H185 V70"/>
+  <text class="fig-text" x="110" y="22" font-size="12">R<tspan baseline-shift="sub">F</tspan></text>
+
+  <!-- 중앙 화살표 -->
+  <path class="fig-ink" d="M220 70 H255 M247 64 L255 70 L247 76" stroke-width="2"/>
+  <text class="fig-muted" x="216" y="92" font-size="11">밀러 정리</text>
+
+  <!-- 우측: 변환 후 -->
+  <text class="fig-muted" x="280" y="24" font-size="12">변환 후 (노드 X 등가 입력 부하)</text>
+  <path class="fig-ink" d="M280 70 H330"/>
+  <circle class="fig-dot" data-node-color="blue" cx="330" cy="70" r="4"/>
+  <text class="fig-text" x="322" y="60">X</text>
+  <!-- BJT 내부 저항 r_pi -->
+  <path class="fig-ink" d="M330 70 H300 V85 l-5 3 l10 5 l-10 5 l10 5 l-10 5 l10 5 l-5 3 V130"/>
+  <path class="fig-ink" d="M292 130 H308 M295 134 H305 M298 138 H302"/>
+  <text class="fig-text" x="278" y="105" font-size="12">r<tspan baseline-shift="sub">π</tspan></text>
+  <!-- 밀러 분할 저항 R_F,in -->
+  <path class="fig-ink" d="M330 70 H360 V85 l-5 3 l10 5 l-10 5 l10 5 l-10 5 l10 5 l-5 3 V130"/>
+  <path class="fig-ink" d="M352 130 H368 M355 134 H365 M358 138 H362"/>
+  <text class="fig-text" x="368" y="105" font-size="11">R<tspan baseline-shift="sub">F</tspan>/(1+g<tspan baseline-shift="sub">m</tspan>R<tspan baseline-shift="sub">C</tspan>)</text>
+  <!-- 출력단 -->
+  <polygon class="fig-ink" points="390,45 460,70 390,95"/>
+  <text class="fig-text" x="398" y="74" font-size="11">-g<tspan baseline-shift="sub">m</tspan>R<tspan baseline-shift="sub">C</tspan></text>
+  <path class="fig-ink" d="M460 70 H495"/>
+  <circle class="fig-dot" data-node-color="red" cx="495" cy="70" r="4"/>
+  <text class="fig-text" x="490" y="60">v<tspan baseline-shift="sub">out</tspan></text>
+  <!-- 설명 캡션 텍스트 -->
+  <text class="fig-muted" x="310" y="152" font-size="11">R<tspan baseline-shift="sub">X</tspan> = r<tspan baseline-shift="sub">π</tspan> ‖ [R<tspan baseline-shift="sub">F</tspan>/(1+g<tspan baseline-shift="sub">m</tspan>R<tspan baseline-shift="sub">C</tspan>)]</text>
+</svg><figcaption>밀러 정리를 적용하면 피드백 저항 $R_F$가 $(1+g_mR_C)$배 줄어들어 노드 $X$에서 $r_\pi$와 병렬로 연결돼요.</figcaption></figure>
 </div>
 <div class="layer formal" data-explanation="solve">
 <h4>이렇게 풀어요</h4>
@@ -845,6 +969,51 @@
 <div class="layer formal" data-explanation="start">
 <h4>종이에 쓸 첫 줄</h4>
 <p>$V_{CC}$와 $v_{in}$의 독립 전압원을 AC 접지로 놓고 베이스를 $v_b$, 컬렉터를 $v_o$라 해요. 커패시터를 잠시 열면 $v_o=-g_mv_bR_C$여서 $A=v_o/v_b=-g_mR_C$예요. $C_F$의 베이스 쪽 전류 $sC_F(v_b-v_o)=s(1-A)C_Fv_b$를 쓰면 첫 등가값이 $C_{in}=(1-A)C_F$임을 바로 알 수 있어요.</p>
+<figure class="figure"><svg viewBox="0 0 540 160" role="img" aria-label="BJT 입력 저항 r_pi와 밀러 등가 커패시터의 병렬 결합 회로">
+  <!-- 좌측: 변환 전 -->
+  <text class="fig-muted" x="20" y="24" font-size="12">변환 전 (BJT CE 증폭기 + C<tspan baseline-shift="sub">F</tspan>)</text>
+  <path class="fig-ink" d="M20 70 H60"/>
+  <circle class="fig-dot" data-node-color="blue" cx="60" cy="70" r="4"/>
+  <text class="fig-text" x="52" y="60">v<tspan baseline-shift="sub">b</tspan></text>
+  <path class="fig-ink" d="M60 70 V85 l-4 3 l8 4 l-8 4 l8 4 l-8 4 l8 4 l-4 3 V125"/>
+  <path class="fig-ink" d="M52 125 H68 M55 129 H65 M58 133 H62"/>
+  <text class="fig-text" x="38" y="105" font-size="11">r<tspan baseline-shift="sub">π</tspan></text>
+  <polygon class="fig-ink" points="75,45 145,70 75,95"/>
+  <text class="fig-text" x="80" y="74" font-size="11">A = -g<tspan baseline-shift="sub">m</tspan>R<tspan baseline-shift="sub">C</tspan></text>
+  <path class="fig-ink" d="M145 70 H185"/>
+  <circle class="fig-dot" data-node-color="red" cx="185" cy="70" r="4"/>
+  <text class="fig-text" x="180" y="60">v<tspan baseline-shift="sub">o</tspan></text>
+  <path class="fig-accent" d="M60 70 V36 H105 M135 36 H185 V70"/>
+  <path class="fig-accent" d="M105 26 V46 M115 26 V46" stroke-width="2.5"/>
+  <text class="fig-text" x="102" y="20" font-size="12">C<tspan baseline-shift="sub">F</tspan></text>
+
+  <!-- 중앙 화살표 -->
+  <path class="fig-ink" d="M220 70 H255 M247 64 L255 70 L247 76" stroke-width="2"/>
+  <text class="fig-muted" x="216" y="92" font-size="11">밀러 분할</text>
+
+  <!-- 우측: 변환 후 -->
+  <text class="fig-muted" x="280" y="24" font-size="12">변환 후 (베이스단 등가 병렬망)</text>
+  <path class="fig-ink" d="M280 70 H330"/>
+  <circle class="fig-dot" data-node-color="blue" cx="330" cy="70" r="4"/>
+  <text class="fig-text" x="322" y="60">v<tspan baseline-shift="sub">b</tspan></text>
+  <!-- 신호원 저항 R_B + r_pi 병렬 -->
+  <path class="fig-ink" d="M330 70 H300 V85 l-4 3 l8 4 l-8 4 l8 4 l-8 4 l8 4 l-4 3 V125"/>
+  <path class="fig-ink" d="M292 125 H308 M295 129 H305 M298 133 H302"/>
+  <text class="fig-text" x="245" y="105" font-size="11">R<tspan baseline-shift="sub">B</tspan> ‖ r<tspan baseline-shift="sub">π</tspan></text>
+  <!-- 밀러 입력 커패시터 -->
+  <path class="fig-ink" d="M330 70 H360 V90 M360 100 V125"/>
+  <path class="fig-accent" d="M350 90 H370 M350 100 H370" stroke-width="2.5"/>
+  <path class="fig-ink" d="M352 125 H368 M355 129 H365 M358 133 H362"/>
+  <text class="fig-text" x="372" y="100" font-size="11">C<tspan baseline-shift="sub">in</tspan>=(1+g<tspan baseline-shift="sub">m</tspan>R<tspan baseline-shift="sub">C</tspan>)C<tspan baseline-shift="sub">F</tspan></text>
+  <!-- 출력측 커패시터 -->
+  <path class="fig-ink" d="M420 70 H470"/>
+  <circle class="fig-dot" data-node-color="red" cx="470" cy="70" r="4"/>
+  <text class="fig-text" x="465" y="60">v<tspan baseline-shift="sub">o</tspan></text>
+  <path class="fig-ink" d="M470 70 V90 M470 100 V125"/>
+  <path class="fig-accent" d="M460 90 H480 M460 100 H480" stroke-width="2.5"/>
+  <path class="fig-ink" d="M462 125 H478 M465 129 H475 M468 133 H472"/>
+  <text class="fig-text" x="485" y="100" font-size="11">C<tspan baseline-shift="sub">out</tspan></text>
+</svg><figcaption>베이스 노드에서 $R_B$와 BJT 입력저항 $r_\pi$가 병렬을 이루고, 밀러 커패시터 $C_{in}$과 함께 입력 극점을 결정해요.</figcaption></figure>
 </div>
 <div class="layer formal" data-explanation="solve">
 <h4>이렇게 풀어요</h4>
@@ -965,7 +1134,64 @@
 </article><article class="topic" id="p10"><h3>P10. 다이오드 연결 부하의 고주파 소신호 회로</h3><p class="panel-meta">X11.13 · 연습문제 11.13 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1016_Miller_High_Frequency_Models-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p10"><div class="layer formal" data-source-problem="p10"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>예제 11.13의 증폭기: Fig 11.28(a) (입력 NMOS $M_1$, 다이오드 연결 PMOS $M_2$ 부하)</li><li>$M_2$가 다이오드 연결 소자임에 유념</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>위 증폭기의 소신호 등가 회로 그리기<ul><li>예제 11.13에서 찾은 커패시턴스를 포함한 고주파 등가 회로로 봄</li></ul></li></ul></div><figure><img src=".assets/figures_문제설명_1016_Miller_High_Frequency_Models/aa86e35636c569fb-fig11-28-a.png" alt="그림 X11.13"></figure></div><details class="original" data-original-problem="p10"><summary>원문 보기</summary><p>$M_2$가 다이오드 연결 소자임을 유념하고, 위 증폭기의 소신호 등가 회로를 그려라.</p></details></div><div class="layer eli5" data-explanation="understand"><h4>문제를 읽어요</h4><p>예제 11.13의 입력 NMOS와 다이오드 연결 PMOS를 고주파 소신호 회로로 바꾸는 문제예요. 입력 $V_{in}$, 출력 $V_{out}$, AC 접지 세 노드가 있고, 각 노드 사이의 커패시터·저항·종속 전류원을 모두 그려야 해요.</p></div>
 <div class="layer formal" data-explanation="recall"><h4>이 개념과 공식을 떠올려요</h4><p>"소신호 등가 회로"와 "다이오드 연결"에서 MOS 고주파 모델(high-frequency MOS model)을 선택해요. 각 소자의 드레인–소스 사이에는 $r_O$와 제어 전류원이 있고, $C_{GS},C_{GD},C_{SB},C_{DB}$가 단자 사이에 붙어요. $g_m$은 게이트 제어 전압에 대한 드레인 전류 변화율, $r_O$는 유한 출력 저항이에요.</p><p>$V_{DD}$는 AC 접지이고 $M_2$의 게이트와 드레인은 출력으로 단락되어 있어요. $r_{O1},r_{O2}$를 무한대로 보내라는 조건은 없으므로 남겨요. PMOS 전류 방향을 NMOS의 $g_m v_{GS}$와 기계적으로 동일하게 적지 않고, 출력에서 접지로 빠지는 소신호 전류로 환산하면 $g_{m2}V_{out}$이에요.</p></div>
 <div class="layer formal" data-explanation="start"><h4>종이에 쓸 첫 줄</h4><p>노드 표부터 써요: $M_1:(G,D,S,B)=(V_{in},V_{out},0,0)$, $M_2:(G,D,S,B)=(V_{out},V_{out},0,0)$. $M_1$의 $v_{GS1}=V_{in}$이고 출력→접지 종속 전류는 $g_{m1}V_{in}$이에요. $M_2$에서는 $v_{SG2}=0-V_{out}=-V_{out}$이에요. PMOS 소스→드레인 전류 변화 $g_{m2}v_{SG2}=-g_{m2}V_{out}$은 출력→접지로 환산하면 $+g_{m2}V_{out}$이므로 출력–접지의 양의 컨덕턴스 $g_{m2}$가 돼요.</p></div>
-<div class="layer formal" data-explanation="solve"><h4>이렇게 풀어요</h4><div data-subpart="main"><h4>고주파 소신호 등가 회로</h4><div data-answer-step="단계별 풀이"><p>입력–접지에 $C_{GS1}$, 입력–출력에 $C_{GD1}$을 그려요. 출력–접지에는 $M_1$의 종속 전류원 $g_{m1}V_{in}$ (아래 방향), $r_{O1}$, $C_{DB1}$을 놓아요.</p><p>$M_2$의 드레인·게이트는 출력이고 소스는 AC 접지이므로 $r_{O2}$와 $g_{m2}V_{out}$에 해당하는 양의 컨덕턴스가 출력–접지에 놓여요. 후자는 $1/g_{m2}$ 저항과 동등해요. 같은 두 노드의 $C_{GS2}$와 $C_{DB2}$는 $C_{DB1}$과 합쳐 $C_T=C_{DB1}+C_{DB2}+C_{GS2}$예요. $C_{GD2}$와 두 $C_{SB}$는 양 끝이 같은 AC 노드여서 빠져요.</p><figure class="figure"><svg aria-label="MOS 소신호 등가회로의 가지 연결" role="img" viewBox="0 0 900 547"><text fill="currentColor" font-size="21" x="24" y="37">MOS 소신호 등가회로의 가지 연결</text><text fill="currentColor" font-size="19" x="25" y="88">입력</text><path d="M160 80 H330 M570 80 H740" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="160" cy="80" fill="currentColor" r="4"/><circle cx="740" cy="80" fill="currentColor" r="4"/><rect fill="none" height="48" rx="6" stroke="currentColor" width="240" x="330" y="56"/><text fill="currentColor" font-size="19" text-anchor="middle" x="450" y="87">C GS1</text><text fill="currentColor" font-size="19" x="765" y="88">접지</text><text fill="currentColor" font-size="19" x="25" y="154">입력</text><path d="M160 146 H330 M570 146 H740" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="160" cy="146" fill="currentColor" r="4"/><circle cx="740" cy="146" fill="currentColor" r="4"/><rect fill="none" height="48" rx="6" stroke="currentColor" width="240" x="330" y="122"/><text fill="currentColor" font-size="19" text-anchor="middle" x="450" y="153">C GD1</text><text fill="currentColor" font-size="19" x="765" y="154">출력</text><text fill="currentColor" font-size="19" x="25" y="220">출력</text><path d="M160 212 H330 M570 212 H740" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="160" cy="212" fill="currentColor" r="4"/><circle cx="740" cy="212" fill="currentColor" r="4"/><rect fill="none" height="48" rx="6" stroke="currentColor" width="240" x="330" y="188"/><text fill="currentColor" font-size="19" text-anchor="middle" x="450" y="219">gₘ₁Vᵢₙ ↓</text><text fill="currentColor" font-size="19" x="765" y="220">접지</text><text fill="currentColor" font-size="19" x="25" y="286">출력</text><path d="M160 278 H330 M570 278 H740" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="160" cy="278" fill="currentColor" r="4"/><circle cx="740" cy="278" fill="currentColor" r="4"/><rect fill="none" height="48" rx="6" stroke="currentColor" width="240" x="330" y="254"/><text fill="currentColor" font-size="19" text-anchor="middle" x="450" y="285">rₒ₁</text><text fill="currentColor" font-size="19" x="765" y="286">접지</text><text fill="currentColor" font-size="19" x="25" y="352">출력</text><path d="M160 344 H330 M570 344 H740" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="160" cy="344" fill="currentColor" r="4"/><circle cx="740" cy="344" fill="currentColor" r="4"/><rect fill="none" height="48" rx="6" stroke="currentColor" width="240" x="330" y="320"/><text fill="currentColor" font-size="19" text-anchor="middle" x="450" y="351">rₒ₂</text><text fill="currentColor" font-size="19" x="765" y="352">접지</text><text fill="currentColor" font-size="19" x="25" y="418">출력</text><path d="M160 410 H330 M570 410 H740" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="160" cy="410" fill="currentColor" r="4"/><circle cx="740" cy="410" fill="currentColor" r="4"/><rect fill="none" height="48" rx="6" stroke="currentColor" width="240" x="330" y="386"/><text fill="currentColor" font-size="19" text-anchor="middle" x="450" y="417">1/gₘ₂</text><text fill="currentColor" font-size="19" x="765" y="418">접지</text><text fill="currentColor" font-size="19" x="25" y="484">출력</text><path d="M160 476 H330 M570 476 H740" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="160" cy="476" fill="currentColor" r="4"/><circle cx="740" cy="476" fill="currentColor" r="4"/><rect fill="none" height="48" rx="6" stroke="currentColor" width="240" x="330" y="452"/><text fill="currentColor" font-size="19" text-anchor="middle" x="450" y="483">Cₜ</text><text fill="currentColor" font-size="19" x="765" y="484">접지</text></svg><figcaption>같은 두 노드를 잇는 행의 소자들은 병렬이에요. $C_T=C_{DB1}+C_{DB2}+C_{GS2}$예요.</figcaption></figure></div></div></div>
+<div class="layer formal" data-explanation="solve"><h4>이렇게 풀어요</h4><div data-subpart="main"><h4>고주파 소신호 등가 회로</h4><div data-answer-step="단계별 풀이"><p>입력–접지에 $C_{GS1}$, 입력–출력에 $C_{GD1}$을 그려요. 출력–접지에는 $M_1$의 종속 전류원 $g_{m1}V_{in}$ (아래 방향), $r_{O1}$, $C_{DB1}$을 놓아요.</p><p>$M_2$의 드레인·게이트는 출력이고 소스는 AC 접지이므로 $r_{O2}$와 $g_{m2}V_{out}$에 해당하는 양의 컨덕턴스가 출력–접지에 놓여요. 후자는 $1/g_{m2}$ 저항과 동등해요. 같은 두 노드의 $C_{GS2}$와 $C_{DB2}$는 $C_{DB1}$과 합쳐 $C_T=C_{DB1}+C_{DB2}+C_{GS2}$예요. $C_{GD2}$와 두 $C_{SB}$는 양 끝이 같은 AC 노드여서 빠져요.</p><figure class="figure"><svg viewBox="0 0 580 250" role="img" aria-label="입력 NMOS M1과 다이오드 연결 PMOS M2의 정식 고주파 소신호 등가회로">
+  <!-- 입력 노드 Vin -->
+  <text class="fig-muted" x="20" y="25" font-size="12">입력단 (NMOS M₁ 게이트)</text>
+  <path class="fig-ink" d="M20 70 H70"/>
+  <circle class="fig-dot" data-node-color="blue" cx="70" cy="70" r="4"/>
+  <text class="fig-text" x="60" y="60">V<tspan baseline-shift="sub">in</tspan></text>
+
+  <!-- C_GS1 (Vin - 접지) -->
+  <path class="fig-ink" d="M70 70 H100 V95 M100 105 V135"/>
+  <path class="fig-accent" d="M90 95 H110 M90 105 H110" stroke-width="2.5"/>
+  <path class="fig-ink" d="M92 135 H108 M95 139 H105 M98 143 H102"/>
+  <text class="fig-text" x="114" y="105" font-size="11">C<tspan baseline-shift="sub">GS1</tspan></text>
+
+  <!-- C_GD1 (Vin - Vout 피드백) -->
+  <path class="fig-accent" d="M70 70 V35 H250 M270 35 H450 V70"/>
+  <path class="fig-accent" d="M250 25 V45 M260 25 V45" stroke-width="2.5"/>
+  <text class="fig-text" x="245" y="20" font-size="12">C<tspan baseline-shift="sub">GD1</tspan></text>
+
+  <!-- 출력 노드 Vout -->
+  <circle class="fig-dot" data-node-color="red" cx="450" cy="70" r="4"/>
+  <text class="fig-text" x="445" y="60">V<tspan baseline-shift="sub">out</tspan></text>
+  <path class="fig-ink" d="M450 70 H520"/>
+  <text class="fig-muted" x="430" y="25" font-size="12">출력단 부하 (M₂ 다이오드 연결)</text>
+
+  <!-- 출력-접지 병렬 소자들 -->
+  <!-- 1. M1 제어 전류원 gm1*Vin (하향) -->
+  <path class="fig-ink" d="M450 70 H180 V95"/>
+  <polygon class="fig-ink" points="180,95 192,110 180,125 168,110"/>
+  <path class="fig-ink" d="M180 102 V118 M176 113 L180 118 L184 113"/>
+  <path class="fig-ink" d="M180 125 V145"/>
+  <path class="fig-ink" d="M172 145 H188 M175 149 H185 M178 153 H182"/>
+  <text class="fig-text" x="135" y="115" font-size="11">g<tspan baseline-shift="sub">m1</tspan>V<tspan baseline-shift="sub">in</tspan></text>
+
+  <!-- 2. M1 출력저항 r_O1 -->
+  <path class="fig-ink" d="M450 70 H250 V85 l-4 3 l8 4 l-8 4 l8 4 l-8 4 l8 4 l-4 3 V145"/>
+  <path class="fig-ink" d="M242 145 H258 M245 149 H255 M248 153 H252"/>
+  <text class="fig-text" x="256" y="115" font-size="11">r<tspan baseline-shift="sub">O1</tspan></text>
+
+  <!-- 3. M2 다이오드 연결 저항 1/gm2 -->
+  <path class="fig-ink" d="M450 70 H320 V85 l-4 3 l8 4 l-8 4 l8 4 l-8 4 l8 4 l-4 3 V145"/>
+  <path class="fig-ink" d="M312 145 H328 M315 149 H325 M318 153 H322"/>
+  <text class="fig-text" x="326" y="115" font-size="11">1/g<tspan baseline-shift="sub">m2</tspan></text>
+
+  <!-- 4. M2 출력저항 r_O2 -->
+  <path class="fig-ink" d="M450 70 H390 V85 l-4 3 l8 4 l-8 4 l8 4 l-8 4 l8 4 l-4 3 V145"/>
+  <path class="fig-ink" d="M382 145 H398 M385 149 H395 M388 153 H392"/>
+  <text class="fig-text" x="396" y="115" font-size="11">r<tspan baseline-shift="sub">O2</tspan></text>
+
+  <!-- 5. 합산 출력 커패시터 C_T = C_DB1 + C_GS2 + C_DB2 -->
+  <path class="fig-ink" d="M450 70 H470 V95 M470 105 V145"/>
+  <path class="fig-accent" d="M460 95 H480 M460 105 H480" stroke-width="2.5"/>
+  <path class="fig-ink" d="M462 145 H478 M465 149 H475 M468 153 H472"/>
+  <text class="fig-text" x="484" y="105" font-size="11">C<tspan baseline-shift="sub">T</tspan></text>
+
+  <!-- 하단 요약 문구 -->
+  <text class="fig-muted" x="140" y="185" font-size="11">C<tspan baseline-shift="sub">T</tspan> = C<tspan baseline-shift="sub">DB1</tspan> + C<tspan baseline-shift="sub">GS2</tspan> + C<tspan baseline-shift="sub">DB2</tspan> (C<tspan baseline-shift="sub">GD2</tspan>는 단락 소거)</text>
+  <text class="fig-muted" x="140" y="205" font-size="11">출력 저항 R<tspan baseline-shift="sub">out</tspan> = r<tspan baseline-shift="sub">O1</tspan> ‖ r<tspan baseline-shift="sub">O2</tspan> ‖ (1/g<tspan baseline-shift="sub">m2</tspan>) ≈ 1/g<tspan baseline-shift="sub">m2</tspan></text>
+</svg><figcaption>다이오드 연결된 $M_2$는 소신호에서 $1/g_{m2}$ 저항과 $C_{GS2}+C_{DB2}$ 접지 커패시터로 동작해요.</figcaption></figure></div></div></div>
 <div class="layer formal" data-explanation="verify"><h4>완성 답과 검산</h4><div data-subpart="main"><h4>노드와 전류 방향 확인</h4><p data-answer-final=""><b>입력–접지 $C_{GS1}$, 입력–출력 $C_{GD1}$; 출력–접지 $g_{m1}V_{in}$ 전류원, $r_{O1}\parallel r_{O2}\parallel(1/g_{m2})$, $C_T=C_{DB1}+C_{DB2}+C_{GS2}$.</b> $V_{in}=0$일 때 출력에서 접지로 흐르는 저항성 전류는 $V_{out}(1/r_{O1}+1/r_{O2}+g_{m2})$예요. 모두 양의 컨덕턴스이므로 수동 다이오드 연결 부하의 방향과 맞아요. $1/g_m$은 Ω 단위예요.</p></div></div>
 <div class="layer warn" data-explanation="pitfall"><h4>주의할 점</h4><p>$M_2$에 NMOS의 "드레인→소스 $g_m v_{GS}$" 화살표를 그대로 붙여 $g_{m2}V_{out}$이 위쪽으로 흐른다고 보면 부하가 음의 저항처럼 바뀌어요. PMOS는 $v_{SG2}=-V_{out}$와 소스→드레인 전류를 먼저 정의해야 해요. $C_{GD1}$도 두 움직이는 노드 사이이므로 출력 커패시턴스 합에 바로 넣지 않아요.</p></div>
 <div class="layer eli5" data-explanation="retry"><h4>조건을 바꾸어 생각해요</h4><ol><li>$M_2$의 $r_{O2}$가 무한대라면 등가회로에서 어느 가지만 지우며, $1/g_{m2}$는 왜 남나요?</li><li>$V_{out}$이 AC로 조금 증가할 때 다이오드 연결 PMOS의 출력→접지 소신호 전류 변화는 어느 방향인가요?</li></ol></div>
@@ -973,7 +1199,65 @@
 </article><article class="topic" id="p11"><h3>P11. BJT 캐스코드의 커패시턴스 식별</h3><p class="panel-meta">E11.12 · 예제 11.12 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1016_Miller_High_Frequency_Models-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p11"><div class="layer formal" data-source-problem="p11"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>소자 값은 주어지지 않음 (답은 커패시턴스 기호로)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>회로의 모든 커패시턴스 확인</li></ul></div><figure><img src=".assets/figures_문제설명_1016_Miller_High_Frequency_Models/0a58bc2b53d772d6-fig11-24-a.png" alt="그림 E11.12"></figure></div><details class="original" data-original-problem="p11"><summary>원문 보기</summary><p>그림 11.24(a)에 그려진 회로의 모든 커패시턴스를 확인하라.</p></details></div><div class="layer eli5" data-explanation="understand"><h4>문제를 읽어요</h4><p>아래 $Q_1$의 베이스가 입력이고, 위 $Q_2$의 컬렉터가 출력인 바이폴라 캐스코드예요. $Q_1$ 컬렉터와 $Q_2$ 이미터가 만나는 중간점 $X$도 신호가 움직이는 노드예요. 트랜지스터 두 개에 커패시터 세 개씩 붙이고 실제 연결 노드를 적어요.</p></div>
 <div class="layer formal" data-explanation="recall"><h4>이 개념과 공식을 떠올려요</h4><p>"바이폴라 캐스코드의 모든 커패시턴스"에서 고주파 하이브리드 파이 모델(high-frequency hybrid-π model)을 떠올려요. 각 BJT의 $C_\pi$는 베이스–이미터, $C_\mu$는 베이스–컬렉터, $C_{CS}$는 컬렉터–기판 사이예요. 집적 회로의 기판은 AC 접지예요.</p><p>$V_{b1}$과 $V_{CC}$는 고정 DC 전압이므로 AC 접지로 바꿔요. $X$는 $Q_2$ 이미터이지만 접지가 아니에요. 따라서 모델 커패시터마다 원래 단자를 실제 회로의 입력·$X$·출력·접지에 대응하는 것이 첫 도구예요.</p></div>
 <div class="layer formal" data-explanation="start"><h4>종이에 쓸 첫 줄</h4><p>$Q_1:(B,E,C,\text{기판})=(V_{in},0,X,0)$, $Q_2:(B,E,C,\text{기판})=(0,X,V_{out},0)$이라고 써요. $X=Q_1$ 컬렉터 $=Q_2$ 이미터예요. 예를 들어 $C_{\pi2}$의 두 끝 $B_2$–$E_2$를 이 표에 대입하면 $0$–$X$이므로 중간점–접지 가지예요.</p></div>
-<div class="layer formal" data-explanation="solve"><h4>이렇게 풀어요</h4><div data-subpart="main"><h4>각 소자의 세 커패시턴스</h4><div data-answer-step="단계별 풀이"><p>$Q_1$: $C_{\pi1}$은 $V_{in}$–접지, $C_{\mu1}$은 $V_{in}$–$X$, $C_{CS1}$은 $X$–접지예요. $C_{\mu1}$만 입력과 중간점 사이에 떠 있어요.</p><p>$Q_2$: $C_{\pi2}$는 AC 접지된 베이스–$X$, $C_{\mu2}$는 AC 접지된 베이스–$V_{out}$, $C_{CS2}$는 $V_{out}$–접지예요. 따라서 중간점의 병렬 커패시턴스는 $C_X=C_{CS1}+C_{\pi2}$, 출력의 병렬 커패시턴스는 $C_Y=C_{\mu2}+C_{CS2}$예요. $C_{\mu1}$은 양쪽이 모두 움직이는 노드라 이 두 합에 넣지 않아요.</p></div></div></div>
+<div class="layer formal" data-explanation="solve"><h4>이렇게 풀어요</h4><div data-subpart="main"><h4>각 소자의 세 커패시턴스</h4><div data-answer-step="단계별 풀이"><p>$Q_1$: $C_{\pi1}$은 $V_{in}$–접지, $C_{\mu1}$은 $V_{in}$–$X$, $C_{CS1}$은 $X$–접지예요. $C_{\mu1}$만 입력과 중간점 사이에 떠 있어요.</p><p>$Q_2$: $C_{\pi2}$는 AC 접지된 베이스–$X$, $C_{\mu2}$는 AC 접지된 베이스–$V_{out}$, $C_{CS2}$는 $V_{out}$–접지예요. 따라서 중간점의 병렬 커패시턴스는 $C_X=C_{CS1}+C_{\pi2}$, 출력의 병렬 커패시턴스는 $C_Y=C_{\mu2}+C_{CS2}$예요. $C_{\mu1}$은 양쪽이 모두 움직이는 노드라 이 두 합에 넣지 않아요.</p>
+<figure class="figure"><svg viewBox="0 0 580 220" role="img" aria-label="BJT 캐스코드 6개 기생 커패시터의 노드별 식별 지도">
+  <!-- 세 주요 노드 축 -->
+  <!-- 1. 입력 노드 Vin -->
+  <circle class="fig-dot" data-node-color="blue" cx="80" cy="50" r="5"/>
+  <text class="fig-text" x="65" y="38" font-size="13">입력 V<tspan baseline-shift="sub">in</tspan></text>
+  <path class="fig-ink" d="M40 50 H80"/>
+
+  <!-- 2. 중간 노드 X -->
+  <circle class="fig-dot" cx="280" cy="50" r="5"/>
+  <text class="fig-text" x="268" y="38" font-size="13">중간 노드 X</text>
+
+  <!-- 3. 출력 노드 Vout -->
+  <circle class="fig-dot" data-node-color="red" cx="480" cy="50" r="5"/>
+  <text class="fig-text" x="465" y="38" font-size="13">출력 V<tspan baseline-shift="sub">out</tspan></text>
+  <path class="fig-ink" d="M480 50 H520"/>
+
+  <!-- 커패시터 연결선들 -->
+  <!-- Q1 커패시터 3개 -->
+  <!-- C_pi1: Vin - 접지 -->
+  <path class="fig-ink" d="M80 50 V85 M80 95 V125"/>
+  <path class="fig-accent" d="M70 85 H90 M70 95 H90" stroke-width="2.5"/>
+  <path class="fig-ink" d="M72 125 H88 M75 129 H85 M78 133 H82"/>
+  <text class="fig-text" x="38" y="95" font-size="11">C<tspan baseline-shift="sub">π1</tspan></text>
+
+  <!-- C_mu1: Vin - X (부유 피드백) -->
+  <path class="fig-accent" d="M80 50 V15 H170 M190 15 H280 V50"/>
+  <path class="fig-accent" d="M170 5 V25 M180 5 V25" stroke-width="2.5"/>
+  <text class="fig-text" x="168" y="38" font-size="11">C<tspan baseline-shift="sub">μ1</tspan> (입력-X)</text>
+
+  <!-- C_CS1: X - 접지 -->
+  <path class="fig-ink" d="M260 50 V85 M260 95 V125"/>
+  <path class="fig-accent" d="M250 85 H270 M250 95 H270" stroke-width="2.5"/>
+  <path class="fig-ink" d="M252 125 H268 M255 129 H265 M258 133 H262"/>
+  <text class="fig-text" x="220" y="95" font-size="11">C<tspan baseline-shift="sub">CS1</tspan></text>
+
+  <!-- Q2 커패시터 3개 -->
+  <!-- C_pi2: X - 베이스(접지) -->
+  <path class="fig-ink" d="M300 50 V85 M300 95 V125"/>
+  <path class="fig-accent" d="M290 85 H310 M290 95 H310" stroke-width="2.5"/>
+  <path class="fig-ink" d="M292 125 H308 M295 129 H305 M298 133 H302"/>
+  <text class="fig-text" x="314" y="95" font-size="11">C<tspan baseline-shift="sub">π2</tspan></text>
+
+  <!-- C_mu2: Vout - 베이스(접지) -->
+  <path class="fig-ink" d="M460 50 V85 M460 95 V125"/>
+  <path class="fig-accent" d="M450 85 H470 M450 95 H470" stroke-width="2.5"/>
+  <path class="fig-ink" d="M452 125 H468 M455 129 H465 M458 133 H462"/>
+  <text class="fig-text" x="420" y="95" font-size="11">C<tspan baseline-shift="sub">μ2</tspan></text>
+
+  <!-- C_CS2: Vout - 기판(접지) -->
+  <path class="fig-ink" d="M500 50 V85 M500 95 V125"/>
+  <path class="fig-accent" d="M490 85 H510 M490 95 H510" stroke-width="2.5"/>
+  <path class="fig-ink" d="M492 125 H508 M495 129 H505 M498 133 H502"/>
+  <text class="fig-text" x="514" y="95" font-size="11">C<tspan baseline-shift="sub">CS2</tspan></text>
+
+  <!-- 노드별 묶음 캡션 -->
+  <text class="fig-muted" x="200" y="165" font-size="12">중간점 총 커패시턴스: C<tspan baseline-shift="sub">X</tspan> = C<tspan baseline-shift="sub">CS1</tspan> + C<tspan baseline-shift="sub">π2</tspan></text>
+  <text class="fig-muted" x="200" y="188" font-size="12">출력단 총 커패시턴스: C<tspan baseline-shift="sub">Y</tspan> = C<tspan baseline-shift="sub">μ2</tspan> + C<tspan baseline-shift="sub">CS2</tspan></text>
+</svg><figcaption>$Q_2$의 베이스가 AC 접지이므로 $C_{\pi2}$는 중간점 $X$–접지로, $C_{\mu2}$는 출력–접지로 병렬 합산돼요.</figcaption></figure></div></div></div>
 <div class="layer formal" data-explanation="verify"><h4>완성 답과 검산</h4><div data-subpart="main"><h4>여섯 개의 두 끝</h4><p data-answer-final=""><b>$V_{in}$–접지: $C_{\pi1}$; $V_{in}$–$X$: $C_{\mu1}$; $X$–접지: $C_{CS1}+C_{\pi2}$; $V_{out}$–접지: $C_{\mu2}+C_{CS2}$.</b> $Q_1$에서 세 개, $Q_2$에서 세 개로 총 여섯 개를 모두 배치했어요. $C_X,C_Y$는 각각 F 단위이고, 같은 두 노드에 걸린 것끼리만 합했어요.</p></div></div>
 <div class="layer warn" data-explanation="pitfall"><h4>주의할 점</h4><p>베이스 $V_{b1}$을 접지로 바꾼다고 $Q_2$ 이미터 $X$까지 접지되는 것은 아니에요. 그러면 $C_{\pi2}$를 잘못 지우고 캐스코드의 중간점 커패시턴스를 놓쳐요. $C_{\mu1}$도 $Q_1$ 컬렉터가 최종 출력이 아니라 $X$이므로 입력–출력으로 그리면 안 돼요.</p></div>
 <div class="layer eli5" data-explanation="retry"><h4>조건을 바꾸어 생각해요</h4><ol><li>$Q_2$의 베이스 바이어스가 AC로도 움직이는 신호 $v_b$라면 $C_{\pi2}$와 $C_{\mu2}$는 각각 어느 두 노드 사이인가요?</li><li>$Q_1$의 컬렉터가 $X$ 대신 최종 출력에 직접 연결된 CE 단이라면 $C_{\mu1}$의 두 끝은 어떻게 바뀌나요?</li></ol></div>
@@ -981,7 +1265,89 @@
 </article><article class="topic" id="p12"><h3>P12. BJT 캐스코드의 고주파 소신호 회로</h3><p class="panel-meta">X11.12 · 연습문제 11.12 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1016_Miller_High_Frequency_Models-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p12"><div class="layer formal" data-source-problem="p12"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>예제 11.12의 캐스코드: Fig 11.24(a) ($Q_1$, $Q_2$, $V_{b1}$, $R_C$)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>위 캐스코드의 소신호 등가 회로 그리기<ul><li>예제 11.12에서 찾은 커패시턴스를 포함한 고주파 등가 회로로 봄</li></ul></li></ul></div><figure><img src=".assets/figures_문제설명_1016_Miller_High_Frequency_Models/0a58bc2b53d772d6-fig11-24-a.png" alt="그림 X11.12"></figure></div><details class="original" data-original-problem="p12"><summary>원문 보기</summary><p>위 캐스코드의 소신호 등가 회로를 그려라.</p></details></div><div class="layer eli5" data-explanation="understand"><h4>문제를 읽어요</h4><p>예제 11.12의 BJT 캐스코드를 고주파 소신호 등가회로로 그려요. $Q_1$ 베이스는 입력, $Q_1$ 컬렉터와 $Q_2$ 이미터의 접점은 $X$, $Q_2$ 컬렉터는 출력이에요. $V_{b1}$과 $V_{CC}$는 AC 접지로 바꾸고 저항·전류원·커패시터까지 빠짐없이 연결해요.</p></div>
 <div class="layer formal" data-explanation="recall"><h4>이 개념과 공식을 떠올려요</h4><p>"캐스코드의 소신호 등가 회로"에서 BJT 고주파 하이브리드 파이 모델(high-frequency hybrid-π model)을 떠올려요. 한 BJT의 베이스–이미터에는 $r_\pi\parallel C_\pi$, 베이스–컬렉터에는 $C_\mu$, 컬렉터–이미터에는 $r_O$와 컬렉터→이미터 방향 종속 전류원 $g_m v_\pi$, 컬렉터–접지에는 $C_{CS}$를 놓아요. $v_\pi=v_B-v_E$이며 $g_m$은 이 전압에 대한 컬렉터 전류 변화율이에요.</p><p>$V_{b1}$과 $V_{CC}$는 고정 DC 전원이므로 AC 접지예요. $r_{O1},r_{O2}$를 버리는 조건은 없고, 두 BJT의 소자 값이 같다는 조건도 없으므로 아래첨자 1·2를 유지해요.</p></div>
 <div class="layer formal" data-explanation="start"><h4>종이에 쓸 첫 줄</h4><p>$Q_1:(B,E,C)=(V_{in},0,X)$, $Q_2:(B,E,C)=(0,X,V_{out})$로 써요. 그러면 $v_{\pi1}=V_{in}-0=V_{in}$, $v_{\pi2}=0-V_X=-V_X$예요. 컬렉터→이미터 방향을 양의 기준으로 잡으면 $Q_1$의 제어 전류는 $X\to0$의 $g_{m1}V_{in}$, $Q_2$는 $V_{out}\to X$의 $g_{m2}v_{\pi2}$예요. $v_{\pi2}$가 음수이면 실제 증분 전류는 표시 화살표와 반대예요.</p></div>
-<div class="layer formal" data-explanation="solve"><h4>이렇게 풀어요</h4><div data-subpart="main"><h4>고주파 하이브리드 파이 회로</h4><div data-answer-step="단계별 풀이"><p>입력–접지에는 $r_{\pi1}\parallel C_{\pi1}$, 입력–$X$에는 $C_{\mu1}$을 연결해요. $X$–접지에는 $Q_1$의 $g_{m1}V_{in}$ 전류원(아래 방향), $r_{O1}$, $C_{CS1}$과 $Q_2$의 $r_{\pi2},C_{\pi2}$를 놓아요. 두 커패시터는 $C_X=C_{CS1}+C_{\pi2}$로 합칠 수 있어요.</p><p>출력–$X$에는 $Q_2$의 $g_{m2}v_{\pi2}$ 전류원(출력→$X$ 기준)과 $r_{O2}$를 병렬로 놓아요. 출력–접지에는 $R_C$와 $C_{\mu2},C_{CS2}$를 놓아요. $C_Y=C_{\mu2}+C_{CS2}$예요.</p><figure class="figure"><svg aria-label="BJT 캐스코드 고주파 등가회로의 가지 연결" role="img" viewBox="0 0 900 811"><text fill="currentColor" font-size="21" x="24" y="37">BJT 캐스코드 고주파 등가회로의 가지 연결</text><text fill="currentColor" font-size="19" x="25" y="88">입력</text><path d="M160 80 H330 M570 80 H740" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="160" cy="80" fill="currentColor" r="4"/><circle cx="740" cy="80" fill="currentColor" r="4"/><rect fill="none" height="48" rx="6" stroke="currentColor" width="240" x="330" y="56"/><text fill="currentColor" font-size="19" text-anchor="middle" x="450" y="87">rπ₁</text><text fill="currentColor" font-size="19" x="765" y="88">접지</text><text fill="currentColor" font-size="19" x="25" y="154">입력</text><path d="M160 146 H330 M570 146 H740" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="160" cy="146" fill="currentColor" r="4"/><circle cx="740" cy="146" fill="currentColor" r="4"/><rect fill="none" height="48" rx="6" stroke="currentColor" width="240" x="330" y="122"/><text fill="currentColor" font-size="19" text-anchor="middle" x="450" y="153">Cπ₁</text><text fill="currentColor" font-size="19" x="765" y="154">접지</text><text fill="currentColor" font-size="19" x="25" y="220">입력</text><path d="M160 212 H330 M570 212 H740" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="160" cy="212" fill="currentColor" r="4"/><circle cx="740" cy="212" fill="currentColor" r="4"/><rect fill="none" height="48" rx="6" stroke="currentColor" width="240" x="330" y="188"/><text fill="currentColor" font-size="19" text-anchor="middle" x="450" y="219">C μ1</text><text fill="currentColor" font-size="19" x="765" y="220">X</text><text fill="currentColor" font-size="19" x="25" y="286">X</text><path d="M160 278 H330 M570 278 H740" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="160" cy="278" fill="currentColor" r="4"/><circle cx="740" cy="278" fill="currentColor" r="4"/><rect fill="none" height="48" rx="6" stroke="currentColor" width="240" x="330" y="254"/><text fill="currentColor" font-size="19" text-anchor="middle" x="450" y="285">gₘ₁Vᵢₙ ↓</text><text fill="currentColor" font-size="19" x="765" y="286">접지</text><text fill="currentColor" font-size="19" x="25" y="352">X</text><path d="M160 344 H330 M570 344 H740" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="160" cy="344" fill="currentColor" r="4"/><circle cx="740" cy="344" fill="currentColor" r="4"/><rect fill="none" height="48" rx="6" stroke="currentColor" width="240" x="330" y="320"/><text fill="currentColor" font-size="19" text-anchor="middle" x="450" y="351">rₒ₁</text><text fill="currentColor" font-size="19" x="765" y="352">접지</text><text fill="currentColor" font-size="19" x="25" y="418">X</text><path d="M160 410 H330 M570 410 H740" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="160" cy="410" fill="currentColor" r="4"/><circle cx="740" cy="410" fill="currentColor" r="4"/><rect fill="none" height="48" rx="6" stroke="currentColor" width="240" x="330" y="386"/><text fill="currentColor" font-size="19" text-anchor="middle" x="450" y="417">rπ₂</text><text fill="currentColor" font-size="19" x="765" y="418">접지</text><text fill="currentColor" font-size="19" x="25" y="484">X</text><path d="M160 476 H330 M570 476 H740" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="160" cy="476" fill="currentColor" r="4"/><circle cx="740" cy="476" fill="currentColor" r="4"/><rect fill="none" height="48" rx="6" stroke="currentColor" width="240" x="330" y="452"/><text fill="currentColor" font-size="19" text-anchor="middle" x="450" y="483">Cₓ = C CS1 + Cπ2</text><text fill="currentColor" font-size="19" x="765" y="484">접지</text><text fill="currentColor" font-size="19" x="25" y="550">출력</text><path d="M160 542 H330 M570 542 H740" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="160" cy="542" fill="currentColor" r="4"/><circle cx="740" cy="542" fill="currentColor" r="4"/><rect fill="none" height="48" rx="6" stroke="currentColor" width="240" x="330" y="518"/><text fill="currentColor" font-size="19" text-anchor="middle" x="450" y="549">gₘ₂vπ₂ (출력→X)</text><text fill="currentColor" font-size="19" x="765" y="550">X</text><text fill="currentColor" font-size="19" x="25" y="616">출력</text><path d="M160 608 H330 M570 608 H740" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="160" cy="608" fill="currentColor" r="4"/><circle cx="740" cy="608" fill="currentColor" r="4"/><rect fill="none" height="48" rx="6" stroke="currentColor" width="240" x="330" y="584"/><text fill="currentColor" font-size="19" text-anchor="middle" x="450" y="615">rₒ₂</text><text fill="currentColor" font-size="19" x="765" y="616">X</text><text fill="currentColor" font-size="19" x="25" y="682">출력</text><path d="M160 674 H330 M570 674 H740" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="160" cy="674" fill="currentColor" r="4"/><circle cx="740" cy="674" fill="currentColor" r="4"/><rect fill="none" height="48" rx="6" stroke="currentColor" width="240" x="330" y="650"/><text fill="currentColor" font-size="19" text-anchor="middle" x="450" y="681">R꜀</text><text fill="currentColor" font-size="19" x="765" y="682">접지</text><text fill="currentColor" font-size="19" x="25" y="748">출력</text><path d="M160 740 H330 M570 740 H740" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="160" cy="740" fill="currentColor" r="4"/><circle cx="740" cy="740" fill="currentColor" r="4"/><rect fill="none" height="48" rx="6" stroke="currentColor" width="240" x="330" y="716"/><text fill="currentColor" font-size="19" text-anchor="middle" x="450" y="747">Cᵧ = C μ2 + C CS2</text><text fill="currentColor" font-size="19" x="765" y="748">접지</text></svg><figcaption>같은 두 노드를 잇는 행의 소자들은 병렬이에요. $C_X=C_{CS1}+C_{\pi2}$, $C_Y=C_{\mu2}+C_{CS2}$예요.</figcaption></figure></div></div></div>
+<div class="layer formal" data-explanation="solve"><h4>이렇게 풀어요</h4><div data-subpart="main"><h4>고주파 하이브리드 파이 회로</h4><div data-answer-step="단계별 풀이"><p>입력–접지에는 $r_{\pi1}\parallel C_{\pi1}$, 입력–$X$에는 $C_{\mu1}$을 연결해요. $X$–접지에는 $Q_1$의 $g_{m1}V_{in}$ 전류원(아래 방향), $r_{O1}$, $C_{CS1}$과 $Q_2$의 $r_{\pi2},C_{\pi2}$를 놓아요. 두 커패시터는 $C_X=C_{CS1}+C_{\pi2}$로 합칠 수 있어요.</p><p>출력–$X$에는 $Q_2$의 $g_{m2}v_{\pi2}$ 전류원(출력→$X$ 기준)과 $r_{O2}$를 병렬로 놓아요. 출력–접지에는 $R_C$와 $C_{\mu2},C_{CS2}$를 놓아요. $C_Y=C_{\mu2}+C_{CS2}$예요.</p><figure class="figure"><svg viewBox="0 0 620 270" role="img" aria-label="BJT 캐스코드의 정식 고주파 소신호 등가회로">
+  <!-- 입력 노드 Vin -->
+  <text class="fig-muted" x="15" y="25" font-size="12">입력단 (Q₁ 공통 이미터)</text>
+  <path class="fig-ink" d="M15 65 H55"/>
+  <circle class="fig-dot" data-node-color="blue" cx="55" cy="65" r="4"/>
+  <text class="fig-text" x="45" y="55">V<tspan baseline-shift="sub">in</tspan></text>
+
+  <!-- 입력-접지 r_pi1 || C_pi1 -->
+  <!-- r_pi1 -->
+  <path class="fig-ink" d="M55 65 H40 V85 l-4 3 l8 4 l-8 4 l8 4 l-8 4 l8 4 l-4 3 V145"/>
+  <path class="fig-ink" d="M32 145 H48 M35 149 H45 M38 153 H42"/>
+  <text class="fig-text" x="18" y="115" font-size="11">r<tspan baseline-shift="sub">π1</tspan></text>
+  <!-- C_pi1 -->
+  <path class="fig-ink" d="M55 65 H75 V95 M75 105 V145"/>
+  <path class="fig-accent" d="M65 95 H85 M65 105 H85" stroke-width="2.5"/>
+  <path class="fig-ink" d="M67 145 H83 M70 149 H80 M73 153 H77"/>
+  <text class="fig-text" x="88" y="105" font-size="11">C<tspan baseline-shift="sub">π1</tspan></text>
+
+  <!-- C_mu1 (Vin - X 피드백) -->
+  <path class="fig-accent" d="M55 65 V35 H150 M170 35 H250 V65"/>
+  <path class="fig-accent" d="M150 25 V45 M160 25 V45" stroke-width="2.5"/>
+  <text class="fig-text" x="145" y="20" font-size="11">C<tspan baseline-shift="sub">μ1</tspan></text>
+
+  <!-- 중간 노드 X -->
+  <circle class="fig-dot" cx="250" cy="65" r="4"/>
+  <text class="fig-text" x="245" y="55">X</text>
+
+  <!-- Q1 제어전류원 gm1*Vin (하향: X -> 접지) -->
+  <path class="fig-ink" d="M250 65 H140 V95"/>
+  <polygon class="fig-ink" points="140,95 152,110 140,125 128,110"/>
+  <path class="fig-ink" d="M140 102 V118 M136 113 L140 118 L144 113"/>
+  <path class="fig-ink" d="M140 125 V145"/>
+  <path class="fig-ink" d="M132 145 H148 M135 149 H145 M138 153 H142"/>
+  <text class="fig-text" x="90" y="115" font-size="11">g<tspan baseline-shift="sub">m1</tspan>V<tspan baseline-shift="sub">in</tspan></text>
+
+  <!-- Q1 r_O1 -->
+  <path class="fig-ink" d="M250 65 H190 V85 l-4 3 l8 4 l-8 4 l8 4 l-8 4 l8 4 l-4 3 V145"/>
+  <path class="fig-ink" d="M182 145 H198 M185 149 H195 M188 153 H192"/>
+  <text class="fig-text" x="195" y="115" font-size="11">r<tspan baseline-shift="sub">O1</tspan></text>
+
+  <!-- Q2 베이스 접지 r_pi2 및 중간점 커패시터 C_X -->
+  <path class="fig-ink" d="M250 65 H240 V85 l-4 3 l8 4 l-8 4 l8 4 l-8 4 l8 4 l-4 3 V145"/>
+  <path class="fig-ink" d="M232 145 H248 M235 149 H245 M238 153 H242"/>
+  <text class="fig-text" x="245" y="115" font-size="11">r<tspan baseline-shift="sub">π2</tspan></text>
+  <!-- C_X = C_CS1 + C_pi2 -->
+  <path class="fig-ink" d="M250 65 H280 V95 M280 105 V145"/>
+  <path class="fig-accent" d="M270 95 H290 M270 105 H290" stroke-width="2.5"/>
+  <path class="fig-ink" d="M272 145 H288 M275 149 H285 M278 153 H282"/>
+  <text class="fig-text" x="295" y="105" font-size="11">C<tspan baseline-shift="sub">X</tspan></text>
+
+  <!-- Q2 단: X에서 Vout으로 이어지는 종속원과 r_O2 -->
+  <text class="fig-muted" x="380" y="25" font-size="12">출력단 (Q₂ 공통 베이스)</text>
+  <!-- gm2*v_pi2 (Vout -> X 방향) -->
+  <path class="fig-ink" d="M250 65 H350 V95"/>
+  <polygon class="fig-ink" points="350,95 362,110 350,125 338,110"/>
+  <path class="fig-ink" d="M350 118 V102 M346 107 L350 102 L354 107"/>
+  <path class="fig-ink" d="M350 125 V145 H480 V65"/>
+  <text class="fig-text" x="366" y="115" font-size="11">g<tspan baseline-shift="sub">m2</tspan>v<tspan baseline-shift="sub">π2</tspan></text>
+
+  <!-- Q2 r_O2 (X - Vout) -->
+  <path class="fig-ink" d="M250 65 H410 V85 l-4 3 l8 4 l-8 4 l8 4 l-8 4 l8 4 l-4 3 V145 H480"/>
+  <text class="fig-text" x="415" y="115" font-size="11">r<tspan baseline-shift="sub">O2</tspan></text>
+
+  <!-- 출력 노드 Vout -->
+  <circle class="fig-dot" data-node-color="red" cx="480" cy="65" r="4"/>
+  <text class="fig-text" x="475" y="55">V<tspan baseline-shift="sub">out</tspan></text>
+  <path class="fig-ink" d="M480 65 H580"/>
+
+  <!-- 출력 부하 저항 R_C -->
+  <path class="fig-ink" d="M480 65 H520 V85 l-4 3 l8 4 l-8 4 l8 4 l-8 4 l8 4 l-4 3 V145"/>
+  <path class="fig-ink" d="M512 145 H528 M515 149 H525 M518 153 H522"/>
+  <text class="fig-text" x="526" y="115" font-size="11">R<tspan baseline-shift="sub">C</tspan></text>
+
+  <!-- 출력 커패시터 C_Y = C_mu2 + C_CS2 -->
+  <path class="fig-ink" d="M480 65 H560 V95 M560 105 V145"/>
+  <path class="fig-accent" d="M550 95 H570 M550 105 H570" stroke-width="2.5"/>
+  <path class="fig-ink" d="M552 145 H568 M555 149 H565 M558 153 H562"/>
+  <text class="fig-text" x="575" y="105" font-size="11">C<tspan baseline-shift="sub">Y</tspan></text>
+
+  <!-- 하단 수식 요약 -->
+  <text class="fig-muted" x="70" y="200" font-size="11">v<tspan baseline-shift="sub">π2</tspan> = -V<tspan baseline-shift="sub">X</tspan> (Q₂ 베이스는 AC 접지)</text>
+  <text class="fig-muted" x="70" y="222" font-size="11">C<tspan baseline-shift="sub">X</tspan> = C<tspan baseline-shift="sub">CS1</tspan> + C<tspan baseline-shift="sub">π2</tspan> (중간점 접지 커패시터) · C<tspan baseline-shift="sub">Y</tspan> = C<tspan baseline-shift="sub">μ2</tspan> + C<tspan baseline-shift="sub">CS2</tspan> (출력 접지 커패시터)</text>
+</svg><figcaption>Razavi 교과서의 BJT 캐스코드 고주파 등가회로: 중간 노드 $X$와 출력 노드 $V_{out}$의 소신호 전류원·저항·커패시터 연결을 정확히 나타내요.</figcaption></figure></div></div></div>
 <div class="layer formal" data-explanation="verify"><h4>완성 답과 검산</h4><div data-subpart="main"><h4>가지별 연결 검산</h4><p data-answer-final=""><b>입력–접지 $r_{\pi1}\parallel C_{\pi1}$; 입력–$X$ $C_{\mu1}$; $X$–접지 $g_{m1}V_{in}$, $r_{O1}$, $r_{\pi2}$, $C_{CS1}+C_{\pi2}$; 출력–$X$ $g_{m2}v_{\pi2}$, $r_{O2}$; 출력–접지 $R_C$, $C_{\mu2}+C_{CS2}$.</b> 입력을 0으로 놓으면 $Q_1$ 제어 전류가 0이고, $V_X=0$이면 $Q_2$ 제어 전류도 0이에요. $v_{\pi2}=0-V_X$이므로 부호가 반대로 들어가는 것이 맞아요. 커패시터도 $Q_1$ 세 개와 $Q_2$ 세 개가 모두 있어요.</p></div></div>
 <div class="layer warn" data-explanation="pitfall"><h4>주의할 점</h4><p>$Q_2$ 베이스가 AC 접지라도 $v_{\pi2}=+V_X$가 아니에요. 정의는 베이스 전압 빼기 이미터 전압이므로 $-V_X$예요. $Q_2$의 $r_{O2}$는 출력–접지가 아니라 컬렉터–이미터인 출력–$X$ 사이예요. $C_{\mu1}$도 최종 출력까지 이어지지 않아요.</p></div>
 <div class="layer eli5" data-explanation="retry"><h4>조건을 바꾸어 생각해요</h4><ol><li>중간 노드 $V_X$가 $+10\,\text{mV}$ 변하고 $Q_2$ 베이스는 AC 접지라면 $v_{\pi2}$는 얼마이며, 표시된 컬렉터→이미터 제어 전류의 부호는 무엇인가요?</li><li>$V_{b1}$이 AC 접지가 아닌 신호 $v_b$라면 $Q_2$의 $v_{\pi2}$와 $C_{\pi2}$의 두 끝을 어떻게 고쳐야 하나요?</li></ol></div>

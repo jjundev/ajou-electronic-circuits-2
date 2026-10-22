@@ -149,7 +149,25 @@ recall은 일반 개념을 고르는 과정이고 start는 주어진 기호로 �
 <path class="fig-accent" d="M200 89 V71 M195 76 L200 71 L205 76"/>
 <!-- 소자 값 -->
 <text class="fig-text" x="112" y="80">r<tspan baseline-shift="sub">O1</tspan></text>
+<!-- 가로 커패시터: (140,60)에서 (200,60)까지 -->
+<path class="fig-ink" d="M140 60 H165 M175 60 H200"/>
+<path class="fig-accent" d="M165 48 V72 M175 48 V72"/>
+<!-- 세로 커패시터: (200,60)에서 (200,120)까지 -->
+<path class="fig-ink" d="M200 60 V85 M200 95 V120"/>
+<path class="fig-accent" d="M188 85 H212 M188 95 H212"/>
 ```
+
+### 고주파 모델 및 밀러 효과(Miller Effect) 회로도 규칙
+
+1. **밀러 정리(Miller's Theorem) 적용 문항**:
+   - **변환 전/후 2단 비교 회로도(Miller Decoupling Pair) 필수**: `start`(종이에 쓸 첫 줄) 또는 `solve` 도입부에 [Before: 부유 피드백 임피던스($C_F$ 또는 $R_F$)]와 [After: 입력측 접지 임피던스 $Z_{in,M}$ 및 출력측 접지 임피던스 $Z_{out,M}$]를 나란히 대조하는 1장의 SVG(viewBox 약 `0 0 520 160`)를 삽입해요.
+   - 변환 후 회로에는 반드시 입력측 접지 커패시터 $C_{in,M}=(1-A_v)C_F$와 출력측 접지 커패시터 $C_{out,M}=(1-1/A_v)C_F$를 접지와 연결된 형태로 명시해요.
+   - `solve`의 극점 추정 단계에는 입력 노드의 테브난 저항과 결합된 $R_{in,eq} \parallel C_{in,M}$ 루프 및 출력 노드의 $R_{out,eq} \parallel C_{out,M}$ 루프를 나타내는 도해를 보여줘요.
+
+2. **고주파 소신호 등가회로(High-Frequency Models)**:
+   - 기생 커패시터($C_\pi, C_\mu, C_{CS}$ 또는 $C_{GS}, C_{GD}, C_{DB}$)를 단순 박스 나열이나 텍스트 행으로 표현하는 것을 금지해요.
+   - 트랜지스터 심볼 또는 제어 전류원($g_m v_{gs}$ / $g_m v_\pi$)과 실제 회로 노드(입력, 출력, 중간 노드 $X$, AC 접지) 사이에 커패시터 기호(평행 두 선)를 올바른 배선으로 그린 정식 등가회로를 삽입해요.
+   - 캐스코드(Cascode) 회로의 경우, 중간 노드 $X$가 AC 접지가 아닌 신호 노드임을 분명히 나타내고, $Q_1$의 $C_{\mu1}$이 입력–$X$ 사이에 걸려 있음을 시각화해요.
 
 ### retry: 다른 조건에 규칙 적용하기
 

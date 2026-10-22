@@ -263,6 +263,9 @@ $V_{DD}$를 AC 접지로 놓고, 게이트 노드를 $v_g$, 드레인을 $v_o$�
 
 게이트에서 $C_F$로 나가는 전류는 $sC_F(v_g-v_o)=sC_F(1-A)v_g$예요. 입력에서 접지로 향하는 등가 커패시터 전류 $sC_{in}v_g$와 맞추면 $C_{in}=(1-A)C_F$가 나와요.
 
+![밀러 변환 전후 비교: 피드백 커패시터 C_F의 접지 분할](figures_문제설명_1016_Miller_High_Frequency_Models/p3-miller-decoupling.svg)
+
+
 #### 이렇게 풀어요
 
 #### 입력·출력 극점 추정
@@ -270,6 +273,9 @@ $V_{DD}$를 AC 접지로 놓고, 게이트 노드를 $v_g$, 드레인을 $v_o$�
 $A=-g_mR_D$를 입력식에 대입하면 $C_{in}=(1+g_mR_D)C_F$예요. 출력에서도 원래 전류 $sC_F(v_o-v_g)=sC_F(1-1/A)v_o$를 맞추므로 $C_{out}=(1+1/(g_mR_D))C_F$예요.
 
 $V_{in}=0$일 때 게이트에서는 $R_S$와 $C_{in}$이 접지로, 드레인에서는 $R_D$와 $C_{out}$이 접지로 이어져요. 따라서 **$\omega_{in}\approx\dfrac{1}{R_S(1+g_mR_D)C_F}$**, **$\omega_{out}\approx\dfrac{1}{R_D(1+1/(g_mR_D))C_F}$**예요.
+
+![입력 및 출력 노드의 등가 RC 병렬 극점 루프 회로](figures_문제설명_1016_Miller_High_Frequency_Models/p3-node-rc.svg)
+
 
 #### 완성 답과 검산
 
@@ -431,6 +437,9 @@ $R_F$가 충분히 커 출력 쪽 밀러 저항이 $R_C$에 주는 부하를 무
 
 $V_{CC}$를 AC 접지로 놓고 $Q_1$의 이미터도 접지예요. $X$에서 $R_F$로 나가는 전류를 $i_F=(v_X-v_{out})/R_F$라 써요. $v_{out}=Av_X$를 넣으면 $i_F=(1-A)v_X/R_F=v_X/R_{F,X}$이므로 $R_{F,X}=R_F/(1-A)$예요.
 
+![피드백 저항 R_F의 밀러 정리 적용 전후 비교 회로](figures_문제설명_1016_Miller_High_Frequency_Models/p5-miller-resistor.svg)
+
+
 #### 이렇게 풀어요
 
 #### 저항 분배 뒤 반전 이득
@@ -517,6 +526,9 @@ $v_{in}$은 $R_B$를 지나 $Q_1$ 베이스에, 출력은 컬렉터에 있어요
 #### 종이에 쓸 첫 줄
 
 $V_{CC}$와 $v_{in}$의 독립 전압원을 AC 접지로 놓고 베이스를 $v_b$, 컬렉터를 $v_o$라 해요. 커패시터를 잠시 열면 $v_o=-g_mv_bR_C$여서 $A=v_o/v_b=-g_mR_C$예요. $C_F$의 베이스 쪽 전류 $sC_F(v_b-v_o)=s(1-A)C_Fv_b$를 쓰면 첫 등가값이 $C_{in}=(1-A)C_F$임을 바로 알 수 있어요.
+
+![BJT 입력 저항 r_pi와 밀러 등가 커패시터의 병렬 결합 회로](figures_문제설명_1016_Miller_High_Frequency_Models/p6-bjt-miller.svg)
+
 
 #### 이렇게 풀어요
 
@@ -1008,6 +1020,9 @@ $Q_1:(B,E,C,\text{기판})=(V_{in},0,X,0)$, $Q_2:(B,E,C,\text{기판})=(0,X,V_{o
 $Q_1$: $C_{\pi1}$은 $V_{in}$–접지, $C_{\mu1}$은 $V_{in}$–$X$, $C_{CS1}$은 $X$–접지예요. $C_{\mu1}$만 입력과 중간점 사이에 떠 있어요.
 
 $Q_2$: $C_{\pi2}$는 AC 접지된 베이스–$X$, $C_{\mu2}$는 AC 접지된 베이스–$V_{out}$, $C_{CS2}$는 $V_{out}$–접지예요. 따라서 중간점의 병렬 커패시턴스는 $C_X=C_{CS1}+C_{\pi2}$, 출력의 병렬 커패시턴스는 $C_Y=C_{\mu2}+C_{CS2}$예요. $C_{\mu1}$은 양쪽이 모두 움직이는 노드라 이 두 합에 넣지 않아요.
+
+![BJT 캐스코드 6개 기생 커패시터의 노드별 식별 지도](figures_문제설명_1016_Miller_High_Frequency_Models/p11-bjt-cascode-caps.svg)
+
 
 #### 완성 답과 검산
 
