@@ -1,3 +1,24 @@
-H(s) = -R_D*g_m/((C_L*R_D*s + 1)*(C_in*R_S*s + 1))
-poles: [-1/(C_L*R_D), -1/(C_in*R_S)]
-H - target = 0
+Given frequencies in Hz: poles fp1=100MHz=1e8Hz, fp2=10GHz=1e10Hz; zero fz=1GHz=1e9Hz.
+DC gain not supplied: let L0=20log10|A0| be unknown vertical offset. Do not infer0dB absolute gain.
+Let x=f/(100MHz). Real first-order pole/zero normalized magnitudes apply; a RHP vs LHP real zero has same magnitude.
+Normalized exact squared magnitude: 100*(x**2 + 100)/((x**2 + 1)*(x**2 + 10000))
+Exact normalized dB=10log10(M2); total dB=L0+10log10(M2).
+A pole contributes -20dB/dec after corner, zero +20dB/dec after corner.
+f<100MHz: cumulative slope0dB/dec, levelL0.
+100MHz<f<1GHz: slope-20dB/dec, levelL0-20log10(f/100MHz).
+1GHz<f<10GHz: slope0dB/dec, levelL0-20dB.
+f>10GHz: slope-20dB/dec, levelL0-20-20log10(f/10GHz).
+Asymptote corner levels relative L0: at100MHz0dB, at1GHz-20dB, at10GHz-20dB.
+Poles/zero change slope; no vertical jumps at corners.
+Piecewise continuity residuals all0.
+Exact dB/dec slope: -20*x**2*(x**4 + 200*x**2 + 990100)/((x**2 + 1)*(x**2 + 100)*(x**2 + 10000))
+Exact low-frequency slope: 0
+Exact high-frequency slope: -20
+M low-frequency limit: 1
+High-frequency x*M limit: 10
+Exact smooth relative corner dB at x= 1 : -2.967520491582013
+Exact smooth relative corner dB at x= 10 : -17.07612751901304
+Exact smooth relative corner dB at x= 100 : -22.96752049158201
+Smooth response differs from straight-line asymptote near corners; plateau is a Bode asymptotic segment.
+If plotting angular frequency instead, all corners multiply by2pi:2pi*1e8,2pi*1e9,2pi*1e10 rad/s; same ratios/slopes/relative levels.
+BLIND SYMBOLIC BODE PASS

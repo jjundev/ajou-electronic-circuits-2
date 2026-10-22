@@ -1,10 +1,46 @@
+"""Blind independent X11.04 from inherited original CS circuit, now finite ro."""
 import sympy as sp
-x = sp.symbols('x', positive=True)
-RD = sp.Integer(1000); CL = sp.Rational(1, 10**12)
-# H = -gm RD/(1+s RD CL); |H|/|H0| = 1/sqrt(1+(w RD CL)^2) = 0.9
-xs = sp.solve(sp.Eq(1/sp.sqrt(1+x**2), sp.Rational(9, 10)), x)[0]
-print('w RD CL =', xs, '=', sp.N(xs))
-w = xs/(RD*CL); f = w/(2*sp.pi)
-print('omega =', sp.N(w), 'rad/s ; f =', sp.N(f), 'Hz')
-print('check |H|/H0 at w:', sp.N(1/sp.sqrt(1+(w*RD*CL)**2)))
-print('dB drop:', sp.N(20*sp.log(sp.Rational(9, 10), 10)))
+s=sp.symbols('s')
+gm,RD,ro,CL,w,vin=sp.symbols('gm RD ro CL omega vin',positive=True)
+vo=sp.symbols('vout')
+print('CONNECTIVITY: grounded-source NMOS, gate vin, drain vout; RD vout-to-VDD; CL vout-ground. VDD is AC-ground.')
+print('MODEL: inherited biased saturation small signal, now lambda!=0 => finite ro drain-source; source=ground, so ro vout-ground parallel with RD and CL.')
+print('Positive controlled current gm*vin leaves output toward source; output positive drain relative to ground.')
+kcl=sp.Eq(gm*vin+vo/RD+vo/ro+s*CL*vo,0)
+H=sp.factor(sp.solve(kcl,vo)[0]/vin)
+Req=RD*ro/(RD+ro)
+print('Independent output KCL:',kcl)
+print('H(s) from solve:',H)
+print('Req=RD||ro:',Req)
+print('Normalized transfer identity residual:',sp.simplify(H+gm*Req/(1+s*Req*CL)))
+assert sp.simplify(H+gm*Req/(1+s*Req*CL))==0
+print('Output-short Gm=gm because all passive output branches have zero voltage; input-zero passive resistance=RD||ro.')
+Hjw=sp.simplify(H.subs(s,sp.I*w))
+mag2=sp.simplify(Hjw*sp.conjugate(Hjw))
+print('Magnitude squared:',mag2)
+assert sp.simplify(mag2-(gm*Req)**2/(1+(w*Req*CL)**2))==0
+print('Magnitude=gm*Req/sqrt(1+(omega*Req*CL)^2).')
+pole=sp.solve(sp.denom(H),s)[0]
+wp=sp.simplify(-pole)
+print('Pole:',pole)
+print('Positive angular bandwidth:',wp)
+print('Hz bandwidth:',wp/(2*sp.pi))
+print('At cutoff normalized squared amplitude:',sp.simplify((mag2/(gm*Req)**2).subs(w,wp)))
+assert sp.simplify((mag2/(gm*Req)**2).subs(w,wp))==sp.Rational(1,2)
+print('H(0):',H.subs(s,0))
+print('High-frequency magnitude:',sp.limit(sp.sqrt(mag2),w,sp.oo))
+print('ro->infinity H(s):',sp.limit(H,ro,sp.oo))
+assert sp.simplify(sp.limit(H,ro,sp.oo)+gm*RD/(1+s*RD*CL))==0
+print('ro->infinity bandwidth:',sp.limit(wp,ro,sp.oo))
+print('CL->0 H(s):',sp.limit(H,CL,0))
+print('Gain-magnitude times angular bandwidth:',sp.simplify(gm*Req*wp))
+assert sp.simplify(gm*Req*wp-gm/CL)==0
+x=sp.symbols('x',positive=True)
+h=-1/(1+sp.I*x)
+unit=sp.simplify(h/sp.sqrt(sp.simplify(h*sp.conjugate(h))))
+phase=sp.pi-sp.atan(x)
+print('Physical principal phase pi-atan(x), x=omega Req CL; continuous branch -pi-atan(x) differs by2pi.')
+print('Unit phase residual:',sp.simplify(unit-sp.cos(phase)-sp.I*sp.sin(phase)))
+assert sp.simplify(unit-sp.cos(phase)-sp.I*sp.sin(phase))==0
+print('Phase exp branch residual:',sp.simplify(sp.exp(sp.I*phase)-sp.exp(sp.I*(-sp.pi-sp.atan(x)))))
+print('No physical numerical parameter invented; all results symbolic. BLIND SYMBOLIC PASS')

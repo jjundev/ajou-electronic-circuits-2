@@ -1,5 +1,18 @@
-H(s) = R_D*g_m/((C_L*R_D*s + 1)*(C_in*R_S*s + R_S*g_m + 1))
-poles: [-1/(C_L*R_D), (-R_S*g_m - 1)/(C_in*R_S)]
-win - 1/((RS||1/gm)Cin) = 0
-H - target = 0
-low-frequency gain = R_D*g_m/(R_S*g_m + 1)
+Actual Fig11.65: M1 gate vin, source ground, drain VX; RD1 VX-VDD, CL1 VX-ground; VX wire feeds M2 gate; M2 source ground drain Vout, RD2 Vout-VDD CL2 Vout-ground.
+Identical stages. VDD ACground; lambda0 -> ro omitted; MOS gates draw no current, all other caps absent -> M2 imposes no loading at VX and no feedback to first stage.
+Node VX KCL: Eq(CL*VX*s + gm*vin + VX/RD, 0)
+Node Vout KCL: Eq(CL*Vout*s + VX*gm + Vout/RD, 0)
+Stage1 transfer: -RD*gm/(CL*RD*s + 1)
+Full two-node transfer: RD**2*gm**2/(CL*RD*s + 1)**2
+Two inversions -> positive DCgain: RD**2*gm**2
+Stage output-short current entering that stage=gm*its gate voltage; Gmstage=gm. Stage input-zero impedance RD || 1/(sCL). It is not a whole-cascade Gm claim.
+Double pole s=-1/(RDCL); fp=1/(2pi RDCL), wp=1/(RDCL).
+Magnitude: RD**2*gm**2/(CL**2*RD**2*omega**2 + 1)
+u=f/fp; normalized magnitude1/(1+u^2), relative exactdB=-20log10(1+u^2).
+Bode asymptote: flat B0=40log10(gmRD) beforefp; beyondfp B0-40log10(f/fp), slope-40dB/dec.
+Exact normalized corner amplitude: 1/2
+Exact corner relative dB: -6.020599913279624
+Exact low/high slope: 0 -40
+True overall3dB normalized frequency: 2**(3/4)*sqrt(2 - sqrt(2))/2 0.6435942529055826
+Single-stage corner fp is a double-pole frequency; not overall3dB point.
+BLIND TWO-NODE SYMBOLIC PASS

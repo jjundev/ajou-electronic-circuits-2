@@ -1,0 +1,781 @@
+{
+  "learning_style": {
+    "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
+    "sha256": "15dd74dba003093e0a3e627a7531d1b89dbc4b081ebfb2f04245d065758f62fe",
+    "rule_ids": [
+      "UNIT-01",
+      "CALC-01",
+      "CALC-02",
+      "CIRCUIT-01",
+      "CIRCUIT-02",
+      "GAIN-01",
+      "DEGEN-01",
+      "SCALE-01",
+      "BIAS-01",
+      "NOTATION-01",
+      "EXPLAIN-01",
+      "CORRECT-01"
+    ]
+  },
+  "items": {
+    "why-circuit": {
+      "status": "pass",
+      "reviewer": "independent note-content reviewer /root/note_review, actual semantic reading 2026-10-22",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "why-circuit: 설계 동기·한계·극점 해석·이득 대역폭 대가를 연결하는 4단계 안내. 새 공학단위 환산·차원 수치 계산을 요구하지 않음."
+        },
+        "CALC-01": {
+          "disposition": "not_applicable",
+          "evidence": "why-circuit: 설계 동기·한계·극점 해석·이득 대역폭 대가를 연결하는 4단계 안내. 소자별 중간 수치나 설계 목표 역산을 수행하는 토픽이 아님."
+        },
+        "CALC-02": {
+          "disposition": "not_applicable",
+          "evidence": "why-circuit: 설계 동기·한계·극점 해석·이득 대역폭 대가를 연결하는 4단계 안내. 반올림·연속 수치대입을 하는 계산이 없음."
+        },
+        "CIRCUIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "why-circuit: 설계 동기·한계·극점 해석·이득 대역폭 대가를 연결하는 4단계 안내. 새 출력저항망 합성이나 소자 저항 치환을 수행하지 않음."
+        },
+        "CIRCUIT-02": {
+          "disposition": "not_applicable",
+          "evidence": "why-circuit: 설계 동기·한계·극점 해석·이득 대역폭 대가를 연결하는 4단계 안내. Gm·출력저항 측정 회로를 새로 도출하지 않음."
+        },
+        "GAIN-01": {
+          "disposition": "not_applicable",
+          "evidence": "why-circuit: 설계 동기·한계·극점 해석·이득 대역폭 대가를 연결하는 4단계 안내. 새 증폭기 전압이득 풀이가 아니므로 Gm/Rout 계산을 재생하지 않음."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "why-circuit: 설계 동기·한계·극점 해석·이득 대역폭 대가를 연결하는 4단계 안내. 게이트/베이스 구동 외부 소스/이미터 축퇴의 제어전압 피드백을 풀지 않음."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "why-circuit formal 4와 sum에서 gm,CL을 고정하고 RD만2배→저주파 |A0|2배·omega3dB절반. 사용처는 무선통신·차량 레이더, 링크는 실제 대응 토픽."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "why-circuit: 설계 동기·한계·극점 해석·이득 대역폭 대가를 연결하는 4단계 안내. DC 바이어스 또는 포화/활성 경계 부등식·설계값 선택을 요구하지 않음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "why-circuit 본문/요약의 대소문자·아래첨자·기호 대응을 읽었다. fig-why. 생성 SVG의 수식 라벨은 native text/tspan 실제 78% 첨자이며 글자/점 data-node-id 대응을 확인했다. 실제 face·glyph 간격 판정은 부모 화면 evidence와 결합해야 한다."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "why-circuit formal 1문제→2단순 CS의 한계→3극점/보데/노드 해석→4고정 gm,CL에서 RD 두 배의 대가. fig-why는 흐름도이고 소신호 등가회로·ol.steps 없음; eli5 첫 동작/사례 뒤 formal 정의·유도이며, 개념 토픽에 7구역 풀이를 억지로 붙이지 않는다. 일반·강조·주의·보충의 요약 일치는 summary-audit-note.json에서 별도 확인."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "why-circuit 과도한 이득만으로 좋은 설계라 하지 않고, 각 접지 RC 노드 예제 한정·두 신호 노드 CF는 직접 배분 불가를 명시. 미학습 변환식 없음."
+        }
+      }
+    },
+    "s0-speed-bandwidth": {
+      "status": "pass",
+      "reviewer": "independent note-content reviewer /root/note_review, actual semantic reading 2026-10-22",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "s0-speed-bandwidth: 속도/대역폭 정의와 같은 입력의 저주파10배·고주파5배 사례. 새 공학단위 환산·차원 수치 계산을 요구하지 않음."
+        },
+        "CALC-01": {
+          "disposition": "not_applicable",
+          "evidence": "s0-speed-bandwidth: 속도/대역폭 정의와 같은 입력의 저주파10배·고주파5배 사례. 소자별 중간 수치나 설계 목표 역산을 수행하는 토픽이 아님."
+        },
+        "CALC-02": {
+          "disposition": "not_applicable",
+          "evidence": "s0-speed-bandwidth: 속도/대역폭 정의와 같은 입력의 저주파10배·고주파5배 사례. 반올림·연속 수치대입을 하는 계산이 없음."
+        },
+        "CIRCUIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "s0-speed-bandwidth: 속도/대역폭 정의와 같은 입력의 저주파10배·고주파5배 사례. 새 출력저항망 합성이나 소자 저항 치환을 수행하지 않음."
+        },
+        "CIRCUIT-02": {
+          "disposition": "not_applicable",
+          "evidence": "s0-speed-bandwidth: 속도/대역폭 정의와 같은 입력의 저주파10배·고주파5배 사례. Gm·출력저항 측정 회로를 새로 도출하지 않음."
+        },
+        "GAIN-01": {
+          "disposition": "not_applicable",
+          "evidence": "s0-speed-bandwidth: 속도/대역폭 정의와 같은 입력의 저주파10배·고주파5배 사례. 새 증폭기 전압이득 풀이가 아니므로 Gm/Rout 계산을 재생하지 않음."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "s0-speed-bandwidth: 속도/대역폭 정의와 같은 입력의 저주파10배·고주파5배 사례. 게이트/베이스 구동 외부 소스/이미터 축퇴의 제어전압 피드백을 풀지 않음."
+        },
+        "SCALE-01": {
+          "disposition": "not_applicable",
+          "evidence": "s0-speed-bandwidth: 속도/대역폭 정의와 같은 입력의 저주파10배·고주파5배 사례. 소자/바이어스 고정 인자에 대한 전후 배율 계산이 없음."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "s0-speed-bandwidth: 속도/대역폭 정의와 같은 입력의 저주파10배·고주파5배 사례. DC 바이어스 또는 포화/활성 경계 부등식·설계값 선택을 요구하지 않음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "s0-speed-bandwidth 본문/요약의 대소문자·아래첨자·기호 대응을 읽었다. fig-s0-speed. 생성 SVG의 수식 라벨은 native text/tspan 실제 78% 첨자이며 글자/점 data-node-id 대응을 확인했다. 실제 face·glyph 간격 판정은 부모 화면 evidence와 결합해야 한다."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "s0-speed-bandwidth 같은 입력에서 느린 신호10배·빠른 신호5배 사례를 formal 정의보다 먼저 제시; eli5 첫 동작/사례 뒤 formal 정의·유도이며, 개념 토픽에 7구역 풀이를 억지로 붙이지 않는다. 일반·강조·주의·보충의 요약 일치는 summary-audit-note.json에서 별도 확인."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "s0-speed-bandwidth formal/prof는 고주파에서 이득 감소·저주파 큰 임피던스의 개방 근사로 강의 말실수 방향을 교정; GHz 응용은 예시이며 임의 속도 배율 없음."
+        }
+      }
+    },
+    "s0-rc-lowpass": {
+      "status": "pass",
+      "reviewer": "independent note-content reviewer /root/note_review, actual semantic reading 2026-10-22",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "s0-rc-lowpass: 직렬 R과 접지 C의 수동 저역통과 전압분배. 새 공학단위 환산·차원 수치 계산을 요구하지 않음."
+        },
+        "CALC-01": {
+          "disposition": "not_applicable",
+          "evidence": "s0-rc-lowpass: 직렬 R과 접지 C의 수동 저역통과 전압분배. 소자별 중간 수치나 설계 목표 역산을 수행하는 토픽이 아님."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "s0-rc-lowpass formal의 ZC/(R+ZC)를 sC 곱으로 1/(1+sRC)까지 기호 정리. 반올림된 수치 재사용 없음."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "s0-rc-lowpass fig-s0-rc 입력x48→직렬R→출력x425, C는 출력 분기x330–접지. 출력은 C양단이라 low-pass이며 병렬 블록/관찰 노드가 일치."
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "s0-rc-lowpass fig-s0-rc 실제 직렬R/shuntC 연결→ZC분압 첫 식. Gm/Rout 측정이 아니어서 출력 단락·입력 영점 추가 불필요. 입력 blue/출력 red점과 이름, 접지-only 점 생략 확인."
+        },
+        "GAIN-01": {
+          "disposition": "not_applicable",
+          "evidence": "s0-rc-lowpass: 직렬 R과 접지 C의 수동 저역통과 전압분배. 새 증폭기 전압이득 풀이가 아니므로 Gm/Rout 계산을 재생하지 않음."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "s0-rc-lowpass: 직렬 R과 접지 C의 수동 저역통과 전압분배. 게이트/베이스 구동 외부 소스/이미터 축퇴의 제어전압 피드백을 풀지 않음."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "s0-rc-lowpass eli5/formal에서 R,C고정·omega10배→|ZC|1/10. 전압이 정확1/10배라는 주장은 하지 않는다."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "s0-rc-lowpass: 직렬 R과 접지 C의 수동 저역통과 전압분배. DC 바이어스 또는 포화/활성 경계 부등식·설계값 선택을 요구하지 않음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "s0-rc-lowpass 본문/요약의 대소문자·아래첨자·기호 대응을 읽었다. fig-s0-rc. 생성 SVG의 수식 라벨은 native text/tspan 실제 78% 첨자이며 글자/점 data-node-id 대응을 확인했다. 실제 face·glyph 간격 판정은 부모 화면 evidence와 결합해야 한다."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "s0-rc-lowpass shunt C가 고주파 신호를 접지로 흘림→주파수10배/임피던스1/10→전압분배→기호 약분; eli5 첫 동작/사례 뒤 formal 정의·유도이며, 개념 토픽에 7구역 풀이를 억지로 붙이지 않는다. 일반·강조·주의·보충의 요약 일치는 summary-audit-note.json에서 별도 확인."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "s0-rc-lowpass omega→0의 개방/전달비1, omega→infty의 출력0 극한 확인. 회로의 series/shunt 위치와 일치."
+        }
+      }
+    },
+    "s0-cs-cl": {
+      "status": "pass",
+      "reviewer": "independent note-content reviewer /root/note_review, actual semantic reading 2026-10-22",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "s0-cs-cl: 소스 접지 CS의 외부 CL 부하 전달 특성. 새 공학단위 환산·차원 수치 계산을 요구하지 않음."
+        },
+        "CALC-01": {
+          "disposition": "not_applicable",
+          "evidence": "s0-cs-cl: 소스 접지 CS의 외부 CL 부하 전달 특성. 소자별 중간 수치나 설계 목표 역산을 수행하는 토픽이 아님."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "s0-cs-cl formal에서 RD||1/(sCL)를 admittance 합으로 정리한 뒤 기호 결과. 독립 Gm·Zout·Av는 각각 display, 같은 Zout 연속 동치는 aligned 사용."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "s0-cs-cl 원 MOS기호 유지. source AC접지·lambda0·몸체효과무시·외부 CL만인 알려진 블록. 입력0 뒤 증폭기측 RD[유한rO 대안 RD||rO]를 먼저 읽고 같은 output–ground의 CL을 마지막 병렬."
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "s0-cs-cl fig-s0-cs-gm: 입력신호 유지·소스접지·오른쪽x500출력 실제 접지단락·좌향 iout,sc. vgs=vin→iout,sc=gmvin. fig-s0-cs-rout: 게이트 실제 접지·x500끝 Vt점 오른쪽 연장없음·그 왼쪽 좌향it/라벨. 저주파 Rout≈RD부터 시작. 원 MOS 직접합성이라 controlled-source/ro 병렬쌍 규칙 비적용; 불필요한 등가회로 없음."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "s0-cs-cl formal data-gain-route gm-rout: Gm=iout,sc/vin=gm→입력0 Rout≈RD 및 같은 출력 외부CL의 Zout→Av=-GmZout=-gmRD/(1+sRDCL). 전류 양의 방향이 회로 유입이어서 음부호, 게이트/소스 동일 정의. 정확 Zout은 지정 RC모델 임피던스이며 정확 전체 transistor Rout 유도 아님."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "s0-cs-cl: 소스 접지 CS의 외부 CL 부하 전달 특성. 게이트/베이스 구동 외부 소스/이미터 축퇴의 제어전압 피드백을 풀지 않음."
+        },
+        "SCALE-01": {
+          "disposition": "not_applicable",
+          "evidence": "s0-cs-cl: 소스 접지 CS의 외부 CL 부하 전달 특성. 소자/바이어스 고정 인자에 대한 전후 배율 계산이 없음."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "s0-cs-cl: 소스 접지 CS의 외부 CL 부하 전달 특성. DC 바이어스 또는 포화/활성 경계 부등식·설계값 선택을 요구하지 않음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "s0-cs-cl 본문/요약의 대소문자·아래첨자·기호 대응을 읽었다. fig-s0-cs-overview, fig-s0-cs-gm, fig-s0-cs-rout. 생성 SVG의 수식 라벨은 native text/tspan 실제 78% 첨자이며 글자/점 data-node-id 대응을 확인했다. 실제 face·glyph 간격 판정은 부모 화면 evidence와 결합해야 한다."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "s0-cs-cl 전류 생성과 CL의 부하 역할→CL 증가 사례→측정 조건별 Gm/Rout/전압이득; eli5 첫 동작/사례 뒤 formal 정의·유도이며, 개념 토픽에 7구역 풀이를 억지로 붙이지 않는다. 일반·강조·주의·보충의 요약 일치는 summary-audit-note.json에서 별도 확인."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "s0-cs-cl Gm/gm 구별, 입력유지 단락과 입력0 측정을 분리. finite rO 대안도 Rout≈RD||rO에서 출발하고 full Rout 정확식/수치비교를 학습 표면에 넣지 않음."
+        }
+      }
+    },
+    "s0-3db": {
+      "status": "pass",
+      "reviewer": "independent note-content reviewer /root/note_review, actual semantic reading 2026-10-22",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "s0-3db formal omega3dB=1/(RDCL)는 rad/s, f3dB는 2pi로 나눈 Hz. dB는20log 진폭비. 서로 다른 물리량 각각 display."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "s0-3db 목표 |A|=|A0|/sqrt2→1+(omegaRDCL)^2=2→양의 omega→f로 단계 연결; 새로운 DC설계 제약 문제는 아님."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "s0-3db 20log(1/sqrt2)≈-3.01dB, 1/sqrt2≈0.71을 근사 표현. 기호 결과 먼저이고 둥근 중간 수치 재사용 없음."
+        },
+        "CIRCUIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "s0-3db: 이미 얻은 CS 전달 함수의 크기·3dB 경계와 RD 배율. 새 출력저항망 합성이나 소자 저항 치환을 수행하지 않음."
+        },
+        "CIRCUIT-02": {
+          "disposition": "not_applicable",
+          "evidence": "s0-3db: 이미 얻은 CS 전달 함수의 크기·3dB 경계와 RD 배율. Gm·출력저항 측정 회로를 새로 도출하지 않음."
+        },
+        "GAIN-01": {
+          "disposition": "not_applicable",
+          "evidence": "s0-3db: 이미 얻은 CS 전달 함수의 크기·3dB 경계와 RD 배율. 새 증폭기 전압이득 풀이가 아니므로 Gm/Rout 계산을 재생하지 않음."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "s0-3db: 이미 얻은 CS 전달 함수의 크기·3dB 경계와 RD 배율. 게이트/베이스 구동 외부 소스/이미터 축퇴의 제어전압 피드백을 풀지 않음."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "s0-3db formal/sum gm,CL고정 RD2배→|A0|2배/대역폭1/2. CL만 증가시는 저주파 이득 불변. 수정 fig-s0-tradeoff 두 곡선은 유한 주파수에서 큰RD가 항상 위이며 고주파 동일점근선으로 접근."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "s0-3db: 이미 얻은 CS 전달 함수의 크기·3dB 경계와 RD 배율. DC 바이어스 또는 포화/활성 경계 부등식·설계값 선택을 요구하지 않음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "s0-3db 본문/요약의 대소문자·아래첨자·기호 대응을 읽었다. fig-s0-tradeoff. 생성 SVG의 수식 라벨은 native text/tspan 실제 78% 첨자이며 글자/점 data-node-id 대응을 확인했다. 실제 face·glyph 간격 판정은 부모 화면 evidence와 결합해야 한다."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "s0-3db RD증가의 이득/속도 대가→RD2배 사례→|A|의 분모크기 및 1/sqrt2 경계 유도; eli5 첫 동작/사례 뒤 formal 정의·유도이며, 개념 토픽에 7구역 풀이를 억지로 붙이지 않는다. 일반·강조·주의·보충의 요약 일치는 summary-audit-note.json에서 별도 확인."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "s0-3db -3dB를 진폭절반과 구별, 공정축소에 따른 무조건4배 속도 일반화 배제. 그래프와 고정인자 조건 일치."
+        }
+      }
+    },
+    "s1-transfer": {
+      "status": "pass",
+      "reviewer": "independent note-content reviewer /root/note_review, actual semantic reading 2026-10-22",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "s1-transfer formal 양의 omega_p=1/(RDCL) rad/s, H는 V/V무차원. 위상 도 단위와 크기 비 구별."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "s1-transfer 기존 CS H의 분모근 s=-1/(RDCL)→양의omega_p→유한영점없음→복소대입의 크기·위상으로 개념 중간량 명시."
+        },
+        "CALC-02": {
+          "disposition": "not_applicable",
+          "evidence": "s1-transfer: 기존 CS H(s)를 사례로 극점·영점·크기·위상·적정성 정의. 반올림·연속 수치대입을 하는 계산이 없음."
+        },
+        "CIRCUIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "s1-transfer: 기존 CS H(s)를 사례로 극점·영점·크기·위상·적정성 정의. 새 출력저항망 합성이나 소자 저항 치환을 수행하지 않음."
+        },
+        "CIRCUIT-02": {
+          "disposition": "not_applicable",
+          "evidence": "s1-transfer: 기존 CS H(s)를 사례로 극점·영점·크기·위상·적정성 정의. Gm·출력저항 측정 회로를 새로 도출하지 않음."
+        },
+        "GAIN-01": {
+          "disposition": "not_applicable",
+          "evidence": "s1-transfer: 기존 CS H(s)를 사례로 극점·영점·크기·위상·적정성 정의. 새 증폭기 전압이득 풀이가 아니므로 Gm/Rout 계산을 재생하지 않음."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "s1-transfer: 기존 CS H(s)를 사례로 극점·영점·크기·위상·적정성 정의. 게이트/베이스 구동 외부 소스/이미터 축퇴의 제어전압 피드백을 풀지 않음."
+        },
+        "SCALE-01": {
+          "disposition": "not_applicable",
+          "evidence": "s1-transfer: 기존 CS H(s)를 사례로 극점·영점·크기·위상·적정성 정의. 소자/바이어스 고정 인자에 대한 전후 배율 계산이 없음."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "s1-transfer: 기존 CS H(s)를 사례로 극점·영점·크기·위상·적정성 정의. DC 바이어스 또는 포화/활성 경계 부등식·설계값 선택을 요구하지 않음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "s1-transfer 본문/요약의 대소문자·아래첨자·기호 대응을 읽었다. fig-transfer-response. 생성 SVG의 수식 라벨은 native text/tspan 실제 78% 첨자이며 글자/점 data-node-id 대응을 확인했다. 실제 face·glyph 간격 판정은 부모 화면 evidence와 결합해야 한다."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "s1-transfer 크기/위상 역할→CS 저주파 반전·고주파 진폭 감소 사례→분모근/양의코너/일반식; eli5 첫 동작/사례 뒤 formal 정의·유도이며, 개념 토픽에 7구역 풀이를 억지로 붙이지 않는다. 일반·강조·주의·보충의 요약 일치는 summary-audit-note.json에서 별도 확인."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "s1-transfer formal/prof/sum 근은 음수/코너양수, proper(차수)와 안정(약분후극점 실수부음수) 구별. phase=-180°-atan(omegaRDCL)는 -180° branch의 연속값으로 주값+180°와360°동치. 새 amplifier gain route가 아니라 앞 CS식 해석."
+        }
+      }
+    },
+    "s1-bode": {
+      "status": "pass",
+      "reviewer": "independent note-content reviewer /root/note_review, actual semantic reading 2026-10-22",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "s1-bode 그래프 가로 로그주파수·세로dB, dB/dec는10배 주파수당 기울기. instantaneous dB jump와 구별."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "s1-bode formal 첫 예의 -40-20=-60, pole/zero 기여를 각각 Dp,Dz로 정의하고 합산. 역산 설계 없음."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "s1-bode 정확 20log(sqrt2)뒤≈3.01dB. omega>>omega_p에서만 점근 Dp근사 적용, 독립 Dp/Dz display 분리."
+        },
+        "CIRCUIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "s1-bode: 이미 알려진 전달 인자의 보데 크기 기울기 합성. 새 출력저항망 합성이나 소자 저항 치환을 수행하지 않음."
+        },
+        "CIRCUIT-02": {
+          "disposition": "not_applicable",
+          "evidence": "s1-bode: 이미 알려진 전달 인자의 보데 크기 기울기 합성. Gm·출력저항 측정 회로를 새로 도출하지 않음."
+        },
+        "GAIN-01": {
+          "disposition": "not_applicable",
+          "evidence": "s1-bode: 이미 알려진 전달 인자의 보데 크기 기울기 합성. 새 증폭기 전압이득 풀이가 아니므로 Gm/Rout 계산을 재생하지 않음."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "s1-bode: 이미 알려진 전달 인자의 보데 크기 기울기 합성. 게이트/베이스 구동 외부 소스/이미터 축퇴의 제어전압 피드백을 풀지 않음."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "s1-bode omega/omega_p10배→충분히 높은 주파수에서 기여-20dB 변화. 다른 pole·zero 없다는 초기사례 조건 보존."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "s1-bode: 이미 알려진 전달 인자의 보데 크기 기울기 합성. DC 바이어스 또는 포화/활성 경계 부등식·설계값 선택을 요구하지 않음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "s1-bode 본문/요약의 대소문자·아래첨자·기호 대응을 읽었다. fig-bode-slope-rule. 생성 SVG의 수식 라벨은 native text/tspan 실제 78% 첨자이며 글자/점 data-node-id 대응을 확인했다. 실제 face·glyph 간격 판정은 부모 화면 evidence와 결합해야 한다."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "s1-bode 극점마다 기존 기울기-20→0/-20/-40 작은 예→세번째-60 적용→로그 인자 유도; eli5 첫 동작/사례 뒤 formal 정의·유도이며, 개념 토픽에 7구역 풀이를 억지로 붙이지 않는다. 일반·강조·주의·보충의 요약 일치는 summary-audit-note.json에서 별도 확인."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "s1-bode warn/sum: 기울기 변화이지 순간 이득하락 아님; 실제 곡선은 부드러움·single-pole코너≈3.01dB낮음. 첫 pole뒤zero면 기울기0, 세번째pole후-60 독립 확인."
+        }
+      }
+    },
+    "s2-cs-two-poles": {
+      "status": "pass",
+      "reviewer": "independent note-content reviewer /root/note_review, actual semantic reading 2026-10-22",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "s2-cs-two-poles formal 마지막 양의코너 rad/s와 실제 s=-omega 위치 구별. H는 무차원이며 gmRD의 차원 일치."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "s2-cs-two-poles formal steps1–5에서 Gm·Rout·Zout·stagegain·inputdivider를 독립 display로 정의한 뒤 overall H와 각 코너를 구함."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "s2-cs-two-poles RS/Cin KCL를 vX/vin=1/(1+sRSCin)로 기호 정리한 후 곱함. 별표 관계는 정확한 1/2, 반올림소수 없음."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "s2-cs-two-poles fig-s2-cs-original/gm/rout 모두 M1기호 유지, source접지 lambda0/no-body/no-gate-conduction. 출력에서 입력 되먹임없어 두 블록 곱. RD저항을 먼저 보고 같은 출력CL을 병렬, gate RC 별도."
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "s2-cs-two-poles gm그림 오른쪽x505 실제출력단락·좌향유입전류, 저주파 Cin/CL개방을 caption/본문 명시. rout그림 독립입력 실제접지, RS뒤vX=0·source접지→제어0; 오른쪽끝x505 Vt점, 왼쪽 i_t. 제어원/ro 병렬쌍은 original-MOS그림이므로 없음. RD첫 결과≈표시, full exact transistorRout없음."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "s2-cs-two-poles Gm=iout,sc/vX=gm→Rout≈RD→vout/vX=-GmZout→vX/vin 곱. Gm가 gate vX기준임을 명시하며 저주파 vX=vin도 먼저 정함. 전체vin기준 고주파 Gm와 혼동없음."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "s2-cs-two-poles: 입력 RS/Cin과 출력 RD/CL을 갖는 일방향 CS. 게이트/베이스 구동 외부 소스/이미터 축퇴의 제어전압 피드백을 풀지 않음."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "s2-cs-two-poles 나머지 고정 Cin*=2Cin, omega_p,in*=omega_p,in/2; 출력RDCL불변. 별표와 비율 역할 명시."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "s2-cs-two-poles: 입력 RS/Cin과 출력 RD/CL을 갖는 일방향 CS. DC 바이어스 또는 포화/활성 경계 부등식·설계값 선택을 요구하지 않음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "s2-cs-two-poles 본문/요약의 대소문자·아래첨자·기호 대응을 읽었다. fig-s2-cs-original, fig-s2-cs-gm, fig-s2-cs-rout. 생성 SVG의 수식 라벨은 native text/tspan 실제 78% 첨자이며 글자/점 data-node-id 대응을 확인했다. 실제 face·glyph 간격 판정은 부모 화면 evidence와 결합해야 한다."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "s2-cs-two-poles Cin2배→inputcorner절반·output불변을 먼저 적용한 후, 단락 Gm/입력0Rout/부호이득/inputdivider/H 유도; eli5 첫 동작/사례 뒤 formal 정의·유도이며, 개념 토픽에 7구역 풀이를 억지로 붙이지 않는다. 일반·강조·주의·보충의 요약 일치는 summary-audit-note.json에서 별도 확인."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "s2-cs-two-poles 코너 순서 값의존·겹친 pole도2차·개별 코너를 전체 -3dB라 부르지 않음. body와sum 모두 동일 조건/경계."
+        }
+      }
+    },
+    "s2-node-rule": {
+      "status": "pass",
+      "reviewer": "independent note-content reviewer /root/note_review, actual semantic reading 2026-10-22",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "s2-node-rule 1kΩ×1pF=10^3Ω×10^-12F=10^-9s→omega=10^9rad/s. Hz로 오기하지 않음."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "s2-node-rule formal it=vX/Req+sCeqvX→vX/it=Req/(1+sReqCeq)→s_p와양의코너 각각 display. 설계 목표 역산은 없음."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "s2-node-rule 정확10지수와1/2비를 유지하고 기호 합성을 먼저 마침. 반올림치 재사용 없음."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "s2-node-rule fig-s2-node-rc의Req와Ceq는 동일X–ground 병렬. sourceground CS의 finite rO와RD만 병렬합치는 범위 명시; moving source회로로 확대하지 않음."
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "s2-node-rule 독립 voltage단락/current개방·종속원 유지·저항찾을 때C개방 조건→오른쪽X유입it KCL. fig끝x455전압점과 좌측화살표, X같은 node blue. Gm/amplifier test회로 아님, 제어원/ro 병렬쌍 없음."
+        },
+        "GAIN-01": {
+          "disposition": "not_applicable",
+          "evidence": "s2-node-rule: 분리된 접지 RC 노드 임피던스와 코너 일반화의 한계. 새 증폭기 전압이득 풀이가 아니므로 Gm/Rout 계산을 재생하지 않음."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "s2-node-rule: 분리된 접지 RC 노드 임피던스와 코너 일반화의 한계. 게이트/베이스 구동 외부 소스/이미터 축퇴의 제어전압 피드백을 풀지 않음."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "s2-node-rule Ceq고정 Req*=2Req→omega*=omega/2; 수치예시 후 임의면적/속도 일반화 없음."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "s2-node-rule: 분리된 접지 RC 노드 임피던스와 코너 일반화의 한계. DC 바이어스 또는 포화/활성 경계 부등식·설계값 선택을 요구하지 않음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "s2-node-rule 본문/요약의 대소문자·아래첨자·기호 대응을 읽었다. fig-s2-node-rc. 생성 SVG의 수식 라벨은 native text/tspan 실제 78% 첨자이며 글자/점 data-node-id 대응을 확인했다. 실제 face·glyph 간격 판정은 부모 화면 evidence와 결합해야 한다."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "s2-node-rule 분리접지 RC의 곱이 클수록 느림→R2배 코너절반·1kΩ/1pF 사례→KCL/임피던스/극점 유도; eli5 첫 동작/사례 뒤 formal 정의·유도이며, 개념 토픽에 7구역 풀이를 억지로 붙이지 않는다. 일반·강조·주의·보충의 요약 일치는 summary-audit-note.json에서 별도 확인."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "s2-node-rule warn에서 노드수=서로다른극점수 보편규칙 부정. lambda0일방향 예제 한정·같은코너중복·부유/상호결합시 독립RC분리불가 보존."
+        }
+      }
+    },
+    "s2-cg-poles": {
+      "status": "pass",
+      "reviewer": "independent note-content reviewer /root/note_review, actual semantic reading 2026-10-22",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "s2-cg-poles 1mS역수1kΩ, RS=1kΩ과병렬1/2kΩ. mS·kΩ 조합 정확, 독립량 각각display."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "s2-cg-poles 1/gm중간량→RS병렬→inputpole, 별도로outputpole. 물리구조에서 먼저 합성하고 긴 전체H계산을 강제하지 않음."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "s2-cg-poles 병렬결과1/2kΩ 정확분수와 기호식을 유지. 둥근소수 연쇄대입 없음."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "s2-cg-poles 게이트AC접지/lambda0/몸체효과무시에서 source-looking1/gm knownblock. RS영점후같은X–ground이므로병렬, drainRD/CL별도. 원MOS기호, VDD고정, DC전류원생략조건 명시."
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "s2-cg-poles fig-s2-cg-zero 왼쪽독립입력실제접지, gateAC접지유지. vgs=-vX→drain-to-source=-gmvX→source유입iS=gmvX→Rin,S=1/gm. source X시험의 vX까지0으로두지않음. 알려진블록으로충분해 제어원등가도·출력Gm그림추가없음."
+        },
+        "GAIN-01": {
+          "disposition": "not_applicable",
+          "evidence": "s2-cg-poles: 게이트 AC 접지 CG 소스 입력의 알려진 1/gm 블록과 두 코너. 새 증폭기 전압이득 풀이가 아니므로 Gm/Rout 계산을 재생하지 않음."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "s2-cg-poles: 게이트 AC 접지 CG 소스 입력의 알려진 1/gm 블록과 두 코너. 게이트/베이스 구동 외부 소스/이미터 축퇴의 제어전압 피드백을 풀지 않음."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "s2-cg-poles RS=1/gm이며 동일RS,Cin CS비교에서 Req=RS/2→inputcorner2배. 출력코너보다항상높다는결론은금지."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "s2-cg-poles: 게이트 AC 접지 CG 소스 입력의 알려진 1/gm 블록과 두 코너. DC 바이어스 또는 포화/활성 경계 부등식·설계값 선택을 요구하지 않음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "s2-cg-poles 본문/요약의 대소문자·아래첨자·기호 대응을 읽었다. fig-s2-cg-original, fig-s2-cg-zero. 생성 SVG의 수식 라벨은 native text/tspan 실제 78% 첨자이며 글자/점 data-node-id 대응을 확인했다. 실제 face·glyph 간격 판정은 부모 화면 evidence와 결합해야 한다."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "s2-cg-poles source측전류경로→같은두저항 병렬값1/2·코너2배→원회로 입력0·알려진1/gm블록 확인; eli5 첫 동작/사례 뒤 formal 정의·유도이며, 개념 토픽에 7구역 풀이를 억지로 붙이지 않는다. 일반·강조·주의·보충의 요약 일치는 summary-audit-note.json에서 별도 확인."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "s2-cg-poles inputRS는앞단출력저항, gate접지≠source신호0. 앞단outputpole와뒷단inputpole가동일노드현상이고zero전환아님. 외부게이트구동축퇴가아니므로 gmRS>>1를 억지적용안함."
+        }
+      }
+    },
+    "s2-floating": {
+      "status": "pass",
+      "reviewer": "independent note-content reviewer /root/note_review, actual semantic reading 2026-10-22",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "s2-floating: 게이트–드레인 CF의 연결 정의와 접지 RC 분리 불가 문제 제기. 새 공학단위 환산·차원 수치 계산을 요구하지 않음."
+        },
+        "CALC-01": {
+          "disposition": "not_applicable",
+          "evidence": "s2-floating: 게이트–드레인 CF의 연결 정의와 접지 RC 분리 불가 문제 제기. 소자별 중간 수치나 설계 목표 역산을 수행하는 토픽이 아님."
+        },
+        "CALC-02": {
+          "disposition": "not_applicable",
+          "evidence": "s2-floating: 게이트–드레인 CF의 연결 정의와 접지 RC 분리 불가 문제 제기. 반올림·연속 수치대입을 하는 계산이 없음."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "s2-floating fig-s2-floating-original: CF왼쪽gateX·오른쪽drainoutput, 어느단자도접지아님. 입력왼쪽/output오른쪽, source접지, MOS기호유지."
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "s2-floating 이 토픽은 저항/Gm 측정이 아닌 CF연결분류. 측정용단락·시험원을추가하지않고 원그림에서두신호노드확인; 제어원/ro병렬쌍없음."
+        },
+        "GAIN-01": {
+          "disposition": "not_applicable",
+          "evidence": "s2-floating: 게이트–드레인 CF의 연결 정의와 접지 RC 분리 불가 문제 제기. 새 증폭기 전압이득 풀이가 아니므로 Gm/Rout 계산을 재생하지 않음."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "s2-floating: 게이트–드레인 CF의 연결 정의와 접지 RC 분리 불가 문제 제기. 게이트/베이스 구동 외부 소스/이미터 축퇴의 제어전압 피드백을 풀지 않음."
+        },
+        "SCALE-01": {
+          "disposition": "not_applicable",
+          "evidence": "s2-floating: 게이트–드레인 CF의 연결 정의와 접지 RC 분리 불가 문제 제기. 소자/바이어스 고정 인자에 대한 전후 배율 계산이 없음."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "s2-floating: 게이트–드레인 CF의 연결 정의와 접지 RC 분리 불가 문제 제기. DC 바이어스 또는 포화/활성 경계 부등식·설계값 선택을 요구하지 않음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "s2-floating 본문/요약의 대소문자·아래첨자·기호 대응을 읽었다. fig-s2-floating-original. 생성 SVG의 수식 라벨은 native text/tspan 실제 78% 첨자이며 글자/점 data-node-id 대응을 확인했다. 실제 face·glyph 간격 판정은 부모 화면 evidence와 결합해야 한다."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "s2-floating 양쪽 움직이는 전압 때문에 임의배분불가→gate/drain사례→부유/접지정의; eli5 첫 동작/사례 뒤 formal 정의·유도이며, 개념 토픽에 7구역 풀이를 억지로 붙이지 않는다. 일반·강조·주의·보충의 요약 일치는 summary-audit-note.json에서 별도 확인."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "s2-floating formal/sum은임의절반배분및노드별접지RC직접분리불가. 아직다루지않은변환공식·등가회로가없어수업범위유지."
+        }
+      }
+    },
+    "s3-cheatsheet": {
+      "status": "pass",
+      "reviewer": "independent note-content reviewer /root/note_review, actual semantic reading 2026-10-22",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "s3-cheatsheet 3dB omega식과Hz f식의2pi구별, dB/dec는주파수10배당기울기. 입력/출력코너각각display."
+        },
+        "CALC-01": {
+          "disposition": "not_applicable",
+          "evidence": "s3-cheatsheet: 배운 식·조건을 원 토픽 링크와 함께 압축한 표. 소자별 중간 수치나 설계 목표 역산을 수행하는 토픽이 아님."
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "s3-cheatsheet 기호결과그대로요약, 단일코너손실≈3.01dB. 반올림치재사용없음."
+        },
+        "CIRCUIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "s3-cheatsheet: 배운 식·조건을 원 토픽 링크와 함께 압축한 표. 새 출력저항망 합성이나 소자 저항 치환을 수행하지 않음."
+        },
+        "CIRCUIT-02": {
+          "disposition": "not_applicable",
+          "evidence": "s3-cheatsheet: 배운 식·조건을 원 토픽 링크와 함께 압축한 표. Gm·출력저항 측정 회로를 새로 도출하지 않음."
+        },
+        "GAIN-01": {
+          "disposition": "not_applicable",
+          "evidence": "s3-cheatsheet: 배운 식·조건을 원 토픽 링크와 함께 압축한 표. 새 증폭기 전압이득 풀이가 아니므로 Gm/Rout 계산을 재생하지 않음."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "s3-cheatsheet: 배운 식·조건을 원 토픽 링크와 함께 압축한 표. 게이트/베이스 구동 외부 소스/이미터 축퇴의 제어전압 피드백을 풀지 않음."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "s3-cheatsheet 이득/대역폭대가행에gm,CL고정·RD증가→|A0|증가/대역폭감소조건명시."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "s3-cheatsheet: 배운 식·조건을 원 토픽 링크와 함께 압축한 표. DC 바이어스 또는 포화/활성 경계 부등식·설계값 선택을 요구하지 않음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "s3-cheatsheet 원토픽의H,gm,rO,R_eq,C_eq,omega_p,in/out및A0기호역할일치. 표에SVG없음·독립식별도display. 실제좁은화면은부모검토."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "s3-cheatsheet 요약표이므로새유도/예시를복제하지않음. 각행핵심식·적용조건·원토픽링크연결. 별도.sum없음이manifest layers=[]계약과일치."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "s3-cheatsheet 분모근/양의코너구별·proper와안정성구별·노드독립일방향조건·floating경계및반전부호가표에유지."
+        }
+      }
+    },
+    "s3-next": {
+      "status": "pass",
+      "reviewer": "independent note-content reviewer /root/note_review, actual semantic reading 2026-10-22",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "s3-next: 후속 수업의 제목만 나열한 예고. 새 공학단위 환산·차원 수치 계산을 요구하지 않음."
+        },
+        "CALC-01": {
+          "disposition": "not_applicable",
+          "evidence": "s3-next: 후속 수업의 제목만 나열한 예고. 소자별 중간 수치나 설계 목표 역산을 수행하는 토픽이 아님."
+        },
+        "CALC-02": {
+          "disposition": "not_applicable",
+          "evidence": "s3-next: 후속 수업의 제목만 나열한 예고. 반올림·연속 수치대입을 하는 계산이 없음."
+        },
+        "CIRCUIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "s3-next: 후속 수업의 제목만 나열한 예고. 새 출력저항망 합성이나 소자 저항 치환을 수행하지 않음."
+        },
+        "CIRCUIT-02": {
+          "disposition": "not_applicable",
+          "evidence": "s3-next: 후속 수업의 제목만 나열한 예고. Gm·출력저항 측정 회로를 새로 도출하지 않음."
+        },
+        "GAIN-01": {
+          "disposition": "not_applicable",
+          "evidence": "s3-next: 후속 수업의 제목만 나열한 예고. 새 증폭기 전압이득 풀이가 아니므로 Gm/Rout 계산을 재생하지 않음."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "s3-next: 후속 수업의 제목만 나열한 예고. 게이트/베이스 구동 외부 소스/이미터 축퇴의 제어전압 피드백을 풀지 않음."
+        },
+        "SCALE-01": {
+          "disposition": "not_applicable",
+          "evidence": "s3-next: 후속 수업의 제목만 나열한 예고. 소자/바이어스 고정 인자에 대한 전후 배율 계산이 없음."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "s3-next: 후속 수업의 제목만 나열한 예고. DC 바이어스 또는 포화/활성 경계 부등식·설계값 선택을 요구하지 않음."
+        },
+        "NOTATION-01": {
+          "disposition": "not_applicable",
+          "evidence": "s3-next: 후속 수업의 제목만 나열한 예고. 회로 수식·노드·변경량·상대오차 기호를 새로 생성하지 않음."
+        },
+        "EXPLAIN-01": {
+          "disposition": "not_applicable",
+          "evidence": "s3-next: 후속 수업의 제목만 나열한 예고. 계산/개념 설명이 없는 제목 또는 파일 링크 목록이므로 판단→식→유도를 강요하지 않음."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "s3-next 밀러/고역통과/고주파모델/fT/증폭단별응답은제목예고뿐. 공식·상세본문이나.sum을추가하지않음."
+        }
+      }
+    },
+    "s3-links": {
+      "status": "pass",
+      "reviewer": "independent note-content reviewer /root/note_review, actual semantic reading 2026-10-22",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "s3-links: manifest의 문제/답안 PDF 및 인터랙티브 3개 링크 목록. 새 공학단위 환산·차원 수치 계산을 요구하지 않음."
+        },
+        "CALC-01": {
+          "disposition": "not_applicable",
+          "evidence": "s3-links: manifest의 문제/답안 PDF 및 인터랙티브 3개 링크 목록. 소자별 중간 수치나 설계 목표 역산을 수행하는 토픽이 아님."
+        },
+        "CALC-02": {
+          "disposition": "not_applicable",
+          "evidence": "s3-links: manifest의 문제/답안 PDF 및 인터랙티브 3개 링크 목록. 반올림·연속 수치대입을 하는 계산이 없음."
+        },
+        "CIRCUIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "s3-links: manifest의 문제/답안 PDF 및 인터랙티브 3개 링크 목록. 새 출력저항망 합성이나 소자 저항 치환을 수행하지 않음."
+        },
+        "CIRCUIT-02": {
+          "disposition": "not_applicable",
+          "evidence": "s3-links: manifest의 문제/답안 PDF 및 인터랙티브 3개 링크 목록. Gm·출력저항 측정 회로를 새로 도출하지 않음."
+        },
+        "GAIN-01": {
+          "disposition": "not_applicable",
+          "evidence": "s3-links: manifest의 문제/답안 PDF 및 인터랙티브 3개 링크 목록. 새 증폭기 전압이득 풀이가 아니므로 Gm/Rout 계산을 재생하지 않음."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "s3-links: manifest의 문제/답안 PDF 및 인터랙티브 3개 링크 목록. 게이트/베이스 구동 외부 소스/이미터 축퇴의 제어전압 피드백을 풀지 않음."
+        },
+        "SCALE-01": {
+          "disposition": "not_applicable",
+          "evidence": "s3-links: manifest의 문제/답안 PDF 및 인터랙티브 3개 링크 목록. 소자/바이어스 고정 인자에 대한 전후 배율 계산이 없음."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "s3-links: manifest의 문제/답안 PDF 및 인터랙티브 3개 링크 목록. DC 바이어스 또는 포화/활성 경계 부등식·설계값 선택을 요구하지 않음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "s3-links manifest의문제PDF/답안PDF/인터랙티브3개href와순서·한국어라벨보존. 13문항표시가manifest및selection13ID와일치;회로기호없음."
+        },
+        "EXPLAIN-01": {
+          "disposition": "not_applicable",
+          "evidence": "s3-links: manifest의 문제/답안 PDF 및 인터랙티브 3개 링크 목록. 계산/개념 설명이 없는 제목 또는 파일 링크 목록이므로 판단→식→유도를 강요하지 않음."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "s3-links 기존10문항표시를현재13문항에맞춤. 연결파일실재·PDF발행상태는부모발행게이트이며이내용리뷰가답안완료를승인하지않음."
+        }
+      }
+    }
+  },
+  "review_scope": "정리노트 내용·수식·SVG 연결 의미와 요약의 독립 감사. 실제 font face·glyph geometry·light/dark·mobile/PDF 화면은 부모 브라우저 감사 별도.",
+  "reviewed_html": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\복습노트\\1014\\정리노트_1014_Frequency_Response.html",
+  "reviewed_html_sha256": "3676cf101f3d5a66c4fde57a4f74c9604806f46c252c55155bc528162ce875af"
+}

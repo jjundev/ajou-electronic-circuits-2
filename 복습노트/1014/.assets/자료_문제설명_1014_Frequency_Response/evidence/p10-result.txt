@@ -1,7 +1,15 @@
-H(s) = R_D*g_m/((C_L*R_D*s + 1)*(C_in*R_P*R_S*g_m*s + C_in*R_S*s + R_P*g_m + R_S*g_m + 1))
-poles: [-1/(C_L*R_D), (-R_P*g_m - R_S*g_m - 1)/(C_in*R_S*(R_P*g_m + 1))]
-target win = 1/([RS||(RP+1/gm)]Cin), wout = 1/(RD CL)
--pole - win: [(-C_L*R_D*(g_m*(R_P + R_S) + 1) + C_in*R_S*(R_P*g_m + 1))/(C_L*C_in*R_D*R_S*(R_P*g_m + 1)), 0]
--pole - wout: [0, (C_L*R_D*(R_P*g_m + R_S*g_m + 1) - C_in*R_S*(R_P*g_m + 1))/(C_L*C_in*R_D*R_S*(R_P*g_m + 1))]
-limit RP->0 of win: (R_S*g_m + 1)/(C_in*R_S)  (recovers p8)
-low-frequency gain: R_D*g_m/(R_P*g_m + R_S*g_m + 1)
+Inherited original Fig11.11: sourceground NMOS, inputRS+Cin atgate, outputRD+CL, lambda0, no reversecoupling. Own two-node KCL: Eq(Cin*s*vg + (vg - vin)/RS, 0) Eq(CL*s*vo + gm*vg + vo/RD, 0)
+Own derived H: -RD*gm/((CL*RD*s + 1)*(Cin*RS*s + 1))
+Equal pole condition RSCin=RDCL -> -RD*gm/(CL*RD*s + 1)**2
+Normalized amplitude=1/[1+(omega/omega_p)^2], omega_p=1/(RDCL).
+Conventional3dB/halfpower condition amplitude1/sqrt2, squared amplitude1/2.
+omega3dB / omega_p exact: sqrt(-1 + sqrt(2)) numeric: 0.6435942529055826
+Positive root from1+u^2=sqrt2; discard negative frequency.
+Residual normalized amplitude vs1/sqrt2: 0
+Hz result f3dB=sqrt(sqrt2-1)*omega_p/(2pi)=sqrt(sqrt2-1)*fp.
+At common pole, normalized amplitude: 1/2 dB: -6.020599913279624
+At halfpower root dB: -3.010299956639812
+Exactly3.000dB instead of conventional halfpower gives ratio: 0.6422908567173865
+Conventional3dB target is -3.0102999566dB; difference is normal corner-bandwidth convention.
+u->0 amplitude: 1 u->infinity: 0
+BLIND SYMBOLIC HALFPOWER ROOT PASS

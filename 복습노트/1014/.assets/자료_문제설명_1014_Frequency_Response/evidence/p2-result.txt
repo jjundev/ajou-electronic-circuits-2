@@ -1,7 +1,29 @@
-H(s) = -R_D*g_m/(C_L*R_D*s + 1)
-H - target = 0
-|H(jw)| = R_D*g_m/sqrt(C_L**2*R_D**2*omega**2 + 1)
-|H| - gmRD/sqrt(1+w^2RD^2CL^2) = 0
-pole s = [-1/(C_L*R_D)]  -> omega_p = 1/(R_D C_L)
-|H(j wp)|/|H(0)| = sqrt(2)/2  (-3 dB)
-limit w->oo of w*|H| = g_m/C_L  -> -20 dB/dec, |H|=1 near w = gm/CL
+CONNECTIVITY: gate=vin relative to ground; source=ground; drain=vout; RD drain-to-VDD; CL drain-to-ground.
+MODEL: biased saturation small signal, lambda=0 so ro=infinity; VDD is AC ground; vgs=vin.
+Positive gm*vin current leaves drain to grounded source. Positive output voltage is drain relative to ground.
+Drain KCL: Eq(CL*s*vout + gm*vin + vout/RD, 0)
+H(s) derived by solve: -RD*gm/(CL*RD*s + 1)
+Output short circuit current into transistor = gm*vin; Gm = gm.
+Input-zero output impedance = RD || 1/(s*CL); H = -Gm*Zout.
+Pole: [-1/(CL*RD)]
+Low-frequency gain: -RD*gm
+H(jw): I*RD*gm/(CL*RD*omega - I)
+real: -RD*gm/(CL**2*RD**2*omega**2 + 1)
+imag: CL*RD**2*gm*omega/(CL**2*RD**2*omega**2 + 1)
+magnitude squared: RD**2*gm**2/(CL**2*RD**2*omega**2 + 1)
+Magnitude = gm*RD/sqrt(1+(omega*RD*CL)**2)
+Phase: principal theta=pi-atan(omega*RD*CL); positive-frequency H is quadrant II.
+Equivalent continuous branch theta=-pi-atan(omega*RD*CL), differing by 2*pi.
+Principal phase unit-complex residual: 0
+Unwrapped/principal phase exp residual: 0
+Half-power at omega_p: 1/2
+omega_p=1/(RD*CL) rad/s; f_p=1/(2*pi*RD*CL) Hz.
+At pole: magnitude=gm*RD/sqrt(2), principal phase=3*pi/4; equivalent unwrapped=-5*pi/4.
+DC magnitude: RD*gm
+High-frequency magnitude: 0
+CL->0 transfer: -RD*gm
+High-frequency omega*H(jw): I*gm/CL
+dB/decade slope: -20*x**2/(x**2 + 1)
+High-frequency slope: -20
+No physical numeric parameters were invented; normalized exact x=1 half-power check only.
+BLIND SYMBOLIC PASS

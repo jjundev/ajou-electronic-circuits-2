@@ -1,8 +1,142 @@
-<div class="layer eli5" data-explanation="understand"><h4>문제를 내 말로 읽어요</h4><p>극점 두 개와 영점 한 개의 위치만 주어졌어요. 저주파 이득 $A_0$가 없으므로 절대 높이는 $20\log_{10}|A_0|$로 남기고, 그 높이에 대한 상대 보데 선도를 그려요.</p></div>
-<div class="layer formal" data-explanation="recall"><h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4><p>극점(pole)은 통과한 뒤 기울기에 $-20\,\mathrm{dB/dec}$, 영점(zero)은 $+20\,\mathrm{dB/dec}$를 더해요. dec는 주파수가 10배가 되는 구간이에요. 크기 선도만 묻기 때문에 영점이 좌·우 반평면 어느 쪽인지는 크기에 영향을 주지 않아요. 여기서는 단순 1차 극점·영점으로 해석해요.</p></div>
-<div class="layer formal" data-explanation="start"><h4>종이에 쓰는 실제 첫 줄</h4><p>$M(f)=20\log_{10}|H(f)/A_0|$로 정규화하고 코너를 $0.1,1,10\,\mathrm{GHz}$ 순으로 표시해요.</p></div>
-<div class="layer formal" data-explanation="solve"><h4>왜 이렇게 푸는지 함께 따라가요</h4><div data-subpart="main"><p>정확한 크기 비는 $$\frac{|H|}{|A_0|}=\frac{\sqrt{1+(f/10^9)^2}}{\sqrt{1+(f/10^8)^2}\sqrt{1+(f/10^{10})^2}}.$$ 직선 근사는 $100\,\mathrm{MHz}$ 아래에서 $M=0$이에요. $100\,\mathrm{MHz}$에서 극점이 시작되어 $1\,\mathrm{GHz}$까지 −20 dB/dec로 내려가 $M=-20\,\mathrm{dB}$가 돼요. $1\,\mathrm{GHz}$의 영점은 그 기울기를 상쇄하므로 $10\,\mathrm{GHz}$까지 평평해요. 그 뒤 두 번째 극점 때문에 다시 −20 dB/dec예요. 따라서 실제 높이는 이 상대 선도 전체에 $20\log_{10}|A_0|$를 더해요.</p><figure class="figure"><svg viewBox="0 0 480 232" role="img" aria-label="A0 기준 정규화 보데 직선 근사: 100 MHz까지 0 dB, 1 GHz까지 −20 dB/dec로 −20 dB, 10 GHz까지 평평, 그 뒤 −20 dB/dec"><path class="fig-ink" d="M56 20 V200 H470"/><path class="fig-ink" d="M150 196 V204"/><path class="fig-ink" d="M245 196 V204"/><path class="fig-ink" d="M340 196 V204"/><path class="fig-ink" d="M435 196 V204"/><path class="fig-ink" d="M52 50 H60"/><path class="fig-ink" d="M52 110 H60"/><path class="fig-ink" d="M52 170 H60"/><polyline class="fig-accent" points="56,50 150,50 245,110 340,110 435,170"/><text class="fig-text" x="150" y="222" text-anchor="middle">100 MHz</text><text class="fig-text" x="245" y="222" text-anchor="middle">1 GHz</text><text class="fig-text" x="340" y="222" text-anchor="middle">10 GHz</text><text class="fig-text" x="435" y="222" text-anchor="middle">100 GHz</text><text class="fig-text" x="48" y="55" text-anchor="end">0 dB</text><text class="fig-text" x="48" y="115" text-anchor="end">−20</text><text class="fig-text" x="48" y="175" text-anchor="end">−40</text><text class="fig-muted" x="70" y="18">M = 20 log₁₀|H/A₀|  (dB)</text><text class="fig-text" x="204" y="74">−20 dB/dec</text><text class="fig-text" x="262" y="100">0 dB/dec</text><text class="fig-text" x="300" y="160">−20 dB/dec</text></svg><figcaption>세로축은 저주파 이득 $20\log_{10}|A_0|$ 대비 dB예요. 실제 선도는 코너 부근에서 부드럽게 휘어요.</figcaption></figure></div></div>
-<div class="layer formal" data-explanation="verify"><h4>완성 답과 검산</h4><div data-subpart="main"><p><strong>기울기는 차례로 $0,-20,0,-20\,\mathrm{dB/dec}$예요.</strong> 정확한 식으로 코너 $100\,\mathrm{MHz},1\,\mathrm{GHz},10\,\mathrm{GHz}$에서 각각 약 $-2.97,-17.08,-22.97\,\mathrm{dB}$예요. 코너 부근에서는 직선 근사와 다르지만 고주파에서 극점 2개−영점 1개=순수 1개 극점이므로 최종 −20 기울기가 맞아요.</p></div></div>
-<div class="layer warn" data-explanation="pitfall"><h4>여기서 조심해요</h4><p>영점 이후 이득이 반드시 증가하는 것은 아니에요. 앞 극점의 −20과 더해 이 구간은 0이 돼요. $A_0$가 없는데 저주파 절대 높이를 0 dB로 확정하지 않아요.</p></div>
-<div class="layer eli5" data-explanation="retry"><h4>설명을 닫고 규칙을 적용해 봐요</h4><ol><li>기존 기울기가 −20 dB/dec일 때 1차 영점을 하나 지나면 기울기는 얼마인가요? 영점 대신 극점이었다면요?</li><li>극점은 $100\,\mathrm{MHz}$, $10\,\mathrm{GHz}$ 그대로 두고 영점만 $10\,\mathrm{GHz}$로 옮기면 $100\,\mathrm{MHz}$ 이후 직선 근사의 기울기는 구간별로 어떻게 되나요?</li></ol></div>
-<div class="sum" hidden=""><p>절대 높이는 $20\log_{10}|A_0|$만큼 더해요. 영점은 기존 −20 기울기를 상쇄해 0으로 만들며, 그 뒤 반드시 이득이 증가한다는 뜻은 아니에요.</p><div class="summary-group"><h4>핵심 개념·답</h4><p>코너 $0.1,1,10\,\mathrm{GHz}$; 상대 기울기 $0,-20,0,-20$</p></div><div class="summary-group"><h4>첫 줄</h4><p>$M(f)=20\log_{10}|H(f)/A_0|$로 정규화하고 코너를 $0.1,1,10\,\mathrm{GHz}$ 순으로 표시해요.</p></div><div class="summary-group"><h4>검산</h4><p>극점2개−영점1개라 최종 기울기는 −20 dB/dec예요.</p></div></div>
+<div class="layer eli5" data-explanation="understand">
+<h4>문제를 읽어요</h4>
+<p>이득을 높이려고 전류나 부하 저항을 무작정 키울 수 없는 설계 문제예요.</p>
+<p>전류는 전력 한계에, $R_1$은 목표 대역폭에 묶이므로 두 허용 범위 안에서 저주파 이득을 가장 크게 해요.</p>
+<p>원문에는 열전압 $V_T$가 없으므로 기호 답을 먼저 구하고, 수업의 $26\,\mathrm{mV}$ 관례를 적용한 수치를 따로 밝혀요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+<h4>이 개념과 공식을 떠올려요</h4>
+<p>그림은 이미터가 접지된 공통 이미터(common-emitter, CE) 단이에요.</p>
+<p>소신호에서 전원은 AC 접지이므로 컬렉터 출력에는 $R_1$과 $C_L$이 병렬로 보여요.</p>
+<p>얼리 효과와 다른 커패시턴스를 무시한 단일 출력 노드 모델이므로 −3 dB 주파수는 $1/(2\pi R_1C_L)$이에요.</p>
+<p>$g_m=I_C/V_T$는 베이스–이미터 전압 변화를 컬렉터 전류로 바꾸는 비율이에요.</p>
+<p>$G_m$은 출력을 단락해 읽은 단 전체의 비율이고, $R_{out}$은 입력을 0으로 둔 출력저항이에요.</p>
+<p>이상적으로 입력 전압을 인가하는 이 회로에서 저주파 이득 크기는 $I_CR_1/V_T$에 비례하므로 전류와 저항을 각각 얼마나 키울 수 있는지 먼저 찾아요.</p>
+<p>예를 들어 전류를 고정하고 $R_1$만 두 배로 하면 이득 크기는 두 배지만 대역폭은 절반이 돼요.</p>
+<p>전력은 그림의 컬렉터 전원이 공급하는 $P=V_{CC}I_C$로 계산해요.</p>
+<p>이 수업 모델은 별도 베이스 바이어스·입력 구동 회로의 전력을 포함하지 않아요.</p>
+<p><a href="정리노트_1014_Frequency_Response.html#s0-3db">−3 dB 대역폭과 이득–대역폭 트레이드오프</a>를 설계 제약으로 읽는 문제예요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+<h4>종이에 쓸 첫 줄</h4>
+<p>요구 대역폭을 $f_b=1\,\mathrm{GHz}$, 전력 한계를 $P_{\max}=2\,\mathrm{mW}$로 두고 두 제약을 먼저 써요.</p>
+<div data-answer-step="전력과 대역폭 제약">
+$$V_{CC}I_C\le P_{\max}$$
+$$f_{3\mathrm{dB}}=\frac{1}{2\pi R_1C_L}\ge f_b$$
+</div>
+<p>목표를 정확히 $1\,\mathrm{GHz}$로 맞추는 경우에는 두 번째 식의 경계를 쓰게 돼요.</p>
+</div>
+<div class="layer formal" data-explanation="solve">
+<h4>이렇게 풀어요</h4>
+<div data-subpart="main">
+<h5>허용 전류와 저항을 먼저 구해요</h5>
+<div data-answer-step="전력으로 정해지는 전류 상한">
+$$I_C\le\frac{P_{\max}}{V_{CC}}=\frac{2\,\mathrm{mW}}{2.5\,\mathrm{V}}=0.8\,\mathrm{mA}$$
+</div>
+<p>모든 양이 양수이므로 대역폭 부등식을 저항의 상한으로 바꿀 수 있어요.</p>
+<div data-answer-step="대역폭으로 정해지는 저항 상한">
+$$R_1\le\frac{1}{2\pi f_bC_L}$$
+$$\begin{aligned}R_{1,\max}&amp;=\frac{1}{2\pi(10^9\,\mathrm{Hz})(2\times10^{-12}\,\mathrm{F})}\\&amp;=\frac{250}{\pi}\,\Omega\approx79.58\,\Omega\end{aligned}$$
+</div>
+<p>저항을 이보다 크게 고르면 이득이 올라가더라도 $1\,\mathrm{GHz}$ 대역폭을 충족하지 못해요.</p>
+<p>$I_C$와 $R_1$이 커질수록 이득 크기가 커지므로 두 상한을 모두 쓰는 값이 최대를 만들어요.</p>
+<div data-answer-step="최대 이득을 만드는 경계 선택">
+$$I_C=\frac{P_{\max}}{V_{CC}}$$
+$$R_1=\frac{1}{2\pi f_bC_L}$$
+<p>능동 영역에서 동작하도록 바이어스한다는 소신호 모델 안에서 선택한 값이에요.</p>
+</div>
+<div data-gain-route="gm-rout">
+<div data-gain-stage="gm">
+<h5>출력을 단락해 전류 변환 비율 구하기</h5>
+<div data-answer-step="출력 단락에서 단의 트랜스컨덕턴스">
+<figure class="figure"><svg id="p5-gm-circuit" viewBox="0 0 480 220" role="img" aria-label="베이스 입력을 유지한 NPN CE 단의 컬렉터 출력이 오른쪽에서 접지로 단락된 회로"><path class="fig-ink" d="M135 106V154M135 118L170 95V65H420M135 142L170 165V185M158 153L166 162M157 160L166 162L163 153M260 65V100M260 150V185M330 65V115M316 115H344M316 125H344M330 125V185M170 185h-11m0 0h22m-18 6h14m-10 6h6M260 185h-11m0 0h22m-18 6h14m-10 6h6M330 185h-11m0 0h22m-18 6h14m-10 6h6M42 130H135M420 65V185M420 185h-11m0 0h22m-18 6h14m-10 6h6"/><rect class="fig-ink" x="249" y="100" width="22" height="50"/><circle class="fig-dot" cx="260" cy="65" r="3.5" data-node-id="p5-gm-out" data-node-color="red"/><circle class="fig-dot" cx="330" cy="65" r="3.5" data-node-id="p5-gm-out" data-node-color="red"/><circle class="fig-dot" cx="420" cy="65" r="3.5" data-node-id="p5-gm-out" data-node-color="red"/><circle class="fig-dot" cx="42" cy="130" r="3.5" data-node-id="p5-gm-in" data-node-color="blue"/><text class="fig-text fig-math" x="28" y="103" data-node-id="p5-gm-in" data-node-color="blue">V<tspan baseline-shift="sub" font-size="78%">in</tspan></text><text class="fig-text fig-math" x="185" y="157">Q<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" x="283" y="134">R<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" x="352" y="127">C<tspan baseline-shift="sub" font-size="78%">L</tspan></text><text class="fig-text fig-math" x="387" y="34" data-node-id="p5-gm-out" data-node-color="red">V<tspan baseline-shift="sub" font-size="78%">out</tspan>=0</text><path class="fig-ink" d="M405 65H370m7-5-7 5 7 5"/><text class="fig-text fig-math" x="370" y="94">i<tspan baseline-shift="sub" font-size="78%">out,sc</tspan></text></svg><figcaption>전원 $V_{CC}$는 AC 접지로 옮겼어요. 얼리 효과를 무시하므로 컬렉터의 $r_O$는 그리지 않아요.</figcaption></figure>
+<p>오른쪽에서 회로 안으로 들어오는 단락 전류를 양으로 정해요.</p>
+<p>이미터가 AC 접지이므로 $v_{be}=V_{in}$이고, 단락된 $R_1,C_L$에는 전압 변화가 없어요.</p>
+$$i_{out,sc}=g_mV_{in}$$
+$$G_m=\frac{i_{out,sc}}{V_{in}}=g_m=\frac{I_C}{V_T}$$
+</div>
+</div>
+<div data-gain-stage="rout">
+<h5>입력을 0으로 둔 출력 부하</h5>
+<div data-answer-step="입력 영점과 부하 포함 출력저항">
+<figure class="figure"><svg id="p5-rout-circuit" viewBox="0 0 480 220" role="img" aria-label="베이스와 이미터가 접지된 NPN CE 단의 출력에 저항과 커패시터가 병렬로 연결된 회로"><path class="fig-ink" d="M135 106V154M135 118L170 95V65H420M135 142L170 165V185M158 153L166 162M157 160L166 162L163 153M260 65V100M260 150V185M330 65V115M316 115H344M316 125H344M330 125V185M170 185h-11m0 0h22m-18 6h14m-10 6h6M260 185h-11m0 0h22m-18 6h14m-10 6h6M330 185h-11m0 0h22m-18 6h14m-10 6h6M65 130H135M65 130V185M65 185h-11m0 0h22m-18 6h14m-10 6h6"/><rect class="fig-ink" x="249" y="100" width="22" height="50"/><circle class="fig-dot" cx="260" cy="65" r="3.5" data-node-id="p5-rout-out" data-node-color="red"/><circle class="fig-dot" cx="330" cy="65" r="3.5" data-node-id="p5-rout-out" data-node-color="red"/><circle class="fig-dot" cx="420" cy="65" r="3.5" data-node-id="p5-rout-out" data-node-color="red"/><text class="fig-text fig-math" x="19" y="103">V<tspan baseline-shift="sub" font-size="78%">in</tspan>=0</text><text class="fig-text fig-math" x="185" y="157">Q<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" x="283" y="134">R<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" x="352" y="127">C<tspan baseline-shift="sub" font-size="78%">L</tspan></text><text class="fig-text fig-math" x="387" y="34" data-node-id="p5-rout-out" data-node-color="red">V<tspan baseline-shift="sub" font-size="78%">out</tspan></text></svg><figcaption>전원 $V_{CC}$는 AC 접지로 옮겼어요. 얼리 효과를 무시하므로 컬렉터의 $r_O$는 그리지 않아요.</figcaption></figure>
+<p>베이스와 이미터가 모두 AC 접지이면 $v_{be}=0$이에요.</p>
+<p>얼리 효과를 무시하므로 트랜지스터가 만드는 유한한 컬렉터 출력저항은 없어요.</p>
+<p>외부 부하까지 포함한 출력 임피던스는 $R_1$과 $1/(sC_L)$의 병렬이에요.</p>
+$$Z_{out}(s)=R_1\parallel\frac{1}{sC_L}$$
+<p>구하려는 저주파에서는 $C_L$이 개방처럼 보여요.</p>
+$$R_{out}\approx R_1$$
+</div>
+</div>
+<div data-gain-stage="gain">
+<h5>반전 부호와 최대 이득 크기</h5>
+<p>출력 단락을 풀면 양의 입력은 컬렉터 전류를 늘려 출력 전압을 낮춰요.</p>
+<div data-answer-step="부호 있는 저주파 이득">
+$$A_0\approx-G_mR_{out}\approx-\frac{I_CR_1}{V_T}$$
+</div>
+<p>두 경계식을 먼저 대입하고 공통 인자를 정리해요.</p>
+<div data-answer-step="열전압을 남긴 최대 이득">
+$$\begin{aligned}|A_0|_{\max}&amp;=\frac{P_{\max}}{V_{CC}V_T}\frac{1}{2\pi f_bC_L}\\&amp;=\frac{P_{\max}}{2\pi V_{CC}V_Tf_bC_L}\end{aligned}$$
+</div>
+<p>주어진 값만 대입하면 열전압을 남긴 기호 답이 돼요.</p>
+$$|A_0|_{\max}=\frac{0.2\,\mathrm{V}}{\pi V_T}$$
+<p>이제 원문의 조건이 아닌 수업·참고 풀이의 관례 $V_T=26\,\mathrm{mV}=0.026\,\mathrm{V}$를 적용해 수치로 비교해요.</p>
+<div data-answer-step="수업 열전압 관례의 수치 답">
+$$|A_0|_{\max}=\frac{0.2}{0.026\pi}\approx2.45\;\mathrm{V/V}$$
+$$A_0\approx-2.45\;\mathrm{V/V}$$
+</div>
+<p>dB 값은 반올림 전 $0.2/(0.026\pi)$로 계산해요.</p>
+$$20\log_{10}|A_0|_{\max}\approx7.78\,\mathrm{dB}$$
+</div>
+</div>
+</div>
+</div>
+<div class="layer formal" data-explanation="verify">
+<h4>완성 답과 검산</h4>
+<div data-subpart="main">
+<div data-answer-final>
+<p><strong>열전압을 남긴 최대 저주파 이득 크기예요.</strong></p>
+$$|A_0|_{\max}=\frac{P_{\max}}{2\pi V_{CC}V_Tf_bC_L}=\frac{0.2\,\mathrm{V}}{\pi V_T}$$
+<p>수업·참고 풀이의 관례 $V_T=26\,\mathrm{mV}$를 쓰면 다음과 같아요.</p>
+$$|A_0|_{\max}\approx2.45\;\mathrm{V/V}$$
+$$A_0\approx-2.45\;\mathrm{V/V}$$
+<p>선택한 전류는 $0.8\,\mathrm{mA}$, 저항은 $(250/\pi)\,\Omega$이며 CE 능동 영역의 소신호 모델 결과예요.</p>
+</div>
+<p>원래의 전력 제약에 대입해요.</p>
+$$V_{CC}I_C=(2.5\,\mathrm{V})(0.8\,\mathrm{mA})=2\,\mathrm{mW}$$
+<p>대역폭은 반올림한 저항 대신 정확한 $250/\pi$를 넣어 확인해요.</p>
+$$f_{3\mathrm{dB}}=\frac{1}{2\pi(250/\pi\,\Omega)(2\times10^{-12}\,\mathrm{F})}=10^9\,\mathrm{Hz}$$
+<p>저항의 전압 강하는 전류와 저항의 곱이에요.</p>
+$$I_CR_1=(0.8\,\mathrm{mA})\frac{1}{4\pi}\,\mathrm{k}\Omega=\frac{0.2}{\pi}\,\mathrm{V}\approx63.66\,\mathrm{mV}$$
+<p>따라서 컬렉터의 DC 전압은 다음과 같아요.</p>
+$$V_C=V_{CC}-I_CR_1=2.5\,\mathrm{V}-\frac{0.2}{\pi}\,\mathrm{V}\approx2.44\,\mathrm{V}$$
+<p>실제 NPN 능동 영역에서는 베이스–이미터를 순방향으로 바이어스하고 $V_{CB}=V_C-V_B\ge0$을 만족해야 해요.</p>
+<p>원문에는 베이스의 DC 바이어스가 없으므로 임의의 $V_B$를 넣어 동작 영역의 수치 여유를 단정하지 않아요.</p>
+<p>저주파 이득의 단위도 $I_CR_1/V_T$가 $\mathrm{V}/\mathrm{V}=1$이므로 맞아요.</p>
+</div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+<h4>주의할 점</h4>
+<ul>
+<li>$1\,\mathrm{GHz}$는 Hz 단위 주파수예요. $R_1=1/(2\pi f_bC_L)$의 $2\pi$를 빼면 대역폭 조건이 틀려요.</li>
+<li>전력은 $Q_1$만의 $V_{CE}I_C$가 아니라 이 풀이에서 정한 컬렉터 전원 공급 전력 $V_{CC}I_C$로 계산해요.</li>
+<li>$V_T=26\,\mathrm{mV}$는 원문에 주어진 값이 아니에요. 다른 열전압이면 최대 이득도 바뀌어요.</li>
+<li>최대 이득은 크기를 말해요. 실제 CE 전압이득에는 반전의 음수가 붙어요.</li>
+<li>반올림한 $79.58\,\Omega$를 다음 계산에 계속 넣지 말고 $250/\pi\,\Omega$를 유지해요.</li>
+</ul>
+</div>
+<div class="layer eli5" data-explanation="retry">
+<h4>조건을 바꾸어 생각해요</h4>
+<ol><li>전력 한계 $2\,\mathrm{mW}$, $V_{CC}$, $C_L$, $V_T$와 같은 능동 영역 모델을 유지하고 목표 대역폭만 $2\,\mathrm{GHz}$로 높이면, 최대 허용 $I_C$, 최대 허용 $R_1$, 최대 이득 크기는 각각 어떻게 바뀔까요?</li></ol>
+</div>
+<div class="sum" hidden>
+<p class="sum-lead">전력과 대역폭이 정한 전류·저항 상한을 함께 써서 이득 크기를 최대화해요.</p>
+<p>전력은 컬렉터 전원의 $V_{CC}I_C$로 계산해요.</p>
+<ul class="eq-list">
+<li><span class="eq-name">전류 한계</span>$$I_C\le\frac{P_{\max}}{V_{CC}}$$</li>
+<li><span class="eq-name">저항 한계</span>$$R_1\le\frac{1}{2\pi f_bC_L}$$</li>
+<li><span class="eq-name">최대 크기</span>$$\begin{aligned}|A_0|_{\max}&amp;=\frac{P_{\max}}{V_{CC}V_T}\\&amp;\quad\cdot\frac{1}{2\pi f_bC_L}\end{aligned}$$</li>
+</ul>
+<p>$V_T=26\,\mathrm{mV}$는 수업 관례이며 이때 크기는 약 $2.45$예요.</p>
+<p>반전 이득은 $A_0\approx-2.45$예요.</p>
+</div>

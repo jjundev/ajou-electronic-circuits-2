@@ -1,14 +1,24 @@
-f=1e+06  |H|/A0 =   -0.00 dB
-f=1e+07  |H|/A0 =   -0.04 dB
-f=1e+08  |H|/A0 =   -2.97 dB
-f=3e+08  |H|/A0 =   -9.63 dB
-f=1e+09  |H|/A0 =  -17.08 dB
-f=3e+09  |H|/A0 =  -19.92 dB
-f=1e+10  |H|/A0 =  -22.97 dB
-f=1e+11  |H|/A0 =  -40.04 dB
-f=1e+12  |H|/A0 =  -60.00 dB
-slope 1e+05-1e+06:  -0.00 dB/dec
-slope 2e+08-5e+08: -16.01 dB/dec
-slope 2e+09-5e+09:  -3.99 dB/dec
-slope 1e+12-1e+13: -20.00 dB/dec
-asymptotic: flat to 100MHz, -20 dB/dec to 1GHz (down 20 dB), flat 1-10GHz at -20 dB, -20 dB/dec beyond 10GHz
+Actual Fig11.63: NPN emitter ground, base Vin, collector Vout; R1 collector-to-VCC and CL collector-ground.
+Early ignored -> ro=infinity. Ideal input source drives vbe=vin. Other caps absent, supply AC-ground.
+Independent collector KCL: Eq(CL*s*vout + IC*vin/VT + vout/R1, 0)
+H(s): -IC*R1/(VT*(CL*R1*s + 1))
+Output-short entering current=gm*vin so Gm=gm=IC/VT; input-zero output resistive load R1; H(0)=-gm R1.
+Single-pole frequency f3dB=1/(2pi R1 CL).
+Power constraint P_supply=VCC IC <=Pmax gives IC<= Pmax/VCC
+Bandwidth f3dB>=fmin gives R1<= 1/(2*pi*CL*fmin)
+d|A|/dIC: R1/VT positive
+d|A|/dR1: IC/VT positive
+Thus max uses both upper bounds; symbolic max magnitude: Pmax/(2*pi*CL*VCC*VT*fmin)
+Signed low-frequency gain: -Pmax/(2*pi*CL*VCC*VT*fmin)
+ICmax A exact/numeric: 1/1250 0.0008000000000000000
+R1max ohm exact/numeric: 250/pi 79.57747154594767
+R1max kohm: 0.07957747154594767
+Gain remains conditional on VT because original does not specify temperature or VT.
+VT(V)= 13/500 gm(S)= 0.03076923076923077 max magnitude= 2.448537586029159 signed= -2.448537586029159
+VT(V)= 1/40 gm(S)= 0.03200000000000000 max magnitude= 2.546479089470325 signed= -2.546479089470325
+Recomputed actual power: 1/500
+Recomputed bandwidth: 1000000000
+Collector DC voltage VCC-ICR1 exact/numeric: (-2 + 25*pi)/(10*pi) 2.436338022763242
+Active-region condition requires collector-base reverse bias VC>=VB for NPN (boundary equality); no VB value is supplied or invented.
+Therefore report above gain within intended active small-signal operating point, with headroom condition VB<=2.436338...V; no arbitrary0.7V needed.
+SYMBOLIC CONSTRAINED MAXIMUM + EXACT-RATIONAL NUMERIC SUBSTITUTION PASS

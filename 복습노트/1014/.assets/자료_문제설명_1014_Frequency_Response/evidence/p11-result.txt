@@ -1,0 +1,20 @@
+ACTUAL: gate fixedVb -> ACground; sourcevx is afterRS fromVin, withCinx-ground; drainvout hasRD toVDD andCL-ground. Input enters source, notgate.
+MODEL lambda0 -> roinfinity; bodyeffect ignored; gatecurrent0. SuppliesACground.
+vgs=-vx, controlled drain-to-source current=-gm vx; hence source-to-drain current=+gm vx. Positive current entering source transistor=gm vx -> source driving resistance1/gm independent ofdrainvoltage.
+Source KCL: Eq(Cin*s*vx + gm*vx + (-vin + vx)/RS, 0)
+Drain KCL: Eq(CL*s*vout - gm*vx + vout/RD, 0)
+Natural-response matrix: Matrix([[Cin*s + gm + 1/RS, 0], [-gm, CL*s + 1/RD]])
+Characteristic determinant: (CL*RD*s + 1)*(Cin*RS*s + RS*gm + 1)/(RD*RS)
+Pole roots: [-1/(CL*RD), (-RS*gm - 1)/(Cin*RS)]
+Internal H: RD*gm/((CL*RD*s + 1)*(Cin*RS*s + RS*gm + 1))
+Source input-zero equivalent resistance RS||1/gm: RS/(RS*gm + 1)
+Positive source corner: (RS*gm + 1)/(Cin*RS)
+Positive drain corner: 1/(CL*RD)
+Setting independentVin0 groundsRS left endpoint only; sourcevx remains a natural/testnode, notidentically0. Source inputresistance provides additional shunt1/gm.
+No drain-to-source voltagefeedback because roinfinity -> upperrightmatrix0. Thus sourcepole independentofRD,CL.
+RS->0 sourcecorner ->infinity: oo
+RS->infinity sourcecorner ->gm/Cin: gm/Cin
+gm->0 sourcecorner ->1/(RSCin): 1/(Cin*RS)
+Corner Hz frequencies=positive angularcorners/(2pi). No fixedpoleordering withoutvalues.
+If bodyeffect included, gm is replaced bygm+gmb in sourcecurrent; selectedclassroommodel intentionallyomitsgmb.
+BLIND TWO-NODE CG POLE PASS

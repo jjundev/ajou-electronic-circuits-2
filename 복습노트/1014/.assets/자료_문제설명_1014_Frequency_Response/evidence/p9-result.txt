@@ -1,3 +1,18 @@
-R_D = C_in*R_S/(10*C_L*(R_S*g_m + 1))
-R_D - (RS||1/gm)Cin/(10CL) = 0
-check wout/win = 10
+CONNECTIVITY: Vin through RS to gate node vg; Cin gate-ground; M1 source-ground; drain=vout; RD drain-VDD; CL drain-ground.
+MODEL: lambda=0 so ro=infinity, VDD AC-ground, ideal MOS gate conduction0. No gate-drain capacitance shown; only given Cin and CL. Grounded source means no signal body-source voltage in intended model.
+Gate KCL: Eq(Cin*s*vg + (vg - vin)/RS, 0)
+Drain KCL: Eq(CL*s*vout + gm*vg + vout/RD, 0)
+vg/vin: 1/(Cin*RS*s + 1)
+Derived internal H(s): -RD*gm/((CL*RD*s + 1)*(Cin*RS*s + 1))
+Input-zero natural-system matrix: Matrix([[Cin*s + 1/RS, 0], [gm, CL*s + 1/RD]])
+Characteristic determinant: (CL*RD*s + 1)*(Cin*RS*s + 1)/(RD*RS)
+Natural poles: [-1/(CL*RD), -1/(Cin*RS)]
+No numerator cancellation for positive finite nonzero values. Two poles negative real; if timeconstants coincide, one repeated pole multiplicity2.
+Pole locations s_p,in=-1/(RS Cin), s_p,out=-1/(RD CL).
+Positive angular corners win=1/(RS Cin), wout=1/(RD CL); f=omega/(2pi).
+RC cross-check: zero independent Vin by short; Cin sees RS toground because ideal gate does not draw conduction. No drain-to-gate feedback -> upper-right matrix0. Output sees RD when vin0->vg0 and lambda0.
+gm affects transfer numerator and driven output, not this lower-triangular determinant.
+Cin->0 transfer: -RD*gm/(CL*RD*s + 1)
+CL->0 transfer: -RD*gm/(Cin*RS*s + 1)
+No pole ordering follows from unspecified component values; cannot assert input pole islower.
+BLIND TWO-NODE POLE PASS

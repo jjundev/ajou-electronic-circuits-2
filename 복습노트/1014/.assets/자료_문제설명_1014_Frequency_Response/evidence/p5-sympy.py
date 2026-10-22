@@ -1,10 +1,42 @@
-import sympy as sp, math
-f = sp.symbols('f', positive=True)
-fp1, fz, fp2 = 1e8, 1e9, 1e10
-H = sp.sqrt(1+(f/fz)**2)/(sp.sqrt(1+(f/fp1)**2)*sp.sqrt(1+(f/fp2)**2))
-dB = lambda x: float(20*sp.log(H.subs(f, x), 10))
-for x in [1e6, 1e7, 1e8, 3e8, 1e9, 3e9, 1e10, 1e11, 1e12]:
-    print('f=%.0e  |H|/A0 = %7.2f dB' % (x, dB(x)))
-for a, b in [(1e5, 1e6), (2e8, 5e8), (2e9, 5e9), (1e12, 1e13)]:
-    print('slope %.0e-%.0e: %6.2f dB/dec' % (a, b, (dB(b)-dB(a))/math.log10(b/a)))
-print('asymptotic: flat to 100MHz, -20 dB/dec to 1GHz (down 20 dB), flat 1-10GHz at -20 dB, -20 dB/dec beyond 10GHz')
+"""Independent blind P11.02 maximum low-frequency gain from circuit/constraints."""
+import sympy as sp
+s=sp.symbols('s')
+Ic,VT,R,C,VCC,P,fmin,vin=sp.symbols('IC VT R1 CL VCC Pmax fmin vin',positive=True)
+vo=sp.symbols('vout')
+gm=Ic/VT
+print('Actual Fig11.63: NPN emitter ground, base Vin, collector Vout; R1 collector-to-VCC and CL collector-ground.')
+print('Early ignored -> ro=infinity. Ideal input source drives vbe=vin. Other caps absent, supply AC-ground.')
+kcl=sp.Eq(gm*vin+vo/R+s*C*vo,0)
+H=sp.simplify(sp.solve(kcl,vo)[0]/vin)
+print('Independent collector KCL:',kcl)
+print('H(s):',H)
+print('Output-short entering current=gm*vin so Gm=gm=IC/VT; input-zero output resistive load R1; H(0)=-gm R1.')
+print('Single-pole frequency f3dB=1/(2pi R1 CL).')
+Imax=P/VCC
+Rmax=1/(2*sp.pi*fmin*C)
+A=Ic*R/VT
+print('Power constraint P_supply=VCC IC <=Pmax gives IC<=',Imax)
+print('Bandwidth f3dB>=fmin gives R1<=',Rmax)
+print('d|A|/dIC:',sp.diff(A,Ic),'positive')
+print('d|A|/dR1:',sp.diff(A,R),'positive')
+Amax=sp.simplify(A.subs({Ic:Imax,R:Rmax}))
+print('Thus max uses both upper bounds; symbolic max magnitude:',Amax)
+print('Signed low-frequency gain:',-Amax)
+vals={P:sp.Rational(2,1000),VCC:sp.Rational(5,2),C:sp.Rational(2,10**12),fmin:10**9}
+In=sp.simplify(Imax.subs(vals));Rn=sp.simplify(Rmax.subs(vals))
+print('ICmax A exact/numeric:',In,sp.N(In,16))
+print('R1max ohm exact/numeric:',Rn,sp.N(Rn,16))
+print('R1max kohm:',sp.N(Rn/1000,16))
+print('Gain remains conditional on VT because original does not specify temperature or VT.')
+for vt in [sp.Rational(26,1000),sp.Rational(25,1000)]:
+    av=sp.simplify(Amax.subs(vals).subs(VT,vt))
+    print('VT(V)=',vt,'gm(S)=',sp.N(In/vt,16),'max magnitude=',sp.N(av,16),'signed=',sp.N(-av,16))
+print('Recomputed actual power:',sp.simplify(In*vals[VCC]))
+print('Recomputed bandwidth:',sp.simplify(1/(2*sp.pi*Rn*vals[C])))
+Vc=sp.simplify(vals[VCC]-In*Rn)
+print('Collector DC voltage VCC-ICR1 exact/numeric:',Vc,sp.N(Vc,16))
+print('Active-region condition requires collector-base reverse bias VC>=VB for NPN (boundary equality); no VB value is supplied or invented.')
+print('Therefore report above gain within intended active small-signal operating point, with headroom condition VB<=2.436338...V; no arbitrary0.7V needed.')
+assert sp.simplify(In*vals[VCC]-vals[P])==0
+assert sp.simplify(1/(2*sp.pi*Rn*vals[C])-vals[fmin])==0
+print('SYMBOLIC CONSTRAINED MAXIMUM + EXACT-RATIONAL NUMERIC SUBSTITUTION PASS')

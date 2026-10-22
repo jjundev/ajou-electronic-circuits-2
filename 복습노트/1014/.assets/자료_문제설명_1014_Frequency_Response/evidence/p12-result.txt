@@ -1,0 +1,20 @@
+TOPOLOGY: input vin -- Rs -- source vs; Cin source-ground; gate AC ground; Rd drain-ground; CL drain-ground; output vd.
+KCL source = Cin*s*vs + gm*vs + (-vin + vs)/Rs =0
+KCL drain = CL*s*vd - gm*vs + vd/Rd =0
+vs/vin = 1/(Cin*Rs*s + Rs*gm + 1)
+vd/vin = Rd*gm/((CL*Rd*s + 1)*(Cin*Rs*s + Rs*gm + 1))
+DC source test: it=gm*vs; Rin transistor= 1/gm
+Cin sees Rs parallel Rin= Rs/(Rs*gm + 1)
+omega_in [rad/s]= (Rs*gm + 1)/(Cin*Rs)
+omega_out [rad/s]= 1/(CL*Rd)
+negative s poles= [-(Rs*gm + 1)/(Cin*Rs), -1/(CL*Rd)]
+Rd for omega_out=10 omega_in [ohm]= Cin*Rs/(10*CL*(Rs*gm + 1))
+ratio residual= 0
+Units: Cin/CL dimensionless, Rs/(1+gm*Rs) ohm, hence Rd ohm; each RC seconds; 2*pi cancels for Hz ratio.
+Inequality: for positive values, omega_out>=10 omega_in iff 0<Rd<=Rd_required. Exactly 10 requires equality only.
+Rs->0, required Rd -> 0
+Rs->infinity, required Rd -> Cin/(10*CL*gm)
+gm->0, required Rd -> Cin*Rs/(10*CL)
+Illustrative exact SI gm=0.01S, Rs=1000ohm, Cin=1pF, CL=2pF: Rd= 50/11 ohm
+omega_in= 11000000000 rad/s; omega_out= 110000000000 rad/s
+numeric ratio= 10

@@ -1,6 +1,21 @@
-R1 = 250/pi = 79.5774715459477 ohm
-IC = 1/1250 A
-gm = 0.0307692307692308 S
-Av = gm R1 = 2.44853758602916
-symbolic Av - P/(VCC VT 2 pi f CL) = 0
-headroom IC*R1 = 0.0636619772367581 V (<< VCC, Q1 stays active)
+Actual circuit: grounded-source NMOS gate Vin, drain Vout; RD Vout-to-VDD; CL Vout-ground.
+Supplies AC-ground; lambda=0 removes ro; only CL retained; gm*Vin leaves drain toward grounded source.
+KCL: Eq(CL*s*vout + gm*vin + vout/RD, 0)
+H(s): -RD*gm/(CL*RD*s + 1)
+Output-short entering current=gm Vin, so Gm=gm; input-zero output load=RD parallel 1/(sCL).
+Normalized magnitude squared: 1/(CL**2*RD**2*omega**2 + 1)
+90 percent amplitude condition yields angular frequency: sqrt(19)/(9*CL*RD)
+RD=1000ohm, CL=10^-12F -> tau(s): 1/1000000000
+omega exact (rad/s): 1000000000*sqrt(19)/9
+omega numeric(rad/s): 484322104.8378526
+f exact(Hz): 500000000*sqrt(19)/(9*pi)
+f numeric(Hz): 77082257.03361540
+f MHz: 77.08225703361540
+Actual10percent voltage-gain-loss dB: -0.9151498112135025
+Parenthetical approximately1dB is rounded description, not exact second target.
+If exact1dB instead, omega(rad/s): 508847139.9095874
+If exact1dB instead, f(MHz): 80.98553759478409
+Target omega /3dB omega: sqrt(19)/9
+DC normalized squared magnitude: 1
+High-frequency normalized squared magnitude: 0
+SYMBOLIC+EXACT-RATIONAL SUBSTITUTION PASS

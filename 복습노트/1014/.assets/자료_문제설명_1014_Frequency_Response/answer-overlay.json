@@ -1,0 +1,570 @@
+{
+  "schema_version": 1,
+  "review_policy_version": "problem-explain-2026-10-21-learning-style",
+  "range": "1014",
+  "slug": "Frequency_Response",
+  "learning_style": {
+    "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
+    "sha256": "15dd74dba003093e0a3e627a7531d1b89dbc4b081ebfb2f04245d065758f62fe",
+    "rule_ids": [
+      "UNIT-01",
+      "CALC-01",
+      "CALC-02",
+      "CIRCUIT-01",
+      "CIRCUIT-02",
+      "GAIN-01",
+      "DEGEN-01",
+      "SCALE-01",
+      "BIAS-01",
+      "NOTATION-01",
+      "EXPLAIN-01",
+      "CORRECT-01"
+    ]
+  },
+  "input_hash": "3c43e1c63169a923c02cb4dd1eb59e6707bb45d4f7e5bdbdbf5e3cd5f6c6bb60",
+  "source_inputs": {
+    "복습노트/1014/.assets/problems.txt": "d7ed6400c95d5ad154f0ee9e1cac134fc814525a02e66d63642c6c5f031ed9dd",
+    "복습노트/1014/.assets/display-titles.json": "e9c5774c45b02b919fdc2770393c0351808799fe3e77883c66b3787bdadbad7e",
+    "복습노트/1014/.assets/selection.json": "482a06914bc41627e7aa4f50eda56390def36c9a0774c196edd81528dd2342b4",
+    "교과서/마이크로전자회로/ch11/예제/E11.03.md": "7891bac87a34900b1124916cdd2c61a01873c0206d7de753ed4b48fd68be8a40",
+    "교과서/마이크로전자회로/ch11/예제/E11.04.md": "0a6d6acdd689dc2029971d362e38db32bc1592e7d50bea58e96eeb5de452db26",
+    "교과서/마이크로전자회로/ch11/연습문제/X11.04.md": "e57016eadeae284a853e87b55408ded6b2c82089dc8509412686bbaf8dfeb0a9",
+    "교과서/마이크로전자회로/ch11/장말문제/P11.01.md": "3ca75f987eabd30a079e18fbde82fba7b76d87d418f123a28e7b8be7481e620b",
+    "교과서/마이크로전자회로/ch11/장말문제/P11.02.md": "1eba975ba6d6cf6ceb014adfd01a61e47bf599643e61fdd03e30962d8c284d3f",
+    "교과서/마이크로전자회로/ch11/장말문제/P11.03.md": "e717c1a69a91ed83ca9dbd1714258779ccbce097b1dfe9f29c4102820314db87",
+    "교과서/마이크로전자회로/ch11/장말문제/P11.06.md": "a6c3c4e167dc4ff25e0694dbbcbc99b5d1524a1f89243c4ef3de0146331ad7d8",
+    "교과서/마이크로전자회로/ch11/장말문제/P11.09.md": "f515b810a7c3b0f1a0f88994ed18df5c41cd7b1f8fef32fa41f2e07db96ba064",
+    "교과서/마이크로전자회로/ch11/예제/E11.08.md": "9955ce98f983b56959d0e06534a1c78c6836b16ea8d60e3ba9ff18fc79c33df6",
+    "교과서/마이크로전자회로/ch11/연습문제/X11.08.md": "34c31407b5341b196157a275a434d327f924817061f383d21ca72035193f90b1",
+    "교과서/마이크로전자회로/ch11/예제/E11.09.md": "d1092a299eb24a449e1d2522bd13696d698118085a41b5d38998fba1db281057",
+    "교과서/마이크로전자회로/ch11/연습문제/X11.09.md": "5208ea2f0e590e4697a4dd37bd6fc53907ed71e7e33c42a4e13558ab788b618a",
+    "교과서/마이크로전자회로/ch11/장말문제/P11.12.md": "498eb2ac4dd9fd549504b8405472a173d90250455068f20da9064b92f6d36997",
+    "교과서/마이크로전자회로/ch11/figures/fig11-05-a.png": "3a21b4d1f79c67636243ebc53de179bee31d69a8df131c2efd805a4040182579",
+    "교과서/마이크로전자회로/ch11/figures/fig11-62.png": "f48ad265bf8ad9dcf046b20d80ec222bf850fd8daebe0bacddbde2cd25954478",
+    "교과서/마이크로전자회로/ch11/figures/fig11-63.png": "098ad55db273560e49f0ab042ed7d821631b88536d8430340d3ba3e7aad42e87",
+    "교과서/마이크로전자회로/ch11/figures/fig11-64.png": "9d16914a2ff28f7533309467219c2bbba9679b144e8421e71a3c9692259623c4",
+    "교과서/마이크로전자회로/ch11/figures/fig11-65.png": "16ae71e1657018af0d75b4fd4340f222838caab7c54fbe527134c84739732403",
+    "교과서/마이크로전자회로/ch11/figures/fig11-11.png": "85538ecbe076c41d223ff9473cc2456332bd87c9733ea45ca133f0a4ae63439a",
+    "교과서/마이크로전자회로/ch11/figures/fig11-12.png": "ddef7a6e3a5cea3abe0aa781f1adeac43c77a62075678a9d3aa2ceb98c95f6d1",
+    "교과서/마이크로전자회로/ch11/figures/fig11-67.png": "62a1e93fd4ceda3a24d41d9b5dfd1bc178e427c04a6da689073e8113555198c2",
+    ".claude/skills/ec2-review-pack/references/solution-style.md": "15dd74dba003093e0a3e627a7531d1b89dbc4b081ebfb2f04245d065758f62fe"
+  },
+  "problems": [
+    {
+      "id": "E11.03",
+      "explanation_id": "p1",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "첫 판단",
+          "html": "<p data-answer-step=\"첫 판단\">왼쪽에서 오른쪽으로 화면을 스캔할 때 한 픽셀의 흰색에서 다음 픽셀의 검정색으로 빠르게 바뀌는 구간은 고주파 성분이 필요해요.</p>"
+        },
+        {
+          "subpart": "main",
+          "label": "대역폭 부족의 효과",
+          "html": "<p data-answer-step=\"대역폭 부족의 효과\">시스템 대역폭이 부족하면 이 빠른 성분이 약해져 출력 밝기가 다음 픽셀에 도달할 때까지 충분히 바뀌지 못해요.</p>"
+        },
+        {
+          "subpart": "main",
+          "label": "화면에서 보이는 결과",
+          "html": "<p data-answer-step=\"화면에서 보이는 결과\">흰색과 검정색 사이에 중간 밝기인 회색이 나타나므로, 스캔 방향을 가로지르는 세로 테두리가 가로 방향으로 번져요.</p>"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "<p data-answer-final=\"\"><strong>왼쪽에서 오른쪽으로 스캔하는 이 예에서 대역폭이 부족하면 세로 테두리가 가로 방향으로 회색으로 번져 화면이 흐릿해져요.</strong> 화면 구동 회로가 한 픽셀에서 다음 픽셀로 밝기를 충분히 빠르게 바꾸지 못하기 때문이에요.</p>"
+        }
+      ]
+    },
+    {
+      "id": "E11.04",
+      "explanation_id": "p2",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "출력 단락에서 첫 전류식",
+          "html": "\n<p>소스가 AC 접지이므로 $v_{gs}=V_{in}$이에요.</p>\n<figure class=\"figure\"><svg id=\"p2-p2-gm-circuit\" viewBox=\"0 0 480 220\" role=\"img\" aria-label=\"게이트 입력을 유지하고 오른쪽 출력과 접지를 단락한 CS 단\"><path class=\"fig-ink\" d=\"M130 104V156M145 104V118M145 123V137M145 142V156M145 104H170V65H420M145 156H170V185M260 65V100M260 150V185M330 65V115M316 115H344M316 125H344M330 125V185M170 185h-11m0 0h22m-18 6h14m-10 6h6M260 185h-11m0 0h22m-18 6h14m-10 6h6M330 185h-11m0 0h22m-18 6h14m-10 6h6M42 130H130M420 65V185M420 185h-11m0 0h22m-18 6h14m-10 6h6\"/><rect class=\"fig-ink\" x=\"249\" y=\"100\" width=\"22\" height=\"50\"/><circle class=\"fig-dot\" cx=\"260\" cy=\"65\" r=\"3.5\" data-node-id=\"p2-gm-out\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"330\" cy=\"65\" r=\"3.5\" data-node-id=\"p2-gm-out\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"420\" cy=\"65\" r=\"3.5\" data-node-id=\"p2-gm-out\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"42\" cy=\"130\" r=\"3.5\" data-node-id=\"p2-gm-in\" data-node-color=\"blue\"/><text class=\"fig-text fig-math\" x=\"28\" y=\"103\" data-node-id=\"p2-gm-in\" data-node-color=\"blue\">V<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text><text class=\"fig-text fig-math\" x=\"184\" y=\"146\">M<tspan baseline-shift=\"sub\" font-size=\"78%\">1</tspan></text><text class=\"fig-text fig-math\" x=\"283\" y=\"134\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">D</tspan></text><text class=\"fig-text fig-math\" x=\"352\" y=\"127\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">L</tspan></text><text class=\"fig-text fig-math\" x=\"387\" y=\"34\" data-node-id=\"p2-gm-out\" data-node-color=\"red\">V<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan>=0</text><path class=\"fig-ink\" d=\"M405 65H370m7-5-7 5 7 5\"/><text class=\"fig-text fig-math\" x=\"370\" y=\"94\">i<tspan baseline-shift=\"sub\" font-size=\"78%\">out,sc</tspan></text></svg><figcaption>전원 $V_{DD}$는 AC 접지로 옮겼어요. 오른쪽 단락선을 통해 회로로 들어오는 전류를 양으로 정해요.</figcaption></figure>\n<p>출력을 단락하면 $R_D$와 $C_L$ 양단 전압이 0이므로, 오른쪽에서 들어오는 단락 전류는 $M_1$의 전류가 돼요.</p>\n$$i_{out,sc}=g_mV_{in}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "단의 트랜스컨덕턴스",
+          "html": "\n<p>첫 줄의 단락 전류를 입력 전압으로 나눠요.</p>\n$$G_m=\\frac{i_{out,sc}}{V_{in}}=g_m$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "입력 영점과 병렬 부하",
+          "html": "\n<figure class=\"figure\"><svg id=\"p2-svg2-p2-rout-circuit\" viewBox=\"0 0 480 220\" role=\"img\" aria-label=\"게이트 입력이 접지되고 출력에서 접지로 드레인 저항과 부하 커패시터가 병렬인 CS 단\"><path class=\"fig-ink\" d=\"M130 104V156M145 104V118M145 123V137M145 142V156M145 104H170V65H420M145 156H170V185M260 65V100M260 150V185M330 65V115M316 115H344M316 125H344M330 125V185M170 185h-11m0 0h22m-18 6h14m-10 6h6M260 185h-11m0 0h22m-18 6h14m-10 6h6M330 185h-11m0 0h22m-18 6h14m-10 6h6M65 130H130M65 130V185M65 185h-11m0 0h22m-18 6h14m-10 6h6\"/><rect class=\"fig-ink\" x=\"249\" y=\"100\" width=\"22\" height=\"50\"/><circle class=\"fig-dot\" cx=\"260\" cy=\"65\" r=\"3.5\" data-node-id=\"p2-rout-out\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"330\" cy=\"65\" r=\"3.5\" data-node-id=\"p2-rout-out\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"420\" cy=\"65\" r=\"3.5\" data-node-id=\"p2-rout-out\" data-node-color=\"red\"/><text class=\"fig-text fig-math\" x=\"19\" y=\"103\">V<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan>=0</text><text class=\"fig-text fig-math\" x=\"184\" y=\"146\">M<tspan baseline-shift=\"sub\" font-size=\"78%\">1</tspan></text><text class=\"fig-text fig-math\" x=\"283\" y=\"134\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">D</tspan></text><text class=\"fig-text fig-math\" x=\"352\" y=\"127\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">L</tspan></text><text class=\"fig-text fig-math\" x=\"387\" y=\"34\" data-node-id=\"p2-rout-out\" data-node-color=\"red\">V<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text></svg><figcaption>입력 전압원을 단락했어요. 채널 길이 변조를 무시하므로 출력에서 보이는 가지는 $R_D$와 $C_L$이에요.</figcaption></figure>\n<p>$V_{in}=0$이면 $v_{gs}=0$이라 $M_1$이 만드는 소신호 전류는 0이에요.</p>\n<p>저주파에서 $C_L$을 개방으로 보면 출력저항은 다음과 같아요.</p>\n$$R_{out}\\approx R_D$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "부하 포함 출력 임피던스",
+          "html": "\n<p>분자와 분모에 $R_D$를 곱해요.</p>\n$$Z_{out}(s)=\\frac{R_D}{1+sR_DC_L}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "부호 있는 전달 함수",
+          "html": "\n<p>양의 입력은 $M_1$이 드레인에서 끌어내리는 전류를 늘리므로 출력 전압을 낮춰요.</p>\n$$\\begin{aligned}H(s)&amp;=\\frac{V_{out}}{V_{in}}=-G_mZ_{out}(s)\\\\&amp;=-\\frac{g_mR_D}{1+sR_DC_L}\\end{aligned}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "크기와 위상 응답",
+          "html": "\n$$|H(j\\omega)|=\\frac{g_mR_D}{\\sqrt{1+(\\omega R_DC_L)^2}}$$\n<p>위상 응답(phase response)은 반전의 $-\\pi$에서 연속해서 읽어요.</p>\n$$\\angle H(j\\omega)=-\\pi-\\tan^{-1}(\\omega R_DC_L)$$\n<p>위 식은 $\\omega\\ge0$에서 라디안 단위예요.</p>\n"
+        },
+        {
+          "subpart": "main",
+          "label": "3 dB 경계",
+          "html": "\n$$\\omega_{3\\mathrm{dB}}=\\frac{1}{R_DC_L}$$\n$$f_{3\\mathrm{dB}}=\\frac{1}{2\\pi R_DC_L}$$\n"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n<p><strong>채널 길이 변조를 무시한 이 CS 단의 전달 함수와 주파수 응답이에요.</strong></p>\n$$H(s)=-\\frac{g_mR_D}{1+sR_DC_L}$$\n$$|H(j\\omega)|=\\frac{g_mR_D}{\\sqrt{1+(\\omega R_DC_L)^2}}$$\n<p>반전의 $-\\pi$에서 연속해서 읽은 위상은 $\\omega\\ge0$에서 다음과 같아요.</p>\n$$\\angle H(j\\omega)=-\\pi-\\tan^{-1}(\\omega R_DC_L)$$\n$$\\omega_{3\\mathrm{dB}}=\\frac{1}{R_DC_L}$$\n"
+        }
+      ]
+    },
+    {
+      "id": "X11.04",
+      "explanation_id": "p3",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "출력 단락의 첫 식",
+          "html": "\n<figure class=\"figure\"><svg id=\"p3-p3-gm-circuit\" viewBox=\"0 0 520 220\" role=\"img\" aria-label=\"MOS 기호의 CS 전류생성 부분과 별도로 표시한 내부 출력저항 및 외부 부하가 있고 오른쪽 출력이 접지로 단락된 회로\"><path class=\"fig-ink\" d=\"M120 104V156M135 104V118M135 123V137M135 142V156M135 104H160V65H455M135 156H160V185M235 65V100M235 150V185M305 65V100M305 150V185M375 65V115M361 115H389M361 125H389M375 125V185M160 185h-11m0 0h22m-18 6h14m-10 6h6M235 185h-11m0 0h22m-18 6h14m-10 6h6M305 185h-11m0 0h22m-18 6h14m-10 6h6M375 185h-11m0 0h22m-18 6h14m-10 6h6M35 130H120M455 65V185M455 185h-11m0 0h22m-18 6h14m-10 6h6\"/><rect class=\"fig-ink\" x=\"225\" y=\"100\" width=\"20\" height=\"50\"/><rect class=\"fig-ink\" x=\"295\" y=\"100\" width=\"20\" height=\"50\"/><circle class=\"fig-dot\" cx=\"235\" cy=\"65\" r=\"3.5\" data-node-id=\"p3-gm-out\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"305\" cy=\"65\" r=\"3.5\" data-node-id=\"p3-gm-out\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"375\" cy=\"65\" r=\"3.5\" data-node-id=\"p3-gm-out\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"455\" cy=\"65\" r=\"3.5\" data-node-id=\"p3-gm-out\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"35\" cy=\"130\" r=\"3.5\" data-node-id=\"p3-gm-in\" data-node-color=\"blue\"/><text class=\"fig-text fig-math\" x=\"20\" y=\"103\" data-node-id=\"p3-gm-in\" data-node-color=\"blue\">V<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text><text class=\"fig-text fig-math\" x=\"175\" y=\"146\">M<tspan baseline-shift=\"sub\" font-size=\"78%\">1</tspan></text><text class=\"fig-text fig-math\" x=\"254\" y=\"134\">r<tspan baseline-shift=\"sub\" font-size=\"78%\">O</tspan></text><text class=\"fig-text fig-math\" x=\"324\" y=\"134\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">D</tspan></text><text class=\"fig-text fig-math\" x=\"397\" y=\"127\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">L</tspan></text><text class=\"fig-text fig-math\" x=\"425\" y=\"34\" data-node-id=\"p3-gm-out\" data-node-color=\"red\">V<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan>=0</text><path class=\"fig-ink\" d=\"M440 65H407m7-5-7 5 7 5\"/><text class=\"fig-text fig-math\" x=\"404\" y=\"94\">i<tspan baseline-shift=\"sub\" font-size=\"78%\">out,sc</tspan></text></svg><figcaption>전원은 AC 접지로 옮겼어요. MOS 기호는 전류생성 역할을 남기고, $M_1$ 내부의 $r_O$를 별도 가지로 꺼내 표시했어요.</figcaption></figure>\n<p>오른쪽에서 회로 안으로 들어오는 단락 전류를 양으로 정해요.</p>\n<p>출력 단락에서는 $R_D,r_O,C_L$ 양단 전압이 모두 0이고, 소스가 접지라 $v_{gs}=V_{in}$이에요.</p>\n$$i_{out,sc}=g_mV_{in}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "단의 트랜스컨덕턴스",
+          "html": "\n<p>$r_O$의 양단 전압이 0인 이 측정에서는 $r_O$로 흐르는 전류도 0이에요.</p>\n$$G_m=\\frac{i_{out,sc}}{V_{in}}=g_m$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "입력 영점에서 남는 출력 가지",
+          "html": "\n<figure class=\"figure\"><svg id=\"p3-svg2-p3-rout-circuit\" viewBox=\"0 0 520 220\" role=\"img\" aria-label=\"입력이 접지된 CS 단의 내부 출력저항과 드레인 저항 및 커패시터가 같은 출력 노드에서 접지로 병렬인 회로\"><path class=\"fig-ink\" d=\"M120 104V156M135 104V118M135 123V137M135 142V156M135 104H160V65H455M135 156H160V185M235 65V100M235 150V185M305 65V100M305 150V185M375 65V115M361 115H389M361 125H389M375 125V185M160 185h-11m0 0h22m-18 6h14m-10 6h6M235 185h-11m0 0h22m-18 6h14m-10 6h6M305 185h-11m0 0h22m-18 6h14m-10 6h6M375 185h-11m0 0h22m-18 6h14m-10 6h6M58 130H120M58 130V185M58 185h-11m0 0h22m-18 6h14m-10 6h6\"/><rect class=\"fig-ink\" x=\"225\" y=\"100\" width=\"20\" height=\"50\"/><rect class=\"fig-ink\" x=\"295\" y=\"100\" width=\"20\" height=\"50\"/><circle class=\"fig-dot\" cx=\"235\" cy=\"65\" r=\"3.5\" data-node-id=\"p3-rout-out\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"305\" cy=\"65\" r=\"3.5\" data-node-id=\"p3-rout-out\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"375\" cy=\"65\" r=\"3.5\" data-node-id=\"p3-rout-out\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"455\" cy=\"65\" r=\"3.5\" data-node-id=\"p3-rout-out\" data-node-color=\"red\"/><text class=\"fig-text fig-math\" x=\"13\" y=\"103\">V<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan>=0</text><text class=\"fig-text fig-math\" x=\"175\" y=\"146\">M<tspan baseline-shift=\"sub\" font-size=\"78%\">1</tspan></text><text class=\"fig-text fig-math\" x=\"254\" y=\"134\">r<tspan baseline-shift=\"sub\" font-size=\"78%\">O</tspan></text><text class=\"fig-text fig-math\" x=\"324\" y=\"134\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">D</tspan></text><text class=\"fig-text fig-math\" x=\"397\" y=\"127\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">L</tspan></text><text class=\"fig-text fig-math\" x=\"425\" y=\"34\" data-node-id=\"p3-rout-out\" data-node-color=\"red\">V<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text></svg><figcaption>전원은 AC 접지로 옮겼어요. MOS 기호는 전류생성 역할을 남기고, $M_1$ 내부의 $r_O$를 별도 가지로 꺼내 표시했어요.</figcaption></figure>\n<p>입력 전압원을 단락하면 $v_{gs}=0$이라 입력으로 제어되는 전류는 0이지만, $r_O$ 가지는 남아요.</p>\n<p>저주파에서 $C_L$을 개방으로 보아 출력저항을 먼저 써요.</p>\n$$R_{out}\\approx R_D\\parallel r_O$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "출력 저항 블록",
+          "html": "\n$$R=R_D\\parallel r_O=\\frac{R_Dr_O}{R_D+r_O}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "부하 포함 출력 임피던스",
+          "html": "\n<p>분자와 분모에 $R$을 곱하면 시간상수 $RC_L$이 드러나요.</p>\n$$Z_{out}(s)=\\frac{R}{1+sRC_L}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "유한 출력저항을 반영한 전달 함수",
+          "html": "\n<p>양의 입력은 출력에서 끌어내리는 전류를 늘려 출력 전압을 낮춰요.</p>\n$$\\begin{aligned}H(s)&amp;=\\frac{V_{out}}{V_{in}}=-G_mZ_{out}(s)\\\\&amp;=-\\frac{g_mR}{1+sRC_L}\\end{aligned}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "크기 응답",
+          "html": "\n$$|H(j\\omega)|=\\frac{g_mR}{\\sqrt{1+(\\omega RC_L)^2}}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "3 dB 대역폭",
+          "html": "\n$$\\omega_{3\\mathrm{dB}}=\\frac{1}{RC_L}=\\frac{1}{(R_D\\parallel r_O)C_L}$$\n$$f_{3\\mathrm{dB}}=\\frac{1}{2\\pi RC_L}$$\n"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n<p><strong>유한 $r_O$를 남기면 $R=R_D\\parallel r_O$를 사용해요.</strong></p>\n$$H(s)=-\\frac{g_mR}{1+sRC_L}$$\n$$|H(j\\omega)|=\\frac{g_mR}{\\sqrt{1+(\\omega RC_L)^2}}$$\n$$\\omega_{3\\mathrm{dB}}=\\frac{1}{RC_L}$$\n<p>소스가 AC 접지인 포화 영역의 소신호 모델이며 외부 $C_L$을 부하로 유지한 결과예요.</p>\n"
+        }
+      ]
+    },
+    {
+      "id": "P11.01",
+      "explanation_id": "p4",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "출력 단락에서 Gm",
+          "html": "\n<p>출력을 단락하고 $i_{out,sc}$의 양의 방향을 오른쪽 출력 단자에서 회로 안으로 정해요.</p>\n<figure class=\"figure\"><svg id=\"p4-fig-p4-gm\" viewBox=\"0 0 480 220\" role=\"img\" aria-label=\"게이트에 왼쪽 입력 신호를 유지하고 오른쪽 출력을 접지로 단락한 CS 회로. 단락전류의 양의 방향은 출력 도선에서 오른쪽에서 왼쪽으로 회로에 들어가는 방향이다.\"><path class=\"fig-ink\" d=\"M200 111 V150 M212 108 V153 M212 114 H230 V80 M212 147 H230 V180 M220 142 l7 5 l-7 5\"/><text class=\"fig-text fig-math\" x=\"246\" y=\"145\" text-anchor=\"start\">M<tspan baseline-shift=\"sub\" font-size=\"78%\">1</tspan></text><path class=\"fig-ink\" d=\"M230 180 V195\"/><path class=\"fig-ink\" d=\"M219 195 h22 M223 200 h14 M227 205 h6\"/><path class=\"fig-ink\" d=\"M230 10 V22 M219 10 H241 M230 22 v7 l6 3 l-12 6 l12 6 l-12 6 l12 6 l-12 6 l6 3 V80\"/><text class=\"fig-text fig-math\" x=\"249\" y=\"17\" text-anchor=\"start\">V<tspan baseline-shift=\"sub\" font-size=\"78%\">DD</tspan></text><text class=\"fig-text fig-math\" x=\"250\" y=\"53\" text-anchor=\"start\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">D</tspan></text><path class=\"fig-ink\" d=\"M230 80 H440 M350 80 V126 M338 126 H362 M338 134 H362 M350 134 V195\"/><path class=\"fig-ink\" d=\"M339 195 h22 M343 200 h14 M347 205 h6\"/><text class=\"fig-text fig-math\" x=\"371\" y=\"157\" text-anchor=\"start\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">L</tspan></text><circle class=\"fig-dot\" cx=\"230\" cy=\"80\" r=\"4\" data-node-id=\"OUT\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"350\" cy=\"80\" r=\"4\" data-node-id=\"OUT\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"440\" cy=\"80\" r=\"4\" data-node-id=\"OUT\" data-node-color=\"red\"/><path class=\"fig-ink\" d=\"M60 130 H200\"/><path class=\"fig-ink\" d=\"M421 100 H381 M381 100 l8 -5 M381 100 l8 5\"/><circle class=\"fig-dot\" cx=\"60\" cy=\"130\" r=\"4\" data-node-id=\"IN\" data-node-color=\"blue\"/><text class=\"fig-text fig-math\" x=\"60\" y=\"108\" text-anchor=\"middle\" data-node-id=\"IN\" data-node-color=\"blue\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text><path class=\"fig-ink\" d=\"M440 80 V195\"/><path class=\"fig-ink\" d=\"M429 195 h22 M433 200 h14 M437 205 h6\"/><text class=\"fig-text fig-math\" x=\"440\" y=\"57\" text-anchor=\"end\" data-node-id=\"OUT\" data-node-color=\"red\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan> = 0</text><text class=\"fig-text fig-math\" x=\"402\" y=\"123\" text-anchor=\"middle\">i<tspan baseline-shift=\"sub\" font-size=\"78%\">out,sc</tspan></text></svg><figcaption>입력은 유지하고 오른쪽 출력을 접지로 단락해요; $i_{out,sc}$는 오른쪽에서 왼쪽으로 회로에 들어가는 방향이에요.</figcaption></figure>\n<p>소스가 AC 접지라 $v_{gs}=v_{in}$이고, 단락된 드레인으로 들어가는 전류는 $g_mv_{in}$이에요.</p>\n$$G_m=\\frac{i_{out,sc}}{v_{in}}=g_m$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "입력 영점에서 출력 부하",
+          "html": "\n<p>독립 입력 전압을 0으로 두고 $V_{DD}$를 AC 접지로 봐요. 저주파에서 $C_L$을 개방하면 $R_D$가 출력 부하예요.</p>\n<figure class=\"figure\"><svg id=\"p4-svg2-fig-p4-rout\" viewBox=\"0 0 480 220\" role=\"img\" aria-label=\"입력 게이트를 왼쪽에서 접지한 CS 회로. 출력의 저항과 부하 커패시터는 각각 AC 접지로 연결되고, 오른쪽 끝 시험전압 점의 왼쪽에서 시험전류가 왼쪽으로 들어간다.\"><path class=\"fig-ink\" d=\"M200 111 V150 M212 108 V153 M212 114 H230 V80 M212 147 H230 V180 M220 142 l7 5 l-7 5\"/><text class=\"fig-text fig-math\" x=\"246\" y=\"145\" text-anchor=\"start\">M<tspan baseline-shift=\"sub\" font-size=\"78%\">1</tspan></text><path class=\"fig-ink\" d=\"M230 180 V195\"/><path class=\"fig-ink\" d=\"M219 195 h22 M223 200 h14 M227 205 h6\"/><path class=\"fig-ink\" d=\"M230 10 V22 M219 10 H241 M230 22 v7 l6 3 l-12 6 l12 6 l-12 6 l12 6 l-12 6 l6 3 V80\"/><text class=\"fig-text fig-math\" x=\"249\" y=\"17\" text-anchor=\"start\">V<tspan baseline-shift=\"sub\" font-size=\"78%\">DD</tspan></text><text class=\"fig-text fig-math\" x=\"250\" y=\"53\" text-anchor=\"start\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">D</tspan></text><path class=\"fig-ink\" d=\"M230 80 H440 M350 80 V126 M338 126 H362 M338 134 H362 M350 134 V195\"/><path class=\"fig-ink\" d=\"M339 195 h22 M343 200 h14 M347 205 h6\"/><text class=\"fig-text fig-math\" x=\"371\" y=\"157\" text-anchor=\"start\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">L</tspan></text><circle class=\"fig-dot\" cx=\"230\" cy=\"80\" r=\"4\" data-node-id=\"OUT\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"350\" cy=\"80\" r=\"4\" data-node-id=\"OUT\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"440\" cy=\"80\" r=\"4\" data-node-id=\"OUT\" data-node-color=\"red\"/><path class=\"fig-ink\" d=\"M60 130 H200\"/><path class=\"fig-ink\" d=\"M421 100 H381 M381 100 l8 -5 M381 100 l8 5\"/><path class=\"fig-ink\" d=\"M60 130 V195\"/><path class=\"fig-ink\" d=\"M49 195 h22 M53 200 h14 M57 205 h6\"/><text class=\"fig-text fig-math\" x=\"60\" y=\"108\" text-anchor=\"middle\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan> = 0</text><text class=\"fig-text fig-math\" x=\"440\" y=\"57\" text-anchor=\"end\" data-node-id=\"OUT\" data-node-color=\"red\">V<tspan baseline-shift=\"sub\" font-size=\"78%\">t</tspan> (+)</text><text class=\"fig-text fig-math\" x=\"402\" y=\"123\" text-anchor=\"middle\">i<tspan baseline-shift=\"sub\" font-size=\"78%\">t</tspan></text></svg><figcaption>입력을 단락해 게이트와 소스를 AC 접지로 두어요; 시험전류 $i_t$는 오른쪽 끝 $V_t$ 점 왼쪽에서 회로 안으로 들어가요.</figcaption></figure>\n$$R_{out}\\approx R_D$$\n<p>이 문제의 $\\lambda=0$ 모델에서 출력의 저항성 경로는 $R_D$뿐이에요. 여기에 같은 출력–접지 두 노드의 $C_L$을 병렬로 연결해요.</p>\n$$Z_{out}(s)=R_D\\parallel\\frac1{sC_L}=\\frac{R_D}{1+sR_DC_L}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "부호 있는 단일 극점 전달 함수",
+          "html": "\n<p>양의 입력은 드레인에서 끌어내리는 전류를 늘리므로 출력이 내려가요. 따라서 이득에는 음의 부호가 붙어요.</p>\n$$H(s)=\\frac{v_{out}}{v_{in}}=-G_mZ_{out}(s)=-\\frac{g_mR_D}{1+sR_DC_L}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "RC와 극점의 단위 환산",
+          "html": "\n$$R_DC_L=(10^3\\,\\Omega)(10^{-12}\\,\\mathrm F)=10^{-9}\\,\\mathrm s$$\n$$\\omega_p=\\frac1{R_DC_L}=10^9\\,\\mathrm{rad/s}$$\n$$f_p=\\frac{\\omega_p}{2\\pi}\\approx159.15\\,\\mathrm{MHz}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "10퍼센트 감소 조건과 주파수",
+          "html": "\n<p>10% 감소는 원래 크기의 $0.9=9/10$가 남는다는 뜻이에요.</p>\n$$\\frac1{\\sqrt{1+(\\omega/\\omega_p)^2}}=\\frac9{10}$$\n<p>양변을 제곱한 뒤 역수를 취해요.</p>\n$$1+(\\omega/\\omega_p)^2=\\frac{100}{81}$$\n$$\\frac{\\omega}{\\omega_p}=\\sqrt{\\frac{100}{81}-1}=\\frac{\\sqrt{19}}9$$\n<p>양의 주파수를 고르고, 반올림하지 않은 비를 끝까지 유지해요.</p>\n$$\\omega=\\frac{\\sqrt{19}}9\\times10^9\\,\\mathrm{rad/s}\\approx4.84\\times10^8\\,\\mathrm{rad/s}$$\n$$f=\\frac{\\sqrt{19}}{18\\pi}\\times10^9\\,\\mathrm{Hz}\\approx77.08\\,\\mathrm{MHz}$$\n"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n<p><strong>이득 크기가 정확히 10% 감소하는 주파수예요.</strong></p>\n$$\\omega\\approx4.84\\times10^8\\,\\mathrm{rad/s}$$\n$$f\\approx77.08\\,\\mathrm{MHz}$$\n<p>$R_D=1\\,\\mathrm{k\\Omega}$, $C_L=1\\,\\mathrm{pF}$이고, 채널 길이 변조와 다른 커패시턴스를 무시한 결과예요.</p>\n"
+        }
+      ]
+    },
+    {
+      "id": "P11.02",
+      "explanation_id": "p5",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "전력과 대역폭 제약",
+          "html": "\n$$V_{CC}I_C\\le P_{\\max}$$\n$$f_{3\\mathrm{dB}}=\\frac{1}{2\\pi R_1C_L}\\ge f_b$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "전력으로 정해지는 전류 상한",
+          "html": "\n$$I_C\\le\\frac{P_{\\max}}{V_{CC}}=\\frac{2\\,\\mathrm{mW}}{2.5\\,\\mathrm{V}}=0.8\\,\\mathrm{mA}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "대역폭으로 정해지는 저항 상한",
+          "html": "\n$$R_1\\le\\frac{1}{2\\pi f_bC_L}$$\n$$\\begin{aligned}R_{1,\\max}&amp;=\\frac{1}{2\\pi(10^9\\,\\mathrm{Hz})(2\\times10^{-12}\\,\\mathrm{F})}\\\\&amp;=\\frac{250}{\\pi}\\,\\Omega\\approx79.58\\,\\Omega\\end{aligned}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "최대 이득을 만드는 경계 선택",
+          "html": "\n$$I_C=\\frac{P_{\\max}}{V_{CC}}$$\n$$R_1=\\frac{1}{2\\pi f_bC_L}$$\n<p>능동 영역에서 동작하도록 바이어스한다는 소신호 모델 안에서 선택한 값이에요.</p>\n"
+        },
+        {
+          "subpart": "main",
+          "label": "출력 단락에서 단의 트랜스컨덕턴스",
+          "html": "\n<figure class=\"figure\"><svg id=\"p5-p5-gm-circuit\" viewBox=\"0 0 480 220\" role=\"img\" aria-label=\"베이스 입력을 유지한 NPN CE 단의 컬렉터 출력이 오른쪽에서 접지로 단락된 회로\"><path class=\"fig-ink\" d=\"M135 106V154M135 118L170 95V65H420M135 142L170 165V185M158 153L166 162M157 160L166 162L163 153M260 65V100M260 150V185M330 65V115M316 115H344M316 125H344M330 125V185M170 185h-11m0 0h22m-18 6h14m-10 6h6M260 185h-11m0 0h22m-18 6h14m-10 6h6M330 185h-11m0 0h22m-18 6h14m-10 6h6M42 130H135M420 65V185M420 185h-11m0 0h22m-18 6h14m-10 6h6\"/><rect class=\"fig-ink\" x=\"249\" y=\"100\" width=\"22\" height=\"50\"/><circle class=\"fig-dot\" cx=\"260\" cy=\"65\" r=\"3.5\" data-node-id=\"p5-gm-out\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"330\" cy=\"65\" r=\"3.5\" data-node-id=\"p5-gm-out\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"420\" cy=\"65\" r=\"3.5\" data-node-id=\"p5-gm-out\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"42\" cy=\"130\" r=\"3.5\" data-node-id=\"p5-gm-in\" data-node-color=\"blue\"/><text class=\"fig-text fig-math\" x=\"28\" y=\"103\" data-node-id=\"p5-gm-in\" data-node-color=\"blue\">V<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text><text class=\"fig-text fig-math\" x=\"185\" y=\"157\">Q<tspan baseline-shift=\"sub\" font-size=\"78%\">1</tspan></text><text class=\"fig-text fig-math\" x=\"283\" y=\"134\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">1</tspan></text><text class=\"fig-text fig-math\" x=\"352\" y=\"127\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">L</tspan></text><text class=\"fig-text fig-math\" x=\"387\" y=\"34\" data-node-id=\"p5-gm-out\" data-node-color=\"red\">V<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan>=0</text><path class=\"fig-ink\" d=\"M405 65H370m7-5-7 5 7 5\"/><text class=\"fig-text fig-math\" x=\"370\" y=\"94\">i<tspan baseline-shift=\"sub\" font-size=\"78%\">out,sc</tspan></text></svg><figcaption>전원 $V_{CC}$는 AC 접지로 옮겼어요. 얼리 효과를 무시하므로 컬렉터의 $r_O$는 그리지 않아요.</figcaption></figure>\n<p>오른쪽에서 회로 안으로 들어오는 단락 전류를 양으로 정해요.</p>\n<p>이미터가 AC 접지이므로 $v_{be}=V_{in}$이고, 단락된 $R_1,C_L$에는 전압 변화가 없어요.</p>\n$$i_{out,sc}=g_mV_{in}$$\n$$G_m=\\frac{i_{out,sc}}{V_{in}}=g_m=\\frac{I_C}{V_T}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "입력 영점과 부하 포함 출력저항",
+          "html": "\n<figure class=\"figure\"><svg id=\"p5-svg2-p5-rout-circuit\" viewBox=\"0 0 480 220\" role=\"img\" aria-label=\"베이스와 이미터가 접지된 NPN CE 단의 출력에 저항과 커패시터가 병렬로 연결된 회로\"><path class=\"fig-ink\" d=\"M135 106V154M135 118L170 95V65H420M135 142L170 165V185M158 153L166 162M157 160L166 162L163 153M260 65V100M260 150V185M330 65V115M316 115H344M316 125H344M330 125V185M170 185h-11m0 0h22m-18 6h14m-10 6h6M260 185h-11m0 0h22m-18 6h14m-10 6h6M330 185h-11m0 0h22m-18 6h14m-10 6h6M65 130H135M65 130V185M65 185h-11m0 0h22m-18 6h14m-10 6h6\"/><rect class=\"fig-ink\" x=\"249\" y=\"100\" width=\"22\" height=\"50\"/><circle class=\"fig-dot\" cx=\"260\" cy=\"65\" r=\"3.5\" data-node-id=\"p5-rout-out\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"330\" cy=\"65\" r=\"3.5\" data-node-id=\"p5-rout-out\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"420\" cy=\"65\" r=\"3.5\" data-node-id=\"p5-rout-out\" data-node-color=\"red\"/><text class=\"fig-text fig-math\" x=\"19\" y=\"103\">V<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan>=0</text><text class=\"fig-text fig-math\" x=\"185\" y=\"157\">Q<tspan baseline-shift=\"sub\" font-size=\"78%\">1</tspan></text><text class=\"fig-text fig-math\" x=\"283\" y=\"134\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">1</tspan></text><text class=\"fig-text fig-math\" x=\"352\" y=\"127\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">L</tspan></text><text class=\"fig-text fig-math\" x=\"387\" y=\"34\" data-node-id=\"p5-rout-out\" data-node-color=\"red\">V<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text></svg><figcaption>전원 $V_{CC}$는 AC 접지로 옮겼어요. 얼리 효과를 무시하므로 컬렉터의 $r_O$는 그리지 않아요.</figcaption></figure>\n<p>베이스와 이미터가 모두 AC 접지이면 $v_{be}=0$이에요.</p>\n<p>얼리 효과를 무시하므로 트랜지스터가 만드는 유한한 컬렉터 출력저항은 없어요.</p>\n<p>외부 부하까지 포함한 출력 임피던스는 $R_1$과 $1/(sC_L)$의 병렬이에요.</p>\n$$Z_{out}(s)=R_1\\parallel\\frac{1}{sC_L}$$\n<p>구하려는 저주파에서는 $C_L$이 개방처럼 보여요.</p>\n$$R_{out}\\approx R_1$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "부호 있는 저주파 이득",
+          "html": "\n$$A_0\\approx-G_mR_{out}\\approx-\\frac{I_CR_1}{V_T}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "열전압을 남긴 최대 이득",
+          "html": "\n$$\\begin{aligned}|A_0|_{\\max}&amp;=\\frac{P_{\\max}}{V_{CC}V_T}\\frac{1}{2\\pi f_bC_L}\\\\&amp;=\\frac{P_{\\max}}{2\\pi V_{CC}V_Tf_bC_L}\\end{aligned}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "수업 열전압 관례의 수치 답",
+          "html": "\n$$|A_0|_{\\max}=\\frac{0.2}{0.026\\pi}\\approx2.45\\;\\mathrm{V/V}$$\n$$A_0\\approx-2.45\\;\\mathrm{V/V}$$\n"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n<p><strong>열전압을 남긴 최대 저주파 이득 크기예요.</strong></p>\n$$|A_0|_{\\max}=\\frac{P_{\\max}}{2\\pi V_{CC}V_Tf_bC_L}=\\frac{0.2\\,\\mathrm{V}}{\\pi V_T}$$\n<p>수업·참고 풀이의 관례 $V_T=26\\,\\mathrm{mV}$를 쓰면 다음과 같아요.</p>\n$$|A_0|_{\\max}\\approx2.45\\;\\mathrm{V/V}$$\n$$A_0\\approx-2.45\\;\\mathrm{V/V}$$\n<p>선택한 전류는 $0.8\\,\\mathrm{mA}$, 저항은 $(250/\\pi)\\,\\Omega$이며 CE 능동 영역의 소신호 모델 결과예요.</p>\n"
+        }
+      ]
+    },
+    {
+      "id": "P11.03",
+      "explanation_id": "p6",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "입력 영점과 단일 출력 극점",
+          "html": "\n<p>$v_{in}=0$으로 두고 $V_{CC}$·$V_{DD}$·고정 바이어스 $V_b$를 AC 접지로 바꿔요. 저항을 읽을 때는 $C_L$을 개방하고, 출력의 위·아래 가지를 마지막에 병렬로 합쳐요.</p>\n$$\\omega_{3\\mathrm{dB}}\\approx\\frac1{R_{out}C_L}$$\n<p>(a)·(b)는 $Q_2$를 이미터에서 보고, (c)는 두 MOS의 드레인 저항을 보며, (d)는 다이오드 접속 $M_2$와 위쪽 $M_1$의 드레인 저항을 함께 봐요.</p>\n"
+        },
+        {
+          "subpart": "main",
+          "label": "(a) 이미터에서 보는 다이오드 접속 부하",
+          "html": "\n<p>$Q_2$는 베이스와 컬렉터가 서로 묶여 AC 접지예요. 반대쪽인 이미터에서 보는 알려진 블록을 바로 써요.</p>\n$$R_{out,a}\\approx\\frac1{g_{m2}}\\parallel r_{\\pi2}$$\n$$\\omega_{3\\mathrm{dB},a}\\approx\\frac{g_{m2}+1/r_{\\pi2}}{C_L}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "(b) 베이스 저항의 이미터 환산",
+          "html": "\n<p>큰 $\\beta$에서 베이스 경로 저항은 이미터 쪽에 약 $R_B/\\beta$로 나타나요. 소자 자체의 $1/g_{m2}$와 직렬로 더해요.</p>\n$$R_{out,b}\\approx\\frac1{g_{m2}}+\\frac{R_B}{\\beta}$$\n$$\\omega_{3\\mathrm{dB},b}\\approx\\frac1{\\left(1/g_{m2}+R_B/\\beta\\right)C_L}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "(c) 두 출력저항의 병렬",
+          "html": "\n<p>두 소자의 소스가 각각 AC 접지이므로, 두 출력저항은 같은 출력–접지 두 노드에 걸려요.</p>\n$$R_{out,c}\\approx r_{O1}\\parallel r_{O2}$$\n$$\\omega_{3\\mathrm{dB},c}\\approx\\frac1{(r_{O1}\\parallel r_{O2})C_L}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "(d) 다이오드 블록과 입력 소자 저항의 병렬",
+          "html": "\n<p>아래쪽 $M_2$는 게이트–드레인 결선을 확인하고, 소스가 접지인 다이오드 접속 저항 블록으로 바꿔요.</p>\n$$R_{d2}\\approx\\frac1{g_{m2}}\\parallel r_{O2}$$\n<p>출력에 붙은 위쪽 $r_{O1}$을 마지막에 병렬로 합쳐요.</p>\n$$R_{out,d}\\approx r_{O1}\\parallel R_{d2}$$\n$$\\omega_{3\\mathrm{dB},d}\\approx\\frac{g_{m2}+1/r_{O1}+1/r_{O2}}{C_L}$$\n"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n<p><strong>각 회로의 대역폭은 다음과 같아요.</strong></p>\n<p>BJT는 $V_A=\\infty$, MOS는 $\\lambda\\gt0$인 출력저항을 써요.</p>\n<div class=\"table-wrap\"><table>\n<thead><tr><th>회로와 조건</th><th>각주파수 대역폭</th></tr></thead>\n<tbody>\n<tr><td>(a) 베이스 경로 유지</td><td>$$\\omega_{3\\mathrm{dB},a}\\approx\\frac{g_{m2}+1/r_{\\pi2}}{C_L}$$</td></tr>\n<tr><td>(b) $\\beta\\gg1$</td><td>$$\\omega_{3\\mathrm{dB},b}\\approx\\frac1{\\left(1/g_{m2}+R_B/\\beta\\right)C_L}$$</td></tr>\n<tr><td>(c) 두 $r_O$ 병렬</td><td>$$\\omega_{3\\mathrm{dB},c}\\approx\\frac1{(r_{O1}\\parallel r_{O2})C_L}$$</td></tr>\n<tr><td>(d) $r_{O1}$ 포함</td><td>$$\\omega_{3\\mathrm{dB},d}\\approx\\frac{g_{m2}+1/r_{O1}+1/r_{O2}}{C_L}$$</td></tr>\n</tbody></table></div>\n<p>네 식은 각주파수예요; $\\mathrm{Hz}$ 대역폭은 각각 $2\\pi$로 나눠요.</p>\n$$f_{3\\mathrm{dB}}=\\frac{\\omega_{3\\mathrm{dB}}}{2\\pi}$$\n"
+        }
+      ]
+    },
+    {
+      "id": "P11.06",
+      "explanation_id": "p7",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "코너 순서와 처음 기울기",
+          "html": "\n<p>주파수를 낮은 순서로 놓으면 <strong>첫 극점 $100\\,\\mathrm{MHz}$ → 영점 $1\\,\\mathrm{GHz}$ → 둘째 극점 $10\\,\\mathrm{GHz}$</strong>예요.</p>\n<p>저주파에서는 상대 높이 $D\\approx0\\,\\mathrm{dB}$에서 평평하게 시작해요.</p>\n$$m_0=0\\,\\mathrm{dB/dec}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "극점과 영점을 지날 때의 기울기",
+          "html": "\n<p>코너를 지날 때 이득값이 갑자기 바뀌는 것이 아니라, <strong>그 뒤 구간의 기울기</strong>가 바뀌어요.</p>\n<div class=\"table-wrap\"><table><thead><tr><th>주파수 구간</th><th>기울기를 바꾸는 이유</th><th>구간 기울기</th></tr></thead><tbody>\n<tr><td>$f\\lt100\\,\\mathrm{MHz}$</td><td>아직 코너를 지나지 않음</td><td>$$m_0=0\\,\\mathrm{dB/dec}$$</td></tr>\n<tr><td>$100\\,\\mathrm{MHz}\\lt f\\lt1\\,\\mathrm{GHz}$</td><td>첫 극점: 기존 값에서 20을 뺌</td><td>$$m_1=0-20=-20\\,\\mathrm{dB/dec}$$</td></tr>\n<tr><td>$1\\,\\mathrm{GHz}\\lt f\\lt10\\,\\mathrm{GHz}$</td><td>영점: 기존 값에 20을 더함</td><td>$$m_2=-20+20=0\\,\\mathrm{dB/dec}$$</td></tr>\n<tr><td>$f\\gt10\\,\\mathrm{GHz}$</td><td>둘째 극점: 기존 값에서 20을 뺌</td><td>$$m_3=0-20=-20\\,\\mathrm{dB/dec}$$</td></tr>\n</tbody></table></div>\n"
+        },
+        {
+          "subpart": "main",
+          "label": "상대 높이로 그린 보데 선도",
+          "html": "\n<figure class=\"figure\"><svg id=\"p7-fig-p7-bode\" viewBox=\"0 0 560 345\" role=\"img\" aria-label=\"저주파 이득을 기준으로 정규화한 보데 크기 직선 근사. 로그 주파수 축에서100메가헤르츠까지0데시벨로 평평하고,1기가헤르츠에서 마이너스20데시벨까지 내려간다.10기가헤르츠까지 평평한 뒤 다시 내려가100기가헤르츠에서 마이너스40데시벨이다.\"><path class=\"fig-ink\" d=\"M70 65 V280 H520 M70 100 h-7 M70 180 h-7 M70 260 h-7\"/><path class=\"fig-ink\" d=\"M90 280 v6 M190 280 v6 M290 280 v6 M390 280 v6 M490 280 v6\"/><path class=\"fig-ink\" d=\"M190 70 V280 M290 70 V280 M390 70 V280\" stroke-opacity=\"0.25\" stroke-dasharray=\"4 5\"/><path class=\"fig-accent\" d=\"M90 100 H190 L290 180 H390 L490 260\"/><circle class=\"fig-dot\" cx=\"190\" cy=\"100\" r=\"3.5\"/><circle class=\"fig-dot\" cx=\"290\" cy=\"180\" r=\"3.5\"/><circle class=\"fig-dot\" cx=\"390\" cy=\"180\" r=\"3.5\"/><text class=\"fig-text fig-math\" x=\"70\" y=\"20\" text-anchor=\"start\">저주파 대비 (dB)</text><text class=\"fig-text fig-math\" x=\"55\" y=\"104\" text-anchor=\"end\">0</text><text class=\"fig-text fig-math\" x=\"55\" y=\"184\" text-anchor=\"end\">−20</text><text class=\"fig-text fig-math\" x=\"55\" y=\"264\" text-anchor=\"end\">−40</text><text class=\"fig-text fig-math\" x=\"90\" y=\"305\" text-anchor=\"middle\">10 MHz</text><text class=\"fig-text fig-math\" x=\"190\" y=\"305\" text-anchor=\"middle\">100 MHz</text><text class=\"fig-text fig-math\" x=\"290\" y=\"305\" text-anchor=\"middle\">1 GHz</text><text class=\"fig-text fig-math\" x=\"390\" y=\"305\" text-anchor=\"middle\">10 GHz</text><text class=\"fig-text fig-math\" x=\"490\" y=\"305\" text-anchor=\"middle\">100 GHz</text><text class=\"fig-text fig-math\" x=\"517\" y=\"330\" text-anchor=\"end\">f (로그 축)</text><text class=\"fig-text fig-math\" x=\"190\" y=\"49\" text-anchor=\"middle\">첫 극점 f<tspan baseline-shift=\"sub\" font-size=\"78%\">p1</tspan></text><text class=\"fig-text fig-math\" x=\"290\" y=\"49\" text-anchor=\"middle\">영점 f<tspan baseline-shift=\"sub\" font-size=\"78%\">z</tspan></text><text class=\"fig-text fig-math\" x=\"390\" y=\"49\" text-anchor=\"middle\">둘째 극점 f<tspan baseline-shift=\"sub\" font-size=\"78%\">p2</tspan></text><text class=\"fig-text fig-math\" x=\"127\" y=\"83\" text-anchor=\"middle\">0 dB/dec</text><text class=\"fig-text fig-math\" x=\"230\" y=\"208\" text-anchor=\"middle\">−20 dB/dec</text><text class=\"fig-text fig-math\" x=\"340\" y=\"163\" text-anchor=\"middle\">0 dB/dec</text><text class=\"fig-text fig-math\" x=\"450\" y=\"182\" text-anchor=\"middle\">−20 dB/dec</text></svg><figcaption>세로축의 $0\\,\\mathrm{dB}$는 저주파 이득에 대한 상대 높이예요; 절대 이득은 이 선도 전체에 $20\\log_{10}|A_0|$를 더해요.</figcaption></figure>\n<p>절대 dB 높이는 그림의 $0$을 $B_0$로, $-20$을 $B_0-20\\,\\mathrm{dB}$로 읽어요. $A_0$의 수치가 없으므로 절대 높이는 하나로 정할 수 없어요.</p>\n"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n<p><strong>$B_0=20\\log_{10}|A_0|$를 기준 높이로 하는 보데 크기 근사예요.</strong></p>\n<ul>\n<li>$100\\,\\mathrm{MHz}$ 전에는 높이 $B_0$에서 평평해요.</li>\n<li>$100\\,\\mathrm{MHz}$부터 $1\\,\\mathrm{GHz}$까지 $-20\\,\\mathrm{dB/dec}$로 내려가요.</li>\n<li>$1\\,\\mathrm{GHz}$부터 $10\\,\\mathrm{GHz}$까지 높이 $B_0-20\\,\\mathrm{dB}$에서 평평해요.</li>\n<li>$10\\,\\mathrm{GHz}$ 뒤에는 그 높이에서 다시 $-20\\,\\mathrm{dB/dec}$로 내려가요.</li>\n</ul>\n<p>전체 높이는 미지의 $B_0$만큼 달라질 수 있어요.</p>\n"
+        }
+      ]
+    },
+    {
+      "id": "P11.09",
+      "explanation_id": "p8",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "중간 노드 X로 전달 함수 나누기",
+          "html": "\n$$\\frac{V_{out}}{V_{in}}=\\frac{V_X}{V_{in}}\\frac{V_{out}}{V_X}$$\n<p>두 단은 같고 둘째 게이트가 첫째 출력을 부하로 당기지 않는 모델이므로, 첫째 단을 한 번 풀어 두 비율에 적용해요.</p>\n"
+        },
+        {
+          "subpart": "main",
+          "label": "한 단의 출력 단락과 Gm",
+          "html": "\n<figure class=\"figure\"><svg id=\"p8-p8-first-gm\" viewBox=\"0 0 480 220\" role=\"img\" aria-label=\"첫째 단 M1의 게이트 입력을 유지하고 오른쪽 X 출력을 접지로 단락한 회로\"><path class=\"fig-ink\" d=\"M130 104V156M145 104V118M145 123V137M145 142V156M145 104H170V65H420M145 156H170V185M260 65V100M260 150V185M330 65V115M316 115H344M316 125H344M330 125V185M42 130H130M420 65V185M170 185h-11m0 0h22m-18 6h14m-10 6h6M260 185h-11m0 0h22m-18 6h14m-10 6h6M330 185h-11m0 0h22m-18 6h14m-10 6h6M420 185h-11m0 0h22m-18 6h14m-10 6h6\"/><rect class=\"fig-ink\" x=\"249\" y=\"100\" width=\"22\" height=\"50\"/><circle class=\"fig-dot\" cx=\"260\" cy=\"65\" r=\"3.5\" data-node-id=\"p8-x\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"330\" cy=\"65\" r=\"3.5\" data-node-id=\"p8-x\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"420\" cy=\"65\" r=\"3.5\" data-node-id=\"p8-x\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"42\" cy=\"130\" r=\"3.5\" data-node-id=\"p8-vin\" data-node-color=\"blue\"/><text class=\"fig-text fig-math\" x=\"28\" y=\"103\" data-node-id=\"p8-vin\" data-node-color=\"blue\">V<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text><text class=\"fig-text fig-math\" x=\"184\" y=\"146\">M<tspan baseline-shift=\"sub\" font-size=\"78%\">1</tspan></text><text class=\"fig-text fig-math\" x=\"283\" y=\"134\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">D</tspan></text><text class=\"fig-text fig-math\" x=\"352\" y=\"127\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">L</tspan></text><text class=\"fig-text fig-math\" x=\"387\" y=\"34\" data-node-id=\"p8-x\" data-node-color=\"red\">V<tspan baseline-shift=\"sub\" font-size=\"78%\">X</tspan>=0</text><path class=\"fig-ink\" d=\"M405 65H370m7-5-7 5 7 5\"/><text class=\"fig-text fig-math\" x=\"370\" y=\"94\">i<tspan baseline-shift=\"sub\" font-size=\"78%\">out,sc</tspan></text></svg><figcaption>전원은 AC 접지로 옮겼어요. 다른 커패시턴스를 무시한 $M_2$의 게이트는 $X$에 부하를 더하지 않아 첫째 단만 표시했어요.</figcaption></figure>\n<p>출력 $X$를 단락하고 오른쪽에서 회로 안으로 들어오는 전류를 양으로 정해요.</p>\n<p>소스가 AC 접지라 $v_{gs1}=V_{in}$이고 $R_D,C_L$ 양단 전압은 0이에요.</p>\n$$i_{out,sc}=g_mV_{in}$$\n$$G_m=\\frac{i_{out,sc}}{V_{in}}=g_m$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "한 단의 출력저항과 부하",
+          "html": "\n<p>저주파에서는 $C_L$을 개방으로 보아 출력저항부터 읽어요.</p>\n$$R_{out}\\approx R_D$$\n<p>주파수 응답에는 같은 노드의 외부 커패시터 부하를 포함해요.</p>\n$$\\begin{aligned}Z_{out}(s)&amp;=R_D\\parallel\\frac{1}{sC_L}\\\\&amp;=\\frac{R_D}{1+sR_DC_L}\\end{aligned}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "한 단의 부호 있는 전달 함수",
+          "html": "\n<p>양의 게이트 입력은 출력에서 끌어내리는 전류를 늘리므로 반전 부호가 붙어요.</p>\n$$\\begin{aligned}H_1(s)&amp;=\\frac{V_X}{V_{in}}=-G_mZ_{out}(s)\\\\&amp;=-\\frac{g_mR_D}{1+sR_DC_L}\\end{aligned}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "두 반전을 곱한 전체 전달 함수",
+          "html": "\n<p>음수 두 개가 곱해져 전체 저주파 이득은 양수가 돼요.</p>\n$$H(s)=H_1(s)H_2(s)=\\frac{(g_mR_D)^2}{(1+sR_DC_L)^2}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "보데 선도의 시작 높이와 코너",
+          "html": "\n$$D_0=20\\log_{10}\\!\\left[(g_mR_D)^2\\right]=40\\log_{10}(g_mR_D)$$\n$$\\omega_p=\\frac{1}{R_DC_L}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "두 겹친 극점의 보데 선도",
+          "html": "\n<figure class=\"figure\"><svg id=\"p8-svg2-p8-bode\" viewBox=\"0 0 520 330\" role=\"img\" aria-label=\"저주파 이득 높이를 뺀 상대 dB 보데 선도에서 직선 근사는 정규화 코너 1 이전에 평평하고 이후 기울기 마이너스40 dB매dec이며 정확한 곡선은 코너에서 마이너스6.02 dB로 부드럽게 이어지는 그래프\"><path class=\"fig-ink\" d=\"M70 25V245H465\"/><path class=\"fig-ink\" d=\"M65 45H70\"/><text class=\"fig-text fig-math\" x=\"57\" y=\"50\" text-anchor=\"end\">0</text><path class=\"fig-ink\" d=\"M65 135H70\"/><text class=\"fig-text fig-math\" x=\"57\" y=\"140\" text-anchor=\"end\">−40</text><path class=\"fig-ink\" d=\"M65 225H70\"/><text class=\"fig-text fig-math\" x=\"57\" y=\"230\" text-anchor=\"end\">−80</text><path class=\"fig-ink\" d=\"M80 245V251\"/><text class=\"fig-text fig-math\" x=\"80\" y=\"270\" text-anchor=\"middle\">0.1</text><path class=\"fig-ink\" d=\"M200 245V251\"/><text class=\"fig-text fig-math\" x=\"200\" y=\"270\" text-anchor=\"middle\">1</text><path class=\"fig-ink\" d=\"M320 245V251\"/><text class=\"fig-text fig-math\" x=\"320\" y=\"270\" text-anchor=\"middle\">10</text><path class=\"fig-ink\" d=\"M440 245V251\"/><text class=\"fig-text fig-math\" x=\"440\" y=\"270\" text-anchor=\"middle\">100</text><text class=\"fig-text fig-math\" x=\"76\" y=\"19\">D−D<tspan baseline-shift=\"sub\" font-size=\"78%\">0</tspan> (dB)</text><text class=\"fig-text fig-math\" x=\"355\" y=\"293\">ω / ω<tspan baseline-shift=\"sub\" font-size=\"78%\">p</tspan></text><path class=\"fig-ink\" stroke-dasharray=\"4 5\" d=\"M200 45V245\"/><path class=\"fig-accent\" d=\"M80 45H200L440 225\"/><path class=\"fig-danger\" stroke-dasharray=\"6 4\" d=\"M80.00 45.19L82.40 45.21L84.80 45.23L87.20 45.26L89.60 45.28L92.00 45.31L94.40 45.34L96.80 45.37L99.20 45.40L101.60 45.44L104.00 45.48L106.40 45.53L108.80 45.58L111.20 45.64L113.60 45.70L116.00 45.76L118.40 45.83L120.80 45.91L123.20 46.00L125.60 46.09L128.00 46.20L130.40 46.31L132.80 46.43L135.20 46.56L137.60 46.71L140.00 46.86L142.40 47.03L144.80 47.22L147.20 47.42L149.60 47.64L152.00 47.88L154.40 48.13L156.80 48.41L159.20 48.71L161.60 49.03L164.00 49.38L166.40 49.75L168.80 50.16L171.20 50.59L173.60 51.05L176.00 51.55L178.40 52.08L180.80 52.64L183.20 53.24L185.60 53.88L188.00 54.56L190.40 55.28L192.80 56.03L195.20 56.83L197.60 57.67L200.00 58.55L202.40 59.47L204.80 60.43L207.20 61.43L209.60 62.48L212.00 63.56L214.40 64.68L216.80 65.84L219.20 67.04L221.60 68.28L224.00 69.55L226.40 70.85L228.80 72.19L231.20 73.56L233.60 74.95L236.00 76.38L238.40 77.83L240.80 79.31L243.20 80.81L245.60 82.33L248.00 83.88L250.40 85.44L252.80 87.02L255.20 88.62L257.60 90.23L260.00 91.86L262.40 93.51L264.80 95.16L267.20 96.83L269.60 98.51L272.00 100.20L274.40 101.89L276.80 103.60L279.20 105.31L281.60 107.03L284.00 108.76L286.40 110.50L288.80 112.24L291.20 113.98L293.60 115.73L296.00 117.48L298.40 119.24L300.80 121.00L303.20 122.77L305.60 124.54L308.00 126.31L310.40 128.08L312.80 129.86L315.20 131.63L317.60 133.41L320.00 135.19L322.40 136.98L324.80 138.76L327.20 140.55L329.60 142.33L332.00 144.12L334.40 145.91L336.80 147.70L339.20 149.49L341.60 151.29L344.00 153.08L346.40 154.87L348.80 156.66L351.20 158.46L353.60 160.25L356.00 162.05L358.40 163.84L360.80 165.64L363.20 167.44L365.60 169.23L368.00 171.03L370.40 172.83L372.80 174.63L375.20 176.42L377.60 178.22L380.00 180.02L382.40 181.82L384.80 183.62L387.20 185.41L389.60 187.21L392.00 189.01L394.40 190.81L396.80 192.61L399.20 194.41L401.60 196.21L404.00 198.01L406.40 199.81L408.80 201.61L411.20 203.41L413.60 205.21L416.00 207.00L418.40 208.80L420.80 210.60L423.20 212.40L425.60 214.20L428.00 216.00L430.40 217.80L432.80 219.60L435.20 221.40L437.60 223.20L440.00 225.00\"/><circle class=\"fig-danger\" cx=\"200\" cy=\"58.55\" r=\"4\"/><path class=\"fig-ink\" d=\"M174 84L195 65\"/><text class=\"fig-text fig-math\" x=\"105\" y=\"92\">−6.02 dB</text><text class=\"fig-text fig-math\" x=\"107\" y=\"38\">0 dB/dec</text><text class=\"fig-text fig-math\" x=\"330\" y=\"127\">−40 dB/dec</text><path class=\"fig-accent\" d=\"M87 312H119\"/><text class=\"fig-text fig-math\" x=\"127\" y=\"317\">직선 근사</text><path class=\"fig-danger\" stroke-dasharray=\"6 4\" d=\"M283 312H315\"/><text class=\"fig-text fig-math\" x=\"323\" y=\"317\">정확한 곡선</text></svg><figcaption>세로축은 실제 이득 $D$에서 저주파 높이 $D_0=40\\log_{10}(g_mR_D)$를 뺀 값이에요. 실제 dB 높이는 그래프 값에 $D_0$를 더해 읽어요.</figcaption></figure>\n<p>직선 근사는 $D_0$에서 시작해 $\\omega_p$ 이후 $-40\\,\\mathrm{dB/dec}$로 내려가요.</p>\n<p>코너에서 이득이 갑자기 40 dB 내려가는 것이 아니라 그 이후 기울기가 바뀌어요.</p>\n"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n<p><strong>전체 보데 직선 근사의 저주파 높이와 코너예요.</strong></p>\n$$D_0=40\\log_{10}(g_mR_D)$$\n$$\\omega_p=\\frac{1}{R_DC_L}$$\n<p>$\\omega_p$ 아래의 기울기는 $0\\,\\mathrm{dB/dec}$이고, 위의 기울기는 $-40\\,\\mathrm{dB/dec}$예요.</p>\n<p>동일한 두 CS 단이며 둘째 입력이 첫째 출력을 부하로 당기지 않는 주어진 모델의 결과예요.</p>\n"
+        }
+      ]
+    },
+    {
+      "id": "E11.08",
+      "explanation_id": "p9",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "입력 영점과 두 접지 RC 경로",
+          "html": "\n<p>독립 입력 전압을 0으로 두어 단락하고, $V_{DD}$는 AC 접지로 봐요. 저항 경로를 읽을 때는 커패시터 자체를 개방해서 생각해요.</p>\n$$v_{in}=0$$\n<figure class=\"figure\"><svg id=\"p9-fig-p9-input-zero\" viewBox=\"0 0 550 270\" role=\"img\" aria-label=\"독립 입력 전압을 왼쪽에서 접지로 단락한 CS 원 회로. 게이트 노드X에는 입력저항RS와 접지 커패시터가 연결되고, 오른쪽 드레인 출력에는 저항RD와 접지 부하 커패시터가 연결된다.\"><path class=\"fig-ink\" d=\"M252 145 V195 M264 142 V198 M264 148 H300 V105 M264 192 H300 V225 M289 187 l7 5 l-7 5\"/><text class=\"fig-text fig-math\" x=\"314\" y=\"172\" text-anchor=\"start\">M<tspan baseline-shift=\"sub\" font-size=\"78%\">1</tspan></text><path class=\"fig-ink\" d=\"M300 105 V91 M300 91 v-8 l-6 -3 l12 -6 l-12 -6 l12 -6 l-12 -6 l12 -6 l-6 -3 V25 M289 25 H311\"/><text class=\"fig-text fig-math\" x=\"320\" y=\"30\" text-anchor=\"start\">V<tspan baseline-shift=\"sub\" font-size=\"78%\">DD</tspan></text><text class=\"fig-text fig-math\" x=\"321\" y=\"69\" text-anchor=\"start\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">D</tspan></text><path class=\"fig-ink\" d=\"M300 225 V243\"/><path class=\"fig-ink\" d=\"M289 243 h22 M293 248 h14 M297 253 h6\"/><path class=\"fig-ink\" d=\"M45 170 H69 M69 170 h8 l4 -6 l8 12 l8 -12 l8 12 l8 -12 l8 12 l4 -6 H133 M133 170 H252 M45 170 V243\"/><path class=\"fig-ink\" d=\"M34 243 h22 M38 248 h14 M42 253 h6\"/><text class=\"fig-text fig-math\" x=\"83\" y=\"148\" text-anchor=\"start\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">S</tspan></text><text class=\"fig-text fig-math\" x=\"45\" y=\"148\" text-anchor=\"middle\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan> = 0</text><path class=\"fig-ink\" d=\"M190 170 V202 M178 202 H202 M178 210 H202 M190 210 V242\"/><path class=\"fig-ink\" d=\"M179 242 h22 M183 247 h14 M187 252 h6\"/><text class=\"fig-text fig-math\" x=\"211\" y=\"224\" text-anchor=\"start\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text><circle class=\"fig-dot\" cx=\"190\" cy=\"170\" r=\"4\" data-node-id=\"X\" data-node-color=\"blue\"/><text class=\"fig-text fig-math\" x=\"185\" y=\"148\" text-anchor=\"middle\" data-node-id=\"X\" data-node-color=\"blue\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">X</tspan></text><path class=\"fig-ink\" d=\"M300 105 H505 M412 105 V151 M400 151 H424 M400 159 H424 M412 159 V205\"/><path class=\"fig-ink\" d=\"M401 205 h22 M405 210 h14 M409 215 h6\"/><text class=\"fig-text fig-math\" x=\"433\" y=\"174\" text-anchor=\"start\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">L</tspan></text><circle class=\"fig-dot\" cx=\"300\" cy=\"105\" r=\"4\" data-node-id=\"OUT\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"412\" cy=\"105\" r=\"4\" data-node-id=\"OUT\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"505\" cy=\"105\" r=\"4\" data-node-id=\"OUT\" data-node-color=\"red\"/><text class=\"fig-text fig-math\" x=\"500\" y=\"81\" text-anchor=\"end\" data-node-id=\"OUT\" data-node-color=\"red\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text></svg><figcaption>독립 입력 $v_{in}$만 단락했어요; 게이트 노드 $v_X$는 $R_S$를 거쳐 접지에 연결되며 $C_{in}$과 $C_L$은 각각 접지로 이어져요.</figcaption></figure>\n<p>게이트를 바로 접지로 옮기는 것이 아니에요. $v_{in}$을 단락해도 게이트 노드와 접지 사이에는 $R_S$가 남아요.</p>\n"
+        },
+        {
+          "subpart": "main",
+          "label": "입력 극점의 RC 블록",
+          "html": "\n$$R_{eq,in}=R_S$$\n$$\\tau_{in}=R_SC_{in}$$\n<p>입력의 RC 인자에서 양의 코너 각주파수를 구해요.</p>\n$$\\omega_{p,in}=\\frac1{R_SC_{in}}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "출력 극점의 RC 블록",
+          "html": "\n$$R_{eq,out}=R_D$$\n$$\\tau_{out}=R_DC_L$$\n<p>출력의 RC 인자에서 양의 코너 각주파수를 구해요.</p>\n$$\\omega_{p,out}=\\frac1{R_DC_L}$$\n"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n<p><strong>양의 극점 코너 각주파수는 다음과 같아요.</strong></p>\n$$\\omega_{p,in}=\\frac1{R_SC_{in}}$$\n$$\\omega_{p,out}=\\frac1{R_DC_L}$$\n<p>$\\lambda=0$이고, 게이트 전도 전류·몸체효과를 무시한 이 접지 커패시터 모델의 결과예요.</p>\n<p>$s$ 평면의 극점 위치를 쓰면 음의 실수예요.</p>\n$$s_{p,in}=-\\frac1{R_SC_{in}}$$\n$$s_{p,out}=-\\frac1{R_DC_L}$$\n"
+        }
+      ]
+    },
+    {
+      "id": "X11.08",
+      "explanation_id": "p10",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "상속한 두 극점 크기 응답",
+          "html": "\n$$\\frac{|H(j\\omega)|}{|A_0|}=\\frac{1}{\\sqrt{\\left[1+(\\omega/\\omega_{p1})^2\\right]\\left[1+(\\omega/\\omega_{p2})^2\\right]}}$$\n$$\\omega_{p1}=\\omega_{p2}=\\omega_p$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "동일한 두 극점의 정규화 크기",
+          "html": "\n$$\\begin{aligned}M(\\omega)&amp;=\\frac{1}{\\sqrt{\\left[1+(\\omega/\\omega_p)^2\\right]^2}}\\\\&amp;=\\frac{1}{1+(\\omega/\\omega_p)^2}\\end{aligned}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "전체 3 dB 조건",
+          "html": "\n$$\\frac{1}{1+(\\omega_{3\\mathrm{dB}}/\\omega_p)^2}=\\frac{1}{\\sqrt2}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "양의 대역폭 주파수",
+          "html": "\n$$\\omega_{3\\mathrm{dB}}=\\sqrt{\\sqrt2-1}\\,\\omega_p\\approx0.64\\,\\omega_p$$\n"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n<p><strong>같은 두 극점의 전체 −3 dB 각주파수예요.</strong></p>\n$$\\omega_{3\\mathrm{dB}}=\\sqrt{\\sqrt2-1}\\,\\omega_p\\approx0.64\\,\\omega_p$$\n$$\\omega_p=\\frac{1}{R_SC_{in}}=\\frac{1}{R_DC_L}$$\n<p>예제 11.8의 $\\lambda=0$인 두 RC 모델과 $R_SC_{in}=R_DC_L$ 조건을 사용해요.</p>\n"
+        }
+      ]
+    },
+    {
+      "id": "E11.09",
+      "explanation_id": "p11",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "입력 영점과 소스 쪽 저항 경로",
+          "html": "\n<p>독립 입력원을 0으로 놓아 $R_S$의 왼쪽을 접지로 연결해요. 고정 바이어스 $V_b$와 전원 $V_{DD}$도 AC 접지로 봐요.</p>\n$$v_{in}=0$$\n<figure class=\"figure\"><svg id=\"p11-fig-p11-input-zero\" viewBox=\"0 0 550 300\" role=\"img\" aria-label=\"게이트가 오른쪽에서 AC 접지된 원래 방향의 NMOS CG 회로. 왼쪽 독립 입력을 접지로 단락해도 소스 노드X와 접지 사이에는 직렬저항RS가 남는다. 소스 노드는 접지 입력 커패시터와 연결되고 드레인 출력은 오른쪽의 저항과 부하 커패시터를 본다.\"><path class=\"fig-ink\" d=\"M286 112 V152 M274 109 V155 M274 115 H250 V80 M274 149 H250 V190 M263 144 l-7 5 l7 5\"/><text class=\"fig-text fig-math\" x=\"218\" y=\"139\" text-anchor=\"start\">M<tspan baseline-shift=\"sub\" font-size=\"78%\">1</tspan></text><path class=\"fig-ink\" d=\"M286 132 H340 V157\"/><path class=\"fig-ink\" d=\"M329 157 h22 M333 162 h14 M337 167 h6\"/><text class=\"fig-text fig-math\" x=\"323\" y=\"111\" text-anchor=\"middle\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">b</tspan> = 0</text><path class=\"fig-ink\" d=\"M250 80 V69 M250 69 v-7 l-6 -3 l12 -6 l-12 -6 l12 -6 l-12 -6 l12 -6 l-6 -3 V12 M239 12 H261\"/><text class=\"fig-text fig-math\" x=\"270\" y=\"18\" text-anchor=\"start\">V<tspan baseline-shift=\"sub\" font-size=\"78%\">DD</tspan></text><text class=\"fig-text fig-math\" x=\"272\" y=\"53\" text-anchor=\"start\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">D</tspan></text><path class=\"fig-ink\" d=\"M250 80 H505 M420 80 V121 M408 121 H432 M408 129 H432 M420 129 V170\"/><path class=\"fig-ink\" d=\"M409 170 h22 M413 175 h14 M417 180 h6\"/><text class=\"fig-text fig-math\" x=\"442\" y=\"140\" text-anchor=\"start\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">L</tspan></text><circle class=\"fig-dot\" cx=\"250\" cy=\"80\" r=\"4\" data-node-id=\"OUT\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"420\" cy=\"80\" r=\"4\" data-node-id=\"OUT\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"505\" cy=\"80\" r=\"4\" data-node-id=\"OUT\" data-node-color=\"red\"/><text class=\"fig-text fig-math\" x=\"500\" y=\"56\" text-anchor=\"end\" data-node-id=\"OUT\" data-node-color=\"red\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text><path class=\"fig-ink\" d=\"M44 190 H69 M69 190 h8 l4 -6 l8 12 l8 -12 l8 12 l8 -12 l8 12 l4 -6 H133 M133 190 H250 M44 190 V267\"/><path class=\"fig-ink\" d=\"M33 267 h22 M37 272 h14 M41 277 h6\"/><text class=\"fig-text fig-math\" x=\"44\" y=\"168\" text-anchor=\"middle\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan> = 0</text><text class=\"fig-text fig-math\" x=\"83\" y=\"168\" text-anchor=\"start\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">S</tspan></text><path class=\"fig-ink\" d=\"M250 190 V226 M238 226 H262 M238 234 H262 M250 234 V270\"/><path class=\"fig-ink\" d=\"M239 270 h22 M243 275 h14 M247 280 h6\"/><text class=\"fig-text fig-math\" x=\"271\" y=\"255\" text-anchor=\"start\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text><circle class=\"fig-dot\" cx=\"250\" cy=\"190\" r=\"4\" data-node-id=\"X\" data-node-color=\"blue\"/><text class=\"fig-text fig-math\" x=\"272\" y=\"211\" text-anchor=\"start\" data-node-id=\"X\" data-node-color=\"blue\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">X</tspan></text></svg><figcaption>독립 입력 $v_{in}$은 $R_S$ 앞에서 단락해요; 게이트는 AC 접지이지만 소스 노드 $v_X$를 바로 접지로 바꾸지는 않아요.</figcaption></figure>\n<p>저항 경로를 읽을 때 커패시터 자체는 개방해서 생각해요. 소스 노드 X에는 $R_S$로 가는 경로와 $M_1$의 소스 쪽을 보는 경로가 함께 남아요.</p>\n"
+        },
+        {
+          "subpart": "main",
+          "label": "소스 입력저항과 입력 극점",
+          "html": "\n$$R_{in,S}=\\frac1{g_m}$$\n<p>입력을 단락한 뒤 $R_S$와 이 소스 쪽 저항은 모두 X에서 AC 접지로 보이므로 병렬이에요.</p>\n$$R_{eq,in}=R_S\\parallel\\frac1{g_m}$$\n<p>같은 X–접지 두 노드에 $C_{in}$이 연결되므로 입력 코너가 정해져요.</p>\n$$\\omega_{p,in}=\\frac1{(R_S\\parallel1/g_m)C_{in}}=\\frac{1+g_mR_S}{R_SC_{in}}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "출력 RC 극점",
+          "html": "\n$$R_{eq,out}=R_D$$\n$$\\omega_{p,out}=\\frac1{R_DC_L}$$\n"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n<p><strong>양의 코너 각주파수는 다음과 같아요.</strong></p>\n$$\\omega_{p,in}=\\frac1{(R_S\\parallel1/g_m)C_{in}}$$\n$$\\omega_{p,out}=\\frac1{R_DC_L}$$\n<p>$\\lambda=0$·게이트 AC 접지·몸체효과와 게이트 전도 전류 무시 조건이에요.</p>\n<p>$s$ 평면의 극점은 각 양의 코너에 음의 부호를 붙인 위치예요.</p>\n"
+        }
+      ]
+    },
+    {
+      "id": "X11.09",
+      "explanation_id": "p12",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "정확히 열 배라는 설계 조건",
+          "html": "\n$$\\omega_{p,out}=10\\,\\omega_{p,in}$$\n<p>여기서 $\\omega_{p,in},\\omega_{p,out}$은 각각 입력·출력의 양의 코너 각주파수예요.</p>\n"
+        },
+        {
+          "subpart": "main",
+          "label": "CG 입력의 유효 저항과 두 극점",
+          "html": "\n<p>입력 노드의 병렬 저항을 $R_i$로 정의해요.</p>\n$$R_i=R_S\\parallel\\frac1{g_m}$$\n<p>예제에서 구한 입력 극점은 이 저항과 $C_{in}$으로 정해져요.</p>\n$$\\omega_{p,in}=\\frac1{R_iC_{in}}$$\n<p>출력 극점에는 별도의 $R_D$와 $C_L$을 써요.</p>\n$$\\omega_{p,out}=\\frac1{R_DC_L}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "두 극점의 열 배 조건 대입",
+          "html": "\n$$\\frac1{R_DC_L}=\\frac{10}{R_iC_{in}}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "커패시턴스 비를 포함한 저항 선택",
+          "html": "\n$$R_D=\\frac{R_iC_{in}}{10C_L}$$\n$$R_D=\\frac{C_{in}}{10C_L}\\left(R_S\\parallel\\frac1{g_m}\\right)$$\n"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n<p><strong>출력 극점이 정확히 입력 극점의 10배가 되도록 고르는 값이에요.</strong></p>\n$$R_D=\\frac{C_{in}}{10C_L}\\left(R_S\\parallel\\frac1{g_m}\\right)$$\n<p>예제의 $\\lambda=0$·몸체효과 무시·게이트 AC 접지 조건을 사용해요.</p>\n"
+        }
+      ]
+    },
+    {
+      "id": "P11.12",
+      "explanation_id": "p13",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "입력 영점과 기생 저항의 실제 위치",
+          "html": "\n<p>독립 입력을 0으로 두어 $R_S$의 왼쪽을 단락하고, 고정 바이어스와 전원은 AC 접지로 봐요.</p>\n$$v_{in}=0$$\n<figure class=\"figure\"><svg id=\"p13-fig-p13-input-zero\" viewBox=\"0 0 550 380\" role=\"img\" aria-label=\"게이트가 오른쪽에서 AC 접지된 CG MOS 회로. 왼쪽 입력원을 접지로 단락하면 입력 커패시터 노드X에서 RS가 접지로 보인다. X와 실제 MOS 소스 노드S 사이에 기생 저항RP가 직렬로 있고, 드레인 출력과 부하 커패시터는 오른쪽에 있다.\"><path class=\"fig-ink\" d=\"M286 112 V152 M274 109 V155 M274 115 H250 V80 M274 149 H250 V180 M263 144 l-7 5 l7 5\"/><path class=\"fig-ink\" d=\"M286 132 H340 V157\"/><path class=\"fig-ink\" d=\"M329 157 h22 M333 162 h14 M337 167 h6\"/><text class=\"fig-text fig-math\" x=\"323\" y=\"111\" text-anchor=\"middle\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">b</tspan> = 0</text><path class=\"fig-ink\" d=\"M250 80 V69 M250 69 v-7 l-6 -3 l12 -6 l-12 -6 l12 -6 l-12 -6 l12 -6 l-6 -3 V12 M239 12 H261\"/><text class=\"fig-text fig-math\" x=\"270\" y=\"18\" text-anchor=\"start\">V<tspan baseline-shift=\"sub\" font-size=\"78%\">DD</tspan></text><text class=\"fig-text fig-math\" x=\"272\" y=\"53\" text-anchor=\"start\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">D</tspan></text><path class=\"fig-ink\" d=\"M250 80 H505 M420 80 V121 M408 121 H432 M408 129 H432 M420 129 V170\"/><path class=\"fig-ink\" d=\"M409 170 h22 M413 175 h14 M417 180 h6\"/><text class=\"fig-text fig-math\" x=\"442\" y=\"140\" text-anchor=\"start\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">L</tspan></text><circle class=\"fig-dot\" cx=\"250\" cy=\"80\" r=\"4\" data-node-id=\"OUT\" data-node-color=\"blue\"/><circle class=\"fig-dot\" cx=\"420\" cy=\"80\" r=\"4\" data-node-id=\"OUT\" data-node-color=\"blue\"/><circle class=\"fig-dot\" cx=\"505\" cy=\"80\" r=\"4\" data-node-id=\"OUT\" data-node-color=\"blue\"/><text class=\"fig-text fig-math\" x=\"500\" y=\"56\" text-anchor=\"end\" data-node-id=\"OUT\" data-node-color=\"blue\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text><path class=\"fig-ink\" d=\"M250 180 V198 M250 198 v7 l6 3 l-12 6 l12 6 l-12 6 l12 6 l-12 6 l6 3 V270\"/><text class=\"fig-text fig-math\" x=\"272\" y=\"236\" text-anchor=\"start\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">P</tspan></text><circle class=\"fig-dot\" cx=\"250\" cy=\"180\" r=\"4\" data-node-id=\"S\" data-node-color=\"red\"/><text class=\"fig-text fig-math\" x=\"270\" y=\"201\" text-anchor=\"start\" data-node-id=\"S\" data-node-color=\"red\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">S</tspan></text><path class=\"fig-ink\" d=\"M44 270 H69 M69 270 h8 l4 -6 l8 12 l8 -12 l8 12 l8 -12 l8 12 l4 -6 H133 M133 270 H250 M44 270 V350\"/><path class=\"fig-ink\" d=\"M33 350 h22 M37 355 h14 M41 360 h6\"/><text class=\"fig-text fig-math\" x=\"44\" y=\"248\" text-anchor=\"middle\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan> = 0</text><text class=\"fig-text fig-math\" x=\"83\" y=\"248\" text-anchor=\"start\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">S</tspan></text><path class=\"fig-ink\" d=\"M250 270 V306 M238 306 H262 M238 314 H262 M250 314 V350\"/><path class=\"fig-ink\" d=\"M239 350 h22 M243 355 h14 M247 360 h6\"/><text class=\"fig-text fig-math\" x=\"271\" y=\"335\" text-anchor=\"start\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text><circle class=\"fig-dot\" cx=\"250\" cy=\"270\" r=\"4\" data-node-id=\"X\" data-node-color=\"blue\"/><text class=\"fig-text fig-math\" x=\"272\" y=\"291\" text-anchor=\"start\" data-node-id=\"X\" data-node-color=\"blue\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">X</tspan></text></svg><figcaption>해석용 노드 X는 $R_S$·$R_P$·$C_{in}$의 접속점이고, 해석용 노드 S는 MOS의 실제 소스예요; 두 노드 사이의 $R_P$를 남겨요.</figcaption></figure>\n<p>저항을 읽을 때 커패시터를 개방해서 생각해도 $R_P$의 위치는 그대로예요. $C_{in}$이 보는 노드는 S가 아니라 X예요.</p>\n"
+        },
+        {
+          "subpart": "main",
+          "label": "직렬 가지를 구한 뒤 입력 병렬 합성",
+          "html": "\n$$R_{in,S}=\\frac1{g_m}$$\n<p>X에서 S를 거쳐 들어가는 가지에는 $R_P$가 직렬로 더해져요.</p>\n$$R_{branch}=R_P+\\frac1{g_m}$$\n<p>입력원을 단락하면 $R_S$도 X에서 AC 접지로 보여요. 두 경로를 마지막에 병렬로 합쳐요.</p>\n$$R_{eq,in}=R_S\\parallel\\left(R_P+\\frac1{g_m}\\right)$$\n<p>X–접지의 커패시턴스는 $C_{in}$이므로 입력 코너예요.</p>\n$$\\omega_{p,in}=\\frac1{\\left[R_S\\parallel\\left(R_P+1/g_m\\right)\\right]C_{in}}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "출력 극점은 RD와 CL로 결정",
+          "html": "\n<p>$\\lambda=0$이므로 MOS의 드레인 저항은 무한대예요. 소스 쪽에 $R_P$가 있어도 드레인 전압의 영향이 되돌아가지 않아서 출력의 저항 경로는 $R_D$예요.</p>\n$$R_{eq,out}=R_D$$\n$$\\omega_{p,out}=\\frac1{R_DC_L}$$\n"
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n<p><strong>양의 입력·출력 코너 각주파수예요.</strong></p>\n$$\\omega_{p,in}=\\frac1{\\left[R_S\\parallel\\left(R_P+1/g_m\\right)\\right]C_{in}}$$\n$$\\omega_{p,out}=\\frac1{R_DC_L}$$\n<p>$\\lambda=0$·게이트 AC 접지·몸체효과와 게이트 전도 전류 무시 조건이고, 다른 커패시턴스는 고려하지 않아요.</p>\n<p>$s$ 평면의 극점은 이 양의 코너에 각각 음의 부호를 붙인 위치예요.</p>\n"
+        }
+      ]
+    }
+  ],
+  "assets": {}
+}

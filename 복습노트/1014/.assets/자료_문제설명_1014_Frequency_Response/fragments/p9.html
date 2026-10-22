@@ -1,8 +1,96 @@
-<div class="layer eli5" data-explanation="understand"><h4>문제를 내 말로 읽어요</h4><p>그림 11.12의 CG 단(예제 11.9 회로: $R_S$, $C_{in}$, $M_1$, $V_b$, $R_D$, $C_L$, $\lambda=0$)에서 출력 극점을 입력 극점의 정확히 10배로 배치하고 싶어요. 나머지 값은 기호로 두고 $R_D$만 역산해요.</p></div>
-<div class="layer formal" data-explanation="recall"><h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4><p>극점 배치(pole placement) 문제는 각 노드 시간상수를 먼저 쓰면 돼요. $\lambda=0$, 몸체 효과 무시에서 $R_{in}=R_S\parallel1/g_m$이고 $\omega_{in}=1/(R_{in}C_{in})$예요. $R_D$는 출력 시간상수만 바꾸므로 출력 극점 식에 목표 비율을 넣어요.</p></div>
-<div class="layer formal" data-explanation="start"><h4>종이에 쓰는 실제 첫 줄</h4><p>$1/(R_DC_L)=10/[R_{in}C_{in}]$, $R_{in}=R_S\parallel1/g_m$부터 적어요.</p></div>
-<div class="layer formal" data-explanation="solve"><h4>왜 이렇게 푸는지 함께 따라가요</h4><div data-subpart="main"><p>양변을 교차 곱하면 $R_{in}C_{in}=10R_DC_L$이에요. 따라서 $$R_D=\frac{C_{in}}{10C_L}(R_S\parallel1/g_m).$$ 출력 극점을 더 높이려면 이 값보다 작은 $R_D$를 택해요. 단, 저주파 CG 이득은 $g_mR_D/(1+g_mR_S)=R_D/(R_S+1/g_m)$이므로 저항을 줄이면 이득도 감소해요.</p></div></div>
-<div class="layer formal" data-explanation="verify"><h4>완성 답과 검산</h4><div data-subpart="main"><p><strong>$R_D=(C_{in}/10C_L)(R_S\parallel1/g_m)$예요.</strong> 계산한 값을 출력 식에 넣으면 $1/(R_DC_L)=10/(R_{in}C_{in})$이 되어 비율 10을 되찾아요. 커패시턴스 비는 무차원이라 결과는 저항이에요. $C_L$이 2배이면 $R_D$를 절반으로 해야 같은 출력 극점을 지켜요.</p></div></div>
-<div class="layer warn" data-explanation="pitfall"><h4>여기서 조심해요</h4><p>주파수가 10배라는 조건을 시간상수가 10배로 바꾸면 안 돼요. 시간상수는 오히려 1/10이에요.</p></div>
-<div class="layer eli5" data-explanation="retry"><h4>설명을 닫고 규칙을 적용해 봐요</h4><ol><li>다른 값을 유지하고 출력 극점을 입력 극점의 10배 대신 20배로 놓으려면 $R_D$를 몇 배로 바꿔야 하나요? 키우나요, 줄이나요?</li><li>$R_S=1\,\mathrm{k\Omega}$, $g_m=10\,\mathrm{mS}$, $C_{in}=2\,\mathrm{pF}$, $C_L=1\,\mathrm{pF}$이면 출력 극점이 입력 극점의 10배가 되는 $R_D$는 몇 Ω인가요?</li></ol></div>
-<div class="sum" hidden=""><p>$\lambda=0$·몸체 효과 무시의 CG 식이에요. 출력 극점을 더 높이려고 $R_D$를 줄이면 저주파 이득 $g_mR_D/(1+g_mR_S)$도 줄어요.</p><div class="summary-group"><h4>핵심 개념·답</h4><p>$\omega_{out}=10\omega_{in}$ → $R_D=R_{in}C_{in}/(10C_L)$</p></div><div class="summary-group"><h4>첫 줄</h4><p>$1/(R_DC_L)=10/[R_{in}C_{in}]$, $R_{in}=R_S\parallel1/g_m$부터 적어요.</p></div><div class="summary-group"><h4>검산</h4><p>$R_D$를 되넣으면 출력/입력 극점 비가 10이에요.</p></div></div>
+<div class="layer eli5" data-explanation="understand">
+<h4>문제를 읽어요</h4>
+<p>입력과 출력에 접지 커패시터가 하나씩 있는 CS 회로예요. 각 커패시터가 어떤 저항을 통해 충전되고 방전되는지 찾아 두 극점을 구해요.</p>
+<p>$v_{in}$은 $R_S$ 앞의 신호이고, 실제 게이트 전압은 $R_S$ 뒤의 $v_X$예요. 두 전압을 같은 노드로 놓지 않는 것이 출발점이에요.</p>
+</div>
+
+<div class="layer formal" data-explanation="recall">
+<h4>이 개념과 공식을 떠올려요</h4>
+<p>$\lambda=0$이라는 단서에서 $M_1$의 드레인 출력저항은 무한대로 봐요. 그림에 표시된 $C_{in}$과 $C_L$은 서로 다른 신호 노드에서 각각 접지로 연결돼 있어요.</p>
+<p>이 단순 소신호 모델은 게이트 전도 전류와 몸체효과를 무시하고, 입력과 출력을 잇는 부유 커패시터도 두지 않아요. 소스는 AC 접지이고, 게이트 전압은 출력 전류에 영향을 주지만 출력 전압이 게이트 쪽으로 되돌아가지는 않아요.</p>
+<p>이 조건에서는 <a href="정리노트_1014_Frequency_Response.html#s2-cs-two-poles">입력 RC가 있는 CS 단의 두 극점</a>처럼 노드별 접지 RC 인자가 따로 나타나요. 저항 $R$과 커패시턴스 $C$의 곱은 시간상수(time constant)이고, 그 역수가 양의 코너 각주파수예요.</p>
+$$\tau=RC$$
+$$\omega_p=\frac1{RC}$$
+<p>예를 들어 같은 저항에서 커패시턴스만 2배가 되면 시간상수는 2배이고 코너 각주파수는 절반이에요. 모든 회로의 노드 수를 세어 극점을 정하는 일반 법칙으로 확대하지 않아요.</p>
+</div>
+
+<div class="layer formal" data-explanation="start">
+<h4>종이에 쓸 첫 줄</h4>
+<div data-answer-step="입력 영점과 두 접지 RC 경로">
+<p>독립 입력 전압을 0으로 두어 단락하고, $V_{DD}$는 AC 접지로 봐요. 저항 경로를 읽을 때는 커패시터 자체를 개방해서 생각해요.</p>
+$$v_{in}=0$$
+<figure class="figure"><svg id="fig-p9-input-zero" viewBox="0 0 550 270" role="img" aria-label="독립 입력 전압을 왼쪽에서 접지로 단락한 CS 원 회로. 게이트 노드X에는 입력저항RS와 접지 커패시터가 연결되고, 오른쪽 드레인 출력에는 저항RD와 접지 부하 커패시터가 연결된다."><path class="fig-ink" d="M252 145 V195 M264 142 V198 M264 148 H300 V105 M264 192 H300 V225 M289 187 l7 5 l-7 5"/><text class="fig-text fig-math" x="314" y="172" text-anchor="start">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><path class="fig-ink" d="M300 105 V91 M300 91 v-8 l-6 -3 l12 -6 l-12 -6 l12 -6 l-12 -6 l12 -6 l-6 -3 V25 M289 25 H311"/><text class="fig-text fig-math" x="320" y="30" text-anchor="start">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text><text class="fig-text fig-math" x="321" y="69" text-anchor="start">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text><path class="fig-ink" d="M300 225 V243"/><path class="fig-ink" d="M289 243 h22 M293 248 h14 M297 253 h6"/><path class="fig-ink" d="M45 170 H69 M69 170 h8 l4 -6 l8 12 l8 -12 l8 12 l8 -12 l8 12 l4 -6 H133 M133 170 H252 M45 170 V243"/><path class="fig-ink" d="M34 243 h22 M38 248 h14 M42 253 h6"/><text class="fig-text fig-math" x="83" y="148" text-anchor="start">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><text class="fig-text fig-math" x="45" y="148" text-anchor="middle">v<tspan baseline-shift="sub" font-size="78%">in</tspan> = 0</text><path class="fig-ink" d="M190 170 V202 M178 202 H202 M178 210 H202 M190 210 V242"/><path class="fig-ink" d="M179 242 h22 M183 247 h14 M187 252 h6"/><text class="fig-text fig-math" x="211" y="224" text-anchor="start">C<tspan baseline-shift="sub" font-size="78%">in</tspan></text><circle class="fig-dot" cx="190" cy="170" r="4" data-node-id="X" data-node-color="blue"/><text class="fig-text fig-math" x="185" y="148" text-anchor="middle" data-node-id="X" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">X</tspan></text><path class="fig-ink" d="M300 105 H505 M412 105 V151 M400 151 H424 M400 159 H424 M412 159 V205"/><path class="fig-ink" d="M401 205 h22 M405 210 h14 M409 215 h6"/><text class="fig-text fig-math" x="433" y="174" text-anchor="start">C<tspan baseline-shift="sub" font-size="78%">L</tspan></text><circle class="fig-dot" cx="300" cy="105" r="4" data-node-id="OUT" data-node-color="red"/><circle class="fig-dot" cx="412" cy="105" r="4" data-node-id="OUT" data-node-color="red"/><circle class="fig-dot" cx="505" cy="105" r="4" data-node-id="OUT" data-node-color="red"/><text class="fig-text fig-math" x="500" y="81" text-anchor="end" data-node-id="OUT" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text></svg><figcaption>독립 입력 $v_{in}$만 단락했어요; 게이트 노드 $v_X$는 $R_S$를 거쳐 접지에 연결되며 $C_{in}$과 $C_L$은 각각 접지로 이어져요.</figcaption></figure>
+<p>게이트를 바로 접지로 옮기는 것이 아니에요. $v_{in}$을 단락해도 게이트 노드와 접지 사이에는 $R_S$가 남아요.</p>
+</div>
+</div>
+
+<div class="layer formal" data-explanation="solve">
+<h4>이렇게 풀어요</h4>
+<div data-subpart="main">
+<h5>입력 노드 $v_X$</h5>
+<p>MOS 게이트로 전도 전류가 흐르지 않으므로 게이트 쪽에 추가 병렬 저항은 없어요. 입력원을 단락한 뒤 X에서 접지로 보면 $R_S$가 저항 경로이고, 같은 X–접지 두 노드에 $C_{in}$이 연결돼요.</p>
+<div data-answer-step="입력 극점의 RC 블록">
+$$R_{eq,in}=R_S$$
+$$\tau_{in}=R_SC_{in}$$
+<p>입력의 RC 인자에서 양의 코너 각주파수를 구해요.</p>
+$$\omega_{p,in}=\frac1{R_SC_{in}}$$
+</div>
+
+<h5>출력 노드 $v_{out}$</h5>
+<p>저항을 읽는 단계에서 $C_{in}$도 개방하면 입력 0 조건에 의해 게이트와 소스의 제어 전압이 0이에요. $\lambda=0$이라 트랜지스터의 드레인 저항도 무한대예요.</p>
+<p>따라서 출력의 저항 경로는 위쪽 $R_D$이고, 출력의 커패시턴스는 $C_L$이에요.</p>
+<div data-answer-step="출력 극점의 RC 블록">
+$$R_{eq,out}=R_D$$
+$$\tau_{out}=R_DC_L$$
+<p>출력의 RC 인자에서 양의 코너 각주파수를 구해요.</p>
+$$\omega_{p,out}=\frac1{R_DC_L}$$
+</div>
+<p>두 식은 접지 커패시터와 한 방향 전달이라는 선택 모델 안에서의 극점 코너예요. 소자값이 없으므로 입력과 출력 중 어느 코너가 더 낮은지는 정할 수 없어요.</p>
+</div>
+</div>
+
+<div class="layer formal" data-explanation="verify">
+<h4>완성 답과 검산</h4>
+<div data-subpart="main">
+<div data-answer-final>
+<p><strong>양의 극점 코너 각주파수는 다음과 같아요.</strong></p>
+$$\omega_{p,in}=\frac1{R_SC_{in}}$$
+$$\omega_{p,out}=\frac1{R_DC_L}$$
+<p>$\lambda=0$이고, 게이트 전도 전류·몸체효과를 무시한 이 접지 커패시터 모델의 결과예요.</p>
+<p>$s$ 평면의 극점 위치를 쓰면 음의 실수예요.</p>
+$$s_{p,in}=-\frac1{R_SC_{in}}$$
+$$s_{p,out}=-\frac1{R_DC_L}$$
+</div>
+<p><strong>두 RC 인자를 확인해요.</strong> 출력에서 입력으로 돌아가는 결합이 없어서 입력의 자연응답 인자는 출력 쪽 동작으로 바뀌지 않아요. 따라서 이 모델의 극점을 만드는 두 인자는 다음처럼 곱해져요.</p>
+$$D(s)=(1+sR_SC_{in})(1+sR_DC_L)$$
+<p>$D(s)=0$을 풀면 완성 답의 두 음의 근이 나와요. 두 RC 시간이 같으면 같은 위치에 겹친 극점이 생기며 차수는 2로 남아요.</p>
+<p><strong>단위도 확인해요.</strong> $\Omega\cdot\mathrm F=\mathrm s$이므로 두 $RC$ 곱의 역수는 $\mathrm{s^{-1}}$ 차원을 가져요. $\omega_p$의 단위는 $\mathrm{rad/s}$이고, $\mathrm{Hz}$의 코너 주파수가 필요하면 $2\pi$로 나눠요.</p>
+</div>
+</div>
+
+<div class="layer warn" data-explanation="pitfall">
+<h4>주의할 점</h4>
+<ul>
+<li>입력원을 0으로 놓는 것은 $R_S$ 앞의 $v_{in}$을 단락하는 것이에요. $v_X$를 입력원과 같은 노드로 취급해 $R_S$를 없애지 않아요.</li>
+<li>게이트를 보는 입력 저항과 소스를 보는 입력 저항은 달라요. 이 CS의 게이트 노드에 $1/g_m$을 병렬로 넣지 않아요.</li>
+<li>$C_{in}$과 $C_L$은 같은 노드에 붙어 있지 않으므로 합쳐서 하나의 커패시턴스로 만들지 않아요.</li>
+<li>입력 코너가 항상 낮은 것도, 두 코너가 반드시 서로 다른 것도 아니에요. 크기 비교에는 실제 소자값이 필요해요.</li>
+<li>양의 코너 $\omega_p$와 음의 $s$ 평면 근을 구별해요. 부유 커패시터나 역방향 결합이 있는 다른 회로에 이 두 RC 식을 그대로 적용하지 않아요.</li>
+</ul>
+</div>
+
+<div class="layer eli5" data-explanation="retry">
+<h4>조건을 바꾸어 생각해요</h4>
+<ol>
+<li>$R_S$·$R_D$·$C_L$을 그대로 두고 $C_{in}$만 2배로 늘리면, 입력과 출력의 코너 각주파수는 각각 어떻게 바뀔까요? 같은 $\lambda=0$ 모델을 사용해요.</li>
+</ol>
+</div>
+
+<div class="sum" hidden>
+<p class="sum-lead">입력은 $R_SC_{in}$, 출력은 $R_DC_L$의 접지 RC 인자로 극점을 찾아요.</p>
+<p>$\lambda=0$이고 게이트 전도 전류·몸체효과와 입력–출력 부유 커패시터를 무시한 모델이에요.</p>
+$$\omega_{p,in}=\frac1{R_SC_{in}}$$
+$$\omega_{p,out}=\frac1{R_DC_L}$$
+<p>양의 코너 각주파수와 음의 $s$ 평면 근을 구별해요.</p>
+<p>어느 코너가 낮은지는 소자값으로 판단해요.</p>
+</div>

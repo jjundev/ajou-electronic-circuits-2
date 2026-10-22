@@ -1,10 +1,93 @@
-<div class="layer eli5" data-explanation="understand"><h4>문제를 내 말로 읽어요</h4><p>그림 11.67은 그림 11.12의 CG 단에서 $M_1$ 소스와 직렬로 기생 저항이 생긴 회로예요. 문제 문장의 $R_p$는 그림 라벨 $R_P$와 같은 소자이고, 그림에 $M_1$ 라벨은 인쇄되어 있지 않아요. $V_{in}$이 $R_S$를 지나 $C_{in}$이 붙은 접점에 오고, 그 접점과 실제 소스 사이에 $R_P$가 있어요. $\lambda=0$, 다른 커패시턴스는 무시하고 입력·출력 극점을 기호로 구해요.</p></div>
-<div class="layer formal" data-explanation="recall"><h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4><p>“소스와 직렬인 기생 저항”은 CG 소스 입력 저항 $1/g_m$에 $R_P$가 직렬로 더해진다는 단서예요. $\lambda=0$이면 드레인에서 소스 쪽으로의 소신호 되먹임이 없고 몸체 효과도 무시해요. 입력원을 0으로 놓으면 $C_{in}$ 노드에서 AC 접지로 가는 길은 $R_S$와 $R_P+1/g_m$ 두 갈래이고, 둘은 병렬이에요. 출력 노드는 $\lambda=0$이라 여전히 $R_D$만 봐요.</p></div>
-<div class="layer formal" data-explanation="start"><h4>종이에 쓰는 실제 첫 줄</h4><p>$V_{DD}$와 $V_b$를 AC 접지로 보내고 $M_1$을 종속 전류원으로 바꿔요. $C_{in}$이 붙은 접점 전압을 $v_x$, 실제 소스를 $v_s$라 두면 $v_{gs}=-v_s$라서 $v_s$에서 드레인 쪽으로 $g_mv_s$가 흘러 나가요. $R_P$를 $v_x\to v_s$ 방향으로 흐르는 전류 $(v_x-v_s)/R_P$는 $v_s$ 노드에서 이 $g_mv_s$와 같아야 해요. $v_x$에서 <strong>나가는</strong> 전류는 $R_S$ 가지 $(v_x-v_{in})/R_S$, $C_{in}$ 가지 $sC_{in}v_x$, $R_P$ 가지 $(v_x-v_s)/R_P$예요.</p>
-<figure class="figure"><svg viewBox="0 0 460 310" role="img" aria-label="v_in 전원이 R_S를 거쳐 노드 v_x에 이어지고 v_x에서 접지로 C_in이 있어요. v_x와 실제 소스 v_s 사이에 기생 저항 R_P가 있어요. 게이트 V_b는 AC 접지라 v_gs = −v_s이고, v_s에서 출력 노드 v_out 쪽으로 g_m·v_s 전류원(위 방향)이 있어요. v_out에서 접지로 R_D와 C_L이 병렬로 내려가요."><path class="fig-accent" d="M200 40 H432"/><circle class="fig-ink" cx="436" cy="40" r="4"/><text class="fig-text" x="430" y="26" text-anchor="end">v<tspan baseline-shift="sub">out</tspan></text><path class="fig-ink" d="M200 40 V79 M200 111 V150"/><polygon class="fig-ink" points="200,79 214,95 200,111 186,95"/><path class="fig-ink" d="M200 105 V86 M195 91 L200 86 L205 91"/><text class="fig-text" x="220" y="105">g<tspan baseline-shift="sub">m</tspan>v<tspan baseline-shift="sub">s</tspan></text><path class="fig-ink" d="M300 40 V71 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 V150"/><path class="fig-ink" d="M300 150 v8 M290 158 H310 M294 163 H306 M298 168 H302"/><path class="fig-ink" d="M380 40 V91 M368 91 H392 M368 99 H392 M380 99 V150"/><path class="fig-ink" d="M380 150 v8 M370 158 H390 M374 163 H386 M378 168 H382"/><circle class="fig-dot" cx="300" cy="40" r="3.5"/><circle class="fig-dot" cx="380" cy="40" r="3.5"/><path class="fig-accent" d="M294 57 L300 63 L306 57"/><path class="fig-accent" d="M374 57 L380 63 L386 57"/><text class="fig-text" x="314" y="100">R<tspan baseline-shift="sub">D</tspan></text><text class="fig-text" x="396" y="100">C<tspan baseline-shift="sub">L</tspan></text><text class="fig-muted" x="40" y="60">게이트 V<tspan baseline-shift="sub">b</tspan> → AC 접지</text><text class="fig-muted" x="176" y="92" text-anchor="end">v<tspan baseline-shift="sub">gs</tspan> = −v<tspan baseline-shift="sub">s</tspan></text><circle class="fig-dot" cx="200" cy="150" r="3.5"/><text class="fig-text" x="212" y="156">v<tspan baseline-shift="sub">s</tspan></text><path class="fig-danger" d="M200 150 V166 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 V230"/><text class="fig-text" x="214" y="196">R<tspan baseline-shift="sub">P</tspan></text><path class="fig-accent" d="M194 223 L200 217 L206 223"/><path class="fig-accent" d="M148 230 H200"/><path class="fig-ink" d="M80 230 h10 l4 -8 l8 16 l8 -16 l8 16 l8 -16 l8 16 l4 -8 h10"/><circle class="fig-dot" cx="200" cy="230" r="3.5"/><text class="fig-text" x="104" y="210">R<tspan baseline-shift="sub">S</tspan></text><text class="fig-text" x="212" y="226">v<tspan baseline-shift="sub">x</tspan></text><path class="fig-ink" d="M200 230 V252 M188 252 H212 M188 260 H212 M200 260 V282"/><path class="fig-ink" d="M200 282 v8 M190 290 H210 M194 295 H206 M198 300 H202"/><text class="fig-text" x="218" y="260">C<tspan baseline-shift="sub">in</tspan></text><path class="fig-accent" d="M175 224 L169 230 L175 236"/><path class="fig-accent" d="M194 240 L200 246 L206 240"/><path class="fig-ink" d="M80 230 H40 V247 M40 277 V282"/><circle class="fig-ink" cx="40" cy="262" r="15"/><text class="fig-text" x="36" y="259">+</text><text class="fig-text" x="36" y="274">−</text><path class="fig-ink" d="M40 282 v8 M30 290 H50 M34 295 H46 M38 300 H42"/><text class="fig-text" x="62" y="272">v<tspan baseline-shift="sub">in</tspan></text></svg><figcaption>$V_{DD}$와 게이트 $V_b$를 AC 접지로 보내 $R_D$를 $v_{out}$–접지 사이에 두고, $M_1$은 $v_s$에서 $v_{out}$으로 흐르는 $g_mv_s$ 전류원으로 바꿨어요($\lambda=0$, 몸체 효과 무시). 빨간 저항이 기생 $R_P$이고, 강조색 화살표는 각 노드에서 나가는 양의 방향이에요.</figcaption></figure>
-<p>$$v_s\text{ 노드: }\ \frac{v_x-v_s}{R_P}=g_mv_s$$</p></div>
-<div class="layer formal" data-explanation="solve"><h4>왜 이렇게 푸는지 함께 따라가요</h4><div data-subpart="main"><p>첫 식을 $v_s$로 풀면 $v_x=(1+g_mR_P)v_s$, 곧 $v_s=v_x/(1+g_mR_P)$예요. 그래서 $R_P$ 가지 전류는 $g_mv_s=\dfrac{g_m v_x}{1+g_mR_P}=\dfrac{v_x}{R_P+1/g_m}$이에요. 이것을 $v_x$ 노드 KCL에 넣으면 $$\frac{v_x-v_{in}}{R_S}+sC_{in}v_x+\frac{v_x}{R_P+1/g_m}=0.$$ $v_x$의 계수는 $\dfrac1{R_S}+\dfrac1{R_P+1/g_m}+sC_{in}$이므로 $$\omega_{p,in}=\frac1{[R_S\parallel(R_P+1/g_m)]C_{in}}.$$ $v_{out}$ 노드는 $(1/R_D+sC_L)v_{out}-g_mv_s=0$이고 $\lambda=0$이라 소스 쪽 저항 변화가 드레인 출력 저항에 전달되지 않아 $\omega_{p,out}=1/(R_DC_L)$이에요. 실제 $s$ 극점은 둘 다 음수예요.</p></div></div>
-<div class="layer formal" data-explanation="verify"><h4>완성 답과 검산</h4><div data-subpart="main"><p><strong>입력은 $1/\{[R_S\parallel(R_P+1/g_m)]C_{in}\}$, 출력은 $1/(R_DC_L)$예요.</strong> $R_P\to0$이면 예제 11.9 CG 입력 식 $1/[(R_S\parallel1/g_m)C_{in}]$로 돌아와요. $R_P\to\infty$이면 입력 저항은 $R_S$로 가서 입력 극점은 $1/(R_SC_{in})$예요. $R_P$가 커질수록 병렬 합 저항이 증가하므로 입력 극점이 내려가요. $g_mR_P$는 무차원이라 $R_P+1/g_m$도 저항 단위가 맞아요.</p></div></div>
-<div class="layer warn" data-explanation="pitfall"><h4>여기서 조심해요</h4><p>$R_P$를 $R_S$와 먼저 직렬로 합치지 않아요. $C_{in}$이 $R_S$와 $R_P$ 사이 접점 $v_x$에 붙어 있어 두 갈래를 분리해야 해요. $R_P$를 $1/g_m$과 병렬로 두는 것도 틀려요. 같은 전류가 $R_P$와 트랜지스터를 차례로 지나므로 직렬이에요. 출력 극점도 무조건 내려간다고 추정하지 않아요.</p></div>
-<div class="layer eli5" data-explanation="retry"><h4>설명을 닫고 규칙을 적용해 봐요</h4><ol><li>$C_{in}$이 보는 저항에서 $R_P$는 $1/g_m$과 직렬인가요, 병렬인가요? $R_S$와는요? 각각 같은 전류가 지나는지, 같은 두 노드 사이인지로 판단해 보세요.</li><li>$R_S=1\,\mathrm{k\Omega}$, $1/g_m=100\,\Omega$, $C_{in}=1\,\mathrm{pF}$일 때 $R_P=100\,\Omega$이 생기면 입력 극점은 $R_P=0$일 때보다 몇 배가 되나요? 출력 극점은요?</li></ol></div>
-<div class="sum" hidden=""><p>입력 극점은 $1/\{[R_S\parallel(R_P+1/g_m)]C_{in}\}$, 출력은 $1/(R_DC_L)$예요. $R_P$가 커지면 입력 극점만 내려가요.</p><p>$C_{in}$은 $R_S$와 $R_P$ 사이 노드에 있어요. $\lambda=0$·몸체 효과와 다른 커패시턴스 무시에서 $R_P$와 $1/g_m$은 직렬, 그 합과 $R_S$는 병렬이에요.</p><div class="summary-group"><h4>핵심 개념·답</h4><p>입력 $R_S\parallel(R_P+1/g_m)$, 출력 $R_D$</p><p>$R_P\to0$으로 원래 CG 회로 복원</p></div><div class="summary-group"><h4>첫 줄</h4><p>$v_s$ 노드: $(v_x-v_s)/R_P=g_mv_s$</p><p>$v_x$ 노드 KCL에 $v_x/(R_P+1/g_m)$ 대입</p></div><div class="summary-group"><h4>검산</h4><p>$R_P\to0$에서 예제 11.9 입력 극점, $R_P\to\infty$에서 $1/(R_SC_{in})$이에요.</p></div></div>
+<div class="layer eli5" data-explanation="understand">
+<h4>문제를 읽어요</h4>
+<p>입력 쪽과 출력 쪽의 두 극점이 같은 주파수에 있을 때, 전체 이득이 얼마나 일찍 줄어드는지 찾는 문제예요.</p>
+<p>구할 것은 공통 극점 주파수 자체가 아니라 전체 이득 크기가 저주파 값의 $1/\sqrt2$가 되는 주파수예요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+<h4>이 개념과 공식을 떠올려요</h4>
+<p>단서는 $\omega_{p1}=\omega_{p2}$라는 조건이에요.</p>
+<p>예제 11.8의 두 극점 크기 응답에서 같은 인자 두 개를 묶으면 되므로 회로를 다시 전개할 필요가 없어요.</p>
+<p>양의 공통 코너 각주파수를 $\omega_p$로 정해요.</p>
+<p>저주파 전압이득을 $A_0$라고 쓰고 크기 응답을 $|A_0|$로 나누면, 저주파에서 1인 정규화 응답(normalized response)이 돼요.</p>
+<p>전압 이득에서 교과서의 −3 dB 기준은 진폭이 $1/\sqrt2$가 되는 것이에요.</p>
+<p>예를 들어 $\omega=\omega_p$에서는 각 극점이 $1/\sqrt2$배를 만들므로, 두 인자를 곱한 전체 진폭은 $1/2$이에요.</p>
+<p>따라서 전체 −3 dB 지점은 $\omega_p$에 도착하기 전에 나타나요.</p>
+<p>예제의 $\lambda=0$인 입력·출력 두 RC 모델을 그대로 사용하며 다른 커패시턴스는 추가하지 않아요.</p>
+<p><a href="정리노트_1014_Frequency_Response.html#s2-cs-two-poles">입력 RC가 있는 CS 단의 두 극점</a>에서 얻은 크기 식을 출발점으로 써요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+<h4>종이에 쓸 첫 줄</h4>
+<p>예제의 크기 식을 저주파 값으로 나눈 뒤 두 극점을 같게 놓아요.</p>
+<div data-answer-step="상속한 두 극점 크기 응답">
+$$\frac{|H(j\omega)|}{|A_0|}=\frac{1}{\sqrt{\left[1+(\omega/\omega_{p1})^2\right]\left[1+(\omega/\omega_{p2})^2\right]}}$$
+$$\omega_{p1}=\omega_{p2}=\omega_p$$
+</div>
+</div>
+<div class="layer formal" data-explanation="solve">
+<h4>이렇게 풀어요</h4>
+<div data-subpart="main">
+<h5>같은 두 인자를 먼저 합쳐요</h5>
+<p>정규화 크기를 $M(\omega)=|H(j\omega)|/|A_0|$로 간단히 적어요.</p>
+<p>같은 양을 두 번 곱한 제곱근이며 $1+(\omega/\omega_p)^2$는 양수예요.</p>
+<div data-answer-step="동일한 두 극점의 정규화 크기">
+$$\begin{aligned}M(\omega)&amp;=\frac{1}{\sqrt{\left[1+(\omega/\omega_p)^2\right]^2}}\\&amp;=\frac{1}{1+(\omega/\omega_p)^2}\end{aligned}$$
+</div>
+<h5>전체 응답에 −3 dB 조건을 걸어요</h5>
+<div data-answer-step="전체 3 dB 조건">
+$$\frac{1}{1+(\omega_{3\mathrm{dB}}/\omega_p)^2}=\frac{1}{\sqrt2}$$
+</div>
+<p>양변의 역수를 취하고 1을 빼요.</p>
+$$1+(\omega_{3\mathrm{dB}}/\omega_p)^2=\sqrt2$$
+$$\left(\frac{\omega_{3\mathrm{dB}}}{\omega_p}\right)^2=\sqrt2-1$$
+<p>찾는 각주파수는 양수이므로 양의 제곱근을 골라요.</p>
+<div data-answer-step="양의 대역폭 주파수">
+$$\omega_{3\mathrm{dB}}=\sqrt{\sqrt2-1}\,\omega_p\approx0.64\,\omega_p$$
+</div>
+<p>계산에는 $0.64$가 아니라 정확한 $\sqrt{\sqrt2-1}$을 유지해요.</p>
+<p>공통 극점의 회로값 표현은 예제에서 이미 구한 값이에요.</p>
+$$\omega_p=\frac{1}{R_SC_{in}}=\frac{1}{R_DC_L}$$
+<figure class="figure"><svg id="p10-normalized" viewBox="0 0 500 290" role="img" aria-label="동일한 두 극점의 정규화 크기 응답은 저주파에서 1로 시작해 공통 극점 주파수의 약 0.64배에서 마이너스 3 dB가 되고 공통 극점 주파수에서는 0.5가 되는 곡선"><path class="fig-ink" d="M75 25V220H460"/><path class="fig-ink" d="M69 40H75"/><text class="fig-text fig-math" x="60" y="45" text-anchor="end">1</text><path class="fig-ink" d="M69 130H75"/><text class="fig-text fig-math" x="60" y="135" text-anchor="end">0.5</text><path class="fig-ink" d="M69 220H75"/><text class="fig-text fig-math" x="60" y="225" text-anchor="end">0</text><path class="fig-ink" d="M75.00 220V226"/><text class="fig-text fig-math" x="75" y="247" text-anchor="middle">0</text><path class="fig-ink" d="M235.90 220V226"/><text class="fig-text fig-math" x="235.89856322639568" y="247" text-anchor="middle">0.64</text><path class="fig-ink" d="M325.00 220V226"/><text class="fig-text fig-math" x="325" y="247" text-anchor="middle">1</text><path class="fig-ink" d="M450.00 220V226"/><text class="fig-text fig-math" x="450" y="247" text-anchor="middle">1.5</text><text class="fig-text fig-math" x="82" y="20">M(ω)</text><text class="fig-text fig-math" x="365" y="275">ω / ω<tspan baseline-shift="sub" font-size="78%">p</tspan></text><path class="fig-ink" stroke-dasharray="4 5" d="M75 92.72H235.90V220M325 130V220"/><path class="fig-accent" d="M75.00 40.00L78.75 40.04L82.50 40.16L86.25 40.36L90.00 40.65L93.75 41.01L97.50 41.45L101.25 41.96L105.00 42.56L108.75 43.22L112.50 43.96L116.25 44.77L120.00 45.65L123.75 46.59L127.50 47.60L131.25 48.67L135.00 49.80L138.75 50.99L142.50 52.23L146.25 53.52L150.00 54.86L153.75 56.25L157.50 57.68L161.25 59.15L165.00 60.65L168.75 62.19L172.50 63.76L176.25 65.36L180.00 66.99L183.75 68.64L187.50 70.31L191.25 72.00L195.00 73.71L198.75 75.42L202.50 77.15L206.25 78.89L210.00 80.64L213.75 82.39L217.50 84.14L221.25 85.89L225.00 87.65L228.75 89.40L232.50 91.14L236.25 92.88L240.00 94.62L243.75 96.34L247.50 98.06L251.25 99.76L255.00 101.45L258.75 103.13L262.50 104.80L266.25 106.45L270.00 108.09L273.75 109.71L277.50 111.31L281.25 112.90L285.00 114.47L288.75 116.02L292.50 117.55L296.25 119.06L300.00 120.55L303.75 122.03L307.50 123.48L311.25 124.91L315.00 126.33L318.75 127.72L322.50 129.10L326.25 130.45L330.00 131.78L333.75 133.09L337.50 134.39L341.25 135.66L345.00 136.91L348.75 138.15L352.50 139.36L356.25 140.55L360.00 141.73L363.75 142.88L367.50 144.02L371.25 145.13L375.00 146.23L378.75 147.31L382.50 148.37L386.25 149.41L390.00 150.44L393.75 151.44L397.50 152.43L401.25 153.41L405.00 154.36L408.75 155.30L412.50 156.23L416.25 157.13L420.00 158.03L423.75 158.90L427.50 159.76L431.25 160.61L435.00 161.44L438.75 162.25L442.50 163.05L446.25 163.84L450.00 164.62"/><circle class="fig-dot" cx="235.90" cy="92.72" r="4"/><circle class="fig-danger" cx="325" cy="130" r="4"/><text class="fig-text fig-math" x="245" y="77">−3 dB</text><text class="fig-text fig-math" x="336" y="113">−6.02 dB</text></svg><figcaption>가로축은 공통 극점 주파수로 나눈 각주파수이고, 세로축은 저주파 이득 크기를 1로 맞춘 값이에요. $0.64$ 표시는 정확한 근호 값을 반올림한 위치예요.</figcaption></figure>
+</div>
+</div>
+<div class="layer formal" data-explanation="verify">
+<h4>완성 답과 검산</h4>
+<div data-subpart="main">
+<div data-answer-final>
+<p><strong>같은 두 극점의 전체 −3 dB 각주파수예요.</strong></p>
+$$\omega_{3\mathrm{dB}}=\sqrt{\sqrt2-1}\,\omega_p\approx0.64\,\omega_p$$
+$$\omega_p=\frac{1}{R_SC_{in}}=\frac{1}{R_DC_L}$$
+<p>예제 11.8의 $\lambda=0$인 두 RC 모델과 $R_SC_{in}=R_DC_L$ 조건을 사용해요.</p>
+</div>
+<p>정확한 근호 값을 원래 정규화 크기 식에 다시 넣어요.</p>
+$$M(\omega_{3\mathrm{dB}})=\frac{1}{1+(\sqrt2-1)}=\frac{1}{\sqrt2}$$
+$$20\log_{10}\frac{1}{\sqrt2}\approx-3.01\,\mathrm{dB}$$
+<p>공통 코너 $\omega_p$에 대입하면 진폭은 절반이므로 같은 지점이 아니에요.</p>
+$$M(\omega_p)=\frac{1}{1+1}=\frac12$$
+$$20\log_{10}\frac12\approx-6.02\,\mathrm{dB}$$
+<p>$0\lt\sqrt{\sqrt2-1}\lt1$이므로 전체 대역폭이 공통 코너보다 낮다는 예상과 맞아요.</p>
+<p>배율은 무차원이므로 $\omega_{3\mathrm{dB}}$와 $\omega_p$는 둘 다 rad/s 단위예요.</p>
+<p>Hz로 비교하더라도 두 주파수를 똑같이 $2\pi$로 나누므로 $f_{3\mathrm{dB}}/f_p$의 배율은 같아요.</p>
+</div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+<h4>주의할 점</h4>
+<ul>
+<li>극점 하나일 때의 $\omega_{3\mathrm{dB}}=\omega_p$를 두 극점에 그대로 쓰지 않아요.</li>
+<li>같은 인자 두 개의 크기를 곱했으므로 분모는 $1+(\omega/\omega_p)^2$예요. 바깥 제곱근을 한 번 더 남기지 않아요.</li>
+<li>−3 dB는 진폭 절반이 아니에요. 이 회로에서 진폭 절반은 공통 코너의 약 −6.02 dB예요.</li>
+<li>$\omega_p$는 양의 코너 각주파수예요. 전달 함수의 음의 극점 위치와 혼동하지 않아요.</li>
+</ul>
+</div>
+<div class="layer eli5" data-explanation="retry">
+<h4>조건을 바꾸어 생각해요</h4>
+<ol><li>처음에는 두 극점이 같아요. $R_S,R_D,C_L,g_m$을 고정하고 $C_{in}$만 절반으로 줄이면 더 이상 두 극점이 같지 않아요. 원래의 공통 주파수로 $x=\omega/\omega_p$를 정의해 새로운 −3 dB 조건을 써 보고, 전체 대역폭이 원래보다 커지는지 판단해 보세요.</li></ol>
+</div>
+<div class="sum" hidden>
+<p class="sum-lead">같은 두 극점의 감쇠가 곱해지므로 전체 −3 dB 지점은 공통 코너보다 낮아요.</p>
+<p>예제의 $\lambda=0$인 두 RC 모델과 동일 극점 조건을 사용해요.</p>
+<ul class="eq-list">
+<li><span class="eq-name">정규화 크기</span>$$M(\omega)=\frac{1}{1+(\omega/\omega_p)^2}$$</li>
+<li><span class="eq-name">전체 3 dB 경계</span>$$\begin{aligned}\omega_{3\mathrm{dB}}&amp;=\sqrt{\sqrt2-1}\,\omega_p\\&amp;\approx0.64\,\omega_p\end{aligned}$$</li>
+</ul>
+<p>$\omega_p$에서의 전체 감쇠는 약 −6.02 dB예요.</p>
+</div>

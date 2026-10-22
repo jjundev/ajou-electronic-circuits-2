@@ -1,0 +1,96 @@
+<div class="layer eli5" data-explanation="understand">
+<h4>문제를 읽어요</h4>
+<p>입력 극점은 그대로 두고 출력 극점만 그보다 열 배 높은 곳으로 보내도록 $R_D$를 고르는 문제예요.</p>
+<p>출력 극점은 $R_DC_L$의 역수이므로, 다른 값이 같을 때 더 높은 출력 극점을 원하면 $R_D$를 작게 해야 해요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+<h4>이 개념과 공식을 떠올려요</h4>
+<p>단서는 출력 극점 주파수가 입력 극점 주파수의 10배라는 비교 조건이에요.</p>
+<p>예제 11.9의 CG(common-gate) 단에서 입력은 $M_1$의 소스이고 게이트의 고정 바이어스 $V_b$는 AC 접지예요.</p>
+<p>독립 입력 전압을 0으로 두면 소스 입력 노드에서 $R_S$가 접지로 보여요.</p>
+<p>$\lambda=0$이고 몸체효과를 무시한 모델에서는 게이트가 AC 접지인 MOS의 소스 쪽 저항이 알려진 블록 $1/g_m$이에요.</p>
+<p>따라서 입력 커패시터 $C_{in}$이 보는 저항은 $R_S$만이 아니라 $R_S\parallel(1/g_m)$이에요.</p>
+<p>반면 드레인 출력에서는 $R_D$와 $C_L$이 극점을 정하므로, 두 커패시터를 서로 바꾸지 않아요.</p>
+<p>예를 들어 $C_{in}=C_L$이라면 출력 저항을 입력의 유효 저항의 $1/10$로 만들 때 출력 코너가 열 배 높아져요.</p>
+<p>일반적인 서로 다른 커패시턴스에서는 그 비율까지 포함해야 해요.</p>
+<p><a href="정리노트_1014_Frequency_Response.html#s2-cg-poles">CG 단의 입력 극점</a>에서 얻은 두 극점 식을 그대로 사용해요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+<h4>종이에 쓸 첫 줄</h4>
+<p>구할 저항부터 추측하지 말고 원문의 주파수 비교를 먼저 식으로 옮겨요.</p>
+<div data-answer-step="정확히 열 배라는 설계 조건">
+$$\omega_{p,out}=10\,\omega_{p,in}$$
+<p>여기서 $\omega_{p,in},\omega_{p,out}$은 각각 입력·출력의 양의 코너 각주파수예요.</p>
+</div>
+</div>
+<div class="layer formal" data-explanation="solve">
+<h4>이렇게 풀어요</h4>
+<div data-subpart="main">
+<h5>입력의 알려진 저항 블록을 묶어요</h5>
+<div data-answer-step="CG 입력의 유효 저항과 두 극점">
+<p>입력 노드의 병렬 저항을 $R_i$로 정의해요.</p>
+$$R_i=R_S\parallel\frac1{g_m}$$
+<p>예제에서 구한 입력 극점은 이 저항과 $C_{in}$으로 정해져요.</p>
+$$\omega_{p,in}=\frac1{R_iC_{in}}$$
+<p>출력 극점에는 별도의 $R_D$와 $C_L$을 써요.</p>
+$$\omega_{p,out}=\frac1{R_DC_L}$$
+</div>
+<h5>비교 조건에 대입하고 저항을 역산해요</h5>
+<div data-answer-step="두 극점의 열 배 조건 대입">
+$$\frac1{R_DC_L}=\frac{10}{R_iC_{in}}$$
+</div>
+<p>저항과 커패시턴스가 양수이므로 양변에 $R_DC_LR_iC_{in}$을 곱해요.</p>
+$$R_iC_{in}=10R_DC_L$$
+<p>양변을 $10C_L$로 나누어 $R_D$만 남겨요.</p>
+<div data-answer-step="커패시턴스 비를 포함한 저항 선택">
+$$R_D=\frac{R_iC_{in}}{10C_L}$$
+$$R_D=\frac{C_{in}}{10C_L}\left(R_S\parallel\frac1{g_m}\right)$$
+</div>
+<p>$1/10$은 출력 주파수를 열 배 높이라는 요구에서 나오고, $C_{in}/C_L$은 서로 다른 두 노드의 커패시턴스를 보정해요.</p>
+</div>
+</div>
+<div class="layer formal" data-explanation="verify">
+<h4>완성 답과 검산</h4>
+<div data-subpart="main">
+<div data-answer-final>
+<p><strong>출력 극점이 정확히 입력 극점의 10배가 되도록 고르는 값이에요.</strong></p>
+$$R_D=\frac{C_{in}}{10C_L}\left(R_S\parallel\frac1{g_m}\right)$$
+<p>예제의 $\lambda=0$·몸체효과 무시·게이트 AC 접지 조건을 사용해요.</p>
+</div>
+<p>구한 저항을 출력 극점 식에 그대로 넣어 비교 조건을 확인해요.</p>
+$$\begin{aligned}\omega_{p,out}&amp;=\frac1{\left(R_iC_{in}/(10C_L)\right)C_L}\\&amp;=\frac{10}{R_iC_{in}}\\&amp;=10\,\omega_{p,in}\end{aligned}$$
+<p>$C_{in}/C_L$의 단위는 $\mathrm{F}/\mathrm{F}=1$이라 저항에 곱해도 답의 단위는 $\Omega$예요.</p>
+<p>$C_{in}=C_L$인 특수값에서는 예측한 단순 비율로 돌아와요.</p>
+$$R_D=\frac1{10}\left(R_S\parallel\frac1{g_m}\right)$$
+<p>선택한 값보다 $R_D$를 더 작게 만들면 출력의 시간상수는 줄고 출력 극점은 10배보다 더 높아져요.</p>
+<p>만약 요구를 “적어도 10배”로 바꾼 경우에만 다음 부등식 범위를 답으로 쓸 수 있어요.</p>
+$$R_D\le\frac{C_{in}}{10C_L}\left(R_S\parallel\frac1{g_m}\right)$$
+</div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+<h4>주의할 점</h4>
+<ul>
+<li>CG 입력에서는 $1/g_m$ 경로를 빠뜨리지 않아요. 입력 유효 저항은 $R_S$ 하나가 아니에요.</li>
+<li>출력 극점을 높이려면 $R_D$를 키우는 것이 아니라 줄여야 해요.</li>
+<li>$C_{in}$은 입력 극점에, $C_L$은 출력 극점에 들어가므로 최종 비는 $C_{in}/C_L$이에요.</li>
+<li>원문의 “10배”는 등식이에요. “10배 이상”을 위한 저항 범위와 구별해요.</li>
+<li>두 주파수의 비는 Hz로 구해도 같으므로 이 비교식에 $2\pi$를 한쪽에만 추가하지 않아요.</li>
+</ul>
+</div>
+<div class="layer eli5" data-explanation="retry">
+<h4>조건을 바꾸어 생각해요</h4>
+<ol>
+<li>$R_S,g_m,C_{in},C_L$을 고정하고 출력 극점 목표를 입력의 20배로 높이면, 고를 $R_D$는 원래 값의 몇 배일까요?</li>
+<li>$R_S,g_m,C_{in}$을 고정하고 $C_L$만 두 배가 되었어요. 출력 극점을 여전히 입력의 10배로 유지하려면 $R_D$를 어떻게 바꿔야 할까요?</li>
+</ol>
+</div>
+<div class="sum" hidden>
+<p class="sum-lead">두 극점의 비를 먼저 정하고 출력 시간상수에서 $R_D$를 역산해요.</p>
+<p>$\lambda=0$·몸체효과 무시·게이트 AC 접지인 CG 모델이에요.</p>
+<ul class="eq-list">
+<li><span class="eq-name">원문의 비교 조건</span>$$\omega_{p,out}=10\,\omega_{p,in}$$</li>
+<li><span class="eq-name">입력 저항 블록</span>$$R_i=R_S\parallel\frac1{g_m}$$</li>
+<li><span class="eq-name">정확히 열 배인 선택</span>$$R_D=\frac{C_{in}}{10C_L}R_i$$</li>
+</ul>
+<p>$R_D$를 더 작게 고르면 출력 극점은 10배보다 높아져요.</p>
+</div>

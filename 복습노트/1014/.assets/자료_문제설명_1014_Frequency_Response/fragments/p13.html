@@ -1,0 +1,97 @@
+<div class="layer eli5" data-explanation="understand">
+<h4>문제를 읽어요</h4>
+<p>CG 입력 경로에 생긴 기생 저항 때문에, 입력 커패시터가 붙은 노드와 MOS의 실제 소스가 서로 다른 노드가 됐어요. 입력 극점에서 이 차이를 반영하고, 출력 극점도 따로 확인해요.</p>
+<p>문제의 $M_1$은 게이트가 $V_b$에 고정된 MOS예요. 기생 저항은 그림의 표기 $R_P$로 쓰고, $R_S$·$R_P$·$C_{in}$의 접속점을 해석용 X, 실제 소스를 해석용 S라고 부를게요.</p>
+</div>
+
+<div class="layer formal" data-explanation="recall">
+<h4>이 개념과 공식을 떠올려요</h4>
+<p>$\lambda=0$이고 다른 커패시턴스를 무시하므로, 그림의 $C_{in}$과 $C_L$에 해당하는 두 RC 인자를 찾아요. 게이트는 AC 접지이고 몸체효과와 게이트 전도 전류는 무시하는 모델이에요.</p>
+<p><a href="정리노트_1014_Frequency_Response.html#s2-cg-poles">CG 소스 쪽의 알려진 입력저항</a>은 $1/g_m$이에요. 여기서 $g_m$은 문제의 MOS 트랜스컨덕턴스예요. X에서 그 소스 쪽을 보려면 먼저 $R_P$를 지나야 하므로 두 저항은 직렬이에요.</p>
+<p>예를 들어 $R_P=1/g_m$이면 소자 쪽 가지의 직렬 합은 $2/g_m$이에요. 그다음에야 X에서 접지로 가는 다른 경로인 $R_S$와 병렬로 합쳐요.</p>
+<p>$R_P$는 CG 신호 입력 경로에 직렬로 생긴 저항이에요. 일반적인 접지 소스 축퇴 저항으로 바꿔 놓거나 $g_mR_P\gg1$을 강제하지 않고, 내부 저항 $1/g_m$을 포함한 $R_P+1/g_m$을 유지해요.</p>
+<p>$\lambda=0$에서는 드레인 전압 변화가 소스 전류에 영향을 주지 않아요. 그래서 입력 쪽 저항 블록은 출력의 $R_D$·$C_L$에 의존하지 않아요.</p>
+<p>S에는 별도의 커패시턴스를 두지 않으므로, 해석용 노드 이름을 추가했다고 RC 극점이 하나 더 생기지는 않아요.</p>
+</div>
+
+<div class="layer formal" data-explanation="start">
+<h4>종이에 쓸 첫 줄</h4>
+<div data-answer-step="입력 영점과 기생 저항의 실제 위치">
+<p>독립 입력을 0으로 두어 $R_S$의 왼쪽을 단락하고, 고정 바이어스와 전원은 AC 접지로 봐요.</p>
+$$v_{in}=0$$
+<figure class="figure"><svg id="fig-p13-input-zero" viewBox="0 0 550 380" role="img" aria-label="게이트가 오른쪽에서 AC 접지된 CG MOS 회로. 왼쪽 입력원을 접지로 단락하면 입력 커패시터 노드X에서 RS가 접지로 보인다. X와 실제 MOS 소스 노드S 사이에 기생 저항RP가 직렬로 있고, 드레인 출력과 부하 커패시터는 오른쪽에 있다."><path class="fig-ink" d="M286 112 V152 M274 109 V155 M274 115 H250 V80 M274 149 H250 V180 M263 144 l-7 5 l7 5"/><path class="fig-ink" d="M286 132 H340 V157"/><path class="fig-ink" d="M329 157 h22 M333 162 h14 M337 167 h6"/><text class="fig-text fig-math" x="323" y="111" text-anchor="middle">v<tspan baseline-shift="sub" font-size="78%">b</tspan> = 0</text><path class="fig-ink" d="M250 80 V69 M250 69 v-7 l-6 -3 l12 -6 l-12 -6 l12 -6 l-12 -6 l12 -6 l-6 -3 V12 M239 12 H261"/><text class="fig-text fig-math" x="270" y="18" text-anchor="start">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text><text class="fig-text fig-math" x="272" y="53" text-anchor="start">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text><path class="fig-ink" d="M250 80 H505 M420 80 V121 M408 121 H432 M408 129 H432 M420 129 V170"/><path class="fig-ink" d="M409 170 h22 M413 175 h14 M417 180 h6"/><text class="fig-text fig-math" x="442" y="140" text-anchor="start">C<tspan baseline-shift="sub" font-size="78%">L</tspan></text><circle class="fig-dot" cx="250" cy="80" r="4" data-node-id="OUT" data-node-color="blue"/><circle class="fig-dot" cx="420" cy="80" r="4" data-node-id="OUT" data-node-color="blue"/><circle class="fig-dot" cx="505" cy="80" r="4" data-node-id="OUT" data-node-color="blue"/><text class="fig-text fig-math" x="500" y="56" text-anchor="end" data-node-id="OUT" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M250 180 V198 M250 198 v7 l6 3 l-12 6 l12 6 l-12 6 l12 6 l-12 6 l6 3 V270"/><text class="fig-text fig-math" x="272" y="236" text-anchor="start">R<tspan baseline-shift="sub" font-size="78%">P</tspan></text><circle class="fig-dot" cx="250" cy="180" r="4" data-node-id="S" data-node-color="red"/><text class="fig-text fig-math" x="270" y="201" text-anchor="start" data-node-id="S" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">S</tspan></text><path class="fig-ink" d="M44 270 H69 M69 270 h8 l4 -6 l8 12 l8 -12 l8 12 l8 -12 l8 12 l4 -6 H133 M133 270 H250 M44 270 V350"/><path class="fig-ink" d="M33 350 h22 M37 355 h14 M41 360 h6"/><text class="fig-text fig-math" x="44" y="248" text-anchor="middle">v<tspan baseline-shift="sub" font-size="78%">in</tspan> = 0</text><text class="fig-text fig-math" x="83" y="248" text-anchor="start">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><path class="fig-ink" d="M250 270 V306 M238 306 H262 M238 314 H262 M250 314 V350"/><path class="fig-ink" d="M239 350 h22 M243 355 h14 M247 360 h6"/><text class="fig-text fig-math" x="271" y="335" text-anchor="start">C<tspan baseline-shift="sub" font-size="78%">in</tspan></text><circle class="fig-dot" cx="250" cy="270" r="4" data-node-id="X" data-node-color="blue"/><text class="fig-text fig-math" x="272" y="291" text-anchor="start" data-node-id="X" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">X</tspan></text></svg><figcaption>해석용 노드 X는 $R_S$·$R_P$·$C_{in}$의 접속점이고, 해석용 노드 S는 MOS의 실제 소스예요; 두 노드 사이의 $R_P$를 남겨요.</figcaption></figure>
+<p>저항을 읽을 때 커패시터를 개방해서 생각해도 $R_P$의 위치는 그대로예요. $C_{in}$이 보는 노드는 S가 아니라 X예요.</p>
+</div>
+</div>
+
+<div class="layer formal" data-explanation="solve">
+<h4>이렇게 풀어요</h4>
+<div data-subpart="main">
+<h5>입력 커패시터 노드 X</h5>
+<p>먼 곳의 소자 블록부터 읽어요. 게이트 AC 접지·$\lambda=0$·몸체효과 무시 조건에서, 실제 소스 S에서 MOS 안쪽을 보면 $1/g_m$이에요.</p>
+<div data-answer-step="직렬 가지를 구한 뒤 입력 병렬 합성">
+$$R_{in,S}=\frac1{g_m}$$
+<p>X에서 S를 거쳐 들어가는 가지에는 $R_P$가 직렬로 더해져요.</p>
+$$R_{branch}=R_P+\frac1{g_m}$$
+<p>입력원을 단락하면 $R_S$도 X에서 AC 접지로 보여요. 두 경로를 마지막에 병렬로 합쳐요.</p>
+$$R_{eq,in}=R_S\parallel\left(R_P+\frac1{g_m}\right)$$
+<p>X–접지의 커패시턴스는 $C_{in}$이므로 입력 코너예요.</p>
+$$\omega_{p,in}=\frac1{\left[R_S\parallel\left(R_P+1/g_m\right)\right]C_{in}}$$
+</div>
+
+<h5>드레인 출력 노드</h5>
+<p>출력의 저항 경로를 읽을 때도 독립 입력을 0으로 두고 커패시터를 개방해요. 소스는 입력의 접지 경로를 통해 0이 되고 게이트도 AC 접지라 제어 전압이 0이에요.</p>
+<div data-answer-step="출력 극점은 RD와 CL로 결정">
+<p>$\lambda=0$이므로 MOS의 드레인 저항은 무한대예요. 소스 쪽에 $R_P$가 있어도 드레인 전압의 영향이 되돌아가지 않아서 출력의 저항 경로는 $R_D$예요.</p>
+$$R_{eq,out}=R_D$$
+$$\omega_{p,out}=\frac1{R_DC_L}$$
+</div>
+<p>이 결론은 주어진 한 방향 소신호 모델의 결과예요. 소스 전류가 드레인 전압에 의존하는 다른 모델에 그대로 옮기지 않아요.</p>
+</div>
+</div>
+
+<div class="layer formal" data-explanation="verify">
+<h4>완성 답과 검산</h4>
+<div data-subpart="main">
+<div data-answer-final>
+<p><strong>양의 입력·출력 코너 각주파수예요.</strong></p>
+$$\omega_{p,in}=\frac1{\left[R_S\parallel\left(R_P+1/g_m\right)\right]C_{in}}$$
+$$\omega_{p,out}=\frac1{R_DC_L}$$
+<p>$\lambda=0$·게이트 AC 접지·몸체효과와 게이트 전도 전류 무시 조건이고, 다른 커패시턴스는 고려하지 않아요.</p>
+<p>$s$ 평면의 극점은 이 양의 코너에 각각 음의 부호를 붙인 위치예요.</p>
+</div>
+<p><strong>기생 저항이 없어지는 경우를 확인해요.</strong> $R_P\to0$을 넣으면 기본 CG 입력 극점으로 돌아가요.</p>
+$$\omega_{p,in}\longrightarrow\frac1{(R_S\parallel1/g_m)C_{in}}$$
+<p><strong>저항 증가 방향을 확인해요.</strong> $g_m$과 다른 소신호 값을 고정하면 입력 코너를 다음처럼 컨덕턴스의 합으로 쓸 수 있어요.</p>
+$$\omega_{p,in}=\frac1{C_{in}}\left(\frac1{R_S}+\frac1{R_P+1/g_m}\right)$$
+<p>$R_P$가 커지면 두 번째 항이 작아지므로 입력 코너는 낮아져요. 출력 코너 식에는 $R_P$가 없어서 같은 $R_D$·$C_L$이면 그대로예요.</p>
+<p><strong>단위를 확인해요.</strong> $R_P$와 $1/g_m$은 모두 저항이라 직렬 합의 단위는 $\Omega$예요. 병렬 합도 $\Omega$이고, $C_{in}$을 곱한 뒤 역수를 취하면 $\mathrm{s^{-1}}$ 차원의 코너 각주파수이며 단위는 $\mathrm{rad/s}$예요.</p>
+</div>
+</div>
+
+<div class="layer warn" data-explanation="pitfall">
+<h4>주의할 점</h4>
+<ul>
+<li>$R_P$는 X와 실제 소스 S 사이에 있어요. $C_{in}$을 S에 옮겨 그리면 다른 회로를 푸는 셈이에요.</li>
+<li>$R_P$와 $1/g_m$은 직렬이고, 그 합이 $R_S$와 병렬이에요. 세 저항을 모두 직렬이나 모두 병렬로 묶지 않아요.</li>
+<li>소스 입력 경로의 기생 저항이라는 위치를 유지해요. $g_mR_P\gg1$을 조건 없이 넣어 내부 $1/g_m$을 지우지 않아요.</li>
+<li>입력원을 0으로 놓아도 실제로 단락하는 위치는 $R_S$ 앞이에요. X나 S를 바로 접지로 옮기지 않아요.</li>
+<li>$R_P$를 바꾸었을 때 입력 코너가 낮아진다는 비교는 $g_m$과 나머지 소신호 값을 고정한 조건이에요.</li>
+</ul>
+</div>
+
+<div class="layer eli5" data-explanation="retry">
+<h4>조건을 바꾸어 생각해요</h4>
+<ol>
+<li>$g_m$·$C_{in}$·$R_D$·$C_L$을 고정하고 $R_S\gg2/g_m$라고 해요. $R_P=0$에서 $R_P=1/g_m$으로 바꾸면 입력 코너는 처음의 약 몇 배가 되고, 출력 코너는 어떻게 될까요?</li>
+</ol>
+</div>
+
+<div class="sum" hidden>
+<p class="sum-lead">입력 커패시터 노드에서는 $R_P+1/g_m$을 먼저 만들고 $R_S$와 병렬로 합쳐요.</p>
+<p>$\lambda=0$·게이트 AC 접지·몸체효과와 게이트 전도 전류 무시 조건이며 $C_{in}$과 $C_L$만 남겨요.</p>
+$$\begin{aligned}\omega_{p,in}&amp;=\\&amp;\frac1{\left[R_S\parallel\left(R_P+1/g_m\right)\right]C_{in}}\end{aligned}$$
+$$\omega_{p,out}=\frac1{R_DC_L}$$
+<p>$R_P$는 입력 커패시터 노드와 MOS 소스 사이에 있어요.</p>
+<p>$g_m$을 고정하면 $R_P$ 증가는 입력 코너를 낮추고 출력 코너는 바꾸지 않아요.</p>
+</div>

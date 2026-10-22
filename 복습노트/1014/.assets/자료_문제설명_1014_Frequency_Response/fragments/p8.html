@@ -1,10 +1,134 @@
-<div class="layer eli5" data-explanation="understand"><h4>문제를 내 말로 읽어요</h4><p>그림 11.12는 CG 단이에요. 입력 $V_{in}$이 $R_S$를 거쳐 $M_1$의 소스로 들어가고, 소스 노드와 접지 사이에 $C_{in}$이 있어요. 게이트는 바이어스 $V_b$에 묶여 있고 드레인 $V_{out}$에는 $R_D$와 $C_L$이 있어요. $\lambda=0$이고 값이 없으니 극점을 기호로 구해요. $R_S$뿐 아니라 트랜지스터 쪽으로도 소스 전류가 빠져나가는 점이 CS와 달라요.</p></div>
-<div class="layer formal" data-explanation="recall"><h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4><p>“CG의 입력 극점”은 소스에서 들여다본 입력 저항 $1/g_m$을 떠올리는 단서예요. $g_m$은 게이트–소스 전압이 만드는 드레인 전류의 계수예요. $\lambda=0$이고 몸체 효과를 무시하면 게이트가 AC 접지인 소스 노드에서 트랜지스터로 들어가는 전류는 $g_mv_s$예요. 그래서 $C_{in}$이 보는 저항은 $R_S$와 $1/g_m$의 병렬이고, $\lambda=0$이라 드레인 노드는 따로 $R_DC_L$ 극점을 만들어요.</p></div>
-<div class="layer formal" data-explanation="start"><h4>종이에 쓰는 실제 첫 줄</h4><p>$V_{DD}$와 $V_b$를 AC 접지로 보내고 $M_1$을 종속 전류원으로 바꿔요. 소스 노드 전압을 $v_s$라 두면 게이트가 접지라 $v_{gs}=-v_s$, 드레인→소스 전류 $g_mv_{gs}=-g_mv_s$예요. 즉 $v_s$에서 드레인 쪽으로 $g_mv_s$가 흘러 나가요. $v_s$에서 <strong>나가는</strong> 전류를 양으로 잡으면 $R_S$ 가지 $(v_s-v_{in})/R_S$, $C_{in}$ 가지 $sC_{in}v_s$, 트랜지스터 가지 $g_mv_s$예요.</p>
-<figure class="figure"><svg viewBox="0 0 460 285" role="img" aria-label="v_in 전원이 R_S를 거쳐 소스 노드 v_s에 이어지고 v_s에서 접지로 C_in이 있어요. 게이트 V_b는 AC 접지라 v_gs = −v_s이고, v_s에서 출력 노드 v_out 쪽으로 g_m·v_s 전류원(위 방향)이 있어요. v_out에서 접지로 R_D와 C_L이 병렬로 내려가요."><path class="fig-accent" d="M200 50 H432"/><circle class="fig-ink" cx="436" cy="50" r="4"/><text class="fig-text" x="430" y="36" text-anchor="end">v<tspan baseline-shift="sub">out</tspan></text><path class="fig-ink" d="M200 50 V109 M200 141 V200"/><polygon class="fig-ink" points="200,109 214,125 200,141 186,125"/><path class="fig-ink" d="M200 135 V116 M195 121 L200 116 L205 121"/><text class="fig-text" x="220" y="131">g<tspan baseline-shift="sub">m</tspan>v<tspan baseline-shift="sub">s</tspan></text><path class="fig-ink" d="M300 50 V81 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 V160"/><path class="fig-ink" d="M300 160 v8 M290 168 H310 M294 173 H306 M298 178 H302"/><path class="fig-ink" d="M380 50 V101 M368 101 H392 M368 109 H392 M380 109 V160"/><path class="fig-ink" d="M380 160 v8 M370 168 H390 M374 173 H386 M378 178 H382"/><circle class="fig-dot" cx="300" cy="50" r="3.5"/><circle class="fig-dot" cx="380" cy="50" r="3.5"/><path class="fig-accent" d="M294 67 L300 73 L306 67"/><path class="fig-accent" d="M374 67 L380 73 L386 67"/><text class="fig-text" x="314" y="110">R<tspan baseline-shift="sub">D</tspan></text><text class="fig-text" x="396" y="110">C<tspan baseline-shift="sub">L</tspan></text><text class="fig-muted" x="40" y="84">게이트 V<tspan baseline-shift="sub">b</tspan> → AC 접지</text><text class="fig-muted" x="176" y="112" text-anchor="end">v<tspan baseline-shift="sub">gs</tspan> = −v<tspan baseline-shift="sub">s</tspan></text><path class="fig-accent" d="M148 200 H200"/><path class="fig-ink" d="M80 200 h10 l4 -8 l8 16 l8 -16 l8 16 l8 -16 l8 16 l4 -8 h10"/><circle class="fig-dot" cx="200" cy="200" r="3.5"/><text class="fig-text" x="104" y="180">R<tspan baseline-shift="sub">S</tspan></text><text class="fig-text" x="210" y="196">v<tspan baseline-shift="sub">s</tspan></text><path class="fig-ink" d="M200 200 V224 M188 224 H212 M188 232 H212 M200 232 V256"/><path class="fig-ink" d="M200 256 v8 M190 264 H210 M194 269 H206 M198 274 H202"/><text class="fig-text" x="218" y="234">C<tspan baseline-shift="sub">in</tspan></text><path class="fig-accent" d="M175 194 L169 200 L175 206"/><path class="fig-accent" d="M194 209 L200 215 L206 209"/><path class="fig-ink" d="M80 200 H40 V222 M40 252 V256"/><circle class="fig-ink" cx="40" cy="237" r="15"/><text class="fig-text" x="36" y="234">+</text><text class="fig-text" x="36" y="249">−</text><path class="fig-ink" d="M40 256 v8 M30 264 H50 M34 269 H46 M38 274 H42"/><text class="fig-text" x="62" y="246">v<tspan baseline-shift="sub">in</tspan></text></svg><figcaption>$V_{DD}$와 게이트 $V_b$를 AC 접지로 보내 $R_D$를 $v_{out}$–접지 사이에 두고, $M_1$은 $v_s$에서 $v_{out}$으로 흐르는 $g_mv_s$ 전류원으로 바꿨어요($\lambda=0$, 몸체 효과 무시). 강조색 화살표는 각 노드에서 나가는 양의 방향이에요.</figcaption></figure>
-<p>$$\frac{v_s-v_{in}}{R_S}+sC_{in}v_s+g_mv_s=0$$</p></div>
-<div class="layer formal" data-explanation="solve"><h4>왜 이렇게 푸는지 함께 따라가요</h4><div data-subpart="main"><p>입력 식에 $R_S$를 곱해 묶으면 $(1+g_mR_S+sR_SC_{in})v_s=v_{in}$이라 $$\frac{v_s}{v_{in}}=\frac1{1+g_mR_S+sR_SC_{in}}.$$ $v_{out}$ 노드에서 나가는 전류는 $v_{out}/R_D$, $sC_Lv_{out}$이고, 종속원 전류 $g_mv_s$는 이 노드로 들어오므로 $-g_mv_s$예요. KCL $(1/R_D+sC_L)v_{out}-g_mv_s=0$에서 $$H(s)=\frac{g_mR_D}{(1+g_mR_S+sR_SC_{in})(1+sR_DC_L)}.$$ 입력 인자를 상수항으로 나눠 정규화하면 $1+sR_SC_{in}/(1+g_mR_S)$이고, $R_S/(1+g_mR_S)=R_S\parallel(1/g_m)$이에요. 따라서 $$\omega_{p,in}=\frac{1}{\left(R_S\parallel\frac1{g_m}\right)C_{in}},\qquad\omega_{p,out}=\frac1{R_DC_L}.$$ 실제 $s$ 극점 위치는 이 값들의 음수예요.</p></div></div>
-<div class="layer formal" data-explanation="verify"><h4>완성 답과 검산</h4><div data-subpart="main"><p><strong>입력 극점 크기는 $1/[(R_S\parallel1/g_m)C_{in}]$, 출력은 $1/(R_DC_L)$예요.</strong> $g_m\to0$이면 입력 값은 $1/(R_SC_{in})$로 돌아와요. $g_mR_S\gg1$이면 입력 극점은 $g_m/C_{in}$에 가까워져요. 소스 저항이 낮아 커패시터가 더 빨리 충방전되는 해석과 같아요. 저주파 이득 $g_mR_D/(1+g_mR_S)$는 양수라 CG가 비반전이라는 사실과도 맞아요.</p></div></div>
-<div class="layer warn" data-explanation="pitfall"><h4>여기서 조심해요</h4><p>입력에 $R_S+1/g_m$을 넣지 않아요. $v_{in}$을 0으로 두면 $R_S$와 $1/g_m$은 둘 다 $v_s$와 AC 접지 사이라 병렬이에요. 극점을 구할 때 종속 전류원까지 꺼서는 안 돼요. $v_{gs}=+v_s$로 잡으면 $g_m$ 항의 부호가 뒤집혀 입력 저항이 음수처럼 나와요.</p></div>
-<div class="layer eli5" data-explanation="retry"><h4>설명을 닫고 규칙을 적용해 봐요</h4><ol><li>극점을 구하려고 $v_{in}=0$으로 두면 $C_{in}$이 보는 저항은 $R_S$와 $1/g_m$의 직렬인가요, 병렬인가요? 그 판단의 근거가 되는 두 가지의 양 끝 노드를 말해 보세요.</li><li>$g_m=10\,\mathrm{mS}$, $R_S=1\,\mathrm{k\Omega}$, $C_{in}=1\,\mathrm{pF}$이면 입력 극점은 몇 rad/s인가요? 근사 $g_m/C_{in}$과 몇 % 차이 나나요?</li></ol></div>
-<div class="sum" hidden=""><p>$\lambda=0$·몸체 효과 무시이며 종속 전류원은 꺼지지 않아요. 저주파 이득은 $g_mR_D/(1+g_mR_S)&gt;0$라 CG는 비반전이에요.</p><div class="summary-group"><h4>핵심 개념·답</h4><p>$\omega_{p,in}=1/[(R_S\parallel1/g_m)C_{in}]$</p><p>$\omega_{p,out}=1/(R_DC_L)$</p></div><div class="summary-group"><h4>첫 줄</h4><p>$v_{gs}=-v_s$</p><p>$(v_s-v_{in})/R_S+sC_{in}v_s+g_mv_s=0$</p></div><div class="summary-group"><h4>검산</h4><p>$g_m\to0$이면 입력 극점은 $1/(R_SC_{in})$이에요.</p></div></div>
+<div class="layer eli5" data-explanation="understand">
+<h4>문제를 읽어요</h4>
+<p>똑같은 CS 단 두 개가 이어져 있으므로, 한 단에서 신호가 얼마나 줄어드는지 구해 두 번 곱하는 문제예요.</p>
+<p>첫째 출력은 $V_X$이고 동시에 둘째 입력이며, 최종 출력은 $V_{out}$이에요.</p>
+<p>구할 것은 전체 이득 크기의 보데 선도이므로 저주파 높이·코너 위치·구간별 기울기를 밝혀요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+<h4>이 개념과 공식을 떠올려요</h4>
+<p>단서는 두 단이 동일하고, 채널 길이 변조와 다른 커패시턴스를 무시한다는 조건이에요.</p>
+<p>이 모델에서 $M_2$ 게이트는 전류를 받지 않으므로 $X$에 추가 부하를 주지 않아요.</p>
+<p>따라서 첫째 단의 $R_D,C_L$을 둘째 단 때문에 바꾸지 않고 각 단의 전달 함수를 곱할 수 있어요.</p>
+<p>$g_m$은 두 동일 MOS의 트랜스컨덕턴스이고, 단 전체의 출력 단락 전류 비율은 $G_m$으로 구별해요.</p>
+<p>한 단의 출력에서는 $R_D$와 $1/(sC_L)$이 AC 접지로 병렬이에요.</p>
+<p>보데(Bode) 근사에서는 각 실수 극점의 코너를 지날 때마다 기울기에 $-20\,\mathrm{dB/dec}$를 더해요.</p>
+<p>이 회로는 같은 코너에서 두 극점을 한꺼번에 지나므로 $0\to-20-20=-40\,\mathrm{dB/dec}$가 돼요.</p>
+<p>예를 들어 코너보다 충분히 높은 구간에서 주파수가 열 배가 되면 전체 이득 크기는 약 $1/100$이 돼요.</p>
+<p><a href="정리노트_1014_Frequency_Response.html#s1-bode">보데 근사: 극점마다 기울기 −20 dB/dec</a>의 기울기 합성을 같은 주파수에서 두 번 적용해요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+<h4>종이에 쓸 첫 줄</h4>
+<p>원문이 알려 준 중간 노드 $X$로 전체 경로를 나누는 식을 먼저 써요.</p>
+<div data-answer-step="중간 노드 X로 전달 함수 나누기">
+$$\frac{V_{out}}{V_{in}}=\frac{V_X}{V_{in}}\frac{V_{out}}{V_X}$$
+<p>두 단은 같고 둘째 게이트가 첫째 출력을 부하로 당기지 않는 모델이므로, 첫째 단을 한 번 풀어 두 비율에 적용해요.</p>
+</div>
+</div>
+<div class="layer formal" data-explanation="solve">
+<h4>이렇게 풀어요</h4>
+<div data-subpart="main">
+<div data-gain-route="gm-rout">
+<div data-gain-stage="gm">
+<h5>대표로 첫째 단의 출력 단락을 읽어요</h5>
+<div data-answer-step="한 단의 출력 단락과 Gm">
+<figure class="figure"><svg id="p8-first-gm" viewBox="0 0 480 220" role="img" aria-label="첫째 단 M1의 게이트 입력을 유지하고 오른쪽 X 출력을 접지로 단락한 회로"><path class="fig-ink" d="M130 104V156M145 104V118M145 123V137M145 142V156M145 104H170V65H420M145 156H170V185M260 65V100M260 150V185M330 65V115M316 115H344M316 125H344M330 125V185M42 130H130M420 65V185M170 185h-11m0 0h22m-18 6h14m-10 6h6M260 185h-11m0 0h22m-18 6h14m-10 6h6M330 185h-11m0 0h22m-18 6h14m-10 6h6M420 185h-11m0 0h22m-18 6h14m-10 6h6"/><rect class="fig-ink" x="249" y="100" width="22" height="50"/><circle class="fig-dot" cx="260" cy="65" r="3.5" data-node-id="p8-x" data-node-color="red"/><circle class="fig-dot" cx="330" cy="65" r="3.5" data-node-id="p8-x" data-node-color="red"/><circle class="fig-dot" cx="420" cy="65" r="3.5" data-node-id="p8-x" data-node-color="red"/><circle class="fig-dot" cx="42" cy="130" r="3.5" data-node-id="p8-vin" data-node-color="blue"/><text class="fig-text fig-math" x="28" y="103" data-node-id="p8-vin" data-node-color="blue">V<tspan baseline-shift="sub" font-size="78%">in</tspan></text><text class="fig-text fig-math" x="184" y="146">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" x="283" y="134">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text><text class="fig-text fig-math" x="352" y="127">C<tspan baseline-shift="sub" font-size="78%">L</tspan></text><text class="fig-text fig-math" x="387" y="34" data-node-id="p8-x" data-node-color="red">V<tspan baseline-shift="sub" font-size="78%">X</tspan>=0</text><path class="fig-ink" d="M405 65H370m7-5-7 5 7 5"/><text class="fig-text fig-math" x="370" y="94">i<tspan baseline-shift="sub" font-size="78%">out,sc</tspan></text></svg><figcaption>전원은 AC 접지로 옮겼어요. 다른 커패시턴스를 무시한 $M_2$의 게이트는 $X$에 부하를 더하지 않아 첫째 단만 표시했어요.</figcaption></figure>
+<p>출력 $X$를 단락하고 오른쪽에서 회로 안으로 들어오는 전류를 양으로 정해요.</p>
+<p>소스가 AC 접지라 $v_{gs1}=V_{in}$이고 $R_D,C_L$ 양단 전압은 0이에요.</p>
+$$i_{out,sc}=g_mV_{in}$$
+$$G_m=\frac{i_{out,sc}}{V_{in}}=g_m$$
+</div>
+</div>
+<div data-gain-stage="rout">
+<h5>입력을 0으로 둔 부하를 합쳐요</h5>
+<p>$V_{in}=0$이면 $M_1$의 게이트와 소스가 AC 접지라 제어 전류가 0이에요.</p>
+<p>채널 길이 변조를 무시하므로 유한 $r_O$는 없고, 이상적인 $M_2$ 게이트도 $X$에서 전류를 받지 않아요.</p>
+<div data-answer-step="한 단의 출력저항과 부하">
+<p>저주파에서는 $C_L$을 개방으로 보아 출력저항부터 읽어요.</p>
+$$R_{out}\approx R_D$$
+<p>주파수 응답에는 같은 노드의 외부 커패시터 부하를 포함해요.</p>
+$$\begin{aligned}Z_{out}(s)&amp;=R_D\parallel\frac{1}{sC_L}\\&amp;=\frac{R_D}{1+sR_DC_L}\end{aligned}$$
+</div>
+</div>
+<div data-gain-stage="gain">
+<h5>단락을 풀고 한 단의 반전 이득을 구해요</h5>
+<div data-answer-step="한 단의 부호 있는 전달 함수">
+<p>양의 게이트 입력은 출력에서 끌어내리는 전류를 늘리므로 반전 부호가 붙어요.</p>
+$$\begin{aligned}H_1(s)&amp;=\frac{V_X}{V_{in}}=-G_mZ_{out}(s)\\&amp;=-\frac{g_mR_D}{1+sR_DC_L}\end{aligned}$$
+</div>
+</div>
+</div>
+<p>둘째 단은 입력이 $V_X$, 출력이 $V_{out}$으로 바뀔 뿐 같은 $g_m,R_D,C_L$을 가져요.</p>
+$$H_2(s)=\frac{V_{out}}{V_X}=-\frac{g_mR_D}{1+sR_DC_L}$$
+<div data-answer-step="두 반전을 곱한 전체 전달 함수">
+<p>음수 두 개가 곱해져 전체 저주파 이득은 양수가 돼요.</p>
+$$H(s)=H_1(s)H_2(s)=\frac{(g_mR_D)^2}{(1+sR_DC_L)^2}$$
+</div>
+<p>분모에 같은 인자가 두 번 있으므로 같은 위치에 두 극점이 겹쳐요.</p>
+$$\omega_p=\frac{1}{R_DC_L}$$
+<p>$s=j\omega$에서 한 인자의 크기는 $\sqrt{1+(\omega/\omega_p)^2}$예요.</p>
+<p>그 크기를 두 번 곱하면 제곱근이 사라져요.</p>
+$$|H(j\omega)|=\frac{(g_mR_D)^2}{1+(\omega/\omega_p)^2}$$
+<h5>dB 높이와 기울기로 그려요</h5>
+<p>실제 dB 이득을 $D(\omega)$, 저주파 높이를 $D_0$로 정의해요.</p>
+<div data-answer-step="보데 선도의 시작 높이와 코너">
+$$D_0=20\log_{10}\!\left[(g_mR_D)^2\right]=40\log_{10}(g_mR_D)$$
+$$\omega_p=\frac{1}{R_DC_L}$$
+</div>
+<p>로그에서 곱은 합, 나눗셈은 차가 돼요.</p>
+$$D(\omega)=D_0-20\log_{10}\!\left[1+(\omega/\omega_p)^2\right]$$
+<p>코너 아래에서는 대괄호를 1로, 코너 위에서는 $(\omega/\omega_p)^2$로 근사해요.</p>
+$$D(\omega)\approx\begin{cases}D_0,&amp;\omega\le\omega_p\\D_0-40\log_{10}(\omega/\omega_p),&amp;\omega\ge\omega_p\end{cases}$$
+<div data-answer-step="두 겹친 극점의 보데 선도">
+<figure class="figure"><svg id="p8-bode" viewBox="0 0 520 330" role="img" aria-label="저주파 이득 높이를 뺀 상대 dB 보데 선도에서 직선 근사는 정규화 코너 1 이전에 평평하고 이후 기울기 마이너스40 dB매dec이며 정확한 곡선은 코너에서 마이너스6.02 dB로 부드럽게 이어지는 그래프"><path class="fig-ink" d="M70 25V245H465"/><path class="fig-ink" d="M65 45H70"/><text class="fig-text fig-math" x="57" y="50" text-anchor="end">0</text><path class="fig-ink" d="M65 135H70"/><text class="fig-text fig-math" x="57" y="140" text-anchor="end">−40</text><path class="fig-ink" d="M65 225H70"/><text class="fig-text fig-math" x="57" y="230" text-anchor="end">−80</text><path class="fig-ink" d="M80 245V251"/><text class="fig-text fig-math" x="80" y="270" text-anchor="middle">0.1</text><path class="fig-ink" d="M200 245V251"/><text class="fig-text fig-math" x="200" y="270" text-anchor="middle">1</text><path class="fig-ink" d="M320 245V251"/><text class="fig-text fig-math" x="320" y="270" text-anchor="middle">10</text><path class="fig-ink" d="M440 245V251"/><text class="fig-text fig-math" x="440" y="270" text-anchor="middle">100</text><text class="fig-text fig-math" x="76" y="19">D−D<tspan baseline-shift="sub" font-size="78%">0</tspan> (dB)</text><text class="fig-text fig-math" x="355" y="293">ω / ω<tspan baseline-shift="sub" font-size="78%">p</tspan></text><path class="fig-ink" stroke-dasharray="4 5" d="M200 45V245"/><path class="fig-accent" d="M80 45H200L440 225"/><path class="fig-danger" stroke-dasharray="6 4" d="M80.00 45.19L82.40 45.21L84.80 45.23L87.20 45.26L89.60 45.28L92.00 45.31L94.40 45.34L96.80 45.37L99.20 45.40L101.60 45.44L104.00 45.48L106.40 45.53L108.80 45.58L111.20 45.64L113.60 45.70L116.00 45.76L118.40 45.83L120.80 45.91L123.20 46.00L125.60 46.09L128.00 46.20L130.40 46.31L132.80 46.43L135.20 46.56L137.60 46.71L140.00 46.86L142.40 47.03L144.80 47.22L147.20 47.42L149.60 47.64L152.00 47.88L154.40 48.13L156.80 48.41L159.20 48.71L161.60 49.03L164.00 49.38L166.40 49.75L168.80 50.16L171.20 50.59L173.60 51.05L176.00 51.55L178.40 52.08L180.80 52.64L183.20 53.24L185.60 53.88L188.00 54.56L190.40 55.28L192.80 56.03L195.20 56.83L197.60 57.67L200.00 58.55L202.40 59.47L204.80 60.43L207.20 61.43L209.60 62.48L212.00 63.56L214.40 64.68L216.80 65.84L219.20 67.04L221.60 68.28L224.00 69.55L226.40 70.85L228.80 72.19L231.20 73.56L233.60 74.95L236.00 76.38L238.40 77.83L240.80 79.31L243.20 80.81L245.60 82.33L248.00 83.88L250.40 85.44L252.80 87.02L255.20 88.62L257.60 90.23L260.00 91.86L262.40 93.51L264.80 95.16L267.20 96.83L269.60 98.51L272.00 100.20L274.40 101.89L276.80 103.60L279.20 105.31L281.60 107.03L284.00 108.76L286.40 110.50L288.80 112.24L291.20 113.98L293.60 115.73L296.00 117.48L298.40 119.24L300.80 121.00L303.20 122.77L305.60 124.54L308.00 126.31L310.40 128.08L312.80 129.86L315.20 131.63L317.60 133.41L320.00 135.19L322.40 136.98L324.80 138.76L327.20 140.55L329.60 142.33L332.00 144.12L334.40 145.91L336.80 147.70L339.20 149.49L341.60 151.29L344.00 153.08L346.40 154.87L348.80 156.66L351.20 158.46L353.60 160.25L356.00 162.05L358.40 163.84L360.80 165.64L363.20 167.44L365.60 169.23L368.00 171.03L370.40 172.83L372.80 174.63L375.20 176.42L377.60 178.22L380.00 180.02L382.40 181.82L384.80 183.62L387.20 185.41L389.60 187.21L392.00 189.01L394.40 190.81L396.80 192.61L399.20 194.41L401.60 196.21L404.00 198.01L406.40 199.81L408.80 201.61L411.20 203.41L413.60 205.21L416.00 207.00L418.40 208.80L420.80 210.60L423.20 212.40L425.60 214.20L428.00 216.00L430.40 217.80L432.80 219.60L435.20 221.40L437.60 223.20L440.00 225.00"/><circle class="fig-danger" cx="200" cy="58.55" r="4"/><path class="fig-ink" d="M174 84L195 65"/><text class="fig-text fig-math" x="105" y="92">−6.02 dB</text><text class="fig-text fig-math" x="107" y="38">0 dB/dec</text><text class="fig-text fig-math" x="330" y="127">−40 dB/dec</text><path class="fig-accent" d="M87 312H119"/><text class="fig-text fig-math" x="127" y="317">직선 근사</text><path class="fig-danger" stroke-dasharray="6 4" d="M283 312H315"/><text class="fig-text fig-math" x="323" y="317">정확한 곡선</text></svg><figcaption>세로축은 실제 이득 $D$에서 저주파 높이 $D_0=40\log_{10}(g_mR_D)$를 뺀 값이에요. 실제 dB 높이는 그래프 값에 $D_0$를 더해 읽어요.</figcaption></figure>
+<p>직선 근사는 $D_0$에서 시작해 $\omega_p$ 이후 $-40\,\mathrm{dB/dec}$로 내려가요.</p>
+<p>코너에서 이득이 갑자기 40 dB 내려가는 것이 아니라 그 이후 기울기가 바뀌어요.</p>
+</div>
+</div>
+</div>
+<div class="layer formal" data-explanation="verify">
+<h4>완성 답과 검산</h4>
+<div data-subpart="main">
+<div data-answer-final>
+<p><strong>전체 보데 직선 근사의 저주파 높이와 코너예요.</strong></p>
+$$D_0=40\log_{10}(g_mR_D)$$
+$$\omega_p=\frac{1}{R_DC_L}$$
+<p>$\omega_p$ 아래의 기울기는 $0\,\mathrm{dB/dec}$이고, 위의 기울기는 $-40\,\mathrm{dB/dec}$예요.</p>
+<p>동일한 두 CS 단이며 둘째 입력이 첫째 출력을 부하로 당기지 않는 주어진 모델의 결과예요.</p>
+</div>
+<p>저주파 극한은 반전 두 번의 부호와 크기를 확인해 줘요.</p>
+$$H(0)=(g_mR_D)^2\gt0$$
+<p>정확한 크기 식에 $\omega=\omega_p$를 넣으면 저주파 진폭의 절반이에요.</p>
+$$|H(j\omega_p)|=\frac{(g_mR_D)^2}{2}$$
+$$20\log_{10}\frac12\approx-6.02\,\mathrm{dB}$$
+<p>따라서 두 극점의 공통 코너를 전체 회로의 −3 dB 주파수라고 부르면 틀려요.</p>
+<p>코너보다 충분히 높으면 크기 식은 다음처럼 돼요.</p>
+$$|H(j\omega)|\approx(g_mR_D)^2\left(\frac{\omega_p}{\omega}\right)^2$$
+<p>이 구간에서 주파수를 열 배로 하면 크기는 약 $1/100$이므로 기울기가 맞아요.</p>
+$$20\log_{10}\frac1{100}=-40\,\mathrm{dB}$$
+<p>$g_mR_D$는 무차원이고 $R_DC_L$은 초 단위이므로 이득과 코너의 단위도 맞아요.</p>
+</div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+<h4>주의할 점</h4>
+<ul>
+<li>첫째 출력 $X$는 둘째 게이트에 연결돼요. 다른 커패시턴스를 무시한 이 모델에서 그 게이트는 추가 입력 부하가 아니에요.</li>
+<li>두 전압이득을 더하지 않아요. 전달 함수는 곱하고, dB로 바꾼 높이를 더해요.</li>
+<li>CS 두 단을 지났으므로 저주파 전체 부호는 양수예요.</li>
+<li>같은 코너에 극점이 두 개라서 기울기 변화는 $-20-20=-40\,\mathrm{dB/dec}$예요.</li>
+<li>직선 근사의 꺾이는 점과 정확한 응답의 감쇠값을 구별해요. 정확한 공통 코너 감쇠는 약 $-6.02\,\mathrm{dB}$예요.</li>
+</ul>
+</div>
+<div class="layer eli5" data-explanation="retry">
+<h4>조건을 바꾸어 생각해요</h4>
+<ol><li>같은 $g_m,R_D,C_L$을 가진 CS 단을 하나 더 이어 세 단으로 만들어요. 각 다음 단의 입력이 앞단에 부하를 주지 않고 다른 커패시턴스도 없다면, 공통 코너 위의 보데 기울기와 전체 저주파 이득의 부호는 어떻게 바뀔까요?</li></ol>
+</div>
+<div class="sum" hidden>
+<p class="sum-lead">부하를 주지 않는 동일한 CS 두 단의 전달 함수를 곱해요.</p>
+<p>반전 두 번으로 전체 저주파 이득은 양수예요.</p>
+<ul class="eq-list">
+<li><span class="eq-name">저주파 높이</span>$$D_0=40\log_{10}(g_mR_D)$$</li>
+<li><span class="eq-name">겹친 코너</span>$$\omega_p=\frac{1}{R_DC_L}$$</li>
+</ul>
+<p>기울기는 코너에서 $0\to-40\,\mathrm{dB/dec}$로 바뀌어요.</p>
+<p>정확한 코너 감쇠는 약 $-6.02\,\mathrm{dB}$예요.</p>
+</div>

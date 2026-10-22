@@ -1,0 +1,23 @@
+ACTUAL Fig11.67: Vin-RS-X; Cin X-ground; RP betweenX andtransistorsourceS. GatefixedVb ACground; drainoutput hasRD toVDD ACground andCL-ground. X is not thetransistorsource.
+MODEL lambda0, idealgate0current, bodyeffectignored; no capacitance atS and no othercaps. No drainvoltagefeedback toS.
+vgs=-vS, drain-to-source controlledcurrent=-gm vS, source-to-drain=+gm vS.
+X KCL: Eq(Cin*s*vX + (vX - vin)/RS + (-vS + vX)/RP, 0)
+S KCL: Eq(gm*vS + (vS - vX)/RP, 0)
+Output KCL: Eq(CL*s*vout - gm*vS + vout/RD, 0)
+vS/vX: 1/(RP*gm + 1)
+CurrentfromX throughRP thenintotransistor: gm*vX/(RP*gm + 1)
+Series sourcepath resistance: (RP*gm + 1)/gm
+Three-node characteristic determinant: (CL*RD*s + 1)*(Cin*RP*RS*gm*s + Cin*RS*s + RP*gm + RS*gm + 1)/(RD*RP*RS)
+Degree in s: 2
+Poles: [-1/(CL*RD), (-RP*gm - RS*gm - 1)/(Cin*RS*(RP*gm + 1))]
+Input equivalent resistance: RS*(RP*gm + 1)/(RP*gm + RS*gm + 1)
+Positive inputcorner: (RP*gm + RS*gm + 1)/(Cin*RS*(RP*gm + 1))
+Positive outputcorner: 1/(CL*RD)
+Internal H: RD*gm/((CL*RD*s + 1)*(Cin*RP*RS*gm*s + Cin*RS*s + RP*gm + RS*gm + 1))
+Inputzero groundsRSleftendpoint only, notX orS; Cinsees RS parallel(RP+1/gm). RP has no storage and adds no pole.
+RP->0 inputcorner: (RS*gm + 1)/(Cin*RS)
+RP->infinity inputcorner: 1/(Cin*RS)
+Derivative ofinputcorner vsRP: -gm**2/(Cin*(RP*gm + 1)**2)
+RP arbitraryparasitic ininputseries path, not an assumedlarge AC-grounddegenerationresistor. Keep1/gm; do not assumegmRP>>1.
+All Hzcornerfrequencies are angularcorners/(2pi); signedspoles negative. No numericvalues invented.
+BLIND THREE-NODE/TWO-POLE SYMBOLIC PASS

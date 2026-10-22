@@ -1,6 +1,16 @@
-step response: 1 - exp(-omega_p*t)
-rise time 10-90% = 2*log(3)/omega_p = 2.19722457733622 /omega_p
-limit wp->oo of rise time: 0  (ideal sharp edge only with infinite bandwidth)
-f_-3dB = 5e+06 Hz -> rise time 69.9 ns
-f_-3dB = 1e+06 Hz -> rise time 349.7 ns
-Conclusion: smaller bandwidth -> slower edges -> sharp black/white transitions smear; image looks blurry, fine detail lost.
+INPUT: video requires approximately 5 MHz; system upper bandwidth is insufficient.
+Independent physical derivation:
+1. Video voltage encodes brightness as the raster scans successive positions.
+2. A narrow bright/dark edge requires a rapid temporal voltage transition, hence high-frequency Fourier components.
+3. Insufficient upper bandwidth attenuates these rapid components relative to slowly varying/constant brightness.
+4. Output brightness cannot change as abruptly as the desired edge; adjacent picture details blend.
+CONCLUSION: edges and fine detail become blurred; sharp black-to-white boundaries become gradual brightness transitions.
+No numerical blur width, rise time or attenuation follows from 5 MHz alone; actual system transfer and scanning rate are unspecified.
+Illustrative first-order low-pass check only: H(s)=1/(1+s*tau), tau>0.
+Unit-step output: 1 - exp(-t/tau)
+DC magnitude-squared limit: 1
+High-frequency magnitude-squared limit: 0
+Magnitude-squared derivative vs frequency: -2*tau**2*w/(tau**2*w**2 + 1)**2
+Settled unit-step value: 1
+With positive t, ideal unlimited-bandwidth tau->0 limit: 1
+QUALITATIVE CHECK PASS: steady brightness retained but rapid spatial edges rounded.

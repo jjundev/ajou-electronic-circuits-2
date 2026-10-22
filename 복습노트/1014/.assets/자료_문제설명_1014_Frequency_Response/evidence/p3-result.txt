@@ -1,4 +1,24 @@
-w RD CL = sqrt(19)/9 = 0.484322104837853
-omega = 484322104.837853 rad/s ; f = 77082257.0336154 Hz
-check |H|/H0 at w: 0.900000000000000
-dB drop: -0.915149811213502
+CONNECTIVITY: grounded-source NMOS, gate vin, drain vout; RD vout-to-VDD; CL vout-ground. VDD is AC-ground.
+MODEL: inherited biased saturation small signal, now lambda!=0 => finite ro drain-source; source=ground, so ro vout-ground parallel with RD and CL.
+Positive controlled current gm*vin leaves output toward source; output positive drain relative to ground.
+Independent output KCL: Eq(CL*s*vout + gm*vin + vout/ro + vout/RD, 0)
+H(s) from solve: -RD*gm*ro/(CL*RD*ro*s + RD + ro)
+Req=RD||ro: RD*ro/(RD + ro)
+Normalized transfer identity residual: 0
+Output-short Gm=gm because all passive output branches have zero voltage; input-zero passive resistance=RD||ro.
+Magnitude squared: RD**2*gm**2*ro**2/((-I*CL*RD*omega*ro + RD + ro)*(I*CL*RD*omega*ro + RD + ro))
+Magnitude=gm*Req/sqrt(1+(omega*Req*CL)^2).
+Pole: (-RD - ro)/(CL*RD*ro)
+Positive angular bandwidth: (RD + ro)/(CL*RD*ro)
+Hz bandwidth: (RD + ro)/(2*pi*CL*RD*ro)
+At cutoff normalized squared amplitude: 1/2
+H(0): -RD*gm*ro/(RD + ro)
+High-frequency magnitude: 0
+ro->infinity H(s): -RD*gm/(CL*RD*s + 1)
+ro->infinity bandwidth: 1/(CL*RD)
+CL->0 H(s): -RD*gm*ro/(RD + ro)
+Gain-magnitude times angular bandwidth: gm/CL
+Physical principal phase pi-atan(x), x=omega Req CL; continuous branch -pi-atan(x) differs by2pi.
+Unit phase residual: 0
+Phase exp branch residual: 0
+No physical numerical parameter invented; all results symbolic. BLIND SYMBOLIC PASS

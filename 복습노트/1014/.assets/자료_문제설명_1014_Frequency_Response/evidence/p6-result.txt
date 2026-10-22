@@ -1,5 +1,36 @@
-H(s) = R_D**2*g_m**2/(C_L*R_D*s + 1)**2
-H - (gmRD)^2/(1+sRDCL)^2 = 0
-|H(j wp)|/|H0| at wp=1/(RDCL): 1/2 (-6 dB)
-limit w->oo w^2|H| = g_m**2/C_L**2  -> -40 dB/dec beyond the double pole
--3dB freq: [sqrt(-1 + sqrt(2))/(C_L*R_D)]  sqrt(sqrt2-1) = 0.643594252905583
+COMMON: output=common drain/collector-emitter junction relative to ground; CL output-ground; supplies and fixed Vb AC-ground. Other capacitances absent.
+BJT a,b VA=infinity -> ro1=ro2=infinity. Q1 collector current gm1*vin leaves output.
+(a) Q2 collector and base both at VCC; emitter=output. vbe2=-vout.
+a exact internal Q2 emitter resistance: beta2/(gm2*(beta2 + 1))
+a H(s): -beta2*gm1/(CL*beta2*s + beta2*gm2 + gm2)
+a exact omega3dB: gm2*(beta2 + 1)/(CL*beta2)
+a large-beta omega3dB: gm2/CL
+a exact/large-beta bandwidth ratio -> 1
+(b) Q2 collector=VCC, base connected to VCC through RB, emitter=output.
+b base KCL: Eq(gm2*(vb2 - vout)/beta2 + vb2/RB, 0)
+b base voltage: RB*gm2*vout/(RB*gm2 + beta2)
+b exact internal resistance: (RB*gm2 + beta2)/(gm2*(beta2 + 1))
+b explicit-1/gm identity residual: 0
+b H(s): -gm1*(RB*gm2 + beta2)/(CL*RB*gm2*s + CL*beta2*s + beta2*gm2 + gm2)
+b exact omega3dB: gm2*(beta2 + 1)/(CL*(RB*gm2 + beta2))
+b large-beta basic resistance: RB/beta2 + 1/gm2
+b large-beta omega3dB: beta2*gm2/(CL*(RB*gm2 + beta2))
+b exact/basic bandwidth ratio: (beta2 + 1)/beta2
+b exact/basic bandwidth ratio beta->infinity: 1
+(c) M1 source=ground, gate=vin; M2 source=VDD and gate=Vb, both AC-ground, hence controlled gm2 source inactive, but MOS ro2 retained; lambda>0 retains ro1 too.
+c KCL gm1*vin+(1/ro1+1/ro2+sCL)*vo=0
+c H(s): -gm1*ro1*ro2/(CL*ro1*ro2*s + ro1 + ro2)
+c omega3dB: (ro1 + ro2)/(CL*ro1*ro2)
+c resistance: ro1*ro2/(ro1 + ro2)
+(d) upper PMOS M1 source=VDD, gate=vin, drain=output. Lower NMOS M2 gate=drain=output, source=ground, so gm2*vo and vo/ro2 leave output; upper PMOS ro1 also connects output to AC ground.
+d H(s): -gm1*ro1*ro2/(CL*ro1*ro2*s + gm2*ro1*ro2 + ro1 + ro2)
+d omega3dB: (gm2*ro1*ro2 + ro1 + ro2)/(CL*ro1*ro2)
+d resistance: ro1*ro2/(gm2*ro1*ro2 + ro1 + ro2)
+No cross-device gm1*ro2 assumption is used; all required MOS ro branches retained.
+GENERAL SINGLE-POLE CHECK: H(s)=H0*G/(G+sCL), G>0.
+Normalized magnitude squared: G**2/(CL**2*omega**2 + G**2)
+At omega=G/CL: 1/2
+All four f3dB=omega3dB/(2*pi), in Hz; omega in rad/s. No finite transfer zero arises since only shunt CL is present.
+Limits: b RB->0 exact resistance: beta2/(gm2*(beta2 + 1)) a resistance: beta2/(gm2*(beta2 + 1))
+c ro1,ro2->infinity bandwidth ->0; d same ro limits bandwidth: gm2/CL
+BLIND SYMBOLIC PASS: ALL FOUR CIRCUITS

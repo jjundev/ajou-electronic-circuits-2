@@ -1,10 +1,104 @@
-<div class="layer eli5" data-explanation="understand"><h4>문제를 내 말로 읽어요</h4><p>그림 11.11은 CS 단 $M_1$ 앞에 $R_S$와 게이트–접지 사이 $C_{in}$이 붙은 회로예요. 드레인 출력 $V_{out}$에는 $R_D$와 $C_L$이 있어요. $\lambda=0$이고 소자 값이 없으니, 커패시터 두 개의 충방전 경로를 각각 찾아 극점을 기호로 구해요.</p></div>
-<div class="layer formal" data-explanation="recall"><h4>이 문제를 봤을 때 떠올릴 개념과 공식</h4><p>“노드와 극점”에서는 각 커패시터가 붙은 노드의 시간상수 $RC$를 떠올려요(노드마다 극점 하나). CS의 게이트 전류는 0이고, $\lambda=0$이라 드레인 전압이 게이트 노드로 되먹임되지 않아요. 게이트–드레인 커패시턴스도 없으니 두 노드 방정식이 입력→출력 한 방향으로만 이어져, 분모가 두 RC 인자로 분리돼요.</p></div>
-<div class="layer formal" data-explanation="start"><h4>종이에 쓰는 실제 첫 줄</h4><p>$V_{DD}$를 AC 접지로 보내고 $M_1$을 $g_mv_{gs}$ 전류원으로 바꿔요. 게이트 노드 전압을 $v_g$라 두면 소스가 접지라 $v_{gs}=v_g$예요. $v_g$에서 <strong>나가는</strong> 전류를 양으로 잡으면 $R_S$ 가지 $(v_g-v_{in})/R_S$, $C_{in}$ 가지 $sC_{in}v_g$이고 게이트로는 0이에요. $v_{out}$에서 나가는 전류는 $v_{out}/R_D$, $sC_Lv_{out}$, 종속원 $g_mv_{gs}$예요.</p>
-<figure class="figure"><svg viewBox="0 0 480 235" role="img" aria-label="v_in 전원이 R_S를 거쳐 게이트 노드 v_g에 이어지고 v_g에서 접지로 C_in이 있어요. 게이트와 접지된 소스 사이 전압은 v_gs = v_g예요. 출력 노드 v_out에서 접지로 g_m·v_gs 전류원(아래 방향), R_D, C_L이 병렬로 내려가요."><circle class="fig-ink" cx="30" cy="135" r="15"/><text class="fig-text" x="26" y="132">+</text><text class="fig-text" x="26" y="147">−</text><path class="fig-ink" d="M30 120 V50 H52 M30 150 V205"/><path class="fig-ink" d="M30 205 v8 M20 213 H40 M24 218 H36 M28 223 H32"/><path class="fig-ink" d="M52 50 h10 l4 -8 l8 16 l8 -16 l8 16 l8 -16 l8 16 l4 -8 h10"/><path class="fig-accent" d="M120 50 H186"/><circle class="fig-ink" cx="190" cy="50" r="4"/><path class="fig-ink" d="M140 50 V123.5 M128 123.5 H152 M128 131.5 H152 M140 131.5 V205"/><path class="fig-ink" d="M140 205 v8 M130 213 H150 M134 218 H146 M138 223 H142"/><circle class="fig-dot" cx="140" cy="50" r="3.5"/><path class="fig-accent" d="M131 44 L125 50 L131 56"/><path class="fig-accent" d="M134 71 L140 77 L146 71"/><text class="fig-text" x="74" y="30">R<tspan baseline-shift="sub">S</tspan></text><text class="fig-text" x="156" y="132">C<tspan baseline-shift="sub">in</tspan></text><text class="fig-text" x="146" y="36">v<tspan baseline-shift="sub">g</tspan></text><text class="fig-text" x="50" y="145">v<tspan baseline-shift="sub">in</tspan></text><path class="fig-ink" d="M190 205 v8 M180 213 H200 M184 218 H196 M188 223 H192"/><text class="fig-text" x="198" y="76">+</text><text class="fig-text" x="198" y="132">v<tspan baseline-shift="sub">gs</tspan></text><text class="fig-text" x="198" y="198">−</text><path class="fig-accent" d="M270 50 H462"/><circle class="fig-ink" cx="466" cy="50" r="4"/><path class="fig-ink" d="M270 50 V111.5 M270 143.5 V205"/><polygon class="fig-ink" points="270,111.5 284,127.5 270,143.5 256,127.5"/><path class="fig-ink" d="M270 117.5 V136.5 M265 131.5 L270 136.5 L275 131.5"/><path class="fig-ink" d="M360 50 V103.5 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 V205"/><path class="fig-ink" d="M420 50 V123.5 M408 123.5 H432 M408 131.5 H432 M420 131.5 V205"/><path class="fig-ink" d="M270 205 v8 M260 213 H280 M264 218 H276 M268 223 H272"/><path class="fig-ink" d="M360 205 v8 M350 213 H370 M354 218 H366 M358 223 H362"/><path class="fig-ink" d="M420 205 v8 M410 213 H430 M414 218 H426 M418 223 H422"/><circle class="fig-dot" cx="360" cy="50" r="3.5"/><circle class="fig-dot" cx="420" cy="50" r="3.5"/><path class="fig-accent" d="M354 71 L360 77 L366 71"/><path class="fig-accent" d="M414 71 L420 77 L426 71"/><text class="fig-text" x="288" y="132.5">g<tspan baseline-shift="sub">m</tspan>v<tspan baseline-shift="sub">gs</tspan></text><text class="fig-text" x="374" y="132.5">R<tspan baseline-shift="sub">D</tspan></text><text class="fig-text" x="436" y="132.5">C<tspan baseline-shift="sub">L</tspan></text><text class="fig-text" x="460" y="36" text-anchor="end">v<tspan baseline-shift="sub">out</tspan></text></svg><figcaption>$V_{DD}$를 AC 접지로 보내 $R_D$를 $v_{out}$–접지 사이에 두고, $M_1$은 $g_mv_{gs}$ 전류원으로 바꿨어요($\lambda=0$이라 $r_o$ 없음, 게이트 전류 0). 강조색 화살표는 각 노드에서 나가는 양의 방향이에요.</figcaption></figure>
-<p>$$\frac{v_g-v_{in}}{R_S}+sC_{in}v_g=0,\qquad \frac{v_{out}}{R_D}+sC_Lv_{out}+g_mv_g=0$$</p></div>
-<div class="layer formal" data-explanation="solve"><h4>왜 이렇게 푸는지 함께 따라가요</h4><div data-subpart="main"><p>첫 식에 $R_S$를 곱해 묶으면 $(1+sR_SC_{in})v_g=v_{in}$, 곧 $v_g/v_{in}=1/(1+sR_SC_{in})$예요. 두 번째 식은 $v_{out}/v_g=-g_mR_D/(1+sR_DC_L)$이므로 $$H(s)=\frac{-g_mR_D}{(1+sR_SC_{in})(1+sR_DC_L)}.$$ 따라서 복소 평면 극점은 $s_{p1}=-1/(R_SC_{in})$, $s_{p2}=-1/(R_DC_L)$이에요. 문제의 극점 주파수 크기는 각각 이 음수 위치의 절댓값이에요.</p></div></div>
-<div class="layer formal" data-explanation="verify"><h4>완성 답과 검산</h4><div data-subpart="main"><p><strong>입력 극점 $|\omega_{p1}|=1/(R_SC_{in})$, 출력 극점 $|\omega_{p2}|=1/(R_DC_L)$예요.</strong> $C_{in}\to0$이면 입력 극점이 무한대로 가고 예제 11.4의 단일 출력 극점만 남아요. $C_L\to0$이면 그 반대예요. 두 시간상수가 같으면 극점이 사라지는 게 아니라 같은 위치의 이중 극점이에요. $R_SC_{in}$, $R_DC_L$ 모두 초 단위라 극점 단위도 맞아요.</p></div></div>
-<div class="layer warn" data-explanation="pitfall"><h4>여기서 조심해요</h4><p>CS 게이트를 들여다보는 저항에 $1/g_m$을 넣지 않아요. 게이트에는 전류가 흐르지 않아요($1/g_m$은 CG처럼 소스로 들어갈 때의 값). 게이트–드레인 커패시턴스가 있으면 두 노드가 묶여 이 분리 접근을 그대로 쓰기 어려워요.</p></div>
-<div class="layer eli5" data-explanation="retry"><h4>설명을 닫고 규칙을 적용해 봐요</h4><ol><li>$\lambda=0$이고 게이트 전류와 다른 기생을 무시할 때 $R_S$만 2배로 하면 두 극점은 각각 어떻게 되나요?</li><li>같은 회로에서 $\lambda\neq0$이라 $M_1$에 $r_o$가 생기면(다른 기생은 여전히 무시) 입력 극점과 출력 극점 식은 각각 어떻게 바뀌나요? $r_o$는 그림의 어느 두 노드 사이에 들어가나요?</li></ol></div>
-<div class="sum" hidden=""><p>$\lambda=0$·게이트–드레인 커패시턴스 없음에서 두 RC 인자가 분리돼요. CS 게이트에는 $1/g_m$을 넣지 않으며, 같은 시간상수는 소거가 아닌 이중 극점이에요.</p><div class="summary-group"><h4>핵심 개념·답</h4><p>입력 $|\omega_{p1}|=1/(R_SC_{in})$</p><p>출력 $|\omega_{p2}|=1/(R_DC_L)$</p></div><div class="summary-group"><h4>첫 줄</h4><p>$v_g$ 노드: $(v_g-v_{in})/R_S+sC_{in}v_g=0$</p><p>$v_{out}$ 노드: $v_{out}/R_D+sC_Lv_{out}+g_mv_g=0$</p></div><div class="summary-group"><h4>검산</h4><p>$C_{in}\to0$이면 입력 극점만 무한대로 가요.</p></div></div>
+<div class="layer eli5" data-explanation="understand">
+<h4>문제를 읽어요</h4>
+<p>낮은 주파수에서는 평평하게 가다가, 주어진 극점과 영점을 지날 때마다 선의 기울기를 바꾸면 돼요. 극점은 내려가는 기울기를 더하고, 영점은 올라가는 기울기를 더해요.</p>
+<p>저주파 이득의 수치는 주어지지 않았어요. 그래서 선도의 모양과 상대 높이를 먼저 그리고, 전체 세로 위치는 미지의 저주파 이득으로 남겨요.</p>
+</div>
+
+<div class="layer formal" data-explanation="recall">
+<h4>이 개념과 공식을 떠올려요</h4>
+<p>극점·영점의 주파수를 바로 주었으므로 회로의 $G_m$이나 출력저항을 구할 필요 없이 <a href="정리노트_1014_Frequency_Response.html#s1-bode">보데(Bode) 크기 근사</a>를 써요. 가로축은 주파수 $f$의 로그 축이고, 세로축은 전압이득 크기의 dB 값이에요.</p>
+<p>단일 극점 하나를 지나면 기존 기울기에 $-20\,\mathrm{dB/dec}$, 단일 영점 하나를 지나면 $+20\,\mathrm{dB/dec}$를 더해요. dec는 주파수가 10배 되는 구간이에요.</p>
+<p>예를 들어 첫 극점 뒤 기울기가 $-20\,\mathrm{dB/dec}$라면, 다음 영점 뒤에는 $-20+20=0\,\mathrm{dB/dec}$로 평평해져요. 그동안 내려온 높이는 그대로 유지해요.</p>
+<p>저주파 이득을 $A_0$라고 두고, 그 dB 높이를 $B_0$로 정의해요.</p>
+$$B_0=20\log_{10}|A_0|$$
+<p>그림은 그 높이를 뺀 상대 이득 $D(f)$로 그릴 거예요. $D=0\,\mathrm{dB}$는 실제 이득이 1이라는 뜻이 아니에요.</p>
+$$D(f)=20\log_{10}\frac{|H(j2\pi f)|}{|A_0|}$$
+<p>$f$와 주어진 코너 주파수는 모두 같은 주파수 단위로 비교해요. $100\,\mathrm{MHz}=0.1\,\mathrm{GHz}$이므로 $1\,\mathrm{GHz}$까지 정확히 한 decade예요.</p>
+</div>
+
+<div class="layer formal" data-explanation="start">
+<h4>종이에 쓸 첫 줄</h4>
+<div data-answer-step="코너 순서와 처음 기울기">
+<p>주파수를 낮은 순서로 놓으면 <strong>첫 극점 $100\,\mathrm{MHz}$ → 영점 $1\,\mathrm{GHz}$ → 둘째 극점 $10\,\mathrm{GHz}$</strong>예요.</p>
+<p>저주파에서는 상대 높이 $D\approx0\,\mathrm{dB}$에서 평평하게 시작해요.</p>
+$$m_0=0\,\mathrm{dB/dec}$$
+</div>
+</div>
+
+<div class="layer formal" data-explanation="solve">
+<h4>이렇게 풀어요</h4>
+<div data-subpart="main">
+<div data-answer-step="극점과 영점을 지날 때의 기울기">
+<p>코너를 지날 때 이득값이 갑자기 바뀌는 것이 아니라, <strong>그 뒤 구간의 기울기</strong>가 바뀌어요.</p>
+<div class="table-wrap"><table><thead><tr><th>주파수 구간</th><th>기울기를 바꾸는 이유</th><th>구간 기울기</th></tr></thead><tbody>
+<tr><td>$f\lt100\,\mathrm{MHz}$</td><td>아직 코너를 지나지 않음</td><td>$$m_0=0\,\mathrm{dB/dec}$$</td></tr>
+<tr><td>$100\,\mathrm{MHz}\lt f\lt1\,\mathrm{GHz}$</td><td>첫 극점: 기존 값에서 20을 뺌</td><td>$$m_1=0-20=-20\,\mathrm{dB/dec}$$</td></tr>
+<tr><td>$1\,\mathrm{GHz}\lt f\lt10\,\mathrm{GHz}$</td><td>영점: 기존 값에 20을 더함</td><td>$$m_2=-20+20=0\,\mathrm{dB/dec}$$</td></tr>
+<tr><td>$f\gt10\,\mathrm{GHz}$</td><td>둘째 극점: 기존 값에서 20을 뺌</td><td>$$m_3=0-20=-20\,\mathrm{dB/dec}$$</td></tr>
+</tbody></table></div>
+</div>
+<p>첫 극점과 영점 사이는 $100\,\mathrm{MHz}$에서 $1\,\mathrm{GHz}$까지 주파수가 10배예요. $-20\,\mathrm{dB/dec}$로 한 decade를 가므로 상대 높이가 $0$에서 $-20\,\mathrm{dB}$로 내려가요.</p>
+$$D_{asym}(1\,\mathrm{GHz})=-20\log_{10}\frac{1\,\mathrm{GHz}}{0.1\,\mathrm{GHz}}=-20\,\mathrm{dB}$$
+<p>그다음 한 decade는 기울기가 0이라 $-20\,\mathrm{dB}$를 유지해요. $10\,\mathrm{GHz}$를 지나면 그 높이에서 다시 내려가요.</p>
+<div data-answer-step="상대 높이로 그린 보데 선도">
+<figure class="figure"><svg id="fig-p7-bode" viewBox="0 0 560 345" role="img" aria-label="저주파 이득을 기준으로 정규화한 보데 크기 직선 근사. 로그 주파수 축에서100메가헤르츠까지0데시벨로 평평하고,1기가헤르츠에서 마이너스20데시벨까지 내려간다.10기가헤르츠까지 평평한 뒤 다시 내려가100기가헤르츠에서 마이너스40데시벨이다."><path class="fig-ink" d="M70 65 V280 H520 M70 100 h-7 M70 180 h-7 M70 260 h-7"/><path class="fig-ink" d="M90 280 v6 M190 280 v6 M290 280 v6 M390 280 v6 M490 280 v6"/><path class="fig-ink" d="M190 70 V280 M290 70 V280 M390 70 V280" stroke-opacity="0.25" stroke-dasharray="4 5"/><path class="fig-accent" d="M90 100 H190 L290 180 H390 L490 260"/><circle class="fig-dot" cx="190" cy="100" r="3.5"/><circle class="fig-dot" cx="290" cy="180" r="3.5"/><circle class="fig-dot" cx="390" cy="180" r="3.5"/><text class="fig-text fig-math" x="70" y="20" text-anchor="start">저주파 대비 (dB)</text><text class="fig-text fig-math" x="55" y="104" text-anchor="end">0</text><text class="fig-text fig-math" x="55" y="184" text-anchor="end">−20</text><text class="fig-text fig-math" x="55" y="264" text-anchor="end">−40</text><text class="fig-text fig-math" x="90" y="305" text-anchor="middle">10 MHz</text><text class="fig-text fig-math" x="190" y="305" text-anchor="middle">100 MHz</text><text class="fig-text fig-math" x="290" y="305" text-anchor="middle">1 GHz</text><text class="fig-text fig-math" x="390" y="305" text-anchor="middle">10 GHz</text><text class="fig-text fig-math" x="490" y="305" text-anchor="middle">100 GHz</text><text class="fig-text fig-math" x="517" y="330" text-anchor="end">f (로그 축)</text><text class="fig-text fig-math" x="190" y="49" text-anchor="middle">첫 극점 f<tspan baseline-shift="sub" font-size="78%">p1</tspan></text><text class="fig-text fig-math" x="290" y="49" text-anchor="middle">영점 f<tspan baseline-shift="sub" font-size="78%">z</tspan></text><text class="fig-text fig-math" x="390" y="49" text-anchor="middle">둘째 극점 f<tspan baseline-shift="sub" font-size="78%">p2</tspan></text><text class="fig-text fig-math" x="127" y="83" text-anchor="middle">0 dB/dec</text><text class="fig-text fig-math" x="230" y="208" text-anchor="middle">−20 dB/dec</text><text class="fig-text fig-math" x="340" y="163" text-anchor="middle">0 dB/dec</text><text class="fig-text fig-math" x="450" y="182" text-anchor="middle">−20 dB/dec</text></svg><figcaption>세로축의 $0\,\mathrm{dB}$는 저주파 이득에 대한 상대 높이예요; 절대 이득은 이 선도 전체에 $20\log_{10}|A_0|$를 더해요.</figcaption></figure>
+<p>절대 dB 높이는 그림의 $0$을 $B_0$로, $-20$을 $B_0-20\,\mathrm{dB}$로 읽어요. $A_0$의 수치가 없으므로 절대 높이는 하나로 정할 수 없어요.</p>
+</div>
+<p>코너를 포함한 직선 근사식을 쓰면 그림의 각 선분을 확인할 수 있어요.</p>
+$$D_{asym}(f)=\begin{cases}
+0\,\mathrm{dB},&amp; f\le100\,\mathrm{MHz}\\
+-20\log_{10}\dfrac{f}{100\,\mathrm{MHz}}\,\mathrm{dB},&amp;100\,\mathrm{MHz}\le f\le1\,\mathrm{GHz}\\
+-20\,\mathrm{dB},&amp;1\,\mathrm{GHz}\le f\le10\,\mathrm{GHz}\\
+\left[-20-20\log_{10}\dfrac{f}{10\,\mathrm{GHz}}\right]\mathrm{dB},&amp;f\ge10\,\mathrm{GHz}
+\end{cases}$$
+<p>경계에서 이웃한 두 식의 높이가 같으므로 선은 끊기지 않아요. 이 그래프는 직선 근사이며, 정확한 응답은 코너 부근에서 부드럽게 휘어요.</p>
+</div>
+</div>
+
+<div class="layer formal" data-explanation="verify">
+<h4>완성 답과 검산</h4>
+<div data-subpart="main">
+<div data-answer-final>
+<p><strong>$B_0=20\log_{10}|A_0|$를 기준 높이로 하는 보데 크기 근사예요.</strong></p>
+<ul>
+<li>$100\,\mathrm{MHz}$ 전에는 높이 $B_0$에서 평평해요.</li>
+<li>$100\,\mathrm{MHz}$부터 $1\,\mathrm{GHz}$까지 $-20\,\mathrm{dB/dec}$로 내려가요.</li>
+<li>$1\,\mathrm{GHz}$부터 $10\,\mathrm{GHz}$까지 높이 $B_0-20\,\mathrm{dB}$에서 평평해요.</li>
+<li>$10\,\mathrm{GHz}$ 뒤에는 그 높이에서 다시 $-20\,\mathrm{dB/dec}$로 내려가요.</li>
+</ul>
+<p>전체 높이는 미지의 $B_0$만큼 달라질 수 있어요.</p>
+</div>
+<p><strong>한 decade를 더 가서 검산해요.</strong> $10\,\mathrm{GHz}$부터 $100\,\mathrm{GHz}$까지도 주파수가 10배이므로 20 dB 더 내려가야 해요.</p>
+$$D_{asym}(100\,\mathrm{GHz})=-20-20=-40\,\mathrm{dB}$$
+<p><strong>고주파 기울기도 맞아요.</strong> 극점 두 개가 $-40\,\mathrm{dB/dec}$를 더하고 영점 하나가 $+20\,\mathrm{dB/dec}$를 더하므로 합은 $-20\,\mathrm{dB/dec}$예요.</p>
+<p>정확한 크기 모델과 비교할 때도 위상 부호를 고를 필요는 없어요. 코너를 $f_{p1}=100\,\mathrm{MHz}$, $f_z=1\,\mathrm{GHz}$, $f_{p2}=10\,\mathrm{GHz}$로 두면 정규화한 크기는 다음과 같아요.</p>
+$$\frac{|H(j2\pi f)|}{|A_0|}=\frac{\sqrt{1+(f/f_z)^2}}{\sqrt{1+(f/f_{p1})^2}\sqrt{1+(f/f_{p2})^2}}$$
+<p>$100\,\mathrm{GHz}$에서 이 크기를 dB로 바꾸면 약 $-40.04\,\mathrm{dB}$예요. 직선 근사의 $-40\,\mathrm{dB}$와 가깝고, 코너 바로 근처에서는 두 값의 차이가 더 커져요.</p>
+</div>
+</div>
+
+<div class="layer warn" data-explanation="pitfall">
+<h4>주의할 점</h4>
+<ul>
+<li>첫 극점에서 이득이 갑자기 20 dB 떨어지는 것이 아니에요. 기울기가 바뀐 뒤 주파수가 10배 올라가는 동안 20 dB 내려가요.</li>
+<li>$1\,\mathrm{GHz}$의 영점은 내려온 높이를 0으로 되돌리지 않아요. 기울기만 0으로 만들어 상대 높이 $-20\,\mathrm{dB}$를 유지해요.</li>
+<li>그림의 상대 높이 $0\,\mathrm{dB}$를 절대 이득 $0\,\mathrm{dB}$로 읽지 않아요. 저주파 이득은 주어지지 않았어요.</li>
+<li>가로축은 $f$예요. $100\,\mathrm{MHz}$를 그대로 $100\,\mathrm{Mrad/s}$로 쓰지 않아요.</li>
+<li>영점이 좌반평면인지 우반평면인지에 따라 위상은 달라질 수 있지만, 이 문제의 크기 선도만으로 그 위치를 정하지 않아요.</li>
+</ul>
+</div>
+
+<div class="layer eli5" data-explanation="retry">
+<h4>조건을 바꾸어 생각해요</h4>
+<ol>
+<li>기존 극점·영점과 저주파 이득은 그대로 두고 $100\,\mathrm{GHz}$에 1차 극점을 하나 더 넣으면, 그 주파수 뒤의 보데 직선 기울기는 얼마가 될까요?</li>
+</ol>
+</div>
+
+<div class="sum" hidden>
+<p class="sum-lead">코너를 지날 때마다 기울기를 더하면 $0\to-20\to0\to-20\,\mathrm{dB/dec}$가 돼요.</p>
+<p>코너 순서는 $100\,\mathrm{MHz}$ 극점, $1\,\mathrm{GHz}$ 영점, $10\,\mathrm{GHz}$ 극점이에요.</p>
+<p>$1$–$10\,\mathrm{GHz}$의 상대 높이는 $-20\,\mathrm{dB}$예요.</p>
+<p>실제 dB 높이에는 미지의 $20\log_{10}|A_0|$를 더해요.</p>
+<p>기울기 변화는 순간적인 이득 감소와 달라요.</p>
+</div>

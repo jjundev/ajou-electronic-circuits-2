@@ -1,0 +1,757 @@
+{
+  "learning_style": {
+    "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
+    "sha256": "15dd74dba003093e0a3e627a7531d1b89dbc4b081ebfb2f04245d065758f62fe",
+    "rule_ids": [
+      "UNIT-01",
+      "CALC-01",
+      "CALC-02",
+      "CIRCUIT-01",
+      "CIRCUIT-02",
+      "GAIN-01",
+      "DEGEN-01",
+      "SCALE-01",
+      "BIAS-01",
+      "NOTATION-01",
+      "EXPLAIN-01",
+      "CORRECT-01"
+    ]
+  },
+  "final_approval": true,
+  "status": "pass",
+  "items": {
+    "p1:main": {
+      "status": "pass",
+      "pre_review_status": "clear_pending_actual_stage",
+      "reviewer": "non-author content reviewer /root/note_review; actual final-stage HTML, MD, source conditions, all selected steps/finals, retries and summary read",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "p1: 영상대역폭부족의스캔방향/경계흐림정성논증. 새공학단위환산수치가없는정성/기호목표. 원문단위는보존."
+        },
+        "CALC-01": {
+          "disposition": "not_applicable",
+          "evidence": "p1: 영상대역폭부족의스캔방향/경계흐림정성논증. 설계역산/소자중간량수치계산목표가아님."
+        },
+        "CALC-02": {
+          "disposition": "not_applicable",
+          "evidence": "p1: 영상대역폭부족의스캔방향/경계흐림정성논증. 반올림수치나연속수치대입이없음."
+        },
+        "CIRCUIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "p1: 영상대역폭부족의스캔방향/경계흐림정성논증. 저항망합성·소자블록치환을새로수행하지않음."
+        },
+        "CIRCUIT-02": {
+          "disposition": "not_applicable",
+          "evidence": "p1: 영상대역폭부족의스캔방향/경계흐림정성논증. 회로측정/KCL이없는정의·정성·전달크기특성목표라측정그림을강제하지않음."
+        },
+        "GAIN-01": {
+          "disposition": "not_applicable",
+          "evidence": "p1: 영상대역폭부족의스캔방향/경계흐림정성논증. 새증폭기전압이득계산이아니며극점/저항/기존크기응답/정성목표. Gm루트를억지로추가하지않음."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "p1: 영상대역폭부족의스캔방향/경계흐림정성논증. gate/base구동의외부source/emitter축퇴feedback를계산하지않음. 1/gm소자입력저항과구별."
+        },
+        "SCALE-01": {
+          "disposition": "not_applicable",
+          "evidence": "p1: 영상대역폭부족의스캔방향/경계흐림정성논증. 소자변수고정/변경에대한배율계산을요구하지않음."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "p1: 영상대역폭부족의스캔방향/경계흐림정성논증. DC바이어스경계/설계제약부등식목표가아님. active/saturation작동전제를부정하지않음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "p1: 영상대역폭부족의스캔방향/경계흐림정성논증. 원문약5MHz의규모를보존하고화면해상도/refresh수치추정안함;회로SVG없음"
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "p1: 영상대역폭부족의스캔방향/경계흐림정성논증. 대역폭부족단서→고주파성분/응답속도→좌우스캔의밝기전환첫줄→세로경계의가로회색번짐→반대고대역상황검산. 7구역하나씩,별도핵심route없음"
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "p1: 영상대역폭부족의스캔방향/경계흐림정성논증. 모든픽셀균일어두워짐과경계흐림구별. 원문예시5MHz를현재영상전체의보편사양으로확대안함"
+        }
+      },
+      "evidence_scope": "Actual final-stage canonical sections, all source main requirements and selected answer steps/final read; frozen-fragment reasoning rechecked against final stage and MD."
+    },
+    "p2:main": {
+      "status": "pass",
+      "pre_review_status": "clear_pending_actual_stage",
+      "reviewer": "non-author content reviewer /root/note_review; actual final-stage HTML, MD, source conditions, all selected steps/finals, retries and summary read",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "p2: lambda0의외부CL단일출력CS전달함수/크기/위상/대역폭. gmRD무차원,RC초,omega rad/s와fHz의2pi구별;위상radianbranch명시"
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "p2: lambda0의외부CL단일출력CS전달함수/크기/위상/대역폭. i_sc→Gm→Rout→RC부하Z→signedH→크기/위상→경계,독립량별display"
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "p2: lambda0의외부CL단일출력CS전달함수/크기/위상/대역폭. admittance정리후기호식. 경계손실≈-3.01dB만반올림"
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "p2: lambda0의외부CL단일출력CS전달함수/크기/위상/대역폭. sourceground/lambda0의MOS기호knownblock,입력0후RD먼저·CL같은node마지막병렬"
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "p2: lambda0의외부CL단일출력CS전달함수/크기/위상/대역폭. p2-gm실제오른쪽접지단락·leftward유입isc; p2-rout입력actualground. 알려진RD/CL합성이어서별도시험원불필요. 출력오른쪽·노드점색대응·source접지. 제어원/ro쌍없음"
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "p2: lambda0의외부CL단일출력CS전달함수/크기/위상/대역폭. gm→rout→gain단계보이며Gm=i_sc/Vin=gm;Rout≈RD;같은outputCL포함Zout;H=-GmZout. 반전/phase와magnitude구별"
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "p2: lambda0의외부CL단일출력CS전달함수/크기/위상/대역폭. gate/base구동의외부source/emitter축퇴feedback를계산하지않음. 1/gm소자입력저항과구별."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "p2: lambda0의외부CL단일출력CS전달함수/크기/위상/대역폭. gmRD고정CL2배와gmCL고정RD2배의영향을조건별분리"
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "p2: lambda0의외부CL단일출력CS전달함수/크기/위상/대역폭. DC바이어스경계/설계제약부등식목표가아님. active/saturation작동전제를부정하지않음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "p2: lambda0의외부CL단일출력CS전달함수/크기/위상/대역폭. 본문의Gm/gm/Rout/rO및입출력첨자역할일치;SVGnative text/tspan78%와node-id/색대응. 실제font/geometry부모stageQA."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "p2: lambda0의외부CL단일출력CS전달함수/크기/위상/대역폭. 원문단서→개념/기호/조건/선택이유→실제첫줄→현재단계곁이유/계산→최종답/실제검산→오류구별→명시조건retry. 7직계구역이순서대로하나씩이며별도core중복없음."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "p2: lambda0의외부CL단일출력CS전달함수/크기/위상/대역폭. 입력0과outputshort다른측정,음수반전과크기/위상구별,전체exactRout유도없음"
+        }
+      },
+      "evidence_scope": "Actual final-stage canonical sections, all source main requirements and selected answer steps/final read; frozen-fragment reasoning rechecked against final stage and MD."
+    },
+    "p3:main": {
+      "status": "pass",
+      "pre_review_status": "clear_pending_actual_stage",
+      "reviewer": "non-author content reviewer /root/note_review; actual final-stage HTML, MD, source conditions, all selected steps/finals, retries and summary read",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "p3: 동일CS의finite rO저항합성과주파수응답. gmR무차원,RC초,omega/f단위구별"
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "p3: 동일CS의finite rO저항합성과주파수응답. R=RD||rO중간량먼저정의→외부CL병렬→H/magnitude/corner"
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "p3: 동일CS의finite rO저항합성과주파수응답. 병렬공통인자를기호정리,특수값RD/2정확분수;반올림중간치없음"
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "p3: 동일CS의finite rO저항합성과주파수응답. sourcegroundfinite rO를RD와같은output-ground로합성후CL. currentgen-onlyMOS기호와따로꺼낸rO의의미caption명시"
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "p3: 동일CS의finite rO저항합성과주파수응답. p3-gm출력actualshort·isc유입, p3-routinputactualground. knownblock직접합성이라시험원강제안함. rO오른쪽·RD/CL그오른쪽·output맨오른쪽; 제어원까지펼친등가도없음"
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "p3: 동일CS의finite rO저항합성과주파수응답. Gm=gm→Rout≈RD||rO→Zout→H=-GmZout. rO는outputshort에서전류0이나입력0에서는남는가지"
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "p3: 동일CS의finite rO저항합성과주파수응답. gate/base구동의외부source/emitter축퇴feedback를계산하지않음. 1/gm소자입력저항과구별."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "p3: 동일CS의finite rO저항합성과주파수응답. rO=RD→RD/2변경시Req RD/2→RD/3; CL단독반배시gain불변/corner두배"
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "p3: 동일CS의finite rO저항합성과주파수응답. DC바이어스경계/설계제약부등식목표가아님. active/saturation작동전제를부정하지않음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "p3: 동일CS의finite rO저항합성과주파수응답. 본문의Gm/gm/Rout/rO및입출력첨자역할일치;SVGnative text/tspan78%와node-id/색대응. 실제font/geometry부모stageQA."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "p3: 동일CS의finite rO저항합성과주파수응답. 원문단서→개념/기호/조건/선택이유→실제첫줄→현재단계곁이유/계산→최종답/실제검산→오류구별→명시조건retry. 7직계구역이순서대로하나씩이며별도core중복없음."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "p3: 동일CS의finite rO저항합성과주파수응답. finite rO를영점화하지않고RD와병렬,full exactRout추가안함. 대역폭정규화는변경후DC크기기준"
+        }
+      },
+      "evidence_scope": "Actual final-stage canonical sections, all source main requirements and selected answer steps/final read; frozen-fragment reasoning rechecked against final stage and MD."
+    },
+    "p4:main": {
+      "status": "pass",
+      "pre_review_status": "clear_pending_actual_stage",
+      "reviewer": "non-author content reviewer /root/note_review; actual final-stage HTML, MD, source conditions, all selected steps/finals, retries and summary read",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "p4: RD1kΩCL1pF의10%전압이득크기감소주파수. 1kΩ1pF=1ns→1e9rad/s→159.15MHz,10%감쇠77.08MHz와omega4.84e8구별"
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "p4: RD1kΩCL1pF의10%전압이득크기감소주파수. Gm/Rout/H뒤DC정규화→9/10조건→sqrt19/9역산→최종f,단위와목표재대입검산"
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "p4: RD1kΩCL1pF의10%전압이득크기감소주파수. sqrt19/9정확근호로f계산,4.84e8반올림재사용안함;159.15/77.08/-0.92≈표시"
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "p4: RD1kΩCL1pF의10%전압이득크기감소주파수. sourcegroundlambda0CSknownblock→RD→CL. input왼쪽output오른쪽의원MOS기호"
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "p4: RD1kΩCL1pF의10%전압이득크기감소주파수. fig-p4-gmoutput오른쪽actualgroundshort·좌향isc, fig-p4-routinputactualground/rightendpointVt/leftit. RD첫Rout≈,CLeffect는Z. 제어원ro병렬쌍없음"
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "p4: RD1kΩCL1pF의10%전압이득크기감소주파수. start에Gm=i_sc/vin=gm→Rout≈RD/Zout→H=-GmZout세단계,이후비율정규화해gm소거"
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "p4: RD1kΩCL1pF의10%전압이득크기감소주파수. gate/base구동의외부source/emitter축퇴feedback를계산하지않음. 1/gm소자입력저항과구별."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "p4: RD1kΩCL1pF의10%전압이득크기감소주파수. RDgm고정CL2배에서같은정규화10%조건의omega/f절반"
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "p4: RD1kΩCL1pF의10%전압이득크기감소주파수. DC바이어스경계/설계제약부등식목표가아님. active/saturation작동전제를부정하지않음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "p4: RD1kΩCL1pF의10%전압이득크기감소주파수. 본문의Gm/gm/Rout/rO및입출력첨자역할일치;SVGnative text/tspan78%와node-id/색대응. 실제font/geometry부모stageQA."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "p4: RD1kΩCL1pF의10%전압이득크기감소주파수. 원문단서→개념/기호/조건/선택이유→실제첫줄→현재단계곁이유/계산→최종답/실제검산→오류구별→명시조건retry. 7직계구역이순서대로하나씩이며별도core중복없음."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "p4: RD1kΩCL1pF의10%전압이득크기감소주파수. 10%감소는0.9전압비이며전력비/0.1/정확1dB아님,정확10%로검산"
+        }
+      },
+      "evidence_scope": "Actual final-stage canonical sections, all source main requirements and selected answer steps/final read; frozen-fragment reasoning rechecked against final stage and MD."
+    },
+    "p5:main": {
+      "status": "pass",
+      "pre_review_status": "clear_pending_actual_stage",
+      "reviewer": "non-author content reviewer /root/note_review; actual final-stage HTML, MD, source conditions, all selected steps/finals, retries and summary read",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "p5: 전력2mW/대역폭1GHz의CE최대저주파이득설계. P/V=mA,1GHz/2pF를SI로RD79.58Ω,IC0.8mA;VT26mV=0.026V를원문외관례로선언"
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "p5: 전력2mW/대역폭1GHz의CE최대저주파이득설계. 전력/대역폭부등식→허용IC/R1상한→monotonicgain으로상한선택이유→역산→원전력/대역폭및active가능조건검산"
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "p5: 전력2mW/대역폭1GHz의CE최대저주파이득설계. R1=250/piΩ및|A|max=0.2/(piVT)먼저,VT대입마지막;2.45/7.78/63.66mV/2.44V≈,반올림79.58재사용안함"
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "p5: 전력2mW/대역폭1GHz의CE최대저주파이득설계. CEemitterground/VAinftyknownblock,idealinput의rpi분압없음. R1CLoutputparallel;別base-drivepower제외모델명시"
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "p5: 전력2mW/대역폭1GHz의CE최대저주파이득설계. p5-gm오른쪽actualoutputshort/leftward유입isc; p5-routbase/emitteractualground. rO무한가지생략원문조건,제어원ro쌍없는원BJT기호. knownR1block이라시험원불필요"
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "p5: 전력2mW/대역폭1GHz의CE최대저주파이득설계. Gm=gm=IC/VT→input0Rout≈R1(Zloadincluded)→A0≈-GmRout≈-ICR1/VT;|max와음의signedgain구별"
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "p5: 전력2mW/대역폭1GHz의CE최대저주파이득설계. gate/base구동의외부source/emitter축퇴feedback를계산하지않음. 1/gm소자입력저항과구별."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "p5: 전력2mW/대역폭1GHz의CE최대저주파이득설계. P/VCC/CL/VT고정fb두배→ICmax불변/R1max절반/gain절반"
+        },
+        "BIAS-01": {
+          "disposition": "applied",
+          "evidence": "p5: 전력2mW/대역폭1GHz의CE최대저주파이득설계. verify VC=VCC-ICR1≈2.44V,active VCB=VC-VB≥0및BEforward조건명시. 미제시VB를임의수치로단정안함"
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "p5: 전력2mW/대역폭1GHz의CE최대저주파이득설계. 본문의Gm/gm/Rout/rO및입출력첨자역할일치;SVGnative text/tspan78%와node-id/색대응. 실제font/geometry부모stageQA."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "p5: 전력2mW/대역폭1GHz의CE최대저주파이득설계. 원문단서→개념/기호/조건/선택이유→실제첫줄→현재단계곁이유/계산→최종답/실제검산→오류구별→명시조건retry. 7직계구역이순서대로하나씩이며별도core중복없음."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "p5: 전력2mW/대역폭1GHz의CE최대저주파이득설계. VT26mV와collector-supply-onlypower가정명시,전력/VCEIC혼동및|max양수/signedgain음수구별"
+        }
+      },
+      "evidence_scope": "Actual final-stage canonical sections, all source main requirements and selected answer steps/final read; frozen-fragment reasoning rechecked against final stage and MD."
+    },
+    "p6:main": {
+      "status": "pass",
+      "pre_review_status": "clear_pending_actual_stage",
+      "reviewer": "non-author content reviewer /root/note_review; actual final-stage HTML, MD, source conditions, all selected steps/finals, retries and summary read",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "p6: VAinfty인BJT(a)(b)및lambda>0인MOS(c)(d)의4회로대역폭. 모든omega=(conductance)/CL의s^-1, f=omega/2piHz;원문VAinfty/lambda>0범위분리"
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "p6: VAinfty인BJT(a)(b)및lambda>0인MOS(c)(d)의4회로대역폭. 원문4회로전체knownblock저항→Rout→CLcorner,main안a/b/c/d모두solve와finaltable포함"
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "p6: VAinfty인BJT(a)(b)및lambda>0인MOS(c)(d)의4회로대역폭. 1/gm+RB/beta항을기호유지,병렬컨덕턴스합으로정리;임의수치없음"
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "p6: VAinfty인BJT(a)(b)및lambda>0인MOS(c)(d)의4회로대역폭. a/b Q2emitter단자↔base/collectorACground연결, c兩MOSdrain rOparallel,d上PMOSro1+下diodeM2. 먼블록Rd2먼저→outputro1마지막병렬;소신호그림자동추가안함"
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "p6: VAinfty인BJT(a)(b)및lambda>0인MOS(c)(d)의4회로대역폭. startinput0/전원·VbACground/C개방명시. a1/gm||rpi,b큰beta(1/gm+RB/beta),c/dfinite rO유지. 알려진블록직접합성뿐KCL없어SVG/testsource불필요. 全Rout≈부터/전체정확모델본문없음"
+        },
+        "GAIN-01": {
+          "disposition": "not_applicable",
+          "evidence": "p6: VAinfty인BJT(a)(b)및lambda>0인MOS(c)(d)의4회로대역폭. 새증폭기전압이득계산이아니며극점/저항/기존크기응답/정성목표. Gm루트를억지로추가하지않음."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "p6: VAinfty인BJT(a)(b)및lambda>0인MOS(c)(d)의4회로대역폭. gate/base구동의외부source/emitter축퇴feedback를계산하지않음. 1/gm소자입력저항과구별."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "p6: VAinfty인BJT(a)(b)및lambda>0인MOS(c)(d)의4회로대역폭. b RB두배비=(1/gm+RB/beta)/(1/gm+2RB/beta),d ro1절반Δomega=1/(ro1CL),서로고정조건명시"
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "p6: VAinfty인BJT(a)(b)및lambda>0인MOS(c)(d)의4회로대역폭. DC바이어스경계/설계제약부등식목표가아님. active/saturation작동전제를부정하지않음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "p6: VAinfty인BJT(a)(b)및lambda>0인MOS(c)(d)의4회로대역폭. 본문의Gm/gm/Rout/rO및입출력첨자역할일치;SVGnative text/tspan78%와node-id/색대응. 실제font/geometry부모stageQA."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "p6: VAinfty인BJT(a)(b)및lambda>0인MOS(c)(d)의4회로대역폭. 원문단서→개념/기호/조건/선택이유→실제첫줄→현재단계곁이유/계산→최종답/실제검산→오류구별→명시조건retry. 7직계구역이순서대로하나씩이며별도core중복없음."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "p6: VAinfty인BJT(a)(b)및lambda>0인MOS(c)(d)의4회로대역폭. VAinftyBJT만/lambda>0MOS, b explicit1/gm보존, d gm2ro2≫1로다른소자gm2ro1≫1단정안함. p6현재89d768조건수정반영"
+        }
+      },
+      "evidence_scope": "Actual final-stage canonical sections, all source main requirements and selected answer steps/final read; frozen-fragment reasoning rechecked against final stage and MD."
+    },
+    "p7:main": {
+      "status": "pass",
+      "pre_review_status": "clear_pending_actual_stage",
+      "reviewer": "non-author content reviewer /root/note_review; actual final-stage HTML, MD, source conditions, all selected steps/finals, retries and summary read",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "p7: 100MHzpole/1GHzzero/10GHzpole의상대Bode높이와기울기. 100MHz=0.1GHz한decade, fHz와omega rad/s구별,dB/dec기울기vsdB높이"
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "p7: 100MHzpole/1GHzzero/10GHzpole의상대Bode높이와기울기. corner정렬→기울기누적→한decade상대높이→미지B0절대shift,최종100GHz높이실제검산"
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "p7: 100MHzpole/1GHzzero/10GHzpole의상대Bode높이와기울기. -20/-40dB정확asymptote,exact100GHz≈-40.04dB로표시"
+        },
+        "CIRCUIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "p7: 100MHzpole/1GHzzero/10GHzpole의상대Bode높이와기울기. 저항망합성·소자블록치환을새로수행하지않음."
+        },
+        "CIRCUIT-02": {
+          "disposition": "not_applicable",
+          "evidence": "p7: 100MHzpole/1GHzzero/10GHzpole의상대Bode높이와기울기. 회로측정/KCL이없는정의·정성·전달크기특성목표라측정그림을강제하지않음."
+        },
+        "GAIN-01": {
+          "disposition": "not_applicable",
+          "evidence": "p7: 100MHzpole/1GHzzero/10GHzpole의상대Bode높이와기울기. 새증폭기전압이득계산이아니며극점/저항/기존크기응답/정성목표. Gm루트를억지로추가하지않음."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "p7: 100MHzpole/1GHzzero/10GHzpole의상대Bode높이와기울기. gate/base구동의외부source/emitter축퇴feedback를계산하지않음. 1/gm소자입력저항과구별."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "p7: 100MHzpole/1GHzzero/10GHzpole의상대Bode높이와기울기. 한decade는주파수10배,zero는높이초기화아닌slope+20;추가pole100GHz뒤slope-40"
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "p7: 100MHzpole/1GHzzero/10GHzpole의상대Bode높이와기울기. DC바이어스경계/설계제약부등식목표가아님. active/saturation작동전제를부정하지않음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "p7: 100MHzpole/1GHzzero/10GHzpole의상대Bode높이와기울기. fig-p7-bode의상대세로축/로그f/cornerlabelnative첨자. 실제label폰트/geometry부모stageQA"
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "p7: 100MHzpole/1GHzzero/10GHzpole의상대Bode높이와기울기. pole/zero빈도단서→Bode규칙·B0/D정의→정렬첫줄→구간이유/그래프→continuousboundary검산→변경retry"
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "p7: 100MHzpole/1GHzzero/10GHzpole의상대Bode높이와기울기. A0미제시절대height추정안함,zero위치LHP/RHP를magnitude만으로정하지않음,instantjump아님"
+        }
+      },
+      "evidence_scope": "Actual final-stage canonical sections, all source main requirements and selected answer steps/final read; frozen-fragment reasoning rechecked against final stage and MD."
+    },
+    "p8:main": {
+      "status": "pass",
+      "pre_review_status": "clear_pending_actual_stage",
+      "reviewer": "non-author content reviewer /root/note_review; actual final-stage HTML, MD, source conditions, all selected steps/finals, retries and summary read",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "p8: 부하없는동일CS2단곱과겹친poleBode선도. gmRD무차원,RCs,normalizedomegaaxis와relativeD-D0표시,단위검산"
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "p8: 부하없는동일CS2단곱과겹친poleBode선도. 원문Vout/Vin중간Xfactor→representativeGm/Rout/signedH1→같은H2곱→D0/corner/slope"
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "p8: 부하없는동일CS2단곱과겹친poleBode선도. 동일인자2개의sqrt곱약분후표시,corner20log1/2≈-6.02;정수dB변화정확"
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "p8: 부하없는동일CS2단곱과겹친poleBode선도. 입력gate無전도/他C무시라M2가X부하안됨. 같은RDCL단을두번읽고곱;모든3단retry조건에도부하없음유지"
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "p8: 부하없는동일CS2단곱과겹친poleBode선도. p8-first-gm原M1기호/X오른쪽actualshort·유입좌향isc. input0Rout는알려진RD라글조건+합성만,별도등가도불필요. 제어원ro병렬쌍없음"
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "p8: 부하없는동일CS2단곱과겹친poleBode선도. 대표stage에서Gm=gm→input0Rout≈RD/CLZ→negativeH1;sameH2→positiveHtotal. 동일입출력선택/부하조건을명시해셋계산을생략한두번째독립풀이아님"
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "p8: 부하없는동일CS2단곱과겹친poleBode선도. gate/base구동의외부source/emitter축퇴feedback를계산하지않음. 1/gm소자입력저항과구별."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "p8: 부하없는동일CS2단곱과겹친poleBode선도. highfreq10배→magnitude1/100,동일무부하CS3단retry→-60dB/dec·DCnegative"
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "p8: 부하없는동일CS2단곱과겹친poleBode선도. DC바이어스경계/설계제약부등식목표가아님. active/saturation작동전제를부정하지않음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "p8: 부하없는동일CS2단곱과겹친poleBode선도. 본문의Gm/gm/Rout/rO및입출력첨자역할일치;SVGnative text/tspan78%와node-id/색대응. 실제font/geometry부모stageQA."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "p8: 부하없는동일CS2단곱과겹친poleBode선도. 원문단서→개념/기호/조건/선택이유→실제첫줄→현재단계곁이유/계산→최종답/실제검산→오류구별→명시조건retry. 7직계구역이순서대로하나씩이며별도core중복없음."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "p8: 부하없는동일CS2단곱과겹친poleBode선도. cascode와cascade혼동안함,同cornerpole2개/정확-6.02dBvs전체3dB구별,반전두번positive"
+        }
+      },
+      "evidence_scope": "Actual final-stage canonical sections, all source main requirements and selected answer steps/final read; frozen-fragment reasoning rechecked against final stage and MD."
+    },
+    "p9:main": {
+      "status": "pass",
+      "pre_review_status": "clear_pending_actual_stage",
+      "reviewer": "non-author content reviewer /root/note_review; actual final-stage HTML, MD, source conditions, all selected steps/finals, retries and summary read",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "p9: lambda0CS의서로분리된접지Cin/CL두극점. RC초/corner rad/s및Hz2pi구별,positivecorner/negativesroot"
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "p9: lambda0CS의서로분리된접지Cin/CL두극점. input0→Req,in/τin/omegain→output Req/τ/out각중간량분리→D(s)두인자검산"
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "p9: lambda0CS의서로분리된접지Cin/CL두극점. 기호합성후최종두식;수치반올림없음"
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "p9: lambda0CS의서로분리된접지Cin/CL두극점. lambda0CSgate無전도→XRS와Cground/outputRDCL각각. gate≠source1/gmblock,원MOS기호그림"
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "p9: lambda0CS의서로분리된접지Cin/CL두극점. fig-p9-input-zero actual왼쪽입력단락,RS뒤X가존재. source/전원ACground,저항읽을때capopen명시. knownblock/poles목표라Gm/시험원억지추가없음"
+        },
+        "GAIN-01": {
+          "disposition": "not_applicable",
+          "evidence": "p9: lambda0CS의서로분리된접지Cin/CL두극점. 새증폭기전압이득계산이아니며극점/저항/기존크기응답/정성목표. Gm루트를억지로추가하지않음."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "p9: lambda0CS의서로분리된접지Cin/CL두극점. gate/base구동의외부source/emitter축퇴feedback를계산하지않음. 1/gm소자입력저항과구별."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "p9: lambda0CS의서로분리된접지Cin/CL두극점. RSRDCL고정Cin2배→inputcorner절반/output불변"
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "p9: lambda0CS의서로분리된접지Cin/CL두극점. DC바이어스경계/설계제약부등식목표가아님. active/saturation작동전제를부정하지않음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "p9: lambda0CS의서로분리된접지Cin/CL두극점. 본문의Gm/gm/Rout/rO및입출력첨자역할일치;SVGnative text/tspan78%와node-id/색대응. 실제font/geometry부모stageQA."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "p9: lambda0CS의서로분리된접지Cin/CL두극점. 원문단서→개념/기호/조건/선택이유→실제첫줄→현재단계곁이유/계산→최종답/실제검산→오류구별→명시조건retry. 7직계구역이순서대로하나씩이며별도core중복없음."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "p9: lambda0CS의서로분리된접지Cin/CL두극점. gate를독립입력과같은node로접지안함,兩C다른node라합성안함,order값의존/같은corner2차/역결합범위한계"
+        }
+      },
+      "evidence_scope": "Actual final-stage canonical sections, all source main requirements and selected answer steps/final read; frozen-fragment reasoning rechecked against final stage and MD."
+    },
+    "p10:main": {
+      "status": "pass",
+      "pre_review_status": "clear_pending_actual_stage",
+      "reviewer": "non-author content reviewer /root/note_review; actual final-stage HTML, MD, source conditions, all selected steps/finals, retries and summary read",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "p10: 같은두극점의half-power대역폭과공통corner구별. 반복pole배율sqrt(sqrt2-1)는무차원,rad/s및Hz비같음"
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "p10: 같은두극점의half-power대역폭과공통corner구별. 원문같은pole→정규화M→동일인자sqrt약분→halfpower조건→positive근호해→재대입검산"
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "p10: 같은두극점의half-power대역폭과공통corner구별. 정확sqrt(sqrt2-1)유지후≈0.64표시,roundtrip에0.64재사용없음,corner≈-6.02dB"
+        },
+        "CIRCUIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "p10: 같은두극점의half-power대역폭과공통corner구별. 저항망합성·소자블록치환을새로수행하지않음."
+        },
+        "CIRCUIT-02": {
+          "disposition": "not_applicable",
+          "evidence": "p10: 같은두극점의half-power대역폭과공통corner구별. 회로측정/KCL이없는정의·정성·전달크기특성목표라측정그림을강제하지않음."
+        },
+        "GAIN-01": {
+          "disposition": "not_applicable",
+          "evidence": "p10: 같은두극점의half-power대역폭과공통corner구별. 새증폭기전압이득계산이아니며극점/저항/기존크기응답/정성목표. Gm루트를억지로추가하지않음."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "p10: 같은두극점의half-power대역폭과공통corner구별. gate/base구동의외부source/emitter축퇴feedback를계산하지않음. 1/gm소자입력저항과구별."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "p10: 같은두극점의half-power대역폭과공통corner구별. retryCin반배inputpole2배/output고정→(1+x²/4)(1+x²)=2,BW증가. 다른파라미터고정"
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "p10: 같은두극점의half-power대역폭과공통corner구별. DC바이어스경계/설계제약부등식목표가아님. active/saturation작동전제를부정하지않음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "p10: 같은두극점의half-power대역폭과공통corner구별. p10-normalized의x=omega/omega_p/M정의및nativep첨자.0.64는round로caption명시. 실제face/geometrystageQA"
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "p10: 같은두극점의half-power대역폭과공통corner구별. samepole단서→normalization/halfpower개념→examplecorner1/2→실제첫식→양의해이유→검산/다른Cinretry. 회로새전개불필요"
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "p10: 같은두극점의half-power대역폭과공통corner구별. singlepole3dBcorner를겹친2pole에적용안함,진폭half=-6.02dB.부호있는H새계산아닌기존magnitude전달특성"
+        }
+      },
+      "evidence_scope": "Actual final-stage canonical sections, all source main requirements and selected answer steps/final read; frozen-fragment reasoning rechecked against final stage and MD."
+    },
+    "p11:main": {
+      "status": "pass",
+      "pre_review_status": "clear_pending_actual_stage",
+      "reviewer": "non-author content reviewer /root/note_review; actual final-stage HTML, MD, source conditions, all selected steps/finals, retries and summary read",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "p11: lambda0/no-bodyCGsource의RS||1/gm과두극점. sourceR=1/gm의Ω차원,RCs/corner rad/s;동일저항분수1/(2gm)"
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "p11: lambda0/no-bodyCGsource의RS||1/gm과두극점. sourceknownblock→inputparallel→inputpole→outputRDCL→RS=1/gm특수검산,모든독립량별display"
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "p11: lambda0/no-bodyCGsource의RS||1/gm과두극점. RS병렬기호약분(1+gmRS)/(RSCin),1항무단제거안함,임의round없음"
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "p11: lambda0/no-bodyCGsource의RS||1/gm과두극점. gateACgroundlambda0no-body에서source1/gmblock을RS와같은X-ground로병렬. outputRD/CL. 알려진블록우선이라제어원등가그림없음"
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "p11: lambda0/no-bodyCGsource의RS||1/gm과두극점. fig-p11-input-zero독립입력실제왼쪽접지/RS뒤sourceX유지·gateactualground. ź제어동작과drain-to-sourcefeedback부재조건명시;수식Gm/Rout계산목표아님"
+        },
+        "GAIN-01": {
+          "disposition": "not_applicable",
+          "evidence": "p11: lambda0/no-bodyCGsource의RS||1/gm과두극점. 새증폭기전압이득계산이아니며극점/저항/기존크기응답/정성목표. Gm루트를억지로추가하지않음."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "p11: lambda0/no-bodyCGsource의RS||1/gm과두극점. gate/base구동의외부source/emitter축퇴feedback를계산하지않음. 1/gm소자입력저항과구별."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "p11: lambda0/no-bodyCGsource의RS||1/gm과두극점. RS=1/gm→RS≫1/gm,Req두배접근/corner처음1/2접근;유한RS에서정확절반이라안함"
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "p11: lambda0/no-bodyCGsource의RS||1/gm과두극점. DC바이어스경계/설계제약부등식목표가아님. active/saturation작동전제를부정하지않음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "p11: lambda0/no-bodyCGsource의RS||1/gm과두극점. 본문의Gm/gm/Rout/rO및입출력첨자역할일치;SVGnative text/tspan78%와node-id/색대응. 실제font/geometry부모stageQA."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "p11: lambda0/no-bodyCGsource의RS||1/gm과두극점. 원문단서→개념/기호/조건/선택이유→실제첫줄→현재단계곁이유/계산→최종답/실제검산→오류구별→명시조건retry. 7직계구역이순서대로하나씩이며별도core중복없음."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "p11: lambda0/no-bodyCGsource의RS||1/gm과두극점. 내부1/gm≠externalRe,gm(1/gm)=1명시. gmRS≫1강제안함,output순서값의존,양의corner/음의sroot구별"
+        }
+      },
+      "evidence_scope": "Actual final-stage canonical sections, all source main requirements and selected answer steps/final read; frozen-fragment reasoning rechecked against final stage and MD."
+    },
+    "p12:main": {
+      "status": "pass",
+      "pre_review_status": "clear_pending_actual_stage",
+      "reviewer": "non-author content reviewer /root/note_review; actual final-stage HTML, MD, source conditions, all selected steps/finals, retries and summary read",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "p12: CGoutputpole가inputpole정확10배인RD역산. Cin/CL무차원·RDΩ,兩frequency비는Hz/omega똑같아2pi한쪽추가안함"
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "p12: CGoutputpole가inputpole정확10배인RD역산. 원문정확10배조건먼저→Ri→兩pole→crossmultiply→RD역산→원래조건재대입/동일C특수값검산"
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "p12: CGoutputpole가inputpole정확10배인RD역산. Ri기호정의후약분·Cin/CL비정리,수치반올림없음"
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "p12: CGoutputpole가inputpole정확10배인RD역산. 상속E11.09lambda0no-bodygategroundsourceRi=RS||1/gmknownblock직접사용. input/outputC교환안함"
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "p12: CGoutputpole가inputpole정확10배인RD역산. 실제source저항knownblock상속으로충분하며KCL/새Gm/output저항시험도출아니라SVG불필요;입력0/바이어스ACground조건recall에서확인"
+        },
+        "GAIN-01": {
+          "disposition": "not_applicable",
+          "evidence": "p12: CGoutputpole가inputpole정확10배인RD역산. 새증폭기전압이득계산이아니며극점/저항/기존크기응답/정성목표. Gm루트를억지로추가하지않음."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "p12: CGoutputpole가inputpole정확10배인RD역산. gate/base구동의외부source/emitter축퇴feedback를계산하지않음. 1/gm소자입력저항과구별."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "p12: CGoutputpole가inputpole정확10배인RD역산. 목표비10→20RD절반및CL2배동일목표RD절반조건분리"
+        },
+        "BIAS-01": {
+          "disposition": "applied",
+          "evidence": "p12: CGoutputpole가inputpole정확10배인RD역산. 원문정확10배등식과가정변경적어도10배의RD≤범위를명시적으로구별;DC포화계산은목표아님"
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "p12: CGoutputpole가inputpole정확10배인RD역산. 본문의Gm/gm/Rout/rO및입출력첨자역할일치;SVGnative text/tspan78%와node-id/색대응. 실제font/geometry부모stageQA."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "p12: CGoutputpole가inputpole정확10배인RD역산. 10배비교단서→CGnodeRC/Ri개념→같은C작은예→실제첫줄비율→대입/이항이유→검산/변경retry"
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "p12: CGoutputpole가inputpole정확10배인RD역산. 정확10배≠이상,outputpole증가시RD감소,미제시C동일가정안함"
+        }
+      },
+      "evidence_scope": "Actual final-stage canonical sections, all source main requirements and selected answer steps/final read; frozen-fragment reasoning rechecked against final stage and MD."
+    },
+    "p13:main": {
+      "status": "pass",
+      "pre_review_status": "clear_pending_actual_stage",
+      "reviewer": "non-author content reviewer /root/note_review; actual final-stage HTML, MD, source conditions, all selected steps/finals, retries and summary read",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "applied",
+          "evidence": "p13: CGsource앞의RP와입력C노드X/실제sourceS를구별한두pole. RP와1/gm은모두Ω,직렬/병렬저항후Cin곱은초;corner rad/s와음의sroot구별"
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "p13: CGsource앞의RP와입력C노드X/실제sourceS를구별한두pole. 먼source블록1/gm→X에서RP직렬→RS마지막병렬→inputcorner,別outputRDCL. 各독립중간량display분리"
+        },
+        "CALC-02": {
+          "disposition": "applied",
+          "evidence": "p13: CGsource앞의RP와입력C노드X/실제sourceS를구별한두pole. Rbranch기호합성뒤parallel정리,검산conductance형으로변환. round소수없음"
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "p13: CGsource앞의RP와입력C노드X/실제sourceS를구별한두pole. 원MOS/입력X와실제sourceS를유지. sourceknown1/gm와RP직렬→RS병렬의연쇄합성이가능하므로제어원등가회로생략. Cin을S로옮기지않음"
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "p13: CGsource앞의RP와입력C노드X/실제sourceS를구별한두pole. fig-p13-input-zero의독립원actual왼쪽ground·gateactualground·sourceS–RP–Cin의X실제연결을확인. 양node에점/이름,output오른쪽. knownblock/pole목표라Gm/testsource없음. S에C없어추가pole강제안함"
+        },
+        "GAIN-01": {
+          "disposition": "not_applicable",
+          "evidence": "p13: CGsource앞의RP와입력C노드X/실제sourceS를구별한두pole. 새증폭기전압이득계산이아니며극점/저항/기존크기응답/정성목표. Gm루트를억지로추가하지않음."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "p13: CGsource앞의RP와입력C노드X/실제sourceS를구별한두pole. gate/base구동의외부source/emitter축퇴feedback를계산하지않음. 1/gm소자입력저항과구별."
+        },
+        "SCALE-01": {
+          "disposition": "applied",
+          "evidence": "p13: CGsource앞의RP와입력C노드X/실제sourceS를구별한두pole. gm/Cin/RD/CL고정·RS≫2/gm에서RP0→1/gm inputcorner약1/2/output불변. finiteRS의정확비는(GmRS+2)/(2(GmRS+1))"
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "p13: CGsource앞의RP와입력C노드X/실제sourceS를구별한두pole. DC바이어스경계/설계제약부등식목표가아님. active/saturation작동전제를부정하지않음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "p13: CGsource앞의RP와입력C노드X/실제sourceS를구별한두pole. 원문RP대문자첨자/해석nodeX,S명시. native text/tspan78%의X blue/S red/outputblue대응. sourceS는원문M1의실제소스,추가소자명아님. 실제face/spacing별도부모QA"
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "p13: CGsource앞의RP와입력C노드X/실제sourceS를구별한두pole. 기생seriesR단서→source1gmknownblock→RP=1gm작은예→input0그림→직렬후병렬이유→두corner/limit검산→구체조건retry. 중복core없음"
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "p13: CGsource앞의RP와입력C노드X/실제sourceS를구별한두pole. RP를외부grounded-sourceRe로오인해gmRP≫1강제안함,1gm보존;X/S직접ground안함;gm고정시RP증가inputcorner감소/output불변조건명시"
+        }
+      },
+      "evidence_scope": "Actual final-stage canonical sections, all source main requirements and selected answer steps/final read; frozen-fragment reasoning rechecked against final stage and MD."
+    }
+  },
+  "approval_scope": "content and learning-style semantic gate only; no browser/source-visual/PDF approval",
+  "html": "C:\\Users\\Hyunjun\\.codex\\tmp\\review-pack\\1014-20261022-regen\\problem-explain\\final-v1\\review-1014-Frequency_Response\\stage\\6f0c545903a34f2cb2979a0c1450a18c\\문제설명_1014_Frequency_Response.html",
+  "html_sha256": "989c06fdd66ece89dfd8ce3a62cda89ba570a679eb4522b22e743aa30366e4a8",
+  "md": "C:\\Users\\Hyunjun\\.codex\\tmp\\review-pack\\1014-20261022-regen\\problem-explain\\final-v1\\review-1014-Frequency_Response\\stage\\6f0c545903a34f2cb2979a0c1450a18c\\.assets\\문제설명_1014_Frequency_Response.md",
+  "md_sha256": "6dd617b74b23ec765a882ef739e42f2df0effbbecdd311df3097e8bd602bc1f7"
+}
