@@ -133,8 +133,7 @@ class TestRealRepo(unittest.TestCase):
                 self.assertEqual(problem_index.main(["--repo", str(repo)]), 1)
             self.assertIn("ERROR", err.getvalue())
 
-    def test_problem_without_solution_is_skipped(self):
-        # 풀이가 아직 없는 문제(새로 옮긴 기출 등)는 답안지를 만들 수 없으므로 후보가 아니다.
+    def test_problem_without_solution_is_included(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)
             (repo / "workbook").symlink_to(REPO / "workbook", target_is_directory=True)
@@ -149,7 +148,7 @@ class TestRealRepo(unittest.TestCase):
                                         encoding="utf-8")
             rows, errors = problem_index.index(repo)
             self.assertEqual(errors, [])
-            self.assertEqual([r[0] for r in rows], ["2099-1_중간-Q2"])
+            self.assertEqual([r[0] for r in rows], ["2099-1_중간-Q1", "2099-1_중간-Q2"])
 
     def test_non_dict_frontmatter_is_reported_and_skipped(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -167,6 +166,105 @@ class TestRealRepo(unittest.TestCase):
 
 
 class TestJSON(unittest.TestCase):
+    def test_new_policy_cli_accepts_unsolved_exam_and_requires_history(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo = Path(tmp)
+            (repo / 'workbook').symlink_to(REPO / 'workbook', target_is_directory=True)
+            exam = repo / 'from_the_past/md/2099-1_중간'
+            exam.mkdir(parents=True)
+            (exam / 'exam.yaml').write_text('exam: synthetic fixture\n', encoding='utf-8')
+            (exam / 'Q1.md').write_text('---\nid: 2099-1_중간-Q1\nkind: 기출\nnumber: "1"\n'
+                'points: 10\nsource: ../../x.pdf\npdf_page: 1\nsource_lang: ko\nfigures: []\n'
+                'textbook_chapters: [9]\ndepends_on: []\nrefs: []\n---\n'
+                '# 기출 2099-1 중간 1 — 합성 테스트\n\n## 조건\n- $R=1$\n\n'
+                '## 구할 것\n- (1) 저항\n\n## 회로 — 없음 (서술형)\n', encoding='utf-8')
+            notes = repo / '복습노트'
+            notes.mkdir()
+            candidates, errors = problem_index.candidate_data(repo, notes, {9}, '1007')
+            self.assertEqual(errors, [])
+            q = candidates['problems'][0]
+            self.assertEqual(q['reference_solution'], 'none')
+            snapshot = repo / 'candidates.json'
+            snapshot.write_text(json.dumps(candidates), encoding='utf-8')
+            m = dict(range='1007', selection_policy='exam-first-v2', problems=[dict(id=q['id'],
+                kind='기출', why='합성 테스트', priority='core', learning_goals=['저항'], estimated_minutes=5)])
+            (repo / 'manifest.json').write_text(json.dumps(m), encoding='utf-8')
+            review = dict(policy='exam-first-v2', catalog_sha256=candidates['catalog_sha256'],
+                candidates=[dict(id=q['id'], disposition='selected', scope='in_scope', reason='합성 테스트')],
+                coverage=[dict(goal='저항', problem_ids=[q['id']])])
+            (repo / 'review.json').write_text(json.dumps(review), encoding='utf-8')
+            args = ['--repo', str(repo), '--chapters', '9', '--format', 'json', '--catalog-out', str(repo/'catalog'),
+                    '--candidates-input', str(snapshot), '--selection-manifest', str(repo/'manifest.json'),
+                    '--selection-review', str(repo/'review.json'), '--selection-out', str(repo/'selection.json')]
+            with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+                self.assertEqual(problem_index.main(args), 1)
+            self.assertFalse((repo/'selection.json').exists())
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(problem_index.main(args + ['--used', str(notes), '--exclude-range', '1007']), 0)
+            recorded = json.loads((repo/'selection.json').read_text(encoding='utf-8'))
+            self.assertEqual(recorded['problems'][0]['reference_solution'], 'none')
+            self.assertEqual(recorded['workload']['estimated_minutes'], 5)
+
+    def test_new_policy_requires_audit_and_keeps_strict_reuse(self):
+        data = dict(catalog_sha256='abc', problems=[dict(id='Q', kind='기출', used=False,
+            depends_on=[], subparts=[{'label': '1'}], reference_solution='none')])
+        manifest = dict(range='1007', selection_policy='exam-first-v2', problems=[dict(
+            id='Q', kind='기출', why='기본형', priority='core', learning_goals=['이득'], estimated_minutes=15)])
+        review = dict(policy='exam-first-v2', catalog_sha256='abc', candidates=[dict(
+            id='Q', disposition='selected', scope='in_scope', reason='기본형')],
+            coverage=[dict(goal='이득', problem_ids=['Q'])])
+        with self.assertRaises(ValueError):
+            problem_index.record_selection(manifest, data)
+        record = problem_index.record_selection(manifest, data, review)
+        self.assertEqual(record['schema_version'], 2)
+        self.assertEqual(record['problems'][0]['priority'], 'core')
+        self.assertEqual(record['problems'][0]['subpart_count'], 1)
+        self.assertEqual(record['problems'][0]['reference_solution'], 'none')
+        self.assertEqual(record['workload']['estimated_minutes'], 15)
+        data['problems'][0]['used'] = True
+        with self.assertRaises(ValueError):
+            problem_index.record_selection(manifest, data, review)
+
+    def test_previously_used_dependency_is_never_exempt(self):
+        data = dict(catalog_sha256='abc', problems=[
+            dict(id='A', kind='기출', used=True, depends_on=[]),
+            dict(id='B', kind='기출', used=False, depends_on=['A'])])
+        m = dict(range='1007', problems=[dict(id='A', kind='기출', why='전제'), dict(id='B', kind='기출', why='응용')])
+        with self.assertRaisesRegex(ValueError, '이전 팩'):
+            problem_index.record_selection(m, data)
+        m['problems'].pop(0)
+        with self.assertRaisesRegex(ValueError, '의존'):
+            problem_index.record_selection(m, data)
+
+    def test_missing_goals_and_wrong_coverage_fail(self):
+        data = dict(catalog_sha256='abc', problems=[dict(id='A', kind='기출', used=False, depends_on=[])])
+        m = dict(range='1007', selection_policy='exam-first-v2', problems=[dict(
+            id='A', kind='기출', why='전제', priority='core', learning_goals=['이득'], estimated_minutes=10)])
+        r = dict(policy='exam-first-v2', catalog_sha256='abc', candidates=[dict(
+            id='A', disposition='selected', scope='in_scope', reason='이득')], coverage=[])
+        with self.assertRaisesRegex(ValueError, 'coverage'):
+            problem_index.record_selection(m, data, r)
+        r['coverage'] = [dict(goal='다른 목표', problem_ids=['A'])]
+        with self.assertRaisesRegex(ValueError, '불일치'):
+            problem_index.record_selection(m, data, r)
+
+    def test_new_policy_requires_reviewing_unselected_exams_and_all_subparts(self):
+        data = dict(catalog_sha256='abc', problems=[dict(id='Q', kind='기출', used=False,
+            depends_on=[], subparts=[{'label': '1'}])])
+        manifest = dict(range='1007', selection_policy='exam-first-v2', problems=[])
+        review = dict(policy='exam-first-v2', catalog_sha256='abc', candidates=[], coverage=[])
+        with self.assertRaises(ValueError):
+            problem_index.record_selection(manifest, data, review)
+        review['candidates'] = [dict(id='Q', disposition='deferred', scope='out_of_scope',
+                                    reason='주파수 응답 미학습', missing_concepts=['주파수 응답'])]
+        result = problem_index.record_selection(manifest, data, review)
+        self.assertEqual(result['review']['candidates'][0]['disposition'], 'deferred')
+        review['candidates'][0]['scope'] = 'in_scope'
+        manifest['problems'] = [dict(id='Q', kind='기출', why='x', priority='core',
+            learning_goals=['이득'], estimated_minutes=10)]
+        with self.assertRaises(ValueError):
+            problem_index.record_selection(manifest, data, review)
+
     def test_textbook_figure_and_config_changes_invalidate_candidate(self):
         with tempfile.TemporaryDirectory() as tmp:
             repo = Path(tmp)

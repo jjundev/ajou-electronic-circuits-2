@@ -8,7 +8,7 @@
 
 1. 부모의 기계 예비 검사·내용 리뷰(lite는 부모 내용 리뷰만 생략)·브라우저·MD 변환과 모든 topic ID의 개인화 감사를 끝낸다. `<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md`의 실제 절대 경로와 manifest `learning_style` snapshot이 필수 입력이다.
 2. 문제가 0개면 `skipped-no-problems`다. 자식·PDF 없이 현재 snapshot·모든 토픽 감사·유예 없는 최종 노트 검사를 수행한다.
-3. manifest `problems`·`RUN/selection.json`·`.assets/problems.txt`의 ID·순서를 대조한다. 선택용 JSON은 자식 원문이나 독립 검산 근거를 대신하지 않는다.
+3. manifest `problems`·`RUN/selection.json`·`.assets/selection.json`·`.assets/problems.txt`의 ID·순서를 대조한다. 새 정책의 핵심/추가·학습 목표·소문항 묶음 수·추정 시간도 같은 입력에서 읽고 source 해시에 묶는다. 선택용 JSON은 자식 원문이나 독립 검산 근거를 대신하지 않는다.
 4. **필수 하위 스킬: ec2-problem-explain.** 형제 `../ec2-problem-explain/SKILL.md`를 읽는다. 부모 `range`를 명시하고 `EXPLAIN_RUN=RUN/problem-explain/<새 실행ID>`를 없거나 빈 폴더로 정한다. 아래 변수는 명령 전에 같은 셸에서 실제 절대 경로로 설정한다.
 ```bash
 python3 "$REPO/.claude/skills/ec2-problem-explain/scripts/epe_cli.py" extract --repo "$REPO" --target "$RANGE" --run "$EXPLAIN_RUN"
@@ -61,7 +61,7 @@ EOF
 
 ## 실패 시 전체 팩 복구
 
-표시 제목 맵 `.assets/display-titles.json`도 기본 팩 입력이다. 기존 맵은 문제 목록과 함께 백업·복원하고, 실행 전 없던 새 맵은 실패 시 withheld로 보관한 뒤 발행 위치에서 제거한다. 제목 맵을 먼저 변경하지 않는다.
+표시 제목 맵 `.assets/display-titles.json`과 새 선발 기록 `.assets/selection.json`도 기본 팩 입력이다. 두 파일을 같은 백업·복원·실패 시 withheld 절차에 포함한다. `.pack/selection-review.json`도 실행 전 백업하고 실패 시 이전 기록으로 복원한다. 기존 맵은 문제 목록과 함께 백업·복원하고, 실행 전 없던 새 맵은 실패 시 withheld로 보관한 뒤 발행 위치에서 제거한다. 제목 맵을 먼저 변경하지 않는다.
 
 먼저 두 백업 기록의 range·전체 경로 집합·SHA-256과 실제 백업을 대조한다. 이번 실행에서 만든 같은 range의 허용 산출을 `RUN/withheld/<고유ID>/`에 상대 경로로 보관한 뒤 제거한다. 기본 팩 → 설명 순서로 복원하고 모든 파일 해시를 다시 확인한다. 새 팩은 두 기록이 빈 목록이므로 복원 없이 withheld로 끝난다.
 
@@ -80,9 +80,11 @@ def allowed(rel):
     parts = Path(rel).parts
     if len(parts) == 1:
         return bool(re.fullmatch(rf"(?:정리노트|문제설명)_{r}_[^/]+\.html|복습문제_{r}_[^/]+-(?:문제|답안)\.pdf", rel))
+    if parts == (".pack", "selection-review.json"):
+        return True
     if len(parts) >= 2 and parts[0] == ".assets":
         name = parts[1]
-        return (len(parts) == 2 and (name in ("problems.txt", "display-titles.json") or bool(re.fullmatch(rf"(?:정리노트|문제설명)_{r}_.+\.md", name)))
+        return (len(parts) == 2 and (name in ("problems.txt", "display-titles.json", "selection.json") or bool(re.fullmatch(rf"(?:정리노트|문제설명)_{r}_.+\.md", name)))
             or name == f"figures_{r}" or name.startswith((f"figures_문제설명_{r}_", f"자료_문제설명_{r}_")))
     return False
 def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
@@ -109,7 +111,8 @@ for record_name in ("basic-pack-backup.json", "explanations-backup.json"):
         assert actual_files == files and sorted(actual_dirs) == sorted(dirs), "백업 경로/해시 불일치"
     records.append(record)
 current = []
-for base in (pack, pack / ".assets"):
+for base in (pack, pack / ".assets", pack / ".pack"):
+    assert not base.is_symlink() and base.resolve().is_relative_to(pack.resolve())
     for target in (base.iterdir() if base.is_dir() else []):
         if allowed(target.relative_to(pack).as_posix()):
             for item in [target, *(target.rglob("*") if target.is_dir() else [])]:

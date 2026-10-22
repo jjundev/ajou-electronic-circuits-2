@@ -1,6 +1,6 @@
 ---
 name: ec2-review-pack
-description: 전자회로2 수업의 STT·강의노트·Razavi 교과서로 ELI5 정리노트 HTML(+MD, 그림)을 만들고, 그 수업 범위에 맞는 workbook 문제 약 10개를 골라 복습문제 PDF(문제+답안)를 만들어 검토를 통과한 문제설명 HTML·MD와 함께 복습노트의 날짜별 폴더에 저장한다. "정리노트", "복습문제", "복습팩", "0923 정리해줘"처럼 전자회로2 수업 정리를 요청하거나 /ec2-review-pack [MMDD|MMDD-MMDD] [lite]로 부를 때 사용한다.
+description: 전자회로2 수업의 STT·강의노트·Razavi 교과서로 ELI5 정리노트 HTML(+MD, 그림)을 만들고, 수업 범위에 맞는 미사용 workbook 문제를 기출 우선 최대 20개 선발해 복습문제 PDF(문제+답안)와 검토를 통과한 문제설명 HTML·MD를 날짜별 폴더에 저장한다. 참고 풀이 없는 문제도 직접 풀고 독립 검증한다. "정리노트", "복습문제", "복습팩", "0923 정리해줘" 또는 /ec2-review-pack [MMDD|MMDD-MMDD] [lite]에 사용한다.
 ---
 
 # 전자회로2 복습팩
@@ -91,8 +91,8 @@ description: 전자회로2 수업의 STT·강의노트·Razavi 교과서로 ELI5
 - 필수 `learning_style`은 준비 단계 `RUN/learning-style-snapshot.json`의 객체 전체(path·sha256·rule_ids)를 그대로 넣는다. 작성자·리뷰어 브리프에 PROFILE 절대 경로와 snapshot을 채운다.
 - 요약들의 슬라이드 대조표와 용어·식 목록으로 `RUN/manifest.json`을 쓴다. 규칙은 `references/manifest-guide.md`에 있다.
 - 첫 섹션은 항상 `why`(토픽 `why-circuit`, "들어가며: 왜 이런 회로를 쓸까")다. 요약의 `## 동기 발언`으로 `required_terms`를 고른다(`references/manifest-guide.md`).
-- 문제 선별은 `references/problem-selection.md`를 따른다. 요약의 `## 교과서 절 대조`와 `RUN/candidates.json`으로 후보를 좁히고, 기출은 상세 JSON의 원문·전체 소문항·풀이와 실제 회로 그림까지 읽어 고른다. 미분류·draft·stale은 자동 제외하지 않고 MD로 재확인한다. 전체 문항만 채택하며 소문항 하나라도 범위 밖이면 제외한다.
-- 문제가 1개 이상이면 manifest 검증 후 `references/problem-selection.md` 4의 명령으로 `RUN/selection.json`을 만든다. 원본/사용 이력 변경이면 새 후보로 다시 선별한다. 문제 목록이 바뀔 때마다 선택 기록도 갱신한다. PDF 빌드 전 선택 기록의 ID·순서가 manifest와 같아야 한다. 문제 0개이면 후보/선택 기록 없이 기존 문제 없는 팩 절차를 따른다.
+- 문제 선별의 공통 명세는 `references/problem-selection.md`다. 새 manifest는 `selection_policy: exam-first-v2`로 **기출 우선 최대 20문항**, 핵심/추가 연습·학습 목표·추정 시간을 기록한다. 교과서는 기출의 빈틈을 보완하고 종류별 고정 비율/최소 개수를 강제하지 않는다. 다른 회차에서 사용한 문항은 선행 문제도 항상 제외한다. 풀이 없는 문제도 원문에서 직접 풀어 검토하며 무해설을 불이익으로 삼지 않는다. 기출 상세 JSON의 원문·전체 소문항·실제 그림을 읽고 미분류·draft·stale은 MD로 재확인한다. 전체 문항만 채택하며 범위 밖 소문항이 있으면 미학습 개념과 함께 보류해 이후 회차에서 재검토한다.
+- 문제가 1개 이상이면 manifest 검증 후 `RUN/selection-review.json`(미사용 기출 전체/선택 문항의 판정·보류·coverage·전체 시험 범위 점검)을 작성하고 `references/problem-selection.md` 4의 명령으로 `RUN/selection.json`을 만든다. 원본/후보/사용 이력 변경이면 다시 검토한다. 목록이나 핵심/추가·시간·목표가 바뀔 때마다 기록을 갱신한다. 조립 시 `.assets/selection.json`과 `.pack/selection-review.json`을 보존한다. PDF 빌드 전 ID·순서가 manifest와 같아야 한다. 후보는 있으나 최종 0개이면 제외·보류 이유를 보고하고 문제 없는 팩 절차를 따른다.
 - 검증: `python3 "$SKILL/scripts/manifest.py" "$RUN/manifest.json" "$REPO"` 결과가 `OK`여야 한다.
 
 ### 3. 작성
@@ -113,9 +113,9 @@ description: 전자회로2 수업의 STT·강의노트·Razavi 교과서로 ELI5
 
 ### 4. 조립
 - `manifest.py "$RUN/manifest.json" "$REPO"`로 현재 snapshot을 검증한 후에만 발행 경로를 변경한다.
-- **부모가 problems.txt·display-titles.json·slug·정리노트를 처음 변경하기 전에** `references/problem-explain-integration.md`의 기존 설명 백업·정리 절차를 먼저 끝낸다. 문제지 빌드도 그 뒤에 한다. 재조립마다 반복하지 않는다. 기본 팩 재생성이 실패하면 해당 참조의 복원 순서를 따른다.
+- **부모가 problems.txt·display-titles.json·selection.json·slug·정리노트를 처음 변경하기 전에** `references/problem-explain-integration.md`의 기존 설명 백업·정리 절차를 먼저 끝낸다. 문제지 빌드도 그 뒤에 한다. 재조립마다 반복하지 않는다. 기본 팩 재생성이 실패하면 해당 참조의 복원 순서를 따른다.
 - 초기 빌드는 문제지(`--mode problems`)만 만든다. 답안은 9단계 자식 승인 이후에 만든다.
-- **처음 조립할 때만**: `복습노트/<range>/`에 이번 `range`의 산출물(맨 위의 `정리노트_<range>_*`·`복습문제_<range>_*`, `.assets/`의 `정리노트_<range>_*`·`problems.txt`·`display-titles.json`·`figures_<range>/`)이 하나라도 있으면 먼저 백업한다. 다시 조립할 때(5~8단계에서 돌아온 경우)는 백업하지 않는다. 이미 스킬이 만든 초안이 백업에 섞이기 때문이다.
+- **처음 조립할 때만**: `복습노트/<range>/`에 이번 `range`의 산출물(맨 위의 `정리노트_<range>_*`·`복습문제_<range>_*`, `.assets/`의 `정리노트_<range>_*`·`problems.txt`·`display-titles.json`·`selection.json`·`figures_<range>/`)이 하나라도 있으면 먼저 백업한다. 다시 조립할 때(5~8단계에서 돌아온 경우)는 백업하지 않는다. 이미 스킬이 만든 초안이 백업에 섞이기 때문이다.
   - `RANGE`, `REPO`, `RUN`을 모두 실제 값으로 바꿔 한 명령으로 실행한다. 파일명은 NFC로 비교하므로 NFD 파일명도 잡힌다.
   - 백업 파일·경로 집합·SHA-256은 `RUN/basic-pack-backup.json`에 기록하고 재조립 시 유지한다. 백업은 매번 새 폴더 `RUN/previous-<시각>-<임의>/`에 만든다. `RANGE`가 형식에 안 맞거나, 대상이 있는데 복사된 파일 수가 다르면 종료 코드 1로 멈춘다. 이때는 조립하지 말고 원인을 고친다.
 ```bash
@@ -134,7 +134,8 @@ pack = listdir_nfc(notes).get(r)
 top = listdir_nfc(pack)
 hits = sorted((n, p) for n, p in top.items() if re.fullmatch(rf"정리노트_{r}_.+\.html|복습문제_{r}_.+-(문제|답안)\.pdf", n))
 hits += sorted((f".assets/{n}", p) for n, p in listdir_nfc(top.get(".assets")).items()
-               if re.fullmatch(rf"정리노트_{r}_.+\.md", n) or n in (f"figures_{r}", "problems.txt", "display-titles.json"))
+               if re.fullmatch(rf"정리노트_{r}_.+\.md", n) or n in (f"figures_{r}", "problems.txt", "display-titles.json", "selection.json"))
+hits += [(f".pack/{n}", p) for n, p in listdir_nfc(top.get(".pack")).items() if n == "selection-review.json"]
 record = Path(run) / "basic-pack-backup.json"
 if not hits:
     record.write_text(json.dumps({"range": r, "backup": None, "roots": [], "files": {}, "dirs": []}), encoding="utf-8")
@@ -226,7 +227,7 @@ python3 "$SKILL/scripts/assemble.py" --repo "$REPO" --run "$RUN" --out "$REPO/�
 python3 -c "import json,sys;print(','.join(q['id'] for q in json.load(open(sys.argv[1]))['problems']))" "$RUN/manifest.json"
 ```
 ```bash
-python3 "$REPO/workbook/build_workbook.py" --ids <위 결과> --name 복습문제_<range>_<slug> --mode problems --display-titles "$REPO/복습노트/<range>/.assets/display-titles.json" --layout video-16x9 --pdf-dir "$REPO/복습노트/<range>" --build-dir "$RUN/workbook-build"
+python3 "$REPO/workbook/build_workbook.py" --ids <위 결과> --name 복습문제_<range>_<slug> --mode problems --selection "$REPO/복습노트/<range>/.assets/selection.json" --display-titles "$REPO/복습노트/<range>/.assets/display-titles.json" --layout video-16x9 --pdf-dir "$REPO/복습노트/<range>" --build-dir "$RUN/workbook-build"
 ```
   - stderr에 `ERROR <md 경로>: …`(문제 md 자체 오류, 종료 코드 2)가 나오면 해당 id를 같은 절 후보로 한 번 바꿔 manifest를 고치고 2단계 검증부터 다시 하고 이 단계를 다시 한다(백업은 하지 않는다). `ERROR <name>: …`(렌더링·Chrome·네트워크, 종료 코드 1)나 `OVERFLOW`는 md 문제가 아니므로 id를 바꾸지 않고 "미해결"로 보고한다(`references/problem-selection.md` 5).
 
@@ -269,7 +270,7 @@ python3 "$SKILL/scripts/html2md.py" "$REPO/복습노트/<range>/<정리노트>.h
 - extract 이후 정리노트 바이트를 바꾸지 않는다. 자식은 확정한 일곱 구역의 통합 풀이 저작 → 독립 검산 → build/check → 네 검토 + 전체 개인화 감사 → publish까지 완료한다. 자식은 PDF를 직접 교체하지 않는다.
 - 자식 publish 성공 후 같은 팩의 발행 overlay를 쓴다. `<위 결과>`는 4단계처럼 manifest ID 순서를 추출한 값이다.
 ```bash
-python3 "$REPO/workbook/build_workbook.py" --ids <위 결과> --name 복습문제_<range>_<slug> --mode answers --answer-overlay "$REPO/복습노트/<range>/.assets/자료_문제설명_<range>_<slug>/answer-overlay.json" --display-titles "$REPO/복습노트/<range>/.assets/display-titles.json" --layout video-16x9 --pdf-dir "$RUN/answers" --build-dir "$RUN/answer-build"
+python3 "$REPO/workbook/build_workbook.py" --ids <위 결과> --name 복습문제_<range>_<slug> --mode answers --answer-overlay "$REPO/복습노트/<range>/.assets/자료_문제설명_<range>_<slug>/answer-overlay.json" --selection "$REPO/복습노트/<range>/.assets/selection.json" --display-titles "$REPO/복습노트/<range>/.assets/display-titles.json" --layout video-16x9 --pdf-dir "$RUN/answers" --build-dir "$RUN/answer-build"
 ```
 - [통합 계약](references/problem-explain-integration.md)의 명령으로 PDF 실제 렌더 페이지를 확인하고 `RUN/answer-review.json`을 기록한다. 핵심 회로·판단·계산·최종 답과 자막 여백·넘침을 실제 확인한 기록만 pass다. 빌드 종료 코드가 0이고 OVERFLOW가 없어야 한다.
 ```bash
@@ -287,6 +288,7 @@ python3 "$SKILL/scripts/check_html.py" --repo "$REPO" --manifest "$RUN/manifest.
 - 문제설명: <published | withheld | skipped-no-problems | reused-verified> — <문항/소문항 수, HTML·MD 또는 stage, 검토·disputed·백업 경로>
 - 범위: 배운 슬라이드 … / 교과서 절 … / 예고만: …
 - 문제 N개: P9.05(장말, 9.1.2) — <why>, … (문제가 0개면 "없음 — <이유>")
+- 선발: 기출/교과서·핵심/추가 개수, 전체 소문항 묶음 수, 핵심/전체 예상 분(추정), 기출 미채택·보류 이유와 미학습 개념, 전체 시험 범위의 누락/유형 반복, selection.json·selection-review.json 경로
 - 스킬이 정한 사항: slug, 섹션 구성, 위젯, 문제 구성, 뺀 내용과 이유
 - 미해결: … (없으면 "없음")
 - 커밋 제안: git add 복습노트/<range> && git commit -m "docs(notes): add review pack <range>"
@@ -318,7 +320,7 @@ python3 "$SKILL/scripts/insert_why.py" --note "$REPO/복습노트/<range>/<정�
 | 포트 사용 중 | 다른 빈 포트 사용 |
 | 문제설명·개인화 감사·답안·최종 검사 실패 / disputed | 통합 계약대로 이번 실행 전 기본 팩과 대응 설명을 복원한다. 새 팩은 이번 파일만 RUN/withheld에 보관한다. 전체 완료를 보고하지 않고 다른 팩은 계속한다 |
 | 기존 설명 백업·해시 검증 실패 | 원본을 유지하고 부모 첫 조립을 중단한다 |
-| 같은 range의 팩이 이미 있음 | 4단계 첫 조립 전에 기존 html·pdf와 `.assets/`의 md·`problems.txt`·`display-titles.json`·`figures_<range>/`를 같은 상대 경로로 새 폴더 `RUN/previous-<시각>-<임의>/`에 복사하고(다시 조립할 때는 복사하지 않음) 백업 경로를 보고서에 적음. 백업 명령이 실패하면 조립하지 않고 원인을 고친다 |
+| 같은 range의 팩이 이미 있음 | 4단계 첫 조립 전에 기존 html·pdf와 `.assets/`의 md·`problems.txt`·`display-titles.json`·`selection.json`·`figures_<range>/`를 같은 상대 경로로 새 폴더 `RUN/previous-<시각>-<임의>/`에 복사하고(다시 조립할 때는 복사하지 않음) 백업 경로를 보고서에 적음. 백업 명령이 실패하면 조립하지 않고 원인을 고친다 |
 | `insert_why.py`가 `insert_why 실패: …` | 노트는 그대로다. 메시지대로 why 조각을 고쳐 다시 실행 |
 | 검사 2회 실패 | 해당 팩을 통합 계약대로 복구/보류하고 미해결로 보고한다. 다른 팩은 계속한다 |
 

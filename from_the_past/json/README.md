@@ -6,7 +6,7 @@ MD를 원본으로 유지하면서 전체 기출을 JSON으로 보관한다. PDF
 - `problems/<id>.json`: MD 전체 문자열, 순서 있는 절, 원본 메타데이터, 시험 메모, 원본/다시 그린 그림 경로, 입력 해시.
 - `detail_path`는 이 폴더 기준이고 `md_path`, 그림·input_hashes 경로는 저장소 기준이다. 경로의 Unicode 표기는 실제 파일을 따른다. ID는 NFC다.
 - `adoption_unit: whole`: 복습문제로는 문항 전체만 채택한다. 일부 소문항이 범위 밖이면 그 문항은 제외한다.
-- `eligible`은 참고 풀이 존재 여부이며 정확성 인증이 아니다. 풀이 없는 문항도 카탈로그에는 남는다.
+- schema v2의 `eligible`은 원문 파싱·그림 확인을 통과했다는 뜻이며 범위/정답 인증이 아니다. `reference_solution: solution | none`으로 참고 풀이 유무를 별도로 기록한다. 풀이 없는 문항도 후보에 포함한다. 기존 schema v1 저장본은 실행 시 MD에서 다시 생성한다.
 
 저장소 루트에서 생성·검사한다.
 
@@ -32,6 +32,6 @@ python3 workbook/exam_catalog.py check
 
 ## 복습팩에서 사용
 
-`ec2-review-pack`의 problem_index.py가 최신 MD에서 RUN 아래에 카탈로그를 만들고 관련 장·풀이·사용 이력을 반영한 candidates.json을 제공한다. 저장 카탈로그를 고치거나 생성물을 직접 편집하지 않는다. AI가 전체 내용과 실제 회로 그림을 확인한 뒤 기존 ID를 manifest에 채택한다. selection.json에 선택 이유와 해시를 기록하고 기존 PDF/문제설명 도구가 MD에서 문제를 가져온다.
+`ec2-review-pack`의 problem_index.py가 최신 MD에서 RUN 아래에 카탈로그를 만들고 관련 장·사용 이력을 반영하고 풀이 상태를 별도 표기한 candidates.json을 제공한다. 저장 카탈로그를 고치거나 생성물을 직접 편집하지 않는다. AI가 전체 내용과 실제 회로 그림을 확인한 뒤 기존 ID를 manifest에 채택한다. 기출 우선 최대 20문항을 고르며 다른 회차의 사용 문항은 항상 제외한다. selection.json에 핵심/추가·학습 목표·소문항 묶음 수·추정 시간·선택 이유와 해시를 기록하고 기존 PDF/문제설명 도구가 MD에서 문제를 가져온다.
 
 JSON 생성·해시 검사는 원본 PDF 대조나 정답의 독립 검산이 아니다. 문제설명의 기존 발행 검토 절차를 유지한다.

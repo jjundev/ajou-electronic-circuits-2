@@ -34,6 +34,20 @@ class BuildCase(unittest.TestCase):
 
 
 class TestJsonOnly(BuildCase):
+    def test_selection_metadata_applies_to_both_pdfs(self):
+        selection = Path(self._tmp.name) / 'selection.json'
+        selection.write_text(json.dumps(dict(schema_version=2, policy='exam-first-v2',
+            workload=dict(estimated_minutes=20), problems=[dict(id=pid, priority='core',
+                learning_goals=['이득'], estimated_minutes=10, subpart_count=1)
+                for pid in ['E9.01', 'P9.05']])), encoding='utf-8')
+        code, _, err = self.run_cli('--ids', 'E9.01,P9.05', '--name', 't', '--json-only',
+                                    '--selection', str(selection))
+        self.assertEqual(code, 0, err)
+        for suffix in ['문제', '답안']:
+            data = self.read_json(f't-{suffix}.json')
+            self.assertIn('핵심', data['problems'][0]['review_workload_label'])
+            self.assertEqual(data['meta']['review_workload']['estimated_minutes'], 20)
+
     def test_ids(self):
         code, _, err = self.run_cli("--ids", "E9.01,P9.05", "--name", "t", "--json-only")
         self.assertEqual(code, 0, err)

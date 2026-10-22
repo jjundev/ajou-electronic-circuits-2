@@ -36,7 +36,7 @@ PDF에는 [저작 규칙](references/authoring.md)의 선택 표지를 쓴 핵�
 - 인자 없음: `problems.txt`가 있는 팩 중 폴더명 끝 날짜가 가장 늦은 팩. 같은 끝 날짜 후보가 여럿이면 후보를 보여 주고 멈춘다.
 - `problems.txt`가 없는 팩(예: 0902·0904)을 지정하면 "문제 없는 팩"으로 멈춘다. 기출 회차·임의 문제 id·설계과제는 대상이 아니다.
 
-새 문제, 정리노트, PDF, 영상, 자동 채점은 만들지 않는다. 원본(`problems.txt`, 문제 md, 문제 그림, 복습문제 PDF, 정리노트 HTML·MD)은 고치지 않는다. md의 `## 풀이`는 참고 답안일 뿐 독립 검산을 대신하지 않는다. md 풀이가 틀렸다고 보이면 고치지 말고 disputed로 보고한다(수정은 `workbook-solution` 몫). 정리노트에 링크를 자동으로 넣지 않는다.
+새 문제, 정리노트, PDF, 영상, 자동 채점은 만들지 않는다. 원본(`problems.txt`, 문제 md, 문제 그림, 복습문제 PDF, 정리노트 HTML·MD)은 고치지 않는다. 부모의 공통 선발 명세는 `../ec2-review-pack/references/problem-selection.md`(기출 우선 최대 20개, 다른 회차 사용 문항 항상 제외)다. 참고 풀이가 없어도 원문에서 직접 풀고 독립 검산한다. 없음 자체는 disputed가 아니다. md의 `## 풀이`는 참고 답안일 뿐 독립 검산을 대신하지 않는다. md 풀이가 틀렸다고 보이면 고치지 말고 disputed로 보고한다(수정은 `workbook-solution` 몫). 원문이 모호하거나 풀이 불일치가 해결되지 않으면 withheld로 부모에 보고하며 임의로 문제를 바꾸지 않는다. 정리노트에 링크를 자동으로 넣지 않는다.
 
 ## 경로 약속
 
@@ -67,6 +67,7 @@ python3 "$SKILL/scripts/epe_cli.py" extract --repo "$REPO" --target 1007 --run "
 ```
 - `--target`은 인자 그대로(`1007`, `0923-1002`), 인자가 없으면 `--target`을 뺀다.
 - 팩마다 `BUCKET/source.json`, 빈 `explanations/`, 빈 `evidence/`가 생기고 `RUN/run.json`에 목록이 남는다. 출력의 `extract: …/source.json` 줄이 팩 목록이다.
+- 새 팩의 `.assets/selection.json`은 ID·순서와 메타데이터를 검증하고 원본 해시에 포함한다. 핵심/추가·소문항 묶음 수·추정 시간은 생성기가 표시한다. 저작자가 제목이나 원문에 중복 삽입하지 않는다. 참고 풀이가 없는 source의 reference_steps/reference_answer는 빈 값이며 정상 입력이다.
 - 대상 오류(없음·문제 없는 팩·여러 후보)는 메시지를 그대로 보여 주고 멈춘다. 한 팩만 실패하면(종료 코드 1, stderr에 그 팩) 그 팩을 withheld로 적고 나머지는 계속한다.
 
 ### 2. 자료 읽기

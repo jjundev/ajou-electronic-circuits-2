@@ -17,6 +17,7 @@ import unicodedata
 DEFAULT_REPO = Path(__file__).resolve().parents[4]
 sys.path.append(str(DEFAULT_REPO / "workbook"))
 from learning_style import STYLE_PATH, LearningStyleError, check_style  # noqa: E402
+from review_selection import MAX_PROBLEMS, metadata_errors  # noqa: E402
 
 LAYER_NAMES = {"eli5", "formal", "prof", "warn"}
 TOP_LEVEL_TYPES = {
@@ -33,7 +34,6 @@ DATE_RE = re.compile(r"\d{4}")
 TEXTBOOK_ID_RE = re.compile(r"([EXP])(\d+)\.(\d{2})")
 EXAM_ID_RE = re.compile(r"(\d{4}-[12]_(?:중간|기말)(?:_[0-9A-Za-z가-힣]+)?)-Q([1-9]\d*)")
 KIND_BY_PREFIX = {"E": "예제", "X": "연습문제", "P": "장말문제"}
-MAX_PROBLEMS = 12
 # 모든 정리노트의 첫 섹션: "왜 이런 회로를 쓸까" 페이지(토픽 1개). 기존 s0… id는 그대로 둔다.
 WHY_SECTION_ID = "why"
 WHY_TOPIC_ID = "why-circuit"
@@ -222,6 +222,8 @@ def validate(m: dict, repo: Path | str | None = None) -> list[str]:
             errors.append(f"{where}.why: 줄바꿈이나 |를 쓸 수 없음")
     if len(m["problems"]) > MAX_PROBLEMS:
         errors.append(f"problems: 최대 {MAX_PROBLEMS}개 ({len(m['problems'])}개)")
+    if all(isinstance(q, dict) for q in m['problems']):
+        errors.extend(metadata_errors(m))
 
     hrefs: set[str] = set()
     for i, link in _objects(m["links"], "links", errors):

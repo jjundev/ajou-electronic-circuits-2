@@ -24,6 +24,7 @@ class Problem:
     reference_answer: str
     subparts: tuple[str, ...]
     workbook_id: str
+    workload_label: str = ''
 
 @dataclass(frozen=True)
 class SourcePack:

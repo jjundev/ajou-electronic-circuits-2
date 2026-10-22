@@ -10,6 +10,27 @@ import assemble
 
 
 class TestAssemble(unittest.TestCase):
+    def test_new_selection_record_is_required_and_preserved(self):
+        run = self.copy_run()
+        manifest_path = run / 'manifest.json'
+        m = json.loads(manifest_path.read_text(encoding='utf-8'))
+        m['selection_policy'] = 'exam-first-v2'
+        for q in m['problems']:
+            q.update(priority='core', learning_goals=['기초'], estimated_minutes=10)
+        manifest_path.write_text(json.dumps(m, ensure_ascii=False), encoding='utf-8')
+        out = self.tmp / 'new-pack'
+        with self.assertRaisesRegex(assemble.AssembleError, '선발 기록'):
+            assemble.assemble(run, out)
+        self.assertFalse(out.exists())
+        selection = dict(schema_version=2, policy='exam-first-v2',
+            workload=dict(estimated_minutes=10 * len(m['problems'])),
+            review=dict(candidates=[], coverage=[]),
+            problems=[dict(q, subpart_count=1) for q in m['problems']])
+        (run / 'selection.json').write_text(json.dumps(selection), encoding='utf-8')
+        assemble.assemble(run, out)
+        self.assertEqual(json.loads((out / '.assets/selection.json').read_text()), selection)
+        self.assertEqual(json.loads((out / '.pack/selection-review.json').read_text()), selection['review'])
+
     def setUp(self):
         self.tmp = Path(tempfile.mkdtemp())
         self.note = assemble.assemble(MINI_RUN, self.tmp)

@@ -442,6 +442,7 @@ function problemHead(p, n, total) {
 
   const meta = el('div', 'head-meta');
   const info = [p.section, p.book_page != null ? `p.${p.book_page}` : '', `${n} / ${total}`];
+  if (p.review_workload_label) meta.append(txt('div', 'head-info review-workload', p.review_workload_label));
   meta.append(txt('span', 'head-info', info.filter(Boolean).join(' · ')));
 
   frag.append(lead, h2, meta);

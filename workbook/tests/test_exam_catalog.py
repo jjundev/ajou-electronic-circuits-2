@@ -60,11 +60,13 @@ class CatalogTest(unittest.TestCase):
         self.assertTrue(item['figures'][0]['display_path'].endswith('redrawn/fig-Q1.png'))
         self.assertTrue(all(not Path(p).is_absolute() for p in item['input_hashes']))
 
-    def test_no_solution_is_preserved_but_not_eligible(self):
+    def test_no_solution_is_preserved_and_eligible(self):
         self.body = self.body.split('## 풀이')[0]
         self.save()
         index, details = catalog.build_catalog(self.repo)
-        self.assertFalse(index['problems'][0]['eligible'])
+        self.assertTrue(index['problems'][0]['eligible'])
+        self.assertEqual(index['schema_version'], 2)
+        self.assertEqual(index['problems'][0]['reference_solution'], 'none')
         self.assertIn(self.meta['id'], details)
 
     def test_hash_and_checked_generated_files_detect_changes(self):

@@ -166,6 +166,7 @@ def build_explanation(pack, fragments, stage: Path, repo: Path) -> Artifacts:
         original_link = (f' · <a href="{quote(problem_pdf, safe="")}">원 문제 보기</a>' if has_pdf else '')
         articles.append(f'<article class="topic" id="{p.id}"><h3>{html.escape(p.title)}</h3>'
                         + f'<p class="panel-meta">{html.escape(p.source)}{original_link}</p>'
+                        + (f'<p class="panel-meta review-workload">{html.escape(p.workload_label)}</p>' if p.workload_label else '')
                         + reading + explanation + '</article>')
         toc.append(f'<li><a href="#{p.id}">{html.escape(p.title)}</a></li>')
         (data_dir / 'fragments').mkdir(exist_ok=True)

@@ -16,7 +16,7 @@ from problem import ProblemError, load_problem, problem_figures
 from check_md import split_frontmatter
 from crop_exam import figure_filename
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 EXAM_ID = re.compile(r'\d{4}-[12]_(?:중간|기말)(?:_[0-9A-Za-z가-힣]+)?-Q[1-9]\d*')
 PART = re.compile(r'^\s*-\s+(?:\((\d+|[a-z])\)|(\d+|[a-z])\))\s+(.*)$')
 SELECTION_LISTS = ('topics', 'circuit_types', 'required_concepts', 'learning_goals', 'evidence_sections')
@@ -178,7 +178,8 @@ def build_catalog(repo: Path) -> tuple[dict, dict[str, dict]]:
             rows.append(dict(id=pid, kind='기출', title=p.title, md_path=detail['md_path'],
                              detail_path=f'problems/{pid}.json', textbook_chapters=p.meta.get('textbook_chapters') or [],
                              depends_on=[nfc(d) for d in deps], refs=p.meta.get('refs') or [],
-                             points=p.meta.get('points'), eligible=bool((p.section('풀이') or '').strip()),
+                             points=p.meta.get('points'), eligible=True,
+                             reference_solution='solution' if (p.section('풀이') or '').strip() else 'none',
                              adoption_unit='whole', subparts=subparts, selection=selection,
                              content_sha256=source_sha, detail_sha256=digest(detail)))
         except (ProblemError, ValueError, OSError, TypeError, KeyError, AttributeError, yaml.YAMLError) as exc:

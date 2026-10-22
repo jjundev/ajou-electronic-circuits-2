@@ -22,6 +22,7 @@ from display_titles import DisplayTitlesError, load_display_titles, apply_displa
 from assemble import MODE_SUFFIX, BuildError, all_selections, build_data, ids_selection, resolve_target, nfc
 from answer_overlay import AnswerOverlayError, load_answer_overlay, apply_answer_overlay
 from render import RenderError, inject, load_template, render_pdf, measure_typography
+from review_selection import load_selection, apply_selection, reviewed_selection_path
 
 
 def parse_args(argv):
@@ -34,6 +35,7 @@ def parse_args(argv):
                     help="문제지·답안지 모두 또는 하나만 생성")
     ap.add_argument("--display-titles", type=Path, help="복습팩의 ID별 짧은 표시 제목 JSON")
     ap.add_argument("--answer-overlay", type=Path, help="현재 검토를 통과한 발행 답안 overlay")
+    ap.add_argument('--selection', type=Path, help='복습팩의 승인 입력에 포함할 selection.json')
     ap.add_argument("--json-only", action="store_true", help="PDF 없이 JSON·HTML만 만든다")
     ap.add_argument("--pdf-dir", type=Path, default=paths.WORKBOOK / "pdf")
     ap.add_argument("--build-dir", type=Path, default=paths.WORKBOOK / "build")
@@ -50,6 +52,8 @@ def parse_args(argv):
         ap.error("--ids 에는 --name 이 필요하다")
     if args.answer_overlay and (not args.ids or args.mode == "problems"):
         ap.error("--answer-overlay 는 --ids 및 --mode answers/both 에서만 쓸 수 있다")
+    if args.selection and not args.ids:
+        ap.error('--selection은 --ids와 함께 써요')
     return args
 
 
@@ -66,14 +70,18 @@ def build_one(sel, args):
     overflow = []
     overlay = None
     title_path = args.display_titles
+    selection_path = args.selection
     if args.answer_overlay:
         overlay = load_answer_overlay(args.answer_overlay, paths.ROOT,
                                       [nfc(pid.strip()) for pid in args.ids.split(",")])
         title_path = reviewed_title_path(overlay, paths.ROOT, title_path)
+        selection_path = reviewed_selection_path(overlay, paths.ROOT, selection_path)
     for mode, suffix in MODE_SUFFIX.items():
         if args.mode != "both" and args.mode != mode:
             continue
         data = build_data(sel, mode)
+        if selection_path:
+            data = apply_selection(data, load_selection(selection_path, [p['id'] for p in data['problems']]))
         if title_path:
             titles = load_display_titles(title_path, [p['id'] for p in data['problems']])
             data = apply_display_titles(data, titles)
@@ -119,7 +127,7 @@ def main(argv):
             for msg in e.errors:
                 print(f"ERROR {msg}", file=sys.stderr)
             code = 1
-        except (RenderError, AnswerOverlayError, DisplayTitlesError) as e:
+        except (RenderError, AnswerOverlayError, DisplayTitlesError, ValueError, OSError) as e:
             print(f"ERROR {sel.name}: {e}", file=sys.stderr)
             code = 1
     for item in overflow:

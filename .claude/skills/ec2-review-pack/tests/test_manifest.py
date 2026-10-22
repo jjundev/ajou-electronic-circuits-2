@@ -127,8 +127,19 @@ class TestManifest(unittest.TestCase):
     def test_too_many_problems(self):
         m = mini()
         m["problems"] = [{"id": f"P9.{i:02d}", "kind": "장말문제", "anchor": "s1-mean", "date": "0101", "why": "x"}
-                         for i in range(1, 14)]
-        self.assertIn("problems: 최대 12개 (13개)", manifest.validate(m))
+                         for i in range(1, 22)]
+        self.assertIn("problems: 최대 20개 (21개)", manifest.validate(m))
+
+    def test_twenty_problems_allowed_and_new_policy_metadata_required(self):
+        m = mini()
+        m['problems'] = [dict(id=f'P9.{i:02d}', kind='장말문제', anchor='s1-mean', date='0101', why='x')
+                         for i in range(1, 21)]
+        self.assertEqual(manifest.validate(m), [])
+        m['selection_policy'] = 'exam-first-v2'
+        self.assertTrue(any('priority' in e for e in manifest.validate(m)))
+        for q in m['problems']:
+            q.update(priority='core', learning_goals=['출력저항'], estimated_minutes=10)
+        self.assertEqual(manifest.validate(m), [])
 
     def test_pdf_links_required_when_problems(self):
         m = mini()

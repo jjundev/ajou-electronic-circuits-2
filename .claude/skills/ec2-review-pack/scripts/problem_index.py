@@ -49,13 +49,13 @@ def secnum(meta: dict) -> str:
     return m.group(0) if m else section
 
 
-def used_ids(notes_dir: Path | str, exclude: str | None = None) -> set[str]:
+def used_in_ranges(notes_dir: Path | str, exclude: str | None = None) -> dict[str, list[str]]:
     """<notes_dir>/*/.assets/problems.txt 의 id (줄 형식 `id | why`).
 
     exclude: 이 폴더 이름(NFC로 비교)의 problems.txt는 건너뛴다(같은 range를 다시 돌릴 때
     자기 자신의 이전 결과가 USED로 잡히지 않게 한다).
     """
-    notes_dir, ids = Path(notes_dir), set()
+    notes_dir, ids = Path(notes_dir), {}
     if not notes_dir.is_dir():
         return ids
     exclude_nfc = nfc(exclude) if exclude is not None else None
@@ -65,8 +65,12 @@ def used_ids(notes_dir: Path | str, exclude: str | None = None) -> set[str]:
         for line in path.read_text(encoding="utf-8").splitlines():
             pid = nfc(line.split("|", 1)[0].strip())
             if pid:
-                ids.add(pid)
+                ids.setdefault(pid, []).append(nfc(path.parent.parent.name))
     return ids
+
+
+def used_ids(notes_dir: Path | str, exclude: str | None = None) -> set[str]:
+    return set(used_in_ranges(notes_dir, exclude))
 
 
 def _exam_number(path: Path) -> int:
@@ -103,8 +107,6 @@ def index(repo: Path | str, used_dir: Path | str | None = None,
             exam = meta.get("kind") == "기출"
             if exam and chapters and not set(meta.get("textbook_chapters") or []) & chapters:
                 continue
-            if p.section("풀이") is None:   # 답안지를 만들 수 없으므로 후보가 아니다 (풀이 전인 새 기출 등)
-                continue
             rows.append([pid, str(meta["kind"]), secnum(meta), str(meta.get("section", "-")),
                          "-" if exam else str(meta.get("difficulty", "-")),
                          "USED" if pid in used else "-", p.title.replace("\t", " ")])
@@ -128,7 +130,7 @@ def candidate_data(repo: Path, used_dir=None, chapters=None, exclude_range=None)
     """기출은 상세 JSON 참조와 전체 소문항을, 교과서는 기존 선별 정보를 제공한다."""
     repo = Path(repo)
     problem = _workbook(repo)
-    from exam_catalog import build_catalog, CatalogError, digest
+    from exam_catalog import build_catalog, CatalogError, digest, question_parts
     rows, errors = index(repo, used_dir, chapters, exclude_range)
     try:
         catalog, _ = build_catalog(repo)
@@ -138,11 +140,10 @@ def candidate_data(repo: Path, used_dir=None, chapters=None, exclude_range=None)
     exams = {p['id']: p for p in catalog['problems']}
     textbook_paths = {nfc(p.stem): p for p in md_paths(repo, chapters) if not p.stem.startswith('Q')}
     items = []
+    history = used_in_ranges(used_dir, exclude_range) if used_dir else {}
     for pid, kind, secnum_, section, difficulty, used, title in rows:
         if kind == '기출':
             item = dict(exams[pid])
-            if not item['eligible']:
-                continue
         else:
             # 기존 index가 검증한 교과서 MD에서 의존성도 가져온다.
             path = textbook_paths[pid]
@@ -155,20 +156,31 @@ def candidate_data(repo: Path, used_dir=None, chapters=None, exclude_range=None)
             item = dict(id=pid, kind=kind, title=title, secnum=secnum_, section=section,
                         difficulty=difficulty, depends_on=p.meta.get('depends_on') or [],
                         md_path=path.relative_to(repo).as_posix(), content_sha256=digest(inputs),
-                        input_hashes=inputs,
+                        input_hashes=inputs, subparts=question_parts(p),
+                        reference_solution=('solution' if (p.section('풀이') or '').strip()
+                                            else 'answer_only' if problem.solution(p) else 'none'),
                         adoption_unit='whole')
-        items.append({**item, 'used': used == 'USED'})
-    return dict(schema_version=1, adoption_unit='whole', catalog_sha256=catalog['catalog_sha256'],
+        items.append({**item, 'used': used == 'USED', 'used_in_ranges': sorted(history.get(pid, []))})
+    return dict(schema_version=2, adoption_unit='whole', catalog_sha256=catalog['catalog_sha256'],
                 catalog_root=None, problems=items), errors
 
 
-def record_selection(manifest: dict, candidates: dict) -> dict:
+def record_selection(manifest: dict, candidates: dict, review: dict | None = None) -> dict:
     """확정 manifest의 순서와 근거를 저장한다. 수업 범위의 의미 판단은 AI 몫이다."""
+    from review_selection import POLICY, MAX_PROBLEMS, validate_review
+    policy = manifest.get('selection_policy')
+    if policy is not None and policy != POLICY:
+        raise ValueError(f'알 수 없는 선발 정책: {policy}')
+    modern = policy == POLICY
+    if modern:
+        validate_review(manifest, candidates, review)
     table = {p['id']: p for p in candidates['problems']}
     selected = manifest['problems']
     ids = [q['id'] for q in selected]
     if len(ids) != len(set(ids)):
         raise ValueError('선택 ID 중복')
+    if len(ids) > MAX_PROBLEMS:
+        raise ValueError(f'최대 {MAX_PROBLEMS}문항')
     output = []
     for q in selected:
         pid = q['id']
@@ -184,14 +196,28 @@ def record_selection(manifest: dict, candidates: dict) -> dict:
         missing = set(item['depends_on']) - set(ids)
         if missing or any(ids.index(d) >= ids.index(pid) for d in item['depends_on'] if d in ids):
             raise ValueError(f'의존 문항을 먼저 선택해야 해요: {pid}: {sorted(missing)}')
+        if modern and q['priority'] == 'core' and any(selected[ids.index(d)]['priority'] != 'core' for d in item['depends_on']):
+            raise ValueError(f'핵심 문항의 전제 문항도 핵심이어야 합니다: {pid}')
         output.append(dict(id=pid, kind=item['kind'], why=q['why'], adoption_unit='whole',
                            subparts=item.get('subparts', []), depends_on=item['depends_on'],
                            content_sha256=item.get('content_sha256'),
                            classification_status=item.get('selection', {}).get('status')))
-    return dict(schema_version=1, range=manifest['range'], adoption_unit='whole',
+        if modern:
+            output[-1].update(priority=q['priority'], learning_goals=q['learning_goals'],
+                estimated_minutes=q['estimated_minutes'], subpart_count=max(1, len(item.get('subparts', []))),
+                reference_solution=item.get('reference_solution', 'none'))
+    result = dict(schema_version=2 if modern else 1, range=manifest['range'], adoption_unit='whole',
                 catalog_sha256=candidates['catalog_sha256'],
                 scope_check='AI must verify every subpart and figure against the taught scope',
                 problems=output)
+    if modern:
+        from exam_catalog import digest
+        result.update(policy=POLICY, review=review, workload=dict(
+            estimated_minutes=sum(q['estimated_minutes'] for q in output),
+            core_estimated_minutes=sum(q['estimated_minutes'] for q in output if q['priority'] == 'core'),
+            subpart_count=sum(q['subpart_count'] for q in output), estimates_only=True))
+        result['candidates_sha256'] = digest(candidates['problems'])
+    return result
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -205,7 +231,10 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument('--selection-manifest', type=Path, help='확정 manifest의 전체 문항 채택 기록')
     ap.add_argument('--selection-out', type=Path, help='RUN/selection.json')
     ap.add_argument('--candidates-input', type=Path, help='선별 때 읽은 RUN/candidates.json (변경 감지)')
+    ap.add_argument('--selection-review', type=Path, help='exam-first-v2의 후보 판정/학습 목표 검토 JSON')
     args = ap.parse_args(argv)
+    if args.selection_review and not args.selection_manifest:
+        ap.error('--selection-review는 --selection-manifest와 함께 써요')
     chapters = {int(c) for c in args.chapters.split(",")} if args.chapters else None
     if args.format == 'json':
         if not args.catalog_out:
@@ -226,13 +255,19 @@ def main(argv: list[str] | None = None) -> int:
             data['catalog_root'] = str(args.catalog_out.absolute())
             if args.selection_manifest:
                 manifest = json.loads(args.selection_manifest.read_text(encoding='utf-8'))
+                if manifest.get('selection_policy') == 'exam-first-v2' and (
+                        not args.used or args.exclude_range != manifest['range']):
+                    raise CatalogError('새 선발에는 --used 및 manifest range와 같은 --exclude-range가 필요합니다')
                 previous = json.loads(args.candidates_input.read_text(encoding='utf-8'))
                 old = {q['id']: q for q in previous['problems']}
                 current = {q['id']: q for q in data['problems']}
                 if (previous['catalog_sha256'] != data['catalog_sha256']
+                        or previous.get('schema_version') != data['schema_version']
+                        or old != current
                         or any(old.get(q['id']) != current.get(q['id']) for q in manifest['problems'])):
                     raise CatalogError('후보/사용 이력/원본이 변경됐어요. 후보를 다시 검토해 주세요')
-                atomic_json(args.selection_out, record_selection(manifest, data))
+                review = json.loads(args.selection_review.read_text(encoding='utf-8')) if args.selection_review else None
+                atomic_json(args.selection_out, record_selection(manifest, data, review))
             print(json.dumps(data, ensure_ascii=False, indent=2))
             for error in errors:
                 print(f'ERROR {error}', file=sys.stderr)

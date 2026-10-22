@@ -68,7 +68,9 @@ python3 -m pytest workbook/tests -q
 
 ## AI 기출 선별 카탈로그
 
-`python3 workbook/exam_catalog.py build`로 `from_the_past/json/index.json`과 문항별 상세 JSON을 재생성하고 `python3 workbook/exam_catalog.py check`로 최신 상태를 검사한다. 원본은 기출 MD이며 긴 풀이·수식·회로 설명·출처를 Markdown 문자열로 보존한다. 사용법과 분류 상태는 [카탈로그 README](../from_the_past/json/README.md)에 있다. 이 데이터는 출력용 `workbook/build` JSON과 별개다. 복습팩 실행 시에는 저장소를 수정하지 않고 `--catalog-out <RUN>/exam-catalog`로 실행별 사본을 생성한다.
+`python3 workbook/exam_catalog.py build`로 `from_the_past/json/index.json`과 문항별 상세 JSON을 재생성하고 `python3 workbook/exam_catalog.py check`로 최신 상태를 검사한다. 원본은 기출 MD이며 긴 풀이·수식·회로 설명·출처를 Markdown 문자열로 보존한다. 사용법과 분류 상태는 [카탈로그 README](../from_the_past/json/README.md)에 있다. 이 데이터는 출력용 `workbook/build` JSON과 별개다. 복습팩 실행 시에는 저장소를 수정하지 않고 `--catalog-out <RUN>/exam-catalog`로 실행별 사본을 생성한다. schema v2부터 `eligible`은 원문 파싱·그림 확인을 뜻하며 참고 풀이 유무는 `reference_solution`으로 분리한다. 기존 저장 카탈로그는 새 실행의 입력으로 신뢰하지 않고 MD에서 재생성한다.
+
+복습팩 공통 선발 정책은 [problem-selection.md](../.claude/skills/ec2-review-pack/references/problem-selection.md)다. 최대 20개·기출 우선·다른 회차 사용 문항 항상 제외이며 참고 풀이 없는 문제도 독립 풀이/검산 후 수록한다. `build_workbook.py --ids ... --name ... --selection <팩>/.assets/selection.json`은 두 PDF에 같은 핵심/추가·소문항 묶음 수·추정 시간을 표시한다. 승인된 `--answer-overlay`를 사용하면 입력 해시에 묶인 selection.json을 자동으로 사용하며 다른 값으로 대체할 수 없다. 기존 selection.json이 없는 팩은 예전대로 표시한다.
 
 ## 원문 옮기기 도구
 `source_pages.py`는 md frontmatter의 `pdf_page`로 원본 PDF 쪽을 찾는다. 규칙은 `교과서/마이크로전자회로/FORMAT.md` '문제집용 절'.

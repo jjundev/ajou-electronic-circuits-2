@@ -13,6 +13,7 @@ from epe_shared import (load_problem, html_fields, problem_figures, solution, Pr
                         exam_figure_filename, parse, read_style, LearningStyleError)
 
 from display_titles import DisplayTitlesError, load_display_titles, numbered_title
+from review_selection import load_selection, workload_label
 
 REVIEW_DIR = '복습노트'
 PACK_RE = re.compile(r'\d{4}(?:-\d{4})?')
@@ -221,6 +222,11 @@ def load_source(path: Path, repo: Path) -> SourcePack:
         titles = load_display_titles(titles_path, ids) if titles_path.exists() else None
     except DisplayTitlesError as exc:
         raise ExplainError(str(exc)) from exc
+    selection_path = path.with_name('selection.json')
+    try:
+        selection = load_selection(selection_path, ids) if selection_path.exists() else None
+    except (ValueError, OSError, KeyError, TypeError) as exc:
+        raise ExplainError(f'선발 기록 오류: {exc}') from exc
     problems, mds, figs = [], [], []
     for i, pid in enumerate(ids, 1):
         try:
@@ -248,10 +254,12 @@ def load_source(path: Path, repo: Path) -> SourcePack:
             original_html=fields.get('original', ''), conditions_html=fields['conditions'],
             ask_html=fields['ask'],
             figures_html=tuple(f'<figure><img src="{rel}" alt="그림 {p.id}"></figure>' for rel in rels),
-            reference_steps=steps, reference_answer=answer, subparts=subs, workbook_id=p.id))
+            reference_steps=steps, reference_answer=answer, subparts=subs, workbook_id=p.id,
+            workload_label=workload_label(selection['problems'][i-1]) if selection else ''))
         mds.append(md)
         figs += [f for f in paths if f not in figs]
-    inputs = [path, *([titles_path] if titles is not None else []), *mds, *figs, style_path]
+    inputs = [path, *([titles_path] if titles is not None else []),
+              *([selection_path] if selection else []), *mds, *figs, style_path]
     digest = hashlib.sha256()
     for item in inputs:
         digest.update(sha256(item).encode())

@@ -24,6 +24,24 @@ def add_pack(repo, name, problems=True, folder_form=lambda s: s):
 
 
 class SourceTest(unittest.TestCase):
+    def test_no_reference_solution_and_hashed_workload_metadata(self):
+        repo = self.repo(ids=('E9.05',))
+        txt = resolve_sources(repo, '1007')[0]
+        md = md_path(repo, 'E9.05')
+        body = md.read_text(encoding='utf-8').split('## 풀이')[0].split('## 답 (검증용)')[0]
+        md.write_text(body, encoding='utf-8')
+        original = load_source(txt, repo)
+        self.assertEqual(original.problems[0].reference_steps, ())
+        self.assertEqual(original.problems[0].reference_answer, '')
+        selection = txt.with_name('selection.json')
+        selection.write_text(json.dumps(dict(schema_version=2, policy='exam-first-v2',
+            workload=dict(estimated_minutes=10), problems=[dict(id='E9.05', priority='core',
+                learning_goals=['출력저항'], estimated_minutes=10, subpart_count=1)])), encoding='utf-8')
+        current = load_source(txt, repo)
+        self.assertIn('핵심', current.problems[0].workload_label)
+        self.assertIn(str(selection), current.inputs)
+        self.assertNotEqual(current.sha256, original.sha256)
+
     def setUp(self):
         tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)

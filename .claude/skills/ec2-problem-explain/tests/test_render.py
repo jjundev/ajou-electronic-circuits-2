@@ -15,6 +15,15 @@ from epe_types import ExplainError
 
 
 class RenderTest(unittest.TestCase):
+    def test_workload_metadata_is_visible_in_html_and_markdown(self):
+        pack, fragments, _ = self.build(ids=('E9.05',))
+        pack = replace(pack, problems=(replace(pack.problems[0], workload_label='핵심 · 소문항 1묶음 · 예상 10분(추정)'),))
+        result = build_explanation(pack, fragments, self.tmp / 'with-workload', self.repo)
+        for file in [result.html, result.md]:
+            text = file.read_text(encoding='utf-8')
+            self.assertIn('핵심', text)
+            self.assertIn('예상 10분(추정)', text)
+
     def setUp(self):
         tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)

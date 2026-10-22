@@ -39,12 +39,17 @@ manifest는 이번 팩의 계약이다. 작성자, 검사기, 조립기가 모�
 - `forbidden_outside_preview`: 슬라이드·절 대조표에서 **"예고만"이거나, 지금까지 수업에서 아직 다루지 않은** 슬라이드·절의 핵심 용어 3~8개. 이전 수업에서 이미 배운 내용이나 이번 range의 STT에서 실제로 쓴 용어는(다른 날짜·다른 팩이라도) 절대 넣지 않는다 — "안 다룸"은 예고 없이 그냥 건너뛴 슬라이드에만 쓰고, 이미 배운 것을 다시 금지어로 넣지 않는다. 본문에 나오면 검사 실패.
 
 ## problems
-- 선별은 `references/problem-selection.md`. 0~12개, 목표 10개. workbook에 맞는 문제가 없으면 `[]`.
-- 항목: `{"id": "P9.05", "kind": "장말문제", "anchor": "s2-rout", "date": "0916", "why": "캐스코드 출력저항 수치 계산"}`
+- 선별은 `references/problem-selection.md`. **0~20개, 기출 우선, 종류별 고정 할당 없음**. 다른 회차에서 사용한 문제는 항상 제외한다. 풀이 없는 문제도 후보이며 workbook에 맞는 문제가 없으면 `[]`.
+- 새 실행의 최상위 값: `"selection_policy": "exam-first-v2"`. 과거 이 키가 없는 manifest는 호환 읽기를 지원한다.
+- 항목: `{"id": "P9.05", "kind": "장말문제", "anchor": "s2-rout", "date": "0916", "why": "기출에 없는 출력저항 기본형 보완", "priority": "core", "learning_goals": ["출력저항 계산"], "estimated_minutes": 10}`
   - `id`: workbook id. 교과서 `E`(예제)/`X`(연습문제)/`P`(장말문제) + `장.두자리`(예: `E10.03`), 기출 `<연도>-<학기>_<중간|기말>-Q<n>`(예: `2023-1_기말-Q1`).
   - `kind`: id에서 정해진다(`E`→예제, `X`→연습문제, `P`→장말문제, 기출). 틀리면 manifest.py가 실패.
   - `anchor`: 문제가 기대는 정리노트 토픽 id. `date`: 관련 수업 날짜(MMDD).
   - `why`: 이 문제를 고른 이유 한 줄. `.assets/problems.txt`와 보고서에 그대로 쓰인다.
+  - 새 정책의 `priority`: `core`(핵심) / `extra`(추가 연습). 최소 한 문항은 core이며 핵심 문항의 전제도 core.
+  - `learning_goals`: 비어 있지 않은 목표 문자열 목록. 선발 검토 coverage의 목표와 일치.
+  - `estimated_minutes`: 양의 정수, 학생 풀이 시간의 추정 분. 실제 측정값이나 검증된 표준 시간이 아니다.
+- `subpart_count`, 참고 풀이 상태, 총 예상 시간은 선발기가 원본 후보와 문항 정보로 계산해 `selection.json`에 기록한다. 원문이 묶어 제시한 소문항은 묶음 기준으로 계산될 수 있다.
 - 배열 순서가 PDF 순서다. 수업 순서(=토픽 순서)대로 둔다.
 
 ## links

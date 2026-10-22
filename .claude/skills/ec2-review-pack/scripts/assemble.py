@@ -14,6 +14,7 @@ CLI: assemble.py --run RUN --out 복습노트/<range>
 from __future__ import annotations
 
 import argparse
+import json
 import html
 from pathlib import Path
 import re
@@ -21,6 +22,7 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import manifest as manifest_mod  # noqa: E402
+from review_selection import POLICY, load_selection  # noqa: E402
 
 ASSETS = Path(__file__).resolve().parent.parent / "assets"
 SLOT_RE = re.compile(r"\{\{([A-Z_]+)\}\}")
@@ -84,6 +86,20 @@ def problems_txt(m: dict) -> str:
 def assemble(run_dir: Path | str, out_dir: Path | str, *, repo: Path | None = None) -> Path:
     run_dir, out_dir = Path(run_dir), Path(out_dir)
     m = manifest_mod.load(run_dir / "manifest.json", repo=repo if repo is not None else manifest_mod.DEFAULT_REPO)
+    selection_path = run_dir / 'selection.json'
+    selection_text = None
+    selected = None
+    if m.get('selection_policy') == POLICY and m['problems']:
+        try:
+            load_selection(selection_path, [q['id'] for q in m['problems']])
+            selection_text = selection_path.read_text(encoding='utf-8')
+            # Prevent a valid but stale selection record from being attached to a new manifest.
+            selected = json.loads(selection_text)
+            for q, recorded in zip(m['problems'], selected['problems']):
+                if any(q.get(k) != recorded.get(k) for k in ('id', 'kind', 'why', 'priority', 'learning_goals', 'estimated_minutes')):
+                    raise ValueError(f'선발 기록이 manifest와 다릅니다: {q["id"]}')
+        except (OSError, ValueError, KeyError) as exc:
+            raise AssembleError(f'선발 기록 오류: {exc}') from exc
     note_html = build_note(m, run_dir)  # 조각이 하나라도 없으면 아무것도 쓰지 않는다
     out_dir.mkdir(parents=True, exist_ok=True)
     note_path = out_dir / manifest_mod.note_name(m)
@@ -92,8 +108,15 @@ def assemble(run_dir: Path | str, out_dir: Path | str, *, repo: Path | None = No
     if m["problems"]:
         listing.parent.mkdir(exist_ok=True)
         listing.write_text(problems_txt(m), encoding="utf-8")
+        if selection_text is not None:
+            (listing.parent / 'selection.json').write_text(selection_text, encoding='utf-8')
     elif listing.exists():
         listing.unlink()
+    if selected is not None:
+        pack = out_dir / '.pack'
+        pack.mkdir(exist_ok=True)
+        (pack / 'selection-review.json').write_text(
+            json.dumps(selected['review'], ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     return note_path
 
 
