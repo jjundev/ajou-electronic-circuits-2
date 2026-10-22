@@ -1,182 +1,297 @@
-[
-  {
-    "topic": "p1",
-    "category": "일반",
-    "body_claim": "이상부하개방·DM테일접지·입력ro부하로 -gmro",
-    "before": "pass",
-    "summary_sentence": "이상적인 것은 부하 전류원이에요. 입력 BJT의 Early 출력저항은 남기고, 차동 입력·출력의 절반 인자가 상쇄되므로 1/2을 다시 곱하지 않아요.개념차동 하프 서킷·출력 저항답$\\dfrac{v_{out1} - v_{out2}}{v_{in1} - v_{in2}} = -g_m r_O$검산$g_mr_O=V_A/V_T$라 바이어스 전류가 약분돼요.",
-    "status": "pass",
-    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+{
+  "schema_version": 1,
+  "status": "pass; final stage HTML/MD verified",
+  "problems": {
+    "p1": {
+      "fragment_sha256": "643e2848329aa740211ed331c4dfc21023b8baf01c1c853166da5315b0bbbb00",
+      "rows": [
+        {
+          "layer": "general",
+          "body_claim": "순수 차동 대칭 P 가상 접지·이상 상단 전류원 개방",
+          "summary_match_or_reason": "요약 첫 문장과 마지막 판단",
+          "disposition": "included"
+        },
+        {
+          "layer": "general",
+          "body_claim": "Gm=g_m1, Rout≈r_O1, Av≈-g_m1 r_O1",
+          "summary_match_or_reason": "요약 핵심 식 세 행",
+          "disposition": "included"
+        },
+        {
+          "layer": "warn",
+          "body_claim": "r_O1을 지우면 유한 이득을 놓침",
+          "summary_match_or_reason": "요약 마지막 판단",
+          "disposition": "included"
+        },
+        {
+          "layer": "supplement",
+          "body_claim": "g_m r_O=V_A/V_T의 바이어스 전류 소거",
+          "summary_match_or_reason": "요약에는 직접 답을 우선하고 식의 유도는 solve에 남김",
+          "disposition": "omitted_with_reason"
+        }
+      ],
+      "stage_html_sha256": "d4a6fee7e264c4ad08b62f557c194e611531e0ae90522043d31cefb6b4b93f1e",
+      "stage_md_sha256": "c8b784e82edd1258909f5ecea9da54ad072cf0644bb605d86601b29d6e253b69"
+    },
+    "p2": {
+      "fragment_sha256": "dbe5204a249cfec12c03a3772c23581dcd223719bf43fd36515a6977cd00bf37",
+      "rows": [
+        {
+          "layer": "general",
+          "body_claim": "Q3의 v_eb3=0이지만 r_O3는 남음",
+          "summary_match_or_reason": "요약 첫 문장",
+          "disposition": "included"
+        },
+        {
+          "layer": "general",
+          "body_claim": "Gm=g_m1, Rout≈r_O1∥r_O3, Av≈-GmRout",
+          "summary_match_or_reason": "요약 핵심 식 세 행",
+          "disposition": "included"
+        },
+        {
+          "layer": "warn",
+          "body_claim": "pnp DC off가 아니며 동일 저항이면 이득 절반",
+          "summary_match_or_reason": "요약에 DC 신호 변화와 무한저항 극한을 남기고 동등저항 수치 비교는 verify·retry에 둠",
+          "disposition": "omitted_with_reason"
+        }
+      ],
+      "stage_html_sha256": "d4a6fee7e264c4ad08b62f557c194e611531e0ae90522043d31cefb6b4b93f1e",
+      "stage_md_sha256": "c8b784e82edd1258909f5ecea9da54ad072cf0644bb605d86601b29d6e253b69"
+    },
+    "p3": {
+      "fragment_sha256": "4ddca6c8653d42394626df582ff187adc6bc24c8f799b4540223b68b2f1daf98",
+      "rows": [
+        {
+          "layer": "general",
+          "body_claim": "ID=ISS/2와 캐스코드 목표 역산",
+          "summary_match_or_reason": "요약 첫 문장·마지막 판단",
+          "disposition": "included"
+        },
+        {
+          "layer": "general",
+          "body_claim": "Gm≈gm1, Rout≈gm3rO3rO1, ISS≈14.81mA",
+          "summary_match_or_reason": "요약 핵심 식 세 행",
+          "disposition": "included"
+        },
+        {
+          "layer": "warn",
+          "body_claim": "gmro 주항·각 소자 전류/번호 구분",
+          "summary_match_or_reason": "요약의 |Av|≈(gmro)^2와 첫 문장; 구체 소자 번호는 Rout 식",
+          "disposition": "included"
+        },
+        {
+          "layer": "supplement",
+          "body_claim": "정확 전체 Rout과 주항 수치 차이",
+          "summary_match_or_reason": "학습 요약에서는 공개하지 않고 독립 evidence의 정확 모델에만 둠",
+          "disposition": "omitted_with_reason"
+        }
+      ],
+      "stage_html_sha256": "d4a6fee7e264c4ad08b62f557c194e611531e0ae90522043d31cefb6b4b93f1e",
+      "stage_md_sha256": "c8b784e82edd1258909f5ecea9da54ad072cf0644bb605d86601b29d6e253b69"
+    },
+    "p4": {
+      "fragment_sha256": "e721732919376eca19b18ed3614f29d5b86e70f325c3edadebeb128ecf801e9e",
+      "rows": [
+        {
+          "layer": "general",
+          "body_claim": "아래 NMOS·위 PMOS 캐스코드 저항 마지막 병렬",
+          "summary_match_or_reason": "요약 첫 문장과 Rout 행",
+          "disposition": "included"
+        },
+        {
+          "layer": "general",
+          "body_claim": "Gm≈gmn, 공통 W/L≈33.28",
+          "summary_match_or_reason": "요약 식 두 행",
+          "disposition": "included"
+        },
+        {
+          "layer": "warn",
+          "body_claim": "NMOS와 PMOS의 μ·λ를 같게 둘 수 없음",
+          "summary_match_or_reason": "요약 마지막 문장",
+          "disposition": "included"
+        },
+        {
+          "layer": "supplement",
+          "body_claim": "K=60.09 kΩ² 중간 역산",
+          "summary_match_or_reason": "요약에는 답·주요 블록만 남기고 수치 유도는 solve에 보존",
+          "disposition": "omitted_with_reason"
+        }
+      ],
+      "stage_html_sha256": "d4a6fee7e264c4ad08b62f557c194e611531e0ae90522043d31cefb6b4b93f1e",
+      "stage_md_sha256": "c8b784e82edd1258909f5ecea9da54ad072cf0644bb605d86601b29d6e253b69"
+    },
+    "p5": {
+      "fragment_sha256": "b3b0fe3f1ed5176e94eec0a16cd259d0b6fcf4f3bd7a90e4d98140b6b12dca8a",
+      "rows": [
+        {
+          "layer": "general",
+          "body_claim": "세 회로의 DM 반회로/캐스코드에 맞춘 Gm·Rout·Av",
+          "summary_match_or_reason": "요약 첫 문장",
+          "disposition": "included"
+        },
+        {
+          "layer": "general",
+          "body_claim": "(1) -5, (2) -50, (3) -2×10^4 V/V",
+          "summary_match_or_reason": "최종 답 별도 p 세 행",
+          "disposition": "included"
+        },
+        {
+          "layer": "warn",
+          "body_claim": "(1) g_m R_E/2=1이라 1/g_m 유지",
+          "summary_match_or_reason": "요약 별도 문장",
+          "disposition": "included"
+        },
+        {
+          "layer": "warn",
+          "body_claim": "(3) 유한 rπ2는 rO1과 병렬",
+          "summary_match_or_reason": "요약 별도 문장",
+          "disposition": "included"
+        },
+        {
+          "layer": "supplement",
+          "body_claim": "각 수치 gm/rO/rπ와 검산",
+          "summary_match_or_reason": "요약 중복을 피하고 solve·verify에 둠",
+          "disposition": "omitted_with_reason"
+        }
+      ],
+      "stage_html_sha256": "d4a6fee7e264c4ad08b62f557c194e611531e0ae90522043d31cefb6b4b93f1e",
+      "stage_md_sha256": "c8b784e82edd1258909f5ecea9da54ad072cf0644bb605d86601b29d6e253b69"
+    },
+    "p6": {
+      "fragment_sha256": "6b82b0f196ed918cd7c2525c4369fd761fa891551cac91392a12885e3be86466",
+      "rows": [
+        {
+          "layer": "general",
+          "body_claim": "베이스 되먹임 부하와 유한 rπ 캐스코드",
+          "summary_match_or_reason": "요약 첫 문장",
+          "disposition": "included"
+        },
+        {
+          "layer": "general",
+          "body_claim": "한쪽 Rout과 두 출력 사이 Rout의 2배 구별",
+          "summary_match_or_reason": "요약 둘째 문장",
+          "disposition": "included"
+        },
+        {
+          "layer": "general",
+          "body_claim": "(1) 149.72Ω·-2.88V/V, (2) 561.8kΩ·-1.08×10^4V/V",
+          "summary_match_or_reason": "새 요약에서 (1) 저항·이득, (2) 저항·이득이 각각 별도 문단이며 본문 값과 일치",
+          "disposition": "included"
+        },
+        {
+          "layer": "warn",
+          "body_claim": "(1) 기본 블록의 1/g_m3은 g_m3 R1≫1만으로 삭제하지 않음",
+          "summary_match_or_reason": "새 페이지 요약의 단독 display R_Q3≈(1/g_m3+R1/β)∥r_O3가 핵심 식을 그대로 보여 준다; g_m3R1≫1만으로 내부항을 삭제하지 않는다.",
+          "disposition": "included"
+        },
+        {
+          "layer": "warn",
+          "body_claim": "(2)의 원본에는 R2 없음",
+          "summary_match_or_reason": "요약에서는 생략하고 understand·pitfall에만 남김; 범위·답 조건에는 영향 없지만 원본 함정은 본문 유지",
+          "disposition": "omitted_with_reason"
+        }
+      ],
+      "stage_html_sha256": "d4a6fee7e264c4ad08b62f557c194e611531e0ae90522043d31cefb6b4b93f1e",
+      "stage_md_sha256": "c8b784e82edd1258909f5ecea9da54ad072cf0644bb605d86601b29d6e253b69"
+    },
+    "p7": {
+      "fragment_sha256": "20d6e5bbca0eb1c127b9a641fbc8ac56e2e6e49e24b83878d25a76c5c5800bf2",
+      "rows": [
+        {
+          "layer": "general",
+          "body_claim": "DM은 P 가상 접지, CM은 2RSS 반회로",
+          "summary_match_or_reason": "요약 첫 문장·마지막 경고",
+          "disposition": "included"
+        },
+        {
+          "layer": "general",
+          "body_claim": "A_DM≈-100, R_SS≈2MΩ, A_CM≈-5mV/V",
+          "summary_match_or_reason": "요약 (1)(2) 각각 별도 문장",
+          "disposition": "included"
+        },
+        {
+          "layer": "warn",
+          "body_claim": "CM 단일 출력과 대칭 차동 출력 0 구별",
+          "summary_match_or_reason": "요약의 한쪽 CM 표시와 P 비가상 접지; 추가 검산은 verify에 둠",
+          "disposition": "included"
+        },
+        {
+          "layer": "supplement",
+          "body_claim": "아래 축퇴 저항 800MΩ의 상세 비교",
+          "summary_match_or_reason": "요약에는 유효 최종 부하/답만 남기고 solve에 보존",
+          "disposition": "omitted_with_reason"
+        }
+      ],
+      "stage_html_sha256": "d4a6fee7e264c4ad08b62f557c194e611531e0ae90522043d31cefb6b4b93f1e",
+      "stage_md_sha256": "c8b784e82edd1258909f5ecea9da54ad072cf0644bb605d86601b29d6e253b69"
+    },
+    "p8": {
+      "fragment_sha256": "f04ef8cbf0d181fd35ddbb473784b1de16737c45d3f5099a4d7e866f4a54ea81",
+      "rows": [
+        {
+          "layer": "general",
+          "body_claim": "CM에서는 아래 입력 rO1도 2rO7 축퇴로 커짐",
+          "summary_match_or_reason": "요약 첫 문장",
+          "disposition": "included"
+        },
+        {
+          "layer": "general",
+          "body_claim": "A_DM≈-99.01, Rdn,CM≈Rup≈1MΩ, A_CM≈-50",
+          "summary_match_or_reason": "요약 (1)(2) 문장으로 본문 결과와 일치",
+          "disposition": "included"
+        },
+        {
+          "layer": "warn",
+          "body_claim": "대칭 CM 두 출력 차는 0, 한쪽 A_CM은 -50",
+          "summary_match_or_reason": "요약 마지막 문장",
+          "disposition": "included"
+        },
+        {
+          "layer": "supplement",
+          "body_claim": "중간 gm·ro 숫자와 0.50MΩ 병렬",
+          "summary_match_or_reason": "요약에서는 생략하고 solve에 보존",
+          "disposition": "omitted_with_reason"
+        }
+      ],
+      "stage_html_sha256": "d4a6fee7e264c4ad08b62f557c194e611531e0ae90522043d31cefb6b4b93f1e",
+      "stage_md_sha256": "c8b784e82edd1258909f5ecea9da54ad072cf0644bb605d86601b29d6e253b69"
+    },
+    "p9": {
+      "fragment_sha256": "b71aed7e4d81a5ff98a5fadceb4e2de476e2ce2923087a65eb11dbf1f76bd074",
+      "rows": [
+        {
+          "layer": "general",
+          "body_claim": "CM 한쪽 아래 2rO3와 IC=Q3 테일 전류",
+          "summary_match_or_reason": "요약 첫 문장·마지막 판단",
+          "disposition": "included"
+        },
+        {
+          "layer": "general",
+          "body_claim": "Gm,CM=IC/[2(VA+VT)], Rout≈RC, 목표 부등식",
+          "summary_match_or_reason": "요약 핵심 식 세 행",
+          "disposition": "included"
+        },
+        {
+          "layer": "warn",
+          "body_claim": "원문 VT 유지 위해 1/gm을 버리지 않음",
+          "summary_match_or_reason": "요약 마지막 문장",
+          "disposition": "included"
+        },
+        {
+          "layer": "supplement",
+          "body_claim": "vP=2iRSS 중간 유도·양수 부등식 이항",
+          "summary_match_or_reason": "요약에서는 결론만 두고 start/solve에 일반증명 보존",
+          "disposition": "omitted_with_reason"
+        }
+      ],
+      "stage_html_sha256": "d4a6fee7e264c4ad08b62f557c194e611531e0ae90522043d31cefb6b4b93f1e",
+      "stage_md_sha256": "c8b784e82edd1258909f5ecea9da54ad072cf0644bb605d86601b29d6e253b69"
+    }
   },
-  {
-    "topic": "p1",
-    "category": "주의",
-    "body_claim": "테일이상과입력Early무시는다름·추가1/2금지",
-    "before": "unresolved",
-    "summary_sentence": "이상적인 것은 부하 전류원이에요. 입력 BJT의 Early 출력저항은 남기고, 차동 입력·출력의 절반 인자가 상쇄되므로 1/2을 다시 곱하지 않아요.",
-    "status": "pass",
-    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
-  },
-  {
-    "topic": "p2",
-    "category": "일반",
-    "body_claim": "실제pnp 고정BE로 종속전류0·ON OP병렬이득",
-    "before": "pass",
-    "summary_sentence": "작은 차동 입력·좌우 대칭에서 테일은 가상 접지예요. pnp 베이스는 고정 바이어스라 다이오드 연결의 $1/g_{mP}$가 아닌 $r_{OP}$만 남아요.개념차동 하프 서킷·출력 저항답차동 전압 이득 $= -g_m (r_{ON} \\parallel r_{OP})$검산$r_{OP}\\to\\infty$이면 $-g_mr_{ON}$으로 돌아와요.",
-    "status": "pass",
-    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
-  },
-  {
-    "topic": "p2",
-    "category": "주의",
-    "body_claim": "다이오드부하 아님·작은DM대칭조건",
-    "before": "unresolved",
-    "summary_sentence": "작은 차동 입력·좌우 대칭에서 테일은 가상 접지예요. pnp 베이스는 고정 바이어스라 다이오드 연결의 $1/g_{mP}$가 아닌 $r_{OP}$만 남아요.",
-    "status": "pass",
-    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
-  },
-  {
-    "topic": "p3",
-    "category": "일반",
-    "body_claim": "대칭중점X0·ro병렬R1 이득·극한",
-    "before": "pass",
-    "summary_sentence": "$R_1=R_2$와 대응 소자 대칭·순수 차동 입력에서만 X를 AC 접지로 봐요. 출력에서 X까지의 부하는 $R_1$이며 $R_1+R_2$가 아니에요.개념차동 하프 서킷·출력 저항답차동 이득 $A_v = -g_{m1} (r_{O1} \\parallel r_{O3} \\parallel R_1)$검산$R_1\\to0$이면 출력이 접지되어 이득이 0이에요.",
-    "status": "pass",
-    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
-  },
-  {
-    "topic": "p3",
-    "category": "주의",
-    "body_claim": "차동·매칭만 가상접지·R1단독부하",
-    "before": "unresolved",
-    "summary_sentence": "$R_1=R_2$와 대응 소자 대칭·순수 차동 입력에서만 X를 AC 접지로 봐요. 출력에서 X까지의 부하는 $R_1$이며 $R_1+R_2$가 아니에요.",
-    "status": "pass",
-    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
-  },
-  {
-    "topic": "p4",
-    "category": "일반",
-    "body_claim": "각전류0.5mA·gm ro변환·VT가정포함 -54.9",
-    "before": "pass",
-    "summary_sentence": "개념차동 하프 서킷·출력 저항답차동 이득 $A_v \\approx -54.9$검산$R_h=2.857$ kΩ, $V_T=26$ mV에서 $A=-54.95$예요.적용 조건상온 관례 $V_T=26$ mV에서 약 -54.9예요. 일반식은 $-1.42857\\,\\mathrm V/V_T$예요.",
-    "status": "pass",
-    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
-  },
-  {
-    "topic": "p4",
-    "category": "주의",
-    "body_claim": "VT26은추가가정·일반식 유지",
-    "before": "pass",
-    "summary_sentence": "개념차동 하프 서킷·출력 저항답차동 이득 $A_v \\approx -54.9$검산$R_h=2.857$ kΩ, $V_T=26$ mV에서 $A=-54.95$예요.적용 조건상온 관례 $V_T=26$ mV에서 약 -54.9예요. 일반식은 $-1.42857\\,\\mathrm V/V_T$예요.",
-    "status": "pass",
-    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
-  },
-  {
-    "topic": "p5",
-    "category": "일반",
-    "body_claim": "캐스코드주항14.8mA와 +1항15.7구분",
-    "before": "pass",
-    "summary_sentence": "이상 부하·몸체 효과 무시에서 $g_mr_O\\gg1$의 주항을 써요. 구한 $I_D=7.407\\,\\mathrm{mA}$는 가지 전류라 테일은 두 배이며, 고정 크기에서 전류가 커질수록 고유 이득은 줄어요.개념차동 하프 서킷·출력 저항답$I_{SS} \\approx 14.8\\ \\text{mA}$검산$(g_mr_O)^2=300$을 역대입해요. 정확 보정은 약 6%예요.적용 조건주항 설계: 약 14.8 mA. $+1$ 항을 남긴 소신호 설계: 약 15.7 mA예요.",
-    "status": "pass",
-    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
-  },
-  {
-    "topic": "p5",
-    "category": "주의",
-    "body_claim": "이상부하·몸체무시·gmro큰근사·가지와테일2배",
-    "before": "unresolved",
-    "summary_sentence": "이상 부하·몸체 효과 무시에서 $g_mr_O\\gg1$의 주항을 써요. 구한 $I_D=7.407\\,\\mathrm{mA}$는 가지 전류라 테일은 두 배이며, 고정 크기에서 전류가 커질수록 고유 이득은 줄어요.",
-    "status": "pass",
-    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
-  },
-  {
-    "topic": "p6",
-    "category": "일반",
-    "body_claim": "공통W/L이어도 n/p gmro다름·양스택병렬·주항과정밀값구별",
-    "before": "unresolved",
-    "summary_sentence": "같은 가지 전류·형상비에서도 $g_{mp}=g_{mn}/\\sqrt2$, $r_n=20\\,\\mathrm{k}\\Omega$, $r_p=10\\,\\mathrm{k}\\Omega$예요. 두 캐스코드 저항을 직렬이 아닌 병렬로 합쳐요.",
-    "status": "pass",
-    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
-  },
-  {
-    "topic": "p6",
-    "category": "주의",
-    "body_claim": "병렬공통인자한번·입력gm한번·근사와정확모델",
-    "before": "pass",
-    "summary_sentence": "같은 가지 전류·형상비에서도 $g_{mp}=g_{mn}/\\sqrt2$, $r_n=20\\,\\mathrm{k}\\Omega$, $r_p=10\\,\\mathrm{k}\\Omega$예요. 두 캐스코드 저항을 직렬이 아닌 병렬로 합쳐요.개념차동 하프 서킷·출력 저항답$(W/L)_1 = \\cdots = (W/L)_8 \\approx 33.3$검산$R_n\\parallel R_p=109.6$ kΩ와 $g_{mn}=1.824$ mS의 곱은 200이에요.적용 조건공통 형상비는 주항 설계에서 약 33.3, 비지배 항을 남긴 노드 해석에서 약 29.8이에요.규칙을 적용하는 순서$(aX)\\parallel(aY)=a(X\\parallel Y)$병렬에서 한 번, 입력에서 한 번 곱해 $g_{mn}^2$가 돼요.",
-    "status": "pass",
-    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
-  },
-  {
-    "topic": "p7",
-    "category": "일반",
-    "body_claim": "유한beta rpi유지·x=VA/VT로전류상쇄·양의근최소VA",
-    "before": "pass",
-    "summary_sentence": "개념차동 하프 서킷·출력 저항답최소 Early 전압 $V_A \\approx 2.24\\ \\text{V}$검산$100x^2/(x+100)=4000$, $x=86.33$을 확인해요.적용 조건상온 $V_T=26$ mV를 채택한 캐스코드 근사값이 $V_{A,min}\\approx2.24$ V예요.규칙을 적용하는 순서$g_mr_O=x$, $g_mr_\\pi=\\beta$$g_m(r_O\\parallel r_\\pi)=x\\beta/(x+\\beta)$",
-    "status": "pass",
-    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
-  },
-  {
-    "topic": "p7",
-    "category": "주의",
-    "body_claim": "VT26채택·주항근사 1.16%보정·DC베이스보정밖",
-    "before": "pass",
-    "summary_sentence": "개념차동 하프 서킷·출력 저항답최소 Early 전압 $V_A \\approx 2.24\\ \\text{V}$검산$100x^2/(x+100)=4000$, $x=86.33$을 확인해요.적용 조건상온 $V_T=26$ mV를 채택한 캐스코드 근사값이 $V_{A,min}\\approx2.24$ V예요.규칙을 적용하는 순서$g_mr_O=x$, $g_mr_\\pi=\\beta$$g_m(r_O\\parallel r_\\pi)=x\\beta/(x+\\beta)$",
-    "status": "pass",
-    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
-  },
-  {
-    "topic": "p8",
-    "category": "일반",
-    "body_claim": "시험KCL로캐스코드저항·각문항수치·반회로와차동저항2배",
-    "before": "pass",
-    "summary_sentence": "주 답은 $g_mr_o\\gg1$의 지배항이에요. 시험 KCL의 정확한 저항은 $r_t+r_e+g_{m,u}r_tr_e$이고, 차동 저항의 2배를 차동 이득에 다시 곱하지 않아요.개념차동 하프 서킷·출력 저항답(1) $R_{out} \\approx 500\\ \\text{k}\\Omega$, $A_v \\approx -2.00 \\times 10^4$(2) $R_{out} \\approx 1.00\\ \\text{M}\\Omega$ (차동, 한쪽은 $500\\ \\text{k}\\Omega$), $A_v \\approx -1.00 \\times 10^4$검산한쪽 500 kΩ 두 개라 차동 출력저항은 1 MΩ예요.적용 조건관례: DC 베이스 전류만 무시하고 유한한 소신호 $r_\\pi$를 유지해요. $r_\\pi\\to\\infty$ 해석이면 (1) 약 667 kΩ, (2) 차동 약 2 MΩ로 달라져요.",
-    "status": "pass",
-    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
-  },
-  {
-    "topic": "p8",
-    "category": "주의",
-    "body_claim": "DC베이스만무시·유한rpi유지·주항과비지배항구분",
-    "before": "unresolved",
-    "summary_sentence": "주 답은 $g_mr_o\\gg1$의 지배항이에요. 시험 KCL의 정확한 저항은 $r_t+r_e+g_{m,u}r_tr_e$이고, 차동 저항의 2배를 차동 이득에 다시 곱하지 않아요.",
-    "status": "pass",
-    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
-  },
-  {
-    "topic": "p9",
-    "category": "일반",
-    "body_claim": "IC테일전류·CM반회로2ro·부등식과엄격경계",
-    "before": "pass",
-    "summary_sentence": "개념CM 하프 서킷·축퇴답$|A_{CM}| = R_C I_C/[2(V_A + V_T)] < 0.01$에서 $R_C I_C < 0.02(V_A + V_T)$ (식 (10.223))가 나온다검산경계 $R_CI_C=0.02(V_A+V_T)$에서 $|A_{CM}|=0.01$이에요.적용 조건$I_C$는 테일 $Q_3$ 전류이고 입력 가지는 $I_C/2$예요. 이 관례에서 $R_CI_C<0.02(V_A+V_T)$예요.추가 근사 $\\beta\\to\\infty$($\\alpha\\approx1$)는 문제에 없는 교과서 근사예요. 유한 $\\beta$면 $|A_{CM}|$이 더 작아 이 식은 충분조건이에요.규칙을 적용하는 순서반쪽에서 $i_c=g_m(v_{CM}-2r_{O3}i_c)$$v_o=-R_Ci_c$를 연결한 뒤 소자 값을 넣어요.",
-    "status": "pass",
-    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
-  },
-  {
-    "topic": "p9",
-    "category": "주의",
-    "body_claim": "문제밖beta무한추가근사·유한beta면충분조건",
-    "before": "pass",
-    "summary_sentence": "개념CM 하프 서킷·축퇴답$|A_{CM}| = R_C I_C/[2(V_A + V_T)] < 0.01$에서 $R_C I_C < 0.02(V_A + V_T)$ (식 (10.223))가 나온다검산경계 $R_CI_C=0.02(V_A+V_T)$에서 $|A_{CM}|=0.01$이에요.적용 조건$I_C$는 테일 $Q_3$ 전류이고 입력 가지는 $I_C/2$예요. 이 관례에서 $R_CI_C<0.02(V_A+V_T)$예요.추가 근사 $\\beta\\to\\infty$($\\alpha\\approx1$)는 문제에 없는 교과서 근사예요. 유한 $\\beta$면 $|A_{CM}|$이 더 작아 이 식은 충분조건이에요.규칙을 적용하는 순서반쪽에서 $i_c=g_m(v_{CM}-2r_{O3}i_c)$$v_o=-R_Ci_c$를 연결한 뒤 소자 값을 넣어요.",
-    "status": "pass",
-    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
-  },
-  {
-    "topic": "p10",
-    "category": "일반",
-    "body_claim": "CM대칭RSS두배 분할·소스축퇴CE이득·원식동일",
-    "before": "pass",
-    "summary_sentence": "CM 대칭에서 입력 $r_O$와 베이스 전류를 무시하는 근사예요. 반회로 이미터 저항은 $2R_{EE}$이며 P를 DM 가상 접지로 바꾸면 안 돼요.개념CM 하프 서킷·축퇴답절반 회로의 이득 $-R_C/(2R_{EE} + 1/g_m)$은 분자·분모를 2로 나누면 $-\\dfrac{R_C/2}{R_{EE} + 1/(2g_m)}$이 되어 식 (10.180)이 그대로 성립한다검산$R_{EE}\\to\\infty$이면 $A_{CM}\\to0$이에요.",
-    "status": "pass",
-    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
-  },
-  {
-    "topic": "p10",
-    "category": "주의",
-    "body_claim": "CM P접지금지·입력ro와베이스전류무시조건",
-    "before": "unresolved",
-    "summary_sentence": "CM 대칭에서 입력 $r_O$와 베이스 전류를 무시하는 근사예요. 반회로 이미터 저항은 $2R_{EE}$이며 P를 DM 가상 접지로 바꾸면 안 돼요.",
-    "status": "pass",
-    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
-  }
-]
+  "html_sha256": "d4a6fee7e264c4ad08b62f557c194e611531e0ae90522043d31cefb6b4b93f1e",
+  "md_sha256": "c8b784e82edd1258909f5ecea9da54ad072cf0644bb605d86601b29d6e253b69",
+  "display_formula_count": 127,
+  "md_image_reference_count": 11,
+  "md_all_display_formulas_present": true,
+  "stage_delta": "p6 summary adds one display of the same basic R_Q3≈(1/g_m3+R1/β)∥r_O3 expression before unchanged four separate answers; other content unchanged."
+}

@@ -8,7 +8,7 @@ from epe_browser_check import evaluate
 def good(**overrides):
     result = {'visibility': 'visible', 'topics': 3, 'sumsInPanel': 3, 'katex': 40, 'katexErrors': 0,
               'rawDollar': False, 'sumsLeftInMain': 0, 'brokenImages': [], 'external': [],
-              'hScroll': [], 'panelOverflow': [], 'consoleErrors': []}
+              'hScroll': [], 'panelOverflow': [], 'consoleErrors': [], 'spacingErrors': []}
     result.update(overrides)
     return result
 
@@ -24,6 +24,7 @@ class EvaluateTests(unittest.TestCase):
                  'rawDollar': {'rawDollar': True}, 'sumsLeftInMain': {'sumsLeftInMain': 1},
                  'brokenImages': {'brokenImages': ['a.png']}, 'external': {'external': ['https://x']},
                  'hScroll': {'hScroll': ['p1:900']}, 'panelOverflow': {'panelOverflow': ['p2']},
+                 'spacingErrors': {'spacingErrors': [{'kind':'summary-label-top','actual':0,'minimum':24}]},
                  'consoleErrors': {'consoleErrors': ['boom']}}
         for needle, overrides in cases.items():
             with self.subTest(needle=needle):
@@ -32,6 +33,7 @@ class EvaluateTests(unittest.TestCase):
 
     def test_expected_topic_count_and_missing_keys_fail(self):
         self.assertTrue(evaluate(good(), expected_topics=4))
+        missing=good(); del missing['spacingErrors']; self.assertTrue(evaluate(missing))
         self.assertTrue(evaluate({'visibility': 'visible', 'topics': 1, 'sumsInPanel': 1}))
 
 

@@ -23,12 +23,33 @@ MEASURE_JS = r"""async (topicWait) => {
 await new Promise((r) => setTimeout(r, 1500));
 const textNodes = Array.from(document.querySelectorAll('main *, #panel-right *')).filter((e) => !['SCRIPT', 'STYLE'].includes(e.tagName) && !e.closest('[hidden]'));
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+const summaryToggle=document.querySelector('#toggle-right');
+if (summaryToggle?.getAttribute('aria-expanded')==='false') {summaryToggle.click(); await wait(300);}
 const scroller = document.querySelector('.content') || document.documentElement;
-const over = [], panelOver = [];
+const over = [], panelOver = [], spacingErrors = [];
+const gap = (a,b) => b.getBoundingClientRect().top-a.getBoundingClientRect().bottom;
+function checkGap(a,b,min,kind,id) {
+  if (a && b && a.getClientRects().length && b.getClientRects().length && gap(a,b)<min-.5)
+    spacingErrors.push({topic:id,kind,actual:gap(a,b),minimum:min});
+}
 for (const t of document.querySelectorAll('main article.topic')) {
   location.hash = '#' + t.id; await wait(topicWait);
   document.getAnimations().forEach((a) => a.finish());
   await wait(100);
+  const sum = document.querySelector('#sum-for .sum:not([hidden])');
+  for (const label of sum?.querySelectorAll(':scope > .panel-label') || []) {
+    checkGap(label.previousElementSibling,label,24,'summary-label-top',t.id);
+    checkGap(label,label.nextElementSibling,12,'summary-label-bottom',t.id);
+  }
+  for (const list of sum?.querySelectorAll(':scope > .eq-list') || [])
+    checkGap(list,list.nextElementSibling,24,'summary-equations-bottom',t.id);
+  for (const part of t.querySelectorAll('.layer:is([data-explanation="solve"],[data-explanation="verify"]) > [data-subpart]')) {
+    const prev=part.previousElementSibling;
+    const min=prev?.matches('h4,.layer-title') ? 24 : (innerWidth>=1024 ? 32 : 24);
+    checkGap(prev,part,min,'subpart-top',t.id);
+    const heading=part.firstElementChild;
+    if (heading?.matches('h4')) checkGap(heading,heading.nextElementSibling,12,'subpart-heading-bottom',t.id);
+  }
   if (scroller.scrollWidth > scroller.clientWidth + 1 || document.documentElement.scrollWidth > window.innerWidth + 1) over.push(t.id + ':' + scroller.scrollWidth);
   for (const d of document.querySelectorAll('#panel-right .sum .katex-display')) {
     if (d.offsetParent !== null && d.scrollWidth > d.clientWidth + 1) panelOver.push(t.id);
@@ -49,6 +70,7 @@ return {
   mathPan: document.querySelectorAll('.math-pan').length,
   hScroll: over,
   panelOverflow: panelOver,
+  spacingErrors,
   bg: getComputedStyle(document.body).backgroundColor,
 };}"""
 
@@ -71,7 +93,7 @@ def evaluate(result, expected_topics=None):
         failures.append('rawDollar')
     if result.get('sumsLeftInMain', 1):
         failures.append(f"sumsLeftInMain={result.get('sumsLeftInMain')}")
-    for key in ('brokenImages', 'external', 'hScroll', 'panelOverflow', 'consoleErrors'):
+    for key in ('brokenImages', 'external', 'hScroll', 'panelOverflow', 'consoleErrors', 'spacingErrors'):
         value = result.get(key, ['(없음)'])
         if value:
             failures.append(f'{key}={value}')

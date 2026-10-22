@@ -1,8 +1,13 @@
-|A_v| exact = g_m*r_o*(g_m*r_o + 1)
-check exact = g_m r_o (g_m r_o + 1): 0
-limit A/(g_m^2 r_o^2), g_m r_o->oo : 1
-g_m r_o = 2*sqrt(5)/(3*sqrt(I_D))
-approx (A = g_m^2 r_o^2):  I_D = 0.00740741  I_SS = 0.0148148 A
-exact  (A = g_m r_o(g_m r_o+1)): I_D = 0.00784760  I_SS = 0.0156952 A
-g_m r_o at approx solution = 17.320
-ratio exact/approx I_SS = 1.0594
+p5(1) exact hybrid-pi differential gain with beta,ro infinite = -5 ≈ -5.000000000000000
+p5(1) block Gm = 1/100 ≈ 0.01000000000000000
+p5(1) block load = 500 ≈ 500.0000000000000
+p5(1) exact minus block 0
+p5(2) exact nodal differential gain = -50 ≈ -50.00000000000000
+p5(2) exact minus block 0
+p5(3) exact finite-beta, finite-ro voltage gain = -8080200/401 ≈ -20150.12468827930
+p5(3) leading cascode gain = -8040000/401 ≈ -20049.87531172070
+p5(3) exact/leading 201/200
+p5(3) sympy.limit(exact/leading, gm2*ro2->infinity) 1
+p5(3) equal-DC-current leading model at beta=200 = -20000 ≈ -20000.00000000000
+p5(3) finite-beta DC correction/reference at beta=200 1.00249376559
+p5(3) sympy.limit(DC-correction/reference,beta->infinity) 1

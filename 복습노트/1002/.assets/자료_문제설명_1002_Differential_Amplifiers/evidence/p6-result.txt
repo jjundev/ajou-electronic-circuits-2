@@ -1,6 +1,17 @@
-A_approx(WL) = g_m1[(g_m3 r_o3 r_o1)||(g_m5 r_o5 r_o7)] = -40*WL/31 + 160*sqrt(2)*WL/31 = 6.00884 * WL
-approx  W/L = [33.2843]
-exact (full KCL) W/L = 29.8482
-exact A at approx W/L = 221.838
-g_m r_o (n,p) at approx W/L: 36.49 12.90
-limit A_exact/A_approx as W/L -> oo (g_m r_o >> 1): 1
+Q3 full hybrid-pi minus corrected known block: 0
+conditions: low frequency, Q3 active, E/VCC AC ground, beta=100 treated as large-beta course model
+gmro3= 5000/13 ; beta= 100
+1/gm = 52 ≈ 52.00000000000000
+RP/beta = 100 ≈ 100.0000000000000
+R_base = 152 ≈ 152.0000000000000
+R_Q3_default = 380000/2519 ≈ 150.8535132989281
+Rout_half = 190000/1269 ≈ 149.7241922773838
+Rout_diff = 380000/1269 ≈ 299.4483845547675
+Gm = 1/52 ≈ 0.01923076923076923
+Av = -47500/16497 ≈ -2.879311389949688
+internal corrected Rout_half= 380000/2563 ≈ 148.2637534139680
+internal corrected Av= -95000/33319 ≈ -2.851226027191692
+base corrected/default ratio= beta/(beta + 1)
+limit beta->infinity base ratio= 1
+limit beta->infinity complete Rout ratio= 1
+limit beta->infinity complete Av ratio= 1

@@ -265,9 +265,9 @@
     /* readability-20261022:start */
     /* Shared summary layout: explicit blocks, no runtime sentence split. */
     .sum { display: flow-root; }
-    .sum > *, .sum p, .sum ul, .sum ol, .sum dl { margin: 0; }
-    .sum > * + * { margin-top: var(--s5); }
-    .sum > p + p:not(.panel-label) { margin-top: var(--s2); }
+    .sum :where(p, ul, ol, dl), .sum > :where(*) { margin: 0; }
+    .sum > :nth-child(n+2) { margin-top: var(--s5); }
+    .sum > :where(p:not(.panel-label, .sum-lead)) + p:not(.panel-label) { margin-top: var(--s2); }
     .sum > .sum-lead + * { margin-top: var(--s5); }
     .sum > .panel-label + *, .sum > h4 + * { margin-top: var(--s3); }
     .sum .summary-group { display: flex; flex-direction: column; gap: var(--s2); }

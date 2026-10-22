@@ -1,34 +1,67 @@
-# p8 (2021-1 midterm Q3). V_T=25mV, beta=200, V_A=5V, ideal I1 / top sources / I_EE.
+# Independent nodal analysis from problem statements and circuit images only.
 import sympy as sp
-VT=sp.Rational(25,1000); beta=200; VA=5
-def bjt(IC): gm=IC/VT; return gm, beta/gm, VA/IC
-vin=sp.symbols('v_in'); vX,vo,it,vt=sp.symbols('v_X v_o i_t v_t')
-ic=lambda g,r,b,c,e: g*(b-e)+(c-e)/r
-ib=lambda rp,b,e: (b-e)/rp
-# ---- (1) circuit (a): Q2 CE (1 mA), Q1 CB cascode (I1=0.5 mA), Q3 PNP current source (0.5 mA) at node X
-g1,rp1,ro1=bjt(sp.Rational(1,2000)); g2,rp2,ro2=bjt(sp.Rational(1,1000)); g3,rp3,ro3=bjt(sp.Rational(1,2000))
-# Q3: base Vb3, emitter VCC -> both AC gnd: just ro3 from X to gnd
-def solve_a(vin_val, itest):
-    eqX = sp.Eq(ic(g2,ro2,vin_val,vX,0) + vX/ro3 - (ic(g1,ro1,0,vo,vX)+ib(rp1,0,vX)), 0)
-    eqO = sp.Eq(ic(g1,ro1,0,vo,vX) - itest, 0)      # test current itest injected into out node
-    return sp.solve([eqX,eqO],[vX,vo],dict=True)[0]
-Rout_a = sp.simplify(solve_a(0,1)[vo])
-Av_a = sp.simplify(solve_a(1,0)[vo])
-R = 1/(1/ro2+1/ro3+1/rp1)
-print('(a) ro1,ro2,ro3,rpi1 =',ro1,ro2,ro3,rp1,' R=ro2||ro3||rpi1 =',sp.N(R))
-print('(a) Rout exact =',sp.N(Rout_a,6),' approx g_m1 r_O1 R =',sp.N(g1*ro1*R,6))
-print('(a) Av exact =',sp.N(Av_a,6),' approx -g_m2 * g_m1 r_O1 R =',sp.N(-g2*g1*ro1*R,6))
-# ---- (2) circuit (b): half circuit, I_C=0.5 mA each, RP across C-E of Q3 (Q4)
-RP=10000
-gq,rpq,roq=bjt(sp.Rational(1,2000))
-def solve_b(vin_val,itest):
-    i3 = ic(gq,roq,0,vo,vX) + (vo-vX)/RP      # current into top of (Q3 || RP) from out
-    eqX = sp.Eq(ic(gq,roq,vin_val,vX,0) - i3 - ib(rpq,0,vX), 0)
-    eqO = sp.Eq(i3 - itest, 0)
-    return sp.solve([eqX,eqO],[vX,vo],dict=True)[0]
-Rh = sp.simplify(solve_b(0,1)[vo]); Ah = sp.simplify(solve_b(1,0)[vo])
-Rb = 1/(1/roq+1/rpq); Rc = 1/(1/roq+sp.Rational(1,RP))
-print('(b) ro=',roq,' rpi=',rpq,' ro3||RP=',sp.N(Rc),' ro1||rpi3=',sp.N(Rb))
-print('(b) Rout per side exact =',sp.N(Rh,6),' approx g_m3(r_O3||R_P)(r_O1||r_pi3)=',sp.N(gq*Rc*Rb,6))
-print('(b) Rout differential (out1-out2) exact =',sp.N(2*Rh,6),' approx =',sp.N(2*gq*Rc*Rb,6))
-print('(b) A_d=(vo1-vo2)/(vi1-vi2) exact =',sp.N(Ah,6),' approx -g_m1*g_m3(r_O3||R_P)(r_O1||r_pi3) =',sp.N(-gq*gq*Rc*Rb,6))
+
+def network(nodes, fixed, devices, injections=None):
+    injections = injections or {}
+    v = {'0': sp.S.Zero, **fixed}
+    v.update({name: sp.Symbol(name) for name in nodes if name not in v})
+    kcl = {name: sp.S.Zero for name in nodes}
+    def add(name, current):
+        if name in kcl:
+            kcl[name] += current
+    for dev in devices:
+        if dev[0] == 'R':
+            _, a, b, resistance = dev
+            i = (v[a]-v[b])/resistance
+            add(a,i); add(b,-i)
+        elif dev[0] in ('Q','M'):
+            kind, d, g, s, gm, ro, *extra = dev
+            i = gm*(v[g]-v[s]) + (v[d]-v[s])/ro
+            add(d,i); add(s,-i)
+            if kind == 'Q':
+                rpi = extra[0]
+                ib = (v[g]-v[s])/rpi
+                add(g,ib); add(s,-ib)
+    for name, current in injections.items():
+        add(name,-current)
+    unknown = [v[name] for name in nodes if name not in fixed]
+    sol = sp.solve([kcl[name] for name in nodes if name not in fixed], unknown, dict=True)
+    assert len(sol) == 1, sol
+    return {name:sp.simplify(expr.subs(sol[0])) for name,expr in v.items()}, {name:sp.simplify(expr.subs(sol[0])) for name,expr in kcl.items()}
+
+def result(label, value):
+    print(label, '=', sp.simplify(value), '≈', sp.N(value, 16))
+
+vin=sp.Symbol('vin', positive=True);test=sp.Symbol('it')
+Id=sp.Rational(1,1000);Itail=2*Id
+kn=sp.Rational(100,1000000);kp=sp.Rational(50,1000000)
+gm1=sp.sqrt(2*kn*sp.Integer(500)*Id)
+gm3=sp.sqrt(2*kp*sp.Integer(1000)*Id)
+gm5=gm3
+ro=1/(sp.Rational(1,10)*Id)
+ro7=1/(sp.Rational(1,10)*Itail)
+dev=[('M','oL','inL','P',gm1,ro),('M','oR','inR','P',gm1,ro),
+     ('M','oL','0','aL',gm3,ro),('M','oR','0','aR',gm3,ro),
+     ('M','aL','0','0',gm5,ro),('M','aR','0','0',gm5,ro),
+     ('M','P','0','0',sp.sqrt(2*kn*1000*Itail),ro7)]
+nodes=['oL','oR','aL','aR','P']
+vd,_=network(nodes,{'inL':vin/2,'inR':-vin/2},dev)
+A_DM=sp.simplify((vd['oL']-vd['oR'])/vin)
+vc,_=network(nodes,{'inL':vin,'inR':vin},dev)
+A_CM=sp.simplify(vc['oL']/vin)
+vtest,_=network(nodes,{'inL':sp.S.Zero,'inR':sp.S.Zero},dev,{'oL':test,'oR':-test})
+Rdiff=sp.simplify((vtest['oL']-vtest['oR'])/test)
+Rup_lead=gm3*ro*ro
+Rhalf_lead=1/(1/ro+1/Rup_lead)
+Gcm_lead=1/(2*ro7)
+result('p8(1) exact nodal DM gain',A_DM)
+result('p8(1) exact nodal differential Rout',Rdiff)
+result('p8(1) leading DM gain',-gm1*Rhalf_lead)
+result('p8(2) exact nodal CM gain',A_CM)
+result('p8(2) basic tail Gm leading',Gcm_lead)
+print('p8(1) exact/leading gain',sp.N(A_DM/(-gm1*Rhalf_lead),12))
+g,r=sp.symbols('g r',positive=True)
+upper_exact=2*r+g*r*r
+upper_lead=g*r*r
+print('p8(1) sympy.limit(upper branch exact/leading,g->infinity)',sp.limit(upper_exact/upper_lead,g,sp.oo))
+print('p8(2) exact minus displayed leading',sp.simplify(A_CM+sp.Integer(50)))

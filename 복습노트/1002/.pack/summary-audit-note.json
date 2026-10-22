@@ -1,272 +1,359 @@
-[
-  {
-    "topic": "why-circuit",
-    "category": "일반",
-    "body_claim": "전류원·캐스코드 출력저항으로 DM이득증대; 테일저항으로 CM누설억제",
-    "before": "pass",
-    "summary_sentence": "이상적 테일·완전 대칭이면 CM 이득은 0이에요. 유한한 테일에서 각 출력이 움직여도 대칭이면 출력 차는 0이고 비대칭과 겹칠 때 차동으로 새어요.부하도 캐스코드로 만들고, 쌓인 다섯 소자의 최소 $5V_{ov}$에 출력 스윙 여유를 더해야 해요. BJT는 $r_{\\pi3}$가 병렬로 끼어 MOS보다 출력저항 증대가 작아요.보충(교과서 10.4절, 수업 미유도): 텔레스코픽 캐스코드 OP 앰프는 고주파 동작 때문에 수신기 아날로그 필터·A/D 변환기에 쓰여요. 차동 이득을 키우려고 출력저항을 키우고(전류원 부하, 캐스코드), CM이 새지 않게 테일 저항을 키우는 대신 헤드룸과 소자 수를 내줘요. 핵심 식 전류원 부하$$A_v=-g_{m1}(r_{O1}\\parallel r_{O3})$$ 캐스코드$$A_v\\approx-g_{m1}g_{m3}r_{O3}r_{O1}$$ CM 이득$$\\frac{\\Delta V_{out,CM}}{\\Delta V_{in,CM}}$$ $$=-\\frac{R_D}{1/g_m+2R_{SS}}$$ 용어 캐스코드(cascode)입력 트랜지스터 위에 쌓아 전류는 그대로 넘기고 출력저항을 키우는 트랜지스터 헤드룸(headroom)쌓은 소자마다 $V_{ov}$가 필요해서 생기는 전압 여유 부담 비대칭(mismatch)두 쪽이 완전히 같지 않은 것, 새는 CM을 차동 출력에 드러나게 함",
-    "status": "pass",
-    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
+{
+  "html_sha256": "390311c5b5e64a495e6c5ed0e2310059f1d274b19864b1250990a381601e3e68",
+  "md_sha256": "49edc01bfc63c010c5ff76e388ba51c1c7b2379a84d7850297b3f436a1fb3cc7",
+  "topics": {
+    "why-circuit": [
+      {
+        "layer": "general",
+        "body_claim": "차동 이득을 키우고 공통 잡음을 줄이는 동기",
+        "summary_match_or_reason": "요약 첫 문장에 전류원 부하·캐스코드·테일 저항 역할을 연결",
+        "disposition": "included"
+      },
+      {
+        "layer": "general",
+        "body_claim": "저항 부하의 DC 전압 강하와 캐스코드 헤드룸 대가",
+        "summary_match_or_reason": "요약 판단 두 행에 각각 전압 강하·헤드룸을 표시",
+        "disposition": "included"
+      },
+      {
+        "layer": "emphasis",
+        "body_claim": "대칭 CM 출력 성분은 차동 출력에서 상쇄",
+        "summary_match_or_reason": "요약 판단의 대칭 빼기 문장",
+        "disposition": "included"
+      },
+      {
+        "layer": "supplement",
+        "body_claim": "교과서의 연산증폭기 응용과 불일치 예고",
+        "summary_match_or_reason": "캐스코드의 동기와 대칭 한계를 일반문장으로 남기고 교재 세부 회로는 생략",
+        "disposition": "omitted_with_reason"
+      }
+    ],
+    "s0-cm-vs-dc": [
+      {
+        "layer": "general",
+        "body_claim": "DC 바이어스는 공통 모드의 일부, 차동 입력은 전류 재분배",
+        "summary_match_or_reason": "요약 첫 문장과 마지막 판단",
+        "disposition": "included"
+      },
+      {
+        "layer": "general",
+        "body_claim": "큰 beta에서 각 컬렉터 약 IEE/2, 변화는 ±ΔIC",
+        "summary_match_or_reason": "요약 식 3행",
+        "disposition": "included"
+      },
+      {
+        "layer": "warn",
+        "body_claim": "유한 beta에서는 alpha IEE/2가 평형 전류",
+        "summary_match_or_reason": "요약 판단에 alpha 조건; 100/101 수치 예시는 학습 핵심이 아니므로 생략",
+        "disposition": "included"
+      },
+      {
+        "layer": "emphasis",
+        "body_claim": "CM은 DC보다 넓은 표현",
+        "summary_match_or_reason": "요약 마지막 판단",
+        "disposition": "included"
+      }
+    ],
+    "s0-half-circuit": [
+      {
+        "layer": "general",
+        "body_claim": "순수 차동 대칭에서 P 가상 접지와 반회로 이득",
+        "summary_match_or_reason": "요약 첫 문장과 Gm/Rout/Av 세 행",
+        "disposition": "included"
+      },
+      {
+        "layer": "general",
+        "body_claim": "rπ는 유한 베이스 전류 모델에 남음",
+        "summary_match_or_reason": "요약 판단 첫 행",
+        "disposition": "included"
+      },
+      {
+        "layer": "warn",
+        "body_claim": "CM 입력에는 차동 가상 접지를 적용하지 않음",
+        "summary_match_or_reason": "요약 첫 문장의 순수 차동 대칭 조건; 본문 warn에서 명시",
+        "disposition": "included"
+      },
+      {
+        "layer": "supplement",
+        "body_claim": "대칭성의 vP=-vP 증명",
+        "summary_match_or_reason": "요약에는 결과 P=0만 남김; 대칭 증명은 보충에 있음",
+        "disposition": "omitted_with_reason"
+      }
+    ],
+    "s1-pnp-load": [
+      {
+        "layer": "general",
+        "body_claim": "Q3의 고정 베이스·이미터에서 신호원이 꺼지고 rO3가 남음",
+        "summary_match_or_reason": "요약 일반 문장과 rO1∥rO3 식",
+        "disposition": "included"
+      },
+      {
+        "layer": "general",
+        "body_claim": "출력 단락 Gm → 부하 Rout → 부호 이득",
+        "summary_match_or_reason": "최신 요약의 세 짧은 display 행",
+        "disposition": "included"
+      },
+      {
+        "layer": "warn",
+        "body_claim": "비슷한 rO1과 rO3를 둘 다 유지",
+        "summary_match_or_reason": "요약 판단 문장",
+        "disposition": "included"
+      },
+      {
+        "layer": "emphasis",
+        "body_claim": "큰 저항 부하의 IR 드롭과 pnp 활성 조건",
+        "summary_match_or_reason": "요약의 pnp 활성 부등식, 동기 문장은 도입 토픽에도 남음",
+        "disposition": "included"
+      }
+    ],
+    "s1-r1-load": [
+      {
+        "layer": "general",
+        "body_claim": "매칭·순수 차동에서 X의 AC 변화 0",
+        "summary_match_or_reason": "요약 첫 문장과 부하 Rout 식",
+        "disposition": "included"
+      },
+      {
+        "layer": "general",
+        "body_claim": "R1이 rO1·rO3와 병렬, Gm → Rout → Av",
+        "summary_match_or_reason": "최신 요약 세 display 행",
+        "disposition": "included"
+      },
+      {
+        "layer": "warn",
+        "body_claim": "CM 입력이나 한쪽 저항만 바꾸면 가상 접지 성립하지 않음",
+        "summary_match_or_reason": "요약에 매칭·순수 차동 조건; 자세한 반례는 formal·warn에 보존",
+        "disposition": "included"
+      },
+      {
+        "layer": "general",
+        "body_claim": "R1=R2→0이면 출력 합쳐져 차동 차이 0",
+        "summary_match_or_reason": "요약 마지막 판단",
+        "disposition": "included"
+      }
+    ],
+    "s2-mos-cascode": [
+      {
+        "layer": "general",
+        "body_claim": "M1이 Gm을 정하고 M3가 출력저항을 증대",
+        "summary_match_or_reason": "요약 첫 문장과 Gm·Rout·Av 행",
+        "disposition": "included"
+      },
+      {
+        "layer": "general",
+        "body_claim": "캐스코드 주항의 큰 곱 조건·소자 인자",
+        "summary_match_or_reason": "요약의 g_m3 r_O1, g_m3 r_O3 조건 문장",
+        "disposition": "included"
+      },
+      {
+        "layer": "emphasis",
+        "body_claim": "바이어스 Vb1 변화에도 전류가 거의 일정하고 M1 포화 필요",
+        "summary_match_or_reason": "요약에서 생략; formal에 경계식이 있고 요약의 목표는 이득 경로 압축",
+        "disposition": "omitted_with_reason"
+      }
+    ],
+    "s2-mos-cascode-load": [
+      {
+        "layer": "general",
+        "body_claim": "아래·위 캐스코드 출력저항을 마지막에 병렬",
+        "summary_match_or_reason": "요약 첫 문장과 Rout 행",
+        "disposition": "included"
+      },
+      {
+        "layer": "general",
+        "body_claim": "M7 바이어스가 상단 전류를 정해 ISS/2와 맞춰야 함",
+        "summary_match_or_reason": "요약 판단 문장",
+        "disposition": "included"
+      },
+      {
+        "layer": "emphasis",
+        "body_claim": "캐스코드 적층의 헤드룸·출력 스윙 대가",
+        "summary_match_or_reason": "요약 마지막 판단",
+        "disposition": "included"
+      },
+      {
+        "layer": "general",
+        "body_claim": "NMOS 이동도에 따른 gm 유리함",
+        "summary_match_or_reason": "formal에만 보존; 요약은 캐스코드 부하의 핵심 저항 경로에 집중",
+        "disposition": "omitted_with_reason"
+      }
+    ],
+    "s2-bjt-cascode": [
+      {
+        "layer": "general",
+        "body_claim": "Q3의 rπ3가 rO1과 병렬이라 이를 먼저 묶음",
+        "summary_match_or_reason": "요약 첫 문장과 Rout 행",
+        "disposition": "included"
+      },
+      {
+        "layer": "general",
+        "body_claim": "큰 beta 전달 Gm·캐스코드 주항 조건",
+        "summary_match_or_reason": "요약 Gm·Rout·Av 및 조건",
+        "disposition": "included"
+      },
+      {
+        "layer": "emphasis",
+        "body_claim": "OP 앰프의 높은 차동 이득 응용",
+        "summary_match_or_reason": "formal·prof에 남기고 요약은 회로 합성 규칙으로 한정",
+        "disposition": "omitted_with_reason"
+      }
+    ],
+    "s3-cm-ideal": [
+      {
+        "layer": "general",
+        "body_claim": "대칭·이상 테일에서 두 전류 변화가 같고 합이 0",
+        "summary_match_or_reason": "요약 첫 문장과 각 출력 ACM=0",
+        "disposition": "included"
+      },
+      {
+        "layer": "warn",
+        "body_claim": "CM에서는 P를 차동 가상 접지로 두지 않음",
+        "summary_match_or_reason": "본문 warn에 명시; 요약에는 대칭·테일 조건만 남김",
+        "disposition": "omitted_with_reason"
+      },
+      {
+        "layer": "emphasis",
+        "body_claim": "외부 잡음의 같은 위상 입력",
+        "summary_match_or_reason": "본문 formal/prof에 설명; 요약에서는 출력 결과 중심",
+        "disposition": "omitted_with_reason"
+      }
+    ],
+    "s3-finite-rss": [
+      {
+        "layer": "general",
+        "body_claim": "같은 가지 전류 i에서 vP=2iRSS=i·2RSS",
+        "summary_match_or_reason": "요약의 핵심 식",
+        "disposition": "included"
+      },
+      {
+        "layer": "general",
+        "body_claim": "CM 반회로는 각 소스에 2RSS",
+        "summary_match_or_reason": "요약 첫 문장과 판단",
+        "disposition": "included"
+      },
+      {
+        "layer": "warn",
+        "body_claim": "CM 대칭선은 가상 접지가 아님",
+        "summary_match_or_reason": "요약 판단 마지막 문장",
+        "disposition": "included"
+      },
+      {
+        "layer": "emphasis",
+        "body_claim": "캐스코드 테일로 RSS 증가",
+        "summary_match_or_reason": "formal·prof에 남김; 요약은 반회로 등가 변환에 집중",
+        "disposition": "omitted_with_reason"
+      }
+    ],
+    "s3-cm-half": [
+      {
+        "layer": "general",
+        "body_claim": "출력 단락 Gm, 입력 영점 Rout, 부호 이득의 순서",
+        "summary_match_or_reason": "최신 요약 세 display 행",
+        "disposition": "included"
+      },
+      {
+        "layer": "general",
+        "body_claim": "큰 곱에서 Gm≈1/(2RSS), Rout≈RD",
+        "summary_match_or_reason": "요약 조건·두 행",
+        "disposition": "included"
+      },
+      {
+        "layer": "emphasis",
+        "body_claim": "RSS를 5배 키우면 CM 이득 약 1/5",
+        "summary_match_or_reason": "본문 formal의 계산 예시에 남기고 요약은 기본 식만 제시",
+        "disposition": "omitted_with_reason"
+      },
+      {
+        "layer": "general",
+        "body_claim": "Rout 정확 전체식은 공개 본문에서 제외",
+        "summary_match_or_reason": "요약에도 정확식 없음; 학습 표면의 근사식 정책에 따름",
+        "disposition": "omitted_with_reason"
+      }
+    ],
+    "s3-cm-summary": [
+      {
+        "layer": "general",
+        "body_claim": "유한 RSS는 한쪽 CM 누설을 만들지만 대칭 차동 출력은 0",
+        "summary_match_or_reason": "요약 첫 문장과 식 두 행",
+        "disposition": "included"
+      },
+      {
+        "layer": "warn",
+        "body_claim": "RSS≫1/gm, 양쪽 대칭 조건",
+        "summary_match_or_reason": "요약 판단 두 행",
+        "disposition": "included"
+      },
+      {
+        "layer": "emphasis",
+        "body_claim": "테일 캐스코드로 RSS를 키워 누설 완화",
+        "summary_match_or_reason": "요약 첫 문장의 높은 테일 저항 의미; 상세 방법은 formal·prof에 보존",
+        "disposition": "included"
+      }
+    ],
+    "s4-cheatsheet": [
+      {
+        "layer": "general",
+        "body_claim": "Gm→부하 포함 Rout→부호 Av 표",
+        "summary_match_or_reason": "이 토픽은 layers=[]인 요약 페이지 자체; 별도 페이지 요약 없음",
+        "disposition": "no_summary_by_contract"
+      }
+    ],
+    "s4-next": [
+      {
+        "layer": "general",
+        "body_claim": "s36–40은 예고만, 불일치·CMRR·단일 출력·능동 부하 미유도",
+        "summary_match_or_reason": "이 토픽은 layers=[]인 예고 페이지 자체; 별도 페이지 요약 없음",
+        "disposition": "no_summary_by_contract"
+      }
+    ],
+    "s4-links": [
+      {
+        "layer": "general",
+        "body_claim": "9문항 문제지·답안과 이전 노트·전체 문제집 링크",
+        "summary_match_or_reason": "이 토픽은 layers=[]인 링크 페이지 자체; 별도 페이지 요약 없음",
+        "disposition": "no_summary_by_contract"
+      }
+    ]
   },
-  {
-    "topic": "why-circuit",
-    "category": "주의",
-    "body_claim": "이상테일·대칭이면 CM0; 유한테일 단독은 차동0·비대칭겹칠때문제",
-    "before": "unresolved",
-    "summary_sentence": "이상적 테일·완전 대칭이면 CM 이득은 0이에요. 유한한 테일에서 각 출력이 움직여도 대칭이면 출력 차는 0이고 비대칭과 겹칠 때 차동으로 새어요.",
-    "status": "pass",
-    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  "md_check": {
+    "all_15_topic_anchors": true,
+    "display_delimiters_balanced": true,
+    "no_public_stt_part_or_time": true
   },
-  {
-    "topic": "why-circuit",
-    "category": "강조",
-    "body_claim": "부하도캐스코드 필요·5Vov최소와 출력스윙; BJT rpi병렬",
-    "before": "unresolved",
-    "summary_sentence": "부하도 캐스코드로 만들고, 쌓인 다섯 소자의 최소 $5V_{ov}$에 출력 스윙 여유를 더해야 해요. BJT는 $r_{\\pi3}$가 병렬로 끼어 MOS보다 출력저항 증대가 작아요.",
-    "status": "pass",
-    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
+  "final_visual_delta": "fig-s0-half-symmetry P: 변화 0 label y=90; prior y=110 overlapped horizontal wire. No text/equation changes.",
+  "profile_sha256": "15dd74dba003093e0a3e627a7531d1b89dbc4b081ebfb2f04245d065758f62fe",
+  "new_resistor_diode_block_review": {
+    "why-circuit": "도입은 R_C·전류원 부하·캐스코드의 역할만 비교한다. 베이스–컬렉터 사이 저항을 두 단자 구동점 저항으로 치환하는 계산은 없다.",
+    "s0-cm-vs-dc": "Q1/Q2의 대칭 바이어스·전류 재분배이며 컬렉터–베이스 또는 베이스–컬렉터 저항 접속이 없다.",
+    "s0-half-circuit": "BJT r_π와 R_C의 일반 CE 반회로다. 베이스–컬렉터 저항이 없어 새 다이오드 접속형 블록은 비적용.",
+    "s1-pnp-load": "Q3/Q4의 베이스는 독립 고정 V_b, 이미터는 V_CC에 접지되고 컬렉터와 베이스 사이 R_P가 없다. 신호 제어원 0·r_O3 잔류 판단을 유지한다.",
+    "s1-r1-load": "R1·R2는 두 출력 사이에 직렬이며 중점 X가 양쪽 pnp 베이스에 공통 결합된다. 두 출력과 두 부하 소자가 얽힌 제3 연결이므로 단독 x=C–R_P–B,E=e 두 단자 블록이 아니다. 순수 차동·R1=R2 대칭에서만 X=AC 접지로 내려 R1을 출력 병렬 가지로 본 기존 풀이가 맞다. R1→0 때 두 출력 단락도 보존한다.",
+    "s2-mos-cascode": "M3/M4 게이트는 고정 V_b1이며 드레인–게이트 또는 게이트–드레인 R_P 결선이 없다. 기존 M1 r_O1→M3 캐스코드 합성만 적용.",
+    "s2-mos-cascode-load": "M5/M7의 바이어스 게이트는 고정이며 드레인 경로 R_P나 게이트 경로 R_P가 없다. 두 캐스코드 저항 병렬 합성은 새 블록과 별개.",
+    "s2-bjt-cascode": "Q3/Q5 베이스는 AC 접지라 X의 r_π3·위 r_π5를 먼 저항에 병렬로 두며 베이스–컬렉터 R_P 결선은 없다.",
+    "s3-cm-ideal": "이상 테일·대칭 CM KCL에서 같은 전류 변화 0을 보인다. 저항 포함 다이오드 접속 블록은 등장하지 않는다.",
+    "s3-finite-rss": "테일 R_SS를 한 소자의 r_O 또는 캐스코드 유효저항으로 정의한다. 테일 소자에 베이스–컬렉터/게이트–드레인 R_P가 없다.",
+    "s3-cm-half": "입력 MOS의 소스 축퇴 2R_SS와 외부 R_D 부하를 합성한다. 게이트–드레인이나 드레인–게이트 R_P 결선은 없으며 새 블록을 적용하지 않는다.",
+    "s3-cm-summary": "동일 CM 출력의 차동 상쇄·테일 저항 크기만 요약하며 저항 포함 다이오드 접속 구조를 쓰지 않는다.",
+    "s4-cheatsheet": "표의 R_p는 PMOS 캐스코드 상단 출력저항을 뜻하고 새 규칙의 베이스/컬렉터 경로 저항 R_P와 다르다. R_1 결합 부하 행은 s1-r1-load의 두 출력·공통 베이스 X 조건을 그대로 따른다.",
+    "s4-next": "미학습 CMRR·능동 부하의 예고 제목뿐이며 회로 저항 블록을 계산하지 않는다.",
+    "s4-links": "문제·답안·이전 노트·문제집 링크만 있어 소자 연결/구동점 저항 계산이 없다."
   },
-  {
-    "topic": "why-circuit",
-    "category": "보충",
-    "body_claim": "교과서 고주파텔레스코픽 응용은 수업미유도 보충",
-    "before": "unresolved",
-    "summary_sentence": "보충(교과서 10.4절, 수업 미유도): 텔레스코픽 캐스코드 OP 앰프는 고주파 동작 때문에 수신기 아날로그 필터·A/D 변환기에 쓰여요.",
-    "status": "pass",
-    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
-  },
-  {
-    "topic": "s0-cm-vs-dc",
-    "category": "일반",
-    "body_claim": "CM은 DC보다넓음; 대칭 전류±ΔI 합보존·출력차",
-    "before": "unresolved",
-    "summary_sentence": "두 출력의 차는 $-R_C(I_{C1}-I_{C2})=-2R_C\\Delta I$예요. 공통 성분은 같아서 차에서 사라져요.",
-    "status": "pass",
-    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
-  },
-  {
-    "topic": "s0-cm-vs-dc",
-    "category": "주의",
-    "body_claim": "컬렉터합=테일은 베이스전류무시 근사",
-    "before": "unresolved",
-    "summary_sentence": "$I_{C1}+I_{C2}=I_{EE}$는 베이스 전류를 무시한 근사이며, 작은 대칭 차동 입력의 평형 근처를 해석해요.",
-    "status": "pass",
-    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
-  },
-  {
-    "topic": "s0-half-circuit",
-    "category": "일반",
-    "body_claim": "rpi와gm 동일·순수차동 가상접지·2인자상쇄; ro포함 이득",
-    "before": "pass",
-    "summary_sentence": "DC 전압은 AC 접지, 이상적 테일 전류원은 개방이에요. $r_{O1}\\gg R_C$일 때만 $-g_mR_C$로 줄여 써요.보충(수업 미유도): 완전 대칭·반대 입력의 KCL을 더하면 양의 계수에 $v_P$를 곱한 값이 0이어서, $r_\\pi$와 $r_O$를 남겨도 $v_P=0$이에요. 차동 입력에서 P는 가상 접지라서, 차동 이득은 CE 단 절반 회로 하나의 이득과 같아요. 핵심 식 차동 이득$$A_v=\\frac{v_{out1}-v_{out2}}{v_{in1}-v_{in2}}$$ $$A_v=-g_mR_C$$ rO1 포함$$A_v=-g_m(R_C\\parallel r_{O1})$$ 소신호 파라미터$$g_m=\\frac{I_C}{V_T}$$ $$r_\\pi=\\frac{\\beta}{g_m}$$ 용어 가상 접지(virtual ground)차동 입력에서 전압이 변하지 않아 접지처럼 보는 노드 P 절반 회로(half circuit)P를 접지로 두고 나눈 한쪽 회로. BJT에서는 CE 단",
-    "status": "pass",
-    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
-  },
-  {
-    "topic": "s0-half-circuit",
-    "category": "주의",
-    "body_claim": "ro무시는 RC보다충분히클때; 전류원개방",
-    "before": "unresolved",
-    "summary_sentence": "DC 전압은 AC 접지, 이상적 테일 전류원은 개방이에요. $r_{O1}\\gg R_C$일 때만 $-g_mR_C$로 줄여 써요.",
-    "status": "pass",
-    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
-  },
-  {
-    "topic": "s0-half-circuit",
-    "category": "보충",
-    "body_claim": "rpi와ro를남긴 가상접지 증명은 수업미유도",
-    "before": "unresolved",
-    "summary_sentence": "보충(수업 미유도): 완전 대칭·반대 입력의 KCL을 더하면 양의 계수에 $v_P$를 곱한 값이 0이어서, $r_\\pi$와 $r_O$를 남겨도 $v_P=0$이에요.",
-    "status": "pass",
-    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
-  },
-  {
-    "topic": "s1-pnp-load",
-    "category": "일반",
-    "body_claim": "고정베이스이미터로 pnp종속전류0·ro병렬·IR드롭없이큰저항",
-    "before": "pass",
-    "summary_sentence": "$r_{O1}$과 $r_{O3}$는 비슷한 크기라 모두 남겨요. pnp는 이미터–베이스 순방향·베이스–컬렉터 역방향의 활성 영역을 유지해야 해요. 절반 회로에서 $Q_3$는 $r_{O3}$만 남아 $r_{O1}$과 병렬이 되고, 전류원 부하는 큰 IR 드롭 없이 큰 소신호 저항을 줘요. 핵심 식 pnp 전류원 부하 차동 이득$$A_v=-g_{m1}(r_{O1}\\parallel r_{O3})$$ 용어 전류원 부하(current-source load)베이스·이미터가 AC 접지인 트랜지스터 부하로, 소신호로는 $r_{O3}$만 보여요.IR 드롭(IR drop)저항 부하에 걸리는 DC 전압으로, 저항을 키우면 같이 커져요.",
-    "status": "pass",
-    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
-  },
-  {
-    "topic": "s1-pnp-load",
-    "category": "주의",
-    "body_claim": "ro둘다유지·pnp활성조건 필요",
-    "before": "unresolved",
-    "summary_sentence": "$r_{O1}$과 $r_{O3}$는 비슷한 크기라 모두 남겨요. pnp는 이미터–베이스 순방향·베이스–컬렉터 역방향의 활성 영역을 유지해야 해요.",
-    "status": "pass",
-    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
-  },
-  {
-    "topic": "s1-r1-load",
-    "category": "일반",
-    "body_claim": "R1R2중점 가상접지로 병렬부하·0과무한극한",
-    "before": "pass",
-    "summary_sentence": "P와 X의 가상 접지는 매칭된 순수 차동 입력에서만 성립해요. 공통 모드에서는 접지로 볼 수 없고, DC 전압 0이라는 뜻도 아니에요. $R_1=R_2$의 가운데 X가 AC 접지라 $R_1$이 $r_{O1}$, $r_{O3}$와 병렬로 붙고, $R_1$에 따라 이득이 0과 전류원 부하 이득 사이에서 바뀌어요. 핵심 식 R1, R2 부하 차동 이득$$A_v=-g_{m1}(r_{O1}\\parallel r_{O3}\\parallel R_1)$$가운데 노드 X$$v_X=\\frac{v_{out1}+v_{out2}}{2}=0$$ 용어 AC 접지(AC ground)DC 전압은 있어도 소신호 변화가 0인 노드예요.다이오드 연결(diode connection)컬렉터와 베이스를 바로 이은 꼴로, X가 접지가 아닐 때 $1/g_m$ 저항으로 보여요.",
-    "status": "pass",
-    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
-  },
-  {
-    "topic": "s1-r1-load",
-    "category": "주의",
-    "body_claim": "차동·매칭전용, DC0아님·CM에서는불가",
-    "before": "unresolved",
-    "summary_sentence": "P와 X의 가상 접지는 매칭된 순수 차동 입력에서만 성립해요. 공통 모드에서는 접지로 볼 수 없고, DC 전압 0이라는 뜻도 아니에요.",
-    "status": "pass",
-    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
-  },
-  {
-    "topic": "s2-mos-cascode",
-    "category": "일반",
-    "body_claim": "이상부하 캐스코드 Gm유지·ro증대·입력소자포화조건",
-    "before": "pass",
-    "summary_sentence": "이 이득은 이상적 전류원 부하와 $g_mr_O\\gg1$의 근사예요. 실제 부하도 캐스코드로 만들어야 큰 출력저항을 유지해요. 캐스코드를 쌓아도 $G_m$은 그대로이고 $R_{out}$만 $g_{m3}r_{O3}$배 커져서, 이득이 그만큼 커져요. 핵심 식 이득$$A_v=-G_mR_{out}$$$$G_m=g_{m1}$$ 출력저항과 이득$$R_{out}\\approx g_{m3}r_{O3}r_{O1}$$$$A_v\\approx-g_{m1}g_{m3}r_{O3}r_{O1}$$ M1 포화 조건$$V_{b1}-V_{GS3}$$$$\\ge V_{in,CM}-V_{TH}$$ 용어 캐스코드(cascode)입력 트랜지스터 위에 쌓아 전류는 그대로 넘기고 출력저항을 키우는 트랜지스터",
-    "status": "pass",
-    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
-  },
-  {
-    "topic": "s2-mos-cascode",
-    "category": "주의",
-    "body_claim": "gmro큰근사·실제부하도캐스코드",
-    "before": "unresolved",
-    "summary_sentence": "이 이득은 이상적 전류원 부하와 $g_mr_O\\gg1$의 근사예요. 실제 부하도 캐스코드로 만들어야 큰 출력저항을 유지해요.",
-    "status": "pass",
-    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
-  },
-  {
-    "topic": "s2-mos-cascode-load",
-    "category": "일반",
-    "body_claim": "양스택병렬·Gm입력만·PMOS바이어스전류맞춤·NMOS이동도장점",
-    "before": "pass",
-    "summary_sentence": "같은 소자 크기·전류에서 NMOS의 큰 이동도가 큰 $g_m$을 줘요. 테일과 네 적층 소자에 최소 $5V_{ov}$가 들고 실제 전원에는 출력 스윙 여유도 필요해요.$V_{b3}$는 위 부하 전류를 $I_{SS}/2$에 맞춰야 해요. 틀리면 위아래 전류 불일치로 출력이 극단으로 가며, 다른 바이어스는 소자의 정상 동작 범위 안에서 정해요. 부하도 캐스코드 전류원으로 만들어야 캐스코드 이득이 살고, 대가는 헤드룸이에요. 핵심 식 캐스코드 부하 이득$$A_v\\approx-g_{m1}\\big[(g_{m3}r_{O3}r_{O1})$$$$\\parallel(g_{m5}r_{O5}r_{O7})\\big]$$ 트랜스컨덕턴스$$g_m=\\sqrt{2\\mu_nC_{ox}\\frac{W}{L}I_D}$$$$\\mu_n\\gt\\mu_p$$ 용어 캐스코드 전류원(cascode current source)트랜지스터 두 개를 쌓아 출력저항을 $g_{m5}r_{O5}r_{O7}$로 키운 전류원헤드룸(headroom)쌓은 소자마다 오버드라이브 전압이 필요해서 생기는 전압 여유 부담$V_{b3}$ (PMOS 바이어스)$M_7$의 전류를 정하는 바이어스, $I_{SS}/2$에 맞춰요",
-    "status": "pass",
-    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
-  },
-  {
-    "topic": "s2-mos-cascode-load",
-    "category": "주의",
-    "body_claim": "최소5Vov와추가스윙·같은크기전류 mobility비교",
-    "before": "unresolved",
-    "summary_sentence": "같은 소자 크기·전류에서 NMOS의 큰 이동도가 큰 $g_m$을 줘요. 테일과 네 적층 소자에 최소 $5V_{ov}$가 들고 실제 전원에는 출력 스윙 여유도 필요해요.",
-    "status": "pass",
-    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
-  },
-  {
-    "topic": "s2-mos-cascode-load",
-    "category": "강조",
-    "body_claim": "Vb3오류위아래전류불일치·나머지바이어스는포화범위내 전류불변",
-    "before": "unresolved",
-    "summary_sentence": "$V_{b3}$는 위 부하 전류를 $I_{SS}/2$에 맞춰야 해요. 틀리면 위아래 전류 불일치로 출력이 극단으로 가며, 다른 바이어스는 소자의 정상 동작 범위 안에서 정해요.",
-    "status": "pass",
-    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
-  },
-  {
-    "topic": "s2-bjt-cascode",
-    "category": "일반",
-    "body_claim": "rpi상단이 하단ro병렬·BJT부하도같음·OP앰프응용",
-    "before": "pass",
-    "summary_sentence": "$G_m\\approx g_{m1}$은 큰 $\\beta$에서의 근사예요. $g_{m3}(r_{O1}\\parallel r_{\\pi3})\\gg1$에서 출력저항의 지배항만 남기며, 슬라이드와 교과서의 작은 덧셈항 차이는 이 근사에서 사라져요. 바이폴라 캐스코드는 $r_{\\pi3}$가 $r_{O1}$과 병렬로 붙어 축퇴 저항이 $r_{\\pi3}$ 수준으로 작아지고, OP 앰프의 대표 구조예요. 핵심 식 캐스코드 이득$$A_v\\approx-g_{m1}g_{m3}r_{O3}$$$$\\times(r_{O1}\\parallel r_{\\pi3})$$ 캐스코드 부하 포함$$A_v\\approx-g_{m1}\\big[g_{m3}r_{O3}(r_{O1}\\parallel r_{\\pi3})\\big]$$$$\\parallel\\big[g_{m5}r_{O5}(r_{O7}\\parallel r_{\\pi5})\\big]$$ 이미터 전류$$i_E=i_C+i_B$$ 용어 $r_{O1}\\parallel r_{\\pi3}$바이폴라 캐스코드가 키워 주는 축퇴 저항OP 앰프고이득 차동 증폭기(high-gain differential amplifier), 대표 구조가 캐스코드 차동 증폭기",
-    "status": "pass",
-    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
-  },
-  {
-    "topic": "s2-bjt-cascode",
-    "category": "주의",
-    "body_claim": "큰beta Gm근사와 Rout지배항 조건·slide오차의 주항동일",
-    "before": "unresolved",
-    "summary_sentence": "$G_m\\approx g_{m1}$은 큰 $\\beta$에서의 근사예요. $g_{m3}(r_{O1}\\parallel r_{\\pi3})\\gg1$에서 출력저항의 지배항만 남기며, 슬라이드와 교과서의 작은 덧셈항 차이는 이 근사에서 사라져요.",
-    "status": "pass",
-    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
-  },
-  {
-    "topic": "s3-cm-ideal",
-    "category": "일반",
-    "body_claim": "대칭·이상테일 KCL로 전류변화0·P입력추종·CM0",
-    "before": "pass",
-    "summary_sentence": "완전 제거는 이상적인 테일과 완전 대칭의 결과예요. 실제 전류원의 유한 출력저항과 불일치를 따로 확인해요. 대칭 차동쌍에 이상적인 테일 전류원이면 CM 입력이 들어와도 P가 따라 올라가 전류와 출력이 변하지 않아요. 핵심 식 P에서 KCL$$\\Delta I_D=0$$ CM 이득$$\\frac{\\Delta V_{out,CM}}{\\Delta V_{in,CM}}=0$$ 용어 공통 모드 제거(common-mode rejection)입력 CM 레벨이 변해도 출력이 영향을 받지 않는 성질 잡음(noise)두 입력에 같은 위상으로 들어오는 대표적인 CM 신호",
-    "status": "pass",
-    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
-  },
-  {
-    "topic": "s3-cm-ideal",
-    "category": "주의",
-    "body_claim": "현실은 테일유한·불일치로 완전제거아님",
-    "before": "unresolved",
-    "summary_sentence": "완전 제거는 이상적인 테일과 완전 대칭의 결과예요. 실제 전류원의 유한 출력저항과 불일치를 따로 확인해요.",
-    "status": "pass",
-    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
-  },
-  {
-    "topic": "s3-finite-rss",
-    "category": "일반",
-    "body_claim": "유한테일 총변화2ΔID·P변화·VGS분배·음의CM이득",
-    "before": "pass",
-    "summary_sentence": "입력 MOS의 $r_O$와 몸체 효과를 무시한 식이에요. $R_{SS}\\to\\infty$이면 CM 이득은 0으로 돌아가며, 캐스코드 테일로 $R_{SS}$를 키울 수 있어요. 테일 임피던스 $R_{SS}$가 유한하면 P가 입력을 완전히 따라가지 못해 각 출력의 CM 레벨이 조금 움직여요. 핵심 식 P의 변화$$\\Delta V_P=2\\Delta I_DR_{SS}$$ 입력의 분배$$\\Delta V_{in,CM}=(1+2g_mR_{SS})\\Delta V_{GS}$$ CM 이득$$\\frac{\\Delta V_{out,CM}}{\\Delta V_{in,CM}}$$ $$=-\\frac{R_D}{1/g_m+2R_{SS}}$$ 용어 테일 임피던스(tail impedance)테일 전류원의 유한한 출력저항 $R_{SS}$, 트랜지스터 하나면 $r_O$",
-    "status": "pass",
-    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
-  },
-  {
-    "topic": "s3-finite-rss",
-    "category": "주의",
-    "body_claim": "입력MOS ro와몸체효과무시·무한테일극한0",
-    "before": "unresolved",
-    "summary_sentence": "입력 MOS의 $r_O$와 몸체 효과를 무시한 식이에요. $R_{SS}\\to\\infty$이면 CM 이득은 0으로 돌아가며, 캐스코드 테일로 $R_{SS}$를 키울 수 있어요.",
-    "status": "pass",
-    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
-  },
-  {
-    "topic": "s3-cm-half",
-    "category": "일반",
-    "body_claim": "RSS병렬분할 각2RSS·CM대칭 연결선전류0·P접지아님",
-    "before": "pass",
-    "summary_sentence": "대칭 CM 입력에서는 $R_{SS}$를 $2R_{SS}$ 두 개의 병렬로 바꾸므로, 반회로 소스 저항은 $2R_{SS}$이고 P는 AC 접지가 아니에요. 핵심 식 테일 쪼개기$$R_{SS}=2R_{SS}\\parallel2R_{SS}$$ CM 이득$$A_{CM}=-\\frac{R_D}{1/g_m+2R_{SS}}$$ 용어 CM 절반 회로(common-mode half circuit)CM 입력에서 대칭선으로 자른 반쪽, P는 접지가 아님 소스 축퇴(source degeneration)소스와 접지 사이에 저항을 둔 CS 단",
-    "status": "pass",
-    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
-  },
-  {
-    "topic": "s3-cm-summary",
-    "category": "일반",
-    "body_claim": "유한테일각출력같은변화차동0·캐스코드RSS증대·비대칭다음범위",
-    "before": "pass",
-    "summary_sentence": "$R_{SS}\\gg1/g_m$일 때만 $A_{CM}\\approx-R_D/(2R_{SS})$예요. 작은 CM 누설도 중요할 수 있어 확인하며 줄이려면 $R_{SS}$를 키워요. 유한한 $R_{SS}$는 각 출력을 조금 움직이지만 두 출력이 같은 양만큼 움직여 차동 출력은 0이고, 남은 문제는 비대칭이에요. 핵심 식 근사 CM 이득$$\\frac{\\Delta V_{out,CM}}{\\Delta V_{in,CM}}\\approx-\\frac{R_D}{2R_{SS}}$$ 차동 출력$$\\Delta V_{out1}-\\Delta V_{out2}=0$$ 용어 캐스코드 전류원(cascode current source)$R_{SS}$를 $g_{m2}r_{O2}r_{O1}$ 수준으로 키우는 테일 전류원 비대칭(asymmetry, mismatch)두 쪽이 완전히 같지 않은 것, 다음 시간에 다룸",
-    "status": "pass",
-    "reason": "본문의 해당 핵심이 기존 문장과 식에 반영됨"
-  },
-  {
-    "topic": "s3-cm-summary",
-    "category": "주의",
-    "body_claim": "근사 -RD/2RSS는 RSS≫1/gm조건",
-    "before": "unresolved",
-    "summary_sentence": "$R_{SS}\\gg1/g_m$일 때만 $A_{CM}\\approx-R_D/(2R_{SS})$예요. 작은 CM 누설도 중요할 수 있어 확인하며 줄이려면 $R_{SS}$를 키워요.",
-    "status": "pass",
-    "reason": "본문의 누락 조건/원리/범위를 보완 후 대조"
-  },
-  {
-    "topic": "s4-cheatsheet",
-    "category": "구조",
-    "body_claim": "전범위식·교수비유 연결표",
-    "before": "pass",
-    "summary_sentence": "기존 요약표·예고·링크 화면 구조 유지",
-    "status": "pass",
-    "reason": "요약·예고·링크에는 별도 패널을 만들지 않음"
-  },
-  {
-    "topic": "s4-next",
-    "category": "구조",
-    "body_claim": "비대칭과능동부하 미강의예고",
-    "before": "pass",
-    "summary_sentence": "기존 요약표·예고·링크 화면 구조 유지",
-    "status": "pass",
-    "reason": "요약·예고·링크에는 별도 패널을 만들지 않음"
-  },
-  {
-    "topic": "s4-links",
-    "category": "구조",
-    "body_claim": "해당범위10문제와답안 연결",
-    "before": "pass",
-    "summary_sentence": "기존 요약표·예고·링크 화면 구조 유지",
-    "status": "pass",
-    "reason": "요약·예고·링크에는 별도 패널을 만들지 않음"
+  "explicit_inverse_gm_review": {
+    "why-circuit": "도입은 R_C·전류원 부하·캐스코드의 역할만 비교한다. 베이스–컬렉터 사이 저항을 두 단자 구동점 저항으로 치환하는 계산은 없다. 따라서 저항 포함 단독 베이스 경로의 새 1/g_m 명시 기본식은 이 토픽의 표시식에 적용되지 않는다.",
+    "s0-cm-vs-dc": "Q1/Q2의 대칭 바이어스·전류 재분배이며 컬렉터–베이스 또는 베이스–컬렉터 저항 접속이 없다. 따라서 저항 포함 단독 베이스 경로의 새 1/g_m 명시 기본식은 이 토픽의 표시식에 적용되지 않는다.",
+    "s0-half-circuit": "BJT r_π와 R_C의 일반 CE 반회로다. 베이스–컬렉터 저항이 없어 새 다이오드 접속형 블록은 비적용. 따라서 저항 포함 단독 베이스 경로의 새 1/g_m 명시 기본식은 이 토픽의 표시식에 적용되지 않는다.",
+    "s1-pnp-load": "Q3/Q4의 베이스는 독립 고정 V_b, 이미터는 V_CC에 접지되고 컬렉터와 베이스 사이 R_P가 없다. 신호 제어원 0·r_O3 잔류 판단을 유지한다. 따라서 저항 포함 단독 베이스 경로의 새 1/g_m 명시 기본식은 이 토픽의 표시식에 적용되지 않는다.",
+    "s1-r1-load": "s1의 저항 결합 부하는 두 출력·공통 X로 묶인 좌우 회로라 단독 베이스 경로 두 단자 블록이 아니다. 1/g_m+R_P/β 기본식이나 β/(β+1) 보정을 이 행에 넣지 않는다.",
+    "s2-mos-cascode": "M3/M4 게이트는 고정 V_b1이며 드레인–게이트 또는 게이트–드레인 R_P 결선이 없다. 기존 M1 r_O1→M3 캐스코드 합성만 적용. 따라서 저항 포함 단독 베이스 경로의 새 1/g_m 명시 기본식은 이 토픽의 표시식에 적용되지 않는다.",
+    "s2-mos-cascode-load": "M5/M7의 바이어스 게이트는 고정이며 드레인 경로 R_P나 게이트 경로 R_P가 없다. 두 캐스코드 저항 병렬 합성은 새 블록과 별개. 따라서 저항 포함 단독 베이스 경로의 새 1/g_m 명시 기본식은 이 토픽의 표시식에 적용되지 않는다.",
+    "s2-bjt-cascode": "Q3/Q5 베이스는 AC 접지라 X의 r_π3·위 r_π5를 먼 저항에 병렬로 두며 베이스–컬렉터 R_P 결선은 없다. 따라서 저항 포함 단독 베이스 경로의 새 1/g_m 명시 기본식은 이 토픽의 표시식에 적용되지 않는다.",
+    "s3-cm-ideal": "이상 테일·대칭 CM KCL에서 같은 전류 변화 0을 보인다. 저항 포함 다이오드 접속 블록은 등장하지 않는다. 따라서 저항 포함 단독 베이스 경로의 새 1/g_m 명시 기본식은 이 토픽의 표시식에 적용되지 않는다.",
+    "s3-finite-rss": "테일 R_SS를 한 소자의 r_O 또는 캐스코드 유효저항으로 정의한다. 테일 소자에 베이스–컬렉터/게이트–드레인 R_P가 없다. 따라서 저항 포함 단독 베이스 경로의 새 1/g_m 명시 기본식은 이 토픽의 표시식에 적용되지 않는다.",
+    "s3-cm-half": "입력 MOS의 소스 축퇴 2R_SS와 외부 R_D 부하를 합성한다. 게이트–드레인이나 드레인–게이트 R_P 결선은 없으며 새 블록을 적용하지 않는다. 따라서 저항 포함 단독 베이스 경로의 새 1/g_m 명시 기본식은 이 토픽의 표시식에 적용되지 않는다.",
+    "s3-cm-summary": "동일 CM 출력의 차동 상쇄·테일 저항 크기만 요약하며 저항 포함 다이오드 접속 구조를 쓰지 않는다. 따라서 저항 포함 단독 베이스 경로의 새 1/g_m 명시 기본식은 이 토픽의 표시식에 적용되지 않는다.",
+    "s4-cheatsheet": "s1의 저항 결합 부하는 두 출력·공통 X로 묶인 좌우 회로라 단독 베이스 경로 두 단자 블록이 아니다. 1/g_m+R_P/β 기본식이나 β/(β+1) 보정을 이 행에 넣지 않는다.",
+    "s4-next": "미학습 CMRR·능동 부하의 예고 제목뿐이며 회로 저항 블록을 계산하지 않는다. 따라서 저항 포함 단독 베이스 경로의 새 1/g_m 명시 기본식은 이 토픽의 표시식에 적용되지 않는다.",
+    "s4-links": "문제·답안·이전 노트·문제집 링크만 있어 소자 연결/구동점 저항 계산이 없다. 따라서 저항 포함 단독 베이스 경로의 새 1/g_m 명시 기본식은 이 토픽의 표시식에 적용되지 않는다."
   }
-]
+}

@@ -87,11 +87,11 @@
     .layer .part { margin-top: var(--s4); }
     /* Same-level solve groups own their spacing once; inner paragraphs cannot collapse out. */
     .layer:is([data-explanation="solve"], [data-explanation="verify"]) > [data-subpart] { display: flow-root; margin: var(--s5) 0 0; }
-    .layer:is([data-explanation="solve"], [data-explanation="verify"]) > [data-subpart] + [data-subpart] { margin-top: var(--s6); }
+    .layer:is([data-explanation="solve"], [data-explanation="verify"]) > :not(h4, .layer-title) + [data-subpart] { margin-top: var(--s6); }
     .layer:is([data-explanation="solve"], [data-explanation="verify"]) > [data-subpart] > :first-child { margin-top: 0; }
     .layer:is([data-explanation="solve"], [data-explanation="verify"]) > [data-subpart] > :last-child { margin-bottom: 0; }
     @media (max-width: 1023px) {
-      .layer:is([data-explanation="solve"], [data-explanation="verify"]) > [data-subpart] + [data-subpart] { margin-top: var(--s5); }
+      .layer:is([data-explanation="solve"], [data-explanation="verify"]) > :not(h4, .layer-title) + [data-subpart] { margin-top: var(--s5); }
     }
     .layer li + li { margin-top: var(--s3); }
     .layer-title { display: block; font-size: var(--fs-layer); font-weight: 700; line-height: 1.4; letter-spacing: -0.01em; color: var(--ink); margin-bottom: var(--s3); }
@@ -285,9 +285,9 @@
     /* readability-20261022:start */
     /* Shared summary layout: explicit blocks, no runtime sentence split. */
     .sum { display: flow-root; }
-    .sum > *, .sum p, .sum ul, .sum ol, .sum dl { margin: 0; }
-    .sum > * + * { margin-top: var(--s5); }
-    .sum > p + p:not(.panel-label) { margin-top: var(--s2); }
+    .sum :where(p, ul, ol, dl), .sum > :where(*) { margin: 0; }
+    .sum > :nth-child(n+2) { margin-top: var(--s5); }
+    .sum > :where(p:not(.panel-label, .sum-lead)) + p:not(.panel-label) { margin-top: var(--s2); }
     .sum > .sum-lead + * { margin-top: var(--s5); }
     .sum > .panel-label + *, .sum > h4 + * { margin-top: var(--s3); }
     .sum .summary-group { display: flex; flex-direction: column; gap: var(--s2); }

@@ -1,8 +1,9 @@
-exact |A| = g_m*r_O*r_pi*(g_m*r_O + 1)/(r_O + r_pi)
-simplify(exact - g_m (r_O||r_pi)(1+g_m r_O)) : 0
-limit exact/std (g_m r_O -> oo, fixed beta):  1
-A_std(u) = 100*u**2/(u + 100)  ; A_exact(u) = 100*u*(u + 1)/(u + 100)
-std:   V_A/V_T = 20 + 20*sqrt(11) = 86.3325  -> V_A = 2.2446 V (V_T=26mV), 2.1583 V (25mV)
-exact: V_A/V_T = 85.6835  -> V_A = 2.2278 V (V_T=26mV), 2.1421 V (25mV)
-ratio A_exact/A_std as u->oo: 1
-ratio at u_std: 1.0116
+p7(1) exact nodal DM gain = -100 ≈ -100.0000000000000
+p7(1) exact nodal differential Rout = 20000 ≈ 20000.00000000000
+p7(1) block DM gain = -100 ≈ -100.0000000000000
+p7(2) exact nodal CM gain with cascode tail = -50/10151 ≈ -0.004925623091321052
+p7(2) leading tail resistance = 2000000 ≈ 2000000.000000000
+p7(2) leading CM gain = -1/200 ≈ -0.005000000000000000
+p7(1) exact minus block 0
+p7(2) exact/leading CM 0.985124618264
+p7(2) sympy.limit(CM exact/leading,rs->infinity,gm->infinity) 1

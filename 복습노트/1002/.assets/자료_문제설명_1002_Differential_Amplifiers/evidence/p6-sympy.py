@@ -1,27 +1,52 @@
-# p6 (P10.64, Fig 10.43(a)): NMOS telescopic cascode with PMOS cascode current-source load M5/M7 (M6/M8).
-# Half circuit, all gates AC gnd except M1. I_D = I_SS/2 = 0.5 mA. All W/L equal.
+"""Independent p6(1) calculation from original Fig Q2 and 15dd74db profile.
+
+No source reference answer or author explanation is used here.
+The exact hybrid-pi result is internal verification only; the displayed course
+model is the explicit 1/gm large-beta block from CIRCUIT-01.
+"""
 import sympy as sp
-WL = sp.symbols('WL', positive=True)
-vin = sp.symbols('v_in')
-vX, vo, vY = sp.symbols('v_X v_o v_Y')
-ID = sp.Rational(1,2000)
-gn = sp.sqrt(2*sp.Rational(100,10**6)*WL*ID); rn = 1/(sp.Rational(1,10)*ID)
-gp = sp.sqrt(2*sp.Rational(50,10**6)*WL*ID);  rp = 1/(sp.Rational(2,10)*ID)
-idf = lambda g_,r_,G,D,S: g_*(G-S) + (D-S)/r_   # current into drain (same linear model for PMOS)
-eqs = [
-  sp.Eq(idf(gn,rn,vin,vX,0) - idf(gn,rn,0,vo,vX), 0),   # node X: M1 drain / M3 source
-  sp.Eq(idf(gn,rn,0,vo,vX) + idf(gp,rp,0,vo,vY), 0),    # node out: M3 drain + M5 drain (leaving node)
-  sp.Eq(idf(gp,rp,0,vo,vY) - idf(gp,rp,0,vY,0), 0),     # node Y: M5 source / M7 drain (M7 source = VDD = 0)
-]
-s = sp.solve(eqs,[vX,vo,vY],dict=True)[0]
-A_exact = sp.simplify(-s[vo]/vin)
-Rn = gn*rn*rn; Rp = gp*rp*rp
-A_approx = gn*(Rn*Rp/(Rn+Rp))
-print('A_approx(WL) = g_m1[(g_m3 r_o3 r_o1)||(g_m5 r_o5 r_o7)] =', sp.nsimplify(sp.simplify(A_approx)), '=', sp.N(sp.simplify(A_approx/WL),6),'* WL')
-wa = sp.solve(sp.Eq(A_approx,200),WL)
-print('approx  W/L =', [sp.N(w,6) for w in wa])
-we = sp.nsolve(A_exact-200, WL, 30)
-print('exact (full KCL) W/L =', sp.N(we,6))
-print('exact A at approx W/L =', sp.N(A_exact.subs(WL,wa[0]),6))
-print('g_m r_o (n,p) at approx W/L:', sp.N((gn*rn).subs(WL,wa[0]),4), sp.N((gp*rp).subs(WL,wa[0]),4))
-print('limit A_exact/A_approx as W/L -> oo (g_m r_o >> 1):', sp.radsimp(sp.limit(sp.simplify(A_exact/A_approx), WL, sp.oo)))
+
+gm, RP, beta, ron, rop = sp.symbols('g_m R_P beta r_on r_op', positive=True)
+vt, vb = sp.symbols('v_t v_b')
+rpi = beta/gm
+parallel = lambda *xs: sp.simplify(1/sum(1/x for x in xs))
+
+# Q3 is pnp with E at AC ground, C at output x, B connected via RP to C.
+# Base and collector KCL provide an independent model check of the known block.
+base_kcl = (vb-vt)/RP + vb/rpi
+base_solution = sp.solve(base_kcl, vb)[0]
+it = vt/rop + (vt-base_solution)/RP + gm*base_solution
+R_Q3_exact = sp.simplify(vt/it)
+R_Q3_known = parallel(rop, (RP+rpi)/(beta+1))
+print('Q3 full hybrid-pi minus corrected known block:', sp.simplify(R_Q3_exact-R_Q3_known))
+
+# Required displayed model: explicit 1/gm and RP/beta, with rop retained.
+R_base = 1/gm + RP/beta
+R_Q3_default = parallel(rop,R_base)
+Rout_half = parallel(ron,R_Q3_default)
+Rout_diff = 2*Rout_half
+Gm = gm
+Av = -Gm*Rout_half
+
+values = {gm:sp.Rational(1,52), RP:sp.Integer(10000), beta:sp.Integer(100),
+          ron:sp.Integer(20000), rop:sp.Integer(20000)}
+print('conditions: low frequency, Q3 active, E/VCC AC ground, beta=100 treated as large-beta course model')
+print('gmro3=',sp.simplify((gm*rop).subs(values)),'; beta=',values[beta])
+for label, expr in [('1/gm',1/gm),('RP/beta',RP/beta),('R_base',R_base),
+                    ('R_Q3_default',R_Q3_default),('Rout_half',Rout_half),
+                    ('Rout_diff',Rout_diff),('Gm',Gm),('Av',Av)]:
+    value = sp.simplify(expr.subs(values))
+    print(label,'=',value,'≈',sp.N(value,16))
+
+# Internal comparison only. The reference-like finite-beta block is not the
+# default displayed formula under this profile snapshot.
+Rout_half_corr = parallel(ron,R_Q3_known)
+Av_corr = -gm*Rout_half_corr
+print('internal corrected Rout_half=',sp.simplify(Rout_half_corr.subs(values)),
+      '≈',sp.N(Rout_half_corr.subs(values),16))
+print('internal corrected Av=',sp.simplify(Av_corr.subs(values)),
+      '≈',sp.N(Av_corr.subs(values),16))
+print('base corrected/default ratio=',sp.simplify(((RP+rpi)/(beta+1))/R_base))
+print('limit beta->infinity base ratio=',sp.limit(((RP+rpi)/(beta+1))/R_base,beta,sp.oo))
+print('limit beta->infinity complete Rout ratio=',sp.limit(Rout_half_corr/Rout_half,beta,sp.oo))
+print('limit beta->infinity complete Av ratio=',sp.limit(Av_corr/Av,beta,sp.oo))

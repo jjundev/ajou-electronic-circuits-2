@@ -1,17 +1,22 @@
-# p1 (E10.10, Fig 10.18(a)): BJT diff pair, ideal current-source loads, ideal tail.
-# Full small-signal circuit, finite r_o and r_pi, KCL at P, out1, out2.
-import sympy as sp
-gm, ro, rpi, v1, v2 = sp.symbols('g_m r_O r_pi v_in1 v_in2', positive=True)
-vP, o1, o2 = sp.symbols('v_P v_o1 v_o2')
-ic = lambda b,c,e: gm*(b-e) + (c-e)/ro      # current into collector
-ib = lambda b,e: (b-e)/rpi
-eqs = [
-    sp.Eq(ic(v1,o1,vP), 0),                 # node out1: ideal load -> no AC current
-    sp.Eq(ic(v2,o2,vP), 0),                 # node out2
-    sp.Eq(ic(v1,o1,vP)+ib(v1,vP)+ic(v2,o2,vP)+ib(v2,vP), 0),  # node P: ideal tail
-]
-s = sp.solve(eqs, [vP,o1,o2], dict=True)[0]
-Ad = sp.simplify((s[o1]-s[o2])/(v1-v2))
-print('A_d =', Ad)
-target = -gm*ro
-print('simplify(A_d - (-g_m r_O)) =', sp.simplify(Ad-target))
+import sympy as s
+
+# Fig 10.18(a), one differential half. Ideal upper current source opens
+# in AC; the tail symmetry plane is AC ground. Positive output current
+# is into the amplifier at the collector.
+gm, ro = s.symbols("g_m r_o", positive=True)
+vin, vout, it = s.symbols("v_in v_out i_t")
+open_solution = s.solve([gm * vin + vout / ro], [vout], dict=True)[0]
+av = s.simplify(open_solution[vout] / vin)
+test_solution = s.solve([it - vout / ro], [it], dict=True)[0]
+rout = s.simplify(vout / test_solution[it])
+short_current = gm * vin
+Gm = s.simplify(short_current / vin)
+
+assert s.simplify(av + Gm * rout) == 0
+assert s.simplify(av + gm * ro) == 0
+print("p1 model: matched BJT halves, pure differential input, ideal upper current sources, tail AC open")
+print("Gm =", Gm)
+print("Rout =", rout)
+print("Av_differential =", av)
+print("factor_of_two: vin1=vid/2 and vout1=vod/2, so vod/vid=vout1/vin1")
+print("limit ro->infinity: |Av| diverges in this idealized low-frequency model")

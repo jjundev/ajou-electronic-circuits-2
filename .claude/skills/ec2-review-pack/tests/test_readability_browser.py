@@ -52,5 +52,36 @@ class ReadabilityBrowserTest(unittest.TestCase):
                 browser.close()
 
 
+    def test_real_summary_labels_equation_tail_and_math_before_subpart(self):
+        # Regression: reset selectors used to win over universal sibling selectors.
+        body = """<div class="sum"><p class="sum-lead">요약</p><p>첫 판단</p><p>둘째 판단</p>
+          <p class="panel-label">최종 답</p><p class="answer">답이에요.</p><ul class="eq-list"><li><span class="eq-name">공통 크기</span><span class="math-row">x = 33.28</span></li></ul><p class="tail">조건을 유지해요.</p></div>
+          <div class="layer" data-explanation="solve"><h4>이렇게 풀어요</h4><p>공통 계산</p>
+          <span class="math-row">r = 5 kΩ</span><div data-subpart="1"><h4>(1) 차동 이득</h4><p>설명</p></div></div>"""
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch()
+            try:
+                for name in ("ec2-review-pack", "ec2-problem-explain"):
+                    text = (SKILL.parent / name / "assets/note-template.html").read_text(encoding="utf-8")
+                    css = re.search(r"<style>([\s\S]*?)</style>", text).group(1)
+                    for width in (1280, 1024, 1023, 375):
+                        with self.subTest(template=name, width=width):
+                            page = browser.new_page(viewport={"width":width,"height":900})
+                            page.set_content("<style>"+css+"</style>"+body)
+                            values = page.evaluate("""() => {
+                              const q=s=>document.querySelector(s),gap=(a,b)=>q(b).getBoundingClientRect().top-q(a).getBoundingClientRect().bottom;
+                              return {label:gap('.sum > p:nth-child(3)', '.panel-label'),
+                                formula:gap('.panel-label','.answer'),lead:gap('.sum-lead','.sum > p:nth-child(2)'),tail:gap('.eq-list','.tail'),
+                                part:gap('.layer > .math-row','[data-subpart]')};
+                            }""")
+                            for key,wanted in {'label':24,'formula':12,'tail':24,'lead':24}.items():
+                                self.assertAlmostEqual(values[key],wanted,delta=.1,msg=(key,values))
+                            if name == 'ec2-problem-explain':
+                                self.assertAlmostEqual(values['part'],32 if width>=1024 else 24,delta=.1,msg=values)
+                            page.close()
+            finally:
+                browser.close()
+
+
 if __name__ == "__main__":
     unittest.main()

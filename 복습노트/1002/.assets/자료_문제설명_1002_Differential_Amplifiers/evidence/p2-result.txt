@@ -1,3 +1,6 @@
-v_P = 0
-A_d = -g_m1*r_O1*r_O3/(r_O1 + r_O3)
-simplify(A_d + g_m1 (r_O1||r_O3)) = 0
+p2 model: matched differential halves; pnp base/emitter AC ground; finite r_o3
+Gm = g_m1
+Rout = r_o1*r_o3/(r_o1 + r_o3)
+Av_differential = -g_m1*r_o1*r_o3/(r_o1 + r_o3)
+limit ro3->infinity = -g_m1*r_o1
+equal-ro limit = -g_m1*r_o1/2

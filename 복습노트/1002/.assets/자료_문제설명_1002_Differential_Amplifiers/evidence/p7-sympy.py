@@ -1,28 +1,68 @@
-# p7 (P10.54, Fig 10.39(a)): bipolar cascode diff pair, ideal current-source loads I1,I2, beta=100.
-# Half circuit: Q1 CE (emitter AC gnd), Q3 CB (base AC gnd), out at Q3 collector, ideal load.
+# Independent nodal analysis from problem statements and circuit images only.
 import sympy as sp
-gm, ro, rpi, vin = sp.symbols('g_m r_O r_pi v_in', positive=True)
-vX, vo = sp.symbols('v_X v_o')
-ic = lambda b,c,e: gm*(b-e) + (c-e)/ro
-ib = lambda b,e: (b-e)/rpi
-eqs = [sp.Eq(ic(0,vo,vX), 0),                                  # out node: ideal load
-       sp.Eq(ic(vin,vX,0) - ic(0,vo,vX) - ib(0,vX), 0)]        # node X: i_c1 leaves X; i_e3 = i_c3+i_b3 enters X
-s = sp.solve(eqs,[vX,vo],dict=True)[0]
-A = sp.simplify(-s[vo]/vin)
-R = ro*rpi/(ro+rpi)
-A_std = gm*(gm*ro*R)
-A_mid = gm*R*(1+gm*ro)   # exact closed form
-print('exact |A| =', sp.factor(A))
-print('simplify(exact - g_m (r_O||r_pi)(1+g_m r_O)) :', sp.simplify(A - A_mid))
-print('limit exact/std (g_m r_O -> oo, fixed beta): ', sp.limit((A/A_std).subs({gm:sp.Symbol("u")/ro, rpi:100*ro/sp.Symbol("u")}), sp.Symbol('u'), sp.oo))
-u, VT = sp.symbols('u V_T', positive=True)       # u = V_A/V_T = g_m r_O, beta = g_m r_pi
-beta = 100
-sub = {gm: 1, ro: u, rpi: beta}                   # gain is dimensionless in g_m*(.) form
-Au_std = sp.simplify(A_std.subs(sub)); Au_ex = sp.simplify(A.subs(sub))
-print('A_std(u) =', Au_std, ' ; A_exact(u) =', sp.simplify(Au_ex))
-us = [r for r in sp.solve(sp.Eq(Au_std,4000),u) if r.is_positive][0]
-ue = [r for r in sp.solve(sp.Eq(Au_ex,4000),u) if r.is_positive][0]
-print('std:   V_A/V_T =', us, '=', sp.N(us,6), ' -> V_A =', sp.N(us*sp.Rational(26,1000),5),'V (V_T=26mV),', sp.N(us*sp.Rational(25,1000),5),'V (25mV)')
-print('exact: V_A/V_T =', sp.N(ue,6), ' -> V_A =', sp.N(ue*sp.Rational(26,1000),5),'V (V_T=26mV),', sp.N(ue*sp.Rational(25,1000),5),'V (25mV)')
-print('ratio A_exact/A_std as u->oo:', sp.limit(Au_ex/Au_std, u, sp.oo))
-print('ratio at u_std:', sp.N((Au_ex/Au_std).subs(u,us),5))
+
+def network(nodes, fixed, devices, injections=None):
+    injections = injections or {}
+    v = {'0': sp.S.Zero, **fixed}
+    v.update({name: sp.Symbol(name) for name in nodes if name not in v})
+    kcl = {name: sp.S.Zero for name in nodes}
+    def add(name, current):
+        if name in kcl:
+            kcl[name] += current
+    for dev in devices:
+        if dev[0] == 'R':
+            _, a, b, resistance = dev
+            i = (v[a]-v[b])/resistance
+            add(a,i); add(b,-i)
+        elif dev[0] in ('Q','M'):
+            kind, d, g, s, gm, ro, *extra = dev
+            i = gm*(v[g]-v[s]) + (v[d]-v[s])/ro
+            add(d,i); add(s,-i)
+            if kind == 'Q':
+                rpi = extra[0]
+                ib = (v[g]-v[s])/rpi
+                add(g,ib); add(s,-ib)
+    for name, current in injections.items():
+        add(name,-current)
+    unknown = [v[name] for name in nodes if name not in fixed]
+    sol = sp.solve([kcl[name] for name in nodes if name not in fixed], unknown, dict=True)
+    assert len(sol) == 1, sol
+    return {name:sp.simplify(expr.subs(sol[0])) for name,expr in v.items()}, {name:sp.simplify(expr.subs(sol[0])) for name,expr in kcl.items()}
+
+def result(label, value):
+    print(label, '=', sp.simplify(value), '≈', sp.N(value, 16))
+
+vin=sp.Symbol('vin', positive=True);test=sp.Symbol('it')
+Id=sp.Rational(1,2000);Itail=2*Id
+kn=sp.Rational(100,1000000);kp=sp.Rational(50,1000000)
+gm1=sp.sqrt(2*kn*sp.Integer(1000)*Id)
+gm3=sp.sqrt(2*kp*sp.Integer(2000)*Id)
+gm5=sp.sqrt(2*kn*sp.Integer(2000)*Itail)
+ro1=1/(sp.Rational(1,10)*Id)
+ro3=ro1
+ro5=1/(sp.Rational(1,10)*Itail)
+ro6=ro5
+# MOS M1/M2 input; PMOS M3/M4 load; NMOS M5/M6 cascode tail.
+dev=[('M','oL','inL','P',gm1,ro1),('M','oR','inR','P',gm1,ro1),
+     ('M','oL','0','0',gm3,ro3),('M','oR','0','0',gm3,ro3),
+     ('M','P','0','x',gm5,ro5),('M','x','0','0',gm5,ro6)]
+nodes=['oL','oR','P','x']
+vd,_=network(nodes,{'inL':vin/2,'inR':-vin/2},dev)
+A_DM=sp.simplify((vd['oL']-vd['oR'])/vin)
+vc,_=network(nodes,{'inL':vin,'inR':vin},dev)
+A_CM=sp.simplify(vc['oL']/vin)
+vtest,_=network(nodes,{'inL':sp.S.Zero,'inR':sp.S.Zero},dev,{'oL':test,'oR':-test})
+Rdiff=sp.simplify((vtest['oL']-vtest['oR'])/test)
+Rhalf=1/(1/ro1+1/ro3)
+Rss_lead=gm5*ro5*ro6
+result('p7(1) exact nodal DM gain',A_DM)
+result('p7(1) exact nodal differential Rout',Rdiff)
+result('p7(1) block DM gain',-gm1*Rhalf)
+result('p7(2) exact nodal CM gain with cascode tail',A_CM)
+result('p7(2) leading tail resistance',Rss_lead)
+result('p7(2) leading CM gain',-ro3/(2*Rss_lead))
+print('p7(1) exact minus block',sp.simplify(A_DM+gm1*Rhalf))
+print('p7(2) exact/leading CM',sp.N(A_CM/(-ro3/(2*Rss_lead)),12))
+g,rn,rp,rs=sp.symbols('g rn rp rs',positive=True)
+cm_ratio=g/(g+1/rn+(1+rp/rn)/(2*rs))
+print('p7(2) sympy.limit(CM exact/leading,rs->infinity,gm->infinity)',sp.limit(sp.limit(cm_ratio,rs,sp.oo),g,sp.oo))

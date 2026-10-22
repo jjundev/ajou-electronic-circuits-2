@@ -1,4 +1,12 @@
-r_O = 8000 ohm ; r_O1||r_O3||R1 = 2857.14285714286 ohm
-A_d =  -10/(7*V_T)  =  -1.42857142857143 / V_T
-  V_T = 13/500 ->  A_d = -54.9451
-  V_T = 1/40 ->  A_d = -57.1429
+I_each_mA = 1/2
+gm_n_mS = sqrt(10)*sqrt(w)/10 gm_p_mS = sqrt(5)*sqrt(w)/10
+ro_n_kOhm = 20 ro_p_kOhm = 10
+R_bottom_kOhm = 40*sqrt(10)*sqrt(w) R_top_kOhm = 10*sqrt(5)*sqrt(w)
+R_parallel_kOhm = 200*sqrt(2)*sqrt(w)/(sqrt(5) + 4*sqrt(10))
+gain_magnitude = 40*sqrt(5)*w/(sqrt(5) + 4*sqrt(10))
+common_W_over_L_exact = 5 + 20*sqrt(2)
+common_W_over_L_decimal = 33.2842712475
+gain_at_solution = 200
+gm_n_ro_n = 36.487955 gm_p_ro_p = 12.900440
+leading_term_limit_ratio = 1
+full_model_at_leading_solution_internal = 221.8383544

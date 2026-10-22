@@ -1,3 +1,10 @@
-v_X = 0  v_P = 0
-A_d = -R_1*g_m1*r_O1*r_O3/(R_1*r_O1 + R_1*r_O3 + r_O1*r_O3)
-simplify(A_d + g_m1 (r_O1||r_O3||R_1)) = 0
+p3 KCL exact Gm = g1*r1*(g3*r3 + 1)/(g3*r1*r3 + r1 + r3)
+p3 KCL exact Rout = g3*r1*r3 + r1 + r3
+p3 KCL exact Av = -g1*r1*(g3*r3 + 1)
+equal-device exact Av = -gm*ro*(gm*ro + 1)
+main-term Av = -gm**2*ro**2
+exact/main ratio = (gm*ro + 1)/(gm*ro) limit z=gm*ro->infinity = 1
+required I_SS main-term = 2/135 A = 14.81481481 mA
+gm*ro at main-term design = 17.320508
+internal full-model I_SS for exact |Av|=300 = 15.69519622 mA
+full-model |Av| at main-term design = 317.32051

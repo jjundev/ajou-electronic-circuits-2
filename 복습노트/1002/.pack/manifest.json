@@ -1,0 +1,464 @@
+{
+  "learning_style": {
+    "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
+    "sha256": "15dd74dba003093e0a3e627a7531d1b89dbc4b081ebfb2f04245d065758f62fe",
+    "rule_ids": [
+      "UNIT-01",
+      "CALC-01",
+      "CALC-02",
+      "CIRCUIT-01",
+      "CIRCUIT-02",
+      "GAIN-01",
+      "DEGEN-01",
+      "SCALE-01",
+      "BIAS-01",
+      "NOTATION-01",
+      "EXPLAIN-01",
+      "CORRECT-01"
+    ]
+  },
+  "course": "전자회로2",
+  "range": "1002",
+  "slug": "Differential_Amplifiers",
+  "note_title": "BJT 차동쌍 소신호, 캐스코드 차동쌍, 공통 모드 제거 — 5살도 이해하는 정리노트",
+  "note_subtitle": "권익진 교수님 전자회로2 · 1002 수업 (Lec4, Razavi 10장)",
+  "footer_note": "출처: 권익진 교수님 강의자료(Lec4) · 수업 녹음 전사(1002) · B. Razavi, <i>Microelectronics</i>, 2nd ed. (Wiley) 10장.",
+  "sessions": [
+    {
+      "date": "1002",
+      "stt": "STT/1002 전회2.md",
+      "summary": "summaries/stt-1002.md",
+      "slides": "L04 s22–35"
+    }
+  ],
+  "sections": [
+    {
+      "id": "why",
+      "title": "들어가며: 왜 이런 회로를 쓸까",
+      "short": "왜 쓸까",
+      "topics": [
+        {
+          "id": "why-circuit",
+          "title": "왜 이런 회로를 쓸까",
+          "required_terms": [
+            "차동",
+            "전류원 부하",
+            "캐스코드",
+            "공통 모드",
+            "헤드룸"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof"
+          ],
+          "supp": true
+        }
+      ]
+    },
+    {
+      "id": "s0",
+      "title": "0. BJT 차동쌍의 소신호 해석",
+      "short": "0. BJT 차동쌍의 소신호 해석",
+      "topics": [
+        {
+          "id": "s0-cm-vs-dc",
+          "title": "CM 레벨과 DC 바이어스, 차동 입력이 만드는 전류 변화",
+          "required_terms": [
+            "공통 모드",
+            "DC 바이어스",
+            "I_{EE}",
+            "차동"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof",
+            "warn"
+          ],
+          "supp": false
+        },
+        {
+          "id": "s0-half-circuit",
+          "title": "가상 접지와 절반 회로: 차동 이득은 절반 회로 이득",
+          "required_terms": [
+            "가상 접지",
+            "r_\\pi",
+            "절반 회로",
+            "A_v"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof",
+            "warn"
+          ],
+          "supp": true
+        }
+      ]
+    },
+    {
+      "id": "s1",
+      "title": "1. 전류원 부하 차동쌍 예제",
+      "short": "1. 전류원 부하 차동쌍 예제",
+      "topics": [
+        {
+          "id": "s1-pnp-load",
+          "title": "예제 1: pnp 전류원 부하",
+          "required_terms": [
+            "전류원 부하",
+            "r_{O1}",
+            "r_{O3}",
+            "G_m"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof",
+            "warn"
+          ],
+          "supp": false
+        },
+        {
+          "id": "s1-r1-load",
+          "title": "예제 2: R1, R2 가운데에 베이스를 묶은 부하",
+          "required_terms": [
+            "R_1",
+            "R_2",
+            "가상 접지",
+            "G_m"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof",
+            "warn"
+          ],
+          "supp": false
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "title": "2. 캐스코드 차동쌍",
+      "short": "2. 캐스코드 차동쌍",
+      "topics": [
+        {
+          "id": "s2-mos-cascode",
+          "title": "MOS 캐스코드 차동쌍: 전류 변화는 그대로, 출력저항은 크게",
+          "required_terms": [
+            "캐스코드",
+            "g_{m3}r_{O3}",
+            "G_m",
+            "R_{out}"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof"
+          ],
+          "supp": false
+        },
+        {
+          "id": "s2-mos-cascode-load",
+          "title": "캐스코드 부하, NMOS 입력, 전압 여유",
+          "required_terms": [
+            "캐스코드 부하",
+            "g_{m5}r_{O5}r_{O7}",
+            "헤드룸"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof"
+          ],
+          "supp": false
+        },
+        {
+          "id": "s2-bjt-cascode",
+          "title": "바이폴라 캐스코드 차동쌍: 베이스 전류 경로",
+          "required_terms": [
+            "r_{O1}\\parallel r_{\\pi3}",
+            "큰",
+            "G_m"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof"
+          ],
+          "supp": false
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "title": "3. 공통 모드 제거",
+      "short": "3. 공통 모드 제거",
+      "topics": [
+        {
+          "id": "s3-cm-ideal",
+          "title": "이상적인 경우: CM 입력에 출력이 꿈쩍하지 않는다",
+          "required_terms": [
+            "대칭",
+            "I_{SS}",
+            "공통 모드"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof",
+            "warn"
+          ],
+          "supp": false
+        },
+        {
+          "id": "s3-finite-rss",
+          "title": "유한한 테일 임피던스: 2R_SS CM 반회로",
+          "required_terms": [
+            "2R_{SS}",
+            "가상 접지",
+            "v_P"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof"
+          ],
+          "supp": false
+        },
+        {
+          "id": "s3-cm-half",
+          "title": "CM 반회로 계산과 수치 예시",
+          "required_terms": [
+            "G_{m,CM}",
+            "R_{out}",
+            "A_{CM,SE}"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof"
+          ],
+          "supp": false
+        },
+        {
+          "id": "s3-cm-summary",
+          "title": "그래도 차동 출력은 0, R_SS를 키우는 법",
+          "required_terms": [
+            "대칭",
+            "R_{SS}",
+            "차동 출력"
+          ],
+          "layers": [
+            "eli5",
+            "formal",
+            "prof",
+            "warn"
+          ],
+          "supp": false
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "title": "4. 요약 · 예고",
+      "short": "4. 요약 · 예고",
+      "topics": [
+        {
+          "id": "s4-cheatsheet",
+          "title": "한눈에 보는 식",
+          "required_terms": [
+            "G_m",
+            "R_{out}",
+            "2R_{SS}"
+          ],
+          "layers": [],
+          "supp": false
+        },
+        {
+          "id": "s4-next",
+          "title": "다음 시간 예고",
+          "required_terms": [
+            "CMRR",
+            "능동 부하"
+          ],
+          "layers": [],
+          "supp": false
+        },
+        {
+          "id": "s4-links",
+          "title": "함께 보면 좋은 자료",
+          "required_terms": [
+            "복습문제",
+            "답안",
+            "0930"
+          ],
+          "layers": [],
+          "supp": false
+        }
+      ]
+    }
+  ],
+  "preview_topic": "s4-next",
+  "forbidden_outside_preview": [
+    "CMRR",
+    "차동-단일단 변환",
+    "능동 부하(active load)"
+  ],
+  "selection_policy": "exam-first-v2",
+  "problems": [
+    {
+      "id": "E10.10",
+      "kind": "예제",
+      "anchor": "s0-half-circuit",
+      "date": "1002",
+      "why": "E10.11의 원문 전제이며 이상적 전류원 부하 BJT 반회로의 G_m과 R_out 기준을 세운다.",
+      "priority": "core",
+      "learning_goals": [
+        "BJT 차동 반회로 기준 이득"
+      ],
+      "estimated_minutes": 7
+    },
+    {
+      "id": "E10.11",
+      "kind": "예제",
+      "anchor": "s1-pnp-load",
+      "date": "1002",
+      "why": "첫 수업 예제 그대로 이상적 부하를 실제 pnp 전류원으로 바꾸고 두 r_O의 병렬을 확인한다.",
+      "priority": "core",
+      "learning_goals": [
+        "pnp 전류원 부하 이득"
+      ],
+      "estimated_minutes": 9
+    },
+    {
+      "id": "P10.62",
+      "kind": "장말문제",
+      "anchor": "s2-mos-cascode",
+      "date": "1002",
+      "why": "기출의 순방향 계산에 없는 MOS 입력 캐스코드의 이득 목표에서 테일 전류를 역산한다.",
+      "priority": "core",
+      "learning_goals": [
+        "MOS 입력 캐스코드 역설계"
+      ],
+      "estimated_minutes": 12
+    },
+    {
+      "id": "P10.64",
+      "kind": "장말문제",
+      "anchor": "s2-mos-cascode-load",
+      "date": "1002",
+      "why": "입력과 부하를 모두 캐스코드로 키운 두 출력저항의 병렬 및 NMOS·PMOS 폭 설계를 연습한다.",
+      "priority": "core",
+      "learning_goals": [
+        "MOS 양쪽 캐스코드 부하 설계"
+      ],
+      "estimated_minutes": 17
+    },
+    {
+      "id": "2018-2_중간-Q1",
+      "kind": "기출",
+      "anchor": "s2-bjt-cascode",
+      "date": "1002",
+      "why": "세 원본 회로에서 선행 이미터 축퇴, 수업의 R1/R2 pnp 부하, 유한 r_π BJT 캐스코드를 차례로 구별한다.",
+      "priority": "core",
+      "learning_goals": [
+        "BJT 반회로 부하 비교",
+        "BJT 유한 r_π 캐스코드"
+      ],
+      "estimated_minutes": 20
+    },
+    {
+      "id": "2015-2_중간-Q2",
+      "kind": "기출",
+      "anchor": "s2-bjt-cascode",
+      "date": "1002",
+      "why": "베이스 저항 pnp 부하와 다단 BJT 캐스코드의 출력저항·이득을 기본 반회로 다음에 확장한다.",
+      "priority": "extra",
+      "learning_goals": [
+        "BJT 유한 r_π 캐스코드",
+        "BJT 부하 연결 비교"
+      ],
+      "estimated_minutes": 22
+    },
+    {
+      "id": "2018-2_중간-Q3",
+      "kind": "기출",
+      "anchor": "s3-cm-half",
+      "date": "1002",
+      "why": "캐스코드 테일의 큰 R_SS를 2R_SS 공통 모드 반회로에 넣어 차동 이득과 단일 출력 CM 이득을 비교한다.",
+      "priority": "core",
+      "learning_goals": [
+        "캐스코드 테일의 차동·CM 응답"
+      ],
+      "estimated_minutes": 17
+    },
+    {
+      "id": "2019-1_중간-Q4",
+      "kind": "기출",
+      "anchor": "s3-cm-half",
+      "date": "1002",
+      "why": "이번에는 부하가 캐스코드이고 테일이 단순한 원본 회로에서 입력·부하 저항의 병렬을 유지해 DM과 단일 출력 CM을 비교한다.",
+      "priority": "core",
+      "learning_goals": [
+        "캐스코드 부하의 차동·CM 응답"
+      ],
+      "estimated_minutes": 18
+    },
+    {
+      "id": "P10.66",
+      "kind": "장말문제",
+      "anchor": "s3-finite-rss",
+      "date": "1002",
+      "why": "기출의 CM 수치 계산에서 한 걸음 더 나아가 유한 테일 저항으로 CM 이득 상한 부등식을 증명한다.",
+      "priority": "extra",
+      "learning_goals": [
+        "유한 테일 CM 이득 한계 증명"
+      ],
+      "estimated_minutes": 12
+    }
+  ],
+  "links": [
+    {
+      "topic": "s0-cm-vs-dc",
+      "href": "../0930/정리노트_0930_Differential_Amplifiers.html#s3-bjt-cm"
+    },
+    {
+      "topic": "s0-half-circuit",
+      "href": "../0923/정리노트_0923_Differential_Amplifiers.html#s3-virtual-ground"
+    },
+    {
+      "topic": "s2-mos-cascode-load",
+      "href": "../0916/정리노트_0916_Cascode_Amplifier.html#s1-headroom"
+    },
+    {
+      "topic": "s2-bjt-cascode",
+      "href": "../0916/정리노트_0916_Cascode_Amplifier.html#s2-bjt"
+    },
+    {
+      "topic": "s3-cm-ideal",
+      "href": "../0923/정리노트_0923_Differential_Amplifiers.html#s0-noise"
+    },
+    {
+      "topic": "s3-cm-half",
+      "href": "../0930/정리노트_0930_Differential_Amplifiers.html#s2-degen-gain"
+    },
+    {
+      "topic": "s4-links",
+      "href": "복습문제_1002_Differential_Amplifiers-문제.pdf"
+    },
+    {
+      "topic": "s4-links",
+      "href": "복습문제_1002_Differential_Amplifiers-답안.pdf"
+    },
+    {
+      "topic": "s4-links",
+      "href": "../0930/정리노트_0930_Differential_Amplifiers.html"
+    },
+    {
+      "topic": "s4-links",
+      "href": "../../workbook/pdf/ch10-문제.pdf"
+    }
+  ]
+}

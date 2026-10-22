@@ -1,0 +1,1300 @@
+{
+  "adoption_unit": "whole",
+  "candidates_sha256": "ba43aa606c66709f70fee550d9280fb90570ff4149ad0c6d7a6d259596e9a687",
+  "catalog_sha256": "356062ac0fd86e5632567da849526a4030fd86fa3d0973ebc253181d3d6947dc",
+  "policy": "exam-first-v2",
+  "problems": [
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "f2276dfbab33d0e41e6135019f28b78f9ad7910849fd3063332652c9fd8184ae",
+      "depends_on": [],
+      "estimated_minutes": 7,
+      "id": "E10.10",
+      "kind": "예제",
+      "learning_goals": [
+        "BJT 차동 반회로 기준 이득"
+      ],
+      "priority": "core",
+      "reference_solution": "solution",
+      "subpart_count": 1,
+      "subparts": [
+        {
+          "ask_md": "- 차동 이득 $\\dfrac{v_{out1} - v_{out2}}{v_{in1} - v_{in2}}$",
+          "label": "main"
+        }
+      ],
+      "why": "E10.11의 원문 전제이며 이상적 전류원 부하 BJT 반회로의 G_m과 R_out 기준을 세운다."
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "16d0f0700ef678c1964360bbfd8677933eec1a0774fe9b3601eb7709c5c8ad52",
+      "depends_on": [
+        "E10.10"
+      ],
+      "estimated_minutes": 9,
+      "id": "E10.11",
+      "kind": "예제",
+      "learning_goals": [
+        "pnp 전류원 부하 이득"
+      ],
+      "priority": "core",
+      "reference_solution": "solution",
+      "subpart_count": 1,
+      "subparts": [
+        {
+          "ask_md": "- 차동 전압 이득",
+          "label": "main"
+        }
+      ],
+      "why": "첫 수업 예제 그대로 이상적 부하를 실제 pnp 전류원으로 바꾸고 두 r_O의 병렬을 확인한다."
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "43fa7b9437a98d53f728708209911dd238a420b79321836c7ddee5cd7a565c2f",
+      "depends_on": [],
+      "estimated_minutes": 12,
+      "id": "P10.62",
+      "kind": "장말문제",
+      "learning_goals": [
+        "MOS 입력 캐스코드 역설계"
+      ],
+      "priority": "core",
+      "reference_solution": "solution",
+      "subpart_count": 1,
+      "subparts": [
+        {
+          "ask_md": "- 필요한 테일 전류 ($I_{SS}$) (괄호 안은 원문에 없음)",
+          "label": "main"
+        }
+      ],
+      "why": "기출의 순방향 계산에 없는 MOS 입력 캐스코드의 이득 목표에서 테일 전류를 역산한다."
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "675205be9fd4c5d5556255091214c37dc2de465812efc2c026f4f6dab944c082",
+      "depends_on": [],
+      "estimated_minutes": 17,
+      "id": "P10.64",
+      "kind": "장말문제",
+      "learning_goals": [
+        "MOS 양쪽 캐스코드 부하 설계"
+      ],
+      "priority": "core",
+      "reference_solution": "solution",
+      "subpart_count": 1,
+      "subparts": [
+        {
+          "ask_md": "- $(W/L)_1 = \\cdots = (W/L)_8$",
+          "label": "main"
+        }
+      ],
+      "why": "입력과 부하를 모두 캐스코드로 키운 두 출력저항의 병렬 및 NMOS·PMOS 폭 설계를 연습한다."
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": "stale",
+      "content_sha256": "adb78eb5f037885c09fde20797085135b3e76a7bfede77160ef48199a33976b5",
+      "depends_on": [],
+      "estimated_minutes": 20,
+      "id": "2018-2_중간-Q1",
+      "kind": "기출",
+      "learning_goals": [
+        "BJT 반회로 부하 비교",
+        "BJT 유한 r_π 캐스코드"
+      ],
+      "priority": "core",
+      "reference_solution": "solution",
+      "subpart_count": 3,
+      "subparts": [
+        {
+          "ask_md": "회로 (a)의 차동 전압 이득",
+          "label": "1",
+          "required_concepts": [
+            "차동 증폭기",
+            "차동 반회로와 가상 접지",
+            "소신호 파라미터(gm)",
+            "소스·이미터 축퇴",
+            "다이오드 연결 부하",
+            "능동 부하의 소신호 등가회로",
+            "소신호 전압 이득"
+          ]
+        },
+        {
+          "ask_md": "회로 (b)의 차동 전압 이득",
+          "label": "2",
+          "required_concepts": [
+            "차동 증폭기",
+            "차동 반회로와 가상 접지",
+            "소신호 파라미터(gm)",
+            "유한 출력 저항(ro)",
+            "능동 부하의 소신호 등가회로",
+            "소신호 전압 이득"
+          ]
+        },
+        {
+          "ask_md": "회로 (c)의 전압 이득",
+          "label": "3",
+          "required_concepts": [
+            "캐스코드",
+            "소신호 파라미터(gm)",
+            "유한 β와 rπ",
+            "유한 출력 저항(ro)",
+            "출력 저항",
+            "소신호 전압 이득"
+          ]
+        }
+      ],
+      "why": "세 원본 회로에서 선행 이미터 축퇴, 수업의 R1/R2 pnp 부하, 유한 r_π BJT 캐스코드를 차례로 구별한다."
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": "stale",
+      "content_sha256": "777064d26edc34c8e3ae679da0f6225ead9ab5c1a383324e62edf4564d5c139e",
+      "depends_on": [],
+      "estimated_minutes": 22,
+      "id": "2015-2_중간-Q2",
+      "kind": "기출",
+      "learning_goals": [
+        "BJT 유한 r_π 캐스코드",
+        "BJT 부하 연결 비교"
+      ],
+      "priority": "extra",
+      "reference_solution": "solution",
+      "subpart_count": 2,
+      "subparts": [
+        {
+          "ask_md": "그림 Q2 회로의 $R_{out}$과 차동 전압 이득 $A_v$",
+          "label": "1",
+          "required_concepts": [
+            "차동 증폭기",
+            "차동 반회로와 가상 접지",
+            "DC 바이어스와 동작 영역",
+            "소신호 파라미터 gm·rO",
+            "유한 β와 rπ",
+            "능동 부하의 소신호 등가회로",
+            "유한 출력 저항(ro)",
+            "출력 저항",
+            "소신호 전압 이득"
+          ]
+        },
+        {
+          "ask_md": "그림 Q2-2 회로의 $R_{out}$과 차동 전압 이득 $A_v$",
+          "label": "2",
+          "required_concepts": [
+            "차동 증폭기",
+            "차동 반회로와 가상 접지",
+            "DC 바이어스와 동작 영역",
+            "소신호 파라미터 gm·rO",
+            "유한 β와 rπ",
+            "캐스코드",
+            "능동 부하의 소신호 등가회로",
+            "유한 출력 저항(ro)",
+            "출력 저항",
+            "소신호 전압 이득"
+          ]
+        }
+      ],
+      "why": "베이스 저항 pnp 부하와 다단 BJT 캐스코드의 출력저항·이득을 기본 반회로 다음에 확장한다."
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": "stale",
+      "content_sha256": "9f9ed42323f321069d8e231750f36bb5dd6d8efbf35f3f84905c5b77841a1b8d",
+      "depends_on": [],
+      "estimated_minutes": 17,
+      "id": "2018-2_중간-Q3",
+      "kind": "기출",
+      "learning_goals": [
+        "캐스코드 테일의 차동·CM 응답"
+      ],
+      "priority": "core",
+      "reference_solution": "solution",
+      "subpart_count": 2,
+      "subparts": [
+        {
+          "ask_md": "차동 전압 이득",
+          "label": "1",
+          "required_concepts": [
+            "차동 증폭기",
+            "차동 반회로와 가상 접지",
+            "소신호 파라미터(gm)",
+            "유한 출력 저항(ro)",
+            "능동 부하의 소신호 등가회로",
+            "소신호 전압 이득"
+          ]
+        },
+        {
+          "ask_md": "Common-mode 이득 $A_{CM} = \\Delta V_{out,CM}/\\Delta V_{in,CM}$",
+          "label": "2",
+          "required_concepts": [
+            "차동 증폭기",
+            "캐스코드",
+            "소신호 파라미터(gm)",
+            "유한 출력 저항(ro)",
+            "출력 저항",
+            "소스·이미터 축퇴",
+            "공통 모드 해석",
+            "능동 부하의 소신호 등가회로",
+            "소신호 전압 이득"
+          ]
+        }
+      ],
+      "why": "캐스코드 테일의 큰 R_SS를 2R_SS 공통 모드 반회로에 넣어 차동 이득과 단일 출력 CM 이득을 비교한다."
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": "stale",
+      "content_sha256": "ba03b8324fafe9d717e3e7f3d839c8b0b1f6b75393300be85c0cdd9702ba2cdc",
+      "depends_on": [],
+      "estimated_minutes": 18,
+      "id": "2019-1_중간-Q4",
+      "kind": "기출",
+      "learning_goals": [
+        "캐스코드 부하의 차동·CM 응답"
+      ],
+      "priority": "core",
+      "reference_solution": "solution",
+      "subpart_count": 2,
+      "subparts": [
+        {
+          "ask_md": "차동 전압 이득",
+          "label": "1",
+          "required_concepts": [
+            "차동 증폭기",
+            "차동 반회로와 가상 접지",
+            "캐스코드",
+            "소신호 파라미터(gm)",
+            "유한 출력 저항(ro)",
+            "출력 저항",
+            "능동 부하의 소신호 등가회로",
+            "소신호 전압 이득"
+          ]
+        },
+        {
+          "ask_md": "Common-mode 이득 $A_{CM}$",
+          "label": "2",
+          "required_concepts": [
+            "차동 증폭기",
+            "캐스코드",
+            "소신호 파라미터(gm)",
+            "유한 출력 저항(ro)",
+            "출력 저항",
+            "소스·이미터 축퇴",
+            "공통 모드 해석",
+            "능동 부하의 소신호 등가회로",
+            "소신호 전압 이득"
+          ]
+        }
+      ],
+      "why": "이번에는 부하가 캐스코드이고 테일이 단순한 원본 회로에서 입력·부하 저항의 병렬을 유지해 DM과 단일 출력 CM을 비교한다."
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "98d564d77202d27c663c8e98f08fcb53e2021f18332f354eb4c5b1fa4c233fdc",
+      "depends_on": [],
+      "estimated_minutes": 12,
+      "id": "P10.66",
+      "kind": "장말문제",
+      "learning_goals": [
+        "유한 테일 CM 이득 한계 증명"
+      ],
+      "priority": "extra",
+      "reference_solution": "solution",
+      "subpart_count": 1,
+      "subparts": [
+        {
+          "ask_md": "- 다음을 증명\n  $$R_C I_C < 0.02(V_A + V_T) \\qquad (10.223)$$",
+          "label": "main"
+        }
+      ],
+      "why": "기출의 CM 수치 계산에서 한 걸음 더 나아가 유한 테일 저항으로 CM 이득 상한 부등식을 증명한다."
+    }
+  ],
+  "range": "1002",
+  "review": {
+    "candidates": [
+      {
+        "disposition": "deferred",
+        "evidence": {
+          "figure_method": "RUN/work/all-exam-figures-1..5.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2013-1_중간/figures/fig-Q3.png"
+          ],
+          "read_md": "from_the_past/md/2013-1_중간/Q3.md",
+          "subparts_checked": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"
+          ]
+        },
+        "id": "2013-1_중간-Q3",
+        "missing_concepts": [
+          "부하 불일치 CM→DM 변환",
+          "CMRR"
+        ],
+        "previously_used_in_ranges": [],
+        "reason": "소문항 (4)(5)가 부하 불일치의 CM→DM 변환·CMRR을 요구한다. Lec4 s36–37은 다음 시간 예고.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "deferred",
+        "evidence": {
+          "figure_method": "RUN/work/used-exam-figures-1..3.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2013-1_중간/figures/fig-Q4.png"
+          ],
+          "read_md": "from_the_past/md/2013-1_중간/Q4.md",
+          "subparts_checked": [
+            "1",
+            "2",
+            "3",
+            "4"
+          ]
+        },
+        "id": "2013-1_중간-Q4",
+        "missing_concepts": [
+          "전류 거울 능동 부하"
+        ],
+        "previously_used_in_ranges": [
+          "1007"
+        ],
+        "reason": "(a) 전류 거울 능동 부하의 차동 전류 합성이 핵심이다. (b)(c)의 반회로를 배웠더라도 전체 소문항 채택은 1007 능동 부하 수업 이후.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "excluded",
+        "evidence": {
+          "figure_method": "RUN/work/all-exam-figures-1..5.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2013-1_중간/figures/fig-Q5.png"
+          ],
+          "read_md": "from_the_past/md/2013-1_중간/Q5.md",
+          "subparts_checked": [
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        "id": "2013-1_중간-Q5",
+        "previously_used_in_ranges": [],
+        "reason": "(a) 수업의 R1/R2 중점 pnp 부하, (b) 이미터 축퇴, (c) 고정 바이어스 pnp 부하다. 전부 범위 안이지만 2018-2 Q1의 더 다양한 조합과 수업 예제 E10.13이 같은 목표를 다룬다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "excluded",
+        "evidence": {
+          "figure_method": "RUN/work/all-exam-figures-1..5.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2014-1_중간/figures/fig-Q5.png"
+          ],
+          "read_md": "from_the_past/md/2014-1_중간/Q5.md",
+          "subparts_checked": [
+            "1",
+            "2",
+            "3",
+            "4"
+          ]
+        },
+        "id": "2014-1_중간-Q5",
+        "previously_used_in_ranges": [],
+        "reason": "네 회로의 DM 반회로 이득은 배운 범위이나 (a)(c) 다이오드 부하·(b) 저항 중점은 0930 및 수업 예제와 겹치고 (d) 원본 소자 화살표 판독이 약하다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "excluded",
+        "evidence": {
+          "figure_method": "RUN/work/all-exam-figures-1..5.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2014-1_중간/figures/fig-Q6.png"
+          ],
+          "read_md": "from_the_past/md/2014-1_중간/Q6.md",
+          "subparts_checked": [
+            "1",
+            "2",
+            "3",
+            "4"
+          ]
+        },
+        "id": "2014-1_중간-Q6",
+        "previously_used_in_ranges": [],
+        "reason": "BJT CM 상한·축퇴·pnp 부하·다이오드 부하 모두 선수 범위. 2018-2 Q1과 수업 예제가 같은 회로 판단을 더 직접적으로 연습한다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "deferred",
+        "evidence": {
+          "figure_method": "RUN/work/used-exam-figures-1..3.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2015-1_중간/figures/fig-Q3.png",
+            "from_the_past/md/2015-1_중간/figures/fig-Q3-2.png",
+            "from_the_past/md/2015-1_중간/figures/fig-Q3-3.png"
+          ],
+          "read_md": "from_the_past/md/2015-1_중간/Q3.md",
+          "subparts_checked": [
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        "id": "2015-1_중간-Q3",
+        "missing_concepts": [
+          "BJT 전류 거울 능동 부하"
+        ],
+        "previously_used_in_ranges": [
+          "1007"
+        ],
+        "reason": "(1)(3)은 저항 pnp 부하·축퇴로 가능하나 (2)는 BJT 전류 거울 능동 부하의 단일 출력 전류 합성을 요구한다.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "deferred",
+        "evidence": {
+          "figure_method": "RUN/work/used-exam-figures-1..3.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2015-1_중간/figures/fig-Q4.png"
+          ],
+          "read_md": "from_the_past/md/2015-1_중간/Q4.md",
+          "subparts_checked": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"
+          ]
+        },
+        "id": "2015-1_중간-Q4",
+        "missing_concepts": [
+          "부하 불일치 CM→DM 변환",
+          "CMRR"
+        ],
+        "previously_used_in_ranges": [
+          "1007"
+        ],
+        "reason": "(4)(5)의 부하 불일치 CM→DM 이득과 CMRR 역산은 Lec4 s36–37 이후다.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "selected",
+        "evidence": {
+          "figure_method": "RUN/work/all-exam-figures-1..5.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2015-2_중간/figures/fig-Q2.png",
+            "from_the_past/md/2015-2_중간/figures/fig-Q2-2.png"
+          ],
+          "read_md": "from_the_past/md/2015-2_중간/Q2.md",
+          "subparts_checked": [
+            "1",
+            "2"
+          ]
+        },
+        "id": "2015-2_중간-Q2",
+        "previously_used_in_ranges": [],
+        "reason": "(1) pnp 베이스–컬렉터 저항 부하와 (2) 다단 BJT 캐스코드의 Rout·DM 이득을 함께 묻는다. (2)의 R1은 대칭 A–B 사이여서 DC 전류 0이다. 기본형 2018-2 Q1 다음에 유한 rπ의 복합 캐스코드를 확장한다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "deferred",
+        "evidence": {
+          "figure_method": "RUN/work/used-exam-figures-1..3.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2015-2_중간/figures/fig-Q3.png"
+          ],
+          "read_md": "from_the_past/md/2015-2_중간/Q3.md",
+          "subparts_checked": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
+          ]
+        },
+        "id": "2015-2_중간-Q3",
+        "missing_concepts": [
+          "부하 불일치 CM→DM 변환",
+          "CMRR"
+        ],
+        "previously_used_in_ranges": [
+          "1007"
+        ],
+        "reason": "(4)–(6)이 부하 불일치 CM→DM 및 CMRR과 꼬리 폭 변경의 영향을 요구한다.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "excluded",
+        "evidence": {
+          "figure_method": "RUN/work/all-exam-figures-1..5.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2016-1_중간/figures/fig-Q1.png"
+          ],
+          "read_md": "from_the_past/md/2016-1_중간/Q1.md",
+          "subparts_checked": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"
+          ]
+        },
+        "id": "2016-1_중간-Q1",
+        "previously_used_in_ranges": [],
+        "reason": "전류 거울 바이어스·입력 CM 하한·대신호 차동 입력 범위·DM 이득은 선행 수업 범위까지 합치면 가능하지만 1002 신규 핵심인 캐스코드/유한 테일 CM 응답을 묻지 않는다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "deferred",
+        "evidence": {
+          "figure_method": "RUN/work/all-exam-figures-1..5.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2016-1_중간/figures/fig-Q2.png"
+          ],
+          "read_md": "from_the_past/md/2016-1_중간/Q2.md",
+          "subparts_checked": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"
+          ]
+        },
+        "id": "2016-1_중간-Q2",
+        "missing_concepts": [
+          "부하 불일치 CM→DM 변환",
+          "CMRR"
+        ],
+        "previously_used_in_ranges": [],
+        "reason": "(2)(3)는 배웠어도 (4)(5)가 ΔRC에 의한 CM→DM 변환과 CMRR을 요구한다. 첫 소문항의 베이스 폭 변경도 별도 대신호 범위 판단.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "excluded",
+        "evidence": {
+          "figure_method": "RUN/work/all-exam-figures-1..5.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2016-1_중간/figures/fig-Q3.png",
+            "from_the_past/md/2016-1_중간/figures/fig-Q3-2.png"
+          ],
+          "read_md": "from_the_past/md/2016-1_중간/Q3.md",
+          "subparts_checked": [
+            "1",
+            "2"
+          ]
+        },
+        "id": "2016-1_중간-Q3",
+        "previously_used_in_ranges": [],
+        "reason": "(1) 베이스 저항을 둔 BJT 부하, (2) 이미터 축퇴 차동쌍은 풀이 가능. (1)은 수업의 R1/R2 중점 공유 베이스와 실제 그림 연결이 달라 보조 비교 가치가 있으나 대표로는 2018-2 Q1을 우선.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "deferred",
+        "evidence": {
+          "figure_method": "RUN/work/used-exam-figures-1..3.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2017-1_중간_C030/figures/fig-Q2.png"
+          ],
+          "read_md": "from_the_past/md/2017-1_중간_C030/Q2.md",
+          "subparts_checked": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
+          ]
+        },
+        "id": "2017-1_중간_C030-Q2",
+        "missing_concepts": [
+          "부하 불일치 CM→DM 변환",
+          "CMRR"
+        ],
+        "previously_used_in_ranges": [
+          "1007"
+        ],
+        "reason": "(5)(6)이 ΔRC에 의한 CM→DM 변환과 CMRR을 요구한다.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "excluded",
+        "evidence": {
+          "figure_method": "RUN/work/all-exam-figures-1..5.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2017-1_중간_C030/figures/fig-Q3.png",
+            "from_the_past/md/2017-1_중간_C030/figures/fig-Q3-2.png"
+          ],
+          "read_md": "from_the_past/md/2017-1_중간_C030/Q3.md",
+          "subparts_checked": [
+            "1",
+            "2"
+          ]
+        },
+        "id": "2017-1_중간_C030-Q3",
+        "previously_used_in_ranges": [],
+        "reason": "(1) BJT 입력·부하 이중 캐스코드와 (2) pnp 저항 부하·이미터 축퇴 모두 범위 안. 원본 (1)의 Q5/Q6 극성 판독 주의가 있고 2021-1 Q3가 BJT 캐스코드의 rπ/Rp 효과를 더 명시한다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "excluded",
+        "evidence": {
+          "figure_method": "RUN/work/all-exam-figures-1..5.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2017-1_중간_D반/figures/fig-Q3.png"
+          ],
+          "read_md": "from_the_past/md/2017-1_중간_D반/Q3.md",
+          "subparts_checked": [
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        "id": "2017-1_중간_D반-Q3",
+        "previously_used_in_ranges": [],
+        "reason": "(a) 이미터 축퇴+입력 CM 상한, (b) pnp R1/R2 중점 부하를 묻는다. 2018-2 Q1의 (a)(b)와 사실상 같은 유형이라 대표 하나만 둔다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "excluded",
+        "evidence": {
+          "figure_method": "RUN/work/all-exam-figures-1..5.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2017-1_중간_D반/figures/fig-Q4.png",
+            "from_the_past/md/2017-1_중간_D반/figures/fig-Q4-2.png"
+          ],
+          "read_md": "from_the_past/md/2017-1_중간_D반/Q4.md",
+          "subparts_checked": [
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        "id": "2017-1_중간_D반-Q4",
+        "previously_used_in_ranges": [],
+        "reason": "(a) 다이오드 PMOS 부하, (b) R_SS가 두 소스 사이에 있는 DM 반회로, (c) NMOS/PMOS 부하 모두 0930까지의 지식으로 가능. 1002 캐스코드·유한 테일 CM 계산에는 직접 닿지 않는다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "deferred",
+        "evidence": {
+          "figure_method": "RUN/work/all-exam-figures-1..5.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2017-1_중간_D반/figures/fig-Q5.png"
+          ],
+          "read_md": "from_the_past/md/2017-1_중간_D반/Q5.md",
+          "subparts_checked": [
+            "1",
+            "2",
+            "3",
+            "4"
+          ]
+        },
+        "id": "2017-1_중간_D반-Q5",
+        "missing_concepts": [
+          "부하 불일치가 만드는 차동 출력 CM 잡음"
+        ],
+        "previously_used_in_ranges": [],
+        "reason": "(2)–(4) 캐스코드 테일과 PMOS 부하의 DM/단일 출력 CM 이득은 가능하나 (1)이 실제 차동 출력의 CM 잡음 원인 두 가지, 즉 부하 불일치를 설명하도록 요구한다. s36은 예고만.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "deferred",
+        "evidence": {
+          "figure_method": "RUN/work/all-exam-figures-1..5.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2017-1_중간_D반/figures/fig-Q6.png"
+          ],
+          "read_md": "from_the_past/md/2017-1_중간_D반/Q6.md",
+          "subparts_checked": [
+            "1",
+            "2",
+            "3",
+            "4"
+          ]
+        },
+        "id": "2017-1_중간_D반-Q6",
+        "missing_concepts": [
+          "부하 불일치 CM→DM 변환",
+          "CMRR"
+        ],
+        "previously_used_in_ranges": [],
+        "reason": "(2)–(4)가 ΔRD의 CM→DM 이득과 CMRR을 요구한다. 원문 전류 첨자 일부도 판독 불명확.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "selected",
+        "evidence": {
+          "figure_method": "RUN/work/all-exam-figures-1..5.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2018-2_중간/figures/fig-Q1.png"
+          ],
+          "read_md": "from_the_past/md/2018-2_중간/Q1.md",
+          "subparts_checked": [
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        "id": "2018-2_중간-Q1",
+        "previously_used_in_ranges": [],
+        "reason": "원본 세 회로는 (a) 이미터 간 RE 축퇴, (b) 수업 s26과 같은 pnp R1/R2 중점 부하, (c) 유한 β·rπ를 지닌 BJT 캐스코드다. 전체 소문항이 배운 DM 반회로와 캐스코드 합성 안에 있다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "selected",
+        "evidence": {
+          "figure_method": "RUN/work/used-exam-figures-1..3.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2018-2_중간/figures/fig-Q3.png"
+          ],
+          "read_md": "from_the_past/md/2018-2_중간/Q3.md",
+          "subparts_checked": [
+            "1",
+            "2"
+          ]
+        },
+        "id": "2018-2_중간-Q3",
+        "previously_used_in_ranges": [
+          "1007"
+        ],
+        "reason": "원본 M5/M6은 캐스코드 테일이고 M3/M4는 각각 독립 PMOS 전류원 부하다. (1) DM 반회로 이득과 (2) 캐스코드 R_SS를 두 배로 나눈 단일 출력 CM 이득이 모두 당일 내용이다. 기존 1007 사용 여부는 사용자 허용으로 배제하지 않는다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "deferred",
+        "evidence": {
+          "figure_method": "RUN/work/used-exam-figures-1..3.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2018-2_중간/figures/fig-Q4.png"
+          ],
+          "read_md": "from_the_past/md/2018-2_중간/Q4.md",
+          "subparts_checked": [
+            "1",
+            "2"
+          ]
+        },
+        "id": "2018-2_중간-Q4",
+        "missing_concepts": [
+          "부하 불일치 CM→DM 변환"
+        ],
+        "previously_used_in_ranges": [
+          "1007"
+        ],
+        "reason": "(1)의 불일치 원인 설명과 (2)의 ΔRD CM→DM 수치 계산은 Lec4 s36 이후 범위다.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "deferred",
+        "evidence": {
+          "figure_method": "RUN/work/all-exam-figures-1..5.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2019-1_중간/figures/fig-Q1.png"
+          ],
+          "read_md": "from_the_past/md/2019-1_중간/Q1.md",
+          "subparts_checked": [
+            "1",
+            "2"
+          ]
+        },
+        "id": "2019-1_중간-Q1",
+        "missing_concepts": [
+          "폴디드 캐스코드"
+        ],
+        "previously_used_in_ranges": [],
+        "reason": "(1)이 폴디드 캐스코드 단일 증폭기의 Rout·이득을 요구한다. (2) BJT 차동축퇴는 가능해도 전체 문항은 아직 폴디드 경로를 배우지 않았다.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "excluded",
+        "evidence": {
+          "figure_method": "RUN/work/all-exam-figures-1..5.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2019-1_중간/figures/fig-Q2.png"
+          ],
+          "read_md": "from_the_past/md/2019-1_중간/Q2.md",
+          "subparts_checked": [
+            "1",
+            "2"
+          ]
+        },
+        "id": "2019-1_중간-Q2",
+        "previously_used_in_ranges": [],
+        "reason": "(1) 전류 거울로 바이어스된 CG 단과 (2) RS/RSS 차동쌍 모두 선행 지식으로 풀이 가능하지만 1002의 BJT 부하·캐스코드/CM 반회로를 직접 연습하지 않는다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "excluded",
+        "evidence": {
+          "figure_method": "RUN/work/all-exam-figures-1..5.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2019-1_중간/figures/fig-Q3.png"
+          ],
+          "read_md": "from_the_past/md/2019-1_중간/Q3.md",
+          "subparts_checked": [
+            "1",
+            "2"
+          ]
+        },
+        "id": "2019-1_중간-Q3",
+        "previously_used_in_ranges": [],
+        "reason": "(a) 단일 BJT 캐스코드에 pnp 전류 주입, (b) 다이오드 부하·이미터 축퇴 차동쌍이다. 전체 풀이 가능하지만 이번 차동 캐스코드 자체는 2018-2 Q1·2021-1 Q3가 더 직접적이다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "selected",
+        "evidence": {
+          "figure_method": "RUN/work/used-exam-figures-1..3.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2019-1_중간/figures/fig-Q4.png"
+          ],
+          "read_md": "from_the_past/md/2019-1_중간/Q4.md",
+          "subparts_checked": [
+            "1",
+            "2"
+          ]
+        },
+        "id": "2019-1_중간-Q4",
+        "previously_used_in_ranges": [
+          "1007"
+        ],
+        "reason": "원본 M5/M3·M6/M4가 PMOS 캐스코드 부하이고 M7은 단순 테일이다. (1) DM에서 위쪽 큰 저항과 입력 rO의 병렬, (2) CM에서 2rO7 반회로의 아래쪽 증대 저항까지 병렬로 남기는 비교가 당일 캐스코드 부하·CM 수업을 연결한다. 기존 1007 사용 여부는 배제하지 않는다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "deferred",
+        "evidence": {
+          "figure_method": "RUN/work/all-exam-figures-1..5.jpg contact sheets from original crops",
+          "original_figures_viewed": [],
+          "read_md": "from_the_past/md/2019-1_중간/Q5.md",
+          "subparts_checked": [
+            "1",
+            "2",
+            "3",
+            "4"
+          ]
+        },
+        "id": "2019-1_중간-Q5",
+        "missing_concepts": [
+          "CMRR",
+          "Miller 정리"
+        ],
+        "previously_used_in_ranges": [],
+        "reason": "(3) CMRR 정의와 (4) Miller 등가 커패시턴스는 아직 수업 범위 밖이다.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "deferred",
+        "evidence": {
+          "figure_method": "RUN/work/all-exam-figures-1..5.jpg contact sheets from original crops",
+          "original_figures_viewed": [],
+          "read_md": "from_the_past/md/2021-1_중간/Q1.md",
+          "subparts_checked": [
+            "1",
+            "2",
+            "3",
+            "4"
+          ]
+        },
+        "id": "2021-1_중간-Q1",
+        "missing_concepts": [
+          "불일치에 의한 CM→DM 변환"
+        ],
+        "previously_used_in_ranges": [],
+        "reason": "(3)은 이상적 CM 제거로 가능하나 (4)는 실제 제한 요인 두 가지 중 불일치의 CM→DM 효과 설명을 요구한다. 교수는 다음 시간 예고만 했다.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "excluded",
+        "evidence": {
+          "figure_method": "RUN/work/all-exam-figures-1..5.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2021-1_중간/figures/fig-Q2.png"
+          ],
+          "read_md": "from_the_past/md/2021-1_중간/Q2.md",
+          "subparts_checked": [
+            "1",
+            "2"
+          ]
+        },
+        "id": "2021-1_중간-Q2",
+        "previously_used_in_ranges": [],
+        "reason": "(a) MOS 캐스코드+병렬 Rp, (b) 소스 축퇴 차동쌍의 Rout·DM 이득은 기존 9장/0930 선행 범위까지면 가능하다. 이 날 새로 배운 BJT rπ·유한 테일 CM과 겹침이 적다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "excluded",
+        "evidence": {
+          "figure_method": "RUN/work/all-exam-figures-1..5.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2021-1_중간/figures/fig-Q3.png"
+          ],
+          "read_md": "from_the_past/md/2021-1_중간/Q3.md",
+          "subparts_checked": [
+            "1",
+            "2"
+          ]
+        },
+        "id": "2021-1_중간-Q3",
+        "previously_used_in_ranges": [],
+        "reason": "(a)는 가능하지만 (b)의 R_P=10 kΩ이 Q3/Q4 컬렉터–이미터에 직접 병렬이다. DC에서 I_C1≈I_EE/2=I_C3+V_CE3/R_P인데 V_b·V_CC·상단 전류원 값/출력 DC 전압이 없어 I_C3를 유일하게 정할 수 없다. 기존 풀이의 R_P DC 전류 무시는 원문에 없는 추가 가정이므로 전체 문항의 수치 이득은 미정.",
+        "scope": "unclear"
+      },
+      {
+        "disposition": "deferred",
+        "evidence": {
+          "figure_method": "RUN/work/all-exam-figures-1..5.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2021-1_중간/figures/fig-Q4.png"
+          ],
+          "read_md": "from_the_past/md/2021-1_중간/Q4.md",
+          "subparts_checked": [
+            "1",
+            "2"
+          ]
+        },
+        "id": "2021-1_중간-Q4",
+        "missing_concepts": [
+          "부하 불일치 CM→DM 변환",
+          "CMRR"
+        ],
+        "previously_used_in_ranges": [],
+        "reason": "(1)(2)에 50Ω 출력 불일치의 CM→DM 변환과 CMRR이 포함된다. 캐스코드 테일의 ACM만 따로 잘라 채택할 수 없다.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "deferred",
+        "evidence": {
+          "figure_method": "RUN/work/all-exam-figures-1..5.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2023-1_기말/figures/fig-Q1.png"
+          ],
+          "read_md": "from_the_past/md/2023-1_기말/Q1.md",
+          "subparts_checked": [
+            "1",
+            "2"
+          ]
+        },
+        "id": "2023-1_기말-Q1",
+        "missing_concepts": [
+          "Miller 정리",
+          "주파수 응답 극점"
+        ],
+        "previously_used_in_ranges": [],
+        "reason": "두 소문항 모두 Miller 정리·극점/전달함수를 요구한다. 10장 회로가 등장해도 주파수 응답은 미학습.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "deferred",
+        "evidence": {
+          "figure_method": "RUN/work/all-exam-figures-1..5.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2023-1_기말/figures/fig-Q3.png"
+          ],
+          "read_md": "from_the_past/md/2023-1_기말/Q3.md",
+          "subparts_checked": [
+            "1",
+            "2"
+          ]
+        },
+        "id": "2023-1_기말-Q3",
+        "missing_concepts": [
+          "부귀환",
+          "루프 이득"
+        ],
+        "previously_used_in_ranges": [],
+        "reason": "차동쌍 앞단 뒤의 레이저 다이오드 구동에서 개루프·루프·폐루프 이득/임피던스 전부 귀환 해석이다.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "deferred",
+        "evidence": {
+          "figure_method": "RUN/work/all-exam-figures-1..5.jpg contact sheets from original crops",
+          "original_figures_viewed": [],
+          "read_md": "from_the_past/md/2023-1_중간/Q1.md",
+          "subparts_checked": [
+            "1",
+            "2"
+          ]
+        },
+        "id": "2023-1_중간-Q1",
+        "missing_concepts": [
+          "Miller 정리",
+          "대역폭"
+        ],
+        "previously_used_in_ranges": [],
+        "reason": "(1) CM 제거는 일부 가능하나 (2)가 Miller 등가 입력 임피던스·대역폭을 요구한다.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "deferred",
+        "evidence": {
+          "figure_method": "RUN/work/all-exam-figures-1..5.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2023-1_중간/figures/fig-Q3.png"
+          ],
+          "read_md": "from_the_past/md/2023-1_중간/Q3.md",
+          "subparts_checked": [
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        "id": "2023-1_중간-Q3",
+        "missing_concepts": [
+          "폴디드 캐스코드",
+          "전류 거울 능동 부하"
+        ],
+        "previously_used_in_ranges": [],
+        "reason": "(a) 폴디드 캐스코드, (b) 거울 능동 부하의 신호 전류 합성은 이 날짜 미학습이며 전체 소문항 채택이 불가하다.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "deferred",
+        "evidence": {
+          "figure_method": "RUN/work/used-exam-figures-1..3.jpg contact sheets from original crops",
+          "original_figures_viewed": [
+            "from_the_past/md/2023-1_중간/figures/fig-Q4.png"
+          ],
+          "read_md": "from_the_past/md/2023-1_중간/Q4.md",
+          "subparts_checked": [
+            "1",
+            "2",
+            "3"
+          ]
+        },
+        "id": "2023-1_중간-Q4",
+        "missing_concepts": [
+          "부하 불일치 CM→DM 변환",
+          "CMRR"
+        ],
+        "previously_used_in_ranges": [
+          "1007"
+        ],
+        "reason": "(1) CM 입력 범위는 가능해도 (2)(3)의 ΔRD CM→DM·CMRR은 다음 시간 내용이다.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "selected",
+        "evidence": {
+          "read_md": "교과서/마이크로전자회로/ch10/예제/E10.10.md",
+          "subparts_checked": [
+            "main"
+          ]
+        },
+        "id": "E10.10",
+        "reason": "E10.11의 원문 전제이며 이상적 전류원 부하 BJT 반회로의 G_m과 R_out 기준을 세운다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "selected",
+        "evidence": {
+          "read_md": "교과서/마이크로전자회로/ch10/예제/E10.11.md",
+          "subparts_checked": [
+            "main"
+          ]
+        },
+        "id": "E10.11",
+        "reason": "첫 수업 예제 그대로 이상적 부하를 실제 pnp 전류원으로 바꾸고 두 r_O의 병렬을 확인한다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "selected",
+        "evidence": {
+          "read_md": "교과서/마이크로전자회로/ch10/장말문제/P10.62.md",
+          "subparts_checked": [
+            "main"
+          ]
+        },
+        "id": "P10.62",
+        "reason": "기출의 순방향 계산에 없는 MOS 입력 캐스코드의 이득 목표에서 테일 전류를 역산한다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "selected",
+        "evidence": {
+          "read_md": "교과서/마이크로전자회로/ch10/장말문제/P10.64.md",
+          "subparts_checked": [
+            "main"
+          ]
+        },
+        "id": "P10.64",
+        "reason": "입력과 부하를 모두 캐스코드로 키운 두 출력저항의 병렬 및 NMOS·PMOS 폭 설계를 연습한다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "selected",
+        "evidence": {
+          "read_md": "교과서/마이크로전자회로/ch10/장말문제/P10.66.md",
+          "subparts_checked": [
+            "main"
+          ]
+        },
+        "id": "P10.66",
+        "reason": "기출의 CM 수치 계산에서 한 걸음 더 나아가 유한 테일 저항으로 CM 이득 상한 부등식을 증명한다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "excluded",
+        "evidence": {
+          "read_md": "교과서/마이크로전자회로/ch10/예제/E10.13.md",
+          "subparts_checked": [
+            "main"
+          ]
+        },
+        "id": "E10.13",
+        "reason": "수업 R1/R2 중점 부하 예제이나 2018-2 Q1(b)가 같은 회로를 수치로 연습한다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "excluded",
+        "evidence": {
+          "read_md": "교과서/마이크로전자회로/ch10/연습문제/X10.13.md",
+          "subparts_checked": [
+            "main"
+          ]
+        },
+        "id": "X10.13",
+        "reason": "E10.13 전제가 필요하고 2018-2 Q1(b)와 수치 연습이 반복된다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "excluded",
+        "evidence": {
+          "read_md": "교과서/마이크로전자회로/ch10/장말문제/P10.54.md",
+          "subparts_checked": [
+            "main"
+          ]
+        },
+        "id": "P10.54",
+        "reason": "BJT 캐스코드의 Early 전압 역산은 기출 두 문제의 rπ 합성 뒤 추가할 수 있으나 이번 분량에서는 생략한다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "excluded",
+        "evidence": {
+          "read_md": "교과서/마이크로전자회로/ch10/장말문제/P10.65.md",
+          "subparts_checked": [
+            "main"
+          ]
+        },
+        "id": "P10.65",
+        "reason": "2R_SS CM 반회로 유도는 핵심 기출 2018-2 Q3과 2019-1 Q4 안에 들어간다.",
+        "scope": "in_scope"
+      }
+    ],
+    "catalog_sha256": "356062ac0fd86e5632567da849526a4030fd86fa3d0973ebc253181d3d6947dc",
+    "coverage": [
+      {
+        "goal": "BJT 반회로 부하 비교",
+        "problem_ids": [
+          "2018-2_중간-Q1"
+        ]
+      },
+      {
+        "gap_reason": "핵심 문제로 기본 경로를 연습한 뒤 푸는 추가 심화 목표이며 핵심 필수분량에서 제외한다.",
+        "goal": "BJT 부하 연결 비교",
+        "problem_ids": [
+          "2015-2_중간-Q2"
+        ]
+      },
+      {
+        "goal": "BJT 유한 r_π 캐스코드",
+        "problem_ids": [
+          "2018-2_중간-Q1",
+          "2015-2_중간-Q2"
+        ]
+      },
+      {
+        "goal": "BJT 차동 반회로 기준 이득",
+        "problem_ids": [
+          "E10.10"
+        ]
+      },
+      {
+        "goal": "MOS 양쪽 캐스코드 부하 설계",
+        "problem_ids": [
+          "P10.64"
+        ]
+      },
+      {
+        "goal": "MOS 입력 캐스코드 역설계",
+        "problem_ids": [
+          "P10.62"
+        ]
+      },
+      {
+        "goal": "pnp 전류원 부하 이득",
+        "problem_ids": [
+          "E10.11"
+        ]
+      },
+      {
+        "gap_reason": "핵심 문제로 기본 경로를 연습한 뒤 푸는 추가 심화 목표이며 핵심 필수분량에서 제외한다.",
+        "goal": "유한 테일 CM 이득 한계 증명",
+        "problem_ids": [
+          "P10.66"
+        ]
+      },
+      {
+        "goal": "캐스코드 부하의 차동·CM 응답",
+        "problem_ids": [
+          "2019-1_중간-Q4"
+        ]
+      },
+      {
+        "goal": "캐스코드 테일의 차동·CM 응답",
+        "problem_ids": [
+          "2018-2_중간-Q3"
+        ]
+      }
+    ],
+    "cross_pack_review": {
+      "deferred_ids": [
+        "2013-1_중간-Q3",
+        "2013-1_중간-Q4",
+        "2015-1_중간-Q3",
+        "2015-1_중간-Q4",
+        "2015-2_중간-Q3",
+        "2016-1_중간-Q2",
+        "2017-1_중간_C030-Q2",
+        "2017-1_중간_D반-Q5",
+        "2017-1_중간_D반-Q6",
+        "2018-2_중간-Q4",
+        "2019-1_중간-Q1",
+        "2019-1_중간-Q5",
+        "2021-1_중간-Q1",
+        "2021-1_중간-Q4",
+        "2023-1_기말-Q1",
+        "2023-1_기말-Q3",
+        "2023-1_중간-Q1",
+        "2023-1_중간-Q3",
+        "2023-1_중간-Q4"
+      ],
+      "missing_types": [
+        "기초 2R_SS 유도는 P10.65를 생략하고 2018-2 Q3·2019-1 Q4의 핵심 풀이에 직접 포함",
+        "CM→DM·CMRR은 이 날짜 아직 미학습이므로 다음 회차에서 전체 기출 검토"
+      ],
+      "repeated_types": [
+        "0930의 다이오드 부하·축퇴와 2018-2 Q1(a)는 중복",
+        "2018-2 Q3·2019-1 Q4는 둘 다 DM/CM을 묻지만 테일 캐스코드 대 부하 캐스코드로 다른 블록을 비교",
+        "1007 사용 이력은 별도 기록하되 사용자 지시에 따라 1002 재선발 배제 근거가 아니다",
+        "2018-2 Q3·2019-1 Q4는 1007에 기수록되었지만 사용자 지시로 재생성 간 중복을 허용; 사용 이력은 previously_used_in_ranges에 기록"
+      ]
+    },
+    "policy": "exam-first-v2",
+    "selection_policy_override": "work/selection-policy-override.md",
+    "source_review": "work/selection-review-draft.json"
+  },
+  "schema_version": 2,
+  "scope_check": "AI must verify every subpart and figure against the taught scope",
+  "workload": {
+    "core_estimated_minutes": 100,
+    "estimated_minutes": 134,
+    "estimates_only": true,
+    "subpart_count": 14
+  }
+}
