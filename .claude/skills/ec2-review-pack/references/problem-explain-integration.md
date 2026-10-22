@@ -4,20 +4,30 @@
 
 공통 조립·검사는 통합 일곱 구역을 검증하고, 본문의 `data-answer-step`/`data-answer-final` 선택 요소에서 overlay를 추출한다. 새 원고에 구형 route를 요구하지 않는다. 표지 누락·검토 실패 시 설명/답안 발행을 withheld로 보고하며 검사 우회·숨긴 중복 핵심·구버전 승인을 사용하지 않는다. 과거 발행 자료의 구형 추출 검증은 새 저작 승인과 구분한다.
 
-실행 순서는 명세 snapshot → 범위/manifest → 작성/조립 → 문제지만 빌드 → 부모 내용/화면/MD/개인화 감사 + 답안 링크 예비 검사 → 자식 → 승인 overlay 답안 빌드 → PDF 화면 검토 → 답안 발행 → 유예 없는 최종 검사다.
+실행 순서는 명세 snapshot → 범위/manifest → 작성/조립 → 문제지만 빌드 → 부모 내용/화면/MD/개인화 감사 + 답안 링크 예비 검사 → 자식 코디네이터의 발행 준비 → 부모의 설명 발행 → 승인 overlay 답안 빌드 → PDF 화면 검토 → 부모의 답안 발행 → 유예 없는 최종 검사다.
 
 1. 부모의 기계 예비 검사·내용 리뷰(lite는 부모 내용 리뷰만 생략)·브라우저·MD 변환과 모든 topic ID의 개인화 감사를 끝낸다. `<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md`의 실제 절대 경로와 manifest `learning_style` snapshot이 필수 입력이다.
 2. 문제가 0개면 `skipped-no-problems`다. 자식·PDF 없이 현재 snapshot·모든 토픽 감사·유예 없는 최종 노트 검사를 수행한다.
 3. manifest `problems`·`RUN/selection.json`·`.assets/selection.json`·`.assets/problems.txt`의 ID·순서를 대조한다. 새 정책의 핵심/추가·학습 목표·소문항 묶음 수·추정 시간도 같은 입력에서 읽고 source 해시에 묶는다. 해설 HTML·동반 MD에는 핵심/추가·소문항 묶음·예상 시간의 학습량 행을 출력하지 않으며 선발 JSON은 유지한다. PDF 표시는 기존 PDF 정책을 따른다. 선택용 JSON은 자식 원문이나 독립 검산 근거를 대신하지 않는다.
-4. **필수 하위 스킬: ec2-problem-explain.** 형제 `../ec2-problem-explain/SKILL.md`를 읽는다. 부모 `range`를 명시하고 `EXPLAIN_RUN=RUN/problem-explain/<새 실행ID>`를 없거나 빈 폴더로 정한다. 아래 변수는 명령 전에 같은 셸에서 실제 절대 경로로 설정한다.
+4. **필수 하위 스킬: ec2-problem-explain.** 이 부모 통합 호출에서는 자식 코디네이터 한 명에게 형제 `../ec2-problem-explain/SKILL.md`와 필요한 참조를 직접 읽고 아래 발행 준비 절차를 맡긴다. 부모는 자식 원고·풀이·화면을 자기 문맥에 다시 모으지 않고 이 계약과 반환 영수증을 사용한다. 부모 `range`를 명시하고 `EXPLAIN_RUN=RUN/problem-explain/<새 실행ID>`를 없거나 빈 폴더로 정한다. 코디네이터에게 `REPO`, 부모 `RUN`, `EXPLAIN_RUN`, 자식 `SKILL`, `PROFILE`의 실제 절대 경로, 부모 manifest·learning_style snapshot·선발 기록·검증된 두 백업 기록의 경로와 SHA-256을 넘긴다. 아래 변수는 명령 전에 같은 셸에서 실제 절대 경로로 설정한다.
 ```bash
 python3 "$REPO/.claude/skills/ec2-problem-explain/scripts/epe_cli.py" extract --repo "$REPO" --target "$RANGE" --run "$EXPLAIN_RUN"
 ```
-5. extract 뒤 정리노트 바이트·목록·참고 자료를 고정한다. 바뀌면 부모 검토를 다시 하고 새 EXPLAIN_RUN으로 시작한다. 자식은 understand → recall → start → solve(`이렇게 풀어요`) → verify → pitfall → retry의 통합 본문 → 독립 검산 → build/check → 네 검토와 전체 개인화 감사 → publish까지 수행한다. lite도 자식 모델·검토를 유지한다. 자식은 PDF를 직접 교체하지 않는다.
-6. 자식의 `source_visual/content/independent/browser`와 `learning_style_audit`가 모두 실제 pass여야 한다. 성공은 `published`, 현재 snapshot/전체 감사까지 입증된 재사용만 `reused-verified`다. 실패/disputed는 `withheld`이며 아래 전체 팩 복구 계약을 따른다.
-7. 부모 SKILL 9단계의 `--mode answers --answer-overlay`로 발행 자료의 `answer-overlay.json`을 소비해 **RUN 안**에 답안 PDF를 만든다. 같은 폴더 `validation.json`이 현재 검토를 승인해야 한다. 원본 MD 참고 풀이로 조용히 대체하지 않는다.
+5. 코디네이터가 extract를 실행한다. extract 뒤 정리노트 바이트·목록·참고 자료를 고정한다. 바뀌면 부모 검토를 다시 하고 새 EXPLAIN_RUN으로 시작한다. 자식은 understand → recall → start → solve(`이렇게 풀어요`) → verify → pitfall → retry의 통합 본문 → 독립 검산 → build/check → 네 검토와 전체 개인화 감사까지 수행한다. 마지막 build 뒤의 check·검토 기록이 승인한 산출만 `ready-for-publish`로 반환하며 코디네이터는 publish를 실행하지 않는다. lite도 자식 모델·검토를 유지한다. 아래 위임 경계를 적용한다.
+6. 부모가 영수증의 현재 경로·입력/명세/참조/산출/검토 해시와 모든 판정을 확인한 뒤 직접 `python3 "$REPO/.claude/skills/ec2-problem-explain/scripts/epe_cli.py" publish --run "$EXPLAIN_RUN"`을 실행한다. 기존 CLI의 전체 발행 게이트를 그대로 통과해야 하며 영수증으로 검사를 대체하거나 발행 권한 우회 옵션을 만들지 않는다. 자식의 `source_visual/content/independent/browser`와 `learning_style_audit`가 모두 실제 pass여야 한다. `publish: … backup: …` 출력과 종료 코드를 부모 실행 기록에 남긴 뒤에만 `published`로 기록한다. 현재 snapshot/전체 감사와 재사용 근거까지 입증된 재사용만 `reused-verified`다. 실패/disputed는 `withheld`이며 아래 전체 팩 복구 계약을 따른다.
+7. `execution-guide.md` 9단계의 `--mode answers --answer-overlay` 명령으로 발행 자료의 `answer-overlay.json`을 소비해 **RUN 안**에 답안 PDF를 만든다. 같은 폴더 `validation.json`이 현재 검토를 승인해야 한다. 원본 MD 참고 풀이로 조용히 대체하지 않는다.
 8. 아래 렌더 페이지 검토를 수행하고 부모 SKILL의 `publish_answer.py`를 실행한다. 이후 `check_html.py --repo "$REPO" --manifest "$RUN/manifest.json" --note <실제 노트 절대경로>`를 **유예 없이** 실행한다. extract 뒤 노트 링크를 자동 삽입하지 않는다.
 9. 기본 팩·설명·답안·최종 검사와 복구/withheld 상태를 함께 보고한다. 자식/PDF/최종 검사 실패는 전체 완료가 아니다. 다른 팩은 계속할 수 있다.
+
+## 자식 코디네이터의 위임 경계와 영수증
+
+- **쓰기 경계:** 저장소 발행·기본 팩/설명 선제 정리·제목 맵 갱신·백업 후 제거·복구는 최상위 부모만 수행한다. 코디네이터와 작업자는 할당된 `EXPLAIN_RUN` 안에만 쓰고, 부모가 별도로 지정한 PDF 검토는 해당 부모 `RUN` 안에만 쓴다. `RUN/repo` 같은 링크를 통해 저장소에 쓰지 않는다. 문제 md·그림·정리노트·목록·PDF 등 보호 입력을 고치지 않는다. 자식 스킬의 publish 단계는 이 통합 호출에 한해 부모 실행 요청으로 바꾸며 단독 호출 계약은 바꾸지 않는다.
+- **화면 검토 역할:** 이 통합 호출에서 코디네이터는 자식 스킬의 `메인 에이전트` 역할로 stage의 read-only 브라우저 검토와 검토 기록을 담당한다. `references/verification.md`의 모든 크기·테마·원문/문제 탭·링크·클릭·visibility·오류/넘침 기준을 실제 수행하고 증거를 RUN에 남긴다. 부모의 발행 권한과는 별개다. 브라우저 세션·서버·포트는 코디네이터가 소유하고, 다른 작업자의 탭이나 서버를 조작하지 않으며 종료/재개 시 소유권과 정리 상태를 기록한다. 부모가 같은 스크린샷을 모두 다시 읽는 대신 증거 경로·해시·범위·판정을 확인한다.
+- **전체 슬롯 최대 4:** 최상위 부모 1 + 자식 코디네이터 1 + leaf 작업자 최대 2로 제한한다. 부모의 이전 작성/검토 작업을 먼저 끝내고, 문항별 작성·독립 검산은 두 자리 안에서 제한된 묶음으로 수행한다. 완료 작업자는 종료해 자리를 반환한 뒤 다음 묶음을 시작한다. 코디네이터 아래에 다른 코디네이터를 만들지 않고 leaf는 재위임하지 않는다. 해당 문항 작성자는 독립 검산자가 될 수 없고, 팩 내용 리뷰어는 그 팩의 어떤 문항도 작성하지 않은 별도 에이전트여야 한다. 독립 검산자에게는 정답·참고 풀이·설명 조각을 제외한 원문/그림/필요 이론만 넘겨 먼저 풀이를 저장하게 한 뒤 코디네이터가 참고 답과 대조한다. 정답 필드가 있는 전체 source.json을 blind 검산 입력으로 넘기지 않는다.
+- **중첩 실행 불가 시:** 코디네이터는 역할·읽을 경로·허용 출력 경로·문항/소문항·모델·금지할 정답 입력이 적힌 leaf 브리프와 진행 상태를 EXPLAIN_RUN에 저장해 부모에게 요청한다. 자리가 없으면 코디네이터가 상태를 저장하고 종료한 뒤 부모가 그 브리프로 leaf를 실행한다. leaf가 끝나 자리가 반환되면 코디네이터를 재개하거나 저장 상태를 읽는 후임 한 명으로 교체한다. 기다리는 코디네이터를 계속 중첩 생성하거나, 슬롯 부족을 이유로 작성자에게 자기 검산/내용 리뷰를 맡기지 않는다. 필요한 독립 역할을 확보하지 못하면 `withheld`다.
+- **동결·재검토:** 코디네이터는 위임 시작과 반환 시 부모 manifest·snapshot·선발/목록·정리노트·원본/그림·실제 읽은 참조 해시를 확인하고 부모는 발행 직전에 다시 확인한다. 입력 변경은 새 EXPLAIN_RUN과 부모 재검토 대상이다. 조각·evidence·산출 변경은 build부터 다시 하며 build가 초기화한 review.json에 과거 pass를 복사하지 않는다. 마지막 build 뒤 실제 네 검토와 모든 소문항·규칙의 개인화 감사를 기록한다.
+
+코디네이터는 `EXPLAIN_RUN/child-receipt.json`에 `{schema_version: 1, status: ready-for-publish|withheld, range, slug, run, bucket, stage, files, input_hash, review_policy_version, counts, reviews, reviewers, unresolved}`를 저장한다. `files`에는 부모 manifest·learning_style snapshot·자식 source.json·stage.json·stage manifest·machine.json·review.json·answer-overlay.json과 실제 원본/참조/산출/evidence를 각각 `{path: 실제 절대 경로, sha256: 현재 바이트 해시}`로 기록한다. `ready-for-publish`는 source의 전체 입력 집합·build의 artifact_hashes·검토의 references와 대응되게 하며 항목을 생략하지 않는다. `withheld`는 확보한 파일만 기록하고 없는 필드/파일과 원인을 unresolved에 밝힌다. `counts`는 문항/소문항 수, `reviews`는 네 검토와 전체 learning_style_audit의 판정·증거 경로, `reviewers`는 실제 역할/문항별 작성자·검산자·내용/화면 검토자의 식별자를 보존한다. 해시나 게이트 값을 임의 갱신하지 않는다. 반환 메시지는 상태·range·문항/소문항 수·영수증 절대 경로와 SHA-256·부모 다음 실행·unresolved 요지만 담는다. 실패는 같은 영수증에 이유와 현재 stage/백업 경로를 남기며 `ready-for-publish`를 발행 완료로 보고하지 않는다. 부모가 설명을 발행한 뒤 실행한 CLI 결과와 백업 경로를 별도 실행 영수증에 남겨 이 영수증과 연결한다.
 
 ## 답안 PDF 렌더 검토 기록
 
@@ -27,6 +37,8 @@ mkdir -p "$RUN/answer-pages"
 pdftoppm -png -r 120 "$RUN/answers/복습문제_<range>_<slug>-답안.pdf" "$RUN/answer-pages/page"
 ```
 각 PNG를 이미지 도구로 열어 모든 문항/소문항의 핵심 회로·판단·계산·최종 답을 검토한 통합 HTML 본문의 start/solve/verify와 대조한다. 답·단위·조건·근사·그림, 16:9 규격과 하단 180px/1080px 자막 여백, 잘림·겹침·누락을 검토해 `RUN/answer-review.md`에 페이지별 판정과 근거를 쓴다. 검토를 못 하면 보류다.
+
+이 실제 PDF 화면 검토는 별도 검토자에게 위임할 수 있다. 부모가 PDF·승인 overlay·명세·검토한 HTML의 경로/해시와 전체 페이지 목록을 넘기고, 검토자는 부모가 지정한 `RUN/answer-pages/`의 모든 PNG를 실제 열어 대조한 뒤 `RUN/answer-review.md`와 `RUN/answer-review.json`만 기록한다. 렌더가 필요하면 위 명령의 RUN 내 렌더 경로만 쓴다. 반환은 PDF/overlay/명세/PNG/보고서 해시·검토자·전체 페이지 판정·unresolved 요지만 담으며 부모가 같은 페이지를 전부 다시 여는 것을 요구하지 않는다. 자동 해시 기록 생성만으로 pass를 부여하지 않고 아래 미승인 기록을 실제 검토자가 완료한다. 부모는 현재 바이트와 전체 페이지 증거·pass를 확인한 뒤에만 직접 `publish_answer.py`를 실행하고, 실패 시 아래 전체 팩 복구를 수행한다.
 
 다음은 해시를 묶는 **미승인** 기록을 만든다. `PDF`, `OVERLAY`는 부모 SKILL에 나온 실제 절대 경로로 설정한다. PNG와 보고서가 실제로 있어야 한다.
 ```bash

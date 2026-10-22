@@ -1,4 +1,4 @@
-# manifest.json 작성 규칙 (메인 에이전트)
+# manifest.json 작성 규칙 (범위 설계자)
 
 manifest는 이번 팩의 계약이다. 작성자, 검사기, 조립기가 모두 이 파일을 기준으로 삼는다.
 구조 예시(learning_style의 0 해시는 테스트용 placeholder이며 실행에 쓰지 않는다): `tests/fixtures/mini-run/manifest.json`.

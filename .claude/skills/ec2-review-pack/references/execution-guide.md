@@ -1,0 +1,341 @@
+# 단계별 실행 상세
+
+진입점은 `../SKILL.md`, 역할·인계 계약은 `delegation.md`다. 이 파일 전체를 메인에 적재하지 않고 현재 담당 단계의 제목 범위만 읽는다. 기존 명령·교육 품질·백업/복구 계약을 보존한 상세 절차이며, 담당자·동시 실행·짧은 반환은 진입점과 delegation 계약을 따른다. `SKILL`은 이 references 폴더가 아니라 상위 스킬 루트다.
+
+수업 녹음 전사(STT)와 강의자료, Razavi 교과서로 한 기간의 정리노트를 만들고, workbook에서 그 범위 문제를 골라 복습문제 PDF와 검토를 통과한 문제설명 HTML·MD를 만든다. 중간에 사용자에게 묻지 않고 끝에 한 번 보고한다. 커밋은 제안만 한다.
+
+**산출물** (`복습노트/<range>/`):
+- 맨 위: `정리노트_<range>_<slug>.html`, 그리고 문제가 1개 이상이면 `복습문제_<range>_<slug>-문제.pdf`, `복습문제_<range>_<slug>-답안.pdf`, `문제설명_<range>_<slug>.html`
+- `.assets/`: 같은 이름의 `.md`, `figures_<range>/`, 그리고 문제가 1개 이상이면 `problems.txt`, `문제설명_<range>_<slug>.md`, `figures_문제설명_<range>_<slug>/`, `자료_문제설명_<range>_<slug>/`
+
+**폴더 규칙**: 날짜 폴더 맨 위에는 `.pack/`, `*.html`, `*.pdf`, `.assets/`만 둔다. md·그림·목록·데이터 등 나머지는 모두 `.assets/`에 둔다(`tests/test_pack_layout.py`가 실제 `복습노트/`를 검사한다).
+
+**PDF 규격**: 문제지·답안지는 16:9 페이지를 사용한다. 1920×1080 기준 하단 180px는 자막 전용 여백으로 비우고, 본문 기본값은 약 11.34pt이며 제목·수식·힌트도 같은 약 1.134배로 조정해 기존 A4 영상 전체 화면에서 보이던 텍스트 크기를 유지한다. 긴 문항의 기존 축소 배율도 보존한다.
+
+**인자**: `[MMDD | MMDD-MMDD] [lite]`
+- `lite`: 작성자·요약 에이전트를 sonnet으로, 6단계의 부모 내용 리뷰를 생략한다. 개인화 감사는 부모가 실제 수행하고 기록한다. 부모 정리노트의 기계 검사와 브라우저 검사는 그대로 한다. 자식 문제설명의 작성자 모델·독립 검산·네 검토는 lite에서도 낮추거나 생략하지 않는다.
+
+**모델 이름**: 이 문서의 opus·sonnet은 Claude 기준이다. Claude가 아닌 환경(GPT)에서는 opus 대신 sol, sonnet 대신 luna를 쓴다.
+
+**진행 표시**: 단계마다 한 줄만 쓴다. 예: `3/10 작성 중: 섹션 5개 (병렬)`
+
+**경로 약속**
+- `SKILL` = 이 파일이 있는 폴더(`.claude/skills/ec2-review-pack`)의 절대 경로
+- `REPO` = 이 checkout의 저장소 루트 절대 경로(`git rev-parse --show-toplevel`로 확인)
+- `PROFILE` = `<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md`의 실제 절대 경로. 작성자·리뷰어 필수 입력이다.
+- `RUN` = `<scratchpad>/review-pack/<range>/`
+- 셸 상태는 Bash 호출 사이에 이어지지 않는다. 아래 명령의 `$SKILL`, `$RUN`, `$REPO`는 실행할 때마다 실제 절대 경로로 바꿔 쓰거나, 같은 명령 앞에 `SKILL=… RUN=… REPO=…`를 붙여 설정한다. `cd`는 쓰지 않고 파일도 절대 경로로 넘긴다.
+
+**기본 근사와 회로 표기:** 공통 `solution-style.md`의 수업 기본 근사를 적용한다. $g_mr_o\gg1$, $g_mR_e\gg1$의 주항을 쓰고 캐스코드의 곱 인자 소자를 밝힌다. 내부 $r_e=1/g_m$는 축퇴 저항과 구분하고 유한 $r_\pi$는 보존한다. 생성 SVG는 NOTATION-01의 native text/tspan 실제 첨자(기본 78%)·Pretendard 600 정체로 통일하고 실제 face 사용을 HTML·독립 SVG·PDF에서 검토한다. CM 이득은 성립 조건을 확인한 $2R_{SS}$ 반회로를 본풀이에 앞세우고 테일 저항 유도는 보충으로 분리한다. 부하 불일치·거울 결합·원문 지정 방법의 예외는 PROFILE CIRCUIT-02를 따른다.
+
+**전압이득의 계산 순서:** 새로 작성하거나 내용을 고치는 적용 가능한 증폭기 전압이득 풀이는 PROFILE GAIN-01에 따라 성립 조건·입출력 정의 → 출력 단락의 $G_m$ → 입력 영점·시험원의 부하 포함 $R_{out}$ → 부호 있는 $A_v=-G_mR_{out}$ 순서로 쓴다. 짧게 푸는 것은 대수 전개를 줄이는 것이며 세 중간 계산을 생략하지 않는다. 같은 출력 정의에서 증폭기 쪽 근사 저항과 외부 부하의 병렬을 보인다. 필요한 유한 $r_\pi$·$r_o$와 원문 조건을 유지하고 $R_{out}$ 정확 전체식·긴 노드방정식은 예외가 아니면 내부 검산에 둔다. 순수 DC·전류 전달/트랜스임피던스·원문 지정 증명은 해당 목표와 방법을 유지한다. 기존 미수정 문항 전체에 소급 재작성을 강제하지 않는다.
+
+## 확정한 문제 해설 형식
+
+자식 ec2-problem-explain의 문제 해설은 **문제를 읽어요 → 이 개념과 공식을 떠올려요 → 종이에 쓸 첫 줄 → 이렇게 풀어요 → 완성 답과 검산 → 주의할 점 → 조건을 바꾸어 생각해요** 순서다. 사용자 방식의 풀이를 start/solve/verify의 정식 본문으로 삼고 필요한 이유·유도를 각 단계에 연결한다. 앞에 별도 핵심 풀이를 추가하거나 뒤에 같은 상세 풀이를 반복하지 않는다. 요약·동반 MD·답안 PDF는 이 경로와 결과를 따른다. 순수 개념 정리노트는 기존 토픽/레이어 구조를 유지한다.
+
+**한 행에 하나의 식:** 독립된 계산 대상은 각각 별도 display 블록/MD 줄/PDF 행에 쓴다. 서로 다른 $g_m$, $r_\pi$, $r_o$ 계산을 쉼표·\quad·\qquad로 한 줄에 묶지 않는다. 같은 양의 `식 = 대입 = 결과` 연속 등식과 실제 같은 값을 가진 소자의 등식 묶음은 유지할 수 있으며, 폭을 넘으면 단계별로 세로로 나눈다. 설명문의 짧은 기호·조건은 인라인으로 쓸 수 있다.
+
+자식 공통 조립·검사·답안 추출은 통합 본문과 `data-answer-step`/`data-answer-final` 선택 표지를 지원한다. PDF는 별도 풀이 사본 없이 검토한 본문의 회로·판단·계산·최종 답에서 추출한다. 아래 PDF 명령은 현재 validation 승인이 실제로 확인된 뒤에만 수행한다. 표지 누락·검토 실패이면 withheld로 기록하고 기존 팩 보존/복구 계약을 따른다. 정상 발행 검사를 우회하거나 원본 MD 답안으로 조용히 대체하지 않는다.
+
+## 절차
+
+### 0. 준비
+1. `REPO`에 `STT/`, `강의노트/`, `교과서/마이크로전자회로/`, `workbook/build_workbook.py`가 모두 있는지 확인한다. 하나라도 없으면 "전자회로2 저장소에서만 동작해요"라고 알리고 멈춘다.
+2. STT 목록은 NFC로 읽는다. macOS에는 NFD 파일명이 섞여 있다.
+   ```bash
+   python3 -c "import os,unicodedata as u,re;n=[u.normalize('NFC',f) for f in os.listdir('$REPO/STT')];print(sorted(m.group(1) for f in n if f.endswith('전회2.md') and (m:=re.match(r'(\d{4})',f))))"
+   ```
+3. 기간을 정한다.
+   - 인자가 있으면 그 기간을 쓴다.
+   - 인자가 없으면 `복습노트/*/정리노트_<range>_*.html` 중 가장 늦은 끝 날짜를 찾는다(NFD 폴더·파일명도 잡히게 NFC로 비교).
+     ```bash
+     python3 -c "import os,re,unicodedata as u
+     packs=[]
+     for d in os.listdir('$REPO/복습노트'):
+         for f in os.listdir(os.path.join('$REPO/복습노트', d)):
+             if m:=re.match(r'정리노트_(\d{4}(?:-(\d{4}))?)_', u.normalize('NFC', f)):
+                 packs.append(m.group(2) or m.group(1))
+     print(max(packs) if packs else '없음')"
+     ```
+     그 뒤의 STT를 모두 쓴다. 팩이 하나도 없으면 사용 가능한 STT 날짜를 보여 주고 "기간을 인자로 넣어 주면 돼요(예: /ec2-review-pack 0923)"라고 알린 뒤 멈춘다.
+   - 해당 STT가 하나도 없으면 사용 가능한 날짜를 보여 주고 멈춘다.
+   - `range`는 첫 STT 날짜 하나이거나 `첫-끝` 형식이다.
+4. 실행 폴더를 만든다. 서브에이전트에게는 `RUN`, `RUN/repo`, `SKILL`, `PROFILE`의 실제 절대 경로와 learning_style snapshot을 넘긴다.
+   ```bash
+   mkdir -p "$RUN"/{summaries,sections,work} && ln -sfn "$REPO" "$RUN/repo"
+   ```
+   에이전트는 `RUN` 밖에 쓰지 않는다. 임시·보조 파일은 `RUN/work/`에만 둔다. 저장소(`STT/`, `강의노트/`, `교과서/`, `workbook/`, `from_the_past/`)에는 아무도 쓰지 않고, `복습노트/`에는 메인 에이전트만 쓴다.
+
+5. `PROFILE` 존재를 확인하고 현재 바이트 snapshot을 만든다. 본문은 작성자·감사자·리뷰어가 읽고, 메인은 정상 모드에서 snapshot 객체만 읽는다(lite의 실제 부모 감사 때는 본문도 읽는다). 빠진 명세는 필수 입력 오류다.
+   ```bash
+   python3 "$REPO/workbook/learning_style.py" snapshot --repo "$REPO" --out "$RUN/learning-style-snapshot.json"
+   ```
+
+### 1. 범위 파악
+1. **먼저** 관련 `강의노트/2026F_Lec*_*.pdf` 텍스트를 슬라이드 번호와 함께 `RUN/slides.txt`에 추출한다(PyMuPDF, 쪽마다 `=== LNN sK ===`, `LNN`은 파일명의 `LecN`을 두 자리로). 요약 에이전트는 이 파일이 있다고 보고 시작하므로 추출이 끝난 뒤에 띄운다.
+   - 관련 PDF: **이번 range의 STT가 실제로 다루는** 슬라이드가 들어 있는 Lec PDF만. 이전 날짜가 이미 다룬 슬라이드는 이전 팩이 있든 없든 이번 range 밖이므로 "안 다룸"이 아니라 그냥 넣지 않는다. 확실하지 않으면 넉넉히 넣는다. 새 강의자료가 방금 올라왔으면(`강의노트/`에 새 Lec PDF) 그것도 관련 PDF 후보에 넣는다 — 수업은 슬라이드 업로드보다 먼저 진행되기도 한다.
+   - 추출에 실패하면 STT만으로 진행하고 보고서에 적는다(브리프의 `slides.txt` 줄은 "없음"으로 바꿔 넘긴다).
+   - **슬라이드가 없는 날짜**: 이번 range의 날짜 중 그 날 강의 내용을 다루는 Lec PDF가 하나도 없으면(예: 교수님이 업로드된 슬라이드보다 더 나간 경우), 그 날짜를 표시해 둔다. 다음 항목의 브리프에서 쓴다.
+2. 그다음 STT 날짜마다 요약 에이전트 1명을 **병렬로** 띄운다. 브리프는 `references/stt-summary-prompt.md`에 있다.
+   - `<2026F_LecN_*.pdf>`: 그 날짜가 다룬 슬라이드가 들어 있는 PDF. 확실하지 않으면 1의 관련 PDF를 모두 적는다. **1에서 "슬라이드 없음"으로 표시한 날짜**는 이 자리에 "없음(이 날짜 슬라이드 미게시)"이라고 적는다 — 요약 에이전트는 STT와 교과서만으로 진행하고, `## 슬라이드 대조표` 대신 `## 교과서 절 대조`만 쓴다(`references/stt-summary-prompt.md`).
+   - `<YYYY-MM-DD>`: 연도는 이번 학기 연도(오늘 날짜 기준), 월·일은 `<MMDD>`.
+3. **요약이 모두 끝난 뒤** 문제 선발자가 후보 문제 목록을 만든다(`references/problem-selection.md` 1).
+   ```bash
+   python3 "$SKILL/scripts/problem_index.py" --repo "$REPO" --used "$REPO/복습노트" --exclude-range <range> --chapters <장> --format json --catalog-out "$RUN/exam-catalog" > "$RUN/candidates.json"
+   ```
+   장은 각 요약의 `## 교과서 절 대조`에서 "다룸"·"일부"로 적힌 절 번호마다 **첫 번째 숫자**(예: `9.1.2` → `9`)를 모아 만든 집합이다(슬라이드 제목이 아니다). 어떤 요약에도 Razavi 절이 없으면(순수 전자회로1 복습, Lec1–2뿐) 이 단계를 건너뛴다(문제 0개).
+
+### 2. manifest
+- 필수 `learning_style`은 준비 단계 `RUN/learning-style-snapshot.json`의 객체 전체(path·sha256·rule_ids)를 그대로 넣는다. 작성자·리뷰어 브리프에 PROFILE 절대 경로와 snapshot을 채운다.
+- 범위 설계자가 요약들의 슬라이드 대조표와 용어·식 목록으로 `RUN/manifest.json`을 쓴다. 문제 선발자의 순차 인계 후 같은 설계자가 최종 계약과 섹션 브리프를 확정한다. 규칙은 `references/manifest-guide.md`에 있다.
+- 첫 섹션은 항상 `why`(토픽 `why-circuit`, "들어가며: 왜 이런 회로를 쓸까")다. 요약의 `## 동기 발언`으로 `required_terms`를 고른다(`references/manifest-guide.md`).
+- 문제 선별의 공통 명세는 `references/problem-selection.md`다. 새 manifest는 `selection_policy: exam-first-v2`로 **기출 우선 최대 20문항**, 핵심/추가 연습·학습 목표·추정 시간을 기록한다. 교과서는 기출의 빈틈을 보완하고 종류별 고정 비율/최소 개수를 강제하지 않는다. 다른 회차에서 사용한 문항은 선행 문제도 항상 제외한다. 풀이 없는 문제도 원문에서 직접 풀어 검토하며 무해설을 불이익으로 삼지 않는다. 기출 상세 JSON의 원문·전체 소문항·실제 그림을 읽고 미분류·draft·stale은 MD로 재확인한다. 전체 문항만 채택하며 범위 밖 소문항이 있으면 미학습 개념과 함께 보류해 이후 회차에서 재검토한다.
+- 문제가 1개 이상이면 manifest 검증 후 `RUN/selection-review.json`(미사용 기출 전체/선택 문항의 판정·보류·coverage·전체 시험 범위 점검)을 작성하고 `references/problem-selection.md` 4의 명령으로 `RUN/selection.json`을 만든다. 원본/후보/사용 이력 변경이면 다시 검토한다. 목록이나 핵심/추가·시간·목표가 바뀔 때마다 기록을 갱신한다. 조립 시 `.assets/selection.json`과 `.pack/selection-review.json`을 보존한다. PDF 빌드 전 ID·순서가 manifest와 같아야 한다. 후보는 있으나 최종 0개이면 제외·보류 이유를 보고하고 문제 없는 팩 절차를 따른다.
+- 검증: `python3 "$SKILL/scripts/manifest.py" "$RUN/manifest.json" "$REPO"` 결과가 `OK`여야 한다.
+
+### 3. 작성
+- 작성·수정 모두 `references/content-rules.md`의 "이해되는 설명의 순서"를 적용한다. 작성자는 첫 설명과 작은 예시만으로 풀 수 있는 적용 질문·답·이유를 보고한다. `lite`도 이 자기 검사를 생략하지 않는다. 기존 팩을 수정할 때도 대상 토픽에 적용하고 HTML에서 MD·SVG를 다시 생성한다.
+- 각 개념은 회로 역할과 핵심 관계를 첫 설명에 먼저 보여 주고 formal에 상세 정의·중간 단계·유도를 잇는다. 기존 why·eli5·formal·보충·summary 계약을 유지한다.
+- 회로를 그리는 토픽과 자식 문제설명 브리프는 PROFILE의 `CIRCUIT-02`를 필수 적용한다. 측정 조건을 실제 연결한 회로 → 생략 근거 → 노드 관계 → 첫 식 순서이며, $G_m$은 출력 단락 접지, $R_{out}$은 입력 영점·출력 시험원을 그림에 보인다. 입력·노드·축퇴 저항을 식과 연결하고 병렬쌍은 전류원 왼쪽/$r_o$ 오른쪽으로 둔다. 유한 β·$r_o$가 필요하면 유지하고 선택 모델의 상세 유도는 formal에서 보존한다. $R_{out}$ 정확 전체 모델은 아래 예외가 아니면 내부 검산에만 둔다. why-circuit의 소신호 그림 금지는 유지한다. 내용 리뷰와 답안 PDF 화면 검토는 일반 모델 그림만으로 이 기준을 통과시키지 않는다.
+- 출력 배치 필수: 입력은 왼쪽, 출력 단자·출력 라벨·출력 시험원/단락 접속은 오른쪽에 둔다. 회로로 유입하는 시험전류는 오른쪽에서 왼쪽으로 그리며, 내부 제어 전류원의 방향·전압 극성·실제 접속은 유지한다. 전기적으로 같은 노드라는 이유로 출력 접속을 왼쪽이나 중앙에 두지 않는다. 풀이 본문·HTML·PDF에서 각각 확인한다.
+- 병렬 가지 순서 필수: 제어 전류원과 $r_o$가 병렬이면 반드시 **제어 전류원 왼쪽 → $r_o$ 또는 병렬 합성 저항 오른쪽 → 출력 접속 맨 오른쪽** 순서로 그린다. 입력은 그 왼쪽, 이미터/소스 축퇴 저항은 해당 노드 아래에 둔다. $r_o$를 생략한 축약 모델에는 없는 저항을 추가하지 않는다. 그 모델의 제어원 위치를 병렬쌍의 배치 규칙으로 일반화하지 않는다. 풀이 본문의 모든 SVG와 답안 PDF에서 소자·단자 전체 배치를 대조하고, 전기적 등가성만으로 위치 불일치를 승인하지 않는다.
+- 노드 점과 시험 표기 필수: 접지 표기만 하는 비분기 단자와 접지 기호의 직접 접속점을 제외하고, 입력·출력·시험 노드와 이름을 붙인 전압 노드에는 연결 위치가 분명한 눈에 보이는 점을 찍는다. 출력 시험전압 노드의 점은 출력 도선의 실제 맨 끝이자 가장 오른쪽 단자에 둔다. 점 오른쪽으로 도선(ink)이 더 이어지거나 연장된 도선 중간에 점이 놓이면 안 된다. 시험 노드 전압 $V_t(+)$는 그 끝점 위에 둔다. 유입 시험전류는 오른쪽에서 왼쪽으로 흐르며, 왼쪽을 향하는 $i_t$ 화살표는 $V_t$ 점 왼쪽의 도선 구간에 둔다. $i_t$ 라벨도 점 왼쪽에서 그 화살표 아래나 곁에 둔다. 화살표 전체가 점 왼쪽에 머물고 점을 덮지 않도록 화살표 꼬리와 점 사이에 작은 간격을 남긴다. 화살표나 전류 라벨을 점 오른쪽에 놓지 않는다. 다른 시험 기호($v_x/i_x$ 등)를 쓰면 같은 배치와 정의를 적용한다. 선 교차만 있고 연결되지 않은 곳에는 점을 찍지 않는다. 라이트·다크 HTML과 실제 답안 PDF에서 점·라벨·화살표의 분리와 가시성을 각각 확인한다.
+- 회로 안 글자와 점의 정돈: SVG 안에는 소자 이름·값·제어 전류원 라벨(예: $g_mv_\pi$), 노드 이름·극성·방향처럼 실제 회로를 읽는 표기를 남긴다. 분석용 $G_m$ 제목·측정 조건 문구·유도 설명은 그림 아래 figcaption이나 수식 문단에 둔다. 출력 단락·입력 영점의 실제 연결은 그림에 보존한다. 접지 입력 위의 독립 제목 `Rout`처럼 불필요한 제목은 옮겨 중복하지 않고 삭제한다. 가까운 노드 관계는 유도 설명이 아니고 겹치지 않을 때만 남길 수 있다. 접지 표기만 하는 비분기 단자·접지 기호의 직접 접속점은 제외하고 입력·출력·시험 단자, 이름 붙인 내부 전압 노드, 실제 분기 접속점의 점은 유지하되 이름도 분기도 없는 직선 도선 중간의 장식 점은 없앤다. 모든 도선에 점을 추가하라는 규칙이 아니다. $V_{out}(+)$·$V_t$ 등 라벨은 아래첨자까지 포함한 실제 글리프 경계상자가 도선에서 최소 0.6em(보통 화면에서 약 8px) 떨어지게 배치한다. 텍스트 기준선 간격만 확인하지 않는다. 필요하면 라벨을 옮기고 viewBox 위쪽 여백을 늘린다. 풀이 본문의 모든 SVG를 열거하여 라이트·다크 HTML과 실제 답안 PDF의 보통 보기 크기에서 이 간격·클리핑·겹침을 확인한다. 병렬 제어원 왼쪽/$r_o$ 오른쪽/출력 맨 오른쪽, 맨 끝 $V_t$ 점 오른쪽 도선 없음, 점 왼쪽의 왼쪽 방향 $i_t$와 라벨 배치도 유지한다.
+- 접지·전압 라벨·노드 색 대응: 접지 기호에 직접 닿는 점과 접지만 표시하는 비분기 입력 단자의 점은 생략한다. 접지로 이어지는 회로라도 별도의 실제 분기 접속점·이름 있는 비접지 노드는 유지한다. $v_e$ 등 전압 이름은 다른 소자나 저항 옆으로 멀리 밀지 않고 해당 노드 바로 곁에 둔다. 아래첨자·극성을 포함한 실제 글리프 경계로 도선과 최소 0.6em 간격을 확보하면서 가능하면 0.6–1em 정도의 가까운 간격을 목표로 한다. 혼잡 때문에 더 벌리면 배치 이유를 검토에 기록한다. 노드 점과 해당 전압 이름·극성은 같은 파랑 또는 빨강으로 묶는다. 주요 신호 경로를 따라 파랑·빨강을 교대하고 가까운 전압 라벨끼리 최대한 다른 색을 쓴다. 같은 전기적 노드는 다른 위치의 점도 같은 색이며, 모든 인접 노드를 반대색으로 만드는 그래프 채색을 강제하지 않는다. 접지 표기·도선·소자/제어원 라벨·전류 화살표/라벨·본문 수식의 색은 이 노드 색 규칙으로 바꾸지 않는다. 색 없이도 노드 이름과 극성으로 구분되어야 한다. SVG에는 대응 노드 식별자와 색을 명시하고, HTML 테마와 PDF에서 실제 계산된 색이 파랑/빨강인지 확인한다. PDF의 문항 종류별 초록/주황 `--kind`를 노드 파랑의 대체값으로 사용하지 않는다. 풀이 본문의 모든 SVG와 MD에 참조된 같은 그림, 라이트·다크 HTML 및 실제 답안 PDF에서 접지 점 생략·가까운 라벨·점/전압 색 일치를 검토한다.
+- 출력저항 표시/검산 경계: $R_{out}$은 처음부터 유효한 근사식으로 시작하고 조건과 $\approx$를 유지한다. 이 규칙은 생성하는 풀이 본문(start/solve/verify·formal/보충 포함) HTML·요약·동반 MD·답안 PDF 모두에 적용한다. 정확식 → 근사식 유도나 정확식과 수치 비교를 학습 본문에 추가하지 않는다. 정확한 $R_{out}$의 전체 모델·유도·수치/극한 대조는 내부 독립 검산 evidence에만 둔다. 원문이 정확식·유한 β 전체 결과 또는 수업 기본 큰 곱 근사와 반대인 조건·수치를 명시하면 예외 이유를 짧게 밝히고 필요한 모델과 결과를 제시한다. 유한 β 또는 $r_o$가 있다는 사실만으로 예외를 선언하지 않는다. 이 제한은 $R_{out}$에 한정하며 다른 개념의 필요한 상세 유도를 줄이지 않는다.
+- 섹션마다 작성자 1명을 띄운다. 브리프는 `references/content-rules.md`, 위젯 규칙은 `references/widget-rules.md`에 있다.
+- 독립 작성자는 가용 슬롯만큼 **배치로 병렬** 실행한다. 전체 작성자를 한 번에 띄울 것을 요구하지 않는다. 모델은 opus(GPT: sol), `lite`이면 sonnet(GPT: luna)이다. 병렬 작성자끼리 임시 파일이 섞이지 않게 브리프에 각자의 임시 폴더 `<RUN>/work/<sid>/`를 적어 준다.
+- 브리프의 `<…>` 자리는 실제 경로, id, 금지어 목록(`<forbidden 목록>`), 예고 토픽 id(`<preview_topic>`), 섹션 작성자에게 필요한 교과서 장 PDF와 쪽(`<N>장.pdf`, `<쪽>`), 그리고 manifest `links` 중 그 섹션 토픽에 속한 것만(`<이 섹션의 links 목록>`) 채워 넣는다. 요약·예고 섹션 작성자에게는 문제 수(0이면 "문제 없음")도 알린다.
+- `why` 섹션 작성자도 함께 병렬로 띄운다. 브리프의 `<뒤 섹션 토픽 id·제목 목록>`에 manifest의 나머지 토픽 id와 제목을 모두 적어 준다(링크 대상). 위젯은 두지 않는다.
+- 위젯은 팩 전체에 0~2개다. 병렬 작성자끼리는 서로를 모르므로 **범위 설계자가 작성자 실행 전에** 위젯을 둘 토픽(0~2개)을 정하고, 그 토픽의 섹션 작성자 브리프에만 `<위젯>` 자리에 "토픽 `<토픽 id>`에 위젯 1개: <무엇을 움직이면 무엇이 보이는지>"를 적는다. 나머지 작성자의 `<위젯>` 자리에는 "위젯 없음"이라고 적는다. 정한 토픽과 이유는 보고서 "스킬이 정한 사항"에 적는다.
+
+### 4. 조립
+- `manifest.py "$RUN/manifest.json" "$REPO"`로 현재 snapshot을 검증한 후에만 발행 경로를 변경한다.
+- **부모가 problems.txt·display-titles.json·selection.json·slug·정리노트를 처음 변경하기 전에** `references/problem-explain-integration.md`의 기존 설명 백업·정리 절차를 먼저 끝낸다. 문제지 빌드도 그 뒤에 한다. 재조립마다 반복하지 않는다. 기본 팩 재생성이 실패하면 해당 참조의 복원 순서를 따른다.
+- 초기 빌드는 문제지(`--mode problems`)만 만든다. 답안은 9단계 자식 승인 이후에 만든다.
+- **처음 조립할 때만**: `복습노트/<range>/`에 이번 `range`의 산출물(맨 위의 `정리노트_<range>_*`·`복습문제_<range>_*`, `.assets/`의 `정리노트_<range>_*`·`problems.txt`·`display-titles.json`·`selection.json`·`figures_<range>/`)이 하나라도 있으면 먼저 백업한다. 다시 조립할 때(5~8단계에서 돌아온 경우)는 백업하지 않는다. 이미 스킬이 만든 초안이 백업에 섞이기 때문이다.
+  - `RANGE`, `REPO`, `RUN`을 모두 실제 값으로 바꿔 한 명령으로 실행한다. 파일명은 NFC로 비교하므로 NFD 파일명도 잡힌다.
+  - 백업 파일·경로 집합·SHA-256은 `RUN/basic-pack-backup.json`에 기록하고 재조립 시 유지한다. 백업은 매번 새 폴더 `RUN/previous-<시각>-<임의>/`에 만든다. `RANGE`가 형식에 안 맞거나, 대상이 있는데 복사된 파일 수가 다르면 종료 코드 1로 멈춘다. 이때는 조립하지 말고 원인을 고친다.
+```bash
+RANGE=<range> REPO=… RUN=… python3 - <<'EOF'
+import hashlib, json, os, re, shutil, sys, tempfile, time, unicodedata as u
+from pathlib import Path
+r, run, repo = os.environ["RANGE"], os.environ["RUN"], os.environ["REPO"]
+if not re.fullmatch(r"\d{4}(-\d{4})?", r) or not os.path.isdir(run):
+    sys.exit(f"백업 중단: RANGE={r!r} 또는 RUN={run!r} 잘못됨")
+if not os.path.isdir(os.path.join(repo, "STT")):
+    sys.exit(f"백업 중단: REPO={repo!r} 잘못됨")
+notes = os.path.join(repo, "복습노트")
+def listdir_nfc(d):  # NFD 폴더명도 찾는다
+    return {u.normalize("NFC", n): os.path.join(d, n) for n in os.listdir(d)} if d and os.path.isdir(d) else {}
+pack = listdir_nfc(notes).get(r)
+top = listdir_nfc(pack)
+hits = sorted((n, p) for n, p in top.items() if re.fullmatch(rf"정리노트_{r}_.+\.html|복습문제_{r}_.+-(문제|답안)\.pdf", n))
+hits += sorted((f".assets/{n}", p) for n, p in listdir_nfc(top.get(".assets")).items()
+               if re.fullmatch(rf"정리노트_{r}_.+\.md", n) or n in (f"figures_{r}", "problems.txt", "display-titles.json", "selection.json"))
+hits += [(f".pack/{n}", p) for n, p in listdir_nfc(top.get(".pack")).items() if n == "selection-review.json"]
+record = Path(run) / "basic-pack-backup.json"
+if not hits:
+    record.write_text(json.dumps({"range": r, "backup": None, "roots": [], "files": {}, "dirs": []}), encoding="utf-8")
+    print("백업할 기존 팩 없음"); sys.exit(0)
+if Path(pack).is_symlink() or (Path(pack) / ".assets").is_symlink():
+    sys.exit("백업 중단: 팩/자료 경로에 symlink")
+def inventory(base, roots):
+    files, dirs = {}, []
+    for rel in roots:
+        target = Path(base) / rel
+        for item in [target, *(target.rglob("*") if target.is_dir() else [])]:
+            if item.is_symlink() or not item.resolve().is_relative_to(Path(base).resolve()):
+                sys.exit(f"백업 중단: 허용 경로 밖/symlink: {item}")
+            name = item.relative_to(base).as_posix()
+            if item.is_file(): files[name] = hashlib.sha256(item.read_bytes()).hexdigest()
+            elif item.is_dir(): dirs.append(name)
+    return files, sorted(dirs)
+roots = [n for n, _ in hits]
+want = inventory(Path(pack), roots)
+def count(p):
+    return sum(len(f) for _, _, f in os.walk(p)) if os.path.isdir(p) else 1
+dst = tempfile.mkdtemp(prefix=time.strftime("previous-%Y%m%d-%H%M%S-"), dir=run)  # 항상 새 폴더
+for n, a in hits:
+    b = os.path.join(dst, n)
+    os.makedirs(os.path.dirname(b), exist_ok=True)
+    shutil.copytree(a, b) if os.path.isdir(a) else shutil.copy2(a, b)
+want_n, got_n = sum(count(a) for _, a in hits), count(dst)
+if got_n != want_n:
+    sys.exit(f"백업 실패: 파일 {want_n}개 중 {got_n}개만 복사됨 → {dst}")
+got = inventory(Path(dst), roots)
+if got != want:
+    sys.exit(f"백업 실패: 경로/해시 불일치 → {dst}")
+record.write_text(json.dumps({"range": r, "backup": str(Path(dst).resolve()), "roots": roots,
+    "files": want[0], "dirs": want[1]}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+print(f"백업 {len(hits)}항목(파일 {got_n}개): {dst}", *(a for _, a in hits), sep="\n")
+EOF
+```
+  - 백업 직후(처음 조립이고 백업이 성공했을 때만): 이전 problems.txt의 ID·순서와 새 목록이 다르면 같은 slug의 이전 답안도 백업에 보관하고 발행 위치에서 제거한다. 이번 manifest가 만들 이름과 다른, 이번 range의 이전 산출물(문제가 0개로 바뀌었거나 slug가 바뀐 경우의 옛 `정리노트_<range>_*`/`복습문제_<range>_*`)을 지운다. 정확한 소유 패턴과 검증된 basic-pack-backup.json의 roots에 함께 속하는 파일만 정리하며, 삭제 전 원본·백업 해시를 다시 확인한다.
+```bash
+python3 - "$RUN/manifest.json" "$REPO/복습노트/<range>" <<'EOF'
+import hashlib, json, os, re, sys, unicodedata as u
+from pathlib import Path
+m = json.load(open(sys.argv[1], encoding="utf-8"))
+r, slug, out = m["range"], m["slug"], sys.argv[2]
+keep = {f"정리노트_{r}_{slug}.html", f".assets/정리노트_{r}_{slug}.md"}
+if m["problems"]:
+    keep |= {f"복습문제_{r}_{slug}-문제.pdf", f"복습문제_{r}_{slug}-답안.pdf"}
+previous_list = os.path.join(out, ".assets", "problems.txt")
+previous_ids = ([line.split("|", 1)[0].strip() for line in open(previous_list, encoding="utf-8")
+                 if line.strip()] if os.path.isfile(previous_list) else [])
+if previous_ids != [q["id"] for q in m["problems"]]:
+    keep.discard(f"복습문제_{r}_{slug}-답안.pdf")
+record = json.loads((Path(sys.argv[1]).parent / "basic-pack-backup.json").read_text(encoding="utf-8"))
+if record["range"] != r:
+    sys.exit("정리 중단: 백업 range 불일치")
+roots = set(record["roots"])
+backup = Path(record["backup"]) if record["backup"] is not None else None
+def owned(rel):
+    return bool(re.fullmatch(rf"정리노트_{r}_.+\.html|복습문제_{r}_.+-(문제|답안)\.pdf|\.assets/정리노트_{r}_.+\.md", rel))
+def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
+pending = []
+for sub in ("", ".assets/"):  # 맨 위와 .assets/ 의 파일만 본다
+    d = os.path.join(out, sub)
+    for n in (os.listdir(d) if os.path.isdir(d) else []):
+        nn = u.normalize("NFC", n)
+        rel, target = sub + nn, Path(d) / n
+        if not (owned(rel) and rel in roots and rel not in keep):
+            continue
+        saved = backup / rel if backup is not None else None
+        if (target.is_symlink() or not target.is_file() or saved is None or saved.is_symlink()
+                or not saved.is_file() or not saved.resolve().is_relative_to(backup.resolve())
+                or sha(saved) != record["files"].get(rel) or sha(target) != record["files"].get(rel)):
+            sys.exit(f"정리 중단: 검증된 백업/현재 파일 불일치: {rel}")
+        pending.append((rel, target))
+# 모든 삭제 후보를 검증한 뒤에만 변경한다.
+for rel, target in pending:
+    target.unlink()
+print("제거:", ", ".join(rel for rel, _ in pending) if pending else "없음")
+EOF
+```
+- **기본 팩·설명 백업이 모두 검증된 뒤에만** 표시 제목 맵을 발행 폴더에 작성/갱신한다. 작성 전까지 후보 맵은 RUN/work에 둔다.
+- 선발 문항마다 짧은 표시 제목을 작성해 `.assets/display-titles.json`에 `{ "workbook ID": "짧은 제목" }` 객체로 저장한다. 키는 선발 ID 전체와 정확히 일치해야 한다. 값에 `P1.` 접두사·Fig 번호·긴 조건 나열을 넣지 않는다. 생성기가 순서에 따라 `P1. …`를 붙인다. 문제은행 원제목·원문·출처는 보존한다. 문제설명은 자동으로 이 파일을 읽고 입력 해시에 포함하며, 두 PDF 빌드는 같은 파일을 `--display-titles`로 받는다.
+- 정리노트를 조립한다.
+```bash
+python3 "$SKILL/scripts/assemble.py" --repo "$REPO" --run "$RUN" --out "$REPO/복습노트/<range>"
+```
+- 문제가 1개 이상이면 PDF를 만든다(`references/problem-selection.md` 5). `--ids`는 manifest `problems` 순서대로 쉼표로 잇는다. 값은 아래처럼 manifest에서 그대로 뽑아 쓴다(손으로 다시 나열하지 않는다).
+```bash
+python3 -c "import json,sys;print(','.join(q['id'] for q in json.load(open(sys.argv[1]))['problems']))" "$RUN/manifest.json"
+```
+```bash
+python3 "$REPO/workbook/build_workbook.py" --ids <위 결과> --name 복습문제_<range>_<slug> --mode problems --selection "$REPO/복습노트/<range>/.assets/selection.json" --display-titles "$REPO/복습노트/<range>/.assets/display-titles.json" --layout video-16x9 --pdf-dir "$REPO/복습노트/<range>" --build-dir "$RUN/workbook-build"
+```
+  - stderr에 `ERROR <md 경로>: …`(문제 md 자체 오류, 종료 코드 2)가 나오면 해당 id를 같은 절 후보로 한 번 바꿔 manifest를 고치고 2단계 검증부터 다시 하고 이 단계를 다시 한다(백업은 하지 않는다). `ERROR <name>: …`(렌더링·Chrome·네트워크, 종료 코드 1)나 `OVERFLOW`는 md 문제가 아니므로 id를 바꾸지 않고 "미해결"로 보고한다(`references/problem-selection.md` 5).
+
+### 5. 기계 예비 검사
+먼저 전담 감사자가 `references/review-prompt.md`의 개인화 감사 형식으로 모든 topic ID를 실제 검토하고 `RUN/learning-style-audit.json`에 기록한다. 일반 모드는 6단계 리뷰어가 재검토·보완하고, lite는 부모가 직접 수행한다. 문제가 0개여도 필요하다.
+```bash
+python3 "$SKILL/scripts/check_html.py" --repo "$REPO" --manifest "$RUN/manifest.json" --note "$REPO/복습노트/<range>/<정리노트>.html" --defer-answer-pdf
+```
+- 문제가 1개 이상일 때 위 명령의 성공 출력은 `PRELIMINARY: answer PDF pending`이며 최종 pass가 아니다. 문제가 0개이면 `--defer-answer-pdf`를 빼고 실행한다. 유예는 정확한 manifest 답안 경로의 파일 없음 한 건뿐이고 다른 링크·앵커·내용·명세·감사는 모두 검사한다.
+- `FAIL`이면 Problem의 `where`(토픽 id, 섹션 id)로 담당 작성자를 찾는다. `broken-link`가 PDF이면 4단계 PDF 빌드를 확인한다.
+- 그 작성자에게 문제 목록을 보내 조각을 고치게 한다(SendMessage, 안 되면 같은 브리프로 새 에이전트).
+- 고친 뒤 4단계부터 다시 한다. PDF는 manifest `problems`가 바뀐 경우에만 다시 만든다. HTML·MD 조각만 고쳤으면 조립(`assemble.py`)만 다시 하면 된다. 최대 2회까지이며, 그래도 남으면 "미해결"로 보고한다.
+
+### 6. 리뷰 (lite는 부모 내용 리뷰만 생략)
+- 리뷰어는 작성자의 적용 질문을 독립적으로 풀어 보고 핵심 규칙·예시·조건을 대조한다. 상세 기준은 `references/review-prompt.md`의 ELI5 품질 항목을 따른다.
+- 리뷰어 1명을 띄운다. 브리프는 `references/review-prompt.md`에 있다.
+- Critical과 Important는 모두, Minor는 쉬운 것만 고친다. 문제 선별 지적은 선발자가 manifest·선발 기록을 고치고 범위 설계자가 영향받은 링크·브리프를 동기화한다. 메인은 검증 후 PDF를 다시 만든다.
+- 담당 작성자별로 **한 번에 모아서** 수정을 요청한다. 수정은 한 번만 한다.
+- 수정 후 4~5단계를 다시 한다. 문제 선별(manifest `problems`)을 고쳤을 때만 PDF를 다시 만들고, 정리노트 조각만 고쳤으면 조립만 다시 한다. 반영하지 않은 항목은 보고서에 적는다.
+
+### 7. 브라우저 검증
+- 브라우저 QA 에이전트가 `references/browser-check.md`대로 실제 검사하고 RUN에 증거를 남긴다. 메인은 상태·결함 위치·증거 해시만 읽는다.
+  - http.server를 빈 포트에 띄운다.
+  - 답안 링크는 아직 pending인 정확한 경로만 예비 검사로 기록한다. 다른 링크는 실제로 확인하고 답안 PDF 화면은 9단계에서 본다.
+  - 확인: KaTeX 오류 0, 남은 `$` 없음, 375px에서 가로 스크롤 없음, 다크모드, 위젯, 링크(복습문제 PDF 포함), 콘솔 오류
+- 결함은 5단계와 같은 방식으로 작성자에게 되돌린다(정리노트 조각만 고치므로 조립만 다시 하면 된다). 이것도 최대 2회 규칙에 포함된다.
+- 끝나면 서버를 종료한다.
+
+### 8. MD 변환
+```bash
+python3 "$SKILL/scripts/html2md.py" "$REPO/복습노트/<range>/<정리노트>.html" --check
+```
+- `OK`가 나와야 한다.
+- 누락이 나오면 대부분 HTML 조각의 마크업 문제다(수식이 `svg`나 `.controls` 안에 있는 경우 등). 조각을 고치고 4단계부터 다시 한다.
+
+### 9. 문제설명·승인 답안·최종 검사
+- `references/problem-explain-integration.md`의 부모 호출 계약을 따른다.
+- 확정한 manifest `problems`가 1개 이상이면 문제설명 조정자가 형제 `ec2-problem-explain` 스킬의 extract부터 실제 네 검토까지 수행하고, 최상위 메인만 기존 CLI publish를 실행한다. MD 변환 이후이며 최종 보고 이전이다.
+- 문제가 0개이면 `skipped-no-problems`다. 자식·PDF를 건너뛰고 현재 snapshot·모든 토픽 감사와 유예 없는 최종 노트 검사를 수행한다. lite여도 개인화 감사를 수행한다.
+- extract 이후 정리노트 바이트를 바꾸지 않는다. 자식 조정자는 확정한 일곱 구역의 통합 풀이 저작 → 독립 검산 → build/check → 네 검토 + 전체 개인화 감사를 완료해 ready-for-publish로 인계한다. 메인이 기존 publish 게이트로 발행한다. 자식은 PDF를 직접 교체하지 않는다.
+- 자식 publish 성공 후 같은 팩의 발행 overlay를 쓴다. `<위 결과>`는 4단계처럼 manifest ID 순서를 추출한 값이다.
+```bash
+python3 "$REPO/workbook/build_workbook.py" --ids <위 결과> --name 복습문제_<range>_<slug> --mode answers --answer-overlay "$REPO/복습노트/<range>/.assets/자료_문제설명_<range>_<slug>/answer-overlay.json" --selection "$REPO/복습노트/<range>/.assets/selection.json" --display-titles "$REPO/복습노트/<range>/.assets/display-titles.json" --layout video-16x9 --pdf-dir "$RUN/answers" --build-dir "$RUN/answer-build"
+```
+- [통합 계약](problem-explain-integration.md)의 명령으로 PDF 실제 렌더 페이지를 확인하고 `RUN/answer-review.json`을 기록한다. 핵심 회로·판단·계산·최종 답과 자막 여백·넘침을 실제 확인한 기록만 pass다. 빌드 종료 코드가 0이고 OVERFLOW가 없어야 한다.
+```bash
+python3 "$SKILL/scripts/publish_answer.py" --repo "$REPO" --overlay "$REPO/복습노트/<range>/.assets/자료_문제설명_<range>_<slug>/answer-overlay.json" --pdf "$RUN/answers/복습문제_<range>_<slug>-답안.pdf" --review "$RUN/answer-review.json" --destination "$REPO/복습노트/<range>/복습문제_<range>_<slug>-답안.pdf" --backup-dir "$RUN/answer-backup-<새 실행ID>"
+python3 "$SKILL/scripts/check_html.py" --repo "$REPO" --manifest "$RUN/manifest.json" --note "$REPO/복습노트/<range>/<정리노트>.html"
+```
+- 답안 발행 후 유예 없는 최종 검사까지 통과해야 전체 완료다. 명세 변경·자식/PDF 실패 시 통합 계약에 따라 서로 맞는 이전 팩을 복원하거나 새 파일만 RUN/withheld로 옮긴다.
+
+### 10. 보고
+다음 형식으로 끝낸다.
+```
+## 복습팩 <range> <완료 | 일부 완료>
+- 파일: 복습노트/<range>/… (기본 팩 html 1·md 1·pdf <0|2>, 설명 published이면 html 1·md 1·그림/자료 폴더, 그 외에는 상태와 보류 경로)
+- 기본 팩: <완료 | 미해결 — 이유>
+- 문제설명: <published | withheld | skipped-no-problems | reused-verified> — <문항/소문항 수, HTML·MD 또는 stage, 검토·disputed·백업 경로>
+- 범위: 배운 슬라이드 … / 교과서 절 … / 예고만: …
+- 문제 N개: P9.05(장말, 9.1.2) — <why>, … (문제가 0개면 "없음 — <이유>")
+- 선발: 기출/교과서·핵심/추가 개수, 전체 소문항 묶음 수, 핵심/전체 예상 분(추정), 기출 미채택·보류 이유와 미학습 개념, 전체 시험 범위의 누락/유형 반복, selection.json·selection-review.json 경로
+- 스킬이 정한 사항: slug, 섹션 구성, 위젯, 문제 구성, 뺀 내용과 이유
+- 미해결: … (없으면 "없음")
+- 커밋 제안: git add 복습노트/<range> && git commit -m "docs(notes): add review pack <range>"
+```
+실행 폴더 경로(`RUN`, `EXPLAIN_RUN`)도 적는다. 설명이나 답안이 withheld이거나 최종 검사가 실패하면 제목은 "일부 완료"이며 전체 완료라고 쓰지 않는다. 개인화 감사·답안 렌더 검토·발행 receipt·최종 검사 상태와 복구/withheld 경로도 적는다. 수정 시 부모는 4~8단계부터, 설명은 자식 절차에 따라 다시 실행한다. extract 뒤 부모 입력·참고 자료가 바뀌면 새 EXPLAIN_RUN에서 시작한다.
+
+## 기존 팩에 왜 페이지 붙이기
+첫 섹션 `why`가 생기기 전에 만든 팩에는 다시 조립하지 않고 조각만 끼워넣는다. 기존 토픽 id(`s0-…`)는 그대로라 팩 사이 링크와 읽음 표시가 유지된다.
+1. 대상 팩의 `정리노트_*.html`과 `.assets/정리노트_*.md`를 scratchpad에 백업한다(NFC로 찾는다).
+2. 팩마다 작성자 1명(opus, 병렬)에게 `references/content-rules.md`의 작성자 브리프를 섹션 `why`로 채워 넘긴다. manifest 대신 기존 노트를 계약으로 삼는다: 근거는 노트 자체(읽기 전용), 그 날짜 STT, 노트 태그의 강의자료, Razavi 장 도입부이고, `<뒤 섹션 토픽 id·제목 목록>`은 노트에서 `article class="topic" id=…`를 뽑아 채운다. 출력은 scratchpad의 `why.html` 한 파일이다.
+3. 끼워넣는다. 이미 why 섹션이 있으면 교체하므로 다시 실행해도 된다.
+```bash
+python3 "$SKILL/scripts/insert_why.py" --note "$REPO/복습노트/<range>/<정리노트>.html" --fragment <why.html>
+```
+4. `python3 "$SKILL/scripts/check_html.py" <정리노트>.html`이 `OK`, `html2md.py <정리노트>.html --check`가 `OK`(`.assets/`의 md와 `.assets/figures_<range>/fig-why.svg`를 새로 만든다)여야 한다. 커밋할 때 이 svg도 함께 넣는다.
+5. 7단계처럼 브라우저로 본다: 표지 다음 첫 화면이 why 토픽인지, 오른쪽 요약 패널, 링크 이동, 다크모드, 375px.
+
+## 오류 처리
+| 상황 | 동작 |
+|---|---|
+| 저장소가 아님 | 알리고 멈춤 |
+| 기간에 해당하는 STT 없음 / 인자 없음 + 팩 없음 | 사용 가능한 날짜를 보여 주고 멈춤 |
+| PDF 텍스트 추출 실패 | STT만으로 진행하고 보고서에 표시 |
+| 범위가 workbook(9~11장) 밖 | 문제 0개, PDF 없이 정리노트만. 보고서에 이유 |
+| `problem_index.py`가 ERROR md를 냄 | 그 md는 후보에서 빼고 "미해결"에 적음 |
+| `build_workbook.py`가 `ERROR <md 경로>: …` 를 내거나 종료 코드 2 | 문제 md 자체의 오류다. 해당 id를 같은 절 후보로 한 번 교체해 재빌드. 또 실패하면 그 id를 빼고 "미해결" |
+| `build_workbook.py`가 `ERROR <name>: …` (렌더링·Chrome·네트워크) 를 내거나 종료 코드 1 (OVERFLOW 없이) | md 문제가 아니므로 id를 바꾸지 않는다. "미해결"에 적고 다음 단계로 진행 |
+| `OVERFLOW <파일>: <id>` | 종료 코드 1이지만 PDF는 남음. id를 바꾸지 않고 "미해결"에 적음 |
+| 포트 사용 중 | 다른 빈 포트 사용 |
+| 문제설명·개인화 감사·답안·최종 검사 실패 / disputed | 통합 계약대로 이번 실행 전 기본 팩과 대응 설명을 복원한다. 새 팩은 이번 파일만 RUN/withheld에 보관한다. 전체 완료를 보고하지 않고 다른 팩은 계속한다 |
+| 기존 설명 백업·해시 검증 실패 | 원본을 유지하고 부모 첫 조립을 중단한다 |
+| 같은 range의 팩이 이미 있음 | 4단계 첫 조립 전에 기존 html·pdf와 `.assets/`의 md·`problems.txt`·`display-titles.json`·`selection.json`·`figures_<range>/`를 같은 상대 경로로 새 폴더 `RUN/previous-<시각>-<임의>/`에 복사하고(다시 조립할 때는 복사하지 않음) 백업 경로를 보고서에 적음. 백업 명령이 실패하면 조립하지 않고 원인을 고친다 |
+| `insert_why.py`가 `insert_why 실패: …` | 노트는 그대로다. 메시지대로 why 조각을 고쳐 다시 실행 |
+| 검사 2회 실패 | 해당 팩을 통합 계약대로 복구/보류하고 미해결로 보고한다. 다른 팩은 계속한다 |
+
+## 본문과 페이지 요약의 계약
+
+요약은 시험 직전 확인할 핵심만 남긴다. 기본 구성은 핵심 한 문장 → 필요한 식 1~3개 → 판단 기준 1~3개이며 권장 분량이지 할당량이나 강제 상한이 아니다. 반복 예시·유도·중복 용어 풀이·일반적인 경고는 본문에 둔다. 식의 적용 여부나 답의 부호를 바꾸는 조건은 해당 식 옆에 압축한다. 본문에 없는 사실을 추가하지 않는다. 모든 본문 주장을 요약에 복제하지 않고 핵심의 일치·오해 가능성·중복 여부를 검토하며 생략 이유는 감사 기록에 남긴다.
+
+요약의 문장은 각각 별도 `<p>`로 작성하며 한 문장에는 하나의 판단을 담는다. 마침표로 문장을 실행 중 자동 분리하지 않는다(소수·약어·TeX 보존). 자연스러운 화면 줄바꿈은 허용한다. 의미가 나뉘면 짧은 소제목의 `summary-group`으로 묶되 단순 요약에 소제목을 늘리지 않는다. 제목 아래 12px, 그룹 사이 24px, 문장 문단 사이 8px을 공통 템플릿이 처리하며 빈 문단·연속 `<br>`로 간격을 만들지 않는다. 긴 식은 하나의 `aligned` 안에서 관계를 유지하며 나눈다. 중앙 제목·고정 패널 제목과 유일한 `.sums#sum-for`, 문제·원문 탭·앵커·저장 키를 보존한다.
+
+공개 학습 HTML·요약·동반 MD·툴팁·접근성 문구에는 STT 줄 번호·Part·타임스탬프·시각 정보 유무를 출력하지 않는다. 근거 위치는 별도 검토 기록에만 보관한다. 해설 HTML·동반 MD의 학습량 행(핵심/추가 연습·소문항 묶음·예상 시간)은 생성하지 않고 선발 JSON에는 유지한다. PDF 규칙은 이 HTML 가독성 변경으로 바꾸지 않는다.
+
+모든 학습 토픽에 대해 자료·토픽별 일반·강조·주의·보충의 서로 다른 핵심을 별도 행으로 감사한다. 본문 주장·대응 요약 문장·판정/생략 이유와 `pass | unresolved`를 기록하고 보완 뒤 실제 요약을 다시 읽는다. 기존 동반 MD와 재생성 원고를 동기화하되 없는 MD 형식을 만들지 않는다. 검증 JSON은 `{schema_version:1, html, html_sha256, audit_path, audit_sha256, semantic_status, browser_status, evidence, unresolved}`이며 실제 검사 뒤에만 상태를 갱신한다. 파일 해시 변경 후 기존 증거는 갱신 전까지 오래된 근거다.
+
+
+**수치 표시:** 계산 결과는 소수점 둘째 자리까지 반올림해 표시한다. 정수·짧은 소수에 불필요한 0이나 말줄임표를 붙이지 않는다. 내부 계산은 반올림 전 정밀도를 유지하고, 반올림한 결과는 등호 대신 근사 기호로 구별한다. 간단한 분수·근호는 유지할 수 있으며 원문 입력값·요구 정밀도는 보존한다.
+
+## HTML 가독성 생성·검사
+
+`references/content-rules.md`의 간결한 문장별 요약·공개 STT 위치 정보 금지 규칙을 적용한다. 정리노트 `check_html.py`, 동반 MD `html2md.py --check`, 자식 해설 check는 공통 `scripts/readability.py`로 검사한다. 요약은 핵심 한 문장·식 1~3개·판단 1~3개를 권장하되 채우기용 항목을 만들지 않는다. solve 동급 소문항은 데스크톱 32px·모바일 24px, 첫 소문항 24px, 제목 아래·본문 문단 사이 12px, 요약 문장 사이 8px·그룹 사이 24px을 실제 화면에서 확인한다. 이 변경은 HTML·동반 MD에 적용하며 PDF 스타일을 바꾸지 않는다.

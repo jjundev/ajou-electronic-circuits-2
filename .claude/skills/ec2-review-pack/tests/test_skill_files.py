@@ -47,6 +47,7 @@ class TestReferences(unittest.TestCase):
 
 
 SKILL_MD = SKILL / "SKILL.md"
+EXECUTION_GUIDE = SKILL / "references/execution-guide.md"
 
 
 class TestSkillMd(unittest.TestCase):
@@ -86,13 +87,13 @@ class TestSkillMd(unittest.TestCase):
 
 
 class TestBackupSnippet(unittest.TestCase):
-    """SKILL.md 4단계 백업 스니펫(python 부분)을 임시 폴더에서 실제로 실행한다."""
+    """실행 상세 4단계 백업 스니펫을 임시 폴더에서 실제로 실행한다."""
 
     @classmethod
     def setUpClass(cls):
-        text = SKILL_MD.read_text(encoding="utf-8")
+        text = EXECUTION_GUIDE.read_text(encoding="utf-8")
         m = re.search(r"```bash\nRANGE=<range> REPO=… RUN=… python3 - <<'EOF'\n(.*?)\nEOF\n```", text, re.S)
-        assert m, "SKILL.md 4단계 백업 스니펫을 찾지 못함"
+        assert m, "실행 상세 4단계 백업 스니펫을 찾지 못함"
         cls.code = m.group(1)
 
     def setUp(self):
@@ -226,12 +227,12 @@ class TestBackupSnippet(unittest.TestCase):
 
 
 class TestCleanupSnippet(unittest.TestCase):
-    """SKILL.md 4단계 정리 스니펫이 맨 위와 .assets/ 의 옛 산출물만 지우는지 실제로 실행한다."""
+    """실행 상세의 정리 스니펫이 소유한 옛 산출물만 지우는지 실제로 실행한다."""
 
     def test_removes_stale_outputs_in_both_levels(self):
-        text = SKILL_MD.read_text(encoding="utf-8")
+        text = EXECUTION_GUIDE.read_text(encoding="utf-8")
         m = re.search(r"```bash\npython3 - \"\$RUN/manifest.json\" \"\$REPO/복습노트/<range>\" <<'EOF'\n(.*?)\nEOF\n```", text, re.S)
-        self.assertIsNotNone(m, "SKILL.md 4단계 정리 스니펫을 찾지 못함")
+        self.assertIsNotNone(m, "실행 상세 4단계 정리 스니펫을 찾지 못함")
         with tempfile.TemporaryDirectory() as tmp:
             tmp = Path(tmp)
             (tmp / "manifest.json").write_text(json.dumps({"range": "0923", "slug": "A", "problems": []}), encoding="utf-8")
@@ -254,7 +255,7 @@ class TestCleanupSnippet(unittest.TestCase):
 
 
     def test_cleanup_preserves_same_prefix_non_owned_and_unrecorded_files(self):
-        text = SKILL_MD.read_text(encoding="utf-8")
+        text = EXECUTION_GUIDE.read_text(encoding="utf-8")
         backup = re.search(r"RANGE=<range> REPO=… RUN=… python3 - <<'EOF'\n(.*?)\nEOF", text, re.S).group(1)
         cleanup = re.search(r"python3 - \"\$RUN/manifest.json\" \"\$REPO/복습노트/<range>\" <<'EOF'\n(.*?)\nEOF", text, re.S).group(1)
         with tempfile.TemporaryDirectory() as tmp:
@@ -313,8 +314,11 @@ class TestWhyPageDocs(unittest.TestCase):
 
     def test_skill_md_mentions_retrofit(self):
         t = self.read("SKILL.md")
-        self.assertIn("scripts/insert_why.py", t)
-        self.assertIn("## 기존 팩에 왜 페이지 붙이기", t)
+        self.assertIn("references/execution-guide.md", t)
+        self.assertIn("기존 팩에 왜 페이지 붙이기", t)
+        guide = EXECUTION_GUIDE.read_text(encoding="utf-8")
+        self.assertIn("scripts/insert_why.py", guide)
+        self.assertIn("## 기존 팩에 왜 페이지 붙이기", guide)
 
 
 class TestLearningStyleBriefs(unittest.TestCase):
@@ -326,7 +330,7 @@ class TestLearningStyleBriefs(unittest.TestCase):
             self.assertIn("learning_style", brief)
             self.assertIn("핵심 관계", brief)
         self.assertIn("learning-style-audit.json", reviewer)
-        skill = SKILL_MD.read_text()
+        skill = SKILL_MD.read_text() + EXECUTION_GUIDE.read_text()
         for required in ("--mode problems", "--mode answers --answer-overlay", "--defer-answer-pdf", "publish_answer.py", "answer-review.json"):
             self.assertIn(required, skill)
 

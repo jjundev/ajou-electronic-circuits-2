@@ -1,4 +1,6 @@
-# 브라우저 검증 (메인 에이전트)
+# 브라우저 검증 (브라우저 QA 에이전트)
+
+[delegation.md](delegation.md)의 파일 인계 계약을 따른다. QA 한 명이 자기 격리 브라우저 컨텍스트와 이번 실행의 서버를 단독 소유하며, 다른 에이전트와 같은 탭·뷰포트·테마·저장 상태를 동시에 조작하지 않는다. 저장소와 발행 파일은 읽기 전용이다. 상세 결과·실제 스크린샷·측정값은 `<RUN>/work/browser/`에만 저장하고, 부모에게 상태·증거 파일 경로·영향받는 topic ID 목록·미해결을 8줄 이내로 반환한다. 실제 브라우저 조작과 스크린샷 확인은 아래 모든 검사에서 그대로 수행하며, 정적 검사나 이전 실행 증거로 대체하지 않는다. 결함은 담당 작성자에게 돌리고 저장소 파일을 직접 고치지 않는다.
 
 ## 서버
 file:// 미리보기에서는 스크립트가 돌지 않는다. 빈 포트로 서버를 띄운다. 셸 상태는 Bash 호출 사이에 이어지지 않으므로 포트 번호를 먼저 출력해 두고, 이후 명령과 URL에는 그 숫자를 직접 쓴다.
@@ -6,12 +8,12 @@ file:// 미리보기에서는 스크립트가 돌지 않는다. 빈 포트로 �
    ```bash
    python3 -c "import socket; s=socket.socket(); s.bind(('',0)); print(s.getsockname()[1])"
    ```
-2. 서버 띄우기: Bash 도구의 `run_in_background: true`로 실행한다(명령 끝에 `&`를 붙이지 않는다).
+2. 서버 띄우기: Bash 도구의 `run_in_background: true`로 실행한다(명령 끝에 `&`를 붙이지 않는다). 반환된 작업 ID나 실제 서버 PID를 `<RUN>/work/browser/`에 기록해 소유 프로세스를 식별한다.
    ```bash
    python3 -m http.server <port> --directory "<RUN>/repo"
    ```
 3. URL: `http://localhost:<port>/복습노트/<range>/<파일명>` (한글 그대로).
-4. 끝나면 서버를 종료한다: 그 백그라운드 작업을 멈추거나(TaskStop 등), `pkill -f "http.server <port>"`.
+4. 끝나면 이번 QA가 시작한 서버만 종료한다. 기록한 백그라운드 작업 ID(TaskStop 등)나 PID를 확인하고 해당 작업/프로세스만 멈춘다. 이름·명령 패턴으로 서버를 일괄 종료하지 않는다.
 
 ## 측정 전 준비
 브라우저 창이 숨겨져 있으면 `document.documentElement.clientWidth`가 0이 되어 `hScroll`이 거짓 양성으로 나온다. 측정 전에 `resize_window`로 크기를 명시하고(`width: 1280`, `height: 900`) `document.documentElement.clientWidth > 0`을 확인한다. `.katex-mathml` 안 요소는 화면에 보이지 않으므로 넘침 원인으로 치지 않는다. 스크롤 직후 스크린샷은 늦게 반영될 수 있으니 1초쯤 기다린 뒤 찍는다.
@@ -85,7 +87,12 @@ await Promise.all(Array.from(document.querySelectorAll('a[href$=".pdf"]')).map(a
   return { href: a.getAttribute('href'), status: r.status, type: r.headers.get('content-type') };
 }))
 ```
-통과: 링크가 2개(문제·답안)이고 모두 `status: 200`, `type: "application/pdf"`. PDF 내용은 `Read` 도구(`pages: "1-2"`)로 첫 두 쪽을 열어 제목이 `복습문제_<range>_<slug>`이고 첫 문제가 manifest의 첫 id인지 확인한다.
+통과 기준은 manifest의 문제 수와 검사 단계에 따라 정한다. 선택 PDF 링크 이외의 다른 자료 링크도 실제 확인한다.
+- 문제 0개: 이번 팩의 문제·답안 PDF 링크가 없어야 한다. 두 링크의 개수/200 응답이나 없는 PDF 화면을 요구하지 않는다.
+- 문제 1개 이상, 답안 발행 전: 문제·답안 링크의 경로가 manifest와 일치해야 한다. 문제지는 `status: 200`, `type: "application/pdf"`여야 한다. 답안은 manifest의 정확한 pending 경로만 미발행을 허용하고 예비 검사로 기록한다. 다른 경로의 404나 이전 답안 PDF를 이번 승인 답안으로 통과시키지 않는다.
+- 답안 발행 후: 두 링크 모두 `status: 200`, `type: "application/pdf"`여야 한다. 최종 검사에는 pending 유예가 없다.
+
+현재 존재하는 PDF는 사용 가능한 PDF 읽기/이미지 도구로 첫 두 쪽을 열어 제목이 `복습문제_<range>_<slug>`이고 첫 문제가 manifest의 첫 id인지 확인한다. 전체 답안 렌더 검토는 통합 계약의 9단계에서 별도로 수행한다.
 
 ## 마무리
 모든 검사가 끝나면 `resize_window`(`preset: "desktop"`, `colorScheme: "light"`)로 되돌리고 서버를 종료한다(위 "서버" 4).
