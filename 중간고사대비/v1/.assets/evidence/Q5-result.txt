@@ -1,0 +1,28 @@
+=== Q5 SymPy Verification Report ===
+
+--- (1) DC Operating Point & Vin,CM Range ---
+ID1 = ID2: 0.50 mA
+Vov: 0.1000 V
+VGS: 0.5000 V
+VD1: 0.8000 V
+VD2: 0.7500 V
+Vin,CM,min: 0.8000 V
+Vin,CM,max: 1.1500 V
+
+--- (2) Differential Gain Ad and Common Mode Gain ACM ---
+gm: 10.00 mS
+Derived Ad symbolic: g_m*(-R_D1 - R_D2)/2
+Ad numerical: -20.5000
+Derived ACM symbolic: g_m*(-R_D1 - R_D2)/(2*(2*R_SS*g_m + 1))
+ACM numerical: -0.97619
+
+--- (3) Common-Mode to Differential-Mode Gain ACM-DM ---
+Derived ACM-DM symbolic: g_m*(-R_D1 + R_D2)/(2*R_SS*g_m + 1)
+ACM-DM numerical: 0.04762 (1/21 = 0.04762)
+
+--- (4) Common-Mode Rejection Ratio CMRR ---
+Derived CMRR symbolic: Abs((R_D1 + R_D2)*(2*R_SS*g_m + 1)/(R_D1 - R_D2))/2
+CMRR exact numerical: 430.50
+CMRR exact dB: 52.68 dB
+
+ALL Q5 ASSERTIONS PASSED.

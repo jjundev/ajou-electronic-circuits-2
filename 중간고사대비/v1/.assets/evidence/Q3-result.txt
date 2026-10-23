@@ -1,0 +1,28 @@
+=== Q3 SymPy Verification Report ===
+
+--- (a) Cascode Amplifier with Parasitic RP ---
+gm1 = gm2: 10.00 mS
+ro1 = ro2: 10.00 kOhm
+gm3 = gm4: 5.00 mS
+ro3 = ro4: 10.00 kOhm
+ro2' = ro2 || RP: 5.00 kOhm
+Derived Rout_n symbolic: g_m2*r_o1*r_o2_prime + r_o1 + r_o2_prime
+Rout_n approx: 500.00 kOhm, exact: 515.00 kOhm
+Rout_p approx: 500.00 kOhm, exact: 520.00 kOhm
+Rout approx: 250.00 kOhm, exact: 258.74 kOhm
+Av approx: -2500.00
+Av exact Rout: -2587.44
+
+--- (b) PMOS-Input Folded Cascode Amplifier ---
+gm5: 7.0711 mS, ro5: 20.00 kOhm
+ro1: 10.00 kOhm
+gm2: 7.0711 mS, ro2: 20.00 kOhm
+gm3: 5.0000 mS, ro3 = ro4: 20.00 kOhm
+Folding node RS' = ro1 || ro5: 6.6667 kOhm
+Gm: 7.0711 mS
+Rout,n: 942.81 kOhm
+Rout,p: 2000.00 kOhm
+Rout: 640.75 kOhm
+Av: -4530.82
+
+ALL Q3 ASSERTIONS PASSED.

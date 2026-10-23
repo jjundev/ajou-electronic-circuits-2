@@ -1,0 +1,24 @@
+=== Q2 SymPy Verification Report ===
+
+--- (a) Source-Degenerated Current Mirror ---
+V_GS1 exact: 3/5 V, float: 0.6000 V
+V_ov2 exact: sqrt(2)/10 V, float: 0.1414 V
+V_GS2 exact: sqrt(2)/10 + 2/5 V, float: 0.5414 V
+R_S exact: 400 - 200*sqrt(2) Ohm, float: 117.1573 Ohm
+Derived Rout symbolic: R_S*g_m2*r_o2 + R_S + r_o2
+gm2: 7.0711 mS
+ro2: 20.0000 kOhm
+gm2 * R_S: 0.8284
+Rout exact: 36685.70 Ohm (36.686 kOhm)
+Rout approx: 36568.54 Ohm (36.569 kOhm)
+
+--- (b) Compound Current-Mirror Biased CE Amplifier ---
+I_C1: 0.600 mA
+gm1: 23.0769 mS
+ro1: 66.6667 kOhm
+ro2: 66.6667 kOhm
+Rout: 33.3333 kOhm
+Av exact: -769.2308
+Av formula (-V_A / 2V_T): -769.2308
+
+ALL Q2 ASSERTIONS PASSED.

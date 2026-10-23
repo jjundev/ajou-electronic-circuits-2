@@ -1,0 +1,20 @@
+=== Q4 SymPy Verification Report ===
+
+--- (a) Source-Degenerated Diff Pair Half-Circuit ---
+gm1 = gm2: 10.00 mS
+1/gm1: 100.00 Ohm
+Av_half: -40/3 = -13.3333
+Virtual ground node v_mid = (vs1 + vs2)/2: 0
+Full network differential gain Ad: -2*R_D*g_m/(R_SS*g_m + 2)
+Ad numerical: -13.3333
+
+--- (b) Active Current-Mirror Load Diff Pair ---
+gm3 = gm4: 10.00 mS
+ro2: 20.00 kOhm, ro4: 20.00 kOhm
+Gm: 10.00 mS
+Rout: 10.00 kOhm
+Av: 100.00
+Full small-signal Av expression: g_m1*r_o2*r_o4*(g_m3*r_o1*r_o3 + g_m4*r_o1*r_o3 + r_o1 + r_o3)/(2*(g_m3*r_o1*r_o2*r_o3 + g_m3*r_o1*r_o3*r_o4 + r_o1*r_o2 + r_o1*r_o4 + r_o2*r_o3 + r_o3*r_o4))
+Av exact full nodal: 99.5050
+
+ALL Q4 ASSERTIONS PASSED.
