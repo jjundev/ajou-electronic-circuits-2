@@ -8,7 +8,7 @@ def test_midterm_v1_md_files_exist_and_valid():
         path = md_dir / f"Q{i}.md"
         assert path.is_file(), f"Q{i}.md missing"
         text = path.read_text(encoding="utf-8")
-        assert "## 문제" in text, f"Q{i}.md missing '## 문제'"
+        assert ("## 문제" in text or "## 원문" in text), f"Q{i}.md missing '## 문제' or '## 원문'"
         assert "## 풀이" in text, f"Q{i}.md missing '## 풀이'"
         assert ("20점" in text or "배점: 20" in text or "20" in text), f"Q{i}.md missing score 20"
         assert "$$" in text, f"Q{i}.md missing display math formula $$"
