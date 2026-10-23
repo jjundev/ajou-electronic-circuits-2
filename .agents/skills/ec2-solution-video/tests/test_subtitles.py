@@ -89,3 +89,60 @@ class SubtitleTests(Sandbox):
    with self.subTest(text=text),self.assertRaises(InputError):split_caption(text)
   self.assertEqual(split_caption('(맞습니까?) 답을 확인합니다.'),['(맞습니까?) 답을 확인합니다.'])
   self.assertEqual(split_caption('“어째서? 설명합니다”를 읽습니다.'),['“어째서? 설명합니다”를 읽습니다.'])
+
+ def test_formula_boundary_precedes_balance(self):
+  from solution_video.subtitles import wrap_caption
+  self.assertEqual(wrap_caption('저항으로 흐르는 전류는 (I₀ + ΔI) − (I₀ − ΔI)입니다.'),
+                   '저항으로 흐르는 전류는\n(I₀ + ΔI) − (I₀ − ΔI)입니다.')
+ def test_spaced_fraction_and_nested_group(self):
+  from solution_video.subtitles import wrap_caption
+  self.assertEqual(wrap_caption('출력 전류의 변화량은 ΔI / 2로 계산합니다.',20),
+                   '출력 전류의 변화량은\nΔI / 2로 계산합니다.')
+  self.assertEqual(wrap_caption('부하 전압의 변화는 (R_L × ((I₀ + ΔI)/2))입니다.'),
+                   '부하 전압의 변화는\n(R_L × ((I₀ + ΔI)/2))입니다.')
+ def test_signed_fraction_is_protected(self):
+  from solution_video.subtitles import wrap_caption
+  for sign in ['−','-']:
+   with self.subTest(sign=sign):
+    self.assertEqual(wrap_caption('출력 전류의 변화량은 '+sign+'ΔI / 2로 계산합니다.',20),
+                     '출력 전류의 변화량은\n'+sign+'ΔI / 2로 계산합니다.')
+ def test_long_formula_operator_stays_with_rhs(self):
+  from solution_video.subtitles import wrap_caption
+  formula='r_O1∥r_O3∥R₁+g_m1+V_BE+'*2+'r_O1.'
+  lines=wrap_caption(formula).splitlines()
+  self.assertEqual(''.join(lines),formula)
+  self.assertIn(lines[1][0],'+−=∥×÷')
+  self.assertNotIn(lines[0][-1],'+−=∥×÷')
+ def test_unsplittable_group_reports_layout_error(self):
+  from solution_video.subtitles import wrap_caption
+  from solution_video.contracts import InputError
+  with self.assertRaises(InputError):wrap_caption('값은 ('+'X + '*9+'X)입니다.')
+ def test_caption_boundary_compatibility(self):
+  from solution_video.subtitles import caption_units,wrap_caption
+  self.assertEqual(caption_units('E10.13에서 0.5와 1,000을 봅니다.'),['E10.13에서 0.5와 1,000을 봅니다.'])
+  self.assertEqual(wrap_caption('전류는 2ΔI입니다.'),'전류는 2ΔI입니다.')
+  self.assertEqual(wrap_caption('이 회로의 전류입니다.'),'이 회로의 전류입니다.')
+
+ def test_wrap_preserves_pcm_cue_bounds(self):
+  from solution_video.speech_chunks import MODE
+  text='저항으로 흐르는 전류는 (I₀ + ΔI) − (I₀ − ΔI)입니다.'
+  cue=dict(segment_id='s',chunk_id='c',caption_text=text,start_sample=24000,end_sample=96000)
+  t=dict(rate=24000,caption_timing=MODE,caption_cues=[cue],segments=[
+    dict(id='s',start_sample=24000,end_sample=120000,voice_samples=72000,chunks=[dict(id='c',caption_text=text)])])
+  write_srt(t,self.run/'chunk.srt')
+  self.assertEqual((self.run/'chunk.srt').read_text(),
+    '1\n00:00:01,000 --> 00:00:04,000\n저항으로 흐르는 전류는\n(I₀ + ΔI) − (I₀ − ΔI)입니다.\n')
+
+ def test_implicit_product_cannot_split_between_factors(self):
+  from solution_video.subtitles import wrap_caption
+  from solution_video.contracts import InputError
+  with self.assertRaises(InputError):wrap_caption('I₀ R_L I₀ R_L I₀ R_L',14)
+
+ def test_signed_group_denominator_is_protected(self):
+  from solution_video.subtitles import wrap_caption
+  from solution_video.contracts import InputError
+  for sign in ['−','-','− ','- ']:
+   text='출력 전류는 (I₀ + ΔI + I₁) / '+sign+'(I₀ − ΔI + I₂)입니다.'
+   with self.subTest(sign=sign),self.assertRaises(InputError):wrap_caption(text)
+  self.assertEqual(wrap_caption('출력 전류의 변화량은 (I₀ + ΔI) / −(I₀ − ΔI)입니다.'),
+                   '출력 전류의 변화량은\n(I₀ + ΔI) / −(I₀ − ΔI)입니다.')

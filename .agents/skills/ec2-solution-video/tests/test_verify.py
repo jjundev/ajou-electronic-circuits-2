@@ -9,6 +9,20 @@ class VerifyTests(Sandbox):
         self.assertEqual(report['warnings'][0]['code'],'numeric_predicate')
         self.assertNotIn('caption_notation',report['checks'])
 
+    def test_caption_srt_tampering_is_rejected(self):
+        from solution_video.subtitles import caption_srt_matches
+        text='저항으로 흐르는 전류는 (I₀ + ΔI) − (I₀ − ΔI)입니다.'
+        timeline=dict(rate=24000,segments=[dict(id='s',caption_text=text,start_sample=24000,end_sample=96000,voice_samples=72000)])
+        srt=self.run/'captions.srt'
+        correct='1\n00:00:01,000 --> 00:00:04,000\n저항으로 흐르는 전류는\n(I₀ + ΔI) − (I₀ − ΔI)입니다.\n'
+        srt.write_text(correct);self.assertTrue(caption_srt_matches(timeline,srt))
+        cases=[correct.replace('전류는','전압은'),correct.replace('는\n(I₀ + ΔI)','는 (I₀ +\nΔI)'),
+               correct.replace('01,000','01,001'),'']
+        for value in cases:
+            with self.subTest(value=value):
+                srt.write_text(value);self.assertFalse(caption_srt_matches(timeline,srt))
+        srt.unlink();self.assertFalse(caption_srt_matches(timeline,srt))
+
     def test_final_media_checked_after_burn(self):
         report=verify_run(self.run,Path('/missing/hyperframes'))
         self.assertFalse(report['complete']); self.assertIsNone(report['final_sha256'])
@@ -83,3 +97,18 @@ class VerifyTests(Sandbox):
         assemble({'problem':{'snapshot':'pencil.pdf','page_index':0}},read(self.run/'layers/layers.json'),read(self.run/'source/manifest.json'),read(self.run/'source/timeline.json'),self.run,S.parent/'ec2-review-video/assets/runtime/vendor/gsap.min.js')
         report=verify_run(self.run,Path('/missing/hyperframes'))
         self.assertEqual(report['checks']['teaching_animation']['status'],'passed')
+
+
+class DenseTeachingScreenTests(Sandbox):
+    def test_dense_teaching_screen_has_budget_for_complete_frame_oracles(self):
+        # Catch accidental use of the generic120s subprocess budget for dense ink.
+        import solution_video.verify as verification
+        self.assertTrue(hasattr(verification,'teaching_browser'),'dense teaching runner missing')
+        from unittest.mock import patch
+        import subprocess
+        def run(argv,**kwargs):
+            if kwargs['timeout']<300:raise subprocess.TimeoutExpired(argv,kwargs['timeout'])
+            self.assertIn('--mode',argv);self.assertIn('teaching',argv)
+            return subprocess.CompletedProcess(argv,0,stdout='{"bounds_ok":true,"seek_equal":true}',stderr='')
+        with patch('solution_video.util.subprocess.run',side_effect=run):
+            self.assertEqual(verification.teaching_browser(['--mode','teaching']),{'bounds_ok':True,'seek_equal':True})

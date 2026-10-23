@@ -37,3 +37,10 @@ must be fully covered once (0.01pt tolerance). Assign zero-area spaces once.
 Change lines when switching columns; never return to a completed line. Changing
 chunks within a line requires `camera_break_before: true`. Inspect original
 geometry; do not infer reading order from PDF paint order. Typing stays legacy.
+
+
+### 발화에 맞춘 회로 필기
+같은 타원 반복으로 회로 설명을 대신하지 않고, 연결·방향·변화량을 해당 발화에 표시한다. 짧은 기호와 화살표를 원본 선·소자 이름 밖에 배치한다. 감소량 −ΔI는 전류 방향 반전으로 표시하지 않는다.
+도형별 `stroke_width_px`는 유한한 숫자 2~12px(생략값3px)를 지원한다. 신규 저작은 보조4px·전류6px·강조8px를 사용한다. label에는 굵기 대신 runs의 font_size_pt를 지정한다. 파랑 #1565C0 연결·비율, 주황 #C45100 유입 전류, 초록 #237A43 분기 전류, 자주 #8E348E 결과의 역할로 쓰고 기호·위치로도 구분한다. P10.72에서는 각각 M3/M4 관계·M4 유입·I2·RL 결과에 대응한다.
+`chunk_id`는 해당 reason/check segment의 실제 음성 청크를 참조한다. 청크 모드 offset_frames는 청크 시작 기준 정수>=0(기본0)이며 같은 segment에서 legacy offset과 혼합하지 않는다. 서로 다른 청크의 같은 offset은 허용한다. move8프레임과 필기 전체가 ceil(start_sample/800) 이후, floor(end_sample/800) 및 카메라 복귀 직전(segment end−13) 이내여야 한다. 넘치면 표시/label을 간소화하고 무음을 늘리지 않는다. legacy segment 기준 오프셋과 최소길이 보정은 유지한다.
+설명 중 표시는 누적하고 다음 풀이에 복귀할 때 hide_at으로 정리하며 최종 원본에는 숨긴다. 굵은 선의 반경·화살촉·펜 여백과 label26px를 확인한다. 각 청크의 작성중/완료 프레임과 원문을 대조해 방향·부호·가림을 검토한다. 기술검사만으로 음성 청취를 승인하지 않으며 미청취는 live_audio=unverified/complete=false로 전달한다.

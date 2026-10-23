@@ -2,6 +2,35 @@ from fixtures import *
 from solution_video.review_adapter import generate_voice,default_config
 import base64
 class VoiceTests(Sandbox):
+    def test_mixed_chunks_fail_before_transport(self):
+        from test_speech_chunks import paired_segment
+        from solution_video.contracts import InputError
+        calls=[]
+        def transport(p):calls.append(p);return {'candidates':[]}
+        with self.assertRaises(InputError):generate_voice([paired_segment(),dict(id='intro',text='문제입니다.')],self.run,default_config(),self.run/'ledger.json',transport)
+        self.assertEqual(calls,[])
+    def test_invalid_trims_fail_before_transport(self):
+        from test_speech_chunks import paired_segment
+        from solution_video.util import write
+        from solution_video.contracts import InputError
+        write(self.run/'source/chunk-trims.json',dict(schema_version=1,rows=[dict(segment_id='write_one',chunk_id='current',raw_sha256='stale',start_sample=-1,end_sample=20,reason='bad')]))
+        calls=[]
+        def transport(p):calls.append(p);return {'candidates':[]}
+        with self.assertRaises(InputError):generate_voice([paired_segment()],self.run,default_config(),self.run/'ledger.json',transport)
+        self.assertEqual(calls,[])
+    def test_trimmed_voice_config_change_fails_before_transport(self):
+        from test_speech_chunks import paired_segment
+        from test_speech_tts import response
+        from solution_video.util import read,write
+        from solution_video.contracts import InputError
+        calls=[];cfg=default_config()
+        def transport(p):calls.append(p);return response()
+        generate_voice([paired_segment()],self.run,cfg,self.run/'ledger.json',transport)
+        raw=read(self.run/'source/chunk-audio.json')['voices'][0]
+        write(self.run/'source/chunk-trims.json',dict(schema_version=1,rows=[dict(segment_id='write_one',chunk_id='current',raw_sha256=raw['sha256'],start_sample=10,end_sample=2300,reason='reviewed')]))
+        cfg['voice']='different'
+        with self.assertRaises(InputError):generate_voice([paired_segment()],self.run,cfg,self.run/'ledger.json',transport)
+        self.assertEqual(len(calls),2)
     def test_caption_change_reuses_voice(self):
         cfg=default_config();cfg.update(max_attempts=1,tts_concurrency=1);calls=[]
         def transport(payload):

@@ -1,0 +1,255 @@
+{
+  "schema_version": 1,
+  "steps": [
+    {
+      "step_id": "part_0_0",
+      "mode": "calculation",
+      "reason_segment_ids": [],
+      "check_segment_ids": [],
+      "region_ids": [],
+      "annotation_ids": [],
+      "meaning_notes": "먼저 전류 거울과 출력 노드의 관계를 정리합니다.",
+      "source_refs": [
+        "answer:9",
+        "md:풀이"
+      ],
+      "exemption_reason": "원문 제목 또는 이미 설명한 회로 근거에 이어지는 전류 차이 계산과 최종 답 확인입니다."
+    },
+    {
+      "step_id": "part_0_1",
+      "mode": "circuit",
+      "reason_segment_ids": [
+        "reason_0"
+      ],
+      "check_segment_ids": [],
+      "region_ids": [
+        "circuit"
+      ],
+      "annotation_ids": [
+        "diode_connection",
+        "shared_gate",
+        "mirror_size",
+        "mirror_relation",
+        "m4_in",
+        "m4_in_label",
+        "i2_out",
+        "i2_out_label",
+        "rl_out",
+        "rl_out_label"
+      ],
+      "meaning_notes": "채널 길이 변조를 무시하고 엠 포가 포화에 있다고 가정합니다. 엠 포의 전류는 엠 쓰리에 흐르는 아이 원에 소자 크기의 비를 곱합니다. 분자는 엠 포의 폭 대 길이 비이고, 분모는 엠 쓰리의 폭 대 길이 비입니다.",
+      "source_refs": [
+        "answer:9",
+        "md:풀이"
+      ]
+    },
+    {
+      "step_id": "part_0_2",
+      "mode": "calculation",
+      "reason_segment_ids": [],
+      "check_segment_ids": [],
+      "region_ids": [],
+      "annotation_ids": [],
+      "meaning_notes": "출력 노드에 들어오는 아이 디 포는 아이 투와 저항 전류로 나뉩니다. 따라서 브이 아웃은 알 엘에 아이 디 포 빼기 아이 투를 곱한 값입니다.",
+      "source_refs": [
+        "answer:9",
+        "md:풀이"
+      ],
+      "exemption_reason": "원문 제목 또는 이미 설명한 회로 근거에 이어지는 전류 차이 계산과 최종 답 확인입니다."
+    },
+    {
+      "step_id": "part_1_0",
+      "mode": "calculation",
+      "reason_segment_ids": [],
+      "check_segment_ids": [],
+      "region_ids": [],
+      "annotation_ids": [],
+      "meaning_notes": "에이에서는 두 소자의 폭 대 길이 비가 같습니다.",
+      "source_refs": [
+        "answer:9",
+        "md:풀이"
+      ],
+      "exemption_reason": "원문 제목 또는 이미 설명한 회로 근거에 이어지는 전류 차이 계산과 최종 답 확인입니다."
+    },
+    {
+      "step_id": "part_1_1",
+      "mode": "circuit",
+      "reason_segment_ids": [
+        "reason_1"
+      ],
+      "check_segment_ids": [],
+      "region_ids": [
+        "circuit"
+      ],
+      "annotation_ids": [
+        "equal_size",
+        "equal_devices",
+        "equal_m4",
+        "equal_m4_change",
+        "equal_i2",
+        "equal_i2_change",
+        "equal_rl",
+        "equal_rl_change"
+      ],
+      "meaning_notes": "변화 전에는 거울 전류가 아이 영입니다. 출력에서 빠져나가는 아이 투도 아이 영이므로 차이가 영입니다. 따라서 출력 전압도 영입니다.",
+      "source_refs": [
+        "answer:9",
+        "md:풀이"
+      ]
+    },
+    {
+      "step_id": "part_1_2",
+      "mode": "calculation",
+      "reason_segment_ids": [],
+      "check_segment_ids": [],
+      "region_ids": [],
+      "annotation_ids": [],
+      "meaning_notes": "변화 후 거울 전류는 아이 영 더하기 델타 아이가 됩니다.",
+      "source_refs": [
+        "answer:9",
+        "md:풀이"
+      ],
+      "exemption_reason": "원문 제목 또는 이미 설명한 회로 근거에 이어지는 전류 차이 계산과 최종 답 확인입니다."
+    },
+    {
+      "step_id": "part_1_3",
+      "mode": "calculation",
+      "reason_segment_ids": [],
+      "check_segment_ids": [],
+      "region_ids": [],
+      "annotation_ids": [],
+      "meaning_notes": "저항으로 흐르는 전류는 아이 영 더하기 델타 아이에서 아이 영 빼기 델타 아이를 뺀 값입니다. 증가한 전류와 감소한 전류의 효과가 함께 더해집니다.",
+      "source_refs": [
+        "answer:9",
+        "md:풀이"
+      ],
+      "exemption_reason": "원문 제목 또는 이미 설명한 회로 근거에 이어지는 전류 차이 계산과 최종 답 확인입니다."
+    },
+    {
+      "step_id": "part_1_4",
+      "mode": "calculation",
+      "reason_segment_ids": [],
+      "check_segment_ids": [],
+      "region_ids": [],
+      "annotation_ids": [],
+      "meaning_notes": "아이 영끼리는 없어지고 델타 아이 두 개가 남습니다. 출력 전압은 이 델타 아이 알 엘입니다.",
+      "source_refs": [
+        "answer:9",
+        "md:풀이"
+      ],
+      "exemption_reason": "원문 제목 또는 이미 설명한 회로 근거에 이어지는 전류 차이 계산과 최종 답 확인입니다."
+    },
+    {
+      "step_id": "part_2_0",
+      "mode": "calculation",
+      "reason_segment_ids": [],
+      "check_segment_ids": [],
+      "region_ids": [],
+      "annotation_ids": [],
+      "meaning_notes": "비에서는 엠 쓰리의 폭 대 길이 비가 엠 포의 두 배입니다.",
+      "source_refs": [
+        "answer:9",
+        "md:풀이"
+      ],
+      "exemption_reason": "원문 제목 또는 이미 설명한 회로 근거에 이어지는 전류 차이 계산과 최종 답 확인입니다."
+    },
+    {
+      "step_id": "part_2_1",
+      "mode": "circuit",
+      "reason_segment_ids": [
+        "reason_2"
+      ],
+      "check_segment_ids": [],
+      "region_ids": [
+        "circuit"
+      ],
+      "annotation_ids": [
+        "double_size",
+        "double_devices",
+        "half_mirror",
+        "half_m4",
+        "half_m4_change",
+        "half_i2_branch",
+        "half_rl_branch",
+        "subtract_i2",
+        "half_i2_change",
+        "half_rl_change"
+      ],
+      "meaning_notes": "거울 전류는 아이 원의 절반입니다. 변화 전에는 아이 영의 절반에서 아이 영을 빼므로 출력 전압은 마이너스 아이 영 알 엘 나누기 이입니다.",
+      "source_refs": [
+        "answer:9",
+        "md:풀이"
+      ]
+    },
+    {
+      "step_id": "part_2_2",
+      "mode": "calculation",
+      "reason_segment_ids": [],
+      "check_segment_ids": [],
+      "region_ids": [],
+      "annotation_ids": [],
+      "meaning_notes": "변화 후 거울 전류는 아이 영 더하기 델타 아이를 이로 나눈 값입니다.",
+      "source_refs": [
+        "answer:9",
+        "md:풀이"
+      ],
+      "exemption_reason": "원문 제목 또는 이미 설명한 회로 근거에 이어지는 전류 차이 계산과 최종 답 확인입니다."
+    },
+    {
+      "step_id": "part_2_3",
+      "mode": "calculation",
+      "reason_segment_ids": [],
+      "check_segment_ids": [],
+      "region_ids": [],
+      "annotation_ids": [],
+      "meaning_notes": "출력 전압은 알 엘에 괄호 안 전류 차이를 곱합니다. 거울 전류인 아이 영 더하기 델타 아이의 절반에서 아이 영 빼기 델타 아이를 뺍니다.",
+      "source_refs": [
+        "answer:9",
+        "md:풀이"
+      ],
+      "exemption_reason": "원문 제목 또는 이미 설명한 회로 근거에 이어지는 전류 차이 계산과 최종 답 확인입니다."
+    },
+    {
+      "step_id": "part_2_4",
+      "mode": "calculation",
+      "reason_segment_ids": [],
+      "check_segment_ids": [],
+      "region_ids": [],
+      "annotation_ids": [],
+      "meaning_notes": "이를 정리하면 델타 아이의 계수는 이분의 삼입니다. 아이 영의 계수는 마이너스 이분의 일입니다. 따라서 원문에 있는 이 두 항의 차이에 알 엘을 곱합니다.",
+      "source_refs": [
+        "answer:9",
+        "md:풀이"
+      ],
+      "exemption_reason": "원문 제목 또는 이미 설명한 회로 근거에 이어지는 전류 차이 계산과 최종 답 확인입니다."
+    },
+    {
+      "step_id": "part_2_5",
+      "mode": "calculation",
+      "reason_segment_ids": [],
+      "check_segment_ids": [],
+      "region_ids": [],
+      "annotation_ids": [],
+      "meaning_notes": "변화량은 일 점 오 델타 아이 알 엘입니다. 같은 크기인 에이의 이 델타 아이 알 엘보다 작습니다.",
+      "source_refs": [
+        "answer:9",
+        "md:풀이"
+      ],
+      "exemption_reason": "원문 제목 또는 이미 설명한 회로 근거에 이어지는 전류 차이 계산과 최종 답 확인입니다."
+    },
+    {
+      "step_id": "part_3_0",
+      "mode": "calculation",
+      "reason_segment_ids": [],
+      "check_segment_ids": [],
+      "region_ids": [],
+      "annotation_ids": [],
+      "meaning_notes": "답을 원본과 함께 확인합니다. 에이는 변화 전 영이고 변화 후 이 델타 아이 알 엘입니다. 비는 변화 전 마이너스 아이 영 알 엘 나누기 이이고, 변화 후 알 엘 곱하기 삼 델타 아이 빼기 아이 영을 이로 나눈 값입니다.",
+      "source_refs": [
+        "answer:9",
+        "md:풀이"
+      ],
+      "exemption_reason": "원문 제목 또는 이미 설명한 회로 근거에 이어지는 전류 차이 계산과 최종 답 확인입니다."
+    }
+  ]
+}

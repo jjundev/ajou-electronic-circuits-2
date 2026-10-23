@@ -2,6 +2,14 @@ from fixtures import *
 from solution_video.state import finish_stage,recover_run,STAGES
 from solution_video.util import write
 class StateTests(Sandbox):
+    def test_chunk_receipt_and_trim_invalidate_timing(self):
+        for stage in STAGES[:5]:
+            out=self.run/(stage+'.txt');out.write_text(stage);finish_stage(self.run,stage,[out])
+        write(self.run/'source/chunk-audio.json',dict(voices=[]))
+        self.assertEqual(recover_run(self.run),'timing')
+        finish_stage(self.run,'timing',[self.run/'timing.txt'])
+        write(self.run/'source/chunk-trims.json',dict(schema_version=1,rows=[]))
+        self.assertEqual(recover_run(self.run),'timing')
     def test_lesson_edit_invalidates_script(self):
         from solution_video.state import stage_fingerprint
         before=stage_fingerprint(self.run,'script')
@@ -113,3 +121,28 @@ class StateTests(Sandbox):
             p=root/'scripts/solution_video/workload.py';p.write_text(p.read_text()+'\n# classifier change\n')
             self.assertEqual(recover_run(self.run),'render')
             self.assertEqual(file_hash(self.run/wav['path']),before)
+    def test_shape_timing_invalidates_only_timing(self):
+        import shutil
+        from unittest.mock import patch
+        import solution_video.state as state
+        root=self.run/'tool';shutil.copytree(S,root,ignore=shutil.ignore_patterns('__pycache__'))
+        a=make_audio('w',2400,self.run);before=(self.run/a['path']).read_bytes()
+        with patch.object(state,'S',root):
+            for stage in STAGES[:5]:
+                out=self.run/(stage+'.txt');out.write_text(stage);finish_stage(self.run,stage,[out])
+            p=root/'scripts/solution_video/shape_timing.py';p.write_text(p.read_text()+'\n# fingerprint change\n')
+            self.assertEqual(recover_run(self.run),'timing')
+            self.assertEqual((self.run/a['path']).read_bytes(),before)
+    def test_chunk_and_style_invalidation(self):
+        from test_annotations import teaching_fixture
+        from solution_video.state import stage_fingerprint
+        from solution_video.util import file_hash
+        f,a,m,l=teaching_fixture();m['caption_timing']='pcm-chunks-v1';m['segments'][1]['chunks']=[dict(id='c1'),dict(id='c2')];a['items'][0].update(chunk_id='c1',offset_frames=0)
+        write(self.run/'source/manifest.json',m);write(self.run/'layers/layers.json',l);write(self.run/'source/focus.json',f);write(self.run/'source/annotations.json',a)
+        wav=make_audio('r',2400,self.run);sha=file_hash(self.run/wav['path']);voice=stage_fingerprint(self.run,'voice')
+        def finish():
+            for stage in STAGES[:6]:
+                out=self.run/(stage+'.txt');out.write_text(stage);finish_stage(self.run,stage,[out])
+        finish();a['items'][0]['chunk_id']='c2';write(self.run/'source/annotations.json',a);self.assertEqual(recover_run(self.run),'timing')
+        finish();a['items'][0].update(stroke_width_px=8,color='#C45100');write(self.run/'source/annotations.json',a);self.assertEqual(recover_run(self.run),'composition')
+        self.assertEqual(stage_fingerprint(self.run,'voice'),voice);self.assertEqual(file_hash(self.run/wav['path']),sha)

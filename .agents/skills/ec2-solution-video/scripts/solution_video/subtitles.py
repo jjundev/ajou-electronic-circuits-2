@@ -44,10 +44,16 @@ def inspect_caption_notation(text:str,segment_id:str)->list[dict]:
     return [issues[span] for span in sorted(issues)]
 
 def caption_notation_warnings(segments:list[dict])->list[dict]:
-    return [issue for segment in segments if isinstance(segment,dict)
-            and isinstance(segment.get('caption_text'),str)
-            for issue in inspect_caption_notation(segment['caption_text'],segment.get('id','unknown'))
-            if issue['severity']=='warning']
+    warnings=[]
+    for segment in segments:
+        if not isinstance(segment,dict):continue
+        for item in segment.get('chunks',[segment]):
+            if not isinstance(item,dict) or not isinstance(item.get('caption_text'),str):continue
+            for issue in inspect_caption_notation(item['caption_text'],segment.get('id','unknown')):
+                if issue['severity']!='warning':continue
+                if 'chunks' in segment:issue['chunk_id']=item.get('id','unknown')
+                warnings.append(issue)
+    return warnings
 
 def validate_caption_notation(text:str,segment_id:str)->None:
     errors=[i for i in inspect_caption_notation(text,segment_id) if i['severity']=='error']
@@ -102,32 +108,107 @@ def caption_units(text:str)->list[str]:
     """Split prose at sentence/clause boundaries without changing stored text."""
     return _caption_units(text,True)
 
+# Caption math is intentionally conservative: this is not a Korean parser.
+_CAPTION_ATOM = re.compile(r'(?:[0-9]*[A-Za-zΔλμΩ][A-Za-z0-9_₀-₉]*|[0-9]+(?:[.,][0-9]+)*)')
+_LAYOUT_OPERATORS = _OPERATORS + '-/'
+
+def _protected_ranges(text: str) -> list[tuple[int, int]]:
+    """Protect nested groups, identifiers, signed atoms and spaced fractions."""
+    _caption_units(text, False)  # Keep the existing delimiter/punctuation contract.
+    ranges=[]; stack=[]
+    for i,ch in enumerate(text):
+        if stack and ch==stack[-1][0]:
+            _,start=stack.pop()
+            if not stack:ranges.append((start,i+1))
+        elif stack and stack[-1][0] in _QUOTES:
+            continue
+        elif ch in _PAIRS:
+            stack.append((_PAIRS[ch],i))
+    for match in _CAPTION_ATOM.finditer(text):
+        start,end=match.span()
+        if any(a<=start and end<=b for a,b in ranges):continue
+        ranges.append((start,end))
+    # Absorb unary signs for both bare atoms and complete parenthesis groups.
+    # Signed denominators must bind to their numerator before layout scoring.
+    signed=[]
+    for start,end in ranges:
+        at=start
+        while at>0 and text[at-1].isspace():at-=1
+        if at>0 and text[at-1] in '+−-':
+            sign=at-1; prev=text[:sign].rstrip()
+            if not prev or prev[-1] in _LAYOUT_OPERATORS+'([{,' or re.search(r'[가-힣]$',prev):start=sign
+        signed.append((start,end))
+    ranges=signed
+    ranges.sort()
+    # A slash binds its complete numerator/denominator, including whitespace.
+    result=[]
+    for start,end in ranges:
+        if result and re.fullmatch(r'\s*/\s*',text[result[-1][1]:start]):
+            result[-1]=(result[-1][0],end)
+        else:result.append((start,end))
+    return result
+
+def _wrap_candidates(text: str, max_chars: int) -> list[tuple[int,int,int,str,str]]:
+    protected=_protected_ranges(text)
+    # Maximal math spans distinguish prose boundaries from spaces inside a sum.
+    math_spans=[]
+    for start,end in protected:
+        if not _CAPTION_ATOM.search(text[start:end]):continue
+        if math_spans and re.fullmatch(r'(?:\s+|\s*['+re.escape(_LAYOUT_OPERATORS)+r']\s*)',text[math_spans[-1][1]:start]):
+            math_spans[-1]=(math_spans[-1][0],end)
+        else:math_spans.append((start,end))
+    points={m.start() for m in re.finditer(r'\s+',text)}
+    points.update(i for i,ch in enumerate(text) if ch in _LAYOUT_OPERATORS)
+    choices=[]
+    for at in sorted(points):
+        if any(a<at<b for a,b in protected):continue
+        left,right=text[:at].rstrip(),text[at:].lstrip()
+        if (not left or not right or right[0] in '.,)]}”’'
+            or left[-1] in _LAYOUT_OPERATORS+'([{'
+            or len(left)>max_chars or len(right)>max_chars):continue
+        right_start=len(text)-len(right)
+        # The operator and its RHS must stay on the same line.
+        inside_math=any(a<at<b for a,b in math_spans)
+        operator=right[0] in _LAYOUT_OPERATORS
+        if inside_math and not operator:continue
+        before_math=any(a==right_start for a,b in math_spans) and bool(re.search(r'[가-힣]$',left))
+        after_math=any(b==len(left) for a,b in math_spans) and bool(re.match(r'[가-힣]',right))
+        priority=0 if before_math or after_math else 2 if operator else 1
+        choices.append((priority,abs(len(left)-len(right)),at,left,right))
+    return choices
+
 def wrap_caption(text:str,max_chars:int=34,max_lines:int=2)->str:
-    """Fit one semantic unit, preserving identifiers and punctuation."""
+    """Fit one cue at semantic boundaries without splitting math groups."""
     if max_chars<1 or max_lines not in (1,2):raise InputError('caption limits require positive width and one or two lines')
     text=' '.join(text.split())
-    tokens=re.findall(r'[^\s+−=∥×÷(),]+|[+−=∥×÷(),]',text)
-    if any(len(t)>max_chars for t in tokens):raise InputError('caption token exceeds '+str(max_chars)+' characters: '+text)
+    protected=_protected_ranges(text)
+    if any(b-a>max_chars for a,b in protected):
+        raise InputError('caption protected expression exceeds '+str(max_chars)+' characters: '+text)
     if len(text)<=max_chars:return text
-    def candidates(points):
-        valid=[]
-        for at in points:
-            left,right=text[:at].rstrip(),text[at:].lstrip()
-            if not left or not right or right[0] in '.,)]}”’' or len(left)>max_chars or len(right)>max_chars:continue
-            valid.append((abs(len(left)-len(right)),at,left,right))
-        return valid
-    choices=candidates([m.start() for m in re.finditer(r'\s+',text)])
-    if not choices:choices=candidates([i+1 for i,c in enumerate(text) if c in _OPERATORS])
+    choices=_wrap_candidates(text,max_chars)
     if max_lines==1 or not choices:raise InputError('caption clause exceeds '+str(max_lines)+' lines of '+str(max_chars)+' characters; author shorter captions: '+text)
-    _,_,left,right=min(choices)
+    _,_,_,left,right=min(choices)
     return left+'\n'+right
 
 def split_caption(text:str,max_chars:int=34)->list[str]:
     return [wrap_caption(unit,max_chars) for unit in caption_units(text)]
 
+def chunk_caption(text:str)->str:
+    """One authored cue; a comma-ending clause keeps its comma."""
+    units=_caption_units(text,not text.rstrip().endswith(','))
+    if len(units)!=1:raise InputError('speech chunk must contain exactly one caption cue')
+    return wrap_caption(units[0])
+
 def write_srt(timeline,dest):
     lines=[]; num=0
-    for seg in timeline['segments']:
+    from .speech_chunks import MODE,validate_caption_cues
+    if timeline.get('caption_timing') not in (None,MODE):raise InputError('unsupported caption timing mode')
+    chunk_mode=timeline.get('caption_timing')==MODE
+    if chunk_mode:
+        for num,cue in enumerate(validate_caption_cues(timeline),1):
+            c=chunk_caption(caption_text(cue))
+            lines.append(f'{num}\n{_stamp(cue["start_sample"],timeline["rate"])} --> {_stamp(cue["end_sample"],timeline["rate"])}\n{c}\n')
+    for seg in [] if chunk_mode else timeline['segments']:
         text=caption_text(seg); chunks=split_caption(text)
         lengths=[len(unit) for unit in _caption_units(text,False)]
         duration=seg.get('voice_samples',seg['end_sample']-seg['start_sample']); weights=sum(lengths); start=seg['start_sample']; offset=0
@@ -137,13 +218,21 @@ def write_srt(timeline,dest):
             num+=1; lines.append(f'{num}\n{_stamp(begin,timeline["rate"])} --> {_stamp(end,timeline["rate"])}\n{c}\n')
     dest=Path(dest); dest.parent.mkdir(parents=True,exist_ok=True); dest.write_text('\n'.join(lines),encoding='utf-8'); return dest
 
+def caption_srt_matches(timeline: dict, srt: Path) -> bool:
+    """Check complete cue text and sample-derived timestamps, without mutation."""
+    srt=Path(srt)
+    if not srt.is_file():return False
+    with tempfile.TemporaryDirectory(prefix='ec2-expected-captions-') as td:
+        expected=write_srt(timeline,Path(td)/'expected.srt')
+        return srt.read_text(encoding='utf-8')==expected.read_text(encoding='utf-8')
+
 def burn_subtitles(master,srt,dest,font):
     master,srt,dest,font=map(lambda p:Path(p).resolve(),[master,srt,dest,font])
     if dest==master: raise InputError('cannot overwrite master with captions')
     dest.parent.mkdir(parents=True,exist_ok=True)
     with tempfile.TemporaryDirectory(prefix='ec2-captions-') as td:
         work=Path(td); (work/'fonts').mkdir(); shutil.copyfile(font,work/'fonts/Pretendard-Bold.ttf'); shutil.copyfile(srt,work/'subs.srt')
-        style='FontName=Pretendard,FontSize=14,Bold=1,Alignment=2,MarginV=14,Outline=0,Shadow=4,BorderStyle=4,PrimaryColour=&HFFFFFF&,OutlineColour=&H4D0E0B0B,BackColour=&H4D0E0B0B'
+        style='WrapStyle=2,FontName=Pretendard,FontSize=14,Bold=1,Alignment=2,MarginV=14,Outline=0,Shadow=4,BorderStyle=4,PrimaryColour=&HFFFFFF&,OutlineColour=&H4D0E0B0B,BackColour=&H4D0E0B0B'
         pending=dest.with_name(dest.stem+'.pending.mp4')
         checked([ffmpeg(),'-y','-v','error','-i',master,'-vf',"subtitles=subs.srt:fontsdir=fonts:force_style='"+style+"'",'-c:v','libx264','-crf','18','-pix_fmt','yuv420p','-c:a','copy',pending],cwd=work,timeout=1800)
         os.replace(pending,dest)

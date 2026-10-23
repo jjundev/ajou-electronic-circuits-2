@@ -52,3 +52,10 @@ class GuidedAcceptanceTests(Sandbox):
     self.assertTrue(all(c.endswith((',', '.')) for c in chunks))
     output.extend(chunks)
   for symbol in ['r_O1','r_O3','g_m1']:self.assertIn(symbol,' '.join(output))
+
+ def test_repeated_original_svg_gate_stays_exact(self):
+  # Rebuilding identical static SVG must not capture compositor intermediate frames.
+  for attempt in range(8):
+   with self.subTest(attempt=attempt):
+    run,_=self.guided();gate=read(run/'verification/gate.json')
+    self.assertEqual([gate[k] for k in ['pixel_diff','non_target_diff','hidden_leaks']],[0,0,0])

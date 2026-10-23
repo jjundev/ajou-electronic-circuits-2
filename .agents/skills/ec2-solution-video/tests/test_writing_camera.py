@@ -50,3 +50,13 @@ class WritingCameraTests(Sandbox):
     def test_manual_transition_crossing_chunk_boundary_rejected(self):
         l,t=self.fixture();t['cameras']=[dict(at_frame=29,viewbox=[20,20,100,100],transition_frames=12)]
         with self.assertRaisesRegex(InputError,'conflicts'):self.keys(l,t)
+    def test_shape_only_chunk_keeps_page_context(self):
+        l,t=self.fixture(50)
+        l['shapes']=[dict(id='box',bbox=[900,300,980,340])]
+        step=l['map']['steps'][0];step['shape_ids']=['box'];step['writing_units'].append(unit('empty',[900,980],[],['box'],line='shape_line',chunk='shape_chunk',camera_break=True))
+        m=dict(segments=[dict(id='w',kind='write',step_id='step')],shape_anchors={},cameras=[])
+        t=build_timeline(m,l,[make_audio('w',800,self.run)],default_config(),default_writing())
+        view=self.keys(l,t)[-2]['viewbox'];scale=1080/view[3]
+        for x,y in ((0,0),(1000,562.5)):
+            self.assertGreaterEqual((x-view[0])*scale,0);self.assertLessEqual((x-view[0])*scale,1920)
+            self.assertGreaterEqual((y-view[1])*scale,0);self.assertLessEqual((y-view[1])*scale,900)

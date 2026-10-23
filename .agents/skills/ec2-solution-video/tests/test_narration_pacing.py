@@ -1,7 +1,7 @@
 from fixtures import *
 import array,importlib
 from solution_video.contracts import InputError
-from solution_video.util import file_hash,write
+from solution_video.util import file_hash,write,read
 
 class NarrationPacingTests(Sandbox):
     def api(self):
@@ -49,3 +49,29 @@ class NarrationPacingTests(Sandbox):
         self.assertEqual(api.analyze_narration_pacing(self.timeline(150),[a],self.run)['status'],'passed')
         a=self.voice(150,silent=61)
         self.assertEqual(api.analyze_narration_pacing(self.timeline(150),[a],self.run)['status'],'review-required')
+    def test_lag_boundary_and_hold(self):
+        a=self.voice(90);api=self.api()
+        for end,status in [(150,'passed'),(151,'review-required')]:
+            r=api.analyze_narration_pacing(self.timeline(end),[a],self.run)
+            row=r['segments'][0];self.assertEqual(row['writing_lag_frames'],end-90)
+            # Energy gaps still require their own review.
+            self.assertEqual(bool(r['unreviewed_writing_lags']),status=='review-required')
+        a=self.voice(120);r=api.analyze_narration_pacing(self.timeline(90,110),[a],self.run)
+        self.assertEqual(r['segments'][0]['completed_hold_frames'],80)
+    def test_gap_review_cannot_approve_lag(self):
+        a=self.voice(90);t=self.timeline(151);api=self.api();r=api.analyze_narration_pacing(t,[a],self.run)
+        gap=r['segments'][0]['gaps'][0]
+        write(self.run/'verification/pacing-review.json',dict(input_hash=r['input_hash'],gaps=[dict(segment_id='w',**gap,reason='finished page')]))
+        self.assertEqual(api.analyze_narration_pacing(t,[a],self.run)['status'],'review-required')
+        review=read(self.run/'verification/pacing-review.json');review['writing_lags']=[dict(segment_id='w',voice_end_frame=90,writing_end_frame=151,reason='intentional remaining writing')];write(self.run/'verification/pacing-review.json',review)
+        self.assertEqual(api.analyze_narration_pacing(t,[a],self.run)['status'],'passed')
+        for change in [dict(reason=''),dict(voice_end_frame=89),dict(writing_end_frame=150)]:
+            bad=dict(review);bad['writing_lags']=[dict(review['writing_lags'][0],**change)]
+            write(self.run/'verification/pacing-review.json',bad)
+            self.assertEqual(api.analyze_narration_pacing(t,[a],self.run)['status'],'review-required')
+        review['input_hash']='stale';write(self.run/'verification/pacing-review.json',review)
+        self.assertEqual(api.analyze_narration_pacing(t,[a],self.run)['status'],'review-required')
+    def test_pcm_end_separate_from_energy(self):
+        a=self.voice(90,silent=61);r=self.api().analyze_narration_pacing(self.timeline(),[a],self.run)
+        self.assertEqual(r['segments'][0]['voice_end_frame'],90);self.assertEqual(r['segments'][0]['writing_lag_frames'],0)
+        self.assertEqual(r['segments'][0]['longest_gap_frames'],61)
