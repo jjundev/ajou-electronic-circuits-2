@@ -1,6 +1,6 @@
 # 단계별 실행 상세
 
-진입점은 `../SKILL.md`, 역할·인계 계약은 `delegation.md`다. 이 파일 전체를 메인에 적재하지 않고 현재 담당 단계의 제목 범위만 읽는다. 기존 명령·교육 품질·백업/복구 계약을 보존한 상세 절차이며, 담당자·동시 실행·짧은 반환은 진입점과 delegation 계약을 따른다. `SKILL`은 이 references 폴더가 아니라 상위 스킬 루트다.
+진입점은 `../SKILL.md`, 역할·인계 계약은 `delegation.md`다. 이 파일 전체를 메인에 적재하지 않고 현재 담당 단계의 제목 범위만 읽는다. [runner 계약](runner-contract.md)이 상태·명령 실행의 단일 경로다. 아래는 역할의 교육 품질·검사·백업/복구 의미를 보존한 상세 절차이며, 담당자·동시 실행·짧은 반환은 진입점과 delegation 계약을 따른다. `SKILL`은 이 references 폴더가 아니라 상위 스킬 루트다.
 
 수업 녹음 전사(STT)와 강의자료, Razavi 교과서로 한 기간의 정리노트를 만들고, workbook에서 그 범위 문제를 골라 복습문제 PDF와 검토를 통과한 문제설명 HTML·MD를 만든다. 중간에 사용자에게 묻지 않고 끝에 한 번 보고한다. 커밋은 제안만 한다.
 
@@ -61,16 +61,8 @@
      그 뒤의 STT를 모두 쓴다. 팩이 하나도 없으면 사용 가능한 STT 날짜를 보여 주고 "기간을 인자로 넣어 주면 돼요(예: /ec2-review-pack 0923)"라고 알린 뒤 멈춘다.
    - 해당 STT가 하나도 없으면 사용 가능한 날짜를 보여 주고 멈춘다.
    - `range`는 첫 STT 날짜 하나이거나 `첫-끝` 형식이다.
-4. 실행 폴더를 만든다. 서브에이전트에게는 `RUN`, `RUN/repo`, `SKILL`, `PROFILE`의 실제 절대 경로와 learning_style snapshot을 넘긴다.
-   ```bash
-   mkdir -p "$RUN"/{summaries,sections,work} && ln -sfn "$REPO" "$RUN/repo"
-   ```
-   에이전트는 `RUN` 밖에 쓰지 않는다. 임시·보조 파일은 `RUN/work/`에만 둔다. 저장소(`STT/`, `강의노트/`, `교과서/`, `workbook/`, `from_the_past/`)에는 아무도 쓰지 않고, `복습노트/`에는 메인 에이전트만 쓴다.
-
-5. `PROFILE` 존재를 확인하고 현재 바이트 snapshot을 만든다. 본문은 작성자·감사자·리뷰어가 읽고, 메인은 정상 모드에서 snapshot 객체만 읽는다(lite의 실제 부모 감사 때는 본문도 읽는다). 빠진 명세는 필수 입력 오류다.
-   ```bash
-   python3 "$REPO/workbook/learning_style.py" snapshot --repo "$REPO" --out "$RUN/learning-style-snapshot.json"
-   ```
+4. 새 RUN과 실제 browser/pdf owner를 [runner 계약](runner-contract.md)의 init에 전달한다. 실행기가 디렉터리와 `RUN/learning-style.json` snapshot을 만든다. 별도 snapshot 명령/수기 run-status를 실행하지 않는다. 원본은 읽기 전용이고 최상위 메인만 발행한다.
+5. PROFILE 존재·현재 snapshot을 확인한다. 작성자·감사자·리뷰어는 PROFILE 전체를 읽으며 메인은 일반 모드에서 객체/해시만 확인한다(lite 실제 감사 때는 본문도 읽는다).
 
 ### 1. 범위 파악
 1. **먼저** 관련 `강의노트/2026F_Lec*_*.pdf` 텍스트를 슬라이드 번호와 함께 `RUN/slides.txt`에 추출한다(PyMuPDF, 쪽마다 `=== LNN sK ===`, `LNN`은 파일명의 `LecN`을 두 자리로). 요약 에이전트는 이 파일이 있다고 보고 시작하므로 추출이 끝난 뒤에 띄운다.
@@ -87,7 +79,7 @@
    장은 각 요약의 `## 교과서 절 대조`에서 "다룸"·"일부"로 적힌 절 번호마다 **첫 번째 숫자**(예: `9.1.2` → `9`)를 모아 만든 집합이다(슬라이드 제목이 아니다). 어떤 요약에도 Razavi 절이 없으면(순수 전자회로1 복습, Lec1–2뿐) 이 단계를 건너뛴다(문제 0개).
 
 ### 2. manifest
-- 필수 `learning_style`은 준비 단계 `RUN/learning-style-snapshot.json`의 객체 전체(path·sha256·rule_ids)를 그대로 넣는다. 작성자·리뷰어 브리프에 PROFILE 절대 경로와 snapshot을 채운다.
+- 필수 `learning_style`은 준비 단계 `RUN/learning-style.json`의 객체 전체(path·sha256·rule_ids)를 그대로 넣는다. 작성자·리뷰어 브리프에 PROFILE 절대 경로와 snapshot을 채운다.
 - 범위 설계자가 요약들의 슬라이드 대조표와 용어·식 목록으로 `RUN/manifest.json`을 쓴다. 문제 선발자의 순차 인계 후 같은 설계자가 최종 계약과 섹션 브리프를 확정한다. 규칙은 `references/manifest-guide.md`에 있다.
 - 첫 섹션은 항상 `why`(토픽 `why-circuit`, "들어가며: 왜 이런 회로를 쓸까")다. 요약의 `## 동기 발언`으로 `required_terms`를 고른다(`references/manifest-guide.md`).
 - 문제 선별의 공통 명세는 `references/problem-selection.md`다. 새 manifest는 `selection_policy: exam-first-v2`로 **기출 우선 최대 20문항**, 핵심/추가 연습·학습 목표·추정 시간을 기록한다. 교과서는 기출의 빈틈을 보완하고 종류별 고정 비율/최소 개수를 강제하지 않는다. 다른 회차에서 사용한 문항은 선행 문제도 항상 제외한다. 풀이 없는 문제도 원문에서 직접 풀어 검토하며 무해설을 불이익으로 삼지 않는다. 기출 상세 JSON의 원문·전체 소문항·실제 그림을 읽고 미분류·draft·stale은 MD로 재확인한다. 전체 문항만 채택하며 범위 밖 소문항이 있으면 미학습 개념과 함께 보류해 이후 회차에서 재검토한다.
@@ -111,131 +103,26 @@
 - 위젯은 팩 전체에 0~2개다. 병렬 작성자끼리는 서로를 모르므로 **범위 설계자가 작성자 실행 전에** 위젯을 둘 토픽(0~2개)을 정하고, 그 토픽의 섹션 작성자 브리프에만 `<위젯>` 자리에 "토픽 `<토픽 id>`에 위젯 1개: <무엇을 움직이면 무엇이 보이는지>"를 적는다. 나머지 작성자의 `<위젯>` 자리에는 "위젯 없음"이라고 적는다. 정한 토픽과 이유는 보고서 "스킬이 정한 사항"에 적는다.
 
 ### 4. 조립
-- `manifest.py "$RUN/manifest.json" "$REPO"`로 현재 snapshot을 검증한 후에만 발행 경로를 변경한다.
+- runner가 기존 manifest/snapshot 검증을 통과한 뒤에만 발행 경로를 변경한다.
 - **부모가 problems.txt·display-titles.json·selection.json·slug·정리노트를 처음 변경하기 전에** `references/problem-explain-integration.md`의 기존 설명 백업·정리 절차를 먼저 끝낸다. 문제지 빌드도 그 뒤에 한다. 재조립마다 반복하지 않는다. 기본 팩 재생성이 실패하면 해당 참조의 복원 순서를 따른다.
 - 초기 빌드는 문제지(`--mode problems`)만 만든다. 답안은 9단계 자식 승인 이후에 만든다.
 - **처음 조립할 때만**: `복습노트/<range>/`에 이번 `range`의 산출물(맨 위의 `정리노트_<range>_*`·`복습문제_<range>_*`, `.assets/`의 `정리노트_<range>_*`·`problems.txt`·`display-titles.json`·`selection.json`·`figures_<range>/`)이 하나라도 있으면 먼저 백업한다. 다시 조립할 때(5~8단계에서 돌아온 경우)는 백업하지 않는다. 이미 스킬이 만든 초안이 백업에 섞이기 때문이다.
   - `RANGE`, `REPO`, `RUN`을 모두 실제 값으로 바꿔 한 명령으로 실행한다. 파일명은 NFC로 비교하므로 NFD 파일명도 잡힌다.
-  - 백업 파일·경로 집합·SHA-256은 `RUN/basic-pack-backup.json`에 기록하고 재조립 시 유지한다. 백업은 매번 새 폴더 `RUN/previous-<시각>-<임의>/`에 만든다. `RANGE`가 형식에 안 맞거나, 대상이 있는데 복사된 파일 수가 다르면 종료 코드 1로 멈춘다. 이때는 조립하지 말고 원인을 고친다.
-```bash
-RANGE=<range> REPO=… RUN=… python3 - <<'EOF'
-import hashlib, json, os, re, shutil, sys, tempfile, time, unicodedata as u
-from pathlib import Path
-r, run, repo = os.environ["RANGE"], os.environ["RUN"], os.environ["REPO"]
-if not re.fullmatch(r"\d{4}(-\d{4})?", r) or not os.path.isdir(run):
-    sys.exit(f"백업 중단: RANGE={r!r} 또는 RUN={run!r} 잘못됨")
-if not os.path.isdir(os.path.join(repo, "STT")):
-    sys.exit(f"백업 중단: REPO={repo!r} 잘못됨")
-notes = os.path.join(repo, "복습노트")
-def listdir_nfc(d):  # NFD 폴더명도 찾는다
-    return {u.normalize("NFC", n): os.path.join(d, n) for n in os.listdir(d)} if d and os.path.isdir(d) else {}
-pack = listdir_nfc(notes).get(r)
-top = listdir_nfc(pack)
-hits = sorted((n, p) for n, p in top.items() if re.fullmatch(rf"정리노트_{r}_.+\.html|복습문제_{r}_.+-(문제|답안)\.pdf", n))
-hits += sorted((f".assets/{n}", p) for n, p in listdir_nfc(top.get(".assets")).items()
-               if re.fullmatch(rf"정리노트_{r}_.+\.md", n) or n in (f"figures_{r}", "problems.txt", "display-titles.json", "selection.json"))
-hits += [(f".pack/{n}", p) for n, p in listdir_nfc(top.get(".pack")).items() if n == "selection-review.json"]
-record = Path(run) / "basic-pack-backup.json"
-if not hits:
-    record.write_text(json.dumps({"range": r, "backup": None, "roots": [], "files": {}, "dirs": []}), encoding="utf-8")
-    print("백업할 기존 팩 없음"); sys.exit(0)
-if Path(pack).is_symlink() or (Path(pack) / ".assets").is_symlink():
-    sys.exit("백업 중단: 팩/자료 경로에 symlink")
-def inventory(base, roots):
-    files, dirs = {}, []
-    for rel in roots:
-        target = Path(base) / rel
-        for item in [target, *(target.rglob("*") if target.is_dir() else [])]:
-            if item.is_symlink() or not item.resolve().is_relative_to(Path(base).resolve()):
-                sys.exit(f"백업 중단: 허용 경로 밖/symlink: {item}")
-            name = item.relative_to(base).as_posix()
-            if item.is_file(): files[name] = hashlib.sha256(item.read_bytes()).hexdigest()
-            elif item.is_dir(): dirs.append(name)
-    return files, sorted(dirs)
-roots = [n for n, _ in hits]
-want = inventory(Path(pack), roots)
-def count(p):
-    return sum(len(f) for _, _, f in os.walk(p)) if os.path.isdir(p) else 1
-dst = tempfile.mkdtemp(prefix=time.strftime("previous-%Y%m%d-%H%M%S-"), dir=run)  # 항상 새 폴더
-for n, a in hits:
-    b = os.path.join(dst, n)
-    os.makedirs(os.path.dirname(b), exist_ok=True)
-    shutil.copytree(a, b) if os.path.isdir(a) else shutil.copy2(a, b)
-want_n, got_n = sum(count(a) for _, a in hits), count(dst)
-if got_n != want_n:
-    sys.exit(f"백업 실패: 파일 {want_n}개 중 {got_n}개만 복사됨 → {dst}")
-got = inventory(Path(dst), roots)
-if got != want:
-    sys.exit(f"백업 실패: 경로/해시 불일치 → {dst}")
-record.write_text(json.dumps({"range": r, "backup": str(Path(dst).resolve()), "roots": roots,
-    "files": want[0], "dirs": want[1]}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-print(f"백업 {len(hits)}항목(파일 {got_n}개): {dst}", *(a for _, a in hits), sep="\n")
-EOF
-```
-  - 백업 직후(처음 조립이고 백업이 성공했을 때만): 이전 problems.txt의 ID·순서와 새 목록이 다르면 같은 slug의 이전 답안도 백업에 보관하고 발행 위치에서 제거한다. 이번 manifest가 만들 이름과 다른, 이번 range의 이전 산출물(문제가 0개로 바뀌었거나 slug가 바뀐 경우의 옛 `정리노트_<range>_*`/`복습문제_<range>_*`)을 지운다. 정확한 소유 패턴과 검증된 basic-pack-backup.json의 roots에 함께 속하는 파일만 정리하며, 삭제 전 원본·백업 해시를 다시 확인한다.
-```bash
-python3 - "$RUN/manifest.json" "$REPO/복습노트/<range>" <<'EOF'
-import hashlib, json, os, re, sys, unicodedata as u
-from pathlib import Path
-m = json.load(open(sys.argv[1], encoding="utf-8"))
-r, slug, out = m["range"], m["slug"], sys.argv[2]
-keep = {f"정리노트_{r}_{slug}.html", f".assets/정리노트_{r}_{slug}.md"}
-if m["problems"]:
-    keep |= {f"복습문제_{r}_{slug}-문제.pdf", f"복습문제_{r}_{slug}-답안.pdf"}
-previous_list = os.path.join(out, ".assets", "problems.txt")
-previous_ids = ([line.split("|", 1)[0].strip() for line in open(previous_list, encoding="utf-8")
-                 if line.strip()] if os.path.isfile(previous_list) else [])
-if previous_ids != [q["id"] for q in m["problems"]]:
-    keep.discard(f"복습문제_{r}_{slug}-답안.pdf")
-record = json.loads((Path(sys.argv[1]).parent / "basic-pack-backup.json").read_text(encoding="utf-8"))
-if record["range"] != r:
-    sys.exit("정리 중단: 백업 range 불일치")
-roots = set(record["roots"])
-backup = Path(record["backup"]) if record["backup"] is not None else None
-def owned(rel):
-    return bool(re.fullmatch(rf"정리노트_{r}_.+\.html|복습문제_{r}_.+-(문제|답안)\.pdf|\.assets/정리노트_{r}_.+\.md", rel))
-def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
-pending = []
-for sub in ("", ".assets/"):  # 맨 위와 .assets/ 의 파일만 본다
-    d = os.path.join(out, sub)
-    for n in (os.listdir(d) if os.path.isdir(d) else []):
-        nn = u.normalize("NFC", n)
-        rel, target = sub + nn, Path(d) / n
-        if not (owned(rel) and rel in roots and rel not in keep):
-            continue
-        saved = backup / rel if backup is not None else None
-        if (target.is_symlink() or not target.is_file() or saved is None or saved.is_symlink()
-                or not saved.is_file() or not saved.resolve().is_relative_to(backup.resolve())
-                or sha(saved) != record["files"].get(rel) or sha(target) != record["files"].get(rel)):
-            sys.exit(f"정리 중단: 검증된 백업/현재 파일 불일치: {rel}")
-        pending.append((rel, target))
-# 모든 삭제 후보를 검증한 뒤에만 변경한다.
-for rel, target in pending:
-    target.unlink()
-print("제거:", ", ".join(rel for rel, _ in pending) if pending else "없음")
-EOF
-```
-- **기본 팩·설명 백업이 모두 검증된 뒤에만** 표시 제목 맵을 발행 폴더에 작성/갱신한다. 작성 전까지 후보 맵은 RUN/work에 둔다.
-- 선발 문항마다 짧은 표시 제목을 작성해 `.assets/display-titles.json`에 `{ "workbook ID": "짧은 제목" }` 객체로 저장한다. 키는 선발 ID 전체와 정확히 일치해야 한다. 값에 `P1.` 접두사·Fig 번호·긴 조건 나열을 넣지 않는다. 생성기가 순서에 따라 `P1. …`를 붙인다. 문제은행 원제목·원문·출처는 보존한다. 문제설명은 자동으로 이 파일을 읽고 입력 해시에 포함하며, 두 PDF 빌드는 같은 파일을 `--display-titles`로 받는다.
+  - 백업 파일·경로 집합·SHA-256은 `RUN/basic-pack-backup.json`에 기록하고 재조립 시 유지한다. 최초 백업은 새 폴더 `RUN/previous-<시각>-<임의>/`에 만든다. `RANGE`가 형식에 안 맞거나, 대상이 있는데 복사된 파일 수가 다르면 종료 코드 1로 멈춘다. 이때는 조립하지 말고 원인을 고친다.
+부모 실행: next가 요청한 `prepare-pack` action을 runner로 한 번 실행한다. 실제 argv/로그는 RUN에 보존한다.
+  - runner의 `prepare-pack`은 두 최초 백업을 함께 검증한 뒤 설명과 이전 slug/문항 목록의 낡은 산출만 정리한다. 재시도는 최초 기록을 재사용한다. `RUN/pack-first-inventory.json`은 두 백업 전의 전체 소유 inventory를 고정하며, 한 백업만 성공한 뒤 재시도할 때 현재 값이 다르면 중단한다. 정리 중 실패하면 이번 호출에서 제거를 시도한 경로만 호출 직전 상태로 복원한다. NFC는 비교에만 사용하며 실제 파일명·바이트와 빈 폴더를 보존한다. 정규화 이름 충돌·symlink·백업 불일치는 변경 전에 중단한다.
+- **기본 팩·설명 백업이 모두 검증된 뒤에만** 표시 제목 맵을 발행 폴더에 작성/갱신한다. 확정 전 후보는 RUN/work에 두고 최종 맵은 RUN/display-titles.json에 둔다.
+- 선발자가 `RUN/display-titles.json`에 확정한 짧은 표시 제목을 runner가 백업 뒤 `.assets/display-titles.json`에 `{ "workbook ID": "짧은 제목" }` 객체로 저장한다. 키는 선발 ID 전체와 정확히 일치해야 한다. 값에 `P1.` 접두사·Fig 번호·긴 조건 나열을 넣지 않는다. 생성기가 순서에 따라 `P1. …`를 붙인다. 문제은행 원제목·원문·출처는 보존한다. 문제설명은 자동으로 이 파일을 읽고 입력 해시에 포함하며, 두 PDF 빌드는 같은 파일을 `--display-titles`로 받는다.
 - 정리노트를 조립한다.
-```bash
-python3 "$SKILL/scripts/assemble.py" --repo "$REPO" --run "$RUN" --out "$REPO/복습노트/<range>"
-```
-- 문제가 1개 이상이면 PDF를 만든다(`references/problem-selection.md` 5). `--ids`는 manifest `problems` 순서대로 쉼표로 잇는다. 값은 아래처럼 manifest에서 그대로 뽑아 쓴다(손으로 다시 나열하지 않는다).
-```bash
-python3 -c "import json,sys;print(','.join(q['id'] for q in json.load(open(sys.argv[1]))['problems']))" "$RUN/manifest.json"
-```
-```bash
-python3 "$REPO/workbook/build_workbook.py" --ids <위 결과> --name 복습문제_<range>_<slug> --mode problems --selection "$REPO/복습노트/<range>/.assets/selection.json" --display-titles "$REPO/복습노트/<range>/.assets/display-titles.json" --layout video-16x9 --pdf-dir "$REPO/복습노트/<range>" --build-dir "$RUN/workbook-build"
-```
+부모 실행: next가 요청한 `assemble-note` action을 runner로 한 번 실행한다. 실제 argv/로그는 RUN에 보존한다.
+- 문제가 1개 이상이면 PDF를 만든다(`references/problem-selection.md` 5). `--ids`는 manifest `problems` 순서대로 쉼표로 잇는다. runner가 manifest에서 그대로 뽑아 쓴다(손으로 다시 나열하지 않는다).
+부모 실행: next가 요청한 `build-problems` action을 runner로 한 번 실행한다. 실제 argv/로그는 RUN에 보존한다.
   - stderr에 `ERROR <md 경로>: …`(문제 md 자체 오류, 종료 코드 2)가 나오면 해당 id를 같은 절 후보로 한 번 바꿔 manifest를 고치고 2단계 검증부터 다시 하고 이 단계를 다시 한다(백업은 하지 않는다). `ERROR <name>: …`(렌더링·Chrome·네트워크, 종료 코드 1)나 `OVERFLOW`는 md 문제가 아니므로 id를 바꾸지 않고 "미해결"로 보고한다(`references/problem-selection.md` 5).
 
 ### 5. 기계 예비 검사
-먼저 전담 감사자가 `references/review-prompt.md`의 개인화 감사 형식으로 모든 topic ID를 실제 검토하고 `RUN/learning-style-audit.json`에 기록한다. 일반 모드는 6단계 리뷰어가 재검토·보완하고, lite는 부모가 직접 수행한다. 문제가 0개여도 필요하다.
-```bash
-python3 "$SKILL/scripts/check_html.py" --repo "$REPO" --manifest "$RUN/manifest.json" --note "$REPO/복습노트/<range>/<정리노트>.html" --defer-answer-pdf
-```
-- 문제가 1개 이상일 때 위 명령의 성공 출력은 `PRELIMINARY: answer PDF pending`이며 최종 pass가 아니다. 문제가 0개이면 `--defer-answer-pdf`를 빼고 실행한다. 유예는 정확한 manifest 답안 경로의 파일 없음 한 건뿐이고 다른 링크·앵커·내용·명세·감사는 모두 검사한다.
+먼저 전담 감사자가 `references/review-prompt.md`의 개인화 감사 형식으로 모든 topic ID를 실제 검토하고 브리프의 `audit_output`에 기록한다. 일반 모드는 6단계 리뷰어가 재검토·보완하고, lite는 부모가 직접 수행한다. 문제가 0개여도 필요하다.
+부모 실행: next가 요청한 `precheck` action을 runner로 한 번 실행한다. 실제 argv/로그는 RUN에 보존한다.
+- 문제가 1개 이상일 때 위 명령의 성공 출력은 `PRELIMINARY: answer PDF pending`이며 최종 pass가 아니다. 문제가 0개이면 유예 없이 실행한다. 유예는 정확한 manifest 답안 경로의 파일 없음 한 건뿐이고 다른 링크·앵커·내용·명세·감사는 모두 검사한다.
 - `FAIL`이면 Problem의 `where`(토픽 id, 섹션 id)로 담당 작성자를 찾는다. `broken-link`가 PDF이면 4단계 PDF 빌드를 확인한다.
 - 그 작성자에게 문제 목록을 보내 조각을 고치게 한다(SendMessage, 안 되면 같은 브리프로 새 에이전트).
 - 고친 뒤 4단계부터 다시 한다. PDF는 manifest `problems`가 바뀐 경우에만 다시 만든다. HTML·MD 조각만 고쳤으면 조립(`assemble.py`)만 다시 하면 된다. 최대 2회까지이며, 그래도 남으면 "미해결"로 보고한다.
@@ -256,9 +143,9 @@ python3 "$SKILL/scripts/check_html.py" --repo "$REPO" --manifest "$RUN/manifest.
 - 끝나면 서버를 종료한다.
 
 ### 8. MD 변환
-```bash
-python3 "$SKILL/scripts/html2md.py" "$REPO/복습노트/<range>/<정리노트>.html" --check
-```
+부모 실행: next가 요청한 `convert-md` action을 runner로 한 번 실행한다. 실제 argv/로그는 RUN에 보존한다.
+
+변환 SVG가 있으면 phase 8의 `standalone-svg-qa`를 이어 수행한다. 브리프에 고정된 MD·모든 SVG를 독립 문서로 직접 열어 PROFILE 전체, NOTATION-01의 native text/tspan 첨자와 실제 Pretendard 600 정체 face, CIRCUIT-02 배치·색·간격·클리핑을 확인한다. 각 SVG의 지정 PNG와 실제 검사 결과를 RUN/work/standalone-svg-qa/report.json 및 report.md에 남긴다. counts.targets는 검토한 SVG 절대 경로 전체다. 실행기는 browser_owner에 따라 작업자/메인/blocked로 안내하며, 이 검토 전에는 자식이나 문제 0개의 최종 검사로 진행하지 않는다. 변환기의 동등성 검사 성공은 실제 SVG·글꼴 검토 승인이 아니다. 실제 출력 SVG가 0개일 때만 명시적 생략이 허용된다.
 - `OK`가 나와야 한다.
 - 누락이 나오면 대부분 HTML 조각의 마크업 문제다(수식이 `svg`나 `.controls` 안에 있는 경우 등). 조각을 고치고 4단계부터 다시 한다.
 
@@ -267,15 +154,10 @@ python3 "$SKILL/scripts/html2md.py" "$REPO/복습노트/<range>/<정리노트>.h
 - 확정한 manifest `problems`가 1개 이상이면 문제설명 조정자가 형제 `ec2-problem-explain` 스킬의 extract부터 실제 네 검토까지 수행하고, 최상위 메인만 기존 CLI publish를 실행한다. MD 변환 이후이며 최종 보고 이전이다.
 - 문제가 0개이면 `skipped-no-problems`다. 자식·PDF를 건너뛰고 현재 snapshot·모든 토픽 감사와 유예 없는 최종 노트 검사를 수행한다. lite여도 개인화 감사를 수행한다.
 - extract 이후 정리노트 바이트를 바꾸지 않는다. 자식 조정자는 확정한 일곱 구역의 통합 풀이 저작 → 독립 검산 → build/check → 네 검토 + 전체 개인화 감사를 완료해 ready-for-publish로 인계한다. 메인이 기존 publish 게이트로 발행한다. 자식은 PDF를 직접 교체하지 않는다.
-- 자식 publish 성공 후 같은 팩의 발행 overlay를 쓴다. `<위 결과>`는 4단계처럼 manifest ID 순서를 추출한 값이다.
-```bash
-python3 "$REPO/workbook/build_workbook.py" --ids <위 결과> --name 복습문제_<range>_<slug> --mode answers --answer-overlay "$REPO/복습노트/<range>/.assets/자료_문제설명_<range>_<slug>/answer-overlay.json" --selection "$REPO/복습노트/<range>/.assets/selection.json" --display-titles "$REPO/복습노트/<range>/.assets/display-titles.json" --layout video-16x9 --pdf-dir "$RUN/answers" --build-dir "$RUN/answer-build"
-```
+- 자식 publish 성공 후 같은 팩의 발행 overlay를 쓴다. ID는 runner가 현재 manifest 순서로 전달한다.
+부모 실행: next가 요청한 `build-answers` action을 runner로 한 번 실행한다. 실제 argv/로그는 RUN에 보존한다.
 - [통합 계약](problem-explain-integration.md)의 명령으로 PDF 실제 렌더 페이지를 확인하고 `RUN/answer-review.json`을 기록한다. 핵심 회로·판단·계산·최종 답과 자막 여백·넘침을 실제 확인한 기록만 pass다. 빌드 종료 코드가 0이고 OVERFLOW가 없어야 한다.
-```bash
-python3 "$SKILL/scripts/publish_answer.py" --repo "$REPO" --overlay "$REPO/복습노트/<range>/.assets/자료_문제설명_<range>_<slug>/answer-overlay.json" --pdf "$RUN/answers/복습문제_<range>_<slug>-답안.pdf" --review "$RUN/answer-review.json" --destination "$REPO/복습노트/<range>/복습문제_<range>_<slug>-답안.pdf" --backup-dir "$RUN/answer-backup-<새 실행ID>"
-python3 "$SKILL/scripts/check_html.py" --repo "$REPO" --manifest "$RUN/manifest.json" --note "$REPO/복습노트/<range>/<정리노트>.html"
-```
+부모 실행: next가 요청한 `publish-answer`와 이어지는 `final-check`를 각각 runner로 한 번 실행한다. 실제 argv/로그는 RUN에 보존한다.
 - 답안 발행 후 유예 없는 최종 검사까지 통과해야 전체 완료다. 명세 변경·자식/PDF 실패 시 통합 계약에 따라 서로 맞는 이전 팩을 복원하거나 새 파일만 RUN/withheld로 옮긴다.
 
 ### 10. 보고
@@ -339,3 +221,5 @@ python3 "$SKILL/scripts/insert_why.py" --note "$REPO/복습노트/<range>/<정�
 ## HTML 가독성 생성·검사
 
 `references/content-rules.md`의 간결한 문장별 요약·공개 STT 위치 정보 금지 규칙을 적용한다. 정리노트 `check_html.py`, 동반 MD `html2md.py --check`, 자식 해설 check는 공통 `scripts/readability.py`로 검사한다. 요약은 핵심 한 문장·식 1~3개·판단 1~3개를 권장하되 채우기용 항목을 만들지 않는다. solve 동급 소문항은 데스크톱 32px·모바일 24px, 첫 소문항 24px, 제목 아래·본문 문단 사이 12px, 요약 문장 사이 8px·그룹 사이 24px을 실제 화면에서 확인한다. 이 변경은 HTML·동반 MD에 적용하며 PDF 스타일을 바꾸지 않는다.
+
+부모 action의 실제 인터페이스: 문제지는 `--mode problems`, 답안은 `--mode answers --answer-overlay`, 두 빌드는 video-16x9와 명시 출력 경로를 사용한다. precheck만 문제 있을 때 `--defer-answer-pdf`를 사용한다. 최종 `publish_answer.py`는 실제 `answer-review.json`을 요구하고 final-check는 유예가 없다. 이 argv 구성은 runner가 기존 CLI에 전달하며 별도 수동 명령을 만들지 않는다.

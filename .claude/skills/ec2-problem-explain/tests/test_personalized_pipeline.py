@@ -1,9 +1,6 @@
 """Real CLI lifecycle with explicitly synthetic approvals; actual QA is in the report."""
-import hashlib
 import json
 from pathlib import Path
-import re
-import shutil
 import subprocess
 import sys
 
@@ -100,7 +97,7 @@ def test_unreviewed_or_changed_bundle_never_replaces_answer(pipeline, mutation):
 
 
 def test_parent_failure_restores_coherent_pack(pipeline):
-    """Back up a real published bundle; trigger real child rejection; run parent recipe."""
+    """Real parent file APIs restore a published bundle after actual child rejection."""
     p = pipeline
     p.approve_publish()
     old_answer = p.folder / '복습문제_1007_Diff_Amp-답안.pdf'
@@ -108,35 +105,31 @@ def test_parent_failure_restores_coherent_pack(pipeline):
     (p.folder / '.assets/정리노트_1007_Diff_Amp.md').write_text('old matching note')
     before = {f.relative_to(p.folder).as_posix(): f.read_bytes() for f in p.folder.rglob('*') if f.is_file()}
     restore_run = p.root / 'parent'; restore_run.mkdir()
-    for kind in ('basic-pack', 'explanations'):
-        backup = restore_run / kind
-        roots = [f for base in (p.folder, p.folder / '.assets') for f in base.iterdir()
-                 if f.name != '.assets' and (('문제설명' in f.name) == (kind == 'explanations'))]
-        record = {'range': '1007', 'backup': str(backup), 'roots': [], 'files': {}, 'dirs': []}
-        for source in roots:
-            rel = source.relative_to(p.folder)
-            dest = backup / rel; dest.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copytree(source, dest) if source.is_dir() else shutil.copy2(source, dest)
-            record['roots'].append(rel.as_posix())
-            for f in [dest, *(dest.rglob('*') if dest.is_dir() else [])]:
-                name = f.relative_to(backup).as_posix()
-                if f.is_dir(): record['dirs'].append(name)
-                else: record['files'][name] = hashlib.sha256(f.read_bytes()).hexdigest()
-        (restore_run / f'{kind}-backup.json').write_text(json.dumps(record))
+    parent_scripts = REPO / '.claude/skills/ec2-review-pack/scripts'
+    sys.path.insert(0, str(parent_scripts))
+    try:
+        from pack_files import prepare_pack, inventory_pack, recover_pack
+    finally:
+        sys.path.remove(str(parent_scripts))
+    (p.repo / 'STT').mkdir()
+    manifest = restore_run / 'manifest.json'
+    manifest.write_text(json.dumps({'range': '1007', 'slug': 'Diff_Amp',
+                                    'problems': [{'id': 'P9.23'}]}))
+    prepared = prepare_pack(p.repo, restore_run, manifest)
+    assert Path(prepared['basic']).is_file() and Path(prepared['explanations']).is_file()
     # A new parent assembly changes input, causing the real child source guard to fail.
     (p.folder / '.assets/problems.txt').write_text('P9.23 | changed selection\n')
     note = p.folder / '정리노트_1007_Diff_Amp.html'
     note.write_text('new unapproved note')
+    # Save the owned post-write inventory now, never recapture it at recovery.
+    expected_current = inventory_pack(p.repo, '1007')
     result = p.call('build', '--run', p.run, success=False)
     assert result.returncode != 0 and '추출' in result.stderr
     assert old_answer.read_bytes() == p.previous_answer_bytes
-    text = (REPO / '.claude/skills/ec2-review-pack/references/problem-explain-integration.md').read_text()
-    recipe = re.search(r'''python3 - "\$REPO" "\$RUN" "\$RANGE" <<'EOF'\n(.*?)\nEOF''', text, re.S)
-    assert recipe
-    result = subprocess.run([sys.executable, '-', str(p.repo), str(restore_run), '1007'], input=recipe.group(1), capture_output=True, text=True)
-    assert result.returncode == 0, result.stdout + result.stderr
+    restored = recover_pack(p.repo, restore_run, '1007', expected_current)
+    assert restored['status'] == 'restored'
     after = {f.relative_to(p.folder).as_posix(): f.read_bytes() for f in p.folder.rglob('*') if f.is_file()}
     assert after == before
-    withheld = next(restore_run.glob('withheld-*'))
+    withheld = Path(restored['withheld'])
     assert (withheld / '.assets/problems.txt').read_text() == 'P9.23 | changed selection\n'
     assert p.run_answers().returncode == 0  # restored bundle remains coherent to real consumer

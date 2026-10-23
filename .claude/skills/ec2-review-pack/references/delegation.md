@@ -1,6 +1,6 @@
 # 역할·파일 인계 계약
 
-목표는 메인의 원문·풀이·화면 독해를 담당자에게 옮기는 것이다. 품질 기준·실제 검토·발행 게이트는 그대로 유지한다. 메인은 진입점과 이 계약을 읽고, 상세 절차는 현재 단계만 연다.
+목표는 메인의 원문·풀이·화면 독해를 담당자에게 옮기는 것이다. 품질 기준·실제 검토·발행 게이트는 그대로 유지한다. 메인은 진입점과 이 계약을 읽고, [runner 계약](runner-contract.md)의 현재 명령 절만 연다. 상세 절차는 현재 단계만 연다.
 
 ## 실행과 컨텍스트
 
@@ -13,7 +13,7 @@
 
 ## 브리프는 경로로 전달
 
-메인/범위 설계자는 `RUN/briefs/<역할ID>.json`에 다음을 쓴다. 호출 메시지는 `역할`, `브리프 절대 경로`, `반환 형식`이면 충분하다. 수업 원문·PROFILE 전문·다른 역할의 전체 브리프를 메시지에 복제하지 않는다.
+실행기는 `RUN/work/<역할ID>/brief.json`에 고정 역할 브리프를 만들고, scope-final은 섹션 교육 브리프 `RUN/briefs/<sid>.json`을 만든다. 호출 메시지는 `역할`, `브리프 절대 경로`, `반환 형식`이면 충분하다. 수업 원문·PROFILE 전문·다른 역할의 전체 브리프를 메시지에 복제하지 않는다.
 
 | 항목 | 브리프에 담을 값 |
 |---|---|
@@ -34,14 +34,15 @@ snapshot **파일 경로**로 전체 객체를 전달한다. 담당자는 이를
 |---|---|---|
 | 자료 준비자 | execution-guide `1`의 1, STT·PDF | `source-map.json`, `slides.txt`; 날짜별 PDF/미게시/추출 실패 |
 | 날짜별 요약자 | stt-summary-prompt, 해당 STT 전체·자료 | `summaries/stt-<날짜>.md`; 기존 총평 3줄 |
-| 범위 설계자 | manifest-guide, 모든 요약·필요한 근거 | `scope.json`, manifest 초안→선발 후 확정본, `briefs/<sid>.json`, `work/scope/decisions.md` |
+| 범위 설계자 | manifest-guide, 모든 요약·필요한 근거 | `scope.json`, manifest 초안→선발 후 확정본, `briefs/<sid>.json`, 브리프 `report` |
 | 문제 선발자 | problem-selection 전체, scope·후보·이력·원문/그림 | candidates/catalog, manifest의 problems/links, selection-review/selection, 표시 제목 후보, `work/selection/report.md` |
-| 섹션 작성자 | content-rules, PROFILE, execution-guide `3`, 해당 근거; widget-rules는 담당자만 | `sections/<sid>.html`, `work/<sid>/report.md` |
-| 개인화 감사자 | review-prompt의 감사 계약, PROFILE, manifest·전체 토픽 | `learning-style-audit.json`; 일반 모드 전담자, lite 메인 |
-| 내용 리뷰어 | review-prompt 전체·원문 근거·선발 기록 | 전체 감사 재검토, `work/review/report.md`; lite 생략 |
-| 브라우저 QA | browser-check 전체·PROFILE의 화면 기준 | `work/browser/` 증거·실제 이미지·`report.json` |
+| 섹션 작성자 | content-rules, PROFILE, execution-guide `3`, 해당 근거; widget-rules는 담당자만 | `sections/<sid>.html`, 브리프 `report` |
+| 개인화 감사자 | review-prompt의 감사 계약, PROFILE, manifest·전체 토픽 | 브리프 `audit_output`과 `report`; 일반 모드 전담자, lite 메인 |
+| 내용 리뷰어 | review-prompt 전체·원문 근거·선발 기록 | 전체 감사 재검토, 브리프 `report`; lite 생략 |
+| 브라우저 QA | browser-check 전체·PROFILE의 화면 기준 | `work/browser/` 증거·실제 이미지·브리프 `report` |
+| 독립 SVG QA (`standalone-svg-qa`) | PROFILE 전체·NOTATION-01/CIRCUIT-02·execution-guide `8`, 변환된 MD/SVG | `work/standalone-svg-qa/report.json`, `report.md`, 대상별 지정 PNG·receipt; MD/SVG 읽기 전용 |
 | 문제설명 조정자 | problem-explain-integration 부모 호출·형제 스킬/참조 | EXPLAIN_RUN 전체 stage/검산/검토, `child-receipt.json`; 발행 직전 반환 |
-| PDF QA | 통합 계약 `답안 PDF 렌더 검토 기록`·승인 HTML/overlay | `answer-pages/`, `answer-review.md`, `answer-review.json` |
+| PDF QA | 통합 계약 `답안 PDF 렌더 검토 기록`·승인 HTML/overlay | `answer-pages/`, 브리프 `report`, `answer-review.json` |
 
 `scope.json`은 날짜별 배운 절/슬라이드·예고/금지어 근거·필요 PDF/쪽·미루거나 제외한 내용·관련 요약 경로를 보관하는 작업 인계물이다. 새 검증기 입력으로 가정하지 않는다. 기존 manifest/selection/audit/review JSON 스키마는 바꾸지 않는다.
 
@@ -49,7 +50,9 @@ manifest 소유권은 **설계자 초안 → 선발자 → 설계자 확정** �
 
 ## 짧은 응답과 상세 기록
 
-각 역할은 자세한 내용·수식·원문 근거·자기 검사·결함 목록을 자신의 보고 파일에 쓴다. 메인에 반환하는 응답은 **8줄 이내**로 다음 순서다. 긴 JSON 전문이나 코드 블록을 응답에 붙이지 않는다.
+표의 경로는 산출물 종류다. 실제 허용 출력/보고/감사는 현재 생성 브리프의 `allowed_outputs`, `allowed_output_roots`, `report`, `audit_output`을 단일 기준으로 따른다. 옛 참조의 고정 보고 경로로 쓰기 권한을 늘리지 않는다.
+
+각 역할은 자세한 내용·수식·원문 근거·자기 검사·결함 목록을 자신의 보고 파일에 쓴다. 메인에 반환하는 응답은 **800자 이하**(개행 포함 Python len)로 다음 순서다. 긴 JSON 전문이나 코드 블록을 응답에 붙이지 않는다. 자식 조정자는 모든 leaf 브리프에도 800자 이하 반환 요청을 명시한다.
 
 1. 역할/담당 ID와 상태(`done | needs-fix | blocked`; 자식은 별도 계약의 `ready-for-publish | withheld`).
 2. 산출물 및 상세 보고의 절대 경로.
@@ -62,8 +65,12 @@ manifest 소유권은 **설계자 초안 → 선발자 → 설계자 확정** �
 
 ## 메인의 상태와 발행 경계
 
-- `RUN/run-status.json`에는 현재 단계, 역할별 상태/agent ID/브리프/산출/보고 경로, 최초 백업 경로, 현재 manifest·snapshot·노트 해시, 내용 수정 횟수와 **기계/브라우저 공통 수정 횟수**, EXPLAIN_RUN·발행 결과·복구 경로를 저장한다. 긴 내용 대신 경로로 이어진다.
+- 실행기가 관리하는 `RUN/run-status.json`에는 현재 단계, 역할별 상태/agent ID/브리프/산출/보고 경로, 최초 백업 경로, 현재 manifest·snapshot·노트 해시, 내용 수정 횟수와 **기계/브라우저 공통 수정 횟수**, EXPLAIN_RUN·발행 결과·복구 경로를 저장한다. 긴 내용 대신 경로로 이어진다.
 - 명령의 장문 stdout/stderr는 `RUN/work/<역할ID>/` 로그에 저장하고 메인에는 종료 코드·검사 요약·오류 위치만 출력한다. 실패 시 해당 오류 부분을 읽는다. 원본/증거 전체를 터미널에 출력해 인계하지 않는다.
 - 메인만 최초 백업·정리, 표시 제목 맵 반영, assemble/MD 변환, 복습노트로의 epe publish/답안 publish, 전체 복구와 최종 검사를 실행한다. RUN 내부 후보/렌더/의미/화면 검토는 위임한다. `RUN/repo`는 쓰기 권한의 예외가 아니다.
 - source/manifest/HTML/명세 변경은 관련 작성·감사·화면 검토를 무효화한다. 자식 extract 후 고정 입력이 바뀌면 부모 재검토와 새 EXPLAIN_RUN이다. 스냅샷 교체나 오래된 pass로 통과시키지 않는다.
-- 컨텍스트가 압축되거나 담당자가 바뀌면 run-status와 현재 인계/검사 파일을 읽고 이어간다. 이미 끝난 원문 독해·작성·검토 대화를 다시 펼치지 않는다. 최종 완료 여부는 메인이 실제 발행 게이트/최종 검사와 복구 상태로 판정한다.
+- 컨텍스트가 압축되거나 담당자가 바뀌면 `status/next`와 필요한 현재 인계/검사 파일을 읽고 이어간다. 이미 끝난 원문 독해·작성·검토 대화를 다시 펼치지 않는다. 최종 완료 여부는 메인이 실제 발행 게이트/최종 검사와 복구 상태로 판정한다.
+
+작업 수락·수정·release·기계 실행·복구는 [runner 명령](runner-contract.md)으로만 기록한다. run-status를 수기 갱신하지 않는다. 실제 audit_output은 브리프 경로를 따르고 이전 작성자의 감사를 덮지 않는다.
+
+MD 변환 뒤 `standalone-svg-qa`는 brief.targets의 SVG 절대 경로를 각각 독립 문서로 연다. 실제 폰트 face와 회로 화면을 검사한 경로만 counts.targets로 제출하고 모든 지정 svg_screenshots PNG와 report.json/report.md를 남긴다. 부모 HTML 브라우저 검토와 별도 필수 단계이며, 실제 변환이 SVG 0개인 경우만 runner가 생략한다.

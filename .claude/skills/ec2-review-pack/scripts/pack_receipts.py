@@ -1,0 +1,304 @@
+"""File handoffs bind existing review records; they do not grant publication."""
+import hashlib
+import json
+from pathlib import Path
+import sys
+from pack_flow import FlowError
+
+ROLE_OUTPUTS = {
+    'source-prep': ('source-map.json', 'slides.txt'), 'stt': ('summaries/stt-{target}.md',),
+    'scope-draft': ('scope.json', 'work/scope-draft/manifest.json'), 'scope-final': ('manifest.json', 'briefs/{target}.json'),
+    'selection': ('candidates.json', 'catalog.json', 'selection.json', 'selection-review.json', 'display-titles.json', 'work/selection/manifest.json'),
+    'author': ('sections/{target}.html',), 'style-audit': ('work/style-audit/learning-style-audit-note.json',),
+    'content-review': (), 'browser-qa': ('work/browser/report.json',),
+    'standalone-svg-qa': ('work/standalone-svg-qa/report.json', 'work/standalone-svg-qa/report.md'),
+    'child-coordinator': (), 'pdf-qa': ('answer-review.json', 'answer-review.md')}
+
+
+def require(ok, message):
+    if not ok: raise FlowError(message)
+
+
+def obj(path):
+    value = json.loads(Path(path).read_text(encoding='utf-8'))
+    require(isinstance(value, dict), 'JSON object required: ' + str(path))
+    return value
+
+
+def sha(path): return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def records(items, roots):
+    require(isinstance(items, list), 'file records must be a list')
+    result = {}
+    for item in items:
+        require(isinstance(item, dict) and isinstance(item.get('path'), str), 'invalid file record')
+        path = Path(item['path'])
+        require(path.is_absolute(), 'absolute file path required')
+        path = path.resolve()
+        require(any(path.is_relative_to(root) for root in roots), 'file outside allowed roots: ' + str(path))
+        require(str(path) not in result and path.is_file(), 'missing or duplicate file: ' + str(path))
+        require(item.get('sha256') == sha(path), 'file hash changed: ' + str(path))
+        result[str(path)] = item['sha256']
+    return result
+
+
+def verify_receipt_files(receipt: dict) -> list[str]:
+    errors = []
+    for item in receipt.get('verified_files', receipt.get('inputs', []) + receipt.get('outputs', [])):
+        try:
+            if sha(item['path']) != item['sha256']: errors.append('changed: ' + item['path'])
+        except (OSError, KeyError, TypeError) as exc: errors.append(str(exc))
+    return errors
+
+
+def _png(path):
+    from PIL import Image
+    try:
+        with Image.open(path) as image:
+            require(image.format == 'PNG' and min(image.size) > 0, 'PNG image required')
+            image.verify()
+        with Image.open(path) as image: image.load()
+    except (OSError, ValueError) as exc:
+        raise FlowError('invalid PNG: ' + str(path)) from exc
+
+
+def _pdf_pages(path):
+    try:
+        import pymupdf
+        with pymupdf.open(path) as document:
+            require(document.is_pdf and len(document) > 0 and not document.needs_pass, 'actual readable PDF required')
+            for page in document: page.get_text()
+            return len(document)
+    except ImportError:
+        from pypdf import PdfReader
+        document = PdfReader(path)
+        require(not document.is_encrypted and len(document.pages) > 0, 'actual readable PDF required')
+        return len(document.pages)
+    except (OSError, ValueError, RuntimeError) as exc:
+        raise FlowError('invalid PDF: ' + str(path)) from exc
+
+
+def _source(state, run):
+    source = obj(run / 'source-map.json')
+    sessions = source.get('sessions')
+    require(source.get('schema_version') == 1 and isinstance(sessions, list), 'invalid source-map')
+    require(len(sessions) == len(state['sessions']) and {x['date'] for x in sessions} == set(state['sessions']), 'source-map dates mismatch')
+    repo = Path(state['repo'])
+    for session in sessions:
+        require(session.get('status') in ('ready', 'missing') and isinstance(session.get('missing'), list), 'invalid material status')
+        if session['status'] == 'missing': return 'blocked'
+        require(not session['missing'] and session.get('pdfs'), 'required PDF material missing')
+        stt = Path(session['stt'])
+        require(stt.name[:4] == session['date'] and str(stt.resolve()) in state['hashes'], 'STT date/frozen source mismatch')
+        for path in [stt, *map(Path, session['pdfs'])]:
+            require(path.is_absolute() and path.resolve().is_relative_to(repo) and path.is_file(), 'source material missing/outside REPO')
+        for path in session['pdfs']: _pdf_pages(path)
+    return 'done'
+
+
+def _audit_output(brief, role, run):
+    """Optional controller-frozen audit revision; receipts cannot select a path."""
+    if 'audit_output' not in brief: return None
+    path = Path(brief['audit_output'])
+    root = (run / 'work' / role / 'audits').resolve()
+    require(path.is_absolute() and root.is_relative_to(run.resolve()) and
+            path.resolve().is_relative_to(root) and path.name == 'learning-style-audit-note.json',
+            'audit output must be an absolute role-owned revision path')
+    path = path.resolve()
+    require(str(path) in {str(Path(p).resolve()) for p in brief.get('allowed_outputs', [])},
+            'audit output must be explicitly declared')
+    require(str(path) not in {str(Path(x['path']).resolve()) for x in brief['inputs']},
+            'audit output must differ from every frozen input')
+    return path
+
+
+def _audit(state, task, run):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[4] / 'workbook'))
+    from learning_style import validate_style_audit
+    targets = task['targets']
+    manifest_path = run / 'manifest.json'
+    if manifest_path.is_file():
+        targets = [topic['id'] for section in obj(manifest_path)['sections'] for topic in section['topics']]
+        require(set(targets) == set(task['targets']), 'audit task omits actual manifest topics')
+    brief = obj(task['brief'])
+    audit_path = _audit_output(brief, task['role'], run) or run / ('work/style-audit/learning-style-audit-note.json' if task['role'] == 'style-audit' else 'work/content-review/learning-style-audit-note.json')
+    if task['role'] == 'content-review' and not audit_path.is_file():
+        brief = obj(task['brief'])
+        audit_path = Path(brief['audit'])
+        require(str(audit_path.resolve()) in {str(Path(x['path']).resolve()) for x in brief['inputs']}, 'active audit must be frozen input')
+    errors = validate_style_audit(obj(audit_path), obj(run / 'learning-style.json'), targets)
+    require(not errors, 'style audit: ' + '; '.join(errors))
+    return audit_path.resolve()
+
+
+def _pdf(brief, run):
+    from publish_answer import _review
+    pdf, overlay_path = Path(brief['pdf']), Path(brief['overlay'])
+    review_path = run / 'answer-review.json'
+    review = _review(review_path, pdf, overlay_path, obj(overlay_path))
+    count = _pdf_pages(pdf)
+    images = {str(p.resolve()) for p in (run / 'answer-pages').glob('page-*.png')}
+    evidence = {str((run / x['path']).resolve()) for x in review['evidence'] if Path(x['path']).suffix.lower() == '.png'}
+    expected = {str((run / 'answer-pages' / ('page-' + str(n).zfill(len(str(count))) + '.png')).resolve()) for n in range(1, count + 1)}
+    require(images == evidence == expected, 'all actual PDF pages required')
+    report = Path(brief.get('report', run / 'answer-review.md')).resolve()
+    require(str(report) in {str((run / x['path']).resolve()) for x in review['evidence']}, 'PDF brief report evidence required')
+    for path in images: _png(path)
+    return [pdf, overlay_path, *[(run / x['path']).resolve() for x in review['evidence']]]
+
+
+def standalone_screenshots(run, targets):
+    return {target: str(Path(run) / 'work/standalone-svg-qa/screenshots' / f'svg-{i:04d}.png')
+            for i, target in enumerate(sorted(targets), 1)}
+
+
+def _standalone_svg(state, task, brief, inputs, outputs, report, reviews):
+    from pack_flow import _converted_assets
+    converted = _converted_assets(state)
+    targets = [x['path'] for x in converted['svgs']]
+    require(targets and task['targets'] == targets, 'standalone SVG target inventory mismatch')
+    required = [converted['note'], converted['md'], *converted['svgs']]
+    require(all(inputs.get(x['path']) == x['sha256'] for x in required), 'standalone current MD/SVG/note inputs required')
+    root = Path(state['run']) / 'work/standalone-svg-qa'
+    require(report == (root / 'report.md').resolve() and str((root / 'report.json').resolve()) in
+            {str(Path(p).resolve()) for p in reviews}, 'standalone report paths required')
+    screens = standalone_screenshots(Path(state['run']), targets)
+    require(brief.get('svg_screenshots') == screens, 'standalone screenshot contract mismatch')
+    require(set(screens.values()) <= outputs.keys(), 'standalone screenshot evidence required for every SVG')
+    for path in screens.values(): _png(path)
+
+
+def validate_receipt(state: dict, task: dict, receipt_path: Path) -> dict:
+    try:
+        run, repo = Path(state['run']).resolve(), Path(state['repo']).resolve()
+        receipt_path = Path(receipt_path).resolve()
+        require(receipt_path.is_relative_to(run), 'receipt outside RUN')
+        receipt = obj(receipt_path)
+        require(receipt.get('schema_version') == 1 and receipt.get('run_id') == state['run_id'] and receipt.get('task_id') == task['id'] and receipt.get('attempt') == task['attempt'], 'receipt identity mismatch')
+        status = receipt.get('status')
+        require(status in ('done', 'needs-fix', 'blocked', 'ready-for-publish', 'withheld'), 'invalid receipt status')
+        require(isinstance(receipt.get('unresolved'), list) and isinstance(receipt.get('counts'), dict), 'counts/unresolved required')
+        require(status not in ('done', 'ready-for-publish') or not receipt['unresolved'], 'unresolved successful receipt')
+        brief = obj(task['brief'])
+        expected = records(brief['inputs'], [repo, run])
+        inputs = records(receipt['inputs'], [repo, run])
+        require(inputs == expected, 'receipt must include all frozen brief inputs')
+        outputs = records(receipt['outputs'], [run])
+        allowed = {str(Path(p).resolve()) for p in brief.get('allowed_outputs', [])}
+        roots = [Path(p).resolve() for p in brief.get('allowed_output_roots', [])]
+        require(all(p.is_relative_to(run) and p != run and not repo.is_relative_to(p) for p in roots), 'invalid output root')
+        require(all(p in allowed or any(Path(p).is_relative_to(root) for root in roots) for p in outputs), 'receipt expands allowed outputs')
+        role = task['role']
+        require(role in ROLE_OUTPUTS, 'unknown role')
+        required = {str((run / pattern.format(target=target)).resolve()) for pattern in ROLE_OUTPUTS[role] for target in task['targets']}
+        if role in ('style-audit', 'content-review'):
+            audit_output = _audit_output(brief, role, run)
+            if role == 'style-audit' and audit_output is not None: required = {str(audit_output)}
+        if status in ('done', 'ready-for-publish'): require(required <= outputs.keys(), 'required role outputs missing')
+        report = Path(receipt['report']).resolve()
+        require(report.is_relative_to(run) and report.is_file(), 'report missing/outside RUN')
+        reviews = receipt['reviews']
+        require(isinstance(reviews, list), 'review paths required')
+        verified = dict(inputs, **outputs)
+        for path in [receipt_path, report, *map(Path, reviews)]:
+            path = path.resolve()
+            require(path.is_relative_to(run) and path.is_file(), 'review evidence missing/outside RUN')
+            verified[str(path)] = sha(path)
+        task_status = {'needs-fix': 'needs_fix', 'withheld': 'blocked'}.get(status, 'done' if status == 'ready-for-publish' else status)
+        if status in ('done', 'ready-for-publish'):
+            if role == 'selection':
+                titles = obj(run / 'display-titles.json')
+                selected = obj(run / 'work/selection/manifest.json')
+                require(set(titles) == {q['id'] for q in selected['problems']}
+                        and all(isinstance(v, str) and v.strip() for v in titles.values()),
+                        'display title map must match selected IDs with nonempty titles')
+            if role == 'source-prep':
+                task_status = _source(state, run)
+                for session in obj(run / 'source-map.json')['sessions']:
+                    for path in [session.get('stt'), *session.get('pdfs', [])]:
+                        if path and Path(path).is_file(): verified[str(Path(path).resolve())] = sha(path)
+            if role in ('style-audit', 'content-review'):
+                audit_path = _audit(state, task, run)
+                require(str(audit_path) in verified, 'audit must be declared frozen input or owned output')
+            if role == 'pdf-qa':
+                require(report == Path(brief['report']).resolve(), 'PDF report must match brief')
+                for path in _pdf(brief, run):
+                    require(path.resolve().is_relative_to(run), 'PDF evidence outside RUN')
+                    verified[str(path.resolve())] = sha(path)
+            if role == 'child-coordinator': _child(state, brief, receipt, verified)
+            if role == 'standalone-svg-qa':
+                _standalone_svg(state, task, brief, inputs, outputs, report, reviews)
+                coverage = receipt['counts'].get('targets')
+                require(isinstance(coverage, list) and len(coverage) == len(task['targets']) and
+                        set(coverage) == set(task['targets']), 'standalone review target coverage mismatch')
+            if role in ('content-review', 'browser-qa'):
+                require(reviews, 'existing review evidence required')
+                require(set(receipt['counts'].get('targets', [])) == set(task['targets']), 'review target coverage mismatch')
+                if role == 'browser-qa':
+                    screens = [path for path in outputs if Path(path).suffix.lower() == '.png']
+                    require(screens, 'actual browser screenshot evidence required')
+                    for path in screens: _png(path)
+        return dict(receipt, task_status=task_status, verified_files=[{'path': p, 'sha256': h} for p, h in verified.items()])
+    except FlowError: raise
+    except (OSError, ValueError, KeyError, TypeError, AttributeError, ImportError, RuntimeError) as exc:
+        raise FlowError('invalid receipt: ' + str(exc)) from exc
+
+
+def _child(state, brief, receipt, verified):
+    """Read the genuine child runtime state without calling its publisher."""
+    scripts = Path(__file__).resolve().parents[2] / 'ec2-problem-explain/scripts'
+    sys.path.insert(0, str(scripts))
+    from epe_cli import load_run, load_fragments, load_artifacts
+    from epe_contract import validate_reviews, payload_hash, validate_fragment
+    from epe_render import artifact_hashes, check_artifacts
+    from epe_core import make_overlay
+    from epe_rerender import verified_references
+    child_run = Path(state['explain_run']).resolve()
+    require(child_run.is_relative_to(Path(state['run']).resolve()), 'child RUN outside parent RUN')
+    child_path = child_run / 'child-receipt.json'
+    child = obj(child_path)
+    require(child.get('schema_version') == 1 and child.get('status') == 'ready-for-publish' and not child.get('unresolved'), 'child is not ready')
+    require(Path(child['run']).resolve() == child_run and child['range'] == state['range'], 'child identity mismatch')
+    files = records(child['files'], [Path(state['repo']).resolve(), child_run, Path(state['run']).resolve()])
+    required = {str(Path(brief['manifest']).resolve()), str((Path(state['run']) / 'learning-style.json').resolve()), str((child_run / 'run.json').resolve())}
+    items = load_run(child_run)
+    require(len(items) == 1, 'one child bucket required for parent pack')
+    for item in items:
+        folder, pack = item['folder'], item['pack']
+        parent = obj(brief['manifest'])
+        require(Path(item['repo']).resolve() == Path(state['repo']).resolve(), 'child parent REPO mismatch')
+        require(pack.range == parent['range'] == state['range'] and pack.slug == parent['slug'] == child['slug'], 'child parent identity mismatch')
+        require([p.workbook_id for p in pack.problems] == [p['id'] for p in parent['problems']], 'child parent problem IDs/order mismatch')
+        expected_source = Path(state['repo']) / '복습노트' / parent['range'] / '.assets/problems.txt'
+        require(pack.path.resolve() == expected_source.resolve(), 'child parent source mismatch')
+        require(pack.learning_style == parent['learning_style'] == obj(Path(state['run']) / 'learning-style.json'), 'child parent style mismatch')
+        fragments, artifacts = load_fragments(item), load_artifacts(item)
+        review_path = folder / 'review.json'
+        reviews = obj(review_path)
+        machine = obj(folder / 'machine.json')
+        require(machine.get('status') == 'pass' and machine.get('errors') == [] and machine.get('artifact_hashes') == artifact_hashes(artifacts), 'child machine evidence stale or failed')
+        errors = validate_reviews(pack, fragments, reviews) + check_artifacts(pack, artifacts)
+        errors += [e for p in pack.problems for e in validate_fragment(p, fragments[p.id])]
+        require(not errors, 'child review/artifact validation: ' + '; '.join(errors))
+        manifest = obj(artifacts.manifest)
+        require(child['input_hash'] == manifest['input_hash'] == payload_hash(pack, fragments) and child['review_policy_version'] == reviews['review_policy_version'], 'child input/policy mismatch')
+        require(reviews['artifact_hashes'] == artifact_hashes(artifacts), 'child artifacts changed')
+        require(verified_references(reviews['references'], item['repo'], item['repo'])[1], 'child references incomplete')
+        overlay_path = artifacts.html.parent / manifest['answer_overlay']
+        require(obj(overlay_path) == make_overlay(pack, artifacts.html, item['repo']), 'child overlay mismatch')
+        require(Path(child['stage']).resolve() == artifacts.html.parent.resolve() and child['bucket'] == folder.name, 'child stage mismatch')
+        required.update(str(Path(p).resolve()) for p in [folder / 'source.json', folder / 'stage.json', folder / 'machine.json', review_path, overlay_path, *artifacts.files, *map(Path, pack.inputs), *[folder / 'explanations' / (p.id + '.html') for p in pack.problems]])
+        required.update(str(Path(x['path']).resolve()) for x in reviews['references'])
+        identities = child['reviewers']
+        authors, solvers = identities['authors'], identities['independent']
+        for problem in pack.problems:
+            require(isinstance(authors.get(problem.id), str) and authors[problem.id].strip(), 'child author ID required')
+            for subpart in problem.subparts:
+                key = problem.id + ':' + subpart
+                require(solvers.get(key) == reviews['independent']['items'][key]['reviewer'] and solvers[key] != authors[problem.id], 'independent reviewer must differ from author')
+        require(reviews['content']['reviewer'] not in set(authors.values()), 'content reviewer authored child problem')
+        require(identities['content'] == reviews['content']['reviewer'] and identities['browser'] == reviews['browser']['reviewer'], 'child reviewer IDs mismatch')
+    require(required <= files.keys(), 'child files omit current inputs/stage/reviews')
+    verified.update(files)
+    verified[str(child_path)] = sha(child_path)

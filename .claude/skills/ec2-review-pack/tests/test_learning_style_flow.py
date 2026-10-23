@@ -181,10 +181,14 @@ def run_rollback(tmp_path, *, old_pack=True, tamper=False):
     (pack / "interactive.html").write_bytes(b"unrelated")
     if tamper:
         (run / "basic-pack-backup/복습문제_0923_Old-답안.pdf").write_bytes(b"tampered")
-    text = (SKILL / "references/problem-explain-integration.md").read_text()
-    snippet = re.search(r'''python3 - "\$REPO" "\$RUN" "\$RANGE" <<'EOF'\n(.*?)\nEOF''', text, re.S)
-    assert snippet, "Executable coherent rollback recipe required"
-    result = subprocess.run([sys.executable, "-", str(repo), str(run), "0923"], input=snippet.group(1), text=True, capture_output=True)
+    from types import SimpleNamespace
+    from pack_files import recover_pack, inventory_pack
+    from pack_flow import FlowError
+    try:
+        recover_pack(repo, run, "0923", inventory_pack(repo, "0923"))
+        result = SimpleNamespace(returncode=0, stdout="", stderr="")
+    except FlowError as error:
+        result = SimpleNamespace(returncode=1, stdout="", stderr=str(error))
     assert other.read_bytes() == b"other date"
     assert (pack / "interactive.html").read_bytes() == b"unrelated"
     return result, pack, run, current, expected

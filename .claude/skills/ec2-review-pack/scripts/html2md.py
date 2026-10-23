@@ -17,6 +17,7 @@ import base64
 from functools import lru_cache
 from pathlib import Path
 import html
+import json
 import os
 import re
 import sys
@@ -598,7 +599,7 @@ def html_math_and_ids(path):
     return MD_MATH_RE.findall("".join(texts)), ids
 
 
-def check_md(html_path, md_path):
+def check_md(html_path, md_path, *, deferred_answer=None):
     """변환 결과 검사. 문제 문자열 목록을 돌려준다(빈 목록이면 통과)."""
     md = _read(md_path)
     md_dir = os.path.dirname(os.path.abspath(md_path))
@@ -635,6 +636,8 @@ def check_md(html_path, md_path):
             continue
         other = os.path.join(md_dir, path_dec)
         if not _exists(other):
+            if deferred_answer is not None and nfc(unquote(target)) == "../" + deferred_answer:
+                continue
             problems.append(f"링크 파일 없음: {target}")
         elif path_dec.endswith(".md") and frag and f'<a id="{frag}"></a>' not in _read(other):
             problems.append(f"링크 앵커 없음: {target}")
@@ -673,16 +676,30 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("note")
     ap.add_argument("--check", action="store_true")
+    ap.add_argument("--manifest", type=Path)
+    ap.add_argument("--defer-answer-pdf", action="store_true")
     args = ap.parse_args(argv)
+    deferred_answer = None
+    if args.defer_answer_pdf:
+        if not args.check or args.manifest is None:
+            ap.error("--defer-answer-pdf requires --check and --manifest")
+        try:
+            from manifest import note_name, answer_pdf_name
+            manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
+            if not manifest.get("problems") or note_name(manifest) != nfc(Path(args.note).name):
+                raise ValueError("manifest must identify this note and nonempty problems")
+            deferred_answer = answer_pdf_name(manifest)
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            ap.error(str(exc))
     out, fig_count = convert_note(args.note)
     print(out)
     print(f"figures: {fig_count}")
     if not args.check:
         return 0
-    problems = [f"{os.path.basename(out)}: {p}" for p in check_md(args.note, out)]
+    problems = [f"{os.path.basename(out)}: {p}" for p in check_md(args.note, out, deferred_answer=deferred_answer)]
     for p in problems:
         print(p)
-    print("OK" if not problems else f"FAIL ({len(problems)})")
+    print(("PRELIMINARY: planned answer PDF pending" if deferred_answer else "OK") if not problems else f"FAIL ({len(problems)})")
     return int(bool(problems))
 
 

@@ -1111,6 +1111,8 @@
         let lastFocus = null;
         document.addEventListener('focusin', (e) => { lastFocus = e.target; });
         function mountPanes() {
+          // Paper-width changes must keep every source pane in the print layout.
+          if (printMq.matches) { mountForPrint(); return; }
           const wide = wideMq.matches;
           const active = document.activeElement;
           const refocus = !wide && lastFocus && panels.prob.contains(lastFocus) && (active === lastFocus || active === body || !active);
