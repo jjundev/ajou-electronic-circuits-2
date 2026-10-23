@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="340" viewBox="0 0 680 340" role="img" aria-label="소스 축퇴 차동 증폭기 및 소신호 반회로 등가 회로도">
+<style>
+svg text, svg text[class], svg text tspan, .fig-math, .fig-math tspan { font-family: Pretendard, -apple-system, sans-serif; font-weight: 600; font-style: normal; }
+.fig-ink { stroke: #1e293b; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fig-accent { stroke: #2563eb; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fig-danger { stroke: #dc2626; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fig-dot { fill: #2563eb; }
+.fig-dot[data-node-color="blue"] { fill: #2563eb; }
+.fig-dot[data-node-color="red"] { fill: #dc2626; }
+.fig-text { fill: #0f172a; font-size: 13px; }
+.fig-text[data-node-color="blue"] { fill: #2563eb; }
+.fig-text[data-node-color="red"] { fill: #dc2626; }
+.fig-muted { fill: #64748b; font-size: 11px; }
+</style>
+<rect width="100%" height="100%" fill="#ffffff" rx="10"/>
+
+  <!-- 구획 분리 점선 -->
+  <line class="fig-ink" stroke-dasharray="5 4" x1="365" y1="20" x2="365" y2="310" stroke="#cbd5e1"/>
+
+  <!-- [좌측] 소스 축퇴 차동 증폭기 전체 회로 -->
+  <text class="fig-muted" x="180" y="24" text-anchor="middle">소스 축퇴 차동 증폭기 (Full Circuit)</text>
+
+  <!-- VDD 상단 레일 -->
+  <line class="fig-ink" x1="80" y1="45" x2="280" y2="45"/>
+  <text class="fig-text" x="180" y="38" text-anchor="middle">V<tspan dy="3" font-size="78%">DD</tspan></text>
+
+  <!-- 좌측 레그: RD1, Vout1, M1 -->
+  <!-- 부하 저항 RD1 -->
+  <path class="fig-ink" d="M110 45 V50 L117 54 L103 62 L117 70 L103 78 L117 86 L103 90 L110 95 V105"/>
+  <text class="fig-text" x="85" y="72" text-anchor="end">R<tspan dy="3" font-size="78%">D</tspan></text>
+
+  <!-- 드레인 출력 노드 Vout1 -->
+  <circle class="fig-dot" data-node-color="red" cx="110" cy="105" r="3.5"/>
+  <line class="fig-danger" x1="110" y1="105" x2="55" y2="105"/>
+  <circle class="fig-danger" cx="55" cy="105" r="3" fill="#ffffff"/>
+  <text class="fig-text" data-node-color="red" x="48" y="109" text-anchor="end">v<tspan dy="3" font-size="78%">out1</tspan></text>
+
+  <!-- NMOS M1 -->
+  <line class="fig-ink" x1="110" y1="105" x2="110" y2="120"/>
+  <line class="fig-ink" x1="92" y1="118" x2="92" y2="152"/>
+  <line class="fig-ink" x1="100" y1="116" x2="100" y2="154"/>
+  <path class="fig-ink" d="M100 124 H110 V120"/>
+  <path class="fig-ink" d="M100 146 H110 V175"/>
+  <path class="fig-ink" d="M103 142 L109 146 L103 150"/>
+  <text class="fig-text" x="115" y="138">M<tspan dy="3" font-size="78%">1</tspan></text>
+
+  <!-- 입력 신호 Vin1 -->
+  <line class="fig-accent" x1="92" y1="135" x2="45" y2="135"/>
+  <circle class="fig-dot" data-node-color="blue" cx="45" cy="135" r="3"/>
+  <text class="fig-text" data-node-color="blue" x="38" y="139" text-anchor="end">v<tspan dy="3" font-size="78%">in1</tspan><tspan dy="-3" font-size="100%"> = +v<tspan dy="3" font-size="78%">in,d</tspan>/2</tspan></text>
+
+  <!-- 우측 레그: RD2, Vout2, M2 -->
+  <!-- 부하 저항 RD2 -->
+  <path class="fig-ink" d="M250 45 V50 L257 54 L243 62 L257 70 L243 78 L257 86 L243 90 L250 95 V105"/>
+  <text class="fig-text" x="275" y="72">R<tspan dy="3" font-size="78%">D</tspan></text>
+
+  <!-- 드레인 출력 노드 Vout2 -->
+  <circle class="fig-dot" data-node-color="red" cx="250" cy="105" r="3.5"/>
+  <line class="fig-danger" x1="250" y1="105" x2="305" y2="105"/>
+  <circle class="fig-danger" cx="305" cy="105" r="3" fill="#ffffff"/>
+  <text class="fig-text" data-node-color="red" x="312" y="109">v<tspan dy="3" font-size="78%">out2</tspan></text>
+
+  <!-- NMOS M2 -->
+  <line class="fig-ink" x1="250" y1="105" x2="250" y2="120"/>
+  <line class="fig-ink" x1="268" y1="118" x2="268" y2="152"/>
+  <line class="fig-ink" x1="260" y1="116" x2="260" y2="154"/>
+  <path class="fig-ink" d="M260 124 H250 V120"/>
+  <path class="fig-ink" d="M260 146 H250 V175"/>
+  <path class="fig-ink" d="M257 142 L251 146 L257 150"/>
+  <text class="fig-text" x="235" y="138" text-anchor="end">M<tspan dy="3" font-size="78%">2</tspan></text>
+
+  <!-- 입력 신호 Vin2 -->
+  <line class="fig-accent" x1="268" y1="135" x2="315" y2="135"/>
+  <circle class="fig-dot" data-node-color="blue" cx="315" cy="135" r="3"/>
+  <text class="fig-text" data-node-color="blue" x="322" y="139">v<tspan dy="3" font-size="78%">in2</tspan><tspan dy="-3" font-size="100%"> = -v<tspan dy="3" font-size="78%">in,d</tspan>/2</tspan></text>
+
+  <!-- 소스 간 축퇴 저항 RSS 분할 (RSS/2 + RSS/2) -->
+  <circle class="fig-dot" cx="110" cy="175" r="3"/>
+  <circle class="fig-dot" cx="250" cy="175" r="3"/>
+  <!-- 좌측 RSS/2 저항 -->
+  <path class="fig-ink" d="M110 175 H125 L129 168 L137 182 L145 168 L153 182 L161 168 L165 175 H180"/>
+  <!-- 우측 RSS/2 저항 -->
+  <path class="fig-ink" d="M180 175 H195 L199 168 L207 182 L215 168 L223 182 L231 168 L235 175 H250"/>
+  <text class="fig-text" x="135" y="196" font-size="11">R<tspan dy="3" font-size="78%">SS</tspan>/2</text>
+  <text class="fig-text" x="205" y="196" font-size="11">R<tspan dy="3" font-size="78%">SS</tspan>/2</text>
+
+  <!-- 중심 가상 접지 노드 -->
+  <circle class="fig-dot" data-node-color="blue" cx="180" cy="175" r="3.5"/>
+  <text class="fig-text" data-node-color="blue" x="180" y="163" text-anchor="middle" font-size="11">가상 접지(0 V)</text>
+
+  <!-- 테일 전류원 ISS1, ISS2 -->
+  <line class="fig-ink" x1="110" y1="175" x2="110" y2="210"/>
+  <circle class="fig-ink" cx="110" cy="225" r="14"/>
+  <path class="fig-ink" d="M110 217 V233 M106 228 L110 233 L114 228"/>
+  <line class="fig-ink" x1="110" y1="239" x2="110" y2="258"/>
+  <line class="fig-ink" x1="100" y1="258" x2="120" y2="258"/>
+  <line class="fig-ink" x1="104" y1="262" x2="116" y2="262"/>
+  <line class="fig-ink" x1="107" y1="266" x2="113" y2="266"/>
+  <text class="fig-text" x="85" y="228" text-anchor="end" font-size="11">I<tspan dy="3" font-size="78%">SS1</tspan></text>
+
+  <line class="fig-ink" x1="250" y1="175" x2="250" y2="210"/>
+  <circle class="fig-ink" cx="250" cy="225" r="14"/>
+  <path class="fig-ink" d="M250 217 V233 M246 228 L250 233 L254 228"/>
+  <line class="fig-ink" x1="250" y1="239" x2="250" y2="258"/>
+  <line class="fig-ink" x1="240" y1="258" x2="260" y2="258"/>
+  <line class="fig-ink" x1="244" y1="262" x2="256" y2="262"/>
+  <line class="fig-ink" x1="247" y1="266" x2="253" y2="266"/>
+  <text class="fig-text" x="275" y="228" font-size="11">I<tspan dy="3" font-size="78%">SS2</tspan></text>
+
+  <!-- [우측] 차동 소신호 반회로 (Differential Half-Circuit) -->
+  <text class="fig-muted" x="525" y="24" text-anchor="middle">차동 소신호 반회로 (Half-Circuit)</text>
+
+  <!-- AC 접지 (VDD) -->
+  <line class="fig-ink" x1="495" y1="45" x2="555" y2="45"/>
+  <text class="fig-text" x="525" y="38" text-anchor="middle">V<tspan dy="3" font-size="78%">DD</tspan> (AC GND)</text>
+
+  <!-- 부하 저항 RD -->
+  <path class="fig-ink" d="M525 45 V50 L532 54 L518 62 L532 70 L518 78 L532 86 L518 90 L525 95 V105"/>
+  <text class="fig-text" x="545" y="72">R<tspan dy="3" font-size="78%">D</tspan><tspan dy="-3" font-size="100%"> = 4 kΩ</tspan></text>
+
+  <!-- 반회로 출력 노드 v_out,half -->
+  <circle class="fig-dot" data-node-color="red" cx="525" cy="105" r="3.5"/>
+  <line class="fig-danger" x1="525" y1="105" x2="595" y2="105"/>
+  <circle class="fig-danger" cx="595" cy="105" r="3" fill="#ffffff"/>
+  <text class="fig-text" data-node-color="red" x="605" y="109">v<tspan dy="3" font-size="78%">out,half</tspan><tspan dy="-3" font-size="100%"> = v<tspan dy="3" font-size="78%">out1</tspan></tspan></text>
+
+  <!-- NMOS M1 -->
+  <line class="fig-ink" x1="525" y1="105" x2="525" y2="120"/>
+  <line class="fig-ink" x1="507" y1="118" x2="507" y2="152"/>
+  <line class="fig-ink" x1="515" y1="116" x2="515" y2="154"/>
+  <path class="fig-ink" d="M515 124 H525 V120"/>
+  <path class="fig-ink" d="M515 146 H525 V170"/>
+  <path class="fig-ink" d="M518 142 L524 146 L518 150"/>
+  <text class="fig-text" x="532" y="138">M<tspan dy="3" font-size="78%">1</tspan></text>
+
+  <!-- 반회로 입력 신호 v_in,d/2 -->
+  <line class="fig-accent" x1="507" y1="135" x2="445" y2="135"/>
+  <circle class="fig-dot" data-node-color="blue" cx="445" cy="135" r="3"/>
+  <text class="fig-text" data-node-color="blue" x="435" y="139" text-anchor="end">v<tspan dy="3" font-size="78%">in,d</tspan>/2</text>
+
+  <!-- 반회로 소스 축퇴 저항 RSS/2 -->
+  <path class="fig-ink" d="M525 170 V175 L532 179 L518 187 L532 195 L518 203 L532 211 L518 215 L525 220 V235"/>
+  <text class="fig-text" x="545" y="198">R<tspan dy="3" font-size="78%">deg</tspan><tspan dy="-3" font-size="100%"> = R<tspan dy="3" font-size="78%">SS</tspan>/2 = 200 Ω</tspan></text>
+
+  <!-- 가상 접지 단자 -->
+  <line class="fig-ink" x1="510" y1="235" x2="540" y2="235"/>
+  <line class="fig-ink" x1="515" y1="240" x2="535" y2="240"/>
+  <line class="fig-ink" x1="520" y1="245" x2="530" y2="245"/>
+  <text class="fig-text" data-node-color="blue" x="525" y="265" text-anchor="middle" font-size="11">가상 접지(Virtual GND)</text>
+
+  <!-- 반회로 이득 수식 표시 -->
+  <text class="fig-muted" x="525" y="295" text-anchor="middle">A<tspan dy="3" font-size="78%">d</tspan><tspan dy="-3" font-size="100%"> = -R<tspan dy="3" font-size="78%">D</tspan> / (1/g<tspan dy="3" font-size="78%">m</tspan> + R<tspan dy="3" font-size="78%">SS</tspan>/2) = -13.33</tspan></text>
+</svg>

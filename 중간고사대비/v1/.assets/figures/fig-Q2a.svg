@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="440" height="320" viewBox="0 0 440 320" role="img" aria-label="소스 축퇴 저항 RS가 삽입된 NMOS 전류 거울 회로도">
+<style>
+svg text, svg text[class], svg text tspan, .fig-math, .fig-math tspan { font-family: Pretendard, -apple-system, sans-serif; font-weight: 600; font-style: normal; }
+.fig-ink { stroke: #1e293b; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fig-accent { stroke: #2563eb; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fig-danger { stroke: #dc2626; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fig-dot { fill: #2563eb; }
+.fig-dot[data-node-color="blue"] { fill: #2563eb; }
+.fig-dot[data-node-color="red"] { fill: #dc2626; }
+.fig-text { fill: #0f172a; font-size: 13px; }
+.fig-text[data-node-color="blue"] { fill: #2563eb; }
+.fig-text[data-node-color="red"] { fill: #dc2626; }
+.fig-muted { fill: #64748b; font-size: 11px; }
+</style>
+<rect width="100%" height="100%" fill="#ffffff" rx="10"/>
+
+  <!-- VDD 상단 레일 -->
+  <line class="fig-ink" x1="90" y1="35" x2="170" y2="35"/>
+  <text class="fig-text" x="122" y="26" text-anchor="middle">V<tspan dy="3" font-size="78%">DD</tspan></text>
+
+  <!-- 기준 전류원 I_REF -->
+  <line class="fig-ink" x1="130" y1="35" x2="130" y2="58"/>
+  <circle class="fig-ink" cx="130" cy="74" r="16"/>
+  <path class="fig-ink" d="M130 65 V83 M126 77 L130 83 L134 77"/>
+  <text class="fig-text" x="100" y="78" text-anchor="end">I<tspan dy="3" font-size="78%">REF</tspan><tspan dy="-3" font-size="100%"> = 1 mA</tspan></text>
+  <line class="fig-ink" x1="130" y1="90" x2="130" y2="125"/>
+
+  <!-- 다이오드 연결선 (M1 드레인 -> 게이트) -->
+  <circle class="fig-dot" cx="130" cy="125" r="3.5"/>
+  <path class="fig-ink" d="M130 125 H90 V170 H112"/>
+
+  <!-- NMOS M1 -->
+  <!-- 게이트 바 -->
+  <line class="fig-ink" x1="112" y1="150" x2="112" y2="190"/>
+  <!-- 채널 바 -->
+  <line class="fig-ink" x1="120" y1="148" x2="120" y2="192"/>
+  <!-- 드레인 단자 -->
+  <path class="fig-ink" d="M120 156 H130 V125"/>
+  <!-- 소스 단자 및 화살표 -->
+  <path class="fig-ink" d="M120 184 H130 V245"/>
+  <path class="fig-ink" d="M123 180 L129 184 L123 188"/>
+  <text class="fig-text" x="78" y="165">M<tspan dy="3" font-size="78%">1</tspan></text>
+
+  <!-- M1 접지 -->
+  <line class="fig-ink" x1="118" y1="245" x2="142" y2="245"/>
+  <line class="fig-ink" x1="122" y1="250" x2="138" y2="250"/>
+  <line class="fig-ink" x1="126" y1="255" x2="134" y2="255"/>
+
+  <!-- 게이트 간 연결 도선 -->
+  <circle class="fig-dot" cx="112" cy="170" r="3"/>
+  <line class="fig-ink" x1="112" y1="170" x2="262" y2="170"/>
+
+  <!-- NMOS M2 -->
+  <!-- 게이트 바 -->
+  <line class="fig-ink" x1="262" y1="150" x2="262" y2="190"/>
+  <!-- 채널 바 -->
+  <line class="fig-ink" x1="270" y1="148" x2="270" y2="192"/>
+  <!-- 드레인 단자 -->
+  <path class="fig-ink" d="M270 156 H280 V100"/>
+  <!-- 소스 단자 및 화살표 -->
+  <path class="fig-ink" d="M270 184 H280 V205"/>
+  <path class="fig-ink" d="M273 180 L279 184 L273 188"/>
+  <text class="fig-text" x="242" y="165">M<tspan dy="3" font-size="78%">2</tspan></text>
+
+  <!-- 출력 노드 Vout -->
+  <circle class="fig-dot" data-node-color="red" cx="280" cy="100" r="4"/>
+  <line class="fig-danger" x1="280" y1="100" x2="370" y2="100"/>
+  <circle class="fig-danger" cx="370" cy="100" r="3.5" fill="#ffffff"/>
+  <text class="fig-text" data-node-color="red" x="382" y="104">V<tspan dy="3" font-size="78%">out</tspan></text>
+
+  <!-- 복사 출력 전류 I_out 표기 -->
+  <path class="fig-danger" d="M280 50 V82 M276 76 L280 82 L284 76"/>
+  <text class="fig-text" data-node-color="red" x="292" y="70">I<tspan dy="3" font-size="78%">out</tspan><tspan dy="-3" font-size="100%"> = 0.5 mA</tspan></text>
+
+  <!-- 소스 축퇴 저항 RS -->
+  <path class="fig-ink" d="M280 205 V210 L287 214 L273 221 L287 228 L273 235 L287 242 L273 249 L280 253 V260"/>
+  <text class="fig-text" x="296" y="235">R<tspan dy="3" font-size="78%">S</tspan></text>
+
+  <!-- M2/RS 접지 -->
+  <line class="fig-ink" x1="268" y1="260" x2="292" y2="260"/>
+  <line class="fig-ink" x1="272" y1="265" x2="288" y2="265"/>
+  <line class="fig-ink" x1="276" y1="270" x2="284" y2="270"/>
+
+  <!-- 주석/설명 -->
+  <text class="fig-muted" x="220" y="300" text-anchor="middle">소스 축퇴 NMOS 전류 거울 회로 (M₁, M₂)</text>
+</svg>

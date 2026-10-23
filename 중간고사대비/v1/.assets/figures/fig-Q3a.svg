@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="440" height="380" viewBox="0 0 440 380" role="img" aria-label="기생 저항 RP가 M2 양단에 병렬 연결된 MOS 캐스코드 증폭기 회로도">
+<style>
+svg text, svg text[class], svg text tspan, .fig-math, .fig-math tspan { font-family: Pretendard, -apple-system, sans-serif; font-weight: 600; font-style: normal; }
+.fig-ink { stroke: #1e293b; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fig-accent { stroke: #2563eb; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fig-danger { stroke: #dc2626; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fig-dot { fill: #2563eb; }
+.fig-dot[data-node-color="blue"] { fill: #2563eb; }
+.fig-dot[data-node-color="red"] { fill: #dc2626; }
+.fig-text { fill: #0f172a; font-size: 13px; }
+.fig-text[data-node-color="blue"] { fill: #2563eb; }
+.fig-text[data-node-color="red"] { fill: #dc2626; }
+.fig-muted { fill: #64748b; font-size: 11px; }
+</style>
+<rect width="100%" height="100%" fill="#ffffff" rx="10"/>
+
+  <!-- VDD 상단 전원 레일 -->
+  <line class="fig-ink" x1="140" y1="30" x2="260" y2="30"/>
+  <text class="fig-text" x="200" y="22" text-anchor="middle">V<tspan dy="3" font-size="78%">DD</tspan></text>
+
+  <!-- PMOS M4 -->
+  <line class="fig-ink" x1="200" y1="30" x2="200" y2="46"/>
+  <line class="fig-ink" x1="182" y1="42" x2="182" y2="76"/>
+  <line class="fig-ink" x1="190" y1="40" x2="190" y2="78"/>
+  <path class="fig-ink" d="M190 48 H200 V46"/>
+  <path class="fig-ink" d="M190 70 H200 V88"/>
+  <!-- PMOS 소스 화살표 (안쪽으로) -->
+  <path class="fig-ink" d="M197 45 L191 48 L197 51"/>
+  <!-- M4 게이트 바이어스 V_b4 -->
+  <line class="fig-ink" x1="182" y1="59" x2="130" y2="59"/>
+  <text class="fig-text" x="120" y="63" text-anchor="end">V<tspan dy="3" font-size="78%">b4</tspan></text>
+  <text class="fig-text" x="212" y="63">M<tspan dy="3" font-size="78%">4</tspan></text>
+
+  <!-- PMOS M3 -->
+  <line class="fig-ink" x1="182" y1="84" x2="182" y2="118"/>
+  <line class="fig-ink" x1="190" y1="82" x2="190" y2="120"/>
+  <path class="fig-ink" d="M190 90 H200 V88"/>
+  <path class="fig-ink" d="M190 112 H200 V135"/>
+  <!-- PMOS 소스 화살표 -->
+  <path class="fig-ink" d="M197 87 L191 90 L197 93"/>
+  <!-- M3 게이트 바이어스 V_b3 -->
+  <line class="fig-ink" x1="182" y1="101" x2="130" y2="101"/>
+  <text class="fig-text" x="120" y="105" text-anchor="end">V<tspan dy="3" font-size="78%">b3</tspan></text>
+  <text class="fig-text" x="212" y="105">M<tspan dy="3" font-size="78%">3</tspan></text>
+
+  <!-- 출력 노드 Vout (M3 드레인 - M2 드레인 사이) -->
+  <circle class="fig-dot" data-node-color="red" cx="200" cy="135" r="4"/>
+  <line class="fig-danger" x1="200" y1="135" x2="330" y2="135"/>
+  <circle class="fig-danger" cx="330" cy="135" r="3.5" fill="#ffffff"/>
+  <text class="fig-text" data-node-color="red" x="342" y="139">V<tspan dy="3" font-size="78%">out</tspan></text>
+
+  <!-- NMOS M2 (캐스코드) -->
+  <line class="fig-ink" x1="200" y1="135" x2="200" y2="152"/>
+  <line class="fig-ink" x1="182" y1="148" x2="182" y2="182"/>
+  <line class="fig-ink" x1="190" y1="146" x2="190" y2="184"/>
+  <path class="fig-ink" d="M190 154 H200 V152"/>
+  <path class="fig-ink" d="M190 176 H200 V210"/>
+  <!-- NMOS 소스 화살표 (바깥쪽으로) -->
+  <path class="fig-ink" d="M193 172 L199 176 L193 180"/>
+  <!-- M2 게이트 바이어스 V_b -->
+  <line class="fig-ink" x1="182" y1="165" x2="130" y2="165"/>
+  <text class="fig-text" x="120" y="169" text-anchor="end">V<tspan dy="3" font-size="78%">b</tspan></text>
+  <text class="fig-text" x="212" y="169">M<tspan dy="3" font-size="78%">2</tspan></text>
+
+  <!-- 기생 저항 RP (M2 양단 병렬 바이패스) -->
+  <path class="fig-ink" d="M200 135 H270 V155"/>
+  <path class="fig-danger" d="M270 155 V158 L277 162 L263 169 L277 176 L263 183 L277 190 L263 197 L270 201 V210"/>
+  <path class="fig-ink" d="M270 210 V210 H200"/>
+  <text class="fig-text" data-node-color="red" x="284" y="184">R<tspan dy="3" font-size="78%">P</tspan><tspan dy="-3" font-size="100%"> = 10 kΩ</tspan></text>
+
+  <!-- 중간 노드 X (M2 소스 - M1 드레인 사이) -->
+  <circle class="fig-dot" data-node-color="blue" cx="200" cy="210" r="3.5"/>
+  <text class="fig-text" data-node-color="blue" x="175" y="206" text-anchor="end">X</text>
+
+  <!-- NMOS M1 (입력 공통 소스) -->
+  <line class="fig-ink" x1="200" y1="210" x2="200" y2="230"/>
+  <line class="fig-ink" x1="182" y1="226" x2="182" y2="260"/>
+  <line class="fig-ink" x1="190" y1="224" x2="190" y2="262"/>
+  <path class="fig-ink" d="M190 232 H200 V230"/>
+  <path class="fig-ink" d="M190 254 H200 V290"/>
+  <!-- NMOS 소스 화살표 -->
+  <path class="fig-ink" d="M193 250 L199 254 L193 258"/>
+  <text class="fig-text" x="212" y="247">M<tspan dy="3" font-size="78%">1</tspan></text>
+
+  <!-- 입력 신호 Vin -->
+  <line class="fig-accent" x1="182" y1="243" x2="100" y2="243"/>
+  <circle class="fig-dot" data-node-color="blue" cx="100" cy="243" r="3.5"/>
+  <text class="fig-text" data-node-color="blue" x="90" y="247" text-anchor="end">V<tspan dy="3" font-size="78%">in</tspan></text>
+
+  <!-- M1 접지 -->
+  <line class="fig-ink" x1="188" y1="290" x2="212" y2="290"/>
+  <line class="fig-ink" x1="192" y1="295" x2="208" y2="295"/>
+  <line class="fig-ink" x1="196" y1="300" x2="204" y2="300"/>
+
+  <!-- 하단 캡션 -->
+  <text class="fig-muted" x="220" y="340" text-anchor="middle">기생 저항 R_P가 결합된 MOS 캐스코드 증폭기 회로</text>
+</svg>

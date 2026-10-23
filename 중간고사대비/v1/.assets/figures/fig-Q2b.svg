@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="540" height="340" viewBox="0 0 540 340" role="img" aria-label="NPN/PNP 복합 바이어스 공통 이미터 증폭기 회로도">
+<style>
+svg text, svg text[class], svg text tspan, .fig-math, .fig-math tspan { font-family: Pretendard, -apple-system, sans-serif; font-weight: 600; font-style: normal; }
+.fig-ink { stroke: #1e293b; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fig-accent { stroke: #2563eb; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fig-danger { stroke: #dc2626; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fig-dot { fill: #2563eb; }
+.fig-dot[data-node-color="blue"] { fill: #2563eb; }
+.fig-dot[data-node-color="red"] { fill: #dc2626; }
+.fig-text { fill: #0f172a; font-size: 13px; }
+.fig-text[data-node-color="blue"] { fill: #2563eb; }
+.fig-text[data-node-color="red"] { fill: #dc2626; }
+.fig-muted { fill: #64748b; font-size: 11px; }
+</style>
+<rect width="100%" height="100%" fill="#ffffff" rx="10"/>
+
+  <!-- VCC 상단 전원 레일 -->
+  <line class="fig-ink" x1="70" y1="35" x2="450" y2="35"/>
+  <text class="fig-text" x="260" y="25" text-anchor="middle">V<tspan dy="3" font-size="78%">CC</tspan><tspan dy="-3" font-size="100%"> = 3 V</tspan></text>
+
+  <!-- 1. 좌측 브랜치: I_REF 및 Q_REF1 (NPN) -->
+  <line class="fig-ink" x1="110" y1="35" x2="110" y2="58"/>
+  <circle class="fig-ink" cx="110" cy="74" r="16"/>
+  <path class="fig-ink" d="M110 65 V83 M106 77 L110 83 L114 77"/>
+  <text class="fig-text" x="85" y="78" text-anchor="end">I<tspan dy="3" font-size="78%">REF</tspan><tspan dy="-3" font-size="100%"> = 200 μA</tspan></text>
+  <line class="fig-ink" x1="110" y1="90" x2="110" y2="135"/>
+
+  <!-- Q_REF1 다이오드 연결선 -->
+  <circle class="fig-dot" cx="110" cy="130" r="3.5"/>
+  <path class="fig-ink" d="M110 130 H80 V175 H102"/>
+
+  <!-- Q_REF1 (Q3) NPN -->
+  <line class="fig-ink" x1="102" y1="160" x2="102" y2="190"/>
+  <line class="fig-ink" x1="102" y1="168" x2="110" y2="135"/>
+  <line class="fig-ink" x1="102" y1="182" x2="110" y2="215"/>
+  <!-- NPN 이미터 화살표 -->
+  <path class="fig-ink" d="M104 186 L109 211 L102 204"/>
+  <line class="fig-ink" x1="110" y1="215" x2="110" y2="255"/>
+  <text class="fig-text" x="50" y="195">Q<tspan dy="3" font-size="78%">REF1</tspan><tspan dy="-3" font-size="100%"> (A<tspan dy="3" font-size="78%">E</tspan>)</tspan></text>
+
+  <!-- Q_REF1 접지 -->
+  <line class="fig-ink" x1="98" y1="255" x2="122" y2="255"/>
+  <line class="fig-ink" x1="102" y1="260" x2="118" y2="260"/>
+  <line class="fig-ink" x1="106" y1="265" x2="114" y2="265"/>
+
+  <!-- NPN 베이스 연결선 (Q_REF1 -> Q_M) -->
+  <circle class="fig-dot" cx="102" cy="175" r="3"/>
+  <line class="fig-ink" x1="102" y1="175" x2="222" y2="175"/>
+
+  <!-- 2. 중앙 브랜치: Q_REF2 (PNP) + Q_M (NPN) -->
+  <!-- Q_REF2 (PNP) -->
+  <line class="fig-ink" x1="230" y1="35" x2="230" y2="60"/>
+  <line class="fig-ink" x1="222" y1="65" x2="222" y2="95"/>
+  <line class="fig-ink" x1="222" y1="73" x2="230" y2="60"/>
+  <!-- PNP 이미터 화살표 (베이스 방향) -->
+  <path class="fig-ink" d="M228 64 L223 72 L228 73"/>
+  <line class="fig-ink" x1="222" y1="87" x2="230" y2="105"/>
+  <text class="fig-text" x="145" y="80">Q<tspan dy="3" font-size="78%">REF2</tspan><tspan dy="-3" font-size="100%"> (2A<tspan dy="3" font-size="78%">E,p</tspan>)</tspan></text>
+
+  <!-- Q_REF2 다이오드 연결선 -->
+  <circle class="fig-dot" cx="230" cy="115" r="3.5"/>
+  <path class="fig-ink" d="M230 115 H200 V80 H222"/>
+
+  <!-- Q_REF2 컬렉터에서 Q_M 컬렉터 연결선 -->
+  <line class="fig-ink" x1="230" y1="105" x2="230" y2="135"/>
+
+  <!-- Q_M (Q4) NPN -->
+  <line class="fig-ink" x1="222" y1="160" x2="222" y2="190"/>
+  <line class="fig-ink" x1="222" y1="168" x2="230" y2="135"/>
+  <line class="fig-ink" x1="222" y1="182" x2="230" y2="215"/>
+  <!-- NPN 이미터 화살표 -->
+  <path class="fig-ink" d="M224 186 L229 211 L222 204"/>
+  <line class="fig-ink" x1="230" y1="215" x2="230" y2="255"/>
+  <text class="fig-text" x="165" y="195">Q<tspan dy="3" font-size="78%">M</tspan><tspan dy="-3" font-size="100%"> (2A<tspan dy="3" font-size="78%">E</tspan>)</tspan></text>
+
+  <!-- Q_M 접지 -->
+  <line class="fig-ink" x1="218" y1="255" x2="242" y2="255"/>
+  <line class="fig-ink" x1="222" y1="260" x2="238" y2="260"/>
+  <line class="fig-ink" x1="226" y1="265" x2="234" y2="265"/>
+
+  <!-- PNP 베이스 연결선 (Q_REF2 -> Q2) -->
+  <circle class="fig-dot" cx="222" cy="80" r="3"/>
+  <line class="fig-ink" x1="222" y1="80" x2="372" y2="80"/>
+
+  <!-- 3. 우측 브랜치: Q2 (PNP 능동 부하) + Q1 (NPN CE 증폭단) -->
+  <!-- Q2 (PNP) -->
+  <line class="fig-ink" x1="380" y1="35" x2="380" y2="60"/>
+  <line class="fig-ink" x1="372" y1="65" x2="372" y2="95"/>
+  <line class="fig-ink" x1="372" y1="73" x2="380" y2="60"/>
+  <!-- PNP 이미터 화살표 -->
+  <path class="fig-ink" d="M378 64 L373 72 L378 73"/>
+  <line class="fig-ink" x1="372" y1="87" x2="380" y2="105"/>
+  <text class="fig-text" x="395" y="80">Q<tspan dy="3" font-size="78%">2</tspan><tspan dy="-3" font-size="100%"> (3A<tspan dy="3" font-size="78%">E,p</tspan>)</tspan></text>
+
+  <!-- 출력 노드 Vout (Q2 컬렉터 - Q1 컬렉터 사이) -->
+  <line class="fig-ink" x1="380" y1="105" x2="380" y2="145"/>
+  <circle class="fig-dot" data-node-color="red" cx="380" cy="145" r="4"/>
+  <line class="fig-danger" x1="380" y1="145" x2="470" y2="145"/>
+  <circle class="fig-danger" cx="470" cy="145" r="3.5" fill="#ffffff"/>
+  <text class="fig-text" data-node-color="red" x="482" y="149">V<tspan dy="3" font-size="78%">out</tspan></text>
+
+  <!-- Q1 (NPN CE 증폭단) -->
+  <line class="fig-ink" x1="380" y1="145" x2="380" y2="168"/>
+  <line class="fig-ink" x1="372" y1="160" x2="372" y2="190"/>
+  <line class="fig-ink" x1="372" y1="168" x2="380" y2="145"/>
+  <!-- 입력 노드 Vin (Q1 베이스) -->
+  <line class="fig-accent" x1="372" y1="175" x2="300" y2="175"/>
+  <circle class="fig-dot" data-node-color="blue" cx="300" cy="175" r="3.5"/>
+  <text class="fig-text" data-node-color="blue" x="290" y="171" text-anchor="end">V<tspan dy="3" font-size="78%">in</tspan></text>
+
+  <!-- Q1 이미터 및 접지 -->
+  <line class="fig-ink" x1="372" y1="182" x2="380" y2="215"/>
+  <!-- NPN 이미터 화살표 -->
+  <path class="fig-ink" d="M374 186 L379 211 L372 204"/>
+  <line class="fig-ink" x1="380" y1="215" x2="380" y2="255"/>
+  <text class="fig-text" x="395" y="195">Q<tspan dy="3" font-size="78%">1</tspan><tspan dy="-3" font-size="100%"> (3A<tspan dy="3" font-size="78%">E</tspan>)</tspan></text>
+
+  <!-- Q1 접지 -->
+  <line class="fig-ink" x1="368" y1="255" x2="392" y2="255"/>
+  <line class="fig-ink" x1="372" y1="260" x2="388" y2="260"/>
+  <line class="fig-ink" x1="376" y1="265" x2="384" y2="265"/>
+
+  <!-- 하단 캡션 -->
+  <text class="fig-muted" x="270" y="310" text-anchor="middle">NPN/PNP 복합 바이어스 CE 증폭기 (Q_REF1, Q_M, Q_REF2, Q₂, Q₁)</text>
+</svg>

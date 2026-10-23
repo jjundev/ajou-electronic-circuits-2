@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="380" viewBox="0 0 520 380" role="img" aria-label="부하 불일치 ΔRD 및 테일 저항 RSS를 갖는 MOS 차동 증폭기 회로도">
+<style>
+svg text, svg text[class], svg text tspan, .fig-math, .fig-math tspan { font-family: Pretendard, -apple-system, sans-serif; font-weight: 600; font-style: normal; }
+.fig-ink { stroke: #1e293b; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fig-accent { stroke: #2563eb; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fig-danger { stroke: #dc2626; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fig-dot { fill: #2563eb; }
+.fig-dot[data-node-color="blue"] { fill: #2563eb; }
+.fig-dot[data-node-color="red"] { fill: #dc2626; }
+.fig-text { fill: #0f172a; font-size: 13px; }
+.fig-text[data-node-color="blue"] { fill: #2563eb; }
+.fig-text[data-node-color="red"] { fill: #dc2626; }
+.fig-muted { fill: #64748b; font-size: 11px; }
+</style>
+<rect width="100%" height="100%" fill="#ffffff" rx="10"/>
+
+  <!-- VDD 상단 전원 레일 -->
+  <line class="fig-ink" x1="120" y1="30" x2="400" y2="30"/>
+  <text class="fig-text" x="260" y="22" text-anchor="middle">V<tspan dy="3" font-size="78%">DD</tspan><tspan dy="-3" font-size="100%"> = 1.8 V</tspan></text>
+
+  <!-- 1. 좌측 브랜치: RD1 = RD = 2.0 kΩ, M1 -->
+  <!-- 부하 저항 RD1 -->
+  <path class="fig-ink" d="M170 30 V45 L177 50 L163 58 L177 66 L163 74 L177 82 L163 90 L170 95 V115"/>
+  <text class="fig-text" x="145" y="72" text-anchor="end">R<tspan dy="3" font-size="78%">D1</tspan><tspan dy="-3" font-size="100%"> = R<tspan dy="3" font-size="78%">D</tspan> = 2.0 kΩ</tspan></text>
+
+  <!-- 출력 노드 Vout1 -->
+  <circle class="fig-dot" data-node-color="red" cx="170" cy="115" r="3.5"/>
+  <line class="fig-danger" x1="170" y1="115" x2="85" y2="115"/>
+  <circle class="fig-danger" cx="85" cy="115" r="3" fill="#ffffff"/>
+  <text class="fig-text" data-node-color="red" x="75" y="119" text-anchor="end">v<tspan dy="3" font-size="78%">out1</tspan></text>
+
+  <!-- NMOS M1 -->
+  <line class="fig-ink" x1="170" y1="115" x2="170" y2="130"/>
+  <line class="fig-ink" x1="152" y1="128" x2="152" y2="162"/>
+  <line class="fig-ink" x1="160" y1="126" x2="160" y2="164"/>
+  <path class="fig-ink" d="M160 134 H170 V130"/>
+  <path class="fig-ink" d="M160 156 H170 V195"/>
+  <path class="fig-ink" d="M163 152 L169 156 L163 160"/>
+  <text class="fig-text" x="182" y="148">M<tspan dy="3" font-size="78%">1</tspan></text>
+
+  <!-- 입력 신호 Vin1 -->
+  <line class="fig-accent" x1="152" y1="145" x2="85" y2="145"/>
+  <circle class="fig-dot" data-node-color="blue" cx="85" cy="145" r="3"/>
+  <text class="fig-text" data-node-color="blue" x="75" y="149" text-anchor="end">v<tspan dy="3" font-size="78%">in1</tspan></text>
+
+  <!-- 2. 우측 브랜치: RD2 = RD + ΔRD = 2.1 kΩ, M2 -->
+  <!-- 부하 저항 RD2 (불일치 강조) -->
+  <path class="fig-danger" d="M350 30 V45 L357 50 L343 58 L357 66 L343 74 L357 82 L343 90 L350 95 V115"/>
+  <text class="fig-text" data-node-color="red" x="375" y="72">R<tspan dy="3" font-size="78%">D2</tspan><tspan dy="-3" font-size="100%"> = R<tspan dy="3" font-size="78%">D</tspan> + ΔR<tspan dy="3" font-size="78%">D</tspan> = 2.1 kΩ</tspan></text>
+
+  <!-- 출력 노드 Vout2 -->
+  <circle class="fig-dot" data-node-color="red" cx="350" cy="115" r="3.5"/>
+  <line class="fig-danger" x1="350" y1="115" x2="435" y2="115"/>
+  <circle class="fig-danger" cx="435" cy="115" r="3" fill="#ffffff"/>
+  <text class="fig-text" data-node-color="red" x="445" y="119">v<tspan dy="3" font-size="78%">out2</tspan></text>
+
+  <!-- NMOS M2 -->
+  <line class="fig-ink" x1="350" y1="115" x2="350" y2="130"/>
+  <line class="fig-ink" x1="368" y1="128" x2="368" y2="162"/>
+  <line class="fig-ink" x1="360" y1="126" x2="360" y2="164"/>
+  <path class="fig-ink" d="M360 134 H350 V130"/>
+  <path class="fig-ink" d="M360 156 H350 V195"/>
+  <path class="fig-ink" d="M357 152 L351 156 L357 160"/>
+  <text class="fig-text" x="338" y="148" text-anchor="end">M<tspan dy="3" font-size="78%">2</tspan></text>
+
+  <!-- 입력 신호 Vin2 -->
+  <line class="fig-accent" x1="368" y1="145" x2="435" y2="145"/>
+  <circle class="fig-dot" data-node-color="blue" cx="435" cy="145" r="3"/>
+  <text class="fig-text" data-node-color="blue" x="445" y="149">v<tspan dy="3" font-size="78%">in2</tspan></text>
+
+  <!-- 테일 노드 P -->
+  <path class="fig-ink" d="M170 195 H350"/>
+  <circle class="fig-dot" cx="260" cy="195" r="3.5"/>
+  <text class="fig-text" x="272" y="190">P (V<tspan dy="3" font-size="78%">P</tspan>)</text>
+
+  <!-- 3. 테일 네트워크: 이상 전류원 ISS // 유한 테일 저항 RSS -->
+  <line class="fig-ink" x1="260" y1="195" x2="260" y2="210"/>
+  <path class="fig-ink" d="M260 210 H210 V225 M260 210 H310 V225"/>
+
+  <!-- 좌측 경로: 전류원 ISS -->
+  <circle class="fig-ink" cx="210" cy="242" r="16"/>
+  <path class="fig-ink" d="M210 233 V251 M206 246 L210 251 L214 246"/>
+  <line class="fig-ink" x1="210" y1="258" x2="210" y2="280"/>
+  <text class="fig-text" x="180" y="246" text-anchor="end">I<tspan dy="3" font-size="78%">SS</tspan><tspan dy="-3" font-size="100%"> = 1.0 mA</tspan></text>
+
+  <!-- 우측 경로: 테일 저항 RSS -->
+  <path class="fig-ink" d="M310 225 V230 L317 234 L303 241 L317 248 L303 255 L317 262 L303 266 L310 270 V280"/>
+  <text class="fig-text" x="332" y="252">R<tspan dy="3" font-size="78%">SS</tspan><tspan dy="-3" font-size="100%"> = 1.0 kΩ</tspan></text>
+
+  <!-- 테일 합류 및 접지 -->
+  <path class="fig-ink" d="M210 280 H310"/>
+  <line class="fig-ink" x1="260" y1="280" x2="260" y2="295"/>
+  <line class="fig-ink" x1="248" y1="295" x2="272" y2="295"/>
+  <line class="fig-ink" x1="252" y1="300" x2="268" y2="300"/>
+  <line class="fig-ink" x1="256" y1="305" x2="264" y2="305"/>
+
+  <!-- 전압 헤드룸 표기 V_CS -->
+  <text class="fig-muted" x="260" y="250" text-anchor="middle">V<tspan dy="3" font-size="78%">CS</tspan><tspan dy="-3" font-size="100%"> ≥ 0.3 V</tspan></text>
+
+  <!-- 하단 캡션 -->
+  <text class="fig-muted" x="260" y="340" text-anchor="middle">부하 불일치 (ΔR_D = 100 Ω) 및 테일 저항 R_SS 차동 증폭기</text>
+</svg>

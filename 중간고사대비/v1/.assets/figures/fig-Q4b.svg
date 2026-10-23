@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="460" height="340" viewBox="0 0 460 340" role="img" aria-label="능동 전류 거울 부하 차동 증폭기 회로도">
+<style>
+svg text, svg text[class], svg text tspan, .fig-math, .fig-math tspan { font-family: Pretendard, -apple-system, sans-serif; font-weight: 600; font-style: normal; }
+.fig-ink { stroke: #1e293b; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fig-accent { stroke: #2563eb; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fig-danger { stroke: #dc2626; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fig-dot { fill: #2563eb; }
+.fig-dot[data-node-color="blue"] { fill: #2563eb; }
+.fig-dot[data-node-color="red"] { fill: #dc2626; }
+.fig-text { fill: #0f172a; font-size: 13px; }
+.fig-text[data-node-color="blue"] { fill: #2563eb; }
+.fig-text[data-node-color="red"] { fill: #dc2626; }
+.fig-muted { fill: #64748b; font-size: 11px; }
+</style>
+<rect width="100%" height="100%" fill="#ffffff" rx="10"/>
+
+  <!-- VDD 상단 전원 레일 -->
+  <line class="fig-ink" x1="100" y1="30" x2="320" y2="30"/>
+  <text class="fig-text" x="210" y="22" text-anchor="middle">V<tspan dy="3" font-size="78%">DD</tspan></text>
+
+  <!-- 1. PMOS 능동 전류 거울 부하 (M3, M4) -->
+  <!-- PMOS M3 (다이오드 연결) -->
+  <line class="fig-ink" x1="150" y1="30" x2="150" y2="48"/>
+  <line class="fig-ink" x1="168" y1="44" x2="168" y2="76"/>
+  <line class="fig-ink" x1="160" y1="42" x2="160" y2="78"/>
+  <path class="fig-ink" d="M160 50 H150 V48"/>
+  <path class="fig-ink" d="M160 70 H150 V95"/>
+  <!-- PMOS 소스 화살표 (안쪽으로) -->
+  <path class="fig-ink" d="M153 47 L159 50 L153 53"/>
+  <text class="fig-text" x="122" y="64">M<tspan dy="3" font-size="78%">3</tspan></text>
+
+  <!-- M3 다이오드 연결 (드레인 -> 게이트) -->
+  <circle class="fig-dot" cx="150" cy="95" r="3.5"/>
+  <path class="fig-ink" d="M150 95 H180 V60 H168"/>
+
+  <!-- 게이트 연결선 (M3 -> M4) -->
+  <circle class="fig-dot" cx="168" cy="60" r="3"/>
+  <line class="fig-ink" x1="168" y1="60" x2="252" y2="60"/>
+
+  <!-- PMOS M4 -->
+  <line class="fig-ink" x1="270" y1="30" x2="270" y2="48"/>
+  <line class="fig-ink" x1="252" y1="44" x2="252" y2="76"/>
+  <line class="fig-ink" x1="260" y1="42" x2="260" y2="78"/>
+  <path class="fig-ink" d="M260 50 H270 V48"/>
+  <path class="fig-ink" d="M260 70 H270 V105"/>
+  <!-- PMOS 소스 화살표 -->
+  <path class="fig-ink" d="M267 47 L261 50 L267 53"/>
+  <text class="fig-text" x="292" y="64">M<tspan dy="3" font-size="78%">4</tspan></text>
+
+  <!-- 출력 노드 Vout (M4 드레인 - M2 드레인 사이) -->
+  <circle class="fig-dot" data-node-color="red" cx="270" cy="105" r="4"/>
+  <line class="fig-danger" x1="270" y1="105" x2="370" y2="105"/>
+  <circle class="fig-danger" cx="370" cy="105" r="3.5" fill="#ffffff"/>
+  <text class="fig-text" data-node-color="red" x="382" y="109">V<tspan dy="3" font-size="78%">out</tspan></text>
+
+  <!-- 2. NMOS 차동 입력쌍 (M1, M2) -->
+  <!-- NMOS M1 (좌측) -->
+  <line class="fig-ink" x1="150" y1="95" x2="150" y2="122"/>
+  <line class="fig-ink" x1="132" y1="120" x2="132" y2="154"/>
+  <line class="fig-ink" x1="140" y1="118" x2="140" y2="156"/>
+  <path class="fig-ink" d="M140 126 H150 V122"/>
+  <path class="fig-ink" d="M140 148 H150 V185"/>
+  <!-- NMOS 소스 화살표 (바깥쪽으로) -->
+  <path class="fig-ink" d="M143 144 L149 148 L143 152"/>
+  <text class="fig-text" x="165" y="140">M<tspan dy="3" font-size="78%">1</tspan></text>
+
+  <!-- 입력 신호 Vin1 -->
+  <line class="fig-accent" x1="132" y1="137" x2="60" y2="137"/>
+  <circle class="fig-dot" data-node-color="blue" cx="60" cy="137" r="3.5"/>
+  <text class="fig-text" data-node-color="blue" x="50" y="141" text-anchor="end">v<tspan dy="3" font-size="78%">in1</tspan></text>
+
+  <!-- NMOS M2 (우측) -->
+  <line class="fig-ink" x1="270" y1="105" x2="270" y2="122"/>
+  <line class="fig-ink" x1="288" y1="120" x2="288" y2="154"/>
+  <line class="fig-ink" x1="280" y1="118" x2="280" y2="156"/>
+  <path class="fig-ink" d="M280 126 H270 V122"/>
+  <path class="fig-ink" d="M280 148 H270 V185"/>
+  <!-- NMOS 소스 화살표 -->
+  <path class="fig-ink" d="M277 144 L271 148 L277 152"/>
+  <text class="fig-text" x="245" y="140" text-anchor="end">M<tspan dy="3" font-size="78%">2</tspan></text>
+
+  <!-- 입력 신호 Vin2 -->
+  <line class="fig-accent" x1="288" y1="137" x2="350" y2="137"/>
+  <circle class="fig-dot" data-node-color="blue" cx="350" cy="137" r="3.5"/>
+  <text class="fig-text" data-node-color="blue" x="360" y="141">v<tspan dy="3" font-size="78%">in2</tspan></text>
+
+  <!-- 공통 소스 테일 연결 도선 (M1 소스, M2 소스 -> 노드 P) -->
+  <path class="fig-ink" d="M150 185 H210 M270 185 H210 V205"/>
+  <circle class="fig-dot" cx="210" cy="185" r="3.5"/>
+  <text class="fig-text" x="218" y="182">P</text>
+
+  <!-- 3. 테일 전류원 ISS -->
+  <line class="fig-ink" x1="210" y1="185" x2="210" y2="210"/>
+  <circle class="fig-ink" cx="210" cy="226" r="16"/>
+  <path class="fig-ink" d="M210 217 V235 M206 230 L210 235 L214 230"/>
+  <line class="fig-ink" x1="210" y1="242" x2="210" y2="265"/>
+  <text class="fig-text" x="180" y="230" text-anchor="end">I<tspan dy="3" font-size="78%">SS</tspan><tspan dy="-3" font-size="100%"> = 1.0 mA</tspan></text>
+
+  <!-- 접지 단자 -->
+  <line class="fig-ink" x1="198" y1="265" x2="222" y2="265"/>
+  <line class="fig-ink" x1="202" y1="270" x2="218" y2="270"/>
+  <line class="fig-ink" x1="206" y1="275" x2="214" y2="275"/>
+
+  <!-- 하단 캡션 -->
+  <text class="fig-muted" x="210" y="310" text-anchor="middle">능동 전류 거울 부하 차동 증폭기 (단일 출력 v_out)</text>
+</svg>

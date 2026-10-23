@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="460" height="360" viewBox="0 0 460 360" role="img" aria-label="PMOS 입력 폴디드 캐스코드(Folded Cascode) 증폭기 회로도">
+<style>
+svg text, svg text[class], svg text tspan, .fig-math, .fig-math tspan { font-family: Pretendard, -apple-system, sans-serif; font-weight: 600; font-style: normal; }
+.fig-ink { stroke: #1e293b; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fig-accent { stroke: #2563eb; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fig-danger { stroke: #dc2626; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.fig-dot { fill: #2563eb; }
+.fig-dot[data-node-color="blue"] { fill: #2563eb; }
+.fig-dot[data-node-color="red"] { fill: #dc2626; }
+.fig-text { fill: #0f172a; font-size: 13px; }
+.fig-text[data-node-color="blue"] { fill: #2563eb; }
+.fig-text[data-node-color="red"] { fill: #dc2626; }
+.fig-muted { fill: #64748b; font-size: 11px; }
+</style>
+<rect width="100%" height="100%" fill="#ffffff" rx="10"/>
+
+  <!-- VDD 상단 레일 -->
+  <line class="fig-ink" x1="100" y1="30" x2="280" y2="30"/>
+  <text class="fig-text" x="190" y="22" text-anchor="middle">V<tspan dy="3" font-size="78%">DD</tspan></text>
+
+  <!-- 1. 좌측 입력단: PMOS M5 -->
+  <line class="fig-ink" x1="130" y1="30" x2="130" y2="52"/>
+  <line class="fig-ink" x1="112" y1="48" x2="112" y2="82"/>
+  <line class="fig-ink" x1="120" y1="46" x2="120" y2="84"/>
+  <path class="fig-ink" d="M120 54 H130 V52"/>
+  <path class="fig-ink" d="M120 76 H130 V190"/>
+  <!-- PMOS 소스 화살표 (안쪽으로) -->
+  <path class="fig-ink" d="M127 51 L121 54 L127 57"/>
+  <text class="fig-text" x="142" y="70">M<tspan dy="3" font-size="78%">5</tspan></text>
+
+  <!-- 입력 신호 Vin -->
+  <line class="fig-accent" x1="112" y1="65" x2="50" y2="65"/>
+  <circle class="fig-dot" data-node-color="blue" cx="50" cy="65" r="3.5"/>
+  <text class="fig-text" data-node-color="blue" x="40" y="69" text-anchor="end">V<tspan dy="3" font-size="78%">in</tspan></text>
+
+  <!-- M5 드레인에서 폴딩 노드 n1으로 연결 도선 -->
+  <line class="fig-ink" x1="130" y1="190" x2="230" y2="190"/>
+
+  <!-- 2. 우측 캐스코드 브랜치: M4, M3, M2, M1 -->
+  <!-- PMOS M4 (상단 부하) -->
+  <line class="fig-ink" x1="230" y1="30" x2="230" y2="48"/>
+  <line class="fig-ink" x1="212" y1="44" x2="212" y2="76"/>
+  <line class="fig-ink" x1="220" y1="42" x2="220" y2="78"/>
+  <path class="fig-ink" d="M220 50 H230 V48"/>
+  <path class="fig-ink" d="M220 70 H230 V88"/>
+  <!-- PMOS 화살표 -->
+  <path class="fig-ink" d="M227 47 L221 50 L227 53"/>
+  <line class="fig-ink" x1="212" y1="60" x2="175" y2="60"/>
+  <text class="fig-text" x="165" y="64" text-anchor="end">V<tspan dy="3" font-size="78%">b4</tspan></text>
+  <text class="fig-text" x="242" y="64">M<tspan dy="3" font-size="78%">4</tspan></text>
+
+  <!-- PMOS M3 (캐스코드 부하) -->
+  <line class="fig-ink" x1="212" y1="84" x2="212" y2="116"/>
+  <line class="fig-ink" x1="220" y1="82" x2="220" y2="118"/>
+  <path class="fig-ink" d="M220 90 H230 V88"/>
+  <path class="fig-ink" d="M220 110 H230 V130"/>
+  <!-- PMOS 화살표 -->
+  <path class="fig-ink" d="M227 87 L221 90 L227 93"/>
+  <line class="fig-ink" x1="212" y1="100" x2="175" y2="100"/>
+  <text class="fig-text" x="165" y="104" text-anchor="end">V<tspan dy="3" font-size="78%">b3</tspan></text>
+  <text class="fig-text" x="242" y="104">M<tspan dy="3" font-size="78%">3</tspan></text>
+
+  <!-- 출력 노드 Vout (M3 드레인 - M2 드레인 사이) -->
+  <circle class="fig-dot" data-node-color="red" cx="230" cy="130" r="4"/>
+  <line class="fig-danger" x1="230" y1="130" x2="350" y2="130"/>
+  <circle class="fig-danger" cx="350" cy="130" r="3.5" fill="#ffffff"/>
+  <text class="fig-text" data-node-color="red" x="362" y="134">V<tspan dy="3" font-size="78%">out</tspan></text>
+
+  <!-- NMOS M2 (캐스코드 단) -->
+  <line class="fig-ink" x1="230" y1="130" x2="230" y2="148"/>
+  <line class="fig-ink" x1="212" y1="144" x2="212" y2="176"/>
+  <line class="fig-ink" x1="220" y1="142" x2="220" y2="178"/>
+  <path class="fig-ink" d="M220 150 H230 V148"/>
+  <path class="fig-ink" d="M220 170 H230 V190"/>
+  <!-- NMOS 화살표 (바깥으로) -->
+  <path class="fig-ink" d="M223 166 L229 170 L223 174"/>
+  <line class="fig-ink" x1="212" y1="160" x2="175" y2="160"/>
+  <text class="fig-text" x="165" y="164" text-anchor="end">V<tspan dy="3" font-size="78%">b2</tspan></text>
+  <text class="fig-text" x="242" y="164">M<tspan dy="3" font-size="78%">2</tspan></text>
+
+  <!-- 폴딩 노드 n1 -->
+  <circle class="fig-dot" data-node-color="blue" cx="230" cy="190" r="3.5"/>
+  <text class="fig-text" data-node-color="blue" x="242" y="194">n<tspan dy="3" font-size="78%">1</tspan></text>
+
+  <!-- NMOS M1 (바이어스 전류원) -->
+  <line class="fig-ink" x1="230" y1="190" x2="230" y2="218"/>
+  <line class="fig-ink" x1="212" y1="214" x2="212" y2="246"/>
+  <line class="fig-ink" x1="220" y1="212" x2="220" y2="248"/>
+  <path class="fig-ink" d="M220 220 H230 V218"/>
+  <path class="fig-ink" d="M220 240 H230 V275"/>
+  <!-- NMOS 화살표 -->
+  <path class="fig-ink" d="M223 236 L229 240 L223 244"/>
+  <line class="fig-ink" x1="212" y1="230" x2="175" y2="230"/>
+  <text class="fig-text" x="165" y="234" text-anchor="end">V<tspan dy="3" font-size="78%">b1</tspan></text>
+  <text class="fig-text" x="242" y="234">M<tspan dy="3" font-size="78%">1</tspan></text>
+
+  <!-- M1 접지 -->
+  <line class="fig-ink" x1="218" y1="275" x2="242" y2="275"/>
+  <line class="fig-ink" x1="222" y1="280" x2="238" y2="280"/>
+  <line class="fig-ink" x1="226" y1="285" x2="234" y2="285"/>
+
+  <!-- 하단 캡션 -->
+  <text class="fig-muted" x="230" y="325" text-anchor="middle">PMOS 입력 폴디드 캐스코드(Folded Cascode) 증폭기</text>
+</svg>
