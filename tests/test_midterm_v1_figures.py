@@ -1,5 +1,6 @@
 from pathlib import Path
 import xml.etree.ElementTree as ET
+import re
 import pytest
 
 EXPECTED_FIGURES = [
@@ -34,6 +35,27 @@ def test_midterm_v1_svg_standards():
         assert "font-family" in text or "Pretendard" in text
         assert "Pretendard" in text, f"{svg.name} should specify Pretendard font"
         assert "<tspan" in text, f"{svg.name} should use <tspan> for subscripts"
+
+def test_midterm_v1_baseline_restoration():
+    fig_dir = Path("중간고사대비/v1/.assets/figures")
+    for fig_name in EXPECTED_FIGURES:
+        svg_path = fig_dir / fig_name
+        text = svg_path.read_text(encoding="utf-8")
+        text_nodes = re.findall(r'<text[^>]*>(.*?)</text>', text, re.DOTALL)
+        for tn in text_nodes:
+            parts = re.split(r'(<tspan[^>]*>.*?</tspan>)', tn)
+            current_dy = 0
+            for part in parts:
+                if not part:
+                    continue
+                m_dy = re.search(r'dy="([+-]?\d+)"', part)
+                if m_dy:
+                    current_dy += int(m_dy.group(1))
+                elif part.strip():
+                    assert current_dy == 0, (
+                        f"In {fig_name}, plain text '{part}' is rendered at shifted baseline "
+                        f"(drift = {current_dy}): full node='{tn}'"
+                    )
 
 def test_figure_labels_and_circuit_components():
     fig_dir = Path("중간고사대비/v1/.assets/figures")
