@@ -88,6 +88,34 @@ class NetlistLineTest(unittest.TestCase):
             with self.subTest(line=line):
                 self.assertIsNotNone(check_netlist_line(line))
 
+    def test_block_diagram_diode_and_dependent_sources_valid(self):
+        for line in [
+            "XS Vin Vfb E sum   ; Vin +, Vfb −",
+            "XS2 a b c d sum",
+            'XA E Vout gain "A1"',
+            'XK Vout Vfb gain "K" tri',
+            "D1 n1 0",
+            "D1 VDD n1 laser",
+            "E1 out 0 vin 0 {A_0}",
+            "G1 out 0 vin 0 {G_m}",
+            "F1 out 0 VS {A_I}",
+            "H1 out 0 VS {R_0}",
+        ]:
+            with self.subTest(line=line):
+                self.assertIsNone(check_netlist_line(line))
+
+    def test_block_diagram_diode_and_dependent_sources_invalid(self):
+        for line in [
+            "XS a sum",
+            "XA a b gain",
+            'XA a b gain "A1" box',
+            "D1 a b led",
+            "E1 out 0 vin {A_0}",
+            "F1 out 0 {A_I}",
+        ]:
+            with self.subTest(line=line):
+                self.assertIsNotNone(check_netlist_line(line))
+
     def test_symbolic_sizes_and_multiplier_valid(self):
         for line in [
             "Q1 a b c npn area={n}",

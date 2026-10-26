@@ -30,6 +30,11 @@ NETLIST_RES = [
     re.compile(rf"^[RCLIV]\w*\s+{NODE}\s+{NODE}(\s+\S+)?$"),
     re.compile(rf"^X\w*\s+{NODE}\s+{NODE}\s+{NODE}\s+opamp$"),
     re.compile(rf'^X\w*(\s+{NODE})+\s+box\s+"[^"]+"$'),
+    re.compile(rf"^X\w*(\s+{NODE}){{3,}}\s+sum$"),                  # 블록도 덧셈기: 입력… 출력
+    re.compile(rf'^X\w*\s+{NODE}\s+{NODE}\s+gain\s+"[^"]+"(\s+tri)?$'),
+    re.compile(rf"^D\w*\s+{NODE}\s+{NODE}(\s+laser)?$"),
+    re.compile(rf"^[EG]\w*\s+{NODE}\s+{NODE}\s+{NODE}\s+{NODE}\s+\S+$"),  # 전압 제어 종속 전원
+    re.compile(rf"^[FH]\w*\s+{NODE}\s+{NODE}\s+V\w*\s+\S+$"),           # 전류 제어: 제어 전압원 이름
 ]
 SPICE_BLOCK_RE = re.compile(r"```spice\n(.*?)\n```", re.DOTALL)
 IMAGE_RE = re.compile(r"!\[[^\]]*\]\(([^)\s]+)\)")
