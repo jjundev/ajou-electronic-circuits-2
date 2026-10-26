@@ -45,6 +45,8 @@ def check_numbering(docs):
         chapter = ID_RE.match(ids[0]).group(2)
         nums = {int(ID_RE.match(i).group(3)) for i in ids}
         missing = [f"{prefix}{chapter}.{n:02d}" for n in range(1, max(nums) + 1) if n not in nums]
+        if prefix == "X":  # 예제가 있으면 연습문제가 없는 예제 (아래 INFO로 따로 알림)
+            missing = [i for i in missing if "E" + i[1:] not in docs]
         if missing:
             errors.append(f"{kind} 번호가 빠짐: {', '.join(missing)}")
     for i in sorted(docs):

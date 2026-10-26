@@ -107,6 +107,21 @@ class NumberingTest(ChapterCase):
         self.assertTrue(any("E9.02" in i and "연습문제 없음" in i for i in infos), infos)
 
 
+    def test_exercise_gap_under_example_without_exercise_is_not_error(self):
+        # 예제 9.2 뒤에 연습문제가 없으면 X9.02가 빠진 채 X9.03이 있을 수 있다 (예: 13장 X13.03)
+        write_md(self.ch, "E9.02")
+        write_md(self.ch, "E9.03")
+        write_md(self.ch, "X9.03", depends=["E9.03"])
+        errors, infos = verify(self.ch)
+        self.assertFalse(any("X9.02" in e for e in errors), errors)
+        self.assertTrue(any("E9.02" in i for i in infos), infos)
+
+    def test_exercise_gap_without_example_is_error(self):
+        write_md(self.ch, "E9.03")
+        write_md(self.ch, "X9.03", depends=["E9.03"])
+        self.assertError("연습문제", "X9.02")
+
+
 class FigureTest(ChapterCase):
     def add_yaml_line(self, line):
         path = self.ch / "figures" / "figures.yaml"
