@@ -116,6 +116,14 @@ class NetlistLineTest(unittest.TestCase):
             with self.subTest(line=line):
                 self.assertIsNotNone(check_netlist_line(line))
 
+    def test_fully_differential_opamp_and_crystal(self):
+        for line in ["X1 Vinp Vinm Voutp Voutm fdopamp", 'XQ n1 n2 box "crystal"']:
+            with self.subTest(line=line):
+                self.assertIsNone(check_netlist_line(line))
+        for line in ["X1 a b c fdopamp", "X1 a b c d e fdopamp"]:
+            with self.subTest(line=line):
+                self.assertIsNotNone(check_netlist_line(line))
+
     def test_symbolic_sizes_and_multiplier_valid(self):
         for line in [
             "Q1 a b c npn area={n}",

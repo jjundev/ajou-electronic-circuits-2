@@ -29,6 +29,7 @@ NETLIST_RES = [
                rf"(\s+W/L=({NUM}/{NUM}|{SYM}))?{MULT}$"),
     re.compile(rf"^[RCLIV]\w*\s+{NODE}\s+{NODE}(\s+\S+)?$"),
     re.compile(rf"^X\w*\s+{NODE}\s+{NODE}\s+{NODE}\s+opamp$"),
+    re.compile(rf"^X\w*(\s+{NODE}){{4}}\s+fdopamp$"),           # 완전 차동: in+ in- out+ out-
     re.compile(rf'^X\w*(\s+{NODE})+\s+box\s+"[^"]+"$'),
     re.compile(rf"^X\w*(\s+{NODE}){{3,}}\s+sum$"),                  # 블록도 덧셈기: 입력… 출력
     re.compile(rf'^X\w*\s+{NODE}\s+{NODE}\s+gain\s+"[^"]+"(\s+tri)?$'),
