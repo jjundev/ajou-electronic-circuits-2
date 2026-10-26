@@ -77,7 +77,7 @@ class TestJsonOnly(BuildCase):
     def test_all(self):
         code, _, err = self.run_cli("--all", "--json-only")
         self.assertEqual(code, 0, err)
-        self.assertEqual(len(list(self.build.glob("*.json"))), 32)   # 장 3 + 기출 13, 각각 문제·답안
+        self.assertEqual(len(list(self.build.glob("*.json"))), 34)   # 장 4 + 기출 13, 각각 문제·답안
 
 
 class TestErrors(BuildCase):
