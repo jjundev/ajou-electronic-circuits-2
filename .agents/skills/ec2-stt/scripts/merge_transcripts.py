@@ -23,7 +23,7 @@ def nfc(text: str) -> str:
 def merge_transcripts(
     target_dir: str,
     prefix: str = "",
-    segment_seconds: int = 600,
+    segment_seconds: int = 300,
     keep_parts: bool = False,
     output_file: str = "",
     out_file: str = "",
@@ -164,7 +164,7 @@ def main():
     parser.add_argument("--dir", required=True, help="Directory containing part files")
     parser.add_argument("--prefix", default="", help="Prefix of the part files (e.g. 1002 전회2)")
     parser.add_argument("--out", default="", help="Final output file path")
-    parser.add_argument("--segment-seconds", type=int, default=600, help="Segment length in seconds (default: 600)")
+    parser.add_argument("--segment-seconds", type=int, default=300, help="Segment length in seconds (default: 300)")
     parser.add_argument("--keep-parts", action="store_true", help="Preserve intermediate part files")
     parser.add_argument("--timestamps", action="store_true", help="Include continuous MM:SS timestamps")
     parser.add_argument("--speakers", default="", help="Comma-separated allowed speaker labels")

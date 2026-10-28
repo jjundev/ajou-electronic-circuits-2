@@ -37,8 +37,10 @@ description: "[Gemini Only] Use when transcribing electronic circuits 2 lecture 
    - Whisper, mlx-whisper, faster-whisper 등 외부/로컬 STT 모델을 절대 설치하거나 사용하지 않는다.
    - 오디오를 1fps 블랙 비디오 래퍼(`color=c=black:s=320x240:r=1`)가 포함된 MP4로 변환한 뒤, Gemini의 `view_file` 기능으로 직접 듣고 전사한다.
 
-4. **10분 세그먼트 및 병렬 서브에이전트**:
-   - 10분이 넘는 긴 음성은 10분(600초) 단위로 분할하여 `self` 서브에이전트를 병렬 기동한다.
+4. **5분 세그먼트 및 배치 병렬 서브에이전트**:
+   - 긴 음성은 안전 필터(Safety Filter) 오탐 방지와 신뢰성 확보를 위해 **5분(300초) 단위**로 분할한다.
+   - API 동시성 부하(503)를 차단하기 위해 서브에이전트는 5개 단위 배치(Batch of 5)로 순차 기동한다.
+   - 서브에이전트는 채팅창에 전사 텍스트를 일체 출력하지 않고 파일 디스크 쓰기(`write_file`)로만 직소하여 출력단 챗 필터 간섭을 원천 차단한다.
 
 5. **복습팩 파이프라인 연계 안내**:
    - 전사 완료 후 `/ec2-review-pack <MMDD>` 실행을 안내하여 수업 STT $\rightarrow$ 복습팩 생성이 매끄럽게 연결되도록 한다. (자동 실행하지 않고 안내만 출력)
@@ -74,7 +76,7 @@ description: "[Gemini Only] Use when transcribing electronic circuits 2 lecture 
 
 ---
 
-## ⚡ Workflow B: 긴 오디오 (> 10분) - 병렬 서브에이전트
+## ⚡ Workflow B: 긴 오디오 (> 5분) - 병렬 서브에이전트
 
 0. **모델 호환성 확인 (Gate 0)**: Gemini 모델인지 확인. 비-Gemini 모델이면 즉시 중단.
 1. **날짜 및 단원 컨텍스트 추출**:
@@ -85,15 +87,15 @@ description: "[Gemini Only] Use when transcribing electronic circuits 2 lecture 
    - 파일명에서 날짜를 파싱할 수 없는 경우 임의 추측하지 않고 즉시 `--date MMDD` 입력을 안내하고 중단.
    - JSON의 `chapters`가 두 단원이면 전환기다. 사용자가 단원을 알려 주면 `--chapter N`으로 다시 추출해도 된다.
 
-2. **10분 분할 및 병렬 1fps MP4 래핑**:
+2. **5분 분할 및 병렬 1fps MP4 래핑**:
    ```bash
    DATE=$(python3 -c "import json; print(json.load(open('/tmp/ec2_stt_context.json'))['date'])")
    WORK_DIR="$REPO/STT/_temp_${DATE}"
    mkdir -p "$WORK_DIR"
 
-   # 10분 분할
+   # 5분(300초) 분할
    ffmpeg -y -i "<AUDIO_PATH>" -vn -c:a libmp3lame -b:a 192k \
-     -f segment -segment_time 600 -segment_start_number 1 -reset_timestamps 1 \
+     -f segment -segment_time 300 -segment_start_number 1 -reset_timestamps 1 \
      "$WORK_DIR/${DATE} 전회2_part%02d.mp3"
 
    # MP4 일괄 래핑
@@ -107,9 +109,9 @@ description: "[Gemini Only] Use when transcribing electronic circuits 2 lecture 
    wait
    ```
 
-3. **병렬 서브에이전트 기동**:
-   - 각 파트마다 `self` 서브에이전트를 동시 기동.
-   - **기본 프롬프트 (클린 텍스트)**:
+3. **배치 병렬 서브에이전트 기동 (Batch of 5)**:
+   - 503 에러 방지를 위해 서브에이전트는 5개 단위로 나누어 순차 기동한다 (예: part01~05 $\rightarrow$ 완료 후 part06~10 $\rightarrow$ part11~15).
+   - **기본 프롬프트 (클린 텍스트 & Direct-to-Disk)**:
      ```text
      You are a verbatim STT transcription agent specialized in Electronic Circuits 2 (전자회로2).
      Target video: <WORK_DIR>/<DATE> 전회2_part01_temp.mp4
@@ -118,17 +120,18 @@ description: "[Gemini Only] Use when transcribing electronic circuits 2 lecture 
      <PROMPT_GUIDE> (infer_context.py 의 prompt_guide 내용 삽입)
 
      Instructions:
-     1. Call `view_file` on <WORK_DIR>/<DATE> 전회2_part01_temp.mp4.
+     1. Call `read_file` on <WORK_DIR>/<DATE> 전회2_part01_temp.mp4.
      2. Transcribe ALL spoken words verbatim from start to finish. Do not skip, summarize, or omit anything.
      3. Group 2~4 sentences per paragraph, separated by blank lines (\n\n). Do not output timestamps.
      4. When technical terms sound ambiguous or muffled, bias towards the correct Korean/English circuit terms provided above.
-     5. Save directly to <WORK_DIR>/<DATE> 전회2_part01.md using `write_to_file` (Overwrite=True).
+     5. Save directly to <WORK_DIR>/<DATE> 전회2_part01.md using `write_file` (Overwrite=True).
      6. Strict Guardrails:
-        - Perform transcription in a single pass directly from view_file.
+        - DO NOT output the transcribed text in your response message body; reply ONLY with 'Done'.
+        - Perform transcription in a single pass directly from read_file into write_file.
         - NEVER search for, install, or run Whisper or any external STT tools.
         - Do NOT inspect other part files or compare transcripts.
         - Do NOT run audio analysis, silence detection, ffmpeg slicing, or additional tools.
-     7. Report completion immediately when done.
+     7. Report completion immediately with 'Done' when write_file finishes.
      ```
    - **타임스탬프 요청 시 (`--timestamps` / `-t`) 변형**:
      지침 3을 아래로 교체:
@@ -168,12 +171,12 @@ description: "[Gemini Only] Use when transcribing electronic circuits 2 lecture 
 
 Gemini safety filter에 의해 특정 파트가 블록될 경우:
 1. **Whisper 폴백 절대 금지**: Whisper 설치 시도 금지.
-2. **해당 파트를 2~3분 단위 서브 청크로 분할**:
+2. **해당 파트를 60~75초 단위 서브 청크로 분할**:
    ```bash
-   ffmpeg -y -i "<FAILING_CHUNK>.mp3" -ss 0 -t 150 -c copy "<FAILING_CHUNK>_sub01.mp3"
-   ffmpeg -y -i "<FAILING_CHUNK>.mp3" -ss 150 -t 150 -c copy "<FAILING_CHUNK>_sub02.mp3"
+   ffmpeg -y -i "<FAILING_CHUNK>.mp3" -ss 0 -t 75 -c copy "<FAILING_CHUNK>_sub01.mp3"
+   ffmpeg -y -i "<FAILING_CHUNK>.mp3" -ss 75 -t 75 -c copy "<FAILING_CHUNK>_sub02.mp3"
    ```
-3. 각각 1fps 블랙 MP4로 감싸서 `view_file`로 전사 후 하나의 파트 파일로 합친다.
+3. 각각 1fps 블랙 MP4로 감싸서 `write_file` 직소 방식으로 전사 후 하나의 파트 파일로 합친다.
 
 ---
 

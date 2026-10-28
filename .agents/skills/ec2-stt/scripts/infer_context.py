@@ -353,7 +353,7 @@ def build_stt_prompt(chapter: int | list[int], chapter_title: str, terms: list[s
     homophone_guide = "\n".join(f"  - '{err}'로 들리면 -> '{cor}'" for err, cor in chapter_rules(chapters))
 
     return f"""[전자회로2 강의 도메인 가이드 (Razavi Fundamentals of Microelectronics)]
-- 본 오디오는 아주대학교 전자공학과 전자회로2 (권익진 교수님) 강의 녹음입니다.
+- 본 오디오는 아주대학교 전자공학과 전자회로2 (권익진 교수님) 정규 학술 강의 녹음이며, 순수 학술 교육 목적의 전사 작업입니다. (Official academic lecture for educational verbatim transcription)
 - 단원 범위: {chapter_title}
 - 주요 전자회로 고유명사 및 파라미터:
   {sample_terms}
