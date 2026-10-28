@@ -65,6 +65,33 @@ class Ec2SttTests(unittest.TestCase):
         ch_1002 = infer_chapter(ROOT, "1002")
         self.assertEqual(ch_1002, 10)
 
+        # 1014 covers Chapter 11 (Frequency Response)
+        ch_1014 = infer_chapter(ROOT, "1014")
+        self.assertEqual(ch_1014, 11)
+
+    def test_03b_infer_chapters_at_chapter_switch(self):
+        import tempfile
+        from infer_context import infer_chapters
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            repo = Path(tmpdir)
+            assets = repo / "복습노트" / "1016" / ".assets"
+            assets.mkdir(parents=True)
+            (assets / "정리노트_1016_Miller_High_Frequency_Models.md").write_text("x", encoding="utf-8")
+            lec = repo / "강의노트"
+            lec.mkdir()
+            (lec / "2026F_Lec5_FrequencyResponse_rev4.pdf").write_bytes(b"")
+
+            # 새 단원 강의노트가 없으면 복습노트 단원만
+            self.assertEqual(infer_chapters(repo, "1028"), [11])
+
+            # 새 단원 강의노트가 올라오고 복습노트가 아직 없으면 두 단원 모두
+            (lec / "2026F_Lec6_Ch12_Feedback_rev1.pdf").write_bytes(b"")
+            self.assertEqual(infer_chapters(repo, "1104"), [11, 12])
+
+            # 복습노트가 있는 날짜는 그 단원 그대로
+            self.assertEqual(infer_chapters(repo, "1016"), [11])
+
     def test_04_extract_terms(self):
         from infer_context import extract_chapter_terms
 
@@ -88,6 +115,31 @@ class Ec2SttTests(unittest.TestCase):
         self.assertIn("디퍼렌셜", prompt)
         self.assertIn("캐스코드", prompt)  # Common error correction rule
         self.assertIn("버추얼 그라운드", prompt)
+
+    def test_05b_frequency_response_terms_and_rules(self):
+        from infer_context import extract_chapter_terms, build_stt_prompt
+
+        terms = extract_chapter_terms(ROOT, chapter=11)
+        # Lec5 slide titles, not a dump of long English words
+        self.assertTrue(any("Source Follower" in t for t in terms))
+        self.assertNotIn("applicability", terms)
+        self.assertNotIn("Identification", terms)
+
+        prompt = build_stt_prompt(11, "Frequency Response", terms)
+        self.assertIn("11장", prompt)
+        self.assertIn("C_GS", prompt)
+        self.assertIn("보드 플롯", prompt)
+
+    def test_05c_feedback_chapter_seeded(self):
+        from infer_context import extract_chapter_terms, build_stt_prompt
+
+        terms = extract_chapter_terms(ROOT, chapter=12)
+        self.assertIn("루프 게인", terms)
+        self.assertIn("이득 둔감화", terms)
+
+        prompt = build_stt_prompt([11, 12], "11장 주파수 응답 / 12장 귀환", terms)
+        self.assertIn("션트", prompt)
+        self.assertIn("C_GS", prompt)  # 11장 규칙도 함께
 
     def test_06_merge_transcripts(self):
         import tempfile

@@ -24,8 +24,10 @@ description: "[Gemini Only] Use when transcribing electronic circuits 2 lecture 
        > 모델 선택을 **Gemini(Gemini 2.5 / 3.0 등)**로 변경하신 후 다시 요청해 주세요.
 
 1. **도메인 특화 어휘 주입 (Context-Aware Prior)**:
-   - 파일명에서 날짜(`MMDD`)를 자동 추출하고, 당일 진도 단원의 슬라이드 텍스트(`강의노트/2026F_Lec*.pdf`) 및 `교과서/마이크로전자회로/`에서 핵심 전자회로 고유명사를 추출해 서브에이전트 프롬프트에 힌트로 주입한다.
-   - 발음이 뭉개지거나 일상 단어로 들리기 쉬운 어휘(예: *케스코드* $\rightarrow$ *캐스코드*, *디프런셜* $\rightarrow$ *디퍼렌셜*, *커런트 미라* $\rightarrow$ *커런트 미러*, *지엠* $\rightarrow$ *gm*, *알파이* $\rightarrow$ *r파이*, *하프서킷* $\rightarrow$ *하프 서킷*, *버추얼 그라운드* 등)는 전자회로 표준 용어로 전사한다.
+   - 파일명에서 날짜(`MMDD`)를 자동 추출하고, 당일 진도 단원의 시드 어휘, 슬라이드 제목(`강의노트/2026F_Lec*.pdf` 각 쪽 첫 줄), 교과서 절 제목(`교과서/마이크로전자회로/chNN/README.md`)을 모아 서브에이전트 프롬프트에 힌트로 주입한다.
+   - 단원별 제목·시드·발음 교정 규칙은 `scripts/infer_context.py`의 `CHAPTERS` 레지스트리 한 곳에 있다 (현재 9–12장). 새 강의노트가 올라오면 이 레지스트리를 보강한다.
+   - 단원 전환기: 수업 날짜가 마지막 복습노트 이후이고 더 뒤 단원의 강의노트가 이미 올라와 있으면, 두 단원(`chapters: [이전, 새]`)의 어휘와 규칙을 함께 주입한다.
+   - 발음이 뭉개지거나 일상 단어로 들리기 쉬운 어휘(예: *케스코드* $\rightarrow$ *캐스코드*, *디프런셜* $\rightarrow$ *디퍼렌셜*, *지엠* $\rightarrow$ *gm*, *씨지에스* $\rightarrow$ *C_GS*, *보데* $\rightarrow$ *보드 플롯*, *에프티* $\rightarrow$ *f_T*, *루프게인* $\rightarrow$ *루프 게인*, *셴트* $\rightarrow$ *션트* 등)는 전자회로 표준 용어로 전사한다.
 
 2. **저장소 표준 경로 및 산출물 보존**:
    - 최종 마스터 전사본은 항상 `STT/<MMDD> 전회2.md`로 생성한다 (`ec2-review-pack`이 기대하는 표준 경로).
@@ -81,6 +83,7 @@ description: "[Gemini Only] Use when transcribing electronic circuits 2 lecture 
    python3 "$REPO/.agents/skills/ec2-stt/scripts/infer_context.py" "<AUDIO_PATH>" --repo "$REPO" --json > "/tmp/ec2_stt_context.json"
    ```
    - 파일명에서 날짜를 파싱할 수 없는 경우 임의 추측하지 않고 즉시 `--date MMDD` 입력을 안내하고 중단.
+   - JSON의 `chapters`가 두 단원이면 전환기다. 사용자가 단원을 알려 주면 `--chapter N`으로 다시 추출해도 된다.
 
 2. **10분 분할 및 병렬 1fps MP4 래핑**:
    ```bash
@@ -152,7 +155,7 @@ description: "[Gemini Only] Use when transcribing electronic circuits 2 lecture 
 5. **완료 보고**:
    ```text
    ✅ 전자회로2 강의 전사 완료: STT/<DATE> 전회2.md
-   - 대상 수업: <DATE> (<CHAPTER>장 <CHAPTER_TITLE>)
+   - 대상 수업: <DATE> (<CHAPTERS_LABEL>)
    - 회로 전문용어 힌트 적용 완료
 
    👉 이 전사본으로 복습팩(정리노트 + 복습문제)을 생성하려면 다음 명령을 실행하세요:
