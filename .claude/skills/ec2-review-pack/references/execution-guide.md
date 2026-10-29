@@ -61,8 +61,13 @@
      그 뒤의 STT를 모두 쓴다. 팩이 하나도 없으면 사용 가능한 STT 날짜를 보여 주고 "기간을 인자로 넣어 주면 돼요(예: /ec2-review-pack 0923)"라고 알린 뒤 멈춘다.
    - 해당 STT가 하나도 없으면 사용 가능한 날짜를 보여 주고 멈춘다.
    - `range`는 첫 STT 날짜 하나이거나 `첫-끝` 형식이다.
-4. 새 RUN과 실제 browser/pdf owner를 [runner 계약](runner-contract.md)의 init에 전달한다. 실행기가 디렉터리와 `RUN/learning-style.json` snapshot을 만든다. 별도 snapshot 명령/수기 run-status를 실행하지 않는다. 원본은 읽기 전용이고 최상위 메인만 발행한다.
-5. PROFILE 존재·현재 snapshot을 확인한다. 작성자·감사자·리뷰어는 PROFILE 전체를 읽으며 메인은 일반 모드에서 객체/해시만 확인한다(lite 실제 감사 때는 본문도 읽는다).
+4. PDF 빌드 도구를 실제로 띄워 본다. workbook 렌더러는 Python playwright로 `channel="chrome"`을 연다.
+   ```bash
+   python3 -c "from playwright.sync_api import sync_playwright as s; p=s().start(); p.chromium.launch(channel='chrome').close(); p.stop(); print('pdf ok')"
+   ```
+   실패하면 init 전에 고친다. 모듈이 없으면 `pip install playwright`, Chrome이 없으면 Google Chrome을 설치하거나 이미 있는 Chromium을 `/opt/google/chrome/chrome`에 연결한다. 고칠 수 없으면 pdf owner를 unavailable로 넘긴다. 도구 없이 init하면 build-problems가 실패해 RUN이 보류된다.
+5. 새 RUN과 실제 browser/pdf owner를 [runner 계약](runner-contract.md)의 init에 전달한다. 실행기가 디렉터리와 `RUN/learning-style.json` snapshot을 만든다. 별도 snapshot 명령/수기 run-status를 실행하지 않는다. 원본은 읽기 전용이고 최상위 메인만 발행한다.
+6. PROFILE 존재·현재 snapshot을 확인한다. 작성자·감사자·리뷰어는 PROFILE 전체를 읽으며 메인은 일반 모드에서 객체/해시만 확인한다(lite 실제 감사 때는 본문도 읽는다).
 
 ### 1. 범위 파악
 1. **먼저** 관련 `강의노트/2026F_Lec*_*.pdf` 텍스트를 슬라이드 번호와 함께 `RUN/slides.txt`에 추출한다(PyMuPDF, 쪽마다 `=== LNN sK ===`, `LNN`은 파일명의 `LecN`을 두 자리로). 요약 에이전트는 이 파일이 있다고 보고 시작하므로 추출이 끝난 뒤에 띄운다.

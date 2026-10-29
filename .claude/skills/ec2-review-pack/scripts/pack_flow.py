@@ -173,8 +173,14 @@ def update_state(run: Path, expected_revision: int, change: Callable[[dict], dic
 
 
 def init_run(repo: Path, run: Path, range_: str, *, lite: bool = False,
-             browser_owner: str = "main", pdf_owner: str = "main") -> dict:
+             browser_owner: str = "main", pdf_owner: str = "main",
+             seed_from: Path | None = None, redo: list[str] | None = None,
+             redo_note: Path | None = None) -> dict:
     repo, run = Path(repo).resolve(), Path(run).resolve()
+    if (redo or redo_note) and seed_from is None:
+        raise FlowError("--redo/--redo-note require --seed-from")
+    if redo_note is not None and not Path(redo_note).is_file():
+        raise FlowError(f"{redo_note}: redo note missing")
     if not repo.is_dir():
         raise FlowError(f"{repo}: repo directory missing")
     if run.exists() and (not run.is_dir() or any(run.iterdir())):
@@ -223,7 +229,11 @@ def init_run(repo: Path, run: Path, range_: str, *, lite: bool = False,
                      hashes={str(p): _sha(p) for p in [*sources, profile, snapshot_path]}, backups={},
                      fix_rounds=dict(content=0, machine_browser=0), explain_run=None,
                      publication={}, recovery={}, sessions=[p.name[:4] for p in sources])
-        refresh_tasks(state)
+        if seed_from is not None:
+            from pack_seed import seed_state
+            seed_state(state, Path(seed_from), list(redo or []), redo_note)
+        else:
+            refresh_tasks(state)
         write_briefs(state)
         _validate(state, run)
         _atomic_json(run / "run-status.json", state)
@@ -518,7 +528,9 @@ def _inputs(state, task):
 def write_briefs(state: dict) -> None:
     """Called in init/accept/fix/action write transactions; never from next/status."""
     from pack_receipts import ROLE_OUTPUTS, standalone_screenshots
+    from pack_seed import attach_redo
     run, repo = Path(state['run']), Path(state['repo'])
+    for tid in (state.get('seeded_from') or {}).get('redo', []): attach_redo(state, tid)
     skill = repo / '.claude/skills/ec2-review-pack'
     for task in state['tasks'].values():
         if task.get('invalidated_active') or task['status'] not in ('pending', 'needs_fix', 'stale') or any(not _done(state, d) for d in task['dependencies']): continue

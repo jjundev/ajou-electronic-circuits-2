@@ -8,7 +8,7 @@ description: 전자회로2 수업의 STT·강의노트·Razavi 교과서로 ELI5
 
 메인은 배치·예외 판단·최상위 발행을 맡는다. 먼저 [실행·역할 계약](references/delegation.md)을 읽는다. 실행기는 에이전트나 모델을 호출하지 않는다. 원문·전체 후보·작업자 보고·스크립트 구현·다른 날짜 예시를 메인에 일괄 적재하지 않는다.
 
-1. [준비](references/execution-guide.md)의 `0. 준비`에서 REPO·기간·새 RUN을 정한다. 실제 브라우저/PDF 도구 접근성을 확인한다. [runner 계약](references/runner-contract.md)의 시작 명령으로 `init`한다. 새 RUN만 지원하며 기존 수기 상태/승인을 변환하지 않는다.
+1. [준비](references/execution-guide.md)의 `0. 준비`에서 REPO·기간·새 RUN을 정한다. 실제 브라우저/PDF 도구 접근성을 확인한다. [runner 계약](references/runner-contract.md)의 시작 명령으로 `init`한다. 새 RUN 또는 보류된 RUN에서 이어받은 새 RUN만 지원하며 기존 수기 상태/승인을 변환하지 않는다. 보류 뒤 다시 돌릴 때는 runner 계약의 `이어받기`를 따른다.
 2. 같은 CLI의 `status --run <RUN>` 및 `next --run <RUN> --slots <현재 가용 작업자 수>`로 현재 근거와 다음 행동을 받는다. `dispatch`는 claim→새 컨텍스트 spawn→bind→receipt accept, `run`은 요청된 action 한 개, `review_locally`는 메인의 실제 검사다. 상세 인자는 runner 계약의 해당 절만 읽는다.
 3. 작업자는 생성 브리프의 참조 절·고정 입력·허용 출력·PROFILE 전체를 직접 읽는다. 작성자는 [내용 규칙](references/content-rules.md), 요약자는 [STT 지시문](references/stt-summary-prompt.md)을 따른다. 상세 보고는 RUN에 두고 반환은 **800자 이하**로 task/status/receipt 경로를 보낸다. 자식 조정자는 모든 leaf 브리프에도 같은 제한을 전파한다.
 4. 수정/재개·중단·복구는 runner 계약을 따른다. 내용 수정 최대 1회, 기계/브라우저 수정은 **공통 최대 2회**다. 현재 입력 변경은 관련 승인을 무효화한다. 최초 두 백업을 덮거나 상태 JSON을 손으로 완료 처리하지 않는다.

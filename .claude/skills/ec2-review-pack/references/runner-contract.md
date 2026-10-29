@@ -6,6 +6,8 @@ OpenCode 우선의 파일 인계 절차이며 Codex도 같은 Python CLI를 쓴�
 
 `init --repo <REPO> --run <새 RUN> --range <MMDD 또는 MMDD-MMDD> [--lite] --browser-owner <workers|main|unavailable> --pdf-owner <workers|main|unavailable>`
 
+`init ... --seed-from <보류된 RUN> [--redo <task id,...>] [--redo-note <절대 파일>]`: 이어받기. 아래 `이어받기` 절을 따른다.
+
 owner 기본은 main이다. 도구가 실제 있는 주체를 전달하며 unavailable은 실제 검토 단계에서 blocked다. RUN은 없거나 비어 있어야 한다. snapshot은 `RUN/learning-style.json`이며 init이 만든다. 기존 수기 run-status를 변환하거나 과거 pass를 추정하지 않는다.
 
 `status --run <RUN>` / `next --run <RUN> --slots <현재 가용 수>`는 읽기 전용이다. 현재 파일/해시와 대조한 view를 반환하고 stale을 저장하지 않는다. slots=0은 새 작업자 dispatch만 기다리며 준비된 기계 작업·메인 검토는 진행한다. 상태를 수동 수정하지 않는다.
@@ -82,6 +84,14 @@ prepare-pack은 첫 변경 전 기본/설명 두 백업을 검증·재사용하�
 `recover --run <RUN>`은 기록된 마지막 신뢰 inventory와 현재 파일 및 두 백업이 일치해야 한다. 기본 팩→설명 순서로 복구하며 새 산출은 withheld에 보존한다. 외부 편집/불명확한 부분 쓰기는 recovery_required로 멈추고 덮지 않는다. 실행 중 명령 lock은 프로세스 종료 때 풀린다. 활성 lock 파일을 unlink하지 않는다.
 
 컨트롤러가 실행 중 죽었으면 메인이 소유 명령/프로세스 트리가 멈췄는지 실제 확인해야 한다. stopped.json이 없을 때만 `RUN/work/actions/<action>/<attempt>/stopped-confirmation.json`을 직접 작성한다: `{schema_version:1,attempt,confirmed_by,reason,process}`. process는 해당 process.json 객체(pid와 동일 attempt)와 정확히 같아야 한다. 확인 마커는 성공 exit·발행·알 수 없는 쓰기 소유권을 증명하지 않는다. 신뢰 inventory가 없거나 외부 차이가 있으면 자동 복구/재발행하지 않는다.
+
+## 이어받기 — 메인
+
+보류된 RUN을 다시 돌릴 때 처음부터 init하지 않고 `--seed-from`으로 새 RUN을 만든다. 이전 RUN은 withheld이거나, 저장소 쓰기(백업·발행) 전의 blocked/needs_fix여야 한다. range·lite·repo가 같고 고정 입력(STT·PROFILE·snapshot) 해시가 모두 같아야 하며, 하나라도 다르면 아무것도 이어받지 않고 처음부터 한다. 활성 attempt가 남은 RUN은 거절한다.
+
+이어받는 것은 이전 RUN에서 done이고 현재 바이트가 receipt와 일치하며 역할·대상·의존이 같은 작업자 task뿐이다. 실제 범위는 첫 기계 작업 앞(source-prep, stt, scope, selection, scope-final, author)이다. 기계 작업은 저장소에 쓰므로 항상 다시 실행하고, 그 뒤 검토·자식·PDF task도 의존 사슬을 따라 다시 한다. child-coordinator와 pdf-qa는 이어받지 않는다. 파일은 같은 상대 경로로 복사하며 텍스트 속 이전 RUN 경로는 새 RUN 경로로 바꾸고 해시를 다시 기록한다. 이어받은 task는 `carried`에 이전 run_id·attempt를 남긴다.
+
+`--redo`는 실제 결함이 확인된 task id다. 그 task와 뒤 단계는 다시 하며, 이전 산출·보고를 `work/<id>/seed-previous/`에, `--redo-note` 사본을 `requests/seed-redo/`에 두고 brief의 request_paths로 넘긴다. 작업자는 처음부터 쓰지 않고 이것을 고친다. 수정 예산은 새 RUN 기준 0에서 시작하며 이어받기로 한 RUN 안의 한도를 늘리지 않는다. 결과의 `seeded_from`(carried/redo/rejected)은 report에도 실린다. rejected가 있으면 그 이유를 최종 보고에 적는다.
 
 ## 보고와 참조 경로
 

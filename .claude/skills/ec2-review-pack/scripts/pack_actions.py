@@ -519,5 +519,6 @@ def write_report(run: Path) -> Path:
     f._atomic_json(report,{'range':state['range'],'status':state['status'],'phase':state['phase'],
         'scope':f._read(scope) if scope.exists() else None,'selection':f._read(selection) if selection.exists() else None,
         'files':inventory_pack(Path(state['repo']),state['range']), 'checks':state['actions'],
-        'backups':state['backups'],'recovery':state['recovery'],'publication':state['publication']})
+        'backups':state['backups'],'recovery':state['recovery'],'publication':state['publication'],
+        'seeded_from':state.get('seeded_from')})
     return report

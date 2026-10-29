@@ -57,6 +57,8 @@ def parser():
     c=command('init'); c.add_argument('--repo',required=True,type=absolute); c.add_argument('--range',required=True)
     c.add_argument('--lite',action='store_true')
     for owner in ('browser','pdf'): c.add_argument('--'+owner+'-owner',choices=('workers','main','unavailable'),default='main')
+    c.add_argument('--seed-from',type=absolute); c.add_argument('--redo',default='')
+    c.add_argument('--redo-note',type=absolute)
     command('status'); c=command('next'); c.add_argument('--slots',required=True,type=int)
     t=sub.add_parser('task'); ts=t.add_subparsers(dest='task_command',required=True)
     for name in ('claim','bind','accept','release','fix','authorize-fix'):
@@ -99,7 +101,14 @@ def execute(a):
     run=a.run
     extra=None
     if a.command=='init':
-        f.init_run(a.repo,run,a.range,lite=a.lite,browser_owner=a.browser_owner,pdf_owner=a.pdf_owner)
+        f.init_run(a.repo,run,a.range,lite=a.lite,browser_owner=a.browser_owner,pdf_owner=a.pdf_owner,
+                   seed_from=a.seed_from,redo=[x.strip() for x in a.redo.split(',') if x.strip()],redo_note=a.redo_note)
+        seeded=f.load_state(run).get('seeded_from')
+        if seeded:
+            extra=f.next_work(run,slots=0)
+            state=f.inspect_state(run)
+            return dict(status=state['status'],phase=state['phase'],next=extra,details_path=str(run/'run-status.json'),
+                        counts={'carried':len(seeded['carried']),'rejected':len(seeded['rejected']),'redo':len(seeded['redo'])}),0
     elif a.command=='status': pass
     elif a.command=='next': extra=f.next_work(run,slots=a.slots)
     elif a.command=='task':
