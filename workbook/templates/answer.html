@@ -568,6 +568,15 @@ function fitStripFormulas(page) {
 }
 
 // 가운데 칸: 풀이 단계와 답. solution이 없으면 빈 점 격자
+// 풀이 그림의 글자가 본문 글자와 같은 크기가 되도록 viewBox 폭을 em으로 넘긴다 (16:9 CSS가 씀)
+const SVG_TEXT_PX = 13;
+function sizeSolutionSvgs(root) {
+  for (const svg of root.querySelectorAll('svg[viewBox]:not(.katex svg)')) {
+    const w = svg.viewBox.baseVal?.width;
+    if (w > 0) svg.style.setProperty('--svg-em', w / SVG_TEXT_PX);
+  }
+}
+
 function solutionArea(p) {
   const work = el('div', 'work');
   const s = p.solution;
@@ -588,6 +597,7 @@ function solutionArea(p) {
     a.classList.add('sol-answer');
     work.append(a);
   }
+  sizeSolutionSvgs(work);
   return work;
 }
 
@@ -860,7 +870,8 @@ async function main() {
       for (const page of book.querySelectorAll('.page--problem')) {
         const scales = meta.typography[page.id];
         if (!scales) continue;
-        for (const [selector, values] of [['.katex-display > .katex', scales.math], ['.hint-strip-formula', scales.hints]]) {
+        // Display math keeps the scale fitted to this page's own column width; A4 scales would shrink it twice.
+        for (const [selector, values] of [['.hint-strip-formula', scales.hints]]) {
           [...page.querySelectorAll(selector)].forEach((node, i) => {
             const scale = values?.[i] ?? 1;
             node.style.transformOrigin = 'left center';

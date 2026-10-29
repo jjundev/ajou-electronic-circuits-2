@@ -12,3 +12,7 @@
 .fig-band { --fig-frac: .30; }
 .work { --sol-step-gap: 24px; }
 .staging { width: 850px; }
+/* Solution SVG text matches body text; the column width still caps it. */
+:is(.sol-step-body, .sol-answer) svg:not(.katex svg) {
+  width: min(100%, calc(var(--svg-em, 26) * 1em)); max-height: none;
+}
