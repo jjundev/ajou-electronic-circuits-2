@@ -1,0 +1,773 @@
+{
+  "adoption_unit": "whole",
+  "candidates_sha256": "9244d6428814c0f8ff827b9b50992c5fc9ef6195c692f32857e12fd2416880bb",
+  "catalog_sha256": "8cf47e716c01d0539fc75f5ecb95058860bfcde80828dfdf70c21fbd706577e8",
+  "policy": "exam-first-v2",
+  "problems": [
+    {
+      "adoption_unit": "whole",
+      "classification_status": "reviewed",
+      "content_sha256": "3d76fe3ac4a745f159a2f6412378dea0238d80e1260d82cf823dee011f4e79dc",
+      "depends_on": [],
+      "estimated_minutes": 10,
+      "id": "2023-1_기말-Q6",
+      "kind": "기출",
+      "learning_goals": [
+        "f_T 정의와 ω_T≈g_m/C_GS 유도"
+      ],
+      "priority": "core",
+      "reference_solution": "solution",
+      "subpart_count": 1,
+      "subparts": [
+        {
+          "ask_md": "- MOSFET의 transit frequency ($f_T$)의 정의를 설명\n- 그 정의를 이용해 $\\omega_T\\ (= 2\\pi f_T)$의 식을 구함\n- $C_{GS} = (2/3)WLC_{ox}$일 때 $\\omega_T\\ (= 2\\pi f_T)$의 식을 $\\mu_n$, $L$ (channel length), $V_{GS} - V_{TH}$로 나타냄",
+          "label": "main",
+          "required_concepts": [
+            "MOSFET 천이 주파수",
+            "단락 전류 이득",
+            "주파수 응답과 기생 커패시턴스",
+            "MOS 포화 영역 전류식",
+            "MOS 트랜스컨덕턴스 gm"
+          ]
+        }
+      ],
+      "why": "f_T 정의→ω_T=g_m/C_GS→μ_n·L·V_ov 식까지 수업 칠판 유도 그대로 묻는 최신 기말 기출(같은 문제 2021-1 Q7 대신 과정 필수 명시본)"
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "0415e915584d6ed309903801e61579f4017f8d492b4bd32e05b75170c26fc308",
+      "depends_on": [],
+      "estimated_minutes": 8,
+      "id": "E11.14",
+      "kind": "예제",
+      "learning_goals": [
+        "f_T의 채널 길이·과구동 전압 스케일링"
+      ],
+      "priority": "core",
+      "reference_solution": "solution",
+      "subpart_count": 1,
+      "subparts": [
+        {
+          "ask_md": "- MOSFET의 $f_T$는 몇 배나 증가했는가?",
+          "label": "main"
+        }
+      ],
+      "why": "기출에 없는 f_T∝μV_ov/L² 수치 배율(L 축소·V_ov 축소 동시)을 직접 계산"
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "6383d695a730cc6a869349e25083c147b55f32bd60822b79437d9b758db46b52",
+      "depends_on": [],
+      "estimated_minutes": 10,
+      "id": "P11.33",
+      "kind": "장말문제",
+      "learning_goals": [
+        "f_T의 채널 길이·과구동 전압 스케일링"
+      ],
+      "priority": "extra",
+      "reference_solution": "solution",
+      "subpart_count": 2,
+      "subparts": [
+        {
+          "ask_md": "같은 과구동 전압과 같은 드레인 전류를 유지하려면 소자 폭을 어떻게 조정해야 하는가?",
+          "label": "a"
+        },
+        {
+          "ask_md": "이 변화들이 트랜지스터의 $f_T$에 어떤 영향을 주는가?",
+          "label": "b"
+        }
+      ],
+      "why": "L 2배·V_ov·I_D 유지 시 W 조정과 f_T 1/4 — 교수님 'L을 줄이면 빨라진다'의 역방향 확인"
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "b86a3c2b501fd5fcb2e7bf1aa832810fbd45f720e567b5c7491e4e5a534203a0",
+      "depends_on": [],
+      "estimated_minutes": 10,
+      "id": "P11.34",
+      "kind": "장말문제",
+      "learning_goals": [
+        "f_T의 채널 길이·과구동 전압 스케일링"
+      ],
+      "priority": "extra",
+      "reference_solution": "solution",
+      "subpart_count": 2,
+      "subparts": [
+        {
+          "ask_md": "$I_D$는 일정하고 $W$를 늘림",
+          "label": "a"
+        },
+        {
+          "ask_md": "$W$는 일정하고 $I_D$를 줄임",
+          "label": "b"
+        }
+      ],
+      "why": "V_ov 절반에서 I_D 고정/W 고정 두 경우의 f_T 변화로 고정 인자 구별 연습"
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "db895c0663517e0a14945998a5600e851fc00d0dd8d7edb9a487f2093fed0b1a",
+      "depends_on": [],
+      "estimated_minutes": 12,
+      "id": "E11.16",
+      "kind": "예제",
+      "learning_goals": [
+        "CS 단 밀러 근사로 입력·출력 극점 계산"
+      ],
+      "priority": "extra",
+      "reference_solution": "solution",
+      "subpart_count": 1,
+      "subparts": [
+        {
+          "ask_md": "- 회로의 이득과 극점 결정",
+          "label": "main"
+        }
+      ],
+      "why": "폭·전류 절반에서 g_m·C·밀러 배수 변화를 기호로 추적하는 CS 밀러 극점 배율 연습"
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "095ba0f7421bb90838b9bfd95d368187dcdd9cf09f96364d57642c92c08549e7",
+      "depends_on": [],
+      "estimated_minutes": 25,
+      "id": "P11.38",
+      "kind": "장말문제",
+      "learning_goals": [
+        "CS 단 밀러 근사로 입력·출력 극점 계산",
+        "부하 저항과 노드별 커패시턴스를 모아 극점 식 세우기"
+      ],
+      "priority": "extra",
+      "reference_solution": "solution",
+      "subpart_count": 1,
+      "subparts": [
+        {
+          "ask_md": "- 밀러 이론을 이용해 세 단 각각의 입력 극점과 출력 극점 구하기",
+          "label": "main"
+        }
+      ],
+      "why": "다이오드 연결·전류원 부하 CS 세 단에서 출력 저항 블록과 붙는 C를 모아 밀러 극점 구성"
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "f269bfc43420ad19ca7997fa68c6176f5b6db7134e7ee8a10a0159a23746c226",
+      "depends_on": [],
+      "estimated_minutes": 15,
+      "id": "E11.15",
+      "kind": "예제",
+      "learning_goals": [
+        "CE 단 밀러 근사(R_S∥r_π)로 입력·출력 극점 계산"
+      ],
+      "priority": "core",
+      "reference_solution": "solution",
+      "subpart_count": 2,
+      "subparts": [
+        {
+          "ask_md": "$R_L = 2\\ \\text{k}\\Omega$일 경우, 입력과 출력 극점 계산. 어떤 노드가 (대역폭을 제한하는) 속도의 장애요인으로 나타나는가?",
+          "label": "a"
+        },
+        {
+          "ask_md": "출력 극점이 대역폭을 제한하도록 $R_L$을 선택하는 것이 가능한가?",
+          "label": "b"
+        }
+      ],
+      "why": "CE 밀러 극점 수치와 R_L 선택으로 지배 노드를 바꿀 수 있는지 판단 — 기출 Q2 전 기초"
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": "reviewed",
+      "content_sha256": "edfae8738d00f1aab4cce43e149ec9f515434d096f657a38d67b71ed338a8ec8",
+      "depends_on": [],
+      "estimated_minutes": 15,
+      "id": "2021-1_기말-Q2",
+      "kind": "기출",
+      "learning_goals": [
+        "CE 단 밀러 근사(R_S∥r_π)로 입력·출력 극점 계산",
+        "부하 저항과 노드별 커패시턴스를 모아 극점 식 세우기"
+      ],
+      "priority": "core",
+      "reference_solution": "solution",
+      "subpart_count": 1,
+      "subparts": [
+        {
+          "ask_md": "- 입력 노드의 극점 주파수와 출력 노드의 극점 주파수를 각각 $Q_1$, $Q_2$의 커패시턴스로 나타낸 식",
+          "label": "main",
+          "required_concepts": [
+            "바이폴라 소신호 파라미터 gm과 ro",
+            "유한 β와 rπ",
+            "유한 출력 저항(ro)",
+            "소신호 전압 이득",
+            "주파수 응답과 기생 커패시턴스",
+            "Miller 정리",
+            "노드 저항과 극점"
+          ]
+        }
+      ],
+      "why": "pnp 전류원 부하 CE의 R_S∥r_π·r_o1∥r_o2와 C_μ 밀러 분할을 묻는 기말 기출(1016에서 보류된 문항)"
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "0afe572410202a21308fb0cdb202e4c9c833c791ee933f4cd431ce6a10a82803",
+      "depends_on": [],
+      "estimated_minutes": 20,
+      "id": "P11.53",
+      "kind": "장말문제",
+      "learning_goals": [
+        "CE 단 밀러 근사(R_S∥r_π)로 입력·출력 극점 계산"
+      ],
+      "priority": "extra",
+      "reference_solution": "solution",
+      "subpart_count": 1,
+      "subparts": [
+        {
+          "ask_md": "- (저주파) 전압 이득이 최대가 되도록 하는 $R_B$와 $R_C$ 값",
+          "label": "main"
+        }
+      ],
+      "why": "도전 설계 1문항: 입력·출력 극점 목표에서 R_C·R_B를 밀러 식으로 역산"
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "83ac967af68bd707d66381c20e10ae410216eedd6fecd6fead375c1271531fb7",
+      "depends_on": [],
+      "estimated_minutes": 20,
+      "id": "P11.44",
+      "kind": "장말문제",
+      "learning_goals": [
+        "직접 해석(노드 KCL)으로 전달 함수와 우반면 영점 구하기"
+      ],
+      "priority": "extra",
+      "reference_solution": "solution",
+      "subpart_count": 1,
+      "subparts": [
+        {
+          "ask_md": "- 밀러 이론을 쓰지 않고 회로의 전달 함수 $V_{out}/V_{in}$ 계산",
+          "label": "main"
+        }
+      ],
+      "why": "NMOS·PMOS 게이트 공유 단을 통합 모델로 묶어 노드 KCL 직접 해석·영점 g_m/C_GD 일반화"
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "fffe3bbaaf5532cff458922735e42974f6a3741e741d2e77cceed54475f03b37",
+      "depends_on": [],
+      "estimated_minutes": 25,
+      "id": "E11.18",
+      "kind": "예제",
+      "learning_goals": [
+        "CS 단 밀러 근사로 입력·출력 극점 계산",
+        "직접 해석(노드 KCL)으로 전달 함수와 우반면 영점 구하기",
+        "주극점 근사 ω_p1≈1/b, ω_p2≈b/a로 극점 계산",
+        "밀러 근사·정확한 전달 함수·주극점 근사 비교와 밀러 근사의 한계"
+      ],
+      "priority": "core",
+      "reference_solution": "solution",
+      "subpart_count": 3,
+      "subparts": [
+        {
+          "ask_md": "밀러 근사",
+          "label": "a"
+        },
+        {
+          "ask_md": "정확한 전달 함수",
+          "label": "b"
+        },
+        {
+          "ask_md": "주극점 근사",
+          "label": "c"
+        }
+      ],
+      "why": "슬라이드 s34와 같은 수치로 밀러·정확·주극점 세 방법을 직접 계산해 비교"
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "8ec7047a5dff05d89f4240335c93463bb61d23c5005cea66abdd23ceffaddaae",
+      "depends_on": [],
+      "estimated_minutes": 20,
+      "id": "P11.39",
+      "kind": "장말문제",
+      "learning_goals": [
+        "CS 단 밀러 근사로 입력·출력 극점 계산",
+        "직접 해석(노드 KCL)으로 전달 함수와 우반면 영점 구하기",
+        "밀러 근사·정확한 전달 함수·주극점 근사 비교와 밀러 근사의 한계"
+      ],
+      "priority": "core",
+      "reference_solution": "solution",
+      "subpart_count": 2,
+      "subparts": [
+        {
+          "ask_md": "밀러 근사 이용",
+          "label": "a"
+        },
+        {
+          "ask_md": "식 (11.73)의 전달 함수 이용",
+          "label": "b"
+        }
+      ],
+      "why": "새 수치(두 극점이 가까운 경우)로 밀러 근사와 식 (11.73) 정확 극점을 비교"
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "24270f00fbaf1d0c2e9b90c5a920adfdd70d3c588e379611cc397a8ce5095d0c",
+      "depends_on": [],
+      "estimated_minutes": 15,
+      "id": "E11.17",
+      "kind": "예제",
+      "learning_goals": [
+        "부하 저항과 노드별 커패시턴스를 모아 극점 식 세우기",
+        "주극점 근사 ω_p1≈1/b, ω_p2≈b/a로 극점 계산"
+      ],
+      "priority": "core",
+      "reference_solution": "solution",
+      "subpart_count": 1,
+      "subparts": [
+        {
+          "ask_md": "- 주극점 근사를 사용하여 회로의 극점들 계산",
+          "label": "main"
+        }
+      ],
+      "why": "전류원 부하 CS에서 r_O1∥r_O2와 출력 C를 모아 주극점 근사 1/b, b/a 적용"
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "2c49a50c59f7d6384cc859f6c70bbe18063df422d80646796e28ebacc1eba8ce",
+      "depends_on": [],
+      "estimated_minutes": 15,
+      "id": "P11.40",
+      "kind": "장말문제",
+      "learning_goals": [
+        "직접 해석(노드 KCL)으로 전달 함수와 우반면 영점 구하기",
+        "밀러 근사·정확한 전달 함수·주극점 근사 비교와 밀러 근사의 한계"
+      ],
+      "priority": "extra",
+      "reference_solution": "solution",
+      "subpart_count": 2,
+      "subparts": [
+        {
+          "ask_md": "밀러 근사 이용",
+          "label": "a"
+        },
+        {
+          "ask_md": "식 (11.73)으로 나타낸 전달 함수 이용",
+          "label": "b"
+        }
+      ],
+      "why": "V_A=∞ 전류원 부하 CE에서 밀러 근사가 실패하는 극한을 정확 전달 함수와 비교"
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "a29bdfd889f90979c8a9fae11b6954c7c7699483afad043a4ce8b7763538065e",
+      "depends_on": [
+        "P11.40"
+      ],
+      "estimated_minutes": 10,
+      "id": "P11.41",
+      "kind": "장말문제",
+      "learning_goals": [
+        "주극점 근사 ω_p1≈1/b, ω_p2≈b/a로 극점 계산",
+        "밀러 근사·정확한 전달 함수·주극점 근사 비교와 밀러 근사의 한계"
+      ],
+      "priority": "extra",
+      "reference_solution": "solution",
+      "subpart_count": 1,
+      "subparts": [
+        {
+          "ask_md": "- 문제 11.40을 다시 풀되 주극점 근사를 이용해 극점 구하기\n- 결과가 (문제 11.40의 결과와) 어떻게 비교되는가?",
+          "label": "main"
+        }
+      ],
+      "why": "P11.40을 주극점 근사로 다시 풀어 세 방법 결과 비교"
+    }
+  ],
+  "range": "1028",
+  "review": {
+    "candidates": [
+      {
+        "disposition": "selected",
+        "id": "2023-1_기말-Q6",
+        "reason": "모든 소문항이 1028 수업(s24 f_T, s28–s34 CS/CE 밀러·직접 해석·주극점)과 이전 회차 고주파 모델·출력저항 블록만으로 풀림: f_T 정의→ω_T=g_m/C_GS→μ_n·L·V_ov 식까지 수업 칠판 유도 그대로 묻는 최신 기말 기출(같은 문제 2021-1 Q7 대신 과정 필수 명시본)",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "selected",
+        "id": "E11.14",
+        "reason": "모든 소문항이 1028 수업(s24 f_T, s28–s34 CS/CE 밀러·직접 해석·주극점)과 이전 회차 고주파 모델·출력저항 블록만으로 풀림: 기출에 없는 f_T∝μV_ov/L² 수치 배율(L 축소·V_ov 축소 동시)을 직접 계산",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "selected",
+        "id": "P11.33",
+        "reason": "모든 소문항이 1028 수업(s24 f_T, s28–s34 CS/CE 밀러·직접 해석·주극점)과 이전 회차 고주파 모델·출력저항 블록만으로 풀림: L 2배·V_ov·I_D 유지 시 W 조정과 f_T 1/4 — 교수님 'L을 줄이면 빨라진다'의 역방향 확인",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "selected",
+        "id": "P11.34",
+        "reason": "모든 소문항이 1028 수업(s24 f_T, s28–s34 CS/CE 밀러·직접 해석·주극점)과 이전 회차 고주파 모델·출력저항 블록만으로 풀림: V_ov 절반에서 I_D 고정/W 고정 두 경우의 f_T 변화로 고정 인자 구별 연습",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "selected",
+        "id": "E11.16",
+        "reason": "모든 소문항이 1028 수업(s24 f_T, s28–s34 CS/CE 밀러·직접 해석·주극점)과 이전 회차 고주파 모델·출력저항 블록만으로 풀림: 폭·전류 절반에서 g_m·C·밀러 배수 변화를 기호로 추적하는 CS 밀러 극점 배율 연습",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "selected",
+        "id": "P11.38",
+        "reason": "모든 소문항이 1028 수업(s24 f_T, s28–s34 CS/CE 밀러·직접 해석·주극점)과 이전 회차 고주파 모델·출력저항 블록만으로 풀림: 다이오드 연결·전류원 부하 CS 세 단에서 출력 저항 블록과 붙는 C를 모아 밀러 극점 구성",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "selected",
+        "id": "E11.15",
+        "reason": "모든 소문항이 1028 수업(s24 f_T, s28–s34 CS/CE 밀러·직접 해석·주극점)과 이전 회차 고주파 모델·출력저항 블록만으로 풀림: CE 밀러 극점 수치와 R_L 선택으로 지배 노드를 바꿀 수 있는지 판단 — 기출 Q2 전 기초",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "selected",
+        "id": "2021-1_기말-Q2",
+        "reason": "모든 소문항이 1028 수업(s24 f_T, s28–s34 CS/CE 밀러·직접 해석·주극점)과 이전 회차 고주파 모델·출력저항 블록만으로 풀림: pnp 전류원 부하 CE의 R_S∥r_π·r_o1∥r_o2와 C_μ 밀러 분할을 묻는 기말 기출(1016에서 보류된 문항)",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "selected",
+        "id": "P11.53",
+        "reason": "모든 소문항이 1028 수업(s24 f_T, s28–s34 CS/CE 밀러·직접 해석·주극점)과 이전 회차 고주파 모델·출력저항 블록만으로 풀림: 도전 설계 1문항: 입력·출력 극점 목표에서 R_C·R_B를 밀러 식으로 역산",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "selected",
+        "id": "P11.44",
+        "reason": "모든 소문항이 1028 수업(s24 f_T, s28–s34 CS/CE 밀러·직접 해석·주극점)과 이전 회차 고주파 모델·출력저항 블록만으로 풀림: NMOS·PMOS 게이트 공유 단을 통합 모델로 묶어 노드 KCL 직접 해석·영점 g_m/C_GD 일반화",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "selected",
+        "id": "E11.18",
+        "reason": "모든 소문항이 1028 수업(s24 f_T, s28–s34 CS/CE 밀러·직접 해석·주극점)과 이전 회차 고주파 모델·출력저항 블록만으로 풀림: 슬라이드 s34와 같은 수치로 밀러·정확·주극점 세 방법을 직접 계산해 비교",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "selected",
+        "id": "P11.39",
+        "reason": "모든 소문항이 1028 수업(s24 f_T, s28–s34 CS/CE 밀러·직접 해석·주극점)과 이전 회차 고주파 모델·출력저항 블록만으로 풀림: 새 수치(두 극점이 가까운 경우)로 밀러 근사와 식 (11.73) 정확 극점을 비교",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "selected",
+        "id": "E11.17",
+        "reason": "모든 소문항이 1028 수업(s24 f_T, s28–s34 CS/CE 밀러·직접 해석·주극점)과 이전 회차 고주파 모델·출력저항 블록만으로 풀림: 전류원 부하 CS에서 r_O1∥r_O2와 출력 C를 모아 주극점 근사 1/b, b/a 적용",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "selected",
+        "id": "P11.40",
+        "reason": "모든 소문항이 1028 수업(s24 f_T, s28–s34 CS/CE 밀러·직접 해석·주극점)과 이전 회차 고주파 모델·출력저항 블록만으로 풀림: V_A=∞ 전류원 부하 CE에서 밀러 근사가 실패하는 극한을 정확 전달 함수와 비교",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "selected",
+        "id": "P11.41",
+        "reason": "모든 소문항이 1028 수업(s24 f_T, s28–s34 CS/CE 밀러·직접 해석·주극점)과 이전 회차 고주파 모델·출력저항 블록만으로 풀림: P11.40을 주극점 근사로 다시 풀어 세 방법 결과 비교",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "excluded",
+        "id": "2021-1_기말-Q7",
+        "reason": "2023-1_기말-Q6과 원문·요구가 사실상 동일(같은 f_T 정의·유도). 숫자 없이 풀이가 같아 최신·'과정 필수' 명시본 Q6 하나만 대표로 채택",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "deferred",
+        "id": "2021-1_기말-Q1",
+        "missing_concepts": [
+          "캐스코드의 주파수 응답(캐스코드 내부 노드 극점과 X→Y 밀러 이득)"
+        ],
+        "reason": "원문·그림 확인: M1 CS + M2 캐스코드 + M3 전류원 노드 Y. 노드 X의 밀러 계수가 X→Y 이득(−g_m1/g_m2, 캐스코드 소스에서 본 1/g_m2)을 요구하며 이는 미시작 s50대 캐스코드 주파수 응답",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "deferred",
+        "id": "2023-1_기말-Q1",
+        "missing_concepts": [
+          "캐스코드의 주파수 응답",
+          "차동쌍의 주파수 응답"
+        ],
+        "reason": "(1) 다이오드 부하 캐스코드 극점, (2) 차동쌍 극점·전달함수 — 두 소문항 모두 미시작 슬라이드(s50–s59) 내용",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "excluded",
+        "id": "X11.14",
+        "reason": "E11.14와 같은 f_T∝μV_ov/L² 대입(수치만 다름) — 대표 E11.14만 채택",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "excluded",
+        "id": "X11.15",
+        "reason": "E11.15 반복(I_C·C_π만 변경), 풀이 경로 동일 — 대표 E11.15",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "excluded",
+        "id": "X11.16",
+        "reason": "E11.16의 배율만 2배로 바꾼 동일 경로 — 대표 E11.16",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "excluded",
+        "id": "X11.17",
+        "reason": "원문이 예제와 같은 λ≠0 조건을 반복(오식) — E11.17과 동일 문제",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "excluded",
+        "id": "X11.18",
+        "reason": "E11.18을 폭·전류 절반으로 반복한 같은 세 방법 계산 — 새 수치 비교는 P11.39가 다른 극점 배치로 대신 제공",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "excluded",
+        "id": "P11.26",
+        "reason": "C_GD를 포함한 f_T 재유도는 풀 수 있으나 수업은 C_GD 무시로 정의함. 총량을 줄이려고 제외(핵심 목표는 기출 Q6이 담당)",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "deferred",
+        "id": "P11.27",
+        "missing_concepts": [
+          "베이스 통과 시간 τ_F와 확산 커패시턴스 C_b=g_mτ_F"
+        ],
+        "reason": "바이폴라 f_T를 베이스 통과 시간 τ_F·C_je로 쓰는 모델은 수업·슬라이드에서 다루지 않음",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "excluded",
+        "id": "P11.28",
+        "reason": "C_GS≈(2/3)WLC_ox로 식 (11.183) 증명 — 채택 기출 2023-1 Q6 셋째 요구와 동일",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "excluded",
+        "id": "P11.29",
+        "reason": "전제 P11.28(기출과 중복이라 제외)에 의존 — 전제와 함께 제외",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "excluded",
+        "id": "P11.30",
+        "reason": "P11.28·P11.29 전제 + 그래프 문항 3연작 중 하나, 같은 f_T 의존성 — P11.33·P11.34로 고정 인자 연습을 대신",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "excluded",
+        "id": "P11.31",
+        "reason": "P11.30과 같은 이유(전제 P11.28·P11.29, 그래프 연작)",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "excluded",
+        "id": "P11.32",
+        "reason": "P11.30과 같은 이유(전제 P11.28·P11.29, 그래프 연작)",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "excluded",
+        "id": "P11.35",
+        "reason": "r_o 포함 CE·CS 밀러 극점 기호식 — 2021-1 Q2(기출)·P11.38이 같은 구성을 다룸",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "excluded",
+        "id": "P11.36",
+        "reason": "전류원 부하 CE 밀러 극점·전달 함수 — 기출 2021-1 Q2가 같은 회로 유형을 수치와 함께 다룸",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "excluded",
+        "id": "P11.37",
+        "reason": "pnp 전류원 부하 CE(Fig 11.81) — 기출 2021-1 Q2와 같은 회로라 기출을 대표로 채택",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "deferred",
+        "id": "P11.42",
+        "missing_concepts": [
+          "고주파 입력 임피던스(주파수 의존 Z_in)",
+          "능동 인덕터의 유도성 임피던스 해석"
+        ],
+        "reason": "원문·그림 확인: M1 드레인에서 R_1을 거쳐 게이트, 게이트–접지 C_1인 '능동 인덕터'의 Z_in(주파수 함수)을 구하고 |Z_in| 보데와 유도성 동작을 설명. 증폭단 전달 함수·극점이 아니라 주파수 의존 입력 임피던스를 요구하며, 이는 s35 이후(고주파 입력 임피던스) 미학습 내용",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "excluded",
+        "id": "P11.24",
+        "reason": "바이폴라 회로 커패시턴스 식별(11.2) — 1016 회차 절이며 이번 수업 주제(f_T 이후 CS/CE 주파수 응답)가 아님. 이번 선발 문항(Q2·P11.38·E11.17)이 필요한 식별을 포함",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "excluded",
+        "id": "P11.25",
+        "reason": "MOS 회로 커패시턴스 식별(11.2) — P11.24와 같은 이유",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "deferred",
+        "id": "P11.43",
+        "missing_concepts": [
+          "고주파 입력 임피던스"
+        ],
+        "reason": "Z_in/Z_out을 밀러 없이 구하는 고주파 입력·출력 임피던스(s35, 11.4.5) — 다음 시간 예고",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "deferred",
+        "id": "P11.45",
+        "missing_concepts": [
+          "고주파 입력 임피던스"
+        ],
+        "reason": "게이트를 묶은 단의 고주파 입력 임피던스 — s35 이후 미학습",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "excluded",
+        "id": "P11.54",
+        "reason": "P11.53에 부하 C 추가 — Design Problems는 도전 1문항(P11.53)만",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "deferred",
+        "id": "E11.20",
+        "missing_concepts": [
+          "CG 단의 주파수 응답"
+        ],
+        "reason": "예제 11.18 CS를 CG로 재구성 — CG 단 주파수 응답 미학습",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "deferred",
+        "id": "E11.25",
+        "missing_concepts": [
+          "캐스코드의 주파수 응답"
+        ],
+        "reason": "예제 11.18 CS를 캐스코드로 — 캐스코드 주파수 응답 미학습",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "excluded",
+        "id": "E11.05",
+        "reason": "11.1.2(단일 극점 이득·대역폭·전력) — 1014 회차 범위 절이며 이번 수업 주제가 아님",
+        "scope": "out_of_scope"
+      }
+    ],
+    "catalog_sha256": "8cf47e716c01d0539fc75f5ecb95058860bfcde80828dfdf70c21fbd706577e8",
+    "coverage": [
+      {
+        "goal": "f_T 정의와 ω_T≈g_m/C_GS 유도",
+        "problem_ids": [
+          "2023-1_기말-Q6"
+        ]
+      },
+      {
+        "goal": "f_T의 채널 길이·과구동 전압 스케일링",
+        "problem_ids": [
+          "E11.14",
+          "P11.33",
+          "P11.34"
+        ]
+      },
+      {
+        "goal": "CS 단 밀러 근사로 입력·출력 극점 계산",
+        "problem_ids": [
+          "E11.16",
+          "P11.38",
+          "E11.18",
+          "P11.39"
+        ]
+      },
+      {
+        "goal": "CE 단 밀러 근사(R_S∥r_π)로 입력·출력 극점 계산",
+        "problem_ids": [
+          "E11.15",
+          "2021-1_기말-Q2",
+          "P11.53"
+        ]
+      },
+      {
+        "goal": "부하 저항과 노드별 커패시턴스를 모아 극점 식 세우기",
+        "problem_ids": [
+          "P11.38",
+          "2021-1_기말-Q2",
+          "E11.17"
+        ]
+      },
+      {
+        "goal": "직접 해석(노드 KCL)으로 전달 함수와 우반면 영점 구하기",
+        "problem_ids": [
+          "P11.44",
+          "E11.18",
+          "P11.39",
+          "P11.40"
+        ]
+      },
+      {
+        "goal": "주극점 근사 ω_p1≈1/b, ω_p2≈b/a로 극점 계산",
+        "problem_ids": [
+          "E11.18",
+          "E11.17",
+          "P11.41"
+        ]
+      },
+      {
+        "goal": "밀러 근사·정확한 전달 함수·주극점 근사 비교와 밀러 근사의 한계",
+        "problem_ids": [
+          "E11.18",
+          "P11.39",
+          "P11.40",
+          "P11.41"
+        ]
+      },
+      {
+        "gap_reason": "미사용 BJT f_T 문항은 P11.27(τ_F 모델, 미학습)뿐이고 g_m/C_π만 묻는 workbook 문항이 없음. 정리노트 s0-ft-bjt가 담당",
+        "goal": "BJT의 f_T(2πf_T≈g_m/C_π) 계산",
+        "problem_ids": []
+      }
+    ],
+    "cross_pack_review": {
+      "deferred_ids": [
+        "2021-1_기말-Q1",
+        "2023-1_기말-Q1"
+      ],
+      "missing_types": [
+        "BJT f_T(g_m/C_π) 단독 문항 없음 — 노트로 보완",
+        "CG/CB·폴로어·캐스코드·차동쌍 주파수 응답 기출(2021-1 Q1, 2023-1 Q1)은 s35 이후 수업 뒤 회차에서 재검토"
+      ],
+      "repeated_types": [
+        "1016의 E11.10·X11.10·P11.22(밀러 극점 기본형)와 이번 E11.15·2021-1 Q2는 같은 밀러 분할을 쓰나 1016은 C_GD 분할 자체, 이번은 CE 입력 R_S∥r_π·전류원 부하 r_o 병렬·지배 노드 판단으로 목표가 다름",
+        "f_T 기출 2021-1 Q7·2023-1 Q6은 동일 문항이라 Q6만 채택"
+      ]
+    },
+    "policy": "exam-first-v2"
+  },
+  "schema_version": 2,
+  "scope_check": "AI must verify every subpart and figure against the taught scope",
+  "workload": {
+    "core_estimated_minutes": 108,
+    "estimated_minutes": 230,
+    "estimates_only": true,
+    "subpart_count": 22
+  }
+}

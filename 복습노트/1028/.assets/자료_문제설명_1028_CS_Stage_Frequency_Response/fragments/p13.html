@@ -1,0 +1,76 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 읽어요</h4>
+  <p>그림 11.33(a)는 NMOS $M_1$이 입력을 받고, PMOS $M_2$가 게이트 $V_b$로 바이어스된 전류원 부하인 CS 단이에요. 입력은 $R_S$를 거쳐 $M_1$ 게이트로, 출력은 두 드레인이 만나는 노드예요.</p>
+  <p>모든 트랜지스터가 포화이고 $\lambda\neq0$이에요. 소자 값이 없으니 극점을 기호로, 주극점 근사(dominant-pole approximation)를 써서 구해요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 개념과 공식을 떠올려요</h4>
+  <p><strong>단서:</strong> "주극점 근사"라는 지시와 두 노드(게이트, 출력)를 가진 CS 구조에서 <a href="정리노트_1028_CS_Stage_Frequency_Response.html#s4-dominant">$|\omega_{p1}|\approx1/b$, $|\omega_{p2}|\approx b/a$</a>를 떠올려요.</p>
+  <p><strong>개념:</strong> 통합 모델의 분모 $as^2+bs+1$에서 두 극점이 멀리 떨어져 있으면 $a=1/(\omega_{p1}\omega_{p2})$, $b\approx1/\omega_{p1}$로 어림할 수 있어요. 회로를 통합 모델($R_{Thev}$, $C_{in}$, $C_{XY}$, $C_{out}$, $R_L$)로 바꾸는 일이 핵심이에요.</p>
+  <p><strong>기호의 뜻:</strong> $g_{m1}$은 $M_1$의 트랜스컨덕턴스, $r_{O1}$, $r_{O2}$는 채널 길이 변조로 생기는 출력 저항이에요. $C_{out}$은 출력 노드–AC 접지 커패시턴스의 합이에요.</p>
+  <p><strong>근사 조건:</strong> $\lambda\neq0$이라 $r_{O1}$, $r_{O2}$를 유지해요. $V_b$와 $V_{DD}$는 AC 접지라 $M_2$는 신호를 만들지 않고 $r_{O2}$와 커패시턴스로만 남아요. 주극점 근사는 $|\omega_{p2}|\gg|\omega_{p1}|$일 때만 써요.</p>
+  <p><strong>선택 이유:</strong> 통합 모델의 $a$, $b$ 식을 이미 알고 있으니 대응만 정하면 극점 식이 바로 나와요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <div data-answer-step="빠지는 커패시턴스와 통합 모델 대응">
+    <p>양 끝이 모두 AC 접지인 커패시턴스부터 지워요: $C_{SB1}$(소스·몸체 모두 접지), $C_{SB2}$(소스·몸체 모두 $V_{DD}$), $C_{GS2}$(게이트 $V_b$, 소스 $V_{DD}$).</p>
+    <p>$M_2$의 $C_{GD2}$는 $V_b$–출력, $C_{DB2}$는 출력–$V_{DD}$라 둘 다 출력–AC 접지예요.</p>
+    $$R_{Thev}=R_S$$
+    $$C_{in}=C_{GS1}$$
+    $$C_{XY}=C_{GD1}$$
+    $$C_{out}=C_{DB1}+C_{GD2}+C_{DB2}$$
+  </div>
+  <figure class="figure"><svg id="fig-p13-model" viewBox="0 0 520 186" role="img" aria-label="왼쪽 v in 단자가 R S를 거쳐 입력 노드 X에 이어진다. X에서 C GS1가 접지로 내려가고 X와 출력 노드 Y 사이에 C GD1가 떠 있다. Y에서 아래로 흐르는 종속 전류원 g m1 v X, 그 오른쪽 R L, 그 오른쪽 C out이 접지로 내려가고 맨 오른쪽이 출력 단자 v out이다."><circle class="fig-dot" data-node="vin" data-node-color="blue" cx="24" cy="44" r="4"/><text class="fig-text fig-math" data-node="vin" data-node-color="blue" x="14" y="32">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><path class="fig-ink" d="M24 44 H32 L37.3 37 L48.0 51 L58.7 37 L69.3 51 L80.0 37 L90.7 51 L96 44 H104"/><text class="fig-text fig-math" x="64" y="28" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><path class="fig-ink" d="M104 44 H124"/><circle class="fig-dot" data-node="X" data-node-color="red" cx="124" cy="44" r="4"/><text class="fig-text fig-math" data-node="X" data-node-color="red" x="118" y="32" text-anchor="end">X</text><path class="fig-ink" d="M124 44 V89 M124 99 V154"/><path class="fig-accent" d="M111 89 H137 M111 99 H137"/><text class="fig-text fig-math" x="101" y="99" text-anchor="end">C<tspan baseline-shift="sub" font-size="78%">GS1</tspan></text><path class="fig-ink" d="M124 44 H164 M174 44 H214"/><path class="fig-danger" d="M164 32 V56 M174 32 V56"/><text class="fig-text fig-math" x="169" y="20" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">GD1</tspan></text><path class="fig-ink" d="M214 44 H505"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="214" cy="44" r="4"/><text class="fig-text fig-math" data-node="Y" data-node-color="blue" x="214" y="66" text-anchor="middle">Y</text><path class="fig-ink" d="M254 44 V84 M254 112 V154"/><polygon class="fig-ink" points="254,84 268,98 254,112 240,98"/><path class="fig-ink" d="M254 90 V105 M250 101 L254 106 L258 101"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="254" cy="44" r="4"/><text class="fig-text fig-math" x="232" y="103" text-anchor="end">g<tspan baseline-shift="sub" font-size="78%">m1</tspan>v<tspan baseline-shift="sub" font-size="78%">X</tspan></text><path class="fig-ink" d="M300 44 V52 L307 59.8 L293 75.5 L307 91.2 L293 106.8 L307 122.5 L293 138.2 L300 146 V154"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="300" cy="44" r="4"/><text class="fig-text fig-math" x="313" y="104">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text><path class="fig-ink" d="M380 44 V89 M380 99 V154"/><path class="fig-accent" d="M367 89 H393 M367 99 H393"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="380" cy="44" r="4"/><text class="fig-text fig-math" x="402" y="99">C<tspan baseline-shift="sub" font-size="78%">out</tspan></text><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="505" cy="44" r="4"/><text class="fig-text fig-math" data-node="Y" data-node-color="blue" x="505" y="32" text-anchor="end">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M124 154 H380"/><path class="fig-ink" d="M244 154 V162 M234 162 H254 M238 167 H250 M242 172 H246"/></svg><figcaption>$V_{DD}$·$V_b$는 AC 접지예요. $M_1$은 $C_{GS1}$·$C_{GD1}$과 $g_{m1}v_X$로, 출력 노드의 $r_{O1}\parallel r_{O2}$는 $R_L$, $C_{DB1}+C_{GD2}+C_{DB2}$는 $C_{out}$ 하나로 묶었어요.</figcaption></figure>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>이렇게 풀어요</h4>
+  <div data-subpart="main">
+    <div data-answer-step="출력 노드 저항">
+      <p>입력을 0으로 두면 $M_1$은 게이트·소스가 AC 접지라 $r_{O1}$, $M_2$도 게이트·소스가 AC 접지라 $r_{O2}$로 보여요. 둘 다 출력과 AC 접지 사이라 병렬이에요.</p>
+      $$R_L=r_{O1}\parallel r_{O2}$$
+    </div>
+    <div data-answer-step="계수 a, b">
+      $$b=\left[1+g_{m1}(r_{O1}\parallel r_{O2})\right]C_{XY}R_S+R_SC_{in}+(r_{O1}\parallel r_{O2})(C_{XY}+C_{out})$$
+      $$a=R_S(r_{O1}\parallel r_{O2})(C_{in}C_{XY}+C_{out}C_{XY}+C_{in}C_{out})$$
+    </div>
+    <div data-answer-step="주극점 근사">
+      <p>$|\omega_{p2}|\gg|\omega_{p1}|$이면 분모를 $(1+s/\omega_{p1})(1+s/\omega_{p2})$로 보고 계수를 맞춰요.</p>
+      $$|\omega_{p1}|\approx\frac{1}{b}=\frac{1}{[1+g_{m1}(r_{O1}\parallel r_{O2})]C_{XY}R_S+R_SC_{in}+(r_{O1}\parallel r_{O2})(C_{XY}+C_{out})}$$
+      $$|\omega_{p2}|\approx\frac{b}{a}=\frac{[1+g_{m1}(r_{O1}\parallel r_{O2})]C_{XY}R_S+R_SC_{in}+(r_{O1}\parallel r_{O2})(C_{XY}+C_{out})}{R_S(r_{O1}\parallel r_{O2})(C_{in}C_{XY}+C_{out}C_{XY}+C_{in}C_{out})}$$
+    </div>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <div data-answer-final>
+      <p>$C_{in}=C_{GS1}$, $C_{XY}=C_{GD1}$, $C_{out}=C_{DB1}+C_{GD2}+C_{DB2}$, $R_L=r_{O1}\parallel r_{O2}$일 때</p>
+      <p>$|\omega_{p1}|\approx\dfrac{1}{[1+g_{m1}R_L]C_{XY}R_S+R_SC_{in}+R_L(C_{XY}+C_{out})}$</p>
+      <p>$|\omega_{p2}|\approx\dfrac{[1+g_{m1}R_L]C_{XY}R_S+R_SC_{in}+R_L(C_{XY}+C_{out})}{R_SR_L(C_{in}C_{XY}+C_{out}C_{XY}+C_{in}C_{out})}$ ($|\omega_{p2}|\gg|\omega_{p1}|$ 가정)</p>
+    </div>
+    <p><strong>극한 확인:</strong> $C_{XY}\to0$이면 $b=R_SC_{in}+R_LC_{out}$, $a=R_SR_LC_{in}C_{out}$이에요. $R_SC_{in}\gg R_LC_{out}$이면 $1/b\approx1/(R_SC_{in})$, $b/a\approx1/(R_LC_{out})$으로 두 노드의 RC가 그대로 나와요.</p>
+    <p><strong>차원:</strong> $b$의 세 항은 모두 $[\Omega\cdot\mathrm{F}]=[\mathrm{s}]$, $a$는 $[\mathrm{s^2}]$라 $1/b$와 $b/a$ 모두 $[1/\mathrm{s}]$예요.</p>
+    <p><strong>밀러와의 연결:</strong> $R_L(C_{XY}+C_{out})\ll R_S[C_{in}+(1+g_{m1}R_L)C_{XY}]$이면 $1/b$는 밀러 입력 극점과 같아져요. 전류원 부하라 $R_L$이 커서 이 조건은 깨지기 쉬워요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>주의할 점</h4>
+  <p>$M_2$를 전류원이라고 $r_{O2}\to\infty$로 두면 안 돼요. 문제는 $\lambda\neq0$이라 했고, 출력 저항은 $r_{O1}\parallel r_{O2}$예요.</p>
+  <p>$C_{GD2}$를 떠 있는 커패시턴스로 보고 밀러 처리하면 틀려요. $M_2$의 게이트는 $V_b$라 AC 접지이므로 $C_{GD2}$는 그냥 출력–접지예요.</p>
+  <p>$C_{GS2}$를 출력 커패시턴스에 넣는 실수도 잦아요. 게이트와 소스가 모두 AC 접지라 신호 전류가 흐르지 않아요.</p>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>조건을 바꾸어 생각해요</h4>
+  <ol>
+    <li>$M_2$를 다이오드 접속(게이트를 출력에 연결)으로 바꾸면 $R_L$과 $C_{out}$은 어떻게 바뀔까요?</li>
+    <li>$R_S\to0$이면 $1/b$는 어떤 식이 되고, 어느 노드가 지배극을 정할까요?</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <p class="sum-lead">전류원 부하 CS 단은 통합 모델로 바꾼 뒤 $1/b$, $b/a$로 극점을 어림해요.</p>
+  <p>$R_L=r_{O1}\parallel r_{O2}$</p>
+  <p>$C_{out}=C_{DB1}+C_{GD2}+C_{DB2}$</p>
+  <p>$|\omega_{p1}|\approx\dfrac{1}{b}$, $|\omega_{p2}|\approx\dfrac{b}{a}$ (두 극점이 멀 때)</p>
+  <p>$C_{SB1}$, $C_{SB2}$, $C_{GS2}$는 양 끝이 AC 접지라 빠져요.</p>
+</div>

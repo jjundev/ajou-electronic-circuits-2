@@ -1,0 +1,104 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 읽어요</h4>
+  <p>그림 11.82의 세 단은 모두 한 트랜지스터가 입력을 받고 다른 트랜지스터가 부하인 공통 소스(CS) 구조예요. $\lambda&gt;0$이라 모든 소자에 $r_O$가 있어요.</p>
+  <p>(a)는 $M_1$ 입력, PMOS $M_2$가 다이오드 접속(게이트–드레인 연결) 부하예요. (b)는 $M_1$ 입력, NMOS $M_2$가 게이트·드레인을 $V_{DD}$에 둔 채 소스가 출력에 붙은 부하예요. (c)는 입력이 $R_S$를 거쳐 PMOS $M_2$ 게이트로 들어가고, $M_1$은 게이트가 $V_b$인 전류원 부하예요.</p>
+  <p>구할 것은 세 단 각각의 입력 극점과 출력 극점이고, 밀러 정리(Miller's theorem)를 쓰라고 했어요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 개념과 공식을 떠올려요</h4>
+  <p><strong>단서:</strong> 입력 트랜지스터의 게이트–드레인 커패시턴스가 입력과 출력 사이에 떠 있어요. "Miller's theorem"이라는 지시와 함께 <a href="정리노트_1028_CS_Stage_Frequency_Response.html#s2-cs-miller">CS 단 밀러 근사</a>를 떠올려요.</p>
+  <p><strong>개념:</strong> 노드마다 극점 $|\omega_p|=1/(RC)$를 쓰는 <a href="정리노트_1028_CS_Stage_Frequency_Response.html#s1-strategy">노드별 극점 전략</a>이에요. 떠 있는 $C_{XY}$는 입력 쪽 $(1+g_mR_L)C_{XY}$, 출력 쪽 $(1+1/(g_mR_L))C_{XY}$로 나눠요.</p>
+  <p><strong>기호의 뜻:</strong> $g_{mj}$, $r_{Oj}$, $C_{GSj}$, $C_{GDj}$, $C_{DBj}$, $C_{SBj}$는 $M_j$의 값이에요. $R_L$은 출력 노드에서 AC 접지로 본 저항, $C_{in}$은 입력 노드–접지, $C_{XY}$는 입력–출력 사이, $C_{out}$은 출력 노드–접지 커패시턴스예요.</p>
+  <p><strong>근사 조건:</strong> 원문이 $\lambda&gt;0$을 명시했으니 $r_O$를 남겨요. 다이오드 접속 MOS는 저주파·몸체 효과 무시 모델에서 $(1/g_m)\parallel r_O$ 블록으로 바로 치환해요. 게이트 전류가 없으므로 입력 노드 저항은 $R_S$예요. 양 끝이 같은 노드이거나 둘 다 AC 접지인 커패시턴스는 빠져요.</p>
+  <p><strong>선택 이유:</strong> 세 회로 모두 통합 모델(입력 노드 X, 출력 노드 Y)로 바꾸면 같은 두 극점 공식을 쓸 수 있어요. 회로마다 $g_m$, $R_L$, 세 커패시턴스만 바꿔 넣으면 돼요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <div data-answer-step="통합 모델과 밀러 극점 식">
+    <p>세 단을 같은 통합 모델로 보고, 회로별 대응만 따로 적어요.</p>
+    <figure class="figure"><svg id="fig-p6-miller" viewBox="0 0 520 368" role="img" aria-label="① 변환 전: 왼쪽 v in 단자가 R S를 거쳐 입력 노드 X에 이어진다. X에서 C in가 접지로 내려가고 X와 출력 노드 Y 사이에 C XY가 떠 있다. Y에서 아래로 흐르는 종속 전류원 g m v X, 그 오른쪽 R L, 그 오른쪽 C out이 접지로 내려가고 맨 오른쪽이 출력 단자 v out이다. ② 변환 후: C XY 대신 X에 접지 커패시턴스 C in,M, Y에 접지 커패시턴스 C out,M이 붙고 X와 Y 사이 연결이 없다."><text class="fig-text fig-math" x="4" y="18">①</text><circle class="fig-dot" data-node="vin" data-node-color="blue" cx="24" cy="48" r="4"/><text class="fig-text fig-math" data-node="vin" data-node-color="blue" x="14" y="36">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><path class="fig-ink" d="M24 48 H32 L37.3 41 L48.0 55 L58.7 41 L69.3 55 L80.0 41 L90.7 55 L96 48 H104"/><text class="fig-text fig-math" x="64" y="32" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><path class="fig-ink" d="M104 48 H124"/><circle class="fig-dot" data-node="X" data-node-color="red" cx="124" cy="48" r="4"/><text class="fig-text fig-math" data-node="X" data-node-color="red" x="118" y="36" text-anchor="end">X</text><path class="fig-ink" d="M124 48 V93 M124 103 V158"/><path class="fig-accent" d="M111 93 H137 M111 103 H137"/><text class="fig-text fig-math" x="101" y="103" text-anchor="end">C<tspan baseline-shift="sub" font-size="78%">in</tspan></text><path class="fig-ink" d="M124 48 H164 M174 48 H214"/><path class="fig-danger" d="M164 36 V60 M174 36 V60"/><text class="fig-text fig-math" x="169" y="24" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">XY</tspan></text><path class="fig-ink" d="M214 48 H505"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="214" cy="48" r="4"/><text class="fig-text fig-math" data-node="Y" data-node-color="blue" x="214" y="70" text-anchor="middle">Y</text><path class="fig-ink" d="M254 48 V88 M254 116 V158"/><polygon class="fig-ink" points="254,88 268,102 254,116 240,102"/><path class="fig-ink" d="M254 94 V109 M250 105 L254 110 L258 105"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="254" cy="48" r="4"/><text class="fig-text fig-math" x="232" y="107" text-anchor="end">g<tspan baseline-shift="sub" font-size="78%">m</tspan>v<tspan baseline-shift="sub" font-size="78%">X</tspan></text><path class="fig-ink" d="M300 48 V56 L307 63.8 L293 79.5 L307 95.2 L293 110.8 L307 126.5 L293 142.2 L300 150 V158"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="300" cy="48" r="4"/><text class="fig-text fig-math" x="313" y="108">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text><path class="fig-ink" d="M380 48 V93 M380 103 V158"/><path class="fig-accent" d="M367 93 H393 M367 103 H393"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="380" cy="48" r="4"/><text class="fig-text fig-math" x="402" y="103">C<tspan baseline-shift="sub" font-size="78%">out</tspan></text><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="505" cy="48" r="4"/><text class="fig-text fig-math" data-node="Y" data-node-color="blue" x="505" y="36" text-anchor="end">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M124 158 H380"/><path class="fig-ink" d="M244 158 V166 M234 166 H254 M238 171 H250 M242 176 H246"/><text class="fig-text fig-math" x="4" y="203">②</text><circle class="fig-dot" data-node="vin" data-node-color="blue" cx="24" cy="233" r="4"/><text class="fig-text fig-math" data-node="vin" data-node-color="blue" x="14" y="221">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><path class="fig-ink" d="M24 233 H32 L37.3 226 L48.0 240 L58.7 226 L69.3 240 L80.0 226 L90.7 240 L96 233 H104"/><text class="fig-text fig-math" x="64" y="217" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><path class="fig-ink" d="M104 233 H170"/><circle class="fig-dot" data-node="X" data-node-color="red" cx="124" cy="233" r="4"/><text class="fig-text fig-math" data-node="X" data-node-color="red" x="118" y="221" text-anchor="end">X</text><path class="fig-ink" d="M124 233 V278 M124 288 V343"/><path class="fig-accent" d="M111 278 H137 M111 288 H137"/><text class="fig-text fig-math" x="101" y="288" text-anchor="end">C<tspan baseline-shift="sub" font-size="78%">in</tspan></text><path class="fig-ink" d="M170 233 V278 M170 288 V343"/><path class="fig-danger" d="M157 278 H183 M157 288 H183"/><text class="fig-text fig-math" x="178" y="267">C<tspan baseline-shift="sub" font-size="78%">in,M</tspan></text><path class="fig-ink" d="M124 343 H170"/><path class="fig-ink" d="M147 343 V351 M137 351 H157 M141 356 H153 M145 361 H149"/><path class="fig-ink" d="M280 233 H505"/><path class="fig-ink" d="M280 233 V273 M280 301 V343"/><polygon class="fig-ink" points="280,273 294,287 280,301 266,287"/><path class="fig-ink" d="M280 279 V294 M276 290 L280 295 L284 290"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="280" cy="233" r="4"/><text class="fig-text fig-math" x="258" y="292" text-anchor="end">g<tspan baseline-shift="sub" font-size="78%">m</tspan>v<tspan baseline-shift="sub" font-size="78%">X</tspan></text><path class="fig-ink" d="M322 233 V241 L329 248.8 L315 264.5 L329 280.2 L315 295.8 L329 311.5 L315 327.2 L322 335 V343"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="322" cy="233" r="4"/><text class="fig-text fig-math" x="333" y="293">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text><path class="fig-ink" d="M385 233 V278 M385 288 V343"/><path class="fig-accent" d="M372 278 H398 M372 288 H398"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="385" cy="233" r="4"/><text class="fig-text fig-math" x="403" y="288">C<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M455 233 V278 M455 288 V343"/><path class="fig-danger" d="M442 278 H468 M442 288 H468"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="455" cy="233" r="4"/><text class="fig-text fig-math" x="470" y="313">C<tspan baseline-shift="sub" font-size="78%">out,M</tspan></text><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="505" cy="233" r="4"/><text class="fig-text fig-math" data-node="Y" data-node-color="blue" x="505" y="221" text-anchor="end">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M280 343 H455"/><path class="fig-ink" d="M368 343 V351 M358 351 H378 M362 356 H374 M366 361 H370"/></svg><figcaption>세 단 공통의 통합 모델이에요. $V_{DD}$·$V_b$는 AC 접지, 입력 소자는 $g_mv_X$, 출력 노드의 $r_O$와 부하 블록은 $R_L$ 하나로 합쳤어요. ②는 $C_{XY}$를 $C_{in,M}=(1+g_mR_L)C_{XY}$, $C_{out,M}=(1+\frac{1}{g_mR_L})C_{XY}$로 나눈 모습이에요.</figcaption></figure>
+    $$|\omega_{p,in}|=\frac{1}{R_S\left[C_{in}+(1+g_mR_L)C_{XY}\right]}$$
+    $$|\omega_{p,out}|=\frac{1}{R_L\left[C_{out}+\left(1+\dfrac{1}{g_mR_L}\right)C_{XY}\right]}$$
+  </div>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>이렇게 풀어요</h4>
+  <div data-subpart="main">
+    <div data-answer-step="(a) 다이오드 접속 PMOS 부하" data-gain-route="gm-rout">
+      <p><strong>(a)</strong> 입력은 $M_1$ 게이트, 출력은 두 드레인이 만나는 노드예요.</p>
+      <div data-gain-stage="gm"><p>출력을 단락하면 $M_2$ 양 끝이 AC 접지라 전류를 만들지 않아요.</p>
+      $$G_m=g_{m1}$$</div>
+      <div data-gain-stage="rout"><p>입력을 0으로 두면 아래는 $r_{O1}$, 위는 다이오드 접속 $M_2$ 블록 $(1/g_{m2})\parallel r_{O2}$이고 같은 두 노드(출력–AC 접지) 사이에 있어요.</p>
+      $$R_{out}=R_L=\frac{1}{g_{m2}}\parallel r_{O1}\parallel r_{O2}$$</div>
+      <div data-gain-stage="gain">$$A_v=-G_mR_{out}=-g_{m1}R_L$$</div>
+      <p>커패시턴스: $C_{in}=C_{GS1}$, $C_{XY}=C_{GD1}$. $C_{GS2}$는 출력(게이트=드레인)과 $V_{DD}$ 사이라 출력–접지로 가고, $C_{GD2}$는 양 끝이 같은 노드라 빠져요.</p>
+      $$C_{out}=C_{DB1}+C_{GS2}+C_{DB2}$$
+      $$|\omega_{p,in}|=\frac{1}{R_S\left[C_{GS1}+(1+g_{m1}R_L)C_{GD1}\right]}$$
+      $$|\omega_{p,out}|=\frac{1}{R_L\left[C_{DB1}+C_{GS2}+C_{DB2}+\left(1+\dfrac{1}{g_{m1}R_L}\right)C_{GD1}\right]}$$
+    </div>
+    <div data-answer-step="(b) 소스가 출력인 NMOS 부하" data-gain-route="gm-rout">
+      <p><strong>(b)</strong> $M_2$는 게이트·드레인이 $V_{DD}$(AC 접지)이고 소스가 출력이에요.</p>
+      <div data-gain-stage="gm"><p>출력 단락 시 $M_2$의 세 단자가 모두 AC 접지라 기여가 없어요.</p>
+      $$G_m=g_{m1}$$</div>
+      <div data-gain-stage="rout"><p>소스 쪽에서 보면 게이트와 드레인이 AC 접지라 다이오드 접속과 같은 블록이에요(몸체 효과 무시, 넣으면 $1/(g_{m2}+g_{mb2})$).</p>
+      $$R_{out}=R_L=\frac{1}{g_{m2}}\parallel r_{O1}\parallel r_{O2}$$</div>
+      <div data-gain-stage="gain">$$A_v=-G_mR_{out}=-g_{m1}R_L$$</div>
+      <p>커패시턴스: $C_{GS2}$는 게이트($V_{DD}$)–소스(출력), $C_{SB2}$는 소스(출력)–몸체(접지)라 둘 다 출력–접지예요. $C_{GD2}$와 $C_{DB2}$는 양 끝이 AC 접지라 빠져요.</p>
+      $$C_{out}=C_{DB1}+C_{GS2}+C_{SB2}$$
+      $$|\omega_{p,in}|=\frac{1}{R_S\left[C_{GS1}+(1+g_{m1}R_L)C_{GD1}\right]}$$
+      $$|\omega_{p,out}|=\frac{1}{R_L\left[C_{DB1}+C_{GS2}+C_{SB2}+\left(1+\dfrac{1}{g_{m1}R_L}\right)C_{GD1}\right]}$$
+    </div>
+    <div data-answer-step="(c) PMOS 입력, 전류원 부하" data-gain-route="gm-rout">
+      <p><strong>(c)</strong> 입력은 PMOS $M_2$ 게이트, $M_1$은 게이트가 $V_b$(AC 접지)인 전류원 부하예요.</p>
+      <div data-gain-stage="gm"><p>출력 단락 시 신호 전류는 $M_2$만 만들어요. 입력이 오르면 $v_{SG2}$가 줄어 출력으로 밀어 넣는 전류가 줄어요.</p>
+      $$G_m=g_{m2}$$</div>
+      <div data-gain-stage="rout"><p>입력을 0으로 두면 두 소자 모두 게이트·소스가 AC 접지라 $r_O$만 보여요.</p>
+      $$R_{out}=R_L=r_{O1}\parallel r_{O2}$$</div>
+      <div data-gain-stage="gain">$$A_v=-G_mR_{out}=-g_{m2}R_L$$</div>
+      <p>커패시턴스: $C_{in}=C_{GS2}$(게이트–$V_{DD}$), $C_{XY}=C_{GD2}$. $C_{GD1}$은 $V_b$–출력이라 출력–접지로 가요.</p>
+      $$C_{out}=C_{DB1}+C_{GD1}+C_{DB2}$$
+      $$|\omega_{p,in}|=\frac{1}{R_S\left[C_{GS2}+(1+g_{m2}R_L)C_{GD2}\right]}$$
+      $$|\omega_{p,out}|=\frac{1}{R_L\left[C_{DB1}+C_{GD1}+C_{DB2}+\left(1+\dfrac{1}{g_{m2}R_L}\right)C_{GD2}\right]}$$
+    </div>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <div data-answer-final>
+      <p><strong>(a)</strong></p>
+      $$R_L=\frac{1}{g_{m2}}\parallel r_{O1}\parallel r_{O2}$$
+      $$|\omega_{p,in}|=\frac{1}{R_S[C_{GS1}+(1+g_{m1}R_L)C_{GD1}]}$$
+      $$|\omega_{p,out}|=\frac{1}{R_L[C_{DB1}+C_{GS2}+C_{DB2}+(1+\frac{1}{g_{m1}R_L})C_{GD1}]}$$
+      <p><strong>(b)</strong> $R_L$과 $|\omega_{p,in}|$은 (a)와 같아요(몸체 효과 무시).</p>
+      $$|\omega_{p,out}|=\frac{1}{R_L[C_{DB1}+C_{GS2}+C_{SB2}+(1+\frac{1}{g_{m1}R_L})C_{GD1}]}$$
+      <p><strong>(c)</strong></p>
+      $$R_L=r_{O1}\parallel r_{O2}$$
+      $$|\omega_{p,in}|=\frac{1}{R_S[C_{GS2}+(1+g_{m2}R_L)C_{GD2}]}$$
+      $$|\omega_{p,out}|=\frac{1}{R_L[C_{DB1}+C_{GD1}+C_{DB2}+(1+\frac{1}{g_{m2}R_L})C_{GD2}]}$$
+    </div>
+    <p><strong>극한 확인:</strong> $C_{GD}$의 밀러 항이 0이면($C_{XY}\to0$) 각 극점이 $1/(R_SC_{in})$, $1/(R_LC_{out})$로 돌아와요. 노드별 RC의 기본형과 같아요.</p>
+    <p><strong>이득 크기 비교:</strong> $g_mr_O\gg1$이면 (a)·(b)의 $R_L\approx1/g_{m2}$라 $|A_v|\approx g_{m1}/g_{m2}$로 작고, (c)는 $g_{m2}(r_{O1}\parallel r_{O2})$로 커요. 그래서 같은 $R_S$에 입력 소자의 $C_{GS}$·$C_{GD}$가 비슷한 크기라면 (c)의 밀러 배수가 가장 커서 입력 극점이 가장 낮아져요.</p>
+    <p><strong>단위:</strong> $g_mR_L$은 무차원, 괄호는 $[\mathrm{F}]$, 극점은 $[1/\mathrm{s}]$예요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>주의할 점</h4>
+  <p>(a)에서 $C_{GS2}$를 빠뜨리기 쉬워요. 다이오드 접속이라 게이트가 출력이고 소스가 $V_{DD}$라서 출력–접지 커패시턴스예요. 대신 $C_{GD2}$는 같은 노드끼리라 0이에요.</p>
+  <p>(b)의 NMOS 몸체는 접지라 $C_{SB2}$가 출력에 붙어요. PMOS (a)에서는 소스와 몸체가 모두 $V_{DD}$라 $C_{SB2}$가 없어요. 소자 종류에 따라 몸체 연결이 달라요.</p>
+  <p>(c)는 입력 소자가 $M_2$예요. 밀러 배수에 $g_{m1}$을 넣거나 $C_{GD1}$을 떠 있는 커패시턴스로 보면 틀려요. $M_1$ 게이트는 $V_b$라 AC 접지예요.</p>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>조건을 바꾸어 생각해요</h4>
+  <ol>
+    <li>(a)에서 $\lambda=0$이라면 $R_L$은 무엇이 되고 밀러 배수 $1+g_{m1}R_L$은 어떤 비로 쓸 수 있을까요?</li>
+    <li>(c)에서 $M_1$의 게이트를 $V_b$ 대신 출력에 연결하면(다이오드 접속) $R_L$과 $C_{out}$은 어떻게 바뀔까요?</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <p class="sum-lead">세 단 모두 통합 모델로 바꾼 뒤 입력 소자의 $C_{GD}$를 밀러로 나눠요.</p>
+  <p>$|\omega_{p,in}|=\dfrac{1}{R_S[C_{in}+(1+g_mR_L)C_{XY}]}$</p>
+  <p>$|\omega_{p,out}|=\dfrac{1}{R_L[C_{out}+(1+\frac{1}{g_mR_L})C_{XY}]}$</p>
+  <p>(a)·(b)는 $R_L=\frac{1}{g_{m2}}\parallel r_{O1}\parallel r_{O2}$, (c)는 $R_L=r_{O1}\parallel r_{O2}$예요.</p>
+  <p>$C_{out}$은 (a) $C_{DB1}+C_{GS2}+C_{DB2}$, (b) $C_{DB1}+C_{GS2}+C_{SB2}$, (c) $C_{DB1}+C_{GD1}+C_{DB2}$예요.</p>
+</div>

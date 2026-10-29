@@ -1,0 +1,83 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 읽어요</h4>
+  <p>그림 11.83은 입력이 $R_S$를 거쳐 $Q_1$ 베이스로 들어가고, 컬렉터가 $V_{CC}$에서 내려오는 이상적 전류원에 붙은 CE 증폭기예요. 출력은 컬렉터 노드예요.</p>
+  <p>$V_A=\infty$라 $Q_1$의 $r_O$도 무한대이고 전류원도 이상적이에요. 그래서 출력 노드에서 접지로 가는 저항이 없어요.</p>
+  <p>극점을 (a) 밀러 근사와 (b) 식 (11.73)의 전달 함수로 구하고 비교해요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 개념과 공식을 떠올려요</h4>
+  <p><strong>단서:</strong> "$V_A=\infty$"와 "전류원 부하"가 함께 있으면 출력 노드 저항 $R_L\to\infty$예요. 이때 밀러 근사의 전제인 유한한 저주파 이득이 무너져요.</p>
+  <p><strong>개념:</strong> (a)는 <a href="정리노트_1028_CS_Stage_Frequency_Response.html#s2-ce-miller">CE 밀러 극점</a>에 $R_L\to\infty$를 넣고, (b)는 <a href="정리노트_1028_CS_Stage_Frequency_Response.html#s3-coeffs">통합 모델 전달 함수</a>를 $R_L$로 나눈 뒤 극한을 취해요.</p>
+  <p><strong>기호의 뜻:</strong> $R_{Th}=R_S\parallel r_\pi$는 베이스 노드에서 본 테브난 저항, $g_m$은 $Q_1$의 트랜스컨덕턴스, $C_\pi$, $C_\mu$, $C_{CS}$는 각각 베이스–이미터, 베이스–컬렉터, 컬렉터–기판 커패시턴스예요. CE 대응은 $C_{in}=C_\pi$, $C_{XY}=C_\mu$, $C_{out}=C_{CS}$예요.</p>
+  <p><strong>근사 조건:</strong> 유한 $r_\pi$는 $R_{Th}$에 남겨요. $R_L\to\infty$ 극한은 원문 조건 그대로이고, 분자·분모의 $R_L$에 비례하는 항만 남겨요.</p>
+  <p><strong>선택 이유:</strong> $R_L$이 분자·$a$·$b$에 모두 1차로 들어가 있어, $R_L$로 나누면 극한이 깔끔하게 정리돼요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <div data-answer-step="출력 노드 저항과 이득" data-gain-route="gm-rout">
+    <p>$C_\mu$ 양 끝(베이스 노드 X에서 출력까지)의 저주파 이득을 봐요.</p>
+    <div data-gain-stage="gm"><p>출력 단락 시 전류는 $g_mv_X$예요.</p>
+    $$G_m=g_m$$</div>
+    <div data-gain-stage="rout"><p>입력 영점에서 출력을 보면 $Q_1$은 $r_O=\infty$, 전류원도 이상적이라 열려 있어요.</p>
+    $$R_{out}=R_L\to\infty$$</div>
+    <div data-gain-stage="gain">$$\frac{v_{out}}{v_X}=-G_mR_{out}\to-\infty$$</div>
+  </div>
+  <figure class="figure"><svg id="fig-p14-miller" viewBox="0 0 520 368" role="img" aria-label="① 변환 전: 왼쪽 v Th 단자가 R S 병렬 r 파이를 거쳐 입력 노드 X에 이어진다. X에서 C 파이가 접지로 내려가고 X와 출력 노드 Y 사이에 C 뮤가 떠 있다. Y에서 아래로 흐르는 종속 전류원 g m v 파이, 그 오른쪽 없음(출력 노드 저항 무한대), 그 오른쪽 C CS이 접지로 내려가고 맨 오른쪽이 출력 단자 v out이다. ② 변환 후: C 뮤 대신 X에 접지 커패시턴스 C in,M, Y에 접지 커패시턴스 C out,M이 붙고 X와 Y 사이 연결이 없다."><text class="fig-text fig-math" x="4" y="18">①</text><circle class="fig-dot" data-node="vin" data-node-color="blue" cx="24" cy="48" r="4"/><text class="fig-text fig-math" data-node="vin" data-node-color="blue" x="14" y="36">v<tspan baseline-shift="sub" font-size="78%">Th</tspan></text><path class="fig-ink" d="M24 48 H32 L37.3 41 L48.0 55 L58.7 41 L69.3 55 L80.0 41 L90.7 55 L96 48 H104"/><text class="fig-text fig-math" x="64" y="32" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">S</tspan>‖r<tspan baseline-shift="sub" font-size="78%">π</tspan></text><path class="fig-ink" d="M104 48 H124"/><circle class="fig-dot" data-node="X" data-node-color="red" cx="124" cy="48" r="4"/><text class="fig-text fig-math" data-node="X" data-node-color="red" x="118" y="36" text-anchor="end">X</text><path class="fig-ink" d="M124 48 V93 M124 103 V158"/><path class="fig-accent" d="M111 93 H137 M111 103 H137"/><text class="fig-text fig-math" x="101" y="103" text-anchor="end">C<tspan baseline-shift="sub" font-size="78%">π</tspan></text><path class="fig-ink" d="M124 48 H164 M174 48 H214"/><path class="fig-danger" d="M164 36 V60 M174 36 V60"/><text class="fig-text fig-math" x="169" y="24" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">μ</tspan></text><path class="fig-ink" d="M214 48 H505"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="214" cy="48" r="4"/><text class="fig-text fig-math" data-node="Y" data-node-color="blue" x="214" y="70" text-anchor="middle">Y</text><path class="fig-ink" d="M254 48 V88 M254 116 V158"/><polygon class="fig-ink" points="254,88 268,102 254,116 240,102"/><path class="fig-ink" d="M254 94 V109 M250 105 L254 110 L258 105"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="254" cy="48" r="4"/><text class="fig-text fig-math" x="232" y="107" text-anchor="end">g<tspan baseline-shift="sub" font-size="78%">m</tspan>v<tspan baseline-shift="sub" font-size="78%">π</tspan></text><path class="fig-ink" d="M380 48 V93 M380 103 V158"/><path class="fig-accent" d="M367 93 H393 M367 103 H393"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="380" cy="48" r="4"/><text class="fig-text fig-math" x="402" y="103">C<tspan baseline-shift="sub" font-size="78%">CS</tspan></text><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="505" cy="48" r="4"/><text class="fig-text fig-math" data-node="Y" data-node-color="blue" x="505" y="36" text-anchor="end">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M124 158 H380"/><path class="fig-ink" d="M244 158 V166 M234 166 H254 M238 171 H250 M242 176 H246"/><text class="fig-text fig-math" x="4" y="203">②</text><circle class="fig-dot" data-node="vin" data-node-color="blue" cx="24" cy="233" r="4"/><text class="fig-text fig-math" data-node="vin" data-node-color="blue" x="14" y="221">v<tspan baseline-shift="sub" font-size="78%">Th</tspan></text><path class="fig-ink" d="M24 233 H32 L37.3 226 L48.0 240 L58.7 226 L69.3 240 L80.0 226 L90.7 240 L96 233 H104"/><text class="fig-text fig-math" x="64" y="217" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">S</tspan>‖r<tspan baseline-shift="sub" font-size="78%">π</tspan></text><path class="fig-ink" d="M104 233 H170"/><circle class="fig-dot" data-node="X" data-node-color="red" cx="124" cy="233" r="4"/><text class="fig-text fig-math" data-node="X" data-node-color="red" x="118" y="221" text-anchor="end">X</text><path class="fig-ink" d="M124 233 V278 M124 288 V343"/><path class="fig-accent" d="M111 278 H137 M111 288 H137"/><text class="fig-text fig-math" x="101" y="288" text-anchor="end">C<tspan baseline-shift="sub" font-size="78%">π</tspan></text><path class="fig-ink" d="M170 233 V278 M170 288 V343"/><path class="fig-danger" d="M157 278 H183 M157 288 H183"/><text class="fig-text fig-math" x="178" y="267">C<tspan baseline-shift="sub" font-size="78%">in,M</tspan></text><path class="fig-ink" d="M124 343 H170"/><path class="fig-ink" d="M147 343 V351 M137 351 H157 M141 356 H153 M145 361 H149"/><path class="fig-ink" d="M280 233 H505"/><path class="fig-ink" d="M280 233 V273 M280 301 V343"/><polygon class="fig-ink" points="280,273 294,287 280,301 266,287"/><path class="fig-ink" d="M280 279 V294 M276 290 L280 295 L284 290"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="280" cy="233" r="4"/><text class="fig-text fig-math" x="258" y="292" text-anchor="end">g<tspan baseline-shift="sub" font-size="78%">m</tspan>v<tspan baseline-shift="sub" font-size="78%">π</tspan></text><path class="fig-ink" d="M385 233 V278 M385 288 V343"/><path class="fig-accent" d="M372 278 H398 M372 288 H398"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="385" cy="233" r="4"/><text class="fig-text fig-math" x="403" y="288">C<tspan baseline-shift="sub" font-size="78%">CS</tspan></text><path class="fig-ink" d="M455 233 V278 M455 288 V343"/><path class="fig-danger" d="M442 278 H468 M442 288 H468"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="455" cy="233" r="4"/><text class="fig-text fig-math" x="470" y="313">C<tspan baseline-shift="sub" font-size="78%">out,M</tspan></text><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="505" cy="233" r="4"/><text class="fig-text fig-math" data-node="Y" data-node-color="blue" x="505" y="221" text-anchor="end">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M280 343 H455"/><path class="fig-ink" d="M368 343 V351 M358 351 H378 M362 356 H374 M366 361 H370"/></svg><figcaption>$V_{CC}$는 AC 접지, $Q_1$은 $r_\pi$·$C_\pi$·$C_\mu$·$C_{CS}$와 $g_mv_\pi$로 바꿨어요. 이상적 전류원과 $V_A=\infty$라 출력 노드 저항 $R_L$은 무한대(개방)라 그림에 저항이 없어요. ②의 밀러 값은 $R_L\to\infty$에서 발산해요.</figcaption></figure>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>이렇게 풀어요</h4>
+  <div data-subpart="main">
+    <div data-answer-step="(a) 밀러 근사">
+      <p><strong>(a)</strong> 밀러 커패시턴스와 출력 저항이 모두 발산해요.</p>
+      $$|\omega_{p,in}|=\frac{1}{R_{Th}[C_\pi+(1+g_mR_L)C_\mu]}\to0$$
+      $$|\omega_{p,out}|=\frac{1}{R_L\left[C_{CS}+\left(1+\dfrac{1}{g_mR_L}\right)C_\mu\right]}\to0$$
+      <p>밀러 근사는 두 극점을 모두 원점에 놓아요.</p>
+    </div>
+    <div data-answer-step="(b) 식 (11.73)의 극한">
+      <p><strong>(b)</strong> 통합 모델의 전달 함수예요.</p>
+      $$\frac{V_{out}}{V_{Thev}}=\frac{(C_\mu s-g_m)R_L}{as^2+bs+1}$$
+      $$a=R_{Th}R_L(C_\pi C_\mu+C_{CS}C_\mu+C_\pi C_{CS})$$
+      $$b=(1+g_mR_L)C_\mu R_{Th}+R_{Th}C_\pi+R_L(C_\mu+C_{CS})$$
+      <p>분자와 분모를 $R_L$로 나눠요. $1/R_L$이 붙은 항은 $R_L\to\infty$에서 0이 돼요.</p>
+      $$\frac{b}{R_L}\to g_mR_{Th}C_\mu+C_\mu+C_{CS}$$
+      $$\frac{V_{out}}{V_{Thev}}=\frac{C_\mu s-g_m}{s\left[R_{Th}(C_\pi C_\mu+C_{CS}C_\mu+C_\pi C_{CS})s+g_mR_{Th}C_\mu+C_\mu+C_{CS}\right]}$$
+      <p>분모가 $s$로 묶여 극점 하나는 원점이에요. 나머지 하나는 대괄호가 0이 되는 곳이에요.</p>
+      $$|\omega_{p2}|=\frac{g_mR_{Th}C_\mu+C_\mu+C_{CS}}{R_{Th}(C_\pi C_\mu+C_{CS}C_\mu+C_\pi C_{CS})}$$
+    </div>
+    <div data-answer-step="두 결과 비교">
+      <p>원점의 극점 하나는 두 방법이 같아요. 출력 전류가 저항 없이 커패시턴스만 충전하니 적분기처럼 동작하기 때문이에요. 그러나 밀러 근사는 유한한 둘째 극점 $|\omega_{p2}|$를 놓쳐요. 이득이 무한대라 "$C_\mu$를 저주파 이득으로 나눈다"는 밀러 분할 자체가 성립하지 않아요.</p>
+    </div>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <div data-answer-final>
+      <p><strong>(a) 밀러:</strong> $|\omega_{p,in}|\to0$, $|\omega_{p,out}|\to0$ (두 극점 모두 원점)</p>
+      <p><strong>(b) 식 (11.73):</strong> $|\omega_{p1}|=0$, $|\omega_{p2}|=\dfrac{g_mR_{Th}C_\mu+C_\mu+C_{CS}}{R_{Th}(C_\pi C_\mu+C_{CS}C_\mu+C_\pi C_{CS})}$, $R_{Th}=R_S\parallel r_\pi$</p>
+      <p><strong>비교:</strong> 원점 극점은 같지만 밀러 근사는 유한한 높은 극점을 놓쳐요. 무한 이득에서는 밀러 분할이 성립하지 않아요.</p>
+    </div>
+    <p><strong>차원:</strong> 분자는 $[\mathrm{F}]$, 분모는 $[\Omega\cdot\mathrm{F^2}]$라 $|\omega_{p2}|$는 $[1/(\Omega\cdot\mathrm{F})]=[1/\mathrm{s}]$예요. $g_mR_{Th}$는 무차원이에요.</p>
+    <p><strong>특수값:</strong> $C_{CS}=0$이면 $|\omega_{p2}|=\dfrac{(1+g_mR_{Th})C_\mu}{R_{Th}C_\pi C_\mu}=\dfrac{1+g_mR_{Th}}{R_{Th}C_\pi}$예요. 출력이 $C_\mu$로만 베이스에 이어져 귀환이 걸린 꼴이고 유한한 값이에요.</p>
+    <p><strong>저주파 극한:</strong> $s\to0$에서 $V_{out}/V_{Thev}\approx-g_m/[s(g_mR_{Th}C_\mu+C_\mu+C_{CS})]$로 $1/s$에 비례해요. 적분기라는 판단과 맞아요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>주의할 점</h4>
+  <p>밀러 결과만 보고 "이 회로의 대역폭은 0"이라고 끝내면 반쪽 답이에요. 정확한 식에는 유한한 둘째 극점이 있어요.</p>
+  <p>극한을 취하기 전에 $R_L$로 나누지 않으면 $\infty/\infty$ 꼴이 돼 극점을 읽을 수 없어요. $R_L$에 비례하는 항을 먼저 모아요.</p>
+  <p>테브난 저항을 $R_S$로만 쓰면 $r_\pi$를 빠뜨려요. 베이스에는 $r_\pi$가 접지로 이어져 있어요.</p>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>조건을 바꾸어 생각해요</h4>
+  <ol>
+    <li>$V_A$가 유한해 $R_L=r_O$가 되면 원점의 극점은 어디로 옮겨 갈까요? (힌트: 분모 상수항 $1/R_L$)</li>
+    <li>$C_\mu=0$이면 식 (11.73)의 둘째 극점은 어떤 식이 될까요?</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <p class="sum-lead">$V_A=\infty$ 전류원 부하라 $R_L\to\infty$이고 밀러 분할이 깨져요.</p>
+  <p>밀러: 두 극점 모두 원점으로 가요.</p>
+  <p>식 (11.73): $|\omega_{p1}|=0$, $|\omega_{p2}|=\dfrac{g_mR_{Th}C_\mu+C_\mu+C_{CS}}{R_{Th}(C_\pi C_\mu+C_{CS}C_\mu+C_\pi C_{CS})}$</p>
+  <p>극한 전에 분자·분모를 $R_L$로 나눠요.</p>
+</div>

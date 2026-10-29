@@ -1,0 +1,68 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 읽어요</h4>
+  <p>MOSFET 세대가 바뀌면서 두 값이 함께 줄었어요. 최소 채널 길이는 $1\ \mu\mathrm{m}$에서 $65\ \mathrm{nm}$로, 과구동 전압 $V_{GS}-V_{TH}$는 약 $400\ \mathrm{mV}$에서 $100\ \mathrm{mV}$로요.</p>
+  <p>구할 것은 $f_T$가 "몇 배" 커졌는지, 즉 비율 하나예요. 소자 값이 주어지지 않으니 비례 관계로 풀어요. 이동도 같은 다른 값은 그대로라고 봐요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 개념과 공식을 떠올려요</h4>
+  <p><strong>단서:</strong> "채널 길이"와 "과구동 전압"이 동시에 바뀌었다는 말에서 $f_T$를 이 두 변수로 쓴 식이 필요하다는 걸 알 수 있어요.</p>
+  <p><strong>개념:</strong> <a href="정리노트_1028_CS_Stage_Frequency_Response.html#s0-ft-scaling">$f_T$와 채널 길이의 관계</a>예요. $2\pi f_T\approx g_m/C_{GS}$에 포화 영역 $g_m$과 $C_{GS}\approx\frac{2}{3}WLC_{ox}$를 넣으면 폭 $W$가 약분된 식이 나와요.</p>
+  <p><strong>기호의 뜻:</strong> $\mu_n$은 전자 이동도, $L$은 채널 길이, $V_{GS}-V_{TH}$는 과구동 전압이에요. 바뀐 뒤의 값은 $f_T^*$, $L^*$처럼 별표로 구별해요.</p>
+  <p><strong>근사 조건:</strong> 장채널 제곱 법칙 모델과 $C_{GS}\approx\frac{2}{3}WLC_{ox}$를 그대로 쓰고 $\mu_n$은 고정이라고 봐요. 이 모델 안에서의 배율이라는 점을 답에 함께 적어요.</p>
+  <p><strong>선택 이유:</strong> 비율만 묻기 때문에 고정 인자 $\frac{3}{2}\mu_n$은 나누면 사라져요. 변하는 두 인자의 배율만 곱하면 끝나요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <div data-answer-step="f_T의 비례식">
+    <p>트랜싯 주파수 식에서 고정 인자와 변하는 인자를 나눠 적어요.</p>
+    $$2\pi f_T\approx\frac{3}{2}\frac{\mu_n}{L^2}(V_{GS}-V_{TH})$$
+    <p>$\mu_n$이 같으므로 바뀐 뒤와 앞의 비는 다음과 같아요.</p>
+    $$\frac{f_T^*}{f_T}=\left(\frac{L}{L^*}\right)^2\cdot\frac{(V_{GS}-V_{TH})^*}{V_{GS}-V_{TH}}$$
+  </div>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>이렇게 풀어요</h4>
+  <div data-subpart="main">
+    <div data-answer-step="두 인자의 배율">
+      <p>먼저 단위를 맞춰요. $1\ \mu\mathrm{m}=1000\ \mathrm{nm}$예요.</p>
+      <p>길이 인자: $L$이 줄면 $1/L^2$로 커지므로 제곱이 붙어요.</p>
+      $$\left(\frac{L}{L^*}\right)^2=\left(\frac{1000\ \mathrm{nm}}{65\ \mathrm{nm}}\right)^2\approx236.69$$
+      <p>과구동 전압 인자: $f_T$는 과구동 전압에 비례하므로 줄어든 만큼 손해를 봐요.</p>
+      $$\frac{(V_{GS}-V_{TH})^*}{V_{GS}-V_{TH}}=\frac{100\ \mathrm{mV}}{400\ \mathrm{mV}}=\frac{1}{4}$$
+    </div>
+    <div data-answer-step="최종 배율">
+      <p>두 배율을 곱해요. 반올림 전 값 $(1000/65)^2$를 그대로 써요.</p>
+      $$\frac{f_T^*}{f_T}=\left(\frac{1000}{65}\right)^2\times\frac{1}{4}\approx59.17$$
+      <p>즉 길이 축소로 약 237배 빨라질 것을 과구동 전압 축소가 1/4로 깎아서 약 59배가 돼요.</p>
+    </div>
+    <p><strong>교과서 보충(예시 값):</strong> 교과서는 $\mu_n=400\ \mathrm{cm^2/(V\cdot s)}=0.04\ \mathrm{m^2/(V\cdot s)}$를 가정해 새 소자의 절대값도 보여 줘요. 문제에서 준 값이 아니므로 비율 답과 구별해요.</p>
+    $$2\pi f_T^*\approx\frac{3}{2}\cdot\frac{0.04\ \mathrm{m^2/(V\cdot s)}}{(65\times10^{-9}\ \mathrm{m})^2}\cdot0.1\ \mathrm{V}\approx1.42\times10^{12}\ \mathrm{rad/s}$$
+    $$f_T^*\approx226\ \mathrm{GHz}$$
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <p data-answer-final><strong>$f_T$는 약 59배($\approx59.17$배) 증가했어요.</strong> ($\mu_n$ 고정, 장채널 모델 $2\pi f_T\approx\frac{3}{2}\mu_n(V_{GS}-V_{TH})/L^2$ 기준)</p>
+    <p><strong>역순 확인:</strong> 과구동 전압만 1/4이 되면 $f_T$도 1/4, 길이만 $1/15.38$이 되면 $f_T$는 $236.69$배예요. 두 효과는 곱으로 합쳐지므로 $236.69/4\approx59.17$로 같아요.</p>
+    <p><strong>단위:</strong> 길이 비와 전압 비가 모두 무차원이라 답도 무차원 배율이에요. 보충 값은 $[\mathrm{m^2/(V\cdot s)}\cdot\mathrm{V}/\mathrm{m^2}]=[1/\mathrm{s}]$로 각주파수 단위가 맞아요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>주의할 점</h4>
+  <p>$f_T\propto1/L$로 착각해 $15.38/4\approx3.85$배라고 답하는 실수가 많아요. $g_m\propto1/L$이고 $C_{GS}\propto L$이라 두 효과가 겹쳐 $1/L^2$이에요.</p>
+  <p>$g_m=2I_D/(V_{GS}-V_{TH})$로 비례를 따지면 $I_D$가 고정인지 정해지지 않아 답이 흔들려요. 과구동 전압만 주어졌으니 과구동 전압 형태의 식을 써요.</p>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>조건을 바꾸어 생각해요</h4>
+  <ol>
+    <li>채널 길이는 $1\ \mu\mathrm{m}$ 그대로 두고 과구동 전압만 $400\ \mathrm{mV}$에서 $100\ \mathrm{mV}$로 줄이면 $f_T$는 몇 배가 될까요?</li>
+    <li>과구동 전압을 그대로 $400\ \mathrm{mV}$로 유지할 수 있었다면 $65\ \mathrm{nm}$ 소자의 $f_T$는 $1\ \mu\mathrm{m}$ 소자의 몇 배였을까요?</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <p class="sum-lead">$f_T$는 과구동 전압에 비례하고 $L^2$에 반비례해요.</p>
+  <p>$2\pi f_T\approx\dfrac{3}{2}\dfrac{\mu_n}{L^2}(V_{GS}-V_{TH})$</p>
+  <p>$\dfrac{f_T^*}{f_T}=\left(\dfrac{1000}{65}\right)^2\times\dfrac{1}{4}\approx59.17$</p>
+  <p>길이는 제곱으로, 과구동 전압은 1승으로 들어가요.</p>
+</div>

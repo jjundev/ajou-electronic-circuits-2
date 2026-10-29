@@ -248,12 +248,19 @@ def validate_receipt(state: dict, task: dict, receipt_path: Path) -> dict:
 def _child(state, brief, receipt, verified):
     """Read the genuine child runtime state without calling its publisher."""
     scripts = Path(__file__).resolve().parents[2] / 'ec2-problem-explain/scripts'
-    sys.path.insert(0, str(scripts))
-    from epe_cli import load_run, load_fragments, load_artifacts
-    from epe_contract import validate_reviews, payload_hash, validate_fragment
-    from epe_render import artifact_hashes, check_artifacts
-    from epe_core import make_overlay
-    from epe_rerender import verified_references
+    # The child modules import workbook's assemble.py; this scripts folder has its own
+    # assemble.py, so put workbook first and hide our module while they load.
+    workbook = Path(__file__).resolve().parents[4] / 'workbook'
+    ours = sys.modules.pop('assemble', None)
+    sys.path[:0] = [str(scripts), str(workbook)]
+    try:
+        from epe_cli import load_run, load_fragments, load_artifacts
+        from epe_contract import validate_reviews, payload_hash, validate_fragment
+        from epe_render import artifact_hashes, check_artifacts
+        from epe_core import make_overlay
+        from epe_rerender import verified_references
+    finally:
+        if ours is not None: sys.modules['assemble'] = ours
     child_run = Path(state['explain_run']).resolve()
     require(child_run.is_relative_to(Path(state['run']).resolve()), 'child RUN outside parent RUN')
     child_path = child_run / 'child-receipt.json'

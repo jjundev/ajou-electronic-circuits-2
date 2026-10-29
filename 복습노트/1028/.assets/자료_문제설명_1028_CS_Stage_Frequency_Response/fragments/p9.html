@@ -1,0 +1,76 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 읽어요</h4>
+  <p>그림 11.94의 공통 이미터(CE) 단을 설계해요. 입력은 $R_B$를 거쳐 $Q_1$ 베이스로, 출력은 컬렉터 저항 $R_C$ 위 노드예요.</p>
+  <p>목표는 입력 극점 $500\ \mathrm{MHz}$, 출력 극점 $2\ \mathrm{GHz}$이고, 그 안에서 저주파 전압 이득이 가장 크게 $R_B$와 $R_C$를 고르는 거예요. 값은 $I_C=1\ \mathrm{mA}$, $C_\pi=20\ \mathrm{fF}$, $C_\mu=5\ \mathrm{fF}$, $C_{CS}=10\ \mathrm{fF}$, $V_A=\infty$예요.</p>
+  <p>$\beta$가 주어지지 않았으니 $r_\pi\to\infty$로 보고, 밀러 정리를 써요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 개념과 공식을 떠올려요</h4>
+  <p><strong>단서:</strong> 두 극점의 목표 주파수와 "이득 최대"가 함께 주어진 설계 문제예요. 극점은 <a href="정리노트_1028_CS_Stage_Frequency_Response.html#s2-ce-miller">CE 단 밀러 근사</a>로, 설계는 제약 → 허용 범위 → 선택 → 역산 → 검산 순서로 풀어요.</p>
+  <p><strong>개념:</strong> 출력 시정수 $R_C[C_{CS}+(1+1/(g_mR_C))C_\mu]$는 $R_C$에만, 입력 시정수 $R_B[C_\pi+(1+g_mR_C)C_\mu]$는 $R_B$와 $R_C$ 둘 다에 걸려요. 그래서 $R_C$를 먼저 정하고 $R_B$를 역산해요.</p>
+  <p><strong>기호의 뜻:</strong> $g_m=I_C/V_T$는 $Q_1$의 트랜스컨덕턴스, $C_{CS}$는 컬렉터–기판 커패시턴스예요.</p>
+  <p><strong>근사 조건:</strong> $V_T=26\ \mathrm{mV}$, $r_\pi\to\infty$(베이스 쪽 저항은 $R_B$만), $V_A=\infty$($r_O\to\infty$)예요. 밀러 배수에는 저주파 이득 $-g_mR_C$를 써요.</p>
+  <p><strong>선택 이유:</strong> $r_\pi$를 무시하면 이득은 $g_mR_C$라 $R_B$와 무관해요. 이득을 키우는 유일한 손잡이가 $R_C$이고, 그 상한을 출력 극점이 정해요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <div data-answer-step="이득과 두 극점의 식" data-gain-route="gm-rout">
+    <div data-gain-stage="gm"><p>출력 단락, $r_\pi\to\infty$라 저주파에서 $v_\pi=v_{in}$이에요.</p>
+    $$G_m=g_m=\frac{1\ \mathrm{mA}}{26\ \mathrm{mV}}=\frac{1}{26}\ \mathrm{S}$$</div>
+    <div data-gain-stage="rout"><p>입력 영점, $V_A=\infty$라 출력에는 $R_C$만 보여요.</p>
+    $$R_{out}\approx R_C$$</div>
+    <div data-gain-stage="gain">$$A_v=-G_mR_{out}=-g_mR_C$$</div>
+    <figure class="figure"><svg id="fig-p9-miller" viewBox="0 0 520 368" role="img" aria-label="① 변환 전: 왼쪽 v in 단자가 R B를 거쳐 입력 노드 X에 이어진다. X에서 C 파이가 접지로 내려가고 X와 출력 노드 Y 사이에 C 뮤가 떠 있다. Y에서 아래로 흐르는 종속 전류원 g m v 파이, 그 오른쪽 R C, 그 오른쪽 C CS이 접지로 내려가고 맨 오른쪽이 출력 단자 v out이다. ② 변환 후: C 뮤 대신 X에 접지 커패시턴스 C in,M, Y에 접지 커패시턴스 C out,M이 붙고 X와 Y 사이 연결이 없다."><text class="fig-text fig-math" x="4" y="18">①</text><circle class="fig-dot" data-node="vin" data-node-color="blue" cx="24" cy="48" r="4"/><text class="fig-text fig-math" data-node="vin" data-node-color="blue" x="14" y="36">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><path class="fig-ink" d="M24 48 H32 L37.3 41 L48.0 55 L58.7 41 L69.3 55 L80.0 41 L90.7 55 L96 48 H104"/><text class="fig-text fig-math" x="64" y="32" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">B</tspan></text><path class="fig-ink" d="M104 48 H124"/><circle class="fig-dot" data-node="X" data-node-color="red" cx="124" cy="48" r="4"/><text class="fig-text fig-math" data-node="X" data-node-color="red" x="118" y="36" text-anchor="end">X</text><path class="fig-ink" d="M124 48 V93 M124 103 V158"/><path class="fig-accent" d="M111 93 H137 M111 103 H137"/><text class="fig-text fig-math" x="101" y="103" text-anchor="end">C<tspan baseline-shift="sub" font-size="78%">π</tspan></text><path class="fig-ink" d="M124 48 H164 M174 48 H214"/><path class="fig-danger" d="M164 36 V60 M174 36 V60"/><text class="fig-text fig-math" x="169" y="24" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">μ</tspan></text><path class="fig-ink" d="M214 48 H505"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="214" cy="48" r="4"/><text class="fig-text fig-math" data-node="Y" data-node-color="blue" x="214" y="70" text-anchor="middle">Y</text><path class="fig-ink" d="M254 48 V88 M254 116 V158"/><polygon class="fig-ink" points="254,88 268,102 254,116 240,102"/><path class="fig-ink" d="M254 94 V109 M250 105 L254 110 L258 105"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="254" cy="48" r="4"/><text class="fig-text fig-math" x="232" y="107" text-anchor="end">g<tspan baseline-shift="sub" font-size="78%">m</tspan>v<tspan baseline-shift="sub" font-size="78%">π</tspan></text><path class="fig-ink" d="M300 48 V56 L307 63.8 L293 79.5 L307 95.2 L293 110.8 L307 126.5 L293 142.2 L300 150 V158"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="300" cy="48" r="4"/><text class="fig-text fig-math" x="313" y="108">R<tspan baseline-shift="sub" font-size="78%">C</tspan></text><path class="fig-ink" d="M380 48 V93 M380 103 V158"/><path class="fig-accent" d="M367 93 H393 M367 103 H393"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="380" cy="48" r="4"/><text class="fig-text fig-math" x="402" y="103">C<tspan baseline-shift="sub" font-size="78%">CS</tspan></text><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="505" cy="48" r="4"/><text class="fig-text fig-math" data-node="Y" data-node-color="blue" x="505" y="36" text-anchor="end">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M124 158 H380"/><path class="fig-ink" d="M244 158 V166 M234 166 H254 M238 171 H250 M242 176 H246"/><text class="fig-text fig-math" x="4" y="203">②</text><circle class="fig-dot" data-node="vin" data-node-color="blue" cx="24" cy="233" r="4"/><text class="fig-text fig-math" data-node="vin" data-node-color="blue" x="14" y="221">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><path class="fig-ink" d="M24 233 H32 L37.3 226 L48.0 240 L58.7 226 L69.3 240 L80.0 226 L90.7 240 L96 233 H104"/><text class="fig-text fig-math" x="64" y="217" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">B</tspan></text><path class="fig-ink" d="M104 233 H170"/><circle class="fig-dot" data-node="X" data-node-color="red" cx="124" cy="233" r="4"/><text class="fig-text fig-math" data-node="X" data-node-color="red" x="118" y="221" text-anchor="end">X</text><path class="fig-ink" d="M124 233 V278 M124 288 V343"/><path class="fig-accent" d="M111 278 H137 M111 288 H137"/><text class="fig-text fig-math" x="101" y="288" text-anchor="end">C<tspan baseline-shift="sub" font-size="78%">π</tspan></text><path class="fig-ink" d="M170 233 V278 M170 288 V343"/><path class="fig-danger" d="M157 278 H183 M157 288 H183"/><text class="fig-text fig-math" x="178" y="267">C<tspan baseline-shift="sub" font-size="78%">in,M</tspan></text><path class="fig-ink" d="M124 343 H170"/><path class="fig-ink" d="M147 343 V351 M137 351 H157 M141 356 H153 M145 361 H149"/><path class="fig-ink" d="M280 233 H505"/><path class="fig-ink" d="M280 233 V273 M280 301 V343"/><polygon class="fig-ink" points="280,273 294,287 280,301 266,287"/><path class="fig-ink" d="M280 279 V294 M276 290 L280 295 L284 290"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="280" cy="233" r="4"/><text class="fig-text fig-math" x="258" y="292" text-anchor="end">g<tspan baseline-shift="sub" font-size="78%">m</tspan>v<tspan baseline-shift="sub" font-size="78%">π</tspan></text><path class="fig-ink" d="M322 233 V241 L329 248.8 L315 264.5 L329 280.2 L315 295.8 L329 311.5 L315 327.2 L322 335 V343"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="322" cy="233" r="4"/><text class="fig-text fig-math" x="333" y="293">R<tspan baseline-shift="sub" font-size="78%">C</tspan></text><path class="fig-ink" d="M385 233 V278 M385 288 V343"/><path class="fig-accent" d="M372 278 H398 M372 288 H398"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="385" cy="233" r="4"/><text class="fig-text fig-math" x="403" y="288">C<tspan baseline-shift="sub" font-size="78%">CS</tspan></text><path class="fig-ink" d="M455 233 V278 M455 288 V343"/><path class="fig-danger" d="M442 278 H468 M442 288 H468"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="455" cy="233" r="4"/><text class="fig-text fig-math" x="470" y="313">C<tspan baseline-shift="sub" font-size="78%">out,M</tspan></text><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="505" cy="233" r="4"/><text class="fig-text fig-math" data-node="Y" data-node-color="blue" x="505" y="221" text-anchor="end">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M280 343 H455"/><path class="fig-ink" d="M368 343 V351 M358 351 H378 M362 356 H374 M366 361 H370"/></svg><figcaption>$V_{CC}$는 AC 접지, $Q_1$은 $C_\pi$·$C_\mu$·$C_{CS}$와 $g_mv_\pi$로 바꿨어요. $r_\pi\to\infty$, $V_A=\infty$라 두 저항은 그리지 않았어요. ②는 $C_{in,M}=(1+g_mR_C)C_\mu$, $C_{out,M}=(1+\frac{1}{g_mR_C})C_\mu$예요.</figcaption></figure>
+    $$\frac{1}{|\omega_{p,out}|}=R_C\left[C_{CS}+\left(1+\frac{1}{g_mR_C}\right)C_\mu\right]=R_C(C_{CS}+C_\mu)+\frac{C_\mu}{g_m}$$
+    $$\frac{1}{|\omega_{p,in}|}=R_B\left[C_\pi+(1+g_mR_C)C_\mu\right]$$
+  </div>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>이렇게 풀어요</h4>
+  <div data-subpart="main">
+    <div data-answer-step="R_C의 허용 범위와 선택">
+      <p><strong>제약:</strong> 출력 극점이 $2\ \mathrm{GHz}$보다 낮아지면 안 되므로 출력 시정수에 상한이 있어요.</p>
+      $$R_C(C_{CS}+C_\mu)+\frac{C_\mu}{g_m}\le\frac{1}{2\pi\cdot2\ \mathrm{GHz}}$$
+      <p><strong>허용 범위:</strong> 숫자를 넣어요. $C_\mu/g_m=5\ \mathrm{fF}\times26\ \Omega=0.13\ \mathrm{ps}$예요.</p>
+      $$R_C\le\frac{79.58\ \mathrm{ps}-0.13\ \mathrm{ps}}{15\ \mathrm{fF}}\approx5296.5\ \Omega\approx5.30\ \mathrm{k\Omega}$$
+      <p><strong>선택 이유:</strong> 이득 $g_mR_C$는 $R_C$에 비례하니 상한에서 최대예요. 그래서 출력 극점을 정확히 $2\ \mathrm{GHz}$에 맞춰 $R_C\approx5.30\ \mathrm{k\Omega}$로 정해요. $R_C$에 대한 1차식이라 반복 계산이 필요 없어요.</p>
+    </div>
+    <div data-answer-step="이득과 입력 커패시턴스">
+      <p>반올림 전 $R_C\approx5296.5\ \Omega$를 그대로 써요(표시값 5.30 kΩ을 다시 넣으면 203.85처럼 끝자리가 달라져요).</p>
+      $$|A_v|=g_mR_C=\frac{1000}{26}\ \mathrm{mS}\times5.2965\ \mathrm{k\Omega}\approx203.71$$
+      $$C_{in}=C_\pi+(1+g_mR_C)C_\mu\approx20\ \mathrm{fF}+204.71\times5\ \mathrm{fF}\approx1043.56\ \mathrm{fF}$$
+    </div>
+    <div data-answer-step="R_B 역산">
+      <p>입력 극점을 $500\ \mathrm{MHz}$에 맞춰요.</p>
+      $$R_B=\frac{1}{2\pi\cdot500\ \mathrm{MHz}\cdot C_{in}}\approx\frac{1}{2\pi\times5\times10^8\times1043.56\times10^{-15}}\ \Omega\approx305.02\ \Omega$$
+    </div>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <p data-answer-final><strong>$R_C\approx5.30\ \mathrm{k\Omega}$, $R_B\approx305.02\ \Omega$이고 이때 저주파 이득은 $|A_v|=g_mR_C\approx203.71$이에요.</strong> ($V_T=26\ \mathrm{mV}$, $r_\pi\to\infty$, $V_A=\infty$, 밀러 근사)</p>
+    <p><strong>전체 제약 대입:</strong> 출력 시정수 $5296.5\ \Omega\times15\ \mathrm{fF}+0.13\ \mathrm{ps}\approx79.58\ \mathrm{ps}$이라 $1/(2\pi\times79.58\ \mathrm{ps})\approx2\ \mathrm{GHz}$예요. 입력 시정수 $305.02\ \Omega\times1043.56\ \mathrm{fF}\approx318.31\ \mathrm{ps}$라 $500\ \mathrm{MHz}$예요.</p>
+    <p><strong>단위:</strong> $[\mathrm{mS}\cdot\mathrm{k\Omega}]=1$이라 이득은 무차원이고, $[\mathrm{ps}/\mathrm{fF}]=[\mathrm{k\Omega}]$라 $R_C$ 단위가 맞아요.</p>
+    <p><strong>최대성 확인:</strong> $R_C$를 조금이라도 키우면 출력 시정수가 늘어 출력 극점이 $2\ \mathrm{GHz}$ 아래로 내려가요. 줄이면 이득이 줄어요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>주의할 점</h4>
+  <p>출력 쪽 밀러 커패시턴스를 그냥 $C_\mu$로 두면 $C_\mu/g_m$ 항이 사라져 $R_C$가 조금 커져요. 식을 펼치면 $R_C$에 대해 1차식이라 정확히 풀 수 있어요.</p>
+  <p>$R_B$를 먼저 정하려 하면 $C_{in}$이 $R_C$에 따라 바뀌어 정해지지 않아요. 순서는 $R_C$ → 이득 → $C_{in}$ → $R_B$예요.</p>
+  <p>$R_B$를 키우면 이득이 줄 것 같지만 $r_\pi\to\infty$ 모델에서는 저주파 이득에 $R_B$가 들어가지 않아요. 유한 $r_\pi$라면 $r_\pi/(R_B+r_\pi)$ 분배가 생기니 모델 가정을 답에 함께 적어요.</p>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>조건을 바꾸어 생각해요</h4>
+  <ol>
+    <li>출력 극점 목표가 $1\ \mathrm{GHz}$로 완화되면 $R_C$의 상한은 대략 얼마가 될까요?</li>
+    <li>그 경우 이득이 커지면 입력 쪽 밀러 커패시턴스도 커져요. 입력 극점 $500\ \mathrm{MHz}$를 지키려면 $R_B$는 커져야 할까요, 작아져야 할까요?</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <p class="sum-lead">이득 $g_mR_C$는 $R_C$에만 걸리므로 출력 극점으로 $R_C$ 상한을 먼저 정해요.</p>
+  <p>$\dfrac{1}{|\omega_{p,out}|}=R_C(C_{CS}+C_\mu)+\dfrac{C_\mu}{g_m}$</p>
+  <p>$R_C\approx5.30\ \mathrm{k\Omega}$, $|A_v|\approx203.71$</p>
+  <p>$R_B=\dfrac{1}{2\pi\cdot500\ \mathrm{MHz}\,[C_\pi+(1+g_mR_C)C_\mu]}\approx305.02\ \Omega$</p>
+</div>

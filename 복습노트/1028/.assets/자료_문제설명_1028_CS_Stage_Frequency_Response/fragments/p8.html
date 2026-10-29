@@ -1,0 +1,81 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 읽어요</h4>
+  <p>npn $Q_1$이 입력을 받는 공통 이미터(CE) 단이고, 위의 pnp $Q_2$는 베이스가 $V_b$, 이미터가 $V_{CC}$인 전류원 부하예요. 입력은 $R_S$를 거쳐 $Q_1$ 베이스로, 출력은 두 컬렉터가 만나는 노드예요.</p>
+  <p>값은 $R_S=10\ \mathrm{k\Omega}$, $I_{D1}=0.5\ \mathrm{mA}$, $V_T=25\ \mathrm{mV}$, $\beta=200$, $V_{A,n}=V_{A,p}=5\ \mathrm{V}$예요. BJT 회로라 $I_{D1}$은 $Q_1$의 컬렉터 바이어스 전류 $I_{C1}$로 읽어요. $Q_2$도 같은 전류를 흘려요.</p>
+  <p>구할 것은 입력 노드와 출력 노드의 극점 주파수를 $Q_1$, $Q_2$의 커패시턴스 기호로 쓴 식이에요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 개념과 공식을 떠올려요</h4>
+  <p><strong>단서:</strong> "입력과 출력 노드의 pole"과 커패시턴스 기호로 답하라는 말에서 노드마다 RC를 구하는 <a href="정리노트_1028_CS_Stage_Frequency_Response.html#s2-ce-miller">CE 단 밀러 근사</a>를 떠올려요.</p>
+  <p><strong>개념:</strong> 떠 있는 $C_{\mu1}$을 밀러로 나누고, 나머지 커패시턴스는 어느 노드와 AC 접지 사이에 있는지 따져 해당 노드에 더해요.</p>
+  <p><strong>기호의 뜻:</strong> $g_{m1}=I_{C1}/V_T$, $r_{\pi1}=\beta/g_{m1}$, $r_{O}=V_A/I_C$예요. $C_{\pi j}$는 베이스–이미터, $C_{\mu j}$는 베이스–컬렉터, $C_{CSj}$는 컬렉터–기판 커패시턴스예요.</p>
+  <p><strong>근사 조건:</strong> $V_A$가 주어졌으니 $r_{O1}$, $r_{O2}$를 유지해요. 입력 노드 저항은 유한 $r_{\pi1}$을 포함한 $R_S\parallel r_{\pi1}$이에요. $Q_2$는 베이스와 이미터가 모두 AC 접지라 출력에는 $r_{O2}$만 보여요.</p>
+  <p><strong>선택 이유:</strong> 수치는 저항과 이득에만 넣고 커패시턴스는 기호로 남기면 답의 형태가 문제 요구와 같아요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <div data-answer-step="소신호 값">
+    $$g_{m1}=\frac{I_{C1}}{V_T}=\frac{0.5\ \mathrm{mA}}{25\ \mathrm{mV}}=\frac{1}{50}\ \mathrm{S}=20\ \mathrm{mS}$$
+    $$r_{\pi1}=\frac{\beta}{g_{m1}}=200\times50\ \Omega=10\ \mathrm{k\Omega}$$
+    $$r_{O1}=r_{O2}=\frac{V_A}{I_C}=\frac{5\ \mathrm{V}}{0.5\ \mathrm{mA}}=10\ \mathrm{k\Omega}$$
+  </div>
+  <p>$C_{\pi2}$는 베이스($V_b$)–이미터($V_{CC}$)가 둘 다 AC 접지라 빠지고, $C_{\mu2}$와 $C_{CS2}$는 출력–AC 접지에 붙어요. 그래서 통합 모델의 출력 커패시턴스는 $C_{out}=C_{CS1}+C_{\mu2}+C_{CS2}$예요.</p>
+  <figure class="figure"><svg id="fig-p8-miller" viewBox="0 0 520 368" role="img" aria-label="① 변환 전: 왼쪽 v Th 단자가 R S 병렬 r 파이1를 거쳐 입력 노드 X에 이어진다. X에서 C 파이1가 접지로 내려가고 X와 출력 노드 Y 사이에 C 뮤1가 떠 있다. Y에서 아래로 흐르는 종속 전류원 g m1 v 파이1, 그 오른쪽 R out, 그 오른쪽 C out이 접지로 내려가고 맨 오른쪽이 출력 단자 v out이다. ② 변환 후: C 뮤1 대신 X에 접지 커패시턴스 C in,M, Y에 접지 커패시턴스 C out,M이 붙고 X와 Y 사이 연결이 없다."><text class="fig-text fig-math" x="4" y="18">①</text><circle class="fig-dot" data-node="vin" data-node-color="blue" cx="24" cy="48" r="4"/><text class="fig-text fig-math" data-node="vin" data-node-color="blue" x="14" y="36">v<tspan baseline-shift="sub" font-size="78%">Th</tspan></text><path class="fig-ink" d="M24 48 H32 L37.3 41 L48.0 55 L58.7 41 L69.3 55 L80.0 41 L90.7 55 L96 48 H104"/><text class="fig-text fig-math" x="64" y="32" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">S</tspan>‖r<tspan baseline-shift="sub" font-size="78%">π1</tspan></text><path class="fig-ink" d="M104 48 H124"/><circle class="fig-dot" data-node="X" data-node-color="red" cx="124" cy="48" r="4"/><text class="fig-text fig-math" data-node="X" data-node-color="red" x="118" y="36" text-anchor="end">X</text><path class="fig-ink" d="M124 48 V93 M124 103 V158"/><path class="fig-accent" d="M111 93 H137 M111 103 H137"/><text class="fig-text fig-math" x="101" y="103" text-anchor="end">C<tspan baseline-shift="sub" font-size="78%">π1</tspan></text><path class="fig-ink" d="M124 48 H164 M174 48 H214"/><path class="fig-danger" d="M164 36 V60 M174 36 V60"/><text class="fig-text fig-math" x="169" y="24" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">μ1</tspan></text><path class="fig-ink" d="M214 48 H505"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="214" cy="48" r="4"/><text class="fig-text fig-math" data-node="Y" data-node-color="blue" x="214" y="70" text-anchor="middle">Y</text><path class="fig-ink" d="M254 48 V88 M254 116 V158"/><polygon class="fig-ink" points="254,88 268,102 254,116 240,102"/><path class="fig-ink" d="M254 94 V109 M250 105 L254 110 L258 105"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="254" cy="48" r="4"/><text class="fig-text fig-math" x="232" y="107" text-anchor="end">g<tspan baseline-shift="sub" font-size="78%">m1</tspan>v<tspan baseline-shift="sub" font-size="78%">π1</tspan></text><path class="fig-ink" d="M300 48 V56 L307 63.8 L293 79.5 L307 95.2 L293 110.8 L307 126.5 L293 142.2 L300 150 V158"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="300" cy="48" r="4"/><text class="fig-text fig-math" x="313" y="108">R<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M380 48 V93 M380 103 V158"/><path class="fig-accent" d="M367 93 H393 M367 103 H393"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="380" cy="48" r="4"/><text class="fig-text fig-math" x="402" y="103">C<tspan baseline-shift="sub" font-size="78%">out</tspan></text><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="505" cy="48" r="4"/><text class="fig-text fig-math" data-node="Y" data-node-color="blue" x="505" y="36" text-anchor="end">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M124 158 H380"/><path class="fig-ink" d="M244 158 V166 M234 166 H254 M238 171 H250 M242 176 H246"/><text class="fig-text fig-math" x="4" y="203">②</text><circle class="fig-dot" data-node="vin" data-node-color="blue" cx="24" cy="233" r="4"/><text class="fig-text fig-math" data-node="vin" data-node-color="blue" x="14" y="221">v<tspan baseline-shift="sub" font-size="78%">Th</tspan></text><path class="fig-ink" d="M24 233 H32 L37.3 226 L48.0 240 L58.7 226 L69.3 240 L80.0 226 L90.7 240 L96 233 H104"/><text class="fig-text fig-math" x="64" y="217" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">S</tspan>‖r<tspan baseline-shift="sub" font-size="78%">π1</tspan></text><path class="fig-ink" d="M104 233 H170"/><circle class="fig-dot" data-node="X" data-node-color="red" cx="124" cy="233" r="4"/><text class="fig-text fig-math" data-node="X" data-node-color="red" x="118" y="221" text-anchor="end">X</text><path class="fig-ink" d="M124 233 V278 M124 288 V343"/><path class="fig-accent" d="M111 278 H137 M111 288 H137"/><text class="fig-text fig-math" x="101" y="288" text-anchor="end">C<tspan baseline-shift="sub" font-size="78%">π1</tspan></text><path class="fig-ink" d="M170 233 V278 M170 288 V343"/><path class="fig-danger" d="M157 278 H183 M157 288 H183"/><text class="fig-text fig-math" x="178" y="267">C<tspan baseline-shift="sub" font-size="78%">in,M</tspan></text><path class="fig-ink" d="M124 343 H170"/><path class="fig-ink" d="M147 343 V351 M137 351 H157 M141 356 H153 M145 361 H149"/><path class="fig-ink" d="M280 233 H505"/><path class="fig-ink" d="M280 233 V273 M280 301 V343"/><polygon class="fig-ink" points="280,273 294,287 280,301 266,287"/><path class="fig-ink" d="M280 279 V294 M276 290 L280 295 L284 290"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="280" cy="233" r="4"/><text class="fig-text fig-math" x="258" y="292" text-anchor="end">g<tspan baseline-shift="sub" font-size="78%">m1</tspan>v<tspan baseline-shift="sub" font-size="78%">π1</tspan></text><path class="fig-ink" d="M322 233 V241 L329 248.8 L315 264.5 L329 280.2 L315 295.8 L329 311.5 L315 327.2 L322 335 V343"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="322" cy="233" r="4"/><text class="fig-text fig-math" x="333" y="293">R<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M385 233 V278 M385 288 V343"/><path class="fig-accent" d="M372 278 H398 M372 288 H398"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="385" cy="233" r="4"/><text class="fig-text fig-math" x="403" y="288">C<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M455 233 V278 M455 288 V343"/><path class="fig-danger" d="M442 278 H468 M442 288 H468"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="455" cy="233" r="4"/><text class="fig-text fig-math" x="470" y="313">C<tspan baseline-shift="sub" font-size="78%">out,M</tspan></text><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="505" cy="233" r="4"/><text class="fig-text fig-math" data-node="Y" data-node-color="blue" x="505" y="221" text-anchor="end">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M280 343 H455"/><path class="fig-ink" d="M368 343 V351 M358 351 H378 M362 356 H374 M366 361 H370"/></svg><figcaption>$V_{CC}$·$V_b$는 AC 접지예요. $Q_1$은 $r_{\pi1}$·$C_{\pi1}$·$C_{\mu1}$·$C_{CS1}$·$g_{m1}v_{\pi1}$·$r_{O1}$로, $Q_2$는 $r_{O2}$와 출력–접지 $C_{\mu2}$·$C_{CS2}$로 바꿨어요. $R_{out}=r_{O1}\parallel r_{O2}$, $C_{out}=C_{CS1}+C_{\mu2}+C_{CS2}$이고 ②는 $C_{in,M}=101C_{\mu1}$, $C_{out,M}=1.01C_{\mu1}$이에요.</figcaption></figure>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>이렇게 풀어요</h4>
+  <div data-subpart="main">
+    <div data-answer-step="밀러 배수에 쓸 이득" data-gain-route="gm-rout">
+      <p>$C_{\mu1}$ 양 끝, 입력 노드 X($v_{\pi1}$)에서 출력까지의 저주파 이득이에요.</p>
+      <div data-gain-stage="gm"><p>출력 단락: 이미터가 접지라 $i_{out}=g_{m1}v_X$예요. $Q_2$는 신호를 받지 않아요.</p>
+      $$G_m=g_{m1}=20\ \mathrm{mS}$$</div>
+      <div data-gain-stage="rout"><p>입력 영점: 아래는 $r_{O1}$, 위는 베이스·이미터가 AC 접지인 $Q_2$의 $r_{O2}$이고 둘 다 출력–AC 접지예요.</p>
+      $$R_{out}=r_{O1}\parallel r_{O2}=5\ \mathrm{k\Omega}$$</div>
+      <div data-gain-stage="gain">$$\frac{v_{out}}{v_X}=-G_mR_{out}=-20\ \mathrm{mS}\times5\ \mathrm{k\Omega}=-100$$</div>
+    </div>
+    <div data-answer-step="입력 극점">
+      <p>입력 노드의 저항은 $R_S$와 $r_{\pi1}$의 병렬이에요.</p>
+      $$R_{Th}=R_S\parallel r_{\pi1}=10\ \mathrm{k\Omega}\parallel10\ \mathrm{k\Omega}=5\ \mathrm{k\Omega}$$
+      $$C_{in}=C_{\pi1}+(1+100)C_{\mu1}=C_{\pi1}+101C_{\mu1}$$
+      $$|\omega_{p,in}|=\frac{1}{5\ \mathrm{k\Omega}\,(C_{\pi1}+101C_{\mu1})}$$
+    </div>
+    <div data-answer-step="출력 극점">
+      <p>출력 쪽 밀러 계수는 $1+1/100=1.01$이에요.</p>
+      $$C_{out,tot}=1.01C_{\mu1}+C_{CS1}+C_{\mu2}+C_{CS2}$$
+      $$|\omega_{p,out}|=\frac{1}{5\ \mathrm{k\Omega}\,(1.01C_{\mu1}+C_{CS1}+C_{\mu2}+C_{CS2})}$$
+    </div>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <div data-answer-final>
+      <p><strong>입력:</strong> $|\omega_{p,in}|=\dfrac{1}{5\ \mathrm{k\Omega}\,(C_{\pi1}+101C_{\mu1})}$, 즉 $f_{p,in}=\dfrac{1}{2\pi\cdot5\ \mathrm{k\Omega}\,(C_{\pi1}+101C_{\mu1})}$</p>
+      <p><strong>출력:</strong> $|\omega_{p,out}|=\dfrac{1}{5\ \mathrm{k\Omega}\,(1.01C_{\mu1}+C_{CS1}+C_{\mu2}+C_{CS2})}$, 즉 $f_{p,out}=|\omega_{p,out}|/2\pi$</p>
+      <p>($I_{D1}$을 $I_{C1}$로 해석, 밀러 근사, 저주파 이득 $-100$ 사용)</p>
+    </div>
+    <p><strong>단위:</strong> $20\ \mathrm{mS}\times5\ \mathrm{k\Omega}=100$으로 무차원이고 $[\mathrm{mS}\cdot\mathrm{k\Omega}]=1$이에요. 극점은 $[1/(\Omega\cdot\mathrm{F})]=[1/\mathrm{s}]$예요.</p>
+    <p><strong>극한 확인:</strong> $C_{\mu1}\to0$이면 두 노드가 분리돼 각각 $1/(5\ \mathrm{k\Omega}\cdot C_{\pi1})$, $1/(5\ \mathrm{k\Omega}\cdot(C_{CS1}+C_{\mu2}+C_{CS2}))$로 돌아와요.</p>
+    <p><strong>커패시턴스 목록 확인:</strong> 여섯 개 중 $C_{\pi2}$만 양 끝이 AC 접지라 빠졌고, 나머지 다섯은 한 번씩 들어갔어요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>주의할 점</h4>
+  <p>$Q_2$를 다이오드처럼 보고 $\frac{1}{g_{m2}}\parallel r_{O2}$를 붙이면 틀려요. 베이스와 이미터가 모두 AC 접지이고 컬렉터가 출력이라 $v_{be2}=0$이므로 $r_{O2}$만 보여요.</p>
+  <p>$C_{\mu2}$를 떠 있는 커패시턴스로 착각하기 쉬워요. 한쪽 끝인 베이스가 $V_b$라 AC 접지예요.</p>
+  <p>입력 노드 저항을 $R_S=10\ \mathrm{k\Omega}$로만 두면 $r_{\pi1}=10\ \mathrm{k\Omega}$과의 병렬을 빠뜨려 입력 극점을 절반으로 잘못 구해요.</p>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>조건을 바꾸어 생각해요</h4>
+  <ol>
+    <li>$V_{A,n}=V_{A,p}=10\ \mathrm{V}$로 두 배가 되면 저주파 이득과 입력 쪽 밀러 계수는 얼마가 될까요?</li>
+    <li>$Q_2$를 이상적 전류원($V_{A,p}=\infty$)으로 바꾸면 $R_{out}$은 무엇이 될까요?</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <p class="sum-lead">전류원 부하 CE 단은 $R_{out}=r_{O1}\parallel r_{O2}$, 입력 저항은 $R_S\parallel r_{\pi1}$이에요.</p>
+  <p>$g_{m1}R_{out}=20\ \mathrm{mS}\times5\ \mathrm{k\Omega}=100$</p>
+  <p>$|\omega_{p,in}|=\dfrac{1}{5\ \mathrm{k\Omega}\,(C_{\pi1}+101C_{\mu1})}$</p>
+  <p>$|\omega_{p,out}|=\dfrac{1}{5\ \mathrm{k\Omega}\,(1.01C_{\mu1}+C_{CS1}+C_{\mu2}+C_{CS2})}$</p>
+  <p>$C_{\pi2}$는 양 끝이 AC 접지라 빠져요.</p>
+</div>

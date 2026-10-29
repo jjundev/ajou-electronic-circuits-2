@@ -1,0 +1,603 @@
+{
+  "schema_version": 1,
+  "review_policy_version": "problem-explain-2026-10-21-learning-style",
+  "range": "1028",
+  "slug": "CS_Stage_Frequency_Response",
+  "learning_style": {
+    "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
+    "sha256": "93446b14ce9a4167cb3dc62b6b8fe2dc777ad4ff825b7894568b4e2f6d971f42",
+    "rule_ids": [
+      "UNIT-01",
+      "CALC-01",
+      "CALC-02",
+      "CIRCUIT-01",
+      "CIRCUIT-02",
+      "GAIN-01",
+      "DEGEN-01",
+      "SCALE-01",
+      "BIAS-01",
+      "NOTATION-01",
+      "EXPLAIN-01",
+      "CORRECT-01"
+    ]
+  },
+  "input_hash": "b1a01e439f08490afecc4eff44f32dae0cedffb09ede7cd7b597a831e253c553",
+  "source_inputs": {
+    "복습노트/1028/.assets/problems.txt": "fbb628b76735ab0303aeae296c35244bb2f5b0d769b76a2e0a3c185600eb43a6",
+    "복습노트/1028/.assets/display-titles.json": "64505e463a02f61b883697f3eddfa0b5438d90c7690be79472e9ef9994daebdf",
+    "복습노트/1028/.assets/selection.json": "9b81f265ddf1abea13dcc9a5eed9af8859fa29a36f80119f9d25557d81eca9ac",
+    "from_the_past/md/2023-1_기말/Q6.md": "a892fbf8cd30f6401b14abb64c570501d62ea8a8ee650c8a335697c11271c8b8",
+    "교과서/마이크로전자회로/ch11/예제/E11.14.md": "d56404807fe1e8c0ff90c08bdc61d4b0dad727f08ae806a390e95fcee4cc76cc",
+    "교과서/마이크로전자회로/ch11/장말문제/P11.33.md": "e9c9431e4b2c3d9b58afde65b87735483211e3b32bec9272485a08d6ae24f4b9",
+    "교과서/마이크로전자회로/ch11/장말문제/P11.34.md": "f11859e8a5fc712db254167df3240d33051597ef31b6fbfff40cfebf6cd24862",
+    "교과서/마이크로전자회로/ch11/예제/E11.16.md": "0087db231851e43064ed21a60879542c8951f21612f1a649a94a2baec4e73e1a",
+    "교과서/마이크로전자회로/ch11/장말문제/P11.38.md": "65316f151f57c4cdabd10286c055bf452461207906134f65c54b48f412d75efd",
+    "교과서/마이크로전자회로/ch11/예제/E11.15.md": "e334b890f25dd40470bd075050dfee241b9b0208b745aba1ffed0b4a2ce4e0b1",
+    "from_the_past/md/2021-1_기말/Q2.md": "428543798b15f71f6be12b485caa4568671a5847907729a90591499f767f1600",
+    "교과서/마이크로전자회로/ch11/장말문제/P11.53.md": "cf6a91f7d426bced11f67f3d636b56f83c1fddfa3c8880aca4fb368f217a2258",
+    "교과서/마이크로전자회로/ch11/장말문제/P11.44.md": "75a4d04a00ece4b6ec62109e3d0b13cd6ec60911cf6fe2473b9692842445bd0a",
+    "교과서/마이크로전자회로/ch11/예제/E11.18.md": "38db92667196fea09ebfb7e72d6f71841ac2de68162fda7595427d2729cb88cf",
+    "교과서/마이크로전자회로/ch11/장말문제/P11.39.md": "11a551e20e5b426f2ba6dad9793b38dea2db5bc45b4758519d555dd1c62d833a",
+    "교과서/마이크로전자회로/ch11/예제/E11.17.md": "e6fc2c2c3bb6df468872e589f67925b92db9a94e4116002adac532881b1a6a50",
+    "교과서/마이크로전자회로/ch11/장말문제/P11.40.md": "565f386ac2bc0b4c4a6f945026218b18444f422fc3a0b389eb4af9d3eb5e01af",
+    "교과서/마이크로전자회로/ch11/장말문제/P11.41.md": "9a8d913acdc176a639e8759cc09dfc8a047c8f6498c0a572765d4a46143bb71e",
+    "교과서/마이크로전자회로/ch11/figures/fig11-31-cs.png": "1ed6fcaef4425f253d3c20f2fcb3541ee0d83b001ab508d1d00de18fa08a8353",
+    "교과서/마이크로전자회로/ch11/figures/fig11-82.png": "0f95bb8bdb4cce55c8a2954e7cba4bcb0720b37664ff769fa72fb638d48ac94a",
+    "교과서/마이크로전자회로/ch11/figures/fig11-31-ce.png": "f20451cb91abb6af45ff7f6fe6fa89a7eabc744eb5587d651aafbfa592aa7012",
+    "from_the_past/md/2021-1_기말/figures/redrawn/fig-Q2.png": "7f9c59bf6a0da2a9d5531792ab8b87f6815c6fe06b668ce6b3b87712092b7a9d",
+    "교과서/마이크로전자회로/ch11/figures/fig11-94.png": "80b95b38e7eeff8a2976b73b5355bbacb6c8aa3f949a595f1baf780fd8f6774b",
+    "교과서/마이크로전자회로/ch11/figures/fig11-86.png": "0f27fad2131eef3c595b4dd2f6707785844e54bf45fb1c34afba91b8f0470363",
+    "교과서/마이크로전자회로/ch11/figures/fig11-31.png": "dac69228bb890e66c24cc94b54dc231ed90acf71a3c77760431ded74c7eb3b7b",
+    "교과서/마이크로전자회로/ch11/figures/fig11-33-a.png": "4d5a3b8f1c3d2da68f01de325f2a5fb61392cc76b9f731d74afc8e334dcfbc21",
+    "교과서/마이크로전자회로/ch11/figures/fig11-83.png": "1e729b70c3d54d3744da26385b805166d5422366356bb01eb2b31456c2120746",
+    ".claude/skills/ec2-review-pack/references/solution-style.md": "93446b14ce9a4167cb3dc62b6b8fe2dc777ad4ff825b7894568b4e2f6d971f42"
+  },
+  "problems": [
+    {
+      "id": "2023-1_기말-Q6",
+      "explanation_id": "p1",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "f_T 시험 회로와 첫 식",
+          "html": "\n    <p>게이트에 소신호 전류원 $i_{in}$을 걸고, 드레인은 오른쪽에서 접지로 단락해요. 소스도 접지예요. $C_{GD}$는 문제 조건대로 빼요.</p>\n    <figure class=\"figure\"><svg id=\"p1-fig-p1-ft\" viewBox=\"0 0 440 200\" role=\"img\" aria-label=\"왼쪽 소신호 전류원 i in이 접지에서 게이트 노드 G로 전류를 넣는다. G에서 C GS가 접지로 내려가고 v GS는 G가 플러스, 접지가 마이너스다. 드레인 노드 D에서 아래로 흐르는 종속 전류원 g m v GS가 접지로 가고, D는 오른쪽 단락선으로 접지에 이어져 v out은 0이다. 단락선에서 D로 왼쪽 방향 i out이 들어온다.\"><path class=\"fig-ink\" d=\"M60 50 V96 M60 124 V170\"/><circle class=\"fig-accent\" cx=\"60\" cy=\"110\" r=\"14\"/><path class=\"fig-accent\" d=\"M60 119 V101 M55 106 L60 101 L65 106\"/><text class=\"fig-text fig-math\" x=\"40\" y=\"115\" text-anchor=\"end\">i<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text><path class=\"fig-ink\" d=\"M60 50 H150\"/><circle class=\"fig-dot\" data-node=\"G\" data-node-color=\"red\" cx=\"150\" cy=\"50\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"G\" data-node-color=\"red\" x=\"150\" y=\"38\" text-anchor=\"middle\">G</text><path class=\"fig-ink\" d=\"M150 50 V105 M150 115 V170\"/><path class=\"fig-accent\" d=\"M137 105 H163 M137 115 H163\"/><text class=\"fig-text fig-math\" x=\"128\" y=\"115\" text-anchor=\"end\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">GS</tspan></text><text class=\"fig-text fig-math\" data-node=\"G\" data-node-color=\"red\" x=\"176\" y=\"84\">+</text><text class=\"fig-text fig-math\" data-node=\"G\" data-node-color=\"red\" x=\"176\" y=\"115\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">GS</tspan></text><text class=\"fig-text fig-math\" data-node=\"G\" data-node-color=\"red\" x=\"176\" y=\"150\">−</text><path class=\"fig-ink\" d=\"M250 50 H340 V170\"/><path class=\"fig-ink\" d=\"M250 50 V96 M250 124 V170\"/><polygon class=\"fig-ink\" points=\"250,96 264,110 250,124 236,110\"/><path class=\"fig-ink\" d=\"M250 102 V117 M246 113 L250 118 L254 113\"/><text class=\"fig-text fig-math\" x=\"268\" y=\"115\">g<tspan baseline-shift=\"sub\" font-size=\"78%\">m</tspan>v<tspan baseline-shift=\"sub\" font-size=\"78%\">GS</tspan></text><circle class=\"fig-dot\" data-node=\"D\" data-node-color=\"blue\" cx=\"250\" cy=\"50\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"D\" data-node-color=\"blue\" x=\"250\" y=\"38\" text-anchor=\"middle\">D</text><circle class=\"fig-dot\" data-node=\"D\" data-node-color=\"blue\" cx=\"340\" cy=\"50\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"D\" data-node-color=\"blue\" x=\"352\" y=\"46\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan>=0</text><path class=\"fig-accent\" d=\"M322 50 H284 M292 44 L284 50 L292 56\"/><text class=\"fig-text fig-math\" x=\"303\" y=\"76\" text-anchor=\"middle\">i<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text><path class=\"fig-ink\" d=\"M60 170 H340\"/><path class=\"fig-ink\" d=\"M200 170 V178 M190 178 H210 M194 183 H206 M198 188 H202\"/></svg><figcaption>소스는 접지, 드레인은 오른쪽 단락선으로 AC 접지해요. $C_{GD}$는 문제 조건대로 빼고 트랜지스터를 $C_{GS}$와 $g_mv_{GS}$로 바꿨어요.</figcaption></figure>\n    <p>게이트 노드 G의 KCL: 들어온 전류는 모두 $C_{GS}$로 흘러요.</p>\n    $$I_{in}=sC_{GS}V_{GS}$$\n    <p>드레인 노드 D: 출력이 단락이라 $v_{out}=0$이고, 단락선으로 들어오는 전류가 종속원 전류와 같아요.</p>\n    $$I_{out}=g_mV_{GS}$$\n  "
+        },
+        {
+          "subpart": "main",
+          "label": "f_T의 정의",
+          "html": "\n      <p>드레인을 AC 접지에 단락하고 게이트에 소신호 전류를 넣었을 때, 소신호 전류 이득 $|I_{out}/I_{in}|$이 1로 떨어지는 주파수를 $f_T$라고 정의해요.</p>\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "전류 이득에서 ω_T 구하기",
+          "html": "\n      <p>두 첫 식을 나누면 $V_{GS}$가 약분돼요.</p>\n      $$\\frac{I_{out}}{I_{in}}=\\frac{g_mV_{GS}}{sC_{GS}V_{GS}}=\\frac{g_m}{sC_{GS}}$$\n      <p>$s=j\\omega$를 넣고 크기를 보면 주파수에 반비례해요.</p>\n      $$\\left|\\frac{I_{out}}{I_{in}}\\right|=\\frac{g_m}{\\omega C_{GS}}$$\n      <p>이 값이 1이 되는 각주파수가 $\\omega_T$예요.</p>\n      $$\\omega_T=2\\pi f_T=\\frac{g_m}{C_{GS}}$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "μ_n, L, V_GS−V_TH로 정리",
+          "html": "\n      <p>포화 영역의 $g_m$과 주어진 $C_{GS}$를 넣어요.</p>\n      $$g_m=\\mu_nC_{ox}\\frac{W}{L}(V_{GS}-V_{TH})$$\n      $$C_{GS}=\\frac{2}{3}WLC_{ox}$$\n      <p>분자의 $W/L$과 분모의 $WL$에서 $W$와 $C_{ox}$가 약분되고 $L$이 두 번 남아요.</p>\n      $$\\omega_T=\\frac{\\mu_nC_{ox}(W/L)(V_{GS}-V_{TH})}{(2/3)WLC_{ox}}=\\frac{3\\mu_n(V_{GS}-V_{TH})}{2L^2}$$\n    "
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n      <p><strong>정의:</strong> 드레인을 AC 접지한 MOSFET에서 소신호 전류 이득 $|I_{out}/I_{in}|$이 1이 되는 주파수가 $f_T$예요.</p>\n      <p><strong>식:</strong> $\\omega_T=2\\pi f_T=\\dfrac{g_m}{C_{GS}}$ (포화, $C_{GD}$ 무시)</p>\n      <p><strong>대입:</strong> $\\omega_T=\\dfrac{3\\mu_n(V_{GS}-V_{TH})}{2L^2}$</p>\n    "
+        }
+      ]
+    },
+    {
+      "id": "E11.14",
+      "explanation_id": "p2",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "f_T의 비례식",
+          "html": "\n    <p>트랜싯 주파수 식에서 고정 인자와 변하는 인자를 나눠 적어요.</p>\n    $$2\\pi f_T\\approx\\frac{3}{2}\\frac{\\mu_n}{L^2}(V_{GS}-V_{TH})$$\n    <p>$\\mu_n$이 같으므로 바뀐 뒤와 앞의 비는 다음과 같아요.</p>\n    $$\\frac{f_T^*}{f_T}=\\left(\\frac{L}{L^*}\\right)^2\\cdot\\frac{(V_{GS}-V_{TH})^*}{V_{GS}-V_{TH}}$$\n  "
+        },
+        {
+          "subpart": "main",
+          "label": "두 인자의 배율",
+          "html": "\n      <p>먼저 단위를 맞춰요. $1\\ \\mu\\mathrm{m}=1000\\ \\mathrm{nm}$예요.</p>\n      <p>길이 인자: $L$이 줄면 $1/L^2$로 커지므로 제곱이 붙어요.</p>\n      $$\\left(\\frac{L}{L^*}\\right)^2=\\left(\\frac{1000\\ \\mathrm{nm}}{65\\ \\mathrm{nm}}\\right)^2\\approx236.69$$\n      <p>과구동 전압 인자: $f_T$는 과구동 전압에 비례하므로 줄어든 만큼 손해를 봐요.</p>\n      $$\\frac{(V_{GS}-V_{TH})^*}{V_{GS}-V_{TH}}=\\frac{100\\ \\mathrm{mV}}{400\\ \\mathrm{mV}}=\\frac{1}{4}$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "최종 배율",
+          "html": "\n      <p>두 배율을 곱해요. 반올림 전 값 $(1000/65)^2$를 그대로 써요.</p>\n      $$\\frac{f_T^*}{f_T}=\\left(\\frac{1000}{65}\\right)^2\\times\\frac{1}{4}\\approx59.17$$\n      <p>즉 길이 축소로 약 237배 빨라질 것을 과구동 전압 축소가 1/4로 깎아서 약 59배가 돼요.</p>\n    "
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "<p data-answer-final=\"\"><strong>$f_T$는 약 59배($\\approx59.17$배) 증가했어요.</strong> ($\\mu_n$ 고정, 장채널 모델 $2\\pi f_T\\approx\\frac{3}{2}\\mu_n(V_{GS}-V_{TH})/L^2$ 기준)</p>"
+        }
+      ]
+    },
+    {
+      "id": "P11.33",
+      "explanation_id": "p3",
+      "subparts": [
+        "a",
+        "b"
+      ],
+      "steps": [
+        {
+          "subpart": "a",
+          "label": "고정 조건을 전류식에 넣기",
+          "html": "\n    <p>고정: $I_D$, $V_{GS}-V_{TH}$, $\\mu_n$, $C_{ox}$. 변함: $L^*=2L$.</p>\n    $$I_D=\\frac{1}{2}\\mu_nC_{ox}\\frac{W}{L}(V_{GS}-V_{TH})^2=\\frac{1}{2}\\mu_nC_{ox}\\frac{W^*}{L^*}(V_{GS}-V_{TH})^2$$\n  "
+        },
+        {
+          "subpart": "a",
+          "label": "W/L 유지",
+          "html": "\n      <p>첫 줄의 두 식에서 같은 인자를 지우면 비만 남아요.</p>\n      $$\\frac{W^*}{L^*}=\\frac{W}{L}$$\n      <p>$L^*=2L$을 넣어요.</p>\n      $$W^*=\\frac{W}{L}\\cdot2L=2W$$\n      <p>따라서 폭도 2배로 늘려야 같은 전류를 같은 과구동 전압에서 흘려요.</p>\n    "
+        },
+        {
+          "subpart": "b",
+          "label": "f_T를 g_m과 C_GS로 나누기",
+          "html": "\n    $$2\\pi f_T\\approx\\frac{g_m}{C_{GS}}$$\n    $$g_m=\\frac{2I_D}{V_{GS}-V_{TH}}$$\n    $$C_{GS}\\approx\\frac{2}{3}WLC_{ox}$$\n  "
+        },
+        {
+          "subpart": "b",
+          "label": "g_m과 C_GS의 배율",
+          "html": "\n      <p>$g_m$의 두 변수가 모두 고정이라 $g_m$은 그대로예요.</p>\n      $$g_m^*=\\frac{2I_D}{V_{GS}-V_{TH}}=g_m$$\n      <p>게이트 면적은 폭과 길이가 모두 2배라 4배가 돼요.</p>\n      $$C_{GS}^*\\approx\\frac{2}{3}(2W)(2L)C_{ox}=4C_{GS}$$\n      <p>나누면 배율이 나와요.</p>\n      $$\\frac{f_T^*}{f_T}=\\frac{g_m^*/C_{GS}^*}{g_m/C_{GS}}=\\frac{1}{4}$$\n    "
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "a",
+          "html": "<p data-answer-final=\"\"><strong>폭도 2배($W^*=2W$)로 늘려 $W/L$을 유지해요.</strong></p>"
+        },
+        {
+          "subpart": "b",
+          "html": "<p data-answer-final=\"\"><strong>$g_m$은 그대로, $C_{GS}$는 4배라 $f_T$는 원래의 $1/4$로 줄어요.</strong></p>"
+        }
+      ]
+    },
+    {
+      "id": "P11.34",
+      "explanation_id": "p4",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "f_T와 전류식",
+          "html": "\n    <p>목표: $(V_{GS}-V_{TH})^*=\\frac{1}{2}(V_{GS}-V_{TH})$, $L$ 고정.</p>\n    $$I_D=\\frac{1}{2}\\mu_nC_{ox}\\frac{W}{L}(V_{GS}-V_{TH})^2$$\n    $$2\\pi f_T\\approx\\frac{g_m}{C_{GS}}=\\frac{2I_D/(V_{GS}-V_{TH})}{\\frac{2}{3}WLC_{ox}}$$\n  "
+        },
+        {
+          "subpart": "main",
+          "label": "(a) I_D 고정, W 증가",
+          "html": "\n      <p><strong>(a)</strong> 전류식에서 $I_D$와 $L$이 고정이면 $W\\propto1/(V_{GS}-V_{TH})^2$이에요. 과구동 전압이 1/2이면 폭은 4배예요.</p>\n      $$W^*=\\frac{W}{(1/2)^2}=4W$$\n      <p>$g_m$은 전류가 같고 과구동 전압이 절반이라 2배예요.</p>\n      $$g_m^*=\\frac{2I_D}{(V_{GS}-V_{TH})/2}=2g_m$$\n      <p>$C_{GS}$는 $W$에 비례하므로 4배예요.</p>\n      $$C_{GS}^*=4C_{GS}$$\n      $$\\frac{f_T^*}{f_T}=\\frac{2}{4}=\\frac{1}{2}$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "(b) W 고정, I_D 감소",
+          "html": "\n      <p><strong>(b)</strong> $W$와 $L$이 고정이면 $I_D\\propto(V_{GS}-V_{TH})^2$이라 전류는 1/4이 돼요.</p>\n      $$I_D^*=\\left(\\frac{1}{2}\\right)^2I_D=\\frac{1}{4}I_D$$\n      <p>$g_m$은 전류 1/4을 과구동 전압 1/2로 나눠 1/2배예요.</p>\n      $$g_m^*=\\frac{2(I_D/4)}{(V_{GS}-V_{TH})/2}=\\frac{1}{2}g_m$$\n      <p>$C_{GS}$는 면적이 같아 그대로예요.</p>\n      $$\\frac{f_T^*}{f_T}=\\frac{1/2}{1}=\\frac{1}{2}$$\n    "
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "<p data-answer-final=\"\"><strong>(a) $f_T$는 절반이 돼요</strong>($W$ 4배, $g_m$ 2배, $C_{GS}$ 4배). <strong>(b) $f_T$는 역시 절반이 돼요</strong>($I_D$ 1/4배, $g_m$ 1/2배, $C_{GS}$ 그대로). 어느 방법이든 $L$이 고정이면 $f_T\\propto V_{GS}-V_{TH}$라 절반이에요.</p>"
+        }
+      ]
+    },
+    {
+      "id": "E11.16",
+      "explanation_id": "p5",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "소자 배율",
+          "html": "\n    <p>과구동 전압은 그대로예요: $I_D\\propto W(V_{GS}-V_{TH})^2$에서 $I_D$와 $W$가 함께 절반이니까요.</p>\n    $$g_m^*=\\sqrt{2\\mu_nC_{ox}\\frac{W/2}{L}\\cdot\\frac{I_D}{2}}=\\frac{g_m}{2}$$\n    $$C_{in}^*=\\frac{C_{in}}{2}$$\n    $$C_{XY}^*=\\frac{C_{XY}}{2}$$\n    $$C_{out}^*=\\frac{C_{out}}{2}$$\n  "
+        },
+        {
+          "subpart": "main",
+          "label": "저주파 이득",
+          "html": "\n      <p>입력은 $V_{in}$, 출력은 드레인 노드 $V_{out}$이에요. 저주파에서는 커패시턴스를 모두 개방해요.</p>\n      <div data-gain-stage=\"gm\"><p>출력을 접지로 단락하면 축퇴가 없으니 단락 전류는 $g_m^*v_{gs}$이고 게이트 전류가 없어 $v_{gs}=v_{in}$이에요.</p>\n      $$G_m=g_m^*=\\frac{g_m}{2}$$</div>\n      <div data-gain-stage=\"rout\"><p>입력을 0으로 두면 $M_1$은 전류를 만들지 않고, $\\lambda=0$이라 $r_o\\to\\infty$예요. 출력에서는 $R_D$만 보여요.</p>\n      $$R_{out}\\approx R_D=R_L$$</div>\n      <div data-gain-stage=\"gain\">$$A_v^*=-G_mR_{out}=-\\frac{g_mR_L}{2}$$</div>\n      <p>이득 크기는 원래의 절반이에요.</p>\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "입력 극점",
+          "html": "\n      <p>입력 노드 X에는 $C_{in}^*$과 밀러 커패시턴스 $(1+g_m^*R_L)C_{XY}^*$이 접지로 붙고, 저항은 $R_S$예요.</p>\n      $$|\\omega_{p,in}^*|=\\frac{1}{R_S\\left[\\dfrac{C_{in}}{2}+\\left(1+\\dfrac{g_mR_L}{2}\\right)\\dfrac{C_{XY}}{2}\\right]}$$\n      <p>원래 $|\\omega_{p,in}|=1/\\{R_S[C_{in}+(1+g_mR_L)C_{XY}]\\}$와 비교하면 커패시턴스가 절반이 되고 밀러 배수 $1+g_mR_L$도 줄었어요. 그래서 2배보다 더 커져요.</p>\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "출력 극점",
+          "html": "\n      <p>출력 노드 Y에는 $C_{out}^*$과 $\\left(1+\\dfrac{1}{g_m^*R_L}\\right)C_{XY}^*$이 붙고, 저항은 $R_L$이에요.</p>\n      $$|\\omega_{p,out}^*|=\\frac{1}{R_L\\left[\\dfrac{C_{out}}{2}+\\left(1+\\dfrac{2}{g_mR_L}\\right)\\dfrac{C_{XY}}{2}\\right]}$$\n      <p>$g_mR_L\\gg2$이면 괄호의 $2/(g_mR_L)$을 무시할 수 있어 원래 출력 극점의 약 2배예요.</p>\n    "
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n      <p><strong>이득:</strong> $A_v^*=-\\dfrac{g_mR_L}{2}$ (크기 절반)</p>\n      <p><strong>입력 극점:</strong> $|\\omega_{p,in}^*|=\\dfrac{1}{R_S\\left[\\frac{C_{in}}{2}+\\left(1+\\frac{g_mR_L}{2}\\right)\\frac{C_{XY}}{2}\\right]}$ (원래의 2배보다 큼)</p>\n      <p><strong>출력 극점:</strong> $|\\omega_{p,out}^*|=\\dfrac{1}{R_L\\left[\\frac{C_{out}}{2}+\\left(1+\\frac{2}{g_mR_L}\\right)\\frac{C_{XY}}{2}\\right]}$ ($g_mR_L\\gg2$이면 약 2배)</p>\n      <p>대역폭은 약 2배가 되고 이득은 절반이라 이득-대역폭 곱은 거의 그대로예요.</p>\n    "
+        }
+      ]
+    },
+    {
+      "id": "P11.38",
+      "explanation_id": "p6",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "통합 모델과 밀러 극점 식",
+          "html": "\n    <p>세 단을 같은 통합 모델로 보고, 회로별 대응만 따로 적어요.</p>\n    <figure class=\"figure\"><svg id=\"p6-fig-p6-miller\" viewBox=\"0 0 520 368\" role=\"img\" aria-label=\"① 변환 전: 왼쪽 v in 단자가 R S를 거쳐 입력 노드 X에 이어진다. X에서 C in가 접지로 내려가고 X와 출력 노드 Y 사이에 C XY가 떠 있다. Y에서 아래로 흐르는 종속 전류원 g m v X, 그 오른쪽 R L, 그 오른쪽 C out이 접지로 내려가고 맨 오른쪽이 출력 단자 v out이다. ② 변환 후: C XY 대신 X에 접지 커패시턴스 C in,M, Y에 접지 커패시턴스 C out,M이 붙고 X와 Y 사이 연결이 없다.\"><text class=\"fig-text fig-math\" x=\"4\" y=\"18\">①</text><circle class=\"fig-dot\" data-node=\"vin\" data-node-color=\"blue\" cx=\"24\" cy=\"48\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"vin\" data-node-color=\"blue\" x=\"14\" y=\"36\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text><path class=\"fig-ink\" d=\"M24 48 H32 L37.3 41 L48.0 55 L58.7 41 L69.3 55 L80.0 41 L90.7 55 L96 48 H104\"/><text class=\"fig-text fig-math\" x=\"64\" y=\"32\" text-anchor=\"middle\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">S</tspan></text><path class=\"fig-ink\" d=\"M104 48 H124\"/><circle class=\"fig-dot\" data-node=\"X\" data-node-color=\"red\" cx=\"124\" cy=\"48\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"X\" data-node-color=\"red\" x=\"118\" y=\"36\" text-anchor=\"end\">X</text><path class=\"fig-ink\" d=\"M124 48 V93 M124 103 V158\"/><path class=\"fig-accent\" d=\"M111 93 H137 M111 103 H137\"/><text class=\"fig-text fig-math\" x=\"101\" y=\"103\" text-anchor=\"end\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text><path class=\"fig-ink\" d=\"M124 48 H164 M174 48 H214\"/><path class=\"fig-danger\" d=\"M164 36 V60 M174 36 V60\"/><text class=\"fig-text fig-math\" x=\"169\" y=\"24\" text-anchor=\"middle\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">XY</tspan></text><path class=\"fig-ink\" d=\"M214 48 H505\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"214\" cy=\"48\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"Y\" data-node-color=\"blue\" x=\"214\" y=\"70\" text-anchor=\"middle\">Y</text><path class=\"fig-ink\" d=\"M254 48 V88 M254 116 V158\"/><polygon class=\"fig-ink\" points=\"254,88 268,102 254,116 240,102\"/><path class=\"fig-ink\" d=\"M254 94 V109 M250 105 L254 110 L258 105\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"254\" cy=\"48\" r=\"4\"/><text class=\"fig-text fig-math\" x=\"232\" y=\"107\" text-anchor=\"end\">g<tspan baseline-shift=\"sub\" font-size=\"78%\">m</tspan>v<tspan baseline-shift=\"sub\" font-size=\"78%\">X</tspan></text><path class=\"fig-ink\" d=\"M300 48 V56 L307 63.8 L293 79.5 L307 95.2 L293 110.8 L307 126.5 L293 142.2 L300 150 V158\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"300\" cy=\"48\" r=\"4\"/><text class=\"fig-text fig-math\" x=\"313\" y=\"108\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">L</tspan></text><path class=\"fig-ink\" d=\"M380 48 V93 M380 103 V158\"/><path class=\"fig-accent\" d=\"M367 93 H393 M367 103 H393\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"380\" cy=\"48\" r=\"4\"/><text class=\"fig-text fig-math\" x=\"402\" y=\"103\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"505\" cy=\"48\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"Y\" data-node-color=\"blue\" x=\"505\" y=\"36\" text-anchor=\"end\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text><path class=\"fig-ink\" d=\"M124 158 H380\"/><path class=\"fig-ink\" d=\"M244 158 V166 M234 166 H254 M238 171 H250 M242 176 H246\"/><text class=\"fig-text fig-math\" x=\"4\" y=\"203\">②</text><circle class=\"fig-dot\" data-node=\"vin\" data-node-color=\"blue\" cx=\"24\" cy=\"233\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"vin\" data-node-color=\"blue\" x=\"14\" y=\"221\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text><path class=\"fig-ink\" d=\"M24 233 H32 L37.3 226 L48.0 240 L58.7 226 L69.3 240 L80.0 226 L90.7 240 L96 233 H104\"/><text class=\"fig-text fig-math\" x=\"64\" y=\"217\" text-anchor=\"middle\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">S</tspan></text><path class=\"fig-ink\" d=\"M104 233 H170\"/><circle class=\"fig-dot\" data-node=\"X\" data-node-color=\"red\" cx=\"124\" cy=\"233\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"X\" data-node-color=\"red\" x=\"118\" y=\"221\" text-anchor=\"end\">X</text><path class=\"fig-ink\" d=\"M124 233 V278 M124 288 V343\"/><path class=\"fig-accent\" d=\"M111 278 H137 M111 288 H137\"/><text class=\"fig-text fig-math\" x=\"101\" y=\"288\" text-anchor=\"end\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text><path class=\"fig-ink\" d=\"M170 233 V278 M170 288 V343\"/><path class=\"fig-danger\" d=\"M157 278 H183 M157 288 H183\"/><text class=\"fig-text fig-math\" x=\"178\" y=\"267\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">in,M</tspan></text><path class=\"fig-ink\" d=\"M124 343 H170\"/><path class=\"fig-ink\" d=\"M147 343 V351 M137 351 H157 M141 356 H153 M145 361 H149\"/><path class=\"fig-ink\" d=\"M280 233 H505\"/><path class=\"fig-ink\" d=\"M280 233 V273 M280 301 V343\"/><polygon class=\"fig-ink\" points=\"280,273 294,287 280,301 266,287\"/><path class=\"fig-ink\" d=\"M280 279 V294 M276 290 L280 295 L284 290\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"280\" cy=\"233\" r=\"4\"/><text class=\"fig-text fig-math\" x=\"258\" y=\"292\" text-anchor=\"end\">g<tspan baseline-shift=\"sub\" font-size=\"78%\">m</tspan>v<tspan baseline-shift=\"sub\" font-size=\"78%\">X</tspan></text><path class=\"fig-ink\" d=\"M322 233 V241 L329 248.8 L315 264.5 L329 280.2 L315 295.8 L329 311.5 L315 327.2 L322 335 V343\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"322\" cy=\"233\" r=\"4\"/><text class=\"fig-text fig-math\" x=\"333\" y=\"293\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">L</tspan></text><path class=\"fig-ink\" d=\"M385 233 V278 M385 288 V343\"/><path class=\"fig-accent\" d=\"M372 278 H398 M372 288 H398\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"385\" cy=\"233\" r=\"4\"/><text class=\"fig-text fig-math\" x=\"403\" y=\"288\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text><path class=\"fig-ink\" d=\"M455 233 V278 M455 288 V343\"/><path class=\"fig-danger\" d=\"M442 278 H468 M442 288 H468\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"455\" cy=\"233\" r=\"4\"/><text class=\"fig-text fig-math\" x=\"470\" y=\"313\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">out,M</tspan></text><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"505\" cy=\"233\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"Y\" data-node-color=\"blue\" x=\"505\" y=\"221\" text-anchor=\"end\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text><path class=\"fig-ink\" d=\"M280 343 H455\"/><path class=\"fig-ink\" d=\"M368 343 V351 M358 351 H378 M362 356 H374 M366 361 H370\"/></svg><figcaption>세 단 공통의 통합 모델이에요. $V_{DD}$·$V_b$는 AC 접지, 입력 소자는 $g_mv_X$, 출력 노드의 $r_O$와 부하 블록은 $R_L$ 하나로 합쳤어요. ②는 $C_{XY}$를 $C_{in,M}=(1+g_mR_L)C_{XY}$, $C_{out,M}=(1+\\frac{1}{g_mR_L})C_{XY}$로 나눈 모습이에요.</figcaption></figure>\n    $$|\\omega_{p,in}|=\\frac{1}{R_S\\left[C_{in}+(1+g_mR_L)C_{XY}\\right]}$$\n    $$|\\omega_{p,out}|=\\frac{1}{R_L\\left[C_{out}+\\left(1+\\dfrac{1}{g_mR_L}\\right)C_{XY}\\right]}$$\n  "
+        },
+        {
+          "subpart": "main",
+          "label": "(a) 다이오드 접속 PMOS 부하",
+          "html": "\n      <p><strong>(a)</strong> 입력은 $M_1$ 게이트, 출력은 두 드레인이 만나는 노드예요.</p>\n      <div data-gain-stage=\"gm\"><p>출력을 단락하면 $M_2$ 양 끝이 AC 접지라 전류를 만들지 않아요.</p>\n      $$G_m=g_{m1}$$</div>\n      <div data-gain-stage=\"rout\"><p>입력을 0으로 두면 아래는 $r_{O1}$, 위는 다이오드 접속 $M_2$ 블록 $(1/g_{m2})\\parallel r_{O2}$이고 같은 두 노드(출력–AC 접지) 사이에 있어요.</p>\n      $$R_{out}=R_L=\\frac{1}{g_{m2}}\\parallel r_{O1}\\parallel r_{O2}$$</div>\n      <div data-gain-stage=\"gain\">$$A_v=-G_mR_{out}=-g_{m1}R_L$$</div>\n      <p>커패시턴스: $C_{in}=C_{GS1}$, $C_{XY}=C_{GD1}$. $C_{GS2}$는 출력(게이트=드레인)과 $V_{DD}$ 사이라 출력–접지로 가고, $C_{GD2}$는 양 끝이 같은 노드라 빠져요.</p>\n      $$C_{out}=C_{DB1}+C_{GS2}+C_{DB2}$$\n      $$|\\omega_{p,in}|=\\frac{1}{R_S\\left[C_{GS1}+(1+g_{m1}R_L)C_{GD1}\\right]}$$\n      $$|\\omega_{p,out}|=\\frac{1}{R_L\\left[C_{DB1}+C_{GS2}+C_{DB2}+\\left(1+\\dfrac{1}{g_{m1}R_L}\\right)C_{GD1}\\right]}$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "(b) 소스가 출력인 NMOS 부하",
+          "html": "\n      <p><strong>(b)</strong> $M_2$는 게이트·드레인이 $V_{DD}$(AC 접지)이고 소스가 출력이에요.</p>\n      <div data-gain-stage=\"gm\"><p>출력 단락 시 $M_2$의 세 단자가 모두 AC 접지라 기여가 없어요.</p>\n      $$G_m=g_{m1}$$</div>\n      <div data-gain-stage=\"rout\"><p>소스 쪽에서 보면 게이트와 드레인이 AC 접지라 다이오드 접속과 같은 블록이에요(몸체 효과 무시, 넣으면 $1/(g_{m2}+g_{mb2})$).</p>\n      $$R_{out}=R_L=\\frac{1}{g_{m2}}\\parallel r_{O1}\\parallel r_{O2}$$</div>\n      <div data-gain-stage=\"gain\">$$A_v=-G_mR_{out}=-g_{m1}R_L$$</div>\n      <p>커패시턴스: $C_{GS2}$는 게이트($V_{DD}$)–소스(출력), $C_{SB2}$는 소스(출력)–몸체(접지)라 둘 다 출력–접지예요. $C_{GD2}$와 $C_{DB2}$는 양 끝이 AC 접지라 빠져요.</p>\n      $$C_{out}=C_{DB1}+C_{GS2}+C_{SB2}$$\n      $$|\\omega_{p,in}|=\\frac{1}{R_S\\left[C_{GS1}+(1+g_{m1}R_L)C_{GD1}\\right]}$$\n      $$|\\omega_{p,out}|=\\frac{1}{R_L\\left[C_{DB1}+C_{GS2}+C_{SB2}+\\left(1+\\dfrac{1}{g_{m1}R_L}\\right)C_{GD1}\\right]}$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "(c) PMOS 입력, 전류원 부하",
+          "html": "\n      <p><strong>(c)</strong> 입력은 PMOS $M_2$ 게이트, $M_1$은 게이트가 $V_b$(AC 접지)인 전류원 부하예요.</p>\n      <div data-gain-stage=\"gm\"><p>출력 단락 시 신호 전류는 $M_2$만 만들어요. 입력이 오르면 $v_{SG2}$가 줄어 출력으로 밀어 넣는 전류가 줄어요.</p>\n      $$G_m=g_{m2}$$</div>\n      <div data-gain-stage=\"rout\"><p>입력을 0으로 두면 두 소자 모두 게이트·소스가 AC 접지라 $r_O$만 보여요.</p>\n      $$R_{out}=R_L=r_{O1}\\parallel r_{O2}$$</div>\n      <div data-gain-stage=\"gain\">$$A_v=-G_mR_{out}=-g_{m2}R_L$$</div>\n      <p>커패시턴스: $C_{in}=C_{GS2}$(게이트–$V_{DD}$), $C_{XY}=C_{GD2}$. $C_{GD1}$은 $V_b$–출력이라 출력–접지로 가요.</p>\n      $$C_{out}=C_{DB1}+C_{GD1}+C_{DB2}$$\n      $$|\\omega_{p,in}|=\\frac{1}{R_S\\left[C_{GS2}+(1+g_{m2}R_L)C_{GD2}\\right]}$$\n      $$|\\omega_{p,out}|=\\frac{1}{R_L\\left[C_{DB1}+C_{GD1}+C_{DB2}+\\left(1+\\dfrac{1}{g_{m2}R_L}\\right)C_{GD2}\\right]}$$\n    "
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n      <p><strong>(a)</strong></p>\n      $$R_L=\\frac{1}{g_{m2}}\\parallel r_{O1}\\parallel r_{O2}$$\n      $$|\\omega_{p,in}|=\\frac{1}{R_S[C_{GS1}+(1+g_{m1}R_L)C_{GD1}]}$$\n      $$|\\omega_{p,out}|=\\frac{1}{R_L[C_{DB1}+C_{GS2}+C_{DB2}+(1+\\frac{1}{g_{m1}R_L})C_{GD1}]}$$\n      <p><strong>(b)</strong> $R_L$과 $|\\omega_{p,in}|$은 (a)와 같아요(몸체 효과 무시).</p>\n      $$|\\omega_{p,out}|=\\frac{1}{R_L[C_{DB1}+C_{GS2}+C_{SB2}+(1+\\frac{1}{g_{m1}R_L})C_{GD1}]}$$\n      <p><strong>(c)</strong></p>\n      $$R_L=r_{O1}\\parallel r_{O2}$$\n      $$|\\omega_{p,in}|=\\frac{1}{R_S[C_{GS2}+(1+g_{m2}R_L)C_{GD2}]}$$\n      $$|\\omega_{p,out}|=\\frac{1}{R_L[C_{DB1}+C_{GD1}+C_{DB2}+(1+\\frac{1}{g_{m2}R_L})C_{GD2}]}$$\n    "
+        }
+      ]
+    },
+    {
+      "id": "E11.15",
+      "explanation_id": "p7",
+      "subparts": [
+        "a",
+        "b"
+      ],
+      "steps": [
+        {
+          "subpart": "a",
+          "label": "소신호 값과 밀러 등가회로",
+          "html": "\n    <p>먼저 소자 값을 구해요. $g_m$은 S 단위 분수로 두고 kΩ과 곱할 때 $10^3$을 붙여요.</p>\n    $$g_m=\\frac{I_C}{V_T}=\\frac{1\\ \\mathrm{mA}}{26\\ \\mathrm{mV}}=\\frac{1}{26}\\ \\mathrm{S}\\approx38.46\\ \\mathrm{mS}$$\n    $$r_\\pi=\\frac{\\beta}{g_m}=100\\times26\\ \\Omega=2.6\\ \\mathrm{k\\Omega}$$\n    $$R_{Th}=R_S\\parallel r_\\pi=\\frac{200\\times2600}{2800}\\ \\Omega\\approx185.71\\ \\Omega$$\n    <figure class=\"figure\"><svg id=\"p7-fig-p7-miller\" viewBox=\"0 0 520 368\" role=\"img\" aria-label=\"① 변환 전: 왼쪽 v Th 단자가 R S 병렬 r 파이를 거쳐 입력 노드 X에 이어진다. X에서 C 파이가 접지로 내려가고 X와 출력 노드 Y 사이에 C 뮤가 떠 있다. Y에서 아래로 흐르는 종속 전류원 g m v 파이, 그 오른쪽 R L, 그 오른쪽 C CS이 접지로 내려가고 맨 오른쪽이 출력 단자 v out이다. ② 변환 후: C 뮤 대신 X에 접지 커패시턴스 C in,M, Y에 접지 커패시턴스 C out,M이 붙고 X와 Y 사이 연결이 없다.\"><text class=\"fig-text fig-math\" x=\"4\" y=\"18\">①</text><circle class=\"fig-dot\" data-node=\"vin\" data-node-color=\"blue\" cx=\"24\" cy=\"48\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"vin\" data-node-color=\"blue\" x=\"14\" y=\"36\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">Th</tspan></text><path class=\"fig-ink\" d=\"M24 48 H32 L37.3 41 L48.0 55 L58.7 41 L69.3 55 L80.0 41 L90.7 55 L96 48 H104\"/><text class=\"fig-text fig-math\" x=\"64\" y=\"32\" text-anchor=\"middle\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">S</tspan>‖r<tspan baseline-shift=\"sub\" font-size=\"78%\">π</tspan></text><path class=\"fig-ink\" d=\"M104 48 H124\"/><circle class=\"fig-dot\" data-node=\"X\" data-node-color=\"red\" cx=\"124\" cy=\"48\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"X\" data-node-color=\"red\" x=\"118\" y=\"36\" text-anchor=\"end\">X</text><path class=\"fig-ink\" d=\"M124 48 V93 M124 103 V158\"/><path class=\"fig-accent\" d=\"M111 93 H137 M111 103 H137\"/><text class=\"fig-text fig-math\" x=\"101\" y=\"103\" text-anchor=\"end\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">π</tspan></text><path class=\"fig-ink\" d=\"M124 48 H164 M174 48 H214\"/><path class=\"fig-danger\" d=\"M164 36 V60 M174 36 V60\"/><text class=\"fig-text fig-math\" x=\"169\" y=\"24\" text-anchor=\"middle\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">μ</tspan></text><path class=\"fig-ink\" d=\"M214 48 H505\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"214\" cy=\"48\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"Y\" data-node-color=\"blue\" x=\"214\" y=\"70\" text-anchor=\"middle\">Y</text><path class=\"fig-ink\" d=\"M254 48 V88 M254 116 V158\"/><polygon class=\"fig-ink\" points=\"254,88 268,102 254,116 240,102\"/><path class=\"fig-ink\" d=\"M254 94 V109 M250 105 L254 110 L258 105\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"254\" cy=\"48\" r=\"4\"/><text class=\"fig-text fig-math\" x=\"232\" y=\"107\" text-anchor=\"end\">g<tspan baseline-shift=\"sub\" font-size=\"78%\">m</tspan>v<tspan baseline-shift=\"sub\" font-size=\"78%\">π</tspan></text><path class=\"fig-ink\" d=\"M300 48 V56 L307 63.8 L293 79.5 L307 95.2 L293 110.8 L307 126.5 L293 142.2 L300 150 V158\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"300\" cy=\"48\" r=\"4\"/><text class=\"fig-text fig-math\" x=\"313\" y=\"108\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">L</tspan></text><path class=\"fig-ink\" d=\"M380 48 V93 M380 103 V158\"/><path class=\"fig-accent\" d=\"M367 93 H393 M367 103 H393\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"380\" cy=\"48\" r=\"4\"/><text class=\"fig-text fig-math\" x=\"402\" y=\"103\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">CS</tspan></text><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"505\" cy=\"48\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"Y\" data-node-color=\"blue\" x=\"505\" y=\"36\" text-anchor=\"end\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text><path class=\"fig-ink\" d=\"M124 158 H380\"/><path class=\"fig-ink\" d=\"M244 158 V166 M234 166 H254 M238 171 H250 M242 176 H246\"/><text class=\"fig-text fig-math\" x=\"4\" y=\"203\">②</text><circle class=\"fig-dot\" data-node=\"vin\" data-node-color=\"blue\" cx=\"24\" cy=\"233\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"vin\" data-node-color=\"blue\" x=\"14\" y=\"221\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">Th</tspan></text><path class=\"fig-ink\" d=\"M24 233 H32 L37.3 226 L48.0 240 L58.7 226 L69.3 240 L80.0 226 L90.7 240 L96 233 H104\"/><text class=\"fig-text fig-math\" x=\"64\" y=\"217\" text-anchor=\"middle\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">S</tspan>‖r<tspan baseline-shift=\"sub\" font-size=\"78%\">π</tspan></text><path class=\"fig-ink\" d=\"M104 233 H170\"/><circle class=\"fig-dot\" data-node=\"X\" data-node-color=\"red\" cx=\"124\" cy=\"233\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"X\" data-node-color=\"red\" x=\"118\" y=\"221\" text-anchor=\"end\">X</text><path class=\"fig-ink\" d=\"M124 233 V278 M124 288 V343\"/><path class=\"fig-accent\" d=\"M111 278 H137 M111 288 H137\"/><text class=\"fig-text fig-math\" x=\"101\" y=\"288\" text-anchor=\"end\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">π</tspan></text><path class=\"fig-ink\" d=\"M170 233 V278 M170 288 V343\"/><path class=\"fig-danger\" d=\"M157 278 H183 M157 288 H183\"/><text class=\"fig-text fig-math\" x=\"178\" y=\"267\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">in,M</tspan></text><path class=\"fig-ink\" d=\"M124 343 H170\"/><path class=\"fig-ink\" d=\"M147 343 V351 M137 351 H157 M141 356 H153 M145 361 H149\"/><path class=\"fig-ink\" d=\"M280 233 H505\"/><path class=\"fig-ink\" d=\"M280 233 V273 M280 301 V343\"/><polygon class=\"fig-ink\" points=\"280,273 294,287 280,301 266,287\"/><path class=\"fig-ink\" d=\"M280 279 V294 M276 290 L280 295 L284 290\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"280\" cy=\"233\" r=\"4\"/><text class=\"fig-text fig-math\" x=\"258\" y=\"292\" text-anchor=\"end\">g<tspan baseline-shift=\"sub\" font-size=\"78%\">m</tspan>v<tspan baseline-shift=\"sub\" font-size=\"78%\">π</tspan></text><path class=\"fig-ink\" d=\"M322 233 V241 L329 248.8 L315 264.5 L329 280.2 L315 295.8 L329 311.5 L315 327.2 L322 335 V343\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"322\" cy=\"233\" r=\"4\"/><text class=\"fig-text fig-math\" x=\"333\" y=\"293\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">L</tspan></text><path class=\"fig-ink\" d=\"M385 233 V278 M385 288 V343\"/><path class=\"fig-accent\" d=\"M372 278 H398 M372 288 H398\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"385\" cy=\"233\" r=\"4\"/><text class=\"fig-text fig-math\" x=\"403\" y=\"288\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">CS</tspan></text><path class=\"fig-ink\" d=\"M455 233 V278 M455 288 V343\"/><path class=\"fig-danger\" d=\"M442 278 H468 M442 288 H468\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"455\" cy=\"233\" r=\"4\"/><text class=\"fig-text fig-math\" x=\"470\" y=\"313\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">out,M</tspan></text><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"505\" cy=\"233\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"Y\" data-node-color=\"blue\" x=\"505\" y=\"221\" text-anchor=\"end\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text><path class=\"fig-ink\" d=\"M280 343 H455\"/><path class=\"fig-ink\" d=\"M368 343 V351 M358 351 H378 M362 356 H374 M366 361 H370\"/></svg><figcaption>$V_{CC}$는 AC 접지, $Q_1$은 $r_\\pi$·$C_\\pi$·$C_\\mu$·$C_{CS}$와 $g_mv_\\pi$로 바꿨고($V_A=\\infty$), 입력은 $R_S$와 $r_\\pi$의 테브난 등가($v_{Th}$, $R_S\\parallel r_\\pi$)로 묶었어요. ②는 $C_{in,M}=(1+g_mR_L)C_\\mu$, $C_{out,M}=(1+\\frac{1}{g_mR_L})C_\\mu$예요.</figcaption></figure>\n  "
+        },
+        {
+          "subpart": "a",
+          "label": "밀러 배수에 쓸 이득",
+          "html": "\n      <p>$C_\\mu$ 양 끝, 즉 입력 노드 X($v_\\pi$)에서 출력까지의 저주파 이득을 구해요.</p>\n      <div data-gain-stage=\"gm\"><p>출력을 단락하면 이미터가 접지라 전류는 $g_mv_\\pi$예요.</p>\n      $$G_m=\\frac{i_{out}}{v_X}=g_m=\\frac{1}{26}\\ \\mathrm{S}$$</div>\n      <div data-gain-stage=\"rout\"><p>입력을 0으로 두면 $V_A=\\infty$라 출력에는 $R_L$만 보여요.</p>\n      $$R_{out}\\approx R_L=2\\ \\mathrm{k\\Omega}$$</div>\n      <div data-gain-stage=\"gain\">$$\\frac{v_{out}}{v_X}=-G_mR_{out}=-\\frac{1000}{26}\\times2\\approx-76.92$$</div>\n    "
+        },
+        {
+          "subpart": "a",
+          "label": "입력 극점",
+          "html": "\n      $$(1+g_mR_L)C_\\mu\\approx77.92\\times20\\ \\mathrm{fF}\\approx1.56\\ \\mathrm{pF}$$\n      $$|\\omega_{p,in}|=\\frac{1}{R_{Th}[C_\\pi+(1+g_mR_L)C_\\mu]}\\approx\\frac{1}{185.71\\ \\Omega\\times1.66\\ \\mathrm{pF}}\\approx2\\pi\\times516.74\\ \\mathrm{MHz}$$\n    "
+        },
+        {
+          "subpart": "a",
+          "label": "출력 극점과 장애 노드",
+          "html": "\n      $$|\\omega_{p,out}|=\\frac{1}{R_L\\left[C_{CS}+\\left(1+\\dfrac{1}{g_mR_L}\\right)C_\\mu\\right]}\\approx\\frac{1}{2\\ \\mathrm{k\\Omega}\\times50.26\\ \\mathrm{fF}}\\approx2\\pi\\times1.58\\ \\mathrm{GHz}$$\n      <p>두 극점 값은 반올림 전 $R_{Th}=1300/7\\ \\Omega$, $C_\\pi+(1+g_mR_L)C_\\mu=1658.46\\ \\mathrm{fF}$로 계산했어요(괄호의 표시값은 반올림). 입력 극점이 약 3배 낮아요. $C_\\mu$가 밀러 효과로 약 78배가 되어 입력 노드가 속도의 장애요인이에요.</p>\n    "
+        },
+        {
+          "subpart": "b",
+          "label": "부등식 세우기",
+          "html": "\n      <p>출력 극점이 더 낮으려면 출력 시정수가 입력 시정수보다 커야 해요.</p>\n      $$R_L\\left[C_{CS}+\\left(1+\\frac{1}{g_mR_L}\\right)C_\\mu\\right]&gt;R_{Th}\\left[C_\\pi+(1+g_mR_L)C_\\mu\\right]$$\n      <p>괄호를 풀면 $R_L$이 들어간 항이 양변에 생겨요. 한쪽으로 모아요.</p>\n      $$R_L(C_{CS}+C_\\mu)+\\frac{C_\\mu}{g_m}&gt;R_{Th}(C_\\pi+C_\\mu)+g_mR_{Th}R_LC_\\mu$$\n      $$R_L\\left[C_{CS}+C_\\mu-g_mR_{Th}C_\\mu\\right]&gt;R_{Th}(C_\\pi+C_\\mu)-\\frac{C_\\mu}{g_m}$$\n    "
+        },
+        {
+          "subpart": "b",
+          "label": "수치로 판정",
+          "html": "\n      $$g_mR_{Th}=\\frac{185.71}{26}\\approx7.14$$\n      $$C_{CS}+C_\\mu-g_mR_{Th}C_\\mu\\approx50\\ \\mathrm{fF}-142.86\\ \\mathrm{fF}\\approx-92.86\\ \\mathrm{fF}$$\n      $$R_{Th}(C_\\pi+C_\\mu)-\\frac{C_\\mu}{g_m}\\approx22.29\\ \\mathrm{ps}-0.52\\ \\mathrm{ps}\\approx21.77\\ \\mathrm{ps}$$\n      <p>좌변은 $R_L&gt;0$이면 항상 음수이고 우변은 양수라 부등식이 성립하지 않아요.</p>\n    "
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "a",
+          "html": "<p data-answer-final=\"\"><strong>$|\\omega_{p,in}|\\approx2\\pi\\times516.74\\ \\mathrm{MHz}$, $|\\omega_{p,out}|\\approx2\\pi\\times1.58\\ \\mathrm{GHz}$이고 입력 노드가 대역폭을 제한해요.</strong> ($V_T=26\\ \\mathrm{mV}$, $r_O$ 무시, 밀러 근사)</p>"
+        },
+        {
+          "subpart": "b",
+          "html": "<p data-answer-final=\"\"><strong>불가능해요.</strong> $C_{CS}+C_\\mu-g_m(R_S\\parallel r_\\pi)C_\\mu\\approx-92.86\\ \\mathrm{fF}&lt;0$이라 어떤 $R_L$로도 출력 극점이 입력 극점보다 낮아지지 않아요.</p>"
+        }
+      ]
+    },
+    {
+      "id": "2021-1_기말-Q2",
+      "explanation_id": "p8",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "소신호 값",
+          "html": "\n    $$g_{m1}=\\frac{I_{C1}}{V_T}=\\frac{0.5\\ \\mathrm{mA}}{25\\ \\mathrm{mV}}=\\frac{1}{50}\\ \\mathrm{S}=20\\ \\mathrm{mS}$$\n    $$r_{\\pi1}=\\frac{\\beta}{g_{m1}}=200\\times50\\ \\Omega=10\\ \\mathrm{k\\Omega}$$\n    $$r_{O1}=r_{O2}=\\frac{V_A}{I_C}=\\frac{5\\ \\mathrm{V}}{0.5\\ \\mathrm{mA}}=10\\ \\mathrm{k\\Omega}$$\n  "
+        },
+        {
+          "subpart": "main",
+          "label": "밀러 배수에 쓸 이득",
+          "html": "\n      <p>$C_{\\mu1}$ 양 끝, 입력 노드 X($v_{\\pi1}$)에서 출력까지의 저주파 이득이에요.</p>\n      <div data-gain-stage=\"gm\"><p>출력 단락: 이미터가 접지라 $i_{out}=g_{m1}v_X$예요. $Q_2$는 신호를 받지 않아요.</p>\n      $$G_m=g_{m1}=20\\ \\mathrm{mS}$$</div>\n      <div data-gain-stage=\"rout\"><p>입력 영점: 아래는 $r_{O1}$, 위는 베이스·이미터가 AC 접지인 $Q_2$의 $r_{O2}$이고 둘 다 출력–AC 접지예요.</p>\n      $$R_{out}=r_{O1}\\parallel r_{O2}=5\\ \\mathrm{k\\Omega}$$</div>\n      <div data-gain-stage=\"gain\">$$\\frac{v_{out}}{v_X}=-G_mR_{out}=-20\\ \\mathrm{mS}\\times5\\ \\mathrm{k\\Omega}=-100$$</div>\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "입력 극점",
+          "html": "\n      <p>입력 노드의 저항은 $R_S$와 $r_{\\pi1}$의 병렬이에요.</p>\n      $$R_{Th}=R_S\\parallel r_{\\pi1}=10\\ \\mathrm{k\\Omega}\\parallel10\\ \\mathrm{k\\Omega}=5\\ \\mathrm{k\\Omega}$$\n      $$C_{in}=C_{\\pi1}+(1+100)C_{\\mu1}=C_{\\pi1}+101C_{\\mu1}$$\n      $$|\\omega_{p,in}|=\\frac{1}{5\\ \\mathrm{k\\Omega}\\,(C_{\\pi1}+101C_{\\mu1})}$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "출력 극점",
+          "html": "\n      <p>출력 쪽 밀러 계수는 $1+1/100=1.01$이에요.</p>\n      $$C_{out,tot}=1.01C_{\\mu1}+C_{CS1}+C_{\\mu2}+C_{CS2}$$\n      $$|\\omega_{p,out}|=\\frac{1}{5\\ \\mathrm{k\\Omega}\\,(1.01C_{\\mu1}+C_{CS1}+C_{\\mu2}+C_{CS2})}$$\n    "
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n      <p><strong>입력:</strong> $|\\omega_{p,in}|=\\dfrac{1}{5\\ \\mathrm{k\\Omega}\\,(C_{\\pi1}+101C_{\\mu1})}$, 즉 $f_{p,in}=\\dfrac{1}{2\\pi\\cdot5\\ \\mathrm{k\\Omega}\\,(C_{\\pi1}+101C_{\\mu1})}$</p>\n      <p><strong>출력:</strong> $|\\omega_{p,out}|=\\dfrac{1}{5\\ \\mathrm{k\\Omega}\\,(1.01C_{\\mu1}+C_{CS1}+C_{\\mu2}+C_{CS2})}$, 즉 $f_{p,out}=|\\omega_{p,out}|/2\\pi$</p>\n      <p>($I_{D1}$을 $I_{C1}$로 해석, 밀러 근사, 저주파 이득 $-100$ 사용)</p>\n    "
+        }
+      ]
+    },
+    {
+      "id": "P11.53",
+      "explanation_id": "p9",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "이득과 두 극점의 식",
+          "html": "\n    <div data-gain-stage=\"gm\"><p>출력 단락, $r_\\pi\\to\\infty$라 저주파에서 $v_\\pi=v_{in}$이에요.</p>\n    $$G_m=g_m=\\frac{1\\ \\mathrm{mA}}{26\\ \\mathrm{mV}}=\\frac{1}{26}\\ \\mathrm{S}$$</div>\n    <div data-gain-stage=\"rout\"><p>입력 영점, $V_A=\\infty$라 출력에는 $R_C$만 보여요.</p>\n    $$R_{out}\\approx R_C$$</div>\n    <div data-gain-stage=\"gain\">$$A_v=-G_mR_{out}=-g_mR_C$$</div>\n    <figure class=\"figure\"><svg id=\"p9-fig-p9-miller\" viewBox=\"0 0 520 368\" role=\"img\" aria-label=\"① 변환 전: 왼쪽 v in 단자가 R B를 거쳐 입력 노드 X에 이어진다. X에서 C 파이가 접지로 내려가고 X와 출력 노드 Y 사이에 C 뮤가 떠 있다. Y에서 아래로 흐르는 종속 전류원 g m v 파이, 그 오른쪽 R C, 그 오른쪽 C CS이 접지로 내려가고 맨 오른쪽이 출력 단자 v out이다. ② 변환 후: C 뮤 대신 X에 접지 커패시턴스 C in,M, Y에 접지 커패시턴스 C out,M이 붙고 X와 Y 사이 연결이 없다.\"><text class=\"fig-text fig-math\" x=\"4\" y=\"18\">①</text><circle class=\"fig-dot\" data-node=\"vin\" data-node-color=\"blue\" cx=\"24\" cy=\"48\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"vin\" data-node-color=\"blue\" x=\"14\" y=\"36\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text><path class=\"fig-ink\" d=\"M24 48 H32 L37.3 41 L48.0 55 L58.7 41 L69.3 55 L80.0 41 L90.7 55 L96 48 H104\"/><text class=\"fig-text fig-math\" x=\"64\" y=\"32\" text-anchor=\"middle\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">B</tspan></text><path class=\"fig-ink\" d=\"M104 48 H124\"/><circle class=\"fig-dot\" data-node=\"X\" data-node-color=\"red\" cx=\"124\" cy=\"48\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"X\" data-node-color=\"red\" x=\"118\" y=\"36\" text-anchor=\"end\">X</text><path class=\"fig-ink\" d=\"M124 48 V93 M124 103 V158\"/><path class=\"fig-accent\" d=\"M111 93 H137 M111 103 H137\"/><text class=\"fig-text fig-math\" x=\"101\" y=\"103\" text-anchor=\"end\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">π</tspan></text><path class=\"fig-ink\" d=\"M124 48 H164 M174 48 H214\"/><path class=\"fig-danger\" d=\"M164 36 V60 M174 36 V60\"/><text class=\"fig-text fig-math\" x=\"169\" y=\"24\" text-anchor=\"middle\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">μ</tspan></text><path class=\"fig-ink\" d=\"M214 48 H505\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"214\" cy=\"48\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"Y\" data-node-color=\"blue\" x=\"214\" y=\"70\" text-anchor=\"middle\">Y</text><path class=\"fig-ink\" d=\"M254 48 V88 M254 116 V158\"/><polygon class=\"fig-ink\" points=\"254,88 268,102 254,116 240,102\"/><path class=\"fig-ink\" d=\"M254 94 V109 M250 105 L254 110 L258 105\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"254\" cy=\"48\" r=\"4\"/><text class=\"fig-text fig-math\" x=\"232\" y=\"107\" text-anchor=\"end\">g<tspan baseline-shift=\"sub\" font-size=\"78%\">m</tspan>v<tspan baseline-shift=\"sub\" font-size=\"78%\">π</tspan></text><path class=\"fig-ink\" d=\"M300 48 V56 L307 63.8 L293 79.5 L307 95.2 L293 110.8 L307 126.5 L293 142.2 L300 150 V158\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"300\" cy=\"48\" r=\"4\"/><text class=\"fig-text fig-math\" x=\"313\" y=\"108\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">C</tspan></text><path class=\"fig-ink\" d=\"M380 48 V93 M380 103 V158\"/><path class=\"fig-accent\" d=\"M367 93 H393 M367 103 H393\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"380\" cy=\"48\" r=\"4\"/><text class=\"fig-text fig-math\" x=\"402\" y=\"103\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">CS</tspan></text><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"505\" cy=\"48\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"Y\" data-node-color=\"blue\" x=\"505\" y=\"36\" text-anchor=\"end\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text><path class=\"fig-ink\" d=\"M124 158 H380\"/><path class=\"fig-ink\" d=\"M244 158 V166 M234 166 H254 M238 171 H250 M242 176 H246\"/><text class=\"fig-text fig-math\" x=\"4\" y=\"203\">②</text><circle class=\"fig-dot\" data-node=\"vin\" data-node-color=\"blue\" cx=\"24\" cy=\"233\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"vin\" data-node-color=\"blue\" x=\"14\" y=\"221\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text><path class=\"fig-ink\" d=\"M24 233 H32 L37.3 226 L48.0 240 L58.7 226 L69.3 240 L80.0 226 L90.7 240 L96 233 H104\"/><text class=\"fig-text fig-math\" x=\"64\" y=\"217\" text-anchor=\"middle\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">B</tspan></text><path class=\"fig-ink\" d=\"M104 233 H170\"/><circle class=\"fig-dot\" data-node=\"X\" data-node-color=\"red\" cx=\"124\" cy=\"233\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"X\" data-node-color=\"red\" x=\"118\" y=\"221\" text-anchor=\"end\">X</text><path class=\"fig-ink\" d=\"M124 233 V278 M124 288 V343\"/><path class=\"fig-accent\" d=\"M111 278 H137 M111 288 H137\"/><text class=\"fig-text fig-math\" x=\"101\" y=\"288\" text-anchor=\"end\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">π</tspan></text><path class=\"fig-ink\" d=\"M170 233 V278 M170 288 V343\"/><path class=\"fig-danger\" d=\"M157 278 H183 M157 288 H183\"/><text class=\"fig-text fig-math\" x=\"178\" y=\"267\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">in,M</tspan></text><path class=\"fig-ink\" d=\"M124 343 H170\"/><path class=\"fig-ink\" d=\"M147 343 V351 M137 351 H157 M141 356 H153 M145 361 H149\"/><path class=\"fig-ink\" d=\"M280 233 H505\"/><path class=\"fig-ink\" d=\"M280 233 V273 M280 301 V343\"/><polygon class=\"fig-ink\" points=\"280,273 294,287 280,301 266,287\"/><path class=\"fig-ink\" d=\"M280 279 V294 M276 290 L280 295 L284 290\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"280\" cy=\"233\" r=\"4\"/><text class=\"fig-text fig-math\" x=\"258\" y=\"292\" text-anchor=\"end\">g<tspan baseline-shift=\"sub\" font-size=\"78%\">m</tspan>v<tspan baseline-shift=\"sub\" font-size=\"78%\">π</tspan></text><path class=\"fig-ink\" d=\"M322 233 V241 L329 248.8 L315 264.5 L329 280.2 L315 295.8 L329 311.5 L315 327.2 L322 335 V343\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"322\" cy=\"233\" r=\"4\"/><text class=\"fig-text fig-math\" x=\"333\" y=\"293\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">C</tspan></text><path class=\"fig-ink\" d=\"M385 233 V278 M385 288 V343\"/><path class=\"fig-accent\" d=\"M372 278 H398 M372 288 H398\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"385\" cy=\"233\" r=\"4\"/><text class=\"fig-text fig-math\" x=\"403\" y=\"288\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">CS</tspan></text><path class=\"fig-ink\" d=\"M455 233 V278 M455 288 V343\"/><path class=\"fig-danger\" d=\"M442 278 H468 M442 288 H468\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"455\" cy=\"233\" r=\"4\"/><text class=\"fig-text fig-math\" x=\"470\" y=\"313\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">out,M</tspan></text><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"505\" cy=\"233\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"Y\" data-node-color=\"blue\" x=\"505\" y=\"221\" text-anchor=\"end\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text><path class=\"fig-ink\" d=\"M280 343 H455\"/><path class=\"fig-ink\" d=\"M368 343 V351 M358 351 H378 M362 356 H374 M366 361 H370\"/></svg><figcaption>$V_{CC}$는 AC 접지, $Q_1$은 $C_\\pi$·$C_\\mu$·$C_{CS}$와 $g_mv_\\pi$로 바꿨어요. $r_\\pi\\to\\infty$, $V_A=\\infty$라 두 저항은 그리지 않았어요. ②는 $C_{in,M}=(1+g_mR_C)C_\\mu$, $C_{out,M}=(1+\\frac{1}{g_mR_C})C_\\mu$예요.</figcaption></figure>\n    $$\\frac{1}{|\\omega_{p,out}|}=R_C\\left[C_{CS}+\\left(1+\\frac{1}{g_mR_C}\\right)C_\\mu\\right]=R_C(C_{CS}+C_\\mu)+\\frac{C_\\mu}{g_m}$$\n    $$\\frac{1}{|\\omega_{p,in}|}=R_B\\left[C_\\pi+(1+g_mR_C)C_\\mu\\right]$$\n  "
+        },
+        {
+          "subpart": "main",
+          "label": "R_C의 허용 범위와 선택",
+          "html": "\n      <p><strong>제약:</strong> 출력 극점이 $2\\ \\mathrm{GHz}$보다 낮아지면 안 되므로 출력 시정수에 상한이 있어요.</p>\n      $$R_C(C_{CS}+C_\\mu)+\\frac{C_\\mu}{g_m}\\le\\frac{1}{2\\pi\\cdot2\\ \\mathrm{GHz}}$$\n      <p><strong>허용 범위:</strong> 숫자를 넣어요. $C_\\mu/g_m=5\\ \\mathrm{fF}\\times26\\ \\Omega=0.13\\ \\mathrm{ps}$예요.</p>\n      $$R_C\\le\\frac{79.58\\ \\mathrm{ps}-0.13\\ \\mathrm{ps}}{15\\ \\mathrm{fF}}\\approx5296.5\\ \\Omega\\approx5.30\\ \\mathrm{k\\Omega}$$\n      <p><strong>선택 이유:</strong> 이득 $g_mR_C$는 $R_C$에 비례하니 상한에서 최대예요. 그래서 출력 극점을 정확히 $2\\ \\mathrm{GHz}$에 맞춰 $R_C\\approx5.30\\ \\mathrm{k\\Omega}$로 정해요. $R_C$에 대한 1차식이라 반복 계산이 필요 없어요.</p>\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "이득과 입력 커패시턴스",
+          "html": "\n      <p>반올림 전 $R_C\\approx5296.5\\ \\Omega$를 그대로 써요(표시값 5.30 kΩ을 다시 넣으면 203.85처럼 끝자리가 달라져요).</p>\n      $$|A_v|=g_mR_C=\\frac{1000}{26}\\ \\mathrm{mS}\\times5.2965\\ \\mathrm{k\\Omega}\\approx203.71$$\n      $$C_{in}=C_\\pi+(1+g_mR_C)C_\\mu\\approx20\\ \\mathrm{fF}+204.71\\times5\\ \\mathrm{fF}\\approx1043.56\\ \\mathrm{fF}$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "R_B 역산",
+          "html": "\n      <p>입력 극점을 $500\\ \\mathrm{MHz}$에 맞춰요.</p>\n      $$R_B=\\frac{1}{2\\pi\\cdot500\\ \\mathrm{MHz}\\cdot C_{in}}\\approx\\frac{1}{2\\pi\\times5\\times10^8\\times1043.56\\times10^{-15}}\\ \\Omega\\approx305.02\\ \\Omega$$\n    "
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "<p data-answer-final=\"\"><strong>$R_C\\approx5.30\\ \\mathrm{k\\Omega}$, $R_B\\approx305.02\\ \\Omega$이고 이때 저주파 이득은 $|A_v|=g_mR_C\\approx203.71$이에요.</strong> ($V_T=26\\ \\mathrm{mV}$, $r_\\pi\\to\\infty$, $V_A=\\infty$, 밀러 근사)</p>"
+        }
+      ]
+    },
+    {
+      "id": "P11.44",
+      "explanation_id": "p10",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "두 소자를 하나로 합치기",
+          "html": "\n    <p>$v_X$가 오르면 $M_1$은 출력에서 $g_{m1}v_X$를 더 끌어내리고, PMOS $M_2$는 $v_{SG2}=-v_X$가 되어 출력으로 밀어 넣던 전류를 $g_{m2}v_X$만큼 줄여요. 둘 다 출력에서 빠져나가는 방향이라 더해져요.</p>\n    $$g_m=g_{m1}+g_{m2}$$\n    $$R_L=r_{O1}\\parallel r_{O2}$$\n    $$C_X=C_{GS1}+C_{GS2}$$\n    $$C_{XY}=C_{GD1}+C_{GD2}$$\n    $$C_Y=C_{DB1}+C_{DB2}$$\n  "
+        },
+        {
+          "subpart": "main",
+          "label": "두 노드의 KCL",
+          "html": "\n    <figure class=\"figure\"><svg id=\"p10-fig-p10-model\" viewBox=\"0 0 520 186\" role=\"img\" aria-label=\"왼쪽 v in 단자가 R S를 거쳐 입력 노드 X에 이어진다. X에서 C X가 접지로 내려가고 X와 출력 노드 Y 사이에 C XY가 떠 있다. Y에서 아래로 흐르는 종속 전류원 g m v X, g m은 g m1 더하기 g m2, 그 오른쪽 R L, 그 오른쪽 C Y이 접지로 내려가고 맨 오른쪽이 출력 단자 v out이다.\"><circle class=\"fig-dot\" data-node=\"vin\" data-node-color=\"blue\" cx=\"24\" cy=\"44\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"vin\" data-node-color=\"blue\" x=\"14\" y=\"32\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text><path class=\"fig-ink\" d=\"M24 44 H32 L37.3 37 L48.0 51 L58.7 37 L69.3 51 L80.0 37 L90.7 51 L96 44 H104\"/><text class=\"fig-text fig-math\" x=\"64\" y=\"28\" text-anchor=\"middle\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">S</tspan></text><path class=\"fig-ink\" d=\"M104 44 H124\"/><circle class=\"fig-dot\" data-node=\"X\" data-node-color=\"red\" cx=\"124\" cy=\"44\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"X\" data-node-color=\"red\" x=\"118\" y=\"32\" text-anchor=\"end\">X</text><path class=\"fig-ink\" d=\"M124 44 V89 M124 99 V154\"/><path class=\"fig-accent\" d=\"M111 89 H137 M111 99 H137\"/><text class=\"fig-text fig-math\" x=\"101\" y=\"99\" text-anchor=\"end\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">X</tspan></text><path class=\"fig-ink\" d=\"M124 44 H164 M174 44 H214\"/><path class=\"fig-danger\" d=\"M164 32 V56 M174 32 V56\"/><text class=\"fig-text fig-math\" x=\"169\" y=\"20\" text-anchor=\"middle\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">XY</tspan></text><path class=\"fig-ink\" d=\"M214 44 H505\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"214\" cy=\"44\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"Y\" data-node-color=\"blue\" x=\"214\" y=\"66\" text-anchor=\"middle\">Y</text><path class=\"fig-ink\" d=\"M254 44 V84 M254 112 V154\"/><polygon class=\"fig-ink\" points=\"254,84 268,98 254,112 240,98\"/><path class=\"fig-ink\" d=\"M254 90 V105 M250 101 L254 106 L258 101\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"254\" cy=\"44\" r=\"4\"/><text class=\"fig-text fig-math\" x=\"232\" y=\"103\" text-anchor=\"end\">g<tspan baseline-shift=\"sub\" font-size=\"78%\">m</tspan>v<tspan baseline-shift=\"sub\" font-size=\"78%\">X</tspan></text><path class=\"fig-ink\" d=\"M300 44 V52 L307 59.8 L293 75.5 L307 91.2 L293 106.8 L307 122.5 L293 138.2 L300 146 V154\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"300\" cy=\"44\" r=\"4\"/><text class=\"fig-text fig-math\" x=\"313\" y=\"104\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">L</tspan></text><path class=\"fig-ink\" d=\"M380 44 V89 M380 99 V154\"/><path class=\"fig-accent\" d=\"M367 89 H393 M367 99 H393\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"380\" cy=\"44\" r=\"4\"/><text class=\"fig-text fig-math\" x=\"402\" y=\"99\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">Y</tspan></text><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"505\" cy=\"44\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"Y\" data-node-color=\"blue\" x=\"505\" y=\"32\" text-anchor=\"end\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text><path class=\"fig-ink\" d=\"M124 154 H380\"/><path class=\"fig-ink\" d=\"M244 154 V162 M234 162 H254 M238 167 H250 M242 172 H246\"/></svg><figcaption>$V_{DD}$는 AC 접지예요. 병렬인 $M_1$·$M_2$를 $g_m=g_{m1}+g_{m2}$의 종속원 하나와 $R_L=r_{O1}\\parallel r_{O2}$로 합치고, 커패시턴스를 $C_X$, $C_{XY}$, $C_Y$로 묶었어요. 종속원 전류는 출력 노드 Y에서 접지로 흐르는 방향이 양이에요.</figcaption></figure>\n    <p>노드 X: $R_S$로 들어온 전류가 $C_X$와 $C_{XY}$로 나가요($C_{XY}$ 전류는 X→출력 방향을 양으로).</p>\n    $$\\frac{V_{in}-V_X}{R_S}=sC_XV_X+sC_{XY}(V_X-V_{out})$$\n    <p>출력 노드: $C_{XY}$로 들어온 전류가 종속원·$R_L$·$C_Y$로 나가요.</p>\n    $$sC_{XY}(V_X-V_{out})=g_mV_X+\\frac{V_{out}}{R_L}+sC_YV_{out}$$\n  "
+        },
+        {
+          "subpart": "main",
+          "label": "출력 노드 식에서 V_X 구하기",
+          "html": "\n      <p>출력 노드 식에서 $V_X$ 항을 왼쪽에 모아요.</p>\n      $$V_X(sC_{XY}-g_m)=V_{out}\\left[\\frac{1}{R_L}+s(C_Y+C_{XY})\\right]$$\n      $$V_X=V_{out}\\,\\frac{1/R_L+s(C_Y+C_{XY})}{sC_{XY}-g_m}$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "X 노드 식에 대입",
+          "html": "\n      <p>X 노드 식을 $V_X$와 $V_{out}$으로 정리해요.</p>\n      $$\\frac{V_{in}}{R_S}=V_X\\left[\\frac{1}{R_S}+s(C_X+C_{XY})\\right]-sC_{XY}V_{out}$$\n      <p>$V_X$를 넣고 양변에 $R_SR_L(sC_{XY}-g_m)$을 곱하면 분수가 사라져요.</p>\n      $$V_{in}R_L(sC_{XY}-g_m)=V_{out}\\Big\\{[1+sR_L(C_Y+C_{XY})][1+sR_S(C_X+C_{XY})]-sR_SR_LC_{XY}(sC_{XY}-g_m)\\Big\\}$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "계수 정리와 전달 함수",
+          "html": "\n      <p>중괄호를 $s$ 차수별로 모아요. $s^2$ 항에서 $C_{XY}^2$이 서로 지워져요.</p>\n      $$s^2:\\ R_SR_L\\left[(C_Y+C_{XY})(C_X+C_{XY})-C_{XY}^2\\right]=R_SR_L(C_XC_{XY}+C_YC_{XY}+C_XC_Y)$$\n      $$s^1:\\ R_L(C_Y+C_{XY})+R_S(C_X+C_{XY})+g_mR_SR_LC_{XY}$$\n      $$\\frac{V_{out}}{V_{in}}=\\frac{(C_{XY}s-g_m)R_L}{as^2+bs+1}$$\n      $$a=R_SR_L(C_XC_{XY}+C_YC_{XY}+C_XC_Y)$$\n      $$b=(1+g_mR_L)C_{XY}R_S+R_SC_X+R_L(C_{XY}+C_Y)$$\n    "
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n      $$\\frac{V_{out}}{V_{in}}=\\frac{(C_{XY}s-g_m)R_L}{as^2+bs+1}$$\n      $$a=R_SR_L(C_XC_{XY}+C_YC_{XY}+C_XC_Y)$$\n      $$b=(1+g_mR_L)C_{XY}R_S+R_SC_X+R_L(C_{XY}+C_Y)$$\n      <p>기호 대응은 다음과 같아요.</p>\n      $$g_m=g_{m1}+g_{m2}$$\n      $$R_L=r_{O1}\\parallel r_{O2}$$\n      $$C_X=C_{GS1}+C_{GS2}$$\n      $$C_{XY}=C_{GD1}+C_{GD2}$$\n      $$C_Y=C_{DB1}+C_{DB2}$$\n    "
+        }
+      ]
+    },
+    {
+      "id": "E11.18",
+      "explanation_id": "p11",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "저주파 이득",
+          "html": "\n    <div data-gain-stage=\"gm\"><p>출력 단락: 축퇴가 없고 게이트 전류가 없으니 단락 전류는 $g_mv_{in}$이에요.</p>\n    $$G_m=g_m=\\frac{1}{150}\\ \\mathrm{S}$$</div>\n    <div data-gain-stage=\"rout\"><p>입력 영점: $\\lambda=0$이라 출력에는 $R_L$만 보여요.</p>\n    $$R_{out}\\approx R_L=2\\ \\mathrm{k\\Omega}$$</div>\n    <div data-gain-stage=\"gain\">$$A_v=-G_mR_{out}=-\\frac{2000}{150}\\approx-13.33$$</div>\n    <p>크기는 $20\\log_{10}13.33\\approx22.5\\ \\mathrm{dB}$예요. 세 방법 모두 이 값에서 출발해요.</p>\n  "
+        },
+        {
+          "subpart": "main",
+          "label": "(a) 밀러 근사",
+          "html": "\n      <p><strong>(a)</strong> $C_{GD}$를 입력 쪽 $(1+13.33)\\times80\\ \\mathrm{fF}\\approx1.15\\ \\mathrm{pF}$, 출력 쪽 $(1+1/13.33)\\times80\\ \\mathrm{fF}=86\\ \\mathrm{fF}$로 나눠요.</p>\n      $$|\\omega_{p,in}|=\\frac{1}{R_S[C_{GS}+(1+g_mR_L)C_{GD}]}=\\frac{1}{200\\ \\Omega\\times1396.67\\ \\mathrm{fF}}\\approx2\\pi\\times569.77\\ \\mathrm{MHz}$$\n      $$|\\omega_{p,out}|=\\frac{1}{R_L\\left[C_{DB}+\\left(1+\\dfrac{1}{g_mR_L}\\right)C_{GD}\\right]}=\\frac{1}{2\\ \\mathrm{k\\Omega}\\times186\\ \\mathrm{fF}}\\approx2\\pi\\times427.84\\ \\mathrm{MHz}$$\n      <p>이 예에서는 출력 극점이 더 낮아 밀러의 지배극이에요. 두 극점이 가까워 꺾이는 점(−3 dB)은 약 $313\\ \\mathrm{MHz}$예요.</p>\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "(b) 정확한 전달 함수",
+          "html": "\n      <p><strong>(b)</strong> 통합 모델의 KCL 결과식에 대입해요.</p>\n      $$\\frac{V_{out}}{V_{in}}=\\frac{(C_{GD}s-g_m)R_L}{as^2+bs+1}$$\n      $$a=200\\times2000\\times(250\\cdot80+100\\cdot80+250\\cdot100)\\times10^{-30}\\ \\mathrm{s^2}=2.12\\times10^{-20}\\ \\mathrm{s^2}$$\n      $$b=229.33\\ \\mathrm{ps}+50\\ \\mathrm{ps}+360\\ \\mathrm{ps}\\approx639.33\\ \\mathrm{ps}$$\n      <p>$as^2+bs+1=0$의 두 근과 분자의 영점이에요.</p>\n      $$|\\omega_{p1}|\\approx2\\pi\\times263.39\\ \\mathrm{MHz}$$\n      $$|\\omega_{p2}|\\approx2\\pi\\times4.54\\ \\mathrm{GHz}$$\n      $$\\omega_z=\\frac{g_m}{C_{GD}}=\\frac{1}{150\\ \\Omega\\times80\\ \\mathrm{fF}}\\approx2\\pi\\times13.26\\ \\mathrm{GHz}$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "(c) 주극점 근사",
+          "html": "\n      <p><strong>(c)</strong> 두 정확 극점이 17배 이상 떨어져 있으니 $1/b$, $b/a$로 어림할 수 있어요.</p>\n      $$|\\omega_{p1}|\\approx\\frac{1}{b}=\\frac{1}{639.33\\ \\mathrm{ps}}\\approx2\\pi\\times248.94\\ \\mathrm{MHz}$$\n      $$|\\omega_{p2}|\\approx\\frac{b}{a}=\\frac{639.33\\ \\mathrm{ps}}{2.12\\times10^{-20}\\ \\mathrm{s^2}}\\approx2\\pi\\times4.80\\ \\mathrm{GHz}$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "주파수 응답 그리기",
+          "html": "\n      <p>세 곡선 모두 $22.5\\ \\mathrm{dB}$에서 평평하게 시작해요. 정확한 식과 주극점(영점 포함)은 약 $250\\ \\mathrm{MHz}$에서 꺾여 $-20\\ \\mathrm{dB/dec}$로 내려가다가 $4.5\\ \\mathrm{GHz}$ 근처에서 $-40\\ \\mathrm{dB/dec}$가 되고, $13\\ \\mathrm{GHz}$ 영점 뒤로 다시 $-20\\ \\mathrm{dB/dec}$에 가까워져요. 밀러는 $313\\ \\mathrm{MHz}$ 근처에서 꺾인 뒤 곧바로 $-40\\ \\mathrm{dB/dec}$로 떨어져요.</p>\n      <figure class=\"figure\"><svg id=\"p11-svg2-fig-p11-bode\" viewBox=\"0 0 460 280\" role=\"img\" aria-label=\"가로축은 10 MHz부터 100 GHz까지 로그 주파수, 세로축은 dB 크기다. 세 곡선 모두 22.5 dB에서 평평하게 시작한다. 정확한 곡선과 주극점 곡선은 약 250 MHz에서 꺾여 거의 겹치고, 밀러 곡선은 약 310 MHz에서 꺾인 뒤 더 가파르게 떨어져 10 GHz에서 약 영하 30 dB이다.\"><path class=\"fig-ink\" d=\"M60 30 V230 H440\"/><path class=\"fig-ink\" d=\"M60.0 230 v6\"/><text class=\"fig-text fig-math\" x=\"60.0\" y=\"250\" text-anchor=\"middle\">10M</text><path class=\"fig-ink\" d=\"M155.0 230 v6\"/><text class=\"fig-text fig-math\" x=\"155.0\" y=\"250\" text-anchor=\"middle\">100M</text><path class=\"fig-ink\" d=\"M250.0 230 v6\"/><text class=\"fig-text fig-math\" x=\"250.0\" y=\"250\" text-anchor=\"middle\">1G</text><path class=\"fig-ink\" d=\"M345.0 230 v6\"/><text class=\"fig-text fig-math\" x=\"345.0\" y=\"250\" text-anchor=\"middle\">10G</text><path class=\"fig-ink\" d=\"M440.0 230 v6\"/><text class=\"fig-text fig-math\" x=\"440.0\" y=\"250\" text-anchor=\"middle\">100G</text><path class=\"fig-ink\" d=\"M54 55.0 h6\"/><text class=\"fig-text fig-math\" x=\"50\" y=\"59.0\" text-anchor=\"end\">20</text><path class=\"fig-ink\" d=\"M54 105.0 h6\"/><text class=\"fig-text fig-math\" x=\"50\" y=\"109.0\" text-anchor=\"end\">0</text><path class=\"fig-ink\" d=\"M54 155.0 h6\"/><text class=\"fig-text fig-math\" x=\"50\" y=\"159.0\" text-anchor=\"end\">−20</text><path class=\"fig-ink\" d=\"M54 205.0 h6\"/><text class=\"fig-text fig-math\" x=\"50\" y=\"209.0\" text-anchor=\"end\">−40</text><text class=\"fig-text fig-math\" x=\"50\" y=\"20\" text-anchor=\"end\">dB</text><text class=\"fig-text fig-math\" x=\"440\" y=\"268\" text-anchor=\"end\">f (Hz)</text><polyline class=\"fig-accent\" points=\"60.0,48.8 63.2,48.8 66.3,48.8 69.5,48.8 72.7,48.8 75.8,48.8 79.0,48.8 82.2,48.8 85.3,48.8 88.5,48.8 91.7,48.8 94.8,48.8 98.0,48.9 101.2,48.9 104.3,48.9 107.5,48.9 110.7,48.9 113.8,49.0 117.0,49.0 120.2,49.0 123.3,49.1 126.5,49.1 129.7,49.2 132.8,49.3 136.0,49.4 139.2,49.5 142.3,49.6 145.5,49.7 148.7,49.9 151.8,50.0 155.0,50.2 158.2,50.4 161.3,50.7 164.5,51.0 167.7,51.3 170.8,51.7 174.0,52.1 177.2,52.6 180.3,53.1 183.5,53.7 186.7,54.3 189.8,55.0 193.0,55.8 196.2,56.6 199.3,57.5 202.5,58.5 205.7,59.5 208.8,60.6 212.0,61.7 215.2,62.9 218.3,64.2 221.5,65.5 224.7,66.8 227.8,68.2 231.0,69.7 234.2,71.1 237.3,72.6 240.5,74.1 243.7,75.7 246.8,77.3 250.0,78.9 253.2,80.5 256.3,82.2 259.5,83.9 262.7,85.6 265.8,87.3 269.0,89.1 272.2,90.9 275.3,92.7 278.5,94.6 281.7,96.5 284.8,98.4 288.0,100.4 291.2,102.4 294.3,104.4 297.5,106.5 300.7,108.6 303.8,110.8 307.0,113.0 310.2,115.3 313.3,117.6 316.5,120.0 319.7,122.4 322.8,124.8 326.0,127.2 329.2,129.7 332.3,132.2 335.5,134.6 338.7,137.1 341.8,139.6 345.0,142.0 348.2,144.5 351.3,146.9 354.5,149.2 357.7,151.6 360.8,153.9 364.0,156.1 367.2,158.3 370.3,160.5 373.5,162.6 376.7,164.7 379.8,166.7 383.0,168.7 386.2,170.7 389.3,172.6 392.5,174.5 395.7,176.4 398.8,178.2 402.0,180.0 405.2,181.8 408.3,183.6 411.5,185.4 414.7,187.1 417.8,188.9 421.0,190.6 424.2,192.3 427.3,194.0 430.5,195.8 433.7,197.5 436.8,199.2 440.0,200.9\"/><polyline class=\"fig-danger\" stroke-dasharray=\"7 5\" points=\"60.0,48.8 63.2,48.8 66.3,48.8 69.5,48.8 72.7,48.8 75.8,48.8 79.0,48.8 82.2,48.8 85.3,48.8 88.5,48.8 91.7,48.8 94.8,48.8 98.0,48.8 101.2,48.8 104.3,48.8 107.5,48.8 110.7,48.9 113.8,48.9 117.0,48.9 120.2,48.9 123.3,49.0 126.5,49.0 129.7,49.0 132.8,49.1 136.0,49.1 139.2,49.2 142.3,49.2 145.5,49.3 148.7,49.4 151.8,49.5 155.0,49.7 158.2,49.8 161.3,50.0 164.5,50.2 167.7,50.4 170.8,50.7 174.0,51.0 177.2,51.3 180.3,51.7 183.5,52.1 186.7,52.7 189.8,53.2 193.0,53.9 196.2,54.6 199.3,55.5 202.5,56.4 205.7,57.4 208.8,58.6 212.0,59.8 215.2,61.2 218.3,62.7 221.5,64.4 224.7,66.1 227.8,68.0 231.0,70.0 234.2,72.1 237.3,74.3 240.5,76.7 243.7,79.1 246.8,81.7 250.0,84.3 253.2,87.0 256.3,89.8 259.5,92.6 262.7,95.5 265.8,98.5 269.0,101.5 272.2,104.5 275.3,107.6 278.5,110.7 281.7,113.9 284.8,117.1 288.0,120.3 291.2,123.5 294.3,126.7 297.5,129.9 300.7,133.2 303.8,136.5 307.0,139.7 310.2,143.0 313.3,146.3 316.5,149.6 319.7,152.9 322.8,156.2 326.0,159.5 329.2,162.9 332.3,166.2 335.5,169.5 338.7,172.8 341.8,176.1 345.0,179.5 348.2,182.8 351.3,186.1 354.5,189.4 357.7,192.8 360.8,196.1 364.0,199.4 367.2,202.8 370.3,206.1 373.5,209.4 376.7,212.7 379.8,216.1 383.0,219.4 386.2,222.7 389.3,226.1 392.5,229.4\"/><polyline class=\"fig-ink\" stroke-dasharray=\"2 4\" points=\"60.0,48.8 63.2,48.8 66.3,48.8 69.5,48.8 72.7,48.8 75.8,48.8 79.0,48.8 82.2,48.8 85.3,48.8 88.5,48.8 91.7,48.8 94.8,48.8 98.0,48.9 101.2,48.9 104.3,48.9 107.5,48.9 110.7,49.0 113.8,49.0 117.0,49.0 120.2,49.1 123.3,49.1 126.5,49.2 129.7,49.3 132.8,49.3 136.0,49.4 139.2,49.5 142.3,49.7 145.5,49.8 148.7,50.0 151.8,50.2 155.0,50.4 158.2,50.6 161.3,50.9 164.5,51.2 167.7,51.6 170.8,52.0 174.0,52.5 177.2,53.0 180.3,53.5 183.5,54.2 186.7,54.8 189.8,55.6 193.0,56.4 196.2,57.3 199.3,58.2 202.5,59.2 205.7,60.3 208.8,61.4 212.0,62.6 215.2,63.8 218.3,65.1 221.5,66.4 224.7,67.8 227.8,69.2 231.0,70.7 234.2,72.2 237.3,73.7 240.5,75.2 243.7,76.8 246.8,78.4 250.0,80.0 253.2,81.6 256.3,83.3 259.5,85.0 262.7,86.7 265.8,88.4 269.0,90.2 272.2,92.0 275.3,93.8 278.5,95.6 281.7,97.5 284.8,99.4 288.0,101.3 291.2,103.3 294.3,105.3 297.5,107.3 300.7,109.4 303.8,111.6 307.0,113.7 310.2,116.0 313.3,118.2 316.5,120.5 319.7,122.9 322.8,125.2 326.0,127.6 329.2,130.1 332.3,132.5 335.5,134.9 338.7,137.4 341.8,139.8 345.0,142.3 348.2,144.7 351.3,147.0 354.5,149.4 357.7,151.7 360.8,154.0 364.0,156.2 367.2,158.4 370.3,160.6 373.5,162.7 376.7,164.7 379.8,166.8 383.0,168.7 386.2,170.7 389.3,172.6 392.5,174.5 395.7,176.4 398.8,178.2 402.0,180.0 405.2,181.8 408.3,183.6 411.5,185.4 414.7,187.1 417.8,188.9 421.0,190.6 424.2,192.3 427.3,194.1 430.5,195.8 433.7,197.5 436.8,199.2 440.0,200.9\"/><path class=\"fig-accent\" d=\"M300 48 h30\"/><text class=\"fig-text fig-math\" x=\"338\" y=\"52\">정확</text><path class=\"fig-danger\" stroke-dasharray=\"7 5\" d=\"M300 66 h30\"/><text class=\"fig-text fig-math\" x=\"338\" y=\"70\">밀러</text><path class=\"fig-ink\" stroke-dasharray=\"2 4\" d=\"M300 84 h30\"/><text class=\"fig-text fig-math\" x=\"338\" y=\"88\">주극점</text></svg><figcaption>세 방법의 크기 응답을 같은 축에 계산해 그렸어요. 정확(실선)과 주극점(점선)에는 우반면 영점 $g_m/C_{GD}$를 넣었고, 밀러(긴 점선)는 영점이 없어요.</figcaption></figure>\n      <p>$10\\ \\mathrm{GHz}$에서 크기는 정확 $\\approx-14.82\\ \\mathrm{dB}$, 주극점(영점 포함) $\\approx-14.9\\ \\mathrm{dB}$, 밀러 $\\approx-29.78\\ \\mathrm{dB}$예요.</p>\n    "
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n      <p><strong>(a) 밀러:</strong> $|\\omega_{p,in}|\\approx2\\pi\\times569.77\\ \\mathrm{MHz}$, $|\\omega_{p,out}|\\approx2\\pi\\times427.84\\ \\mathrm{MHz}$</p>\n      <p><strong>(b) 정확:</strong> $|\\omega_{p1}|\\approx2\\pi\\times263.39\\ \\mathrm{MHz}$, $|\\omega_{p2}|\\approx2\\pi\\times4.54\\ \\mathrm{GHz}$, 우반면 영점 $\\approx2\\pi\\times13.26\\ \\mathrm{GHz}$</p>\n      <p><strong>(c) 주극점:</strong> $|\\omega_{p1}|\\approx2\\pi\\times248.94\\ \\mathrm{MHz}$, $|\\omega_{p2}|\\approx2\\pi\\times4.80\\ \\mathrm{GHz}$</p>\n      <p>저주파 이득 $22.5\\ \\mathrm{dB}$, 대역폭은 정확한 식 기준 약 $260\\ \\mathrm{MHz}$예요. 밀러는 대역폭을 약 $313\\ \\mathrm{MHz}$로 과대평가하고 고주파 감쇠를 크게 과장해요.</p>\n    "
+        }
+      ]
+    },
+    {
+      "id": "P11.39",
+      "explanation_id": "p12",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "g_m과 저주파 이득",
+          "html": "\n    <div data-gain-stage=\"gm\"><p>출력 단락 시 전류는 $g_mv_{in}$이에요.</p>\n    $$G_m=g_m=\\frac{2I_{D1}}{V_{GS}-V_{TH}}=\\frac{2\\times1\\ \\mathrm{mA}}{0.2\\ \\mathrm{V}}=10\\ \\mathrm{mS}$$</div>\n    <div data-gain-stage=\"rout\"><p>입력 영점, $r_O\\to\\infty$라 출력에는 $R_D$만 보여요.</p>\n    $$R_{out}\\approx R_D=1\\ \\mathrm{k\\Omega}$$</div>\n    <div data-gain-stage=\"gain\">$$A_v=-G_mR_{out}=-10\\ \\mathrm{mS}\\times1\\ \\mathrm{k\\Omega}=-10$$</div>\n  "
+        },
+        {
+          "subpart": "main",
+          "label": "(a) 밀러 근사",
+          "html": "\n      <p><strong>(a)</strong> 입력 쪽 밀러 커패시턴스는 $(1+10)\\times10\\ \\mathrm{fF}=110\\ \\mathrm{fF}$예요.</p>\n      $$|\\omega_{p,in}|=\\frac{1}{R_S[C_{GS}+(1+g_mR_D)C_{GD}]}=\\frac{1}{200\\ \\Omega\\times160\\ \\mathrm{fF}}\\approx3.13\\times10^{10}\\ \\mathrm{rad/s}$$\n      <p>출력 쪽 계수는 $1+1/10=1.1$이에요.</p>\n      $$|\\omega_{p,out}|=\\frac{1}{R_D\\left[C_{DB}+\\left(1+\\dfrac{1}{g_mR_D}\\right)C_{GD}\\right]}=\\frac{1}{1\\ \\mathrm{k\\Omega}\\times26\\ \\mathrm{fF}}\\approx3.85\\times10^{10}\\ \\mathrm{rad/s}$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "(b) 식 (11.73)의 극점",
+          "html": "\n      <p><strong>(b)</strong> 계수를 fF·Ω 단위로 정리해 넣어요.</p>\n      $$a=R_SR_D(C_{GS}C_{GD}+C_{DB}C_{GD}+C_{GS}C_{DB})=2\\times10^5\\times1400\\times10^{-30}\\ \\mathrm{s^2}=2.8\\times10^{-22}\\ \\mathrm{s^2}$$\n      $$b=(1+g_mR_D)C_{GD}R_S+R_SC_{GS}+R_D(C_{GD}+C_{DB})=22+10+25=57\\ \\mathrm{ps}$$\n      <p>$as^2+bs+1=0$을 풀어요.</p>\n      $$|\\omega_{p1,2}|=\\frac{b\\mp\\sqrt{b^2-4a}}{2a}$$\n      $$|\\omega_{p1}|\\approx1.94\\times10^{10}\\ \\mathrm{rad/s}$$\n      $$|\\omega_{p2}|\\approx1.84\\times10^{11}\\ \\mathrm{rad/s}$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "두 결과 비교",
+          "html": "\n      <p>낮은 극점끼리: 밀러의 입력 극점 $3.13\\times10^{10}$은 정확한 $1.94\\times10^{10}$의 약 1.61배예요. 높은 극점끼리: 밀러의 출력 극점 $3.85\\times10^{10}$은 정확한 $1.84\\times10^{11}$보다 약 4.79배 낮아요.</p>\n      <p>밀러로 구한 두 극점이 서로 가까워(1.23배) 한 노드씩 떼어 보는 가정이 맞지 않아요. 실제로는 두 노드가 결합돼 극점이 서로 밀어내며 멀어져요.</p>\n    "
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n      <p><strong>(a) 밀러:</strong> $|\\omega_{p,in}|\\approx3.13\\times10^{10}\\ \\mathrm{rad/s}$($\\approx2\\pi\\times4.97\\ \\mathrm{GHz}$), $|\\omega_{p,out}|\\approx3.85\\times10^{10}\\ \\mathrm{rad/s}$($\\approx2\\pi\\times6.12\\ \\mathrm{GHz}$)</p>\n      <p><strong>(b) 식 (11.73):</strong> $|\\omega_{p1}|\\approx1.94\\times10^{10}\\ \\mathrm{rad/s}$($\\approx2\\pi\\times3.09\\ \\mathrm{GHz}$), $|\\omega_{p2}|\\approx1.84\\times10^{11}\\ \\mathrm{rad/s}$($\\approx2\\pi\\times29.31\\ \\mathrm{GHz}$)</p>\n      <p><strong>비교:</strong> 두 극점이 가까워 밀러 근사가 맞지 않아요. 낮은 극점은 약 1.61배 높게, 높은 극점은 약 4.79배 낮게 잡아요($\\lambda=0$ 가정).</p>\n    "
+        }
+      ]
+    },
+    {
+      "id": "E11.17",
+      "explanation_id": "p13",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "빠지는 커패시턴스와 통합 모델 대응",
+          "html": "\n    <p>양 끝이 모두 AC 접지인 커패시턴스부터 지워요: $C_{SB1}$(소스·몸체 모두 접지), $C_{SB2}$(소스·몸체 모두 $V_{DD}$), $C_{GS2}$(게이트 $V_b$, 소스 $V_{DD}$).</p>\n    <p>$M_2$의 $C_{GD2}$는 $V_b$–출력, $C_{DB2}$는 출력–$V_{DD}$라 둘 다 출력–AC 접지예요.</p>\n    $$R_{Thev}=R_S$$\n    $$C_{in}=C_{GS1}$$\n    $$C_{XY}=C_{GD1}$$\n    $$C_{out}=C_{DB1}+C_{GD2}+C_{DB2}$$\n  "
+        },
+        {
+          "subpart": "main",
+          "label": "출력 노드 저항",
+          "html": "\n      <p>입력을 0으로 두면 $M_1$은 게이트·소스가 AC 접지라 $r_{O1}$, $M_2$도 게이트·소스가 AC 접지라 $r_{O2}$로 보여요. 둘 다 출력과 AC 접지 사이라 병렬이에요.</p>\n      $$R_L=r_{O1}\\parallel r_{O2}$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "계수 a, b",
+          "html": "\n      $$b=\\left[1+g_{m1}(r_{O1}\\parallel r_{O2})\\right]C_{XY}R_S+R_SC_{in}+(r_{O1}\\parallel r_{O2})(C_{XY}+C_{out})$$\n      $$a=R_S(r_{O1}\\parallel r_{O2})(C_{in}C_{XY}+C_{out}C_{XY}+C_{in}C_{out})$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "주극점 근사",
+          "html": "\n      <p>$|\\omega_{p2}|\\gg|\\omega_{p1}|$이면 분모를 $(1+s/\\omega_{p1})(1+s/\\omega_{p2})$로 보고 계수를 맞춰요.</p>\n      $$|\\omega_{p1}|\\approx\\frac{1}{b}=\\frac{1}{[1+g_{m1}(r_{O1}\\parallel r_{O2})]C_{XY}R_S+R_SC_{in}+(r_{O1}\\parallel r_{O2})(C_{XY}+C_{out})}$$\n      $$|\\omega_{p2}|\\approx\\frac{b}{a}=\\frac{[1+g_{m1}(r_{O1}\\parallel r_{O2})]C_{XY}R_S+R_SC_{in}+(r_{O1}\\parallel r_{O2})(C_{XY}+C_{out})}{R_S(r_{O1}\\parallel r_{O2})(C_{in}C_{XY}+C_{out}C_{XY}+C_{in}C_{out})}$$\n    "
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n      <p>$C_{in}=C_{GS1}$, $C_{XY}=C_{GD1}$, $C_{out}=C_{DB1}+C_{GD2}+C_{DB2}$, $R_L=r_{O1}\\parallel r_{O2}$일 때</p>\n      <p>$|\\omega_{p1}|\\approx\\dfrac{1}{[1+g_{m1}R_L]C_{XY}R_S+R_SC_{in}+R_L(C_{XY}+C_{out})}$</p>\n      <p>$|\\omega_{p2}|\\approx\\dfrac{[1+g_{m1}R_L]C_{XY}R_S+R_SC_{in}+R_L(C_{XY}+C_{out})}{R_SR_L(C_{in}C_{XY}+C_{out}C_{XY}+C_{in}C_{out})}$ ($|\\omega_{p2}|\\gg|\\omega_{p1}|$ 가정)</p>\n    "
+        }
+      ]
+    },
+    {
+      "id": "P11.40",
+      "explanation_id": "p14",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "출력 노드 저항과 이득",
+          "html": "\n    <p>$C_\\mu$ 양 끝(베이스 노드 X에서 출력까지)의 저주파 이득을 봐요.</p>\n    <div data-gain-stage=\"gm\"><p>출력 단락 시 전류는 $g_mv_X$예요.</p>\n    $$G_m=g_m$$</div>\n    <div data-gain-stage=\"rout\"><p>입력 영점에서 출력을 보면 $Q_1$은 $r_O=\\infty$, 전류원도 이상적이라 열려 있어요.</p>\n    $$R_{out}=R_L\\to\\infty$$</div>\n    <div data-gain-stage=\"gain\">$$\\frac{v_{out}}{v_X}=-G_mR_{out}\\to-\\infty$$</div>\n  "
+        },
+        {
+          "subpart": "main",
+          "label": "(a) 밀러 근사",
+          "html": "\n      <p><strong>(a)</strong> 밀러 커패시턴스와 출력 저항이 모두 발산해요.</p>\n      $$|\\omega_{p,in}|=\\frac{1}{R_{Th}[C_\\pi+(1+g_mR_L)C_\\mu]}\\to0$$\n      $$|\\omega_{p,out}|=\\frac{1}{R_L\\left[C_{CS}+\\left(1+\\dfrac{1}{g_mR_L}\\right)C_\\mu\\right]}\\to0$$\n      <p>밀러 근사는 두 극점을 모두 원점에 놓아요.</p>\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "(b) 식 (11.73)의 극한",
+          "html": "\n      <p><strong>(b)</strong> 통합 모델의 전달 함수예요.</p>\n      $$\\frac{V_{out}}{V_{Thev}}=\\frac{(C_\\mu s-g_m)R_L}{as^2+bs+1}$$\n      $$a=R_{Th}R_L(C_\\pi C_\\mu+C_{CS}C_\\mu+C_\\pi C_{CS})$$\n      $$b=(1+g_mR_L)C_\\mu R_{Th}+R_{Th}C_\\pi+R_L(C_\\mu+C_{CS})$$\n      <p>분자와 분모를 $R_L$로 나눠요. $1/R_L$이 붙은 항은 $R_L\\to\\infty$에서 0이 돼요.</p>\n      $$\\frac{b}{R_L}\\to g_mR_{Th}C_\\mu+C_\\mu+C_{CS}$$\n      $$\\frac{V_{out}}{V_{Thev}}=\\frac{C_\\mu s-g_m}{s\\left[R_{Th}(C_\\pi C_\\mu+C_{CS}C_\\mu+C_\\pi C_{CS})s+g_mR_{Th}C_\\mu+C_\\mu+C_{CS}\\right]}$$\n      <p>분모가 $s$로 묶여 극점 하나는 원점이에요. 나머지 하나는 대괄호가 0이 되는 곳이에요.</p>\n      $$|\\omega_{p2}|=\\frac{g_mR_{Th}C_\\mu+C_\\mu+C_{CS}}{R_{Th}(C_\\pi C_\\mu+C_{CS}C_\\mu+C_\\pi C_{CS})}$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "두 결과 비교",
+          "html": "\n      <p>원점의 극점 하나는 두 방법이 같아요. 출력 전류가 저항 없이 커패시턴스만 충전하니 적분기처럼 동작하기 때문이에요. 그러나 밀러 근사는 유한한 둘째 극점 $|\\omega_{p2}|$를 놓쳐요. 이득이 무한대라 \"$C_\\mu$를 저주파 이득으로 나눈다\"는 밀러 분할 자체가 성립하지 않아요.</p>\n    "
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n      <p><strong>(a) 밀러:</strong> $|\\omega_{p,in}|\\to0$, $|\\omega_{p,out}|\\to0$ (두 극점 모두 원점)</p>\n      <p><strong>(b) 식 (11.73):</strong> $|\\omega_{p1}|=0$, $|\\omega_{p2}|=\\dfrac{g_mR_{Th}C_\\mu+C_\\mu+C_{CS}}{R_{Th}(C_\\pi C_\\mu+C_{CS}C_\\mu+C_\\pi C_{CS})}$, $R_{Th}=R_S\\parallel r_\\pi$</p>\n      <p><strong>비교:</strong> 원점 극점은 같지만 밀러 근사는 유한한 높은 극점을 놓쳐요. 무한 이득에서는 밀러 분할이 성립하지 않아요.</p>\n    "
+        }
+      ]
+    },
+    {
+      "id": "P11.41",
+      "explanation_id": "p15",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "계수 a, b와 주극점 식",
+          "html": "\n    <figure class=\"figure\"><svg id=\"p15-fig-p15-model\" viewBox=\"0 0 520 186\" role=\"img\" aria-label=\"왼쪽 v Th 단자가 R S 병렬 r 파이를 거쳐 입력 노드 X에 이어진다. X에서 C 파이가 접지로 내려가고 X와 출력 노드 Y 사이에 C 뮤가 떠 있다. Y에서 아래로 흐르는 종속 전류원 g m v 파이, 그 오른쪽 없음(출력 노드 저항 무한대), 그 오른쪽 C CS이 접지로 내려가고 맨 오른쪽이 출력 단자 v out이다.\"><circle class=\"fig-dot\" data-node=\"vin\" data-node-color=\"blue\" cx=\"24\" cy=\"44\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"vin\" data-node-color=\"blue\" x=\"14\" y=\"32\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">Th</tspan></text><path class=\"fig-ink\" d=\"M24 44 H32 L37.3 37 L48.0 51 L58.7 37 L69.3 51 L80.0 37 L90.7 51 L96 44 H104\"/><text class=\"fig-text fig-math\" x=\"64\" y=\"28\" text-anchor=\"middle\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">S</tspan>‖r<tspan baseline-shift=\"sub\" font-size=\"78%\">π</tspan></text><path class=\"fig-ink\" d=\"M104 44 H124\"/><circle class=\"fig-dot\" data-node=\"X\" data-node-color=\"red\" cx=\"124\" cy=\"44\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"X\" data-node-color=\"red\" x=\"118\" y=\"32\" text-anchor=\"end\">X</text><path class=\"fig-ink\" d=\"M124 44 V89 M124 99 V154\"/><path class=\"fig-accent\" d=\"M111 89 H137 M111 99 H137\"/><text class=\"fig-text fig-math\" x=\"101\" y=\"99\" text-anchor=\"end\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">π</tspan></text><path class=\"fig-ink\" d=\"M124 44 H164 M174 44 H214\"/><path class=\"fig-danger\" d=\"M164 32 V56 M174 32 V56\"/><text class=\"fig-text fig-math\" x=\"169\" y=\"20\" text-anchor=\"middle\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">μ</tspan></text><path class=\"fig-ink\" d=\"M214 44 H505\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"214\" cy=\"44\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"Y\" data-node-color=\"blue\" x=\"214\" y=\"66\" text-anchor=\"middle\">Y</text><path class=\"fig-ink\" d=\"M254 44 V84 M254 112 V154\"/><polygon class=\"fig-ink\" points=\"254,84 268,98 254,112 240,98\"/><path class=\"fig-ink\" d=\"M254 90 V105 M250 101 L254 106 L258 101\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"254\" cy=\"44\" r=\"4\"/><text class=\"fig-text fig-math\" x=\"232\" y=\"103\" text-anchor=\"end\">g<tspan baseline-shift=\"sub\" font-size=\"78%\">m</tspan>v<tspan baseline-shift=\"sub\" font-size=\"78%\">π</tspan></text><path class=\"fig-ink\" d=\"M380 44 V89 M380 99 V154\"/><path class=\"fig-accent\" d=\"M367 89 H393 M367 99 H393\"/><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"380\" cy=\"44\" r=\"4\"/><text class=\"fig-text fig-math\" x=\"402\" y=\"99\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">CS</tspan></text><circle class=\"fig-dot\" data-node=\"Y\" data-node-color=\"blue\" cx=\"505\" cy=\"44\" r=\"4\"/><text class=\"fig-text fig-math\" data-node=\"Y\" data-node-color=\"blue\" x=\"505\" y=\"32\" text-anchor=\"end\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text><path class=\"fig-ink\" d=\"M124 154 H380\"/><path class=\"fig-ink\" d=\"M244 154 V162 M234 162 H254 M238 167 H250 M242 172 H246\"/></svg><figcaption>문제 11.40과 같은 통합 모델이에요. $V_{CC}$는 AC 접지, 입력은 $R_{Th}=R_S\\parallel r_\\pi$로 묶었고 출력 노드 저항 $R_L$은 무한대(개방)라 그림에 저항이 없어요.</figcaption></figure>\n    $$b=(1+g_mR_L)C_\\mu R_{Th}+R_{Th}C_\\pi+R_L(C_\\mu+C_{CS})$$\n    $$a=R_{Th}R_L(C_\\pi C_\\mu+C_{CS}C_\\mu+C_\\pi C_{CS})$$\n    $$|\\omega_{p1}|\\approx\\frac{1}{b}$$\n    $$|\\omega_{p2}|\\approx\\frac{b}{a}$$\n  "
+        },
+        {
+          "subpart": "main",
+          "label": "낮은 극점",
+          "html": "\n      <p>$V_A=\\infty$라 $R_L\\to\\infty$이고, $b$에는 $R_L$에 비례하는 항이 있어 발산해요.</p>\n      $$|\\omega_{p1}|\\approx\\frac{1}{b}\\to0$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "높은 극점",
+          "html": "\n      <p>$b$와 $a$ 모두 $R_L$에 비례하니 나눈 뒤 극한을 취해요.</p>\n      $$\\frac{b}{a}=\\frac{b/R_L}{a/R_L}\\to\\frac{g_mR_{Th}C_\\mu+C_\\mu+C_{CS}}{R_{Th}(C_\\pi C_\\mu+C_{CS}C_\\mu+C_\\pi C_{CS})}$$\n      $$|\\omega_{p2}|\\approx\\frac{g_mR_{Th}C_\\mu+C_\\mu+C_{CS}}{R_{Th}(C_\\pi C_\\mu+C_{CS}C_\\mu+C_\\pi C_{CS})}$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "11.40과 비교",
+          "html": "\n      <p>한 극점이 원점에 있으면 두 극점의 비 $|\\omega_{p2}/\\omega_{p1}|$가 무한대예요. 주극점 근사의 전제 $|\\omega_{p2}|\\gg|\\omega_{p1}|$이 극한에서 정확히 성립하므로, 결과가 문제 11.40 (b)의 정확한 극점과 똑같아요.</p>\n      <p>반면 11.40 (a)의 밀러 근사는 두 극점을 모두 원점으로 보내 둘째 극점을 놓쳤어요.</p>\n    "
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n      <p>$|\\omega_{p1}|\\to0$, $|\\omega_{p2}|=\\dfrac{g_mR_{Th}C_\\mu+C_\\mu+C_{CS}}{R_{Th}(C_\\pi C_\\mu+C_{CS}C_\\mu+C_\\pi C_{CS})}$, $R_{Th}=R_S\\parallel r_\\pi$</p>\n      <p><strong>비교:</strong> 주극점 근사는 문제 11.40 (b)의 정확한 극점과 같아요(한 극점이 원점이라 간격이 무한대). 밀러 근사는 둘째 극점을 놓쳐요.</p>\n    "
+        }
+      ]
+    }
+  ],
+  "assets": {}
+}

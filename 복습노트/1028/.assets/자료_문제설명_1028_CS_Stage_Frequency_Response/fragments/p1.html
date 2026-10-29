@@ -1,0 +1,80 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 읽어요</h4>
+  <p>포화 영역의 MOSFET 하나만 놓고 "이 소자가 얼마나 빠른가"를 묻는 문제예요. 회로 그림은 없고, 우리가 직접 시험 회로를 정해야 해요.</p>
+  <p>구할 것은 세 가지예요. 첫째 $f_T$의 정의, 둘째 그 정의에서 나오는 $\omega_T=2\pi f_T$ 식, 셋째 $C_{GS}=(2/3)WLC_{ox}$를 넣어 $\mu_n$, $L$, $V_{GS}-V_{TH}$만 남긴 식이에요.</p>
+  <p>조건은 두 개예요. $C_{GD}$는 무시하고, 식을 구하는 과정이 없으면 점수가 없으니 첫 식부터 차례로 써야 해요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 개념과 공식을 떠올려요</h4>
+  <p><strong>단서:</strong> "transit frequency"라는 말은 <a href="정리노트_1028_CS_Stage_Frequency_Response.html#s0-ft-mos">트랜싯 주파수(transit frequency)</a>를 불러요. 소자 하나의 속도를 재는 표준 실험이 있어요.</p>
+  <p><strong>개념:</strong> 게이트에 소신호 전류 $i_{in}$을 넣고 드레인을 AC 접지에 단락한 채, 드레인 전류 $i_{out}$이 $i_{in}$보다 몇 배인지 봐요. 주파수가 오르면 게이트 커패시턴스가 전류를 많이 받아 가므로 전류 이득이 줄어요. 이 전류 이득의 크기가 1이 되는 주파수가 $f_T$예요.</p>
+  <p><strong>기호의 뜻:</strong> $g_m$은 게이트–소스 전압 변화가 드레인 전류를 얼마나 바꾸는지(트랜스컨덕턴스), $C_{GS}$는 게이트–소스 커패시턴스, $\mu_n$은 전자 이동도, $C_{ox}$는 단위 면적당 산화막 커패시턴스예요.</p>
+  <p><strong>근사 조건:</strong> 문제가 $C_{GD}$를 무시하라고 했으니 게이트 전류는 전부 $C_{GS}$로 흘러요. 드레인이 AC 접지라 $r_o$에는 전압이 걸리지 않아 결과에 나타나지 않아요. 포화 영역이므로 $g_m=\mu_nC_{ox}\dfrac{W}{L}(V_{GS}-V_{TH})$를 써요.</p>
+  <p><strong>선택 이유:</strong> 정의가 "전류 이득 = 1"이므로 입력 전류와 출력 전류를 같은 $v_{GS}$로 쓰는 두 식이면 바로 비가 나와요. 등가회로 하나로 정의·식·대입을 모두 이어 갈 수 있어요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <div data-answer-step="f_T 시험 회로와 첫 식">
+    <p>게이트에 소신호 전류원 $i_{in}$을 걸고, 드레인은 오른쪽에서 접지로 단락해요. 소스도 접지예요. $C_{GD}$는 문제 조건대로 빼요.</p>
+    <figure class="figure"><svg id="fig-p1-ft" viewBox="0 0 440 200" role="img" aria-label="왼쪽 소신호 전류원 i in이 접지에서 게이트 노드 G로 전류를 넣는다. G에서 C GS가 접지로 내려가고 v GS는 G가 플러스, 접지가 마이너스다. 드레인 노드 D에서 아래로 흐르는 종속 전류원 g m v GS가 접지로 가고, D는 오른쪽 단락선으로 접지에 이어져 v out은 0이다. 단락선에서 D로 왼쪽 방향 i out이 들어온다."><path class="fig-ink" d="M60 50 V96 M60 124 V170"/><circle class="fig-accent" cx="60" cy="110" r="14"/><path class="fig-accent" d="M60 119 V101 M55 106 L60 101 L65 106"/><text class="fig-text fig-math" x="40" y="115" text-anchor="end">i<tspan baseline-shift="sub" font-size="78%">in</tspan></text><path class="fig-ink" d="M60 50 H150"/><circle class="fig-dot" data-node="G" data-node-color="red" cx="150" cy="50" r="4"/><text class="fig-text fig-math" data-node="G" data-node-color="red" x="150" y="38" text-anchor="middle">G</text><path class="fig-ink" d="M150 50 V105 M150 115 V170"/><path class="fig-accent" d="M137 105 H163 M137 115 H163"/><text class="fig-text fig-math" x="128" y="115" text-anchor="end">C<tspan baseline-shift="sub" font-size="78%">GS</tspan></text><text class="fig-text fig-math" data-node="G" data-node-color="red" x="176" y="84">+</text><text class="fig-text fig-math" data-node="G" data-node-color="red" x="176" y="115">v<tspan baseline-shift="sub" font-size="78%">GS</tspan></text><text class="fig-text fig-math" data-node="G" data-node-color="red" x="176" y="150">−</text><path class="fig-ink" d="M250 50 H340 V170"/><path class="fig-ink" d="M250 50 V96 M250 124 V170"/><polygon class="fig-ink" points="250,96 264,110 250,124 236,110"/><path class="fig-ink" d="M250 102 V117 M246 113 L250 118 L254 113"/><text class="fig-text fig-math" x="268" y="115">g<tspan baseline-shift="sub" font-size="78%">m</tspan>v<tspan baseline-shift="sub" font-size="78%">GS</tspan></text><circle class="fig-dot" data-node="D" data-node-color="blue" cx="250" cy="50" r="4"/><text class="fig-text fig-math" data-node="D" data-node-color="blue" x="250" y="38" text-anchor="middle">D</text><circle class="fig-dot" data-node="D" data-node-color="blue" cx="340" cy="50" r="4"/><text class="fig-text fig-math" data-node="D" data-node-color="blue" x="352" y="46">v<tspan baseline-shift="sub" font-size="78%">out</tspan>=0</text><path class="fig-accent" d="M322 50 H284 M292 44 L284 50 L292 56"/><text class="fig-text fig-math" x="303" y="76" text-anchor="middle">i<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M60 170 H340"/><path class="fig-ink" d="M200 170 V178 M190 178 H210 M194 183 H206 M198 188 H202"/></svg><figcaption>소스는 접지, 드레인은 오른쪽 단락선으로 AC 접지해요. $C_{GD}$는 문제 조건대로 빼고 트랜지스터를 $C_{GS}$와 $g_mv_{GS}$로 바꿨어요.</figcaption></figure>
+    <p>게이트 노드 G의 KCL: 들어온 전류는 모두 $C_{GS}$로 흘러요.</p>
+    $$I_{in}=sC_{GS}V_{GS}$$
+    <p>드레인 노드 D: 출력이 단락이라 $v_{out}=0$이고, 단락선으로 들어오는 전류가 종속원 전류와 같아요.</p>
+    $$I_{out}=g_mV_{GS}$$
+  </div>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>이렇게 풀어요</h4>
+  <div data-subpart="main">
+    <div data-answer-step="f_T의 정의">
+      <p>드레인을 AC 접지에 단락하고 게이트에 소신호 전류를 넣었을 때, 소신호 전류 이득 $|I_{out}/I_{in}|$이 1로 떨어지는 주파수를 $f_T$라고 정의해요.</p>
+    </div>
+    <div data-answer-step="전류 이득에서 ω_T 구하기">
+      <p>두 첫 식을 나누면 $V_{GS}$가 약분돼요.</p>
+      $$\frac{I_{out}}{I_{in}}=\frac{g_mV_{GS}}{sC_{GS}V_{GS}}=\frac{g_m}{sC_{GS}}$$
+      <p>$s=j\omega$를 넣고 크기를 보면 주파수에 반비례해요.</p>
+      $$\left|\frac{I_{out}}{I_{in}}\right|=\frac{g_m}{\omega C_{GS}}$$
+      <p>이 값이 1이 되는 각주파수가 $\omega_T$예요.</p>
+      $$\omega_T=2\pi f_T=\frac{g_m}{C_{GS}}$$
+    </div>
+    <div data-answer-step="μ_n, L, V_GS−V_TH로 정리">
+      <p>포화 영역의 $g_m$과 주어진 $C_{GS}$를 넣어요.</p>
+      $$g_m=\mu_nC_{ox}\frac{W}{L}(V_{GS}-V_{TH})$$
+      $$C_{GS}=\frac{2}{3}WLC_{ox}$$
+      <p>분자의 $W/L$과 분모의 $WL$에서 $W$와 $C_{ox}$가 약분되고 $L$이 두 번 남아요.</p>
+      $$\omega_T=\frac{\mu_nC_{ox}(W/L)(V_{GS}-V_{TH})}{(2/3)WLC_{ox}}=\frac{3\mu_n(V_{GS}-V_{TH})}{2L^2}$$
+    </div>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <div data-answer-final>
+      <p><strong>정의:</strong> 드레인을 AC 접지한 MOSFET에서 소신호 전류 이득 $|I_{out}/I_{in}|$이 1이 되는 주파수가 $f_T$예요.</p>
+      <p><strong>식:</strong> $\omega_T=2\pi f_T=\dfrac{g_m}{C_{GS}}$ (포화, $C_{GD}$ 무시)</p>
+      <p><strong>대입:</strong> $\omega_T=\dfrac{3\mu_n(V_{GS}-V_{TH})}{2L^2}$</p>
+    </div>
+    <p><strong>단위:</strong> $\mu_n$은 $\mathrm{m^2/(V\cdot s)}$, $V_{GS}-V_{TH}$는 $\mathrm{V}$, $L^2$은 $\mathrm{m^2}$이라 $\left[\dfrac{\mathrm{m^2}}{\mathrm{V\cdot s}}\cdot\dfrac{\mathrm{V}}{\mathrm{m^2}}\right]=[1/\mathrm{s}]$로 각주파수 단위가 맞아요. 첫 식도 $[\mathrm{S}/\mathrm{F}]=[1/\mathrm{s}]$예요.</p>
+    <p><strong>극한:</strong> $\omega\to0$이면 $|I_{out}/I_{in}|\to\infty$라 직류에서는 게이트 전류가 0인 MOS의 성질과 맞아요. $\omega=\omega_T$에서 정확히 1이에요.</p>
+    <p><strong>약분 확인:</strong> 결과에 $W$와 $C_{ox}$가 없어요. 폭을 키우면 $g_m$과 $C_{GS}$가 같은 비율로 커지므로 속도는 그대로라는 뜻이라 물리적으로 맞아요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>주의할 점</h4>
+  <p>드레인에 부하 저항을 둔 채 전압 이득으로 정의하면 $f_T$가 아니에요. 정의의 출력은 <strong>드레인 단락 전류</strong>예요.</p>
+  <p>$g_m=2I_D/(V_{GS}-V_{TH})$로 넣으면 $I_D$가 남아 문제가 요구한 변수($\mu_n$, $L$, $V_{GS}-V_{TH}$)로 끝나지 않아요. 과구동 전압 형태의 $g_m$을 써야 $W$가 깨끗이 약분돼요.</p>
+  <p>$C_{GS}=(2/3)WLC_{ox}$의 $2/3$을 뒤집어 $\dfrac{2\mu_n(V_{GS}-V_{TH})}{3L^2}$로 쓰는 실수가 잦아요. $1/(2/3)=3/2$예요.</p>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>조건을 바꾸어 생각해요</h4>
+  <ol>
+    <li>$C_{GD}$를 무시하지 않으면 게이트 전류는 $s(C_{GS}+C_{GD})V_{GS}$가 돼요. 이때 $\omega_T$ 식의 분모는 어떻게 바뀔까요?</li>
+    <li>같은 $V_{GS}-V_{TH}$에서 $L$을 절반으로 줄이면 $\omega_T$는 몇 배가 될까요?</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <p class="sum-lead">$f_T$는 드레인을 AC 접지했을 때 전류 이득이 1이 되는 주파수예요.</p>
+  <p>$\omega_T=\dfrac{g_m}{C_{GS}}$</p>
+  <p>$\omega_T=\dfrac{3\mu_n(V_{GS}-V_{TH})}{2L^2}$</p>
+  <p>$W$와 $C_{ox}$는 약분되고 $L^2$에 반비례해요.</p>
+</div>
