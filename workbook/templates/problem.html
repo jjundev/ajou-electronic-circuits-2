@@ -150,7 +150,7 @@ a:focus-visible { outline: .5mm solid var(--focus); outline-offset: .5mm; }
 }
 .panel > * { flex: none; }
 
-/* 그림: 너비 = min(칸 폭, 교재 크기 × 1.5, 최대 높이 × 가로세로비). 비율은 그대로, 잘리지 않음 */
+/* 그림: 너비 = min(칸 폭, 교재 크기 × FIG_SCALE_CAP, 최대 높이 × 가로세로비). 비율은 그대로, 잘리지 않음 */
 .fig {
   display: block; margin-inline: auto; flex: none;
   width: min(100%, var(--w-cap), calc(var(--fig-h) * var(--ratio)));
@@ -279,7 +279,8 @@ a:focus-visible { outline: .5mm solid var(--focus); outline-offset: .5mm; }
 // 생성기가 문자열 치환으로 바꾸는 자리표시자. 여기서 이어 붙여 두어 치환 대상이 되지 않게 한다.
 const PLACEHOLDER = '__WORKBOOK' + '_DATA__';
 const KIND_SLUG = { '예제': 'example', '연습문제': 'exercise', '장말문제': 'problem', '기출': 'exam' };
-const FIG_SCALE_CAP = 1.5;        // 교재 인쇄 크기 대비 확대 상한
+// 교재 인쇄 크기 대비 확대 상한. 16:9 쪽은 A4보다 넓은 만큼(1920px / 297mm) 더 키운다
+const FIG_SCALE_CAP = window.workbookVideoLayout ? 1.5 * 1920 / (297 * 96 / 25.4) : 1.5;
 const MATH_MIN_SCALE = 0.7;
 const STRIP_MATH_MIN_SCALE = 0.5;  // Hint 띠 속 식은 띠 폭에 맞춰 더 줄일 수 있음
 // 쪽 맞춤 순서: 폭 → 글자. 앞 단계 값은 유지한 채 다음 단계로 간다.
@@ -517,6 +518,7 @@ function problemPage(p, n, total) {
   const figs = p.figures || [];
   if (figs.length) {
     const band = el('div', 'fig-band');
+    if (window.workbookVideoLayout) band.style.setProperty('--fig-frac', '.40');
     figs.forEach(f => band.append(figureImg(f)));
     center.append(band);
   }

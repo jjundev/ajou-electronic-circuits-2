@@ -57,6 +57,30 @@ class VideoLayoutTests(unittest.TestCase):
                 self.assertAlmostEqual(body[0]['size'], 11.34, delta=.03)
 
 
+    def test_problem_figures_scale_with_video_page_width(self):
+        from playwright.sync_api import sync_playwright
+        a4_px = 297 * 96 / 25.4
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            data = build_data(ids_selection(['E11.16'], 'fig'), 'problems')
+            w_mm = data['problems'][0]['figures'][0]['w_mm']
+            with sync_playwright() as pw:
+                browser = pw.chromium.launch(channel='chrome', headless=True)
+                try:
+                    for layout, cap, frac in [('a4', 1.5, '.40'), ('video-16x9', 1.5 * 1920 / a4_px, '.40')]:
+                        html = root/(layout+'.html'); html.write_text(inject(load_template('problems', layout=layout), data))
+                        page = browser.new_page(viewport={'width':1400,'height':1000})
+                        page.goto(html.as_uri())
+                        page.wait_for_function('document.documentElement.dataset.ready')
+                        got = page.evaluate("""() => { const f=document.querySelector('.fig-band .fig');
+                            return [f.style.getPropertyValue('--w-cap'),
+                                getComputedStyle(f.closest('.fig-band')).getPropertyValue('--fig-frac').trim()]; }""")
+                        self.assertAlmostEqual(float(got[0].removesuffix('mm')), w_mm * cap, places=3, msg=layout)
+                        self.assertEqual(got[1], frac, layout)
+                        page.close()
+                finally:
+                    browser.close()
+
 class PersonalizedVideoLayoutTests(unittest.TestCase):
     def test_personalized_core_svg_and_images_render_above_caption_band(self):
         from overlay_fixture import OverlayBundle
