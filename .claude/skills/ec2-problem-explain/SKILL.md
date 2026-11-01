@@ -102,6 +102,7 @@ python3 "$SKILL/scripts/epe_cli.py" extract --repo "$REPO" --target 1007 --run "
 ### 4. 독립 검산 (작성자와 다른 에이전트)
 - 문항마다 검산 에이전트 1명(opus, 병렬)을 띄운다. 그 문항의 작성자를 재사용하지 않는다.
 - [검토 기록](references/verification.md)의 `independent` 절을 따른다. 조건과 구할 것만으로 먼저 답을 구하고(SymPy 기호 계산 + 수치 대입, 증명·정성 문항은 논증 검토), 그 뒤에 md `## 풀이`와 조각의 답과 대조한다.
+- 검산자에게 전달할 입력과 브리프의 참조는 문제·그림·필요한 이론만 포함하는지 먼저 확인한다. 정답·참고 풀이·설명 조각과 정답 필드가 있는 전체 `source.json`은 전달하지 않는다. 독립 풀이와 evidence를 먼저 저장한 뒤 조정자가 참고 답과 대조한다. 풀이를 저장하기 전에 답이나 풀이가 노출되면 해당 검산 판정과 evidence는 무효다. 노출 사실을 기존 보고에 기록하고, 답을 보지 않은 새 검산자가 처음부터 다시 풀어 정식 evidence를 제출한다. 새 검산자를 확보하지 못하면 독립 검산은 미완료로 두고 발행을 보류한다.
 - 산출: SymPy 스크립트 `BUCKET/evidence/pN-sympy.py`와 실행 출력 `BUCKET/evidence/pN-result.txt`, 그리고 소문항별 판정(JSON 형태로 응답: `pN:a` → status/method/conclusion/evidence).
 - 조각 답이 틀렸으면 그 작성자에게 고치게 하고 같은 검산을 다시 한다. md `## 풀이`와 독립 검산이 다르면(조각을 어느 쪽에 맞춰도 해소되지 않음) 그 팩을 disputed로 표시한다. 다른 팩은 계속한다.
 - evidence는 build가 stage로 복사하므로 **build 전에** 모두 써 둔다.

@@ -79,8 +79,9 @@ snapshot은 path·sha256·rule_ids를 그대로 보존하고 references에 실�
 ## independent: 독립 검산 (작성자와 다른 에이전트)
 
 검산 에이전트는 조건과 구할 것만으로 먼저 답을 구해요.
+조정자는 전달할 입력과 브리프의 참조가 문제·그림·필요 이론만 포함하는지 확인해요. 정답·참고 풀이·설명 조각과 정답 필드가 포함된 전체 `source.json`은 검산자에게 전달하지 않아요. 검산자가 독립 풀이와 evidence를 먼저 저장한 뒤 조정자가 참고 답과 비교해요. 풀이 저장 전에 답이나 풀이가 노출되면 해당 검산 판정과 evidence는 무효예요. 기존 보고에 노출 사실을 기록하고 답을 보지 않은 새 검산자가 처음부터 다시 풀어요. 이전 무효 evidence·판정·보고는 새 검산자에게 전달하거나 읽게 하지 않고, 아래 정식 evidence 경로에는 재수행 결과만 제출해요. 새 검산자가 없으면 독립 검산은 미완료이며 발행을 보류해요.
 1. SymPy가 없으면 설치해요: `pip3 install --user --break-system-packages sympy`.
-2. 기호 계산 스크립트를 `BUCKET/evidence/pN-sympy.py`로 저장해요. 소신호 등가회로의 KCL/KVL을 `sympy.solve`로 풀고, 결과를 `simplify`해 목표 식과의 차이가 0인지 확인해요. 근사가 있으면 `sympy.limit`(예: $r_o\to\infty$, $\lambda\to0$)으로 근사 전후를 내부 evidence에 모두 기록해요. $R_{out}$의 정확식·대조 수치는 위 예외가 아니면 학습 HTML·요약·MD·답안 PDF로 옮기지 않아요. 수치 문항은 주어진 값을 대입해요.
+2. 기호 계산 스크립트를 `BUCKET/evidence/pN-sympy.py`로 저장해요. 소신호 등가회로의 KCL/KVL을 `sympy.solve`로 풀고, 결과를 `simplify`해 독립 결과를 기록해요. 풀이를 저장한 뒤 참고 식과 비교할 때 차이가 0인지 확인해요. 근사가 있으면 `sympy.limit`(예: $r_o\to\infty$, $\lambda\to0$)으로 근사 전후를 내부 evidence에 모두 기록해요. $R_{out}$의 정확식·대조 수치는 위 예외가 아니면 학습 HTML·요약·MD·답안 PDF로 옮기지 않아요. 수치 문항은 주어진 값을 대입해요.
 3. 실행 출력을 `BUCKET/evidence/pN-result.txt`로 저장해요.
    ```bash
    python3 "$BUCKET/evidence/pN-sympy.py" > "$BUCKET/evidence/pN-result.txt" 2>&1
