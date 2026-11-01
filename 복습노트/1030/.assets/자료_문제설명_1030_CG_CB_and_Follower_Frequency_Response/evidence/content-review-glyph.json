@@ -1,0 +1,279 @@
+{
+  "status": "pass",
+  "reviewer": "독립 내용 감사 (GPT)",
+  "scope": "네 조각·source·개인화/검토 규칙 정적 재검토. SVG 글자의 실제 렌더, 새 stage 및 PDF는 미검토.",
+  "references": [
+    {
+      "path": "C:\\Users\\Hyunjun\\AppData\\Local\\Temp\\ec2-review-pack-1030-20261102-finish\\problem-explain\\952a6f4e-af3a-4664-92c5-eec0d3311f25\\review-1030-CG_CB_and_Follower_Frequency_Response\\source.json",
+      "sha256": "896596cade678320c0a76a0eda92923050c265c73dad2b496a3330d4f10f0f61"
+    },
+    {
+      "path": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\.claude\\skills\\ec2-review-pack\\references\\solution-style.md",
+      "sha256": "15dd74dba003093e0a3e627a7531d1b89dbc4b081ebfb2f04245d065758f62fe"
+    },
+    {
+      "path": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\.claude\\skills\\ec2-problem-explain\\references\\verification.md",
+      "sha256": "940f73f4cc3fe7382a2241dfb44f535bfb2364a14a45f84223057f18d2e0e511"
+    },
+    {
+      "path": "C:\\Users\\Hyunjun\\AppData\\Local\\Temp\\ec2-review-pack-1030-20261102-finish\\problem-explain\\952a6f4e-af3a-4664-92c5-eec0d3311f25\\review-1030-CG_CB_and_Follower_Frequency_Response\\explanations\\p1.html",
+      "sha256": "2a15ab690cc9ea5d7a18a0a64fff72dcdd1b66da278e3dfc789819076e5b531c"
+    },
+    {
+      "path": "C:\\Users\\Hyunjun\\AppData\\Local\\Temp\\ec2-review-pack-1030-20261102-finish\\problem-explain\\952a6f4e-af3a-4664-92c5-eec0d3311f25\\review-1030-CG_CB_and_Follower_Frequency_Response\\explanations\\p2.html",
+      "sha256": "1ab85bcf0d60c222489adb4308a6ce5ac4e211a4f25aca573232a94a6657d37d"
+    },
+    {
+      "path": "C:\\Users\\Hyunjun\\AppData\\Local\\Temp\\ec2-review-pack-1030-20261102-finish\\problem-explain\\952a6f4e-af3a-4664-92c5-eec0d3311f25\\review-1030-CG_CB_and_Follower_Frequency_Response\\explanations\\p3.html",
+      "sha256": "792b64734f10469153c547f19be377d934396fa7cb99316646f2c47e524318c9"
+    },
+    {
+      "path": "C:\\Users\\Hyunjun\\AppData\\Local\\Temp\\ec2-review-pack-1030-20261102-finish\\problem-explain\\952a6f4e-af3a-4664-92c5-eec0d3311f25\\review-1030-CG_CB_and_Follower_Frequency_Response\\explanations\\p4.html",
+      "sha256": "c48ccda223f83c7df86cbefb18b8ea28573ec4a0894bd9c37b2e19c74695e3b2"
+    }
+  ],
+  "learning_style": {
+    "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
+    "sha256": "15dd74dba003093e0a3e627a7531d1b89dbc4b081ebfb2f04245d065758f62fe",
+    "rule_ids": [
+      "UNIT-01",
+      "CALC-01",
+      "CALC-02",
+      "CIRCUIT-01",
+      "CIRCUIT-02",
+      "GAIN-01",
+      "DEGEN-01",
+      "SCALE-01",
+      "BIAS-01",
+      "NOTATION-01",
+      "EXPLAIN-01",
+      "CORRECT-01"
+    ]
+  },
+  "items": {
+    "p1:main": {
+      "status": "pass",
+      "reviewer": "독립 내용 감사 (GPT)",
+      "evidence": "CX=CGS1+CSB1, CY=CGD1+CDB1+CGS2+CDB2, RX=RS||1/gm1, RY=1/gm2에서 음의 두 극점. 두 λ=0·몸체효과 무시, 요약 및 Rs→∞/CGD2 retry 일치. RC 블록 합성으로 Gm/Rout 측정 그림 불필요.",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "기호 계산만 수행; 극점 rad/s."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "중간값 CX,CY,RX,RY를 통해 결과 도출."
+        },
+        "CALC-02": {
+          "disposition": "not_applicable",
+          "evidence": "수치 대입·반올림 없는 기호 계산."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "CX=CGS1+CSB1, CY=CGD1+CDB1+CGS2+CDB2, RX=RS||1/gm1, RY=1/gm2에서 음의 두 극점. 두 λ=0·몸체효과 무시, 요약 및 Rs→∞/CGD2 retry 일치."
+        },
+        "CIRCUIT-02": {
+          "disposition": "not_applicable",
+          "evidence": "RC 블록 합성으로 Gm/Rout 측정 그림 불필요. 실제 화면·PDF 글리프 간격 미검토."
+        },
+        "GAIN-01": {
+          "disposition": "not_applicable",
+          "evidence": "극점 문제."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "축퇴 저항 유도 문제 아님."
+        },
+        "SCALE-01": {
+          "disposition": "not_applicable",
+          "evidence": "폭·전류 배율 역산 없음."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "DC 동작점·포화 경계 계산 없음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "기호·조건·근사 및 본문/요약 대조. CX=CGS1+CSB1, CY=CGD1+CDB1+CGS2+CDB2, RX=RS||1/gm1, RY=1/gm2에서 음의 두 극점. 두 λ=0·몸체효과 무시, 요약 및 Rs→∞/CGD2 retry 일치."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "일곱 구역·solve 제목·retry 확인. CX=CGS1+CSB1, CY=CGD1+CDB1+CGS2+CDB2, RX=RS||1/gm1, RY=1/gm2에서 음의 두 극점. 두 λ=0·몸체효과 무시, 요약 및 Rs→∞/CGD2 retry 일치."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "수치 필기 교정 사례와 다른 주파수 문제; λ·몸체효과 모델 확인. CX=CGS1+CSB1, CY=CGD1+CDB1+CGS2+CDB2, RX=RS||1/gm1, RY=1/gm2에서 음의 두 극점. 두 λ=0·몸체효과 무시, 요약 및 Rs→∞/CGD2 retry 일치."
+        }
+      }
+    },
+    "p2:main": {
+      "status": "pass",
+      "reviewer": "독립 내용 감사 (GPT)",
+      "evidence": "세 부하 a,c=1/gm2||ro2, b=ro2와 각 CY 분류를 원 회로 단자와 대조. 입력·출력 두 시간상수의 양의 CG 전달함수, M1 λ=0, M2 ro 유지, Rout 및 전달함수 ≈와 요약·retry 일치. 단락 그림 X→Y 제어원, Y 접지; 입력 0 그림 RL·CY 병렬과 오른쪽 시험점.",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "기호 계산만 수행; sRC 무차원."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "중간값 CX,Zx,RL,CY,τ를 통해 결과 도출."
+        },
+        "CALC-02": {
+          "disposition": "not_applicable",
+          "evidence": "수치 대입·반올림 없는 기호 계산."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "세 부하 a,c=1/gm2||ro2, b=ro2와 각 CY 분류를 원 회로 단자와 대조. 입력·출력 두 시간상수의 양의 CG 전달함수, M1 λ=0, M2 ro 유지, Rout 및 전달함수 ≈와 요약·retry 일치."
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "단락 그림 X→Y 제어원, Y 접지; 입력 0 그림 RL·CY 병렬과 오른쪽 시험점. 실제 화면·PDF 글리프 간격 미검토."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "단락 Gm→입력 영점 Rout→Av; Rout 근사 표기."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "축퇴 저항 유도 문제 아님."
+        },
+        "SCALE-01": {
+          "disposition": "not_applicable",
+          "evidence": "폭·전류 배율 역산 없음."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "DC 동작점·포화 경계 계산 없음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "기호·조건·근사 및 본문/요약 대조. 세 부하 a,c=1/gm2||ro2, b=ro2와 각 CY 분류를 원 회로 단자와 대조. 입력·출력 두 시간상수의 양의 CG 전달함수, M1 λ=0, M2 ro 유지, Rout 및 전달함수 ≈와 요약·retry 일치."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "일곱 구역·solve 제목·retry 확인. 세 부하 a,c=1/gm2||ro2, b=ro2와 각 CY 분류를 원 회로 단자와 대조. 입력·출력 두 시간상수의 양의 CG 전달함수, M1 λ=0, M2 ro 유지, Rout 및 전달함수 ≈와 요약·retry 일치."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "수치 필기 교정 사례와 다른 주파수 문제; λ·몸체효과 모델 확인. 세 부하 a,c=1/gm2||ro2, b=ro2와 각 CY 분류를 원 회로 단자와 대조. 입력·출력 두 시간상수의 양의 CG 전달함수, M1 λ=0, M2 ro 유지, Rout 및 전달함수 ≈와 요약·retry 일치."
+        }
+      }
+    },
+    "p3:main": {
+      "status": "pass",
+      "reviewer": "독립 내용 감사 (GPT)",
+      "evidence": "RL=ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgd1+Cgs1/(1+gm1RL). RL→∞와 추종 증가의 의미, 몸체효과 무시와 요약 일치. 단락에서 소스 접지라 vgs=vin이며 제어원 접지→출력. 입력 0에서 1/gm1||ro1||ro2 및 오른쪽 시험점.",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "기호 계산만 수행; gmRL 무차원, Cin 단위 F."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "중간값 RL,Av를 통해 결과 도출."
+        },
+        "CALC-02": {
+          "disposition": "not_applicable",
+          "evidence": "수치 대입·반올림 없는 기호 계산."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "RL=ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgd1+Cgs1/(1+gm1RL). RL→∞와 추종 증가의 의미, 몸체효과 무시와 요약 일치."
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "단락에서 소스 접지라 vgs=vin이며 제어원 접지→출력. 입력 0에서 1/gm1||ro1||ro2 및 오른쪽 시험점. 실제 화면·PDF 글리프 간격 미검토."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "단락 Gm→입력 영점 Rout→Av; Rout 근사 표기."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "축퇴 저항 유도 문제 아님."
+        },
+        "SCALE-01": {
+          "disposition": "not_applicable",
+          "evidence": "폭·전류 배율 역산 없음."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "DC 동작점·포화 경계 계산 없음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "기호·조건·근사 및 본문/요약 대조. RL=ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgd1+Cgs1/(1+gm1RL). RL→∞와 추종 증가의 의미, 몸체효과 무시와 요약 일치."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "일곱 구역·solve 제목·retry 확인. RL=ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgd1+Cgs1/(1+gm1RL). RL→∞와 추종 증가의 의미, 몸체효과 무시와 요약 일치. (1−Av)vin이 answer-step 내부에 있음."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "수치 필기 교정 사례와 다른 주파수 문제; λ·몸체효과 모델 확인. RL=ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgd1+Cgs1/(1+gm1RL). RL→∞와 추종 증가의 의미, 몸체효과 무시와 요약 일치."
+        }
+      }
+    },
+    "p4:main": {
+      "status": "pass",
+      "reviewer": "독립 내용 감사 (GPT)",
+      "evidence": "RL=1/gm2||ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgs1/(1+gm1RL). gm2→0 및 추종 증가 극한, Cgs1만 사용·몸체효과 무시와 요약 일치. 단락에서 vgs=vin, 입력 0에서 1/gm1||ro1||(1/gm2||ro2). 시험점 오른쪽, 유입 시험전류 왼쪽 방향. 병렬 저항 라벨은 U+2016 double vertical line ‖ 사용.",
+      "rules": {
+        "UNIT-01": {
+          "disposition": "not_applicable",
+          "evidence": "기호 계산만 수행; gmRL 무차원, Cin 단위 F."
+        },
+        "CALC-01": {
+          "disposition": "applied",
+          "evidence": "중간값 RL,Av를 통해 결과 도출."
+        },
+        "CALC-02": {
+          "disposition": "not_applicable",
+          "evidence": "수치 대입·반올림 없는 기호 계산."
+        },
+        "CIRCUIT-01": {
+          "disposition": "applied",
+          "evidence": "RL=1/gm2||ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgs1/(1+gm1RL). gm2→0 및 추종 증가 극한, Cgs1만 사용·몸체효과 무시와 요약 일치."
+        },
+        "CIRCUIT-02": {
+          "disposition": "applied",
+          "evidence": "단락에서 vgs=vin, 입력 0에서 1/gm1||ro1||(1/gm2||ro2). 시험점 오른쪽, 유입 시험전류 왼쪽 방향. 병렬 저항 라벨은 U+2016 double vertical line ‖ 사용. 실제 화면·PDF 글리프 간격 미검토."
+        },
+        "GAIN-01": {
+          "disposition": "applied",
+          "evidence": "단락 Gm→입력 영점 Rout→Av; Rout 근사 표기."
+        },
+        "DEGEN-01": {
+          "disposition": "not_applicable",
+          "evidence": "축퇴 저항 유도 문제 아님."
+        },
+        "SCALE-01": {
+          "disposition": "not_applicable",
+          "evidence": "폭·전류 배율 역산 없음."
+        },
+        "BIAS-01": {
+          "disposition": "not_applicable",
+          "evidence": "DC 동작점·포화 경계 계산 없음."
+        },
+        "NOTATION-01": {
+          "disposition": "applied",
+          "evidence": "기호·조건·근사 및 본문/요약 대조. RL=1/gm2||ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgs1/(1+gm1RL). gm2→0 및 추종 증가 극한, Cgs1만 사용·몸체효과 무시와 요약 일치."
+        },
+        "EXPLAIN-01": {
+          "disposition": "applied",
+          "evidence": "일곱 구역·solve 제목·retry 확인. RL=1/gm2||ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgs1/(1+gm1RL). gm2→0 및 추종 증가 극한, Cgs1만 사용·몸체효과 무시와 요약 일치. (1−Av)vin이 answer-step 내부에 있음."
+        },
+        "CORRECT-01": {
+          "disposition": "applied",
+          "evidence": "수치 필기 교정 사례와 다른 주파수 문제; λ·몸체효과 모델 확인. RL=1/gm2||ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgs1/(1+gm1RL). gm2→0 및 추종 증가 극한, Cgs1만 사용·몸체효과 무시와 요약 일치."
+        }
+      }
+    }
+  },
+  "unresolved": [
+    "U+2016 병렬 기호 및 회로 글리프는 실제 라이트·다크와 PDF 렌더에서 검토 필요.",
+    "새 build stage·MD·overlay 동기화 검토 필요."
+  ]
+}

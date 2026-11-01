@@ -1,0 +1,459 @@
+{
+  "review_policy_version": "problem-explain-2026-10-21-learning-style",
+  "input_hash": "52decf2b15fb9eb6864c4e61f25d63a7bc91c112ac346d02f431b7857ebc4744",
+  "references": [
+    {
+      "path": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\교과서\\마이크로전자회로\\11장.pdf",
+      "sha256": "c948160fe9a61f9aa8c0f0e9d84ca001dc4afe5bb27d9f326a3b918f18d930fb"
+    },
+    {
+      "path": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\강의노트\\2026F_Lec5_FrequencyResponse_rev4.pdf",
+      "sha256": "0ce4ed9ad2ce0a4960267d2295b21843b4a694b0e017ffdafa7d07bee51cdf6a"
+    },
+    {
+      "path": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\복습노트\\1030\\정리노트_1030_CG_CB_and_Follower_Frequency_Response.html",
+      "sha256": "dd16d44e4c2fd16b39c03763fca3ec6bd37853e9efd8191a751897011baef70a"
+    },
+    {
+      "path": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\.claude\\skills\\ec2-review-pack\\references\\solution-style.md",
+      "sha256": "15dd74dba003093e0a3e627a7531d1b89dbc4b081ebfb2f04245d065758f62fe"
+    },
+    {
+      "path": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\.claude\\skills\\ec2-problem-explain\\references\\verification.md",
+      "sha256": "940f73f4cc3fe7382a2241dfb44f535bfb2364a14a45f84223057f18d2e0e511"
+    },
+    {
+      "path": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\.claude\\skills\\ec2-problem-explain\\references\\authoring.md",
+      "sha256": "b3a3dafdac5852b8024fc27696b1771c9761fcc63e1944839a393ef304917b3b"
+    },
+    {
+      "path": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\교과서\\마이크로전자회로\\ch11\\figures\\fig11-38.png",
+      "sha256": "f8fb827db46b3e626250fcdba740418998e003bbaa1792877790ee6d30e4d028"
+    }
+  ],
+  "learning_style_audit": {
+    "learning_style": {
+      "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
+      "sha256": "15dd74dba003093e0a3e627a7531d1b89dbc4b081ebfb2f04245d065758f62fe",
+      "rule_ids": [
+        "UNIT-01",
+        "CALC-01",
+        "CALC-02",
+        "CIRCUIT-01",
+        "CIRCUIT-02",
+        "GAIN-01",
+        "DEGEN-01",
+        "SCALE-01",
+        "BIAS-01",
+        "NOTATION-01",
+        "EXPLAIN-01",
+        "CORRECT-01"
+      ]
+    },
+    "items": {
+      "p1:main": {
+        "status": "pass",
+        "reviewer": "content_review",
+        "rules": {
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "기호 계산만 수행; 극점 rad/s."
+          },
+          "CALC-01": {
+            "disposition": "applied",
+            "evidence": "중간값 CX,CY,RX,RY를 통해 결과 도출."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "수치 대입·반올림 없는 기호 계산."
+          },
+          "CIRCUIT-01": {
+            "disposition": "applied",
+            "evidence": "CX=CGS1+CSB1, CY=CGD1+CDB1+CGS2+CDB2, RX=RS||1/gm1, RY=1/gm2에서 음의 두 극점. 두 λ=0·몸체효과 무시, 요약 및 Rs→∞/CGD2 retry 일치."
+          },
+          "CIRCUIT-02": {
+            "disposition": "not_applicable",
+            "evidence": "RC 블록 합성으로 Gm/Rout 측정 그림 불필요. 실제 화면·PDF 글리프 간격 미검토."
+          },
+          "GAIN-01": {
+            "disposition": "not_applicable",
+            "evidence": "극점 문제."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "축퇴 저항 유도 문제 아님."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "폭·전류 배율 역산 없음."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "DC 동작점·포화 경계 계산 없음."
+          },
+          "NOTATION-01": {
+            "disposition": "applied",
+            "evidence": "기호·조건·근사 및 본문/요약 대조. CX=CGS1+CSB1, CY=CGD1+CDB1+CGS2+CDB2, RX=RS||1/gm1, RY=1/gm2에서 음의 두 극점. 두 λ=0·몸체효과 무시, 요약 및 Rs→∞/CGD2 retry 일치."
+          },
+          "EXPLAIN-01": {
+            "disposition": "applied",
+            "evidence": "일곱 구역·solve 제목·retry 확인. CX=CGS1+CSB1, CY=CGD1+CDB1+CGS2+CDB2, RX=RS||1/gm1, RY=1/gm2에서 음의 두 극점. 두 λ=0·몸체효과 무시, 요약 및 Rs→∞/CGD2 retry 일치."
+          },
+          "CORRECT-01": {
+            "disposition": "applied",
+            "evidence": "수치 필기 교정 사례와 다른 주파수 문제; λ·몸체효과 모델 확인. CX=CGS1+CSB1, CY=CGD1+CDB1+CGS2+CDB2, RX=RS||1/gm1, RY=1/gm2에서 음의 두 극점. 두 λ=0·몸체효과 무시, 요약 및 Rs→∞/CGD2 retry 일치."
+          }
+        }
+      },
+      "p2:main": {
+        "status": "pass",
+        "reviewer": "content_review",
+        "rules": {
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "기호 계산만 수행; sRC 무차원."
+          },
+          "CALC-01": {
+            "disposition": "applied",
+            "evidence": "중간값 CX,Zx,RL,CY,τ를 통해 결과 도출."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "수치 대입·반올림 없는 기호 계산."
+          },
+          "CIRCUIT-01": {
+            "disposition": "applied",
+            "evidence": "세 부하 a,c=1/gm2||ro2, b=ro2와 각 CY 분류를 원 회로 단자와 대조. 입력·출력 두 시간상수의 양의 CG 전달함수, M1 λ=0, M2 ro 유지, Rout 및 전달함수 ≈와 요약·retry 일치."
+          },
+          "CIRCUIT-02": {
+            "disposition": "applied",
+            "evidence": "단락 그림 X→Y 제어원, Y 접지; 입력 0 그림 RL·CY 병렬과 오른쪽 시험점. 실제 화면·PDF 글리프 간격 미검토."
+          },
+          "GAIN-01": {
+            "disposition": "applied",
+            "evidence": "단락 Gm→입력 영점 Rout→Av; Rout 근사 표기."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "축퇴 저항 유도 문제 아님."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "폭·전류 배율 역산 없음."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "DC 동작점·포화 경계 계산 없음."
+          },
+          "NOTATION-01": {
+            "disposition": "applied",
+            "evidence": "기호·조건·근사 및 본문/요약 대조. 세 부하 a,c=1/gm2||ro2, b=ro2와 각 CY 분류를 원 회로 단자와 대조. 입력·출력 두 시간상수의 양의 CG 전달함수, M1 λ=0, M2 ro 유지, Rout 및 전달함수 ≈와 요약·retry 일치."
+          },
+          "EXPLAIN-01": {
+            "disposition": "applied",
+            "evidence": "일곱 구역·solve 제목·retry 확인. 세 부하 a,c=1/gm2||ro2, b=ro2와 각 CY 분류를 원 회로 단자와 대조. 입력·출력 두 시간상수의 양의 CG 전달함수, M1 λ=0, M2 ro 유지, Rout 및 전달함수 ≈와 요약·retry 일치."
+          },
+          "CORRECT-01": {
+            "disposition": "applied",
+            "evidence": "수치 필기 교정 사례와 다른 주파수 문제; λ·몸체효과 모델 확인. 세 부하 a,c=1/gm2||ro2, b=ro2와 각 CY 분류를 원 회로 단자와 대조. 입력·출력 두 시간상수의 양의 CG 전달함수, M1 λ=0, M2 ro 유지, Rout 및 전달함수 ≈와 요약·retry 일치."
+          }
+        }
+      },
+      "p3:main": {
+        "status": "pass",
+        "reviewer": "content_review",
+        "rules": {
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "기호 계산만 수행; gmRL 무차원, Cin 단위 F."
+          },
+          "CALC-01": {
+            "disposition": "applied",
+            "evidence": "중간값 RL,Av를 통해 결과 도출."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "수치 대입·반올림 없는 기호 계산."
+          },
+          "CIRCUIT-01": {
+            "disposition": "applied",
+            "evidence": "RL=ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgd1+Cgs1/(1+gm1RL). RL→∞와 추종 증가의 의미, 몸체효과 무시와 요약 일치."
+          },
+          "CIRCUIT-02": {
+            "disposition": "applied",
+            "evidence": "단락에서 소스 접지라 vgs=vin이며 제어원 접지→출력. 입력 0에서 1/gm1||ro1||ro2 및 오른쪽 시험점. 실제 화면·PDF 글리프 간격 미검토."
+          },
+          "GAIN-01": {
+            "disposition": "applied",
+            "evidence": "단락 Gm→입력 영점 Rout→Av; Rout 근사 표기."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "축퇴 저항 유도 문제 아님."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "폭·전류 배율 역산 없음."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "DC 동작점·포화 경계 계산 없음."
+          },
+          "NOTATION-01": {
+            "disposition": "applied",
+            "evidence": "기호·조건·근사 및 본문/요약 대조. RL=ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgd1+Cgs1/(1+gm1RL). RL→∞와 추종 증가의 의미, 몸체효과 무시와 요약 일치."
+          },
+          "EXPLAIN-01": {
+            "disposition": "applied",
+            "evidence": "일곱 구역·solve 제목·retry 확인. RL=ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgd1+Cgs1/(1+gm1RL). RL→∞와 추종 증가의 의미, 몸체효과 무시와 요약 일치. (1−Av)vin이 answer-step 내부에 있음."
+          },
+          "CORRECT-01": {
+            "disposition": "applied",
+            "evidence": "수치 필기 교정 사례와 다른 주파수 문제; λ·몸체효과 모델 확인. RL=ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgd1+Cgs1/(1+gm1RL). RL→∞와 추종 증가의 의미, 몸체효과 무시와 요약 일치."
+          }
+        }
+      },
+      "p4:main": {
+        "status": "pass",
+        "reviewer": "content_review",
+        "rules": {
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "기호 계산만 수행; gmRL 무차원, Cin 단위 F."
+          },
+          "CALC-01": {
+            "disposition": "applied",
+            "evidence": "중간값 RL,Av를 통해 결과 도출."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "수치 대입·반올림 없는 기호 계산."
+          },
+          "CIRCUIT-01": {
+            "disposition": "applied",
+            "evidence": "RL=1/gm2||ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgs1/(1+gm1RL). gm2→0 및 추종 증가 극한, Cgs1만 사용·몸체효과 무시와 요약 일치."
+          },
+          "CIRCUIT-02": {
+            "disposition": "applied",
+            "evidence": "단락에서 vgs=vin, 입력 0에서 1/gm1||ro1||(1/gm2||ro2). 시험점 오른쪽, 유입 시험전류 왼쪽 방향. 병렬 저항 라벨은 U+2016 double vertical line ‖ 사용. 실제 화면·PDF 글리프 간격 미검토."
+          },
+          "GAIN-01": {
+            "disposition": "applied",
+            "evidence": "단락 Gm→입력 영점 Rout→Av; Rout 근사 표기."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "축퇴 저항 유도 문제 아님."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "폭·전류 배율 역산 없음."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "DC 동작점·포화 경계 계산 없음."
+          },
+          "NOTATION-01": {
+            "disposition": "applied",
+            "evidence": "기호·조건·근사 및 본문/요약 대조. RL=1/gm2||ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgs1/(1+gm1RL). gm2→0 및 추종 증가 극한, Cgs1만 사용·몸체효과 무시와 요약 일치."
+          },
+          "EXPLAIN-01": {
+            "disposition": "applied",
+            "evidence": "일곱 구역·solve 제목·retry 확인. RL=1/gm2||ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgs1/(1+gm1RL). gm2→0 및 추종 증가 극한, Cgs1만 사용·몸체효과 무시와 요약 일치. (1−Av)vin이 answer-step 내부에 있음."
+          },
+          "CORRECT-01": {
+            "disposition": "applied",
+            "evidence": "수치 필기 교정 사례와 다른 주파수 문제; λ·몸체효과 모델 확인. RL=1/gm2||ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgs1/(1+gm1RL). gm2→0 및 추종 증가 극한, Cgs1만 사용·몸체효과 무시와 요약 일치."
+          }
+        }
+      }
+    }
+  },
+  "source_visual": {
+    "status": "pass",
+    "reviewer": "child-coordinator",
+    "evidence": "C:\\Users\\Hyunjun\\AppData\\Local\\Temp\\ec2-review-pack-1030-20261102-finish\\problem-explain\\952a6f4e-af3a-4664-92c5-eec0d3311f25\\source-visual-glyph.md"
+  },
+  "browser": {
+    "status": "pass",
+    "reviewer": "child-coordinator",
+    "evidence": "C:\\Users\\Hyunjun\\AppData\\Local\\Temp\\ec2-review-pack-1030-20261102-finish\\problem-explain\\952a6f4e-af3a-4664-92c5-eec0d3311f25\\browser-review-glyph.md"
+  },
+  "content": {
+    "status": "pass",
+    "reviewer": "content_review",
+    "evidence": "C:\\Users\\Hyunjun\\AppData\\Local\\Temp\\ec2-review-pack-1030-20261102-finish\\problem-explain\\952a6f4e-af3a-4664-92c5-eec0d3311f25\\stage-content-glyph.json; evidence/content-review-glyph.json",
+    "items": {
+      "p1:main": {
+        "status": "pass",
+        "reviewer": "content_review",
+        "evidence": "CX=CGS1+CSB1, CY=CGD1+CDB1+CGS2+CDB2, RX=RS||1/gm1, RY=1/gm2에서 음의 두 극점. 두 λ=0·몸체효과 무시, 요약 및 Rs→∞/CGD2 retry 일치. RC 블록 합성으로 Gm/Rout 측정 그림 불필요.; C:\\Users\\Hyunjun\\AppData\\Local\\Temp\\ec2-review-pack-1030-20261102-finish\\problem-explain\\952a6f4e-af3a-4664-92c5-eec0d3311f25\\stage-content-glyph.json"
+      },
+      "p2:main": {
+        "status": "pass",
+        "reviewer": "content_review",
+        "evidence": "세 부하 a,c=1/gm2||ro2, b=ro2와 각 CY 분류를 원 회로 단자와 대조. 입력·출력 두 시간상수의 양의 CG 전달함수, M1 λ=0, M2 ro 유지, Rout 및 전달함수 ≈와 요약·retry 일치. 단락 그림 X→Y 제어원, Y 접지; 입력 0 그림 RL·CY 병렬과 오른쪽 시험점.; C:\\Users\\Hyunjun\\AppData\\Local\\Temp\\ec2-review-pack-1030-20261102-finish\\problem-explain\\952a6f4e-af3a-4664-92c5-eec0d3311f25\\stage-content-glyph.json"
+      },
+      "p3:main": {
+        "status": "pass",
+        "reviewer": "content_review",
+        "evidence": "RL=ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgd1+Cgs1/(1+gm1RL). RL→∞와 추종 증가의 의미, 몸체효과 무시와 요약 일치. 단락에서 소스 접지라 vgs=vin이며 제어원 접지→출력. 입력 0에서 1/gm1||ro1||ro2 및 오른쪽 시험점.; C:\\Users\\Hyunjun\\AppData\\Local\\Temp\\ec2-review-pack-1030-20261102-finish\\problem-explain\\952a6f4e-af3a-4664-92c5-eec0d3311f25\\stage-content-glyph.json"
+      },
+      "p4:main": {
+        "status": "pass",
+        "reviewer": "content_review",
+        "evidence": "RL=1/gm2||ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgs1/(1+gm1RL). gm2→0 및 추종 증가 극한, Cgs1만 사용·몸체효과 무시와 요약 일치. 단락에서 vgs=vin, 입력 0에서 1/gm1||ro1||(1/gm2||ro2). 시험점 오른쪽, 유입 시험전류 왼쪽 방향. 병렬 저항 라벨은 U+2016 double vertical line ‖ 사용.; C:\\Users\\Hyunjun\\AppData\\Local\\Temp\\ec2-review-pack-1030-20261102-finish\\problem-explain\\952a6f4e-af3a-4664-92c5-eec0d3311f25\\stage-content-glyph.json"
+      }
+    }
+  },
+  "independent": {
+    "status": "pass",
+    "reviewer": "child-coordinator cross-check; finish_verify_a, finish_verify_b",
+    "evidence": "evidence/comparison.md; pN-sympy.py and pN-result.txt",
+    "items": {
+      "p1:main": {
+        "status": "pass",
+        "reviewer": "finish_verify_a",
+        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt, evidence/comparison.md",
+        "method": "symbolic",
+        "conclusion": "두 극점이 몸체 효과 무시 모델에서 MD·조각 일치. 입력 교재 인쇄식 오식은 원 그림과 대조."
+      },
+      "p2:main": {
+        "status": "pass",
+        "reviewer": "finish_verify_a",
+        "evidence": "evidence/p2-sympy.py, evidence/p2-result.txt, evidence/comparison.md",
+        "method": "symbolic",
+        "conclusion": "세 부하 전달함수 및 각 커패시턴스가 MD·조각과 일치."
+      },
+      "p3:main": {
+        "status": "pass",
+        "reviewer": "finish_verify_b",
+        "evidence": "evidence/p3-sympy.py, evidence/p3-result.txt, evidence/comparison.md",
+        "method": "symbolic",
+        "conclusion": "저주파 Cin은 gmb1=Cgb1=0에서 MD·조각과 일치."
+      },
+      "p4:main": {
+        "status": "pass",
+        "reviewer": "finish_verify_b",
+        "evidence": "evidence/p4-sympy.py, evidence/p4-result.txt, evidence/comparison.md",
+        "method": "symbolic",
+        "conclusion": "저주파 Cin은 gmb1=0에서 MD·조각과 일치; SVG 문자만 변경."
+      }
+    }
+  },
+  "artifact_hashes": {
+    ".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/0698e985053ddeb7-fig11-45.png": "0698e985053ddeb73927d0cef46b5a7d0d0d9fe5ba59045bf0d74ca46b092641",
+    ".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/2046c31ebf68d939-fig11-38-a.png": "2046c31ebf68d9393644fb4761cb41be26b30d02e81a1de12355dd2fc34d3f32",
+    ".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/35483282c4896f77-fig11-89.png": "35483282c4896f7794d919f38645aa7c9e3e1823d470a9c9d8efa25e1dd5a8ba",
+    ".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/explain-fig-1.svg": "b276cdf297939fadc6932a5c5f3eb3f127e5b36aea11775928eb6fbb99f647e4",
+    ".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/explain-fig-2.svg": "de45e1d89584ce0067bb25787ca523e46bdde053a16d5dc945775447db54636a",
+    ".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/explain-fig-3.svg": "1083816d4cce8d6828300ee4e3a53e0c7f474d1a9fcb5743a88f28d695691f3d",
+    ".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/explain-fig-4.svg": "7330a363222dd5e5eb8bc940f52def890d4a555ed015d6a708d8c12964abb745",
+    ".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/explain-fig-5.svg": "1083816d4cce8d6828300ee4e3a53e0c7f474d1a9fcb5743a88f28d695691f3d",
+    ".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/explain-fig-6.svg": "d8f8ea0a41b20b6ccda95878a1738e3bc06ef966a37214d6cc8be8b1970f70f8",
+    ".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/f67fe8bc75ae39f3-fig11-88.png": "f67fe8bc75ae39f36dee53cf02cf1283e84f5288f1f557fb4b758d5f007b9995",
+    ".assets/문제설명_1030_CG_CB_and_Follower_Frequency_Response.md": "4b3e5f39bca5964555c4694e5a90c77569d4b8f58ba3aa60c65abb9fff2fc465",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/answer-overlay.json": "ea0fdaf161b39c35b9657181ec34cd7771b4b2bbc6f2dae035da61ade6c37968",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/evidence/comparison.md": "b997d91a0b702e22cb88493e90b50a062e5fe5e32535da568c62d1471b5db437",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/evidence/content-review-final.json": "166dd75e68fefb91770c5a4f63c3f67c412ee3a6e79d852b344b8b4fb1aa6a25",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/evidence/content-review-glyph.json": "6b956ae2047275928ffd1c1f2439e1fc43f1c2eee2692e8b13a1e262b247cc23",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/evidence/content-review-recheck.json": "7a33444831bde33c25f0810b75de187c5d439785b68e1e202ad366e24189e9e5",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/evidence/E11.19-p20.png": "2e0d0ba9631d190ee9ac9acf9a63afb7c0da7abcdbd75fdb42328ca02eb8f86f",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/evidence/E11.23-p23.png": "287717f726d0e698248705f96478ef73b90d63f57f85b71709d3752f55f4e1e6",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/evidence/independent-p1-p2.md": "8d7133bd76bdb2df383b176338e45c6e7146013f984ae0a4b3585edd83dfa914",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/evidence/independent-p3-p4.md": "8c1fc296334ad60a71b3a247ab02e5f736c8b1136539206eac8d2ca5eb62bb49",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/evidence/P11.46-p36.png": "c1ab4e84ee15131e956776e7cb0d39f1b60e4997b9bec6575ecab05778009bce",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/fragments/p1.html": "2a15ab690cc9ea5d7a18a0a64fff72dcdd1b66da278e3dfc789819076e5b531c",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/fragments/p2.html": "1ab85bcf0d60c222489adb4308a6ce5ac4e211a4f25aca573232a94a6657d37d",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/fragments/p3.html": "792b64734f10469153c547f19be377d934396fa7cb99316646f2c47e524318c9",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/fragments/p4.html": "c48ccda223f83c7df86cbefb18b8ea28573ec4a0894bd9c37b2e19c74695e3b2",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/template-provenance.json": "df58e3bc22a94c057389598742586ab4ec80b9ad9e584abf4b48f2fc735c4f17",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/contrib/auto-render.min.js": "7b57d427ac6270677daf8d8380ded2cc73336f9149a167b8e1fe0d6ef66604ae",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_AMS-Regular.ttf": "68534840bcfdd2bffb6f0e8deb48684dd01e7f04ea2813267577afb906de1d13",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_AMS-Regular.woff": "30da91e84c893f875e252689faebdc590b2871145e8adc7f9a9d4dbd8ce0b251",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_AMS-Regular.woff2": "0cdd387c9590a1a9f9794560022dbb59654a7d86f187aa0c81495ad42d3a7308",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Caligraphic-Bold.ttf": "07d8e303ce4fc12b4bb54f1004170dd190a1f3db45d400fe68060df3e0897268",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Caligraphic-Bold.woff": "1ae6bd7475590e97e7f145a89e09ccde322f7a6bc0b91607b1c8b8ee28290fed",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Caligraphic-Bold.woff2": "de7701e42cf1f4cf0b766c03fb27977207eee2f4fd5d76fa82188406da43ea4c",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Caligraphic-Regular.ttf": "ed0b74372feefcbb9c0666b2e210da37b7e49fa7fbbf3eeb11db5f693dacfbb7",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Caligraphic-Regular.woff": "3398dd02302557a793f2863f88e02d96ce10df2abffa07c8e9fa90775116e65c",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Caligraphic-Regular.woff2": "5d53e70ad607c2352162dec9e0923fb54ecdafaccbf604cd8dcf7d00facb989b",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Fraktur-Bold.ttf": "9163df9c7122432e6495b4229fa9071cf9ae86a758ae5efc4924ec2e1a6dbce1",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Fraktur-Bold.woff": "9be7ceb88004ab8ad124082246fbfcca4091e36385d4ec6ed1df67375dad50fb",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Fraktur-Bold.woff2": "74444efd593c005e3f4573b44524704c0af0a937fe911cca9e94068d0d140d3f",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Fraktur-Regular.ttf": "1e6f9579e90e2cac37f8f60a597c436e075c114385652b7cbeb0dec0421291b3",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Fraktur-Regular.woff": "5e28753be717dac97f559f49bc10be9cf3c124ddcabda6659d11cb68febc6463",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Fraktur-Regular.woff2": "51814d270d06ff0255dba0799994fa4d8c84d11f09951d47595f4abb1f3602dc",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Main-Bold.ttf": "138ac28d1663b3037e9c5f52371fa5c63d8324f4a38d22cd573e6ea3a3fd0cf8",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Main-Bold.woff": "c76c5d696297d51b9cb1639c7da4334f0e7dec81b42b11213b5e25ef671bb822",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Main-Bold.woff2": "0f60d1b897938ec918c8ce073092411baf9438f6739465693ff18b0f9d20b021",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Main-BoldItalic.ttf": "70ee1f64a20f2048c21940ef46d0144fd215baa953ca69afd1e31e98544f708f",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Main-BoldItalic.woff": "a6f7ec0d846ac7ad975adb8959c37ed49b94acbc4ae436db9ce9e20287e4a64c",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Main-BoldItalic.woff2": "99cd42a3c072d918f2f44984a807cf7aa16e13545fd0875fc07c6c65f99e715b",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Main-Italic.ttf": "0d85ae7cc30f23790a7f1a58c4a112fdca8aae769b6ba11429af1d98b1b6cb3a",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Main-Italic.woff": "f1d6ef86f3b11a528bd5185199bd2443ecb2b0dead96d88674b5a2c12be24bdf",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Main-Italic.woff2": "97479ca6cce906abc961ecac96faa5f9ca2e61b8e7670d475826bcdee9a7c267",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Main-Regular.ttf": "d0332f52868370fd83ae7fa46470f90c8f2eab2fcf12bc4f88080b340c95a830",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Main-Regular.woff": "c6368d87e8a1a3a5d337623d83d8dc4b868f242a9ad476237d6f8d1e0f168cdc",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Main-Regular.woff2": "c2342cd8b869e01752a9321dc17213fc40d4d04c79688c1d43f2cf316abd7866",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Math-BoldItalic.ttf": "f9377ab0271cda59af24bcffbd46a4d0c8a3572ffafdbb38de2ad5ea7b0d5ee5",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Math-BoldItalic.woff": "850c0af5c2238497febaf5e461d880bf458c341f42f4f330f1b1ab5698b1998e",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Math-BoldItalic.woff2": "dc47344dbb6cb5b655c8460d561f4df5f501b90c804ad3c6cec65fe322351ab1",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Math-Italic.ttf": "08ce98e51b04d58945a301e639e02b6998af29fdfd61a7b8afdd07bbfc479d4a",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Math-Italic.woff": "8a8d244581371912b8f3f5a23e2437cb2a59cd9bcaebb0346e722c05737a2571",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Math-Italic.woff2": "7af58c5ec8f132a2ddde9027c6d7814decce4d3b822a11192a42a20e2e973264",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_SansSerif-Bold.ttf": "1ece03f79f95277d57dc7f6b435a74e1379b0d46104a8530286b60ff49369ea0",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_SansSerif-Bold.woff": "ece03cfd83e22c212cdef66feb8442d25a083beb988db3f1883f3f9738d750ba",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_SansSerif-Bold.woff2": "e99ae51144bf1232efcc1bfe5add36262c6866b0faab24fa75740e1b98577a62",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_SansSerif-Italic.ttf": "3931dd81faed86ba021bb2bbdc36f5bed9a38d6b4f4077aca59b265aa1b02083",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_SansSerif-Italic.woff": "91ee67500cc0129aa0ace3ac5c61ff1692102f0f31d02b69347fba35dcb75bf2",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_SansSerif-Italic.woff2": "00b26ac825e2095056396e0553b8ac26d3f8ad158c3826e28b4c45b385c4714a",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_SansSerif-Regular.ttf": "f36ea897e19f4a2e571d1e900e4e3710e438deb05a842486045ba0a3e616a4ad",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_SansSerif-Regular.woff": "11e4dc8a6471ff6d6ee561d53d10fde8f7489e798257ff449c5d37c197435605",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_SansSerif-Regular.woff2": "68e8c73ef42afd3ccec58bf0fba302cce448938e7fc020a5e31f8a952eee1342",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Script-Regular.ttf": "1c67f068fea8bb09bf099c088b1cf64bd27516a6e07f4684344873564bb66a67",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Script-Regular.woff": "d96cdf2b3bdd4d64a8fd5f74a4c467f123a8a73931cd435889f08ffaf9bf947a",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Script-Regular.woff2": "036d4e95149b69ff9bcc0cd55771efeb25ffa3947293e69acd78d5ac328c684b",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Size1-Regular.ttf": "95b6d2f1a50173bfedb8c63e1d1c99b10427d0a4df4201cb44513b226951a22b",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Size1-Regular.woff": "c943cc986384f59e86bea5fd7dc50a9c4dfe567a7c05eb40d6790720dead97c9",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Size1-Regular.woff2": "6b47c40166b6dbe21a5dfca7718413f2147fd2399be1ba605d8ad39cedf25dfe",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Size2-Regular.ttf": "a6b2099fb555c60e3a0db3a08842ebf1d732c6eb4e4bf44913613bed4fc4e39b",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Size2-Regular.woff": "2014c523c3210bcc166648c4d4cc57f05b747df07a24277bf71c51e67dc79e3d",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Size2-Regular.woff2": "d04c54219f9eaec6d4d4fd42dfb28785975a4794d6b2fc71e566b9cd6db842dd",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Size3-Regular.ttf": "500e04d54f0d51666332c9d2089aa803be22aa878eca539e59fa53c6e522b082",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Size3-Regular.woff": "6ab6b62e9b62dae2c00dd90f791bd10950be0ecc3490d7d6045f51c2e8fe0949",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Size3-Regular.woff2": "73d591271b1604960cb10bb90fee021670af7297017e0e98480b332d11f51995",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Size4-Regular.ttf": "c647367d1dd4e162468717d020e1fc0f1dc5c26ebfdffbe55261713bf88c5877",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Size4-Regular.woff": "99f9c6750b489c9462bf04900bd3f939df9b829339daaaaa99ef5495cdddea58",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Size4-Regular.woff2": "a4af7d414440a1c1790825cfb700cf9cf43b0f2c4b04f0ebc523011ad9853ec0",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Typewriter-Regular.ttf": "f01f3e87d9c6a61c0c081ceb577abd864eb00a612f7ac1620dd6915fad2ef5aa",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Typewriter-Regular.woff": "e14fed02b1aba7ce9f5afd5844b5d0321b22351febc720e0de8b8723527609f7",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/fonts/KaTeX_Typewriter-Regular.woff2": "71d517d67827787cfabdf186914cc3358eda539e37931941f2b2fd4a21f68c0b",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/katex.min.css": "717bc9ae7853b61f0f76455dddf0ecd4f527a783f42de2ac24684899c1c46258",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/katex.min.js": "e6bfe5deebd4c7ccd272055bab63bd3ab2c73b907b6e6a22d352740a81381fd4",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/katex/LICENSE": "766ccc1f306c885aa45542a9846bbd0a505b27a0374f146778171c2254ce18e3",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/pretendard/LICENSE": "85fce85e25260b03777bf10373d3bd9363b9da96d9e0ca86a280dd37ed7667a0",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/pretendard/pretendard.css": "74dbf94c1ab3cb1d166346878e03572d8004ac88d21ac84332a32b28a088f2bd",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/pretendard/woff/Pretendard-Black.woff": "d8511e03d73b848d3df45d6f3d1166bb9532f7547b68da5f768d7b60df76faaa",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/pretendard/woff/Pretendard-Bold.woff": "b02e6d7d8606f13f12682bc4d43575d403a9cbb2d662f6f4f137dba384633267",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/pretendard/woff/Pretendard-ExtraBold.woff": "1f43803fe4cb56b82061c7392eae37a9123e839b39cc0aa3c3f5b22edcb170d3",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/pretendard/woff/Pretendard-ExtraLight.woff": "f8c8f64cec9d0c4b2c675a5cac99b2cef9d34f4b485caf9ec47901314ff8c460",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/pretendard/woff/Pretendard-Light.woff": "744e50b9780722eada9afc308712c7d1dc5176d8b46c315d010fa42fffb76fe6",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/pretendard/woff/Pretendard-Medium.woff": "6231269ba695835ca13b03cf411b4e68379993039b4033c373e4e9940ee5370d",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/pretendard/woff/Pretendard-Regular.woff": "3214d4fdb5bd41e10c9f0b5fa8c6ff2f1096b249665cdbf34948434ee7c51934",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/pretendard/woff/Pretendard-SemiBold.woff": "e476f124e88472078cf472ac09768331f93f76063a52183ff303a192adea800a",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/pretendard/woff/Pretendard-Thin.woff": "1c760324692f0d4bdd46f6f2378ce73aaa37056b8673163d1463adaee8b3dee1",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/pretendard/woff2/Pretendard-Black.woff2": "c5fd0c3568fc1368a3edc0d0fbb36df029935954276e3573451b3bae09e27296",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/pretendard/woff2/Pretendard-Bold.woff2": "4609c3356e536fafe38f4add0daeceb3d8595d3057bce13c428c33ddbd43d362",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/pretendard/woff2/Pretendard-ExtraBold.woff2": "dd7c1e156f508eb962acc7a33a7a1896d1e0b71e11156fad96e731689ceb6dc3",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/pretendard/woff2/Pretendard-ExtraLight.woff2": "df43dc9165dff4542114674bcd8b79b7daae6dec004004586d5d076fec6fe2aa",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/pretendard/woff2/Pretendard-Light.woff2": "b7426635cce2ea2b95c9c802e43fba1c620e0dafaf25f737c069b8b4e09fa841",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/pretendard/woff2/Pretendard-Medium.woff2": "d03481330eeba0659ab5b87f25ceb504a35de377dd90a0d0aba2982eb2d05e2c",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/pretendard/woff2/Pretendard-Regular.woff2": "fad853f7f47c6c8b103171e7193fa095708cdcd70850a71d93aa5379e8a61d63",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/pretendard/woff2/Pretendard-SemiBold.woff2": "c863f76a7de5c1ddc1ed8b2fa794964530774592c4f31407a84e2a2ae93f17f0",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/pretendard/woff2/Pretendard-Thin.woff2": "1539755224a64719d5b18406762c476db74fcc299b9e4641ca1e9812fbc7a09b",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/vendor/provenance.json": "c953ecb4573b74379b1599a52f234b195bb335cf119fd9b35997c2a98b6abfeb",
+    "문제설명_1030_CG_CB_and_Follower_Frequency_Response.html": "3875fb3d54a1ee1341a07017d0dfc06f0042a00eb497fc996054938efa0bba94",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/manifest.json": "103be17d798994f9bd8079b9717cc768f7a42832212f7cf3bdda948d90ec85ac"
+  }
+}

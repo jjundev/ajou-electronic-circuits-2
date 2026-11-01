@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>전자회로2 정리노트 1030</title>
+  <meta name="description" content="권익진 교수님 전자회로2 · 1030 수업 (Lec5, Razavi 11장)">
+  <script>document.documentElement.classList.add('js');try{const t=localStorage.getItem('od-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false,ignoredTags:['script','noscript','style','textarea','pre','code']})"></script>
+  <style>
+    /* ---------- 토큰 ---------- */
+    :root {
+      color-scheme: light;
+      --scroll: #c9d0db; --scroll-hover: #9aa3b2;
+      --bg: #ffffff; --surface: #f7f8fa; --ink: #111111; --ink-2: #6b7280; --line: #d9dee7;
+      --accent: #1677ff; --accent-ink: #1b64da; --btn-bg: #1b64da; --on-btn: #ffffff;
+      --warn: #b54708; --prof: #6941c6; --supp: #067647; --danger: #d92d20;
+      --font: 'Pretendard', system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      --fs-title: clamp(28px, 6vw, 36px); --fs-h3: clamp(26px, 5.4vw, 32px); --fs-layer: 19px; --fs-lead: 22px; --fs-body: 17px; --fs-sub: 15px; --fs-small: 14px; --fs-label: 13px; --fs-fig: 12px;
+      --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px;
+      --radius: 8px; --measure: 680px; --tap: 48px; --btn-min: 160px;
+      --dur: 220ms; --dur-exit: 150ms; --ease-out: cubic-bezier(.2, .8, .2, 1);
+      /* 예전 조각이 참조할 수 있는 이름 */
+      --surface-2: var(--surface); --accent-soft: var(--surface); --warn-soft: var(--surface);
+      --prof-soft: var(--surface); --supp-soft: var(--surface); --eli5: var(--accent-ink); --eli5-soft: var(--surface);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        color-scheme: dark;
+        --scroll: #3f414b; --scroll-hover: #5b5e6a;
+        --bg: #17171c; --surface: #212128; --ink: #f2f4f6; --ink-2: #a3abb8; --line: #34353d;
+        --accent: #3182f6; --accent-ink: #6ea4ff; --btn-bg: #1b64da; --on-btn: #ffffff;
+        --warn: #f5a15c; --prof: #b69cff; --supp: #5fd39a; --danger: #ff6b61;
+      }
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --scroll: #3f414b; --scroll-hover: #5b5e6a;
+      --bg: #17171c; --surface: #212128; --ink: #f2f4f6; --ink-2: #a3abb8; --line: #34353d;
+      --accent: #3182f6; --accent-ink: #6ea4ff; --btn-bg: #1b64da; --on-btn: #ffffff;
+      --warn: #f5a15c; --prof: #b69cff; --supp: #5fd39a; --danger: #ff6b61;
+    }
+
+    /* ---------- 기본 ---------- */
+    * { box-sizing: border-box; }
+    html { scroll-padding-top: 72px; -webkit-text-size-adjust: 100%; }
+    body { margin: 0; min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column;
+      background: var(--bg); color: var(--ink); font-family: var(--font); font-size: var(--fs-body); line-height: 1.7; word-break: keep-all; overflow-wrap: anywhere; }
+    a { color: var(--accent-ink); text-underline-offset: 3px; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    [hidden] { display: none !important; }
+
+    /* ---------- 상단 바 ---------- */
+    .topbar { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line); }
+    .topbar-inner { max-width: var(--measure); margin: 0 auto; padding: var(--s2) var(--s4); display: flex; align-items: center; gap: var(--s3); min-height: 56px; }
+    .brand { flex: 1 1 auto; min-width: 0; font-size: var(--fs-body); font-weight: 700; white-space: nowrap; }
+    .text-btn { flex: none; min-height: 44px; min-width: 44px; padding: 0 var(--s3); border: 0; border-radius: var(--radius);
+      background: transparent; color: var(--ink); font: 600 var(--fs-small)/1 var(--font); cursor: pointer; }
+    .bar { height: 2px; background: var(--line); overflow: hidden; }
+    .bar > span { display: block; height: 100%; background: var(--accent); transform-origin: left; transform: scaleX(0); transition: transform var(--dur) var(--ease-out); }
+
+    /* ---------- 본문 ---------- */
+    main { flex: 1 0 auto; width: 100%; max-width: var(--measure); margin: 0 auto; padding: var(--s6) var(--s5) var(--s7); }
+    .hero h1 { font-size: var(--fs-title); line-height: 1.3; margin: 0 0 var(--s3); letter-spacing: -0.02em; }
+    .hero p { color: var(--ink-2); margin: 0; }
+    section { margin-top: var(--s7); }
+    section > h2 { font-size: 22px; line-height: 1.4; margin: 0 0 var(--s4); }
+    .topic { padding: var(--s6) 0; border-top: 1px solid var(--line); }
+    .topic h3 { margin: 0 0 var(--s2); font-size: var(--fs-h3); font-weight: 800; line-height: 1.3; letter-spacing: -0.02em; }
+    .tags { display: flex; flex-wrap: wrap; gap: var(--s2); margin-bottom: var(--s5); }
+    .tag { font-size: var(--fs-label); line-height: 1.5; padding: 2px var(--s2); border-radius: 6px; background: var(--surface); color: var(--ink-2); white-space: nowrap; }
+
+    /* 레이어: 배경 없이 라벨과 구분선으로 나눈다 */
+    .layer { margin-top: var(--s5); padding-top: var(--s5); border-top: 1px solid var(--line); }
+    .layer.eli5 { margin-top: 0; padding-top: 0; border-top: 0; }
+    .layer > :first-child { margin-top: 0; }
+    .layer > :last-child { margin-bottom: 0; }
+    .layer-title { display: block; font-size: var(--fs-layer); font-weight: 700; line-height: 1.4; letter-spacing: -0.01em; color: var(--ink); margin-bottom: var(--s3); }
+    .layer.eli5 .layer-title { color: var(--accent-ink); }
+    .layer.eli5 .lead { font-size: var(--fs-lead); font-weight: 700; line-height: 1.5; letter-spacing: -0.01em; margin: 0 0 var(--s4); }
+    /* 정확히 말하면: 본문 크기 그대로, 굵은 첫머리만 진하게 */
+    .layer.formal b { font-weight: 700; color: var(--ink); }
+    /* 교수님 말씀 · 주의: 보조 정보는 한 단계 작게 */
+    .layer.prof, .layer.warn { font-size: var(--fs-sub); line-height: 1.7; }
+    .layer.prof blockquote { font-size: var(--fs-sub); }
+    .layer.prof .layer-title { color: var(--prof); }
+    .layer.warn { background: var(--surface); border-top: 0; border-radius: var(--radius); padding: var(--s4); }
+    .layer.warn .layer-title { color: var(--warn); font-size: var(--fs-body); }
+    .layer.supp .badge.supp { margin-bottom: var(--s2); }
+    .badge { display: inline-block; font-size: var(--fs-label); font-weight: 600; line-height: 1.5; padding: 2px var(--s2); border-radius: 6px; background: var(--surface); color: var(--ink-2); }
+    .badge.supp { color: var(--supp); }
+    blockquote { margin: var(--s3) 0; padding: 0 0 0 var(--s3); border-left: 2px solid var(--line); color: var(--ink-2); }
+    ol.steps { padding-left: 1.4em; }
+    ol.steps li { margin: var(--s2) 0; }
+
+    /* 그림 · 수식 · 표 */
+    .figure { margin: var(--s4) 0; text-align: center; }
+    .figure svg { width: 100%; height: auto; max-width: 560px; color: var(--ink); }
+    .figure figcaption { font-size: var(--fs-small); color: var(--ink-2); margin-top: var(--s1); }
+    .katex-display { overflow-x: auto; overflow-y: hidden; padding: var(--s1) 0; }
+    .table-wrap { overflow-x: auto; }
+    table { border-collapse: collapse; width: 100%; font-size: var(--fs-small); }
+    th, td { border-bottom: 1px solid var(--line); padding: var(--s2); text-align: left; vertical-align: top; }
+    th { color: var(--ink-2); font-weight: 600; }
+    td:first-child, th:first-child { min-width: 6em; }
+
+    /* 위젯 */
+    .widget { background: var(--surface); border-radius: var(--radius); padding: var(--s4); margin: var(--s5) 0; }
+    .widget h4 { margin: 0 0 var(--s1); font-size: var(--fs-layer); line-height: 1.4; }
+    .widget-help { font-size: var(--fs-small); color: var(--ink-2); margin: 0 0 var(--s3); }
+    .controls { display: grid; gap: var(--s2); grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-bottom: var(--s2); font-size: var(--fs-small); }
+    .controls label { display: flex; align-items: center; gap: var(--s2); min-height: 44px; }
+    .controls input[type=range] { flex: 1; min-width: 0; accent-color: var(--accent); }
+    .widget svg { width: 100%; height: auto; background: var(--bg); border-radius: var(--radius); }
+    .readout { font-size: var(--fs-small); margin-top: var(--s2); }
+    .legend { font-size: var(--fs-label); color: var(--ink-2); display: flex; flex-wrap: wrap; gap: var(--s3); }
+    .sw { display: inline-block; width: 14px; height: 4px; vertical-align: middle; margin-right: var(--s1); border-radius: 2px; }
+    .sw.truth { background: var(--ink-2); } .sw.fit { background: var(--accent); } .sw.train { background: var(--accent); height: 10px; width: 10px; border-radius: 50%; }
+    .sw.test { background: var(--warn); height: 10px; width: 10px; border-radius: 50%; } .sw.like { background: var(--accent); } .sw.prior { background: var(--prof); } .sw.post { background: var(--supp); }
+    .axis { stroke: var(--line); stroke-width: 1.5; }
+    .tick { fill: var(--ink-2); font-size: 11px; }
+    .plot-truth { fill: none; stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 5 4; }
+    .plot-fit { fill: none; stroke: var(--accent); stroke-width: 2.5; }
+    .pt-train { fill: var(--accent); }
+    .pt-test { fill: var(--warn); }
+    .plot-like { fill: none; stroke: var(--accent); stroke-width: 2; }
+    .plot-prior { fill: none; stroke: var(--prof); stroke-width: 2; stroke-dasharray: 6 4; }
+    .plot-post { fill: none; stroke: var(--supp); stroke-width: 3; }
+    .mark-ml { stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 3 3; }
+    .mark-map { stroke: var(--supp); stroke-width: 1.5; stroke-dasharray: 3 3; }
+    .fig-ink { stroke: currentColor; fill: none; stroke-width: 2; }
+    .fig-accent { stroke: var(--accent); fill: none; stroke-width: 2.5; }
+    .fig-danger { stroke: var(--danger); fill: none; stroke-width: 2.5; }
+    .fig-dot { fill: var(--accent); }
+    .fig-text { fill: currentColor; font-size: 13px; font-family: inherit; }
+    svg text, svg text[class], svg text tspan, .fig-math, .fig-math tspan { font-family: Pretendard, sans-serif; font-weight: 600; font-style: normal; }
+    svg tspan[baseline-shift="sub"], svg tspan[baseline-shift="super"] { font-size: 78%; }
+    svg :is(.fig-dot, .fig-text)[data-node-color="blue"] { fill: var(--accent, #2563eb); }
+    svg :is(.fig-dot, .fig-text)[data-node-color="red"] { fill: var(--danger, #dc2626); }
+    .fig-muted { fill: var(--ink-2); font-size: var(--fs-fig); font-family: inherit; }
+
+    footer { width: 100%; max-width: var(--measure); margin: 0 auto; padding: 0 var(--s5) var(--s6); color: var(--ink-2); font-size: var(--fs-small); }
+
+    /* ---------- 하단 이동 바 ---------- */
+    .pager { position: sticky; bottom: 0; z-index: 10; background: var(--bg); border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom); }
+    .pager-inner { max-width: var(--measure); margin: 0 auto; padding: var(--s3) var(--s4); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: var(--s3); }
+    .pager-count { font-size: var(--fs-small); color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; text-align: center; min-width: 4em; }
+    .btn { min-height: var(--tap); min-width: var(--btn-min); padding: 0 var(--s6); border-radius: var(--radius); border: 0; font: 700 var(--fs-body)/1 var(--font); cursor: pointer; white-space: nowrap;
+      transition: background-color 150ms ease-out, opacity 150ms ease-out; }
+    .btn-ghost { justify-self: start; background: var(--surface); color: var(--ink); }
+    .btn-primary { justify-self: end; background: var(--btn-bg); color: var(--on-btn); }
+    .btn:disabled { opacity: .4; cursor: default; }
+    @media (hover: hover) {
+      .text-btn:hover, .btn-ghost:not(:disabled):hover { background: var(--line); }
+      .btn-primary:not(:disabled):hover { box-shadow: inset 0 0 0 100px rgba(0, 0, 0, .14); }
+    }
+
+    /* ---------- 목차 시트 ---------- */
+    .sheet { width: min(100%, var(--measure)); max-width: 100%; max-height: 80dvh; margin: auto auto 0; padding: 0; border: 0;
+      border-radius: 16px 16px 0 0; background: var(--bg); color: var(--ink); }
+    .sheet::backdrop { background: rgba(0, 0, 0, .4); }
+    .sheet-inner { padding: var(--s4) var(--s5) calc(var(--s5) + env(safe-area-inset-bottom)); }
+    .sheet-head { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); margin-bottom: var(--s2); }
+    .sheet-head h2 { margin: 0; font-size: var(--fs-lead); }
+    .toc { display: flex; flex-direction: column; }
+    .toc > a, .toc-group > a { display: block; padding: var(--s3) 0 var(--s1); font-size: var(--fs-label); font-weight: 600; color: var(--ink-2); text-decoration: none; }
+    .toc-list { list-style: none; margin: 0 0 var(--s2); padding: 0; }
+    .toc-list a { display: flex; align-items: center; gap: var(--s3); min-height: var(--tap); padding: var(--s2) var(--s3); margin: 0 calc(-1 * var(--s3));
+      border-radius: var(--radius); color: var(--ink); text-decoration: none; line-height: 1.4; }
+    .toc-list a[aria-current="true"] { background: var(--surface); font-weight: 700; color: var(--accent-ink); }
+    .toc-list .toc-title { flex: 1 1 0; min-width: 0; }
+    @media (hover: hover) { .toc-list a:hover { background: var(--surface); } }
+
+    /* ---------- 한 화면에 하나씩 (JS가 켤 때만) ---------- */
+    html:not(.js) .pager, html:not(.js) #toc-open { display: none; }
+    html:not(.js) .sheet { display: block; position: static; width: 100%; max-height: none; margin: 0 auto; border-radius: 0; border-bottom: 1px solid var(--line); }
+    html:not(.js) .sheet-close { display: none; }
+    .js main > .hero:not(.is-current), .js main > section:not(.is-on), .js .screen:not(.is-current) { display: none; }
+    .js main > section { margin-top: 0; }
+    .js main > section > h2 { font-size: var(--fs-small); font-weight: 600; color: var(--accent-ink); margin: 0 0 var(--s2); }
+    .js .topic { padding: 0; border-top: 0; }
+    .js .hero { padding-top: 12vh; }
+    .js footer { display: none; }
+    .js body.at-end footer { display: block; }
+    .screen.enter-next { animation: enter-next var(--dur) var(--ease-out); }
+    .screen.enter-prev { animation: enter-prev var(--dur) var(--ease-out); }
+    @keyframes enter-next { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: none; } }
+    @keyframes enter-prev { from { opacity: 0; transform: translateX(-24px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) {
+      .screen.enter-next, .screen.enter-prev { animation: none; }
+      .bar > span, .btn { transition: none; }
+    }
+    @media (max-width: 480px) {
+      main { padding: var(--s5) var(--s4) var(--s6); }
+      footer { padding: 0 var(--s4) var(--s5); }
+      .btn { min-width: 120px; padding: 0 var(--s5); }
+    }
+    @media print {
+      .topbar, .pager, .sheet { display: none !important; }
+      .js main > .hero, .js main > section, .js .screen, .js footer { display: block !important; }
+    }
+
+    /* ---------- 좌우 패널 (drawer) ---------- */
+    :root { --panel-l: clamp(240px, 18vw, 320px); --panel-r-min: 320px; --panel-r-max: 720px; --scrollbar: 16px; --drawer-l: 304px; --drawer-r: 360px; --fs-panel: 16px; --scrim: rgba(0, 0, 0, .4); }
+    body { height: 100vh; height: 100dvh; min-height: 0; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; overflow: hidden; }
+    .topbar-inner { max-width: none; padding: var(--s2) var(--s3); gap: var(--s2); }
+    .panel-toggle { display: inline-flex; align-items: center; gap: var(--s1); padding: 0 var(--s2); }
+    .panel-toggle svg { flex: none; width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .panel-toggle .strip { fill: transparent; stroke: none; transition: fill 150ms ease-out; }
+    .panel-toggle[aria-expanded="true"] { color: var(--accent-ink); }
+    .panel-toggle[aria-expanded="true"] .strip { fill: currentColor; }
+    .theme-toggle { display: inline-flex; align-items: center; justify-content: center; padding: 0; }
+    .theme-toggle svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .theme-toggle .i-sun { display: none; }
+    :root[data-theme="dark"] .theme-toggle .i-sun { display: block; }
+    :root[data-theme="dark"] .theme-toggle .i-moon { display: none; }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .theme-toggle .i-sun { display: block; }
+      :root:not([data-theme="light"]) .theme-toggle .i-moon { display: none; }
+    }
+
+    .layout { display: grid; grid-template-columns: auto minmax(320px, 1fr) auto; min-height: 0; }
+    .content { display: flex; flex-direction: column; min-width: 0; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scroll-padding-top: var(--s4); }
+    .panel { position: relative; display: flex; flex-direction: column; min-height: 0; overflow: hidden; background: var(--bg); color: var(--ink); font-size: var(--fs-panel); line-height: 1.6; }
+    .panel-left { grid-column: 1; border-right: 1px solid var(--line); }
+    .content { grid-column: 2; }
+    .panel-right { grid-column: 3; border-left: 1px solid var(--line); }
+    .panel-inner { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: var(--s4) var(--s4) var(--s6); }
+    .content::-webkit-scrollbar, .panel-inner::-webkit-scrollbar { width: 8px; }
+    .content::-webkit-scrollbar-track, .panel-inner::-webkit-scrollbar-track { background: transparent; }
+    .content::-webkit-scrollbar-thumb, .panel-inner::-webkit-scrollbar-thumb { background: var(--scroll); border-radius: 8px; border: 2px solid var(--bg); }
+    .content::-webkit-scrollbar-thumb:hover, .panel-inner::-webkit-scrollbar-thumb:hover { background: var(--scroll-hover); }
+    @supports (scrollbar-color: auto) { .content, .panel-inner { scrollbar-width: thin; scrollbar-color: var(--scroll) transparent; } }
+    .panel-resize { display: none; }
+    .panel-head { display: flex; align-items: center; gap: var(--s2); min-height: 44px; margin-bottom: var(--s2); }
+    .panel-head h2 { flex: 1 1 0; min-width: 0; margin: 0; font-size: var(--fs-lead); line-height: 1.4; }
+    .panel-sub { margin: 0 0 var(--s4); font-size: var(--fs-layer); font-weight: 700; line-height: 1.4; letter-spacing: -0.01em; }
+    .panel-empty { margin: 0; color: var(--ink-2); }
+    .panel-label { display: block; margin: var(--s5) 0 var(--s2); font-size: var(--fs-label); font-weight: 600; color: var(--ink-2); }
+
+    /* 진행 상태 */
+    .panel-meta { margin: 0 0 var(--s2); font-size: var(--fs-small); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+    .panel-meta b { color: var(--ink); }
+    .progress { height: 4px; margin-bottom: var(--s3); border-radius: 2px; background: var(--line); overflow: hidden; }
+    .progress > span { display: block; height: 100%; background: var(--accent); transform-origin: left; transform: scaleX(0); transition: transform var(--dur) var(--ease-out); }
+    .panel .toc-list a { margin: 0 calc(-1 * var(--s2)); padding: var(--s2); font-size: var(--fs-panel); }
+    .toc-mark { flex: none; display: block; width: 20px; height: 20px; color: var(--ink-2); }
+    .toc-mark svg { display: block; width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .toc-mark.is-done { color: var(--accent-ink); }
+
+    /* 복습문제: 원문 · 힌트 · 풀이 */
+    .aid details:last-of-type { border-bottom: 1px solid var(--line); }
+    .aid details.original > summary { font-size: var(--fs-panel); }
+    .solved-btn { display: flex; align-items: center; justify-content: center; gap: var(--s2); width: 100%; min-height: var(--tap); margin-top: var(--s5); padding: 0 var(--s4);
+      border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg); color: var(--ink); font: 700 var(--fs-panel)/1.2 var(--font); cursor: pointer; }
+    .solved-btn svg { flex: none; width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .solved-btn[aria-pressed="true"] { border-color: var(--accent); color: var(--accent-ink); }
+
+    /* 정리노트: 페이지 요약 */
+    /* readability-20261022:start */
+    /* Shared summary layout: explicit blocks, no runtime sentence split. */
+    .sum { display: flow-root; }
+    .sum :where(p, ul, ol, dl), .sum > :where(*) { margin: 0; }
+    .sum > :nth-child(n+2) { margin-top: var(--s5); }
+    .sum > :where(p:not(.panel-label, .sum-lead)) + p:not(.panel-label) { margin-top: var(--s2); }
+    .sum > .sum-lead + * { margin-top: var(--s5); }
+    .sum > .panel-label + *, .sum > h4 + * { margin-top: var(--s3); }
+    .sum .summary-group { display: flex; flex-direction: column; gap: var(--s2); }
+    .sum h4 { margin: 0 0 var(--s1); font-size: inherit; line-height: 1.5; }
+    .sum .summary-group > p { margin: 0; }
+    .sum .terms dt { margin-top: var(--s3); }
+    .sum .terms dt:first-child { margin-top: 0; }
+    .sum .terms dd { margin: var(--s2) 0 0; }
+    /* readability-20261022:end */
+    .sum-lead { margin: 0; font-size: var(--fs-body); font-weight: 700; line-height: 1.6; }
+    .eq-list { list-style: none; margin: 0; padding: 0; }
+    .eq-list li { padding: var(--s2) 0; border-bottom: 1px solid var(--line); }
+    .eq-list li:first-child { padding-top: 0; }
+    .eq-name { display: block; font-size: var(--fs-label); font-weight: 600; color: var(--ink-2); }
+    .eq-list .katex-display { margin: var(--s1) 0 0; text-align: left; }
+    .eq-list .katex-display > .katex { text-align: left; }
+    .terms { margin: 0; }
+    .terms dt { font-size: var(--fs-panel); font-weight: 700; margin-top: var(--s4); }
+    .terms dt:first-child { margin-top: 0; }
+    .terms dd { margin: var(--s1) 0 0; font-size: var(--fs-sub); line-height: 1.6; color: var(--ink-2); }
+    .flow { margin: 0; padding-left: 1.4em; font-size: var(--fs-sub); }
+    .flow li { margin: var(--s2) 0; }
+
+    @media (hover: hover) { .solved-btn:hover { background: var(--surface); } }
+
+    /* 넓은 화면: 본문 옆에 붙는 패널 */
+    @media (min-width: 1024px) {
+      .layout { --l: var(--panel-l-user, var(--panel-l)); }
+      .layout[data-left="closed"] { --l: 0px; }
+      .panel-left { width: var(--l); }
+      /* 기본값: 왼쪽 패널과 본문 폭을 뺀 나머지를 오른쪽 패널이 차지 → 본문 옆 빈 여백이 생기지 않는다 */
+      .panel-right { width: var(--panel-r-user, clamp(var(--panel-r-min), calc(100vw - var(--l) - var(--measure) - var(--scrollbar)), var(--panel-r-max))); }
+      .panel-resize { display: block; position: absolute; top: 0; bottom: 0; z-index: 2; width: 12px; padding: 0; border: 0; background: transparent; cursor: col-resize; touch-action: none; }
+      .panel-left .panel-resize { right: 0; }
+      .panel-right .panel-resize { left: 0; }
+      .panel-resize::after { content: ""; position: absolute; top: 0; bottom: 0; width: 2px; background: var(--accent); opacity: 0; transition: opacity 150ms ease-out; }
+      .panel-left .panel-resize::after { right: 0; }
+      .panel-right .panel-resize::after { left: 0; }
+      .panel-resize:focus-visible { outline: none; }
+      .panel-resize:focus-visible::after, .is-resizing .panel-resize:active::after { opacity: 1; }
+      @media (hover: hover) { .panel-resize:hover::after { opacity: 1; } }
+      body.is-resizing { cursor: col-resize; user-select: none; }
+      .layout[data-left="closed"] .panel-left, .layout[data-right="closed"] .panel-right { display: none; }
+      .panel.is-shown { animation: panel-fade var(--dur) var(--ease-out); }
+      .scrim, .panel-close { display: none; }
+    }
+    @keyframes panel-fade { from { opacity: 0; } to { opacity: 1; } }
+
+    /* 좁은 화면: 가장자리에서 밀려 나오는 drawer */
+    @media (max-width: 1023.98px) {
+      .panel { position: fixed; top: 0; bottom: 0; z-index: 40; visibility: hidden;
+        transition: transform var(--dur-exit) ease-in, visibility 0s linear var(--dur-exit); }
+      .panel-left { left: 0; width: min(var(--drawer-l), 88vw); transform: translateX(-100%); }
+      .panel-right { right: 0; width: min(var(--drawer-r), 88vw); transform: translateX(100%); }
+      .panel.is-open { visibility: visible; transform: none; transition: transform var(--dur) var(--ease-out); }
+      .panel-inner { padding-top: calc(var(--s3) + env(safe-area-inset-top)); padding-bottom: calc(var(--s6) + env(safe-area-inset-bottom)); }
+      .scrim { position: fixed; inset: 0; z-index: 35; background: var(--scrim); opacity: 0; visibility: hidden;
+        transition: opacity var(--dur-exit) ease-in, visibility 0s linear var(--dur-exit); }
+      .scrim.is-on { opacity: 1; visibility: visible; transition: opacity var(--dur) var(--ease-out); }
+      html:not(.js) .panel-left { display: none; }
+    }
+    @media (max-width: 480px) { .panel-toggle { padding: 0 var(--s1); } }
+    html:not(.js) .panel-toggle, html:not(.js) .panel-right, html:not(.js) .scrim { display: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .panel, .panel.is-open, .scrim, .scrim.is-on, .progress > span, .panel-toggle .strip { transition: none; }
+      .panel.is-shown { animation: none; }
+      .panel-resize::after { transition: none; }
+    }
+    @media print {
+      body { display: block; height: auto; overflow: visible; }
+      .layout { display: block; }
+      .content { overflow: visible; }
+      .panel, .scrim { display: none !important; }
+    }
+  </style>
+</head>
+<body data-screens="article.topic" data-panels="note" data-range="1030">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <button class="text-btn panel-toggle" id="toggle-left" type="button" aria-controls="panel-left" aria-expanded="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="strip" x="3" y="4" width="6" height="16" rx="1"/><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg><span>목차</span></button>
+      <strong class="brand">정리노트</strong>
+      <button class="text-btn theme-toggle" id="theme-toggle" type="button" aria-label="다크 모드로 전환" title="다크 모드로 전환"><svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg><svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+      <button class="text-btn panel-toggle" id="toggle-right" type="button" aria-controls="panel-right" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="strip" x="15" y="4" width="6" height="16" rx="1"/><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M15 4v16"/></svg><span>요약</span></button>
+    </div>
+    <div class="bar" aria-hidden="true"><span id="pager-bar"></span></div>
+  </header>
+  <div class="layout" data-left="open" data-right="closed">
+    <aside class="panel panel-left" id="panel-left" aria-labelledby="panel-left-title">
+      <div class="panel-resize" data-side="left" role="separator" aria-orientation="vertical" aria-controls="panel-left" aria-label="왼쪽 패널 너비 조절. 좌우 화살표로 조절, Home으로 자동 너비" tabindex="0"></div>
+      <div class="panel-inner">
+        <div class="panel-head">
+          <h2 id="panel-left-title">목차</h2>
+          <button class="text-btn panel-close" type="button" data-panel-close>닫기</button>
+        </div>
+        <p class="panel-meta">읽은 토픽 <b id="progress-n">0</b> / <span id="progress-total">0</span></p>
+        <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+        <nav class="toc" aria-label="목차"><a href="#why">왜 쓸까</a><a href="#s0">1 입력 임피던스</a><a href="#s1">2 CG·CB</a><a href="#s2">3 팔로워</a><a href="#s3">4 요약·예고</a></nav>
+      </div>
+    </aside>
+    <div class="content">
+  <main>
+    <div class="hero">
+      <h1>CG·CB와 팔로워의 주파수 응답 — 5살도 이해하는 정리노트</h1>
+      <p>권익진 교수님 전자회로2 · 1030 수업 (Lec5, Razavi 11장)</p>
+    </div>
+    <section id="why"><h2>들어가며: 왜 이런 회로를 쓸까</h2>
+<article class="topic" id="why-circuit"><h3>왜 이런 회로를 쓸까</h3><div class="tags"><span class="tag date">1030 수업</span><span class="tag slide">L05 s35–46</span></div>
+<div class="layer eli5"><span class="layer-title">쉽게 말하면</span><p class="lead">빠른 신호를 전달하려면 증폭기의 속도와 앞뒤 회로의 연결을 함께 살펴봐요.</p><p>CG·CB는 속도를 높이는 대신 입력 전압을 받기 어렵고, 팔로워는 앞뒤 회로 사이에서 버퍼 역할을 해요.</p>
+<figure class="figure"><svg id="fig-why" viewBox="0 0 720 140" role="img" aria-label="빠른 신호를 전달할 때 밀러 효과와 부하 문제가 생기고 CG 또는 CB와 팔로워로 각각 대응하는 흐름"><rect class="fig-ink" x="10" y="36" width="175" height="65" rx="10"/><text class="fig-text" x="97" y="63" text-anchor="middle">빠른 신호 전달</text><text class="fig-muted" x="97" y="84" text-anchor="middle">속도와 연결이 중요</text><path class="fig-accent" d="M185 68 H235 M225 61 L235 68 L225 75"/><rect class="fig-danger" x="245" y="36" width="180" height="65" rx="10"/><text class="fig-text" x="335" y="63" text-anchor="middle">밀러 효과 · 부하</text><text class="fig-muted" x="335" y="84" text-anchor="middle">전달이 어려워짐</text><path class="fig-accent" d="M425 68 H475 M465 61 L475 68 L465 75"/><rect class="fig-ink" x="485" y="36" width="225" height="65" rx="10"/><text class="fig-text" x="597" y="63" text-anchor="middle">CG·CB / 팔로워</text><text class="fig-muted" x="597" y="84" text-anchor="middle">빠른 동작 / 버퍼</text></svg><figcaption>빠른 신호를 다루는 두 가지 선택을 살펴봐요.</figcaption></figure></div>
+<div class="layer formal"><span class="layer-title">정확히 말하면</span>
+<p><strong>1. 풀고 싶은 문제.</strong> 주파수가 올라가도 신호가 잘 전달되도록 증폭기의 속도와 입력 임피던스를 살펴봐요. <a href="#s0-miller">밀러 효과와 입력 분압</a>에서 출발해요.</p>
+<p><strong>2. 단순한 해법과 한계.</strong> CS·CE는 전압 증폭에 쓰이지만 입력과 출력 사이 커패시턴스의 밀러 효과가 입력에 크게 나타날 수 있어요. 높은 주파수에서 입력 임피던스가 작아지면 신호원과의 분압으로 입력 전압이 줄어요. <a href="#s0-miller">밀러 효과와 입력 분압</a>에서 확인해요.</p>
+<p><strong>3. 핵심 아이디어.</strong> CG·CB는 공통 단자를 교류 접지해 이 모델의 입력과 출력 사이 부유 커패시터를 없애므로 밀러 효과의 영향을 줄여요. 팔로워는 출력이 입력을 따라가게 하여 높은 입력 임피던스와 낮은 출력 임피던스를 가진 버퍼로 사용해요. 각각 <a href="#s1-topology">접지된 게이트와 베이스</a>와 <a href="#s2-buffer">팔로워와 버퍼</a>에서 살펴봐요.</p>
+<p><strong>4. 대가와 쓰이는 곳.</strong> CG·CB는 입력 저항이 낮아 전압을 받기 어려울 수 있지만 전류 입력이나 50Ω 매칭에 쓸 수 있어요. 예를 들어 출력저항이 1 kΩ인 전단에 5Ω 스피커를 직접 연결하면 부하 때문에 출력이 크게 줄어드므로 그 사이에 팔로워 버퍼를 둘 수 있어요. <a href="#s1-topology">접지된 게이트와 베이스</a>와 <a href="#s2-buffer">팔로워와 버퍼</a>에서 자세히 알아봐요.</p></div>
+<div class="layer prof"><span class="layer-title">교수님 말씀</span><blockquote>“낮은 임피던스를 출력 임피던스가 높은 앰프로 낮은 임피던스를 그대로 연결하면 이득이 확 떨어지죠.”</blockquote></div>
+<div class="sum" hidden><p class="sum-lead">CG·CB는 밀러 효과를 줄이고 팔로워는 버퍼로 앞뒤 회로를 연결해요.</p><p class="panel-label">판단 기준</p><p>CG·CB는 낮은 입력 저항을 고려해요.</p><p>높은 출력저항의 전단과 낮은 저항의 부하 사이에는 팔로워 버퍼를 쓸 수 있어요.</p></div></article>
+    </section>
+    <section id="s0"><h2>1. CE·CS의 입력 임피던스</h2>
+<article class="topic" id="s0-miller">
+<h3>밀러 효과와 입력 분압</h3>
+<div class="tags"><span class="tag date">1030 수업</span><span class="tag slide">L05 s35</span></div>
+<div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+<p class="lead">출력이 입력과 반대로 움직이면 사이의 작은 커패시터도 입력에서 크게 보여요.</p>
+<p>예를 들어 출력이 입력의 반대 방향으로 4배 움직이면 그 커패시터는 입력에서 5배로 보여요.</p>
+<figure class="figure"><svg id="fig-miller-input" viewBox="0 0 600 135" role="img" aria-label="입력과 반대 방향으로 움직이는 출력 때문에 사이 커패시터가 입력에 다섯 배로 보이는 흐름"><rect class="fig-ink" x="10" y="30" width="160" height="64" rx="10"/><text class="fig-text" x="90" y="57" text-anchor="middle">입력 1만큼 증가</text><text class="fig-muted" x="90" y="78" text-anchor="middle">출력은 4만큼 감소</text><path class="fig-accent" d="M182 62 H224 M216 55 L224 62 L216 69"/><rect class="fig-ink" x="235" y="30" width="160" height="64" rx="10"/><text class="fig-text" x="315" y="57" text-anchor="middle">양끝 차이 5배</text><text class="fig-muted" x="315" y="78" text-anchor="middle">밀러 효과</text><path class="fig-accent" d="M407 62 H449 M441 55 L449 62 L441 69"/><rect class="fig-ink" x="460" y="30" width="130" height="64" rx="10"/><text class="fig-text" x="525" y="57" text-anchor="middle">입력에서</text><text class="fig-text" x="525" y="78" text-anchor="middle">용량 5배</text></svg><figcaption>입력과 출력의 움직임 차이가 커패시터에 걸려요.</figcaption></figure>
+</div>
+<div class="layer formal"><span class="layer-title">정확히 말하면</span>
+<p>먼저 저주파 전압 이득이 $A_v=-4$이고 $C_{GD}=1\,\mathrm{fF}$인 예를 볼게요. 밀러 등가 용량은 $(1-(-4))\times1=5\,\mathrm{fF}$예요. $C_{GS}=2\,\mathrm{fF}$라면 입력의 전체 등가 용량은 $7\,\mathrm{fF}$예요.</p>
+<p>공통 소스(CS) 단에서 게이트가 입력, 드레인이 출력이고 소스는 AC 접지예요. $C_{GD}$는 게이트와 드레인 사이, $C_{GS}$는 입력과 접지 사이에 있어요. $A_v=V_{out}/V_{in}$을 해당 주파수의 두 노드 이득이라고 두고 게이트로 흐르는 $C_{GD}$ 전류를 살펴봐요.</p>
+<ol class="steps"><li>커패시터 양끝 전압은 $V_{in}-V_{out}=(1-A_v)V_{in}$이에요.</li><li>입력 전류 $I_{GD}=sC_{GD}(1-A_v)V_{in}$을 입력과 접지 사이의 전류 $sC_{M,in}V_{in}$과 같게 두어요.</li><li>따라서 $C_{M,in}=(1-A_v)C_{GD}$예요. 출력이 반전되면 $A_v$가 음수여서 용량이 커져요.</li></ol>
+<p>저주파 이득 $A_v\approx-g_mR_D$를 사용하고 출력저항의 영향은 무시하면 다음과 같아요. 이것은 주파수에 따라 변하는 이득을 저주파 값으로 대신한 밀러 근사예요.</p>
+$$C_{in,CS}\approx C_{GS}+(1+g_mR_D)C_{GD}$$
+$$Z_{in,CS}\approx\frac{1}{s\left[C_{GS}+(1+g_mR_D)C_{GD}\right]}$$
+<p>이 근사에서 $s=j\omega$이고 주파수가 높아지면 용량성 입력 임피던스의 크기가 작아져요. 공통 이미터(CE)에서는 $C_\pi$와 $C_\mu$가 각각 같은 역할을 하고, 베이스와 이미터 사이의 $r_\pi$도 입력에 병렬로 보여요.</p>
+$$Z_{in,CE}\approx r_\pi\parallel\frac{1}{s\left[C_\pi+(1+g_mR_C)C_\mu\right]}$$
+<p>신호원 전압 $V_S$가 직렬 저항 $R_S$를 거쳐 입력에 연결되면 입력 전압은 임피던스 분압으로 정해져요.</p>
+$$\frac{V_{in}}{V_S}=\frac{Z_{in}}{R_S+Z_{in}}$$
+<p>CS의 저주파 입력은 이상적으로 무한대에 가까워 신호원 전압을 거의 모두 받아요. 주파수가 높아져 용량성 $Z_{in}$의 크기가 작아지면 유한한 $R_S$에 걸리는 전압이 커져 입력에 전달되는 전압이 줄어요. 복소 임피던스이므로 크기만 단순 저항처럼 나누지 않아요.</p>
+</div>
+<div class="layer prof"><span class="layer-title">교수님 말씀</span><blockquote>“C_GD 자체는 작지만 왜 중요한 영향을 미치죠? ... 밀러 이펙트에 의해서”</blockquote><p>게이트–드레인 중첩 커패시턴스는 게이트–소스 산화막 커패시턴스보다 작아도, 반전 이득 때문에 입력에서 크게 나타나요.</p><blockquote>“임피던스가 커야지 전압을 잘 받을 수 있죠.”</blockquote><p>전단의 출력 임피던스를 $R_S$로 나타내고 입력 임피던스와의 분압으로 설명했어요.</p></div>
+<div class="sum" hidden><p class="sum-lead">반전 이득은 입력에 보이는 밀러 용량을 키워요.</p><p class="panel-label">핵심 식</p><ul class="eq-list"><li><span class="eq-name">CS 입력 용량</span>$$C_{in,CS}\approx C_{GS}+(1+g_mR_D)C_{GD}$$</li><li><span class="eq-name">입력 분압</span>$$\frac{V_{in}}{V_S}=\frac{Z_{in}}{R_S+Z_{in}}$$</li></ul><p>첫 식은 저주파 이득을 사용하는 밀러 근사예요.</p><p>유한한 $R_S$에서 고주파 입력 임피던스가 작아지면 전달 전압이 줄어요.</p></div>
+</article>
+    </section>
+    <section id="s1"><h2>2. CG·CB의 주파수 응답</h2>
+<article class="topic" id="s1-topology"><h3>접지된 게이트와 베이스</h3><div class="tags"><span class="tag date">1030 수업</span><span class="tag slide">L05 s36–38</span></div>
+<div class="layer eli5"><span class="layer-title">쉽게 말하면</span><p class="lead">게이트를 교류 접지하면 입력과 출력 사이의 커패시터가 각각 접지 쪽으로 나뉘어 보여요.</p><figure class="figure"><svg id="fig-cg-topology" viewBox="0 0 620 150" role="img" aria-label="입력과 출력이 각각 커패시터 기호를 거쳐 교류 접지에 연결되는 개념도"><rect class="fig-ink" x="20" y="30" width="150" height="50" rx="8"/><rect class="fig-accent" x="235" y="30" width="150" height="50" rx="8"/><rect class="fig-ink" x="450" y="30" width="150" height="50" rx="8"/><path class="fig-ink" d="M170 55 H194 M194 43 V67 M202 43 V67 M202 55 H235 M385 55 H408 M408 43 V67 M416 43 V67 M416 55 H450 M310 80 V110 M295 110 H325 M300 116 H320 M305 122 H315"/><text class="fig-text" x="65" y="60">입력</text><text class="fig-text" x="256" y="60">교류 접지</text><text class="fig-text" x="495" y="60">출력</text></svg><figcaption>입력과 출력은 각각 교류 접지를 기준으로 커패시턴스를 봐요.</figcaption></figure></div>
+<div class="layer formal"><span class="layer-title">정확히 말하면</span><p>CG(common gate)는 소스 입력, 드레인 출력이고 게이트는 AC 접지예요. 예를 들어 $C_{GS}$는 입력과 접지 사이의 접지 커패시터가 되며 $C_{GD}$는 출력과 접지 사이에 있어요. 이 모델에는 입력과 출력을 직접 잇는 부유 커패시터가 없으므로 CS의 입력 밀러 증폭이 없어요.</p><p>바디도 AC 접지일 때 $C_{SB}$는 입력에, $C_{DB}$는 출력에 붙어요. CB(common base)는 베이스가 AC 접지이고 이미터 입력, 컬렉터 출력이에요. $C_\pi$는 입력에, $C_\mu$와 $C_{CS}$는 출력에 붙어요.</p><p>같은 부하와 소자 근사에서 CG의 소스 노드 기준 이득은 양수이고 CS는 음수예요. 입력 저항은 대략 $1/g_m$이므로 전압 신호는 신호원 저항과 분압돼요. 대신 전류 입력이나 50Ω 매칭에 활용할 수 있어요. 실제 회로에는 DC 바이어스 전류 경로가 필요해요. 이상 전류원은 소신호에서 개방이며, AC 결합 커패시터는 동작 대역에서 거의 단락이면서 DC 바이어스를 분리해요.</p></div>
+<div class="layer prof"><span class="layer-title">교수님 말씀</span><blockquote>“게이트가 그라운드인 점을 감안하면 ... 그라운디드 캡이죠.”</blockquote><p>입력 저항이 낮으면 전단에서 전압을 잘 받지 못해요.</p></div><div class="sum" hidden><p class="sum-lead">CG·CB의 접지 단자가 입력과 출력 커패시턴스를 나눠요.</p><p>입력 저항이 낮아 전압 분압이 생겨요.</p></div></article>
+<article class="topic" id="s1-poles"><h3>입력과 출력의 두 극점</h3><div class="tags"><span class="tag date">1030 수업</span><span class="tag slide">L05 s37–38</span></div>
+<div class="layer eli5"><span class="layer-title">쉽게 말하면</span><p class="lead">제로 영향이 없는 저역통과 응답에서 −40 dB/dec 기울기에 극점 하나가 더해지면 −60 dB/dec가 돼요.</p><figure class="figure"><svg id="fig-cg-poles" viewBox="0 0 620 130" role="img" aria-label="극점 하나를 더 지나면 기울기가 마이너스 40에서 마이너스 60 데시벨 매 데케이드로 바뀌는 그림"><rect class="fig-ink" x="45" y="25" width="200" height="65" rx="8"/><rect class="fig-accent" x="375" y="25" width="200" height="65" rx="8"/><path class="fig-ink" d="M245 58 H375"/><text class="fig-text" x="75" y="64">−40 dB/dec</text><text class="fig-text" x="405" y="64">−60 dB/dec</text></svg><figcaption>극점을 지날 때 이득이 갑자기 떨어지는 것이 아니라 기울기가 바뀌어요.</figcaption></figure></div>
+<div class="layer formal"><span class="layer-title">정확히 말하면</span><p>제로의 영향이 없는 저역통과 응답에서 극점을 하나 더 지나면 기울기에 −20 dB/dec를 더해 −40에서 −60 dB/dec가 돼요. 이득이 순간적으로 20 dB 떨어진다는 뜻은 아니에요. 또 입력의 저항만 두 배가 되면, 다른 조건이 같을 때 입력 극점 크기는 절반이 돼요. 각 노드의 접지 커패시터와 그 노드에서 보는 저항을 곱해요.</p><p>CG에서 $r_O$와 바디 효과를 무시하고 게이트·바디가 AC 접지이면 다음과 같아요.</p>
+$$C_X=C_{GS}+C_{SB}$$
+$$R_X\approx R_S\parallel\frac{1}{g_m}$$
+$$C_Y=C_{GD}+C_{DB}$$
+$$R_Y\approx R_D$$
+$$\omega_{pX}\approx\frac{1}{R_X C_X}$$
+$$\omega_{pY}\approx\frac{1}{R_Y C_Y}$$
+<p>이 값은 양의 극점 크기이며 실제 실수 극점 위치는 각각 음수예요. CB에서는 $C_X=C_\pi$, $C_Y=C_\mu+C_{CS}$, $R_Y\approx R_C$예요. 입력측 소자 저항은 큰 $\beta$에서 약 $1/g_m$이고, $r_\pi$를 유지하면 $r_\pi\parallel(1/g_m)$로 근사해요.</p><p>제로를 무시할 수 있는 주파수 범위에서는 두 극점을 이용해 전달함수를 표현해요.</p>
+$$H(s)\approx\frac{A_0}{(1+s/\omega_{pX})(1+s/\omega_{pY})}$$
+<p>여기서 $A_0$는 신호원에서 출력까지의 저주파 이득이에요. 신호원 저항의 입력 분압을 포함해 $A_0\approx g_m R_D/(1+g_m R_S)$예요. 두 극점보다 아래에서 이득이 평평하고 제로의 영향이 없다면 첫 극점 이후 기울기는 약 −20 dB/dec, 두 번째 이후 약 −40 dB/dec가 돼요. 실제 곡선은 모서리에서 부드럽게 변해요.</p></div>
+<div class="layer prof"><span class="layer-title">교수님 말씀</span><p>입력에 보이는 저항은 신호원 저항과 소스에서 바라본 저항의 병렬로 잡아요.</p></div><div class="sum" hidden><p class="sum-lead">각 노드의 저항과 커패시턴스로 극점 크기를 구해요.</p><p class="panel-label">핵심 식</p><ul class="eq-list"><li><span class="eq-name">입력 극점 크기</span>$$\omega_{pX}\approx\frac{1}{R_X C_X}$$</li><li><span class="eq-name">출력 극점 크기</span>$$\omega_{pY}\approx\frac{1}{R_Y C_Y}$$</li></ul><p>실제 실수 극점은 음수예요.</p></div></article>
+<article class="topic" id="s1-example"><h3>CG 극점 수치 비교</h3><div class="tags"><span class="tag date">1030 수업</span><span class="tag slide">L05 s39</span></div>
+<div class="layer eli5"><span class="layer-title">쉽게 말하면</span><p class="lead">입력 쪽이 빨라져도 출력 쪽이 전체 속도를 제한할 수 있어요.</p><figure class="figure"><svg id="fig-cg-example" viewBox="0 0 620 160" role="img" aria-label="CG 입력과 출력 극점 주파수 비교"><text class="fig-text" x="10" y="45">CG 입력</text><path class="fig-accent" d="M115 40 H540"/><circle class="fig-dot" cx="540" cy="40" r="5"/><text class="fig-text" x="445" y="30">5.31 GHz</text><text class="fig-text" x="10" y="105">CG 출력</text><path class="fig-ink" d="M115 100 H150"/><circle class="fig-dot" cx="150" cy="100" r="5"/><text class="fig-text" x="165" y="105">442 MHz</text></svg><figcaption>같은 주파수 눈금에서 출력 극점이 먼저 나타나요.</figcaption></figure></div>
+<div class="layer formal"><span class="layer-title">정확히 말하면</span><p>슬라이드에는 입력 극점 5.31 GHz, 출력 극점 442 MHz가 표시돼 출력이 지배적 극점이에요. 원본 조건은 $R_S=200\ \Omega$, $1/g_m=150\ \Omega$, $R_D=2\ \mathrm{k}\Omega$, $\lambda=0$, $C_{GS}=250\ \mathrm{fF}$, $C_{GD}=80\ \mathrm{fF}$, $C_{DB}=100\ \mathrm{fF}$예요.</p>
+$$R_X=200\parallel150\ \Omega\approx85.71\ \Omega$$
+$$C_Y=80+100=180\ \mathrm{fF}$$
+$$f_{pY}\approx\frac{1}{2\pi(2\ \mathrm{k}\Omega)(180\ \mathrm{fF})}\approx442\ \mathrm{MHz}$$
+<p>입력에 $C_{SB}=100\ \mathrm{fF}$를 추가로 가정하면 $C_X=350\ \mathrm{fF}$이므로 표시된 5.31 GHz가 재현돼요. 다만 슬라이드에는 $C_{SB}$ 수치가 명시되지 않아 이 가정은 확정할 수 없어요. $C_{SB}=0$이라면 입력 극점은 약 7.43 GHz예요. 표시된 5.31 GHz와 앞서 계산한 CS 입력 극점의 밀러 근사 571 MHz를 비교하면 약 9.3배지만, 입력 극점의 비율을 전체 대역폭 비율로 일반화하지 않아요.</p></div>
+<div class="layer prof"><span class="layer-title">교수님 말씀</span><p>입력 극점과 출력 극점을 따로 살펴보고 더 낮은 쪽이 전체 응답을 제한하는지 확인해요.</p></div><div class="sum" hidden><p class="sum-lead">입력 극점이 높아도 출력 극점이 응답을 제한할 수 있어요.</p><p>입력 극점 비율을 전체 대역폭 비율로 쓰지 않아요.</p></div></article>
+<article class="topic" id="s1-diode"><h3>다이오드 연결 부하의 극점</h3><div class="tags"><span class="tag date">1030 수업</span><span class="tag slide">L05 s40</span></div>
+<div class="layer eli5"><span class="layer-title">쉽게 말하면</span><p class="lead">다이오드 연결 부하는 출력 저항과 출력 쪽 커패시턴스를 함께 바꿔요.</p><figure class="figure"><svg id="fig-cg-diode" viewBox="0 0 620 140" role="img" aria-label="입력 노드와 다이오드 연결 부하가 있는 출력 노드를 구분하는 그림"><rect class="fig-ink" x="30" y="35" width="180" height="60" rx="8"/><rect class="fig-accent" x="380" y="35" width="210" height="60" rx="8"/><path class="fig-ink" d="M210 65 H380"/><text class="fig-text" x="80" y="70">입력 X</text><text class="fig-text" x="414" y="70">출력 Y · 부하</text></svg><figcaption>출력에는 입력 소자와 부하 소자의 접지 커패시턴스가 모여요.</figcaption></figure></div>
+<div class="layer formal"><span class="layer-title">정확히 말하면</span><p>예를 들어 $C_{GD2}$는 M2의 게이트와 드레인이 서로 연결돼 양단 전압이 0이므로 출력 커패시턴스에 더하지 않아요. M1 게이트와 M2 소스는 AC 접지, M1 소스는 입력, M1 드레인과 M2 게이트·드레인은 출력이에요. M2 바디도 AC 접지라 $C_{SB2}$의 양단도 AC 접지예요.</p><p>$r_O$와 바디 효과를 무시하면 입력과 출력의 합성 커패시턴스는 다음과 같아요.</p>
+$$C_X=C_{GS1}+C_{SB1}$$
+$$C_Y=C_{GD1}+C_{DB1}+C_{GS2}+C_{DB2}$$
+<p>출력에서 다이오드 연결 M2를 보면 저항은 약 $1/g_{m2}$예요. 신호원을 영점으로 두고 계산하면 $R_X\approx R_S\parallel(1/g_{m1})$이므로 각 극점 크기는 다음과 같아요.</p>
+$$\omega_{pX}\approx\frac{1}{R_X C_X}$$
+$$\omega_{pY}\approx\frac{g_{m2}}{C_Y}$$
+<p>신호원에서 출력까지의 저주파 이득은 입력 분압을 포함해 $A_0\approx(g_{m1}/g_{m2})/(1+g_{m1}R_S)$예요. 저항 대신 트랜지스터의 트랜스컨덕턴스 비를 이용하면 이득을 정하는 방법이 달라져요.</p></div>
+<div class="layer prof"><span class="layer-title">교수님 말씀</span><p>저항의 공정 변동을 피하고 트랜지스터 특성의 비를 이용해 이득을 정하는 방식이에요.</p></div><div class="sum" hidden><p class="sum-lead">다이오드 연결 부하는 출력 저항을 약 $1/g_{m2}$로 정해요.</p><p class="panel-label">핵심 식</p><ul class="eq-list"><li><span class="eq-name">출력 극점 크기</span>$$\omega_{pY}\approx\frac{g_{m2}}{C_Y}$$</li></ul><p>$C_{GD2}$는 단락된 두 단자 사이에 있어 기여하지 않아요.</p></div></article>
+    </section>
+    <section id="s2"><h2>3. 팔로워의 대역폭과 입력 커패시턴스</h2>
+<article class="topic" id="s2-buffer"><h3>팔로워와 버퍼</h3><div class="tags"><span class="tag date">1030 수업</span><span class="tag slide">L05 s41–43</span></div><div class="layer eli5"><span class="layer-title">쉽게 말하면</span><p class="lead">팔로워는 앞 회로의 전압을 받아 부하에 전달하는 버퍼예요.</p><p>출력저항이 1 kΩ인 전단에 5Ω 스피커를 직접 연결하면 전압이 크게 줄어요.</p><figure class="figure"><svg id="fig-s2-buffer" viewBox="0 0 720 120" role="img" aria-label="버퍼는 전단과 낮은 저항 부하 사이에 놓아요."><rect class="fig-ink" x="10" y="30" width="180" height="55" rx="8"/><text class="fig-text" x="100" y="62" text-anchor="middle">전단 출력 1 kΩ</text><path class="fig-accent" d="M190 58 H250 M240 51 L250 58 L240 65"/><rect class="fig-ink" x="260" y="30" width="190" height="55" rx="8"/><text class="fig-text" x="355" y="62" text-anchor="middle">팔로워 버퍼</text><path class="fig-accent" d="M450 58 H510 M500 51 L510 58 L500 65"/><rect class="fig-ink" x="520" y="30" width="190" height="55" rx="8"/><text class="fig-text" x="615" y="62" text-anchor="middle">스피커 5Ω</text></svg><figcaption>버퍼는 전단과 낮은 저항 부하 사이에 놓아요.</figcaption></figure></div><div class="layer formal"><span class="layer-title">정확히 말하면</span><p>소스 팔로워는 게이트 입력, 소스 출력, 드레인 교류 접지 구조예요. 이미터 팔로워는 대응하는 BJT 구조예요. 두 회로는 높은 입력 임피던스와 낮은 출력 임피던스를 이용해 전압 버퍼로 쓰여요.</p><p>예를 들어 전단의 테브난 전압을 $V_s$, 출력저항을 $1\,\mathrm{k}\Omega$, 스피커를 $5\,\Omega$인 저항으로 모델링하면 직접 연결된 부하 전압은 $V_s\,5/(1000+5)\approx0.005V_s$예요. 버퍼의 입력이 전단을 적게 부하하고 출력이 스피커를 구동하면 이 손실을 줄일 수 있어요. 실제 전달은 버퍼의 출력 저항과 전류 구동 능력에 달려요.</p><p>고주파에서 입력 임피던스도 작아지므로 원하는 대역에서도 버퍼가 제 역할을 하는지 확인해야 해요.</p></div><div class="layer prof"><span class="layer-title">교수님 말씀</span><blockquote>“낮은 임피던스를 그대로 연결하면 이득이 확 떨어지죠.”</blockquote></div><div class="sum" hidden><p class="sum-lead">팔로워 버퍼는 전단의 부하를 줄이고 낮은 저항 부하를 구동해요.</p><p>고주파에서는 입력 임피던스도 확인해요.</p></div></article>
+<article class="topic" id="s2-transfer"><h3>팔로워의 전달함수</h3><div class="tags"><span class="tag date">1030 수업</span><span class="tag slide">L05 s41–43</span></div><div class="layer eli5"><span class="layer-title">쉽게 말하면</span><p class="lead">큰 입력과 출력 사이 커패시터 때문에 팔로워의 주파수 응답은 전달함수로 살펴봐요.</p><p>예제에서는 두 극점이 복소수 쌍으로 나타나요.</p><figure class="figure"><svg id="fig-s2-transfer" viewBox="0 0 720 120" role="img" aria-label="입출력의 상호작용을 전달함수에 함께 반영해요."><rect class="fig-ink" x="10" y="30" width="180" height="55" rx="8"/><text class="fig-text" x="100" y="62" text-anchor="middle">입력과 출력 결합</text><path class="fig-accent" d="M190 58 H250 M240 51 L250 58 L240 65"/><rect class="fig-ink" x="260" y="30" width="190" height="55" rx="8"/><text class="fig-text" x="355" y="62" text-anchor="middle">직접 전달함수</text><path class="fig-accent" d="M450 58 H510 M500 51 L510 58 L500 65"/><rect class="fig-ink" x="520" y="30" width="190" height="55" rx="8"/><text class="fig-text" x="615" y="62" text-anchor="middle">복소 극점</text></svg><figcaption>입출력의 상호작용을 전달함수에 함께 반영해요.</figcaption></figure></div><div class="layer formal"><span class="layer-title">정확히 말하면</span><p>$C_{GS}$는 게이트 입력과 소스 출력 사이의 부유 커패시터예요. 크기가 커서 주파수가 올라가면 입출력이 서로 영향을 주고, 저주파 이득을 고정해 적용한 밀러 근사는 극점 예측에 큰 오차가 생길 수 있어요.</p><p>슬라이드의 모델은 $r_O$와 몸체 효과를 무시하고 다음 전달함수를 줘요. $V_{in}$은 $R_S$ 앞 신호원의 전압이고 게이트 노드 전압과 구별해요. $R_S$는 신호원 저항, $C_L$은 출력 부하 커패시턴스예요.</p>$$H(s)=\frac{V_{out}}{V_{in}}=\frac{1+sC_{GS}/g_m}{1+bs+as^2}$$ $$a=\frac{R_S}{g_m}\left(C_{GD}C_{GS}+C_{GD}C_{SB}+C_{GS}C_{SB}+C_LC_{GD}+C_LC_{GS}\right)$$ $$b=R_SC_{GD}+\frac{C_{GS}+C_{SB}+C_L}{g_m}$$<p>수업에서는 이 전달함수의 유도 대신 결과를 사용했어요. $R_S=200\,\Omega$, $1/g_m=150\,\Omega$, $C_L=100\,\mathrm{fF}$, $C_{GS}=250\,\mathrm{fF}$, $C_{GD}=80\,\mathrm{fF}$, $C_{DB}=100\,\mathrm{fF}$, $\lambda=0$인 예제에서 슬라이드는 두 복소 극점을 다음과 같이 제시해요. 드레인은 교류 접지이므로 $C_{DB}$ 양단이 접지에 놓여 응답에 기여하지 않아요. 슬라이드에는 $C_{SB}$ 수치가 명시되지 않아 이 극점의 수치 재현에는 추가 조건이 필요해요.</p>$$p_{1,2}=2\pi(-1.79\pm j2.57)\times10^9\ \mathrm{rad/s}$$<p>다만 이 값은 위 계수와 인쇄된 조건으로 재현되지 않아요. 예를 들어 미기재 $C_{SB}$를 100 fF로 가정하면 위 전달함수에서 $p_{1,2}\approx2\pi(-2.58\pm j1.78)\times10^9\ \mathrm{rad/s}$예요. 이 가정은 슬라이드에 인쇄된 값이 아니며, 슬라이드 결과의 조건에는 추가 확인이 필요해요.</p><p>소스 팔로워는 보통 CS보다, 이미터 팔로워는 CE보다 넓은 대역폭을 제공해요. 구체적인 대역폭은 소자와 부하 조건에 달려요.</p></div><div class="layer prof"><span class="layer-title">교수님 말씀</span><blockquote>“전달 함수를 구해서 ... 커먼 소스 구조보다는 상대적으로 밴드위스가 상당히 크다.”</blockquote></div><div class="sum" hidden><p class="sum-lead">큰 부유 커패시터가 입출력을 결합하므로 팔로워 극점은 직접 전달함수로 살펴봐요.</p><p class="panel-label">핵심 식</p><ul class="eq-list"><li><span class="eq-name">소스 팔로워 전달함수</span>$$H(s)=\frac{1+sC_{GS}/g_m}{1+bs+as^2}$$</li></ul></div></article>
+<article class="topic" id="s2-input-cap"><h3>출력이 따라오면 입력 커패시턴스가 작아진다</h3><div class="tags"><span class="tag date">1030 수업</span><span class="tag slide">L05 s44</span></div><div class="layer eli5"><span class="layer-title">쉽게 말하면</span><p class="lead">출력이 입력을 따라가면 두 단자 사이 전압 차가 줄어 입력 커패시턴스가 작아져요.</p><p>예를 들어 출력이 입력의 90%를 따라가면 그 커패시터의 입력 기여는 원래의 10%예요.</p><figure class="figure"><svg id="fig-s2-input-cap" viewBox="0 0 720 120" role="img" aria-label="두 단자의 변화가 비슷할수록 전압 차가 작아요."><rect class="fig-ink" x="10" y="30" width="180" height="55" rx="8"/><text class="fig-text" x="100" y="62" text-anchor="middle">입력 변화 100%</text><path class="fig-accent" d="M190 58 H250 M240 51 L250 58 L240 65"/><rect class="fig-ink" x="260" y="30" width="190" height="55" rx="8"/><text class="fig-text" x="355" y="62" text-anchor="middle">출력 변화 90%</text><path class="fig-accent" d="M450 58 H510 M500 51 L510 58 L500 65"/><rect class="fig-ink" x="520" y="30" width="190" height="55" rx="8"/><text class="fig-text" x="615" y="62" text-anchor="middle">단자 차이 10%</text></svg><figcaption>두 단자의 변화가 비슷할수록 전압 차가 작아요.</figcaption></figure></div><div class="layer formal"><span class="layer-title">정확히 말하면</span><p>게이트와 드레인 사이 $C_{GD}$는 드레인이 교류 접지라 입력에서 접지로 보이고, $C_{GS}$는 입력과 출력 사이에 있어요. $r_O$와 몸체 효과를 무시하고 소스의 저항 부하를 $R_L$로 둬요. 입력은 게이트 전압, 출력은 소스 전압이에요. 저주파에서 커패시터를 열어 놓고 아래 두 조건으로 이득을 구해요.</p>
+<figure class="figure"><svg id="fig-s2-gm-measure" viewBox="0 0 640 220" role="img" aria-label="출력 단락 소스 팔로워 등가회로: 입력으로 제어된 전류원이 출력 노드에 전류를 공급하고 부하 및 출력 단락이 접지로 연결된다"><path class="fig-ink" d="M90 115 H155 M250 115 H420 M420 115 H540 V165 M540 165 V178 M525 178 H555 M530 185 H550 M535 192 H545 M250 115 V82 M250 42 V20 M235 20 H265 M240 13 H260 M245 6 H255 M420 115 V133 M405 133 L435 133 L435 167 L405 167 Z M420 167 V180 M405 180 H435 M410 187 H430 M415 194 H425"/><circle class="fig-ink" cx="250" cy="62" r="20"/><path class="fig-ink" d="M250 50 V73 M244 67 L250 73 L256 67"/><circle class="fig-dot" data-node="input" cx="90" cy="115" r="4" style="fill:#2563eb"/><circle class="fig-dot" data-node="short-output" cx="250" cy="115" r="4" style="fill:#dc2626"/><circle class="fig-dot" data-node="short-output" cx="420" cy="115" r="4" style="fill:#dc2626"/><circle class="fig-dot" data-node="short-output" cx="540" cy="115" r="4" style="fill:#dc2626"/><path class="fig-accent" d="M460 103 H500 M492 96 L500 103 L492 110"/><text class="fig-text fig-math" data-node="input" style="fill:#2563eb" x="70" y="95">v<tspan baseline-shift="sub" font-size="78%">in</tspan> (+)</text><text class="fig-text" x="30" y="145">입력 포트</text><text class="fig-text fig-math" data-node="short-output" style="fill:#dc2626" x="515" y="80">v<tspan baseline-shift="sub" font-size="78%">out</tspan> = 0</text><text class="fig-text fig-math" x="275" y="66">g<tspan baseline-shift="sub" font-size="78%">m</tspan>v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><text class="fig-text fig-math" x="445" y="155">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text><text class="fig-text fig-math" x="470" y="91">i<tspan baseline-shift="sub" font-size="78%">out</tspan></text></svg><figcaption>왼쪽은 접지 기준 제어 입력 포트이고, 제어 전류원은 그 전압에 비례해요. 출력을 접지에 단락하면 소스 전압이 0이고 단락 출력전류는 오른쪽으로 흘러요.</figcaption></figure>
+<p>출력 단락에서는 $v_{gs}=v_{in}$이고 부하 전압도 0이므로 $i_{out}=g_mv_{in}$이에요. 전류를 단락으로 나가는 방향으로 정의하면 $G_m=-i_{out}/v_{in}=-g_m$이에요.</p>
+<figure class="figure"><svg id="fig-s2-rout-measure" viewBox="0 0 640 260" role="img" aria-label="입력 게이트를 접지한 소스 팔로워에서 드레인도 교류 접지하고 소스 출력에 부하와 시험 전압을 연결한다. 시험 전류는 오른쪽에서 왼쪽으로 흐른다."><path class="fig-ink" d="M195 80 V145 M215 80 V145 M215 93 H235 V48 M220 48 H250 M225 41 H245 M230 34 H240 M215 132 H235 V180 H560 M195 112 H135 V198 M120 198 H150 M125 205 H145 M130 212 H140 M360 180 V198 M345 198 H375 V228 H345 Z M360 228 V238 M345 238 H375 M350 245 H370 M355 252 H365"/><circle class="fig-dot" data-node="test-output" cx="235" cy="180" r="4" style="fill:#dc2626"/><circle class="fig-dot" data-node="test-output" cx="360" cy="180" r="4" style="fill:#dc2626"/><circle class="fig-dot" data-node="test-output" cx="560" cy="180" r="4" style="fill:#dc2626"/><path class="fig-ink" d="M510 168 H465 M473 161 L465 168 L473 175"/><text class="fig-text fig-math" x="381" y="219">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text><text class="fig-text fig-math" data-node="test-output" style="fill:#dc2626" x="540" y="153">V<tspan baseline-shift="sub" font-size="78%">t</tspan> (+)</text><text class="fig-text fig-math" x="475" y="198">i<tspan baseline-shift="sub" font-size="78%">t</tspan></text><text class="fig-text fig-math" x="90" y="101">v<tspan baseline-shift="sub" font-size="78%">in</tspan> = 0</text></svg><figcaption>게이트 입력과 드레인을 교류 접지하고 소스 출력의 끝점에 시험 전압을 걸어요.</figcaption></figure>
+<p>입력을 교류 접지하면 소스에서 트랜지스터 쪽으로 본 저항이 $1/g_m$이고, 같은 출력에서 부하 $R_L$과 병렬이에요. 따라서 $i_t=V_t(g_m+1/R_L)$이고</p>$$R_{out}=\frac{V_t}{i_t}\approx\frac{1}{g_m}\parallel R_L$$<p>위 방향으로 정의한 $G_m$과 부하를 포함한 $R_{out}$을 곱하면</p>$$A_v=-G_mR_{out}\approx g_m\left(\frac{1}{g_m}\parallel R_L\right)=\frac{g_mR_L}{1+g_mR_L}$$<p>입력과 출력 사이의 전압 차는 $v_{in}-v_{out}=(1-A_v)v_{in}$이므로 저주파 이득을 이용한 밀러 근사에서 $C_{GS}$의 입력 기여가 $(1-A_v)C_{GS}$가 돼요. $A_v=0.9$라면 그 기여는 $0.1C_{GS}$예요.</p>$$C_{in}\approx C_{GD}+\frac{C_{GS}}{1+g_mR_L}$$<p>이 범위에서 $Z_{in}\approx1/(sC_{in})$예요. 실제 이득은 주파수에 따라 달라지므로 이 식은 전체 주파수에 대한 정확한 입력 임피던스가 아니에요. $R_L$이 커져 이득이 1에 가까워질수록 $C_{GS}$ 기여가 줄어요. 다른 조건이 비슷하면 CS의 밀러 증배보다 입력 커패시턴스가 작아 높은 주파수에서 입력 임피던스가 더 클 수 있어요.</p></div><div class="layer prof"><span class="layer-title">교수님 말씀</span><blockquote>“입력 쪽으로 보이는 등가 커패시턴스가 ... 감소돼요.”</blockquote></div><div class="sum" hidden><p class="sum-lead">출력이 따라올수록 입력에서 보이는 $C_{GS}$의 기여가 줄어요.</p><p class="panel-label">핵심 식</p><ul class="eq-list"><li><span class="eq-name">저주파 이득을 쓴 근사</span>$$C_{in}\approx C_{GD}+\frac{C_{GS}}{1+g_mR_L}$$</li></ul><p>$r_O$와 몸체 효과를 무시한 저항 부하 모델이에요.</p></div></article>
+<article class="topic" id="s2-loads"><h3>전류원 부하와 이미터 팔로워</h3><div class="tags"><span class="tag date">1030 수업</span><span class="tag slide">L05 s45–46</span></div><div class="layer eli5"><span class="layer-title">쉽게 말하면</span><p class="lead">부하가 바뀌면 출력이 따라가는 정도도 바뀌어 입력 커패시턴스가 달라져요.</p><p>전류원 부하에서는 두 출력저항을 병렬로 합쳐 부하로 봐요.</p><figure class="figure"><svg id="fig-s2-loads" viewBox="0 0 720 120" role="img" aria-label="소스 노드에서 보이는 부하를 바꿔 같은 관계에 넣어요."><rect class="fig-ink" x="10" y="30" width="180" height="55" rx="8"/><text class="fig-text" x="100" y="62" text-anchor="middle">저항 부하</text><path class="fig-accent" d="M190 58 H250 M240 51 L250 58 L240 65"/><rect class="fig-ink" x="260" y="30" width="190" height="55" rx="8"/><text class="fig-text" x="355" y="62" text-anchor="middle">출력저항 병렬</text><path class="fig-accent" d="M450 58 H510 M500 51 L510 58 L500 65"/><rect class="fig-ink" x="520" y="30" width="190" height="55" rx="8"/><text class="fig-text" x="615" y="62" text-anchor="middle">입력 기여 계산</text></svg><figcaption>소스 노드에서 보이는 부하를 바꿔 같은 관계에 넣어요.</figcaption></figure></div><div class="layer formal"><span class="layer-title">정확히 말하면</span><p>전류원으로 바이어스한 소스 팔로워에서는 소스 쪽 유효 부하가 $r_{O1}\parallel r_{O2}$예요. $r_{O1}$은 팔로워 트랜지스터의 출력저항, $r_{O2}$는 전류원 트랜지스터의 출력저항이에요. 몸체 효과를 무시한 저주파 이득 근사에서</p>$$C_{in}\approx C_{GD1}+\frac{C_{GS1}}{1+g_{m1}(r_{O1}\parallel r_{O2})}$$<p>예를 들어 두 출력저항이 각각 $20\,\mathrm{k}\Omega$라면 유효 부하는 $10\,\mathrm{k}\Omega$예요. $g_{m1}=1\,\mathrm{mS}$이면 $C_{GS1}$ 기여는 $C_{GS1}/11$이에요.</p><p>이미터 팔로워는 대응하는 커패시터가 $C_\pi$와 $C_\mu$예요. 큰 $\beta$와 $r_O$ 무시 근사로 $C_{in}\approx C_\mu+C_\pi/(1+g_mR_L)$를 얻어요. $r_\pi$는 베이스와 움직이는 이미터 사이에 있으므로 입력에서 접지에 바로 병렬인 저항으로 단정하면 안 돼요. 유한 $r_\pi$가 중요하면 입력과 이미터 양쪽 전압을 함께 고려해요.</p></div><div class="layer prof"><span class="layer-title">교수님 말씀</span><blockquote>“정확하게는 두 개가 이제 바로 병렬연결이 아니고 ...”</blockquote></div><div class="sum" hidden><p class="sum-lead">전류원 부하의 두 출력저항을 병렬로 넣어 입력 커패시턴스를 근사해요.</p><p class="panel-label">핵심 식</p><ul class="eq-list"><li><span class="eq-name">전류원 부하</span>$$C_{in}\approx C_{GD1}+\frac{C_{GS1}}{1+g_{m1}(r_{O1}\parallel r_{O2})}$$</li></ul><p>이미터 팔로워의 $r_\pi$는 베이스와 이미터 사이에 있어요.</p></div></article>
+    </section>
+    <section id="s3"><h2>4. 요약 · 예고</h2>
+<article class="topic" id="s3-cheatsheet"><h3>한눈에 정리</h3><div class="tags"><span class="tag date">1030 수업</span><span class="tag slide">L05 s35–46</span></div>
+<p>이 식들은 표시된 소신호 모델과 근사 조건에서 사용해요.</p>
+<div class="table-wrap"><table><thead><tr><th>구조와 핵심 판단</th></tr></thead><tbody>
+<tr><td><strong>CS</strong><div>$C_{in}\approx C_{GS}+(1+g_mR_D)C_{GD}$</div><div>저주파 반전 이득을 쓴 밀러 근사예요. 주파수가 올라가면 입력 임피던스가 낮아져요.</div></td></tr>
+<tr><td><strong>CE</strong><div>$Z_{in}\approx r_\pi\parallel\dfrac{1}{s[C_\pi+(1+g_mR_C)C_\mu]}$</div><div>밀러 등가 커패시턴스에 $r_\pi$가 병렬이에요.</div></td></tr>
+<tr><td><strong>CG</strong><div>$R_X\approx R_S\parallel(1/g_m)$, $C_X=C_{GS}+C_{SB}$</div><div>게이트가 AC 접지라 입력과 출력 사이에 밀러 커패시터가 없어요. 낮은 입력 저항은 전압 입력에 불리해요.</div></td></tr>
+<tr><td><strong>CB</strong><div>$C_X=C_\pi$, $C_Y=C_\mu+C_{CS}$</div><div>베이스가 AC 접지여서 같은 방식으로 밀러 효과를 피합니다.</div></td></tr>
+<tr><td><strong>소스 팔로워</strong><div>$C_{in}\approx C_{GD}+\dfrac{C_{GS}}{1+g_mR_L}$</div><div>저주파 이득으로 구한 근사예요. 출력이 입력을 따라가면 $C_{GS}$의 입력 등가가 작아져요.</div></td></tr>
+<tr><td><strong>이미터 팔로워</strong><div>$C_{in}\approx C_\mu+\dfrac{C_\pi}{1+g_mR_L}$</div><div>입력의 $r_\pi$는 베이스와 이미터 사이에 있어 단순 접지 병렬로 두지 않아요.</div></td></tr>
+</tbody></table></div>
+<p>CG와 CB의 각 극점 크기는 해당 노드의 등가 저항과 용량의 곱의 역수로 근사해요. 입력 저항과 출력 저항 모델 및 다른 소자들의 영향을 무시할 수 있는 조건을 확인해요.</p></article>
+<article class="topic" id="s3-next"><h3>다음 시간 예고</h3><ul><li>팔로워 출력 임피던스의 주파수 응답</li><li>캐스코드의 세 극점</li></ul></article>
+<article class="topic" id="s3-links"><h3>함께 보면 좋은 자료</h3><ul><li><a href="../1028/정리노트_1028_CS_Stage_Frequency_Response.html">이전 정리노트: CS 주파수 응답</a></li><li><a href="복습문제_1030_CG_CB_and_Follower_Frequency_Response-문제.pdf">복습문제 4개 (PDF)</a></li><li><a href="복습문제_1030_CG_CB_and_Follower_Frequency_Response-답안.pdf">답안 (PDF)</a></li></ul></article>
+    </section>
+  </main>
+  <footer>출처: 권익진 교수님 강의자료(Lec5) · 수업 녹음 전사(1030) · B. Razavi, <i>Microelectronics</i>, 2nd ed. (Wiley) 11장.</footer>
+    </div>
+    <aside class="panel panel-right" id="panel-right" aria-labelledby="panel-right-title">
+      <div class="panel-resize" data-side="right" role="separator" aria-orientation="vertical" aria-controls="panel-right" aria-label="오른쪽 패널 너비 조절. 좌우 화살표로 조절, Home으로 자동 너비" tabindex="0"></div>
+      <div class="panel-inner">
+        <div class="panel-head">
+          <h2 id="panel-right-title">페이지 요약</h2>
+          <button class="text-btn panel-close" type="button" data-panel-close>닫기</button>
+        </div>
+        <p class="panel-empty" id="sum-empty">페이지를 넘기면 그 페이지의 핵심 식과 용어가 여기에 나옵니다.</p>
+        <div class="sums" id="sum-for"></div>
+      </div>
+    </aside>
+  </div>
+  <div class="scrim" id="panel-scrim" aria-hidden="true"></div>
+  <nav class="pager" aria-label="화면 이동">
+    <div class="pager-inner">
+      <button class="btn btn-ghost" id="pager-prev" type="button">이전</button>
+      <span class="pager-count" id="pager-count"></span>
+      <button class="btn btn-primary" id="pager-next" type="button">시작하기</button>
+    </div>
+  </nav>
+  <p class="sr-only" id="pager-status" aria-live="polite"></p>
+
+  <script id="theme-ui">
+    (function () {
+      const root = document.documentElement;
+      const btn = document.getElementById('theme-toggle');
+      const sysDark = matchMedia('(prefers-color-scheme: dark)');
+      const KEY = 'od-theme';
+      const isDark = () => root.dataset.theme ? root.dataset.theme === 'dark' : sysDark.matches;
+      function label() {
+        const next = isDark() ? '라이트 모드로 전환' : '다크 모드로 전환';
+        btn.setAttribute('aria-label', next);
+        btn.title = next;
+      }
+      btn.addEventListener('click', () => {
+        const t = isDark() ? 'light' : 'dark';
+        // 시스템 설정과 같아지면 저장을 지워 다시 시스템을 따른다
+        if ((t === 'dark') === sysDark.matches) { delete root.dataset.theme; try { localStorage.removeItem(KEY); } catch (e) {} }
+        else { root.dataset.theme = t; try { localStorage.setItem(KEY, t); } catch (e) { /* 저장 불가: 이번 방문에만 유지 */ } }
+        label();
+      });
+      sysDark.addEventListener('change', label);
+      window.addEventListener('storage', (e) => {
+        if (e.key !== KEY) return;
+        if (e.newValue === 'light' || e.newValue === 'dark') root.dataset.theme = e.newValue; else delete root.dataset.theme;
+        label();
+      });
+      label();
+    })();
+  </script>
+  <script id="panels-ui">
+    (function () {
+      const body = document.body;
+      const layout = document.querySelector('.layout');
+      const kind = body.dataset.panels;
+      const panels = { left: document.getElementById('panel-left'), right: document.getElementById('panel-right') };
+      const toggles = { left: document.getElementById('toggle-left'), right: document.getElementById('toggle-right') };
+      const scrim = document.getElementById('panel-scrim');
+      const blockers = [document.querySelector('.topbar'), document.querySelector('.content'), document.querySelector('.pager')];
+      const wideMq = matchMedia('(min-width: 1024px)');
+      const roomyMq = matchMedia('(min-width: 1280px)');
+      const store = {
+        get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+        set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* 저장 불가: 이번 방문에만 유지 */ } }
+      };
+      const PREF = 'od-panels:' + kind;
+      // 팩마다 문제·토픽 id가 p1, s1-…로 겹치므로 진행 기록은 기간별로 나눈다
+      const RANGE = body.dataset.range || '';
+      const ICON_TODO = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg>';
+      const ICON_DONE = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 10"/></svg>';
+      let overlay = null;
+
+      // ---------- 열고 닫기 ----------
+      function docked() {
+        const pref = store.get(PREF, {});
+        return { left: pref.left ?? true, right: pref.right ?? roomyMq.matches };
+      }
+      function sync() {
+        const wide = wideMq.matches;
+        const d = docked();
+        ['left', 'right'].forEach((side) => {
+          const open = wide ? d[side] : overlay === side;
+          const p = panels[side];
+          layout.dataset[side] = open ? 'open' : 'closed';
+          p.classList.toggle('is-open', !wide && open);
+          p.inert = !open;
+          if (!wide && open) { p.setAttribute('role', 'dialog'); p.setAttribute('aria-modal', 'true'); }
+          else { p.removeAttribute('role'); p.removeAttribute('aria-modal'); }
+          toggles[side].setAttribute('aria-expanded', String(open));
+        });
+        const drawer = !wide && overlay !== null;
+        scrim.classList.toggle('is-on', drawer);
+        body.classList.toggle('drawer-open', drawer);
+        blockers.forEach((el) => { el.inert = drawer; });
+      }
+      function openDrawer(side) {
+        overlay = side;
+        sync();
+        requestAnimationFrame(() => panels[side].querySelector('[data-panel-close]').focus());
+      }
+      function closeDrawer(refocus) {
+        if (overlay === null) return;
+        const side = overlay;
+        overlay = null;
+        sync();
+        if (refocus) toggles[side].focus();
+      }
+      function toggle(side) {
+        if (wideMq.matches) {
+          const d = docked();
+          d[side] = !d[side];
+          store.set(PREF, d);
+          sync();
+          if (d[side]) { const p = panels[side]; p.classList.remove('is-shown'); void p.offsetWidth; p.classList.add('is-shown'); }
+        } else if (overlay === side) closeDrawer(true);
+        else openDrawer(side);
+      }
+
+      toggles.left.addEventListener('click', () => toggle('left'));
+      toggles.right.addEventListener('click', () => toggle('right'));
+      scrim.addEventListener('click', () => closeDrawer(true));
+      document.querySelectorAll('[data-panel-close]').forEach((b) => b.addEventListener('click', () => closeDrawer(true)));
+      panels.left.addEventListener('click', (e) => { if (e.target.closest('.toc a')) closeDrawer(false); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && overlay !== null) { e.preventDefault(); closeDrawer(true); } });
+
+      // ---------- 패널 너비: 기본은 화면 폭에 맞춰 자동, 경계를 끌면 직접 조절 ----------
+      const WIDTH = { left: { min: 220, max: 480, prop: '--panel-l-user' }, right: { min: 280, max: 720, prop: '--panel-r-user' } };
+      function applyWidths() {
+        const w = store.get(PREF + ':w', {});
+        ['left', 'right'].forEach((side) => {
+          if (w[side]) layout.style.setProperty(WIDTH[side].prop, w[side] + 'px');
+          else layout.style.removeProperty(WIDTH[side].prop);
+        });
+      }
+      function maxFor(side) {
+        const other = side === 'left' ? panels.right : panels.left;
+        const otherW = layout.dataset[side === 'left' ? 'right' : 'left'] === 'open' ? other.getBoundingClientRect().width : 0;
+        return Math.max(WIDTH[side].min, Math.min(WIDTH[side].max, window.innerWidth - otherW - 400));
+      }
+      function setWidth(side, px, save) {
+        const v = Math.round(Math.min(Math.max(px, WIDTH[side].min), maxFor(side)));
+        layout.style.setProperty(WIDTH[side].prop, v + 'px');
+        panels[side].querySelector('.panel-resize').setAttribute('aria-valuenow', String(v));
+        if (save) { const w = store.get(PREF + ':w', {}); w[side] = v; store.set(PREF + ':w', w); }
+      }
+      function resetWidth(side) {
+        const w = store.get(PREF + ':w', {});
+        delete w[side];
+        store.set(PREF + ':w', w);
+        layout.style.removeProperty(WIDTH[side].prop);
+      }
+      document.querySelectorAll('.panel-resize').forEach((handle) => {
+        const side = handle.dataset.side;
+        const dir = side === 'left' ? 1 : -1;
+        handle.setAttribute('aria-valuemin', String(WIDTH[side].min));
+        handle.setAttribute('aria-valuemax', String(WIDTH[side].max));
+        handle.addEventListener('pointerdown', (e) => {
+          if (!wideMq.matches || e.button !== 0) return;
+          e.preventDefault();
+          const startX = e.clientX;
+          const startW = panels[side].getBoundingClientRect().width;
+          handle.setPointerCapture(e.pointerId);
+          body.classList.add('is-resizing');
+          const move = (ev) => setWidth(side, startW + dir * (ev.clientX - startX), false);
+          const up = () => {
+            handle.removeEventListener('pointermove', move);
+            handle.removeEventListener('pointerup', up);
+            handle.removeEventListener('pointercancel', up);
+            body.classList.remove('is-resizing');
+            setWidth(side, panels[side].getBoundingClientRect().width, true);
+          };
+          handle.addEventListener('pointermove', move);
+          handle.addEventListener('pointerup', up);
+          handle.addEventListener('pointercancel', up);
+        });
+        handle.addEventListener('dblclick', () => resetWidth(side));
+        handle.addEventListener('keydown', (e) => {
+          const step = e.shiftKey ? 64 : 16;
+          const cur = panels[side].getBoundingClientRect().width;
+          if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+            e.preventDefault();
+            e.stopPropagation();
+            setWidth(side, cur + (e.key === 'ArrowRight' ? step : -step) * dir, true);
+          } else if (e.key === 'Home') { e.preventDefault(); resetWidth(side); }
+        });
+      });
+      applyWidths();
+      const onMq = () => { overlay = null; sync(); };
+      wideMq.addEventListener('change', onMq);
+      roomyMq.addEventListener('change', onMq);
+
+      // ---------- 목차의 진행 표시 ----------
+      const progressN = document.getElementById('progress-n');
+      const progressBar = document.getElementById('progress-bar');
+      const progressTotal = document.getElementById('progress-total');
+      function markToc(done, total, doneLabel) {
+        panels.left.querySelectorAll('.toc-list a').forEach((a) => {
+          const id = decodeURIComponent(a.getAttribute('href').slice(1));
+          let mark = a.querySelector('.toc-mark');
+          if (!mark) {
+            mark = document.createElement('span');
+            mark.className = 'toc-mark';
+            mark.setAttribute('aria-hidden', 'true');
+            const state = document.createElement('span');
+            state.className = 'sr-only toc-state';
+            a.append(mark, state);
+          }
+          const isDone = done.has(id);
+          mark.classList.toggle('is-done', isDone);
+          mark.innerHTML = isDone ? ICON_DONE : ICON_TODO;
+          a.querySelector('.toc-state').textContent = isDone ? ' (' + doneLabel + ')' : '';
+        });
+        progressN.textContent = String(done.size);
+        progressTotal.textContent = String(total);
+        progressBar.style.transform = 'scaleX(' + (total ? done.size / total : 0) + ')';
+      }
+      function revealCurrent() {
+        const link = panels.left.querySelector('.toc-list a[aria-current="true"]');
+        if (link && layout.dataset.left === 'open') link.scrollIntoView({ block: 'nearest' });
+      }
+
+      // ---------- 복습문제: 오른쪽 = 원문 · 힌트 · 풀이 ----------
+      function setupReview() {
+        const KEY = 'od-review-solved:' + RANGE;
+        const cards = Array.from(document.querySelectorAll('main article.card'));
+        const aids = panels.right.querySelector('.aids');
+        const empty = panels.right.querySelector('.panel-empty');
+        const btn = document.getElementById('solved-btn');
+        const groups = {};
+        const solved = new Set(store.get(KEY, []).filter((id) => cards.some((c) => c.id === id)));
+        cards.forEach((card) => {
+          const g = document.createElement('div');
+          g.className = 'aid';
+          g.hidden = true;
+          card.querySelectorAll(':scope > details').forEach((d) => g.appendChild(d));
+          aids.appendChild(g);
+          groups[card.id] = g;
+        });
+        let curId = null;
+        function paintBtn() {
+          const on = solved.has(curId);
+          btn.setAttribute('aria-pressed', String(on));
+          btn.innerHTML = (on ? ICON_DONE : ICON_TODO) + '<span>' + (on ? '푼 문제 · 표시 해제' : '푼 문제로 표시') + '</span>';
+        }
+        btn.addEventListener('click', () => {
+          if (!curId) return;
+          if (solved.has(curId)) solved.delete(curId); else solved.add(curId);
+          store.set(KEY, Array.from(solved));
+          paintBtn();
+          markToc(solved, cards.length, '푼 문제');
+        });
+        document.addEventListener('od:screen', (e) => {
+          const s = e.detail.screen;
+          curId = s.matches('article.card') ? s.id : null;
+          Object.keys(groups).forEach((id) => { groups[id].hidden = id !== curId; });
+          empty.hidden = Boolean(curId);
+          btn.hidden = !curId;
+          if (curId) paintBtn();
+          panels.right.querySelector('.panel-inner').scrollTop = 0;
+          markToc(solved, cards.length, '푼 문제');
+          revealCurrent();
+        });
+      }
+
+      // ---------- 정리노트: 오른쪽 = 페이지(토픽)별 요약 ----------
+      function setupNote() {
+        const KEY = 'od-note-read:' + RANGE;
+        const topics = Array.from(document.querySelectorAll('main article.topic'));
+        const read = new Set(store.get(KEY, []).filter((id) => topics.some((t) => t.id === id)));
+        // 조각의 <div class="sum" hidden> 을 오른쪽 패널로 옮긴다. 없으면 안내 문구만 보인다.
+        const box = panels.right.querySelector('.sums');
+        const sums = {};
+        topics.forEach((t) => {
+          const el = t.querySelector(':scope > .sum');
+          if (!el) return;
+          el.hidden = true;
+          box.appendChild(el);
+          sums[t.id] = el;
+        });
+        const empty = document.getElementById('sum-empty');
+        document.addEventListener('od:screen', (e) => {
+          const s = e.detail.screen;
+          const key = s.matches('article.topic') ? s.id : 'intro';
+          Object.keys(sums).forEach((id) => { sums[id].hidden = id !== key; });
+          empty.hidden = Boolean(sums[key]);
+          if (s.matches('article.topic') && !read.has(s.id)) { read.add(s.id); store.set(KEY, Array.from(read)); }
+          panels.right.querySelector('.panel-inner').scrollTop = 0;
+          markToc(read, topics.length, '읽음');
+          revealCurrent();
+        });
+      }
+
+      if (kind === 'review') setupReview();
+      if (kind === 'note') setupNote();
+      sync();
+    })();
+  </script>
+  <script id="pager-ui">
+    (function () {
+      const root = document.documentElement;
+      const main = document.querySelector('main');
+      const hero = main.querySelector('.hero');
+      const screens = [hero].concat(Array.from(main.querySelectorAll(document.body.dataset.screens)));
+      if (screens.length < 2) { root.classList.remove('js'); return; }
+      screens.forEach((s) => s.classList.add('screen'));
+
+      const last = screens.length - 1;
+      const prevBtn = document.getElementById('pager-prev');
+      const nextBtn = document.getElementById('pager-next');
+      const count = document.getElementById('pager-count');
+      const bar = document.getElementById('pager-bar');
+      const status = document.getElementById('pager-status');
+      const toc = document.querySelector('#panel-left .toc');
+      const scroller = document.querySelector('.content');
+      const titleOf = (s) => ((s.querySelector('h3') || s.querySelector('h1') || {}).textContent || '').trim();
+      let cur = -1;
+
+      // 목차: 섹션 링크 아래에 화면(토픽·카드) 목록을 붙인다
+      const tocLinks = [];
+      Array.from(toc.querySelectorAll(':scope > a')).forEach((a) => {
+        const sec = document.getElementById(decodeURIComponent(a.getAttribute('href').slice(1)));
+        const group = document.createElement('div');
+        group.className = 'toc-group';
+        a.replaceWith(group);
+        group.appendChild(a);
+        if (!sec) return;
+        const list = document.createElement('ol');
+        list.className = 'toc-list';
+        screens.forEach((s, i) => {
+          if (!sec.contains(s)) return;
+          const li = document.createElement('li');
+          const link = document.createElement('a');
+          link.href = '#' + s.id;
+          link.innerHTML = '<span class="toc-title"></span>';
+          link.firstChild.textContent = titleOf(s);
+          li.appendChild(link);
+          list.appendChild(li);
+          tocLinks[i] = link;
+        });
+        group.appendChild(list);
+      });
+
+      function indexFor(hash) {
+        const id = decodeURIComponent((hash || '').replace(/^#/, ''));
+        const el = id && document.getElementById(id);
+        if (!el || !main.contains(el)) return { i: 0 };
+        const i = screens.findIndex((s) => s.contains(el) || el.contains(s));
+        return { i: Math.max(i, 0), target: i >= 0 && screens[i].contains(el) && screens[i] !== el ? el : null };
+      }
+
+      function render(i, target) {
+        const dir = cur < 0 ? '' : i > cur ? 'enter-next' : 'enter-prev';
+        if (i !== cur) {
+          if (cur >= 0) screens[cur].classList.remove('is-current', 'enter-next', 'enter-prev');
+          main.querySelectorAll(':scope > section.is-on').forEach((sec) => sec.classList.remove('is-on'));
+          const s = screens[i];
+          const sec = s.closest('section');
+          if (sec) sec.classList.add('is-on');
+          s.classList.add('is-current');
+          if (dir) { s.classList.remove('enter-next', 'enter-prev'); void s.offsetWidth; s.classList.add(dir); }
+          cur = i;
+          document.body.classList.toggle('at-end', i === last);
+          prevBtn.disabled = i === 0;
+          nextBtn.textContent = i === 0 ? '시작하기' : i === last ? '처음으로' : '다음';
+          count.textContent = i === 0 ? '' : i + ' / ' + last;
+          bar.style.transform = 'scaleX(' + (i / last) + ')';
+          status.textContent = i === 0 ? titleOf(s) : i + ' / ' + last + ', ' + titleOf(s);
+          tocLinks.forEach((link, k) => link && link.setAttribute('aria-current', String(k === i)));
+          document.dispatchEvent(new CustomEvent('od:screen', { detail: { index: i, screen: s } }));
+        }
+        if (target) target.scrollIntoView({ block: 'start' });
+        else scroller.scrollTo(0, 0);
+      }
+
+      function go(i) {
+        i = Math.min(Math.max(i, 0), last);
+        if (i === cur) return;
+        const url = i === 0 ? location.pathname + location.search : '#' + screens[i].id;
+        history.pushState(null, '', url);
+        render(i);
+      }
+
+      prevBtn.addEventListener('click', () => go(cur - 1));
+      nextBtn.addEventListener('click', () => go(cur === last ? 0 : cur + 1));
+      const fromUrl = () => { const r = indexFor(location.hash); render(r.i, r.target); };
+      window.addEventListener('hashchange', fromUrl);
+      window.addEventListener('popstate', fromUrl);
+
+      document.addEventListener('keydown', (e) => {
+        if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || document.body.classList.contains('drawer-open')) return;
+        if (e.target.closest('input, select, textarea, [contenteditable="true"]')) return;
+        if (e.key === 'ArrowRight') { e.preventDefault(); go(cur + 1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); }
+      });
+
+      // 좌우로 밀어서 넘기기 (가로로 스크롤되는 영역은 제외)
+      let sx = 0, sy = 0, skip = true;
+      main.addEventListener('touchstart', (e) => {
+        const t = e.touches[0];
+        sx = t.clientX; sy = t.clientY;
+        skip = e.touches.length > 1 || Boolean(e.target.closest('.widget, .katex-display, .table-wrap, svg, input, details'));
+      }, { passive: true });
+      main.addEventListener('touchend', (e) => {
+        if (skip) return;
+        const t = e.changedTouches[0];
+        const dx = t.clientX - sx, dy = t.clientY - sy;
+        if (Math.abs(dx) > 64 && Math.abs(dx) > 2 * Math.abs(dy)) go(cur + (dx < 0 ? 1 : -1));
+      }, { passive: true });
+
+      fromUrl();
+    })();
+  </script>
+</body>
+</html>
