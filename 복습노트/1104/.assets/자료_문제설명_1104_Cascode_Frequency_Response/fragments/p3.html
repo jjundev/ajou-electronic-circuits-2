@@ -1,0 +1,109 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 읽어요</h4>
+  <p>이미터 팔로워의 오른쪽 단자에서 회로 안을 들여다봐요. 시험 전류를 흘릴 때 단자 전압이 얼마나 변하는지 보면, 이 단자가 주파수에 따라 전류를 얼마나 쉽게 받아들이는지 알 수 있어요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 개념과 공식을 떠올려요</h4>
+  <p>출력 임피던스(output impedance)는 독립 입력의 소신호를 0으로 만든 뒤, 출력에 건 시험 전압을 회로로 들어가는 시험 전류로 나눈 값이에요. 베이스–컬렉터 사이의 $C_\mu$는 컬렉터가 AC 접지이므로 베이스–접지 커패시터로 그대로 놓아요. 밀러 이득을 따로 구할 필요가 없어요.</p>
+  <p>$r_\pi$는 유한한 베이스 전류를 나타내는 베이스–이미터 저항이고, $C_\pi$는 그 두 단자 사이의 커패시터예요. $g_m$은 $v_\pi=v_b-v_t$를 컬렉터에서 이미터로 향하는 제어 전류 $g_mv_\pi$로 바꾸는 비례 상수예요. $V_A=\infty$ 조건에서 $r_o$ 가지는 열려요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <div data-answer-step="입력 영점의 시험 회로">
+    <p>입력 전압원을 AC 접지로 바꾸고 이상적 바이어스 전류원을 개방해요. 이미터에 $v_t$를 걸고 오른쪽에서 들어가는 $i_t$를 구해요.</p>
+    <figure class="figure">
+      <svg viewBox="0 0 460 200" role="img" aria-label="베이스에서 접지로 R B와 C 뮤가 병렬 연결되고, 베이스와 이미터 사이에 r 파이와 C 파이가 병렬 연결됩니다. 제어 전류원은 접지된 컬렉터에서 이미터 쪽으로 흐릅니다. 오른쪽 시험 단자의 전류는 왼쪽으로 들어갑니다.">
+        <path class="fig-ink" d="M45 123 V106 l-6 -4 l12 -8 l-12 -8 l12 -8 l-6 -4 V60 H145 V112 M94 60 V90 M94 100 V123 M33 123 H57 M37 128 H53 M41 133 H49 M82 123 H106 M86 128 H102 M90 133 H98"/>
+        <path class="fig-ink" d="M145 60 H176 l4 -6 l8 12 l8 -12 l8 12 l8 -12 l4 6 H266 V112 H215 M145 112 H205 M266 60 H426"/>
+        <path class="fig-ink" d="M82 90 H106 M82 100 H106 M205 101 V123 M215 101 V123"/>
+        <path class="fig-ink" d="M325 60 V96 M325 132 V168 M313 168 H337 M317 173 H333 M321 178 H329 M325 125 V103 M320 109 L325 103 L330 109"/>
+        <polygon class="fig-ink" points="325,96 340,114 325,132 310,114"/>
+        <path class="fig-ink" d="M400 60 H365 M371 55 L365 60 L371 65"/>
+        <circle class="fig-dot" data-node="b" data-node-color="blue" cx="145" cy="60" r="3.5"/>
+        <circle class="fig-dot" data-node="b" data-node-color="blue" cx="94" cy="60" r="3.5"/>
+        <circle class="fig-dot" data-node="t" data-node-color="red" cx="266" cy="60" r="3.5"/>
+        <circle class="fig-dot" data-node="t" data-node-color="red" cx="325" cy="60" r="3.5"/>
+        <circle class="fig-dot" data-node="t" data-node-color="red" cx="426" cy="60" r="3.5"/>
+        <text class="fig-text fig-math" x="18" y="92">R<tspan baseline-shift="sub" font-size="78%">B</tspan></text>
+        <text class="fig-text fig-math" x="115" y="99">C<tspan baseline-shift="sub" font-size="78%">μ</tspan></text>
+        <text class="fig-text fig-math" data-node="b" data-node-color="blue" x="145" y="43" text-anchor="middle">v<tspan baseline-shift="sub" font-size="78%">b</tspan></text>
+        <text class="fig-text fig-math" x="197" y="42" text-anchor="middle">r<tspan baseline-shift="sub" font-size="78%">π</tspan></text>
+        <text class="fig-text fig-math" x="210" y="143" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">π</tspan></text>
+        <text class="fig-text fig-math" x="348" y="118">g<tspan baseline-shift="sub" font-size="78%">m</tspan>v<tspan baseline-shift="sub" font-size="78%">π</tspan></text>
+        <text class="fig-text fig-math" x="383" y="84" text-anchor="middle">i<tspan baseline-shift="sub" font-size="78%">t</tspan></text>
+        <text class="fig-text fig-math" data-node="t" data-node-color="red" x="426" y="43" text-anchor="middle">v<tspan baseline-shift="sub" font-size="78%">t</tspan>(+)</text>
+      </svg>
+      <figcaption>$R_B$와 $C_\mu$는 베이스–접지, $r_\pi$와 $C_\pi$는 베이스–이미터에 각각 병렬로 연결돼요.</figcaption>
+    </figure>
+    <p>$$Z_B=R_B\parallel\frac{1}{sC_\mu}=\frac{R_B}{1+sR_BC_\mu}$$</p>
+    <p>$$Z_\pi=r_\pi\parallel\frac{1}{sC_\pi}=\frac{r_\pi}{1+sr_\pi C_\pi}$$</p>
+  </div>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>이렇게 풀어요</h4>
+  <div data-subpart="main">
+    <p>베이스에서 이미터로 향하는 전류는 $v_\pi/Z_\pi$예요. 베이스에서 접지로 나가는 전류와 더하면 0이므로 $v_b$를 $v_\pi$로 나타낼 수 있어요.</p>
+    <div data-answer-step="시험 전압과 전류의 비">
+      <p>$$\frac{v_b}{Z_B}+\frac{v_\pi}{Z_\pi}=0$$</p>
+      <p>$$v_t=v_b-v_\pi=-\left(1+\frac{Z_B}{Z_\pi}\right)v_\pi$$</p>
+      <p>이미터에서는 시험 전류와 제어 전류의 합이 베이스 쪽으로 흘러요.</p>
+      <p>$$i_t+g_mv_\pi=-\frac{v_\pi}{Z_\pi}$$</p>
+      <p>$$Z_{out}(s)=\frac{v_t}{i_t}=\frac{Z_B+Z_\pi}{1+g_mZ_\pi}$$</p>
+    </div>
+    <p>두 식의 $v_\pi$가 소거돼요. $Z_B$와 $Z_\pi$를 대입하고 분자와 분모에 $(1+sR_BC_\mu)(1+sr_\pi C_\pi)$를 곱하면, $\beta=g_mr_\pi$로 정리할 수 있어요.</p>
+    <div data-answer-step="보드선도의 꺾임 주파수">
+      <p>분자의 1차항은 영점 하나, 분모의 두 인수는 극점 두 개를 만들어요.</p>
+      <p>$$\omega_z=\frac{1}{(R_B\parallel r_\pi)(C_\pi+C_\mu)}$$</p>
+      <p>$$\omega_B=\frac{1}{R_BC_\mu}$$</p>
+      <p>$$\omega_\pi=\frac{\beta+1}{r_\pi C_\pi}$$</p>
+    </div>
+    <p>보드선도(Bode plot)에서 영점은 기울기에 $+20\,\mathrm{dB/dec}$, 각 극점은 $-20\,\mathrm{dB/dec}$를 더해요. $R_B&gt;1/g_m$이면 $\omega_z&lt;\omega_\pi$이고, $R_BC_\mu&lt;r_\pi C_\pi$이면 $\omega_z&lt;\omega_B$예요. 두 조건을 만족하면 영점이 두 극점보다 먼저 와요.</p>
+    <p>극점 하나가 영점보다 낮으면 저주파의 평탄한 구간 뒤에 하강, 평탄, 하강 순으로 바뀌어요. $\omega_z$는 두 극점보다 모두 높을 수 없어요. $\omega_B&lt;\omega_z$이면 $R_BC_\mu&gt;r_\pi C_\pi$이고, 이 경우 $R_B[\beta C_\pi+(\beta+1)C_\mu]&gt;r_\pi C_\pi$여서 $\omega_z&lt;\omega_\pi$예요. 영점과 극점이 같으면 서로 상쇄되고 두 극점이 같으면 그 자리에서 기울기가 한꺼번에 $40\,\mathrm{dB/dec}$ 줄어요.</p>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <div data-answer-final="출력 임피던스와 크기 스케치">
+      <p><strong>출력 임피던스</strong>는 $V_A=\infty$이고 이상적 바이어스 전류원을 쓸 때 다음과 같아요.</p>
+      <p>$$Z_{out}(s)=\frac{r_\pi+R_B+r_\pi R_B(C_\pi+C_\mu)s}{(1+R_BC_\mu s)(\beta+1+r_\pi C_\pi s)}$$</p>
+      <p>$$Z_{out}(0)=\frac{r_\pi+R_B}{\beta+1}$$</p>
+      <figure class="figure">
+        <svg viewBox="0 0 460 180" role="img" aria-label="영점이 두 극점보다 낮을 때 보드 크기 선도는 저주파 평탄, 영점 이후 상승, 첫 극점 이후 평탄, 둘째 극점 이후 하강합니다.">
+          <path class="fig-ink" d="M58 24 V148 H429 M53 31 L58 24 L63 31 M421 143 L429 148 L421 153 M127 144 V152 M218 144 V152 M310 144 V152"/>
+          <path class="fig-ink" stroke-dasharray="3 4" d="M127 109 V140 M218 51 V140 M310 51 V140"/>
+          <path class="fig-accent" d="M58 109 H127 L218 51 H310 L406 112"/>
+          <text class="fig-text fig-math" x="59" y="17">20 log<tspan baseline-shift="sub" font-size="78%">10</tspan>(|Z<tspan baseline-shift="sub" font-size="78%">out</tspan>| / Ω)</text>
+          <text class="fig-text" x="173" y="55" text-anchor="middle">+20</text>
+          <text class="fig-text" x="366" y="68">−20</text>
+          <text class="fig-text fig-math" x="127" y="168" text-anchor="middle">ω<tspan baseline-shift="sub" font-size="78%">z</tspan></text>
+          <text class="fig-text" x="218" y="168" text-anchor="middle">첫 극점</text>
+          <text class="fig-text" x="310" y="168" text-anchor="middle">둘째 극점</text>
+          <text class="fig-text fig-math" x="430" y="168" text-anchor="end">log ω</text>
+        </svg>
+        <figcaption>영점이 먼저 오는 경우의 점근선이에요. 두 극점의 순서는 $\omega_B$와 $\omega_\pi$ 중 작은 값부터이며, 표기한 기울기의 단위는 $\mathrm{dB/dec}$예요.</figcaption>
+      </figure>
+      <p>극점 하나가 영점보다 낮으면 첫 극점, 영점, 둘째 극점을 차례로 지나면서 기울기가 $0,-20,0,-20\,\mathrm{dB/dec}$로 바뀌어요. 주파수가 충분히 높으면 $|Z_{out}|\sim1/(\omega C_s)$이고 $C_s=C_\pi C_\mu/(C_\pi+C_\mu)$예요.</p>
+    </div>
+    <p>$s=0$이면 두 커패시터가 열려서 $R_B$와 $r_\pi$가 남아요. 이때 $r_\pi/(\beta+1)$은 $\beta$가 충분히 크면 $1/g_m$에 가까워져요.</p>
+    <p>높은 주파수에서는 이미터에서 $C_\pi$를 지나 베이스에 도달한 뒤 $C_\mu$를 지나 접지로 가는 경로가 지배해요. 두 커패시터의 임피던스 합 $1/(sC_\pi)+1/(sC_\mu)$는 최종 식에서 분자·분모의 최고차항만 남겼을 때와 같아요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>주의할 점</h4>
+  <p>$C_\pi$와 $C_\mu$의 직렬 합성은 고주파 극한에서 써요. 그 전에는 두 커패시터가 공유하는 베이스 노드에 $R_B$도 연결되어 있어요.</p>
+  <p>상승 구간을 그리기 전에 영점과 두 극점을 비교해요. 각 꺾임의 단위는 $\mathrm{rad/s}$이며, $\mathrm{Hz}$로 그리려면 $2\pi$로 나눠요.</p>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>조건을 바꾸어 생각해요</h4>
+  <ol><li>$R_B$를 0으로 바꾸면 $C_\mu$의 두 단자 전압은 어떻게 되나요? 그때 이미터에서 본 $Z_{out}(s)$를 한 줄로 쓰고, 기울기가 바뀌는 주파수를 표시해 보세요.</li></ol>
+</div>
+<div class="sum" hidden>
+  <p class="sum-lead">입력을 0으로 두면 $C_\mu$는 $R_B$와 병렬로 보여요.</p>
+  $$Z_{out}=\frac{Z_B+Z_\pi}{1+g_mZ_\pi}$$
+  $$Z_{out}(0)=\frac{R_B+r_\pi}{\beta+1}$$
+  <p>저주파에서는 $Z_{out}(0)$에서 평탄해요.</p>
+  <p>영점이 먼저면 기울기는 $+20,0,-20\,\mathrm{dB/dec}$ 순서로 바뀌어요.</p>
+  <p>극점이 먼저면 첫 극점, 영점, 둘째 극점에서 기울기가 $-20,0,-20\,\mathrm{dB/dec}$로 바뀌어요.</p>
+  <p>고주파에서는 $C_\pi$와 $C_\mu$의 직렬 경로가 지배해요.</p>
+</div>

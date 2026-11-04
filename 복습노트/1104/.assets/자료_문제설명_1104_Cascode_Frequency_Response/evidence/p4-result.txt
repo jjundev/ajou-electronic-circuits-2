@@ -1,0 +1,11 @@
+A(0) = -R_p*g_m1/(R_p*g_m2 + 1)
+Miller poles [rad/s] = [-1/(R_s*(C_f*(g_m1/(g_m2 + 1/R_p) + 1) + C_i)), -(g_m2 + 1/R_p)/(C_f*(1 + (g_m2 + 1/R_p)/g_m1) + C_x), -1/(C_o*R_D)]
+Exact normalized characteristic = (1+s*R_D*C_o)*(1+a*s+b*s**2)
+a = C_f*R_p*R_s*g_m1/(R_p*g_m2 + 1) + C_f*R_p*R_s*g_m2/(R_p*g_m2 + 1) + C_f*R_p/(R_p*g_m2 + 1) + C_f*R_s/(R_p*g_m2 + 1) + C_i*R_p*R_s*g_m2/(R_p*g_m2 + 1) + C_i*R_s/(R_p*g_m2 + 1) + C_x*R_p/(R_p*g_m2 + 1)
+b = R_p*R_s*(C_f*C_i + C_f*C_x + C_i*C_x)/(R_p*g_m2 + 1)
+Exact x/gate pair = [(R_p*g_m2 + 1)*(sqrt(-4*R_p*R_s*(C_f*C_i + C_f*C_x + C_i*C_x)/(R_p*g_m2 + 1) + (C_f*R_p*R_s*g_m1 + C_f*R_p*R_s*g_m2 + C_f*R_p + C_f*R_s + C_i*R_p*R_s*g_m2 + C_i*R_s + C_x*R_p)**2/(R_p*g_m2 + 1)**2) - (C_f*R_p*R_s*g_m1 + C_f*R_p*R_s*g_m2 + C_f*R_p + C_f*R_s + C_i*R_p*R_s*g_m2 + C_i*R_s + C_x*R_p)/(R_p*g_m2 + 1))/(2*R_p*R_s*(C_f*C_i + C_f*C_x + C_i*C_x)), (R_p*g_m2 + 1)*(-sqrt(-4*R_p*R_s*(C_f*C_i + C_f*C_x + C_i*C_x)/(R_p*g_m2 + 1) + (C_f*R_p*R_s*g_m1 + C_f*R_p*R_s*g_m2 + C_f*R_p + C_f*R_s + C_i*R_p*R_s*g_m2 + C_i*R_s + C_x*R_p)**2/(R_p*g_m2 + 1)**2) - (C_f*R_p*R_s*g_m1 + C_f*R_p*R_s*g_m2 + C_f*R_p + C_f*R_s + C_i*R_p*R_s*g_m2 + C_i*R_s + C_x*R_p)/(R_p*g_m2 + 1))/(2*R_p*R_s*(C_f*C_i + C_f*C_x + C_i*C_x))]
+R_p -> infinity: G = g_m2
+R_p -> 0: A = 0
+R_p -> 0: exact normalized gate/junction factor = C_f*R_s*s + C_i*R_s*s + 1
+C_f = 0: exact and Miller characteristics agree
+PASS: determinant, DC gain, first-order coefficient, zero-bridge limit, output transfer

@@ -1,0 +1,10 @@
+Base KCL: vb*(a + cu*s) + (b + cp*s)*(vb - ve)
+Emitter KCL: -it + (-vb + ve)*(b + cp*s + gm)
+Zout = (a + b + cp*s + cu*s)/((a + cu*s)*(b + cp*s + gm))
+Zout(0) = (a + b)/(a*(b + gm))
+lim s*Zout = (cp + cu)/(cp*cu)
+Cmu=0: (a + b + cp*s)/(a*(b + cp*s + gm))
+RB=0: 1/(b + cp*s + gm)
+omega_z, omega_p1, omega_p2: (a + b)/(cp + cu) a/cu (b + gm)/cp
+Normalized squared magnitude derivative numerator: -N*P*Q*x**2 + N - 2*P*Q*x - P - Q
+x=omega^2, N=omega_z^-2, P=omega_p1^-2, Q=omega_p2^-2

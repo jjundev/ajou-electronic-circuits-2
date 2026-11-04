@@ -1,0 +1,370 @@
+{
+  "adoption_unit": "whole",
+  "candidates_sha256": "98f9d5d166779a334c6cccbbfa32a323a6bc200ee49cd4019e6861d3e6d1e1a5",
+  "catalog_sha256": "8cf47e716c01d0539fc75f5ecb95058860bfcde80828dfdf70c21fbd706577e8",
+  "policy": "exam-first-v2",
+  "problems": [
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "11a15b56901dd70b5bfb55d6ae0b6b0dc791502d2f6b14b84e3553b8252d6974",
+      "depends_on": [],
+      "estimated_minutes": 8,
+      "id": "E11.24",
+      "kind": "예제",
+      "learning_goals": [
+        "입력을 영점화하고 전단의 병렬 저항을 팔로워의 출력 임피던스 모델에 적용한다"
+      ],
+      "priority": "core",
+      "reference_solution": "solution",
+      "subpart_count": 1,
+      "subparts": [
+        {
+          "ask_md": "- 증폭기의 출력 임피던스",
+          "label": "main"
+        }
+      ],
+      "why": "Lec5 s48과 같은 회로에서 전단의 병렬 출력저항을 먼저 묶고 소스 팔로워의 시험원 식을 적용한다."
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "981036b878bb97e3f08a91059c558b78af5be5e27c53df2032a24bdad670e525",
+      "depends_on": [
+        "E11.24"
+      ],
+      "estimated_minutes": 6,
+      "id": "X11.24",
+      "kind": "연습문제",
+      "learning_goals": [
+        "유한한 팔로워 출력저항을 시험 단자에서 보이는 병렬 가지로 반영한다"
+      ],
+      "priority": "extra",
+      "reference_solution": "solution",
+      "subpart_count": 1,
+      "subparts": [
+        {
+          "ask_md": "- 예제 11.24의 회로에서 $Z_{out}$",
+          "label": "main"
+        }
+      ],
+      "why": "선행 E11.24와 같은 회로에서 유한한 팔로워 출력저항이 시험 단자에 직접 병렬로 붙는지 확인한다."
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "c85aabeecbafc7fe3e914306c24e3171fe6479f50473863ec522ca7efbaaec12",
+      "depends_on": [],
+      "estimated_minutes": 15,
+      "id": "P11.48",
+      "kind": "장말문제",
+      "learning_goals": [
+        "이미터 팔로워에서 베이스 쪽 기생 커패시턴스를 포함한 출력 임피던스와 주파수별 크기를 구한다"
+      ],
+      "priority": "core",
+      "reference_solution": "solution",
+      "subpart_count": 1,
+      "subparts": [
+        {
+          "ask_md": "- 이미터 폴로어의 출력 임피던스 $Z_{out}$\n- 주파수에 따른 $|Z_{out}|$의 개형 스케치",
+          "label": "main"
+        }
+      ],
+      "why": "기출에 없는 이미터 팔로워의 출력 측정을 연습한다. s49의 베이스 KCL에 베이스-접지 기생 성분을 병렬로 추가하고 임피던스 개형을 판단한다."
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "844c08752ab667c93a610e28cf44197ef3c114fb71f365b4d4fc88a56bb65120",
+      "depends_on": [],
+      "estimated_minutes": 15,
+      "id": "P11.50",
+      "kind": "장말문제",
+      "learning_goals": [
+        "캐스코드의 국소 이득으로 밀러 커패시턴스를 분리하고 세 노드의 RC 극을 비교한다"
+      ],
+      "priority": "core",
+      "reference_solution": "solution",
+      "subpart_count": 1,
+      "subparts": [
+        {
+          "ask_md": "- 회로의 극점",
+          "label": "main"
+        }
+      ],
+      "why": "기출은 능동 가지나 차동쌍을 요구하므로, s51의 세 노드와 같은 커패시턴스 구성에서 중간 노드의 저항만 바뀌는 문제로 국소 이득과 세 극을 연습한다."
+    },
+    {
+      "adoption_unit": "whole",
+      "classification_status": null,
+      "content_sha256": "d4755906830486355a9359b5bef6fabb7dc93b277ff80fce9a7a8ec99a47c102",
+      "depends_on": [],
+      "estimated_minutes": 18,
+      "id": "P11.58",
+      "kind": "장말문제",
+      "learning_goals": [
+        "캐스코드의 입력과 출력 극 사양에서 허용 저항과 이득을 역산한다"
+      ],
+      "priority": "extra",
+      "reference_solution": "solution",
+      "subpart_count": 1,
+      "subparts": [
+        {
+          "ask_md": "- 허용되는 $R_G$, $R_D$의 최댓값\n- 전압 이득",
+          "label": "main"
+        }
+      ],
+      "why": "같은 캐스코드 근사를 쓰되 세 극의 순방향 계산과 달리 입력·출력 극 사양으로 허용 저항과 이득을 정하는 도전 문제다."
+    }
+  ],
+  "range": "1104",
+  "review": {
+    "candidates": [
+      {
+        "disposition": "selected",
+        "id": "E11.24",
+        "reason": "Lec5 s48과 같은 회로에서 전단의 병렬 출력저항을 먼저 묶고 소스 팔로워의 시험원 식을 적용한다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "selected",
+        "id": "X11.24",
+        "reason": "선행 E11.24와 같은 회로에서 유한한 팔로워 출력저항이 시험 단자에 직접 병렬로 붙는지 확인한다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "selected",
+        "id": "P11.48",
+        "reason": "기출에 없는 이미터 팔로워의 출력 측정을 연습한다. s49의 베이스 KCL에 베이스-접지 기생 성분을 병렬로 추가하고 임피던스 개형을 판단한다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "selected",
+        "id": "P11.50",
+        "reason": "기출은 능동 가지나 차동쌍을 요구하므로, s51의 세 노드와 같은 커패시턴스 구성에서 중간 노드의 저항만 바뀌는 문제로 국소 이득과 세 극을 연습한다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "selected",
+        "id": "P11.58",
+        "reason": "같은 캐스코드 근사를 쓰되 세 극의 순방향 계산과 달리 입력·출력 극 사양으로 허용 저항과 이득을 정하는 도전 문제다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "deferred",
+        "id": "2021-1_기말-Q1",
+        "missing_concepts": [
+          "중간 노드에 접속한 능동 전류원 가지의 바이어스 전류 분배 및 기생 커패시턴스"
+        ],
+        "reason": "Fig Q1의 M3 드레인이 Y에 이어져 M3가 공급하는 전류와 Y의 C_GD3·C_DB3를 반영해야 한다. s51은 M1·M2 두 소자의 Y 모델까지만 다뤘다.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "deferred",
+        "id": "2023-1_기말-Q1",
+        "missing_concepts": [
+          "중간 노드의 추가 NMOS 능동 가지와 기생 커패시턴스",
+          "MOS 차동쌍의 고주파 반회로와 전달함수"
+        ],
+        "reason": "(a)는 M3 소스가 Y에 붙고 다이오드 부하가 출력에 붙는다. (b)는 유한 r_o를 갖는 MOS 차동쌍의 고주파 반회로 극과 전달함수를 요구한다. 원문 전체를 보류한다.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "excluded",
+        "id": "2021-1_기말-Q7",
+        "reason": "원문은 드레인 단락 전류 이득의 단위 이득 주파수 정의와 식 유도다. 1104의 팔로워 출력 임피던스·캐스코드 극과 범위가 다르고, 1028의 2023-1 기말 Q6과 같은 요구다.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "deferred",
+        "id": "E11.21",
+        "missing_concepts": [
+          "소스 팔로워의 부하 포함 전압 전달함수"
+        ],
+        "reason": "E11.18 사용 이력(1028)이 있고 부하가 있는 소스 팔로워의 이차 전압 전달함수와 응답을 요구한다.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "deferred",
+        "id": "E11.22",
+        "missing_concepts": [
+          "소스 팔로워의 다중 기생 성분을 포함한 전압 전달함수"
+        ],
+        "reason": "전류원 부하와 여러 기생 성분을 넣은 소스 팔로워의 전체 전압 전달함수를 요구한다.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "excluded",
+        "id": "E11.23",
+        "reason": "1030에 수록된 소스 팔로워 입력 커패시턴스 문항이다. 이번 수업의 출력 측정과 다르다.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "excluded",
+        "id": "E11.25",
+        "reason": "MOS의 세 극 수치·개략 응답에 s51의 노드별 근사를 쓸 수 있으나, 1028에 수록된 E11.18의 소자값과 응답 결과를 직접 가져와 비교한다. 전제 문제의 재수록이 금지되어 함께 제외한다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "deferred",
+        "id": "E11.26",
+        "missing_concepts": [
+          "중간 노드에 접속한 능동 전류원 가지의 바이어스 전류 분배 및 기생 커패시턴스"
+        ],
+        "reason": "Fig 11.54의 M3가 Y에 공급하는 바이어스와 두 드레인 기생 성분이 필요하다.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "deferred",
+        "id": "X11.21",
+        "missing_concepts": [
+          "소스 팔로워 전압 전달함수의 복소·중복 극"
+        ],
+        "reason": "E11.21 및 그 전제 E11.18이 필요하고, 이차 전압 전달함수의 중근 조건을 사용한다.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "deferred",
+        "id": "X11.22",
+        "missing_concepts": [
+          "소스 팔로워의 전체 전압 전달함수와 극"
+        ],
+        "reason": "E11.22의 전압 전달함수와 1028 사용 E11.18의 값을 함께 요구한다.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "excluded",
+        "id": "X11.23",
+        "reason": "이번 수업에서 복습에 해당하는 입력 커패시턴스 문제이고 전제 E11.23이 1030에 수록됐다.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "excluded",
+        "id": "X11.25",
+        "reason": "E11.25의 폭 변경 연습으로 s51의 근사를 적용할 수 있으나, 전제 E11.25가 다른 회차 사용 E11.18을 직접 참조한다.",
+        "scope": "in_scope"
+      },
+      {
+        "disposition": "deferred",
+        "id": "X11.26",
+        "missing_concepts": [
+          "중간 노드에 접속한 능동 전류원 가지의 기생 커패시턴스"
+        ],
+        "reason": "E11.26의 M3 전류원 캐스코드와 1028 사용 E11.18의 소자값이 필요하다.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "excluded",
+        "id": "P11.47",
+        "reason": "다이오드 부하 팔로워의 입력 커패시턴스 문제이며 1030 수록이다.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "deferred",
+        "id": "P11.49",
+        "missing_concepts": [
+          "BJT 캐스코드의 세 노드 저항 및 기생 커패시턴스",
+          "중간 노드의 능동 전류원 가지"
+        ],
+        "reason": "Q3가 바이어스의 75%를 공급하는 BJT 캐스코드에서 세 극 전부를 요구한다. 수업에서 BJT는 입력 밀러 성분만 다뤘다.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "deferred",
+        "id": "P11.51",
+        "missing_concepts": [
+          "중간 노드의 추가 NMOS 능동 가지와 기생 커패시턴스"
+        ],
+        "reason": "Y에 M3 소스가 접속된다. 능동 가지가 Y 저항과 기생 커패시턴스를 함께 바꾼다.",
+        "scope": "out_of_scope"
+      },
+      {
+        "disposition": "excluded",
+        "id": "P11.59",
+        "reason": "P11.58에서 폭이 4배인 M2의 g_m·C_GD2 변경을 추적할 수 있으나, P11.58과 함께 넣으면 설계 문제 최대 1개를 초과한다. 선행 문항 P11.58을 채택한다.",
+        "scope": "in_scope"
+      }
+    ],
+    "catalog_sha256": "8cf47e716c01d0539fc75f5ecb95058860bfcde80828dfdf70c21fbd706577e8",
+    "coverage": [
+      {
+        "goal": "입력을 영점화하고 전단의 병렬 저항을 팔로워의 출력 임피던스 모델에 적용한다",
+        "problem_ids": [
+          "E11.24"
+        ]
+      },
+      {
+        "gap_reason": "유한 r_O3는 s48 기본 가정의 변경이므로 추가 연습 X11.24로 다룬다.",
+        "goal": "유한한 팔로워 출력저항을 시험 단자에서 보이는 병렬 가지로 반영한다",
+        "problem_ids": [
+          "X11.24"
+        ]
+      },
+      {
+        "goal": "이미터 팔로워에서 베이스 쪽 기생 커패시턴스를 포함한 출력 임피던스와 주파수별 크기를 구한다",
+        "problem_ids": [
+          "P11.48"
+        ]
+      },
+      {
+        "goal": "캐스코드의 국소 이득으로 밀러 커패시턴스를 분리하고 세 노드의 RC 극을 비교한다",
+        "problem_ids": [
+          "P11.50"
+        ]
+      },
+      {
+        "gap_reason": "극 사양 역산은 추가 도전 P11.58로 다룬다.",
+        "goal": "캐스코드의 입력과 출력 극 사양에서 허용 저항과 이득을 역산한다",
+        "problem_ids": [
+          "P11.58"
+        ]
+      },
+      {
+        "gap_reason": "직접 피킹을 묻는 미사용 범위 내 문항은 없다. P11.48은 출력 구동점 임피던스의 개형을 묻는다.",
+        "goal": "소스 팔로워의 유도성 동작과 부하 커패시터에 따른 피킹 가능성을 구분한다",
+        "problem_ids": []
+      },
+      {
+        "gap_reason": "P11.49의 BJT 세 극과 능동 가지를 분리 수록할 수 없다. 본 노트에서 입력 성분을 설명한다.",
+        "goal": "동일 g_m인 BJT 캐스코드의 입력 밀러 성분을 구한다",
+        "problem_ids": []
+      },
+      {
+        "gap_reason": "P11.50은 비교에 필요한 세 극을 기호로 요구하지만 수치 순서는 정해지지 않는다. E11.25 수치 비교는 사용된 전제 E11.18이 필요하다.",
+        "goal": "가장 큰 노드 시정수가 지배극임을 판단한다",
+        "problem_ids": []
+      }
+    ],
+    "cross_pack_review": {
+      "deferred_ids": [
+        "2021-1_기말-Q1",
+        "2023-1_기말-Q1",
+        "E11.21",
+        "E11.22",
+        "E11.26",
+        "X11.21",
+        "X11.22",
+        "X11.26",
+        "P11.49",
+        "P11.51"
+      ],
+      "missing_types": [
+        "1014–1030은 소자 기생 성분, 밀러, f_T, CS·CE·CG 및 팔로워 입력을 다뤘다. 1104는 팔로워 출력과 수동 변형 MOS 캐스코드 극을 보완한다.",
+        "능동 가지 캐스코드, BJT 캐스코드의 전체 극, 차동쌍 주파수 응답은 현재 팩 미수록."
+      ],
+      "repeated_types": [
+        "2021-1 기말 Q7과 1028의 2023-1 기말 Q6은 f_T 정의와 동일 유도다.",
+        "1030의 E11.23·P11.47은 팔로워 입력 C다. 이번 E11.24·X11.24·P11.48은 입력 영점에서 출력 시험원을 사용한다."
+      ]
+    },
+    "policy": "exam-first-v2"
+  },
+  "schema_version": 2,
+  "scope_check": "AI must verify every subpart and figure against the taught scope",
+  "workload": {
+    "core_estimated_minutes": 38,
+    "estimated_minutes": 62,
+    "estimates_only": true,
+    "subpart_count": 5
+  }
+}
