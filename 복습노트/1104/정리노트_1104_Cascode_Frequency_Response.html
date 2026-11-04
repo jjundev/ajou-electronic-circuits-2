@@ -583,6 +583,13 @@
     <p>저주파에는 $C_\pi$가 열리고, 유한 $\beta$를 유지한 모델에서는 다음 값이 나와요.</p>
     <p>$$Z_{out}(0)\approx\frac{r_\pi+R_S}{\beta+1}$$</p>
     <p>$R_S=0$이면 큰 $\beta$에서 익숙한 $1/g_m$가 남아요. 고주파 극한에는 $C_\pi$가 베이스와 이미터를 거의 연결하므로 모델에서 $R_S$가 보여요. 저주파 값보다 $R_S$가 클 때만 크기가 올라가요.</p>
+    <p><strong>캡 없는 값에서 바로 쓰기</strong> — 커패시터를 뺀 저주파 값을 $B/A$로 놓고 커패시터 항을 더하면 같은 식이 바로 나와요. $A$는 출력 노드로 들어오는 총 컨덕턴스예요. $B$는 $A$에 저주파 값을 곱한 무차원 수예요.</p>
+    <p>$$A=g_m+\frac{1}{r_\pi}=\frac{\beta+1}{r_\pi}$$</p>
+    <p>$$B=A\,Z_{out}(0)=1+\frac{R_S}{r_\pi}$$</p>
+    <p>$$Z_{out}(s)\approx\frac{R_SC_\pi s+B}{C_\pi s+A}$$</p>
+    <p>분자와 분모에 $r_\pi$를 곱하면 3단계의 식과 같아요. 소스 팔로워는 게이트 전류가 없어서 $r_\pi\to\infty$인 경우예요. 그러면 $A=g_m$, $B=1$이 되어 $(R_SC_{GS}s+1)/(C_{GS}s+g_m)$가 나와요.</p>
+    <div class="table-wrap"><table><tr><th>팔로워</th><th>$A$</th><th>$B$</th><th>$s\to0$</th><th>$s\to\infty$</th></tr><tr><td>소스</td><td>$g_m$</td><td>$1$</td><td>$1/g_m$</td><td>$R_S$</td></tr><tr><td>이미터</td><td>$g_m+1/r_\pi$</td><td>$1+R_S/r_\pi$</td><td>$\approx1/g_m+R_S/(\beta+1)$</td><td>$R_S$</td></tr></table></div>
+    <p>$A$와 $B$는 비율만 정해지는 값이에요. 강의 식의 $\beta+1$과 $r_\pi+R_S$를 그대로 $A$, $B$에 넣으면 $s$항의 계수가 맞지 않아요.</p>
     <p><strong>복습문제 연결</strong> — P11.48은 강의 모델에서 생략했던 베이스–컬렉터 커패시턴스 $C_\mu$를 포함하는 경우예요.</p>
   </div>
   <div class="layer prof"><span class="layer-title">교수님 말씀</span>
@@ -596,7 +603,8 @@
   <div class="sum" hidden>
     <p class="sum-lead">베이스 전류 때문에 $R_S$의 영향이 저주파에도 남아요.</p>
     <p class="panel-label">핵심 식</p>
-    <ul class="eq-list"><li><span class="eq-name">유한 $\beta$의 저주파 모델</span>$$Z_{out}(0)\approx\frac{r_\pi+R_S}{\beta+1}$$</li></ul>
+    <ul class="eq-list"><li><span class="eq-name">유한 $\beta$의 저주파 모델</span>$$Z_{out}(0)\approx\frac{r_\pi+R_S}{\beta+1}$$</li><li><span class="eq-name">캡 없는 값 $B/A$에서 쓰는 꼴</span>$$Z_{out}(s)\approx\frac{R_SC_\pi s+B}{C_\pi s+A}$$</li></ul>
+    <p>$A=g_m+1/r_\pi$, $B=1+R_S/r_\pi$로 맞추면 소스 팔로워와 같은 꼴이에요.</p>
     <p>$r_o$와 $C_\mu$를 생략한 모델이에요.</p>
     <p>저주파에 $R_S/(\beta+1)$이 충분히 크면 유지해요.</p>
     <p>같은 모델의 고주파 극한에는 $C_\pi$가 단락되어 $R_S$가 보여요.</p>

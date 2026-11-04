@@ -1,14 +1,14 @@
 {
   "review_policy_version": "problem-explain-2026-10-21-learning-style",
-  "input_hash": "99b2b0d9fe0d48623231af892d1a786ea9b554e22d25f49fa04997e940185665",
+  "input_hash": "db4f0d373d6d75e62b5a077a8b0fb185ab478c7597968f3248b5d04dd3edc5c7",
   "references": [
     {
       "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.claude/skills/ec2-review-pack/references/solution-style.md",
-      "sha256": "93446b14ce9a4167cb3dc62b6b8fe2dc777ad4ff825b7894568b4e2f6d971f42"
+      "sha256": "3c9f68f55d804966c95a35cdcd2f729754e9dc9a453fcc0df7f5b01152edeb9f"
     },
     {
       "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/복습노트/1104/정리노트_1104_Cascode_Frequency_Response.html",
-      "sha256": "03d2fb2c1689f607a7d1360b7cfbe93414cf1cc324d36ae8209579b04f1b1fa2"
+      "sha256": "1fcb76f882d9272971bfbba11b25711071bd9bad9e6b30b8e7f8358dc125b4e6"
     },
     {
       "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/강의노트/2026F_Lec5_FrequencyResponse_rev4.pdf",
@@ -17,10 +17,6 @@
     {
       "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/교과서/마이크로전자회로/11장.pdf",
       "sha256": "c948160fe9a61f9aa8c0f0e9d84ca001dc4afe5bb27d9f326a3b918f18d930fb"
-    },
-    {
-      "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.claude/skills/ec2-review-pack/references/execution-guide.md",
-      "sha256": "b42c0cf00301bd366c5d6925ecf03bc5ce56b51c681c138b743596c42f6c6781"
     },
     {
       "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.claude/skills/ec2-problem-explain/references/verification.md",
@@ -38,7 +34,7 @@
   "learning_style_audit": {
     "learning_style": {
       "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
-      "sha256": "93446b14ce9a4167cb3dc62b6b8fe2dc777ad4ff825b7894568b4e2f6d971f42",
+      "sha256": "3c9f68f55d804966c95a35cdcd2f729754e9dc9a453fcc0df7f5b01152edeb9f",
       "rule_ids": [
         "UNIT-01",
         "CALC-01",
@@ -51,277 +47,298 @@
         "BIAS-01",
         "NOTATION-01",
         "EXPLAIN-01",
-        "CORRECT-01"
+        "CORRECT-01",
+        "FREQ-01"
       ]
     },
     "items": {
       "p1:main": {
         "status": "pass",
-        "reviewer": "/root/child/content_review",
+        "reviewer": "content reviewer (opus, non-author)",
         "rules": {
           "UNIT-01": {
-            "disposition": "not_applicable",
-            "evidence": "Symbolic impedance only, no engineering-unit conversion required."
+            "disposition": "applied",
+            "evidence": "Symbolic problem; dimensional check in verify: numerator dimensionless, both denominator terms in S, so Z_out in Ω; pitfall uses the same dimension argument to reject A=1,B=1/g_m3. No numerical conversion needed."
           },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "start RG then solve gate relation before admittance"
+            "evidence": "Target Z_out built from named intermediates in order: R_G=r_o1∥r_o2 → Z_out(0)=1/g_m3 → A=g_m3 → B=A·Z(0)=1 → form → expand R_G last; each intermediate on its own display line."
           },
           "CALC-02": {
-            "disposition": "applied",
-            "evidence": "solve reciprocal of grouped admittance"
+            "disposition": "not_applicable",
+            "evidence": "No numerical values given (answer symbolic); no rounding. Symbolic simplification (R_G kept as a symbol until the last line) is done before expansion."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "Follower test has RG at the gate and Cgs3 to the right output, upward controlled source and leftward trial current. Stage, MD and summary agree on rational Zout and limits. Overlay 3+1 includes the test figure."
+            "evidence": "Far part first: CS stage with v_in=0 collapses to R_G=r_o1∥r_o2 seen from the M3 gate; then known block 'MOS source looking in with gate at AC ground' gives Z_out(0)=1/g_m3; r_o3 and ideal bias source stated as open branches."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "Follower test has RG at the gate and Cgs3 to the right output, upward controlled source and leftward trial current. Stage, MD and summary agree on rational Zout and limits. Overlay 3+1 includes the test figure."
+            "evidence": "Measurement condition applied in start figure: v_in, V_DD, V_b to AC ground (caption), test V_X at the rightmost wire end with V_X(+) above the dot, I_X arrow leftward left of the dot with gap, label below; input side (R_G to ground) on left; gate blue / source red with matching dots. No KCL is written; figure kept under authoring's high-frequency equivalent-circuit rule and it shows the shortcut conditions (single gate-side R, C only gate–source). No parallel controlled-source/r_o pair (r_o3 open)."
           },
           "GAIN-01": {
             "disposition": "not_applicable",
-            "evidence": "Test-impedance task with input zero, no gain measurement."
+            "evidence": "Goal is output impedance Z_out(s), not a voltage gain; no G_m/R_out/A_v route applies."
           },
           "DEGEN-01": {
             "disposition": "not_applicable",
-            "evidence": "No external source/emitter series degeneration branch in this model."
+            "evidence": "No source/emitter degeneration G_m; the follower impedance is handled by FREQ-01."
           },
           "SCALE-01": {
             "disposition": "not_applicable",
-            "evidence": "No parameter-ratio design; retry sets a resistance to zero."
+            "evidence": "No parameter scaling or ratio question; retry uses limits (R_G=0, r_o3 present), not fixed-factor scaling."
           },
           "BIAS-01": {
             "disposition": "not_applicable",
-            "evidence": "No DC operating point or headroom calculation requested."
+            "evidence": "No DC node voltage or saturation boundary asked."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "Follower test has RG at the gate and Cgs3 to the right output, upward controlled source and leftward trial current. Stage, MD and summary agree on rational Zout and limits. Overlay 3+1 includes the test figure."
+            "evidence": "SVG labels native <text class=\"fig-text fig-math\"> with tspan baseline-shift sub 78% (R_G, C_GS3, V_G, V_X(+), I_X, g_m3(V_G − V_X)); Pretendard 600 upright; no plain gm/ro, no unicode pseudo-subscripts; node dot/label colors paired (gate blue, source red); final answer in data-answer-final block."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "Follower test has RG at the gate and Cgs3 to the right output, upward controlled source and leftward trial current. Stage, MD and summary agree on rational Zout and limits. Overlay 3+1 includes the test figure."
+            "evidence": "Seven sections in order, solve titled '이렇게 풀어요'; each step pairs a one-line judgement with its equation (e.g. 'R_G에 전류가 흐르지 않으니 V_G=0' → Z(0)=1/g_m3; 'r_o3가 열린 가지라서' → A=g_m3); summary/body/MD agree on R_G, A, B, Z_out, limits."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "Follower test has RG at the gate and Cgs3 to the right output, upward controlled source and leftward trial current. Stage, MD and summary agree on rational Zout and limits. Overlay 3+1 includes the test figure."
+            "evidence": "Model conditions stated with the answer (input zeroed, only C_GS3, r_o3 open); inductive claim conditioned on R_G>1/g_m3 rather than asserted; no approximate-as-exact; answer is exact for the stated model."
+          },
+          "FREQ-01": {
+            "disposition": "applied",
+            "evidence": "Shortcut applied as briefed, no KCL: start Z_out(0)=1/g_m3 → A=g_m3 (total conductance into output node), B=A·Z(0)=1 (dimensionless) → solve (R_GC_GS3s+B)/(C_GS3s+A) with R_G in the R_S slot → verify s→0 = B/A = 1/g_m3, s→∞ = R_G, R_G>1/g_m3 ⇒ inductive. Shortcut conditions checked explicitly in recall and solve (single gate-side R after input zero, C only at control port, r_o3 ignored since λ3=0). Pitfall warns that C_GD3 or r_o3 would require KCL with the form as a check. r_o parallel n/a (open); 1/g_m visible."
           }
         }
       },
       "p2:main": {
         "status": "pass",
-        "reviewer": "/root/child/content_review",
+        "reviewer": "content reviewer (opus, non-author)",
         "rules": {
           "UNIT-01": {
-            "disposition": "not_applicable",
-            "evidence": "Symbolic impedance only, no engineering-unit conversion required."
+            "disposition": "applied",
+            "evidence": "Symbolic; verify states C_GS3s and g_m3 are conductances so the fraction is in Ω; limits r_O3∥1/g_m3, r_O3∥R_G are resistances."
           },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "solve Vg, Vgs, source KCL and parallel inverse"
+            "evidence": "Intermediates R_G → V_G → V_GS3 → I_X/V_X admittance sum → parallel form, each on its own line."
           },
           "CALC-02": {
-            "disposition": "applied",
-            "evidence": "solve group by output voltage before inverting"
+            "disposition": "not_applicable",
+            "evidence": "No numerical data; symbolic answer, no rounding."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "Finite ro3 is right of the controlled source and left of the rightmost trial port. Voltage labels and dots share semantic colors. Stage, MD and summary agree on parallel Zout and finite-ro3 limits. Overlay 2+1 includes the test figure."
+            "evidence": "R_G=r_O1∥r_O2 from the CS stage with input zeroed; final result read as r_O3 in parallel with the follower impedance (same two nodes: output and AC ground)."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "Finite ro3 is right of the controlled source and left of the rightmost trial port. Voltage labels and dots share semantic colors. Stage, MD and summary agree on parallel Zout and finite-ro3 limits. Overlay 2+1 includes the test figure."
+            "evidence": "KCL needed (r_O3), so the small-signal model is drawn: input zero, test source at right; controlled source left, r_O3 right, output dot rightmost (parallel-pair order met); I_X arrow left of the dot with gap, V_X(+) above; gate blue, output red, branch dots at real junctions. First equation (gate KCL) and source KCL match the figure node names and the caption's current reference direction."
           },
           "GAIN-01": {
             "disposition": "not_applicable",
-            "evidence": "Test-impedance task with input zero, no gain measurement."
+            "evidence": "Output-impedance problem; no voltage gain."
           },
           "DEGEN-01": {
             "disposition": "not_applicable",
-            "evidence": "No external source/emitter series degeneration branch in this model."
+            "evidence": "No degeneration structure."
           },
           "SCALE-01": {
             "disposition": "not_applicable",
-            "evidence": "No parameter-ratio design; retry sets a resistance to zero."
+            "evidence": "No scaling/ratio question."
           },
           "BIAS-01": {
             "disposition": "not_applicable",
-            "evidence": "No DC operating point or headroom calculation requested."
+            "evidence": "No DC bias boundary."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "Finite ro3 is right of the controlled source and left of the rightmost trial port. Voltage labels and dots share semantic colors. Stage, MD and summary agree on parallel Zout and finite-ro3 limits. Overlay 2+1 includes the test figure."
+            "evidence": "Native tspan subscripts (V_G, V_X(+), C_GS3, R_G, g_m3V_GS3, r_O3, I_X), Pretendard 600, no pseudo-subscripts; node colors paired. Notation within P2 consistent (r_O). Advisory: P1 uses r_o (pre-existing case difference, lecture uses r_O) — not blocking."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "Finite ro3 is right of the controlled source and left of the rightmost trial port. Voltage labels and dots share semantic colors. Stage, MD and summary agree on parallel Zout and finite-ro3 limits. Overlay 2+1 includes the test figure."
+            "evidence": "Seven sections, fixed solve title; judgements linked to equations ('C_GS3와 R_G는 직렬 경로, r_O3는 그 경로 전체와 병렬' → admittance sum → parallel reading). Summary/MD match body."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "Finite ro3 is right of the controlled source and left of the rightmost trial port. Voltage labels and dots share semantic colors. Stage, MD and summary agree on parallel Zout and finite-ro3 limits. Overlay 2+1 includes the test figure."
+            "evidence": "Approximation Z(0)≈1/g_m3 marked with ≈ and condition g_m3r_O3≫1; model statement (only C_GS3, no body effect) attached to the final answer."
+          },
+          "FREQ-01": {
+            "disposition": "applied",
+            "evidence": "r_O3 present → KCL kept (start gate KCL, solve source KCL). Form used only as a check in verify: fraction = (R_GC_GS3s+B)/(C_GS3s+A) with A=g_m3, B=1, B/A=1/g_m3; removing r_O3 (→∞) returns to E11.24; r_O3 attached in parallel last, with the explicit warning not to fold 1/r_O3 into A. Both limits checked (r_O3∥1/g_m3, r_O3∥R_G) and inductive condition stated. The general form (1+Z_BY_c)/(g_m+Y_c) coincides with the fraction here because Z_B=R_G is purely resistive."
           }
         }
       },
       "p3:main": {
         "status": "pass",
-        "reviewer": "/root/child/content_review",
+        "reviewer": "content reviewer (opus, non-author)",
         "rules": {
           "UNIT-01": {
             "disposition": "applied",
-            "evidence": "solve rad/s versus Hz; verify high-frequency impedance uses series capacitance"
+            "evidence": "Symbolic; pitfall states A is a conductance and B dimensionless (unnormalized β+1, r_π+R_B break units); break frequencies in rad/s with Hz conversion by 2π noted; slopes labelled dB/dec."
           },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "solve ZB/Zπ then exact ratio and three separate corners"
+            "evidence": "Intermediates Z_B and Z_π defined first (each own line), then v_b in terms of v_π, v_t, i_t, Z_out; zero/pole frequencies listed one per line."
           },
           "CALC-02": {
-            "disposition": "applied",
-            "evidence": "solve clear denominators before factoring"
+            "disposition": "not_applicable",
+            "evidence": "No numerical values; symbolic answer."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "Cπ spans the base and emitter nets. Stage and MD provide exact impedance and the conditional sketch; summary gives both sequences and HF series path. Overlay 3+1 includes test circuit and final sketch."
+            "evidence": "Branches combined before KCL: R_B∥C_μ at base (collector AC ground so C_μ is base–ground) = Z_B; r_π∥C_π = Z_π; ideal bias source open; V_A=∞ so r_o open."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "Cπ spans the base and emitter nets. Stage and MD provide exact impedance and the conditional sketch; summary gives both sequences and HF series path. Overlay 3+1 includes test circuit and final sketch."
+            "evidence": "KCL model drawn: input zeroed (R_B to ground left), C_μ base–ground, r_π∥C_π base–emitter, g_mv_π collector(ground)→emitter, test v_t/i_t at right with dot at wire end, arrow left of dot; base blue, emitter red; KCL equations use the same node names and v_π polarity."
           },
           "GAIN-01": {
             "disposition": "not_applicable",
-            "evidence": "Test-impedance task with input zero, no gain measurement."
+            "evidence": "Output impedance and |Z_out| sketch; no voltage gain."
           },
           "DEGEN-01": {
             "disposition": "not_applicable",
-            "evidence": "No external source/emitter series degeneration branch in this model."
+            "evidence": "No degeneration G_m; the resistor-sum 1/g_m+R_B/(β+1) is the FREQ-01 low-frequency form, not a degenerated transconductance."
           },
           "SCALE-01": {
             "disposition": "not_applicable",
-            "evidence": "No parameter-ratio design; retry sets a resistance to zero."
+            "evidence": "No scaling question."
           },
           "BIAS-01": {
             "disposition": "not_applicable",
-            "evidence": "No DC operating point or headroom calculation requested."
+            "evidence": "No bias boundary."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "Cπ spans the base and emitter nets. Stage and MD provide exact impedance and the conditional sketch; summary gives both sequences and HF series path. Overlay 3+1 includes test circuit and final sketch."
+            "evidence": "SVG labels native tspan (R_B, C_μ, v_b, r_π, C_π, g_mv_π, i_t, v_t(+)); Bode axis label 20 log10(|Z_out|/Ω) with tspan subscripts; no pseudo-subscripts; node colors paired; answer emphasized with <strong> in data-answer-final."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "Cπ spans the base and emitter nets. Stage and MD provide exact impedance and the conditional sketch; summary gives both sequences and HF series path. Overlay 3+1 includes test circuit and final sketch."
+            "evidence": "Seven sections, fixed solve title; each KCL line preceded by a one-line judgement of current direction; Bode reasoning (zero +20, pole −20, ordering conditions) linked to the sketch. Summary/MD consistent."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "Cπ spans the base and emitter nets. Stage and MD provide exact impedance and the conditional sketch; summary gives both sequences and HF series path. Overlay 3+1 includes test circuit and final sketch."
+            "evidence": "Ordering statements given as conditions (R_B>1/g_m, R_BC_μ<r_πC_π) and the impossible ordering proven; ≈ used for β≫1 reduction; high-frequency series-C claim limited to the high-frequency limit in pitfall."
+          },
+          "FREQ-01": {
+            "disposition": "applied",
+            "evidence": "C_μ changes the base-side impedance → KCL kept (recall says why). Verify uses the form as a check: C_μ=0 → (R_BC_πs+B)/(C_πs+A) with normalized A=(β+1)/r_π, B=1+R_B/r_π; general form (1+Z_BY_c)/(g_m+Y_c) with Y_c=1/Z_π equals the derived (Z_B+Z_π)/(1+g_mZ_π); low-frequency B/A=(r_π+R_B)/(β+1)≈1/g_m+R_B/(β+1) (1/g_m visible); s→∞ gives R_B and the inductive judgement R_B>1/g_m; r_o n/a (V_A=∞). Pitfall forbids unnormalized β+1, r_π+R_B as A, B."
           }
         }
       },
       "p4:main": {
         "status": "pass",
-        "reviewer": "/root/child/content_review",
+        "reviewer": "content reviewer (opus, non-author)",
         "rules": {
           "UNIT-01": {
             "disposition": "applied",
-            "evidence": "verify RC in seconds and pole magnitude in rad/s"
+            "evidence": "Symbolic; verify states RC has units of seconds and |s_p| is in rad/s."
           },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "start RY then Miller terms, C bundles and three poles"
+            "evidence": "R_Y and A_XY computed first, then C_X, C_Y, C_out (one per line), then each pole; intermediate R_Y reused symbolically."
           },
           "CALC-02": {
-            "disposition": "applied",
-            "evidence": "solve node grouping before forming RC"
+            "disposition": "not_applicable",
+            "evidence": "No numeric values; symbolic poles."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "RD ground clears the Y conductor. Local gm→RY→gain has a right-hand Y short and inward current. Both Miller coefficients, the three capacitance bundles and signed poles agree in stage and MD. Overlay 3+1 now includes the Y-short SVG in the local-gain step."
+            "evidence": "Known block: looking into M2 source (λ=0) gives 1/g_m2, in parallel with R_P at the same node Y → R_Y=R_P∥1/g_m2; output sees only R_D (no resistive path back through M2 drain)."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "RD ground clears the Y conductor. Local gm→RY→gain has a right-hand Y short and inward current. Both Miller coefficients, the three capacitance bundles and signed poles agree in stage and MD. Overlay 3+1 now includes the Y-short SVG in the local-gain step."
+            "evidence": "G_m measurement figure draws the actual Y-to-ground short, v_Y=0 and i_Y,sc direction (into circuit, leftward arrow), caption explains why R_P and M2 carry no current; high-frequency model with all caps wired to real nodes, output rightmost; Miller before/after pair with grounded C_X,M, C_Y,M; per-node RC natural-response figure."
           },
           "GAIN-01": {
             "disposition": "applied",
-            "evidence": "RD ground clears the Y conductor. Local gm→RY→gain has a right-hand Y short and inward current. Both Miller coefficients, the three capacitance bundles and signed poles agree in stage and MD. Overlay 3+1 now includes the Y-short SVG in the local-gain step."
+            "evidence": "Miller gain X→Y written as data-gain-route gm-rout: G_m,XY=i_Y,sc/v_X=g_m1 (short) → R_Y=R_P∥1/g_m2 (input zero) → A_XY=−G_m,XYR_Y=−g_m1R_Y; sign kept."
           },
           "DEGEN-01": {
             "disposition": "not_applicable",
-            "evidence": "No external source/emitter series degeneration branch in this model."
+            "evidence": "No degeneration; R_P loads the intermediate node rather than degenerating M1's source."
           },
           "SCALE-01": {
             "disposition": "applied",
-            "evidence": "retry varies finite Rp at fixed gm, expanded τY establishes trend"
+            "evidence": "Retry fixes bias and small-signal parameters explicitly and asks how R_YC_Y changes as R_P shrinks (fixed factors → changing factor → direction); verify R_P→∞ limit recovers the standard cascode."
           },
           "BIAS-01": {
             "disposition": "not_applicable",
-            "evidence": "No DC operating point or headroom calculation requested."
+            "evidence": "No DC bias question."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "RD ground clears the Y conductor. Local gm→RY→gain has a right-hand Y short and inward current. Both Miller coefficients, the three capacitance bundles and signed poles agree in stage and MD. Overlay 3+1 now includes the Y-short SVG in the local-gain step."
+            "evidence": "All SVG labels native tspan (v_X, v_Y, v_out, R_S, C_GD1, C_GS1, g_m1v_X, g_m2v_Y, R_P, C_Y0, R_D, C_out, C_X,M, C_Y,M, i_Y,sc); no pseudo-subscripts; figcaptions use $…$; node colors paired and same node same color."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "RD ground clears the Y conductor. Local gm→RY→gain has a right-hand Y short and inward current. Both Miller coefficients, the three capacitance bundles and signed poles agree in stage and MD. Overlay 3+1 now includes the Y-short SVG in the local-gain step."
+            "evidence": "Seven sections, fixed solve title; recall explains physically why X and Y move oppositely before the Miller formula; each capacitance sum preceded by a node-by-node judgement. Summary/MD consistent."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "RD ground clears the Y conductor. Local gm→RY→gain has a right-hand Y short and inward current. Both Miller coefficients, the three capacitance bundles and signed poles agree in stage and MD. Overlay 3+1 now includes the Y-short SVG in the local-gain step."
+            "evidence": "Miller poles marked ≈ and pitfall states they are estimates with frozen low-frequency ratio; output pole given with = and justified (unilateral output node)."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "Cascode pole problem (Miller), not a follower output impedance; outside FREQ-01 scope as briefed."
           }
         }
       },
       "p5:main": {
         "status": "pass",
-        "reviewer": "/root/child/content_review",
+        "reviewer": "content reviewer (opus, non-author)",
         "rules": {
           "UNIT-01": {
             "disposition": "applied",
-            "evidence": "solve width μA convention and Ω/F to ps back-check"
+            "evidence": "Fixed: substituted lines now carry units per factor — W/L with µA, µA/V², V; W with µm; g_m with mA/V→mS; C_GS with µm·µm·fF/µm²; C_GD with fF/µm·µm; C_X with fF; R_G,max and R_D,max with s⁻¹ and F (10⁹·10⁻¹⁵ conversion visible); A_v=−G_mR_D≈−(5 mS)(1.768 kΩ) with mS×kΩ=1 → ≈−8.84 V/V. All values recomputed and correct."
           },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "solve W/gm/C, two minimum frequencies and upper R bounds before choosing maximum gain"
+            "evidence": "Back-calculation chain W/L → W → g_m → C_GS, C_GD → C_X → R_G,max and C_GD2 → R_D,max → A_v; design written as constraint f_p ≥ target ⇒ R ≤ R_max with the boundary chosen as the maximum, then checked (τ values, pole ratio 2)."
           },
           "CALC-02": {
             "disposition": "applied",
-            "evidence": "solve unrounded RD reused for gain, symbolic RC before numeric substitution"
+            "evidence": "Two-decimal display (384.43 Ω, 1.77 kΩ, −8.84 V/V, 31.83 ps, 15.92 ps, 9.61 GHz) with ≈; gain explicitly computed from the unrounded R_D (my check: 5 mS×1768.39 Ω=8.8419). Re-checked in final stage: substituted lines keep two-decimal display with ≈; A_v=−G_mR_D≈−(5 mS)(1.768 kΩ)≈−8.84 V/V marks the rounded R_D with ≈ (unrounded product 8.842)."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "Both marked gm→rout→gain paths carry right-hand shorts with inward current. Stage, MD and final extract separate RG=384.43 Ω, RD=1.77 kΩ and Av=−8.84 V/V. Overlay 7+1 includes local Y and global output shorts in their own selected steps."
+            "evidence": "R_Y=1/g_m2 looking into the CG source; R_out=R_D∥∞ (r_o2 open, λ=0); R_G as the node resistance at X with the source zeroed."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "Both marked gm→rout→gain paths carry right-hand shorts with inward current. Stage, MD and final extract separate RG=384.43 Ω, RD=1.77 kΩ and Av=−8.84 V/V. Overlay 7+1 includes local Y and global output shorts in their own selected steps."
+            "evidence": "Two G_m measurement figures with real shorts to ground (Y short for A_XY, output short for A_v), v=0 labels, leftward short-current arrows at right; Miller pair figure; input-zeroed high-frequency circuit with output dot rightmost."
           },
           "GAIN-01": {
             "disposition": "applied",
-            "evidence": "Both marked gm→rout→gain paths carry right-hand shorts with inward current. Stage, MD and final extract separate RG=384.43 Ω, RD=1.77 kΩ and Av=−8.84 V/V. Overlay 7+1 includes local Y and global output shorts in their own selected steps."
+            "evidence": "Two gm-rout routes: A_XY (G_m,XY=g_m1, R_Y=1/g_m2, A_XY=−1) and A_v (G_m=g_m1 with output short, R_out=R_D, A_v=−G_mR_D≈−8.84 V/V)."
           },
           "DEGEN-01": {
             "disposition": "not_applicable",
-            "evidence": "No external source/emitter series degeneration branch in this model."
+            "evidence": "No degeneration; M2 is a CG cascode device, not a degeneration resistor."
           },
           "SCALE-01": {
             "disposition": "applied",
-            "evidence": "retry scales output requirement and inverse-scales RD and gain"
+            "evidence": "Retry asks the factor change of R_D,max and |A_v| when only the output-pole target doubles (g_m and C_GD2 fixed → both halve); verify states output pole frequency is twice the input pole from τ ratio."
           },
           "BIAS-01": {
-            "disposition": "applied",
-            "evidence": "solve saturation square law with given overdrive and current; no DC headroom target"
+            "disposition": "not_applicable",
+            "evidence": "V_ov=200 mV given; no saturation boundary or node-voltage limit is asked."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "Both marked gm→rout→gain paths carry right-hand shorts with inward current. Stage, MD and final extract separate RG=384.43 Ω, RD=1.77 kΩ and Av=−8.84 V/V. Overlay 7+1 includes local Y and global output shorts in their own selected steps."
+            "evidence": "Fixed: the three captions now use inline math ($v_Y=0$, $M_2$, $X$, $R_G$, $C_X$, $R_D$, $C_{\\mathrm{out}}$); no unicode pseudo-subscripts or HTML <sub> remain in the fragment or the MD p5 section. SVG labels native <text class=\"fig-text fig-math\"> with tspan subscripts, Pretendard 600, node colors paired (X/out blue, Y red)."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "Both marked gm→rout→gain paths carry right-hand shorts with inward current. Stage, MD and final extract separate RG=384.43 Ω, RD=1.77 kΩ and Av=−8.84 V/V. Overlay 7+1 includes local Y and global output shorts in their own selected steps."
+            "evidence": "Seven sections, fixed solve title; judgement lines precede each design step (target is a lower bound on pole frequency ⇒ resistor upper bound). Summary/MD consistent with body."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "Both marked gm→rout→gain paths carry right-hand shorts with inward current. Stage, MD and final extract separate RG=384.43 Ω, RD=1.77 kΩ and Av=−8.84 V/V. Overlay 7+1 includes local Y and global output shorts in their own selected steps."
+            "evidence": "Signed gain A_v≈−8.84 V/V distinguished from the reference |A_v|=8.84; unspecified junction caps stated as neglected; verify warns the Y pole (9.61 GHz) is close to the output pole so node estimates are not an exact bandwidth."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "Cascode design with Miller approximation; no follower output impedance; outside FREQ-01 scope as briefed."
           }
         }
       }
@@ -329,85 +346,85 @@
   },
   "source_visual": {
     "status": "pass",
-    "reviewer": "/root/child",
-    "evidence": "work/source-visual/pdf-reading.md, work/source-visual/stage-compare.json, pages/*.png: physical spreads 25/26/36/37 visually verified then matched all 5 assembled originals/conditions/asks and identical image bytes."
+    "reviewer": "main coordinator (Claude Opus 5.5)",
+    "evidence": "work/source-visual/report.md, pages/E11.24-p25.png, pages/P11.48-p36.png: E11.24/X11.24/P11.48 conditions, figures and asks match the textbook pages; stage problem/condition/ask blocks byte-identical to the prior approved publication; P11.50/P11.58 inputs unchanged. Carried over: reviewed stage 4efbf304 (RUN 1104-20261104-freq01) HTML, MD and figures are byte-identical to this stage; only manifest absolute paths changed (NFC→NFD repo path for answer-PDF validation)."
   },
   "browser": {
     "status": "pass",
-    "reviewer": "/root/child",
-    "evidence": "work/browser/report.md, work/browser/final/details.json, work/browser/metrics/measurements.json, work/browser/standalone-final/details.json: visible Playwright HTML/MD SVG and interaction/print checks across 6 combinations."
+    "reviewer": "main coordinator (Claude Opus 5.5)",
+    "evidence": "work/browser-final.json, shots/*.png: re-run on this stage, playwright-headless 1280x900/375x812 × light/dark all visible, 581 KaTeX, 0 errors, no overflow, no console errors, no broken images."
   },
   "content": {
     "status": "pass",
-    "reviewer": "/root/child/content_review",
-    "evidence": "/private/tmp/ec2-pack-1104.pzN3MP/problem-explain/f13e861f-c1f9-41a5-8c10-23580300f611/work/content-review/report.md",
+    "reviewer": "content reviewer (opus, non-author)",
+    "evidence": "Final stage 4efbf304aa0647d49c42153db6da7994: diffed against 053a7353… — HTML and MD each differ only in the p5 A_v line ('=−(5 mS)(1.768 kΩ)' → '≈−(5 mS)(1.768 kΩ)'); everything else byte-identical. Final re-review on rebuilt stage 053a73532c8f413aa726a89c154d51d9. Programmatic comparison against the previously reviewed stage 3dfd32e2…: articles p1–p4 in the stage HTML and the p1–p4 sections of the companion MD are byte-identical; the non-article template part has identical length; only p5 changed. Read verification.md (content + learning_style_audit), authoring.md, solution-style.md (sha256 3c9f68f5…eb9f verified, 13 rule_ids), source.json (p1–p5, subparts main), originally reviewed stage HTML 3dfd32e2…/문제설명_1104_Cascode_Frequency_Response.html and .assets MD, lecture Lec5 slides 46–56 (text extracted), concept-note anchors s0-source-impedance/s0-cs-buffer/s0-emitter-impedance (exist; content consistent with FREQ-01 wording). Diffed new p1–p3 against prev/p1–p3: changes are exactly the FREQ-01 rewrite (P1 shortcut, P2/P3 form-as-check). Programmatic check: every $…$/$$…$$ string of all five fragments appears in both the stage HTML and the companion MD; stage articles each have the 7 data-explanation sections in order with the fixed headings; 5 summaries; no learning-volume rows. Independent sympy KCL (my own script, scratchpad/crv/chk.py) reproduces P1, P2, P3 expressions, the P2 R_G→0 and P3 R_B=0 retry results, the P3 C_μ=0 form and high-frequency limit (all diffs 0), and P5 numerics. Retry questions answered by me before reading work/p1/retry-expected.txt, work/p3/retry-answer.txt and the coordinator's p2 statement; all agree. All five items pass content; two learning-style defects found in P5 (see defects). Carried over: reviewed stage 4efbf304 (RUN 1104-20261104-freq01) HTML, MD and figures are byte-identical to this stage; only manifest absolute paths changed (NFC→NFD repo path for answer-PDF validation).",
     "items": {
       "p1:main": {
         "status": "pass",
-        "reviewer": "/root/child/content_review",
-        "evidence": "5ae88c2ed90a1ab0bc0caeb9beabd10f846bc64bf04e330a68bb534900363b4a. Follower test has RG at the gate and Cgs3 to the right output, upward controlled source and leftward trial current. Stage, MD and summary agree on rational Zout and limits. Overlay 3+1 includes the test figure."
+        "reviewer": "content reviewer (opus, non-author)",
+        "evidence": "Stage article p1 has 7 sections in order (understand→recall→start→solve('이렇게 풀어요')→verify→pitfall→retry), one data-subpart=main in solve/verify, one data-answer-final. FREQ-01 shortcut path as briefed: recall gives clue (output at follower source, only C_GS3) → concept Z_out(s) → symbols g_m3/C_GS3 → shortcut conditions (single gate-side R, C only at control port, r_o ignored; M3 λ=0) → reason for no KCL; start writes R_G=r_o1∥r_o2 (input zeroed, M1/M2 control currents 0), Z_out(0)=1/g_m3, A=g_m3, B=A·Z(0)=1; solve substitutes into (R_GC s+B)/(Cs+A) with no KCL, then expands R_G. Verify: units (S, Ω), s→0 = B/A = 1/g_m3, s→∞ = R_G, ω_z=1/(R_GC_GS3), ω_p=g_m3/C_GS3, inductive iff R_G>1/g_m3 (zero first) — all actually computed. My sympy KCL (gate+source nodes, λ3=0) gives Z=(R_GCs+1)/(Cs+g_m3), diff 0; matches reference_answer. Figure (no KCL in text, kept per authoring high-frequency-model rule and it shows the shortcut conditions): R_G gate-to-ground at left, C_GS3 gate–source, g_m3(V_G−V_X) source pointing up into source node (drain=AC ground), output dot at x=480 is wire end, V_X(+) above it, I_X arrow 457→404 left of the dot with gap, label below; gate blue/source red. Pitfalls correct (A=1,B=1/g_m3 gives right limits but wrong dimension — verified). Retry solved before reading writer file: Q1 R_G=0 → A,B unchanged, Z=1/(g_m3+sC_GS3), magnitude falls (capacitive); Q2 r_o3 present → shortcut invalid, KCL, result r_o3∥previous answer; matches work/p1/retry-expected.txt. Summary/body/MD: all 107 fragment math strings present in MD and stage HTML; summary formulas equal body. R_out boundary: Z(0)=1/g_m3 is exact under the problem's λ3=0, no exact→approx display. Advisory only: P1 writes r_o1 (lowercase) while P2/lecture s48 use r_O — pre-existing, not changed in this run."
       },
       "p2:main": {
         "status": "pass",
-        "reviewer": "/root/child/content_review",
-        "evidence": "5ae88c2ed90a1ab0bc0caeb9beabd10f846bc64bf04e330a68bb534900363b4a. Finite ro3 is right of the controlled source and left of the rightmost trial port. Voltage labels and dots share semantic colors. Stage, MD and summary agree on parallel Zout and finite-ro3 limits. Overlay 2+1 includes the test figure."
+        "reviewer": "content reviewer (opus, non-author)",
+        "evidence": "7 sections in order, solve title fixed, main subpart once in solve/verify. KCL kept as FREQ-01 requires for r_O3: start figure is the KCL model (R_G gate–ground left, C_GS3 gate–output, controlled source g_m3V_GS3 left / r_O3 right / output dot x=414 rightmost; I_X arrow 396→368 left of dot, V_X(+) above dot; caption states drain→source reference so leaving-node current is −g_m3V_GS3) and the first equation V_G/R_G+(V_G−V_X)sC_GS3=0 is the gate node KCL of exactly this figure; solve source-node KCL I_X=V_X/r_O3−g_m3V_GS3+(V_X−V_G)sC_GS3 matches figure branches and signs. Form used only as check in verify: fraction = (R_GCs+B)/(Cs+A) with A=g_m3,B=1; r_O3→∞ returns to E11.24; r_O3 attached in parallel last and explicit warning that folding 1/r_O3 into A breaks the s→∞ limit (I verified: that form gives R_G, not r_O3∥R_G). Verify computes s→0 r_O3/(1+g_m3r_O3)=r_O3∥1/g_m3≈1/g_m3 (g_m3r_O3≫1 stated) and s→∞ r_O3∥R_G; inductive condition R_G>1/g_m3 checked (zero<pole iff g_m3R_G>1). My sympy: Z−r_O3(1+R_GCs)/(1+g_mr_O3+(r_O3+R_G)Cs)=0; equals reference_answer. R_out boundary: the problem's explicit change (M3 λ≠0) makes r_O3 the requested content, so the exact Z_out(s) and its s→0 value are the requested result (exception), not an added exact→approx R_out derivation. Retry solved first: R_G→0 → r_O3 ∥ 1/g_m3 ∥ 1/(sC_GS3) = r_O3∥1/(g_m3+C_GS3s); matches coordinator's expected answer (sympy check 0). Summary consistent with body and MD (75 math strings all present). Advisory only: start <figure> lacks class=\"figure\" (unchanged from prior approval; browser review covers rendering)."
       },
       "p3:main": {
         "status": "pass",
-        "reviewer": "/root/child/content_review",
-        "evidence": "5ae88c2ed90a1ab0bc0caeb9beabd10f846bc64bf04e330a68bb534900363b4a. Cπ spans the base and emitter nets. Stage and MD provide exact impedance and the conditional sketch; summary gives both sequences and HF series path. Overlay 3+1 includes test circuit and final sketch."
+        "reviewer": "content reviewer (opus, non-author)",
+        "evidence": "7 sections in order, solve title fixed, main once each, data-answer-final present. KCL kept (C_μ changes base-side impedance) and recall states why; form used only in verify. Figure vs first equations: R_B and C_μ base→ground at left, r_π∥C_π base–emitter, g_mv_π source collector(ground)→emitter pointing up, output dot x=426 wire end, i_t arrow 400→365 left of dot, v_t(+) above; base blue, emitter red. Base KCL v_b/Z_B+v_π/Z_π=0 and emitter KCL i_t+g_mv_π=−v_π/Z_π match the figure's node names/directions/polarity (v_π=v_b−v_t). Result (Z_B+Z_π)/(1+g_mZ_π) and expanded form verified by my sympy (diff 0), equal to reference_answer. Bode claims checked algebraically: R_B>1/g_m ⇒ ω_z<ω_π; ω_z<ω_B ⇔ R_BC_μ<r_πC_π; ω_z cannot exceed both poles (R_B[βC_π+(β+1)C_μ]>r_πC_π shown correctly); high-frequency 1/(C_s s) with series C (sympy limit matches). Sketch (asymptotes flat, +20, flat, −20) matches the zero-first case; pole-first case described in text and summary. Verify FREQ-01 checks: C_μ=0 → (R_BC_πs+B)/(C_πs+A) with A=(β+1)/r_π, B=1+R_B/r_π (sympy diff 0), general form (1+Z_BY_c)/(g_m+Y_c) with Y_c=1/Z_π equals derived expression, B/A=(r_π+R_B)/(β+1)≈1/g_m+R_B/(β+1) (1/g_m visible), s→∞ → R_B, inductive iff R_B>1/g_m (exact equivalence). Pitfall on unnormalized β+1, r_π+R_B is correct. Retry solved first: R_B=0 → C_μ has 0 V across (both ends AC ground) and drops out; Z=1/(g_m+1/r_π+sC_π), flat r_π/(β+1)≈1/g_m, single pole (β+1)/(r_πC_π), 0→−20 dB/dec; matches work/p3/retry-answer.txt. Z_out(0) exact finite-β value is the s=0 level of the requested full Z_out (and the lecture/FREQ-01 form), so not an R_out-boundary violation. Summary/MD consistent (116 math strings present)."
       },
       "p4:main": {
         "status": "pass",
-        "reviewer": "/root/child/content_review",
-        "evidence": "5ae88c2ed90a1ab0bc0caeb9beabd10f846bc64bf04e330a68bb534900363b4a. RD ground clears the Y conductor. Local gm→RY→gain has a right-hand Y short and inward current. Both Miller coefficients, the three capacitance bundles and signed poles agree in stage and MD. Overlay 3+1 now includes the Y-short SVG in the local-gain step."
+        "reviewer": "content reviewer (opus, non-author)",
+        "evidence": "Unchanged fragment re-audited. 7 sections in order, solve title fixed. Start uses gm-rout route for the Miller gain X→Y: figure shows Y shorted to ground with v_Y=0 label at right, i_Y,sc arrow leftward, g_m1v_X source Y→ground; G_m,XY=g_m1, R_Y=R_P∥1/g_m2=R_P/(1+g_m2R_P), A_XY=−g_m1R_Y. Solve: full high-frequency model (C_GD1 X–Y, C_GS1 X–gnd, M1 source Y→gnd, M2 source Y→out labelled g_m2v_Y upward = −g_m2v_GS2 drain→source, R_P Y–gnd, R_D/C_out at output, output dot rightmost); Miller derivation i_X,C≈sv_XC_GD1(1−A_XY), i_Y,C≈sv_YC_GD1(1−1/A_XY); before/after pair figure with grounded C_X,M, C_Y,M; per-node RC figure. C_X, C_Y, C_out and poles match reference_answer and lecture s51 (R_P→∞ gives R_Y→1/g_m2 and the slide formula, checked). Verify: RC unit seconds, sign negative, R_P→∞ limit, output pole exact because output node is unilateral (λ=0, M2 gate grounded) — correct. Pitfall: Miller factor uses v_Y/v_X not overall gain; Miller poles are estimates — correct. Retry solved: smaller R_P → R_Y↓ → Y-side Miller factor (1+1/(g_m1R_Y))↑, but R_YC_Y=R_Y(C_DB1+C_GS2+C_SB2+C_GD1)+C_GD1/g_m1 decreases — question is well-posed and answerable. Summary/MD consistent (106 math strings present). FREQ-01 out of scope (cascode poles)."
       },
       "p5:main": {
         "status": "pass",
-        "reviewer": "/root/child/content_review",
-        "evidence": "5ae88c2ed90a1ab0bc0caeb9beabd10f846bc64bf04e330a68bb534900363b4a. Both marked gm→rout→gain paths carry right-hand shorts with inward current. Stage, MD and final extract separate RG=384.43 Ω, RD=1.77 kΩ and Av=−8.84 V/V. Overlay 7+1 includes local Y and global output shorts in their own selected steps."
+        "reviewer": "content reviewer (opus, non-author)",
+        "evidence": "Final stage 4efbf304aa0647d49c42153db6da7994: diffed against 053a7353… — HTML and MD each differ only in the p5 A_v line ('=−(5 mS)(1.768 kΩ)' → '≈−(5 mS)(1.768 kΩ)'); everything else byte-identical. Re-reviewed in stage 053a73532c8f413aa726a89c154d51d9 after the writer fix (diffed work/p5/p5.orig.html vs explanations/p5.html: changes limited to the three figure captions and added unit-bearing substitution lines; no structural/answer change). All 110 p5 math strings appear in the new stage HTML and MD; MD p5 section has no '₂' and no <sub>; 7 sections in order with the fixed solve title. New substituted numbers recomputed: 2(500 µA)/((100 µA/V²)(0.2 V)²)=250; 250(0.18 µm)=45 µm; 2(0.5 mA)/0.2 V=5 mS; (2/3)(45 µm)(0.18 µm)(12 fF/µm²)=64.8 fF; (0.2 fF/µm)(45 µm)=9 fF; C_X=64.8 fF+(1+1)(9 fF)=82.8 fF (1−A_XY with A_XY=−1); 1/(2π·5×10⁹ s⁻¹·82.8×10⁻¹⁵ F)=384.43 Ω; 1/(2π·10¹⁰ s⁻¹·9×10⁻¹⁵ F)=1768.39 Ω≈1.77 kΩ; (5 mS)(1.768 kΩ)=8.84 (unrounded 8.842) → A_v≈−8.84 V/V. Each calculation on its own display line (symbolic line, then substituted line). Remaining content unchanged from first review: Gm-route twice (A_XY=−1 via G_m,XY=g_m1, R_Y=1/g_m2; A_v=−G_mR_D with output-short figure), constraint inequality f_p≥target ⇒ R≤R_max, Miller pair and input-zeroed hf circuit, τ_in=31.83 ps, τ_out=15.92 ps, Y pole 9.61 GHz, retry (doubling output-pole target halves R_D,max and |A_v|) answered and correct; summary/MD consistent. The A_v line now reads A_v=−G_mR_D≈−(5 mS)(1.768 kΩ)≈−8.84 V/V, so the rounded R_D is marked with ≈ (earlier advisory resolved)."
       }
     }
   },
   "independent": {
     "status": "pass",
-    "reviewer": "/root/child",
-    "evidence": "All 5 separately derived from redacted prompts, complete SymPy stdout re-executed and compared, and results reconciled with workbook and final HTML. work/independent-comparison.md",
+    "reviewer": "blind verifiers from prior run (inputs unchanged) + coordinator comparison",
+    "evidence": "evidence/p1–p5 re-executed byte-identical; new fragment answers compared in work/independent/comparison.md Carried over: reviewed stage 4efbf304 (RUN 1104-20261104-freq01) HTML, MD and figures are byte-identical to this stage; only manifest absolute paths changed (NFC→NFD repo path for answer-PDF validation).",
     "items": {
       "p1:main": {
         "status": "pass",
-        "reviewer": "/root/child/blind_p1",
-        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt; work/p1/blind/report.md; work/independent-comparison.md",
+        "reviewer": "/root/child/blind_p1 (blind, prior run; re-executed here)",
         "method": "symbolic",
-        "conclusion": "R=ro1∥ro2에서 (1+sRCgs3)/(gm3+sCgs3), 원문 식 (11.133) 및 조각과 일치. DC, 고주파 극한 확인."
+        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt: re-executed in this RUN, output byte-identical; work/independent/comparison.md. New shortcut-path final Z_out=(1+sR_G C_GS3)/(g_m3+sC_GS3), R_G=r_o1||r_o2 equals evidence Zout; DC 1/gm3, HF R_G.",
+        "conclusion": "R=ro1∥ro2에서 (1+sRCgs3)/(gm3+sCgs3), 원문 식 (11.133) 및 조각과 일치. DC, 고주파 극한 확인. / New shortcut-path final Z_out=(1+sR_G C_GS3)/(g_m3+sC_GS3), R_G=r_o1||r_o2 equals evidence Zout; DC 1/gm3, HF R_G."
       },
       "p2:main": {
         "status": "pass",
-        "reviewer": "/root/child/blind_p2",
-        "evidence": "evidence/p2-sympy.py, evidence/p2-result.txt; work/p2/blind/report.md; work/independent-comparison.md",
+        "reviewer": "/root/child/blind_p2 (blind, prior run; re-executed here)",
         "method": "symbolic",
-        "conclusion": "ro3∥Z0로 정리되는 KCL 결과가 workbook 단일분수 및 조각 병렬식과 일치. 유한 ro3 및 고주파 극한 확인."
+        "evidence": "evidence/p2-sympy.py, evidence/p2-result.txt: re-executed in this RUN, output byte-identical; work/independent/comparison.md. data-answer-final unchanged from prior approval; new verify limits (s→0 r_O3||1/g_m3, s→∞ r_O3||R_G) match evidence.",
+        "conclusion": "ro3∥Z0로 정리되는 KCL 결과가 workbook 단일분수 및 조각 병렬식과 일치. 유한 ro3 및 고주파 극한 확인. / data-answer-final unchanged from prior approval; new verify limits (s→0 r_O3||1/g_m3, s→∞ r_O3||R_G) match evidence."
       },
       "p3:main": {
         "status": "pass",
-        "reviewer": "/root/child/blind_p3",
-        "evidence": "evidence/p3-sympy.py, evidence/p3-result.txt; work/p3/blind/report.md; work/independent-comparison.md",
+        "reviewer": "/root/child/blind_p3 (blind, prior run; re-executed here)",
         "method": "symbolic",
-        "conclusion": "유한 rπ, Cπ, Cμ 두 KCL 결과·두 극/한 영점과 조건부 점근선이 workbook 및 조각과 일치. DC·고주파 극한 확인."
+        "evidence": "evidence/p3-sympy.py, evidence/p3-result.txt: re-executed in this RUN, output byte-identical; work/independent/comparison.md. data-answer-final unchanged; new C_mu=0 form (R_B C_pi s+B)/(C_pi s+A), A=g_m+1/r_pi, B=1+R_B/r_pi equals evidence Cmu=0 line; general-form identity checked symbolically.",
+        "conclusion": "유한 rπ, Cπ, Cμ 두 KCL 결과·두 극/한 영점과 조건부 점근선이 workbook 및 조각과 일치. DC·고주파 극한 확인. / data-answer-final unchanged; new C_mu=0 form (R_B C_pi s+B)/(C_pi s+A), A=g_m+1/r_pi, B=1+R_B/r_pi equals evidence Cmu=0 line; general-form identity checked symbolically."
       },
       "p4:main": {
         "status": "pass",
-        "reviewer": "/root/child/blind_p4",
-        "evidence": "evidence/p4-sympy.py, evidence/p4-result.txt; work/p4/blind/report.md; work/independent-comparison.md",
+        "reviewer": "/root/child/blind_p4 (blind, prior run; re-executed here)",
         "method": "symbolic",
-        "conclusion": "입력·중간 Miller 근사 극과 모델에서 분리된 출력 극 일치. 정확한 결합식은 내부 검산에 유지."
+        "evidence": "evidence/p4-sympy.py, evidence/p4-result.txt: re-executed in this RUN, output byte-identical; work/independent/comparison.md. Fragment unchanged; evidence reproduces.",
+        "conclusion": "입력·중간 Miller 근사 극과 모델에서 분리된 출력 극 일치. 정확한 결합식은 내부 검산에 유지. / Fragment unchanged; evidence reproduces."
       },
       "p5:main": {
         "status": "pass",
-        "reviewer": "/root/child/blind_p5",
-        "evidence": "evidence/p5-sympy.py, evidence/p5-result.txt; work/p5/blind/report.md; work/independent-comparison.md",
+        "reviewer": "/root/child/blind_p5 (blind, prior run; re-executed here)",
         "method": "symbolic",
-        "conclusion": "RG,max≈384.43 Ω, RD,max≈1.77 kΩ, 부호 포함 Av≈−8.84 V/V. 5/10 GHz 조건 역대입 및 workbook 반올림과 일치."
+        "evidence": "evidence/p5-sympy.py, evidence/p5-result.txt: re-executed in this RUN, output byte-identical; work/independent/comparison.md. Only notation/unit substitution lines added; final values 384.43 Ω, 1.77 kΩ, −8.84 V/V match evidence.",
+        "conclusion": "RG,max≈384.43 Ω, RD,max≈1.77 kΩ, 부호 포함 Av≈−8.84 V/V. 5/10 GHz 조건 역대입 및 workbook 반올림과 일치. / Only notation/unit substitution lines added; final values 384.43 Ω, 1.77 kΩ, −8.84 V/V match evidence."
       }
     }
   },
@@ -415,7 +432,7 @@
     ".assets/figures_문제설명_1104_Cascode_Frequency_Response/3a88ef570d579101-fig11-90.png": "3a88ef570d579101f23092628274d51273bcdfa2e2e4184552cfdb60e6e9a524",
     ".assets/figures_문제설명_1104_Cascode_Frequency_Response/987fa03d89679685-fig11-49-a.png": "987fa03d896796854948b111650ccffa8ce82ef1c69163eaa9cc6746cfd93c06",
     ".assets/figures_문제설명_1104_Cascode_Frequency_Response/e2e839b0311d0f9d-fig11-97.png": "e2e839b0311d0f9dee7803ec3a0959e57ed46b47e7f3f34a9f7c3a4ddd9d539b",
-    ".assets/figures_문제설명_1104_Cascode_Frequency_Response/explain-fig-1.svg": "98dad30ff0ca141d8b59cb47872beb5f6a834a9367496b4aec6b97ab9c7d9b8f",
+    ".assets/figures_문제설명_1104_Cascode_Frequency_Response/explain-fig-1.svg": "e4b7a9defd88adac2aba2ec255b529d84a2a72b6a79b2e2f2df2e66f6b05f244",
     ".assets/figures_문제설명_1104_Cascode_Frequency_Response/explain-fig-10.svg": "653ae3d8f8d3824405b4e6bb353db47dfb05339ffbb4c71305ed3ae270d22839",
     ".assets/figures_문제설명_1104_Cascode_Frequency_Response/explain-fig-11.svg": "578e55e1212ea493dd067ece177fde875db52ea6866b6d12ce177f53e8cd1dc8",
     ".assets/figures_문제설명_1104_Cascode_Frequency_Response/explain-fig-12.svg": "338db1f0fdaa688865d73b12570bb0f98fcccde5c06776a32491810b8434f72a",
@@ -428,8 +445,8 @@
     ".assets/figures_문제설명_1104_Cascode_Frequency_Response/explain-fig-8.svg": "6be45291c7711970452116e94e5ea764d843b34a7b3307b822043325af1efae3",
     ".assets/figures_문제설명_1104_Cascode_Frequency_Response/explain-fig-9.svg": "870a38f9d55c2f782ab2192cc7a97c122b0259c5d4518415b069a72404bee3de",
     ".assets/figures_문제설명_1104_Cascode_Frequency_Response/fc4f843f03f7f36c-fig11-92.png": "fc4f843f03f7f36ccc463e8a35826c18c75c3c1f8c5cd7ee53a42b2227abbb9d",
-    ".assets/문제설명_1104_Cascode_Frequency_Response.md": "1e14dca2da954a1f4f35f0752837ff1b5a07338fd3e64beeef6699891855555d",
-    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/answer-overlay.json": "c9aebe1db6fb0199410741c9bed92a7be198903862ab48b2d0051d2516329d6a",
+    ".assets/문제설명_1104_Cascode_Frequency_Response.md": "57a360a2ee05c1e8b5b505da66c5880f406bf5356f2c3ff3523842de7d79923d",
+    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/answer-overlay.json": "d6d9a22f0f22a5a5d1e14d5e31cd41d8566d3af6c821c8114598285582e45bf6",
     ".assets/자료_문제설명_1104_Cascode_Frequency_Response/evidence/p1-result.txt": "7b6d15c274687b7300b9cc303c1e220f482bf42506f77fe86f2c694cff75f55b",
     ".assets/자료_문제설명_1104_Cascode_Frequency_Response/evidence/p1-sympy.py": "94d043e47d452cb06179a37ef2988ab8324de126d8ab52773f79720755231026",
     ".assets/자료_문제설명_1104_Cascode_Frequency_Response/evidence/p2-result.txt": "a78c6a302a0159c33c0acc6c01df9439b16e9e865cdc3ca8717d465839728589",
@@ -440,11 +457,11 @@
     ".assets/자료_문제설명_1104_Cascode_Frequency_Response/evidence/p4-sympy.py": "204bcb85db9e47d30e752b659be49a84b67562dc01717ad3a317e323cbea1aff",
     ".assets/자료_문제설명_1104_Cascode_Frequency_Response/evidence/p5-result.txt": "51be2e55c148a1d8d973c846446c01cc95a5afed2102bc73fec3a699bdf5a651",
     ".assets/자료_문제설명_1104_Cascode_Frequency_Response/evidence/p5-sympy.py": "caeec231ae70c4646d277fa588be2913aa3a6bfd05ca3f351548c988c33f8076",
-    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/fragments/p1.html": "91cd3fa0d48c96431fcaae477c900bd02764664636571786da133bbecc3a7119",
-    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/fragments/p2.html": "d93b8f28a45e69539375b0f4071a031da707453438e5c9a24fd1f40620dd2526",
-    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/fragments/p3.html": "fc6343f02a5ee1fd8b308feb961f06837fca5a8bbacda56f19c97a050f18e060",
+    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/fragments/p1.html": "7d05f1df1b425648081bc9a30a6545e82ef9e14cac8d18d016ee3bcd92dfde1d",
+    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/fragments/p2.html": "a3d84597cf1fa67f508eb0217988d5193dc57207d7476d8af1c6f495eaa0ce06",
+    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/fragments/p3.html": "9f4d645f32045ac64825604cb9e3a1fe810e66332cf719b833dd850766bb2697",
     ".assets/자료_문제설명_1104_Cascode_Frequency_Response/fragments/p4.html": "0b7c56af4684e9594c46dedcb52249ded8968e79d5f98bb7ceb000137049c64d",
-    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/fragments/p5.html": "bc5e7da8a9e228f85cb9f3cd211406dcc1e632960488f53110c0a8ba036e0d06",
+    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/fragments/p5.html": "5e81cce2a6b439c27d93b4b136678db07c70802531d24f9abcc26c44fb30aedc",
     ".assets/자료_문제설명_1104_Cascode_Frequency_Response/template-provenance.json": "69f885ea5f798b5132305e84c4e454228d50fb784330bfab3b2d4fd3697650fc",
     ".assets/자료_문제설명_1104_Cascode_Frequency_Response/vendor/katex/LICENSE": "766ccc1f306c885aa45542a9846bbd0a505b27a0374f146778171c2254ce18e3",
     ".assets/자료_문제설명_1104_Cascode_Frequency_Response/vendor/katex/contrib/auto-render.min.js": "7b57d427ac6270677daf8d8380ded2cc73336f9149a167b8e1fe0d6ef66604ae",
@@ -531,7 +548,7 @@
     ".assets/자료_문제설명_1104_Cascode_Frequency_Response/vendor/pretendard/woff2/Pretendard-SemiBold.woff2": "c863f76a7de5c1ddc1ed8b2fa794964530774592c4f31407a84e2a2ae93f17f0",
     ".assets/자료_문제설명_1104_Cascode_Frequency_Response/vendor/pretendard/woff2/Pretendard-Thin.woff2": "1539755224a64719d5b18406762c476db74fcc299b9e4641ca1e9812fbc7a09b",
     ".assets/자료_문제설명_1104_Cascode_Frequency_Response/vendor/provenance.json": "c953ecb4573b74379b1599a52f234b195bb335cf119fd9b35997c2a98b6abfeb",
-    "문제설명_1104_Cascode_Frequency_Response.html": "5ae88c2ed90a1ab0bc0caeb9beabd10f846bc64bf04e330a68bb534900363b4a",
-    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/manifest.json": "7a3c2262fd0e362986d1abe2aed22fcd5c445154bef836b68615f414329105dc"
+    "문제설명_1104_Cascode_Frequency_Response.html": "fa8edb002dbd1963750371db5a9ff43deb9617b980a9140991812224dd8c1ede",
+    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/manifest.json": "6b7e3a01148e3f95a78ebcdbd636884d073f258c8529d5a40c42f4a89a10da88"
   }
 }
