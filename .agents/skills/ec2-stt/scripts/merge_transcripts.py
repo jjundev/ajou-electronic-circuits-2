@@ -23,7 +23,8 @@ def nfc(text: str) -> str:
 def merge_transcripts(
     target_dir: str,
     prefix: str = "",
-    segment_seconds: int = 300,
+    segment_seconds: int = 150,
+    group_parts: int = 2,
     keep_parts: bool = False,
     output_file: str = "",
     out_file: str = "",
@@ -65,14 +66,24 @@ def merge_transcripts(
         f"# {prefix or os.path.basename(target_dir)} 전체 오디오 전사본\n\n",
     ]
 
+    current_header_idx = 0
+
     for part_num, p_file in part_files:
         offset_seconds = (part_num - 1) * segment_seconds
         part_path = os.path.join(target_dir, p_file)
-        if timestamps:
-            start_min = (part_num - 1) * (segment_seconds // 60)
-            full_content.append(f"## Part {part_num:02d} ({start_min:02d}:00 ~ )\n\n")
-        else:
-            full_content.append(f"## Part {part_num:02d}\n\n")
+
+        # Header grouping: group_parts chunks per displayed Part
+        # e.g., if group_parts=2, chunks 1 & 2 belong to Part 01
+        header_num = ((part_num - 1) // group_parts) + 1 if group_parts > 1 else part_num
+
+        if header_num != current_header_idx:
+            current_header_idx = header_num
+            if timestamps:
+                start_sec = ((header_num - 1) * group_parts) * segment_seconds
+                start_min = start_sec // 60
+                full_content.append(f"## Part {header_num:02d} ({start_min:02d}:00 ~ )\n\n")
+            else:
+                full_content.append(f"## Part {header_num:02d}\n\n")
 
         with open(part_path, "r", encoding="utf-8") as pf:
             lines = pf.readlines()
@@ -135,9 +146,9 @@ def merge_transcripts(
         output_abs = os.path.abspath(output_path)
         for f in os.listdir(target_dir):
             fn = nfc(f)
-            is_chunk_md = bool(re.search(r"_part\d+\.md$", fn))
-            is_chunk_mp3 = bool(re.search(r"_part\d+\.mp3$", fn))
-            is_chunk_mp4 = bool(re.search(r"_part\d+_temp\.mp4$", fn))
+            is_chunk_md = bool(re.search(r"_part\d+.*\.md$", fn))
+            is_chunk_mp3 = bool(re.search(r"_part\d+.*\.mp3$", fn))
+            is_chunk_mp4 = bool(re.search(r"_part\d+.*_temp\.mp4$", fn))
 
             if prefix:
                 matches_prefix = fn.startswith(prefix)
@@ -164,7 +175,8 @@ def main():
     parser.add_argument("--dir", required=True, help="Directory containing part files")
     parser.add_argument("--prefix", default="", help="Prefix of the part files (e.g. 1002 전회2)")
     parser.add_argument("--out", default="", help="Final output file path")
-    parser.add_argument("--segment-seconds", type=int, default=300, help="Segment length in seconds (default: 300)")
+    parser.add_argument("--segment-seconds", type=int, default=150, help="Segment length in seconds (default: 150)")
+    parser.add_argument("--group-parts", type=int, default=2, help="Number of chunks grouped under each ## Part header (default: 2, yielding ~5min parts)")
     parser.add_argument("--keep-parts", action="store_true", help="Preserve intermediate part files")
     parser.add_argument("--timestamps", action="store_true", help="Include continuous MM:SS timestamps")
     parser.add_argument("--speakers", default="", help="Comma-separated allowed speaker labels")
@@ -174,6 +186,7 @@ def main():
         target_dir=args.dir,
         prefix=args.prefix,
         segment_seconds=args.segment_seconds,
+        group_parts=args.group_parts,
         keep_parts=args.keep_parts,
         output_file=args.out,
         timestamps=args.timestamps,
