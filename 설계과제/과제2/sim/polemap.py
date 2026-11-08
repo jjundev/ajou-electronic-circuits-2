@@ -38,19 +38,34 @@ def shift_matrix(base, shifted):
     return rel
 
 
-def map_poles(base, shifted):
-    """노드 → 극점 인덱스의 일대일 대응. 상대 이동의 합이 최대인 순열을 고른다.
+MIN_MARGIN = 0.05        # 최선 대응이 차선보다 이만큼(상대) 이상 나아야 대응으로 인정한다
 
-    X와 Y는 CGD1로 결합되어 있어 노드마다 따로 argmax를 하면 같은 극점을 고를 수
-    있다. 그래서 전체 순열 중 합이 가장 큰 것을 고르고, 최댓값이 둘 이상이면
-    대응을 정할 수 없으므로 ValueError를 낸다.
+
+def assignment_scores(base, shifted):
+    """[(점수, 순열), ...] 내림차순. 점수 = 노드별로 최댓값 1로 정규화한 상대 이동의 합.
+
+    정규화는 1 fF가 작은 노드에서 더 크게 보이는 1/C_node 가중을 없앤다.
     """
     rel = shift_matrix(base, shifted)
     names = list(rel)
-    scored = sorted(((sum(rel[n][i] for n, i in zip(names, perm)), perm)
-                     for perm in permutations(range(len(base)), len(names))), reverse=True)
-    if len(scored) > 1 and scored[0][0] - scored[1][0] <= 1e-9 * scored[0][0]:
-        raise ValueError(f"ambiguous pole mapping: {rel}")
+    norm = {n: [x / max(rel[n]) for x in rel[n]] for n in names}
+    return names, sorted(((sum(norm[n][i] for n, i in zip(names, perm)), perm)
+                          for perm in permutations(range(len(base)), len(names))), reverse=True)
+
+
+def map_poles(base, shifted):
+    """노드 → 극점 인덱스의 일대일 대응. 정규화한 상대 이동의 합이 최대인 순열을 고른다.
+
+    X와 Y는 CGD1로 결합되어 있어 노드마다 따로 argmax를 하면 같은 극점을 고를 수
+    있다. 그래서 전체 순열 중 합이 가장 큰 것을 고르고, 차선과의 차이가
+    MIN_MARGIN보다 작으면 대응을 정할 수 없으므로 ValueError를 낸다.
+    켤레 복소 극점 쌍은 |p|가 같아 항상 동점이 되므로 역시 ValueError가 된다.
+    """
+    if not base:
+        raise ValueError("no poles from pz analysis")
+    names, scored = assignment_scores(base, shifted)
+    if len(scored) > 1 and scored[0][0] - scored[1][0] < MIN_MARGIN * scored[0][0]:
+        raise ValueError(f"ambiguous pole mapping: {shift_matrix(base, shifted)}")
     return dict(zip(names, scored[0][1]))
 
 
@@ -60,9 +75,12 @@ if __name__ == "__main__":
     idx = map_poles(base, shifted)
     b = sorted(base, key=abs)
     rel = shift_matrix(base, shifted)
-    pm = {k: {"index": i, "f_hz": abs(b[i]) / (2 * math.pi), "rel_shift": rel[k]}
-          for k, i in idx.items()}
+    _, scored = assignment_scores(base, shifted)
+    margin = (scored[0][0] - scored[1][0]) / scored[0][0]
+    pm = {k: {"index": i, "f_hz": abs(b[i]) / (2 * math.pi), "rel_shift": rel[k],
+              "assign_margin": margin} for k, i in idx.items()}
     (SIM / "polemap.json").write_text(json.dumps(pm, indent=2) + "\n")
+    print(f"assignment margin over runner-up: {margin*100:.1f} %")
     for k, v in pm.items():
         s = sorted(shifted[k], key=abs)[v["index"]]
         print(f"{k:3s}: pole #{v['index']}  f = {v['f_hz']/1e9:.4f} GHz  "

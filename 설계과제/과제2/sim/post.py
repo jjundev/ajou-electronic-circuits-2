@@ -6,6 +6,7 @@ from pathlib import Path
 import numpy as np
 
 import handcalc
+import polemap
 import spice_io
 
 SIM = Path(__file__).resolve().parent
@@ -52,14 +53,27 @@ def spice_gain(dev, RL):
     return -gm1 * r13 / (r13 + rin2_sc) * par(RL, rcas)
 
 
-def spice_nodal(dev, RL):
-    """SPICE 소자값(gm, gds, cgs, cgd, cbd, cbs)을 handcalc.nodal 3노드 회로에 넣어 푼다."""
-    return handcalc.nodal({
+def label_nodal(dd, c_probe=1.0):
+    """handcalc.nodal 극점을 노드에 붙인다: 노드마다 c_probe(fF)를 더해 polemap.map_poles로 대응."""
+    base = handcalc.nodal(dd)["f"]
+    shifted = {k: handcalc.nodal(dd, extra={k: c_probe})["f"] for k in NODES}
+    idx = polemap.map_poles(base, shifted)
+    return {k: base[i] for k, i in idx.items()}
+
+
+def spice_nodal_input(dev, RL):
+    """SPICE 소자값(gm, gds, cgs, cgd, cbd, cbs) → handcalc.nodal 입력 dict."""
+    return {
         "RL": RL,
         "gm": {k: dev[k]["gm"] for k in ORDER},
         "ro": {k: 1 / dev[k]["gds"] for k in ORDER},
         "caps": {k: {"CGS": dev[k]["cgs"] * 1e15, "CGD": dev[k]["cgd"] * 1e15,
-                     "CDB": dev[k]["cbd"] * 1e15, "CSB": dev[k]["cbs"] * 1e15} for k in ORDER}})
+                     "CDB": dev[k]["cbd"] * 1e15, "CSB": dev[k]["cbs"] * 1e15} for k in ORDER}}
+
+
+def spice_nodal(dev, RL):
+    """SPICE 소자값을 handcalc.nodal 3노드 회로에 넣어 푼다."""
+    return handcalc.nodal(spice_nodal_input(dev, RL))
 
 
 def node_caps(f, R):
@@ -180,8 +194,8 @@ def main():
     ])
     R_sp = spice_node_R(dev, d["RL"])
     f_sp = {k: pm[k]["f_hz"] for k in NODES}
-    fn = {k: d["nodal"]["f"][pm[k]["index"]] for k in NODES}   # 같은 |p| 순서로 대응
-    fsn = {k: sn["f"][pm[k]["index"]] for k in NODES}
+    fn = label_nodal(d)                                          # 1 fF 섭동으로 노드 대응
+    fsn = label_nodal(spice_nodal_input(dev, d["RL"]))
     pole_rows = [[f"$f_{{{k}}}$ [GHz]", f"{d['f'][k]/1e9:.3f}", f"{fn[k]/1e9:.3f}", f"{fsn[k]/1e9:.3f}",
                   f"{f_sp[k]/1e9:.3f}",
                   f"{err_pct(f_sp[k], d['f'][k]):+.1f}", f"{err_pct(f_sp[k], fn[k]):+.1f}"] for k in NODES]

@@ -155,6 +155,15 @@ class PolemapTests(unittest.TestCase):
               "out": [-0.9989e10, -1.9186e10, -3.9940e10]}
         self.assertEqual(self.m.map_poles(base, sh), {"X": 0, "Y": 2, "out": 1})
 
+    def test_map_poles_near_tie_raises(self):
+        # X와 Y가 두 극점을 거의 같은 비율로 움직이면 대응을 정할 수 없다 (정확히 같지 않아도)
+        b = [-1e10, -2e10, -4e10]
+        sh = {"X": [b[0] * 1.0040, b[1] * 1.0006, b[2] * 1.0041],
+              "Y": [b[0] * 1.0038, b[1] * 1.0001, b[2] * 1.0040],
+              "out": [b[0] * 1.001, b[1] * 1.04, b[2] * 1.001]}
+        with self.assertRaises(ValueError):
+            self.m.map_poles(b, sh)
+
     @unittest.skipUnless(shutil.which("ngspice"), "ngspice not installed")
     def test_real_map_x_is_dominant(self):
         subprocess.run(["python3", "polemap.py"], cwd=SIM, check=True, capture_output=True)
@@ -204,6 +213,19 @@ class PostTests(unittest.TestCase):
         self.assertAlmostEqual(n["A0"], d["nodal"]["A0"], places=9)
         for a, b in zip(n["f"], d["nodal"]["f"]):
             self.assertAlmostEqual(a / b, 1, places=9)
+
+    def test_label_nodal_poles_by_perturbation(self):
+        import handcalc
+        lab = self.p.label_nodal(handcalc.design())
+        for k, ref in (("X", 1.590e9), ("Y", 5.959e9), ("out", 3.786e9)):
+            self.assertAlmostEqual(lab[k] / ref, 1, delta=0.005)
+
+    def test_label_nodal_poles_when_y_and_out_swap_order(self):
+        # vov2 = 0.2에서는 정확해의 Y 극점이 out 극점보다 낮다: |p| 순서로 붙이면 둘이 바뀐다
+        import handcalc
+        lab = self.p.label_nodal(handcalc.design(vov2=0.2))
+        self.assertAlmostEqual(lab["Y"] / 5.711e9, 1, delta=0.005)
+        self.assertAlmostEqual(lab["out"] / 7.551e9, 1, delta=0.005)
 
     def test_device_node_caps_matches_design_with_table_caps(self):
         d = json.loads((SIM / "design.json").read_text())

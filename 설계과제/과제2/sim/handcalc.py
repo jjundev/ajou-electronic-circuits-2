@@ -79,8 +79,14 @@ def design(I1=400e-6, vov1=0.15, vov2=0.15, vov3=0.30, VY=0.30, av=10.0):
     return d
 
 
-def nodal(d):
-    """X·Y·out 3노드 소신호 회로(과제 표 C)를 근사 없이 푼다: 저주파 이득과 극점(Hz, 오름차순)."""
+NODE_INDEX = {"X": 0, "Y": 1, "out": 2}
+
+
+def nodal(d, extra=None):
+    """X·Y·out 3노드 소신호 회로(과제 표 C)를 근사 없이 푼다: 저주파 이득과 극점(Hz, 오름차순).
+
+    extra = {"Y": 1.0}처럼 주면 그 노드에 접지 커패시턴스(fF)를 더한다 (극점-노드 대응용).
+    """
     gm, r, c, fF = d["gm"], d["ro"], d["caps"], 1e-15
     G = np.zeros((3, 3))
     C = np.zeros((3, 3))
@@ -93,6 +99,8 @@ def nodal(d):
     C[1, 1] = cgd1 + fF * (c["M1"]["CDB"] + c["M2"]["CGS"] + c["M2"]["CSB"]
                            + c["M3"]["CDB"] + c["M3"]["CGD"])
     C[2, 2] = fF * (c["M2"]["CDB"] + c["M2"]["CGD"])
+    for node, cf in (extra or {}).items():
+        C[NODE_INDEX[node], NODE_INDEX[node]] += cf * fF
     a0 = np.linalg.solve(G, [1 / RS, 0, 0])[2]
     p = np.linalg.eigvals(-np.linalg.solve(C, G))
     return {"A0": float(a0), "f": sorted(float(abs(x)) / (2 * math.pi) for x in p)}
