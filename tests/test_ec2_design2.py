@@ -155,5 +155,53 @@ class PolemapTests(unittest.TestCase):
         self.assertGreaterEqual(min(v["f_hz"] for v in pm.values()), 1e9)
 
 
+class PostTests(unittest.TestCase):
+    def setUp(self):
+        import post
+        self.p = post
+
+    def test_sat_rows_ignore_vdsat(self):
+        dev = {"M1": {"id": 4e-4, "vgs": 0.55, "vds": 0.30, "vdsat": 0.0},
+               "M2": {"id": 2e-4, "vgs": 0.55, "vds": 0.314, "vdsat": 0.0},
+               "M3": {"id": -2e-4, "vgs": -0.70, "vds": -0.70, "vdsat": 0.0}}
+        r = {x["name"]: x for x in self.p.sat_rows(dev)}
+        self.assertAlmostEqual(r["M1"]["margin"], 0.15)
+        self.assertAlmostEqual(r["M3"]["margin"], 0.40)
+        self.assertTrue(all(x["ok"] for x in r.values()))
+
+    def test_node_caps_roundtrip(self):
+        c = self.p.node_caps({"X": 1 / (2 * 3.141592653589793 * 500 * 164e-15)}, {"X": 500})
+        self.assertAlmostEqual(c["X"], 164, places=6)
+
+    def test_spice_node_R_matches_design(self):
+        d = json.loads((SIM / "design.json").read_text())
+        dev = {"M1": {"gm": d["gm"]["M1"], "gds": 1 / d["ro"]["M1"]},
+               "M2": {"gm": d["gm"]["M2"], "gds": 1 / d["ro"]["M2"]},
+               "M3": {"gm": d["gm"]["M3"], "gds": 1 / d["ro"]["M3"]}}
+        R = self.p.spice_node_R(dev, d["RL"])
+        for k in ("X", "Y", "out"):
+            self.assertAlmostEqual(R[k] / d["R"][k], 1, delta=0.01)
+
+    def test_device_node_caps_matches_design_with_table_caps(self):
+        d = json.loads((SIM / "design.json").read_text())
+        dev = {k: {"cgs": c["CGS"] * 1e-15, "cgd": c["CGD"] * 1e-15,
+                   "cbd": c["CDB"] * 1e-15, "cbs": c["CSB"] * 1e-15} for k, c in d["caps"].items()}
+        c = self.p.device_node_caps(dev, d["AXY"])
+        for k in ("X", "Y", "out"):
+            self.assertAlmostEqual(c[k], d["C"][k], places=6)
+
+    def test_err_pct(self):
+        self.assertAlmostEqual(self.p.err_pct(11.0, 10.0), 10.0)
+
+    @unittest.skipUnless(shutil.which("ngspice"), "ngspice not installed")
+    def test_outputs_written(self):
+        subprocess.run(["python3", "post.py"], cwd=SIM, check=True, capture_output=True)
+        figs = SIM.parent / "report/figs"
+        for f in ("02_bode_design.png", "04_ac_bode.png"):
+            self.assertTrue((figs / f).stat().st_size > 10_000)
+        self.assertIn("saturation", (SIM.parent / "report/sat_table.md").read_text())
+        self.assertIn("오차", (SIM.parent / "report/compare.md").read_text())
+
+
 if __name__ == "__main__":
     unittest.main()
