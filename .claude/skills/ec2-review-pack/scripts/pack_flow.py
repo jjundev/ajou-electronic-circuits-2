@@ -709,6 +709,7 @@ def request_fixes(run: Path, request_path: Path) -> dict:
         if s['fix_rounds'][category] >= maximum: raise FlowError('shared fix budget exhausted')
         seen = set()
         _current(s)
+        if category == 'content': _require_finding_coverage(s, run, request)
         for item in items:
             tid = item.get('task_id'); path = Path(item.get('request_path', '')).resolve()
             if tid not in s['tasks'] or tid in seen or not path.is_relative_to(run) or not path.is_file():
@@ -723,6 +724,31 @@ def request_fixes(run: Path, request_path: Path) -> dict:
         refresh_tasks(s); write_briefs(s)
         return s
     return update_state(run, state['revision'], change)
+
+
+def _require_finding_coverage(state: dict, run: Path, request: dict) -> None:
+    """The one content round must reach every audit finding's owner, or waive it."""
+    from pack_findings import blocking_findings, owner_of
+    waived = request.get('waived', [])
+    if not isinstance(waived, list) or not all(isinstance(w, dict) and isinstance(w.get('id'), str)
+            and isinstance(w.get('reason'), str) and w['reason'].strip() for w in waived):
+        raise FlowError('waived must be [{"id", "reason"}] with a nonempty reason')
+    manifest = next((run / name for name in ('manifest.json', 'work/selection/manifest.json',
+                     'work/scope-draft/manifest.json') if (run / name).is_file()), None)
+    manifest = _read(manifest) if manifest else {}
+    requested = {item.get('task_id') for item in request['items'] if isinstance(item, dict)}
+    skipped = {w['id'] for w in waived}
+    missing = []
+    for task in state['tasks'].values():
+        report = (task.get('receipt') or {}).get('report')
+        if task['role'] not in ('style-audit', 'content-review') or task['status'] != 'needs_fix' or not report: continue
+        if not Path(report).is_file(): continue
+        for _, item_id in blocking_findings(Path(report)):
+            owner = owner_of(item_id, manifest)
+            if item_id not in skipped and owner not in requested:
+                missing.append(f'{item_id}→{owner}')
+    if missing:
+        raise FlowError('content fix misses findings: ' + ', '.join(dict.fromkeys(missing)))
 
 
 def authorize_extra_fix(run: Path, authorization_path: Path) -> dict:
