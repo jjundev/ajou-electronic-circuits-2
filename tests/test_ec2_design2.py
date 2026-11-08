@@ -203,5 +203,15 @@ class PostTests(unittest.TestCase):
         self.assertIn("오차", (SIM.parent / "report/compare.md").read_text())
 
 
+class AscTests(unittest.TestCase):
+    def test_asc_encoding_and_content(self):
+        subprocess.run(["python3", "make_asc.py"], cwd=SIM / "ltspice", check=True, capture_output=True)
+        raw = (SIM / "ltspice/cascode.asc").read_bytes()
+        self.assertFalse(raw.startswith(b"\xff\xfe"))           # BOM 금지
+        txt = raw.decode("utf-16-le")
+        for s in ("202220953 신현준", "CMOSN", "CMOSP", ".include ../MOSFET_model.lib", "\r\n"):
+            self.assertIn(s, txt)
+
+
 if __name__ == "__main__":
     unittest.main()
