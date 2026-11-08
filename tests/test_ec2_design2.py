@@ -58,5 +58,44 @@ class HandcalcTests(unittest.TestCase):
             self.assertIn("f", json.loads((Path(t) / "design.json").read_text()))
 
 
+DEV = """ Mos1: Level 1 MOSfet model with Meyer capacitance model
+     device                    m3                    m2                    m1
+      model                 cmosp                 cmosn                 cmosn
+         id            0.00020668           0.000207447           0.000414127
+        vdsat                     0                     0                     0
+        cgs           1.94032e-14           4.45142e-14           8.91721e-14
+        vth             ?????????             ?????????             ?????????
+"""
+
+
+class SpiceIoTests(unittest.TestCase):
+    def setUp(self):
+        import spice_io
+        self.s = spice_io
+
+    def test_parse_scalars(self):
+        d = self.s.parse_scalars("v(y) = 2.997411e-01\ni(vdd) = -4.14127e-04\na0 = 2.03080e+01\n")
+        self.assertAlmostEqual(d["v(y)"], 0.2997411)
+        self.assertAlmostEqual(d["i(vdd)"], -4.14127e-4)
+
+    def test_parse_devices(self):
+        d = self.s.parse_devices(DEV + DEV.replace("m3", "m9"))
+        self.assertAlmostEqual(d["M1"]["id"], 0.000414127)
+        self.assertAlmostEqual(d["M2"]["cgs"], 4.45142e-14)
+        self.assertIn("M9", d)
+        self.assertNotEqual(d["M1"]["vth"], d["M1"]["vth"])  # nan
+
+    def test_parse_pz(self):
+        p, z = self.s.parse_pz("pole(1) = -4.67097e+10,0.000000e+00\npole(2) = -9.76058e+09,0.000000e+00\n"
+                               "zero(1) = 2.222905e+11,0.000000e+00\n")
+        self.assertEqual(p, [complex(-4.67097e10, 0), complex(-9.76058e9, 0)])
+        self.assertEqual(z, [complex(2.222905e11, 0)])
+
+    def test_parse_pz_complex(self):
+        p, _ = self.s.parse_pz("pole(1) = -1.0e+10,5.0e+09\npole(2) = -1.0e+10,-5.0e+09\n")
+        self.assertEqual(p[0].imag, 5e9)
+        self.assertEqual(p[1].imag, -5e9)
+
+
 if __name__ == "__main__":
     unittest.main()
