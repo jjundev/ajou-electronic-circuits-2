@@ -20,6 +20,7 @@
 - **모델**: 과제 제공 라이브러리를 `.include ../MOSFET_model.lib` 로 넣고 그 안의 모델 이름(CMOSN/CMOSP)을 쓴다. `NMOS`·`PMOS` 같은 이름은 LTspice 내장 모델과 부딪친다. 전역 `standard.mos` 는 고치지 않는다.
 - **심볼**: 소스가 VDD·GND 에 붙은 MOSFET 은 3단자 `nmos`/`pmos` 심볼을 쓴다 (body 가 소스에 묶임 = body → VDD/GND 결선과 같다). 소스가 떠 있는 MOSFET 은 `nmos4` 로 body 를 GND 에 따로 잇는다.
 - **`.op` 라벨**: `DATAFLAG x y "V(op)"`, `"Id(M1)"` 처럼 식을 직접 적는다. 글자 가운데가 (x, y) 에 오므로 배선과 겹치지 않는 빈 곳에 둔다. 모델 이름은 `WINDOW 3 0 0 Invisible 2` 로 숨긴다.
+- **소자 글자는 짧게**: MOSFET 옆에 보이는 `SYMATTR Value2` 에는 `l=… w=…` 만 둔다. `ad/as/pd/ps` 같은 추가 인스턴스 파라미터는 `SYMATTR SpiceLine` 에 넣는다. SpiceLine 도 넷리스트 줄 끝에 그대로 붙지만 회로도에는 보이지 않는다. Value2 에 다 넣으면 글자가 길어져 옆 소자 값과 `.op` 라벨을 덮는다 (2026-11-08 설계과제2: M3 글자가 RL 값을, M1·M2 글자가 Id 라벨을 덮었다).
 - **표기**: 학번·이름은 `TEXT x y Left 3 ;<학번> <이름>` (주석 텍스트).
 
 ## 배치 실행으로 먼저 검증

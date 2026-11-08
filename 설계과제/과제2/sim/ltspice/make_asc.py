@@ -3,6 +3,8 @@
 M1(소스 GND)과 M3(소스 VDD)은 body 를 소스에 묶는 3단자 심볼을 쓴다(결선은 body → GND/VDD 와 같다).
 M2 는 소스가 Y 에 떠 있으므로 nmos4 로 body 를 GND 에 따로 잇는다.
 DATAFLAG 는 글자 가운데가 지정 좌표에 오므로, 식을 직접 적어 배선과 겹치지 않는 곳에 둔다.
+MOSFET 옆에 보이는 Value2 는 l, w 만 둔다. ad/as/pd/ps 까지 넣으면 글자가 길어져 RL 값과 Id 라벨을 덮으므로
+접합 파라미터는 화면에 보이지 않는 SpiceLine 속성에 넣는다 (넷리스트 줄 끝에 그대로 붙는다).
 """
 import re
 from pathlib import Path
@@ -32,7 +34,9 @@ def mos(kind, name, x, y, rot, model, win=None):
         out.append("WINDOW 123 56 64 Left 2")
     out.append(f"SYMATTR InstName {name}")
     out.append(f"SYMATTR Value {model}")
-    out.append(f"SYMATTR Value2 l={L} w={W[name]} ad={XJ*w:.4g}p as={XJ*w:.4g}p pd={W[name]} ps={W[name]}")
+    out.append(f"SYMATTR Value2 l={L} w={W[name]}")       # 화면에 보이는 것은 l, w만 (과제1과 같다)
+    # 접합 면적·둘레는 SpiceLine 으로: 넷리스트에는 붙고 회로도에는 보이지 않아 라벨과 겹치지 않는다
+    out.append(f"SYMATTR SpiceLine ad={XJ*w:.4g}p as={XJ*w:.4g}p pd={W[name]} ps={W[name]}")
 
 
 def res(name, x, y, rot, value):
@@ -75,7 +79,7 @@ mos("nmos4", "M2", 832, 272, "R0", "CMOSN", NWIN)
 wire(832, 352, 784, 352); flag(784, 352, "vb1")
 wire(RX, 320, 912, 320); wire(912, 320, 912, 336); flag(912, 336, "0")
 data(1056, 240, "V(out)")
-data(1088, 336, "Id(M2)")
+data(1088, 368, "Id(M2)")          # M2 이름·W/L 아래
 
 # --- Y, M1 (CS 입력단), RS, X ---
 wire(RX, 368, RX, 416); wire(RX, 416, RX, 464); flag(RX, 416, "y")
@@ -85,8 +89,8 @@ wire(RX, 560, RX, 592); flag(RX, 592, "0")
 res("RS", 752, 528, "R90", "500")
 wire(736, 544, 832, 544); flag(784, 544, "x")
 wire(656, 544, 576, 544); flag(576, 544, "in")
-data(784, 608, "V(x)")
-data(1040, 528, "Id(M1)")
+data(720, 624, "V(x)")            # RS 값 아래, M1 소스 접지 기호와 떨어지게
+data(1040, 560, "Id(M1)")         # M1 이름·W/L 아래
 
 # --- 전원 ---
 vsrc("VDD", 160, 704, VDD, "vdd")

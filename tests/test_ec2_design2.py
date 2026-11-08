@@ -257,6 +257,19 @@ class AscTests(unittest.TestCase):
         for s in ("202220953 신현준", "CMOSN", "CMOSP", ".include ../MOSFET_model.lib", "\r\n"):
             self.assertIn(s, txt)
 
+    def test_asc_mos_label_short_junction_params_hidden(self):
+        # 화면에 보이는 Value2는 l, w만 (길면 RL 값과 .op 라벨을 덮는다). ad/as/pd/ps는 SpiceLine으로
+        subprocess.run(["python3", "make_asc.py"], cwd=SIM / "ltspice", check=True, capture_output=True)
+        txt = (SIM / "ltspice/cascode.asc").read_bytes().decode("utf-16-le")
+        v2 = [l for l in txt.splitlines() if l.startswith("SYMATTR Value2")]
+        sl = [l for l in txt.splitlines() if l.startswith("SYMATTR SpiceLine")]
+        self.assertEqual(len(v2), 3)
+        self.assertEqual(len(sl), 3)
+        for l in v2:
+            self.assertRegex(l, r"^SYMATTR Value2 l=0\.18u w=[\d.]+u$")
+        for l in sl:
+            self.assertRegex(l, r"ad=[\d.]+p as=[\d.]+p pd=[\d.]+u ps=[\d.]+u")
+
 
 if __name__ == "__main__":
     unittest.main()
