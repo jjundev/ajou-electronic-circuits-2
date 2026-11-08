@@ -371,3 +371,31 @@ def test_invalidated_running_action_waits_after_predecessor_repair(tmp_path):
         return s
     flow.update_state(run, flow.load_state(run)['revision'], reconciled)
     assert flow.next_work(run, slots=3)['action'] == 'prepare-pack'
+
+
+def test_claimed_brief_carries_run_id_attempt_and_rules(tmp_path):
+    import json
+    from pack_support import make_run
+    _, run = make_run(tmp_path)
+    claim = flow.claim_task(run, 'source-prep')
+    state = flow.load_state(run)
+    brief = json.loads(Path(state['tasks']['source-prep']['brief']).read_text(encoding='utf-8'))
+    assert brief['run_id'] == state['run_id']
+    assert brief['attempt'] == claim['attempt']
+    for rule in ('done/ready-for-publish receipt는 unresolved=[]; 비차단 메모는 report에만',
+                 '모든 경로 문자열은 NFC; run_id·attempt는 이 브리프 값만 사용',
+                 'Write 도구가 막히면 Bash heredoc으로 report 작성; 반환 전 task check 실행'):
+        assert rule in brief['constraints']
+    # the claimed brief is what the attempt is pinned to
+    flow.bind_task(run, 'source-prep', claim['attempt'], 'agent')
+
+
+def test_reclaimed_brief_gets_the_new_attempt(tmp_path):
+    import json
+    from pack_support import make_run
+    _, run = make_run(tmp_path)
+    first = flow.claim_task(run, 'source-prep')['attempt']
+    flow.release_task(run, 'source-prep', first, 'worker died')
+    second = flow.claim_task(run, 'source-prep')['attempt']
+    brief = json.loads(Path(flow.load_state(run)['tasks']['source-prep']['brief']).read_text(encoding='utf-8'))
+    assert brief['attempt'] == second != first

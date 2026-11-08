@@ -298,7 +298,13 @@ def claim_task(run: Path, task_id: str) -> dict:
         brief = Path(task['brief']).resolve()
         if not brief.is_relative_to(Path(state['run'])) or not brief.is_file():
             raise FlowError('brief must be a RUN file')
-        task.update(status='claimed', attempt=str(uuid4()), agent_id=None,
+        attempt = str(uuid4())
+        # Scheduler-owned briefs carry the claimed attempt so workers never guess it.
+        if brief == (Path(state['run']) / 'work' / task_id / 'brief.json').resolve():
+            data = _read(brief)
+            if 'run_id' in data:
+                _atomic_json(brief, dict(data, attempt=attempt))
+        task.update(status='claimed', attempt=attempt, agent_id=None,
                     brief_sha256=_sha(brief), receipt=None)
     state = _task_change(run, task_id, change)
     task = state['tasks'][task_id]
@@ -579,7 +585,7 @@ def write_briefs(state: dict) -> None:
         if role in ('author', 'style-audit', 'content-review'):
             refs.append({'path': str(skill / 'references/execution-guide.md'), 'sections': _COMMON_SECTIONS})
         snapshot = _read(run / 'learning-style.json')
-        data = dict(task_id=task['id'], role=role, range=state['range'], lite=state['lite'],
+        data = dict(task_id=task['id'], run_id=state['run_id'], attempt=None, role=role, range=state['range'], lite=state['lite'],
             repo=str(repo), run=str(run), skill=str(skill), profile=str(repo / snapshot['path']),
             profile_read='전체 필수', snapshot=str(run / 'learning-style.json'), references=refs,
             targets=task['targets'], inputs=_inputs(state, task), allowed_outputs=outputs,
@@ -587,7 +593,10 @@ def write_briefs(state: dict) -> None:
             report=str(run / 'work' / task['id'] / 'report.md'), receipt=str(run / 'work' / task['id'] / 'receipt.json'),
             return_limit=800, request_paths=task.get('request_paths', []),
             constraints=['원본 읽기 전용; RUN/repo 링크도 예외 없음', '실제 검토 없이 pass 생성 금지',
-                         '1920×1080 하단 180px 자막 여백; PDF 16:9', '렌더 오류로 문항 교체 금지'])
+                         '1920×1080 하단 180px 자막 여백; PDF 16:9', '렌더 오류로 문항 교체 금지',
+                         'done/ready-for-publish receipt는 unresolved=[]; 비차단 메모는 report에만',
+                         '모든 경로 문자열은 NFC; run_id·attempt는 이 브리프 값만 사용',
+                         'Write 도구가 막히면 Bash heredoc으로 report 작성; 반환 전 task check 실행'])
         if role in ('style-audit', 'content-review'): data['audit_output'] = task['audit_output']
         if role == 'selection': data['manifest'] = str(run / 'work/scope-draft/manifest.json')
         elif role == 'scope-final': data['manifest'] = str(run / 'work/selection/manifest.json')
