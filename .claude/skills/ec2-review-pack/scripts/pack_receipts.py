@@ -3,7 +3,7 @@ import hashlib
 import json
 from pathlib import Path
 import sys
-from pack_flow import FlowError
+from pack_flow import FlowError, nfc_path, within
 
 ROLE_OUTPUTS = {
     'source-prep': ('source-map.json', 'slides.txt'), 'stt': ('summaries/stt-{target}.md',),
@@ -35,8 +35,8 @@ def records(items, roots):
         require(isinstance(item, dict) and isinstance(item.get('path'), str), 'invalid file record')
         path = Path(item['path'])
         require(path.is_absolute(), 'absolute file path required')
-        path = path.resolve()
-        require(any(path.is_relative_to(root) for root in roots), 'file outside allowed roots: ' + str(path))
+        path = nfc_path(path.resolve())
+        require(any(within(path, root) for root in roots), 'file outside allowed roots: ' + str(path))
         require(str(path) not in result and path.is_file(), 'missing or duplicate file: ' + str(path))
         require(item.get('sha256') == sha(path), 'file hash changed: ' + str(path))
         result[str(path)] = item['sha256']
@@ -90,9 +90,9 @@ def _source(state, run):
         if session['status'] == 'missing': return 'blocked'
         require(not session['missing'] and session.get('pdfs'), 'required PDF material missing')
         stt = Path(session['stt'])
-        require(stt.name[:4] == session['date'] and str(stt.resolve()) in state['hashes'], 'STT date/frozen source mismatch')
+        require(stt.name[:4] == session['date'] and str(nfc_path(stt.resolve())) in state['hashes'], 'STT date/frozen source mismatch')
         for path in [stt, *map(Path, session['pdfs'])]:
-            require(path.is_absolute() and path.resolve().is_relative_to(repo) and path.is_file(), 'source material missing/outside REPO')
+            require(path.is_absolute() and within(path.resolve(), repo) and path.is_file(), 'source material missing/outside REPO')
         for path in session['pdfs']: _pdf_pages(path)
     return 'done'
 
@@ -171,9 +171,9 @@ def _standalone_svg(state, task, brief, inputs, outputs, report, reviews):
 
 def validate_receipt(state: dict, task: dict, receipt_path: Path) -> dict:
     try:
-        run, repo = Path(state['run']).resolve(), Path(state['repo']).resolve()
-        receipt_path = Path(receipt_path).resolve()
-        require(receipt_path.is_relative_to(run), 'receipt outside RUN')
+        run, repo = nfc_path(Path(state['run']).resolve()), nfc_path(Path(state['repo']).resolve())
+        receipt_path = nfc_path(Path(receipt_path).resolve())
+        require(within(receipt_path, run), 'receipt outside RUN')
         receipt = obj(receipt_path)
         require(receipt.get('schema_version') == 1 and receipt.get('run_id') == state['run_id'] and receipt.get('task_id') == task['id'] and receipt.get('attempt') == task['attempt'], 'receipt identity mismatch')
         status = receipt.get('status')
@@ -185,25 +185,25 @@ def validate_receipt(state: dict, task: dict, receipt_path: Path) -> dict:
         inputs = records(receipt['inputs'], [repo, run])
         require(inputs == expected, 'receipt must include all frozen brief inputs')
         outputs = records(receipt['outputs'], [run])
-        allowed = {str(Path(p).resolve()) for p in brief.get('allowed_outputs', [])}
-        roots = [Path(p).resolve() for p in brief.get('allowed_output_roots', [])]
-        require(all(p.is_relative_to(run) and p != run and not repo.is_relative_to(p) for p in roots), 'invalid output root')
-        require(all(p in allowed or any(Path(p).is_relative_to(root) for root in roots) for p in outputs), 'receipt expands allowed outputs')
+        allowed = {str(nfc_path(Path(p).resolve())) for p in brief.get('allowed_outputs', [])}
+        roots = [nfc_path(Path(p).resolve()) for p in brief.get('allowed_output_roots', [])]
+        require(all(within(p, run) and p != run and not within(repo, p) for p in roots), 'invalid output root')
+        require(all(p in allowed or any(within(p, root) for root in roots) for p in outputs), 'receipt expands allowed outputs')
         role = task['role']
         require(role in ROLE_OUTPUTS, 'unknown role')
-        required = {str((run / pattern.format(target=target)).resolve()) for pattern in ROLE_OUTPUTS[role] for target in task['targets']}
+        required = {str(nfc_path((run / pattern.format(target=target)).resolve())) for pattern in ROLE_OUTPUTS[role] for target in task['targets']}
         if role in ('style-audit', 'content-review'):
             audit_output = _audit_output(brief, role, run)
             if role == 'style-audit' and audit_output is not None: required = {str(audit_output)}
         if status in ('done', 'ready-for-publish'): require(required <= outputs.keys(), 'required role outputs missing')
-        report = Path(receipt['report']).resolve()
-        require(report.is_relative_to(run) and report.is_file(), 'report missing/outside RUN')
+        report = nfc_path(Path(receipt['report']).resolve())
+        require(within(report, run) and report.is_file(), 'report missing/outside RUN')
         reviews = receipt['reviews']
         require(isinstance(reviews, list), 'review paths required')
         verified = dict(inputs, **outputs)
         for path in [receipt_path, report, *map(Path, reviews)]:
-            path = path.resolve()
-            require(path.is_relative_to(run) and path.is_file(), 'review evidence missing/outside RUN')
+            path = nfc_path(path.resolve())
+            require(within(path, run) and path.is_file(), 'review evidence missing/outside RUN')
             verified[str(path)] = sha(path)
         task_status = {'needs-fix': 'needs_fix', 'withheld': 'blocked'}.get(status, 'done' if status == 'ready-for-publish' else status)
         if status in ('done', 'ready-for-publish'):
@@ -217,15 +217,15 @@ def validate_receipt(state: dict, task: dict, receipt_path: Path) -> dict:
                 task_status = _source(state, run)
                 for session in obj(run / 'source-map.json')['sessions']:
                     for path in [session.get('stt'), *session.get('pdfs', [])]:
-                        if path and Path(path).is_file(): verified[str(Path(path).resolve())] = sha(path)
+                        if path and Path(path).is_file(): verified[str(nfc_path(Path(path).resolve()))] = sha(path)
             if role in ('style-audit', 'content-review'):
                 audit_path = _audit(state, task, run)
-                require(str(audit_path) in verified, 'audit must be declared frozen input or owned output')
+                require(str(nfc_path(audit_path)) in verified, 'audit must be declared frozen input or owned output')
             if role == 'pdf-qa':
                 require(report == Path(brief['report']).resolve(), 'PDF report must match brief')
                 for path in _pdf(brief, run):
-                    require(path.resolve().is_relative_to(run), 'PDF evidence outside RUN')
-                    verified[str(path.resolve())] = sha(path)
+                    require(within(path.resolve(), run), 'PDF evidence outside RUN')
+                    verified[str(nfc_path(path.resolve()))] = sha(path)
             if role == 'child-coordinator': _child(state, brief, receipt, verified)
             if role == 'standalone-svg-qa':
                 _standalone_svg(state, task, brief, inputs, outputs, report, reviews)
@@ -261,12 +261,12 @@ def _child(state, brief, receipt, verified):
         from epe_rerender import verified_references
     finally:
         if ours is not None: sys.modules['assemble'] = ours
-    child_run = Path(state['explain_run']).resolve()
-    require(child_run.is_relative_to(Path(state['run']).resolve()), 'child RUN outside parent RUN')
+    child_run = nfc_path(Path(state['explain_run']).resolve())
+    require(within(child_run, Path(state['run']).resolve()), 'child RUN outside parent RUN')
     child_path = child_run / 'child-receipt.json'
     child = obj(child_path)
     require(child.get('schema_version') == 1 and child.get('status') == 'ready-for-publish' and not child.get('unresolved'), 'child is not ready')
-    require(Path(child['run']).resolve() == child_run and child['range'] == state['range'], 'child identity mismatch')
+    require(nfc_path(Path(child['run']).resolve()) == child_run and child['range'] == state['range'], 'child identity mismatch')
     files = records(child['files'], [Path(state['repo']).resolve(), child_run, Path(state['run']).resolve()])
     required = {str(Path(brief['manifest']).resolve()), str((Path(state['run']) / 'learning-style.json').resolve()), str((child_run / 'run.json').resolve())}
     items = load_run(child_run)

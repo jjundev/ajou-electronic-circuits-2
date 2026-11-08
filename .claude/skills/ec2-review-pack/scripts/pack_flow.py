@@ -20,6 +20,20 @@ class FlowError(ValueError):
     """A state or filesystem precondition failed."""
 
 
+def nfc_path(p: str | Path) -> Path:
+    """The path spelled in Unicode NFC (no resolve).
+
+    macOS keeps Korean folder names as NFD on disk while tools and workers often
+    write NFC. Lookups ignore the spelling; string comparisons do not.
+    """
+    return Path(unicodedata.normalize("NFC", str(p)))
+
+
+def within(path: str | Path, root: str | Path) -> bool:
+    """path is root or below it, compared in NFC."""
+    return nfc_path(path).is_relative_to(nfc_path(root))
+
+
 _FIELDS = {"schema_version", "revision", "run_id", "repo", "run", "range", "lite",
            "capabilities", "phase", "status", "tasks", "actions", "hashes", "backups",
            "fix_rounds", "explain_run", "publication", "recovery"}
@@ -77,7 +91,7 @@ def _validate(state: dict, run: Path) -> None:
     for field in ("repo", "run"):
         require(isinstance(state[field], str) and Path(state[field]).is_absolute(), f"{field} must be absolute")
         require(Path(state[field]).is_dir(), f"{field} directory missing: {state[field]}")
-    require(Path(state["run"]).resolve() == run.resolve(), "run path mismatch")
+    require(nfc_path(Path(state["run"]).resolve()) == nfc_path(run.resolve()), "run path mismatch")
     require(type(state["lite"]) is bool, "invalid lite")
     require(type(state["phase"]) is int and 0 <= state["phase"] <= 10, "invalid phase")
     require(isinstance(state["status"], str) and state["status"] in _STATUSES, "invalid status")
@@ -95,7 +109,7 @@ def _validate(state: dict, run: Path) -> None:
     for path, digest in state["hashes"].items():
         require(Path(path).is_absolute() and isinstance(digest, str) and re.fullmatch(r"[a-f0-9]{64}", digest), "invalid input hash")
         candidate = Path(path).resolve()
-        require(any(candidate.is_relative_to(Path(state[root]).resolve()) for root in ("repo", "run")), f"input outside repo/run: {path}")
+        require(any(within(candidate, Path(state[root]).resolve()) for root in ("repo", "run")), f"input outside repo/run: {path}")
 
 
 @contextmanager
@@ -176,7 +190,7 @@ def init_run(repo: Path, run: Path, range_: str, *, lite: bool = False,
              browser_owner: str = "main", pdf_owner: str = "main",
              seed_from: Path | None = None, redo: list[str] | None = None,
              redo_note: Path | None = None) -> dict:
-    repo, run = Path(repo).resolve(), Path(run).resolve()
+    repo, run = nfc_path(Path(repo).resolve()), nfc_path(Path(run).resolve())
     if (redo or redo_note) and seed_from is None:
         raise FlowError("--redo/--redo-note require --seed-from")
     if redo_note is not None and not Path(redo_note).is_file():
@@ -219,14 +233,14 @@ def init_run(repo: Path, run: Path, range_: str, *, lite: bool = False,
         try:
             snapshot = json.loads(snapshot_path.read_text(encoding="utf-8"))
             profile = repo / snapshot["path"]
-            if not profile.resolve().is_relative_to(repo) or snapshot["sha256"] != _sha(profile):
+            if not within(profile.resolve(), repo) or snapshot["sha256"] != _sha(profile):
                 raise ValueError("snapshot hash/path mismatch")
         except (OSError, ValueError, KeyError, TypeError) as exc:
             raise FlowError(f"{snapshot_path}: invalid snapshot: {exc}") from exc
         state = dict(schema_version=1, revision=0, run_id=str(uuid4()), repo=str(repo), run=str(run),
                      range=range_, lite=lite, capabilities=dict(browser_owner=browser_owner, pdf_owner=pdf_owner),
                      phase=0, status="ready", tasks={}, actions={},
-                     hashes={str(p): _sha(p) for p in [*sources, profile, snapshot_path]}, backups={},
+                     hashes={str(nfc_path(p)): _sha(p) for p in [*sources, profile, snapshot_path]}, backups={},
                      fix_rounds=dict(content=0, machine_browser=0), explain_run=None,
                      publication={}, recovery={}, sessions=[p.name[:4] for p in sources])
         if seed_from is not None:

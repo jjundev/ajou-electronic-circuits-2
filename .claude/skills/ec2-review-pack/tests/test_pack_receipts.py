@@ -288,3 +288,43 @@ def test_pdf_reviewer_produces_exact_documented_outputs(tmp_path, damage):
         f.accept_task(run, 'pdf-qa', attempt, receipt)
         assert f.load_state(run)['tasks']['pdf-qa']['status'] == 'done'
         assert not (run / 'work/pdf-qa/report.md').exists()
+
+
+def _nfd(p): import unicodedata; return unicodedata.normalize('NFD', str(p))
+def _nfc(p): import unicodedata; return unicodedata.normalize('NFC', str(p))
+
+
+def _real_pdf(path):
+    import fitz
+    path.parent.mkdir(parents=True, exist_ok=True)
+    doc = fitz.open(); doc.new_page().insert_text((72, 72), 'slide'); doc.save(path); doc.close()
+
+
+def test_init_stores_nfc_repo(tmp_path):
+    repo, run = make_run(tmp_path, repo_name=_nfd('전자회로2'), init_repo=Path(_nfd(tmp_path / '전자회로2')))
+    state = f.load_state(run)
+    assert state['repo'] == _nfc(state['repo']) and state['run'] == _nfc(state['run'])
+    assert all(k == _nfc(k) for k in state['hashes'])
+
+
+def test_source_map_accepts_mixed_nfd_component(tmp_path):
+    from pack_receipts import _source
+    repo, run = make_run(tmp_path, repo_name=_nfd('전자회로2'), init_repo=Path(_nfc(tmp_path / '전자회로2')))
+    pdf = repo / _nfd('강의노트') / 'x.pdf'; _real_pdf(pdf)
+    (run / 'source-map.json').write_text(json.dumps({'schema_version': 1, 'sessions': [
+        {'date': '0909', 'stt': _nfd(repo / 'STT/0909 전회2.md'), 'pdfs': [_nfd(pdf)], 'status': 'ready', 'missing': []}]}))
+    assert _source(f.load_state(run), run) == 'done'
+
+
+def test_source_map_rejects_sibling_outside_repo(tmp_path):
+    from pack_receipts import _source
+    repo, run = make_run(tmp_path, repo_name='전자회로2')
+    pdf = tmp_path / '전자회로2-copy' / '강의노트' / 'x.pdf'; _real_pdf(pdf)
+    (run / 'source-map.json').write_text(json.dumps({'schema_version': 1, 'sessions': [
+        {'date': '0909', 'stt': str(repo / 'STT/0909 전회2.md'), 'pdfs': [str(pdf)], 'status': 'ready', 'missing': []}]}))
+    with pytest.raises(f.FlowError, match='source material missing/outside REPO'): _source(f.load_state(run), run)
+
+
+def test_state_loads_when_run_is_spelled_nfd(tmp_path):
+    _, run = make_run(tmp_path)
+    assert f.load_state(Path(_nfd(run)))['run_id'] == f.load_state(run)['run_id']
