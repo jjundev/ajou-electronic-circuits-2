@@ -239,3 +239,37 @@ def test_init_without_run_uses_cache_dir(tmp_path):
     assert p.returncode == 0, d
     assert d['details_path'].startswith(str((tmp_path / '.cache/ec2-review-pack').resolve()) + '/0909-')
     assert Path(d['details_path']).is_file()
+
+
+def _check_setup(tmp_path):
+    import hashlib
+    _, run = make_run(tmp_path)
+    tid = install_task(run)
+    attempt = call('task', 'claim', '--run', run, '--task', tid)[1]['next']['attempt']
+    receipt = receipt_for(run, tid, attempt)
+    sha = lambda: hashlib.sha256((run / 'run-status.json').read_bytes()).hexdigest()
+    return run, tid, attempt, receipt, sha
+
+
+def test_task_check_passes_valid_receipt_without_state_change(tmp_path):
+    run, tid, attempt, receipt, sha = _check_setup(tmp_path)
+    before = sha()
+    p, d = call('task', 'check', '--run', run, '--task', tid, '--attempt', attempt, '--receipt', receipt)
+    assert p.returncode == 0 and d['status'] == 'ok' and d['error_code'] is None
+    assert sha() == before and not (run / 'work' / 'cli').exists()
+
+
+def test_task_check_reports_unresolved(tmp_path):
+    run, tid, attempt, receipt, sha = _check_setup(tmp_path)
+    data = json.loads(receipt.read_text()); data['unresolved'] = ['note']; receipt.write_text(json.dumps(data))
+    before = sha()
+    p, d = call('task', 'check', '--run', run, '--task', tid, '--attempt', attempt, '--receipt', receipt)
+    assert p.returncode == 1 and d['status'] == 'failed' and d['error_code'] == 'validation_failed'
+    assert d['reason'] == 'unresolved successful receipt' and sha() == before
+
+
+def test_task_check_reports_identity_mismatch(tmp_path):
+    run, tid, attempt, receipt, sha = _check_setup(tmp_path)
+    data = json.loads(receipt.read_text()); data['run_id'] = 'wrong'; receipt.write_text(json.dumps(data))
+    p, d = call('task', 'check', '--run', run, '--task', tid, '--attempt', attempt, '--receipt', receipt)
+    assert p.returncode == 1 and d['reason'] == 'receipt identity mismatch'

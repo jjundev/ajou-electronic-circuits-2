@@ -350,6 +350,23 @@ def accept_task(run: Path, task_id: str, attempt: str, receipt_path: Path) -> di
     return _task_change(run, task_id, change)
 
 
+def check_task(run: Path, task_id: str, attempt: str, receipt_path: Path) -> dict:
+    """Run accept's validation on a copy of the state; never writes run-status.json."""
+    from pack_receipts import validate_receipt
+    state = copy.deepcopy(load_state(run))
+    task = state['tasks'].get(task_id)
+    try:
+        if task is None: raise FlowError('unknown task: ' + task_id)
+        _current(state)
+        _attempt(task, attempt)
+        if any(not _done(state, dep) for dep in task['dependencies']):
+            raise FlowError('task dependencies are not current')
+        receipt = validate_receipt(state, task, receipt_path)
+    except FlowError as exc:
+        return dict(status='failed', error_code='validation_failed', reason=str(exc))
+    return dict(status='ok', error_code=None, reason=None, task_status=receipt['task_status'])
+
+
 def release_task(run: Path, task_id: str, attempt: str, reason: str) -> dict:
     def change(state, task):
         if task.get('invalidated_active') and task.get('attempt') == attempt and task['status'] == 'stale':
