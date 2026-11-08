@@ -2,6 +2,7 @@ import io
 import json
 import sys
 import tempfile
+import unicodedata
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
@@ -222,3 +223,17 @@ class TestAnswerModes(BuildCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def test_root_spelling_matches_nfc_argument_under_nfd_root(monkeypatch, tmp_path):
+    nfd = tmp_path / unicodedata.normalize("NFD", "전자회로2")
+    (nfd / "복습노트").mkdir(parents=True)
+    monkeypatch.setattr(build_workbook.paths, "ROOT", nfd)
+    arg = unicodedata.normalize("NFC", str(nfd / "복습노트/x/.assets/a/answer-overlay.json"))
+    root = build_workbook.root_spelling(arg)
+    assert str(root) == unicodedata.normalize("NFC", str(nfd))
+
+
+def test_root_spelling_keeps_root_for_outside_path(monkeypatch, tmp_path):
+    monkeypatch.setattr(build_workbook.paths, "ROOT", tmp_path / "repo")
+    assert build_workbook.root_spelling(tmp_path / "repo-copy/a.json") == tmp_path / "repo"

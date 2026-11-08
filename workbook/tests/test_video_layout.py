@@ -9,7 +9,7 @@ import fitz
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import build_workbook
 from assemble import build_data, ids_selection
-from render import inject, load_template, render_pdf
+from render import inject, load_template, measure_typography, render_pdf
 
 
 class VideoLayoutTests(unittest.TestCase):
@@ -136,6 +136,40 @@ class PersonalizedVideoLayoutTests(unittest.TestCase):
                     self.assertTrue(page.locator('.sol-step-body img').first.evaluate('(n) => n.complete && n.naturalWidth > 0'))
                 finally:
                     browser.close()
+
+class DenseFigureTests(unittest.TestCase):
+    def test_dense_figure_keeps_cap_width_and_paginates(self):
+        from playwright.sync_api import sync_playwright
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            data = build_data(ids_selection(['E11.16'], 'dense'), 'answers')
+            prob = data['problems'][0]
+            prob['figures'] = prob['figures'][:1]
+            prob['figures'][0].update(w_mm=84.7, h_mm=71.6)
+            steps = prob['solution']['steps']
+            prob['solution']['steps'] = (steps * 8)[:8]
+            prob['solution']['paginate'] = True
+            data['meta']['layout'] = 'video-16x9'
+            baseline = root/'baseline.html'
+            baseline.write_text(inject(load_template('answers'), data))
+            data['meta']['typography'] = measure_typography(baseline)
+            html = root/'dense.html'
+            html.write_text(inject(load_template('answers', layout='video-16x9'), data))
+            with sync_playwright() as pw:
+                browser = pw.chromium.launch(channel='chrome', headless=True)
+                try:
+                    page = browser.new_page(viewport={'width': 1920, 'height': 1080})
+                    page.goto(html.as_uri())
+                    page.wait_for_selector('html[data-ready]')
+                    got = page.evaluate("""() => ({
+                        width: document.querySelector('.fig-band .fig').offsetWidth,
+                        overflow: document.querySelectorAll('.page[data-overflow]').length,
+                        pages: document.querySelectorAll('.page').length})""")
+                finally:
+                    browser.close()
+            self.assertGreaterEqual(got['width'], 0.98 * 84.7 * 1.5 * 96 / 25.4)
+            self.assertEqual(got['overflow'], 0)
+            self.assertGreaterEqual(got['pages'], 2)
 
 
 if __name__ == "__main__":
