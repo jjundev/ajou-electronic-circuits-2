@@ -11,7 +11,7 @@
 3. $M_1$(소스 GND)과 $M_3$(소스 VDD)은 body 를 소스에 묶는 3단자 기호를 쓴다(결선은 body → GND/VDD 와 같다). $M_2$ 는 소스가 $Y$ 에 떠 있으므로 `nmos4` 로 body 를 GND 에 따로 잇는다.
 4. 모든 MOSFET 에 접합 면적·둘레를 넣는다: $AD = AS = 0.49\ \mu\text{m}\times W$, $PD = PS = W$ (ngspice `core.inc` 와 같다).
 
-LTspice 배치 실행 결과(2026-11-08)는 ngspice 동작점과 표시 자릿수까지 같다: $V_X$ 0.55 V, $V_Y$ 0.299928 V, $V_{out}$ 0.600127 V, $I_{D1}$ 414.40 µA, $I_{D2}$ 207.14 µA, $|I_{D3}|$ 207.26 µA, $I_{VDD}$ 414.40 µA. 떠 있는 노드·floating 경고는 없다. 로그의 "Direct Newton iteration failed … Gmin stepping succeeded" 는 초기 수렴 방법이 바뀌었다는 뜻일 뿐 결과에는 영향이 없고, "Oxide thickness thinner / Length shorter than recommended for a level 1 MOSFET" 은 Level 1 모델에 0.18 µm 공정 값을 넣어 생기는 안내 문구다.
+LTspice 배치 실행 결과(2026-11-08)는 ngspice 동작점과 표시 자릿수까지 같다: $V_X$ 0.55 V, $V_Y$ 0.299908 V, $V_{out}$ 0.600532 V, $I_{D1}$ 414.40 µA, $I_{D2}$ 207.14 µA, $|I_{D3}|$ 207.26 µA, $I_{VDD}$ 414.40 µA. 떠 있는 노드·floating 경고는 없다. 로그의 "Direct Newton iteration failed … Gmin stepping succeeded" 는 초기 수렴 방법이 바뀌었다는 뜻일 뿐 결과에는 영향이 없고, "Oxide thickness thinner / Length shorter than recommended for a level 1 MOSFET" 은 Level 1 모델에 0.18 µm 공정 값을 넣어 생기는 안내 문구다.
 
 ## 시뮬레이션 파일 (`sim/`)
 
