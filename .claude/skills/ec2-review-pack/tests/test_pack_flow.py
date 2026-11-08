@@ -399,3 +399,19 @@ def test_reclaimed_brief_gets_the_new_attempt(tmp_path):
     second = flow.claim_task(run, 'source-prep')['attempt']
     brief = json.loads(Path(flow.load_state(run)['tasks']['source-prep']['brief']).read_text(encoding='utf-8'))
     assert brief['attempt'] == second != first
+
+
+def test_pdf_qa_fix_restales_build_answers(tmp_path):
+    from pack_support import workflow_until
+    _, run = make_run(tmp_path)
+    workflow_until(run, 'pdf-qa', problems=1)
+    detail = run / 'fix.md'; detail.write_text('synthetic: figure too small')
+    request = run / 'fix.json'
+    request.write_text(json.dumps({'id': 'pdf-1', 'category': 'machine_browser',
+        'items': [{'task_id': 'pdf-qa', 'request_path': str(detail)}]}))
+    flow.request_fixes(run, request)
+    state = flow.load_state(run)
+    assert state['actions']['build-answers']['status'] == 'stale'
+    assert state['actions']['build-answers']['history'][-1]['reason'] == 'fix pdf-1'
+    nxt = flow.next_work(run, slots=1)
+    assert (nxt['kind'], nxt['action']) == ('run', 'build-answers')

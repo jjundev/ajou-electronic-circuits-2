@@ -720,6 +720,11 @@ def request_fixes(run: Path, request_path: Path) -> dict:
             task.update(status='needs_fix', attempt=None, receipt=None, agent_id=None)
             task.pop('audit_output', None)
             task.setdefault('request_paths', []).append(str(path))
+        build = s['actions'].get('build-answers')
+        if 'pdf-qa' in seen and build and build.get('status') == 'done':
+            # The PDF reviewer's fix lands in the template/overlay; the RUN answer PDF must be rebuilt.
+            build.setdefault('history', []).append(dict({k: v for k, v in build.items() if k != 'history'}, reason='fix ' + rid))
+            build['status'] = 'stale'
         s['fix_rounds'][category] += 1; prior[rid] = request
         refresh_tasks(s); write_briefs(s)
         return s

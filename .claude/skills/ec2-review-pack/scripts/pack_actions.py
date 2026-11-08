@@ -18,6 +18,8 @@ from pack_files import inventory_pack, prepare_pack, recover_pack
 ACTIONS = frozenset(('prepare-pack','assemble-note','build-problems','precheck',
     'convert-md','publish-explanation','build-answers','publish-answer','final-check'))
 READ_ONLY = frozenset(('precheck', 'final-check'))
+# Writes only inside RUN (the answer PDF goes to RUN/answers); a failure leaves the pack untouched.
+RUN_ONLY = frozenset(('build-answers',))
 
 
 def _paths(state):
@@ -439,7 +441,11 @@ def run_action(run: Path, action: str) -> dict:
             else:
                 f._atomic_json(folder/'stopped.json',{'attempt':attempt,'exit_code':result['exit_code'],
                     'inventory':inventory_pack(Path(state['repo']),state['range'])})
-                result['status']='recovery_required' if mutation_started and action not in READ_ONLY else 'needs_fix'
+                try: changed=before is not None and inventory_pack(Path(state['repo']),state['range'])!=before
+                except (OSError,ValueError): changed=True
+                # RUN-only and read-only commands can be retried unless the pack itself changed.
+                result['status']=('recovery_required' if changed or (mutation_started and action not in READ_ONLY|RUN_ONLY)
+                                  else 'needs_fix')
             try:
                 _verify(result['inputs'])
                 if writes is None: raise f.FlowError('action write set not frozen')
