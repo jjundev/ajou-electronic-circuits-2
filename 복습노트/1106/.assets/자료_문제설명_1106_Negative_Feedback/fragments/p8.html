@@ -1,0 +1,101 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 읽어요</h4>
+  <p>그림 12.80의 네 회로를 다시 봐요. 이번에는 입력 $X$에서 출력 $Y$까지의 폐루프 이득(closed-loop gain) $Y/X$를 구해요. 문제 12.4에서 구한 루프 이득 $T_a$–$T_d$를 이용하라고 했어요.</p>
+  <p>가정은 문제 12.4와 같아요. 연산증폭기는 개루프 이득 $A_1$ 말고는 이상적이고 $\lambda=0$이에요. 문제 12.4와 마찬가지로 $M_1$, $M_3$는 포화 영역, 몸체효과는 무시해요.</p>
+  <p>입력 위치를 먼저 확인해요. (a)와 (d)는 $X$가 + 입력, (b)와 (c)는 $X$가 − 입력이에요. 그래서 (b), (c)는 반전 증폭기가 돼요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 개념과 공식을 떠올려요</h4>
+  <p>"루프 이득 결과를 이용해 폐루프 이득을 구하라"는 말에서 폐루프 이득의 분모가 $1+$루프 이득이라는 사실을 떠올려요. 수업의 기본 귀환 시스템에서 $Y/X=A_1/(1+KA_1)$이었고, 그 분모의 $KA_1$이 바로 루프 이득이었어요(<a href="정리노트_1106_Negative_Feedback.html#s3-loop-vs-closed">루프 이득과 폐루프 이득</a>).</p>
+  <p>이 문제에서도 같은 구조가 나와요. $Y$를 미지수로 두고, $A_1$의 두 입력을 각각 $X$와 $Y$로 쓴 뒤, $Y=A_1(v_+-v_-)$을 정리하면 돼요. 이때 $Y$에 붙는 계수가 문제 12.4의 루프 이득과 같아요.</p>
+  $$Y=A_1(v_+-v_-)$$
+  <p>정리하면 모든 회로가 다음 꼴이 돼요. $A_{\mathrm{fwd}}$는 귀환 신호를 0으로 두었을 때 $X$에서 $Y$까지의 이득이에요. $T$는 문제 12.4에서와 같이 $-V_N/V_{test}$로 정의한 양의 루프 이득이에요.</p>
+  $$\frac{Y}{X}=\frac{A_{\mathrm{fwd}}}{1+T}$$
+  <p>$T\gg1$이면 분모의 1을 무시해 $Y/X\approx A_{\mathrm{fwd}}/T$로 근사할 수 있어요. 그러면 $A_1$이 약분되어 귀환 경로의 소자만 남아요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <div data-answer-step="입력 식 세우기">
+    <p>(a)를 예로 들어요. + 입력은 $X$, − 입력은 분배기와 $K$ 블록을 지난 $Y$예요. 문제 12.4에서 쓴 블록 이득을 그대로 써요.</p>
+    $$v_+=X$$
+    $$v_-=K\frac{R_2}{R_1+R_2}Y$$
+    $$Y=A_1\left(X-K\frac{R_2}{R_1+R_2}Y\right)$$
+    <p>$Y$ 항을 왼쪽으로 모으면 $Y$에 붙는 계수가 $1+T_a$가 돼요.</p>
+    $$Y\left(1+KA_1\frac{R_2}{R_1+R_2}\right)=A_1X$$
+  </div>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>이렇게 풀어요</h4>
+  <div data-subpart="main">
+    <div data-answer-step="(a) 폐루프 이득">
+      <p>첫 줄의 괄호가 $1+T_a$예요. 양변을 나눠요.</p>
+      $$\frac{Y}{X}=\frac{A_1}{1+T_a}=\frac{A_1}{1+KA_1\dfrac{R_2}{R_1+R_2}}$$
+      <p>$T_a\gg1$이면 $A_1$이 약분돼요.</p>
+      $$\frac{Y}{X}\approx\frac{R_1+R_2}{KR_2}=\frac{1}{K}\left(1+\frac{R_1}{R_2}\right)$$
+    </div>
+    <div data-answer-step="(b) 폐루프 이득">
+      <p>(b)는 $X$가 − 입력, $M_3$ 드레인이 + 입력이에요. 드레인 전압은 분배기 → CS 단을 지난 값이에요.</p>
+      $$v_+=-g_mR_D\frac{R_2}{R_1+R_2}Y$$
+      $$Y=A_1\left(-g_mR_D\frac{R_2}{R_1+R_2}Y-X\right)$$
+      <p>$Y$ 항을 모으면 계수가 $1+T_b$이고, $X$ 앞에는 반전 부호가 남아요.</p>
+      $$\frac{Y}{X}=\frac{-A_1}{1+T_b}=-\frac{A_1}{1+g_mR_DA_1\dfrac{R_2}{R_1+R_2}}$$
+      <p>$T_b\gg1$이면 다음으로 다가가요.</p>
+      $$\frac{Y}{X}\approx-\frac{1}{g_mR_D}\left(1+\frac{R_1}{R_2}\right)$$
+    </div>
+    <div data-answer-step="(c) 폐루프 이득">
+      <p>(c)는 분배기 없이 $Y$가 바로 $M_3$ 게이트에 걸려요.</p>
+      $$v_+=-g_mR_DY$$
+      $$Y=A_1(-g_mR_DY-X)$$
+      $$\frac{Y}{X}=\frac{-A_1}{1+T_c}=-\frac{A_1}{1+g_mR_DA_1}$$
+      <p>$T_c\gg1$이면 다음으로 다가가요.</p>
+      $$\frac{Y}{X}\approx-\frac{1}{g_mR_D}$$
+    </div>
+    <div data-answer-step="(d) 폐루프 이득">
+      <p>(d)는 $A_1$ 출력이 $M_1$ 게이트를 구동하고, 팔로워의 소스가 $Y$예요. 그래서 $Y$는 $A_1$ 출력에 팔로워 이득을 곱한 값이고, − 입력은 $Y$ 자체예요.</p>
+      $$Y=\frac{g_mR_2}{1+g_mR_2}A_1(X-Y)$$
+      <p>귀환 신호가 없을 때의 순방향 이득은 $A_1$과 팔로워 이득의 곱이고, 이것이 바로 $T_d$와 같아요. 그래서 분자와 분모의 루프 이득이 같은 꼴이 돼요.</p>
+      $$\frac{Y}{X}=\frac{T_d}{1+T_d}=\frac{\dfrac{g_mR_2}{1+g_mR_2}A_1}{1+\dfrac{g_mR_2}{1+g_mR_2}A_1}$$
+      <p>$T_d\gg1$이면 다음으로 다가가요.</p>
+      $$\frac{Y}{X}\approx1$$
+    </div>
+    <p>네 회로 모두 분모가 $1+T$이고, 루프 이득이 크면 $A_1$이 사라져 귀환 경로만으로 이득이 정해져요. (b), (c)의 근사 이득은 $1/g_m$ 같은 MOS 파라미터에 의존한다는 점이 (a), (d)와 달라요.</p>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <div data-answer-final>
+      <p>문제 12.4의 $T_a$–$T_d$를 쓴 폐루프 이득 $Y/X$예요($\lambda=0$, 몸체효과 무시).</p>
+      $$\frac{Y}{X}\Big|_a=\frac{A_1}{1+KA_1\dfrac{R_2}{R_1+R_2}}$$
+      $$\frac{Y}{X}\Big|_b=-\frac{A_1}{1+g_mR_DA_1\dfrac{R_2}{R_1+R_2}}$$
+      $$\frac{Y}{X}\Big|_c=-\frac{A_1}{1+g_mR_DA_1}$$
+      $$\frac{Y}{X}\Big|_d=\frac{\dfrac{g_mR_2}{1+g_mR_2}A_1}{1+\dfrac{g_mR_2}{1+g_mR_2}A_1}$$
+      <p>루프 이득이 1보다 훨씬 크면 각각 $(1+R_1/R_2)/K$, $-(1+R_1/R_2)/(g_mR_D)$, $-1/(g_mR_D)$, $1$에 다가가요.</p>
+    </div>
+    <p>귀환을 끊는 극한으로 확인해요. (a)에서 $K=0$이면 귀환이 없어 $Y/X=A_1$이 되고, (b)·(c)에서 $g_m\to0$이면 $Y/X=-A_1$로 − 입력에서 본 개루프 이득이 돼요.</p>
+    <p>(a)에서 $K=1$이면 수업의 비반전 증폭기 결과 $A_1/[1+A_1R_2/(R_1+R_2)]$와 같고, 큰 루프 이득에서 $1+R_1/R_2$로 가요. (b)에서 $R_1=0$이면 (c)의 결과와 같아져요.</p>
+    <p>(c)는 근사 결과를 직접 확인할 수도 있어요. $A_1$이 크면 두 입력 전압이 거의 같아 $v_+\approx X$이고, $v_+=-g_mR_DY$이므로 $Y\approx-X/(g_mR_D)$예요. 위 근사와 같아요.</p>
+    <p>(d)에서 $g_mR_2\gg1$이면 $T_d\approx A_1$이라 $Y/X\approx A_1/(1+A_1)$, 즉 전압 팔로워의 결과와 같아요. 네 결과 모두 전압비라 무차원이에요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>주의할 점</h4>
+  <p>(b), (c)의 분자 부호를 놓치기 쉬워요. 루프 이득은 양수지만 $X$가 − 입력으로 들어가서 순방향 이득이 $-A_1$이에요. 폐루프 이득은 음수예요.</p>
+  <p>(d)의 분자를 $A_1$만으로 쓰면 틀려요. $X$에서 $Y$까지 가는 길에 팔로워가 들어 있으니 분자도 $T_d$예요. 분자와 분모의 분수 꼴을 함께 맞춰요.</p>
+  <p>근사 $Y/X\approx A_{\mathrm{fwd}}/T$는 $T\gg1$일 때만 써요. 원문은 정확한 폐루프 이득을 물었으니 $1+T$가 들어간 식을 답으로 먼저 쓰고, 근사는 의미 확인으로 덧붙여요.</p>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>조건을 바꾸어 생각해요</h4>
+  <ol>
+    <li>(a)에서 $K$ 블록을 도선($K=1$)으로 바꾸고 $R_1/R_2=7$, $A_1=500$이면 폐루프 이득은 얼마인가요? 어느 문항의 결과와 같은지 말해 보세요.</li>
+    <li>(c)에서 $g_mR_D=2$, $A_1=1000$이면 폐루프 이득은 대략 얼마인가요? 부호는 어떤가요?</li>
+    <li>(d)에서 $R_2$를 키우면 루프 이득과 폐루프 이득은 각각 커지나요, 작아지나요?</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <p class="sum-lead">$Y=A_1(v_+-v_-)$을 세우고 $Y$ 항을 모으면 분모가 $1+T$가 돼요.</p>
+  $$\frac{Y}{X}=\frac{A_{\mathrm{fwd}}}{1+T}$$
+  <p>(a)는 $A_{\mathrm{fwd}}=A_1$이라 $T_a\gg1$에서 $(1+R_1/R_2)/K$로 가요.</p>
+  <p>(b)·(c)는 $X$가 − 입력이라 $A_{\mathrm{fwd}}=-A_1$이고, 근사 이득은 $-(1+R_1/R_2)/(g_mR_D)$와 $-1/(g_mR_D)$예요.</p>
+  <p>(d)는 팔로워가 순방향에도 있어 $Y/X=T_d/(1+T_d)\approx1$이에요.</p>
+</div>

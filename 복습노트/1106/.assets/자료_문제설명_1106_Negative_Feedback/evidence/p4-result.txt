@@ -1,0 +1,25 @@
+=== (1) circuit (a), lambda=0
+M3: NMOS source follower (D=VDD, G=Vb2) -> looks like 1/gm3 into n1; M4 diode load -> 1/gm4 at out.
+R_n1 = 1/(gm2+gm3); A_v,(gate1->n1) = -gm1/(gm2+gm3). C_GD3 sits VDD-Vb2 (no effect); C_GD4 shorted by diode.
+w_pX  = 1/{R_G[C_GS1+(1+gm1/(gm2+gm3))C_GD1]} : 1/(R_G*(C_GD1*(g_m1/(g_m2 + g_m3) + 1) + C_GS1))
+w_pn1 = (gm2+gm3)/[C_DB1+C_GS2+C_SB2+C_GS3+C_SB3+(1+(gm2+gm3)/gm1)C_GD1] : (g_m2 + g_m3)/(C_DB1 + C_GD1*(1 + (g_m2 + g_m3)/g_m1) + C_GS2 + C_GS3 + C_SB2 + C_SB3)
+w_pout= gm4/(C_GD2+C_DB2+C_GS4+C_DB4) : g_m4/(C_DB2 + C_DB4 + C_GD2 + C_GS4)
+exact H_a(s) = g_m2*(C_GD1*s - g_m1)/((C_DB2*s + C_DB4*s + C_GD2*s + C_GS4*s + g_m4)*(C_DB1*C_GD1*R_G*s**2 + C_DB1*C_GS1*R_G*s**2 + C_DB1*s + C_GD1*C_GS1*R_G*s**2 + C_GD1*C_GS2*R_G*s**2 + C_GD1*C_GS3*R_G*s**2 + C_GD1*C_SB2*R_G*s**2 + C_GD1*C_SB3*R_G*s**2 + C_GD1*R_G*g_m1*s + C_GD1*R_G*g_m2*s + C_GD1*R_G*g_m3*s + C_GD1*s + C_GS1*C_GS2*R_G*s**2 + C_GS1*C_GS3*R_G*s**2 + C_GS1*C_SB2*R_G*s**2 + C_GS1*C_SB3*R_G*s**2 + C_GS1*R_G*g_m2*s + C_GS1*R_G*g_m3*s + C_GS2*s + C_GS3*s + C_SB2*s + C_SB3*s + g_m2 + g_m3))
+sample: {R_G: 10000.0, g_m1: 0.004, g_m2: 0.002, g_m3: 0.002, g_m4: 0.002, C_GS1: 1e-13, C_GD1: 2e-14, C_DB1: 3e-14, C_GS2: 1e-13, C_SB2: 3e-14, C_GS3: 1e-13, C_SB3: 3e-14, C_GD2: 2e-14, C_DB2: 3e-14, C_GS4: 1e-13, C_DB4: 3e-14}
+exact |poles| = [708034358.0363559, 11111111111.111113, 15351748250.659296]
+Miller poles  = [714285714.2857144, 11111111111.11111, 12121212121.212122]
+
+=== (2) circuit (b), lambda!=0, differential half circuit (n3 = AC ground)
+out1 load: M3 NMOS (G=D=VDD, S=out1) -> 1/gm3||ro3 ; M5 PMOS current source -> ro5 ; M1 -> ro1
+R_out = ro1||ro5||(1/gm3)||ro3 = 1/(g_m3 + 1/r_o5 + 1/r_o3 + 1/r_o1)
+A_v = -gm1*R_out
+w_pX  = 1/{R_S[C_GS1+(1+gm1 R_out)C_GD1]} : 1/(R_S*(C_GD1*(g_m1/(g_m3 + 1/r_o5 + 1/r_o3 + 1/r_o1) + 1) + C_GS1))
+w_pout= 1/{R_out[C_DB1+C_DB5+C_GD5+C_GS3+C_SB3+(1+1/(gm1 R_out))C_GD1]} : g_m1*(g_m3*r_o1*r_o3*r_o5 + r_o1*r_o3 + r_o1*r_o5 + r_o3*r_o5)/(C_GD1*(g_m1*r_o1*r_o3*r_o5 + g_m3*r_o1*r_o3*r_o5 + r_o1*r_o3 + r_o1*r_o5 + r_o3*r_o5) + g_m1*r_o1*r_o3*r_o5*(C_DB1 + C_DB5 + C_GD5 + C_GS3 + C_SB3))
+(C_GD3: both ends VDD; C_DB3: D=VDD, body=gnd -> not at out; C_GD5 to Vb1=AC gnd; C_DB5 to VDD=AC gnd)
+Vout/Vin(s) = (Vout1-Vout2)/(Vin1-Vin2) = -gm1 R_out / [(1+s/w_pX)(1+s/w_pout)]  (Miller: zero s=gm1/C_GD1 lost)
+exact half-circuit H(s) = r_o1*r_o3*r_o5*(C_GD1*s - g_m1)/(C_DB1*C_GD1*R_S*r_o1*r_o3*r_o5*s**2 + C_DB1*C_GS1*R_S*r_o1*r_o3*r_o5*s**2 + C_DB1*r_o1*r_o3*r_o5*s + C_DB5*C_GD1*R_S*r_o1*r_o3*r_o5*s**2 + C_DB5*C_GS1*R_S*r_o1*r_o3*r_o5*s**2 + C_DB5*r_o1*r_o3*r_o5*s + C_GD1*C_GD5*R_S*r_o1*r_o3*r_o5*s**2 + C_GD1*C_GS1*R_S*r_o1*r_o3*r_o5*s**2 + C_GD1*C_GS3*R_S*r_o1*r_o3*r_o5*s**2 + C_GD1*C_SB3*R_S*r_o1*r_o3*r_o5*s**2 + C_GD1*R_S*g_m1*r_o1*r_o3*r_o5*s + C_GD1*R_S*g_m3*r_o1*r_o3*r_o5*s + C_GD1*R_S*r_o1*r_o3*s + C_GD1*R_S*r_o1*r_o5*s + C_GD1*R_S*r_o3*r_o5*s + C_GD1*r_o1*r_o3*r_o5*s + C_GD5*C_GS1*R_S*r_o1*r_o3*r_o5*s**2 + C_GD5*r_o1*r_o3*r_o5*s + C_GS1*C_GS3*R_S*r_o1*r_o3*r_o5*s**2 + C_GS1*C_SB3*R_S*r_o1*r_o3*r_o5*s**2 + C_GS1*R_S*g_m3*r_o1*r_o3*r_o5*s + C_GS1*R_S*r_o1*r_o3*s + C_GS1*R_S*r_o1*r_o5*s + C_GS1*R_S*r_o3*r_o5*s + C_GS3*r_o1*r_o3*r_o5*s + C_SB3*r_o1*r_o3*r_o5*s + g_m3*r_o1*r_o3*r_o5 + r_o1*r_o3 + r_o1*r_o5 + r_o3*r_o5)
+H(0) = -g_m1*r_o1*r_o3*r_o5/(g_m3*r_o1*r_o3*r_o5 + r_o1*r_o3 + r_o1*r_o5 + r_o3*r_o5)
+sample: {R_S: 10000.0, g_m1: 0.004, g_m3: 0.001, r_o1: 50000.0, r_o3: 50000.0, r_o5: 50000.0, C_GS1: 1e-13, C_GD1: 2e-14, C_DB1: 3e-14, C_DB5: 3e-14, C_GD5: 2e-14, C_GS3: 1e-13, C_SB3: 3e-14}
+exact |poles| = [488687099.02961355, 7974548195.088036]
+Miller poles  = [511583011.5830116, 4504887377.815554]
+Gain check: H(0) = -gm1*R_out; Miller poles track exact when w_pX << w_pout.

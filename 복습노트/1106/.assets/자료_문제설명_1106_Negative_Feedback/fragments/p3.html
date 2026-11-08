@@ -1,0 +1,182 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 읽어요</h4>
+  <p>입력 소자 $M_1$, $M_2$의 소스가 꼬리 전류원 $I_{SS}$에 함께 붙은 차동쌍이에요. 각 입력은 $R_S$를 지나 게이트로 들어가고, 입력 소자 위에 게이트가 $V_b$인 캐스코드 소자 $M_3$, $M_4$가 얹혀 있어요. 부하는 $V_{DD}$에 달린 $R_D$이고 출력은 두 드레인 사이의 $V_{out}$이에요.</p>
+  <p>소자 값이 없으니 극점을 기호로 어림해요. 왼쪽 반쪽에서 $M_1$ 게이트를 $X$, $M_1$ 드레인과 $M_3$ 소스가 만나는 점을 $Y$라고 불러요(그림 (a)에는 이 이름이 없어요).</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 개념과 공식을 떠올려요</h4>
+  <p>"차동쌍"과 "좌우 대칭"이 단서예요. 순수 차동 입력($v_{in1}=+v_{id}/2$, $v_{in2}=-v_{id}/2$)이면 두 가지 전류 변화가 크기는 같고 방향이 반대라 꼬리 노드의 소신호 전압이 0이에요. 이 가상 접지(virtual ground) 덕분에 반회로(half circuit) 하나만 풀면 돼요. 커패시터가 있어도 대칭은 그대로라 반회로의 극점이 회로 전체의 극점이에요(<a href="정리노트_1106_Negative_Feedback.html#s1-half-circuit">차동쌍은 반회로와 같은 극점·영점을 가져요</a>).</p>
+  <p>반회로는 $R_S$로 구동되는 $M_1$ 위에 $M_3$가 얹힌 캐스코드 단이에요. 캐스코드 단의 극점은 노드 $X$, $Y$, 출력마다 하나씩이고, $X$–$Y$ 사이에 떠 있는 $C_{GD1}$은 밀러 정리(Miller's theorem)로 나눠요(<a href="정리노트_1106_Negative_Feedback.html#s1-cascode-diffpair">캐스코드 차동쌍의 세 극점</a>).</p>
+  $$C_{X,M}=(1-A_{XY})C_{GD1}$$
+  $$C_{Y,M}=\left(1-\frac{1}{A_{XY}}\right)C_{GD1}$$
+  <p>$A_{XY}=v_Y/v_X$는 저주파 이득이고, 교과서처럼 $\lambda=0$, 몸체 효과 무시 모델을 써요. 캐스코드 소자는 입력 소자가 보는 $Y$ 저항을 $1/g_{m3}$로 작게 만들어 $|A_{XY}|$를 줄이고 밀러 효과를 낮춰요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <div data-answer-step="반회로 판단">
+    <p>좌우 소자·$R_S$·$R_D$·바이어스가 같고 입력이 순수 차동이므로 꼬리 노드를 AC 접지로 바꿔요. 그러면 $M_1$ 소스가 접지된 왼쪽 반회로가 남아요. $V_{DD}$와 $V_b$도 AC 접지예요.</p>
+    <p>반회로: $v_{in1}\to R_S\to X$($M_1$ 게이트), $M_1$ 드레인 $=Y=M_3$ 소스, $M_3$ 드레인 $=$ 출력, 출력–$R_D$–AC 접지.</p>
+  </div>
+  <div data-answer-step="X에서 Y까지의 저주파 이득" data-gain-route="gm-rout">
+    <p>입력 $v_X$, 출력 $v_Y$로 정하고 커패시터는 열어요. $Y$를 단락하면 $M_3$의 $v_{GS3}=0$이라 $M_1$ 제어 전류가 그대로 단락선으로 가요.</p>
+    <p>$Y$를 접지로 단락해 $v_Y=0$으로 두고, 접지에서 단락선을 지나 $Y$로 들어가는 전류를 $i_{Y,\mathrm{sc}}$의 양의 방향으로 둬요. $M_1$이 $Y$에서 끌어내리는 $g_{m1}v_X$를 단락선이 그대로 대 주므로 $i_{Y,\mathrm{sc}}=g_{m1}v_X$예요.</p>
+    <div data-gain-stage="gm">$$G_{m,XY}=\frac{i_{Y,\mathrm{sc}}}{v_X}=g_{m1}$$</div>
+    <p>$v_X=0$으로 두고 $Y$에서 보면 $M_1$ 드레인은 $\lambda=0$이라 개방이고 $M_3$ 소스 쪽 $1/g_{m3}$만 남아요.</p>
+    <div data-gain-stage="rout">$$R_Y=\frac{1}{g_{m3}}$$</div>
+    <div data-gain-stage="gain">$$A_{XY}=-G_{m,XY}R_Y=-\frac{g_{m1}}{g_{m3}}$$</div>
+  </div>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>이렇게 풀어요</h4>
+  <div data-subpart="main">
+    <p>반회로의 고주파 모델에서 커패시터 위치를 확인해요. $M_1$ 소스가 가상 접지라 $C_{GS1}$은 $X$–접지예요. $M_3$ 게이트가 $V_b$라 $C_{GS3}$는 $Y$–접지, $C_{GD3}$는 출력–접지예요. $C_{DB1}$, $C_{SB3}$는 $Y$–접지, $C_{DB3}$는 출력–접지예요. 떠 있는 것은 $C_{GD1}$뿐이에요.</p>
+    <figure class="figure">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 530 235" role="img" aria-label="왼쪽 반회로입니다. 입력이 R_S를 지나 X에 연결됩니다. X에서 접지로 C_GS1이 있고 X와 Y 사이에 C_GD1이 떠 있습니다. Y에서 접지로 M1 제어 전류원과 C_Y0이 있고, Y에서 출력으로 M3 제어 전류원이 위로 흐릅니다. 출력에서 접지로 R_D와 C_out이 있습니다." font-family="Pretendard, sans-serif" font-size="14" font-weight="600">
+<path class="fig-ink" d="M24 150 H52.0 l4 -6 8 12 8 -12 8 12 8 -12 4 6 H120"/>
+<circle class="fig-dot" cx="24" cy="150" r="3.5" data-node-id="p3-in" data-node-color="red"/>
+<text class="fig-text fig-math" x="24" y="132" text-anchor="middle" data-node-id="p3-in" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
+<text class="fig-text fig-math" x="64" y="130" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text>
+<circle class="fig-dot" cx="120" cy="150" r="3.5" data-node-id="p3-x" data-node-color="blue"/>
+<text class="fig-text fig-math" x="120" y="132" text-anchor="middle" data-node-id="p3-x" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">X</tspan></text>
+<path class="fig-ink" d="M120 150 V178.5 M108 178.5 H132 M108 186.5 H132 M120 186.5 V215"/>
+<path class="fig-ink" d="M110 215 h20 m-16 5 h12 m-8 5 h4"/>
+<text class="fig-text fig-math" x="98" y="186" text-anchor="end">C<tspan baseline-shift="sub" font-size="78%">GS1</tspan></text>
+<path class="fig-ink" d="M120 150 H185.0 M185.0 138 V162 M195.0 138 V162 M195.0 150 H260"/>
+<text class="fig-text fig-math" x="215" y="124" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">GD1</tspan></text>
+<circle class="fig-dot" cx="260" cy="150" r="3.5" data-node-id="p3-y" data-node-color="red"/>
+<text class="fig-text fig-math" x="270" y="136" text-anchor="start" data-node-id="p3-y" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">Y</tspan></text>
+<path class="fig-ink" d="M260 150 V164.5 l18 18 -18 18 -18 -18 18 -18 M260 200.5 V215"/>
+<path class="fig-ink" d="M260 172.5 V192.5 m-5 -5 l5 5 5 -5"/>
+<path class="fig-ink" d="M250 215 h20 m-16 5 h12 m-8 5 h4"/>
+<text class="fig-text fig-math" x="288" y="185" text-anchor="start">g<tspan baseline-shift="sub" font-size="78%">m1</tspan>v<tspan baseline-shift="sub" font-size="78%">X</tspan></text>
+<path class="fig-ink" d="M260 150 H380"/>
+<path class="fig-ink" d="M380 150 V178.5 M368 178.5 H392 M368 186.5 H392 M380 186.5 V215"/>
+<path class="fig-ink" d="M370 215 h20 m-16 5 h12 m-8 5 h4"/>
+<text class="fig-text fig-math" x="402" y="186" text-anchor="start">C<tspan baseline-shift="sub" font-size="78%">Y0</tspan></text>
+<path class="fig-ink" d="M260 150 V111.0 l18 -18 -18 -18 -18 18 18 18 M260 75.0 V36 H510"/>
+<path class="fig-ink" d="M260 103.0 V83.0 m-5 5 l5 -5 5 5"/>
+<text class="fig-text fig-math" x="288" y="98.0" text-anchor="start">g<tspan baseline-shift="sub" font-size="78%">m3</tspan>v<tspan baseline-shift="sub" font-size="78%">Y</tspan></text>
+<circle class="fig-dot" cx="360" cy="36" r="3.5" data-node-id="p3-out" data-node-color="blue"/>
+<path class="fig-ink" d="M360 36 V50.0 l6 3 -12 6 12 6 -12 6 12 6 -12 6 6 3 V100"/>
+<path class="fig-ink" d="M350 100 h20 m-16 5 h12 m-8 5 h4"/>
+<text class="fig-text fig-math" x="376" y="72" text-anchor="start">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text>
+<circle class="fig-dot" cx="430" cy="36" r="3.5" data-node-id="p3-out" data-node-color="blue"/>
+<path class="fig-ink" d="M430 36 V64.0 M418 64.0 H442 M418 72.0 H442 M430 72.0 V100"/>
+<path class="fig-ink" d="M420 100 h20 m-16 5 h12 m-8 5 h4"/>
+<text class="fig-text fig-math" x="452" y="72" text-anchor="start">C<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+<circle class="fig-dot" cx="510" cy="36" r="3.5" data-node-id="p3-out" data-node-color="blue"/>
+<text class="fig-text fig-math" x="510" y="18" text-anchor="middle" data-node-id="p3-out" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+</svg>
+<figcaption>차동 입력이라 꼬리 노드를 가상 접지로 둔 왼쪽 반회로예요. $V_{DD}$, $V_b$를 AC 접지로 보내고 $M_1$, $M_3$를 제어 전류원으로 바꿨어요($\lambda=0$, 몸체 효과 무시). $C_{Y0}=C_{DB1}+C_{GS3}+C_{SB3}$, $C_{\mathrm{out}}=C_{DB3}+C_{GD3}$예요.</figcaption>
+</figure>
+    $$i_{X,C}=sC_{GD1}(v_X-v_Y)\approx sv_XC_{GD1}(1-A_{XY})$$
+    $$i_{Y,C}=sC_{GD1}(v_Y-v_X)\approx sv_YC_{GD1}\left(1-\frac{1}{A_{XY}}\right)$$
+    <div data-answer-step="밀러 분리와 노드별 커패시턴스">
+      <figure class="figure">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 150" role="img" aria-label="왼쪽은 X와 Y 사이에 떠 있는 C_GD1입니다. 오른쪽은 X와 Y에 각각 접지로 연결된 밀러 커패시터입니다." font-family="Pretendard, sans-serif" font-size="14" font-weight="600">
+<text class="fig-text fig-math" x="97" y="16" text-anchor="middle">분리 전</text>
+<text class="fig-text fig-math" x="360" y="16" text-anchor="middle">분리 후</text>
+<path class="fig-ink" d="M24 68 H92.0 M92.0 56 V80 M102.0 56 V80 M102.0 68 H170"/>
+<text class="fig-text fig-math" x="97" y="103" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">GD1</tspan></text>
+<circle class="fig-dot" cx="24" cy="68" r="3.5" data-node-id="p3-pa" data-node-color="blue"/>
+<text class="fig-text fig-math" x="24" y="48" text-anchor="middle" data-node-id="p3-pa" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">X</tspan></text>
+<circle class="fig-dot" cx="170" cy="68" r="3.5" data-node-id="p3-pb" data-node-color="red"/>
+<text class="fig-text fig-math" x="170" y="48" text-anchor="middle" data-node-id="p3-pb" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">Y</tspan></text>
+<path class="fig-ink" d="M190 76 H215 m-5 -5 l5 5 -5 5"/>
+<path class="fig-ink" d="M250 68 V96"/>
+<path class="fig-ink" d="M250 96 V106.0 M238 106.0 H262 M238 114.0 H262 M250 114.0 V124"/>
+<path class="fig-ink" d="M250 124 V131"/>
+<path class="fig-ink" d="M240 131 h20 m-16 5 h12 m-8 5 h4"/>
+<circle class="fig-dot" cx="250" cy="68" r="3.5" data-node-id="p3-qa" data-node-color="blue"/>
+<text class="fig-text fig-math" x="250" y="48" text-anchor="middle" data-node-id="p3-qa" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">X</tspan></text>
+<text class="fig-text fig-math" x="272" y="115" text-anchor="start">(1 − A<tspan baseline-shift="sub" font-size="78%">XY</tspan>)C<tspan baseline-shift="sub" font-size="78%">GD1</tspan></text>
+<path class="fig-ink" d="M400 68 V96"/>
+<path class="fig-ink" d="M400 96 V106.0 M388 106.0 H412 M388 114.0 H412 M400 114.0 V124"/>
+<path class="fig-ink" d="M400 124 V131"/>
+<path class="fig-ink" d="M390 131 h20 m-16 5 h12 m-8 5 h4"/>
+<circle class="fig-dot" cx="400" cy="68" r="3.5" data-node-id="p3-qb" data-node-color="red"/>
+<text class="fig-text fig-math" x="400" y="48" text-anchor="middle" data-node-id="p3-qb" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">Y</tspan></text>
+<text class="fig-text fig-math" x="422" y="115" text-anchor="start">(1 − 1/A<tspan baseline-shift="sub" font-size="78%">XY</tspan>)C<tspan baseline-shift="sub" font-size="78%">GD1</tspan></text>
+</svg>
+<figcaption>$A_{XY}=-g_{m1}/g_{m3}$이므로 $X$ 쪽은 $(1+g_{m1}/g_{m3})C_{GD1}$, $Y$ 쪽은 $(1+g_{m3}/g_{m1})C_{GD1}$이고 두 가지 모두 접지로 이어져요.</figcaption>
+</figure>
+      $$C_X=C_{GS1}+\left(1+\frac{g_{m1}}{g_{m3}}\right)C_{GD1}$$
+      $$C_Y=C_{DB1}+C_{GS3}+\left(1+\frac{g_{m3}}{g_{m1}}\right)C_{GD1}+C_{SB3}$$
+      $$C_{\mathrm{out}}=C_{DB3}+C_{GD3}$$
+    </div>
+    <div data-answer-step="노드 저항과 세 극점">
+      <p>입력을 0으로 두면 $X$는 $R_S$만 보고, $Y$는 $1/g_{m3}$을 봐요. 출력에서 아래로 $M_3$ 드레인을 보면 $\lambda=0$이라 무한대이므로 $R_D$만 남아요.</p>
+      <figure class="figure">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 505 125" role="img" aria-label="입력 X, 중간 Y, 출력에서 각각 노드 저항과 접지 기준 커패시턴스가 병렬로 연결된 세 개의 자연응답 회로" font-family="Pretendard, sans-serif" font-size="14" font-weight="600">
+<path class="fig-ink" d="M36 37 H96"/>
+<path class="fig-ink" d="M36 37 V55.0 l6 3 -12 6 12 6 -12 6 12 6 -12 6 6 3 V109"/>
+<path class="fig-ink" d="M26 109 h20 m-16 5 h12 m-8 5 h4"/>
+<path class="fig-ink" d="M96 37 V69.0 M84 69.0 H108 M84 77.0 H108 M96 77.0 V109"/>
+<path class="fig-ink" d="M86 109 h20 m-16 5 h12 m-8 5 h4"/>
+<circle class="fig-dot" cx="36" cy="37" r="3.5" data-node-id="p3-X" data-node-color="blue"/>
+<text class="fig-text fig-math" x="36" y="19" text-anchor="middle" data-node-id="p3-X" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">X</tspan></text>
+<text class="fig-text fig-math" x="20" y="78" text-anchor="end">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text>
+<text class="fig-text fig-math" x="118" y="78" text-anchor="start">C<tspan baseline-shift="sub" font-size="78%">X</tspan></text>
+<path class="fig-ink" d="M215 37 H275"/>
+<path class="fig-ink" d="M215 37 V55.0 l6 3 -12 6 12 6 -12 6 12 6 -12 6 6 3 V109"/>
+<path class="fig-ink" d="M205 109 h20 m-16 5 h12 m-8 5 h4"/>
+<path class="fig-ink" d="M275 37 V69.0 M263 69.0 H287 M263 77.0 H287 M275 77.0 V109"/>
+<path class="fig-ink" d="M265 109 h20 m-16 5 h12 m-8 5 h4"/>
+<circle class="fig-dot" cx="215" cy="37" r="3.5" data-node-id="p3-Y" data-node-color="red"/>
+<text class="fig-text fig-math" x="215" y="19" text-anchor="middle" data-node-id="p3-Y" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">Y</tspan></text>
+<text class="fig-text fig-math" x="199" y="78" text-anchor="end">1/g<tspan baseline-shift="sub" font-size="78%">m3</tspan></text>
+<text class="fig-text fig-math" x="297" y="78" text-anchor="start">C<tspan baseline-shift="sub" font-size="78%">Y</tspan></text>
+<path class="fig-ink" d="M372 37 H432"/>
+<path class="fig-ink" d="M372 37 V55.0 l6 3 -12 6 12 6 -12 6 12 6 -12 6 6 3 V109"/>
+<path class="fig-ink" d="M362 109 h20 m-16 5 h12 m-8 5 h4"/>
+<path class="fig-ink" d="M432 37 V69.0 M420 69.0 H444 M420 77.0 H444 M432 77.0 V109"/>
+<path class="fig-ink" d="M422 109 h20 m-16 5 h12 m-8 5 h4"/>
+<circle class="fig-dot" cx="372" cy="37" r="3.5" data-node-id="p3-out" data-node-color="blue"/>
+<text class="fig-text fig-math" x="372" y="19" text-anchor="middle" data-node-id="p3-out" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+<text class="fig-text fig-math" x="356" y="78" text-anchor="end">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text>
+<text class="fig-text fig-math" x="454" y="78" text-anchor="start">C<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+</svg>
+<figcaption>밀러 분리 뒤 입력을 0으로 둔 반회로 각 노드의 자연응답 회로예요.</figcaption>
+</figure>
+      $$|\omega_{p,X}|=\frac{1}{R_S\left[C_{GS1}+\left(1+\dfrac{g_{m1}}{g_{m3}}\right)C_{GD1}\right]}$$
+      $$|\omega_{p,Y}|=\frac{g_{m3}}{C_{DB1}+C_{GS3}+\left(1+\dfrac{g_{m3}}{g_{m1}}\right)C_{GD1}+C_{SB3}}$$
+      $$|\omega_{p,\mathrm{out}}|=\frac{1}{R_D(C_{DB3}+C_{GD3})}$$
+      <p>교과서 식 (11.156)은 $C_{GD1}$과 $C_{SB3}$ 사이의 $+$가 빠져 인쇄돼 있어요. 위처럼 합으로 읽어요. 식 (11.157)의 $R_L$은 이 그림의 $R_D$예요.</p>
+    </div>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <div data-answer-final>
+      <p>순수 차동 입력, $\lambda=0$, 몸체 효과 무시, 저주파 이득 $A_{XY}=-g_{m1}/g_{m3}$로 밀러 근사를 적용한 세 극점(크기, rad/s)이에요. 두 반쪽이 같으므로 회로 전체의 극점도 이 세 개예요.</p>
+      $$|\omega_{p,X}|=\frac{1}{R_S\left[C_{GS1}+\left(1+\dfrac{g_{m1}}{g_{m3}}\right)C_{GD1}\right]}$$
+      $$|\omega_{p,Y}|=\frac{g_{m3}}{C_{DB1}+C_{GS3}+\left(1+\dfrac{g_{m3}}{g_{m1}}\right)C_{GD1}+C_{SB3}}$$
+      $$|\omega_{p,\mathrm{out}}|=\frac{1}{R_D(C_{DB3}+C_{GD3})}$$
+    </div>
+    <p>단위: $R\cdot C$는 s, $g_m/C$는 1/s라서 모두 rad/s예요.</p>
+    <p>특수값: $g_{m1}=g_{m3}$이면 $X$, $Y$ 쪽 계수가 모두 2가 되어 캐스코드의 "약 $-1$ 이득" 결과로 돌아가요. 캐스코드 없이 $M_1$ 드레인이 바로 $R_D$에 붙으면 $X$ 쪽 계수가 $1+g_{m1}R_D$로 커지므로 캐스코드가 밀러 효과를 줄인다는 결론과 맞아요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>주의할 점</h4>
+  <p>그림의 $M_2$는 반대쪽 입력 소자예요. 11.7절 캐스코드 식의 캐스코드 소자 자리에는 이 그림의 $M_3$가 들어가므로 $g_{m2}$가 아니라 $g_{m3}$를 써요.</p>
+  <p>꼬리 노드가 AC 접지인 것은 순수 차동 입력일 때예요. 공통 모드 입력에서는 꼬리 노드가 움직이므로 이 반회로를 그대로 쓰지 않아요.</p>
+  <p>교과서 $\omega_{p,Y}$ 식의 빠진 $+$를 곱으로 읽지 않아요. 커패시턴스끼리 곱하면 단위가 F²가 되어 맞지 않아요.</p>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>조건을 바꾸어 생각해요</h4>
+  <ol>
+    <li>캐스코드 소자 $M_3$, $M_4$를 없애고 $M_1$ 드레인을 바로 $R_D$에 붙이면 $X$의 밀러 계수와 극점 개수는 어떻게 바뀌나요?</li>
+    <li>$M_3$의 폭을 키워 $g_{m3}=2g_{m1}$로 만들면 $X$ 쪽과 $Y$ 쪽 $C_{GD1}$ 계수는 각각 얼마인가요?</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <p class="sum-lead">순수 차동 입력이면 꼬리 노드가 가상 접지라 캐스코드 반회로 하나만 풀어요.</p>
+  $$A_{XY}=-\frac{g_{m1}}{g_{m3}}$$
+  <p>$X$ 쪽은 $(1+g_{m1}/g_{m3})C_{GD1}$, $Y$ 쪽은 $(1+g_{m3}/g_{m1})C_{GD1}$이에요.</p>
+  $$|\omega_{p,X}|=\frac{1}{R_SC_X}$$
+  <p>$Y$ 극점은 $g_{m3}/C_Y$이고 $C_Y=C_{DB1}+C_{GS3}+(1+g_{m3}/g_{m1})C_{GD1}+C_{SB3}$예요.</p>
+  <p>출력 극점은 $1/[R_D(C_{DB3}+C_{GD3})]$예요.</p>
+  <p>교과서 $\omega_{p,Y}$ 식의 빠진 $+$는 합으로 읽어요.</p>
+</div>

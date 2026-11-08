@@ -1,0 +1,203 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 읽어요</h4>
+  <p>입력 $V_{in}$은 $R_B$를 지나 $Q_1$ 베이스로 들어가요. 그림에는 노드 이름이 없어서, 이 해설에서는 $Q_1$ 베이스를 $X$, $Q_1$ 컬렉터와 $Q_2$ 이미터가 만나는 점을 $Y$라고 불러요. 출력은 $Q_2$ 컬렉터와 $R_C$가 만나는 $V_{out}$이에요.</p>
+  <p>pnp $Q_3$는 컬렉터가 $Y$에 붙은 일정 전류원이에요. $Q_1$이 흘리는 바이어스 전류 중 75%를 $Q_3$가 대므로 $Q_2$에는 나머지만 흘러요. $V_A=\infty$라서 모든 트랜지스터의 $r_o$는 무한대예요.</p>
+  <p>구할 것은 두 가지예요. 밀러 정리로 $X$, $Y$, 출력 세 노드의 극점을 구하고, 밀러 효과가 $Q_3$가 없는 표준 캐스코드(Fig. 11.50(a))보다 큰지 작은지 판단해요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 개념과 공식을 떠올려요</h4>
+  <p>"using Miller's theorem"과 "$X$–$Y$ 사이에 걸린 $C_{\mu1}$"이 단서예요. $C_{\mu1}$은 $Q_1$의 베이스–컬렉터 커패시턴스라서 두 신호 노드 사이에 떠 있는 플로팅 커패시터(floating capacitor)예요. 밀러 정리(Miller's theorem)는 이 커패시터를 각 노드에서 접지로 가는 두 커패시터로 바꿔 줘요.</p>
+  $$C_{X,M}=(1-A_{XY})C_{\mu1}$$
+  $$C_{Y,M}=\left(1-\frac{1}{A_{XY}}\right)C_{\mu1}$$
+  <p>여기서 $A_{XY}=v_Y/v_X$는 입력→출력 이득이 아니라 $C_{\mu1}$ 양 끝 노드 사이의 저주파 이득이에요. 저주파 값으로 고정하는 것이 밀러 근사(Miller approximation)이고, 그 덕분에 노드마다 병렬 $RC$ 하나로 극점(pole)을 어림할 수 있어요(<a href="../1028/정리노트_1028_CS_Stage_Frequency_Response.html#s2-cs-miller">CS 단의 밀러 효과</a>).</p>
+  <p>기호를 정리해요. $g_m=I_C/V_T$는 트랜스컨덕턴스, $r_{\pi1}=\beta/g_{m1}$은 $Q_1$ 베이스에서 이미터 쪽을 본 저항, $C_{\pi}$·$C_{\mu}$·$C_{CS}$는 베이스–이미터·베이스–컬렉터·컬렉터–기판 커패시턴스예요.</p>
+  <p>근사 조건은 $V_A=\infty$(모든 $r_o\to\infty$)와 큰 β예요. 큰 β에서는 베이스 전류를 무시해 $I_{E2}\approx I_{C2}$이고, $Q_2$ 이미터를 바라본 저항이 $1/g_{m2}$예요. 핵심은 $g_m$이 컬렉터 전류에 비례하므로 $Q_3$가 $Q_2$ 전류를 줄이면 $Y$ 저항이 커지고 $A_{XY}$가 커진다는 점이에요(<a href="정리노트_1106_Negative_Feedback.html#s0-bjt-poles">바이폴라 캐스코드의 세 극점</a>, <a href="정리노트_1106_Negative_Feedback.html#s0-m3-cascode">전류원 M3를 단 캐스코드</a>).</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <div data-answer-step="바이어스 전류와 gm 비">
+    <p>노드 $Y$에서 DC KCL을 써요. $Q_1$이 $Y$에서 끌어내리는 전류는 $Q_2$와 $Q_3$가 나눠서 대요.</p>
+    $$I_{C1}=I_{C2}+I_{C3}$$
+    <p>$Q_3$가 75%를 대므로 $I_{C1}:I_{C3}:I_{C2}=4:3:1$이에요.</p>
+    $$I_{C2}=I_{C1}-0.75I_{C1}=\frac{I_{C1}}{4}$$
+    <p>$g_m=I_C/V_T$이고 $V_T$는 공통이라 $g_m$도 같은 비율로 줄어요.</p>
+    $$g_{m2}=\frac{g_{m1}}{4}$$
+  </div>
+  <div data-answer-step="X에서 Y까지의 저주파 이득" data-gain-route="gm-rout">
+    <p>밀러 배율에 넣을 $A_{XY}$를 $G_m$과 $R_{out}$으로 나눠 구해요. 입력은 $v_X$, 출력은 $v_Y$이고 커패시터는 저주파에서 열어요. $Y$를 접지에 단락하면 $Q_2$ 베이스–이미터 전압이 0이라 $Q_1$의 제어 전류가 모두 단락선으로 가요.</p>
+    <p>$Y$를 접지로 단락해 $v_Y=0$으로 두고, 접지에서 단락선을 지나 $Y$로 들어가는 전류를 $i_{Y,\mathrm{sc}}$의 양의 방향으로 둬요. $Q_1$이 $Y$에서 끌어내리는 $g_{m1}v_X$를 단락선이 그대로 대 주므로 $i_{Y,\mathrm{sc}}=g_{m1}v_X$예요.</p>
+    <div data-gain-stage="gm">$$G_{m,XY}=\frac{i_{Y,\mathrm{sc}}}{v_X}=g_{m1}$$</div>
+    <p>$v_X=0$으로 두고 $Y$에서 바라보면 아래 $Q_1$ 컬렉터와 왼쪽 $Q_3$ 컬렉터는 $V_A=\infty$라 개방이에요. 남는 것은 위쪽 $Q_2$ 이미터의 $1/g_{m2}$뿐이에요.</p>
+    <div data-gain-stage="rout">$$R_Y\approx\frac{1}{g_{m2}}=\frac{4}{g_{m1}}$$</div>
+    <div data-gain-stage="gain">$$A_{XY}=-G_{m,XY}R_Y\approx-g_{m1}\cdot\frac{4}{g_{m1}}=-4$$</div>
+  </div>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>이렇게 풀어요</h4>
+  <div data-subpart="main">
+    <p>먼저 고주파 소신호 모델에서 커패시터가 어느 노드 사이에 있는지 확인해요. $Q_2$와 $Q_3$의 베이스가 AC 접지라서 $C_{\pi2}$, $C_{\mu3}$는 $Y$–접지, $C_{\mu2}$는 출력–접지 커패시터예요. $Q_3$의 $C_{\pi3}$는 베이스와 이미터가 둘 다 AC 접지라 양단 전압이 0이어서 빠져요. 떠 있는 것은 $X$와 $Y$ 사이의 $C_{\mu1}$ 하나예요.</p>
+    <figure class="figure">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 530 235" role="img" aria-label="입력이 R_B를 지나 X에 연결됩니다. X에서 접지로 C_pi1과 r_pi1이 있고, X와 Y 사이에 C_mu1이 떠 있습니다. Y에서 접지로 Q1 제어 전류원과 C_Y0이 있고, Y에서 출력으로 Q2 제어 전류원이 위로 흐릅니다. 출력에서 접지로 R_C와 C_out이 있습니다." font-family="Pretendard, sans-serif" font-size="14" font-weight="600">
+<path class="fig-ink" d="M24 150 H52.0 l4 -6 8 12 8 -12 8 12 8 -12 4 6 H120"/>
+<circle class="fig-dot" cx="24" cy="150" r="3.5" data-node-id="p1-in" data-node-color="red"/>
+<text class="fig-text fig-math" x="24" y="132" text-anchor="middle" data-node-id="p1-in" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
+<text class="fig-text fig-math" x="64" y="130" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">B</tspan></text>
+<circle class="fig-dot" cx="120" cy="150" r="3.5" data-node-id="p1-x" data-node-color="blue"/>
+<text class="fig-text fig-math" x="120" y="132" text-anchor="middle" data-node-id="p1-x" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">X</tspan></text>
+<path class="fig-ink" d="M120 150 V178.5 M108 178.5 H132 M108 186.5 H132 M120 186.5 V215"/>
+<path class="fig-ink" d="M110 215 h20 m-16 5 h12 m-8 5 h4"/>
+<text class="fig-text fig-math" x="98" y="186" text-anchor="end">C<tspan baseline-shift="sub" font-size="78%">π1</tspan></text>
+<circle class="fig-dot" cx="170" cy="150" r="3.5" data-node-id="p1-x" data-node-color="blue"/>
+<path class="fig-ink" d="M170 150 V164.5 l6 3 -12 6 12 6 -12 6 12 6 -12 6 6 3 V215"/>
+<path class="fig-ink" d="M160 215 h20 m-16 5 h12 m-8 5 h4"/>
+<text class="fig-text fig-math" x="186" y="190" text-anchor="start">r<tspan baseline-shift="sub" font-size="78%">π1</tspan></text>
+<path class="fig-ink" d="M120 150 H185.0 M185.0 138 V162 M195.0 138 V162 M195.0 150 H260"/>
+<text class="fig-text fig-math" x="215" y="124" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">μ1</tspan></text>
+<circle class="fig-dot" cx="260" cy="150" r="3.5" data-node-id="p1-y" data-node-color="red"/>
+<text class="fig-text fig-math" x="270" y="136" text-anchor="start" data-node-id="p1-y" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">Y</tspan></text>
+<path class="fig-ink" d="M260 150 V164.5 l18 18 -18 18 -18 -18 18 -18 M260 200.5 V215"/>
+<path class="fig-ink" d="M260 172.5 V192.5 m-5 -5 l5 5 5 -5"/>
+<path class="fig-ink" d="M250 215 h20 m-16 5 h12 m-8 5 h4"/>
+<text class="fig-text fig-math" x="288" y="185" text-anchor="start">g<tspan baseline-shift="sub" font-size="78%">m1</tspan>v<tspan baseline-shift="sub" font-size="78%">X</tspan></text>
+<path class="fig-ink" d="M260 150 H380"/>
+<path class="fig-ink" d="M380 150 V178.5 M368 178.5 H392 M368 186.5 H392 M380 186.5 V215"/>
+<path class="fig-ink" d="M370 215 h20 m-16 5 h12 m-8 5 h4"/>
+<text class="fig-text fig-math" x="402" y="186" text-anchor="start">C<tspan baseline-shift="sub" font-size="78%">Y0</tspan></text>
+<path class="fig-ink" d="M260 150 V111.0 l18 -18 -18 -18 -18 18 18 18 M260 75.0 V36 H510"/>
+<path class="fig-ink" d="M260 103.0 V83.0 m-5 5 l5 -5 5 5"/>
+<text class="fig-text fig-math" x="288" y="98.0" text-anchor="start">g<tspan baseline-shift="sub" font-size="78%">m2</tspan>v<tspan baseline-shift="sub" font-size="78%">Y</tspan></text>
+<circle class="fig-dot" cx="360" cy="36" r="3.5" data-node-id="p1-out" data-node-color="blue"/>
+<path class="fig-ink" d="M360 36 V50.0 l6 3 -12 6 12 6 -12 6 12 6 -12 6 6 3 V100"/>
+<path class="fig-ink" d="M350 100 h20 m-16 5 h12 m-8 5 h4"/>
+<text class="fig-text fig-math" x="376" y="72" text-anchor="start">R<tspan baseline-shift="sub" font-size="78%">C</tspan></text>
+<circle class="fig-dot" cx="430" cy="36" r="3.5" data-node-id="p1-out" data-node-color="blue"/>
+<path class="fig-ink" d="M430 36 V64.0 M418 64.0 H442 M418 72.0 H442 M430 72.0 V100"/>
+<path class="fig-ink" d="M420 100 h20 m-16 5 h12 m-8 5 h4"/>
+<text class="fig-text fig-math" x="452" y="72" text-anchor="start">C<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+<circle class="fig-dot" cx="510" cy="36" r="3.5" data-node-id="p1-out" data-node-color="blue"/>
+<text class="fig-text fig-math" x="510" y="18" text-anchor="middle" data-node-id="p1-out" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+</svg>
+<figcaption>$V_{CC}$, $V_{b1}$, $V_{b2}$를 AC 접지로 보내고 $Q_1$은 $r_{\pi1}$·$C_{\pi1}$·제어 전류원, $Q_2$는 제어 전류원으로 바꿨어요($V_A=\infty$라 모든 $r_o$와 $Q_3$의 소신호 가지는 개방, 큰 β에서 $r_{\pi2}\gg1/g_{m2}$라 생략). $C_{Y0}=C_{CS1}+C_{\pi2}+C_{\mu3}+C_{CS3}$, $C_{\mathrm{out}}=C_{\mu2}+C_{CS2}$예요.</figcaption>
+</figure>
+    <p>$C_{\mu1}$의 각 단자에서 커패시터로 들어가는 전류를 양으로 잡고 $A_{XY}$로 반대쪽 전압을 바꿔요.</p>
+    $$i_{X,C}=sC_{\mu1}(v_X-v_Y)\approx sv_XC_{\mu1}(1-A_{XY})$$
+    $$i_{Y,C}=sC_{\mu1}(v_Y-v_X)\approx sv_YC_{\mu1}\left(1-\frac{1}{A_{XY}}\right)$$
+    <div data-answer-step="밀러 분리와 노드별 커패시턴스">
+      <figure class="figure">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 150" role="img" aria-label="왼쪽은 X와 Y 사이에 떠 있는 C_mu1입니다. 오른쪽은 X와 Y에 각각 접지로 연결된 밀러 커패시터입니다." font-family="Pretendard, sans-serif" font-size="14" font-weight="600">
+<text class="fig-text fig-math" x="97" y="16" text-anchor="middle">분리 전</text>
+<text class="fig-text fig-math" x="360" y="16" text-anchor="middle">분리 후</text>
+<path class="fig-ink" d="M24 68 H92.0 M92.0 56 V80 M102.0 56 V80 M102.0 68 H170"/>
+<text class="fig-text fig-math" x="97" y="103" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">μ1</tspan></text>
+<circle class="fig-dot" cx="24" cy="68" r="3.5" data-node-id="p1-pa" data-node-color="blue"/>
+<text class="fig-text fig-math" x="24" y="48" text-anchor="middle" data-node-id="p1-pa" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">X</tspan></text>
+<circle class="fig-dot" cx="170" cy="68" r="3.5" data-node-id="p1-pb" data-node-color="red"/>
+<text class="fig-text fig-math" x="170" y="48" text-anchor="middle" data-node-id="p1-pb" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">Y</tspan></text>
+<path class="fig-ink" d="M190 76 H215 m-5 -5 l5 5 -5 5"/>
+<path class="fig-ink" d="M250 68 V96"/>
+<path class="fig-ink" d="M250 96 V106.0 M238 106.0 H262 M238 114.0 H262 M250 114.0 V124"/>
+<path class="fig-ink" d="M250 124 V131"/>
+<path class="fig-ink" d="M240 131 h20 m-16 5 h12 m-8 5 h4"/>
+<circle class="fig-dot" cx="250" cy="68" r="3.5" data-node-id="p1-qa" data-node-color="blue"/>
+<text class="fig-text fig-math" x="250" y="48" text-anchor="middle" data-node-id="p1-qa" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">X</tspan></text>
+<text class="fig-text fig-math" x="272" y="115" text-anchor="start">(1 − A<tspan baseline-shift="sub" font-size="78%">XY</tspan>)C<tspan baseline-shift="sub" font-size="78%">μ1</tspan></text>
+<path class="fig-ink" d="M400 68 V96"/>
+<path class="fig-ink" d="M400 96 V106.0 M388 106.0 H412 M388 114.0 H412 M400 114.0 V124"/>
+<path class="fig-ink" d="M400 124 V131"/>
+<path class="fig-ink" d="M390 131 h20 m-16 5 h12 m-8 5 h4"/>
+<circle class="fig-dot" cx="400" cy="68" r="3.5" data-node-id="p1-qb" data-node-color="red"/>
+<text class="fig-text fig-math" x="400" y="48" text-anchor="middle" data-node-id="p1-qb" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">Y</tspan></text>
+<text class="fig-text fig-math" x="422" y="115" text-anchor="start">(1 − 1/A<tspan baseline-shift="sub" font-size="78%">XY</tspan>)C<tspan baseline-shift="sub" font-size="78%">μ1</tspan></text>
+</svg>
+<figcaption>$A_{XY}=v_Y/v_X=-4$를 넣으면 $X$ 쪽은 $(1-A_{XY})C_{\mu1}=5C_{\mu1}$, $Y$ 쪽은 $(1-1/A_{XY})C_{\mu1}=1.25\,C_{\mu1}$이고 두 가지 모두 접지로 이어져요.</figcaption>
+</figure>
+      <p>$A_{XY}=-4$를 넣어 밀러 커패시턴스를 구해요.</p>
+      $$C_{X,M}=(1+4)C_{\mu1}=5C_{\mu1}$$
+      $$C_{Y,M}=\left(1+\frac{1}{4}\right)C_{\mu1}=1.25\,C_{\mu1}$$
+      <p>노드마다 접지 커패시턴스를 모아요. $X$에는 $C_{\pi1}$, $Y$에는 $Q_1$의 $C_{CS1}$·$Q_2$의 $C_{\pi2}$·$Q_3$의 $C_{\mu3}$·$C_{CS3}$, 출력에는 $C_{\mu2}$·$C_{CS2}$가 더해져요.</p>
+      $$C_X=C_{\pi1}+5C_{\mu1}$$
+      $$C_Y=1.25\,C_{\mu1}+C_{CS1}+C_{\pi2}+C_{\mu3}+C_{CS3}$$
+      $$C_{\mathrm{out}}=C_{\mu2}+C_{CS2}$$
+    </div>
+    <div data-answer-step="노드 저항과 세 극점">
+      <p>입력원을 0으로 두면 $X$에서는 왼쪽 $R_B$와 오른쪽 $r_{\pi1}$이 모두 접지로 이어져 병렬이에요. $Y$는 앞에서 구한 $1/g_{m2}$예요. 출력에서 아래로 $Q_2$ 컬렉터를 보면 $V_A=\infty$라 무한대이므로 $R_C$만 남아요.</p>
+      <figure class="figure">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 551 125" role="img" aria-label="입력 X, 중간 Y, 출력에서 각각 노드 저항과 접지 기준 커패시턴스가 병렬로 연결된 세 개의 자연응답 회로" font-family="Pretendard, sans-serif" font-size="14" font-weight="600">
+<path class="fig-ink" d="M82 37 H142"/>
+<path class="fig-ink" d="M82 37 V55.0 l6 3 -12 6 12 6 -12 6 12 6 -12 6 6 3 V109"/>
+<path class="fig-ink" d="M72 109 h20 m-16 5 h12 m-8 5 h4"/>
+<path class="fig-ink" d="M142 37 V69.0 M130 69.0 H154 M130 77.0 H154 M142 77.0 V109"/>
+<path class="fig-ink" d="M132 109 h20 m-16 5 h12 m-8 5 h4"/>
+<circle class="fig-dot" cx="82" cy="37" r="3.5" data-node-id="p1-X" data-node-color="blue"/>
+<text class="fig-text fig-math" x="82" y="19" text-anchor="middle" data-node-id="p1-X" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">X</tspan></text>
+<text class="fig-text fig-math" x="66" y="78" text-anchor="end">R<tspan baseline-shift="sub" font-size="78%">B</tspan> ‖ r<tspan baseline-shift="sub" font-size="78%">π1</tspan></text>
+<text class="fig-text fig-math" x="164" y="78" text-anchor="start">C<tspan baseline-shift="sub" font-size="78%">X</tspan></text>
+<path class="fig-ink" d="M261 37 H321"/>
+<path class="fig-ink" d="M261 37 V55.0 l6 3 -12 6 12 6 -12 6 12 6 -12 6 6 3 V109"/>
+<path class="fig-ink" d="M251 109 h20 m-16 5 h12 m-8 5 h4"/>
+<path class="fig-ink" d="M321 37 V69.0 M309 69.0 H333 M309 77.0 H333 M321 77.0 V109"/>
+<path class="fig-ink" d="M311 109 h20 m-16 5 h12 m-8 5 h4"/>
+<circle class="fig-dot" cx="261" cy="37" r="3.5" data-node-id="p1-Y" data-node-color="red"/>
+<text class="fig-text fig-math" x="261" y="19" text-anchor="middle" data-node-id="p1-Y" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">Y</tspan></text>
+<text class="fig-text fig-math" x="245" y="78" text-anchor="end">1/g<tspan baseline-shift="sub" font-size="78%">m2</tspan></text>
+<text class="fig-text fig-math" x="343" y="78" text-anchor="start">C<tspan baseline-shift="sub" font-size="78%">Y</tspan></text>
+<path class="fig-ink" d="M418 37 H478"/>
+<path class="fig-ink" d="M418 37 V55.0 l6 3 -12 6 12 6 -12 6 12 6 -12 6 6 3 V109"/>
+<path class="fig-ink" d="M408 109 h20 m-16 5 h12 m-8 5 h4"/>
+<path class="fig-ink" d="M478 37 V69.0 M466 69.0 H490 M466 77.0 H490 M478 77.0 V109"/>
+<path class="fig-ink" d="M468 109 h20 m-16 5 h12 m-8 5 h4"/>
+<circle class="fig-dot" cx="418" cy="37" r="3.5" data-node-id="p1-out" data-node-color="blue"/>
+<text class="fig-text fig-math" x="418" y="19" text-anchor="middle" data-node-id="p1-out" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+<text class="fig-text fig-math" x="402" y="78" text-anchor="end">R<tspan baseline-shift="sub" font-size="78%">C</tspan></text>
+<text class="fig-text fig-math" x="500" y="78" text-anchor="start">C<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+</svg>
+<figcaption>밀러 분리 뒤 입력을 0으로 둔 각 노드의 자연응답 회로예요. 각 노드는 $1+sRC=0$에서 극점 하나를 줘요.</figcaption>
+</figure>
+      $$|\omega_{p,X}|=\frac{1}{(R_B\parallel r_{\pi1})(C_{\pi1}+5C_{\mu1})}$$
+      $$|\omega_{p,Y}|=\frac{g_{m2}}{C_Y}=\frac{g_{m1}/4}{1.25\,C_{\mu1}+C_{CS1}+C_{\pi2}+C_{\mu3}+C_{CS3}}$$
+      $$|\omega_{p,\mathrm{out}}|=\frac{1}{R_C(C_{\mu2}+C_{CS2})}$$
+    </div>
+    <div data-answer-step="표준 캐스코드와 비교">
+      <p>표준 캐스코드(Fig. 11.50(a))는 $Q_1$, $Q_2$에 같은 전류가 흘러 $g_{m1}=g_{m2}$예요. 그래서 $A_{XY}=-1$이고 $X$ 쪽 밀러 커패시턴스는 $2C_{\mu1}$이에요.</p>
+      $$\frac{C_{X,M}(\text{여기})}{C_{X,M}(\text{표준})}=\frac{5C_{\mu1}}{2C_{\mu1}}=2.5$$
+      <p>$Q_3$가 $Q_2$ 전류를 1/4로 줄여 $Y$ 저항이 4배가 되므로 $|A_{XY}|$도 4배가 돼요. 그래서 밀러 효과는 표준 캐스코드보다 더 커요.</p>
+    </div>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <div data-answer-final>
+      <p>$V_A=\infty$, 큰 β, 저주파 이득 $A_{XY}=-4$로 밀러 근사를 적용한 세 극점(크기, rad/s)이에요.</p>
+      $$|\omega_{p,X}|=\frac{1}{(R_B\parallel r_{\pi1})(C_{\pi1}+5C_{\mu1})}$$
+      $$|\omega_{p,Y}|=\frac{g_{m1}/4}{1.25\,C_{\mu1}+C_{CS1}+C_{\pi2}+C_{\mu3}+C_{CS3}}$$
+      $$|\omega_{p,\mathrm{out}}|=\frac{1}{R_C(C_{\mu2}+C_{CS2})}$$
+      <p><strong>밀러 효과는 표준 캐스코드보다 더 커요.</strong> $C_{\mu1}$이 입력에서 $2C_{\mu1}$ 대신 $5C_{\mu1}$로 보여요.</p>
+    </div>
+    <p>단위: $RC$는 초(s)이고 $g_m/C$도 S/F=1/s라서 세 식 모두 rad/s예요.</p>
+    <p>특수값: $Q_3$가 대는 비율을 $k$라 하면 $g_{m2}=(1-k)g_{m1}$이고 $A_{XY}=-1/(1-k)$예요. $k=0$이면 $A_{XY}=-1$로 표준 캐스코드의 $2C_{\mu1}$이 다시 나오고, $k=0.75$이면 $-4$로 위 결과와 같아요.</p>
+    <p>계수 확인: $X$ 쪽 $1+4=5$, $Y$ 쪽 $1+1/4=1.25$예요. 두 계수의 곱 $5\times1.25$와 합 $5+1.25$가 같은 6.25인 것도 $(1-A)(1-1/A)=2-A-1/A$ 관계와 맞아요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>주의할 점</h4>
+  <p>밀러 배율에 입력→출력 전체 이득을 넣으면 안 돼요. $C_{\mu1}$의 양 끝은 $X$와 $Y$이므로 $A_{XY}=-g_{m1}/g_{m2}$를 써요.</p>
+  <p>$Q_3$가 소신호 저항을 더한다고 생각하기 쉬워요. $V_A=\infty$라 $Q_3$의 소신호 가지는 개방이고, $Q_3$가 바꾸는 것은 $g_{m2}$(바이어스)와 $Y$의 커패시턴스($C_{\mu3}$, $C_{CS3}$)예요.</p>
+  <p>MOS와 달리 바이폴라 입력은 $r_{\pi1}$이 유한해요. $X$의 저항은 $R_B$만이 아니라 $R_B\parallel r_{\pi1}$이에요.</p>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>조건을 바꾸어 생각해요</h4>
+  <ol>
+    <li>$Q_3$가 $Q_1$ 바이어스 전류의 50%만 댄다면 $A_{XY}$와 $X$ 쪽 밀러 커패시턴스는 각각 얼마인가요?</li>
+    <li>$Q_3$의 얼리 전압이 유한해 $r_{o3}$가 $Y$와 AC 접지 사이에 생긴다면 $Y$의 저항은 어떻게 바뀌고, $r_{o3}\gg1/g_{m2}$일 때 밀러 배율은 크게 달라지나요?</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <p class="sum-lead">$Q_3$가 바이어스의 75%를 대면 $g_{m2}=g_{m1}/4$가 돼요.</p>
+  $$A_{XY}=-\frac{g_{m1}}{g_{m2}}=-4$$
+  <p>$C_{\mu1}$은 $X$에서 $5C_{\mu1}$, $Y$에서 $1.25\,C_{\mu1}$로 보여요.</p>
+  $$|\omega_{p,X}|=\frac{1}{(R_B\parallel r_{\pi1})(C_{\pi1}+5C_{\mu1})}$$
+  <p>$Y$ 극점은 $g_{m2}/C_Y$이고 $C_Y$에는 $Q_3$의 $C_{\mu3}$, $C_{CS3}$도 들어가요.</p>
+  <p>출력 극점은 $1/[R_C(C_{\mu2}+C_{CS2})]$예요.</p>
+  <p>표준 캐스코드의 $2C_{\mu1}$보다 커서 밀러 효과가 더 커요.</p>
+</div>

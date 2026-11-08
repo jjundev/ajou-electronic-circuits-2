@@ -1,0 +1,2086 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>전자회로2 정리노트 1106</title>
+  <meta name="description" content="권익진 교수님 전자회로2 · 1106 수업 (Lec5 52–59쪽 · Lec6 1–8쪽, Razavi 11·12장)">
+  <script>document.documentElement.classList.add('js');try{const t=localStorage.getItem('od-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false,ignoredTags:['script','noscript','style','textarea','pre','code']})"></script>
+  <style>
+    /* ---------- 토큰 ---------- */
+    :root {
+      color-scheme: light;
+      --scroll: #c9d0db; --scroll-hover: #9aa3b2;
+      --bg: #ffffff; --surface: #f7f8fa; --ink: #111111; --ink-2: #6b7280; --line: #d9dee7;
+      --accent: #1677ff; --accent-ink: #1b64da; --btn-bg: #1b64da; --on-btn: #ffffff;
+      --warn: #b54708; --prof: #6941c6; --supp: #067647; --danger: #d92d20;
+      --font: 'Pretendard', system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      --fs-title: clamp(28px, 6vw, 36px); --fs-h3: clamp(26px, 5.4vw, 32px); --fs-layer: 19px; --fs-lead: 22px; --fs-body: 17px; --fs-sub: 15px; --fs-small: 14px; --fs-label: 13px; --fs-fig: 12px;
+      --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px;
+      --radius: 8px; --measure: 680px; --tap: 48px; --btn-min: 160px;
+      --dur: 220ms; --dur-exit: 150ms; --ease-out: cubic-bezier(.2, .8, .2, 1);
+      /* 예전 조각이 참조할 수 있는 이름 */
+      --surface-2: var(--surface); --accent-soft: var(--surface); --warn-soft: var(--surface);
+      --prof-soft: var(--surface); --supp-soft: var(--surface); --eli5: var(--accent-ink); --eli5-soft: var(--surface);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        color-scheme: dark;
+        --scroll: #3f414b; --scroll-hover: #5b5e6a;
+        --bg: #17171c; --surface: #212128; --ink: #f2f4f6; --ink-2: #a3abb8; --line: #34353d;
+        --accent: #3182f6; --accent-ink: #6ea4ff; --btn-bg: #1b64da; --on-btn: #ffffff;
+        --warn: #f5a15c; --prof: #b69cff; --supp: #5fd39a; --danger: #ff6b61;
+      }
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --scroll: #3f414b; --scroll-hover: #5b5e6a;
+      --bg: #17171c; --surface: #212128; --ink: #f2f4f6; --ink-2: #a3abb8; --line: #34353d;
+      --accent: #3182f6; --accent-ink: #6ea4ff; --btn-bg: #1b64da; --on-btn: #ffffff;
+      --warn: #f5a15c; --prof: #b69cff; --supp: #5fd39a; --danger: #ff6b61;
+    }
+
+    /* ---------- 기본 ---------- */
+    * { box-sizing: border-box; }
+    html { scroll-padding-top: 72px; -webkit-text-size-adjust: 100%; }
+    body { margin: 0; min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column;
+      background: var(--bg); color: var(--ink); font-family: var(--font); font-size: var(--fs-body); line-height: 1.7; word-break: keep-all; overflow-wrap: anywhere; }
+    a { color: var(--accent-ink); text-underline-offset: 3px; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    [hidden] { display: none !important; }
+
+    /* ---------- 상단 바 ---------- */
+    .topbar { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line); }
+    .topbar-inner { max-width: var(--measure); margin: 0 auto; padding: var(--s2) var(--s4); display: flex; align-items: center; gap: var(--s3); min-height: 56px; }
+    .brand { flex: 1 1 auto; min-width: 0; font-size: var(--fs-body); font-weight: 700; white-space: nowrap; }
+    .text-btn { flex: none; min-height: 44px; min-width: 44px; padding: 0 var(--s3); border: 0; border-radius: var(--radius);
+      background: transparent; color: var(--ink); font: 600 var(--fs-small)/1 var(--font); cursor: pointer; }
+    .bar { height: 2px; background: var(--line); overflow: hidden; }
+    .bar > span { display: block; height: 100%; background: var(--accent); transform-origin: left; transform: scaleX(0); transition: transform var(--dur) var(--ease-out); }
+
+    /* ---------- 본문 ---------- */
+    main { flex: 1 0 auto; width: 100%; max-width: var(--measure); margin: 0 auto; padding: var(--s6) var(--s5) var(--s7); }
+    .hero h1 { font-size: var(--fs-title); line-height: 1.3; margin: 0 0 var(--s3); letter-spacing: -0.02em; }
+    .hero p { color: var(--ink-2); margin: 0; }
+    section { margin-top: var(--s7); }
+    section > h2 { font-size: 22px; line-height: 1.4; margin: 0 0 var(--s4); }
+    .topic { padding: var(--s6) 0; border-top: 1px solid var(--line); }
+    .topic h3 { margin: 0 0 var(--s2); font-size: var(--fs-h3); font-weight: 800; line-height: 1.3; letter-spacing: -0.02em; }
+    .tags { display: flex; flex-wrap: wrap; gap: var(--s2); margin-bottom: var(--s5); }
+    .tag { font-size: var(--fs-label); line-height: 1.5; padding: 2px var(--s2); border-radius: 6px; background: var(--surface); color: var(--ink-2); white-space: nowrap; }
+
+    /* 레이어: 배경 없이 라벨과 구분선으로 나눈다 */
+    .layer { margin-top: var(--s5); padding-top: var(--s5); border-top: 1px solid var(--line); }
+    .layer.eli5 { margin-top: 0; padding-top: 0; border-top: 0; }
+    .layer > :first-child { margin-top: 0; }
+    .layer > :last-child { margin-bottom: 0; }
+    .layer-title { display: block; font-size: var(--fs-layer); font-weight: 700; line-height: 1.4; letter-spacing: -0.01em; color: var(--ink); margin-bottom: var(--s3); }
+    .layer.eli5 .layer-title { color: var(--accent-ink); }
+    .layer.eli5 .lead { font-size: var(--fs-lead); font-weight: 700; line-height: 1.5; letter-spacing: -0.01em; margin: 0 0 var(--s4); }
+    /* 정확히 말하면: 본문 크기 그대로, 굵은 첫머리만 진하게 */
+    .layer.formal b { font-weight: 700; color: var(--ink); }
+    /* 교수님 말씀 · 주의: 보조 정보는 한 단계 작게 */
+    .layer.prof, .layer.warn { font-size: var(--fs-sub); line-height: 1.7; }
+    .layer.prof blockquote { font-size: var(--fs-sub); }
+    .layer.prof .layer-title { color: var(--prof); }
+    .layer.warn { background: var(--surface); border-top: 0; border-radius: var(--radius); padding: var(--s4); }
+    .layer.warn .layer-title { color: var(--warn); font-size: var(--fs-body); }
+    .layer.supp .badge.supp { margin-bottom: var(--s2); }
+    .badge { display: inline-block; font-size: var(--fs-label); font-weight: 600; line-height: 1.5; padding: 2px var(--s2); border-radius: 6px; background: var(--surface); color: var(--ink-2); }
+    .badge.supp { color: var(--supp); }
+    blockquote { margin: var(--s3) 0; padding: 0 0 0 var(--s3); border-left: 2px solid var(--line); color: var(--ink-2); }
+    ol.steps { padding-left: 1.4em; }
+    ol.steps li { margin: var(--s2) 0; }
+
+    /* 그림 · 수식 · 표 */
+    .figure { margin: var(--s4) 0; text-align: center; }
+    .figure svg { width: 100%; height: auto; max-width: 560px; color: var(--ink); }
+    .figure figcaption { font-size: var(--fs-small); color: var(--ink-2); margin-top: var(--s1); }
+    .katex-display { overflow-x: auto; overflow-y: hidden; padding: var(--s1) 0; }
+    .table-wrap { overflow-x: auto; }
+    table { border-collapse: collapse; width: 100%; font-size: var(--fs-small); }
+    th, td { border-bottom: 1px solid var(--line); padding: var(--s2); text-align: left; vertical-align: top; }
+    th { color: var(--ink-2); font-weight: 600; }
+    td:first-child, th:first-child { min-width: 6em; }
+
+    /* 위젯 */
+    .widget { background: var(--surface); border-radius: var(--radius); padding: var(--s4); margin: var(--s5) 0; }
+    .widget h4 { margin: 0 0 var(--s1); font-size: var(--fs-layer); line-height: 1.4; }
+    .widget-help { font-size: var(--fs-small); color: var(--ink-2); margin: 0 0 var(--s3); }
+    .controls { display: grid; gap: var(--s2); grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-bottom: var(--s2); font-size: var(--fs-small); }
+    .controls label { display: flex; align-items: center; gap: var(--s2); min-height: 44px; }
+    .controls input[type=range] { flex: 1; min-width: 0; accent-color: var(--accent); }
+    .widget svg { width: 100%; height: auto; background: var(--bg); border-radius: var(--radius); }
+    .readout { font-size: var(--fs-small); margin-top: var(--s2); }
+    .legend { font-size: var(--fs-label); color: var(--ink-2); display: flex; flex-wrap: wrap; gap: var(--s3); }
+    .sw { display: inline-block; width: 14px; height: 4px; vertical-align: middle; margin-right: var(--s1); border-radius: 2px; }
+    .sw.truth { background: var(--ink-2); } .sw.fit { background: var(--accent); } .sw.train { background: var(--accent); height: 10px; width: 10px; border-radius: 50%; }
+    .sw.test { background: var(--warn); height: 10px; width: 10px; border-radius: 50%; } .sw.like { background: var(--accent); } .sw.prior { background: var(--prof); } .sw.post { background: var(--supp); }
+    .axis { stroke: var(--line); stroke-width: 1.5; }
+    .tick { fill: var(--ink-2); font-size: 11px; }
+    .plot-truth { fill: none; stroke: var(--ink-2); stroke-width: 1.5; stroke-dasharray: 5 4; }
+    .plot-fit { fill: none; stroke: var(--accent); stroke-width: 2.5; }
+    .pt-train { fill: var(--accent); }
+    .pt-test { fill: var(--warn); }
+    .plot-like { fill: none; stroke: var(--accent); stroke-width: 2; }
+    .plot-prior { fill: none; stroke: var(--prof); stroke-width: 2; stroke-dasharray: 6 4; }
+    .plot-post { fill: none; stroke: var(--supp); stroke-width: 3; }
+    .mark-ml { stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 3 3; }
+    .mark-map { stroke: var(--supp); stroke-width: 1.5; stroke-dasharray: 3 3; }
+    .fig-ink { stroke: currentColor; fill: none; stroke-width: 2; }
+    .fig-accent { stroke: var(--accent); fill: none; stroke-width: 2.5; }
+    .fig-danger { stroke: var(--danger); fill: none; stroke-width: 2.5; }
+    .fig-dot { fill: var(--accent); }
+    .fig-text { fill: currentColor; font-size: 13px; font-family: inherit; }
+    svg text, svg text[class], svg text tspan, .fig-math, .fig-math tspan { font-family: Pretendard, sans-serif; font-weight: 600; font-style: normal; }
+    svg tspan[baseline-shift="sub"], svg tspan[baseline-shift="super"] { font-size: 78%; }
+    svg :is(.fig-dot, .fig-text)[data-node-color="blue"] { fill: var(--accent, #2563eb); }
+    svg :is(.fig-dot, .fig-text)[data-node-color="red"] { fill: var(--danger, #dc2626); }
+    .fig-muted { fill: var(--ink-2); font-size: var(--fs-fig); font-family: inherit; }
+
+    footer { width: 100%; max-width: var(--measure); margin: 0 auto; padding: 0 var(--s5) var(--s6); color: var(--ink-2); font-size: var(--fs-small); }
+
+    /* ---------- 하단 이동 바 ---------- */
+    .pager { position: sticky; bottom: 0; z-index: 10; background: var(--bg); border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom); }
+    .pager-inner { max-width: var(--measure); margin: 0 auto; padding: var(--s3) var(--s4); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: var(--s3); }
+    .pager-count { font-size: var(--fs-small); color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; text-align: center; min-width: 4em; }
+    .btn { min-height: var(--tap); min-width: var(--btn-min); padding: 0 var(--s6); border-radius: var(--radius); border: 0; font: 700 var(--fs-body)/1 var(--font); cursor: pointer; white-space: nowrap;
+      transition: background-color 150ms ease-out, opacity 150ms ease-out; }
+    .btn-ghost { justify-self: start; background: var(--surface); color: var(--ink); }
+    .btn-primary { justify-self: end; background: var(--btn-bg); color: var(--on-btn); }
+    .btn:disabled { opacity: .4; cursor: default; }
+    @media (hover: hover) {
+      .text-btn:hover, .btn-ghost:not(:disabled):hover { background: var(--line); }
+      .btn-primary:not(:disabled):hover { box-shadow: inset 0 0 0 100px rgba(0, 0, 0, .14); }
+    }
+
+    /* ---------- 목차 시트 ---------- */
+    .sheet { width: min(100%, var(--measure)); max-width: 100%; max-height: 80dvh; margin: auto auto 0; padding: 0; border: 0;
+      border-radius: 16px 16px 0 0; background: var(--bg); color: var(--ink); }
+    .sheet::backdrop { background: rgba(0, 0, 0, .4); }
+    .sheet-inner { padding: var(--s4) var(--s5) calc(var(--s5) + env(safe-area-inset-bottom)); }
+    .sheet-head { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); margin-bottom: var(--s2); }
+    .sheet-head h2 { margin: 0; font-size: var(--fs-lead); }
+    .toc { display: flex; flex-direction: column; }
+    .toc > a, .toc-group > a { display: block; padding: var(--s3) 0 var(--s1); font-size: var(--fs-label); font-weight: 600; color: var(--ink-2); text-decoration: none; }
+    .toc-list { list-style: none; margin: 0 0 var(--s2); padding: 0; }
+    .toc-list a { display: flex; align-items: center; gap: var(--s3); min-height: var(--tap); padding: var(--s2) var(--s3); margin: 0 calc(-1 * var(--s3));
+      border-radius: var(--radius); color: var(--ink); text-decoration: none; line-height: 1.4; }
+    .toc-list a[aria-current="true"] { background: var(--surface); font-weight: 700; color: var(--accent-ink); }
+    .toc-list .toc-title { flex: 1 1 0; min-width: 0; }
+    @media (hover: hover) { .toc-list a:hover { background: var(--surface); } }
+
+    /* ---------- 한 화면에 하나씩 (JS가 켤 때만) ---------- */
+    html:not(.js) .pager, html:not(.js) #toc-open { display: none; }
+    html:not(.js) .sheet { display: block; position: static; width: 100%; max-height: none; margin: 0 auto; border-radius: 0; border-bottom: 1px solid var(--line); }
+    html:not(.js) .sheet-close { display: none; }
+    .js main > .hero:not(.is-current), .js main > section:not(.is-on), .js .screen:not(.is-current) { display: none; }
+    .js main > section { margin-top: 0; }
+    .js main > section > h2 { font-size: var(--fs-small); font-weight: 600; color: var(--accent-ink); margin: 0 0 var(--s2); }
+    .js .topic { padding: 0; border-top: 0; }
+    .js .hero { padding-top: 12vh; }
+    .js footer { display: none; }
+    .js body.at-end footer { display: block; }
+    .screen.enter-next { animation: enter-next var(--dur) var(--ease-out); }
+    .screen.enter-prev { animation: enter-prev var(--dur) var(--ease-out); }
+    @keyframes enter-next { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: none; } }
+    @keyframes enter-prev { from { opacity: 0; transform: translateX(-24px); } to { opacity: 1; transform: none; } }
+    @media (prefers-reduced-motion: reduce) {
+      .screen.enter-next, .screen.enter-prev { animation: none; }
+      .bar > span, .btn { transition: none; }
+    }
+    @media (max-width: 480px) {
+      main { padding: var(--s5) var(--s4) var(--s6); }
+      footer { padding: 0 var(--s4) var(--s5); }
+      .btn { min-width: 120px; padding: 0 var(--s5); }
+    }
+    @media print {
+      .topbar, .pager, .sheet { display: none !important; }
+      .js main > .hero, .js main > section, .js .screen, .js footer { display: block !important; }
+    }
+
+    /* ---------- 좌우 패널 (drawer) ---------- */
+    :root { --panel-l: clamp(240px, 18vw, 320px); --panel-r-min: 320px; --panel-r-max: 720px; --scrollbar: 16px; --drawer-l: 304px; --drawer-r: 360px; --fs-panel: 16px; --scrim: rgba(0, 0, 0, .4); }
+    body { height: 100vh; height: 100dvh; min-height: 0; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; overflow: hidden; }
+    .topbar-inner { max-width: none; padding: var(--s2) var(--s3); gap: var(--s2); }
+    .panel-toggle { display: inline-flex; align-items: center; gap: var(--s1); padding: 0 var(--s2); }
+    .panel-toggle svg { flex: none; width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .panel-toggle .strip { fill: transparent; stroke: none; transition: fill 150ms ease-out; }
+    .panel-toggle[aria-expanded="true"] { color: var(--accent-ink); }
+    .panel-toggle[aria-expanded="true"] .strip { fill: currentColor; }
+    .theme-toggle { display: inline-flex; align-items: center; justify-content: center; padding: 0; }
+    .theme-toggle svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .theme-toggle .i-sun { display: none; }
+    :root[data-theme="dark"] .theme-toggle .i-sun { display: block; }
+    :root[data-theme="dark"] .theme-toggle .i-moon { display: none; }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .theme-toggle .i-sun { display: block; }
+      :root:not([data-theme="light"]) .theme-toggle .i-moon { display: none; }
+    }
+
+    .layout { display: grid; grid-template-columns: auto minmax(320px, 1fr) auto; min-height: 0; }
+    .content { display: flex; flex-direction: column; min-width: 0; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scroll-padding-top: var(--s4); }
+    .panel { position: relative; display: flex; flex-direction: column; min-height: 0; overflow: hidden; background: var(--bg); color: var(--ink); font-size: var(--fs-panel); line-height: 1.6; }
+    .panel-left { grid-column: 1; border-right: 1px solid var(--line); }
+    .content { grid-column: 2; }
+    .panel-right { grid-column: 3; border-left: 1px solid var(--line); }
+    .panel-inner { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: var(--s4) var(--s4) var(--s6); }
+    .content::-webkit-scrollbar, .panel-inner::-webkit-scrollbar { width: 8px; }
+    .content::-webkit-scrollbar-track, .panel-inner::-webkit-scrollbar-track { background: transparent; }
+    .content::-webkit-scrollbar-thumb, .panel-inner::-webkit-scrollbar-thumb { background: var(--scroll); border-radius: 8px; border: 2px solid var(--bg); }
+    .content::-webkit-scrollbar-thumb:hover, .panel-inner::-webkit-scrollbar-thumb:hover { background: var(--scroll-hover); }
+    @supports (scrollbar-color: auto) { .content, .panel-inner { scrollbar-width: thin; scrollbar-color: var(--scroll) transparent; } }
+    .panel-resize { display: none; }
+    .panel-head { display: flex; align-items: center; gap: var(--s2); min-height: 44px; margin-bottom: var(--s2); }
+    .panel-head h2 { flex: 1 1 0; min-width: 0; margin: 0; font-size: var(--fs-lead); line-height: 1.4; }
+    .panel-sub { margin: 0 0 var(--s4); font-size: var(--fs-layer); font-weight: 700; line-height: 1.4; letter-spacing: -0.01em; }
+    .panel-empty { margin: 0; color: var(--ink-2); }
+    .panel-label { display: block; margin: var(--s5) 0 var(--s2); font-size: var(--fs-label); font-weight: 600; color: var(--ink-2); }
+
+    /* 진행 상태 */
+    .panel-meta { margin: 0 0 var(--s2); font-size: var(--fs-small); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+    .panel-meta b { color: var(--ink); }
+    .progress { height: 4px; margin-bottom: var(--s3); border-radius: 2px; background: var(--line); overflow: hidden; }
+    .progress > span { display: block; height: 100%; background: var(--accent); transform-origin: left; transform: scaleX(0); transition: transform var(--dur) var(--ease-out); }
+    .panel .toc-list a { margin: 0 calc(-1 * var(--s2)); padding: var(--s2); font-size: var(--fs-panel); }
+    .toc-mark { flex: none; display: block; width: 20px; height: 20px; color: var(--ink-2); }
+    .toc-mark svg { display: block; width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .toc-mark.is-done { color: var(--accent-ink); }
+
+    /* 복습문제: 원문 · 힌트 · 풀이 */
+    .aid details:last-of-type { border-bottom: 1px solid var(--line); }
+    .aid details.original > summary { font-size: var(--fs-panel); }
+    .solved-btn { display: flex; align-items: center; justify-content: center; gap: var(--s2); width: 100%; min-height: var(--tap); margin-top: var(--s5); padding: 0 var(--s4);
+      border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg); color: var(--ink); font: 700 var(--fs-panel)/1.2 var(--font); cursor: pointer; }
+    .solved-btn svg { flex: none; width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .solved-btn[aria-pressed="true"] { border-color: var(--accent); color: var(--accent-ink); }
+
+    /* 정리노트: 페이지 요약 */
+    /* readability-20261022:start */
+    /* Shared summary layout: explicit blocks, no runtime sentence split. */
+    .sum { display: flow-root; }
+    .sum :where(p, ul, ol, dl), .sum > :where(*) { margin: 0; }
+    .sum > :nth-child(n+2) { margin-top: var(--s5); }
+    .sum > :where(p:not(.panel-label, .sum-lead)) + p:not(.panel-label) { margin-top: var(--s2); }
+    .sum > .sum-lead + * { margin-top: var(--s5); }
+    .sum > .panel-label + *, .sum > h4 + * { margin-top: var(--s3); }
+    .sum .summary-group { display: flex; flex-direction: column; gap: var(--s2); }
+    .sum h4 { margin: 0 0 var(--s1); font-size: inherit; line-height: 1.5; }
+    .sum .summary-group > p { margin: 0; }
+    .sum .terms dt { margin-top: var(--s3); }
+    .sum .terms dt:first-child { margin-top: 0; }
+    .sum .terms dd { margin: var(--s2) 0 0; }
+    /* readability-20261022:end */
+    .sum-lead { margin: 0; font-size: var(--fs-body); font-weight: 700; line-height: 1.6; }
+    .eq-list { list-style: none; margin: 0; padding: 0; }
+    .eq-list li { padding: var(--s2) 0; border-bottom: 1px solid var(--line); }
+    .eq-list li:first-child { padding-top: 0; }
+    .eq-name { display: block; font-size: var(--fs-label); font-weight: 600; color: var(--ink-2); }
+    .eq-list .katex-display { margin: var(--s1) 0 0; text-align: left; }
+    .eq-list .katex-display > .katex { text-align: left; }
+    .terms { margin: 0; }
+    .terms dt { font-size: var(--fs-panel); font-weight: 700; margin-top: var(--s4); }
+    .terms dt:first-child { margin-top: 0; }
+    .terms dd { margin: var(--s1) 0 0; font-size: var(--fs-sub); line-height: 1.6; color: var(--ink-2); }
+    .flow { margin: 0; padding-left: 1.4em; font-size: var(--fs-sub); }
+    .flow li { margin: var(--s2) 0; }
+
+    @media (hover: hover) { .solved-btn:hover { background: var(--surface); } }
+
+    /* 넓은 화면: 본문 옆에 붙는 패널 */
+    @media (min-width: 1024px) {
+      .layout { --l: var(--panel-l-user, var(--panel-l)); }
+      .layout[data-left="closed"] { --l: 0px; }
+      .panel-left { width: var(--l); }
+      /* 기본값: 왼쪽 패널과 본문 폭을 뺀 나머지를 오른쪽 패널이 차지 → 본문 옆 빈 여백이 생기지 않는다 */
+      .panel-right { width: var(--panel-r-user, clamp(var(--panel-r-min), calc(100vw - var(--l) - var(--measure) - var(--scrollbar)), var(--panel-r-max))); }
+      .panel-resize { display: block; position: absolute; top: 0; bottom: 0; z-index: 2; width: 12px; padding: 0; border: 0; background: transparent; cursor: col-resize; touch-action: none; }
+      .panel-left .panel-resize { right: 0; }
+      .panel-right .panel-resize { left: 0; }
+      .panel-resize::after { content: ""; position: absolute; top: 0; bottom: 0; width: 2px; background: var(--accent); opacity: 0; transition: opacity 150ms ease-out; }
+      .panel-left .panel-resize::after { right: 0; }
+      .panel-right .panel-resize::after { left: 0; }
+      .panel-resize:focus-visible { outline: none; }
+      .panel-resize:focus-visible::after, .is-resizing .panel-resize:active::after { opacity: 1; }
+      @media (hover: hover) { .panel-resize:hover::after { opacity: 1; } }
+      body.is-resizing { cursor: col-resize; user-select: none; }
+      .layout[data-left="closed"] .panel-left, .layout[data-right="closed"] .panel-right { display: none; }
+      .panel.is-shown { animation: panel-fade var(--dur) var(--ease-out); }
+      .scrim, .panel-close { display: none; }
+    }
+    @keyframes panel-fade { from { opacity: 0; } to { opacity: 1; } }
+
+    /* 좁은 화면: 가장자리에서 밀려 나오는 drawer */
+    @media (max-width: 1023.98px) {
+      .panel { position: fixed; top: 0; bottom: 0; z-index: 40; visibility: hidden;
+        transition: transform var(--dur-exit) ease-in, visibility 0s linear var(--dur-exit); }
+      .panel-left { left: 0; width: min(var(--drawer-l), 88vw); transform: translateX(-100%); }
+      .panel-right { right: 0; width: min(var(--drawer-r), 88vw); transform: translateX(100%); }
+      .panel.is-open { visibility: visible; transform: none; transition: transform var(--dur) var(--ease-out); }
+      .panel-inner { padding-top: calc(var(--s3) + env(safe-area-inset-top)); padding-bottom: calc(var(--s6) + env(safe-area-inset-bottom)); }
+      .scrim { position: fixed; inset: 0; z-index: 35; background: var(--scrim); opacity: 0; visibility: hidden;
+        transition: opacity var(--dur-exit) ease-in, visibility 0s linear var(--dur-exit); }
+      .scrim.is-on { opacity: 1; visibility: visible; transition: opacity var(--dur) var(--ease-out); }
+      html:not(.js) .panel-left { display: none; }
+    }
+    @media (max-width: 480px) { .panel-toggle { padding: 0 var(--s1); } }
+    html:not(.js) .panel-toggle, html:not(.js) .panel-right, html:not(.js) .scrim { display: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .panel, .panel.is-open, .scrim, .scrim.is-on, .progress > span, .panel-toggle .strip { transition: none; }
+      .panel.is-shown { animation: none; }
+      .panel-resize::after { transition: none; }
+    }
+    @media print {
+      body { display: block; height: auto; overflow: visible; }
+      .layout { display: block; }
+      .content { overflow: visible; }
+      .panel, .scrim { display: none !important; }
+    }
+  </style>
+</head>
+<body data-screens="article.topic" data-panels="note" data-range="1106">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <button class="text-btn panel-toggle" id="toggle-left" type="button" aria-controls="panel-left" aria-expanded="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="strip" x="3" y="4" width="6" height="16" rx="1"/><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg><span>목차</span></button>
+      <strong class="brand">정리노트</strong>
+      <button class="text-btn theme-toggle" id="theme-toggle" type="button" aria-label="다크 모드로 전환" title="다크 모드로 전환"><svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg><svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+      <button class="text-btn panel-toggle" id="toggle-right" type="button" aria-controls="panel-right" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="strip" x="15" y="4" width="6" height="16" rx="1"/><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M15 4v16"/></svg><span>요약</span></button>
+    </div>
+    <div class="bar" aria-hidden="true"><span id="pager-bar"></span></div>
+  </header>
+  <div class="layout" data-left="open" data-right="closed">
+    <aside class="panel panel-left" id="panel-left" aria-labelledby="panel-left-title">
+      <div class="panel-resize" data-side="left" role="separator" aria-orientation="vertical" aria-controls="panel-left" aria-label="왼쪽 패널 너비 조절. 좌우 화살표로 조절, Home으로 자동 너비" tabindex="0"></div>
+      <div class="panel-inner">
+        <div class="panel-head">
+          <h2 id="panel-left-title">목차</h2>
+          <button class="text-btn panel-close" type="button" data-panel-close>닫기</button>
+        </div>
+        <p class="panel-meta">읽은 토픽 <b id="progress-n">0</b> / <span id="progress-total">0</span></p>
+        <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+        <nav class="toc" aria-label="목차"><a href="#why">왜 쓸까</a><a href="#s0">1 캐스코드</a><a href="#s1">2 차동쌍</a><a href="#s2">3 귀환</a><a href="#s3">4 루프 이득</a><a href="#s4">5 요약·예고</a></nav>
+      </div>
+    </aside>
+    <div class="content">
+  <main>
+    <div class="hero">
+      <h1>캐스코드·차동쌍 주파수 응답과 음귀환 — 5살도 이해하는 정리노트</h1>
+      <p>권익진 교수님 전자회로2 · 1106 수업 (Lec5 52–59쪽 · Lec6 1–8쪽, Razavi 11·12장)</p>
+    </div>
+    <section id="why"><h2>들어가며: 왜 이런 회로를 쓸까</h2>
+<article class="topic" id="why-circuit">
+  <h3>왜 이런 회로를 쓸까</h3>
+  <div class="tags"><span class="tag date">1106 수업</span><span class="tag slide">L05 s52 · L06 s3–4</span></div>
+  <div class="layer eli5">
+    <span class="layer-title">쉽게 말하면</span>
+    <p class="lead">캐스코드는 이득을 그대로 두고 동작 주파수를 높이고, 차동쌍은 반회로 하나로 극점을 읽고, 음귀환은 이득을 $1+KA_1$배 내주고 정확도를 얻어요.</p>
+    <figure class="figure">
+      <svg id="fig-why" viewBox="0 0 400 236" role="img" aria-label="세 줄의 테두리 상자 흐름도예요. 고주파 증폭은 공통 소스 한 단에서 입력 극점이 낮아 캐스코드로, 차동쌍의 극점 찾기는 전체 회로가 복잡해 반회로로, 정확한 증폭은 개루프에서 A1 오차가 그대로 나와 음귀환으로 이어지고 그 대가로 이득이 1+KA1배 줄어요">
+        <rect class="fig-ink" x="4" y="8" width="116" height="60" rx="8"/>
+        <rect class="fig-danger" x="142" y="8" width="116" height="60" rx="8"/>
+        <rect class="fig-accent" x="280" y="8" width="116" height="60" rx="8"/>
+        <path class="fig-ink" d="M124 38h14m-5-5 5 5-5 5 M262 38h14m-5-5 5 5-5 5"/>
+        <text class="fig-text" x="62" y="34" text-anchor="middle">고주파 증폭</text>
+        <text class="fig-muted" x="62" y="53" text-anchor="middle">큰 이득 유지</text>
+        <text class="fig-text" x="200" y="34" text-anchor="middle">공통 소스 한 단</text>
+        <text class="fig-muted" x="200" y="53" text-anchor="middle">입력 극점 낮음</text>
+        <text class="fig-text" x="338" y="34" text-anchor="middle">캐스코드</text>
+        <text class="fig-muted" x="338" y="53" text-anchor="middle">주파수 3배 이상</text>
+        <rect class="fig-ink" x="4" y="88" width="116" height="60" rx="8"/>
+        <rect class="fig-danger" x="142" y="88" width="116" height="60" rx="8"/>
+        <rect class="fig-accent" x="280" y="88" width="116" height="60" rx="8"/>
+        <path class="fig-ink" d="M124 118h14m-5-5 5 5-5 5 M262 118h14m-5-5 5 5-5 5"/>
+        <text class="fig-text" x="62" y="114" text-anchor="middle">차동쌍 고주파</text>
+        <text class="fig-muted" x="62" y="133" text-anchor="middle">극점 찾기</text>
+        <text class="fig-text" x="200" y="114" text-anchor="middle">전체 회로 풀기</text>
+        <text class="fig-muted" x="200" y="133" text-anchor="middle">소자가 두 배</text>
+        <text class="fig-text" x="338" y="114" text-anchor="middle">반회로 하나</text>
+        <text class="fig-muted" x="338" y="133" text-anchor="middle">같은 극점·영점</text>
+        <rect class="fig-ink" x="4" y="168" width="116" height="60" rx="8"/>
+        <rect class="fig-danger" x="142" y="168" width="116" height="60" rx="8"/>
+        <rect class="fig-accent" x="280" y="168" width="116" height="60" rx="8"/>
+        <path class="fig-ink" d="M124 198h14m-5-5 5 5-5 5 M262 198h14m-5-5 5 5-5 5"/>
+        <text class="fig-text" x="62" y="194" text-anchor="middle">정확한 증폭</text>
+        <text class="fig-muted fig-math" x="62" y="213" text-anchor="middle">A<tspan baseline-shift="sub" font-size="78%">1</tspan><tspan baseline-shift="0">은 부정확</tspan></text>
+        <text class="fig-text fig-math" x="200" y="194" text-anchor="middle">개루프 Y = A<tspan baseline-shift="sub" font-size="78%">1</tspan><tspan baseline-shift="0">X</tspan></text>
+        <text class="fig-muted fig-math" x="200" y="213" text-anchor="middle">A<tspan baseline-shift="sub" font-size="78%">1</tspan><tspan baseline-shift="0"> 오차가 그대로</tspan></text>
+        <text class="fig-text" x="338" y="194" text-anchor="middle">음귀환</text>
+        <text class="fig-muted fig-math" x="338" y="213" text-anchor="middle">이득 1+KA<tspan baseline-shift="sub" font-size="78%">1</tspan><tspan baseline-shift="0">배 감소</tspan></text>
+      </svg>
+      <figcaption>반회로(half circuit)는 차동쌍의 한쪽 절반이고, 각 줄은 필요한 것 → 쉬운 방법이 막히는 곳 → 이번 회로 순서로 읽어요.</figcaption>
+    </figure>
+  </div>
+  <div class="layer formal">
+    <span class="layer-title">정확히 말하면</span>
+    <h4>1. 풀고 싶은 문제</h4>
+    <p>주파수가 올라가면 트랜지스터 내부 커패시턴스의 임피던스 $\frac{1}{Cs}$가 작아져서 이득이 극점(pole)부터 떨어져요. 같은 전압 이득을 더 높은 동작 주파수까지 유지하는 증폭단이 필요해요. <a href="#s0-io-impedance">입출력 임피던스도 커패시턴스의 함수예요</a></p>
+    <p>차동쌍(differential pair)도 고주파에서 이득이 어디서 떨어지는지, 즉 극점과 영점(zero)이 어디인지 알아야 해요. <a href="#s1-half-circuit">차동쌍은 반회로와 같은 극점·영점을 가져요</a></p>
+    <p>전방 증폭기 $A_1$은 그 자체로 정확도가 떨어지는(poorly controlled) 시스템일 수 있어요. 이런 시스템이 더 정교한 특성을 갖게 만들고 싶어요. <a href="#s2-feedback-system">음귀환 시스템의 네 부분</a></p>
+    <h4>2. 단순한 해법과 그 한계</h4>
+    <p>공통 소스(CS) 한 단은 입력과 출력이 반대 방향으로 크게 움직여요. 그래서 둘 사이의 $C_{GD1}$이 밀러 효과(Miller effect)로 입력에서 크게 보여요. $\lambda=0$이고 입력에서 출력까지의 이득이 $-g_{m1}R_L$인 밀러 근사에서 입력 쪽 커패시턴스는 다음과 같아요.</p>
+    $$C_{in}\approx C_{GS1}+(1+g_{m1}R_L)C_{GD1}$$
+    <p>이득 $g_{m1}R_L$을 키울수록 입력 커패시턴스도 커져서 입력 극점이 낮아져요. <a href="../1028/정리노트_1028_CS_Stage_Frequency_Response.html#s2-cs-miller">CS 단: 밀러 곱셈이 입력 극점을 끌어내려요</a></p>
+    <p>차동쌍을 트랜지스터 두 개와 꼬리 노드까지 그대로 놓고 풀면, 다뤄야 할 커패시턴스와 노드가 한쪽 단의 두 배로 늘어 식이 복잡해져요. <a href="#s1-half-circuit">차동쌍은 반회로와 같은 극점·영점을 가져요</a></p>
+    <p>개루프(open loop)로 쓰면 출력이 $A_1$을 그대로 따라가요.</p>
+    $$Y=A_1X$$
+    <p>$A_1$이 정확하지 않으면 출력 $Y$도 그만큼 정확하지 않아요. <a href="#s2-closed-loop">폐루프 이득: 이득이 $1+KA_1$배 줄어요</a></p>
+    <h4>3. 핵심 아이디어</h4>
+    <p>캐스코드(cascode)는 $M_1$ 위에 공통 게이트 $M_2$를 쌓아요. 노드 Y에서 위로 보이는 저항이 $\frac{1}{g_{m2}}$로 작아서, $C_{GD1}$ 양단의 노드 X에서 노드 Y로의 이득이 $-\frac{g_{m1}}{g_{m2}}$ 정도로 작아져요($\lambda=0$일 때).</p>
+    $$C_{in}\approx C_{GS1}+\left(1+\frac{g_{m1}}{g_{m2}}\right)C_{GD1}$$
+    <p>예를 들어 $g_{m1}=g_{m2}$이면 계수가 $1+1=2$가 되어 $C_{GD1}$이 $2C_{GD1}$로만 보여요. $M_2$는 $M_1$이 만든 전류 변화를 출력으로 전달만 하므로 전체 이득은 CS와 같은 $-g_{m1}R_L$이에요. 강의 예제에서는 이득이 같으면서 동작 주파수가 CS보다 3배 이상 높았어요. <a href="#s0-bjt-poles">바이폴라 캐스코드의 세 극점</a></p>
+    <p>소자·바이어스가 대칭이고 순수 차동 입력이면 꼬리 노드가 AC 접지가 돼요. 그러면 반회로는 CS 단 하나이고, 전달함수가 같으므로 차동쌍은 반회로와 같은 극점·영점을 가져요. <a href="#s1-half-circuit">차동쌍은 반회로와 같은 극점·영점을 가져요</a></p>
+    <p>음귀환(negative feedback)은 출력을 감지해 귀환 회로망 $K$로 되돌리고, 입력에서 빼서 그 차이를 $A_1$에 넣어요. 그러면 입력–출력 관계는 다음 폐루프 이득(closed-loop gain)이 돼요.</p>
+    $$\frac{Y}{X}=\frac{A_1}{1+KA_1}$$
+    <p>예를 들어 $A_1=1000$, $K=0.1$이면 $\frac{1000}{1+100}=\frac{1000}{101}\approx9.90$이에요. $KA_1$이 클수록 이 값은 $\frac{1}{K}=10$에 가까워져요. 비반전 증폭기에서는 이 값이 저항비 $1+\frac{R_1}{R_2}$로 정해져요. <a href="#s2-noninverting">비반전 증폭기를 귀환으로 보기</a> · <a href="#s2-error-signal">오차 E와 가상 단락</a></p>
+    <h4>4. 대가와 쓰이는 곳</h4>
+    <p>캐스코드는 트랜지스터가 하나 더 들고, 두 소자 사이 노드 Y가 생겨 극점이 하나 늘어요. 그래도 같은 이득으로 더 높은 주파수까지 쓸 수 있어서 CS보다 훨씬 많이 써요. 노드 Y에 전류원 $M_3$를 달면 $g_{m1}$과 $R_L$을 더 키우는 변형도 가능해요. <a href="#s0-m3-cascode">전류원 M3를 단 캐스코드</a></p>
+    <p>반회로는 대칭과 순수 차동 입력이 성립할 때만 써요. 공통 모드 신호에서는 꼬리 노드를 접지로 볼 수 없어요. 반회로가 캐스코드 단이면 캐스코드의 세 극점을 그대로 가져다 써요. <a href="#s1-cascode-diffpair">캐스코드 차동쌍의 세 극점</a></p>
+    <p>음귀환의 대가는 이득이 $1+KA_1$배 줄어든다는 점이에요. 위 예에서는 $1000$이던 이득이 $1+KA_1=101$배 줄어 약 $9.90$이 돼요. 그래도 op-amp의 비반전·반전 증폭기처럼 대부분의 증폭기는 음귀환으로 써요. 귀환 시스템의 여러 특성을 정하는 양은 루프 이득 $KA_1$이고, 폐루프 이득과는 다른 양이에요. <a href="#s3-loop-gain">루프를 끊고 시험 신호를 넣어요</a> · <a href="#s3-loop-vs-closed">루프 이득과 폐루프 이득은 완전히 달라요</a></p>
+    <p>이득을 내주면서도 쓰는 이유는 다음 시간에 다뤄요. <a href="#s4-next">다음 시간 예고</a></p>
+  </div>
+  <div class="layer prof">
+    <span class="layer-title">교수님 말씀</span>
+    <blockquote>이득은 커먼 소스 스테이지와 같으면서 동작 주파수는 세 배 이상 더 증가하는 장점</blockquote>
+    <blockquote>캐스코드 구조를 훨씬 더 많이 사용하죠.</blockquote>
+    <blockquote>전달 함수가 같다는 것은 폴도 같다는 거죠.</blockquote>
+    <blockquote>정확도가 떨어지는 시스템에 좀 더 정교한 특성을 갖도록 만드는 게 피드백의 효과</blockquote>
+    <blockquote>게인이 줄어드는데 왜 쓰느냐? 다른 장점이 있기 때문에 쓰겠죠?</blockquote>
+    <p>교수님은 그냥 "피드백"이라고 하면 음귀환을 뜻한다고 했어요. 같은 위상 신호를 계속 더하는 양귀환은 발진기에 쓰며 전자회로2에서는 다루지 않아요.</p>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">캐스코드는 같은 이득으로 동작 주파수를 높이고, 차동쌍은 반회로로 극점을 읽고, 음귀환은 이득을 내주고 정확도를 얻어요.</p>
+    <p class="panel-label">핵심 식</p>
+    <ul class="eq-list">
+      <li><span class="eq-name">CS 입력 커패시턴스</span>$$C_{in}\approx C_{GS1}+(1+g_{m1}R_L)C_{GD1}$$</li>
+      <li><span class="eq-name">캐스코드 입력 커패시턴스</span>$$C_{in}\approx C_{GS1}+\left(1+\frac{g_{m1}}{g_{m2}}\right)C_{GD1}$$</li>
+      <li><span class="eq-name">폐루프 이득</span>$$\frac{Y}{X}=\frac{A_1}{1+KA_1}$$</li>
+    </ul>
+    <p>캐스코드의 전체 이득은 CS와 같은 $-g_{m1}R_L$이에요.</p>
+    <p>차동쌍은 대칭·순수 차동 입력에서 반회로와 같은 극점·영점을 가져요.</p>
+    <p>음귀환을 걸면 이득이 $1+KA_1$배 줄어요.</p>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>캐스코드(cascode)</dt><dd>공통 소스 위에 공통 게이트를 쌓은 증폭단</dd>
+      <dt>반회로(half circuit)</dt><dd>대칭 차동쌍의 한쪽 절반</dd>
+      <dt>음귀환(negative feedback)</dt><dd>출력을 되돌려 입력에서 빼는 구조</dd>
+    </dl>
+  </div>
+</article>
+    </section>
+    <section id="s0"><h2>1. 캐스코드 주파수 응답 마무리</h2>
+<article class="topic" id="s0-bjt-poles">
+  <h3>바이폴라 캐스코드의 세 극점</h3>
+  <div class="tags"><span class="tag date">1106 수업</span><span class="tag slide">L05 s53</span></div>
+  <div class="layer eli5">
+    <span class="layer-title">쉽게 말하면</span>
+    <p class="lead">바이폴라 캐스코드도 X·Y·출력 세 노드마다 저항과 커패시턴스의 곱으로 극점(pole)이 하나씩 생겨요.</p>
+    <figure class="figure">
+      <svg id="fig-bjt-cascode-poles" viewBox="0 0 400 262" role="img" aria-label="밀러 근사 뒤의 바이폴라 캐스코드: 입력 v_in이 R_S를 거쳐 노드 X(Q1 베이스)로 들어가고, Q1 컬렉터와 Q2 이미터가 만나는 노드 Y, Q2 컬렉터인 출력 노드에 각각 접지 커패시터 C_π1+2C_μ1, C_CS1+C_π2+2C_μ1, C_CS2+C_μ2가 붙어 있어요"><path class="fig-ink" d="M24 200H45.0l2.5 -5l5 10l5 -10l5 10l5 -10l5 10l2.5 -5H96"/><path class="fig-ink" d="M96 200H146"/><path class="fig-ink" d="M110 200V222m-10 0h20m-20 6h20m-10 0V244"/><path class="fig-ink" d="M100 244h20m-17 4h14m-11 4h8"/><path class="fig-ink" d="M146 188V212M146 194L162 184V150M146 206L162 216V236"/><path class="fig-ink" d="M152.4 214.7L159.6 214.5L156.6 207.9"/><path class="fig-ink" d="M152 236h20m-17 4h14m-11 4h8"/><path class="fig-ink" d="M146 98V122M146 104L162 94V60M146 116L162 126V150"/><path class="fig-ink" d="M152.4 124.7L159.6 124.5L156.6 117.9"/><path class="fig-ink" d="M111 110H146"/><circle class="fig-ink" cx="108" cy="110" r="3"/><path class="fig-ink" d="M162 150H250"/><path class="fig-ink" d="M250 150V172m-10 0h20m-20 6h20m-10 0V194"/><path class="fig-ink" d="M240 194h20m-17 4h14m-11 4h8"/><path class="fig-ink" d="M162 14V22.0l5 2.5l-10 5l10 5l-10 5l10 5l-10 5l5 2.5V60"/><path class="fig-ink" d="M152 14H172"/><path class="fig-ink" d="M162 60H360"/><path class="fig-ink" d="M290 60V82m-10 0h20m-20 6h20m-10 0V104"/><path class="fig-ink" d="M280 104h20m-17 4h14m-11 4h8"/><circle class="fig-dot" cx="24" cy="200" r="3.7" data-node-id="bjtc-in" data-node-color="red"/><circle class="fig-dot" cx="110" cy="200" r="3.7" data-node-id="bjtc-x" data-node-color="blue"/><circle class="fig-dot" cx="162" cy="150" r="3.7" data-node-id="bjtc-y" data-node-color="red"/><circle class="fig-dot" cx="162" cy="60" r="3.7" data-node-id="bjtc-out" data-node-color="blue"/><circle class="fig-dot" cx="290" cy="60" r="3.7" data-node-id="bjtc-out" data-node-color="blue"/><circle class="fig-dot" cx="360" cy="60" r="3.7" data-node-id="bjtc-out" data-node-color="blue"/><text class="fig-text fig-math" x="24" y="186" text-anchor="middle" data-node-id="bjtc-in" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><text class="fig-text fig-math" x="110" y="186" text-anchor="middle" data-node-id="bjtc-x" data-node-color="blue">X</text><text class="fig-text fig-math" x="152" y="166" text-anchor="end" data-node-id="bjtc-y" data-node-color="red">Y</text><text class="fig-text fig-math" x="360" y="46" text-anchor="middle" data-node-id="bjtc-out" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><text class="fig-text fig-math" x="60" y="186" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><text class="fig-text fig-math" x="176" y="206">Q<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" x="176" y="116">Q<tspan baseline-shift="sub" font-size="78%">2</tspan></text><text class="fig-text fig-math" x="176" y="42">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text><text class="fig-text fig-math" x="178" y="19">V<tspan baseline-shift="sub" font-size="78%">CC</tspan></text><text class="fig-text fig-math" x="100" y="115" text-anchor="end">V<tspan baseline-shift="sub" font-size="78%">b1</tspan></text><text class="fig-text fig-math" x="94" y="236" text-anchor="end">C<tspan baseline-shift="sub" font-size="78%">π1</tspan>+2C<tspan baseline-shift="sub" font-size="78%">μ1</tspan></text><text class="fig-text fig-math" x="266" y="182">C<tspan baseline-shift="sub" font-size="78%">CS1</tspan>+C<tspan baseline-shift="sub" font-size="78%">π2</tspan>+2C<tspan baseline-shift="sub" font-size="78%">μ1</tspan></text><text class="fig-text fig-math" x="304" y="92">C<tspan baseline-shift="sub" font-size="78%">CS2</tspan>+C<tspan baseline-shift="sub" font-size="78%">μ2</tspan></text></svg>
+      <figcaption>$Q_1$과 $Q_2$에 같은 컬렉터 전류가 흘러 X에서 Y로 가는 이득이 약 −1이므로, 두 노드를 잇는 $C_{\mu1}$은 X와 Y에서 모두 $2C_{\mu1}$로 보여요.</figcaption>
+    </figure>
+  </div>
+  <div class="layer formal">
+    <span class="layer-title">정확히 말하면</span>
+    <p>작은 예로 $C_{\mu1}=10\,\mathrm{fF}$이고 $g_{m1}=g_{m2}$라고 해요. X에서 Y로 가는 이득이 −1이면 X를 1 mV 올릴 때 Y는 1 mV 내려가요.</p>
+    <p>그러면 $C_{\mu1}$ 양단 전압은 2 mV 변해서 X에서는 $2\times10=20\,\mathrm{fF}$, Y에서도 $2\times10=20\,\mathrm{fF}$로 보여요. 같은 규칙으로 $g_{m1}/g_{m2}=4$인 MOS 캐스코드라면 X 쪽 배율은 $1+4=5$, Y 쪽 배율은 $1+1/4=1.25$가 돼요.</p>
+    <p>바이어스 전압 $V_{b1}$, 전원 $V_{CC}$는 AC 접지로 보고, 몸체·기판 쪽 단자도 AC 접지로 둬요. 각 노드의 저항과 커패시턴스를 따로 모아요.</p>
+    <ol class="steps">
+      <li>
+        <p><strong>밀러 배율에 넣을 이득을 정해요.</strong> $C_{\mu1}$은 $Q_1$의 베이스–컬렉터, 곧 X와 Y 사이의 플로팅 커패시터(floating capacitor)예요. 그래서 배율에는 입력→출력 이득이 아니라 노드 X에서 노드 Y로의 이득을 넣어요.</p>
+        <p>Y에서 위로 $Q_2$ 이미터를 보면 β가 클 때 $1/g_{m2}$이고, 아래로 $Q_1$ 컬렉터를 보면 $r_{o1}$이에요. $r_{o1}\gg1/g_{m2}$이므로 Y의 저항은 $1/g_{m2}$로 봐요.</p>
+        $$A_{v,XY}=\frac{v_Y}{v_X}\approx-\frac{g_{m1}}{g_{m2}}$$
+      </li>
+      <li>
+        <p><strong>BJT에서는 두 $g_m$이 같아요.</strong> $g_m=I_C/V_T$이고 $Q_1$과 $Q_2$는 같은 컬렉터 전류 경로에 있어요. 베이스 전류를 무시하면 $I_{C1}=I_{C2}$이므로 $g_{m1}=g_{m2}$예요.</p>
+        $$A_{v,XY}\approx-1$$
+      </li>
+      <li>
+        <p><strong>X의 커패시턴스와 저항을 모아요.</strong> $Q_1$ 이미터가 접지라 $C_{\pi1}$은 그대로 보이고, $C_{\mu1}$은 X 쪽 밀러 성분으로 보여요.</p>
+        $$\left(1-A_{v,XY}\right)C_{\mu1}\approx2C_{\mu1}$$
+        <p>X에서 왼쪽은 앞단의 출력 임피던스 $R_S$, 오른쪽 베이스로는 $r_{\pi1}$이 보여요. 입력 신호원을 0으로 두면 두 저항은 X와 AC 접지 사이에 있으므로 병렬 $R_S\parallel r_{\pi1}$이에요.</p>
+        $$\omega_{p,X}=\frac{1}{(R_S\parallel r_{\pi1})(C_{\pi1}+2C_{\mu1})}$$
+      </li>
+      <li>
+        <p><strong>Y의 커패시턴스와 저항을 모아요.</strong> $Q_1$의 컬렉터–기판 $C_{CS1}$, 베이스가 AC 접지인 $Q_2$의 $C_{\pi2}$, $C_{\mu1}$의 Y 쪽 밀러 성분이 보여요.</p>
+        $$\left(1-\frac{1}{A_{v,XY}}\right)C_{\mu1}\approx2C_{\mu1}$$
+        $$\omega_{p,Y}=\frac{1}{\frac{1}{g_{m2}}(C_{CS1}+C_{\pi2}+2C_{\mu1})}$$
+      </li>
+      <li>
+        <p><strong>출력의 커패시턴스와 저항을 모아요.</strong> $Q_2$의 베이스가 AC 접지이므로 $C_{\mu2}$는 플로팅이 아닌 접지형 커패시터(grounded capacitor)예요. 여기에 컬렉터–기판 $C_{CS2}$가 더해져요.</p>
+        <p>출력에서 아래로 보이는 캐스코드 저항은 $R_{cas}\approx g_{m2}r_{o2}(r_{o1}\parallel r_{\pi2})$예요. 이 값이 $R_L$보다 훨씬 크므로 출력 저항은 $R_L\parallel R_{cas}\approx R_L$로 봐요.</p>
+        $$\omega_{p,out}=\frac{1}{R_L(C_{CS2}+C_{\mu2})}$$
+      </li>
+    </ol>
+    <p>MOS 캐스코드와 해석 순서는 같고 기호만 $C_{GS}\leftrightarrow C_\pi$, $C_{GD}\leftrightarrow C_\mu$로 바뀌어요. 차이는 두 가지예요. MOS는 저주파 입력저항이 무한대라 X의 저항에 $r_\pi$ 항이 없고, $g_{m1}$과 $g_{m2}$가 일반적으로 달라 밀러 배율이 $1+g_{m1}/g_{m2}$로 남아요.</p>
+    <p>MOS 쪽 노드별 커패시턴스 정리는 <a href="../1104/정리노트_1104_Cascode_Frequency_Response.html#s1-node-capacitance">1104 정리노트의 X·Y·출력 커패시터 모으기</a>에 있어요.</p>
+  </div>
+  <div class="layer prof">
+    <span class="layer-title">교수님 말씀</span>
+    <blockquote>Q1과 Q2가 같은 IC 패스를 갖기 때문에 gm1과 gm2가 같습니다. MOSFET은 일반적으로 달라요.</blockquote>
+    <p>BJT와 MOS의 극점 해석은 같고, $C_{GS}$가 $C_\pi$, $C_{GD}$가 $C_\mu$로 기호만 달라진다고 정리하셨어요. Y의 저항도 더 정확히는 $r_{o1}$, $r_{o2}$가 있지만 $1/g_{m2}$로 본다고 하셨어요.</p>
+  </div>
+  <div class="layer warn">
+    <span class="layer-title">꼭 기억해요</span>
+    <blockquote>이게 이제 입력과 출력의 관계가 아니라 노드 X에서 노드 Y로의 이득입니다.</blockquote>
+    <p>밀러 배율에 전체 이득 $-g_{m1}R_L$을 넣으면 X의 커패시턴스를 크게 잘못 구해요. 캐스코드에서는 $A_{v,XY}\approx-g_{m1}/g_{m2}$를 써요.</p>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">바이폴라 캐스코드는 X·Y·출력에 극점이 하나씩 있고, $C_{\mu1}$은 X와 Y에서 모두 $2C_{\mu1}$로 보여요.</p>
+    <p class="panel-label">핵심 식</p>
+    <ul class="eq-list">
+      <li><span class="eq-name">입력 X</span>$$\omega_{p,X}=\frac{1}{(R_S\parallel r_{\pi1})(C_{\pi1}+2C_{\mu1})}$$</li>
+      <li><span class="eq-name">중간 Y</span>$$\omega_{p,Y}=\frac{1}{\frac{1}{g_{m2}}(C_{CS1}+C_{\pi2}+2C_{\mu1})}$$</li>
+      <li><span class="eq-name">출력</span>$$\omega_{p,out}=\frac{1}{R_L(C_{CS2}+C_{\mu2})}$$</li>
+    </ul>
+    <p>밀러 배율에는 노드 X에서 노드 Y로의 이득 $A_{v,XY}\approx-g_{m1}/g_{m2}$를 넣어요.</p>
+    <p>BJT 캐스코드는 같은 컬렉터 전류가 흘러 $g_{m1}=g_{m2}$이므로 배율이 2가 돼요.</p>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>플로팅 커패시터(floating capacitor)</dt><dd>두 끝이 모두 움직이는 노드에 붙은 커패시터</dd>
+      <dt>접지형 커패시터(grounded capacitor)</dt><dd>한쪽 끝이 AC 접지에 붙은 커패시터</dd>
+    </dl>
+  </div>
+</article>
+
+<article class="topic" id="s0-io-impedance">
+  <h3>입출력 임피던스도 커패시턴스의 함수예요</h3>
+  <div class="tags"><span class="tag date">1106 수업</span><span class="tag slide">L05 s54 · s56</span></div>
+  <div class="layer eli5">
+    <span class="layer-title">쉽게 말하면</span>
+    <p class="lead">저주파에서 무한대(MOS)나 $r_{\pi1}$(BJT)이던 입력 임피던스는 주파수가 오르면 커패시턴스가 보여서 점점 작아져요.</p>
+    <figure class="figure">
+      <svg id="fig-cascode-zin" viewBox="0 0 360 196" role="img" aria-label="로그 눈금의 주파수에 따른 입력 임피던스 크기: MOS는 처음부터 주파수에 반비례해 내려가는 점선, BJT는 r_π1에서 평평하다가 1/(2π r_π1 C_in) 부근에서 꺾여 같은 직선을 따라 내려가는 실선이에요"><path class="fig-ink" d="M40 20V170H340"/><path class="fig-ink" d="M130 20L280 170" stroke-dasharray="6 5"/><path class="fig-accent" d="M40 60H140C163 60 175 66 190 80L280 170"/><path class="fig-ink" d="M170 60V170" stroke-dasharray="2 4" stroke-width="1.2"/><text class="fig-text fig-math" x="36" y="64" text-anchor="end">r<tspan baseline-shift="sub" font-size="78%">π1</tspan></text><text class="fig-text fig-math" x="150" y="30">MOS: 1/(C<tspan baseline-shift="sub" font-size="78%">in</tspan>s)</text><text class="fig-text fig-math" x="48" y="110">BJT: r<tspan baseline-shift="sub" font-size="78%">π1</tspan> ‖ 1/(C<tspan baseline-shift="sub" font-size="78%">in</tspan>s)</text><text class="fig-text fig-math" x="170" y="188" text-anchor="middle">1/(2πr<tspan baseline-shift="sub" font-size="78%">π1</tspan>C<tspan baseline-shift="sub" font-size="78%">in</tspan>)</text><text class="fig-text fig-math" x="340" y="188" text-anchor="end">주파수</text><text class="fig-text fig-math" x="44" y="14">|Z<tspan baseline-shift="sub" font-size="78%">in</tspan>|</text></svg>
+      <figcaption>같은 입력 커패시턴스 $C_{in}$이라고 두면, BJT는 $r_{\pi1}$에서 평평하다가 $1/(2\pi r_{\pi1}C_{in})$ 부근에서 꺾여 MOS와 같은 $1/(C_{in}s)$ 직선을 따라 내려가요.</figcaption>
+    </figure>
+  </div>
+  <div class="layer formal">
+    <span class="layer-title">정확히 말하면</span>
+    <p>작은 예로 BJT 캐스코드에서 $r_{\pi1}=2.6\,\mathrm{k\Omega}$, 입력 쪽 커패시턴스 $C_{in}=C_{\pi1}+2C_{\mu1}=1\,\mathrm{pF}$라고 해요. $2.6\,\mathrm{k\Omega}\times1\,\mathrm{pF}=2.6\,\mathrm{ns}$이므로 꺾이는 주파수는 다음과 같아요.</p>
+    $$\begin{aligned}f_c&amp;=\frac{1}{2\pi r_{\pi1}C_{in}}\\&amp;=\frac{1}{2\pi\times2.6\,\mathrm{ns}}\\&amp;\approx61.21\,\mathrm{MHz}\end{aligned}$$
+    $$|Z_{in}|=\frac{r_{\pi1}}{\sqrt{1+(f/f_c)^2}}$$
+    <p>$f=0.1f_c$이면 $|Z_{in}|\approx2.59\,\mathrm{k\Omega}$로 거의 $r_{\pi1}$이에요. $f=f_c$이면 $r_{\pi1}/\sqrt2\approx1.84\,\mathrm{k\Omega}$, $f=10f_c$이면 약 $0.26\,\mathrm{k\Omega}$예요. 꺾인 뒤에는 주파수가 10배 될 때마다 크기가 약 10배 작아져요.</p>
+    <ol class="steps">
+      <li>
+        <p><strong>MOS 캐스코드의 입력.</strong> 저주파에서는 게이트로 전류가 흐르지 않아 $Z_{in}=\infty$예요. 주파수가 오르면 $C_{GS1}$과, X에서 Y로의 이득으로 밀러 변환한 $C_{GD1}$이 보여요.</p>
+        $$Z_{in}=\frac{1}{\left[C_{GS1}+\left(1+\frac{g_{m1}}{g_{m2}}\right)C_{GD1}\right]s}$$
+        <p>$\omega\to\infty$이면 $Z_{in}\to0$이에요. 그 사이에서는 커패시턴스의 임피던스가 주파수에 따라 바뀌어요.</p>
+      </li>
+      <li>
+        <p><strong>MOS 캐스코드의 출력.</strong> 저주파에서는 아래로 보이는 캐스코드 저항이 $R_L$보다 훨씬 커서 $Z_{out}\approx R_L$이에요. 게이트가 AC 접지인 $M_2$의 $C_{GD2}$와 $C_{DB2}$가 접지형으로 병렬로 붙어요.</p>
+        $$Z_{out}=R_L\parallel\frac{1}{(C_{GD2}+C_{DB2})s}$$
+      </li>
+      <li>
+        <p><strong>바이폴라 캐스코드의 입력.</strong> 저주파 입력 임피던스는 무한대가 아니라 베이스–이미터의 $r_{\pi1}$이에요. 여기에 $C_{\pi1}$과 밀러 성분 $2C_{\mu1}$이 병렬로 붙어요.</p>
+        $$Z_{in}=r_{\pi1}\parallel\frac{1}{(C_{\pi1}+2C_{\mu1})s}$$
+        <p>이 $Z_{in}$은 베이스에서 본 값이라 앞단의 $R_S$는 들어 있지 않아요.</p>
+      </li>
+      <li>
+        <p><strong>바이폴라 캐스코드의 출력.</strong> 저주파의 $R_L$에 $C_{\mu2}$와 $C_{CS2}$가 병렬로 붙어요.</p>
+        $$Z_{out}=R_L\parallel\frac{1}{(C_{\mu2}+C_{CS2})s}$$
+      </li>
+      <li>
+        <p><strong>극점과 같은 현상이에요.</strong> 노드 X에서 접지까지 보이는 임피던스는 $R_S$와 $Z_{in}$의 병렬이에요.</p>
+        $$\begin{aligned}R_S\parallel Z_{in}&amp;=(R_S\parallel r_{\pi1})\\&amp;\quad\parallel\frac{1}{(C_{\pi1}+2C_{\mu1})s}\end{aligned}$$
+        <p>이 임피던스가 꺾이는 각주파수 $1/[(R_S\parallel r_{\pi1})(C_{\pi1}+2C_{\mu1})]$이 바로 $\omega_{p,X}$예요. 출력의 $Z_{out}$이 꺾이는 각주파수도 $\omega_{p,out}$과 같아요.</p>
+      </li>
+    </ol>
+    <p>그래서 이득이 극점에서 떨어지는 것과 입출력 임피던스가 커패시턴스의 함수가 되는 것은 별개가 아니에요. 각 노드의 임피던스가 커패시턴스의 함수라서 그 노드에 극점이 생겨요.</p>
+  </div>
+  <div class="layer prof">
+    <span class="layer-title">교수님 말씀</span>
+    <blockquote>임피던스가 커패시턴스의 함수로 나타나기 때문에 각각의 노드에서 폴이 생기는 겁니다.</blockquote>
+    <p>주파수가 높아지면 $r_\pi$나 $R_L$ 같은 저주파 임피던스만 보이는 것이 아니라 커패시턴스의 임피던스가 병렬로 보인다고 정리하셨어요.</p>
+  </div>
+  <div class="layer warn">
+    <span class="layer-title">꼭 기억해요</span>
+    <blockquote>정확하게 얘기하면 무한대는 반만 맞는 거죠.</blockquote>
+    <p>"MOS 입력 임피던스는 무한대"는 저주파에서만 맞아요. 일반적인 답은 커패시턴스의 함수인 $Z_{in}(s)$예요.</p>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">입출력 임피던스는 저주파 값에 커패시턴스의 임피던스가 병렬로 붙은 커패시턴스의 함수예요.</p>
+    <p class="panel-label">핵심 식</p>
+    <ul class="eq-list">
+      <li><span class="eq-name">MOS 입력</span>$$Z_{in}=\frac{1}{\left[C_{GS1}+\left(1+\frac{g_{m1}}{g_{m2}}\right)C_{GD1}\right]s}$$</li>
+      <li><span class="eq-name">MOS 출력</span>$$Z_{out}=R_L\parallel\frac{1}{(C_{GD2}+C_{DB2})s}$$</li>
+      <li><span class="eq-name">BJT 입력</span>$$Z_{in}=r_{\pi1}\parallel\frac{1}{(C_{\pi1}+2C_{\mu1})s}$$</li>
+      <li><span class="eq-name">BJT 출력</span>$$Z_{out}=R_L\parallel\frac{1}{(C_{\mu2}+C_{CS2})s}$$</li>
+    </ul>
+    <p>입력 임피던스가 무한대라는 답은 저주파에서만 성립하는 반만 맞는 답이에요.</p>
+    <p>임피던스가 꺾이는 RC가 그 노드의 극점과 같아서 두 현상은 별개가 아니에요.</p>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>입력 임피던스(input impedance)</dt><dd>입력 단자에서 본 전압 대 전류의 비로, 주파수에 따라 달라짐</dd>
+    </dl>
+  </div>
+</article>
+
+<article class="topic" id="s0-m3-cascode">
+  <h3>전류원 M3를 단 캐스코드</h3>
+  <div class="tags"><span class="tag date">1106 수업</span><span class="tag slide">L05 s55</span></div>
+  <div class="layer eli5">
+    <span class="layer-title">쉽게 말하면</span>
+    <p class="lead">노드 Y에 단 PMOS 전류원 $M_3$는 $M_1$에 바이어스 전류만 더 보태고, 소신호 전류는 거의 다 $M_2$로 가서 이득은 그대로예요.</p>
+    <figure class="figure">
+      <svg id="fig-m3-current-split" viewBox="0 0 400 262" role="img" aria-label="PMOS 전류원 M3가 노드 Y에 붙은 MOS 캐스코드: M1이 끌어내리는 소신호 전류 g_m1 v_in 가운데 약 99%는 M2를 거쳐 위에서 오고, M3 쪽에서 오는 것은 약 1%예요"><path class="fig-ink" d="M182 20H262"/><path class="fig-ink" d="M158 44V68M166 42V70M166 46H182V20M166 66H182V170"/><path class="fig-ink" d="M172.0 42.5L167.0 46.0L172.0 49.5"/><circle class="fig-ink" cx="154" cy="56" r="3.5"/><path class="fig-ink" d="M119 56H150.5"/><circle class="fig-ink" cx="116" cy="56" r="3"/><path class="fig-ink" d="M182 170H250"/><path class="fig-ink" d="M250 20V35.0l5 2.5l-10 5l10 5l-10 5l10 5l-10 5l5 2.5V80"/><path class="fig-ink" d="M226 106V130M234 104V132M234 108H250V80M234 128H250V170"/><path class="fig-ink" d="M240.0 131.5L245.0 128.0L240.0 124.5"/><path class="fig-ink" d="M207 118H226"/><circle class="fig-ink" cx="204" cy="118" r="3"/><path class="fig-ink" d="M226 196V220M234 194V222M234 198H250V170M234 218H250V238"/><path class="fig-ink" d="M240.0 221.5L245.0 218.0L240.0 214.5"/><path class="fig-ink" d="M240 238h20m-17 4h14m-11 4h8"/><path class="fig-ink" d="M40 208H70.0l2.5 -5l5 10l5 -10l5 10l5 -10l5 10l2.5 -5H130"/><path class="fig-ink" d="M130 208H226"/><circle class="fig-dot" cx="40" cy="208" r="3.7" data-node-id="m3c-in" data-node-color="red"/><text class="fig-text fig-math" x="40" y="194" text-anchor="middle" data-node-id="m3c-in" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><path class="fig-ink" d="M250 80H370"/><circle class="fig-dot" cx="186" cy="208" r="3.7" data-node-id="m3c-x" data-node-color="blue"/><circle class="fig-dot" cx="250" cy="170" r="3.7" data-node-id="m3c-y" data-node-color="red"/><circle class="fig-dot" cx="250" cy="80" r="3.7" data-node-id="m3c-out" data-node-color="blue"/><circle class="fig-dot" cx="370" cy="80" r="3.7" data-node-id="m3c-out" data-node-color="blue"/><text class="fig-text fig-math" x="186" y="196" text-anchor="middle" data-node-id="m3c-x" data-node-color="blue">X</text><text class="fig-text fig-math" x="236" y="188" text-anchor="end" data-node-id="m3c-y" data-node-color="red">Y</text><text class="fig-text fig-math" x="370" y="66" text-anchor="middle" data-node-id="m3c-out" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><text class="fig-text fig-math" x="85" y="194" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><text class="fig-text fig-math" x="196" y="60">M<tspan baseline-shift="sub" font-size="78%">3</tspan></text><text class="fig-text fig-math" x="262" y="122">M<tspan baseline-shift="sub" font-size="78%">2</tspan></text><text class="fig-text fig-math" x="262" y="226">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" x="262" y="52">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text><text class="fig-text fig-math" x="266" y="24">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text><text class="fig-text fig-math" x="104" y="61" text-anchor="end">V<tspan baseline-shift="sub" font-size="78%">b2</tspan></text><text class="fig-text fig-math" x="210" y="103" text-anchor="middle">V<tspan baseline-shift="sub" font-size="78%">b1</tspan></text><path class="fig-accent" d="M262 136L262 160M258.0 154.0L262.0 160.0L266.0 154.0"/><text class="fig-text fig-math" x="270" y="153">약 99%</text><path class="fig-accent" d="M196 160L228 160M222.0 164.0L228.0 160.0L222.0 156.0"/><text class="fig-text fig-math" x="206" y="152" text-anchor="middle">약 1%</text><path class="fig-accent" d="M274 178L274 200M270.0 194.0L274.0 200.0L278.0 194.0"/><text class="fig-text fig-math" x="282" y="196">g<tspan baseline-shift="sub" font-size="78%">m1</tspan>v<tspan baseline-shift="sub" font-size="78%">in</tspan></text></svg>
+      <figcaption>예를 들어 $r_{o3}=20\,\mathrm{k\Omega}$이고 $1/g_{m2}=200\,\Omega$이면, $M_1$이 끌어내리는 소신호 전류의 약 99%는 $M_2$ 쪽에서 오고 $M_3$ 쪽은 약 1%예요.</figcaption>
+    </figure>
+  </div>
+  <div class="layer formal">
+    <span class="layer-title">정확히 말하면</span>
+    <p>작은 예로 $R_L=1\,\mathrm{k\Omega}$에 $0.5\,\mathrm{mA}$가 흐르면 IR 드롭은 $0.5\,\mathrm{V}$예요. $g_{m1}$을 키우려고 전류를 2배로 늘리면 $1\,\mathrm{V}$, 4배로 늘리면 $2\,\mathrm{V}$가 $R_L$에 걸려요.</p>
+    <p>$M_3$가 $I_{D3}=1.5\,\mathrm{mA}$를 따로 흘리면 $I_{D1}=2\,\mathrm{mA}$로 4배가 되어도 $I_{D2}=0.5\,\mathrm{mA}$라서 IR 드롭은 $0.5\,\mathrm{V}$ 그대로예요. 제곱 법칙 모델에서 $W/L$이 같으면 $g_m\propto\sqrt{I_D}$이므로 $g_{m1}$은 2배가 돼요.</p>
+    <p>소신호에서는 Y에서 위로 $r_{o3}=20\,\mathrm{k\Omega}$와 $1/g_{m2}=200\,\Omega$이 경쟁해요. $M_2$ 쪽 몫은 $20/(20+0.2)\approx0.99$예요.</p>
+    <ol class="steps">
+      <li>
+        <p><strong>바이어스 전류를 나눠요.</strong> $M_3$는 게이트가 $V_{b2}$에 묶인 PMOS 전류원이에요. 노드 Y에서 KCL을 쓰면 $M_1$ 전류는 $M_2$ 전류와 $M_3$ 전류의 합이에요.</p>
+        $$I_{D1}=I_{D2}+I_{D3}$$
+        <p>$R_L$에는 $I_{D2}$만 흐르므로 $R_L$의 IR 드롭은 $I_{D2}R_L$이에요. $I_{D1}$을 늘려 $g_{m1}$을 키우면서 IR 드롭은 늘리지 않을 수 있고, 같은 전압 여유에서 더 큰 $R_L$도 쓸 수 있어요.</p>
+      </li>
+      <li>
+        <p><strong>전압이득을 $G_m$과 $R_{out}$으로 나눠 구해요.</strong> 입력은 $M_1$ 게이트 쪽 $v_{in}$, 출력은 $M_2$ 드레인의 $v_{out}$이에요. 바이어스 전압 $V_{b1}$, $V_{b2}$, $V_{DD}$는 AC 접지로 두고 몸체효과는 무시해요.</p>
+        <div data-gain-route="gm-rout">
+          <div data-gain-stage="gm">
+            <p>출력을 오른쪽에서 접지로 단락해 $v_{out}=0$으로 두고, 단락선에서 출력 단자를 거쳐 회로로 들어가는 $i_{out}$을 양으로 정해요. $M_1$이 Y에서 끌어내리는 $g_{m1}v_{in}$은 $M_2$ 소스($\approx1/g_{m2}$), $r_{o3}$, $r_{o1}$ 쪽에서 나뉘어 와요.</p>
+            <figure class="figure">
+              <svg id="fig-m3-gm" viewBox="0 0 400 262" role="img" aria-label="G_m 측정 회로: 출력 노드를 오른쪽에서 접지로 단락해 v_out=0으로 두고, 단락선에서 회로 안으로 왼쪽으로 들어가는 i_out을 양의 방향으로 정한 M3 캐스코드예요"><path class="fig-ink" d="M182 20H262"/><path class="fig-ink" d="M158 44V68M166 42V70M166 46H182V20M166 66H182V170"/><path class="fig-ink" d="M172.0 42.5L167.0 46.0L172.0 49.5"/><circle class="fig-ink" cx="154" cy="56" r="3.5"/><path class="fig-ink" d="M119 56H150.5"/><circle class="fig-ink" cx="116" cy="56" r="3"/><path class="fig-ink" d="M182 170H250"/><path class="fig-ink" d="M250 20V35.0l5 2.5l-10 5l10 5l-10 5l10 5l-10 5l5 2.5V80"/><path class="fig-ink" d="M226 106V130M234 104V132M234 108H250V80M234 128H250V170"/><path class="fig-ink" d="M240.0 131.5L245.0 128.0L240.0 124.5"/><path class="fig-ink" d="M207 118H226"/><circle class="fig-ink" cx="204" cy="118" r="3"/><path class="fig-ink" d="M226 196V220M234 194V222M234 198H250V170M234 218H250V238"/><path class="fig-ink" d="M240.0 221.5L245.0 218.0L240.0 214.5"/><path class="fig-ink" d="M240 238h20m-17 4h14m-11 4h8"/><path class="fig-ink" d="M40 208H70.0l2.5 -5l5 10l5 -10l5 10l5 -10l5 10l2.5 -5H130"/><path class="fig-ink" d="M130 208H226"/><circle class="fig-dot" cx="40" cy="208" r="3.7" data-node-id="m3c-in" data-node-color="red"/><text class="fig-text fig-math" x="40" y="194" text-anchor="middle" data-node-id="m3c-in" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><path class="fig-ink" d="M250 80H370V112"/><path class="fig-ink" d="M360 112h20m-17 4h14m-11 4h8"/><circle class="fig-dot" cx="186" cy="208" r="3.7" data-node-id="m3c-x" data-node-color="blue"/><circle class="fig-dot" cx="250" cy="170" r="3.7" data-node-id="m3c-y" data-node-color="red"/><circle class="fig-dot" cx="250" cy="80" r="3.7" data-node-id="m3c-out" data-node-color="blue"/><circle class="fig-dot" cx="370" cy="80" r="3.7" data-node-id="m3c-out" data-node-color="blue"/><text class="fig-text fig-math" x="186" y="196" text-anchor="middle" data-node-id="m3c-x" data-node-color="blue">X</text><text class="fig-text fig-math" x="236" y="188" text-anchor="end" data-node-id="m3c-y" data-node-color="red">Y</text><text class="fig-text fig-math" x="370" y="66" text-anchor="middle" data-node-id="m3c-out" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">out</tspan>=0</text><text class="fig-text fig-math" x="85" y="194" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><text class="fig-text fig-math" x="196" y="60">M<tspan baseline-shift="sub" font-size="78%">3</tspan></text><text class="fig-text fig-math" x="262" y="122">M<tspan baseline-shift="sub" font-size="78%">2</tspan></text><text class="fig-text fig-math" x="262" y="226">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" x="262" y="52">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text><text class="fig-text fig-math" x="266" y="24">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text><text class="fig-text fig-math" x="104" y="61" text-anchor="end">V<tspan baseline-shift="sub" font-size="78%">b2</tspan></text><text class="fig-text fig-math" x="210" y="103" text-anchor="middle">V<tspan baseline-shift="sub" font-size="78%">b1</tspan></text><path class="fig-ink" d="M342 92L312 92M318.0 88.0L312.0 92.0L318.0 96.0"/><text class="fig-text fig-math" x="327" y="108" text-anchor="middle">i<tspan baseline-shift="sub" font-size="78%">out</tspan></text></svg>
+              <figcaption>출력 단락에서는 $R_L$ 양끝이 모두 AC 접지라 $R_L$로는 소신호 전류가 흐르지 않아요. $M_2$ 소스에서 보는 저항은 $(1/g_{m2})\parallel r_{o2}$이고 $r_{o2}\gg1/g_{m2}$이므로 $r_{o2}$ 가지는 무시했어요.</figcaption>
+            </figure>
+            $$G_m=\frac{i_{out}}{v_{in}}\approx g_{m1}\frac{r_{o1}\parallel r_{o3}}{(r_{o1}\parallel r_{o3})+1/g_{m2}}$$
+            <p>$r_{o1}\parallel r_{o3}\gg1/g_{m2}$이면 소신호 전류가 거의 다 $M_2$로 가요.</p>
+            $$G_m\approx g_{m1}$$
+          </div>
+          <div data-gain-stage="rout">
+            <p>입력을 0으로 두고 출력에서 바라봐요. 위로는 $R_L$, 아래로는 $M_2$가 Y의 저항 $r_{o1}\parallel r_{o3}$를 캐스코드로 키운 $R_{cas}$가 보여요.</p>
+            <figure class="figure">
+              <svg id="fig-m3-rout" viewBox="0 0 400 262" role="img" aria-label="R_out 측정 회로: 입력 쪽 R_S 왼쪽 끝을 접지해 입력을 0으로 두고, 오른쪽 출력에서 회로를 바라보는 R_out과 출력 노드에서 M2 아래쪽으로 바라보는 R_cas 방향을 화살표로 표시한 M3 캐스코드예요"><path class="fig-ink" d="M182 20H262"/><path class="fig-ink" d="M158 44V68M166 42V70M166 46H182V20M166 66H182V170"/><path class="fig-ink" d="M172.0 42.5L167.0 46.0L172.0 49.5"/><circle class="fig-ink" cx="154" cy="56" r="3.5"/><path class="fig-ink" d="M119 56H150.5"/><circle class="fig-ink" cx="116" cy="56" r="3"/><path class="fig-ink" d="M182 170H250"/><path class="fig-ink" d="M250 20V35.0l5 2.5l-10 5l10 5l-10 5l10 5l-10 5l5 2.5V80"/><path class="fig-ink" d="M226 106V130M234 104V132M234 108H250V80M234 128H250V170"/><path class="fig-ink" d="M240.0 131.5L245.0 128.0L240.0 124.5"/><path class="fig-ink" d="M207 118H226"/><circle class="fig-ink" cx="204" cy="118" r="3"/><path class="fig-ink" d="M226 196V220M234 194V222M234 198H250V170M234 218H250V238"/><path class="fig-ink" d="M240.0 221.5L245.0 218.0L240.0 214.5"/><path class="fig-ink" d="M240 238h20m-17 4h14m-11 4h8"/><path class="fig-ink" d="M40 208H70.0l2.5 -5l5 10l5 -10l5 10l5 -10l5 10l2.5 -5H130"/><path class="fig-ink" d="M130 208H226"/><path class="fig-ink" d="M40 208V222"/><path class="fig-ink" d="M30 222h20m-17 4h14m-11 4h8"/><path class="fig-ink" d="M250 80H370"/><circle class="fig-dot" cx="186" cy="208" r="3.7" data-node-id="m3c-x" data-node-color="blue"/><circle class="fig-dot" cx="250" cy="170" r="3.7" data-node-id="m3c-y" data-node-color="red"/><circle class="fig-dot" cx="250" cy="80" r="3.7" data-node-id="m3c-out" data-node-color="blue"/><circle class="fig-dot" cx="370" cy="80" r="3.7" data-node-id="m3c-out" data-node-color="blue"/><text class="fig-text fig-math" x="186" y="196" text-anchor="middle" data-node-id="m3c-x" data-node-color="blue">X</text><text class="fig-text fig-math" x="236" y="188" text-anchor="end" data-node-id="m3c-y" data-node-color="red">Y</text><text class="fig-text fig-math" x="370" y="66" text-anchor="middle" data-node-id="m3c-out" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><text class="fig-text fig-math" x="85" y="194" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><text class="fig-text fig-math" x="196" y="60">M<tspan baseline-shift="sub" font-size="78%">3</tspan></text><text class="fig-text fig-math" x="262" y="122">M<tspan baseline-shift="sub" font-size="78%">2</tspan></text><text class="fig-text fig-math" x="262" y="226">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" x="262" y="52">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text><text class="fig-text fig-math" x="266" y="24">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text><text class="fig-text fig-math" x="104" y="61" text-anchor="end">V<tspan baseline-shift="sub" font-size="78%">b2</tspan></text><text class="fig-text fig-math" x="210" y="103" text-anchor="middle">V<tspan baseline-shift="sub" font-size="78%">b1</tspan></text><path class="fig-ink" d="M356 92L316 92M322.0 88.0L316.0 92.0L322.0 96.0"/><text class="fig-text fig-math" x="336" y="108" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M262 86L262 104M258.0 98.0L262.0 104.0L266.0 98.0"/><text class="fig-text fig-math" x="270" y="100">R<tspan baseline-shift="sub" font-size="78%">cas</tspan></text></svg>
+              <figcaption>입력 쪽 $R_S$의 왼쪽 끝을 접지해 입력을 0으로 두고, 출력 노드에서 위의 $R_L$과 아래의 $R_{cas}$를 바라봐요.</figcaption>
+            </figure>
+            $$R_{cas}\approx g_{m2}r_{o2}(r_{o1}\parallel r_{o3})$$
+            $$R_{out}=R_L\parallel R_{cas}\approx R_L$$
+            <p>$R_{cas}\gg R_L$일 때의 근사예요. 슬라이드처럼 $\lambda=0$이면 $R_{cas}$는 무한대로 봐요.</p>
+          </div>
+          <div data-gain-stage="gain">
+            <p>$v_{in}$이 오르면 $M_2$를 거쳐 출력에서 빠져나가는 전류가 늘어 $v_{out}$이 내려가요. 같은 입출력 정의로 두 값을 곱해요.</p>
+            $$A_v=-G_mR_{out}\approx-g_{m1}R_L$$
+            <p>수업에서도 이 결과를 $A_v=-g_{m1}R_L$로 써서 $M_3$가 없는 캐스코드와 이득이 같다고 했어요.</p>
+          </div>
+        </div>
+      </li>
+      <li>
+        <p><strong>PMOS 대신 NMOS를 달면 이득이 줄어요.</strong> 노드 Y에 NMOS의 소스를 붙이면 그 소스로 보이는 저항은 $r_o$가 아니라 $1/g_m$이에요. 그 NMOS를 $M_3$라 하면 $1/g_{m3}$이 $1/g_{m2}$와 비슷해서 소신호 전류가 그쪽으로 새어요.</p>
+        $$G_m\approx g_{m1}\frac{g_{m2}}{g_{m2}+g_{m3}}$$
+        <p>바이어스 전류를 보태는 역할은 같지만 출력 전류와 이득이 줄어요. 일부러 이득을 줄이려는 경우가 아니면 쓰지 않아요.</p>
+      </li>
+      <li>
+        <p><strong>극점을 모아요.</strong> 극점의 저항도 바이어스 값이 아니라 소신호의 전압 변화량/전류 변화량으로 구해요. $M_3$는 Y에만 붙어 있으므로 X와 출력 노드의 식 꼴은 앞의 캐스코드와 같아요.</p>
+        $$\begin{aligned}\omega_{p,X}&amp;=\frac{1}{R_SC_X}\\C_X&amp;=C_{GS1}+\left(1+\frac{g_{m1}}{g_{m2}}\right)C_{GD1}\end{aligned}$$
+        $$\omega_{p,out}=\frac{1}{R_L(C_{GD2}+C_{DB2})}$$
+        <p>Y의 저항은 $(1/g_{m2})\parallel r_{o3}\parallel r_{o1}\approx1/g_{m2}$예요. 커패시턴스에는 $M_3$의 $C_{GD3}$(게이트가 AC 접지라 접지형)와 $C_{DB3}$ 두 개가 더해져요.</p>
+        $$\begin{aligned}\omega_{p,Y}&amp;=\frac{1}{\frac{1}{g_{m2}}C_Y}\\C_Y&amp;=C_{DB1}\\&amp;\quad+\left(1+\frac{g_{m2}}{g_{m1}}\right)C_{GD1}\\&amp;\quad+C_{GS2}+C_{SB2}\\&amp;\quad+C_{GD3}+C_{DB3}\end{aligned}$$
+        <p>식의 꼴은 같아도 값은 달라질 수 있어요. 교과서 예제 11.26은 같은 크기의 $M_2$에서 $I_{D2}$가 줄면 $g_{m2}$도 줄어 $1+g_{m1}/g_{m2}$가 커지므로 $\omega_{p,X}$의 크기가 낮아진다고 설명해요.</p>
+      </li>
+    </ol>
+  </div>
+  <div class="layer prof">
+    <span class="layer-title">교수님 말씀</span>
+    <blockquote>M3가 달려 있어도 전류의 변화에는 영향을 주지 않는다는 거니까 그냥 없는 거나 마찬가지예요.</blockquote>
+    <p>$M_3$의 장점은 $g_{m1}$을 더 크게 만들면서 $R_L$도 더 크게 쓸 수 있다는 것이라고 하셨어요. PMOS 대신 NMOS를 쓰면 어떻게 되느냐는 질문에는 출력 전류가 줄어 이득이 줄어든다고 답하셨어요.</p>
+  </div>
+  <div class="layer warn">
+    <span class="layer-title">꼭 기억해요</span>
+    <blockquote>지금 얘기하는 거는 스몰 시그널 전류를 얘기하는 겁니다. DC 바이어스 전류가 아니고</blockquote>
+    <p>$M_3$는 DC 바이어스 전류는 크게 바꿔요($I_{D1}=I_{D2}+I_{D3}$). 소신호 전류에는 $r_{o3}\gg1/g_{m2}$이라서 거의 영향이 없어요.</p>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">$M_3$는 $M_1$에 바이어스 전류만 더 보태고, 소신호 전류는 거의 다 $M_2$로 가서 이득이 그대로예요.</p>
+    <p class="panel-label">핵심 식</p>
+    <ul class="eq-list">
+      <li><span class="eq-name">바이어스 KCL</span>$$I_{D1}=I_{D2}+I_{D3}$$</li>
+      <li><span class="eq-name">전압이득</span>$$A_v=-G_mR_{out}\approx-g_{m1}R_L$$</li>
+      <li><span class="eq-name">Y 극점</span>$$\begin{aligned}\omega_{p,Y}&amp;=\frac{1}{\frac{1}{g_{m2}}C_Y}\\C_Y&amp;=C_{DB1}\\&amp;\quad+\left(1+\frac{g_{m2}}{g_{m1}}\right)C_{GD1}\\&amp;\quad+C_{GS2}+C_{SB2}\\&amp;\quad+C_{GD3}+C_{DB3}\end{aligned}$$</li>
+    </ul>
+    <p>$R_L$에는 $I_{D2}$만 흘러 IR 드롭을 늘리지 않고 $g_{m1}$을 키울 수 있어요.</p>
+    <p>$G_m\approx g_{m1}$은 $r_{o3}\gg1/g_{m2}$일 때 성립해요.</p>
+    <p>NMOS를 달면 Y에서 $1/g_m$ 쪽으로 소신호 전류가 새어 이득이 줄어요.</p>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>IR 드롭(IR drop)</dt><dd>저항에 흐르는 전류와 저항의 곱만큼 생기는 전압 강하</dd>
+    </dl>
+  </div>
+</article>
+    </section>
+    <section id="s1"><h2>2. 차동쌍의 주파수 응답</h2>
+<article class="topic" id="s1-half-circuit">
+  <h3>차동쌍은 반회로와 같은 극점·영점을 가져요</h3>
+  <div class="tags"><span class="tag date">1106 수업</span><span class="tag slide">L05 s57</span><span class="tag slide">L05 s59</span></div>
+  <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+    <p class="lead">차동 입력에서는 꼬리 노드가 움직이지 않는 가상 접지라서 차동쌍 한쪽이 MOS면 CS 단, 바이폴라면 CE 단인 반회로가 되고, 극점과 영점도 그 반회로와 같아요.</p>
+    <p>예를 들어 두 입력이 $+1\,\mathrm{mV}$와 $-1\,\mathrm{mV}$이면 한쪽 전류가 늘어난 만큼 다른 쪽이 줄어 꼬리 노드 P는 $0\,\mathrm{mV}$에 머물지만, 두 입력이 모두 $+1\,\mathrm{mV}$인 공통 모드에서는 P도 따라 움직여요.</p>
+    <figure class="figure"><svg id="fig-diffpair-half" viewBox="0 0 562 240" role="img" aria-label="왼쪽은 꼬리 노드 P에 전류원이 달린 MOS 차동쌍에 +vid/2와 −vid/2를 넣은 그림이고, 오른쪽은 소스를 접지한 반회로로 RS, M1, RD와 커패시터 CGS1, CGD1, CDB1이 있는 공통 소스 단입니다."><path class="fig-ink" d="M106 30 H166 M106 30 V46.0 L112 48.5 L100 53.5 L112 58.5 L100 63.5 L112 68.5 L100 73.5 L106 76.0 V92 M166 30 V46.0 L172 48.5 L160 53.5 L172 58.5 L160 63.5 L172 68.5 L160 73.5 L166 76.0 V92 M76 101 V139 M80 101 V139 M80 106 H106 M80 134 H106 M196 101 V139 M192 101 V139 M192 106 H166 M192 134 H166 M106 92 V106 M106 134 V175 H166 V134 M166 92 V106 M136 175 V190 M136 216 V226 M136 226 v8 m-8 0 h16 m-13 4 h10 m-8 4 h6 M136 195 V211 m-5 -5 l5 5 l5 -5 M14 120 H23.0 L25.5 114 L30.5 126 L35.5 114 L40.5 126 L45.5 114 L50.5 126 L53.0 120 H62 H76 M196 120 H212.0 L214.5 114 L219.5 126 L224.5 114 L229.5 126 L234.5 114 L239.5 126 L242.0 120 H258 M413 30 H463 M438 30 V41.0 L444 43.5 L432 48.5 L444 53.5 L432 58.5 L444 63.5 L432 68.5 L438 71.0 V82 M408 123 V161 M412 123 V161 M412 128 H438 M412 156 H438 M438 82 V128 M438 156 V200 M438 200 v8 m-8 0 h16 m-13 4 h10 m-8 4 h6 M318 142 H330.0 L332.5 136 L337.5 148 L342.5 136 L347.5 148 L352.5 136 L357.5 148 L360.0 142 H372 H408 M384 142 V180 M374 180 H394 M374 187 H394 M384 187 V196 M384 196 v8 m-8 0 h16 m-13 4 h10 m-8 4 h6 M384 142 V98 H410 M410 88 V108 M417 88 V108 M417 98 H438 M438 98 H540 M500 98 V136 M490 136 H510 M490 143 H510 M500 143 V152 M500 152 v8 m-8 0 h16 m-13 4 h10 m-8 4 h6"/><circle class="fig-ink" cx="136" cy="203" r="13"/><path class="fig-accent" d="M270 66 H306 m-8 -6 l8 6 l-8 6"/><circle class="fig-dot" cx="14" cy="120" r="3.6" data-node="in1" data-node-color="blue"/><circle class="fig-dot" cx="258" cy="120" r="3.6" data-node="in2" data-node-color="red"/><circle class="fig-dot" cx="136" cy="175" r="3.6" data-node="P" data-node-color="red"/><circle class="fig-dot" cx="318" cy="142" r="3.6" data-node="hin" data-node-color="blue"/><circle class="fig-dot" cx="384" cy="142" r="3.6" data-node="X" data-node-color="red"/><circle class="fig-dot" cx="438" cy="98" r="3.6" data-node="hout" data-node-color="blue"/><circle class="fig-dot" cx="500" cy="98" r="3.6" data-node="hout" data-node-color="blue"/><circle class="fig-dot" cx="540" cy="98" r="3.6" data-node="hout" data-node-color="blue"/><text class="fig-text fig-math" x="6" y="97" text-anchor="start" font-size="14" data-node="in1" data-node-color="blue">+v<tspan baseline-shift="sub" font-size="78%">id</tspan>/2</text><text class="fig-text fig-math" x="266" y="97" text-anchor="end" font-size="14" data-node="in2" data-node-color="red">−v<tspan baseline-shift="sub" font-size="78%">id</tspan>/2</text><text class="fig-text fig-math" x="38" y="143" text-anchor="middle" font-size="14">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><text class="fig-text fig-math" x="228" y="143" text-anchor="middle" font-size="14">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><text class="fig-text fig-math" x="94" y="65" text-anchor="end" font-size="14">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text><text class="fig-text fig-math" x="178" y="65" text-anchor="start" font-size="14">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text><text class="fig-text fig-math" x="80" y="164" text-anchor="start" font-size="14">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" x="192" y="164" text-anchor="end" font-size="14">M<tspan baseline-shift="sub" font-size="78%">2</tspan></text><text class="fig-text fig-math" x="130" y="167" text-anchor="end" font-size="14" data-node="P" data-node-color="red">P</text><text class="fig-text fig-math" x="136" y="14" text-anchor="middle" font-size="14">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text><text class="fig-text fig-math" x="156" y="207" text-anchor="start" font-size="14">I<tspan baseline-shift="sub" font-size="78%">SS</tspan></text><text class="fig-text" x="288" y="50" text-anchor="middle" font-size="13">반회로</text><text class="fig-text fig-math" x="318" y="124" text-anchor="middle" font-size="14" data-node="hin" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">in1</tspan></text><text class="fig-text fig-math" x="345" y="164" text-anchor="middle" font-size="14">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><text class="fig-text fig-math" x="374" y="132" text-anchor="end" font-size="14" data-node="X" data-node-color="red">X</text><text class="fig-text fig-math" x="396" y="196" text-anchor="start" font-size="14">C<tspan baseline-shift="sub" font-size="78%">GS1</tspan></text><text class="fig-text fig-math" x="414" y="80" text-anchor="middle" font-size="14">C<tspan baseline-shift="sub" font-size="78%">GD1</tspan></text><text class="fig-text fig-math" x="512" y="147" text-anchor="start" font-size="14">C<tspan baseline-shift="sub" font-size="78%">DB1</tspan></text><text class="fig-text fig-math" x="450" y="60" text-anchor="start" font-size="14">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text><text class="fig-text fig-math" x="448" y="150" text-anchor="start" font-size="14">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" x="540" y="80" text-anchor="middle" font-size="14" data-node="hout" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">out1</tspan></text><text class="fig-text fig-math" x="438" y="14" text-anchor="middle" font-size="14">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text></svg><figcaption>차동 입력이면 P를 접지로 바꾼 오른쪽 반회로 하나만 풀면 돼요.</figcaption></figure>
+  </div>
+  <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <p>작은 예시를 먼저 식으로 적어요. 입력을 $v_{in1}=+v_{id}/2$, $v_{in2}=-v_{id}/2$로 넣으면 대칭 회로에서 두 가지 전류의 변화는 크기가 같고 방향이 반대예요. 꼬리로 모이는 전류의 합이 변하지 않으므로 꼬리 노드 P의 소신호 전압은 0이에요. 이것이 차동 증폭기에서 배운 <a href="../0923/정리노트_0923_Differential_Amplifiers.html#s3-virtual-ground">가상 접지</a>예요.</p>
+    <p>저주파 이득도 이 판단으로 반회로 하나에서 구했어요. $v_{out2}=-v_{out1}$이므로 차동 입력 대비 차동 출력 이득은 반회로 이득과 부호까지 같아요.</p>
+    <p>$$\frac{v_{out1}-v_{out2}}{v_{in1}-v_{in2}}=\frac{2v_{out1}}{2v_{in1}}=\frac{v_{out1}}{v_{in1}}$$</p>
+    <p>커패시턴스가 들어가도 같은 순서로 판단해요.</p>
+    <ol class="steps">
+      <li><strong>조건</strong> — 좌우의 소자, 바이어스, $R_D$, $R_S$가 대칭이고 입력은 순수 차동이에요. 그림의 커패시터는 따로 달아 준 소자가 아니라 트랜지스터에 내재된 커패시턴스를 표시한 것이고, $R_S$는 앞단의 소스 임피던스예요.</li>
+      <li><strong>꼬리 노드</strong> — 커패시터가 있어도 좌우 대칭은 그대로라서 모든 주파수에서 $v_P=0$이에요. 그래서 꼬리 노드와 접지 사이의 $C_{SB1}$, $C_{SB2}$는 양단 전압이 0이 되어 반회로에서 빠져요.</li>
+      <li><strong>반회로</strong> — 게이트에 입력이 들어가고 소스가 접지된 CS 단이에요. 노드 X에는 $R_S$와 $C_{GS1}$, 출력에는 $R_D$와 $C_{DB1}$이 있고, 두 노드 사이에 $C_{GD1}$이 떠 있어요.</li>
+      <li><strong>전달함수</strong> — 차동 전달함수가 반회로 전달함수와 같아요.
+        <p>$$\begin{aligned}H_{DM}(s)&amp;=\frac{V_{out1}(s)-V_{out2}(s)}{V_{in1}(s)-V_{in2}(s)}\\&amp;=\frac{V_{out1}(s)}{V_{in1}(s)}=H_{half}(s)\end{aligned}$$</p>
+        전달함수가 같으면 분모와 분자의 근, 즉 극점과 영점이 같아요.</li>
+    </ol>
+    <p>그래서 CS 단에서 구한 결과를 그대로 써요. $\lambda=0$이고 반회로의 저주파 이득이 $-g_{m1}R_D$일 때 밀러 근사의 두 극점은 다음과 같아요.</p>
+    <p>$$\begin{aligned}|\omega_{p,in}|&amp;=1\Big/\Big(R_S\big[C_{GS1}\\&amp;\qquad+(1+g_{m1}R_D)C_{GD1}\big]\Big)\end{aligned}$$</p>
+    <p>$$\begin{aligned}|\omega_{p,out}|&amp;=1\Big/\Big(R_D\Big[C_{DB1}\\&amp;\qquad+\Big(1+\frac{1}{g_{m1}R_D}\Big)C_{GD1}\Big]\Big)\end{aligned}$$</p>
+    <p>CS 단을 정확히 풀었을 때 $C_{GD1}$을 지나 앞으로 새는 전류가 만드는 영점 $g_{m1}/C_{GD1}$도 차동쌍에 그대로 있어요.</p>
+    <p><strong>바이폴라 차동쌍</strong> — 차동 입력에서 꼬리 노드가 가상 접지인 것은 같고, 반회로는 CE 단이에요. 기호는 $C_{GS}\to C_\pi$, $C_{GD}\to C_\mu$, $C_{DB}\to C_{CS}$, $R_D\to R_C$로 바뀌어요. 베이스로 $r_{\pi1}$이 보이므로 입력 노드의 저항은 $R_S\parallel r_{\pi1}$이에요.</p>
+    <p>$$\begin{aligned}|\omega_{p,in}|&amp;=1\Big/\Big((R_S\parallel r_{\pi1})\big[C_{\pi1}\\&amp;\qquad+(1+g_{m1}R_C)C_{\mu1}\big]\Big)\end{aligned}$$</p>
+    <p>$$\begin{aligned}|\omega_{p,out}|&amp;=1\Big/\Big(R_C\Big[C_{CS1}\\&amp;\qquad+\Big(1+\frac{1}{g_{m1}R_C}\Big)C_{\mu1}\Big]\Big)\end{aligned}$$</p>
+    <p><strong>공통 모드는 다르게 풀어요</strong> — $v_{in1}=v_{in2}=v_{CM}$이면 두 가지 전류가 같은 방향으로 변해 꼬리 노드가 움직이므로 가상 접지를 쓰지 않아요. 꼬리 저항 $R_{EE}$를 $2R_{EE}$ 두 개의 병렬로 나눠 반쪽마다 하나씩 맡겨요. 가지 전류를 $i$라 하면 꼬리 전압은 다음과 같아요.</p>
+    <p>$$v_P=(2i)R_{EE}=i(2R_{EE})$$</p>
+    <p>그래서 공통 모드 반회로는 이미터에 $2R_{EE}$가 달린 CE 단이에요. 실제 꼬리는 트랜지스터 전류원으로 만들고, 그 출력저항이 $R_{EE}$ 역할을 해요.</p>
+  </div>
+  <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+    <p>저주파 이득을 반회로로 구했던 방법을 주파수 응답에도 그대로 가져왔어요. 반회로를 그려 보면 게이트에 입력이 들어가고 소스가 접지된 공통 소스 구조이고, 전달함수가 같다는 말은 극점과 영점이 같다는 뜻이라고 정리했어요.</p>
+    <blockquote>같은 폴과 제로를 가진다고 보면 되겠습니다.</blockquote>
+    <p>그림에 그린 커패시터는 회로에 달아 주는 소자가 아니라 트랜지스터 안에 내재된 커패시턴스를 표시한 것이라고 짚었어요.</p>
+  </div>
+  <div class="layer warn"><span class="layer-title">꼭 기억해요</span>
+    <blockquote>커먼 모드 신호에 대해서는 그라운드로 볼 수 없죠.</blockquote>
+    <p>꼬리 노드를 접지로 바꾸는 것은 좌우가 대칭이고 입력이 순수 차동일 때만이에요. 공통 모드는 $2R_{EE}$ 반회로로 따로 풀어요.</p>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">순수 차동 입력이면 꼬리 노드가 가상 접지라서 차동쌍의 극점과 영점은 반회로(CS 단·CE 단)와 같아요.</p>
+    <p class="panel-label">핵심 식</p>
+    <ul class="eq-list">
+      <li><span class="eq-name">차동 전달함수</span>$$\begin{aligned}&amp;H_{DM}(s)\\&amp;=\frac{V_{out1}(s)-V_{out2}(s)}{V_{in1}(s)-V_{in2}(s)}\\&amp;=\frac{V_{out1}(s)}{V_{in1}(s)}=H_{half}(s)\end{aligned}$$</li>
+      <li><span class="eq-name">공통 모드 꼬리</span>$$v_P=(2i)R_{EE}=i(2R_{EE})$$</li>
+    </ul>
+    <p>공통 모드에서는 꼬리를 접지로 두지 않고 $2R_{EE}$ 반회로를 써요.</p>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>반회로(half circuit)</dt><dd>대칭 차동쌍의 한쪽만 떼어 낸 회로</dd>
+      <dt>가상 접지(virtual ground)</dt><dd>순수 차동 입력에서 소신호 전압이 0인 꼬리 노드</dd>
+    </dl>
+  </div>
+</article>
+
+<article class="topic" id="s1-cascode-diffpair">
+  <h3>캐스코드 차동쌍의 세 극점</h3>
+  <div class="tags"><span class="tag date">1106 수업</span><span class="tag slide">L05 s58</span></div>
+  <div class="layer eli5"><span class="layer-title">쉽게 말하면</span>
+    <p class="lead">캐스코드 차동쌍의 반회로는 캐스코드 단이라서 노드 X, Y, 출력마다 저항과 커패시터가 하나씩 모여 극점 세 개가 생겨요.</p>
+    <p>세 극점이 서로 멀리 떨어져 있고 영점은 훨씬 높은 곳에 있다면, 평평하던 이득 곡선의 기울기는 극점을 하나 지날 때마다 $-20\,\mathrm{dB/dec}$씩 더해져 $0\to-20\to-40\to-60\,\mathrm{dB/dec}$로 바뀌어요.</p>
+    <figure class="figure"><svg id="fig-cascode-half" viewBox="0 0 480 280" role="img" aria-label="반회로는 RS를 지난 입력이 M1 게이트 X로 들어가고 M1 드레인 Y 위에 게이트가 Vb인 M3, 그 위에 RD가 있는 캐스코드 단이며, 노드 X, Y, 출력에 각각 접지로 가는 커패시터 CX, CY, Cout이 하나씩 있습니다."><path class="fig-ink" d="M235 28 H285 M260 28 V42.0 L266 44.5 L254 49.5 L266 54.5 L254 59.5 L266 64.5 L254 69.5 L260 72.0 V86 M260 86 V100 M230 99 V137 M234 99 V137 M234 104 H260 M234 132 H260 M230 197 V235 M234 197 V235 M234 202 H260 M234 230 H260 M260 100 V104 M260 132 V202 M260 230 V252 M260 252 v8 m-8 0 h16 m-13 4 h10 m-8 4 h6 M173 118 H230 M260 100 H440 M380 100 V134 M370 134 H390 M370 141 H390 M380 141 V150 M380 150 v8 m-8 0 h16 m-13 4 h10 m-8 4 h6 M260 166 H330 M330 166 V192 M320 192 H340 M320 199 H340 M330 199 V208 M330 208 v8 m-8 0 h16 m-13 4 h10 m-8 4 h6 M60 216 H80.0 L82.5 210 L87.5 222 L92.5 210 L97.5 222 L102.5 210 L107.5 222 L110.0 216 H130 H230 M170 216 V244 M160 244 H180 M160 251 H180 M170 251 V258 M170 258 v8 m-8 0 h16 m-13 4 h10 m-8 4 h6"/><circle class="fig-ink" cx="170" cy="118" r="3"/><circle class="fig-dot" cx="60" cy="216" r="3.6" data-node="cin" data-node-color="blue"/><circle class="fig-dot" cx="170" cy="216" r="3.6" data-node="cX" data-node-color="red"/><circle class="fig-dot" cx="260" cy="166" r="3.6" data-node="cY" data-node-color="blue"/><circle class="fig-dot" cx="260" cy="100" r="3.6" data-node="cout" data-node-color="red"/><circle class="fig-dot" cx="380" cy="100" r="3.6" data-node="cout" data-node-color="red"/><circle class="fig-dot" cx="440" cy="100" r="3.6" data-node="cout" data-node-color="red"/><text class="fig-text fig-math" x="60" y="198" text-anchor="middle" font-size="14" data-node="cin" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><text class="fig-text fig-math" x="95" y="240" text-anchor="middle" font-size="14">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><text class="fig-text fig-math" x="158" y="206" text-anchor="end" font-size="14" data-node="cX" data-node-color="red">X</text><text class="fig-text fig-math" x="182" y="266" text-anchor="start" font-size="14">C<tspan baseline-shift="sub" font-size="78%">X</tspan></text><text class="fig-text fig-math" x="272" y="155" text-anchor="start" font-size="14" data-node="cY" data-node-color="blue">Y</text><text class="fig-text fig-math" x="342" y="208" text-anchor="start" font-size="14">C<tspan baseline-shift="sub" font-size="78%">Y</tspan></text><text class="fig-text fig-math" x="392" y="149" text-anchor="start" font-size="14">C<tspan baseline-shift="sub" font-size="78%">out</tspan></text><text class="fig-text fig-math" x="440" y="82" text-anchor="middle" font-size="14" data-node="cout" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><text class="fig-text fig-math" x="170" y="100" text-anchor="middle" font-size="14">V<tspan baseline-shift="sub" font-size="78%">b</tspan></text><text class="fig-text fig-math" x="260" y="13" text-anchor="middle" font-size="14">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text><text class="fig-text fig-math" x="272" y="62" text-anchor="start" font-size="14">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text><text class="fig-text fig-math" x="272" y="128" text-anchor="start" font-size="14">M<tspan baseline-shift="sub" font-size="78%">3</tspan></text><text class="fig-text fig-math" x="272" y="226" text-anchor="start" font-size="14">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text></svg><figcaption>각 노드의 커패시터를 접지로 모으면 노드마다 극점이 하나씩 보여요.</figcaption></figure>
+  </div>
+  <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <p>작은 예시부터 적용해요. 저주파 이득에서 평평하게 시작하는 저역통과 응답이고, 영점은 관심 대역보다 훨씬 높아 영향이 없다고 둬요. 세 극점이 충분히 떨어져 있으면 점근선의 기울기는 극점을 지날 때마다 $-20\,\mathrm{dB/dec}$씩 더해져요. 이득이 한 번에 20 dB 떨어지는 것이 아니라 기울기가 바뀌는 것이고, 실제 곡선은 각 극점 근처에서 부드럽게 휘어요.</p>
+    <figure class="figure"><svg id="fig-cascode-bode" viewBox="0 0 490 260" role="img" aria-label="평평한 이득이 세 극점 주파수를 지날 때마다 기울기가 0, −20, −40, −60 dB/dec로 바뀌는 점근선입니다."><path class="fig-ink" d="M60 34 L64 28 L68 34 M64 28 V200 H454 m-6 -4 l6 4 l-6 4 M170 196 V204 M270 196 V204 M370 196 V204"/><path class="fig-ink" stroke-dasharray="3 4" d="M170 50 V196 M270 50 V196 M370 50 V196"/><path class="fig-accent" d="M70 50.0 L170 50.0 L270 75.0 L370 125.0 L440 177.5"/><text class="fig-text fig-math" x="64" y="20" text-anchor="middle" font-size="13">|H| (dB)</text><text class="fig-text fig-math" x="462" y="204" text-anchor="start" font-size="14">ω</text><text class="fig-text fig-math" x="170" y="222" text-anchor="middle" font-size="14">ω<tspan baseline-shift="sub" font-size="78%">p1</tspan></text><text class="fig-text fig-math" x="270" y="222" text-anchor="middle" font-size="14">ω<tspan baseline-shift="sub" font-size="78%">p2</tspan></text><text class="fig-text fig-math" x="370" y="222" text-anchor="middle" font-size="14">ω<tspan baseline-shift="sub" font-size="78%">p3</tspan></text><text class="fig-text" x="115" y="42" text-anchor="middle" font-size="13">0</text><text class="fig-text" x="228" y="91" text-anchor="middle" font-size="13">−20</text><text class="fig-text" x="336" y="142" text-anchor="middle" font-size="13">−40</text><text class="fig-text" x="430" y="146" text-anchor="start" font-size="13">−60</text><text class="fig-text" x="258" y="250" text-anchor="middle" font-size="12">숫자는 각 구간의 기울기(dB/dec)</text></svg><figcaption>세 극점을 크기 순으로 $\omega_{p1}\lt\omega_{p2}\lt\omega_{p3}$라 부르면 기울기가 0, −20, −40, −60 dB/dec로 바뀌어요.</figcaption></figure>
+    <p>그림의 순서는 크기 순으로 다시 붙인 이름이에요. 노드 X, Y, 출력 중 어느 극점이 가장 낮은지는 소자 값에 따라 달라요.</p>
+    <p>이제 극점을 구해요. 순수 차동 입력에서는 꼬리 노드가 가상 접지이므로(<a href="#s1-half-circuit">차동쌍은 반회로와 같은 극점·영점을 가져요</a>), 반회로는 $R_S$로 구동되는 입력 소자 $M_1$ 위에 캐스코드 소자 $M_3$가 얹힌 캐스코드 단이에요. 반대쪽 $M_2$, $M_4$는 다른 반쪽에서 같은 역할을 해요. 그래서 캐스코드 단의 극점을 소자 번호만 바꿔 그대로 쓰고, 슬라이드처럼 $\lambda=0$ 모델을 써요. 그림의 $C_X$, $C_Y$, $C_{out}$은 아래 각 단계에서 그 노드와 접지 사이에 모은 커패시턴스의 합이에요.</p>
+    <div data-gain-route="gm-rout">
+      <p data-gain-stage="gm"><strong>출력 단락의 $G_m$</strong> — 저주파에서는 커패시터가 개방이고 게이트 전류가 없어 $v_X=v_{in}$이에요. 출력을 AC 접지에 단락하면 $M_1$이 만든 소신호 전류는 노드 Y에서 $M_3$ 소스 말고는 갈 곳이 없어 그대로 단락선까지 가요.
+        $$G_m=\frac{i_{out}}{v_{in}}=g_{m1}$$</p>
+      <p data-gain-stage="rout"><strong>입력 영점의 $R_{out}$</strong> — 입력을 0으로 두고 출력에서 보면 위로 $R_D$, 아래로 캐스코드 저항이 보여요. 아래쪽은 $\lambda=0$이면 무한대이고, $r_o$를 넣어도 $g_{m3}r_{o3}r_{o1}$ 정도로 $R_D$보다 훨씬 커요.
+        $$R_{out}\approx R_D\parallel(g_{m3}r_{o3}r_{o1})\approx R_D$$</p>
+      <p data-gain-stage="gain"><strong>저주파 이득</strong> — 같은 입출력 정의로 곱해요.
+        $$A_0=-G_mR_{out}\approx-g_{m1}R_D$$</p>
+    </div>
+    <ol class="steps">
+      <li><strong>노드 X</strong> — 소스가 가상 접지라 $C_{GS1}$은 접지 커패시터예요. $C_{GD1}$은 X와 Y 사이에 떠 있어서 밀러 근사로 나눠요. Y에서 $M_3$ 소스로 보이는 저항이 $1/g_{m3}$이므로 X에서 Y로의 이득은 다음과 같아요.
+        <p>$$A_{v,XY}\approx-\frac{g_{m1}}{g_{m3}}$$</p>
+        X 쪽에는 $(1-A_{v,XY})C_{GD1}$이 보이고, X의 저항은 $R_S$예요(MOS 게이트의 저주파 입력저항은 무한대).
+        <p>$$\begin{aligned}\omega_{p,X}&amp;=1\Big/\Big(R_S\Big[C_{GS1}\\&amp;\qquad+\Big(1+\frac{g_{m1}}{g_{m3}}\Big)C_{GD1}\Big]\Big)\end{aligned}$$</p></li>
+      <li><strong>노드 Y</strong> — 저항은 $M_3$ 소스로 보이는 $1/g_{m3}$이에요. 커패시터는 $M_1$의 $C_{DB1}$, 게이트가 $V_b$로 AC 접지인 $M_3$의 $C_{GS3}$와 $C_{SB3}$, 그리고 $C_{GD1}$의 Y 쪽 몫이에요.
+        <p>$$\begin{aligned}&amp;\left(1-\frac{1}{A_{v,XY}}\right)C_{GD1}\\&amp;=\left(1+\frac{g_{m3}}{g_{m1}}\right)C_{GD1}\end{aligned}$$</p>
+        <p>$$\begin{aligned}&amp;\omega_{p,Y}=1\Big/\Big(\frac{1}{g_{m3}}\Big[C_{DB1}\\&amp;\quad+\Big(1+\frac{g_{m3}}{g_{m1}}\Big)C_{GD1}\\&amp;\quad+C_{GS3}+C_{SB3}\Big]\Big)\end{aligned}$$</p></li>
+      <li><strong>출력 노드</strong> — 저항은 $R_D$예요(아래의 캐스코드 저항은 훨씬 커요). $M_3$ 게이트가 AC 접지라 $C_{GD3}$도 접지 커패시터가 되어 $C_{DB3}$와 더해져요.
+        <p>$$\omega_{p,out}=\frac{1}{R_D(C_{DB3}+C_{GD3})}$$</p></li>
+      <li><strong>전달함수</strong> — 세 노드의 극점을 곱으로 묶어요.
+        <p>$$\begin{aligned}H(s)&amp;=\frac{A_0}{\left(1+\frac{s}{\omega_{p,X}}\right)\left(1+\frac{s}{\omega_{p,Y}}\right)}\\&amp;\quad\times\frac{1}{1+\frac{s}{\omega_{p,out}}}\end{aligned}$$</p>
+        여기서 $A_0=-g_{m1}R_D$는 저주파 이득이고, 분모에 극점 세 개가 있어요.</li>
+    </ol>
+    <p><strong>극점의 부호</strong> — 실제 극점은 $s=-\omega_{p,X}$처럼 음수에 있어요. 극점 주파수는 그 크기라서 책에 따라 $|\omega_{p,X}|$처럼 절댓값을 씌워 쓰거나 두 표기를 섞어 써요. 극점이 음수로 나오면 절댓값을 씌워 주파수로 읽어요.</p>
+    <p><strong>밀러 근사의 오차</strong> — 밀러 근사는 저주파 이득 $A_{v,XY}$로 $C_{GD1}$을 나눴기 때문에 영점을 구할 수 없고, 극점에도 약간의 오차가 생길 수 있어요. $C_{GD1}$을 지나 앞으로 새는 전류가 만드는 영점은 대략 $g_{m1}/C_{GD1}$이고, $C_{GD1}$이 작아 극점들보다 훨씬 높은 주파수에 있어요. 그래서 이득이 극점에서 떨어지는 관심 대역에서는 영점의 영향이 작아 위 근사 전달함수가 타당해요.</p>
+    <p><strong>캐스코드를 쓰는 이유</strong> — 단순 CS 반회로에서 $C_{GD1}$의 입력 밀러 배수는 $1+g_{m1}R_D$였지만, 캐스코드 반회로에서는 $1+g_{m1}/g_{m3}$로 줄어요. $g_{m1}\approx g_{m3}$이면 약 2라서 입력 극점이 높아지고, 대신 노드 Y에 극점이 하나 더 생겨요.</p>
+  </div>
+  <div class="layer prof"><span class="layer-title">교수님 말씀</span>
+    <p>캐스코드 차동쌍도 반회로의 극점을 구하는 것이 곧 차동쌍의 극점을 구하는 것이라서, 앞에서 구한 캐스코드 단의 극점을 그대로 쓰면 된다고 했어요. 전달함수는 극점 세 개의 함수이고, 분자는 저주파 이득 $-g_{m1}R_D$예요.</p>
+    <blockquote>원래 폴은 네거티브 폴이에요.</blockquote>
+    <blockquote>제로는 상당히 높은 주파수에 있습니다, 폴들에 비해서.</blockquote>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">캐스코드 차동쌍은 반회로 캐스코드 단의 노드 X, Y, 출력에서 극점 세 개를 가져요.</p>
+    <p class="panel-label">핵심 식</p>
+    <ul class="eq-list">
+      <li><span class="eq-name">전달함수</span>$$\begin{aligned}H(s)&amp;=\frac{A_0}{\left(1+\frac{s}{\omega_{p,X}}\right)\left(1+\frac{s}{\omega_{p,Y}}\right)}\\&amp;\quad\times\frac{1}{1+\frac{s}{\omega_{p,out}}}\end{aligned}$$</li>
+      <li><span class="eq-name">저주파 이득</span>$$A_0=-g_{m1}R_D$$</li>
+      <li><span class="eq-name">노드 Y</span>$$\begin{aligned}&amp;\omega_{p,Y}=1\Big/\Big(\frac{1}{g_{m3}}\Big[C_{DB1}\\&amp;\quad+\Big(1+\frac{g_{m3}}{g_{m1}}\Big)C_{GD1}\\&amp;\quad+C_{GS3}+C_{SB3}\Big]\Big)\end{aligned}$$</li>
+      <li><span class="eq-name">출력 노드</span>$$\omega_{p,out}=\frac{1}{R_D(C_{DB3}+C_{GD3})}$$</li>
+    </ul>
+    <p>노드 Y의 저항은 $M_3$ 소스로 보이는 $1/g_{m3}$이에요.</p>
+    <p>밀러 근사는 영점을 주지 않지만 영점이 극점보다 훨씬 높아 관심 대역에서는 무시해요.</p>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>밀러 근사(Miller approximation)</dt><dd>저주파 노드 간 이득으로 떠 있는 커패시터를 양쪽 접지 커패시터로 나누는 근사</dd>
+      <dt>극점 주파수(pole frequency)</dt><dd>음수인 극점의 크기</dd>
+    </dl>
+  </div>
+</article>
+    </section>
+    <section id="s2"><h2>3. 귀환 시스템과 폐루프 이득</h2>
+<article class="topic" id="s2-feedback-system">
+  <h3>음귀환 시스템의 네 부분</h3>
+  <div class="tags"><span class="tag date">1106 수업</span><span class="tag slide">L06 s3</span></div>
+  <div class="layer eli5">
+    <span class="layer-title">쉽게 말하면</span>
+    <p class="lead">음귀환은 출력을 감지해 그 일부를 입력에서 빼고, 남은 차이만 증폭기에 넣는 구조예요.</p>
+    <figure class="figure">
+      <svg id="fig-fb-blocks" viewBox="0 0 400 214" role="img" aria-label="음귀환 블록도예요. 왼쪽 입력 X가 테두리 원 모양의 비교부로 들어가고, 차이 E가 테두리 상자 A1 전방 시스템을 지나 오른쪽 출력 Y가 돼요. 출력을 감지한 점에서 아래로 내려가 왼쪽을 향한 테두리 삼각형 K 귀환 회로망을 지나 귀환 신호 X F가 비교부의 빼기 입력으로 들어가요">
+        <text class="fig-muted" x="120" y="34" text-anchor="middle">입력 비교</text>
+        <text class="fig-muted" x="208" y="38" text-anchor="middle">전방 시스템</text>
+        <text class="fig-muted" x="312" y="102">출력 감지</text>
+        <text class="fig-muted" x="236" y="196" text-anchor="middle">귀환 회로망</text>
+        <path class="fig-ink" d="M24 70H106 M134 70H180 M236 70H376"/>
+        <path class="fig-ink" d="M99 65l6 5-6 5 M173 65l6 5-6 5"/>
+        <circle class="fig-ink" cx="120" cy="70" r="14"/>
+        <path class="fig-ink" d="M120 62v16 M112 70h16"/>
+        <text class="fig-text" x="94" y="60" text-anchor="middle">+</text>
+        <text class="fig-text" x="108" y="104" text-anchor="middle">−</text>
+        <rect class="fig-ink" x="180" y="50" width="56" height="40" rx="4"/>
+        <text class="fig-text fig-math" x="208" y="75" text-anchor="middle" font-size="15">A<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        <path class="fig-accent" d="M300 70V150H250 M222 150H120V84"/>
+        <path class="fig-accent" d="M115 91l5-6 5 6"/>
+        <path class="fig-ink" d="M250 135V165L222 150Z"/>
+        <text class="fig-text fig-math" x="241" y="155" text-anchor="middle">K</text>
+        <circle class="fig-dot" cx="24" cy="70" r="4" data-node="x" data-node-color="blue"/>
+        <text class="fig-text fig-math" x="24" y="56" text-anchor="middle" font-size="14" data-node="x" data-node-color="blue">X</text>
+        <circle class="fig-dot" cx="157" cy="70" r="3.6" data-node="e" data-node-color="red"/>
+        <text class="fig-text fig-math" x="157" y="57" text-anchor="middle" font-size="14" data-node="e" data-node-color="red">E</text>
+        <circle class="fig-dot" cx="300" cy="70" r="3.6" data-node="y" data-node-color="blue"/>
+        <circle class="fig-dot" cx="376" cy="70" r="4" data-node="y" data-node-color="blue"/>
+        <text class="fig-text fig-math" x="376" y="56" text-anchor="middle" font-size="14" data-node="y" data-node-color="blue">Y</text>
+        <circle class="fig-dot" cx="168" cy="150" r="3.6" data-node="xf" data-node-color="red"/>
+        <text class="fig-text fig-math" x="168" y="130" text-anchor="middle" font-size="14" data-node="xf" data-node-color="red">X<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+      </svg>
+      <figcaption>op-amp 비반전 증폭기라면 op-amp가 전방 시스템 $A_1$, 저항 분배기가 출력 감지와 귀환 회로망 $K$, op-amp의 두 입력이 비교부예요.</figcaption>
+    </figure>
+  </div>
+  <div class="layer formal">
+    <span class="layer-title">정확히 말하면</span>
+    <p>귀환(feedback)은 출력을 다시 입력 쪽으로 되돌리는 구조예요. 되돌린 신호를 빼는지 더하는지에 따라 두 가지로 나뉘어요.</p>
+    <ul>
+      <li><b>음귀환(negative feedback)</b>: 입력과 같은 위상의 귀환 신호를 입력에서 빼요. 차이가 줄어드는 안정한 시스템이고, 증폭기 같은 대부분의 회로에 써요. 그냥 "귀환"이라고 하면 음귀환을 뜻해요.</li>
+      <li><b>양귀환(positive feedback)</b>: 같은 위상의 출력을 입력에 계속 더해요. 증폭한 신호를 다시 더하면 출력이 점점 커지는 불안정한 시스템이에요. 일정한 주파수의 신호를 만드는 발진기(oscillator, 신호 발생기)에 쓰고, 전자회로2에서는 다루지 않아요.</li>
+    </ul>
+    <p>음귀환은 정확도가 떨어지는(poorly controlled) 시스템이 더 정교한 특성을 갖게 만드는 데 써요.</p>
+    <p>지금까지 다룬 회로는 입력을 넣으면 출력이 그대로 나오는 개루프(open loop) 시스템이에요.</p>
+    $$Y=A_1X$$
+    <p>음귀환 시스템은 여기에 세 부분을 더해 모두 네 부분으로 이루어져요.</p>
+    <div class="table-wrap"><table>
+      <tr><th>부분</th><th>하는 일</th><th>비반전 증폭기에서</th></tr>
+      <tr><td>전방 시스템(feedforward system) $A_1$</td><td>들어온 신호를 증폭해요. 예: CS 단</td><td>op-amp</td></tr>
+      <tr><td>출력 감지(sense mechanism)</td><td>출력 $Y$를 읽어요</td><td>출력에 붙은 $R_1$, $R_2$</td></tr>
+      <tr><td>귀환 회로망(feedback network) $K$</td><td>감지한 출력으로 귀환 신호 $X_F$를 만들어요</td><td>저항 분배기 $R_1$, $R_2$</td></tr>
+      <tr><td>입력 비교(comparison mechanism)</td><td>$X$에서 $X_F$를 빼서 $A_1$에 넣어요</td><td>op-amp의 차동 입력</td></tr>
+    </table></div>
+    <p>op-amp는 이미 배운 귀환 시스템이에요. op-amp를 그대로 쓰면 개루프이지만, 실제로는 출력에서 저항을 거쳐 입력으로 되돌려요. 비반전 증폭기든 반전 증폭기든 귀환은 항상 반전(−) 입력으로 들어가므로 음귀환이에요. 자세한 대응은 <a href="#s2-noninverting">비반전 증폭기를 귀환으로 보기</a>에서 다뤄요.</p>
+    <p>귀환 회로망 $K$가 $0$이면 되돌아오는 신호가 없으니 개루프 시스템이에요. $K\ne0$이면 루프가 닫혀 있다고 해서 폐루프(closed loop) 시스템이라고 해요. 음귀환 시스템은 폐루프로 구성돼요.</p>
+  </div>
+  <div class="layer prof">
+    <span class="layer-title">교수님 말씀</span>
+    <blockquote>회로에서는 둘 다 써요. ... 용도가 완전히 다르죠.</blockquote>
+    <blockquote>근데 여러분들이 그동안 피드백 시스템 배웠어요. 언제 배웠냐? Op-amp에서.</blockquote>
+    <p>양귀환은 작은 신호를 증폭해 다시 더하는 일을 반복해 큰 신호를 만들어 낸다고 설명했어요. 신호 발생 회로는 아날로그 집적회로 같은 상위 과목에서 다룬다고 했어요.</p>
+  </div>
+  <div class="layer warn">
+    <span class="layer-title">꼭 기억해요</span>
+    <blockquote>일반적으로 여러분들이 피드백이라고 하면 네거티브 피드백을 얘기하는 거예요</blockquote>
+    <blockquote>K가 0이면 오픈 루프 시스템이에요.</blockquote>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">음귀환은 출력을 감지해 귀환 회로망 $K$로 만든 $X_F$를 입력에서 빼고 그 차이를 전방 시스템 $A_1$에 넣어요.</p>
+    <p class="panel-label">핵심 식</p>
+    <ul class="eq-list"><li><span class="eq-name">개루프</span>$$Y=A_1X$$</li></ul>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>음귀환(negative feedback)</dt><dd>귀환 신호를 빼는 안정한 구조로, 증폭기에 써요.</dd>
+      <dt>양귀환(positive feedback)</dt><dd>출력을 더하는 불안정한 구조로, 발진기에 써요.</dd>
+      <dt>네 부분</dt><dd>전방 시스템, 출력 감지, 귀환 회로망, 입력 비교예요.</dd>
+      <dt>개루프 / 폐루프</dt><dd>$K=0$이면 개루프, $K\ne0$이면 폐루프예요.</dd>
+    </dl>
+  </div>
+</article>
+
+<article class="topic" id="s2-closed-loop">
+  <h3>폐루프 이득: 이득이 $1+KA_1$배 줄어요</h3>
+  <div class="tags"><span class="tag date">1106 수업</span><span class="tag slide">L06 s4</span></div>
+  <div class="layer eli5">
+    <span class="layer-title">쉽게 말하면</span>
+    <p class="lead">음귀환을 걸면 이득이 $A_1$에서 $\frac{A_1}{1+KA_1}$로 바뀌어, $1+KA_1$배 줄어요.</p>
+    <figure class="figure">
+      <svg id="fig-fb-gain" viewBox="0 0 400 206" role="img" aria-label="로그 눈금의 세로축에 테두리 막대 두 개가 있어요. 왼쪽 개루프 이득 A1 막대는 1000까지, 오른쪽 폐루프 이득 막대는 약 9.90까지 올라가고, 두 막대 사이 화살표에 101로 나눈다고 적혀 있어요">
+        <line class="axis" x1="70" y1="30" x2="70" y2="170"/><line class="axis" x1="70" y1="170" x2="360" y2="170"/>
+        <line class="axis" x1="65" y1="170" x2="70" y2="170"/><line class="axis" x1="65" y1="123.33" x2="70" y2="123.33"/><line class="axis" x1="65" y1="76.67" x2="70" y2="76.67"/><line class="axis" x1="65" y1="30" x2="70" y2="30"/>
+        <text class="tick" x="60" y="174" text-anchor="end">1</text>
+        <text class="tick" x="60" y="127.33" text-anchor="end">10</text>
+        <text class="tick" x="60" y="80.67" text-anchor="end">100</text>
+        <text class="tick" x="60" y="34" text-anchor="end">1000</text>
+        <text class="tick" x="8" y="16">이득 (로그 눈금)</text>
+        <rect class="fig-ink" x="110" y="30" width="70" height="140"/>
+        <rect class="fig-accent" x="250" y="123.53" width="70" height="46.47"/>
+        <text class="fig-text" x="145" y="22" text-anchor="middle">1000</text>
+        <text class="fig-text" x="285" y="115" text-anchor="middle">≈ 9.90</text>
+        <path class="fig-ink" d="M188 46L242 108 M233 105l9 3-2-9"/>
+        <text class="fig-text" x="226" y="66">÷ 101</text>
+        <text class="fig-text fig-math" x="145" y="192" text-anchor="middle">개루프 A<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        <text class="fig-text fig-math" x="285" y="192" text-anchor="middle">폐루프 Y/X</text>
+      </svg>
+      <figcaption>$A_1=1000$, $K=0.1$이면 $1+KA_1=101$이라 이득이 1000에서 약 9.90으로 줄어요.</figcaption>
+    </figure>
+  </div>
+  <div class="layer formal">
+    <span class="layer-title">정확히 말하면</span>
+    <p>먼저 작은 예에 적용해 봐요. $A_1=1000$, $K=0.1$이면 다음과 같아요.</p>
+    $$1+KA_1=1+0.1\times1000=101$$
+    $$\frac{Y}{X}=\frac{1000}{101}\approx9.90$$
+    <p>개루프 이득(open-loop gain)은 귀환이 없을 때 입력–출력 비 $A_1$이에요($Y=A_1X$).</p>
+    <p>출력을 감지해 귀환 회로망에서 $K$배 한 것이 귀환 신호 $X_F$예요.</p>
+    $$X_F=KY$$
+    $$K=\frac{X_F}{Y}$$
+    <p>$K$를 귀환율(feedback factor)이라고 하고, "피드백 게인"이라고 부르기도 해요. 어떤 교재는 $K$ 대신 $\beta$를 써서 $\beta A_1$처럼 적어요. $\beta$도 같은 귀환율이에요.</p>
+    <p>폐루프에서는 $A_1$에 $X$가 아니라 $X$에서 $X_F$를 뺀 신호가 들어가요. 칠판 유도는 이 순서예요.</p>
+    <ol class="steps">
+      <li>$A_1$의 입력은 $X-X_F$예요. $$Y=A_1(X-X_F)$$</li>
+      <li>$X_F=KY$를 대입해요. $$Y=A_1(X-KY)$$</li>
+      <li>$Y$ 항을 왼쪽으로 이항해요. $$(1+KA_1)Y=A_1X$$</li>
+      <li>양변을 $X$와 $1+KA_1$로 나누면 폐루프 이득(closed-loop gain)이에요. $$\frac{Y}{X}=\frac{A_1}{1+KA_1}$$</li>
+    </ol>
+    <p>$K=0$이면 분모가 1이라 개루프 식 $Y=A_1X$로 돌아가요. 음귀환에서는 $KA_1\gt0$이라 분모 $1+KA_1$이 1보다 커서, 이득이 개루프 이득보다 $1+KA_1$배 줄어요.</p>
+    <p>$A_1=1000$을 고정하고 $K$를 키우면 분모가 커지는 만큼 이득이 줄어요.</p>
+    <div class="table-wrap"><table>
+      <tr><th>$K$</th><th>$1+KA_1$</th><th>$\frac{Y}{X}$</th></tr>
+      <tr><td>$0$ (개루프)</td><td>$1$</td><td>$1000$</td></tr>
+      <tr><td>$0.01$</td><td>$11$</td><td>$\frac{1000}{11}\approx90.91$</td></tr>
+      <tr><td>$0.1$</td><td>$101$</td><td>$\frac{1000}{101}\approx9.90$</td></tr>
+    </table></div>
+    <p>이득을 내주는 것은 일반적으로 보면 단점일 수 있어요. 그런데도 음귀환을 쓰는 이유는 다른 장점 때문이고, 그 장점은 다음 시간에 다뤄요. <a href="#s4-next">다음 시간 예고</a></p>
+  </div>
+  <div class="layer prof">
+    <span class="layer-title">교수님 말씀</span>
+    <blockquote>게인이 줄어드는데 왜, 왜 쓰느냐? 다른 장점이 있기 때문에 쓰겠죠?</blockquote>
+    <p>교수님은 예전 교재가 귀환율을 $\beta$로 적었다고 했어요. "베타가 뭐지" 하지 말고 $K$와 같은 피드백 팩터로 이해하라고 했어요.</p>
+  </div>
+  <div class="layer warn">
+    <span class="layer-title">꼭 기억해요</span>
+    <blockquote>우선 특징은 게인이 줄어듭니다. 얼마만큼? 1 + KA 만큼</blockquote>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">음귀환을 걸면 개루프 이득 $A_1$이 폐루프 이득 $\frac{A_1}{1+KA_1}$로 $1+KA_1$배 줄어요.</p>
+    <p class="panel-label">핵심 식</p>
+    <ul class="eq-list">
+      <li><span class="eq-name">귀환 신호</span>$$X_F=KY$$</li>
+      <li><span class="eq-name">폐루프 이득</span>$$\frac{Y}{X}=\frac{A_1}{1+KA_1}$$</li>
+    </ul>
+    <p>$K=0$이면 개루프 식 $Y=A_1X$로 돌아가요.</p>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>귀환율(feedback factor)</dt><dd>$K=\frac{X_F}{Y}$이고, 교재에 따라 $\beta$로 적어요.</dd>
+    </dl>
+  </div>
+</article>
+
+<article class="topic" id="s2-noninverting">
+  <h3>비반전 증폭기를 귀환으로 보기</h3>
+  <div class="tags"><span class="tag date">1106 수업</span><span class="tag slide">L06 s5</span></div>
+  <div class="layer eli5">
+    <span class="layer-title">쉽게 말하면</span>
+    <p class="lead">비반전 증폭기는 op-amp가 $A_1$, 저항 분배기가 $K$인 귀환 시스템이라서, $A_1$이 아주 크면 이득이 $1+\frac{R_1}{R_2}$가 돼요.</p>
+    <figure class="figure">
+      <svg id="fig-fb-noninv" viewBox="0 0 400 234" role="img" aria-label="비반전 증폭기 회로예요. 왼쪽 입력 X가 테두리 삼각형 op-amp A1의 플러스 입력으로 들어가고, 오른쪽 출력 Y에서 아래로 R1, 귀환 노드 X F, R2를 거쳐 접지돼요. X F 노드에서 왼쪽으로 돌아가는 강조선이 op-amp의 마이너스 입력에 연결돼요">
+        <path class="fig-ink" d="M40 60H150 M230 80H360"/>
+        <path class="fig-ink" d="M150 40V120L230 80Z"/>
+        <text class="fig-text" x="157" y="65">+</text>
+        <text class="fig-text" x="157" y="105">−</text>
+        <text class="fig-text fig-math" x="180" y="86" font-size="15">A<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        <path class="fig-ink" d="M290 80V92l8 4-16 8 16 8-16 8 16 8-8 4V150V168l8 4-16 8 16 8-16 8 16 8-8 4V212"/>
+        <path class="fig-ink" d="M276 212h28 M281 217h18 M286 222h8"/>
+        <text class="fig-text fig-math" x="308" y="117">R<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        <text class="fig-text fig-math" x="308" y="193">R<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+        <path class="fig-accent" d="M290 150H120V100H150"/>
+        <circle class="fig-dot" cx="40" cy="60" r="4" data-node="x" data-node-color="blue"/>
+        <text class="fig-text fig-math" x="40" y="45" text-anchor="middle" font-size="14" data-node="x" data-node-color="blue">X</text>
+        <circle class="fig-dot" cx="290" cy="80" r="3.6" data-node="y" data-node-color="red"/>
+        <circle class="fig-dot" cx="360" cy="80" r="4" data-node="y" data-node-color="red"/>
+        <text class="fig-text fig-math" x="360" y="65" text-anchor="middle" font-size="14" data-node="y" data-node-color="red">Y</text>
+        <circle class="fig-dot" cx="290" cy="150" r="3.6" data-node="xf" data-node-color="blue"/>
+        <text class="fig-text fig-math" x="301" y="155" text-anchor="start" font-size="14" data-node="xf" data-node-color="blue">X<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+      </svg>
+      <figcaption>$R_1=9\,\mathrm{k\Omega}$, $R_2=1\,\mathrm{k\Omega}$이면 $K=0.1$이고, $A_1$이 클수록 이득이 $1+\frac{9}{1}=10$에 가까워져요.</figcaption>
+    </figure>
+  </div>
+  <div class="layer formal">
+    <span class="layer-title">정확히 말하면</span>
+    <p>귀환의 네 부분은 이 회로에서 다음과 같이 대응해요.</p>
+    <ul>
+      <li>전방 시스템: op-amp $A_1$이에요.</li>
+      <li>출력 감지와 귀환 회로망: 출력과 접지 사이의 저항 분배기 $R_1$, $R_2$가 출력 전압을 감지해 일정 비율로 나눠요.</li>
+      <li>입력 비교: op-amp의 차동 입력이에요. $X$는 (+) 입력, $X_F$는 (−) 입력으로 들어가 서로 빠져요.</li>
+    </ul>
+    <p>분배기가 없어서 (−) 입력이 접지되면 $X_F=0$이라 개루프이고, $Y=A_1X$예요.</p>
+    <p>먼저 작은 예에 적용해 봐요. $R_1=9\,\mathrm{k\Omega}$, $R_2=1\,\mathrm{k\Omega}$, $A_1=1000$이면 다음과 같아요.</p>
+    $$K=\frac{1\,\mathrm{k\Omega}}{9\,\mathrm{k\Omega}+1\,\mathrm{k\Omega}}=0.1$$
+    $$\frac{Y}{X}=\frac{1000}{1+0.1\times1000}=\frac{1000}{101}\approx9.90$$
+    <p>$A_1\to\infty$이면 이 값은 $\frac{1}{K}=10$으로 가요.</p>
+    <p>일반식은 이 순서로 구해요. op-amp 입력으로 전류가 흐르지 않는다고 보고 분배기를 써요.</p>
+    <ol class="steps">
+      <li>저항 분배기의 가운데 노드가 귀환 신호예요. $$X_F=\frac{R_2}{R_1+R_2}Y$$</li>
+      <li>귀환율은 그 비율이에요. $$K=\frac{R_2}{R_1+R_2}$$</li>
+      <li>폐루프 이득 $\frac{A_1}{1+KA_1}$에 대입해요. $$\frac{Y}{X}=\frac{A_1}{1+\frac{R_2}{R_1+R_2}A_1}$$</li>
+      <li>이상적인 op-amp처럼 $A_1\to\infty$이면 분모의 1을 무시할 수 있어요. $$\frac{Y}{X}\to\frac{1}{K}=\frac{R_1+R_2}{R_2}=1+\frac{R_1}{R_2}$$</li>
+    </ol>
+    <p>4단계의 $1+\frac{R_1}{R_2}$가 op-amp에서 저항비로 구했던 비반전 증폭기의 이득이에요. $A_1$이 무한대가 아니면 정확한 이득은 3단계 식이에요.</p>
+    <p>이 회로의 $K$는 보통 1보다 작아요. 귀환이 없을 때($K=0$) 이득은 $A_1$이었고, $A_1=\infty$였다면 무한대에서 $1+\frac{R_1}{R_2}$로 이득이 줄어든 셈이에요.</p>
+    <p>그래서 op-amp는 무한대 이득의 개루프로 쓰지 않고 귀환 시스템으로 만들어 써요. 그 이유는 뒤에서 다시 설명해요.</p>
+  </div>
+  <div class="layer prof">
+    <span class="layer-title">교수님 말씀</span>
+    <blockquote>근데 A1이 무한대가 아니면? 정확하게는 요런 공식이 돼요.</blockquote>
+    <blockquote>op-amp는 오픈 루프로서는 사용을 안 합니다.</blockquote>
+    <p>교수님은 저항 분배기로 출력을 일정 비율만큼 나눠 되돌리므로 여기서는 $K$가 보통 1보다 작다고 했어요.</p>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">비반전 증폭기는 op-amp $A_1$과 저항 분배기 $K$의 귀환 시스템이고, $A_1\to\infty$이면 이득이 $\frac{1}{K}=1+\frac{R_1}{R_2}$예요.</p>
+    <p class="panel-label">핵심 식</p>
+    <ul class="eq-list">
+      <li><span class="eq-name">귀환율</span>$$K=\frac{R_2}{R_1+R_2}$$</li>
+      <li><span class="eq-name">op-amp 이득이 유한할 때</span>$$\frac{Y}{X}=\frac{A_1}{1+\frac{R_2}{R_1+R_2}A_1}$$</li>
+      <li><span class="eq-name">op-amp 이득이 무한대일 때</span>$$\frac{Y}{X}\to\frac{1}{K}=1+\frac{R_1}{R_2}$$</li>
+    </ul>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>저항 분배기</dt><dd>출력을 감지하고 $K$를 정하는 $R_1$, $R_2$예요.</dd>
+    </dl>
+  </div>
+</article>
+
+<article class="topic" id="s2-error-signal">
+  <h3>오차 E와 가상 단락</h3>
+  <div class="tags"><span class="tag date">1106 수업</span><span class="tag slide">L06 s6–s7</span></div>
+  <div class="layer eli5">
+    <span class="layer-title">쉽게 말하면</span>
+    <p class="lead">오차 $E$는 입력과 귀환 신호의 차이인데, $KA_1$이 클수록 작아져서 귀환 신호가 입력을 거의 그대로 복제해요.</p>
+    <figure class="figure">
+      <svg id="fig-fb-error" viewBox="0 0 400 210" role="img" aria-label="보통 눈금의 세로축에 테두리 막대 세 개가 있어요. 입력 X는 1 V, 귀환 신호 X F는 약 0.99 V로 거의 같은 높이이고, 오차 E는 약 9.90 mV로 바닥에 붙은 얇은 막대예요">
+        <line class="axis" x1="60" y1="40" x2="60" y2="170"/><line class="axis" x1="60" y1="170" x2="370" y2="170"/>
+        <line class="axis" x1="55" y1="170" x2="60" y2="170"/><line class="axis" x1="55" y1="105" x2="60" y2="105"/><line class="axis" x1="55" y1="40" x2="60" y2="40"/>
+        <text class="tick" x="50" y="174" text-anchor="end">0</text>
+        <text class="tick" x="50" y="109" text-anchor="end">0.5</text>
+        <text class="tick" x="50" y="44" text-anchor="end">1</text>
+        <text class="tick" x="8" y="22">전압 (V)</text>
+        <rect class="fig-ink" x="90" y="40" width="64" height="130"/>
+        <rect class="fig-accent" x="190" y="41.29" width="64" height="128.71"/>
+        <rect class="fig-danger" x="290" y="168.4" width="64" height="1.6"/>
+        <text class="fig-text" x="122" y="32" text-anchor="middle">1 V</text>
+        <text class="fig-text" x="222" y="33" text-anchor="middle">≈ 0.99 V</text>
+        <text class="fig-text" x="322" y="158" text-anchor="middle">≈ 9.90 mV</text>
+        <text class="fig-text fig-math" x="122" y="192" text-anchor="middle">입력 X</text>
+        <text class="fig-text fig-math" x="222" y="192" text-anchor="middle">귀환 X<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+        <text class="fig-text fig-math" x="322" y="192" text-anchor="middle">오차 E</text>
+      </svg>
+      <figcaption>$A_1=1000$, $K=0.1$, $X=1\,\mathrm{V}$이면 $E=\frac{1}{101}\,\mathrm{V}\approx9.90\,\mathrm{mV}$뿐이라 $X_F\approx0.99\,\mathrm{V}$가 입력과 거의 같아요.</figcaption>
+    </figure>
+  </div>
+  <div class="layer formal">
+    <span class="layer-title">정확히 말하면</span>
+    <p>음귀환에서는 입력이 그대로 $A_1$에 들어가지 않고, 입력과 귀환 신호의 차이가 들어가요. 이 차이를 오차 신호(error signal) $E$라고 해요.</p>
+    $$E=X-X_F$$
+    <p>먼저 작은 예에 적용해 봐요. $X=1\,\mathrm{V}$, $A_1=1000$, $K=0.1$이면 $1+KA_1=101$이에요.</p>
+    $$E=\frac{1\,\mathrm{V}}{101}\approx9.90\,\mathrm{mV}$$
+    $$Y=A_1E=\frac{1000}{101}\,\mathrm{V}\approx9.90\,\mathrm{V}$$
+    $$X_F=KY=\frac{100}{101}\,\mathrm{V}\approx0.99\,\mathrm{V}$$
+    <p>$E$는 어떻게 이렇게 작아질까요? 칠판 유도는 이 순서예요.</p>
+    <ol class="steps">
+      <li>오차의 정의에서 시작해요. $$E=X-X_F$$</li>
+      <li>$X_F=KY$이고 $Y=A_1E$예요. $$X_F=KA_1E$$</li>
+      <li>정의에 대입해요. $$E=X-KA_1E$$</li>
+      <li>$E$ 항을 모아요. $$(1+KA_1)E=X$$</li>
+      <li>$E$에 대해 풀어요. $$E=\frac{X}{1+KA_1}$$</li>
+    </ol>
+    <p>입력 $X$가 $1+KA_1$배 줄어든 것이 실제로 $A_1$에 들어가는 신호예요. $KA_1$을 키우면 이 비율이 계속 작아져요.</p>
+    <div class="table-wrap"><table>
+      <tr><th>$KA_1$</th><th>$\frac{E}{X}=\frac{1}{1+KA_1}$</th></tr>
+      <tr><td>$10$</td><td>$\frac{1}{11}\approx9.09\,\%$</td></tr>
+      <tr><td>$100$</td><td>$\frac{1}{101}\approx0.99\,\%$</td></tr>
+      <tr><td>$1000$</td><td>$\frac{1}{1001}\approx0.10\,\%$</td></tr>
+    </table></div>
+    <p>$A_1\to\infty$이면 $E\to0$이에요. 하지만 $E$는 정확히 0이 아니에요. $E=0$이면 $Y=A_1E$도 0이 되어 아무 의미가 없어요. $A_1$이 아주 커도 작은 $E$가 들어가야 유한한 출력이 나와요.</p>
+    <p>그래서 $E$가 거의 0이라는 것은 입력과 귀환 신호가 거의 같다는 뜻이에요.</p>
+    $$X\approx X_F$$
+    <p>이것이 op-amp에서 배운 가상 단락(virtual short)이에요. 두 입력 단자의 전압이 거의 같다는 가정이에요.</p>
+    <p>$KA_1$이 클수록 귀환 신호는 입력의 좋은 복제(replica)가 돼요. 출력 $Y$는 커도 $K$로 줄인 $X_F$는 입력 모양을 거의 그대로 따라가요.</p>
+    <p>비반전 증폭기에서 $E\approx0$으로 두면 저항비 이득이 바로 나와요. <a href="#s2-noninverting">비반전 증폭기를 귀환으로 보기</a></p>
+    $$X_F=\frac{R_2}{R_1+R_2}Y\approx X$$
+    $$\frac{Y}{X}\approx1+\frac{R_1}{R_2}$$
+    <p>지금까지 비반전 증폭기의 이득을 저항비로 구할 수 있었던 원리가 이 $E$와 $KA_1$의 관계예요.</p>
+    <div class="widget" id="widget-feedback"><h4>직접 해 보기: 루프가 클수록 이득은 1/K로, 오차는 0으로</h4>
+      <p class="widget-help">$A_1$(로그 눈금)과 $K$를 움직이면 왼쪽 그래프의 폐루프 이득 $\frac{Y}{X}$가 $\frac{1}{K}$ 점선에 다가가고, 오른쪽 그래프의 $\frac{E}{X}=\frac{1}{1+KA_1}$이 0으로 줄어드는 것이 보여요. 회색 점선은 귀환이 없을 때의 개루프 이득 $A_1$이에요.</p>
+      <div class="controls">
+        <label>$A_1$ <input type="range" id="feedback-a" min="0" max="5" step="0.1" value="3"> <b id="feedback-a-val">1000</b></label>
+        <label>$K$ <input type="range" id="feedback-k" min="0.01" max="1" step="0.01" value="0.1"> <b id="feedback-k-val">0.1</b></label>
+      </div>
+      <svg id="feedback-plot" viewBox="0 0 560 300" role="img" aria-label="왼쪽은 가로축 A1 로그 눈금, 세로축 Y/X 로그 눈금의 그래프로 개루프 이득 점선, 1/K 가로 점선, 폐루프 이득 곡선과 현재 위치의 색칠된 점이 있어요. 오른쪽은 같은 가로축에 E/X 곡선과 현재 위치의 색칠된 점이 있어요"></svg>
+      <p class="readout">현재 값: <b id="feedback-out">KA<sub>1</sub> ≈ 100 · Y/X ≈ 9.90 (1/K = 10의 99.01 %) · E/X ≈ 0.99 %</b></p>
+      <p class="legend"><span><span class="sw fit"></span>폐루프 이득과 오차 비</span><span><span class="sw truth"></span>개루프 이득 $A_1$ 점선</span><span><span class="sw post"></span>$\frac{1}{K}$ 수준 점선</span><span><span class="sw like"></span>현재 $A_1$ 위치 점선</span></p>
+      <div class="widget-static" hidden>
+        <figure class="figure"><svg id="widget-feedback-static-1" viewBox="0 0 560 300" role="img" aria-label="K = 0.1, A1 = 10일 때 개루프 이득 점선, 1/K 점선, 폐루프 이득 곡선과 오차 비 곡선, 현재 A1 위치의 색칠된 점"><line class="axis" x1="58" y1="34" x2="58" y2="236"/><line class="axis" x1="53" y1="236" x2="58" y2="236"/><text class="tick" x="50" y="240" text-anchor="end">0.1</text><line class="axis" x1="53" y1="185.50" x2="58" y2="185.50"/><text class="tick" x="50" y="189.50" text-anchor="end">1</text><line class="axis" x1="53" y1="135" x2="58" y2="135"/><text class="tick" x="50" y="139" text-anchor="end">10</text><line class="axis" x1="53" y1="84.50" x2="58" y2="84.50"/><text class="tick" x="50" y="88.50" text-anchor="end">100</text><line class="axis" x1="53" y1="34" x2="58" y2="34"/><text class="tick" x="50" y="38" text-anchor="end">1000</text><line class="axis" x1="58" y1="236" x2="262" y2="236"/><line class="axis" x1="58" y1="236" x2="58" y2="241"/><text class="tick" x="58" y="252" text-anchor="middle">1</text><line class="axis" x1="98.80" y1="236" x2="98.80" y2="241"/><text class="tick" x="98.80" y="252" text-anchor="middle">10</text><line class="axis" x1="139.60" y1="236" x2="139.60" y2="241"/><text class="tick" x="139.60" y="252" text-anchor="middle">100</text><line class="axis" x1="180.40" y1="236" x2="180.40" y2="241"/><text class="tick" x="180.40" y="252" text-anchor="middle">1k</text><line class="axis" x1="221.20" y1="236" x2="221.20" y2="241"/><text class="tick" x="221.20" y="252" text-anchor="middle">10k</text><line class="axis" x1="262" y1="236" x2="262" y2="241"/><text class="tick" x="262" y="252" text-anchor="middle">100k</text><text class="tick fig-math" x="262" y="267" text-anchor="end">A<tspan baseline-shift="sub" font-size="78%">1</tspan> (로그 눈금)</text><text class="tick fig-math" x="58" y="20">Y/X (로그 눈금)</text><path class="plot-truth" d="M58 185.50 L60.04 182.98 L62.08 180.45 L64.12 177.93 L66.16 175.40 L68.20 172.88 L70.24 170.35 L72.28 167.83 L74.32 165.30 L76.36 162.78 L78.40 160.25 L80.44 157.73 L82.48 155.20 L84.52 152.68 L86.56 150.15 L88.60 147.63 L90.64 145.10 L92.68 142.57 L94.72 140.05 L96.76 137.53 L98.80 135 L100.84 132.48 L102.88 129.95 L104.92 127.43 L106.96 124.90 L109 122.38 L111.04 119.85 L113.08 117.32 L115.12 114.80 L117.16 112.28 L119.20 109.75 L121.24 107.23 L123.28 104.70 L125.32 102.18 L127.36 99.65 L129.40 97.13 L131.44 94.60 L133.48 92.07 L135.52 89.55 L137.56 87.02 L139.60 84.50 L141.64 81.98 L143.68 79.45 L145.72 76.93 L147.76 74.40 L149.80 71.88 L151.84 69.35 L153.88 66.82 L155.92 64.30 L157.96 61.77 L160 59.25 L162.04 56.73 L164.08 54.20 L166.12 51.68 L168.16 49.15 L170.20 46.63 L172.24 44.10 L174.28 41.57 L176.32 39.05 L178.36 36.52 L180.40 34"/><line class="mark-map" x1="58" y1="135" x2="262" y2="135"/><text class="tick fig-math" x="209.60" y="119">1/K = 10</text><path class="plot-fit" d="M58 187.59 L60.04 185.31 L62.08 183.05 L64.12 180.82 L66.16 178.63 L68.20 176.46 L70.24 174.34 L72.28 172.26 L74.32 170.21 L76.36 168.22 L78.40 166.28 L80.44 164.38 L82.48 162.55 L84.52 160.77 L86.56 159.06 L88.60 157.41 L90.64 155.83 L92.68 154.31 L94.72 152.87 L96.76 151.50 L98.80 150.20 L100.84 148.98 L102.88 147.82 L104.92 146.74 L106.96 145.73 L109 144.79 L111.04 143.91 L113.08 143.10 L115.12 142.35 L117.16 141.66 L119.20 141.03 L121.24 140.45 L123.28 139.91 L125.32 139.43 L127.36 138.99 L129.40 138.59 L131.44 138.23 L133.48 137.90 L135.52 137.60 L137.56 137.33 L139.60 137.09 L141.64 136.87 L143.68 136.68 L145.72 136.50 L147.76 136.34 L149.80 136.20 L151.84 136.07 L153.88 135.96 L155.92 135.86 L157.96 135.76 L160 135.68 L162.04 135.61 L164.08 135.54 L166.12 135.49 L168.16 135.43 L170.20 135.39 L172.24 135.34 L174.28 135.31 L176.32 135.27 L178.36 135.24 L180.40 135.22 L182.44 135.19 L184.48 135.17 L186.52 135.15 L188.56 135.14 L190.60 135.12 L192.64 135.11 L194.68 135.10 L196.72 135.09 L198.76 135.08 L200.80 135.07 L202.84 135.06 L204.88 135.06 L206.92 135.05 L208.96 135.04 L211 135.04 L213.04 135.03 L215.08 135.03 L217.12 135.03 L219.16 135.02 L221.20 135.02 L223.24 135.02 L225.28 135.02 L227.32 135.02 L229.36 135.01 L231.40 135.01 L233.44 135.01 L235.48 135.01 L237.52 135.01 L239.56 135.01 L241.60 135.01 L243.64 135.01 L245.68 135.01 L247.72 135 L249.76 135 L251.80 135 L253.84 135 L255.88 135 L257.92 135 L259.96 135 L262 135"/><line class="mark-ml" x1="98.80" y1="34" x2="98.80" y2="236"/><circle class="fig-dot" cx="98.80" cy="150.20" r="4.5"/><line class="axis" x1="330" y1="34" x2="330" y2="236"/><line class="axis" x1="325" y1="236" x2="330" y2="236"/><text class="tick" x="322" y="240" text-anchor="end">0</text><line class="axis" x1="325" y1="135" x2="330" y2="135"/><text class="tick" x="322" y="139" text-anchor="end">0.5</text><line class="axis" x1="325" y1="34" x2="330" y2="34"/><text class="tick" x="322" y="38" text-anchor="end">1</text><line class="axis" x1="330" y1="236" x2="534" y2="236"/><line class="axis" x1="330" y1="236" x2="330" y2="241"/><text class="tick" x="330" y="252" text-anchor="middle">1</text><line class="axis" x1="370.80" y1="236" x2="370.80" y2="241"/><text class="tick" x="370.80" y="252" text-anchor="middle">10</text><line class="axis" x1="411.60" y1="236" x2="411.60" y2="241"/><text class="tick" x="411.60" y="252" text-anchor="middle">100</text><line class="axis" x1="452.40" y1="236" x2="452.40" y2="241"/><text class="tick" x="452.40" y="252" text-anchor="middle">1k</text><line class="axis" x1="493.20" y1="236" x2="493.20" y2="241"/><text class="tick" x="493.20" y="252" text-anchor="middle">10k</text><line class="axis" x1="534" y1="236" x2="534" y2="241"/><text class="tick" x="534" y="252" text-anchor="middle">100k</text><text class="tick fig-math" x="534" y="267" text-anchor="end">A<tspan baseline-shift="sub" font-size="78%">1</tspan> (로그 눈금)</text><text class="tick fig-math" x="330" y="20">E/X (보통 눈금)</text><path class="plot-fit" d="M330 52.36 L332.04 54.38 L334.08 56.59 L336.12 59 L338.16 61.63 L340.20 64.50 L342.24 67.60 L344.28 70.95 L346.32 74.55 L348.36 78.41 L350.40 82.53 L352.44 86.90 L354.48 91.52 L356.52 96.37 L358.56 101.44 L360.60 106.71 L362.64 112.15 L364.68 117.73 L366.72 123.42 L368.76 129.19 L370.80 135 L372.84 140.81 L374.88 146.58 L376.92 152.27 L378.96 157.85 L381 163.29 L383.04 168.56 L385.08 173.63 L387.12 178.48 L389.16 183.10 L391.20 187.47 L393.24 191.59 L395.28 195.45 L397.32 199.05 L399.36 202.40 L401.40 205.50 L403.44 208.37 L405.48 211 L407.52 213.41 L409.56 215.62 L411.60 217.64 L413.64 219.47 L415.68 221.14 L417.72 222.64 L419.76 224.01 L421.80 225.25 L423.84 226.36 L425.88 227.36 L427.92 228.27 L429.96 229.08 L432 229.81 L434.04 230.46 L436.08 231.05 L438.12 231.58 L440.16 232.05 L442.20 232.47 L444.24 232.85 L446.28 233.19 L448.32 233.49 L450.36 233.76 L452.40 234 L454.44 234.22 L456.48 234.41 L458.52 234.58 L460.56 234.73 L462.60 234.87 L464.64 234.99 L466.68 235.10 L468.72 235.20 L470.76 235.29 L472.80 235.36 L474.84 235.43 L476.88 235.49 L478.92 235.55 L480.96 235.60 L483 235.64 L485.04 235.68 L487.08 235.72 L489.12 235.75 L491.16 235.77 L493.20 235.80 L495.24 235.82 L497.28 235.84 L499.32 235.86 L501.36 235.87 L503.40 235.89 L505.44 235.90 L507.48 235.91 L509.52 235.92 L511.56 235.93 L513.60 235.94 L515.64 235.94 L517.68 235.95 L519.72 235.95 L521.76 235.96 L523.80 235.96 L525.84 235.97 L527.88 235.97 L529.92 235.97 L531.96 235.98 L534 235.98"/><line class="mark-ml" x1="370.80" y1="34" x2="370.80" y2="236"/><circle class="fig-dot" cx="370.80" cy="135" r="4.5"/></svg><figcaption>$K=0.1$, $A_1=10$</figcaption></figure>
+        <figure class="figure"><svg id="widget-feedback-static-2" viewBox="0 0 560 300" role="img" aria-label="K = 0.1, A1 = 1000일 때 개루프 이득 점선, 1/K 점선, 폐루프 이득 곡선과 오차 비 곡선, 현재 A1 위치의 색칠된 점"><line class="axis" x1="58" y1="34" x2="58" y2="236"/><line class="axis" x1="53" y1="236" x2="58" y2="236"/><text class="tick" x="50" y="240" text-anchor="end">0.1</text><line class="axis" x1="53" y1="185.50" x2="58" y2="185.50"/><text class="tick" x="50" y="189.50" text-anchor="end">1</text><line class="axis" x1="53" y1="135" x2="58" y2="135"/><text class="tick" x="50" y="139" text-anchor="end">10</text><line class="axis" x1="53" y1="84.50" x2="58" y2="84.50"/><text class="tick" x="50" y="88.50" text-anchor="end">100</text><line class="axis" x1="53" y1="34" x2="58" y2="34"/><text class="tick" x="50" y="38" text-anchor="end">1000</text><line class="axis" x1="58" y1="236" x2="262" y2="236"/><line class="axis" x1="58" y1="236" x2="58" y2="241"/><text class="tick" x="58" y="252" text-anchor="middle">1</text><line class="axis" x1="98.80" y1="236" x2="98.80" y2="241"/><text class="tick" x="98.80" y="252" text-anchor="middle">10</text><line class="axis" x1="139.60" y1="236" x2="139.60" y2="241"/><text class="tick" x="139.60" y="252" text-anchor="middle">100</text><line class="axis" x1="180.40" y1="236" x2="180.40" y2="241"/><text class="tick" x="180.40" y="252" text-anchor="middle">1k</text><line class="axis" x1="221.20" y1="236" x2="221.20" y2="241"/><text class="tick" x="221.20" y="252" text-anchor="middle">10k</text><line class="axis" x1="262" y1="236" x2="262" y2="241"/><text class="tick" x="262" y="252" text-anchor="middle">100k</text><text class="tick fig-math" x="262" y="267" text-anchor="end">A<tspan baseline-shift="sub" font-size="78%">1</tspan> (로그 눈금)</text><text class="tick fig-math" x="58" y="20">Y/X (로그 눈금)</text><path class="plot-truth" d="M58 185.50 L60.04 182.98 L62.08 180.45 L64.12 177.93 L66.16 175.40 L68.20 172.88 L70.24 170.35 L72.28 167.83 L74.32 165.30 L76.36 162.78 L78.40 160.25 L80.44 157.73 L82.48 155.20 L84.52 152.68 L86.56 150.15 L88.60 147.63 L90.64 145.10 L92.68 142.57 L94.72 140.05 L96.76 137.53 L98.80 135 L100.84 132.48 L102.88 129.95 L104.92 127.43 L106.96 124.90 L109 122.38 L111.04 119.85 L113.08 117.32 L115.12 114.80 L117.16 112.28 L119.20 109.75 L121.24 107.23 L123.28 104.70 L125.32 102.18 L127.36 99.65 L129.40 97.13 L131.44 94.60 L133.48 92.07 L135.52 89.55 L137.56 87.02 L139.60 84.50 L141.64 81.98 L143.68 79.45 L145.72 76.93 L147.76 74.40 L149.80 71.88 L151.84 69.35 L153.88 66.82 L155.92 64.30 L157.96 61.77 L160 59.25 L162.04 56.73 L164.08 54.20 L166.12 51.68 L168.16 49.15 L170.20 46.63 L172.24 44.10 L174.28 41.57 L176.32 39.05 L178.36 36.52 L180.40 34"/><line class="mark-map" x1="58" y1="135" x2="262" y2="135"/><text class="tick fig-math" x="209.60" y="119">1/K = 10</text><path class="plot-fit" d="M58 187.59 L60.04 185.31 L62.08 183.05 L64.12 180.82 L66.16 178.63 L68.20 176.46 L70.24 174.34 L72.28 172.26 L74.32 170.21 L76.36 168.22 L78.40 166.28 L80.44 164.38 L82.48 162.55 L84.52 160.77 L86.56 159.06 L88.60 157.41 L90.64 155.83 L92.68 154.31 L94.72 152.87 L96.76 151.50 L98.80 150.20 L100.84 148.98 L102.88 147.82 L104.92 146.74 L106.96 145.73 L109 144.79 L111.04 143.91 L113.08 143.10 L115.12 142.35 L117.16 141.66 L119.20 141.03 L121.24 140.45 L123.28 139.91 L125.32 139.43 L127.36 138.99 L129.40 138.59 L131.44 138.23 L133.48 137.90 L135.52 137.60 L137.56 137.33 L139.60 137.09 L141.64 136.87 L143.68 136.68 L145.72 136.50 L147.76 136.34 L149.80 136.20 L151.84 136.07 L153.88 135.96 L155.92 135.86 L157.96 135.76 L160 135.68 L162.04 135.61 L164.08 135.54 L166.12 135.49 L168.16 135.43 L170.20 135.39 L172.24 135.34 L174.28 135.31 L176.32 135.27 L178.36 135.24 L180.40 135.22 L182.44 135.19 L184.48 135.17 L186.52 135.15 L188.56 135.14 L190.60 135.12 L192.64 135.11 L194.68 135.10 L196.72 135.09 L198.76 135.08 L200.80 135.07 L202.84 135.06 L204.88 135.06 L206.92 135.05 L208.96 135.04 L211 135.04 L213.04 135.03 L215.08 135.03 L217.12 135.03 L219.16 135.02 L221.20 135.02 L223.24 135.02 L225.28 135.02 L227.32 135.02 L229.36 135.01 L231.40 135.01 L233.44 135.01 L235.48 135.01 L237.52 135.01 L239.56 135.01 L241.60 135.01 L243.64 135.01 L245.68 135.01 L247.72 135 L249.76 135 L251.80 135 L253.84 135 L255.88 135 L257.92 135 L259.96 135 L262 135"/><line class="mark-ml" x1="180.40" y1="34" x2="180.40" y2="236"/><circle class="fig-dot" cx="180.40" cy="135.22" r="4.5"/><line class="axis" x1="330" y1="34" x2="330" y2="236"/><line class="axis" x1="325" y1="236" x2="330" y2="236"/><text class="tick" x="322" y="240" text-anchor="end">0</text><line class="axis" x1="325" y1="135" x2="330" y2="135"/><text class="tick" x="322" y="139" text-anchor="end">0.5</text><line class="axis" x1="325" y1="34" x2="330" y2="34"/><text class="tick" x="322" y="38" text-anchor="end">1</text><line class="axis" x1="330" y1="236" x2="534" y2="236"/><line class="axis" x1="330" y1="236" x2="330" y2="241"/><text class="tick" x="330" y="252" text-anchor="middle">1</text><line class="axis" x1="370.80" y1="236" x2="370.80" y2="241"/><text class="tick" x="370.80" y="252" text-anchor="middle">10</text><line class="axis" x1="411.60" y1="236" x2="411.60" y2="241"/><text class="tick" x="411.60" y="252" text-anchor="middle">100</text><line class="axis" x1="452.40" y1="236" x2="452.40" y2="241"/><text class="tick" x="452.40" y="252" text-anchor="middle">1k</text><line class="axis" x1="493.20" y1="236" x2="493.20" y2="241"/><text class="tick" x="493.20" y="252" text-anchor="middle">10k</text><line class="axis" x1="534" y1="236" x2="534" y2="241"/><text class="tick" x="534" y="252" text-anchor="middle">100k</text><text class="tick fig-math" x="534" y="267" text-anchor="end">A<tspan baseline-shift="sub" font-size="78%">1</tspan> (로그 눈금)</text><text class="tick fig-math" x="330" y="20">E/X (보통 눈금)</text><path class="plot-fit" d="M330 52.36 L332.04 54.38 L334.08 56.59 L336.12 59 L338.16 61.63 L340.20 64.50 L342.24 67.60 L344.28 70.95 L346.32 74.55 L348.36 78.41 L350.40 82.53 L352.44 86.90 L354.48 91.52 L356.52 96.37 L358.56 101.44 L360.60 106.71 L362.64 112.15 L364.68 117.73 L366.72 123.42 L368.76 129.19 L370.80 135 L372.84 140.81 L374.88 146.58 L376.92 152.27 L378.96 157.85 L381 163.29 L383.04 168.56 L385.08 173.63 L387.12 178.48 L389.16 183.10 L391.20 187.47 L393.24 191.59 L395.28 195.45 L397.32 199.05 L399.36 202.40 L401.40 205.50 L403.44 208.37 L405.48 211 L407.52 213.41 L409.56 215.62 L411.60 217.64 L413.64 219.47 L415.68 221.14 L417.72 222.64 L419.76 224.01 L421.80 225.25 L423.84 226.36 L425.88 227.36 L427.92 228.27 L429.96 229.08 L432 229.81 L434.04 230.46 L436.08 231.05 L438.12 231.58 L440.16 232.05 L442.20 232.47 L444.24 232.85 L446.28 233.19 L448.32 233.49 L450.36 233.76 L452.40 234 L454.44 234.22 L456.48 234.41 L458.52 234.58 L460.56 234.73 L462.60 234.87 L464.64 234.99 L466.68 235.10 L468.72 235.20 L470.76 235.29 L472.80 235.36 L474.84 235.43 L476.88 235.49 L478.92 235.55 L480.96 235.60 L483 235.64 L485.04 235.68 L487.08 235.72 L489.12 235.75 L491.16 235.77 L493.20 235.80 L495.24 235.82 L497.28 235.84 L499.32 235.86 L501.36 235.87 L503.40 235.89 L505.44 235.90 L507.48 235.91 L509.52 235.92 L511.56 235.93 L513.60 235.94 L515.64 235.94 L517.68 235.95 L519.72 235.95 L521.76 235.96 L523.80 235.96 L525.84 235.97 L527.88 235.97 L529.92 235.97 L531.96 235.98 L534 235.98"/><line class="mark-ml" x1="452.40" y1="34" x2="452.40" y2="236"/><circle class="fig-dot" cx="452.40" cy="234" r="4.5"/></svg><figcaption>$K=0.1$, $A_1=1000$</figcaption></figure>
+        <figure class="figure"><svg id="widget-feedback-static-3" viewBox="0 0 560 300" role="img" aria-label="K = 0.1, A1 = 100000일 때 개루프 이득 점선, 1/K 점선, 폐루프 이득 곡선과 오차 비 곡선, 현재 A1 위치의 색칠된 점"><line class="axis" x1="58" y1="34" x2="58" y2="236"/><line class="axis" x1="53" y1="236" x2="58" y2="236"/><text class="tick" x="50" y="240" text-anchor="end">0.1</text><line class="axis" x1="53" y1="185.50" x2="58" y2="185.50"/><text class="tick" x="50" y="189.50" text-anchor="end">1</text><line class="axis" x1="53" y1="135" x2="58" y2="135"/><text class="tick" x="50" y="139" text-anchor="end">10</text><line class="axis" x1="53" y1="84.50" x2="58" y2="84.50"/><text class="tick" x="50" y="88.50" text-anchor="end">100</text><line class="axis" x1="53" y1="34" x2="58" y2="34"/><text class="tick" x="50" y="38" text-anchor="end">1000</text><line class="axis" x1="58" y1="236" x2="262" y2="236"/><line class="axis" x1="58" y1="236" x2="58" y2="241"/><text class="tick" x="58" y="252" text-anchor="middle">1</text><line class="axis" x1="98.80" y1="236" x2="98.80" y2="241"/><text class="tick" x="98.80" y="252" text-anchor="middle">10</text><line class="axis" x1="139.60" y1="236" x2="139.60" y2="241"/><text class="tick" x="139.60" y="252" text-anchor="middle">100</text><line class="axis" x1="180.40" y1="236" x2="180.40" y2="241"/><text class="tick" x="180.40" y="252" text-anchor="middle">1k</text><line class="axis" x1="221.20" y1="236" x2="221.20" y2="241"/><text class="tick" x="221.20" y="252" text-anchor="middle">10k</text><line class="axis" x1="262" y1="236" x2="262" y2="241"/><text class="tick" x="262" y="252" text-anchor="middle">100k</text><text class="tick fig-math" x="262" y="267" text-anchor="end">A<tspan baseline-shift="sub" font-size="78%">1</tspan> (로그 눈금)</text><text class="tick fig-math" x="58" y="20">Y/X (로그 눈금)</text><path class="plot-truth" d="M58 185.50 L60.04 182.98 L62.08 180.45 L64.12 177.93 L66.16 175.40 L68.20 172.88 L70.24 170.35 L72.28 167.83 L74.32 165.30 L76.36 162.78 L78.40 160.25 L80.44 157.73 L82.48 155.20 L84.52 152.68 L86.56 150.15 L88.60 147.63 L90.64 145.10 L92.68 142.57 L94.72 140.05 L96.76 137.53 L98.80 135 L100.84 132.48 L102.88 129.95 L104.92 127.43 L106.96 124.90 L109 122.38 L111.04 119.85 L113.08 117.32 L115.12 114.80 L117.16 112.28 L119.20 109.75 L121.24 107.23 L123.28 104.70 L125.32 102.18 L127.36 99.65 L129.40 97.13 L131.44 94.60 L133.48 92.07 L135.52 89.55 L137.56 87.02 L139.60 84.50 L141.64 81.98 L143.68 79.45 L145.72 76.93 L147.76 74.40 L149.80 71.88 L151.84 69.35 L153.88 66.82 L155.92 64.30 L157.96 61.77 L160 59.25 L162.04 56.73 L164.08 54.20 L166.12 51.68 L168.16 49.15 L170.20 46.63 L172.24 44.10 L174.28 41.57 L176.32 39.05 L178.36 36.52 L180.40 34"/><line class="mark-map" x1="58" y1="135" x2="262" y2="135"/><text class="tick fig-math" x="203.60" y="119">1/K = 10</text><path class="plot-fit" d="M58 187.59 L60.04 185.31 L62.08 183.05 L64.12 180.82 L66.16 178.63 L68.20 176.46 L70.24 174.34 L72.28 172.26 L74.32 170.21 L76.36 168.22 L78.40 166.28 L80.44 164.38 L82.48 162.55 L84.52 160.77 L86.56 159.06 L88.60 157.41 L90.64 155.83 L92.68 154.31 L94.72 152.87 L96.76 151.50 L98.80 150.20 L100.84 148.98 L102.88 147.82 L104.92 146.74 L106.96 145.73 L109 144.79 L111.04 143.91 L113.08 143.10 L115.12 142.35 L117.16 141.66 L119.20 141.03 L121.24 140.45 L123.28 139.91 L125.32 139.43 L127.36 138.99 L129.40 138.59 L131.44 138.23 L133.48 137.90 L135.52 137.60 L137.56 137.33 L139.60 137.09 L141.64 136.87 L143.68 136.68 L145.72 136.50 L147.76 136.34 L149.80 136.20 L151.84 136.07 L153.88 135.96 L155.92 135.86 L157.96 135.76 L160 135.68 L162.04 135.61 L164.08 135.54 L166.12 135.49 L168.16 135.43 L170.20 135.39 L172.24 135.34 L174.28 135.31 L176.32 135.27 L178.36 135.24 L180.40 135.22 L182.44 135.19 L184.48 135.17 L186.52 135.15 L188.56 135.14 L190.60 135.12 L192.64 135.11 L194.68 135.10 L196.72 135.09 L198.76 135.08 L200.80 135.07 L202.84 135.06 L204.88 135.06 L206.92 135.05 L208.96 135.04 L211 135.04 L213.04 135.03 L215.08 135.03 L217.12 135.03 L219.16 135.02 L221.20 135.02 L223.24 135.02 L225.28 135.02 L227.32 135.02 L229.36 135.01 L231.40 135.01 L233.44 135.01 L235.48 135.01 L237.52 135.01 L239.56 135.01 L241.60 135.01 L243.64 135.01 L245.68 135.01 L247.72 135 L249.76 135 L251.80 135 L253.84 135 L255.88 135 L257.92 135 L259.96 135 L262 135"/><line class="mark-ml" x1="262" y1="34" x2="262" y2="236"/><circle class="fig-dot" cx="262" cy="135" r="4.5"/><line class="axis" x1="330" y1="34" x2="330" y2="236"/><line class="axis" x1="325" y1="236" x2="330" y2="236"/><text class="tick" x="322" y="240" text-anchor="end">0</text><line class="axis" x1="325" y1="135" x2="330" y2="135"/><text class="tick" x="322" y="139" text-anchor="end">0.5</text><line class="axis" x1="325" y1="34" x2="330" y2="34"/><text class="tick" x="322" y="38" text-anchor="end">1</text><line class="axis" x1="330" y1="236" x2="534" y2="236"/><line class="axis" x1="330" y1="236" x2="330" y2="241"/><text class="tick" x="330" y="252" text-anchor="middle">1</text><line class="axis" x1="370.80" y1="236" x2="370.80" y2="241"/><text class="tick" x="370.80" y="252" text-anchor="middle">10</text><line class="axis" x1="411.60" y1="236" x2="411.60" y2="241"/><text class="tick" x="411.60" y="252" text-anchor="middle">100</text><line class="axis" x1="452.40" y1="236" x2="452.40" y2="241"/><text class="tick" x="452.40" y="252" text-anchor="middle">1k</text><line class="axis" x1="493.20" y1="236" x2="493.20" y2="241"/><text class="tick" x="493.20" y="252" text-anchor="middle">10k</text><line class="axis" x1="534" y1="236" x2="534" y2="241"/><text class="tick" x="534" y="252" text-anchor="middle">100k</text><text class="tick fig-math" x="534" y="267" text-anchor="end">A<tspan baseline-shift="sub" font-size="78%">1</tspan> (로그 눈금)</text><text class="tick fig-math" x="330" y="20">E/X (보통 눈금)</text><path class="plot-fit" d="M330 52.36 L332.04 54.38 L334.08 56.59 L336.12 59 L338.16 61.63 L340.20 64.50 L342.24 67.60 L344.28 70.95 L346.32 74.55 L348.36 78.41 L350.40 82.53 L352.44 86.90 L354.48 91.52 L356.52 96.37 L358.56 101.44 L360.60 106.71 L362.64 112.15 L364.68 117.73 L366.72 123.42 L368.76 129.19 L370.80 135 L372.84 140.81 L374.88 146.58 L376.92 152.27 L378.96 157.85 L381 163.29 L383.04 168.56 L385.08 173.63 L387.12 178.48 L389.16 183.10 L391.20 187.47 L393.24 191.59 L395.28 195.45 L397.32 199.05 L399.36 202.40 L401.40 205.50 L403.44 208.37 L405.48 211 L407.52 213.41 L409.56 215.62 L411.60 217.64 L413.64 219.47 L415.68 221.14 L417.72 222.64 L419.76 224.01 L421.80 225.25 L423.84 226.36 L425.88 227.36 L427.92 228.27 L429.96 229.08 L432 229.81 L434.04 230.46 L436.08 231.05 L438.12 231.58 L440.16 232.05 L442.20 232.47 L444.24 232.85 L446.28 233.19 L448.32 233.49 L450.36 233.76 L452.40 234 L454.44 234.22 L456.48 234.41 L458.52 234.58 L460.56 234.73 L462.60 234.87 L464.64 234.99 L466.68 235.10 L468.72 235.20 L470.76 235.29 L472.80 235.36 L474.84 235.43 L476.88 235.49 L478.92 235.55 L480.96 235.60 L483 235.64 L485.04 235.68 L487.08 235.72 L489.12 235.75 L491.16 235.77 L493.20 235.80 L495.24 235.82 L497.28 235.84 L499.32 235.86 L501.36 235.87 L503.40 235.89 L505.44 235.90 L507.48 235.91 L509.52 235.92 L511.56 235.93 L513.60 235.94 L515.64 235.94 L517.68 235.95 L519.72 235.95 L521.76 235.96 L523.80 235.96 L525.84 235.97 L527.88 235.97 L529.92 235.97 L531.96 235.98 L534 235.98"/><line class="mark-ml" x1="534" y1="34" x2="534" y2="236"/><circle class="fig-dot" cx="534" cy="235.98" r="4.5"/></svg><figcaption>$K=0.1$, $A_1=10^5$</figcaption></figure>
+        <div class="table-wrap"><table>
+          <tr><th>설정</th><th>$KA_1$</th><th>$\frac{Y}{X}$</th><th>$\frac{1}{K}$ 대비</th><th>$\frac{E}{X}$</th></tr>
+          <tr><td>$K=0.1$, $A_1=10$</td><td>$1$</td><td>$5$</td><td>$50\,\%$</td><td>$50\,\%$</td></tr>
+          <tr><td>$K=0.1$, $A_1=1000$</td><td>$100$</td><td>$\approx9.90$</td><td>$\approx99.01\,\%$</td><td>$\approx0.99\,\%$</td></tr>
+          <tr><td>$K=0.1$, $A_1=10^5$</td><td>$10^4$</td><td>$\approx10$</td><td>$\approx99.99\,\%$</td><td>$\approx0.01\,\%$</td></tr>
+        </table></div>
+      </div>
+    </div>
+  </div>
+  <div class="layer prof">
+    <span class="layer-title">교수님 말씀</span>
+    <blockquote>op-amp 때 ... 두 개가 이 gain이 무한대면 이 두 개가 virtual short이라고 배웠잖아요</blockquote>
+    <blockquote>A1이 크면 클수록 입력과 피드백 신호가 거의 같아진다라고, 이것도 피드백 시스템의 특징이에요.</blockquote>
+  </div>
+  <div class="layer warn">
+    <span class="layer-title">꼭 기억해요</span>
+    <blockquote>같지 않습니다. 같으면 출력이 0이에요, 그러면.</blockquote>
+    <p>$E$는 0에 가깝지만 0은 아니에요. 아주 작은 $E$가 들어가야 유한한 출력이 나와요.</p>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">오차 $E$는 $1+KA_1$배 줄어든 입력이라서, $KA_1$이 클수록 귀환 신호가 입력의 복제가 돼요.</p>
+    <p class="panel-label">핵심 식</p>
+    <ul class="eq-list">
+      <li><span class="eq-name">오차 신호</span>$$E=X-X_F$$</li>
+      <li><span class="eq-name">오차의 크기</span>$$E=\frac{X}{1+KA_1}$$</li>
+      <li><span class="eq-name">가상 단락</span>$$X\approx X_F$$</li>
+    </ul>
+    <p>$E$는 0에 가깝지만 정확히 0이면 출력도 0이에요.</p>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>가상 단락(virtual short)</dt><dd>$E\approx0$이라 두 입력 전압이 거의 같다는 가정이에요.</dd>
+      <dt>복제(replica)</dt><dd>$KA_1$이 클 때 $X_F$가 입력을 거의 그대로 따라가는 것이에요.</dd>
+    </dl>
+  </div>
+</article>
+    </section>
+    <section id="s3"><h2>4. 루프 이득</h2>
+<article class="topic" id="s3-loop-gain">
+  <h3>루프를 끊고 시험 신호를 넣어요</h3>
+  <div class="tags"><span class="tag date">1106 수업</span><span class="tag slide">L06 s8</span></div>
+  <div class="layer eli5">
+    <span class="layer-title">쉽게 말하면</span>
+    <p class="lead">루프 이득은 루프를 한 곳에서 끊고 입력을 $X=0$으로 둔 채 끊은 자리에 시험 신호 $V_{test}$를 넣어, 한 바퀴 돌아온 신호가 몇 배인지 잰 값이에요.</p>
+    <p>$K=0.1$, $A_1=1000$에서 $V_{test}=1\,\mathrm{mV}$를 넣으면 $K$ 뒤 $0.1\,\mathrm{mV}$ → 비교부 뒤 $-0.1\,\mathrm{mV}$ → $A_1$ 뒤 $-100\,\mathrm{mV}$로 돌아오니, 마이너스를 붙인 비 $100$이 루프 이득이에요.</p>
+    <figure class="figure">
+      <svg id="fig-loop-break" viewBox="0 0 450 222" role="img" aria-label="입력을 접지해 X는 0이에요. 테두리 원 모양의 비교부, 테두리 상자 A1, 왼쪽을 향한 테두리 삼각형 K가 루프를 이루고, A1 출력 끝 N과 K 입력 끝 M 사이가 끊겨 있어요. M에는 아래쪽이 접지된 시험 신호원 V test가 달려 있고, 강조선으로 그린 루프를 따라 K 뒤 K V test, 비교부 뒤 마이너스 K V test, A1 뒤 N에서 V N은 마이너스 K A1 V test가 돼요">
+        <path class="fig-ink" d="M30 70V84 m-8 0h16 m-13 4h10 m-8 4h6 M30 70H106 M99 65l6 5-6 5"/>
+        <circle class="fig-ink" cx="120" cy="70" r="14"/>
+        <path class="fig-ink" d="M120 62v16 M112 70h16"/>
+        <text class="fig-text" x="96" y="60" text-anchor="middle">+</text>
+        <text class="fig-text" x="108" y="104" text-anchor="middle">−</text>
+        <text class="fig-text fig-math" x="44" y="56" text-anchor="middle" font-size="14">X = 0</text>
+        <rect class="fig-ink" x="200" y="50" width="56" height="40" rx="4"/>
+        <text class="fig-text fig-math" x="228" y="75" text-anchor="middle" font-size="15">A<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        <path class="fig-ink" d="M290 135V165L262 150Z"/>
+        <text class="fig-text fig-math" x="281" y="155" text-anchor="middle" font-size="14">K</text>
+        <path class="fig-accent" d="M134 70H200 M193 65l6 5-6 5 M256 70H380 M420 150H290 M304 145l-6 5 6 5 M262 150H120V84 M115 91l5-6 5 6"/>
+        <path class="fig-ink" d="M420 150V169 M420 195V206 m-8 0h16 m-13 4h10 m-8 4h6"/>
+        <circle class="fig-ink" cx="420" cy="182" r="13"/>
+        <text class="fig-text" x="420" y="180" text-anchor="middle" font-size="11">+</text>
+        <text class="fig-text" x="420" y="192" text-anchor="middle" font-size="11">−</text>
+        <text class="fig-muted" x="400" y="112" text-anchor="middle" font-size="12">끊은 자리</text>
+        <circle class="fig-dot" cx="420" cy="150" r="4" data-node="m" data-node-color="blue"/>
+        <text class="fig-text fig-math" x="420" y="136" text-anchor="middle" font-size="14" data-node="m" data-node-color="blue">M</text>
+        <text class="fig-text fig-math" x="401" y="187" text-anchor="end" font-size="14" data-node="m" data-node-color="blue">V<tspan baseline-shift="sub" font-size="78%">test</tspan></text>
+        <circle class="fig-dot" cx="190" cy="150" r="3.6" data-node="xf" data-node-color="red"/>
+        <text class="fig-text fig-math" x="190" y="136" text-anchor="middle" font-size="14" data-node="xf" data-node-color="red">KV<tspan baseline-shift="sub" font-size="78%">test</tspan></text>
+        <circle class="fig-dot" cx="164" cy="70" r="3.6" data-node="e" data-node-color="blue"/>
+        <text class="fig-text fig-math" x="164" y="54" text-anchor="middle" font-size="14" data-node="e" data-node-color="blue">−KV<tspan baseline-shift="sub" font-size="78%">test</tspan></text>
+        <circle class="fig-dot" cx="380" cy="70" r="4" data-node="n" data-node-color="red"/>
+        <text class="fig-text fig-math" x="392" y="75" text-anchor="start" font-size="14" data-node="n" data-node-color="red">N</text>
+        <text class="fig-text fig-math" x="264" y="54" text-anchor="start" font-size="14" data-node="n" data-node-color="red">V<tspan baseline-shift="sub" font-size="78%">N</tspan> = −KA<tspan baseline-shift="sub" font-size="78%">1</tspan>V<tspan baseline-shift="sub" font-size="78%">test</tspan></text>
+      </svg>
+      <figcaption>$M$에 넣은 $V_{test}$가 $K$, 비교부, $A_1$을 차례로 지나 $N$에 $V_N=-KA_1V_{test}$로 돌아와요.</figcaption>
+    </figure>
+  </div>
+  <div class="layer formal">
+    <span class="layer-title">정확히 말하면</span>
+    <p>먼저 작은 예에 적용해 봐요. $A_1=1000$, $K=0.1$이고 끊은 자리에 $V_{test}=1\,\mathrm{mV}$를 넣어요.</p>
+    $$KV_{test}=0.1\times1\,\mathrm{mV}=0.1\,\mathrm{mV}$$
+    $$0-KV_{test}=-0.1\,\mathrm{mV}$$
+    $$V_N=1000\times(-0.1\,\mathrm{mV})=-100\,\mathrm{mV}$$
+    $$-\frac{V_N}{V_{test}}=-\frac{-100\,\mathrm{mV}}{1\,\mathrm{mV}}=100=KA_1$$
+    <p>귀환 시스템의 루프 이득(loop gain)은 루프를 끊고, 시험 신호(test signal)를 넣고, 루프를 한 바퀴 돈 이득을 계산해서 얻어요. 칠판 유도는 이 순서예요.</p>
+    <ol class="steps">
+      <li><strong>루프 끊기</strong> — $A_1$ 출력과 $K$ 입력 사이를 끊어요. $A_1$ 출력 쪽 끝이 $N$, $K$ 입력 쪽 끝이 $M$이에요. 신호가 흐르는 방향은 바꾸지 않아요. $M$에서 $K$, 비교부, $A_1$을 거쳐 $N$으로 가요.</li>
+      <li><strong>입력 영점</strong> — 입력을 접지해 $X=0$으로 둬요. 그래야 $N$에 돌아온 신호가 모두 $V_{test}$에서 온 것이에요.</li>
+      <li><strong>시험 신호</strong> — 끊은 자리 $M$에 $V_{test}$를 넣어요.</li>
+      <li><strong>귀환 회로망</strong> — $K$를 지나면 귀환 신호가 돼요. $$X_F=KV_{test}$$</li>
+      <li><strong>비교부</strong> — 입력 0에서 귀환 신호를 빼요. $$0-KV_{test}=-KV_{test}$$</li>
+      <li><strong>전방 시스템</strong> — $A_1$을 지나 끊은 자리 $N$으로 돌아와요. $$V_N=-KA_1V_{test}$$</li>
+      <li><strong>부호와 정의</strong> — 한 바퀴 돈 비 $\frac{V_N}{V_{test}}=-KA_1$은 음수예요. 음귀환이라 비교부에서 한 번 빼기 때문이에요. 크기를 나타내려고 마이너스를 붙여 루프 이득으로 정의해요. $$KA_1=-\frac{V_N}{V_{test}}$$</li>
+    </ol>
+    <p>$K=0$이면 $M$에 넣은 신호가 비교부로 돌아오지 않아 $V_N=0$이고, 루프 이득도 0이에요. 귀환이 없는 개루프예요.</p>
+    <p>루프 이득과 폐루프 이득을 구별하는 이야기는 <a href="#s3-loop-vs-closed">루프 이득과 폐루프 이득은 완전히 달라요</a>로 이어져요.</p>
+  </div>
+  <div class="layer prof">
+    <span class="layer-title">교수님 말씀</span>
+    <blockquote>루프를 한 바퀴 돌아서 다시 끊은 자리까지 올 때까지 이득을 루프 게인으로 정의</blockquote>
+    <p>교수님은 루프를 끊어도 신호의 방향은 그대로라고 짚었어요. 칠판에서는 $V_{test}$가 $K$를 지나 $KV_{test}$, 비교부에서 $-KV_{test}$, $A_1$을 지나 $-KA_1V_{test}$가 되는 순서를 따라 그렸어요.</p>
+    <blockquote>마이너스 붙인 이유는 이게 크기를 나타내기 위해서</blockquote>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">루프를 끊고 $X=0$에서 $V_{test}$를 넣어 한 바퀴 돌아온 신호의 비로 루프 이득을 구해요.</p>
+    <p class="panel-label">핵심 식</p>
+    <ul class="eq-list">
+      <li><span class="eq-name">한 바퀴 돈 신호</span>$$V_N=-KA_1V_{test}$$</li>
+      <li><span class="eq-name">루프 이득</span>$$KA_1=-\frac{V_N}{V_{test}}$$</li>
+    </ul>
+    <p>음귀환이라 돌아온 비가 음수여서 마이너스를 붙여 크기로 정의해요.</p>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>루프 이득(loop gain)</dt><dd>루프를 끊고 입력을 0으로 둔 채 한 바퀴 돈 이득의 크기</dd>
+      <dt>시험 신호(test signal)</dt><dd>끊은 자리에 넣는 신호 $V_{test}$</dd>
+    </dl>
+  </div>
+</article>
+<article class="topic" id="s3-loop-vs-closed">
+  <h3>루프 이득과 폐루프 이득은 완전히 달라요</h3>
+  <div class="tags"><span class="tag date">1106 수업</span><span class="tag slide">L06 s8</span></div>
+  <div class="layer eli5">
+    <span class="layer-title">쉽게 말하면</span>
+    <p class="lead">루프 이득 $KA_1$은 입력을 0으로 두고 루프를 한 바퀴 돈 이득이고, 폐루프 이득 $\frac{A_1}{1+KA_1}$은 입력 $X$에서 출력 $Y$까지의 이득이라서 둘은 완전히 다른 양이에요.</p>
+    <p>$A_1=1000$, $K=0.1$이면 루프 이득은 $100$인데 폐루프 이득은 $\frac{1000}{101}\approx9.90$이에요.</p>
+    <figure class="figure">
+      <svg id="fig-loop-vs-closed" viewBox="0 0 540 200" role="img" aria-label="같은 귀환 블록도 두 개를 나란히 그렸어요. 왼쪽은 입력을 접지해 X가 0이고, 비교부에서 테두리 상자 A1, 출력 감지점, 테두리 삼각형 K를 지나 비교부로 돌아오는 루프를 강조선으로 그렸어요. 오른쪽은 입력 X에서 비교부와 A1을 지나 출력 Y로 가는 길을 강조선으로 그렸어요">
+        <path class="fig-ink" d="M16 70V84 m-8 0h16 m-13 4h10 m-8 4h6 M16 70H58 M51 65l6 5-6 5"/>
+        <text class="fig-text fig-math" x="22" y="52" text-anchor="middle" font-size="14">X = 0</text>
+        <circle class="fig-ink" cx="70" cy="70" r="12"/>
+        <path class="fig-ink" d="M70 63v14 M63 70h14"/>
+        <text class="fig-text" x="52" y="60" text-anchor="middle">+</text>
+        <text class="fig-text" x="58" y="100" text-anchor="middle">−</text>
+        <rect class="fig-ink" x="110" y="52" width="46" height="36" rx="4"/>
+        <text class="fig-text fig-math" x="133" y="75" text-anchor="middle" font-size="15">A<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        <path class="fig-ink" d="M170 125V155L146 140Z"/>
+        <text class="fig-text fig-math" x="162" y="145" text-anchor="middle" font-size="13">K</text>
+        <path class="fig-accent" d="M82 70H110 M103 65l6 5-6 5 M156 70H196V140H170 M146 140H70V82 M65 89l5-6 5 6"/>
+        <path class="fig-ink" d="M196 70H236"/>
+        <circle class="fig-dot" cx="196" cy="70" r="3.6" data-node="y-l" data-node-color="red"/>
+        <circle class="fig-dot" cx="236" cy="70" r="4" data-node="y-l" data-node-color="red"/>
+        <text class="fig-text fig-math" x="236" y="56" text-anchor="middle" font-size="14" data-node="y-l" data-node-color="red">Y</text>
+        <text class="fig-text fig-math" x="125" y="188" text-anchor="middle" font-size="14">루프 이득 KA<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        <path class="fig-accent" d="M296 70H338 M331 65l6 5-6 5 M362 70H390 M383 65l6 5-6 5 M436 70H516"/>
+        <circle class="fig-dot" cx="296" cy="70" r="4" data-node="x-r" data-node-color="blue"/>
+        <text class="fig-text fig-math" x="296" y="56" text-anchor="middle" font-size="14" data-node="x-r" data-node-color="blue">X</text>
+        <circle class="fig-ink" cx="350" cy="70" r="12"/>
+        <path class="fig-ink" d="M350 63v14 M343 70h14"/>
+        <text class="fig-text" x="330" y="60" text-anchor="middle">+</text>
+        <text class="fig-text" x="338" y="100" text-anchor="middle">−</text>
+        <rect class="fig-ink" x="390" y="52" width="46" height="36" rx="4"/>
+        <text class="fig-text fig-math" x="413" y="75" text-anchor="middle" font-size="15">A<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        <path class="fig-ink" d="M450 125V155L426 140Z"/>
+        <text class="fig-text fig-math" x="442" y="145" text-anchor="middle" font-size="13">K</text>
+        <path class="fig-ink" d="M476 70V140H450 M426 140H350V82 M345 89l5-6 5 6"/>
+        <circle class="fig-dot" cx="476" cy="70" r="3.6" data-node="y-r" data-node-color="red"/>
+        <circle class="fig-dot" cx="516" cy="70" r="4" data-node="y-r" data-node-color="red"/>
+        <text class="fig-text fig-math" x="516" y="56" text-anchor="middle" font-size="14" data-node="y-r" data-node-color="red">Y</text>
+        <text class="fig-text fig-math" x="405" y="188" text-anchor="middle" font-size="14">폐루프 이득 Y/X</text>
+      </svg>
+      <figcaption>왼쪽 강조선은 $X=0$에서 루프를 한 바퀴 도는 길이고, 오른쪽 강조선은 입력 $X$에서 출력 $Y$로 가는 길이에요.</figcaption>
+    </figure>
+  </div>
+  <div class="layer formal">
+    <span class="layer-title">정확히 말하면</span>
+    <p>먼저 작은 예에 적용해 봐요. $A_1=1000$, $K=0.1$이면 두 값은 다음과 같아요.</p>
+    $$KA_1=0.1\times1000=100$$
+    $$\frac{Y}{X}=\frac{A_1}{1+KA_1}=\frac{1000}{101}\approx9.90$$
+    <p>같은 $A_1$과 $K$로 만든 값인데 하나는 $100$, 하나는 약 $9.90$이에요. 재는 대상이 다르기 때문이에요.</p>
+    <div class="table-wrap"><table>
+      <tr><th>구분</th><th>루프 이득</th><th>폐루프 이득</th></tr>
+      <tr><td>무엇의 비</td><td>끊은 자리로 돌아온 신호 ÷ 넣은 시험 신호</td><td>출력 $Y$ ÷ 입력 $X$</td></tr>
+      <tr><td>조건</td><td>루프를 끊고 $X=0$</td><td>루프를 닫은 채 입력 $X$를 넣음</td></tr>
+      <tr><td>식</td><td>$KA_1=-\frac{V_N}{V_{test}}$</td><td>$\frac{Y}{X}=\frac{A_1}{1+KA_1}$</td></tr>
+      <tr><td>뜻</td><td>루프 한 바퀴의 이득, 입력·출력과 무관</td><td>입력과 출력의 관계(전달함수)</td></tr>
+    </table></div>
+    <p>두 값은 다르지만 이어져 있어요. <a href="#s2-closed-loop">폐루프 이득</a>과 <a href="#s2-error-signal">오차 E</a>의 분모에 모두 $1+KA_1$, 즉 1 더하기 루프 이득이 들어가요.</p>
+    $$E=\frac{X}{1+KA_1}$$
+    <p>$A_1=1000$을 고정하고 $K$를 키우면 루프 이득이 커지는 만큼 폐루프 이득과 오차가 함께 줄어요.</p>
+    <div class="table-wrap"><table>
+      <tr><th>$K$</th><th>루프 이득 $KA_1$</th><th>폐루프 이득 $\frac{Y}{X}$</th><th>오차 비율 $\frac{E}{X}$</th></tr>
+      <tr><td>$0$ (개루프)</td><td>$0$</td><td>$1000$</td><td>$100\%$</td></tr>
+      <tr><td>$0.01$</td><td>$10$</td><td>$\frac{1000}{11}\approx90.91$</td><td>$\frac{1}{11}\approx9.09\%$</td></tr>
+      <tr><td>$0.1$</td><td>$100$</td><td>$\frac{1000}{101}\approx9.90$</td><td>$\frac{1}{101}\approx0.99\%$</td></tr>
+    </table></div>
+    <p>루프 이득이 0이면 귀환이 없는 개루프예요. 루프 이득이 클수록 귀환이 많이 걸려 폐루프 이득도 줄고 입력과 귀환 신호의 차이인 오차도 줄어요.</p>
+    <p>루프 이득을 따로 정의하는 이유는 이 값이 이득과 입출력 임피던스 같은 귀환 시스템의 여러 성질을 정하기 때문이에요. 루프 이득과 입출력 임피던스의 관계는 다음 시간에 다뤄요. <a href="#s4-next">다음 시간 예고</a></p>
+  </div>
+  <div class="layer prof">
+    <span class="layer-title">교수님 말씀</span>
+    <blockquote>지금 얘기했던 루프 게인과 클로즈드 루프 게인은 완전히 다른 거예요.</blockquote>
+    <blockquote>요건 전달함수고 요거는 루프 게인. 입력과 출력과 아무 관계가 없네요.</blockquote>
+    <p>교수님은 루프 이득에 따라 귀환 시스템의 여러 특성이 달라진다고 했어요. 그래서 이 용어를 먼저 잘 이해하라고 당부했어요.</p>
+  </div>
+  <div class="layer warn">
+    <span class="layer-title">꼭 기억해요</span>
+    <blockquote>시험에서 문제로 내면 두 개를 반대로 쓰면 아깝게 틀리죠.</blockquote>
+    <p>"폐루프 이득을 구하시오"에는 $\frac{A_1}{1+KA_1}$을, "루프 이득을 구하시오"에는 $KA_1$을 답해요.</p>
+  </div>
+  <div class="sum" hidden>
+    <p class="sum-lead">루프 이득 $KA_1$은 루프 한 바퀴의 이득이고 폐루프 이득 $\frac{A_1}{1+KA_1}$은 입력에서 출력까지의 이득이라 완전히 다른 양이에요.</p>
+    <p class="panel-label">핵심 식</p>
+    <ul class="eq-list">
+      <li><span class="eq-name">루프 이득</span>$$KA_1=-\frac{V_N}{V_{test}}$$</li>
+      <li><span class="eq-name">폐루프 이득</span>$$\frac{Y}{X}=\frac{A_1}{1+KA_1}$$</li>
+    </ul>
+    <p>루프 이득이 클수록 폐루프 이득과 오차가 함께 줄어요.</p>
+    <p>루프 이득은 이득과 입출력 임피던스 같은 여러 성질을 정해요.</p>
+    <p class="panel-label">용어</p>
+    <dl class="terms">
+      <dt>루프 이득(loop gain)</dt><dd>루프를 끊고 $X=0$에서 한 바퀴 돈 이득, 입력·출력과 무관</dd>
+      <dt>폐루프 이득(closed-loop gain)</dt><dd>루프가 닫혔을 때 입력 대비 출력 $\frac{Y}{X}$</dd>
+    </dl>
+  </div>
+</article>
+    </section>
+    <section id="s4"><h2>5. 요약 · 예고</h2>
+<article class="topic" id="s4-cheatsheet">
+  <h3>한눈에 다시 보기</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th scope="col">무엇을 구하나요?</th><th scope="col">어떤 조건에서 무엇을 쓰나요?</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row"><a href="#s0-bjt-poles">바이폴라 캐스코드의 밀러 배율</a></th>
+          <td>
+            <p>$C_{\mu1}$의 배율에는 입력→출력 이득이 아니라 노드 X에서 노드 Y로의 이득을 넣어요.</p>
+            $$A_{v,XY}=\frac{v_Y}{v_X}\approx-\frac{g_{m1}}{g_{m2}}$$
+            <p>BJT 캐스코드는 두 소자에 같은 컬렉터 전류가 흘러 $g_{m1}=g_{m2}$이므로 $A_{v,XY}\approx-1$이에요.</p>
+            <p>그래서 $C_{\mu1}$은 X와 Y에서 모두 $2C_{\mu1}$로 보여요.</p>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#s0-bjt-poles">바이폴라 캐스코드의 세 극점</a></th>
+          <td>
+            <p>X는 $R_S\parallel r_{\pi1}$, Y는 $1/g_{m2}$, 출력은 $R_L$을 그 노드의 커패시턴스와 짝지어요.</p>
+            $$\omega_{p,X}=\frac{1}{(R_S\parallel r_{\pi1})(C_{\pi1}+2C_{\mu1})}$$
+            $$\omega_{p,Y}=\frac{1}{\frac{1}{g_{m2}}(C_{CS1}+C_{\pi2}+2C_{\mu1})}$$
+            $$\omega_{p,out}=\frac{1}{R_L(C_{CS2}+C_{\mu2})}$$
+            <p>Y는 $r_{o1}\gg1/g_{m2}$라서 $1/g_{m2}$로 봐요.</p>
+            <p>출력은 아래로 보이는 캐스코드 저항이 $R_L$보다 훨씬 커서 $R_L$로 봐요.</p>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#s0-io-impedance">캐스코드의 입출력 임피던스</a></th>
+          <td>
+            <p>저주파 값에 커패시턴스의 임피던스가 병렬로 붙어요.</p>
+            $$Z_{in}=r_{\pi1}\parallel\frac{1}{(C_{\pi1}+2C_{\mu1})s}$$
+            $$Z_{out}=R_L\parallel\frac{1}{(C_{\mu2}+C_{CS2})s}$$
+            <p>MOS 입력 임피던스가 무한대라는 말은 저주파에서만 맞아요.</p>
+            <p>각 노드의 임피던스가 커패시턴스의 함수라서 그 노드에 극점이 생겨요.</p>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#s0-m3-cascode">전류원 $M_3$를 단 캐스코드</a></th>
+          <td>
+            $$I_{D1}=I_{D2}+I_{D3}$$
+            <p>$R_L$에는 $I_{D2}$만 흘러서 IR 드롭을 늘리지 않고 $g_{m1}$을 키울 수 있어요.</p>
+            <p>출력 단락에서 $r_{o1}\parallel r_{o3}\gg1/g_{m2}$이면 소신호 전류가 거의 다 $M_2$로 가서 $G_m\approx g_{m1}$이에요.</p>
+            <p>입력 영점에서 출력을 보면 $R_{out}\approx R_L$이에요.</p>
+            $$A_v=-G_mR_{out}\approx-g_{m1}R_L$$
+            <p>극점 식은 노드 Y에만 $C_{GD3}$와 $C_{DB3}$가 더해져요.</p>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#s1-half-circuit">차동쌍의 주파수 응답</a></th>
+          <td>
+            <p>순수 차동 입력이면 꼬리 노드가 가상 접지라서 $H_{DM}(s)=H_{half}(s)$예요.</p>
+            <p>반회로는 MOS면 CS 단, 바이폴라면 CE 단이고 극점과 영점이 그 반회로와 같아요.</p>
+            <p>공통 모드에서는 가상 접지를 쓰지 않고, 꼬리 저항을 $2R_{EE}$로 나눈 반회로를 써요.</p>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#s1-cascode-diffpair">캐스코드 차동쌍</a></th>
+          <td>
+            <p>반회로가 캐스코드 단이라서 노드 X, Y, 출력에 극점이 하나씩 생겨요.</p>
+            <p>출력 단락에서 $G_m=g_{m1}$, 입력 영점에서 $R_{out}\approx R_D$예요.</p>
+            $$\omega_{p,out}=\frac{1}{R_D(C_{DB3}+C_{GD3})}$$
+            $$\begin{aligned}H(s)&amp;=\frac{A_0}{\left(1+\frac{s}{\omega_{p,X}}\right)\left(1+\frac{s}{\omega_{p,Y}}\right)}\\&amp;\quad\times\frac{1}{1+\frac{s}{\omega_{p,out}}}\end{aligned}$$
+            <p>여기서 $A_0=-g_{m1}R_D$는 저주파 이득이에요.</p>
+            <p>밀러 근사는 영점을 주지 않지만 영점이 극점보다 훨씬 높아 관심 대역에서는 무시해요.</p>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#s2-feedback-system">음귀환 시스템</a></th>
+          <td>
+            <p>전방 시스템 $A_1$, 출력 감지, 귀환 회로망 $K$, 입력 비교의 네 부분이에요.</p>
+            <p>$K=0$이면 개루프, $K\ne0$이면 폐루프예요.</p>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#s2-closed-loop">폐루프 이득</a></th>
+          <td>
+            $$X_F=KY$$
+            $$\frac{Y}{X}=\frac{A_1}{1+KA_1}$$
+            <p>음귀환을 걸면 이득이 $1+KA_1$배 줄어요.</p>
+            <p>일부 교재는 귀환율 $K$를 $\beta$로 써요.</p>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#s2-noninverting">비반전 증폭기</a></th>
+          <td>
+            $$K=\frac{R_2}{R_1+R_2}$$
+            $$\frac{Y}{X}\to\frac{1}{K}=1+\frac{R_1}{R_2}$$
+            <p>$A_1\to\infty$일 때의 극한이에요.</p>
+            <p>$A_1$이 유한하면 폐루프 이득 식에 $K$를 그대로 넣어요.</p>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#s2-error-signal">오차 신호</a></th>
+          <td>
+            $$E=X-X_F$$
+            $$E=\frac{X}{1+KA_1}$$
+            <p>$KA_1$이 클수록 $E$가 작아져 $X\approx X_F$, 곧 귀환 신호가 입력의 복제가 돼요.</p>
+            <p>$E$가 정확히 0이면 출력도 0이므로 작은 $E$가 남아야 유한한 출력이 나와요.</p>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#s3-loop-gain">루프 이득</a></th>
+          <td>
+            <p>입력을 $X=0$으로 두고 $A_1$ 출력($N$)과 $K$ 입력($M$) 사이에서 루프를 끊어요.</p>
+            <p>$M$에 시험 신호 $V_{test}$를 넣으면 $K$, 비교부, $A_1$을 지나 $N$으로 돌아와요.</p>
+            $$V_N=-KA_1V_{test}$$
+            $$KA_1=-\frac{V_N}{V_{test}}$$
+            <p>음귀환이라 돌아온 비가 음수여서 마이너스를 붙여 정의해요.</p>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row"><a href="#s3-loop-vs-closed">루프 이득과 폐루프 이득</a></th>
+          <td>
+            <p>루프 이득 $KA_1$은 루프를 한 바퀴 돈 이득이에요.</p>
+            <p>폐루프 이득 $\frac{A_1}{1+KA_1}$은 폐루프일 때 입력에서 출력까지의 이득이에요.</p>
+            <p>루프 이득이 클수록 폐루프 이득과 오차가 함께 작아져요.</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</article>
+
+<article class="topic" id="s4-next">
+  <h3>다음 시간 예고</h3>
+  <ul>
+    <li>음귀환의 장점: 이득 둔감화(gain desensitization)</li>
+    <li>음귀환의 장점: 대역폭 확장(bandwidth extension)</li>
+    <li>음귀환의 장점: 입출력 임피던스 변화</li>
+    <li>귀환을 실제 회로로 구현하는 감지·반송 기법(sense and return techniques)</li>
+  </ul>
+</article>
+
+<article class="topic" id="s4-links">
+  <h3>함께 보면 좋은 자료</h3>
+  <ul>
+    <li><a href="../1104/정리노트_1104_Cascode_Frequency_Response.html#s1-node-capacitance">1104 정리노트 · X·Y·출력에 붙는 커패시터를 모아요</a></li>
+    <li><a href="../1028/정리노트_1028_CS_Stage_Frequency_Response.html#s2-cs-miller">1028 정리노트 · CS 단: 밀러 곱셈이 입력 극점을 끌어내려요</a></li>
+    <li><a href="../0923/정리노트_0923_Differential_Amplifiers.html#s3-virtual-ground">0923 정리노트 · 노드 P는 차동 입력에서 가상 접지</a></li>
+    <li><a href="../../workbook/pdf/ch11-문제.pdf">문제집 11장 문제 (PDF)</a></li>
+    <li><a href="../../workbook/pdf/ch12-문제.pdf">문제집 12장 문제 (PDF)</a></li>
+    <li><a href="복습문제_1106_Negative_Feedback-문제.pdf">복습문제 8개 (PDF)</a></li>
+    <li><a href="복습문제_1106_Negative_Feedback-답안.pdf">답안 (PDF)</a></li>
+  </ul>
+</article>
+    </section>
+  </main>
+  <footer>출처: 권익진 교수님 강의자료(Lec5, Lec6) · 수업 녹음 전사(1106) · B. Razavi, <i>Microelectronics</i>, 2nd ed. (Wiley) 11·12장.</footer>
+    </div>
+    <aside class="panel panel-right" id="panel-right" aria-labelledby="panel-right-title">
+      <div class="panel-resize" data-side="right" role="separator" aria-orientation="vertical" aria-controls="panel-right" aria-label="오른쪽 패널 너비 조절. 좌우 화살표로 조절, Home으로 자동 너비" tabindex="0"></div>
+      <div class="panel-inner">
+        <div class="panel-head">
+          <h2 id="panel-right-title">페이지 요약</h2>
+          <button class="text-btn panel-close" type="button" data-panel-close>닫기</button>
+        </div>
+        <p class="panel-empty" id="sum-empty">페이지를 넘기면 그 페이지의 핵심 식과 용어가 여기에 나옵니다.</p>
+        <div class="sums" id="sum-for"></div>
+      </div>
+    </aside>
+  </div>
+  <div class="scrim" id="panel-scrim" aria-hidden="true"></div>
+  <nav class="pager" aria-label="화면 이동">
+    <div class="pager-inner">
+      <button class="btn btn-ghost" id="pager-prev" type="button">이전</button>
+      <span class="pager-count" id="pager-count"></span>
+      <button class="btn btn-primary" id="pager-next" type="button">시작하기</button>
+    </div>
+  </nav>
+  <p class="sr-only" id="pager-status" aria-live="polite"></p>
+  <script id="widget-feedback-ui">(function () {
+// FEEDBACK-CORE-BEGIN
+var LA0 = 0, LA1 = 5;            // log10(A_1): 1 .. 100000
+var LG0 = -1, LG1 = 3;           // log10(Y/X): 0.1 .. 1000
+function fmt(v) {
+  var r = Math.round(v * 100) / 100;
+  return Number.isInteger(r) ? String(r) : r.toFixed(2);
+}
+function fmtA(A) { return A >= 100 ? String(Math.round(A)) : fmt(A); }
+function fmtPct(p) { return p < 0.005 ? '&lt; 0.01' : fmt(p); }
+function calc(A, K) {
+  var kA = K * A;
+  var cl = A / (1 + kA);          // closed-loop gain Y/X
+  var e = 1 / (1 + kA);           // error ratio E/X
+  return { A: A, K: K, kA: kA, cl: cl, e: e, inv: 1 / K, frac: cl * K };
+}
+function sub(t) { return '<tspan baseline-shift="sub" font-size="78%">' + t + '</tspan>'; }
+var WIDE = { vb: '0 0 560 300',
+  p1: { x0: 58, x1: 262, y0: 34, y1: 236 }, p2: { x0: 330, x1: 534, y0: 34, y1: 236 },
+  tdy: 16, ts: '', xl: 'A' + sub('1') };
+var COMPACT = { vb: '0 0 320 540',
+  p1: { x0: 58, x1: 300, y0: 34, y1: 224 }, p2: { x0: 58, x1: 300, y0: 304, y1: 494 },
+  tdy: 18, ts: ' style="font-size:13px"', xl: 'A' + sub('1') };
+function xa(P, A) { return P.x0 + (Math.log10(A) - LA0) / (LA1 - LA0) * (P.x1 - P.x0); }
+function yg(P, g) { var l = Math.max(LG0, Math.min(LG1, Math.log10(g))); return P.y1 - (l - LG0) / (LG1 - LG0) * (P.y1 - P.y0); }
+function ye(P, e) { return P.y1 - e * (P.y1 - P.y0); }
+function xAxis(L, P) {
+  var s = '<line class="axis" x1="' + P.x0 + '" y1="' + P.y1 + '" x2="' + P.x1 + '" y2="' + P.y1 + '"/>';
+  var lab = ['1', '10', '100', '1k', '10k', '100k'];
+  for (var i = 0; i <= 5; i++) {
+    var x = fmt(xa(P, Math.pow(10, i)));
+    s += '<line class="axis" x1="' + x + '" y1="' + P.y1 + '" x2="' + x + '" y2="' + (P.y1 + 5) + '"/>';
+    s += '<text class="tick"' + L.ts + ' x="' + x + '" y="' + (P.y1 + L.tdy) + '" text-anchor="middle">' + lab[i] + '</text>';
+  }
+  s += '<text class="tick fig-math"' + L.ts + ' x="' + P.x1 + '" y="' + (P.y1 + L.tdy + 15) + '" text-anchor="end">' + L.xl + ' (로그 눈금)</text>';
+  return s;
+}
+function build(A, K, compact) {
+  var L = compact ? COMPACT : WIDE, r = calc(A, K), s = '', i, la, a, p;
+  var P = L.p1, Q = L.p2;
+  // panel 1: Y/X on log axis
+  s += '<line class="axis" x1="' + P.x0 + '" y1="' + P.y0 + '" x2="' + P.x0 + '" y2="' + P.y1 + '"/>';
+  var gl = ['0.1', '1', '10', '100', '1000'];
+  for (i = 0; i <= 4; i++) {
+    var y = fmt(yg(P, Math.pow(10, LG0 + i)));
+    s += '<line class="axis" x1="' + (P.x0 - 5) + '" y1="' + y + '" x2="' + P.x0 + '" y2="' + y + '"/>';
+    s += '<text class="tick"' + L.ts + ' x="' + (P.x0 - 8) + '" y="' + fmt(Number(y) + 4) + '" text-anchor="end">' + gl[i] + '</text>';
+  }
+  s += xAxis(L, P);
+  s += '<text class="tick fig-math"' + L.ts + ' x="' + P.x0 + '" y="' + (P.y0 - 14) + '">Y/X (로그 눈금)</text>';
+  // open-loop A_1 (dashed), clipped at the top of the axis
+  p = '';
+  for (i = 0; i <= 100; i++) {
+    la = LA0 + (LA1 - LA0) * i / 100; a = Math.pow(10, la);
+    if (Math.log10(a) > LG1) break;
+    p += (i ? ' L' : 'M') + fmt(xa(P, a)) + ' ' + fmt(yg(P, a));
+  }
+  s += '<path class="plot-truth" d="' + p + '"/>';
+  // 1/K level
+  var yk = fmt(yg(P, r.inv));
+  s += '<line class="mark-map" x1="' + P.x0 + '" y1="' + yk + '" x2="' + P.x1 + '" y2="' + yk + '"/>';
+  // 1/K label: search bands above/below the 1/K level and x positions so the label box clears
+  // the 1/K line, the current-A_1 marker line and dot, the open-loop dashed line and the curve.
+  var lt = '1/K = ' + fmt(r.inv), fs = compact ? 13 : 11, lw = lt.length * (compact ? 7.4 : 6.3);
+  var mx = xa(P, A), my = yg(P, r.cl), ykn = Number(yk);
+  function hits(fn, a0, a1, t, b) {
+    for (var xx = a0 - 4; xx <= a1 + 4; xx += 2) {
+      var la2 = LA0 + (xx - P.x0) / (P.x1 - P.x0) * (LA1 - LA0);
+      var v = fn(Math.pow(10, la2), la2);
+      if (v !== null && v > t - 6 && v < b + 6) return true;
+    }
+    return false;
+  }
+  function okBox(a0, a1, base) {
+    var t = base - fs * 0.85, b = base + fs * 0.3;
+    if (a0 < P.x0 + 4 || a1 > P.x1 || t < P.y0 || b > P.y1 - 4) return false;
+    if (ykn > t - 8 && ykn < b + 8) return false;
+    if (mx > a0 - 8 && mx < a1 + 8) return false;
+    if (Math.max(a0 - mx, mx - a1, 0) < 10 && my > t - 10 && my < b + 10) return false;
+    if (hits(function (a, la) { return la > LG1 ? null : yg(P, a); }, a0, a1, t, b)) return false;
+    if (hits(function (a) { return yg(P, a / (1 + K * a)); }, a0, a1, t, b)) return false;
+    return true;
+  }
+  var lx = null, lyb = ykn - 16, bands = [-16, -30, 26, -44, 40];
+  for (var bi = 0; bi < bands.length && !lx; bi++) {
+    for (var ax = P.x1 - 2; ax - lw >= P.x0 + 4; ax -= 2) {
+      if (okBox(ax - lw, ax, ykn + bands[bi])) { lx = [ax - lw, ax]; lyb = ykn + bands[bi]; break; }
+    }
+  }
+  if (!lx) { lx = [P.x1 - 2 - lw, P.x1 - 2]; }
+  s += '<text class="tick fig-math"' + L.ts + ' x="' + fmt(lx[0]) + '" y="' + fmt(lyb) + '">' + lt + '</text>';
+  // closed-loop curve
+  p = '';
+  for (i = 0; i <= 100; i++) {
+    la = LA0 + (LA1 - LA0) * i / 100; a = Math.pow(10, la);
+    p += (i ? ' L' : 'M') + fmt(xa(P, a)) + ' ' + fmt(yg(P, a / (1 + K * a)));
+  }
+  s += '<path class="plot-fit" d="' + p + '"/>';
+  var xc = fmt(xa(P, A));
+  s += '<line class="mark-ml" x1="' + xc + '" y1="' + P.y0 + '" x2="' + xc + '" y2="' + P.y1 + '"/>';
+  s += '<circle class="fig-dot" cx="' + xc + '" cy="' + fmt(yg(P, r.cl)) + '" r="4.5"/>';
+  // panel 2: E/X on linear axis
+  s += '<line class="axis" x1="' + Q.x0 + '" y1="' + Q.y0 + '" x2="' + Q.x0 + '" y2="' + Q.y1 + '"/>';
+  var el = [0, 0.5, 1];
+  for (i = 0; i < 3; i++) {
+    var y2 = fmt(ye(Q, el[i]));
+    s += '<line class="axis" x1="' + (Q.x0 - 5) + '" y1="' + y2 + '" x2="' + Q.x0 + '" y2="' + y2 + '"/>';
+    s += '<text class="tick"' + L.ts + ' x="' + (Q.x0 - 8) + '" y="' + fmt(Number(y2) + 4) + '" text-anchor="end">' + el[i] + '</text>';
+  }
+  s += xAxis(L, Q);
+  s += '<text class="tick fig-math"' + L.ts + ' x="' + Q.x0 + '" y="' + (Q.y0 - 14) + '">E/X (보통 눈금)</text>';
+  p = '';
+  for (i = 0; i <= 100; i++) {
+    la = LA0 + (LA1 - LA0) * i / 100; a = Math.pow(10, la);
+    p += (i ? ' L' : 'M') + fmt(xa(Q, a)) + ' ' + fmt(ye(Q, 1 / (1 + K * a)));
+  }
+  s += '<path class="plot-fit" d="' + p + '"/>';
+  var xq = fmt(xa(Q, A));
+  s += '<line class="mark-ml" x1="' + xq + '" y1="' + Q.y0 + '" x2="' + xq + '" y2="' + Q.y1 + '"/>';
+  s += '<circle class="fig-dot" cx="' + xq + '" cy="' + fmt(ye(Q, r.e)) + '" r="4.5"/>';
+  return s;
+}
+function viewBox(compact) { return compact ? COMPACT.vb : WIDE.vb; }
+function readout(A, K) {
+  var r = calc(A, K);
+  return 'KA<sub>1</sub> ≈ ' + fmtA(r.kA) + ' · Y/X ≈ ' + fmt(r.cl) + ' (1/K = ' + fmt(r.inv) + '의 ' + fmt(r.frac * 100) +
+    ' %) · E/X ≈ ' + fmtPct(r.e * 100) + ' %';
+}
+// FEEDBACK-CORE-END
+  var sa = document.getElementById('feedback-a');
+  var sk = document.getElementById('feedback-k');
+  var va = document.getElementById('feedback-a-val');
+  var vk = document.getElementById('feedback-k-val');
+  var plot = document.getElementById('feedback-plot');
+  var out = document.getElementById('feedback-out');
+  if (!sa || !sk || !plot) return;
+  function update() {
+    var A = Math.pow(10, Number(sa.value));
+    var K = Number(sk.value);
+    va.textContent = fmtA(A);
+    vk.textContent = String(Math.round(K * 100) / 100);
+    var w = plot.getBoundingClientRect().width;
+    var compact = w > 0 && w < 480;
+    plot.setAttribute('viewBox', viewBox(compact));
+    plot.innerHTML = build(A, K, compact);
+    out.innerHTML = readout(A, K);
+  }
+  sa.addEventListener('input', update);
+  sk.addEventListener('input', update);
+  window.addEventListener('resize', update);
+  if (window.ResizeObserver) {
+    var lastCompact = null;
+    new ResizeObserver(function (entries) {
+      var w = entries[0].contentRect.width;
+      var c = w > 0 && w < 480;
+      if (c !== lastCompact) { lastCompact = c; update(); }
+    }).observe(plot);
+  }
+  update();
+})();</script>
+  <script id="theme-ui">
+    (function () {
+      const root = document.documentElement;
+      const btn = document.getElementById('theme-toggle');
+      const sysDark = matchMedia('(prefers-color-scheme: dark)');
+      const KEY = 'od-theme';
+      const isDark = () => root.dataset.theme ? root.dataset.theme === 'dark' : sysDark.matches;
+      function label() {
+        const next = isDark() ? '라이트 모드로 전환' : '다크 모드로 전환';
+        btn.setAttribute('aria-label', next);
+        btn.title = next;
+      }
+      btn.addEventListener('click', () => {
+        const t = isDark() ? 'light' : 'dark';
+        // 시스템 설정과 같아지면 저장을 지워 다시 시스템을 따른다
+        if ((t === 'dark') === sysDark.matches) { delete root.dataset.theme; try { localStorage.removeItem(KEY); } catch (e) {} }
+        else { root.dataset.theme = t; try { localStorage.setItem(KEY, t); } catch (e) { /* 저장 불가: 이번 방문에만 유지 */ } }
+        label();
+      });
+      sysDark.addEventListener('change', label);
+      window.addEventListener('storage', (e) => {
+        if (e.key !== KEY) return;
+        if (e.newValue === 'light' || e.newValue === 'dark') root.dataset.theme = e.newValue; else delete root.dataset.theme;
+        label();
+      });
+      label();
+    })();
+  </script>
+  <script id="panels-ui">
+    (function () {
+      const body = document.body;
+      const layout = document.querySelector('.layout');
+      const kind = body.dataset.panels;
+      const panels = { left: document.getElementById('panel-left'), right: document.getElementById('panel-right') };
+      const toggles = { left: document.getElementById('toggle-left'), right: document.getElementById('toggle-right') };
+      const scrim = document.getElementById('panel-scrim');
+      const blockers = [document.querySelector('.topbar'), document.querySelector('.content'), document.querySelector('.pager')];
+      const wideMq = matchMedia('(min-width: 1024px)');
+      const roomyMq = matchMedia('(min-width: 1280px)');
+      const store = {
+        get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+        set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* 저장 불가: 이번 방문에만 유지 */ } }
+      };
+      const PREF = 'od-panels:' + kind;
+      // 팩마다 문제·토픽 id가 p1, s1-…로 겹치므로 진행 기록은 기간별로 나눈다
+      const RANGE = body.dataset.range || '';
+      const ICON_TODO = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg>';
+      const ICON_DONE = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 10"/></svg>';
+      let overlay = null;
+
+      // ---------- 열고 닫기 ----------
+      function docked() {
+        const pref = store.get(PREF, {});
+        return { left: pref.left ?? true, right: pref.right ?? roomyMq.matches };
+      }
+      function sync() {
+        const wide = wideMq.matches;
+        const d = docked();
+        ['left', 'right'].forEach((side) => {
+          const open = wide ? d[side] : overlay === side;
+          const p = panels[side];
+          layout.dataset[side] = open ? 'open' : 'closed';
+          p.classList.toggle('is-open', !wide && open);
+          p.inert = !open;
+          if (!wide && open) { p.setAttribute('role', 'dialog'); p.setAttribute('aria-modal', 'true'); }
+          else { p.removeAttribute('role'); p.removeAttribute('aria-modal'); }
+          toggles[side].setAttribute('aria-expanded', String(open));
+        });
+        const drawer = !wide && overlay !== null;
+        scrim.classList.toggle('is-on', drawer);
+        body.classList.toggle('drawer-open', drawer);
+        blockers.forEach((el) => { el.inert = drawer; });
+      }
+      function openDrawer(side) {
+        overlay = side;
+        sync();
+        requestAnimationFrame(() => panels[side].querySelector('[data-panel-close]').focus());
+      }
+      function closeDrawer(refocus) {
+        if (overlay === null) return;
+        const side = overlay;
+        overlay = null;
+        sync();
+        if (refocus) toggles[side].focus();
+      }
+      function toggle(side) {
+        if (wideMq.matches) {
+          const d = docked();
+          d[side] = !d[side];
+          store.set(PREF, d);
+          sync();
+          if (d[side]) { const p = panels[side]; p.classList.remove('is-shown'); void p.offsetWidth; p.classList.add('is-shown'); }
+        } else if (overlay === side) closeDrawer(true);
+        else openDrawer(side);
+      }
+
+      toggles.left.addEventListener('click', () => toggle('left'));
+      toggles.right.addEventListener('click', () => toggle('right'));
+      scrim.addEventListener('click', () => closeDrawer(true));
+      document.querySelectorAll('[data-panel-close]').forEach((b) => b.addEventListener('click', () => closeDrawer(true)));
+      panels.left.addEventListener('click', (e) => { if (e.target.closest('.toc a')) closeDrawer(false); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && overlay !== null) { e.preventDefault(); closeDrawer(true); } });
+
+      // ---------- 패널 너비: 기본은 화면 폭에 맞춰 자동, 경계를 끌면 직접 조절 ----------
+      const WIDTH = { left: { min: 220, max: 480, prop: '--panel-l-user' }, right: { min: 280, max: 720, prop: '--panel-r-user' } };
+      function applyWidths() {
+        const w = store.get(PREF + ':w', {});
+        ['left', 'right'].forEach((side) => {
+          if (w[side]) layout.style.setProperty(WIDTH[side].prop, w[side] + 'px');
+          else layout.style.removeProperty(WIDTH[side].prop);
+        });
+      }
+      function maxFor(side) {
+        const other = side === 'left' ? panels.right : panels.left;
+        const otherW = layout.dataset[side === 'left' ? 'right' : 'left'] === 'open' ? other.getBoundingClientRect().width : 0;
+        return Math.max(WIDTH[side].min, Math.min(WIDTH[side].max, window.innerWidth - otherW - 400));
+      }
+      function setWidth(side, px, save) {
+        const v = Math.round(Math.min(Math.max(px, WIDTH[side].min), maxFor(side)));
+        layout.style.setProperty(WIDTH[side].prop, v + 'px');
+        panels[side].querySelector('.panel-resize').setAttribute('aria-valuenow', String(v));
+        if (save) { const w = store.get(PREF + ':w', {}); w[side] = v; store.set(PREF + ':w', w); }
+      }
+      function resetWidth(side) {
+        const w = store.get(PREF + ':w', {});
+        delete w[side];
+        store.set(PREF + ':w', w);
+        layout.style.removeProperty(WIDTH[side].prop);
+      }
+      document.querySelectorAll('.panel-resize').forEach((handle) => {
+        const side = handle.dataset.side;
+        const dir = side === 'left' ? 1 : -1;
+        handle.setAttribute('aria-valuemin', String(WIDTH[side].min));
+        handle.setAttribute('aria-valuemax', String(WIDTH[side].max));
+        handle.addEventListener('pointerdown', (e) => {
+          if (!wideMq.matches || e.button !== 0) return;
+          e.preventDefault();
+          const startX = e.clientX;
+          const startW = panels[side].getBoundingClientRect().width;
+          handle.setPointerCapture(e.pointerId);
+          body.classList.add('is-resizing');
+          const move = (ev) => setWidth(side, startW + dir * (ev.clientX - startX), false);
+          const up = () => {
+            handle.removeEventListener('pointermove', move);
+            handle.removeEventListener('pointerup', up);
+            handle.removeEventListener('pointercancel', up);
+            body.classList.remove('is-resizing');
+            setWidth(side, panels[side].getBoundingClientRect().width, true);
+          };
+          handle.addEventListener('pointermove', move);
+          handle.addEventListener('pointerup', up);
+          handle.addEventListener('pointercancel', up);
+        });
+        handle.addEventListener('dblclick', () => resetWidth(side));
+        handle.addEventListener('keydown', (e) => {
+          const step = e.shiftKey ? 64 : 16;
+          const cur = panels[side].getBoundingClientRect().width;
+          if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+            e.preventDefault();
+            e.stopPropagation();
+            setWidth(side, cur + (e.key === 'ArrowRight' ? step : -step) * dir, true);
+          } else if (e.key === 'Home') { e.preventDefault(); resetWidth(side); }
+        });
+      });
+      applyWidths();
+      const onMq = () => { overlay = null; sync(); };
+      wideMq.addEventListener('change', onMq);
+      roomyMq.addEventListener('change', onMq);
+
+      // ---------- 목차의 진행 표시 ----------
+      const progressN = document.getElementById('progress-n');
+      const progressBar = document.getElementById('progress-bar');
+      const progressTotal = document.getElementById('progress-total');
+      function markToc(done, total, doneLabel) {
+        panels.left.querySelectorAll('.toc-list a').forEach((a) => {
+          const id = decodeURIComponent(a.getAttribute('href').slice(1));
+          let mark = a.querySelector('.toc-mark');
+          if (!mark) {
+            mark = document.createElement('span');
+            mark.className = 'toc-mark';
+            mark.setAttribute('aria-hidden', 'true');
+            const state = document.createElement('span');
+            state.className = 'sr-only toc-state';
+            a.append(mark, state);
+          }
+          const isDone = done.has(id);
+          mark.classList.toggle('is-done', isDone);
+          mark.innerHTML = isDone ? ICON_DONE : ICON_TODO;
+          a.querySelector('.toc-state').textContent = isDone ? ' (' + doneLabel + ')' : '';
+        });
+        progressN.textContent = String(done.size);
+        progressTotal.textContent = String(total);
+        progressBar.style.transform = 'scaleX(' + (total ? done.size / total : 0) + ')';
+      }
+      function revealCurrent() {
+        const link = panels.left.querySelector('.toc-list a[aria-current="true"]');
+        if (link && layout.dataset.left === 'open') link.scrollIntoView({ block: 'nearest' });
+      }
+
+      // ---------- 복습문제: 오른쪽 = 원문 · 힌트 · 풀이 ----------
+      function setupReview() {
+        const KEY = 'od-review-solved:' + RANGE;
+        const cards = Array.from(document.querySelectorAll('main article.card'));
+        const aids = panels.right.querySelector('.aids');
+        const empty = panels.right.querySelector('.panel-empty');
+        const btn = document.getElementById('solved-btn');
+        const groups = {};
+        const solved = new Set(store.get(KEY, []).filter((id) => cards.some((c) => c.id === id)));
+        cards.forEach((card) => {
+          const g = document.createElement('div');
+          g.className = 'aid';
+          g.hidden = true;
+          card.querySelectorAll(':scope > details').forEach((d) => g.appendChild(d));
+          aids.appendChild(g);
+          groups[card.id] = g;
+        });
+        let curId = null;
+        function paintBtn() {
+          const on = solved.has(curId);
+          btn.setAttribute('aria-pressed', String(on));
+          btn.innerHTML = (on ? ICON_DONE : ICON_TODO) + '<span>' + (on ? '푼 문제 · 표시 해제' : '푼 문제로 표시') + '</span>';
+        }
+        btn.addEventListener('click', () => {
+          if (!curId) return;
+          if (solved.has(curId)) solved.delete(curId); else solved.add(curId);
+          store.set(KEY, Array.from(solved));
+          paintBtn();
+          markToc(solved, cards.length, '푼 문제');
+        });
+        document.addEventListener('od:screen', (e) => {
+          const s = e.detail.screen;
+          curId = s.matches('article.card') ? s.id : null;
+          Object.keys(groups).forEach((id) => { groups[id].hidden = id !== curId; });
+          empty.hidden = Boolean(curId);
+          btn.hidden = !curId;
+          if (curId) paintBtn();
+          panels.right.querySelector('.panel-inner').scrollTop = 0;
+          markToc(solved, cards.length, '푼 문제');
+          revealCurrent();
+        });
+      }
+
+      // ---------- 정리노트: 오른쪽 = 페이지(토픽)별 요약 ----------
+      function setupNote() {
+        const KEY = 'od-note-read:' + RANGE;
+        const topics = Array.from(document.querySelectorAll('main article.topic'));
+        const read = new Set(store.get(KEY, []).filter((id) => topics.some((t) => t.id === id)));
+        // 조각의 <div class="sum" hidden> 을 오른쪽 패널로 옮긴다. 없으면 안내 문구만 보인다.
+        const box = panels.right.querySelector('.sums');
+        const sums = {};
+        topics.forEach((t) => {
+          const el = t.querySelector(':scope > .sum');
+          if (!el) return;
+          el.hidden = true;
+          box.appendChild(el);
+          sums[t.id] = el;
+        });
+        const empty = document.getElementById('sum-empty');
+        document.addEventListener('od:screen', (e) => {
+          const s = e.detail.screen;
+          const key = s.matches('article.topic') ? s.id : 'intro';
+          Object.keys(sums).forEach((id) => { sums[id].hidden = id !== key; });
+          empty.hidden = Boolean(sums[key]);
+          if (s.matches('article.topic') && !read.has(s.id)) { read.add(s.id); store.set(KEY, Array.from(read)); }
+          panels.right.querySelector('.panel-inner').scrollTop = 0;
+          markToc(read, topics.length, '읽음');
+          revealCurrent();
+        });
+      }
+
+      if (kind === 'review') setupReview();
+      if (kind === 'note') setupNote();
+      sync();
+    })();
+  </script>
+  <script id="pager-ui">
+    (function () {
+      const root = document.documentElement;
+      const main = document.querySelector('main');
+      const hero = main.querySelector('.hero');
+      const screens = [hero].concat(Array.from(main.querySelectorAll(document.body.dataset.screens)));
+      if (screens.length < 2) { root.classList.remove('js'); return; }
+      screens.forEach((s) => s.classList.add('screen'));
+
+      const last = screens.length - 1;
+      const prevBtn = document.getElementById('pager-prev');
+      const nextBtn = document.getElementById('pager-next');
+      const count = document.getElementById('pager-count');
+      const bar = document.getElementById('pager-bar');
+      const status = document.getElementById('pager-status');
+      const toc = document.querySelector('#panel-left .toc');
+      const scroller = document.querySelector('.content');
+      const titleOf = (s) => ((s.querySelector('h3') || s.querySelector('h1') || {}).textContent || '').trim();
+      let cur = -1;
+
+      // 목차: 섹션 링크 아래에 화면(토픽·카드) 목록을 붙인다
+      const tocLinks = [];
+      Array.from(toc.querySelectorAll(':scope > a')).forEach((a) => {
+        const sec = document.getElementById(decodeURIComponent(a.getAttribute('href').slice(1)));
+        const group = document.createElement('div');
+        group.className = 'toc-group';
+        a.replaceWith(group);
+        group.appendChild(a);
+        if (!sec) return;
+        const list = document.createElement('ol');
+        list.className = 'toc-list';
+        screens.forEach((s, i) => {
+          if (!sec.contains(s)) return;
+          const li = document.createElement('li');
+          const link = document.createElement('a');
+          link.href = '#' + s.id;
+          link.innerHTML = '<span class="toc-title"></span>';
+          link.firstChild.textContent = titleOf(s);
+          li.appendChild(link);
+          list.appendChild(li);
+          tocLinks[i] = link;
+        });
+        group.appendChild(list);
+      });
+
+      function indexFor(hash) {
+        const id = decodeURIComponent((hash || '').replace(/^#/, ''));
+        const el = id && document.getElementById(id);
+        if (!el || !main.contains(el)) return { i: 0 };
+        const i = screens.findIndex((s) => s.contains(el) || el.contains(s));
+        return { i: Math.max(i, 0), target: i >= 0 && screens[i].contains(el) && screens[i] !== el ? el : null };
+      }
+
+      function render(i, target) {
+        const dir = cur < 0 ? '' : i > cur ? 'enter-next' : 'enter-prev';
+        if (i !== cur) {
+          if (cur >= 0) screens[cur].classList.remove('is-current', 'enter-next', 'enter-prev');
+          main.querySelectorAll(':scope > section.is-on').forEach((sec) => sec.classList.remove('is-on'));
+          const s = screens[i];
+          const sec = s.closest('section');
+          if (sec) sec.classList.add('is-on');
+          s.classList.add('is-current');
+          if (dir) { s.classList.remove('enter-next', 'enter-prev'); void s.offsetWidth; s.classList.add(dir); }
+          cur = i;
+          document.body.classList.toggle('at-end', i === last);
+          prevBtn.disabled = i === 0;
+          nextBtn.textContent = i === 0 ? '시작하기' : i === last ? '처음으로' : '다음';
+          count.textContent = i === 0 ? '' : i + ' / ' + last;
+          bar.style.transform = 'scaleX(' + (i / last) + ')';
+          status.textContent = i === 0 ? titleOf(s) : i + ' / ' + last + ', ' + titleOf(s);
+          tocLinks.forEach((link, k) => link && link.setAttribute('aria-current', String(k === i)));
+          document.dispatchEvent(new CustomEvent('od:screen', { detail: { index: i, screen: s } }));
+        }
+        if (target) target.scrollIntoView({ block: 'start' });
+        else scroller.scrollTo(0, 0);
+      }
+
+      function go(i) {
+        i = Math.min(Math.max(i, 0), last);
+        if (i === cur) return;
+        const url = i === 0 ? location.pathname + location.search : '#' + screens[i].id;
+        history.pushState(null, '', url);
+        render(i);
+      }
+
+      prevBtn.addEventListener('click', () => go(cur - 1));
+      nextBtn.addEventListener('click', () => go(cur === last ? 0 : cur + 1));
+      const fromUrl = () => { const r = indexFor(location.hash); render(r.i, r.target); };
+      window.addEventListener('hashchange', fromUrl);
+      window.addEventListener('popstate', fromUrl);
+
+      document.addEventListener('keydown', (e) => {
+        if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || document.body.classList.contains('drawer-open')) return;
+        if (e.target.closest('input, select, textarea, [contenteditable="true"]')) return;
+        if (e.key === 'ArrowRight') { e.preventDefault(); go(cur + 1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); }
+      });
+
+      // 좌우로 밀어서 넘기기 (가로로 스크롤되는 영역은 제외)
+      let sx = 0, sy = 0, skip = true;
+      main.addEventListener('touchstart', (e) => {
+        const t = e.touches[0];
+        sx = t.clientX; sy = t.clientY;
+        skip = e.touches.length > 1 || Boolean(e.target.closest('.widget, .katex-display, .table-wrap, svg, input, details'));
+      }, { passive: true });
+      main.addEventListener('touchend', (e) => {
+        if (skip) return;
+        const t = e.changedTouches[0];
+        const dx = t.clientX - sx, dy = t.clientY - sy;
+        if (Math.abs(dx) > 64 && Math.abs(dx) > 2 * Math.abs(dy)) go(cur + (dx < 0 ? 1 : -1));
+      }, { passive: true });
+
+      fromUrl();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 읽어요</h4>
+  <p>그림 12.2의 비반전 증폭기에서 입력 $X$는 + 입력으로, 분배기 접속점 전압 $X_F$는 − 입력으로 들어가요. 출력은 $Y$예요.</p>
+  <p>숫자를 구하는 문제가 아니라 이유를 설명하는 문제예요. $[R_2/(R_1+R_2)]A_1$이 1보다 훨씬 커질 때 $Y/X$가 왜 $1+R_1/R_2$로 다가가는지, 회로가 실제로 어떻게 움직이는지와 식으로 함께 보여요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 개념과 공식을 떠올려요</h4>
+  <p>원문의 $[R_2/(R_1+R_2)]A_1$은 귀환율 $K=R_2/(R_1+R_2)$와 $A_1$의 곱, 즉 루프 이득(loop gain) $KA_1$이에요. "루프 이득이 1보다 훨씬 크다"는 단서에서 이득 둔감화(gain desensitization)를 떠올려요(<a href="정리노트_1106_Negative_Feedback.html#s2-closed-loop">폐루프 이득</a>).</p>
+  <p>설명에 쓰는 관계는 세 개예요. 분배기가 정하는 귀환 신호, $A_1$이 정하는 출력, 그리고 둘에서 나오는 오차예요.</p>
+  $$X_F=KY$$
+  $$Y=A_1(X-X_F)$$
+  $$E=X-X_F=\frac{X}{1+KA_1}$$
+  <p>오차 식은 루프 이득이 클수록 입력과 귀환 신호의 차이가 작아진다는 뜻이에요. 그래서 귀환 신호가 입력의 복제(replica)에 가까워져요(<a href="정리노트_1106_Negative_Feedback.html#s2-error-signal">오차 신호</a>). 이 문제는 이 사실에서 출발해 분배기 관계로 $Y$를 거꾸로 구하면 돼요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <div data-answer-step="오차가 0으로">
+    <p>오차 식의 분모에 루프 이득이 있어요. $KA_1\gg1$이면 분모가 아주 커져 오차가 입력보다 훨씬 작아져요.</p>
+    $$E=\frac{X}{1+KA_1}\approx0$$
+    <p>오차가 거의 0이라는 말은 귀환 신호가 입력과 거의 같다는 뜻이에요.</p>
+    $$X_F\approx X$$
+  </div>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>이렇게 풀어요</h4>
+  <div data-subpart="main">
+    <div data-answer-step="분배기에서 출력 역산">
+      <p>$X_F$는 분배기가 정한 출력의 $K$배예요. 그런데 위에서 $X_F\approx X$이므로, 분배기는 출력에 다음 조건을 걸어요.</p>
+      $$Y\frac{R_2}{R_1+R_2}\approx X$$
+      <p>양변을 $X$로 나누고 $R_2/(R_1+R_2)$를 뒤집으면 폐루프 이득이 나와요.</p>
+      $$\frac{Y}{X}\approx\frac{R_1+R_2}{R_2}=1+\frac{R_1}{R_2}$$
+    </div>
+    <p>회로가 움직이는 모습으로 보면 이래요. $A_1$이 매우 크면 유한한 출력을 내는 데 필요한 입력 차이 $E=Y/A_1$이 아주 작아요. 그래서 출력은 "분배한 값이 입력과 같아지는" 크기로 저절로 맞춰져요. 출력이 그보다 크면 $X_F$가 $X$를 넘어 $E$가 음수가 되고 출력이 줄어들며, 작으면 반대로 늘어나요.</p>
+    <div data-answer-step="식 (12.3)으로 같은 결과">
+      <p>같은 결론을 폐루프 식에서도 얻어요. 분자·분모를 $KA_1$로 나눠 루프 이득만 남는 꼴로 바꿔요.</p>
+      $$\frac{Y}{X}=\frac{A_1}{1+KA_1}=\frac{1}{K}\cdot\frac{KA_1}{1+KA_1}$$
+      <p>$KA_1\gg1$이면 두 번째 인자 $KA_1/(1+KA_1)$이 1에 다가가요.</p>
+      $$\frac{Y}{X}\approx\frac{1}{K}=1+\frac{R_1}{R_2}$$
+    </div>
+    <p>결과에는 $A_1$이 남지 않아요. $A_1$이 온도·공정에 따라 흔들려도 루프 이득이 충분히 크면 폐루프 이득은 저항비로만 정해져요. 이것이 이득 둔감화예요.</p>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <div data-answer-final>
+      <p>$KA_1=[R_2/(R_1+R_2)]A_1\gg1$이면 오차 $E=X/(1+KA_1)$이 0에 가까워져 $X_F\approx X$가 되고, 분배기 관계 $X_F=Y\,R_2/(R_1+R_2)$ 때문에 다음이 성립해요.</p>
+      $$\frac{Y}{X}\approx1+\frac{R_1}{R_2}$$
+    </div>
+    <p>정확한 값과의 상대 차이는 루프 이득으로 정해져요. 위의 두 번째 인자를 1에서 뺀 크기예요.</p>
+    $$1-\frac{KA_1}{1+KA_1}=\frac{1}{1+KA_1}$$
+    <p>이해를 위한 예시로 $KA_1=100$이면 $Y/X$는 $1/K$보다 약 $1\%$ 작고, $KA_1=1000$이면 약 $0.1\%$ 작아요. 루프 이득이 커질수록 $1+R_1/R_2$에 다가가는 것이 확인돼요.</p>
+    <p>반대 극한 $KA_1\to0$은 귀환이 없는 경우예요. 이때 $Y/X\to A_1$으로 개루프 이득이 돼요. $1+R_1/R_2$는 큰 루프 이득에서만 쓰는 근사라는 점이 드러나요.</p>
+    <p>$Y/X$와 $1+R_1/R_2$는 모두 저항비라 무차원이에요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>주의할 점</h4>
+  <p>조건은 $A_1\gg1$이 아니라 $KA_1\gg1$이에요. $A_1$이 커도 $R_1\gg R_2$라서 $K$가 아주 작으면 루프 이득이 크지 않아 근사가 맞지 않아요.</p>
+  <p>$X_F\approx X$는 오차가 입력에 비해 작다는 근사예요. $E$를 정확히 0으로 두면 $Y=A_1E$에서 출력도 0이 되는 모순이 생겨요. $E$는 작지만 $A_1$배 되어 유한한 출력을 만들어요.</p>
+  <p>폐루프 이득 $1+R_1/R_2$와 루프 이득 $KA_1$을 같은 양으로 보지 않아요(<a href="정리노트_1106_Negative_Feedback.html#s3-loop-vs-closed">루프 이득과 폐루프 이득</a>).</p>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>조건을 바꾸어 생각해요</h4>
+  <ol>
+    <li>$R_1=0$, $R_2$는 유한하게 바꾸면 $K$와 큰 루프 이득에서의 $Y/X$는 얼마인가요? 이 회로를 무엇이라고 부르는지도 말해 보세요.</li>
+    <li>$A_1$이 $20\%$ 줄어도 $KA_1$이 1000 정도로 크다면 폐루프 이득은 크게 바뀌나요? 어느 식으로 판단하는지 말해 보세요.</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <p class="sum-lead">루프 이득 $KA_1\gg1$이면 오차가 0에 가까워 귀환 신호가 입력을 따라가요.</p>
+  $$E=\frac{X}{1+KA_1}\approx0$$
+  <p>$X_F\approx X$와 분배기 관계 $X_F=KY$에서 출력을 거꾸로 구해요.</p>
+  $$\frac{Y}{X}\approx\frac1K=1+\frac{R_1}{R_2}$$
+  <p>조건은 $A_1$이 아니라 $KA_1$이 1보다 훨씬 큰 것이에요.</p>
+</div>

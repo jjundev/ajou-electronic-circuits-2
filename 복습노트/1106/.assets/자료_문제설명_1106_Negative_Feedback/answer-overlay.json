@@ -1,0 +1,375 @@
+{
+  "schema_version": 1,
+  "review_policy_version": "problem-explain-2026-10-21-learning-style",
+  "range": "1106",
+  "slug": "Negative_Feedback",
+  "learning_style": {
+    "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
+    "sha256": "3c9f68f55d804966c95a35cdcd2f729754e9dc9a453fcc0df7f5b01152edeb9f",
+    "rule_ids": [
+      "UNIT-01",
+      "CALC-01",
+      "CALC-02",
+      "CIRCUIT-01",
+      "CIRCUIT-02",
+      "GAIN-01",
+      "DEGEN-01",
+      "SCALE-01",
+      "BIAS-01",
+      "NOTATION-01",
+      "EXPLAIN-01",
+      "CORRECT-01",
+      "FREQ-01"
+    ]
+  },
+  "input_hash": "d1f3151ca137b7ce9d68599fe8c32f02101e59b1fc0e945a280241b552956e80",
+  "source_inputs": {
+    "복습노트/1106/.assets/problems.txt": "f47e575d610f3b72f8c0453828c7b2628d17dbae223829be2486dc6618717c95",
+    "복습노트/1106/.assets/display-titles.json": "3637e5f7b6d6bbf691752f3d806e528ea3749573fb9c19ceeba4ff93a7aff96f",
+    "복습노트/1106/.assets/selection.json": "933ef67f0c53bbe0a886266ff2dc6e9c9041e5414ce891968b4494209069edf9",
+    "교과서/마이크로전자회로/ch11/장말문제/P11.49.md": "730b67c7110c3904bc12dddbfc0a4cecada15536b091b2645951bd42f8cf9de0",
+    "from_the_past/md/2021-1_기말/Q1.md": "63af09ae01c5134052d64117710183cae211bc6cfa2d93e7fac7d5bc0baf5376",
+    "교과서/마이크로전자회로/ch11/예제/E11.27.md": "ef86851118f04deb69cd5d2cf0b65e747d5dce1037939eb7ffeb0f352daa561a",
+    "from_the_past/md/2023-1_기말/Q1.md": "06568e9e313e65d874458e988b1f20316ab8db1c023c91056f299a2b7c3d5af3",
+    "교과서/마이크로전자회로/ch12/장말문제/P12.06.md": "52daac298ee069b6a418ce584f704c69fd755244af412896a5094fcb66113431",
+    "교과서/마이크로전자회로/ch12/예제/E12.02.md": "67688559a9800b0fce7fde5b1dd341e36ec4eb82b2bbd2cd476b412221d1f174",
+    "교과서/마이크로전자회로/ch12/장말문제/P12.04.md": "f8aa85d67b8fe9ec21ecfe6127f1a7c71d169bc86bfba4166f969b3da8500bd1",
+    "교과서/마이크로전자회로/ch12/장말문제/P12.05.md": "ad9cbbdf07803040f659b39dae60143057b524685cccf1cfa5cc2e7946abbb92",
+    "교과서/마이크로전자회로/ch11/figures/fig11-91.png": "ab0bd728edba620dbaa512921afcd1e566a0e1207c2c1acd1e2f09177a41008a",
+    "from_the_past/md/2021-1_기말/figures/redrawn/fig-Q1.png": "4e95f5269dc1f66f13fa4bc736a0d4eb2a676d8e8066042fdcc2877455b660b2",
+    "교과서/마이크로전자회로/ch11/figures/fig11-56-a.png": "28a379146fc4b5d27f52aaf33c0b92f261fb8a97624c9dab00b6d88cdad6a3bd",
+    "from_the_past/md/2023-1_기말/figures/redrawn/fig-Q1.png": "6cb6594fd7a728a7d7128faeb01b62a41585ff717aab57b52ee93f8feafca5f6",
+    "교과서/마이크로전자회로/ch12/figures/fig12-03.png": "d83f5320846995634d2bcd0f140560b7753fe0a1575c66567042994af7864e36",
+    "교과서/마이크로전자회로/ch12/figures/fig12-02.png": "220ea851b6187a7c3c3f691f5015ba0c60d8182d1ddd2dee9b410f214c5b94ab",
+    "교과서/마이크로전자회로/ch12/figures/fig12-80.png": "180fe1e53c618de5f9d30ee8302267a91712f317254d9e6a50608d163253baff",
+    ".claude/skills/ec2-review-pack/references/solution-style.md": "3c9f68f55d804966c95a35cdcd2f729754e9dc9a453fcc0df7f5b01152edeb9f"
+  },
+  "problems": [
+    {
+      "id": "P11.49",
+      "explanation_id": "p1",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "바이어스 전류와 gm 비",
+          "html": "\n    <p>노드 $Y$에서 DC KCL을 써요. $Q_1$이 $Y$에서 끌어내리는 전류는 $Q_2$와 $Q_3$가 나눠서 대요.</p>\n    $$I_{C1}=I_{C2}+I_{C3}$$\n    <p>$Q_3$가 75%를 대므로 $I_{C1}:I_{C3}:I_{C2}=4:3:1$이에요.</p>\n    $$I_{C2}=I_{C1}-0.75I_{C1}=\\frac{I_{C1}}{4}$$\n    <p>$g_m=I_C/V_T$이고 $V_T$는 공통이라 $g_m$도 같은 비율로 줄어요.</p>\n    $$g_{m2}=\\frac{g_{m1}}{4}$$\n  "
+        },
+        {
+          "subpart": "main",
+          "label": "X에서 Y까지의 저주파 이득",
+          "html": "\n    <p>밀러 배율에 넣을 $A_{XY}$를 $G_m$과 $R_{out}$으로 나눠 구해요. 입력은 $v_X$, 출력은 $v_Y$이고 커패시터는 저주파에서 열어요. $Y$를 접지에 단락하면 $Q_2$ 베이스–이미터 전압이 0이라 $Q_1$의 제어 전류가 모두 단락선으로 가요.</p>\n    <p>$Y$를 접지로 단락해 $v_Y=0$으로 두고, 접지에서 단락선을 지나 $Y$로 들어가는 전류를 $i_{Y,\\mathrm{sc}}$의 양의 방향으로 둬요. $Q_1$이 $Y$에서 끌어내리는 $g_{m1}v_X$를 단락선이 그대로 대 주므로 $i_{Y,\\mathrm{sc}}=g_{m1}v_X$예요.</p>\n    <div data-gain-stage=\"gm\">$$G_{m,XY}=\\frac{i_{Y,\\mathrm{sc}}}{v_X}=g_{m1}$$</div>\n    <p>$v_X=0$으로 두고 $Y$에서 바라보면 아래 $Q_1$ 컬렉터와 왼쪽 $Q_3$ 컬렉터는 $V_A=\\infty$라 개방이에요. 남는 것은 위쪽 $Q_2$ 이미터의 $1/g_{m2}$뿐이에요.</p>\n    <div data-gain-stage=\"rout\">$$R_Y\\approx\\frac{1}{g_{m2}}=\\frac{4}{g_{m1}}$$</div>\n    <div data-gain-stage=\"gain\">$$A_{XY}=-G_{m,XY}R_Y\\approx-g_{m1}\\cdot\\frac{4}{g_{m1}}=-4$$</div>\n  "
+        },
+        {
+          "subpart": "main",
+          "label": "밀러 분리와 노드별 커패시턴스",
+          "html": "\n      <figure class=\"figure\">\n<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 540 150\" role=\"img\" aria-label=\"왼쪽은 X와 Y 사이에 떠 있는 C_mu1입니다. 오른쪽은 X와 Y에 각각 접지로 연결된 밀러 커패시터입니다.\" font-family=\"Pretendard, sans-serif\" font-size=\"14\" font-weight=\"600\">\n<text class=\"fig-text fig-math\" x=\"97\" y=\"16\" text-anchor=\"middle\">분리 전</text>\n<text class=\"fig-text fig-math\" x=\"360\" y=\"16\" text-anchor=\"middle\">분리 후</text>\n<path class=\"fig-ink\" d=\"M24 68 H92.0 M92.0 56 V80 M102.0 56 V80 M102.0 68 H170\"/>\n<text class=\"fig-text fig-math\" x=\"97\" y=\"103\" text-anchor=\"middle\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">μ1</tspan></text>\n<circle class=\"fig-dot\" cx=\"24\" cy=\"68\" r=\"3.5\" data-node-id=\"p1-pa\" data-node-color=\"blue\"/>\n<text class=\"fig-text fig-math\" x=\"24\" y=\"48\" text-anchor=\"middle\" data-node-id=\"p1-pa\" data-node-color=\"blue\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">X</tspan></text>\n<circle class=\"fig-dot\" cx=\"170\" cy=\"68\" r=\"3.5\" data-node-id=\"p1-pb\" data-node-color=\"red\"/>\n<text class=\"fig-text fig-math\" x=\"170\" y=\"48\" text-anchor=\"middle\" data-node-id=\"p1-pb\" data-node-color=\"red\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">Y</tspan></text>\n<path class=\"fig-ink\" d=\"M190 76 H215 m-5 -5 l5 5 -5 5\"/>\n<path class=\"fig-ink\" d=\"M250 68 V96\"/>\n<path class=\"fig-ink\" d=\"M250 96 V106.0 M238 106.0 H262 M238 114.0 H262 M250 114.0 V124\"/>\n<path class=\"fig-ink\" d=\"M250 124 V131\"/>\n<path class=\"fig-ink\" d=\"M240 131 h20 m-16 5 h12 m-8 5 h4\"/>\n<circle class=\"fig-dot\" cx=\"250\" cy=\"68\" r=\"3.5\" data-node-id=\"p1-qa\" data-node-color=\"blue\"/>\n<text class=\"fig-text fig-math\" x=\"250\" y=\"48\" text-anchor=\"middle\" data-node-id=\"p1-qa\" data-node-color=\"blue\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">X</tspan></text>\n<text class=\"fig-text fig-math\" x=\"272\" y=\"115\" text-anchor=\"start\">(1 − A<tspan baseline-shift=\"sub\" font-size=\"78%\">XY</tspan>)C<tspan baseline-shift=\"sub\" font-size=\"78%\">μ1</tspan></text>\n<path class=\"fig-ink\" d=\"M400 68 V96\"/>\n<path class=\"fig-ink\" d=\"M400 96 V106.0 M388 106.0 H412 M388 114.0 H412 M400 114.0 V124\"/>\n<path class=\"fig-ink\" d=\"M400 124 V131\"/>\n<path class=\"fig-ink\" d=\"M390 131 h20 m-16 5 h12 m-8 5 h4\"/>\n<circle class=\"fig-dot\" cx=\"400\" cy=\"68\" r=\"3.5\" data-node-id=\"p1-qb\" data-node-color=\"red\"/>\n<text class=\"fig-text fig-math\" x=\"400\" y=\"48\" text-anchor=\"middle\" data-node-id=\"p1-qb\" data-node-color=\"red\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">Y</tspan></text>\n<text class=\"fig-text fig-math\" x=\"422\" y=\"115\" text-anchor=\"start\">(1 − 1/A<tspan baseline-shift=\"sub\" font-size=\"78%\">XY</tspan>)C<tspan baseline-shift=\"sub\" font-size=\"78%\">μ1</tspan></text>\n</svg>\n<figcaption>$A_{XY}=v_Y/v_X=-4$를 넣으면 $X$ 쪽은 $(1-A_{XY})C_{\\mu1}=5C_{\\mu1}$, $Y$ 쪽은 $(1-1/A_{XY})C_{\\mu1}=1.25\\,C_{\\mu1}$이고 두 가지 모두 접지로 이어져요.</figcaption>\n</figure>\n      <p>$A_{XY}=-4$를 넣어 밀러 커패시턴스를 구해요.</p>\n      $$C_{X,M}=(1+4)C_{\\mu1}=5C_{\\mu1}$$\n      $$C_{Y,M}=\\left(1+\\frac{1}{4}\\right)C_{\\mu1}=1.25\\,C_{\\mu1}$$\n      <p>노드마다 접지 커패시턴스를 모아요. $X$에는 $C_{\\pi1}$, $Y$에는 $Q_1$의 $C_{CS1}$·$Q_2$의 $C_{\\pi2}$·$Q_3$의 $C_{\\mu3}$·$C_{CS3}$, 출력에는 $C_{\\mu2}$·$C_{CS2}$가 더해져요.</p>\n      $$C_X=C_{\\pi1}+5C_{\\mu1}$$\n      $$C_Y=1.25\\,C_{\\mu1}+C_{CS1}+C_{\\pi2}+C_{\\mu3}+C_{CS3}$$\n      $$C_{\\mathrm{out}}=C_{\\mu2}+C_{CS2}$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "노드 저항과 세 극점",
+          "html": "\n      <p>입력원을 0으로 두면 $X$에서는 왼쪽 $R_B$와 오른쪽 $r_{\\pi1}$이 모두 접지로 이어져 병렬이에요. $Y$는 앞에서 구한 $1/g_{m2}$예요. 출력에서 아래로 $Q_2$ 컬렉터를 보면 $V_A=\\infty$라 무한대이므로 $R_C$만 남아요.</p>\n      <figure class=\"figure\">\n<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 551 125\" role=\"img\" aria-label=\"입력 X, 중간 Y, 출력에서 각각 노드 저항과 접지 기준 커패시턴스가 병렬로 연결된 세 개의 자연응답 회로\" font-family=\"Pretendard, sans-serif\" font-size=\"14\" font-weight=\"600\">\n<path class=\"fig-ink\" d=\"M82 37 H142\"/>\n<path class=\"fig-ink\" d=\"M82 37 V55.0 l6 3 -12 6 12 6 -12 6 12 6 -12 6 6 3 V109\"/>\n<path class=\"fig-ink\" d=\"M72 109 h20 m-16 5 h12 m-8 5 h4\"/>\n<path class=\"fig-ink\" d=\"M142 37 V69.0 M130 69.0 H154 M130 77.0 H154 M142 77.0 V109\"/>\n<path class=\"fig-ink\" d=\"M132 109 h20 m-16 5 h12 m-8 5 h4\"/>\n<circle class=\"fig-dot\" cx=\"82\" cy=\"37\" r=\"3.5\" data-node-id=\"p1-X\" data-node-color=\"blue\"/>\n<text class=\"fig-text fig-math\" x=\"82\" y=\"19\" text-anchor=\"middle\" data-node-id=\"p1-X\" data-node-color=\"blue\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">X</tspan></text>\n<text class=\"fig-text fig-math\" x=\"66\" y=\"78\" text-anchor=\"end\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">B</tspan> ‖ r<tspan baseline-shift=\"sub\" font-size=\"78%\">π1</tspan></text>\n<text class=\"fig-text fig-math\" x=\"164\" y=\"78\" text-anchor=\"start\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">X</tspan></text>\n<path class=\"fig-ink\" d=\"M261 37 H321\"/>\n<path class=\"fig-ink\" d=\"M261 37 V55.0 l6 3 -12 6 12 6 -12 6 12 6 -12 6 6 3 V109\"/>\n<path class=\"fig-ink\" d=\"M251 109 h20 m-16 5 h12 m-8 5 h4\"/>\n<path class=\"fig-ink\" d=\"M321 37 V69.0 M309 69.0 H333 M309 77.0 H333 M321 77.0 V109\"/>\n<path class=\"fig-ink\" d=\"M311 109 h20 m-16 5 h12 m-8 5 h4\"/>\n<circle class=\"fig-dot\" cx=\"261\" cy=\"37\" r=\"3.5\" data-node-id=\"p1-Y\" data-node-color=\"red\"/>\n<text class=\"fig-text fig-math\" x=\"261\" y=\"19\" text-anchor=\"middle\" data-node-id=\"p1-Y\" data-node-color=\"red\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">Y</tspan></text>\n<text class=\"fig-text fig-math\" x=\"245\" y=\"78\" text-anchor=\"end\">1/g<tspan baseline-shift=\"sub\" font-size=\"78%\">m2</tspan></text>\n<text class=\"fig-text fig-math\" x=\"343\" y=\"78\" text-anchor=\"start\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">Y</tspan></text>\n<path class=\"fig-ink\" d=\"M418 37 H478\"/>\n<path class=\"fig-ink\" d=\"M418 37 V55.0 l6 3 -12 6 12 6 -12 6 12 6 -12 6 6 3 V109\"/>\n<path class=\"fig-ink\" d=\"M408 109 h20 m-16 5 h12 m-8 5 h4\"/>\n<path class=\"fig-ink\" d=\"M478 37 V69.0 M466 69.0 H490 M466 77.0 H490 M478 77.0 V109\"/>\n<path class=\"fig-ink\" d=\"M468 109 h20 m-16 5 h12 m-8 5 h4\"/>\n<circle class=\"fig-dot\" cx=\"418\" cy=\"37\" r=\"3.5\" data-node-id=\"p1-out\" data-node-color=\"blue\"/>\n<text class=\"fig-text fig-math\" x=\"418\" y=\"19\" text-anchor=\"middle\" data-node-id=\"p1-out\" data-node-color=\"blue\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text>\n<text class=\"fig-text fig-math\" x=\"402\" y=\"78\" text-anchor=\"end\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">C</tspan></text>\n<text class=\"fig-text fig-math\" x=\"500\" y=\"78\" text-anchor=\"start\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text>\n</svg>\n<figcaption>밀러 분리 뒤 입력을 0으로 둔 각 노드의 자연응답 회로예요. 각 노드는 $1+sRC=0$에서 극점 하나를 줘요.</figcaption>\n</figure>\n      $$|\\omega_{p,X}|=\\frac{1}{(R_B\\parallel r_{\\pi1})(C_{\\pi1}+5C_{\\mu1})}$$\n      $$|\\omega_{p,Y}|=\\frac{g_{m2}}{C_Y}=\\frac{g_{m1}/4}{1.25\\,C_{\\mu1}+C_{CS1}+C_{\\pi2}+C_{\\mu3}+C_{CS3}}$$\n      $$|\\omega_{p,\\mathrm{out}}|=\\frac{1}{R_C(C_{\\mu2}+C_{CS2})}$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "표준 캐스코드와 비교",
+          "html": "\n      <p>표준 캐스코드(Fig. 11.50(a))는 $Q_1$, $Q_2$에 같은 전류가 흘러 $g_{m1}=g_{m2}$예요. 그래서 $A_{XY}=-1$이고 $X$ 쪽 밀러 커패시턴스는 $2C_{\\mu1}$이에요.</p>\n      $$\\frac{C_{X,M}(\\text{여기})}{C_{X,M}(\\text{표준})}=\\frac{5C_{\\mu1}}{2C_{\\mu1}}=2.5$$\n      <p>$Q_3$가 $Q_2$ 전류를 1/4로 줄여 $Y$ 저항이 4배가 되므로 $|A_{XY}|$도 4배가 돼요. 그래서 밀러 효과는 표준 캐스코드보다 더 커요.</p>\n    "
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n      <p>$V_A=\\infty$, 큰 β, 저주파 이득 $A_{XY}=-4$로 밀러 근사를 적용한 세 극점(크기, rad/s)이에요.</p>\n      $$|\\omega_{p,X}|=\\frac{1}{(R_B\\parallel r_{\\pi1})(C_{\\pi1}+5C_{\\mu1})}$$\n      $$|\\omega_{p,Y}|=\\frac{g_{m1}/4}{1.25\\,C_{\\mu1}+C_{CS1}+C_{\\pi2}+C_{\\mu3}+C_{CS3}}$$\n      $$|\\omega_{p,\\mathrm{out}}|=\\frac{1}{R_C(C_{\\mu2}+C_{CS2})}$$\n      <p><strong>밀러 효과는 표준 캐스코드보다 더 커요.</strong> $C_{\\mu1}$이 입력에서 $2C_{\\mu1}$ 대신 $5C_{\\mu1}$로 보여요.</p>\n    "
+        }
+      ]
+    },
+    {
+      "id": "2021-1_기말-Q1",
+      "explanation_id": "p2",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "바이어스 전류와 gm",
+          "html": "\n    <p>노드 $Y$에서 DC KCL을 써요. $M_1$ 전류는 $M_2$와 $M_3$가 나눠서 대요.</p>\n    $$I_{D1}=I_{D2}+I_{D3}$$\n    $$I_{D2}=2\\,\\mathrm{mA}-1\\,\\mathrm{mA}=1\\,\\mathrm{mA}$$\n    <p>단위를 맞춰요. $100\\,\\mu\\mathrm{A/V^2}=0.1\\,\\mathrm{mA/V^2}$이고, $\\sqrt{\\mathrm{mA/V^2}\\cdot\\mathrm{mA}}=\\mathrm{mA/V}=\\mathrm{mS}$예요.</p>\n    $$g_{m1}=\\sqrt{2\\times0.1\\times\\frac{200}{0.2}\\times2}\\,\\mathrm{mS}=\\sqrt{400}\\,\\mathrm{mS}=20\\,\\mathrm{mS}$$\n    $$g_{m2}=\\sqrt{2\\times0.1\\times\\frac{100}{0.2}\\times1}\\,\\mathrm{mS}=\\sqrt{100}\\,\\mathrm{mS}=10\\,\\mathrm{mS}$$\n    <p>$M_3$의 $g_m$은 필요 없어요. 게이트와 소스가 모두 AC 접지라 제어 전압이 0이고, $\\lambda=0$이라 출력 저항도 무한대예요. 그래서 $\\mu_pC_{ox}$, $(W/L)_3$, 그리고 $X$·$Y$ 극점에 관여하지 않는 $R_L$은 쓰지 않아요.</p>\n  "
+        },
+        {
+          "subpart": "main",
+          "label": "X에서 Y까지의 저주파 이득",
+          "html": "\n    <p>입력 $v_X$, 출력 $v_Y$로 정하고 커패시터는 열어요. $Y$를 접지에 단락하면 $M_2$의 $v_{GS2}=0$이라 $M_1$ 제어 전류가 그대로 단락선으로 가요.</p>\n    <p>$Y$를 접지로 단락해 $v_Y=0$으로 두고, 접지에서 단락선을 지나 $Y$로 들어가는 전류를 $i_{Y,\\mathrm{sc}}$의 양의 방향으로 둬요. $M_1$이 $Y$에서 끌어내리는 $g_{m1}v_X$를 단락선이 그대로 대 주므로 $i_{Y,\\mathrm{sc}}=g_{m1}v_X$예요.</p>\n    <div data-gain-stage=\"gm\">$$G_{m,XY}=\\frac{i_{Y,\\mathrm{sc}}}{v_X}=g_{m1}=20\\,\\mathrm{mS}$$</div>\n    <p>$v_X=0$으로 두고 $Y$에서 보면 $M_1$ 드레인과 $M_3$ 드레인은 $\\lambda=0$이라 개방이고, $M_2$ 소스 쪽 $1/g_{m2}$만 남아요.</p>\n    <div data-gain-stage=\"rout\">$$R_Y=\\frac{1}{g_{m2}}=\\frac{1}{10\\,\\mathrm{mS}}=100\\,\\Omega$$</div>\n    <div data-gain-stage=\"gain\">$$A_{XY}=-G_{m,XY}R_Y=-20\\,\\mathrm{mS}\\times0.1\\,\\mathrm{k\\Omega}=-2$$</div>\n  "
+        },
+        {
+          "subpart": "main",
+          "label": "밀러 분리와 노드별 커패시턴스",
+          "html": "\n      <figure class=\"figure\">\n<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 540 150\" role=\"img\" aria-label=\"왼쪽은 X와 Y 사이에 떠 있는 C_GD1입니다. 오른쪽은 X와 Y에 각각 접지로 연결된 밀러 커패시터입니다.\" font-family=\"Pretendard, sans-serif\" font-size=\"14\" font-weight=\"600\">\n<text class=\"fig-text fig-math\" x=\"97\" y=\"16\" text-anchor=\"middle\">분리 전</text>\n<text class=\"fig-text fig-math\" x=\"360\" y=\"16\" text-anchor=\"middle\">분리 후</text>\n<path class=\"fig-ink\" d=\"M24 68 H92.0 M92.0 56 V80 M102.0 56 V80 M102.0 68 H170\"/>\n<text class=\"fig-text fig-math\" x=\"97\" y=\"103\" text-anchor=\"middle\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">GD1</tspan></text>\n<circle class=\"fig-dot\" cx=\"24\" cy=\"68\" r=\"3.5\" data-node-id=\"p2-pa\" data-node-color=\"blue\"/>\n<text class=\"fig-text fig-math\" x=\"24\" y=\"48\" text-anchor=\"middle\" data-node-id=\"p2-pa\" data-node-color=\"blue\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">X</tspan></text>\n<circle class=\"fig-dot\" cx=\"170\" cy=\"68\" r=\"3.5\" data-node-id=\"p2-pb\" data-node-color=\"red\"/>\n<text class=\"fig-text fig-math\" x=\"170\" y=\"48\" text-anchor=\"middle\" data-node-id=\"p2-pb\" data-node-color=\"red\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">Y</tspan></text>\n<path class=\"fig-ink\" d=\"M190 76 H215 m-5 -5 l5 5 -5 5\"/>\n<path class=\"fig-ink\" d=\"M250 68 V96\"/>\n<path class=\"fig-ink\" d=\"M250 96 V106.0 M238 106.0 H262 M238 114.0 H262 M250 114.0 V124\"/>\n<path class=\"fig-ink\" d=\"M250 124 V131\"/>\n<path class=\"fig-ink\" d=\"M240 131 h20 m-16 5 h12 m-8 5 h4\"/>\n<circle class=\"fig-dot\" cx=\"250\" cy=\"68\" r=\"3.5\" data-node-id=\"p2-qa\" data-node-color=\"blue\"/>\n<text class=\"fig-text fig-math\" x=\"250\" y=\"48\" text-anchor=\"middle\" data-node-id=\"p2-qa\" data-node-color=\"blue\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">X</tspan></text>\n<text class=\"fig-text fig-math\" x=\"272\" y=\"115\" text-anchor=\"start\">(1 − A<tspan baseline-shift=\"sub\" font-size=\"78%\">XY</tspan>)C<tspan baseline-shift=\"sub\" font-size=\"78%\">GD1</tspan></text>\n<path class=\"fig-ink\" d=\"M400 68 V96\"/>\n<path class=\"fig-ink\" d=\"M400 96 V106.0 M388 106.0 H412 M388 114.0 H412 M400 114.0 V124\"/>\n<path class=\"fig-ink\" d=\"M400 124 V131\"/>\n<path class=\"fig-ink\" d=\"M390 131 h20 m-16 5 h12 m-8 5 h4\"/>\n<circle class=\"fig-dot\" cx=\"400\" cy=\"68\" r=\"3.5\" data-node-id=\"p2-qb\" data-node-color=\"red\"/>\n<text class=\"fig-text fig-math\" x=\"400\" y=\"48\" text-anchor=\"middle\" data-node-id=\"p2-qb\" data-node-color=\"red\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">Y</tspan></text>\n<text class=\"fig-text fig-math\" x=\"422\" y=\"115\" text-anchor=\"start\">(1 − 1/A<tspan baseline-shift=\"sub\" font-size=\"78%\">XY</tspan>)C<tspan baseline-shift=\"sub\" font-size=\"78%\">GD1</tspan></text>\n</svg>\n<figcaption>$A_{XY}=-2$이므로 $X$ 쪽은 $(1-A_{XY})C_{GD1}=3C_{GD1}$, $Y$ 쪽은 $(1-1/A_{XY})C_{GD1}=1.5\\,C_{GD1}$이고 두 가지 모두 접지로 이어져요.</figcaption>\n</figure>\n      $$C_{X,M}=(1+2)C_{GD1}=3C_{GD1}$$\n      $$C_{Y,M}=\\left(1+\\frac{1}{2}\\right)C_{GD1}=1.5\\,C_{GD1}$$\n      $$C_X=C_{GS1}+3C_{GD1}$$\n      $$C_Y=C_{DB1}+C_{GS2}+C_{SB2}+1.5\\,C_{GD1}+C_{GD3}+C_{DB3}$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "X와 Y의 극점",
+          "html": "\n      <p>입력을 0으로 두면 $X$는 $R_S$를 거쳐 접지로 이어져요. MOS 게이트 쪽 저주파 저항은 무한대라 $R_S$만 남아요. $Y$는 앞에서 구한 $1/g_{m2}=100\\,\\Omega$이에요.</p>\n      <figure class=\"figure\">\n<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 550 125\" role=\"img\" aria-label=\"노드 X와 노드 Y에서 각각 노드 저항과 접지 기준 커패시턴스가 병렬로 연결된 두 개의 자연응답 회로\" font-family=\"Pretendard, sans-serif\" font-size=\"14\" font-weight=\"600\">\n<g transform=\"translate(107 0)\">\n<path class=\"fig-ink\" d=\"M36 37 H96\"/>\n<path class=\"fig-ink\" d=\"M36 37 V55.0 l6 3 -12 6 12 6 -12 6 12 6 -12 6 6 3 V109\"/>\n<path class=\"fig-ink\" d=\"M26 109 h20 m-16 5 h12 m-8 5 h4\"/>\n<path class=\"fig-ink\" d=\"M96 37 V69.0 M84 69.0 H108 M84 77.0 H108 M96 77.0 V109\"/>\n<path class=\"fig-ink\" d=\"M86 109 h20 m-16 5 h12 m-8 5 h4\"/>\n<circle class=\"fig-dot\" cx=\"36\" cy=\"37\" r=\"3.5\" data-node-id=\"p2-X\" data-node-color=\"blue\"/>\n<text class=\"fig-text fig-math\" x=\"36\" y=\"19\" text-anchor=\"middle\" data-node-id=\"p2-X\" data-node-color=\"blue\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">X</tspan></text>\n<text class=\"fig-text fig-math\" x=\"20\" y=\"78\" text-anchor=\"end\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">S</tspan></text>\n<text class=\"fig-text fig-math\" x=\"118\" y=\"78\" text-anchor=\"start\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">X</tspan></text>\n<path class=\"fig-ink\" d=\"M215 37 H275\"/>\n<path class=\"fig-ink\" d=\"M215 37 V55.0 l6 3 -12 6 12 6 -12 6 12 6 -12 6 6 3 V109\"/>\n<path class=\"fig-ink\" d=\"M205 109 h20 m-16 5 h12 m-8 5 h4\"/>\n<path class=\"fig-ink\" d=\"M275 37 V69.0 M263 69.0 H287 M263 77.0 H287 M275 77.0 V109\"/>\n<path class=\"fig-ink\" d=\"M265 109 h20 m-16 5 h12 m-8 5 h4\"/>\n<circle class=\"fig-dot\" cx=\"215\" cy=\"37\" r=\"3.5\" data-node-id=\"p2-Y\" data-node-color=\"red\"/>\n<text class=\"fig-text fig-math\" x=\"215\" y=\"19\" text-anchor=\"middle\" data-node-id=\"p2-Y\" data-node-color=\"red\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">Y</tspan></text>\n<text class=\"fig-text fig-math\" x=\"199\" y=\"78\" text-anchor=\"end\">1/g<tspan baseline-shift=\"sub\" font-size=\"78%\">m2</tspan></text>\n<text class=\"fig-text fig-math\" x=\"297\" y=\"78\" text-anchor=\"start\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">Y</tspan></text>\n</g>\n</svg>\n<figcaption>밀러 분리 뒤 입력을 0으로 둔 $X$, $Y$의 자연응답 회로예요. 두 저항이 모두 $100\\,\\Omega$이에요.</figcaption>\n</figure>\n      $$|\\omega_{p,X}|=\\frac{1}{R_SC_X}=\\frac{1}{100\\,\\Omega\\,(C_{GS1}+3C_{GD1})}$$\n      $$|\\omega_{p,Y}|=\\frac{g_{m2}}{C_Y}=\\frac{1}{100\\,\\Omega\\,(C_{DB1}+C_{GS2}+C_{SB2}+1.5\\,C_{GD1}+C_{GD3}+C_{DB3})}$$\n    "
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n      <p>$\\lambda=0$, 몸체 효과 무시, 저주파 이득 $A_{XY}=-2$로 밀러 근사를 적용한 두 극점(크기, rad/s)이에요.</p>\n      $$|\\omega_{p,X}|=\\frac{1}{100\\,\\Omega\\,(C_{GS1}+3C_{GD1})}$$\n      $$|\\omega_{p,Y}|=\\frac{1}{100\\,\\Omega\\,(C_{DB1}+C_{GS2}+C_{SB2}+1.5\\,C_{GD1}+C_{GD3}+C_{DB3})}$$\n    "
+        }
+      ]
+    },
+    {
+      "id": "E11.27",
+      "explanation_id": "p3",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "반회로 판단",
+          "html": "\n    <p>좌우 소자·$R_S$·$R_D$·바이어스가 같고 입력이 순수 차동이므로 꼬리 노드를 AC 접지로 바꿔요. 그러면 $M_1$ 소스가 접지된 왼쪽 반회로가 남아요. $V_{DD}$와 $V_b$도 AC 접지예요.</p>\n    <p>반회로: $v_{in1}\\to R_S\\to X$($M_1$ 게이트), $M_1$ 드레인 $=Y=M_3$ 소스, $M_3$ 드레인 $=$ 출력, 출력–$R_D$–AC 접지.</p>\n  "
+        },
+        {
+          "subpart": "main",
+          "label": "X에서 Y까지의 저주파 이득",
+          "html": "\n    <p>입력 $v_X$, 출력 $v_Y$로 정하고 커패시터는 열어요. $Y$를 단락하면 $M_3$의 $v_{GS3}=0$이라 $M_1$ 제어 전류가 그대로 단락선으로 가요.</p>\n    <p>$Y$를 접지로 단락해 $v_Y=0$으로 두고, 접지에서 단락선을 지나 $Y$로 들어가는 전류를 $i_{Y,\\mathrm{sc}}$의 양의 방향으로 둬요. $M_1$이 $Y$에서 끌어내리는 $g_{m1}v_X$를 단락선이 그대로 대 주므로 $i_{Y,\\mathrm{sc}}=g_{m1}v_X$예요.</p>\n    <div data-gain-stage=\"gm\">$$G_{m,XY}=\\frac{i_{Y,\\mathrm{sc}}}{v_X}=g_{m1}$$</div>\n    <p>$v_X=0$으로 두고 $Y$에서 보면 $M_1$ 드레인은 $\\lambda=0$이라 개방이고 $M_3$ 소스 쪽 $1/g_{m3}$만 남아요.</p>\n    <div data-gain-stage=\"rout\">$$R_Y=\\frac{1}{g_{m3}}$$</div>\n    <div data-gain-stage=\"gain\">$$A_{XY}=-G_{m,XY}R_Y=-\\frac{g_{m1}}{g_{m3}}$$</div>\n  "
+        },
+        {
+          "subpart": "main",
+          "label": "밀러 분리와 노드별 커패시턴스",
+          "html": "\n      <figure class=\"figure\">\n<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 540 150\" role=\"img\" aria-label=\"왼쪽은 X와 Y 사이에 떠 있는 C_GD1입니다. 오른쪽은 X와 Y에 각각 접지로 연결된 밀러 커패시터입니다.\" font-family=\"Pretendard, sans-serif\" font-size=\"14\" font-weight=\"600\">\n<text class=\"fig-text fig-math\" x=\"97\" y=\"16\" text-anchor=\"middle\">분리 전</text>\n<text class=\"fig-text fig-math\" x=\"360\" y=\"16\" text-anchor=\"middle\">분리 후</text>\n<path class=\"fig-ink\" d=\"M24 68 H92.0 M92.0 56 V80 M102.0 56 V80 M102.0 68 H170\"/>\n<text class=\"fig-text fig-math\" x=\"97\" y=\"103\" text-anchor=\"middle\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">GD1</tspan></text>\n<circle class=\"fig-dot\" cx=\"24\" cy=\"68\" r=\"3.5\" data-node-id=\"p3-pa\" data-node-color=\"blue\"/>\n<text class=\"fig-text fig-math\" x=\"24\" y=\"48\" text-anchor=\"middle\" data-node-id=\"p3-pa\" data-node-color=\"blue\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">X</tspan></text>\n<circle class=\"fig-dot\" cx=\"170\" cy=\"68\" r=\"3.5\" data-node-id=\"p3-pb\" data-node-color=\"red\"/>\n<text class=\"fig-text fig-math\" x=\"170\" y=\"48\" text-anchor=\"middle\" data-node-id=\"p3-pb\" data-node-color=\"red\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">Y</tspan></text>\n<path class=\"fig-ink\" d=\"M190 76 H215 m-5 -5 l5 5 -5 5\"/>\n<path class=\"fig-ink\" d=\"M250 68 V96\"/>\n<path class=\"fig-ink\" d=\"M250 96 V106.0 M238 106.0 H262 M238 114.0 H262 M250 114.0 V124\"/>\n<path class=\"fig-ink\" d=\"M250 124 V131\"/>\n<path class=\"fig-ink\" d=\"M240 131 h20 m-16 5 h12 m-8 5 h4\"/>\n<circle class=\"fig-dot\" cx=\"250\" cy=\"68\" r=\"3.5\" data-node-id=\"p3-qa\" data-node-color=\"blue\"/>\n<text class=\"fig-text fig-math\" x=\"250\" y=\"48\" text-anchor=\"middle\" data-node-id=\"p3-qa\" data-node-color=\"blue\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">X</tspan></text>\n<text class=\"fig-text fig-math\" x=\"272\" y=\"115\" text-anchor=\"start\">(1 − A<tspan baseline-shift=\"sub\" font-size=\"78%\">XY</tspan>)C<tspan baseline-shift=\"sub\" font-size=\"78%\">GD1</tspan></text>\n<path class=\"fig-ink\" d=\"M400 68 V96\"/>\n<path class=\"fig-ink\" d=\"M400 96 V106.0 M388 106.0 H412 M388 114.0 H412 M400 114.0 V124\"/>\n<path class=\"fig-ink\" d=\"M400 124 V131\"/>\n<path class=\"fig-ink\" d=\"M390 131 h20 m-16 5 h12 m-8 5 h4\"/>\n<circle class=\"fig-dot\" cx=\"400\" cy=\"68\" r=\"3.5\" data-node-id=\"p3-qb\" data-node-color=\"red\"/>\n<text class=\"fig-text fig-math\" x=\"400\" y=\"48\" text-anchor=\"middle\" data-node-id=\"p3-qb\" data-node-color=\"red\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">Y</tspan></text>\n<text class=\"fig-text fig-math\" x=\"422\" y=\"115\" text-anchor=\"start\">(1 − 1/A<tspan baseline-shift=\"sub\" font-size=\"78%\">XY</tspan>)C<tspan baseline-shift=\"sub\" font-size=\"78%\">GD1</tspan></text>\n</svg>\n<figcaption>$A_{XY}=-g_{m1}/g_{m3}$이므로 $X$ 쪽은 $(1+g_{m1}/g_{m3})C_{GD1}$, $Y$ 쪽은 $(1+g_{m3}/g_{m1})C_{GD1}$이고 두 가지 모두 접지로 이어져요.</figcaption>\n</figure>\n      $$C_X=C_{GS1}+\\left(1+\\frac{g_{m1}}{g_{m3}}\\right)C_{GD1}$$\n      $$C_Y=C_{DB1}+C_{GS3}+\\left(1+\\frac{g_{m3}}{g_{m1}}\\right)C_{GD1}+C_{SB3}$$\n      $$C_{\\mathrm{out}}=C_{DB3}+C_{GD3}$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "노드 저항과 세 극점",
+          "html": "\n      <p>입력을 0으로 두면 $X$는 $R_S$만 보고, $Y$는 $1/g_{m3}$을 봐요. 출력에서 아래로 $M_3$ 드레인을 보면 $\\lambda=0$이라 무한대이므로 $R_D$만 남아요.</p>\n      <figure class=\"figure\">\n<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 505 125\" role=\"img\" aria-label=\"입력 X, 중간 Y, 출력에서 각각 노드 저항과 접지 기준 커패시턴스가 병렬로 연결된 세 개의 자연응답 회로\" font-family=\"Pretendard, sans-serif\" font-size=\"14\" font-weight=\"600\">\n<path class=\"fig-ink\" d=\"M36 37 H96\"/>\n<path class=\"fig-ink\" d=\"M36 37 V55.0 l6 3 -12 6 12 6 -12 6 12 6 -12 6 6 3 V109\"/>\n<path class=\"fig-ink\" d=\"M26 109 h20 m-16 5 h12 m-8 5 h4\"/>\n<path class=\"fig-ink\" d=\"M96 37 V69.0 M84 69.0 H108 M84 77.0 H108 M96 77.0 V109\"/>\n<path class=\"fig-ink\" d=\"M86 109 h20 m-16 5 h12 m-8 5 h4\"/>\n<circle class=\"fig-dot\" cx=\"36\" cy=\"37\" r=\"3.5\" data-node-id=\"p3-X\" data-node-color=\"blue\"/>\n<text class=\"fig-text fig-math\" x=\"36\" y=\"19\" text-anchor=\"middle\" data-node-id=\"p3-X\" data-node-color=\"blue\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">X</tspan></text>\n<text class=\"fig-text fig-math\" x=\"20\" y=\"78\" text-anchor=\"end\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">S</tspan></text>\n<text class=\"fig-text fig-math\" x=\"118\" y=\"78\" text-anchor=\"start\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">X</tspan></text>\n<path class=\"fig-ink\" d=\"M215 37 H275\"/>\n<path class=\"fig-ink\" d=\"M215 37 V55.0 l6 3 -12 6 12 6 -12 6 12 6 -12 6 6 3 V109\"/>\n<path class=\"fig-ink\" d=\"M205 109 h20 m-16 5 h12 m-8 5 h4\"/>\n<path class=\"fig-ink\" d=\"M275 37 V69.0 M263 69.0 H287 M263 77.0 H287 M275 77.0 V109\"/>\n<path class=\"fig-ink\" d=\"M265 109 h20 m-16 5 h12 m-8 5 h4\"/>\n<circle class=\"fig-dot\" cx=\"215\" cy=\"37\" r=\"3.5\" data-node-id=\"p3-Y\" data-node-color=\"red\"/>\n<text class=\"fig-text fig-math\" x=\"215\" y=\"19\" text-anchor=\"middle\" data-node-id=\"p3-Y\" data-node-color=\"red\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">Y</tspan></text>\n<text class=\"fig-text fig-math\" x=\"199\" y=\"78\" text-anchor=\"end\">1/g<tspan baseline-shift=\"sub\" font-size=\"78%\">m3</tspan></text>\n<text class=\"fig-text fig-math\" x=\"297\" y=\"78\" text-anchor=\"start\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">Y</tspan></text>\n<path class=\"fig-ink\" d=\"M372 37 H432\"/>\n<path class=\"fig-ink\" d=\"M372 37 V55.0 l6 3 -12 6 12 6 -12 6 12 6 -12 6 6 3 V109\"/>\n<path class=\"fig-ink\" d=\"M362 109 h20 m-16 5 h12 m-8 5 h4\"/>\n<path class=\"fig-ink\" d=\"M432 37 V69.0 M420 69.0 H444 M420 77.0 H444 M432 77.0 V109\"/>\n<path class=\"fig-ink\" d=\"M422 109 h20 m-16 5 h12 m-8 5 h4\"/>\n<circle class=\"fig-dot\" cx=\"372\" cy=\"37\" r=\"3.5\" data-node-id=\"p3-out\" data-node-color=\"blue\"/>\n<text class=\"fig-text fig-math\" x=\"372\" y=\"19\" text-anchor=\"middle\" data-node-id=\"p3-out\" data-node-color=\"blue\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text>\n<text class=\"fig-text fig-math\" x=\"356\" y=\"78\" text-anchor=\"end\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">D</tspan></text>\n<text class=\"fig-text fig-math\" x=\"454\" y=\"78\" text-anchor=\"start\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text>\n</svg>\n<figcaption>밀러 분리 뒤 입력을 0으로 둔 반회로 각 노드의 자연응답 회로예요.</figcaption>\n</figure>\n      $$|\\omega_{p,X}|=\\frac{1}{R_S\\left[C_{GS1}+\\left(1+\\dfrac{g_{m1}}{g_{m3}}\\right)C_{GD1}\\right]}$$\n      $$|\\omega_{p,Y}|=\\frac{g_{m3}}{C_{DB1}+C_{GS3}+\\left(1+\\dfrac{g_{m3}}{g_{m1}}\\right)C_{GD1}+C_{SB3}}$$\n      $$|\\omega_{p,\\mathrm{out}}|=\\frac{1}{R_D(C_{DB3}+C_{GD3})}$$\n      <p>교과서 식 (11.156)은 $C_{GD1}$과 $C_{SB3}$ 사이의 $+$가 빠져 인쇄돼 있어요. 위처럼 합으로 읽어요. 식 (11.157)의 $R_L$은 이 그림의 $R_D$예요.</p>\n    "
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n      <p>순수 차동 입력, $\\lambda=0$, 몸체 효과 무시, 저주파 이득 $A_{XY}=-g_{m1}/g_{m3}$로 밀러 근사를 적용한 세 극점(크기, rad/s)이에요. 두 반쪽이 같으므로 회로 전체의 극점도 이 세 개예요.</p>\n      $$|\\omega_{p,X}|=\\frac{1}{R_S\\left[C_{GS1}+\\left(1+\\dfrac{g_{m1}}{g_{m3}}\\right)C_{GD1}\\right]}$$\n      $$|\\omega_{p,Y}|=\\frac{g_{m3}}{C_{DB1}+C_{GS3}+\\left(1+\\dfrac{g_{m3}}{g_{m1}}\\right)C_{GD1}+C_{SB3}}$$\n      $$|\\omega_{p,\\mathrm{out}}|=\\frac{1}{R_D(C_{DB3}+C_{GD3})}$$\n    "
+        }
+      ]
+    },
+    {
+      "id": "2023-1_기말-Q1",
+      "explanation_id": "p4",
+      "subparts": [
+        "1",
+        "2"
+      ],
+      "steps": [
+        {
+          "subpart": "1",
+          "label": "회로 (a) 노드 판단",
+          "html": "\n    <p>$V_{DD}$, $V_{b1}$, $V_{b2}$를 AC 접지로 보내요. 극점 후보는 커패시터가 모이는 세 노드 $X$, $A$, 출력이에요. $C_{GD1}$만 $X$–$A$ 사이에 떠 있고, $M_4$의 $C_{GD4}$는 게이트와 드레인이 같은 노드라 양단 전압이 0이어서 빠져요.</p>\n  "
+        },
+        {
+          "subpart": "1",
+          "label": "X에서 A까지의 저주파 이득",
+          "html": "\n      <p>입력 $v_X$, 출력 $v_A$로 정하고 커패시터는 열어요. $A$를 단락하면 $M_2$, $M_3$의 게이트–소스 전압이 0이라 $M_1$ 제어 전류가 그대로 단락선으로 가요.</p>\n      <p>$A$를 접지로 단락해 $v_A=0$으로 두고, 접지에서 단락선을 지나 $A$로 들어가는 전류를 $i_{A,\\mathrm{sc}}$의 양의 방향으로 둬요. $M_1$이 $A$에서 끌어내리는 $g_{m1}v_X$를 단락선이 그대로 대 주므로 $i_{A,\\mathrm{sc}}=g_{m1}v_X$예요.</p>\n      <div data-gain-stage=\"gm\">$$G_{m,XA}=\\frac{i_{A,\\mathrm{sc}}}{v_X}=g_{m1}$$</div>\n      <p>$v_X=0$으로 두고 $A$에서 보면 $M_1$ 드레인은 $\\lambda=0$이라 개방이에요. 위로 $M_2$ 소스의 $1/g_{m2}$, 왼쪽으로 $M_3$ 소스의 $1/g_{m3}$이 같은 두 노드($A$와 AC 접지)에 붙어 병렬이에요.</p>\n      <div data-gain-stage=\"rout\">$$R_A=\\frac{1}{g_{m2}}\\parallel\\frac{1}{g_{m3}}=\\frac{1}{g_{m2}+g_{m3}}$$</div>\n      <div data-gain-stage=\"gain\">$$A_{XA}=-G_{m,XA}R_A=-\\frac{g_{m1}}{g_{m2}+g_{m3}}$$</div>\n    "
+        },
+        {
+          "subpart": "1",
+          "label": "밀러 분리와 노드별 커패시턴스",
+          "html": "\n      <figure class=\"figure\">\n<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 540 150\" role=\"img\" aria-label=\"왼쪽은 X와 A 사이에 떠 있는 C_GD1입니다. 오른쪽은 X와 A에 각각 접지로 연결된 밀러 커패시터입니다.\" font-family=\"Pretendard, sans-serif\" font-size=\"14\" font-weight=\"600\">\n<text class=\"fig-text fig-math\" x=\"97\" y=\"16\" text-anchor=\"middle\">분리 전</text>\n<text class=\"fig-text fig-math\" x=\"360\" y=\"16\" text-anchor=\"middle\">분리 후</text>\n<path class=\"fig-ink\" d=\"M24 68 H92.0 M92.0 56 V80 M102.0 56 V80 M102.0 68 H170\"/>\n<text class=\"fig-text fig-math\" x=\"97\" y=\"103\" text-anchor=\"middle\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">GD1</tspan></text>\n<circle class=\"fig-dot\" cx=\"24\" cy=\"68\" r=\"3.5\" data-node-id=\"p4a-pa\" data-node-color=\"blue\"/>\n<text class=\"fig-text fig-math\" x=\"24\" y=\"48\" text-anchor=\"middle\" data-node-id=\"p4a-pa\" data-node-color=\"blue\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">X</tspan></text>\n<circle class=\"fig-dot\" cx=\"170\" cy=\"68\" r=\"3.5\" data-node-id=\"p4a-pb\" data-node-color=\"red\"/>\n<text class=\"fig-text fig-math\" x=\"170\" y=\"48\" text-anchor=\"middle\" data-node-id=\"p4a-pb\" data-node-color=\"red\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">A</tspan></text>\n<path class=\"fig-ink\" d=\"M190 76 H215 m-5 -5 l5 5 -5 5\"/>\n<path class=\"fig-ink\" d=\"M250 68 V96\"/>\n<path class=\"fig-ink\" d=\"M250 96 V106.0 M238 106.0 H262 M238 114.0 H262 M250 114.0 V124\"/>\n<path class=\"fig-ink\" d=\"M250 124 V131\"/>\n<path class=\"fig-ink\" d=\"M240 131 h20 m-16 5 h12 m-8 5 h4\"/>\n<circle class=\"fig-dot\" cx=\"250\" cy=\"68\" r=\"3.5\" data-node-id=\"p4a-qa\" data-node-color=\"blue\"/>\n<text class=\"fig-text fig-math\" x=\"250\" y=\"48\" text-anchor=\"middle\" data-node-id=\"p4a-qa\" data-node-color=\"blue\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">X</tspan></text>\n<text class=\"fig-text fig-math\" x=\"272\" y=\"115\" text-anchor=\"start\">(1 − A<tspan baseline-shift=\"sub\" font-size=\"78%\">XA</tspan>)C<tspan baseline-shift=\"sub\" font-size=\"78%\">GD1</tspan></text>\n<path class=\"fig-ink\" d=\"M400 68 V96\"/>\n<path class=\"fig-ink\" d=\"M400 96 V106.0 M388 106.0 H412 M388 114.0 H412 M400 114.0 V124\"/>\n<path class=\"fig-ink\" d=\"M400 124 V131\"/>\n<path class=\"fig-ink\" d=\"M390 131 h20 m-16 5 h12 m-8 5 h4\"/>\n<circle class=\"fig-dot\" cx=\"400\" cy=\"68\" r=\"3.5\" data-node-id=\"p4a-qb\" data-node-color=\"red\"/>\n<text class=\"fig-text fig-math\" x=\"400\" y=\"48\" text-anchor=\"middle\" data-node-id=\"p4a-qb\" data-node-color=\"red\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">A</tspan></text>\n<text class=\"fig-text fig-math\" x=\"422\" y=\"115\" text-anchor=\"start\">(1 − 1/A<tspan baseline-shift=\"sub\" font-size=\"78%\">XA</tspan>)C<tspan baseline-shift=\"sub\" font-size=\"78%\">GD1</tspan></text>\n</svg>\n<figcaption>$A_{XA}=-g_{m1}/(g_{m2}+g_{m3})$이므로 $X$ 쪽은 $(1-A_{XA})C_{GD1}$, $A$ 쪽은 $(1-1/A_{XA})C_{GD1}$이고 두 가지 모두 접지로 이어져요.</figcaption>\n</figure>\n      $$C_{in}=C_{GS1}+\\left(1+\\frac{g_{m1}}{g_{m2}+g_{m3}}\\right)C_{GD1}$$\n      $$C_A=C_{DB1}+C_{GS2}+C_{SB2}+C_{GS3}+C_{SB3}+\\left(1+\\frac{g_{m2}+g_{m3}}{g_{m1}}\\right)C_{GD1}$$\n      $$C_{out}=C_{GD2}+C_{DB2}+C_{GS4}+C_{DB4}$$\n    "
+        },
+        {
+          "subpart": "1",
+          "label": "노드 저항과 세 극점",
+          "html": "\n      <p>입력을 0으로 두면 $X$는 $R_G$만 봐요. $A$는 위에서 구한 $1/(g_{m2}+g_{m3})$예요. 출력에서는 위로 다이오드 연결 $M_4$의 $1/g_{m4}$, 아래로 $M_2$ 드레인($\\lambda=0$이라 무한대)이 보여요.</p>\n      $$R_{out}=\\frac{1}{g_{m4}}\\parallel\\infty=\\frac{1}{g_{m4}}$$\n      <figure class=\"figure\">\n<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 579 125\" role=\"img\" aria-label=\"입력 X, 중간 A, 출력에서 각각 노드 저항과 접지 기준 커패시턴스가 병렬로 연결된 세 개의 자연응답 회로\" font-family=\"Pretendard, sans-serif\" font-size=\"14\" font-weight=\"600\">\n<path class=\"fig-ink\" d=\"M36 37 H96\"/>\n<path class=\"fig-ink\" d=\"M36 37 V55.0 l6 3 -12 6 12 6 -12 6 12 6 -12 6 6 3 V109\"/>\n<path class=\"fig-ink\" d=\"M26 109 h20 m-16 5 h12 m-8 5 h4\"/>\n<path class=\"fig-ink\" d=\"M96 37 V69.0 M84 69.0 H108 M84 77.0 H108 M96 77.0 V109\"/>\n<path class=\"fig-ink\" d=\"M86 109 h20 m-16 5 h12 m-8 5 h4\"/>\n<circle class=\"fig-dot\" cx=\"36\" cy=\"37\" r=\"3.5\" data-node-id=\"p4a-X\" data-node-color=\"blue\"/>\n<text class=\"fig-text fig-math\" x=\"36\" y=\"19\" text-anchor=\"middle\" data-node-id=\"p4a-X\" data-node-color=\"blue\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">X</tspan></text>\n<text class=\"fig-text fig-math\" x=\"20\" y=\"78\" text-anchor=\"end\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">G</tspan></text>\n<text class=\"fig-text fig-math\" x=\"118\" y=\"78\" text-anchor=\"start\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text>\n<path class=\"fig-ink\" d=\"M267 37 H327\"/>\n<path class=\"fig-ink\" d=\"M267 37 V55.0 l6 3 -12 6 12 6 -12 6 12 6 -12 6 6 3 V109\"/>\n<path class=\"fig-ink\" d=\"M257 109 h20 m-16 5 h12 m-8 5 h4\"/>\n<path class=\"fig-ink\" d=\"M327 37 V69.0 M315 69.0 H339 M315 77.0 H339 M327 77.0 V109\"/>\n<path class=\"fig-ink\" d=\"M317 109 h20 m-16 5 h12 m-8 5 h4\"/>\n<circle class=\"fig-dot\" cx=\"267\" cy=\"37\" r=\"3.5\" data-node-id=\"p4a-A\" data-node-color=\"red\"/>\n<text class=\"fig-text fig-math\" x=\"267\" y=\"19\" text-anchor=\"middle\" data-node-id=\"p4a-A\" data-node-color=\"red\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">A</tspan></text>\n<text class=\"fig-text fig-math\" x=\"251\" y=\"78\" text-anchor=\"end\">1/(g<tspan baseline-shift=\"sub\" font-size=\"78%\">m2</tspan>+g<tspan baseline-shift=\"sub\" font-size=\"78%\">m3</tspan>)</text>\n<text class=\"fig-text fig-math\" x=\"349\" y=\"78\" text-anchor=\"start\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">A</tspan></text>\n<path class=\"fig-ink\" d=\"M446 37 H506\"/>\n<path class=\"fig-ink\" d=\"M446 37 V55.0 l6 3 -12 6 12 6 -12 6 12 6 -12 6 6 3 V109\"/>\n<path class=\"fig-ink\" d=\"M436 109 h20 m-16 5 h12 m-8 5 h4\"/>\n<path class=\"fig-ink\" d=\"M506 37 V69.0 M494 69.0 H518 M494 77.0 H518 M506 77.0 V109\"/>\n<path class=\"fig-ink\" d=\"M496 109 h20 m-16 5 h12 m-8 5 h4\"/>\n<circle class=\"fig-dot\" cx=\"446\" cy=\"37\" r=\"3.5\" data-node-id=\"p4a-out\" data-node-color=\"blue\"/>\n<text class=\"fig-text fig-math\" x=\"446\" y=\"19\" text-anchor=\"middle\" data-node-id=\"p4a-out\" data-node-color=\"blue\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text>\n<text class=\"fig-text fig-math\" x=\"430\" y=\"78\" text-anchor=\"end\">1/g<tspan baseline-shift=\"sub\" font-size=\"78%\">m4</tspan></text>\n<text class=\"fig-text fig-math\" x=\"528\" y=\"78\" text-anchor=\"start\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text>\n</svg>\n<figcaption>밀러 분리 뒤 입력을 0으로 둔 회로 (a) 각 노드의 자연응답 회로예요.</figcaption>\n</figure>\n      $$|\\omega_{p,in}|=\\frac{1}{R_GC_{in}}$$\n      $$|\\omega_{p,A}|=\\frac{g_{m2}+g_{m3}}{C_A}$$\n      $$|\\omega_{p,out}|=\\frac{g_{m4}}{C_{out}}$$\n    "
+        },
+        {
+          "subpart": "2",
+          "label": "회로 (b) 반회로 판단",
+          "html": "\n    <p>좌우가 대칭이고 $V_{in1}=+V_{in}/2$, $V_{in2}=-V_{in}/2$이면 꼬리 노드(양쪽 소스)가 AC 접지예요. 왼쪽 반회로는 $V_{in1}\\to R_S\\to X$($M_1$ 게이트), $M_1$ 소스 접지, $M_1$ 드레인 $=$ 왼쪽 출력 $v_{o1}$이에요. 오른쪽 출력은 $v_{o2}=-v_{o1}$이므로 차동 출력은 다음과 같아요.</p>\n    $$\\frac{V_{out}}{V_{in}}=\\frac{v_{o1}-v_{o2}}{v_{in1}-v_{in2}}=\\frac{2v_{o1}}{2v_{in1}}=\\frac{v_{o1}}{v_{in1}}$$\n  "
+        },
+        {
+          "subpart": "2",
+          "label": "반회로 저주파 이득",
+          "html": "\n      <p>입력 $v_{in1}$(저주파에서 $v_X=v_{in1}$), 출력 $v_{o1}$로 정해요. 출력을 단락하면 $r_{O1}$과 부하 가지 양단이 0이라 $M_1$ 제어 전류가 단락선으로 가요.</p>\n      <div data-gain-stage=\"gm\">$$G_m=\\frac{i_{o1,\\mathrm{sc}}}{v_{in1}}=g_{m1}$$</div>\n      <p>입력을 0으로 두고 출력에서 바라봐요. 먼 쪽부터 블록을 정해요. $M_3$는 게이트와 드레인이 AC 접지라 $(1/g_{m3})\\parallel r_{O3}$, $M_5$는 게이트($V_{b1}$)와 소스가 AC 접지라 $r_{O5}$, $M_1$은 게이트와 소스(가상 접지)가 AC 접지라 $r_{O1}$이에요. 셋 다 출력과 AC 접지 사이에 있으므로 마지막에 병렬로 묶어요.</p>\n      <div data-gain-stage=\"rout\">$$R_{out}=\\frac{1}{g_{m3}}\\parallel r_{O3}\\parallel r_{O5}\\parallel r_{O1}$$</div>\n      <div data-gain-stage=\"gain\">$$A_v=\\frac{v_{o1}}{v_{in1}}=-G_mR_{out}=-g_{m1}R_{out}$$</div>\n    "
+        },
+        {
+          "subpart": "2",
+          "label": "밀러 분리와 노드별 커패시턴스",
+          "html": "\n      <figure class=\"figure\">\n<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 540 150\" role=\"img\" aria-label=\"왼쪽은 X와 출력 사이에 떠 있는 C_GD1입니다. 오른쪽은 X와 출력에 각각 접지로 연결된 밀러 커패시터입니다.\" font-family=\"Pretendard, sans-serif\" font-size=\"14\" font-weight=\"600\">\n<text class=\"fig-text fig-math\" x=\"97\" y=\"16\" text-anchor=\"middle\">분리 전</text>\n<text class=\"fig-text fig-math\" x=\"360\" y=\"16\" text-anchor=\"middle\">분리 후</text>\n<path class=\"fig-ink\" d=\"M24 68 H92.0 M92.0 56 V80 M102.0 56 V80 M102.0 68 H170\"/>\n<text class=\"fig-text fig-math\" x=\"97\" y=\"103\" text-anchor=\"middle\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">GD1</tspan></text>\n<circle class=\"fig-dot\" cx=\"24\" cy=\"68\" r=\"3.5\" data-node-id=\"p4b-pa\" data-node-color=\"blue\"/>\n<text class=\"fig-text fig-math\" x=\"24\" y=\"48\" text-anchor=\"middle\" data-node-id=\"p4b-pa\" data-node-color=\"blue\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">X</tspan></text>\n<circle class=\"fig-dot\" cx=\"170\" cy=\"68\" r=\"3.5\" data-node-id=\"p4b-pb\" data-node-color=\"red\"/>\n<text class=\"fig-text fig-math\" x=\"170\" y=\"48\" text-anchor=\"middle\" data-node-id=\"p4b-pb\" data-node-color=\"red\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">o1</tspan></text>\n<path class=\"fig-ink\" d=\"M190 76 H215 m-5 -5 l5 5 -5 5\"/>\n<path class=\"fig-ink\" d=\"M250 68 V96\"/>\n<path class=\"fig-ink\" d=\"M250 96 V106.0 M238 106.0 H262 M238 114.0 H262 M250 114.0 V124\"/>\n<path class=\"fig-ink\" d=\"M250 124 V131\"/>\n<path class=\"fig-ink\" d=\"M240 131 h20 m-16 5 h12 m-8 5 h4\"/>\n<circle class=\"fig-dot\" cx=\"250\" cy=\"68\" r=\"3.5\" data-node-id=\"p4b-qa\" data-node-color=\"blue\"/>\n<text class=\"fig-text fig-math\" x=\"250\" y=\"48\" text-anchor=\"middle\" data-node-id=\"p4b-qa\" data-node-color=\"blue\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">X</tspan></text>\n<text class=\"fig-text fig-math\" x=\"272\" y=\"115\" text-anchor=\"start\">(1 − A<tspan baseline-shift=\"sub\" font-size=\"78%\">v</tspan>)C<tspan baseline-shift=\"sub\" font-size=\"78%\">GD1</tspan></text>\n<path class=\"fig-ink\" d=\"M400 68 V96\"/>\n<path class=\"fig-ink\" d=\"M400 96 V106.0 M388 106.0 H412 M388 114.0 H412 M400 114.0 V124\"/>\n<path class=\"fig-ink\" d=\"M400 124 V131\"/>\n<path class=\"fig-ink\" d=\"M390 131 h20 m-16 5 h12 m-8 5 h4\"/>\n<circle class=\"fig-dot\" cx=\"400\" cy=\"68\" r=\"3.5\" data-node-id=\"p4b-qb\" data-node-color=\"red\"/>\n<text class=\"fig-text fig-math\" x=\"400\" y=\"48\" text-anchor=\"middle\" data-node-id=\"p4b-qb\" data-node-color=\"red\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">o1</tspan></text>\n<text class=\"fig-text fig-math\" x=\"422\" y=\"115\" text-anchor=\"start\">(1 − 1/A<tspan baseline-shift=\"sub\" font-size=\"78%\">v</tspan>)C<tspan baseline-shift=\"sub\" font-size=\"78%\">GD1</tspan></text>\n</svg>\n<figcaption>$A_v=-g_{m1}R_{\\mathrm{out}}$이므로 $X$ 쪽은 $(1+g_{m1}R_{\\mathrm{out}})C_{GD1}$, 출력 쪽은 $[1+1/(g_{m1}R_{\\mathrm{out}})]C_{GD1}$이고 두 가지 모두 접지로 이어져요.</figcaption>\n</figure>\n      $$C_{in}=C_{GS1}+(1+g_{m1}R_{out})C_{GD1}$$\n      $$C_{out}=C_{DB1}+\\left(1+\\frac{1}{g_{m1}R_{out}}\\right)C_{GD1}+C_{GD5}+C_{DB5}+C_{GS3}+C_{SB3}$$\n    "
+        },
+        {
+          "subpart": "2",
+          "label": "두 극점과 전달함수",
+          "html": "\n      <p>입력을 0으로 두면 $X$는 $R_S$, 출력은 $R_{out}$을 봐요.</p>\n      <figure class=\"figure\">\n<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 550 125\" role=\"img\" aria-label=\"입력 X와 출력에서 각각 노드 저항과 접지 기준 커패시턴스가 병렬로 연결된 두 개의 자연응답 회로\" font-family=\"Pretendard, sans-serif\" font-size=\"14\" font-weight=\"600\">\n<g transform=\"translate(102 0)\">\n<path class=\"fig-ink\" d=\"M36 37 H96\"/>\n<path class=\"fig-ink\" d=\"M36 37 V55.0 l6 3 -12 6 12 6 -12 6 12 6 -12 6 6 3 V109\"/>\n<path class=\"fig-ink\" d=\"M26 109 h20 m-16 5 h12 m-8 5 h4\"/>\n<path class=\"fig-ink\" d=\"M96 37 V69.0 M84 69.0 H108 M84 77.0 H108 M96 77.0 V109\"/>\n<path class=\"fig-ink\" d=\"M86 109 h20 m-16 5 h12 m-8 5 h4\"/>\n<circle class=\"fig-dot\" cx=\"36\" cy=\"37\" r=\"3.5\" data-node-id=\"p4b-X\" data-node-color=\"blue\"/>\n<text class=\"fig-text fig-math\" x=\"36\" y=\"19\" text-anchor=\"middle\" data-node-id=\"p4b-X\" data-node-color=\"blue\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">X</tspan></text>\n<text class=\"fig-text fig-math\" x=\"20\" y=\"78\" text-anchor=\"end\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">S</tspan></text>\n<text class=\"fig-text fig-math\" x=\"118\" y=\"78\" text-anchor=\"start\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text>\n<path class=\"fig-ink\" d=\"M212 37 H272\"/>\n<path class=\"fig-ink\" d=\"M212 37 V55.0 l6 3 -12 6 12 6 -12 6 12 6 -12 6 6 3 V109\"/>\n<path class=\"fig-ink\" d=\"M202 109 h20 m-16 5 h12 m-8 5 h4\"/>\n<path class=\"fig-ink\" d=\"M272 37 V69.0 M260 69.0 H284 M260 77.0 H284 M272 77.0 V109\"/>\n<path class=\"fig-ink\" d=\"M262 109 h20 m-16 5 h12 m-8 5 h4\"/>\n<circle class=\"fig-dot\" cx=\"212\" cy=\"37\" r=\"3.5\" data-node-id=\"p4b-out\" data-node-color=\"red\"/>\n<text class=\"fig-text fig-math\" x=\"212\" y=\"19\" text-anchor=\"middle\" data-node-id=\"p4b-out\" data-node-color=\"red\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">o1</tspan></text>\n<text class=\"fig-text fig-math\" x=\"196\" y=\"78\" text-anchor=\"end\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text>\n<text class=\"fig-text fig-math\" x=\"294\" y=\"78\" text-anchor=\"start\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text>\n</g>\n</svg>\n<figcaption>밀러 분리 뒤 입력을 0으로 둔 반회로의 두 노드 자연응답 회로예요.</figcaption>\n</figure>\n      $$|\\omega_{p,in}|=\\frac{1}{R_SC_{in}}$$\n      $$|\\omega_{p,out}|=\\frac{1}{R_{out}C_{out}}$$\n      <p>밀러 분리로 두 노드가 독립된 $RC$가 되었으므로 저주파 이득에 두 1차 저역통과 인자를 곱해요. 차동 전달함수는 반회로 전달함수와 같아요.</p>\n      $$\\frac{V_{out}}{V_{in}}(s)=\\frac{-g_{m1}R_{out}}{\\left(1+\\dfrac{s}{|\\omega_{p,in}|}\\right)\\left(1+\\dfrac{s}{|\\omega_{p,out}|}\\right)}$$\n    "
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "1",
+          "html": "\n      <p>$\\lambda=0$, 몸체 효과 무시, $A_{XA}=-g_{m1}/(g_{m2}+g_{m3})$로 밀러 근사를 적용한 세 극점(크기, rad/s)이에요.</p>\n      $$|\\omega_{p,in}|=\\frac{1}{R_G\\left[C_{GS1}+\\left(1+\\dfrac{g_{m1}}{g_{m2}+g_{m3}}\\right)C_{GD1}\\right]}$$\n      $$|\\omega_{p,A}|=\\frac{g_{m2}+g_{m3}}{C_{DB1}+C_{GS2}+C_{SB2}+C_{GS3}+C_{SB3}+\\left(1+\\dfrac{g_{m2}+g_{m3}}{g_{m1}}\\right)C_{GD1}}$$\n      $$|\\omega_{p,out}|=\\frac{g_{m4}}{C_{GD2}+C_{DB2}+C_{GS4}+C_{DB4}}$$\n    "
+        },
+        {
+          "subpart": "2",
+          "html": "\n      <p>순수 차동 입력 $V_{in}=V_{in1}-V_{in2}$, 차동 출력 $V_{out}$, $\\lambda\\neq0$, 밀러 근사의 결과예요. $R_{out}=(1/g_{m3})\\parallel r_{O3}\\parallel r_{O5}\\parallel r_{O1}$이에요.</p>\n      $$|\\omega_{p,in}|=\\frac{1}{R_S\\left[C_{GS1}+(1+g_{m1}R_{out})C_{GD1}\\right]}$$\n      $$|\\omega_{p,out}|=\\frac{1}{R_{out}\\left[C_{DB1}+\\left(1+\\dfrac{1}{g_{m1}R_{out}}\\right)C_{GD1}+C_{GD5}+C_{DB5}+C_{GS3}+C_{SB3}\\right]}$$\n      $$\\frac{V_{out}}{V_{in}}(s)=\\frac{-g_{m1}R_{out}}{\\left(1+\\dfrac{s}{|\\omega_{p,in}|}\\right)\\left(1+\\dfrac{s}{|\\omega_{p,out}|}\\right)}$$\n    "
+        }
+      ]
+    },
+    {
+      "id": "P12.06",
+      "explanation_id": "p5",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "귀환율과 루프 이득",
+          "html": "\n    <p>비 $R_1/R_2=7$만 주어졌으니 $K$를 그 비로 바꿔 써요. 분자·분모를 $R_2$로 나누면 돼요.</p>\n    $$K=\\frac{R_2}{R_1+R_2}=\\frac{1}{R_1/R_2+1}=\\frac{1}{8}$$\n    <p>폐루프 식의 분모에 들어갈 $KA_1$을 먼저 구해요.</p>\n    $$KA_1=\\frac{500}{8}=62.5$$\n    $$1+KA_1=63.5$$\n  "
+        },
+        {
+          "subpart": "main",
+          "label": "출력 진폭",
+          "html": "\n      <p>사인파의 피크 진폭에 폐루프 이득을 곱하면 출력의 피크 진폭이에요. 분수 꼴을 유지하다가 마지막에 소수로 바꿔요.</p>\n      $$\\frac{Y}{X}=\\frac{A_1}{1+KA_1}=\\frac{500}{63.5}=\\frac{1000}{127}\\approx7.87$$\n      $$|Y|=\\frac{1000}{127}\\times2\\,\\mathrm{mV}=\\frac{2000}{127}\\,\\mathrm{mV}\\approx15.75\\,\\mathrm{mV}$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "귀환 파형 진폭",
+          "html": "\n      <p>귀환 파형은 분배기 접속점의 전압이라 출력의 $K$배예요. 반올림한 15.75를 다시 쓰지 않고 분수로 곱해요.</p>\n      $$|X_F|=K|Y|=\\frac{1}{8}\\times\\frac{2000}{127}\\,\\mathrm{mV}=\\frac{250}{127}\\,\\mathrm{mV}\\approx1.97\\,\\mathrm{mV}$$\n    "
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n      <p>$K=1/8$, $KA_1=62.5$일 때 출력과 귀환 파형의 피크 진폭이에요.</p>\n      $$|Y|=\\frac{2000}{127}\\,\\mathrm{mV}\\approx15.75\\,\\mathrm{mV}$$\n      $$|X_F|=\\frac{250}{127}\\,\\mathrm{mV}\\approx1.97\\,\\mathrm{mV}$$\n    "
+        }
+      ]
+    },
+    {
+      "id": "E12.02",
+      "explanation_id": "p6",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "오차가 0으로",
+          "html": "\n    <p>오차 식의 분모에 루프 이득이 있어요. $KA_1\\gg1$이면 분모가 아주 커져 오차가 입력보다 훨씬 작아져요.</p>\n    $$E=\\frac{X}{1+KA_1}\\approx0$$\n    <p>오차가 거의 0이라는 말은 귀환 신호가 입력과 거의 같다는 뜻이에요.</p>\n    $$X_F\\approx X$$\n  "
+        },
+        {
+          "subpart": "main",
+          "label": "분배기에서 출력 역산",
+          "html": "\n      <p>$X_F$는 분배기가 정한 출력의 $K$배예요. 그런데 위에서 $X_F\\approx X$이므로, 분배기는 출력에 다음 조건을 걸어요.</p>\n      $$Y\\frac{R_2}{R_1+R_2}\\approx X$$\n      <p>양변을 $X$로 나누고 $R_2/(R_1+R_2)$를 뒤집으면 폐루프 이득이 나와요.</p>\n      $$\\frac{Y}{X}\\approx\\frac{R_1+R_2}{R_2}=1+\\frac{R_1}{R_2}$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "식 (12.3)으로 같은 결과",
+          "html": "\n      <p>같은 결론을 폐루프 식에서도 얻어요. 분자·분모를 $KA_1$로 나눠 루프 이득만 남는 꼴로 바꿔요.</p>\n      $$\\frac{Y}{X}=\\frac{A_1}{1+KA_1}=\\frac{1}{K}\\cdot\\frac{KA_1}{1+KA_1}$$\n      <p>$KA_1\\gg1$이면 두 번째 인자 $KA_1/(1+KA_1)$이 1에 다가가요.</p>\n      $$\\frac{Y}{X}\\approx\\frac{1}{K}=1+\\frac{R_1}{R_2}$$\n    "
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n      <p>$KA_1=[R_2/(R_1+R_2)]A_1\\gg1$이면 오차 $E=X/(1+KA_1)$이 0에 가까워져 $X_F\\approx X$가 되고, 분배기 관계 $X_F=Y\\,R_2/(R_1+R_2)$ 때문에 다음이 성립해요.</p>\n      $$\\frac{Y}{X}\\approx1+\\frac{R_1}{R_2}$$\n    "
+        }
+      ]
+    },
+    {
+      "id": "P12.04",
+      "explanation_id": "p7",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "루프를 끊는 자리",
+          "html": "\n    <p>(a)를 예로 끊은 회로를 그려요. $X=0$이라 + 입력은 접지예요. $A_1$ 출력 노드 $N$은 열어 두고, 원래 거기에 붙어 있던 분배기 위쪽 끝 $M$에 $V_{test}$를 걸어요.</p>\n    <figure class=\"figure\">\n      <svg viewBox=\"-40 0 560 262\" role=\"img\" aria-label=\"회로 (a)의 루프를 끊은 그림. 연산증폭기의 플러스 입력은 접지되어 있고, 출력 노드 N은 열린 단자예요. 노드 M에는 시험 전압원이 접지와의 사이에 걸려 있고, M에서 R1을 거쳐 노드 V1, R2를 거쳐 접지로 이어져요. V1에서 왼쪽을 향한 K 블록을 지나 연산증폭기의 마이너스 입력으로 돌아가요.\">\n        <g fill=\"none\" stroke-width=\"2\">\n          <polygon class=\"fig-ink\" points=\"90,30 90,110 170,70\"/>\n          <path class=\"fig-ink\" d=\"M90 50H40V60M28 60H52M32 65H48M36 70H44\"/>\n          <path class=\"fig-ink\" d=\"M170 70H230\"/>\n          <path class=\"fig-ink\" d=\"M300 70H380V91l8 4l-16 8l16 8l-16 8l16 8l-16 8l8 4V170\"/>\n          <path class=\"fig-ink\" d=\"M380 170V180l8 4l-16 8l16 8l-16 8l16 8l-16 8l8 4V238M368 238H392M372 243H388M376 248H384\"/>\n          <path class=\"fig-accent\" d=\"M300 70V86M300 114V124\"/>\n          <circle class=\"fig-accent\" cx=\"300\" cy=\"100\" r=\"14\"/>\n          <path class=\"fig-ink\" d=\"M288 124H312M292 129H308M296 134H304\"/>\n          <path class=\"fig-ink\" d=\"M380 170H300\"/>\n          <polygon class=\"fig-ink\" points=\"300,150 300,190 262,170\"/>\n          <path class=\"fig-ink\" d=\"M262 170H60V90H90\"/>\n        </g>\n        <circle class=\"fig-dot\" data-node-id=\"p7-N\" data-node-color=\"blue\" cx=\"230\" cy=\"70\" r=\"4\"/>\n        <circle class=\"fig-dot\" data-node-id=\"p7-M\" data-node-color=\"red\" cx=\"300\" cy=\"70\" r=\"4\"/>\n        <circle class=\"fig-dot\" data-node-id=\"p7-V1\" data-node-color=\"blue\" cx=\"380\" cy=\"170\" r=\"4\"/>\n        <g font-family=\"Pretendard, sans-serif\" font-weight=\"600\" font-size=\"14\">\n          <text class=\"fig-text fig-math\" x=\"120\" y=\"76\" text-anchor=\"middle\">A<tspan baseline-shift=\"sub\" font-size=\"78%\">1</tspan></text>\n          <text class=\"fig-text\" x=\"101\" y=\"56\" text-anchor=\"middle\">+</text>\n          <text class=\"fig-text\" x=\"101\" y=\"96\" text-anchor=\"middle\">−</text>\n          <text class=\"fig-text fig-math\" data-node-id=\"p7-N\" data-node-color=\"blue\" x=\"230\" y=\"54\" text-anchor=\"middle\">N</text>\n          <text class=\"fig-text fig-math\" data-node-id=\"p7-N\" data-node-color=\"blue\" x=\"230\" y=\"96\" text-anchor=\"middle\">V<tspan baseline-shift=\"sub\" font-size=\"78%\">N</tspan></text>\n          <text class=\"fig-text fig-math\" data-node-id=\"p7-M\" data-node-color=\"red\" x=\"300\" y=\"54\" text-anchor=\"middle\">M</text>\n          <text class=\"fig-text\" x=\"300\" y=\"97\" text-anchor=\"middle\" font-size=\"12\">+</text>\n          <text class=\"fig-text\" x=\"300\" y=\"111\" text-anchor=\"middle\" font-size=\"12\">−</text>\n          <text class=\"fig-text fig-math\" x=\"320\" y=\"106\">V<tspan baseline-shift=\"sub\" font-size=\"78%\">test</tspan></text>\n          <text class=\"fig-text fig-math\" x=\"401\" y=\"122\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">1</tspan></text>\n          <text class=\"fig-text fig-math\" x=\"401\" y=\"210\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">2</tspan></text>\n          <text class=\"fig-text fig-math\" data-node-id=\"p7-V1\" data-node-color=\"blue\" x=\"404\" y=\"166\">V<tspan baseline-shift=\"sub\" font-size=\"78%\">1</tspan></text>\n          <text class=\"fig-text fig-math\" x=\"287\" y=\"175\" text-anchor=\"middle\" font-size=\"13\">K</text>\n        </g>\n      </svg>\n      <figcaption>입력 $X$를 0(접지)으로 두고 $A_1$ 출력 $N$과 분배기 위쪽 끝 $M$ 사이를 끊어 $M$에 $V_{test}$를 걸었어요. $V_1$은 분배기 접속점 전압이에요.</figcaption>\n    </figure>\n    <p>(b)도 같은 자리, 즉 $A_1$ 출력과 분배기 위쪽 끝 사이를 끊어요. (c)는 $A_1$ 출력과 그 출력이 구동하는 $M_3$ 게이트 사이, (d)는 $A_1$ 출력과 $M_1$ 게이트 사이를 끊어요. 네 회로 모두 $M$에 $V_{test}$를 걸고 $N$의 전압을 구해요.</p>\n  "
+        },
+        {
+          "subpart": "main",
+          "label": "첫 식",
+          "html": "\n    <p>신호를 $M$에서 $N$까지 따라가며 블록 이득을 곱해요. (a)의 첫 식은 분배기 → $K$ → − 입력 → $A_1$이에요.</p>\n    $$V_1=\\frac{R_2}{R_1+R_2}V_{test}$$\n    $$v_-=KV_1$$\n    $$V_N=A_1(0-v_-)=-A_1K\\frac{R_2}{R_1+R_2}V_{test}$$\n  "
+        },
+        {
+          "subpart": "main",
+          "label": "(a) 분배기와 K 블록",
+          "html": "\n      <p>(a)는 첫 식에서 정의대로 마이너스를 붙이면 끝나요.</p>\n      $$T_a=-\\frac{V_N}{V_{test}}=KA_1\\frac{R_2}{R_1+R_2}$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "(b)·(c)의 M3 공통 소스 단",
+          "html": "\n      <p>(b)와 (c)에는 $M_3$와 $R_D$로 된 저항 부하 CS 단이 루프 안에 있어요. 입력은 $M_3$ 게이트 전압 $v_{g3}$, 출력은 드레인 전압 $v_{d3}$예요. 이 단의 전압 이득을 $G_m$과 $R_{out}$으로 나눠 구해요.</p>\n      <p>드레인을 단락하면 드레인에서 접지로 흐르는 단락 전류는 $g_mv_{g3}$예요.</p>\n      <div data-gain-stage=\"gm\">$$G_m=\\frac{i_{d,\\mathrm{sc}}}{v_{g3}}=g_m$$</div>\n      <p>게이트 입력을 0으로 두면 $\\lambda=0$이라 $r_{o3}\\to\\infty$이고, 연산증폭기 + 입력은 전류를 끌지 않아요. 드레인에서 보이는 저항은 $R_D$뿐이에요.</p>\n      <div data-gain-stage=\"rout\">$$R_{out}=R_D$$</div>\n      <p>드레인으로 들어오는 전류를 양으로 잡았으니 이득은 반전이에요.</p>\n      <div data-gain-stage=\"gain\">$$\\frac{v_{d3}}{v_{g3}}=-G_mR_{out}=-g_mR_D$$</div>\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "(b) 분배기와 CS 단",
+          "html": "\n      <p>$M$의 $V_{test}$가 분배기를 지나 $M_3$ 게이트에 $V_1$로 들어가요.</p>\n      $$V_1=\\frac{R_2}{R_1+R_2}V_{test}$$\n      <p>CS 단을 지나 드레인 전압이 되고, 그 드레인이 + 입력이에요. − 입력은 $X=0$이에요.</p>\n      $$v_+=-g_mR_DV_1$$\n      $$V_N=A_1(v_+-0)=-g_mR_DA_1\\frac{R_2}{R_1+R_2}V_{test}$$\n      $$T_b=-\\frac{V_N}{V_{test}}=g_mR_DA_1\\frac{R_2}{R_1+R_2}$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "(c) CS 단만",
+          "html": "\n      <p>(c)는 분배기 없이 $V_{test}$가 $M_3$ 게이트에 바로 걸려요.</p>\n      $$v_+=-g_mR_DV_{test}$$\n      $$V_N=A_1(v_+-0)=-g_mR_DA_1V_{test}$$\n      $$T_c=-\\frac{V_N}{V_{test}}=g_mR_DA_1$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "(d)의 M1 소스 팔로워",
+          "html": "\n      <p>(d)는 $V_{test}$가 $M_1$ 게이트에 걸리고, 소스 노드가 $Y$이자 − 입력이에요. 이 팔로워의 이득도 $G_m$과 $R_{out}$으로 나눠 구해요.</p>\n      <p>소스를 단락하면 $v_{gs1}=V_{test}$라서, 소스에서 단락선으로 흘러 나가는 전류가 $g_mV_{test}$예요.</p>\n      <div data-gain-stage=\"gm\">$$G_m=\\frac{i_{s,\\mathrm{sc}}}{V_{test}}=g_m$$</div>\n      <p>게이트 입력을 0으로 두면 소스에서 $M_1$ 쪽은 $1/g_m$($\\lambda=0$, 몸체효과 무시), 아래쪽은 $R_2$예요. 두 가지는 같은 소스 노드와 AC 접지 사이에 있어 병렬이에요.</p>\n      <div data-gain-stage=\"rout\">$$R_{out}=\\frac{1}{g_m}\\parallel R_2=\\frac{R_2}{1+g_mR_2}$$</div>\n      <p>단락 전류를 소스에서 밖으로 나가는 방향으로 잡았으니, 그 전류가 $R_{out}$에 만드는 전압은 같은 부호예요. 그래서 팔로워 이득은 비반전이에요.</p>\n      <div data-gain-stage=\"gain\">$$\\frac{v_{s1}}{V_{test}}=+G_mR_{out}=\\frac{g_mR_2}{1+g_mR_2}$$</div>\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "(d) 루프 이득",
+          "html": "\n      <p>소스 전압이 − 입력으로 들어가고 + 입력은 $X=0$이에요.</p>\n      $$V_N=A_1(0-v_{s1})=-A_1\\frac{g_mR_2}{1+g_mR_2}V_{test}$$\n      $$T_d=-\\frac{V_N}{V_{test}}=\\frac{g_mR_2}{1+g_mR_2}A_1$$\n    "
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n      <p>$X=0$에서 $A_1$ 출력과 귀환 경로 입력 사이를 끊고 루프 이득 $=-V_N/V_{test}$로 정의한 결과예요($\\lambda=0$, 몸체효과 무시).</p>\n      $$T_a=KA_1\\frac{R_2}{R_1+R_2}$$\n      $$T_b=g_mR_DA_1\\frac{R_2}{R_1+R_2}$$\n      $$T_c=g_mR_DA_1$$\n      $$T_d=\\frac{g_mR_2}{1+g_mR_2}A_1$$\n    "
+        }
+      ]
+    },
+    {
+      "id": "P12.05",
+      "explanation_id": "p8",
+      "subparts": [
+        "main"
+      ],
+      "steps": [
+        {
+          "subpart": "main",
+          "label": "입력 식 세우기",
+          "html": "\n    <p>(a)를 예로 들어요. + 입력은 $X$, − 입력은 분배기와 $K$ 블록을 지난 $Y$예요. 문제 12.4에서 쓴 블록 이득을 그대로 써요.</p>\n    $$v_+=X$$\n    $$v_-=K\\frac{R_2}{R_1+R_2}Y$$\n    $$Y=A_1\\left(X-K\\frac{R_2}{R_1+R_2}Y\\right)$$\n    <p>$Y$ 항을 왼쪽으로 모으면 $Y$에 붙는 계수가 $1+T_a$가 돼요.</p>\n    $$Y\\left(1+KA_1\\frac{R_2}{R_1+R_2}\\right)=A_1X$$\n  "
+        },
+        {
+          "subpart": "main",
+          "label": "(a) 폐루프 이득",
+          "html": "\n      <p>첫 줄의 괄호가 $1+T_a$예요. 양변을 나눠요.</p>\n      $$\\frac{Y}{X}=\\frac{A_1}{1+T_a}=\\frac{A_1}{1+KA_1\\dfrac{R_2}{R_1+R_2}}$$\n      <p>$T_a\\gg1$이면 $A_1$이 약분돼요.</p>\n      $$\\frac{Y}{X}\\approx\\frac{R_1+R_2}{KR_2}=\\frac{1}{K}\\left(1+\\frac{R_1}{R_2}\\right)$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "(b) 폐루프 이득",
+          "html": "\n      <p>(b)는 $X$가 − 입력, $M_3$ 드레인이 + 입력이에요. 드레인 전압은 분배기 → CS 단을 지난 값이에요.</p>\n      $$v_+=-g_mR_D\\frac{R_2}{R_1+R_2}Y$$\n      $$Y=A_1\\left(-g_mR_D\\frac{R_2}{R_1+R_2}Y-X\\right)$$\n      <p>$Y$ 항을 모으면 계수가 $1+T_b$이고, $X$ 앞에는 반전 부호가 남아요.</p>\n      $$\\frac{Y}{X}=\\frac{-A_1}{1+T_b}=-\\frac{A_1}{1+g_mR_DA_1\\dfrac{R_2}{R_1+R_2}}$$\n      <p>$T_b\\gg1$이면 다음으로 다가가요.</p>\n      $$\\frac{Y}{X}\\approx-\\frac{1}{g_mR_D}\\left(1+\\frac{R_1}{R_2}\\right)$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "(c) 폐루프 이득",
+          "html": "\n      <p>(c)는 분배기 없이 $Y$가 바로 $M_3$ 게이트에 걸려요.</p>\n      $$v_+=-g_mR_DY$$\n      $$Y=A_1(-g_mR_DY-X)$$\n      $$\\frac{Y}{X}=\\frac{-A_1}{1+T_c}=-\\frac{A_1}{1+g_mR_DA_1}$$\n      <p>$T_c\\gg1$이면 다음으로 다가가요.</p>\n      $$\\frac{Y}{X}\\approx-\\frac{1}{g_mR_D}$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "(d) 폐루프 이득",
+          "html": "\n      <p>(d)는 $A_1$ 출력이 $M_1$ 게이트를 구동하고, 팔로워의 소스가 $Y$예요. 그래서 $Y$는 $A_1$ 출력에 팔로워 이득을 곱한 값이고, − 입력은 $Y$ 자체예요.</p>\n      $$Y=\\frac{g_mR_2}{1+g_mR_2}A_1(X-Y)$$\n      <p>귀환 신호가 없을 때의 순방향 이득은 $A_1$과 팔로워 이득의 곱이고, 이것이 바로 $T_d$와 같아요. 그래서 분자와 분모의 루프 이득이 같은 꼴이 돼요.</p>\n      $$\\frac{Y}{X}=\\frac{T_d}{1+T_d}=\\frac{\\dfrac{g_mR_2}{1+g_mR_2}A_1}{1+\\dfrac{g_mR_2}{1+g_mR_2}A_1}$$\n      <p>$T_d\\gg1$이면 다음으로 다가가요.</p>\n      $$\\frac{Y}{X}\\approx1$$\n    "
+        }
+      ],
+      "answers": [
+        {
+          "subpart": "main",
+          "html": "\n      <p>문제 12.4의 $T_a$–$T_d$를 쓴 폐루프 이득 $Y/X$예요($\\lambda=0$, 몸체효과 무시).</p>\n      $$\\frac{Y}{X}\\Big|_a=\\frac{A_1}{1+KA_1\\dfrac{R_2}{R_1+R_2}}$$\n      $$\\frac{Y}{X}\\Big|_b=-\\frac{A_1}{1+g_mR_DA_1\\dfrac{R_2}{R_1+R_2}}$$\n      $$\\frac{Y}{X}\\Big|_c=-\\frac{A_1}{1+g_mR_DA_1}$$\n      $$\\frac{Y}{X}\\Big|_d=\\frac{\\dfrac{g_mR_2}{1+g_mR_2}A_1}{1+\\dfrac{g_mR_2}{1+g_mR_2}A_1}$$\n      <p>루프 이득이 1보다 훨씬 크면 각각 $(1+R_1/R_2)/K$, $-(1+R_1/R_2)/(g_mR_D)$, $-1/(g_mR_D)$, $1$에 다가가요.</p>\n    "
+        }
+      ]
+    }
+  ],
+  "assets": {}
+}
