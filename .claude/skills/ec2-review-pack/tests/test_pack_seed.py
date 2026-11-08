@@ -17,7 +17,7 @@ def _withheld(tmp_path):
 
 def _seed(repo, old, tmp_path, **kw):
     new = tmp_path / 'run 이어받기'
-    return new, flow.init_run(repo, new, '0909', browser_owner='workers', pdf_owner='workers', seed_from=old, **kw)
+    return new, flow.init_run(repo, new, '0909', browser_owner='workers', pdf_owner='workers', seed_from=old, allow_tmp=True, **kw)
 
 
 def test_carries_accepted_work_and_redoes_named_task(tmp_path):
@@ -74,7 +74,7 @@ def test_rejects_unknown_redo_and_redo_without_seed(tmp_path):
     with pytest.raises(flow.FlowError, match='unknown redo task'):
         _seed(repo, old, tmp_path, redo=['author-nope'])
     with pytest.raises(flow.FlowError, match='require --seed-from'):
-        flow.init_run(repo, tmp_path / 'other', '0909', redo=['author-s1'])
+        flow.init_run(repo, tmp_path / 'other', '0909', redo=['author-s1'], allow_tmp=True)
 
 
 def test_copier_rewrites_embedded_run_paths(tmp_path):
@@ -86,3 +86,69 @@ def test_copier_rewrites_embedded_run_paths(tmp_path):
     data = json.loads(Path(record['path']).read_text(encoding='utf-8'))
     assert data == {'out': str(new / 'sections/s0.html'), 'other': str(old) + '0/x'}
     assert record['sha256'] == flow._sha(Path(record['path']))
+
+
+def _seed_redo_scope_final(tmp_path):
+    repo, old = _withheld(tmp_path)
+    new, state = _seed(repo, old, tmp_path, redo=['scope-final'])
+    assert state['tasks']['scope-final']['status'] == 'pending'
+    assert sorted(state['seeded_from']['deferred']) == ['author-s1', 'author-why']
+    return new
+
+
+def test_author_carried_after_scope_final_when_brief_matches(tmp_path):
+    new = _seed_redo_scope_final(tmp_path)
+    workflow_accept(new, 'scope-final')
+    state = flow.load_state(new)
+    for tid in ('author-why', 'author-s1'):
+        assert state['tasks'][tid]['status'] == 'done' and state['tasks'][tid]['carried']
+    assert state['seeded_from']['deferred'] == []
+    assert flow.next_work(new, slots=3)['action'] == 'prepare-pack'
+
+
+def test_author_not_carried_when_brief_note_changed(tmp_path):
+    new = _seed_redo_scope_final(tmp_path)
+    def change_note():
+        brief = new / 'briefs/s1.json'
+        brief.write_text(json.dumps({'notes': ['pole naming을 섹션 공통으로']}), encoding='utf-8')
+        receipt = next((new / 'work/scope-final').glob('*-report.json'))
+        data = json.loads(receipt.read_text())
+        for item in data['outputs']:
+            if item['path'] == str(brief): item['sha256'] = flow._sha(brief)
+        receipt.write_text(json.dumps(data))
+    workflow_accept(new, 'scope-final', before_accept=change_note)
+    state = flow.load_state(new)
+    assert state['tasks']['author-why']['status'] == 'done'
+    assert state['tasks']['author-s1']['status'] == 'pending' and not state['tasks']['author-s1'].get('carried')
+    assert {'id': 'author-s1', 'reason': 'section brief changed'} in state['seeded_from']['rejected']
+    assert [t['id'] for t in flow.next_work(new, slots=3)['tasks']] == ['author-s1']
+
+
+def test_author_not_carried_when_upstream_input_changed(tmp_path):
+    repo, old = _withheld(tmp_path)
+    new, state = _seed(repo, old, tmp_path, redo=['stt-0909'])
+    assert 'author-s1' in state['seeded_from']['deferred']
+    def change_summary():
+        summary = new / 'summaries/stt-0909.md'
+        summary.write_text('바뀐 요약', encoding='utf-8')
+        receipt = next((new / 'work/stt-0909').glob('*-report.json'))
+        data = json.loads(receipt.read_text())
+        for item in data['outputs']:
+            if item['path'] == str(summary): item['sha256'] = flow._sha(summary)
+        receipt.write_text(json.dumps(data))
+    workflow_accept(new, 'stt-0909', before_accept=change_summary)
+    workflow_until(new, 'author-s1')
+    st = flow.load_state(new)
+    assert st['tasks']['author-s1']['status'] == 'pending' and not st['tasks']['author-s1'].get('carried')
+    assert {'id': 'author-s1', 'reason': 'upstream input changed: summaries/stt-0909.md'} in st['seeded_from']['rejected']
+
+
+def test_missing_seed_run_does_not_block_scope_final(tmp_path):
+    import shutil
+    new = _seed_redo_scope_final(tmp_path)
+    shutil.rmtree(flow.load_state(new)['seeded_from']['run'])
+    workflow_accept(new, 'scope-final')
+    state = flow.load_state(new)
+    assert state['tasks']['scope-final']['status'] == 'done'
+    assert state['tasks']['author-s1']['status'] == 'pending'
+    assert {'id': 'author-s1', 'reason': 'seed RUN unavailable'} in state['seeded_from']['rejected']

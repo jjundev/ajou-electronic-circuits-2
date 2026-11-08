@@ -20,6 +20,33 @@ class FlowError(ValueError):
     """A state or filesystem precondition failed."""
 
 
+def nfc_path(p: str | Path) -> Path:
+    """The path spelled in Unicode NFC (no resolve).
+
+    macOS keeps Korean folder names as NFD on disk while tools and workers often
+    write NFC. Lookups ignore the spelling; string comparisons do not.
+    """
+    return Path(unicodedata.normalize("NFC", str(p)))
+
+
+# RUN holds state, receipts and backups; the OS clears these on reboot.
+TEMP_ROOTS = ('/tmp', '/private/tmp', '/var/folders', '/private/var/folders')
+
+
+def default_run_dir(range_: str, now) -> Path:
+    """~/.cache/ec2-review-pack/<range>-<YYYYmmdd-HHMMSS>: survives a reboot."""
+    return Path.home() / '.cache' / 'ec2-review-pack' / f"{range_}-{now.strftime('%Y%m%d-%H%M%S')}"
+
+
+def is_temp_path(path: str | Path) -> bool:
+    return any(within(path, root) for root in TEMP_ROOTS)
+
+
+def within(path: str | Path, root: str | Path) -> bool:
+    """path is root or below it, compared in NFC."""
+    return nfc_path(path).is_relative_to(nfc_path(root))
+
+
 _FIELDS = {"schema_version", "revision", "run_id", "repo", "run", "range", "lite",
            "capabilities", "phase", "status", "tasks", "actions", "hashes", "backups",
            "fix_rounds", "explain_run", "publication", "recovery"}
@@ -77,7 +104,7 @@ def _validate(state: dict, run: Path) -> None:
     for field in ("repo", "run"):
         require(isinstance(state[field], str) and Path(state[field]).is_absolute(), f"{field} must be absolute")
         require(Path(state[field]).is_dir(), f"{field} directory missing: {state[field]}")
-    require(Path(state["run"]).resolve() == run.resolve(), "run path mismatch")
+    require(nfc_path(Path(state["run"]).resolve()) == nfc_path(run.resolve()), "run path mismatch")
     require(type(state["lite"]) is bool, "invalid lite")
     require(type(state["phase"]) is int and 0 <= state["phase"] <= 10, "invalid phase")
     require(isinstance(state["status"], str) and state["status"] in _STATUSES, "invalid status")
@@ -95,7 +122,7 @@ def _validate(state: dict, run: Path) -> None:
     for path, digest in state["hashes"].items():
         require(Path(path).is_absolute() and isinstance(digest, str) and re.fullmatch(r"[a-f0-9]{64}", digest), "invalid input hash")
         candidate = Path(path).resolve()
-        require(any(candidate.is_relative_to(Path(state[root]).resolve()) for root in ("repo", "run")), f"input outside repo/run: {path}")
+        require(any(within(candidate, Path(state[root]).resolve()) for root in ("repo", "run")), f"input outside repo/run: {path}")
 
 
 @contextmanager
@@ -175,8 +202,11 @@ def update_state(run: Path, expected_revision: int, change: Callable[[dict], dic
 def init_run(repo: Path, run: Path, range_: str, *, lite: bool = False,
              browser_owner: str = "main", pdf_owner: str = "main",
              seed_from: Path | None = None, redo: list[str] | None = None,
-             redo_note: Path | None = None) -> dict:
-    repo, run = Path(repo).resolve(), Path(run).resolve()
+             redo_note: Path | None = None, allow_tmp: bool = False) -> dict:
+    repo, run = nfc_path(Path(repo).resolve()), nfc_path(Path(run).resolve())
+    if not allow_tmp and is_temp_path(run):
+        raise FlowError(f"{run}: RUN is under a temporary folder that a reboot clears; "
+                        "use the default ~/.cache/ec2-review-pack or pass --allow-tmp")
     if (redo or redo_note) and seed_from is None:
         raise FlowError("--redo/--redo-note require --seed-from")
     if redo_note is not None and not Path(redo_note).is_file():
@@ -219,14 +249,14 @@ def init_run(repo: Path, run: Path, range_: str, *, lite: bool = False,
         try:
             snapshot = json.loads(snapshot_path.read_text(encoding="utf-8"))
             profile = repo / snapshot["path"]
-            if not profile.resolve().is_relative_to(repo) or snapshot["sha256"] != _sha(profile):
+            if not within(profile.resolve(), repo) or snapshot["sha256"] != _sha(profile):
                 raise ValueError("snapshot hash/path mismatch")
         except (OSError, ValueError, KeyError, TypeError) as exc:
             raise FlowError(f"{snapshot_path}: invalid snapshot: {exc}") from exc
         state = dict(schema_version=1, revision=0, run_id=str(uuid4()), repo=str(repo), run=str(run),
                      range=range_, lite=lite, capabilities=dict(browser_owner=browser_owner, pdf_owner=pdf_owner),
                      phase=0, status="ready", tasks={}, actions={},
-                     hashes={str(p): _sha(p) for p in [*sources, profile, snapshot_path]}, backups={},
+                     hashes={str(nfc_path(p)): _sha(p) for p in [*sources, profile, snapshot_path]}, backups={},
                      fix_rounds=dict(content=0, machine_browser=0), explain_run=None,
                      publication={}, recovery={}, sessions=[p.name[:4] for p in sources])
         if seed_from is not None:
@@ -268,7 +298,13 @@ def claim_task(run: Path, task_id: str) -> dict:
         brief = Path(task['brief']).resolve()
         if not brief.is_relative_to(Path(state['run'])) or not brief.is_file():
             raise FlowError('brief must be a RUN file')
-        task.update(status='claimed', attempt=str(uuid4()), agent_id=None,
+        attempt = str(uuid4())
+        # Scheduler-owned briefs carry the claimed attempt so workers never guess it.
+        if brief == (Path(state['run']) / 'work' / task_id / 'brief.json').resolve():
+            data = _read(brief)
+            if 'run_id' in data:
+                _atomic_json(brief, dict(data, attempt=attempt))
+        task.update(status='claimed', attempt=attempt, agent_id=None,
                     brief_sha256=_sha(brief), receipt=None)
     state = _task_change(run, task_id, change)
     task = state['tasks'][task_id]
@@ -310,8 +346,28 @@ def accept_task(run: Path, task_id: str, attempt: str, receipt_path: Path) -> di
                 if precheck and (previous_audit != str(audit) or precheck.get('audit_sha256') != _sha(audit)):
                     precheck['status'] = 'pending'
         refresh_tasks(state)
+        if (state.get('seeded_from') or {}).get('deferred'):
+            from pack_seed import carry_deferred
+            if carry_deferred(state): refresh_tasks(state)
         write_briefs(state)
     return _task_change(run, task_id, change)
+
+
+def check_task(run: Path, task_id: str, attempt: str, receipt_path: Path) -> dict:
+    """Run accept's validation on a copy of the state; never writes run-status.json."""
+    from pack_receipts import validate_receipt
+    state = copy.deepcopy(load_state(run))
+    task = state['tasks'].get(task_id)
+    try:
+        if task is None: raise FlowError('unknown task: ' + task_id)
+        _current(state)
+        _attempt(task, attempt)
+        if any(not _done(state, dep) for dep in task['dependencies']):
+            raise FlowError('task dependencies are not current')
+        receipt = validate_receipt(state, task, receipt_path)
+    except FlowError as exc:
+        return dict(status='failed', error_code='validation_failed', reason=str(exc))
+    return dict(status='ok', error_code=None, reason=None, task_status=receipt['task_status'])
 
 
 def release_task(run: Path, task_id: str, attempt: str, reason: str) -> dict:
@@ -549,7 +605,7 @@ def write_briefs(state: dict) -> None:
         if role in ('author', 'style-audit', 'content-review'):
             refs.append({'path': str(skill / 'references/execution-guide.md'), 'sections': _COMMON_SECTIONS})
         snapshot = _read(run / 'learning-style.json')
-        data = dict(task_id=task['id'], role=role, range=state['range'], lite=state['lite'],
+        data = dict(task_id=task['id'], run_id=state['run_id'], attempt=None, role=role, range=state['range'], lite=state['lite'],
             repo=str(repo), run=str(run), skill=str(skill), profile=str(repo / snapshot['path']),
             profile_read='전체 필수', snapshot=str(run / 'learning-style.json'), references=refs,
             targets=task['targets'], inputs=_inputs(state, task), allowed_outputs=outputs,
@@ -557,7 +613,10 @@ def write_briefs(state: dict) -> None:
             report=str(run / 'work' / task['id'] / 'report.md'), receipt=str(run / 'work' / task['id'] / 'receipt.json'),
             return_limit=800, request_paths=task.get('request_paths', []),
             constraints=['원본 읽기 전용; RUN/repo 링크도 예외 없음', '실제 검토 없이 pass 생성 금지',
-                         '1920×1080 하단 180px 자막 여백; PDF 16:9', '렌더 오류로 문항 교체 금지'])
+                         '1920×1080 하단 180px 자막 여백; PDF 16:9', '렌더 오류로 문항 교체 금지',
+                         'done/ready-for-publish receipt는 unresolved=[]; 비차단 메모는 report에만',
+                         '모든 경로 문자열은 NFC; run_id·attempt는 이 브리프 값만 사용',
+                         'Write 도구가 막히면 Bash heredoc으로 report 작성; 반환 전 task check 실행'])
         if role in ('style-audit', 'content-review'): data['audit_output'] = task['audit_output']
         if role == 'selection': data['manifest'] = str(run / 'work/scope-draft/manifest.json')
         elif role == 'scope-final': data['manifest'] = str(run / 'work/selection/manifest.json')
@@ -653,6 +712,7 @@ def request_fixes(run: Path, request_path: Path) -> dict:
         if s['fix_rounds'][category] >= maximum: raise FlowError('shared fix budget exhausted')
         seen = set()
         _current(s)
+        if category == 'content': _require_finding_coverage(s, run, request)
         for item in items:
             tid = item.get('task_id'); path = Path(item.get('request_path', '')).resolve()
             if tid not in s['tasks'] or tid in seen or not path.is_relative_to(run) or not path.is_file():
@@ -663,10 +723,40 @@ def request_fixes(run: Path, request_path: Path) -> dict:
             task.update(status='needs_fix', attempt=None, receipt=None, agent_id=None)
             task.pop('audit_output', None)
             task.setdefault('request_paths', []).append(str(path))
+        build = s['actions'].get('build-answers')
+        if 'pdf-qa' in seen and build and build.get('status') == 'done':
+            # The PDF reviewer's fix lands in the template/overlay; the RUN answer PDF must be rebuilt.
+            build.setdefault('history', []).append(dict({k: v for k, v in build.items() if k != 'history'}, reason='fix ' + rid))
+            build['status'] = 'stale'
         s['fix_rounds'][category] += 1; prior[rid] = request
         refresh_tasks(s); write_briefs(s)
         return s
     return update_state(run, state['revision'], change)
+
+
+def _require_finding_coverage(state: dict, run: Path, request: dict) -> None:
+    """The one content round must reach every audit finding's owner, or waive it."""
+    from pack_findings import blocking_findings, owner_of
+    waived = request.get('waived', [])
+    if not isinstance(waived, list) or not all(isinstance(w, dict) and isinstance(w.get('id'), str)
+            and isinstance(w.get('reason'), str) and w['reason'].strip() for w in waived):
+        raise FlowError('waived must be [{"id", "reason"}] with a nonempty reason')
+    manifest = next((run / name for name in ('manifest.json', 'work/selection/manifest.json',
+                     'work/scope-draft/manifest.json') if (run / name).is_file()), None)
+    manifest = _read(manifest) if manifest else {}
+    requested = {item.get('task_id') for item in request['items'] if isinstance(item, dict)}
+    skipped = {w['id'] for w in waived}
+    missing = []
+    for task in state['tasks'].values():
+        report = (task.get('receipt') or {}).get('report')
+        if task['role'] not in ('style-audit', 'content-review') or task['status'] != 'needs_fix' or not report: continue
+        if not Path(report).is_file(): continue
+        for _, item_id in blocking_findings(Path(report)):
+            owner = owner_of(item_id, manifest)
+            if item_id not in skipped and owner not in requested:
+                missing.append(f'{item_id}→{owner}')
+    if missing:
+        raise FlowError('content fix misses findings: ' + ', '.join(dict.fromkeys(missing)))
 
 
 def authorize_extra_fix(run: Path, authorization_path: Path) -> dict:

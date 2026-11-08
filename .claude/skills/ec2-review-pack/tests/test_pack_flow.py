@@ -17,7 +17,7 @@ def test_init_rejects_nonempty_run(tmp_path):
     repo, run = make_run(tmp_path)
     before = (run / "run-status.json").read_bytes()
     with pytest.raises(flow.FlowError, match="nonempty"):
-        flow.init_run(repo, run, "0909")
+        flow.init_run(repo, run, "0909", allow_tmp=True)
     assert (run / "run-status.json").read_bytes() == before
 
 
@@ -26,7 +26,7 @@ def test_snapshot_uses_explicit_repo(tmp_path):
     profile = repo / ".claude/skills/ec2-review-pack/references/solution-style.md"
     profile.write_bytes(profile.read_bytes() + b"\nexplicit repo provenance\n")
     run = tmp_path / "second run"
-    flow.init_run(repo, run, "0909", lite=True)
+    flow.init_run(repo, run, "0909", lite=True, allow_tmp=True)
     state = flow.load_state(run)
     assert state["schema_version"] == 1 and state["revision"] == 0
     assert state["fix_rounds"] == {"content": 0, "machine_browser": 0}
@@ -371,3 +371,47 @@ def test_invalidated_running_action_waits_after_predecessor_repair(tmp_path):
         return s
     flow.update_state(run, flow.load_state(run)['revision'], reconciled)
     assert flow.next_work(run, slots=3)['action'] == 'prepare-pack'
+
+
+def test_claimed_brief_carries_run_id_attempt_and_rules(tmp_path):
+    import json
+    from pack_support import make_run
+    _, run = make_run(tmp_path)
+    claim = flow.claim_task(run, 'source-prep')
+    state = flow.load_state(run)
+    brief = json.loads(Path(state['tasks']['source-prep']['brief']).read_text(encoding='utf-8'))
+    assert brief['run_id'] == state['run_id']
+    assert brief['attempt'] == claim['attempt']
+    for rule in ('done/ready-for-publish receipt는 unresolved=[]; 비차단 메모는 report에만',
+                 '모든 경로 문자열은 NFC; run_id·attempt는 이 브리프 값만 사용',
+                 'Write 도구가 막히면 Bash heredoc으로 report 작성; 반환 전 task check 실행'):
+        assert rule in brief['constraints']
+    # the claimed brief is what the attempt is pinned to
+    flow.bind_task(run, 'source-prep', claim['attempt'], 'agent')
+
+
+def test_reclaimed_brief_gets_the_new_attempt(tmp_path):
+    import json
+    from pack_support import make_run
+    _, run = make_run(tmp_path)
+    first = flow.claim_task(run, 'source-prep')['attempt']
+    flow.release_task(run, 'source-prep', first, 'worker died')
+    second = flow.claim_task(run, 'source-prep')['attempt']
+    brief = json.loads(Path(flow.load_state(run)['tasks']['source-prep']['brief']).read_text(encoding='utf-8'))
+    assert brief['attempt'] == second != first
+
+
+def test_pdf_qa_fix_restales_build_answers(tmp_path):
+    from pack_support import workflow_until
+    _, run = make_run(tmp_path)
+    workflow_until(run, 'pdf-qa', problems=1)
+    detail = run / 'fix.md'; detail.write_text('synthetic: figure too small')
+    request = run / 'fix.json'
+    request.write_text(json.dumps({'id': 'pdf-1', 'category': 'machine_browser',
+        'items': [{'task_id': 'pdf-qa', 'request_path': str(detail)}]}))
+    flow.request_fixes(run, request)
+    state = flow.load_state(run)
+    assert state['actions']['build-answers']['status'] == 'stale'
+    assert state['actions']['build-answers']['history'][-1]['reason'] == 'fix pdf-1'
+    nxt = flow.next_work(run, slots=1)
+    assert (nxt['kind'], nxt['action']) == ('run', 'build-answers')

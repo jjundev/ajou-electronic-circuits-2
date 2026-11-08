@@ -52,23 +52,24 @@ def format_result(result: dict, *, limit: int=2000) -> str:
 def parser():
     p=Parser(description='Resumable review-pack runner; all output is compact JSON.')
     sub=p.add_subparsers(dest='command',required=True)
-    def command(name, parent=sub):
-        c=parent.add_parser(name); c.add_argument('--run',required=True,type=absolute); return c
-    c=command('init'); c.add_argument('--repo',required=True,type=absolute); c.add_argument('--range',required=True)
-    c.add_argument('--lite',action='store_true')
+    def command(name, parent=sub, run_required=True):
+        c=parent.add_parser(name); c.add_argument('--run',required=run_required,type=absolute); return c
+    # init without --run uses ~/.cache/ec2-review-pack/<range>-<timestamp>
+    c=command('init',run_required=False); c.add_argument('--repo',required=True,type=absolute); c.add_argument('--range',required=True)
+    c.add_argument('--lite',action='store_true'); c.add_argument('--allow-tmp',action='store_true')
     for owner in ('browser','pdf'): c.add_argument('--'+owner+'-owner',choices=('workers','main','unavailable'),default='main')
     c.add_argument('--seed-from',type=absolute); c.add_argument('--redo',default='')
     c.add_argument('--redo-note',type=absolute)
     command('status'); c=command('next'); c.add_argument('--slots',required=True,type=int)
     t=sub.add_parser('task'); ts=t.add_subparsers(dest='task_command',required=True)
-    for name in ('claim','bind','accept','release','fix','authorize-fix'):
+    for name in ('claim','bind','accept','check','release','fix','authorize-fix'):
         c=command(name,ts)
         if name=='authorize-fix': c.add_argument('--authorization',required=True,type=absolute); continue
         if name=='fix': c.add_argument('--request',required=True,type=absolute); continue
         c.add_argument('--task',required=True)
         if name!='claim': c.add_argument('--attempt',required=True)
         if name=='bind': c.add_argument('--agent-id',required=True)
-        if name=='accept': c.add_argument('--receipt',required=True,type=absolute)
+        if name in ('accept','check'): c.add_argument('--receipt',required=True,type=absolute)
         if name=='release': c.add_argument('--reason',required=True)
     for name in ('run', 'reconcile'):
         c=command(name); c.add_argument('--action',required=True,choices=ACTIONS)
@@ -101,8 +102,12 @@ def execute(a):
     run=a.run
     extra=None
     if a.command=='init':
+        if run is None:
+            from datetime import datetime
+            run=a.run=f.default_run_dir(a.range,datetime.now()).resolve()
         f.init_run(a.repo,run,a.range,lite=a.lite,browser_owner=a.browser_owner,pdf_owner=a.pdf_owner,
-                   seed_from=a.seed_from,redo=[x.strip() for x in a.redo.split(',') if x.strip()],redo_note=a.redo_note)
+                   seed_from=a.seed_from,redo=[x.strip() for x in a.redo.split(',') if x.strip()],redo_note=a.redo_note,
+                   allow_tmp=a.allow_tmp)
         seeded=f.load_state(run).get('seeded_from')
         if seeded:
             extra=f.next_work(run,slots=0)
@@ -115,6 +120,10 @@ def execute(a):
         if a.task_command=='claim': extra=f.claim_task(run,a.task)
         elif a.task_command=='bind': f.bind_task(run,a.task,a.attempt,a.agent_id)
         elif a.task_command=='accept': f.accept_task(run,a.task,a.attempt,a.receipt)
+        elif a.task_command=='check':
+            # Read-only: the worker's pre-return check runs accept's validation without state changes.
+            result=f.check_task(run,a.task,a.attempt,a.receipt)
+            return dict(result,details_path=str(a.receipt)),int(result['status']!='ok')
         elif a.task_command=='release': f.release_task(run,a.task,a.attempt,a.reason)
         elif a.task_command=='authorize-fix': f.authorize_extra_fix(run,a.authorization)
         else: f.request_fixes(run,a.request)
@@ -152,8 +161,9 @@ def main(argv: list[str] | None=None) -> int:
         except Exception as exc:
             trace=traceback.format_exc()
             result=dict(status='failed',error_code='validation_failed' if isinstance(exc,(ValueError,OSError)) else 'execution_failed',reason=str(exc)[:240])
-        # Read-only queries never create logs, including on failure/noisy imports.
-        if a is not None and a.command not in ('status','next') and (a.run/'run-status.json').is_file():
+        # Read-only queries (status, next, task check) never create logs, including on failure/noisy imports.
+        read_only=a is not None and (a.command in ('status','next') or getattr(a,'task_command',None)=='check')
+        if a is not None and a.run is not None and not read_only and (a.run/'run-status.json').is_file():
             try:
                 noise.flush(); noise.seek(0)
                 raw=noise.read()

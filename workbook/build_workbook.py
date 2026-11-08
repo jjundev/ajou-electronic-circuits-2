@@ -65,6 +65,22 @@ def selections(args):
     return [resolve_target(args.target)]
 
 
+def root_spelling(overlay_path):
+    """paths.ROOT spelled the way the overlay path spells it.
+
+    macOS keeps folder names as NFD on disk, so paths.ROOT (from __file__) can be
+    NFD while a caller passes NFC paths. The overlay gate compares path strings,
+    so the same folder spelled two ways reads as "outside the repo".
+    Only the spelling changes; a path that is really outside keeps paths.ROOT.
+    """
+    root = Path(paths.ROOT)
+    given = Path(overlay_path).absolute()
+    head = given.parts[:len(root.parts)]
+    if len(given.parts) > len(root.parts) and [nfc(p) for p in head] == [nfc(p) for p in root.parts]:
+        return Path(*head)
+    return root
+
+
 def build_one(sel, args):
     """선택 하나를 문제지·답안지로 만든다. 넘친 쪽을 '<파일 이름>: <id>' 목록으로 돌려준다."""
     overflow = []
@@ -72,10 +88,11 @@ def build_one(sel, args):
     title_path = args.display_titles
     selection_path = args.selection
     if args.answer_overlay:
-        overlay = load_answer_overlay(args.answer_overlay, paths.ROOT,
+        root = root_spelling(args.answer_overlay)
+        overlay = load_answer_overlay(args.answer_overlay, root,
                                       [nfc(pid.strip()) for pid in args.ids.split(",")])
-        title_path = reviewed_title_path(overlay, paths.ROOT, title_path)
-        selection_path = reviewed_selection_path(overlay, paths.ROOT, selection_path)
+        title_path = reviewed_title_path(overlay, root, title_path)
+        selection_path = reviewed_selection_path(overlay, root, selection_path)
     for mode, suffix in MODE_SUFFIX.items():
         if args.mode != "both" and args.mode != mode:
             continue

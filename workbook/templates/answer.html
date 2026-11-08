@@ -157,7 +157,8 @@ a:focus-visible { outline: .5mm solid var(--focus); outline-offset: .5mm; }
 /* 그림: 너비 = min(칸 폭, 교재 크기 × 1.5, 최대 높이 × 가로세로비). 비율은 그대로, 잘리지 않음 */
 .fig {
   display: block; margin-inline: auto; flex: none;
-  width: min(100%, var(--w-cap), calc(var(--fig-h) * var(--ratio)));
+  /* --w-min: 큰 다중 회로도는 높이 맞춤으로 줄여도 이 폭 밑으로 내려가지 않음(라벨 판독). 풀이는 다음 쪽으로 넘어감 */
+  width: min(100%, var(--w-cap), max(calc(var(--fig-h) * var(--ratio)), var(--w-min, 0px)));
   height: auto; aspect-ratio: var(--ratio);
   background: var(--paper); border-radius: 1mm;
 }
@@ -343,6 +344,7 @@ const PLACEHOLDER = '__WORKBOOK' + '_DATA__';
 const KIND_SLUG = { '예제': 'example', '연습문제': 'exercise', '장말문제': 'problem', '기출': 'exam' };
 const KIND_SHORT = { '예제': '예제', '연습문제': '연습', '장말문제': '문제', '기출': '문항' };   // Hint 쪽 항목 번호 앞 (번호가 종류끼리 겹침)
 const FIG_SCALE_CAP = 1.5;        // 교재 인쇄 크기 대비 확대 상한
+const DENSE_FIG_AREA_MM2 = 5000;  // 이 넓이 이상의 교재 그림은 확대 상한 폭을 최소 폭으로 유지
 const MATH_MIN_SCALE = 0.7;
 const STRIP_MATH_MIN_SCALE = 0.5;  // Hint 띠 속 식은 띠 폭에 맞춰 더 줄일 수 있음
 // 쪽 맞춤 순서: 폭 → 글자. 앞 단계 값은 유지한 채 다음 단계로 간다.
@@ -516,7 +518,7 @@ function problemHead(p, n, total) {
 }
 
 /* ---------- 문제 쪽 ---------- */
-function figureImg(f) {
+function figureImg(f, dense = false) {
   const img = el('img', 'fig');
   img.src = f.src;
   img.alt = '';
@@ -524,6 +526,9 @@ function figureImg(f) {
   img.height = Math.round(f.h_mm * 10);
   img.style.setProperty('--w-cap', `${f.w_mm * FIG_SCALE_CAP}mm`);
   img.style.setProperty('--ratio', f.w_mm / f.h_mm);
+  // 교재에서 큰 그림(여러 회로를 한 장에 담은 그림 등)은 높이 맞춤으로 줄이면 라벨을 못 읽는다.
+  // 풀이를 다음 쪽으로 넘길 수 있는 문항(solution.paginate)에서만 지킨다. 넘길 수 없으면 줄여서라도 한 쪽에 맞춘다.
+  if (dense && f.w_mm * f.h_mm >= DENSE_FIG_AREA_MM2) img.style.setProperty('--w-min', `${f.w_mm * FIG_SCALE_CAP}mm`);
   return img;
 }
 
@@ -615,7 +620,7 @@ function problemPage(p, n, total) {
   const figs = p.figures || [];
   if (figs.length) {
     const band = el('div', 'fig-band');
-    figs.forEach(f => band.append(figureImg(f)));
+    figs.forEach(f => band.append(figureImg(f, !!p.solution?.paginate)));
     center.append(band);
   }
   center.append(solutionArea(p));
@@ -713,7 +718,9 @@ async function paginateSolution(page, p, n, total) {
   for (const step of steps) {
     let list = current.querySelector('.sol-steps');
     list.append(step);
-    if (!fitSolution(current) && list.children.length > 1) {
+    // 그림 쪽에서는 첫 단계도 넘길 수 있다(큰 그림 아래 자리가 첫 단계보다 작을 때).
+    const movable = list.children.length > 1 || (current === page && page.querySelector('.fig-band'));
+    if (!fitSolution(current) && movable) {
       step.remove();
       current.removeAttribute('data-overflow');
       await newPage();

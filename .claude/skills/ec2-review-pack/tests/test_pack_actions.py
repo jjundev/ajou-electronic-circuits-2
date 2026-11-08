@@ -388,3 +388,34 @@ def test_actual_converter_allows_only_derived_svg_names(tmp_path,monkeypatch):
     assert not (figures/'obsolete.svg').exists()
     assert (figures/'keep.txt').read_text()=='preserved non-SVG asset'
     assert {Path(item['path']).name for item in result['outputs'] if item['path'].endswith('.svg')}==names
+
+
+def _answer_build_fails(monkeypatch, *, pack_write=None):
+    def command(state, action):
+        script = 'import sys; from pathlib import Path; '
+        if pack_write: script += f'Path({str(pack_write)!r}).write_text("stray", encoding="utf-8"); '
+        script += 'sys.stderr.write("ERROR build failed"); sys.exit(1)'
+        path = Path(state['run']) / 'synthetic-answer-fail.py'
+        path.write_text(script, encoding='utf-8')
+        return [sys.executable, str(path)]
+    monkeypatch.setattr(a, 'action_argv', command)
+    # The synthetic workflow has no reviewed overlay; skip the input gate so the command really runs.
+    monkeypatch.setattr(a, '_inputs', lambda state, action: [])
+
+
+def test_build_answers_failure_is_retryable(tmp_path, monkeypatch):
+    _, run = make_run(tmp_path)
+    workflow_until(run, 'build-answers', problems=1)
+    _answer_build_fails(monkeypatch)
+    assert a.run_action(run, 'build-answers')['status'] == 'needs_fix'
+    assert f.load_state(run)['status'] == 'needs_fix'
+    nxt = f.next_work(run, slots=1)
+    assert (nxt['kind'], nxt['action']) == ('run', 'build-answers')
+
+
+def test_build_answers_failure_with_repo_write_stays_recovery_required(tmp_path, monkeypatch):
+    repo, run = make_run(tmp_path)
+    workflow_until(run, 'build-answers', problems=1)
+    _answer_build_fails(monkeypatch, pack_write=repo / '복습노트/0909/복습문제_0909_Synthetic-답안.pdf')
+    assert a.run_action(run, 'build-answers')['status'] == 'recovery_required'
+    assert f.next_work(run, slots=1)['kind'] == 'recover'
