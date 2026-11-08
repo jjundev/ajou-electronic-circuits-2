@@ -77,3 +77,16 @@ def test_content_fix_accepts_waived(tmp_path):
     _audit_needs_fix(run, ['s1-topic', 'P10.02'])
     flow.request_fixes(run, _request(run, ['author-s1'], waived=[{'id': 'P10.02', 'reason': 'title already fixed in PDF'}]))
     assert flow.load_state(run)['fix_rounds']['content'] == 1
+
+
+def test_blocking_findings_accepts_heading_variants_and_id_lists(tmp_path):
+    report = tmp_path / 'report.md'
+    report.write_text('### Critical\n- [s1-intro] wrong sign\n\n## Important (2)\n'
+                      '- [s4-cheatsheet, P12.04] two owners\n## Notes\n- [x] skip\n', encoding='utf-8')
+    assert blocking_findings(report) == [('Critical', 's1-intro'), ('Important', 's4-cheatsheet'), ('Important', 'P12.04')]
+
+
+def test_subheading_inside_severity_keeps_section(tmp_path):
+    report = tmp_path / 'report.md'
+    report.write_text('## Important\n### s1 섹션\n- [s1-intro] gap\n## Notes\n- [x] skip\n', encoding='utf-8')
+    assert blocking_findings(report) == [('Important', 's1-intro')]

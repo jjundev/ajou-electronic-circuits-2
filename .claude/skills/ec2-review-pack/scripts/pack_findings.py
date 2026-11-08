@@ -10,8 +10,8 @@ from pathlib import Path
 import re
 
 SEVERITIES = ('Critical', 'Important', 'Minor')
-_HEADING = re.compile(r'^##\s+(.+?)\s*$')
-_ITEM = re.compile(r'^\s*[-*]\s+\[([^\]\s]+)\]')
+_HEADING = re.compile(r'^(#{2,4})\s+(.+?)\s*$')
+_ITEM = re.compile(r'^\s*[-*]\s+\[([^\]]+)\]')
 
 
 def blocking_findings(report_md: Path) -> list[tuple[str, str]]:
@@ -20,11 +20,16 @@ def blocking_findings(report_md: Path) -> list[tuple[str, str]]:
     for line in Path(report_md).read_text(encoding='utf-8').splitlines():
         heading = _HEADING.match(line)
         if heading:
-            name = heading[1].strip().capitalize()
-            severity = name if name in SEVERITIES else None
+            # '## Important (2)' and '### Critical' open a section; another '##' heading closes it,
+            # while a deeper non-severity subheading stays inside the current section.
+            word = re.match(r'[A-Za-z]+', heading[2])
+            name = word[0].capitalize() if word else ''
+            if name in SEVERITIES: severity = name
+            elif len(heading[1]) == 2: severity = None
             continue
         item = _ITEM.match(line)
-        if severity and item: found.append((severity, item[1]))
+        if severity and item:
+            found += [(severity, x.strip()) for x in item[1].split(',') if x.strip()]
     return found
 
 

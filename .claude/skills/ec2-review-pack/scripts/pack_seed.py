@@ -196,6 +196,15 @@ def _deferred_mismatch(copier: _Copier, prior: dict, task: dict) -> str | None:
         if not old_brief.is_file() or not new_brief.is_file(): return 'section brief missing'
         if copier.value(f._read(old_brief)) != f._read(new_brief): return 'section brief changed'
     old_run = copier.old.resolve()
+    # Only scope-final's own outputs may differ; every other input the author read must be unchanged.
+    for item in (prior['receipt'] or {}).get('inputs', []):
+        source = Path(item['path']).resolve()
+        if not source.is_relative_to(old_run): continue
+        relative = source.relative_to(old_run)
+        if relative.as_posix() == 'manifest.json' or relative.parts[0] == 'briefs': continue
+        target = copier.new / relative
+        if not target.is_file() or f._sha(target) != item['sha256']:
+            return 'upstream input changed: ' + relative.as_posix()
     for item in (prior['receipt'] or {}).get('outputs', []):
         source = Path(item['path']).resolve()
         if not source.is_relative_to(old_run): continue
@@ -216,7 +225,14 @@ def carry_deferred(state: dict) -> list[str]:
              and all(f._done(state, d) for d in state['tasks'][tid]['dependencies'])]
     if not ready: return []
     seed_run = Path(seeded['run'])
-    old = f.load_state(seed_run)
+    try:
+        old = f.load_state(seed_run)
+    except (f.FlowError, OSError):
+        # Best effort: a vanished seed RUN (e.g. cleared temp folder) must not block the new RUN.
+        for tid in ready:
+            deferred.remove(tid)
+            seeded['rejected'].append(dict(id=tid, reason='seed RUN unavailable'))
+        return []
     copier = _Copier(seed_run, Path(state['run']).resolve())
     carried = []
     with f._locked(seed_run):
