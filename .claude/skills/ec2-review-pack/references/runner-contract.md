@@ -4,7 +4,9 @@ OpenCode 우선의 파일 인계 절차이며 Codex도 같은 Python CLI를 쓴�
 
 ## 시작과 조회 — 메인
 
-`init --repo <REPO> --run <새 RUN> --range <MMDD 또는 MMDD-MMDD> [--lite] --browser-owner <workers|main|unavailable> --pdf-owner <workers|main|unavailable>`
+`init --repo <REPO> [--run <새 RUN>] --range <MMDD 또는 MMDD-MMDD> [--lite] --browser-owner <workers|main|unavailable> --pdf-owner <workers|main|unavailable> [--allow-tmp]`
+
+`--run`을 빼면 RUN은 `~/.cache/ec2-review-pack/<range>-<YYYYmmdd-HHMMSS>`이고 응답의 details_path가 그 RUN의 run-status.json이다. `/tmp`, `/private/tmp`, `/var/folders` 아래 RUN은 `--allow-tmp` 없이 거부한다. 재부팅하면 그 폴더가 지워져 상태·receipt·백업을 모두 잃는다. 실행기는 repo·run 경로를 NFC로 저장하고 경로를 NFC로 비교한다. macOS의 `전자회로2` 같은 폴더는 디스크에서 NFD라 작업자가 어느 표기를 써도 같은 경로로 본다.
 
 `init ... --seed-from <보류된 RUN> [--redo <task id,...>] [--redo-note <절대 파일>]`: 이어받기. 아래 `이어받기` 절을 따른다.
 
@@ -16,7 +18,7 @@ owner 기본은 main이다. 도구가 실제 있는 주체를 전달하며 unava
 
 ## 배치·재개 — 메인과 역할 담당자
 
-next.kind는 dispatch/run/review_locally/wait/recover/report/blocked다. dispatch는 `task claim --run <RUN> --task <id>`로 먼저 예약한다. 반환 attempt/brief로 새 컨텍스트 작업자를 실행하고 `task bind --run <RUN> --task <id> --attempt <UUID> --agent-id <실제 ID>`로 연결한다. Codex는 spawn_agent(fork_turns="none"), OpenCode는 전체 대화를 복사하지 않는 새 작업 컨텍스트를 사용한다. 반환 뒤 `task accept --run <RUN> --task <id> --attempt <UUID> --receipt <절대 경로>`를 실행한다. 늦게 온 다른 attempt는 거부한다. 가용 슬롯·독립 역할·기존 담당자 재개 규칙은 [delegation](delegation.md)을 따른다.
+next.kind는 dispatch/run/review_locally/wait/recover/report/blocked다. dispatch는 `task claim --run <RUN> --task <id>`로 먼저 예약한다. 반환 attempt/brief로 새 컨텍스트 작업자를 실행하고 `task bind --run <RUN> --task <id> --attempt <UUID> --agent-id <실제 ID>`로 연결한다. Codex는 spawn_agent(fork_turns="none"), OpenCode는 전체 대화를 복사하지 않는 새 작업 컨텍스트를 사용한다. 작업자 지시문은 [worker-prompt](worker-prompt.md) 템플릿을 채워 쓴다. claim 뒤 brief.json에는 `run_id`와 `attempt`가 들어 있다. 작업자는 반환 전에 `task check --run <RUN> --task <id> --attempt <UUID> --receipt <절대 경로>`를 실행한다. 이 명령은 accept와 같은 검증을 하되 상태를 바꾸지 않고, 실패하면 exit 1과 reason(예: `unresolved successful receipt`, `receipt identity mismatch`)을 돌려준다. 반환 뒤 `task accept --run <RUN> --task <id> --attempt <UUID> --receipt <절대 경로>`를 실행한다. 늦게 온 다른 attempt는 거부한다. 가용 슬롯·독립 역할·기존 담당자 재개 규칙은 [delegation](delegation.md)을 따른다.
 
 브리프는 `RUN/work/<task>/brief.json`이다. role/targets/references/inputs/allowed_outputs/allowed_output_roots/report/receipt/request_paths를 직접 읽는다. author는 section_brief도 읽는다. 실행기가 고정한 inputs를 빼거나 임의 출력을 추가해 쓰기 권한을 늘리지 않는다. PROFILE 전체와 [공통 교육 계약](execution-guide.md)의 지정 절은 그대로 필수다.
 
@@ -69,9 +71,11 @@ style-audit/content-review는 브리프의 **audit_output**에 쓴다. 앞 작�
 
 prepare-pack은 첫 변경 전 기본/설명 두 백업을 검증·재사용하며 제목 맵도 그 뒤 반영한다. 답안은 현재 발행된 승인 overlay/validation으로만 RUN에 빌드한다. 자식 ready-for-publish는 발행 완료가 아니다. [통합 계약](problem-explain-integration.md)의 독립 검산·네 실제 검토·전체 감사와 [화면 검사](browser-check.md), 전 페이지 실제 PDF 검토를 유지한다. precheck의 pending/defer는 final-check 완료가 아니다.
 
+build-answers는 RUN 안(`RUN/answers`)에만 쓴다. 실패해도 팩 inventory가 그대로면 needs_fix이고 next가 같은 action을 다시 요청한다. 고친 뒤 `run --action build-answers`를 다시 실행한다. 실행 중 팩 파일이 바뀌었으면 recovery_required이고 recover 절을 따른다.
+
 ## 수정·중단·복구 — 필요할 때만
 
-`task fix --run <RUN> --request <절대 JSON>`: `{id,category,items:[{task_id,request_path}]}`. category=content 또는 machine_browser. 같은 id 재등록은 중복 차감하지 않는다. 내용 최대 1회, 기계/브라우저 **공통 최대 2회**이며 작성자 수나 release로 늘리지 않는다. 기존 담당자를 재개하고 새 attempt를 사용한다.
+`task fix --run <RUN> --request <절대 JSON>`: `{id,category,items:[{task_id,request_path}],waived?:[{id,reason}]}`. content 요청은 needs_fix인 style-audit·content-review report의 `## Critical`·`## Important`·`## Minor` 아래 `- [<id>]` 결함을 모두 덮어야 한다. 토픽·섹션 ID는 `author-<섹션>`, manifest 문제 ID(노트 밖 `[P12.04]` 포함)는 `selection`, 그 밖은 `scope-final`이 담당이다. 담당 task가 items에 없으면 `content fix misses findings: P12.04→selection`처럼 거부하며 예산을 쓰지 않는다. 일부러 고치지 않는 결함은 `waived`에 이유와 함께 적는다. items에 `pdf-qa`가 있으면 build-answers가 stale이 되어 next가 답안 PDF를 RUN에 다시 빌드한다. category=content 또는 machine_browser. 같은 id 재등록은 중복 차감하지 않는다. 내용 최대 1회, 기계/브라우저 **공통 최대 2회**이며 작성자 수나 release로 늘리지 않는다. 기존 담당자를 재개하고 새 attempt를 사용한다.
 
 추가 회차는 사용자가 해당 RUN에 **기계/브라우저 수정 1회 추가를 명시적으로 허용한 경우에만** 메인이 `task authorize-fix --run <RUN> --authorization <절대 JSON>`으로 기록한다. JSON은 `{schema_version:1,id,run_id,category:"machine_browser",extra_rounds:1,approved_by:"user",human_request,request_ref,reason}`의 정확한 필드 집합이며 id·사용자 원문·메시지 참조·이유는 비어 있지 않은 문자열, run_id는 현재 RUN UUID다. 메인은 실제 사용자 메시지를 확인하고 원문/참조를 그대로 기입한다. 이 로컬 기록은 암호학적 사용자 인증을 제공하지 않는다. 자동 승인·추가 grant·content 확장·횟수 초기화는 금지한다.
 
@@ -92,6 +96,8 @@ prepare-pack은 첫 변경 전 기본/설명 두 백업을 검증·재사용하�
 이어받는 것은 이전 RUN에서 done이고 현재 바이트가 receipt와 일치하며 역할·대상·의존이 같은 작업자 task뿐이다. 실제 범위는 첫 기계 작업 앞(source-prep, stt, scope, selection, scope-final, author)이다. 기계 작업은 저장소에 쓰므로 항상 다시 실행하고, 그 뒤 검토·자식·PDF task도 의존 사슬을 따라 다시 한다. child-coordinator와 pdf-qa는 이어받지 않는다. 파일은 같은 상대 경로로 복사하며 텍스트 속 이전 RUN 경로는 새 RUN 경로로 바꾸고 해시를 다시 기록한다. 이어받은 task는 `carried`에 이전 run_id·attempt를 남긴다.
 
 `--redo`는 실제 결함이 확인된 task id다. 그 task와 뒤 단계는 다시 하며, 이전 산출·보고를 `work/<id>/seed-previous/`에, `--redo-note` 사본을 `requests/seed-redo/`에 두고 brief의 request_paths로 넘긴다. 작업자는 처음부터 쓰지 않고 이것을 고친다. 수정 예산은 새 RUN 기준 0에서 시작하며 이어받기로 한 RUN 안의 한도를 늘리지 않는다. 결과의 `seeded_from`(carried/redo/rejected)은 report에도 실린다. rejected가 있으면 그 이유를 최종 보고에 적는다.
+
+scope-final을 redo하면 init 때는 섹션 작성자를 이어받지 못한다(의존이 아직 끝나지 않음). 이 작성자들은 `seeded_from.deferred`에 남고, 새 scope-final이 accept된 직후 실행기가 다시 시도한다. RUN 경로만 다르고 `briefs/<섹션>.json`이 같으며 이전 `sections/<섹션>.html`이 receipt 해시와 같으면 carried가 된다. 메모 한 줄이라도 다르면 `section brief changed`로 rejected에 남고 그 작성자만 새로 띄운다.
 
 ## 보고와 참조 경로
 

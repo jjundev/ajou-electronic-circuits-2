@@ -140,5 +140,32 @@ class TestLearningStyleBriefs(unittest.TestCase):
             self.assertIn(required, skill)
 
 
+class TestHardenedContracts(unittest.TestCase):
+    """1106 run lessons must stay in the documents workers and the main agent read."""
+
+    def read(self, rel):
+        return (SKILL / rel).read_text(encoding="utf-8")
+
+    def test_worker_prompt_has_placeholders(self):
+        text = self.read("references/worker-prompt.md")
+        for token in ("{role}", "{brief}", "{attempt}", "{run_id}", "task check", "800자"):
+            with self.subTest(token=token):
+                self.assertIn(token, text)
+
+    def test_docs_mention_new_contracts(self):
+        expected = {
+            "SKILL.md": ("~/.cache/ec2-review-pack", "NFC", "worker-prompt.md", "waived"),
+            "references/runner-contract.md": ("task check", "--allow-tmp", "waived", "~/.cache/ec2-review-pack"),
+            "references/delegation.md": ("layout_probe.py", "task check"),
+            "references/problem-explain-integration.md": ("bucket", "폴더 이름", "SVG", "task check"),
+            "references/execution-guide.md": ("~/.cache/ec2-review-pack", "재부팅"),
+        }
+        for rel, tokens in expected.items():
+            text = self.read(rel)
+            for token in tokens:
+                with self.subTest(file=rel, token=token):
+                    self.assertIn(token, text)
+
+
 if __name__ == "__main__":
     unittest.main()
