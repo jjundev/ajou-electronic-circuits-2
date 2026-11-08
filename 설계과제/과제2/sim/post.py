@@ -136,7 +136,7 @@ def main():
     asym = 20 * math.log10(abs(d["A0"])) - sum(
         20 * np.log10(np.maximum(f / d["f"][k], 1)) for k in NODES)
     fig, ax = plt.subplots(figsize=(7, 4.2))
-    ax.semilogx(f, hd, lw=1.6, label="|H(jf)| (exact)")
+    ax.semilogx(f, hd, lw=1.6, label="|H(jf)| (3 Miller poles)")
     ax.semilogx(f, asym, ls="--", c="k", lw=.9, label="asymptote")
     for k, c in zip(NODES, ("tab:red", "tab:green", "tab:purple")):
         ax.axvline(d["f"][k], ls=":", c=c, lw=1.2, label=f"$f_{{{k}}}$ = {d['f'][k]/1e9:.2f} GHz")
