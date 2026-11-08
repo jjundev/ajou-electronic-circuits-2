@@ -17,7 +17,7 @@ def test_init_rejects_nonempty_run(tmp_path):
     repo, run = make_run(tmp_path)
     before = (run / "run-status.json").read_bytes()
     with pytest.raises(flow.FlowError, match="nonempty"):
-        flow.init_run(repo, run, "0909")
+        flow.init_run(repo, run, "0909", allow_tmp=True)
     assert (run / "run-status.json").read_bytes() == before
 
 
@@ -26,7 +26,7 @@ def test_snapshot_uses_explicit_repo(tmp_path):
     profile = repo / ".claude/skills/ec2-review-pack/references/solution-style.md"
     profile.write_bytes(profile.read_bytes() + b"\nexplicit repo provenance\n")
     run = tmp_path / "second run"
-    flow.init_run(repo, run, "0909", lite=True)
+    flow.init_run(repo, run, "0909", lite=True, allow_tmp=True)
     state = flow.load_state(run)
     assert state["schema_version"] == 1 and state["revision"] == 0
     assert state["fix_rounds"] == {"content": 0, "machine_browser": 0}

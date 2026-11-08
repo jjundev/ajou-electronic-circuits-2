@@ -17,7 +17,7 @@ def _withheld(tmp_path):
 
 def _seed(repo, old, tmp_path, **kw):
     new = tmp_path / 'run 이어받기'
-    return new, flow.init_run(repo, new, '0909', browser_owner='workers', pdf_owner='workers', seed_from=old, **kw)
+    return new, flow.init_run(repo, new, '0909', browser_owner='workers', pdf_owner='workers', seed_from=old, allow_tmp=True, **kw)
 
 
 def test_carries_accepted_work_and_redoes_named_task(tmp_path):
@@ -74,7 +74,7 @@ def test_rejects_unknown_redo_and_redo_without_seed(tmp_path):
     with pytest.raises(flow.FlowError, match='unknown redo task'):
         _seed(repo, old, tmp_path, redo=['author-nope'])
     with pytest.raises(flow.FlowError, match='require --seed-from'):
-        flow.init_run(repo, tmp_path / 'other', '0909', redo=['author-s1'])
+        flow.init_run(repo, tmp_path / 'other', '0909', redo=['author-s1'], allow_tmp=True)
 
 
 def test_copier_rewrites_embedded_run_paths(tmp_path):

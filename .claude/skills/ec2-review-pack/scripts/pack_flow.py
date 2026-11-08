@@ -29,6 +29,19 @@ def nfc_path(p: str | Path) -> Path:
     return Path(unicodedata.normalize("NFC", str(p)))
 
 
+# RUN holds state, receipts and backups; the OS clears these on reboot.
+TEMP_ROOTS = ('/tmp', '/private/tmp', '/var/folders', '/private/var/folders')
+
+
+def default_run_dir(range_: str, now) -> Path:
+    """~/.cache/ec2-review-pack/<range>-<YYYYmmdd-HHMMSS>: survives a reboot."""
+    return Path.home() / '.cache' / 'ec2-review-pack' / f"{range_}-{now.strftime('%Y%m%d-%H%M%S')}"
+
+
+def is_temp_path(path: str | Path) -> bool:
+    return any(within(path, root) for root in TEMP_ROOTS)
+
+
 def within(path: str | Path, root: str | Path) -> bool:
     """path is root or below it, compared in NFC."""
     return nfc_path(path).is_relative_to(nfc_path(root))
@@ -189,8 +202,11 @@ def update_state(run: Path, expected_revision: int, change: Callable[[dict], dic
 def init_run(repo: Path, run: Path, range_: str, *, lite: bool = False,
              browser_owner: str = "main", pdf_owner: str = "main",
              seed_from: Path | None = None, redo: list[str] | None = None,
-             redo_note: Path | None = None) -> dict:
+             redo_note: Path | None = None, allow_tmp: bool = False) -> dict:
     repo, run = nfc_path(Path(repo).resolve()), nfc_path(Path(run).resolve())
+    if not allow_tmp and is_temp_path(run):
+        raise FlowError(f"{run}: RUN is under a temporary folder that a reboot clears; "
+                        "use the default ~/.cache/ec2-review-pack or pass --allow-tmp")
     if (redo or redo_note) and seed_from is None:
         raise FlowError("--redo/--redo-note require --seed-from")
     if redo_note is not None and not Path(redo_note).is_file():

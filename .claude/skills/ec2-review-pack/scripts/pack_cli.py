@@ -52,10 +52,11 @@ def format_result(result: dict, *, limit: int=2000) -> str:
 def parser():
     p=Parser(description='Resumable review-pack runner; all output is compact JSON.')
     sub=p.add_subparsers(dest='command',required=True)
-    def command(name, parent=sub):
-        c=parent.add_parser(name); c.add_argument('--run',required=True,type=absolute); return c
-    c=command('init'); c.add_argument('--repo',required=True,type=absolute); c.add_argument('--range',required=True)
-    c.add_argument('--lite',action='store_true')
+    def command(name, parent=sub, run_required=True):
+        c=parent.add_parser(name); c.add_argument('--run',required=run_required,type=absolute); return c
+    # init without --run uses ~/.cache/ec2-review-pack/<range>-<timestamp>
+    c=command('init',run_required=False); c.add_argument('--repo',required=True,type=absolute); c.add_argument('--range',required=True)
+    c.add_argument('--lite',action='store_true'); c.add_argument('--allow-tmp',action='store_true')
     for owner in ('browser','pdf'): c.add_argument('--'+owner+'-owner',choices=('workers','main','unavailable'),default='main')
     c.add_argument('--seed-from',type=absolute); c.add_argument('--redo',default='')
     c.add_argument('--redo-note',type=absolute)
@@ -101,8 +102,12 @@ def execute(a):
     run=a.run
     extra=None
     if a.command=='init':
+        if run is None:
+            from datetime import datetime
+            run=a.run=f.default_run_dir(a.range,datetime.now()).resolve()
         f.init_run(a.repo,run,a.range,lite=a.lite,browser_owner=a.browser_owner,pdf_owner=a.pdf_owner,
-                   seed_from=a.seed_from,redo=[x.strip() for x in a.redo.split(',') if x.strip()],redo_note=a.redo_note)
+                   seed_from=a.seed_from,redo=[x.strip() for x in a.redo.split(',') if x.strip()],redo_note=a.redo_note,
+                   allow_tmp=a.allow_tmp)
         seeded=f.load_state(run).get('seeded_from')
         if seeded:
             extra=f.next_work(run,slots=0)
@@ -153,7 +158,7 @@ def main(argv: list[str] | None=None) -> int:
             trace=traceback.format_exc()
             result=dict(status='failed',error_code='validation_failed' if isinstance(exc,(ValueError,OSError)) else 'execution_failed',reason=str(exc)[:240])
         # Read-only queries never create logs, including on failure/noisy imports.
-        if a is not None and a.command not in ('status','next') and (a.run/'run-status.json').is_file():
+        if a is not None and a.run is not None and a.command not in ('status','next') and (a.run/'run-status.json').is_file():
             try:
                 noise.flush(); noise.seek(0)
                 raw=noise.read()

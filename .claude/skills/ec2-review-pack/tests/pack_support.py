@@ -17,7 +17,7 @@ def make_run(tmp_path: Path, *, lite=False, browser_owner="workers", pdf_owner="
     (repo / "STT/0909 전회2.md").write_text("실제 최소 STT 입력", encoding="utf-8")
     run.mkdir()
     from pack_flow import init_run
-    init_run(init_repo or repo, run, "0909", lite=lite, browser_owner=browser_owner, pdf_owner=pdf_owner)
+    init_run(init_repo or repo, run, "0909", lite=lite, browser_owner=browser_owner, pdf_owner=pdf_owner, allow_tmp=True)
     return repo, run
 import json
 from pathlib import Path
