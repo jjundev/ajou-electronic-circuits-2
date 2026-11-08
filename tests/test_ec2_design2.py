@@ -49,6 +49,15 @@ class HandcalcTests(unittest.TestCase):
         self.assertAlmostEqual(d5["A0"], -10.0, places=6)
         self.assertLess(d5["f"]["X"], self.d["f"]["X"])
 
+    def test_gain_matches_nodal_analysis(self):
+        # Gm은 출력을 단락하고 구해야 한다: 3노드 소신호 회로를 직접 풀어 낸 이득과 같아야 한다
+        self.assertAlmostEqual(self.d["nodal"]["A0"] / self.d["A0"], 1, delta=1e-6)
+
+    def test_nodal_poles_with_table_caps(self):
+        # 과제 표 C로 3노드 회로를 정확히 풀면 X·Y 극점이 Miller 값에서 서로 벌어진다
+        for f, ref in zip(self.d["nodal"]["f"], (1.59e9, 3.78e9, 5.96e9)):
+            self.assertAlmostEqual(f / ref, 1, delta=0.03)
+
     def test_write_outputs(self):
         with tempfile.TemporaryDirectory() as t:
             self.h.write_outputs(self.d, Path(t))
@@ -181,6 +190,20 @@ class PostTests(unittest.TestCase):
         R = self.p.spice_node_R(dev, d["RL"])
         for k in ("X", "Y", "out"):
             self.assertAlmostEqual(R[k] / d["R"][k], 1, delta=0.01)
+
+    def test_spice_gain_matches_design_formula(self):
+        d = json.loads((SIM / "design.json").read_text())
+        dev = {k: {"gm": d["gm"][k], "gds": 1 / d["ro"][k]} for k in ("M1", "M2", "M3")}
+        self.assertAlmostEqual(self.p.spice_gain(dev, d["RL"]) / d["nodal"]["A0"], 1, delta=1e-6)
+
+    def test_spice_nodal_with_design_values_equals_design_nodal(self):
+        d = json.loads((SIM / "design.json").read_text())
+        dev = {k: {"gm": d["gm"][k], "gds": 1 / d["ro"][k], "cgs": c["CGS"] * 1e-15, "cgd": c["CGD"] * 1e-15,
+                   "cbd": c["CDB"] * 1e-15, "cbs": c["CSB"] * 1e-15} for k, c in d["caps"].items()}
+        n = self.p.spice_nodal(dev, d["RL"])
+        self.assertAlmostEqual(n["A0"], d["nodal"]["A0"], places=9)
+        for a, b in zip(n["f"], d["nodal"]["f"]):
+            self.assertAlmostEqual(a / b, 1, places=9)
 
     def test_device_node_caps_matches_design_with_table_caps(self):
         d = json.loads((SIM / "design.json").read_text())

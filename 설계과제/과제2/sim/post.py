@@ -5,6 +5,7 @@ from pathlib import Path
 
 import numpy as np
 
+import handcalc
 import spice_io
 
 SIM = Path(__file__).resolve().parent
@@ -46,9 +47,19 @@ def spice_gain(dev, RL):
     ro = {k: 1 / dev[k]["gds"] for k in ORDER}
     gm1, gm2 = dev["M1"]["gm"], dev["M2"]["gm"]
     r13 = par(ro["M1"], ro["M3"])
-    rin2 = (RL + ro["M2"]) / (1 + gm2 * ro["M2"])
     rcas = ro["M2"] + r13 + gm2 * ro["M2"] * r13
-    return -gm1 * r13 / (r13 + rin2) * par(RL, rcas)
+    rin2_sc = ro["M2"] / (1 + gm2 * ro["M2"])                  # Gm은 출력 단락으로 정의
+    return -gm1 * r13 / (r13 + rin2_sc) * par(RL, rcas)
+
+
+def spice_nodal(dev, RL):
+    """SPICE 소자값(gm, gds, cgs, cgd, cbd, cbs)을 handcalc.nodal 3노드 회로에 넣어 푼다."""
+    return handcalc.nodal({
+        "RL": RL,
+        "gm": {k: dev[k]["gm"] for k in ORDER},
+        "ro": {k: 1 / dev[k]["gds"] for k in ORDER},
+        "caps": {k: {"CGS": dev[k]["cgs"] * 1e15, "CGD": dev[k]["cgd"] * 1e15,
+                     "CDB": dev[k]["cbd"] * 1e15, "CSB": dev[k]["cbs"] * 1e15} for k in ORDER}})
 
 
 def node_caps(f, R):
@@ -158,23 +169,33 @@ def main():
     # --- 비교표 ---
     a0_spice = 10 ** (meas["a0"] / 20)
     a0_formula = abs(spice_gain(dev, d["RL"]))
+    sn = spice_nodal(dev, d["RL"])
     gain_md = _table(["항목", "설계", "SPICE", "오차 [%]"], [
         ["\\|A0\\| (AC, 1 MHz)", f"{abs(d['A0']):.3f}", f"{a0_spice:.3f}", f"{err_pct(a0_spice, abs(d['A0'])):+.2f}"],
         ["A0 [dB]", f"{20*math.log10(abs(d['A0'])):.2f}", f"{meas['a0']:.2f}", "-"],
         ["\\|A0\\| (SPICE gm·gds를 이득식에 대입)", f"{abs(d['A0']):.3f}", f"{a0_formula:.3f}",
          f"{err_pct(a0_formula, abs(d['A0'])):+.2f}"],
+        ["\\|A0\\| (SPICE 소자값 3노드 정확해)", f"{abs(d['nodal']['A0']):.3f}", f"{abs(sn['A0']):.3f}",
+         f"{err_pct(abs(sn['A0']), abs(d['A0'])):+.2f}"],
     ])
     R_sp = spice_node_R(dev, d["RL"])
     f_sp = {k: pm[k]["f_hz"] for k in NODES}
-    pole_rows = [[f"$f_{{{k}}}$ [GHz]", f"{d['f'][k]/1e9:.3f}", f"{f_sp[k]/1e9:.3f}",
-                  f"{err_pct(f_sp[k], d['f'][k]):+.1f}"] for k in NODES]
-    pole_rows.append(["$f_{-3dB}$ [GHz]", f"{f3_design/1e9:.3f}", f"{meas['f3db']/1e9:.3f}",
-                      f"{err_pct(meas['f3db'], f3_design):+.1f}"])
+    fn = {k: d["nodal"]["f"][pm[k]["index"]] for k in NODES}   # 같은 |p| 순서로 대응
+    fsn = {k: sn["f"][pm[k]["index"]] for k in NODES}
+    pole_rows = [[f"$f_{{{k}}}$ [GHz]", f"{d['f'][k]/1e9:.3f}", f"{fn[k]/1e9:.3f}", f"{fsn[k]/1e9:.3f}",
+                  f"{f_sp[k]/1e9:.3f}",
+                  f"{err_pct(f_sp[k], d['f'][k]):+.1f}", f"{err_pct(f_sp[k], fn[k]):+.1f}"] for k in NODES]
+    pole_rows.append(["$f_{-3dB}$ [GHz]", f"{f3_design/1e9:.3f}", "-", "-", f"{meas['f3db']/1e9:.3f}",
+                      f"{err_pct(meas['f3db'], f3_design):+.1f}", "-"])
     tau_d = sum(1 / (2 * math.pi * d["f"][k]) for k in NODES)
+    tau_n = sum(1 / (2 * math.pi * x) for x in d["nodal"]["f"])
     tau_s = sum(1 / abs(p) for p in poles)
-    pole_rows.append([r"$\sum 1/\omega_p$ [ps]", f"{tau_d*1e12:.2f}", f"{tau_s*1e12:.2f}",
-                      f"{err_pct(tau_s, tau_d):+.1f}"])
-    pole_md = _table(["항목", "설계 (Miller)", "SPICE (pz)", "오차 [%]"], pole_rows)
+    tau_sn = sum(1 / (2 * math.pi * x) for x in sn["f"])
+    pole_rows.append([r"$\sum 1/\omega_p$ [ps]", f"{tau_d*1e12:.2f}", f"{tau_n*1e12:.2f}", f"{tau_sn*1e12:.2f}",
+                      f"{tau_s*1e12:.2f}",
+                      f"{err_pct(tau_s, tau_d):+.1f}", f"{err_pct(tau_s, tau_n):+.1f}"])
+    pole_md = _table(["항목", "설계 (Miller)", "설계 (표 C, 3노드 정확해)", "SPICE 소자값 3노드 정확해", "SPICE (pz)",
+                      "오차 [%] (Miller 대비)", "오차 [%] (정확해 대비)"], pole_rows)
 
     axy_sp = -dev["M1"]["gm"] * R_sp["Y"]
     C_sp = node_caps(f_sp, R_sp)
