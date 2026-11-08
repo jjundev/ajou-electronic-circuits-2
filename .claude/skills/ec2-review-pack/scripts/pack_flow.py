@@ -346,6 +346,9 @@ def accept_task(run: Path, task_id: str, attempt: str, receipt_path: Path) -> di
                 if precheck and (previous_audit != str(audit) or precheck.get('audit_sha256') != _sha(audit)):
                     precheck['status'] = 'pending'
         refresh_tasks(state)
+        if (state.get('seeded_from') or {}).get('deferred'):
+            from pack_seed import carry_deferred
+            if carry_deferred(state): refresh_tasks(state)
         write_briefs(state)
     return _task_change(run, task_id, change)
 

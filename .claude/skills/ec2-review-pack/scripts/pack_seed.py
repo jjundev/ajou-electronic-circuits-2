@@ -53,13 +53,16 @@ class _Copier:
         if isinstance(value, dict): return {k: self.value(v) for k, v in value.items()}
         return value
 
-    def file(self, source: Path, expected: str | None = None) -> dict:
+    def file(self, source: Path, expected: str | None = None, *, keep_existing: bool = False) -> dict:
+        """keep_existing: a file the new RUN already wrote stays, and the record binds it."""
         source = source.resolve()
         if not source.is_relative_to(self.old.resolve()): raise f.FlowError('carried file outside seed RUN: ' + str(source))
         if expected is not None and f._sha(source) != expected:
             raise f.FlowError('changed in seed RUN: ' + str(source))
         if str(source) in self.done: return self.done[str(source)]
         target = self.new / source.relative_to(self.old.resolve())
+        if keep_existing and target.is_file():
+            return {'path': str(target), 'sha256': f._sha(target)}
         target.parent.mkdir(parents=True, exist_ok=True)
         data = source.read_bytes()
         if source.suffix.lower() in _TEXT:
@@ -71,20 +74,24 @@ class _Copier:
         self.done[str(source)] = record
         return record
 
-    def tree(self, folder: Path) -> None:
+    def tree(self, folder: Path, *, keep_existing: bool = False) -> None:
         if folder.is_dir():
             for path in sorted(folder.rglob('*')):
-                if path.is_file() and path.name != '.pack-flow.lock': self.file(path)
+                if path.is_file() and path.name != '.pack-flow.lock': self.file(path, keep_existing=keep_existing)
 
 
-def _carry_receipt(copier: _Copier, receipt: dict) -> dict:
-    """Copy every old-RUN file the receipt binds; keep repo records unchanged."""
+def _carry_receipt(copier: _Copier, receipt: dict, *, keep_existing: bool = False) -> dict:
+    """Copy every old-RUN file the receipt binds; keep repo records unchanged.
+
+    keep_existing (late carry): inputs the new RUN already produced stay and are re-bound.
+    """
     old_run = copier.old.resolve()
     def records(items):
         result = []
         for item in items:
             path = Path(item['path']).resolve()
-            result.append(copier.file(path, item['sha256']) if path.is_relative_to(old_run) else dict(item))
+            result.append(copier.file(path, item['sha256'], keep_existing=keep_existing)
+                          if path.is_relative_to(old_run) else dict(item))
         return result
     carried = copier.value(receipt)
     for field in ('inputs', 'outputs', 'verified_files'):
@@ -158,14 +165,76 @@ def seed_state(state: dict, seed_run: Path, redo: list[str], note: Path | None) 
                     copier.tree(Path(prior['brief']).parent)
                 except (f.FlowError, OSError, KeyError, TypeError) as exc:
                     summary['rejected'].append(dict(id=tid, reason=str(exc)[:200])); continue
-                task.update(status='done', attempt=prior['attempt'], agent_id=prior.get('agent_id'),
-                            receipt=receipt, brief=copier.path(prior['brief']),
-                            carried=dict(run=str(seed_run), run_id=old['run_id'], attempt=prior['attempt']))
+                _install(task, prior, receipt, copier, old)
                 summary['carried'].append(tid)
                 changed = True
             if not changed: break
+    rejected = {r['id'] for r in summary['rejected']}
+    # Authors whose scope-final is redone wait for it; carry_deferred tries them after it is accepted.
+    summary['deferred'] = [tid for tid, prior in old['tasks'].items()
+                           if prior.get('role') == 'author' and prior.get('status') == 'done'
+                           and tid not in redo and tid not in summary['carried'] and tid not in rejected]
     for tid in redo:
         attach_redo(state, tid)
+
+
+def _install(task: dict, prior: dict, receipt: dict, copier: _Copier, old: dict) -> None:
+    task.update(status='done', attempt=prior['attempt'], agent_id=prior.get('agent_id'),
+                receipt=receipt, brief=copier.path(prior['brief']),
+                carried=dict(run=str(copier.old), run_id=old['run_id'], attempt=prior['attempt']))
+
+
+def _deferred_mismatch(copier: _Copier, prior: dict, task: dict) -> str | None:
+    from pack_receipts import verify_receipt_files
+    if (prior['role'], prior['targets'], prior['dependencies']) != (task['role'], task['targets'], task['dependencies']):
+        return 'task shape differs'
+    errors = verify_receipt_files(prior['receipt'] or {})
+    if errors or not (prior['receipt'] or {}).get('verified_files'):
+        return ('; '.join(errors) or 'no verified files')[:200]
+    for target in task['targets']:
+        old_brief, new_brief = copier.old / 'briefs' / (target + '.json'), copier.new / 'briefs' / (target + '.json')
+        if not old_brief.is_file() or not new_brief.is_file(): return 'section brief missing'
+        if copier.value(f._read(old_brief)) != f._read(new_brief): return 'section brief changed'
+    old_run = copier.old.resolve()
+    for item in (prior['receipt'] or {}).get('outputs', []):
+        source = Path(item['path']).resolve()
+        if not source.is_relative_to(old_run): continue
+        target = copier.new / source.relative_to(old_run)
+        if target.exists() and f._sha(target) != item['sha256']: return 'output already rewritten in new RUN'
+    return None
+
+
+def carry_deferred(state: dict) -> list[str]:
+    """Carry deferred authors whose dependencies are now done and whose section brief is unchanged.
+
+    Compared modulo RUN paths; any other difference, even one note line, leaves the author pending.
+    Returns the newly carried task IDs.
+    """
+    seeded = state.get('seeded_from') or {}
+    deferred = seeded.get('deferred') or []
+    ready = [tid for tid in deferred if tid in state['tasks'] and state['tasks'][tid]['status'] == 'pending'
+             and all(f._done(state, d) for d in state['tasks'][tid]['dependencies'])]
+    if not ready: return []
+    seed_run = Path(seeded['run'])
+    old = f.load_state(seed_run)
+    copier = _Copier(seed_run, Path(state['run']).resolve())
+    carried = []
+    with f._locked(seed_run):
+        for tid in ready:
+            deferred.remove(tid)
+            task, prior = state['tasks'][tid], old['tasks'].get(tid)
+            reason = 'missing in seed RUN' if not prior else _deferred_mismatch(copier, prior, task)
+            if reason is None:
+                try:
+                    receipt = _carry_receipt(copier, prior['receipt'], keep_existing=True)
+                    copier.tree(Path(prior['brief']).parent, keep_existing=True)
+                except (f.FlowError, OSError, KeyError, TypeError) as exc:
+                    reason = str(exc)[:200]
+            if reason is not None:
+                seeded['rejected'].append(dict(id=tid, reason=reason)); continue
+            _install(task, prior, receipt, copier, old)
+            seeded['carried'].append(tid); carried.append(tid)
+    return carried
 
 
 def attach_redo(state: dict, tid: str) -> None:

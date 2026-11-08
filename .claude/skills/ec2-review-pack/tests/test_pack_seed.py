@@ -86,3 +86,39 @@ def test_copier_rewrites_embedded_run_paths(tmp_path):
     data = json.loads(Path(record['path']).read_text(encoding='utf-8'))
     assert data == {'out': str(new / 'sections/s0.html'), 'other': str(old) + '0/x'}
     assert record['sha256'] == flow._sha(Path(record['path']))
+
+
+def _seed_redo_scope_final(tmp_path):
+    repo, old = _withheld(tmp_path)
+    new, state = _seed(repo, old, tmp_path, redo=['scope-final'])
+    assert state['tasks']['scope-final']['status'] == 'pending'
+    assert sorted(state['seeded_from']['deferred']) == ['author-s1', 'author-why']
+    return new
+
+
+def test_author_carried_after_scope_final_when_brief_matches(tmp_path):
+    new = _seed_redo_scope_final(tmp_path)
+    workflow_accept(new, 'scope-final')
+    state = flow.load_state(new)
+    for tid in ('author-why', 'author-s1'):
+        assert state['tasks'][tid]['status'] == 'done' and state['tasks'][tid]['carried']
+    assert state['seeded_from']['deferred'] == []
+    assert flow.next_work(new, slots=3)['action'] == 'prepare-pack'
+
+
+def test_author_not_carried_when_brief_note_changed(tmp_path):
+    new = _seed_redo_scope_final(tmp_path)
+    def change_note():
+        brief = new / 'briefs/s1.json'
+        brief.write_text(json.dumps({'notes': ['pole naming을 섹션 공통으로']}), encoding='utf-8')
+        receipt = next((new / 'work/scope-final').glob('*-report.json'))
+        data = json.loads(receipt.read_text())
+        for item in data['outputs']:
+            if item['path'] == str(brief): item['sha256'] = flow._sha(brief)
+        receipt.write_text(json.dumps(data))
+    workflow_accept(new, 'scope-final', before_accept=change_note)
+    state = flow.load_state(new)
+    assert state['tasks']['author-why']['status'] == 'done'
+    assert state['tasks']['author-s1']['status'] == 'pending' and not state['tasks']['author-s1'].get('carried')
+    assert {'id': 'author-s1', 'reason': 'section brief changed'} in state['seeded_from']['rejected']
+    assert [t['id'] for t in flow.next_work(new, slots=3)['tasks']] == ['author-s1']
