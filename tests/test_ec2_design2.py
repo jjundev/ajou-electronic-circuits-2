@@ -122,5 +122,38 @@ class SpiceRunTests(unittest.TestCase):
         self.assertGreaterEqual(min(abs(p) for p in self.poles) / 6.283185307, 1e9)
 
 
+class PolemapTests(unittest.TestCase):
+    def setUp(self):
+        import polemap
+        self.m = polemap
+
+    def test_map_poles_unique(self):
+        base = [-1e10, -2e10, -4e10]
+        sh = {"X": [-0.9e10, -2e10, -4e10], "Y": [-1e10, -1.8e10, -4e10], "out": [-1e10, -2e10, -3.7e10]}
+        self.assertEqual(self.m.map_poles(base, sh), {"X": 0, "Y": 1, "out": 2})
+
+    def test_map_poles_ambiguous_raises(self):
+        base = [-1e10, -2e10, -4e10]
+        sh = {"X": [-0.9e10, -2e10, -4e10], "Y": [-0.9e10, -2e10, -4e10], "out": [-1e10, -2e10, -3.7e10]}
+        with self.assertRaises(ValueError):
+            self.m.map_poles(base, sh)
+
+    def test_map_poles_coupled_pair_assigned_one_to_one(self):
+        # 실제 회로 모양: X와 Y가 CGD1로 결합해 두 노드 모두 같은 극점을 가장 많이 움직인다
+        base = [-1.0e10, -2.0e10, -4.0e10]
+        sh = {"X": [-0.9964e10, -1.9988e10, -3.9802e10],
+              "Y": [-0.9980e10, -1.9998e10, -3.9717e10],
+              "out": [-0.9989e10, -1.9186e10, -3.9940e10]}
+        self.assertEqual(self.m.map_poles(base, sh), {"X": 0, "Y": 2, "out": 1})
+
+    @unittest.skipUnless(shutil.which("ngspice"), "ngspice not installed")
+    def test_real_map_x_is_dominant(self):
+        subprocess.run(["python3", "polemap.py"], cwd=SIM, check=True, capture_output=True)
+        pm = json.loads((SIM / "polemap.json").read_text())
+        self.assertEqual(set(pm), {"X", "Y", "out"})
+        self.assertEqual(pm["X"]["index"], 0)
+        self.assertGreaterEqual(min(v["f_hz"] for v in pm.values()), 1e9)
+
+
 if __name__ == "__main__":
     unittest.main()
