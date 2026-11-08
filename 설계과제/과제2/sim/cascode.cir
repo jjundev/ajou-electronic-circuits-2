@@ -1,0 +1,20 @@
+* 전자회로2 설계과제2 - cascode amplifier (그림 1): op, ac, pz
+.include core.inc
+.control
+op
+echo "=== NODES ===" > op.txt
+print v(x) v(y) v(out) v(vb1) v(vb2) v(in) >> op.txt
+print i(VDD) >> op.txt
+echo "=== DEVICES ===" >> op.txt
+show m : id vgs vds vdsat gm gds cgs cgd cbd cbs >> op.txt
+ac dec 100 1meg 100g
+let ph = 180/pi*cph(v(out))
+meas ac a0 FIND vdb(out) AT=1meg
+let a3 = a0 - 3
+meas ac f3db WHEN vdb(out)=a3 FALL=1
+print a0 f3db > meas.txt
+wrdata ac.txt vdb(out) ph
+pz in 0 out 0 vol pz
+print all > pz.txt
+.endc
+.end

@@ -97,5 +97,30 @@ class SpiceIoTests(unittest.TestCase):
         self.assertEqual(p[1].imag, -5e9)
 
 
+@unittest.skipUnless(shutil.which("ngspice"), "ngspice not installed")
+class SpiceRunTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        subprocess.run(["python3", "handcalc.py"], cwd=SIM, check=True, capture_output=True)
+        subprocess.run(["ngspice", "-b", "cascode.cir"], cwd=SIM, check=True, capture_output=True)
+        import spice_io as s
+        cls.op = (SIM / "op.txt").read_text()
+        cls.dev = s.parse_devices(cls.op.split("=== DEVICES ===")[1])
+        cls.meas = s.parse_scalars((SIM / "meas.txt").read_text())
+        cls.poles, _ = s.parse_pz((SIM / "pz.txt").read_text())
+
+    def test_currents_and_power(self):
+        i2, i3 = self.dev["M2"]["id"], abs(self.dev["M3"]["id"])
+        self.assertLess(abs(i2 - i3) / i3, 0.01)
+        self.assertLessEqual(self.dev["M1"]["id"] * 1.0, 0.5e-3)
+
+    def test_gain_near_ten(self):
+        self.assertAlmostEqual(10 ** (self.meas["a0"] / 20), 10, delta=1.0)
+
+    def test_all_poles_above_1ghz(self):
+        self.assertEqual(len(self.poles), 3)
+        self.assertGreaterEqual(min(abs(p) for p in self.poles) / 6.283185307, 1e9)
+
+
 if __name__ == "__main__":
     unittest.main()
