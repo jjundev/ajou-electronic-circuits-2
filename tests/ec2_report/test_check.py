@@ -103,6 +103,15 @@ class CheckMarkdownTests(unittest.TestCase):
         self.assertEqual(len(e), 1)
         self.assertIn("12열", e[0].msg)
 
+    def test_adjacent_tables_need_text_between(self):
+        # 빈 줄만 사이에 둔 두 표는 노션이 하나로 합친다 (2026-11-08 설계과제2 Spice (a))
+        two = "| a | b |\n|---|---|\n| 1 | 2 |\n\n| c | d |\n|---|---|\n| 3 | 4 |\n"
+        e = self.errors(two)
+        self.assertEqual(len(e), 1)
+        self.assertIn("합", e[0].msg)
+        apart = two.replace("\n\n| c", "\n\n전류는 다음과 같다.\n\n| c")
+        self.assertEqual(self.errors(apart), [])
+
     def test_escaped_pipe_is_not_a_cell(self):
         self.assertEqual(self.errors("| a | b |\n|---|---|\n| x \\| y | 2 |\n"), [])
 

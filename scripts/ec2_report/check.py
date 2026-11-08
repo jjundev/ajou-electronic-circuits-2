@@ -116,6 +116,13 @@ def _check_tables(lines: list[str], name: str) -> list[Finding]:
                 out.append(Finding("error", f"{name}:{j + 1}행",
                     f"표 행의 셀이 {n}개인데 헤더는 {width}개다 — 노션에서 표가 뭉개진다"))
             j += 1
+        k = j
+        while k < len(lines) and not lines[k].strip():
+            k += 1
+        if (k > j and k + 1 < len(lines) and lines[k].startswith("|")
+                and _TABLE_SEP.match(lines[k + 1].strip())):
+            out.append(Finding("error", f"{name}:{k + 1}행",
+                "빈 줄만 사이에 둔 두 표는 노션이 하나로 합친다 — 표 사이에 문장을 한 줄 넣는다"))
     return out
 
 
