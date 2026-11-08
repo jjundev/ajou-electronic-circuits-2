@@ -173,6 +173,11 @@ class PolemapTests(unittest.TestCase):
         self.assertGreaterEqual(min(v["f_hz"] for v in pm.values()), 1e9)
 
 
+def spice_io_devices():
+    import spice_io
+    return spice_io.parse_devices((SIM / "op.txt").read_text().split("=== DEVICES ===")[1])
+
+
 class PostTests(unittest.TestCase):
     def setUp(self):
         import post
@@ -226,6 +231,20 @@ class PostTests(unittest.TestCase):
         lab = self.p.label_nodal(handcalc.design(vov2=0.2))
         self.assertAlmostEqual(lab["Y"] / 5.711e9, 1, delta=0.005)
         self.assertAlmostEqual(lab["out"] / 7.551e9, 1, delta=0.005)
+
+    def test_sensitivity_rows_one_at_a_time(self):
+        # 표 C 정확해에서 한 가지씩 SPICE 값으로 바꿔 어떤 차이가 극점을 움직였는지 본다
+        d = json.loads((SIM / "design.json").read_text())
+        dev = spice_io_devices()
+        rows = dict(self.p.sensitivity_rows(d, dev))
+        ref = {"기준 (표 C 정확해)": (1.590, 5.959), "C_GD1 = 0 (X-Y 결합 제거)": (2.944, 4.946),
+               "C_GD1만 SPICE 값": (1.412, 6.143), "C_GS1만 SPICE 값": (1.704, 6.450),
+               "Y 노드 C만 SPICE 값": (1.628, 6.483), "gm, gds만 SPICE 값": (1.601, 6.119),
+               "모두 SPICE 값": (1.552, 7.431)}
+        self.assertEqual(list(rows), list(ref))
+        for k, (fx, fy) in ref.items():
+            self.assertAlmostEqual(rows[k]["X"] / 1e9, fx, delta=0.002)
+            self.assertAlmostEqual(rows[k]["Y"] / 1e9, fy, delta=0.002)
 
     def test_device_node_caps_matches_design_with_table_caps(self):
         d = json.loads((SIM / "design.json").read_text())

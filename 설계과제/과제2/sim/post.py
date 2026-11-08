@@ -1,4 +1,5 @@
 """설계과제2 후처리: design.json + ngspice 결과(op/ac/meas/pz) + polemap.json → Bode 그림, 포화 표, 설계-SPICE 비교표."""
+import copy
 import json
 import math
 from pathlib import Path
@@ -76,6 +77,34 @@ def spice_nodal(dev, RL):
     return handcalc.nodal(spice_nodal_input(dev, RL))
 
 
+Y_NODE_CAPS = (("M1", "CDB"), ("M2", "CGS"), ("M2", "CSB"), ("M3", "CDB"), ("M3", "CGD"))
+
+
+def sensitivity_rows(d, dev):
+    """표 C 3노드 정확해에서 한 가지씩 SPICE 값으로 바꿔 푼 극점 [(이름, {X, Y, out} Hz)]."""
+    base = {"RL": d["RL"], "gm": d["gm"], "ro": d["ro"], "caps": d["caps"]}
+    sp = spice_nodal_input(dev, d["RL"])
+
+    def variant(**change):
+        v = copy.deepcopy(base)
+        for (m, c), val in change.get("caps", {}).items():
+            v["caps"][m][c] = val
+        if change.get("gm_ro"):
+            v["gm"], v["ro"] = sp["gm"], sp["ro"]
+        return v
+
+    cases = [
+        ("기준 (표 C 정확해)", base),
+        ("C_GD1 = 0 (X-Y 결합 제거)", variant(caps={("M1", "CGD"): 0.0})),
+        ("C_GD1만 SPICE 값", variant(caps={("M1", "CGD"): sp["caps"]["M1"]["CGD"]})),
+        ("C_GS1만 SPICE 값", variant(caps={("M1", "CGS"): sp["caps"]["M1"]["CGS"]})),
+        ("Y 노드 C만 SPICE 값", variant(caps={mc: sp["caps"][mc[0]][mc[1]] for mc in Y_NODE_CAPS})),
+        ("gm, gds만 SPICE 값", variant(gm_ro=True)),
+        ("모두 SPICE 값", sp),
+    ]
+    return [(name, label_nodal(v)) for name, v in cases]
+
+
 def node_caps(f, R):
     """C = 1/(2π f R) [fF]."""
     return {k: 1 / (2 * math.pi * f[k] * R[k]) * 1e15 for k in f}
@@ -140,7 +169,7 @@ def main():
     ax.semilogx(f, asym, ls="--", c="k", lw=.9, label="asymptote")
     for k, c in zip(NODES, ("tab:red", "tab:green", "tab:purple")):
         ax.axvline(d["f"][k], ls=":", c=c, lw=1.2, label=f"$f_{{{k}}}$ = {d['f'][k]/1e9:.2f} GHz")
-    ax.axhline(hd[0] - 3, ls="-.", c="gray", lw=.8)
+    ax.axhline(hd[0] - 3, ls="-.", c="gray", lw=.8, label="−3 dB")
     ax.set_title(f"Design H(s): |A0| = {abs(d['A0']):.2f} ({hd[0]:.2f} dB), "
                  f"$f_{{-3dB}}$ = {f3_design/1e9:.2f} GHz", fontsize=11)
     ax.set_xlabel("frequency [Hz]")
@@ -156,7 +185,7 @@ def main():
     fig, ax = plt.subplots(2, 1, sharex=True, figsize=(7, 5.5))
     ax[0].semilogx(f_ac, db_ac, lw=1.6)
     ax[0].set_ylabel("|Vout/Vin| [dB]")
-    ax[0].set_title(f"SPICE AC: A0 = {10**(meas['a0']/20):.2f} ({meas['a0']:.2f} dB), "
+    ax[0].set_title(f"SPICE AC: |A0| = {10**(meas['a0']/20):.2f} ({meas['a0']:.2f} dB), "
                     f"$f_{{-3dB}}$ = {meas['f3db']/1e9:.2f} GHz", fontsize=11)
     ax[1].semilogx(f_ac, ph_ac, lw=1.6)
     ax[1].set_ylabel("phase [deg]")
@@ -224,11 +253,15 @@ def main():
                        for k in NODES])
     z = sorted(zeros, key=abs)
     zero_line = ", ".join(f"{zz.real/2/math.pi/1e9:+.1f} GHz" for zz in z)
+    sens_md = _table(["경우", "$f_X$ [GHz]", "$f_Y$ [GHz]", "$f_{out}$ [GHz]"],
+                     [[n, f"{r['X']/1e9:.3f}", f"{r['Y']/1e9:.3f}", f"{r['out']/1e9:.3f}"]
+                      for n, r in sensitivity_rows(d, dev)])
     (REPORT / "compare.md").write_text(
         "## 이득\n\n" + gain_md +
         "\n## 극점\n\n" + pole_md +
         f"\nSPICE 영점: {zero_line} (양수 = RHP). 설계 RHP 영점 gm1/(2π CGD1) = "
         f"{d['gm']['M1']/(2*math.pi*d['caps']['M1']['CGD']*1e-15)/1e9:.1f} GHz.\n"
+        "\n## 3노드 정확해: 한 가지씩 SPICE 값으로 바꿨을 때\n\n" + sens_md +
         "\n## 1 fF 섭동 상대 이동 |Δp|/|p|\n\n" + shift_md +
         f"\n## 노드 등가 C\n\nA_XY (SPICE) = {axy_sp:.3f}, A_XY (설계) = {d['AXY']:.3f}\n\n" + cap_md)
 
