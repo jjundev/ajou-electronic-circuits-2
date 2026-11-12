@@ -1312,14 +1312,19 @@
     $$KA_1=0.1\times1000=100$$
     $$\frac{Y}{X}=\frac{A_1}{1+KA_1}=\frac{1000}{101}\approx9.90$$
     <p>같은 $A_1$과 $K$로 만든 값인데 하나는 $100$, 하나는 약 $9.90$이에요. 재는 대상이 다르기 때문이에요.</p>
+    <p>여기에 귀환이 없을 때의 <a href="#s2-closed-loop">개루프 이득</a> $A_1=1000$까지 더하면 이름에 "루프"가 들어간 이득이 세 개예요. 한 표로 나란히 놓고 봐요.</p>
     <div class="table-wrap"><table>
-      <tr><th>구분</th><th>루프 이득</th><th>폐루프 이득</th></tr>
-      <tr><td>무엇의 비</td><td>끊은 자리로 돌아온 신호 ÷ 넣은 시험 신호</td><td>출력 $Y$ ÷ 입력 $X$</td></tr>
-      <tr><td>조건</td><td>루프를 끊고 $X=0$</td><td>루프를 닫은 채 입력 $X$를 넣음</td></tr>
-      <tr><td>식</td><td>$KA_1=-\frac{V_N}{V_{test}}$</td><td>$\frac{Y}{X}=\frac{A_1}{1+KA_1}$</td></tr>
-      <tr><td>뜻</td><td>루프 한 바퀴의 이득, 입력·출력과 무관</td><td>입력과 출력의 관계(전달함수)</td></tr>
+      <tr><th>구분</th><th>개루프 이득</th><th>루프 이득</th><th>폐루프 이득</th></tr>
+      <tr><td>무엇의 비</td><td>귀환 없이 출력 $Y$ ÷ 입력 $X$</td><td>끊은 자리로 돌아온 신호 ÷ 넣은 시험 신호</td><td>출력 $Y$ ÷ 입력 $X$</td></tr>
+      <tr><td>조건</td><td>$K=0$, 귀환 없음</td><td>루프를 끊고 $X=0$</td><td>루프를 닫은 채 입력 $X$를 넣음</td></tr>
+      <tr><td>식</td><td>$\frac{Y}{X}=A_1$</td><td>$KA_1=-\frac{V_N}{V_{test}}$</td><td>$\frac{Y}{X}=\frac{A_1}{1+KA_1}$</td></tr>
+      <tr><td>뜻</td><td>앞단 증폭기 자체의 이득</td><td>루프 한 바퀴의 이득, 입력·출력과 무관</td><td>입력과 출력의 관계(전달함수)</td></tr>
+      <tr><td>예 ($A_1=1000$, $K=0.1$)</td><td>$1000$</td><td>$100$</td><td>$\approx9.90$</td></tr>
     </table></div>
-    <p>두 값은 다르지만 이어져 있어요. <a href="#s2-closed-loop">폐루프 이득</a>과 <a href="#s2-error-signal">오차 E</a>의 분모에 모두 $1+KA_1$, 즉 1 더하기 루프 이득이 들어가요.</p>
+    <p>세 이득은 하나의 식으로 이어져요. 폐루프 이득은 개루프 이득을 1 더하기 루프 이득으로 나눈 값이에요.</p>
+    $$\frac{Y}{X}=\frac{A_1}{1+KA_1}$$
+    $$\text{폐루프 이득}=\frac{\text{개루프 이득}}{1+\text{루프 이득}}=\frac{1000}{1+100}\approx9.90$$
+    <p>루프 이득과 폐루프 이득은 다르지만 이어져 있어요. <a href="#s2-closed-loop">폐루프 이득</a>과 <a href="#s2-error-signal">오차 E</a>의 분모에 모두 $1+KA_1$, 즉 1 더하기 루프 이득이 들어가요.</p>
     $$E=\frac{X}{1+KA_1}$$
     <p>$A_1=1000$을 고정하고 $K$를 키우면 루프 이득이 커지는 만큼 폐루프 이득과 오차가 함께 줄어요.</p>
     <div class="table-wrap"><table>
@@ -1348,11 +1353,13 @@
     <ul class="eq-list">
       <li><span class="eq-name">루프 이득</span>$$KA_1=-\frac{V_N}{V_{test}}$$</li>
       <li><span class="eq-name">폐루프 이득</span>$$\frac{Y}{X}=\frac{A_1}{1+KA_1}$$</li>
+      <li><span class="eq-name">세 이득의 관계</span>$$\text{폐루프 이득}=\frac{\text{개루프 이득}}{1+\text{루프 이득}}$$</li>
     </ul>
     <p>루프 이득이 클수록 폐루프 이득과 오차가 함께 줄어요.</p>
     <p>루프 이득은 이득과 입출력 임피던스 같은 여러 성질을 정해요.</p>
     <p class="panel-label">용어</p>
     <dl class="terms">
+      <dt>개루프 이득(open-loop gain)</dt><dd>귀환이 없을 때 입력 대비 출력 $A_1$</dd>
       <dt>루프 이득(loop gain)</dt><dd>루프를 끊고 $X=0$에서 한 바퀴 돈 이득, 입력·출력과 무관</dd>
       <dt>폐루프 이득(closed-loop gain)</dt><dd>루프가 닫혔을 때 입력 대비 출력 $\frac{Y}{X}$</dd>
     </dl>
@@ -1477,6 +1484,7 @@
           <td>
             <p>루프 이득 $KA_1$은 루프를 한 바퀴 돈 이득이에요.</p>
             <p>폐루프 이득 $\frac{A_1}{1+KA_1}$은 폐루프일 때 입력에서 출력까지의 이득이에요.</p>
+            <p>폐루프 이득은 개루프 이득 $A_1$을 1 더하기 루프 이득으로 나눈 값이에요.</p>
             <p>루프 이득이 클수록 폐루프 이득과 오차가 함께 작아져요.</p>
           </td>
         </tr>
