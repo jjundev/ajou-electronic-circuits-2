@@ -72,6 +72,22 @@ class TestHtml2Md(unittest.TestCase):
         svg = next((self.tmp / '.assets/figures_0101').glob('*.svg')).read_text(encoding='utf-8')
         self.assertNotIn('data:font/', svg)
 
+    def test_guide_structure_converts(self):
+        note = small_note(self.tmp, '<article class="topic" id="t1"><h3>T</h3><div class="layer formal">'
+                          '<span class="layer-title">정확히 말하면</span><h4 class="sub">왜 정확한가요</h4>'
+                          '<p>설명. <b>비로 정해져요.</b></p><ol class="steps"><li><div class="drow">'
+                          '<div>$$K^*=K$$</div><p class="why">약분돼요.</p></div></li></ol></div>'
+                          '<div class="quiz after"><p class="q">확인해 봐요. $x$는?</p>'
+                          '<details><summary>답 보기</summary><p>$1$이에요.</p></details></div></article>')
+        md_path, _ = html2md.convert_note(note)
+        md = Path(md_path).read_text(encoding="utf-8")
+        self.assertIn("#### 왜 정확한가요", md)
+        self.assertIn("**비로 정해져요.**", md)
+        self.assertLess(md.index("K^*=K"), md.index("약분돼요."))
+        self.assertIn("확인해 봐요. $x$는?", md)
+        self.assertIn("<details><summary>답 보기</summary>", md)
+        self.assertEqual(html2md.check_md(note, md_path), [])
+
     def test_pdf_links_kept_as_pdf(self):
         self.assertIn("(../복습문제_0101-0102_Mini_Test-문제.pdf)", self.md)
         self.assertIn("(../복습문제_0101-0102_Mini_Test-답안.pdf)", self.md)

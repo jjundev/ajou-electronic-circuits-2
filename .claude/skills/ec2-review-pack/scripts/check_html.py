@@ -25,6 +25,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import manifest as manifest_mod  # noqa: E402
 from learning_style import validate_style_audit  # noqa: E402
 from readability import readability_errors  # noqa: E402
+from html2md import Builder, Node  # noqa: E402
 
 VOID_TAGS = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
 CONTAINER_CLASSES = {"topic", "card"}
@@ -288,6 +289,55 @@ def check_note(doc: Doc, m: dict) -> list[Problem]:
     return out
 
 
+# content-rules.md "정확히 말하면의 길잡이": formal 본문 블록이 이만큼 이상이면 소제목이 필요하다.
+SUBHEAD_MIN_BLOCKS = 6
+
+
+def _kids(node: Node) -> list[Node]:
+    return [c for c in node.children if isinstance(c, Node)]
+
+
+def check_guide(source: str, m: dict) -> list[Problem]:
+    """길잡이 템플릿(body data-guide)으로 만든 노트만: 끝의 확인 질문, formal 소제목, 본문 접기 금지."""
+    builder = Builder()
+    builder.feed(source)
+    root = builder.root
+    body = next(root.find_all(lambda n: n.tag == "body"), None)
+    if body is None or "data-guide" not in body.attrs:
+        return []
+    topics = {n.attrs.get("id"): n for n in root.find_all(lambda n: n.tag == "article" and "topic" in n.classes)}
+    out: list[Problem] = []
+    for t in (t for s in m["sections"] for t in s["topics"] if t["layers"]):
+        art = topics.get(t["id"])
+        if art is None:
+            continue  # missing-topic이 이미 알린다
+        quiz = [q for q in _kids(art) if {"quiz", "after"} <= q.classes]
+        if not quiz or not any(c.tag == "p" and "q" in c.classes for c in _kids(quiz[0])) \
+                or not any(any(s.tag == "summary" for s in _kids(d)) for d in _kids(quiz[0]) if d.tag == "details"):
+            out.append(Problem("missing-check-quiz", t["id"],
+                               '토픽 끝에 <div class="quiz after"><p class="q">…</p><details><summary>…</summary>… 필요'))
+        # 확인 질문의 답 토글과 위젯 안 조작부만 허용한다. 레이어 밖에서 본문을 접어도 막는다.
+        folded = [d for d in art.find_all(lambda n: n.tag == "details")
+                  if not any(a.classes & {"quiz", "widget"} for a in _ancestors(d, art))]
+        if folded:
+            out.append(Problem("folded-body", t["id"], "본문을 <details>로 접지 않아요(확인 질문의 답만 허용)"))
+        formal = next((c for c in _kids(art) if {"layer", "formal"} <= c.classes), None)
+        if formal is not None:
+            blocks = [c for c in _kids(formal) if "layer-title" not in c.classes and c.tag != "h4"]
+            has_sub = any(c.tag == "h4" and "sub" in c.classes for c in _kids(formal))
+            if len(blocks) >= SUBHEAD_MIN_BLOCKS and not has_sub:
+                out.append(Problem("formal-no-subheads", t["id"],
+                                   f'정확히 말하면 블록 {len(blocks)}개: <h4 class="sub"> 소제목 필요'))
+    return out
+
+
+def _ancestors(node: Node, stop: Node):
+    node = node.parent
+    while node is not None and node is not stop:
+        yield node
+        node = node.parent
+
+
 def check_file(path: Path | str) -> list[Problem]:
     source = Path(path).read_text(encoding="utf-8")
     return check_common(parse_html(source), source, Path(path))
@@ -319,7 +369,7 @@ def check_pack(m: dict, note_path: Path | str, *, repo: Path, style_audit: dict,
             target = note_path.parent / pdf
             if target.exists() and not target.is_file():
                 common.append(Problem("pdf-file", note_path.name, f"PDF 파일이 아님: {pdf}"))
-    return out + common + check_note(doc, m)
+    return out + common + check_note(doc, m) + check_guide(source, m)
 
 
 def main(argv: list[str] | None = None) -> int:

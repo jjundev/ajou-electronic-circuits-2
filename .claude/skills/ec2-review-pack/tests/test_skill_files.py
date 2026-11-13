@@ -111,6 +111,17 @@ class TestWhyPageDocs(unittest.TestCase):
     def test_content_rules_has_why_section(self):
         self.assertIn("## 왜 쓰는가 페이지 (`why-circuit`)", self.read("references/content-rules.md"))
 
+    def test_guide_rules_for_author_reviewer_and_template(self):
+        rules = self.read("references/content-rules.md")
+        self.assertIn("## 정확히 말하면의 길잡이", rules)
+        for s in ('<h4 class="sub">', '<div class="quiz after">', 'class="drow"', "folded-body", "formal-no-subheads"):
+            self.assertIn(s, rules)
+        self.assertIn("정확히 말하면의 길잡이", self.read("references/review-prompt.md"))
+        template = self.read("assets/note-template.html")
+        for s in ('data-guide="1"', ".layer.formal h4.sub", ".drow", ".quiz.after"):
+            self.assertIn(s, template)
+        self.assertNotIn("details.more", template)
+
     def test_summary_prompt_collects_motivation(self):
         self.assertIn("## 동기 발언", self.read("references/stt-summary-prompt.md"))
 
