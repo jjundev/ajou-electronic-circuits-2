@@ -8,6 +8,7 @@ from playwright.sync_api import sync_playwright
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from assemble import build_data,ids_selection
 from render import inject,load_template,render_pdf
+import vendor_route
 
 
 def test_long_answer_route_keeps_every_step_and_final_on_visible_pages(tmp_path):
@@ -23,7 +24,7 @@ def test_long_answer_route_keeps_every_step_and_final_on_visible_pages(tmp_path)
         assert text.count('FinalResult729')==1
         for page in doc:assert not page.get_text(clip=fitz.Rect(0,675,1440,810)).strip()
     with sync_playwright() as pw:
-        browser=pw.chromium.launch(channel='chrome');page=browser.new_page();page.goto(file.as_uri());page.wait_for_selector('html[data-ready="true"]')
+        browser=pw.chromium.launch(channel='chrome');page=browser.new_page();vendor_route.install(page);page.goto(file.as_uri());page.wait_for_selector('html[data-ready="true"]')
         assert page.locator('[data-solution-for="E9.05"]').count()>0
         assert page.locator('.sol-step').count()==26
         assert page.locator('.katex-error').count()==0
@@ -45,7 +46,7 @@ def test_paginated_routes_keep_baseline_type_size(tmp_path):
     data['problems'][0]['solution']={'paginate':True,'steps':[{'label':f'Step{i}','html':'<p>계산</p>$$x=1$$'} for i in range(28)],'answer':'<p>Final</p>'}
     file=tmp_path/'type.html';file.write_text(inject(load_template('answers','a4'),data))
     with sync_playwright() as pw:
-        browser=pw.chromium.launch(channel='chrome');page=browser.new_page();page.goto(file.as_uri());page.wait_for_selector('html[data-ready="true"]')
+        browser=pw.chromium.launch(channel='chrome');page=browser.new_page();vendor_route.install(page);page.goto(file.as_uri());page.wait_for_selector('html[data-ready="true"]')
         assert page.locator('.work').evaluate_all('(nodes)=>nodes.every(n=>(parseFloat(getComputedStyle(n).getPropertyValue("--sfs"))||1)>=1)')
         browser.close()
 

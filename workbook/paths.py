@@ -7,6 +7,8 @@ TEXTBOOK = ROOT / "교과서" / "마이크로전자회로"
 EXAMS = ROOT / "from_the_past" / "md"
 WORKBOOK = ROOT / "workbook"
 TEMPLATES = WORKBOOK / "templates"
+# 렌더 때 CDN 대신 쓰는 KaTeX·Pretendard 사본 (vendor_route.py)
+VENDOR = ROOT / ".claude" / "skills" / "ec2-problem-explain" / "assets" / "vendor"
 
 for _tools in (TEXTBOOK / "_tools", EXAMS / "_tools"):
     if str(_tools) not in sys.path:

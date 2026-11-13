@@ -2,12 +2,15 @@
 
 템플릿 계약(workbook/templates/*.html): #workbook-data 안의 자리표시자 __WORKBOOK_DATA__ 를 JSON으로 바꾼다.
 템플릿은 다 그리면 html[data-ready]를 'true'(실패면 'error')로, body[data-overflow]를 넘친 쪽 id(쉼표)로 둔다.
-PDF는 Playwright가 설치된 Google Chrome(channel="chrome")으로 만든다. 템플릿이 CDN 글꼴·KaTeX를 받으므로 인터넷이 필요하다.
+PDF는 Playwright가 설치된 Google Chrome(channel="chrome")으로 만든다. 템플릿은 CDN 주소의 글꼴·KaTeX를 부르지만,
+렌더 때는 vendor_route가 그 요청을 저장소 사본으로 답하므로 인터넷이 필요 없다.
+템플릿이 KaTeX·글꼴을 못 불렀거나 TeX가 남으면 data-ready를 'error'로, 사유를 html[data-error]에 둔다.
 """
 import json
 import re
 from pathlib import Path
 
+import vendor_route
 from paths import TEMPLATES
 
 PLACEHOLDER = "__WORKBOOK_DATA__"
@@ -55,12 +58,16 @@ def _render_html(html_path, pdf_path=None, timeout_ms=120_000):
             browser = pw.chromium.launch(channel="chrome")
             try:
                 page = browser.new_page(viewport=VIEWPORT)
+                misses = vendor_route.install(page)
                 page.goto(Path(html_path).resolve().as_uri())
                 page.wait_for_function("document.documentElement.dataset.ready", timeout=timeout_ms)
-                ready, overflow = page.evaluate(
-                    "[document.documentElement.dataset.ready, document.body.dataset.overflow || '']")
+                ready, overflow, reason = page.evaluate(
+                    "[document.documentElement.dataset.ready, document.body.dataset.overflow || '',"
+                    " document.documentElement.dataset.error || '']")
                 if ready != "true":
-                    raise RenderError(f"템플릿이 데이터를 그리지 못함 (data-ready={ready!r}): {html_path}")
+                    detail = "; ".join(x for x in [reason, *misses] if x)
+                    raise RenderError(f"템플릿이 데이터를 그리지 못함 (data-ready={ready!r}): {html_path}"
+                                      + (f" — {detail}" if detail else ""))
                 typography = page.evaluate("""Object.fromEntries([...document.querySelectorAll('.page--problem')].map(p => {
                     const panel=p.querySelector('.panel'), work=p.querySelector('.work');
                     const scale=n=>{const t=getComputedStyle(n).transform;return t==='none'?1:new DOMMatrix(t).a;};
@@ -74,7 +81,7 @@ def _render_html(html_path, pdf_path=None, timeout_ms=120_000):
             finally:
                 browser.close()
     except PlaywrightError as e:
-        raise RenderError(f"Chrome 렌더링 실패 (Google Chrome 설치와 인터넷 연결 확인): {e}") from e
+        raise RenderError(f"Chrome 렌더링 실패 (Google Chrome 설치 확인): {e}") from e
     return {"overflow": [x for x in overflow.split(",") if x], "typography": typography}
 
 

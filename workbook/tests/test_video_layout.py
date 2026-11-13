@@ -10,6 +10,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import build_workbook
 from assemble import build_data, ids_selection
 from render import inject, load_template, measure_typography, render_pdf
+import vendor_route
 
 
 class VideoLayoutTests(unittest.TestCase):
@@ -70,6 +71,7 @@ class VideoLayoutTests(unittest.TestCase):
                     for layout, cap, frac in [('a4', 1.5, '.40'), ('video-16x9', 1.5 * 1920 / a4_px, '.40')]:
                         html = root/(layout+'.html'); html.write_text(inject(load_template('problems', layout=layout), data))
                         page = browser.new_page(viewport={'width':1400,'height':1000})
+                        vendor_route.install(page)
                         page.goto(html.as_uri())
                         page.wait_for_function('document.documentElement.dataset.ready')
                         got = page.evaluate("""() => { const f=document.querySelector('.fig-band .fig');
@@ -117,6 +119,7 @@ class PersonalizedVideoLayoutTests(unittest.TestCase):
                 browser = pw.chromium.launch(channel='chrome',headless=True)
                 try:
                     page = browser.new_page(viewport={'width':1920,'height':1080})
+                    vendor_route.install(page)
                     page.goto((bundle.build_dir/'personal-답안.html').as_uri())
                     page.wait_for_selector('html[data-ready="true"]')
                     style = page.locator('.sol-step-body svg .fig-ink').first.evaluate('(n) => ({stroke:getComputedStyle(n).stroke, fill:getComputedStyle(n).fill, marker:getComputedStyle(n).markerEnd})')
@@ -159,6 +162,7 @@ class DenseFigureTests(unittest.TestCase):
                 browser = pw.chromium.launch(channel='chrome', headless=True)
                 try:
                     page = browser.new_page(viewport={'width': 1920, 'height': 1080})
+                    vendor_route.install(page)
                     page.goto(html.as_uri())
                     page.wait_for_selector('html[data-ready]')
                     got = page.evaluate("""() => ({
