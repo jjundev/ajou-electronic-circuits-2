@@ -18,9 +18,16 @@ from pathlib import Path
 
 COMBOS = [(1280, 900, 'light'), (1280, 900, 'dark'), (375, 812, 'light'), (375, 812, 'dark')]
 TOPIC_WAIT_MS = 700
+ASSETS = Path(__file__).resolve().parents[1] / 'assets'
+WORKBOOK = Path(__file__).resolve().parents[4] / 'workbook'
 
 MEASURE_JS = r"""async (topicWait) => {
 await new Promise((r) => setTimeout(r, 1500));
+await document.fonts.ready;
+const allowedExternal = [
+  'https://cdn.jsdelivr.net/npm/katex@0.16.11/',
+  'https://cdn.jsdelivr.net/npm/pretendard@1.3.9/',
+];
 const textNodes = Array.from(document.querySelectorAll('main *, #panel-right *')).filter((e) => !['SCRIPT', 'STYLE'].includes(e.tagName) && !e.closest('[hidden]'));
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 const summaryToggle=document.querySelector('#toggle-right');
@@ -66,7 +73,7 @@ return {
   sumsInPanel: document.querySelectorAll('#panel-right .sum').length,
   sumsLeftInMain: document.querySelectorAll('main .sum').length,
   brokenImages: Array.from(document.images).filter((i) => !i.complete || i.naturalWidth === 0).map((i) => i.getAttribute('src')),
-  external: performance.getEntriesByType('resource').map((e) => e.name).filter((u) => !u.startsWith(location.origin)),
+  external: performance.getEntriesByType('resource').map((e) => e.name).filter((u) => !u.startsWith(location.origin) && !allowedExternal.some((p) => u.startsWith(p))),
   mathPan: document.querySelectorAll('.math-pan').length,
   hScroll: over,
   panelOverflow: panelOver,
@@ -113,6 +120,9 @@ async def _goto(page, url, tries=3):
 
 async def run(url, shots=None):
     from playwright.async_api import async_playwright
+    if str(WORKBOOK) not in sys.path:
+        sys.path.insert(0, str(WORKBOOK))
+    import vendor_route
     out = {}
     async with async_playwright() as p:
         browser = await p.chromium.launch()
@@ -122,11 +132,14 @@ async def run(url, shots=None):
                 ctx = await browser.new_context(viewport={'width': width, 'height': height},
                                                 color_scheme=scheme, is_mobile=mobile, has_touch=mobile)
                 page = await ctx.new_page()
+                misses = await vendor_route.install_async(page, vendor=ASSETS / 'vendor')
                 errors = []
                 page.on('console', lambda m, errors=errors: errors.append(m.text) if m.type == 'error' else None)
                 page.on('pageerror', lambda e, errors=errors: errors.append(str(e)))
                 await _goto(page, url)
                 result = await page.evaluate(MEASURE_JS, TOPIC_WAIT_MS)
+                if misses:
+                    result['external'] = [*result.get('external', []), *misses]
                 result['consoleErrors'] = errors
                 combo = f'{width}x{height}-{scheme}'
                 if shots:

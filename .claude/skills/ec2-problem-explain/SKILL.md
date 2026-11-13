@@ -154,7 +154,7 @@ withheld 팩은 HTML·MD 줄 대신 stage 경로를 적는다.
 - `문제설명_<range>_<slug>.html` (`slug`는 같은 폴더 `정리노트_<range>_<slug>.html`의 것)
 - `.assets/문제설명_<range>_<slug>.md`: 링크는 `../`로 팩 폴더를 가리킨다
 - `.assets/figures_문제설명_<range>_<slug>/`: 문제·설명 그림 복사본
-- `.assets/자료_문제설명_<range>_<slug>/`: manifest, 조각, evidence, `answer-overlay.json`, 로컬 KaTeX·Pretendard, `validation.json`(발행 당시 review.json)
+- `.assets/자료_문제설명_<range>_<slug>/`: manifest, 조각, evidence, `answer-overlay.json`, `validation.json`(발행 당시 review.json)
 
 읽음 상태는 원 정리노트와 다른 `ec2-problem-explain-review-<range>-<slug>` 키로 저장된다.
 

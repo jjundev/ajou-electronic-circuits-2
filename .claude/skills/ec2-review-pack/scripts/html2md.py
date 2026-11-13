@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import base64
 from functools import lru_cache
+import io
 from pathlib import Path
 import html
 import json
@@ -59,15 +60,49 @@ svg :is(.fig-dot, .fig-text)[data-node-color="red"] {{ fill: {LIGHT['danger']}; 
 
 
 @lru_cache(maxsize=1)
-def svg_font_css():
-    """Embed the actual 600 face: SVG image documents cannot inherit page fonts."""
+def _pretendard_meta():
     vendor = Path(__file__).resolve().parents[2] / "ec2-problem-explain/assets/vendor/pretendard"
-    font = vendor / "woff2/Pretendard-SemiBold.woff2"
     license_text = (vendor / "LICENSE").read_text(encoding="utf-8").replace("*/", "* /")
-    encoded = base64.b64encode(font.read_bytes()).decode("ascii")
+    return vendor, license_text
+
+
+@lru_cache(maxsize=1)
+def _full_woff2_css():
+    vendor, license_text = _pretendard_meta()
+    encoded = base64.b64encode((vendor / "woff2/Pretendard-SemiBold.woff2").read_bytes()).decode("ascii")
     return (f"/* {license_text} */\n"
             "@font-face { font-family: Pretendard; font-style: normal; font-weight: 600; "
             f"src: url(data:font/woff2;base64,{encoded}) format('woff2'); }}\n")
+
+
+@lru_cache(maxsize=256)
+def _subset_woff_css(chars):
+    from fontTools import subset
+    vendor, license_text = _pretendard_meta()
+    options = subset.Options(flavor="woff")
+    font = subset.load_font(str(vendor / "woff/Pretendard-SemiBold.woff"), options)
+    subsetter = subset.Subsetter(options)
+    subsetter.populate(text=chars)
+    subsetter.subset(font)
+    buf = io.BytesIO()
+    font.save(buf)
+    encoded = base64.b64encode(buf.getvalue()).decode("ascii")
+    return (f"/* {license_text} */\n"
+            "@font-face { font-family: Pretendard; font-style: normal; font-weight: 600; "
+            f"src: url(data:font/woff;base64,{encoded}) format('woff'); }}\n")
+
+
+def svg_font_css(text=None):
+    """Embed the actual 600 face (subsetted to used glyphs when possible): SVG image documents cannot inherit page fonts."""
+    if text is None:
+        return _full_woff2_css()
+    chars = "".join(sorted({c for c in nfc(text) + text if c not in "\r\n\t"}))
+    if not chars.strip():
+        return ""
+    try:
+        return _subset_woff_css(chars)
+    except ImportError:
+        return _full_woff2_css()
 
 
 # HTMLParser는 태그·속성 이름을 소문자로 바꾼다. 독립 SVG(XML)는 대소문자를 구분하므로 되돌린다.
@@ -368,9 +403,10 @@ def export_svg(svg, ctx, name=None):
     uses_xlink = "xlink:" in body or any(k.startswith("xlink:") for k in attrs)
     if uses_xlink and "xmlns:xlink" not in attrs:
         attrs["xmlns:xlink"] = "http://www.w3.org/1999/xlink"
+    svg_text = "".join(n.text() for n in svg.find_all(lambda n: n.tag == "text"))
     doc = (f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="{" ".join(vb)}"'
            f"{_svg_attrs(attrs)}>"
-           f"<style>{html.escape(svg_font_css() + SVG_CSS, quote=False)}</style>"
+           f"<style>{html.escape(svg_font_css(svg_text) + SVG_CSS, quote=False)}</style>"
            f'<rect x="{vb[0]}" y="{vb[1]}" width="{w}" height="{h}" rx="10" fill="{LIGHT["surface"]}"/>'
            f"{body}</svg>\n")
     fname = _fig_name(svg, ctx, name)

@@ -42,23 +42,35 @@ class TestHtml2Md(unittest.TestCase):
 
     def test_exported_svg_contains_real_semibold_and_native_subscripts(self):
         import base64
+        import io
         import re
+        from fontTools.ttLib import TTFont
         note = small_note(self.tmp, '<figure><svg viewBox="0 0 240 120"><text class="fig-text fig-math" font-family="Times New Roman" font-style="italic" x="12" y="30">g<tspan baseline-shift="sub" font-size="72%">m3</tspan></text></svg></figure>')
         _, count = html2md.convert_note(note)
         self.assertEqual(count, 1)
         svg = next((self.tmp / '.assets/figures_0101').glob('*.svg')).read_text(encoding='utf-8')
         doc = xml.dom.minidom.parseString(svg)
         css = doc.getElementsByTagName('style')[0].firstChild.data
-        data = re.search(r'data:font/woff2;base64,([A-Za-z0-9+/=]+)', css)
+        data = re.search(r'data:font/(woff2?);base64,([A-Za-z0-9+/=]+)', css)
         self.assertIsNotNone(data, 'Standalone SVG must load its own actual 600 font')
-        font = Path(html2md.__file__).resolve().parents[2] / 'ec2-problem-explain/assets/vendor/pretendard/woff2/Pretendard-SemiBold.woff2'
-        self.assertEqual(base64.b64decode(data.group(1)), font.read_bytes())
+        raw = base64.b64decode(data.group(2))
+        self.assertLess(len(raw), 30_000)
+        cmap = TTFont(io.BytesIO(raw)).getBestCmap()
+        for ch in ('g', 'm', '3'):
+            self.assertIn(ord(ch), cmap)
         self.assertIn('font-weight: 600', css)
         self.assertIn('font-style: normal', css)
         self.assertIn('svg text tspan', css)
         self.assertIn('font-size: 78%', css)
         self.assertIn('baseline-shift="sub"', svg)
         self.assertIn('SIL OPEN FONT LICENSE', css)
+
+    def test_exported_svg_without_text_skips_font_embedding(self):
+        note = small_note(self.tmp, '<figure><svg viewBox="0 0 100 40"><rect x="10" y="10" width="80" height="20"/></svg></figure>')
+        _, count = html2md.convert_note(note)
+        self.assertEqual(count, 1)
+        svg = next((self.tmp / '.assets/figures_0101').glob('*.svg')).read_text(encoding='utf-8')
+        self.assertNotIn('data:font/', svg)
 
     def test_pdf_links_kept_as_pdf(self):
         self.assertIn("(../복습문제_0101-0102_Mini_Test-문제.pdf)", self.md)

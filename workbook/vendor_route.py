@@ -59,3 +59,19 @@ def install(page, vendor=None):
 
     page.route(CDN_PATTERN, handle)
     return misses
+
+
+async def install_async(page, vendor=None):
+    """async Playwright page용 CDN 사본 라우팅 설치기."""
+    misses = []
+
+    async def handle(route):
+        target, reason = resolve(route.request.url, vendor)
+        if target is None:
+            misses.append(reason)
+            await route.abort()
+        else:
+            await route.fulfill(path=str(target))
+
+    await page.route(CDN_PATTERN, handle)
+    return misses

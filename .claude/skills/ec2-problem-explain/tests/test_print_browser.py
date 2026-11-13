@@ -7,6 +7,8 @@ from playwright.sync_api import expect
 
 from test_sync import synthetic
 from test_sync_browser import browser
+import vendor_route
+from _util import SKILL
 from epe_render import build_explanation
 
 
@@ -39,6 +41,7 @@ def test_real_pdf_preserves_every_original_and_restores_screen(
     context = browser.new_context(viewport={'width': width, 'height': height},
                                   color_scheme=theme)
     page = context.new_page()
+    vendor_route.install(page, vendor=SKILL / 'assets/vendor')
     errors = []
     page.on('pageerror', lambda error: errors.append(str(error)))
     try:

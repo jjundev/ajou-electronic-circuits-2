@@ -7,7 +7,9 @@ from pathlib import Path
 import pytest
 from playwright.sync_api import sync_playwright, expect
 from test_sync import synthetic
-from epe_render import build_explanation,check_artifacts
+import vendor_route
+from _util import SKILL
+from epe_render import build_explanation,check_artifacts,ALLOWED_EXTERNAL_PREFIXES
 
 
 def make_stage(root):
@@ -56,11 +58,12 @@ def browser():
 def test_panel_tabs_choices_zoom_print_and_resources(browser,stage_url,width,height,theme):
     context=browser.new_context(viewport={'width':width,'height':height},color_scheme=theme)
     page=context.new_page();errors=[];failed=[];external=[]
+    misses=vendor_route.install(page,vendor=SKILL/'assets/vendor')
     page.on('pageerror',lambda e:errors.append(str(e)))
     page.on('console',lambda m:errors.append(m.text) if m.type=='error' else None)
     page.on('requestfailed',lambda r:failed.append(r.url))
     page.on('response',lambda r:failed.append(r.url) if r.status>=400 else None)
-    page.on('request',lambda r:external.append(r.url) if not r.url.startswith(stage_url.split('/stage/')[0]) else None)
+    page.on('request',lambda r:external.append(r.url) if not r.url.startswith(stage_url.split('/stage/')[0]) and not r.url.startswith(ALLOWED_EXTERNAL_PREFIXES) else None)
     try:
         page.goto(stage_url,wait_until='networkidle')
         if width>=1024:
@@ -89,7 +92,7 @@ def test_panel_tabs_choices_zoom_print_and_resources(browser,stage_url,width,hei
         page.evaluate('window.dispatchEvent(new Event("afterprint"))')
         assert page.evaluate('document.documentElement.scrollWidth<=innerWidth')
         assert page.locator('.katex-error').count()==0
-        assert not errors and not failed and not external,(errors,failed,external)
+        assert not errors and not failed and not external and not misses,(errors,failed,external,misses)
     finally:
         context.close()
 
@@ -97,6 +100,7 @@ def test_panel_tabs_choices_zoom_print_and_resources(browser,stage_url,width,hei
 def test_breakpoint_and_saved_closed_toc(browser,stage_url):
     context=browser.new_context(viewport={'width':1023,'height':900})
     page=context.new_page()
+    vendor_route.install(page,vendor=SKILL/'assets/vendor')
     try:
         page.goto(stage_url,wait_until='networkidle')
         assert page.locator('#panel-prob').is_hidden()
@@ -115,6 +119,7 @@ def test_breakpoint_and_saved_closed_toc(browser,stage_url):
 def test_dock_float_drag_resize_and_restore(browser,stage_url):
     context=browser.new_context(viewport={'width':1280,'height':900})
     page=context.new_page()
+    vendor_route.install(page,vendor=SKILL/'assets/vendor')
     try:
         page.goto(stage_url,wait_until='networkidle')
         page.locator('.prob-dock [data-dock="right"]').click()
@@ -145,6 +150,7 @@ def test_dock_float_drag_resize_and_restore(browser,stage_url):
 def test_summary_switch_with_math_title(browser,stage_url,width,height,theme):
     context=browser.new_context(viewport={'width':width,'height':height},color_scheme=theme)
     page=context.new_page();errors=[]
+    vendor_route.install(page,vendor=SKILL/'assets/vendor')
     page.on('pageerror',lambda e:errors.append(str(e)))
     try:
         page.goto(stage_url,wait_until='networkidle')

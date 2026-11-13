@@ -8,7 +8,7 @@ from pathlib import Path
 
 from _util import make_repo, fragment
 from epe_contract import payload_hash
-from epe_render import build_explanation, check_artifacts, artifact_hashes, names, dump
+from epe_render import build_explanation, check_artifacts, artifact_hashes, names, dump, ALLOWED_EXTERNAL_PREFIXES
 from epe_shared import parse, compact
 from epe_source import load_source, sha256
 from epe_types import ExplainError
@@ -73,11 +73,24 @@ class RenderTest(unittest.TestCase):
                       for n in reading.find_all(lambda n: 'data-source-field' in n.attrs)}
             self.assertEqual(fields, {'conditions': compact(p.conditions_html), 'ask': compact(p.ask_html)})
             self.assertIn(f'<a id="{p.id}"></a>', md)
-        self.assertNotIn('https://cdn.', text)
+        self.assertIn('https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/static/pretendard.css', text)
+        self.assertIn('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css', text)
+        self.assertFalse((result.html.parent / '.assets' / names(pack)[2] / 'vendor').exists())
         self.assertFalse(list(root.find_all(lambda n: n.tag == 'details' and 'original' not in n.classes)))
         self.assertEqual(set(artifact_hashes(result)),
                          {p.relative_to(result.html.parent).as_posix() for p in result.files})
         self.assertEqual(check_artifacts(pack, result), [])
+
+    def test_unapproved_external_resource_rejected(self):
+        pack, _, result = self.build(take=slice(0, 1))
+        bad = result.html.read_text(encoding='utf-8').replace(
+            'https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css',
+            'https://evil.example/other.css')
+        result.html.write_text(bad, encoding='utf-8')
+        manifest = json.loads(result.manifest.read_text(encoding='utf-8'))
+        manifest['files'][result.html.name] = sha256(result.html)
+        dump(result.manifest, manifest)
+        self.assertTrue(any('외부 자원/링크' in e for e in check_artifacts(pack, result)))
 
     def test_recall_and_summary_survive_html_and_markdown(self):
         pack, _, _ = self.build(take=slice(0, 1))

@@ -156,7 +156,7 @@ location.hash = '';
   sumsInPanel: document.querySelectorAll('#panel-right .sum').length,
   sumsLeftInMain: document.querySelectorAll('main .sum').length,
   brokenImages: Array.from(document.images).filter((i) => !i.complete || i.naturalWidth === 0).map((i) => i.getAttribute('src')),
-  external: performance.getEntriesByType('resource').map((e) => e.name).filter((u) => !u.startsWith(location.origin)),
+  external: performance.getEntriesByType('resource').map((e) => e.name).filter((u) => !u.startsWith(location.origin) && !['https://cdn.jsdelivr.net/npm/katex@0.16.11/','https://cdn.jsdelivr.net/npm/pretendard@1.3.9/'].some((p) => u.startsWith(p))),
   hScroll: over,
   panelOverflow: panelOver,
 })

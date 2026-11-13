@@ -18,6 +18,10 @@ from epe_core import make_overlay
 from readability import readability_errors, public_location_errors
 
 ASSETS = Path(__file__).resolve().parents[1] / 'assets'
+ALLOWED_EXTERNAL_PREFIXES = (
+    'https://cdn.jsdelivr.net/npm/katex@0.16.11/',
+    'https://cdn.jsdelivr.net/npm/pretendard@1.3.9/',
+)
 
 def names(pack):
     stem = f'문제설명_{pack.range}_{pack.slug}'
@@ -140,7 +144,6 @@ def build_explanation(pack, fragments, stage: Path, repo: Path) -> Artifacts:
     data_dir = bundle / data_name
     data_dir.mkdir(parents=True)
     (bundle / fig_name).mkdir()
-    shutil.copytree(ASSETS / 'vendor', data_dir / 'vendor')
     shutil.copy2(ASSETS / 'template-provenance.json', data_dir / 'template-provenance.json')
     articles = []
     toc = []
@@ -177,7 +180,7 @@ def build_explanation(pack, fragments, stage: Path, repo: Path) -> Artifacts:
               'SUBTITLE': '주어진 조건을 읽고, 첫 줄을 쓰고, 이유를 따라가며 답을 확인해요.',
               'SECTIONS': '<section id="problems"><h2>문항별 설명</h2>' + ''.join(articles) + '</section>',
               'FOOTER': '원 문제·정리노트·PDF는 보존해요.', 'SCRIPTS': '',
-              'RANGE': f'ec2-problem-explain-review-{pack.range}-{pack.slug}', 'VENDOR': f'{BUNDLE}/{data_name}/vendor'}
+              'RANGE': f'ec2-problem-explain-review-{pack.range}-{pack.slug}'}
     text = (ASSETS / 'note-template.html').read_text(encoding='utf-8')
     for key, value in values.items():
         text = text.replace('{{' + key + '}}', value)
@@ -272,6 +275,8 @@ def check_artifacts(pack, artifacts):
                 continue
             url = urlsplit(href)
             if url.scheme or url.netloc:
+                if node.tag in ('link', 'script') and href.startswith(ALLOWED_EXTERNAL_PREFIXES):
+                    continue
                 errors.append('외부 자원/링크: ' + href)
                 continue
             if not url.path:
