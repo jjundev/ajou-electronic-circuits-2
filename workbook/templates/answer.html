@@ -189,6 +189,17 @@ a:focus-visible { outline: .5mm solid var(--focus); outline-offset: .5mm; }
 }
 .prose code { font-size: .92em; }
 .prose p { margin: 0; }
+/* 번호 목록은 번호만: 원점 글머리표를 겹쳐 그리지 않는다 */
+.prose ol { margin: 0; padding-left: 5mm; }
+.prose ol > li { padding-left: .8mm; }
+.prose ol > li::before { content: none; }
+/* 표: 이웃 셀 수식이 한 식처럼 붙지 않게 셀 간격과 행 구분선 */
+.prose table { border-collapse: collapse; margin: 1mm 0; }
+.prose th, .prose td {
+  padding: .8mm 2.5mm; text-align: left; vertical-align: top;
+  border-bottom: .25mm solid var(--rule);
+}
+.prose th { font-weight: 600; border-bottom-width: .35mm; }
 
 /* 문제 원문: 맨 위, 조건·구할 것과 구분되게 가는 선 아래 한 단계 작게 (문제지와 같음) */
 .original {

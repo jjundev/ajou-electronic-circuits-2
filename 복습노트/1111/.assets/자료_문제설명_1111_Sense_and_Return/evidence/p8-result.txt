@@ -1,0 +1,9 @@
+exact omega_u = omega_0*sqrt(-A_0**2*K**2 + A_0**2 - 2*A_0*K - 1)
+omega_u - w0*sqrt(A0^2-(1+K A0)^2) = 0
+valid only if A0/(1+K A0) > 1 (closed-loop dc gain above unity)
+with 1+KA0~KA0: A_0*omega_0*sqrt(1 - K**2) = A0 w0 sqrt(1-K^2)
+ratio exact/approx with A0=1/(K x): sqrt(-K**2*(x + 1)**2 + 1)/sqrt(1 - K**2)  limit x->0: 1
+lim K->0 of A0 w0 sqrt(1-K^2)/(A0 w0) = 1  -> omega_u ~ A0*w0 (= open-loop GBW), independent of K
+d(omega_u)/dK exact = -A_0*omega_0*(A_0*K + 1)/sqrt(A_0**2 - (A_0*K + 1)**2)  (relative sensitivity small when K^2<<1, KA0>>1)
+A0=200,K=1/10: omega_u/w0 exact=198.894, approx A0=200
+A0=200,K=1/2: omega_u/w0 exact=172.624, approx A0=200

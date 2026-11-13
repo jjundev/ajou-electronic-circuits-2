@@ -1,0 +1,6 @@
+open-loop -1dB(10%) BW: [sqrt(19)*omega_0/9] = [0.484322] * w0
+closed-loop -1dB(10%) BW: [sqrt(19)*omega_0*(A_0*K + 1)/9]
+ratio closed/open: A_0*K + 1
+check sqrt(19)/9 = 0.48432210
+strict -1 dB: open [0.508847] *w0; ratio A_0*K + 1
+10% drop in dB: -0.91515 dB

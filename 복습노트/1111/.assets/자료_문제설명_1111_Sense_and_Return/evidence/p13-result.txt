@@ -1,0 +1,19 @@
+--- Return (common to all six): differential pair M1/M2 with ideal tail ---
+v_n1 = v_fb/2 + v_in/2 ; i_d2 = g_m1*(v_fb - v_in)/2  -> depends only on (v_fb - v_in): voltage subtraction
+v_in and v_fb enter at different nodes (gate M1, gate M2) => series (voltage) return
+check: d(i_d2)/dv_in + d(i_d2)/dv_fb = 0
+--- Sense: feedback voltage at M2 gate vs output quantity ---
+(a) v_fb = v_out  | v_fb = V_out (M2 gate tied to V_out): voltage sense (shunt at output)
+(b) v_fb = v_out  | v_fb = V_out: voltage sense
+(c) v_fb = R_1*i_out  | v_fb = V_n3 = R1*I_out (R1 in series with output current): current sense
+(d) v_fb = R_1*i_out  | v_fb = V_n3 = R1*I_out: current sense
+(e) v_fb = R_2*v_out/(R_1 + R_2)  | v_fb = R2/(R1+R2)*V_out (divider across output): voltage sense
+(f) v_fb = v_out  | v_fb = V_out: voltage sense
+--- Loop polarity check (break at M2 gate, v_in=0, v_t applied to M2 gate; return = v_fb) ---
+(a) v_return/v_t = -R_n*g_m1/2 -> negative feedback
+(b) v_return/v_t = R_1*R_n*g_m1*g_m3/2 -> POSITIVE (return in phase with test)
+(c) v_return/v_t = R_1*R_n*g_m1*g_m3/2 -> POSITIVE (return in phase with test)
+(d) v_return/v_t = -R_1*R_n*g_m1*g_m3/(2*R_1*g_m3 + 2) -> negative feedback
+(e) v_return/v_t = -R_2*R_n*g_m1/(2*R_1 + 2*R_2 + 2*R_n) -> negative feedback
+(f) v_return/v_t = R_1*g_m1*g_m3/(2*g_m4) -> POSITIVE (return in phase with test)
+Note: loop polarity is not asked; it is recorded only as an observation about the figure as drawn.

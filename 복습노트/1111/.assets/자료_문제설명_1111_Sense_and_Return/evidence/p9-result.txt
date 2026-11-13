@@ -1,0 +1,10 @@
+literal Y/X = -g_m*r_O/(C_L*r_O*s - K_r*g_m*r_O + 1)
+literal pole = (K_r*g_m*r_O - 1)/(C_L*r_O)
+open-loop A1 = -gm rO/(1+s rO CL); open-loop BW = 1/(rO CL)
+neg-feedback pole = (-K*g_m*r_O - 1)/(C_L*r_O)  -> BW = (K*g_m*r_O + 1)/(C_L*r_O)
+required K = (B*C_L*r_O - 1)/(g_m*r_O) = B*C_L/g_m - 1/(g_m*r_O)
+check: BW(Ksol)-B = 0
+lim rO->oo of K: B*C_L/g_m (lambda=0 case)
+requires B > 1/(rO CL) for K>0
+literal-sign K (stable) = (-B*C_L*r_O + 1)/(g_m*r_O)  = -(required K above): 0
+numeric example K = 0.900000

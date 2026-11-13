@@ -1,0 +1,122 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 읽어요</h4>
+  <p>회로가 아니라 식으로 주어진 시스템이에요. 순방향 증폭기는 저주파 이득 $A_0=200$, 극점 $\omega_0$ 하나뿐인 단일 극점 증폭기이고, 귀환율(feedback factor) $K$로 부귀환을 건 폐루프 전달 함수가 식 (12.22)예요.</p>
+  <p>할 일은 $K=0$, $0.1$, $0.5$ 세 경우의 폐루프 크기 응답을 한 그래프에 그리는 거예요. $\omega_0$의 값은 주어지지 않았으니 가로축은 $\omega_0$의 배수로 읽어요.</p>
+  <p>그래프 하나를 그리려면 숫자 두 개만 알면 돼요. 평탄한 저주파 이득의 높이와, 곡선이 꺾이는 극점의 위치예요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 개념과 공식을 떠올려요</h4>
+  <p>"식 (12.22)"와 "$K$를 0, 0.1, 0.5로 바꿔"라는 단서에서 대역폭 확장(bandwidth extension)을 떠올려요(<a href="정리노트_1111_Sense_and_Return.html#s2-pole-shift">극점이 (1+루프 이득)배 높아져요</a>). 식 (12.22)는 다시 단일 극점 꼴이라서 두 값을 바로 읽을 수 있어요.</p>
+  $$\frac{Y}{X}(0)=\frac{A_0}{1+KA_0}$$
+  $$\omega_{p,\mathrm{closed}}=(1+KA_0)\omega_0$$
+  <p>기호를 정리해요. $KA_0$는 저주파 루프 이득(loop gain)이고, $1+KA_0$는 귀환이 이득을 나누는 배수예요. 극점(pole)은 분모를 0으로 만드는 $s$이고, 영점이 없는 단일 극점 응답에서는 그 크기가 −3 dB 대역폭이에요.</p>
+  <p>근사는 쓰지 않아요. 식 (12.22)는 단일 극점 개루프에서 정확히 나온 식이고, 그래프는 보데 근사(Bode approximation)로 그려요. 극점 전에는 평탄, 극점 뒤에는 기울기 $-20\,\mathrm{dB/dec}$예요(<a href="../1014/정리노트_1014_Frequency_Response.html#s1-bode">보데 근사</a>).</p>
+  <p>이 도구를 고르는 이유는 세 곡선이 모두 같은 모양(단일 극점)이고 $1+KA_0$ 하나만 다르기 때문이에요. 그 배수 하나를 구하면 높이와 꺾이는 위치가 함께 정해져요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <div data-answer-step="배수 1+KA0 먼저 구하기">
+    <p>고정된 값은 $A_0=200$과 $\omega_0$이고, 바뀌는 것은 $K$뿐이에요. 그래서 경우마다 배수 $1+KA_0$부터 써요.</p>
+    $$K=0:\ 1+KA_0=1+0\times200=1$$
+    $$K=0.1:\ 1+KA_0=1+0.1\times200=21$$
+    $$K=0.5:\ 1+KA_0=1+0.5\times200=101$$
+    <p>이 배수로 저주파 이득은 나누고, 극점은 곱해요.</p>
+  </div>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>이렇게 풀어요</h4>
+  <div data-subpart="main">
+    <div data-answer-step="평탄 이득과 극점">
+      <p>$K=0$이면 귀환이 없어요. 식 (12.22)가 개루프 식 (12.19)로 돌아가요.</p>
+      $$\frac{Y}{X}(0)=200\ [\mathrm{V/V}]\approx46.02\ \mathrm{dB}$$
+      $$\omega_{p}=\omega_0$$
+      <p>$K=0.1$이면 이득은 21로 나누고 극점은 21배 해요. 간단한 분수 $200/21$을 유지하다가 마지막에 반올림해요.</p>
+      $$\frac{Y}{X}(0)=\frac{200}{21}\approx9.52\ [\mathrm{V/V}]\approx19.58\ \mathrm{dB}$$
+      $$\omega_{p}=21\omega_0$$
+      <p>$K=0.5$이면 배수가 101이에요.</p>
+      $$\frac{Y}{X}(0)=\frac{200}{101}\approx1.98\ [\mathrm{V/V}]\approx5.93\ \mathrm{dB}$$
+      $$\omega_{p}=101\omega_0$$
+      <p>dB 값은 크기에 $20\log_{10}$을 취한 거예요. 이득을 배수로 나누면 dB에서는 그 배수의 dB만큼 빼요.</p>
+      $$20\log_{10}21\approx26.44\,\mathrm{dB}$$
+      $$20\log_{10}101\approx40.09\,\mathrm{dB}$$
+    </div>
+    <div data-answer-step="고주파 하강선이 겹치는 이유">
+      <p>극점보다 훨씬 높은 주파수 $\omega\gg(1+KA_0)\omega_0$에서는 분모의 1을 무시할 수 있어요. 남는 식에서 $1+KA_0$가 약분돼요.</p>
+      $$\left|\frac{Y}{X}(j\omega)\right|\approx\frac{A_0}{1+KA_0}\cdot\frac{(1+KA_0)\omega_0}{\omega}=\frac{A_0\omega_0}{\omega}$$
+      <p>결과에 $K$가 없어요. 그래서 세 곡선의 하강선은 모두 같은 직선 위에 있고, 그 직선은 $\omega=A_0\omega_0=200\omega_0$에서 0 dB에 닿아요. 이득을 나눈 만큼 극점을 곱했으니 평탄 이득 × 극점은 셋 다 $200\omega_0$예요.</p>
+      <figure class="figure">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 270" role="img" aria-label="가로축은 로그 눈금의 각주파수, 세로축은 데시벨 이득인 보데 직선 근사입니다. K=0 곡선은 46.02 dB에서 평탄하다가 오메가0에서 꺾이고, K=0.1 곡선은 19.58 dB에서 평탄하다가 21 오메가0에서 꺾이며, K=0.5 곡선은 5.93 dB에서 평탄하다가 101 오메가0에서 꺾입니다. 세 곡선은 꺾인 뒤 같은 마이너스 20 dB/dec 직선을 따라 200 오메가0에서 0 dB에 닿습니다." font-family="Pretendard, sans-serif" font-size="14" font-weight="600">
+<path class="fig-ink" d="M80 20 V220 H470"/>
+<path class="fig-ink" d="M75 25 L80 18 L85 25"/>
+<path class="fig-ink" d="M463 215 L470 220 L463 225"/>
+<text class="fig-text fig-math" x="88" y="16" text-anchor="start">|Y/X| (dB)</text>
+<text class="fig-text fig-math" x="476" y="225" text-anchor="start">ω</text>
+<path class="fig-ink" d="M75 54.33 H80 M75 149.51 H80 M75 198.65 H80"/>
+<text class="fig-text fig-math" x="71" y="59" text-anchor="end">46.02</text>
+<text class="fig-text fig-math" x="71" y="154" text-anchor="end">19.58</text>
+<text class="fig-text fig-math" x="71" y="203" text-anchor="end">5.93</text>
+<text class="fig-text fig-math" x="71" y="225" text-anchor="end">0</text>
+<path class="fig-ink" stroke-dasharray="3 4" d="M140 54.33 V220 M298.7 149.51 V220 M380.5 198.65 V220"/>
+<path class="fig-ink" d="M416.1 220 V244"/>
+<text class="fig-text fig-math" x="140" y="240" text-anchor="middle">ω<tspan baseline-shift="sub" font-size="78%">0</tspan></text>
+<text class="fig-text fig-math" x="298.7" y="240" text-anchor="middle">21ω<tspan baseline-shift="sub" font-size="78%">0</tspan></text>
+<text class="fig-text fig-math" x="380.5" y="240" text-anchor="middle">101ω<tspan baseline-shift="sub" font-size="78%">0</tspan></text>
+<text class="fig-text fig-math" x="416.1" y="260" text-anchor="middle">A<tspan baseline-shift="sub" font-size="78%">0</tspan>ω<tspan baseline-shift="sub" font-size="78%">0</tspan> = 200ω<tspan baseline-shift="sub" font-size="78%">0</tspan></text>
+<path class="fig-ink" d="M80 54.33 H140 L416.1 220"/>
+<path class="fig-accent" d="M80 149.51 H298.7 L416.1 220"/>
+<path class="fig-danger" stroke-dasharray="6 4" d="M80 198.65 H380.5 L416.1 220"/>
+<text class="fig-text fig-math" x="92" y="45" text-anchor="start">K = 0</text>
+<text class="fig-text fig-math" x="92" y="140" text-anchor="start">K = 0.1</text>
+<text class="fig-text fig-math" x="92" y="189" text-anchor="start">K = 0.5</text>
+<text class="fig-text fig-math" x="262" y="104" text-anchor="start">−20 dB/dec</text>
+</svg>
+<figcaption>$A_0=200$일 때 식 (12.22)의 보데 직선 근사예요. 세로 점선은 각 경우의 극점 $\omega_0$, $21\omega_0$, $101\omega_0$이고, 꺾인 뒤의 하강선은 셋 다 같은 직선이라 겹쳐 보여요. 실제 곡선은 각 극점에서 평탄 이득보다 약 3 dB 낮게 부드럽게 꺾여요.</figcaption>
+</figure>
+    </div>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <div data-answer-final>
+      <p>$A_0=200$에서 폐루프 응답은 셋 다 단일 극점 저역통과 꼴이에요.</p>
+      $$K=0:\ \frac{Y}{X}(0)=200\ [\mathrm{V/V}]\approx46.02\,\mathrm{dB}$$
+      $$K=0:\ \omega_p=\omega_0$$
+      $$K=0.1:\ \frac{Y}{X}(0)\approx9.52\ [\mathrm{V/V}]\approx19.58\,\mathrm{dB}$$
+      $$K=0.1:\ \omega_p=21\omega_0$$
+      $$K=0.5:\ \frac{Y}{X}(0)\approx1.98\ [\mathrm{V/V}]\approx5.93\,\mathrm{dB}$$
+      $$K=0.5:\ \omega_p=101\omega_0$$
+      <p><strong>$K$가 커질수록 평탄 이득은 $1+KA_0$배 낮아지고 극점은 같은 배수로 오른쪽으로 가요.</strong> 극점 뒤 $-20\,\mathrm{dB/dec}$ 하강선은 세 곡선이 같아 $200\omega_0$에서 0 dB에 닿아요.</p>
+    </div>
+    <p>이득–대역폭 곱을 경우마다 확인해요. 셋 다 $200\omega_0$예요.</p>
+    $$K=0:\ 200\times\omega_0=200\omega_0$$
+    $$K=0.1:\ \frac{200}{21}\times21\omega_0=200\omega_0$$
+    $$K=0.5:\ \frac{200}{101}\times101\omega_0=200\omega_0$$
+    <p>극한 확인: $K\to0$이면 배수가 1이라 개루프 응답 그대로예요. $K$가 커서 $KA_0\gg1$이면 평탄 이득은 $1/K$에 다가가요. $K=0.5$의 $1.98$은 $1/K=2$와 거의 같아요.</p>
+    <p>하강선 확인: 꺾이는 점을 $K=0$의 하강 직선 $46.02-20\log_{10}(\omega/\omega_0)$에 넣어 봐요. 두 값이 각 평탄 이득과 같아서 꺾이는 점이 그 직선 위에 있어요.</p>
+    $$\omega=21\omega_0:\ 46.02-26.44=19.58\,\mathrm{dB}$$
+    $$\omega=101\omega_0:\ 46.02-40.09=5.93\,\mathrm{dB}$$
+    <p>단위: 이득은 [V/V]이고 dB는 그 크기의 $20\log_{10}$이에요. 극점은 $\omega_0$와 같은 rad/s예요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>주의할 점</h4>
+  <p>귀환이 극점을 "더 낮게" 만든다고 거꾸로 읽기 쉬워요. 분모의 $s$ 항이 $s/[(1+KA_0)\omega_0]$이므로 극점은 $(1+KA_0)$배 높아져요.</p>
+  <p>극점에서 이득이 갑자기 20 dB 떨어지는 게 아니에요. 극점 뒤 기울기가 $-20\,\mathrm{dB/dec}$가 되고, 실제 곡선은 극점에서 약 3 dB만 낮아요.</p>
+  <p>$K=0.5$에서 $1+KA_0$를 $1.5$로 계산하는 실수가 흔해요. $K$에 $A_0=200$을 곱한 루프 이득 100에 1을 더해야 해요.</p>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>조건을 바꾸어 생각해요</h4>
+  <ol>
+    <li>$A_0=200$에서 $K=0.05$로 바꾸면 평탄 이득(V/V와 dB)과 극점은 각각 얼마인가요?</li>
+    <li>$\omega=1000\omega_0$에서 $K=0$과 $K=0.1$의 이득 크기는 거의 같나요? 어느 식으로 판단하는지도 말해 보세요.</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <p class="sum-lead">경우마다 배수 $1+KA_0$를 먼저 구해 이득은 나누고 극점은 곱해요.</p>
+  $$\frac{Y}{X}(0)=\frac{A_0}{1+KA_0}$$
+  $$\omega_p=(1+KA_0)\omega_0$$
+  <p>$A_0=200$이면 배수는 $K=0,0.1,0.5$에서 1, 21, 101이에요.</p>
+  <p>평탄 이득은 약 46.02, 19.58, 5.93 dB이고 극점은 $\omega_0$, $21\omega_0$, $101\omega_0$예요.</p>
+  <p>고주파 하강선은 $A_0\omega_0/\omega$로 $K$와 무관해 세 곡선이 겹쳐요.</p>
+</div>

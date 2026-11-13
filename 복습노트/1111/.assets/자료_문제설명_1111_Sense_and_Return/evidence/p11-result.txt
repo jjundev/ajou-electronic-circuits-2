@@ -1,0 +1,10 @@
+Gm exact (body effect kept) = g_m1*r_O1*(g_m2*r_O2 + g_mb2*r_O2 + 1)/(g_m2*r_O1*r_O2 + g_mb2*r_O1*r_O2 + r_O1 + r_O2)
+Gm exact (gmb2=0)          = g_m1*r_O1*(g_m2*r_O2 + 1)/(g_m2*r_O1*r_O2 + r_O1 + r_O2)
+Gm limit ro1->oo           = g_m1
+Gm/g_m1 with ro1->oo, ro2 finite? -> 1
+Rout exact = g_m2*r_O1*r_O2 + g_mb2*r_O1*r_O2 + r_O1 + r_O2
+Rout (gmb2=0) = g_m2*r_O1*r_O2 + r_O1 + r_O2
+ratio Rout/(g_m2 r_O1 r_O2) as g_m2*r_O->oo (gmb2=0, ro1=ro2=r, gm2*r=K):
+   1
+Rin = oo (MOS gate)
+Norton check Iout - (Gm vin + vd/Rout) = 0
