@@ -116,6 +116,40 @@ class TestPack(unittest.TestCase):
                   "<p>이번 범위에는 복습문제가 없어요.</p>")
         self.assertEqual(self.codes(), [])
 
+    def test_missing_check_quiz(self):
+        self.edit("sections/s1.html", '<div class="quiz after"><p class="q">확인해 봐요. $2$와', '<div class="quiz"><p class="q">확인해 봐요. $2$와')
+        self.assertEqual(self.codes(), ["missing-check-quiz"])
+
+    def test_check_quiz_needs_answer_toggle(self):
+        self.edit("sections/s1.html", "<details><summary>답 보기</summary><p>$\\frac{2+4}{2}=3$이에요.</p></details>",
+                  "<p>$\\frac{2+4}{2}=3$이에요.</p>")
+        self.assertEqual(self.codes(), ["missing-check-quiz"])
+
+    def test_folded_body(self):
+        self.edit("sections/s1.html", '<p>$$\\bar{x} = \\frac{1}{N}\\sum_{n=1}^{N} x_n$$</p></div>',
+                  '<details><summary>유도</summary><p>$$\\bar{x} = \\frac{1}{N}\\sum_{n=1}^{N} x_n$$</p></details></div>')
+        self.assertEqual(self.codes(), ["folded-body"])
+
+    def test_folded_body_outside_layers(self):
+        self.edit("sections/s1.html", '<div class="layer prof"><span class="layer-title">교수님 말씀</span><p>"평균부터 봐요."</p></div>',
+                  '<div class="layer prof"><span class="layer-title">교수님 말씀</span></div>'
+                  '<div class="folds"><details class="more"><summary>교수님 말씀</summary><p>"평균부터 봐요."</p></details></div>')
+        self.assertEqual(self.codes(), ["folded-body"])
+
+    def test_long_formal_needs_subheads(self):
+        old = '<p>$\\sigma^2 = \\frac{1}{N}\\sum_{n}(x_n - \\bar{x})^2$</p>'
+        self.edit("sections/s1.html", old, old + "<p>가</p>" * 5)
+        self.assertEqual(self.codes(), ["formal-no-subheads"])
+        self.edit("sections/s1.html", '<span class="layer-title">정확히 말하면</span><p>$\\sigma',
+                  '<span class="layer-title">정확히 말하면</span><h4 class="sub">정의</h4><p>$\\sigma')
+        self.assertEqual(self.codes(), [])
+
+    def test_guide_checks_skip_notes_without_marker(self):
+        note = self.build()
+        text = note.read_text(encoding="utf-8").replace(' data-guide="1"', "")
+        note.write_text(text.replace('<div class="quiz after">', '<div class="quiz">'), encoding="utf-8")
+        self.assertEqual(self.codes(note), [])
+
     def test_cli_exit_codes(self):
         note = self.build()
         args = ["--manifest", str(self.run / "manifest.json"), "--note", str(note)]
