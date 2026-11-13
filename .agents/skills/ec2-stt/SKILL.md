@@ -37,11 +37,11 @@ description: "[Gemini Only] Use when transcribing electronic circuits 2 lecture 
    - Whisper, mlx-whisper, faster-whisper 등 외부/로컬 STT 모델을 절대 설치하거나 사용하지 않는다.
    - 오디오를 1fps 블랙 비디오 래퍼(`color=c=black:s=320x240:r=1`)가 포함된 MP4로 변환한 뒤, Gemini의 `read_file` 기능으로 직접 듣고 전사한다.
 
-4. **150초(2.5분) 안전 세그먼트 및 1-청크 1-에이전트 원칙**:
-   - **안전 필터 오탐 차단**: 5분 단위 오디오는 강의 특유의 반복 추임새("어...", "음...")와 수식 반복으로 인해 Gemini 안전 필터에 빈번히 걸린다. 따라서 기본 분할 길이는 **150초(2.5분)**를 표준으로 한다.
+4. **무음 기반 50초(±12초) 안전 세그먼트 및 1-청크 1-에이전트 원칙**:
+   - **안전 필터 오탐 차단 & 문맥 보존**: 150초 이상 청크는 강의 특유의 반복 추임새("어...", "음...")와 회로 은어("신호가 죽는다", "전압을 때린다")로 인해 Gemini 안전 필터에 빈번히 걸린다. 따라서 기본 목표 길이는 **50초(±12초 무음 구간 탐색, `silencedetect`)**를 표준으로 하여 자연스러운 휴지기에서 분할한다.
    - **1-청크 1-에이전트(1-Chunk-1-Agent)**: 한 에이전트에게 여러 서브청크를 체이닝하면 Thinking 토큰 오염 및 딴짓(불필요한 진단 루프)이 발생한다. **반드시 서브에이전트 1개당 청크 1개**를 배정한다.
    - **직소(Direct-to-Disk)**: 서브에이전트는 채팅창이나 Thinking에 전사 텍스트를 일체 출력하지 않고 파일 디스크 쓰기(`write_file`)로만 직소하여 챗 레이어 필터 간섭을 원천 차단한다.
-   - **배치 병렬화**: 503 동시성 부하를 방지하기 위해 5개 단위 배치(Batch of 5)로 순차 기동한다.
+   - **배치 병렬화**: 503 동시성 부하를 방지하면서도 처리 속도를 유지하기 위해 8개 단위 배치(Batch of 8)로 순차 기동한다.
 
 5. **복습팩 파이프라인 연계 안내**:
    - 전사 완료 후 `/ec2-review-pack <MMDD>` 실행을 안내하여 수업 STT $\rightarrow$ 복습팩 생성이 매끄럽게 연결되도록 한다. (자동 실행하지 않고 안내만 출력)
@@ -87,7 +87,7 @@ description: "[Gemini Only] Use when transcribing electronic circuits 2 lecture 
    ```
    - 파일명에서 날짜를 파싱할 수 없는 경우 임의 추측하지 않고 즉시 `--date MMDD` 입력을 안내하고 중단.
 
-2. **150초 세그먼트 분할 및 병렬 MP4 래핑 (`prepare_segments.py`)**:
+2. **무음 기반 50초 세그먼트 분할 및 병렬 MP4 래핑 (`prepare_segments.py`)**:
    ```bash
    DATE=$(python3 -c "import json; print(json.load(open('/tmp/ec2_stt_context.json'))['date'])")
    WORK_DIR="$REPO/STT/_temp_${DATE}"
@@ -96,20 +96,22 @@ description: "[Gemini Only] Use when transcribing electronic circuits 2 lecture 
    python3 "$REPO/.agents/skills/ec2-stt/scripts/prepare_segments.py" "<AUDIO_PATH>" \
      --work-dir "$WORK_DIR" \
      --prefix "${DATE} 전회2" \
-     --segment-seconds 150 \
+     --segment-seconds 50 \
+     --window-seconds 12 \
      --json > "/tmp/ec2_stt_segments.json"
    ```
 
-3. **1-청크 1-에이전트 배치 병렬 기동 (Batch of 5)**:
-   - `/tmp/ec2_stt_segments.json`의 `segments` 목록을 5개씩 묶어 순차적으로 서브에이전트를 기동한다.
+3. **1-청크 1-에이전트 배치 병렬 기동 (Batch of 8)**:
+   - `/tmp/ec2_stt_segments.json`의 `segments` 목록을 8개씩 묶어 순차적으로 서브에이전트를 기동한다.
    - 각 서브에이전트는 **오직 1개의 청크 파일**만 담당한다.
+   - `/tmp/ec2_stt_context.json`의 `prompt_guide` 필드를 읽어 아래 프롬프트의 `<PROMPT_GUIDE>` 자리에 그대로 주입한다 (`python3 -c "import json; print(json.load(open('/tmp/ec2_stt_context.json'))['prompt_guide'])"`).
    - **초경량 Direct-to-Disk 프롬프트**:
      ```text
      You are a verbatim STT transcription agent for Electronic Circuits 2 (전자회로2, Prof. Ikjin Kwon).
      Target video: <WORK_DIR>/<DATE> 전회2_part<NN>_temp.mp4
      Output file: <WORK_DIR>/<DATE> 전회2_part<NN>.md
 
-     Domain terms: gm, ro, r_pi, C_GS, C_GD, C_DB, f_T, Miller, Dominant pole, Bode plot, Feedback factor K, Loop gain, Open-loop, Closed-loop, Virtual ground, Virtual short, Desensitization, Transimpedance.
+     <PROMPT_GUIDE>
 
      Instructions:
      1. Call `read_file` on target video.
@@ -123,8 +125,8 @@ description: "[Gemini Only] Use when transcribing electronic circuits 2 lecture 
    - **타임스탬프 요청 시 (`--timestamps` / `-t`) 변형**:
      지침 2에 타임스탬프 형식 지정 (`MM:SS\n발화내용`).
 
-4. **마스터 전사본 병합 및 자동 정리 (`merge_transcripts.py`)**:
-   - 150초 세그먼트 2개씩 묶어 최종 MD에는 5분 단위 `## Part 01`, `## Part 02`... 헤더로 깔끔하게 병합한다.
+4. **매니페스트 계약 기반 마스터 전사본 병합 및 완전 정리 (`merge_transcripts.py`)**:
+   - `--manifest /tmp/ec2_stt_segments.json`의 `start_time`을 기준으로 5분(300초) 단위 `## Part 01`, `## Part 02`... 헤더를 구성하고, 복구 서브청크(`_part16_1.md` 등) 자동 취합 · 누락 파트 검증 · 중간 파일 및 빈 `_temp_` 디렉토리 삭제까지 일괄 수행한다.
    ```bash
    REPO="$(git rev-parse --show-toplevel)"
    DATE=$(python3 -c "import json; print(json.load(open('/tmp/ec2_stt_context.json'))['date'])")
@@ -133,8 +135,7 @@ description: "[Gemini Only] Use when transcribing electronic circuits 2 lecture 
    python3 "$REPO/.agents/skills/ec2-stt/scripts/merge_transcripts.py" \
      --dir "$WORK_DIR" \
      --prefix "${DATE} 전회2" \
-     --segment-seconds 150 \
-     --group-parts 2 \
+     --manifest "/tmp/ec2_stt_segments.json" \
      --out "$REPO/STT/${DATE} 전회2.md"
    ```
    - 타임스탬프 필요 시: `--timestamps`
@@ -157,12 +158,14 @@ description: "[Gemini Only] Use when transcribing electronic circuits 2 lecture 
 
 만약 특정 청크에서 서브에이전트가 안전 필터(`blocked by Gemini's filters`)로 멈출 경우:
 1. **Whisper 등 외부 툴 설치 절대 금지**.
-2. **해당 150초 청크를 60~75초 단위로 반분할**:
+2. **원커맨드 3분할 재래핑 (`--resplit`)**:
    ```bash
-   ffmpeg -y -ss 0 -t 75 -i "<FAILING_CHUNK>.mp3" -c copy "<FAILING_CHUNK>a.mp3" -loglevel error
-   ffmpeg -y -ss 74 -t 76 -i "<FAILING_CHUNK>.mp3" -c copy "<FAILING_CHUNK>b.mp3" -loglevel error
+   python3 "$REPO/.agents/skills/ec2-stt/scripts/prepare_segments.py" \
+     --resplit "<FAILING_CHUNK>.mp3" \
+     --parts 3 \
+     --json
    ```
-3. 각각 1fps 블랙 MP4로 감싼 뒤, 단일 서브에이전트로 전사하여 하나의 파트 파일로 합치고 배치를 재개한다.
+3. 생성된 서브청크(`_partNN_1_temp.mp4` ~ `_partNN_3_temp.mp4`)를 각각 단일 서브에이전트로 전사해 `_partNN_1.md` ~ `_partNN_3.md`로 저장한다. `merge_transcripts.py`가 부모 파트 번호로 자동 취합하므로 수동으로 합칠 필요가 없다.
 
 ---
 
@@ -170,10 +173,10 @@ description: "[Gemini Only] Use when transcribing electronic circuits 2 lecture 
 
 - [ ] 활성 모델이 Gemini인지 확인 완료 (Gate 0 준수, Claude/GPT 차단).
 - [ ] 오디오 파일명에서 날짜(`MMDD`) 정상 파싱 (실패 시 `--date` 요구).
-- [ ] 150초 안전 세그먼트 및 `prepare_segments.py` 고속 병렬 MP4 래핑 완료.
+- [ ] 무음 기반 50초(±12초) 안전 세그먼트 및 `prepare_segments.py` 고속 병렬 MP4 래핑 완료.
+- [ ] `infer_context.py`의 `prompt_guide`를 모든 서브에이전트 프롬프트에 주입 완료.
 - [ ] 외부/로컬 모델(Whisper 등) 사용 배제 (네이티브 `read_file` 100% 사용).
 - [ ] 1-청크 1-에이전트 원칙 준수 (서브에이전트 딴짓 및 Thinking 토큰 오염 차단).
 - [ ] Direct-to-Disk 파일 쓰기로 챗 레이어 안전 필터 간섭 0% 보장.
-- [ ] 최종 산출물이 5분 단위 `## Part 01` 헤더 규격으로 `STT/<MMDD> 전회2.md`에 올바르게 병합 및 저장됨.
-- [ ] 중간 임시 파일 자동 정리 완료.
+- [ ] `--manifest` 계약 기반 병합으로 누락 검증, 5분 단위 `## Part 01` 헤더 규격 저장, 중간 파일 및 `_temp_` 폴더 완전 정리 완료.
 - [ ] 후속 작업으로 `/ec2-review-pack <MMDD>` 안내 메시지 출력.
