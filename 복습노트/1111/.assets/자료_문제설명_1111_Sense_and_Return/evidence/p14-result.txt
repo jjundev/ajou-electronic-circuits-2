@@ -1,0 +1,16 @@
+--- Return (common to all four) ---
+i_d1 = g_m1*(v_fb - v_in) ; d/dv_in + d/dv_fb = 0 -> M1 responds to v_GS = v_fb - v_in: voltage subtraction
+v_in drives M1 source, v_fb drives M1 gate: different nodes => series (voltage) return
+(input is a voltage V_in at the source; the feedback does not inject a current into the input node)
+--- Sense ---
+(a) M1 gate tied to V_out (M2 follower output): v_fb = V_out -> voltage sense
+(b) M1 gate tied to V_out (M2 PMOS drain, R1): v_fb = V_out -> voltage sense
+(c) output = I_out through R1; M1 gate at n2: v_fb = R1*I_out -> current sense
+(d) M1 gate tied to V_out: v_fb = V_out -> voltage sense
+check (c): v_n2 = R_1*i_out ; d v_fb / d I_out = R_1
+--- Loop polarity check (break at M1 gate, v_in=0, v_t at gate; return = v_fb) ---
+(a) v_return/v_t = -R_n*g_m1 -> negative feedback
+(b) v_return/v_t = R_1*R_n*g_m1*g_m2 -> POSITIVE (return in phase with test)
+(c) v_return/v_t = R_1*R_n*g_m1*g_m2 -> POSITIVE (return in phase with test)
+(d) v_return/v_t = R_1*g_m1*g_m2/g_m3 -> POSITIVE (return in phase with test)
+Note: loop polarity is not asked; observation about the figure as drawn only.
