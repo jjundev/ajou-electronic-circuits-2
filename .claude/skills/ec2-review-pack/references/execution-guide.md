@@ -66,6 +66,7 @@
    python3 -c "from playwright.sync_api import sync_playwright as s; p=s().start(); p.chromium.launch(channel='chrome').close(); p.stop(); print('pdf ok')"
    ```
    실패하면 init 전에 고친다. 모듈이 없으면 `pip install playwright`, Chrome이 없으면 Google Chrome을 설치하거나 이미 있는 Chromium을 `/opt/google/chrome/chrome`에 연결한다. 고칠 수 없으면 pdf owner를 unavailable로 넘긴다. 도구 없이 init하면 build-problems가 실패해 RUN이 보류된다.
+   KaTeX·Pretendard는 네트워크가 필요 없다. 렌더러와 `layout_probe.py`가 템플릿의 CDN 요청을 저장소 사본(`workbook/vendor_route.py`)으로 답한다. CDN 주소는 발행 HTML에만 남는다. 사본을 못 부르거나 TeX가 남으면 렌더가 사유와 함께 실패하니, 다른 팩의 vendor를 끌어다 우회하지 말고 그 사유를 고친다.
 5. 새 RUN과 실제 browser/pdf owner를 [runner 계약](runner-contract.md)의 init에 전달한다. RUN은 `--run`을 빼서 기본 위치 `~/.cache/ec2-review-pack/<range>-<YYYYmmdd-HHMMSS>`를 쓴다. `/tmp`·`/private/tmp`에 두면 재부팅 때 RUN 전체(상태·receipt·백업)가 사라진다. 실행기가 디렉터리와 `RUN/learning-style.json` snapshot을 만든다. 별도 snapshot 명령/수기 run-status를 실행하지 않는다. 원본은 읽기 전용이고 최상위 메인만 발행한다.
 6. PROFILE 존재·현재 snapshot을 확인한다. 작성자·감사자·리뷰어는 PROFILE 전체를 읽으며 메인은 일반 모드에서 객체/해시만 확인한다(lite 실제 감사 때는 본문도 읽는다).
 

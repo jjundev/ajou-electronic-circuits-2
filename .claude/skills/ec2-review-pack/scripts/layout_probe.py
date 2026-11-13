@@ -11,6 +11,9 @@ Usage:
   python3 layout_probe.py NOTE.html [--widths 1280,375] [--themes light,dark] --out probe.json
 Exit code: 0 no defects, 1 defects found, 2 usage or browser error.
 This is evidence for the reviewer, not a substitute for looking at the screen.
+KaTeX and Pretendard requests to cdn.jsdelivr.net are answered from the repository copy
+(workbook/vendor_route.py), so measurements match with or without network. A page that
+loads KaTeX but ends up without it is a browser error (exit 2), not a clean measurement.
 """
 from __future__ import annotations
 
@@ -20,7 +23,11 @@ import json
 from pathlib import Path
 import sys
 
+REPO = Path(__file__).resolve().parents[4]
 GAP_EM = 0.6
+# The page asked for KaTeX (a script tag) but the library never arrived.
+_KATEX_MISSING = ("() => [...document.scripts].some(s => /katex/i.test(s.src))"
+                  " && typeof window.katex === 'undefined'")
 OVERFLOW_SELECTOR = ('.katex-display, .page-summary, .panel-right .panel-inner, '
                      '.panel-right .sum, .panel-right .katex-display, table')
 
@@ -70,6 +77,9 @@ _MEASURE = r"""
 
 def probe(html: Path, widths: list[int], themes: list[str]) -> dict:
     from playwright.sync_api import sync_playwright
+    if str(REPO / 'workbook') not in sys.path:
+        sys.path.insert(0, str(REPO / 'workbook'))
+    import vendor_route
     checks = []
     with sync_playwright() as pw:
         browser = pw.chromium.launch(channel='chrome', headless=True)
@@ -77,8 +87,11 @@ def probe(html: Path, widths: list[int], themes: list[str]) -> dict:
             for width in widths:
                 for theme in themes:
                     page = browser.new_page(viewport={'width': width, 'height': 900}, color_scheme=theme)
+                    misses = vendor_route.install(page)
                     page.goto(html.resolve().as_uri())
                     page.wait_for_load_state('load')
+                    if page.evaluate(_KATEX_MISSING):
+                        raise RuntimeError('KaTeX not loaded' + (': ' + '; '.join(misses) if misses else ''))
                     page.evaluate("t => document.documentElement.setAttribute('data-theme', t)", theme)
                     toggle = page.locator('#toggle-right[aria-expanded="false"]')
                     if toggle.count() and toggle.first.is_visible():

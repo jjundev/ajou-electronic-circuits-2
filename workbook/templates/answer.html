@@ -837,6 +837,29 @@ function applyZoom(z) {
 }
 const screenZoom = () => applyZoom(Math.min(1, (innerWidth - 32) / PAGE_W_PX));
 
+/* ---------- 렌더 확인: 수식·글꼴이 실제로 그려졌는지 ---------- */
+// KaTeX나 글꼴을 못 불러오면 조용히 TeX 원문을 찍지 않고 실패로 알린다 (render.py가 data-error를 읽는다).
+const RAW_TEX_RE = /\$[^$\s][^$]*\$/;
+function assertRendered(root) {
+  if (typeof katex === 'undefined' || typeof renderMathInElement !== 'function')
+    throw new Error('KaTeX를 불러오지 못함');
+  const pretendard = [...document.fonts].some(f => f.family.replace(/["']/g, '') === 'Pretendard' && f.status === 'loaded');
+  if (!pretendard) throw new Error('Pretendard 글꼴 없음');
+  const bad = root.querySelector('.katex-error');
+  if (bad) throw new Error(`TeX 문법 오류: ${(bad.getAttribute('title') || bad.textContent).slice(0, 80)}`);
+  // 모르는 명령은 .katex-error 대신 오류색(#cc0000) \명령 글자로 그려진다
+  const unknown = [...root.querySelectorAll('.katex-mathml mstyle[mathcolor="#cc0000"] > mtext')]
+    .find(t => t.textContent.startsWith('\\'));
+  if (unknown) throw new Error(`TeX 문법 오류: 모르는 명령 ${unknown.textContent.slice(0, 40)}`);
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode: n => n.parentElement?.closest('.katex, script, style') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT,
+  });
+  for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+    const m = n.nodeValue.match(RAW_TEX_RE);
+    if (m) throw new Error(`TeX 원문 남음: ${m[0].slice(0, 40)}`);
+  }
+}
+
 /* ---------- 실행 (6.9) ---------- */
 async function main() {
   try {
@@ -898,12 +921,14 @@ async function main() {
         }
       }
     }
+    assertRendered(book);
     document.body.dataset.overflow = overflow.join(',');
     document.documentElement.dataset.ready = 'true';
   } catch (err) {
     console.error(err);
-    book.append(txt('p', 'load-error', `문제 데이터를 읽지 못했습니다: ${err.message}`));
+    book.append(txt('p', 'load-error', `렌더링 실패: ${err.message}`));
     document.body.dataset.overflow = '';
+    document.documentElement.dataset.error = err.message;
     document.documentElement.dataset.ready = 'error';
     return;
   }

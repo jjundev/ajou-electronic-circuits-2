@@ -46,3 +46,30 @@ def test_probe_clean_fixture_exits_zero(tmp_path):
     assert code == 0 and len(report['checks']) == 4
     assert len(report['html_sha256']) == 64
     assert all(c['overflow'] == [] and c['label_gaps'] == [] for c in report['checks'])
+
+
+KATEX_PAGE = ('<!doctype html><meta charset="utf-8">'
+              '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@{v}/dist/katex.min.css">'
+              '<script src="https://cdn.jsdelivr.net/npm/katex@{v}/dist/katex.min.js"></script>'
+              '<body><div class="katex-display">x = 1</div></body>')
+
+
+def _run(tmp_path, html_text):
+    html = tmp_path / 'note.html'
+    html.write_text(html_text, encoding='utf-8')
+    out = tmp_path / 'probe.json'
+    p = subprocess.run([sys.executable, str(PROBE), str(html), '--out', str(out), '--widths', '1280', '--themes', 'light'],
+                       capture_output=True, text=True, encoding='utf-8')
+    return p.returncode, p.stdout
+
+
+def test_probe_serves_katex_from_repo_copy(tmp_path):
+    code, out = _run(tmp_path, KATEX_PAGE.format(v='0.16.11'))
+    assert code == 0, out
+
+
+def test_probe_fails_when_katex_cannot_load(tmp_path):
+    code, out = _run(tmp_path, KATEX_PAGE.format(v='0.0.1'))
+    assert code == 2
+    report = json.loads(out)
+    assert report['status'] == 'error' and 'KaTeX not loaded' in report['reason'] and '0.0.1' in report['reason']
