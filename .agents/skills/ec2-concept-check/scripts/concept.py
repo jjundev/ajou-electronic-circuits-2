@@ -110,7 +110,7 @@ def render_page(data):
         "TITLE": render.esc(title),
         "NOTE_HREF": render.esc(note),
         "TOC": '<a href="#check">확인</a>',
-        "INTRO": f"이번 수업에서 처음 배운 개념을 {len(data['items'])}문항으로 확인해요. 고르면 바로 채점돼요.",
+        "INTRO": f"이번 수업에서 처음 배운 개념을 {len(data['items'])}문항으로 확인해요. 보기를 고르면 바로 채점돼요. 숫자 답은 입력한 뒤 ‘답 확인’을 눌러요.",
         "PARTS": f'<section id="check"><h2>확인문제</h2>{cards}</section>',
         "FOOTER": ("<p>AI가 강의자료와 수업 전사를 바탕으로 만든 문항이에요.</p>"
                    f'<p>라이선스 <a href="{asset_root}/pretendard/LICENSE" download="Pretendard-LICENSE.txt">Pretendard</a> · '
