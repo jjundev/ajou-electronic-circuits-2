@@ -18,7 +18,7 @@ owner 기본은 main이다. 도구가 실제 있는 주체를 전달하며 unava
 
 ## 배치·재개 — 메인과 역할 담당자
 
-next.kind는 dispatch/run/review_locally/wait/recover/report/blocked다. dispatch는 `task claim --run <RUN> --task <id>`로 먼저 예약한다. 반환 attempt/brief로 새 컨텍스트 작업자를 실행하고 `task bind --run <RUN> --task <id> --attempt <UUID> --agent-id <실제 ID>`로 연결한다. Codex는 spawn_agent(fork_turns="none"), OpenCode는 전체 대화를 복사하지 않는 새 작업 컨텍스트를 사용한다. 작업자 지시문은 [worker-prompt](worker-prompt.md) 템플릿을 채워 쓴다. claim 뒤 brief.json에는 `run_id`와 `attempt`가 들어 있다. 작업자는 반환 전에 `task check --run <RUN> --task <id> --attempt <UUID> --receipt <절대 경로>`를 실행한다. 이 명령은 accept와 같은 검증을 하되 상태를 바꾸지 않고, 실패하면 exit 1과 reason(예: `unresolved successful receipt`, `receipt identity mismatch`)을 돌려준다. 반환 뒤 `task accept --run <RUN> --task <id> --attempt <UUID> --receipt <절대 경로>`를 실행한다. 늦게 온 다른 attempt는 거부한다. 가용 슬롯·독립 역할·기존 담당자 재개 규칙은 [delegation](delegation.md)을 따른다.
+next.kind는 dispatch/run/review_locally/wait/recover/concept_check/report/blocked다. dispatch는 `task claim --run <RUN> --task <id>`로 먼저 예약한다. 반환 attempt/brief로 새 컨텍스트 작업자를 실행하고 `task bind --run <RUN> --task <id> --attempt <UUID> --agent-id <실제 ID>`로 연결한다. Codex는 spawn_agent(fork_turns="none"), OpenCode는 전체 대화를 복사하지 않는 새 작업 컨텍스트를 사용한다. 작업자 지시문은 [worker-prompt](worker-prompt.md) 템플릿을 채워 쓴다. claim 뒤 brief.json에는 `run_id`와 `attempt`가 들어 있다. 작업자는 반환 전에 `task check --run <RUN> --task <id> --attempt <UUID> --receipt <절대 경로>`를 실행한다. 이 명령은 accept와 같은 검증을 하되 상태를 바꾸지 않고, 실패하면 exit 1과 reason(예: `unresolved successful receipt`, `receipt identity mismatch`)을 돌려준다. 반환 뒤 `task accept --run <RUN> --task <id> --attempt <UUID> --receipt <절대 경로>`를 실행한다. 늦게 온 다른 attempt는 거부한다. 가용 슬롯·독립 역할·기존 담당자 재개 규칙은 [delegation](delegation.md)을 따른다.
 
 브리프는 `RUN/work/<task>/brief.json`이다. role/targets/references/inputs/allowed_outputs/allowed_output_roots/report/receipt/request_paths를 직접 읽는다. author는 section_brief도 읽는다. 실행기가 고정한 inputs를 빼거나 임의 출력을 추가해 쓰기 권한을 늘리지 않는다. PROFILE 전체와 [공통 교육 계약](execution-guide.md)의 지정 절은 그대로 필수다.
 
@@ -67,7 +67,9 @@ style-audit/content-review는 브리프의 **audit_output**에 쓴다. 앞 작�
 
 `run --run <RUN> --action <next.action>`으로 한 개만 실행한다. 허용 action: prepare-pack, assemble-note, build-problems, precheck, convert-md, publish-explanation, build-answers, publish-answer, final-check. 기존 assemble/check_html/html2md, workbook 및 자식/publish_answer CLI를 실제 호출하며 구현을 문서에 복제하지 않는다. argv는 shell=False, 현재 sys.executable, 자식 UTF-8 환경이다. 로그/결과는 `RUN/work/actions/<action>/<attempt>/stdout.log`, stderr.log, result.json이다.
 
-순서는 source-prep→날짜별 stt→scope-draft→selection→scope-final→섹션 author→prepare-pack→assemble-note→build-problems(문제 있을 때)→style-audit→precheck→content-review(일반)→browser-qa→convert-md→standalone-svg-qa(SVG가 있을 때)→child-coordinator→publish-explanation→build-answers→pdf-qa→publish-answer→final-check→report다. next가 실제 준비 작업을 결정한다. 문제 0개는 자식/PDF만 생략한다.
+순서는 source-prep→날짜별 stt→scope-draft→selection→scope-final→섹션 author→prepare-pack→assemble-note→build-problems(문제 있을 때)→style-audit→precheck→content-review(일반)→browser-qa→convert-md→standalone-svg-qa(SVG가 있을 때)→child-coordinator→publish-explanation→build-answers→pdf-qa→publish-answer→final-check→concept_check→report다. next가 실제 준비 작업을 결정한다. 문제 0개는 자식/PDF만 생략한다.
+
+`next.kind=concept_check`는 신규 RUN의 최종 검사 완료 후 메인이 수행하는 스킬 호출이다. `next.range`와 `next.parent_run`을 [ec2-concept-check](../../../../.agents/skills/ec2-concept-check/SKILL.md)에 넘긴다. 스킬의 `publish` 또는 `withhold`가 현재 final-check 회차의 `RUN/concept-check-result.json`을 남기면 `next`는 `report`로 넘어간다. 확인문제 보류 사유는 report의 `concept_check`에 담기며 부모 팩은 완료로 유지한다. 이 계약이 도입되기 전에 시작된 RUN은 기존 보고 흐름을 따른다. 기존 팩의 수기 보완은 확인문제 자동 호출 대상에서 제외한다.
 
 prepare-pack은 첫 변경 전 기본/설명 두 백업을 검증·재사용하며 제목 맵도 그 뒤 반영한다. 답안은 현재 발행된 승인 overlay/validation으로만 RUN에 빌드한다. 자식 ready-for-publish는 발행 완료가 아니다. [통합 계약](problem-explain-integration.md)의 독립 검산·네 실제 검토·전체 감사와 [화면 검사](browser-check.md), 전 페이지 실제 PDF 검토를 유지한다. precheck의 pending/defer는 final-check 완료가 아니다.
 

@@ -8,7 +8,7 @@ import sys
 import time
 
 import pytest
-from _util import SCRIPTS
+from _util import REPO, SCRIPTS
 from pack_support import make_run
 import pack_flow as flow
 
@@ -415,3 +415,37 @@ def test_pdf_qa_fix_restales_build_answers(tmp_path):
     assert state['actions']['build-answers']['history'][-1]['reason'] == 'fix pdf-1'
     nxt = flow.next_work(run, slots=1)
     assert (nxt['kind'], nxt['action']) == ('run', 'build-answers')
+
+
+def test_new_pack_queues_concept_check_after_final_check(tmp_path):
+    _, run = make_run(tmp_path, lite=True)
+    from pack_flow import load_state, next_work
+    assert load_state(run)["concept_check_enabled"] is True
+    assert next_work(run, slots=1)["kind"] != "concept_check"
+    workflow_until(run, "final-check")
+    assert next_work(run, slots=0)["action"] == "final-check"
+    workflow_action(run, "final-check")
+    flow.update_state(run, flow.load_state(run)["revision"], lambda st: {
+        **st, "status": "complete",
+        "actions": {**st["actions"], "final-check": {**st["actions"]["final-check"], "attempt": "current"}},
+    })
+    step = next_work(run, slots=0)
+    assert (step["kind"], step["range"], Path(step["parent_run"])) == ("concept_check", "0909", run)
+    from pack_cli import execute, parser
+    report_cli, exit_code = execute(parser().parse_args(["report", "--run", str(run)]))
+    assert exit_code == 0 and report_cli["next"]["kind"] == "concept_check"
+    assert report_cli["counts"]["partial"] == 1
+    state = flow.inspect_state(run)
+    result = run / "concept-check-result.json"
+    flow._atomic_json(result, {"range": state["range"], "attempt": "old",
+                               "status": "withheld", "reason": "fixture"})
+    assert next_work(run, slots=0)["kind"] == "concept_check"
+    child_cli = REPO / ".agents/skills/ec2-concept-check/scripts/concept.py"
+    child = subprocess.run([sys.executable, str(child_cli), "withhold", "--parent-run", str(run),
+                            "--reason", "fixture"], capture_output=True, text=True)
+    assert child.returncode == 0, child.stderr
+    assert next_work(run, slots=0)["kind"] == "report"
+    from pack_actions import write_report
+    report = json.loads(write_report(run).read_text(encoding="utf-8"))
+    assert report["status"] == "complete"
+    assert report["concept_check"]["status"] == "withheld"

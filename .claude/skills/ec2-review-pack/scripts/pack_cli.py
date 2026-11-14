@@ -138,12 +138,17 @@ def execute(a):
         else:
             path=actions.write_report(run)
             state=f.inspect_state(run)
-            return dict(status=state['status'],phase=state['phase'],counts={'partial':int(state['status']!='complete')},details_path=str(path)),0
+            next_step = f.next_work(run, slots=0)
+            pending = next_step['kind'] == 'concept_check'
+            return dict(status='ready' if pending else state['status'], phase=state['phase'],
+                        next=next_step if pending else None,
+                        counts={'partial': int(pending or state['status'] != 'complete')}, details_path=str(path)), 0
     state=f.inspect_state(run)
     if extra is None: extra=f.next_work(run,slots=0)
     if isinstance(extra,dict) and 'tasks' in extra:
         extra=dict(extra,tasks=[{k:t[k] for k in ('id','role','brief','status') if k in t} for t in extra['tasks']])
-    return dict(status=state['status'],phase=state['phase'],next=extra,
+    status = 'ready' if extra and extra.get('kind') == 'concept_check' else state['status']
+    return dict(status=status,phase=state['phase'],next=extra,
                 counts={'tasks':len(state['tasks']),'actions':len(state['actions']),'stale_inputs':len(state['stale_inputs'])},
                 details_path=str(run/'run-status.json')),0
 

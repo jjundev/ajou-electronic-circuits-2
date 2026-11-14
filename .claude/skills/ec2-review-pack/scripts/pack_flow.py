@@ -255,7 +255,7 @@ def init_run(repo: Path, run: Path, range_: str, *, lite: bool = False,
             raise FlowError(f"{snapshot_path}: invalid snapshot: {exc}") from exc
         state = dict(schema_version=1, revision=0, run_id=str(uuid4()), repo=str(repo), run=str(run),
                      range=range_, lite=lite, capabilities=dict(browser_owner=browser_owner, pdf_owner=pdf_owner),
-                     phase=0, status="ready", tasks={}, actions={},
+                     phase=0, status="ready", tasks={}, actions={}, concept_check_enabled=True,
                      hashes={str(nfc_path(p)): _sha(p) for p in [*sources, profile, snapshot_path]}, backups={},
                      fix_rounds=dict(content=0, machine_browser=0), explain_run=None,
                      publication={}, recovery={}, sessions=[p.name[:4] for p in sources])
@@ -667,6 +667,27 @@ def _owner(state, task):
     return 'workers'
 
 
+def concept_check_result(state):
+    if not state.get('concept_check_enabled') or state['status'] != 'complete' or not _done(state, 'final-check'):
+        return None
+    receipt = Path(state['run']) / 'concept-check-result.json'
+    try:
+        result = _read(receipt)
+        if (result.get('range'), result.get('attempt')) != (state['range'], state['actions']['final-check'].get('attempt')):
+            return None
+        if result.get('status') == 'withheld' and result.get('reason'):
+            return result
+        files = result.get('files', {})
+        if result.get('status') == 'published' and isinstance(files, dict) and files and all(
+            within(Path(path).resolve(), Path(state['repo']) / '복습노트' / state['range']) and _sha(Path(path)) == digest
+            for path, digest in files.items()
+        ):
+            return result
+    except (OSError, ValueError):
+        pass
+    return None
+
+
 def next_work(run: Path, *, slots: int) -> dict:
     if type(slots) is not int or slots < 0: raise FlowError('slots must be a nonnegative integer')
     state = inspect_state(run)
@@ -692,6 +713,9 @@ def next_work(run: Path, *, slots: int) -> dict:
         if owner == 'main': return result('review_locally', ready, reason='main must perform actual review from brief')
         if slots == 0: return result('wait', reason='no worker slots available')
         return result('dispatch', ready[:slots], reason='claim before dispatch')
+    if state.get('concept_check_enabled') and state['status'] == 'complete' and concept_check_result(state) is None:
+        return dict(result('concept_check', reason='final check current; invoke ec2-concept-check'),
+                    range=state['range'], parent_run=state['run'])
     return result('report', reason='final check current; generate final report')
 
 

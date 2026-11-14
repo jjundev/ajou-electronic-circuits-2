@@ -526,5 +526,7 @@ def write_report(run: Path) -> Path:
         'scope':f._read(scope) if scope.exists() else None,'selection':f._read(selection) if selection.exists() else None,
         'files':inventory_pack(Path(state['repo']),state['range']), 'checks':state['actions'],
         'backups':state['backups'],'recovery':state['recovery'],'publication':state['publication'],
+        'concept_check': f.concept_check_result(state) or (
+            {'status':'pending'} if state.get('concept_check_enabled') and state['status']=='complete' else None),
         'seeded_from':state.get('seeded_from')})
     return report
