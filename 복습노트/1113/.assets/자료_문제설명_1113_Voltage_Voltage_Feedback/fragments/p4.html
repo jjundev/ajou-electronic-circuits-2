@@ -1,0 +1,147 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 읽어요</h4>
+  <p>회로는 예제 12.12의 그림 12.28과 같아요. 입력 $v_{in}$은 $M_1$ 게이트로 들어가고, $M_3$–$M_4$ 전류 거울이 능동 부하, 꼬리 전류원 $I_{SS}$가 두 소스를 묶어요. $R_1$–$R_2$ 분배기의 가운데 노드 $X$는 여전히 $M_2$ 게이트로 돌아가요.</p>
+  <p>바뀐 것은 한 곳이에요. $R_1$의 위 단자가 $M_2$ 드레인(출력 $v_{out}$)에서 떨어져 $M_1$ 드레인에 붙어요. $M_1$ 드레인은 다이오드 연결된 $M_3$의 드레인이자 두 PMOS 게이트가 모인 노드예요. 이 노드 전압을 $V_{D1}$이라고 부를게요.</p>
+  <p>그래서 이제 분배기가 감지하는 것은 $v_{out}$이 아니라 $V_{D1}$이에요. $v_{out}$은 $M_2$ 드레인에 그대로 남지만 귀환 루프 밖에 있어요.</p>
+  <p>구할 것은 귀환의 극성(polarity), 즉 음귀환(부귀환, negative feedback)인지 양귀환(정귀환, positive feedback)인지예요. 소자 값이 없으니 답은 정성적인 판정이에요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 개념과 공식을 떠올려요</h4>
+  <p>"귀환의 극성을 결정하라"는 말에서 수업의 세 단계를 떠올려요(<a href="정리노트_1113_Voltage_Voltage_Feedback.html#s3-polarity-steps">입력을 올려 보고 루프를 한 바퀴 따라가요</a>). 입력이 올라간다고 가정하고, 그 변화를 순방향 증폭기와 귀환 회로망을 거쳐 루프를 따라 한 바퀴 돌린 뒤, 돌아온 변화가 처음 변화를 줄이면 음귀환, 키우면 양귀환이에요.</p>
+  <p>이 회로에서 쓰는 관계는 세 가지예요.</p>
+  <ul>
+    <li>꼬리 전류 고정: $I_{SS}$가 일정하니 한쪽 전류가 늘면 다른 쪽은 그만큼 줄어요.</li>
+  </ul>
+  $$I_{D1}+I_{D2}=I_{SS}$$
+  <ul>
+    <li>다이오드 연결 $M_3$: $M_3$의 소스–게이트 전압 $V_{SG3}$은 $M_3$에 흐르는 전류가 클수록 커져요. 그래서 전류를 더 끌어가면 드레인(=게이트) 전압 $V_{D1}$은 내려가요.</li>
+  </ul>
+  $$V_{D1}=V_{DD}-V_{SG3}$$
+  <ul>
+    <li>저항 분배기: $X$에는 $M_2$ 게이트만 붙어 게이트 전류가 0이므로 $V_X$는 $V_{D1}$을 일정한 비율로 줄인 값이고, 같은 방향으로 움직여요.</li>
+  </ul>
+  $$V_X=\frac{R_2}{R_1+R_2}V_{D1}$$
+  <p>차동쌍은 두 게이트 전압의 차 $V_{in}-V_X$에 반응해요. $M_1$ 게이트가 더하는 입력, $M_2$ 게이트($X$)가 빼는 입력이에요. 같은 쪽 신호가 빼는 입력으로 돌아오면 차가 줄고, 반대쪽 신호가 돌아오면 차가 커져요.</p>
+  <p>근사 조건은 거의 필요 없어요. 모든 트랜지스터가 포화 영역에 있고 $I_{SS}$가 일정하다는 것만 쓰면, 각 화살표의 방향은 소자 값과 관계없이 정해져요. 그래서 이 문제의 첫 도구는 이득 계산이 아니라 방향(↑/↓) 추적이에요. 수업 기본 근사($g_mr_o\gg1$ 등)는 크기를 구하지 않으니 쓰지 않고, 부호를 식으로 다시 확인하는 검산에서만 $\lambda=0$과 같은 $M_1$·$M_2$를 따로 가정해요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <div data-answer-step="바뀐 회로와 첫 가정">
+    <p>먼저 바뀐 연결대로 회로를 다시 그려요. 원 그림을 그대로 보면 $R_1$이 $v_{out}$에 붙어 있어 예제 12.12의 답을 그대로 옮기기 쉬워요.</p>
+    <figure class="figure">
+      <svg viewBox="0 0 440 305" role="img" aria-label="연습문제 12.12의 바뀐 회로. 위쪽 V DD 레일에 PMOS M3과 M4의 소스가 붙어 있어요. 두 PMOS 게이트는 가로선으로 이어지고, 그 선에서 내려온 도선이 M3 드레인 노드 V D1에 닿아 M3이 다이오드 연결이에요. M3 드레인 V D1 아래에 NMOS M1이 있고, M1 게이트는 왼쪽 입력 v in에 연결돼요. 오른쪽 열은 M4 드레인이 출력 노드 v out이고, 그 아래에 NMOS M2가 있으며, v out은 오른쪽 출력 단자로만 나가요. M1과 M2의 소스는 아래 가로선에서 만나 꼬리 전류원 I SS를 거쳐 접지로 가요. V D1 노드에서 오른쪽으로 나온 도선이 가운데의 R1 위 단자로 가고, R1 아래 노드 X에서 R2가 접지로 내려가며, X는 오른쪽으로 M2 게이트에 연결돼요.">
+        <g fill="none" stroke-width="2">
+          <path class="fig-ink" d="M110 30H330"/>
+          <path class="fig-ink" d="M130 30V50H142M130 80H142M130 80V150"/>
+          <path class="fig-ink" d="M142 46V84M148 50V80"/>
+          <circle class="fig-ink" cx="152" cy="65" r="4"/>
+          <path class="fig-ink" d="M156 65H264"/>
+          <circle class="fig-ink" cx="268" cy="65" r="4"/>
+          <path class="fig-ink" d="M272 50V80M278 46V84"/>
+          <path class="fig-ink" d="M290 30V50H278M278 80H290V150"/>
+          <path class="fig-ink" d="M180 65V100H130"/>
+          <path class="fig-ink" d="M180 100H220V114l6 3l-12 6l12 6l-12 6l12 6l-12 6l6 3V167"/>
+          <path class="fig-ink" d="M220 167V173l6 2.5l-12 5l12 5l-12 5l12 5l-12 5l6 2.5V207"/>
+          <path class="fig-ink" d="M210 207H230M214 212H226M218 217H222"/>
+          <path class="fig-ink" d="M220 167H272"/>
+          <path class="fig-ink" d="M130 150H118M130 184H118M118 146V188M112 150V184M112 167H50"/>
+          <path class="fig-ink" d="M290 150H278M290 184H278M278 146V188M272 150V184"/>
+          <path class="fig-ink" d="M130 184V240H290V184"/>
+          <path class="fig-ink" d="M210 240V252M210 278V285"/>
+          <circle class="fig-ink" cx="210" cy="265" r="13"/>
+          <path class="fig-ink" d="M210 257V273M205 268L210 273L215 268"/>
+          <path class="fig-ink" d="M200 285H220M204 290H216M208 295H212"/>
+          <path class="fig-ink" d="M290 110H400"/>
+        </g>
+        <circle class="fig-dot" data-node-id="p4-vin" data-node-color="blue" cx="50" cy="167" r="4"/>
+        <circle class="fig-dot" data-node-id="p4-vd1" data-node-color="red" cx="130" cy="100" r="4"/>
+        <circle class="fig-dot" data-node-id="p4-vd1" data-node-color="red" cx="180" cy="100" r="4"/>
+        <circle class="fig-dot" data-node-id="p4-vd1" data-node-color="red" cx="180" cy="65" r="4"/>
+        <circle class="fig-dot" data-node-id="p4-x" data-node-color="blue" cx="220" cy="167" r="4"/>
+        <circle class="fig-dot" data-node-id="p4-tail" data-node-color="red" cx="210" cy="240" r="4"/>
+        <circle class="fig-dot" data-node-id="p4-vout" data-node-color="blue" cx="290" cy="110" r="4"/>
+        <circle class="fig-dot" data-node-id="p4-vout" data-node-color="blue" cx="400" cy="110" r="4"/>
+        <g font-family="Pretendard, sans-serif" font-weight="600" font-size="14">
+          <text class="fig-text fig-math" x="340" y="35">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text>
+          <text class="fig-text fig-math" x="120" y="70" text-anchor="end">M<tspan baseline-shift="sub" font-size="78%">3</tspan></text>
+          <text class="fig-text fig-math" x="300" y="70">M<tspan baseline-shift="sub" font-size="78%">4</tspan></text>
+          <text class="fig-text fig-math" x="140" y="172">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+          <text class="fig-text fig-math" x="300" y="172">M<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+          <text class="fig-text fig-math" data-node-id="p4-vin" data-node-color="blue" x="50" y="150" text-anchor="middle">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
+          <text class="fig-text fig-math" data-node-id="p4-vd1" data-node-color="red" x="120" y="105" text-anchor="end">V<tspan baseline-shift="sub" font-size="78%">D1</tspan></text>
+          <text class="fig-text fig-math" data-node-id="p4-x" data-node-color="blue" x="204" y="172" text-anchor="end">X</text>
+          <text class="fig-text fig-math" data-node-id="p4-vout" data-node-color="blue" x="400" y="93" text-anchor="middle">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+          <text class="fig-text fig-math" x="236" y="136">R<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+          <text class="fig-text fig-math" x="236" y="194">R<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+          <text class="fig-text fig-math" x="232" y="270">I<tspan baseline-shift="sub" font-size="78%">SS</tspan></text>
+        </g>
+      </svg>
+      <figcaption>원 회로의 연결만 바꾼 그림이에요. $R_1$ 위 단자가 $M_1$ 드레인 노드 $V_{D1}$에 붙고, 출력 $v_{out}$에는 분배기가 더 이상 붙지 않아요. 새 귀환 경로는 $V_{D1}$에서 오른쪽으로 나가 $R_1$–$R_2$를 지나 $X$에서 $M_2$ 게이트로 들어가는 길이에요.</figcaption>
+    </figure>
+    <p>루프는 $M_1$ → $V_{D1}$ → 분배기 → $X$ → $M_2$ 게이트 → 꼬리 노드 → 다시 $M_1$이에요. 첫 줄은 입력 변화의 가정과, 그 변화가 처음 만드는 두 드레인 전류의 변화예요.</p>
+    $$V_{in}\uparrow\ \Rightarrow\ I_{D1}\uparrow,\ I_{D2}\downarrow$$
+    <p>$M_1$ 게이트가 올라가 $M_1$이 더 켜지고, $I_{D1}+I_{D2}=I_{SS}$가 일정하니 $I_{D2}$는 같은 크기만큼 줄어요. 이 $I_{D1}\uparrow$가 나중에 돌아온 변화와 비교할 "처음 효과"예요.</p>
+  </div>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>이렇게 풀어요</h4>
+  <div data-subpart="main">
+    <div data-answer-step="루프를 한 바퀴 따라가기">
+      <p>$V_{D1}$ 노드에는 다이오드 연결 $M_3$과 $R_1$–$R_2$ 경로가 함께 붙어 있어요. 이 노드의 소신호 저항을 $R_{D1}$이라고 두면, $M_1$이 전류를 더 끌어갈 때 $V_{D1}$은 그 전류 변화에 $R_{D1}$을 곱한 만큼 내려가요.</p>
+      $$R_{D1}\approx\frac{1}{g_{m3}}\parallel(R_1+R_2)$$
+      $$\Delta V_{D1}\approx-R_{D1}\,\Delta I_{D1}$$
+      <p>$\Delta I_{D1}&gt;0$이고 $R_{D1}&gt;0$이니 $V_{D1}\downarrow$예요. $M_1$은 게이트에서 드레인으로 신호를 반전시키는 공통 소스(CS) 동작을 하는 셈이에요.</p>
+      <p>분배기는 비율만 줄이고 부호는 바꾸지 않아요. 그래서 $V_X$도 내려가요.</p>
+      $$\Delta V_X=\frac{R_2}{R_1+R_2}\Delta V_{D1}$$
+      <p>$X$는 $M_2$ 게이트, 즉 빼는 입력이에요. $V_X$가 내려가면 차동쌍이 보는 차 $V_{in}-V_X$가 더 커져요. 그 결과 $M_2$는 덜 켜지고, 꼬리 전류가 일정하니 남는 전류는 $M_1$으로 가요.</p>
+      $$V_X\downarrow\ \Rightarrow\ I_{D2}\downarrow,\ I_{D1}\uparrow$$
+      <p>루프 전체를 한 줄로 이어 쓰면 이렇게 돼요.</p>
+      $$\begin{aligned}V_{in}\uparrow&amp;\to I_{D1}\uparrow\to V_{D1}\downarrow\to V_X\downarrow\\&amp;\to I_{D2}\downarrow,\ I_{D1}\uparrow\end{aligned}$$
+    </div>
+    <div data-answer-step="처음 효과와 비교">
+      <p>같은 양끼리 비교해요. 처음 효과는 $I_{D1}\uparrow$였고, 루프를 돌아온 변화도 $I_{D1}\uparrow$예요. 돌아온 변화가 처음 효과를 키우므로 양귀환(정귀환, positive feedback)이에요. $I_{D2}$로 비교해도 처음 $I_{D2}\downarrow$, 돌아온 것도 $I_{D2}\downarrow$라 같은 결론이에요.</p>
+    </div>
+    <p>예제 12.12와 무엇이 달라졌는지 짚어 봐요. 원래 회로에서는 $V_{in}\uparrow$일 때 $v_{out}\uparrow$이라 $V_X\uparrow$가 빼는 입력으로 돌아와 차를 줄였어요(음귀환). 이번에는 감지하는 노드가 반대 위상으로 움직이는 $M_1$ 드레인이라 $V_X\downarrow$가 돌아오고, 같은 빼는 입력에서 차를 키워요. 분배기와 돌아가는 곳은 그대로인데 감지점의 위상만 뒤집혀 극성이 바뀌었어요.</p>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <div data-answer-final>
+      <p><strong>양귀환(정귀환, positive feedback)이에요.</strong> $V_{in}\uparrow$이면 $V_{D1}\downarrow$, $V_X\downarrow$가 되어 $I_{D1}\uparrow$로 돌아오므로 처음 효과 $I_{D1}\uparrow$를 키워요.</p>
+      <p>성립 조건: 모든 트랜지스터가 포화 영역이고 $I_{SS}$가 일정하면 돼요. 방향만으로 정해지므로 $R_1$, $R_2$, $g_m$ 같은 소자 값과는 관계없어요.</p>
+    </div>
+    <p>위상으로 다시 확인해요. $V_{in}$에서 $V_{D1}$까지는 $M_1$의 게이트 → 드레인 한 번이라 반전돼요. 분배기는 부호를 바꾸지 않아요. 따라서 $V_{in}$과 반대 위상의 신호가 빼는 입력($M_2$ 게이트)으로 돌아와요. 빼는 입력에 반대 위상이 들어가면 차 $V_{in}-V_X$가 커지므로 양귀환이에요.</p>
+    <p>교과서의 두 번째 방법(입력 영점 → 루프 끊기 → 시험 신호)으로도 확인해요. $V_{in}=0$으로 두고 $X$와 $M_2$ 게이트 사이를 끊은 뒤 $M_2$ 게이트에 $V_{test}$를 걸어요. 이 확인에서만 $\lambda=0$, $M_1$과 $M_2$가 같아 $g_{m1}=g_{m2}=g_m$, $I_{SS}$가 이상적이라고 둘게요. 그러면 꼬리 노드가 $V_{test}/2$만큼 따라가고, $M_1$ 전류는 그 반대로 변해요.</p>
+    $$\Delta I_{D1}=-\frac{g_m}{2}V_{test}$$
+    $$\Delta V_{D1}\approx-R_{D1}\,\Delta I_{D1}=\frac{g_mR_{D1}}{2}V_{test}$$
+    $$V_{ret}=\frac{R_2}{R_1+R_2}\Delta V_{D1}$$
+    $$\frac{V_{ret}}{V_{test}}\approx\frac{g_mR_{D1}}{2}\cdot\frac{R_2}{R_1+R_2}&gt;0$$
+    <p>돌아온 신호가 시험 신호와 같은 부호예요. 예제 12.12처럼 $v_{out}$에서 감지하면 같은 시험에서 $V_{test}\uparrow$ → $I_{D2}\uparrow$ → $v_{out}\downarrow$라 $V_{ret}/V_{test}&lt;0$(음귀환)이 나오는 것과 정반대예요.</p>
+    <p>극한도 맞아요. $R_2\to0$이면 $X$가 접지되어 $V_{ret}\to0$, 즉 귀환이 사라져요. 값이 남아 있는 한 부호는 항상 양수예요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>주의할 점</h4>
+  <p>"분배기와 $M_2$ 게이트는 그대로니 예제 12.12처럼 음귀환"이라고 답을 옮기면 틀려요. 극성은 분배기가 어느 노드를 감지하느냐에 달려 있고, $M_1$ 드레인은 $v_{out}$과 반대 위상으로 움직여요.</p>
+  <p>$V_{D1}$의 방향을 거꾸로 잡기 쉬워요. 전류 거울이 있어도 $M_1$이 전류를 더 끌어가면 다이오드 연결 $M_3$의 $V_{SG3}$이 커져야 하므로 $V_{D1}$은 내려가요.</p>
+  <p>돌아온 변화는 처음 가정한 것과 같은 양끼리 비교해요. 돌아온 $I_{D2}\downarrow$를 처음의 $I_{D1}\uparrow$와 비교하면 "반대로 돌아왔다"고 착각해 음귀환이라고 잘못 답하게 돼요.</p>
+  <p>$X$는 $M_2$ 게이트, 즉 빼는 입력이에요. 더하는 입력으로 착각하면 같은 $V_X\downarrow$를 보고 정반대 결론을 내려요.</p>
+  <p>양귀환이라는 판정과 회로가 실제로 발진하거나 한쪽으로 쏠리는지는 별개예요. 그것은 루프 이득의 크기에 달려 있고, 이 문제는 극성만 물어요.</p>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>조건을 바꾸어 생각해요</h4>
+  <ol>
+    <li>이 문제의 회로에서 이번에는 입력이 내려간다고($V_{in}\downarrow$) 가정해 보세요. $I_{D1}$은 어느 방향으로 돌아오고, 극성은 무엇인가요?</li>
+    <li>$R_1$은 $M_1$ 드레인에 그대로 두고, $X$를 $M_2$ 게이트 대신 $M_1$ 게이트에 연결하고 입력 $v_{in}$은 $M_2$ 게이트로 옮겼어요. 극성은 무엇인가요?</li>
+    <li>$R_1$ 위 단자를 $V_{DD}$에 연결하면 $V_X$는 신호에 따라 움직이나요? 이때 귀환 루프가 남아 있나요?</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <p class="sum-lead">$R_1$을 $M_1$ 드레인에 옮기면 양귀환(정귀환)이에요.</p>
+  $$\begin{aligned}V_{in}\uparrow&amp;\to I_{D1}\uparrow\to V_{D1}\downarrow\to V_X\downarrow\\&amp;\to I_{D1}\uparrow\end{aligned}$$
+  $$I_{D1}+I_{D2}=I_{SS}$$
+  <p>$M_1$ 드레인은 $V_{in}$과 반대 위상으로 움직여요.</p>
+  <p>빼는 입력($M_2$ 게이트)에 반대 위상이 돌아오면 차가 커져 양귀환이에요.</p>
+  <p>돌아온 변화는 처음 가정한 양($I_{D1}\uparrow$)과 같은 양끼리 비교해요.</p>
+</div>

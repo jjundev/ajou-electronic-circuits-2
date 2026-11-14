@@ -1,0 +1,36 @@
+======================================================================
+(a) M2 NMOS SF: gate=Vout, src=n1, drain=VDD
+  qualitative: Vin up -> n1 up -> M1 CS: Vout down -> M2 follower: n1(src) follows gate down -> opposes -> NEGATIVE
+  return ratio on M2: T = R_S*g_m2*r_o2*(g_m1*r_o1 + 1)/(R_S + r_o2)
+     r_o->oo : T = oo
+     sign(T) over all positive params = 1  -> NEGATIVE feedback
+  return ratio on M1: T = R_S*g_m1*g_m2*r_o1*r_o2/(R_S*g_m2*r_o2 + R_S + r_o2)
+     r_o->oo : T = oo
+     sign(T) over all positive params = 1  -> NEGATIVE feedback
+======================================================================
+(b) M2 PMOS CS: gate=Vout, src=VDD, drain=n1
+  qualitative: Vin up -> n1 up -> Vout down -> M2 PMOS |Vsg| up -> more current pushed into n1 -> n1 up -> reinforces -> POSITIVE
+  return ratio on M2: T = -R_S*g_m1*g_m2*r_o1*r_o2/(R_S + r_o2)
+     r_o->oo : T = -oo
+     sign(T) over all positive params = -1  -> POSITIVE feedback
+  return ratio on M1: T = -R_S*g_m1*g_m2*r_o1*r_o2/(R_S + r_o2)
+     r_o->oo : T = -oo
+     sign(T) over all positive params = -1  -> POSITIVE feedback
+======================================================================
+(c) M2 PMOS CG: gate=Vb, src=Vout, drain=n1
+  qualitative: Vin up -> n1 up -> Vout down -> M2 PMOS CG src down -> |Vsg| down -> less current into n1 -> n1 down -> opposes -> NEGATIVE
+  return ratio on M2: T = g_m2*r_o1*r_o2*(R_S*g_m1 + 1)/(R_S*g_m1*r_o1 + R_S + r_o1 + r_o2)
+     r_o->oo : T = oo
+     sign(T) over all positive params = 1  -> NEGATIVE feedback
+  return ratio on M1: T = R_S*g_m1*r_o1*(g_m2*r_o2 + 1)/(R_S + g_m2*r_o1*r_o2 + r_o1 + r_o2)
+     r_o->oo : T = R_S*g_m1
+     sign(T) over all positive params = 1  -> NEGATIVE feedback
+======================================================================
+(d) M1 NMOS CG (gate=Vb, src=n1, drain=Vout); M2 PMOS CS (gate=Vout, src=VDD, drain=n1)
+  qualitative: Vin up -> n1 up -> M1 CG Vgs down -> I_D1 down -> Vout up -> M2 PMOS |Vsg| down -> less current into n1 -> n1 down -> opposes -> NEGATIVE
+  return ratio on M2: T = R_S*g_m2*r_o2*(g_m1*r_o1 + 1)/(R_S + r_o2)
+     r_o->oo : T = oo
+     sign(T) over all positive params = 1  -> NEGATIVE feedback
+  return ratio on M1: T = R_S*g_m1*g_m2*r_o1*r_o2/(R_S*g_m2*r_o2 + R_S + r_o2)
+     r_o->oo : T = oo
+     sign(T) over all positive params = 1  -> NEGATIVE feedback

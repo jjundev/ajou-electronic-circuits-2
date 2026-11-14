@@ -1,0 +1,66 @@
+======================================================================
+circuit=CG, r_o included=False
+  v_A   = -R_D1*g_m1*v_test/(R_D1*g_m2 + 1)
+  v_out = R_D2*g_m1*v_test*(-R_D1*R_F1*g_m2 + R_F2)/(R_D1*R_D2*g_m2 + R_D1*R_F1*g_m2 + R_D1*R_F2*g_m2 + R_D2 + R_F1 + R_F2)
+  v_X   = R_F2*g_m1*v_test*(R_D1*R_F1*g_m2 + R_D2 + R_F1)/(R_D1*R_D2*g_m2 + R_D1*R_F1*g_m2 + R_D1*R_F2*g_m2 + R_D2 + R_F1 + R_F2)
+  v_ret/v_test = -R_F2*g_m1*(R_D1*R_F1*g_m2 + R_D2 + R_F1)/((R_D1*g_m2 + 1)*(R_D2 + R_F1 + R_F2))
+  numerator all-coeff positive=False, negative=True; denominator all positive=True, negative=False
+  [PART 1: gm1-control break = NET M1 return ratio incl. LOCAL source degeneration, not the global-loop polarity]
+  sign(v_ret/v_test) = -1 -> NEGATIVE feedback (v_ret opposes v_test)
+======================================================================
+circuit=CG, r_o included=True
+  v_A   = R_D1*g_m1*r_o1*v_test*(-R_D2*R_F1 - R_D2*r_o2 - R_F1*r_o2 - R_F2*r_o2)/(R_D1*R_D2*R_F1 + R_D1*R_D2*g_m2*r_o1*r_o2 + R_D1*R_D2*r_o1 + R_D1*R_D2*r_o2 + R_D1*R_F1*R_F2*g_m2*r_o2 + R_D1*R_F1*R_F2 + R_D1*R_F1*g_m2*r_o1*r_o2 + R_D1*R_F1*r_o1 + R_D1*R_F1*r_o2 + R_D1*R_F2*g_m2*r_o1*r_o2 + R_D1*R_F2*r_o1 + R_D1*R_F2*r_o2 + R_D2*R_F1*R_F2 + R_D2*R_F1*r_o1 + R_D2*R_F2*r_o1 + R_D2*R_F2*r_o2 + R_D2*r_o1*r_o2 + R_F1*R_F2*r_o2 + R_F1*r_o1*r_o2 + R_F2*r_o1*r_o2)
+  v_out = R_D2*g_m1*r_o1*v_test*(-R_D1*R_F1*g_m2*r_o2 - R_D1*R_F1 + R_F2*r_o2)/(R_D1*R_D2*R_F1 + R_D1*R_D2*g_m2*r_o1*r_o2 + R_D1*R_D2*r_o1 + R_D1*R_D2*r_o2 + R_D1*R_F1*R_F2*g_m2*r_o2 + R_D1*R_F1*R_F2 + R_D1*R_F1*g_m2*r_o1*r_o2 + R_D1*R_F1*r_o1 + R_D1*R_F1*r_o2 + R_D1*R_F2*g_m2*r_o1*r_o2 + R_D1*R_F2*r_o1 + R_D1*R_F2*r_o2 + R_D2*R_F1*R_F2 + R_D2*R_F1*r_o1 + R_D2*R_F2*r_o1 + R_D2*R_F2*r_o2 + R_D2*r_o1*r_o2 + R_F1*R_F2*r_o2 + R_F1*r_o1*r_o2 + R_F2*r_o1*r_o2)
+  v_X   = R_F2*g_m1*r_o1*v_test*(R_D1*R_F1*g_m2*r_o2 + R_D1*R_F1 + R_D2*R_F1 + R_D2*r_o2 + R_F1*r_o2)/(R_D1*R_D2*R_F1 + R_D1*R_D2*g_m2*r_o1*r_o2 + R_D1*R_D2*r_o1 + R_D1*R_D2*r_o2 + R_D1*R_F1*R_F2*g_m2*r_o2 + R_D1*R_F1*R_F2 + R_D1*R_F1*g_m2*r_o1*r_o2 + R_D1*R_F1*r_o1 + R_D1*R_F1*r_o2 + R_D1*R_F2*g_m2*r_o1*r_o2 + R_D1*R_F2*r_o1 + R_D1*R_F2*r_o2 + R_D2*R_F1*R_F2 + R_D2*R_F1*r_o1 + R_D2*R_F2*r_o1 + R_D2*R_F2*r_o2 + R_D2*r_o1*r_o2 + R_F1*R_F2*r_o2 + R_F1*r_o1*r_o2 + R_F2*r_o1*r_o2)
+  v_ret/v_test = -R_F2*g_m1*r_o1*(R_D1*R_F1*g_m2*r_o2 + R_D1*R_F1 + R_D2*R_F1 + R_D2*r_o2 + R_F1*r_o2)/(R_D1*R_D2*R_F1 + R_D1*R_D2*g_m2*r_o1*r_o2 + R_D1*R_D2*r_o1 + R_D1*R_D2*r_o2 + R_D1*R_F1*R_F2*g_m2*r_o2 + R_D1*R_F1*R_F2 + R_D1*R_F1*g_m2*r_o1*r_o2 + R_D1*R_F1*r_o1 + R_D1*R_F1*r_o2 + R_D1*R_F2*g_m2*r_o1*r_o2 + R_D1*R_F2*r_o1 + R_D1*R_F2*r_o2 + R_D2*R_F1*R_F2 + R_D2*R_F1*r_o1 + R_D2*R_F2*r_o1 + R_D2*R_F2*r_o2 + R_D2*r_o1*r_o2 + R_F1*R_F2*r_o2 + R_F1*r_o1*r_o2 + R_F2*r_o1*r_o2)
+  numerator all-coeff positive=False, negative=True; denominator all positive=True, negative=False
+  [PART 1: gm1-control break = NET M1 return ratio incl. LOCAL source degeneration, not the global-loop polarity]
+  sign(v_ret/v_test) = -1 -> NEGATIVE feedback (v_ret opposes v_test)
+  limit r_o1,r_o2->oo: -R_F2*g_m1*(R_D1*R_F1*g_m2 + R_D2 + R_F1)/((R_D1*g_m2 + 1)*(R_D2 + R_F1 + R_F2))
+======================================================================
+circuit=CS_original, r_o included=False
+  v_A   = -R_D1*g_m1*v_test
+  v_out = R_D2*g_m1*v_test*(R_D1*R_F1*g_m2 + R_D1*R_F2*g_m2 + R_F2)/(R_D2 + R_F1 + R_F2)
+  v_X   = R_F2*g_m1*v_test*(R_D1*R_D2*g_m2 + R_D2 + R_F1)/(R_D2 + R_F1 + R_F2)
+  v_ret/v_test = -R_F2*g_m1*(R_D1*R_D2*g_m2 + R_D2 + R_F1)/(R_D2 + R_F1 + R_F2)
+  numerator all-coeff positive=False, negative=True; denominator all positive=True, negative=False
+  [PART 1: gm1-control break = NET M1 return ratio incl. LOCAL source degeneration, not the global-loop polarity]
+  sign(v_ret/v_test) = -1 -> NEGATIVE feedback (v_ret opposes v_test)
+======================================================================
+circuit=CS_original, r_o included=True
+  v_A   = R_D1*g_m1*r_o1*v_test*(-R_D2*R_F1 - R_D2*R_F2 - R_D2*r_o2 - R_F1*r_o2 - R_F2*r_o2)/(R_D1*R_D2*R_F1 + R_D1*R_D2*R_F2*g_m2*r_o2 + R_D1*R_D2*R_F2 + R_D1*R_D2*r_o2 + R_D1*R_F1*r_o2 + R_D1*R_F2*r_o2 + R_D2*R_F1*R_F2 + R_D2*R_F1*r_o1 + R_D2*R_F2*r_o1 + R_D2*R_F2*r_o2 + R_D2*r_o1*r_o2 + R_F1*R_F2*r_o2 + R_F1*r_o1*r_o2 + R_F2*r_o1*r_o2)
+  v_out = R_D2*g_m1*r_o1*r_o2*v_test*(R_D1*R_F1*g_m2 + R_D1*R_F2*g_m2 + R_F2)/(R_D1*R_D2*R_F1 + R_D1*R_D2*R_F2*g_m2*r_o2 + R_D1*R_D2*R_F2 + R_D1*R_D2*r_o2 + R_D1*R_F1*r_o2 + R_D1*R_F2*r_o2 + R_D2*R_F1*R_F2 + R_D2*R_F1*r_o1 + R_D2*R_F2*r_o1 + R_D2*R_F2*r_o2 + R_D2*r_o1*r_o2 + R_F1*R_F2*r_o2 + R_F1*r_o1*r_o2 + R_F2*r_o1*r_o2)
+  v_X   = R_F2*g_m1*r_o1*v_test*(R_D1*R_D2*g_m2*r_o2 + R_D2*R_F1 + R_D2*r_o2 + R_F1*r_o2)/(R_D1*R_D2*R_F1 + R_D1*R_D2*R_F2*g_m2*r_o2 + R_D1*R_D2*R_F2 + R_D1*R_D2*r_o2 + R_D1*R_F1*r_o2 + R_D1*R_F2*r_o2 + R_D2*R_F1*R_F2 + R_D2*R_F1*r_o1 + R_D2*R_F2*r_o1 + R_D2*R_F2*r_o2 + R_D2*r_o1*r_o2 + R_F1*R_F2*r_o2 + R_F1*r_o1*r_o2 + R_F2*r_o1*r_o2)
+  v_ret/v_test = -R_F2*g_m1*r_o1*(R_D1*R_D2*g_m2*r_o2 + R_D2*R_F1 + R_D2*r_o2 + R_F1*r_o2)/(R_D1*R_D2*R_F1 + R_D1*R_D2*R_F2*g_m2*r_o2 + R_D1*R_D2*R_F2 + R_D1*R_D2*r_o2 + R_D1*R_F1*r_o2 + R_D1*R_F2*r_o2 + R_D2*R_F1*R_F2 + R_D2*R_F1*r_o1 + R_D2*R_F2*r_o1 + R_D2*R_F2*r_o2 + R_D2*r_o1*r_o2 + R_F1*R_F2*r_o2 + R_F1*r_o1*r_o2 + R_F2*r_o1*r_o2)
+  numerator all-coeff positive=False, negative=True; denominator all positive=True, negative=False
+  [PART 1: gm1-control break = NET M1 return ratio incl. LOCAL source degeneration, not the global-loop polarity]
+  sign(v_ret/v_test) = -1 -> NEGATIVE feedback (v_ret opposes v_test)
+  limit r_o1,r_o2->oo: -R_F2*g_m1*(R_D1*R_D2*g_m2 + R_D2 + R_F1)/(R_D2 + R_F1 + R_F2)
+======================================================================
+qualitative chain (CG case):
+   v_in up => M1 V_GS1 up -> i_D1 up
+   i_D1 up => more current pulled through R_D1 -> v_A down
+   v_A down (M2 source, gate fixed) => V_GS2 = V_b - v_A up -> i_D2 up
+   i_D2 up => more drop on R_D2 -> v_out down
+   v_out down => divider R_F1-R_F2 -> v_X down
+   v_X down (M1 source) => V_GS1 = v_in - v_X up further -> i_D1 up further: reinforces => POSITIVE
+original CS: v_A down -> M2 (CS, gate A) i_D2 down -> v_out up -> v_X up -> V_GS1 down: opposes => NEGATIVE
+======================================================================
+PART 2: global-loop break at the sensing point (top of R_F1)
+circuit=CG, r_o=False: v_ret/v_test = R_D1*R_D2*R_F2*g_m1*g_m2*(R_F1 + R_F2)/((R_D1*g_m2 + 1)*(R_D2 + R_F1 + R_F2)*(R_F1*R_F2*g_m1 + R_F1 + R_F2))
+   sign = 1 -> POSITIVE feedback
+circuit=CG, r_o=True: v_ret/v_test = R_D1*R_D2*R_F2*(R_F1 + R_F2)*(g_m1*r_o1 + 1)*(g_m2*r_o2 + 1)/(R_D1*R_D2*R_F1**2 + R_D1*R_D2*R_F1*R_F2*g_m1*g_m2*r_o1*r_o2 + R_D1*R_D2*R_F1*R_F2*g_m1*r_o1 + R_D1*R_D2*R_F1*R_F2*g_m2*r_o2 + 3*R_D1*R_D2*R_F1*R_F2 + R_D1*R_D2*R_F1*g_m2*r_o1*r_o2 + R_D1*R_D2*R_F1*r_o1 + R_D1*R_D2*R_F1*r_o2 + R_D1*R_D2*R_F2**2 + R_D1*R_D2*R_F2*g_m2*r_o1*r_o2 + R_D1*R_D2*R_F2*r_o1 + R_D1*R_D2*R_F2*r_o2 + R_D1*R_F1**2*R_F2*g_m1*g_m2*r_o1*r_o2 + R_D1*R_F1**2*R_F2*g_m1*r_o1 + R_D1*R_F1**2*R_F2*g_m2*r_o2 + R_D1*R_F1**2*R_F2 + R_D1*R_F1**2*g_m2*r_o1*r_o2 + R_D1*R_F1**2*r_o1 + R_D1*R_F1**2*r_o2 + R_D1*R_F1*R_F2**2*g_m1*g_m2*r_o1*r_o2 + R_D1*R_F1*R_F2**2*g_m1*r_o1 + R_D1*R_F1*R_F2**2*g_m2*r_o2 + R_D1*R_F1*R_F2**2 + 2*R_D1*R_F1*R_F2*g_m2*r_o1*r_o2 + 2*R_D1*R_F1*R_F2*r_o1 + 2*R_D1*R_F1*R_F2*r_o2 + R_D1*R_F2**2*g_m2*r_o1*r_o2 + R_D1*R_F2**2*r_o1 + R_D1*R_F2**2*r_o2 + R_D2*R_F1**2*R_F2*g_m1*r_o1 + R_D2*R_F1**2*R_F2 + R_D2*R_F1**2*r_o1 + R_D2*R_F1*R_F2**2*g_m1*r_o1 + R_D2*R_F1*R_F2**2 + R_D2*R_F1*R_F2*g_m1*r_o1*r_o2 + 2*R_D2*R_F1*R_F2*r_o1 + R_D2*R_F1*R_F2*r_o2 + R_D2*R_F1*r_o1*r_o2 + R_D2*R_F2**2*r_o1 + R_D2*R_F2*r_o1*r_o2 + R_F1**2*R_F2*g_m1*r_o1*r_o2 + R_F1**2*R_F2*r_o2 + R_F1**2*r_o1*r_o2 + R_F1*R_F2**2*g_m1*r_o1*r_o2 + R_F1*R_F2**2*r_o2 + 2*R_F1*R_F2*r_o1*r_o2 + R_F2**2*r_o1*r_o2)
+   sign = 1 -> POSITIVE feedback
+   limit r_o->oo: R_D1*R_D2*R_F2*g_m1*g_m2*(R_F1 + R_F2)/((R_D1*g_m2 + 1)*(R_D2 + R_F1 + R_F2)*(R_F1*R_F2*g_m1 + R_F1 + R_F2))
+circuit=CS_original, r_o=False: v_ret/v_test = -R_D1*R_D2*R_F2*g_m1*g_m2*(R_F1 + R_F2)/((R_D2 + R_F1 + R_F2)*(R_F1*R_F2*g_m1 + R_F1 + R_F2))
+   sign = -1 -> NEGATIVE feedback
+circuit=CS_original, r_o=True: v_ret/v_test = -R_D1*R_D2*R_F2*g_m2*r_o2*(R_F1 + R_F2)*(g_m1*r_o1 + 1)/((R_D2*R_F1 + R_D2*R_F2 + R_D2*r_o2 + R_F1*r_o2 + R_F2*r_o2)*(R_D1*R_F1 + R_D1*R_F2 + R_F1*R_F2*g_m1*r_o1 + R_F1*R_F2 + R_F1*r_o1 + R_F2*r_o1))
+   sign = -1 -> NEGATIVE feedback
+   limit r_o->oo: -R_D1*R_D2*R_F2*g_m1*g_m2*(R_F1 + R_F2)/((R_D2 + R_F1 + R_F2)*(R_F1*R_F2*g_m1 + R_F1 + R_F2))
+======================================================================
+PART 3: decomposition of PART-1 CG result (lambda=0)
+  local (degeneration) term  Z_XX = R_F2*(R_D2 + R_F1)/(R_D2 + R_F1 + R_F2)
+  global (via CG M2) term  -a*Z_XO = -R_D1*R_D2*R_F2*g_m2/((R_D1*g_m2 + 1)*(R_D2 + R_F1 + R_F2))  (opposite sign: global loop is regenerative)
+  check simplify(-v_X_dec/v_test - PART1) = 0
+  Z_XX - a*Z_XO = R_F2*(R_D1*R_F1*g_m2 + R_D2 + R_F1)/((R_D1*g_m2 + 1)*(R_D2 + R_F1 + R_F2))  > 0 always (a<1, R_F1+R_D2>R_D2):
+  -> local degeneration always outweighs the global positive loop; global loop polarity itself = POSITIVE
