@@ -1,0 +1,98 @@
+== Fig 12.85(a)
+   reasoning : Vin->0; M2 gate+ -> M2 i up -> n2 down (I1 load) -> M3 NMOS follower: Vout down -> back at M2 gate: opposes
+   Vret/Vt   = -g_m2*g_m3*r_I1*r_I2*r_o2*r_o3*(g_m1*r_SS*r_o1 + r_SS + r_o1)/(g_m1*g_m3*r_I1*r_I2*r_SS*r_o1*r_o3 + g_m1*g_m3*r_I2*r_SS*r_o1*r_o2*r_o3 + g_m1*r_I1*r_I2*r_SS*r_o1 + g_m1*r_I1*r_SS*r_o1*r_o3 + g_m1*r_I2*r_SS*r_o1*r_o2 + g_m1*r_SS*r_o1*r_o2*r_o3 + g_m2*g_m3*r_I2*r_SS*r_o1*r_o2*r_o3 + g_m2*r_I2*r_SS*r_o1*r_o2 + g_m2*r_SS*r_o1*r_o2*r_o3 + g_m3*r_I1*r_I2*r_SS*r_o3 + g_m3*r_I1*r_I2*r_o1*r_o3 + g_m3*r_I2*r_SS*r_o1*r_o3 + g_m3*r_I2*r_SS*r_o2*r_o3 + g_m3*r_I2*r_o1*r_o2*r_o3 + r_I1*r_I2*r_SS + r_I1*r_I2*r_o1 + r_I1*r_SS*r_o3 + r_I1*r_o1*r_o3 + r_I2*r_SS*r_o1 + r_I2*r_SS*r_o2 + r_I2*r_o1*r_o2 + r_SS*r_o1*r_o3 + r_SS*r_o2*r_o3 + r_o1*r_o2*r_o3)
+   ideal lim = -oo
+   sign(Vret/Vt) symbolic=- (numeric sweep -) -> feedback = negative
+== Fig 12.85(b)
+   reasoning : M2 gate+ -> n2 down -> M3 PMOS CS: |VGS3| up, i3 up -> Vout up -> reinforces
+   Vret/Vt   = R_1*g_m2*g_m3*r_I1*r_o2*r_o3*(g_m1*r_SS*r_o1 + r_SS + r_o1)/(R_1*g_m1*r_I1*r_SS*r_o1 + R_1*g_m1*r_SS*r_o1*r_o2 + R_1*g_m2*r_SS*r_o1*r_o2 + R_1*r_I1*r_SS + R_1*r_I1*r_o1 + R_1*r_SS*r_o1 + R_1*r_SS*r_o2 + R_1*r_o1*r_o2 + g_m1*r_I1*r_SS*r_o1*r_o3 + g_m1*r_SS*r_o1*r_o2*r_o3 + g_m2*r_SS*r_o1*r_o2*r_o3 + r_I1*r_SS*r_o3 + r_I1*r_o1*r_o3 + r_SS*r_o1*r_o3 + r_SS*r_o2*r_o3 + r_o1*r_o2*r_o3)
+   ideal lim = oo
+   sign(Vret/Vt) symbolic=+ (numeric sweep +) -> feedback = positive
+== Fig 12.85(c)
+   reasoning : same topology as (b), output taken as I_out: n3 up -> reinforces
+   Vret/Vt   = R_1*g_m2*g_m3*r_I1*r_o2*r_o3*(g_m1*r_SS*r_o1 + r_SS + r_o1)/(R_1*g_m1*r_I1*r_SS*r_o1 + R_1*g_m1*r_SS*r_o1*r_o2 + R_1*g_m2*r_SS*r_o1*r_o2 + R_1*r_I1*r_SS + R_1*r_I1*r_o1 + R_1*r_SS*r_o1 + R_1*r_SS*r_o2 + R_1*r_o1*r_o2 + g_m1*r_I1*r_SS*r_o1*r_o3 + g_m1*r_SS*r_o1*r_o2*r_o3 + g_m2*r_SS*r_o1*r_o2*r_o3 + r_I1*r_SS*r_o3 + r_I1*r_o1*r_o3 + r_SS*r_o1*r_o3 + r_SS*r_o2*r_o3 + r_o1*r_o2*r_o3)
+   ideal lim = oo
+   sign(Vret/Vt) symbolic=+ (numeric sweep +) -> feedback = positive
+== Fig 12.85(d)
+   reasoning : same as (a) with R1: follower non-inverting, M2 path inverting -> opposes
+   Vret/Vt   = -R_1*g_m2*g_m3*r_I1*r_o2*r_o3*(g_m1*r_SS*r_o1 + r_SS + r_o1)/(R_1*g_m1*g_m3*r_I1*r_SS*r_o1*r_o3 + R_1*g_m1*g_m3*r_SS*r_o1*r_o2*r_o3 + R_1*g_m1*r_I1*r_SS*r_o1 + R_1*g_m1*r_SS*r_o1*r_o2 + R_1*g_m2*g_m3*r_SS*r_o1*r_o2*r_o3 + R_1*g_m2*r_SS*r_o1*r_o2 + R_1*g_m3*r_I1*r_SS*r_o3 + R_1*g_m3*r_I1*r_o1*r_o3 + R_1*g_m3*r_SS*r_o1*r_o3 + R_1*g_m3*r_SS*r_o2*r_o3 + R_1*g_m3*r_o1*r_o2*r_o3 + R_1*r_I1*r_SS + R_1*r_I1*r_o1 + R_1*r_SS*r_o1 + R_1*r_SS*r_o2 + R_1*r_o1*r_o2 + g_m1*r_I1*r_SS*r_o1*r_o3 + g_m1*r_SS*r_o1*r_o2*r_o3 + g_m2*r_SS*r_o1*r_o2*r_o3 + r_I1*r_SS*r_o3 + r_I1*r_o1*r_o3 + r_SS*r_o1*r_o3 + r_SS*r_o2*r_o3 + r_o1*r_o2*r_o3)
+   ideal lim = -oo
+   sign(Vret/Vt) symbolic=- (numeric sweep -) -> feedback = negative
+== Fig 12.85(e)
+   reasoning : Vout=n2; M2 gate+ -> Vout down -> divider R2/(R1+R2) -> M2 gate down -> opposes
+   Vret/Vt   = -R_2*g_m2*r_I1*r_o2*(g_m1*r_SS*r_o1 + r_SS + r_o1)/(R_1*g_m1*r_I1*r_SS*r_o1 + R_1*g_m1*r_SS*r_o1*r_o2 + R_1*g_m2*r_SS*r_o1*r_o2 + R_1*r_I1*r_SS + R_1*r_I1*r_o1 + R_1*r_SS*r_o1 + R_1*r_SS*r_o2 + R_1*r_o1*r_o2 + R_2*g_m1*r_I1*r_SS*r_o1 + R_2*g_m1*r_SS*r_o1*r_o2 + R_2*g_m2*r_SS*r_o1*r_o2 + R_2*r_I1*r_SS + R_2*r_I1*r_o1 + R_2*r_SS*r_o1 + R_2*r_SS*r_o2 + R_2*r_o1*r_o2 + g_m1*r_I1*r_SS*r_o1*r_o2 + g_m2*r_I1*r_SS*r_o1*r_o2 + r_I1*r_SS*r_o1 + r_I1*r_SS*r_o2 + r_I1*r_o1*r_o2)
+   ideal lim = -R_2*g_m1*g_m2/(g_m1 + g_m2)
+   sign(Vret/Vt) symbolic=- (numeric sweep -) -> feedback = negative
+== Fig 12.85(f)
+   reasoning : M2 gate+ -> i2 up through diode M4 -> n2 down -> M3 PMOS i3 up -> Vout up -> reinforces
+   Vret/Vt   = R_1*g_m2*g_m3*r_o2*r_o3*r_o4*(g_m1*r_SS*r_o1 + r_SS + r_o1)/(R_1*g_m1*g_m4*r_SS*r_o1*r_o2*r_o4 + R_1*g_m1*r_SS*r_o1*r_o2 + R_1*g_m1*r_SS*r_o1*r_o4 + R_1*g_m2*g_m4*r_SS*r_o1*r_o2*r_o4 + R_1*g_m2*r_SS*r_o1*r_o2 + R_1*g_m4*r_SS*r_o1*r_o4 + R_1*g_m4*r_SS*r_o2*r_o4 + R_1*g_m4*r_o1*r_o2*r_o4 + R_1*r_SS*r_o1 + R_1*r_SS*r_o2 + R_1*r_SS*r_o4 + R_1*r_o1*r_o2 + R_1*r_o1*r_o4 + g_m1*g_m4*r_SS*r_o1*r_o2*r_o3*r_o4 + g_m1*r_SS*r_o1*r_o2*r_o3 + g_m1*r_SS*r_o1*r_o3*r_o4 + g_m2*g_m4*r_SS*r_o1*r_o2*r_o3*r_o4 + g_m2*r_SS*r_o1*r_o2*r_o3 + g_m4*r_SS*r_o1*r_o3*r_o4 + g_m4*r_SS*r_o2*r_o3*r_o4 + g_m4*r_o1*r_o2*r_o3*r_o4 + r_SS*r_o1*r_o3 + r_SS*r_o2*r_o3 + r_SS*r_o3*r_o4 + r_o1*r_o2*r_o3 + r_o1*r_o3*r_o4)
+   ideal lim = R_1*g_m1*g_m2*g_m3/(g_m4*(g_m1 + g_m2))
+   sign(Vret/Vt) symbolic=+ (numeric sweep +) -> feedback = positive
+== Fig 12.86(a)
+   reasoning : M1 gate+ -> i1 up -> n1 down -> NMOS follower M2: Vout down -> opposes
+   Vret/Vt   = -g_m1*g_m2*r_I1*r_SS*r_o1*r_o2/(g_m2*r_I1*r_SS*r_o2 + g_m2*r_SS*r_o1*r_o2 + r_I1*r_SS + r_I1*r_o2 + r_SS*r_o1 + r_o1*r_o2)
+   ideal lim = -oo
+   sign(Vret/Vt) symbolic=- (numeric sweep -) -> feedback = negative
+== Fig 12.86(b)
+   reasoning : n1 down -> PMOS M2 i up -> Vout up -> reinforces
+   Vret/Vt   = R_1*g_m1*g_m2*r_I1*r_o1*r_o2/(R_1*r_I1 + R_1*r_o1 + r_I1*r_o2 + r_o1*r_o2)
+   ideal lim = oo
+   sign(Vret/Vt) symbolic=+ (numeric sweep +) -> feedback = positive
+== Fig 12.86(c)
+   reasoning : same as (b), I_out output -> reinforces
+   Vret/Vt   = R_1*g_m1*g_m2*r_I1*r_o1*r_o2/(R_1*r_I1 + R_1*r_o1 + r_I1*r_o2 + r_o1*r_o2)
+   ideal lim = oo
+   sign(Vret/Vt) symbolic=+ (numeric sweep +) -> feedback = positive
+== Fig 12.86(d)
+   reasoning : diode M3 load: n1 down -> M2 mirror i up -> Vout up -> reinforces
+   Vret/Vt   = R_1*g_m1*g_m2*r_o1*r_o2*r_o3/(R_1*g_m3*r_o1*r_o3 + R_1*r_o1 + R_1*r_o3 + g_m3*r_o1*r_o2*r_o3 + r_o1*r_o2 + r_o2*r_o3)
+   ideal lim = R_1*g_m1*g_m2/g_m3
+   sign(Vret/Vt) symbolic=+ (numeric sweep +) -> feedback = positive
+== Fig 12.87(a)
+   reasoning : n1+ -> M1 CS: Vout down -> M2 NMOS follower: n1 down -> opposes
+   Vret/Vt   = -g_m1*g_m2*r_I1*r_I2*r_o1*r_o2/(g_m2*r_I1*r_I2*r_o2 + g_m2*r_I2*r_o1*r_o2 + r_I1*r_I2 + r_I1*r_o2 + r_I2*r_o1 + r_o1*r_o2)
+   ideal lim = -oo
+   sign(Vret/Vt) symbolic=- (numeric sweep -) -> feedback = negative
+== Fig 12.87(b)
+   reasoning : n1+ -> Vout down -> PMOS CS M2 (source VDD): |VGS| up, more current into n1 -> n1 up -> reinforces
+   Vret/Vt   = g_m1*g_m2*r_I1*r_I2*r_o1*r_o2/(r_I1*r_I2 + r_I1*r_o2 + r_I2*r_o1 + r_o1*r_o2)
+   ideal lim = oo
+   sign(Vret/Vt) symbolic=+ (numeric sweep +) -> feedback = positive
+== Fig 12.87(c)
+   reasoning : n1+ -> Vout down -> PMOS CG M2 (gate Vb, source Vout): |VGS| down, less current into n1 -> n1 down -> opposes
+   Vret/Vt   = -g_m1*r_I1*r_I2*r_o1*(g_m2*r_o2 + 1)/(g_m2*r_I1*r_o1*r_o2 + r_I1*r_I2 + r_I1*r_o1 + r_I1*r_o2 + r_I2*r_o1 + r_o1*r_o2)
+   ideal lim = -oo
+   sign(Vret/Vt) symbolic=- (numeric sweep -) -> feedback = negative
+== Fig 12.87(d)
+   reasoning : M2 gate+ -> PMOS M2 current into n1 down -> n1 down -> CG M1 (gate Vb) i up -> Vout down -> opposes
+   Vret/Vt   = -g_m2*r_I1*r_I2*r_o2*(g_m1*r_o1 + 1)/(g_m1*r_I2*r_o1*r_o2 + r_I1*r_I2 + r_I1*r_o2 + r_I2*r_o1 + r_I2*r_o2 + r_o1*r_o2)
+   ideal lim = -oo
+   sign(Vret/Vt) symbolic=- (numeric sweep -) -> feedback = negative
+== Fig 12.88(a)
+   reasoning : base+ -> Vout down -> via R_F n1 down -> opposes
+   Vret/Vt   = -R_C*g_m1*r_o1*r_pi/(R_C*R_F + R_C*r_o1 + R_C*r_pi + R_F*r_o1 + r_o1*r_pi)
+   ideal lim = -R_C*g_m1*r_pi/(R_C + R_F + r_pi)
+   sign(Vret/Vt) symbolic=- (numeric sweep -) -> feedback = negative
+== Fig 12.88(b)
+   reasoning : M1 gate+ -> i1 up, i2 down -> n3 up -> M3 NMOS follower Vout up -> R_F -> n1 up -> reinforces
+   Vret/Vt   = g_m1*g_m3*r_I1*r_I2*r_SS*r_o1*r_o3*(g_m2*r_o2 + 1)/(g_m1*g_m3*r_I1*r_I2*r_SS*r_o1*r_o3 + g_m1*g_m3*r_I2*r_SS*r_o1*r_o2*r_o3 + g_m1*r_I1*r_I2*r_SS*r_o1 + g_m1*r_I1*r_I2*r_o1*r_o3 + g_m1*r_I2*r_SS*r_o1*r_o2 + g_m1*r_I2*r_o1*r_o2*r_o3 + g_m2*g_m3*r_I2*r_SS*r_o1*r_o2*r_o3 + g_m2*r_I2*r_SS*r_o1*r_o2 + g_m2*r_I2*r_o1*r_o2*r_o3 + g_m3*r_I1*r_I2*r_SS*r_o3 + g_m3*r_I1*r_SS*r_o1*r_o3 + g_m3*r_I2*r_SS*r_o1*r_o3 + g_m3*r_I2*r_SS*r_o2*r_o3 + g_m3*r_SS*r_o1*r_o2*r_o3 + r_I1*r_I2*r_SS + r_I1*r_I2*r_o3 + r_I1*r_SS*r_o1 + r_I1*r_o1*r_o3 + r_I2*r_SS*r_o1 + r_I2*r_SS*r_o2 + r_I2*r_o1*r_o3 + r_I2*r_o2*r_o3 + r_SS*r_o1*r_o2 + r_o1*r_o2*r_o3)
+   ideal lim = oo
+   sign(Vret/Vt) symbolic=+ (numeric sweep +) -> feedback = positive
+
+SUMMARY (Vret/Vt>0 -> positive feedback, <0 -> negative feedback):
+  Fig 12.85(a): negative
+  Fig 12.85(b): positive
+  Fig 12.85(c): positive
+  Fig 12.85(d): negative
+  Fig 12.85(e): negative
+  Fig 12.85(f): positive
+  Fig 12.86(a): negative
+  Fig 12.86(b): positive
+  Fig 12.86(c): positive
+  Fig 12.86(d): positive
+  Fig 12.87(a): negative
+  Fig 12.87(b): positive
+  Fig 12.87(c): negative
+  Fig 12.87(d): negative
+  Fig 12.88(a): negative
+  Fig 12.88(b): positive

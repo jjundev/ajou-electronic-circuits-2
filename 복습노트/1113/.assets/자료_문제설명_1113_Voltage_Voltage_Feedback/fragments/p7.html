@@ -1,0 +1,138 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 읽어요</h4>
+  <p>입력은 전압이 아니라 전류 $I_{in}$이에요. 이 전류가 노드 $X$로 들어가고, $X$는 $M_1$의 게이트예요.</p>
+  <p>$M_1$은 소스가 접지이고 드레인에 $R_{D1}$이 달린 CS 단(common-source stage)이에요. 그 드레인이 출력 $V_{out}$이에요.</p>
+  <p>$V_{out}$은 다시 $M_2$의 게이트로 가요. $M_2$는 소스가 접지이고 드레인이 $X$에 붙어 있어서, $X$에서 전류 $I_{D2}$를 빼 가요. 이 $M_2$가 출력을 입력 쪽으로 되돌리는 귀환 경로예요.</p>
+  <p>소자 값이 하나도 없으니 숫자를 구하는 문제가 아니에요. 루프를 한 바퀴 돌았을 때 돌아온 변화가 처음 변화를 줄이는지(음귀환, 부귀환) 키우는지(양귀환, 정귀환)만 판정하면 돼요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 개념과 공식을 떠올려요</h4>
+  <p><b>단서 → 개념.</b> "귀환의 극성을 결정하라"는 말과 값이 없는 회로에서 귀환 극성(feedback polarity) 판정의 세 단계를 떠올려요. 입력이 오른다고 가정하고, 그 변화를 순방향 증폭기와 귀환 회로망을 따라 한 바퀴 추적한 뒤, 돌아온 양이 처음 변화를 방해하면 음귀환(부귀환, negative feedback), 개선하면 양귀환(정귀환, positive feedback)이에요(<a href="정리노트_1113_Voltage_Voltage_Feedback.html#s3-polarity-steps">극성을 따지는 세 단계</a>).</p>
+  <p><b>단서 → 개념.</b> 입력이 전류원이고 귀환 소자 $M_2$의 드레인이 그 전류원과 같은 노드 $X$에 병렬로 붙어 있어요. 이것은 전류 반송(current return)이에요. 같은 노드에 병렬로 붙은 전류는 더해지거나 빠지므로, 순방향 쪽에 실제로 남는 전류는 $I_{in}-I_{D2}$예요(<a href="정리노트_1113_Voltage_Voltage_Feedback.html#s0-current-return">전류는 같은 노드에 병렬로 빼요</a>, <a href="정리노트_1113_Voltage_Voltage_Feedback.html#s0-current-return-circuits">트랜지스터로 전류를 빼요</a>).</p>
+  <p><b>기호의 뜻.</b> $V_X$는 노드 $X$의 전압이면서 $M_1$의 게이트–소스 전압 $V_{GS1}$이에요. $I_{D1}$은 $M_1$ 드레인 전류이고, $V_{out}$ 단자와 $M_2$ 게이트로는 전류가 흐르지 않으니 $R_{D1}$에 흐르는 전류도 $I_{D1}$이에요. $V_{out}$은 $M_2$의 게이트–소스 전압 $V_{GS2}$이고, $I_{D2}$는 $X$에서 $M_2$ 드레인으로 빠져나가는 전류예요.</p>
+  <p><b>쓸 규칙.</b> 소스가 접지인 CS 단은 게이트 전압이 오르면 드레인 전류가 늘고, 드레인에 저항이 있으면 드레인 전압이 내려가요. 즉 게이트에서 드레인으로 반전(inverting)이에요. 소신호로는 $A_v\approx-g_mR_D$ 꼴이지만 이 문제에는 부호만 필요해요.</p>
+  <p><b>성립 조건.</b> $M_1$·$M_2$가 모두 포화 영역의 CS 단으로 동작하는 바이어스점을 가정해요. 원문에 값이 없으니 크기 계산이나 $g_mr_o\gg1$ 같은 큰 곱 근사는 쓸 일이 없어요. 극성은 각 단의 부호만으로 정해져요.</p>
+  <p><b>선택 이유.</b> 숫자가 없어도 "늘어나요/줄어요"의 방향만 단마다 따라가면 되므로, 세 단계 추적이 이 문제의 첫 도구예요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <div data-answer-step="회로 판단과 첫 줄">
+    <p>원 회로에서 각 가지 전류의 방향부터 정해요. $X$로는 $I_{in}$이 들어오고, $M_2$ 드레인으로 $I_{D2}$가 빠져나가요. $M_1$ 게이트로는 전류가 없어요.</p>
+    <figure class="figure">
+      <svg viewBox="0 0 420 300" role="img" aria-label="그림 12.30을 다시 그린 회로. 왼쪽 입력 전류원 I in은 아래가 접지이고 위로 노드 X에 전류를 넣어요. 노드 X는 오른쪽으로 M1 게이트에 연결되고 아래로 M2 드레인에 연결돼요. M1은 소스가 접지이고 드레인이 R D1을 거쳐 V DD에 연결되며, 그 드레인 노드가 오른쪽 출력 V out이에요. V out 도선은 오른쪽에서 갈라져 아래로 내려가 왼쪽으로 꺾여 M2 게이트에 연결돼요. M2는 소스가 접지예요. R D1에는 아래로 흐르는 I D1, X에서 M2 드레인으로는 아래로 흐르는 I D2가 표시돼 있어요.">
+        <g fill="none" stroke-width="2">
+          <path class="fig-ink" d="M215 30H245"/>
+          <path class="fig-ink" d="M230 30v12l8 4l-16 8l16 8l-16 8l16 8l-16 8l8 4v10"/>
+          <path class="fig-ink" d="M230 100V128H218"/>
+          <path class="fig-ink" d="M230 110H370"/>
+          <path class="fig-ink" d="M218 122V158"/>
+          <path class="fig-ink" d="M210 124V156"/>
+          <path class="fig-ink" d="M150 140H210"/>
+          <path class="fig-ink" d="M218 152H230V175"/>
+          <path class="fig-ink" d="M223 148L229 152L223 156"/>
+          <path class="fig-ink" d="M220 175H240M224 180H236M228 185H232"/>
+          <circle class="fig-ink" cx="70" cy="190" r="13"/>
+          <path class="fig-ink" d="M70 198V182M65 187L70 182L75 187"/>
+          <path class="fig-ink" d="M70 177V140H150"/>
+          <path class="fig-ink" d="M70 203V218"/>
+          <path class="fig-ink" d="M60 218H80M64 223H76M68 228H72"/>
+          <path class="fig-ink" d="M150 140V228H162"/>
+          <path class="fig-ink" d="M162 222V254"/>
+          <path class="fig-ink" d="M170 224V252"/>
+          <path class="fig-ink" d="M162 248H150V270"/>
+          <path class="fig-ink" d="M157 244L151 248L157 252"/>
+          <path class="fig-ink" d="M140 270H160M144 275H156M148 280H152"/>
+          <path class="fig-ink" d="M170 238H330V110"/>
+          <path class="fig-ink" d="M144 178L150 186L156 178"/>
+          <path class="fig-ink" d="M206 52V76M201 70L206 76L211 70"/>
+        </g>
+        <circle class="fig-dot" data-node-id="p7-x" data-node-color="blue" cx="150" cy="140" r="4"/>
+        <circle class="fig-dot" data-node-id="p7-vout" data-node-color="red" cx="230" cy="110" r="4"/>
+        <circle class="fig-dot" data-node-id="p7-vout" data-node-color="red" cx="330" cy="110" r="4"/>
+        <circle class="fig-dot" data-node-id="p7-vout" data-node-color="red" cx="370" cy="110" r="4"/>
+        <g font-family="Pretendard, sans-serif" font-weight="600" font-size="14">
+          <text class="fig-text fig-math" x="256" y="35">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text>
+          <text class="fig-text fig-math" x="249" y="70">R<tspan baseline-shift="sub" font-size="78%">D1</tspan></text>
+          <text class="fig-text fig-math" x="198" y="69" text-anchor="end">I<tspan baseline-shift="sub" font-size="78%">D1</tspan></text>
+          <text class="fig-text fig-math" x="240" y="146">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+          <text class="fig-text fig-math" x="140" y="244" text-anchor="end">M<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+          <text class="fig-text fig-math" x="48" y="195" text-anchor="end">I<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
+          <text class="fig-text fig-math" x="162" y="188">I<tspan baseline-shift="sub" font-size="78%">D2</tspan></text>
+          <text class="fig-text fig-math" data-node-id="p7-x" data-node-color="blue" x="150" y="123" text-anchor="middle">X</text>
+          <text class="fig-text fig-math" data-node-id="p7-vout" data-node-color="red" x="384" y="115">V<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+        </g>
+      </svg>
+      <figcaption>그림 12.30을 다시 그리고 가지 전류의 방향만 정했어요. 파랑 $X$와 빨강 $V_{out}$이 판정에 쓰는 두 노드예요. 빨강 점 세 개는 모두 같은 $V_{out}$ 노드예요.</figcaption>
+    </figure>
+    <p>$X$ 노드에 붙은 것은 $I_{in}$과 $M_2$ 드레인뿐이에요. 그래서 $X$에 남는 전류는 아래 차이이고, 이 값이 늘면 $X$ 노드가 충전되어 $V_X$가 오르려 해요.</p>
+    $$i_{X}=I_{in}-I_{D2}$$
+    <p>종이에 쓸 첫 줄은 세 단계의 1단계인 가정이에요.</p>
+    $$I_{in}\uparrow\ \Rightarrow\ V_X\uparrow$$
+  </div>
+  <p>이 첫 줄이 정한 "처음 효과"는 $V_X$의 상승이에요. 마지막에 돌아온 변화를 이 $V_X$의 방향과 비교해요.</p>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>이렇게 풀어요</h4>
+  <div data-subpart="main">
+    <div data-answer-step="루프 추적">
+      <p>순방향 증폭기 $M_1$을 지나요. $M_1$ 소스가 접지라 $V_X$가 곧 $V_{GS1}$이에요. 게이트 전압이 오르면 드레인 전류가 늘어요.</p>
+      $$V_{GS1}=V_X\uparrow\ \Rightarrow\ I_{D1}\uparrow$$
+      <p>$R_{D1}$에 흐르는 전류가 $I_{D1}$이므로 저항 전압강하가 커지고 출력은 내려가요. $M_1$이 반전 단인 이유예요.</p>
+      $$V_{out}=V_{DD}-I_{D1}R_{D1}\ \Rightarrow\ V_{out}\downarrow$$
+      <p>귀환 회로망 $M_2$를 지나요. $M_2$ 소스도 접지라 $V_{out}$이 곧 $V_{GS2}$예요. 게이트 전압이 내려가니 $M_2$ 드레인 전류가 줄어요.</p>
+      $$V_{GS2}=V_{out}\downarrow\ \Rightarrow\ I_{D2}\downarrow$$
+      <p>다시 $X$로 돌아와요. $I_{D2}$는 $X$에서 빠져나가는 전류라서, 줄어들면 $X$에 남는 전류가 늘어나요.</p>
+      $$i_X=I_{in}-I_{D2}\uparrow\ \Rightarrow\ V_X\uparrow$$
+    </div>
+    <p>돌아온 변화($V_X\uparrow$)가 첫 줄에서 $I_{in}$이 만든 처음 효과($V_X\uparrow$)와 같은 방향이에요. 반송된 신호가 원래 효과를 방해하지 않고 개선하므로 귀환의 극성은 양이에요.</p>
+    <p>루프 안의 반전 단을 세어 봐도 같아요. $V_X\to V_{out}$은 $M_1$ CS 단으로 반전, $V_{out}\to V_X$는 드레인이 $X$에 붙은 $M_2$ CS 단으로 반전이에요. 반전이 두 번이라 한 바퀴 돌면 원래 방향으로 돌아와요.</p>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <div data-answer-final>
+      <p><b>귀환의 극성은 양(정귀환, positive feedback)이에요.</b> $I_{in}\uparrow\Rightarrow V_X\uparrow\Rightarrow I_{D1}\uparrow\Rightarrow V_{out}\downarrow\Rightarrow I_{D2}\downarrow$이고, $X$에서 빠지는 전류가 줄어 $V_X$가 더 올라가요. 반송된 신호가 $I_{in}$이 만든 효과를 개선해요.</p>
+      <p>성립 조건: $M_1$·$M_2$가 포화 영역의 CS 단(게이트에서 드레인으로 반전)으로 동작하고, $M_1$·$M_2$ 게이트로는 전류가 흐르지 않아요.</p>
+    </div>
+    <p><b>반대 방향 가정.</b> $I_{in}$이 줄어든다고 가정해도 결론이 같아야 해요. $V_X\downarrow\Rightarrow I_{D1}\downarrow\Rightarrow V_{out}\uparrow\Rightarrow I_{D2}\uparrow$이고, $X$에서 더 많이 빼 가니 $V_X$가 더 내려가요. 처음 효과($V_X\downarrow$)를 다시 키우므로 양귀환이에요.</p>
+    <p><b>루프를 끊는 방법.</b> 입력을 0으로 두고(전류원 $I_{in}$은 개방) 게이트 전류가 없는 $M_2$ 게이트에서 루프를 끊어요. 그 게이트에 시험 신호 $v_{test}$를 넣고, $M_1$ 드레인에서 돌아온 $v_{ret}$를 봐요.</p>
+    <p>$M_2$는 $X$를 드레인 노드로 하는 CS 단이에요. $X$에는 $M_2$ 드레인 말고 접지로 가는 경로가 없으니 부하는 $r_{O2}$뿐이에요.</p>
+    $$\frac{v_x}{v_{test}}=-g_{m2}r_{O2}\lt 0$$
+    <p>$M_1$은 $R_{D1}$ 부하의 CS 단이에요.</p>
+    $$\frac{v_{ret}}{v_x}=-g_{m1}\left(R_{D1}\parallel r_{O1}\right)\lt 0$$
+    <p>두 부호를 곱해요.</p>
+    $$\frac{v_{ret}}{v_{test}}=g_{m1}g_{m2}r_{O2}\left(R_{D1}\parallel r_{O1}\right)>0$$
+    <p>돌아온 신호가 시험 신호와 같은 부호라서 양귀환이에요. 세 단계 추적과 결론이 같아요. 각 인자의 단위는 $\mathrm{S}\cdot\mathrm{k\Omega}\cdot\mathrm{S}\cdot\mathrm{k\Omega}$로 무차원이고, 값이 없어도 부호는 $(-)(-)=(+)$로 정해져요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>주의할 점</h4>
+  <ul>
+    <li>"$I_{D2}$가 줄었으니 귀환이 약해져 음귀환"이라고 판정하지 않아요. 극성은 귀환 양의 크기가 아니라 방향으로 정해요. $I_{D2}$는 $X$에서 <b>빠져나가는</b> 전류라서, 줄어들면 $X$에 남는 전류가 늘어 $V_X$ 상승을 도와요.</li>
+    <li>비교하는 자리는 출력이 아니라 입력 쪽 노드 $X$예요. $V_{out}$이 내려갔다는 사실만 보고 "출력 변화를 줄였다"고 결론 내리면 안 돼요. 처음 효과는 $I_{in}$이 만든 $V_X$의 상승이에요.</li>
+    <li>$M_2$를 소스 팔로워나 다이오드 연결로 읽지 않아요. 게이트는 $V_{out}$, 소스는 접지, 드레인은 $X$이므로 반전하는 CS 단이에요. 같은 날 다룬 예제 12.12·12.13처럼 귀환이 음이 되는 회로와 달리, 이 루프에는 반전 단이 두 개예요.</li>
+  </ul>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>조건을 바꾸어 생각해요</h4>
+  <ol>
+    <li>$M_2$를 PMOS로 바꿔 소스를 $V_{DD}$에, 게이트를 $V_{out}$에, 드레인을 $X$에 연결해요. 여전히 CS 단으로 동작한다면 귀환의 극성은 무엇인가요? $M_2$ 전류가 $X$로 들어가는지 나가는지부터 정해 보세요.</li>
+    <li>$M_1$을 소스 팔로워로 바꿔 드레인을 $V_{DD}$에 붙이고, 소스와 접지 사이 저항의 위쪽 노드를 $V_{out}$으로 삼아요. $M_2$ 연결은 그대로일 때 극성은 무엇인가요?</li>
+    <li>$R_{D1}$ 대신 다이오드 연결 PMOS를 $M_1$의 부하로 쓰면 극성이 바뀌나요? 부하의 종류가 $M_1$ 단의 부호를 바꾸는지 생각해 보세요.</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <p class="sum-lead">루프 안에 반전 CS 단이 두 개라 귀환의 극성은 양이에요.</p>
+  <div class="summary-group">
+    <h4>루프 추적</h4>
+    <p>$$\begin{aligned}&I_{in}\uparrow\Rightarrow V_X\uparrow\Rightarrow I_{D1}\uparrow\\&\Rightarrow V_{out}\downarrow\Rightarrow I_{D2}\downarrow\Rightarrow V_X\uparrow\end{aligned}$$</p>
+    <p>$X$에 남는 전류는 $i_X=I_{in}-I_{D2}$예요.</p>
+  </div>
+  <div class="summary-group">
+    <h4>판단 기준</h4>
+    <p>$I_{D2}$는 $X$에서 빠져나가는 전류라서, 줄어들면 $V_X$ 상승을 도와요.</p>
+    <p>돌아온 변화를 입력 쪽의 처음 효과($V_X\uparrow$)와 비교해요.</p>
+    <p>루프를 끊으면 $v_{ret}/v_{test}=(-)(-)>0$이에요.</p>
+  </div>
+</div>

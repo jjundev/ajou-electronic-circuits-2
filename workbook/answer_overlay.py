@@ -188,21 +188,53 @@ def _answer_html(markup, asset_data):
     return inner(root)
 
 
+def _figure_pattern(fig_id: str):
+    # 12.8은 12.85와, 2.85는 12.85와 맞지 않는다.
+    return re.compile(r'(?<![\d.])' + re.escape(fig_id) + r'(?!\d)')
+
+
+def match_step_figures(figures: list, labels: list[str]):
+    """그림마다 그림 번호가 라벨에 든 단계를 정확히 하나 찾는다.
+
+    모두 찾으면 단계별 그림 목록을, 하나라도 못 찾거나 둘 이상이면 None(위쪽 그림 띠 유지)을 준다.
+    본문은 보지 않는다. 판정 기준 단계처럼 여러 그림을 함께 언급하는 본문이 있기 때문이다.
+    """
+    ids = [str(f.get('id') or '') for f in figures]
+    if not figures or '' in ids or len(set(ids)) != len(ids):
+        return None
+    per_step = [[] for _ in labels]
+    for fig, fig_id in zip(figures, ids):
+        pattern = _figure_pattern(fig_id)
+        hits = [i for i, label in enumerate(labels) if pattern.search(label)]
+        if len(hits) != 1:
+            return None
+        per_step[hits[0]].append(fig)
+    return per_step
+
+
 def apply_answer_overlay(data: dict, overlay: dict, *, html_dir: Path) -> dict:
     """Copy workbook data and replace solutions only, with self-contained images."""
     result = deepcopy(data)
     _require([p['id'] for p in result['problems']] == [p['id'] for p in overlay['problems']], '답안 데이터 문항 순서 불일치')
     assets = overlay['_asset_data']
     for problem, core in zip(result['problems'], overlay['problems']):
-        steps, answers = [], []
+        steps, answers, labels = [], [], []
         for subpart in core['subparts']:
             prefix = '' if subpart == 'main' else f'({subpart}) '
             for step in core['steps']:
                 if step['subpart'] == subpart:
+                    labels.append(prefix + step['label'])
                     steps.append({'label': html.escape(prefix + step['label']), 'html': _answer_html(step['html'], assets)})
             for answer in core['answers']:
                 if answer['subpart'] == subpart:
                     body = _answer_html(answer['html'], assets)
                     answers.append((f'<p><strong>{html.escape(prefix.strip())}</strong></p>' if prefix else '') + body)
+        per_step = match_step_figures(problem.get('figures') or [], labels)
+        if per_step is not None:
+            # 그림을 그 그림을 다루는 단계 안에 원래 크기로 둔다. 위쪽 띠에 모으면 함께 줄어 라벨을 못 읽는다.
+            for step, figs in zip(steps, per_step):
+                if figs:
+                    step['figures'] = figs
+            problem['figures'] = []
         problem['solution'] = {'steps': steps, 'answer': ''.join(answers), 'paginate': True}
     return result

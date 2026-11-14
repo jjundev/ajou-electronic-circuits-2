@@ -1,0 +1,37 @@
+== 1. Structural connection table (from problem.md netlist + figure) ==
+(a)
+    R_F terminals : ('n1 = Q1 base = I_in node', 'Vout = Q1 collector = output node')
+    output side : R_F end sits ON the Vout node, in parallel with R_C/load (Vout to ac ground) -> senses output VOLTAGE (parallel/shunt sense)
+    input side : R_F other end sits ON the I_in node n1; i_F and I_in sum as currents at that node (KCL) -> returns CURRENT (parallel/shunt return)
+    verdict : voltage sense (parallel) / current return (parallel) = voltage-current (shunt-shunt)
+(b)
+    R_F terminals : ('n1 = M1 gate = I_in node', 'Vout = M3 source = output node')
+    output side : R_F end sits ON the Vout node, in parallel with I_SS/load -> senses output VOLTAGE (parallel)
+    input side : R_F other end sits ON the I_in node n1 (M1 gate); currents summed at node -> returns CURRENT (parallel)
+    verdict : voltage sense (parallel) / current return (parallel) = voltage-current (shunt-shunt)
+Ideal-network impedances: voltage sensing -> network input in parallel with output, ideal Z_in=inf;
+current return -> network output in parallel with I_in, ideal Z_out=inf. A large R_F approximates both (book Fig 12.24(d)).
+No element is in series with an output branch (no current sensing) and nothing is inserted in series with the
+input loop (no voltage subtraction), so series-type options are excluded in both circuits.
+
+== 2. (a) BJT CE + collector-base R_F ==
+Vout/Iin = R_C*r_pi*(-R_F*g_m + 1)/(R_C*g_m*r_pi + R_C + R_F + r_pi)
+lim gm->oo Vout/Iin = -R_F  (ideal transimpedance set by R_F: current in, voltage out)
+Rin = r_pi*(R_C + R_F)/(R_C*g_m*r_pi + R_C + R_F + r_pi)
+lim gm->oo Rin = 0  ; Rin/Rin(gm=0) = (R_C + R_F + r_pi)/(R_C*g_m*r_pi + R_C + R_F + r_pi)
+Rout = R_C*(R_F + r_pi)/(R_C*g_m*r_pi + R_C + R_F + r_pi)
+lim gm->oo Rout = 0  ; Rout/Rout(gm=0) = (R_C + R_F + r_pi)/(R_C*g_m*r_pi + R_C + R_F + r_pi)
+-> both Rin and Rout fall with loop gain: parallel at output (voltage sense) and parallel at input (current return)
+loop gain T_a = R_C*g_m*r_pi/(R_C + R_F + r_pi)  > 0 -> negative feedback (CE inverts)
+
+== 3. (b) M1/M2 pair -> n3 (I1 load) -> follower M3 -> Vout, R_F back to M1 gate ==
+v3/v1 = R_3*g_m1/2  (>0: M1 gate -> M2 drain is NON-inverting)
+Vout/Iin = R_S*(R_3*R_F*g_m1*g_m3 + 2)/(-R_3*R_S*g_m1*g_m3 + 2*R_S*g_m3 + 2)
+Rin = 2*(R_F*R_S*g_m3 + R_F + R_S)/(-R_3*R_S*g_m1*g_m3 + 2*R_S*g_m3 + 2)
+loop gain T_b = -R_3*R_S*g_m1*g_m3/(2*R_S*g_m3 + 2)  < 0 -> forward path non-inverting, R_F feedback is POSITIVE in sign
+denominator of Rin_b == 2(1+g_m3 R_S)(1+T_b): True  (1+T_b -> 0 possible: positive-feedback signature)
+Structure (sense/return type) is unaffected by sign: still voltage sense (parallel) / current return (parallel).
+
+== RESULT ==
+(a) sense: output voltage (parallel); return: current to input (parallel)
+(b) sense: output voltage (parallel); return: current to input (parallel)
