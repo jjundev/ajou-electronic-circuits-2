@@ -176,5 +176,70 @@ class DenseFigureTests(unittest.TestCase):
             self.assertGreaterEqual(got['pages'], 2)
 
 
+class StepFigureTests(unittest.TestCase):
+    """P12.24: 그림 네 장(교재 Fig 12.85–12.88)이 한 띠에서 0.4배로 줄어 라벨을 못 읽던 문제."""
+    LABELS = ['판정 기준과 묶음별 첫 줄', '그림 12.85 차동쌍 입력 여섯 회로', '그림 12.86 CG 입력 네 회로',
+              '그림 12.87 전류 입력 네 회로', '그림 12.88 저항 귀환 두 회로']
+
+    def _data(self, labels):
+        from answer_overlay import match_step_figures
+        data = build_data(ids_selection(['P12.24'], 'stepfig'), 'answers')
+        data['meta']['layout'] = 'video-16x9'
+        prob = data['problems'][0]
+        prob['hints'] = []
+        prob['solution'] = {'paginate': True, 'answer': '<p>FinalAnswer</p>',
+                            'steps': [{'label': l, 'html': f'<p>단계 {i} 설명</p>'} for i, l in enumerate(labels)]}
+        per_step = match_step_figures(prob['figures'], labels)
+        if per_step is not None:
+            for step, figs in zip(prob['solution']['steps'], per_step):
+                if figs:
+                    step['figures'] = figs
+            prob['figures'] = []
+        return data
+
+    def _render(self, data, extra_css=''):
+        from playwright.sync_api import sync_playwright
+        with tempfile.TemporaryDirectory() as td:
+            html = Path(td)/'stepfig.html'
+            markup = inject(load_template('answers', layout='video-16x9'), data)
+            html.write_text(markup.replace('</head>', f'<style>{extra_css}</style></head>', 1))
+            with sync_playwright() as pw:
+                browser = pw.chromium.launch(channel='chrome', headless=True)
+                try:
+                    page = browser.new_page(viewport={'width': 1920, 'height': 1080})
+                    vendor_route.install(page)
+                    page.goto(html.as_uri())
+                    page.wait_for_selector('html[data-ready="true"]')
+                    return page.evaluate("""() => ({
+                        overflow: document.body.dataset.overflow,
+                        figs: [...document.querySelectorAll('img.fig, img.step-fig')].map(f => ({
+                            cls: f.className, dense: f.hasAttribute('data-dense'),
+                            scale: f.offsetWidth / f.naturalWidth, top: Math.round(f.getBoundingClientRect().top),
+                            page: f.closest('.page').id}))})""")
+                finally:
+                    browser.close()
+
+    def test_each_figure_sits_in_its_step_at_full_size(self):
+        got = self._render(self._data(self.LABELS))
+        self.assertEqual(got['overflow'], '')
+        self.assertEqual([f['cls'] for f in got['figs']], ['step-fig'] * 4)
+        for f in got['figs']:
+            self.assertGreaterEqual(f['scale'], 0.98, f)
+
+    def test_unmatched_band_wraps_and_keeps_dense_figures_readable(self):
+        got = self._render(self._data(['기준', '여섯 회로', '네 회로', '네 회로', '두 회로']))
+        self.assertEqual([f['cls'] for f in got['figs']], ['fig'] * 4)
+        self.assertGreater(len({f['top'] for f in got['figs']}), 1)        # 한 줄에 몰지 않고 줄을 바꾼다
+        dense = [f for f in got['figs'] if f['dense']]
+        self.assertTrue(dense)
+        for f in dense:
+            self.assertGreaterEqual(f['scale'], 0.8, f)
+        self.assertNotIn('fig-scale', got['overflow'])
+
+    def test_shrunk_dense_figure_is_reported(self):
+        got = self._render(self._data(self.LABELS), '.step-figs { width: 100px; }')
+        self.assertIn('fig-scale=', got['overflow'])
+
+
 if __name__ == "__main__":
     unittest.main()

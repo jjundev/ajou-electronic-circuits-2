@@ -137,6 +137,9 @@ a:focus-visible { outline: .5mm solid var(--focus); outline-offset: .5mm; }
 }
 /* 회로도는 모두 가운데 칸 맨 위에. 여러 장이면 폭을 나눠 갖고 비율은 그대로 */
 .fig-band > .fig { flex: 0 1 auto; min-width: 0; margin-inline: 0; }
+/* 풀이를 넘길 수 있는 문항: 그림이 한 줄에 안 들어가면 줄을 바꾼다. 큰 그림(--w-min)은 줄어들지 않는다 */
+.page[data-solution-pagination] .fig-band { flex-wrap: wrap; row-gap: 3mm; }
+.fig-band > .fig[data-dense] { flex-shrink: 0; min-width: min(100%, var(--w-min)); }
 /* 가운데 칸: 위 회로도 + 아래 풀이 공간. 좌(조건)·우(Hint) 패널은 줄 높이 그대로 */
 .page-center { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3mm; }
 .page-center > .work { flex: 1; min-height: 0; }
@@ -242,6 +245,13 @@ a:focus-visible { outline: .5mm solid var(--focus); outline-offset: .5mm; }
 }
 .sol-step-body { grid-column: 2; margin-top: 2.5mm; }
 .sol-step-body:first-child { grid-row: 1; margin-top: 0; }
+/* 단계가 다루는 교재 그림: 라벨 아래 원래 크기(--w-cap = 원본 픽셀)로. 높이 맞춤 축소 없음 */
+.step-figs { grid-column: 2; margin-top: 2.5mm; display: flex; flex-direction: column; align-items: flex-start; gap: 2mm; }
+.step-figs:first-child { grid-row: 1; margin-top: 0; }
+.step-fig {
+  display: block; width: min(100%, var(--w-cap)); height: auto; aspect-ratio: var(--ratio);
+  background: var(--paper); border-radius: 1mm;
+}
 .sol-step-body .katex-display { overflow-x: clip; }
 .sol-answer { flex: none; }
 
@@ -356,6 +366,7 @@ const KIND_SLUG = { '예제': 'example', '연습문제': 'exercise', '장말문�
 const KIND_SHORT = { '예제': '예제', '연습문제': '연습', '장말문제': '문제', '기출': '문항' };   // Hint 쪽 항목 번호 앞 (번호가 종류끼리 겹침)
 const FIG_SCALE_CAP = 1.5;        // 교재 인쇄 크기 대비 확대 상한
 const DENSE_FIG_AREA_MM2 = 5000;  // 이 넓이 이상의 교재 그림은 확대 상한 폭을 최소 폭으로 유지
+const MIN_DENSE_FIG_SCALE = 0.8;  // 큰 그림이 원본 픽셀 대비 이보다 작아지면 넘침(라벨 판독 불가)으로 빌드 실패
 const MATH_MIN_SCALE = 0.7;
 const STRIP_MATH_MIN_SCALE = 0.5;  // Hint 띠 속 식은 띠 폭에 맞춰 더 줄일 수 있음
 // 쪽 맞춤 순서: 폭 → 글자. 앞 단계 값은 유지한 채 다음 단계로 간다.
@@ -539,8 +550,28 @@ function figureImg(f, dense = false) {
   img.style.setProperty('--ratio', f.w_mm / f.h_mm);
   // 교재에서 큰 그림(여러 회로를 한 장에 담은 그림 등)은 높이 맞춤으로 줄이면 라벨을 못 읽는다.
   // 풀이를 다음 쪽으로 넘길 수 있는 문항(solution.paginate)에서만 지킨다. 넘길 수 없으면 줄여서라도 한 쪽에 맞춘다.
-  if (dense && f.w_mm * f.h_mm >= DENSE_FIG_AREA_MM2) img.style.setProperty('--w-min', `${f.w_mm * FIG_SCALE_CAP}mm`);
+  if (dense && f.w_mm * f.h_mm >= DENSE_FIG_AREA_MM2) {
+    img.style.setProperty('--w-min', `${f.w_mm * FIG_SCALE_CAP}mm`);
+    img.dataset.dense = '';
+  }
   return img;
+}
+
+// 풀이 단계 안의 교재 그림 (apply_answer_overlay가 라벨의 그림 번호로 붙인 것)
+function stepFigure(f) {
+  const img = figureImg(f, true);
+  img.className = 'step-fig';
+  return img;
+}
+
+// 큰 그림이 원본보다 MIN_DENSE_FIG_SCALE 밑으로 줄어든 쪽. 렌더 폭 / 원본 픽셀 폭(--w-cap과 같음)
+function shrunkFigures(root) {
+  const out = [];
+  for (const img of root.querySelectorAll('img[data-dense]')) {
+    const scale = img.naturalWidth ? img.offsetWidth / img.naturalWidth : 0;
+    if (scale < MIN_DENSE_FIG_SCALE) out.push(`${img.closest('.page').id}:fig-scale=${scale.toFixed(2)}`);
+  }
+  return out;
 }
 
 function block(label, html, cls, lang) {
@@ -603,6 +634,11 @@ function solutionArea(p) {
     const li = el('li', 'sol-step');
     li.dataset.n = i + 1;
     if (st.label) li.append(el('div', 'sol-step-label', st.label));
+    if (st.figures && st.figures.length) {
+      const figs = el('div', 'step-figs');
+      st.figures.forEach(f => figs.append(stepFigure(f)));
+      li.append(figs);
+    }
     li.append(el('div', 'prose sol-step-body', breakEquations(st.html)));
     ol.append(li);
   });
@@ -684,6 +720,8 @@ function fitSolution(page) {
   const state = { sfs: work.style.getPropertyValue('--sfs') || '1', fig: '0.40', cols: '1' };
   for (const [key, val] of SOL_FIT_STEPS) {
     if (key === 'sfs' && page.hasAttribute('data-solution-pagination')) continue;
+    // 2단이면 단 폭이 줄어 단계 속 그림도 줄어든다. 그림 단계가 있는 쪽은 다음 쪽으로 넘긴다
+    if (key === 'cols' && page.querySelector('.step-fig')) continue;
     if (fits()) break;
     if (key === 'fig') {
       if (!band) continue;
@@ -904,6 +942,7 @@ async function main() {
       const solOk = fitSolution(page);
       if (!panelOk || !solOk || page.hasAttribute('data-overflow')) overflow.push(page.id);
     }
+    overflow.push(...shrunkFigures(book));
     overflow.push(...flowHints(meta, problems, staged));
     staging.remove();
 

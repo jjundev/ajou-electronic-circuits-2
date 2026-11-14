@@ -7,7 +7,7 @@ import sys
 import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from overlay_fixture import OverlayBundle, dump
-from answer_overlay import AnswerOverlayError, load_answer_overlay, apply_answer_overlay
+from answer_overlay import AnswerOverlayError, load_answer_overlay, apply_answer_overlay, match_step_figures
 
 
 @pytest.fixture
@@ -163,3 +163,42 @@ def test_untracked_svg_resources_are_rejected(bundle, markup):
     bundle.overlay['problems'][0]['steps'][0]['html'] += markup
     bundle.sync()
     with pytest.raises(AnswerOverlayError): load_answer_overlay(bundle.path,bundle.repo,bundle.ids)
+
+
+P12_24_LABELS = ['판정 기준과 묶음별 첫 줄', '그림 12.85 차동쌍 입력 여섯 회로', '그림 12.86 CG 입력 네 회로',
+                 '그림 12.87 전류 입력 네 회로', '그림 12.88 저항 귀환 두 회로']
+
+
+def _figs(*ids):
+    return [{'id': i, 'src': f'data:{i}', 'w_mm': 1, 'h_mm': 1} for i in ids]
+
+
+def test_step_figures_follow_their_labels():
+    per_step = match_step_figures(_figs('12.85', '12.86', '12.87', '12.88'), P12_24_LABELS)
+    assert [[f['id'] for f in figs] for figs in per_step] == [[], ['12.85'], ['12.86'], ['12.87'], ['12.88']]
+
+
+def test_one_step_may_take_several_figures():
+    per_step = match_step_figures(_figs('9.2', '9.4'), ['기준', '그림 9.2와 9.4 비교'])
+    assert [[f['id'] for f in figs] for figs in per_step] == [[], ['9.2', '9.4']]
+
+
+@pytest.mark.parametrize('figures, labels', [
+    (_figs('12.85', '12.86'), ['그림 12.85']),                      # 한 그림을 맞는 단계가 없음
+    (_figs('12.85'), ['그림 12.85 (a)', '그림 12.85 (b)']),          # 두 단계에 맞음
+    (_figs('12.85', '12.85'), ['그림 12.85']),                      # 같은 그림의 다른 crop
+    (_figs('12.8'), ['그림 12.85']),                                # 앞자리만 같음
+    (_figs('2.85'), ['그림 12.85']),                                # 뒷자리만 같음
+    ([{'src': 'data:x', 'w_mm': 1, 'h_mm': 1}], ['그림 12.85']),     # 번호 없는 그림
+    ([], ['그림 12.85']),
+])
+def test_unmatched_figures_stay_in_the_band(figures, labels):
+    assert match_step_figures(figures, labels) is None
+
+
+def test_overlay_keeps_band_when_labels_name_no_figure(bundle):
+    data = {'meta': {'mode': 'answers'}, 'problems': [{'id': p, 'html': {}, 'figures': _figs('12.85')} for p in bundle.ids]}
+    overlay = load_answer_overlay(bundle.path, bundle.repo, bundle.ids)
+    out = apply_answer_overlay(data, overlay, html_dir=bundle.build_dir)
+    assert [f['id'] for f in out['problems'][0]['figures']] == ['12.85']
+    assert all('figures' not in step for p in out['problems'] for step in p['solution']['steps'])

@@ -188,7 +188,7 @@ def figures(p):
             rw, rh = png_size(data)
             h_mm = round(w_mm * rh / rw, 1)
         out.append({"src": "data:image/png;base64," + base64.b64encode(data).decode("ascii"),
-                    "w_mm": w_mm, "h_mm": h_mm})
+                    "w_mm": w_mm, "h_mm": h_mm, "id": fig_id, "crop": crop})
     return out
 
 
