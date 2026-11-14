@@ -29,7 +29,7 @@ python3 workbook/build_workbook.py --ids <대상 id들, 쉼표로> --name 풀이
 
 ## 4. 커밋
 git add <대상 md 경로들>
-git commit -m "docs(<<LABEL>>): add solutions batch <<BATCH>> (<첫 id>–<끝 id>)" (끝에 빈 줄 + Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>)
+git commit -m "docs(<<LABEL>>): add solutions batch <<BATCH>> (<첫 id>–<끝 id>)"
 git add에는 경로를 명시한다(-A나 . 금지). push하지 않는다.
 
 ## 최종 메시지

@@ -22,7 +22,7 @@ Razavi 이론은 읽었지만 문제풀이 경험이 적은 학생에게 개인 
 PDF에는 [저작 규칙](references/authoring.md)의 선택 표지를 쓴 핵심 회로·판단·계산·최종 답을 담는다. 상세 이유·유도·검산은 HTML 본문에 유지한다. 내용·개인화 감사·독립 검산·원문·브라우저 검토와 현재 입력/명세/산출 해시가 승인되어야 발행된다. 표지 누락이나 미지원 원고는 withheld이며 숨긴 중복 풀이·검사 우회·과거 승인 재사용으로 해결하지 않는다.
 
 
-**모델 이름**: 이 문서의 opus는 Claude 기준이다. Claude가 아닌 환경(GPT)에서는 opus 대신 sol을 쓴다.
+**모델 선택.** 문항 작성자, 독립 검산자, 내용 리뷰어에게는 현재 환경에서 서브에이전트에 지정할 수 있는 모델 중 **가장 높은 등급의 모델**을 사용한다. 부모 복습팩의 일반·lite 호출과 단독 실행에 모두 적용한다. 선택 가능한 모델이 하나면 그 모델을 사용한다. 환경이 제공하는 등급 순서를 확인할 수 없으면 환경의 기본 모델을 사용하고 이유를 최종 보고에 적는다.
 
 **진행 표시**: 단계마다 한 줄만 쓴다. 예: `3/8 작성 중: 문항 10개 (병렬)`
 
@@ -85,8 +85,8 @@ python3 "$SKILL/scripts/epe_cli.py" extract --repo "$REPO" --target 1007 --run "
 
 [저작 규칙](references/authoring.md)의 교육적 연결·retry 기준을 적용한다. 핵심 규칙 → 작은 상태 변화 또는 기호 조작 → 실제 첫 식 → 유도를 연결하고, 범용 재계산 문구 대신 조건을 바꿔 규칙을 적용하는 질문을 쓴다. 허용된 보충 정확식에도 같은 기준을 적용하되 $R_{out}$은 아래 표시/검산 경계를 따른다. [내용 검토](references/verification.md)에서 리뷰어가 첫 식과 retry 답을 재구성하고 본문·요약·MD·그림의 조건·방향·수치를 대조한다. 구조 검사와 수학 검산만으로 교육적 연결을 승인하지 않는다.
 
-### 3. 저작 (문항마다 opus 작성자, 병렬)
-- 문항마다 작성자 1명을 **한 메시지에서 병렬로** 띄운다. 모델은 opus(GPT: sol)다.
+### 3. 저작 (문항마다 작성자 1명, 병렬)
+- 문항마다 작성자 1명을 **한 메시지에서 병렬로** 띄운다. 위 모델 선택 규칙을 적용한다.
 - 브리프 필수 슬롯: `<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md` 실제 절대 경로, `BUCKET/source.json.learning_style` snapshot, 원문 `subparts` 순서, 통합 일곱 구역(understand → recall → start → solve → verify → pitfall → retry), solve 제목 `이렇게 풀어요`, 마지막 sum, 독립 계산 한 행 규칙, 규칙별 적용 위치 또는 비적용 이유 보고.
 - 브리프에 적을 것: [저작 규칙](references/authoring.md)의 절대 경로를 먼저 읽으라는 지시, `BUCKET/source.json` 경로와 문항 id(`pN`), 그 문항의 `subparts`, 2에서 정한 참고 자료 경로와 쪽, 출력 파일 `BUCKET/explanations/pN.html` 하나(다른 곳에는 쓰지 않는다), 임시 파일은 `RUN/work/pN/`에만.
 - 작성자는 원문·조건·구할 것·그림을 다시 쓰지 않는다(조립기가 md에서 붙인다).
@@ -100,7 +100,7 @@ python3 "$SKILL/scripts/epe_cli.py" extract --repo "$REPO" --target 1007 --run "
 - 모든 조각이 모이면 `explanations/`의 파일 집합이 `source.json`의 문항 id 집합과 같은지 확인한다.
 
 ### 4. 독립 검산 (작성자와 다른 에이전트)
-- 문항마다 검산 에이전트 1명(opus, 병렬)을 띄운다. 그 문항의 작성자를 재사용하지 않는다.
+- 문항마다 검산 에이전트 1명을 위 모델 선택 규칙에 따라 병렬로 띄운다. 그 문항의 작성자를 재사용하지 않는다.
 - [검토 기록](references/verification.md)의 `independent` 절을 따른다. 조건과 구할 것만으로 먼저 답을 구하고(SymPy 기호 계산 + 수치 대입, 증명·정성 문항은 논증 검토), 그 뒤에 md `## 풀이`와 조각의 답과 대조한다.
 - 검산자에게 전달할 입력과 브리프의 참조는 문제·그림·필요한 이론만 포함하는지 먼저 확인한다. 정답·참고 풀이·설명 조각과 정답 필드가 있는 전체 `source.json`은 전달하지 않는다. 독립 풀이와 evidence를 먼저 저장한 뒤 조정자가 참고 답과 대조한다. 풀이를 저장하기 전에 답이나 풀이가 노출되면 해당 검산 판정과 evidence는 무효다. 노출 사실을 기존 보고에 기록하고, 답을 보지 않은 새 검산자가 처음부터 다시 풀어 정식 evidence를 제출한다. 새 검산자를 확보하지 못하면 독립 검산은 미완료로 두고 발행을 보류한다.
 - 산출: SymPy 스크립트 `BUCKET/evidence/pN-sympy.py`와 실행 출력 `BUCKET/evidence/pN-result.txt`, 그리고 소문항별 판정(JSON 형태로 응답: `pN:a` → status/method/conclusion/evidence).
@@ -118,7 +118,7 @@ python3 "$SKILL/scripts/epe_cli.py" check --run "$RUN"
 ### 6. 검토 기록
 [검토 기록](references/verification.md)을 읽고 네 검토와 `learning_style_audit`의 모든 소문항·규칙 감사를 실제로 수행해 `BUCKET/review.json`에 기록한다.
 - `source_visual`: `workbook/source_pages.py render`로 원본 쪽을 렌더해 문항 조건·그림·소문항과 대조.
-- `content`: 필수 읽기 `<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md` 절대 경로와 `source.json.learning_style`을 브리프에 넣는다. 일곱 구역 순서·`이렇게 풀어요` 제목·식별 행 분리와 본문·요약·MD의 답·단위·근사·그림을 대조하고 `learning_style_audit`를 작성한다. 작성자가 아닌 리뷰어 에이전트(opus) 1명이 팩의 모든 조각을 읽고 소문항별로 판정.
+- `content`: 필수 읽기 `<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md` 절대 경로와 `source.json.learning_style`을 브리프에 넣는다. 일곱 구역 순서·`이렇게 풀어요` 제목·식별 행 분리와 본문·요약·MD의 답·단위·근사·그림을 대조하고 `learning_style_audit`를 작성한다. 위 모델 선택 규칙을 적용한 별도 리뷰어 1명이 팩의 모든 조각을 읽고 소문항별로 판정한다.
 - `independent`: 4의 판정을 그대로 옮긴다(evidence 경로는 stage에 복사된 `evidence/`와 같은 이름).
 - `browser`: 메인 에이전트가 stage 폴더를 `python3 -m http.server`로 열고(몇 초 뒤 측정), 네 조합 측정은 헤드리스 Playwright [scripts/epe_browser_check.py](scripts/epe_browser_check.py)로 해요(`playwright`·chromium 필요). 내장 브라우저 창은 목차·pager·테마 토글을 눌러 보는 확인에만 쓰고, 그 페이지의 `document.visibilityState`가 `'visible'`일 때만 결과로 써요. `ERR_CONNECTION_RESET` 같은 연결 끊김은 fail이 아니라 다시 실행해요. evidence에 어느 경로로 확인했는지 적어요.
 - `references`: 실제로 읽은 저장소 자료의 절대 경로와 SHA-256.

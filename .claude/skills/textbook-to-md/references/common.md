@@ -62,4 +62,4 @@ python3 -m unittest discover -s 교과서/마이크로전자회로/_tools/tests
 ## git 규칙 (엄수)
 - 현재 브랜치는 `feat/ch<<N>>-problem-md`다. 브랜치 전환, rebase, reset, merge, push는 하지 않는다.
 - 추적하지 않는 파일(PDF와 PDF 심볼릭 링크, `STT/`, `강의노트/`)은 절대 add하지 않는다. `git add -A`, `git add .`는 쓰지 않고 항상 경로를 명시한다.
-- 커밋 메시지는 빈 줄 뒤 `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`로 끝낸다.
+- 공동 작성자 트레일러는 실제 참여자의 이름과 이메일을 확인했을 때만 `Co-Authored-By`로 기록한다.

@@ -14,6 +14,8 @@ description: 전자회로2 수업의 새 개념을 확인하는 즉시 채점 HT
 
 아래에서 `C`는 `<REPO>/.agents/skills/ec2-concept-check/scripts/concept.py`의 절대 경로, `RUN`은 `~/.cache/ec2-concept-check/<범위>-<고유 실행명>`의 절대 경로다. 독립 풀이자에게는 이 RUN과 별개인 임시 폴더를 할당한다.
 
+문항 작성자와 독립 풀이자(재풀이 포함)에게는 현재 실행 환경이 서브에이전트에 지정할 수 있는 모델 중 **두 번째로 높은 등급의 모델**을 사용한다. 선택 가능한 모델이 하나면 그 모델을 사용한다. 환경이 제공하는 등급 순서를 확인할 수 없으면 환경의 기본 모델을 사용하고 이유를 최종 보고에 적는다. 단독 실행과 신규 복습팩의 일반·lite 호출 모두에 적용한다.
+
 1. `python3 "$C" prepare <범위> --repo "$REPO" --run "$RUN"`을 실행한다. 부모가 부르면 여기에 `--parent-run "$PARENT_RUN"`을 붙여 현재 최종 검사와 manifest·날짜별 STT 요약을 연결한다. 준비가 실패하면 원인과 경로를 보고한다.
 2. `$RUN/source.json`의 정리노트 HTML·MD, 전사 및 신규 팩의 요약을 읽고 `$RUN/objectives.json`을 작성한다. [문항 규칙](references/items.md)을 적용해 회고·예고·보충을 걷어 내고, 토픽 ID·날짜·슬라이드·STT 위치를 기록한다. 보통 6~16문항을 확보하고, 근거가 있는 목표가 적으면 실제 확보한 수와 이유를 보고한다.
 3. 새 컨텍스트의 문항 작성자 한 명에게 [문항 규칙](references/items.md), `source.json`, `objectives.json`을 넘겨 `$RUN/items.json`을 작성하게 한다. 메인은 출제 근거, 정답 유도, 보기의 오개념, 기존 복습문제와 중복, 힌트의 적절성을 검토한다. `python3 "$C" check --run "$RUN"`을 통과시킨다.

@@ -41,7 +41,9 @@ python3 "$REPO/workbook/source_pages.py" render <문제 md 절대 경로…> --o
 
 `RUN/pages/<id>-p<쪽>.png`를 Read 도구로 열어 문항마다 다음을 확인해요: 조건의 수치·기호·가정(어느 트랜지스터가 $\lambda\neq0$인지 등), 그림의 회로 연결, 소문항 개수와 표지(`(a)`/`(1)`), 구할 것. 조립된 stage HTML의 원문·조건·구할 것·그림과도 맞는지 봐요. evidence에 "pN(workbook id): <PDF> p<쪽> 대조, 일치/차이 내용"을 문항마다 적어요. 차이가 있으면 md는 고치지 않고 그 팩을 disputed로 보고해요.
 
-## content: 내용 리뷰 (작성자가 아닌 opus 리뷰어 1명)
+## content: 내용 리뷰 (작성자와 별도 리뷰어 1명)
+
+리뷰어 모델은 [스킬의 모델 선택 규칙](../SKILL.md)을 따른다.
 
 리뷰어에게 stage HTML 경로, `source.json`, 이 문서와 [저작 규칙](authoring.md)의 경로, 참고 자료 경로를 넘기고, 모든 `pN:<subpart>`에 대해 판정을 JSON으로 받아요. 확인할 것:
 - 통합 풀이: understand → recall → start → solve → verify → pitfall → retry 순서와 solve의 `이렇게 풀어요` 제목을 확인한다. 별도 선행 핵심 블록 없이 사용자 방식의 경로가 start/solve/verify에 통합됐는지, 모든 소문항·sum·MD의 답·단위·부호·조건·근사·그림이 같은지 대조한다. 독립 계산은 한 행씩이며 같은 양의 연속 등식은 허용한다. 브라우저 자동 줄바꿈이나 좁은 PDF 폭에 의존해 서로 다른 식을 한 블록에 묶지 않는다.
@@ -99,7 +101,7 @@ method는 `exact|symbolic|numerical|proof|qualitative` 중 하나예요. 기호 
 ```json
 {
   "status": "pass",
-  "reviewer": "독립 검산 에이전트(opus, pN 작성자와 다름)",
+  "reviewer": "독립 검산 에이전트의 실제 식별자",
   "evidence": "evidence/pN-sympy.py, evidence/pN-result.txt: CM 하프 서킷 KCL을 풀어 simplify(A_CM - 목표식) = 0",
   "method": "symbolic",
   "conclusion": "A_CM = -(R_D/2)/(1/(2g_m)+r_O3), md 풀이·조각과 일치"
