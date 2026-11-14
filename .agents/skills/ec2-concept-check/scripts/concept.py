@@ -102,8 +102,9 @@ def render_page(data):
                     for index, it in enumerate(data["items"], 1))
     range_ = data["range"]
     title = f"{range_} 확인문제 — 이번 수업 개념 확인"
+    asset_root = quote(Path(os.path.relpath(vendor, data["pack"])).as_posix(), safe="/")
     slots = {
-        "ASSET_ROOT": quote(Path(os.path.relpath(vendor, data["pack"])).as_posix(), safe="/"),
+        "ASSET_ROOT": asset_root,
         "PAGE_TITLE": render.esc(f"전자회로2 확인문제 {range_}"),
         "DESCRIPTION": render.esc(title),
         "TITLE": render.esc(title),
@@ -111,7 +112,9 @@ def render_page(data):
         "TOC": '<a href="#check">확인</a>',
         "INTRO": f"이번 수업에서 처음 배운 개념을 {len(data['items'])}문항으로 확인해요. 고르면 바로 채점돼요.",
         "PARTS": f'<section id="check"><h2>확인문제</h2>{cards}</section>',
-        "FOOTER": "<p>AI가 강의자료와 수업 전사를 바탕으로 만든 문항이에요.</p>",
+        "FOOTER": ("<p>AI가 강의자료와 수업 전사를 바탕으로 만든 문항이에요.</p>"
+                   f'<p>라이선스 <a href="{asset_root}/pretendard/LICENSE" download="Pretendard-LICENSE.txt">Pretendard</a> · '
+                   f'<a href="{asset_root}/katex/LICENSE" download="KaTeX-LICENSE.txt">KaTeX</a></p>'),
         "SCRIPTS": "",
         "RANGE": render.esc(f"{range_}-확인"),
     }
