@@ -98,6 +98,18 @@
     ol.steps { padding-left: 1.4em; }
     ol.steps li { margin: var(--s2) 0; }
 
+    /* 정확히 말하면의 길잡이: 소제목 · 구간 결론 · 식|이유 두 열 · 끝의 확인 질문 */
+    .layer.formal h4.sub { margin: var(--s6) 0 var(--s3); padding-left: var(--s3); border-left: 3px solid var(--accent); font-size: var(--fs-body); font-weight: 800; line-height: 1.4; }
+    .layer.formal .layer-title + h4.sub { margin-top: var(--s4); }
+    .drow { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 15em); column-gap: var(--s4); align-items: center; }
+    .drow .why { margin: 0; font-size: var(--fs-sub); color: var(--ink-2); }
+    @media (max-width: 560px) { .drow { grid-template-columns: 1fr; } .drow .why { order: -1; } }
+    .quiz { background: var(--surface); border-radius: var(--radius); padding: var(--s4); }
+    .quiz.after { margin-top: var(--s5); }
+    .quiz .q { margin: 0; font-weight: 700; line-height: 1.6; }
+    .quiz summary { display: inline-flex; align-items: center; min-height: 44px; color: var(--accent-ink); font-weight: 600; font-size: var(--fs-sub); cursor: pointer; }
+    .quiz details p { margin: 0; }
+
     /* 그림 · 수식 · 표 */
     .figure { margin: var(--s4) 0; text-align: center; }
     .figure svg { width: 100%; height: auto; max-width: 560px; color: var(--ink); }
@@ -344,7 +356,7 @@
     }
   </style>
 </head>
-<body data-screens="article.topic" data-panels="note" data-range="1111">
+<body data-screens="article.topic" data-panels="note" data-range="1111" data-guide="1">
   <header class="topbar">
     <div class="topbar-inner">
       <button class="text-btn panel-toggle" id="toggle-left" type="button" aria-controls="panel-left" aria-expanded="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="strip" x="3" y="4" width="6" height="16" rx="1"/><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg><span>목차</span></button>
@@ -410,20 +422,20 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
-    <h4>1. 풀고 싶은 문제</h4>
+    <h4 class="sub">풀고 싶은 문제</h4>
     <p>지금까지 만든 공통 소스·캐스코드·차동쌍 증폭기는 모두 개루프 이득(open-loop gain) $A_1$이에요. 공통 소스 단이면 이득의 크기가 $g_mR_D$예요.</p>
-    <p>$g_m$은 전류·소자 크기·공정·온도에 따라 바뀌어요. $R_D$는 단품이든 칩 안 저항이든 ±20%까지 오차가 나요. 그래서 $A_1$도 ±20%까지 흔들려요. 이득이 정확한 증폭기가 필요해요. <a href="#s1-precise-k">증폭기 이득은 흔들리고 저항의 비는 정확해요</a></p>
+    <p>$g_m$은 전류·소자 크기·공정·온도에 따라 바뀌어요. $R_D$는 단품이든 칩 안 저항이든 ±20%까지 오차가 나요. 그래서 $A_1$도 ±20%까지 흔들려요. <b>이득이 정확한 증폭기가 필요해요.</b> <a href="#s1-precise-k">증폭기 이득은 흔들리고 저항의 비는 정확해요</a></p>
     <p>대역폭(bandwidth)도 넓히고 싶어요. 극점 주파수는 $\frac{1}{RC}$ 꼴이라 회로를 그대로 두면 정해진 주파수부터 이득이 떨어져요. <a href="#s2-pole-shift">극점이 (1+루프 이득)배 높아져요</a></p>
-    <h4>2. 단순한 해법과 그 한계</h4>
+    <h4 class="sub">단순한 해법과 그 한계</h4>
     <p>가장 쉬운 방법은 $A_1$을 그대로 쓰는 개루프 증폭기예요.</p>
     $$Y=A_1X$$
-    <p>출력이 $A_1$에 정비례하므로 $A_1$이 20% 변하면 이득도 20% 변해요. <a href="#s1-desensitization">루프 이득이 크면 이득은 1/K가 돼요</a></p>
+    <p><b>출력이 $A_1$에 정비례하므로 $A_1$이 20% 변하면 이득도 20% 변해요.</b> <a href="#s1-desensitization">루프 이득이 크면 이득은 1/K가 돼요</a></p>
     <p>정확한 저항비만 쓰면 어떨까요? 저항 분배기는 1보다 작은 비만 만들어서 혼자서는 증폭을 못 해요.</p>
     <p>대역폭을 넓히려고 극점을 올리려면 $R$을 줄이거나(이득이 줄어요) $C$를 줄여야(트랜지스터를 작게 해서 $g_m$과 전류가 줄어요) 해요. 결국 회로를 다시 설계해야 해요. <a href="#s2-bandwidth-example">이득을 내주고 대역폭을 얻어요</a></p>
-    <h4>3. 핵심 아이디어</h4>
+    <h4 class="sub">핵심 아이디어</h4>
     <p>음귀환(negative feedback)은 출력을 감지(sense)해 피드백 팩터(귀환율) $K$만큼 되돌리고, 입력에서 빼서 그 차이를 $A_1$에 넣어요. op-amp와 저항 분배기 $R_1$–$R_2$로 만든 비반전 증폭기에서 $K$는 저항비예요.</p>
     $$K=\frac{R_2}{R_1+R_2}$$
-    <p>루프 이득(loop gain) $KA_1$이 1보다 훨씬 크면 폐루프 이득(closed-loop gain)이 $\frac{1}{K}$에 가까워져요. <a href="#s0-break-anywhere">루프는 어디서 끊어도 루프 이득이 같아요</a></p>
+    <p><b>루프 이득(loop gain) $KA_1$이 1보다 훨씬 크면 폐루프 이득(closed-loop gain)이 $\frac{1}{K}$에 가까워져요.</b> <a href="#s0-break-anywhere">루프는 어디서 끊어도 루프 이득이 같아요</a></p>
     $$\frac{Y}{X}=\frac{A_1}{1+KA_1}\approx\frac{1}{K}$$
     <p>예를 들어 $K=0.1$이고 $A_1=1000$이면 이득은 $\frac{1000}{101}\approx9.90$이에요.</p>
     <p>$A_1$이 20% 줄어 800이 되어도 이득은 $\frac{800}{81}\approx9.88$이라 둘 다 $\frac{1}{K}=10$ 근처예요.</p>
@@ -431,8 +443,8 @@
     <p>$K$는 이득이 필요 없어서 저항·커패시터 같은 수동 소자의 비로 만들어요. 같은 공정의 저항은 함께 커지거나 함께 작아지므로, 하나하나는 ±20% 변해도 비는 ±1% 정도로 정확해요. <a href="#s1-precise-k">증폭기 이득은 흔들리고 저항의 비는 정확해요</a></p>
     <p>같은 귀환이 대역폭도 넓혀요. 개루프가 극점 하나인 증폭기에서 $A_0$를 $A_1$의 저주파 값, $\omega_0$를 개루프 극점이라 하면 극점이 $1+KA_0$배 높아져요. 이것이 대역폭 확장(bandwidth extension)이에요. <a href="#s2-pole-shift">극점이 (1+루프 이득)배 높아져요</a></p>
     $$\omega_0\ \to\ (1+KA_0)\omega_0$$
-    <h4>4. 대가와 쓰이는 곳</h4>
-    <p>대가는 이득이에요. 이득이 $A_1$에서 $\frac{A_1}{1+KA_1}$로, 즉 $1+KA_1$배 줄어요. 대역폭이 넓어진 만큼 저주파 이득도 $1+KA_0$배 줄어요. <a href="#s2-bandwidth-example">이득을 내주고 대역폭을 얻어요</a></p>
+    <h4 class="sub">대가와 쓰이는 곳</h4>
+    <p>대가는 이득이에요. <b>이득이 $A_1$에서 $\frac{A_1}{1+KA_1}$로, 즉 $1+KA_1$배 줄어요.</b> 대역폭이 넓어진 만큼 저주파 이득도 $1+KA_0$배 줄어요. <a href="#s2-bandwidth-example">이득을 내주고 대역폭을 얻어요</a></p>
     <p>줄어든 이득은 쉽게 되찾아요. 정확한 이득 10짜리 단을 세 개 이으면 $10\times10\times10=1000$이에요.</p>
     <p>둔감화가 잘 되려면 루프 이득 $KA_1$이 1보다 훨씬 커야 해요. 그래서 op-amp의 개루프 이득을 아주 크게 만들어요. <a href="#s1-large-loop-gain">루프 이득이 커야 하고, 그 대가로 이득은 줄어요</a></p>
     <p>주파수가 올라가 루프를 한 바퀴 돈 위상이 180° 바뀌면 음귀환이 양귀환(positive feedback)이 되어 발진할 수 있어요. 안정성 설계는 이 과목에서 다루지 않아요. <a href="#s3-instability">음귀환이 양귀환으로 바뀌면 발진해요</a></p>
@@ -448,6 +460,10 @@
     <blockquote>대역폭을 늘리는 건 사실 굉장히 어려운 일이에요. … 게인을 늘리는 거는 쉽기 때문에</blockquote>
     <blockquote>타입에 따라서 피드백의 구조가 달라지기 때문이에요.</blockquote>
     <p>교수님은 "처음부터 $K$만 쓰면 되지 않느냐"고 스스로 물었어요. $K$는 1보다 작아 증폭을 못 하므로 $A_1$이 꼭 있어야 한다는 답이었어요.</p>
+  </div>
+  <div class="quiz after">
+    <p class="q">확인해 봐요. 저항 분배기의 비 $K$가 $\pm1\,\%$로 정확하다면, 개루프 증폭기 $A_1$ 없이 $K$만으로 증폭기를 만들면 안 되는 이유는 무엇인가요?</p>
+    <details><summary>답 보기</summary><p>저항 분배기 같은 수동 소자의 비 $K$는 $1$보다 작아 혼자서는 신호를 증폭할 수 없기 때문이에요. 그래서 $A_1$이 꼭 있어야 증폭이 되고, 음귀환은 $KA_1\gg1$일 때 이득이 $\frac{1}{K}$ 근처로 정해지게 해요.</p></details>
   </div>
   <div class="sum" hidden>
     <p class="sum-lead">음귀환은 흔들리는 $A_1$ 대신 정확한 $K$로 이득을 정하고 대역폭도 넓혀요.</p>
@@ -542,27 +558,30 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <h4 class="sub">숫자로 확인하기</h4>
     <p>먼저 작은 예에 적용해 봐요. $A_1=200$, $K=0.05$이고, 입력을 접지해 $X=0$으로 둔 뒤 $A_1$ 입력 쪽 $M$에 $V_{test}=1\,\mathrm{mV}$를 넣어요.</p>
     $$A_1V_{test}=200\times1\,\mathrm{mV}=200\,\mathrm{mV}$$
     $$KA_1V_{test}=0.05\times200\,\mathrm{mV}=10\,\mathrm{mV}$$
     $$V_N=0-10\,\mathrm{mV}=-10\,\mathrm{mV}$$
     $$-\frac{V_N}{V_{test}}=-\frac{-10\,\mathrm{mV}}{1\,\mathrm{mV}}=10$$
-    <p>같은 루프를 출력 쪽($K$ 입력)에서 끊고 $1\,\mathrm{mV}$를 넣으면 $K$ 뒤 $0.05\,\mathrm{mV}$ → 빼기 뒤 $-0.05\,\mathrm{mV}$ → $A_1$ 뒤 $-10\,\mathrm{mV}$로 돌아와요. 비는 똑같이 $10$이에요.</p>
+    <p>같은 루프를 출력 쪽($K$ 입력)에서 끊고 $1\,\mathrm{mV}$를 넣으면 $K$ 뒤 $0.05\,\mathrm{mV}$ → 빼기 뒤 $-0.05\,\mathrm{mV}$ → $A_1$ 뒤 $-10\,\mathrm{mV}$로 돌아와요. <b>비는 똑같이 $10$이에요.</b></p>
     $$KA_1=0.05\times200=10$$
+    <h4 class="sub">어느 자리에서 끊어도 같은 이유</h4>
     <p>일반식은 칠판 유도 순서대로 따라가요.</p>
     <ol class="steps">
       <li><strong>입력 영점</strong> — 입력을 접지해 $X=0$으로 둬요. 돌아온 신호가 모두 시험 신호에서 온 것이 되게 하려는 거예요.</li>
       <li><strong>루프 끊기</strong> — 비교부(합산기) 출력 $N$과 $A_1$ 입력 $M$ 사이를 끊어요. 신호 방향은 그대로 $M$ → $A_1$ → $K$ → 비교부 → $N$이에요.</li>
       <li><strong>시험 신호</strong> — 끊은 자리 $M$에 $V_{test}$를 넣어요.</li>
-      <li><strong>순방향 시스템</strong> — $A_1$을 지나 출력이 돼요. $$Y=A_1V_{test}$$</li>
-      <li><strong>귀환 회로망</strong> — 출력을 감지해 $K$배 해요. $$KY=KA_1V_{test}$$</li>
-      <li><strong>비교부</strong> — 입력 0에서 귀환 신호를 빼서 $N$으로 돌아와요. $$0-KA_1V_{test}$$ $$V_N=-KA_1V_{test}$$</li>
+      <li><div class="drow"><div>$$Y=A_1V_{test}$$</div><p class="why"><strong>순방향 시스템</strong> — $A_1$을 지나 출력이 돼요.</p></div></li>
+      <li><div class="drow"><div>$$KY=KA_1V_{test}$$</div><p class="why"><strong>귀환 회로망</strong> — 출력을 감지해 $K$배 해요.</p></div></li>
+      <li><div class="drow"><div>$$0-KA_1V_{test}$$ $$V_N=-KA_1V_{test}$$</div><p class="why"><strong>비교부</strong> — 입력 0에서 귀환 신호를 빼서 $N$으로 돌아와요.</p></div></li>
       <li><strong>부호와 정의</strong> — 비 $\frac{V_N}{V_{test}}=-KA_1$은 음수예요. 음귀환에서 루프 이득을 양수로 나타내려고 마이너스를 붙여 정의해요. $$KA_1=-\frac{V_N}{V_{test}}$$</li>
     </ol>
     <p>그림의 $N$, $M$은 끊은 자리의 두 끝 이름이에요. 출력 쪽에서 끊을 때는 $A_1$ 출력 끝이 $N$, $K$ 입력 끝이 $M$이라서 위치가 달라요.</p>
-    <p>루프 한 바퀴의 이득은 루프 위 블록인 $A_1$, $K$, 비교부의 빼기($-1$)를 모두 곱한 값이에요. 어디서 시작해도 곱하는 순서만 바뀌므로 결과는 같아요.</p>
+    <p>루프 한 바퀴의 이득은 루프 위 블록인 $A_1$, $K$, 비교부의 빼기($-1$)를 모두 곱한 값이에요. <b>어디서 시작해도 곱하는 순서만 바뀌므로 결과는 같아요.</b></p>
     $$\begin{aligned}A_1\cdot K\cdot(-1)&amp;=K\cdot(-1)\cdot A_1\\&amp;=-KA_1\end{aligned}$$
-    <p>그래서 끊는 자리는 계산하기 편한 곳으로 고르면 돼요. 보통은 출력이 명확히 보여서 출력 쪽에서 끊는 경우가 많아요. 출력 쪽에서 끊는 순서는 <a href="../1106/정리노트_1106_Negative_Feedback.html#s3-loop-gain">루프를 끊고 시험 신호를 넣어요</a>에서 따라갈 수 있어요.</p>
+    <h4 class="sub">어디를 끊는 것이 편할까요</h4>
+    <p><b>그래서 끊는 자리는 계산하기 편한 곳으로 고르면 돼요.</b> 보통은 출력이 명확히 보여서 출력 쪽에서 끊는 경우가 많아요. 출력 쪽에서 끊는 순서는 <a href="../1106/정리노트_1106_Negative_Feedback.html#s3-loop-gain">루프를 끊고 시험 신호를 넣어요</a>에서 따라갈 수 있어요.</p>
     <p>루프 이득은 폐루프 이득뿐 아니라 뒤에서 볼 입출력 임피던스(I/O impedance)까지 좌우해서 따로 정의해 둬요.</p>
   </div>
   <div class="layer prof">
@@ -577,8 +596,11 @@
     <blockquote>루프 게인과 클로즈드 루프 게인은 잘 구별을 해야 된다</blockquote>
     <p>폐루프 이득 $\frac{Y}{X}=\frac{A_1}{1+KA_1}$은 입력 $X$에서 출력 $Y$까지의 관계예요. 루프 이득 $KA_1$은 $X=0$에서 루프를 한 바퀴 돈 이득이에요.</p>
     <p>$A_1=200$, $K=0.05$이면 루프 이득은 $10$이고 폐루프 이득은 $\frac{200}{1+10}\approx18.18$이에요. 두 양을 나란히 비교한 내용은 <a href="../1106/정리노트_1106_Negative_Feedback.html#s3-loop-vs-closed">루프 이득과 폐루프 이득은 완전히 달라요</a>에 있어요.</p>
-    <blockquote>어디를 끊어야 되냐? 계산하기 편한 곳으로 끊으면 돼요.</blockquote>
     <p>끊는 자리가 달라도 루프 이득은 $KA_1$ 하나예요. 자리마다 다른 값이 나오면 $X=0$과 신호 방향을 다시 확인해요.</p>
+  </div>
+  <div class="quiz after">
+    <p class="q">확인해 봐요. $A_1=400$, $K=0.02$인 루프에서 입력을 $X=0$으로 두고 $A_1$ 입력 쪽 $M$에 $V_{test}=1\,\mathrm{mV}$를 넣으면 $V_N$과 루프 이득 $KA_1$은 얼마인가요?</p>
+    <details><summary>답 보기</summary><p>$V_N=-8\,\mathrm{mV}$, 루프 이득 $KA_1=8$이에요. $A_1$ 뒤 $400\,\mathrm{mV}$ → $K$ 뒤 $0.02\times400=8\,\mathrm{mV}$ → 비교부에서 $V_N=0-8=-8\,\mathrm{mV}$이고, $KA_1=-\frac{V_N}{V_{test}}=-\frac{-8\,\mathrm{mV}}{1\,\mathrm{mV}}=8$이에요.</p></details>
   </div>
   <div class="sum" hidden>
     <p class="sum-lead">루프는 어디서 끊어도 루프 이득이 $KA_1$로 같아서, 계산하기 편한 곳에서 끊으면 돼요.</p>
@@ -634,24 +656,28 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <h4 class="sub">숫자로 확인하기</h4>
     <p>음귀환 시스템의 폐루프 이득(closed-loop gain)은 개루프 이득(open-loop gain) $A_1$과 피드백 팩터(귀환율, feedback factor) $K$로 정해져요.</p>
     $$\frac{Y}{X}=\frac{A_1}{1+KA_1}$$
     <p>먼저 작은 예에 적용해 봐요. $K=0.1$, $A_1=1000$이면 루프 이득은 $KA_1=100$이에요.</p>
     $$\frac{Y}{X}=\frac{1000}{1+0.1\times1000}=\frac{1000}{101}\approx9.90$$
-    <p>이 값은 $\frac{1}{K}=10$과 거의 같아요. 일반식은 이 순서로 줄여요.</p>
+    <p><b>이 값은 $\frac{1}{K}=10$과 거의 같아요.</b></p>
+    <h4 class="sub">$A_1$이 식에서 사라지는 과정</h4>
+    <p>일반식은 이 순서로 줄여요.</p>
     <ol class="steps">
-      <li>폐루프 이득에서 시작해요. $$\frac{Y}{X}=\frac{A_1}{1+KA_1}$$</li>
-      <li>루프 이득이 $KA_1\gg1$이면 분모의 1을 무시할 수 있어요. $$1+KA_1\approx KA_1$$</li>
-      <li>분모에 대입해요. $$\frac{Y}{X}\approx\frac{A_1}{KA_1}$$</li>
-      <li>분자와 분모의 $A_1$이 약분돼요. $$\frac{Y}{X}\approx\frac{1}{K}$$</li>
+      <li><div class="drow"><div>$$\frac{Y}{X}=\frac{A_1}{1+KA_1}$$</div><p class="why">폐루프 이득에서 시작해요.</p></div></li>
+      <li><div class="drow"><div>$$1+KA_1\approx KA_1$$</div><p class="why">루프 이득이 $KA_1\gg1$이면 분모의 1을 무시할 수 있어요.</p></div></li>
+      <li><div class="drow"><div>$$\frac{Y}{X}\approx\frac{A_1}{KA_1}$$</div><p class="why">분모에 대입해요.</p></div></li>
+      <li><div class="drow"><div>$$\frac{Y}{X}\approx\frac{1}{K}$$</div><p class="why">분자와 분모의 $A_1$이 약분돼요.</p></div></li>
     </ol>
-    <p>폐루프 이득이 피드백 팩터의 역수가 되고, 식에서 $A_1$이 사라져요. 이득을 정하는 것이 $A_1$이 아니라 $K$가 된 거예요.</p>
+    <p>폐루프 이득이 피드백 팩터의 역수가 되고, 식에서 $A_1$이 사라져요. <b>이득을 정하는 것이 $A_1$이 아니라 $K$가 된 거예요.</b></p>
     <p>그래서 폐루프 이득은 개루프 이득의 변화에 둔감해져요. 이 성질을 이득 둔감화(gain desensitization)라고 해요. desensitize는 감도를 낮춘다는 뜻이에요.</p>
     <p>$A_1$은 지금까지 배운 공통 소스(CS)·공통 게이트(CG)·캐스코드·차동 증폭기 어느 것이든 될 수 있어요. 귀환이 없을 때 이들의 이득이 모두 개루프 이득이에요. 이 이득이 왜 부정확한지는 <a href="#s1-precise-k">증폭기 이득은 흔들리고 저항의 비는 정확해요</a>에서 봐요.</p>
+    <h4 class="sub">피드백 팩터 $K$의 범위</h4>
     <p>$K$는 보통 저항의 비예요. op-amp 비반전 증폭기에서는 출력 전압 중 저항 분배기가 입력 쪽으로 되돌려 보내는 비율이에요.</p>
     $$K=\frac{X_F}{Y}=\frac{R_2}{R_1+R_2}$$
     <p>비반전 증폭기를 귀환 시스템으로 나눠 본 내용은 1106 정리노트의 <a href="../1106/정리노트_1106_Negative_Feedback.html#s2-noninverting">비반전 증폭기를 귀환으로 보기</a>에 있어요.</p>
-    <p>$K$는 보통 1보다 작고, 커 봐야 1이에요. $K\gt1$이면 폐루프 이득 $\frac{1}{K}$가 1보다 작아져 증폭이 되지 않아요. 큰 이득이 필요하므로 실제 $K$는 1보다 훨씬 작아요.</p>
+    <p>$K$는 보통 1보다 작고, 커 봐야 1이에요. <b>$K\gt1$이면 폐루프 이득 $\frac{1}{K}$가 1보다 작아져 증폭이 되지 않아요.</b> 큰 이득이 필요하므로 실제 $K$는 1보다 훨씬 작아요.</p>
   </div>
   <div class="layer prof">
     <span class="layer-title">교수님 말씀</span>
@@ -659,11 +685,9 @@
     <blockquote>정교한 K로 부정확한 A1을 보정한다.</blockquote>
     <p>교수님은 제어 시스템에 비유했어요. 정확하지 않은 시스템에 정교한 피드백 $K$를 덧붙여 정밀하게 제어하는 것이 피드백의 원리라고 했어요.</p>
   </div>
-  <div class="layer warn">
-    <span class="layer-title">꼭 기억해요</span>
-    <blockquote>부정확한 A1을 정확한 K로 컨트롤한다라고 생각하면 되겠습니다.</blockquote>
-    <blockquote>K로 이득을 제어하는, 이게 기본적인 네거티브 피드백의 컨셉입니다.</blockquote>
-    <p>교수님은 이득이 $A_1$과 무관해지는 이 성질을 귀환의 큰 장점이라고 강조했어요.</p>
+  <div class="quiz after">
+    <p class="q">확인해 봐요. $K=0.2$, $A_1=500$일 때 루프 이득 $KA_1$, 폐루프 이득 $\frac{Y}{X}$, 그리고 $KA_1\gg1$ 근사값 $\frac{1}{K}$는 각각 얼마인가요?</p>
+    <details><summary>답 보기</summary><p>루프 이득은 $KA_1=0.2\times500=100$, 폐루프 이득은 $\frac{Y}{X}=\frac{500}{1+100}=\frac{500}{101}\approx4.95$, 근사값은 $\frac{1}{K}=\frac{1}{0.2}=5$예요.</p></details>
   </div>
   <div class="sum" hidden>
     <p class="sum-lead">루프 이득이 $KA_1\gg1$이면 폐루프 이득은 $A_1$과 거의 무관한 $\frac{1}{K}$가 돼요.</p>
@@ -713,26 +737,30 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <h4 class="sub">숫자로 확인하기</h4>
     <p>먼저 작은 예에 적용해 봐요. 비반전 증폭기의 $R_1=9\,\mathrm{k\Omega}$, $R_2=1\,\mathrm{k\Omega}$이 같은 공정에서 함께 20% 커졌다고 해 봐요. 바뀐 뒤의 값에는 $^*$를 붙여요.</p>
     $$K=\frac{1\,\mathrm{k\Omega}}{9\,\mathrm{k\Omega}+1\,\mathrm{k\Omega}}=0.1$$
     $$K^*=\frac{1.2\,\mathrm{k\Omega}}{10.8\,\mathrm{k\Omega}+1.2\,\mathrm{k\Omega}}=0.1$$
-    <p>개별 저항값은 20% 바뀌었지만 $K$는 그대로예요.</p>
-    <p>개루프 이득은 왜 흔들릴까요? $A_1$의 가장 단순한 예는 공통 소스(CS) 단이고, 이득의 크기는 다음과 같아요.</p>
+    <p><b>개별 저항값은 20% 바뀌었지만 $K$는 그대로예요.</b></p>
+    <h4 class="sub">$A_1$은 왜 흔들리나요</h4>
+    <p>$A_1$의 가장 단순한 예는 공통 소스(CS) 단이고, 이득의 크기는 다음과 같아요.</p>
     $$|A_v|=g_mR_D$$
     <ul>
       <li>$g_m$은 바이어스 전류와 소자 크기의 함수라서 공정과 온도에 따라 바뀌어요.</li>
       <li>$R_D$는 단품 저항이든 칩 위에 만든 저항이든 최대 ±20%까지 오차가 나요.</li>
       <li>$W/L$도 공정의 랜덤 미스매치(random mismatch)로 바뀌어요.</li>
     </ul>
-    <p>그래서 개루프 이득도 최대 ±20%까지 달라질 수 있어요. 귀환 없이 $A_1$을 그대로 쓰면 $g_m$이나 $R_D$의 변화가 이득에 그대로 나타나요.</p>
-    <p>$K$는 왜 정확할까요? $K$는 1보다 작아도 되므로 이득이 필요 없어요. 그래서 $g_m$ 없이 수동 소자(저항이나 커패시터)의 비로 만들어요. 절댓값이 아니라 비(ratio)로 정해진다는 점이 핵심이에요.</p>
+    <p><b>그래서 개루프 이득도 최대 ±20%까지 달라질 수 있어요.</b> 귀환 없이 $A_1$을 그대로 쓰면 $g_m$이나 $R_D$의 변화가 이득에 그대로 나타나요.</p>
+    <h4 class="sub">$K$는 왜 정확한가요</h4>
+    <p>$K$는 1보다 작아도 되므로 이득이 필요 없어요. 그래서 $g_m$ 없이 수동 소자(저항이나 커패시터)의 비로 만들어요. 절댓값이 아니라 비(ratio)로 정해진다는 점이 핵심이에요.</p>
     <ol class="steps">
-      <li>같은 공정에서 만든 두 저항은 같은 배율 $\alpha$로 함께 늘거나 줄어요. $$R_1^*=\alpha R_1$$ $$R_2^*=\alpha R_2$$</li>
-      <li>$K$에 대입하면 $\alpha$가 약분돼요. $$K^*=\frac{\alpha R_2}{\alpha R_1+\alpha R_2}=\frac{R_2}{R_1+R_2}=K$$</li>
+      <li><div class="drow"><div>$$R_1^*=\alpha R_1$$ $$R_2^*=\alpha R_2$$</div><p class="why">같은 공정에서 만든 두 저항은 같은 배율 $\alpha$로 함께 늘거나 줄어요.</p></div></li>
+      <li><div class="drow"><div>$$K^*=\frac{\alpha R_2}{\alpha R_1+\alpha R_2}=\frac{R_2}{R_1+R_2}=K$$</div><p class="why">$K$에 대입하면 $\alpha$가 약분돼요.</p></div></li>
       <li>실제 두 저항의 변화가 완전히 같지는 않아요. 그래도 같은 공정에서 만든 저항의 비는 ±1% 정도로 정확해요.</li>
     </ol>
-    <p>정리하면 부정확한 $A_1$의 영향은 귀환이 줄이고, 이득은 정확한 비로 만든 $K$가 정해요. <a href="#s1-desensitization">루프 이득이 크면 이득은 1/K가 돼요</a></p>
-    <p>개루프 이득에 영향을 주는 요인은 무엇이든 폐루프 이득에는 덜 영향을 줘요. 이득 둔감화가 줄여 주는 변동은 세 가지예요.</p>
+    <p><b>정리하면 부정확한 $A_1$의 영향은 귀환이 줄이고, 이득은 정확한 비로 만든 $K$가 정해요.</b> <a href="#s1-desensitization">루프 이득이 크면 이득은 1/K가 돼요</a></p>
+    <h4 class="sub">둔감화가 줄이는 변동과 쓰이는 곳</h4>
+    <p><b>개루프 이득에 영향을 주는 요인은 무엇이든 폐루프 이득에는 덜 영향을 줘요.</b> 이득 둔감화가 줄여 주는 변동은 세 가지예요.</p>
     <ul>
       <li>부품 변동(component variation): $g_m$, $r_O$ 같은 소자 파라미터의 변화예요.</li>
       <li>부하 변동(load variation): CS 단의 이득은 부하 저항에 의존하므로, 부하가 바뀌면 $A_1$도 바뀌어요.</li>
@@ -750,6 +778,10 @@
     <p>교수님은 파운드리에서 $100\,\Omega$ 저항을 만들면 ±20%까지 변하지만, 저항들이 같이 늘고 같이 줄어서 비는 정확하다고 설명했어요.</p>
     <p>SPICE 시뮬레이션에서 100으로 설계해도 실제 칩에서는 99가 되거나 100.1이 될 수 있다는 예도 들었어요.</p>
     <blockquote>정밀한 전류를 만들거나 … 전압을 만들거나 … 주파수를 만들거나, 모두 다 피드백 씁니다.</blockquote>
+  </div>
+  <div class="quiz after">
+    <p class="q">확인해 봐요. $R_1=4\,\mathrm{k\Omega}$, $R_2=1\,\mathrm{k\Omega}$인 저항 분배기가 같은 공정 변화로 함께 $20\,\%$ 줄어 $R_1^*=3.2\,\mathrm{k\Omega}$, $R_2^*=0.8\,\mathrm{k\Omega}$이 되면 피드백 팩터 $K^*$는 얼마인가요?</p>
+    <details><summary>답 보기</summary><p>$K^*=0.2$로 원래 $K=\frac{1}{4+1}=0.2$와 같아요. $K^*=\frac{0.8}{3.2+0.8}=\frac{0.8}{4.0}=0.2$로 같은 비율 $\alpha=0.8$이 약분돼요.</p></details>
   </div>
   <div class="sum" hidden>
     <p class="sum-lead">개루프 이득 $g_mR_D$는 ±20%까지 흔들리지만, 같은 공정 저항의 비인 $K$는 ±1% 정도로 정확해요.</p>
@@ -802,35 +834,39 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <h4 class="sub">$\frac{1}{K}$와의 오차 $\varepsilon$</h4>
     <p>이득이 $\frac{1}{K}$로 정해지려면 루프 이득이 $KA_1\gg1$이어야 해요. 실제 $A_1$은 유한하므로 폐루프 이득 $\frac{A_1}{1+KA_1}$은 $\frac{1}{K}$보다 조금 작아요. 이 모자란 비율을 오차 $\varepsilon$으로 정의해요.</p>
     <p>먼저 작은 예에 적용해 봐요. $K=0.1$, $A_1=1000$이면 다음과 같아요.</p>
     $$\frac{Y}{X}=\frac{1000}{1+0.1\times1000}=\frac{1000}{101}\approx9.90$$
     $$\varepsilon=1-0.1\times\frac{1000}{101}=\frac{1}{101}\approx0.99\,\%$$
     <p>일반식은 이 순서로 구해요.</p>
     <ol class="steps">
-      <li>오차를 $\frac{1}{K}$ 대비 모자란 비율로 정의해요. $$\varepsilon=\frac{\frac{1}{K}-\frac{Y}{X}}{\frac{1}{K}}=1-K\frac{Y}{X}$$</li>
-      <li>폐루프 이득을 대입해요. $$\varepsilon=1-\frac{KA_1}{1+KA_1}$$</li>
-      <li>통분해요. $$\varepsilon=\frac{1}{1+KA_1}$$</li>
-      <li>$KA_1\gg1$이면 분모의 1을 무시해요. $$\varepsilon\approx\frac{1}{KA_1}$$</li>
+      <li><div class="drow"><div>$$\varepsilon=\frac{\frac{1}{K}-\frac{Y}{X}}{\frac{1}{K}}=1-K\frac{Y}{X}$$</div><p class="why">오차를 $\frac{1}{K}$ 대비 모자란 비율로 정의해요.</p></div></li>
+      <li><div class="drow"><div>$$\varepsilon=1-\frac{KA_1}{1+KA_1}$$</div><p class="why">폐루프 이득을 대입해요.</p></div></li>
+      <li><div class="drow"><div>$$\varepsilon=\frac{1}{1+KA_1}$$</div><p class="why">통분해요.</p></div></li>
+      <li><div class="drow"><div>$$\varepsilon\approx\frac{1}{KA_1}$$</div><p class="why">$KA_1\gg1$이면 분모의 1을 무시해요.</p></div></li>
     </ol>
-    <p>$A_1$이 작을수록 $KA_1$이 작아져 오차가 커져요. $A_1\to\infty$이면 오차가 0이 되어 이득이 정확히 $\frac{1}{K}$예요.</p>
+    <p><b>$A_1$이 작을수록 $KA_1$이 작아져 오차가 커져요.</b> $A_1\to\infty$이면 오차가 0이 되어 이득이 정확히 $\frac{1}{K}$예요.</p>
     <div class="table-wrap"><table>
       <tr><th>$A_1$ ($K=0.1$)</th><th>$KA_1$</th><th>$\frac{Y}{X}=\frac{A_1}{1+KA_1}$</th><th>$\varepsilon=\frac{1}{1+KA_1}$</th></tr>
       <tr><td>$10$</td><td>$1$</td><td>$5$</td><td>$50\,\%$</td></tr>
       <tr><td>$100$</td><td>$10$</td><td>$\frac{100}{11}\approx9.09$</td><td>$\frac{1}{11}\approx9.09\,\%$</td></tr>
       <tr><td>$1000$</td><td>$100$</td><td>$\frac{1000}{101}\approx9.90$</td><td>$\frac{1}{101}\approx0.99\,\%$</td></tr>
     </table></div>
+    <h4 class="sub">1% 오차에 필요한 루프 이득</h4>
     <p>교수님은 오차를 1% 정도로 만들려면 $A_1$이 1000 이상이어야 한다고 했어요. 이 숫자에는 폐루프 이득이 약 10, 즉 $K=0.1$이라는 전제가 숨어 있어요.</p>
     <ol class="steps">
-      <li>오차를 1% 이하로 만드는 조건이에요. $$\frac{1}{1+KA_1}\le0.01$$</li>
-      <li>정리하면 루프 이득이 약 100 이상이어야 해요. $$KA_1\ge99$$</li>
-      <li>$K=0.1$을 넣어요. $$A_1\ge\frac{99}{0.1}=990$$</li>
+      <li><div class="drow"><div>$$\frac{1}{1+KA_1}\le0.01$$</div><p class="why">오차를 1% 이하로 만드는 조건이에요.</p></div></li>
+      <li><div class="drow"><div>$$KA_1\ge99$$</div><p class="why">정리하면 루프 이득이 약 100 이상이어야 해요.</p></div></li>
+      <li><div class="drow"><div>$$A_1\ge\frac{99}{0.1}=990$$</div><p class="why">$K=0.1$을 넣어요.</p></div></li>
     </ol>
-    <p>그래서 $\frac{1}{K}=10$이면 $A_1\gtrsim1000$이에요. 일반 기준은 $KA_1\gtrsim100$이므로, 폐루프 이득이 더 큰 $\frac{1}{K}=100$이면 같은 1% 오차에 $A_1\gtrsim10^4$이 필요해요.</p>
+    <p>그래서 $\frac{1}{K}=10$이면 $A_1\gtrsim1000$이에요. <b>일반 기준은 $KA_1\gtrsim100$이므로, 폐루프 이득이 더 큰 $\frac{1}{K}=100$이면 같은 1% 오차에 $A_1\gtrsim10^4$이 필요해요.</b></p>
+    <h4 class="sub">오차의 뜻과 op-amp를 크게 만드는 이유</h4>
     <p>여기의 오차는 이상적인 $\frac{1}{K}$와의 차이예요. $A_1$이 변할 때 폐루프 이득이 몇 % 바뀌는지(변화율)는 다른 질문이므로 두 기준을 섞지 않아요.</p>
-    <p>이 조건 때문에 op-amp의 이득을 아주 크게 설계해요. op-amp를 이득 1000이나 10000짜리 개루프 증폭기로 쓰려는 것이 아니에요. 귀환 안에서 루프 이득을 키워 정확한 폐루프 이득을 얻으려는 거예요.</p>
+    <p>이 조건 때문에 op-amp의 이득을 아주 크게 설계해요. op-amp를 이득 1000이나 10000짜리 개루프 증폭기로 쓰려는 것이 아니에요. <b>귀환 안에서 루프 이득을 키워 정확한 폐루프 이득을 얻으려는 거예요.</b></p>
+    <h4 class="sub">대가와 줄어든 이득 되찾기</h4>
     <p>대가는 이득이에요. 폐루프 이득 $\frac{A_1}{1+KA_1}$은 개루프 이득 $A_1$보다 $1+KA_1$배 작아요. 위 예에서는 $1000$이 약 $9.90$으로 $101$배 줄었어요.</p>
-    <p>그럼 처음부터 $A_1$ 없이 $K$만 쓰면 될까요? $K$는 수동 소자(저항·커패시터)의 비라서 1보다 작아 증폭을 할 수 없어요. $A_1$이 있어야 증폭이 되고, 귀환은 그 이득이 $A_1$이 아니라 $\frac{1}{K}$로 정해지게 해 줘요.</p>
+    <p>그럼 처음부터 $A_1$ 없이 $K$만 쓰면 될까요? $K$는 수동 소자(저항·커패시터)의 비라서 1보다 작아 증폭을 할 수 없어요. <b>$A_1$이 있어야 증폭이 되고, 귀환은 그 이득이 $A_1$이 아니라 $\frac{1}{K}$로 정해지게 해 줘요.</b></p>
     <p>줄어든 이득은 쉽게 되찾아요. 정확한 이득 10짜리 단을 세 개 이으면 돼요.</p>
     $$10\times10\times10=1000$$
     <p>반대로 이득 1000짜리 증폭기 하나를 귀환 없이 정확하게 만드는 것은 어려워요.</p>
@@ -845,8 +881,11 @@
   <div class="layer warn">
     <span class="layer-title">꼭 기억해요</span>
     <blockquote>루프 게인이 1보다 굉장히 커야 됩니다.</blockquote>
-    <blockquote>A1이 작으면 작을수록 오차가 커지는 거예요.</blockquote>
     <p>"1% 오차에 $A_1$이 1000 이상"은 폐루프 이득이 약 10일 때의 숫자예요. 일반 기준은 $KA_1\gtrsim100$이에요.</p>
+  </div>
+  <div class="quiz after">
+    <p class="q">확인해 봐요. 목표 폐루프 이득이 $\frac{1}{K}=20$($K=0.05$)일 때 $\frac{1}{K}$와의 오차 $\varepsilon$를 $1\,\%$ 이하로 만들려면 개루프 이득 $A_1$은 최소 얼마여야 하나요?</p>
+    <details><summary>답 보기</summary><p>$A_1\ge1980$(약 $2000$ 이상)이어야 해요. $\frac{1}{1+KA_1}\le0.01$에서 $KA_1\ge99$이고, $K=0.05$를 넣으면 $A_1\ge\frac{99}{0.05}=1980$이에요.</p></details>
   </div>
   <div class="sum" hidden>
     <p class="sum-lead">이득이 $\frac{1}{K}$에 가까우려면 루프 이득 $KA_1$이 1보다 훨씬 커야 하고, 그 대가로 이득은 $1+KA_1$배 줄어요.</p>
@@ -872,16 +911,20 @@
     <p>작은 예시부터 적용해요. 피드백 팩터(귀환율) $K=0.09$, 개루프 저주파 이득 $A_0=100\,[\mathrm{V/V}]$이면 루프 이득은 $KA_0=9$이고 귀환 배수는 $1+KA_0=10$이에요. 폐루프 저주파 이득은 $100/10=10\,[\mathrm{V/V}]$로 40 dB에서 20 dB로 내려가고, 극점은 $\omega_0$에서 $10\omega_0$로 올라가요. 그래서 이득이 일정하게 유지되는 주파수 범위, 즉 대역폭이 10배 넓어져요. 이것이 대역폭 확장(bandwidth extension)이에요.</p>
     <ol class="steps">
       <li><p><strong>개루프를 단일 극점(single pole) 시스템으로 둬요.</strong> 저주파 이득이 $A_0$이고 극점이 $\omega_0$ 하나뿐인 증폭기예요. 영점이 없으므로 $\omega_0$가 −3 dB 대역폭이에요.</p>$$A(s)=\frac{A_0}{1+s/\omega_0}$$</li>
-      <li><p><strong>폐루프 식에 넣어요.</strong> 분자는 개루프 이득 $A(s)$이고, 분모의 $KA(s)$가 루프 이득이에요.</p>$$\frac{Y}{X}(s)=\frac{A(s)}{1+KA(s)}$$$$\frac{Y}{X}(s)=\frac{\dfrac{A_0}{1+s/\omega_0}}{1+K\dfrac{A_0}{1+s/\omega_0}}$$</li>
-      <li><p><strong>분자와 분모에 $1+s/\omega_0$를 곱해요.</strong></p>$$\frac{Y}{X}(s)=\frac{A_0}{1+KA_0+s/\omega_0}$$</li>
+      <li><div class="drow"><div>$$\frac{Y}{X}(s)=\frac{A(s)}{1+KA(s)}$$ $$\frac{Y}{X}(s)=\frac{\dfrac{A_0}{1+s/\omega_0}}{1+K\dfrac{A_0}{1+s/\omega_0}}$$</div><p class="why"><strong>폐루프 식에 넣어요.</strong> 분자는 개루프 이득 $A(s)$이고, 분모의 $KA(s)$가 루프 이득이에요.</p></div></li>
+      <li><div class="drow"><div>$$\frac{Y}{X}(s)=\frac{A_0}{1+KA_0+s/\omega_0}$$</div><p class="why"><strong>분자와 분모에 $1+s/\omega_0$를 곱해요.</strong></p></div></li>
       <li><p><strong>분자와 분모를 $1+KA_0$로 나눠요.</strong> 상수항을 1로 만들고 $s$ 항을 앞으로 빼면 다시 단일 극점 꼴이 돼요.</p>$$\frac{Y}{X}(s)=\frac{\dfrac{A_0}{1+KA_0}}{1+\dfrac{s}{(1+KA_0)\omega_0}}$$</li>
-      <li><p><strong>저주파 이득을 읽어요.</strong> $s\to0$이면 분모가 1이에요. 저주파 이득은 $1+KA_0$배 줄어요.</p>$$\frac{Y}{X}(0)=\frac{A_0}{1+KA_0}$$</li>
+      <li><div class="drow"><div>$$\frac{Y}{X}(0)=\frac{A_0}{1+KA_0}$$</div><p class="why"><strong>저주파 이득을 읽어요.</strong> $s\to0$이면 분모가 1이에요. 저주파 이득은 $1+KA_0$배 줄어요.</p></div></li>
       <li><p><strong>극점을 읽어요.</strong> 극점은 분모를 0으로 만드는 $s$예요. 그 크기는 원래 $\omega_0$보다 같은 $1+KA_0$배 높아요.</p>$$\omega_{p,\mathrm{closed}}=(1+KA_0)\omega_0$$</li>
       <li><p><strong>두 배수를 함께 봐요.</strong> 이득을 나눈 배수와 극점을 곱한 배수가 같아서, 평탄 이득과 대역폭의 곱은 귀환 전과 같은 $A_0\omega_0$예요.</p></li>
     </ol>
-    <p>슬라이드의 문장도 같은 뜻이에요. 음귀환은 이득을 $(1+KA_0)$배 낮추지만 대역폭을 같은 양만큼 넓혀요. 실제 크기 곡선은 꺾은선이 아니라 부드럽게 변하고, 극점에서 평탄 이득보다 약 3 dB 낮아요.</p>
+    <p>슬라이드의 문장도 같은 뜻이에요. <b>음귀환은 이득을 $(1+KA_0)$배 낮추지만 대역폭을 같은 양만큼 넓혀요.</b> 실제 크기 곡선은 꺾은선이 아니라 부드럽게 변하고, 극점에서 평탄 이득보다 약 3 dB 낮아요.</p>
   </div>
-  <div class="layer prof"><span class="layer-title">교수님 말씀</span><p>교수님은 개루프를 극점 하나인 시스템으로 두고, 칠판에서 폐루프 식에 대입한 뒤 분자·분모를 $1+KA_0$로 나눠 끝까지 정리했어요. 극점을 읽는 기준도 짚었어요.</p><blockquote>“폴 주파수는 분모를 0으로 만드는 거잖아요”</blockquote><p>결과를 그래프로 다시 읽어 줬어요.</p><blockquote>“원래는 ω0에서 게인이 떨어지는데, 이제는 … 루프 게인만큼 더 높은 곳에서 게인이 떨어지죠”</blockquote><blockquote>“1 + 루프 게인만큼 대역폭이 더 증가하더라”</blockquote></div>
+  <div class="layer prof"><span class="layer-title">교수님 말씀</span><p>교수님은 개루프를 극점 하나인 시스템으로 두고, 칠판에서 폐루프 식에 대입한 뒤 분자·분모를 $1+KA_0$로 나눠 끝까지 정리했어요. 극점을 읽는 기준도 짚었어요.</p><blockquote>“폴 주파수는 분모를 0으로 만드는 거잖아요”</blockquote><p>결과를 그래프로 다시 읽어 줬어요.</p><blockquote>“원래는 ω0에서 게인이 떨어지는데, 이제는 … 1 + 루프 게인만큼 대역폭이 더 증가하더라”</blockquote></div>
+  <div class="quiz after">
+    <p class="q">확인해 봐요. 저주파 이득이 $A_0=80\,[\mathrm{V/V}]$이고 극점이 $\omega_0$인 단일 극점 증폭기에 $K=0.05$인 음귀환을 걸면, 폐루프 저주파 이득과 폐루프 극점은 얼마인가요?</p>
+    <details><summary>답 보기</summary><p>폐루프 저주파 이득은 $16\,[\mathrm{V/V}]$, 극점은 $5\omega_0$예요. $KA_0=0.05\times80=4$이므로 $1+KA_0=5$이고, 이득은 $\frac{80}{5}=16$, 극점은 $5\omega_0$가 돼요.</p></details>
+  </div>
   <div class="sum" hidden><p class="sum-lead">음귀환은 단일 극점 증폭기의 저주파 이득을 $1+KA_0$배 낮추고 극점을 같은 배수만큼 올려 대역폭을 넓혀요.</p><p class="panel-label">핵심 식</p><ul class="eq-list"><li><span class="eq-name">개루프</span>$$A(s)=\frac{A_0}{1+s/\omega_0}$$</li><li><span class="eq-name">폐루프 저주파 이득</span>$$\frac{Y}{X}(0)=\frac{A_0}{1+KA_0}$$</li><li><span class="eq-name">폐루프 극점</span>$$\omega_{p,\mathrm{closed}}=(1+KA_0)\omega_0$$</li></ul><p>폐루프 식의 분자는 개루프 이득 $A(s)$이고 루프 이득은 $KA(s)$예요.</p><p>극점은 분모를 0으로 만드는 $s$이고, 단일 극점이면 그 크기가 −3 dB 대역폭이에요.</p><p class="panel-label">용어</p><dl class="terms"><dt>대역폭 확장(bandwidth extension)</dt><dd>음귀환으로 극점이 $1+KA_0$배 높아져 대역폭이 넓어지는 성질</dd><dt>단일 극점(single pole)</dt><dd>전달 함수의 극점이 $\omega_0$ 하나뿐인 저역통과 응답</dd></dl></div>
 </article>
 
@@ -895,7 +938,7 @@
       <li><p><strong>곡선 모양을 확인해요.</strong> 영점이 없는 저역통과 응답이라 세 곡선 모두 평탄한 저주파 이득에서 시작해 각자의 극점 근처에서 부드럽게 꺾여요. 극점 위 고주파 쪽에서는 평탄 이득을 나눈 배수와 극점을 곱한 배수가 같아서, 하강선이 개루프 곡선과 거의 겹쳐요.</p></li>
       <li><p><strong>회로로 극점을 올리려면 어떻게 할까요.</strong> 신호 경로의 노드 극점은 그 노드에서 본 저항과 커패시턴스의 곱으로 정해져요(<a href="../1028/정리노트_1028_CS_Stage_Frequency_Response.html#s1-strategy">1028 정리노트: 극점은 노드마다, 떠 있는 C는 밀러로</a>).</p>$$|\omega_p|=\frac{1}{RC}$$<p>$R$을 줄이면 이득도 같이 줄어요. 예를 들어 CS 단 이득의 크기는 $g_mR_D$예요. $C$를 줄이려면 트랜지스터 크기를 줄여야 하고, 그러면 $g_m$과 전류도 줄어요. 어느 쪽이든 회로를 다시 설계해야 해요.</p></li>
       <li><p><strong>귀환은 회로를 그대로 둬요.</strong> $A_0$를 바꾸지 않고 $K$만 조절해 대역폭을 $1+KA_0$배 넓혀요. 대가는 같은 배수만큼 줄어드는 이득이에요.</p></li>
-      <li><p><strong>줄어든 이득은 캐스케이딩으로 되찾아요.</strong> 캐스케이딩(cascading)은 증폭단을 여러 단 이어 전체 이득을 곱으로 키우는 방법이에요. 이득을 늘리는 일은 쉽고 대역폭을 늘리는 일은 어려우므로, 귀환으로 이득을 대역폭과 바꾸는 것이 이득이에요.</p></li>
+      <li><p><strong>줄어든 이득은 캐스케이딩으로 되찾아요.</strong> 캐스케이딩(cascading)은 증폭단을 여러 단 이어 전체 이득을 곱으로 키우는 방법이에요. <b>이득을 늘리는 일은 쉽고 대역폭을 늘리는 일은 어려우므로, 귀환으로 이득을 대역폭과 바꾸는 것이 이득이에요.</b></p></li>
     </ol>
     <div class="widget" id="widget-bwext"><h4>직접 해 보기: K를 키우면 이득은 내려가고 극점은 오른쪽으로 가요</h4>
   <p class="widget-help">피드백 팩터 $K$ 슬라이더(눈금 0, 0.1, 0.5)를 움직이면 $A_0=100$인 단일 극점 증폭기의 폐루프 크기 응답에서 평탄 이득이 $1+KA_0$배 낮아지고 극점이 $(1+KA_0)\omega_0$로 오른쪽으로 가요. 고주파 하강선은 개루프 곡선(흐린 점선)과 거의 겹쳐요.</p>
@@ -916,7 +959,10 @@
 </div>
   </div>
   <div class="layer prof"><span class="layer-title">교수님 말씀</span><p>교수님은 $K$를 0, 0.1, 0.5로 키운 그래프를 짚으며 이득과 대역폭이 반대로 움직인다고 정리했어요.</p><blockquote>“게인은 줄어드는 것만큼 대역폭은 더 늘어난다”</blockquote><p>대역폭을 늘리는 회로 설계를 묻고 스스로 답했어요.</p><blockquote>“R과 C를 줄여야 되겠죠. R을 줄이든지, C를 줄이든지.”</blockquote><blockquote>“C를 줄이려면 트랜지스터 사이즈를 줄여야 돼요”</blockquote><p>줄어든 이득은 여러 단으로 해결하면 된다고 했어요.</p><blockquote>“게인이 줄어든 만큼 캐스케이딩을 이용해서 여러 단을 쓰면 되겠습니다”</blockquote><p>귀환의 가장 우선적인 목적은 정확한 특성을 얻는 것이고, 대역폭 증가는 또 하나의 장점이라고 정리했어요.</p></div>
-  <div class="layer warn"><span class="layer-title">꼭 기억해요</span><blockquote>“대역폭을 늘리는 건 사실 굉장히 어려운 일이에요”</blockquote><blockquote>“게인을 늘리는 거는 쉽기 때문에 이거는 굉장히 큰 장점입니다”</blockquote><blockquote>“A0를 바꾸지 않고 피드백을 통해서 대역폭을 늘릴 수 있어요”</blockquote><p>귀환은 늘리기 어려운 대역폭을 늘리기 쉬운 이득과 바꾸는 거래예요.</p></div>
+  <div class="quiz after">
+    <p class="q">확인해 봐요. 위젯의 예시처럼 개루프 저주파 이득이 $A_0=100\,[\mathrm{V/V}]$일 때 피드백 팩터 $K=0.19$로 키우면 폐루프 평탄 이득[V/V]과 극점은 얼마가 되나요?</p>
+    <details><summary>답 보기</summary><p>평탄 이득은 $5\,[\mathrm{V/V}]$, 극점은 $20\omega_0$가 돼요. $1+KA_0=1+0.19\times100=20$이므로 이득은 $\frac{100}{20}=5\,[\mathrm{V/V}]$, 극점은 $20\omega_0$예요.</p></details>
+  </div>
   <div class="sum" hidden><p class="sum-lead">피드백 팩터 $K$를 키우면 평탄 이득은 $1+KA_0$배 낮아지고 대역폭은 같은 배수로 넓어져요.</p><p class="panel-label">핵심 식</p><ul class="eq-list"><li><span class="eq-name">$K=0.1$의 극점</span>$$\omega_{p,\mathrm{closed}}=(1+0.1A_0)\omega_0$$</li><li><span class="eq-name">$K=0.5$의 극점</span>$$\omega_{p,\mathrm{closed}}=(1+0.5A_0)\omega_0$$</li></ul><p>극점 위 고주파 하강선은 개루프 곡선과 거의 겹쳐요.</p><p>$R$이나 $C$를 줄여 극점을 올리려면 회로를 다시 설계해야 해요.</p><p>귀환은 $A_0$를 그대로 두고 $K$만 조절해 대역폭을 넓혀요.</p><p>줄어든 이득은 캐스케이딩으로 되찾아요.</p><p class="panel-label">용어</p><dl class="terms"><dt>피드백 팩터(귀환율, feedback factor)</dt><dd>출력에서 입력으로 되돌리는 비율 $K$</dd><dt>캐스케이딩(cascading)</dt><dd>증폭단을 여러 단 이어 이득을 곱으로 키우는 방법</dd></dl></div>
 </article>
     </section>
@@ -969,20 +1015,22 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <h4 class="sub">부호가 뒤집히면 차이가 커져요</h4>
     <p>전방 증폭기 $A_1$과 피드백 팩터(귀환율) $K$로 만든 음귀환의 대가는 두 가지예요. 하나는 이득이 $1+KA_1$배 줄어드는 것이에요(<a href="#s1-large-loop-gain">루프 이득이 커야 하고, 그 대가로 이득은 줄어요</a>). 다른 하나는 회로가 불안정(unstable)해져 발진(oscillation)할 수 있다는 것이에요.</p>
     <p>비교부는 입력 $X$에서 귀환 신호 $X_F$를 빼서 전방 증폭기 $A_1$에 넣어요.</p>
     $$E=X-X_F$$
     <p>먼저 그림의 크기 예시에 적용해요. 입력 $X=1\,\mathrm{mV}$와 같은 위상으로 $X_F=0.9\,\mathrm{mV}$가 돌아오면 차이가 작아요.</p>
     $$E=1-0.9=0.1\,\mathrm{mV}$$
-    <p>같은 크기가 부호만 뒤집혀 $X_F=-0.9\,\mathrm{mV}$로 돌아오면 차이가 입력보다 커져요.</p>
+    <p><b>같은 크기가 부호만 뒤집혀 $X_F=-0.9\,\mathrm{mV}$로 돌아오면 차이가 입력보다 커져요.</b></p>
     $$E=1-(-0.9)=1.9\,\mathrm{mV}$$
+    <h4 class="sub">왜 위상이 180° 밀리나요</h4>
     <p>부호가 왜 뒤집히는지는 위상으로 설명해요.</p>
     <ol class="steps">
-      <li>사인파는 위상이 180° 밀리면 부호만 뒤집힌 같은 파형이에요. $$\sin(\omega t-180^\circ)=-\sin\omega t$$</li>
+      <li><div class="drow"><div>$$\sin(\omega t-180^\circ)=-\sin\omega t$$</div><p class="why">사인파는 위상이 180° 밀리면 부호만 뒤집힌 같은 파형이에요.</p></div></li>
       <li>귀환 신호는 $A_1$과 $K$를 거쳐 루프를 한 바퀴 돌아와요. 저주파에서는 입력과 같은 위상으로 돌아오도록 음귀환을 설계해요.</li>
       <li>주파수가 올라가면 증폭기의 극점(pole)에서 크기뿐 아니라 위상도 늦어지는 위상 이동(phase shift)이 생겨요. 극점은 <a href="#s2-pole-shift">극점이 (1+루프 이득)배 높아져요</a>에서 본 $\omega_0$ 같은 주파수예요.</li>
       <li>어떤 주파수에서 루프 한 바퀴의 위상 이동이 180°가 되면 그 주파수의 $X_F$는 부호가 뒤집혀 $-X_F$로 돌아와요. $$E=X-(-X_F)=X+X_F$$</li>
-      <li>빼기가 더하기가 되었으니 이 주파수에서는 양귀환(positive feedback)이에요. 더해진 신호가 다시 증폭되어 돌아오고 또 더해지면서 신호가 점점 커지는 것이 발진이에요.</li>
+      <li><b>빼기가 더하기가 되었으니 이 주파수에서는 양귀환(positive feedback)이에요.</b> 더해진 신호가 다시 증폭되어 돌아오고 또 더해지면서 신호가 점점 커지는 것이 발진이에요.</li>
       <li>발진하면 신호를 넣지 않아도 원치 않는 신호가 출력에 나와요. 이런 회로는 증폭기로 쓸 수 없어요.</li>
     </ol>
     <div class="table-wrap"><table>
@@ -992,7 +1040,8 @@
       <tr><td>출력</td><td>정해진 이득으로 증폭돼요</td><td>점점 커져 발진해요</td></tr>
       <tr><td>쓰임</td><td>증폭기</td><td>증폭기로 못 써요. 오실레이터는 일부러 이용해요</td></tr>
     </table></div>
-    <p>일부러 양귀환을 쓰는 회로도 있어요. 신호를 만드는 회로인 오실레이터(oscillator, 발진기)는 발진을 이용해 신호를 만들어요. 증폭기에서는 발진이 나면 안 돼요.</p>
+    <h4 class="sub">발진이 쓰이는 곳과 이 과목의 범위</h4>
+    <p>일부러 양귀환을 쓰는 회로도 있어요. 신호를 만드는 회로인 오실레이터(oscillator, 발진기)는 발진을 이용해 신호를 만들어요. <b>증폭기에서는 발진이 나면 안 돼요.</b></p>
     <p>그래서 실제 귀환 증폭기에는 안정성(stability)을 지키는 조치가 필요할 수 있어요. 어떤 조건에서 발진하는지 따지는 안정성 분석은 이 과목에서 다루지 않아요.</p>
   </div>
   <div class="layer prof">
@@ -1005,6 +1054,10 @@
     <p>수업 중 강의실 마이크에서 난 소리를 예로 들었어요. 소리가 마이크로 계속 다시 들어가 같은 소리가 증폭되면, 아무도 말하지 않아도 소리가 나는 발진이 돼요.</p>
     <blockquote>앰프에서는 발진이 나면 안 되죠.</blockquote>
     <p>신호를 만드는 회로는 일부러 발진을 이용한다고 덧붙였어요.</p>
+  </div>
+  <div class="quiz after">
+    <p class="q">확인해 봐요. 입력 $X=2\,\mathrm{mV}$일 때 크기 $1.5\,\mathrm{mV}$의 귀환 신호가 같은 위상($X_F=1.5\,\mathrm{mV}$)으로 돌아올 때와 루프 위상이 $180^\circ$ 밀려($X_F=-1.5\,\mathrm{mV}$) 돌아올 때 비교부 출력 $E$는 각각 얼마인가요?</p>
+    <details><summary>답 보기</summary><p>같은 위상이면 $E=2-1.5=0.5\,\mathrm{mV}$로 작아지고, $180^\circ$ 밀려 부호가 뒤집히면 $E=2-(-1.5)=3.5\,\mathrm{mV}$로 입력보다 커져 발진할 수 있어요.</p></details>
   </div>
   <div class="sum" hidden>
     <p class="sum-lead">루프를 한 바퀴 돈 위상이 180° 밀리면 음귀환이 양귀환이 되어 발진하고, 발진하는 회로는 증폭기로 쓸 수 없어요.</p>
@@ -1039,9 +1092,10 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <h4 class="sub">네 형태의 이득 정의</h4>
     <p>입력의 종류 두 가지(전압, 전류)와 출력의 종류 두 가지(전압, 전류)를 짝지으면 증폭기는 네 가지 형태(type)가 돼요.</p>
     <p>그림의 예에 먼저 적용해요. 발광 다이오드(LED)는 흐르는 전류가 밝기를 정해요. 밝기를 조절하는 증폭기는 입력 전압의 크기에 따라 다이오드에 흘릴 출력 전류를 바꿔야 하므로, 입력은 전압이고 출력은 전류인 트랜스컨덕턴스 증폭기예요.</p>
-    <p>네 형태의 이득은 모두 출력을 입력으로 나눈 비예요.</p>
+    <p><b>네 형태의 이득은 모두 출력을 입력으로 나눈 비예요.</b></p>
     $$A_v=\frac{v_{out}}{v_{in}}$$
     $$A_I=\frac{i_{out}}{i_{in}}$$
     $$G_m=\frac{i_{out}}{v_{in}}$$
@@ -1049,9 +1103,11 @@
     <p>전압 증폭기(voltage amplifier)의 $A_v$와 전류 증폭기(current amplifier)의 $A_I$는 같은 종류의 양끼리 나눈 비라서 단위가 $\mathrm{V/V}$, $\mathrm{A/A}$예요.</p>
     <p>트랜스컨덕턴스 증폭기(transconductance amplifier)의 $G_m$은 전류를 전압으로 나눈 비라서 컨덕턴스(저항의 역수)와 단위가 같아요($\mathrm{A/V}=\mathrm{S}$).</p>
     <p>트랜스임피던스 증폭기(transimpedance amplifier)의 $R_O$는 전압을 전류로 나눈 비라서 저항과 단위가 같아요($\mathrm{V/A}=\Omega$).</p>
+    <h4 class="sub">트랜스(trans-)의 뜻과 기호 구별</h4>
     <p>같은 노드의 전압과 전류의 비는 그 노드의 저항이에요. 예를 들어 $v_{in}/i_{in}$은 입력저항 $R_{in}$이에요. $G_m$과 $R_O$는 입력 쪽 양과 출력 쪽 양, 즉 서로 다른 노드의 양을 잇는 비라서 "건너간다, 바뀐다"는 뜻의 트랜스(trans-)를 붙여 트랜스컨덕턴스, 트랜스임피던스라고 불러요.</p>
     <p>트랜지스터의 $g_m$도 게이트 전압의 변화가 드레인 전류의 변화를 정하는 비라서 트랜스컨덕턴스라고 불러요(<a href="../0904/정리노트_0904_MOS_Small_Signal_Model.html#s1-gm">0904 노트의 트랜스컨덕턴스</a>). 그래서 트랜지스터는 트랜스컨덕턴스 증폭기의 대표적인 예예요.</p>
-    <p>기호를 구별해요. 형태의 이득 $G_m$(대문자)과 소자의 $g_m$은 다른 양이고, 트랜스임피던스 이득 $R_O$(대문자)와 트랜지스터의 출력저항 $r_O$도 다른 양이에요.</p>
+    <p>기호를 구별해요. <b>형태의 이득 $G_m$(대문자)과 소자의 $g_m$은 다른 양이고, 트랜스임피던스 이득 $R_O$(대문자)와 트랜지스터의 출력저항 $r_O$도 다른 양이에요.</b></p>
+    <h4 class="sub">이상적인 입력저항과 출력저항</h4>
     <p>각 형태가 신호를 잘 받고 잘 내보내려면 입력저항 $R_{in}$과 출력저항 $R_{out}$이 정해진 쪽으로 가야 해요. 작은 예부터 봐요. 내부 저항 $R_S=1\,\mathrm{k\Omega}$인 전압원 $v_s$를 증폭기 입력에 이으면 $R_S$와 $R_{in}$이 전압을 나눠 가져요.</p>
     $$v_{in}=\frac{R_{in}}{R_S+R_{in}}v_s$$
     <p>$R_{in}=99\,\mathrm{k\Omega}$이면 전원 전압을 거의 다 받아요.</p>
@@ -1072,7 +1128,7 @@
       <tr><td>트랜스컨덕턴스 증폭기</td><td>$G_m=i_{out}/v_{in}$</td><td>$\infty$</td><td>$\infty$</td></tr>
       <tr><td>트랜스임피던스 증폭기</td><td>$R_O=v_{out}/i_{in}$</td><td>$0$</td><td>$0$</td></tr>
     </table></div>
-    <p>표는 입력의 종류가 $R_{in}$을, 출력의 종류가 $R_{out}$을 정한다는 규칙 하나로 읽어요. 전압이면 받는 쪽은 $\infty$, 내보내는 쪽은 $0$이고, 전류면 그 반대예요.</p>
+    <p>표는 입력의 종류가 $R_{in}$을, 출력의 종류가 $R_{out}$을 정한다는 규칙 하나로 읽어요. <b>전압이면 받는 쪽은 $\infty$, 내보내는 쪽은 $0$이고, 전류면 그 반대예요.</b></p>
     <p>형태를 나누는 이유는 귀환에서 출력의 무엇을 감지하고 입력에서 무엇을 뺄지가 이 형태로 정해지기 때문이에요(<a href="#s5-sense-return">감지와 반송이 귀환 구조를 정해요</a>).</p>
   </div>
   <div class="layer prof">
@@ -1086,6 +1142,10 @@
     <p>네 형태가 모두 쓰이는 예로 발광 다이오드를 들었어요. 빛을 내려면 다이오드에 전류를 흘려야 하므로, 입력 전압의 크기에 따라 출력 전류를 바꿔 빛의 밝기를 조절해요.</p>
     <blockquote>전압을 잘 받으려면 입력 저항이 커야 되죠.</blockquote>
     <p>전류를 잘 받으려면 반대로 입력 저항이 작아야 한다고 했어요. 출력 쪽은 전압을 내보낼 때는 전압원을, 전류를 내보낼 때는 이상적인 전류원을 떠올리면 된다고 했어요.</p>
+  </div>
+  <div class="quiz after">
+    <p class="q">확인해 봐요. 내부 저항이 $R_S=2\,\mathrm{k\Omega}$인 전압원 $v_s$를 입력저항 $R_{in}=18\,\mathrm{k\Omega}$인 전압 증폭기에 이으면 신호원 전압 중 몇 배($\frac{v_{in}}{v_s}$)가 입력에 걸리나요?</p>
+    <details><summary>답 보기</summary><p>$0.9$배($90\,\%$)가 걸려요. $v_{in}=\frac{R_{in}}{R_S+R_{in}}v_s$에서 $\frac{v_{in}}{v_s}=\frac{18}{2+18}=0.9$예요.</p></details>
   </div>
   <div class="sum" hidden>
     <p class="sum-lead">증폭기는 입력과 출력이 각각 전압이냐 전류냐에 따라 네 형태로 나뉘고, 이득은 모두 출력을 입력으로 나눈 비예요.</p>
@@ -1119,6 +1179,7 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <h4 class="sub">작은 부하에 전압을 줄 때 소스 팔로워가 필요한 이유</h4>
     <p>그림의 스피커 예에 먼저 적용해요. 전압을 내보내는 출력은 개방 출력 전압 $v_{oc}$에 출력저항 $R_{out}$이 직렬로 붙은 전압원처럼 보이므로, 부하 $R_L$에는 그 일부만 걸려요.</p>
     $$\frac{v_L}{v_{oc}}=\frac{R_L}{R_{out}+R_L}$$
     <p>공통 소스(common-source) 단만 쓰면 $\lambda=0$에서 출력저항이 $R_D$예요. $R_D=10\,\mathrm{k\Omega}$에 작은 부하 $R_L=1\,\mathrm{k\Omega}$을 달면 개방 출력 전압의 약 9%만 부하에 걸려요.</p>
@@ -1126,10 +1187,10 @@
     <p>소스 팔로워(source follower)를 붙여 출력저항을 $1/g_{m2}$ 정도로 낮추면 대부분이 걸려요. $g_{m2}=10\,\mathrm{mS}$이면 출력저항과 비율은 다음과 같아요.</p>
     $$\frac{1}{g_{m2}}=\frac{1}{10\,\mathrm{mS}}=0.1\,\mathrm{k\Omega}$$
     $$\frac{v_L}{v_{oc}}=\frac{1}{0.1+1}=\frac{10}{11}\approx0.91$$
-    <p>스피커처럼 저항이 더 작은 부하일수록 두 경우의 차이가 커져요.</p>
+    <p><b>스피커처럼 저항이 더 작은 부하일수록 두 경우의 차이가 커져요.</b></p>
     <p>이 토픽의 $R_{in}$, $R_{out}$은 저주파 소신호 값이에요. $1/g_m$ 꼴의 값은 몸체효과를 무시하고 $g_mr_O\gg1$인 수업 기본 근사의 값이고, 공통 게이트 입력은 드레인 쪽 저항이 $r_O$보다 충분히 작다는 조건도 더해요. 슬라이드는 $R_{out}=1/g_{m2}$, $R_{in}=1/g_{m1}$처럼 등호로 적지만 이 근사 아래의 값이므로 $\approx$로 읽어요.</p>
     <p>입력 단 두 가지(게이트, 공통 게이트의 소스)와 출력 단 두 가지(소스 팔로워, 드레인)를 짝지은 순서로 슬라이드의 네 회로를 봐요.</p>
-    <p><strong>(a) 전압 증폭기: 공통 소스 $M_1$ + 소스 팔로워 $M_2$</strong></p>
+    <h4 class="sub">(a) 전압 증폭기: 공통 소스 $M_1$ + 소스 팔로워 $M_2$</h4>
     <figure class="figure">
       <svg id="fig-ex-voltage" viewBox="0 0 380 222" role="img" aria-label="전압 증폭기 회로예요. 왼쪽 입력 v in이 공통 소스 M1의 게이트로 들어가고, M1 소스는 접지, 드레인은 R D를 거쳐 위쪽 V DD에 이어져요. M1 드레인 노드는 오른쪽 소스 팔로워 M2의 게이트에 이어지고, M2 드레인은 V DD, 소스는 아래 전류원을 거쳐 접지로 가요. M2 소스가 오른쪽 출력 v out이에요. 입력 아래에는 오른쪽을 향한 화살표와 R in = 무한대, 출력 아래에는 왼쪽을 향한 화살표와 R out 약 1/g m2를 적었어요."><path class="fig-ink" d="M130 30 H250"/><circle class="fig-dot" cx="250" cy="30" r="3.6" data-node="vdd" data-node-color="red"/><text class="fig-text fig-math" x="262" y="35" text-anchor="start" font-size="14" data-node="vdd" data-node-color="red">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text><path class="fig-ink" d="M130 30 V44 L137 47.5 L123 54.5 L137 61.5 L123 68.5 L137 75.5 L123 82.5 L130 86 V100"/><text class="fig-text fig-math" x="114" y="70" text-anchor="end" font-size="14">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text><path class="fig-ink" d="M104 135 V165"/><path class="fig-ink" d="M108 132 V168"/><path class="fig-ink" d="M108 138 H130 V100"/><path class="fig-ink" d="M108 162 H130 V190"/><path class="fig-ink" d="M122 157 l6 5 l-6 5"/><path class="fig-ink" d="M130 190 v8 m-9 0 h18 m-14 4 h10 m-6 4 h2"/><text class="fig-text fig-math" x="146" y="172" text-anchor="start" font-size="14">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><path class="fig-ink" d="M40 150 H104"/><circle class="fig-dot" cx="40" cy="150" r="3.6" data-node="in" data-node-color="blue"/><text class="fig-text fig-math" x="40" y="131" text-anchor="middle" font-size="14" data-node="in" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><path class="fig-accent" d="M42 168 V176 H88 m-7 -5 l7 5 l-7 5"/><text class="fig-text fig-math" x="42" y="202" text-anchor="start" font-size="14">R<tspan baseline-shift="sub" font-size="78%">in</tspan> = ∞</text><path class="fig-ink" d="M204 85 V115"/><path class="fig-ink" d="M208 82 V118"/><path class="fig-ink" d="M208 88 H230 V30"/><path class="fig-ink" d="M208 112 H230 V140"/><path class="fig-ink" d="M222 107 l6 5 l-6 5"/><path class="fig-ink" d="M130 100 H204"/><circle class="fig-dot" cx="130" cy="100" r="3.6" data-node="x" data-node-color="red"/><text class="fig-text fig-math" x="243" y="76" text-anchor="start" font-size="14">M<tspan baseline-shift="sub" font-size="78%">2</tspan></text><path class="fig-ink" d="M230 140 V157 M230 183 V200"/><circle class="fig-ink" cx="230" cy="170" r="13"/><path class="fig-ink" d="M230 162 V178 m-5 -5 l5 5 l5 -5"/><path class="fig-ink" d="M230 200 v8 m-9 0 h18 m-14 4 h10 m-6 4 h2"/><path class="fig-ink" d="M230 140 H312"/><circle class="fig-dot" cx="230" cy="140" r="3.6" data-node="out" data-node-color="blue"/><circle class="fig-dot" cx="312" cy="140" r="3.6" data-node="out" data-node-color="blue"/><text class="fig-text fig-math" x="312" y="121" text-anchor="middle" font-size="14" data-node="out" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-accent" d="M310 156 V164 H262 m7 -5 l-7 5 l7 5"/><text class="fig-text fig-math" x="256" y="192" text-anchor="start" font-size="14">R<tspan baseline-shift="sub" font-size="78%">out</tspan> ≈ 1/g<tspan baseline-shift="sub" font-size="78%">m2</tspan></text></svg>
       <figcaption>공통 소스 $M_1$이 게이트로 전압을 받아 증폭하고, 소스 팔로워 $M_2$가 낮은 출력저항으로 내보내요.</figcaption>
@@ -1137,27 +1198,27 @@
     <ul>
       <li>입력: $M_1$의 게이트로 받아요. 저주파에서는 게이트로 전류가 흐르지 않으므로 $R_{in}=\infty$예요.</li>
       <li>출력: 소스 팔로워 $M_2$의 소스에서 내보내요. $$R_{out}\approx\frac{1}{g_{m2}}$$</li>
-      <li>공통 소스 단만으로도 전압은 증폭돼요. 하지만 출력저항이 $R_D$로 커서 작은 부하를 달면 출력 전압이 떨어지므로 이상적인 전압 증폭기와는 거리가 있어요. 그래서 전압 증폭은 $M_1$이 맡고, $M_2$는 출력저항을 낮추는 일을 맡아요.</li>
+      <li>공통 소스 단만으로도 전압은 증폭돼요. 하지만 출력저항이 $R_D$로 커서 작은 부하를 달면 출력 전압이 떨어지므로 이상적인 전압 증폭기와는 거리가 있어요. <b>그래서 전압 증폭은 $M_1$이 맡고, $M_2$는 출력저항을 낮추는 일을 맡아요.</b></li>
     </ul>
-    <p><strong>(c) 트랜스컨덕턴스 증폭기: 트랜지스터 $M_1$ 하나</strong></p>
+    <h4 class="sub">(c) 트랜스컨덕턴스 증폭기: 트랜지스터 $M_1$ 하나</h4>
     <figure class="figure">
       <svg id="fig-ex-gm" viewBox="0 0 340 214" role="img" aria-label="트랜스컨덕턴스 증폭기 회로예요. 왼쪽 입력 v in이 트랜지스터 M1의 게이트로 들어가고 소스는 접지예요. M1 드레인은 위로 올라가 오른쪽 출력 단자로 이어지고, 그 도선 위에 왼쪽(드레인 쪽)을 향한 i out 화살표가 있어요. 입력 아래에는 오른쪽을 향한 화살표와 R in = 무한대, 출력 도선 위에는 왼쪽을 향한 화살표와 R out = r O를 적었어요."><path class="fig-ink" d="M124 125 V155"/><path class="fig-ink" d="M128 122 V158"/><path class="fig-ink" d="M128 128 H150 V80"/><path class="fig-ink" d="M128 152 H150 V180"/><path class="fig-ink" d="M142 147 l6 5 l-6 5"/><path class="fig-ink" d="M150 180 v8 m-9 0 h18 m-14 4 h10 m-6 4 h2"/><text class="fig-text fig-math" x="166" y="162" text-anchor="start" font-size="14">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><path class="fig-ink" d="M50 140 H124"/><circle class="fig-dot" cx="50" cy="140" r="3.6" data-node="in" data-node-color="blue"/><text class="fig-text fig-math" x="50" y="121" text-anchor="middle" font-size="14" data-node="in" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><path class="fig-accent" d="M52 158 V166 H98 m-7 -5 l7 5 l-7 5"/><text class="fig-text fig-math" x="52" y="192" text-anchor="start" font-size="14">R<tspan baseline-shift="sub" font-size="78%">in</tspan> = ∞</text><path class="fig-ink" d="M150 80 H300"/><circle class="fig-dot" cx="300" cy="80" r="3.6" data-node="out" data-node-color="red"/><path class="fig-ink" d="M258 75 l-6 5 l6 5"/><text class="fig-text fig-math" x="256" y="106" text-anchor="middle" font-size="14">i<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-accent" d="M298 44 V52 H238 m7 -5 l-7 5 l7 5"/><text class="fig-text fig-math" x="238" y="28" text-anchor="start" font-size="14">R<tspan baseline-shift="sub" font-size="78%">out</tspan> = r<tspan baseline-shift="sub" font-size="78%">O</tspan></text></svg>
       <figcaption>게이트로 전압을 받아 드레인으로 전류를 내보내는 트랜지스터 자체가 트랜스컨덕턴스 증폭기예요.</figcaption>
     </figure>
     <ul>
       <li>입력: 게이트라서 저주파에서 $R_{in}=\infty$예요.</li>
-      <li>출력: 드레인 전류 $i_{out}$을 내보내요. 소스가 접지이므로 드레인에서 들여다보면 트랜지스터의 출력저항 하나만 보여요. $$R_{out}=r_O$$ $\lambda=0$이면 $r_O=\infty$이고, $\lambda$를 고려해도 $r_O$는 커서 전류를 내보내기에 알맞아요.</li>
+      <li>출력: 드레인 전류 $i_{out}$을 내보내요. 소스가 접지이므로 드레인에서 들여다보면 트랜지스터의 출력저항 하나만 보여요. $$R_{out}=r_O$$ <b>$\lambda=0$이면 $r_O=\infty$이고, $\lambda$를 고려해도 $r_O$는 커서 전류를 내보내기에 알맞아요.</b></li>
     </ul>
-    <p><strong>(d) 전류 증폭기: 공통 게이트 $M_1$ 하나</strong></p>
+    <h4 class="sub">(d) 전류 증폭기: 공통 게이트 $M_1$ 하나</h4>
     <figure class="figure">
       <svg id="fig-ex-current" viewBox="0 0 340 260" role="img" aria-label="전류 증폭기 회로예요. 공통 게이트 M1의 게이트는 오른쪽 바이어스 V b에 이어져요. 왼쪽 아래 위쪽을 향한 전류원 i in이 M1 소스로 전류를 넣고, M1 드레인은 위로 올라가 오른쪽 출력 단자로 이어져요. 출력 도선에는 왼쪽(드레인 쪽)을 향한 i out 화살표가 있어요. 입력 노드 아래에는 오른쪽을 향한 화살표와 R in 약 1/g m1, 출력 도선 위에는 왼쪽을 향한 화살표와 R out = 무한대를 적었어요."><path class="fig-ink" d="M176 125 V155"/><path class="fig-ink" d="M172 122 V158"/><path class="fig-ink" d="M172 128 H150 V80"/><path class="fig-ink" d="M172 152 H150 V185"/><path class="fig-ink" d="M158 147 l-6 5 l6 5"/><path class="fig-ink" d="M176 140 H216"/><circle class="fig-dot" cx="216" cy="140" r="3.6" data-node="vb" data-node-color="red"/><text class="fig-text fig-math" x="228" y="145" text-anchor="start" font-size="14" data-node="vb" data-node-color="red">V<tspan baseline-shift="sub" font-size="78%">b</tspan></text><text class="fig-text fig-math" x="132" y="145" text-anchor="end" font-size="14">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><path class="fig-ink" d="M150 80 H300"/><circle class="fig-dot" cx="300" cy="80" r="3.6" data-node="out" data-node-color="red"/><path class="fig-ink" d="M258 75 l-6 5 l6 5"/><text class="fig-text fig-math" x="256" y="106" text-anchor="middle" font-size="14">i<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-accent" d="M298 44 V52 H238 m7 -5 l-7 5 l7 5"/><text class="fig-text fig-math" x="238" y="28" text-anchor="start" font-size="14">R<tspan baseline-shift="sub" font-size="78%">out</tspan> = ∞</text><path class="fig-ink" d="M150 185 H60 V200 M60 226 V240"/><circle class="fig-ink" cx="60" cy="213" r="13"/><path class="fig-ink" d="M60 221 V205 m-5 5 l5 -5 l5 5"/><path class="fig-ink" d="M60 240 v8 m-9 0 h18 m-14 4 h10 m-6 4 h2"/><circle class="fig-dot" cx="150" cy="185" r="3.6" data-node="in" data-node-color="blue"/><text class="fig-text fig-math" x="40" y="218" text-anchor="end" font-size="14">i<tspan baseline-shift="sub" font-size="78%">in</tspan></text><path class="fig-accent" d="M96 202 V210 H140 m-7 -5 l7 5 l-7 5"/><text class="fig-text fig-math" x="96" y="238" text-anchor="start" font-size="14">R<tspan baseline-shift="sub" font-size="78%">in</tspan> ≈ 1/g<tspan baseline-shift="sub" font-size="78%">m1</tspan></text></svg>
       <figcaption>게이트를 바이어스 $V_b$에 고정한 공통 게이트 $M_1$이 소스로 전류를 받아 드레인으로 내보내요.</figcaption>
     </figure>
     <ul>
-      <li>입력: 게이트를 $V_b$에 고정하고 소스로 전류를 받는 공통 게이트(common-gate) 단이에요. 소스에서 들여다본 저항이 작아서 전류를 받기에 알맞아요. $$R_{in}\approx\frac{1}{g_{m1}}$$</li>
+      <li>입력: 게이트를 $V_b$에 고정하고 소스로 전류를 받는 공통 게이트(common-gate) 단이에요. <b>소스에서 들여다본 저항이 작아서 전류를 받기에 알맞아요.</b> $$R_{in}\approx\frac{1}{g_{m1}}$$</li>
       <li>출력: 드레인으로 전류를 내보내요. $\lambda=0$이면 $R_{out}=\infty$이고, $\lambda$를 고려해도 출력저항이 커서 전류를 내보내기에 알맞아요.</li>
     </ul>
-    <p><strong>(b) 트랜스임피던스 증폭기: 공통 게이트 $M_1$ + 소스 팔로워 $M_2$</strong></p>
+    <h4 class="sub">(b) 트랜스임피던스 증폭기: 공통 게이트 $M_1$ + 소스 팔로워 $M_2$</h4>
     <figure class="figure">
       <svg id="fig-ex-transimpedance" viewBox="0 0 400 274" role="img" aria-label="트랜스임피던스 증폭기 회로예요. 왼쪽 아래 위쪽을 향한 전류원 i in이 공통 게이트 M1의 소스로 전류를 넣고, M1 게이트는 바이어스 V b, 드레인은 R D를 거쳐 위쪽 V DD에 이어져요. M1 드레인 노드는 소스 팔로워 M2의 게이트로 이어지고, M2 드레인은 V DD, 소스는 아래 전류원을 거쳐 접지로 가요. M2 소스가 오른쪽 출력 v out이에요. 입력 노드 아래에는 오른쪽을 향한 화살표와 R in 약 1/g m1, 출력 아래에는 왼쪽을 향한 화살표와 R out 약 1/g m2를 적었어요."><path class="fig-ink" d="M150 30 H286"/><circle class="fig-dot" cx="286" cy="30" r="3.6" data-node="vdd" data-node-color="red"/><text class="fig-text fig-math" x="298" y="35" text-anchor="start" font-size="14" data-node="vdd" data-node-color="red">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text><path class="fig-ink" d="M150 30 V44 L157 47.5 L143 54.5 L157 61.5 L143 68.5 L157 75.5 L143 82.5 L150 86 V100"/><text class="fig-text fig-math" x="134" y="70" text-anchor="end" font-size="14">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text><path class="fig-ink" d="M176 135 V165"/><path class="fig-ink" d="M172 132 V168"/><path class="fig-ink" d="M172 138 H150 V100"/><path class="fig-ink" d="M172 162 H150 V200"/><path class="fig-ink" d="M158 157 l-6 5 l6 5"/><path class="fig-ink" d="M176 150 H210"/><circle class="fig-dot" cx="210" cy="150" r="3.6" data-node="vb" data-node-color="blue"/><text class="fig-text fig-math" x="222" y="155" text-anchor="start" font-size="14" data-node="vb" data-node-color="blue">V<tspan baseline-shift="sub" font-size="78%">b</tspan></text><text class="fig-text fig-math" x="132" y="155" text-anchor="end" font-size="14">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><path class="fig-ink" d="M150 200 H60 V214 M60 240 V254"/><circle class="fig-ink" cx="60" cy="227" r="13"/><path class="fig-ink" d="M60 235 V219 m-5 5 l5 -5 l5 5"/><path class="fig-ink" d="M60 254 v8 m-9 0 h18 m-14 4 h10 m-6 4 h2"/><circle class="fig-dot" cx="150" cy="200" r="3.6" data-node="in" data-node-color="blue"/><text class="fig-text fig-math" x="40" y="232" text-anchor="end" font-size="14">i<tspan baseline-shift="sub" font-size="78%">in</tspan></text><path class="fig-accent" d="M96 216 V224 H140 m-7 -5 l7 5 l-7 5"/><text class="fig-text fig-math" x="96" y="252" text-anchor="start" font-size="14">R<tspan baseline-shift="sub" font-size="78%">in</tspan> ≈ 1/g<tspan baseline-shift="sub" font-size="78%">m1</tspan></text><path class="fig-ink" d="M244 85 V115"/><path class="fig-ink" d="M248 82 V118"/><path class="fig-ink" d="M248 88 H270 V30"/><path class="fig-ink" d="M248 112 H270 V150"/><path class="fig-ink" d="M262 107 l6 5 l-6 5"/><path class="fig-ink" d="M150 100 H244"/><circle class="fig-dot" cx="150" cy="100" r="3.6" data-node="x" data-node-color="red"/><text class="fig-text fig-math" x="283" y="76" text-anchor="start" font-size="14">M<tspan baseline-shift="sub" font-size="78%">2</tspan></text><path class="fig-ink" d="M270 150 V167 M270 193 V210"/><circle class="fig-ink" cx="270" cy="180" r="13"/><path class="fig-ink" d="M270 172 V188 m-5 -5 l5 5 l5 -5"/><path class="fig-ink" d="M270 210 v8 m-9 0 h18 m-14 4 h10 m-6 4 h2"/><path class="fig-ink" d="M270 150 H350"/><circle class="fig-dot" cx="270" cy="150" r="3.6" data-node="out" data-node-color="blue"/><circle class="fig-dot" cx="350" cy="150" r="3.6" data-node="out" data-node-color="blue"/><text class="fig-text fig-math" x="350" y="131" text-anchor="middle" font-size="14" data-node="out" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-accent" d="M348 166 V174 H300 m7 -5 l-7 5 l7 5"/><text class="fig-text fig-math" x="296" y="202" text-anchor="start" font-size="14">R<tspan baseline-shift="sub" font-size="78%">out</tspan> ≈ 1/g<tspan baseline-shift="sub" font-size="78%">m2</tspan></text></svg>
       <figcaption>공통 게이트 $M_1$이 전류를 받고, 소스 팔로워 $M_2$가 전압으로 내보내요.</figcaption>
@@ -1165,7 +1226,7 @@
     <ul>
       <li>입력: (d)와 같은 공통 게이트 입력이라 $R_{in}\approx1/g_{m1}$로 작아요.</li>
       <li>출력: (a)와 같은 소스 팔로워 출력이라 $R_{out}\approx1/g_{m2}$로 작아요.</li>
-      <li>전류를 받기 좋은 입력 단과 전압을 내보내기 좋은 출력 단을 이었으므로, 전류를 받아 전압을 내보내는 이상적인 트랜스임피던스 증폭기에 가까워요.</li>
+      <li><b>전류를 받기 좋은 입력 단과 전압을 내보내기 좋은 출력 단을 이었으므로, 전류를 받아 전압을 내보내는 이상적인 트랜스임피던스 증폭기에 가까워요.</b></li>
     </ul>
     <p>(c)와 (d)처럼 드레인으로 내보내는 출력에 부하 저항을 달면 그 양단에 전압 출력이 생기지만, 트랜지스터 자체는 전류원처럼 동작해요.</p>
     <p>네 회로는 받는 쪽과 내보내는 쪽의 조건을 단마다 맞춘 예예요. 각 형태의 이상적인 조건은 <a href="#s4-four-types">입력과 출력이 전압이냐 전류냐</a>에 정리했어요.</p>
@@ -1178,6 +1239,10 @@
     <blockquote>트랜지스터 자체가 트랜스컨덕턴스 앰프예요.</blockquote>
     <p>게이트로 들어가는 입력 임피던스는 무한대이고, 전압을 받아 전류를 내보내며 출력 임피던스는 $r_O$라고 했어요.</p>
     <blockquote>로드 저항을 달게 되면 전압 출력이 나오겠지만, 트랜지스터 자체는 전류원이 되는 거고요.</blockquote>
+  </div>
+  <div class="quiz after">
+    <p class="q">확인해 봐요. 소스 팔로워 $M_2$의 $g_{m2}=4\,\mathrm{mS}$일 때 출력저항 $R_{out}\approx\frac{1}{g_{m2}}$는 얼마이고, $R_L=1\,\mathrm{k\Omega}$ 부하에 개방 출력 전압의 몇 배($\frac{v_L}{v_{oc}}$)가 걸리나요?</p>
+    <details><summary>답 보기</summary><p>$R_{out}\approx250\,\Omega$($0.25\,\mathrm{k\Omega}$)이고 $\frac{v_L}{v_{oc}}=\frac{1}{0.25+1}=0.8$배($80\,\%$)가 걸려요.</p></details>
   </div>
   <div class="sum" hidden>
     <p class="sum-lead">게이트 입력은 전압을, 공통 게이트의 소스 입력은 전류를 받기 좋고, 소스 팔로워 출력은 전압을, 드레인 출력은 전류를 내보내기 좋아요.</p>
@@ -1241,6 +1306,7 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <h4 class="sub">음귀환 시스템의 네 부분</h4>
     <p>강의 자료는 음귀환 시스템을 네 부분으로 나눠요.</p>
     <div class="table-wrap"><table>
       <tr><th>부분</th><th>하는 일</th></tr>
@@ -1251,13 +1317,14 @@
     </table></div>
     <p>신호는 이 네 부분을 차례로 돌아요.</p>
     <ol class="steps">
-      <li>귀환 회로망이 감지한 출력에 $K$를 곱해요. $$X_F=KY$$</li>
-      <li>반송한 $X_F$를 입력에서 빼요. $$E=X-X_F$$</li>
-      <li>피드포워드 시스템이 그 차이를 증폭해 출력을 만들어요. $$Y=A_1E$$</li>
+      <li><div class="drow"><div>$$X_F=KY$$</div><p class="why">귀환 회로망이 감지한 출력에 $K$를 곱해요.</p></div></li>
+      <li><div class="drow"><div>$$E=X-X_F$$</div><p class="why">반송한 $X_F$를 입력에서 빼요.</p></div></li>
+      <li><div class="drow"><div>$$Y=A_1E$$</div><p class="why">피드포워드 시스템이 그 차이를 증폭해 출력을 만들어요.</p></div></li>
     </ol>
-    <p>그래서 귀환을 실제 회로로 만들 때 정할 것은 두 가지예요. 출력을 무엇으로 어떻게 감지할지, 그리고 입력에 무엇으로 어떻게 반송해 뺄지예요.</p>
+    <p><b>그래서 귀환을 실제 회로로 만들 때 정할 것은 두 가지예요. 출력을 무엇으로 어떻게 감지할지, 그리고 입력에 무엇으로 어떻게 반송해 뺄지예요.</b></p>
+    <h4 class="sub">증폭기 형태가 귀환 구조를 정해요</h4>
     <p>먼저 전압 증폭기에 적용해요. op-amp 비반전 증폭기는 출력이 전압이라 저항 분배기가 출력 전압을 감지하고, 입력이 전압이라 귀환 전압을 입력 전압에서 빼요. 감지하는 방법은 <a href="#s5-voltage-sense">전압은 병렬로, 큰 임피던스로 감지해요</a>, 빼는 방법은 <a href="#s6-voltage-return">전압은 입력원과 직렬로 빼요</a>에 있어요.</p>
-    <p>같은 규칙을 네 가지 증폭기 형태에 모두 적용해요. 출력 쪽 신호의 종류가 감지할 양을, 입력 쪽 신호의 종류가 뺄 양을 정해요. 네 형태의 정의는 <a href="#s4-four-types">입력과 출력이 전압이냐 전류냐</a>에 있어요.</p>
+    <p>같은 규칙을 네 가지 증폭기 형태에 모두 적용해요. <b>출력 쪽 신호의 종류가 감지할 양을, 입력 쪽 신호의 종류가 뺄 양을 정해요.</b> 네 형태의 정의는 <a href="#s4-four-types">입력과 출력이 전압이냐 전류냐</a>에 있어요.</p>
     <div class="table-wrap"><table>
       <tr><th>증폭기 형태</th><th>입력</th><th>출력</th><th>감지할 양</th><th>입력에서 뺄 양</th></tr>
       <tr><td>전압 증폭기</td><td>전압</td><td>전압</td><td>출력 전압</td><td>전압</td></tr>
@@ -1265,8 +1332,9 @@
       <tr><td>트랜스컨덕턴스 증폭기</td><td>전압</td><td>전류</td><td>출력 전류</td><td>전압</td></tr>
       <tr><td>트랜스임피던스 증폭기</td><td>전류</td><td>전압</td><td>출력 전압</td><td>전류</td></tr>
     </table></div>
+    <h4 class="sub">맞지 않는 조합은 쓰지 않아요</h4>
     <p>형태와 맞지 않는 조합은 쓰지 않아요. 예를 들어 전압 증폭기에서 출력 전류를 감지하거나 입력에서 전류를 빼면 안 돼요.</p>
-    <p>그래서 네 가지 증폭기 형태에 맞춰 네 가지 귀환 구조가 있어요. 각 구조와 전류를 입력에서 빼는 방법은 다음 시간에 다루고, 제목은 <a href="#s7-next">다음 시간 예고</a>에 있어요.</p>
+    <p><b>그래서 네 가지 증폭기 형태에 맞춰 네 가지 귀환 구조가 있어요.</b> 각 구조와 전류를 입력에서 빼는 방법은 다음 시간에 다루고, 제목은 <a href="#s7-next">다음 시간 예고</a>에 있어요.</p>
     <p>돌아온 신호가 정말 빼지는지, 즉 음귀환이 되는지 따지는 극성은 수업에서 이름만 꺼냈어요. 출력 전류를 감지하는 방법은 <a href="#s5-current-sense">전류는 직렬로, 작은 임피던스로 감지해요</a>에 있어요.</p>
   </div>
   <div class="layer prof">
@@ -1278,12 +1346,9 @@
     <blockquote>볼티지 앰프인데 전류를 센싱해서 전류를 리턴해주면 안 되겠죠.</blockquote>
     <p>전압 증폭기는 출력이 전압이라 전압을 감지하고, 입력이 전압이라 전압으로 빼야 한다는 예로 든 말이에요.</p>
   </div>
-  <div class="layer warn">
-    <span class="layer-title">꼭 기억해요</span>
-    <blockquote>출력을 어떻게 센싱할 것인가, 그리고 입력에 다시 어떻게 전달해서 뺄 것인가, 이게 이제 실제 구조를 결정하는 키 포인트</blockquote>
-    <p>귀환 회로를 보면 감지하는 곳과 빼는 곳을 먼저 찾아요.</p>
-    <blockquote>센싱과 리턴의 구조는 결국 원래 있던 오픈루프 앰프의 타입이 뭐냐에 따라서 결정됩니다.</blockquote>
-    <p>출력이 전압이면 전압, 전류이면 전류를 감지해요. 입력이 전압이면 전압, 전류이면 전류를 빼요.</p>
+  <div class="quiz after">
+    <p class="q">확인해 봐요. 입력이 전류이고 출력이 전압인 트랜스임피던스 증폭기에 음귀환을 걸 때, 귀환 회로망은 출력에서 무엇을 감지하고 입력에서 무엇을 빼야 하나요?</p>
+    <details><summary>답 보기</summary><p>출력 전압을 감지하고 입력에서 전류를 빼야 해요. 출력 쪽 신호의 종류(전압)가 감지할 양을, 입력 쪽 신호의 종류(전류)가 입력에서 뺄 양을 정해요.</p></details>
   </div>
   <div class="sum" hidden>
     <p class="sum-lead">귀환 구조는 출력을 무엇으로 감지하고 입력에서 무엇으로 빼는지로 정해지고, 그 답은 증폭기 형태가 정해요.</p>
@@ -1332,16 +1397,19 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <h4 class="sub">볼트미터로 전압을 재는 방법</h4>
     <p>감지는 재는 것이에요. 두 단자 사이의 전압을 재려면 볼트미터(voltmeter)를 두 단자에 병렬(parallel)로 대요. 보통 한쪽 단자가 접지이므로 재려는 노드와 접지 사이에 대요. 강의 자료는 이를 "전압은 병렬로, 전류는 직렬로 감지한다"로 정리해요.</p>
     <p>먼저 그림의 예에 적용해요. 증폭기 출력을 개방 전압 $V_{oc}$와 출력저항 $R_{out}$으로 보고, 출력 노드에서 감지하는 쪽을 본 입력 임피던스를 $R_{in,F}$라 해요.</p>
     <ol class="steps">
-      <li>병렬로 댄 $R_{in,F}$와 $R_{out}$이 전압을 나눠요. $$V_{out}=V_{oc}\frac{R_{in,F}}{R_{out}+R_{in,F}}$$</li>
+      <li><div class="drow"><div>$$V_{out}=V_{oc}\frac{R_{in,F}}{R_{out}+R_{in,F}}$$</div><p class="why">병렬로 댄 $R_{in,F}$와 $R_{out}$이 전압을 나눠요.</p></div></li>
       <li>$V_{oc}=1\,\mathrm{V}$, $R_{out}=1\,\mathrm{k\Omega}$에 $R_{in,F}=1\,\mathrm{k\Omega}$을 대면 절반으로 떨어져요. $$V_{out}=1\,\mathrm{V}\times\frac{1\,\mathrm{k\Omega}}{1\,\mathrm{k\Omega}+1\,\mathrm{k\Omega}}=0.5\,\mathrm{V}$$</li>
-      <li>$R_{in,F}=99\,\mathrm{k\Omega}$이면 거의 그대로예요. $$V_{out}=1\,\mathrm{V}\times\frac{99\,\mathrm{k\Omega}}{1\,\mathrm{k\Omega}+99\,\mathrm{k\Omega}}=0.99\,\mathrm{V}$$</li>
-      <li>$R_{in,F}$가 무한대로 가면 감지해도 출력 전압이 바뀌지 않아요. $$V_{out}\to V_{oc}$$</li>
+      <li><div class="drow"><div>$$V_{out}=1\,\mathrm{V}\times\frac{99\,\mathrm{k\Omega}}{1\,\mathrm{k\Omega}+99\,\mathrm{k\Omega}}=0.99\,\mathrm{V}$$</div><p class="why">$R_{in,F}=99\,\mathrm{k\Omega}$이면 거의 그대로예요.</p></div></li>
+      <li><div class="drow"><div>$$V_{out}\to V_{oc}$$</div><p class="why">$R_{in,F}$가 무한대로 가면 감지해도 출력 전압이 바뀌지 않아요.</p></div></li>
     </ol>
-    <p>작은 임피던스를 병렬로 대면 노드의 임피던스가 작아져서 같은 전류에 대해 전압이 떨어져요. 그래서 이상적인 볼트미터의 입력 임피던스는 무한대예요.</p>
-    <p>귀환 회로망이 출력 전압을 감지할 때도 같아요. 귀환 회로망을 출력 노드에 병렬로 연결하고, 출력 노드에서 귀환 회로망 쪽으로 본 입력 임피던스가 커야 해요. 이상적인 귀환 회로망이 전압을 감지할 때 입력 임피던스는 무한대예요.</p>
+    <p>작은 임피던스를 병렬로 대면 노드의 임피던스가 작아져서 같은 전류에 대해 전압이 떨어져요. <b>그래서 이상적인 볼트미터의 입력 임피던스는 무한대예요.</b></p>
+    <h4 class="sub">귀환 회로망에 적용하기</h4>
+    <p>귀환 회로망이 출력 전압을 감지할 때도 같아요. 귀환 회로망을 출력 노드에 병렬로 연결하고, 출력 노드에서 귀환 회로망 쪽으로 본 입력 임피던스가 커야 해요. <b>이상적인 귀환 회로망이 전압을 감지할 때 입력 임피던스는 무한대예요.</b></p>
+    <h4 class="sub">op-amp 저항 분배기의 조건</h4>
     <figure class="figure">
       <svg id="fig-divider-sense" viewBox="0 0 420 252" role="img" aria-label="테두리 삼각형 op-amp A1의 플러스 입력에 왼쪽 입력 V in이 들어가고, 오른쪽 출력 V out 노드에서 아래로 강조선의 저항 R1, 귀환 노드 V F, 저항 R2를 거쳐 접지돼요. V F 노드에서 왼쪽으로 돌아가는 선이 op-amp의 마이너스 입력에 연결돼요. V in, V out, V F에는 색칠된 점이 있어요">
         <path class="fig-ink" d="M40 70H150"/>
@@ -1369,12 +1437,12 @@
     </figure>
     <p>op-amp 비반전 증폭기에서는 저항 분배기 $R_1$–$R_2$가 출력 전압을 감지하는 귀환 회로망이에요. op-amp의 − 입력으로는 전류가 들어가지 않는다고 봐요.</p>
     <ol class="steps">
-      <li>$R_1$과 $R_2$에 같은 전류가 흐르므로 출력 노드에서 본 입력 임피던스는 두 저항의 합이에요. $$R_{in,F}=R_1+R_2$$</li>
-      <li>분배기의 비가 피드백 팩터(귀환율) $K$예요. $$V_F=\frac{R_2}{R_1+R_2}V_{out}=KV_{out}$$</li>
+      <li><div class="drow"><div>$$R_{in,F}=R_1+R_2$$</div><p class="why">$R_1$과 $R_2$에 같은 전류가 흐르므로 출력 노드에서 본 입력 임피던스는 두 저항의 합이에요.</p></div></li>
+      <li><div class="drow"><div>$$V_F=\frac{R_2}{R_1+R_2}V_{out}=KV_{out}$$</div><p class="why">분배기의 비가 피드백 팩터(귀환율) $K$예요.</p></div></li>
       <li>1번 식을 위 분배식에 넣으면 $R_1+R_2\gg R_{out}$일 때 $V_{out}\approx V_{oc}$예요. 강의 자료는 이 조건을 무한대로 적어요. $$R_1+R_2\approx\infty$$</li>
     </ol>
     <p>$R_1+R_2$가 작으면 분배기를 연결하는 순간 출력 전압이 떨어져요. 실제로는 무한대로 만들 수 없으니 굉장히 큰 저항으로 설계해요.</p>
-    <p>$K$는 두 저항의 비로, 출력에 주는 영향은 두 저항의 합으로 정해져요. 그래서 비를 유지한 채 두 저항을 함께 키우면 $K$는 그대로이고 출력 전압이 덜 바뀌어요. 예를 들어 $9\,\mathrm{k\Omega}$–$1\,\mathrm{k\Omega}$과 $90\,\mathrm{k\Omega}$–$10\,\mathrm{k\Omega}$은 둘 다 $K=0.1$이지만 합은 $10\,\mathrm{k\Omega}$과 $100\,\mathrm{k\Omega}$이에요.</p>
+    <p><b>$K$는 두 저항의 비로, 출력에 주는 영향은 두 저항의 합으로 정해져요.</b> 그래서 비를 유지한 채 두 저항을 함께 키우면 $K$는 그대로이고 출력 전압이 덜 바뀌어요. 예를 들어 $9\,\mathrm{k\Omega}$–$1\,\mathrm{k\Omega}$과 $90\,\mathrm{k\Omega}$–$10\,\mathrm{k\Omega}$은 둘 다 $K=0.1$이지만 합은 $10\,\mathrm{k\Omega}$과 $100\,\mathrm{k\Omega}$이에요.</p>
   </div>
   <div class="layer prof">
     <span class="layer-title">교수님 말씀</span>
@@ -1387,12 +1455,9 @@
     <blockquote>OP 앰프의 출력이 전압이에요. … 이와 같이 노드에 병렬로</blockquote>
     <p>저항 귀환을 단 op-amp를 예로 들어, 출력 전압을 감지하는 귀환 회로망도 출력 노드에 병렬로 연결한다고 했어요.</p>
   </div>
-  <div class="layer warn">
-    <span class="layer-title">꼭 기억해요</span>
-    <blockquote>이상적으로는 무한대 임피던스를 가진 볼트미터를 병렬로 연결해서 재는 겁니다.</blockquote>
-    <p>전압 감지는 병렬 연결이고, 감지하는 쪽의 입력 임피던스는 이상적으로 무한대예요.</p>
-    <blockquote>$R_1$, $R_2$가 굉장히 커야 된다. 그렇지 않으면 원래 전압이 영향을 받는다</blockquote>
-    <p>출력 노드에서 분배기 쪽으로 보이는 것은 $R_1+R_2$예요.</p>
+  <div class="quiz after">
+    <p class="q">확인해 봐요. 개방 출력 전압 $V_{oc}=1\,\mathrm{V}$, 출력저항 $R_{out}=1\,\mathrm{k\Omega}$인 노드에 $R_1=8\,\mathrm{k\Omega}$, $R_2=1\,\mathrm{k\Omega}$ 저항 분배기를 병렬로 달면 분배기의 입력 임피던스 $R_{in,F}$와 출력 전압 $V_{out}$은 얼마가 되나요?</p>
+    <details><summary>답 보기</summary><p>$R_{in,F}=9\,\mathrm{k\Omega}$, $V_{out}=0.9\,\mathrm{V}$예요. $R_{in,F}=R_1+R_2=8+1=9\,\mathrm{k\Omega}$이고, $V_{out}=1\,\mathrm{V}\times\frac{9\,\mathrm{k\Omega}}{1\,\mathrm{k\Omega}+9\,\mathrm{k\Omega}}=0.9\,\mathrm{V}$예요.</p></details>
   </div>
   <div class="sum" hidden>
     <p class="sum-lead">전압은 노드와 접지 사이에 병렬로 감지하고, 감지하는 쪽의 입력 임피던스가 무한대에 가까워야 출력 전압이 그대로예요.</p>
@@ -1445,17 +1510,20 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <h4 class="sub">전류계로 전류를 재는 방법</h4>
     <p>전류를 재려면 전류가 흐르는 길 중간을 끊고 전류계(current meter)를 직렬(series)로 넣어요. 병렬로 대서는 전류를 잴 수 없어요. 실제 전류계는 작은 저항 $r$과 그 양단 전압 $V_r$을 재는 볼트미터로 이뤄져 있어요.</p>
     $$I=\frac{V_r}{r}$$
     <p>먼저 그림의 예에 적용해요. 전압원 $V$가 부하 $R_L$에 전류를 흘리는 길에 $r$을 직렬로 넣어요.</p>
     <ol class="steps">
-      <li>직렬로 넣은 $r$이 부하에 더해져요. $$I_{out}=\frac{V}{R_L+r}$$</li>
+      <li><div class="drow"><div>$$I_{out}=\frac{V}{R_L+r}$$</div><p class="why">직렬로 넣은 $r$이 부하에 더해져요.</p></div></li>
       <li>$V=1\,\mathrm{V}$, $R_L=1\,\mathrm{k\Omega}$에 $r=1\,\mathrm{k\Omega}$을 넣으면 절반으로 줄어요. $$I_{out}=\frac{1\,\mathrm{V}}{1\,\mathrm{k\Omega}+1\,\mathrm{k\Omega}}=0.5\,\mathrm{mA}$$</li>
-      <li>$r=10\,\Omega=0.01\,\mathrm{k\Omega}$이면 거의 그대로예요. $$I_{out}=\frac{1\,\mathrm{V}}{1\,\mathrm{k\Omega}+0.01\,\mathrm{k\Omega}}\approx0.99\,\mathrm{mA}$$</li>
-      <li>$r$이 0으로 가면 넣기 전의 전류와 같아요. $$I_{out}\to\frac{V}{R_L}$$</li>
+      <li><div class="drow"><div>$$I_{out}=\frac{1\,\mathrm{V}}{1\,\mathrm{k\Omega}+0.01\,\mathrm{k\Omega}}\approx0.99\,\mathrm{mA}$$</div><p class="why">$r=10\,\Omega=0.01\,\mathrm{k\Omega}$이면 거의 그대로예요.</p></div></li>
+      <li><div class="drow"><div>$$I_{out}\to\frac{V}{R_L}$$</div><p class="why">$r$이 0으로 가면 넣기 전의 전류와 같아요.</p></div></li>
     </ol>
-    <p>그래서 이상적인 전류계의 임피던스는 0이에요.</p>
-    <p>귀환 회로망이 출력 전류를 감지할 때도 같아요. 출력 전류가 흐르는 길을 끊고 귀환 회로망을 직렬로 넣고, 그 입력 임피던스는 작아야 해요. 증폭기의 출력이 귀환 회로망에는 입력으로 들어가므로 이 임피던스를 입력 임피던스라 불러요. 이상적인 귀환 회로망이 전류를 감지할 때 입력 임피던스는 0이에요.</p>
+    <p><b>그래서 이상적인 전류계의 임피던스는 0이에요.</b></p>
+    <h4 class="sub">귀환 회로망에 적용하기</h4>
+    <p>귀환 회로망이 출력 전류를 감지할 때도 같아요. 출력 전류가 흐르는 길을 끊고 귀환 회로망을 직렬로 넣고, 그 입력 임피던스는 작아야 해요. 증폭기의 출력이 귀환 회로망에는 입력으로 들어가므로 이 임피던스를 입력 임피던스라 불러요. <b>이상적인 귀환 회로망이 전류를 감지할 때 입력 임피던스는 0이에요.</b></p>
+    <h4 class="sub">소스 저항 $R_S$로 감지할 때와 감지법 비교</h4>
     <figure class="figure">
       <svg id="fig-rs-sense" viewBox="0 0 420 264" role="img" aria-label="왼쪽 입력 V in이 테두리 삼각형 증폭기를 지나 NMOS M1의 게이트로 들어가요. 증폭기와 M1은 A1이라 적힌 점선 테두리 상자 안에 있어요. M1 드레인은 위쪽 열린 단자로 이어지고, 소스에서 아래로 흐르는 I out 화살표 뒤 노드 V F를 지나 강조선의 저항 R S를 거쳐 접지돼요. R S 옆에 귀환 회로망이라고 적혀 있고, V F 노드는 오른쪽 단자까지 이어져요. V in과 V F에는 색칠된 점이 있어요">
         <rect class="fig-ink" x="52" y="20" width="188" height="116" rx="6" stroke-dasharray="5 4"/>
@@ -1485,12 +1553,12 @@
     $$V_F=I_{out}R_S$$
     <p>$R_S$가 크면 출력 전류 자체가 바뀌어요. 포화 영역의 $M_1$에서 $I_{out}$은 $V_{GS}$로 정해지기 때문이에요.</p>
     <ol class="steps">
-      <li>$R_S$의 전압 강하만큼 소스 전압이 올라가요. $$V_S=I_{out}R_S$$</li>
-      <li>게이트 전압 $V_G$가 같아도 남는 $V_{GS}$가 줄어요. $$V_{GS}=V_G-I_{out}R_S$$</li>
+      <li><div class="drow"><div>$$V_S=I_{out}R_S$$</div><p class="why">$R_S$의 전압 강하만큼 소스 전압이 올라가요.</p></div></li>
+      <li><div class="drow"><div>$$V_{GS}=V_G-I_{out}R_S$$</div><p class="why">게이트 전압 $V_G$가 같아도 남는 $V_{GS}$가 줄어요.</p></div></li>
       <li>$V_{GS}$가 줄면 $I_{out}$이 줄어요. $R_S$가 클수록 감지하려던 전류가 원래 값에서 더 멀어져요.</li>
       <li>작은 신호로 보면, 몸체효과와 $r_O$를 무시할 때 게이트 소신호 $v_g$ 가운데 $i_{out}R_S$를 뺀 나머지만 전류를 만들어요. $$i_{out}=g_{m1}(v_g-i_{out}R_S)$$</li>
-      <li>$i_{out}$에 대해 정리하면 저항 합의 꼴이 돼요. $$i_{out}=\frac{g_{m1}}{1+g_{m1}R_S}v_g=\frac{v_g}{1/g_{m1}+R_S}$$</li>
-      <li>$R_S\ll1/g_{m1}$이면 분모가 $1/g_{m1}$로 남아 $R_S$가 없을 때의 $i_{out}=g_{m1}v_g$와 거의 같아요. 예를 들어 $g_{m1}R_S=0.1$이면 $\frac{1}{1.1}\approx0.91$배예요.</li>
+      <li><div class="drow"><div>$$i_{out}=\frac{g_{m1}}{1+g_{m1}R_S}v_g=\frac{v_g}{1/g_{m1}+R_S}$$</div><p class="why">$i_{out}$에 대해 정리하면 저항 합의 꼴이 돼요.</p></div></li>
+      <li><b>$R_S\ll1/g_{m1}$이면 분모가 $1/g_{m1}$로 남아 $R_S$가 없을 때의 $i_{out}=g_{m1}v_g$와 거의 같아요.</b> 예를 들어 $g_{m1}R_S=0.1$이면 $\frac{1}{1.1}\approx0.91$배예요.</li>
     </ol>
     <p>그래서 강의 자료는 이 조건을 다음처럼 적어요. 교과서는 기준을 $R_S\ll1/g_{m1}$로 적어요.</p>
     $$R_S\approx0$$
@@ -1511,12 +1579,9 @@
     <blockquote>요거는 이제 피드백 네트워크고, 여기까지가 이제 $A_1$이에요.</blockquote>
     <p>트랜지스터 회로에서 $R_S$가 귀환 회로망이고, 그 앞까지가 피드포워드 시스템이라고 나눠 보였어요.</p>
   </div>
-  <div class="layer warn">
-    <span class="layer-title">꼭 기억해요</span>
-    <blockquote>이상적인 피드백 네트워크는 0의 임피던스를 갖는 게 이상적인 구조가 되겠습니다.</blockquote>
-    <p>$R_S$가 크면 소스 전압이 올라 $V_{GS}$가 줄고, 감지하려던 $I_{out}$이 바뀌어요.</p>
-    <blockquote>전압이면 병렬, 전류이면은 직렬.</blockquote>
-    <p>전압 감지는 병렬과 큰 입력 임피던스, 전류 감지는 직렬과 작은 입력 임피던스예요.</p>
+  <div class="quiz after">
+    <p class="q">확인해 봐요. $g_{m1}=10\,\mathrm{mS}$($1/g_{m1}=100\,\Omega$)인 $M_1$의 소스에 $R_S=25\,\Omega$을 직렬로 넣어 전류를 감지하면, $R_S=0$일 때의 전류 $g_{m1}v_g$에 비해 몇 배가 되나요?</p>
+    <details><summary>답 보기</summary><p>$0.8$배($80\,\%$)가 돼요. $i_{out}=\frac{g_{m1}}{1+g_{m1}R_S}v_g$에서 $g_{m1}R_S=10\,\mathrm{mS}\times25\,\Omega=0.25$이므로 $\frac{1}{1+0.25}=0.8$배예요.</p></details>
   </div>
   <div class="sum" hidden>
     <p class="sum-lead">전류는 흐르는 길을 끊고 직렬로 감지하고, 감지하는 쪽의 입력 임피던스가 0에 가까워야 출력 전류가 그대로예요.</p>
@@ -1584,23 +1649,26 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <h4 class="sub">전압 반송의 정의</h4>
     <p>귀환 회로는 피드포워드 시스템(feedforward system) $A_1$의 출력을 감지(sense)해 귀환 회로망(feedback network)으로 보내고, 귀환 회로망이 만든 귀환 신호를 입력으로 반송(return)해 입력에서 빼요(<a href="#s5-sense-return">감지와 반송이 귀환 구조를 정해요</a>).</p>
-    <p>증폭기의 입력이 전압이면 빼는 양도 전압이어야 해요. 귀환 전압 $v_F$를 입력 전압 $v_{in}$에서 빼도록 연결하는 것을 전압 반송(voltage return)이라고 해요.</p>
+    <p>증폭기의 입력이 전압이면 빼는 양도 전압이어야 해요. <b>귀환 전압 $v_F$를 입력 전압 $v_{in}$에서 빼도록 연결하는 것을 전압 반송(voltage return)이라고 해요.</b></p>
     <p>출력 전압을 감지하는 귀환이라면 $v_F$는 출력 전압에 피드백 팩터(귀환율) $K$를 곱한 값이에요.</p>
     $$v_F=Kv_{out}$$
     <p>먼저 그림의 예시에 적용해요. 입력 $v_{in}=1\,\mathrm{V}$와 귀환 전압 $v_F=0.9\,\mathrm{V}$를 극성이 반대가 되게 직렬로 이으면 피드포워드 시스템에 걸리는 전압은 차이예요.</p>
     $$v_e=1-0.9=0.1\,\mathrm{V}$$
+    <h4 class="sub">전압원을 직렬로 이어 빼는 원리</h4>
     <p>왜 직렬이어야 하는지는 전압원 두 개를 잇는 방법에서 나와요.</p>
     <ol class="steps">
       <li>두 전압원 $v_1$, $v_2$를 같은 극성으로 직렬 연결하면 양 끝 전압은 두 전압의 합이에요. 건전지 1.5 V 두 개를 직렬로 이으면 3 V가 돼요. $$v_{total}=v_1+v_2$$</li>
       <li>병렬로 연결하면 두 전원의 양 끝이 같은 두 노드에 묶여요. 두 전압이 같지 않으면 전압은 더해지지 않고 두 전원 사이에 전류만 흘러요.</li>
-      <li>빼기는 음수를 더하는 것과 같아요. 그래서 한쪽 전원을 극성만 반대로 해서 직렬로 이으면 두 전압이 빼져요. $$v_{total}=v_1-v_2$$</li>
+      <li><div class="drow"><div>$$v_{total}=v_1-v_2$$</div><p class="why">빼기는 음수를 더하는 것과 같아요. 그래서 한쪽 전원을 극성만 반대로 해서 직렬로 이으면 두 전압이 빼져요.</p></div></li>
       <li>같은 원리로 귀환 회로망의 출력 $v_F$를 입력원 $v_{in}$과 직렬로, 극성이 반대가 되게 연결해요. 입력원 → 피드포워드 시스템의 입력 → 귀환 회로망의 출력으로 이어지는 루프에서 KVL을 쓰면 $$v_{in}=v_e+v_F$$</li>
-      <li>피드포워드 시스템의 입력에 실제로 걸리는 오차 전압(error voltage) $v_e$는 두 전압의 차이예요. $$v_e=v_{in}-v_F$$</li>
+      <li><b>피드포워드 시스템의 입력에 실제로 걸리는 오차 전압(error voltage) $v_e$는 두 전압의 차이예요.</b> $$v_e=v_{in}-v_F$$</li>
       <li>$v_F=0$이면 $v_e=v_{in}$이에요. 더해지는 전압이 없으니 입력이 그대로 피드포워드 시스템에 들어가요.</li>
     </ol>
+    <h4 class="sub">감지와 반송의 연결 비교</h4>
     <p>강의 슬라이드의 문장도 같은 내용이에요. 두 전압원을 더하거나 빼려면(add or subtract) 직렬로 놓고, 그래서 귀환 회로망은 입력원과 직렬로 놓여요.</p>
-    <p>출력 쪽에서 전압을 감지할 때와는 연결이 반대예요(<a href="#s5-voltage-sense">전압은 병렬로, 큰 임피던스로 감지해요</a>).</p>
+    <p><b>출력 쪽에서 전압을 감지할 때와는 연결이 반대예요</b>(<a href="#s5-voltage-sense">전압은 병렬로, 큰 임피던스로 감지해요</a>).</p>
     <div class="table-wrap"><table>
       <tr><th></th><th>출력 쪽 전압 감지</th><th>입력 쪽 전압 반송</th></tr>
       <tr><td>연결</td><td>출력 노드에 병렬</td><td>입력원과 직렬</td></tr>
@@ -1616,10 +1684,9 @@
     <blockquote>출력에서 센싱할 때와 전압을 입력에서 받아줄 때는 서로 반대입니다.</blockquote>
     <p>출력 쪽 전압 감지는 병렬, 입력 쪽 전압 반송은 직렬이라는 대비예요.</p>
   </div>
-  <div class="layer warn">
-    <span class="layer-title">꼭 기억해요</span>
-    <blockquote>인풋 소스와 피드백 네트워크를 직렬로 연결해야 된다</blockquote>
-    <p>전압을 입력에서 뺄 때 귀환 회로망은 입력원과 직렬이에요. 출력 쪽 전압 감지의 병렬과 헷갈리지 않게 해요.</p>
+  <div class="quiz after">
+    <p class="q">확인해 봐요. 입력 전압 $v_{in}=1.5\,\mathrm{V}$, 출력 전압 $v_{out}=12\,\mathrm{V}$, 피드백 팩터 $K=0.1$인 전압 반송 회로에서 귀환 전압 $v_F$와 오차 전압 $v_e$는 각각 얼마인가요?</p>
+    <details><summary>답 보기</summary><p>$v_F=1.2\,\mathrm{V}$, $v_e=0.3\,\mathrm{V}$예요. $v_F=Kv_{out}=0.1\times12=1.2\,\mathrm{V}$이고, $v_e=v_{in}-v_F=1.5-1.2=0.3\,\mathrm{V}$예요.</p></details>
   </div>
   <div class="sum" hidden>
     <p class="sum-lead">입력이 전압이면 귀환 전압 $v_F$를 입력원과 직렬로, 극성을 반대로 이어서 빼요.</p>
@@ -1683,31 +1750,32 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <h4 class="sub">전압 뺄셈기 두 구조</h4>
     <p>실제 귀환 회로에서 전압을 빼는 방법으로는 두 구조가 많이 쓰여요. 하나는 트랜지스터 하나의 게이트와 소스에 두 전압을 나눠 넣는 것이고, 다른 하나는 차동쌍(differential pair)의 두 게이트에 나눠 넣는 것이에요.</p>
-    <p>두 구조 모두 $v_{in}$과 $v_F$가 <a href="#s6-voltage-return">전압은 입력원과 직렬로 빼요</a>의 그림처럼 직접 직렬로 이어져 있지는 않아요. 그래도 만들어지는 전류가 $v_{in}$과 $v_F$의 차이에 비례하므로 전압을 빼는 구조예요. 이 역할을 전압 뺄셈기(voltage subtractor)라고 불러요.</p>
+    <p>두 구조 모두 $v_{in}$과 $v_F$가 <a href="#s6-voltage-return">전압은 입력원과 직렬로 빼요</a>의 그림처럼 직접 직렬로 이어져 있지는 않아요. <b>그래도 만들어지는 전류가 $v_{in}$과 $v_F$의 차이에 비례하므로 전압을 빼는 구조예요.</b> 이 역할을 전압 뺄셈기(voltage subtractor)라고 불러요.</p>
     <p>아래 식은 포화 영역의 저주파 소신호 모델에서 $r_O$와 몸체 효과를 무시하고, 전압과 전류의 작은 신호 성분만 쓴 것이에요.</p>
-    <h4>트랜지스터 하나</h4>
+    <h4 class="sub">트랜지스터 하나</h4>
     <p>먼저 그림의 예시에 적용해요. 소스에 $v_{in}=10\,\mathrm{mV}$, 게이트에 $v_F=9\,\mathrm{mV}$가 걸리면 게이트–소스 전압은 두 전압의 차이예요.</p>
     $$v_{GS}=9-10=-1\,\mathrm{mV}$$
     <ol class="steps">
-      <li>게이트에 $v_F$, 소스에 $v_{in}$이 걸리면 게이트–소스 전압은 $$v_{GS}=v_F-v_{in}$$</li>
-      <li>드레인 전류는 트랜스컨덕턴스 $g_m$과 $v_{GS}$의 곱이에요. $$i_D=g_mv_{GS}=g_m(v_F-v_{in})$$</li>
-      <li>두 전압의 자리를 바꿔 게이트에 $v_{in}$, 소스에 $v_F$를 넣어도 같은 원리예요. $$i_D=g_m(v_{in}-v_F)$$</li>
-      <li>어느 쪽이든 전류는 두 전압의 차이에 비례하고, 자리를 바꾸면 부호만 반대가 돼요. $v_F=0$이면 원래 입력만으로 전류가 정해져요.</li>
+      <li><div class="drow"><div>$$v_{GS}=v_F-v_{in}$$</div><p class="why">게이트에 $v_F$, 소스에 $v_{in}$이 걸리면 게이트–소스 전압은</p></div></li>
+      <li><div class="drow"><div>$$i_D=g_mv_{GS}=g_m(v_F-v_{in})$$</div><p class="why">드레인 전류는 트랜스컨덕턴스 $g_m$과 $v_{GS}$의 곱이에요.</p></div></li>
+      <li><div class="drow"><div>$$i_D=g_m(v_{in}-v_F)$$</div><p class="why">두 전압의 자리를 바꿔 게이트에 $v_{in}$, 소스에 $v_F$를 넣어도 같은 원리예요.</p></div></li>
+      <li><b>어느 쪽이든 전류는 두 전압의 차이에 비례하고, 자리를 바꾸면 부호만 반대가 돼요.</b> $v_F=0$이면 원래 입력만으로 전류가 정해져요.</li>
       <li>드레인에 저항을 달면 이 전류가 저항을 지나며 출력 전압이 돼요.</li>
     </ol>
-    <h4>차동쌍</h4>
+    <h4 class="sub">차동쌍</h4>
     <p>한쪽 게이트에 $v_{in}$, 다른 쪽 게이트에 $v_F$를 넣어요. 두 트랜지스터 $M_1$, $M_2$는 같은 소자이고 테일 전류원 $I_{SS}$를 반씩 나눠 흘려서 $g_m$이 같아요. 두 소스가 만나는 노드의 소신호 전압을 $v_P$라고 해요.</p>
     <ol class="steps">
-      <li>각 트랜지스터의 드레인 전류는 자기 게이트 전압과 $v_P$의 차이로 정해져요. $$I_{out1}=g_m(v_{in}-v_P)$$ $$I_{out2}=g_m(v_F-v_P)$$</li>
-      <li>테일 전류원이 이상적이면 두 전류의 합은 바뀌지 않으므로 신호 성분의 합은 0이에요. $$I_{out1}+I_{out2}=0$$</li>
-      <li>두 식을 대입해 풀면 $v_P$는 두 게이트 전압의 평균을 따라가요. $$v_P=\frac{v_{in}+v_F}{2}$$</li>
-      <li>차동 출력 전류는 두 전류의 차이예요. $$I_{out}=I_{out1}-I_{out2}=g_m(v_{in}-v_F)$$</li>
+      <li><div class="drow"><div>$$I_{out1}=g_m(v_{in}-v_P)$$ $$I_{out2}=g_m(v_F-v_P)$$</div><p class="why">각 트랜지스터의 드레인 전류는 자기 게이트 전압과 $v_P$의 차이로 정해져요.</p></div></li>
+      <li><div class="drow"><div>$$I_{out1}+I_{out2}=0$$</div><p class="why">테일 전류원이 이상적이면 두 전류의 합은 바뀌지 않으므로 신호 성분의 합은 0이에요.</p></div></li>
+      <li><div class="drow"><div>$$v_P=\frac{v_{in}+v_F}{2}$$</div><p class="why">두 식을 대입해 풀면 $v_P$는 두 게이트 전압의 평균을 따라가요.</p></div></li>
+      <li><div class="drow"><div>$$I_{out}=I_{out1}-I_{out2}=g_m(v_{in}-v_F)$$</div><p class="why">차동 출력 전류는 두 전류의 차이예요.</p></div></li>
       <li>$v_F=0$이면 $I_{out}=g_mv_{in}$으로 입력만큼 전류가 나오고, $v_F$가 0이 아니면 두 전압의 차이가 입력처럼 작용해요.</li>
     </ol>
-    <p>수업에서는 이 비례 계수를 차동쌍 전체의 트랜스컨덕턴스 $G_m$이라고 불렀어요. 위 조건에서는 $G_m=g_m$으로, 한 트랜지스터의 $g_m$과 같아요.</p>
-    <h4>직렬인지 병렬인지 가리는 법</h4>
-    <p>귀환 전압이 원래 입력과 같은 노드에 걸리면 병렬, 다른 노드에 걸리면 직렬이에요. 병렬은 두 소자가 같은 노드에 묶여야만 될 수 있으므로, 같은 노드인지만 확인하면 돼요.</p>
+    <p>수업에서는 이 비례 계수를 차동쌍 전체의 트랜스컨덕턴스 $G_m$이라고 불렀어요. <b>위 조건에서는 $G_m=g_m$으로, 한 트랜지스터의 $g_m$과 같아요.</b></p>
+    <h4 class="sub">직렬인지 병렬인지 가리는 법</h4>
+    <p><b>귀환 전압이 원래 입력과 같은 노드에 걸리면 병렬, 다른 노드에 걸리면 직렬이에요.</b> 병렬은 두 소자가 같은 노드에 묶여야만 될 수 있으므로, 같은 노드인지만 확인하면 돼요.</p>
     <div class="table-wrap"><table>
       <tr><th></th><th>트랜지스터 하나</th><th>차동쌍</th></tr>
       <tr><td>$v_{in}$이 걸리는 노드</td><td>소스(또는 게이트)</td><td>$M_1$의 게이트</td></tr>
@@ -1730,6 +1798,10 @@
     <span class="layer-title">꼭 기억해요</span>
     <blockquote>입력과 다른 노드로 피드백 전압이 인가되면 그거는 직렬이에요. 가장 쉬운 방법은 그렇게 외우세요.</blockquote>
     <p>직접 직렬로 이어져 있지 않아도 $v_F$가 입력과 다른 노드에 걸리면 직렬로 전압을 빼는 구조예요.</p>
+  </div>
+  <div class="quiz after">
+    <p class="q">확인해 봐요. $g_m=2\,\mathrm{mS}$인 차동쌍의 두 게이트에 각각 $v_{in}=15\,\mathrm{mV}$, $v_F=10\,\mathrm{mV}$를 넣으면 공통 소스 노드 전압 $v_P$와 차동 출력 전류 $I_{out}=I_{out1}-I_{out2}$는 얼마이고, 이 귀환 연결은 직렬인가요 병렬인가요?</p>
+    <details><summary>답 보기</summary><p>$v_P=12.5\,\mathrm{mV}$, $I_{out}=10\,\mu\mathrm{A}$이고, 직렬 연결이에요. $v_P=\frac{15+10}{2}=12.5\,\mathrm{mV}$, $I_{out}=2\,\mathrm{mS}\times(15-10)\,\mathrm{mV}=10\,\mu\mathrm{A}$이며, $v_F$가 $v_{in}$과 다른 노드($M_2$ 게이트)에 걸리므로 직렬이에요.</p></details>
   </div>
   <div class="sum" hidden>
     <p class="sum-lead">트랜지스터 하나나 차동쌍에서 $v_F$를 $v_{in}$과 다른 노드에 넣으면 전류가 두 전압의 차이에 비례해서 전압을 빼요.</p>

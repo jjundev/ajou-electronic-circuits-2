@@ -98,6 +98,18 @@
     ol.steps { padding-left: 1.4em; }
     ol.steps li { margin: var(--s2) 0; }
 
+    /* 정확히 말하면의 길잡이: 소제목 · 구간 결론 · 식|이유 두 열 · 끝의 확인 질문 */
+    .layer.formal h4.sub { margin: var(--s6) 0 var(--s3); padding-left: var(--s3); border-left: 3px solid var(--accent); font-size: var(--fs-body); font-weight: 800; line-height: 1.4; }
+    .layer.formal .layer-title + h4.sub { margin-top: var(--s4); }
+    .drow { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 15em); column-gap: var(--s4); align-items: center; }
+    .drow .why { margin: 0; font-size: var(--fs-sub); color: var(--ink-2); }
+    @media (max-width: 560px) { .drow { grid-template-columns: 1fr; } .drow .why { order: -1; } }
+    .quiz { background: var(--surface); border-radius: var(--radius); padding: var(--s4); }
+    .quiz.after { margin-top: var(--s5); }
+    .quiz .q { margin: 0; font-weight: 700; line-height: 1.6; }
+    .quiz summary { display: inline-flex; align-items: center; min-height: 44px; color: var(--accent-ink); font-weight: 600; font-size: var(--fs-sub); cursor: pointer; }
+    .quiz details p { margin: 0; }
+
     /* 그림 · 수식 · 표 */
     .figure { margin: var(--s4) 0; text-align: center; }
     .figure svg { width: 100%; height: auto; max-width: 560px; color: var(--ink); }
@@ -344,7 +356,7 @@
     }
   </style>
 </head>
-<body data-screens="article.topic" data-panels="note" data-range="1106">
+<body data-screens="article.topic" data-panels="note" data-range="1106" data-guide="1">
   <header class="topbar">
     <div class="topbar-inner">
       <button class="text-btn panel-toggle" id="toggle-left" type="button" aria-controls="panel-left" aria-expanded="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="strip" x="3" y="4" width="6" height="16" rx="1"/><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg><span>목차</span></button>
@@ -418,30 +430,30 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
-    <h4>1. 풀고 싶은 문제</h4>
-    <p>주파수가 올라가면 트랜지스터 내부 커패시턴스의 임피던스 $\frac{1}{Cs}$가 작아져서 이득이 극점(pole)부터 떨어져요. 같은 전압 이득을 더 높은 동작 주파수까지 유지하는 증폭단이 필요해요. <a href="#s0-io-impedance">입출력 임피던스도 커패시턴스의 함수예요</a></p>
+    <h4 class="sub">풀고 싶은 문제</h4>
+    <p>주파수가 올라가면 트랜지스터 내부 커패시턴스의 임피던스 $\frac{1}{Cs}$가 작아져서 이득이 극점(pole)부터 떨어져요. <b>같은 전압 이득을 더 높은 동작 주파수까지 유지하는 증폭단이 필요해요.</b> <a href="#s0-io-impedance">입출력 임피던스도 커패시턴스의 함수예요</a></p>
     <p>차동쌍(differential pair)도 고주파에서 이득이 어디서 떨어지는지, 즉 극점과 영점(zero)이 어디인지 알아야 해요. <a href="#s1-half-circuit">차동쌍은 반회로와 같은 극점·영점을 가져요</a></p>
     <p>전방 증폭기 $A_1$은 그 자체로 정확도가 떨어지는(poorly controlled) 시스템일 수 있어요. 이런 시스템이 더 정교한 특성을 갖게 만들고 싶어요. <a href="#s2-feedback-system">음귀환 시스템의 네 부분</a></p>
-    <h4>2. 단순한 해법과 그 한계</h4>
+    <h4 class="sub">단순한 해법과 그 한계</h4>
     <p>공통 소스(CS) 한 단은 입력과 출력이 반대 방향으로 크게 움직여요. 그래서 둘 사이의 $C_{GD1}$이 밀러 효과(Miller effect)로 입력에서 크게 보여요. $\lambda=0$이고 입력에서 출력까지의 이득이 $-g_{m1}R_L$인 밀러 근사에서 입력 쪽 커패시턴스는 다음과 같아요.</p>
     $$C_{in}\approx C_{GS1}+(1+g_{m1}R_L)C_{GD1}$$
     <p>이득 $g_{m1}R_L$을 키울수록 입력 커패시턴스도 커져서 입력 극점이 낮아져요. <a href="../1028/정리노트_1028_CS_Stage_Frequency_Response.html#s2-cs-miller">CS 단: 밀러 곱셈이 입력 극점을 끌어내려요</a></p>
     <p>차동쌍을 트랜지스터 두 개와 꼬리 노드까지 그대로 놓고 풀면, 다뤄야 할 커패시턴스와 노드가 한쪽 단의 두 배로 늘어 식이 복잡해져요. <a href="#s1-half-circuit">차동쌍은 반회로와 같은 극점·영점을 가져요</a></p>
     <p>개루프(open loop)로 쓰면 출력이 $A_1$을 그대로 따라가요.</p>
     $$Y=A_1X$$
-    <p>$A_1$이 정확하지 않으면 출력 $Y$도 그만큼 정확하지 않아요. <a href="#s2-closed-loop">폐루프 이득: 이득이 $1+KA_1$배 줄어요</a></p>
-    <h4>3. 핵심 아이디어</h4>
+    <p><b>$A_1$이 정확하지 않으면 출력 $Y$도 그만큼 정확하지 않아요.</b> <a href="#s2-closed-loop">폐루프 이득: 이득이 $1+KA_1$배 줄어요</a></p>
+    <h4 class="sub">핵심 아이디어</h4>
     <p>캐스코드(cascode)는 $M_1$ 위에 공통 게이트 $M_2$를 쌓아요. 노드 Y에서 위로 보이는 저항이 $\frac{1}{g_{m2}}$로 작아서, $C_{GD1}$ 양단의 노드 X에서 노드 Y로의 이득이 $-\frac{g_{m1}}{g_{m2}}$ 정도로 작아져요($\lambda=0$일 때).</p>
     $$C_{in}\approx C_{GS1}+\left(1+\frac{g_{m1}}{g_{m2}}\right)C_{GD1}$$
     <p>예를 들어 $g_{m1}=g_{m2}$이면 계수가 $1+1=2$가 되어 $C_{GD1}$이 $2C_{GD1}$로만 보여요. $M_2$는 $M_1$이 만든 전류 변화를 출력으로 전달만 하므로 전체 이득은 CS와 같은 $-g_{m1}R_L$이에요. 강의 예제에서는 이득이 같으면서 동작 주파수가 CS보다 3배 이상 높았어요. <a href="#s0-bjt-poles">바이폴라 캐스코드의 세 극점</a></p>
     <p>소자·바이어스가 대칭이고 순수 차동 입력이면 꼬리 노드가 AC 접지가 돼요. 그러면 반회로는 CS 단 하나이고, 전달함수가 같으므로 차동쌍은 반회로와 같은 극점·영점을 가져요. <a href="#s1-half-circuit">차동쌍은 반회로와 같은 극점·영점을 가져요</a></p>
     <p>음귀환(negative feedback)은 출력을 감지해 귀환 회로망 $K$로 되돌리고, 입력에서 빼서 그 차이를 $A_1$에 넣어요. 그러면 입력–출력 관계는 다음 폐루프 이득(closed-loop gain)이 돼요.</p>
     $$\frac{Y}{X}=\frac{A_1}{1+KA_1}$$
-    <p>예를 들어 $A_1=1000$, $K=0.1$이면 $\frac{1000}{1+100}=\frac{1000}{101}\approx9.90$이에요. $KA_1$이 클수록 이 값은 $\frac{1}{K}=10$에 가까워져요. 비반전 증폭기에서는 이 값이 저항비 $1+\frac{R_1}{R_2}$로 정해져요. <a href="#s2-noninverting">비반전 증폭기를 귀환으로 보기</a> · <a href="#s2-error-signal">오차 E와 가상 단락</a></p>
-    <h4>4. 대가와 쓰이는 곳</h4>
+    <p>예를 들어 $A_1=1000$, $K=0.1$이면 $\frac{1000}{1+100}=\frac{1000}{101}\approx9.90$이에요. <b>$KA_1$이 클수록 이 값은 $\frac{1}{K}=10$에 가까워져요.</b> 비반전 증폭기에서는 이 값이 저항비 $1+\frac{R_1}{R_2}$로 정해져요. <a href="#s2-noninverting">비반전 증폭기를 귀환으로 보기</a> · <a href="#s2-error-signal">오차 E와 가상 단락</a></p>
+    <h4 class="sub">대가와 쓰이는 곳</h4>
     <p>캐스코드는 트랜지스터가 하나 더 들고, 두 소자 사이 노드 Y가 생겨 극점이 하나 늘어요. 그래도 같은 이득으로 더 높은 주파수까지 쓸 수 있어서 CS보다 훨씬 많이 써요. 노드 Y에 전류원 $M_3$를 달면 $g_{m1}$과 $R_L$을 더 키우는 변형도 가능해요. <a href="#s0-m3-cascode">전류원 M3를 단 캐스코드</a></p>
     <p>반회로는 대칭과 순수 차동 입력이 성립할 때만 써요. 공통 모드 신호에서는 꼬리 노드를 접지로 볼 수 없어요. 반회로가 캐스코드 단이면 캐스코드의 세 극점을 그대로 가져다 써요. <a href="#s1-cascode-diffpair">캐스코드 차동쌍의 세 극점</a></p>
-    <p>음귀환의 대가는 이득이 $1+KA_1$배 줄어든다는 점이에요. 위 예에서는 $1000$이던 이득이 $1+KA_1=101$배 줄어 약 $9.90$이 돼요. 그래도 op-amp의 비반전·반전 증폭기처럼 대부분의 증폭기는 음귀환으로 써요. 귀환 시스템의 여러 특성을 정하는 양은 루프 이득 $KA_1$이고, 폐루프 이득과는 다른 양이에요. <a href="#s3-loop-gain">루프를 끊고 시험 신호를 넣어요</a> · <a href="#s3-loop-vs-closed">루프 이득과 폐루프 이득은 완전히 달라요</a></p>
+    <p><b>음귀환의 대가는 이득이 $1+KA_1$배 줄어든다는 점이에요.</b> 위 예에서는 $1000$이던 이득이 $1+KA_1=101$배 줄어 약 $9.90$이 돼요. 그래도 op-amp의 비반전·반전 증폭기처럼 대부분의 증폭기는 음귀환으로 써요. 귀환 시스템의 여러 특성을 정하는 양은 루프 이득 $KA_1$이고, 폐루프 이득과는 다른 양이에요. <a href="#s3-loop-gain">루프를 끊고 시험 신호를 넣어요</a> · <a href="#s3-loop-vs-closed">루프 이득과 폐루프 이득은 완전히 달라요</a></p>
     <p>이득을 내주면서도 쓰는 이유는 다음 시간에 다뤄요. <a href="#s4-next">다음 시간 예고</a></p>
   </div>
   <div class="layer prof">
@@ -453,6 +465,7 @@
     <blockquote>게인이 줄어드는데 왜 쓰느냐? 다른 장점이 있기 때문에 쓰겠죠?</blockquote>
     <p>교수님은 그냥 "피드백"이라고 하면 음귀환을 뜻한다고 했어요. 같은 위상 신호를 계속 더하는 양귀환은 발진기에 쓰며 전자회로2에서는 다루지 않아요.</p>
   </div>
+  <div class="quiz after"><p class="q">확인해 봐요. 공통 소스 한 단 대신 캐스코드를 쓰고, 차동쌍 대신 반회로를 쓰고, 개루프 대신 음귀환을 쓰는 핵심 이유는 무엇이고 각 구조의 대가는 무엇인가요?</p><details><summary>답 보기</summary><p>캐스코드는 밀러 배율을 줄여 같은 이득에서 동작 주파수를 높이고, 대가로 소자가 하나 더 들며 노드 Y에 극점이 하나 늘어요. 반회로는 순수 차동·대칭에서 꼬리 노드가 AC 접지가 되어 한쪽만 풀어도 같은 극점·영점을 얻고, 대칭·순수 차동일 때만 쓸 수 있어요. 음귀환은 $KA_1$이 클수록 이득이 $\frac{1}{K}$에 가까워져 정확해지고, 대가로 이득이 $1+KA_1$배 줄어요.</p></details></div>
   <div class="sum" hidden>
     <p class="sum-lead">캐스코드는 같은 이득으로 동작 주파수를 높이고, 차동쌍은 반회로로 극점을 읽고, 음귀환은 이득을 내주고 정확도를 얻어요.</p>
     <p class="panel-label">핵심 식</p>
@@ -487,8 +500,10 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <h4 class="sub">숫자로 먼저 보는 밀러 배율</h4>
     <p>작은 예로 $C_{\mu1}=10\,\mathrm{fF}$이고 $g_{m1}=g_{m2}$라고 해요. X에서 Y로 가는 이득이 −1이면 X를 1 mV 올릴 때 Y는 1 mV 내려가요.</p>
-    <p>그러면 $C_{\mu1}$ 양단 전압은 2 mV 변해서 X에서는 $2\times10=20\,\mathrm{fF}$, Y에서도 $2\times10=20\,\mathrm{fF}$로 보여요. 같은 규칙으로 $g_{m1}/g_{m2}=4$인 MOS 캐스코드라면 X 쪽 배율은 $1+4=5$, Y 쪽 배율은 $1+1/4=1.25$가 돼요.</p>
+    <p>그러면 $C_{\mu1}$ 양단 전압은 2 mV 변해서 <b>X에서는 $2\times10=20\,\mathrm{fF}$, Y에서도 $2\times10=20\,\mathrm{fF}$로 보여요.</b> 같은 규칙으로 $g_{m1}/g_{m2}=4$인 MOS 캐스코드라면 X 쪽 배율은 $1+4=5$, Y 쪽 배율은 $1+1/4=1.25$가 돼요.</p>
+    <h4 class="sub">노드 X · Y · 출력의 세 극점 유도</h4>
     <p>바이어스 전압 $V_{b1}$, 전원 $V_{CC}$는 AC 접지로 보고, 몸체·기판 쪽 단자도 AC 접지로 둬요. 각 노드의 저항과 커패시턴스를 따로 모아요.</p>
     <ol class="steps">
       <li>
@@ -497,7 +512,7 @@
         $$A_{v,XY}=\frac{v_Y}{v_X}\approx-\frac{g_{m1}}{g_{m2}}$$
       </li>
       <li>
-        <p><strong>BJT에서는 두 $g_m$이 같아요.</strong> $g_m=I_C/V_T$이고 $Q_1$과 $Q_2$는 같은 컬렉터 전류 경로에 있어요. 베이스 전류를 무시하면 $I_{C1}=I_{C2}$이므로 $g_{m1}=g_{m2}$예요.</p>
+        <p><strong>BJT에서는 두 $g_m$이 같아요.</strong> $g_m=I_C/V_T$이고 $Q_1$과 $Q_2$는 같은 컬렉터 전류 경로에 있어요. <b>베이스 전류를 무시하면 $I_{C1}=I_{C2}$이므로 $g_{m1}=g_{m2}$예요.</b></p>
         $$A_{v,XY}\approx-1$$
       </li>
       <li>
@@ -517,7 +532,8 @@
         $$\omega_{p,out}=\frac{1}{R_L(C_{CS2}+C_{\mu2})}$$
       </li>
     </ol>
-    <p>MOS 캐스코드와 해석 순서는 같고 기호만 $C_{GS}\leftrightarrow C_\pi$, $C_{GD}\leftrightarrow C_\mu$로 바뀌어요. 차이는 두 가지예요. MOS는 저주파 입력저항이 무한대라 X의 저항에 $r_\pi$ 항이 없고, $g_{m1}$과 $g_{m2}$가 일반적으로 달라 밀러 배율이 $1+g_{m1}/g_{m2}$로 남아요.</p>
+    <h4 class="sub">MOS 캐스코드와 무엇이 다른가요</h4>
+    <p>MOS 캐스코드와 해석 순서는 같고 기호만 $C_{GS}\leftrightarrow C_\pi$, $C_{GD}\leftrightarrow C_\mu$로 바뀌어요. 차이는 두 가지예요. <b>MOS는 저주파 입력저항이 무한대라 X의 저항에 $r_\pi$ 항이 없고, $g_{m1}$과 $g_{m2}$가 일반적으로 달라 밀러 배율이 $1+g_{m1}/g_{m2}$로 남아요.</b></p>
     <p>MOS 쪽 노드별 커패시턴스 정리는 <a href="../1104/정리노트_1104_Cascode_Frequency_Response.html#s1-node-capacitance">1104 정리노트의 X·Y·출력 커패시터 모으기</a>에 있어요.</p>
   </div>
   <div class="layer prof">
@@ -530,6 +546,7 @@
     <blockquote>이게 이제 입력과 출력의 관계가 아니라 노드 X에서 노드 Y로의 이득입니다.</blockquote>
     <p>밀러 배율에 전체 이득 $-g_{m1}R_L$을 넣으면 X의 커패시턴스를 크게 잘못 구해요. 캐스코드에서는 $A_{v,XY}\approx-g_{m1}/g_{m2}$를 써요.</p>
   </div>
+  <div class="quiz after"><p class="q">확인해 봐요. 바이폴라 캐스코드에서 $C_{\pi1}=100\,\mathrm{fF}$, $C_{\mu1}=15\,\mathrm{fF}$, $R_S\parallel r_{\pi1}=1\,\mathrm{k\Omega}$일 때 X 노드의 전체 커패시턴스와 극점 각주파수 $\omega_{p,X}$는 얼마인가요?</p><details><summary>답 보기</summary><p>전체 커패시턴스는 $130\,\mathrm{fF}$, $\omega_{p,X}\approx7.69\times10^9\,\mathrm{rad/s}$예요. BJT 캐스코드는 $g_{m1}=g_{m2}$이므로 $C_{\mu1}$이 $2C_{\mu1}=30\,\mathrm{fF}$로 보여 $C_{\pi1}+2C_{\mu1}=100+30=130\,\mathrm{fF}$이고, $\omega_{p,X}=\frac{1}{1\,\mathrm{k\Omega}\times130\,\mathrm{fF}}=\frac{1}{1.3\times10^{-10}}\approx7.69\times10^9\,\mathrm{rad/s}$예요.</p></details></div>
   <div class="sum" hidden>
     <p class="sum-lead">바이폴라 캐스코드는 X·Y·출력에 극점이 하나씩 있고, $C_{\mu1}$은 X와 Y에서 모두 $2C_{\mu1}$로 보여요.</p>
     <p class="panel-label">핵심 식</p>
@@ -561,10 +578,12 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <h4 class="sub">숫자로 보는 입력 임피던스의 꺾임</h4>
     <p>작은 예로 BJT 캐스코드에서 $r_{\pi1}=2.6\,\mathrm{k\Omega}$, 입력 쪽 커패시턴스 $C_{in}=C_{\pi1}+2C_{\mu1}=1\,\mathrm{pF}$라고 해요. $2.6\,\mathrm{k\Omega}\times1\,\mathrm{pF}=2.6\,\mathrm{ns}$이므로 꺾이는 주파수는 다음과 같아요.</p>
     $$\begin{aligned}f_c&amp;=\frac{1}{2\pi r_{\pi1}C_{in}}\\&amp;=\frac{1}{2\pi\times2.6\,\mathrm{ns}}\\&amp;\approx61.21\,\mathrm{MHz}\end{aligned}$$
     $$|Z_{in}|=\frac{r_{\pi1}}{\sqrt{1+(f/f_c)^2}}$$
-    <p>$f=0.1f_c$이면 $|Z_{in}|\approx2.59\,\mathrm{k\Omega}$로 거의 $r_{\pi1}$이에요. $f=f_c$이면 $r_{\pi1}/\sqrt2\approx1.84\,\mathrm{k\Omega}$, $f=10f_c$이면 약 $0.26\,\mathrm{k\Omega}$예요. 꺾인 뒤에는 주파수가 10배 될 때마다 크기가 약 10배 작아져요.</p>
+    <p>$f=0.1f_c$이면 $|Z_{in}|\approx2.59\,\mathrm{k\Omega}$로 거의 $r_{\pi1}$이에요. $f=f_c$이면 $r_{\pi1}/\sqrt2\approx1.84\,\mathrm{k\Omega}$, $f=10f_c$이면 약 $0.26\,\mathrm{k\Omega}$예요. <b>꺾인 뒤에는 주파수가 10배 될 때마다 크기가 약 10배 작아져요.</b></p>
+    <h4 class="sub">MOS와 BJT의 입출력 임피던스</h4>
     <ol class="steps">
       <li>
         <p><strong>MOS 캐스코드의 입력.</strong> 저주파에서는 게이트로 전류가 흐르지 않아 $Z_{in}=\infty$예요. 주파수가 오르면 $C_{GS1}$과, X에서 Y로의 이득으로 밀러 변환한 $C_{GD1}$이 보여요.</p>
@@ -580,17 +599,14 @@
         $$Z_{in}=r_{\pi1}\parallel\frac{1}{(C_{\pi1}+2C_{\mu1})s}$$
         <p>이 $Z_{in}$은 베이스에서 본 값이라 앞단의 $R_S$는 들어 있지 않아요.</p>
       </li>
-      <li>
-        <p><strong>바이폴라 캐스코드의 출력.</strong> 저주파의 $R_L$에 $C_{\mu2}$와 $C_{CS2}$가 병렬로 붙어요.</p>
-        $$Z_{out}=R_L\parallel\frac{1}{(C_{\mu2}+C_{CS2})s}$$
-      </li>
+      <li><div class="drow"><div>$$Z_{out}=R_L\parallel\frac{1}{(C_{\mu2}+C_{CS2})s}$$</div><p class="why"><strong>바이폴라 캐스코드의 출력.</strong> 저주파의 $R_L$에 $C_{\mu2}$와 $C_{CS2}$가 병렬로 붙어요.</p></div></li>
       <li>
         <p><strong>극점과 같은 현상이에요.</strong> 노드 X에서 접지까지 보이는 임피던스는 $R_S$와 $Z_{in}$의 병렬이에요.</p>
         $$\begin{aligned}R_S\parallel Z_{in}&amp;=(R_S\parallel r_{\pi1})\\&amp;\quad\parallel\frac{1}{(C_{\pi1}+2C_{\mu1})s}\end{aligned}$$
         <p>이 임피던스가 꺾이는 각주파수 $1/[(R_S\parallel r_{\pi1})(C_{\pi1}+2C_{\mu1})]$이 바로 $\omega_{p,X}$예요. 출력의 $Z_{out}$이 꺾이는 각주파수도 $\omega_{p,out}$과 같아요.</p>
       </li>
     </ol>
-    <p>그래서 이득이 극점에서 떨어지는 것과 입출력 임피던스가 커패시턴스의 함수가 되는 것은 별개가 아니에요. 각 노드의 임피던스가 커패시턴스의 함수라서 그 노드에 극점이 생겨요.</p>
+    <p>그래서 이득이 극점에서 떨어지는 것과 입출력 임피던스가 커패시턴스의 함수가 되는 것은 별개가 아니에요. <b>각 노드의 임피던스가 커패시턴스의 함수라서 그 노드에 극점이 생겨요.</b></p>
   </div>
   <div class="layer prof">
     <span class="layer-title">교수님 말씀</span>
@@ -602,6 +618,7 @@
     <blockquote>정확하게 얘기하면 무한대는 반만 맞는 거죠.</blockquote>
     <p>"MOS 입력 임피던스는 무한대"는 저주파에서만 맞아요. 일반적인 답은 커패시턴스의 함수인 $Z_{in}(s)$예요.</p>
   </div>
+  <div class="quiz after"><p class="q">확인해 봐요. BJT 캐스코드에서 $r_{\pi1}=2.6\,\mathrm{k\Omega}$, $C_{in}=C_{\pi1}+2C_{\mu1}=2\,\mathrm{pF}$일 때, 입력 임피던스가 꺾이는 주파수 $f_c$와 $f=f_c$에서의 $|Z_{in}|$은 얼마인가요?</p><details><summary>답 보기</summary><p>$f_c\approx30.61\,\mathrm{MHz}$, $|Z_{in}|\approx1.84\,\mathrm{k\Omega}$예요. $r_{\pi1}C_{in}=2.6\,\mathrm{k\Omega}\times2\,\mathrm{pF}=5.2\,\mathrm{ns}$이므로 $f_c=\frac{1}{2\pi\times5.2\,\mathrm{ns}}\approx30.61\,\mathrm{MHz}$이고, $f=f_c$에서는 $|Z_{in}|=\frac{2.6\,\mathrm{k\Omega}}{\sqrt{1+1^2}}\approx1.84\,\mathrm{k\Omega}$예요.</p></details></div>
   <div class="sum" hidden>
     <p class="sum-lead">입출력 임피던스는 저주파 값에 커패시턴스의 임피던스가 병렬로 붙은 커패시턴스의 함수예요.</p>
     <p class="panel-label">핵심 식</p>
@@ -633,9 +650,11 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <h4 class="sub">바이어스와 소신호 전류 분배의 작은 예</h4>
     <p>작은 예로 $R_L=1\,\mathrm{k\Omega}$에 $0.5\,\mathrm{mA}$가 흐르면 IR 드롭은 $0.5\,\mathrm{V}$예요. $g_{m1}$을 키우려고 전류를 2배로 늘리면 $1\,\mathrm{V}$, 4배로 늘리면 $2\,\mathrm{V}$가 $R_L$에 걸려요.</p>
-    <p>$M_3$가 $I_{D3}=1.5\,\mathrm{mA}$를 따로 흘리면 $I_{D1}=2\,\mathrm{mA}$로 4배가 되어도 $I_{D2}=0.5\,\mathrm{mA}$라서 IR 드롭은 $0.5\,\mathrm{V}$ 그대로예요. 제곱 법칙 모델에서 $W/L$이 같으면 $g_m\propto\sqrt{I_D}$이므로 $g_{m1}$은 2배가 돼요.</p>
+    <p><b>$M_3$가 $I_{D3}=1.5\,\mathrm{mA}$를 따로 흘리면 $I_{D1}=2\,\mathrm{mA}$로 4배가 되어도 $I_{D2}=0.5\,\mathrm{mA}$라서 IR 드롭은 $0.5\,\mathrm{V}$ 그대로예요.</b> 제곱 법칙 모델에서 $W/L$이 같으면 $g_m\propto\sqrt{I_D}$이므로 $g_{m1}$은 2배가 돼요.</p>
     <p>소신호에서는 Y에서 위로 $r_{o3}=20\,\mathrm{k\Omega}$와 $1/g_{m2}=200\,\Omega$이 경쟁해요. $M_2$ 쪽 몫은 $20/(20+0.2)\approx0.99$예요.</p>
+    <h4 class="sub">바이어스 · 이득 · 극점 해석</h4>
     <ol class="steps">
       <li>
         <p><strong>바이어스 전류를 나눠요.</strong> $M_3$는 게이트가 $V_{b2}$에 묶인 PMOS 전류원이에요. 노드 Y에서 KCL을 쓰면 $M_1$ 전류는 $M_2$ 전류와 $M_3$ 전류의 합이에요.</p>
@@ -668,7 +687,7 @@
           <div data-gain-stage="gain">
             <p>$v_{in}$이 오르면 $M_2$를 거쳐 출력에서 빠져나가는 전류가 늘어 $v_{out}$이 내려가요. 같은 입출력 정의로 두 값을 곱해요.</p>
             $$A_v=-G_mR_{out}\approx-g_{m1}R_L$$
-            <p>수업에서도 이 결과를 $A_v=-g_{m1}R_L$로 써서 $M_3$가 없는 캐스코드와 이득이 같다고 했어요.</p>
+            <p><b>수업에서도 이 결과를 $A_v=-g_{m1}R_L$로 써서 $M_3$가 없는 캐스코드와 이득이 같다고 했어요.</b></p>
           </div>
         </div>
       </li>
@@ -697,6 +716,7 @@
     <blockquote>지금 얘기하는 거는 스몰 시그널 전류를 얘기하는 겁니다. DC 바이어스 전류가 아니고</blockquote>
     <p>$M_3$는 DC 바이어스 전류는 크게 바꿔요($I_{D1}=I_{D2}+I_{D3}$). 소신호 전류에는 $r_{o3}\gg1/g_{m2}$이라서 거의 영향이 없어요.</p>
   </div>
+  <div class="quiz after"><p class="q">확인해 봐요. 노드 Y에 PMOS 전류원 $M_3$가 달린 캐스코드에서 $I_{D2}=0.5\,\mathrm{mA}$, $I_{D3}=2.0\,\mathrm{mA}$, $R_L=1\,\mathrm{k\Omega}$일 때 $M_1$의 바이어스 전류 $I_{D1}$과 $R_L$의 IR 드롭은 얼마인가요? 또 $r_{o3}=20\,\mathrm{k\Omega}$, $1/g_{m2}=200\,\Omega$이고 $r_{o1}\gg r_{o3}$이면 $M_1$의 소신호 전류 중 $M_2$로 가는 비율은 약 몇 %인가요?</p><details><summary>답 보기</summary><p>$I_{D1}=I_{D2}+I_{D3}=0.5+2.0=2.5\,\mathrm{mA}$이고, $R_L$에는 $I_{D2}$만 흐르므로 IR 드롭은 $0.5\,\mathrm{mA}\times1\,\mathrm{k\Omega}=0.5\,\mathrm{V}$예요. 소신호에서는 $M_2$ 쪽 저항 $1/g_{m2}=0.2\,\mathrm{k\Omega}$와 $M_3$ 쪽 저항 $r_{o3}=20\,\mathrm{k\Omega}$가 병렬로 전류를 나누므로 $M_2$로 가는 비율은 $\frac{20}{20+0.2}\approx99\,\%$예요.</p></details></div>
   <div class="sum" hidden>
     <p class="sum-lead">$M_3$는 $M_1$에 바이어스 전류만 더 보태고, 소신호 전류는 거의 다 $M_2$로 가서 이득이 그대로예요.</p>
     <p class="panel-label">핵심 식</p>
@@ -725,9 +745,11 @@
     <figure class="figure"><svg id="fig-diffpair-half" viewBox="0 0 562 240" role="img" aria-label="왼쪽은 꼬리 노드 P에 전류원이 달린 MOS 차동쌍에 +vid/2와 −vid/2를 넣은 그림이고, 오른쪽은 소스를 접지한 반회로로 RS, M1, RD와 커패시터 CGS1, CGD1, CDB1이 있는 공통 소스 단입니다."><path class="fig-ink" d="M106 30 H166 M106 30 V46.0 L112 48.5 L100 53.5 L112 58.5 L100 63.5 L112 68.5 L100 73.5 L106 76.0 V92 M166 30 V46.0 L172 48.5 L160 53.5 L172 58.5 L160 63.5 L172 68.5 L160 73.5 L166 76.0 V92 M76 101 V139 M80 101 V139 M80 106 H106 M80 134 H106 M196 101 V139 M192 101 V139 M192 106 H166 M192 134 H166 M106 92 V106 M106 134 V175 H166 V134 M166 92 V106 M136 175 V190 M136 216 V226 M136 226 v8 m-8 0 h16 m-13 4 h10 m-8 4 h6 M136 195 V211 m-5 -5 l5 5 l5 -5 M14 120 H23.0 L25.5 114 L30.5 126 L35.5 114 L40.5 126 L45.5 114 L50.5 126 L53.0 120 H62 H76 M196 120 H212.0 L214.5 114 L219.5 126 L224.5 114 L229.5 126 L234.5 114 L239.5 126 L242.0 120 H258 M413 30 H463 M438 30 V41.0 L444 43.5 L432 48.5 L444 53.5 L432 58.5 L444 63.5 L432 68.5 L438 71.0 V82 M408 123 V161 M412 123 V161 M412 128 H438 M412 156 H438 M438 82 V128 M438 156 V200 M438 200 v8 m-8 0 h16 m-13 4 h10 m-8 4 h6 M318 142 H330.0 L332.5 136 L337.5 148 L342.5 136 L347.5 148 L352.5 136 L357.5 148 L360.0 142 H372 H408 M384 142 V180 M374 180 H394 M374 187 H394 M384 187 V196 M384 196 v8 m-8 0 h16 m-13 4 h10 m-8 4 h6 M384 142 V98 H410 M410 88 V108 M417 88 V108 M417 98 H438 M438 98 H540 M500 98 V136 M490 136 H510 M490 143 H510 M500 143 V152 M500 152 v8 m-8 0 h16 m-13 4 h10 m-8 4 h6"/><circle class="fig-ink" cx="136" cy="203" r="13"/><path class="fig-accent" d="M270 66 H306 m-8 -6 l8 6 l-8 6"/><circle class="fig-dot" cx="14" cy="120" r="3.6" data-node="in1" data-node-color="blue"/><circle class="fig-dot" cx="258" cy="120" r="3.6" data-node="in2" data-node-color="red"/><circle class="fig-dot" cx="136" cy="175" r="3.6" data-node="P" data-node-color="red"/><circle class="fig-dot" cx="318" cy="142" r="3.6" data-node="hin" data-node-color="blue"/><circle class="fig-dot" cx="384" cy="142" r="3.6" data-node="X" data-node-color="red"/><circle class="fig-dot" cx="438" cy="98" r="3.6" data-node="hout" data-node-color="blue"/><circle class="fig-dot" cx="500" cy="98" r="3.6" data-node="hout" data-node-color="blue"/><circle class="fig-dot" cx="540" cy="98" r="3.6" data-node="hout" data-node-color="blue"/><text class="fig-text fig-math" x="6" y="97" text-anchor="start" font-size="14" data-node="in1" data-node-color="blue">+v<tspan baseline-shift="sub" font-size="78%">id</tspan>/2</text><text class="fig-text fig-math" x="266" y="97" text-anchor="end" font-size="14" data-node="in2" data-node-color="red">−v<tspan baseline-shift="sub" font-size="78%">id</tspan>/2</text><text class="fig-text fig-math" x="38" y="143" text-anchor="middle" font-size="14">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><text class="fig-text fig-math" x="228" y="143" text-anchor="middle" font-size="14">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><text class="fig-text fig-math" x="94" y="65" text-anchor="end" font-size="14">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text><text class="fig-text fig-math" x="178" y="65" text-anchor="start" font-size="14">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text><text class="fig-text fig-math" x="80" y="164" text-anchor="start" font-size="14">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" x="192" y="164" text-anchor="end" font-size="14">M<tspan baseline-shift="sub" font-size="78%">2</tspan></text><text class="fig-text fig-math" x="130" y="167" text-anchor="end" font-size="14" data-node="P" data-node-color="red">P</text><text class="fig-text fig-math" x="136" y="14" text-anchor="middle" font-size="14">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text><text class="fig-text fig-math" x="156" y="207" text-anchor="start" font-size="14">I<tspan baseline-shift="sub" font-size="78%">SS</tspan></text><text class="fig-text" x="288" y="50" text-anchor="middle" font-size="13">반회로</text><text class="fig-text fig-math" x="318" y="124" text-anchor="middle" font-size="14" data-node="hin" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">in1</tspan></text><text class="fig-text fig-math" x="345" y="164" text-anchor="middle" font-size="14">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><text class="fig-text fig-math" x="374" y="132" text-anchor="end" font-size="14" data-node="X" data-node-color="red">X</text><text class="fig-text fig-math" x="396" y="196" text-anchor="start" font-size="14">C<tspan baseline-shift="sub" font-size="78%">GS1</tspan></text><text class="fig-text fig-math" x="414" y="80" text-anchor="middle" font-size="14">C<tspan baseline-shift="sub" font-size="78%">GD1</tspan></text><text class="fig-text fig-math" x="512" y="147" text-anchor="start" font-size="14">C<tspan baseline-shift="sub" font-size="78%">DB1</tspan></text><text class="fig-text fig-math" x="450" y="60" text-anchor="start" font-size="14">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text><text class="fig-text fig-math" x="448" y="150" text-anchor="start" font-size="14">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" x="540" y="80" text-anchor="middle" font-size="14" data-node="hout" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">out1</tspan></text><text class="fig-text fig-math" x="438" y="14" text-anchor="middle" font-size="14">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text></svg><figcaption>차동 입력이면 P를 접지로 바꾼 오른쪽 반회로 하나만 풀면 돼요.</figcaption></figure>
   </div>
   <div class="layer formal"><span class="layer-title">정확히 말하면</span>
-    <p>작은 예시를 먼저 식으로 적어요. 입력을 $v_{in1}=+v_{id}/2$, $v_{in2}=-v_{id}/2$로 넣으면 대칭 회로에서 두 가지 전류의 변화는 크기가 같고 방향이 반대예요. 꼬리로 모이는 전류의 합이 변하지 않으므로 꼬리 노드 P의 소신호 전압은 0이에요. 이것이 차동 증폭기에서 배운 <a href="../0923/정리노트_0923_Differential_Amplifiers.html#s3-virtual-ground">가상 접지</a>예요.</p>
+    <h4 class="sub">차동 입력과 가상 접지</h4>
+    <p>작은 예시를 먼저 식으로 적어요. 입력을 $v_{in1}=+v_{id}/2$, $v_{in2}=-v_{id}/2$로 넣으면 대칭 회로에서 두 가지 전류의 변화는 크기가 같고 방향이 반대예요. <b>꼬리로 모이는 전류의 합이 변하지 않으므로 꼬리 노드 P의 소신호 전압은 0이에요.</b> 이것이 차동 증폭기에서 배운 <a href="../0923/정리노트_0923_Differential_Amplifiers.html#s3-virtual-ground">가상 접지</a>예요.</p>
     <p>저주파 이득도 이 판단으로 반회로 하나에서 구했어요. $v_{out2}=-v_{out1}$이므로 차동 입력 대비 차동 출력 이득은 반회로 이득과 부호까지 같아요.</p>
     <p>$$\frac{v_{out1}-v_{out2}}{v_{in1}-v_{in2}}=\frac{2v_{out1}}{2v_{in1}}=\frac{v_{out1}}{v_{in1}}$$</p>
+    <h4 class="sub">고주파 반회로와 극점·영점</h4>
     <p>커패시턴스가 들어가도 같은 순서로 판단해요.</p>
     <ol class="steps">
       <li><strong>조건</strong> — 좌우의 소자, 바이어스, $R_D$, $R_S$가 대칭이고 입력은 순수 차동이에요. 그림의 커패시터는 따로 달아 준 소자가 아니라 트랜지스터에 내재된 커패시턴스를 표시한 것이고, $R_S$는 앞단의 소스 임피던스예요.</li>
@@ -735,18 +757,20 @@
       <li><strong>반회로</strong> — 게이트에 입력이 들어가고 소스가 접지된 CS 단이에요. 노드 X에는 $R_S$와 $C_{GS1}$, 출력에는 $R_D$와 $C_{DB1}$이 있고, 두 노드 사이에 $C_{GD1}$이 떠 있어요.</li>
       <li><strong>전달함수</strong> — 차동 전달함수가 반회로 전달함수와 같아요.
         <p>$$\begin{aligned}H_{DM}(s)&amp;=\frac{V_{out1}(s)-V_{out2}(s)}{V_{in1}(s)-V_{in2}(s)}\\&amp;=\frac{V_{out1}(s)}{V_{in1}(s)}=H_{half}(s)\end{aligned}$$</p>
-        전달함수가 같으면 분모와 분자의 근, 즉 극점과 영점이 같아요.</li>
+        <b>전달함수가 같으면 분모와 분자의 근, 즉 극점과 영점이 같아요.</b></li>
     </ol>
     <p>그래서 CS 단에서 구한 결과를 그대로 써요. $\lambda=0$이고 반회로의 저주파 이득이 $-g_{m1}R_D$일 때 밀러 근사의 두 극점은 다음과 같아요.</p>
     <p>$$\begin{aligned}|\omega_{p,in}|&amp;=1\Big/\Big(R_S\big[C_{GS1}\\&amp;\qquad+(1+g_{m1}R_D)C_{GD1}\big]\Big)\end{aligned}$$</p>
     <p>$$\begin{aligned}|\omega_{p,out}|&amp;=1\Big/\Big(R_D\Big[C_{DB1}\\&amp;\qquad+\Big(1+\frac{1}{g_{m1}R_D}\Big)C_{GD1}\Big]\Big)\end{aligned}$$</p>
     <p>CS 단을 정확히 풀었을 때 $C_{GD1}$을 지나 앞으로 새는 전류가 만드는 영점 $g_{m1}/C_{GD1}$도 차동쌍에 그대로 있어요.</p>
-    <p><strong>바이폴라 차동쌍</strong> — 차동 입력에서 꼬리 노드가 가상 접지인 것은 같고, 반회로는 CE 단이에요. 기호는 $C_{GS}\to C_\pi$, $C_{GD}\to C_\mu$, $C_{DB}\to C_{CS}$, $R_D\to R_C$로 바뀌어요. 베이스로 $r_{\pi1}$이 보이므로 입력 노드의 저항은 $R_S\parallel r_{\pi1}$이에요.</p>
+    <h4 class="sub">바이폴라 차동쌍의 극점</h4>
+    <p><strong>바이폴라 차동쌍</strong> — 차동 입력에서 꼬리 노드가 가상 접지인 것은 같고, 반회로는 CE 단이에요. 기호는 $C_{GS}\to C_\pi$, $C_{GD}\to C_\mu$, $C_{DB}\to C_{CS}$, $R_D\to R_C$로 바뀌어요. <b>베이스로 $r_{\pi1}$이 보이므로 입력 노드의 저항은 $R_S\parallel r_{\pi1}$이에요.</b></p>
     <p>$$\begin{aligned}|\omega_{p,in}|&amp;=1\Big/\Big((R_S\parallel r_{\pi1})\big[C_{\pi1}\\&amp;\qquad+(1+g_{m1}R_C)C_{\mu1}\big]\Big)\end{aligned}$$</p>
     <p>$$\begin{aligned}|\omega_{p,out}|&amp;=1\Big/\Big(R_C\Big[C_{CS1}\\&amp;\qquad+\Big(1+\frac{1}{g_{m1}R_C}\Big)C_{\mu1}\Big]\Big)\end{aligned}$$</p>
+    <h4 class="sub">공통 모드 반회로</h4>
     <p><strong>공통 모드는 다르게 풀어요</strong> — $v_{in1}=v_{in2}=v_{CM}$이면 두 가지 전류가 같은 방향으로 변해 꼬리 노드가 움직이므로 가상 접지를 쓰지 않아요. 꼬리 저항 $R_{EE}$를 $2R_{EE}$ 두 개의 병렬로 나눠 반쪽마다 하나씩 맡겨요. 가지 전류를 $i$라 하면 꼬리 전압은 다음과 같아요.</p>
     <p>$$v_P=(2i)R_{EE}=i(2R_{EE})$$</p>
-    <p>그래서 공통 모드 반회로는 이미터에 $2R_{EE}$가 달린 CE 단이에요. 실제 꼬리는 트랜지스터 전류원으로 만들고, 그 출력저항이 $R_{EE}$ 역할을 해요.</p>
+    <p><b>그래서 공통 모드 반회로는 이미터에 $2R_{EE}$가 달린 CE 단이에요.</b> 실제 꼬리는 트랜지스터 전류원으로 만들고, 그 출력저항이 $R_{EE}$ 역할을 해요.</p>
   </div>
   <div class="layer prof"><span class="layer-title">교수님 말씀</span>
     <p>저주파 이득을 반회로로 구했던 방법을 주파수 응답에도 그대로 가져왔어요. 반회로를 그려 보면 게이트에 입력이 들어가고 소스가 접지된 공통 소스 구조이고, 전달함수가 같다는 말은 극점과 영점이 같다는 뜻이라고 정리했어요.</p>
@@ -757,6 +781,7 @@
     <blockquote>커먼 모드 신호에 대해서는 그라운드로 볼 수 없죠.</blockquote>
     <p>꼬리 노드를 접지로 바꾸는 것은 좌우가 대칭이고 입력이 순수 차동일 때만이에요. 공통 모드는 $2R_{EE}$ 반회로로 따로 풀어요.</p>
   </div>
+  <div class="quiz after"><p class="q">확인해 봐요. 꼬리 저항이 $R_{EE}=5\,\mathrm{k\Omega}$인 대칭 BJT 차동쌍에서 (a) 순수 차동 입력을 넣을 때와 (b) 공통 모드 입력을 넣을 때, 한쪽 반회로의 이미터에는 각각 무엇이 연결되나요?</p><details><summary>답 보기</summary><p>(a) 순수 차동 입력에서는 꼬리 노드가 가상 접지이므로 이미터가 접지에 바로 연결된 CE 단이 돼요. (b) 공통 모드 입력에서는 꼬리 저항 $R_{EE}$를 $2R_{EE}$ 두 개의 병렬로 나누므로 이미터에 $2R_{EE}=10\,\mathrm{k\Omega}$가 달린 CE 단이 돼요.</p></details></div>
   <div class="sum" hidden>
     <p class="sum-lead">순수 차동 입력이면 꼬리 노드가 가상 접지라서 차동쌍의 극점과 영점은 반회로(CS 단·CE 단)와 같아요.</p>
     <p class="panel-label">핵심 식</p>
@@ -782,10 +807,12 @@
     <figure class="figure"><svg id="fig-cascode-half" viewBox="0 0 480 280" role="img" aria-label="반회로는 RS를 지난 입력이 M1 게이트 X로 들어가고 M1 드레인 Y 위에 게이트가 Vb인 M3, 그 위에 RD가 있는 캐스코드 단이며, 노드 X, Y, 출력에 각각 접지로 가는 커패시터 CX, CY, Cout이 하나씩 있습니다."><path class="fig-ink" d="M235 28 H285 M260 28 V42.0 L266 44.5 L254 49.5 L266 54.5 L254 59.5 L266 64.5 L254 69.5 L260 72.0 V86 M260 86 V100 M230 99 V137 M234 99 V137 M234 104 H260 M234 132 H260 M230 197 V235 M234 197 V235 M234 202 H260 M234 230 H260 M260 100 V104 M260 132 V202 M260 230 V252 M260 252 v8 m-8 0 h16 m-13 4 h10 m-8 4 h6 M173 118 H230 M260 100 H440 M380 100 V134 M370 134 H390 M370 141 H390 M380 141 V150 M380 150 v8 m-8 0 h16 m-13 4 h10 m-8 4 h6 M260 166 H330 M330 166 V192 M320 192 H340 M320 199 H340 M330 199 V208 M330 208 v8 m-8 0 h16 m-13 4 h10 m-8 4 h6 M60 216 H80.0 L82.5 210 L87.5 222 L92.5 210 L97.5 222 L102.5 210 L107.5 222 L110.0 216 H130 H230 M170 216 V244 M160 244 H180 M160 251 H180 M170 251 V258 M170 258 v8 m-8 0 h16 m-13 4 h10 m-8 4 h6"/><circle class="fig-ink" cx="170" cy="118" r="3"/><circle class="fig-dot" cx="60" cy="216" r="3.6" data-node="cin" data-node-color="blue"/><circle class="fig-dot" cx="170" cy="216" r="3.6" data-node="cX" data-node-color="red"/><circle class="fig-dot" cx="260" cy="166" r="3.6" data-node="cY" data-node-color="blue"/><circle class="fig-dot" cx="260" cy="100" r="3.6" data-node="cout" data-node-color="red"/><circle class="fig-dot" cx="380" cy="100" r="3.6" data-node="cout" data-node-color="red"/><circle class="fig-dot" cx="440" cy="100" r="3.6" data-node="cout" data-node-color="red"/><text class="fig-text fig-math" x="60" y="198" text-anchor="middle" font-size="14" data-node="cin" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><text class="fig-text fig-math" x="95" y="240" text-anchor="middle" font-size="14">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><text class="fig-text fig-math" x="158" y="206" text-anchor="end" font-size="14" data-node="cX" data-node-color="red">X</text><text class="fig-text fig-math" x="182" y="266" text-anchor="start" font-size="14">C<tspan baseline-shift="sub" font-size="78%">X</tspan></text><text class="fig-text fig-math" x="272" y="155" text-anchor="start" font-size="14" data-node="cY" data-node-color="blue">Y</text><text class="fig-text fig-math" x="342" y="208" text-anchor="start" font-size="14">C<tspan baseline-shift="sub" font-size="78%">Y</tspan></text><text class="fig-text fig-math" x="392" y="149" text-anchor="start" font-size="14">C<tspan baseline-shift="sub" font-size="78%">out</tspan></text><text class="fig-text fig-math" x="440" y="82" text-anchor="middle" font-size="14" data-node="cout" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><text class="fig-text fig-math" x="170" y="100" text-anchor="middle" font-size="14">V<tspan baseline-shift="sub" font-size="78%">b</tspan></text><text class="fig-text fig-math" x="260" y="13" text-anchor="middle" font-size="14">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text><text class="fig-text fig-math" x="272" y="62" text-anchor="start" font-size="14">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text><text class="fig-text fig-math" x="272" y="128" text-anchor="start" font-size="14">M<tspan baseline-shift="sub" font-size="78%">3</tspan></text><text class="fig-text fig-math" x="272" y="226" text-anchor="start" font-size="14">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text></svg><figcaption>각 노드의 커패시터를 접지로 모으면 노드마다 극점이 하나씩 보여요.</figcaption></figure>
   </div>
   <div class="layer formal"><span class="layer-title">정확히 말하면</span>
-    <p>작은 예시부터 적용해요. 저주파 이득에서 평평하게 시작하는 저역통과 응답이고, 영점은 관심 대역보다 훨씬 높아 영향이 없다고 둬요. 세 극점이 충분히 떨어져 있으면 점근선의 기울기는 극점을 지날 때마다 $-20\,\mathrm{dB/dec}$씩 더해져요. 이득이 한 번에 20 dB 떨어지는 것이 아니라 기울기가 바뀌는 것이고, 실제 곡선은 각 극점 근처에서 부드럽게 휘어요.</p>
+    <h4 class="sub">세 극점과 보드 선도의 기울기</h4>
+    <p>작은 예시부터 적용해요. 저주파 이득에서 평평하게 시작하는 저역통과 응답이고, 영점은 관심 대역보다 훨씬 높아 영향이 없다고 둬요. <b>세 극점이 충분히 떨어져 있으면 점근선의 기울기는 극점을 지날 때마다 $-20\,\mathrm{dB/dec}$씩 더해져요.</b> 이득이 한 번에 20 dB 떨어지는 것이 아니라 기울기가 바뀌는 것이고, 실제 곡선은 각 극점 근처에서 부드럽게 휘어요.</p>
     <figure class="figure"><svg id="fig-cascode-bode" viewBox="0 0 490 260" role="img" aria-label="평평한 이득이 세 극점 주파수를 지날 때마다 기울기가 0, −20, −40, −60 dB/dec로 바뀌는 점근선입니다."><path class="fig-ink" d="M60 34 L64 28 L68 34 M64 28 V200 H454 m-6 -4 l6 4 l-6 4 M170 196 V204 M270 196 V204 M370 196 V204"/><path class="fig-ink" stroke-dasharray="3 4" d="M170 50 V196 M270 50 V196 M370 50 V196"/><path class="fig-accent" d="M70 50.0 L170 50.0 L270 75.0 L370 125.0 L440 177.5"/><text class="fig-text fig-math" x="64" y="20" text-anchor="middle" font-size="13">|H| (dB)</text><text class="fig-text fig-math" x="462" y="204" text-anchor="start" font-size="14">ω</text><text class="fig-text fig-math" x="170" y="222" text-anchor="middle" font-size="14">ω<tspan baseline-shift="sub" font-size="78%">p1</tspan></text><text class="fig-text fig-math" x="270" y="222" text-anchor="middle" font-size="14">ω<tspan baseline-shift="sub" font-size="78%">p2</tspan></text><text class="fig-text fig-math" x="370" y="222" text-anchor="middle" font-size="14">ω<tspan baseline-shift="sub" font-size="78%">p3</tspan></text><text class="fig-text" x="115" y="42" text-anchor="middle" font-size="13">0</text><text class="fig-text" x="228" y="91" text-anchor="middle" font-size="13">−20</text><text class="fig-text" x="336" y="142" text-anchor="middle" font-size="13">−40</text><text class="fig-text" x="430" y="146" text-anchor="start" font-size="13">−60</text><text class="fig-text" x="258" y="250" text-anchor="middle" font-size="12">숫자는 각 구간의 기울기(dB/dec)</text></svg><figcaption>세 극점을 크기 순으로 $\omega_{p1}\lt\omega_{p2}\lt\omega_{p3}$라 부르면 기울기가 0, −20, −40, −60 dB/dec로 바뀌어요.</figcaption></figure>
     <p>그림의 순서는 크기 순으로 다시 붙인 이름이에요. 노드 X, Y, 출력 중 어느 극점이 가장 낮은지는 소자 값에 따라 달라요.</p>
-    <p>이제 극점을 구해요. 순수 차동 입력에서는 꼬리 노드가 가상 접지이므로(<a href="#s1-half-circuit">차동쌍은 반회로와 같은 극점·영점을 가져요</a>), 반회로는 $R_S$로 구동되는 입력 소자 $M_1$ 위에 캐스코드 소자 $M_3$가 얹힌 캐스코드 단이에요. 반대쪽 $M_2$, $M_4$는 다른 반쪽에서 같은 역할을 해요. 그래서 캐스코드 단의 극점을 소자 번호만 바꿔 그대로 쓰고, 슬라이드처럼 $\lambda=0$ 모델을 써요. 그림의 $C_X$, $C_Y$, $C_{out}$은 아래 각 단계에서 그 노드와 접지 사이에 모은 커패시턴스의 합이에요.</p>
+    <h4 class="sub">저주파 이득 $A_0$ 구하기</h4>
+    <p>이제 극점을 구해요. 순수 차동 입력에서는 꼬리 노드가 가상 접지이므로(<a href="#s1-half-circuit">차동쌍은 반회로와 같은 극점·영점을 가져요</a>), 반회로는 $R_S$로 구동되는 입력 소자 $M_1$ 위에 캐스코드 소자 $M_3$가 얹힌 캐스코드 단이에요. 반대쪽 $M_2$, $M_4$는 다른 반쪽에서 같은 역할을 해요. <b>그래서 캐스코드 단의 극점을 소자 번호만 바꿔 그대로 쓰고, 슬라이드처럼 $\lambda=0$ 모델을 써요.</b> 그림의 $C_X$, $C_Y$, $C_{out}$은 아래 각 단계에서 그 노드와 접지 사이에 모은 커패시턴스의 합이에요.</p>
     <div data-gain-route="gm-rout">
       <p data-gain-stage="gm"><strong>출력 단락의 $G_m$</strong> — 저주파에서는 커패시터가 개방이고 게이트 전류가 없어 $v_X=v_{in}$이에요. 출력을 AC 접지에 단락하면 $M_1$이 만든 소신호 전류는 노드 Y에서 $M_3$ 소스 말고는 갈 곳이 없어 그대로 단락선까지 가요.
         $$G_m=\frac{i_{out}}{v_{in}}=g_{m1}$$</p>
@@ -794,6 +821,7 @@
       <p data-gain-stage="gain"><strong>저주파 이득</strong> — 같은 입출력 정의로 곱해요.
         $$A_0=-G_mR_{out}\approx-g_{m1}R_D$$</p>
     </div>
+    <h4 class="sub">노드 X · Y · 출력의 세 극점과 전달함수</h4>
     <ol class="steps">
       <li><strong>노드 X</strong> — 소스가 가상 접지라 $C_{GS1}$은 접지 커패시터예요. $C_{GD1}$은 X와 Y 사이에 떠 있어서 밀러 근사로 나눠요. Y에서 $M_3$ 소스로 보이는 저항이 $1/g_{m3}$이므로 X에서 Y로의 이득은 다음과 같아요.
         <p>$$A_{v,XY}\approx-\frac{g_{m1}}{g_{m3}}$$</p>
@@ -806,17 +834,19 @@
         <p>$$\omega_{p,out}=\frac{1}{R_D(C_{DB3}+C_{GD3})}$$</p></li>
       <li><strong>전달함수</strong> — 세 노드의 극점을 곱으로 묶어요.
         <p>$$\begin{aligned}H(s)&amp;=\frac{A_0}{\left(1+\frac{s}{\omega_{p,X}}\right)\left(1+\frac{s}{\omega_{p,Y}}\right)}\\&amp;\quad\times\frac{1}{1+\frac{s}{\omega_{p,out}}}\end{aligned}$$</p>
-        여기서 $A_0=-g_{m1}R_D$는 저주파 이득이고, 분모에 극점 세 개가 있어요.</li>
+        <b>여기서 $A_0=-g_{m1}R_D$는 저주파 이득이고, 분모에 극점 세 개가 있어요.</b></li>
     </ol>
+    <h4 class="sub">극점의 부호 · 영점 오차 · 캐스코드의 이점</h4>
     <p><strong>극점의 부호</strong> — 실제 극점은 $s=-\omega_{p,X}$처럼 음수에 있어요. 극점 주파수는 그 크기라서 책에 따라 $|\omega_{p,X}|$처럼 절댓값을 씌워 쓰거나 두 표기를 섞어 써요. 극점이 음수로 나오면 절댓값을 씌워 주파수로 읽어요.</p>
     <p><strong>밀러 근사의 오차</strong> — 밀러 근사는 저주파 이득 $A_{v,XY}$로 $C_{GD1}$을 나눴기 때문에 영점을 구할 수 없고, 극점에도 약간의 오차가 생길 수 있어요. $C_{GD1}$을 지나 앞으로 새는 전류가 만드는 영점은 대략 $g_{m1}/C_{GD1}$이고, $C_{GD1}$이 작아 극점들보다 훨씬 높은 주파수에 있어요. 그래서 이득이 극점에서 떨어지는 관심 대역에서는 영점의 영향이 작아 위 근사 전달함수가 타당해요.</p>
-    <p><strong>캐스코드를 쓰는 이유</strong> — 단순 CS 반회로에서 $C_{GD1}$의 입력 밀러 배수는 $1+g_{m1}R_D$였지만, 캐스코드 반회로에서는 $1+g_{m1}/g_{m3}$로 줄어요. $g_{m1}\approx g_{m3}$이면 약 2라서 입력 극점이 높아지고, 대신 노드 Y에 극점이 하나 더 생겨요.</p>
+    <p><strong>캐스코드를 쓰는 이유</strong> — 단순 CS 반회로에서 $C_{GD1}$의 입력 밀러 배수는 $1+g_{m1}R_D$였지만, 캐스코드 반회로에서는 $1+g_{m1}/g_{m3}$로 줄어요. <b>$g_{m1}\approx g_{m3}$이면 약 2라서 입력 극점이 높아지고, 대신 노드 Y에 극점이 하나 더 생겨요.</b></p>
   </div>
   <div class="layer prof"><span class="layer-title">교수님 말씀</span>
     <p>캐스코드 차동쌍도 반회로의 극점을 구하는 것이 곧 차동쌍의 극점을 구하는 것이라서, 앞에서 구한 캐스코드 단의 극점을 그대로 쓰면 된다고 했어요. 전달함수는 극점 세 개의 함수이고, 분자는 저주파 이득 $-g_{m1}R_D$예요.</p>
     <blockquote>원래 폴은 네거티브 폴이에요.</blockquote>
     <blockquote>제로는 상당히 높은 주파수에 있습니다, 폴들에 비해서.</blockquote>
   </div>
+  <div class="quiz after"><p class="q">확인해 봐요. 저주파 이득에서 평평하게 시작하고 영점이 극점보다 훨씬 높아 무시할 수 있는 캐스코드 차동쌍에서 세 극점이 충분히 떨어져 있을 때, 두 번째 극점 $\omega_{p2}$를 지난 구간 기울기가 $-40\,\mathrm{dB/dec}$이면 세 번째 극점 $\omega_{p3}$를 지난 뒤 기울기는 얼마인가요?</p><details><summary>답 보기</summary><p>$-60\,\mathrm{dB/dec}$예요. 실수 극점을 하나 지날 때마다 기존 기울기에 $-20\,\mathrm{dB/dec}$가 더해지므로 $-40+(-20)=-60\,\mathrm{dB/dec}$가 돼요.</p></details></div>
   <div class="sum" hidden>
     <p class="sum-lead">캐스코드 차동쌍은 반회로 캐스코드 단의 노드 X, Y, 출력에서 극점 세 개를 가져요.</p>
     <p class="panel-label">핵심 식</p>
@@ -876,12 +906,14 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <h4 class="sub">음귀환과 양귀환의 차이</h4>
     <p>귀환(feedback)은 출력을 다시 입력 쪽으로 되돌리는 구조예요. 되돌린 신호를 빼는지 더하는지에 따라 두 가지로 나뉘어요.</p>
     <ul>
       <li><b>음귀환(negative feedback)</b>: 입력과 같은 위상의 귀환 신호를 입력에서 빼요. 차이가 줄어드는 안정한 시스템이고, 증폭기 같은 대부분의 회로에 써요. 그냥 "귀환"이라고 하면 음귀환을 뜻해요.</li>
       <li><b>양귀환(positive feedback)</b>: 같은 위상의 출력을 입력에 계속 더해요. 증폭한 신호를 다시 더하면 출력이 점점 커지는 불안정한 시스템이에요. 일정한 주파수의 신호를 만드는 발진기(oscillator, 신호 발생기)에 쓰고, 전자회로2에서는 다루지 않아요.</li>
     </ul>
-    <p>음귀환은 정확도가 떨어지는(poorly controlled) 시스템이 더 정교한 특성을 갖게 만드는 데 써요.</p>
+    <p><b>음귀환은 정확도가 떨어지는(poorly controlled) 시스템이 더 정교한 특성을 갖게 만드는 데 써요.</b></p>
+    <h4 class="sub">음귀환 시스템을 이루는 네 부분</h4>
     <p>지금까지 다룬 회로는 입력을 넣으면 출력이 그대로 나오는 개루프(open loop) 시스템이에요.</p>
     $$Y=A_1X$$
     <p>음귀환 시스템은 여기에 세 부분을 더해 모두 네 부분으로 이루어져요.</p>
@@ -892,8 +924,9 @@
       <tr><td>귀환 회로망(feedback network) $K$</td><td>감지한 출력으로 귀환 신호 $X_F$를 만들어요</td><td>저항 분배기 $R_1$, $R_2$</td></tr>
       <tr><td>입력 비교(comparison mechanism)</td><td>$X$에서 $X_F$를 빼서 $A_1$에 넣어요</td><td>op-amp의 차동 입력</td></tr>
     </table></div>
-    <p>op-amp는 이미 배운 귀환 시스템이에요. op-amp를 그대로 쓰면 개루프이지만, 실제로는 출력에서 저항을 거쳐 입력으로 되돌려요. 비반전 증폭기든 반전 증폭기든 귀환은 항상 반전(−) 입력으로 들어가므로 음귀환이에요. 자세한 대응은 <a href="#s2-noninverting">비반전 증폭기를 귀환으로 보기</a>에서 다뤄요.</p>
-    <p>귀환 회로망 $K$가 $0$이면 되돌아오는 신호가 없으니 개루프 시스템이에요. $K\ne0$이면 루프가 닫혀 있다고 해서 폐루프(closed loop) 시스템이라고 해요. 음귀환 시스템은 폐루프로 구성돼요.</p>
+    <p>op-amp는 이미 배운 귀환 시스템이에요. op-amp를 그대로 쓰면 개루프이지만, 실제로는 출력에서 저항을 거쳐 입력으로 되돌려요. <b>비반전 증폭기든 반전 증폭기든 귀환은 항상 반전(−) 입력으로 들어가므로 음귀환이에요.</b> 자세한 대응은 <a href="#s2-noninverting">비반전 증폭기를 귀환으로 보기</a>에서 다뤄요.</p>
+    <h4 class="sub">개루프와 폐루프</h4>
+    <p>귀환 회로망 $K$가 $0$이면 되돌아오는 신호가 없으니 개루프 시스템이에요. <b>$K\ne0$이면 루프가 닫혀 있다고 해서 폐루프(closed loop) 시스템이라고 해요.</b> 음귀환 시스템은 폐루프로 구성돼요.</p>
   </div>
   <div class="layer prof">
     <span class="layer-title">교수님 말씀</span>
@@ -901,11 +934,7 @@
     <blockquote>근데 여러분들이 그동안 피드백 시스템 배웠어요. 언제 배웠냐? Op-amp에서.</blockquote>
     <p>양귀환은 작은 신호를 증폭해 다시 더하는 일을 반복해 큰 신호를 만들어 낸다고 설명했어요. 신호 발생 회로는 아날로그 집적회로 같은 상위 과목에서 다룬다고 했어요.</p>
   </div>
-  <div class="layer warn">
-    <span class="layer-title">꼭 기억해요</span>
-    <blockquote>일반적으로 여러분들이 피드백이라고 하면 네거티브 피드백을 얘기하는 거예요</blockquote>
-    <blockquote>K가 0이면 오픈 루프 시스템이에요.</blockquote>
-  </div>
+  <div class="quiz after"><p class="q">확인해 봐요. 입력을 (+) 단자에 넣고, 출력에서 저항 분배기로 전압을 나눠 (−) 단자에 되돌리는 op-amp 회로에서 전방 시스템 $A_1$, 출력 감지·귀환 회로망 $K$, 입력 비교부는 각각 어디에 해당하고, 이 회로는 개루프와 폐루프 중 무엇인가요?</p><details><summary>답 보기</summary><p>op-amp가 전방 시스템 $A_1$, 출력에 연결된 저항 분배기가 출력 감지와 귀환 회로망 $K$, op-amp의 두 차동 입력 단자가 입력 비교부예요. $K\ne0$이므로 폐루프(음귀환) 시스템이에요.</p></details></div>
   <div class="sum" hidden>
     <p class="sum-lead">음귀환은 출력을 감지해 귀환 회로망 $K$로 만든 $X_F$를 입력에서 빼고 그 차이를 전방 시스템 $A_1$에 넣어요.</p>
     <p class="panel-label">핵심 식</p>
@@ -949,6 +978,7 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <h4 class="sub">숫자로 먼저 보는 폐루프 이득</h4>
     <p>먼저 작은 예에 적용해 봐요. $A_1=1000$, $K=0.1$이면 다음과 같아요.</p>
     $$1+KA_1=1+0.1\times1000=101$$
     $$\frac{Y}{X}=\frac{1000}{101}\approx9.90$$
@@ -956,15 +986,17 @@
     <p>출력을 감지해 귀환 회로망에서 $K$배 한 것이 귀환 신호 $X_F$예요.</p>
     $$X_F=KY$$
     $$K=\frac{X_F}{Y}$$
-    <p>$K$를 귀환율(feedback factor)이라고 하고, "피드백 게인"이라고 부르기도 해요. 어떤 교재는 $K$ 대신 $\beta$를 써서 $\beta A_1$처럼 적어요. $\beta$도 같은 귀환율이에요.</p>
+    <p><b>$K$를 귀환율(feedback factor)이라고 하고, "피드백 게인"이라고 부르기도 해요.</b> 어떤 교재는 $K$ 대신 $\beta$를 써서 $\beta A_1$처럼 적어요. $\beta$도 같은 귀환율이에요.</p>
+    <h4 class="sub">폐루프 이득 유도하기</h4>
     <p>폐루프에서는 $A_1$에 $X$가 아니라 $X$에서 $X_F$를 뺀 신호가 들어가요. 칠판 유도는 이 순서예요.</p>
     <ol class="steps">
-      <li>$A_1$의 입력은 $X-X_F$예요. $$Y=A_1(X-X_F)$$</li>
-      <li>$X_F=KY$를 대입해요. $$Y=A_1(X-KY)$$</li>
-      <li>$Y$ 항을 왼쪽으로 이항해요. $$(1+KA_1)Y=A_1X$$</li>
-      <li>양변을 $X$와 $1+KA_1$로 나누면 폐루프 이득(closed-loop gain)이에요. $$\frac{Y}{X}=\frac{A_1}{1+KA_1}$$</li>
+      <li><div class="drow"><div>$$Y=A_1(X-X_F)$$</div><p class="why">$A_1$의 입력은 $X-X_F$예요.</p></div></li>
+      <li><div class="drow"><div>$$Y=A_1(X-KY)$$</div><p class="why">$X_F=KY$를 대입해요.</p></div></li>
+      <li><div class="drow"><div>$$(1+KA_1)Y=A_1X$$</div><p class="why">$Y$ 항을 왼쪽으로 이항해요.</p></div></li>
+      <li><div class="drow"><div>$$\frac{Y}{X}=\frac{A_1}{1+KA_1}$$</div><p class="why">양변을 $X$와 $1+KA_1$로 나누면 폐루프 이득(closed-loop gain)이에요.</p></div></li>
     </ol>
-    <p>$K=0$이면 분모가 1이라 개루프 식 $Y=A_1X$로 돌아가요. 음귀환에서는 $KA_1\gt0$이라 분모 $1+KA_1$이 1보다 커서, 이득이 개루프 이득보다 $1+KA_1$배 줄어요.</p>
+    <p>$K=0$이면 분모가 1이라 개루프 식 $Y=A_1X$로 돌아가요. <b>음귀환에서는 $KA_1\gt0$이라 분모 $1+KA_1$이 1보다 커서, 이득이 개루프 이득보다 $1+KA_1$배 줄어요.</b></p>
+    <h4 class="sub">$K$에 따른 이득 변화와 대가</h4>
     <p>$A_1=1000$을 고정하고 $K$를 키우면 분모가 커지는 만큼 이득이 줄어요.</p>
     <div class="table-wrap"><table>
       <tr><th>$K$</th><th>$1+KA_1$</th><th>$\frac{Y}{X}$</th></tr>
@@ -972,17 +1004,14 @@
       <tr><td>$0.01$</td><td>$11$</td><td>$\frac{1000}{11}\approx90.91$</td></tr>
       <tr><td>$0.1$</td><td>$101$</td><td>$\frac{1000}{101}\approx9.90$</td></tr>
     </table></div>
-    <p>이득을 내주는 것은 일반적으로 보면 단점일 수 있어요. 그런데도 음귀환을 쓰는 이유는 다른 장점 때문이고, 그 장점은 다음 시간에 다뤄요. <a href="#s4-next">다음 시간 예고</a></p>
+    <p><b>이득을 내주는 것은 일반적으로 보면 단점일 수 있어요.</b> 그런데도 음귀환을 쓰는 이유는 다른 장점 때문이고, 그 장점은 다음 시간에 다뤄요. <a href="#s4-next">다음 시간 예고</a></p>
   </div>
   <div class="layer prof">
     <span class="layer-title">교수님 말씀</span>
     <blockquote>게인이 줄어드는데 왜, 왜 쓰느냐? 다른 장점이 있기 때문에 쓰겠죠?</blockquote>
     <p>교수님은 예전 교재가 귀환율을 $\beta$로 적었다고 했어요. "베타가 뭐지" 하지 말고 $K$와 같은 피드백 팩터로 이해하라고 했어요.</p>
   </div>
-  <div class="layer warn">
-    <span class="layer-title">꼭 기억해요</span>
-    <blockquote>우선 특징은 게인이 줄어듭니다. 얼마만큼? 1 + KA 만큼</blockquote>
-  </div>
+  <div class="quiz after"><p class="q">확인해 봐요. 개루프 이득이 $A_1=500$, 귀환율이 $K=0.04$인 음귀환 시스템에서 폐루프 이득 $\frac{Y}{X}$는 얼마인가요?</p><details><summary>답 보기</summary><p>$\frac{500}{21}\approx23.81$이에요. $1+KA_1=1+0.04\times500=21$이므로 $\frac{Y}{X}=\frac{500}{21}\approx23.81$이에요.</p></details></div>
   <div class="sum" hidden>
     <p class="sum-lead">음귀환을 걸면 개루프 이득 $A_1$이 폐루프 이득 $\frac{A_1}{1+KA_1}$로 $1+KA_1$배 줄어요.</p>
     <p class="panel-label">핵심 식</p>
@@ -1029,25 +1058,28 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <h4 class="sub">회로와 귀환 네 부분의 대응</h4>
     <p>귀환의 네 부분은 이 회로에서 다음과 같이 대응해요.</p>
     <ul>
       <li>전방 시스템: op-amp $A_1$이에요.</li>
       <li>출력 감지와 귀환 회로망: 출력과 접지 사이의 저항 분배기 $R_1$, $R_2$가 출력 전압을 감지해 일정 비율로 나눠요.</li>
       <li>입력 비교: op-amp의 차동 입력이에요. $X$는 (+) 입력, $X_F$는 (−) 입력으로 들어가 서로 빠져요.</li>
     </ul>
-    <p>분배기가 없어서 (−) 입력이 접지되면 $X_F=0$이라 개루프이고, $Y=A_1X$예요.</p>
+    <p><b>분배기가 없어서 (−) 입력이 접지되면 $X_F=0$이라 개루프이고, $Y=A_1X$예요.</b></p>
+    <h4 class="sub">숫자로 먼저 보는 비반전 증폭기</h4>
     <p>먼저 작은 예에 적용해 봐요. $R_1=9\,\mathrm{k\Omega}$, $R_2=1\,\mathrm{k\Omega}$, $A_1=1000$이면 다음과 같아요.</p>
     $$K=\frac{1\,\mathrm{k\Omega}}{9\,\mathrm{k\Omega}+1\,\mathrm{k\Omega}}=0.1$$
     $$\frac{Y}{X}=\frac{1000}{1+0.1\times1000}=\frac{1000}{101}\approx9.90$$
-    <p>$A_1\to\infty$이면 이 값은 $\frac{1}{K}=10$으로 가요.</p>
+    <p><b>$A_1\to\infty$이면 이 값은 $\frac{1}{K}=10$으로 가요.</b></p>
+    <h4 class="sub">유한한 $A_1$과 무한대 $A_1$의 폐루프 이득</h4>
     <p>일반식은 이 순서로 구해요. op-amp 입력으로 전류가 흐르지 않는다고 보고 분배기를 써요.</p>
     <ol class="steps">
-      <li>저항 분배기의 가운데 노드가 귀환 신호예요. $$X_F=\frac{R_2}{R_1+R_2}Y$$</li>
-      <li>귀환율은 그 비율이에요. $$K=\frac{R_2}{R_1+R_2}$$</li>
-      <li>폐루프 이득 $\frac{A_1}{1+KA_1}$에 대입해요. $$\frac{Y}{X}=\frac{A_1}{1+\frac{R_2}{R_1+R_2}A_1}$$</li>
-      <li>이상적인 op-amp처럼 $A_1\to\infty$이면 분모의 1을 무시할 수 있어요. $$\frac{Y}{X}\to\frac{1}{K}=\frac{R_1+R_2}{R_2}=1+\frac{R_1}{R_2}$$</li>
+      <li><div class="drow"><div>$$X_F=\frac{R_2}{R_1+R_2}Y$$</div><p class="why">저항 분배기의 가운데 노드가 귀환 신호예요.</p></div></li>
+      <li><div class="drow"><div>$$K=\frac{R_2}{R_1+R_2}$$</div><p class="why">귀환율은 그 비율이에요.</p></div></li>
+      <li><div class="drow"><div>$$\frac{Y}{X}=\frac{A_1}{1+\frac{R_2}{R_1+R_2}A_1}$$</div><p class="why">폐루프 이득 $\frac{A_1}{1+KA_1}$에 대입해요.</p></div></li>
+      <li><div class="drow"><div>$$\frac{Y}{X}\to\frac{1}{K}=\frac{R_1+R_2}{R_2}=1+\frac{R_1}{R_2}$$</div><p class="why">이상적인 op-amp처럼 $A_1\to\infty$이면 분모의 1을 무시할 수 있어요.</p></div></li>
     </ol>
-    <p>4단계의 $1+\frac{R_1}{R_2}$가 op-amp에서 저항비로 구했던 비반전 증폭기의 이득이에요. $A_1$이 무한대가 아니면 정확한 이득은 3단계 식이에요.</p>
+    <p>4단계의 $1+\frac{R_1}{R_2}$가 op-amp에서 저항비로 구했던 비반전 증폭기의 이득이에요. <b>$A_1$이 무한대가 아니면 정확한 이득은 3단계 식이에요.</b></p>
     <p>이 회로의 $K$는 보통 1보다 작아요. 귀환이 없을 때($K=0$) 이득은 $A_1$이었고, $A_1=\infty$였다면 무한대에서 $1+\frac{R_1}{R_2}$로 이득이 줄어든 셈이에요.</p>
     <p>그래서 op-amp는 무한대 이득의 개루프로 쓰지 않고 귀환 시스템으로 만들어 써요. 그 이유는 뒤에서 다시 설명해요.</p>
   </div>
@@ -1057,6 +1089,7 @@
     <blockquote>op-amp는 오픈 루프로서는 사용을 안 합니다.</blockquote>
     <p>교수님은 저항 분배기로 출력을 일정 비율만큼 나눠 되돌리므로 여기서는 $K$가 보통 1보다 작다고 했어요.</p>
   </div>
+  <div class="quiz after"><p class="q">확인해 봐요. 비반전 증폭기에서 $R_1=4\,\mathrm{k\Omega}$, $R_2=1\,\mathrm{k\Omega}$일 때 귀환율 $K$는 얼마이고, $A_1=500$일 때의 폐루프 이득과 $A_1\to\infty$일 때의 극한 이득은 각각 얼마인가요?</p><details><summary>답 보기</summary><p>$K=0.2$, $A_1=500$일 때 폐루프 이득은 $\frac{500}{101}\approx4.95$, $A_1\to\infty$일 때 극한 이득은 $5$예요. $K=\frac{1}{4+1}=0.2$, $1+KA_1=1+0.2\times500=101$이므로 $\frac{Y}{X}=\frac{500}{101}\approx4.95$이고, $A_1\to\infty$이면 $\frac{1}{K}=1+\frac{4}{1}=5$예요.</p></details></div>
   <div class="sum" hidden>
     <p class="sum-lead">비반전 증폭기는 op-amp $A_1$과 저항 분배기 $K$의 귀환 시스템이고, $A_1\to\infty$이면 이득이 $\frac{1}{K}=1+\frac{R_1}{R_2}$예요.</p>
     <p class="panel-label">핵심 식</p>
@@ -1101,37 +1134,51 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
-    <p>음귀환에서는 입력이 그대로 $A_1$에 들어가지 않고, 입력과 귀환 신호의 차이가 들어가요. 이 차이를 오차 신호(error signal) $E$라고 해요.</p>
+    <h4 class="sub">오차 신호 $E$의 정의와 작은 예</h4>
+    <p>음귀환에서는 입력이 그대로 $A_1$에 들어가지 않고, 입력과 귀환 신호의 차이가 들어가요. <b>이 차이를 오차 신호(error signal) $E$라고 해요.</b></p>
     $$E=X-X_F$$
     <p>먼저 작은 예에 적용해 봐요. $X=1\,\mathrm{V}$, $A_1=1000$, $K=0.1$이면 $1+KA_1=101$이에요.</p>
     $$E=\frac{1\,\mathrm{V}}{101}\approx9.90\,\mathrm{mV}$$
     $$Y=A_1E=\frac{1000}{101}\,\mathrm{V}\approx9.90\,\mathrm{V}$$
     $$X_F=KY=\frac{100}{101}\,\mathrm{V}\approx0.99\,\mathrm{V}$$
+    <h4 class="sub">오차 $E=\frac{X}{1+KA_1}$ 유도하기</h4>
     <p>$E$는 어떻게 이렇게 작아질까요? 칠판 유도는 이 순서예요.</p>
     <ol class="steps">
-      <li>오차의 정의에서 시작해요. $$E=X-X_F$$</li>
-      <li>$X_F=KY$이고 $Y=A_1E$예요. $$X_F=KA_1E$$</li>
-      <li>정의에 대입해요. $$E=X-KA_1E$$</li>
-      <li>$E$ 항을 모아요. $$(1+KA_1)E=X$$</li>
-      <li>$E$에 대해 풀어요. $$E=\frac{X}{1+KA_1}$$</li>
+      <li><div class="drow"><div>$$E=X-X_F$$</div><p class="why">오차의 정의에서 시작해요.</p></div></li>
+      <li><div class="drow"><div>$$X_F=KA_1E$$</div><p class="why">$X_F=KY$이고 $Y=A_1E$예요.</p></div></li>
+      <li><div class="drow"><div>$$E=X-KA_1E$$</div><p class="why">정의에 대입해요.</p></div></li>
+      <li><div class="drow"><div>$$(1+KA_1)E=X$$</div><p class="why">$E$ 항을 모아요.</p></div></li>
+      <li><div class="drow"><div>$$E=\frac{X}{1+KA_1}$$</div><p class="why">$E$에 대해 풀어요.</p></div></li>
     </ol>
-    <p>입력 $X$가 $1+KA_1$배 줄어든 것이 실제로 $A_1$에 들어가는 신호예요. $KA_1$을 키우면 이 비율이 계속 작아져요.</p>
+    <p><b>입력 $X$가 $1+KA_1$배 줄어든 것이 실제로 $A_1$에 들어가는 신호예요.</b> $KA_1$을 키우면 이 비율이 계속 작아져요.</p>
     <div class="table-wrap"><table>
       <tr><th>$KA_1$</th><th>$\frac{E}{X}=\frac{1}{1+KA_1}$</th></tr>
       <tr><td>$10$</td><td>$\frac{1}{11}\approx9.09\,\%$</td></tr>
       <tr><td>$100$</td><td>$\frac{1}{101}\approx0.99\,\%$</td></tr>
       <tr><td>$1000$</td><td>$\frac{1}{1001}\approx0.10\,\%$</td></tr>
     </table></div>
+    <h4 class="sub">가상 단락과 복제</h4>
     <p>$A_1\to\infty$이면 $E\to0$이에요. 하지만 $E$는 정확히 0이 아니에요. $E=0$이면 $Y=A_1E$도 0이 되어 아무 의미가 없어요. $A_1$이 아주 커도 작은 $E$가 들어가야 유한한 출력이 나와요.</p>
     <p>그래서 $E$가 거의 0이라는 것은 입력과 귀환 신호가 거의 같다는 뜻이에요.</p>
     $$X\approx X_F$$
     <p>이것이 op-amp에서 배운 가상 단락(virtual short)이에요. 두 입력 단자의 전압이 거의 같다는 가정이에요.</p>
-    <p>$KA_1$이 클수록 귀환 신호는 입력의 좋은 복제(replica)가 돼요. 출력 $Y$는 커도 $K$로 줄인 $X_F$는 입력 모양을 거의 그대로 따라가요.</p>
+    <p><b>$KA_1$이 클수록 귀환 신호는 입력의 좋은 복제(replica)가 돼요.</b> 출력 $Y$는 커도 $K$로 줄인 $X_F$는 입력 모양을 거의 그대로 따라가요.</p>
     <p>비반전 증폭기에서 $E\approx0$으로 두면 저항비 이득이 바로 나와요. <a href="#s2-noninverting">비반전 증폭기를 귀환으로 보기</a></p>
     $$X_F=\frac{R_2}{R_1+R_2}Y\approx X$$
     $$\frac{Y}{X}\approx1+\frac{R_1}{R_2}$$
     <p>지금까지 비반전 증폭기의 이득을 저항비로 구할 수 있었던 원리가 이 $E$와 $KA_1$의 관계예요.</p>
-    <div class="widget" id="widget-feedback"><h4>직접 해 보기: 루프가 클수록 이득은 1/K로, 오차는 0으로</h4>
+  </div>
+  <div class="layer prof">
+    <span class="layer-title">교수님 말씀</span>
+    <blockquote>op-amp 때 ... 두 개가 이 gain이 무한대면 이 두 개가 virtual short이라고 배웠잖아요</blockquote>
+    <blockquote>A1이 크면 클수록 입력과 피드백 신호가 거의 같아진다라고, 이것도 피드백 시스템의 특징이에요.</blockquote>
+  </div>
+  <div class="layer warn">
+    <span class="layer-title">꼭 기억해요</span>
+    <blockquote>같지 않습니다. 같으면 출력이 0이에요, 그러면.</blockquote>
+    <p>$E$는 0에 가깝지만 0은 아니에요. 아주 작은 $E$가 들어가야 유한한 출력이 나와요.</p>
+  </div>
+  <div class="widget" id="widget-feedback"><h4>직접 해 보기: 루프가 클수록 이득은 1/K로, 오차는 0으로</h4>
       <p class="widget-help">$A_1$(로그 눈금)과 $K$를 움직이면 왼쪽 그래프의 폐루프 이득 $\frac{Y}{X}$가 $\frac{1}{K}$ 점선에 다가가고, 오른쪽 그래프의 $\frac{E}{X}=\frac{1}{1+KA_1}$이 0으로 줄어드는 것이 보여요. 회색 점선은 귀환이 없을 때의 개루프 이득 $A_1$이에요.</p>
       <div class="controls">
         <label>$A_1$ <input type="range" id="feedback-a" min="0" max="5" step="0.1" value="3"> <b id="feedback-a-val">1000</b></label>
@@ -1151,18 +1198,8 @@
           <tr><td>$K=0.1$, $A_1=10^5$</td><td>$10^4$</td><td>$\approx10$</td><td>$\approx99.99\,\%$</td><td>$\approx0.01\,\%$</td></tr>
         </table></div>
       </div>
-    </div>
   </div>
-  <div class="layer prof">
-    <span class="layer-title">교수님 말씀</span>
-    <blockquote>op-amp 때 ... 두 개가 이 gain이 무한대면 이 두 개가 virtual short이라고 배웠잖아요</blockquote>
-    <blockquote>A1이 크면 클수록 입력과 피드백 신호가 거의 같아진다라고, 이것도 피드백 시스템의 특징이에요.</blockquote>
-  </div>
-  <div class="layer warn">
-    <span class="layer-title">꼭 기억해요</span>
-    <blockquote>같지 않습니다. 같으면 출력이 0이에요, 그러면.</blockquote>
-    <p>$E$는 0에 가깝지만 0은 아니에요. 아주 작은 $E$가 들어가야 유한한 출력이 나와요.</p>
-  </div>
+  <div class="quiz after"><p class="q">확인해 봐요. $X=2\,\mathrm{V}$, $A_1=200$, $K=0.05$인 음귀환 시스템에서 오차 신호 $E$, 출력 $Y$, 귀환 신호 $X_F$는 각각 얼마인가요?</p><details><summary>답 보기</summary><p>$E=\frac{2}{11}\approx0.18\,\mathrm{V}$($181.8\,\mathrm{mV}$), $Y=\frac{400}{11}\approx36.36\,\mathrm{V}$, $X_F=\frac{20}{11}\approx1.82\,\mathrm{V}$예요. $1+KA_1=1+0.05\times200=11$이므로 $E=\frac{2}{11}\approx0.18\,\mathrm{V}$, $Y=A_1E=\frac{400}{11}\approx36.36\,\mathrm{V}$, $X_F=KY=\frac{20}{11}\approx1.82\,\mathrm{V}$예요($X-X_F=2-\frac{20}{11}=\frac{2}{11}=E$).</p></details></div>
   <div class="sum" hidden>
     <p class="sum-lead">오차 $E$는 $1+KA_1$배 줄어든 입력이라서, $KA_1$이 클수록 귀환 신호가 입력의 복제가 돼요.</p>
     <p class="panel-label">핵심 식</p>
@@ -1222,20 +1259,22 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <h4 class="sub">숫자로 먼저 보는 루프 이득</h4>
     <p>먼저 작은 예에 적용해 봐요. $A_1=1000$, $K=0.1$이고 끊은 자리에 $V_{test}=1\,\mathrm{mV}$를 넣어요.</p>
     $$KV_{test}=0.1\times1\,\mathrm{mV}=0.1\,\mathrm{mV}$$
     $$0-KV_{test}=-0.1\,\mathrm{mV}$$
     $$V_N=1000\times(-0.1\,\mathrm{mV})=-100\,\mathrm{mV}$$
     $$-\frac{V_N}{V_{test}}=-\frac{-100\,\mathrm{mV}}{1\,\mathrm{mV}}=100=KA_1$$
+    <h4 class="sub">루프를 끊고 $KA_1$ 정의하기</h4>
     <p>귀환 시스템의 루프 이득(loop gain)은 루프를 끊고, 시험 신호(test signal)를 넣고, 루프를 한 바퀴 돈 이득을 계산해서 얻어요. 칠판 유도는 이 순서예요.</p>
     <ol class="steps">
       <li><strong>루프 끊기</strong> — $A_1$ 출력과 $K$ 입력 사이를 끊어요. $A_1$ 출력 쪽 끝이 $N$, $K$ 입력 쪽 끝이 $M$이에요. 신호가 흐르는 방향은 바꾸지 않아요. $M$에서 $K$, 비교부, $A_1$을 거쳐 $N$으로 가요.</li>
       <li><strong>입력 영점</strong> — 입력을 접지해 $X=0$으로 둬요. 그래야 $N$에 돌아온 신호가 모두 $V_{test}$에서 온 것이에요.</li>
       <li><strong>시험 신호</strong> — 끊은 자리 $M$에 $V_{test}$를 넣어요.</li>
-      <li><strong>귀환 회로망</strong> — $K$를 지나면 귀환 신호가 돼요. $$X_F=KV_{test}$$</li>
-      <li><strong>비교부</strong> — 입력 0에서 귀환 신호를 빼요. $$0-KV_{test}=-KV_{test}$$</li>
-      <li><strong>전방 시스템</strong> — $A_1$을 지나 끊은 자리 $N$으로 돌아와요. $$V_N=-KA_1V_{test}$$</li>
-      <li><strong>부호와 정의</strong> — 한 바퀴 돈 비 $\frac{V_N}{V_{test}}=-KA_1$은 음수예요. 음귀환이라 비교부에서 한 번 빼기 때문이에요. 크기를 나타내려고 마이너스를 붙여 루프 이득으로 정의해요. $$KA_1=-\frac{V_N}{V_{test}}$$</li>
+      <li><div class="drow"><div>$$X_F=KV_{test}$$</div><p class="why"><strong>귀환 회로망</strong> — $K$를 지나면 귀환 신호가 돼요.</p></div></li>
+      <li><div class="drow"><div>$$0-KV_{test}=-KV_{test}$$</div><p class="why"><strong>비교부</strong> — 입력 0에서 귀환 신호를 빼요.</p></div></li>
+      <li><div class="drow"><div>$$V_N=-KA_1V_{test}$$</div><p class="why"><strong>전방 시스템</strong> — $A_1$을 지나 끊은 자리 $N$으로 돌아와요.</p></div></li>
+      <li><strong>부호와 정의</strong> — 한 바퀴 돈 비 $\frac{V_N}{V_{test}}=-KA_1$은 음수예요. 음귀환이라 비교부에서 한 번 빼기 때문이에요. <b>크기를 나타내려고 마이너스를 붙여 루프 이득으로 정의해요.</b> $$KA_1=-\frac{V_N}{V_{test}}$$</li>
     </ol>
     <p>$K=0$이면 $M$에 넣은 신호가 비교부로 돌아오지 않아 $V_N=0$이고, 루프 이득도 0이에요. 귀환이 없는 개루프예요.</p>
     <p>루프 이득과 폐루프 이득을 구별하는 이야기는 <a href="#s3-loop-vs-closed">루프 이득과 폐루프 이득은 완전히 달라요</a>로 이어져요.</p>
@@ -1246,6 +1285,7 @@
     <p>교수님은 루프를 끊어도 신호의 방향은 그대로라고 짚었어요. 칠판에서는 $V_{test}$가 $K$를 지나 $KV_{test}$, 비교부에서 $-KV_{test}$, $A_1$을 지나 $-KA_1V_{test}$가 되는 순서를 따라 그렸어요.</p>
     <blockquote>마이너스 붙인 이유는 이게 크기를 나타내기 위해서</blockquote>
   </div>
+  <div class="quiz after"><p class="q">확인해 봐요. $A_1=500$, $K=0.04$인 음귀환 시스템에서 입력을 $X=0$으로 두고 끊은 자리 $M$에 $V_{test}=2\,\mathrm{mV}$를 넣었을 때, 한 바퀴 돌아온 $V_N$과 루프 이득 $KA_1$은 각각 얼마인가요?</p><details><summary>답 보기</summary><p>$V_N=-40\,\mathrm{mV}$, 루프 이득은 $KA_1=20$이에요. $KV_{test}=0.04\times2=0.08\,\mathrm{mV}$, 비교부 뒤 $-0.08\,\mathrm{mV}$, $A_1$ 뒤 $V_N=500\times(-0.08)=-40\,\mathrm{mV}$이고, $KA_1=-\frac{V_N}{V_{test}}=-\frac{-40}{2}=20$이에요.</p></details></div>
   <div class="sum" hidden>
     <p class="sum-lead">루프를 끊고 $X=0$에서 $V_{test}$를 넣어 한 바퀴 돌아온 신호의 비로 루프 이득을 구해요.</p>
     <p class="panel-label">핵심 식</p>
@@ -1308,10 +1348,11 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <h4 class="sub">개루프 · 루프 · 폐루프 이득 비교</h4>
     <p>먼저 작은 예에 적용해 봐요. $A_1=1000$, $K=0.1$이면 두 값은 다음과 같아요.</p>
     $$KA_1=0.1\times1000=100$$
     $$\frac{Y}{X}=\frac{A_1}{1+KA_1}=\frac{1000}{101}\approx9.90$$
-    <p>같은 $A_1$과 $K$로 만든 값인데 하나는 $100$, 하나는 약 $9.90$이에요. 재는 대상이 다르기 때문이에요.</p>
+    <p><b>같은 $A_1$과 $K$로 만든 값인데 하나는 $100$, 하나는 약 $9.90$이에요.</b> 재는 대상이 다르기 때문이에요.</p>
     <p>여기에 귀환이 없을 때의 <a href="#s2-closed-loop">개루프 이득</a> $A_1=1000$까지 더하면 이름에 "루프"가 들어간 이득이 세 개예요. 한 표로 나란히 놓고 봐요.</p>
     <div class="table-wrap"><table>
       <tr><th>구분</th><th>개루프 이득</th><th>루프 이득</th><th>폐루프 이득</th></tr>
@@ -1321,11 +1362,13 @@
       <tr><td>뜻</td><td>앞단 증폭기 자체의 이득</td><td>루프 한 바퀴의 이득, 입력·출력과 무관</td><td>입력과 출력의 관계(전달함수)</td></tr>
       <tr><td>예 ($A_1=1000$, $K=0.1$)</td><td>$1000$</td><td>$100$</td><td>$\approx9.90$</td></tr>
     </table></div>
-    <p>세 이득은 하나의 식으로 이어져요. 폐루프 이득은 개루프 이득을 1 더하기 루프 이득으로 나눈 값이에요.</p>
+    <h4 class="sub">세 이득을 잇는 식과 오차</h4>
+    <p>세 이득은 하나의 식으로 이어져요. <b>폐루프 이득은 개루프 이득을 1 더하기 루프 이득으로 나눈 값이에요.</b></p>
     $$\frac{Y}{X}=\frac{A_1}{1+KA_1}$$
-    $$\text{폐루프 이득}=\frac{\text{개루프 이득}}{1+\text{루프 이득}}=\frac{1000}{1+100}\approx9.90$$
+    $$\begin{aligned}\text{폐루프 이득}&amp;=\frac{\text{개루프 이득}}{1+\text{루프 이득}}\\&amp;=\frac{1000}{1+100}\approx9.90\end{aligned}$$
     <p>루프 이득과 폐루프 이득은 다르지만 이어져 있어요. <a href="#s2-closed-loop">폐루프 이득</a>과 <a href="#s2-error-signal">오차 E</a>의 분모에 모두 $1+KA_1$, 즉 1 더하기 루프 이득이 들어가요.</p>
     $$E=\frac{X}{1+KA_1}$$
+    <h4 class="sub">$K$에 따른 변화와 루프 이득의 역할</h4>
     <p>$A_1=1000$을 고정하고 $K$를 키우면 루프 이득이 커지는 만큼 폐루프 이득과 오차가 함께 줄어요.</p>
     <div class="table-wrap"><table>
       <tr><th>$K$</th><th>루프 이득 $KA_1$</th><th>폐루프 이득 $\frac{Y}{X}$</th><th>오차 비율 $\frac{E}{X}$</th></tr>
@@ -1333,7 +1376,7 @@
       <tr><td>$0.01$</td><td>$10$</td><td>$\frac{1000}{11}\approx90.91$</td><td>$\frac{1}{11}\approx9.09\%$</td></tr>
       <tr><td>$0.1$</td><td>$100$</td><td>$\frac{1000}{101}\approx9.90$</td><td>$\frac{1}{101}\approx0.99\%$</td></tr>
     </table></div>
-    <p>루프 이득이 0이면 귀환이 없는 개루프예요. 루프 이득이 클수록 귀환이 많이 걸려 폐루프 이득도 줄고 입력과 귀환 신호의 차이인 오차도 줄어요.</p>
+    <p>루프 이득이 0이면 귀환이 없는 개루프예요. <b>루프 이득이 클수록 귀환이 많이 걸려 폐루프 이득도 줄고 입력과 귀환 신호의 차이인 오차도 줄어요.</b></p>
     <p>루프 이득을 따로 정의하는 이유는 이 값이 이득과 입출력 임피던스 같은 귀환 시스템의 여러 성질을 정하기 때문이에요. 루프 이득과 입출력 임피던스의 관계는 다음 시간에 다뤄요. <a href="#s4-next">다음 시간 예고</a></p>
   </div>
   <div class="layer prof">
@@ -1347,6 +1390,7 @@
     <blockquote>시험에서 문제로 내면 두 개를 반대로 쓰면 아깝게 틀리죠.</blockquote>
     <p>"폐루프 이득을 구하시오"에는 $\frac{A_1}{1+KA_1}$을, "루프 이득을 구하시오"에는 $KA_1$을 답해요.</p>
   </div>
+  <div class="quiz after"><p class="q">확인해 봐요. $A_1=1000$을 고정하고 $K=0.05$로 두었을 때 개루프 이득, 루프 이득 $KA_1$, 폐루프 이득 $\frac{Y}{X}$, 오차 비율 $\frac{E}{X}$는 각각 얼마인가요?</p><details><summary>답 보기</summary><p>개루프 이득은 $1000$, 루프 이득은 $KA_1=0.05\times1000=50$, 폐루프 이득은 $\frac{1000}{1+50}=\frac{1000}{51}\approx19.61$, 오차 비율은 $\frac{1}{51}\approx1.96\,\%$예요.</p></details></div>
   <div class="sum" hidden>
     <p class="sum-lead">루프 이득 $KA_1$은 루프 한 바퀴의 이득이고 폐루프 이득 $\frac{A_1}{1+KA_1}$은 입력에서 출력까지의 이득이라 완전히 다른 양이에요.</p>
     <p class="panel-label">핵심 식</p>
