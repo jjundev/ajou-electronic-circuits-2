@@ -100,6 +100,37 @@ def test_unopened_run_failure_does_not_create_logs(tmp_path):
     assert list(run.iterdir())==[]
 
 
+def test_init_rejects_removed_lite_option_before_creating_run(tmp_path):
+    repo, _ = make_run(tmp_path)
+    new = tmp_path / 'new'
+    p, data = call('init', '--repo', repo, '--run', new, '--range', '0909', '--allow-tmp', '--lite')
+    assert p.returncode == 2 and data['error_code'] == 'usage_error'
+    assert not new.exists()
+
+
+def test_legacy_standard_run_can_resume(tmp_path):
+    _, run = make_run(tmp_path)
+    path = run / 'run-status.json'
+    path.write_text(json.dumps(dict(json.loads(path.read_text()), lite=False)))
+    before = path.read_bytes()
+    p, data = call('next', '--run', run, '--slots', '1')
+    assert p.returncode == 0 and data['next']['tasks'][0]['id'] == 'source-prep'
+    assert path.read_bytes() == before
+    assert call('task', 'claim', '--run', run, '--task', 'source-prep')[0].returncode == 0
+    assert 'lite' not in json.loads(path.read_text())
+
+
+def test_legacy_lite_run_requires_a_fresh_run_for_the_same_range(tmp_path):
+    _, run = make_run(tmp_path)
+    path = run / 'run-status.json'
+    path.write_text(json.dumps(dict(json.loads(path.read_text()), lite=True)))
+    before = path.read_bytes()
+    p, data = call('next', '--run', run, '--slots', '1')
+    assert p.returncode == 1 and data['error_code'] == 'validation_failed'
+    assert 'init' in data['reason'] and '--range 0909' in data['reason']
+    assert path.read_bytes() == before
+
+
 def test_fixture_workflow_cannot_finish_with_missing_reviews(tmp_path):
     """Synthetic scheduling evidence cannot replace the real final gate."""
     from pack_support import workflow_until, workflow_accept
@@ -130,20 +161,22 @@ def test_fixture_workflow_cannot_finish_with_missing_reviews(tmp_path):
     assert call('report', '--run', run)[1]['counts']['partial'] == 1
 
 
-@pytest.mark.parametrize('lite', [False, True])
-def test_zero_problem_and_lite_cli_workflow(tmp_path, lite):
+def test_zero_problem_cli_workflow_requires_worker_reviews(tmp_path):
     """Synthetic roles exercise CLI routing; no semantic approval is claimed."""
     from pack_support import workflow_until, workflow_accept
     import pack_flow as f
-    _, run = make_run(tmp_path, lite=lite)
+    _, run = make_run(tmp_path)
     workflow_until(run, 'style-audit')
     next_ = call('next', '--run', run, '--slots', '1')[1]['next']
-    assert next_['kind'] == ('review_locally' if lite else 'dispatch')
+    assert next_['kind'] == 'dispatch'
     assert next_['tasks'][0]['id'] == 'style-audit'
     workflow_accept(run, 'style-audit')
+    workflow_until(run, 'content-review')
+    next_ = call('next', '--run', run, '--slots', '1')[1]['next']
+    assert next_['kind'] == 'dispatch'
+    assert next_['tasks'][0]['id'] == 'content-review'
     workflow_until(run, 'final-check')
     state = f.load_state(run)
-    assert ('content-review' in state['tasks']) is not lite
     assert 'browser-qa' in state['tasks']
     assert 'child-coordinator' not in state['tasks']
     assert 'build-answers' not in state['actions']

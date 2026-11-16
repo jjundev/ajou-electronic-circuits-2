@@ -22,17 +22,25 @@ def test_init_rejects_nonempty_run(tmp_path):
 
 
 def test_snapshot_uses_explicit_repo(tmp_path):
-    repo, run = make_run(tmp_path, lite=True)
+    repo, _ = make_run(tmp_path)
     profile = repo / ".claude/skills/ec2-review-pack/references/solution-style.md"
     profile.write_bytes(profile.read_bytes() + b"\nexplicit repo provenance\n")
     run = tmp_path / "second run"
-    flow.init_run(repo, run, "0909", lite=True, allow_tmp=True)
+    flow.init_run(repo, run, "0909", allow_tmp=True)
     state = flow.load_state(run)
     assert state["schema_version"] == 1 and state["revision"] == 0
     assert state["fix_rounds"] == {"content": 0, "machine_browser": 0}
     snapshot = json.loads((run / "learning-style.json").read_text(encoding="utf-8"))
     assert snapshot["sha256"] == hashlib.sha256((repo / snapshot["path"]).read_bytes()).hexdigest()
-    assert state["repo"] == str(repo.resolve()) and state["lite"] is True
+    assert state["repo"] == str(repo.resolve())
+
+
+def test_new_run_records_no_mode_in_state_or_worker_brief(tmp_path):
+    _, run = make_run(tmp_path)
+    state = json.loads((run / "run-status.json").read_text())
+    brief = json.loads(Path(state["tasks"]["source-prep"]["brief"]).read_text())
+    assert "lite" not in state
+    assert "lite" not in brief
 
 
 def test_atomic_write_failure_preserves_previous_state(tmp_path, monkeypatch):
@@ -166,14 +174,6 @@ def test_zero_slots_does_not_block_machine_action(tmp_path):
     _, run = make_run(tmp_path)
     workflow_until(run, 'prepare-pack')
     assert flow.next_work(run, slots=0)['action'] == 'prepare-pack'
-
-
-def test_lite_requires_main_audit(tmp_path):
-    _, run = make_run(tmp_path, lite=True)
-    workflow_until(run, 'style-audit')
-    assert flow.next_work(run, slots=0)['kind'] == 'review_locally'
-    workflow_until(run, 'final-check')
-    assert 'content-review' not in flow.load_state(run)['tasks']
 
 
 def test_zero_problems_still_requires_final_check(tmp_path):
@@ -418,7 +418,7 @@ def test_pdf_qa_fix_restales_build_answers(tmp_path):
 
 
 def test_new_pack_queues_concept_check_after_final_check(tmp_path):
-    _, run = make_run(tmp_path, lite=True)
+    _, run = make_run(tmp_path)
     from pack_flow import load_state, next_work
     assert load_state(run)["concept_check_enabled"] is True
     assert next_work(run, slots=1)["kind"] != "concept_check"

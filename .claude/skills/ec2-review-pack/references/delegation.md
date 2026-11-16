@@ -5,11 +5,11 @@
 ## 실행과 컨텍스트
 
 - Codex는 `spawn_agent`에 `fork_turns: "none"`을 써서 새 컨텍스트로 시작한다. 다른 환경도 대화 전체를 복사하지 않는 서브에이전트를 쓴다. 필요한 정보는 아래 브리프 파일에 명시한다.
-- **모델 선택.** 메인은 날짜별 STT 텍스트 요약자와 정리노트 섹션 작성자를 호출할 때, 현재 환경에서 서브에이전트에 지정할 수 있는 모델을 환경이 제공하는 등급순으로 본다. 일반 모드와 기존 팩에 왜 페이지를 추가하는 작성자에는 **가장 높은 등급의 모델**, 신규 팩 `lite`의 요약자·작성자에는 **두 번째로 높은 등급의 모델**을 지정한다. 선택 가능한 모델이 하나면 그 모델을 사용한다. 환경이 제공하는 등급 순서를 확인할 수 없으면 환경의 기본 모델을 사용하고 이유를 최종 보고에 적는다. 문제설명과 확인문제 작업자는 각 하위 스킬의 모델 선택 규칙을 따른다.
+- **모델 선택.** 메인은 날짜별 STT 텍스트 요약자와 정리노트 섹션 작성자를 호출할 때, 현재 환경에서 서브에이전트에 지정할 수 있는 모델을 환경이 제공하는 등급순으로 본다. 요약자와 작성자에게 **가장 높은 등급의 모델**을 지정한다. 기존 팩의 왜 페이지를 작성할 때도 이 기준을 적용한다. 선택 가능한 모델이 하나면 그 모델을 사용한다. 환경이 제공하는 등급 순서를 확인할 수 없으면 환경의 기본 모델을 사용하고 이유를 최종 보고에 적는다. 문제설명과 확인문제 작업자는 각 하위 스킬의 모델 선택 규칙을 따른다.
 - 독립 작업은 **현재 가용 슬롯만큼 배치**한다. 4슬롯이면 메인+직접 작업자 최대 3명, 자식 조정자 실행 중에는 메인+조정자+작업자 최대 2명이다. 남은 작업은 대기열에 두며 순서 의존 단계는 병렬화하지 않는다.
 - 이전 단계 작업을 끝내고 자식 조정자를 실행한다. 조정자는 또 다른 조정자를 만들지 않는다. 중첩 spawn이 불가능하면 조정자가 작업 브리프를 파일로 남기고 반환하고, 메인이 해당 leaf들을 실행한 뒤 같은 조정자를 재개한다. 독립 검산자/내용 리뷰어를 작성자로 대체하지 않는다.
 - 수정은 기존 담당자를 재개한다(Codex `followup_task`). 담당자를 재개할 수 없을 때만 같은 브리프와 수정 요청 경로로 새 작업자를 띄운다.
-- 메인이 STT·교과서·전체 후보 JSON·HTML/SVG·모든 스크린샷·자식 검토 전문을 재독하는 것을 기본 경로로 삼지 않는다. 결함 위치·해시·승인 상태가 불명확하면 필요한 범위의 근거를 직접 확인한다. lite 부모 감사는 예외가 아니라 지정된 메인 작업이다.
+- 메인이 STT·교과서·전체 후보 JSON·HTML/SVG·모든 스크린샷·자식 검토 전문을 재독하는 것을 기본 경로로 삼지 않는다. 결함 위치·해시·승인 상태가 불명확하면 필요한 범위의 근거를 직접 확인한다.
 - 서브에이전트가 없거나 실제 검사 도구에 접근할 수 없으면 조용히 검토를 생략하지 않는다. 메인 실행이 필요한 작업을 표시하고 실제 수행하거나 미실시/보류로 보고한다.
 
 ## 브리프는 경로로 전달
@@ -18,7 +18,7 @@
 
 | 항목 | 브리프에 담을 값 |
 |---|---|
-| 실행 | 역할 ID, range, lite, REPO/RUN/SKILL/PROFILE 절대 경로, snapshot 파일 경로 |
+| 실행 | 역할 ID, range, REPO/RUN/SKILL/PROFILE 절대 경로, snapshot 파일 경로 |
 | 계약 | 읽을 참조 문서와 제목 범위, manifest/scope/source-map 등 입력 파일 경로 |
 | 담당 범위 | 날짜 또는 섹션/토픽/문항 ID, 필요한 STT·요약·교과서 PDF와 쪽 |
 | 출력 | 허용 산출물 절대 경로, `RUN/work/<역할ID>/`, 완료/실패 인계 경로 |
@@ -38,8 +38,8 @@ snapshot **파일 경로**로 전체 객체를 전달한다. 담당자는 이를
 | 범위 설계자 | manifest-guide, 모든 요약·필요한 근거 | `scope.json`, manifest 초안→선발 후 확정본, `briefs/<sid>.json`, 브리프 `report` |
 | 문제 선발자 | problem-selection 전체, scope·후보·이력·원문/그림 | candidates/catalog, manifest의 problems/links, selection-review/selection, 표시 제목 후보, `work/selection/report.md` |
 | 섹션 작성자 | content-rules, PROFILE, execution-guide `3`, 해당 근거; widget-rules는 담당자만 | `sections/<sid>.html`, 브리프 `report` |
-| 개인화 감사자 | review-prompt의 감사 계약, PROFILE, manifest·전체 토픽 | 브리프 `audit_output`과 `report`; 일반 모드 전담자, lite 메인 |
-| 내용 리뷰어 | review-prompt 전체·원문 근거·선발 기록 | 전체 감사 재검토, 브리프 `report`; lite 생략 |
+| 개인화 감사자 | review-prompt의 감사 계약, PROFILE, manifest·전체 토픽 | 브리프 `audit_output`과 `report` |
+| 내용 리뷰어 | review-prompt 전체·원문 근거·선발 기록 | 전체 감사 재검토, 브리프 `report` |
 | 브라우저 QA | browser-check 전체·PROFILE의 화면 기준 | `work/browser/` 증거·실제 이미지·브리프 `report` |
 | 독립 SVG QA (`standalone-svg-qa`) | PROFILE 전체·NOTATION-01/CIRCUIT-02·execution-guide `8`, 변환된 MD/SVG | `work/standalone-svg-qa/report.json`, `report.md`, 대상별 지정 PNG·receipt; MD/SVG 읽기 전용 |
 | 문제설명 조정자 | problem-explain-integration 부모 호출·형제 스킬/참조 | EXPLAIN_RUN 전체 stage/검산/검토, `child-receipt.json`; 발행 직전 반환 |

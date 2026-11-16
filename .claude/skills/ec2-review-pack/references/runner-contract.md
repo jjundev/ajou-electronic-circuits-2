@@ -4,7 +4,7 @@ OpenCode 우선의 파일 인계 절차이며 Codex도 같은 Python CLI를 쓴�
 
 ## 시작과 조회 — 메인
 
-`init --repo <REPO> [--run <새 RUN>] --range <MMDD 또는 MMDD-MMDD> [--lite] --browser-owner <workers|main|unavailable> --pdf-owner <workers|main|unavailable> [--allow-tmp]`
+`init --repo <REPO> [--run <새 RUN>] --range <MMDD 또는 MMDD-MMDD> --browser-owner <workers|main|unavailable> --pdf-owner <workers|main|unavailable> [--allow-tmp]`
 
 `--run`을 빼면 RUN은 `~/.cache/ec2-review-pack/<range>-<YYYYmmdd-HHMMSS>`이고 응답의 details_path가 그 RUN의 run-status.json이다. `/tmp`, `/private/tmp`, `/var/folders` 아래 RUN은 `--allow-tmp` 없이 거부한다. 재부팅하면 그 폴더가 지워져 상태·receipt·백업을 모두 잃는다. 실행기는 repo·run 경로를 NFC로 저장하고 경로를 NFC로 비교한다. macOS의 `전자회로2` 같은 폴더는 디스크에서 NFD라 작업자가 어느 표기를 써도 같은 경로로 본다.
 
@@ -61,7 +61,7 @@ content-review와 browser-qa는 실제 검토를 마친 대상만 `counts.target
 
 source-prep의 source-map.json은 `{schema_version:1,sessions:[{date,stt,pdfs,status,missing}]}`다. 실제 MMDD 집합, REPO 내부 STT/PDF 절대 경로, ready/missing 및 누락 이유 배열을 기록한다. scope.json은 의미 인계물이므로 임의 기계 스키마로 확장하지 않는다. manifest는 scope-draft→selection→scope-final 단일 작성자 순서다. selection은 `RUN/display-titles.json`에 선발 ID와 정확히 같은 키/비어 있지 않은 제목을 반환한다(0개는 {}). runner는 제목을 선택하지 않는다.
 
-style-audit/content-review는 브리프의 **audit_output**에 쓴다. 앞 작성자의 감사 파일을 덮지 않는다. content-review의 보완 감사만 단일 작성자 인계로 채택되며 precheck를 다시 수행한다. 브라우저/PDF owner=main과 lite audit는 review_locally: 메인이 실제 근거를 읽고 검사한 뒤 동일 claim/receipt/accept 계약을 수행한다. 도구 없는 작업자에게 pass를 요청하지 않는다.
+style-audit/content-review는 브리프의 **audit_output**에 쓴다. 앞 작성자의 감사 파일을 덮지 않는다. content-review의 보완 감사만 단일 작성자 인계로 채택되며 precheck를 다시 수행한다. 브라우저/PDF owner=main은 review_locally: 메인이 실제 근거를 읽고 검사한 뒤 동일 claim/receipt/accept 계약을 수행한다. 도구 없는 작업자에게 pass를 요청하지 않는다.
 
 ## 기계 작업·발행 — 최상위 메인
 
@@ -93,7 +93,7 @@ build-answers는 RUN 안(`RUN/answers`)에만 쓴다. 실패해도 팩 inventory
 
 ## 이어받기 — 메인
 
-보류된 RUN을 다시 돌릴 때 처음부터 init하지 않고 `--seed-from`으로 새 RUN을 만든다. 이전 RUN은 withheld이거나, 저장소 쓰기(백업·발행) 전의 blocked/needs_fix여야 한다. range·lite·repo가 같고 고정 입력(STT·PROFILE·snapshot) 해시가 모두 같아야 하며, 하나라도 다르면 아무것도 이어받지 않고 처음부터 한다. 활성 attempt가 남은 RUN은 거절한다.
+보류된 RUN을 다시 돌릴 때 처음부터 init하지 않고 `--seed-from`으로 새 RUN을 만든다. 이전 RUN은 withheld이거나, 저장소 쓰기(백업·발행) 전의 blocked/needs_fix여야 한다. range·repo가 같고 고정 입력(STT·PROFILE·snapshot) 해시가 모두 같아야 하며, 하나라도 다르면 아무것도 이어받지 않고 처음부터 한다. 활성 attempt가 남은 RUN은 거절한다. 이전 일반 RUN은 재개하거나 이어받을 수 있다. 이전 `lite: true` RUN은 같은 범위로 새 RUN을 시작한다.
 
 이어받는 것은 이전 RUN에서 done이고 현재 바이트가 receipt와 일치하며 역할·대상·의존이 같은 작업자 task뿐이다. 실제 범위는 첫 기계 작업 앞(source-prep, stt, scope, selection, scope-final, author)이다. 기계 작업은 저장소에 쓰므로 항상 다시 실행하고, 그 뒤 검토·자식·PDF task도 의존 사슬을 따라 다시 한다. child-coordinator와 pdf-qa는 이어받지 않는다. 파일은 같은 상대 경로로 복사하며 텍스트 속 이전 RUN 경로는 새 RUN 경로로 바꾸고 해시를 다시 기록한다. 이어받은 task는 `carried`에 이전 run_id·attempt를 남긴다.
 

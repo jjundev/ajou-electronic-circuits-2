@@ -1,6 +1,6 @@
-# 리뷰어 지시문 (lite에서는 부모가 개인화 감사를 수행)
+# 리뷰어 지시문
 
-역할·파일 인계는 [delegation.md](delegation.md)를 따른다. 일반 모드의 기계 예비 검사 전 개인화 감사는 작성자가 아닌 전담 감사자가 수행하며, 아래 내용 리뷰어가 실제 근거를 재검토·보완한다. `lite`에서는 부모 MAIN이 같은 개인화 감사를 직접 수행하고 기록한다. 감사 준비나 기계 검사 결과를 부모의 실제 감사로 간주하지 않는다.
+역할·파일 인계는 [delegation.md](delegation.md)를 따른다. 기계 예비 검사 전 개인화 감사는 작성자가 아닌 전담 감사자가 수행하며, 아래 내용 리뷰어가 실제 근거를 재검토·보완한다. 실제 감사 결과는 전담 감사자가 기록한다.
 
 상세 리뷰는 `<RUN>/work/review/report.md`에 남긴다. 부모에게는 상태·보고/감사 파일 경로·미해결 및 조치 항목의 `where`(topic ID 또는 문제 ID)·`severity`·담당 owner만 8줄 이내로 반환한다. 많은 항목은 보고 파일의 경로와 개수로 알리며 자료 전문·전체 유도·감사 본문을 메시지에 붙이지 않는다.
 
@@ -17,7 +17,7 @@
 전자회로2 복습팩 초안을 검토한다. 학습 산출물은 읽기 전용이며 아래 개인화 감사 기록과 `<RUN>/work/review/report.md`만 쓴다.
 
 - 개인 명세(필수 읽기): `<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md` 절대 경로와 `<RUN>/manifest.json`의 `learning_style` snapshot. 현재 바이트와 snapshot이 일치하는지 확인한다.
-- 개인화 감사 산출: `<RUN>/learning-style-audit.json`. 대상은 manifest의 **모든 topic ID**(why·요약·예고·링크 포함), 규칙은 snapshot의 모든 rule_ids다. 각 토픽의 첫 설명에서 회로 역할과 핵심 관계가 먼저 보이고 formal에 상세 유도가 이어지는지 실제로 읽는다. `lite`는 메인 에이전트가 같은 감사를 수행한다.
+- 개인화 감사 산출: `<RUN>/learning-style-audit.json`. 대상은 manifest의 **모든 topic ID**(why·요약·예고·링크 포함), 규칙은 snapshot의 모든 rule_ids다. 각 토픽의 첫 설명에서 회로 역할과 핵심 관계가 먼저 보이고 formal에 상세 유도가 이어지는지 실제로 읽는다.
 - 대상: `<RUN>/repo/복습노트/<range>/<정리노트 html>`, `<RUN>/manifest.json`의 `problems`
 - 근거: `<RUN>/summaries/stt-*.md`, `<RUN>/slides.txt`, `<RUN>/candidates.json`, `<RUN>/exam-catalog/`, `<RUN>/selection-review.json`, Razavi `<RUN>/repo/교과서/마이크로전자회로/<N>장.pdf`, 문제 md(`<RUN>/repo/교과서/마이크로전자회로/chNN/…`, `<RUN>/repo/from_the_past/md/…`)
 - 규칙: `<SKILL>/references/content-rules.md`, `problem-selection.md`

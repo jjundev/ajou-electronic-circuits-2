@@ -47,7 +47,7 @@ def within(path: str | Path, root: str | Path) -> bool:
     return nfc_path(path).is_relative_to(nfc_path(root))
 
 
-_FIELDS = {"schema_version", "revision", "run_id", "repo", "run", "range", "lite",
+_FIELDS = {"schema_version", "revision", "run_id", "repo", "run", "range",
            "capabilities", "phase", "status", "tasks", "actions", "hashes", "backups",
            "fix_rounds", "explain_run", "publication", "recovery"}
 _STATUSES = {"ready", "waiting_agents", "running", "needs_fix", "blocked",
@@ -105,7 +105,6 @@ def _validate(state: dict, run: Path) -> None:
         require(isinstance(state[field], str) and Path(state[field]).is_absolute(), f"{field} must be absolute")
         require(Path(state[field]).is_dir(), f"{field} directory missing: {state[field]}")
     require(nfc_path(Path(state["run"]).resolve()) == nfc_path(run.resolve()), "run path mismatch")
-    require(type(state["lite"]) is bool, "invalid lite")
     require(type(state["phase"]) is int and 0 <= state["phase"] <= 10, "invalid phase")
     require(isinstance(state["status"], str) and state["status"] in _STATUSES, "invalid status")
     require(isinstance(state["range"], str) and re.fullmatch(r"\d{4}(?:-\d{4})?", state["range"]), "invalid range")
@@ -177,6 +176,15 @@ def load_state(run: Path) -> dict:
     except (OSError, ValueError) as exc:
         raise FlowError(f"{run / 'run-status.json'}: {exc}") from exc
     _validate(state, run)
+    # Version 1 runs created before mode removal recorded the flag in state.
+    legacy_lite = state.pop("lite", False)
+    if type(legacy_lite) is not bool:
+        raise FlowError("invalid legacy lite flag")
+    if legacy_lite:
+        raise FlowError(
+            f"Legacy lite RUN cannot resume or seed. "
+            f"Start a new RUN with init --repo <REPO> --range {state['range']}."
+        )
     return state
 
 
@@ -191,7 +199,7 @@ def update_state(run: Path, expected_revision: int, change: Callable[[dict], dic
             and changed.get('extra_fix_authorization') != state['extra_fix_authorization']):
             raise FlowError('extra fix authorization is immutable')
         _validate(changed, run)
-        for field in ("run_id", "repo", "run", "range", "lite", "schema_version", "revision"):
+        for field in ("run_id", "repo", "run", "range", "schema_version", "revision"):
             if changed[field] != state[field]:
                 raise FlowError(f"{run}: immutable field changed: {field}")
         changed["revision"] = expected_revision + 1
@@ -199,7 +207,7 @@ def update_state(run: Path, expected_revision: int, change: Callable[[dict], dic
         return changed
 
 
-def init_run(repo: Path, run: Path, range_: str, *, lite: bool = False,
+def init_run(repo: Path, run: Path, range_: str, *,
              browser_owner: str = "main", pdf_owner: str = "main",
              seed_from: Path | None = None, redo: list[str] | None = None,
              redo_note: Path | None = None, allow_tmp: bool = False) -> dict:
@@ -235,6 +243,7 @@ def init_run(repo: Path, run: Path, range_: str, *, lite: bool = False,
             sources.append(path)
     if not sources:
         raise FlowError(f"{repo / 'STT'}: no STT sessions for {range_}")
+    seed = load_state(seed_from) if seed_from is not None else None
     run.mkdir(parents=True, exist_ok=True)
     with _locked(run):
         if any(p.name != ".pack-flow.lock" for p in run.iterdir()):
@@ -254,14 +263,14 @@ def init_run(repo: Path, run: Path, range_: str, *, lite: bool = False,
         except (OSError, ValueError, KeyError, TypeError) as exc:
             raise FlowError(f"{snapshot_path}: invalid snapshot: {exc}") from exc
         state = dict(schema_version=1, revision=0, run_id=str(uuid4()), repo=str(repo), run=str(run),
-                     range=range_, lite=lite, capabilities=dict(browser_owner=browser_owner, pdf_owner=pdf_owner),
+                     range=range_, capabilities=dict(browser_owner=browser_owner, pdf_owner=pdf_owner),
                      phase=0, status="ready", tasks={}, actions={}, concept_check_enabled=True,
                      hashes={str(nfc_path(p)): _sha(p) for p in [*sources, profile, snapshot_path]}, backups={},
                      fix_rounds=dict(content=0, machine_browser=0), explain_run=None,
                      publication={}, recovery={}, sessions=[p.name[:4] for p in sources])
-        if seed_from is not None:
+        if seed is not None:
             from pack_seed import seed_state
-            seed_state(state, Path(seed_from), list(redo or []), redo_note)
+            seed_state(state, seed, list(redo or []), redo_note)
         else:
             refresh_tasks(state)
         write_briefs(state)
@@ -492,7 +501,7 @@ def _stages(state):
     action(4, 'prepare-pack'); action(4, 'assemble-note')
     if manifest['problems']: action(4, 'build-problems')
     task(5, 'style-audit', topics); action(6, 'precheck')
-    if not state['lite']: task(6, 'content-review', topics)
+    task(6, 'content-review', topics)
     task(7, 'browser-qa', topics); action(8, 'convert-md')
     if not _done(state, 'convert-md'): return stages
     converted = _converted_assets(state)
@@ -605,7 +614,7 @@ def write_briefs(state: dict) -> None:
         if role in ('author', 'style-audit', 'content-review'):
             refs.append({'path': str(skill / 'references/execution-guide.md'), 'sections': _COMMON_SECTIONS})
         snapshot = _read(run / 'learning-style.json')
-        data = dict(task_id=task['id'], run_id=state['run_id'], attempt=None, role=role, range=state['range'], lite=state['lite'],
+        data = dict(task_id=task['id'], run_id=state['run_id'], attempt=None, role=role, range=state['range'],
             repo=str(repo), run=str(run), skill=str(skill), profile=str(repo / snapshot['path']),
             profile_read='전체 필수', snapshot=str(run / 'learning-style.json'), references=refs,
             targets=task['targets'], inputs=_inputs(state, task), allowed_outputs=outputs,
@@ -661,7 +670,6 @@ def write_briefs(state: dict) -> None:
 
 
 def _owner(state, task):
-    if task['role'] == 'style-audit' and state['lite']: return 'main'
     if task['role'] in ('browser-qa', 'standalone-svg-qa'): return state['capabilities']['browser_owner']
     if task['role'] == 'pdf-qa': return state['capabilities']['pdf_owner']
     return 'workers'

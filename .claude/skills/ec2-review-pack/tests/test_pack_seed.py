@@ -20,8 +20,12 @@ def _seed(repo, old, tmp_path, **kw):
     return new, flow.init_run(repo, new, '0909', browser_owner='workers', pdf_owner='workers', seed_from=old, allow_tmp=True, **kw)
 
 
-def test_carries_accepted_work_and_redoes_named_task(tmp_path):
+@pytest.mark.parametrize("legacy", [False, True])
+def test_carries_accepted_work_and_redoes_named_task(tmp_path, legacy):
     repo, old = _withheld(tmp_path)
+    if legacy:
+        path = old / 'run-status.json'
+        path.write_text(json.dumps(dict(json.loads(path.read_text()), lite=False)))
     note = tmp_path / 'redo.md'; note.write_text('pole_naming 정의를 섹션 공통으로', encoding='utf-8')
     new, state = _seed(repo, old, tmp_path, redo=['author-s1'], redo_note=note)
     seeded = state['seeded_from']
@@ -41,6 +45,15 @@ def test_carries_accepted_work_and_redoes_named_task(tmp_path):
                        for item in task['receipt']['verified_files'])
     workflow_accept(new, 'author-s1')
     assert flow.next_work(new, slots=3) == dict(kind='run', tasks=[], action='prepare-pack', reason='required machine action')
+
+
+def test_rejects_seed_from_legacy_lite_run(tmp_path):
+    repo, old = _withheld(tmp_path)
+    path = old / 'run-status.json'
+    path.write_text(json.dumps(dict(json.loads(path.read_text()), lite=True)))
+    with pytest.raises(flow.FlowError, match=r'init .*--range 0909'):
+        _seed(repo, old, tmp_path)
+    assert not (tmp_path / 'run 이어받기').exists()
 
 
 def test_changed_stt_carries_nothing(tmp_path):

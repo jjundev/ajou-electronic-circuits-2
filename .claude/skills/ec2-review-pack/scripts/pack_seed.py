@@ -116,12 +116,11 @@ def _previous(copier: _Copier, task: dict) -> list[str]:
     return paths
 
 
-def seed_state(state: dict, seed_run: Path, redo: list[str], note: Path | None) -> None:
+def seed_state(state: dict, old: dict, redo: list[str], note: Path | None) -> None:
     """Install carried tasks into a fresh in-memory state, then refresh stages."""
-    seed_run, run = Path(seed_run).resolve(), Path(state['run']).resolve()
+    seed_run, run = Path(old['run']).resolve(), Path(state['run']).resolve()
     if seed_run == run: raise f.FlowError('seed RUN must differ from the new RUN')
-    old = f.load_state(seed_run)
-    if old['range'] != state['range'] or old['lite'] != state['lite']: raise f.FlowError('seed RUN range/lite differ')
+    if old['range'] != state['range']: raise f.FlowError('seed RUN range differs')
     if Path(old['repo']).resolve() != Path(state['repo']).resolve(): raise f.FlowError('seed RUN repo differs')
     _seedable(old)
     unknown = [tid for tid in redo if tid not in old['tasks']]

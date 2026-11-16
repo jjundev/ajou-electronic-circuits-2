@@ -56,7 +56,7 @@ def parser():
         c=parent.add_parser(name); c.add_argument('--run',required=run_required,type=absolute); return c
     # init without --run uses ~/.cache/ec2-review-pack/<range>-<timestamp>
     c=command('init',run_required=False); c.add_argument('--repo',required=True,type=absolute); c.add_argument('--range',required=True)
-    c.add_argument('--lite',action='store_true'); c.add_argument('--allow-tmp',action='store_true')
+    c.add_argument('--allow-tmp',action='store_true')
     for owner in ('browser','pdf'): c.add_argument('--'+owner+'-owner',choices=('workers','main','unavailable'),default='main')
     c.add_argument('--seed-from',type=absolute); c.add_argument('--redo',default='')
     c.add_argument('--redo-note',type=absolute)
@@ -105,7 +105,7 @@ def execute(a):
         if run is None:
             from datetime import datetime
             run=a.run=f.default_run_dir(a.range,datetime.now()).resolve()
-        f.init_run(a.repo,run,a.range,lite=a.lite,browser_owner=a.browser_owner,pdf_owner=a.pdf_owner,
+        f.init_run(a.repo,run,a.range,browser_owner=a.browser_owner,pdf_owner=a.pdf_owner,
                    seed_from=a.seed_from,redo=[x.strip() for x in a.redo.split(',') if x.strip()],redo_note=a.redo_note,
                    allow_tmp=a.allow_tmp)
         seeded=f.load_state(run).get('seeded_from')

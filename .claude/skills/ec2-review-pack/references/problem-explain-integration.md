@@ -6,14 +6,14 @@
 
 실행 순서는 명세 snapshot → 범위/manifest → 작성/조립 → 문제지만 빌드 → 부모 내용/화면/MD/개인화 감사 + 답안 링크 예비 검사 + 변환 SVG 독립 화면 검토 → 자식 코디네이터의 발행 준비 → 부모의 설명 발행 → 승인 overlay 답안 빌드 → PDF 화면 검토 → 부모의 답안 발행 → 유예 없는 최종 검사다.
 
-1. 부모의 기계 예비 검사·내용 리뷰(lite는 부모 내용 리뷰만 생략)·브라우저·MD 변환과 모든 topic ID의 개인화 감사를 끝낸다. `<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md`의 실제 절대 경로와 manifest `learning_style` snapshot이 필수 입력이다.
+1. 부모의 기계 예비 검사·내용 리뷰·브라우저·MD 변환과 모든 topic ID의 개인화 감사를 끝낸다. `<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md`의 실제 절대 경로와 manifest `learning_style` snapshot이 필수 입력이다.
 2. 문제가 0개면 `skipped-no-problems`다. 자식·PDF 없이 현재 snapshot·모든 토픽 감사·유예 없는 최종 노트 검사를 수행한다.
 3. manifest `problems`·`RUN/selection.json`·`.assets/selection.json`·`.assets/problems.txt`의 ID·순서를 대조한다. 새 정책의 핵심/추가·학습 목표·소문항 묶음 수·추정 시간도 같은 입력에서 읽고 source 해시에 묶는다. 해설 HTML·동반 MD에는 핵심/추가·소문항 묶음·예상 시간의 학습량 행을 출력하지 않으며 선발 JSON은 유지한다. PDF 표시는 기존 PDF 정책을 따른다. 선택용 JSON은 자식 원문이나 독립 검산 근거를 대신하지 않는다.
 4. **필수 하위 스킬: ec2-problem-explain.** 이 부모 통합 호출에서는 자식 코디네이터 한 명에게 형제 `../ec2-problem-explain/SKILL.md`와 필요한 참조를 직접 읽고 아래 발행 준비 절차를 맡긴다. 부모는 자식 원고·풀이·화면을 자기 문맥에 다시 모으지 않고 이 계약과 반환 영수증을 사용한다. 부모 `range`를 명시하고 runner가 브리프에 지정한 새 `EXPLAIN_RUN`을 사용한다. 코디네이터에게 `REPO`, 부모 `RUN`, `EXPLAIN_RUN`, 자식 `SKILL`, `PROFILE`의 실제 절대 경로, 부모 manifest·learning_style snapshot·선발 기록·검증된 두 백업 기록의 경로와 SHA-256을 넘긴다. 아래 변수는 명령 전에 같은 셸에서 실제 절대 경로로 설정한다.
 ```bash
 python3 "$REPO/.claude/skills/ec2-problem-explain/scripts/epe_cli.py" extract --repo "$REPO" --target "$RANGE" --run "$EXPLAIN_RUN"
 ```
-5. 코디네이터가 extract를 실행한다. extract 뒤 정리노트 바이트·목록·참고 자료를 고정한다. 바뀌면 부모 검토를 다시 하고 새 EXPLAIN_RUN으로 시작한다. 자식은 understand → recall → start → solve(`이렇게 풀어요`) → verify → pitfall → retry의 통합 본문 → 독립 검산 → build/check → 네 검토와 전체 개인화 감사까지 수행한다. 마지막 build 뒤의 check·검토 기록이 승인한 산출만 `ready-for-publish`로 반환하며 코디네이터는 publish를 실행하지 않는다. lite도 자식 모델·검토를 유지한다. 아래 위임 경계를 적용한다.
+5. 코디네이터가 extract를 실행한다. extract 뒤 정리노트 바이트·목록·참고 자료를 고정한다. 바뀌면 부모 검토를 다시 하고 새 EXPLAIN_RUN으로 시작한다. 자식은 understand → recall → start → solve(`이렇게 풀어요`) → verify → pitfall → retry의 통합 본문 → 독립 검산 → build/check → 네 검토와 전체 개인화 감사까지 수행한다. 마지막 build 뒤의 check·검토 기록이 승인한 산출만 `ready-for-publish`로 반환하며 코디네이터는 publish를 실행하지 않는다. 아래 위임 경계를 적용한다.
 6. 부모가 영수증의 현재 경로·입력/명세/참조/산출/검토 해시와 모든 판정을 확인한 뒤 runner의 `run --action publish-explanation`을 실행한다. 기존 CLI의 전체 발행 게이트를 그대로 통과해야 하며 영수증으로 검사를 대체하거나 발행 권한 우회 옵션을 만들지 않는다. 자식의 `source_visual/content/independent/browser`와 `learning_style_audit`가 모두 실제 pass여야 한다. `publish: … backup: …` 출력과 종료 코드를 부모 실행 기록에 남긴 뒤에만 `published`로 기록한다. 현재 snapshot/전체 감사와 재사용 근거까지 입증된 재사용만 `reused-verified`다. 실패/disputed는 `withheld`이며 아래 전체 팩 복구 계약을 따른다.
 7. runner의 `run --action build-answers`로 발행 자료의 `answer-overlay.json`을 소비해 **RUN 안**에 답안 PDF를 만든다. 같은 폴더 `validation.json`이 현재 검토를 승인해야 한다. 원본 MD 참고 풀이로 조용히 대체하지 않는다.
 8. 아래 렌더 페이지 검토를 수행하고 runner의 `run --action publish-answer`를 실행한다. 이후 `run --action final-check`로 기존 검사를 **유예 없이** 실행한다. extract 뒤 노트 링크를 자동 삽입하지 않는다.
