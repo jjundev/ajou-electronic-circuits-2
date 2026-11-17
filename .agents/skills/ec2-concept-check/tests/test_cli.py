@@ -12,10 +12,10 @@ def invoke(*args):
     return subprocess.run([sys.executable, str(CLI), *map(str, args)], text=True, capture_output=True)
 
 
-def test_template_matches_pinned_original():
+def test_template_matches_pinned_digest():
     template = SKILL / "assets/review-template.html"
     assert hashlib.sha256(template.read_bytes()).hexdigest() == (
-        "345324b7d1cdcbfadd2e538c4a871d92597bbceb946abbb7bf793d95b68b5a93"
+        "a4ab46b5dd70f6d50748f6b47ffa11a17eb7a7aa4124fb07d2bc06e1b4cbacab"
     )
 
 
