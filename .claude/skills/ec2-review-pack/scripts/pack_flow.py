@@ -745,6 +745,10 @@ def request_fixes(run: Path, request_path: Path) -> dict:
         seen = set()
         _current(s)
         if category == 'content': _require_finding_coverage(s, run, request)
+        if any(item.get('task_id') == 'standalone-svg-qa' for item in items) and (
+                s.get('explain_run') or s.get('stale_explain_runs')
+                or s['tasks'].get('child-coordinator', {}).get('attempt')):
+            raise FlowError('SVG reconversion requires parent re-review after child allocation')
         for item in items:
             tid = item.get('task_id'); path = Path(item.get('request_path', '')).resolve()
             if tid not in s['tasks'] or tid in seen or not path.is_relative_to(run) or not path.is_file():
@@ -760,6 +764,11 @@ def request_fixes(run: Path, request_path: Path) -> dict:
             # The PDF reviewer's fix lands in the template/overlay; the RUN answer PDF must be rebuilt.
             build.setdefault('history', []).append(dict({k: v for k, v in build.items() if k != 'history'}, reason='fix ' + rid))
             build['status'] = 'stale'
+        conversion = s['actions'].get('convert-md')
+        if 'standalone-svg-qa' in seen and conversion and conversion.get('status') == 'done':
+            conversion.setdefault('history', []).append(dict(
+                {k: v for k, v in conversion.items() if k != 'history'}, reason='fix ' + rid))
+            conversion['status'] = 'stale'
         s['fix_rounds'][category] += 1; prior[rid] = request
         refresh_tasks(s); write_briefs(s)
         return s

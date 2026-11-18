@@ -109,6 +109,39 @@ def test_absent_expected_svg_is_not_treated_as_zero(tmp_path):
     assert f.load_state(run)['standalone_svg_qa']['status'] == 'required'
 
 
+def test_standalone_fix_reconverts_before_reviewing_new_artifacts(tmp_path):
+    run = converted(tmp_path, problems=1)
+    detail = run / 'fix-svg.md'
+    detail.write_text('Re-export the required embedded WOFF2 font')
+    request = run / 'fix-svg.json'
+    request.write_text(json.dumps({'id': 'svg-font-1', 'category': 'machine_browser',
+        'items': [{'task_id': 'standalone-svg-qa', 'request_path': str(detail)}]}))
+    f.request_fixes(run, request)
+    state = f.load_state(run)
+    assert state['actions']['convert-md']['status'] == 'stale'
+    assert state['tasks']['browser-qa']['status'] == 'done'
+    step = f.next_work(run, slots=1)
+    assert (step['kind'], step['action']) == ('run', 'convert-md')
+    workflow_action(run, 'convert-md')
+    assert f.next_work(run, slots=1)['tasks'][0]['id'] == 'standalone-svg-qa'
+    assert f.load_state(run)['explain_run'] is None
+
+
+def test_standalone_fix_cannot_reconvert_after_child_allocation(tmp_path):
+    run = converted(tmp_path, problems=1)
+    workflow_accept(run, 'standalone-svg-qa')
+    assert f.load_state(run)['explain_run']
+    detail = run / 'fix-svg.md'
+    detail.write_text('Re-export the required embedded WOFF2 font')
+    request = run / 'fix-svg.json'
+    request.write_text(json.dumps({'id': 'svg-font-1', 'category': 'machine_browser',
+        'items': [{'task_id': 'standalone-svg-qa', 'request_path': str(detail)}]}))
+    before = (run / 'run-status.json').read_bytes()
+    with pytest.raises(f.FlowError, match='parent re-review'):
+        f.request_fixes(run, request)
+    assert (run / 'run-status.json').read_bytes() == before
+
+
 def test_each_svg_requires_its_own_decodable_screenshot(tmp_path):
     run = converted(tmp_path, svg_count=2)
     def damage():

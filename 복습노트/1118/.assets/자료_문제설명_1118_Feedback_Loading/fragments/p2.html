@@ -1,0 +1,22 @@
+<div class="layer eli5" data-explanation="understand"><h4>문제를 읽어요</h4>
+<p>같은 회로에서 첫째 단의 드레인 저항 $R_{D1}$만 커져요. 입력 전류는 유한하게 고정하고, 출력 전압이 입력 전류의 몇 배인지와 그 값을 정하는 전류 경로를 찾아요.</p>
+</div>
+<div class="layer formal" data-explanation="recall"><h4>이 개념과 공식을 떠올려요</h4>
+<p>큰 순방향 이득에서는 아주 작은 오차 전류만 있어도 유한한 출력 전압을 만들어요. 공통 게이트 소스 쪽으로 들어가는 전류가 작아지면 $1/g_{m1}$에 걸리는 입력 전압도 작아져요. 이렇게 귀환이 소신호 전압을 0에 붙잡는 노드를 가상 접지(virtual ground)라고 해요.</p><p>$\lambda=0$, $R_F\gg R_{D2}$, $R_F\gg1/g_{m1}$를 유지하고 $g_{m1},g_{m2},R_{D2},R_F$는 유한한 양수로 고정해요.</p>
+</div>
+<div class="layer formal" data-explanation="start"><h4>종이에 쓸 첫 줄</h4>
+<div data-answer-step="루프 이득으로 분자와 분모 나누기"><p>예제의 식에서 무차원 루프 이득 $T=g_{m2}R_{D1}R_{D2}/R_F$를 묶어요. 그러면 분자에도 같은 $T$가 나타나요.</p><p>$$\frac{v_{out}}{i_{in}}\approx -R_F\frac{T}{1+T}$$</p></div>
+</div>
+<div class="layer formal" data-explanation="solve"><h4>이렇게 풀어요</h4>
+<div data-subpart="main"><div data-answer-step="유한한 출력과 가상 접지 연결하기"><p>$$\frac{T}{1+T}=\frac{1}{1+1/T}\longrightarrow 1$$</p><p>$R_{D1}\to\infty$이면 $T\to\infty$예요. 고정된 입력 전류에서 출력은 유한한데 $|R_0|$는 무한대로 가므로, 순방향 오차 전류 $i_e=v_{out}/R_0$는 0으로 가요.</p><p>$$v_s=\frac{i_e}{g_{m1}}\longrightarrow 0$$</p></div><div data-answer-step="입력 전류가 흐르는 저항 확인하기"><figure class="figure"><svg viewBox="0 0 360 121" role="img" aria-label="가상 접지인 소스 노드로 들어온 입력 전류가 귀환 저항을 거쳐 오른쪽 출력으로 흐르는 극한 등가회로."><path class="fig-ink" d="M42 50H120 M42 50V66 M42 92V97"/><circle class="fig-ink" cx="42" cy="79" r="13"/><path class="fig-ink" d="M42 86v-14 m-4 5 4 -5 4 5"/><path class="fig-ink" d="M42 97v6 m-9 0h18 m-15 4h12 m-9 4h6"/><text class="fig-text fig-math" x="11" y="82">i<tspan baseline-shift="sub" font-size="78%">in</tspan></text><circle class="fig-dot" data-node="s" data-node-color="blue" cx="84" cy="50" r="3.1"/><text class="fig-text fig-math" x="61" y="32" data-node="s" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">s</tspan> → 0</text><path class="fig-ink" d="M120 50h6 l3 -5 5 10 5 -10 5 10 5 -10 3 5 h6"/><path class="fig-ink" d="M158 50H300"/><text class="fig-text fig-math" x="121" y="32">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text><circle class="fig-dot" data-node="out" data-node-color="red" cx="300" cy="50" r="3.1"/><text class="fig-text fig-math" x="285" y="32" data-node="out" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M195 59H223 m-5 -4 5 4 -5 4"/><text class="fig-text fig-math" x="194" y="82">i<tspan baseline-shift="sub" font-size="78%">in</tspan></text></svg><figcaption>큰 루프 이득의 극한에서 $M_1$ 소스에 들어가는 소신호 전류가 0으로 가므로, 입력 전류가 $R_F$를 따라 흐르는 경로만 남겨 그렸어요.</figcaption></figure><p>입력 전류가 $R_F$를 통해 입력에서 출력 쪽으로 흘러요. 따라서 입력 쪽 전위에서 출력 쪽 전위를 뺀 값이 저항의 전압 강하예요.</p><p>$$v_s-v_{out}\longrightarrow i_{in}R_F$$</p></div></div>
+</div>
+<div class="layer formal" data-explanation="verify"><h4>완성 답과 검산</h4>
+<div data-subpart="main"><div data-answer-final="완성 답"><p>$\lambda=0$인 예제의 큰 $R_F$ 가정에서 $R_{D1}\to\infty$이면 <strong>$v_{out}/i_{in}\to-R_F$</strong>예요. $M_1$ 소스는 소신호 가상 접지가 되고 입력 전류는 $R_F$로 흘러요.</p></div><p>양의 $i_{in}$이 0 V에 가까운 노드에서 저항을 따라 나가려면 출력 쪽 전위가 더 낮아야 해요. 따라서 $\mathrm{V/A}=\Omega$의 차원과 반전 부호가 모두 맞아요.</p></div>
+</div>
+<div class="layer warn" data-explanation="pitfall"><h4>주의할 점</h4>
+<p>가상 접지는 소신호 전압을 말해요. 실제 접지선을 연결하면 입력 전류가 그 선으로도 흐를 수 있어서 위의 $R_F$ 전류 해석을 그대로 쓸 수 없어요.</p>
+</div>
+<div class="layer eli5" data-explanation="retry"><h4>조건을 바꾸어 생각해요</h4>
+<ol><li>두 로딩 근사를 유지하되 $R_{D1}$이 유한해서 $T=9$라면, 출력 트랜스임피던스의 크기는 $R_F$의 몇 배인가요?</li></ol>
+</div>
+<div class="sum" hidden><p class="sum-lead">$R_{D1}\to\infty$이면 $T\to\infty$가 되어 폐루프 트랜스임피던스는 $-R_F$에 다가가요.</p><p>$\lambda=0$인 예제의 큰 $R_F$ 조건에서 $v_s\to0$이에요.</p><p>입력 전류가 가상 접지에서 $R_F$를 거쳐 출력 쪽으로 흘러요.</p></div>
