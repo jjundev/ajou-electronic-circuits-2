@@ -15,7 +15,7 @@ def invoke(*args):
 def test_template_matches_pinned_digest():
     template = SKILL / "assets/review-template.html"
     assert hashlib.sha256(template.read_bytes()).hexdigest() == (
-        "a4ab46b5dd70f6d50748f6b47ffa11a17eb7a7aa4124fb07d2bc06e1b4cbacab"
+        "b8df4750f44ce1e6e4487133049e480cf1be2236d92bd6d8af8a56df2d400927"
     )
 
 

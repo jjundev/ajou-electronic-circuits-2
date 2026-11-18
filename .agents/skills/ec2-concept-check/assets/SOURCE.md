@@ -2,8 +2,10 @@
 
 저장소 `jjundev/ajou-jagual`의 로컬 자구알 체크아웃 커밋 `2b384389fd3a88c99c6a6d951903736196ebd63c`에서 가져왔다.
 
-- `review-template.html`은 `.agents/skills/ds-review-pack/assets/review-template.html`에서 가져와 문제 목록의 채점 아이콘을 반영했다. 현재 SHA-256은 `a4ab46b5dd70f6d50748f6b47ffa11a17eb7a7aa4124fb07d2bc06e1b4cbacab`이며 원본은 `345324b7d1cdcbfadd2e538c4a871d92597bbceb946abbb7bf793d95b68b5a93`이다.
+- `review-template.html`은 `.agents/skills/ds-review-pack/assets/review-template.html`에서 가져와 문제 목록의 채점 아이콘을 반영했다. 현재 SHA-256은 `b8df4750f44ce1e6e4487133049e480cf1be2236d92bd6d8af8a56df2d400927`이며 원본은 `345324b7d1cdcbfadd2e538c4a871d92597bbceb946abbb7bf793d95b68b5a93`이다.
 - `review-interaction.css`, `review-interaction.js`, `review-prompt.js`는 `.agents/skills/ds-concept-check/assets/`의 원본 그대로다.
 - 빌더는 원본과 같은 템플릿 슬롯과 채점 삽입을 사용한다. 회로 문항과 토픽 링크를 채우고, 전자회로2의 동일한 로컬 KaTeX·Pretendard 자산을 사용한다.
 
 빌드할 때 복기 프롬프트의 과목명과 자료명은 전자회로2 확인문제를 가리키도록 채운다.
+
+2026-11-18에 페이지 높이를 뷰포트에 맞추는 변경을 템플릿에 반영했다.

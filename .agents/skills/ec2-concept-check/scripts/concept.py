@@ -25,7 +25,7 @@ from source import describe_inputs, nfc, read, sha, verify_inputs, write
 
 ASSETS = _paths.SKILL / "assets"
 TEMPLATE = ASSETS / "review-template.html"
-TEMPLATE_HASH = "a4ab46b5dd70f6d50748f6b47ffa11a17eb7a7aa4124fb07d2bc06e1b4cbacab"
+TEMPLATE_HASH = "b8df4750f44ce1e6e4487133049e480cf1be2236d92bd6d8af8a56df2d400927"
 BRAND = '<strong class="brand">복습문제</strong>'
 RUNTIME = ("pretendard/pretendard.css", "katex/katex.min.css", "katex/katex.min.js",
            "katex/contrib/auto-render.min.js")
