@@ -1,0 +1,796 @@
+{
+  "review_policy_version": "problem-explain-2026-10-21-learning-style",
+  "input_hash": "2e404c6a55cbe91cb651fe61db29d877599964aa7dc31c95dc6037fcea08bfb2",
+  "references": [
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/.claude/skills/ec2-problem-explain/SKILL.md",
+      "sha256": "57acb347917e84ba8e7566234f86504985d9b718760d42d026460f81655dc0dd"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/.claude/skills/ec2-problem-explain/references/authoring.md",
+      "sha256": "224df76f0a6a16ab2a6c79e9c4a9ade64df375d69f7e1842e3309cff012317d3"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/.claude/skills/ec2-problem-explain/references/verification.md",
+      "sha256": "b507cb2e800aacd739429079b7706ea3ad033e9b0c3a1c7e46230511db25078f"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/.claude/skills/ec2-review-pack/references/solution-style.md",
+      "sha256": "3c9f68f55d804966c95a35cdcd2f729754e9dc9a453fcc0df7f5b01152edeb9f"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/강의노트/2026F_Lec6_Ch12_Feedback_rev3.pdf",
+      "sha256": "fa5bb49642b0c1a6695986e9b8215d7eaef9e605ba78eda1d493fdb8fc5a625d"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/교과서/마이크로전자회로/12장.pdf",
+      "sha256": "351797bf72941f867d90c948e17d4c24f09e733a16796ae76aca500f9fd96498"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/교과서/마이크로전자회로/ch12/figures/fig12-38-a.png",
+      "sha256": "b1113696292b6aa1644fe70f6c102f18e3a5ad12a5e2c6116a7c5b15fc37aa27"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/교과서/마이크로전자회로/ch12/figures/fig12-38.png",
+      "sha256": "e503b387c8ad6f391e97d78534d047ee863f54bd41636690875841fe66a283b6"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/교과서/마이크로전자회로/ch12/figures/fig12-45.png",
+      "sha256": "e9ecb477df3c8cbedbf1e3d0e3b17655c74e4ebb9a930b6f9ceda9a2e9852607"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/교과서/마이크로전자회로/ch12/figures/fig12-97.png",
+      "sha256": "f09b9bae52d6cde8d922ed9e8a3d8380de1faa416edf41df4d65d7babff1d0c4"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/교과서/마이크로전자회로/ch12/연습문제/X12.18.md",
+      "sha256": "8a7aaf261600524ecd3060b7f804594dbb69b4aa461cf4fa42230016152404c1"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/교과서/마이크로전자회로/ch12/예제/E12.18.md",
+      "sha256": "90ddd4eac38ff8c150dff6a5c5467608e3e10df48217144f2e767c4b3176c53d"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/교과서/마이크로전자회로/ch12/예제/E12.19.md",
+      "sha256": "3d0ac81000fd3f771bfceb1d62d3230c9931730c281327c66fbb1f14952625b8"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/교과서/마이크로전자회로/ch12/예제/E12.20.md",
+      "sha256": "84d7258e841e596c0d6b559144f860b5c7edb37067623787976c1c3a4d600683"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/교과서/마이크로전자회로/ch12/예제/E12.23.md",
+      "sha256": "c23eb295f6265a72b47521e2c9ba8d12d250896639ceeaa6873fd150f6bc8dbb"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/교과서/마이크로전자회로/ch12/장말문제/P12.33.md",
+      "sha256": "15f8a9ad772c21377b88fe64465f9a2e7471b727db9952d0513f2f1cb46b9d4f"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/복습노트/1118/.assets/display-titles.json",
+      "sha256": "7b15cf314ce428a9138452eb19cac7807ce9192fdfbb7e3a8414a1204b42a495"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/복습노트/1118/.assets/figures_1118/fig-cv-input.svg",
+      "sha256": "443429d7a8590e5fe47d9e0b5c44b8387e0a4aabf231df4d72b175f906956e36"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/복습노트/1118/.assets/figures_1118/fig-cv-reg.svg",
+      "sha256": "f907c6dcd3be50dd324550cdcb6a1887adede1d66fa26a9d4a3926aa1bb71f67"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/복습노트/1118/.assets/figures_1118/fig-cv-test.svg",
+      "sha256": "50835a923681013979858a094437ed5d70c19f178b107fec58384db128da8a57"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/복습노트/1118/.assets/figures_1118/fig-s0-0.svg",
+      "sha256": "6956c4a0e123328d86e8a52c4e40e6358783179f9e0fa25d908c667a7a536a9a"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/복습노트/1118/.assets/figures_1118/fig-s0-1.svg",
+      "sha256": "065dc2d79ec3ca11fc6a42fa2c78c96ba80f70e790799fbe8b6c996381f80853"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/복습노트/1118/.assets/figures_1118/fig-s0-2.svg",
+      "sha256": "62ef9156491a9e98b8ad83791425035b6728e1ee1a6b85efb26040d7f84b1996"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/복습노트/1118/.assets/figures_1118/fig-s2-cc-gain.svg",
+      "sha256": "b4d95f00aa109af14051748b2d150dbcd5b8c003cb09b2db19d90576b555e9d1"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/복습노트/1118/.assets/figures_1118/fig-s2-cc-impedances.svg",
+      "sha256": "3f8ce7de0e3695c62391184a6ad4bbb0b9bf1e3e6cd99bdca29522c8dbe2fb15"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/복습노트/1118/.assets/figures_1118/fig-s3-directions.svg",
+      "sha256": "47052217781278de44f867c5c65937e0713834c9bed4f270962d8b97fd97a8c6"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/복습노트/1118/.assets/figures_1118/fig-s3-meter.svg",
+      "sha256": "e0dbe31ffa2bfc48dee2b87cb4e07044b51ced745bb70b3a89eb3413e6cd730a"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/복습노트/1118/.assets/figures_1118/fig-s4-duplicates.svg",
+      "sha256": "236b2f53561f716797195b14b31cd20b1d6caba997d272fa06e1eb9cbea8c67a"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/복습노트/1118/.assets/figures_1118/fig-s4-loading.svg",
+      "sha256": "49336c27108bbb8527a26221d130d2ed7071774c001e43f08f6a5ee4851a011c"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/복습노트/1118/.assets/figures_1118/fig-s4-vv-termination.svg",
+      "sha256": "b61e184e9fab6baf27afa1c2e853ead7bf0119d985ae641be41f3b3ec9acc7c5"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/복습노트/1118/.assets/figures_1118/fig-why.svg",
+      "sha256": "2f48cb5fa1dd989c9295e31fb64e6e6595c077e30c55394a9b05a6c777f795ab"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/복습노트/1118/.assets/figures_1118/widget-s3-topology-static-1.svg",
+      "sha256": "c93a55782c7e23101f4330e3299b363f3c4de755c1ef2f06b7a9cc66e4963b4c"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/복습노트/1118/.assets/figures_1118/widget-s3-topology-static-2.svg",
+      "sha256": "9d2c62f38e267bf26728c2be167a0b003731873693e6da1fadb4ef3db99b3d0f"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/복습노트/1118/.assets/figures_1118/widget-s3-topology-static-3.svg",
+      "sha256": "657a6d2e262013ddf35ffbdeafc58fa44fd71104fd7a4a9cc46f5c90e663afe0"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/복습노트/1118/.assets/problems.txt",
+      "sha256": "0ababbc43f8f4cf6fb95e5ef00753742bc43f4fbcfd9f94f2db12e6b5623f276"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/복습노트/1118/.assets/selection.json",
+      "sha256": "87ca56e2e6df156ee41e345a1a67fabba88069cbcf98cb5fd540f9f1b88f3d9a"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/복습노트/1118/.assets/정리노트_1118_Feedback_Loading.md",
+      "sha256": "04ed1eff19707d271f0f862e00c45c5d25543752d7d7327c080223c3ea378b37"
+    },
+    {
+      "path": "/workspace/ajou-electronic-circuits-2/복습노트/1118/정리노트_1118_Feedback_Loading.html",
+      "sha256": "fa04475fbeff4166b8e890adaa0fb18856541060e56eaa06d6546fc144a6fa5a"
+    }
+  ],
+  "learning_style_audit": {
+    "learning_style": {
+      "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
+      "sha256": "3c9f68f55d804966c95a35cdcd2f729754e9dc9a453fcc0df7f5b01152edeb9f",
+      "rule_ids": [
+        "UNIT-01",
+        "CALC-01",
+        "CALC-02",
+        "CIRCUIT-01",
+        "CIRCUIT-02",
+        "GAIN-01",
+        "DEGEN-01",
+        "SCALE-01",
+        "BIAS-01",
+        "NOTATION-01",
+        "EXPLAIN-01",
+        "CORRECT-01",
+        "FREQ-01"
+      ]
+    },
+    "items": {
+      "p1:a": {
+        "status": "pass",
+        "reviewer": "content_resume 독립 내용 검토자",
+        "rules": {
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "전류 방향만으로 판정하는 극성 판정"
+          },
+          "CALC-01": {
+            "disposition": "applied",
+            "evidence": "vgs1=-vs에서 M2 반전까지 후 극성 판정을 판정한다."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "수치 대입·반올림 없이 극성 판정을 기호와 극성으로 정리한다."
+          },
+          "CIRCUIT-01": {
+            "disposition": "applied",
+            "evidence": "iRF의 출력→소스 방향의 관찰 방향과 반대측 연결을 특정한다."
+          },
+          "CIRCUIT-02": {
+            "disposition": "applied",
+            "evidence": "iRF의 출력→소스 방향의 소신호 측정 조건을 해당 start/solve에서 확인했다. 양의 입력 전류가 M1 소스·X를 올리고 M2가 출력을 내려 입력으로 향하는 iRF를 감소시킨다. 역방향 교란도 반대로 상쇄한다."
+          },
+          "GAIN-01": {
+            "disposition": "not_applicable",
+            "evidence": "목표는 극성 판정이며 증폭기 vout/vin이 아니다."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "iRF의 출력→소스 방향에 외부 소스·이미터 축퇴 블록이 없다."
+          },
+          "SCALE-01": {
+            "disposition": "applied",
+            "evidence": "부호를 바꾼 입력 교란에서 고정한 조건 아래 결과를 비교한다."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "극성 판정의 선형화된 AC 조건이며 DC 동작점이나 영역 경계를 구하지 않는다."
+          },
+          "NOTATION-01": {
+            "disposition": "applied",
+            "evidence": "iRF의 출력→소스 방향를 회로 또는 원문 그림의 해당 단자 및 본문 기호로 대조했다. 최종 P1의 gm1 vs 라벨은 왼쪽 정렬 위치에서 end anchor로 끝나며 78% 실제 첨자, 회로 접속과 방향은 보존된다."
+          },
+          "EXPLAIN-01": {
+            "disposition": "applied",
+            "evidence": "vgs1=-vs에서 M2 반전까지에서 첫 판단과 검산을 연결한다. 양의 입력 전류가 M1 소스·X를 올리고 M2가 출력을 내려 입력으로 향하는 iRF를 감소시킨다. 역방향 교란도 반대로 상쇄한다."
+          },
+          "CORRECT-01": {
+            "disposition": "applied",
+            "evidence": "양의 입력 전류가 M1 소스·X를 올리고 M2가 출력을 내려 입력으로 향하는 iRF를 감소시킨다. 역방향 교란도 반대로 상쇄한다."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "극성 판정은 저주파 피드백 문제이며 주파수에 따른 팔로워 출력 임피던스를 구하지 않는다."
+          }
+        }
+      },
+      "p1:b": {
+        "status": "pass",
+        "reviewer": "content_resume 독립 내용 검토자",
+        "rules": {
+          "UNIT-01": {
+            "disposition": "applied",
+            "evidence": "Ω인 개루프 전달저항과 무차원 루프 배율을 구분한다."
+          },
+          "CALC-01": {
+            "disposition": "applied",
+            "evidence": "두 단 전달을 순차 조립 후 개루프 전달저항을 판정한다."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "수치 대입·반올림 없이 개루프 전달저항을 기호와 극성으로 정리한다."
+          },
+          "CIRCUIT-01": {
+            "disposition": "applied",
+            "evidence": "M1 소스 입력과 M2 드레인 출력의 관찰 방향과 반대측 연결을 특정한다."
+          },
+          "CIRCUIT-02": {
+            "disposition": "applied",
+            "evidence": "M1 소스 입력과 M2 드레인 출력의 소신호 측정 조건을 해당 start/solve에서 확인했다. RF가 RD2보다 클 때 출력 로딩을 생략한다. X=iin RD1, vout=-gm2 X RD2이므로 R0가 음수이고 S Ω²=Ω이다."
+          },
+          "GAIN-01": {
+            "disposition": "not_applicable",
+            "evidence": "목표는 개루프 전달저항이며 증폭기 vout/vin이 아니다."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "M1 소스 입력과 M2 드레인 출력에 외부 소스·이미터 축퇴 블록이 없다."
+          },
+          "SCALE-01": {
+            "disposition": "applied",
+            "evidence": "출력 로딩이 작은 극한에서 고정한 조건 아래 결과를 비교한다."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "개루프 전달저항의 선형화된 AC 조건이며 DC 동작점이나 영역 경계를 구하지 않는다."
+          },
+          "NOTATION-01": {
+            "disposition": "applied",
+            "evidence": "M1 소스 입력과 M2 드레인 출력를 회로 또는 원문 그림의 해당 단자 및 본문 기호로 대조했다. 최종 P1의 gm1 vs 라벨은 왼쪽 정렬 위치에서 end anchor로 끝나며 78% 실제 첨자, 회로 접속과 방향은 보존된다."
+          },
+          "EXPLAIN-01": {
+            "disposition": "applied",
+            "evidence": "두 단 전달을 순차 조립에서 첫 판단과 검산을 연결한다. RF가 RD2보다 클 때 출력 로딩을 생략한다. X=iin RD1, vout=-gm2 X RD2이므로 R0가 음수이고 S Ω²=Ω이다."
+          },
+          "CORRECT-01": {
+            "disposition": "applied",
+            "evidence": "RF가 RD2보다 클 때 출력 로딩을 생략한다. X=iin RD1, vout=-gm2 X RD2이므로 R0가 음수이고 S Ω²=Ω이다."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "개루프 전달저항은 저주파 피드백 문제이며 주파수에 따른 팔로워 출력 임피던스를 구하지 않는다."
+          }
+        }
+      },
+      "p1:c": {
+        "status": "pass",
+        "reviewer": "content_resume 독립 내용 검토자",
+        "rules": {
+          "UNIT-01": {
+            "disposition": "applied",
+            "evidence": "Ω인 폐루프 전달저항과 무차원 루프 배율을 구분한다."
+          },
+          "CALC-01": {
+            "disposition": "applied",
+            "evidence": "R0와 K를 T로 묶기 후 폐루프 전달저항을 판정한다."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "수치 대입·반올림 없이 폐루프 전달저항을 기호와 극성으로 정리한다."
+          },
+          "CIRCUIT-01": {
+            "disposition": "applied",
+            "evidence": "반송 전류 정의의 관찰 방향과 반대측 연결을 특정한다."
+          },
+          "CIRCUIT-02": {
+            "disposition": "applied",
+            "evidence": "반송 전류 정의의 소신호 측정 조건을 해당 start/solve에서 확인했다. 개방 입력에서 RF와 1/gm1의 반송 경로, iF=-iRF, K≈-1/RF로 T>0. 폐루프 R0/(1+T)와 큰 T의 -RF 부호가 일치한다."
+          },
+          "GAIN-01": {
+            "disposition": "not_applicable",
+            "evidence": "목표는 폐루프 전달저항이며 증폭기 vout/vin이 아니다."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "반송 전류 정의에 외부 소스·이미터 축퇴 블록이 없다."
+          },
+          "SCALE-01": {
+            "disposition": "applied",
+            "evidence": "RF 두 배이면 T 절반에서 고정한 조건 아래 결과를 비교한다."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "폐루프 전달저항의 선형화된 AC 조건이며 DC 동작점이나 영역 경계를 구하지 않는다."
+          },
+          "NOTATION-01": {
+            "disposition": "applied",
+            "evidence": "반송 전류 정의를 회로 또는 원문 그림의 해당 단자 및 본문 기호로 대조했다. 최종 P1의 gm1 vs 라벨은 왼쪽 정렬 위치에서 end anchor로 끝나며 78% 실제 첨자, 회로 접속과 방향은 보존된다."
+          },
+          "EXPLAIN-01": {
+            "disposition": "applied",
+            "evidence": "R0와 K를 T로 묶기에서 첫 판단과 검산을 연결한다. 개방 입력에서 RF와 1/gm1의 반송 경로, iF=-iRF, K≈-1/RF로 T>0. 폐루프 R0/(1+T)와 큰 T의 -RF 부호가 일치한다."
+          },
+          "CORRECT-01": {
+            "disposition": "applied",
+            "evidence": "개방 입력에서 RF와 1/gm1의 반송 경로, iF=-iRF, K≈-1/RF로 T>0. 폐루프 R0/(1+T)와 큰 T의 -RF 부호가 일치한다."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "폐루프 전달저항은 저주파 피드백 문제이며 주파수에 따른 팔로워 출력 임피던스를 구하지 않는다."
+          }
+        }
+      },
+      "p2:main": {
+        "status": "pass",
+        "reviewer": "content_resume 독립 내용 검토자",
+        "rules": {
+          "UNIT-01": {
+            "disposition": "applied",
+            "evidence": "Ω인 전달저항 극한과 무차원 루프 배율을 구분한다."
+          },
+          "CALC-01": {
+            "disposition": "applied",
+            "evidence": "T/(1+T) 극한 후 전달저항 극한을 판정한다."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "수치 대입·반올림 없이 전달저항 극한을 기호와 극성으로 정리한다."
+          },
+          "CIRCUIT-01": {
+            "disposition": "applied",
+            "evidence": "RF 양단과 가상접지 전류 경로의 관찰 방향과 반대측 연결을 특정한다."
+          },
+          "CIRCUIT-02": {
+            "disposition": "applied",
+            "evidence": "RF 양단과 가상접지 전류 경로의 소신호 측정 조건을 해당 start/solve에서 확인했다. 유한 입력에서 RD1→∞이면 T→∞, 오차전류와 소스 전압이 0으로 접근하고 RF를 통과한 전류가 -RF 출력을 만든다."
+          },
+          "GAIN-01": {
+            "disposition": "not_applicable",
+            "evidence": "목표는 전달저항 극한이며 증폭기 vout/vin이 아니다."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "RF 양단과 가상접지 전류 경로에 외부 소스·이미터 축퇴 블록이 없다."
+          },
+          "SCALE-01": {
+            "disposition": "applied",
+            "evidence": "T=9에서 9/10에서 고정한 조건 아래 결과를 비교한다."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "전달저항 극한의 선형화된 AC 조건이며 DC 동작점이나 영역 경계를 구하지 않는다."
+          },
+          "NOTATION-01": {
+            "disposition": "applied",
+            "evidence": "RF 양단과 가상접지 전류 경로를 회로 또는 원문 그림의 해당 단자 및 본문 기호로 대조했다."
+          },
+          "EXPLAIN-01": {
+            "disposition": "applied",
+            "evidence": "T/(1+T) 극한에서 첫 판단과 검산을 연결한다. 유한 입력에서 RD1→∞이면 T→∞, 오차전류와 소스 전압이 0으로 접근하고 RF를 통과한 전류가 -RF 출력을 만든다."
+          },
+          "CORRECT-01": {
+            "disposition": "applied",
+            "evidence": "유한 입력에서 RD1→∞이면 T→∞, 오차전류와 소스 전압이 0으로 접근하고 RF를 통과한 전류가 -RF 출력을 만든다."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "전달저항 극한은 저주파 피드백 문제이며 주파수에 따른 팔로워 출력 임피던스를 구하지 않는다."
+          }
+        }
+      },
+      "p3:main": {
+        "status": "pass",
+        "reviewer": "content_resume 독립 내용 검토자",
+        "rules": {
+          "UNIT-01": {
+            "disposition": "applied",
+            "evidence": "Ω인 입력 구동점 저항과 무차원 루프 배율을 구분한다."
+          },
+          "CALC-01": {
+            "disposition": "applied",
+            "evidence": "오차전류에서 시험전류 구하기 후 입력 구동점 저항을 판정한다."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "수치 대입·반올림 없이 입력 구동점 저항을 기호와 극성으로 정리한다."
+          },
+          "CIRCUIT-01": {
+            "disposition": "applied",
+            "evidence": "입력 시험원과 반송 가지의 관찰 방향과 반대측 연결을 특정한다."
+          },
+          "CIRCUIT-02": {
+            "disposition": "applied",
+            "evidence": "입력 시험원과 반송 가지의 소신호 측정 조건을 해당 start/solve에서 확인했다. 입력 시험전류를 ie+iF로 나누면 it=(1+T)ie이다. vs/it=(1/gm1)/(1+T), 귀환 제거와 무한 T 극한이 각각 1/gm1과 0이다."
+          },
+          "GAIN-01": {
+            "disposition": "not_applicable",
+            "evidence": "목표는 입력 구동점 저항이며 증폭기 vout/vin이 아니다."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "입력 시험원과 반송 가지에 외부 소스·이미터 축퇴 블록이 없다."
+          },
+          "SCALE-01": {
+            "disposition": "applied",
+            "evidence": "T=3에서 시험전류 네 배에서 고정한 조건 아래 결과를 비교한다."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "입력 구동점 저항의 선형화된 AC 조건이며 DC 동작점이나 영역 경계를 구하지 않는다."
+          },
+          "NOTATION-01": {
+            "disposition": "applied",
+            "evidence": "입력 시험원과 반송 가지를 회로 또는 원문 그림의 해당 단자 및 본문 기호로 대조했다."
+          },
+          "EXPLAIN-01": {
+            "disposition": "applied",
+            "evidence": "오차전류에서 시험전류 구하기에서 첫 판단과 검산을 연결한다. 입력 시험전류를 ie+iF로 나누면 it=(1+T)ie이다. vs/it=(1/gm1)/(1+T), 귀환 제거와 무한 T 극한이 각각 1/gm1과 0이다."
+          },
+          "CORRECT-01": {
+            "disposition": "applied",
+            "evidence": "입력 시험전류를 ie+iF로 나누면 it=(1+T)ie이다. vs/it=(1/gm1)/(1+T), 귀환 제거와 무한 T 극한이 각각 1/gm1과 0이다."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "입력 구동점 저항은 저주파 피드백 문제이며 주파수에 따른 팔로워 출력 임피던스를 구하지 않는다."
+          }
+        }
+      },
+      "p4:main": {
+        "status": "pass",
+        "reviewer": "content_resume 독립 내용 검토자",
+        "rules": {
+          "UNIT-01": {
+            "disposition": "applied",
+            "evidence": "Ω인 출력 구동점 저항과 무차원 루프 배율을 구분한다."
+          },
+          "CALC-01": {
+            "disposition": "applied",
+            "evidence": "개루프 저항과 루프이득 조립 후 출력 구동점 저항을 판정한다."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "수치 대입·반올림 없이 출력 구동점 저항을 기호와 극성으로 정리한다."
+          },
+          "CIRCUIT-01": {
+            "disposition": "applied",
+            "evidence": "출력 시험원에서 본 RD2의 관찰 방향과 반대측 연결을 특정한다."
+          },
+          "CIRCUIT-02": {
+            "disposition": "applied",
+            "evidence": "출력 시험원에서 본 RD2의 소신호 측정 조건을 해당 start/solve에서 확인했다. 입력 전류원 개방과 출력 시험원에서 RD2/(1+T). 양의 출력 시험전압이 M2 전류를 키워 같은 전압 유지에 더 큰 시험전류가 필요하다."
+          },
+          "GAIN-01": {
+            "disposition": "not_applicable",
+            "evidence": "목표는 출력 구동점 저항이며 증폭기 vout/vin이 아니다."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "출력 시험원에서 본 RD2에 외부 소스·이미터 축퇴 블록이 없다."
+          },
+          "SCALE-01": {
+            "disposition": "applied",
+            "evidence": "RF 두 배이면 분모 감소에서 고정한 조건 아래 결과를 비교한다."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "출력 구동점 저항의 선형화된 AC 조건이며 DC 동작점이나 영역 경계를 구하지 않는다."
+          },
+          "NOTATION-01": {
+            "disposition": "applied",
+            "evidence": "출력 시험원에서 본 RD2를 회로 또는 원문 그림의 해당 단자 및 본문 기호로 대조했다."
+          },
+          "EXPLAIN-01": {
+            "disposition": "applied",
+            "evidence": "개루프 저항과 루프이득 조립에서 첫 판단과 검산을 연결한다. 입력 전류원 개방과 출력 시험원에서 RD2/(1+T). 양의 출력 시험전압이 M2 전류를 키워 같은 전압 유지에 더 큰 시험전류가 필요하다."
+          },
+          "CORRECT-01": {
+            "disposition": "applied",
+            "evidence": "입력 전류원 개방과 출력 시험원에서 RD2/(1+T). 양의 출력 시험전압이 M2 전류를 키워 같은 전압 유지에 더 큰 시험전류가 필요하다."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "출력 구동점 저항은 저주파 피드백 문제이며 주파수에 따른 팔로워 출력 임피던스를 구하지 않는다."
+          }
+        }
+      },
+      "p5:main": {
+        "status": "pass",
+        "reviewer": "content_resume 독립 내용 검토자",
+        "rules": {
+          "UNIT-01": {
+            "disposition": "applied",
+            "evidence": "Ω인 트랜스임피던스와 양 포트 저항과 무차원 루프 배율을 구분한다."
+          },
+          "CALC-01": {
+            "disposition": "applied",
+            "evidence": "α와 T 및 D로 세 결과 연결 후 트랜스임피던스와 양 포트 저항을 판정한다."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "수치 대입·반올림 없이 트랜스임피던스와 양 포트 저항을 기호와 극성으로 정리한다."
+          },
+          "CIRCUIT-01": {
+            "disposition": "applied",
+            "evidence": "분압기 중간점과 M2의 입력 전류 인출의 관찰 방향과 반대측 연결을 특정한다."
+          },
+          "CIRCUIT-02": {
+            "disposition": "applied",
+            "evidence": "분압기 중간점과 M2의 입력 전류 인출의 소신호 측정 조건을 해당 start/solve에서 확인했다. 큰 분압망은 RD를 거의 부하로 걸지 않지만 분압비 α는 보존한다. K=gm2 α, R0≈+RD. 세 답 RD/D, 1/(gm1 D), RD/D가 양수이고 gm2→0이면 개루프로 돌아간다."
+          },
+          "GAIN-01": {
+            "disposition": "not_applicable",
+            "evidence": "목표는 트랜스임피던스와 양 포트 저항이며 증폭기 vout/vin이 아니다."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "분압기 중간점과 M2의 입력 전류 인출에 외부 소스·이미터 축퇴 블록이 없다."
+          },
+          "SCALE-01": {
+            "disposition": "applied",
+            "evidence": "R2 비중 증가 시 Rin 감소에서 고정한 조건 아래 결과를 비교한다."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "트랜스임피던스와 양 포트 저항의 선형화된 AC 조건이며 DC 동작점이나 영역 경계를 구하지 않는다."
+          },
+          "NOTATION-01": {
+            "disposition": "applied",
+            "evidence": "분압기 중간점과 M2의 입력 전류 인출를 회로 또는 원문 그림의 해당 단자 및 본문 기호로 대조했다."
+          },
+          "EXPLAIN-01": {
+            "disposition": "applied",
+            "evidence": "α와 T 및 D로 세 결과 연결에서 첫 판단과 검산을 연결한다. 큰 분압망은 RD를 거의 부하로 걸지 않지만 분압비 α는 보존한다. K=gm2 α, R0≈+RD. 세 답 RD/D, 1/(gm1 D), RD/D가 양수이고 gm2→0이면 개루프로 돌아간다."
+          },
+          "CORRECT-01": {
+            "disposition": "applied",
+            "evidence": "큰 분압망은 RD를 거의 부하로 걸지 않지만 분압비 α는 보존한다. K=gm2 α, R0≈+RD. 세 답 RD/D, 1/(gm1 D), RD/D가 양수이고 gm2→0이면 개루프로 돌아간다."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "트랜스임피던스와 양 포트 저항은 저주파 피드백 문제이며 주파수에 따른 팔로워 출력 임피던스를 구하지 않는다."
+          }
+        }
+      },
+      "p6:main": {
+        "status": "pass",
+        "reviewer": "content_resume 독립 내용 검토자",
+        "rules": {
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "전류 방향만으로 판정하는 전류 감지 연결 오류"
+          },
+          "CALC-01": {
+            "disposition": "applied",
+            "evidence": "IX=Iport=Isense의 연결 조건 후 전류 감지 연결 오류을 판정한다."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "수치 대입·반올림 없이 전류 감지 연결 오류을 기호와 극성으로 정리한다."
+          },
+          "CIRCUIT-01": {
+            "disposition": "applied",
+            "evidence": "시험원에서 돌아오는 경로의 분기의 관찰 방향과 반대측 연결을 특정한다."
+          },
+          "CIRCUIT-02": {
+            "disposition": "applied",
+            "evidence": "시험원에서 돌아오는 경로의 분기의 소신호 측정 조건을 해당 start/solve에서 확인했다. 입력 전압 영점. 병렬 배치에서는 시험원과 감지 포트 전류가 갈라지므로 Fig 12.45가 잘못이다. 직렬 배치에서는 내부 Rout 가지 전류가 아니라 전체 출력 포트 전류가 시험·감지전류와 같다."
+          },
+          "GAIN-01": {
+            "disposition": "not_applicable",
+            "evidence": "목표는 전류 감지 연결 오류이며 증폭기 vout/vin이 아니다."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "시험원에서 돌아오는 경로의 분기에 외부 소스·이미터 축퇴 블록이 없다."
+          },
+          "SCALE-01": {
+            "disposition": "applied",
+            "evidence": "감지 저항→0의 직렬/병렬 극한에서 고정한 조건 아래 결과를 비교한다."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "전류 감지 연결 오류의 선형화된 AC 조건이며 DC 동작점이나 영역 경계를 구하지 않는다."
+          },
+          "NOTATION-01": {
+            "disposition": "applied",
+            "evidence": "시험원에서 돌아오는 경로의 분기를 회로 또는 원문 그림의 해당 단자 및 본문 기호로 대조했다."
+          },
+          "EXPLAIN-01": {
+            "disposition": "applied",
+            "evidence": "IX=Iport=Isense의 연결 조건에서 첫 판단과 검산을 연결한다. 입력 전압 영점. 병렬 배치에서는 시험원과 감지 포트 전류가 갈라지므로 Fig 12.45가 잘못이다. 직렬 배치에서는 내부 Rout 가지 전류가 아니라 전체 출력 포트 전류가 시험·감지전류와 같다."
+          },
+          "CORRECT-01": {
+            "disposition": "applied",
+            "evidence": "입력 전압 영점. 병렬 배치에서는 시험원과 감지 포트 전류가 갈라지므로 Fig 12.45가 잘못이다. 직렬 배치에서는 내부 Rout 가지 전류가 아니라 전체 출력 포트 전류가 시험·감지전류와 같다."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "전류 감지 연결 오류은 저주파 피드백 문제이며 주파수에 따른 팔로워 출력 임피던스를 구하지 않는다."
+          }
+        }
+      }
+    }
+  },
+  "source_visual": {
+    "status": "pass",
+    "reviewer": "/root/child_resume/source_visual_resume",
+    "evidence": "/home/agent/.cache/ec2-review-pack/1118-20261118-193819/problem-explain/73d1d779-88ea-4c8d-a912-7db27c5ee57c/work/pdf-label-fix-1/source-visual/report.md"
+  },
+  "browser": {
+    "status": "pass",
+    "reviewer": "/root/child_resume",
+    "evidence": "/home/agent/.cache/ec2-review-pack/1118-20261118-193819/problem-explain/73d1d779-88ea-4c8d-a912-7db27c5ee57c/work/pdf-label-fix-1/browser-report.md; playwright-headless 1280×900/1024×900/375×812 light/dark; visible; browser.json, browser1024.json, browser-extra/interactions.json (102 checks), layout-probe.json; actual screenshot/3 generated SVG/font-face inspection. No connected builtin browser; headless clicks and screenshots substituted."
+  },
+  "content": {
+    "status": "pass",
+    "reviewer": "content_resume 독립 내용 검토자",
+    "evidence": "최종 stage a2ed39dc3231457a908f6a81b551e389의 HTML, MD 및 답안 overlay 8개, 원회로 3종, 생성 SVG 3종, 42개 구역 및 요약·retry 대조. /home/agent/.cache/ec2-review-pack/1118-20261118-193819/problem-explain/73d1d779-88ea-4c8d-a912-7db27c5ee57c/work/pdf-label-fix-1/content-review/report.md P1 라벨 좌표와 anchor만 원본 DOM 차이로 확인. 42구역의 텍스트, 여섯 요약·retry 및 MD 일치.",
+    "items": {
+      "p1:a": {
+        "status": "pass",
+        "reviewer": "content_resume 독립 내용 검토자",
+        "evidence": "양의 입력 전류가 M1 소스·X를 올리고 M2가 출력을 내려 입력으로 향하는 iRF를 감소시킨다. 역방향 교란도 반대로 상쇄한다."
+      },
+      "p1:b": {
+        "status": "pass",
+        "reviewer": "content_resume 독립 내용 검토자",
+        "evidence": "RF가 RD2보다 클 때 출력 로딩을 생략한다. X=iin RD1, vout=-gm2 X RD2이므로 R0가 음수이고 S Ω²=Ω이다."
+      },
+      "p1:c": {
+        "status": "pass",
+        "reviewer": "content_resume 독립 내용 검토자",
+        "evidence": "개방 입력에서 RF와 1/gm1의 반송 경로, iF=-iRF, K≈-1/RF로 T>0. 폐루프 R0/(1+T)와 큰 T의 -RF 부호가 일치한다."
+      },
+      "p2:main": {
+        "status": "pass",
+        "reviewer": "content_resume 독립 내용 검토자",
+        "evidence": "유한 입력에서 RD1→∞이면 T→∞, 오차전류와 소스 전압이 0으로 접근하고 RF를 통과한 전류가 -RF 출력을 만든다."
+      },
+      "p3:main": {
+        "status": "pass",
+        "reviewer": "content_resume 독립 내용 검토자",
+        "evidence": "입력 시험전류를 ie+iF로 나누면 it=(1+T)ie이다. vs/it=(1/gm1)/(1+T), 귀환 제거와 무한 T 극한이 각각 1/gm1과 0이다."
+      },
+      "p4:main": {
+        "status": "pass",
+        "reviewer": "content_resume 독립 내용 검토자",
+        "evidence": "입력 전류원 개방과 출력 시험원에서 RD2/(1+T). 양의 출력 시험전압이 M2 전류를 키워 같은 전압 유지에 더 큰 시험전류가 필요하다."
+      },
+      "p5:main": {
+        "status": "pass",
+        "reviewer": "content_resume 독립 내용 검토자",
+        "evidence": "큰 분압망은 RD를 거의 부하로 걸지 않지만 분압비 α는 보존한다. K=gm2 α, R0≈+RD. 세 답 RD/D, 1/(gm1 D), RD/D가 양수이고 gm2→0이면 개루프로 돌아간다."
+      },
+      "p6:main": {
+        "status": "pass",
+        "reviewer": "content_resume 독립 내용 검토자",
+        "evidence": "입력 전압 영점. 병렬 배치에서는 시험원과 감지 포트 전류가 갈라지므로 Fig 12.45가 잘못이다. 직렬 배치에서는 내부 Rout 가지 전류가 아니라 전체 출력 포트 전류가 시험·감지전류와 같다."
+      }
+    }
+  },
+  "independent": {
+    "status": "pass",
+    "reviewer": "/root/child_coordinator/blind_a; /root/child_coordinator/blind_b; 비교 /root/child_resume",
+    "evidence": "/home/agent/.cache/ec2-review-pack/1118-20261118-193819/problem-explain/73d1d779-88ea-4c8d-a912-7db27c5ee57c/work/pdf-label-fix-1/independent-validity.json; /home/agent/.cache/ec2-review-pack/1118-20261118-193819/problem-explain/73d1d779-88ea-4c8d-a912-7db27c5ee57c/work/pdf-label-fix-1/content-review/report.md; evidence/p1-sympy.py–p6-result.txt: 새 stage에서 기존 독립 계산6개 출력 재현; 수식/접속/조건 변경 없음",
+    "items": {
+      "p1:a": {
+        "reviewer": "/root/child_coordinator/blind_a",
+        "method": "qualitative",
+        "conclusion": "게이트 AC접지의 CG M1에서 입력 증가→vs와 vx 증가→vo 감소→출력에서 주입하는 귀환전류 감소: 부귀환. 참고 답 및 조각 방향과 일치",
+        "status": "pass",
+        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt; /home/agent/.cache/ec2-review-pack/1118-20261118-193819/problem-explain/73d1d779-88ea-4c8d-a912-7db27c5ee57c/work/pdf-label-fix-1/independent-validity.json; p1 라벨 좌표 외 식/조건/접속은 동일함을 최종 내용 검토에서 재확인"
+      },
+      "p1:b": {
+        "reviewer": "/root/child_coordinator/blind_a",
+        "method": "symbolic",
+        "conclusion": "귀환 개방 순방향 트랜스임피던스 -gm2 RD1 RD2 [Ω], 참고 답과 일치",
+        "status": "pass",
+        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt; /home/agent/.cache/ec2-review-pack/1118-20261118-193819/problem-explain/73d1d779-88ea-4c8d-a912-7db27c5ee57c/work/pdf-label-fix-1/independent-validity.json; p1 라벨 좌표 외 식/조건/접속은 동일함을 최종 내용 검토에서 재확인"
+      },
+      "p1:c": {
+        "reviewer": "/root/child_coordinator/blind_a",
+        "method": "symbolic",
+        "conclusion": "큰 RF의 양단 로딩을 생략한 폐루프 -A/(1+A/RF), A=gm2 RD1 RD2, 참고 답과 일치",
+        "status": "pass",
+        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt; /home/agent/.cache/ec2-review-pack/1118-20261118-193819/problem-explain/73d1d779-88ea-4c8d-a912-7db27c5ee57c/work/pdf-label-fix-1/independent-validity.json; p1 라벨 좌표 외 식/조건/접속은 동일함을 최종 내용 검토에서 재확인"
+      },
+      "p2:main": {
+        "reviewer": "/root/child_coordinator/blind_a",
+        "method": "symbolic",
+        "conclusion": "전체 KCL에서 RD1→∞, vo/iin→-RF, vs/iin→0, RF 전류/입력전류→1. 참고 풀이 없음; 별도 독립 도출",
+        "status": "pass",
+        "evidence": "evidence/p2-sympy.py, evidence/p2-result.txt; /home/agent/.cache/ec2-review-pack/1118-20261118-193819/problem-explain/73d1d779-88ea-4c8d-a912-7db27c5ee57c/work/pdf-label-fix-1/independent-validity.json; p1 라벨 좌표 외 식/조건/접속은 동일함을 최종 내용 검토에서 재확인"
+      },
+      "p3:main": {
+        "reviewer": "/root/child_coordinator/blind_a",
+        "method": "symbolic",
+        "conclusion": "큰 RF 근사 Rin≈1/[gm1(1+A/RF)], A=gm2 RD1 RD2; 유한 RF 전체 KCL과 근사 일치 및 참고 답 일치",
+        "status": "pass",
+        "evidence": "evidence/p3-sympy.py, evidence/p3-result.txt; /home/agent/.cache/ec2-review-pack/1118-20261118-193819/problem-explain/73d1d779-88ea-4c8d-a912-7db27c5ee57c/work/pdf-label-fix-1/independent-validity.json; p1 라벨 좌표 외 식/조건/접속은 동일함을 최종 내용 검토에서 재확인"
+      },
+      "p4:main": {
+        "reviewer": "/root/child_coordinator/blind_b",
+        "method": "symbolic",
+        "conclusion": "입력 전류원 개방 시험 KCL의 출력저항, 큰 RF 아래 Rout≈RD2/(1+A/RF). 참고 답과 같은 근사 일치. 정확식은 내부 evidence에만 보존",
+        "status": "pass",
+        "evidence": "evidence/p4-sympy.py, evidence/p4-result.txt; /home/agent/.cache/ec2-review-pack/1118-20261118-193819/problem-explain/73d1d779-88ea-4c8d-a912-7db27c5ee57c/work/pdf-label-fix-1/independent-validity.json; p1 라벨 좌표 외 식/조건/접속은 동일함을 최종 내용 검토에서 재확인"
+      },
+      "p5:main": {
+        "reviewer": "/root/child_coordinator/blind_b",
+        "method": "symbolic",
+        "conclusion": "beta=R2/(R1+R2), T=gm2 beta RD; 큰 R1+R2 아래 vo/iin≈RD/(1+T), Rin≈1/[gm1(1+T)], Rout≈RD/(1+T). 참고 답 없음; 부하 보존 전체 KCL로 별도 도출",
+        "status": "pass",
+        "evidence": "evidence/p5-sympy.py, evidence/p5-result.txt; /home/agent/.cache/ec2-review-pack/1118-20261118-193819/problem-explain/73d1d779-88ea-4c8d-a912-7db27c5ee57c/work/pdf-label-fix-1/independent-validity.json; p1 라벨 좌표 외 식/조건/접속은 동일함을 최종 내용 검토에서 재확인"
+      },
+      "p6:main": {
+        "reviewer": "/root/child_coordinator/blind_b",
+        "method": "qualitative",
+        "conclusion": "전류 감지는 출력·시험원과 직렬이어야 한다. 병렬 탭은 전압만 공유하고 출력전류를 보장하지 않는다. 참고 답의 잘못된 병렬 접속 논증과 일치",
+        "status": "pass",
+        "evidence": "evidence/p6-sympy.py, evidence/p6-result.txt; /home/agent/.cache/ec2-review-pack/1118-20261118-193819/problem-explain/73d1d779-88ea-4c8d-a912-7db27c5ee57c/work/pdf-label-fix-1/independent-validity.json; p1 라벨 좌표 외 식/조건/접속은 동일함을 최종 내용 검토에서 재확인"
+      }
+    }
+  },
+  "artifact_hashes": {
+    ".assets/figures_문제설명_1118_Feedback_Loading/b1113696292b6aa1-fig12-38-a.png": "b1113696292b6aa1644fe70f6c102f18e3a5ad12a5e2c6116a7c5b15fc37aa27",
+    ".assets/figures_문제설명_1118_Feedback_Loading/e9ecb477df3c8cbe-fig12-45.png": "e9ecb477df3c8cbedbf1e3d0e3b17655c74e4ebb9a930b6f9ceda9a2e9852607",
+    ".assets/figures_문제설명_1118_Feedback_Loading/explain-fig-1.svg": "222f55bfe06033f42e6f0de6d7da885cde7f614b0efdd96dbd460ec0ffed0841",
+    ".assets/figures_문제설명_1118_Feedback_Loading/explain-fig-2.svg": "e375167190ca944718f524587f1c0ad46c23a78658f3f28c6a77689240c7a9d6",
+    ".assets/figures_문제설명_1118_Feedback_Loading/explain-fig-3.svg": "d33011c08b2275602d4de756cf1c3d3faf9ad3d8b3f6fe86124d1e062ed3b540",
+    ".assets/figures_문제설명_1118_Feedback_Loading/f09b9bae52d6cde8-fig12-97.png": "f09b9bae52d6cde8d922ed9e8a3d8380de1faa416edf41df4d65d7babff1d0c4",
+    ".assets/문제설명_1118_Feedback_Loading.md": "6eadcc1e805ddefabb93876df8ea5f528a95b461b7548044eb88414f6997e2e7",
+    ".assets/자료_문제설명_1118_Feedback_Loading/answer-overlay.json": "f1fb298de79b60f0207020afc7ab097bb47b32b3952ddf6aed0a5063322fc044",
+    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p1-result.txt": "1acc98310ce7516d67ed19038fe1da377770ddddd15d4dd5c38395a8bb7e2e70",
+    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p1-sympy.py": "2645493137784228f691d3c3effb878646e56a5f079eb41f9205e1d0b0b60028",
+    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p2-result.txt": "10a8547bdcffb462a4493983d4ea69235217b7da5772e351e3f1c57507004ea6",
+    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p2-sympy.py": "c1e123ad8ff6ef6a00d245dd16c20e6e2f624ab798bccf16dd7446f936b8cd23",
+    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p3-result.txt": "824fcdfcb6ff47a9d56a2fbf5d4a22c1285e2837311e92fa24c4b3b20c3f2730",
+    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p3-sympy.py": "be536e6e5fdfdcb16ae4c7f06c6662eb73801f3eed821eb962c4404675435a1b",
+    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p4-result.txt": "4b2d4d1fb80e47991981c02c8c423b4de711319e90da4721b51607bf455bc281",
+    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p4-sympy.py": "567934a4eeebeb99deec2a961861a32304973228d7d977a46d49c9d94df7e5f5",
+    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p5-result.txt": "29de94b9112e6a85fe24b17d599dd51c33afc648da93cbf0318c0813f7fb2dda",
+    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p5-sympy.py": "9d26ba90dba87abc211b5f1da763db0664dfa16926eadfcdbe628d75a82a412c",
+    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p6-result.txt": "d37d7f150eb57b634a9eaa3d917c681d0c7c8b12ce5dda348c744c39fb1af99d",
+    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p6-sympy.py": "e7968487b0303ca6b71084e57d7a6f0e788fed1535e69d34eaee7229bbc0b4ea",
+    ".assets/자료_문제설명_1118_Feedback_Loading/fragments/p1.html": "23c8dacd25a45ffc921bb583bf8151a0cf84226dde37c8b35e765cf0a81857eb",
+    ".assets/자료_문제설명_1118_Feedback_Loading/fragments/p2.html": "0085868aaa3f7c8fa9a4a78dd4299d44d3919d9a2d4748fc01f760caf68f5ab4",
+    ".assets/자료_문제설명_1118_Feedback_Loading/fragments/p3.html": "1f5b40acfd11659f15824d0a75dd04a6532a64309c4fc623682b769675ccff6b",
+    ".assets/자료_문제설명_1118_Feedback_Loading/fragments/p4.html": "e97c2a9fba2c9cd60d83e97f4d5041d7319a1e8b17886949d14ec2d993c5dfad",
+    ".assets/자료_문제설명_1118_Feedback_Loading/fragments/p5.html": "b5aebac0457dd81107597fc5de78181c436f24512295c61ccabd3f3e903b8b38",
+    ".assets/자료_문제설명_1118_Feedback_Loading/fragments/p6.html": "400cf344d633fd0498eacc7d5287136a20c148161d0f41866744b69467d0449c",
+    ".assets/자료_문제설명_1118_Feedback_Loading/template-provenance.json": "69f885ea5f798b5132305e84c4e454228d50fb784330bfab3b2d4fd3697650fc",
+    "문제설명_1118_Feedback_Loading.html": "1732e599d9331eb65235ee967f244ded49b76bc72c8f08c489bceedf0ba018d5",
+    ".assets/자료_문제설명_1118_Feedback_Loading/manifest.json": "640f0529b5c4f37a9f5da258c0635a4971d92dd47f906abf2e5a862504ab5b9f"
+  }
+}

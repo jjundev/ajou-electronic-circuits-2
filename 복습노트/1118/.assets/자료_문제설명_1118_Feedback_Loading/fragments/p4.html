@@ -1,0 +1,53 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 읽어요</h4>
+  <p>그림 12.38(a)에서 시험할 곳은 $M_2$의 드레인인 $v_{out}$이에요. 이 단자에 바깥에서 전류를 조금 밀어 넣었을 때 전압이 얼마나 바뀌는지 구해요. 왼쪽 $M_1$의 소스는 신호 입력이고, 드레인 $X$는 $M_2$를 구동해요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 개념과 공식을 떠올려요</h4>
+  <p>$R_F$는 출력 전압을 감지해 입력에 전류를 돌려줘요. 전압 감지(voltage sensing) 음귀환은 출력 전압의 변화를 억제하므로, 개루프 출력저항을 $1+T$로 나누어요. $T$는 뺄셈 규약으로 정의한 양의 루프 이득(loop gain)이에요.</p>
+  <p>여기서 두 양의 단위가 모두 Ω이에요. $R_0$은 입력 전류를 출력 전압으로 바꾸는 순방향 트랜스임피던스이고, $R_{out,0}$은 출력 단자 자체에서 본 개루프 저항이에요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <div data-answer-step="출력 단자에서 보는 조건">
+    <p>입력 전류원은 개방하고 $V_{DD}$와 $V_b$는 AC 접지로 두어요. 귀환을 연결한 채 출력으로 들어가는 시험전류 $i_t$와 접지 기준 시험전압 $v_t$를 정의해요.</p>
+    $$R_{out,cl}=\frac{v_t}{i_t}\approx\frac{R_{out,0}}{1+T}$$
+  </div>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>이렇게 풀어요</h4>
+  <div data-subpart="main">
+    <p>$\lambda=0$이라 $M_2$의 $r_{o2}$는 무한대예요. 또 $R_F\gg R_{D2}$여서 감지 가지가 출력에 주는 직접 부하는 무시할 수 있어요. 따라서 식의 분자에는 $R_{out,0}\approx R_{D2}$를 넣어요.</p>
+    <div data-answer-step="예제 12.18의 루프 이득">
+      <p>공통 게이트 첫째 단은 입력 전류가 증가하면 $X$ 전압을 올리고, 공통 소스 둘째 단은 이를 반전해요. 예제 12.18의 순방향 전달량은 다음과 같아요.</p>
+      $$R_0\approx -g_{m2}R_{D1}R_{D2}$$
+      <p>$R_F\gg 1/g_{m1}$이므로 출력에서 입력으로 들어오는 귀환 전류는 약 $v_{out}/R_F$예요. 입력에서 <strong>빼는</strong> 전류를 기준으로 한 귀환율은 $K\approx-1/R_F$예요.</p>
+      $$T=KR_0\approx \frac{g_{m2}R_{D1}R_{D2}}{R_F}$$
+    </div>
+    <p>출력에 양의 시험전압을 걸면 $R_F$가 입력에 전류를 더 보내요. 그러면 $X$ 전압이 올라 $M_2$가 전류를 더 끌어내므로, 같은 시험전압을 유지하려면 시험원이 더 많은 전류를 보내야 해요.</p>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <div data-answer-final="폐루프 출력저항">
+      <p><strong>폐루프 출력저항</strong> ($\lambda=0$, $R_F\gg R_{D2}$ 및 $R_F\gg 1/g_{m1}$)</p>
+      $$R_{out,cl}\approx\frac{R_{D2}}{1+g_{m2}R_{D1}R_{D2}/R_F}$$
+    </div>
+    <p>분모의 루프 이득은 $\mathrm{S}\cdot\Omega^2/\Omega=1$로 무차원이에요. $R_F\to\infty$로 두면 귀환 전류가 사라지고 결과가 $R_{D2}$로 돌아와요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>주의할 점</h4>
+  <p>입력 전류원을 끌 때 $M_1$의 소스를 접지하면 $R_F$가 되돌린 전류가 접지로 빠져요. 개방하는 것은 독립 전류원 가지뿐이에요.</p>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>조건을 바꾸어 생각해요</h4>
+  <ul><li>다른 소신호 값은 그대로 두고 $R_F$만 두 배로 하면, $T$와 폐루프 출력저항은 각각 어떻게 변할까요?</li></ul>
+</div>
+<div class="sum" hidden>
+  <p class="sum-lead">출력 전압을 감지하는 음귀환은 개루프 출력저항을 $1+T$로 나누어요.</p>
+  <p>$\lambda=0$이고 $R_F$가 $R_{D2}$와 $1/g_{m1}$보다 훨씬 커요.</p>
+  $$T\approx g_{m2}R_{D1}R_{D2}/R_F$$
+  $$R_{out,cl}\approx R_{D2}/(1+T)$$
+</div>
