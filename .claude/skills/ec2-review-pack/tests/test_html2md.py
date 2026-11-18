@@ -54,6 +54,8 @@ class TestHtml2Md(unittest.TestCase):
         data = re.search(r'data:font/(woff2?);base64,([A-Za-z0-9+/=]+)', css)
         self.assertIsNotNone(data, 'Standalone SVG must load its own actual 600 font')
         raw = base64.b64decode(data.group(2))
+        self.assertEqual(data.group(1), 'woff2', 'Standalone SVG must embed the required WOFF2 font')
+        self.assertEqual(raw[:4], b'wOF2', 'The embedded bytes must be WOFF2, not only its MIME label')
         self.assertLess(len(raw), 30_000)
         cmap = TTFont(io.BytesIO(raw)).getBestCmap()
         for ch in ('g', 'm', '3'):

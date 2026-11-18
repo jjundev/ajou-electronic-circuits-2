@@ -76,11 +76,11 @@ def _full_woff2_css():
 
 
 @lru_cache(maxsize=256)
-def _subset_woff_css(chars):
+def _subset_woff2_css(chars):
     from fontTools import subset
     vendor, license_text = _pretendard_meta()
-    options = subset.Options(flavor="woff")
-    font = subset.load_font(str(vendor / "woff/Pretendard-SemiBold.woff"), options)
+    options = subset.Options(flavor="woff2")
+    font = subset.load_font(str(vendor / "woff2/Pretendard-SemiBold.woff2"), options)
     subsetter = subset.Subsetter(options)
     subsetter.populate(text=chars)
     subsetter.subset(font)
@@ -89,7 +89,7 @@ def _subset_woff_css(chars):
     encoded = base64.b64encode(buf.getvalue()).decode("ascii")
     return (f"/* {license_text} */\n"
             "@font-face { font-family: Pretendard; font-style: normal; font-weight: 600; "
-            f"src: url(data:font/woff;base64,{encoded}) format('woff'); }}\n")
+            f"src: url(data:font/woff2;base64,{encoded}) format('woff2'); }}\n")
 
 
 def svg_font_css(text=None):
@@ -100,7 +100,7 @@ def svg_font_css(text=None):
     if not chars.strip():
         return ""
     try:
-        return _subset_woff_css(chars)
+        return _subset_woff2_css(chars)
     except ImportError:
         return _full_woff2_css()
 
