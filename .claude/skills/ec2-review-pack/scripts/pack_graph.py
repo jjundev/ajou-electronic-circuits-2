@@ -84,6 +84,11 @@ def task_specs(state: dict) -> tuple[TaskSpec, ...]:
         svg = ('standalone-svg-qa',)
     action('publish-pack', ('convert-md',), ('publication journal',), ('browser-qa', *svg, *pdf_qa))
     action('final-check', ('publish-pack',), ('current public proof',))
+    if state.get('concept_contract') and state.get('concept_check_enabled'):
+        action('concept-draft', ('convert-md', 'selection'), ('source.json',))
+        worker('concept-review', ('concept-draft',),
+               tuple('quiz/' + name for name in ('source.json', 'objectives.json', 'items.json', 'blind-ledger.json', 'browser.json', 'visual-review.json')))
+        action('concept-publish', ('concept-review', 'final-check'), ('concept-check-result.json',))
     return tuple(specs)
 
 
@@ -130,7 +135,8 @@ def ready_work(state: dict, *, slots: int) -> dict:
     for spec in sorted(specs, key=lambda s: (-len(descendants[s.id]), s.id)):
         record = f._record(state, spec.id)
         status = record.get('status', 'pending')
-        if status == 'done': continue
+        if status == 'done' or (f._done(state, 'final-check') and not spec.id.startswith('concept-')):
+            continue
         if state.get('stale_inputs') or state['status'] in ('withheld', 'recovery_required', 'blocked'):
             result['blocked'].append((spec.id, 'RUN requires attention'))
         elif status == 'recovery_required':

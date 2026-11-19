@@ -108,14 +108,36 @@ def child_lock_options(public_pack):
         yield {'pass_fds': (handle,), 'env': {**env, _FD_ENV: str(handle)}}
 
 
-def _checked_inventory(root, date, *, private=False):
+def publication_inventory(root, date):
+    """Include the exact concept publisher namespace only in new parent transactions."""
+    inventory = pack_files.inventory_at(root, date)
+    for base, prefix, suffix, directory in ((root, '확인문제_', r'\.html', False),
+                                              (root/'.pack', '자료_확인문제_', '', True)):
+        for path in pack_files._children(base):
+            if re.fullmatch(prefix + re.escape(date) + r'_[a-zA-Z0-9_]+' + suffix, pack_files._nfc(path.name)):
+                name = path.relative_to(root).as_posix()
+                checked_file(root, name)
+                if path.is_dir() != directory:
+                    raise FlowError('unexpected concept publication root: ' + name)
+                files, dirs = pack_files._inventory(root, [name])
+                inventory.update(files)
+                inventory.update({d + '/': 'directory' for d in dirs})
+    return inventory
+
+
+def current_parent_publication(public, journal):
+    marker = _control(public).with_suffix('.parent.json')
+    return marker.is_file() and _read(marker).get('journal') == str(Path(journal).resolve())
+
+
+def _checked_inventory(root, date, *, private=False, concepts=False):
     for name in pack_files._roots(root, date):
         directory = re.fullmatch(rf'\.assets/(?:figures_{date}|(?:자료|figures)_문제설명_{date}_[^/]+)',
                                  pack_files._nfc(name))
         path = checked_file(root, name)
         if bool(directory) != path.is_dir():
             raise FlowError('unexpected owned root type: ' + name)
-    inventory = pack_files.inventory_at(root, date)
+    inventory = publication_inventory(root, date) if concepts else pack_files.inventory_at(root, date)
     if private:
         # Candidates and backups contain only owned files and their directories.
         files, dirs = pack_files._inventory(root, [p.name for p in pack_files._children(root)])
@@ -148,7 +170,7 @@ def _copy(source, destination, digest):
         raise FlowError('publication copy changed: ' + str(source))
 
 
-def _snapshot(root, target, inventory, date):
+def _snapshot(root, target, inventory, date, *, concepts=False):
     target.mkdir()
     for name, value in inventory.items():
         source = checked_file(root, name)
@@ -158,7 +180,7 @@ def _snapshot(root, target, inventory, date):
         else:
             dst.parent.mkdir(parents=True, exist_ok=True)
             _copy(source, dst, value)
-    if _checked_inventory(target, date, private=True) != inventory:
+    if _checked_inventory(target, date, private=True, concepts=concepts) != inventory:
         raise FlowError('publication snapshot verification failed')
     for directory, _, _ in os.walk(target, topdown=False):
         _fsync_dir(directory)
@@ -258,6 +280,8 @@ def _identity(paths):
 
 def _signature(data):
     fields = [data['public'], data['before'], data['after']]
+    if data.get('retire_concept'):
+        fields.append('retire_concept')
     return hashlib.sha256(json.dumps(fields, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
 
 
@@ -268,18 +292,20 @@ def _result(data, journal, status, **extra):
 def _finish(journal, data, active, status):
     data['status'] = status
     _save(journal, data)
+    if status == 'published':
+        _save(_control(Path(data['public'])).with_suffix('.parent.json'), dict(journal=str(journal.resolve())))
     active.unlink()
     _fsync_dir(active.parent)
     return _result(data, journal, status)
 
 
-def _verify_snapshot(paths, root, expected):
-    if _checked_inventory(root, paths.public_pack.name) != expected:
+def _verify_snapshot(paths, root, expected, *, concepts=False):
+    if _checked_inventory(root, paths.public_pack.name, concepts=concepts) != expected:
         raise FlowError('owned inventory changed: ' + str(root))
 
 
 def publish_pack(paths: PackPaths, run: Path, *, expected: dict[str, str],
-                 candidate_inventory: dict[str, str], verify) -> dict:
+                 candidate_inventory: dict[str, str], verify, retire_concept=False) -> dict:
     public = _identity(paths)
     identity = _key(public)
     if not paths.candidate_pack or not paths.work_file('.').is_dir():
@@ -297,7 +323,7 @@ def publish_pack(paths: PackPaths, run: Path, *, expected: dict[str, str],
         _check_public_root(public, identity)
         if active.exists():
             return _result(initial, _read(active)['journal'], 'recovery_required', error_code='pending_publication')
-        before = _checked_inventory(public, public.name)
+        before = _checked_inventory(public, public.name, concepts=retire_concept)
         if _canonical(before) != _canonical(expected):
             return _result(initial, journal, 'conflict', error_code='publication_conflict')
         verify(paths.work_pack)
@@ -315,21 +341,21 @@ def publish_pack(paths: PackPaths, run: Path, *, expected: dict[str, str],
         _mkdirs(folder.parent)
         folder.mkdir(exist_ok=False)
         _fsync_dir(folder.parent)
-        _snapshot(public, folder / 'before', before, public.name)
+        _snapshot(public, folder / 'before', before, public.name, concepts=retire_concept)
         _snapshot(paths.work_pack, folder / 'after', after, public.name)
-        _verify_snapshot(paths, public, before)
+        _verify_snapshot(paths, public, before, concepts=retire_concept)
         _check_public_root(public, identity)
-        data = dict(schema_version=1, public=identity, before=before, after=after,
+        data = dict(schema_version=1, public=identity, before=before, after=after, retire_concept=retire_concept,
                     status='applying', direction='publish', cursor=0, intent=None)
         _save(journal, data)
         _save(active, dict(journal=str(journal.resolve()), signature=_signature(data)))
         try:
             _mkdirs(public)
             _run_steps(journal, data, public, len(_steps(data['before'], data['after'])))
-            _verify_snapshot(paths, public, after)
+            _verify_snapshot(paths, public, after, concepts=retire_concept)
             verify(public)
             _check_public_root(public, identity)
-            _verify_snapshot(paths, public, after)
+            _verify_snapshot(paths, public, after, concepts=retire_concept)
         except (OSError, ValueError, KeyError, TypeError) as exc:
             return _result(data, journal, 'recovery_required', error_code='publication_interrupted', detail=str(exc))
         return _finish(journal, data, active, 'published')
@@ -356,14 +382,15 @@ def reconcile_publication(paths: PackPaths, journal: Path, *, verify) -> dict:
                 if owner != dict(journal=str(journal.resolve()), signature=_signature(data)):
                     raise FlowError('different active transaction')
 
+            retire_concept = data.get('retire_concept', False)
             before, after = data['before'], data['after']
             # Never use journal-provided names to access files. Compare entire
             # inventories obtained by walking owned roots, including backups.
             for name in ('before', 'after'):
                 snapshot = checked_file(journal.parent, name)
-                if not snapshot.is_dir() or _checked_inventory(snapshot, public.name, private=True) != data[name]:
+                if not snapshot.is_dir() or _checked_inventory(snapshot, public.name, private=True, concepts=retire_concept and name == 'before') != data[name]:
                     raise FlowError('publication backup or staged snapshot damaged')
-            current = _checked_inventory(public, public.name)
+            current = _checked_inventory(public, public.name, concepts=retire_concept)
             if not active.exists() and data['status'] == 'applying':
                 # The journal is durable before its date reservation is created.
                 # In this narrow crash window the protocol permits no public write.
@@ -379,7 +406,7 @@ def reconcile_publication(paths: PackPaths, journal: Path, *, verify) -> dict:
                 if data['status'] == 'published':
                     verify(public)
                     _check_public_root(public, data['public'])
-                    _verify_snapshot(paths, public, after)
+                    _verify_snapshot(paths, public, after, concepts=retire_concept)
                 return (_finish(journal, data, active, data['status']) if active.exists()
                         else _result(data, journal, data['status']))
             steps = _steps(before, after)
@@ -413,13 +440,13 @@ def reconcile_publication(paths: PackPaths, journal: Path, *, verify) -> dict:
                     pass  # The new bytes are known, but their current proof failed.
                 else:
                     _check_public_root(public, data['public'])
-                    _verify_snapshot(paths, public, after)
+                    _verify_snapshot(paths, public, after, concepts=retire_concept)
                     data.update(cursor=cursor, intent=None)
                     return _finish(journal, data, active, 'published')
             data.update(direction='restore', cursor=cursor, intent=None)
             _save(journal, data)
             _run_steps(journal, data, public, 0)
-            _verify_snapshot(paths, public, before)
+            _verify_snapshot(paths, public, before, concepts=retire_concept)
             return _finish(journal, data, active, 'restored')
         except (OSError, ValueError, KeyError, TypeError) as exc:
             return dict(status='recovery_required', error_code='unverified_publication', journal=str(journal),

@@ -3,6 +3,7 @@ from pathlib import Path
 from uuid import uuid4
 import copy
 import hashlib
+import json
 import tempfile
 import shutil
 import subprocess
@@ -90,7 +91,10 @@ def worker_inputs(state, spec):
         return file_records(map(Path, state['actions']['stage-problem-index']['questions']))
     snapshot = Path(state['run'])/'learning-style.json'
     paths = {snapshot, Path(state['repo'])/f._read(snapshot)['path']}
-    if role == 'source-prep':
+    if role == 'concept-review':
+        source = output(state, 'concept-draft', 'source.json')
+        paths.update([source, *map(Path, f._read(source)['inputs'])])
+    elif role == 'source-prep':
         paths.update(map(Path, state['hashes']))
     elif role == 'stt':
         source = f._record(state, 'source-prep')
@@ -170,6 +174,14 @@ def claim_worker(state, task):
         data.update(repo=str(repo), snapshot=str(snapshot), profile=str(repo / f._read(snapshot)['path']),
                     profile_read='전체 필수', references=[str(refs / ref) for ref, _ in f._REFERENCES[role]],
                     constraints=['Read the complete profile and referenced review criteria. Perform the actual inspection.'])
+    if role == 'concept-review':
+        quiz = root/'quiz'
+        quiz.mkdir()
+        shutil.copyfile(output(state, 'concept-draft', 'source.json'), quiz/'source.json')
+        data.update(quiz_run=str(quiz), concept_cli=str(CONCEPT_CLI), retained_quiz=retain_quiz_evidence(task, quiz),
+                    instruction='Follow ec2-concept-check/SKILL.md in quiz_run. Use a separate author and blind solver, '
+                                'send only the answer-free packet, then inspect the four browser views. '
+                                'Record their identities during blind-record. Submit evidence without publishing.')
     if role == 'scope-draft':
         data['instruction'] = ('Complete the teaching manifest, including sessions, preview rules, style and all section/topic briefs. '
                                'Declare the section IDs that may receive final links in link_sections before early authoring.')
@@ -432,12 +444,23 @@ def validate_worker(state, task, receipt_path):
         trial = copy.deepcopy(state)
         register_review(trial, trial['tasks'][task['id']], receipt)
     if receipt['task_status'] != 'done':
+        if task['role'] == 'concept-review' and receipt['status'] == 'withheld' and not receipt['unresolved']:
+            raise f.FlowError('withheld quiz requires an unresolved reason')
         return receipt
     root = Path(task['attempt_dir'])
     previous = f._read(task['brief']).get('previous_outputs', {})
     if previous and all(f._sha(Path(path)) == f._sha(local_path(root, name)) for name, path in previous.items()):
         raise f.FlowError('unchanged repair output')
     role = task['role']
+    if role == 'concept-review':
+        quiz = root/'quiz'
+        if f._sha(quiz/'source.json') != f._sha(output(state, 'concept-draft', 'source.json')):
+            raise f.FlowError('quiz_input_changed')
+        validated = json.loads(concept_command('evidence', '--run', quiz))
+        for path in map(Path, validated):
+            if not path.resolve().is_relative_to(quiz):
+                raise f.FlowError('quiz evidence escapes its attempt')
+        receipt['verified_files'].extend(file_records(map(Path, validated)))
     if role == 'scope-draft':
         scope_manifest(state, f._read(root / 'manifest.json'))
     if role == 'selection':
@@ -726,13 +749,92 @@ def machine_report(state, root, problems, note, manifest, paths=None):
     return {path.name: path}
 
 
+CONCEPT_CLI = Path(__file__).resolve().parents[2]/'ec2-concept-check/scripts/concept.py'
+
+
+def retain_quiz_evidence(task, quiz):
+    """Copy only independently current parts of a previously accepted review."""
+    receipt = task.get('receipt') or {}
+    if receipt.get('task_status') != 'done':
+        return []
+    previous = Path(task['attempt_dir'])/'quiz'
+    hashes = {Path(r['path']).relative_to(previous).as_posix(): r['sha256']
+              for r in receipt['verified_files'] if Path(r['path']).is_relative_to(previous)}
+
+    def current(name):
+        try:
+            contents = local_path(previous, name).read_bytes()
+            if hashlib.sha256(contents).hexdigest() == hashes.get(name):
+                return contents
+        except (OSError, ValueError):
+            pass
+        return None
+
+    def copy_group(names):
+        files = {name: current(name) for name in names}
+        if any(contents is None for contents in files.values()):
+            return False
+        for name, contents in files.items():
+            path = local_path(quiz, name)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(contents)
+        return True
+
+    prior = current('source.json')
+    if prior is None:
+        return []
+    old = json.loads(prior)['logical_inputs']
+    new = f._read(quiz/'source.json')['logical_inputs']
+    def teaching(inputs):
+        return {key:value for key,value in inputs.items() if not key.startswith('vendor/')}
+    if teaching(old) != teaching(new) or not copy_group(('objectives.json', 'items.json')):
+        return []
+    retained = ['objectives.json', 'items.json']
+    ledger = {}
+    for cid,row in json.loads(current('blind-ledger.json') or b'{}').items():
+        answers = row['proof']
+        folder = Path(answers).parent.parent
+        names = [name for name in hashes if Path(name).is_relative_to(folder/'packet')]
+        if names and copy_group([answers, (folder/'issued.json').as_posix(), *names]):
+            ledger[cid] = row
+    if ledger:
+        f._atomic_json(quiz/'blind-ledger.json', ledger)
+        retained.extend(sorted(ledger))
+    shots = [name for name in hashes if name.startswith('shots/')]
+    if old == new and shots and copy_group(['browser.json', *shots]):
+        retained.append('browser.json')
+        if copy_group(['visual-review.json']):
+            retained.append('visual-review.json')
+    return retained
+
+
+def concept_command(*args):
+    result = subprocess.run([sys.executable, CONCEPT_CLI, *args], capture_output=True, text=True)
+    if result.returncode:
+        raise f.FlowError(result.stderr.strip() or 'concept command failed')
+    return result.stdout.strip()
+
+
 def execute_action(state, spec, root):
     import manifest
     import pack_actions as actions
     tid = spec.id
     repo = Path(state['repo'])
     extras = {}
-    if tid == 'render-preflight':
+    if tid == 'concept-draft':
+        path = concept_command('prepare', state['range'], '--repo', repo, '--parent-run', state['run'],
+                               '--run', root/'quiz', '--candidate-pack', state['actions']['convert-md']['candidate_root'])
+        files = {'source.json': Path(path)}
+        extras['source_inputs'] = [dict(path=p, sha256=h) for p,h in f._read(path)['inputs'].items()]
+    elif tid == 'concept-publish':
+        worker = state['tasks']['concept-review']
+        concept_command('publish', '--run', Path(worker['attempt_dir'])/'quiz', '--review-attempt', worker['attempt'],
+                        '--action-attempt', state['actions'][tid]['attempt'])
+        result = Path(state['run'])/'concept-check-result.json'
+        files = {'concept-check-result.json': root/'concept-check-result.json'}
+        shutil.copyfile(result, files['concept-check-result.json'])
+        extras['source_inputs'] = file_records([result, *map(Path, f._read(result)['files'])])
+    elif tid == 'render-preflight':
         from render import render_preflight
         result = render_preflight(root)
         result['pdf'] = str(result['pdf']) if result['pdf'] else None
@@ -855,7 +957,8 @@ def publish(state, spec, attempt, root, *, recover=False):
     if recover:
         result = reconcile_publication(paths, root/'publication/journal.json', verify=verify)
     else:
-        result = publish_pack(paths, root, expected=state['public_baseline'], candidate_inventory=files, verify=verify)
+        result = publish_pack(paths, root, expected=state['public_baseline'], candidate_inventory=files, verify=verify,
+                              retire_concept=bool(state.get('concept_contract')))
     if result.get('error_code') == 'pending_publication':
         return foreign_reservation()
     if result['status'] != 'published':

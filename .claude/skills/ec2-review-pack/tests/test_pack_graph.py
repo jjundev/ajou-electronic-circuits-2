@@ -175,6 +175,7 @@ def test_zero_problem_cli_publishes_only_after_actual_converter_and_review_recei
                 target.write_text(json.dumps(audit))
             elif target.suffix == '.html':
                 raw = (fixture/'sections'/target.name).read_text()
+                raw = raw.replace("0101 수업", "0909 수업")
                 raw = raw.replace('<ul><li><a href="{{PROBLEM_PDF}}">복습문제 PDF</a></li><li><a href="{{ANSWER_PDF}}">복습문제 답안 PDF</a></li></ul>',
                                   '<p>이번 범위에는 복습문제가 없어요.</p>')
                 target.write_text(raw)
@@ -229,6 +230,44 @@ def test_zero_problem_cli_publishes_only_after_actual_converter_and_review_recei
     worker('style-audit')
     action('precheck')
     action('convert-md')
+    assert 'concept-draft' in flow.next_work(run, slots=1)['actions']
+    shutil.copytree(REPO/'복습노트/.assets/vendor', repo/'복습노트/.assets/vendor', dirs_exist_ok=True)
+    action('concept-draft')
+    assert 'concept-review' in flow.next_work(run, slots=8)['dispatch']
+    def review_quiz(brief, outputs):
+        quiz = Path(brief['quiz_run'])
+        command = [sys.executable, brief['concept_cli']]
+        def call(*args):
+            proc = subprocess.run([*command, *args, '--run', quiz], capture_output=True, text=True)
+            assert proc.returncode == 0, proc.stderr
+        source = flow._read(quiz/'source.json')
+        topic, = source['topics']
+        objective = dict(id='o1', topic_id=topic, concept='fixture gain',
+                         source=dict(date='0909', stt='fixture line one', slide=source['topics'][topic]['slides'][0]))
+        flow._atomic_json(quiz/'objectives.json', dict(range='0909',slug=source['slug'],objectives=[objective]))
+        item = dict(id='q1',objective='o1',format='short',title='합성 문제',stem_html='<p>1+1은?</p>',
+                    hint='하나를 더하세요.', answer=dict(canonical='2',accepted=[]),solution=['1에 1을 더하면 2예요.'])
+        flow._atomic_json(quiz/'items.json', dict(items=[item]))
+        call('check')
+        packet = tmp_path/'sealed-quiz'
+        call('blind-make', '--out', packet)
+        assert set(p.name for p in packet.iterdir()) == {'문제.md'}
+        answers = tmp_path/'synthetic-quiz-solver.md'
+        answers.write_text('| q1 | 2 | |')
+        call('blind-record', '--answers', answers, '--round', '1', '--packet', packet, '--author', 'fixture-author', '--solver', 'fixture-solver')
+        call('build')
+        call('browser')
+        missing = subprocess.run([*command, 'evidence', '--run', quiz], capture_output=True, text=True)
+        assert missing.returncode and 'visual-review' in missing.stderr
+        browser = flow._read(quiz/'browser.json')
+        observations = {v['label']:dict(status='pass', observation='Synthetic review of formulas, diagram and hint area.',
+            screenshots={name:digest for name,digest in browser['screenshots'].items()
+                         if name.startswith(v['label'].replace(' ','-')+'-')}) for v in browser['runs']}
+        flow._atomic_json(quiz/'visual-review.json', dict(reviewer='fixture-visual', views=observations))
+        early = subprocess.run([*command, 'publish', '--run', quiz], capture_output=True, text=True)
+        assert early.returncode and 'parent_final_check_required' in early.stderr
+    parallel_worker(run, 'concept-review', review_quiz)
+    assert 'concept-publish' not in flow.next_work(run, slots=8)['actions']
     assert not (repo/'복습노트/0909').exists()
     assert 'publish-pack' not in flow.next_work(run, slots=1)['actions']
     worker('browser-qa')
@@ -292,8 +331,46 @@ def test_zero_problem_cli_publishes_only_after_actual_converter_and_review_recei
     assert state['status'] == 'complete'
     assert state['actions']['final-check']['attempt'] == state['actions']['publish-pack']['attempt']
     assert (repo/'복습노트/0909/정리노트_0909_Mini_Test.html').is_file()
-    assert flow.next_work(run, slots=0)['kind'] == 'concept_check'
+    assert flow.next_work(run, slots=0)['actions'] == ['concept-publish']
+    pending = cli('report', '--run', run)
+    assert pending['status'] == 'complete'
+    assert flow._read(run/'report.json')['concept_check']['reason']
+    from pack_parallel import CONCEPT_CLI
+    review = state['tasks']['concept-review']
+    wrong = subprocess.run([sys.executable, CONCEPT_CLI, 'publish', '--run', Path(review['attempt_dir'])/'quiz',
+                           '--review-attempt', review['attempt'], '--action-attempt', 'obsolete-claim'],
+                           capture_output=True, text=True)
+    assert wrong.returncode and 'quiz_publish_attempt_changed' in wrong.stderr
+    assert not (repo/'복습노트/0909/확인문제_0909_Mini_Test.html').exists()
+    action('concept-publish')
+    state = flow.inspect_state(run)
+    receipt = flow.concept_check_result(state)
+    assert receipt and receipt['attempt'] == state['actions']['final-check']['attempt']
+    assert (repo/'복습노트/0909/확인문제_0909_Mini_Test.html').is_file()
+    assert flow.next_work(run, slots=0)['kind'] == 'report'
+    # Damage to the quiz evidence must reopen its production alone.
+    shot = next((Path(state['tasks']['concept-review']['attempt_dir'])/'quiz/shots').glob('*.png'))
+    shot.write_bytes(b'changed synthetic quiz capture')
+    stale = flow.inspect_state(run)
+    assert stale['status'] == 'complete' and flow._done(stale, 'final-check')
+    assert flow.concept_check_result(stale) is None
+    assert 'concept-review' in flow.next_work(run, slots=2)['dispatch']
+    repair = cli('task', 'claim', '--task', 'concept-review', '--run', run)['next']
+    brief = flow._read(repair['brief'])
+    repaired = Path(brief['quiz_run'])
+    assert flow._read(repaired/'blind-ledger.json')['q1']['solver'] == 'fixture-solver'
+    assert (repaired/'items.json').is_file() and not (repaired/'browser.json').exists()
+    intact = subprocess.run([sys.executable, CONCEPT_CLI, 'blind-status', '--run', repaired],
+                            capture_output=True, text=True)
+    assert intact.returncode == 0, intact.stderr
+    withheld = subprocess.run([sys.executable, CONCEPT_CLI, 'withhold', '--parent-run', run,
+                               '--reason', 'fixture review needs another independent response'], capture_output=True, text=True)
+    assert withheld.returncode == 0, withheld.stderr
     cli('report', '--run', run)
+    summary = flow._read(run/'report.json')
+    assert summary['status'] == 'complete'
+    assert summary['concept_check']['status'] == 'withheld'
+    assert summary['concept_check']['reason'] == 'fixture review needs another independent response'
     assert json.loads((run/'report.json').read_text())['selection']['problems'] == []
 
 

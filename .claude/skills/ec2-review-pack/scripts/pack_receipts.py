@@ -6,6 +6,7 @@ import sys
 from pack_flow import FlowError, nfc_path, within
 
 ROLE_OUTPUTS = {
+    'concept-review': (),
     'source-prep': ('source-map.json', 'slides.txt'), 'stt': ('summaries/stt-{target}.md',),
     'scope-draft': ('scope.json', 'work/scope-draft/manifest.json'), 'scope-final': ('manifest.json', 'briefs/{target}.json'),
     'selection': ('candidates.json', 'catalog.json', 'selection.json', 'selection-review.json', 'display-titles.json', 'work/selection/manifest.json'),

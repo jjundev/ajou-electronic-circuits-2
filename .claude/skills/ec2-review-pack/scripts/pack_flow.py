@@ -279,10 +279,10 @@ def init_run(repo: Path, run: Path, range_: str, *,
         state['workflow'] = workflow
         if workflow == 'parallel':
             state['approval_contract'] = 1
-            from pack_files import inventory_pack
-            from pack_publication import publication_lock
+            state['concept_contract'] = 1
+            from pack_publication import publication_inventory, publication_lock
             with publication_lock(repo / '복습노트' / range_):
-                state['public_baseline'] = inventory_pack(repo, range_)
+                state['public_baseline'] = publication_inventory(repo / '복습노트' / range_, range_)
         if seed is not None:
             from pack_seed import seed_state
             seed_state(state, seed, list(redo or []), redo_note)
@@ -449,8 +449,10 @@ def _current(state):
     state['stale_inputs'] = stale
     records = {**state['tasks'], **state['actions']}
     for name, record in records.items():
-        negative_review = (state.get('workflow') == 'parallel' and record.get('status') == 'needs_fix'
-                           and record.get('candidate_digest'))
+        withheld_review = (name == 'concept-review' and record.get('status') == 'blocked'
+                           and (record.get('receipt') or {}).get('status') == 'withheld')
+        negative_review = withheld_review or (state.get('workflow') == 'parallel' and record.get('status') == 'needs_fix'
+                                              and record.get('candidate_digest'))
         if record.get('status') != 'done' and not negative_review: continue
         if state.get('workflow') == 'parallel' and any(
                 _record(state, tid).get('attempt') != version
@@ -488,7 +490,8 @@ def _current(state):
                 if record['status'] in ('claimed', 'running'):
                     record['invalidated_active'] = True
                 record['status'] = 'stale'; changed = True
-    if any(r.get('status') == 'stale' for r in records.values()) or stale:
+    if any(r.get('status') == 'stale' for name,r in records.items()
+           if not (state.get('concept_contract') and name.startswith('concept-'))) or stale:
         if state['status'] not in ('recovery_required', 'withheld', 'blocked'):
             state['status'] = 'needs_fix'
     if state.get('workflow') == 'parallel' and state.get('active_audit'):
@@ -607,6 +610,7 @@ def refresh_tasks(state: dict) -> dict:
 
 
 _REFERENCES = {
+    'concept-review': [],
     'source-prep': [('execution-guide.md', '1. 범위 파악')],
     'stt': [('stt-summary-prompt.md', '전체')],
     'scope-draft': [('manifest-guide.md', '전체')],
@@ -732,19 +736,94 @@ def write_briefs(state: dict) -> None:
 
 
 def _owner(state, task):
-    if task['role'] in ('browser-qa', 'standalone-svg-qa'): return state['capabilities']['browser_owner']
+    if task['role'] in ('browser-qa', 'standalone-svg-qa', 'concept-review'): return state['capabilities']['browser_owner']
     if task['role'] == 'pdf-qa': return state['capabilities']['pdf_owner']
     return 'workers'
 
 
-def concept_check_result(state):
+def _current_quiz_files(result, state, public):
+    from pack_parallel import output
+    from pack_paths import checked_file
+    manifest = _read(output(state, 'scope-final', 'manifest.json'))
+    stem = f"확인문제_{state['range']}_{manifest['slug']}"
+    html = checked_file(public, stem + '.html')
+    bundle = checked_file(public, '.pack/자료_' + stem)
+    physical = {str(html), *(str(path) for path in bundle.rglob('*') if path.is_file())}
+    if set(result.get('files', {})) != physical:
+        return False
+    binding = _read(checked_file(bundle, 'binding.json'))
+    source = _read(checked_file(bundle, 'source.json'))
+    logical = binding.get('logical_inputs')
+    if not logical or binding != dict(parent_run=state['run'], parent_attempt=result['attempt'],
+                                       logical_inputs=source.get('logical_inputs')):
+        return False
+    original = result.get('reviewed_files', {})
+    if not original or any(_sha(Path(p)) != h for p,h in {**source['inputs'], **original}.items()):
+        return False
+    return all(_sha(checked_file(public, key[5:])) == value for key,value in logical.items() if key.startswith('pack/'))
+
+
+def concept_progress(state):
+    result = concept_check_result(state)
+    if result or not state.get('concept_check_enabled') or state['status'] != 'complete':
+        return result
+    if state.get('concept_contract'):
+        for name in ('concept-draft', 'concept-review', 'concept-publish'):
+            row = _record(state, name)
+            if row.get('status') != 'done':
+                detail = row.get('detail') or (row.get('receipt') or {}).get('unresolved')
+                return dict(status='pending', task=name, reason=detail or row.get('status', 'pending'))
+    return dict(status='pending')
+
+
+def current_concept_parent(state):
     if not state.get('concept_check_enabled') or state['status'] != 'complete' or not _done(state, 'final-check'):
+        return False
+    if not state.get('concept_contract'):
+        return True
+    from pack_findings import current_audit
+    from pack_publication import current_parent_publication
+    public = Path(state['repo'])/'복습노트'/state['range']
+    journal = state.get('publication', {}).get('journal')
+    return (journal and _done(state, 'publish-pack') and current_audit(state)
+            and _record(state, 'publish-pack')['attempt'] == _record(state, 'final-check')['attempt']
+            and current_parent_publication(public, journal))
+
+
+def withheld_quiz_review(state):
+    from pack_receipts import verify_receipt_files
+    review = _record(state, 'concept-review')
+    receipt = review.get('receipt') or {}
+    if (review.get('status') == 'blocked' and receipt.get('status') == 'withheld' and receipt.get('unresolved')
+            and receipt.get('verified_files') and not verify_receipt_files(receipt)
+            and all(_done(state, key) and _record(state, key)['attempt'] == attempt
+                    for key,attempt in review['input_version'].items())):
+        return dict(status='withheld', range=state['range'], attempt=_record(state, 'final-check')['attempt'],
+                    reason=', '.join(map(str, receipt['unresolved'])), review_attempt=review['attempt'])
+
+
+def concept_check_result(state):
+    if not current_concept_parent(state):
         return None
+    withheld = withheld_quiz_review(state) if state.get('concept_contract') else None
     receipt = Path(state['run']) / 'concept-check-result.json'
     try:
         result = _read(receipt)
         if (result.get('range'), result.get('attempt')) != (state['range'], state['actions']['final-check'].get('attempt')):
-            return None
+            return withheld
+        if state.get('concept_contract'):
+            public = Path(state['repo'])/'복습노트'/state['range']
+            if result.get('status') == 'published':
+                review = _record(state, 'concept-review')
+                if result.get('review_attempt') and (review.get('status') != 'done' or
+                        review.get('attempt') != result['review_attempt']):
+                    return withheld
+                action = _record(state, 'concept-publish')
+                if result.get('action_attempt') and (action.get('status') != 'done' or
+                        action.get('attempt') != result['action_attempt']):
+                    return withheld
+                if not _current_quiz_files(result, state, public):
+                    return withheld
         if result.get('status') == 'withheld' and result.get('reason'):
             return result
         files = result.get('files', {})
@@ -753,15 +832,16 @@ def concept_check_result(state):
             for path, digest in files.items()
         ):
             return result
-    except (OSError, ValueError):
+    except (OSError, ValueError, KeyError, TypeError):
         pass
-    return None
+    return withheld
 
 
 def next_work(run: Path, *, slots: int) -> dict:
     if type(slots) is not int or slots < 0: raise FlowError('slots must be a nonnegative integer')
     state = inspect_state(run)
-    if state.get('workflow') == 'parallel' and not _done(state, 'final-check'):
+    if state.get('workflow') == 'parallel' and (not _done(state, 'final-check') or
+            (state.get('concept_contract') and concept_check_result(state) is None)):
         from pack_graph import ready_work
         return ready_work(state, slots=slots)
     def result(kind, tasks=None, action=None, reason=''):
