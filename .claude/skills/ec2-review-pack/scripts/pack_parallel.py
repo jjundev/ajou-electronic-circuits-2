@@ -82,6 +82,20 @@ def worker_inputs(state, spec):
     return file_records(paths)
 
 
+def repair_candidate(state, role, owner, attempt):
+    """Find the accepted rendered candidate containing this exact producer correction."""
+    tid, name = ('build-answers', 'pdf') if role == 'pdf-qa' else ('assemble-note', 'note')
+    action = state['actions'][tid]
+    for row in (action, *reversed(action.get('history', []))):
+        if row.get('input_version', {}).get(owner) != attempt:
+            continue
+        path = row.get('artifacts', {}).get(name)
+        verified = {i['path']: i for i in row.get('verified_files', [])}
+        if path in verified:
+            return verified[path]
+    return None
+
+
 def claim_worker(state, task):
     from pack_receipts import standalone_screenshots
     spec = spec_for(state, task['id'])
@@ -156,7 +170,7 @@ def claim_worker(state, task):
                     public_pack=str(public(state)), snapshot=str(snapshot),
                     instruction='Extract against this candidate pack and slug. Use the accepted fragments and independent results. Complete all child reviews.')
     repairs = [r for r in state.get('findings', {}).values()
-               if r['owner_task'] == task['id'] and r.get('pending_request')]
+               if r['owner_task'] == task['id'] and r.get('pending_request') and not findings.repair_record(state, r)]
     if repairs:
         data['repair_findings'] = repairs
         data['previous_outputs'] = {name: task['artifacts'][name] for name in spec.outputs}
@@ -165,9 +179,23 @@ def claim_worker(state, task):
     if role in findings.REVIEW_ROLES:
         candidate = data['pdf'] if role == 'pdf-qa' else data['note']
         data['candidate_digest'] = f._sha(Path(candidate))
-        data['recheck_findings'] = [dict(r, repair_attempt=version.get(r['owner_task']))
-                                    for r in state.get('findings', {}).values()
-                                    if r['review_id'] == role and r['status'] != 'resolved']
+        data['recheck_findings'] = []
+        inputs = {i['path']: i for i in data['inputs']}
+        for row in state.get('findings', {}).values():
+            if row['review_id'] != role or row['status'] == 'resolved':
+                continue
+            item = dict(row, repair_attempt=None)
+            correction = findings.repair_record(state, row)
+            if correction:
+                verified = {i['path']: i for i in correction['receipt']['verified_files']}
+                outputs = correction['artifacts']
+                item.update(repair_attempt=correction['attempt'], repair_outputs=outputs)
+                inputs.update({path: verified[path] for path in outputs.values()})
+                if candidate_file := repair_candidate(state, role, row['owner_task'], correction['attempt']):
+                    item['repair_candidate'] = candidate_file['path']
+                    inputs[candidate_file['path']] = candidate_file
+            data['recheck_findings'].append(item)
+        data['inputs'] = list(inputs.values())
     path = root / 'brief.json'
     f._atomic_json(path, data)
     task.update(attempt=attempt, attempt_dir=str(root), brief=str(path), brief_sha256=f._sha(path),
@@ -455,24 +483,54 @@ def adopted_packs(state, spec):
     return {tid: row['pack'] for tid, row in ancestors(state, spec).items() if row.get('pack')}
 
 
-def machine_report(state, root, problems, note, manifest):
-    from check_html import parse_file
+def fragment_diagnostics(state, manifest, note, paths):
+    """Index each accepted fragment by the same diagnostics used for the assembled page."""
+    from assemble import read_fragment
+    from check_html import check_common, parse_html
+    result = {}
+    for section in manifest['sections']:
+        sid = section['id']
+        path = output(state, 'author-' + sid, 'sections/' + sid + '.html')
+        source = read_fragment(path, manifest)
+        doc = parse_html(source)
+        diagnostics = check_common(doc, source, note, pack_paths=paths)
+        result[sid] = (doc, {(p.code, p.detail) for p in diagnostics if p.code != 'lang'})
+    return result
+
+
+def machine_report(state, root, problems, note, manifest, paths=None):
     issues = []
-    sections = {}
+    sections = None
     for problem in problems:
         owner = findings.owner_of(problem.where, manifest)
-        if owner == 'scope-final':
-            # HTML check_common reports widget/element IDs, or a page filename
-            # and a broken link. Find the unique producing fragment if possible.
-            if not sections:
-                sections = {s['id']: parse_file(output(state, 'author-' + s['id'], 'sections/' + s['id'] + '.html'))
-                            for s in manifest['sections']}
-            owners = [sid for sid, doc in sections.items()
-                      if problem.where in doc.ids or problem.detail in doc.hrefs or problem.detail in doc.ids]
-            if len(owners) == 1:
-                owner = 'author-' + owners[0]
-        issues.append(dict(rule=problem.code, target=problem.where, defect=problem.detail, severity='Important',
-                           owner_task=owner, evidence=str(problem)))
+        targets = [(owner, problem.where)]
+        links = [link for link in manifest['links'] if link['href'] == problem.detail]
+        if problem.code == 'broken-link' and links:
+            # The literal href is part of the manifest contract, so a fragment-only
+            # edit would instead fail missing-link after the next assembly.
+            draft = f._read(output(state, 'scope-draft', 'manifest.json'))
+            targets = [('scope-draft' if link in draft['links'] else 'scope-final', link['topic'])
+                       for link in links]
+        elif owner == 'scope-final':
+            if sections is None:
+                sections = fragment_diagnostics(state, manifest, note, paths)
+            targets = [('author-' + sid, sid if problem.where == note.name else problem.where)
+                       for sid, (doc, diagnostics) in sections.items()
+                       if (problem.code, problem.detail) in diagnostics or problem.where in doc.ids
+                       or (problem.code == 'duplicate-id' and problem.detail in doc.ids)]
+            if not targets:
+                # These values are filled by assemble.build_note from the teaching
+                # draft and may be legitimately changed by that worker in this RUN.
+                header = {key: manifest[key] for key in ('note_title', 'note_subtitle', 'footer_note')}
+                header.update({s['id'] + '.' + k: s[k] for s in manifest['sections'] for k in ('short', 'title')})
+                for key, text in header.items():
+                    if problem.detail and problem.detail in text:
+                        targets.append(('scope-draft', key))
+            if not targets:
+                targets = [('assemble-note', problem.where)]
+        for owner, target in targets:
+            issues.append(dict(rule=problem.code, target=target, defect=problem.detail, severity='Important',
+                               owner_task=owner, evidence=str(problem)))
     path = root/'check-findings.json'
     f._atomic_json(path, dict(candidate_digest=f._sha(note), findings=issues))
     return {path.name: path}
@@ -519,7 +577,7 @@ def execute_action(state, spec, root):
         if tid == 'precheck':
             m = f._read(bundle/'manifest.json')
             problems = actions.note_problems(m, paths, state['active_audit'], preliminary=True)
-            files = machine_report(state, root, problems, output(state, 'assemble-note', 'note'), m)
+            files = machine_report(state, root, problems, paths.work_file(manifest.note_name(m)), m, paths)
             produced = []
         else:
             produced = actions.candidate_action(dict(state, run=str(bundle)), tid, paths, root,

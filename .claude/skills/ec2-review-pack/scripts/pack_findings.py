@@ -20,9 +20,9 @@ _HEADING = re.compile(r'^(#{2,4})\s+(.+?)\s*$')
 _ITEM = re.compile(r'^\s*[-*]\s+\[([^\]]+)\]')
 
 
-def blocking_findings(report_md: Path) -> list[tuple[str, str]]:
-    """(severity, id) for each `- [id]` item under the three severity sections, in order."""
-    found, severity = [], None
+def report_items(report_md: Path):
+    """Yield the severity, target and complete text of each blocking Markdown entry."""
+    severity = None
     for line in Path(report_md).read_text(encoding='utf-8').splitlines():
         heading = _HEADING.match(line)
         if heading:
@@ -35,8 +35,25 @@ def blocking_findings(report_md: Path) -> list[tuple[str, str]]:
             continue
         item = _ITEM.match(line)
         if severity and item:
-            found += [(severity, x.strip()) for x in item[1].split(',') if x.strip()]
-    return found
+            for target in item[1].split(','):
+                if target.strip():
+                    yield severity, target.strip(), line[item.end():].strip()
+
+
+def blocking_findings(report_md: Path) -> list[tuple[str, str]]:
+    # Legacy rounds only route the reported target to its author.
+    return [(severity, target) for severity, target, _ in report_items(report_md)]
+
+
+def check_report_items(report, unresolved):
+    declared = {(r.get('severity'), r.get('target'), r.get('rule'), r.get('defect'))
+                for r in unresolved if isinstance(r, dict)}
+    for severity, target, text in report_items(report):
+        match = re.fullmatch(r'\[([^]\n]+)\]\s+(.+)', text)
+        identity = (severity, target, match[1], match[2]) if match else None
+        if identity not in declared:
+            raise f.FlowError('each blocking report entry needs its own matching [target] [rule] defect')
+        declared.remove(identity)
 
 
 def owner_of(item_id: str, manifest: dict) -> str:
@@ -69,6 +86,9 @@ def _judgment(state, review_id):
 
 
 def _current_judgment(state, tid):
+    if tid == CONFLICT:
+        return all(f._done(state, role) for role in NOTE_REVIEWS) and review_pair(
+            state, state['tasks']['content-review'].get('candidate_digest'))
     row = _judgment(state, tid)
     return (row.get('status') in ('done', 'needs_fix') and row.get('candidate_digest')
             and all(f._done(state, dep) and f._record(state, dep)['attempt'] == ver
@@ -78,6 +98,23 @@ def _current_judgment(state, tid):
 def review_pair(state, digest):
     return all(_current_judgment(state, tid) and state['tasks'][tid]['candidate_digest'] == digest
                for tid in NOTE_REVIEWS)
+
+
+def judgment_attempt(state, tid):
+    if tid == CONFLICT:
+        return '+'.join(state['tasks'][role]['attempt'] for role in NOTE_REVIEWS)
+    return _judgment(state, tid)['attempt']
+
+
+def repair_record(state, finding):
+    """The accepted producer for this request, even after a later serial correction."""
+    owner = state['tasks'][finding['owner_task']]
+    rid = finding.get('pending_request')
+    if rid:
+        for record in (owner, *reversed(owner.get('history', []))):
+            if record.get('status') == 'done' and record.get('repair_bindings', {}).get(finding['id']) == rid:
+                return record
+    return None
 
 
 def review_reports(state, review_id):
@@ -108,9 +145,10 @@ def record_findings(state: dict, *, review_id: str, input_digest: str, findings:
             raise f.FlowError('structured review finding required')
         key = finding_key(review_id, item)
         owner = item.get('owner_task')
+        external = owner == 'assemble-note' and review_id in (MACHINE_REVIEW, 'precheck')
         if (key in seen or item.get('severity') not in SEVERITIES
                 or not isinstance(item.get('evidence'), str) or not item['evidence'].strip()
-                or owner not in state['tasks'] or owner not in source['input_version']
+                or (owner not in state['tasks'] and not external) or owner not in source['input_version']
                 or owner in (*REVIEW_ROLES, 'explain-blind')):
             raise f.FlowError('invalid or duplicate finding, owner or evidence')
         seen.add(key)
@@ -119,9 +157,11 @@ def record_findings(state: dict, *, review_id: str, input_digest: str, findings:
         if row.get('owner_task', owner) != owner:
             raise f.FlowError('finding correction owner changed')
         row.update({name: item[name] for name in ('rule', 'target', 'defect', 'severity', 'owner_task', 'evidence')})
-        row.update(input_digest=input_digest, review_attempt=source['attempt'], owner_attempt=source['input_version'][owner],
+        row.update(input_digest=input_digest, review_attempt=judgment_attempt(state, review_id), owner_attempt=source['input_version'][owner],
                    review_reports=review_reports(state, review_id))
-        if row['status'] == 'resolved':
+        if external:
+            row.update(status='withheld', reason='No writable per-RUN producer for this assembly/template diagnostic')
+        elif row['status'] == 'resolved':
             row['status'] = 'open'
     return state
 
@@ -131,7 +171,15 @@ def fixable_findings(state: dict, *, candidate_digest: str) -> list[dict]:
     for row in state.get('findings', {}).values():
         tid = row['review_id']
         if (row['status'] != 'open' or row.get('pending_request') or row['input_digest'] != candidate_digest
-                or not _current_judgment(state, tid) or _judgment(state, tid)['attempt'] != row['review_attempt']):
+                or not _current_judgment(state, tid)):
+            continue
+        same_attempt = judgment_attempt(state, tid) == row['review_attempt']
+        if not same_attempt and tid == CONFLICT:
+            # The earlier trial recorded the content UUID plus both immutable
+            # adopted report references. The content UUID alone cannot authorize it.
+            same_attempt = (row['review_attempt'] == state['tasks']['content-review']['attempt']
+                            and row.get('review_reports') == review_reports(state, tid))
+        if not same_attempt:
             continue
         if tid in (*NOTE_REVIEWS, CONFLICT) and not review_pair(state, candidate_digest):
             continue
@@ -145,10 +193,11 @@ def record_fix_result(state: dict, *, finding_id: str, request_id: str, attempt:
     row = state['findings'][finding_id]
     owner = state['tasks'][row['owner_task']]
     source = _judgment(state, row['review_id'])
+    correction = repair_record(state, row)
     if (row.get('pending_request') != request_id or row['status'] != 'open'
             or not _current_judgment(state, row['review_id']) or owner['status'] != 'done'
-            or owner['attempt'] != attempt or source['input_version'].get(owner['id']) != attempt
-            or owner.get('repair_bindings', {}).get(finding_id) != request_id
+            or not correction or correction['attempt'] != attempt
+            or source['input_version'].get(owner['id']) != owner['attempt']
             or outcome not in ('resolved', 'unresolved')):
         raise f.FlowError('unverified repair attempt or adjudication')
     if outcome == 'resolved':
@@ -158,7 +207,8 @@ def record_fix_result(state: dict, *, finding_id: str, request_id: str, attempt:
         if len(row['unsuccessful_attempts']) >= 2:
             row['status'] = 'withheld'
     row['repairs'].append(dict(request_id=request_id, attempt=attempt, outcome=outcome,
-                               review_attempt=source['attempt'], input_digest=source['candidate_digest'],
+                               review_attempt=judgment_attempt(state, row['review_id']), reviewed_owner_attempt=owner['attempt'],
+                               input_digest=source['candidate_digest'],
                                review_reports=review_reports(state, row['review_id'])))
     del row['pending_request']
     return state
@@ -192,11 +242,12 @@ def adjudicate(state, tid, findings, results, reconciliations=()):
         if not row or result.get('prior_review_attempt') != row['review_attempt']:
             raise f.FlowError('stale or unknown prior finding in reconciliation')
         owner = state['tasks'][row['owner_task']]
-        if (owner.get('attempt') == row['owner_attempt'] or not owner.get('repair_bindings')
-                or source['input_version'][owner['id']] != owner['attempt']
+        fresh_comparison = tid == CONFLICT and row['review_attempt'] != judgment_attempt(state, tid)
+        corrected = owner.get('attempt') != row['owner_attempt'] and owner.get('repair_bindings')
+        if (not (fresh_comparison or corrected) or source['input_version'][owner['id']] != owner['attempt']
                 or not isinstance(result.get('evidence'), str) or not result['evidence'].strip()):
             raise f.FlowError('incidental resolution needs a current accepted correction and source evidence')
-        row.update(status='resolved', reconciliation=dict(result, review_attempt=source['attempt'],
+        row.update(status='resolved', reconciliation=dict(result, review_attempt=judgment_attempt(state, tid),
                    input_digest=digest, owner_attempt=owner['attempt']))
     for row in existing:
         key = row['id']
@@ -244,8 +295,7 @@ def apply_request(state, request):
                 raise f.FlowError('batch every current note review finding')
     for owner in owners:
         task = state['tasks'][owner]
-        if task['status'] != 'done' or any(r.get('pending_request') and r['owner_task'] == owner
-                                            for r in state['findings'].values()):
+        if task['status'] != 'done':
             raise f.FlowError('correction owner unavailable')
         task.setdefault('history', []).append({k:v for k,v in task.items() if k != 'history'})
         task.update(status='stale', receipt=None, attempt=None, agent_id=None)
@@ -260,9 +310,9 @@ def check_reviewer(state, task):
     reviewer = task.get('agent_id')
     if not isinstance(reviewer, str) or not reviewer.strip():
         raise f.FlowError('bound reviewer identity required')
-    repair_owners = {r['owner_task'] for r in state.get('findings', {}).values()
-                     if r['review_id'] == task['id'] and r.get('pending_request')}
-    if any(state['tasks'][owner].get('agent_id') == reviewer for owner in repair_owners):
+    repairs = [r for r in state.get('findings', {}).values() if r['review_id'] == task['id'] and r.get('pending_request')]
+    authors = [t for r in repairs for t in (state['tasks'][r['owner_task']], repair_record(state, r)) if t]
+    if any(t.get('agent_id') == reviewer for t in authors):
         raise f.FlowError('the correction author cannot approve their own repair')
     if task['id'] in NOTE_REVIEWS:
         other = next(tid for tid in NOTE_REVIEWS if tid != task['id'])
@@ -299,9 +349,9 @@ def join_reviews(state):
     rechecks = []
     for row in state.get('findings', {}).values():
         if row['review_id'] == CONFLICT and row.get('pending_request'):
-            owner = tasks[row['owner_task']]
+            correction = repair_record(state, row) or {}
             item = merged['items'][row['target']]['rules'][row['rule']]
-            rechecks.append(dict(finding_id=row['id'], request_id=row['pending_request'], attempt=owner['attempt'],
+            rechecks.append(dict(finding_id=row['id'], request_id=row['pending_request'], attempt=correction.get('attempt'),
                                  outcome='unresolved' if row['id'] in conflict_ids else 'resolved', evidence=item['evidence']))
     compared = []
     for row in state.get('findings', {}).values():
@@ -356,7 +406,7 @@ def machine_judgment(state, tid, issues):
             continue
         key = row['id']
         rechecks.append(dict(finding_id=key, request_id=row['pending_request'],
-            attempt=source['input_version'].get(row['owner_task']),
+            attempt=(repair_record(state, row) or {}).get('attempt'),
             outcome='unresolved' if key in current else 'resolved',
             evidence=current[key]['evidence'] if key in current else
                 f"Complete {tid} check passed {row['rule']} for {row['target']}"))

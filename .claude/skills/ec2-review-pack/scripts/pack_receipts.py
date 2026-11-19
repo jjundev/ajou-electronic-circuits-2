@@ -220,11 +220,10 @@ def validate_receipt(state: dict, task: dict, receipt_path: Path) -> dict:
             require(within(path, run) and path.is_file(), 'review evidence missing/outside RUN')
             verified[str(path)] = sha(path)
         if state.get('workflow') == 'parallel':
-            from pack_findings import REVIEW_ROLES, blocking_findings
+            from pack_findings import REVIEW_ROLES, check_report_items
             if role in REVIEW_ROLES and status in ('done', 'ready-for-publish', 'needs-fix'):
                 require(report == Path(brief['report']).resolve(), 'review report must match the claimed brief')
-                declared = {(r.get('severity'), r.get('target')) for r in receipt['unresolved'] if isinstance(r, dict)}
-                require(set(blocking_findings(report)) <= declared, 'blocking report findings missing from receipt')
+                check_report_items(report, receipt['unresolved'])
                 if status == 'needs-fix' and role in ('browser-qa', 'pdf-qa', 'standalone-svg-qa'):
                     screens = [p for p in outputs if Path(p).suffix.lower() == '.png']
                     require(screens, 'actual screenshot required for a visual finding')
