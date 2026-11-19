@@ -12,6 +12,7 @@ import pack_flow as f
 
 
 POLICY = 'ec2-target-review-v2'
+NOTE_CAPTURE_POLICY = 'navigated-topic-fragment-v1'
 VIEWS = ('desktop-light', 'desktop-dark', 'mobile-light', 'mobile-dark')
 INTERACTIONS = ('navigation', 'summary_panels', 'theme', 'persistence', 'widgets', 'pdf_links', 'overflow_math_console')
 ROLES = {'explain-blind', 'pdf-qa', 'browser-qa', 'standalone-svg-qa'}
@@ -68,7 +69,12 @@ def collect_current_reviews(required: dict[str, str], ledger: list[dict], *, run
 def review_policy(role):
     import manifest  # initializes the workbook module path in a fresh CLI interpreter
     from learning_style import PERSONALIZED_REVIEW_POLICY
-    return {'targets': POLICY, 'solution': PERSONALIZED_REVIEW_POLICY} if role == 'explain-blind' else {'targets': POLICY}
+    policy = {'targets': POLICY}
+    if role == 'explain-blind':
+        policy['solution'] = PERSONALIZED_REVIEW_POLICY
+    if role == 'browser-qa':
+        policy['capture'] = NOTE_CAPTURE_POLICY
+    return policy
 
 
 def blind_targets(questions, sealed, profile):
@@ -309,9 +315,8 @@ def capture_views(note, root, topics, folder, resources, vendor):
                     url = local_url(note,root)
                     page.goto(url)
                     for index, topic in enumerate(topics,1):
-                        if dynamic:
-                            page.goto(url + '#' + quote(topic, safe=''))
-                        loc = page.locator('[id=' + json.dumps(topic) + ']')
+                        page.goto(url + '#' + quote(topic, safe=''))
+                        loc = page.locator(page.evaluate('id => "#" + CSS.escape(id)', topic))
                         if loc.count() != 1 or not loc.is_visible():
                             continue
                         loc.evaluate("e=>e.scrollIntoView({block:'start',behavior:'instant'})")
@@ -388,7 +393,7 @@ def _visual_targets(state, brief, fingerprint, *, served=None):
                 target = f'note-visual:{topic}:{view}'
                 capture = dict(views.get((topic,view), {}))
                 identity = capture.pop('inputs', None) or group
-                inputs = dict(target_group=identity, render_fingerprint=fingerprint,
+                inputs = dict(target_group=identity, render_fingerprint=fingerprint, navigation=NOTE_CAPTURE_POLICY,
                               capture=capture.get('image_sha256'), browser=capture.get('browser_version'))
                 rows[target] = dict(owner=topic, key=approval_key('note-visual', target, input_hashes=inputs,
                                     policy_version=POLICY), **capture)

@@ -264,7 +264,7 @@ def test_added_shared_resource_reopens_visual_approval_at_next(tmp_path):
     assert set(brief['approval_plan']['pending']) == {'pdf-page:1','pdf-page:2'}
 
 
-def test_real_browser_claim_loses_one_topic_view_and_rejects_cross_attempt_screen(tmp_path):
+def test_real_browser_claim_loses_one_topic_view_and_rejects_cross_attempt_screen(tmp_path, monkeypatch):
     from PIL import Image
     from pack_receipts import build_receipt
     state = selected(tmp_path, [])
@@ -315,6 +315,13 @@ def test_real_browser_claim_loses_one_topic_view_and_rejects_cross_attempt_scree
     specimen.write_bytes(original)
     build_receipt(flow.inspect_state(run),'browser-qa',brief['attempt'],s)
     accepted = flow.accept_task(run,'browser-qa',brief['attempt'],Path(brief['receipt']))
+    import pack_approvals
+    with monkeypatch.context() as change:
+        change.setattr(pack_approvals, 'NOTE_CAPTURE_POLICY', 'different-navigation', raising=False)
+        assert 'browser-qa' in flow.next_work(run,slots=20)['dispatch']
+        changed = flow.claim_task(run,'browser-qa')
+        assert not flow._read(changed['brief'])['approval_plan']['reusable']
+        flow.release_task(run,'browser-qa',changed['attempt'],'fixture checked capture policy')
     Image.new('RGB',(40,40),'orange').save(detail)
     assert 'browser-qa' in flow.next_work(run,slots=20)['dispatch']
     changed = flow.claim_task(run,'browser-qa')
@@ -608,3 +615,31 @@ def test_current_policy_stamp_alone_cannot_revive_an_aggregate_approval(tmp_path
         return state
     flow.update_state(run,accepted['revision'],old)
     assert 'pdf-qa' in flow.next_work(run,slots=20)['dispatch']
+
+
+def test_static_css_target_views_capture_the_navigated_fragment(tmp_path):
+    from PIL import Image
+    from pack_approvals import _visual_targets
+    root = tmp_path/'candidate'
+    root.mkdir()
+    note = root/'note.html'
+    topics = ['always-visible', '회로:#/gain']
+    note.write_text('''<meta charset="utf-8"><style>
+        body {margin:0}
+        article {height:1400px;background:blue}
+        article:target {background:red}
+        article[hidden-on-load]:not(:target) {display:none}
+        @media(prefers-color-scheme:dark) {article:target {background:lime}}
+        </style><article id="always-visible"></article><article id="회로:#/gain" hidden-on-load></article>''')
+    brief = dict(role='browser-qa', run=str(tmp_path/'attempt'), note=str(note),
+                 candidate_pack=str(root), targets=topics, attempt='fixture')
+    rows = _visual_targets({},brief,'fixture')
+    for topic in topics:
+        for view in ('desktop-light', 'mobile-light', 'desktop-dark', 'mobile-dark'):
+            row = rows[f'note-visual:{topic}:{view}']
+            assert 'image' in row, (topic, view)
+            with Image.open(row['image']) as image:
+                color = image.convert('RGB').getpixel((32,32))
+                assert color == ((0,255,0) if view.endswith('dark') else (255,0,0)), (topic,view,color)
+                assert image.size == ((375,812) if view.startswith('mobile') else (1280,900))
+            assert row['image_sha256'] == flow._sha(Path(row['image']))
