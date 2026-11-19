@@ -99,17 +99,12 @@ def _action_lock(run):
 
 
 @contextmanager
-def _live_locks(run, action=None):
+def _live_locks(run):
     with _action_lock(run):
         state = f.load_state(run)
         pack = Path(state['repo']) / '복습노트' / state['range']
-        # Windows does not pass a Unix flock descriptor. These two CLI
-        # publishers own the date lock themselves in their child process.
-        if os.name == 'nt' and action in ('publish-explanation', 'publish-answer'):
-            yield {}
-        else:
-            with publication_lock(pack):
-                yield child_lock_options(pack)
+        with publication_lock(pack):
+            yield pack
 
 
 def _retry_stopped_conversion(state, action):
@@ -389,7 +384,7 @@ def _verify_inventory_delta(before, after, writes):
 
 def run_action(run: Path, action: str) -> dict:
     run=Path(run).resolve()
-    with _live_locks(run, action) as lock_options:
+    with _live_locks(run) as public_pack:
         state=f.load_state(run); _guard(state,action)
         before=_pre_action_inventory(state)
         attempt=str(uuid4()); folder=run/'work/actions'/action/attempt; folder.mkdir(parents=True)
@@ -436,8 +431,8 @@ def run_action(run: Path, action: str) -> dict:
                 else:
                     argv=action_argv(state,action)
                     f._atomic_json(folder/'command.json',{'argv':argv,'cwd':state['repo']})
-                    options = {'env': dict(os.environ, PYTHONUTF8='1', PYTHONIOENCODING='utf-8'), **lock_options}
-                    process=subprocess.Popen(argv,cwd=state['repo'],shell=False,stdout=stdout,stderr=stderr, **options)
+                    with child_lock_options(public_pack) as options:
+                        process=subprocess.Popen(argv,cwd=state['repo'],shell=False,stdout=stdout,stderr=stderr, **options)
                     mutation_started=True
                     f._atomic_json(folder/'process.json',{'pid':process.pid,'attempt':attempt})
                     result['exit_code']=process.wait()

@@ -55,9 +55,16 @@ def _control(public):
     return folder / hashlib.sha256(_key(public).encode()).hexdigest()
 
 
-def _posix_lock(fd):
+@contextmanager
+def _posix_lock(lock):
     import fcntl
-    fcntl.flock(fd, fcntl.LOCK_EX)
+    with lock.open('a+b') as stream:
+        fd = stream.fileno()
+        inherited = os.environ.get(_FD_ENV)
+        if inherited is not None and os.path.samestat(os.fstat(int(inherited)), os.fstat(fd)):
+            fd = int(inherited)
+        fcntl.flock(fd, fcntl.LOCK_EX)
+        yield fd
 
 
 @contextmanager
@@ -68,30 +75,18 @@ def _date_lock(public, *, allow_pending=False):
     held = getattr(_local, 'held', {})
     if key in held:
         raise FlowError('date publication lock already held: ' + str(public))
-    with lock.open('a+b') as stream:
-        fd = stream.fileno()
-        inherited = os.environ.get(_FD_ENV)
-        if inherited and os.name != 'nt':
-            parent_fd = int(inherited)
-            if os.path.samestat(os.fstat(parent_fd), os.fstat(fd)):
-                # This is a real open handle on the date lock inode, handed down
-                # by Popen(pass_fds=...). Never trust an environment flag alone.
-                fd = parent_fd
-        if os.name == 'nt':
-            import msvcrt
-            stream.seek(0)
-            msvcrt.locking(fd, msvcrt.LK_LOCK, 1)
-        else:
-            _posix_lock(fd)
-        _local.held = {**held, key: fd}
+    if os.name == 'nt':
+        from pack_windows_lock import kernel_lock
+    else:
+        kernel_lock = _posix_lock
+    with kernel_lock(lock) as handle:
+        _local.held = {**held, key: handle}
         try:
             if active.exists() and not allow_pending:
                 raise FlowError('date publication requires recovery: ' + str(active))
             yield active
         finally:
             _local.held = held
-            # Closing the last descriptor releases flock, including after a
-            # parent crash while a legacy writing subprocess is still alive.
 
 
 @contextmanager
@@ -100,13 +95,17 @@ def publication_lock(public_pack: Path):
         yield
 
 
+@contextmanager
 def child_lock_options(public_pack):
-    """The command and its parent share the same open file description on Unix."""
+    """Keep the OS reservation owned by both controller and command."""
+    handle = _local.held[str(_control(public_pack))]
+    env = dict(os.environ, PYTHONUTF8='1', PYTHONIOENCODING='utf-8')
     if os.name == 'nt':
-        return {}
-    fd = _local.held[str(_control(public_pack))]
-    return {'pass_fds': (fd,), 'env': dict(os.environ, PYTHONUTF8='1', PYTHONIOENCODING='utf-8',
-                                            **{_FD_ENV: str(fd)})}
+        from pack_windows_lock import child_options
+        with child_options(handle, env) as options:
+            yield options
+    else:
+        yield {'pass_fds': (handle,), 'env': {**env, _FD_ENV: str(handle)}}
 
 
 def _checked_inventory(root, date, *, private=False):
@@ -134,11 +133,17 @@ def _canonical(inventory):
     return names
 
 
+def _copy_stream(src, dst):
+    shutil.copyfileobj(src, dst)
+    dst.flush()
+    if hasattr(os, 'fchmod'):
+        os.fchmod(dst.fileno(), stat.S_IMODE(os.fstat(src.fileno()).st_mode))
+    os.fsync(dst.fileno())
+
+
 def _copy(source, destination, digest):
     with source.open('rb') as src, destination.open('xb') as dst:
-        shutil.copyfileobj(src, dst)
-        dst.flush()
-        os.fsync(dst.fileno())
+        _copy_stream(src, dst)
     if _sha(destination) != digest:
         raise FlowError('publication copy changed: ' + str(source))
 
@@ -212,9 +217,7 @@ def _mutate(public, identity, name, old, new, snapshot):
             temporary = Path(stream.name)
             try:
                 with checked_file(snapshot, name).open('rb') as src:
-                    shutil.copyfileobj(src, stream)
-                stream.flush()
-                os.fsync(stream.fileno())
+                    _copy_stream(src, stream)
             except BaseException:
                 temporary.unlink(missing_ok=True)
                 raise
@@ -394,6 +397,11 @@ def reconcile_publication(paths: PackPaths, journal: Path, *, verify) -> dict:
                 advanced = known.copy()
                 _apply(advanced, steps[intent], (before if reverse else after).get(steps[intent]))
                 if current == advanced:
+                    # A process may have died between the rename/unlink/mkdir
+                    # and its directory fsync. Persist this observed mutation
+                    # before any recovered cursor or terminal status is saved.
+                    _check_public_root(public, data['public'])
+                    _fsync_dir(checked_file(public, steps[intent]).parent)
                     cursor += -1 if reverse else 1
                     known = advanced
             if current != known:

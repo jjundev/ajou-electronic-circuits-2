@@ -371,15 +371,14 @@ def test_delegated_command_reuses_real_lock_handle(transaction):
     import subprocess
     import sys
     import pack_publication as pub
-    if os.name == 'nt':
-        pytest.skip('Unix open file description inheritance')
     paths, _, _ = transaction
     code = ("import sys; from pathlib import Path; sys.path.insert(0,sys.argv[1]); "
             "from pack_publication import publication_lock\n"
             "with publication_lock(Path(sys.argv[2])): print('verified')\n")
     with pub.publication_lock(paths.public_pack):
-        proc = subprocess.run([sys.executable, '-c', code, str(SCRIPTS), str(paths.public_pack)],
-                              **pub.child_lock_options(paths.public_pack), capture_output=True, text=True, timeout=5)
+        with pub.child_lock_options(paths.public_pack) as options:
+            proc = subprocess.run([sys.executable, '-c', code, str(SCRIPTS), str(paths.public_pack)],
+                                  **options, capture_output=True, text=True, timeout=5)
     assert proc.returncode == 0 and proc.stdout.strip() == 'verified', proc.stderr
 
 
@@ -431,3 +430,198 @@ def test_process_exit_releases_date_and_keeps_undo_evidence(transaction):
     record = pub.reconcile_publication(paths, run / 'publication/journal.json', verify=opts['verify'])
     assert record['status'] == 'restored'
     assert inventory_pack(paths.repo, DATE) == opts['expected']
+
+
+@pytest.mark.parametrize('restore', [False, True])
+def test_recovered_rename_syncs_public_parent_before_checkpoint(transaction, monkeypatch, restore):
+    import pack_publication as pub
+    paths, run, opts = transaction
+    if not restore:
+        put(paths.work_pack, NOTE, b'initial')
+        opts['candidate_inventory'][NOTE] = digest(b'initial')
+    journal = crash_after_replace(paths, run, opts, monkeypatch)
+    if restore:
+        replace = pub.os.replace
+        def interrupt(src, dst):
+            replace(src, dst)
+            if Path(dst).is_relative_to(paths.public_pack):
+                raise Crash
+        with monkeypatch.context() as first:
+            first.setattr(pub.os, 'replace', interrupt)
+            with pytest.raises(Crash):
+                pub.reconcile_publication(paths, journal, verify=opts['verify'])
+    events = []
+    sync = pub._fsync_dir
+    save = pub._save
+    def track_sync(path):
+        sync(path)
+        events.append(('sync', path))
+    def track_save(path, record):
+        if path == journal:
+            events.append(('checkpoint', record['status']))
+        save(path, record)
+    monkeypatch.setattr(pub, '_fsync_dir', track_sync)
+    monkeypatch.setattr(pub, '_save', track_save)
+    result = pub.reconcile_publication(paths, journal, verify=opts['verify'])
+    assert result['status'] == ('restored' if restore else 'published')
+    assert events[0] == ('sync', paths.public_pack / '.assets')
+
+
+def test_file_modes_survive_publication_and_rollback(transaction, monkeypatch):
+    import os
+    import stat
+    import pack_publication as pub
+    if os.name == 'nt':
+        pytest.skip('Unix file permission bits')
+    paths, run, opts = transaction
+    old = paths.public_pack / MD
+    new = paths.work_pack / MD
+    old.chmod(0o640)
+    new.chmod(0o644)
+    journal = crash_after_replace(paths, run, opts, monkeypatch)
+    assert stat.S_IMODE(old.stat().st_mode) == 0o644
+    assert pub.reconcile_publication(paths, journal, verify=opts['verify'])['status'] == 'restored'
+    assert stat.S_IMODE(old.stat().st_mode) == 0o640
+
+
+@pytest.mark.parametrize('action', ['publish-explanation', 'publish-answer'])
+def test_windows_controller_keeps_date_lock_through_action_evidence(tmp_path, monkeypatch, action):
+    from types import SimpleNamespace
+    import pack_actions
+    import pack_publication
+    from pack_support import action_run
+    repo, run = action_run(tmp_path)
+    # Exercise the historical platform branch on this host using the actual
+    # host kernel lock. Both standalone delegates must still be inside it.
+    monkeypatch.setattr(pack_actions, 'os', SimpleNamespace(name='nt'))
+    class ReachedGuard(Exception):
+        pass
+    def guard(state, requested):
+        assert requested == action
+        with pytest.raises(ValueError, match='lock'):
+            with pack_publication.publication_lock(repo / '복습노트/0909'):
+                pass
+        raise ReachedGuard
+    monkeypatch.setattr(pack_actions, '_guard', guard)
+    with pytest.raises(ReachedGuard):
+        pack_actions.run_action(run, action)
+
+
+def test_orphan_writer_keeps_reservation_until_its_last_write(transaction):
+    import subprocess
+    import sys
+    import time
+    paths, run, _ = transaction
+    prefix = """import os, sys, time, subprocess
+from pathlib import Path
+sys.path.insert(0, sys.argv[1])
+import pack_publication as pub
+pack, run = map(Path, sys.argv[2:4])
+"""
+    run.mkdir()
+    child = run / 'writer.py'
+    child.write_text(prefix + """
+with pub.publication_lock(pack):
+    (run / 'ready').touch()
+    until = time.monotonic() + 15
+    while not (run / 'release').exists() and time.monotonic() < until:
+        time.sleep(.02)
+    (pack / '정리노트_0923_X.html').write_bytes(b'orphan writer')
+""", encoding='utf-8')
+    args = [str(SCRIPTS), str(paths.public_pack), str(run)]
+    owner = prefix + """
+with pub.publication_lock(pack):
+    with pub.child_lock_options(pack) as opts:
+        subprocess.Popen([sys.executable, str(run / 'writer.py'), *sys.argv[1:]],
+                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, **opts)
+    os._exit(19)
+"""
+    assert subprocess.run([sys.executable, '-c', owner, *args], timeout=5).returncode == 19
+
+    def observe(name):
+        until = time.monotonic() + 8
+        while not (run / name).exists() and time.monotonic() < until:
+            time.sleep(.02)
+        assert (run / name).exists()
+
+    contender = prefix + """
+(run / 'waiting').touch()
+with pub.publication_lock(pack):
+    assert (pack / '정리노트_0923_X.html').read_bytes() == b'orphan writer'
+"""
+    try:
+        observe('ready')
+        with subprocess.Popen([sys.executable, '-c', contender, *args]) as second:
+            try:
+                observe('waiting')
+                with pytest.raises(subprocess.TimeoutExpired):
+                    second.wait(.2)
+            finally:
+                (run / 'release').touch()
+            assert second.wait(5) == 0
+    finally:
+        (run / 'release').touch()
+
+
+def test_windows_os_handle_transfer_adds_only_one_inheritable_duplicate(monkeypatch):
+    import sys
+    from types import SimpleNamespace
+    import pack_windows_lock as win
+    closed = []
+    copies = []
+    def duplicate(src_proc, handle, dst_proc, access, inherit, options):
+        copies.append((handle, inherit))
+        return 17
+    api = SimpleNamespace(GetCurrentProcess=lambda: -1, DUPLICATE_SAME_ACCESS=2,
+                          DuplicateHandle=duplicate, CloseHandle=closed.append)
+    monkeypatch.setitem(sys.modules, '_winapi', api)
+    monkeypatch.setattr(win.subprocess, 'STARTUPINFO', SimpleNamespace, raising=False)
+    with pytest.raises(OSError):
+        with win.child_options(5, {'existing': 'yes'}) as options:
+            assert options['startupinfo'].lpAttributeList == {'handle_list': [17]}
+            assert options['close_fds'] and options['env'] == {'existing': 'yes', win._HANDLE_ENV: '17'}
+            assert closed == []
+            raise OSError('injected CreateProcess failure')
+    assert copies == [(5, True)] and closed == [17]
+
+
+def test_windows_rejects_plain_handle_for_same_file(tmp_path):
+    import os
+    if os.name != 'nt':
+        pytest.skip('native Windows file sharing')
+    import msvcrt
+    import pack_windows_lock as win
+    lock = tmp_path / 'test.lock'
+    with lock.open('a+b') as shared:
+        with pytest.raises(ValueError, match='not exclusive'):
+            win._verify_inherited(lock, msvcrt.get_osfhandle(shared.fileno()))
+
+
+@pytest.mark.parametrize('fault', ['other_date', 'shared', 'exclusive'])
+def test_windows_handoff_verifies_handle_identity_and_exclusion(tmp_path, monkeypatch, fault):
+    import sys
+    from types import SimpleNamespace
+    import pack_windows_lock as win
+    actual = put(tmp_path, 'date.lock', b'').stat()
+    other = put(tmp_path, 'other.lock', b'').stat()
+    closed = []
+    def open_lock(path, access, *args):
+        if access == win._FILE_READ_ATTRIBUTES:
+            return 10
+        if fault == 'exclusive':
+            denied = PermissionError('sharing violation')
+            denied.winerror = 32
+            raise denied
+        return 12
+    api = SimpleNamespace(CreateFile=open_lock, OPEN_EXISTING=3, GENERIC_READ=1,
+                          ReadFile=lambda handle, size: (b'', 0), CloseHandle=closed.append)
+    monkeypatch.setitem(sys.modules, '_winapi', api)
+    monkeypatch.setattr(win, '_duplicate', lambda handle, **kwargs: 11)
+    stats = {10: actual, 11: other if fault == 'other_date' else actual}
+    monkeypatch.setattr(win, '_stat_and_close', stats.__getitem__)
+    if fault == 'exclusive':
+        win._verify_inherited(tmp_path / 'date.lock', 3)
+    else:
+        with pytest.raises(ValueError, match='does not own|not exclusive'):
+            win._verify_inherited(tmp_path / 'date.lock', 3)
+    assert closed == ([12] if fault == 'shared' else [])
