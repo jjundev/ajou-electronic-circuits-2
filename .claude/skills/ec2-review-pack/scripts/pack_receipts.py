@@ -195,7 +195,10 @@ def validate_receipt(state: dict, task: dict, receipt_path: Path) -> dict:
             require(within(run, parent_run), 'attempt outside RUN')
         receipt_path = nfc_path(Path(receipt_path).resolve())
         require(within(receipt_path, run), 'receipt outside RUN')
-        receipt = obj(receipt_path)
+        raw = receipt_path.read_bytes()
+        receipt = json.loads(raw.decode('utf-8'))
+        require(isinstance(receipt, dict), 'receipt object required')
+        parsed_digest = hashlib.sha256(raw).hexdigest()
         require(receipt.get('schema_version') == 1 and receipt.get('run_id') == state['run_id'] and receipt.get('task_id') == task['id'] and receipt.get('attempt') == task['attempt'], 'receipt identity mismatch')
         status = receipt.get('status')
         require(status in ('done', 'needs-fix', 'blocked', 'ready-for-publish', 'withheld'), 'invalid receipt status')
@@ -277,6 +280,8 @@ def validate_receipt(state: dict, task: dict, receipt_path: Path) -> dict:
                     screens = [path for path in outputs if Path(path).suffix.lower() == '.png']
                     require(screens, 'actual browser screenshot evidence required')
                     for path in screens: _png(path)
+        require(verified[str(receipt_path)] == parsed_digest and sha(receipt_path) == parsed_digest,
+                'receipt bytes changed during validation')
         return dict(receipt, task_status=task_status, verified_files=[{'path': p, 'sha256': h} for p, h in verified.items()])
     except FlowError: raise
     except (OSError, ValueError, KeyError, TypeError, AttributeError, ImportError, RuntimeError) as exc:

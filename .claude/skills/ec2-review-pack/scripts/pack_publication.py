@@ -438,10 +438,26 @@ def publish_pack(paths: PackPaths, run: Path, *, expected: dict[str, str],
         return _finish(journal, data, active, 'published')
 
 
+@contextmanager
+def reconciliation_lock(public):
+    # Recovery may already hold the date lock through its enclosing RUN commit.
+    control = _control(public)
+    if getattr(_local, 'reconciliation', None) == control:
+        yield control.with_suffix('.publication.json')
+    else:
+        with _date_lock(public, allow_pending=True) as active:
+            prior = getattr(_local, 'reconciliation', None)
+            _local.reconciliation = control
+            try:
+                yield active
+            finally:
+                _local.reconciliation = prior
+
+
 def reconcile_publication(paths: PackPaths, journal: Path, *, verify) -> dict:
     public = _identity(paths)
     journal = Path(journal).absolute()
-    with _date_lock(public, allow_pending=True) as active:
+    with reconciliation_lock(public) as active:
         data = {}
         try:
             if (journal.name != 'journal.json' or journal.parent.name != 'publication' or journal.is_symlink()
@@ -478,6 +494,8 @@ def reconcile_publication(paths: PackPaths, journal: Path, *, verify) -> dict:
                 data['status'] = 'restored'
                 _save(journal, data)
                 return _result(data, journal, 'restored')
+            if data['status'] == 'published' and not active.exists() and not current_parent_publication(public, journal):
+                raise FlowError('settled publication belongs to a different journal')
             if data['status'] == 'published' and retire_concept and not active.exists():
                 # This parent may have acquired its own authorized child after its journal settled.
                 child = {name:current[name] for name in current.keys() - after.keys()}

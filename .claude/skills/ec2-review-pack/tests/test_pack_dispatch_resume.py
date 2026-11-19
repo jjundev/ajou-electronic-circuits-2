@@ -1,6 +1,7 @@
 """Dispatch and recovery against isolated RUNs. All judgments are fixture evidence."""
 from pathlib import Path
-import json
+import os
+import pytest
 
 from pack_support import make_run
 import pack_flow as f
@@ -17,11 +18,12 @@ def invoke(run, *args):
     return data
 
 
-def solver(run, reviewer):
+def solver(run, reviewer, *, before_build=lambda:None):
     brief, decisions, submission = compact(run, 'explain-blind', reviewer)
     write(decisions, {key: dict(status='pass', method='exact', conclusion=reviewer, evidence='fixture calculation')
                       for key in brief['approval_plan']['pending']})
     args = ['--task', 'explain-blind', '--attempt', brief['attempt']]
+    before_build()
     invoke(run, 'task', 'build-receipt', *args, '--submission', submission)
     invoke(run, 'task', 'check', *args, '--receipt', brief['receipt'])
     return dict(task_id='explain-blind', attempt=brief['attempt'], receipt=brief['receipt'])
@@ -64,8 +66,21 @@ def test_late_receipt_cannot_replace_new_attempt(tmp_path):
 
 def test_resume_reuses_completed_child_and_marks_gap(tmp_path, monkeypatch):
     monkeypatch.setenv("EC2_CLI_TRACE_DIR", str(tmp_path/"trace"))
+    from _util import SCRIPTS
+    boot = tmp_path/'clock'
+    boot.mkdir()
+    (boot/'sitecustomize.py').write_text(
+        "import os,sys\n" + "sys.path.insert(0," + repr(str(SCRIPTS)) + ")\n"
+        + "import pack_flow\npack_flow.utc_now=lambda:os.environ['EC2_FIXTURE_UTC']\n")
+    monkeypatch.setenv('PYTHONPATH',str(boot))
+    def tick(at):
+        monkeypatch.setenv('EC2_FIXTURE_UTC','2026-01-01T'+at+'Z')
+    monkeypatch.setattr(f,'utc_now',lambda:os.environ['EC2_FIXTURE_UTC'])
+    tick('09:40:00')
     run, _ = blind_run(tmp_path)
-    item = solver(run, 'retained solver')
+    tick('09:45:00')
+    item = solver(run, 'retained solver',before_build=lambda:tick('09:55:00'))
+    tick('11:40:00')
     attempt = item['attempt']
     state = f.load_state(run)
     host = dict(run_id=state['run_id'], task_id='explain-blind', attempt=attempt,
@@ -97,8 +112,8 @@ def test_resume_reuses_completed_child_and_marks_gap(tmp_path, monkeypatch):
     assert metrics['brief_bytes'] > 0
     assert metrics['cli_counts']['task check'] == 1
     assert 'model_usage' not in metrics
-    assert metrics['attempts'][attempt]['claim_to_complete_seconds'] >= 0
-    assert metrics['attempts'][attempt]['ready_to_claim_seconds'] >= 0
+    assert metrics['attempts'][attempt]['claim_to_complete_seconds'] == 600
+    assert metrics['attempts'][attempt]['ready_to_claim_seconds'] == 300
     assert {'interrupted','resumed','completed','accepted','reused'} <= {e['event'] for e in metrics['events']}
 
 
@@ -290,3 +305,131 @@ def test_advance_keeps_failed_action_blocked_until_explicit_retry(tmp_path):
     assert 'candidate-index' in invoke(run,'advance','--max-actions','4')['blocked']
     metrics = f._read(invoke(run,'report')['details_path'])['metrics']
     assert 'candidate-index' in metrics['blocker_ids']
+
+
+@pytest.mark.parametrize('batched', [False, True])
+def test_receipt_replaced_after_parsing_cannot_be_adopted(tmp_path,monkeypatch,batched):
+    import pack_parallel as parallel
+    import pack_receipts as receipts
+    run, _ = blind_run(tmp_path)
+    item = solver(run, 'bound solver')
+    path = Path(item['receipt'])
+    read_object = receipts.obj
+    def swap_on_brief(source):
+        if Path(source).name == 'brief.json':
+            write(path,dict(f._read(path),attempt='other-attempt'))
+        return read_object(source)
+    monkeypatch.setattr(receipts,'obj',swap_on_brief)
+    if batched:
+        assert parallel.accept_batch(run,[item])['items'][0]['status'] == 'rejected'
+    else:
+        with pytest.raises(f.FlowError):
+            f.accept_task(run,item['task_id'],item['attempt'],path)
+    assert not f._done(f.load_state(run),item['task_id'])
+
+
+@pytest.mark.parametrize('existing,batched', [(False, True),(True, False)])
+def test_selection_checks_history_membership_and_bytes_at_adoption(tmp_path,monkeypatch,existing,batched):
+    import pack_parallel as parallel
+    import test_pack_graph as scenario
+    import pack_support
+    accept = f.accept_task
+    worker = pack_support.parallel_worker
+    class Verified(Exception): pass
+    def run_worker(run,tid,write_outputs):
+        if tid != 'selection':
+            return worker(run,tid,write_outputs)
+        state = f.load_state(run)
+        other = Path(state['repo'])/'복습노트/0908/.assets/problems.txt'
+        other.parent.mkdir(parents=True)
+        if existing:
+            other.write_text('P1 | first selection reason')
+        def submit(current_run,tid,attempt,receipt):
+            original_update = f.update_state
+            def race(*args):
+                other.write_text('P1 | changed reason or newly published')
+                return original_update(*args)
+            with monkeypatch.context() as patch:
+                patch.setattr(f,'update_state',race)
+                if batched:
+                    result = parallel.accept_batch(run,[dict(task_id=tid,attempt=attempt,receipt=str(receipt))])
+                    assert result['items'][0]['status'] == 'rejected'
+                else:
+                    with pytest.raises(f.FlowError):
+                        accept(run,tid,attempt,receipt)
+            raise Verified
+        monkeypatch.setattr(f,'accept_task',submit)
+        return worker(run,tid,write_outputs)
+    monkeypatch.setattr(pack_support,'parallel_worker',run_worker)
+    with pytest.raises(Verified):
+        scenario.exercise_zero_problem_cli(tmp_path,monkeypatch,None)
+
+
+def test_date_lock_covers_quiz_recovery_adoption_against_second_publisher(tmp_path,monkeypatch):
+    import concurrent.futures
+    import shutil
+    import threading
+    from contextlib import contextmanager
+    from pack_paths import PackPaths
+    import pack_actions
+    import pack_publication as pub
+    import test_pack_graph as scenario
+    original_cli = scenario.cli
+    class Verified(Exception): pass
+    def cli(*args):
+        result = original_cli(*args)
+        if args[:3] != ('run','--action','concept-publish'):
+            return result
+        run = Path(args[-1])
+        state=f.load_state(run)
+        row=state['actions']['concept-publish']
+        row['status']='running'
+        f.update_state(run,state['revision'],lambda _:state)
+        repo=Path(state['repo'])
+        public=repo/'복습노트'/state['range']
+        rival=tmp_path/'rival-run'
+        candidate=tmp_path/'rival-candidate'
+        own_journal = Path(state['publication']['journal'])
+        shutil.copytree(own_journal.parent/'after',candidate)
+        same_parent = f._read(own_journal)['after']
+        expected=pub.publication_inventory(public,state['range'])
+        pool=concurrent.futures.ThreadPoolExecutor(max_workers=1)
+        started=threading.Event()
+        lock=pub._date_lock
+        @contextmanager
+        def signal_lock(*args,**kwargs):
+            if threading.current_thread() != threading.main_thread():
+                started.set()
+            with lock(*args,**kwargs) as handle:
+                yield handle
+        monkeypatch.setattr(pub,'_date_lock',signal_lock)
+        save=f._atomic_json
+        competing=[]
+        def compete(path,data):
+            if not competing and path==run/'run-status.json' and data['actions']['concept-publish']['status']=='done':
+                future=pool.submit(pub.publish_pack,PackPaths(repo,public,candidate),rival,expected=expected,
+                    candidate_inventory=same_parent,verify=lambda _:None,retire_concept=True)
+                competing.append(future)
+                assert started.wait(5)
+                with pytest.raises(concurrent.futures.TimeoutError):
+                    future.result(timeout=0.3)
+            return save(path,data)
+        monkeypatch.setattr(f,'_atomic_json',compete)
+        try:
+            resumed=pack_actions.resume_run(run,stopped_attempts={row['attempt']:str(run/'concept-check-result.json')})
+            assert resumed['reused']==['concept-publish'],resumed
+            assert competing[0].result(timeout=10)['status']=='published'
+            assert not f.concept_check_result(f.inspect_state(run))
+            # The successor published byte-identical parent evidence and retired the old quiz.
+            assert pub.publication_inventory(public,state['range']) == same_parent
+            assert pub.current_parent_publication(public,rival/'publication/journal.json')
+            assert f._done(f.inspect_state(run),'publish-pack')
+            old_parent = state['actions']['publish-pack']['attempt']
+            refused = pack_actions.resume_run(run,stopped_attempts={old_parent:str(own_journal)})
+            assert refused['rejected'] and not refused['reused']
+        finally:
+            pool.shutdown(wait=True)
+        raise Verified
+    monkeypatch.setattr(scenario,'cli',cli)
+    with pytest.raises(Verified):
+        scenario.exercise_zero_problem_cli(tmp_path,monkeypatch,None)

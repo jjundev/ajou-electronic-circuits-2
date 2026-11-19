@@ -15,6 +15,7 @@ JSON: --format json --catalog-out RUN/exam-catalog (전체 소문항·필요 개
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 import re
@@ -55,18 +56,24 @@ def used_in_ranges(notes_dir: Path | str, exclude: str | None = None) -> dict[st
     exclude: 이 폴더 이름(NFC로 비교)의 problems.txt는 건너뛴다(같은 range를 다시 돌릴 때
     자기 자신의 이전 결과가 USED로 잡히지 않게 한다).
     """
-    notes_dir, ids = Path(notes_dir), {}
-    if not notes_dir.is_dir():
-        return ids
-    exclude_nfc = nfc(exclude) if exclude is not None else None
-    for path in notes_dir.glob("*/.assets/problems.txt"):
-        if exclude_nfc is not None and nfc(path.parent.parent.name) == exclude_nfc:
+    return history_snapshot(notes_dir, exclude)[0]
+
+
+def history_snapshot(notes_dir, exclude):
+    """Read each previous pack's problems list once for both interpretation and identity."""
+    ids, files = {}, {}
+    exclude = nfc(exclude) if exclude is not None else None
+    for path in sorted(Path(notes_dir).glob("*/.assets/problems.txt")):
+        date = nfc(path.parent.parent.name)
+        if date == exclude:
             continue
-        for line in path.read_text(encoding="utf-8").splitlines():
+        data = path.read_bytes()
+        files[str(path)] = hashlib.sha256(data).hexdigest()
+        for line in data.decode("utf-8").splitlines():
             pid = nfc(line.split("|", 1)[0].strip())
             if pid:
-                ids.setdefault(pid, []).append(nfc(path.parent.parent.name))
-    return ids
+                ids.setdefault(pid, []).append(date)
+    return ids, files
 
 
 def used_ids(notes_dir: Path | str, exclude: str | None = None) -> set[str]:
@@ -95,9 +102,11 @@ def md_paths(repo: Path | str, chapters: set[int] | None = None) -> list[Path]:
 
 def index(repo: Path | str, used_dir: Path | str | None = None,
           chapters: set[int] | None = None,
-          exclude_range: str | None = None) -> tuple[list[list[str]], list[str]]:
+          exclude_range: str | None = None, *, history=None) -> tuple[list[list[str]], list[str]]:
     problem = _workbook(Path(repo))
-    used = used_ids(used_dir, exclude=exclude_range) if used_dir else set()
+    if history is None:
+        history = used_in_ranges(used_dir, exclude_range) if used_dir else {}
+    used = history
     rows, errors = [], []
     for path in md_paths(repo, chapters):
         try:
@@ -126,12 +135,14 @@ def _textbook_inputs(p, repo: Path) -> dict[str, str]:
     return {inside(path, repo).relative_to(repo).as_posix(): file_hash(path) for path in inputs}
 
 
-def candidate_data(repo: Path, used_dir=None, chapters=None, exclude_range=None) -> tuple[dict, list[str]]:
+def candidate_data(repo: Path, used_dir=None, chapters=None, exclude_range=None, *, history=None) -> tuple[dict, list[str]]:
     """기출은 상세 JSON 참조와 전체 소문항을, 교과서는 기존 선별 정보를 제공한다."""
     repo = Path(repo)
     problem = _workbook(repo)
     from exam_catalog import build_catalog, CatalogError, digest, question_parts
-    rows, errors = index(repo, used_dir, chapters, exclude_range)
+    if history is None:
+        history = used_in_ranges(used_dir, exclude_range) if used_dir else {}
+    rows, errors = index(repo, used_dir, chapters, exclude_range, history=history)
     try:
         catalog, _ = build_catalog(repo)
     except CatalogError as exc:
@@ -140,7 +151,6 @@ def candidate_data(repo: Path, used_dir=None, chapters=None, exclude_range=None)
     exams = {p['id']: p for p in catalog['problems']}
     textbook_paths = {nfc(p.stem): p for p in md_paths(repo, chapters) if not p.stem.startswith('Q')}
     items = []
-    history = used_in_ranges(used_dir, exclude_range) if used_dir else {}
     for pid, kind, secnum_, section, difficulty, used, title in rows:
         if kind == '기출':
             item = dict(exams[pid])

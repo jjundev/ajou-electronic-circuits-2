@@ -934,6 +934,10 @@ def resume_machine(run, state, row, path):
             if active['status'] == 'done':
                 if not f._done(f._current(current), tid):
                     raise f.FlowError('stale completion evidence')
+                if tid == 'publish-pack':
+                    from pack_publication import current_parent_publication
+                    if not current_parent_publication(parallel.public(current),path):
+                        raise f.FlowError('settled publication belongs to a different journal')
                 if tid == 'concept-publish' and not f.concept_check_result(current):
                     raise f.FlowError('unverified quiz publication')
                 result = active
@@ -970,9 +974,15 @@ def resume_machine(run, state, row, path):
                 return current
             record_resume(current, tid, attempt, outcome, supplied, signature, gap)
             return current
-        if tid in ('publish-pack','concept-publish'):
-            # Date ownership and public proof must stay serialized with final state adoption.
-            updated = parallel.transact(run, apply)
+        if tid == 'publish-pack':
+            from pack_publication import reconciliation_lock
+            with reconciliation_lock(parallel.public(state)) as active_journal:
+                if active_journal.exists() and f._read(active_journal).get('journal') != str(path):
+                    raise f.FlowError('different active publication')
+                updated = parallel.transact(run, apply)
+        elif tid == 'concept-publish':
+            with publication_lock(parallel.public(state)):
+                updated = resume_private_snapshot(run, tid, attempt, supplied, signature, apply)
         else:
             updated = resume_private_snapshot(run, tid, attempt, supplied, signature, apply)
     if updated['actions'][tid]['status'] == 'recovery_required':

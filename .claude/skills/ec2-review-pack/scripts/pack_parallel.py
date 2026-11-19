@@ -345,7 +345,9 @@ def check_selection(state, root):
     if (m.get('range'), m.get('slug')) != (scope['range'], scope['slug']):
         raise f.FlowError('selection changed frozen scope')
     candidates = f._read(output(state, 'candidate-index', 'candidates.json'))
-    live, errors = problem_index.candidate_data(Path(state['repo']), public(state).parent, exclude_range=state['range'])
+    notes = public(state).parent
+    history, files = problem_index.history_snapshot(notes,state['range'])
+    live, errors = problem_index.candidate_data(Path(state['repo']), notes, exclude_range=state['range'],history=history)
     if errors or (candidates['catalog_sha256'], candidates['problems']) != (live['catalog_sha256'], live['problems']):
         raise f.FlowError('candidate source or previous use changed')
     review = f._read(root / 'selection-review.json')
@@ -367,7 +369,20 @@ def check_selection(state, root):
             if f._sha(path) != digest:
                 raise f.FlowError('selected question or figure changed: ' + name)
             verified[str(path)] = digest
-    return [dict(path=p, sha256=h) for p, h in sorted(verified.items())]
+    return [dict(path=p, sha256=h) for p, h in sorted(verified.items())], files
+
+
+class SelectionHistoryChanged(f.FlowError):
+    def __init__(self, attempt):
+        super().__init__('previous pack history changed during selection adoption')
+        self.attempt = attempt
+
+
+def check_selection_history(state, receipt):
+    if 'selection_history' in receipt:
+        from problem_index import history_snapshot
+        if history_snapshot(public(state).parent,state['range'])[1] != receipt['selection_history']:
+            raise SelectionHistoryChanged(receipt['attempt'])
 
 
 def check_leaf_join(state, child_root):
@@ -393,7 +408,7 @@ def validate_worker(state, task, receipt_path):
         raise f.FlowError('frozen worker inputs superseded')
     receipt = validate_receipt(state, task, receipt_path)
     # Never trust worker-supplied approval identities or computed provenance.
-    for name in ('fresh_approvals', 'reused_approvals', 'render_environment', 'joined_independent'):
+    for name in ('fresh_approvals', 'reused_approvals', 'render_environment', 'joined_independent', 'selection_history'):
         receipt.pop(name, None)
     brief = f._read(task['brief'])
     receipt['verified_files'].append(dict(path=task['brief'], sha256=task['brief_sha256']))
@@ -474,7 +489,8 @@ def validate_worker(state, task, receipt_path):
     if role == 'scope-draft':
         scope_manifest(state, f._read(root / 'manifest.json'))
     if role == 'selection':
-        receipt['verified_files'].extend(check_selection(state, root))
+        sources, receipt['selection_history'] = check_selection(state, root)
+        receipt['verified_files'].extend(sources)
     if role == 'scope-final':
         import manifest
         m = manifest.load(root / 'manifest.json', repo=Path(state['repo']))
@@ -631,6 +647,7 @@ def accept_worker(run, tid, attempt, receipt_path):
         f._attempt(row, attempt)
         if proof(current, spec_for(current, tid)) != snapshot['tasks'][tid]['input_version'] or verify_receipt_files(receipt):
             raise f.FlowError('worker input or file version changed during adoption')
+        check_selection_history(current, receipt)
         return install_worker(current, snapshot, tid, receipt)
     return transact(run, apply)
 
@@ -693,6 +710,7 @@ def _accept_batch(run, submissions, *, stop=None):
     """Prepare independent receipts privately, then publish one revision or retry."""
     if not isinstance(submissions, list):
         raise f.FlowError('submissions must be an array')
+    changed_selections = set()
     for retry in range(24):
         original = f.parallel_state(run)
         state = f._current(copy.deepcopy(original))
@@ -700,6 +718,8 @@ def _accept_batch(run, submissions, *, stop=None):
         for entry in submissions:
             item = {k:entry.get(k) for k in ('task_id','attempt')} if isinstance(entry, dict) else {}
             try:
+                if item.get('task_id') == 'selection' and item.get('attempt') in changed_selections:
+                    raise SelectionHistoryChanged(item['attempt'])
                 candidate, status, records = prepare_batch_item(state, entry)
                 if stop:
                     if candidate is state:
@@ -730,6 +750,7 @@ def _accept_batch(run, submissions, *, stop=None):
                 if row['input_version'] != version or proof(current, spec_for(current, tid)) != version:
                     raise f.FlowError('batch snapshot changed')
                 receipt = state['tasks'][tid]['receipt']
+                check_selection_history(current, receipt)
                 if environment := receipt.get('render_environment'):
                     from pack_approvals import environment_current
                     if not environment_current(current,f._read(row['brief']),f._read(environment['path'])):
@@ -746,6 +767,8 @@ def _accept_batch(run, submissions, *, stop=None):
                     raise f.FlowError('revision conflict')
                 commit(current)
             return dict(items=items, next=f.next_work(run, slots=0))
+        except SelectionHistoryChanged as exc:
+            changed_selections.add(exc.attempt)
         except (OSError, f.FlowError) as exc:
             if retry == 23 or not any(reason in str(exc) for reason in
                                       ('revision conflict','lock busy','batch snapshot changed','No such file','brief changed after claim')):

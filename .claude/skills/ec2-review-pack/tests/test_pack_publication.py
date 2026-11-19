@@ -625,3 +625,17 @@ def test_windows_handoff_verifies_handle_identity_and_exclusion(tmp_path, monkey
         with pytest.raises(ValueError, match='does not own|not exclusive'):
             win._verify_inherited(tmp_path / 'date.lock', 3)
     assert closed == ([12] if fault == 'shared' else [])
+
+
+def test_identical_later_publication_owns_settled_date(transaction):
+    import pack_publication as pub
+    paths, run, options = transaction
+    first = pub.publish_pack(paths,run,**options,retire_concept=True)
+    assert first['status'] == 'published'
+    second = pub.publish_pack(paths,run.with_name('second-owner'),
+                              **dict(options,expected=options['candidate_inventory']),retire_concept=True)
+    assert second['status'] == 'published'
+    checked = []
+    stale = pub.reconcile_publication(paths,Path(first['journal']),verify=checked.append)
+    assert stale['status'] == 'recovery_required' and not checked
+    assert pub.current_parent_publication(paths.public_pack,second['journal'])
