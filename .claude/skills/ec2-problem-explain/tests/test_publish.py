@@ -31,10 +31,54 @@ class PublishTest(unittest.TestCase):
             approved(self.pack, self.fragments, self.artifacts) if reviews is None else reviews,
             destination or self.folder, self.backup, self.repo)
 
+    def write_index(self):
+        assets = self.src.parent
+        (assets / 'display-titles.json').write_text(json.dumps({'P10.02': '차동쌍'}))
+        (assets / 'selection.json').write_text(json.dumps({
+            'schema_version': 2, 'policy': 'exam-first-v2', 'workload': {'estimated_minutes': 10},
+            'problems': [{'id': 'P10.02', 'priority': 'core', 'learning_goals': ['gain'],
+                          'estimated_minutes': 10, 'subpart_count': 1}]}))
+
+    def test_candidate_requires_both_selection_inputs(self):
+        from pack_paths import PackPaths
+        self.write_index()
+        candidate = self.tmp / 'candidate'
+        self.folder.rename(candidate)
+        view = PackPaths(self.repo, self.folder, candidate)
+        for name in ('display-titles.json', 'selection.json'):
+            with self.subTest(name=name):
+                path = candidate / '.assets' / name
+                valid = path.read_bytes()
+                path.unlink()
+                with self.assertRaisesRegex(ExplainError, name):
+                    load_source(self.src, self.repo, pack_paths=view, slug=self.pack.slug)
+                path.write_bytes(valid)
+
+    def test_candidate_review_refuses_physical_attempt_reference(self):
+        from pack_paths import PackPaths
+        from epe_publish import build_explanation_candidate
+        self.write_index()
+        candidate = self.repo / 'attempt'
+        self.folder.rename(candidate)
+        view = PackPaths(self.repo, self.folder, candidate)
+        pack = load_source(self.src, self.repo, pack_paths=view, slug=self.pack.slug)
+        artifacts = build_explanation(pack, self.fragments, self.tmp / 'candidate-stage', self.repo)
+        reviews = approved(pack, self.fragments, artifacts)
+        path = candidate / '.assets/problems.txt'
+        reviews['references'].append({'path': str(path), 'sha256': sha256(path)})
+        with self.assertRaisesRegex(ExplainError, '공개 경로'):
+            build_explanation_candidate(pack, artifacts, self.fragments, reviews, candidate, self.repo)
+        self.assertFalse((candidate / artifacts.html.name).exists())
+        reviews['references'][-1]['path'] = str(self.src)
+        outputs = build_explanation_candidate(pack, artifacts, self.fragments, reviews, candidate, self.repo)
+        record = json.loads(next(p for p in outputs if p.name == 'validation.json').read_text())
+        self.assertEqual(record['references'][-1]['path'], str(self.src))
+
     def test_candidate_materialization_uses_verified_public_identity(self):
         from pack_paths import PackPaths
         from epe_publish import build_explanation_candidate
         from epe_cli import extract, load_run
+        self.write_index()
         candidate = self.tmp / 'candidate'
         self.folder.rename(candidate)
         view = PackPaths(self.repo, self.folder, candidate)
@@ -53,10 +97,16 @@ class PublishTest(unittest.TestCase):
         from epe_publish import build_explanation_candidate
         destination = self.tmp / 'consumer'
         review = approved(self.pack, self.fragments, self.artifacts)
-        outputs = build_explanation_candidate(self.pack, self.artifacts, self.fragments, review, destination, self.repo)
+        with self.assertRaisesRegex(ExplainError, 'selection.json|display-titles.json'):
+            build_explanation_candidate(self.pack, self.artifacts, self.fragments, review, destination, self.repo)
+        self.write_index()
+        pack = load_source(self.src, self.repo)
+        artifacts = build_explanation(pack, self.fragments, self.tmp / 'complete-stage', self.repo)
+        review = approved(pack, self.fragments, artifacts)
+        outputs = build_explanation_candidate(pack, artifacts, self.fragments, review, destination, self.repo)
         self.assertTrue(all(p.is_relative_to(destination) for p in outputs))
         self.assertFalse((self.folder / self.artifacts.html.name).exists())
-        self.assertFalse((self.artifacts.manifest.parent / 'validation.json').exists())
+        self.assertFalse((artifacts.manifest.parent / 'validation.json').exists())
 
     def test_no_review_keeps_existing_files(self):
         dst = self.folder / self.artifacts.html.name

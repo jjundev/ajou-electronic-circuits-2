@@ -228,18 +228,19 @@ def load_source(path: Path, repo: Path, *, pack_paths: PackPaths | None = None, 
     slug = _slug(path.parent.parent, range_) if slug is None else slug
     if not slug or slug in ('.', '..') or Path(slug).name != slug:
         raise ExplainError('팩 slug 형식 오류')
+    require_index = pack_paths is not None and pack_paths.candidate_pack is not None
     titles_path = path.with_name('display-titles.json')
     if pack_paths:
         titles_path = pack_paths.work_file(f'{BUNDLE}/display-titles.json')
     try:
-        titles = load_display_titles(titles_path, ids) if titles_path.exists() else None
+        titles = load_display_titles(titles_path, ids) if require_index or titles_path.exists() else None
     except DisplayTitlesError as exc:
         raise ExplainError(str(exc)) from exc
     selection_path = path.with_name('selection.json')
     if pack_paths:
         selection_path = pack_paths.work_file(f'{BUNDLE}/selection.json')
     try:
-        selection = load_selection(selection_path, ids) if selection_path.exists() else None
+        selection = load_selection(selection_path, ids) if require_index or selection_path.exists() else None
     except (ValueError, OSError, KeyError, TypeError) as exc:
         raise ExplainError(f'선발 기록 오류: {exc}') from exc
     problems, mds, figs = [], [], []

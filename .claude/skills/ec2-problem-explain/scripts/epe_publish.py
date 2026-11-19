@@ -23,6 +23,10 @@ def _verified_mapping(pack, artifacts, fragments, reviews, destination, repo, *,
         check_style(repo, pack.learning_style)
         current = (load_source(pack.path, repo, pack_paths=view, slug=pack.slug) if view else
                    load_source(pack.path, repo))
+        if candidate and not (view and view.candidate_pack):
+            for name in ('display-titles.json', 'selection.json'):
+                if str(pack.path.with_name(name)) not in current.inputs:
+                    raise ExplainError(f'후보 승인 입력 누락: {name}')
         if current != pack:
             raise ExplainError('입력 변경: 설명을 다시 검증하세요')
         destination = Path(destination).absolute()
@@ -50,6 +54,9 @@ def _verified_mapping(pack, artifacts, fragments, reviews, destination, repo, *,
             raise ExplainError('개인 명세 참조 hash 누락/불일치')
         recorded = {}
         for reference in references:
+            if output and output != view:
+                # The output attempt can also live under repo. Its physical names cannot be published.
+                output.source_file(reference['path'])
             path = view.source_file(reference['path']) if view else inside(Path(reference['path']), repo)
             if not path.is_file() or sha256(path) != reference['sha256']:
                 raise ExplainError('참조 자료 변경: ' + str(path))

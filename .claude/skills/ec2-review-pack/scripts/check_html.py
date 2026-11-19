@@ -52,6 +52,20 @@ def is_remote(url: str) -> bool:
     return url.strip().lower().startswith(REMOTE_PREFIXES)
 
 
+def srcset_urls(value: str):
+    """Collect candidate URLs. Commas within a URL (including data URIs) are literal."""
+    remaining = value
+    while remaining := remaining.lstrip(' ,\t\n\r\f'):
+        match = re.match(r'[^\t\n\r\f ]+', remaining)
+        url = match[0]
+        yield url.rstrip(',')
+        remaining = remaining[match.end():]
+        if not url.endswith(','):
+            # Descriptor separators are commas outside parentheses.
+            descriptors = re.match(r'(?:[^,(]|\([^)]*(?:\)|$))*(?:,|$)', remaining)
+            remaining = remaining[descriptors.end():]
+
+
 @dataclass
 class Container:
     id: str
@@ -123,16 +137,17 @@ class _Parser(HTMLParser):
             self.doc.hrefs.append(a["href"])
             if con is not None:
                 self.doc.containers[con].hrefs.append(a["href"])
-        # 원격 리소스: 모든 태그의 src, 모든 <link>의 href (<a href>는 broken_links 담당)
-        resource = a.get("src") or (a.get("href") if tag == "link" else None)
-        if resource:
+        resources = [a.get("src", "")]
+        if tag in ("link", "image", "use", "feimage"):
+            resources.append(a.get("href", a.get("xlink:href", "")))
+        if tag in ("img", "source"):
+            resources.extend(srcset_urls(a.get("srcset", "")))
+        for resource in filter(None, resources):
             url = urlsplit(resource)
-            if url.path and not (url.scheme or url.netloc):
+            if is_remote(resource):
+                self.doc.external_resources.append(resource)
+            elif url.path and not (url.scheme or url.netloc):
                 self.doc.local_resources.append(resource)
-        if is_remote(a.get("src", "")):
-            self.doc.external_resources.append(a["src"])
-        if tag == "link" and is_remote(a.get("href", "")):
-            self.doc.external_resources.append(a["href"])
         if tag in ("script", "style"):
             self.raw_tag = tag
             self.script_id = el_id if tag == "script" else None

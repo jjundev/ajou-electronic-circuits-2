@@ -91,6 +91,8 @@ class PackPaths:
             raise ValueError(f'상위 경로 금지: {path}')
         path = path if path.is_absolute() else self.repo / path
         relative = _relative(path, self.repo)
+        if _nfc(self.logical(path)) != _nfc(self.repo / relative):
+            raise ValueError(f'후보 경로 대신 공개 경로 필요: {path}')
         try:
             local = _relative(path, self.public_pack)
         except ValueError:

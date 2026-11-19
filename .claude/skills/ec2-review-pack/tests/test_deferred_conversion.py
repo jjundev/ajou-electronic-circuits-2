@@ -194,3 +194,26 @@ def test_candidate_note_verifies_assembled_image_and_stylesheet(tmp_path):
     markup = '<html lang="ko"><link rel="stylesheet" href="missing.css"><img src="plot.svg"></html>'
     errors = check_common(parse_html(markup), markup, view.work_file('note.html'), pack_paths=view)
     assert {'missing.css', 'plot.svg'} == {p.detail for p in errors if p.code == 'missing-resource'}
+
+
+def test_candidate_svg_and_srcset_resources_use_view(tmp_path):
+    from check_html import check_common, parse_html
+    from pack_paths import PackPaths
+    repo = tmp_path/'repo'
+    public = repo/'복습노트/0909'
+    public.mkdir(parents=True)
+    paths = PackPaths(repo, public, tmp_path/'candidate')
+    paths.work_pack.mkdir()
+    missing = {'external.svg#plot', 'old.svg', 'large.png', 'fallback.png'}
+    for name in missing:
+        (public/name.split('#')[0]).touch()
+    paths.work_file('small.png').touch()
+    markup = """<html lang="ko"><svg><image href="external.svg#plot"/><image xlink:href="old.svg"/>
+        <use href="#plot"/><image href="data:image/png;base64,AAAA"/></svg>
+        <picture><source srcset="small.png 300w, large.png 900w">
+        <img srcset="data:image/png;base64,AAAA 1x, fallback.png 2x"></picture></html>"""
+    errors = check_common(parse_html(markup), markup, paths.work_file('note.html'), pack_paths=paths)
+    assert {p.detail for p in errors if p.code == 'missing-resource'} == missing
+    for name in missing:
+        paths.work_file(name.split('#')[0]).touch()
+    assert not check_common(parse_html(markup), markup, paths.work_file('note.html'), pack_paths=paths)

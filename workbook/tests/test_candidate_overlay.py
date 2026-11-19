@@ -1,3 +1,4 @@
+import hashlib
 import importlib.util
 import json
 from pathlib import Path
@@ -15,6 +16,16 @@ from test_answer_overlay import _cli
 
 def moved_bundle(tmp_path):
     bundle = OverlayBundle(tmp_path)
+    assets = bundle.stage / '.assets'
+    titles, selection = assets/'display-titles.json', assets/'selection.json'
+    dump(titles, {pid:'Approved title' for pid in bundle.ids})
+    rows = [dict(id=pid, priority='core', learning_goals=['gain'], estimated_minutes=10, subpart_count=1)
+            for pid in bundle.ids]
+    dump(selection, dict(schema_version=2, policy='exam-first-v2', problems=rows, workload=dict(estimated_minutes=20)))
+    inputs = [bundle.source_files[0], titles, selection, *bundle.source_files[1:]]
+    bundle.manifest['inputs'] = [str(p) for p in inputs]
+    bundle.manifest['source_sha256'] = hashlib.sha256(''.join(digest(p) for p in inputs).encode()).hexdigest()
+    bundle.overlay['source_inputs'] = {p.relative_to(bundle.repo).as_posix(): digest(p) for p in inputs}
     ref = bundle.stage / '.assets/reference.md'
     ref.write_text('Reviewed reference')
     bundle.validation['references'].append({'path': str(ref), 'sha256': digest(ref)})
