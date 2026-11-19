@@ -69,6 +69,9 @@ def parser():
     c.add_argument('--redo-note',type=absolute)
     command('status'); c=command('next'); c.add_argument('--slots',required=True,type=int)
     t=sub.add_parser('task'); ts=t.add_subparsers(dest='task_command',required=True)
+    c=command('accept-batch',ts); c.add_argument('--submissions',required=True,type=absolute)
+    c=command('advance'); c.add_argument('--max-actions',required=True,type=int)
+    c=command('resume'); c.add_argument('--stopped-attempts',required=True,type=absolute)
     for name in ('claim','bind','build-receipt','accept','check','release','fix','authorize-fix'):
         c=command(name,ts)
         if name=='authorize-fix': c.add_argument('--authorization',required=True,type=absolute); continue
@@ -105,6 +108,32 @@ def quiet_runtime():
             for fd,original in zip((1,2),saved): os.dup2(original,fd); os.close(original)
 
 
+def count_cli(a):
+    import pack_flow as f
+    from pack_actions import cli_trace_directory
+    if not a.run or not (a.run/'run-status.json').exists():
+        return
+    if (a.command in ('status','next') or getattr(a,'task_command',None)=='check') and not os.environ.get('EC2_CLI_TRACE_DIR'):
+        return
+    state = f.load_state(a.run)
+    if state.get('workflow') == 'parallel':
+        directory = cli_trace_directory(state)
+        directory.mkdir(parents=True, exist_ok=True)
+        command = 'task '+a.task_command if a.command == 'task' else a.command
+        f._atomic_json(directory/(str(uuid4())+'.json'), dict(command=command, at=f.utc_now()))
+
+
+def dispatch_result(run, data):
+    import pack_flow as f
+    state = f.inspect_state(run)
+    directory = run/'work/dispatch'
+    directory.mkdir(parents=True, exist_ok=True)
+    path = directory/(str(uuid4())+'.json')
+    result = dict(status=state['status'],phase=state['phase'],**data,details_path=str(path))
+    f._atomic_json(path,result)
+    return result, 0
+
+
 def execute(a):
     import pack_flow as f
     run=a.run
@@ -122,6 +151,16 @@ def execute(a):
             state=f.inspect_state(run)
             return dict(status=state['status'],phase=state['phase'],next=extra,details_path=str(run/'run-status.json'),
                         counts={'carried':len(seeded['carried']),'rejected':len(seeded['rejected']),'redo':len(seeded['redo'])}),0
+    elif a.command=='advance':
+        from pack_actions import advance_actions
+        return dispatch_result(run, advance_actions(run, max_actions=a.max_actions))
+    elif a.command=='resume':
+        from pack_actions import resume_run
+        return dispatch_result(run, resume_run(run, stopped_attempts=f._read(a.stopped_attempts)))
+    elif getattr(a,'task_command',None)=='accept-batch':
+        from pack_parallel import accept_batch
+        submissions=json.loads(a.submissions.read_text(encoding='utf-8'))
+        return dispatch_result(run, accept_batch(run, submissions))
     elif a.command=='status': pass
     elif a.command=='next': extra=f.next_work(run,slots=a.slots)
     elif a.command=='task':
@@ -131,8 +170,10 @@ def execute(a):
         elif a.task_command=='build-receipt':
             from pack_receipts import build_receipt
             state = f.inspect_state(run)
-            build_receipt(state,a.task,a.attempt,a.submission)
-            return dict(status='ok',details_path=f._read(state['tasks'][a.task]['brief'])['receipt']),0
+            produced = build_receipt(state,a.task,a.attempt,a.submission)
+            path = Path(f._read(state['tasks'][a.task]['brief'])['receipt'])
+            f.record_completed_receipt(run,a.task,a.attempt,path,produced)
+            return dict(status='ok',details_path=str(path)),0
         elif a.task_command=='check':
             # Read-only: the worker's pre-return check runs accept's validation without state changes.
             result=f.check_task(run,a.task,a.attempt,a.receipt)
@@ -152,8 +193,9 @@ def execute(a):
             path=actions.write_report(run)
             state=f.inspect_state(run)
             next_step = f.next_work(run, slots=0)
-            pending = next_step['kind'] == 'concept_check'
-            return dict(status='ready' if pending else state['status'], phase=state['phase'],
+            pending = (next_step['kind'] == 'concept_check' or (state.get('concept_contract') and
+                       state.get('concept_check_enabled') and f.concept_check_result(state) is None))
+            return dict(status='ready' if next_step['kind']=='concept_check' else state['status'], phase=state['phase'],
                         next=next_step if pending else None,
                         counts={'partial': int(pending or state['status'] != 'complete')}, details_path=str(path)), 0
     state=f.inspect_state(run)
@@ -171,7 +213,9 @@ def main(argv: list[str] | None=None) -> int:
     with quiet_runtime() as noise:
         try:
             a=parser().parse_args(argv)
+            if a.command != 'init': count_cli(a)
             result,code=execute(a)
+            if a.command == 'init' and code == 0: count_cli(a)
         except HelpRequested as exc:
             result,code=dict(status='help',details=str(exc)[:1000]),0
         except UsageError:

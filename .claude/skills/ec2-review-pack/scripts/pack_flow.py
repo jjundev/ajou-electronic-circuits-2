@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from contextlib import contextmanager
+from datetime import datetime, timezone
 import copy
 import hashlib
 import json
@@ -189,6 +190,88 @@ def load_state(run: Path) -> dict:
     return state
 
 
+def utc_now():
+    return datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z')
+
+
+def utc_time(value):
+    if not isinstance(value, str):
+        raise FlowError('UTC event timestamp required')
+    dt = datetime.fromisoformat(value)
+    if dt.utcoffset() != timezone.utc.utcoffset(dt):
+        raise FlowError('UTC event timestamp required')
+    return dt
+
+
+def parallel_state(run):
+    state = load_state(run)
+    if state.get('workflow') != 'parallel':
+        raise FlowError('parallel RUN required; use next for the existing legacy contract')
+    return state
+
+
+def event(state, name, tid, attempt=None, *, at=None, **fields):
+    state.setdefault('events', []).append(dict(event=name, task_id=tid, attempt=attempt,
+                                               at=at or utc_now(), **fields))
+
+
+def record_completed_receipt(run, tid, attempt, path, produced):
+    from pack_parallel import transact
+    payload = path.read_bytes()
+    if json.loads(payload) != produced:
+        raise FlowError('receipt changed after validation')
+    digest = hashlib.sha256(payload).hexdigest()
+    def apply(state):
+        _attempt(state['tasks'][tid], attempt)
+        if _sha(path) != digest:
+            raise FlowError('receipt changed after validation')
+        already = any(e.get('receipt_sha256') == digest and e['event']=='completed'
+                      for e in state.get('events', []))
+        if not already:
+            event(state,'completed',tid,attempt,receipt_sha256=digest)
+        return state
+    transact(run, apply)
+
+
+def record_transitions(previous, state):
+    from pack_findings import blocked_reason
+    rows = {**state['tasks'], **state['actions']}
+    now = utc_now()
+    for tid, row in rows.items():
+        old = _record(previous, tid) if previous else {}
+        status, attempt = row['status'], row.get('attempt')
+        superseded = old.get('status') == 'done' and (
+            status != 'done' or old.get('attempt') != attempt)
+        if superseded or (status == 'stale' and old.get('status') != 'stale'):
+            event(state, 'invalidated', tid, old.get('attempt'), at=now)
+        if status in ('pending','stale') and not row.get('invalidated_active'):
+            eligible = (not state.get('stale_inputs') and state['status'] not in ('blocked','withheld','recovery_required')
+                        and all(_done(state, dep) for dep in row.get('dependencies', []))
+                        and not blocked_reason(state, tid))
+            if eligible and not old.get('ready_at'):
+                row['ready_at'] = now
+                event(state, 'ready', tid, at=now)
+            elif not eligible:
+                row.pop('ready_at', None)
+        if status in ('claimed','running') and attempt != old.get('attempt'):
+            ready = old.get('ready_at')
+            fields = {'brief_bytes':Path(row['brief']).stat().st_size} if row.get('brief') else {}
+            event(state, 'claimed', tid, attempt, at=now, ready_at=ready, **fields)
+            row.pop('ready_at', None)
+        if (attempt and status in ('done','needs_fix','blocked','failed')
+                and (status,attempt) != (old.get('status'),old.get('attempt'))):
+            if old.get('attempt') == attempt and old.get('status') in ('claimed','running','recovery_required'):
+                digest = None
+                receipt = row.get('receipt')
+                if receipt and row.get('brief'):
+                    path = _read(row['brief'])['receipt']
+                    digest = next((r['sha256'] for r in receipt['verified_files'] if r['path']==path),None)
+                if not digest or not any(e.get('receipt_sha256')==digest and e['event']=='completed'
+                                         for e in state.get('events', [])):
+                    event(state, 'completed', tid, attempt, at=row.get('completed_at') or now, receipt_sha256=digest)
+                event(state, 'accepted', tid, attempt, at=now, receipt_sha256=digest)
+
+
 def update_state(run: Path, expected_revision: int, change: Callable[[dict], dict]) -> dict:
     run = Path(run).resolve()
     with _locked(run):
@@ -207,6 +290,8 @@ def update_state(run: Path, expected_revision: int, change: Callable[[dict], dic
         for field in ("run_id", "repo", "run", "range", "schema_version", "revision"):
             if changed[field] != state[field]:
                 raise FlowError(f"{run}: immutable field changed: {field}")
+        if state.get("workflow") == "parallel":
+            record_transitions(state, changed)
         changed["revision"] = expected_revision + 1
         _atomic_json(run / "run-status.json", changed)
         return changed
@@ -290,6 +375,8 @@ def init_run(repo: Path, run: Path, range_: str, *,
         else:
             refresh_tasks(state)
         write_briefs(state)
+        if workflow == "parallel":
+            record_transitions(None, state)
         _validate(state, run)
         _atomic_json(run / "run-status.json", state)
         return state

@@ -4,7 +4,9 @@
 
 공통 조립·검사는 통합 일곱 구역을 검증하고, 본문의 `data-answer-step`/`data-answer-final` 선택 요소에서 overlay를 추출한다. 새 원고에 구형 route를 요구하지 않는다. 표지 누락·검토 실패 시 설명/답안 발행을 withheld로 보고하며 검사 우회·숨긴 중복 핵심·구버전 승인을 사용하지 않는다. 과거 발행 자료의 구형 추출 검증은 새 저작 승인과 구분한다.
 
-실행 순서는 명세 snapshot → 범위/manifest → 작성/조립 → 문제지만 빌드 → 부모 내용/화면/MD/개인화 감사 + 답안 링크 예비 검사 + 변환 SVG 독립 화면 검토 → 자식 코디네이터의 발행 준비 → 부모의 설명 발행 → 승인 overlay 답안 빌드 → PDF 화면 검토 → 부모의 답안 발행 → 유예 없는 최종 검사다.
+병렬 RUN은 선발과 stage-problem-index가 승인된 직후 explain-author와 explain-blind를 서로 다른 시도로 배정한다. 두 작업자는 브리프가 봉인한 문제·그림으로 시작한다. 각 시도의 영수증을 일괄 인계하고 조정자가 채택된 전체 독립 풀이와 설명 조각으로 기존 네 검토를 수행한다. 조정자·PDF·최종 발행은 그래프에 표시된 직접 입력 및 승인 뒤에만 열린다. 중단된 검산은 [같은 RUN 재개](runner-contract.md#같은-병렬-run-재개)의 증거로 이어간다.
+
+레거시 실행 순서는 명세 snapshot → 범위/manifest → 작성/조립 → 문제지만 빌드 → 부모 내용/화면/MD/개인화 감사 + 답안 링크 예비 검사 + 변환 SVG 독립 화면 검토 → 자식 코디네이터의 발행 준비 → 부모의 설명 발행 → 승인 overlay 답안 빌드 → PDF 화면 검토 → 부모의 답안 발행 → 유예 없는 최종 검사다.
 
 1. 부모의 기계 예비 검사·내용 리뷰·브라우저·MD 변환과 모든 topic ID의 개인화 감사를 끝낸다. `<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md`의 실제 절대 경로와 manifest `learning_style` snapshot이 필수 입력이다.
 2. 문제가 0개면 `skipped-no-problems`다. 자식·PDF 없이 현재 snapshot·모든 토픽 감사·유예 없는 최종 노트 검사를 수행한다.

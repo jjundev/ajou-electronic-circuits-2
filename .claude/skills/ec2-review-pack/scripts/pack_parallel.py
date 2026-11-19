@@ -583,45 +583,174 @@ def adopt_worker(state, task, receipt):
 
 
 
-def accept_worker(run, tid, attempt, receipt_path):
-    from pack_receipts import verify_receipt_files
-    snapshot = f.inspect_state(run)
+def prepare_worker(snapshot, tid, attempt, receipt_path):
     task = snapshot['tasks'][tid]
     f._attempt(task, attempt)
     receipt = validate_worker(snapshot, task, receipt_path)
     adopt_worker(snapshot, task, receipt)
+    return receipt
+
+
+def install_worker(current, snapshot, tid, receipt):
+    row = current['tasks'][tid]
+    task = snapshot['tasks'][tid]
+    if 'approval_policy' in receipt:
+        from pack_approvals import review_policy
+        if receipt['approval_policy'] != review_policy(row['role']):
+            raise f.FlowError('target review policy changed during adoption')
+    if environment := receipt.get('render_environment'):
+        from pack_approvals import environment_current
+        if not environment_current(current, f._read(row['brief']), f._read(environment['path'])):
+            raise f.FlowError('render environment changed during adoption')
+    row.update(status=task['status'], receipt=receipt)
+    if row['status'] == 'done' or (tid in findings.REVIEW_ROLES and row['status'] == 'needs_fix'):
+        row['artifacts'] = task['artifacts']
+        from pack_approvals import adopt_targets
+        adopt_targets(current, row, receipt)
+        if tid in findings.REVIEW_ROLES:
+            register_review(current, row, receipt)
+            if tid in findings.NOTE_REVIEWS:
+                findings.join_reviews(current)
+        else:
+            row['repair_bindings'] = {r['id']: r['pending_request']
+                                      for r in f._read(row['brief']).get('repair_findings', [])}
+        keys = {'scope-draft': ('scope_sections', 'link_sections'), 'selection': ('selected_ids',)}.get(tid, ())
+        for key in keys:
+            current[key] = snapshot[key]
+    return f.refresh_tasks(current)
+
+
+def accept_worker(run, tid, attempt, receipt_path):
+    from pack_receipts import verify_receipt_files
+    snapshot = f.inspect_state(run)
+    receipt = prepare_worker(snapshot, tid, attempt, receipt_path)
+
     def apply(current):
         f._current(current)
         row = current['tasks'][tid]
         f._attempt(row, attempt)
-        version = proof(current, spec_for(current, tid))
-        if version != task['input_version'] or verify_receipt_files(receipt):
+        if proof(current, spec_for(current, tid)) != snapshot['tasks'][tid]['input_version'] or verify_receipt_files(receipt):
             raise f.FlowError('worker input or file version changed during adoption')
-        if 'approval_policy' in receipt:
-            from pack_approvals import review_policy
-            if receipt['approval_policy'] != review_policy(row['role']):
-                raise f.FlowError('target review policy changed during adoption')
-        if environment := receipt.get('render_environment'):
-            from pack_approvals import environment_current
-            if not environment_current(current, f._read(row['brief']), f._read(environment['path'])):
-                raise f.FlowError('render environment changed during adoption')
-        row.update(status=task['status'], receipt=receipt)
-        if row['status'] == 'done' or (tid in findings.REVIEW_ROLES and row['status'] == 'needs_fix'):
-            row['artifacts'] = task['artifacts']
-            from pack_approvals import adopt_targets
-            adopt_targets(current, row, receipt)
-            if tid in findings.REVIEW_ROLES:
-                register_review(current, row, receipt)
-                if tid in findings.NOTE_REVIEWS:
-                    findings.join_reviews(current)
-            else:
-                row['repair_bindings'] = {r['id']: r['pending_request']
-                                          for r in f._read(row['brief']).get('repair_findings', [])}
-            keys = {'scope-draft': ('scope_sections', 'link_sections'), 'selection': ('selected_ids',)}.get(tid, ())
-            for key in keys:
-                current[key] = snapshot[key]
-        return f.refresh_tasks(current)
+        return install_worker(current, snapshot, tid, receipt)
     return transact(run, apply)
+
+
+def file_identity(path):
+    stat = Path(path).stat()
+    return stat.st_dev, stat.st_ino, stat.st_size, stat.st_mtime_ns, stat.st_ctime_ns
+
+
+def witness(records):
+    """Hash bytes outside the lock, pin the exact file identities spanning that read."""
+    result = {}
+    for path, digest in records.items():
+        identity = file_identity(path)
+        if f._sha(Path(path)) != digest or file_identity(path) != identity:
+            raise f.FlowError('evidence changed during validation: ' + path)
+        result[path] = identity
+    return result
+
+
+def prepare_batch_item(state, item):
+    if not isinstance(item, dict) or any(not isinstance(item.get(k), str) or not item[k]
+                                        for k in ('task_id', 'attempt', 'receipt')):
+        raise f.FlowError('invalid submission')
+    tid, attempt = item['task_id'], item['attempt']
+    path = Path(item['receipt'])
+    if not path.is_absolute():
+        raise f.FlowError('absolute receipt path required')
+    task = state['tasks'].get(tid, {})
+    if task.get('attempt') != attempt or task.get('invalidated_active') or task.get('status') == 'stale':
+        raise f.FlowError('inactive_attempt')
+    if str(path) != f._read(task['brief'])['receipt']:
+        raise f.FlowError('receipt must match the claimed brief')
+    if task['status'] not in ('claimed', 'running'):
+        saved = task.get('receipt') or {}
+        pinned = {r['path']:r['sha256'] for r in saved.get('verified_files', [])}
+        if pinned.get(str(path)) == f._sha(path):
+            return state, 'already_accepted', pinned
+        raise f.FlowError('different or inactive receipt')
+    snapshot = copy.deepcopy(state)
+    receipt = prepare_worker(snapshot, tid, attempt, path)
+    # A rejected item cannot leave partial changes in the rest of this batch.
+    candidate = install_worker(copy.deepcopy(state), snapshot, tid, receipt)
+    status = candidate['tasks'][tid]['status']
+    if status != receipt['task_status']:
+        raise f.FlowError('input version changed during adoption')
+    pinned = dict(state['hashes'])
+    pinned.update({r['path']:r['sha256'] for r in receipt['verified_files']})
+    for dep in ancestors(state, spec_for(state, tid)).values():
+        source = dep.get('receipt') or dep
+        pinned.update({r['path']:r['sha256'] for r in source['verified_files']})
+    return candidate, 'accepted', pinned
+
+
+def accept_batch(run: Path, submissions: list[dict]) -> dict:
+    return _accept_batch(run, submissions)
+
+
+def _accept_batch(run, submissions, *, stop=None):
+    """Prepare independent receipts privately, then publish one revision or retry."""
+    if not isinstance(submissions, list):
+        raise f.FlowError('submissions must be an array')
+    for retry in range(24):
+        original = f.parallel_state(run)
+        state = f._current(copy.deepcopy(original))
+        items, bindings, identities = [], [], {}
+        for entry in submissions:
+            item = {k:entry.get(k) for k in ('task_id','attempt')} if isinstance(entry, dict) else {}
+            try:
+                candidate, status, records = prepare_batch_item(state, entry)
+                if stop:
+                    if candidate is state:
+                        candidate = copy.deepcopy(state)
+                    from pack_actions import host_stop, record_resume
+                    path, signature, data = stop
+                    if host_stop(state,state['tasks'][item['task_id']],path) != data:
+                        raise f.FlowError('stop evidence changed')
+                    records[str(path)] = signature
+                    record_resume(candidate,item['task_id'],item['attempt'],'reused',path,signature,data.get('host_gap'))
+                stamps = witness(records)
+                if any(identities[p]!=stamp for p,stamp in stamps.items() if p in identities):
+                    raise f.FlowError('shared evidence changed during batch')
+                identities.update(stamps)
+                state = candidate
+                if status == 'accepted':
+                    bindings.append((item['task_id'], item['attempt'], state['tasks'][item['task_id']]['input_version']))
+                item['status'] = status
+            except (OSError, ValueError, TypeError, KeyError) as exc:
+                item.update(status='rejected', error_code='inactive_attempt' if str(exc)=='inactive_attempt'
+                            else 'validation_failed', reason=str(exc))
+            items.append(item)
+
+        def commit(current):
+            for tid, attempt, version in bindings:
+                row = current['tasks'][tid]
+                f._attempt(row, attempt)
+                if row['input_version'] != version or proof(current, spec_for(current, tid)) != version:
+                    raise f.FlowError('batch snapshot changed')
+                receipt = state['tasks'][tid]['receipt']
+                if environment := receipt.get('render_environment'):
+                    from pack_approvals import environment_current
+                    if not environment_current(current,f._read(row['brief']),f._read(environment['path'])):
+                        raise f.FlowError('batch snapshot changed')
+            if any(file_identity(path) != stamp for path,stamp in identities.items()):
+                raise f.FlowError('batch snapshot changed')
+            return state
+        try:
+            if bindings or state != original:
+                f.update_state(run, original['revision'], commit)
+            else:
+                current = f.load_state(run)
+                if current['revision'] != original['revision']:
+                    raise f.FlowError('revision conflict')
+                commit(current)
+            return dict(items=items, next=f.next_work(run, slots=0))
+        except (OSError, f.FlowError) as exc:
+            if retry == 23 or not any(reason in str(exc) for reason in
+                                      ('revision conflict','lock busy','batch snapshot changed','No such file','brief changed after claim')):
+                raise
+            time.sleep(0.01 * (retry + 1))
 
 
 def seal_questions(state, paths, root, slug):
@@ -1063,7 +1192,7 @@ def stopped_candidate(state, tid, attempt, root):
     if record['status'] == 'done' and verify_receipt_files(record):
         raise f.FlowError('completed attempt files changed')
     fields = ('status', 'error_code', 'detail', 'artifacts', 'pack', 'candidate_root', 'questions',
-              'source_inputs', 'verified_files', 'converted_assets')
+              'source_inputs', 'verified_files', 'converted_assets', 'completed_at')
     return {key: record[key] for key in fields if key in record}
 
 
@@ -1148,7 +1277,7 @@ def run_action(run, tid, *, reconcile=False):
                 result = dict(status='done', **outputs)
             except Exception as exc:
                 result = dict(status='failed', error_code='execution_failed', detail=str(exc))
-            f._atomic_json(root/'stopped.json', dict(result, attempt=attempt))
+            f._atomic_json(root/'stopped.json', dict(result, attempt=attempt, task_id=tid, input_version=state['actions'][tid]['input_version'], completed_at=f.utc_now()))
         return transact(run, commit)['actions'][tid]
 
 

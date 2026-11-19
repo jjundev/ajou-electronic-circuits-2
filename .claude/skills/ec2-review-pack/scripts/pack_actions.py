@@ -10,6 +10,7 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
+import time
 from uuid import uuid4
 
 import pack_flow as f
@@ -551,7 +552,10 @@ def write_report(run: Path) -> Path:
         'files':inventory_pack(Path(state['repo']),state['range']), 'checks':state['actions'],
         'backups':state['backups'],'recovery':state['recovery'],'publication':state['publication'],
         'concept_check': f.concept_progress(state),
-        **({'findings':state.get('findings', {})} if state.get('workflow') == 'parallel' else {}),
+        **({'findings':state.get('findings', {}), 'metrics':runner_metrics(state),
+            'concept_stages':{tid:f._record(state,tid).get('status','pending')
+                              for tid in ('concept-draft','concept-review','concept-publish')}
+           } if state.get('workflow') == 'parallel' else {}),
         'seeded_from':state.get('seeded_from')})
     return report
 
@@ -732,3 +736,381 @@ def candidate_action(state, action, paths, attempt, *, audit=None, explain_run=N
                 raise f.FlowError('empty candidate PDF')
         return [pdf]
     raise f.FlowError(f'unknown candidate producer: {action}')
+
+
+def blocker_ids(state, graph):
+    blocked = [tid for tid,_ in graph.get('blocked', [])]
+    failed = [tid for tid in graph.get('actions', []) if state['actions'][tid]['status'] == 'failed']
+    return list(dict.fromkeys(blocked + failed))
+
+
+def advance_actions(run: Path, *, max_actions: int) -> dict:
+    """Run bounded deterministic work; return every available human gate to the host."""
+    f.parallel_state(run)
+    if type(max_actions) is not int or max_actions < 0:
+        raise f.FlowError('max-actions must be nonnegative')
+    executed = []
+    while True:
+        nxt = f.next_work(run, slots=2**31)
+        humans = nxt.get('dispatch', []) + nxt.get('review_locally', [])
+        blockers = blocker_ids(f.load_state(run), nxt)
+        active = [tid for tid,why in nxt.get('waiting', []) if why == 'active attempt']
+        actions = nxt.get('actions', [])
+        if humans or blockers or not actions or len(executed) == max_actions:
+            return dict(executed=executed, waiting_for=humans or blockers or active, blocked=blockers, next=nxt)
+        tid = actions[0]
+        record = run_action(run, tid)
+        executed.append(tid)
+        if record['status'] != 'done':
+            return dict(executed=executed, waiting_for=[tid], blocked=[tid],
+                        error_code=record.get('error_code'), next=f.next_work(run, slots=0))
+
+
+def checked_stop_path(path, expected):
+    path, expected = Path(path), Path(expected)
+    if not path.is_absolute() or path != expected or path.resolve() != expected or not path.is_file():
+        raise f.FlowError('expected owned stop evidence: ' + str(expected))
+    return path
+
+
+def host_stop(state, row, path):
+    attempt, tid = row['attempt'], row['id']
+    path = checked_stop_path(path, Path(state['run'])/'host-stops'/(attempt+'.json'))
+    data = f._read(path)
+    if 'agent_id' not in data or (data.get('run_id'), data.get('task_id'), data.get('attempt'), data.get('agent_id')) != (
+            state['run_id'], tid, attempt, row.get('agent_id')):
+        raise f.FlowError('host stop identity mismatch')
+    if data.get('status') not in ('completed','stopped'):
+        raise f.FlowError('host must confirm a terminal attempt')
+    if 'host_gap' in data:
+        gap = data['host_gap']
+        if not f.utc_time(gap['interrupted']) <= f.utc_time(gap['resumed']) <= f.utc_time(f.utc_now()):
+            raise f.FlowError('invalid confirmed host interval')
+    return data
+
+
+def resume_worker(run, state, row, path):
+    from pack_parallel import transact
+    tid, attempt = row['id'], row['attempt']
+    data = host_stop(state, row, path)
+    signature = f._sha(path)
+    if data['status'] == 'completed':
+        # Completion cannot be downgraded to an unverified release.
+        if data.get('receipt') != f._read(row['brief'])['receipt']:
+            raise f.FlowError('completion must identify this worker receipt')
+        from pack_parallel import _accept_batch
+        result = _accept_batch(run, [dict(task_id=tid, attempt=attempt, receipt=data['receipt'])],
+                               stop=(path, signature, data))['items'][0]
+        if result['status'] == 'rejected':
+            raise f.FlowError(result['reason'])
+        return 'reused'
+    outcome = 'released'
+
+    def apply(current):
+        task = current['tasks'][tid]
+        if task.get('attempt') != attempt or host_stop(current, task, path) != data or f._sha(path) != signature:
+            raise f.FlowError('inactive_attempt')
+        if task['status'] not in ('claimed','running') and not task.get('invalidated_active'):
+            raise f.FlowError('inactive_attempt')
+        task.setdefault('history', []).append(dict(attempt=attempt, agent_id=task.get('agent_id'),
+                                                   reason='host confirmed stopped', evidence=str(path)))
+        task.pop('invalidated_active', None)
+        task.update(status='pending', attempt=None, agent_id=None, receipt=None)
+        record_resume(current, tid, attempt, outcome, path, signature, data.get('host_gap'))
+        return current
+    transact(run, apply)
+    return outcome
+
+
+def record_resume(state, tid, attempt, outcome, path, digest, gap=None):
+    stops = state.setdefault('resumed_attempts', {})
+    if attempt in stops:
+        if stops[attempt]['sha256'] != digest:
+            raise f.FlowError('stop evidence changed')
+        return
+    stops[attempt] = dict(task_id=tid, outcome=outcome, path=str(path), sha256=digest)
+    if gap:
+        f.event(state, 'interrupted', tid, attempt, at=gap['interrupted'], host_gap=gap)
+    else:
+        f.event(state, 'interrupted', tid, attempt, observed='stop evidence verified')
+    f.event(state, 'resumed', tid, attempt, at=gap['resumed'] if gap else None)
+    if outcome == 'reused':
+        f.event(state, 'reused', tid, attempt)
+
+
+def verify_machine_stop(state, row, root, path):
+    from pack_receipts import verify_receipt_files
+    stop = f._read(path)
+    if stop.get('attempt') != row['attempt'] or stop.get('task_id',row['id']) != row['id']:
+        raise f.FlowError('machine stop identity mismatch')
+    if stop.get('input_version', row['input_version']) != row['input_version']:
+        raise f.FlowError('machine stop input version mismatch')
+    if stop.get('status') == 'failed':
+        return
+    if stop.get('status') != 'done' or not stop.get('verified_files') or verify_receipt_files(stop):
+        raise f.FlowError('completed machine evidence missing or changed')
+    if stop.get('completed_at'):
+        f.utc_time(stop['completed_at'])
+    evidence = {r['path']:r['sha256'] for r in stop['verified_files']}
+    artifacts = stop.get('artifacts', {})
+    required = {
+        'candidate-index': ('candidates.json','catalog/index.json'),
+        'render-preflight': ('render-preflight.json','render-preflight.pdf'),
+        'concept-draft': ('source.json',), 'concept-publish': ('concept-check-result.json',),
+        'precheck': ('check-findings.json',), 'structural-precheck': ('check-findings.json',),
+        'assemble-note': ('note',), 'stage-problem-index': ('questions.json',),
+        'build-answers': ('pdf',), 'explain-verify': ('overlay',)
+    }
+    if not set(required.get(row['id'], ())) <= artifacts.keys():
+        raise f.FlowError('required machine artifacts missing')
+    owned = list(artifacts.values()) + list(stop.get('questions', []))
+    pack = stop.get('pack', {})
+    if row['id'] in ('build-problems','convert-md') and not pack.get('files'):
+        raise f.FlowError('completed candidate output missing')
+    if pack:
+        from pack_paths import checked_file
+        for name, digest in pack['files'].items():
+            target = checked_file(Path(pack['root']), name)
+            if evidence.get(str(target)) != digest:
+                raise f.FlowError('candidate inventory differs from verified outputs')
+            owned.append(str(target))
+    if not owned or any(p not in evidence or not Path(p).resolve().is_relative_to(root) for p in owned):
+        raise f.FlowError('machine artifacts must be verified files inside its attempt')
+    # Absolute outputs used by future consumers must point into the verified attempt.
+    if 'candidate_root' in stop and stop['candidate_root'] != pack.get('root'):
+        raise f.FlowError('unbound candidate root')
+    if row['id'] == 'convert-md':
+        converted = stop.get('converted_assets', {})
+        if not converted.get('md') or converted['md']['path'] not in owned:
+            raise f.FlowError('missing converted MD')
+        if any(item['path'] not in owned or evidence[item['path']] != item['sha256']
+               for item in [converted['md'], *converted['svgs']]):
+            raise f.FlowError('unverified converted assets')
+
+
+def resume_machine(run, state, row, path):
+    import pack_parallel as parallel
+    tid, attempt = row['id'], row['attempt']
+    root = Path(run)/'attempts'/tid/attempt
+    if root != Path(row['attempt_dir']):
+        raise f.FlowError('machine attempt ownership mismatch')
+    expected = root/'stopped.json'
+    if tid == 'publish-pack':
+        expected = root/'publication/journal.json'
+    elif tid == 'concept-publish' and path == Path(run)/'concept-check-result.json':
+        expected = path
+    supplied = path
+    attestation = None
+    if path == Path(run)/'host-stops'/(attempt+'.json'):
+        attestation = host_stop(state,row,path)
+        if attestation['status'] == 'completed':
+            path = Path(attestation['completion_evidence'])
+            if tid == 'concept-publish' and path == Path(run)/'concept-check-result.json':
+                expected = path
+            checked_stop_path(path,expected)
+        elif tid in ('publish-pack','concept-publish') or expected.exists():
+            raise f.FlowError('reconcile this attempt using its publication or stopped evidence')
+    else:
+        checked_stop_path(path, expected)
+    signature = f._sha(supplied)
+    with f._locked(root.parent):
+        def apply(current):
+            active = current['actions'][tid]
+            if active['attempt'] != attempt or Path(active['attempt_dir']) != root:
+                raise f.FlowError('inactive_attempt')
+            if f._sha(supplied) != signature:
+                raise f.FlowError('stop evidence changed')
+            gap = attestation.get('host_gap') if attestation else None
+            if attestation and attestation['status'] == 'stopped':
+                if active['status'] not in ('running','recovery_required','stale') or expected.exists():
+                    raise f.FlowError('inactive or completed machine attempt')
+                active.setdefault('history', []).append({k:v for k,v in active.items() if k != 'history'})
+                active.pop('invalidated_active', None)
+                active.update(status='pending',attempt=None,attempt_dir=None)
+                record_resume(current,tid,attempt,'released',supplied,signature,gap)
+                return current
+            if path == root/'stopped.json':
+                verify_machine_stop(current, active, root, path)
+            if active['status'] == 'done':
+                if not f._done(f._current(current), tid):
+                    raise f.FlowError('stale completion evidence')
+                if tid == 'concept-publish' and not f.concept_check_result(current):
+                    raise f.FlowError('unverified quiz publication')
+                result = active
+            elif active['status'] in ('running','recovery_required','stale'):
+                if tid == 'publish-pack':
+                    result = parallel.publish(current, parallel.spec_for(current,tid), attempt, root, recover=True)
+                    if result.get('publication_result', {}).get('status') == 'restored':
+                        current['status'] = 'ready'
+                elif tid == 'concept-publish':
+                    # Check the attached public inventory, current parent/review attempts,
+                    # blind certificate and atomic parent receipt before adopting any bytes.
+                    if active['status'] == 'recovery_required':
+                        active['status'] = 'running'
+                    f._current(current)
+                    parallel.same_attempt(current, tid, attempt)
+                    active['status'] = 'done'
+                    quiz = f.concept_check_result(current)
+                    active['status'] = 'running'
+                    if not quiz or quiz.get('status') != 'published' or quiz.get('action_attempt') != attempt:
+                        raise f.FlowError('unverified quiz publication')
+                    public_receipt = Path(run)/'concept-check-result.json'
+                    private = root/'concept-check-result.json'
+                    f._atomic_json(private, quiz)
+                    sources = parallel.file_records([public_receipt, *map(Path, quiz['files'])])
+                    result = dict(status='done', artifacts={'concept-check-result.json': str(private)},
+                                  source_inputs=sources, verified_files=parallel.file_records([private])+sources)
+                else:
+                    result = parallel.stopped_candidate(current, tid, attempt, root)
+                parallel.finish(current, tid, attempt, root, result)
+            else:
+                raise f.FlowError('inactive_attempt')
+            outcome = 'reused' if result['status'] == 'done' else 'released'
+            if result['status'] == 'recovery_required':
+                return current
+            record_resume(current, tid, attempt, outcome, supplied, signature, gap)
+            return current
+        if tid in ('publish-pack','concept-publish'):
+            # Date ownership and public proof must stay serialized with final state adoption.
+            updated = parallel.transact(run, apply)
+        else:
+            updated = resume_private_snapshot(run, tid, attempt, supplied, signature, apply)
+    if updated['actions'][tid]['status'] == 'recovery_required':
+        raise f.FlowError('publication still requires reconciliation')
+    return updated['resumed_attempts'][attempt]['outcome']
+
+
+def resume_private_snapshot(run, tid, attempt, path, digest, prepare):
+    import pack_parallel as parallel
+    # The caller owns the action lock. A CAS retry can only touch that same private attempt.
+    for retry in range(24):
+        state = f.load_state(run)
+        version = state['actions'][tid]['input_version']
+        revision = state['revision']
+        prepared = prepare(state)
+        row = prepared['actions'][tid]
+        records = {str(path):digest}
+        if row['status'] == 'done':
+            records.update(prepared['hashes'])
+            records.update({r['path']:r['sha256'] for r in row['verified_files']})
+            for dep in parallel.ancestors(prepared, parallel.spec_for(prepared,tid)).values():
+                records.update({r['path']:r['sha256'] for r in (dep.get('receipt') or dep)['verified_files']})
+        stamps = parallel.witness(records)
+        def adopt(current):
+            original = current['actions'][tid]
+            if original.get('attempt') != attempt or original['input_version'] != version:
+                raise f.FlowError('inactive_attempt')
+            if row['status']=='done' and parallel.proof(current,parallel.spec_for(current,tid)) != version:
+                raise f.FlowError('machine inputs superseded')
+            if any(parallel.file_identity(p) != stamp for p,stamp in stamps.items()):
+                raise f.FlowError('machine evidence changed while adopting')
+            return prepared
+        try:
+            return f.update_state(run,revision,adopt)
+        except f.FlowError as exc:
+            if retry == 23 or not any(word in str(exc) for word in ('revision conflict','lock busy')):
+                raise
+            time.sleep(0.01*(retry+1))
+
+
+def resume_run(run: Path, *, stopped_attempts: dict[str, str]) -> dict:
+    f.parallel_state(run)
+    if not isinstance(stopped_attempts, dict):
+        raise f.FlowError('stopped-attempts must map attempt IDs to evidence paths')
+    result = dict(reused=[], released=[], rejected=[])
+    for attempt, filename in stopped_attempts.items():
+        try:
+            state = f.parallel_state(run)
+            path = Path(filename)
+            prior = state.get('resumed_attempts', {}).get(attempt)
+            if prior and prior['outcome'] == 'released':
+                checked_stop_path(path, prior['path'])
+                if f._sha(path) != prior['sha256']:
+                    raise f.FlowError('stop evidence changed')
+                result['released'].append(prior['task_id'])
+                continue
+            rows = [row for row in (*state['tasks'].values(), *state['actions'].values())
+                    if row.get('attempt') == attempt and row['id'] != 'final-check']
+            if len(rows) != 1:
+                raise f.FlowError('inactive_attempt')
+            row, = rows
+            if row['id'] in state['tasks']:
+                outcome = resume_worker(run, state, row, path)
+            else:
+                outcome = resume_machine(run, state, row, path)
+            result[outcome].append(row['id'])
+        except (ValueError, OSError, KeyError, TypeError) as exc:
+            result['rejected'].append(dict(attempt=attempt, reason=str(exc)))
+    return dict(result, next=f.next_work(run, slots=0))
+
+
+def cli_trace_directory(state):
+    # An optional external directory keeps status/next/check wholly read-only in RUN.
+    external = os.environ.get('EC2_CLI_TRACE_DIR')
+    if external:
+        root = Path(external).resolve()
+        if root.is_relative_to(Path(state['run'])):
+            raise f.FlowError('external CLI trace must be outside RUN')
+        return root/state['run_id']
+    return Path(state['run'])/'work/cli-counts'
+
+
+def runner_metrics(state):
+    from collections import Counter
+    from itertools import combinations
+    from pack_graph import ready_work
+    events = state.get('events', [])
+    attempts = {}
+    gaps = set()
+    for item in events:
+        attempt, tid = item.get('attempt'), item['task_id']
+        if 'host_gap' in item:
+            gap = item['host_gap']
+            gaps.add((f.utc_time(gap['interrupted']), f.utc_time(gap['resumed'])))
+        if not attempt:
+            continue
+        # Grouped final-check and publish-pack can have the same attempt.
+        row = attempts.setdefault(attempt, dict(task_id=tid))
+        if row['task_id'] != tid:
+            continue
+        if item['event'] == 'completed':
+            row['completed'] = item['at']
+        else:
+            row.setdefault(item['event'], item['at'])
+        if item['event'] == 'claimed' and item.get('ready_at'):
+            row['ready_to_claim_seconds'] = (f.utc_time(item['at'])-f.utc_time(item['ready_at'])).total_seconds()
+    intervals = []
+    for attempt,row in attempts.items():
+        if 'claimed' in row and 'completed' in row:
+            start, end = map(f.utc_time, (row['claimed'],row['completed']))
+            row['claim_to_complete_seconds'] = (end-start).total_seconds()
+            intervals.append((attempt,start,end))
+    overlaps = []
+    for (a, start, end), (b, other_start, other_end) in combinations(intervals, 2):
+        duration = (min(end, other_end)-max(start, other_start)).total_seconds()
+        if duration > 0:
+            overlaps.append(dict(attempts=[a,b], seconds=duration))
+    merged = []
+    for start,end in sorted(gaps):
+        if merged and start <= merged[-1][1]:
+            merged[-1][1] = max(merged[-1][1], end)
+        else:
+            merged.append([start,end])
+    counters = Counter()
+    for directory in {Path(state['run'])/'work/cli-counts', cli_trace_directory(state)}:
+        for path in directory.glob('*.json'):
+            counters.update([f._read(path)['command']])
+    graph = ready_work(state, slots=2**31)
+    blocked = blocker_ids(state,graph)
+    details = dict(events=events, attempts=attempts, overlaps=overlaps,
+                   confirmed_host_gap_seconds=sum((b-a).total_seconds() for a,b in merged),
+                   brief_bytes=sum(item.get('brief_bytes',0) for item in events),
+                   cli_counts=dict(counters), cli_query_trace_enabled=bool(os.environ.get('EC2_CLI_TRACE_DIR')),
+                   blocker_ids=blocked, human_gates=graph['dispatch']+graph.get('review_locally', []))
+    for name in ('model_usage','host_tool_counts'):
+        observed = Path(state['run'])/'host-observations.json'
+        if observed.is_file():
+            record = f._read(observed)
+            if record.get('run_id') == state['run_id'] and name in record:
+                details[name] = record[name]
+    return details

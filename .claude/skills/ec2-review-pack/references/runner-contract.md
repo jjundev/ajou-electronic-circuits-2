@@ -16,7 +16,28 @@ owner 기본은 main이다. 도구가 실제 있는 주체를 전달하며 unava
 
 모든 응답은 `{schema_version,status,phase,next,counts,details_path,error_code}` JSON 한 개이며 개행 포함 Python `len(str)` **2,000자 이하**다. 접힌 목록은 counts와 details_path 또는 이미 아는 RUN/run-status.json에서 필요한 항목만 읽는다. exit 0은 정상/대기, 1은 실행·검증 실패, 2는 사용법 오류다. 장문 stdout/stderr/traceback은 RUN의 작업 로그에 남긴다. CLI 성공을 실제 검토 pass로 해석하지 않는다.
 
-## 배치·재개 — 메인과 역할 담당자
+## 병렬 실행 순서
+
+목적별로 새 RUN에 `init --workflow parallel` 또는 `init --workflow legacy`를 쓴다. 기본값은 legacy다. 기존 RUN은 저장한 계약을 따르며 workflow 필드가 없는 RUN은 legacy로 이어간다.
+
+1. `next --run <RUN> --slots <가용 수>`의 `actions`, `dispatch`, `review_locally`, `blocked`를 확인한다. `claim`의 지정 경로로 역할을 배정하고 실제 작업자 ID를 `bind`한다. 메인과 자식 조정자가 쓴 슬롯을 먼저 빼고 남은 슬롯을 직접 작업자에 배정한다. 기계 작업은 슬롯 수와 별도로 `run --action <ID>`로 병행할 수 있다.
+2. 시작할 때 source-prep, candidate-index, render-preflight를 함께 연다. selection이 채택되고 stage-problem-index가 봉인되면 explain-author와 explain-blind를 다른 작업자에게 동시에 맡긴다. 저작·독립 풀이가 채택되면 child-coordinator가 검증을 잇는다. 확인문제도 convert-md·selection이 승인되는 즉시 concept-draft → concept-review까지 진행한다. 최종 발행은 publish-pack·final-check 승인 뒤 별도로 진행한다.
+3. 작업자는 자신의 브리프에서 `task build-receipt`와 `task check`를 실행한다. 메인은 완료한 작업만 `[{"task_id":"…","attempt":"…","receipt":"/절대/receipt.json"}]` 배열에 모아 `task accept-batch --run <RUN> --submissions <파일>`로 인계한다. 각 항목의 accepted/already_accepted/rejected와 거부 사유를 확인한다. `task accept`, `task check`로 한 항목씩 진단할 수 있다.
+4. `advance --run <RUN> --max-actions 4`는 최대 네 기계 작업을 실행한다. 사람이 필요한 작업이나 차단을 만나면 `waiting_for`와 `blocked`에 ID가 나온다. 다음 묶음을 배정하고 계속한다. 결과가 접혔으면 `details_path`에서 해당 항목만 읽는다. 진행 표시는 시도 시작·승인·수정·차단·재개·발행처럼 상태가 변했을 때만 한다.
+
+### 같은 병렬 RUN 재개
+
+`resume --run <RUN> --stopped-attempts <파일>`에 `{"<attempt UUID>":"/절대/근거.json"}`을 준다. 살아 있는 작업자는 계속 소유권을 갖는다. 메인은 호스트가 작업자의 종료를 확인한 뒤 `RUN/host-stops/<attempt>.json`에 아래 필드를 기록한다. 작업자가 쓸 수 있는 시도 폴더의 자기 보고를 중단 증거로 사용하지 않는다.
+
+```json
+{"run_id":"<RUN UUID>","task_id":"explain-blind","attempt":"<UUID>","agent_id":"<bound host ID>","status":"completed","receipt":"/실제/worker/receipt.json"}
+```
+
+종료된 미완료 작업자는 `status="stopped"`를 쓰고 claim 후 배정 전이면 `agent_id=null`이다. 완료 작업자는 지정 영수증과 현재 고정 바이트를 모두 검증한 뒤 재사용한다. 실제 호스트 중단과 재개를 모두 확인했을 때만 같은 기록에 `host_gap={"interrupted":"<UTC ISO 시각>","resumed":"<UTC ISO 시각>"}`을 덧붙인다. 기계 작업은 자기 시도의 stopped.json, 부모 발행은 해당 시도의 publication/journal.json, 확인문제 발행은 현재 RUN의 concept-check-result.json과 날짜 소유 표시·검산 인증서를 사용한다. 호스트가 비공개 기계 작업의 중단을 확인한 경우 같은 host-stops 형식에 agent_id=null을 쓴다. 완료를 확인했으면 status="completed"와 completion_evidence에 해당 작업의 실제 종료 근거 절대 경로를 쓴다. 발행 근거가 모호하거나 아직 액션 잠금이 살아 있으면 시도를 보존한다. 누락·불일치 근거는 rejected에 표시한다.
+
+`report --run <RUN>`의 report.json에서 각 시도별 대기·실행 구간, 겹친 구간, 확인한 호스트 공백 합집합, 브리프 바이트, 차단 ID와 확인문제 세 단계를 읽는다. 시각은 실행기가 사건을 관측한 UTC 시각이다. 작업자 실제 추론 시간과는 다를 수 있다. 모든 CLI 호출을 셀 검증 RUN은 시작 전부터 끝까지 모든 작업자에 같은 RUN 외부의 절대 폴더 `EC2_CLI_TRACE_DIR`를 전달한다. 설정하지 않으면 RUN에는 변경 명령 호출만 집계한다. 호스트가 제공한 사용량·호출 수는 `RUN/host-observations.json`에 `run_id`와 제공받은 `model_usage`, `host_tool_counts`만 기록한다.
+
+## 레거시 배치·재개 — 메인과 역할 담당자
 
 next.kind는 dispatch/run/review_locally/wait/recover/concept_check/report/blocked다. dispatch는 `task claim --run <RUN> --task <id>`로 먼저 예약한다. 반환 attempt/brief로 새 컨텍스트 작업자를 실행하고 `task bind --run <RUN> --task <id> --attempt <UUID> --agent-id <실제 ID>`로 연결한다. Codex는 spawn_agent(fork_turns="none"), OpenCode는 전체 대화를 복사하지 않는 새 작업 컨텍스트를 사용한다. 작업자 지시문은 [worker-prompt](worker-prompt.md) 템플릿을 채워 쓴다. claim 뒤 brief.json에는 `run_id`와 `attempt`가 들어 있다. 작업자는 반환 전에 `task check --run <RUN> --task <id> --attempt <UUID> --receipt <절대 경로>`를 실행한다. 이 명령은 accept와 같은 검증을 하되 상태를 바꾸지 않고, 실패하면 exit 1과 reason(예: `unresolved successful receipt`, `receipt identity mismatch`)을 돌려준다. 반환 뒤 `task accept --run <RUN> --task <id> --attempt <UUID> --receipt <절대 경로>`를 실행한다. 늦게 온 다른 attempt는 거부한다. 가용 슬롯·독립 역할·기존 담당자 재개 규칙은 [delegation](delegation.md)을 따른다.
 
