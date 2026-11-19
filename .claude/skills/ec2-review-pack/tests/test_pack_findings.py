@@ -591,7 +591,8 @@ def test_fresh_agreement_on_identical_html_can_reconcile_superseded_conflict(not
     assert state.get('active_audit')
 
 
-def test_assembler_only_diagnostic_has_no_dispatchable_section_owner(note_run, tmp_path):
+@pytest.mark.parametrize('template_defect', ['<p>[generated](#outside-fragments)</p>', '<span id="theme-toggle"></span>'])
+def test_assembler_only_diagnostic_has_no_dispatchable_section_owner(note_run, tmp_path, template_defect):
     from test_pack_graph import cli
     import shutil
     import subprocess
@@ -601,7 +602,7 @@ def test_assembler_only_diagnostic_has_no_dispatchable_section_owner(note_run, t
     template = tmp_path/'templates'
     shutil.copytree(SKILL/'assets', template)
     path = template/'note-template.html'
-    path.write_text(path.read_text().replace('</body>', '<p>[generated](#outside-fragments)</p></body>'))
+    path.write_text(path.read_text().replace('</body>', template_defect + '</body>'))
     flow.update_state(run, flow.load_state(run)['revision'], lambda s: dict(s, actions={
         **s['actions'], 'assemble-note': dict(s['actions']['assemble-note'], status='stale')}))
     script = """import sys
@@ -740,3 +741,37 @@ def test_latest_machine_observation_cannot_charge_an_unchecked_earlier_candidate
     result, = row['repairs']
     assert (result['attempt'], result['outcome']) == (attempt, 'not_reviewed')
     assert (result['reviewed_owner_attempt'], result['current_outcome']) == (later, 'unresolved')
+
+
+@pytest.mark.parametrize('collision_id', ['theme-toggle', 'section-marker'])
+def test_cross_source_duplicate_footer_id_routes_one_editable_owner(note_run, collision_id):
+    from test_pack_graph import cli
+    import subprocess, sys
+    run, fixture = note_run
+    path = fixture/'manifest.json'
+    manifest = flow._read(path)
+    manifest['footer_note'] = f'<span id="{collision_id}">footer</span>'
+    path.write_text(json.dumps(manifest))
+    if collision_id == 'section-marker':
+        section = fixture/'sections/s1.html'
+        section.write_text(section.read_text() + '<span id="section-marker">section anchor</span>')
+    flow.update_state(run, flow.load_state(run)['revision'], lambda s: dict(s, actions={
+        **s['actions'], 'assemble-note': dict(s['actions']['assemble-note'], status='stale')}))
+    cli('run', '--run', run, '--action', 'assemble-note')
+    cli('run', '--run', run, '--action', 'structural-precheck')
+    submit_review(note_run, 'content-review')
+    submit_review(note_run, 'style-audit')
+    proc = subprocess.run([sys.executable, SCRIPTS/'pack_cli.py', 'run', '--run', run, '--action', 'precheck'],
+                          capture_output=True, text=True)
+    state = flow.load_state(run)
+    assert proc.returncode and state['actions']['precheck']['status'] == 'needs_fix'
+    item, = state['findings'].values()
+    assert (item['rule'], item['defect']) == ('duplicate-id', collision_id)
+    assert (item['target'], item['owner_task'], item['status']) == ('footer_note', 'scope-draft', 'open')
+    request = run/'fix-footer.json'
+    request.write_text(json.dumps(dict(id='fix-footer', items=[dict(finding_id=item['id'],
+        review_attempt=item['review_attempt'], input_digest=item['input_digest'])])))
+    cli('task', 'fix', '--run', run, '--request', request)
+    claim = flow.claim_task(run, 'scope-draft')
+    repair, = flow._read(claim['brief'])['repair_findings']
+    assert repair['id'] == item['id']

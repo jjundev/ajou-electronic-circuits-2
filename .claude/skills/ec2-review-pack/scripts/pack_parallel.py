@@ -494,7 +494,7 @@ def metadata_diagnostics(manifest, note, paths):
     markup = {k: escape(manifest[k]) for k in ('note_title', 'note_subtitle')}
     markup['footer_note'] = manifest['footer_note']
     markup.update({s['id'] + '.' + k: escape(s[k]) for s in manifest['sections'] for k in ('short', 'title')})
-    return {field: common_diagnostics(value, note, paths)[1] for field, value in markup.items()}
+    return {field: common_diagnostics(value, note, paths) for field, value in markup.items()}
 
 
 def machine_report(state, root, problems, note, manifest, paths=None):
@@ -520,8 +520,15 @@ def machine_report(state, root, problems, note, manifest, paths=None):
                        or (problem.code == 'duplicate-id' and problem.detail in doc.ids)]
             if metadata is None:
                 metadata = metadata_diagnostics(manifest, note, paths)
-            targets.extend(('scope-draft', field) for field, diagnostics in metadata.items()
-                           if (problem.code, problem.detail) in diagnostics)
+            metadata_targets = [('scope-draft', field) for field, (doc, diagnostics) in metadata.items()
+                                if (problem.code, problem.detail) in diagnostics
+                                or (problem.code == 'duplicate-id' and problem.detail in doc.ids)]
+            if problem.code == 'duplicate-id' and metadata_targets:
+                # Renaming the manifest occurrence can preserve the section or
+                # template anchor. Reassembly checks any remaining duplicates.
+                targets = metadata_targets
+            else:
+                targets.extend(metadata_targets)
             if not targets:
                 targets = [('assemble-note', problem.where)]
         for owner, target in targets:
