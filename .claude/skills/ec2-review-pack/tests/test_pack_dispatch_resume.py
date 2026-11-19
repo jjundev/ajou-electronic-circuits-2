@@ -433,3 +433,44 @@ def test_date_lock_covers_quiz_recovery_adoption_against_second_publisher(tmp_pa
     monkeypatch.setattr(scenario,'cli',cli)
     with pytest.raises(Verified):
         scenario.exercise_zero_problem_cli(tmp_path,monkeypatch,None)
+
+
+@pytest.mark.parametrize('damage', ['invalid_before_validation','invalid_at_commit','unreadable_at_commit'])
+def test_mixed_batch_isolates_unreadable_selection_history(tmp_path, monkeypatch, damage):
+    import pack_parallel as parallel
+    import test_pack_graph as scenario
+    submit = f.accept_task
+    independent = []
+    class Verified(Exception): pass
+
+    def collect(run, tid, attempt, receipt):
+        item = dict(task_id=tid, attempt=attempt, receipt=str(receipt))
+        if tid == 'author-s1':
+            independent.append(item)
+            return
+        if tid != 'selection':
+            return submit(run,tid,attempt,receipt)
+        prior = Path(f.load_state(run)['repo'])/'복습노트/0908/.assets/problems.txt'
+        prior.parent.mkdir(parents=True)
+        prior.write_bytes(b'\xff' if damage=='invalid_before_validation' else b'P1 | previous')
+        original_update = f.update_state
+        def before_commit(*args):
+            if damage == 'invalid_at_commit':
+                prior.write_bytes(b'\xff')
+            if damage == 'unreadable_at_commit' and prior.is_file():
+                prior.unlink()
+                prior.mkdir()
+            return original_update(*args)
+        with monkeypatch.context() as patch:
+            patch.setattr(f,'update_state',before_commit)
+            result = parallel.accept_batch(run,[item,*independent])
+        assert [(r['task_id'],r['status']) for r in result['items']] == [
+            ('selection','rejected'),('author-s1','accepted')]
+        state = f.inspect_state(run)
+        assert not f._done(state,'selection') and f._done(state,'author-s1')
+        assert Path(state['tasks']['author-s1']['artifacts']['sections/s1.html']).is_file()
+        raise Verified
+
+    monkeypatch.setattr(f,'accept_task',collect)
+    with pytest.raises(Verified):
+        scenario.exercise_zero_problem_cli(tmp_path,monkeypatch,None)

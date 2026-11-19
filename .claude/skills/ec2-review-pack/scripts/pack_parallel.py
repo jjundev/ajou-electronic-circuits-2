@@ -379,10 +379,15 @@ class SelectionHistoryChanged(f.FlowError):
 
 
 def check_selection_history(state, receipt):
-    if 'selection_history' in receipt:
-        from problem_index import history_snapshot
-        if history_snapshot(public(state).parent,state['range'])[1] != receipt['selection_history']:
-            raise SelectionHistoryChanged(receipt['attempt'])
+    if 'selection_history' not in receipt:
+        return
+    from problem_index import history_digests
+    try:
+        current = history_digests(public(state).parent, state['range'])
+    except OSError as exc:
+        raise SelectionHistoryChanged(receipt['attempt']) from exc
+    if current != receipt['selection_history']:
+        raise SelectionHistoryChanged(receipt['attempt'])
 
 
 def check_leaf_join(state, child_root):

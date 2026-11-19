@@ -59,15 +59,23 @@ def used_in_ranges(notes_dir: Path | str, exclude: str | None = None) -> dict[st
     return history_snapshot(notes_dir, exclude)[0]
 
 
+def history_sources(notes_dir, exclude):
+    exclude = nfc(exclude) if exclude is not None else None
+    for path in sorted(Path(notes_dir).glob("*/.assets/problems.txt")):
+        if nfc(path.parent.parent.name) != exclude:
+            yield path, path.read_bytes()
+
+
+def history_digests(notes_dir, exclude):
+    return {str(path): hashlib.sha256(data).hexdigest()
+            for path, data in history_sources(notes_dir, exclude)}
+
+
 def history_snapshot(notes_dir, exclude):
     """Read each previous pack's problems list once for both interpretation and identity."""
     ids, files = {}, {}
-    exclude = nfc(exclude) if exclude is not None else None
-    for path in sorted(Path(notes_dir).glob("*/.assets/problems.txt")):
+    for path, data in history_sources(notes_dir, exclude):
         date = nfc(path.parent.parent.name)
-        if date == exclude:
-            continue
-        data = path.read_bytes()
         files[str(path)] = hashlib.sha256(data).hexdigest()
         for line in data.decode("utf-8").splitlines():
             pid = nfc(line.split("|", 1)[0].strip())
