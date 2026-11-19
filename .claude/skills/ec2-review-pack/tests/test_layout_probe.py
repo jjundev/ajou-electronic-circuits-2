@@ -73,3 +73,30 @@ def test_probe_fails_when_katex_cannot_load(tmp_path):
     assert code == 2
     report = json.loads(out)
     assert report['status'] == 'error' and 'KaTeX not loaded' in report['reason'] and '0.0.1' in report['reason']
+
+
+def test_probe_measures_with_staged_note_shared_stylesheet(tmp_path):
+    notes = tmp_path / 'run' / 'repo' / '복습노트'
+    pack = notes / '1118'
+    pack.mkdir(parents=True)
+    assets = notes / '.assets'
+    assets.mkdir()
+    (assets / 'layout.css').write_text('.katex-display { width: 300px; }', encoding='utf-8')
+    body = ('<link rel="stylesheet" href="../.assets/layout.css">'
+            '<a href="https://example.invalid/citation">Reference</a>' + WIDE_MATH)
+
+    code, report = _probe(pack, body, '--widths', '1280', '--themes', 'light')
+
+    assert code == 1
+    assert report['checks'][0]['overflow'][0]['excess_px'] == 600
+
+
+@pytest.mark.parametrize('stylesheet', ['missing.css', 'https://example.invalid/layout.css'])
+def test_probe_rejects_failed_resource_loads(tmp_path, stylesheet):
+    code, out = _run(tmp_path, f'<link rel="stylesheet" href="{stylesheet}">{WIDE_MATH}')
+
+    assert code == 2, out
+    report = json.loads(out)
+    assert report['status'] == 'error'
+    assert stylesheet in report['reason']
+    assert not (tmp_path / 'probe.json').exists()

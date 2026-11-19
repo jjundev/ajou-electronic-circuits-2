@@ -12,8 +12,8 @@ Usage:
 Exit code: 0 no defects, 1 defects found, 2 usage or browser error.
 This is evidence for the reviewer, not a substitute for looking at the screen.
 KaTeX and Pretendard requests to cdn.jsdelivr.net are answered from the repository copy
-(workbook/vendor_route.py), so measurements match with or without network. A page that
-loads KaTeX but ends up without it is a browser error (exit 2), not a clean measurement.
+(workbook/vendor_route.py), so measurements match with or without network.
+A missing page resource or an unloaded KaTeX script yields a browser error (exit 2).
 """
 from __future__ import annotations
 
@@ -22,6 +22,7 @@ import hashlib
 import json
 from pathlib import Path
 import sys
+from unicodedata import normalize
 
 REPO = Path(__file__).resolve().parents[4]
 GAP_EM = 0.6
@@ -83,8 +84,8 @@ def probe(html: Path, widths: list[int], themes: list[str]) -> dict:
     import vendor_route
 
     html = html.resolve()
-    notes_root = REPO / "복습노트"
-    local_root = notes_root if html.is_relative_to(notes_root) else html.parent
+    local_root = next((parent for parent in html.parents if normalize("NFC", parent.name) == "복습노트"),
+                      html.parent)
     url = local_url(html, local_root)
     checks = []
     with sync_playwright() as pw:
@@ -94,20 +95,26 @@ def probe(html: Path, widths: list[int], themes: list[str]) -> dict:
                 for theme in themes:
                     page = browser.new_page(viewport={'width': width, 'height': 900}, color_scheme=theme,
                                             offline=True, service_workers='block')
-                    blocked = set()
+                    failed_resources = set()
+                    page.on('requestfailed', lambda request: failed_resources.add(request.url))
+                    page.on('response', lambda response: failed_resources.add(response.url)
+                            if response.status >= 400 else None)
                     install_render_routes(page, local_roots=(local_root,),
-                                          vendor_resolver=vendor_route.resolve_asset, blocked=blocked)
+                                          vendor_resolver=vendor_route.resolve_asset, blocked=failed_resources)
                     response = page.goto(url, wait_until='load')
                     if response is None or not response.ok:
                         raise RuntimeError(f'Local HTML did not load: {html}')
                     if page.evaluate(_KATEX_MISSING):
-                        detail = ': ' + '; '.join(sorted(blocked)) if blocked else ''
+                        detail = ': ' + ', '.join(sorted(failed_resources)) if failed_resources else ''
                         raise RuntimeError('KaTeX not loaded' + detail)
                     page.evaluate("t => document.documentElement.setAttribute('data-theme', t)", theme)
                     toggle = page.locator('#toggle-right[aria-expanded="false"]')
                     if toggle.count() and toggle.first.is_visible():
                         toggle.first.click()  # measure with the summary panel open
                     page.wait_for_timeout(300)
+                    page.evaluate("document.fonts.ready.then(() => null)")
+                    if failed_resources:
+                        raise RuntimeError('Page resource failed to load: ' + ', '.join(sorted(failed_resources)))
                     result = page.evaluate(_MEASURE, {'selector': OVERFLOW_SELECTOR, 'gapEm': GAP_EM})
                     checks.append(dict(width=width, theme=theme, **result))
                     page.close()
