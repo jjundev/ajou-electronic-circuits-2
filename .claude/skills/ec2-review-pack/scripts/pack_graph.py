@@ -131,6 +131,8 @@ def ready_work(state: dict, *, slots: int) -> dict:
         if status == 'done': continue
         if state.get('stale_inputs') or state['status'] in ('withheld', 'recovery_required', 'blocked'):
             result['blocked'].append((spec.id, 'RUN requires attention'))
+        elif status == 'recovery_required':
+            result['blocked'].append((spec.id, 'reconcile this attempt'))
         elif status in ('blocked', 'needs_fix') or (record and spec.kind == 'worker' and f._owner(state, record) == 'unavailable'):
             result['blocked'].append((spec.id, status if status in ('blocked', 'needs_fix') else 'inspection unavailable'))
         elif status in ('running', 'claimed') or record.get('invalidated_active'):

@@ -131,7 +131,8 @@ def test_sections_which_need_final_links_wait_for_selection(tmp_path):
     assert 'author-links' in ready_work(state, slots=10)['dispatch']
 
 
-def test_zero_problem_cli_publishes_only_after_actual_converter_and_review_receipts(tmp_path):
+@pytest.mark.parametrize('scope_change', [None, 'sessions', 'preview_topic', 'forbidden_outside_preview', 'early_link', 'owned_link'])
+def test_zero_problem_cli_publishes_only_after_actual_converter_and_review_receipts(tmp_path, monkeypatch, scope_change):
     import pymupdf
     from PIL import Image
     from _util import prepare_mini_run
@@ -187,6 +188,24 @@ def test_zero_problem_cli_publishes_only_after_actual_converter_and_review_recei
     action('candidate-index')
     for tid in ['source-prep', 'stt-0909', 'scope-draft', 'author-why', 'author-s1', 'selection',
                 'scope-final', 'author-s2']:
+        if tid == 'scope-final' and scope_change:
+            if scope_change == 'sessions':
+                m['sessions'][0]['slides'] = 'different source'
+            elif scope_change == 'preview_topic':
+                m['preview_topic'] = 's1-mean'
+            elif scope_change == 'forbidden_outside_preview':
+                m['forbidden_outside_preview'] = []
+            elif scope_change == 'owned_link':
+                m['links'] = [{'topic': 's2-links', 'href': '#s1-mean'}]
+                worker(tid)
+                assert 'author-s2' in flow.next_work(run, slots=8)['dispatch']
+                return
+            else:
+                m['links'] = [{'topic': 's1-mean', 'href': '#s2-links'}]
+            with pytest.raises(flow.FlowError, match='scope|link'):
+                worker(tid)
+            assert 'assemble-note' not in flow.next_work(run, slots=8)['actions']
+            return
         worker(tid)
     action('assemble-note')
     worker('content-review')
@@ -206,6 +225,44 @@ def test_zero_problem_cli_publishes_only_after_actual_converter_and_review_recei
         run_action(run, 'publish-pack')
     assert not (repo/'복습노트/0909').exists()
     audit.write_bytes(approved_bytes)
+
+    # Another same-date transaction crashed with a durable reservation and no writes.
+    import pack_publication as pub
+    from pack_paths import PackPaths
+    foreign = tmp_path/'foreign-run'
+    candidate = tmp_path/'foreign-candidate'
+    candidate.mkdir()
+    html = candidate/'정리노트_0909_Other.html'
+    html.write_text('pending foreign transaction')
+    paths = PackPaths(repo, repo/'복습노트/0909', candidate)
+    class Interrupted(BaseException): pass
+    def crash(*args):
+        raise Interrupted()
+    with monkeypatch.context() as patch:
+        patch.setattr(pub, '_run_steps', crash)
+        with pytest.raises(Interrupted):
+            pub.publish_pack(paths, foreign, expected={}, candidate_inventory={html.name: flow._sha(html)}, verify=lambda root: None)
+    try:
+        blocked = run_action(run, 'publish-pack')
+        assert blocked['error_code'] == 'pending_publication'
+        assert flow.load_state(run)['status'] != 'recovery_required'
+        assert not (Path(blocked['attempt_dir'])/'publication/journal.json').exists()
+    finally:
+        result = pub.reconcile_publication(paths, foreign/'publication/journal.json', verify=lambda root: None)
+    assert result['status'] == 'restored'
+    # Earlier trial RUNs persisted someone else's reservation as a local recovery.
+    def previous_trial(s):
+        foreign_journal = str(foreign/'publication/journal.json')
+        s['actions']['publish-pack'].update(status='recovery_required', error_code='pending_publication',
+                publication_result=dict(status='recovery_required', error_code='pending_publication', journal=foreign_journal))
+        s['status'] = 'recovery_required'
+        return s
+    flow.update_state(run, flow.load_state(run)['revision'], previous_trial)
+    from pack_actions import reconcile_action
+    released = reconcile_action(run, 'publish-pack')
+    assert released['error_code'] == 'pending_publication'
+    assert flow.load_state(run)['status'] != 'recovery_required'
+    assert json.loads((foreign/'publication/journal.json').read_text())['status'] == 'restored'
     action('publish-pack')
     state = flow.inspect_state(run)
     assert state['status'] == 'complete'
@@ -352,3 +409,67 @@ def test_ready_work_rechecks_accepted_evidence(tmp_path):
     Path(state['actions']['stage-problem-index']['verified_files'][0]['path']).write_text('edited')
     ready = ready_work(state, slots=4)
     assert 'build-problems' not in ready['actions'] and 'explain-blind' not in ready['dispatch']
+
+@pytest.mark.parametrize('crash_before_adoption', [False, True])
+def test_matching_stopped_stale_attempt_can_be_discarded_and_retried(tmp_path, monkeypatch, crash_before_adoption):
+    import pack_parallel as runner
+    from pack_graph import refresh
+    state = selected(tmp_path, ['P10.02'])
+    run = Path(state['run'])
+    refresh(state)
+    flow.update_state(run, state['revision'], lambda old: state)
+    def execute(s, spec, root):
+        pred = s['tasks']['selection']
+        Path(pred['verified_files'][0]['path']).write_text('changed during work')
+        def invalidate(current):
+            return flow._current(current)
+        runner.transact(run, invalidate)
+        return {'verified_files': []}
+    class Interrupted(BaseException): pass
+    with monkeypatch.context() as patch:
+        patch.setattr(runner, 'execute_action', execute)
+        if crash_before_adoption:
+            def crash(*args):
+                raise Interrupted()
+            patch.setattr(runner, 'finish', crash)
+            with pytest.raises(Interrupted):
+                runner.run_action(run, 'stage-problem-index')
+        else:
+            runner.run_action(run, 'stage-problem-index')
+    if crash_before_adoption:
+        runner.run_action(run, 'stage-problem-index', reconcile=True)
+    discarded = flow.load_state(run)['actions']['stage-problem-index']
+    assert discarded['status'] != 'done' and not discarded.get('invalidated_active')
+    def repair(current):
+        row = current['tasks']['selection']
+        digest = flow._sha(Path(row['verified_files'][0]['path']))
+        row['verified_files'][0]['sha256'] = row['receipt']['verified_files'][0]['sha256'] = digest
+        row.update(status='done', attempt='new-selection')
+        return current
+    runner.transact(run, repair)
+    monkeypatch.setattr(runner, 'execute_action', lambda *args: {'artifacts':{}, 'verified_files':[]})
+    fresh = runner.run_action(run, 'stage-problem-index')
+    assert fresh['status'] == 'done' and fresh['attempt'] != discarded['attempt']
+
+
+@pytest.mark.parametrize('wrong_identity', ['some-other-attempt', 17])
+def test_stopped_identity_cannot_replace_scheduler_attempt(tmp_path, monkeypatch, wrong_identity):
+    import pack_parallel as runner
+    _, run, _ = parallel(tmp_path)
+    write = flow._atomic_json
+    def wrong(path, data):
+        write(path, dict(data, attempt=wrong_identity) if path.name=='stopped.json' else data)
+    monkeypatch.setattr(flow, '_atomic_json', wrong)
+    monkeypatch.setattr(runner, 'execute_action', lambda *args: {'verified_files': []})
+    result = runner.run_action(run, 'candidate-index')
+    assert result['status'] == 'recovery_required'
+    assert result['attempt'] == Path(result['attempt_dir']).name
+    with pytest.raises(flow.FlowError, match='identity'):
+        runner.run_action(run, 'candidate-index', reconcile=True)
+    with pytest.raises(flow.FlowError, match='active'):
+        runner.run_action(run, 'candidate-index')
+    marker = Path(result['attempt_dir'])/'stopped.json'
+    write(marker, dict(status='done', attempt=result['attempt'], verified_files=[]))
+    repaired = runner.run_action(run, 'candidate-index', reconcile=True)
+    assert repaired['attempt'] == result['attempt'] and repaired['status'] == 'done'
+    assert json.loads((marker.parent/'result.json').read_text())['attempt'] == repaired['attempt']

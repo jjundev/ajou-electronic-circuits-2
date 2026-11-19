@@ -112,8 +112,8 @@ def claim_worker(state, task):
                     profile_read='전체 필수', references=[str(refs / ref) for ref, _ in f._REFERENCES[role]],
                     constraints=['Read the complete profile and referenced review criteria. Perform the actual inspection.'])
     if role == 'scope-draft':
-        data['instruction'] = ('Freeze the scope, slug, section and topic IDs and complete author briefs in manifest.sections. '
-                               'List sections needing final problem links in link_sections.')
+        data['instruction'] = ('Complete the teaching manifest, including sessions, preview rules, style and all section/topic briefs. '
+                               'Declare the section IDs that may receive final links in link_sections before early authoring.')
     if role in ('author', 'selection', 'scope-final'):
         data['manifest'] = str(output(state, 'scope-draft', 'manifest.json'))
     if role == 'author':
@@ -125,6 +125,9 @@ def claim_worker(state, task):
         data['instruction'] = 'Freeze the selection order, slug, display titles and selection review against the accepted scope.'
     if role == 'scope-final':
         data['selection_manifest'] = str(output(state, 'selection', 'manifest.json'))
+        data['link_sections'] = state['link_sections']
+        data['instruction'] = ('Use the frozen scope manifest and accepted selection fields. Resolve final links only '
+                               'for topics in the declared link sections.')
     if role in ('style-audit', 'content-review', 'browser-qa', 'standalone-svg-qa'):
         data['manifest'] = str(output(state, 'scope-final', 'manifest.json'))
         data['note'] = str(output(state, 'assemble-note', 'note'))
@@ -154,20 +157,43 @@ def claim_worker(state, task):
 
 def scope_manifest(state, data):
     import manifest
-    sections = data.get('sections')
-    if (data.get('range') != state['range'] or not manifest.SLUG_RE.fullmatch(data.get('slug', ''))
-            or not isinstance(sections, list) or not sections):
-        raise f.FlowError('stable date, slug and nonempty sections required')
-    ids = []
-    for sec in sections:
-        if not isinstance(sec.get('topics'), list) or not sec['topics']:
-            raise f.FlowError('stable topic IDs required')
-        ids.extend([sec['id'], *(t['id'] for t in sec['topics'])])
-    if len(ids) != len(set(ids)) or any(not manifest.ID_RE.fullmatch(x) for x in ids):
-        raise f.FlowError('invalid or duplicate section/topic IDs')
-    if set(data.get('link_sections', [])) - {s['id'] for s in sections}:
+    # The selector owns the problem list. All teaching fields must already be
+    # usable by an early author, including the source sessions and preview rules.
+    errors = manifest.validate(dict(data, problems=[], links=[]), repo=Path(state['repo']))
+    if errors or data.get('range') != state['range']:
+        raise f.FlowError('invalid frozen teaching scope: ' + '; '.join(errors))
+    sections = data['sections']
+    if any(not s['topics'] for s in sections):
+        raise f.FlowError('stable topic IDs required for every section')
+    section_ids = {s['id'] for s in sections}
+    late = data.get('link_sections', [])
+    if not isinstance(late, list) or any(not isinstance(x, str) or x not in section_ids for x in late):
         raise f.FlowError('unknown problem-link section')
+    topics = {t['id'] for s in sections for t in s['topics']}
+    links = data.get('links', [])
+    if not isinstance(links, list) or any(not isinstance(link, dict) or link.get('topic') not in topics for link in links):
+        raise f.FlowError('scope link has no topic owner')
     return sections
+
+
+def check_final_scope(state, final):
+    draft = f._read(output(state, 'scope-draft', 'manifest.json'))
+    selected = f._read(output(state, 'selection', 'manifest.json'))
+    # Only the selected workbook fields and late link list have other producers.
+    # link_sections is optional scheduler metadata, never a new grant of ownership.
+    variable = {'links', 'problems', 'selection_policy', 'link_sections'}
+    def teaching(m):
+        return {key: value for key, value in m.items() if key not in variable}
+    if teaching(final) != teaching(draft):
+        raise f.FlowError('scope-final changed frozen teaching scope')
+    if any(final.get(k) != selected.get(k) for k in ('range', 'slug', 'problems', 'selection_policy')):
+        raise f.FlowError('scope-final changed accepted selection')
+    if 'link_sections' in final and final['link_sections'] != draft.get('link_sections', []):
+        raise f.FlowError('scope-final changed frozen link owners')
+    allowed = {t['id'] for section in state['scope_sections'] if section['id'] in state['link_sections']
+               for t in section['topics']}
+    if any(link['topic'] not in allowed for link in final['links']):
+        raise f.FlowError('new final link belongs to an already fixed section')
 
 
 def check_selection(state, root):
@@ -235,11 +261,7 @@ def validate_worker(state, task, receipt_path):
     if role == 'scope-final':
         import manifest
         m = manifest.load(root / 'manifest.json', repo=Path(state['repo']))
-        selected = f._read(output(state, 'selection', 'manifest.json'))
-        if m['range'] != state['range'] or m.get('selection_policy') != selected.get('selection_policy'):
-            raise f.FlowError('scope-final date or policy differs from frozen selection')
-        if (m['slug'], m['problems'], m['sections']) != (selected['slug'], selected['problems'], state['scope_sections']):
-            raise f.FlowError('final links changed accepted selection or section brief')
+        check_final_scope(state, m)
     if role in ('explain-author', 'explain-blind'):
         if not task.get('agent_id'):
             raise f.FlowError('bound leaf reviewer identity required')
@@ -476,6 +498,11 @@ def same_attempt(state, tid, attempt):
     return spec
 
 
+def foreign_reservation():
+    # The owner may reconcile its transaction; this claimant may retry afterwards.
+    return dict(status='failed', error_code='pending_publication', detail='date reservation belongs to another attempt')
+
+
 def publish(state, spec, attempt, root, *, recover=False):
     import manifest
     from pack_actions import compose_candidate_view, publication_verifier
@@ -502,6 +529,8 @@ def publish(state, spec, attempt, root, *, recover=False):
         result = reconcile_publication(paths, root/'publication/journal.json', verify=verify)
     else:
         result = publish_pack(paths, root, expected=state['public_baseline'], candidate_inventory=files, verify=verify)
+    if result.get('error_code') == 'pending_publication':
+        return foreign_reservation()
     if result['status'] != 'published':
         return dict(status='recovery_required' if result['status'] == 'recovery_required' else 'failed',
                     error_code=result.get('error_code', result['status']), publication_result=result)
@@ -509,17 +538,52 @@ def publish(state, spec, attempt, root, *, recover=False):
     return dict(status='done', publication_result=result, verified_files=file_records(proof_files))
 
 
+class InvalidStop(f.FlowError):
+    """No durable completion record for this attempt."""
+
+
+def stopped_candidate(state, tid, attempt, root):
+    from pack_receipts import verify_receipt_files
+    try:
+        record = f._read(root/'stopped.json')
+    except f.FlowError as exc:
+        raise InvalidStop('stopped completion missing or unreadable') from exc
+    if type(record.get('attempt')) is not str or record['attempt'] != attempt:
+        raise InvalidStop('stopped completion identity mismatch')
+    if record.get('status') not in ('done', 'failed'):
+        raise InvalidStop('invalid stopped completion status')
+    row = state['actions'][tid]
+    if row.get('attempt') != attempt or row.get('attempt_dir') != str(root):
+        raise f.FlowError('late machine result')
+    # Only matching durable stopped evidence can retire an invalidated owner.
+    if row['status'] == 'recovery_required':
+        row['status'] = 'running'
+    f._current(state)
+    superseded = any(f._record(state, dep).get('attempt') != version or not f._done(state, dep)
+                     for dep, version in row['input_version'].items())
+    if row.get('invalidated_active') or row['status'] == 'stale' or state['stale_inputs'] or superseded:
+        row.pop('invalidated_active', None)
+        return dict(status='failed', error_code='stale_attempt', detail='discarded stopped attempt')
+    same_attempt(state, tid, attempt)
+    if record['status'] == 'done' and verify_receipt_files(record):
+        raise f.FlowError('completed attempt files changed')
+    fields = ('status', 'error_code', 'detail', 'artifacts', 'pack', 'candidate_root', 'questions',
+              'source_inputs', 'verified_files', 'converted_assets')
+    return {key: record[key] for key in fields if key in record}
+
+
 def finish(state, tid, attempt, root, result):
     row = state['actions'][tid]
     if row.get('attempt') != attempt:
         raise f.FlowError('late machine result')
+    marker = root/'result.json'
+    f._atomic_json(marker, dict(result, attempt=attempt, task_id=tid))
     if result['status'] == 'done':
-        marker = root/'result.json'
-        f._atomic_json(marker, result)
         result['verified_files'] = [*result.get('verified_files', []), *file_records([marker])]
-    else:
-        f._atomic_json(root/'result.json', result)
     row.update(result)
+    if row['status'] == 'done':
+        row.pop('error_code', None)
+        row.pop('detail', None)
     if tid == 'convert-md' and row['status'] == 'done':
         state['converted_assets'] = row['converted_assets']
     if tid == 'publish-pack':
@@ -534,17 +598,16 @@ def finish(state, tid, attempt, root, result):
 
 
 def run_action(run, tid, *, reconcile=False):
-    from pack_receipts import verify_receipt_files
     run = Path(run).resolve()
     state = f.load_state(run)
-    spec = spec_for(state, tid)
-    if spec.kind != 'action' or tid == 'final-check':
+    if tid not in state['actions'] or tid == 'final-check':
         raise f.FlowError('action not separately runnable: ' + tid)
     lock = run/'attempts'/tid
     lock.mkdir(parents=True, exist_ok=True)
     with f._locked(lock):
         if reconcile:
             return reconcile_attempt(run, tid)
+        spec = spec_for(state, tid)
         attempt = str(uuid4())
         root = lock/attempt
         def start(s):
@@ -557,17 +620,20 @@ def run_action(run, tid, *, reconcile=False):
             root.mkdir(exist_ok=False)
             if row.get('attempt'):
                 row.setdefault('history', []).append({k:v for k,v in row.items() if k != 'history'})
-            row.update(attempt=attempt, attempt_dir=str(root), status='running', input_version=version,
-                       stdout_path=str(root/'stdout.log'))
+            s['actions'][tid] = dict(id=tid, dependencies=row['dependencies'], history=row.get('history', []),
+                                     attempt=attempt, attempt_dir=str(root), status='running', input_version=version,
+                                     stdout_path=str(root/'stdout.log'))
             return s
         state = transact(run, start)
         def commit(s):
             try:
-                f._current(s)
-                spec = same_attempt(s, tid, attempt)
-                result = publish(s, spec, attempt, root) if tid == 'publish-pack' else f._read(root/'stopped.json')
-                if result['status'] == 'done' and verify_receipt_files(result):
-                    raise f.FlowError('completed attempt files changed')
+                if tid == 'publish-pack':
+                    f._current(s)
+                    result = publish(s, same_attempt(s, tid, attempt), attempt, root)
+                else:
+                    result = stopped_candidate(s, tid, attempt, root)
+            except InvalidStop as exc:
+                result = dict(status='recovery_required', error_code='unverified_stop', detail=str(exc))
             except (ValueError, OSError, KeyError) as exc:
                 interrupted = tid == 'publish-pack' and (root/'publication/journal.json').is_file()
                 result = dict(status='recovery_required' if interrupted else 'failed',
@@ -587,20 +653,25 @@ def reconcile_attempt(run, tid):
     """Only adopt stopped candidate work or reconcile this attempt's own journal."""
     def apply(s):
         row = s['actions'][tid]
-        if row.get('status') not in ('running', 'recovery_required', 'stale') or not row.get('attempt_dir'):
+        if not row.get('attempt_dir') or (
+                row.get('status') not in ('running', 'recovery_required', 'stale') and not row.get('invalidated_active')):
             raise f.FlowError('no interrupted attempt')
         root = Path(row['attempt_dir'])
         attempt = row['attempt']
         if tid == 'publish-pack':
-            result = publish(s, spec_for(s, tid), attempt, root, recover=True)
-            if result.get('publication_result', {}).get('status') == 'restored':
+            own_journal = root/'publication/journal.json'
+            previous = row.get('publication_result', {})
+            if (previous.get('error_code') == 'pending_publication' and previous.get('journal')
+                    and Path(previous['journal']) != own_journal and not own_journal.exists()):
+                # Earlier trial records counted a foreign reservation as local recovery.
+                row.pop('publication_result')
                 s['status'] = 'ready'
+                result = foreign_reservation()
+            else:
+                result = publish(s, spec_for(s, tid), attempt, root, recover=True)
+                if result.get('publication_result', {}).get('status') == 'restored':
+                    s['status'] = 'ready'
         else:
-            f._current(s)
-            same_attempt(s, tid, attempt)
-            result = f._read(root/'stopped.json')
-            from pack_receipts import verify_receipt_files
-            if result.get('attempt') != attempt or verify_receipt_files(result):
-                raise f.FlowError('stopped result does not match current attempt')
+            result = stopped_candidate(s, tid, attempt, root)
         return finish(s, tid, attempt, root, result)
     return transact(run, apply)['actions'][tid]
