@@ -79,19 +79,30 @@ def probe(html: Path, widths: list[int], themes: list[str]) -> dict:
     from playwright.sync_api import sync_playwright
     if str(REPO / 'workbook') not in sys.path:
         sys.path.insert(0, str(REPO / 'workbook'))
+    from browser_runtime import install_render_routes, launch_chromium, local_url
     import vendor_route
+
+    html = html.resolve()
+    notes_root = REPO / "복습노트"
+    local_root = notes_root if html.is_relative_to(notes_root) else html.parent
+    url = local_url(html, local_root)
     checks = []
     with sync_playwright() as pw:
-        browser = pw.chromium.launch(channel='chrome', headless=True)
+        browser = launch_chromium(pw)
         try:
             for width in widths:
                 for theme in themes:
-                    page = browser.new_page(viewport={'width': width, 'height': 900}, color_scheme=theme)
-                    misses = vendor_route.install(page)
-                    page.goto(html.resolve().as_uri())
-                    page.wait_for_load_state('load')
+                    page = browser.new_page(viewport={'width': width, 'height': 900}, color_scheme=theme,
+                                            offline=True, service_workers='block')
+                    blocked = set()
+                    install_render_routes(page, local_roots=(local_root,),
+                                          vendor_resolver=vendor_route.resolve_asset, blocked=blocked)
+                    response = page.goto(url, wait_until='load')
+                    if response is None or not response.ok:
+                        raise RuntimeError(f'Local HTML did not load: {html}')
                     if page.evaluate(_KATEX_MISSING):
-                        raise RuntimeError('KaTeX not loaded' + (': ' + '; '.join(misses) if misses else ''))
+                        detail = ': ' + '; '.join(sorted(blocked)) if blocked else ''
+                        raise RuntimeError('KaTeX not loaded' + detail)
                     page.evaluate("t => document.documentElement.setAttribute('data-theme', t)", theme)
                     toggle = page.locator('#toggle-right[aria-expanded="false"]')
                     if toggle.count() and toggle.first.is_visible():
