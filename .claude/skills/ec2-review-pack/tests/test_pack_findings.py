@@ -122,6 +122,15 @@ def note_run(tmp_path):
             s['tasks'][tid].setdefault('artifacts', {})[name] = str(path)
         for tid in ('scope-draft', 'scope-final'):
             s['tasks'][tid].setdefault('artifacts', {})['manifest.json'] = str(fixture/'manifest.json')
+        for tid,names in [('stt-0909',['summaries/stt-0909.md']),
+                          ('candidate-index',['candidates.json','catalog/index.json']),
+                          ('selection',['selection-review.json'])]:
+            row = flow._record(s,tid)
+            for name in names:
+                path = fixture/name
+                path.parent.mkdir(parents=True,exist_ok=True)
+                path.write_text('synthetic summary' if name.endswith('.md') else '{}')
+                row.setdefault('artifacts',{})[name] = str(path)
         for tid in authors:
             name = 'sections/' + tid[7:] + '.html'
             s['tasks'][tid]['artifacts'] = {name: str(fixture/name)}
@@ -471,6 +480,9 @@ def test_visual_finding_requires_screenshot_and_can_be_repaired(note_run, old_ou
                         repair_input=str(first_note), repair_screen=str(old_screen),
                         current_outcome=current_outcome, current_evidence=new_observation,
                         current_screen=str(new_screen))
+        # Form the genuine current target proof before trying malformed repair fields.
+        if receipt['status'] == 'done':
+            prepare_browser_receipt(run,current,receipt)
         path.write_text(json.dumps(receipt))
         assert flow.check_task(run, 'browser-qa', claim['attempt'], path)['status'] == 'failed'
         decision['attempt'] = attempt
@@ -481,6 +493,8 @@ def test_visual_finding_requires_screenshot_and_can_be_repaired(note_run, old_ou
             path.write_text(json.dumps(receipt))
             assert flow.check_task(run, 'browser-qa', claim['attempt'], path)['status'] == 'failed'
             decision[field] = previous
+    if not overlap:
+        prepare_browser_receipt(run,current,receipt)
     path.write_text(json.dumps(receipt))
     state = flow.accept_task(run, 'browser-qa', claim['attempt'], path)
     row = state['findings'][finding['id']]
@@ -775,3 +789,16 @@ def test_cross_source_duplicate_footer_id_routes_one_editable_owner(note_run, co
     claim = flow.claim_task(run, 'scope-draft')
     repair, = flow._read(claim['brief'])['repair_findings']
     assert repair['id'] == item['id']
+
+def prepare_browser_receipt(run, brief, receipt):
+    from pack_support import add_target_judgments
+    from pack_approvals import target_contract
+    add_target_judgments(brief,receipt)
+    for output in receipt['outputs']:
+        if output['path'] == str(Path(brief['run'])/'work/browser/report.json'):
+            output['sha256'] = flow._sha(Path(output['path']))
+    receipt['target_reviews'] = str(Path(brief['run'])/'target-reviews.json')
+    state=flow.inspect_state(run)
+    result=target_contract(state,state['tasks']['browser-qa'],receipt,write=True)
+    existing={r['path'] for r in receipt['outputs']}
+    receipt['outputs'].extend(dict(path=p,sha256=flow._sha(Path(p))) for p in result['outputs'] if p not in existing)

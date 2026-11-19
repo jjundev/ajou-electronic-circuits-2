@@ -460,7 +460,16 @@ def _current(state):
         evidence = record.get('receipt') if name in state['tasks'] else record
         if not evidence or not evidence.get('verified_files') or verify_receipt_files(evidence, hashes):
             record['status'] = 'stale'
-        elif state.get('workflow') == 'parallel' and evidence.get('render_environment'):
+        if state.get('approval_contract') == 1 and name in state['tasks']:
+            from pack_approvals import ROLES, review_policy
+            role = record['role']
+            if role in ROLES:
+                proof = evidence or {}
+                positive = record['status'] == 'done'
+                if proof.get('approval_policy') != review_policy(role) or positive and (
+                        not proof.get('target_reviews') or not {'fresh_approvals','reused_approvals'} <= proof.keys()):
+                    record['status'] = 'stale'
+        if record['status'] != 'stale' and state.get('workflow') == 'parallel' and evidence.get('render_environment'):
             from pack_approvals import environment_current
             manifest = _read(evidence['render_environment']['path'])
             if not environment_current(state, _read(record['brief']), manifest):

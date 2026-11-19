@@ -31,6 +31,10 @@ def seed(state, tids):
         evidence = [{'path': str(marker), 'sha256': flow._sha(marker)}]
         record.update(status='done', attempt='synthetic-test-' + tid, receipt={'verified_files': evidence},
                       verified_files=evidence)
+        from pack_approvals import ROLES, review_policy
+        if tid in ROLES:
+            record['receipt'].update(approval_policy=review_policy(tid), target_reviews=str(marker),
+                                     fresh_approvals={},reused_approvals={})
 
 
 def selected(tmp_path, problems):
@@ -176,13 +180,21 @@ def test_zero_problem_cli_publishes_only_after_actual_converter_and_review_recei
                 target.write_text(raw)
             else:
                 target.write_text('{}')
-        if brief['role'] in ('browser-qa', 'standalone-svg-qa'):
-            names = brief.get('svg_screenshots', {'browser': str(Path(brief['run'])/'browser.png')})
-            for name in names.values():
-                p = Path(name)
-                p.parent.mkdir(parents=True, exist_ok=True)
-                Image.new('RGB', (16, 9)).save(p)
-                extra.append(p)
+        if brief['role'] == 'standalone-svg-qa':
+            from browser_runtime import install_render_routes,launch_chromium,local_url
+            from playwright.sync_api import sync_playwright
+            with sync_playwright() as pw:
+                browser = launch_chromium(pw)
+                for svg_source,name in brief['svg_screenshots'].items():
+                    target, img = Path(svg_source), Path(name)
+                    img.parent.mkdir(parents=True, exist_ok=True)
+                    page = browser.new_page(offline=True, service_workers='block')
+                    install_render_routes(page,local_roots=(target.parent,),blocked=set())
+                    page.goto(local_url(target,target.parent))
+                    page.screenshot(path=img)
+                    extra.append(img)
+                    page.close()
+                browser.close()
         return extra
     def worker(tid):
         parallel_worker(run, tid, write)
@@ -222,6 +234,13 @@ def test_zero_problem_cli_publishes_only_after_actual_converter_and_review_recei
     worker('browser-qa')
     worker('standalone-svg-qa')
     from pack_actions import run_action
+    import pack_approvals
+    with monkeypatch.context() as changed:
+        changed.setattr(pack_approvals, 'POLICY', 'updated-fixture-policy')
+        assert 'publish-pack' not in flow.next_work(run, slots=8)['actions']
+        with pytest.raises(flow.FlowError):
+            run_action(run, 'publish-pack')
+        assert not (repo/'복습노트/0909').exists()
     audit = Path(flow.load_state(run)['active_audit'])
     approved_bytes = audit.read_bytes()
     audit.chmod(0o644)
@@ -323,6 +342,7 @@ def test_early_index_seals_real_questions_for_independent_attempts(tmp_path):
     assert set(a['path'] for a in blind['inputs']) == {str(p) for p in Path(blind['questions']).parent.iterdir()}
     question, = json.loads(Path(blind['questions']).read_text())['problems']
     assert question['id'] == 'p1' and question['ask_html'] and question['figures']
+    assert (question['title'], question['display_title']) == ('P1. Practice', 'Practice')
     assert not {'reference_steps', 'reference_answer', 'source'} & question.keys()
     assert not list(Path(blind['questions']).parent.parent.rglob('source.json'))
     assert not (repo/'복습노트/0909').exists()
@@ -362,25 +382,11 @@ def test_early_index_seals_real_questions_for_independent_attempts(tmp_path):
     import pymupdf
     pdf = Path(flow.load_state(run)['actions']['build-answers']['artifacts']['pdf'])
     def inspect_pdf(brief, outputs):
-        root = Path(brief['run'])
-        report = Path(brief['report'])
-        report.write_text('Synthetic fixture review only.')
-        pages = root/'answer-pages'
-        pages.mkdir()
-        images = []
         with pymupdf.open(pdf) as document:
-            assert len(document) >= 1
-            for i, page in enumerate(document, 1):
-                img = pages/f'page-{i:0{len(str(len(document)))}d}.png'
-                page.get_pixmap(matrix=pymupdf.Matrix(.1, .1)).save(img)
-                images.append(img)
-        overlay = Path(brief['overlay'])
-        review = dict(schema_version=1, status='pass', reviewer='synthetic-pdf-qa', overflow=[],
-                      pdf_sha256=flow._sha(pdf), overlay_sha256=flow._sha(overlay),
-                      learning_style_sha256=json.loads(overlay.read_text())['learning_style']['sha256'],
-                      evidence=[dict(path=str(p.relative_to(root)), sha256=flow._sha(p)) for p in [report, *images]])
-        (root/'answer-review.json').write_text(json.dumps(review))
-        return images
+            assert len(document) == len(brief['approval_plan']['targets'])
+            for index,page in enumerate(document,1):
+                expected = page.get_pixmap(dpi=96, alpha=False).tobytes('png')
+                assert Path(brief['approval_plan']['targets'][f'pdf-page:{index}']['image']).read_bytes() == expected
     pdf_review = parallel_worker(run, 'pdf-qa', inspect_pdf)['tasks']['pdf-qa']
     assert pdf_review['status'] == 'done'
     assert Path(pdf_review['artifacts']['answer-review.json']).is_file()

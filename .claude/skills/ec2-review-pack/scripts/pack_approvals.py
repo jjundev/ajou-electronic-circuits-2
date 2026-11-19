@@ -11,8 +11,9 @@ from pathlib import Path
 import pack_flow as f
 
 
-POLICY = 'ec2-target-review-v1'
+POLICY = 'ec2-target-review-v2'
 VIEWS = ('desktop-light', 'desktop-dark', 'mobile-light', 'mobile-dark')
+INTERACTIONS = ('navigation', 'summary_panels', 'theme', 'persistence', 'widgets', 'pdf_links', 'overflow_math_console')
 ROLES = {'explain-blind', 'pdf-qa', 'browser-qa', 'standalone-svg-qa'}
 
 
@@ -64,12 +65,27 @@ def collect_current_reviews(required: dict[str, str], ledger: list[dict], *, run
     return dict(current=current, pending=pending)
 
 
+def review_policy(role):
+    import manifest  # initializes the workbook module path in a fresh CLI interpreter
+    from learning_style import PERSONALIZED_REVIEW_POLICY
+    return {'targets': POLICY, 'solution': PERSONALIZED_REVIEW_POLICY} if role == 'explain-blind' else {'targets': POLICY}
+
+
 def blind_targets(questions, sealed, profile):
     from learning_style import PERSONALIZED_REVIEW_POLICY
     rows = {}
     for question in questions:
         workbook = question['workbook_id']
         inputs = {k: digest(question[k]) for k in ('title', 'original_html', 'conditions_html', 'ask_html', 'subparts')}
+        # The sealed producer uses workbook.display_titles.numbered_title and
+        # pN IDs for the same ordinal. Only its own display prefix is incidental.
+        position = re.fullmatch(r'p([1-9][0-9]*)', question['id'])
+        if position and 'display_title' in question:
+            from display_titles import numbered_title
+            titles = {workbook: question['display_title']}
+            if numbered_title(titles, workbook, int(position[1])) != question['title']:
+                raise f.FlowError('sealed display title does not match question identity')
+            inputs['title'] = digest(titles[workbook])
         inputs['figures'] = digest([f._sha(sealed/name) for name in question['figures']])
         inputs['profile'] = profile
         inputs['solution_policy'] = PERSONALIZED_REVIEW_POLICY
@@ -116,6 +132,23 @@ def _geometry(page):
     return hints
 
 
+def explanation_assets(problem, assets):
+    """The overlay producer enumerates img[src] from each step and answer."""
+    from html.parser import HTMLParser
+    class Images(HTMLParser):
+        def handle_starttag(self, tag, attrs):
+            if tag == 'img':
+                refs.add(dict(attrs).get('src'))
+    refs = set()
+    for item in [*problem['steps'], *problem['answers']]:
+        if not isinstance(item, dict) or not isinstance(item.get('html'), str):
+            return assets
+        parser = Images()
+        parser.feed(item['html'])
+        parser.close()
+    return {ref:assets[ref] for ref in refs} if refs <= assets.keys() else assets
+
+
 def pdf_targets(pdf, overlay, directory, fingerprint, *, order=None):
     """Render *all* current pages before computing any reusable page identity."""
     import pymupdf
@@ -144,7 +177,8 @@ def pdf_targets(pdf, overlay, directory, fingerprint, *, order=None):
         target = 'pdf-page:' + str(n)
         inputs = dict(render_fingerprint=fingerprint, page_image=f._sha(image), order=order_identity,
                       count=str(len(pages)), explanation=digest(problems[owner] if owner is not None else problems),
-                      assets=digest(overlay.get('assets', {})), profile=digest(overlay['learning_style']),
+                      assets=digest(overlay.get('assets', {}) if owner is None else explanation_assets(
+                          problems[owner], overlay.get('assets', {}))), profile=digest(overlay['learning_style']),
                       overlay_policy=digest(overlay.get('review_policy_version')))
         rows[target] = dict(key=approval_key('pdf-page', target, input_hashes=inputs, policy_version=POLICY),
                             owner=ids[owner] if owner is not None else None, image=str(image),
@@ -188,49 +222,118 @@ def environment_current(state, brief, manifest):
             [r['path'] for r in manifest['files']] == [str(f.nfc_path(p)) for p in resource_paths(state, brief)])
 
 
-def static_views(note, root, topics):
-    """Measure actual viewport output for inert, local documents only."""
+def note_assets(markup, note, resources):
+    """Resolve the local images and shared sheets used by this DOM slice."""
+    from html.parser import HTMLParser
+    from urllib.parse import urlsplit, unquote
+    found = {}
+    uncertain = False
+
+    def collect(ref, base):
+        nonlocal uncertain
+        url = urlsplit(ref.strip())
+        if ref.startswith(('data:', '#')) or not url.path:
+            return
+        if url.scheme or url.netloc or url.path.startswith('/'):
+            uncertain = True
+            return
+        path = (base / unquote(url.path)).resolve()
+        if path not in resources:
+            uncertain = True
+            return
+        if str(path) in found:
+            return
+        found[str(path)] = resources[path]
+        if path.suffix.lower() == '.css':
+            css(path.read_text(), path.parent)
+        if path.suffix.lower() == '.svg' and uncertain_svg(path.read_text()):
+            uncertain = True
+
+    def css(text, base):
+        nonlocal uncertain
+        if re.search(r'@import|image-set\(|\\\\', text, re.I):
+            uncertain = True
+        for ref in re.findall(r'url\(\s*([^)]*)\)', text, re.I):
+            collect(ref.strip().strip('"\''), base)
+
+    class Sources(HTMLParser):
+        in_style = False
+        def handle_starttag(self, tag, attrs):
+            nonlocal uncertain
+            attrs = dict(attrs)
+            self.in_style = tag == 'style'
+            if tag == 'base' or 'srcset' in attrs:
+                uncertain = True
+            for key, value in attrs.items():
+                if key == 'style' and value:
+                    css(value, note.parent)
+                if value and (key == 'src' or key == 'poster' or key in ('href', 'xlink:href') and tag not in ('a','area')):
+                    collect(value, note.parent)
+        def handle_endtag(self, tag):
+            if tag == 'style':
+                self.in_style = False
+        def handle_data(self, text):
+            if self.in_style:
+                css(text, note.parent)
+    parser = Sources()
+    parser.feed(markup)
+    parser.close()
+    return None if uncertain else digest(sorted((str(Path(p).relative_to(note.parent)),h) for p,h in found.items()))
+
+
+def capture_views(note, root, topics, folder, resources, vendor):
+    """Save the exact viewport inspected by each target judgment."""
     from browser_runtime import local_url, install_render_routes, launch_chromium
-    from playwright.sync_api import Error, sync_playwright
-    raw = note.read_text()
-    if re.search(r'<(?:script|iframe|object|embed|video|canvas|meta[^>]*refresh)\b|\son\w+\s*=|@(?:import|keyframes)', raw, re.I):
-        return None
+    from vendor_route import resolve
+    from playwright.sync_api import sync_playwright
+    from urllib.parse import quote
+    dynamic = bool(re.search(r'<(?:script|iframe|object|embed|video|canvas|meta[^>]*refresh)\b|\son\w+\s*=|@(?:import|keyframes)',
+                             note.read_text(), re.I))
     results = {}
+    folder.mkdir(parents=True, exist_ok=True)
     with sync_playwright() as pw:
         browser = launch_chromium(pw)
         try:
             for view in VIEWS:
                 mobile, dark = view.startswith('mobile'), view.endswith('dark')
-                page = browser.new_page(viewport={'width':375 if mobile else 1280, 'height':812 if mobile else 900},
-                                        color_scheme='dark' if dark else 'light', offline=True, service_workers='block',
-                                        java_script_enabled=False)
+                viewport = {'width':375 if mobile else 1280, 'height':812 if mobile else 900}
+                page = browser.new_page(viewport=viewport, color_scheme='dark' if dark else 'light',
+                                        reduced_motion='reduce', offline=True, service_workers='block')
                 try:
                     blocked = set()
-                    install_render_routes(page, local_roots=(root,), blocked=blocked)
+                    install_render_routes(page, local_roots=(root,), blocked=blocked,
+                                          vendor_resolver=lambda url:resolve(url, vendor)[0])
                     page.on('response', lambda r: blocked.add(r.url) if r.status >= 400 else None)
-                    page.goto(local_url(note,root))
-                    page.evaluate('document.fonts.ready')
-                    shell = page.evaluate("""ids => {
-                        const clone = document.documentElement.cloneNode(true);
-                        for (const id of ids) clone.querySelector('#'+CSS.escape(id))?.replaceChildren();
-                        return clone.outerHTML;
-                    }""", topics)
-                    for topic in topics:
-                        # Only isolate explicit, non-nested articles. The viewport
-                        # includes any sidebar or neighbouring material actually visible.
-                        loc = page.locator('article[id=' + json.dumps(topic) + ']')
-                        if loc.count() != 1:
-                            return None
+                    theme = 'dark' if dark else 'light'
+                    page.add_init_script("localStorage.setItem('od-theme'," + json.dumps(theme) + ")")
+                    url = local_url(note,root)
+                    page.goto(url)
+                    for index, topic in enumerate(topics,1):
+                        if dynamic:
+                            page.goto(url + '#' + quote(topic, safe=''))
+                        loc = page.locator('[id=' + json.dumps(topic) + ']')
+                        if loc.count() != 1 or not loc.is_visible():
+                            continue
+                        loc.evaluate("e=>e.scrollIntoView({block:'start',behavior:'instant'})")
+                        page.evaluate("async()=>{await document.fonts.ready; await new Promise(requestAnimationFrame); await new Promise(requestAnimationFrame)}")
+                        seen = loc.evaluate("""e=>{const r=e.getBoundingClientRect();return r.right>0&&r.left<innerWidth&&r.bottom>0&&r.top<innerHeight}""")
+                        effective = page.evaluate("document.documentElement.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')")
+                        if not seen or effective != theme:
+                            continue
                         markup = loc.evaluate('e=>e.outerHTML')
-                        loc.evaluate("e=>e.scrollIntoView({block:'start'})")
-                        pixels = hashlib.sha256(page.screenshot(animations='disabled')).hexdigest()
-                        results[(topic, view)] = digest([shell, markup, pixels, browser.version])
-                    if blocked:
-                        return None
+                        shell = page.evaluate("""ids => {
+                            const clone=document.documentElement.cloneNode(true);
+                            for (const id of ids) clone.querySelector('#'+CSS.escape(id))?.replaceChildren();
+                            return clone.outerHTML;
+                        }""", topics)
+                        image = folder/f'{index:04}-{view}.png'
+                        png = page.screenshot(path=image, animations='disabled')
+                        sha = hashlib.sha256(png).hexdigest()
+                        direct = None if dynamic or blocked else note_assets(shell+markup,note,resources)
+                        results[(topic,view)] = dict(image=str(image), image_sha256=sha, viewport=viewport,
+                            browser_version=browser.version, resource_failures=sorted(blocked), inputs=digest([shell,markup,direct,sha,browser.version]) if direct else None)
                 finally:
                     page.close()
-        except Error:
-            return None
         finally:
             browser.close()
     return results
@@ -275,17 +378,20 @@ def _visual_targets(state, brief, fingerprint, *, served=None):
         note = root/Path(brief['note']).name
         if not note.is_file() or f._sha(note) != f._sha(Path(brief['note'])):
             raise f.FlowError('served browser candidate differs from assembled note')
-        resources = digest([(Path(r['path']).relative_to(root).as_posix(), r['sha256'])
-                            for r in served if Path(r['path']) != note])
-        views = static_views(note, root, brief['targets'])
-        # Unbounded scripts or unresolved resources have no provably stable
-        # target rendering. A fresh attempt must inspect the entire group.
-        group = digest([f._sha(note), resources, brief['attempt']]) if views is None else None
+        resources = {Path(r['path']).resolve():r['sha256'] for r in served if Path(r['path']) != note}
+        group = digest([f._sha(note), sorted((str(p.relative_to(root)),h) for p,h in resources.items()), brief['attempt']])
+        vendor = Path(state['repo'])/'.claude/skills/ec2-problem-explain/assets/vendor' if state.get('repo') else None
+        folder = Path(brief['run'])/'captured-views'
+        views = capture_views(note, root, brief['targets'], folder, resources, vendor)
         for topic in brief['targets']:
             for view in VIEWS:
                 target = f'note-visual:{topic}:{view}'
-                inputs = dict(target_group=group or views[(topic,view)], resources=resources, render_fingerprint=fingerprint)
-                rows[target] = dict(owner=topic, key=approval_key('note-visual', target, input_hashes=inputs, policy_version=POLICY))
+                capture = dict(views.get((topic,view), {}))
+                identity = capture.pop('inputs', None) or group
+                inputs = dict(target_group=identity, render_fingerprint=fingerprint,
+                              capture=capture.get('image_sha256'), browser=capture.get('browser_version'))
+                rows[target] = dict(owner=topic, key=approval_key('note-visual', target, input_hashes=inputs,
+                                    policy_version=POLICY), **capture)
     else:
         for record in converted['svgs']:
             path = Path(record['path'])
@@ -306,6 +412,7 @@ def make_plan(state, brief):
     role = brief['role']
     if role not in ROLES:
         return
+    brief['approval_policy'] = review_policy(role)
     run = Path(state['run'])
     snapshot = f._read(run/'learning-style.json')
     profile = digest(snapshot)
@@ -335,6 +442,11 @@ def make_plan(state, brief):
             brief['geometry_hints'] = dict(path=str(hints), sha256=f._sha(hints))
         else:
             rows = _visual_targets(state, brief, fingerprint, served=served)
+            if role == 'browser-qa':
+                brief['interaction_checks'] = list(INTERACTIONS)
+                actual_versions = {r['browser_version'] for r in rows.values() if 'browser_version' in r}
+                if len(actual_versions) == 1:
+                    brief['render_context']['version'] = actual_versions.pop()
     required = {target: row['key'] for target, row in rows.items()}
     ledger = state.get('approval_ledger', [])
     result = collect_current_reviews(required, ledger, run_root=run)
@@ -407,9 +519,10 @@ def _target_contract(state, task, receipt, *, write):
         finally:
             sys.path.remove(str(child_scripts))
     for index, (target, spec) in enumerate(plan['targets'].items(), 1):
-        if role == 'pdf-qa':
+        if role in ('browser-qa', 'pdf-qa'):
+            require(spec.get('image'), 'missing current target capture')
             canonical = local_path(root, Path(spec['image']).relative_to(root).as_posix())
-            require(canonical.is_file() and file_hash(canonical) == spec['image_sha256'], 'current rendered page missing or changed')
+            require(canonical.is_file() and file_hash(canonical) == spec['image_sha256'], 'current rendered capture missing or changed')
             outputs.append(str(canonical))
         if target in pending:
             decision = decisions[target]
@@ -427,7 +540,12 @@ def _target_contract(state, task, receipt, *, write):
                 require(image.is_absolute() and f.within(image, root), 'fresh screen outside claimed attempt')
                 local_path(root, image.relative_to(root).as_posix())
                 if role == 'browser-qa':
-                    require(not image.is_relative_to(root/'review-screens'), 'fresh screen uses runner output directory')
+                    from PIL import Image
+                    require(spec.get('image') and image == Path(spec['image']) and file_hash(image) == spec['image_sha256'],
+                            'screen must match the actual current target capture')
+                    with Image.open(image) as shot:
+                        require(shot.size == (spec['viewport']['width'],spec['viewport']['height']), 'wrong capture viewport')
+                    require(spec['browser_version'] == decision['renderer']['version'], 'capture renderer mismatch')
                 if role == 'standalone-svg-qa':
                     require(image == Path(spec['image']), 'standalone screen must match its claimed SVG')
                 _png(image)
@@ -458,8 +576,9 @@ def _target_contract(state, task, receipt, *, write):
             items[spec['item']]['reviewer'] = row['reviewer']
         else:
             image = Path(row['screen'])
+            if role in ('browser-qa', 'pdf-qa'):
+                require(file_hash(image) == spec['image_sha256'], 'original approved screen differs from current capture')
             if role == 'pdf-qa':
-                require(file_hash(image) == spec['image_sha256'], 'original PDF screen differs from current page')
                 dest = root/'answer-pages'/Path(spec['image']).name
                 pdf_evidence.append(dest)
             elif role == 'standalone-svg-qa':
@@ -467,6 +586,15 @@ def _target_contract(state, task, receipt, *, write):
             else:
                 dest = root/'review-screens'/f'{index:04}.png'
             materialize(dest, image.read_bytes())
+    if role == 'browser-qa':
+        report = local_path(root, 'work/browser/report.json')
+        require(report.is_file(), 'complete browser interaction report required')
+        interactions = obj(report).get('interactions', {})
+        require(isinstance(interactions, dict) and set(interactions) == set(VIEWS), 'interaction evidence for all four views required')
+        for view in VIEWS:
+            results = interactions[view]
+            require(isinstance(results, dict) and all(isinstance(results.get(k), str) and results[k].strip()
+                    for k in INTERACTIONS), 'missing browser interaction evidence for ' + view)
     if role == 'explain-blind':
         # The blind worker can run build/check repeatedly. Its directory must
         # never reveal another solver's answers, even after its own submission.

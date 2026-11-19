@@ -295,8 +295,51 @@ def parallel_worker(run, tid, write_outputs):
     report.write_text('Synthetic fixture review only.')
     reviews = [str(report), *[str(p) for p in outputs if p.name == 'report.json']]
     receipt = Path(brief['receipt'])
+    if 'approval_plan' in brief:
+        from pack_receipts import build_receipt
+        info = dict(status='done',report=str(report),reviews=reviews,
+                    outputs=[str(p) for p in outputs if p.is_file()],counts={'targets':brief['targets']},unresolved=[])
+        add_target_judgments(brief,info)
+        submission = Path(brief['run'])/'worker.json'
+        submission.write_text(json.dumps(info))
+        build_receipt(f.inspect_state(run),tid,claim['attempt'],submission)
+        return f.accept_task(run,tid,claim['attempt'],receipt)
     receipt.write_text(json.dumps(dict(schema_version=1, run_id=brief['run_id'], task_id=tid,
         attempt=claim['attempt'], status='done', inputs=brief['inputs'],
         outputs=[{'path': str(p), 'sha256': f._sha(p)} for p in outputs], report=str(report),
         reviews=reviews, counts={'targets': brief['targets']}, unresolved=[])))
     return f.accept_task(run, tid, claim['attempt'], receipt)
+
+
+def add_target_judgments(brief, submission):
+    """Fixture-only judgments, bound to the actual page/view captures or solved items."""
+    root = Path(brief['run'])
+    role = brief['role']
+    plan = brief['approval_plan']
+    if role == 'browser-qa':
+        browser_interactions(brief)
+    decisions = {}
+    for target in plan['pending']:
+        spec = plan['targets'][target]
+        if role == 'explain-blind':
+            item = json.loads((root/'independent.json').read_text())['items'][spec['item']]
+            decision = dict(item,status='pass')
+        else:
+            decision = dict(status='pass', evidence='synthetic fixture inspection',image=spec['image'])
+            if role == 'pdf-qa':
+                decision.update(overflow=[], geometry_evidence='fixture glyph and geometry inspection')
+            else:
+                decision['renderer'] = brief['render_context']
+        decisions[target] = decision
+    source = root/'target-reviews.json'
+    source.write_text(json.dumps(decisions))
+    submission['reviews'].append(str(source))
+
+def browser_interactions(brief):
+    """Recorded positive fixture judgments, separate from the machine-rendered screens."""
+    path = Path(brief['run'])/'work/browser/report.json'
+    path.parent.mkdir(parents=True, exist_ok=True)
+    report = json.loads(path.read_text()) if path.is_file() else {}
+    report['interactions'] = {view:{k:'synthetic fixture adjudication: '+k for k in brief['interaction_checks']}
+                               for view in ('mobile-light','mobile-dark','desktop-light','desktop-dark')}
+    path.write_text(json.dumps(report))

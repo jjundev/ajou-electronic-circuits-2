@@ -190,6 +190,32 @@ def claim_worker(state, task):
     if role in ('style-audit', 'content-review', 'browser-qa', 'standalone-svg-qa'):
         data['manifest'] = str(output(state, 'scope-final', 'manifest.json'))
         data['note'] = str(output(state, 'assemble-note', 'note'))
+    if role == 'content-review' and state.get('approval_contract'):
+        index = state['actions']['candidate-index']['artifacts']
+        catalog = [p for name,p in index.items() if name.startswith('catalog/') and name.endswith('.json')]
+        if 'catalog/index.json' not in index:
+            raise f.FlowError('content review requires the accepted exam catalog')
+        summaries = [str(output(state, 'stt-'+date, 'summaries/stt-'+date+'.md')) for date in state['sessions']]
+        selection = state['tasks']['selection']['artifacts']
+        data.update(summaries=summaries, candidates=index['candidates.json'], exam_catalog=index['catalog/index.json'],
+                    selection=selection['selection.json'], selection_review=selection['selection-review.json'])
+        evidence = [*summaries, *catalog, data['candidates'], data['selection'], data['selection_review']]
+        originals = {}
+        for item in f._read(data['candidates']).get('problems', []):
+            if item['id'] not in state['selected_ids'] and (item['kind'] != '기출' or item['used']):
+                continue
+            detail = f._read(index['catalog/' + item['detail_path']]) if item.get('detail_path') else item
+            for name, expected in detail['input_hashes'].items():
+                path = local_path(Path(state['repo']), name)
+                if originals.setdefault(str(path), expected) != expected:
+                    raise f.FlowError('inconsistent content review source: ' + name)
+        from pack_receipts import records
+        sources = [{'path':p,'sha256':h} for p,h in originals.items()]
+        records(sources, [Path(state['repo'])])
+        data['original_sources'] = list(originals)
+        data['inputs'].extend([*file_records(map(Path, evidence)), *sources])
+        refs = Path(state['repo'])/'.claude/skills/ec2-review-pack/references'
+        data['references'].extend(str(refs/name) for name in ('content-rules.md','problem-selection.md'))
     if role in ('style-audit', 'content-review'):
         data['audit_output'] = required[0]
     if role == 'browser-qa':
@@ -378,6 +404,14 @@ def validate_worker(state, task, receipt_path):
         receipt['verified_files'].append(compact)
         if brief.get('approval_plan') and receipt['task_status'] == 'done' and not receipt.get('target_reviews'):
             raise f.FlowError('compact success requires complete target judgments')
+    from pack_approvals import ROLES, review_policy
+    if state.get('approval_contract') == 1 and task['role'] in ROLES:
+        policy = review_policy(task['role'])
+        if brief.get('approval_policy') != policy:
+            raise f.FlowError('claimed approval policy has changed')
+        receipt['approval_policy'] = policy
+        if receipt['task_status'] == 'done' and not receipt.get('target_reviews'):
+            raise f.FlowError('claimed contract requires complete current target judgments')
     if 'target_reviews' in receipt:
         from pack_approvals import target_contract
         if receipt['task_status'] != 'done' or receipt['target_reviews'] != str(Path(task['attempt_dir'])/'target-reviews.json'):
@@ -524,6 +558,10 @@ def accept_worker(run, tid, attempt, receipt_path):
         version = proof(current, spec_for(current, tid))
         if version != task['input_version'] or verify_receipt_files(receipt):
             raise f.FlowError('worker input or file version changed during adoption')
+        if 'approval_policy' in receipt:
+            from pack_approvals import review_policy
+            if receipt['approval_policy'] != review_policy(row['role']):
+                raise f.FlowError('target review policy changed during adoption')
         if environment := receipt.get('render_environment'):
             from pack_approvals import environment_current
             if not environment_current(current, f._read(row['brief']), f._read(environment['path'])):
@@ -564,9 +602,16 @@ def seal_questions(state, paths, root, slug):
     sealed = root / 'sealed'
     sealed.mkdir()
     problems = []
+    display = paths.work_file('.assets/display-titles.json')
+    titles = f._read(display) if state.get('approval_contract') and display.is_file() else {}
     for problem in source['problems']:
         item = {key: problem[key] for key in ('id', 'workbook_id', 'subparts', 'title', 'original_html',
                                               'conditions_html', 'ask_html')}
+        if problem['workbook_id'] in titles:
+            from display_titles import numbered_title
+            if problem['title'] != numbered_title(titles, problem['workbook_id'], problem['number']):
+                raise f.FlowError('sealed question title differs from approved display title')
+            item['display_title'] = titles[problem['workbook_id']]
         item['figures'] = []
         for i, markup in enumerate(problem['figures_html']):
             img = ET.fromstring(markup.replace('></figure>', '/></figure>')).find('img')
