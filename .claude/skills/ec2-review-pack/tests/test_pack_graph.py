@@ -148,7 +148,12 @@ def test_quiz_adoption_keeps_approved_answer_after_sibling_removed(tmp_path, mon
     exercise_zero_problem_cli(tmp_path, monkeypatch, None, quiz_repair='removed')
 
 
+def test_quiz_adoption_freezes_uncertified_predecessor_packet(tmp_path, monkeypatch):
+    exercise_zero_problem_cli(tmp_path, monkeypatch, None, quiz_repair='local-correction')
+
+
 def exercise_zero_problem_cli(tmp_path, monkeypatch, scope_change, *, quiz_repair=None):
+    import pack_parallel
     import pymupdf
     from PIL import Image
     from _util import prepare_mini_run
@@ -287,6 +292,24 @@ def exercise_zero_problem_cli(tmp_path, monkeypatch, scope_change, *, quiz_repai
         parallel_worker(run, 'concept-review', lambda brief, outputs: exercise_sibling_repair(brief, tmp_path, quiz_repair))
         verified = flow.inspect_state(run)['tasks']['concept-review']
         assert verified['status'] == 'done' and verified['attempt'] != accepted['attempt']
+        if quiz_repair == 'local-correction':
+            quiz = Path(verified['attempt_dir'])/'quiz'
+            ledger = flow._read(quiz/'blind-ledger.json')
+            submission = flow._read((quiz/ledger['q2']['proof']).with_name('submission.json'))
+            predecessor = Path(submission['previous']['q2']['proof'])
+            sheet = predecessor.parent.parent/'packet'/'문제.md'
+            receipt = verified['receipt']
+            adopted = Path(verified['artifacts'][(Path('quiz')/sheet).as_posix()])
+            assert receipt['quiz_files'][sheet.as_posix()] == flow._sha(adopted) == flow._sha(quiz/sheet)
+            assert adopted.stat().st_mode & 0o222 == 0
+            # A v1 certificate could have accepted C without B's physical sheet.
+            cert = receipt['blind_certificate']
+            old = dict(cert, solver_history_version=1)
+            old_rows = pack_parallel.prior_blind_approval(run, receipt['run_id'], verified['attempt'], old,
+                                                          flow._read(quiz/'source.json')['logical_inputs'])
+            assert old_rows == {}
+            (quiz/sheet).unlink()
+            assert flow.inspect_state(run)['tasks']['concept-review']['status'] == 'stale'
         if quiz_repair == 'revised':
             shot = next((Path(verified['attempt_dir'])/'quiz/shots').glob('*.png'))
             shot.write_bytes(b'fixture third certified attempt')
@@ -388,7 +411,6 @@ def exercise_zero_problem_cli(tmp_path, monkeypatch, scope_change, *, quiz_repai
         assert not (repo/'복습노트/0909/확인문제_0909_Mini_Test.html').exists()
 
     # A review file changes after assessing all review evidence, before copying.
-    import pack_parallel
     visual = Path(review['attempt_dir'])/'quiz/visual-review.json'
     approved = visual.read_bytes()
     def race(command, *args):
@@ -495,6 +517,16 @@ def exercise_sibling_repair(brief, tmp_path, repair):
                 '--round','3','--author','fixture-author','--solver')
         call(*args,'fixture-solver',expected=False)
         call(*args,'third-solver')
+    elif repair == 'local-correction':
+        for number,solver,answer in ((2,'second-solver','wrong'),(3,'third-solver','4')):
+            items[1].update(stem_html=f'<p>{number}+1?</p>',answer={'canonical':str(number+1)})
+            flow._atomic_json(quiz/'items.json',dict(items=items))
+            packet = tmp_path/f'local-issue-{number}'
+            answers = tmp_path/f'local-answer-{number}.md'
+            answers.write_text(f'| q2 | {answer} | |')
+            call('blind-make','--only','q2','--out',packet)
+            call('blind-record','--packet',packet,'--answers',answers,'--round',str(number),
+                 '--author','fixture-author','--solver',solver)
     elif repair == 'removed':
         flow._atomic_json(quiz/'items.json', dict(items=items[:1]))
         ledger = flow._read(ledger_path)

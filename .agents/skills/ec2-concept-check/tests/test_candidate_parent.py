@@ -363,7 +363,9 @@ def test_uncertified_local_solver_history_requires_recorded_responses(tmp_path):
         blind.evidence(quiz,data,{'q1':dict(rows['q1'], solvers=['C'])})
 
 
-def test_solver_can_correct_unsuccessful_second_round_before_third_approval(tmp_path, monkeypatch):
+@pytest.mark.parametrize('certified_first', [False, True])
+@pytest.mark.parametrize('damage', ['missing', 'modified', 'resealed', 'intact'])
+def test_solver_can_correct_unsuccessful_second_round_before_third_approval(tmp_path, monkeypatch, certified_first, damage):
     import blind
     quiz = tmp_path/'quiz'
     quiz.mkdir()
@@ -371,13 +373,41 @@ def test_solver_can_correct_unsuccessful_second_round_before_third_approval(tmp_
                 answer={'canonical':'2'},hint='add')
     data = dict(logical_inputs={'note':'fixture'}, items=[item], objectives=[{'id':'o1'}])
     ledger = quiz/'blind-ledger.json'
-    for number,solver,answer in ((1,'A','2'),(2,'B','5'),(3,'C','2')):
+    archives = []
+    for number,solver,answer in ((1,'A','2'),(2,'B','5'),(3,'C','4')):
+        item.update(stem_html=f'<p>{number}+1?</p>', figure_svg=f'<svg><text>{number}</text></svg>',
+                    answer={'canonical':str(number + 1)})
         packet = tmp_path/f'packet-{number}'
         blind.issue(data,quiz,packet)
+        archives.append(blind.issued_path(quiz,packet)/'packet')
         answers = put(tmp_path/'answers.md',f'| q1 | {answer} | |')
         rows = blind.record(data,answers,ledger,number,packet_dir=packet,author='writer',solver=solver)
         source.write(ledger,rows)
-        if number == 1:
+        if certified_first and number == 1:
             monkeypatch.setattr(blind,'inherited_rows',lambda *_args, approved=rows:approved)
     assert rows['q1']['solvers'] == ['A','B','C'] and not blind.errors(data,rows)
-    blind.evidence(quiz,data,rows)
+    if damage == 'intact':
+        evidence = set(blind.evidence(quiz,data,rows))
+        for archive in archives[1:] if certified_first else archives:
+            assert {archive/'문제.md', archive/'q1.svg'} <= evidence
+    else:
+        if damage == 'missing':
+            (archives[1]/'문제.md').unlink()
+        else:
+            (archives[1]/'q1.svg').write_text('<svg>changed</svg>')
+        if damage == 'resealed':
+            # Even a consistent chain of file receipts must reproduce B's own questions.
+            issue = archives[1].parent/'issued.json'
+            issued = source.read(issue)
+            issued['files']['q1.svg'] = source.sha(archives[1]/'q1.svg')
+            source.write(issue,issued)
+            latest = (quiz/rows['q1']['proof']).with_name('submission.json')
+            event = source.read(latest)
+            ref = event['previous']['q1']
+            previous = (quiz/ref['proof']).with_name('submission.json')
+            source.write(previous,dict(source.read(previous),issued_sha256=source.sha(issue)))
+            ref['sha256'] = source.sha(previous)
+            source.write(latest,event)
+            rows['q1']['submission_sha256'] = source.sha(latest)
+        with pytest.raises(ValueError,match='packet'):
+            blind.evidence(quiz,data,rows)

@@ -31,6 +31,7 @@ def nfc_path(p: str | Path) -> Path:
 
 # RUN holds state, receipts and backups; the OS clears these on reboot.
 TEMP_ROOTS = ('/tmp', '/private/tmp', '/var/folders', '/private/var/folders')
+BLIND_HISTORY_VERSION = 2  # Includes packet files from every uncertified round.
 
 
 def default_run_dir(range_: str, now) -> Path:
@@ -469,7 +470,7 @@ def _current(state):
             if name == 'concept-review':
                 approval = evidence or {}
                 certificate = approval.get('blind_certificate') or {}
-                if (not approval.get('quiz_files') or certificate.get('solver_history_version') != 1
+                if (not approval.get('quiz_files') or certificate.get('solver_history_version') != BLIND_HISTORY_VERSION
                         or certificate not in approval.get('verified_files', [])):
                     record['status'] = 'stale'
             if name == 'concept-draft':

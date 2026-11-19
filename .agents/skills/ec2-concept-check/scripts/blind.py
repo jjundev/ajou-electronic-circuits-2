@@ -44,15 +44,33 @@ def packet(data, folder):
         (folder/name).write_bytes(content)
 
 
-def verify_packet(archive, issued, data, targets, *, inherited=False):
+def verified_packet_files(archive, issued):
+    """Reconstruct the answer-free files from this issue's own question snapshot."""
+    from pack_paths import checked_file
     questions = issued.get('questions', [])
     ids = [q['id'] for q in questions]
-    current = {item['id']:item for item in data['items']}
     if (not ids or not all(isinstance(cid, str) and re.fullmatch(r'q[1-9][0-9]*', cid) for cid in ids)
             or len(set(ids)) != len(ids) or set(ids) != set(issued['items'])
             or questions != projection(questions)):
         raise ValueError('invalid independent packet projection')
-    stored = dict(zip(ids, questions))
+    expected = {name:hashlib.sha256(content).hexdigest() for name,content in packet_contents(questions).items()}
+    folder = checked_file(archive, 'packet')
+    if (expected != issued.get('files') or not folder.is_dir()
+            or set(expected) != {p.name for p in folder.iterdir()}):
+        raise ValueError('independent packet files changed')
+    paths = set()
+    for name, value in expected.items():
+        path = checked_file(folder, name)
+        if not path.is_file() or sha(path) != value:
+            raise ValueError('independent packet files changed')
+        paths.add(path)
+    return paths
+
+
+def verify_packet_source(issued, data, targets, *, inherited=False):
+    questions = issued['questions']
+    stored = {q['id']:q for q in questions}
+    current = {item['id']:item for item in data['items']}
     objectives = {o['id']:o for o in data['objectives']}
     if not inherited:
         subset = [item for item in data['items'] if item['id'] in stored]
@@ -61,13 +79,8 @@ def verify_packet(archive, issued, data, targets, *, inherited=False):
             raise ValueError('independent packet differs from its full current source; reissue it')
     for cid in targets:
         item = current[cid]
-        if issued['items'].get(cid) != digest(item, objectives[item['objective']]) or stored[cid] != projection([item])[0]:
+        if issued['items'].get(cid) != digest(item, objectives[item['objective']]) or stored.get(cid) != projection([item])[0]:
             raise ValueError('independent packet question changed')
-    expected = {name:hashlib.sha256(content).hexdigest() for name,content in packet_contents(questions).items()}
-    folder = archive/'packet'
-    if (expected != issued.get('files') or set(expected) != {p.name for p in folder.iterdir()}
-            or any((folder/name).is_symlink() or sha(folder/name) != value for name,value in expected.items())):
-        raise ValueError('independent packet files changed')
 
 
 def digest(item, objective):
@@ -130,13 +143,16 @@ def solver_history(run, cid, row, approved):
         require(event.get('solver') == name and type(event.get('round')) is int and 1 <= event['round'] < next_round)
         author = event.get('author')
         require(isinstance(author,str) and author.strip() and author == author.strip() and author != name)
+        issued = read(issue)
+        packet_files = verified_packet_files(issue.parent, issued)
         require(event.get('answers_sha256') == sha(answer) and event.get('issued_sha256') == sha(issue))
-        require(cid in event.get('previous', {}) and cid in read(issue)['items'])
+        require(cid in event.get('previous', {}) and cid in issued['items'])
         require(any(parts[0].strip() == cid and len(parts) == 3 and parts[1].strip() for parts in
                     (line.strip().strip('|').split('|', 2) for line in answer.read_text(encoding='utf-8').splitlines())))
         if not paths:
             require((event['round'],event['author']) == (number,row['author']))
         paths.update((answer,record,issue))
+        paths.update(packet_files)
         next_round = event['round']
         ref = event['previous'][cid]
         if row != approved:
@@ -177,7 +193,8 @@ def record(data, answers, previous, round_, *, packet_dir=None, author=None, sol
             raise ValueError('issued packet required')
         archive = issued_path(previous.parent, packet_dir)
         issued = read(archive/'issued.json')
-        verify_packet(archive, issued, data, responses)
+        verified_packet_files(archive, issued)
+        verify_packet_source(issued, data, responses)
         if (set(responses) != set(issued['items']) or
                 {p.name:sha(p) for p in packet_dir.iterdir()} != issued['files']):
             raise ValueError('independent packet or response set changed')
@@ -246,18 +263,12 @@ def evidence(run, data, ledger):
             if original.parent.relative_to(run) in prior_issues or (previous and (
                     row['round'] <= previous['round'] or row['solver'] in previous['solvers'])):
                 raise ValueError('independent packet or recipient differs from the accepted approval; reissue it')
-        verify_packet(original.parent, issued, data, [cid], inherited=inherited)
+        verify_packet_source(issued, data, [cid], inherited=inherited)
         rows = [line.strip().strip('|').split('|', 2) for line in answer.read_text(encoding='utf-8').splitlines()]
         if (issued['items'].get(cid) != row['sha256'] or
                 [cid, row['answer'], row['objection']] not in [[v.strip() for v in parts] for parts in rows]):
             raise ValueError('independent packet or answer changed')
         paths.update(solver_history(run, cid, row, previous))
-        paths.update((answer, original))
-        for name, digest_ in issued['files'].items():
-            file = checked_file(original.parent/'packet', name)
-            if sha(file) != digest_:
-                raise ValueError('independent packet changed')
-            paths.add(file)
     return sorted(paths)
 
 

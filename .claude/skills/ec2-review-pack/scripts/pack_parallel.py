@@ -795,11 +795,11 @@ def seal_blind_approval(state, task, adopted, hashes):
     f._atomic_json(path, dict(run_id=state['run_id'], attempt=task['attempt'],
                    source_sha256=hashes['source.json'], teaching_sha256=quiz_teaching_digest(source['logical_inputs']), rows=rows))
     path.chmod(0o444)
-    return dict(file_records([path])[0], solver_history_version=1)
+    return dict(file_records([path])[0], solver_history_version=f.BLIND_HISTORY_VERSION)
 
 
 def prior_blind_approval(run, run_id, attempt, record, logical_inputs):
-    if not record or record.get('solver_history_version') != 1:
+    if not record or record.get('solver_history_version') != f.BLIND_HISTORY_VERSION:
         return {}
     try:
         base = Path(run)/'blind-approvals'
