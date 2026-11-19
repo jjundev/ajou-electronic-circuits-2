@@ -1,6 +1,7 @@
 """Private attempts and durable handoffs for the explicit review-pack graph."""
 from pathlib import Path
 from uuid import uuid4
+import copy
 import hashlib
 import tempfile
 import shutil
@@ -9,6 +10,7 @@ import sys
 import time
 
 import pack_flow as f
+import pack_findings as findings
 from pack_graph import task_specs
 
 
@@ -35,6 +37,8 @@ def ancestors(state, spec):
 def proof(state, spec):
     if state.get('stale_inputs') or state['status'] in ('blocked', 'withheld', 'recovery_required'):
         raise f.FlowError('RUN lacks current source or authorization')
+    if reason := findings.blocked_reason(state, spec.id):
+        raise f.FlowError(reason)
     version = {}
     for tid, rec in ancestors(state, spec).items():
         if rec.get('status') != 'done' or not rec.get('attempt'):
@@ -81,6 +85,8 @@ def worker_inputs(state, spec):
 def claim_worker(state, task):
     from pack_receipts import standalone_screenshots
     spec = spec_for(state, task['id'])
+    if task['status'] == 'needs_fix' and task['role'] in findings.REVIEW_ROLES:
+        raise f.FlowError('request correction for the accepted findings before re-review')
     version = proof(state, spec)
     if f._owner(state, task) == 'unavailable':
         raise f.FlowError('required inspection unavailable')
@@ -149,6 +155,19 @@ def claim_worker(state, task):
                     candidate_pack=state['actions']['stage-problem-index']['pack']['root'],
                     public_pack=str(public(state)), snapshot=str(snapshot),
                     instruction='Extract against this candidate pack and slug. Use the accepted fragments and independent results. Complete all child reviews.')
+    repairs = [r for r in state.get('findings', {}).values()
+               if r['owner_task'] == task['id'] and r.get('pending_request')]
+    if repairs:
+        data['repair_findings'] = repairs
+        data['previous_outputs'] = {name: task['artifacts'][name] for name in spec.outputs}
+        data['inputs'] = file_records([*(Path(x['path']) for x in data['inputs']),
+                                       *map(Path, data['previous_outputs'].values())])
+    if role in findings.REVIEW_ROLES:
+        candidate = data['pdf'] if role == 'pdf-qa' else data['note']
+        data['candidate_digest'] = f._sha(Path(candidate))
+        data['recheck_findings'] = [dict(r, repair_attempt=version.get(r['owner_task']))
+                                    for r in state.get('findings', {}).values()
+                                    if r['review_id'] == role and r['status'] != 'resolved']
     path = root / 'brief.json'
     f._atomic_json(path, data)
     task.update(attempt=attempt, attempt_dir=str(root), brief=str(path), brief_sha256=f._sha(path),
@@ -250,9 +269,16 @@ def validate_worker(state, task, receipt_path):
     if proof(state, spec) != task['input_version']:
         raise f.FlowError('frozen worker inputs superseded')
     receipt = validate_receipt(state, task, receipt_path)
+    if task['role'] in findings.REVIEW_ROLES and receipt['task_status'] in ('done', 'needs_fix'):
+        # task check exercises the same decision rules without changing RUN state.
+        trial = copy.deepcopy(state)
+        register_review(trial, trial['tasks'][task['id']], receipt)
     if receipt['task_status'] != 'done':
         return receipt
     root = Path(task['attempt_dir'])
+    previous = f._read(task['brief']).get('previous_outputs', {})
+    if previous and all(f._sha(Path(path)) == f._sha(local_path(root, name)) for name, path in previous.items()):
+        raise f.FlowError('unchanged repair output')
     role = task['role']
     if role == 'scope-draft':
         scope_manifest(state, f._read(root / 'manifest.json'))
@@ -299,9 +325,19 @@ def freeze_files(root, paths, expected, destination):
     return result
 
 
+def register_review(state, task, receipt):
+    findings.check_reviewer(state, task)
+    brief = f._read(task['brief'])
+    task.update(status=receipt['task_status'], receipt=receipt, candidate_digest=brief['candidate_digest'])
+    if task['status'] == 'needs_fix' and not receipt['unresolved']:
+        raise f.FlowError('needs-fix requires structured findings')
+    findings.adjudicate(state, task['id'], receipt['unresolved'], receipt.get('fix_results', []),
+                        receipt.get('reconciliations', []))
+
+
 def adopt_worker(state, task, receipt):
     task.update(status=receipt['task_status'], receipt=receipt)
-    if task['status'] != 'done':
+    if task['status'] != 'done' and not (task['role'] in findings.REVIEW_ROLES and task['status'] == 'needs_fix'):
         return
     root = Path(task['attempt_dir'])
     dst = Path(state['run']) / 'adopted' / task['id'] / str(uuid4())
@@ -321,8 +357,6 @@ def adopt_worker(state, task, receipt):
             s['id'] for s in m['sections'] if any(t['id'] in link_topics for t in s['topics'])})
     if task['role'] == 'selection':
         state['selected_ids'] = [q['id'] for q in f._read(dst / 'manifest.json')['problems']]
-    if task['role'] == 'style-audit':
-        state['active_audit'] = str(dst / 'learning-style-audit-note.json')
 
 
 
@@ -341,10 +375,16 @@ def accept_worker(run, tid, attempt, receipt_path):
         if version != task['input_version'] or verify_receipt_files(receipt):
             raise f.FlowError('worker input or file version changed during adoption')
         row.update(status=task['status'], receipt=receipt)
-        if row['status'] == 'done':
+        if row['status'] == 'done' or (tid in findings.REVIEW_ROLES and row['status'] == 'needs_fix'):
             row['artifacts'] = task['artifacts']
-            keys = {'scope-draft': ('scope_sections', 'link_sections'), 'selection': ('selected_ids',),
-                    'style-audit': ('active_audit',)}.get(tid, ())
+            if tid in findings.REVIEW_ROLES:
+                register_review(current, row, receipt)
+                if tid in findings.NOTE_REVIEWS:
+                    findings.join_reviews(current)
+            else:
+                row['repair_bindings'] = {r['id']: r['pending_request']
+                                          for r in f._read(row['brief']).get('repair_findings', [])}
+            keys = {'scope-draft': ('scope_sections', 'link_sections'), 'selection': ('selected_ids',)}.get(tid, ())
             for key in keys:
                 current[key] = snapshot[key]
         return f.refresh_tasks(current)
@@ -415,6 +455,29 @@ def adopted_packs(state, spec):
     return {tid: row['pack'] for tid, row in ancestors(state, spec).items() if row.get('pack')}
 
 
+def machine_report(state, root, problems, note, manifest):
+    from check_html import parse_file
+    issues = []
+    sections = {}
+    for problem in problems:
+        owner = findings.owner_of(problem.where, manifest)
+        if owner == 'scope-final':
+            # HTML check_common reports widget/element IDs, or a page filename
+            # and a broken link. Find the unique producing fragment if possible.
+            if not sections:
+                sections = {s['id']: parse_file(output(state, 'author-' + s['id'], 'sections/' + s['id'] + '.html'))
+                            for s in manifest['sections']}
+            owners = [sid for sid, doc in sections.items()
+                      if problem.where in doc.ids or problem.detail in doc.hrefs or problem.detail in doc.ids]
+            if len(owners) == 1:
+                owner = 'author-' + owners[0]
+        issues.append(dict(rule=problem.code, target=problem.where, defect=problem.detail, severity='Important',
+                           owner_task=owner, evidence=str(problem)))
+    path = root/'check-findings.json'
+    f._atomic_json(path, dict(candidate_digest=f._sha(note), findings=issues))
+    return {path.name: path}
+
+
 def execute_action(state, spec, root):
     import manifest
     import pack_actions as actions
@@ -429,6 +492,13 @@ def execute_action(state, spec, root):
         if result['status'] != 'pass':
             raise f.FlowError(result['error_code'] or 'render preflight failed')
         files = {'render-preflight.json': root/'render-preflight.json', 'render-preflight.pdf': Path(result['pdf'])}
+    elif tid == findings.MACHINE_REVIEW:
+        from check_html import check_guide, check_note, parse_html
+        note = output(state, 'assemble-note', 'note')
+        source = note.read_text(encoding='utf-8')
+        m = f._read(output(state, 'scope-final', 'manifest.json'))
+        problems = check_note(parse_html(source), m) + check_guide(source, m)
+        files = machine_report(state, root, problems, note, m)
     elif tid == 'candidate-index':
         import problem_index
         data, errors = problem_index.candidate_data(repo, public(state).parent, exclude_range=state['range'])
@@ -446,8 +516,14 @@ def execute_action(state, spec, root):
         paths = actions.compose_candidate_view(repo, public(state), root, adopted_packs(state, spec))
         bundle = input_bundle(state, spec, root)
         files = {}
-        produced = actions.candidate_action(dict(state, run=str(bundle)), tid, paths, root,
-                                            audit=state.get('active_audit'), explain_run=state.get('explain_run'))
+        if tid == 'precheck':
+            m = f._read(bundle/'manifest.json')
+            problems = actions.note_problems(m, paths, state['active_audit'], preliminary=True)
+            files = machine_report(state, root, problems, output(state, 'assemble-note', 'note'), m)
+            produced = []
+        else:
+            produced = actions.candidate_action(dict(state, run=str(bundle)), tid, paths, root,
+                                                audit=state.get('active_audit'), explain_run=state.get('explain_run'))
         roster = {p.relative_to(paths.work_pack).as_posix(): f._sha(p) for p in produced}
         extras.update(pack=dict(root=str(paths.work_pack), files=roster), candidate_root=str(paths.work_pack))
         if tid == 'stage-problem-index':
@@ -576,9 +652,17 @@ def finish(state, tid, attempt, root, result):
     row = state['actions'][tid]
     if row.get('attempt') != attempt:
         raise f.FlowError('late machine result')
+    if tid in (findings.MACHINE_REVIEW, 'precheck') and result['status'] == 'done':
+        row.update(result)
+        report = f._read(output(state, tid, 'check-findings.json'))
+        row['candidate_digest'] = report['candidate_digest']
+        findings.machine_judgment(state, tid, report['findings'])
+        result.update(status=row['status'])
+        if row['status'] == 'needs_fix':
+            result.update(error_code=row['error_code'], detail=row['artifacts']['check-findings.json'])
     marker = root/'result.json'
     f._atomic_json(marker, dict(result, attempt=attempt, task_id=tid))
-    if result['status'] == 'done':
+    if result['status'] in ('done', 'needs_fix'):
         result['verified_files'] = [*result.get('verified_files', []), *file_records([marker])]
     row.update(result)
     if row['status'] == 'done':
@@ -615,7 +699,7 @@ def run_action(run, tid, *, reconcile=False):
             current = spec_for(s, tid)
             version = proof(s, current)
             row = s['actions'][tid]
-            if row['status'] in ('done', 'running', 'recovery_required') or row.get('invalidated_active'):
+            if row['status'] in ('done', 'running', 'needs_fix', 'recovery_required') or row.get('invalidated_active'):
                 raise f.FlowError('machine action already active or complete')
             root.mkdir(exist_ok=False)
             if row.get('attempt'):

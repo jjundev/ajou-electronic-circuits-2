@@ -4,6 +4,14 @@
 
 상세 리뷰는 `<RUN>/work/review/report.md`에 남긴다. 부모에게는 상태·보고/감사 파일 경로·미해결 및 조치 항목의 `where`(topic ID 또는 문제 ID)·`severity`·담당 owner만 8줄 이내로 반환한다. 많은 항목은 보고 파일의 경로와 개수로 알리며 자료 전문·전체 유도·감사 본문을 메시지에 붙이지 않는다.
 
+## 병렬 RUN의 검토 기록
+
+브리프에 `workflow=parallel`이 있으면 두 검토자는 각각 `note`의 고정본을 읽고 자기 attempt의 `report`와 `audit_output`에 기록한다. 감사의 모든 토픽에 실제로 바인딩한 검토자 ID를 쓴다. 두 검토가 모두 통과하면 실행기가 근거를 합친다. 같은 토픽·규칙의 적용 여부가 엇갈리면 두 보고의 원문 근거를 다시 대조한다.
+
+결함이 있으면 receipt의 `status`를 `needs-fix`로 두고 `unresolved`에 결함별로 다음 필드를 남긴다. `rule`은 규칙, `target`은 회차가 바뀌어도 찾을 수 있는 토픽·문항·그림·쪽 ID, `defect`는 해당 위치의 구체적인 오류다. 같은 오류를 다시 확인할 때는 이 세 값을 유지한다. `severity`는 Critical, Important, Minor 중 하나이며 `owner_task`는 수정할 파일을 만든 선행 작업 ID다. `evidence`에는 원문과 실제 산출물에서 확인한 근거를 적는다. 보고서의 항목도 같은 대상과 심각도로 기록한다. 화면 결함은 실제 PNG를 outputs에 포함한다.
+
+수정본을 받은 검토자는 브리프의 `recheck_findings`를 모두 확인한다. 요청된 각 수정의 `fix_results`에 `finding_id`, `request_id`, 작성자의 `attempt`, `outcome`(resolved 또는 unresolved), 새 `evidence`를 적는다. 미해결 항목은 `unresolved`에도 같은 키로 다시 기록한다. 같은 작성자의 다른 수정에서 함께 고쳐진 기존 결함은 현재 후보를 직접 확인하고 `reconciliations`에 `finding_id`, `prior_review_attempt`, `evidence`를 기록한다.
+
 ## 문제 해설의 순서·제목·수식 행
 
 문제 해설(자식 ec2-problem-explain)은 **문제를 읽어요 → 이 개념과 공식을 떠올려요 → 종이에 쓸 첫 줄 → 이렇게 풀어요 → 완성 답과 검산 → 주의할 점 → 조건을 바꾸어 생각해요** 순서다. 사용자 방식의 풀이를 start/solve/verify에 통합하고 이유·유도를 해당 단계에 연결한다. 별도 선행 핵심 풀이와 중복 상세 풀이를 만들지 않는다. 정리노트의 순수 개념 토픽은 기존 레이어 순서를 유지한다.

@@ -4,6 +4,7 @@ import copy
 from typing import Literal
 
 import pack_flow as f
+from pack_findings import blocked_reason
 
 
 @dataclass(frozen=True)
@@ -56,6 +57,7 @@ def task_specs(state: dict) -> tuple[TaskSpec, ...]:
     for sid in state.get('link_sections', []):
         worker('author-' + sid, ('scope-draft', 'scope-final'), (f'sections/{sid}.html',))
     action('assemble-note', ('scope-final', *authors), ('note HTML',))
+    action('structural-precheck', ('assemble-note',), ('check-findings.json',))
     worker('style-audit', ('assemble-note',), ('learning-style-audit-note.json',))
     worker('content-review', ('assemble-note',), ('learning-style-audit-note.json',))
     problem_pdf = ()
@@ -72,7 +74,7 @@ def task_specs(state: dict) -> tuple[TaskSpec, ...]:
         action('build-answers', ('stage-problem-index', 'explain-verify', 'render-preflight'), ('answer PDF',))
         worker('pdf-qa', ('build-answers',), ('answer-review.json', 'answer-review.md'))
         problem_pdf, pdf_qa = ('build-problems',), ('pdf-qa',)
-    action('precheck', ('assemble-note', *problem_pdf), approvals=('style-audit', 'content-review'))
+    action('precheck', ('assemble-note', 'structural-precheck', *problem_pdf), approvals=('style-audit', 'content-review'))
     worker('browser-qa', ('assemble-note', *problem_pdf, 'precheck'), ('work/browser/report.json',))
     action('convert-md', ('assemble-note', *problem_pdf, 'precheck'), ('note MD', 'emitted SVGs'))
     svg = ()
@@ -139,6 +141,8 @@ def ready_work(state: dict, *, slots: int) -> dict:
             result['waiting'].append((spec.id, 'active attempt'))
         elif pending := [dep for dep in spec.dependencies if not f._done(state, dep)]:
             result['waiting'].append((spec.id, pending))
+        elif reason := blocked_reason(state, spec.id):
+            result['blocked'].append((spec.id, reason))
         elif spec.id == 'final-check':
             result['waiting'].append((spec.id, 'grouped with publish-pack'))
         elif spec.kind == 'action':

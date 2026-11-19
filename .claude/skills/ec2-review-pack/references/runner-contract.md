@@ -61,7 +61,7 @@ content-review와 browser-qa는 실제 검토를 마친 대상만 `counts.target
 
 source-prep의 source-map.json은 `{schema_version:1,sessions:[{date,stt,pdfs,status,missing}]}`다. 실제 MMDD 집합, REPO 내부 STT/PDF 절대 경로, ready/missing 및 누락 이유 배열을 기록한다. scope.json은 의미 인계물이므로 임의 기계 스키마로 확장하지 않는다. manifest는 scope-draft→selection→scope-final 단일 작성자 순서다. selection은 `RUN/display-titles.json`에 선발 ID와 정확히 같은 키/비어 있지 않은 제목을 반환한다(0개는 {}). runner는 제목을 선택하지 않는다.
 
-style-audit/content-review는 브리프의 **audit_output**에 쓴다. 앞 작성자의 감사 파일을 덮지 않는다. content-review의 보완 감사만 단일 작성자 인계로 채택되며 precheck를 다시 수행한다. 브라우저/PDF owner=main은 review_locally: 메인이 실제 근거를 읽고 검사한 뒤 동일 claim/receipt/accept 계약을 수행한다. 도구 없는 작업자에게 pass를 요청하지 않는다.
+기존 순차 RUN의 style-audit/content-review는 브리프의 **audit_output**에 쓴다. 앞 작성자의 감사 파일을 덮지 않는다. content-review의 보완 감사만 단일 작성자 인계로 채택되며 precheck를 다시 수행한다. 브라우저/PDF owner=main은 review_locally: 메인이 실제 근거를 읽고 검사한 뒤 동일 claim/receipt/accept 계약을 수행한다. 도구 없는 작업자에게 pass를 요청하지 않는다.
 
 ## 기계 작업·발행 — 최상위 메인
 
@@ -75,7 +75,19 @@ prepare-pack은 첫 변경 전 기본/설명 두 백업을 검증·재사용하�
 
 build-answers는 RUN 안(`RUN/answers`)에만 쓴다. 실패해도 팩 inventory가 그대로면 needs_fix이고 next가 같은 action을 다시 요청한다. 고친 뒤 `run --action build-answers`를 다시 실행한다. 실행 중 팩 파일이 바뀌었으면 recovery_required이고 recover 절을 따른다.
 
-## 수정·중단·복구 — 필요할 때만
+## 병렬 RUN의 내용 검토와 수정
+
+`--workflow parallel`에서 assemble-note가 끝나면 structural-precheck, style-audit, content-review가 같은 HTML을 각각 검사한다. 구조 검사는 토픽·레이어·길잡이를 확인한다. 전체 precheck에는 구조 검사, 양쪽 승인으로 만든 현재 감사, 선택한 경우 문제 PDF가 필요하다. 기존 화면·SVG·PDF 검사와 최종 발행 검사는 계속 실행한다.
+
+메인은 양쪽 노트 검토가 돌아오면 같은 후보의 열린 노트 결함을 한 요청으로 모은다. 기계·화면 검토에서 뒤늦게 발견한 결함은 같은 RUN의 새 요청으로 처리한다. `run-status.json`의 `findings`에서 `id`, `review_attempt`, `input_digest`를 읽고 RUN 안에 다음 형태의 파일을 저장한다.
+
+```json
+{"id":"correct-note-1","items":[{"finding_id":"<finding id>","review_attempt":"<검토 attempt>","input_digest":"<후보 SHA-256>"}]}
+```
+
+`task fix --run <RUN> --request <절대 JSON>`은 해당 작성자를 다시 열고 의존하는 검사를 갱신한다. 작성자는 브리프의 `previous_outputs`를 읽고 `repair_findings`를 새 attempt에서 수정한다. 반복 요청·중단·출력 미변경은 수정 횟수를 쓰지 않는다. 검토자는 새 후보에서 원문과 대조한 결과를 [검토 지시문](review-prompt.md)에 따라 제출한다. 같은 결함에서 서로 다른 두 수정본이 미해결 판정을 받으면 그 결함은 `withheld`가 된다. `report.json`의 `findings`에서 근거와 수정·검토 attempt를 확인한다. 미해결·보류 결함이 있으면 팩 발행이 막히고 다른 결함의 수정은 진행할 수 있다.
+
+## 기존 RUN의 수정·중단·복구
 
 `task fix --run <RUN> --request <절대 JSON>`: `{id,category,items:[{task_id,request_path}],waived?:[{id,reason}]}`. content 요청은 needs_fix인 style-audit·content-review report의 `## Critical`·`## Important`·`## Minor` 아래 `- [<id>]` 결함을 모두 덮어야 한다. 토픽·섹션 ID는 `author-<섹션>`, manifest 문제 ID(노트 밖 `[P12.04]` 포함)는 `selection`, 그 밖은 `scope-final`이 담당이다. 담당 task가 items에 없으면 `content fix misses findings: P12.04→selection`처럼 거부하며 예산을 쓰지 않는다. 일부러 고치지 않는 결함은 `waived`에 이유와 함께 적는다. items에 `pdf-qa`가 있으면 build-answers가 stale이 되어 next가 답안 PDF를 RUN에 다시 빌드한다. category=content 또는 machine_browser. 같은 id 재등록은 중복 차감하지 않는다. 내용 최대 1회, 기계/브라우저 **공통 최대 2회**이며 작성자 수나 release로 늘리지 않는다. 기존 담당자를 재개하고 새 attempt를 사용한다.
 

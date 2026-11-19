@@ -165,7 +165,10 @@ def test_zero_problem_cli_publishes_only_after_actual_converter_and_review_recei
                 review = dict(policy='exam-first-v2', catalog_sha256=rows['catalog_sha256'], candidates=[], coverage=[])
                 target.write_text(json.dumps(review if target.name == 'selection-review.json' else record_selection(m, rows, review)))
             elif target.name == 'learning-style-audit-note.json':
-                shutil.copyfile(fixture/'learning-style-audit.json', target)
+                audit = flow._read(fixture/'learning-style-audit.json')
+                for item in audit['items'].values():
+                    item['reviewer'] = 'synthetic-' + brief['role']
+                target.write_text(json.dumps(audit))
             elif target.suffix == '.html':
                 raw = (fixture/'sections'/target.name).read_text()
                 raw = raw.replace('<ul><li><a href="{{PROBLEM_PDF}}">복습문제 PDF</a></li><li><a href="{{ANSWER_PDF}}">복습문제 답안 PDF</a></li></ul>',
@@ -208,6 +211,8 @@ def test_zero_problem_cli_publishes_only_after_actual_converter_and_review_recei
             return
         worker(tid)
     action('assemble-note')
+    assert 'structural-precheck' in flow.next_work(run, slots=0)['actions']
+    action('structural-precheck')
     worker('content-review')
     worker('style-audit')
     action('precheck')

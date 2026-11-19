@@ -447,7 +447,9 @@ def _current(state):
     state['stale_inputs'] = stale
     records = {**state['tasks'], **state['actions']}
     for name, record in records.items():
-        if record.get('status') != 'done': continue
+        negative_review = (state.get('workflow') == 'parallel' and record.get('status') == 'needs_fix'
+                           and record.get('candidate_digest'))
+        if record.get('status') != 'done' and not negative_review: continue
         if state.get('workflow') == 'parallel' and any(
                 _record(state, tid).get('attempt') != version
                 for tid, version in record.get('input_version', {}).items()):
@@ -463,7 +465,9 @@ def _current(state):
     while changed:
         changed = False
         for record in records.values():
-            if record.get('status') in ('done', 'pending', 'claimed', 'running') and any(
+            reviewing_old = (state.get('workflow') == 'parallel' and record.get('candidate_digest')
+                             and record['status'] == 'needs_fix')
+            if (reviewing_old or record.get('status') in ('done', 'pending', 'claimed', 'running')) and any(
                 _record(state, dep).get('status') in ('stale', 'needs_fix') for dep in record.get('dependencies', [])):
                 if record['status'] in ('claimed', 'running'):
                     record['invalidated_active'] = True
@@ -471,6 +475,10 @@ def _current(state):
     if any(r.get('status') == 'stale' for r in records.values()) or stale:
         if state['status'] not in ('recovery_required', 'withheld', 'blocked'):
             state['status'] = 'needs_fix'
+    if state.get('workflow') == 'parallel' and state.get('active_audit'):
+        from pack_findings import current_audit
+        if not current_audit(state):
+            state.pop('active_audit', None)
     child = state['tasks'].get('child-coordinator')
     if state.get('explain_run') and child and child.get('status') == 'stale':
         state.setdefault('stale_explain_runs', []).append(state['explain_run'])
@@ -773,6 +781,10 @@ def request_fixes(run: Path, request_path: Path) -> dict:
     if not request_path.is_relative_to(run): raise FlowError('fix request must be inside RUN')
     request = _read(request_path)
     state = load_state(run)
+    if state.get('workflow') == 'parallel':
+        from pack_parallel import transact
+        from pack_findings import apply_request
+        return transact(run, lambda s: apply_request(s, request))
     def change(s):
         category, rid, items = request.get('category'), request.get('id'), request.get('items')
         if category not in ('content', 'machine_browser') or not isinstance(rid, str) or not rid or not isinstance(items, list) or not items:
@@ -851,6 +863,8 @@ def authorize_extra_fix(run: Path, authorization_path: Path) -> dict:
     except (OSError, ValueError) as exc:
         raise FlowError('authorization file missing/invalid: ' + str(exc)) from exc
     state = load_state(run)
+    if state.get('workflow') == 'parallel':
+        raise FlowError('extra-round authorization belongs to legacy RUNs')
     def change(s):
         _check_extra_authorization(authorization, s)
         if 'extra_fix_authorization' in s: raise FlowError('one extra round already authorized')

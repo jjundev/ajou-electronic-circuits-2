@@ -129,7 +129,11 @@ def _audit(state, task, run):
         audit_path = Path(brief['audit'])
         require(str(audit_path.resolve()) in {str(Path(x['path']).resolve()) for x in brief['inputs']}, 'active audit must be frozen input')
     snapshot = Path(brief['snapshot']) if parallel else run / 'learning-style.json'
-    errors = validate_style_audit(obj(audit_path), obj(snapshot), targets)
+    audit = obj(audit_path)
+    errors = validate_style_audit(audit, obj(snapshot), targets)
+    if parallel and not errors:
+        require(all(i['reviewer'] == task.get('agent_id') for i in audit['items'].values()),
+                'audit judgments require the bound reviewer identity')
     require(not errors, 'style audit: ' + '; '.join(errors))
     return audit_path.resolve()
 
@@ -215,6 +219,16 @@ def validate_receipt(state: dict, task: dict, receipt_path: Path) -> dict:
             path = nfc_path(path.resolve())
             require(within(path, run) and path.is_file(), 'review evidence missing/outside RUN')
             verified[str(path)] = sha(path)
+        if state.get('workflow') == 'parallel':
+            from pack_findings import REVIEW_ROLES, blocking_findings
+            if role in REVIEW_ROLES and status in ('done', 'ready-for-publish', 'needs-fix'):
+                require(report == Path(brief['report']).resolve(), 'review report must match the claimed brief')
+                declared = {(r.get('severity'), r.get('target')) for r in receipt['unresolved'] if isinstance(r, dict)}
+                require(set(blocking_findings(report)) <= declared, 'blocking report findings missing from receipt')
+                if status == 'needs-fix' and role in ('browser-qa', 'pdf-qa', 'standalone-svg-qa'):
+                    screens = [p for p in outputs if Path(p).suffix.lower() == '.png']
+                    require(screens, 'actual screenshot required for a visual finding')
+                    for p in screens: _png(p)
         task_status = {'needs-fix': 'needs_fix', 'withheld': 'blocked'}.get(status, 'done' if status == 'ready-for-publish' else status)
         if status in ('done', 'ready-for-publish'):
             if role == 'selection':

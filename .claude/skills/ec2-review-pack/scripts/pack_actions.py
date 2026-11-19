@@ -552,6 +552,7 @@ def write_report(run: Path) -> Path:
         'backups':state['backups'],'recovery':state['recovery'],'publication':state['publication'],
         'concept_check': f.concept_check_result(state) or (
             {'status':'pending'} if state.get('concept_check_enabled') and state['status']=='complete' else None),
+        **({'findings':state.get('findings', {})} if state.get('workflow') == 'parallel' else {}),
         'seeded_from':state.get('seeded_from')})
     return report
 
@@ -590,22 +591,30 @@ def compose_candidate_view(repo, public_pack, attempt, adopted):
     return paths
 
 
-def verify_note_view(manifest_data, paths, audit, *, preliminary=False):
+def note_problems(manifest_data, paths, audit, *, preliminary):
     """Check a composed candidate or the published layout with identical link rules."""
     import manifest
-    from check_html import check_pack
-    from html2md import check_md
+    from check_html import check_pack, Problem
     note = paths.work_file(manifest.note_name(manifest_data))
-    errors = list(map(str, check_pack(manifest_data, note, repo=paths.repo, style_audit=f._read(audit),
-                                      defer_answer_pdf=preliminary, pack_paths=paths)))
-    if not preliminary:
-        md = paths.work_file('.assets/' + note.with_suffix('.md').name)
-        errors.extend(check_md(note, md, pack_paths=paths))
+    errors = check_pack(manifest_data, note, repo=paths.repo, style_audit=f._read(audit),
+                        defer_answer_pdf=preliminary, pack_paths=paths)
     if manifest_data['problems']:
         required = [manifest.problem_pdf_name(manifest_data)]
         if not preliminary:
             required.append(manifest.answer_pdf_name(manifest_data))
-        errors.extend('missing PDF: ' + name for name in required if not paths.work_file(name).is_file())
+        errors.extend(Problem('missing-pdf', name, 'missing PDF: ' + name)
+                      for name in required if not paths.work_file(name).is_file())
+    return errors
+
+
+def verify_note_view(manifest_data, paths, audit, *, preliminary=False):
+    import manifest
+    from html2md import check_md
+    errors = list(map(str, note_problems(manifest_data, paths, audit, preliminary=preliminary)))
+    if not preliminary:
+        note = paths.work_file(manifest.note_name(manifest_data))
+        md = paths.work_file('.assets/' + note.with_suffix('.md').name)
+        errors.extend(check_md(note, md, pack_paths=paths))
     if errors:
         raise f.FlowError('\n'.join(errors))
 
