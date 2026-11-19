@@ -39,6 +39,7 @@ def parse_args(argv):
     ap.add_argument('--candidate-pack', type=Path)
     ap.add_argument("--answer-overlay", type=Path, help="현재 검토를 통과한 발행 답안 overlay")
     ap.add_argument('--selection', type=Path, help='복습팩의 승인 입력에 포함할 selection.json')
+    ap.add_argument("--answer-page-order", type=Path, help="답안 PDF 렌더의 비공개 쪽 순서 기록")
     ap.add_argument("--json-only", action="store_true", help="PDF 없이 JSON·HTML만 만든다")
     ap.add_argument("--pdf-dir", type=Path, default=paths.WORKBOOK / "pdf")
     ap.add_argument("--build-dir", type=Path, default=paths.WORKBOOK / "build")
@@ -55,6 +56,8 @@ def parse_args(argv):
         ap.error("대상은 target, --ids, --all 중 하나만 준다")
     if args.ids and not args.name:
         ap.error("--ids 에는 --name 이 필요하다")
+    if args.answer_page_order and (not args.ids or args.mode != 'answers' or args.json_only):
+        ap.error('--answer-page-order requires --ids and a rendered answer PDF')
     if args.answer_overlay and (not args.ids or args.mode == "problems"):
         ap.error("--answer-overlay 는 --ids 및 --mode answers/both 에서만 쓸 수 있다")
     if args.selection and not args.ids:
@@ -133,7 +136,8 @@ def build_one(sel, args):
             continue
         args.pdf_dir.mkdir(parents=True, exist_ok=True)
         pdf_path = args.pdf_dir / f"{stem}.pdf"
-        overflow += [f"{stem}: {x}" for x in render_pdf(html_path, pdf_path)]
+        options = {'order_path': args.answer_page_order} if getattr(args, 'answer_page_order', None) else {}
+        overflow += [f"{stem}: {x}" for x in render_pdf(html_path, pdf_path, **options)]
         print(pdf_path)
     return overflow
 

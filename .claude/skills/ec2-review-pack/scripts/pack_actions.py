@@ -717,6 +717,8 @@ def candidate_action(state, action, paths, attempt, *, audit=None, explain_run=N
                     paths.work_file('.assets/display-titles.json'), '--layout', 'video-16x9',
                     '--pdf-dir', paths.work_pack, '--build-dir', attempt/'workbook-build', *pair]
             if answers:
+                if state.get('approval_contract'):
+                    args += ['--answer-page-order', attempt/'page-order.json']
                 args += ['--answer-overlay', paths.work_file(f".assets/자료_문제설명_{m['range']}_{m['slug']}/answer-overlay.json")]
         proc = subprocess.run([sys.executable, *map(str, args)], capture_output=True, text=True)
         (attempt/'producer-stdout.log').write_text(proc.stdout, encoding='utf-8')

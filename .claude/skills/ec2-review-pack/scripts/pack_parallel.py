@@ -66,7 +66,7 @@ def public(state):
     return Path(state['repo']) / '복습노트' / state['range']
 
 
-def worker_inputs(state, spec):
+def original_worker_inputs(state, spec):
     row = f._record(state, 'stage-problem-index')
     if spec.id in ('explain-blind', 'explain-author'):
         return file_records(Path(p) for p in row['questions'])
@@ -79,6 +79,59 @@ def worker_inputs(state, spec):
         paths.update(row.get('artifacts', {}).values())
         if adopted := row.get('pack'):
             paths.update(str(local_path(adopted['root'], name)) for name in adopted['files'])
+    return file_records(paths)
+
+
+def worker_inputs(state, spec):
+    if not state.get('approval_contract'):
+        return original_worker_inputs(state, spec)
+    role = f._record(state, spec.id)['role']
+    if role in ('explain-blind', 'explain-author'):
+        return file_records(map(Path, state['actions']['stage-problem-index']['questions']))
+    snapshot = Path(state['run'])/'learning-style.json'
+    paths = {snapshot, Path(state['repo'])/f._read(snapshot)['path']}
+    if role == 'source-prep':
+        paths.update(map(Path, state['hashes']))
+    elif role == 'stt':
+        source = f._record(state, 'source-prep')
+        paths.add(Path(source['artifacts']['source-map.json']))
+        sessions = f._read(source['artifacts']['source-map.json'])['sessions']
+        session, = [item for item in sessions if item['date'] == spec.id[4:]]
+        paths.update(map(Path, [session['stt'], *session['pdfs']]))
+        paths.add(Path(source['artifacts']['slides.txt']))
+    elif role == 'pdf-qa':
+        paths.update((output(state, 'build-answers', 'pdf'), output(state, 'explain-verify', 'overlay')))
+    elif role in ('style-audit', 'content-review', 'browser-qa', 'standalone-svg-qa'):
+        paths.update((output(state, 'scope-final', 'manifest.json'), output(state, 'assemble-note', 'note')))
+        if role == 'standalone-svg-qa':
+            converted = state['converted_assets']
+            paths.update(Path(r['path']) for r in [converted['md'], *converted['svgs']])
+        if role == 'browser-qa':
+            if state.get('active_audit'):
+                paths.add(Path(state['active_audit']))
+            pack = state['actions'].get('build-problems', {}).get('pack', {})
+            candidate = state['actions']['precheck']['candidate_root']
+            paths.update(local_path(candidate, name) for name in pack.get('files', {}) if name.endswith('.pdf'))
+    else:
+        for tid in spec.direct_inputs:
+            source = f._record(state, tid)
+            artifacts = source.get('artifacts', {})
+            if tid in state['tasks']:
+                names = spec_for(state, tid).outputs
+            else:
+                names = artifacts
+            paths.update(Path(artifacts[key]) for key in names if key in artifacts)
+        if role == 'child-coordinator':
+            paths.add(output(state, 'selection', 'manifest.json'))
+    if role in ('scope-draft', 'author', 'style-audit', 'content-review'):
+        source = f._record(state, 'source-prep').get('artifacts', {})
+        if source_map := source.get('source-map.json'):
+            # These roles verify the lecture's teaching content against its
+            # actual sources. They do not need any prior worker's QA screenshots.
+            paths.add(Path(source_map))
+            for session in f._read(source_map)['sessions']:
+                paths.update(map(Path, [session['stt'], *session['pdfs']]))
+            paths.add(Path(source['slides.txt']))
     return file_records(paths)
 
 
@@ -137,7 +190,6 @@ def claim_worker(state, task):
     if role in ('style-audit', 'content-review', 'browser-qa', 'standalone-svg-qa'):
         data['manifest'] = str(output(state, 'scope-final', 'manifest.json'))
         data['note'] = str(output(state, 'assemble-note', 'note'))
-        data['inputs'] = file_records([*(Path(x['path']) for x in data['inputs']), Path(data['note']), Path(data['manifest'])])
     if role in ('style-audit', 'content-review'):
         data['audit_output'] = required[0]
     if role == 'browser-qa':
@@ -148,7 +200,6 @@ def claim_worker(state, task):
         data['allowed_outputs'].extend(data['svg_screenshots'].values())
     if role == 'pdf-qa':
         data.update(pdf=str(output(state, 'build-answers', 'pdf')), overlay=str(output(state, 'explain-verify', 'overlay')))
-        data['inputs'] = file_records([*(Path(x['path']) for x in data['inputs']), Path(data['overlay'])])
     if role == 'child-coordinator':
         state['explain_run'] = str(root / 'child')
         data.update(explain_run=state['explain_run'], manifest=str(output(state, 'selection', 'manifest.json')),
@@ -182,6 +233,18 @@ def claim_worker(state, task):
                     inputs[candidate_file['path']] = candidate_file
             data['recheck_findings'].append(item)
         data['inputs'] = list(inputs.values())
+    from pack_approvals import make_plan
+    if state.get('approval_contract'):
+        frozen = {r['path']:r for r in data['inputs']}
+        refs = [Path(p) for p in data.get('references', []) if Path(p).is_file()]
+        frozen.update({r['path']:r for r in file_records(refs)})
+        data['inputs'] = list(frozen.values())
+        data['input_paths'] = list(frozen)
+        make_plan(state, data)
+    else:
+        keys = ('note', 'manifest') if 'note' in data else ('overlay',) if role == 'pdf-qa' else ()
+        extra = [Path(data[k]) for k in keys]
+        data['inputs'] = file_records([*(Path(r['path']) for r in data['inputs']), *extra])
     path = root / 'brief.json'
     f._atomic_json(path, data)
     task.update(attempt=attempt, attempt_dir=str(root), brief=str(path), brief_sha256=f._sha(path),
@@ -283,6 +346,53 @@ def validate_worker(state, task, receipt_path):
     if proof(state, spec) != task['input_version']:
         raise f.FlowError('frozen worker inputs superseded')
     receipt = validate_receipt(state, task, receipt_path)
+    # Never trust worker-supplied approval identities or computed provenance.
+    for name in ('fresh_approvals', 'reused_approvals', 'render_environment', 'joined_independent'):
+        receipt.pop(name, None)
+    brief = f._read(task['brief'])
+    receipt['verified_files'].append(dict(path=task['brief'], sha256=task['brief_sha256']))
+    if environment := brief.get('render_environment'):
+        from pack_approvals import environment_current
+        from pack_receipts import records
+        records([environment], [Path(task['attempt_dir'])])
+        manifest = f._read(environment['path'])
+        if not environment_current(state, brief, manifest):
+            raise f.FlowError('render environment changed after claim')
+        records(manifest['files'], [Path(state['repo'])])
+        records(manifest['served'], [Path(state['run'])])
+        receipt['verified_files'].extend([environment, *manifest['files'], *manifest['served']])
+        if hints := brief.get('geometry_hints'):
+            records([hints], [Path(task['attempt_dir'])])
+            receipt['verified_files'].append(hints)
+        receipt['render_environment'] = environment
+    compact = receipt.get('worker_submission')
+    if compact:
+        from pack_receipts import records, submission_fields
+        root = Path(task['attempt_dir'])
+        records([compact], [root])
+        worker_fields = submission_fields(root, compact['path'])
+        expected_outputs = set(worker_fields.pop('outputs'))
+        if any(receipt.get(k) != value for k,value in worker_fields.items()) or any(
+                k in receipt and k not in worker_fields for k in ('fix_results', 'reconciliations')):
+            raise f.FlowError('receipt differs from original worker submission')
+        receipt['verified_files'].append(compact)
+        if brief.get('approval_plan') and receipt['task_status'] == 'done' and not receipt.get('target_reviews'):
+            raise f.FlowError('compact success requires complete target judgments')
+    if 'target_reviews' in receipt:
+        from pack_approvals import target_contract
+        if receipt['task_status'] != 'done' or receipt['target_reviews'] != str(Path(task['attempt_dir'])/'target-reviews.json'):
+            raise f.FlowError('invalid target review path/status')
+        result = target_contract(state, task, receipt)
+        if not set(result['outputs']) <= {x['path'] for x in receipt['outputs']}:
+            raise f.FlowError('target screens/results must be declared outputs')
+        if task['role'] == 'explain-blind':
+            receipt['joined_independent'] = result['independent']
+        if compact:
+            expected_outputs.update(result['outputs'])
+        receipt.update(fresh_approvals=result['fresh'], reused_approvals=result['reused'])
+        receipt['verified_files'].extend(dict(path=p, sha256=h) for p,h in result['evidence'].items())
+    if compact and expected_outputs != {r['path'] for r in receipt['outputs']}:
+        raise f.FlowError('output inventory differs from worker submission and computed target proof')
     if task['role'] in findings.REVIEW_ROLES and receipt['task_status'] in ('done', 'needs_fix'):
         # task check exercises the same decision rules without changing RUN state.
         trial = copy.deepcopy(state)
@@ -306,15 +416,26 @@ def validate_worker(state, task, receipt_path):
         if not task.get('agent_id'):
             raise f.FlowError('bound leaf reviewer identity required')
         other = state['tasks']['explain-blind' if role == 'explain-author' else 'explain-author']
+        if role == 'explain-author' and other['status'] == 'done':
+            solved = f._read(output(state, 'explain-blind', 'independent.json'))['items']
+            if any(item['reviewer'] == task['agent_id'] for item in solved.values()):
+                raise f.FlowError('independent solver cannot author their reused solution')
         if other.get('agent_id') == task['agent_id']:
             raise f.FlowError('independent solver must differ from author')
     if role == 'explain-blind':
         questions = f._read(output(state, 'stage-problem-index', 'questions.json'))['problems']
         keys = {p['id'] + ':' + sub for p in questions for sub in p['subparts']}
-        items = f._read(root/'independent.json')['items']
-        if set(items) != keys or any(item.get('reviewer') != task['agent_id'] or
+        items = (receipt['joined_independent'] if 'joined_independent' in receipt
+                 else f._read(root/'independent.json')['items'])
+        plan = brief.get('approval_plan', {})
+        from pack_approvals import collect_current_reviews
+        old = collect_current_reviews(receipt.get('reused_approvals', {}), state.get('approval_ledger', []),
+                                      run_root=Path(state['run']))['current']
+        solvers = {plan['targets'][t]['item']:r['reviewer'] for t,r in old.items()}
+        if set(items) != keys or any(item.get('reviewer') != solvers.get(k, task['agent_id']) or
+                item.get('reviewer') == state['tasks']['explain-author'].get('agent_id') or
                 not all(isinstance(item.get(k), str) and item[k].strip() for k in ('method', 'conclusion', 'evidence'))
-                for item in items.values()):
+                for k,item in items.items()):
             raise f.FlowError('blind solution must cover every subpart with the bound solver')
     if role == 'child-coordinator':
         check_leaf_join(state, root/'child')
@@ -359,10 +480,25 @@ def adopt_worker(state, task, receipt):
     # Child receipt/run semantics use absolute paths; its validated files remain hash-bound.
     owned = [Path(x['path']) for x in receipt['outputs']]
     owned.extend(Path(x) for x in (receipt['report'], *receipt['reviews']))
+    if state.get('approval_contract'):
+        owned.append(Path(task['brief']))
+    if compact := receipt.get('worker_submission'):
+        owned.extend([Path(compact['path']), Path(f._read(task['brief'])['receipt'])])
     if task['role'] == 'pdf-qa':
         owned.extend(Path(x) for x in verified if Path(x).is_relative_to(root / 'answer-pages'))
     task['artifacts'] = freeze_files(root, sorted(set(owned)), verified, dst)
     receipt['verified_files'].extend(file_records(Path(p) for p in task['artifacts'].values()))
+    if 'joined_independent' in receipt:
+        joined = receipt.pop('joined_independent')
+        # The complete answer-bearing file exists only on the runner's adopted
+        # side after the worker has returned. Keep its original submission too.
+        separate = dst.parent/str(uuid4())
+        separate.mkdir()
+        compiled = separate/'independent.json'
+        f._atomic_json(compiled, dict(items=joined))
+        compiled.chmod(0o444)
+        task['artifacts']['independent.json'] = str(compiled)
+        receipt['verified_files'].extend(file_records([compiled]))
     if task['role'] == 'scope-draft':
         m = f._read(dst / 'manifest.json')
         state['scope_sections'] = scope_manifest(state, m)
@@ -388,9 +524,15 @@ def accept_worker(run, tid, attempt, receipt_path):
         version = proof(current, spec_for(current, tid))
         if version != task['input_version'] or verify_receipt_files(receipt):
             raise f.FlowError('worker input or file version changed during adoption')
+        if environment := receipt.get('render_environment'):
+            from pack_approvals import environment_current
+            if not environment_current(current, f._read(row['brief']), f._read(environment['path'])):
+                raise f.FlowError('render environment changed during adoption')
         row.update(status=task['status'], receipt=receipt)
         if row['status'] == 'done' or (tid in findings.REVIEW_ROLES and row['status'] == 'needs_fix'):
             row['artifacts'] = task['artifacts']
+            from pack_approvals import adopt_targets
+            adopt_targets(current, row, receipt)
             if tid in findings.REVIEW_ROLES:
                 register_review(current, row, receipt)
                 if tid in findings.NOTE_REVIEWS:
@@ -593,7 +735,10 @@ def execute_action(state, spec, root):
                           source_inputs=file_records(sources))
             files['questions.json'] = sealed/'questions.json'
         if tid == 'assemble-note': files['note'], = produced
-        if tid == 'build-answers': files['pdf'], = produced
+        if tid == 'build-answers':
+            files['pdf'], = produced
+            if state.get('approval_contract'):
+                files['page-order.json'] = root/'page-order.json'
         if tid == 'explain-verify':
             files['overlay'], = (p for p in produced if p.name == 'answer-overlay.json')
         if tid == 'convert-md':

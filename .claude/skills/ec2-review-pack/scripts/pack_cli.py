@@ -69,7 +69,7 @@ def parser():
     c.add_argument('--redo-note',type=absolute)
     command('status'); c=command('next'); c.add_argument('--slots',required=True,type=int)
     t=sub.add_parser('task'); ts=t.add_subparsers(dest='task_command',required=True)
-    for name in ('claim','bind','accept','check','release','fix','authorize-fix'):
+    for name in ('claim','bind','build-receipt','accept','check','release','fix','authorize-fix'):
         c=command(name,ts)
         if name=='authorize-fix': c.add_argument('--authorization',required=True,type=absolute); continue
         if name=='fix': c.add_argument('--request',required=True,type=absolute); continue
@@ -77,6 +77,7 @@ def parser():
         if name!='claim': c.add_argument('--attempt',required=True)
         if name=='bind': c.add_argument('--agent-id',required=True)
         if name in ('accept','check'): c.add_argument('--receipt',required=True,type=absolute)
+        if name=='build-receipt': c.add_argument('--submission',required=True,type=absolute)
         if name=='release': c.add_argument('--reason',required=True)
     for name in ('run', 'reconcile'):
         c=command(name); c.add_argument('--action',required=True,choices=ACTIONS)
@@ -127,6 +128,11 @@ def execute(a):
         if a.task_command=='claim': extra=f.claim_task(run,a.task)
         elif a.task_command=='bind': f.bind_task(run,a.task,a.attempt,a.agent_id)
         elif a.task_command=='accept': f.accept_task(run,a.task,a.attempt,a.receipt)
+        elif a.task_command=='build-receipt':
+            from pack_receipts import build_receipt
+            state = f.inspect_state(run)
+            build_receipt(state,a.task,a.attempt,a.submission)
+            return dict(status='ok',details_path=f._read(state['tasks'][a.task]['brief'])['receipt']),0
         elif a.task_command=='check':
             # Read-only: the worker's pre-return check runs accept's validation without state changes.
             result=f.check_task(run,a.task,a.attempt,a.receipt)

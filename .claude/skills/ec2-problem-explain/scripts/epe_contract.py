@@ -2,7 +2,7 @@ from epe_review_policy import POLICY_VERSION
 """Structural checks do not claim mathematical or visual correctness."""
 import hashlib
 import json
-import math
+from epe_independent import independent_errors
 from collections import Counter
 from urllib.parse import urlsplit
 from epe_shared import Node, parse, math_delimiter_errors, validate_style_audit
@@ -134,12 +134,7 @@ def validate_review_records(snapshot, item_ids, reviews, *, input_hash):
         for key, item in items.items():
             if not check(item, key) or kind != 'independent':
                 continue
-            if item.get('method') not in ('exact', 'symbolic', 'numerical', 'proof', 'qualitative') or not isinstance(item.get('conclusion'), str) or not item['conclusion'].strip():
-                errors.append(f'{key}: 검증 방법·결론 필요')
-            if item.get('method') == 'numerical':
-                tolerance, residual = item.get('tolerance'), item.get('residual')
-                if any(isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v) for v in (tolerance, residual)) or not 0 <= residual <= tolerance or tolerance <= 0:
-                    errors.append(f'{key}: 유한한 tolerance>0 및 0<=residual<=tolerance 필요')
+            errors.extend(independent_errors(key, item))
     return errors
 
 

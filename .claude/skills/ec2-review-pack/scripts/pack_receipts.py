@@ -28,7 +28,15 @@ def obj(path):
 def sha(path): return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def records(items, roots):
+def cached_sha(path, cache):
+    key = str(nfc_path(Path(path)))
+    if key not in cache:
+        cache[key] = sha(path)
+    return cache[key]
+
+
+def records(items, roots, cache=None):
+    cache = {} if cache is None else cache
     require(isinstance(items, list), 'file records must be a list')
     result = {}
     for item in items:
@@ -38,16 +46,17 @@ def records(items, roots):
         path = nfc_path(path.resolve())
         require(any(within(path, root) for root in roots), 'file outside allowed roots: ' + str(path))
         require(str(path) not in result and path.is_file(), 'missing or duplicate file: ' + str(path))
-        require(item.get('sha256') == sha(path), 'file hash changed: ' + str(path))
+        require(item.get('sha256') == cached_sha(path, cache), 'file hash changed: ' + str(path))
         result[str(path)] = item['sha256']
     return result
 
 
-def verify_receipt_files(receipt: dict) -> list[str]:
+def verify_receipt_files(receipt: dict, cache=None) -> list[str]:
+    cache = {} if cache is None else cache
     errors = []
     for item in receipt.get('verified_files', receipt.get('inputs', []) + receipt.get('outputs', [])):
         try:
-            if sha(item['path']) != item['sha256']: errors.append('changed: ' + item['path'])
+            if cached_sha(item['path'], cache) != item['sha256']: errors.append('changed: ' + item['path'])
         except (OSError, KeyError, TypeError) as exc: errors.append(str(exc))
     return errors
 
@@ -192,10 +201,11 @@ def validate_receipt(state: dict, task: dict, receipt_path: Path) -> dict:
         require(isinstance(receipt.get('unresolved'), list) and isinstance(receipt.get('counts'), dict), 'counts/unresolved required')
         require(status not in ('done', 'ready-for-publish') or not receipt['unresolved'], 'unresolved successful receipt')
         brief = obj(task['brief'])
-        expected = records(brief['inputs'], [repo, parent_run])
-        inputs = records(receipt['inputs'], [repo, parent_run])
+        cache = {}
+        expected = records(brief['inputs'], [repo, parent_run], cache)
+        inputs = records(receipt['inputs'], [repo, parent_run], cache)
         require(inputs == expected, 'receipt must include all frozen brief inputs')
-        outputs = records(receipt['outputs'], [run])
+        outputs = records(receipt['outputs'], [run], cache)
         allowed = {str(nfc_path(Path(p).resolve())) for p in brief.get('allowed_outputs', [])}
         roots = [nfc_path(Path(p).resolve()) for p in brief.get('allowed_output_roots', [])]
         require(all(within(p, run) and p != parent_run and not within(repo, p) for p in roots), 'invalid output root')
@@ -218,7 +228,7 @@ def validate_receipt(state: dict, task: dict, receipt_path: Path) -> dict:
         for path in [receipt_path, report, *map(Path, reviews)]:
             path = nfc_path(path.resolve())
             require(within(path, run) and path.is_file(), 'review evidence missing/outside RUN')
-            verified[str(path)] = sha(path)
+            verified[str(path)] = cached_sha(path, cache)
         if state.get('workflow') == 'parallel':
             from pack_findings import REVIEW_ROLES, check_report_items
             if role in REVIEW_ROLES and status in ('done', 'ready-for-publish', 'needs-fix'):
@@ -334,3 +344,51 @@ def _child(state, brief, receipt, verified):
     require(required <= files.keys(), 'child files omit current inputs/stage/reviews')
     verified.update(files)
     verified[str(child_path)] = sha(child_path)
+
+
+def owned_submission_path(root, value):
+    from pack_parallel import local_path
+    path = Path(value)
+    if not path.is_absolute():
+        path = root/path
+    require(path.is_relative_to(root), 'submission path outside claimed attempt')
+    return local_path(root, path.relative_to(root).as_posix())
+
+
+def submission_fields(root, submission):
+    data = obj(submission)
+    required = {'status', 'report', 'outputs', 'reviews', 'counts', 'unresolved'}
+    require(required <= data.keys() <= required | {'fix_results', 'reconciliations'},
+            'unknown or missing worker submission fields')
+    require(isinstance(data['outputs'], list) and isinstance(data['reviews'], list), 'file lists required')
+    return dict(data, report=str(owned_submission_path(root, data['report'])),
+                outputs=[str(owned_submission_path(root,p)) for p in data['outputs']],
+                reviews=[str(owned_submission_path(root,p)) for p in data['reviews']])
+
+
+def build_receipt(state: dict, task_id: str, attempt: str, submission: Path) -> dict:
+    """Build and precheck a parallel handoff using runner-owned identity and hashes."""
+    import pack_flow as f
+    from pack_parallel import file_records, validate_worker
+    from pack_approvals import target_contract
+    require(state.get('approval_contract') == 1, 'compact submission requires a target-review RUN')
+    task = state['tasks'][task_id]
+    f._attempt(task, attempt)
+    root = Path(task['attempt_dir'])
+    brief = obj(task['brief'])
+    submission = owned_submission_path(root, submission)
+    require(submission != Path(brief['receipt']), 'submission and receipt must be separate files')
+    fields = submission_fields(root, submission)
+    receipt = dict(fields, schema_version=1, run_id=state['run_id'], task_id=task_id, attempt=attempt,
+                   inputs=brief['inputs'], worker_submission=dict(path=str(submission), sha256=sha(submission)))
+    require(Path(receipt['report']).is_file(), 'submission report missing')
+    outputs = set(map(Path, fields['outputs']))
+    if brief.get('approval_plan') and fields['status'] in ('done','ready-for-publish'):
+        receipt['target_reviews'] = str(root/'target-reviews.json')
+        result = target_contract(state, task, receipt, write=True)
+        outputs.update(map(Path, result['outputs']))
+    receipt['outputs'] = file_records(outputs)
+    path = owned_submission_path(root, brief['receipt'])
+    f._atomic_json(path, receipt)
+    validate_worker(state, task, path)
+    return receipt

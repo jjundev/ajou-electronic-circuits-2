@@ -278,6 +278,7 @@ def init_run(repo: Path, run: Path, range_: str, *,
                      publication={}, recovery={}, sessions=[p.name[:4] for p in sources])
         state['workflow'] = workflow
         if workflow == 'parallel':
+            state['approval_contract'] = 1
             from pack_files import inventory_pack
             from pack_publication import publication_lock
             with publication_lock(repo / '복습노트' / range_):
@@ -437,11 +438,12 @@ def _read(path):
 
 
 def _current(state):
-    from pack_receipts import verify_receipt_files
+    from pack_receipts import cached_sha, verify_receipt_files
+    hashes = {}
     stale = []
     for path, digest in state['hashes'].items():
         try:
-            if _sha(Path(path)) == digest: continue
+            if cached_sha(path, hashes) == digest: continue
         except OSError: pass
         stale.append(path)
     state['stale_inputs'] = stale
@@ -456,8 +458,13 @@ def _current(state):
             record['status'] = 'stale'
             continue
         evidence = record.get('receipt') if name in state['tasks'] else record
-        if not evidence or not evidence.get('verified_files') or verify_receipt_files(evidence):
+        if not evidence or not evidence.get('verified_files') or verify_receipt_files(evidence, hashes):
             record['status'] = 'stale'
+        elif state.get('workflow') == 'parallel' and evidence.get('render_environment'):
+            from pack_approvals import environment_current
+            manifest = _read(evidence['render_environment']['path'])
+            if not environment_current(state, _read(record['brief']), manifest):
+                record['status'] = 'stale'
     if stale:
         for task in state['tasks'].values():
             if task.get('status') == 'done': task['status'] = 'stale'

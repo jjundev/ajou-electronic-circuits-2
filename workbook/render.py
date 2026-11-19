@@ -6,6 +6,7 @@ PDF는 Playwright Chromium으로 만든다. 템플릿의 CDN 글꼴·KaTeX와 �
 공통 브라우저 경로가 오프라인에서 응답한다.
 템플릿이 KaTeX·글꼴을 못 불렀거나 TeX가 남으면 data-ready를 'error'로, 사유를 html[data-error]에 둔다.
 """
+import hashlib
 import json
 import re
 import tempfile
@@ -52,7 +53,7 @@ def inject(template, data):
     return template.replace(PLACEHOLDER, payload)
 
 
-def _render_html(html_path, pdf_path=None, timeout_ms=120_000, *, preflight=False):
+def _render_html(html_path, pdf_path=None, timeout_ms=120_000, *, preflight=False, order_path=None):
     try:
         from playwright.sync_api import Error as PlaywrightError
         from playwright.sync_api import sync_playwright
@@ -103,7 +104,20 @@ def _render_html(html_path, pdf_path=None, timeout_ms=120_000, *, preflight=Fals
                 }))""")
                 if pdf_path is not None:
                     stage = "pdf_failed"
+                    if order_path is not None:
+                        page.emulate_media(media="print")
+                        page_order = page.locator('#book > .page').evaluate_all("""pages => pages.map(p => ({
+                            id:p.id || null, owner:p.dataset.solutionFor || p.id || null
+                        }))""")
                     page.pdf(path=str(pdf_path), prefer_css_page_size=True, print_background=True)
+                    if order_path is not None:
+                        import pymupdf
+                        with pymupdf.open(pdf_path) as printed:
+                            count = len(printed)
+                        proof = dict(schema_version=1, pdf_sha256=hashlib.sha256(Path(pdf_path).read_bytes()).hexdigest(),
+                                     count=count, browser_version=browser_version,
+                                     pages=page_order if len(page_order) == count else [])
+                        Path(order_path).write_text(json.dumps(proof), encoding='utf-8')
             finally:
                 browser.close()
     except PlaywrightError as e:
@@ -151,9 +165,9 @@ def measure_typography(html_path):
     return _render_html(html_path)["typography"]
 
 
-def render_pdf(html_path, pdf_path, timeout_ms=120_000):
+def render_pdf(html_path, pdf_path, timeout_ms=120_000, *, order_path=None):
     """HTML을 Chromium으로 열어 다 그려지면 PDF로 저장하고, 넘친 쪽 id 목록을 돌려준다."""
-    return _render_html(html_path, pdf_path, timeout_ms)["overflow"]
+    return _render_html(html_path, pdf_path, timeout_ms, order_path=order_path)["overflow"]
 
 
 def render_preflight(output_dir: Path) -> dict:
