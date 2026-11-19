@@ -460,7 +460,9 @@ def validate_worker(state, task, receipt_path):
         for path in map(Path, validated):
             if not path.resolve().is_relative_to(quiz):
                 raise f.FlowError('quiz evidence escapes its attempt')
-        receipt['verified_files'].extend(file_records(map(Path, validated)))
+        quiz_files = file_records(map(Path, validated))
+        receipt['quiz_files'] = {Path(r['path']).relative_to(quiz).as_posix():r['sha256'] for r in quiz_files}
+        receipt['verified_files'].extend(quiz_files)
     if role == 'scope-draft':
         scope_manifest(state, f._read(root / 'manifest.json'))
     if role == 'selection':
@@ -536,6 +538,8 @@ def adopt_worker(state, task, receipt):
     verified = {x['path']: x['sha256'] for x in receipt['verified_files']}
     # Child receipt/run semantics use absolute paths; its validated files remain hash-bound.
     owned = [Path(x['path']) for x in receipt['outputs']]
+    if task['role'] == 'concept-review':
+        owned.extend(local_path(root/'quiz', name) for name in receipt['quiz_files'])
     owned.extend(Path(x) for x in (receipt['report'], *receipt['reviews']))
     if state.get('approval_contract'):
         owned.append(Path(task['brief']))
@@ -786,7 +790,7 @@ def retain_quiz_evidence(task, quiz):
     old = json.loads(prior)['logical_inputs']
     new = f._read(quiz/'source.json')['logical_inputs']
     def teaching(inputs):
-        return {key:value for key,value in inputs.items() if not key.startswith('vendor/')}
+        return {key:value for key,value in inputs.items() if not key.startswith(('vendor/', 'interaction/'))}
     if teaching(old) != teaching(new) or not copy_group(('objectives.json', 'items.json')):
         return []
     retained = ['objectives.json', 'items.json']

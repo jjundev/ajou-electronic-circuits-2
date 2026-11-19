@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 import shutil
 import stat
+import subprocess
 import sys
 import tempfile
 import threading
@@ -108,21 +109,85 @@ def child_lock_options(public_pack):
         yield {'pass_fds': (handle,), 'env': {**env, _FD_ENV: str(handle)}}
 
 
-def publication_inventory(root, date):
-    """Include the exact concept publisher namespace only in new parent transactions."""
-    inventory = pack_files.inventory_at(root, date)
-    for base, prefix, suffix, directory in ((root, '확인문제_', r'\.html', False),
-                                              (root/'.pack', '자료_확인문제_', '', True)):
+def quiz_roots(public, date):
+    roots = {}
+    for base, prefix, suffix in ((public, '확인문제_', r'\.html'), (public/'.pack', '자료_확인문제_', '')):
         for path in pack_files._children(base):
-            if re.fullmatch(prefix + re.escape(date) + r'_[a-zA-Z0-9_]+' + suffix, pack_files._nfc(path.name)):
-                name = path.relative_to(root).as_posix()
-                checked_file(root, name)
-                if path.is_dir() != directory:
-                    raise FlowError('unexpected concept publication root: ' + name)
-                files, dirs = pack_files._inventory(root, [name])
-                inventory.update(files)
-                inventory.update({d + '/': 'directory' for d in dirs})
-    return inventory
+            match = re.fullmatch(prefix + re.escape(date) + r'_([a-zA-Z0-9_]+)' + suffix,
+                                 pack_files._nfc(path.name))
+            if match:
+                roots.setdefault(match[1], []).append(path.relative_to(public).as_posix())
+    return roots
+
+
+def quiz_inventory(public, roots):
+    files, dirs = pack_files._inventory(public, roots)
+    return {**files, **{d + '/':'directory' for d in dirs}}
+
+
+def parent_marker(public):
+    marker = _control(public).with_suffix('.parent.json')
+    if not marker.exists():
+        return {}
+    record = _read(marker)
+    if 'strict' not in record:
+        record['strict'] = bool(_read(record['journal']).get('retire_concept'))
+    return record
+
+
+def attached_quiz(public, inventory, *, journal=None):
+    marker = parent_marker(public)
+    child = marker.get('child') or {}
+    if (not marker.get('strict') or not inventory or child.get('inventory') != inventory
+            or child.get('journal') != marker['journal'] or not child.get('action_attempt') or not child.get('review_attempt')
+            or (journal and marker['journal'] != str(Path(journal).resolve()))):
+        return False
+    return child.get('attempt') == Path(marker['journal']).parent.parent.name
+
+
+def registered_quiz_inventory(public, html, bundle, *, receipt=None):
+    if receipt:
+        child = parent_marker(public).get('child', {})
+        if any(child.get(key) != receipt.get(key) for key in ('attempt','review_attempt','action_attempt')):
+            return False
+    if not html.is_file() or not bundle.is_dir():
+        return False
+    return attached_quiz(public, quiz_inventory(public, [html.name, bundle.relative_to(public).as_posix()]))
+
+
+def register_attached_quiz(public, receipt, journal, inventory):
+    marker = parent_marker(public)
+    if not marker.get('strict') or marker['journal'] != journal or Path(journal).parent.parent.name != receipt['attempt']:
+        raise FlowError('quiz parent publication changed')
+    marker['child'] = dict(journal=journal, inventory=inventory, **{key:receipt[key] for key in
+                           ('attempt','action_attempt','review_attempt')})
+    _save(_control(public).with_suffix('.parent.json'), marker)
+
+
+def unmanaged_quiz_roots(public, date):
+    unmanaged = []
+    marker = parent_marker(public)
+    recorded = marker.get('child', {}).get('inventory', {})
+    for slug, roots in quiz_roots(public, date).items():
+        if len(roots) == 2:
+            if all(name in recorded or name + '/' in recorded for name in roots):
+                try:
+                    if attached_quiz(public, quiz_inventory(public, roots)):
+                        continue
+                except (OSError, ValueError):
+                    pass
+            # A coincidental name never authorizes recursive inventory or removal.
+            command = Path(__file__).resolve().parents[2]/'ec2-concept-check/scripts/concept.py'
+            result = subprocess.run([sys.executable, command, 'verify-legacy', '--pack', public, '--slug', slug],
+                                    capture_output=True, text=True)
+            if not result.returncode:
+                continue
+        unmanaged.extend(roots)
+    return sorted(unmanaged)
+
+
+def publication_inventory(root, date):
+    return _checked_inventory(root, date, concepts=True, exclude=unmanaged_quiz_roots(root, date))
 
 
 def current_parent_publication(public, journal):
@@ -130,14 +195,17 @@ def current_parent_publication(public, journal):
     return marker.is_file() and _read(marker).get('journal') == str(Path(journal).resolve())
 
 
-def _checked_inventory(root, date, *, private=False, concepts=False):
+def _checked_inventory(root, date, *, private=False, concepts=False, exclude=()):
     for name in pack_files._roots(root, date):
         directory = re.fullmatch(rf'\.assets/(?:figures_{date}|(?:자료|figures)_문제설명_{date}_[^/]+)',
                                  pack_files._nfc(name))
         path = checked_file(root, name)
         if bool(directory) != path.is_dir():
             raise FlowError('unexpected owned root type: ' + name)
-    inventory = publication_inventory(root, date) if concepts else pack_files.inventory_at(root, date)
+    inventory = pack_files.inventory_at(root, date)
+    if concepts:
+        roots = [name for names in quiz_roots(root, date).values() for name in names if name not in exclude]
+        inventory.update(quiz_inventory(root, roots))
     if private:
         # Candidates and backups contain only owned files and their directories.
         files, dirs = pack_files._inventory(root, [p.name for p in pack_files._children(root)])
@@ -282,6 +350,8 @@ def _signature(data):
     fields = [data['public'], data['before'], data['after']]
     if data.get('retire_concept'):
         fields.append('retire_concept')
+    if 'unmanaged_quiz' in data:
+        fields.append(data['unmanaged_quiz'])
     return hashlib.sha256(json.dumps(fields, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
 
 
@@ -293,14 +363,14 @@ def _finish(journal, data, active, status):
     data['status'] = status
     _save(journal, data)
     if status == 'published':
-        _save(_control(Path(data['public'])).with_suffix('.parent.json'), dict(journal=str(journal.resolve())))
+        _save(_control(Path(data['public'])).with_suffix('.parent.json'), dict(journal=str(journal.resolve()), strict=bool(data.get('retire_concept'))))
     active.unlink()
     _fsync_dir(active.parent)
     return _result(data, journal, status)
 
 
-def _verify_snapshot(paths, root, expected, *, concepts=False):
-    if _checked_inventory(root, paths.public_pack.name, concepts=concepts) != expected:
+def _verify_snapshot(paths, root, expected, *, concepts=False, exclude=()):
+    if _checked_inventory(root, paths.public_pack.name, concepts=concepts, exclude=exclude) != expected:
         raise FlowError('owned inventory changed: ' + str(root))
 
 
@@ -323,7 +393,12 @@ def publish_pack(paths: PackPaths, run: Path, *, expected: dict[str, str],
         _check_public_root(public, identity)
         if active.exists():
             return _result(initial, _read(active)['journal'], 'recovery_required', error_code='pending_publication')
-        before = _checked_inventory(public, public.name, concepts=retire_concept)
+        unmanaged = unmanaged_quiz_roots(public, public.name) if retire_concept else []
+        before = _checked_inventory(public, public.name, concepts=retire_concept, exclude=unmanaged)
+        for relative in candidate_inventory:
+            note = re.fullmatch(r'정리노트_(.+)\.html', pack_files._nfc(relative))
+            if note and {f'확인문제_{note[1]}.html', f'.pack/자료_확인문제_{note[1]}'} & set(map(pack_files._nfc, unmanaged)):
+                return _result(initial, journal, 'conflict', error_code='unowned_quiz_overlap')
         if _canonical(before) != _canonical(expected):
             return _result(initial, journal, 'conflict', error_code='publication_conflict')
         verify(paths.work_pack)
@@ -343,19 +418,21 @@ def publish_pack(paths: PackPaths, run: Path, *, expected: dict[str, str],
         _fsync_dir(folder.parent)
         _snapshot(public, folder / 'before', before, public.name, concepts=retire_concept)
         _snapshot(paths.work_pack, folder / 'after', after, public.name)
-        _verify_snapshot(paths, public, before, concepts=retire_concept)
+        _verify_snapshot(paths, public, before, concepts=retire_concept, exclude=unmanaged)
         _check_public_root(public, identity)
         data = dict(schema_version=1, public=identity, before=before, after=after, retire_concept=retire_concept,
                     status='applying', direction='publish', cursor=0, intent=None)
+        if retire_concept:
+            data['unmanaged_quiz'] = unmanaged
         _save(journal, data)
         _save(active, dict(journal=str(journal.resolve()), signature=_signature(data)))
         try:
             _mkdirs(public)
             _run_steps(journal, data, public, len(_steps(data['before'], data['after'])))
-            _verify_snapshot(paths, public, after, concepts=retire_concept)
+            _verify_snapshot(paths, public, after, concepts=retire_concept, exclude=unmanaged)
             verify(public)
             _check_public_root(public, identity)
-            _verify_snapshot(paths, public, after, concepts=retire_concept)
+            _verify_snapshot(paths, public, after, concepts=retire_concept, exclude=unmanaged)
         except (OSError, ValueError, KeyError, TypeError) as exc:
             return _result(data, journal, 'recovery_required', error_code='publication_interrupted', detail=str(exc))
         return _finish(journal, data, active, 'published')
@@ -383,6 +460,7 @@ def reconcile_publication(paths: PackPaths, journal: Path, *, verify) -> dict:
                     raise FlowError('different active transaction')
 
             retire_concept = data.get('retire_concept', False)
+            unmanaged = data.get('unmanaged_quiz', [])
             before, after = data['before'], data['after']
             # Never use journal-provided names to access files. Compare entire
             # inventories obtained by walking owned roots, including backups.
@@ -390,7 +468,7 @@ def reconcile_publication(paths: PackPaths, journal: Path, *, verify) -> dict:
                 snapshot = checked_file(journal.parent, name)
                 if not snapshot.is_dir() or _checked_inventory(snapshot, public.name, private=True, concepts=retire_concept and name == 'before') != data[name]:
                     raise FlowError('publication backup or staged snapshot damaged')
-            current = _checked_inventory(public, public.name, concepts=retire_concept)
+            current = _checked_inventory(public, public.name, concepts=retire_concept, exclude=unmanaged)
             if not active.exists() and data['status'] == 'applying':
                 # The journal is durable before its date reservation is created.
                 # In this narrow crash window the protocol permits no public write.
@@ -400,13 +478,21 @@ def reconcile_publication(paths: PackPaths, journal: Path, *, verify) -> dict:
                 data['status'] = 'restored'
                 _save(journal, data)
                 return _result(data, journal, 'restored')
+            if data['status'] == 'published' and retire_concept and not active.exists():
+                # This parent may have acquired its own authorized child after its journal settled.
+                child = {name:current[name] for name in current.keys() - after.keys()}
+                if attached_quiz(public, child, journal=journal):
+                    roots = [name for names in quiz_roots(public, public.name).values() for name in names
+                             if name in child or name + '/' in child]
+                    unmanaged = [*unmanaged, *roots]
+                    current = _checked_inventory(public, public.name, concepts=True, exclude=unmanaged)
             if data['status'] in ('published', 'restored'):
                 if current != (after if data['status'] == 'published' else before):
                     raise FlowError('settled publication changed')
                 if data['status'] == 'published':
                     verify(public)
                     _check_public_root(public, data['public'])
-                    _verify_snapshot(paths, public, after, concepts=retire_concept)
+                    _verify_snapshot(paths, public, after, concepts=retire_concept, exclude=unmanaged)
                 return (_finish(journal, data, active, data['status']) if active.exists()
                         else _result(data, journal, data['status']))
             steps = _steps(before, after)
@@ -440,13 +526,13 @@ def reconcile_publication(paths: PackPaths, journal: Path, *, verify) -> dict:
                     pass  # The new bytes are known, but their current proof failed.
                 else:
                     _check_public_root(public, data['public'])
-                    _verify_snapshot(paths, public, after, concepts=retire_concept)
+                    _verify_snapshot(paths, public, after, concepts=retire_concept, exclude=unmanaged)
                     data.update(cursor=cursor, intent=None)
                     return _finish(journal, data, active, 'published')
             data.update(direction='restore', cursor=cursor, intent=None)
             _save(journal, data)
             _run_steps(journal, data, public, 0)
-            _verify_snapshot(paths, public, before, concepts=retire_concept)
+            _verify_snapshot(paths, public, before, concepts=retire_concept, exclude=unmanaged)
             return _finish(journal, data, active, 'restored')
         except (OSError, ValueError, KeyError, TypeError) as exc:
             return dict(status='recovery_required', error_code='unverified_publication', journal=str(journal),

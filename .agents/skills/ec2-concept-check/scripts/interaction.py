@@ -14,6 +14,7 @@ if str(_paths.REVIEW_PACK / "scripts") not in sys.path:
 from html2md import Builder, Node  # noqa: E402
 
 SKILL = _paths.SKILL
+INTERACTION_RESOURCES = ('review-interaction.css', 'review-prompt.js', 'review-interaction.js')
 LABEL = re.compile(r'^\s*(?:\((\d+)\)|([A-Z])[.)])\s*')
 ANSWER = re.compile(r'^\s*정답:\s*(?:\((\d+)\)|([A-Z]))\s*$')
 CAUTION = re.compile(r'모호|모두 가능|단일 정답|엄밀한.*정답|복수.?정답|답이 하나|성립할 여지|해석에 따라|옳은 설명으로 볼 여지|완전히 옳다고 보기 어려|같은 뜻이 되지만|자료도 있으니')
@@ -214,11 +215,10 @@ def install(source: str, document_id: str, overrides: dict | None = None, strict
     if source.count('</body>') != 1:
         raise ValueError('body 종료 태그는 하나여야 함')
     payload = json.dumps(model, ensure_ascii=False, sort_keys=True).replace('<', '\\u003c')
-    css = (SKILL / 'assets/review-interaction.css').read_text(encoding='utf-8')
-    prompt = (SKILL / 'assets/review-prompt.js').read_text(encoding='utf-8')
+    css, prompt, script = [(SKILL/'assets'/name).read_text(encoding='utf-8') for name in INTERACTION_RESOURCES]
     prompt = prompt.replace('내 생명과학 튜터야', '내 전자회로2 튜터야')
     prompt = prompt.replace("review:'복습문제'", "review:'확인문제'")
-    js = prompt + '\n' + (SKILL / 'assets/review-interaction.js').read_text(encoding='utf-8')
+    js = prompt + '\n' + script
     if not any(card.get('format') == 'short' for card in model['cards'].values()):
         js = re.sub(r'^// short-support:start\n.*?^// short-support:end\n', '', js, flags=re.S | re.M)
     boot = """(function () {

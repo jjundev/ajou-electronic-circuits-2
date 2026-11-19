@@ -10,21 +10,59 @@ from html2md import Builder
 from source import read, sha, write
 
 
-def packet(data, folder):
-    folder.mkdir(exist_ok=True)
+def projection(items):
+    questions = []
+    for item in items:
+        question = {k:item[k] for k in ('id','title','format','stem_html','figure_svg') if k in item}
+        if item['format'] == 'mcq':
+            question['options'] = [{k:opt[k] for k in ('id','text')} for opt in item['options']]
+        questions.append(question)
+    return questions
+
+
+def packet_contents(questions):
+    result = {}
     lines = ["# 확인문제 독립 풀이", "", "답과 이의를 표로 기록하세요. | ID | 답 | 이의 |", ""]
-    for item in data["items"]:
+    for item in questions:
         parser = Builder()
         parser.feed(item["stem_html"])
         lines.extend([f"## {item['id']}. {item['title']}", "", parser.root.text(), ""])
         if item.get("figure_svg"):
-            path = folder / f"{item['id']}.svg"
-            path.write_text(item["figure_svg"], encoding="utf-8")
-            lines.extend([f"![문항의 회로도]({path.name})", ""])
+            name = f"{item['id']}.svg"
+            result[name] = item["figure_svg"].encode()
+            lines.extend([f"![문항의 회로도]({name})", ""])
         if item["format"] == "mcq":
             lines.extend(f"{option['id']}. {option['text']}" for option in item["options"])
         lines.append("")
-    (folder / "문제.md").write_text("\n".join(lines), encoding="utf-8")
+    result['문제.md'] = '\n'.join(lines).encode()
+    return result
+
+
+def packet(data, folder):
+    folder.mkdir(exist_ok=True)
+    for name, content in packet_contents(projection(data['items'])).items():
+        (folder/name).write_bytes(content)
+
+
+def verify_packet(archive, issued, data, targets):
+    questions = issued.get('questions', [])
+    ids = [q['id'] for q in questions]
+    current = {item['id']:item for item in data['items']}
+    if (not ids or not all(isinstance(cid, str) and re.fullmatch(r'q[1-9][0-9]*', cid) for cid in ids)
+            or len(set(ids)) != len(ids) or set(ids) != set(issued['items']) or not set(ids) <= current.keys()
+            or questions != projection(questions)):
+        raise ValueError('invalid independent packet projection')
+    stored = dict(zip(ids, questions))
+    objectives = {o['id']:o for o in data['objectives']}
+    required = set(targets)
+    required.update(cid for cid in ids if issued['items'][cid] == digest(current[cid], objectives[current[cid]['objective']]))
+    if any(stored.get(q['id']) != q for q in projection([current[cid] for cid in required])):
+        raise ValueError('independent packet question changed')
+    expected = {name:hashlib.sha256(content).hexdigest() for name,content in packet_contents(questions).items()}
+    folder = archive/'packet'
+    if (expected != issued.get('files') or set(expected) != {p.name for p in folder.iterdir()}
+            or any((folder/name).is_symlink() or sha(folder/name) != value for name,value in expected.items())):
+        raise ValueError('independent packet files changed')
 
 
 def digest(item, objective):
@@ -46,7 +84,7 @@ def issue(data, run, folder):
     archive.mkdir(parents=True, exist_ok=False)
     shutil.copytree(folder, archive/'packet')
     objectives = {o['id']:o for o in data['objectives']}
-    write(archive/'issued.json', dict(items={i['id']:digest(i,objectives[i['objective']]) for i in data['items']},
+    write(archive/'issued.json', dict(questions=projection(data['items']), items={i['id']:digest(i,objectives[i['objective']]) for i in data['items']},
           files={p.name:sha(p) for p in (archive/'packet').iterdir()}))
 
 
@@ -74,6 +112,7 @@ def record(data, answers, previous, round_, *, packet_dir=None, author=None, sol
             raise ValueError('issued packet required')
         archive = issued_path(previous.parent, packet_dir)
         issued = read(archive/'issued.json')
+        verify_packet(archive, issued, data, responses)
         if (set(responses) != set(issued['items']) or
                 {p.name:sha(p) for p in packet_dir.iterdir()} != issued['files']):
             raise ValueError('independent packet or response set changed')
@@ -88,7 +127,8 @@ def record(data, answers, previous, round_, *, packet_dir=None, author=None, sol
         saved.mkdir()
         shutil.copyfile(answers, saved/'answers.md')
         for row in responses.values():
-            row.update(proof=str((saved/'answers.md').relative_to(previous.parent)), answers_sha256=sha(saved/'answers.md'))
+            row.update(proof=str((saved/'answers.md').relative_to(previous.parent)), answers_sha256=sha(saved/'answers.md'),
+                       issued_sha256=sha(archive/'issued.json'))
     return {**prior, **responses}
 
 
@@ -106,6 +146,9 @@ def evidence(run, data, ledger):
             raise ValueError('independent response evidence changed')
         original = answer.parent.parent/'issued.json'
         issued = read(original)
+        if sha(original) != row.get('issued_sha256'):
+            raise ValueError('independent packet receipt changed')
+        verify_packet(original.parent, issued, data, [cid])
         rows = [line.strip().strip('|').split('|', 2) for line in answer.read_text(encoding='utf-8').splitlines()]
         if (issued['items'].get(cid) != row['sha256'] or
                 [cid, row['answer'], row['objection']] not in [[v.strip() for v in parts] for parts in rows]):

@@ -203,8 +203,12 @@ def validate_receipt(state: dict, task: dict, receipt_path: Path) -> dict:
         require(status not in ('done', 'ready-for-publish') or not receipt['unresolved'], 'unresolved successful receipt')
         brief = obj(task['brief'])
         cache = {}
-        expected = records(brief['inputs'], [repo, parent_run], cache)
-        inputs = records(receipt['inputs'], [repo, parent_run], cache)
+        input_roots = [repo, parent_run]
+        if task['role'] == 'concept-review':
+            from pack_flow import quiz_render_resources
+            input_roots.extend(quiz_render_resources())
+        expected = records(brief['inputs'], input_roots, cache)
+        inputs = records(receipt['inputs'], input_roots, cache)
         require(inputs == expected, 'receipt must include all frozen brief inputs')
         outputs = records(receipt['outputs'], [run], cache)
         allowed = {str(nfc_path(Path(p).resolve())) for p in brief.get('allowed_outputs', [])}

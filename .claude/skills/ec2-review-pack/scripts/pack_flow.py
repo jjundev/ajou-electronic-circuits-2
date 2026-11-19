@@ -437,6 +437,11 @@ def _read(path):
         raise FlowError(f'{path}: {exc}') from exc
 
 
+def quiz_render_resources():
+    assets = Path(__file__).resolve().parents[2]/'ec2-concept-check/assets'
+    return {(assets/name).resolve() for name in ('review-interaction.css','review-prompt.js','review-interaction.js')}
+
+
 def _current(state):
     from pack_receipts import cached_sha, verify_receipt_files
     hashes = {}
@@ -460,6 +465,13 @@ def _current(state):
             record['status'] = 'stale'
             continue
         evidence = record.get('receipt') if name in state['tasks'] else record
+        if state.get('concept_contract') and record['status'] == 'done':
+            if name == 'concept-review' and not (evidence or {}).get('quiz_files'):
+                record['status'] = 'stale'
+            if name == 'concept-draft':
+                frozen = {Path(r['path']).resolve() for r in record.get('source_inputs', [])}
+                if not quiz_render_resources() <= frozen:
+                    record['status'] = 'stale'
         if not evidence or not evidence.get('verified_files') or verify_receipt_files(evidence, hashes):
             record['status'] = 'stale'
         if state.get('approval_contract') == 1 and name in state['tasks']:
@@ -757,6 +769,14 @@ def _current_quiz_files(result, state, public):
     if not logical or binding != dict(parent_run=state['run'], parent_attempt=result['attempt'],
                                        logical_inputs=source.get('logical_inputs')):
         return False
+    from pack_publication import registered_quiz_inventory
+    if not registered_quiz_inventory(public, html, bundle, receipt=result):
+        return False
+    worker = _record(state, 'concept-review')
+    expected = {str(Path(worker['attempt_dir'])/'quiz'/name):value
+                for name,value in worker['receipt'].get('quiz_files', {}).items()}
+    if not expected or result.get('reviewed_files') != expected:
+        return False
     original = result.get('reviewed_files', {})
     if not original or any(_sha(Path(p)) != h for p,h in {**source['inputs'], **original}.items()):
         return False
@@ -814,6 +834,8 @@ def concept_check_result(state):
         if state.get('concept_contract'):
             public = Path(state['repo'])/'복습노트'/state['range']
             if result.get('status') == 'published':
+                if not result.get('review_attempt') or not result.get('action_attempt'):
+                    return withheld
                 review = _record(state, 'concept-review')
                 if result.get('review_attempt') and (review.get('status') != 'done' or
                         review.get('attempt') != result['review_attempt']):

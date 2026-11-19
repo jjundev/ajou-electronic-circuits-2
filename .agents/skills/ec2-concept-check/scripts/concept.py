@@ -191,20 +191,68 @@ def approved_preview(run, data):
     return path
 
 
+def checked_browser(html, browser, data):
+    expected_modes = {f"{w}x{h} {t}" for w, h in browser_check.VIEWPORTS for t in browser_check.THEMES}
+    passed_modes = {entry["label"] for entry in browser.get("runs", []) if not entry["failures"]
+                    and entry["detail"].get("items_checked") == len(data["items"])
+                    and entry["detail"].get("hints_checked") == len(data["items"])}
+    if (browser.get("sha256") != sha(html) or browser.get("status") != "pass"
+            or browser.get("failures") or passed_modes != expected_modes):
+        raise ValueError("현재 HTML의 브라우저 4모드 통과 기록이 필요합니다.")
+
+    return expected_modes
+
+
+def verify_legacy(pack, slug):
+    """Recognize a historical publisher's closed bundle and matching HTML bytes."""
+    from pack_paths import checked_file
+    if not re.fullmatch(r'[A-Za-z0-9_]+', slug):
+        raise ValueError('invalid quiz slug')
+    stem = f'확인문제_{pack.name}_{slug}'
+    html = checked_file(pack, stem + '.html')
+    bundle = checked_file(pack, '.pack/자료_' + stem)
+    if {p.name for p in bundle.iterdir()} not in (set(EVIDENCE), {*EVIDENCE, 'binding.json'}):
+        raise ValueError('unrecognized legacy evidence')
+    for name in EVIDENCE:
+        checked_file(bundle, name)
+    data = read(bundle/'source.json')
+    if (data.get('logical_inputs') or (data.get('range'),data.get('slug')) != (pack.name,slug)
+            or nfc(Path(data['note']).name) != f'정리노트_{pack.name}_{slug}.html'
+            or nfc(Path(data['note_md']).name) != f'정리노트_{pack.name}_{slug}.md'
+            or not all(re.fullmatch(r'[0-9a-f]{64}', data['inputs'].get(path,''))
+                       for path in (data['note'],data['note_md'],*data['transcripts'].values()))):
+        raise ValueError('unrecognized legacy source')
+    if (bundle/'binding.json').exists():
+        binding = read(checked_file(bundle, 'binding.json'))
+        if not data.get('parent_run') or binding != dict(parent_run=data['parent_run'],
+                parent_attempt=data['parent_attempt'], logical_inputs={}):
+            raise ValueError('unrecognized legacy binding')
+    content = items.load(data, bundle)
+    browser = read(bundle/'browser.json')
+    ledger = read(bundle/'blind-ledger.json')
+    if nfc(browser['html']) != nfc(html.name) or blind.errors(content, ledger):
+        raise ValueError('legacy evidence mismatch')
+    checked_browser(html, browser, content)
+    markup = html.read_text(encoding='utf-8')
+    model_tag = re.search(r'<script id="review-interaction-model" type="application/json">(.+?)</script>', markup, re.S)
+    model = json.loads(model_tag[1]) if model_tag else {}
+    if (model.get('documentId') != stem or interaction.validate_model(markup, model)
+            or set(model['cards']) != {item['id'] for item in content['items']}):
+        raise ValueError('legacy HTML model mismatch')
+    objectives = {o['id']:o for o in content['objectives']}
+    for index,item in enumerate(content['items'], 1):
+        card = render.card_html(item, objectives[item['objective']], index, Path(data['note']).name)
+        if card not in markup:
+            raise ValueError('legacy HTML item mismatch')
+
+
 def reviewed_files(run, data):
     preview = approved_preview(run, data)
     problems = blind.errors(data, read(run / "blind-ledger.json"))
     if problems:
         raise ValueError("\n".join(problems))
-    browser = read(run / "browser.json")
-    expected_modes = {f"{w}x{h} {t}" for w, h in browser_check.VIEWPORTS for t in browser_check.THEMES}
-    passed_modes = {entry["label"] for entry in browser.get("runs", []) if not entry["failures"]
-                    and entry["detail"].get("items_checked") == len(data["items"])
-                    and entry["detail"].get("hints_checked") == len(data["items"])}
-    if (browser.get("sha256") != sha(preview) or browser.get("status") != "pass"
-            or browser.get("failures") or passed_modes != expected_modes):
-        raise ValueError("현재 HTML의 브라우저 4모드 통과 기록이 필요합니다.")
-
+    browser = read(run/'browser.json')
+    expected_modes = checked_browser(preview, browser, data)
     files = [run/name for name in EVIDENCE]
     if data.get('logical_inputs'):
         if browser.get('logical_inputs') != data['logical_inputs']:
@@ -247,14 +295,20 @@ def publish(run, data, *, review_attempt=None, action_attempt=None):
     import pack_flow
     pack = Path(data["pack"])
     parent = Path(data['parent_run']) if data.get('parent_run') else None
+    from pack_publication import parent_marker, registered_quiz_inventory, register_attached_quiz
     with (pack_flow._locked(parent) if parent else nullcontext()), publication_lock(pack):
+        owner = parent_marker(pack)
+        strict = owner.get('strict', False)
+        if strict and not (parent and action_attempt and review_attempt):
+            raise ValueError('quiz_publish_attempt_changed')
         binding = _bind_parent(run, parent) if parent else None
         state = parent_state(parent) if parent else {}
         review_root = state.get('tasks', {}).get('concept-review', {}).get('attempt_dir')
-        if review_attempt or action_attempt or (review_root and run == Path(review_root)/'quiz'):
+        if strict or review_attempt or action_attempt or (review_root and run == Path(review_root)/'quiz'):
             from pack_parallel import same_attempt
             claim = state['actions'].get('concept-publish', {})
-            if (not action_attempt or claim.get('attempt') != action_attempt or claim.get('status') != 'running'
+            if (not strict or not state.get('concept_contract') or state['publication'].get('journal') != owner['journal']
+                    or not action_attempt or claim.get('attempt') != action_attempt or claim.get('status') != 'running'
                     or claim.get('input_version', {}).get('final-check') != binding['parent_attempt']):
                 raise ValueError('quiz_publish_attempt_changed')
             same_attempt(state, 'concept-publish', action_attempt)
@@ -264,7 +318,13 @@ def publish(run, data, *, review_attempt=None, action_attempt=None):
                 raise ValueError('quiz_review_changed')
         data = load(run)
         reviewed = reviewed_files(run, data)
-        original = {str(p): sha(p) for p in reviewed}
+        if strict:
+            accepted = worker['receipt'].get('quiz_files', {})
+            if set(accepted) != {nfc(p.relative_to(run).as_posix()) for p in reviewed}:
+                raise ValueError('quiz_review_changed')
+            original = {str(p):accepted[nfc(p.relative_to(run).as_posix())] for p in reviewed}
+        else:
+            original = {str(p): sha(p) for p in reviewed}
         preview = reviewed[0]
         browser = read(run/'browser.json')
         from pack_paths import checked_file
@@ -281,14 +341,22 @@ def publish(run, data, *, review_attempt=None, action_attempt=None):
                 shutil.copyfile(source_file, destination)
                 if sha(destination) != original[str(source_file)]:
                     raise ValueError('quiz_review_changed')
+            files = {str(bundle/p.relative_to(run)): original[str(p)] for p in reviewed[1:]}
+            files[str(html)] = original[str(preview)]
             if binding:
                 write(staged_bundle/'binding.json', binding)
+                files[str(bundle/'binding.json')] = sha(staged_bundle/'binding.json')
             staged_html = stage / html.name
             shutil.copyfile(preview, staged_html)
-            if sha(staged_html) != browser["sha256"]:
+            if sha(staged_html) != original[str(preview)] or sha(staged_html) != browser["sha256"]:
                 raise ValueError("발행 후보 HTML이 브라우저 검사 후 바뀌었습니다.")
             backup = run / "previous" / uuid4().hex
             if html.exists() or bundle.exists():
+                if strict:
+                    if not registered_quiz_inventory(pack, html, bundle):
+                        raise ValueError('unowned_quiz_overlap')
+                else:
+                    verify_legacy(pack, data['slug'])
                 backup.mkdir(parents=True)
                 if html.exists():
                     shutil.copy2(html, backup / html.name)
@@ -312,10 +380,17 @@ def publish(run, data, *, review_attempt=None, action_attempt=None):
         receipt = {
             "range": data["range"], "status": "published", "attempt": binding["parent_attempt"] if binding else None,
             "run": str(run), "backup": str(backup) if backup.exists() else None,
-            "files": {str(p): sha(p) for p in [html, *(p for p in bundle.rglob("*") if p.is_file())]},
+            "files": files,
             "items": len(data["items"]),
             "reviewed_files": original, "review_attempt": review_attempt, "action_attempt": action_attempt,
         }
+        if strict:
+            from pack_publication import quiz_inventory
+            installed = quiz_inventory(pack, [html.name, bundle.relative_to(pack).as_posix()])
+            observed = {str(pack/name):value for name,value in installed.items() if not name.endswith('/')}
+            if observed != files:
+                raise ValueError('installed quiz differs from the approved staged bytes')
+            register_attached_quiz(pack, receipt, owner['journal'], installed)
         if data.get("parent_run"):
             record_parent(Path(data["parent_run"]), receipt)
         return html
@@ -353,11 +428,17 @@ def main(argv=None):
             command.add_argument("--solver")
             command.add_argument("--answers", required=True, type=Path)
             command.add_argument("--round", required=True, type=int, choices=(1, 2, 3))
+    legacy = commands.add_parser('verify-legacy')
+    legacy.add_argument('--pack', required=True, type=Path)
+    legacy.add_argument('--slug', required=True)
     withheld = commands.add_parser("withhold")
     withheld.add_argument("--parent-run", required=True, type=Path)
     withheld.add_argument("--reason", required=True)
     args = parser.parse_args(argv)
     try:
+        if args.command == "verify-legacy":
+            verify_legacy(args.pack, args.slug)
+            return 0
         if args.command == "withhold":
             parent_run = args.parent_run.resolve()
             import pack_flow

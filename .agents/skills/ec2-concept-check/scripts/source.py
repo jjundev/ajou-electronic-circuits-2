@@ -184,7 +184,10 @@ def describe_inputs(repo, range_, parent_run=None, *, candidate_pack: Path | Non
             logical.update(manifest=manifest_path, selection=selection)
             logical.update({'stt/' + d: Path(p) for d,p in transcripts.items()})
             logical.update({'summary/' + d: Path(p) for d,p in summaries.items()})
+            import interaction
             logical.update(runtime_resources(repo))
+            logical.update({'interaction/' + name:interaction.SKILL/'assets'/name
+                            for name in interaction.INTERACTION_RESOURCES})
             if candidate_pack is not None:
                 loaded['candidate_pack'] = str(pack)
             if not {nfc(str(note)), nfc(str(md))} <= {nfc(str(p)) for p in logical.values()}:

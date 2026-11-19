@@ -342,12 +342,89 @@ def test_zero_problem_cli_publishes_only_after_actual_converter_and_review_recei
                            capture_output=True, text=True)
     assert wrong.returncode and 'quiz_publish_attempt_changed' in wrong.stderr
     assert not (repo/'복습노트/0909/확인문제_0909_Mini_Test.html').exists()
+    copied = tmp_path/'copied-quiz'
+    shutil.copytree(Path(review['attempt_dir'])/'quiz', copied, symlinks=True)
+    for orphan_mode in ('copied', 'standalone', 'legacy'):
+        original_source = flow._read(copied/'source.json')
+        altered = dict(original_source)
+        if orphan_mode != 'copied':
+            for key in ('candidate_pack','parent_run','parent_attempt','logical_inputs'):
+                altered.pop(key, None)
+            if orphan_mode == 'legacy':
+                altered['parent_run'] = str(tmp_path/'run 한글')
+        flow._atomic_json(copied/'source.json', altered)
+        bypass = subprocess.run([sys.executable, CONCEPT_CLI, 'publish', '--run', copied],
+                                capture_output=True, text=True)
+        assert bypass.returncode and 'quiz_publish_attempt_changed' in bypass.stderr, bypass.stderr
+        flow._atomic_json(copied/'source.json', original_source)
+        assert not (repo/'복습노트/0909/확인문제_0909_Mini_Test.html').exists()
+
+    # A review file changes after assessing all review evidence, before copying.
+    import pack_parallel
+    visual = Path(review['attempt_dir'])/'quiz/visual-review.json'
+    approved = visual.read_bytes()
+    def race(command, *args):
+        assert command == 'publish'
+        injection = """import sys
+sys.path.insert(0, sys.argv.pop(1))
+import concept
+old = concept.reviewed_files
+def reviewed(run,data):
+    paths = old(run,data)
+    (run/'visual-review.json').write_text('{}')
+    return paths
+concept.reviewed_files = reviewed
+sys.exit(concept.main(sys.argv[1:]))"""
+        proc = subprocess.run([sys.executable, '-c', injection, CONCEPT_CLI.parent, command, *args],
+                              capture_output=True, text=True)
+        visual.write_bytes(approved)
+        if proc.returncode:
+            raise flow.FlowError(proc.stderr)
+        return proc.stdout
+    with monkeypatch.context() as patch:
+        patch.setattr(pack_parallel, 'concept_command', race)
+        failed = pack_parallel.run_action(run, 'concept-publish')
+    assert failed['status'] == 'failed' and 'quiz_review_changed' in failed['detail']
+    assert not (repo/'복습노트/0909/확인문제_0909_Mini_Test.html').exists()
+    visual.write_bytes(approved)
+    collision = repo/'복습노트/0909/확인문제_0909_Mini_Test.html'
+    collision.write_text('personal notes added after parent publication')
+    refused = pack_parallel.run_action(run, 'concept-publish')
+    assert refused['status'] == 'failed' and 'unowned_quiz_overlap' in refused['detail']
+    assert collision.read_text() == 'personal notes added after parent publication'
+    collision.unlink()
     action('concept-publish')
     state = flow.inspect_state(run)
     receipt = flow.concept_check_result(state)
     assert receipt and receipt['attempt'] == state['actions']['final-check']['attempt']
+    import copy
+    prior = copy.deepcopy(state)
+    prior['tasks']['concept-review']['receipt'].pop('quiz_files')
+    assert flow._current(prior)['tasks']['concept-review']['status'] == 'stale'
     assert (repo/'복습노트/0909/확인문제_0909_Mini_Test.html').is_file()
     assert flow.next_work(run, slots=0)['kind'] == 'report'
+    installed = PackPaths(repo, repo/'복습노트/0909', tmp_path/'unused-candidate')
+    settled = pub.reconcile_publication(installed, Path(state['publication']['journal']), verify=lambda _:None)
+    assert settled['status'] == 'published', settled
+    result_path = run/'concept-check-result.json'
+    original_receipt = result_path.read_bytes()
+    flow._atomic_json(result_path, dict(receipt, action_attempt=None, review_attempt=None))
+    assert flow.concept_check_result(state) is None
+    result_path.write_bytes(original_receipt)
+    public_html = repo/'복습노트/0909/확인문제_0909_Mini_Test.html'
+    accepted_html = public_html.read_bytes()
+    public_html.write_bytes(b'foreign bytes')
+    disputed = pub.reconcile_publication(installed, Path(state['publication']['journal']), verify=lambda _:None)
+    assert disputed['status'] == 'recovery_required' and public_html.read_bytes() == b'foreign bytes'
+    public_html.write_bytes(accepted_html)
+    # A tool-owned JS edit changes rendering while teaching/solver input stays identical.
+    temp_review = tmp_path/'changed-runtime-review'
+    temp_review.mkdir()
+    source = flow._read(Path(review['attempt_dir'])/'quiz/source.json')
+    source['logical_inputs']['interaction/review-prompt.js'] = 'changed'
+    flow._atomic_json(temp_review/'source.json', source)
+    retained = pack_parallel.retain_quiz_evidence(review,temp_review)
+    assert 'q1' in retained and 'browser.json' not in retained
     # Damage to the quiz evidence must reopen its production alone.
     shot = next((Path(state['tasks']['concept-review']['attempt_dir'])/'quiz/shots').glob('*.png'))
     shot.write_bytes(b'changed synthetic quiz capture')

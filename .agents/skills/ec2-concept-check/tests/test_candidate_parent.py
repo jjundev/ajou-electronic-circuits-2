@@ -86,14 +86,22 @@ def test_parent_note_change_refuses_early_quiz(parent, tmp_path):
 @pytest.mark.parametrize('interrupted', [False, True])
 def test_old_quiz_not_visible_after_changed_parent(tmp_path, monkeypatch, interrupted):
     repo, run, candidate = tmp_path/'repo', tmp_path/'install', tmp_path/'candidate'
-    public = repo/'복습노트/0909'
-    old = put(public/'확인문제_0909_Old.html', 'obsolete quiz')
-    bundle = put(public/'.pack/자료_확인문제_0909_Old/source.json', 'old evidence')
+    date = '1118'
+    slug = 'Feedback_Loading'
+    public = repo/'복습노트'/date
+    public.mkdir(parents=True)
+    legacy = SKILL.parents[2]/'복습노트'/date
+    stem = '확인문제_' + date + '_' + slug
+    old = public/(stem+'.html')
+    shutil.copyfile(legacy/old.name, old)
+    bundle = public/'.pack'/('자료_'+stem)/'source.json'
+    shutil.copytree(legacy/'.pack'/('자료_'+stem), bundle.parent)
+    before = (old.read_bytes(), bundle.read_bytes())
     other = put(public/'.pack/unrelated/source.json', 'sibling')
-    put(candidate/'정리노트_0909_Test.html', 'new parent')
+    put(candidate/'정리노트_1118_Test.html', 'new parent')
     paths = PackPaths(repo, public, candidate)
-    opts = dict(expected=publication.publication_inventory(public, '0909'),
-                candidate_inventory=publication.publication_inventory(candidate, '0909'),
+    opts = dict(expected=publication.publication_inventory(public, date),
+                candidate_inventory=publication.publication_inventory(candidate, date),
                 verify=lambda _:None, retire_concept=True)
     if interrupted:
         original = publication._mutate
@@ -112,8 +120,8 @@ def test_old_quiz_not_visible_after_changed_parent(tmp_path, monkeypatch, interr
     assert result['status'] == 'published'
     assert not old.exists() and not bundle.exists()
     archive = Path(result['journal']).parent/'before'
-    assert (archive/old.name).read_text() == 'obsolete quiz'
-    assert (archive/bundle.relative_to(public)).read_text() == 'old evidence'
+    assert (archive/old.name).read_bytes() == before[0]
+    assert (archive/bundle.relative_to(public)).read_bytes() == before[1]
     assert other.read_text() == 'sibling'
 
 
@@ -196,3 +204,115 @@ def test_only_read_vendor_resources_invalidate_quiz(parent, tmp_path):
     put(public.parent/'.assets/vendor/pretendard/woff2/Pretendard-Regular.woff2', 'changed font')
     with pytest.raises(ValueError, match='quiz_input_changed'):
         concept.bind_parent_for_publish(quiz, run)
+
+
+@pytest.mark.parametrize('damage', ['empty', 'injected', 'figure', 'wrong-question', 'extra-item'])
+def test_exact_sealed_packet_projection(tmp_path, damage):
+    import blind
+    quiz = tmp_path/'quiz'
+    quiz.mkdir()
+    item = dict(id='q1', title='Question', objective='o1', stem_html='<p>2+2?</p>', format='short',
+                figure_svg='<svg>fixture</svg>', answer={'canonical':'4'}, hint='add')
+    data = dict(logical_inputs={'note':'fixture'}, items=[item], objectives=[{'id':'o1'}])
+    packet = tmp_path/'sealed'
+    blind.issue(data, quiz, packet)
+    answers = put(tmp_path/'answers.md', '| q1 | 4 | |')
+    ledger = blind.record(data, answers, quiz/'blind-ledger.json', 1, packet_dir=packet, author='a', solver='s')
+    archive = blind.issued_path(quiz, packet)
+    issued = source.read(archive/'issued.json')
+    if damage == 'empty':
+        issued['files'] = {}
+    elif damage == 'figure':
+        issued['files'].pop('q1.svg')
+    elif damage == 'extra-item':
+        issued['questions'].append(dict(id='q99', title='Answer is four', format='short', stem_html='<p>4</p>'))
+        issued['items']['q99'] = 'fabricated'
+        for name,content in blind.packet_contents(issued['questions']).items():
+            (archive/'packet'/name).write_bytes(content)
+        issued['files'] = {p.name:source.sha(p) for p in (archive/'packet').iterdir()}
+    else:
+        target = archive/'packet'/('answer.txt' if damage == 'injected' else '문제.md')
+        put(target, 'answer is four')
+        issued['files'][target.name] = source.sha(target)
+    source.write(archive/'issued.json', issued)
+    ledger['q1']['issued_sha256'] = source.sha(archive/'issued.json')
+    with pytest.raises(ValueError, match='packet'):
+        blind.evidence(quiz, data, ledger)
+
+
+def test_pin_the_actual_interaction_assets(parent):
+    import interaction
+    repo, run, candidate, state = parent
+    data = source.describe_inputs(repo, '0909', run, candidate_pack=candidate)
+    for name in ('review-interaction.css', 'review-prompt.js', 'review-interaction.js'):
+        assert data['logical_inputs'].get('interaction/'+name) == source.sha(interaction.SKILL/'assets'/name)
+
+
+def test_manual_quiz_and_unpaired_evidence_survive_parent(tmp_path):
+    repo = tmp_path/'repo'
+    public = repo/'복습노트/0909'
+    manual = put(public/'확인문제_0909_Manual.html', 'manual notes')
+    orphan = put(public/'.pack/자료_확인문제_0909_Orphan/custom.txt', 'private notes')
+    candidate = tmp_path/'candidate'
+    put(candidate/'정리노트_0909_New.html', 'new note')
+    paths = PackPaths(repo, public, candidate)
+    result = publication.publish_pack(paths, tmp_path/'install', expected=publication.publication_inventory(public,'0909'),
+               candidate_inventory=publication.publication_inventory(candidate,'0909'), verify=lambda _:None, retire_concept=True)
+    assert result['status'] == 'published'
+    assert manual.read_text() == 'manual notes' and orphan.read_text() == 'private notes'
+
+def test_manual_overlap_conflicts_before_parent_write(tmp_path):
+    repo = tmp_path/'repo'
+    public = repo/'복습노트/0909'
+    orphan = put(public/'확인문제_0909_Test.html', 'manual')
+    candidate = tmp_path/'candidate'
+    put(candidate/'정리노트_0909_Test.html', 'new note')
+    result = publication.publish_pack(PackPaths(repo, public, candidate), tmp_path/'install',
+                        expected=publication.publication_inventory(public,'0909'),
+                        candidate_inventory=publication.publication_inventory(candidate,'0909'),
+                        verify=lambda _:None, retire_concept=True)
+    assert result['status'] == 'conflict' and orphan.read_text() == 'manual'
+    assert not (public/'정리노트_0909_Test.html').exists()
+
+def test_rewritten_legacy_html_is_not_a_managed_quiz(tmp_path):
+    date, slug = '1118', 'Feedback_Loading'
+    fixture = SKILL.parents[2]/'복습노트'/date
+    public = tmp_path/'repo/복습노트'/date
+    stem = f'확인문제_{date}_{slug}'
+    html = put(public/(stem+'.html'), 'my personal quiz')
+    bundle = public/'.pack'/('자료_'+stem)
+    shutil.copytree(fixture/'.pack'/('자료_'+stem), bundle)
+    browser = source.read(bundle/'browser.json')
+    browser['sha256'] = source.sha(html)
+    source.write(bundle/'browser.json', browser)
+    assert publication.publication_inventory(public,date) == {}
+
+
+def test_interaction_change_invalidates_prepared_render(parent, tmp_path, monkeypatch):
+    import interaction
+    repo, run, candidate, state = parent
+    renderer = tmp_path/'renderer'
+    shutil.copytree(interaction.SKILL/'assets', renderer/'assets')
+    monkeypatch.setattr(interaction, 'SKILL', renderer)
+    quiz = tmp_path/'quiz'
+    draft = concept.prepare(quiz,repo,'0909',run,candidate_pack=candidate)
+    script = renderer/'assets/review-prompt.js'
+    script.write_bytes(script.read_bytes()+b'\n// changed\n')
+    with pytest.raises(ValueError, match='quiz_input_changed'):
+        concept.check_candidate(source.read(draft))
+
+
+def test_standalone_can_replace_its_own_verified_publication(parent, tmp_path):
+    repo, _, candidate, _ = parent
+    shutil.copytree(candidate, repo/'복습노트/0909')
+    quiz = tmp_path/'standalone'
+    concept.prepare(quiz,repo,'0909',None)
+    objective = dict(id='o1',topic_id='gain',concept='fixture',source=dict(date='0909',stt='line 1',slide='s1'))
+    source.write(quiz/'objectives.json', dict(range='0909',slug='Test', objectives=[objective]))
+    item = dict(id='q1',objective='o1',format='short',title='합성 문제',stem_html='<p>1+1은?</p>',
+                hint='하나를 더하세요.',answer=dict(canonical='2',accepted=[]),solution=['1에 1을 더하면 2예요.'])
+    source.write(quiz/'items.json',dict(items=[item]))
+    answer = put(tmp_path/'answer.md','| q1 | 2 | |')
+    for command in (['blind-record','--answers',str(answer),'--round','1'], ['build'], ['browser'], ['publish'], ['publish']):
+        assert concept.main([*command,'--run',str(quiz)]) == 0
+    assert (repo/'복습노트/0909/확인문제_0909_Test.html').is_file()
