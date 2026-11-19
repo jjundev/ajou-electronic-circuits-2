@@ -5,7 +5,7 @@ import json
 import shutil
 from pathlib import Path
 from epe_contract import validate_fragment, validate_reviews, payload_hash
-from epe_files import publish_files
+from epe_files import _install_locked, publication_lock
 from epe_render import artifact_hashes, check_artifacts, dump, names
 from epe_source import sha256, inside, load_source
 from pack_paths import PackPaths
@@ -106,9 +106,10 @@ def _verified_mapping(pack, artifacts, fragments, reviews, destination, repo, *,
 
 
 def publish_explanation(pack, artifacts, fragments, reviews, destination, backup_dir, repo):
-    mapping = _verified_mapping(pack, artifacts, fragments, reviews, destination, repo, candidate=False)
     try:
-        publish_files(mapping, Path(backup_dir))
+        with publication_lock([pack.folder / artifacts.html.name]):
+            mapping = _verified_mapping(pack, artifacts, fragments, reviews, destination, repo, candidate=False)
+            _install_locked(mapping, Path(backup_dir))
     except OSError as exc:
         raise ExplainError(str(exc)) from exc
     return tuple(mapping)

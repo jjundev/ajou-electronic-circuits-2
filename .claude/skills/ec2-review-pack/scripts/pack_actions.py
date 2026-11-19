@@ -14,6 +14,7 @@ from uuid import uuid4
 
 import pack_flow as f
 from pack_files import inventory_pack, prepare_pack, recover_pack
+from pack_publication import publication_lock, child_lock_options
 
 ACTIONS = frozenset(('prepare-pack','assemble-note','build-problems','precheck',
     'convert-md','publish-explanation','build-answers','publish-answer','final-check'))
@@ -95,6 +96,20 @@ def _action_lock(run):
     # Independent from short state transactions, held over the entire process.
     folder=Path(run)/'work/actions'; folder.mkdir(parents=True,exist_ok=True)
     with f._locked(folder): yield
+
+
+@contextmanager
+def _live_locks(run, action=None):
+    with _action_lock(run):
+        state = f.load_state(run)
+        pack = Path(state['repo']) / '복습노트' / state['range']
+        # Windows does not pass a Unix flock descriptor. These two CLI
+        # publishers own the date lock themselves in their child process.
+        if os.name == 'nt' and action in ('publish-explanation', 'publish-answer'):
+            yield {}
+        else:
+            with publication_lock(pack):
+                yield child_lock_options(pack)
 
 
 def _retry_stopped_conversion(state, action):
@@ -374,7 +389,7 @@ def _verify_inventory_delta(before, after, writes):
 
 def run_action(run: Path, action: str) -> dict:
     run=Path(run).resolve()
-    with _action_lock(run):
+    with _live_locks(run, action) as lock_options:
         state=f.load_state(run); _guard(state,action)
         before=_pre_action_inventory(state)
         attempt=str(uuid4()); folder=run/'work/actions'/action/attempt; folder.mkdir(parents=True)
@@ -421,8 +436,8 @@ def run_action(run: Path, action: str) -> dict:
                 else:
                     argv=action_argv(state,action)
                     f._atomic_json(folder/'command.json',{'argv':argv,'cwd':state['repo']})
-                    process=subprocess.Popen(argv,cwd=state['repo'],shell=False,stdout=stdout,stderr=stderr,
-                        env=dict(os.environ,PYTHONUTF8='1',PYTHONIOENCODING='utf-8'))
+                    options = {'env': dict(os.environ, PYTHONUTF8='1', PYTHONIOENCODING='utf-8'), **lock_options}
+                    process=subprocess.Popen(argv,cwd=state['repo'],shell=False,stdout=stdout,stderr=stderr, **options)
                     mutation_started=True
                     f._atomic_json(folder/'process.json',{'pid':process.pid,'attempt':attempt})
                     result['exit_code']=process.wait()
@@ -460,7 +475,7 @@ def run_action(run: Path, action: str) -> dict:
 
 def reconcile_action(run: Path, action: str) -> dict:
     run=Path(run).resolve()
-    with _action_lock(run):
+    with _live_locks(run):
         state=f.load_state(run)
         if action not in ACTIONS or action not in state['actions']: raise f.FlowError('unknown action')
         record=state['actions'][action]; folder=Path(record['attempt_dir'])
@@ -502,7 +517,7 @@ def _require_stopped(state, record):
 
 def recover_run(run: Path) -> dict:
     run=Path(run).resolve()
-    with _action_lock(run):
+    with _live_locks(run):
         state=f.load_state(run)
         for record in state['actions'].values():
             for attempt in [*record.get('history',[]),record]:
@@ -584,6 +599,52 @@ def verify_note_view(manifest_data, paths, audit, *, preliminary=False):
         errors.extend('missing PDF: ' + name for name in required if not paths.work_file(name).is_file())
     if errors:
         raise f.FlowError('\n'.join(errors))
+
+
+def publication_verifier(manifest_data, paths, audit, *, answer_review=None):
+    """Build the same strict verifier for the staged and actual public roots."""
+    import manifest
+    from pack_paths import PackPaths
+
+    def verify(root):
+        if root == paths.public_pack:
+            view = PackPaths(paths.repo, paths.public_pack)
+        elif root == paths.work_pack:
+            view = paths
+        else:
+            raise f.FlowError('unexpected publication verification root')
+        if manifest_data['range'] != view.public_pack.name:
+            raise f.FlowError('publication manifest date mismatch')
+        verify_note_view(manifest_data, view, audit)
+        if not manifest_data['problems']:
+            from pack_files import _roots
+            note_name = manifest.note_name(manifest_data)
+            allowed = {note_name, '.assets/' + Path(note_name).with_suffix('.md').name,
+                       '.assets/figures_' + manifest_data['range']}
+            actual = {str(f.nfc_path(name)) for name in _roots(root, manifest_data['range'])}
+            extra = actual - allowed
+            if extra:
+                raise f.FlowError('unexpected zero-problem pack outputs: ' + ', '.join(sorted(extra)))
+            return
+        if answer_review is None:
+            raise f.FlowError('approved answer PDF screen review required')
+        bundle = f".assets/자료_문제설명_{manifest_data['range']}_{manifest_data['slug']}"
+        # The workbook and note builder each import a distinct assemble.py.
+        # Isolate the workbook loader just as the existing answer CLI does.
+        script = Path(__file__).with_name('publish_answer.py')
+        args = [sys.executable, script, 'verify', '--repo', view.repo, '--public-pack', view.public_pack,
+                '--ids', ','.join(p['id'] for p in manifest_data['problems']),
+                '--overlay', view.work_file(bundle + '/answer-overlay.json'),
+                '--pdf', view.work_file(manifest.answer_pdf_name(manifest_data)),
+                '--problem-pdf', view.work_file(manifest.problem_pdf_name(manifest_data)), '--review', answer_review]
+        if view.candidate_pack:
+            args.extend(['--candidate-pack', view.candidate_pack])
+            for private in view.private_roots:
+                args.extend(['--private-root', private])
+        result = subprocess.run(args, capture_output=True, text=True)
+        if result.returncode:
+            raise f.FlowError('current overlay/PDF verification failed: ' + result.stderr)
+    return verify
 
 
 def candidate_action(state, action, paths, attempt, *, audit=None, explain_run=None):

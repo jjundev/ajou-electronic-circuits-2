@@ -2,9 +2,6 @@
 from __future__ import annotations
 
 import argparse
-from contextlib import contextmanager
-import fcntl
-import hashlib
 import os
 from pathlib import Path
 import re
@@ -21,6 +18,7 @@ import interaction
 import blind
 import items
 import render
+from pack_publication import publication_lock
 from source import describe_inputs, nfc, read, sha, verify_inputs, write
 
 ASSETS = _paths.SKILL / "assets"
@@ -146,16 +144,6 @@ def approved_preview(run, data):
     if path.read_bytes() != render_page(data).encode("utf-8"):
         raise ValueError("미리보기와 현재 빌드가 다릅니다. build부터 다시 실행하세요.")
     return path
-
-
-@contextmanager
-def publication_lock(pack):
-    lock_dir = Path.home() / ".cache/ec2-concept-check/locks"
-    lock_dir.mkdir(parents=True, exist_ok=True)
-    key = hashlib.sha256(nfc(str(pack.resolve())).encode()).hexdigest()
-    with (lock_dir / key).open("a") as lock:
-        fcntl.flock(lock, fcntl.LOCK_EX)
-        yield
 
 
 def publish(run, data):
