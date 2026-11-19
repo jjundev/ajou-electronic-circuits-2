@@ -44,20 +44,25 @@ def packet(data, folder):
         (folder/name).write_bytes(content)
 
 
-def verify_packet(archive, issued, data, targets):
+def verify_packet(archive, issued, data, targets, *, inherited=False):
     questions = issued.get('questions', [])
     ids = [q['id'] for q in questions]
     current = {item['id']:item for item in data['items']}
     if (not ids or not all(isinstance(cid, str) and re.fullmatch(r'q[1-9][0-9]*', cid) for cid in ids)
-            or len(set(ids)) != len(ids) or set(ids) != set(issued['items']) or not set(ids) <= current.keys()
+            or len(set(ids)) != len(ids) or set(ids) != set(issued['items'])
             or questions != projection(questions)):
         raise ValueError('invalid independent packet projection')
     stored = dict(zip(ids, questions))
     objectives = {o['id']:o for o in data['objectives']}
-    required = set(targets)
-    required.update(cid for cid in ids if issued['items'][cid] == digest(current[cid], objectives[current[cid]['objective']]))
-    if any(stored.get(q['id']) != q for q in projection([current[cid] for cid in required])):
-        raise ValueError('independent packet question changed')
+    if not inherited:
+        subset = [item for item in data['items'] if item['id'] in stored]
+        full_digests = {i['id']:digest(i, objectives[i['objective']]) for i in subset}
+        if issued['items'] != full_digests or questions != projection(subset):
+            raise ValueError('independent packet differs from its full current source; reissue it')
+    for cid in targets:
+        item = current[cid]
+        if issued['items'].get(cid) != digest(item, objectives[item['objective']]) or stored[cid] != projection([item])[0]:
+            raise ValueError('independent packet question changed')
     expected = {name:hashlib.sha256(content).hexdigest() for name,content in packet_contents(questions).items()}
     folder = archive/'packet'
     if (expected != issued.get('files') or set(expected) != {p.name for p in folder.iterdir()}
@@ -132,10 +137,27 @@ def record(data, answers, previous, round_, *, packet_dir=None, author=None, sol
     return {**prior, **responses}
 
 
+def inherited_rows(run, data):
+    from pack_flow import load_state
+    from pack_parallel import prior_blind_approval
+    if not data.get('parent_run'):
+        return {}
+    parent = Path(data['parent_run'])
+    state = load_state(parent)
+    worker = state['tasks'].get('concept-review', {})
+    origin = worker.get('blind_origin', {})
+    if (not origin or origin['recipient_attempt'] != worker.get('attempt')
+            or Path(worker['attempt_dir'])/'quiz' != run):
+        return {}
+    return prior_blind_approval(parent, state['run_id'], origin['previous_attempt'], origin['file'], data['logical_inputs'])
+
+
 def evidence(run, data, ledger):
     """Verify source answers and answer-free originals for each accepted item."""
     from pack_paths import checked_file
     paths = set()
+    prior = inherited_rows(run, data)
+    prior_issues = {Path(row['proof']).parent.parent for row in prior.values()}
     for item in data['items']:
         cid = item['id']
         row = ledger[cid]
@@ -148,7 +170,13 @@ def evidence(run, data, ledger):
         issued = read(original)
         if sha(original) != row.get('issued_sha256'):
             raise ValueError('independent packet receipt changed')
-        verify_packet(original.parent, issued, data, [cid])
+        previous = prior.get(cid)
+        inherited = row == previous
+        if not inherited:
+            if original.parent.relative_to(run) in prior_issues or (previous and (
+                    row['round'] <= previous['round'] or row['solver'] in previous['solvers'])):
+                raise ValueError('independent packet or recipient differs from the accepted approval; reissue it')
+        verify_packet(original.parent, issued, data, [cid], inherited=inherited)
         rows = [line.strip().strip('|').split('|', 2) for line in answer.read_text(encoding='utf-8').splitlines()]
         if (issued['items'].get(cid) != row['sha256'] or
                 [cid, row['answer'], row['objection']] not in [[v.strip() for v in parts] for parts in rows]):

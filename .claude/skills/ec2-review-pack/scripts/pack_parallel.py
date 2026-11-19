@@ -178,7 +178,15 @@ def claim_worker(state, task):
         quiz = root/'quiz'
         quiz.mkdir()
         shutil.copyfile(output(state, 'concept-draft', 'source.json'), quiz/'source.json')
-        data.update(quiz_run=str(quiz), concept_cli=str(CONCEPT_CLI), retained_quiz=retain_quiz_evidence(task, quiz),
+        origin = (task.get('receipt') or {}).get('blind_certificate')
+        approved = prior_blind_approval(Path(state['run']), state['run_id'], task.get('attempt'), origin,
+                                        f._read(quiz/'source.json')['logical_inputs'])
+        retained = retain_quiz_evidence(task, quiz, approved=approved)
+        task.pop('blind_origin', None)
+        if approved:
+            task['blind_origin'] = dict(recipient_attempt=attempt, previous_attempt=task['attempt'], file=origin)
+            data['inputs'].append(origin)
+        data.update(quiz_run=str(quiz), concept_cli=str(CONCEPT_CLI), retained_quiz=retained,
                     instruction='Follow ec2-concept-check/SKILL.md in quiz_run. Use a separate author and blind solver, '
                                 'send only the answer-free packet, then inspect the four browser views. '
                                 'Record their identities during blind-record. Submit evidence without publishing.')
@@ -549,6 +557,10 @@ def adopt_worker(state, task, receipt):
         owned.extend(Path(x) for x in verified if Path(x).is_relative_to(root / 'answer-pages'))
     task['artifacts'] = freeze_files(root, sorted(set(owned)), verified, dst)
     receipt['verified_files'].extend(file_records(Path(p) for p in task['artifacts'].values()))
+    if task['role'] == 'concept-review':
+        certificate = seal_blind_approval(state, task, dst/'quiz', receipt['quiz_files'])
+        receipt['blind_certificate'] = certificate
+        receipt['verified_files'].append(certificate)
     if 'joined_independent' in receipt:
         joined = receipt.pop('joined_independent')
         # The complete answer-bearing file exists only on the runner's adopted
@@ -756,7 +768,53 @@ def machine_report(state, root, problems, note, manifest, paths=None):
 CONCEPT_CLI = Path(__file__).resolve().parents[2]/'ec2-concept-check/scripts/concept.py'
 
 
-def retain_quiz_evidence(task, quiz):
+def quiz_teaching_digest(logical_inputs):
+    teaching = {key:value for key,value in logical_inputs.items() if not key.startswith(('vendor/', 'interaction/'))}
+    return hashlib.sha256(json.dumps(teaching, sort_keys=True).encode()).hexdigest()
+
+
+def seal_blind_approval(state, task, adopted, hashes):
+    """Certify only actual accepted targets, against the previously frozen packet and answers."""
+    source = f._read(adopted/'source.json')
+    ledger = f._read(adopted/'blind-ledger.json')
+    rows = {}
+    for item in f._read(adopted/'items.json')['items']:
+        cid = item['id']
+        row = ledger[cid]
+        answers = Path(row['proof'])
+        issue = answers.parent.parent/'issued.json'
+        if hashes.get(answers.as_posix()) != row['answers_sha256'] or hashes.get(issue.as_posix()) != row['issued_sha256']:
+            raise f.FlowError('independent packet or answer differs from accepted evidence')
+        rows[cid] = row
+    # A worker can supply files only inside its attempt. The scheduler allocates
+    # this separate immutable record after validating and adopting its outputs.
+    directory = Path(state['run'])/'blind-approvals'/str(uuid4())
+    directory.mkdir(parents=True, exist_ok=False)
+    path = directory/'approved.json'
+    f._atomic_json(path, dict(run_id=state['run_id'], attempt=task['attempt'],
+                   source_sha256=hashes['source.json'], teaching_sha256=quiz_teaching_digest(source['logical_inputs']), rows=rows))
+    path.chmod(0o444)
+    return file_records([path])[0]
+
+
+def prior_blind_approval(run, run_id, attempt, record, logical_inputs):
+    if not record:
+        return {}
+    try:
+        base = Path(run)/'blind-approvals'
+        path = local_path(base, Path(record['path']).relative_to(base))
+        if f._sha(path) != record['sha256']:
+            return {}
+        data = f._read(path)
+        if (data['run_id'], data['attempt'], data['teaching_sha256']) == (
+                run_id, attempt, quiz_teaching_digest(logical_inputs)):
+            return data['rows']
+    except (ValueError, KeyError, OSError):
+        pass
+    return {}
+
+
+def retain_quiz_evidence(task, quiz, *, approved=None):
     """Copy only independently current parts of a previously accepted review."""
     receipt = task.get('receipt') or {}
     if receipt.get('task_status') != 'done':
@@ -789,13 +847,14 @@ def retain_quiz_evidence(task, quiz):
         return []
     old = json.loads(prior)['logical_inputs']
     new = f._read(quiz/'source.json')['logical_inputs']
-    def teaching(inputs):
-        return {key:value for key,value in inputs.items() if not key.startswith(('vendor/', 'interaction/'))}
-    if teaching(old) != teaching(new) or not copy_group(('objectives.json', 'items.json')):
+    if quiz_teaching_digest(old) != quiz_teaching_digest(new) or not copy_group(('objectives.json', 'items.json')):
         return []
     retained = ['objectives.json', 'items.json']
     ledger = {}
-    for cid,row in json.loads(current('blind-ledger.json') or b'{}').items():
+    if approved is None:
+        parent = Path(f._read(quiz/'source.json')['parent_run'])
+        approved = prior_blind_approval(parent, receipt['run_id'], task['attempt'], receipt.get('blind_certificate'), new)
+    for cid,row in approved.items():
         answers = row['proof']
         folder = Path(answers).parent.parent
         names = [name for name in hashes if Path(name).is_relative_to(folder/'packet')]

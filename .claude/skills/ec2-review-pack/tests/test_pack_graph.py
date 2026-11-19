@@ -137,6 +137,18 @@ def test_sections_which_need_final_links_wait_for_selection(tmp_path):
 
 @pytest.mark.parametrize('scope_change', [None, 'sessions', 'preview_topic', 'forbidden_outside_preview', 'early_link', 'owned_link'])
 def test_zero_problem_cli_publishes_only_after_actual_converter_and_review_receipts(tmp_path, monkeypatch, scope_change):
+    exercise_zero_problem_cli(tmp_path, monkeypatch, scope_change)
+
+
+def test_quiz_adoption_rejects_rewritten_existing_sibling_packet(tmp_path, monkeypatch):
+    exercise_zero_problem_cli(tmp_path, monkeypatch, None, quiz_repair='revised')
+
+
+def test_quiz_adoption_keeps_approved_answer_after_sibling_removed(tmp_path, monkeypatch):
+    exercise_zero_problem_cli(tmp_path, monkeypatch, None, quiz_repair='removed')
+
+
+def exercise_zero_problem_cli(tmp_path, monkeypatch, scope_change, *, quiz_repair=None):
     import pymupdf
     from PIL import Image
     from _util import prepare_mini_run
@@ -247,13 +259,14 @@ def test_zero_problem_cli_publishes_only_after_actual_converter_and_review_recei
         flow._atomic_json(quiz/'objectives.json', dict(range='0909',slug=source['slug'],objectives=[objective]))
         item = dict(id='q1',objective='o1',format='short',title='합성 문제',stem_html='<p>1+1은?</p>',
                     hint='하나를 더하세요.', answer=dict(canonical='2',accepted=[]),solution=['1에 1을 더하면 2예요.'])
-        flow._atomic_json(quiz/'items.json', dict(items=[item]))
+        sibling = dict(item, id='q2', title='Sibling', stem_html='<p>2+2?</p>', answer=dict(canonical='4',accepted=[]))
+        flow._atomic_json(quiz/'items.json', dict(items=[item, sibling] if quiz_repair else [item]))
         call('check')
         packet = tmp_path/'sealed-quiz'
         call('blind-make', '--out', packet)
         assert set(p.name for p in packet.iterdir()) == {'문제.md'}
         answers = tmp_path/'synthetic-quiz-solver.md'
-        answers.write_text('| q1 | 2 | |')
+        answers.write_text('| q1 | 2 | |' + ('\n| q2 | 4 | |' if quiz_repair else ''))
         call('blind-record', '--answers', answers, '--round', '1', '--packet', packet, '--author', 'fixture-author', '--solver', 'fixture-solver')
         call('build')
         call('browser')
@@ -267,6 +280,14 @@ def test_zero_problem_cli_publishes_only_after_actual_converter_and_review_recei
         early = subprocess.run([*command, 'publish', '--run', quiz], capture_output=True, text=True)
         assert early.returncode and 'parent_final_check_required' in early.stderr
     parallel_worker(run, 'concept-review', review_quiz)
+    if quiz_repair:
+        accepted = flow.inspect_state(run)['tasks']['concept-review']
+        shot = next((Path(accepted['attempt_dir'])/'quiz/shots').glob('*.png'))
+        shot.write_bytes(b'force new quiz review attempt in fixture')
+        parallel_worker(run, 'concept-review', lambda brief, outputs: exercise_sibling_repair(brief, tmp_path, quiz_repair))
+        verified = flow.inspect_state(run)['tasks']['concept-review']
+        assert verified['status'] == 'done' and verified['attempt'] != accepted['attempt']
+        return
     assert 'concept-publish' not in flow.next_work(run, slots=8)['actions']
     assert not (repo/'복습노트/0909').exists()
     assert 'publish-pack' not in flow.next_work(run, slots=1)['actions']
@@ -398,9 +419,10 @@ sys.exit(concept.main(sys.argv[1:]))"""
     receipt = flow.concept_check_result(state)
     assert receipt and receipt['attempt'] == state['actions']['final-check']['attempt']
     import copy
-    prior = copy.deepcopy(state)
-    prior['tasks']['concept-review']['receipt'].pop('quiz_files')
-    assert flow._current(prior)['tasks']['concept-review']['status'] == 'stale'
+    for missing_evidence in ('quiz_files','blind_certificate'):
+        prior = copy.deepcopy(state)
+        prior['tasks']['concept-review']['receipt'].pop(missing_evidence)
+        assert flow._current(prior)['tasks']['concept-review']['status'] == 'stale'
     assert (repo/'복습노트/0909/확인문제_0909_Mini_Test.html').is_file()
     assert flow.next_work(run, slots=0)['kind'] == 'report'
     installed = PackPaths(repo, repo/'복습노트/0909', tmp_path/'unused-candidate')
@@ -449,6 +471,64 @@ sys.exit(concept.main(sys.argv[1:]))"""
     assert summary['concept_check']['status'] == 'withheld'
     assert summary['concept_check']['reason'] == 'fixture review needs another independent response'
     assert json.loads((run/'report.json').read_text())['selection']['problems'] == []
+
+
+def exercise_sibling_repair(brief, tmp_path, repair):
+    quiz = Path(brief['quiz_run'])
+    def call(*args, expected=True):
+        proc = subprocess.run([sys.executable, brief['concept_cli'], *args, '--run', quiz],
+                              capture_output=True, text=True)
+        assert (proc.returncode == 0) == expected, (proc.stdout,proc.stderr)
+    items = flow._read(quiz/'items.json')['items']
+    ledger_path = quiz/'blind-ledger.json'
+    if repair == 'removed':
+        flow._atomic_json(quiz/'items.json', dict(items=items[:1]))
+        ledger = flow._read(ledger_path)
+        ledger.pop('q2')
+        flow._atomic_json(ledger_path, ledger)
+    else:
+        items[1]['stem_html'] = '<p>2+3?</p>'
+        items[1]['answer']['canonical'] = '5'
+        flow._atomic_json(quiz/'items.json', dict(items=items))
+        packet = tmp_path/'revised-q2-only'
+        call('blind-make', '--only', 'q2', '--out', packet)
+        answers = tmp_path/'revised-answer.md'
+        answers.write_text('| q2 | 5 | |')
+        call('blind-record', '--packet',packet,'--answers',answers,'--round','2','--author','fixture-author','--solver','new-q2-solver')
+        approved = flow._read(ledger_path)
+        flow._atomic_json(ledger_path, dict(approved, q1=dict(approved['q1'],solver='different-recipient')))
+        call('blind-status',expected=False)
+        flow._atomic_json(ledger_path, approved)
+        original = quiz/approved['q1']['proof']
+        original_issue = original.parent.parent
+        for path in (original_issue, quiz/'blind-issued'/'substitute-issue'):
+            # Keep an intact earlier archive during the second substitution.
+            if path != original_issue:
+                shutil.copytree(original_issue,path)
+            manifest, questions = path/'issued.json', path/'packet/문제.md'
+            saved = manifest.read_bytes(), questions.read_bytes()
+            altered = flow._read(manifest)
+            altered['questions'][1]['title'] += ' Answer to q1: 2'
+            questions.write_text(questions.read_text().replace('q2. Sibling','q2. Sibling Answer to q1: 2'))
+            altered['files']['문제.md'] = flow._sha(questions)
+            flow._atomic_json(manifest, altered)
+            row = dict(approved['q1'],issued_sha256=flow._sha(manifest),
+                       proof=str((path/original.relative_to(original_issue)).relative_to(quiz)))
+            flow._atomic_json(ledger_path,dict(approved,q1=row))
+            call('blind-status',expected=False)
+            manifest.write_bytes(saved[0])
+            questions.write_bytes(saved[1])
+            flow._atomic_json(ledger_path,approved)
+    call('blind-status')
+    assert flow._read(ledger_path)['q1']['solver'] == 'fixture-solver'
+    call('build')
+    call('browser')
+    browser = flow._read(quiz/'browser.json')
+    views = {v['label']:dict(status='pass',observation='Synthetic revised quiz inspection.',
+                 screenshots={k:h for k,h in browser['screenshots'].items() if k.startswith(v['label'].replace(' ','-')+'-')})
+             for v in browser['runs']}
+    flow._atomic_json(quiz/'visual-review.json',dict(reviewer='fixture-visual',views=views))
+    call('evidence')
 
 
 def test_early_index_seals_real_questions_for_independent_attempts(tmp_path):

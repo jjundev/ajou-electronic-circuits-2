@@ -316,3 +316,25 @@ def test_standalone_can_replace_its_own_verified_publication(parent, tmp_path):
     for command in (['blind-record','--answers',str(answer),'--round','1'], ['build'], ['browser'], ['publish'], ['publish']):
         assert concept.main([*command,'--run',str(quiz)]) == 0
     assert (repo/'복습노트/0909/확인문제_0909_Test.html').is_file()
+
+
+@pytest.mark.parametrize('change', ['revised', 'removed'])
+def test_unaccepted_multi_item_packet_must_be_reissued_after_sibling_change(tmp_path, change):
+    import blind
+    quiz, packet = tmp_path/'quiz', tmp_path/'packet'
+    quiz.mkdir()
+    first = dict(id='q1',title='First',objective='o1',stem_html='<p>1+1?</p>',format='short',
+                 answer={'canonical':'2'},hint='add')
+    second = dict(first,id='q2',title='Second',stem_html='<p>2+2?</p>',answer={'canonical':'4'})
+    data = dict(logical_inputs={'note':'fixture'}, items=[first,second], objectives=[{'id':'o1'}])
+    blind.issue(data,quiz,packet)
+    answers = put(tmp_path/'answers.md','| q1 | 2 | |\n| q2 | 4 | |')
+    ledger = blind.record(data,answers,quiz/'blind-ledger.json',1,packet_dir=packet,author='author',solver='solver')
+    if change == 'revised':
+        second['stem_html'] = '<p>2+3?</p>'
+    else:
+        data['items'].pop()
+    # q1 alone still has a matching item digest; its recipient saw the combined sheet.
+    assert not blind.errors(dict(data,items=[first]), ledger)
+    with pytest.raises(ValueError, match='full current source'):
+        blind.evidence(quiz,data,ledger)

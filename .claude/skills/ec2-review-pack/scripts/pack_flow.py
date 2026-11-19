@@ -466,8 +466,10 @@ def _current(state):
             continue
         evidence = record.get('receipt') if name in state['tasks'] else record
         if state.get('concept_contract') and record['status'] == 'done':
-            if name == 'concept-review' and not (evidence or {}).get('quiz_files'):
-                record['status'] = 'stale'
+            if name == 'concept-review':
+                approval = evidence or {}
+                if not approval.get('quiz_files') or approval.get('blind_certificate') not in approval.get('verified_files', []):
+                    record['status'] = 'stale'
             if name == 'concept-draft':
                 frozen = {Path(r['path']).resolve() for r in record.get('source_inputs', [])}
                 if not quiz_render_resources() <= frozen:
