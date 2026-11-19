@@ -375,8 +375,11 @@ def test_passing_envelope_cannot_hide_its_own_blocking_report(note_run):
         submit_review(note_run, 'style-audit', report_text='## Important\n- [s1-mean] wrong source equation')
 
 
-@pytest.mark.parametrize('overlap', [False, True])
-def test_visual_finding_requires_screenshot_and_can_be_repaired(note_run, overlap):
+@pytest.mark.parametrize('old_outcome, current_outcome, other_owner', [
+    (None, 'resolved', False), ('unresolved', 'unresolved', False), ('resolved', 'unresolved', False),
+    ('unresolved', 'resolved', False), ('resolved', 'unresolved', True)])
+def test_visual_finding_requires_screenshot_and_can_be_repaired(note_run, old_outcome, current_outcome, other_owner):
+    overlap = old_outcome is not None
     from PIL import Image
     from test_pack_graph import cli
     run, _ = note_run
@@ -403,13 +406,30 @@ def test_visual_finding_requires_screenshot_and_can_be_repaired(note_run, overla
     path.write_text(json.dumps(receipt))
     state = flow.accept_task(run, 'browser-qa', claim['attempt'], path)
     finding, = state['findings'].values()
+    def repair_view(text, outcome):
+        width = '1px' if outcome == 'unresolved' else '80ch'
+        return text + f'<p style="width:{width};overflow:hidden">Synthetic inspected text</p>'
     attempt = request_and_repair(note_run, [finding], 'correct-clipping',
-        rewrite=lambda t: t.replace('id="s1-mean"', 'id="lost-topic"') if overlap else t)
-    if overlap:
+        rewrite=lambda t: repair_view(t if other_owner else t.replace('id="s1-mean"', 'id="lost-topic"'), old_outcome)
+                          if overlap else t)
+    if other_owner:
+        # A change to another adopted section can alter the assembled candidate
+        # while the original correction owner's attempt remains identical.
+        from pack_support import parallel_worker
+        other = 'author-s2'
+        flow.update_state(run, flow.load_state(run)['revision'], lambda s: dict(s, tasks={
+            **s['tasks'], other: dict(s['tasks'][other], status='stale')}))
+        def change_other(brief, paths):
+            paths[0].write_text((note_run[1]/'sections/s2.html').read_text() +
+                                '<style>article p { width:1px; overflow:hidden }</style>')
+        parallel_worker(run, other, change_other)
+        cli('run', '--run', run, '--action', 'assemble-note')
+        later = attempt
+    elif overlap:
         from pack_parallel import run_action
         assert run_action(run, 'structural-precheck')['status'] == 'needs_fix'
         structural = [r for r in flow.load_state(run)['findings'].values() if r['review_id'] == 'structural-precheck']
-        later = request_and_repair(note_run, structural, 'restore-topic')
+        later = request_and_repair(note_run, structural, 'restore-topic', rewrite=lambda t: repair_view(t, current_outcome))
         assert later != attempt
     reach_browser()
     claim = flow.claim_task(run, 'browser-qa')
@@ -420,7 +440,11 @@ def test_visual_finding_requires_screenshot_and_can_be_repaired(note_run, overla
     if overlap:
         first_note = recheck['repair_candidate']
         assert any(i['path'] == first_note for i in current['inputs'])
-        assert 'id="lost-topic"' in Path(first_note).read_text()
+        if other_owner:
+            assert 'article p { width:1px' not in Path(first_note).read_text()
+            assert 'article p { width:1px' in Path(current['note']).read_text()
+        else:
+            assert 'id="lost-topic"' in Path(first_note).read_text()
         assert 'id="s1-mean"' in Path(current['note']).read_text()
     new_report = Path(current['report'])
     new_report.write_text('Synthetic corrected screen.')
@@ -435,18 +459,46 @@ def test_visual_finding_requires_screenshot_and_can_be_repaired(note_run, overla
                                          outcome='resolved', evidence='compared corrected screen to source')])
     path = Path(current['receipt'])
     if overlap:
-        receipt['status'] = 'needs-fix'
-        receipt['unresolved'] = [defect('clipping')]
+        receipt['status'] = 'needs-fix' if current_outcome == 'unresolved' else 'done'
+        receipt['unresolved'] = [defect('clipping')] if current_outcome == 'unresolved' else []
+        old_screen = Path(current['run'])/'earlier.png'
+        Image.new('RGB', (20, 20), 'blue').save(old_screen)
+        receipt['outputs'].append(dict(path=str(old_screen), sha256=flow._sha(old_screen)))
         decision, = receipt['fix_results']
-        decision.update(outcome='unresolved', attempt=later, evidence='still clipped in both accepted versions')
+        old_observation = '1px text clipped' if old_outcome == 'unresolved' else '80ch text visible'
+        new_observation = '1px text clipped' if current_outcome == 'unresolved' else '80ch text visible'
+        decision.update(outcome=old_outcome, attempt='unrelated' if other_owner else later, evidence=old_observation,
+                        repair_input=str(first_note), repair_screen=str(old_screen),
+                        current_outcome=current_outcome, current_evidence=new_observation,
+                        current_screen=str(new_screen))
         path.write_text(json.dumps(receipt))
         assert flow.check_task(run, 'browser-qa', claim['attempt'], path)['status'] == 'failed'
         decision['attempt'] = attempt
+        for field, forged in [('repair_input', current['note']), ('repair_screen', str(new_screen)),
+                              ('current_outcome', 'missing')]:
+            previous = decision[field]
+            decision[field] = forged
+            path.write_text(json.dumps(receipt))
+            assert flow.check_task(run, 'browser-qa', claim['attempt'], path)['status'] == 'failed'
+            decision[field] = previous
     path.write_text(json.dumps(receipt))
     state = flow.accept_task(run, 'browser-qa', claim['attempt'], path)
     row = state['findings'][finding['id']]
-    assert row['status'] == ('open' if overlap else 'resolved')
-    assert row['unsuccessful_attempts'] == ([attempt] if overlap else [])
+    assert row['status'] == ('open' if current_outcome == 'unresolved' else 'resolved')
+    assert row['unsuccessful_attempts'] == ([attempt] if old_outcome == 'unresolved' else [])
+    if overlap:
+        decision, = row['repairs']
+        assert decision['outcome'] == old_outcome and decision['current_outcome'] == current_outcome
+        assert decision['attempt'] == attempt and decision['reviewed_owner_attempt'] == later
+        assert decision['repair_input']['sha256'] == flow._sha(Path(first_note))
+        assert decision['current_evidence'] == new_observation
+        for field in ('repair_screen', 'current_screen'):
+            proof = decision[field]
+            assert Path(proof['path']).is_relative_to(run/'adopted')
+            assert flow._sha(Path(proof['path'])) == proof['sha256']
+        from pack_findings import fixable_findings
+        available = fixable_findings(state, candidate_digest=flow._sha(Path(current['note'])))
+        assert (row in available) == (current_outcome == 'unresolved')
 
 
 def test_precheck_rejects_pointer_to_one_independent_report(note_run):
@@ -628,3 +680,63 @@ def test_prior_parallel_conflict_matches_only_its_two_adopted_reports(note_run):
     claim = flow.claim_task(run, 'style-audit')
     assert not fixable_findings(flow.inspect_state(run), candidate_digest=digest)
     flow.release_task(run, 'style-audit', claim['attempt'], 'stopped before review')
+
+
+def test_manifest_math_error_returns_to_title_author(note_run):
+    from test_pack_graph import cli
+    import subprocess, sys
+    run, fixture = note_run
+    path = fixture/'manifest.json'
+    manifest = flow._read(path)
+    manifest['note_title'] = 'Gain $'
+    path.write_text(json.dumps(manifest))
+    flow.update_state(run, flow.load_state(run)['revision'], lambda s: dict(s, actions={
+        **s['actions'], 'assemble-note': dict(s['actions']['assemble-note'], status='stale')}))
+    cli('run', '--run', run, '--action', 'assemble-note')
+    cli('run', '--run', run, '--action', 'structural-precheck')
+    submit_review(note_run, 'content-review')
+    submit_review(note_run, 'style-audit')
+    proc = subprocess.run([sys.executable, SCRIPTS/'pack_cli.py', 'run', '--run', run, '--action', 'precheck'],
+                          capture_output=True, text=True)
+    assert proc.returncode and flow.load_state(run)['actions']['precheck']['status'] == 'needs_fix'
+    item, = flow.load_state(run)['findings'].values()
+    assert (item['target'], item['owner_task'], item['status']) == ('note_title', 'scope-draft', 'open')
+    request = run/'fix-title.json'
+    request.write_text(json.dumps(dict(id='fix-title', items=[dict(finding_id=item['id'],
+        review_attempt=item['review_attempt'], input_digest=item['input_digest'])])))
+    cli('task', 'fix', '--run', run, '--request', request)
+    assert 'scope-draft' in flow.next_work(run, slots=5)['dispatch']
+
+
+def test_latest_machine_observation_cannot_charge_an_unchecked_earlier_candidate(note_run):
+    from test_pack_graph import cli
+    import subprocess, sys
+    run, fixture = note_run
+    p = fixture/'sections/s1.html'
+    p.write_text(p.read_text().replace('class="widget-static"', 'class="missing-static"'))
+    flow.update_state(run, flow.load_state(run)['revision'], lambda s: dict(s, actions={
+        **s['actions'], 'assemble-note': dict(s['actions']['assemble-note'], status='stale')}))
+    cli('run', '--run', run, '--action', 'assemble-note')
+    def check(tid, expected):
+        subprocess.run([sys.executable, SCRIPTS/'pack_cli.py', 'run', '--run', run, '--action', tid],
+                       capture_output=True, text=True)
+        assert flow.load_state(run)['actions'][tid]['status'] == expected
+    def full():
+        check('structural-precheck', 'done')
+        submit_review(note_run, 'content-review')
+        submit_review(note_run, 'style-audit')
+        check('precheck', 'needs_fix')
+    full()
+    first, = flow.load_state(run)['findings'].values()
+    attempt = request_and_repair(note_run, [first], 'restore-widget',
+        rewrite=lambda text: text.replace('class="missing-static"', 'class="widget-static"')
+                                 .replace('id="s1-mean"', 'id="lost-topic"'))
+    check('structural-precheck', 'needs_fix')
+    structural = [r for r in flow.load_state(run)['findings'].values() if r['review_id'] == 'structural-precheck']
+    later = request_and_repair(note_run, structural, 'restore-title')
+    full()
+    row = flow.load_state(run)['findings'][first['id']]
+    assert row['status'] == 'open' and not row['unsuccessful_attempts']
+    result, = row['repairs']
+    assert (result['attempt'], result['outcome']) == (attempt, 'not_reviewed')
+    assert (result['reviewed_owner_attempt'], result['current_outcome']) == (later, 'unresolved')

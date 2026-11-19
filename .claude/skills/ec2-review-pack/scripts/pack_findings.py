@@ -117,16 +117,41 @@ def repair_record(state, finding):
     return None
 
 
+def repair_candidate(state, role, owner, attempt):
+    """Find the accepted rendered candidate containing this exact producer correction."""
+    tid, name = ('build-answers', 'pdf') if role == 'pdf-qa' else ('assemble-note', 'note')
+    action = state['actions'].get(tid, {})
+    for row in (*action.get('history', []), action):
+        if row.get('input_version', {}).get(owner) != attempt:
+            continue
+        path = row.get('artifacts', {}).get(name)
+        verified = {i['path']: i for i in row.get('verified_files', [])}
+        if path in verified:
+            return verified[path]
+    return None
+
+
+def same_repair_candidate(state, source, row, attempt):
+    if source['input_version'].get(row['owner_task']) != attempt:
+        return False
+    first = repair_candidate(state, row['review_id'], row['owner_task'], attempt)
+    return not first or first['sha256'] == source['candidate_digest']
+
+
+def review_file(source, path):
+    private = Path(path)
+    adopted = source.get('artifacts', {}).get(private.relative_to(source['attempt_dir']).as_posix())
+    verified = {r['path']: r for r in source['receipt']['verified_files']}
+    return verified.get(adopted, verified[str(private)])
+
+
 def review_reports(state, review_id):
     reports = []
     for tid in (NOTE_REVIEWS if review_id == CONFLICT else (review_id,)):
         source = _judgment(state, tid)
         receipt = source.get('receipt')
         if receipt:
-            private = Path(receipt['report'])
-            adopted = source.get('artifacts', {}).get(private.relative_to(source['attempt_dir']).as_posix())
-            verified = {i['path']: i for i in receipt['verified_files']}
-            reports.append(verified.get(adopted, verified[str(private)]))
+            reports.append(review_file(source, receipt['report']))
         else:
             path = source['artifacts']['check-findings.json']
             reports.append(next(i for i in source['verified_files'] if i['path'] == path))
@@ -162,7 +187,7 @@ def record_findings(state: dict, *, review_id: str, input_digest: str, findings:
         if external:
             row.update(status='withheld', reason='No writable per-RUN producer for this assembly/template diagnostic')
         elif row['status'] == 'resolved':
-            row['status'] = 'open'
+            row['status'] = 'withheld' if len(row['unsuccessful_attempts']) >= 2 else 'open'
     return state
 
 
@@ -188,30 +213,64 @@ def fixable_findings(state: dict, *, candidate_digest: str) -> list[dict]:
 
 
 def record_fix_result(state: dict, *, finding_id: str, request_id: str, attempt: str,
-                      outcome: Literal['resolved', 'unresolved']) -> dict:
+                      outcome: Literal['resolved', 'unresolved', 'not_reviewed'],
+                      current_outcome: Literal['resolved', 'unresolved'] | None = None) -> dict:
     """Bind adjudication to the accepted repair brief and the re-reviewer's frozen inputs."""
     row = state['findings'][finding_id]
     owner = state['tasks'][row['owner_task']]
     source = _judgment(state, row['review_id'])
     correction = repair_record(state, row)
+    same_version = same_repair_candidate(state, source, row, attempt)
+    if current_outcome is None and same_version:
+        current_outcome = outcome
+    historical_unknown = not same_version and row['review_id'] not in REVIEW_ROLES and outcome == 'not_reviewed'
     if (row.get('pending_request') != request_id or row['status'] != 'open'
             or not _current_judgment(state, row['review_id']) or owner['status'] != 'done'
             or not correction or correction['attempt'] != attempt
             or source['input_version'].get(owner['id']) != owner['attempt']
-            or outcome not in ('resolved', 'unresolved')):
+            or current_outcome not in ('resolved', 'unresolved') or (same_version and current_outcome != outcome)
+            or (outcome not in ('resolved', 'unresolved') and not historical_unknown)):
         raise f.FlowError('unverified repair attempt or adjudication')
-    if outcome == 'resolved':
-        row['status'] = 'resolved'
-    elif attempt not in row['unsuccessful_attempts']:
+    if outcome == 'unresolved' and attempt not in row['unsuccessful_attempts']:
         row['unsuccessful_attempts'].append(attempt)
-        if len(row['unsuccessful_attempts']) >= 2:
-            row['status'] = 'withheld'
-    row['repairs'].append(dict(request_id=request_id, attempt=attempt, outcome=outcome,
+    if current_outcome == 'resolved':
+        row['status'] = 'resolved'
+    else:
+        row['status'] = 'withheld' if len(row['unsuccessful_attempts']) >= 2 else 'open'
+    row['repairs'].append(dict(request_id=request_id, attempt=attempt, outcome=outcome, current_outcome=current_outcome,
                                review_attempt=judgment_attempt(state, row['review_id']), reviewed_owner_attempt=owner['attempt'],
                                input_digest=source['candidate_digest'],
                                review_reports=review_reports(state, row['review_id'])))
     del row['pending_request']
     return state
+
+
+def historical_worker_evidence(source, row, decision, current_outcome):
+    """Bind both judgments to what this reviewer received and actually submitted."""
+    brief = f._read(source['brief'])
+    frozen = next((r for r in brief['recheck_findings'] if r['id'] == row['id']), {})
+    receipt = source['receipt']
+    inputs = {r['path']: r for r in receipt['inputs']}
+    original = decision.get('repair_input')
+    candidate = frozen.get('repair_candidate')
+    artifacts = frozen.get('repair_outputs', {})
+    expected_inputs = [candidate] if candidate else artifacts.values()
+    if (decision.get('current_outcome') != current_outcome or not isinstance(decision.get('current_evidence'), str)
+            or not decision['current_evidence'].strip() or frozen.get('repair_attempt') != decision.get('attempt')
+            or not isinstance(original, str) or original not in inputs or original not in expected_inputs):
+        raise f.FlowError('superseded repair needs its frozen input and a separate current candidate judgment')
+    evidence = dict(repair_input=inputs[original], current_evidence=decision['current_evidence'])
+    if source['id'] in ('browser-qa', 'standalone-svg-qa', 'pdf-qa'):
+        from pack_receipts import _png
+        screens = {r['path']: r for r in receipt['outputs'] if Path(r['path']).suffix.lower() == '.png'}
+        old = decision.get('repair_screen')
+        current = decision.get('current_screen')
+        if old == current or old not in screens or current not in screens:
+            raise f.FlowError('separate original and current screenshot evidence required')
+        for field, path in [('repair_screen', old), ('current_screen', current)]:
+            _png(path)
+            evidence[field] = review_file(source, path)
+    return evidence
 
 
 def adjudicate(state, tid, findings, results, reconciliations=()):
@@ -253,12 +312,23 @@ def adjudicate(state, tid, findings, results, reconciliations=()):
         key = row['id']
         if key in pending:
             result = decisions[key]
-            outcome = 'unresolved' if key in ids else 'resolved'
-            if result.get('outcome') != outcome:
+            current_outcome = 'unresolved' if key in ids else 'resolved'
+            outcome = result.get('outcome')
+            evidence = dict(evidence=result['evidence'])
+            if not same_repair_candidate(state, source, row, result.get('attempt')):
+                if tid in REVIEW_ROLES:
+                    evidence.update(historical_worker_evidence(source, row, result, current_outcome))
+                else:
+                    # This check or pair ran only on the later candidate. There
+                    # is no accepted original decision from which to charge a failure.
+                    outcome = 'not_reviewed'
+                    evidence.update(evidence='Original candidate was superseded before this check',
+                                    current_evidence=result['evidence'])
+            elif outcome != current_outcome or result.get('current_outcome', outcome) != current_outcome:
                 raise f.FlowError('repair outcome conflicts with review findings')
             record_fix_result(state, finding_id=key, request_id=result.get('request_id'),
-                              attempt=result.get('attempt'), outcome=outcome)
-            row['repairs'][-1]['evidence'] = result['evidence']
+                              attempt=result.get('attempt'), outcome=outcome, current_outcome=current_outcome)
+            row['repairs'][-1].update(evidence)
     record_findings(state, review_id=tid, input_digest=digest, findings=findings)
 
 

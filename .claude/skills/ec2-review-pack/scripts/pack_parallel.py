@@ -82,20 +82,6 @@ def worker_inputs(state, spec):
     return file_records(paths)
 
 
-def repair_candidate(state, role, owner, attempt):
-    """Find the accepted rendered candidate containing this exact producer correction."""
-    tid, name = ('build-answers', 'pdf') if role == 'pdf-qa' else ('assemble-note', 'note')
-    action = state['actions'][tid]
-    for row in (action, *reversed(action.get('history', []))):
-        if row.get('input_version', {}).get(owner) != attempt:
-            continue
-        path = row.get('artifacts', {}).get(name)
-        verified = {i['path']: i for i in row.get('verified_files', [])}
-        if path in verified:
-            return verified[path]
-    return None
-
-
 def claim_worker(state, task):
     from pack_receipts import standalone_screenshots
     spec = spec_for(state, task['id'])
@@ -188,10 +174,10 @@ def claim_worker(state, task):
             correction = findings.repair_record(state, row)
             if correction:
                 verified = {i['path']: i for i in correction['receipt']['verified_files']}
-                outputs = correction['artifacts']
+                outputs = {name: correction['artifacts'][name] for name in spec_for(state, row['owner_task']).outputs}
                 item.update(repair_attempt=correction['attempt'], repair_outputs=outputs)
                 inputs.update({path: verified[path] for path in outputs.values()})
-                if candidate_file := repair_candidate(state, role, row['owner_task'], correction['attempt']):
+                if candidate_file := findings.repair_candidate(state, role, row['owner_task'], correction['attempt']):
                     item['repair_candidate'] = candidate_file['path']
                     inputs[candidate_file['path']] = candidate_file
             data['recheck_findings'].append(item)
@@ -483,24 +469,38 @@ def adopted_packs(state, spec):
     return {tid: row['pack'] for tid, row in ancestors(state, spec).items() if row.get('pack')}
 
 
+def common_diagnostics(markup, note, paths):
+    from check_html import check_common, parse_html
+    doc = parse_html(markup)
+    return doc, {(p.code, p.detail) for p in check_common(doc, markup, note, pack_paths=paths) if p.code != 'lang'}
+
+
 def fragment_diagnostics(state, manifest, note, paths):
     """Index each accepted fragment by the same diagnostics used for the assembled page."""
     from assemble import read_fragment
-    from check_html import check_common, parse_html
     result = {}
     for section in manifest['sections']:
         sid = section['id']
         path = output(state, 'author-' + sid, 'sections/' + sid + '.html')
         source = read_fragment(path, manifest)
-        doc = parse_html(source)
-        diagnostics = check_common(doc, source, note, pack_paths=paths)
-        result[sid] = (doc, {(p.code, p.detail) for p in diagnostics if p.code != 'lang'})
+        result[sid] = common_diagnostics(source, note, paths)
     return result
+
+
+def metadata_diagnostics(manifest, note, paths):
+    from html import escape
+    # Match build_note's substitution rules: labels and headings are text;
+    # the footer is an HTML fragment supplied by the teaching manifest.
+    markup = {k: escape(manifest[k]) for k in ('note_title', 'note_subtitle')}
+    markup['footer_note'] = manifest['footer_note']
+    markup.update({s['id'] + '.' + k: escape(s[k]) for s in manifest['sections'] for k in ('short', 'title')})
+    return {field: common_diagnostics(value, note, paths)[1] for field, value in markup.items()}
 
 
 def machine_report(state, root, problems, note, manifest, paths=None):
     issues = []
     sections = None
+    metadata = None
     for problem in problems:
         owner = findings.owner_of(problem.where, manifest)
         targets = [(owner, problem.where)]
@@ -518,14 +518,10 @@ def machine_report(state, root, problems, note, manifest, paths=None):
                        for sid, (doc, diagnostics) in sections.items()
                        if (problem.code, problem.detail) in diagnostics or problem.where in doc.ids
                        or (problem.code == 'duplicate-id' and problem.detail in doc.ids)]
-            if not targets:
-                # These values are filled by assemble.build_note from the teaching
-                # draft and may be legitimately changed by that worker in this RUN.
-                header = {key: manifest[key] for key in ('note_title', 'note_subtitle', 'footer_note')}
-                header.update({s['id'] + '.' + k: s[k] for s in manifest['sections'] for k in ('short', 'title')})
-                for key, text in header.items():
-                    if problem.detail and problem.detail in text:
-                        targets.append(('scope-draft', key))
+            if metadata is None:
+                metadata = metadata_diagnostics(manifest, note, paths)
+            targets.extend(('scope-draft', field) for field, diagnostics in metadata.items()
+                           if (problem.code, problem.detail) in diagnostics)
             if not targets:
                 targets = [('assemble-note', problem.where)]
         for owner, target in targets:

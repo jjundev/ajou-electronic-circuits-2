@@ -10,7 +10,7 @@
 
 결함이 있으면 receipt의 `status`를 `needs-fix`로 두고 `unresolved`에 결함별로 다음 필드를 남긴다. `rule`은 규칙, `target`은 회차가 바뀌어도 찾을 수 있는 토픽·문항·그림·쪽 ID, `defect`는 해당 위치의 구체적인 오류다. 같은 오류를 다시 확인할 때는 이 세 값을 유지한다. `severity`는 Critical, Important, Minor 중 하나이며 `owner_task`는 수정할 파일을 만든 선행 작업 ID다. `evidence`에는 원문과 실제 산출물에서 확인한 근거를 적는다. 보고서의 심각도 소제목 아래 각 결함을 `- [target] [rule] defect` 한 줄로 적는다. 세 값은 해당 unresolved 항목과 정확히 일치해야 한다. 화면 결함은 실제 PNG를 outputs에 포함한다.
 
-수정본을 받은 검토자는 브리프의 `recheck_findings`를 모두 확인한다. 요청된 각 수정의 `fix_results`에 `finding_id`, `request_id`, 작성자의 `attempt`, `outcome`(resolved 또는 unresolved), 새 `evidence`를 적는다. 미해결 항목은 `unresolved`에도 같은 키로 다시 기록한다. 다른 결함 때문에 같은 작성자가 그사이 새 수정본을 제출했다면 브리프의 `repair_outputs`와 해당 수정본에서 조립된 `repair_candidate`가 있으면 이를 열어 현재 후보와 각각 대조한다. 지정된 `repair_attempt`의 수정 결과만 해당 결함의 횟수에 반영하므로 두 버전에서 확인한 근거를 구분해 쓴다. 같은 작성자의 다른 수정에서 함께 고쳐진 기존 결함은 현재 후보를 직접 확인하고 `reconciliations`에 `finding_id`, `prior_review_attempt`, `evidence`를 기록한다.
+수정본을 받은 검토자는 브리프의 `recheck_findings`를 모두 확인한다. 요청된 각 수정의 `fix_results`에 `finding_id`, `request_id`, 작성자의 `attempt`, `outcome`(resolved 또는 unresolved), 새 `evidence`를 적는다. 미해결 항목은 `unresolved`에도 같은 키로 다시 기록한다. 같은 작성자가 그사이 다른 수정본을 제출했다면 두 버전을 각각 판정한다. `outcome`과 `evidence`에는 지정된 `repair_attempt`의 산출물을 검사한 결과를 적는다. `repair_input`에는 브리프의 `repair_candidate` 경로를 적고, 조립된 후보가 없으면 검사한 `repair_outputs` 파일의 경로를 적는다. `current_outcome`과 `current_evidence`에는 현재 후보에서 확인한 결과와 근거를 적는다. 현재 결함만 `unresolved`에 기재한다. 화면 검토에서는 원래 수정본과 현재 후보를 각각 열어 캡처한 서로 다른 PNG를 outputs에 포함하고 `repair_screen`, `current_screen`에 경로를 적는다. 같은 작성자의 다른 수정에서 함께 고쳐진 기존 결함은 현재 후보를 직접 확인하고 `reconciliations`에 `finding_id`, `prior_review_attempt`, `evidence`를 기록한다.
 
 ## 문제 해설의 순서·제목·수식 행
 
