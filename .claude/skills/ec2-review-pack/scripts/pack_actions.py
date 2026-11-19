@@ -384,6 +384,9 @@ def _verify_inventory_delta(before, after, writes):
 
 def run_action(run: Path, action: str) -> dict:
     run=Path(run).resolve()
+    if f.load_state(run).get('workflow') == 'parallel':
+        from pack_parallel import run_action as run_parallel
+        return run_parallel(run, action)
     with _live_locks(run) as public_pack:
         state=f.load_state(run); _guard(state,action)
         before=_pre_action_inventory(state)
@@ -470,6 +473,9 @@ def run_action(run: Path, action: str) -> dict:
 
 def reconcile_action(run: Path, action: str) -> dict:
     run=Path(run).resolve()
+    if f.load_state(run).get('workflow') == 'parallel':
+        from pack_parallel import run_action as run_parallel
+        return run_parallel(run, action, reconcile=True)
     with _live_locks(run):
         state=f.load_state(run)
         if action not in ACTIONS or action not in state['actions']: raise f.FlowError('unknown action')
@@ -512,6 +518,8 @@ def _require_stopped(state, record):
 
 def recover_run(run: Path) -> dict:
     run=Path(run).resolve()
+    if f.load_state(run).get('workflow') == 'parallel':
+        return reconcile_action(run, 'publish-pack')
     with _live_locks(run):
         state=f.load_state(run)
         for record in state['actions'].values():
@@ -532,6 +540,12 @@ def write_report(run: Path) -> Path:
     run=Path(run).resolve(); state=f.inspect_state(run)
     report=run/'report.json'
     selection=run/'selection.json'; scope=run/'scope.json'
+    if state.get('workflow') == 'parallel':
+        from pack_parallel import output
+        if f._done(state, 'selection'):
+            selection = output(state, 'selection', 'selection.json')
+        if f._done(state, 'scope-draft'):
+            scope = output(state, 'scope-draft', 'scope.json')
     f._atomic_json(report,{'range':state['range'],'status':state['status'],'phase':state['phase'],
         'scope':f._read(scope) if scope.exists() else None,'selection':f._read(selection) if selection.exists() else None,
         'files':inventory_pack(Path(state['repo']),state['range']), 'checks':state['actions'],

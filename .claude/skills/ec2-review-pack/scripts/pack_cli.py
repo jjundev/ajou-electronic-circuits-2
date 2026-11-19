@@ -11,7 +11,8 @@ import traceback
 from uuid import uuid4
 
 ACTIONS = ('prepare-pack','assemble-note','build-problems','precheck','convert-md',
-           'publish-explanation','build-answers','publish-answer','final-check')
+           'publish-explanation','build-answers','publish-answer','final-check',
+           'render-preflight','candidate-index','stage-problem-index','explain-verify','publish-pack')
 
 class UsageError(ValueError): pass
 class HelpRequested(Exception): pass
@@ -32,6 +33,11 @@ def format_result(result: dict, *, limit: int=2000) -> str:
     if isinstance(nxt,dict):
         tasks=nxt.get('tasks',[])
         data['next']={k:v for k,v in nxt.items() if k in ('kind','action','attempt','task_id','brief')}
+        if nxt.get('kind') == 'parallel':
+            for key in ('actions', 'dispatch', 'review_locally', 'revision'):
+                if key in nxt: data['next'][key] = nxt[key]
+            data['counts'] = dict(data.get('counts') or {}, waiting=len(nxt.get('waiting', [])),
+                                  blocked=len(nxt.get('blocked', [])))
         if tasks:
             data['counts']=dict(data.get('counts') or {},tasks=len(tasks))
             data['next']['tasks_ref']=data.get('details_path')
@@ -56,6 +62,7 @@ def parser():
         c=parent.add_parser(name); c.add_argument('--run',required=run_required,type=absolute); return c
     # init without --run uses ~/.cache/ec2-review-pack/<range>-<timestamp>
     c=command('init',run_required=False); c.add_argument('--repo',required=True,type=absolute); c.add_argument('--range',required=True)
+    c.add_argument('--workflow', choices=('legacy', 'parallel'), default='legacy')
     c.add_argument('--allow-tmp',action='store_true')
     for owner in ('browser','pdf'): c.add_argument('--'+owner+'-owner',choices=('workers','main','unavailable'),default='main')
     c.add_argument('--seed-from',type=absolute); c.add_argument('--redo',default='')
@@ -107,7 +114,7 @@ def execute(a):
             run=a.run=f.default_run_dir(a.range,datetime.now()).resolve()
         f.init_run(a.repo,run,a.range,browser_owner=a.browser_owner,pdf_owner=a.pdf_owner,
                    seed_from=a.seed_from,redo=[x.strip() for x in a.redo.split(',') if x.strip()],redo_note=a.redo_note,
-                   allow_tmp=a.allow_tmp)
+                   allow_tmp=a.allow_tmp, workflow=a.workflow)
         seeded=f.load_state(run).get('seeded_from')
         if seeded:
             extra=f.next_work(run,slots=0)

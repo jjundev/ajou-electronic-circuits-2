@@ -195,6 +195,10 @@ def update_state(run: Path, expected_revision: int, change: Callable[[dict], dic
         if type(expected_revision) is not int or state["revision"] != expected_revision:
             raise FlowError(f"{run}: revision conflict (expected {expected_revision}, current {state['revision']})")
         changed = change(copy.deepcopy(state))
+        if state.get('workflow') == 'parallel' and changed.get('public_baseline') != state['public_baseline']:
+            raise FlowError('initial public baseline cannot change')
+        if changed.get('workflow', 'legacy') != state.get('workflow', 'legacy'):
+            raise FlowError('workflow cannot change during a RUN')
         if ('extra_fix_authorization' in state
             and changed.get('extra_fix_authorization') != state['extra_fix_authorization']):
             raise FlowError('extra fix authorization is immutable')
@@ -210,7 +214,7 @@ def update_state(run: Path, expected_revision: int, change: Callable[[dict], dic
 def init_run(repo: Path, run: Path, range_: str, *,
              browser_owner: str = "main", pdf_owner: str = "main",
              seed_from: Path | None = None, redo: list[str] | None = None,
-             redo_note: Path | None = None, allow_tmp: bool = False) -> dict:
+             redo_note: Path | None = None, allow_tmp: bool = False, workflow: str = "legacy") -> dict:
     repo, run = nfc_path(Path(repo).resolve()), nfc_path(Path(run).resolve())
     if not allow_tmp and is_temp_path(run):
         raise FlowError(f"{run}: RUN is under a temporary folder that a reboot clears; "
@@ -243,7 +247,11 @@ def init_run(repo: Path, run: Path, range_: str, *,
             sources.append(path)
     if not sources:
         raise FlowError(f"{repo / 'STT'}: no STT sessions for {range_}")
+    if workflow not in ('legacy', 'parallel'):
+        raise FlowError('unknown workflow')
     seed = load_state(seed_from) if seed_from is not None else None
+    if seed and (workflow != 'legacy' or seed.get('workflow', 'legacy') != 'legacy'):
+        raise FlowError('seed requires a legacy source and destination RUN')
     run.mkdir(parents=True, exist_ok=True)
     with _locked(run):
         if any(p.name != ".pack-flow.lock" for p in run.iterdir()):
@@ -268,6 +276,12 @@ def init_run(repo: Path, run: Path, range_: str, *,
                      hashes={str(nfc_path(p)): _sha(p) for p in [*sources, profile, snapshot_path]}, backups={},
                      fix_rounds=dict(content=0, machine_browser=0), explain_run=None,
                      publication={}, recovery={}, sessions=[p.name[:4] for p in sources])
+        state['workflow'] = workflow
+        if workflow == 'parallel':
+            from pack_files import inventory_pack
+            from pack_publication import publication_lock
+            with publication_lock(repo / '복습노트' / range_):
+                state['public_baseline'] = inventory_pack(repo, range_)
         if seed is not None:
             from pack_seed import seed_state
             seed_state(state, seed, list(redo or []), redo_note)
@@ -292,6 +306,9 @@ def _task_change(run, task_id, change):
             raise FlowError('unknown task: ' + task_id)
         change(current, current['tasks'][task_id])
         return current
+    if state.get('workflow') == 'parallel':
+        from pack_parallel import transact
+        return transact(run, apply)
     return update_state(run, state['revision'], apply)
 
 
@@ -304,6 +321,10 @@ def claim_task(run: Path, task_id: str) -> dict:
             raise FlowError('task is already claimed or unavailable')
         if any(not _done(state, dep) for dep in task['dependencies']):
             raise FlowError('task dependencies are not done')
+        if state.get('workflow') == 'parallel':
+            from pack_parallel import claim_worker
+            claim_worker(state, task)
+            return
         brief = Path(task['brief']).resolve()
         if not brief.is_relative_to(Path(state['run'])) or not brief.is_file():
             raise FlowError('brief must be a RUN file')
@@ -338,6 +359,9 @@ def bind_task(run: Path, task_id: str, attempt: str, agent_id: str) -> dict:
 
 def accept_task(run: Path, task_id: str, attempt: str, receipt_path: Path) -> dict:
     from pack_receipts import validate_receipt
+    if load_state(run).get('workflow') == 'parallel':
+        from pack_parallel import accept_worker
+        return accept_worker(run, task_id, attempt, receipt_path)
     def change(state, task):
         _current(state)
         _attempt(task, attempt)
@@ -373,6 +397,8 @@ def check_task(run: Path, task_id: str, attempt: str, receipt_path: Path) -> dic
         _attempt(task, attempt)
         if any(not _done(state, dep) for dep in task['dependencies']):
             raise FlowError('task dependencies are not current')
+        if state.get('workflow') == 'parallel':
+            from pack_parallel import validate_worker as validate_receipt
         receipt = validate_receipt(state, task, receipt_path)
     except FlowError as exc:
         return dict(status='failed', error_code='validation_failed', reason=str(exc))
@@ -422,6 +448,11 @@ def _current(state):
     records = {**state['tasks'], **state['actions']}
     for name, record in records.items():
         if record.get('status') != 'done': continue
+        if state.get('workflow') == 'parallel' and any(
+                _record(state, tid).get('attempt') != version
+                for tid, version in record.get('input_version', {}).items()):
+            record['status'] = 'stale'
+            continue
         evidence = record.get('receipt') if name in state['tasks'] else record
         if not evidence or not evidence.get('verified_files') or verify_receipt_files(evidence):
             record['status'] = 'stale'
@@ -451,6 +482,8 @@ def _converted_assets(state):
     """Read only the successful converter's explicit, current output inventory."""
     from manifest import note_name
     from pack_receipts import records
+    if state.get('workflow') == 'parallel':
+        return state['converted_assets']
     action = state['actions'].get('convert-md', {})
     if action.get('status') != 'done': raise FlowError('current successful convert-md required')
     repo = Path(state['repo']).resolve()
@@ -519,6 +552,9 @@ def _stages(state):
 def refresh_tasks(state: dict) -> dict:
     """Reconcile current evidence and register only the next fixed stage, in memory."""
     _current(state)
+    if state.get('workflow') == 'parallel':
+        from pack_graph import refresh
+        return refresh(state)
     if _done(state, 'convert-md'):
         converted = _converted_assets(state)
         state['standalone_svg_qa'] = dict(status='required' if converted['svgs'] else 'not_required',
@@ -592,6 +628,8 @@ def _inputs(state, task):
 
 def write_briefs(state: dict) -> None:
     """Called in init/accept/fix/action write transactions; never from next/status."""
+    if state.get('workflow') == 'parallel':
+        return  # Parallel briefs freeze the claimed attempt and its inputs together.
     from pack_receipts import ROLE_OUTPUTS, standalone_screenshots
     from pack_seed import attach_redo
     run, repo = Path(state['run']), Path(state['repo'])
@@ -699,11 +737,14 @@ def concept_check_result(state):
 def next_work(run: Path, *, slots: int) -> dict:
     if type(slots) is not int or slots < 0: raise FlowError('slots must be a nonnegative integer')
     state = inspect_state(run)
+    if state.get('workflow') == 'parallel' and not _done(state, 'final-check'):
+        from pack_graph import ready_work
+        return ready_work(state, slots=slots)
     def result(kind, tasks=None, action=None, reason=''):
         return dict(kind=kind, tasks=tasks or [], action=action, reason=reason)
     if state['status'] == 'recovery_required': return result('recover', reason='interrupted mutation requires recovery')
     if state['stale_inputs']: return result('blocked', reason='frozen source/profile changed; explicit correction required')
-    for _, kind, group in _stages(state):
+    for _, kind, group in (() if state.get('workflow') == 'parallel' else _stages(state)):
         unfinished = [_record(state, name) for name, _, _ in group if not _done(state, name)]
         if not unfinished: continue
         if not all(unfinished): return result('blocked', reason='stage not materialized; finish preceding write transaction')
