@@ -338,3 +338,46 @@ def test_unaccepted_multi_item_packet_must_be_reissued_after_sibling_change(tmp_
     assert not blind.errors(dict(data,items=[first]), ledger)
     with pytest.raises(ValueError, match='full current source'):
         blind.evidence(quiz,data,ledger)
+
+
+def test_uncertified_local_solver_history_requires_recorded_responses(tmp_path):
+    import blind
+    quiz = tmp_path/'quiz'
+    quiz.mkdir()
+    item = dict(id='q1',title='First',objective='o1',stem_html='<p>1+1?</p>',format='short',
+                answer={'canonical':'2'},hint='add')
+    data = dict(logical_inputs={'note':'fixture'}, items=[item], objectives=[{'id':'o1'}])
+    answers = put(tmp_path/'answers.md','| q1 | 2 | |')
+    ledger = quiz/'blind-ledger.json'
+    for number,solver in enumerate(('A','B','C'),1):
+        packet = tmp_path/f'packet-{number}'
+        blind.issue(data,quiz,packet)
+        rows = blind.record(data,answers,ledger,number,packet_dir=packet,author='writer',solver=solver)
+        source.write(ledger, rows)
+        assert rows['q1']['solvers'] == list('ABC'[:number])
+        blind.evidence(quiz,data,rows)
+        for malformed in ([], [solver,solver], ['invented',solver], ['   ',solver], ['wrong-final']):
+            with pytest.raises(ValueError,match='solver history'):
+                blind.evidence(quiz,data,{'q1':dict(rows['q1'], solvers=malformed)})
+    with pytest.raises(ValueError,match='solver history'):
+        blind.evidence(quiz,data,{'q1':dict(rows['q1'], solvers=['C'])})
+
+
+def test_solver_can_correct_unsuccessful_second_round_before_third_approval(tmp_path, monkeypatch):
+    import blind
+    quiz = tmp_path/'quiz'
+    quiz.mkdir()
+    item = dict(id='q1',title='First',objective='o1',stem_html='<p>1+1?</p>',format='short',
+                answer={'canonical':'2'},hint='add')
+    data = dict(logical_inputs={'note':'fixture'}, items=[item], objectives=[{'id':'o1'}])
+    ledger = quiz/'blind-ledger.json'
+    for number,solver,answer in ((1,'A','2'),(2,'B','5'),(3,'C','2')):
+        packet = tmp_path/f'packet-{number}'
+        blind.issue(data,quiz,packet)
+        answers = put(tmp_path/'answers.md',f'| q1 | {answer} | |')
+        rows = blind.record(data,answers,ledger,number,packet_dir=packet,author='writer',solver=solver)
+        source.write(ledger,rows)
+        if number == 1:
+            monkeypatch.setattr(blind,'inherited_rows',lambda *_args, approved=rows:approved)
+    assert rows['q1']['solvers'] == ['A','B','C'] and not blind.errors(data,rows)
+    blind.evidence(quiz,data,rows)

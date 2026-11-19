@@ -287,6 +287,13 @@ def exercise_zero_problem_cli(tmp_path, monkeypatch, scope_change, *, quiz_repai
         parallel_worker(run, 'concept-review', lambda brief, outputs: exercise_sibling_repair(brief, tmp_path, quiz_repair))
         verified = flow.inspect_state(run)['tasks']['concept-review']
         assert verified['status'] == 'done' and verified['attempt'] != accepted['attempt']
+        if quiz_repair == 'revised':
+            shot = next((Path(verified['attempt_dir'])/'quiz/shots').glob('*.png'))
+            shot.write_bytes(b'fixture third certified attempt')
+            parallel_worker(run, 'concept-review', lambda brief, outputs: exercise_sibling_repair(brief, tmp_path, 'third'))
+            third = flow.inspect_state(run)['tasks']['concept-review']
+            ledger = flow._read(Path(third['attempt_dir'])/'quiz/blind-ledger.json')
+            assert third['status'] == 'done' and ledger['q2']['solvers'] == ['fixture-solver','new-q2-solver','third-solver']
         return
     assert 'concept-publish' not in flow.next_work(run, slots=8)['actions']
     assert not (repo/'복습노트/0909').exists()
@@ -481,7 +488,14 @@ def exercise_sibling_repair(brief, tmp_path, repair):
         assert (proc.returncode == 0) == expected, (proc.stdout,proc.stderr)
     items = flow._read(quiz/'items.json')['items']
     ledger_path = quiz/'blind-ledger.json'
-    if repair == 'removed':
+    if repair == 'third':
+        packet = tmp_path/'third-issue'
+        call('blind-make', '--only', 'q2', '--out', packet)
+        args = ('blind-record', '--packet', packet, '--answers',tmp_path/'revised-answer.md',
+                '--round','3','--author','fixture-author','--solver')
+        call(*args,'fixture-solver',expected=False)
+        call(*args,'third-solver')
+    elif repair == 'removed':
         flow._atomic_json(quiz/'items.json', dict(items=items[:1]))
         ledger = flow._read(ledger_path)
         ledger.pop('q2')
@@ -496,6 +510,10 @@ def exercise_sibling_repair(brief, tmp_path, repair):
         answers.write_text('| q2 | 5 | |')
         call('blind-record', '--packet',packet,'--answers',answers,'--round','2','--author','fixture-author','--solver','new-q2-solver')
         approved = flow._read(ledger_path)
+        for history in (['new-q2-solver'], ['invented','new-q2-solver'], ['new-q2-solver','fixture-solver']):
+            flow._atomic_json(ledger_path, dict(approved, q2=dict(approved['q2'],solvers=history)))
+            call('blind-status',expected=False)
+        flow._atomic_json(ledger_path, approved)
         flow._atomic_json(ledger_path, dict(approved, q1=dict(approved['q1'],solver='different-recipient')))
         call('blind-status',expected=False)
         flow._atomic_json(ledger_path, approved)

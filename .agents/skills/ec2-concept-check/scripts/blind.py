@@ -93,6 +93,63 @@ def issue(data, run, folder):
           files={p.name:sha(p) for p in (archive/'packet').iterdir()}))
 
 
+def response_ref(row):
+    if not isinstance(row.get('proof'),str) or not isinstance(row.get('submission_sha256'),str):
+        raise ValueError('missing independent solver history response')
+    return {'proof':row['proof'], 'sha256':row['submission_sha256'], 'solvers':row['solvers']}
+
+
+def solver_history(run, cid, row, approved):
+    """Verify unaccepted rounds from their response records, stopping at a certified prefix."""
+    from pack_paths import checked_file
+    def require(valid):
+        if not valid:
+            raise ValueError('invalid independent solver history: ' + cid)
+    history, number = row.get('solvers'), row.get('round')
+    require(type(number) is int and 1 <= number <= 3 and isinstance(history, list) and 1 <= len(history) <= number)
+    require(all(isinstance(name,str) and name and name == name.strip() for name in history))
+    require(len(set(history)) == len(history) and history[-1] == row.get('solver'))
+    prefix = approved['solvers'] if approved is not None else []
+    if row != approved:
+        require(history[:len(prefix)] == prefix and len(history) > len(prefix))
+        require(approved is None or number > approved['round'])
+    # The exact inherited row already has the runner's prior attestation. New
+    # submissions must link their actual answer/issue records to that original.
+    ref = response_ref(row)
+    paths = set()
+    next_round = 4
+    length = len(history)
+    for name in reversed(history[-1:] if row == approved else history[len(prefix):]):
+        require(isinstance(ref,dict) and isinstance(ref.get('proof'),str))
+        answer = checked_file(run,ref['proof'])
+        require(answer.is_relative_to(run/'blind-issued') and answer.name == 'answers.md')
+        record = checked_file(run,answer.with_name('submission.json').relative_to(run))
+        issue = checked_file(run,(answer.parent.parent/'issued.json').relative_to(run))
+        require(record.is_file() and sha(record) == ref.get('sha256'))
+        event = read(record)
+        require(event.get('solver') == name and type(event.get('round')) is int and 1 <= event['round'] < next_round)
+        author = event.get('author')
+        require(isinstance(author,str) and author.strip() and author == author.strip() and author != name)
+        require(event.get('answers_sha256') == sha(answer) and event.get('issued_sha256') == sha(issue))
+        require(cid in event.get('previous', {}) and cid in read(issue)['items'])
+        require(any(parts[0].strip() == cid and len(parts) == 3 and parts[1].strip() for parts in
+                    (line.strip().strip('|').split('|', 2) for line in answer.read_text(encoding='utf-8').splitlines())))
+        if not paths:
+            require((event['round'],event['author']) == (number,row['author']))
+        paths.update((answer,record,issue))
+        next_round = event['round']
+        ref = event['previous'][cid]
+        if row != approved:
+            require(ref is None or isinstance(ref,dict) and isinstance(ref.get('solvers'),list))
+            predecessor = ref['solvers'] if ref is not None else []
+            require(history[:length] == [*predecessor, name])
+        length -= 1
+    if row != approved:
+        require(ref == (response_ref(approved) if approved is not None else None))
+        require(approved is None or next_round > approved['round'])
+    return paths
+
+
 def record(data, answers, previous, round_, *, packet_dir=None, author=None, solver=None):
     prior = read(previous) if previous.exists() else {}
     responses = {}
@@ -113,6 +170,9 @@ def record(data, answers, previous, round_, *, packet_dir=None, author=None, sol
     if data.get('logical_inputs'):
         if not author or not solver or not author.strip() or not solver.strip() or author.strip() == solver.strip():
             raise ValueError('independent author and solver identities required')
+        author, solver = author.strip(), solver.strip()
+        if type(round_) is not int or not 1 <= round_ <= 3:
+            raise ValueError('invalid independent solver history round')
         if packet_dir is None:
             raise ValueError('issued packet required')
         archive = issued_path(previous.parent, packet_dir)
@@ -121,8 +181,15 @@ def record(data, answers, previous, round_, *, packet_dir=None, author=None, sol
         if (set(responses) != set(issued['items']) or
                 {p.name:sha(p) for p in packet_dir.iterdir()} != issued['files']):
             raise ValueError('independent packet or response set changed')
+        certified = inherited_rows(previous.parent, data)
+        predecessors = {}
         for cid, row in responses.items():
-            old = prior.get(cid, {})
+            original = certified.get(cid)
+            old = prior.get(cid) or original
+            if old is not None and old != original:
+                solver_history(previous.parent,cid,old,original)
+            predecessors[cid] = response_ref(old) if old else None
+            old = old or {}
             if issued['items'][cid] != row['sha256']:
                 raise ValueError('independent packet changed')
             if round_ <= old.get('round', 0) or solver in old.get('solvers', []):
@@ -131,9 +198,12 @@ def record(data, answers, previous, round_, *, packet_dir=None, author=None, sol
         saved = archive/str(uuid4())
         saved.mkdir()
         shutil.copyfile(answers, saved/'answers.md')
+        metadata = saved/'submission.json'
+        digests = dict(issued_sha256=sha(archive/'issued.json'), answers_sha256=sha(saved/'answers.md'))
+        write(metadata, dict(author=author, solver=solver, round=round_, previous=predecessors, **digests))
+        proof = dict(proof=str((saved/'answers.md').relative_to(previous.parent)), submission_sha256=sha(metadata), **digests)
         for row in responses.values():
-            row.update(proof=str((saved/'answers.md').relative_to(previous.parent)), answers_sha256=sha(saved/'answers.md'),
-                       issued_sha256=sha(archive/'issued.json'))
+            row.update(proof)
     return {**prior, **responses}
 
 
@@ -181,6 +251,7 @@ def evidence(run, data, ledger):
         if (issued['items'].get(cid) != row['sha256'] or
                 [cid, row['answer'], row['objection']] not in [[v.strip() for v in parts] for parts in rows]):
             raise ValueError('independent packet or answer changed')
+        paths.update(solver_history(run, cid, row, previous))
         paths.update((answer, original))
         for name, digest_ in issued['files'].items():
             file = checked_file(original.parent/'packet', name)

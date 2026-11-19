@@ -783,7 +783,8 @@ def seal_blind_approval(state, task, adopted, hashes):
         row = ledger[cid]
         answers = Path(row['proof'])
         issue = answers.parent.parent/'issued.json'
-        if hashes.get(answers.as_posix()) != row['answers_sha256'] or hashes.get(issue.as_posix()) != row['issued_sha256']:
+        if (hashes.get(answers.as_posix()) != row['answers_sha256'] or hashes.get(issue.as_posix()) != row['issued_sha256']
+                or hashes.get(answers.with_name('submission.json').as_posix()) != row['submission_sha256']):
             raise f.FlowError('independent packet or answer differs from accepted evidence')
         rows[cid] = row
     # A worker can supply files only inside its attempt. The scheduler allocates
@@ -794,11 +795,11 @@ def seal_blind_approval(state, task, adopted, hashes):
     f._atomic_json(path, dict(run_id=state['run_id'], attempt=task['attempt'],
                    source_sha256=hashes['source.json'], teaching_sha256=quiz_teaching_digest(source['logical_inputs']), rows=rows))
     path.chmod(0o444)
-    return file_records([path])[0]
+    return dict(file_records([path])[0], solver_history_version=1)
 
 
 def prior_blind_approval(run, run_id, attempt, record, logical_inputs):
-    if not record:
+    if not record or record.get('solver_history_version') != 1:
         return {}
     try:
         base = Path(run)/'blind-approvals'
@@ -858,7 +859,8 @@ def retain_quiz_evidence(task, quiz, *, approved=None):
         answers = row['proof']
         folder = Path(answers).parent.parent
         names = [name for name in hashes if Path(name).is_relative_to(folder/'packet')]
-        if names and copy_group([answers, (folder/'issued.json').as_posix(), *names]):
+        if names and copy_group([answers, Path(answers).with_name('submission.json').as_posix(),
+                                (folder/'issued.json').as_posix(), *names]):
             ledger[cid] = row
     if ledger:
         f._atomic_json(quiz/'blind-ledger.json', ledger)
