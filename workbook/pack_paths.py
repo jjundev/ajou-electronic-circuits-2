@@ -1,8 +1,12 @@
 """Resolve a public pack's logical names against a private candidate view."""
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 import os
 from pathlib import Path
 import unicodedata
+
+
+# A sibling consumer can identify ephemeral artifacts without guessing directory names.
+ATTEMPT_MARKER = '.ec2-candidate-attempt'
 
 
 def _nfc(value):
@@ -41,6 +45,7 @@ class PackPaths:
     repo: Path
     public_pack: Path
     candidate_pack: Path | None = None
+    private_roots: tuple[Path, ...] = field(default=(), kw_only=True)
     _root_identity: Path = field(init=False, repr=False)
 
     def __post_init__(self):
@@ -60,6 +65,11 @@ class PackPaths:
                 raise ValueError('공개 폴더와 후보 폴더가 겹칩니다')
             object.__setattr__(self, 'candidate_pack', candidate)
         object.__setattr__(self, '_root_identity', self.work_pack.resolve())
+
+    def excluding(self, *roots: Path):
+        """Carry known private producer and child RUN roots when rebinding a view."""
+        private_roots = tuple(dict.fromkeys(root.resolve() for root in (*self.private_roots, *roots)))
+        return replace(self, private_roots=private_roots)
 
     @property
     def work_pack(self) -> Path:
@@ -96,7 +106,17 @@ class PackPaths:
         try:
             local = _relative(path, self.public_pack)
         except ValueError:
-            return checked_file(self.repo, relative)
+            source = checked_file(self.repo, relative)
+            if self.candidate_pack:
+                resolved = source.resolve()
+                if any(resolved.is_relative_to(root) for root in self.private_roots):
+                    raise ValueError(f'임시 시도 경로 대신 공개 경로 필요: {path}')
+                for parent in source.parents:
+                    if parent == self.repo:
+                        break
+                    if (parent / ATTEMPT_MARKER).is_file():
+                        raise ValueError(f'임시 시도 경로 대신 공개 경로 필요: {path}')
+            return source
         return self.work_file(str(local))
 
     def link(self, logical_dir: Path, href_path: str) -> Path:

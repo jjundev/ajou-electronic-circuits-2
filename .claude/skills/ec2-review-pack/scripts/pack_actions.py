@@ -535,7 +535,7 @@ def write_report(run: Path) -> Path:
 def compose_candidate_view(repo, public_pack, attempt, adopted):
     """Copy digest-bound producer files into an empty, attempt-private public layout."""
     import manifest  # initializes the shared workbook module path
-    from pack_paths import PackPaths, checked_file
+    from pack_paths import ATTEMPT_MARKER, PackPaths, checked_file
     import unicodedata
 
     attempt = Path(attempt).absolute()
@@ -543,6 +543,8 @@ def compose_candidate_view(repo, public_pack, attempt, adopted):
     view_root = checked_file(attempt, Path('복습노트')/public_pack.name)
     paths = PackPaths(repo, public_pack, view_root)
     paths.work_pack.mkdir(parents=True, exist_ok=False)
+    if attempt.resolve().is_relative_to(paths.repo.resolve()) and attempt.resolve() != paths.repo.resolve():
+        checked_file(attempt, ATTEMPT_MARKER).touch(exist_ok=False)
     owners = {}
     for producer, record in adopted.items():
         root = Path(record['root']).absolute()

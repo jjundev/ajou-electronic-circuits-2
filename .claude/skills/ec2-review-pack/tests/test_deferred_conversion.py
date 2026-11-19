@@ -217,3 +217,22 @@ def test_candidate_svg_and_srcset_resources_use_view(tmp_path):
     for name in missing:
         paths.work_file(name.split('#')[0]).touch()
     assert not check_common(parse_html(markup), markup, paths.work_file('note.html'), pack_paths=paths)
+
+
+def test_unrelated_machine_attempt_is_not_a_permanent_course_reference(tmp_path):
+    repo = tmp_path/'repo'
+    public = repo/'복습노트/0909'
+    other_attempt = repo/'arbitrary-scratch'
+    other_view = a.compose_candidate_view(repo, public, other_attempt, {})
+    producer_file = other_view.work_file('plot.svg')
+    producer_file.write_text('<svg/>')
+    evidence = other_attempt/'evidence.txt'
+    evidence.write_text('temporary proof')
+    stable = repo/'ordinary-source/evidence.txt'
+    stable.parent.mkdir()
+    stable.write_text('course reference')
+    consumer = a.compose_candidate_view(repo, public, repo/'elsewhere', {})
+    assert consumer.source_file(str(stable)) == stable
+    for private in (producer_file, evidence):
+        with pytest.raises(ValueError, match='공개 경로'):
+            consumer.source_file(str(private))

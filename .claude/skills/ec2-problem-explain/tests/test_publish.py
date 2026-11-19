@@ -74,6 +74,49 @@ class PublishTest(unittest.TestCase):
         record = json.loads(next(p for p in outputs if p.name == 'validation.json').read_text())
         self.assertEqual(record['references'][-1]['path'], str(self.src))
 
+    def test_adopted_consumer_rejects_producer_proof_paths(self):
+        import shutil
+        from epe_cli import extract, load_run
+        from epe_publish import build_explanation_candidate
+        from pack_paths import PackPaths
+
+        self.repo = self.repo.resolve()
+        self.folder = self.repo / '복습노트/1007'
+        self.src = self.folder / '.assets/problems.txt'
+        self.write_index()
+        producer = self.repo / 'producer-attempt/복습노트/1007'
+        consumer = self.repo / 'consumer-attempt/복습노트/1007'
+        producer.parent.mkdir(parents=True)
+        self.folder.rename(producer)
+        shutil.copytree(producer, consumer)
+        child = self.repo / 'child-run'
+        self.assertEqual(extract(self.repo, '1007', child,
+                                 pack_paths=PackPaths(self.repo, self.folder, producer), slug=self.pack.slug), 0)
+        view = PackPaths(self.repo, self.folder, consumer)
+        pack = load_run(child, pack_paths=view)[0]['pack']
+        artifacts = build_explanation(pack, self.fragments, self.tmp / 'stage-adopted', self.repo)
+        reviews = approved(pack, self.fragments, artifacts)
+        for physical in (producer / '.assets/problems.txt', child / 'run.json'):
+            with self.subTest(physical=physical):
+                invalid = dict(reviews, references=[*reviews['references'], {'path': str(physical), 'sha256': sha256(physical)}])
+                with self.assertRaisesRegex(ExplainError, '공개 경로'):
+                    build_explanation_candidate(pack, artifacts, self.fragments, invalid, consumer, self.repo)
+                self.assertFalse((consumer / artifacts.html.name).exists())
+
+        reviews['references'].append({'path': str(self.src), 'sha256': sha256(producer/'.assets/problems.txt')})
+        shutil.rmtree(producer.parent.parent)
+        outputs = build_explanation_candidate(pack, artifacts, self.fragments, reviews, consumer, self.repo)
+        saved = json.loads(next(p for p in outputs if p.name == 'validation.json').read_text())
+        self.assertEqual(saved['references'], reviews['references'])
+        from answer_overlay import load_answer_overlay
+        overlay = next(p for p in outputs if p.name == 'answer-overlay.json')
+        candidate_core = load_answer_overlay(overlay, self.repo, ['P10.02'], pack_paths=view)
+        shutil.copytree(consumer, self.folder)
+        shutil.rmtree(consumer.parent.parent)
+        shutil.rmtree(child)
+        public_overlay = self.folder / overlay.relative_to(consumer)
+        self.assertEqual(load_answer_overlay(public_overlay, self.repo, ['P10.02']), candidate_core)
+
     def test_candidate_materialization_uses_verified_public_identity(self):
         from pack_paths import PackPaths
         from epe_publish import build_explanation_candidate

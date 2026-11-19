@@ -58,7 +58,8 @@ def extract(repo, target, run, *, pack_paths=None, slug=None):
             print(f'{source}: {exc}', file=sys.stderr)
     index = {'version': 1, 'repo': str(repo), 'targets': buckets}
     if pack_paths:
-        index.update(public_pack=str(pack_paths.public_pack), candidate_pack=str(pack_paths.work_pack), slug=slug)
+        index.update(public_pack=str(pack_paths.public_pack), candidate_pack=str(pack_paths.work_pack), slug=slug,
+                     private_roots=[str(path) for path in pack_paths.private_roots])
     dump(run / 'run.json', index)
     return int(failed)
 
@@ -72,7 +73,10 @@ def load_run(run, errors=None, *, pack_paths=None):
         stored = PackPaths(repo, Path(index['public_pack']), Path(index['candidate_pack']))
         if pack_paths and stored.public_pack != pack_paths.public_pack:
             raise ExplainError('후보 팩 입력 경로 불일치')
-        pack_paths = pack_paths or stored
+        # Reviews must survive deletion of the child RUN and the original producer,
+        # even when the bound source bytes now come from an adopted consumer.
+        pack_paths = (pack_paths or stored).excluding(
+            stored.work_pack, run, *(Path(p) for p in index.get('private_roots', ())))
     items = []
     if not isinstance(index['targets'], list) or not index['targets']:
         raise ExplainError('추출 대상 없음')
