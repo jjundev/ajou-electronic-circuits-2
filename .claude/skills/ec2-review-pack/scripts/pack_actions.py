@@ -530,3 +530,123 @@ def write_report(run: Path) -> Path:
             {'status':'pending'} if state.get('concept_check_enabled') and state['status']=='complete' else None),
         'seeded_from':state.get('seeded_from')})
     return report
+
+
+def compose_candidate_view(repo, public_pack, attempt, adopted):
+    """Copy digest-bound producer files into an empty, attempt-private public layout."""
+    import manifest  # initializes the shared workbook module path
+    from pack_paths import PackPaths, checked_file
+    import unicodedata
+
+    attempt = Path(attempt).absolute()
+    public_pack = Path(public_pack)
+    view_root = checked_file(attempt, Path('복습노트')/public_pack.name)
+    paths = PackPaths(repo, public_pack, view_root)
+    paths.work_pack.mkdir(parents=True, exist_ok=False)
+    owners = {}
+    for producer, record in adopted.items():
+        root = Path(record['root']).absolute()
+        if root.is_symlink() or not root.is_dir():
+            raise f.FlowError(f'invalid adopted producer root: {root}')
+        for relative, digest in record['files'].items():
+            key = unicodedata.normalize('NFC', Path(relative).as_posix())
+            if key in owners:
+                raise f.FlowError(f'duplicate producer for {key}: {producer}, {owners[key]}')
+            owners[key] = producer
+            dst = paths.work_file(relative)
+            # The source root is the accepted producer's pack view, not its RUN.
+            src = checked_file(root, relative)
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            with src.open('rb') as incoming, dst.open('xb') as out:
+                shutil.copyfileobj(incoming, out)
+            if f._sha(dst) != digest:
+                raise f.FlowError(f'adopted output hash mismatch: {relative}')
+    return paths
+
+
+def verify_note_view(manifest_data, paths, audit, *, preliminary=False):
+    """Check a composed candidate or the published layout with identical link rules."""
+    import manifest
+    from check_html import check_pack
+    from html2md import check_md
+    note = paths.work_file(manifest.note_name(manifest_data))
+    errors = list(map(str, check_pack(manifest_data, note, repo=paths.repo, style_audit=f._read(audit),
+                                      defer_answer_pdf=preliminary, pack_paths=paths)))
+    if not preliminary:
+        md = paths.work_file('.assets/' + note.with_suffix('.md').name)
+        errors.extend(check_md(note, md, pack_paths=paths))
+    if manifest_data['problems']:
+        required = [manifest.problem_pdf_name(manifest_data)]
+        if not preliminary:
+            required.append(manifest.answer_pdf_name(manifest_data))
+        errors.extend('missing PDF: ' + name for name in required if not paths.work_file(name).is_file())
+    if errors:
+        raise f.FlowError('\n'.join(errors))
+
+
+def candidate_action(state, action, paths, attempt, *, audit=None, explain_run=None):
+    """Produce only this node's outputs; the scheduler owns adoption and retries."""
+    import manifest
+    run = Path(state['run'])
+    attempt = Path(attempt).absolute()
+    if not paths.candidate_pack or not paths.work_pack.resolve().is_relative_to(attempt.resolve()):
+        raise f.FlowError('candidate pack must belong to this attempt')
+    m = f._read(run/'manifest.json')
+    if m['range'] != paths.public_pack.name or m['range'] != state['range']:
+        raise f.FlowError('candidate range mismatch')
+    note = paths.work_file(manifest.note_name(m))
+    if action in ('stage-problem-index', 'assemble-note'):
+        import assemble
+        if action == 'stage-problem-index':
+            return list(assemble.stage_problem_index(paths, m, run/'selection.json', run/'display-titles.json').values())
+        return [assemble.assemble(run, paths.work_pack, repo=paths.repo, pack_paths=paths)]
+    if action in ('precheck', 'final-check'):
+        if audit is None:
+            raise f.FlowError('approved learning-style audit required')
+        verify_note_view(m, paths, audit, preliminary=action == 'precheck')
+        return []
+    if action == 'convert-md':
+        from html2md import check_md, convert_note
+        md = paths.work_file('.assets/' + note.with_suffix('.md').name)
+        expected = manifest.answer_pdf_name(m)
+        figures = paths.work_file(f".assets/figures_{m['range']}")
+        if md.exists() or figures.exists():
+            raise f.FlowError('duplicate producer for converted note or figures')
+        convert_note(note)
+        errors = check_md(note, md, deferred_answer=expected if m['problems'] else None, pack_paths=paths)
+        outputs = [md, *sorted(figures.glob('*.svg'))]
+        if errors:
+            raise f.FlowError('\n'.join(errors))
+        return outputs
+    if action in ('explain-verify', 'build-problems', 'build-answers'):
+        pair = ['--public-pack', paths.public_pack, '--candidate-pack', paths.work_pack]
+        if action == 'explain-verify':
+            if not explain_run:
+                raise f.FlowError('reviewed explanation RUN required')
+            script = paths.repo/'.claude/skills/ec2-problem-explain/scripts/epe_cli.py'
+            args = [script, 'publish', '--repo', paths.repo, '--run', explain_run, *pair]
+        else:
+            answers = action == 'build-answers'
+            pdf = paths.work_file(manifest.answer_pdf_name(m) if answers else manifest.problem_pdf_name(m))
+            if pdf.exists():
+                raise f.FlowError(f'duplicate PDF producer: {pdf}')
+            args = [paths.repo/'workbook/build_workbook.py', '--ids', ','.join(q['id'] for q in m['problems']),
+                    '--name', f"복습문제_{m['range']}_{m['slug']}", '--mode', 'answers' if answers else 'problems',
+                    '--selection', paths.work_file('.assets/selection.json'), '--display-titles',
+                    paths.work_file('.assets/display-titles.json'), '--layout', 'video-16x9',
+                    '--pdf-dir', paths.work_pack, '--build-dir', attempt/'workbook-build', *pair]
+            if answers:
+                args += ['--answer-overlay', paths.work_file(f".assets/자료_문제설명_{m['range']}_{m['slug']}/answer-overlay.json")]
+        proc = subprocess.run([sys.executable, *map(str, args)], capture_output=True, text=True)
+        (attempt/'producer-stdout.log').write_text(proc.stdout, encoding='utf-8')
+        (attempt/'producer-stderr.log').write_text(proc.stderr, encoding='utf-8')
+        if proc.returncode:
+            raise f.FlowError(f'{action} failed: {proc.stderr}')
+        if action == 'explain-verify':
+            return [paths.work_file(str(Path(p).relative_to(paths.work_pack))) for p in json.loads(proc.stdout.splitlines()[-1])]
+        import pymupdf
+        with pymupdf.open(pdf) as doc:
+            if not doc.page_count:
+                raise f.FlowError('empty candidate PDF')
+        return [pdf]
+    raise f.FlowError(f'unknown candidate producer: {action}')

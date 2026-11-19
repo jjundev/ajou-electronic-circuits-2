@@ -31,6 +31,33 @@ class PublishTest(unittest.TestCase):
             approved(self.pack, self.fragments, self.artifacts) if reviews is None else reviews,
             destination or self.folder, self.backup, self.repo)
 
+    def test_candidate_materialization_uses_verified_public_identity(self):
+        from pack_paths import PackPaths
+        from epe_publish import build_explanation_candidate
+        from epe_cli import extract, load_run
+        candidate = self.tmp / 'candidate'
+        self.folder.rename(candidate)
+        view = PackPaths(self.repo, self.folder, candidate)
+        child = self.tmp / 'child'
+        self.assertEqual(extract(self.repo, '1007', child, pack_paths=view, slug=self.pack.slug), 0)
+        pack = load_run(child)[0]['pack']
+        artifacts = build_explanation(pack, self.fragments, self.tmp / 'candidate-stage', self.repo)
+        reviews = approved(pack, self.fragments, artifacts)
+        paths = build_explanation_candidate(pack, artifacts, self.fragments, reviews, candidate, self.repo)
+        self.assertTrue(all(p.is_relative_to(candidate) for p in paths))
+        self.assertTrue(any(p.name == 'validation.json' for p in paths))
+        self.assertFalse(self.folder.exists())
+        self.assertEqual(json.loads(artifacts.manifest.read_text())['source'], str(self.src))
+
+    def test_verified_stage_materializes_in_separate_output_attempt(self):
+        from epe_publish import build_explanation_candidate
+        destination = self.tmp / 'consumer'
+        review = approved(self.pack, self.fragments, self.artifacts)
+        outputs = build_explanation_candidate(self.pack, self.artifacts, self.fragments, review, destination, self.repo)
+        self.assertTrue(all(p.is_relative_to(destination) for p in outputs))
+        self.assertFalse((self.folder / self.artifacts.html.name).exists())
+        self.assertFalse((self.artifacts.manifest.parent / 'validation.json').exists())
+
     def test_no_review_keeps_existing_files(self):
         dst = self.folder / self.artifacts.html.name
         dst.write_bytes(b'old')

@@ -35,7 +35,7 @@ def apply_display_titles(data, titles):
     return data
 
 
-def reviewed_title_path(overlay, repo, explicit=None):
+def reviewed_title_path(overlay, repo, explicit=None, *, pack_paths=None):
     """Use the title map bound by the approved overlay, including when flag omitted."""
     bound = [(name, digest) for name, digest in overlay['source_inputs'].items()
              if Path(name).name == 'display-titles.json' and Path(name).parent.name == '.assets']
@@ -46,7 +46,7 @@ def reviewed_title_path(overlay, repo, explicit=None):
     if len(bound) != 1:
         raise DisplayTitlesError('승인된 표시 제목 파일은 정확히 하나여야 합니다')
     name, digest = bound[0]
-    title_path = Path(repo) / name
+    title_path = pack_paths.source_file(name) if pack_paths else Path(repo) / name
     try:
         if hashlib.sha256(title_path.read_bytes()).hexdigest() != digest:
             raise DisplayTitlesError('승인된 표시 제목 파일이 변경되었습니다')

@@ -100,3 +100,24 @@ def test_probe_rejects_failed_resource_loads(tmp_path, stylesheet):
     assert report['status'] == 'error'
     assert stylesheet in report['reason']
     assert not (tmp_path / 'probe.json').exists()
+
+
+def test_candidate_probe_reads_shared_course_css_and_ignores_stale_pack_css(tmp_path):
+    repo = tmp_path/'repo'
+    public = repo/'복습노트/1118'
+    public.mkdir(parents=True)
+    shared = public.parent/'.assets'
+    shared.mkdir()
+    (shared/'layout.css').write_text('.katex-display { width: 300px; }')
+    (public/'stale.css').touch()
+    candidate = tmp_path/'outside'
+    candidate.mkdir()
+    options = ('--repo', str(repo), '--public-pack', str(public), '--candidate-pack', str(candidate),
+               '--widths', '1280', '--themes', 'light')
+    code, report = _probe(candidate, '<link rel="stylesheet" href="../.assets/layout.css">'+WIDE_MATH, *options)
+    assert code == 1 and report['checks'][0]['overflow'][0]['excess_px'] == 600
+    note = candidate/'note.html'
+    note.write_text('<link rel="stylesheet" href="stale.css">'+WIDE_MATH)
+    proc = subprocess.run([sys.executable, str(PROBE), str(note), '--out', str(tmp_path/'bad.json'), *options],
+                          capture_output=True, text=True)
+    assert proc.returncode == 2 and 'stale.css' in proc.stdout

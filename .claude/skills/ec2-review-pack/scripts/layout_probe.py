@@ -76,7 +76,7 @@ _MEASURE = r"""
 """
 
 
-def probe(html: Path, widths: list[int], themes: list[str]) -> dict:
+def probe(html: Path, widths: list[int], themes: list[str], *, pack_paths=None) -> dict:
     from playwright.sync_api import sync_playwright
     if str(REPO / 'workbook') not in sys.path:
         sys.path.insert(0, str(REPO / 'workbook'))
@@ -86,7 +86,15 @@ def probe(html: Path, widths: list[int], themes: list[str]) -> dict:
     html = html.resolve()
     local_root = next((parent for parent in html.parents if normalize("NFC", parent.name) == "복습노트"),
                       html.parent)
-    url = local_url(html, local_root)
+    if pack_paths:
+        logical = pack_paths.logical(html)
+        if pack_paths.source_file(str(logical)).resolve() != html:
+            raise ValueError('preview HTML must come from the candidate')
+        roots = (pack_paths.repo, pack_paths.work_pack)
+        url = local_url(logical, pack_paths.repo)
+    else:
+        roots = (local_root,)
+        url = local_url(html, local_root)
     checks = []
     with sync_playwright() as pw:
         browser = launch_chromium(pw)
@@ -99,7 +107,8 @@ def probe(html: Path, widths: list[int], themes: list[str]) -> dict:
                     page.on('requestfailed', lambda request: failed_resources.add(request.url))
                     page.on('response', lambda response: failed_resources.add(response.url)
                             if response.status >= 400 else None)
-                    install_render_routes(page, local_roots=(local_root,),
+                    install_render_routes(page, local_roots=roots,
+                                          local_resolver=pack_paths.source_file if pack_paths else None,
                                           vendor_resolver=vendor_route.resolve_asset, blocked=failed_resources)
                     response = page.goto(url, wait_until='load')
                     if response is None or not response.ok:
@@ -126,6 +135,9 @@ def probe(html: Path, widths: list[int], themes: list[str]) -> dict:
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument('html', type=Path)
+    ap.add_argument('--repo', type=Path, default=REPO)
+    ap.add_argument('--public-pack', type=Path)
+    ap.add_argument('--candidate-pack', type=Path)
     ap.add_argument('--widths', default='1280,375')
     ap.add_argument('--themes', default='light,dark')
     ap.add_argument('--out', type=Path, required=True)
@@ -135,7 +147,14 @@ def main(argv: list[str] | None = None) -> int:
         themes = [t.strip() for t in a.themes.split(',') if t.strip()]
         if not a.html.is_file() or not widths or not set(themes) <= {'light', 'dark'}:
             raise ValueError('need an existing HTML file, widths, and themes from light,dark')
-        report = probe(a.html, widths, themes)
+        view = None
+        if a.public_pack or a.candidate_pack:
+            if not (a.public_pack and a.candidate_pack):
+                raise ValueError('--public-pack and --candidate-pack must be paired')
+            sys.path.append(str(REPO / 'workbook'))
+            from pack_paths import PackPaths
+            view = PackPaths(a.repo, a.public_pack, a.candidate_pack)
+        report = probe(a.html, widths, themes, pack_paths=view)
     except Exception as exc:  # browser missing, bad arguments
         print(json.dumps({'status': 'error', 'reason': str(exc)[:240]}, ensure_ascii=False))
         return 2

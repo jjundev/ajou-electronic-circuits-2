@@ -16,12 +16,13 @@ from urllib.parse import unquote, urlsplit
 _EPE = Path(__file__).resolve().parents[1] / '.claude/skills/ec2-problem-explain/scripts'
 if str(_EPE) not in sys.path:
     sys.path.append(str(_EPE))
+from pack_paths import PackPaths, checked_file
 from epe_contract import validate_review_records  # noqa: E402
 from epe_core import make_overlay  # noqa: E402
 from epe_render import names  # noqa: E402
 from epe_rerender import reference_dependencies  # noqa: E402
 from epe_shared import parse, inner, Node  # noqa: E402
-from epe_source import existing_path, inside, load_source, sha256  # noqa: E402
+from epe_source import nfc, existing_path, inside, load_source, sha256  # noqa: E402
 from learning_style import PERSONALIZED_REVIEW_POLICY  # noqa: E402
 
 
@@ -43,8 +44,8 @@ def _json(path):
 def _relative_file(root, name):
     _require(isinstance(name, str) and bool(name), '상대 파일 경로 필요')
     path = Path(name)
-    _require(not path.is_absolute(), f'절대 산출 경로 금지: {name}')
-    return inside(existing_path(root / path), root)
+    _require(not path.is_absolute() and '..' not in path.parts, f'절대 산출 경로 금지: {name}')
+    return inside(existing_path(checked_file(root, path)), root)
 
 
 def _hash_files(root, mapping):
@@ -75,7 +76,7 @@ def _check_core_resources(problems):
                         _require(target.strip().strip('\"\'').startswith('#'), 'SVG 외부 자원 금지')
 
 
-def load_answer_overlay(path: Path, repo: Path, expected_ids: list[str]) -> dict:
+def load_answer_overlay(path: Path, repo: Path, expected_ids: list[str], *, pack_paths: PackPaths | None = None) -> dict:
     """Validate disk schema, reviews, all hashes and current source/route identity.
 
     Review records attest to human/agent checks; this validates their format and
@@ -83,7 +84,10 @@ def load_answer_overlay(path: Path, repo: Path, expected_ids: list[str]) -> dict
     """
     try:
         repo = existing_path(Path(repo)).resolve()
-        path = inside(existing_path(Path(path)), repo)
+        if pack_paths:
+            path = inside(pack_paths.source_file(str(pack_paths.logical(path))), pack_paths.work_pack)
+        else:
+            path = inside(existing_path(Path(path)), repo)
         overlay = _json(path)
         _require(type(overlay.get('schema_version')) is int and overlay['schema_version'] == 1,
                  '지원하지 않는 overlay schema_version')
@@ -112,12 +116,19 @@ def load_answer_overlay(path: Path, repo: Path, expected_ids: list[str]) -> dict
         source = Path(manifest['source'])
         if not source.is_absolute():
             source = repo / source
-        pack = load_source(inside(existing_path(source), repo), repo)
+        pack = (load_source(source, repo, pack_paths=pack_paths, slug=manifest['slug']) if pack_paths else
+                load_source(inside(existing_path(source), repo), repo))
+        if pack_paths:
+            notes = [nfc(p.name) for p in stage.iterdir()
+                     if nfc(p.name).startswith(f'정리노트_{pack.range}_') and p.suffix == '.html']
+            _require(not notes or notes == [f'정리노트_{pack.range}_{pack.slug}.html'], '현재 정리노트 slug 불일치')
+            _require(source == pack.path and Path(manifest['destination']) == pack.folder,
+                     'manifest 공개 경로 불일치')
         _require(pack.learning_style == overlay['learning_style'], '개인 명세 변경: 다시 검토 필요')
         _require(manifest.get('source_sha256') == pack.sha256, '현재 원문 hash 불일치')
         _require(manifest.get('inputs') == list(pack.inputs), '현재 입력 집합 불일치')
         _require((pack.range, pack.slug) == (overlay['range'], overlay['slug']), '팩 range/slug 불일치')
-        _require(pack.folder.resolve() == stage, '발행 폴더와 원문 팩 불일치')
+        _require((pack_paths.work_pack if pack_paths else pack.folder).resolve() == stage, '발행 폴더와 원문 팩 불일치')
         problems = overlay['problems']
         _require(isinstance(problems, list) and bool(problems), 'overlay 문항 목록 필요')
         ids = [p['id'] for p in problems]
@@ -129,19 +140,24 @@ def load_answer_overlay(path: Path, repo: Path, expected_ids: list[str]) -> dict
         _require(not errors, ' / '.join(errors))
 
         source_inputs = overlay['source_inputs']
-        _hash_files(repo, source_inputs)
+        if pack_paths:
+            for name, digest in source_inputs.items():
+                _require(not Path(name).is_absolute(), '상대 원본 경로 필요')
+                _require(sha256(pack_paths.source_file(name)) == digest, f'원본 hash 변경: {name}')
+        else:
+            _hash_files(repo, source_inputs)
         references = validation['references']
         _require(isinstance(references, list) and bool(references), '참조 자료 hash 필요')
         recorded = {}
         for reference in references:
             ref = Path(reference['path'])
-            ref = inside(existing_path(ref if ref.is_absolute() else repo / ref), repo)
+            ref = pack_paths.source_file(str(ref)) if pack_paths else inside(existing_path(ref if ref.is_absolute() else repo / ref), repo)
             _require(ref.is_file() and sha256(ref) == reference['sha256'], f'참조 자료 변경: {ref}')
             recorded[ref.resolve()] = reference['sha256']
         style = (repo / pack.learning_style['path']).resolve()
         _require(recorded.get(style) == pack.learning_style['sha256'], '개인 명세 참조 hash 누락')
         for ref in recorded:
-            for dependency in reference_dependencies(ref, repo):
+            for dependency in reference_dependencies(ref, repo, pack_paths=pack_paths):
                 _require(recorded.get(dependency.resolve()) == sha256(dependency), '참조 그림 hash 누락/변경')
 
         stem, _, data_name = names(pack)

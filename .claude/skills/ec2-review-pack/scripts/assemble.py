@@ -22,6 +22,8 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import manifest as manifest_mod  # noqa: E402
+from pack_paths import PackPaths
+from display_titles import load_display_titles
 from review_selection import POLICY, load_selection  # noqa: E402
 
 ASSETS = Path(__file__).resolve().parent.parent / "assets"
@@ -83,10 +85,7 @@ def problems_txt(m: dict) -> str:
     return "".join(f"{q['id']} | {q['why']}\n" for q in m["problems"])
 
 
-def assemble(run_dir: Path | str, out_dir: Path | str, *, repo: Path | None = None) -> Path:
-    run_dir, out_dir = Path(run_dir), Path(out_dir)
-    m = manifest_mod.load(run_dir / "manifest.json", repo=repo if repo is not None else manifest_mod.DEFAULT_REPO)
-    selection_path = run_dir / 'selection.json'
+def _selection(m, selection_path):
     selection_text = None
     selected = None
     if m.get('selection_policy') == POLICY and m['problems']:
@@ -100,6 +99,48 @@ def assemble(run_dir: Path | str, out_dir: Path | str, *, repo: Path | None = No
                     raise ValueError(f'선발 기록이 manifest와 다릅니다: {q["id"]}')
         except (OSError, ValueError, KeyError) as exc:
             raise AssembleError(f'선발 기록 오류: {exc}') from exc
+    return selection_text, selected
+
+
+def stage_problem_index(paths: PackPaths, manifest: dict, selection: Path, titles: Path) -> dict[str, Path]:
+    if not paths.candidate_pack or manifest['range'] != paths.public_pack.name:
+        raise AssembleError('후보 폴더와 manifest 날짜 불일치')
+    if not manifest['problems']:
+        return {}
+    selection_text, selected = _selection(manifest, selection)
+    if selected is None:
+        raise AssembleError('승인된 선발 기록 필요')
+    load_display_titles(titles, [q['id'] for q in manifest['problems']])
+    records = {
+        '.assets/problems.txt': problems_txt(manifest),
+        '.assets/selection.json': selection_text,
+        '.assets/display-titles.json': titles.read_text(encoding='utf-8'),
+        '.pack/selection-review.json': json.dumps(selected['review'], ensure_ascii=False, indent=2) + '\n',
+    }
+    outputs = {}
+    for relative, value in records.items():
+        target = paths.work_file(relative)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with target.open('x', encoding='utf-8') as stream:
+            stream.write(value)
+        outputs[target.name] = target
+    return outputs
+
+
+def assemble(run_dir: Path | str, out_dir: Path | str, *, repo: Path | None = None, pack_paths: PackPaths | None = None) -> Path:
+    run_dir, out_dir = Path(run_dir), Path(out_dir)
+    m = manifest_mod.load(run_dir / "manifest.json", repo=repo if repo is not None else manifest_mod.DEFAULT_REPO)
+    if pack_paths:
+        target = pack_paths.work_file(manifest_mod.note_name(m))
+        if target.parent != out_dir or not pack_paths.candidate_pack:
+            raise AssembleError('후보 note 출력 폴더 불일치')
+        html = build_note(m, run_dir)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with target.open('x', encoding='utf-8') as stream:
+            stream.write(html)
+        return target
+    selection_path = run_dir / 'selection.json'
+    selection_text, selected = _selection(m, selection_path)
     note_html = build_note(m, run_dir)  # 조각이 하나라도 없으면 아무것도 쓰지 않는다
     out_dir.mkdir(parents=True, exist_ok=True)
     note_path = out_dir / manifest_mod.note_name(m)

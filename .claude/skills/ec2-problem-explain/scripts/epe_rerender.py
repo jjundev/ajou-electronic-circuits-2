@@ -101,7 +101,7 @@ def verified_resources(stored, current, repo):
         mapped[path.relative_to(repo).as_posix()]=digest
     return mapped==current
 
-def reference_dependencies(path,repo):
+def reference_dependencies(path,repo, *, pack_paths=None):
     if path.suffix.lower() not in ('.html','.md','.svg'):
         return []
     text=path.read_text(encoding='utf-8')
@@ -116,7 +116,9 @@ def reference_dependencies(path,repo):
         url=urlsplit(value)
         if url.scheme or url.netloc or not url.path:
             raise ExplainError('참조 그림의 로컬 hash 확인 필요')
-        result.append(inside(existing_path(path.parent/unquote(url.path)),repo))
+        target = (pack_paths.link(path.parent, unquote(url.path)) if pack_paths else
+                  inside(existing_path(path.parent/unquote(url.path)),repo))
+        result.append(target)
     return result
 
 def verified_references(references, old_repo, repo):
@@ -164,8 +166,10 @@ def source_resources(pack,repo):
             url=urlsplit(node.attrs.get('src',''))
             if url.scheme or url.netloc or not url.path:
                 raise ExplainError('저장소 내부 그림만 허용')
-            path=inside(existing_path(base/unquote(url.path)),repo)
-            result[path.relative_to(repo).as_posix()]=sha256(path)
+            path=(pack.pack_paths.link(base, unquote(url.path)) if pack.pack_paths else
+                  inside(existing_path(base/unquote(url.path)),repo))
+            logical = pack.pack_paths.logical(path) if pack.pack_paths else path
+            result[logical.relative_to(repo).as_posix()]=sha256(path)
     return result
 
 def rerender(repo,target,run):

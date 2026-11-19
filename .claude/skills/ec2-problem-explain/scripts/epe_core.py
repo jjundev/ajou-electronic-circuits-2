@@ -134,8 +134,9 @@ def make_overlay(pack: SourcePack, stage_html: Path, repo: Path) -> dict:
             problems.append(extract_core(problem, inner(articles[0])))
         source_inputs = {}
         for name in (*pack.inputs, str(repo / pack.learning_style['path'])):
-            path = inside(existing_path(Path(name)), repo)
-            source_inputs[path.resolve().relative_to(repo.resolve()).as_posix()] = sha256(path)
+            path = pack.pack_paths.source_file(name) if pack.pack_paths else inside(existing_path(Path(name)), repo)
+            key = Path(name) if pack.pack_paths else path.resolve()
+            source_inputs[key.relative_to(pack.pack_paths.repo if pack.pack_paths else repo.resolve()).as_posix()] = sha256(path)
         assets = {}
         for problem in problems:
             for item in (*problem['steps'], *problem['answers']):

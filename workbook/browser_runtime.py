@@ -42,6 +42,7 @@ def install_render_routes(
     local_roots: tuple[Path, ...],
     vendor_resolver: Callable[[str], Path | None] | None = None,
     blocked: set[str],
+    local_resolver: Callable[[str], Path] | None = None,
 ) -> None:
     """Mount the first root and allow symlinks only into other listed roots."""
     roots = tuple(root.resolve() for root in local_roots)
@@ -55,7 +56,7 @@ def install_render_routes(
                 decoded = unquote(parsed.path[len(LOCAL_PREFIX):], errors="strict")
                 relative = Path(decoded)
                 if not relative.is_absolute() and ".." not in relative.parts and "\\" not in decoded:
-                    target = (roots[0] / relative).resolve()
+                    target = (local_resolver(decoded) if local_resolver else roots[0] / relative).resolve()
                     if any(target.is_relative_to(root) for root in roots):
                         if target.is_file():
                             return route.fulfill(path=str(target))
