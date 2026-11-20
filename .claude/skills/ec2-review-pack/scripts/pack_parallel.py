@@ -36,12 +36,16 @@ def ancestors(state, spec):
 
 
 def proof(state, spec):
-    if state.get('stale_inputs') or state['status'] in ('blocked', 'withheld', 'recovery_required'):
+    if state.get('stale_inputs'):
+        raise f.StaleInputsError('RUN frozen source changed')
+    if state['status'] in ('blocked', 'withheld', 'recovery_required'):
         raise f.FlowError('RUN lacks current source or authorization')
     if reason := findings.blocked_reason(state, spec.id):
         raise f.FlowError(reason)
     version = {}
     for tid, rec in ancestors(state, spec).items():
+        if rec.get('status') == 'stale':
+            raise f.StaleInputsError('stale predecessor: ' + tid)
         if rec.get('status') != 'done' or not rec.get('attempt'):
             raise f.FlowError('missing current predecessor: ' + tid)
         version[tid] = rec['attempt']
@@ -1145,7 +1149,7 @@ def same_attempt(state, tid, attempt):
         raise f.FlowError('inactive machine attempt')
     spec = spec_for(state, tid)
     if proof(state, spec) != record['input_version']:
-        raise f.FlowError('machine inputs superseded')
+        raise f.StaleInputsError('machine inputs superseded')
     return spec
 
 
@@ -1297,7 +1301,7 @@ def run_action(run, tid, *, reconcile=False):
             except (ValueError, OSError, KeyError) as exc:
                 interrupted = tid == 'publish-pack' and (root/'publication/journal.json').is_file()
                 result = dict(status='recovery_required' if interrupted else 'failed',
-                              error_code='publication_interrupted' if interrupted else 'validation_failed', detail=str(exc))
+                              error_code='publication_interrupted' if interrupted else getattr(exc, 'error_code', 'validation_failed'), detail=str(exc))
             return finish(s, tid, attempt, root, result)
         if tid != 'publish-pack':
             try:

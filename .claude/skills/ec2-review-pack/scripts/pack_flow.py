@@ -21,6 +21,11 @@ class FlowError(ValueError):
     """A state or filesystem precondition failed."""
 
 
+class StaleInputsError(FlowError):
+    """Previously adopted input evidence no longer matches the current attempt."""
+    error_code = 'stale_inputs'
+
+
 def nfc_path(p: str | Path) -> Path:
     """The path spelled in Unicode NFC (no resolve).
 
@@ -300,7 +305,7 @@ def update_state(run: Path, expected_revision: int, change: Callable[[dict], dic
 def init_run(repo: Path, run: Path, range_: str, *,
              browser_owner: str = "main", pdf_owner: str = "main",
              seed_from: Path | None = None, redo: list[str] | None = None,
-             redo_note: Path | None = None, allow_tmp: bool = False, workflow: str = "legacy") -> dict:
+             redo_note: Path | None = None, allow_tmp: bool = False, workflow: str | None = None) -> dict:
     repo, run = nfc_path(Path(repo).resolve()), nfc_path(Path(run).resolve())
     if not allow_tmp and is_temp_path(run):
         raise FlowError(f"{run}: RUN is under a temporary folder that a reboot clears; "
@@ -333,6 +338,8 @@ def init_run(repo: Path, run: Path, range_: str, *,
             sources.append(path)
     if not sources:
         raise FlowError(f"{repo / 'STT'}: no STT sessions for {range_}")
+    if workflow is None:
+        workflow = 'legacy' if seed_from is not None else 'parallel'
     if workflow not in ('legacy', 'parallel'):
         raise FlowError('unknown workflow')
     seed = load_state(seed_from) if seed_from is not None else None

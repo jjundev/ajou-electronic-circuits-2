@@ -4,7 +4,7 @@ OpenCode 우선의 파일 인계 절차이며 Codex도 같은 Python CLI를 쓴�
 
 ## 시작과 조회 — 메인
 
-`init --repo <REPO> [--run <새 RUN>] --range <MMDD 또는 MMDD-MMDD> --browser-owner <workers|main|unavailable> --pdf-owner <workers|main|unavailable> [--allow-tmp]`
+`init --repo <REPO> [--run <새 RUN>] --range <MMDD 또는 MMDD-MMDD> [--workflow parallel|legacy] --browser-owner <workers|main|unavailable> --pdf-owner <workers|main|unavailable> [--allow-tmp]`
 
 `--run`을 빼면 RUN은 `~/.cache/ec2-review-pack/<range>-<YYYYmmdd-HHMMSS>`이고 응답의 details_path가 그 RUN의 run-status.json이다. `/tmp`, `/private/tmp`, `/var/folders` 아래 RUN은 `--allow-tmp` 없이 거부한다. 재부팅하면 그 폴더가 지워져 상태·receipt·백업을 모두 잃는다. 실행기는 repo·run 경로를 NFC로 저장하고 경로를 NFC로 비교한다. macOS의 `전자회로2` 같은 폴더는 디스크에서 NFD라 작업자가 어느 표기를 써도 같은 경로로 본다.
 
@@ -18,7 +18,7 @@ owner 기본은 main이다. 도구가 실제 있는 주체를 전달하며 unava
 
 ## 병렬 실행 순서
 
-목적별로 새 RUN에 `init --workflow parallel` 또는 `init --workflow legacy`를 쓴다. 기본값은 legacy다. 기존 RUN은 저장한 계약을 따르며 workflow 필드가 없는 RUN은 legacy로 이어간다.
+새 RUN의 기본값은 `parallel`이다. 레거시 새 RUN은 `init --workflow legacy`로 시작한다. `--seed-from`은 기존 레거시 RUN의 이어받기 옵션이며 모드를 생략해도 새 레거시 RUN을 만든다. 기존 RUN은 저장한 계약을 따르며 `workflow` 필드가 없는 RUN은 레거시로 이어간다.
 
 1. `next --run <RUN> --slots <가용 수>`의 `actions`, `dispatch`, `review_locally`, `blocked`를 확인한다. `claim`의 지정 경로로 역할을 배정하고 실제 작업자 ID를 `bind`한다. 메인과 자식 조정자가 쓴 슬롯을 먼저 빼고 남은 슬롯을 직접 작업자에 배정한다. 기계 작업은 슬롯 수와 별도로 `run --action <ID>`로 병행할 수 있다.
 2. 시작할 때 source-prep, candidate-index, render-preflight를 함께 연다. selection이 채택되고 stage-problem-index가 봉인되면 explain-author와 explain-blind를 다른 작업자에게 동시에 맡긴다. 저작·독립 풀이가 채택되면 child-coordinator가 검증을 잇는다. 확인문제도 convert-md·selection이 승인되는 즉시 concept-draft → concept-review까지 진행한다. 최종 발행은 publish-pack·final-check 승인 뒤 별도로 진행한다.

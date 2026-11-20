@@ -29,6 +29,32 @@ def test_commands_work_from_foreign_cwd_with_unicode_paths(tmp_path):
         assert call(cmd,'--run',run,*(['--slots','1'] if cmd=='next' else []),cwd=other)[0].returncode == 0
     assert before == {str(p): (p.stat().st_mtime_ns,p.read_bytes()) for p in run.rglob('*') if p.is_file()}
 
+
+def test_new_init_defaults_to_parallel(tmp_path):
+    repo, old = make_run(tmp_path)
+    new = tmp_path / 'parallel'
+    explicit_legacy = tmp_path / 'legacy'
+    args = ('--repo', repo, '--range', '0909', '--allow-tmp')
+
+    result, data = call('init', '--run', new, *args)
+    assert result.returncode == 0
+    assert json.loads((new / 'run-status.json').read_text())['workflow'] == 'parallel'
+    assert set(data['next']['actions']) == {'candidate-index', 'render-preflight'}
+
+    result, data = call('init', '--run', explicit_legacy, *args, '--workflow', 'legacy')
+    assert result.returncode == 0
+    assert json.loads((explicit_legacy / 'run-status.json').read_text())['workflow'] == 'legacy'
+    assert data['next']['kind'] == 'wait'
+
+    path = old / 'run-status.json'
+    historical = json.loads(path.read_text())
+    historical.pop('workflow')
+    path.write_text(json.dumps(historical))
+    result, data = call('next', '--run', old, '--slots', '1')
+    assert result.returncode == 0
+    assert data['next']['kind'] == 'dispatch'
+    assert data['next']['tasks'][0]['id'] == 'source-prep'
+
 @pytest.mark.parametrize('args', [[],['--help'],['task','--help'],['wat'],['next'],['run','--run','x','--action','evil']])
 def test_every_response_is_one_json_under_2000_chars(args):
     call(*args)

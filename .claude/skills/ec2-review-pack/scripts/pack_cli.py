@@ -62,7 +62,8 @@ def parser():
         c=parent.add_parser(name); c.add_argument('--run',required=run_required,type=absolute); return c
     # init without --run uses ~/.cache/ec2-review-pack/<range>-<timestamp>
     c=command('init',run_required=False); c.add_argument('--repo',required=True,type=absolute); c.add_argument('--range',required=True)
-    c.add_argument('--workflow', choices=('legacy', 'parallel'), default='legacy')
+    c.add_argument('--workflow', choices=('legacy', 'parallel'),
+                   help='defaults to parallel for new runs and legacy for --seed-from')
     c.add_argument('--allow-tmp',action='store_true')
     for owner in ('browser','pdf'): c.add_argument('--'+owner+'-owner',choices=('workers','main','unavailable'),default='main')
     c.add_argument('--seed-from',type=absolute); c.add_argument('--redo',default='')
@@ -222,7 +223,8 @@ def main(argv: list[str] | None=None) -> int:
             result,code=dict(status='failed',error_code='usage_error',reason='Invalid command or arguments; use --help.'),2
         except Exception as exc:
             trace=traceback.format_exc()
-            result=dict(status='failed',error_code='validation_failed' if isinstance(exc,(ValueError,OSError)) else 'execution_failed',reason=str(exc)[:240])
+            default_code = 'validation_failed' if isinstance(exc, (ValueError, OSError)) else 'execution_failed'
+            result=dict(status='failed',error_code=getattr(exc, 'error_code', default_code),reason=str(exc)[:240])
         # Read-only queries (status, next, task check) never create logs, including on failure/noisy imports.
         read_only=a is not None and (a.command in ('status','next') or getattr(a,'task_command',None)=='check')
         if a is not None and a.run is not None and not read_only and (a.run/'run-status.json').is_file():
