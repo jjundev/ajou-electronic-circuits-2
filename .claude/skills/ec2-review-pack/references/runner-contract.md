@@ -4,7 +4,7 @@ OpenCode 우선의 파일 인계 절차이며 Codex도 같은 Python CLI를 쓴�
 
 ## 시작과 조회 — 메인
 
-`init --repo <REPO> [--run <새 RUN>] --range <MMDD 또는 MMDD-MMDD> --browser-owner <workers|main|unavailable> --pdf-owner <workers|main|unavailable> [--allow-tmp]`
+`init --repo <REPO> [--run <새 RUN>] --range <MMDD 또는 MMDD-MMDD> [--workflow parallel|legacy] --browser-owner <workers|main|unavailable> --pdf-owner <workers|main|unavailable> [--allow-tmp]`
 
 `--run`을 빼면 RUN은 `~/.cache/ec2-review-pack/<range>-<YYYYmmdd-HHMMSS>`이고 응답의 details_path가 그 RUN의 run-status.json이다. `/tmp`, `/private/tmp`, `/var/folders` 아래 RUN은 `--allow-tmp` 없이 거부한다. 재부팅하면 그 폴더가 지워져 상태·receipt·백업을 모두 잃는다. 실행기는 repo·run 경로를 NFC로 저장하고 경로를 NFC로 비교한다. macOS의 `전자회로2` 같은 폴더는 디스크에서 NFD라 작업자가 어느 표기를 써도 같은 경로로 본다.
 
@@ -16,7 +16,28 @@ owner 기본은 main이다. 도구가 실제 있는 주체를 전달하며 unava
 
 모든 응답은 `{schema_version,status,phase,next,counts,details_path,error_code}` JSON 한 개이며 개행 포함 Python `len(str)` **2,000자 이하**다. 접힌 목록은 counts와 details_path 또는 이미 아는 RUN/run-status.json에서 필요한 항목만 읽는다. exit 0은 정상/대기, 1은 실행·검증 실패, 2는 사용법 오류다. 장문 stdout/stderr/traceback은 RUN의 작업 로그에 남긴다. CLI 성공을 실제 검토 pass로 해석하지 않는다.
 
-## 배치·재개 — 메인과 역할 담당자
+## 병렬 실행 순서
+
+새 RUN의 기본값은 `parallel`이다. 레거시 새 RUN은 `init --workflow legacy`로 시작한다. `--seed-from`은 기존 레거시 RUN의 이어받기 옵션이며 모드를 생략해도 새 레거시 RUN을 만든다. 기존 RUN은 저장한 계약을 따르며 `workflow` 필드가 없는 RUN은 레거시로 이어간다.
+
+1. `next --run <RUN> --slots <가용 수>`의 `actions`, `dispatch`, `review_locally`, `blocked`를 확인한다. `claim`의 지정 경로로 역할을 배정하고 실제 작업자 ID를 `bind`한다. 메인과 자식 조정자가 쓴 슬롯을 먼저 빼고 남은 슬롯을 직접 작업자에 배정한다. 기계 작업은 슬롯 수와 별도로 `run --action <ID>`로 병행할 수 있다.
+2. 시작할 때 source-prep, candidate-index, render-preflight를 함께 연다. selection이 채택되고 stage-problem-index가 봉인되면 explain-author와 explain-blind를 다른 작업자에게 동시에 맡긴다. 저작·독립 풀이가 채택되면 child-coordinator가 검증을 잇는다. 확인문제도 convert-md·selection이 승인되는 즉시 concept-draft → concept-review까지 진행한다. 최종 발행은 publish-pack·final-check 승인 뒤 별도로 진행한다.
+3. 작업자는 자신의 브리프에서 `task build-receipt`와 `task check`를 실행한다. 메인은 완료한 작업만 `[{"task_id":"…","attempt":"…","receipt":"/절대/receipt.json"}]` 배열에 모아 `task accept-batch --run <RUN> --submissions <파일>`로 인계한다. 각 항목의 accepted/already_accepted/rejected와 거부 사유를 확인한다. `task accept`, `task check`로 한 항목씩 진단할 수 있다.
+4. `advance --run <RUN> --max-actions 4`는 최대 네 기계 작업을 실행한다. 사람이 필요한 작업이나 차단을 만나면 `waiting_for`와 `blocked`에 ID가 나온다. 다음 묶음을 배정하고 계속한다. 결과가 접혔으면 `details_path`에서 해당 항목만 읽는다. 진행 표시는 시도 시작·승인·수정·차단·재개·발행처럼 상태가 변했을 때만 한다.
+
+### 같은 병렬 RUN 재개
+
+`resume --run <RUN> --stopped-attempts <파일>`에 `{"<attempt UUID>":"/절대/근거.json"}`을 준다. 살아 있는 작업자는 계속 소유권을 갖는다. 메인은 호스트가 작업자의 종료를 확인한 뒤 `RUN/host-stops/<attempt>.json`에 아래 필드를 기록한다. 작업자가 쓸 수 있는 시도 폴더의 자기 보고를 중단 증거로 사용하지 않는다.
+
+```json
+{"run_id":"<RUN UUID>","task_id":"explain-blind","attempt":"<UUID>","agent_id":"<bound host ID>","status":"completed","receipt":"/실제/worker/receipt.json"}
+```
+
+종료된 미완료 작업자는 `status="stopped"`를 쓰고 claim 후 배정 전이면 `agent_id=null`이다. 완료 작업자는 지정 영수증과 현재 고정 바이트를 모두 검증한 뒤 재사용한다. 실제 호스트 중단과 재개를 모두 확인했을 때만 같은 기록에 `host_gap={"interrupted":"<UTC ISO 시각>","resumed":"<UTC ISO 시각>"}`을 덧붙인다. 기계 작업은 자기 시도의 stopped.json, 부모 발행은 해당 시도의 publication/journal.json, 확인문제 발행은 현재 RUN의 concept-check-result.json과 날짜 소유 표시·검산 인증서를 사용한다. 호스트가 비공개 기계 작업의 중단을 확인한 경우 같은 host-stops 형식에 agent_id=null을 쓴다. 완료를 확인했으면 status="completed"와 completion_evidence에 해당 작업의 실제 종료 근거 절대 경로를 쓴다. 발행 근거가 모호하거나 아직 액션 잠금이 살아 있으면 시도를 보존한다. 누락·불일치 근거는 rejected에 표시한다.
+
+`report --run <RUN>`의 report.json에서 각 시도별 대기·실행 구간, 겹친 구간, 확인한 호스트 공백 합집합, 브리프 바이트, 차단 ID와 확인문제 세 단계를 읽는다. 시각은 실행기가 사건을 관측한 UTC 시각이다. 작업자 실제 추론 시간과는 다를 수 있다. 모든 CLI 호출을 셀 검증 RUN은 시작 전부터 끝까지 모든 작업자에 같은 RUN 외부의 절대 폴더 `EC2_CLI_TRACE_DIR`를 전달한다. 설정하지 않으면 RUN에는 변경 명령 호출만 집계한다. 호스트가 제공한 사용량·호출 수는 `RUN/host-observations.json`에 `run_id`와 제공받은 `model_usage`, `host_tool_counts`만 기록한다.
+
+## 레거시 배치·재개 — 메인과 역할 담당자
 
 next.kind는 dispatch/run/review_locally/wait/recover/concept_check/report/blocked다. dispatch는 `task claim --run <RUN> --task <id>`로 먼저 예약한다. 반환 attempt/brief로 새 컨텍스트 작업자를 실행하고 `task bind --run <RUN> --task <id> --attempt <UUID> --agent-id <실제 ID>`로 연결한다. Codex는 spawn_agent(fork_turns="none"), OpenCode는 전체 대화를 복사하지 않는 새 작업 컨텍스트를 사용한다. 작업자 지시문은 [worker-prompt](worker-prompt.md) 템플릿을 채워 쓴다. claim 뒤 brief.json에는 `run_id`와 `attempt`가 들어 있다. 작업자는 반환 전에 `task check --run <RUN> --task <id> --attempt <UUID> --receipt <절대 경로>`를 실행한다. 이 명령은 accept와 같은 검증을 하되 상태를 바꾸지 않고, 실패하면 exit 1과 reason(예: `unresolved successful receipt`, `receipt identity mismatch`)을 돌려준다. 반환 뒤 `task accept --run <RUN> --task <id> --attempt <UUID> --receipt <절대 경로>`를 실행한다. 늦게 온 다른 attempt는 거부한다. 가용 슬롯·독립 역할·기존 담당자 재개 규칙은 [delegation](delegation.md)을 따른다.
 
@@ -61,7 +82,7 @@ content-review와 browser-qa는 실제 검토를 마친 대상만 `counts.target
 
 source-prep의 source-map.json은 `{schema_version:1,sessions:[{date,stt,pdfs,status,missing}]}`다. 실제 MMDD 집합, REPO 내부 STT/PDF 절대 경로, ready/missing 및 누락 이유 배열을 기록한다. scope.json은 의미 인계물이므로 임의 기계 스키마로 확장하지 않는다. manifest는 scope-draft→selection→scope-final 단일 작성자 순서다. selection은 `RUN/display-titles.json`에 선발 ID와 정확히 같은 키/비어 있지 않은 제목을 반환한다(0개는 {}). runner는 제목을 선택하지 않는다.
 
-style-audit/content-review는 브리프의 **audit_output**에 쓴다. 앞 작성자의 감사 파일을 덮지 않는다. content-review의 보완 감사만 단일 작성자 인계로 채택되며 precheck를 다시 수행한다. 브라우저/PDF owner=main은 review_locally: 메인이 실제 근거를 읽고 검사한 뒤 동일 claim/receipt/accept 계약을 수행한다. 도구 없는 작업자에게 pass를 요청하지 않는다.
+기존 순차 RUN의 style-audit/content-review는 브리프의 **audit_output**에 쓴다. 앞 작성자의 감사 파일을 덮지 않는다. content-review의 보완 감사만 단일 작성자 인계로 채택되며 precheck를 다시 수행한다. 브라우저/PDF owner=main은 review_locally: 메인이 실제 근거를 읽고 검사한 뒤 동일 claim/receipt/accept 계약을 수행한다. 도구 없는 작업자에게 pass를 요청하지 않는다.
 
 ## 기계 작업·발행 — 최상위 메인
 
@@ -75,7 +96,19 @@ prepare-pack은 첫 변경 전 기본/설명 두 백업을 검증·재사용하�
 
 build-answers는 RUN 안(`RUN/answers`)에만 쓴다. 실패해도 팩 inventory가 그대로면 needs_fix이고 next가 같은 action을 다시 요청한다. 고친 뒤 `run --action build-answers`를 다시 실행한다. 실행 중 팩 파일이 바뀌었으면 recovery_required이고 recover 절을 따른다.
 
-## 수정·중단·복구 — 필요할 때만
+## 병렬 RUN의 내용 검토와 수정
+
+`--workflow parallel`에서 assemble-note가 끝나면 structural-precheck, style-audit, content-review가 같은 HTML을 각각 검사한다. 구조 검사는 토픽·레이어·길잡이를 확인한다. 전체 precheck에는 구조 검사, 양쪽 승인으로 만든 현재 감사, 선택한 경우 문제 PDF가 필요하다. 기존 화면·SVG·PDF 검사와 최종 발행 검사는 계속 실행한다.
+
+메인은 양쪽 노트 검토가 돌아오면 같은 후보의 열린 노트 결함을 한 요청으로 모은다. 기계·화면 검토에서 뒤늦게 발견한 결함은 같은 RUN의 새 요청으로 처리한다. `run-status.json`의 `findings`에서 `id`, `review_attempt`, `input_digest`를 읽고 RUN 안에 다음 형태의 파일을 저장한다.
+
+```json
+{"id":"correct-note-1","items":[{"finding_id":"<finding id>","review_attempt":"<검토 attempt>","input_digest":"<후보 SHA-256>"}]}
+```
+
+`task fix --run <RUN> --request <절대 JSON>`은 해당 작성자를 다시 열고 의존하는 검사를 갱신한다. 작성자는 브리프의 `previous_outputs`를 읽고 `repair_findings`를 새 attempt에서 수정한다. 앞선 수정본이 접수되어 재검토를 기다리는 동안 같은 작성자에게 다른 결함을 배정할 수 있다. 새 작성 attempt는 새 결함만 수정하며, 앞선 결함의 재검토는 그 결함에 배정된 원래 수정 attempt와 채택 파일을 참조한다. 이때 수정 횟수는 원래 수정본에서 확인한 실패만 반영하고, 현재 발행 여부는 현재 후보의 별도 판정을 따른다. 기계 검사 또는 감사 결합 전에 다른 수정본이 채택되어 앞선 버전의 판정이 없으면 그 수정은 `not_reviewed`로 기록하고 현재 후보의 결과만 적용한다. 두 노트 검토의 의견 충돌은 양쪽 검토 attempt가 모두 현재일 때만 수정할 수 있다. 조립기·템플릿에서 발생해 RUN 안에 수정 가능한 담당 파일이 없는 진단은 발생 위치와 보류 사유를 기록한다. 반복 요청·중단·출력 미변경은 수정 횟수를 쓰지 않는다. 검토자는 새 후보에서 원문과 대조한 결과를 [검토 지시문](review-prompt.md)에 따라 제출한다. 같은 결함에서 서로 다른 두 수정본이 미해결 판정을 받으면 그 결함은 `withheld`가 된다. `report.json`의 `findings`에서 근거와 수정·검토 attempt를 확인한다. 미해결·보류 결함이 있으면 팩 발행이 막히고 다른 결함의 수정은 진행할 수 있다.
+
+## 기존 RUN의 수정·중단·복구
 
 `task fix --run <RUN> --request <절대 JSON>`: `{id,category,items:[{task_id,request_path}],waived?:[{id,reason}]}`. content 요청은 needs_fix인 style-audit·content-review report의 `## Critical`·`## Important`·`## Minor` 아래 `- [<id>]` 결함을 모두 덮어야 한다. 토픽·섹션 ID는 `author-<섹션>`, manifest 문제 ID(노트 밖 `[P12.04]` 포함)는 `selection`, 그 밖은 `scope-final`이 담당이다. 담당 task가 items에 없으면 `content fix misses findings: P12.04→selection`처럼 거부하며 예산을 쓰지 않는다. 일부러 고치지 않는 결함은 `waived`에 이유와 함께 적는다. items에 `pdf-qa`가 있으면 build-answers가 stale이 되어 next가 답안 PDF를 RUN에 다시 빌드한다. category=content 또는 machine_browser. 같은 id 재등록은 중복 차감하지 않는다. 내용 최대 1회, 기계/브라우저 **공통 최대 2회**이며 작성자 수나 release로 늘리지 않는다. 기존 담당자를 재개하고 새 attempt를 사용한다.
 

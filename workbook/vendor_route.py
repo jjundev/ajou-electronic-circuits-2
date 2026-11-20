@@ -17,15 +17,12 @@ _PRETENDARD_RE = re.compile(
 _ALIASES = {"pretendard.min.css": "pretendard.css"}
 
 
-def _versions(vendor):
-    return json.loads((vendor / "provenance.json").read_text(encoding="utf-8"))["packages"]
-
-
 def resolve(url, vendor=None):
     """CDN 주소를 사본 파일 경로로 바꾼다. 맞는 사본이 없으면 (None, 사유)."""
     vendor = paths.VENDOR if vendor is None else vendor
     try:
-        versions = _versions(vendor)
+        manifest = json.loads((vendor / "provenance.json").read_text(encoding="utf-8"))
+        versions, files = manifest["packages"], manifest["files"]
     except (OSError, ValueError, KeyError) as e:
         return None, f"사본 목록을 읽지 못함 ({vendor / 'provenance.json'}): {e}"
     url = url.split("?", 1)[0].split("#", 1)[0]
@@ -39,10 +36,17 @@ def resolve(url, vendor=None):
         rel = _ALIASES.get(rel, rel)
         target = (vendor / package / rel).resolve()
         root = (vendor / package).resolve()
-        if root not in target.parents or not target.is_file():
+        if f"{package}/{rel}" not in files or root not in target.parents or not target.is_file():
             return None, f"사본에 없음: {url}"
         return target, None
     return None, f"사본 매핑 밖의 주소: {url}"
+
+
+def resolve_asset(url):
+    """Return a registered vendor file for the shared render transport."""
+    if not url.startswith("https://cdn.jsdelivr.net/"):
+        return None
+    return resolve(url)[0]
 
 
 def install(page, vendor=None):

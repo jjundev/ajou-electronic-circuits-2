@@ -73,3 +73,51 @@ def test_probe_fails_when_katex_cannot_load(tmp_path):
     assert code == 2
     report = json.loads(out)
     assert report['status'] == 'error' and 'KaTeX not loaded' in report['reason'] and '0.0.1' in report['reason']
+
+
+def test_probe_measures_with_staged_note_shared_stylesheet(tmp_path):
+    notes = tmp_path / 'run' / 'repo' / '복습노트'
+    pack = notes / '1118'
+    pack.mkdir(parents=True)
+    assets = notes / '.assets'
+    assets.mkdir()
+    (assets / 'layout.css').write_text('.katex-display { width: 300px; }', encoding='utf-8')
+    body = ('<link rel="stylesheet" href="../.assets/layout.css">'
+            '<a href="https://example.invalid/citation">Reference</a>' + WIDE_MATH)
+
+    code, report = _probe(pack, body, '--widths', '1280', '--themes', 'light')
+
+    assert code == 1
+    assert report['checks'][0]['overflow'][0]['excess_px'] == 600
+
+
+@pytest.mark.parametrize('stylesheet', ['missing.css', 'https://example.invalid/layout.css'])
+def test_probe_rejects_failed_resource_loads(tmp_path, stylesheet):
+    code, out = _run(tmp_path, f'<link rel="stylesheet" href="{stylesheet}">{WIDE_MATH}')
+
+    assert code == 2, out
+    report = json.loads(out)
+    assert report['status'] == 'error'
+    assert stylesheet in report['reason']
+    assert not (tmp_path / 'probe.json').exists()
+
+
+def test_candidate_probe_reads_shared_course_css_and_ignores_stale_pack_css(tmp_path):
+    repo = tmp_path/'repo'
+    public = repo/'복습노트/1118'
+    public.mkdir(parents=True)
+    shared = public.parent/'.assets'
+    shared.mkdir()
+    (shared/'layout.css').write_text('.katex-display { width: 300px; }')
+    (public/'stale.css').touch()
+    candidate = tmp_path/'outside'
+    candidate.mkdir()
+    options = ('--repo', str(repo), '--public-pack', str(public), '--candidate-pack', str(candidate),
+               '--widths', '1280', '--themes', 'light')
+    code, report = _probe(candidate, '<link rel="stylesheet" href="../.assets/layout.css">'+WIDE_MATH, *options)
+    assert code == 1 and report['checks'][0]['overflow'][0]['excess_px'] == 600
+    note = candidate/'note.html'
+    note.write_text('<link rel="stylesheet" href="stale.css">'+WIDE_MATH)
+    proc = subprocess.run([sys.executable, str(PROBE), str(note), '--out', str(tmp_path/'bad.json'), *options],
+                          capture_output=True, text=True)
+    assert proc.returncode == 2 and 'stale.css' in proc.stdout

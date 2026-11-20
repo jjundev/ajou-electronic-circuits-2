@@ -7,7 +7,7 @@ from datetime import datetime
 from pathlib import Path
 from urllib.parse import quote
 
-from epe_types import BUNDLE, ExplainError, Problem, SourcePack
+from epe_types import PackPaths, BUNDLE, ExplainError, Problem, SourcePack
 from epe_shared import (load_problem, html_fields, problem_figures, solution, ProblemError,
                         TEXTBOOK_ID_RE, EXAM_ID_RE, KIND_DIR, textbook_figure_filename,
                         exam_figure_filename, parse, read_style, LearningStyleError)
@@ -197,9 +197,18 @@ def _slug(folder: Path, range_: str) -> str:
     return slugs[0]
 
 
-def load_source(path: Path, repo: Path) -> SourcePack:
+def load_source(path: Path, repo: Path, *, pack_paths: PackPaths | None = None, slug: str | None = None) -> SourcePack:
     repo = Path(repo).absolute()
-    path = inside(Path(path), repo)
+    if pack_paths is not None:
+        if pack_paths.repo.resolve() != repo.resolve():
+            raise ExplainError('후보 팩 저장소 경로 불일치')
+        logical = pack_paths.logical(path)
+        if logical != pack_paths.public_pack / BUNDLE / 'problems.txt':
+            raise ExplainError('후보 문제 목록 경로 불일치')
+        path = pack_paths.source_file(str(logical))
+    else:
+        path = inside(Path(path), repo)
+        logical = path
     try:
         text = path.read_text(encoding='utf-8')
     except OSError as exc:
@@ -214,17 +223,24 @@ def load_source(path: Path, repo: Path) -> SourcePack:
         raise ExplainError('problems.txt에 문항이 없습니다')
     if nfc(path.parent.name) != BUNDLE:
         raise ExplainError(f'problems.txt는 팩 폴더의 {BUNDLE}/ 안에 있어야 합니다: {path}')
-    folder = path.parent.parent
+    folder = logical.parent.parent
     range_ = nfc(folder.name)
-    slug = _slug(folder, range_)
+    slug = _slug(path.parent.parent, range_) if slug is None else slug
+    if not slug or slug in ('.', '..') or Path(slug).name != slug:
+        raise ExplainError('팩 slug 형식 오류')
+    require_index = pack_paths is not None and pack_paths.candidate_pack is not None
     titles_path = path.with_name('display-titles.json')
+    if pack_paths:
+        titles_path = pack_paths.work_file(f'{BUNDLE}/display-titles.json')
     try:
-        titles = load_display_titles(titles_path, ids) if titles_path.exists() else None
+        titles = load_display_titles(titles_path, ids) if require_index or titles_path.exists() else None
     except DisplayTitlesError as exc:
         raise ExplainError(str(exc)) from exc
     selection_path = path.with_name('selection.json')
+    if pack_paths:
+        selection_path = pack_paths.work_file(f'{BUNDLE}/selection.json')
     try:
-        selection = load_selection(selection_path, ids) if selection_path.exists() else None
+        selection = load_selection(selection_path, ids) if require_index or selection_path.exists() else None
     except (ValueError, OSError, KeyError, TypeError) as exc:
         raise ExplainError(f'선발 기록 오류: {exc}') from exc
     problems, mds, figs = [], [], []
@@ -260,8 +276,12 @@ def load_source(path: Path, repo: Path) -> SourcePack:
         figs += [f for f in paths if f not in figs]
     inputs = [path, *([titles_path] if titles is not None else []),
               *([selection_path] if selection else []), *mds, *figs, style_path]
+    if pack_paths:
+        inputs = [pack_paths.source_file(str(pack_paths.logical(item))) for item in inputs]
     digest = hashlib.sha256()
     for item in inputs:
         digest.update(sha256(item).encode())
-    return SourcePack('review', range_, slug, path, digest.hexdigest(), tuple(problems),
-                      tuple(str(item) for item in inputs), learning_style)
+    if pack_paths:
+        inputs = [pack_paths.logical(item) for item in inputs]
+    return SourcePack('review', range_, slug, logical, digest.hexdigest(), tuple(problems),
+                      tuple(str(item) for item in inputs), learning_style, pack_paths)

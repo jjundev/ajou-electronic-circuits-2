@@ -19,7 +19,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 import re
 import sys
-from urllib.parse import unquote
+from urllib.parse import unquote, urlsplit
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import manifest as manifest_mod  # noqa: E402
@@ -52,6 +52,20 @@ def is_remote(url: str) -> bool:
     return url.strip().lower().startswith(REMOTE_PREFIXES)
 
 
+def srcset_urls(value: str):
+    """Collect candidate URLs. Commas within a URL (including data URIs) are literal."""
+    remaining = value
+    while remaining := remaining.lstrip(' ,\t\n\r\f'):
+        match = re.match(r'[^\t\n\r\f ]+', remaining)
+        url = match[0]
+        yield url.rstrip(',')
+        remaining = remaining[match.end():]
+        if not url.endswith(','):
+            # Descriptor separators are commas outside parentheses.
+            descriptors = re.match(r'(?:[^,(]|\([^)]*(?:\)|$))*(?:,|$)', remaining)
+            remaining = remaining[descriptors.end():]
+
+
 @dataclass
 class Container:
     id: str
@@ -70,6 +84,7 @@ class Doc:
     duplicate_ids: set[str] = field(default_factory=set)
     id_section: dict[str, str | None] = field(default_factory=dict)
     hrefs: list[str] = field(default_factory=list)
+    local_resources: list[str] = field(default_factory=list)
     external_resources: list[str] = field(default_factory=list)
     section_text: dict[str, str] = field(default_factory=lambda: defaultdict(str))
     containers: dict[str, Container] = field(default_factory=dict)
@@ -122,11 +137,17 @@ class _Parser(HTMLParser):
             self.doc.hrefs.append(a["href"])
             if con is not None:
                 self.doc.containers[con].hrefs.append(a["href"])
-        # 원격 리소스: 모든 태그의 src, 모든 <link>의 href (<a href>는 broken_links 담당)
-        if is_remote(a.get("src", "")):
-            self.doc.external_resources.append(a["src"])
-        if tag == "link" and is_remote(a.get("href", "")):
-            self.doc.external_resources.append(a["href"])
+        resources = [a.get("src", "")]
+        if tag in ("link", "image", "use", "feimage"):
+            resources.append(a.get("href", a.get("xlink:href", "")))
+        if tag in ("img", "source"):
+            resources.extend(srcset_urls(a.get("srcset", "")))
+        for resource in filter(None, resources):
+            url = urlsplit(resource)
+            if is_remote(resource):
+                self.doc.external_resources.append(resource)
+            elif url.path and not (url.scheme or url.netloc):
+                self.doc.local_resources.append(resource)
         if tag in ("script", "style"):
             self.raw_tag = tag
             self.script_id = el_id if tag == "script" else None
@@ -199,7 +220,7 @@ def math_delimiter_errors(text: str) -> list[str]:
     return errors
 
 
-def broken_links(doc: Doc, base_dir: Path) -> list[str]:
+def broken_links(doc: Doc, base_dir: Path, *, pack_paths=None) -> list[str]:
     broken: list[str] = []
     cache: dict[Path, Doc] = {}
     for href in doc.hrefs:
@@ -210,7 +231,8 @@ def broken_links(doc: Doc, base_dir: Path) -> list[str]:
             if frag not in doc.ids:
                 broken.append(href)
             continue
-        target = (Path(base_dir) / unquote(path_part)).resolve()
+        target = (pack_paths.link(base_dir, unquote(path_part)) if pack_paths else
+                  (Path(base_dir) / unquote(path_part)).resolve())
         if not target.exists():
             broken.append(href)
             continue
@@ -232,7 +254,7 @@ class Problem:
         return f"[{self.code}] {self.where}: {self.detail}"
 
 
-def check_common(doc: Doc, source: str, path: Path) -> list[Problem]:
+def check_common(doc: Doc, source: str, path: Path, *, pack_paths=None) -> list[Problem]:
     name = Path(path).name
     out: list[Problem] = []
     if doc.lang != "ko":
@@ -240,7 +262,12 @@ def check_common(doc: Doc, source: str, path: Path) -> list[Problem]:
     out += [Problem("duplicate-id", name, i) for i in sorted(doc.duplicate_ids)]
     out += [Problem("external", name, u) for u in doc.external_resources if not u.startswith(ALLOWED_EXTERNAL_PREFIXES)]
     out += [Problem("math", name, e) for e in math_delimiter_errors(doc.body_text)]
-    out += [Problem("broken-link", name, h) for h in broken_links(doc, Path(path).parent)]
+    out += [Problem("broken-link", name, h) for h in broken_links(doc, Path(path).parent, pack_paths=pack_paths)]
+    if pack_paths:
+        for resource in doc.local_resources:
+            target = pack_paths.link(Path(path).parent, unquote(urlsplit(resource).path))
+            if not target.is_file():
+                out.append(Problem("missing-resource", name, resource))
     out += [Problem("leftover-slot", name, s) for s in sorted(set(SLOT_RE.findall(source)))]
     out += [Problem("markdown-link", name, s) for s in MD_LINK_RE.findall(doc.body_text)]
     out += [Problem(code, name, detail) for code, detail in readability_errors(source)]
@@ -344,7 +371,7 @@ def check_file(path: Path | str) -> list[Problem]:
 
 
 def check_pack(m: dict, note_path: Path | str, *, repo: Path, style_audit: dict,
-               defer_answer_pdf: bool = False) -> list[Problem]:
+               defer_answer_pdf: bool = False, pack_paths=None) -> list[Problem]:
     note_path = Path(note_path)
     validation = manifest_mod.validate(m, repo=repo)
     out = [Problem("learning-style" if "learning_style" in e else "manifest", note_path.name, e)
@@ -355,7 +382,7 @@ def check_pack(m: dict, note_path: Path | str, *, repo: Path, style_audit: dict,
                 for e in validate_style_audit(style_audit, m["learning_style"], topics)]
     source = note_path.read_text(encoding="utf-8")
     doc = parse_html(source)
-    common = check_common(doc, source, note_path)
+    common = check_common(doc, source, note_path, pack_paths=pack_paths)
     # Only the literal expected answer path's missing-file error is deferred.
     # An anchor, different directory/name, or any other check still fails.
     expected = manifest_mod.answer_pdf_name(m)

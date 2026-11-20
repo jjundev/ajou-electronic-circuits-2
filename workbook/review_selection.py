@@ -116,7 +116,7 @@ def apply_selection(data, selection):
     return data
 
 
-def reviewed_selection_path(overlay, repo, explicit=None):
+def reviewed_selection_path(overlay, repo, explicit=None, *, pack_paths=None):
     bound = [(name, digest) for name, digest in overlay['source_inputs'].items()
              if Path(name).name == 'selection.json' and Path(name).parent.name == '.assets']
     if not bound:
@@ -126,7 +126,7 @@ def reviewed_selection_path(overlay, repo, explicit=None):
     if len(bound) != 1:
         raise ValueError('승인된 선발 기록은 정확히 하나여야 합니다')
     name, digest = bound[0]
-    path = Path(repo) / name
+    path = pack_paths.source_file(name) if pack_paths else Path(repo) / name
     if hashlib.sha256(path.read_bytes()).hexdigest() != digest:
         raise ValueError('승인된 선발 기록이 변경되었습니다')
     if explicit is not None and hashlib.sha256(Path(explicit).read_bytes()).hexdigest() != digest:

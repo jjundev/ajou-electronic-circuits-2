@@ -64,7 +64,7 @@ def _review(review_path, pdf_path, overlay_path, overlay):
     return review
 
 
-def publish_answer(repo: Path, overlay_path: Path, pdf_path: Path, review_path: Path,
+def _install_answer(repo: Path, overlay_path: Path, pdf_path: Path, review_path: Path,
                    destination: Path, backup_dir: Path) -> Path:
     """Return verified old-PDF backup, or receipt.json when first installing.
 
@@ -131,7 +131,36 @@ def publish_answer(repo: Path, overlay_path: Path, pdf_path: Path, review_path: 
     return result
 
 
+def publish_answer(repo: Path, overlay_path: Path, pdf_path: Path, review_path: Path,
+                   destination: Path, backup_dir: Path) -> Path:
+    from pack_publication import publication_lock
+    with publication_lock(Path(destination).absolute().parent):
+        return _install_answer(repo, overlay_path, pdf_path, review_path, destination, backup_dir)
+
+
+def _verify_main(argv):
+    from pack_paths import PackPaths
+    import pymupdf
+    parser = argparse.ArgumentParser(description='Check current answer review and both pack PDFs')
+    for option in ('repo', 'public-pack', 'overlay', 'pdf', 'problem-pdf', 'review'):
+        parser.add_argument('--' + option, required=True, type=Path)
+    parser.add_argument('--candidate-pack', type=Path)
+    parser.add_argument('--private-root', type=Path, action='append', default=[])
+    parser.add_argument('--ids', required=True)
+    args = parser.parse_args(argv)
+    view = PackPaths(args.repo, args.public_pack, args.candidate_pack).excluding(*args.private_root)
+    overlay = load_answer_overlay(args.overlay, args.repo, args.ids.split(','), pack_paths=view)
+    _review(args.review, args.pdf, args.overlay, overlay)
+    for pdf in (args.pdf, args.problem_pdf):
+        with pymupdf.open(pdf) as document:
+            _require(document.is_pdf and document.page_count > 0, f'Missing PDF pages: {pdf}')
+    return 0
+
+
 def main(argv=None):
+    argv = sys.argv[1:] if argv is None else argv
+    if argv[:1] == ['verify']:
+        return _verify_main(argv[1:])
     parser = argparse.ArgumentParser(description=__doc__)
     for option in ('repo', 'overlay', 'pdf', 'review', 'destination', 'backup-dir'):
         parser.add_argument('--' + option, required=True, type=Path)

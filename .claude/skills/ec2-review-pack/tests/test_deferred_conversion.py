@@ -123,3 +123,116 @@ def test_provisional_checker_still_rejects_missing_image(tmp_path,monkeypatch):
     with p['md'].open('a',encoding='utf-8') as stream: stream.write('\n![missing](missing.svg)\n')
     errors=check_md(p['note'],p['md'],deferred_answer=p['answer'].name)
     assert any('그림 없음' in error for error in errors)
+
+
+def test_attempt_view_copies_only_adopted_files_and_checks_hashes(tmp_path):
+    from hashlib import sha256
+    repo = tmp_path/'repo'
+    public = repo/'복습노트/0909'
+    producer = tmp_path/'producer'
+    producer.mkdir()
+    note = producer/'note.html'
+    note.write_bytes(b'adopted')
+    (producer/'other').touch()
+    record = {'root': producer, 'files': {'note.html': sha256(b'adopted').hexdigest()}}
+    view = a.compose_candidate_view(repo, public, tmp_path/'consumer', {'assemble-note': record})
+    assert view.work_file('note.html').read_bytes() == b'adopted'
+    assert not view.work_file('other').exists()
+    assert not public.exists()
+    with pytest.raises(ValueError, match='producer|중복'):
+        a.compose_candidate_view(repo, public, tmp_path/'duplicate', {'one': record, 'two': record})
+    note.write_bytes(b'changed')
+    assert view.work_file('note.html').read_bytes() == b'adopted'
+    with pytest.raises(ValueError, match='hash'):
+        a.compose_candidate_view(repo, public, tmp_path/'new', {'assemble-note': record})
+
+
+def test_candidate_link_checks_use_course_sources_and_no_public_fallback(tmp_path):
+    from check_html import broken_links, parse_html
+    from pack_paths import PackPaths
+    repo = tmp_path/'repo'
+    public = repo/'복습노트/0909'
+    public.mkdir(parents=True)
+    (public/'missing.pdf').touch()
+    (repo/'guide.html').write_text('<p id="go">Guide</p>')
+    paths = PackPaths(repo, public, tmp_path/'candidate')
+    paths.work_pack.mkdir()
+    doc = parse_html('<a href="../../guide.html#go">Guide</a><a href="missing.pdf">old</a>')
+    assert broken_links(doc, paths.work_pack, pack_paths=paths) == ['missing.pdf']
+
+
+def test_candidate_converter_checks_repository_links_and_final_answer(tmp_path, monkeypatch):
+    from hashlib import sha256
+    repo, run = pending(tmp_path, monkeypatch)
+    state = f.load_state(run)
+    p = a._paths(state)
+    p['note'].write_text(p['note'].read_text().replace('</article>', '<a href="../../guide.pdf">Guide</a></article>'))
+    (repo/'guide.pdf').touch()
+    public = p['pack']
+    record = {'root': public, 'files': {p['note'].name: sha256(p['note'].read_bytes()).hexdigest()}}
+    attempt = tmp_path/'attempt'
+    view = a.compose_candidate_view(repo, public, attempt, {'assemble-note': record})
+    outputs = a.candidate_action(state, 'convert-md', view, attempt)
+    assert all(path.is_relative_to(view.work_pack) for path in outputs)
+    assert p['md'].name in {path.name for path in outputs}
+    from html2md import check_md
+    md = view.work_file('.assets/'+p['md'].name)
+    assert any(p['answer'].name in item for item in check_md(view.work_file(p['note'].name), md, pack_paths=view))
+    view.work_file(p['answer'].name).touch()
+    assert not check_md(view.work_file(p['note'].name), md, pack_paths=view)
+    assert not p['md'].exists()
+
+
+def test_candidate_note_verifies_assembled_image_and_stylesheet(tmp_path):
+    from check_html import check_common, parse_html
+    from pack_paths import PackPaths
+    repo = tmp_path/'repo'
+    public = repo/'복습노트/0909'
+    public.mkdir(parents=True)
+    (public/'plot.svg').touch()
+    view = PackPaths(repo, public, tmp_path/'attempt')
+    markup = '<html lang="ko"><link rel="stylesheet" href="missing.css"><img src="plot.svg"></html>'
+    errors = check_common(parse_html(markup), markup, view.work_file('note.html'), pack_paths=view)
+    assert {'missing.css', 'plot.svg'} == {p.detail for p in errors if p.code == 'missing-resource'}
+
+
+def test_candidate_svg_and_srcset_resources_use_view(tmp_path):
+    from check_html import check_common, parse_html
+    from pack_paths import PackPaths
+    repo = tmp_path/'repo'
+    public = repo/'복습노트/0909'
+    public.mkdir(parents=True)
+    paths = PackPaths(repo, public, tmp_path/'candidate')
+    paths.work_pack.mkdir()
+    missing = {'external.svg#plot', 'old.svg', 'large.png', 'fallback.png'}
+    for name in missing:
+        (public/name.split('#')[0]).touch()
+    paths.work_file('small.png').touch()
+    markup = """<html lang="ko"><svg><image href="external.svg#plot"/><image xlink:href="old.svg"/>
+        <use href="#plot"/><image href="data:image/png;base64,AAAA"/></svg>
+        <picture><source srcset="small.png 300w, large.png 900w">
+        <img srcset="data:image/png;base64,AAAA 1x, fallback.png 2x"></picture></html>"""
+    errors = check_common(parse_html(markup), markup, paths.work_file('note.html'), pack_paths=paths)
+    assert {p.detail for p in errors if p.code == 'missing-resource'} == missing
+    for name in missing:
+        paths.work_file(name.split('#')[0]).touch()
+    assert not check_common(parse_html(markup), markup, paths.work_file('note.html'), pack_paths=paths)
+
+
+def test_unrelated_machine_attempt_is_not_a_permanent_course_reference(tmp_path):
+    repo = tmp_path/'repo'
+    public = repo/'복습노트/0909'
+    other_attempt = repo/'arbitrary-scratch'
+    other_view = a.compose_candidate_view(repo, public, other_attempt, {})
+    producer_file = other_view.work_file('plot.svg')
+    producer_file.write_text('<svg/>')
+    evidence = other_attempt/'evidence.txt'
+    evidence.write_text('temporary proof')
+    stable = repo/'ordinary-source/evidence.txt'
+    stable.parent.mkdir()
+    stable.write_text('course reference')
+    consumer = a.compose_candidate_view(repo, public, repo/'elsewhere', {})
+    assert consumer.source_file(str(stable)) == stable
+    for private in (producer_file, evidence):
+        with pytest.raises(ValueError, match='공개 경로'):
+            consumer.source_file(str(private))

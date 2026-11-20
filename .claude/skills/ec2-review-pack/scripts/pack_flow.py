@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from contextlib import contextmanager
+from datetime import datetime, timezone
 import copy
 import hashlib
 import json
@@ -20,6 +21,11 @@ class FlowError(ValueError):
     """A state or filesystem precondition failed."""
 
 
+class StaleInputsError(FlowError):
+    """Previously adopted input evidence no longer matches the current attempt."""
+    error_code = 'stale_inputs'
+
+
 def nfc_path(p: str | Path) -> Path:
     """The path spelled in Unicode NFC (no resolve).
 
@@ -31,6 +37,7 @@ def nfc_path(p: str | Path) -> Path:
 
 # RUN holds state, receipts and backups; the OS clears these on reboot.
 TEMP_ROOTS = ('/tmp', '/private/tmp', '/var/folders', '/private/var/folders')
+BLIND_HISTORY_VERSION = 2  # Includes packet files from every uncertified round.
 
 
 def default_run_dir(range_: str, now) -> Path:
@@ -188,6 +195,88 @@ def load_state(run: Path) -> dict:
     return state
 
 
+def utc_now():
+    return datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z')
+
+
+def utc_time(value):
+    if not isinstance(value, str):
+        raise FlowError('UTC event timestamp required')
+    dt = datetime.fromisoformat(value)
+    if dt.utcoffset() != timezone.utc.utcoffset(dt):
+        raise FlowError('UTC event timestamp required')
+    return dt
+
+
+def parallel_state(run):
+    state = load_state(run)
+    if state.get('workflow') != 'parallel':
+        raise FlowError('parallel RUN required; use next for the existing legacy contract')
+    return state
+
+
+def event(state, name, tid, attempt=None, *, at=None, **fields):
+    state.setdefault('events', []).append(dict(event=name, task_id=tid, attempt=attempt,
+                                               at=at or utc_now(), **fields))
+
+
+def record_completed_receipt(run, tid, attempt, path, produced):
+    from pack_parallel import transact
+    payload = path.read_bytes()
+    if json.loads(payload) != produced:
+        raise FlowError('receipt changed after validation')
+    digest = hashlib.sha256(payload).hexdigest()
+    def apply(state):
+        _attempt(state['tasks'][tid], attempt)
+        if _sha(path) != digest:
+            raise FlowError('receipt changed after validation')
+        already = any(e.get('receipt_sha256') == digest and e['event']=='completed'
+                      for e in state.get('events', []))
+        if not already:
+            event(state,'completed',tid,attempt,receipt_sha256=digest)
+        return state
+    transact(run, apply)
+
+
+def record_transitions(previous, state):
+    from pack_findings import blocked_reason
+    rows = {**state['tasks'], **state['actions']}
+    now = utc_now()
+    for tid, row in rows.items():
+        old = _record(previous, tid) if previous else {}
+        status, attempt = row['status'], row.get('attempt')
+        superseded = old.get('status') == 'done' and (
+            status != 'done' or old.get('attempt') != attempt)
+        if superseded or (status == 'stale' and old.get('status') != 'stale'):
+            event(state, 'invalidated', tid, old.get('attempt'), at=now)
+        if status in ('pending','stale') and not row.get('invalidated_active'):
+            eligible = (not state.get('stale_inputs') and state['status'] not in ('blocked','withheld','recovery_required')
+                        and all(_done(state, dep) for dep in row.get('dependencies', []))
+                        and not blocked_reason(state, tid))
+            if eligible and not old.get('ready_at'):
+                row['ready_at'] = now
+                event(state, 'ready', tid, at=now)
+            elif not eligible:
+                row.pop('ready_at', None)
+        if status in ('claimed','running') and attempt != old.get('attempt'):
+            ready = old.get('ready_at')
+            fields = {'brief_bytes':Path(row['brief']).stat().st_size} if row.get('brief') else {}
+            event(state, 'claimed', tid, attempt, at=now, ready_at=ready, **fields)
+            row.pop('ready_at', None)
+        if (attempt and status in ('done','needs_fix','blocked','failed')
+                and (status,attempt) != (old.get('status'),old.get('attempt'))):
+            if old.get('attempt') == attempt and old.get('status') in ('claimed','running','recovery_required'):
+                digest = None
+                receipt = row.get('receipt')
+                if receipt and row.get('brief'):
+                    path = _read(row['brief'])['receipt']
+                    digest = next((r['sha256'] for r in receipt['verified_files'] if r['path']==path),None)
+                if not digest or not any(e.get('receipt_sha256')==digest and e['event']=='completed'
+                                         for e in state.get('events', [])):
+                    event(state, 'completed', tid, attempt, at=row.get('completed_at') or now, receipt_sha256=digest)
+                event(state, 'accepted', tid, attempt, at=now, receipt_sha256=digest)
+
+
 def update_state(run: Path, expected_revision: int, change: Callable[[dict], dict]) -> dict:
     run = Path(run).resolve()
     with _locked(run):
@@ -195,6 +284,10 @@ def update_state(run: Path, expected_revision: int, change: Callable[[dict], dic
         if type(expected_revision) is not int or state["revision"] != expected_revision:
             raise FlowError(f"{run}: revision conflict (expected {expected_revision}, current {state['revision']})")
         changed = change(copy.deepcopy(state))
+        if state.get('workflow') == 'parallel' and changed.get('public_baseline') != state['public_baseline']:
+            raise FlowError('initial public baseline cannot change')
+        if changed.get('workflow', 'legacy') != state.get('workflow', 'legacy'):
+            raise FlowError('workflow cannot change during a RUN')
         if ('extra_fix_authorization' in state
             and changed.get('extra_fix_authorization') != state['extra_fix_authorization']):
             raise FlowError('extra fix authorization is immutable')
@@ -202,6 +295,8 @@ def update_state(run: Path, expected_revision: int, change: Callable[[dict], dic
         for field in ("run_id", "repo", "run", "range", "schema_version", "revision"):
             if changed[field] != state[field]:
                 raise FlowError(f"{run}: immutable field changed: {field}")
+        if state.get("workflow") == "parallel":
+            record_transitions(state, changed)
         changed["revision"] = expected_revision + 1
         _atomic_json(run / "run-status.json", changed)
         return changed
@@ -210,7 +305,7 @@ def update_state(run: Path, expected_revision: int, change: Callable[[dict], dic
 def init_run(repo: Path, run: Path, range_: str, *,
              browser_owner: str = "main", pdf_owner: str = "main",
              seed_from: Path | None = None, redo: list[str] | None = None,
-             redo_note: Path | None = None, allow_tmp: bool = False) -> dict:
+             redo_note: Path | None = None, allow_tmp: bool = False, workflow: str | None = None) -> dict:
     repo, run = nfc_path(Path(repo).resolve()), nfc_path(Path(run).resolve())
     if not allow_tmp and is_temp_path(run):
         raise FlowError(f"{run}: RUN is under a temporary folder that a reboot clears; "
@@ -243,7 +338,13 @@ def init_run(repo: Path, run: Path, range_: str, *,
             sources.append(path)
     if not sources:
         raise FlowError(f"{repo / 'STT'}: no STT sessions for {range_}")
+    if workflow is None:
+        workflow = 'legacy' if seed_from is not None else 'parallel'
+    if workflow not in ('legacy', 'parallel'):
+        raise FlowError('unknown workflow')
     seed = load_state(seed_from) if seed_from is not None else None
+    if seed and (workflow != 'legacy' or seed.get('workflow', 'legacy') != 'legacy'):
+        raise FlowError('seed requires a legacy source and destination RUN')
     run.mkdir(parents=True, exist_ok=True)
     with _locked(run):
         if any(p.name != ".pack-flow.lock" for p in run.iterdir()):
@@ -268,12 +369,21 @@ def init_run(repo: Path, run: Path, range_: str, *,
                      hashes={str(nfc_path(p)): _sha(p) for p in [*sources, profile, snapshot_path]}, backups={},
                      fix_rounds=dict(content=0, machine_browser=0), explain_run=None,
                      publication={}, recovery={}, sessions=[p.name[:4] for p in sources])
+        state['workflow'] = workflow
+        if workflow == 'parallel':
+            state['approval_contract'] = 1
+            state['concept_contract'] = 1
+            from pack_publication import publication_inventory, publication_lock
+            with publication_lock(repo / '복습노트' / range_):
+                state['public_baseline'] = publication_inventory(repo / '복습노트' / range_, range_)
         if seed is not None:
             from pack_seed import seed_state
             seed_state(state, seed, list(redo or []), redo_note)
         else:
             refresh_tasks(state)
         write_briefs(state)
+        if workflow == "parallel":
+            record_transitions(None, state)
         _validate(state, run)
         _atomic_json(run / "run-status.json", state)
         return state
@@ -292,6 +402,9 @@ def _task_change(run, task_id, change):
             raise FlowError('unknown task: ' + task_id)
         change(current, current['tasks'][task_id])
         return current
+    if state.get('workflow') == 'parallel':
+        from pack_parallel import transact
+        return transact(run, apply)
     return update_state(run, state['revision'], apply)
 
 
@@ -304,6 +417,10 @@ def claim_task(run: Path, task_id: str) -> dict:
             raise FlowError('task is already claimed or unavailable')
         if any(not _done(state, dep) for dep in task['dependencies']):
             raise FlowError('task dependencies are not done')
+        if state.get('workflow') == 'parallel':
+            from pack_parallel import claim_worker
+            claim_worker(state, task)
+            return
         brief = Path(task['brief']).resolve()
         if not brief.is_relative_to(Path(state['run'])) or not brief.is_file():
             raise FlowError('brief must be a RUN file')
@@ -338,6 +455,9 @@ def bind_task(run: Path, task_id: str, attempt: str, agent_id: str) -> dict:
 
 def accept_task(run: Path, task_id: str, attempt: str, receipt_path: Path) -> dict:
     from pack_receipts import validate_receipt
+    if load_state(run).get('workflow') == 'parallel':
+        from pack_parallel import accept_worker
+        return accept_worker(run, task_id, attempt, receipt_path)
     def change(state, task):
         _current(state)
         _attempt(task, attempt)
@@ -373,6 +493,8 @@ def check_task(run: Path, task_id: str, attempt: str, receipt_path: Path) -> dic
         _attempt(task, attempt)
         if any(not _done(state, dep) for dep in task['dependencies']):
             raise FlowError('task dependencies are not current')
+        if state.get('workflow') == 'parallel':
+            from pack_parallel import validate_worker as validate_receipt
         receipt = validate_receipt(state, task, receipt_path)
     except FlowError as exc:
         return dict(status='failed', error_code='validation_failed', reason=str(exc))
@@ -410,21 +532,61 @@ def _read(path):
         raise FlowError(f'{path}: {exc}') from exc
 
 
+def quiz_render_resources():
+    assets = Path(__file__).resolve().parents[2]/'ec2-concept-check/assets'
+    return {(assets/name).resolve() for name in ('review-interaction.css','review-prompt.js','review-interaction.js')}
+
+
 def _current(state):
-    from pack_receipts import verify_receipt_files
+    from pack_receipts import cached_sha, verify_receipt_files
+    hashes = {}
     stale = []
     for path, digest in state['hashes'].items():
         try:
-            if _sha(Path(path)) == digest: continue
+            if cached_sha(path, hashes) == digest: continue
         except OSError: pass
         stale.append(path)
     state['stale_inputs'] = stale
     records = {**state['tasks'], **state['actions']}
     for name, record in records.items():
-        if record.get('status') != 'done': continue
-        evidence = record.get('receipt') if name in state['tasks'] else record
-        if not evidence or not evidence.get('verified_files') or verify_receipt_files(evidence):
+        withheld_review = (name == 'concept-review' and record.get('status') == 'blocked'
+                           and (record.get('receipt') or {}).get('status') == 'withheld')
+        negative_review = withheld_review or (state.get('workflow') == 'parallel' and record.get('status') == 'needs_fix'
+                                              and record.get('candidate_digest'))
+        if record.get('status') != 'done' and not negative_review: continue
+        if state.get('workflow') == 'parallel' and any(
+                _record(state, tid).get('attempt') != version
+                for tid, version in record.get('input_version', {}).items()):
             record['status'] = 'stale'
+            continue
+        evidence = record.get('receipt') if name in state['tasks'] else record
+        if state.get('concept_contract') and record['status'] == 'done':
+            if name == 'concept-review':
+                approval = evidence or {}
+                certificate = approval.get('blind_certificate') or {}
+                if (not approval.get('quiz_files') or certificate.get('solver_history_version') != BLIND_HISTORY_VERSION
+                        or certificate not in approval.get('verified_files', [])):
+                    record['status'] = 'stale'
+            if name == 'concept-draft':
+                frozen = {Path(r['path']).resolve() for r in record.get('source_inputs', [])}
+                if not quiz_render_resources() <= frozen:
+                    record['status'] = 'stale'
+        if not evidence or not evidence.get('verified_files') or verify_receipt_files(evidence, hashes):
+            record['status'] = 'stale'
+        if state.get('approval_contract') == 1 and name in state['tasks']:
+            from pack_approvals import ROLES, review_policy
+            role = record['role']
+            if role in ROLES:
+                proof = evidence or {}
+                positive = record['status'] == 'done'
+                if proof.get('approval_policy') != review_policy(role) or positive and (
+                        not proof.get('target_reviews') or not {'fresh_approvals','reused_approvals'} <= proof.keys()):
+                    record['status'] = 'stale'
+        if record['status'] != 'stale' and state.get('workflow') == 'parallel' and evidence.get('render_environment'):
+            from pack_approvals import environment_current
+            manifest = _read(evidence['render_environment']['path'])
+            if not environment_current(state, _read(record['brief']), manifest):
+                record['status'] = 'stale'
     if stale:
         for task in state['tasks'].values():
             if task.get('status') == 'done': task['status'] = 'stale'
@@ -432,14 +594,21 @@ def _current(state):
     while changed:
         changed = False
         for record in records.values():
-            if record.get('status') in ('done', 'pending', 'claimed', 'running') and any(
+            reviewing_old = (state.get('workflow') == 'parallel' and record.get('candidate_digest')
+                             and record['status'] == 'needs_fix')
+            if (reviewing_old or record.get('status') in ('done', 'pending', 'claimed', 'running')) and any(
                 _record(state, dep).get('status') in ('stale', 'needs_fix') for dep in record.get('dependencies', [])):
                 if record['status'] in ('claimed', 'running'):
                     record['invalidated_active'] = True
                 record['status'] = 'stale'; changed = True
-    if any(r.get('status') == 'stale' for r in records.values()) or stale:
+    if any(r.get('status') == 'stale' for name,r in records.items()
+           if not (state.get('concept_contract') and name.startswith('concept-'))) or stale:
         if state['status'] not in ('recovery_required', 'withheld', 'blocked'):
             state['status'] = 'needs_fix'
+    if state.get('workflow') == 'parallel' and state.get('active_audit'):
+        from pack_findings import current_audit
+        if not current_audit(state):
+            state.pop('active_audit', None)
     child = state['tasks'].get('child-coordinator')
     if state.get('explain_run') and child and child.get('status') == 'stale':
         state.setdefault('stale_explain_runs', []).append(state['explain_run'])
@@ -451,6 +620,8 @@ def _converted_assets(state):
     """Read only the successful converter's explicit, current output inventory."""
     from manifest import note_name
     from pack_receipts import records
+    if state.get('workflow') == 'parallel':
+        return state['converted_assets']
     action = state['actions'].get('convert-md', {})
     if action.get('status') != 'done': raise FlowError('current successful convert-md required')
     repo = Path(state['repo']).resolve()
@@ -519,6 +690,9 @@ def _stages(state):
 def refresh_tasks(state: dict) -> dict:
     """Reconcile current evidence and register only the next fixed stage, in memory."""
     _current(state)
+    if state.get('workflow') == 'parallel':
+        from pack_graph import refresh
+        return refresh(state)
     if _done(state, 'convert-md'):
         converted = _converted_assets(state)
         state['standalone_svg_qa'] = dict(status='required' if converted['svgs'] else 'not_required',
@@ -547,6 +721,7 @@ def refresh_tasks(state: dict) -> dict:
 
 
 _REFERENCES = {
+    'concept-review': [],
     'source-prep': [('execution-guide.md', '1. 범위 파악')],
     'stt': [('stt-summary-prompt.md', '전체')],
     'scope-draft': [('manifest-guide.md', '전체')],
@@ -592,6 +767,8 @@ def _inputs(state, task):
 
 def write_briefs(state: dict) -> None:
     """Called in init/accept/fix/action write transactions; never from next/status."""
+    if state.get('workflow') == 'parallel':
+        return  # Parallel briefs freeze the claimed attempt and its inputs together.
     from pack_receipts import ROLE_OUTPUTS, standalone_screenshots
     from pack_seed import attach_redo
     run, repo = Path(state['run']), Path(state['repo'])
@@ -670,19 +847,104 @@ def write_briefs(state: dict) -> None:
 
 
 def _owner(state, task):
-    if task['role'] in ('browser-qa', 'standalone-svg-qa'): return state['capabilities']['browser_owner']
+    if task['role'] in ('browser-qa', 'standalone-svg-qa', 'concept-review'): return state['capabilities']['browser_owner']
     if task['role'] == 'pdf-qa': return state['capabilities']['pdf_owner']
     return 'workers'
 
 
-def concept_check_result(state):
+def _current_quiz_files(result, state, public):
+    from pack_parallel import output
+    from pack_paths import checked_file
+    manifest = _read(output(state, 'scope-final', 'manifest.json'))
+    stem = f"확인문제_{state['range']}_{manifest['slug']}"
+    html = checked_file(public, stem + '.html')
+    bundle = checked_file(public, '.pack/자료_' + stem)
+    physical = {str(html), *(str(path) for path in bundle.rglob('*') if path.is_file())}
+    if set(result.get('files', {})) != physical:
+        return False
+    binding = _read(checked_file(bundle, 'binding.json'))
+    source = _read(checked_file(bundle, 'source.json'))
+    logical = binding.get('logical_inputs')
+    if not logical or binding != dict(parent_run=state['run'], parent_attempt=result['attempt'],
+                                       logical_inputs=source.get('logical_inputs')):
+        return False
+    from pack_publication import registered_quiz_inventory
+    if not registered_quiz_inventory(public, html, bundle, receipt=result):
+        return False
+    worker = _record(state, 'concept-review')
+    expected = {str(Path(worker['attempt_dir'])/'quiz'/name):value
+                for name,value in worker['receipt'].get('quiz_files', {}).items()}
+    if not expected or result.get('reviewed_files') != expected:
+        return False
+    original = result.get('reviewed_files', {})
+    if not original or any(_sha(Path(p)) != h for p,h in {**source['inputs'], **original}.items()):
+        return False
+    return all(_sha(checked_file(public, key[5:])) == value for key,value in logical.items() if key.startswith('pack/'))
+
+
+def concept_progress(state):
+    result = concept_check_result(state)
+    if result or not state.get('concept_check_enabled') or state['status'] != 'complete':
+        return result
+    if state.get('concept_contract'):
+        for name in ('concept-draft', 'concept-review', 'concept-publish'):
+            row = _record(state, name)
+            if row.get('status') != 'done':
+                detail = row.get('detail') or (row.get('receipt') or {}).get('unresolved')
+                return dict(status='pending', task=name, reason=detail or row.get('status', 'pending'))
+    return dict(status='pending')
+
+
+def current_concept_parent(state):
     if not state.get('concept_check_enabled') or state['status'] != 'complete' or not _done(state, 'final-check'):
+        return False
+    if not state.get('concept_contract'):
+        return True
+    from pack_findings import current_audit
+    from pack_publication import current_parent_publication
+    public = Path(state['repo'])/'복습노트'/state['range']
+    journal = state.get('publication', {}).get('journal')
+    return (journal and _done(state, 'publish-pack') and current_audit(state)
+            and _record(state, 'publish-pack')['attempt'] == _record(state, 'final-check')['attempt']
+            and current_parent_publication(public, journal))
+
+
+def withheld_quiz_review(state):
+    from pack_receipts import verify_receipt_files
+    review = _record(state, 'concept-review')
+    receipt = review.get('receipt') or {}
+    if (review.get('status') == 'blocked' and receipt.get('status') == 'withheld' and receipt.get('unresolved')
+            and receipt.get('verified_files') and not verify_receipt_files(receipt)
+            and all(_done(state, key) and _record(state, key)['attempt'] == attempt
+                    for key,attempt in review['input_version'].items())):
+        return dict(status='withheld', range=state['range'], attempt=_record(state, 'final-check')['attempt'],
+                    reason=', '.join(map(str, receipt['unresolved'])), review_attempt=review['attempt'])
+
+
+def concept_check_result(state):
+    if not current_concept_parent(state):
         return None
+    withheld = withheld_quiz_review(state) if state.get('concept_contract') else None
     receipt = Path(state['run']) / 'concept-check-result.json'
     try:
         result = _read(receipt)
         if (result.get('range'), result.get('attempt')) != (state['range'], state['actions']['final-check'].get('attempt')):
-            return None
+            return withheld
+        if state.get('concept_contract'):
+            public = Path(state['repo'])/'복습노트'/state['range']
+            if result.get('status') == 'published':
+                if not result.get('review_attempt') or not result.get('action_attempt'):
+                    return withheld
+                review = _record(state, 'concept-review')
+                if result.get('review_attempt') and (review.get('status') != 'done' or
+                        review.get('attempt') != result['review_attempt']):
+                    return withheld
+                action = _record(state, 'concept-publish')
+                if result.get('action_attempt') and (action.get('status') != 'done' or
+                        action.get('attempt') != result['action_attempt']):
+                    return withheld
+                if not _current_quiz_files(result, state, public):
+                    return withheld
         if result.get('status') == 'withheld' and result.get('reason'):
             return result
         files = result.get('files', {})
@@ -691,19 +953,23 @@ def concept_check_result(state):
             for path, digest in files.items()
         ):
             return result
-    except (OSError, ValueError):
+    except (OSError, ValueError, KeyError, TypeError):
         pass
-    return None
+    return withheld
 
 
 def next_work(run: Path, *, slots: int) -> dict:
     if type(slots) is not int or slots < 0: raise FlowError('slots must be a nonnegative integer')
     state = inspect_state(run)
+    if state.get('workflow') == 'parallel' and (not _done(state, 'final-check') or
+            (state.get('concept_contract') and concept_check_result(state) is None)):
+        from pack_graph import ready_work
+        return ready_work(state, slots=slots)
     def result(kind, tasks=None, action=None, reason=''):
         return dict(kind=kind, tasks=tasks or [], action=action, reason=reason)
     if state['status'] == 'recovery_required': return result('recover', reason='interrupted mutation requires recovery')
     if state['stale_inputs']: return result('blocked', reason='frozen source/profile changed; explicit correction required')
-    for _, kind, group in _stages(state):
+    for _, kind, group in (() if state.get('workflow') == 'parallel' else _stages(state)):
         unfinished = [_record(state, name) for name, _, _ in group if not _done(state, name)]
         if not unfinished: continue
         if not all(unfinished): return result('blocked', reason='stage not materialized; finish preceding write transaction')
@@ -732,6 +998,10 @@ def request_fixes(run: Path, request_path: Path) -> dict:
     if not request_path.is_relative_to(run): raise FlowError('fix request must be inside RUN')
     request = _read(request_path)
     state = load_state(run)
+    if state.get('workflow') == 'parallel':
+        from pack_parallel import transact
+        from pack_findings import apply_request
+        return transact(run, lambda s: apply_request(s, request))
     def change(s):
         category, rid, items = request.get('category'), request.get('id'), request.get('items')
         if category not in ('content', 'machine_browser') or not isinstance(rid, str) or not rid or not isinstance(items, list) or not items:
@@ -810,6 +1080,8 @@ def authorize_extra_fix(run: Path, authorization_path: Path) -> dict:
     except (OSError, ValueError) as exc:
         raise FlowError('authorization file missing/invalid: ' + str(exc)) from exc
     state = load_state(run)
+    if state.get('workflow') == 'parallel':
+        raise FlowError('extra-round authorization belongs to legacy RUNs')
     def change(s):
         _check_extra_authorization(authorization, s)
         if 'extra_fix_authorization' in s: raise FlowError('one extra round already authorized')

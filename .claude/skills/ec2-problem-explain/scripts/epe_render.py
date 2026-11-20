@@ -101,7 +101,8 @@ def resources(markup, problem, pack, repo, stage, fig_name, destination, scope="
             url = urlsplit(node.attrs.get('src', ''))
             if url.scheme or url.netloc or not url.path:
                 raise ExplainError(f'{problem.id}: 저장소 내부 그림만 허용')
-            source = inside(existing_path(pack.folder / unquote(url.path)), repo)
+            source = (pack.pack_paths.link(pack.folder, unquote(url.path)) if pack.pack_paths else
+                      inside(existing_path(pack.folder / unquote(url.path)), repo))
             if not source.is_file():
                 raise ExplainError(f'{problem.id}: 그림 없음: {source}')
             target = stage / fig_name / (sha256(source)[:16] + '-' + source.name)
@@ -116,7 +117,8 @@ def resources(markup, problem, pack, repo, stage, fig_name, destination, scope="
                 raise ExplainError(f'{problem.id}: 개념 링크는 실제 저장소 자료만 허용')
             if not url.path:
                 continue
-            target = inside(existing_path(pack.folder / unquote(url.path)), repo)
+            target = (pack.pack_paths.link(pack.folder, unquote(url.path)) if pack.pack_paths else
+                      inside(existing_path(pack.folder / unquote(url.path)), repo))
             if not target.is_file():
                 raise ExplainError(f'{problem.id}: 링크 파일 없음')
             if url.fragment:
@@ -124,7 +126,7 @@ def resources(markup, problem, pack, repo, stage, fig_name, destination, scope="
                 if unquote(url.fragment) not in anchors:
                     raise ExplainError(f'{problem.id}: 링크 앵커 없음: {href}')
             # These links must remain usable after publication; stage checks resolve against destination.
-            node.attrs['href'] = quote(Path(os.path.relpath(target, destination)).as_posix(), safe='/') + (f'#{url.fragment}' if url.fragment else '')
+            node.attrs['href'] = quote(Path(os.path.relpath(pack.pack_paths.logical(target) if pack.pack_paths else target, destination)).as_posix(), safe='/') + (f'#{url.fragment}' if url.fragment else '')
     return inner(root)
 
 def build_explanation(pack, fragments, stage: Path, repo: Path) -> Artifacts:
@@ -164,7 +166,7 @@ def build_explanation(pack, fragments, stage: Path, repo: Path) -> Artifacts:
         explanation = resources(normalized, p, pack, repo, stage, f'{BUNDLE}/{fig_name}', pack.folder)
         problem_pdf = f'복습문제_{pack.range}_{pack.slug}-문제.pdf'
         try:
-            has_pdf = existing_path(pack.folder / problem_pdf).is_file()
+            has_pdf = (pack.pack_paths.work_file(problem_pdf) if pack.pack_paths else existing_path(pack.folder / problem_pdf)).is_file()
         except ExplainError:
             has_pdf = False
         original_link = (f' · <a href="{quote(problem_pdf, safe="")}">원 문제 보기</a>' if has_pdf else '')
@@ -285,7 +287,8 @@ def check_artifacts(pack, artifacts):
                 continue
             path = root / unquote(url.path)
             if node.tag == 'a':
-                path = Path(manifest['destination']) / unquote(url.path)
+                path = (pack.pack_paths.link(pack.folder, unquote(url.path)) if pack.pack_paths else
+                        Path(manifest['destination']) / unquote(url.path))
             if not path.is_file():
                 errors.append('자원 없음: ' + href)
             elif node.tag == 'a' and url.fragment:

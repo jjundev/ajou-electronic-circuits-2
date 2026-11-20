@@ -16,7 +16,7 @@
 
 가용 모델의 등급과 기본 모델 적용은 [역할·파일 인계 계약](delegation.md#실행과-컨텍스트)의 모델 선택 규칙을 따른다.
 
-**진행 표시**: 단계마다 한 줄만 쓴다. 예: `3/10 작성 중: 섹션 5개 (병렬)`
+**진행 표시**는 작업 배정·인계·검토·차단·재개·발행 상태가 달라졌을 때 한 줄로 남긴다. 병렬 RUN의 가용 슬롯과 독립 풀이 시작 시점은 [병렬 실행 순서](runner-contract.md#병렬-실행-순서)를 따른다.
 
 **경로 약속**
 - `SKILL` = 이 파일이 있는 폴더(`.claude/skills/ec2-review-pack`)의 절대 경로
@@ -60,12 +60,8 @@
      그 뒤의 STT를 모두 쓴다. 팩이 하나도 없으면 사용 가능한 STT 날짜를 보여 주고 "기간을 인자로 넣어 주면 돼요(예: /ec2-review-pack 0923)"라고 알린 뒤 멈춘다.
    - 해당 STT가 하나도 없으면 사용 가능한 날짜를 보여 주고 멈춘다.
    - `range`는 첫 STT 날짜 하나이거나 `첫-끝` 형식이다.
-4. PDF 빌드 도구를 실제로 띄워 본다. workbook 렌더러는 Python playwright로 `channel="chrome"`을 연다.
-   ```bash
-   python3 -c "from playwright.sync_api import sync_playwright as s; p=s().start(); p.chromium.launch(channel='chrome').close(); p.stop(); print('pdf ok')"
-   ```
-   실패하면 init 전에 고친다. 모듈이 없으면 `pip install playwright`, Chrome이 없으면 Google Chrome을 설치하거나 이미 있는 Chromium을 `/opt/google/chrome/chrome`에 연결한다. 고칠 수 없으면 pdf owner를 unavailable로 넘긴다. 도구 없이 init하면 build-problems가 실패해 RUN이 보류된다.
-   KaTeX·Pretendard는 네트워크가 필요 없다. 렌더러와 `layout_probe.py`가 템플릿의 CDN 요청을 저장소 사본(`workbook/vendor_route.py`)으로 답한다. CDN 주소는 발행 HTML에만 남는다. 사본을 못 부르거나 TeX가 남으면 렌더가 사유와 함께 실패하니, 다른 팩의 vendor를 끌어다 우회하지 말고 그 사유를 고친다.
+4. PDF와 브라우저를 실제로 검토할 수 있는 작업 주체를 확인한다. 새 병렬 RUN의 `render-preflight`가 원문 준비와 별도로 Chromium 실행, 로컬 자원과 글꼴 로드, 한 쪽 PDF 쓰기를 검증한다. 레거시 RUN은 같은 `workbook.render.render_preflight`를 별도 확인용 폴더에서 실행한다. 도구를 사용할 수 없으면 해당 owner를 `unavailable`로 넘긴다.
+   KaTeX·Pretendard는 네트워크가 필요 없다. 렌더러와 `layout_probe.py`는 템플릿의 CDN 요청에 저장소 사본(`workbook/vendor_route.py`)으로 응답한다. 자원이나 수식 렌더링이 실패하면 사전 검사에 기록된 원인을 해결한다.
 5. 새 RUN과 실제 browser/pdf owner를 [runner 계약](runner-contract.md)의 init에 전달한다. RUN은 `--run`을 빼서 기본 위치 `~/.cache/ec2-review-pack/<range>-<YYYYmmdd-HHMMSS>`를 쓴다. `/tmp`·`/private/tmp`에 두면 재부팅 때 RUN 전체(상태·receipt·백업)가 사라진다. 실행기가 디렉터리와 `RUN/learning-style.json` snapshot을 만든다. 별도 snapshot 명령/수기 run-status를 실행하지 않는다. 원본은 읽기 전용이고 최상위 메인만 발행한다.
 6. PROFILE 존재·현재 snapshot을 확인한다. 작성자·감사자·리뷰어는 PROFILE 전체를 읽으며 메인은 객체와 해시를 확인한다.
 

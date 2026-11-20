@@ -21,6 +21,7 @@ import paths
 from display_titles import DisplayTitlesError, load_display_titles, apply_display_titles, reviewed_title_path
 from assemble import MODE_SUFFIX, BuildError, all_selections, build_data, ids_selection, resolve_target, nfc
 from answer_overlay import AnswerOverlayError, load_answer_overlay, apply_answer_overlay
+from pack_paths import PackPaths
 from render import RenderError, inject, load_template, render_pdf, measure_typography
 from review_selection import load_selection, apply_selection, reviewed_selection_path
 
@@ -34,14 +35,19 @@ def parse_args(argv):
     ap.add_argument("--mode", choices=("both", "problems", "answers"), default="both",
                     help="문제지·답안지 모두 또는 하나만 생성")
     ap.add_argument("--display-titles", type=Path, help="복습팩의 ID별 짧은 표시 제목 JSON")
+    ap.add_argument('--public-pack', type=Path)
+    ap.add_argument('--candidate-pack', type=Path)
     ap.add_argument("--answer-overlay", type=Path, help="현재 검토를 통과한 발행 답안 overlay")
     ap.add_argument('--selection', type=Path, help='복습팩의 승인 입력에 포함할 selection.json')
+    ap.add_argument("--answer-page-order", type=Path, help="답안 PDF 렌더의 비공개 쪽 순서 기록")
     ap.add_argument("--json-only", action="store_true", help="PDF 없이 JSON·HTML만 만든다")
     ap.add_argument("--pdf-dir", type=Path, default=paths.WORKBOOK / "pdf")
     ap.add_argument("--build-dir", type=Path, default=paths.WORKBOOK / "build")
     ap.add_argument("--layout", choices=("a4", "video-16x9"),
                     help="복습노트 출력은 기본 16:9, 그 외 출력은 기본 A4 가로")
     args = ap.parse_args(argv[1:])
+    if bool(args.public_pack) != bool(args.candidate_pack):
+        ap.error('--public-pack and --candidate-pack must be paired')
     if args.layout is None:
         import unicodedata
         args.layout = "video-16x9" if "복습노트" in [unicodedata.normalize('NFC', p)
@@ -50,6 +56,8 @@ def parse_args(argv):
         ap.error("대상은 target, --ids, --all 중 하나만 준다")
     if args.ids and not args.name:
         ap.error("--ids 에는 --name 이 필요하다")
+    if args.answer_page_order and (not args.ids or args.mode != 'answers' or args.json_only):
+        ap.error('--answer-page-order requires --ids and a rendered answer PDF')
     if args.answer_overlay and (not args.ids or args.mode == "problems"):
         ap.error("--answer-overlay 는 --ids 및 --mode answers/both 에서만 쓸 수 있다")
     if args.selection and not args.ids:
@@ -87,12 +95,20 @@ def build_one(sel, args):
     overlay = None
     title_path = args.display_titles
     selection_path = args.selection
+    view = None
+    if args.public_pack:
+        root = root_spelling(args.public_pack)
+        view = PackPaths(root, args.public_pack, args.candidate_pack)
+        if title_path:
+            title_path = view.source_file(str(view.logical(title_path)))
+        if selection_path:
+            selection_path = view.source_file(str(view.logical(selection_path)))
     if args.answer_overlay:
-        root = root_spelling(args.answer_overlay)
+        root = view.repo if view else root_spelling(args.answer_overlay)
         overlay = load_answer_overlay(args.answer_overlay, root,
-                                      [nfc(pid.strip()) for pid in args.ids.split(",")])
-        title_path = reviewed_title_path(overlay, root, title_path)
-        selection_path = reviewed_selection_path(overlay, root, selection_path)
+                                      [nfc(pid.strip()) for pid in args.ids.split(",")], pack_paths=view)
+        title_path = reviewed_title_path(overlay, root, title_path, pack_paths=view)
+        selection_path = reviewed_selection_path(overlay, root, selection_path, pack_paths=view)
     for mode, suffix in MODE_SUFFIX.items():
         if args.mode != "both" and args.mode != mode:
             continue
@@ -120,7 +136,8 @@ def build_one(sel, args):
             continue
         args.pdf_dir.mkdir(parents=True, exist_ok=True)
         pdf_path = args.pdf_dir / f"{stem}.pdf"
-        overflow += [f"{stem}: {x}" for x in render_pdf(html_path, pdf_path)]
+        options = {'order_path': args.answer_page_order} if getattr(args, 'answer_page_order', None) else {}
+        overflow += [f"{stem}: {x}" for x in render_pdf(html_path, pdf_path, **options)]
         print(pdf_path)
     return overflow
 

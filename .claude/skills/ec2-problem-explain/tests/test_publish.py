@@ -31,6 +31,126 @@ class PublishTest(unittest.TestCase):
             approved(self.pack, self.fragments, self.artifacts) if reviews is None else reviews,
             destination or self.folder, self.backup, self.repo)
 
+    def write_index(self):
+        assets = self.src.parent
+        (assets / 'display-titles.json').write_text(json.dumps({'P10.02': '차동쌍'}))
+        (assets / 'selection.json').write_text(json.dumps({
+            'schema_version': 2, 'policy': 'exam-first-v2', 'workload': {'estimated_minutes': 10},
+            'problems': [{'id': 'P10.02', 'priority': 'core', 'learning_goals': ['gain'],
+                          'estimated_minutes': 10, 'subpart_count': 1}]}))
+
+    def test_candidate_requires_both_selection_inputs(self):
+        from pack_paths import PackPaths
+        self.write_index()
+        candidate = self.tmp / 'candidate'
+        self.folder.rename(candidate)
+        view = PackPaths(self.repo, self.folder, candidate)
+        for name in ('display-titles.json', 'selection.json'):
+            with self.subTest(name=name):
+                path = candidate / '.assets' / name
+                valid = path.read_bytes()
+                path.unlink()
+                with self.assertRaisesRegex(ExplainError, name):
+                    load_source(self.src, self.repo, pack_paths=view, slug=self.pack.slug)
+                path.write_bytes(valid)
+
+    def test_candidate_review_refuses_physical_attempt_reference(self):
+        from pack_paths import PackPaths
+        from epe_publish import build_explanation_candidate
+        self.write_index()
+        candidate = self.repo / 'attempt'
+        self.folder.rename(candidate)
+        view = PackPaths(self.repo, self.folder, candidate)
+        pack = load_source(self.src, self.repo, pack_paths=view, slug=self.pack.slug)
+        artifacts = build_explanation(pack, self.fragments, self.tmp / 'candidate-stage', self.repo)
+        reviews = approved(pack, self.fragments, artifacts)
+        path = candidate / '.assets/problems.txt'
+        reviews['references'].append({'path': str(path), 'sha256': sha256(path)})
+        with self.assertRaisesRegex(ExplainError, '공개 경로'):
+            build_explanation_candidate(pack, artifacts, self.fragments, reviews, candidate, self.repo)
+        self.assertFalse((candidate / artifacts.html.name).exists())
+        reviews['references'][-1]['path'] = str(self.src)
+        outputs = build_explanation_candidate(pack, artifacts, self.fragments, reviews, candidate, self.repo)
+        record = json.loads(next(p for p in outputs if p.name == 'validation.json').read_text())
+        self.assertEqual(record['references'][-1]['path'], str(self.src))
+
+    def test_adopted_consumer_rejects_producer_proof_paths(self):
+        import shutil
+        from epe_cli import extract, load_run
+        from epe_publish import build_explanation_candidate
+        from pack_paths import PackPaths
+
+        self.repo = self.repo.resolve()
+        self.folder = self.repo / '복습노트/1007'
+        self.src = self.folder / '.assets/problems.txt'
+        self.write_index()
+        producer = self.repo / 'producer-attempt/복습노트/1007'
+        consumer = self.repo / 'consumer-attempt/복습노트/1007'
+        producer.parent.mkdir(parents=True)
+        self.folder.rename(producer)
+        shutil.copytree(producer, consumer)
+        child = self.repo / 'child-run'
+        self.assertEqual(extract(self.repo, '1007', child,
+                                 pack_paths=PackPaths(self.repo, self.folder, producer), slug=self.pack.slug), 0)
+        view = PackPaths(self.repo, self.folder, consumer)
+        pack = load_run(child, pack_paths=view)[0]['pack']
+        artifacts = build_explanation(pack, self.fragments, self.tmp / 'stage-adopted', self.repo)
+        reviews = approved(pack, self.fragments, artifacts)
+        for physical in (producer / '.assets/problems.txt', child / 'run.json'):
+            with self.subTest(physical=physical):
+                invalid = dict(reviews, references=[*reviews['references'], {'path': str(physical), 'sha256': sha256(physical)}])
+                with self.assertRaisesRegex(ExplainError, '공개 경로'):
+                    build_explanation_candidate(pack, artifacts, self.fragments, invalid, consumer, self.repo)
+                self.assertFalse((consumer / artifacts.html.name).exists())
+
+        reviews['references'].append({'path': str(self.src), 'sha256': sha256(producer/'.assets/problems.txt')})
+        shutil.rmtree(producer.parent.parent)
+        outputs = build_explanation_candidate(pack, artifacts, self.fragments, reviews, consumer, self.repo)
+        saved = json.loads(next(p for p in outputs if p.name == 'validation.json').read_text())
+        self.assertEqual(saved['references'], reviews['references'])
+        from answer_overlay import load_answer_overlay
+        overlay = next(p for p in outputs if p.name == 'answer-overlay.json')
+        candidate_core = load_answer_overlay(overlay, self.repo, ['P10.02'], pack_paths=view)
+        shutil.copytree(consumer, self.folder)
+        shutil.rmtree(consumer.parent.parent)
+        shutil.rmtree(child)
+        public_overlay = self.folder / overlay.relative_to(consumer)
+        self.assertEqual(load_answer_overlay(public_overlay, self.repo, ['P10.02']), candidate_core)
+
+    def test_candidate_materialization_uses_verified_public_identity(self):
+        from pack_paths import PackPaths
+        from epe_publish import build_explanation_candidate
+        from epe_cli import extract, load_run
+        self.write_index()
+        candidate = self.tmp / 'candidate'
+        self.folder.rename(candidate)
+        view = PackPaths(self.repo, self.folder, candidate)
+        child = self.tmp / 'child'
+        self.assertEqual(extract(self.repo, '1007', child, pack_paths=view, slug=self.pack.slug), 0)
+        pack = load_run(child)[0]['pack']
+        artifacts = build_explanation(pack, self.fragments, self.tmp / 'candidate-stage', self.repo)
+        reviews = approved(pack, self.fragments, artifacts)
+        paths = build_explanation_candidate(pack, artifacts, self.fragments, reviews, candidate, self.repo)
+        self.assertTrue(all(p.is_relative_to(candidate) for p in paths))
+        self.assertTrue(any(p.name == 'validation.json' for p in paths))
+        self.assertFalse(self.folder.exists())
+        self.assertEqual(json.loads(artifacts.manifest.read_text())['source'], str(self.src))
+
+    def test_verified_stage_materializes_in_separate_output_attempt(self):
+        from epe_publish import build_explanation_candidate
+        destination = self.tmp / 'consumer'
+        review = approved(self.pack, self.fragments, self.artifacts)
+        with self.assertRaisesRegex(ExplainError, 'selection.json|display-titles.json'):
+            build_explanation_candidate(self.pack, self.artifacts, self.fragments, review, destination, self.repo)
+        self.write_index()
+        pack = load_source(self.src, self.repo)
+        artifacts = build_explanation(pack, self.fragments, self.tmp / 'complete-stage', self.repo)
+        review = approved(pack, self.fragments, artifacts)
+        outputs = build_explanation_candidate(pack, artifacts, self.fragments, review, destination, self.repo)
+        self.assertTrue(all(p.is_relative_to(destination) for p in outputs))
+        self.assertFalse((self.folder / self.artifacts.html.name).exists())
+        self.assertFalse((artifacts.manifest.parent / 'validation.json').exists())
+
     def test_no_review_keeps_existing_files(self):
         dst = self.folder / self.artifacts.html.name
         dst.write_bytes(b'old')

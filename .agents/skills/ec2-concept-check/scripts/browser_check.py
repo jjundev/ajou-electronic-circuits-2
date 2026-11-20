@@ -16,9 +16,15 @@ from __future__ import annotations
 
 import hashlib
 import json
-import mimetypes
 from pathlib import Path
-from urllib.parse import quote, unquote, urlsplit
+import sys
+
+from _paths import REPO
+
+if str(REPO / "workbook") not in sys.path:
+    sys.path.insert(0, str(REPO / "workbook"))
+
+from browser_runtime import LOCAL_ORIGIN, install_render_routes, launch_chromium, local_url
 
 
 VIEWPORTS = [(1280, 900), (375, 812)]
@@ -27,32 +33,6 @@ ACTION_TIMEOUT = 3000
 NAV_TIMEOUT = 20000
 SETTLE_MS = 600  # 화면 전환 애니메이션이 끝난 뒤 찍는다
 SHORT_CORRECT = "자동 일치"  # review-interaction.js 가 short 정답일 때 .review-status 에 쓰는 글
-LOCAL_ORIGIN = "http://127.0.0.1:8765"
-LOCAL_PREFIX = "/__ec2_local__/"
-
-
-def route_external(blocked: set[str], local_root: Path | None = None, local_paths=()):
-    """오프라인에서 승인된 로컬 자원만 응답하고 외부 요청은 차단한다."""
-    allowed = tuple(Path(p).resolve() for p in ([local_root] if local_root else []) + list(local_paths))
-    def handle(route):
-        url = route.request.url
-        parsed = urlsplit(url)
-        if local_root is not None and url.startswith(LOCAL_ORIGIN + LOCAL_PREFIX):
-            relative = Path(unquote(parsed.path[len(LOCAL_PREFIX):]))
-            if not relative.is_absolute() and '..' not in relative.parts:
-                target = (local_root / relative).resolve()
-                if any(target.is_relative_to(root) for root in allowed):
-                    if not target.is_file():
-                        return route.fulfill(status=404, body='Local resource not found')
-                    return route.fulfill(status=200, body=target.read_bytes(),
-                        content_type=mimetypes.guess_type(target.name)[0] or 'application/octet-stream')
-            blocked.add(url)
-            return route.abort()
-        if url.startswith(("file:", "data:", "blob:")):
-            return route.continue_()
-        blocked.add(url)
-        return route.abort()
-    return handle
 
 
 def sha256(path: Path) -> str:
@@ -69,7 +49,7 @@ def short_variant(answer: dict) -> str:
 class Run:
     """뷰포트 × 테마 한 번. 예외 대신 실패를 모은다."""
 
-    def __init__(self, page, label: str, *, local_root=None, local_paths=()):
+    def __init__(self, page, label: str, *, local_roots: tuple[Path, ...]):
         self.page, self.label = page, label
         self.failures: list[str] = []
         self.errors: list[str] = []
@@ -77,8 +57,8 @@ class Run:
         page.on("pageerror", lambda e: self.errors.append(f"페이지 오류: {e}"))
         page.on("console", lambda m: self.errors.append(f"콘솔 error: {m.text}") if m.type == "error" else None)
         page.on("requestfailed", lambda r: self.errors.append(f"로컬 자원 요청 실패: {r.url}")
-                if r.url.startswith(("file:", LOCAL_ORIGIN + LOCAL_PREFIX)) else None)
-        page.context.route("**/*", route_external(self.blocked, local_root, local_paths))
+                if r.url.startswith(LOCAL_ORIGIN + "/") else None)
+        install_render_routes(page, local_roots=local_roots, blocked=self.blocked)
 
     def expect(self, ok: bool, what: str) -> bool:
         if not ok:
@@ -318,20 +298,20 @@ def check(html: Path, out: Path, shots: Path, *, source: dict,
         shots = Path(shots)
         shots.mkdir(parents=True, exist_ok=True)
     local_root = html.parent.parent
-    local_paths = [Path(source['repo']) / '복습노트/.assets/vendor', Path(source['note'])]
-    url = LOCAL_ORIGIN + LOCAL_PREFIX + quote(html.relative_to(local_root).as_posix(), safe='/')
+    local_roots = (local_root, Path(source['repo']) / '복습노트/.assets/vendor', Path(source['note']))
+    url = local_url(html, local_root)
     report["transport"] = "loopback HTTP, offline=True, local assets fulfilled"
     with sync_playwright() as pw:
-        browser = pw.chromium.launch()
+        browser = launch_chromium(pw)
         try:
             for width, height in viewports:
                 for theme in themes:
                     with browser.new_context(viewport={"width": width, "height": height},
-                                             offline=True, color_scheme=theme) as ctx:
+                                             offline=True, color_scheme=theme, service_workers="block") as ctx:
                         page = ctx.new_page()
                         page.set_default_timeout(ACTION_TIMEOUT)
                         page.set_default_navigation_timeout(NAV_TIMEOUT)
-                        run = Run(page, f"{width}x{height} {theme}", local_root=local_root, local_paths=local_paths)
+                        run = Run(page, f"{width}x{height} {theme}", local_roots=local_roots)
                         detail = run.step("검사", lambda: check_run(run, url, items, shots,
                                                                   f"{width}x{height}-{theme}")) or {}
                         run.failures += [f"{run.label}: {e}" for e in run.errors]

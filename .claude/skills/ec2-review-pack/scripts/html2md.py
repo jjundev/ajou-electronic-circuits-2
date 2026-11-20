@@ -635,10 +635,13 @@ def html_math_and_ids(path):
     return MD_MATH_RE.findall("".join(texts)), ids
 
 
-def check_md(html_path, md_path, *, deferred_answer=None):
+def check_md(html_path, md_path, *, deferred_answer=None, pack_paths=None):
     """변환 결과 검사. 문제 문자열 목록을 돌려준다(빈 목록이면 통과)."""
     md = _read(md_path)
     md_dir = os.path.dirname(os.path.abspath(md_path))
+    def resolve_link(name):
+        return pack_paths.link(Path(md_dir), name) if pack_paths else os.path.join(md_dir, name)
+
     problems = []
     from readability import public_location_errors
     problems.extend(f'{code}: {detail}' for code, detail in public_location_errors(md))
@@ -654,7 +657,7 @@ def check_md(html_path, md_path, *, deferred_answer=None):
     anchors = set(re.findall(r'<a id="([^"]+)"></a>', md))
     problems += [f"앵커 누락: {i}" for i in ids if i not in anchors]
     for img in re.findall(r"!\[[^\]]*\]\(([^)]+)\)", md):
-        if not _exists(os.path.join(md_dir, unquote(img))):
+        if not _exists(str(resolve_link(unquote(img)))):
             problems.append(f"그림 없음: {img}")
     pack = _pack_names(html_path)
     for target in re.findall(r"(?<!!)\[[^\]]*\]\(([^)]+)\)", md):
@@ -670,7 +673,7 @@ def check_md(html_path, md_path, *, deferred_answer=None):
         if head in ("", ".") and base in pack:
             problems.append(f"링크 미변환(.html): {target}")
             continue
-        other = os.path.join(md_dir, path_dec)
+        other = str(resolve_link(path_dec))
         if not _exists(other):
             if deferred_answer is not None and nfc(unquote(target)) == "../" + deferred_answer:
                 continue

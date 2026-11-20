@@ -70,11 +70,15 @@ def _inventory(base,roots):
     return files,sorted(dirs)
 
 
+def inventory_at(pack: Path, range_: str) -> dict[str,str]:
+    files, dirs = _inventory(pack, _roots(pack, range_))
+    return {**files, **{d + "/": "directory" for d in dirs}}
+
+
 def inventory_pack(repo: Path, range_: str) -> dict[str,str]:
     """Return actual relative file names -> SHA-256, plus dir/ -> directory."""
     try:
-        pack=_pack(repo,range_); files,dirs=_inventory(pack,_roots(pack,range_))
-        return {**files,**{d+'/':'directory' for d in dirs}}
+        return inventory_at(_pack(repo, range_), range_)
     except OSError as e: raise FlowError(str(e)) from e
 
 

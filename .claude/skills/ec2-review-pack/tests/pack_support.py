@@ -6,7 +6,7 @@ from _util import REPO
 
 def make_run(tmp_path: Path, *, browser_owner="workers", pdf_owner="workers",
              repo_name="repo 한글", init_repo=None):
-    """init_repo: the spelling passed to init (default: the on-disk path)."""
+    """Create a legacy fixture; init_repo can override the on-disk path spelling."""
     repo, run = tmp_path / repo_name, tmp_path / "run 한글"
     profile = Path(".claude/skills/ec2-review-pack/references/solution-style.md")
     (repo / profile).parent.mkdir(parents=True)
@@ -17,7 +17,8 @@ def make_run(tmp_path: Path, *, browser_owner="workers", pdf_owner="workers",
     (repo / "STT/0909 전회2.md").write_text("실제 최소 STT 입력", encoding="utf-8")
     run.mkdir()
     from pack_flow import init_run
-    init_run(init_repo or repo, run, "0909", browser_owner=browser_owner, pdf_owner=pdf_owner, allow_tmp=True)
+    init_run(init_repo or repo, run, "0909", browser_owner=browser_owner, pdf_owner=pdf_owner,
+             allow_tmp=True, workflow='legacy')
     return repo, run
 import json
 from pathlib import Path
@@ -75,36 +76,54 @@ def genuine_child_run(tmp_path, *, existing=None):
         if previous is not None: sys.modules['assemble'] = previous
         else: sys.modules.pop('assemble', None)
     repo, run = existing or make_run(tmp_path)
+    state = load_state(run)
+    parallel = state.get('workflow') == 'parallel'
     parent_note = repo / '복습노트/0909/정리노트_0909_Synthetic.html'
     parent_bytes = parent_note.read_bytes() if existing and parent_note.exists() else None
-    util.make_repo(repo, range_='0909', slug='Synthetic', ids=('P10.02',))
+    if not parallel:
+        util.make_repo(repo, range_='0909', slug='Synthetic', ids=('P10.02',))
     if parent_bytes is not None: parent_note.write_bytes(parent_bytes)
     child_run = Path(load_state(run)['explain_run']) if existing else run / 'problem-explain' / 'synthetic'
     cli = REPO / '.claude/skills/ec2-problem-explain/scripts/epe_cli.py'
     def call(*args):
         result = subprocess.run([sys.executable, str(cli), *map(str, args)], capture_output=True, text=True, encoding='utf-8')
         assert result.returncode == 0, result.stderr
-    call('extract', '--repo', repo, '--target', '0909', '--run', child_run)
+    args = []
+    if parallel:
+        brief = json.loads(Path(state['tasks']['child-coordinator']['brief']).read_text())
+        manifest = Path(brief['manifest'])
+        slug = json.loads(manifest.read_text())['slug']
+        args = ['--candidate-pack', brief['candidate_pack'], '--public-pack', brief['public_pack'], '--slug', slug]
+    else:
+        manifest, slug = run / 'manifest.json', 'Synthetic'
+    call('extract', '--repo', repo, '--target', '0909', '--run', child_run, *args)
     from epe_cli import load_run, load_artifacts, load_fragments
     item = load_run(child_run)[0]
     for p in item['pack'].problems:
-        (item['folder'] / 'explanations' / (p.id + '.html')).write_text(util.fragment(p), encoding='utf-8')
+        dest = item['folder'] / 'explanations' / (p.id + '.html')
+        if parallel:
+            shutil.copyfile(state['tasks']['explain-author']['artifacts']['explanations/' + p.id + '.html'], dest)
+        else:
+            dest.write_text(util.fragment(p), encoding='utf-8')
     call('build', '--run', child_run); call('check', '--run', child_run)
     artifacts = load_artifacts(item)
     review = util.approved(item['pack'], load_fragments(item), artifacts)
     review['content']['reviewer'] = 'synthetic-content-reviewer'
     review['browser']['reviewer'] = 'synthetic-browser-reviewer'
+    if parallel:
+        blind = Path(state['tasks']['explain-blind']['artifacts']['independent.json'])
+        for k, entry in json.loads(blind.read_text())['items'].items():
+            review['independent']['items'][k].update(entry)
     (item['folder'] / 'review.json').write_text(json.dumps(review), encoding='utf-8')
-    manifest = run / 'manifest.json'
     if not existing:
         manifest.write_text(json.dumps({'range': '0909', 'slug': 'Synthetic', 'problems': [{'id': 'P10.02'}], 'learning_style': item['pack'].learning_style}), encoding='utf-8')
-    child = dict(schema_version=1, status='ready-for-publish', range='0909', slug='Synthetic', run=str(child_run),
+    child = dict(schema_version=1, status='ready-for-publish', range='0909', slug=slug, run=str(child_run),
         bucket=item['folder'].name, stage=str(artifacts.html.parent), input_hash=review['input_hash'], review_policy_version=review['review_policy_version'],
         counts={'problems': 1}, reviews={}, unresolved=[], reviewers={
-            'authors': {p.id: 'synthetic-author' for p in item['pack'].problems},
+            'authors': {p.id: 'synthetic-explain-author' if parallel else 'synthetic-author' for p in item['pack'].problems},
             'independent': {k: v['reviewer'] for k,v in review['independent']['items'].items()},
             'content': review['content']['reviewer'], 'browser': review['browser']['reviewer']})
-    files = {*[p for p in child_run.rglob('*') if p.is_file()], manifest, run / 'learning-style.json', *map(Path, item['pack'].inputs), *[Path(x['path']) for x in review['references']]}
+    files = {*[p for p in child_run.rglob('*') if p.is_file()], manifest, run / 'learning-style.json', *[item['pack'].pack_paths.source_file(p) if parallel else Path(p) for p in item['pack'].inputs], *[Path(x['path']) for x in review['references']]}
     child['files'] = [{'path': str(p.resolve()), 'sha256': _sha(p)} for p in files]
     (child_run / 'child-receipt.json').write_text(json.dumps(child), encoding='utf-8')
     if existing: return repo, run, 'child-coordinator', child_run
@@ -260,3 +279,68 @@ def action_run(tmp_path, *, action='assemble-note'):
         return s
     f.update_state(run,f.load_state(run)['revision'],change)
     return repo,run
+
+
+def parallel_worker(run, tid, write_outputs):
+    """Claim, bind and submit files for a synthetic fixture reviewer only."""
+    import pack_flow as f
+    claim = f.claim_task(run, tid)
+    f.bind_task(run, tid, claim['attempt'], 'synthetic-' + tid)
+    brief = json.loads(Path(claim['brief']).read_text())
+    outputs = [Path(name) for name in brief['required_outputs']]
+    for p in outputs:
+        p.parent.mkdir(parents=True, exist_ok=True)
+    outputs += write_outputs(brief, outputs) or []
+    report = Path(brief['report'])
+    report.parent.mkdir(parents=True, exist_ok=True)
+    report.write_text('Synthetic fixture review only.')
+    reviews = [str(report), *[str(p) for p in outputs if p.name == 'report.json']]
+    receipt = Path(brief['receipt'])
+    if 'approval_plan' in brief:
+        from pack_receipts import build_receipt
+        info = dict(status='done',report=str(report),reviews=reviews,
+                    outputs=[str(p) for p in outputs if p.is_file()],counts={'targets':brief['targets']},unresolved=[])
+        add_target_judgments(brief,info)
+        submission = Path(brief['run'])/'worker.json'
+        submission.write_text(json.dumps(info))
+        build_receipt(f.inspect_state(run),tid,claim['attempt'],submission)
+        return f.accept_task(run,tid,claim['attempt'],receipt)
+    receipt.write_text(json.dumps(dict(schema_version=1, run_id=brief['run_id'], task_id=tid,
+        attempt=claim['attempt'], status='done', inputs=brief['inputs'],
+        outputs=[{'path': str(p), 'sha256': f._sha(p)} for p in outputs], report=str(report),
+        reviews=reviews, counts={'targets': brief['targets']}, unresolved=[])))
+    return f.accept_task(run, tid, claim['attempt'], receipt)
+
+
+def add_target_judgments(brief, submission):
+    """Fixture-only judgments, bound to the actual page/view captures or solved items."""
+    root = Path(brief['run'])
+    role = brief['role']
+    plan = brief['approval_plan']
+    if role == 'browser-qa':
+        browser_interactions(brief)
+    decisions = {}
+    for target in plan['pending']:
+        spec = plan['targets'][target]
+        if role == 'explain-blind':
+            item = json.loads((root/'independent.json').read_text())['items'][spec['item']]
+            decision = dict(item,status='pass')
+        else:
+            decision = dict(status='pass', evidence='synthetic fixture inspection',image=spec['image'])
+            if role == 'pdf-qa':
+                decision.update(overflow=[], geometry_evidence='fixture glyph and geometry inspection')
+            else:
+                decision['renderer'] = brief['render_context']
+        decisions[target] = decision
+    source = root/'target-reviews.json'
+    source.write_text(json.dumps(decisions))
+    submission['reviews'].append(str(source))
+
+def browser_interactions(brief):
+    """Recorded positive fixture judgments, separate from the machine-rendered screens."""
+    path = Path(brief['run'])/'work/browser/report.json'
+    path.parent.mkdir(parents=True, exist_ok=True)
+    report = json.loads(path.read_text()) if path.is_file() else {}
+    report['interactions'] = {view:{k:'synthetic fixture adjudication: '+k for k in brief['interaction_checks']}
+                               for view in ('mobile-light','mobile-dark','desktop-light','desktop-dark')}
+    path.write_text(json.dumps(report))
