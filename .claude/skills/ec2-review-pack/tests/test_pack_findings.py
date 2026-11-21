@@ -140,6 +140,9 @@ def note_run(tmp_path):
     return run, fixture
 
 
+def pin_join_contract(run, version):
+    flow.update_state(run, flow.load_state(run)['revision'], lambda s: dict(s, join_contract=version))
+
 def defect(rule, target='s1-mean'):
     return dict(rule=rule, target=target, defect='missing ' + rule, severity='Important',
                 owner_task='author-s1', evidence='synthetic: source section 1')
@@ -259,6 +262,7 @@ def test_two_failed_repairs_block_only_same_finding(note_run):
 
 def test_same_reviewer_and_conflicting_source_judgments_cannot_join(note_run):
     run, _ = note_run
+    pin_join_contract(run, 1)
     submit_review(note_run, 'style-audit', reviewer='one')
     with pytest.raises(flow.FlowError, match='independent|distinct'):
         submit_review(note_run, 'content-review', reviewer='one')
@@ -576,6 +580,7 @@ def test_report_requires_each_distinct_markdown_defect(note_run, declared):
 def test_superseded_style_judgment_retires_exact_conflict_pair(note_run):
     import pack_findings as ledger
     run, _ = note_run
+    pin_join_contract(run, 1)
     submit_review(note_run, 'content-review', disposition='applied')
     state = submit_review(note_run, 'style-audit')
     conflict, = state['findings'].values()
@@ -596,6 +601,7 @@ def test_superseded_style_judgment_retires_exact_conflict_pair(note_run):
 
 def test_fresh_agreement_on_identical_html_can_reconcile_superseded_conflict(note_run):
     run, _ = note_run
+    pin_join_contract(run, 1)
     submit_review(note_run, 'content-review', disposition='applied')
     state = submit_review(note_run, 'style-audit')
     conflict, = state['findings'].values()
@@ -643,6 +649,7 @@ assert pack_parallel.run_action(Path(sys.argv[3]), 'assemble-note')['status'] ==
 
 def test_repeated_conflict_on_identical_html_requires_new_pair_token(note_run):
     run, _ = note_run
+    pin_join_contract(run, 1)
     submit_review(note_run, 'content-review', disposition='applied')
     initial = submit_review(note_run, 'style-audit')
     first, = initial['findings'].values()
@@ -682,6 +689,7 @@ def test_manifest_owned_broken_link_routes_to_actual_metadata_producer(note_run)
 def test_prior_parallel_conflict_matches_only_its_two_adopted_reports(note_run):
     from pack_findings import fixable_findings
     run, _ = note_run
+    pin_join_contract(run, 1)
     submit_review(note_run, 'content-review', disposition='applied')
     state = submit_review(note_run, 'style-audit')
     key, = state['findings']
@@ -802,3 +810,58 @@ def prepare_browser_receipt(run, brief, receipt):
     result=target_contract(state,state['tasks']['browser-qa'],receipt,write=True)
     existing={r['path'] for r in receipt['outputs']}
     receipt['outputs'].extend(dict(path=p,sha256=flow._sha(Path(p))) for p in result['outputs'] if p not in existing)
+
+
+def test_contract_one_run_still_raises_review_join_finding(note_run):
+    run, _ = note_run
+    pin_join_contract(run, 1)
+    submit_review(note_run, 'content-review', disposition='applied')
+    state = submit_review(note_run, 'style-audit')
+    row, = state['findings'].values()
+    assert (row['review_id'], row['severity'], row['target']) == ('review-join', 'Important', 's1-mean')
+    assert not state.get('active_audit')
+    assert not state.get('applicability_disagreements')
+
+def test_label_only_disagreement_publishes_audit_without_findings(note_run):
+    run, _ = note_run
+    submit_review(note_run, 'content-review', disposition='applied')
+    state = submit_review(note_run, 'style-audit')
+    assert state['join_contract'] == 2
+    assert not [r for r in state['findings'].values() if r['review_id'] == 'review-join']
+    audit = json.loads(Path(state['active_audit']).read_text())
+    rule = next(iter(audit['items']['s1-mean']['rules']))
+    cell = audit['items']['s1-mean']['rules'][rule]
+    assert cell['disposition'] == 'not_applicable' and cell['disagreement'] is True
+    assert 'reviewer-style-audit (not_applicable)' in cell['evidence']
+    assert 'reviewer-content-review (applied)' in cell['evidence']
+    other = [c for t, i in audit['items'].items() for r, c in i['rules'].items() if (t, r) != ('s1-mean', rule)]
+    assert not any('disagreement' in c for c in other)
+    item, = state['applicability_disagreements']
+    assert (item['target'], item['rule']) == ('s1-mean', rule)
+    assert (item['style']['disposition'], item['content']['disposition']) == ('not_applicable', 'applied')
+    assert item['candidate_digest'] == state['joined_review']['candidate_digest']
+    import manifest  # noqa: F401  (puts workbook/ on sys.path)
+    from learning_style import validate_style_audit
+    assert validate_style_audit(audit, audit['learning_style'], list(audit['items'])) == []
+
+def test_rejoin_same_candidate_keeps_one_disagreement_per_cell(note_run):
+    submit_review(note_run, 'content-review', disposition='applied')
+    state = submit_review(note_run, 'style-audit')
+    Path(state['tasks']['style-audit']['receipt']['report']).write_text('superseded')
+    state = submit_review(note_run, 'style-audit')
+    assert len(state['applicability_disagreements']) == 1
+
+def test_needs_fix_review_records_no_disagreement(note_run):
+    submit_review(note_run, 'style-audit', [defect('shape')])
+    state = submit_review(note_run, 'content-review', disposition='applied')
+    assert not state.get('applicability_disagreements')
+    assert {r['review_id'] for r in state['findings'].values()} == {'style-audit'}
+
+def test_label_only_join_rejects_leftover_review_join_finding(note_run):
+    import copy
+    import pack_findings as ledger
+    submit_review(note_run, 'content-review', disposition='applied')
+    state = copy.deepcopy(submit_review(note_run, 'style-audit'))
+    state['findings']['leftover'] = dict(id='leftover', review_id='review-join', status='open')
+    with pytest.raises(flow.FlowError, match='label-only join cannot carry review-join findings'):
+        ledger.join_reviews(state)

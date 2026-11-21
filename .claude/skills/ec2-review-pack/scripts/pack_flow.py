@@ -373,6 +373,7 @@ def init_run(repo: Path, run: Path, range_: str, *,
         if workflow == 'parallel':
             state['approval_contract'] = 1
             state['concept_contract'] = 1
+            state['join_contract'] = 2  # pack_findings.LABEL_ONLY_JOIN
             from pack_publication import publication_inventory, publication_lock
             with publication_lock(repo / '복습노트' / range_):
                 state['public_baseline'] = publication_inventory(repo / '복습노트' / range_, range_)
