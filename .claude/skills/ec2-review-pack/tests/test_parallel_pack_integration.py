@@ -99,7 +99,7 @@ class Trial:
         self.action('precheck')
         self.action('convert-md')
 
-    def worker(self, tid):
+    def worker(self, tid, *, edit=None):
         claim = self.cli('task', 'claim', '--task', tid)['next']
         brief = read(claim['brief'])
         task = ('--task', tid, '--attempt', claim['attempt'])
@@ -114,6 +114,8 @@ class Trial:
         submission = dict(status='done', report=str(report), outputs=[str(p) for p in outputs if p.is_file()],
                           reviews=[str(report), *[str(p) for p in outputs if p.name == 'report.json']],
                           counts=dict(targets=brief['targets']), unresolved=[])
+        if edit:
+            edit(brief, submission)
         if 'approval_plan' in brief:
             add_target_judgments(brief, submission)
         submission_path = Path(brief['run'])/'submission.json'
@@ -133,6 +135,9 @@ class Trial:
                 child_fixture('from _util import fragment; from types import SimpleNamespace; import json; '
                               'Path(sys.argv[3]).write_text(fragment(SimpleNamespace(subparts=json.loads(sys.argv[2]))))',
                               json.dumps(question['subparts']), outputs[0])
+                if brief.get('repair_findings'):
+                    # A synthetic correction: new bytes for the reopened fragment.
+                    outputs[0].write_text(outputs[0].read_text() + '\n' * (1 + len(brief['repair_findings'][0]['repairs'])))
             else:
                 write(outputs[0], dict(items={f'p1:{key}':dict(reviewer='synthetic-explain-blind',
                     method='exact', conclusion='1=1', evidence='synthetic independent fixture')
@@ -256,3 +261,130 @@ def test_regeneration_keeps_public_pack_until_verified_publish(tmp_path):
     assert (trial.public/'정리노트_0909_Mini_Test.html').is_file()
     assert not (trial.public/'정리노트_0909_Previous.html').exists()
     assert (trial.public/'personal.txt').read_bytes() == original['personal.txt']
+
+
+# Coordinator → explain-author repair route. Every judgment below is synthetic.
+COORDINATOR_DEFECT = dict(rule='content/retry', target='P10.01', defect='retry step repeats the solve step',
+                          severity='Important', owner_task='explain-author',
+                          evidence='synthetic: fragment retry block compared with solve block')
+
+
+def coordinator_judgment(trial, *, unresolved=(), fix_results=()):
+    """Submit a coordinator judgment through the real CLI receipt path."""
+    def edit(brief, submission):
+        if unresolved:
+            Path(submission['report']).write_text('## Important\n' + ''.join(
+                f"- [{x['target']}] [{x['rule']}] {x['defect']}\n" for x in unresolved))
+            submission.update(status='needs-fix', outputs=[], unresolved=list(unresolved))
+        if fix_results:
+            pending = brief['recheck_findings']
+            submission['fix_results'] = [dict(finding_id=row['id'], request_id=row['pending_request'],
+                                              attempt=row['repair_attempt'], outcome=outcome,
+                                              evidence='synthetic: corrected fragment re-read')
+                                         for row, outcome in zip(pending, fix_results)]
+    if unresolved:
+        # A negative judgment needs no ready child bucket.
+        trial.produce = lambda tid, brief, outputs, original=trial.produce: (
+            None if tid == 'child-coordinator' else original(tid, brief, outputs))
+    try:
+        return trial.worker('child-coordinator', edit=edit)
+    finally:
+        trial.__dict__.pop('produce', None)
+
+
+def fix_coordinator_findings(trial, rid):
+    rows = [r for r in read(trial.run/'run-status.json')['findings'].values()
+            if r['review_id'] == 'child-coordinator' and r['status'] == 'open']
+    request = trial.run/(rid + '.json')
+    write(request, dict(id=rid, items=[dict(finding_id=r['id'], review_attempt=r['review_attempt'],
+                                            input_digest=r['input_digest']) for r in rows]))
+    trial.cli('task', 'fix', '--request', request)
+    return rows
+
+
+def coordinator_trial(root):
+    trial = Trial(root, problem=True)
+    trial.prepare_note()
+    trial.action('stage-problem-index')
+    trial.worker('explain-author')
+    trial.worker('explain-blind')
+    return trial
+
+
+def test_coordinator_findings_reopen_only_explain_author(tmp_path):
+    trial = coordinator_trial(tmp_path)
+    blind = read(trial.run/'run-status.json')['tasks']['explain-blind']['attempt']
+    first = coordinator_judgment(trial, unresolved=[COORDINATOR_DEFECT])
+    state = read(trial.run/'run-status.json')
+    row, = state['findings'].values()
+    assert (row['review_id'], row['owner_task'], row['status']) == ('child-coordinator', 'explain-author', 'open')
+    assert row['input_digest'] == first['candidate_digest'] == state['tasks']['child-coordinator']['candidate_digest']
+    assert state['tasks']['child-coordinator']['status'] == 'needs_fix'
+    assert 'child-coordinator' not in trial.next()['dispatch']
+    trial.cli('task', 'claim', '--task', 'child-coordinator', error=True)
+
+    fix_coordinator_findings(trial, 'coordinator-fix-1')
+    tasks = read(trial.run/'run-status.json')['tasks']
+    assert tasks['explain-author']['status'] == 'stale'
+    assert tasks['child-coordinator']['status'] == 'stale'
+    assert tasks['explain-blind']['status'] == 'done' and tasks['explain-blind']['attempt'] == blind
+    assert trial.next()['dispatch'] == ['explain-author']
+    repaired = trial.worker('explain-author')
+    assert [r['id'] for r in repaired['repair_findings']] == [row['id']]
+    assert set(repaired['previous_outputs']) == {'explanations/p1.html'}
+
+    second = coordinator_judgment(trial, fix_results=['resolved'])
+    pending, = second['recheck_findings']
+    assert pending['repair_attempt'] == read(trial.run/'run-status.json')['tasks']['explain-author']['attempt']
+    assert second['candidate_digest'] != first['candidate_digest']
+    state = read(trial.run/'run-status.json')
+    assert state['findings'][row['id']]['status'] == 'resolved'
+    assert state['tasks']['child-coordinator']['status'] == 'done'
+    assert state['tasks']['explain-blind']['attempt'] == blind
+    assert 'explain-verify' in trial.next()['actions']
+
+
+def test_coordinator_finding_unresolved_twice_is_withheld(tmp_path):
+    trial = coordinator_trial(tmp_path)
+    coordinator_judgment(trial, unresolved=[COORDINATOR_DEFECT])
+    for attempt in (1, 2):
+        row, = fix_coordinator_findings(trial, f'coordinator-fix-{attempt}')
+        trial.worker('explain-author')
+        coordinator_judgment(trial, unresolved=[COORDINATOR_DEFECT], fix_results=['unresolved'])
+        row = read(trial.run/'run-status.json')['findings'][row['id']]
+        assert len(row['unsuccessful_attempts']) == attempt
+    assert row['status'] == 'withheld'
+    assert 'child-coordinator' not in trial.next()['dispatch']
+
+
+def test_coordinator_must_not_be_the_explanation_author(tmp_path):
+    trial = coordinator_trial(tmp_path)
+    claim = trial.cli('task', 'claim', '--task', 'child-coordinator')['next']
+    brief = read(claim['brief'])
+    task = ('--task', 'child-coordinator', '--attempt', claim['attempt'])
+    trial.cli('task', 'bind', *task, '--agent-id', 'synthetic-explain-author')
+    report = Path(brief['report'])
+    report.write_text('## Important\n- [P10.01] [content/retry] retry step repeats the solve step\n')
+    submission = Path(brief['run'])/'submission.json'
+    write(submission, dict(status='needs-fix', report=str(report), outputs=[], reviews=[str(report)],
+                           counts=dict(targets=brief['targets']), unresolved=[COORDINATOR_DEFECT]))
+    rejected = trial.cli('task', 'build-receipt', *task, '--submission', submission, error=True)
+    assert 'authored' in rejected['reason']
+    assert 'findings' not in read(trial.run/'run-status.json') or not read(trial.run/'run-status.json')['findings']
+
+
+def test_legacy_coordinator_needs_fix_without_findings_is_redispatched(tmp_path):
+    trial = coordinator_trial(tmp_path)
+    coordinator_judgment(trial, unresolved=[COORDINATOR_DEFECT])
+    # Recreate the state adopted by the earlier runner: needs_fix, no ledger entry, no candidate.
+    state = read(trial.run/'run-status.json')
+    state['tasks']['child-coordinator'].pop('candidate_digest')
+    state['findings'] = {}
+    write(trial.run/'run-status.json', state)
+    assert 'child-coordinator' in trial.next()['dispatch']
+    brief = coordinator_judgment(trial, unresolved=[COORDINATOR_DEFECT])
+    assert brief['recheck_findings'] == []
+    state = read(trial.run/'run-status.json')
+    assert [r['review_id'] for r in state['findings'].values()] == ['child-coordinator']
+    # With a ledger finding it waits for task fix instead of looping.
+    assert 'child-coordinator' not in trial.next()['dispatch']

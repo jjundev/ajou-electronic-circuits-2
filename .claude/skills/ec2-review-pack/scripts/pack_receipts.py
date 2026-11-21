@@ -238,8 +238,10 @@ def validate_receipt(state: dict, task: dict, receipt_path: Path) -> dict:
             require(within(path, run) and path.is_file(), 'review evidence missing/outside RUN')
             verified[str(path)] = cached_sha(path, cache)
         if state.get('workflow') == 'parallel':
-            from pack_findings import REVIEW_ROLES, check_report_items
-            if role in REVIEW_ROLES and status in ('done', 'ready-for-publish', 'needs-fix'):
+            from pack_findings import COORDINATOR, REVIEW_ROLES, check_report_items
+            # A coordinator's negative judgment enters the same finding ledger.
+            if (role in REVIEW_ROLES and status in ('done', 'ready-for-publish', 'needs-fix')
+                    or role == COORDINATOR and status == 'needs-fix'):
                 require(report == Path(brief['report']).resolve(), 'review report must match the claimed brief')
                 check_report_items(report, receipt['unresolved'])
                 if status == 'needs-fix' and role in ('browser-qa', 'pdf-qa', 'standalone-svg-qa'):
