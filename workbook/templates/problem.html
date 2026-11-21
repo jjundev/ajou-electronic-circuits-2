@@ -336,7 +336,11 @@ const REL_RE = /^(?:=|\\(?:approx|Rightarrow|leq?|geq?)(?![a-zA-Z]))/;
 const EQ_SPLIT_LEN = 40;
 
 // 중괄호·\left…\right 바깥의 관계 기호에서 나눈다: [lhs, [rel, rhs], …]
+// 작성자가 이미 줄을 나눈 식(\begin{…} 환경, \\ 줄바꿈, & 정렬)은 다시 나누지 않는다.
+// 다시 나누면 aligned가 이중으로 감싸여 관계 기호 열이 어긋나고 빈 행이 생긴다.
 function splitRelations(tex) {
+  // &lt; &gt; 같은 HTML 엔티티는 정렬 기호가 아니므로 제외한다.
+  if (/\\begin\{|\\\\|&(?!lt;|gt;|quot;|#)/.test(tex)) return null;
   const parts = [];
   let depth = 0, start = 0, rel = null;
   for (let i = 0; i < tex.length; i++) {
