@@ -5,81 +5,90 @@ description: '전자회로2 복습노트 날짜나 주제로 회로도·파형·
 
 # 전자회로2 인터랙티브 자료
 
-회로도·파형·보데 선도를 같은 상태와 수치 모델로 연결해요. 공통 셸은 `assets/template.dc.html`, 실행 예제는 `references/example-frequency-response.dc.html`이에요. 생성부터 검토·저장·정리노트 연결까지 진행하고 결과를 보고해요. 중간 승인을 기본 흐름에 추가하지 않아요.
+네이티브 SVG 회로도, 경량 소신호 솔버(`assets/mna.js`), 3대 아키타입(`probe`·`bench`·`approx`)과 공통 3단 셸(`assets/lab-template.html`·`assets/lab-runtime.js`)을 하나의 `lab.js` 명세로 엮어 단일 HTML을 만든다. 실행 예제는 `references/example-lab.js`다. 생성부터 4단계 검증·저장·정리노트 연결까지 일괄 진행하고 결과를 보고하며, 중간 승인을 기본 흐름에 추가하지 않는다.
 
-**인자:** `[MMDD | MMDD-MMDD | 주제]`. 날짜는 적합한 주제 2–4개, 명시 주제는 1개예요. 적합한 후보가 하나면 하나만 만들어요. 인자 없으면 NO_ARG와 사용법을 보고해요.
+**인자:** `[MMDD | MMDD-MMDD | 주제]`. 날짜는 적합한 주제 2–4개, 명시 주제는 1개다(적합 후보가 하나면 1개만 생성). 인자가 없으면 `NO_ARG`와 사용법을 보고한다.
 
-**산출물:** 팩 최상위 `인터렉티브_NN_<이름>.html`, `.assets/자료_인터렉티브_NN_<이름>/`의 Main.dc.html·canvas.json·brief.md·validation.json, 정리노트 HTML의 문맥 안내 링크예요. 이름은 한국어를 쓰고 고유명사·기호만 영어로 남겨요(예: CS_이득과_대역폭).
+**산출물:** 팩 최상위 `인터렉티브_NN_<이름>.html`, `.assets/자료_인터렉티브_NN_<이름>/`의 `lab.js`·`brief.md`·`validation.json`, 정리노트 HTML의 문맥 안내 링크(`data-ec2-interactive`). 이름은 한국어를 쓰고 고유명사·기호만 영어로 남긴다(예: `귀환_종단_조립_벤치`).
 
-**경로:** SKILL은 이 파일이 있는 실제 폴더, REPO는 저장소 루트, RUN은 시스템 임시 폴더의 고유 실행 ID, DEST는 resolve 결과의 folder예요. 모든 도구에는 절대 경로를 전달해요. PowerShell 변수는 호출마다 재설정하거나 절대 경로를 직접 써요. NFC/NFD 경로를 손으로 재조립하지 않고 JSON의 실제 경로를 사용해요.
+**경로와 불변 원칙:** `SKILL`은 이 파일이 있는 실제 폴더, `REPO`는 저장소 루트, `RUN`은 시스템 임시 폴더의 고유 실행 경로, `DEST`는 `resolve.cjs` 결과의 `folder`다. 모든 도구에 절대 경로를 넘기며 NFC/NFD 경로를 손으로 재조립하지 않고 JSON 출력 경로를 그대로 사용한다. 안내 링크 외 정리노트 본문·`.widget`·스타일·스크립트, 정리노트 MD·PDF·복습문제는 수정하지 않는다. 기존 자료 덮어쓰기·자동 커밋·외부 게시·영상·SPICE 생성을 하지 않는다.
 
-링크 안내 외 정리노트 본문·위젯·스타일·스크립트, 정리노트 MD·PDF·복습문제는 유지해요. 기존 자료를 덮어쓰거나 외부 Design 게시·자동 커밋·영상·SPICE 생성을 하지 않아요.
-
-**기존 자료 연결만 요청:** 새 자료를 만들지 않아요. 요청 범위의 노트와 기존 자료를 읽고 8–9단계를 실행해요. `전체`는 복습노트의 기존 자료 전체예요.
+**기존 자료 연결만 요청:** 새 자료를 만들지 않고 요청 범위의 기존 노트·자료를 읽어 8–9단계만 실행한다(`전체`는 `복습노트/` 아래 기존 자료 전체).
 
 ### 0. 준비
 
-복습노트/, STT/, 강의노트/, 교과서/마이크로전자회로/와 Node.js >=20을 확인해요. 누락은 실제 경로와 함께 보고해요. RUN을 만들고 수정할 노트의 byte 백업과 기존 MD·PDF·그림 SHA-256을 남겨요.
+`복습노트/`, `STT/`, `강의노트/`, `교과서/마이크로전자회로/`, Node.js ≥20, Python Playwright(`scripts/probe_interactive.py` 실행용)를 확인한다. 누락은 실제 경로와 함께 보고한다. `RUN`을 만들고 수정 대상 정리노트의 바이트 백업과 기존 MD·PDF·그림 SHA-256을 기록한다.
 
 ### 1. 대상 풀기
 
-`node scripts/resolve.cjs REPO 인자`를 실행하고 target.json을 저장해요. 출력은 kind, folder, exists, date, notes(`.assets/`의 정리노트), noteHtml, stt, stts, existing, next예요.
+`node "$SKILL/scripts/resolve.cjs" "$REPO" "<인자>"`를 실행해 `RUN/target.json`을 저장한다. 출력은 `kind`, `folder`, `exists`, `date`, `notes`, `noteHtml`, `stt`, `stts`, `existing`, `next`다.
 
-정확한 날짜 폴더를 우선하고 없으면 해당 날짜를 포함하는 범위 팩을 골라요. 범위 팩이면 모든 STT를 stts로 반환해요. MMDD-MMDD는 그 이름의 기존 팩만 허용해요. 여러 범위가 겹치면 AMBIGUOUS_TARGET을 보고하고 후보 폴더를 보여줘요. STT만 있으면 새 팩 자리예요. 주제는 H2/H3 제목을 우선하고 최신 팩을 선택해요. 없으면 복습노트/주제별/이에요. NO_TARGET·NO_ARG는 대상 처리를 중단해요.
+정확한 날짜 폴더를 우선하고 없으면 해당 날짜를 포함하는 범위 팩(모든 STT를 `stts`로 반환)을 고른다. `MMDD-MMDD`는 그 이름의 기존 팩만 허용하며, 겹치는 범위 팩이 여럿이면 `AMBIGUOUS_TARGET`과 후보 폴더를 보고한다. `STT`만 있으면 새 팩 자리다. 주제는 H2/H3 제목을 우선해 최신 팩을 선택하고 없으면 `복습노트/주제별/`을 쓴다. `NO_TARGET`·`NO_ARG`는 즉시 중단한다.
 
-### 2. 주제 고르기
+### 2. 주제와 아키타입 고르기
 
-`references/topic-selection.md`로 점수를 매겨요. notes·stts·강의노트·교재 범위를 대조해요. 기존 위젯을 반복하는 후보보다 추가 학습 목표가 있는 후보를 골라요. 다음 시간 예고와 부적합 후보는 제외해요. 후보 없음은 이유를 보고해요.
+`references/topic-selection.md` 기준으로 `notes`·`stts`·강의노트·교재를 대조해 점수(3점 이상 우선)를 매기고 주제별 아키타입(`probe`, `bench`, `approx`)을 결정한다. 정리노트에 이미 `.widget`이 있는 절은 단순 열람형 위젯을 회로 조작·인과 맥동·포트 조립·근사 붕괴 실험 등 능동 조작으로 확장하는 경우만 선정하고, 단순 반복이나 다음 시간 예고는 제외한다. 후보가 없으면 이유를 보고한다.
 
-주제별 RUN 폴더에 brief.md를 작성해요. 회로·수식·조작 범위·모드·단계·오개념 3개·단순화·근거 절/쪽·교과서 보충·정리노트 연결을 기록해요.
+주제별 `RUN/<n>/brief.md`에 제목·파일명·아키타입·점수·기존 `.widget` 확장점·모드·조작 범위·대표 설정·인과 단계·예측 질문·오개념 3개·모델 가정·근거 절/쪽·`(교과서 보충)`·정리노트 연결 계획을 기록한다.
 
-### 3. 작성
+### 3. `lab.js` 작성
 
-`references/scene-api.md`와 `references/design.md`를 읽어요. 템플릿의 제목·좌우 슬롯·네 훅(topic, buildScene, extraState, extraVals)만 바꿔요. 공통 상단 바·테마·모바일 서랍·단계·테마 스크롤바를 유지해요. 기본은 회전 없는 평면이에요. 의미 있는 과정에만 playback을 써요.
+`references/lab-api.md`, `references/design.md`, `references/example-lab.js`를 읽고 `RUN/<n>/lab.js`를 작성한다.
 
-회로 연결·AC 접지·종속원 방향·반전 부호·Hz/rad/s·선형 이득/dB를 명시해요. 화면·숫자 패널·현재 표식은 같은 모델에서 계산해요. 1014 예제는 scripts/frequency-model.cjs와 scripts/frequency-topics.cjs를 사용해요.
+- **네이티브 SVG (`CIRCUIT-02`):** `.fig-ink`, `.fig-accent`, `.fig-danger`, `.fig-dot`, `.fig-text`, `.fig-math`, `.fig-muted`, `.sym`, `data-node-color="blue"|"red"`만 사용한다. SVG 하드코딩 hex와 평문 `_`/`$...$` 첨자를 금지하고 `<tspan baseline-shift="sub" font-size="78%">`를 사용한다. 허용 CDN 4종 외 외부 URL을 쓰지 않는다.
+- **5종 `data-*` 훅과 배지:** `data-node`, `data-branch`, `data-elem`, `data-port`, `data-causal-step`을 선언·반환값과 정확히 일치시키고, `<g data-badges><g data-badge-for="...">` 슬롯을 도선에서 0.6em 이상 떨어진 여백에 둔다.
+- **MNA와 UI 계약:** `evaluate(state, mna)` 안에서 `assets/mna.js`의 `solveCircuit`을 써 회로·배지·타일·진단·플롯을 단일 모델로 계산한다. `predict`는 조작을 잠그지 않는 부드러운 1초 카드로 두고, 모드마다 `mistakes` 3개를 채운다.
 
-```powershell
-node "$SKILL/scripts/make-frequency-example.cjs" cs "$RUN/cs/Main.dc.html"
-node "$SKILL/scripts/make-frequency-example.cjs" two "$RUN/two/Main.dc.html"
+### 4. 기계 검사 (`check.cjs` & `steps.cjs`) — 게이트 1
+
+```bash
+node "$SKILL/scripts/check.cjs" "$RUN/<n>/lab.js"
+node "$SKILL/scripts/steps.cjs" "$RUN/<n>/lab.js"
 ```
 
-그 밖의 주제는 예제를 복사만 하지 않고 적합한 모델을 구현해요. 수업 밖 내용은 패널에 `(교과서 보충)`이라고 표시해요. 단계에 f를 쓰면 phase는 해당 시점 재생 바의 ` · `로 나뉜 과정 이름과 같아야 해요(STEP_OFF_PHASE 검사).
+`check.cjs`가 `ok`(종료 0)를 내야 하며(`SCHEMA_INVALID`, `MISTAKES_INVALID`, `HEX_IN_SVG`, `SVG_TEXT_NOTATION`, `HOOK_MISSING`, `EXTERNAL_URL`, `EVAL_THROW`, `EVAL_NON_FINITE` 모두 해결), `steps.cjs`로 `buildProbeStates` 전 상태의 타일·노드·진단 스냅샷을 뽑아 검토 자료로 넘긴다.
 
-### 4. 기계 검사
+### 5. 내용·독립 수치 검토 (`circuit-verification.md`) — 게이트 2
 
-`node scripts/check.cjs Main.dc.html`, `node scripts/steps.cjs Main.dc.html`을 실행해요. 셸·마크업 구멍·이벤트·단계·빈 장면·NaN 오류를 해결하고 기본·대표 설정·조작 끝값을 테스트해요. 테스트는 `node --test`로 tests/*.test.cjs 전체를 실행해요.
+작성자가 아닌 검토자(또는 별도 독립 검토 패스)에게 `lab.js`, `brief.md`, 실제 근거 자료, `steps.cjs` 출력을 전달한다. `references/circuit-verification.md`에 따라 `mna.js` 재호출이 아닌 **별도의 해석식·복소수 전달함수·KCL/노드방정식**으로 기본 상태, 대표 설정, 파라미터 끝값, 오조립·특이(`bench`) 및 근사 붕괴(`approx`) 상태를 독립 검산한다.
 
-### 5. 내용·독립 수치 검토
+Critical/Important 결함은 수정 뒤 4–5단계를 재실행하며, 해결하지 못하거나 독립 검산을 수행할 수 없으면 `not_run`/`fail`로 남기고 해당 자료만 보류한다.
 
-작성자가 아닌 검토자에게 Main.dc.html·브리프·실제 근거 자료·steps 출력을 전달해요. `references/circuit-verification.md`에 따라 회로 연결·문구·단계·근사 조건을 대조하고 별도의 복소수 전달함수로 기본·대표 설정·끝값을 검산해요. 계산 모듈을 다시 호출하는 것은 독립 검산이 아니에요.
+### 6. 빌드, 오프라인 프로브 & 실제 브라우저 확인 — 게이트 3·4
 
-허용된 실제 도구와 모델을 사용해요. 고정 모델 치환을 가정하지 않아요. 별도 검토를 수행할 수 없으면 not_run을 남기고 그 자료를 보류해요. Critical/Important를 모아 한 차례 수정하고 관련 검사를 다시 수행해요. 해결하지 못하면 해당 자료만 보류해요.
-
-### 6. 브라우저 확인
-
-`node scripts/build.cjs Main.dc.html preview.html`로 빌드해요(assets/dc-runtime.js 내장). RUN만 localhost 서버로 제공하고 자신이 띄운 프로세스 ID를 기록해요. Windows Start-Process는 -WindowStyle Hidden을 사용해요.
-
-1440×900·375×812에서 라이트·다크 모두 확인해요. 콘솔 오류, 가로 스크롤, 잘린 라벨을 검사하고 모든 슬라이더 끝값·대표 설정·모드·단계·재생/정지·스크럽·속도·패널 너비·서랍·Escape를 실제 조작해요. 극점·전체 대역폭·단위·파형과 패널을 대조해요. VM draw만으로 브라우저 pass를 기록하지 않아요.
-
-validation.json에는 현재 source_sha256과 machine/content/numeric_independent/browser의 pass/fail/not_run 및 실제 증거, assumptions, supplements, findings를 기록해요. 소스가 바뀌면 해시와 관련 검토를 갱신해요.
-
-### 7. 저장
-
-네 검토가 모두 pass이고 해시가 일치할 때만 자료별로 순차 저장해요.
-
-```powershell
-node "$SKILL/scripts/save.cjs" "$RUN/<n>/Main.dc.html" "$DEST" "<이름>"
+```bash
+node "$SKILL/scripts/build.cjs" "$RUN/<n>/lab.js" "$RUN/<n>/preview.html"
+python3 "$SKILL/scripts/probe_interactive.py" "$RUN/<n>/preview.html" --widths 1440,375 --themes light,dark --out "$RUN/<n>/probe.json"
 ```
 
-출력 JSON의 nn/html/dir을 사용해요. Main.dc.html과 canvas.json은 도구가 만들어요. brief.md·validation.json을 dir로 복사해요. 저장된 HTML을 다시 열어 핵심 조작과 콘솔을 확인해요. 번호는 기존 HTML과 .assets 제작 폴더를 모두 세고, 배타적으로 파일을 만들어 덮어쓰지 않아요. 실패 시 자신이 만든 부분 파일만 정리해요.
+- **게이트 3 (`probe_interactive.py`):** 오프라인 Playwright로 `window.__EC2_LAB__`의 모든 프로브 상태(`listProbeStates`/`applyProbeState`)를 `1440`·`375` 폭과 `light`·`dark` 테마에서 순회하며 콘솔/페이지 오류, 미등록 외부 요청, 가로 스크롤·오버플로, KaTeX 렌더링, `0.6em` `label_gaps`, 모바일 단일 서랍·`Escape` 닫기를 검증해 `defect_count === 0`(종료 0)을 확인한다.
+- **게이트 4 (실제 브라우저 확인):** `probe_interactive.py` 통과 후에도 실제 브라우저(`1440×900`·`375×812`, 라이트·다크)에서 `preview.html`을 직접 열어 예측 카드 건너뛰기/응답, 포트 팝오버(`Enter`/`Space`/`Arrow`/`Escape`), 소자 토글, 슬라이더 끝값, `+Δv` 인과 맥동, 근사 플롯, 라벨 겹침과 패널 대비를 육안·직접 조작으로 확인한다.
 
-### 8. 정리노트 연결
+`RUN/<n>/validation.json`에 `lab.js`의 현재 `source_sha256`과 4개 게이트(`machine`, `numeric_independent`, `probe`, `browser`)의 `pass`/`fail`/`not_run`, 독립 검산 기준값, 발견/수정 내역을 기록한다. 소스가 바뀌면 해시와 4개 게이트를 다시 갱신한다.
 
-`references/note-links.md`대로 실제 저장 경로와 절을 대조하여 RUN/note-links.json을 작성해요. 관련 설명 바로 뒤에 관찰할 내용을 담은 한 문장과 새 탭 링크를 넣어요. 표식은 data-ec2-interactive예요. 상대 URL·target="_blank" rel="noopener noreferrer"를 사용해요. `(새 탭)` 같은 표시 문구는 붙이지 않는다.
+### 7. 저장 (`save.cjs`)
 
-`node scripts/link-notes.cjs 명세.json --dry-run` 결과를 읽고 skipped 이유를 확인한 뒤 apply해요. 재실행 changed:false를 확인해요. 링크 목적지가 모두 존재하고 새 탭에 올바른 자료가 열리며 원 노트가 유지되는지 확인해요. added만 있으면 삽입 문단을 제거한 결과가 원 HTML과 byte-equivalent여야 해요. updated가 있으면 기존 링크의 target·rel 보정만 허용하고 나머지 원문 바이트를 대조해요. 기존 MD·PDF·그림 해시를 대조해요.
+4개 게이트가 모두 `pass`이고 `validation.json`의 `source_sha256`이 현재 `lab.js`와 일치할 때만 자료별로 순차 저장한다:
 
-### 9. 보고
+```bash
+node "$SKILL/scripts/save.cjs" "$RUN/<n>/lab.js" "$DEST" "<이름>"
+```
 
-실제 자료 절대 경로, 주제 선정 이유·모드·조작·가정·보충, 검토 결과와 수정, 연결 절별 added/updated/unchanged/skipped, 보류 이유, RUN/백업 경로를 보고해요. 실행하지 않은 검사는 완료로 표현하지 않아요. 커밋은 요청이 있을 때만 해요.
+출력 JSON(`{"nn", "html", "dir"}`)의 경로를 사용해 `brief.md`·`validation.json`을 `dir`로 복사한다(`save.cjs`는 `dir/lab.js`와 최상위 HTML만 쓰며 기존 번호를 덮어쓰지 않는다). 저장된 최종 HTML을 브라우저에서 다시 열어 핵심 조작과 콘솔 오류 없음을 확인한다.
+
+### 8. 정리노트 연결 (`link-notes.cjs`)
+
+`references/note-links.md`에 따라 `noteHtml`의 관련 절과 저장된 자료를 대조해 `RUN/note-links.json`을 작성한다.
+
+```bash
+node "$SKILL/scripts/link-notes.cjs" "$RUN/note-links.json" --dry-run
+node "$SKILL/scripts/link-notes.cjs" "$RUN/note-links.json"
+```
+
+`--dry-run`의 `skipped` 사유를 확인한 뒤 적용하고, 재실행해 `changed: false`를 확인한다. 링크는 노트 기준 상대 URL과 `target="_blank" rel="noopener noreferrer"`를 쓰며 `(새 탭)` 같은 문구를 붙이지 않는다.
+
+### 9. 무결성 확인 및 보고
+
+- 정리노트 연결에서 `added`만 있으면 삽입된 `<p class="interactive-note" data-ec2-interactive="...">` 블록을 제거했을 때 백업 원 HTML과 바이트 단위 동등한지 확인한다(`updated`는 해당 링크의 `target`/`rel` 보정 외 원문 바이트 유지).
+- 기존 정리노트 MD·PDF·그림의 SHA-256이 작업 전과 같은지 대조한다.
+- 저장된 실제 절대 경로, 주제 선정 이유(아키타입 및 `.widget` 확장 근거), 4개 게이트 결과와 수정 내역, 연결 절별 `added`/`updated`/`unchanged`/`skipped`, 보류 사유, `RUN`/백업 경로를 보고한다. 실행하지 않은 검사는 완료로 보고하지 않으며, 요청이 없으면 커밋하지 않는다.
