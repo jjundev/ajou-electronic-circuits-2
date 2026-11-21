@@ -543,6 +543,7 @@ def write_report(run: Path) -> Path:
     selection=run/'selection.json'; scope=run/'scope.json'
     if state.get('workflow') == 'parallel':
         from pack_parallel import output
+        from pack_findings import applicability_summary
         if f._done(state, 'selection'):
             selection = output(state, 'selection', 'selection.json')
         if f._done(state, 'scope-draft'):
@@ -553,6 +554,7 @@ def write_report(run: Path) -> Path:
         'backups':state['backups'],'recovery':state['recovery'],'publication':state['publication'],
         'concept_check': f.concept_progress(state),
         **({'findings':state.get('findings', {}), 'metrics':runner_metrics(state),
+            'applicability':applicability_summary(state),
             'concept_stages':{tid:f._record(state,tid).get('status','pending')
                               for tid in ('concept-draft','concept-review','concept-publish')}
            } if state.get('workflow') == 'parallel' else {}),

@@ -6,6 +6,7 @@ source-backed findings across candidate revisions and charge accepted correction
 """
 from __future__ import annotations
 
+from collections import Counter
 import hashlib
 import json
 from pathlib import Path
@@ -72,6 +73,7 @@ NOTE_REVIEWS = ('style-audit', 'content-review')
 REVIEW_ROLES = (*NOTE_REVIEWS, 'browser-qa', 'standalone-svg-qa', 'pdf-qa')
 MACHINE_REVIEW = 'structural-precheck'
 CONFLICT = 'review-join'
+LABEL_ONLY_JOIN = 2  # join_contract from which label-only mismatches are recorded, not routed
 # The child coordinator judges the accepted explanation fragments. Its findings
 # can only be corrected by explain-author; the blind solutions stay independent.
 COORDINATOR = 'child-coordinator'
@@ -410,7 +412,7 @@ def check_reviewer(state, task):
 
 
 def join_reviews(state):
-    """Publish a new combined audit only after both adopted, agreeing judgments."""
+    """Publish a combined audit once both note reviews are adopted (contract 1 also needs agreeing labels)."""
     tasks = state['tasks']
     style, content = (tasks[tid] for tid in NOTE_REVIEWS)
     digest = content.get('candidate_digest')
@@ -418,9 +420,14 @@ def join_reviews(state):
         return
     if style['agent_id'] == content['agent_id'] or style['input_version'] != content['input_version']:
         raise f.FlowError('independent reviews must approve the same candidate version')
+    label_only = state.get('join_contract', 1) >= LABEL_ONLY_JOIN
+    if label_only and any(row['review_id'] == CONFLICT and row['status'] != 'resolved'
+                          for row in state.get('findings', {}).values()):
+        raise f.FlowError('label-only join cannot carry review-join findings')
     audits = [f._read(t['artifacts']['learning-style-audit-note.json']) for t in (style, content)]
     merged = audits[0]
     conflicts = []
+    disagreements = []
     for target, item in merged['items'].items():
         other = audits[1]['items'][target]
         item['reviewer'] = f"{style['agent_id']} + {content['agent_id']}"
@@ -428,11 +435,50 @@ def join_reviews(state):
             second = other['rules'][rule]
             evidence = (f"{style['agent_id']} ({decision['disposition']}): {decision['evidence']}\n"
                         f"{content['agent_id']} ({second['disposition']}): {second['evidence']}")
-            if decision['disposition'] != second['disposition']:
+            if decision['disposition'] != second['disposition'] and label_only:
+                decision['disagreement'] = True
+                disagreements.append(dict(candidate_digest=digest, target=target, rule=rule,
+                    style=dict(reviewer=style['agent_id'], disposition=decision['disposition'], evidence=decision['evidence']),
+                    content=dict(reviewer=content['agent_id'], disposition=second['disposition'], evidence=second['evidence'])))
+            elif decision['disposition'] != second['disposition']:
                 conflicts.append(dict(rule=rule, target=target, defect='conflicting rule dispositions',
                     severity='Important', owner_task=owner_of(target, dict(sections=state['scope_sections'])),
                     evidence=evidence))
             decision['evidence'] = evidence
+    if label_only:
+        existing = state.get('applicability_disagreements', [])
+        state['applicability_disagreements'] = [d for d in existing if d['candidate_digest'] != digest] + disagreements
+    else:
+        _adjudicate_conflicts(state, merged, conflicts)
+        if conflicts:
+            return
+    merged.update(candidate_digest=digest, assemble_attempt=style['input_version']['assemble-note'],
+                  review_attempts={t['id']: t['attempt'] for t in (style, content)})
+    path = Path(state['run'])/'adopted'/'review-join'/str(uuid4())/'learning-style-audit.json'
+    path.parent.mkdir(parents=True, exist_ok=False)
+    f._atomic_json(path, merged)
+    path.chmod(0o444)
+    record = dict(path=str(path), sha256=f._sha(path))
+    state['active_audit'] = str(path)
+    state['joined_review'] = dict(file=record, candidate_digest=digest,
+                                  review_attempts=merged['review_attempts'])
+    for task in (style, content):
+        task['receipt']['verified_files'].append(record)
+
+
+
+def applicability_summary(state):
+    """Count label-only note-review disagreements on the joined candidate, per rule."""
+    history = state.get('applicability_disagreements', [])
+    digest = state.get('joined_review', {}).get('candidate_digest')
+    items = [d for d in history if digest and d['candidate_digest'] == digest]
+    audit = state.get('active_audit')
+    cells = sum(len(i['rules']) for i in f._read(Path(audit))['items'].values()) if audit else None
+    return dict(current=len(items), history=len(history), by_rule=dict(Counter(d['rule'] for d in items)),
+                cells=cells, items=items)
+
+def _adjudicate_conflicts(state, merged, conflicts):
+    """Contract 1: route label mismatches between the note reviews as review-join findings."""
     conflict_ids = {finding_key(CONFLICT, row) for row in conflicts}
     rechecks = []
     for row in state.get('findings', {}).values():
@@ -448,20 +494,6 @@ def join_reviews(state):
             compared.append(dict(finding_id=row['id'], prior_review_attempt=row['review_attempt'],
                                  evidence=merged['items'][row['target']]['rules'][row['rule']]['evidence']))
     adjudicate(state, CONFLICT, conflicts, rechecks, compared)
-    if conflicts:
-        return
-    merged.update(candidate_digest=digest, assemble_attempt=style['input_version']['assemble-note'],
-                  review_attempts={t['id']: t['attempt'] for t in (style, content)})
-    path = Path(state['run'])/'adopted'/'review-join'/str(uuid4())/'learning-style-audit.json'
-    path.parent.mkdir(parents=True, exist_ok=False)
-    f._atomic_json(path, merged)
-    path.chmod(0o444)
-    record = dict(path=str(path), sha256=f._sha(path))
-    state['active_audit'] = str(path)
-    state['joined_review'] = dict(file=record, candidate_digest=digest,
-                                  review_attempts=merged['review_attempts'])
-    for task in (style, content):
-        task['receipt']['verified_files'].append(record)
 
 
 def current_audit(state):

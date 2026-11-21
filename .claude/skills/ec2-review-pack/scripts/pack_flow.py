@@ -373,6 +373,7 @@ def init_run(repo: Path, run: Path, range_: str, *,
         if workflow == 'parallel':
             state['approval_contract'] = 1
             state['concept_contract'] = 1
+            state['join_contract'] = 2  # pack_findings.LABEL_ONLY_JOIN
             from pack_publication import publication_inventory, publication_lock
             with publication_lock(repo / '복습노트' / range_):
                 state['public_baseline'] = publication_inventory(repo / '복습노트' / range_, range_)
@@ -734,8 +735,8 @@ _REFERENCES = {
     'selection': [('problem-selection.md', '전체')],
     'scope-final': [('manifest-guide.md', '전체'), ('delegation.md', 'manifest 소유권')],
     'author': [('content-rules.md', '전체'), ('execution-guide.md', '3. 작성')],
-    'style-audit': [('review-prompt.md', '개인화 감사')],
-    'content-review': [('review-prompt.md', '전체')],
+    'style-audit': [('review-prompt.md', '개인화 감사'), ('note-rule-applicability.md', '전체')],
+    'content-review': [('review-prompt.md', '전체'), ('note-rule-applicability.md', '전체')],
     'browser-qa': [('browser-check.md', '전체')],
     'standalone-svg-qa': [('execution-guide.md', '8. MD 변환'), ('browser-check.md', '전체')],
     'child-coordinator': [('problem-explain-integration.md', '전체')],
