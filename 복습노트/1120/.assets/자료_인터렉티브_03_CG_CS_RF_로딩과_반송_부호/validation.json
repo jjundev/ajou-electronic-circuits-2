@@ -1,0 +1,86 @@
+{
+  "id": "cg-cs-rf-loading-and-sign",
+  "title": "CG+CS 귀환 RF 로딩과 반송 부호",
+  "archetype": "approx",
+  "source_sha256": "c13c4e39727611d31aa82ab49bf4be3b787fd1ab4b28c2600c2487f87fe0aba9",
+  "sources": [
+    "복습노트/1120/정리노트_1120_Nonideal_IO_Feedback.html#s3-vc-ideal",
+    "복습노트/1120/정리노트_1120_Nonideal_IO_Feedback.html#s3-vc-open",
+    "복습노트/1120/정리노트_1120_Nonideal_IO_Feedback.html#s3-vc-sign",
+    "복습노트/1120/정리노트_1120_Nonideal_IO_Feedback.html#s3-vc-closed",
+    "복습노트/1120/정리노트_1120_Nonideal_IO_Feedback.html#widget-s3-rf",
+    "STT/1120 전회2.md"
+  ],
+  "gates": {
+    "machine": "pass",
+    "numeric_independent": "pass",
+    "probe": "pass",
+    "browser": "pass"
+  },
+  "gate_details": {
+    "machine": {
+      "status": "pass",
+      "command": "node .agents/skills/ec2-interactive/scripts/check.cjs $RUN/03/lab.js",
+      "output": "ok",
+      "exit_code": 0
+    },
+    "numeric_independent": {
+      "status": "pass",
+      "script": "$RUN/03/verify_independent.py",
+      "method": "Independent pure-Python nodal KCL+VCCS Gaussian elimination solver + closed-form analytical CG+CS TIA equations (without importing mna.js or lab.js solver)",
+      "cases_verified": 39,
+      "steps_txt_snapshots": 25,
+      "defaults": {
+        "r0_ideal_kohm": -100.0,
+        "r0_loading_kohm": -82.5083,
+        "r_in_open_ohm": 99.0099,
+        "r_out_open_kohm": 1.6667,
+        "k_ms": -0.1,
+        "one_plus_kr0": 9.2508,
+        "r_closed_2port_kohm": -8.919,
+        "r_closed_exact_kohm": -8.9188,
+        "err_no_out_pct": 20.0,
+        "err_ideal_pct": 21.2,
+        "sign_if_ma": -0.1
+      },
+      "extremes": {
+        "rf_1k_r0_kohm": -30.303,
+        "rf_1k_ideal_err_pct": 230.0,
+        "rf_100k_r0_kohm": -97.9413,
+        "rf_100k_ideal_err_pct": 2.1,
+        "weak_feedthrough_2port_ohm": -307.69,
+        "weak_feedthrough_exact_ohm": -250.0
+      }
+    },
+    "probe": {
+      "status": "pass",
+      "command": "python3 .agents/skills/ec2-interactive/scripts/probe_interactive.py",
+      "widths": [1440, 375],
+      "themes": ["light", "dark"],
+      "checks": 104,
+      "defect_count": 0,
+      "blocked_requests": []
+    },
+    "browser": {
+      "status": "pass",
+      "script": "$RUN/03/browser_check.py",
+      "viewports": ["1440x900 light/dark", "375x812 dark"],
+      "verified_flows": [
+        "predict card answer feedback and dismiss without locking controls",
+        "direct click on SVG [data-elem='rf-out'] triggering 20.0% breakdown badge and updating tiles/plot",
+        "keyboard Space toggle on [data-elem='rf-in'] and RF log-slider sweep from 1 kΩ (230.0% error) to 100 kΩ (2.1% error)",
+        "mode switch to '반송 부호 K', 3-beat +ΔV1 causal domino, and preset verification (K=-0.100 mS, IF=-0.100 mA, 1+KR0=9.25)",
+        "mobile 375px right drawer open and Escape close",
+        "visual inspection of desktop light/dark and mobile dark screenshots"
+      ],
+      "console_errors": 0,
+      "page_errors": 0
+    }
+  },
+  "fixes_during_validation": [
+    "Moved VDD/VDD (AC 접지) labels up and shifted VDD bars down to y=48 (then compact y=38 with viewBox 700x302) to keep >= 18 units clearance above vertical wires (0 label_gaps).",
+    "Wrapped multi-step equations inside KaTeX aligned blocks so span.katex-display fits within .formula-box at both 1440px and 375px with zero overflow.",
+    "Compacted loading SVG to viewBox='0 0 700 302' with max-height:216px so .lab-stage never overhangs .predict-card or .plot-wrap vertically on 1440x900.",
+    "Fixed KaTeX formatting in diagnosis messages (fmtKOhmTex, missing $...$ in feedthrough warning, distinct message when both replicas are off within 10%) and used fmtSignedMaTex for upright mA units."
+  ]
+}
