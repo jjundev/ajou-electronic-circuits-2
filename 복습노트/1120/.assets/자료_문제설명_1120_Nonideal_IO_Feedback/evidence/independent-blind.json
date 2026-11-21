@@ -1,0 +1,133 @@
+{
+  "items": {
+    "p1:a": {
+      "status": "pass",
+      "method": "qualitative",
+      "conclusion": "순방향 시스템 = M1·R_D로 된 CG 증폭기(입력 V_in이 소스로 들어감). 감지 장치 = V_out 노드에 병렬로 걸린 R1–R2 분배기(출력 전압 감지). 귀환 회로망 = R1–R2 분배기, K = V_F/V_out = R2/(R1+R2) (V_F = M1 게이트 전압). 비교 장치 = M1 자신: 드레인 전류가 v_GS = V_F − V_in에 비례하므로 오차 E = V_in − V_F를 M1이 만든다(전압-전압 귀환, 음귀환).",
+      "evidence": "봉인 그림 p1-figure-1: V_out–R1–게이트 노드–R2–접지, M1 게이트=분배기 중점, 소스=V_in. i_d = g_m(V_F − V_in), V_out = −i_d R_D = g_m R_D (V_in − V_F)로 부호 확인.",
+      "reviewer": "afb102e1883c11548"
+    },
+    "p1:b": {
+      "status": "pass",
+      "method": "symbolic",
+      "conclusion": "개루프 A_v,open = g_m R_D (게이트 교류 접지 CG). 폐루프 A_v,closed = g_m R_D / (1 + g_m R_D R2/(R1+R2)).",
+      "evidence": "V_out = g_m R_D(V_in − K V_out), K = R2/(R1+R2) → V_out/V_in = g_mR_D/(1+K g_mR_D). R1+R2 ≫ R_D이므로 분배기 부하 무시, λ=0. 직접 KCL과 식 (12.2) 결과 일치.",
+      "reviewer": "afb102e1883c11548"
+    },
+    "p1:c": {
+      "status": "pass",
+      "method": "symbolic",
+      "conclusion": "R_in,open = 1/g_m, R_in,closed = (1/g_m)(1 + g_m R_D R2/(R1+R2)) (전압 귀환 입력이라 증가). R_out,open = R_D, R_out,closed = R_D/(1 + g_m R_D R2/(R1+R2)) (전압 감지라 감소).",
+      "evidence": "입력: i_in = g_m(V_in − K V_out) = g_m V_in/(1+Kg_mR_D) → R_in = (1+Kg_mR_D)/g_m. 출력(V_in=0): I_X = V_X/R_D + g_m K V_X → R_out = R_D/(1+g_mKR_D). 두 직접 계산이 (1+루프이득) 배율과 일치.",
+      "reviewer": "afb102e1883c11548"
+    },
+    "p2:main": {
+      "status": "pass",
+      "method": "symbolic",
+      "conclusion": "루프를 끊으면 감지 복제(출력 포트 개방)로 V_out에 R1+R2가 접지로 걸리고, 반송 복제(입력 포트 단락)는 게이트에 R1∥R2를 거는데 게이트 전류가 0이라 영향 없음. R_L' = R_D∥(R1+R2)일 때 A_v,open = g_m1 R_L', R_in,open = 1/g_m1, R_out,open = R_L', K = R2/(R1+R2). 폐루프: A_v,closed = g_m1R_L'/(1+g_m1R_L'R2/(R1+R2)) = g_m1R_D(R1+R2)/(R_D+R1+R2+g_m1R_DR2), R_in,closed = (1+g_m1R_L'R2/(R1+R2))/g_m1, R_out,closed = R_L'/(1+g_m1R_L'R2/(R1+R2)) = R_D(R1+R2)/(R_D+R1+R2+g_m1R_DR2).",
+      "evidence": "g_m=5mS, R_D=2k, R1=3k, R2=1.5k로 정확한 노드 해석(KCL)과 비교: 이득·R_in·R_out 상대오차 0 (이 회로는 게이트 전류가 0이라 두 포트 분해가 정확). 조건 문구는 '충분히 크지 않을 때'로 해석.",
+      "tolerance": 1e-09,
+      "residual": 0.0,
+      "reviewer": "afb102e1883c11548"
+    },
+    "p3:main": {
+      "status": "pass",
+      "method": "symbolic",
+      "conclusion": "이상적 전류원 부하(R_D→∞, λ=0 가정)이므로 출력 부하는 R1+R2뿐. A_v,open = g_m(R1+R2), R_in,open = 1/g_m, R_out,open = R1+R2, K = R2/(R1+R2), 루프 이득 = g_m R2. 폐루프: A_v,closed = g_m(R1+R2)/(1+g_mR2) (g_mR2≫1이면 1+R1/R2), R_in,closed = (1+g_mR2)/g_m = 1/g_m + R2, R_out,closed = (R1+R2)/(1+g_mR2).",
+      "evidence": "P2 식에서 R_D→∞; 정확한 KCL V_out(1/(R1+R2)+g_mK) = g_mV_in과 수치 비교 상대오차 0. λ>0이면 r_O가 출력에 병렬로 들어가 R1+R2 자리에 r_O∥(R1+R2)를 써야 하나(그때 CG 입력 저항도 바뀜) 문제는 예제 12.26처럼 λ=0으로 봄.",
+      "tolerance": 1e-09,
+      "residual": 0.0,
+      "reviewer": "afb102e1883c11548"
+    },
+    "p4:main": {
+      "status": "pass",
+      "method": "symbolic",
+      "conclusion": "루프 끊기: 베이스에 R_B = R1∥R2(반송 복제, 입력 포트 단락), 컬렉터에 R1+R2(감지 복제, 출력 포트 개방). R_L' = R_C∥(R1+R2). 개루프 A_v,open = βR_L'/(r_π + R1∥R2), R_in,open = (r_π + R1∥R2)/(β+1) ≈ 1/g_m + (R1∥R2)/(β+1), R_out,open = R_L' (V_A=∞). K = R2/(R1+R2). 루프 이득 T = [R2/(R1+R2)]·βR_L'/(r_π+R1∥R2). 폐루프: A_v,closed = A_v,open/(1+T), R_in,closed = R_in,open(1+T), R_out,closed = R_L'/(1+T).",
+      "evidence": "베이스 전류가 R1∥R2에 전압 강하를 만들어 이득을 r_π/(r_π+R_B) 배로 줄임. β=100, g_m=5mS, R_C=2k, R1=3k, R2=1.5k로 정확한 2노드 해석과 비교: 이득 1.0e-3, R_in·R_out 2.3e-3 상대오차(귀환망 피드포워드·베이스 전류의 1/β 항 무시분).",
+      "tolerance": 0.02,
+      "residual": 0.0023,
+      "reviewer": "afb102e1883c11548"
+    },
+    "p5:main": {
+      "status": "pass",
+      "method": "symbolic",
+      "conclusion": "전압-전압 귀환(V_out 감지, M1 소스에 반송; 음귀환). 루프 끊기: M1 소스에 R1∥R2 축퇴(반송 복제), V_out에 R1+R2 부하(감지 복제). λ=0. A_v,open = g_m2 R_D1 [R_D2∥(R1+R2)] / (1/g_m1 + R1∥R2), R_in,open = ∞, R_out,open = R_D2∥(R1+R2), K = R2/(R1+R2). 폐루프: A_v,closed = A_v,open/(1+K A_v,open), R_in,closed = ∞, R_out,closed = [R_D2∥(R1+R2)]/(1+K A_v,open).",
+      "evidence": "부호: V_in↑→X↓→V_out↑→소스↑→v_GS1↓ 음귀환. g_m1=4mS, g_m2=6mS, R_D1=5k, R_D2=4k, R1=3k, R2=1.5k에서 정확한 3노드 해석과 비교: 이득 6.1e-4, R_out 1.05e-2 상대오차(R1을 통한 피드포워드 무시분).",
+      "tolerance": 0.02,
+      "residual": 0.0105,
+      "reviewer": "afb102e1883c11548"
+    },
+    "p6:main": {
+      "status": "pass",
+      "method": "symbolic",
+      "conclusion": "V_in(M1 게이트)→V_out은 비반전, 분배기 중점이 M2 게이트로 가서 음귀환(전압-전압). 루프 끊기: V_out에 R1+R2 부하, M2 게이트의 R1∥R2는 게이트 전류 0이라 무관. A_v,open = g_mN [r_ON∥r_OP∥(R1+R2)], R_in,open = R_in,closed = ∞, R_out,open = r_ON∥r_OP∥(R1+R2), K = R2/(R1+R2). 폐루프: A_v,closed = A_v,open/(1+K A_v,open), R_out,closed = R_out,open/(1+K A_v,open).",
+      "evidence": "전류 거울 부하 차동쌍의 G_m = g_mN, 출력 저항 r_ON∥r_OP 모델로 정확한 KCL과 비교 상대오차 0.",
+      "tolerance": 1e-09,
+      "residual": 0.0,
+      "reviewer": "afb102e1883c11548"
+    },
+    "p7:main": {
+      "status": "pass",
+      "method": "symbolic",
+      "conclusion": "전압-전류 귀환. 루프 끊기: 입력 노드와 V_out에 각각 R_F가 접지로. λ=0. 개루프 R_0 = V_out/I_in = −g_m1 g_m2 R_D1 R_F (R_D2∥R_F)/(1+g_m1R_F), R_in,open = R_F∥(1/g_m1) = R_F/(1+g_m1R_F), R_out,open = R_D2∥R_F. K = I_2/V_1 = −1/R_F, 루프 이득 KR_0 = g_m1g_m2R_D1(R_D2∥R_F)/(1+g_m1R_F) > 0. 폐루프: V_out/I_in = R_0/(1+KR_0) = −g_m1g_m2R_D1R_F(R_D2∥R_F)/(1+g_m1R_F+g_m1g_m2R_D1(R_D2∥R_F)) (→ −R_F), R_in,closed = R_in,open/(1+KR_0), R_out,closed = (R_D2∥R_F)/(1+KR_0).",
+      "evidence": "전류 분배 I_in·R_F/(R_F+1/g_m1)이 M1을 거쳐 R_D1로 감. g_m1=4mS, g_m2=6mS, R_D1=5k, R_D2=4k, R_F=10k로 정확한 노드 해석과 비교: 이득 8.9e-5, R_in 7.4e-4 상대오차.",
+      "tolerance": 0.02,
+      "residual": 0.00075,
+      "reviewer": "afb102e1883c11548"
+    },
+    "p8:1": {
+      "status": "pass",
+      "method": "symbolic",
+      "conclusion": "M1 NMOS CG(게이트 V_b, 드레인 R_D), M2 PMOS CS(게이트=M1 드레인, 드레인=V_out, 부하 R_M), R_F가 V_out→입력 노드: 전압-전류 귀환. 루프 끊기로 입력 노드와 V_out에 R_F를 접지로 붙임. 개루프 이득 R_0 = V_out/I_in = −g_m1 g_m2 R_D R_F (R_M∥R_F)/(1+g_m1R_F). R_in,open = R_F∥(1/g_m1) = R_F/(1+g_m1R_F). R_out,open = R_M∥R_F.",
+      "evidence": "v_s = I_in/(g_m1+1/R_F), v_A = g_m1R_D v_s, PMOS 드레인 전류 = −g_m2 v_A가 R_M∥R_F로 흐름 → V_out = −g_m2 v_A (R_M∥R_F). 부호: I_in↑→v_A↑→M2 전류↓→V_out↓ 음귀환.",
+      "tolerance": 0.02,
+      "residual": 0.00073,
+      "reviewer": "afb102e1883c11548"
+    },
+    "p8:2": {
+      "status": "pass",
+      "method": "symbolic",
+      "conclusion": "Feedback factor K = −1/R_F (V_out 쪽에 V_1, 입력 쪽 단락 전류 I_2). 루프 이득 T = KR_0 = g_m1g_m2R_D(R_M∥R_F)/(1+g_m1R_F). Closed-loop gain = R_0/(1+T) = −g_m1g_m2R_DR_F(R_M∥R_F)/(1+g_m1R_F+g_m1g_m2R_D(R_M∥R_F)) (T≫1이면 ≈ −R_F). R_in,closed = R_in,open/(1+T) = R_F/(1+g_m1R_F+g_m1g_m2R_D(R_M∥R_F)).",
+      "evidence": "g_m1=4mS, g_m2=6mS, R_D=5k, R_M=3k, R_F=10k(T≈6.75)로 정확한 3노드 해석과 비교: 폐루프 이득 1.1e-4, R_in 7.3e-4 상대오차.",
+      "tolerance": 0.02,
+      "residual": 0.00073,
+      "reviewer": "afb102e1883c11548"
+    },
+    "p9:1": {
+      "status": "pass",
+      "method": "symbolic",
+      "conclusion": "M2가 소스 팔로워(드레인 V_DD, 소스=V_out, R_M)라 경로에 반전이 없다(CG 비반전, 팔로워 비반전): R_0 = V_out/I_in = [g_m1R_DR_F/(1+g_m1R_F)]·[g_m2(R_M∥R_F)/(1+g_m2(R_M∥R_F))] > 0. K = −1/R_F이므로 루프 이득 KR_0 = −g_m1g_m2R_D(R_M∥R_F)/[(1+g_m1R_F)(1+g_m2(R_M∥R_F))] < 0 → 양귀환. 정의 |T| = g_m1g_m2R_D(R_M∥R_F)/[(1+g_m1R_F)(1+g_m2(R_M∥R_F))]로 쓰면 Feedback factor K = −1/R_F, closed-loop gain = R_0/(1+KR_0) = R_0/(1−|T|) (|T|<1일 때만 유한·안정한 값; 개루프보다 커짐).",
+      "evidence": "부호: I_in↑→v_s↑→i_D1↓→v_A↑→V_out↑→R_F로 입력 노드에 전류 주입→v_s 더 상승(양귀환). g_m1=4mS, g_m2=6mS, R_D=5k, R_M=3k, R_F=10k에서 KR_0 = −0.455, 정확한 노드 해석과 비교: 이득 1.5e-3 상대오차.",
+      "tolerance": 0.02,
+      "residual": 0.0016,
+      "reviewer": "afb102e1883c11548"
+    },
+    "p9:2": {
+      "status": "pass",
+      "method": "symbolic",
+      "conclusion": "R_in,open = R_F∥(1/g_m1) = R_F/(1+g_m1R_F), R_out,open = (1/g_m2)∥R_M∥R_F. 루프 이득이 음수(KR_0 = −|T|)라 R_in,closed = R_in,open/(1−|T|), R_out,closed = [(1/g_m2)∥R_M∥R_F]/(1−|T|): 양귀환이므로 두 임피던스가 개루프보다 커진다(|T|<1 가정).",
+      "evidence": "같은 수치에서 정확한 노드 해석(R_out은 I_in=0, 출력 시험 전압)과 비교: R_in·R_out 모두 7.0e-4 상대오차.",
+      "tolerance": 0.02,
+      "residual": 0.0007,
+      "reviewer": "afb102e1883c11548"
+    },
+    "p10:main": {
+      "status": "pass",
+      "method": "symbolic",
+      "conclusion": "단일 BJT CE + 컬렉터–베이스 R_F: 전압-전류 귀환. 루프 끊기: 베이스와 컬렉터에 각각 R_F 접지. V_A<∞이므로 r_O 포함. R_0 = −g_m (R_F∥r_π)(R_C∥r_O∥R_F), R_in,open = R_F∥r_π, R_out,open = R_C∥r_O∥R_F, K = −1/R_F, 루프 이득 T = g_m(R_F∥r_π)(R_C∥r_O∥R_F)/R_F. 폐루프: V_out/I_in = R_0/(1+T), R_in,closed = (R_F∥r_π)/(1+T), R_out,closed = (R_C∥r_O∥R_F)/(1+T).",
+      "evidence": "g_m=40mS, β=100, r_O=50k, R_C=2k, R_F=5k로 정확한 2노드 해석과 비교: 이득 2.6e-4, R_in·R_out 4.7e-3 상대오차(R_F 피드포워드 무시분).",
+      "tolerance": 0.02,
+      "residual": 0.0048,
+      "reviewer": "afb102e1883c11548"
+    },
+    "p11:main": {
+      "status": "pass",
+      "method": "symbolic",
+      "conclusion": "M1 CG(R_D1, r_O1), M2 NMOS CS(이상적 전류원 부하, r_O2), 귀환망 = R1·R2·R_F의 T형: 전압-전류 귀환(음귀환). 루프 끊기: 입력 노드에 R_A = R_F + R1∥R2, 출력에 R_B = R1 + R2∥R_F. M1 소스에서 본 저항 R_m = (R_D1+r_O1)/(1+g_m1r_O1). 개루프 R_0 = v_out/i_in = −g_m2 R_D1 [R_A/(R_A+R_m)] (r_O2∥R_B), R_in,open = R_A∥R_m, R_out,open = r_O2∥R_B. 귀환율 K = −(R2∥R_F)/[R_F(R1+R2∥R_F)] = −R2/(R1R2+R1R_F+R2R_F). 루프 이득 T = KR_0 > 0. 폐루프: v_out/i_in = R_0/(1+T) (T≫1이면 → −(R1+R_F+R1R_F/R2)), R_in,closed = (R_A∥R_m)/(1+T), R_out,closed = (r_O2∥R_B)/(1+T).",
+      "evidence": "M2 전류원 부하이므로 R_D2 없음. g_m1=4mS, g_m2=6mS, R_D1=5k, r_O1=30k, r_O2=40k, R1=3k, R2=1.5k, R_F=8k(T≈4.15)에서 정확한 4노드 해석과 비교: 이득 6.9e-5, R_in·R_out 2.9e-4 상대오차.",
+      "tolerance": 0.02,
+      "residual": 0.00029,
+      "reviewer": "afb102e1883c11548"
+    }
+  }
+}

@@ -548,6 +548,12 @@ def _current(state):
         stale.append(path)
     state['stale_inputs'] = stale
     records = {**state['tasks'], **state['actions']}
+    coordinator = state['tasks'].get('child-coordinator')
+    if (state.get('workflow') == 'parallel' and coordinator and coordinator.get('status') == 'needs_fix'
+            and not coordinator.get('candidate_digest')):
+        # Adopted before coordinator findings entered the ledger: nothing can
+        # repair it, so a fresh attempt must resubmit structured findings.
+        coordinator['status'] = 'stale'
     for name, record in records.items():
         withheld_review = (name == 'concept-review' and record.get('status') == 'blocked'
                            and (record.get('receipt') or {}).get('status') == 'withheld')

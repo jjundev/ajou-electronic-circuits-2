@@ -72,6 +72,11 @@ NOTE_REVIEWS = ('style-audit', 'content-review')
 REVIEW_ROLES = (*NOTE_REVIEWS, 'browser-qa', 'standalone-svg-qa', 'pdf-qa')
 MACHINE_REVIEW = 'structural-precheck'
 CONFLICT = 'review-join'
+# The child coordinator judges the accepted explanation fragments. Its findings
+# can only be corrected by explain-author; the blind solutions stay independent.
+COORDINATOR = 'child-coordinator'
+COORDINATOR_OWNER = 'explain-author'
+LEDGER_REVIEWS = (*REVIEW_ROLES, COORDINATOR)
 
 
 def finding_key(kind, item):
@@ -119,6 +124,8 @@ def repair_record(state, finding):
 
 def repair_candidate(state, role, owner, attempt):
     """Find the accepted rendered candidate containing this exact producer correction."""
+    if role == COORDINATOR:
+        return None  # The coordinator inspects the corrected fragments themselves.
     tid, name = ('build-answers', 'pdf') if role == 'pdf-qa' else ('assemble-note', 'note')
     action = state['actions'].get(tid, {})
     for row in (*action.get('history', []), action):
@@ -176,6 +183,8 @@ def record_findings(state: dict, *, review_id: str, input_digest: str, findings:
                 or (owner not in state['tasks'] and not external) or owner not in source['input_version']
                 or owner in (*REVIEW_ROLES, 'explain-blind')):
             raise f.FlowError('invalid or duplicate finding, owner or evidence')
+        if review_id == COORDINATOR and owner != COORDINATOR_OWNER:
+            raise f.FlowError('child-coordinator findings are owned by explain-author')
         seen.add(key)
         row = ledger.setdefault(key, dict(id=key, review_id=review_id, status='open',
                                           unsuccessful_attempts=[], repairs=[]))
@@ -363,6 +372,11 @@ def apply_request(state, request):
             required = {k for k, r in eligible.items() if r['review_id'] in (*NOTE_REVIEWS, CONFLICT)}
             if not required <= {i.get('finding_id') for i in request['items'] if isinstance(i, dict)}:
                 raise f.FlowError('batch every current note review finding')
+        # One explain-author correction answers the whole coordinator judgment.
+        if eligible[key]['review_id'] == COORDINATOR:
+            required = {k for k, r in eligible.items() if r['review_id'] == COORDINATOR}
+            if not required <= {i.get('finding_id') for i in request['items'] if isinstance(i, dict)}:
+                raise f.FlowError('batch every current child-coordinator finding')
     for owner in owners:
         task = state['tasks'][owner]
         if task['status'] != 'done':
@@ -384,6 +398,10 @@ def check_reviewer(state, task):
     authors = [t for r in repairs for t in (state['tasks'][r['owner_task']], repair_record(state, r)) if t]
     if any(t.get('agent_id') == reviewer for t in authors):
         raise f.FlowError('the correction author cannot approve their own repair')
+    if task['id'] == COORDINATOR:
+        author = state['tasks'].get(COORDINATOR_OWNER, {})
+        if reviewer in {author.get('agent_id'), *(r.get('agent_id') for r in author.get('history', []))}:
+            raise f.FlowError('the child coordinator cannot review explanations it authored')
     if task['id'] in NOTE_REVIEWS:
         other = next(tid for tid in NOTE_REVIEWS if tid != task['id'])
         forbidden = [state['tasks'][other], *(t for t in state['tasks'].values() if t['role'] == 'author')]

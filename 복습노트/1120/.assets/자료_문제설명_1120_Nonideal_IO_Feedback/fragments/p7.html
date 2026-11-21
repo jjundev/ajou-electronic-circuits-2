@@ -1,0 +1,102 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 읽어요</h4>
+  <p>입력은 전류 $I_{in}$이고 $M_1$의 소스 노드로 들어가요. $M_1$은 게이트가 $V_b$인 공통 게이트(CG) 단이고 드레인 X에 $R_{D1}$이 달려 있어요. X가 $M_2$(소스 접지 CS 단)의 게이트를 구동하고, $M_2$ 드레인($R_{D2}$ 부하)이 출력 $V_{out}$이에요.</p>
+  <p>$R_F$가 $V_{out}$과 $M_1$ 소스 노드 사이에 걸려 있어요. 출력 전압에 비례하는 전류 $i_{RF}$가 입력 노드로 되돌아가요.</p>
+  <p>$R_F$가 매우 크지 않으니 귀환망이 입력·출력 양쪽에 주는 부하를 넣어야 해요. $\lambda=0$으로 봐요.</p>
+  <p>구할 것은 개루프 트랜스임피던스 $R_0=V_{out}/I_{in}$, 개루프 입력·출력 임피던스, 귀환율 $K$, 폐루프 이득과 폐루프 입력·출력 임피던스예요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 개념과 공식을 떠올려요</h4>
+  <p><strong>단서:</strong> $R_F$가 출력 노드에 병렬로 붙어 전압을 감지하고, 입력 노드에 병렬로 붙어 전류를 되돌려요. 전압-전류 귀환(voltage-current feedback, shunt-shunt)이고, 이득은 트랜스임피던스(transimpedance)예요.</p>
+  <p><strong>끊는 법칙(Fig 12.53(b)):</strong> 감지 복제의 출력 포트와 반송 복제의 입력 포트를 모두 <em>단락</em>해요. 그래서 출력 노드에도, 입력 노드에도 각각 $R_F$가 접지로 붙어요.</p>
+  <p><strong>귀환율(Fig 12.54(b)):</strong> 귀환망 입력에 $V_1$을 걸고 단락된 출력 포트의 전류 $I_2$를 재요. 입력 노드에서 빠져나가는 귀환 전류를 양으로 잡으면 $K=I_2/V_1=-1/R_F$예요.</p>
+  <p><strong>폐루프 공식:</strong> 출력에서 전압 감지, 입력에서 전류 비교라 두 임피던스가 모두 $1+KR_0$로 나뉘어요.</p>
+  $$\frac{V_{out}}{I_{in}}=\frac{R_0}{1+KR_0}$$
+  <p><strong>CG 블록:</strong> $\lambda=0$이면 소스에서 본 저항은 $1/g_{m1}$이고, 게이트 전류가 0이라 소스로 들어간 전류가 그대로 드레인으로 나가요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <div data-answer-step="귀환망 끊기">
+    <p>부하를 넣은 개루프 회로에서는 $M_1$ 소스 노드에 $R_F$가 접지로, $V_{out}$에도 $R_F$가 접지로 붙어요. 첫 줄은 입력 노드에서 $I_{in}$이 $R_F$와 $M_1$로 나뉘는 전류 분배예요.</p>
+    $$i_1=\frac{R_F}{R_F+1/g_{m1}}I_{in}=\frac{g_{m1}R_F}{1+g_{m1}R_F}I_{in}$$
+  </div>
+  <p>$i_1$은 $M_1$ 소스로 들어가 드레인으로 나가고, X에서 $R_{D1}$을 지나 $V_{DD}$로 흘러요. 그래서 $v_X=i_1R_{D1}$이에요.</p>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>이렇게 풀어요</h4>
+  <div data-subpart="main">
+    <div data-answer-step="첫 단">
+      $$v_X=i_1R_{D1}=\frac{g_{m1}R_F}{1+g_{m1}R_F}R_{D1}I_{in}$$
+    </div>
+    <p>둘째 단은 X를 입력으로 하는 CS 단이에요. $i_{out}$은 출력 노드에서 $M_2$ 드레인으로 흘러 들어가는 방향을 양으로 잡아요.</p>
+    <div data-answer-step="둘째 단 전압 이득" data-gain-route="gm-rout">
+      <div data-gain-stage="gm">
+        $$G_{m2}=\frac{i_{out}}{v_X}=g_{m2}$$
+      </div>
+      <div data-gain-stage="rout">
+        <p>$\lambda=0$이라 $M_2$ 드레인 쪽은 무한대이고, $R_{D2}$와 출력 쪽 복제 $R_F$가 병렬이에요.</p>
+        $$R_{out2}=R_{D2}\parallel R_F$$
+      </div>
+      <div data-gain-stage="gain">
+        $$\frac{v_{out}}{v_X}=-G_{m2}R_{out2}=-g_{m2}(R_{D2}\parallel R_F)$$
+      </div>
+    </div>
+    <div data-answer-step="개루프 변수">
+      $$\begin{aligned}R_0&=\frac{V_{out}}{I_{in}}\\&=-\frac{g_{m1}R_F}{1+g_{m1}R_F}R_{D1}g_{m2}(R_{D2}\parallel R_F)\end{aligned}$$
+      $$R_{in,open}=R_F\parallel\frac1{g_{m1}}=\frac{R_F}{1+g_{m1}R_F}$$
+      $$R_{out,open}=R_{D2}\parallel R_F$$
+    </div>
+    <div data-answer-step="귀환율과 루프 이득">
+      <p>$V_1$을 $V_{out}$ 쪽에 걸고 입력 쪽을 단락하면 $R_F$에 $V_1/R_F$가 흘러 입력 노드로 들어가요. 빠져나가는 방향이 양이라 부호가 음이에요.</p>
+      $$K=\frac{I_2}{V_1}=-\frac1{R_F}$$
+      $$KR_0=\frac{g_{m1}R_{D1}g_{m2}(R_{D2}\parallel R_F)}{1+g_{m1}R_F}$$
+      <p>$R_0\lt0$, $K\lt0$이라 루프 이득이 양수이므로 부궤환이에요.</p>
+    </div>
+    <div data-answer-step="폐루프 변수">
+      $$\frac{V_{out}}{I_{in}}=\frac{R_0}{1+KR_0}$$
+      $$R_{in,closed}=\frac{R_F/(1+g_{m1}R_F)}{1+KR_0}$$
+      $$R_{out,closed}=\frac{R_{D2}\parallel R_F}{1+KR_0}$$
+    </div>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <div data-answer-final="">
+      <p><strong>$R_0=-\dfrac{g_{m1}R_F}{1+g_{m1}R_F}R_{D1}g_{m2}(R_{D2}\parallel R_F)$, $R_{in,open}=\dfrac{R_F}{1+g_{m1}R_F}$, $R_{out,open}=R_{D2}\parallel R_F$, $K=-1/R_F$예요.</strong></p>
+      <p><strong>$V_{out}/I_{in}=R_0/(1+KR_0)$, $R_{in,closed}=R_{in,open}/(1+KR_0)$, $R_{out,closed}=R_{out,open}/(1+KR_0)$이고 $KR_0=\dfrac{g_{m1}R_{D1}g_{m2}(R_{D2}\parallel R_F)}{1+g_{m1}R_F}$예요.</strong> ($\lambda=0$)</p>
+    </div>
+    <p>극한: $KR_0\gg1$이면 $V_{out}/I_{in}\to1/K=-R_F$예요. 입력 노드가 거의 고정되어 $I_{in}$이 모두 $R_F$로 흐르면 $V_{out}=-I_{in}R_F$이므로 맞아요.</p>
+    <p>극한: $R_F\to\infty$이면 $K\to0$이고 $R_0\to-R_{D1}g_{m2}R_{D2}$, $R_{in,open}\to1/g_{m1}$로 귀환 없는 CG+CS 값이 돼요.</p>
+    <p>단위: $R_0$는 $R_{D1}$[Ω]×$g_{m2}R_{D2}$[무차원]이라 Ω이고, $KR_0$는 무차원이에요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>주의할 점</h4>
+  <ul>
+    <li>전압-전류 귀환에서는 두 복제를 모두 단락해요. 전압-전압 귀환처럼 출력 쪽을 개방하면 $R_F$가 출력 부하에서 빠져 버려요.</li>
+    <li>$K$의 부호를 빼먹으면 $1+KR_0$가 $1-|KR_0|$로 바뀌어 정궤환처럼 계산돼요. $R_0\lt0$와 $K=-1/R_F$를 함께 써요.</li>
+    <li>입력 노드의 $R_F$를 잊으면 $I_{in}$이 모두 $M_1$로 간다고 계산하게 돼요. 전류 분배 계수 $g_{m1}R_F/(1+g_{m1}R_F)$가 필요해요.</li>
+    <li>전압-전류 귀환은 입력·출력 임피던스를 모두 줄여요. 입력을 키운다고 쓰지 않아요.</li>
+  </ul>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>조건을 바꾸어 생각해요</h4>
+  <ol>
+    <li>$g_{m1}R_F\gg1$이면 전류 분배 계수와 $R_{in,open}$은 각각 무엇으로 단순해지나요?</li>
+    <li>$M_2$를 PMOS CS 단으로 바꾸어도 루프 이득의 부호는 그대로인가요?</li>
+    <li>$\lambda\gt0$이면 $R_{out,open}$에 어떤 저항이 더해지나요?</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <p class="sum-lead">$R_F$가 출력 전압을 감지해 입력 노드로 전류를 되돌리는 전압-전류 귀환이에요.</p>
+  <div class="summary-group">
+    <h4>끊는 법칙</h4>
+    <p>두 복제를 모두 단락해 입력 노드와 출력 노드에 각각 $R_F$를 접지로 붙여요.</p>
+  </div>
+  <div class="summary-group">
+    <h4>핵심 식</h4>
+    <p>$R_0=-\dfrac{g_{m1}R_F}{1+g_{m1}R_F}R_{D1}g_{m2}(R_{D2}\parallel R_F)$예요.</p>
+    <p>$K=-1/R_F$이고 이득·$R_{in}$·$R_{out}$이 모두 $1+KR_0$로 나뉘어요.</p>
+  </div>
+</div>

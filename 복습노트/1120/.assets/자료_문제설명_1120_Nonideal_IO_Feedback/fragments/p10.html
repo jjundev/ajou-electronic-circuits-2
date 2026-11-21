@@ -1,0 +1,85 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 읽어요</h4>
+  <p>트랜지스터 하나로 만든 트랜스임피던스 증폭기예요. 입력 전류 $I_{in}$이 $Q_1$의 베이스 노드로 들어가고, $Q_1$은 이미터가 접지된 공통 이미터(CE) 단이에요. 컬렉터에 $R_C$가 $V_{CC}$로 달려 있고 컬렉터가 출력 $V_{out}$이에요.</p>
+  <p>$R_F$가 컬렉터($V_{out}$)와 베이스 사이에 걸려 있어요. 출력 전압에 비례하는 전류가 입력 노드로 되돌아가요.</p>
+  <p>예제 12.29처럼 $R_F$가 매우 크지 않다고 보고 부하 효과를 넣어요. $V_A\lt\infty$라 $Q_1$의 $r_O$를 유지해요.</p>
+  <p>구할 것은 개루프 트랜스임피던스 $R_0$, 개루프 입력·출력 임피던스, 귀환율 $K$, 폐루프 이득 $V_{out}/I_{in}$과 폐루프 입력·출력 임피던스예요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 개념과 공식을 떠올려요</h4>
+  <p><strong>단서:</strong> $R_F$가 출력 노드에 병렬로 붙어 전압을 감지하고 입력 노드에 병렬로 붙어 전류를 되돌려요. 전압-전류 귀환(voltage-current feedback)이에요.</p>
+  <p><strong>끊는 법칙:</strong> 두 복제를 모두 단락해요. 베이스 노드와 컬렉터 노드에 각각 $R_F$가 접지로 붙어요.</p>
+  <p><strong>귀환율:</strong> 입력 노드에서 빠져나가는 귀환 전류를 양으로 잡으면 $K=-1/R_F$예요.</p>
+  <p><strong>CE 블록:</strong> 베이스에서 본 저항은 $r_\pi$, 컬렉터 전류는 $g_mv_\pi$이고, 컬렉터에서 본 트랜지스터 저항은 $r_O$예요. $V_A\lt\infty$라는 조건 때문에 $r_O$가 출력 노드에 병렬로 남아요.</p>
+  <p><strong>폐루프 공식:</strong> $V_{out}/I_{in}=R_0/(1+KR_0)$이고 입력·출력 임피던스가 모두 $1+KR_0$로 나뉘어요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <div data-answer-step="귀환망 끊기">
+    <p>개루프 회로의 입력 노드에는 $R_F$와 $r_\pi$가, 출력 노드에는 $R_C$, $r_O$, $R_F$가 병렬로 붙어요. 첫 줄은 $I_{in}$이 만드는 베이스 전압이에요.</p>
+    $$v_\pi=I_{in}(R_F\parallel r_\pi)$$
+  </div>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>이렇게 풀어요</h4>
+  <div data-subpart="main">
+    <div data-answer-step="개루프 변수">
+      <p>컬렉터 전류 $g_mv_\pi$가 출력 노드의 세 저항 병렬에서 전압을 만들어요. CE 단이라 부호는 음이에요.</p>
+      $$v_{out}=-g_mv_\pi(R_C\parallel r_O\parallel R_F)$$
+      $$\begin{aligned}R_0&=\frac{V_{out}}{I_{in}}\\&=-g_m(R_F\parallel r_\pi)(R_C\parallel r_O\parallel R_F)\end{aligned}$$
+      $$R_{in,open}=R_F\parallel r_\pi$$
+      $$R_{out,open}=R_C\parallel r_O\parallel R_F$$
+    </div>
+    <div data-answer-step="귀환율과 루프 이득">
+      $$K=\frac{I_2}{V_1}=-\frac1{R_F}$$
+      $$KR_0=\frac{g_m(R_F\parallel r_\pi)(R_C\parallel r_O\parallel R_F)}{R_F}$$
+      <p>$R_0\lt0$, $K\lt0$이라 루프 이득이 양수이고 부궤환이에요.</p>
+    </div>
+    <div data-answer-step="폐루프 변수">
+      $$\frac{V_{out}}{I_{in}}=\frac{R_0}{1+KR_0}$$
+      $$R_{in,closed}=\frac{R_F\parallel r_\pi}{1+KR_0}$$
+      $$R_{out,closed}=\frac{R_C\parallel r_O\parallel R_F}{1+KR_0}$$
+    </div>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <div data-answer-final="">
+      <p><strong>$R_0=-g_m(R_F\parallel r_\pi)(R_C\parallel r_O\parallel R_F)$, $R_{in,open}=R_F\parallel r_\pi$, $R_{out,open}=R_C\parallel r_O\parallel R_F$, $K=-1/R_F$예요.</strong></p>
+      <p><strong>$V_{out}/I_{in}=R_0/(1+KR_0)$, $R_{in,closed}=R_{in,open}/(1+KR_0)$, $R_{out,closed}=R_{out,open}/(1+KR_0)$이고 $KR_0=g_m(R_F\parallel r_\pi)(R_C\parallel r_O\parallel R_F)/R_F$예요.</strong> ($V_A\lt\infty$)</p>
+    </div>
+    <p>극한: $KR_0\gg1$이면 $V_{out}/I_{in}\to1/K=-R_F$예요. 베이스 노드 전압이 거의 고정되어 $I_{in}$이 $R_F$로 흐르므로 맞아요.</p>
+    <p>극한: $V_A\to\infty$이면 $r_O\to\infty$라 출력 쪽이 $R_C\parallel R_F$가 돼요. $R_F\to\infty$이면 $K\to0$, $R_0\to-g_mr_\pi(R_C\parallel r_O)=-\beta(R_C\parallel r_O)$로 귀환 없는 CE 값이에요.</p>
+    <p>단위: $g_m$[S]×Ω×Ω이라 $R_0$는 Ω이고, $KR_0$는 무차원이에요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>주의할 점</h4>
+  <ul>
+    <li>$R_F$를 출력 쪽에만 붙이고 입력 쪽을 잊기 쉬워요. 전압-전류 귀환은 두 복제를 모두 단락하므로 베이스에도 $R_F$가 접지로 붙어요.</li>
+    <li>$V_A\lt\infty$ 조건을 놓쳐 $r_O$를 빼면 출력 저항과 $R_0$가 커지게 계산돼요.</li>
+    <li>입력 노드에서는 $r_\pi$를 유지해요. $\beta$가 크다는 이유로 $r_\pi$를 무한대로 두면 $R_{in,open}$과 $R_0$가 틀려요.</li>
+  </ul>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>조건을 바꾸어 생각해요</h4>
+  <ol>
+    <li>$r_\pi\gg R_F$이면 $R_{in,open}$과 $R_0$는 각각 무엇으로 단순해지나요?</li>
+    <li>$Q_1$을 NMOS로 바꾸면 입력 노드의 $r_\pi$ 자리에는 무엇이 남나요?</li>
+    <li>$R_F$가 $r_\pi$와 $R_C\parallel r_O$보다 훨씬 큰 영역에서 $R_F$를 줄이면 $|K|$와 루프 이득 $KR_0$는 각각 어떻게 변하나요?</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <p class="sum-lead">$R_F$로 컬렉터에서 베이스로 전류를 되돌리는 단일 BJT 전압-전류 귀환 증폭기예요.</p>
+  <div class="summary-group">
+    <h4>개루프</h4>
+    <p>베이스와 컬렉터에 각각 $R_F$를 접지로 붙이고 $r_O$를 유지해요.</p>
+    <p>개루프 트랜스임피던스는 $-g_m$에 입력 쪽 병렬 저항과 출력 쪽 병렬 저항을 곱한 값이에요.</p>
+    $$\begin{aligned}R_0=&-g_m(R_F\parallel r_\pi)\\&\times(R_C\parallel r_O\parallel R_F)\end{aligned}$$
+  </div>
+  <div class="summary-group">
+    <h4>폐루프</h4>
+    <p>$K=-1/R_F$이고 이득·$R_{in}$·$R_{out}$이 모두 $1+KR_0$로 나뉘어요.</p>
+  </div>
+</div>

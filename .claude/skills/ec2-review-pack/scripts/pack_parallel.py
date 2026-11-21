@@ -143,10 +143,18 @@ def worker_inputs(state, spec):
     return file_records(paths)
 
 
+def explanation_digest(state):
+    """The child coordinator's candidate: the accepted explain-author fragment set."""
+    author = state['tasks'][findings.COORDINATOR_OWNER]
+    names = spec_for(state, author['id']).outputs
+    files = {name: f._sha(Path(author['artifacts'][name])) for name in names}
+    return hashlib.sha256(json.dumps(files, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+
+
 def claim_worker(state, task):
     from pack_receipts import standalone_screenshots
     spec = spec_for(state, task['id'])
-    if task['status'] == 'needs_fix' and task['role'] in findings.REVIEW_ROLES:
+    if task['status'] == 'needs_fix' and (task['role'] in findings.REVIEW_ROLES or task.get('candidate_digest')):
         raise f.FlowError('request correction for the accepted findings before re-review')
     version = proof(state, spec)
     if f._owner(state, task) == 'unavailable':
@@ -263,9 +271,12 @@ def claim_worker(state, task):
         data['previous_outputs'] = {name: task['artifacts'][name] for name in spec.outputs}
         data['inputs'] = file_records([*(Path(x['path']) for x in data['inputs']),
                                        *map(Path, data['previous_outputs'].values())])
-    if role in findings.REVIEW_ROLES:
-        candidate = data['pdf'] if role == 'pdf-qa' else data['note']
-        data['candidate_digest'] = f._sha(Path(candidate))
+    if role in findings.LEDGER_REVIEWS:
+        if role == findings.COORDINATOR:
+            data['candidate_digest'] = explanation_digest(state)
+        else:
+            candidate = data['pdf'] if role == 'pdf-qa' else data['note']
+            data['candidate_digest'] = f._sha(Path(candidate))
         data['recheck_findings'] = []
         inputs = {i['path']: i for i in data['inputs']}
         for row in state.get('findings', {}).values():
@@ -471,7 +482,7 @@ def validate_worker(state, task, receipt_path):
         receipt['verified_files'].extend(dict(path=p, sha256=h) for p,h in result['evidence'].items())
     if compact and expected_outputs != {r['path'] for r in receipt['outputs']}:
         raise f.FlowError('output inventory differs from worker submission and computed target proof')
-    if task['role'] in findings.REVIEW_ROLES and receipt['task_status'] in ('done', 'needs_fix'):
+    if task['role'] in findings.LEDGER_REVIEWS and receipt['task_status'] in ('done', 'needs_fix'):
         # task check exercises the same decision rules without changing RUN state.
         trial = copy.deepcopy(state)
         register_review(trial, trial['tasks'][task['id']], receipt)
@@ -555,7 +566,12 @@ def freeze_files(root, paths, expected, destination):
 def register_review(state, task, receipt):
     findings.check_reviewer(state, task)
     brief = f._read(task['brief'])
-    task.update(status=receipt['task_status'], receipt=receipt, candidate_digest=brief['candidate_digest'])
+    digest = brief.get('candidate_digest')
+    if digest is None and task['id'] == findings.COORDINATOR:
+        # A coordinator claimed before the finding ledger reviewed the same
+        # accepted fragments; its frozen input_version pins that author attempt.
+        digest = explanation_digest(state)
+    task.update(status=receipt['task_status'], receipt=receipt, candidate_digest=digest)
     if task['status'] == 'needs_fix' and not receipt['unresolved']:
         raise f.FlowError('needs-fix requires structured findings')
     findings.adjudicate(state, task['id'], receipt['unresolved'], receipt.get('fix_results', []),
@@ -564,7 +580,7 @@ def register_review(state, task, receipt):
 
 def adopt_worker(state, task, receipt):
     task.update(status=receipt['task_status'], receipt=receipt)
-    if task['status'] != 'done' and not (task['role'] in findings.REVIEW_ROLES and task['status'] == 'needs_fix'):
+    if task['status'] != 'done' and not (task['role'] in findings.LEDGER_REVIEWS and task['status'] == 'needs_fix'):
         return
     root = Path(task['attempt_dir'])
     dst = Path(state['run']) / 'adopted' / task['id'] / str(uuid4())
@@ -628,15 +644,15 @@ def install_worker(current, snapshot, tid, receipt):
         if not environment_current(current, f._read(row['brief']), f._read(environment['path'])):
             raise f.FlowError('render environment changed during adoption')
     row.update(status=task['status'], receipt=receipt)
-    if row['status'] == 'done' or (tid in findings.REVIEW_ROLES and row['status'] == 'needs_fix'):
+    if row['status'] == 'done' or (tid in findings.LEDGER_REVIEWS and row['status'] == 'needs_fix'):
         row['artifacts'] = task['artifacts']
         from pack_approvals import adopt_targets
         adopt_targets(current, row, receipt)
-        if tid in findings.REVIEW_ROLES:
+        if tid in findings.LEDGER_REVIEWS:
             register_review(current, row, receipt)
             if tid in findings.NOTE_REVIEWS:
                 findings.join_reviews(current)
-        else:
+        if tid not in findings.REVIEW_ROLES:
             row['repair_bindings'] = {r['id']: r['pending_request']
                                       for r in f._read(row['brief']).get('repair_findings', [])}
         keys = {'scope-draft': ('scope_sections', 'link_sections'), 'selection': ('selected_ids',)}.get(tid, ())

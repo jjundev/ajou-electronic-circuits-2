@@ -1,0 +1,92 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 읽어요</h4>
+  <p>예제 12.26의 분배기 귀환 CG 단에서 부하 $R_D$를 이상적 전류원으로 바꾼 회로예요. 입력 $V_{in}$은 $M_1$ 소스, 출력 $V_{out}$은 드레인이고, $R_1$–$R_2$ 가운데 노드가 게이트로 돌아가요.</p>
+  <p>이상적 전류원은 소신호에서 개방이에요. 그러면 출력 노드에서 접지로 가는 소신호 경로는 $R_1+R_2$뿐이라 분압기의 부하 효과가 결과를 좌우해요.</p>
+  <p>원문에 $\lambda$는 없어요. 예제 12.26처럼 $\lambda=0$으로 봐요(추가 가정). $\lambda\gt0$이면 $r_O$가 출력에 더해지는데, 이 경우는 아래 재도전에서 다뤄요.</p>
+  <p>구할 것은 부하를 넣은 개루프 회로, 귀환율, 폐루프 전압 이득, 폐루프 입력·출력 임피던스예요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 개념과 공식을 떠올려요</h4>
+  <p><strong>단서:</strong> 출력 전압을 분압해 게이트로 되돌리는 전압-전압 귀환(voltage-voltage feedback)이고, "부하로 이상적 전류원"이라는 말이 부하 효과를 꼭 넣으라는 신호예요.</p>
+  <p><strong>끊는 법칙:</strong> 출력 쪽 복제는 귀환망 출력 포트(게이트 쪽)를 열어 $V_{out}$에서 $R_1+R_2$를 보고, 입력 쪽 복제는 귀환망 입력 포트($V_{out}$ 쪽)를 단락해 게이트에서 $R_1\parallel R_2$를 봐요.</p>
+  <p><strong>귀환율:</strong> $K=V_2/V_1=R_2/(R_1+R_2)$예요.</p>
+  <p><strong>폐루프 공식:</strong> $A_{closed}=A_{open}/(1+KA_{open})$, 입력 임피던스는 $1+KA_{open}$배, 출력 임피던스는 $1/(1+KA_{open})$배예요.</p>
+  <p><strong>선택 이유:</strong> 예제 12.26의 결과에서 $R_D$만 무한대로 보내면 되므로, 같은 여섯 단계를 그대로 다시 써요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <div data-answer-step="귀환망 끊기">
+    <p>이상적 전류원은 개방, 게이트 쪽 $R_1\parallel R_2$는 게이트 전류가 0이라 영향이 없어요. 출력 노드에 남는 소신호 부하는 출력 쪽 복제뿐이에요.</p>
+    $$R_L=R_1+R_2$$
+  </div>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>이렇게 풀어요</h4>
+  <div data-subpart="main">
+    <p>개루프 회로는 게이트가 AC 접지이고 부하가 $R_1+R_2$인 CG 단이에요. $i_{out}$은 출력 노드에서 $M_1$ 드레인으로 흘러 들어가는 방향을 양으로 잡아요.</p>
+    <div data-answer-step="개루프 이득" data-gain-route="gm-rout">
+      <div data-gain-stage="gm">
+        <p>출력 단락에서 $i_{out}=g_{m1}(0-v_{in})$이에요.</p>
+        $$G_m=-g_{m1}$$
+      </div>
+      <div data-gain-stage="rout">
+        <p>입력을 0으로 두면 드레인 쪽은 $\lambda=0$이라 무한대, 전류원도 무한대예요.</p>
+        $$R_{out}=R_1+R_2$$
+      </div>
+      <div data-gain-stage="gain">
+        $$A_{open}=-G_mR_{out}=g_{m1}(R_1+R_2)$$
+      </div>
+    </div>
+    <div data-answer-step="개루프 임피던스와 귀환율">
+      $$R_{in,open}=\frac1{g_{m1}}$$
+      $$R_{out,open}=R_1+R_2$$
+      $$K=\frac{R_2}{R_1+R_2}$$
+    </div>
+    <div data-answer-step="루프 이득">
+      <p>$R_1+R_2$가 약분돼 루프 이득이 아주 간단해져요.</p>
+      $$\begin{aligned}KA_{open}&=\frac{R_2}{R_1+R_2}\cdot g_{m1}(R_1+R_2)\\&=g_{m1}R_2\end{aligned}$$
+    </div>
+    <div data-answer-step="폐루프 변수">
+      $$A_{closed}=\frac{g_{m1}(R_1+R_2)}{1+g_{m1}R_2}$$
+      $$R_{in,closed}=\frac1{g_{m1}}(1+g_{m1}R_2)=\frac1{g_{m1}}+R_2$$
+      $$R_{out,closed}=\frac{R_1+R_2}{1+g_{m1}R_2}$$
+    </div>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <div data-answer-final="">
+      <p><strong>개루프: $A_{open}=g_{m1}(R_1+R_2)$, $R_{in,open}=1/g_{m1}$, $R_{out,open}=R_1+R_2$이고 $K=R_2/(R_1+R_2)$예요.</strong></p>
+      <p><strong>폐루프: $A_{closed}=\dfrac{g_{m1}(R_1+R_2)}{1+g_{m1}R_2}$, $R_{in,closed}=\dfrac1{g_{m1}}+R_2$, $R_{out,closed}=\dfrac{R_1+R_2}{1+g_{m1}R_2}$예요.</strong> ($\lambda=0$, 이상적 전류원)</p>
+    </div>
+    <p>극한: 예제 12.26 결과에 $R_D\to\infty$를 넣으면 $R_D\parallel(R_1+R_2)\to R_1+R_2$가 되어 같은 식이 나와요.</p>
+    <p>극한: $g_{m1}R_2\gg1$이면 $A_{closed}\to(R_1+R_2)/R_2=1+R_1/R_2$예요. 이상적 비반전 증폭기의 $1/K$와 같아요.</p>
+    <p>단위: $g_{m1}R_2$는 무차원이고 $1/g_{m1}+R_2$는 Ω이에요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>주의할 점</h4>
+  <ul>
+    <li>전류원 부하라서 개루프 이득이 무한대라고 쓰면 안 돼요. 출력 쪽 복제 $R_1+R_2$가 유일한 부하예요.</li>
+    <li>루프 이득은 $g_{m1}(R_1+R_2)$가 아니라 $K$를 곱한 $g_{m1}R_2$예요.</li>
+    <li>$R_{in,closed}=1/g_{m1}+R_2$를 단순히 $1/g_{m1}$로 줄이지 않아요. 귀환이 입력 저항을 $R_2$만큼 키워요.</li>
+  </ul>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>조건을 바꾸어 생각해요</h4>
+  <ol>
+    <li>$\lambda\gt0$이면 개루프 출력 저항에 어떤 저항이 병렬로 더해지나요?</li>
+    <li>$R_1=0$이면 $K$, 폐루프 이득, 폐루프 출력 저항은 각각 얼마인가요?</li>
+    <li>전류원 부하 대신 $R_D$를 다시 넣으면 루프 이득 $g_{m1}R_2$는 어떻게 바뀌나요?</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <p class="sum-lead">전류원 부하에서는 출력 쪽 복제 $R_1+R_2$가 유일한 부하예요.</p>
+  <div class="summary-group">
+    <h4>핵심 식</h4>
+    <p>$A_{open}=g_{m1}(R_1+R_2)$이고 루프 이득은 $g_{m1}R_2$예요.</p>
+    <p>$A_{closed}=g_{m1}(R_1+R_2)/(1+g_{m1}R_2)$예요.</p>
+    <p>$R_{in,closed}=1/g_{m1}+R_2$, $R_{out,closed}=(R_1+R_2)/(1+g_{m1}R_2)$예요.</p>
+  </div>
+</div>
