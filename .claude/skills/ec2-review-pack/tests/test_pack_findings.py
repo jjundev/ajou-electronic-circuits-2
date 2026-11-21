@@ -901,3 +901,9 @@ def test_note_reviewers_read_shared_applicability_reference(note_run):
         paths = [r['path'] if isinstance(r, dict) else r for r in refs]
         assert any(str(p).endswith('references/note-rule-applicability.md') for p in paths)
         flow.release_task(run, tid, claim['attempt'], 'reference check only')
+
+def test_label_only_join_leaves_precheck_unblocked(note_run):
+    from pack_findings import blocked_reason
+    submit_review(note_run, 'content-review', disposition='applied')
+    state = submit_review(note_run, 'style-audit')
+    assert blocked_reason(state, 'precheck') is None
