@@ -1,0 +1,102 @@
+{
+  "id": "feedback-four-terminations-bench",
+  "title": "네 가지 귀환 복제 종단 조립",
+  "archetype": "bench",
+  "source_sha256": "2f74a7894816db181e6e6ad689e98d43594a180527ad70c2f4f6a482e06e9012",
+  "sources": [
+    "복습노트/1120/정리노트_1120_Nonideal_IO_Feedback.html#s0-loading-recap",
+    "복습노트/1120/정리노트_1120_Nonideal_IO_Feedback.html#s0-four-terminations",
+    "복습노트/1120/정리노트_1120_Nonideal_IO_Feedback.html#s1-k-rules",
+    "복습노트/1120/정리노트_1120_Nonideal_IO_Feedback.html#s2-vv-open",
+    "복습노트/1120/정리노트_1120_Nonideal_IO_Feedback.html#s3-vc-open",
+    "복습노트/1120/정리노트_1120_Nonideal_IO_Feedback.html#s5-cheatsheet",
+    "STT/1120 전회2.md",
+    "교과서/마이크로전자회로/ch12/장말문제/P12.52.md (예제 12.30)",
+    "교과서/마이크로전자회로/ch12/장말문제/P12.53.md (예제 12.32)"
+  ],
+  "gates": {
+    "check": "pass",
+    "independent": "pass",
+    "probe": "pass",
+    "browser": "pass",
+    "machine": "pass",
+    "numeric_independent": "pass"
+  },
+  "gate_details": {
+    "check": {
+      "status": "pass",
+      "command": "node .agents/skills/ec2-interactive/scripts/check.cjs $RUN/01/lab.js",
+      "output": "ok",
+      "exit_code": 0
+    },
+    "independent": {
+      "status": "pass",
+      "script": "$RUN/01/verify_independent.py",
+      "method": "Independent pure-Python nodal KCL/KVL Gaussian elimination + closed-form impedance formulas (without importing mna.js or lab.js evaluate)",
+      "cases_verified": 48,
+      "steps_txt_verified": 34,
+      "truth_table": {
+        "vv": {
+          "sense_rem": "open",
+          "return_rem": "short",
+          "true_r_load_out_ohm": 4000,
+          "true_r_load_in_ohm": 750,
+          "wrong_sense_short_ohm": 3000,
+          "wrong_return_open_ohm": 1000
+        },
+        "vc": {
+          "sense_rem": "short",
+          "return_rem": "short",
+          "true_r_load_out_ohm": 10000,
+          "true_r_load_in_ohm": 10000,
+          "wrong_open": "infinite (0 mA, loading vanishes)"
+        },
+        "cv": {
+          "sense_rem": "open",
+          "return_rem": "open",
+          "true_r_load_out_ohm": 500,
+          "true_r_load_in_ohm": 500,
+          "wrong_short_ohm": 0
+        },
+        "cc": {
+          "sense_rem": "short",
+          "return_rem": "open",
+          "true_r_load_out_ohm": 1000,
+          "true_r_load_in_ohm": 4500,
+          "wrong_sense_open_ohm": 1500,
+          "wrong_return_short_ohm": 3000
+        }
+      }
+    },
+    "probe": {
+      "status": "pass",
+      "command": "python3 .agents/skills/ec2-interactive/scripts/probe_interactive.py",
+      "widths": [1440, 375],
+      "themes": ["light", "dark"],
+      "checks": 140,
+      "defect_count": 0,
+      "blocked_requests": []
+    },
+    "browser": {
+      "status": "pass",
+      "script": "$RUN/01/browser_check.py",
+      "viewports": ["1440x900 light/dark", "375x812 dark"],
+      "verified_flows": [
+        "predict card answer and skip without locking controls",
+        "keyboard Enter/Escape popover interaction on data-port",
+        "mouse click port popover switching V-V sense-rem->open, return-rem->short to pass diagnosis",
+        "slider parameter min/max update (vv_r1=10 kΩ)",
+        "mode switch V-V -> C-C and theme toggle light <-> dark",
+        "mobile 375px right drawer open and Escape close",
+        "visual inspection of desktop-light, desktop-dark, and mobile-dark screenshots"
+      ],
+      "console_errors": 0,
+      "page_errors": 0
+    }
+  },
+  "fixes_during_validation": [
+    "Guarded null percentage formatting when open termination yields zero current (R_load = ∞) in V-C mode.",
+    "Replaced raw LaTeX delimiters in left-panel steps[].text with clean plain Unicode units because renderMathInElement runs on panelRightInner and predictSlot.",
+    "Replaced transparent <rect> port hit box with <ellipse> inside <g data-port> so CSS .is-hot/.is-bad rect border rules do not draw a box outline while preserving full-area pointer/touch hit targets."
+  ]
+}
