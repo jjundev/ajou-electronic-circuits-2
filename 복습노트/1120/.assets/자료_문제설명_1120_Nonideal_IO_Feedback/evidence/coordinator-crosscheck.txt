@@ -1,0 +1,33 @@
+p1:b A_closed: simplify(fragment - blind) = 0
+p1:c Rin_closed: simplify(fragment - blind) = 0
+p1:c Rout_closed: simplify(fragment - blind) = 0
+p2 A_closed: simplify(fragment - blind) = 0
+p2 Rin_closed: simplify(fragment - blind) = 0
+p2 Rout_closed: simplify(fragment - blind) = 0
+p3 A_closed: simplify(fragment - blind) = 0
+p3 Rin_closed: simplify(fragment - blind) = 0
+p3 Rout_closed: simplify(fragment - blind) = 0
+p4 A_closed: simplify(fragment - blind) = 0
+p4 Rin_closed: limit beta->oo of fragment/blind = 1 (fragment uses ~ with beta>>1)
+p4 Rout_closed: simplify(fragment - blind) = 0
+p5 A_open: simplify(fragment - blind) = 0
+p5 Rout_closed: simplify(fragment - blind) = 0
+p6 A_closed: simplify(fragment - blind) = 0
+p7 R0: simplify(fragment - blind) = 0
+p7 KR0: simplify(fragment - blind) = 0
+p7 closed: simplify(fragment - blind) = 0
+p8:1 R0 vs blind: simplify(fragment - blind) = 0
+p8:1 R0 vs md: simplify(fragment - blind) = 0
+p8:2 closed: simplify(fragment - blind) = 0
+p8:2 Rin_closed: simplify(fragment - blind) = 0
+p9:1 closed vs blind: simplify(fragment - blind) = 0
+p9:1 closed vs md: simplify(fragment - blind) = 0
+p9:2 Rin_closed: simplify(fragment - blind) = 0
+p9:2 Rout_closed: simplify(fragment - blind) = 0
+p10 KR0: simplify(fragment - blind) = 0
+p11 R_S1/R_m -> 1 (g_m1 r_O1 >> 1); ratio = 1 + 1/(g1*r_O1)
+p11 K: simplify(fragment - blind) = 0
+p10 retry3 dT/dR_F roots: [sqrt(R_o)*sqrt(r_pi)] (single maximum -> non-monotonic overall)
+p10 retry3 lim R_F*T (R_F->oo) = R_o*g*r_pi = beta*R_o with g*r_pi=beta, so T ~ beta R_o/R_F
+p10 retry3 sign dT/dR_F for R_F > sqrt(r_pi R_o): True
+p10 retry3 T(100k,50k,25k) = [1.91, 3.66, 6.73] |K| = 1/R_F increases as R_F decreases

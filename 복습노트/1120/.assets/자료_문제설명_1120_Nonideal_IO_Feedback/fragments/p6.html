@@ -1,0 +1,91 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 읽어요</h4>
+  <p>NMOS 차동쌍 $M_1$, $M_2$에 테일 전류원 $I_{SS}$, PMOS 전류 거울 부하 $M_3$(다이오드 접속, $M_1$ 쪽)와 $M_4$($M_2$ 쪽)를 쓴 증폭기예요. 입력 $V_{in}$은 $M_1$ 게이트, 출력 $V_{out}$은 $M_2$·$M_4$ 드레인이에요.</p>
+  <p>$V_{out}$과 접지 사이의 $R_1$–$R_2$ 분압기 가운데 노드가 $M_2$ 게이트로 돌아가요. 즉 출력의 일부를 차동쌍의 다른 입력에 걸어요.</p>
+  <p>$r_{ON}$, $r_{OP}$는 NMOS·PMOS의 출력 저항이고 $g_{mN}$은 입력쌍의 트랜스컨덕턴스예요. 조건은 $R_1+R_2$가 $r_{OP}\parallel r_{ON}$보다 충분히 크지 않다는 것이라, 분압기 부하를 넣어야 해요.</p>
+  <p>구할 것은 개루프·폐루프 전압 이득과 폐루프 입력·출력 임피던스예요. 대칭 소자($M_1=M_2$, $M_3=M_4$)와 이상적 테일 전류원을 가정해요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 개념과 공식을 떠올려요</h4>
+  <p><strong>단서:</strong> 출력 전압을 분압해 $M_2$ 게이트로 되돌리니 전압-전압 귀환(voltage-voltage feedback)이에요. 차동쌍이 $v_{in}-v_F$를 만들어 비교 장치 역할을 해요.</p>
+  <p><strong>전류 거울 부하 차동 증폭기:</strong> $M_1$ 게이트에서 출력까지는 비반전이고 $M_2$ 게이트는 반전 입력이에요. 출력 단락에서 $|G_m|\approx g_{mN}$, 입력 0에서 $R_{out}\approx r_{ON}\parallel r_{OP}$를 알려진 블록으로 써요. 이는 거울이 전류를 그대로 복사한다는 근사($g_{mP}r_{OP}\gg1$)와 이상적 테일에서 성립해요.</p>
+  <p><strong>끊는 법칙:</strong> 출력 쪽 복제는 귀환망 출력 포트($M_2$ 게이트 쪽)를 열어 $V_{out}$에서 $R_1+R_2$를 보고, 입력 쪽 복제는 귀환망 입력 포트($V_{out}$ 쪽)를 단락해 $M_2$ 게이트에서 $R_1\parallel R_2$를 봐요.</p>
+  <p><strong>폐루프 공식:</strong> $K=R_2/(R_1+R_2)$, $A_{closed}=A_{open}/(1+KA_{open})$, 출력 임피던스는 $1/(1+KA_{open})$배예요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <div data-answer-step="귀환망 끊기">
+    <p>$M_2$ 게이트의 $R_1\parallel R_2$는 게이트 전류가 0이라 전압강하가 없어요. 그래서 개루프에서 $M_2$ 게이트는 AC 접지예요. 출력 노드에는 $R_1+R_2$가 병렬로 더해져요.</p>
+    $$R_L=r_{ON}\parallel r_{OP}\parallel(R_1+R_2)$$
+  </div>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>이렇게 풀어요</h4>
+  <div data-subpart="main">
+    <p>$i_{out}$은 출력 노드에서 증폭기($M_2$·$M_4$) 쪽으로 흘러 들어가는 방향을 양으로 잡아 $A_v=-G_mR_{out}$을 써요.</p>
+    <div data-answer-step="개루프 이득" data-gain-route="gm-rout">
+      <div data-gain-stage="gm">
+        <p>출력을 단락하고 $v_{in}$을 걸면 $M_1$ 전류가 $g_{mN}v_{in}/2$만큼 늘고 $M_2$ 전류는 같은 양만큼 줄어요. $M_4$는 $M_1$의 증가분을 복사해 출력으로 밀어 넣으니, 출력으로 밀려드는 전류는 $g_{mN}v_{in}$이에요.</p>
+        $$G_m\approx-g_{mN}$$
+      </div>
+      <div data-gain-stage="rout">
+        <p>입력을 0으로 두면 출력에서 아래로 $r_{ON}$, 위로 $r_{OP}$ 쪽 블록이 보이고, 출력 쪽 복제가 병렬로 붙어요.</p>
+        $$R_{out}\approx r_{ON}\parallel r_{OP}\parallel(R_1+R_2)$$
+      </div>
+      <div data-gain-stage="gain">
+        $$\begin{aligned}A_{open}&=-G_mR_{out}\\&\approx g_{mN}\left[r_{ON}\parallel r_{OP}\parallel(R_1+R_2)\right]\end{aligned}$$
+      </div>
+    </div>
+    <p>음수 $G_m$은 $M_1$ 입력에서 출력까지 비반전이라는 뜻이에요. 출력이 오르면 $M_2$ 게이트도 올라 출력을 끌어내리므로 부궤환이에요.</p>
+    <div data-answer-step="개루프 임피던스와 귀환율">
+      $$R_{in,open}=\infty$$
+      $$R_{out,open}\approx r_{ON}\parallel r_{OP}\parallel(R_1+R_2)$$
+      $$K=\frac{R_2}{R_1+R_2}$$
+    </div>
+    <div data-answer-step="폐루프 변수">
+      $$\begin{aligned}A_{closed}&=\frac{A_{open}}{1+KA_{open}}\\&\approx\frac{g_{mN}R_L}{1+\dfrac{R_2}{R_1+R_2}g_{mN}R_L}\end{aligned}$$
+      $$R_{in,closed}=\infty$$
+      $$R_{out,closed}\approx\frac{R_L}{1+\dfrac{R_2}{R_1+R_2}g_{mN}R_L}$$
+      <p>여기서 $R_L=r_{ON}\parallel r_{OP}\parallel(R_1+R_2)$예요.</p>
+    </div>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <div data-answer-final="">
+      <p><strong>$A_{open}\approx g_{mN}R_L$, $R_{in,open}=\infty$, $R_{out,open}\approx R_L$, $K=R_2/(R_1+R_2)$예요.</strong></p>
+      <p><strong>$A_{closed}\approx\dfrac{g_{mN}R_L}{1+g_{mN}R_LR_2/(R_1+R_2)}$, $R_{in,closed}=\infty$, $R_{out,closed}\approx\dfrac{R_L}{1+g_{mN}R_LR_2/(R_1+R_2)}$예요.</strong> (대칭·이상적 테일·거울 근사)</p>
+      <p>여기서 $R_L=r_{ON}\parallel r_{OP}\parallel(R_1+R_2)$예요.</p>
+    </div>
+    <p>극한: $R_1+R_2\to\infty$이면 $R_L\to r_{ON}\parallel r_{OP}$로 부하 효과가 없는 결과로 돌아가요.</p>
+    <p>극한: 루프 이득이 크면 $A_{closed}\to(R_1+R_2)/R_2=1/K$예요.</p>
+    <p>특수값: $R_2\to\infty$이면 $K\to1$이라 폐루프 이득이 1에 가까운 버퍼가 돼요.</p>
+    <p>단위: $g_{mN}$[S]×$R_L$[Ω]이라 무차원이에요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>주의할 점</h4>
+  <ul>
+    <li>$M_2$ 게이트에 붙는 $R_1\parallel R_2$를 테일이나 소스 저항처럼 넣지 않아요. 게이트 전류가 0이라 영향이 없어요.</li>
+    <li>출력 쪽 복제 $R_1+R_2$를 빼고 $r_{ON}\parallel r_{OP}$만 쓰면 이 문항의 조건을 무시한 셈이에요.</li>
+    <li>전류 거울 덕분에 출력으로 밀려드는 전류는 $g_{mN}v_{in}/2$가 아니라 $g_{mN}v_{in}$이에요. 반쪽 값만 쓰면 이득이 절반이 돼요.</li>
+  </ul>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>조건을 바꾸어 생각해요</h4>
+  <ol>
+    <li>$R_1+R_2\gg r_{ON}\parallel r_{OP}$이면 개루프 이득과 루프 이득은 각각 어떻게 단순해지나요?</li>
+    <li>전류 거울 대신 $M_2$ 쪽에만 저항 부하를 두고 그 드레인에서 출력을 취하면 $|G_m|$은 $g_{mN}$의 몇 배인가요?</li>
+    <li>$R_1=0$(출력을 $M_2$ 게이트에 직접 연결)이면 $K$와 폐루프 이득은 얼마인가요?</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <p class="sum-lead">출력 쪽 복제 $R_1+R_2$가 $r_{ON}\parallel r_{OP}$와 병렬로 붙는 것이 부하 효과의 전부예요.</p>
+  <div class="summary-group">
+    <h4>핵심 식</h4>
+    <p>$A_{open}\approx g_{mN}[r_{ON}\parallel r_{OP}\parallel(R_1+R_2)]$예요.</p>
+    <p>$K=R_2/(R_1+R_2)$, $A_{closed}=A_{open}/(1+KA_{open})$예요.</p>
+    <p>$R_{in}=\infty$이고 $R_{out}$은 $1/(1+KA_{open})$배예요.</p>
+  </div>
+</div>

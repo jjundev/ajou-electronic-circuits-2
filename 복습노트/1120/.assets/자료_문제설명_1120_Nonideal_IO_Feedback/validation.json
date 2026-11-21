@@ -1,0 +1,1175 @@
+{
+  "review_policy_version": "problem-explain-2026-10-21-learning-style",
+  "input_hash": "af896c9b89963bdb48362f27c61944e190787e5446cdfbce2e06ae3c3da5a294",
+  "references": [
+    {
+      "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.claude/skills/ec2-review-pack/references/solution-style.md",
+      "sha256": "3c9f68f55d804966c95a35cdcd2f729754e9dc9a453fcc0df7f5b01152edeb9f"
+    },
+    {
+      "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/교과서/마이크로전자회로/12장.pdf",
+      "sha256": "351797bf72941f867d90c948e17d4c24f09e733a16796ae76aca500f9fd96498"
+    },
+    {
+      "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/from_the_past/2023-1/23-1 기말/기말고사.pdf",
+      "sha256": "752dd94805866324ca76ca352fed4005e6e2079ea5a4e5292be90bf39d6f0e70"
+    },
+    {
+      "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/from_the_past/2021중간_기말/기말/Final0617_1p_rev.pdf",
+      "sha256": "c1e22af6d3d337faa2803f9912f4d22cbcff6357a65d367fafba457f177b2bef"
+    }
+  ],
+  "learning_style_audit": {
+    "learning_style": {
+      "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
+      "sha256": "3c9f68f55d804966c95a35cdcd2f729754e9dc9a453fcc0df7f5b01152edeb9f",
+      "rule_ids": [
+        "UNIT-01",
+        "CALC-01",
+        "CALC-02",
+        "CIRCUIT-01",
+        "CIRCUIT-02",
+        "GAIN-01",
+        "DEGEN-01",
+        "SCALE-01",
+        "BIAS-01",
+        "NOTATION-01",
+        "EXPLAIN-01",
+        "CORRECT-01",
+        "FREQ-01"
+      ]
+    },
+    "items": {
+      "p1:a": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "rules": {
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "원문에 소자 수치가 없는 기호 문항이라 단위 환산·10^3 인자 대상 없음. verify에서 차원(이득 무차원, 저항 Ω, 트랜스임피던스 Ω) 확인만 수행."
+          },
+          "CALC-01": {
+            "disposition": "not_applicable",
+            "evidence": "(a)는 네 성분을 밝히는 정성 문항이라 중간값 조립 없음(start의 v_F, i_D, v_out 관계식은 구조 판단용)."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "정성 문항, 수치·반올림 없음."
+          },
+          "CIRCUIT-01": {
+            "disposition": "applied",
+            "evidence": "solve(a) 목록에서 순방향=CG(M1,R_D), 감지=출력 노드 병렬 R1–R2, 귀환망=같은 분압기 K=R2/(R1+R2), 비교=M1(i_D=g_m(v_F−v_in))로 역할을 소자 번호와 함께 정의."
+          },
+          "CIRCUIT-02": {
+            "disposition": "not_applicable",
+            "evidence": "G_m·R_out을 구하지 않는 성분 식별 소문항. 조각에 생성 SVG 없음(stage의 svg 10개는 템플릿 UI 아이콘). start/solve가 소신호 등가회로 노드 KCL을 세우지 않고 알려진 블록(CG 1/g_m, CS/CE/SF 이득, 전류 분배, 복제 저항 합성)으로 끝나 authoring '소신호 등가회로 그림' 필수 조건 미해당. 따라서 병렬쌍 순서·출력 오른쪽·노드 점/색·Vt/it 배치 대조 대상 없음."
+          },
+          "GAIN-01": {
+            "disposition": "not_applicable",
+            "evidence": "전압이득 계산이 아닌 귀환 성분 식별(정성)."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "축퇴 저항·제어 전압 저항 합 꼴이 없는 성분 식별."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "W·I_D 배율·전류 거울 비례식·X*/ΔX 변화량을 묻지 않는 귀환 해석 문항."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "DC 노드 전압·포화/활성 경계 부등식을 묻지 않는 소신호 귀환 해석."
+          },
+          "NOTATION-01": {
+            "disposition": "applied",
+            "evidence": "v_F, K, i_D, v_in 기호를 본문·verify·요약에서 일치시키고 data-answer-final 굵게 강조. 회로 SVG 없음."
+          },
+          "EXPLAIN-01": {
+            "disposition": "applied",
+            "evidence": "일곱 구역 순서·solve 제목 '이렇게 풀어요' 확인. start 첫 식 v_out=g_mR_D(v_in−v_F)에서 '오차×순방향 이득' 판단을 연결하고 부궤환 판단 문장(V_out↑→V_F↑→i_D↑→V_out↓)을 붙임."
+          },
+          "CORRECT-01": {
+            "disposition": "not_applicable",
+            "evidence": "근사·오기 교정 대상 없는 정성 판정."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "커패시턴스·주파수 응답이 없는 저주파 저항 해석이라 팔로워 Z_out(s) 꼴 비적용."
+          }
+        }
+      },
+      "p1:b": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "rules": {
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "원문에 소자 수치가 없는 기호 문항이라 단위 환산·10^3 인자 대상 없음. verify에서 차원(이득 무차원, 저항 Ω, 트랜스임피던스 Ω) 확인만 수행."
+          },
+          "CALC-01": {
+            "disposition": "applied",
+            "evidence": "G_m=−g_m → R_out≈R_D → A1=g_mR_D, K=R2/(R1+R2) → A_closed 순으로 중간값을 구해 조립."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "기호 결과만 있고 수치·반올림 없음."
+          },
+          "CIRCUIT-01": {
+            "disposition": "applied",
+            "evidence": "입력 영점에서 소스 AC 접지, 드레인 쪽 λ=0 무한대, 분압기 부하는 R1+R2≫R_D로 생략해 R_out≈R_D로 합성."
+          },
+          "CIRCUIT-02": {
+            "disposition": "applied",
+            "evidence": "G_m은 '출력을 접지에 단락', R_out은 '입력을 0'으로 측정 조건을 본문에 적용하고 i_out 양의 방향(출력 노드→M1 드레인) 정의. 조각에 생성 SVG 없음(stage의 svg 10개는 템플릿 UI 아이콘). start/solve가 소신호 등가회로 노드 KCL을 세우지 않고 알려진 블록(CG 1/g_m, CS/CE/SF 이득, 전류 분배, 복제 저항 합성)으로 끝나 authoring '소신호 등가회로 그림' 필수 조건 미해당. 따라서 병렬쌍 순서·출력 오른쪽·노드 점/색·Vt/it 배치 대조 대상 없음."
+          },
+          "GAIN-01": {
+            "disposition": "applied",
+            "evidence": "data-gain-route 유지: G_m=−g_m(출력 단락) → R_out≈R_D(입력 영점) → A1=−G_mR_out≈g_mR_D(근사 기호 반영). 음수 G_m=비반전 해석 명시."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "게이트 AC 접지 CG라 축퇴 저항 없음."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "W·I_D 배율·전류 거울 비례식·X*/ΔX 변화량을 묻지 않는 귀환 해석 문항."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "DC 노드 전압·포화/활성 경계 부등식을 묻지 않는 소신호 귀환 해석."
+          },
+          "NOTATION-01": {
+            "disposition": "applied",
+            "evidence": "G_m(대문자)과 g_m 구별, A_1·A_closed·K 표기 일관, final 굵게."
+          },
+          "EXPLAIN-01": {
+            "disposition": "applied",
+            "evidence": "개루프 경로 판단→식→귀환 공식 대입→결과. verify에서 g_mR_D→∞ 시 1/K, R2→0 시 개루프 복귀, 차원 검산 실제 수행."
+          },
+          "CORRECT-01": {
+            "disposition": "applied",
+            "evidence": "수정본: A_1=−G_mR_out≈g_mR_D, A_closed ≈ 로 바꿔 R_out≈R_D 근사와 일관; final (λ=0, R1+R2≫R_D) 병기 유지; 요약 A_1≈g_mR_D."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "커패시턴스·주파수 응답이 없는 저주파 저항 해석이라 팔로워 Z_out(s) 꼴 비적용."
+          }
+        }
+      },
+      "p1:c": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "rules": {
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "원문에 소자 수치가 없는 기호 문항이라 단위 환산·10^3 인자 대상 없음. verify에서 차원(이득 무차원, 저항 Ω, 트랜스임피던스 Ω) 확인만 수행."
+          },
+          "CALC-01": {
+            "disposition": "applied",
+            "evidence": "R_in,open=1/g_m, R_out,open≈R_D를 먼저 구한 뒤 1+KA1 배율로 폐루프 값 조립."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "기호 결과, 수치 없음."
+          },
+          "CIRCUIT-01": {
+            "disposition": "applied",
+            "evidence": "CG 소스에서 본 1/g_m(게이트 AC 접지, λ=0), 출력은 (b)의 R_out 재사용; verify에서 소스 시험전압 v_x로 R_in,closed 직접 재현."
+          },
+          "CIRCUIT-02": {
+            "disposition": "applied",
+            "evidence": "입력·출력 임피던스 측정 조건 글로 적용, R_out은 처음부터 ≈ 근사식이고 조건 병기(Rout 표시 경계 충족). 생성 SVG 없음(소신호 KCL을 start/solve에 세우지 않음)이라 배치·점·색 규칙 비대상."
+          },
+          "GAIN-01": {
+            "disposition": "not_applicable",
+            "evidence": "임피던스만 구하는 소문항(이득 경로는 (b))."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "축퇴 구조 없음."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "W·I_D 배율·전류 거울 비례식·X*/ΔX 변화량을 묻지 않는 귀환 해석 문항."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "DC 노드 전압·포화/활성 경계 부등식을 묻지 않는 소신호 귀환 해석."
+          },
+          "NOTATION-01": {
+            "disposition": "applied",
+            "evidence": "R_in,open/closed, R_out,open/closed 아래첨자 일관, final 굵게."
+          },
+          "EXPLAIN-01": {
+            "disposition": "applied",
+            "evidence": "'입력은 전압 비교라 ×(1+KA1), 출력은 전압 감지라 ÷(1+KA1)' 판단 한 줄 → 식 → 결과. verify에서 직접 KCL 재현과 g_m→0 극한."
+          },
+          "CORRECT-01": {
+            "disposition": "applied",
+            "evidence": "수정본: R_in,closed·R_out,closed 모두 ≈, (c) final에 (λ=0, R1+R2≫R_D) 병기 — 이전 N1 해소."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "커패시턴스·주파수 응답이 없는 저주파 저항 해석이라 팔로워 Z_out(s) 꼴 비적용."
+          }
+        }
+      },
+      "p2:main": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "rules": {
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "원문에 소자 수치가 없는 기호 문항이라 단위 환산·10^3 인자 대상 없음. verify에서 차원(이득 무차원, 저항 Ω, 트랜스임피던스 Ω) 확인만 수행."
+          },
+          "CALC-01": {
+            "disposition": "applied",
+            "evidence": "start에서 R_L=R_D∥(R1+R2) 정의 → G_m, R_out, A_open, R_in,open, K → KA_open → 폐루프 값 순서."
+          },
+          "CALC-02": {
+            "disposition": "applied",
+            "evidence": "KA_open에서 (R1+R2) 약분을 먼저 보이고 폐루프 식을 단일 분수로 정리(수치 반올림 없음)."
+          },
+          "CIRCUIT-01": {
+            "disposition": "applied",
+            "evidence": "감지 복제(게이트 포트 개방)→V_out에서 R1+R2, 반송 복제(V_out 포트 단락)→게이트 R1∥R2(게이트 전류 0으로 무영향)를 정의 후 R_D와 병렬 합성."
+          },
+          "CIRCUIT-02": {
+            "disposition": "applied",
+            "evidence": "G_m 출력 단락, R_out 입력 영점·λ=0 조건 명시, i_out 방향 정의. 조각에 생성 SVG 없음(stage의 svg 10개는 템플릿 UI 아이콘). start/solve가 소신호 등가회로 노드 KCL을 세우지 않고 알려진 블록(CG 1/g_m, CS/CE/SF 이득, 전류 분배, 복제 저항 합성)으로 끝나 authoring '소신호 등가회로 그림' 필수 조건 미해당. 따라서 병렬쌍 순서·출력 오른쪽·노드 점/색·Vt/it 배치 대조 대상 없음."
+          },
+          "GAIN-01": {
+            "disposition": "applied",
+            "evidence": "data-gain-route: G_m=−g_m1 → R_out=R_D∥(R1+R2) → A_open=g_m1[R_D∥(R1+R2)]."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "게이트 쪽 R1∥R2는 게이트 전류 0이라 축퇴가 아님(본문·pitfall에 명시)."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "W·I_D 배율·전류 거울 비례식·X*/ΔX 변화량을 묻지 않는 귀환 해석 문항."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "DC 노드 전압·포화/활성 경계 부등식을 묻지 않는 소신호 귀환 해석."
+          },
+          "NOTATION-01": {
+            "disposition": "applied",
+            "evidence": "G_m/g_m1, A_open/A_closed, K 표기 일관; final 굵게."
+          },
+          "EXPLAIN-01": {
+            "disposition": "applied",
+            "evidence": "일곱 구역·'이렇게 풀어요'. verify: R1+R2→∞ 극한이 p1과 일치, 출력 노드 KCL로 A_closed 정확 재현, g_m1→∞ 시 1/K."
+          },
+          "CORRECT-01": {
+            "disposition": "applied",
+            "evidence": "원문 '충분히 작지 않을 때'를 문맥상 '크지 않을 때'로 해석함을 understand·pitfall에 공개; λ=0 추가 가정 표시. 게이트 전류 0이라 두 포트 분해가 정확함을 verify KCL로 확인."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "커패시턴스·주파수 응답이 없는 저주파 저항 해석이라 팔로워 Z_out(s) 꼴 비적용."
+          }
+        }
+      },
+      "p3:main": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "rules": {
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "원문에 소자 수치가 없는 기호 문항이라 단위 환산·10^3 인자 대상 없음. verify에서 차원(이득 무차원, 저항 Ω, 트랜스임피던스 Ω) 확인만 수행."
+          },
+          "CALC-01": {
+            "disposition": "applied",
+            "evidence": "R_L=R1+R2 → G_m, R_out, A_open → R_in,open, K → KA_open=g_m1R2 → 폐루프 값."
+          },
+          "CALC-02": {
+            "disposition": "applied",
+            "evidence": "K·A_open에서 R1+R2 약분 후 g_m1R2로 정리, R_in,closed=(1/g_m1)(1+g_m1R2)=1/g_m1+R2 동치 변형."
+          },
+          "CIRCUIT-01": {
+            "disposition": "applied",
+            "evidence": "이상적 전류원 개방, 게이트 R1∥R2 무영향, 출력 쪽 복제 R1+R2만 남는 합성."
+          },
+          "CIRCUIT-02": {
+            "disposition": "applied",
+            "evidence": "G_m 출력 단락, R_out 입력 영점·λ=0·전류원 개방 명시. 조각에 생성 SVG 없음(stage의 svg 10개는 템플릿 UI 아이콘). start/solve가 소신호 등가회로 노드 KCL을 세우지 않고 알려진 블록(CG 1/g_m, CS/CE/SF 이득, 전류 분배, 복제 저항 합성)으로 끝나 authoring '소신호 등가회로 그림' 필수 조건 미해당. 따라서 병렬쌍 순서·출력 오른쪽·노드 점/색·Vt/it 배치 대조 대상 없음."
+          },
+          "GAIN-01": {
+            "disposition": "applied",
+            "evidence": "data-gain-route: G_m=−g_m1 → R_out=R1+R2 → A_open=g_m1(R1+R2)."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "축퇴 저항 없음(게이트 쪽 R1∥R2 무영향)."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "W·I_D 배율·전류 거울 비례식·X*/ΔX 변화량을 묻지 않는 귀환 해석 문항."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "DC 노드 전압·포화/활성 경계 부등식을 묻지 않는 소신호 귀환 해석."
+          },
+          "NOTATION-01": {
+            "disposition": "applied",
+            "evidence": "g_m1·R_in,closed 등 첨자 일관, final 굵게."
+          },
+          "EXPLAIN-01": {
+            "disposition": "applied",
+            "evidence": "일곱 구역. verify: p2 결과에 R_D→∞ 대입 일치, 1/K 극한, 차원."
+          },
+          "CORRECT-01": {
+            "disposition": "applied",
+            "evidence": "λ=0 추가 가정 표시, λ>0 경우는 retry로 분리. g_m1R2≫1 극한을 →로 구분."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "커패시턴스·주파수 응답이 없는 저주파 저항 해석이라 팔로워 Z_out(s) 꼴 비적용."
+          }
+        }
+      },
+      "p4:main": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "rules": {
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "원문에 소자 수치가 없는 기호 문항이라 단위 환산·10^3 인자 대상 없음. verify에서 차원(이득 무차원, 저항 Ω, 트랜스임피던스 Ω) 확인만 수행."
+          },
+          "CALC-01": {
+            "disposition": "applied",
+            "evidence": "R_B=R1∥R2, R_L=R_C∥(R1+R2)를 먼저 정의 → G_m → R_out → A_open → R_in,open, K → 폐루프."
+          },
+          "CALC-02": {
+            "disposition": "applied",
+            "evidence": "A_open 분모 (1/g_m+R_B/β)를 곱해 A_closed·R_in,closed·R_out,closed를 저항 합 꼴로 정리, 수치 없음."
+          },
+          "CIRCUIT-01": {
+            "disposition": "applied",
+            "evidence": "베이스 경로 R_B를 이미터에서 R_B/β로 보는 CIRCUIT-01 블록 R≈1/g_m+R_B/β를 1/g_m 독립 항이 보이게 사용(정확형 (r_π+R_B)/(β+1)→≈ 표기). 컬렉터 쪽 R1+R2는 β로 나누지 않음을 pitfall에 구분."
+          },
+          "CIRCUIT-02": {
+            "disposition": "applied",
+            "evidence": "G_m 출력 단락, R_out 입력 영점·V_A=∞. 베이스 루프 i_b=−v_in/(r_π+R_B)는 알려진 블록 수준의 한 줄 관계라 등가회로 그림 불요. 조각에 생성 SVG 없음(stage의 svg 10개는 템플릿 UI 아이콘). start/solve가 소신호 등가회로 노드 KCL을 세우지 않고 알려진 블록(CG 1/g_m, CS/CE/SF 이득, 전류 분배, 복제 저항 합성)으로 끝나 authoring '소신호 등가회로 그림' 필수 조건 미해당. 따라서 병렬쌍 순서·출력 오른쪽·노드 점/색·Vt/it 배치 대조 대상 없음."
+          },
+          "GAIN-01": {
+            "disposition": "applied",
+            "evidence": "data-gain-route: G_m=−β/(r_π+R_B)=−1/(1/g_m+R_B/β) → R_out=R_C∥(R1+R2) → A_open=−G_mR_out."
+          },
+          "DEGEN-01": {
+            "disposition": "applied",
+            "evidence": "G_m을 저항 합 꼴 1/(1/g_m+R_B/β)로 써서 내부 r_e=1/g_m과 R_B/β의 지배항 비교가 보이게 함."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "W·I_D 배율·전류 거울 비례식·X*/ΔX 변화량을 묻지 않는 귀환 해석 문항."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "DC 노드 전압·포화/활성 경계 부등식을 묻지 않는 소신호 귀환 해석."
+          },
+          "NOTATION-01": {
+            "disposition": "applied",
+            "evidence": "R_B, R_L, K 정의를 본문·final·요약에서 일치; G_m/g_m 구별."
+          },
+          "EXPLAIN-01": {
+            "disposition": "applied",
+            "evidence": "일곱 구역. verify: β→∞ 시 MOS 판 복귀, g_m,β→∞ 시 1/K, 분모 항 차원 일치."
+          },
+          "CORRECT-01": {
+            "disposition": "applied",
+            "evidence": "수정본: A_closed·R_in,closed·R_out,closed 모두 ≈로 통일하고 '부하를 넣은 귀환 해석과 β≫1 근사에서 나온 값이라 ≈' 문장 추가; A_open은 V_A=∞에서 정확해 '=' 유지(G_m=−β/(r_π+R_B) 정확식 확인). 요약 A_closed도 ≈."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "커패시턴스·주파수 응답이 없는 저주파 저항 해석이라 팔로워 Z_out(s) 꼴 비적용."
+          }
+        }
+      },
+      "p5:main": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "rules": {
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "원문에 소자 수치가 없는 기호 문항이라 단위 환산·10^3 인자 대상 없음. verify에서 차원(이득 무차원, 저항 Ω, 트랜스임피던스 Ω) 확인만 수행."
+          },
+          "CALC-01": {
+            "disposition": "applied",
+            "evidence": "R_S=R1∥R2, R_L=R_D2∥(R1+R2) → 첫 단 v_X → G_m → R_out → A_open → K → 폐루프."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "수치 없음; 기호 결과만 제시."
+          },
+          "CIRCUIT-01": {
+            "disposition": "applied",
+            "evidence": "반송 복제가 M1 소스에 R1∥R2(축퇴), 감지 복제가 출력에 R1+R2를 붙이는 합성과 노드 X 부하 R_D1(M2 게이트 전류 0) 판단."
+          },
+          "CIRCUIT-02": {
+            "disposition": "applied",
+            "evidence": "전체 증폭기 G_m은 출력 단락, R_out은 입력 영점에서 v_X=0으로 M2 전류 0·λ=0 명시. 조각에 생성 SVG 없음(stage의 svg 10개는 템플릿 UI 아이콘). start/solve가 소신호 등가회로 노드 KCL을 세우지 않고 알려진 블록(CG 1/g_m, CS/CE/SF 이득, 전류 분배, 복제 저항 합성)으로 끝나 authoring '소신호 등가회로 그림' 필수 조건 미해당. 따라서 병렬쌍 순서·출력 오른쪽·노드 점/색·Vt/it 배치 대조 대상 없음."
+          },
+          "GAIN-01": {
+            "disposition": "applied",
+            "evidence": "data-gain-route: G_m=−g_m2R_D1/(1/g_m1+R1∥R2) → R_out=R_D2∥(R1+R2) → A_open=−G_mR_out(양수, 두 반전 단)."
+          },
+          "DEGEN-01": {
+            "disposition": "applied",
+            "evidence": "recall에서 G_m1=g_m1/(1+g_m1R_S)=1/(1/g_m1+R_S) 저항 합 꼴, solve 첫 단 v_X=−R_D1v_in/(1/g_m1+R_S); g_m1R_S≫1 근사는 final에 따로 병기."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "W·I_D 배율·전류 거울 비례식·X*/ΔX 변화량을 묻지 않는 귀환 해석 문항."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "DC 노드 전압·포화/활성 경계 부등식을 묻지 않는 소신호 귀환 해석."
+          },
+          "NOTATION-01": {
+            "disposition": "applied",
+            "evidence": "G_m1과 g_m1 구별, R_S·R_L 정의 일관(R_L=R_D2∥(R1+R2)는 start에서 정의, 옮긴 문장도 같은 R_L 사용). final 강조 문장과 근사 문장을 분리해 괄호 안 긴 식 제거."
+          },
+          "EXPLAIN-01": {
+            "disposition": "applied",
+            "evidence": "일곱 구역. verify: 1/K 극한, R2→0 시 두 CS 곱 복귀, 차원."
+          },
+          "CORRECT-01": {
+            "disposition": "applied",
+            "evidence": "λ=0 추가 가정 표시 유지. final의 괄호 조건은 (λ=0)만 남기고, g_m1(R1∥R2)≫1일 때 A_open≈g_m2R_D1R_L/(R1∥R2)를 같은 data-answer-final 안 별도 <p> 문장으로 옮김. 근사 조건(조건문 '…이면')과 ≈ 기호가 그대로 유지되어 의미 불변."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "커패시턴스·주파수 응답이 없는 저주파 저항 해석이라 팔로워 Z_out(s) 꼴 비적용."
+          }
+        }
+      },
+      "p6:main": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "rules": {
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "원문에 소자 수치가 없는 기호 문항이라 단위 환산·10^3 인자 대상 없음. verify에서 차원(이득 무차원, 저항 Ω, 트랜스임피던스 Ω) 확인만 수행."
+          },
+          "CALC-01": {
+            "disposition": "applied",
+            "evidence": "R_L=r_ON∥r_OP∥(R1+R2) → G_m≈−g_mN → R_out → A_open → K → 폐루프."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "수치·약분 단계 없음."
+          },
+          "CIRCUIT-01": {
+            "disposition": "applied",
+            "evidence": "M2 게이트의 R1∥R2 무영향, 출력에 R1+R2 병렬, 출력 아래 r_ON·위 r_OP 블록을 마지막에 병렬로 묶음."
+          },
+          "CIRCUIT-02": {
+            "disposition": "applied",
+            "evidence": "G_m 출력 단락(거울 복사로 g_mN v_in), R_out 입력 영점 명시; 거울 근사 g_mP r_OP≫1·이상적 테일 조건 명시. 대칭 차동이지만 거울 결합이라 독립 반회로를 강제하지 않음. 조각에 생성 SVG 없음(stage의 svg 10개는 템플릿 UI 아이콘). start/solve가 소신호 등가회로 노드 KCL을 세우지 않고 알려진 블록(CG 1/g_m, CS/CE/SF 이득, 전류 분배, 복제 저항 합성)으로 끝나 authoring '소신호 등가회로 그림' 필수 조건 미해당. 따라서 병렬쌍 순서·출력 오른쪽·노드 점/색·Vt/it 배치 대조 대상 없음."
+          },
+          "GAIN-01": {
+            "disposition": "applied",
+            "evidence": "data-gain-route: G_m≈−g_mN → R_out≈r_ON∥r_OP∥(R1+R2) → A_open≈g_mN R_L."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "축퇴 저항 없음."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "W·I_D 배율·전류 거울 비례식·X*/ΔX 변화량을 묻지 않는 귀환 해석 문항."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "DC 노드 전압·포화/활성 경계 부등식을 묻지 않는 소신호 귀환 해석."
+          },
+          "NOTATION-01": {
+            "disposition": "applied",
+            "evidence": "g_mN, r_ON, r_OP 기호 원문 풀이와 일치, final 굵게. R_L 정의 문장을 분리해 괄호 안 긴 식 제거, 본문 start·solve의 R_L 정의와 동일."
+          },
+          "EXPLAIN-01": {
+            "disposition": "applied",
+            "evidence": "일곱 구역. verify: R1+R2→∞ 복귀, 1/K, R2→∞에서 K→1 버퍼, 차원."
+          },
+          "CORRECT-01": {
+            "disposition": "applied",
+            "evidence": "거울·대칭·이상 테일 근사 조건을 final 괄호에 유지하고 ≈ 일관 표시. R_L 정의를 괄호 밖 별도 <p> '여기서 R_L=r_ON∥r_OP∥(R1+R2)예요'로 옮김 — 정의 동일, 같은 data-answer-final 안."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "커패시턴스·주파수 응답이 없는 저주파 저항 해석이라 팔로워 Z_out(s) 꼴 비적용."
+          }
+        }
+      },
+      "p7:main": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "rules": {
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "원문에 소자 수치가 없는 기호 문항이라 단위 환산·10^3 인자 대상 없음. verify에서 차원(이득 무차원, 저항 Ω, 트랜스임피던스 Ω) 확인만 수행."
+          },
+          "CALC-01": {
+            "disposition": "applied",
+            "evidence": "i_1(전류 분배) → v_X → 둘째 단 이득 → R_0 → R_in,open, R_out,open → K, KR_0 → 폐루프."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "수치 없음."
+          },
+          "CIRCUIT-01": {
+            "disposition": "applied",
+            "evidence": "두 복제 단락으로 입력 노드·출력 노드에 R_F 접지; CG 소스 1/g_m1과 R_F 전류 분배; 출력 R_D2∥R_F 합성."
+          },
+          "CIRCUIT-02": {
+            "disposition": "applied",
+            "evidence": "둘째 단 G_m2 출력 단락·R_out2 λ=0 명시. 입력 노드 전류 분배는 블록식. 조각에 생성 SVG 없음(stage의 svg 10개는 템플릿 UI 아이콘). start/solve가 소신호 등가회로 노드 KCL을 세우지 않고 알려진 블록(CG 1/g_m, CS/CE/SF 이득, 전류 분배, 복제 저항 합성)으로 끝나 authoring '소신호 등가회로 그림' 필수 조건 미해당. 따라서 병렬쌍 순서·출력 오른쪽·노드 점/색·Vt/it 배치 대조 대상 없음."
+          },
+          "GAIN-01": {
+            "disposition": "applied",
+            "evidence": "트랜스임피던스라 전체는 예외; 내부 CS 단에 data-gain-route(G_m2=g_m2 → R_out2=R_D2∥R_F → v_out/v_X=−g_m2(R_D2∥R_F))를 적용."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "축퇴 구조 없음."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "W·I_D 배율·전류 거울 비례식·X*/ΔX 변화량을 묻지 않는 귀환 해석 문항."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "DC 노드 전압·포화/활성 경계 부등식을 묻지 않는 소신호 귀환 해석."
+          },
+          "NOTATION-01": {
+            "disposition": "applied",
+            "evidence": "R_0, K, i_1, v_X 기호 일관, final 굵게."
+          },
+          "EXPLAIN-01": {
+            "disposition": "applied",
+            "evidence": "일곱 구역. verify: KR_0≫1 시 −R_F 물리 해석, R_F→∞ 복귀, 차원."
+          },
+          "CORRECT-01": {
+            "disposition": "applied",
+            "evidence": "K=−1/R_F 부호 정의(입력 노드에서 빠져나가는 방향 양)와 R_0<0 → KR_0>0 부궤환을 명시."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "커패시턴스·주파수 응답이 없는 저주파 저항 해석이라 팔로워 Z_out(s) 꼴 비적용."
+          }
+        }
+      },
+      "p8:1": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "rules": {
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "원문에 소자 수치가 없는 기호 문항이라 단위 환산·10^3 인자 대상 없음. verify에서 차원(이득 무차원, 저항 Ω, 트랜스임피던스 Ω) 확인만 수행."
+          },
+          "CALC-01": {
+            "disposition": "applied",
+            "evidence": "R_L=R_M∥R_F, i_1 → v_X → PMOS CS 단 이득 → R_0, R_in,open, R_out,open."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "수치 없음."
+          },
+          "CIRCUIT-01": {
+            "disposition": "applied",
+            "evidence": "입력 노드 R_F∥(1/g_m1), 출력 R_M∥R_F(감지 복제 단락) 합성, PMOS M2 드레인 쪽 λ=0 무한대."
+          },
+          "CIRCUIT-02": {
+            "disposition": "applied",
+            "evidence": "둘째 단 G_m2 출력 단락(PMOS가 밀어 주는 전류 g_m2 v_SG=−g_m2 v_X → i_out=g_m2 v_X), R_out 입력 영점. 조각에 생성 SVG 없음(stage의 svg 10개는 템플릿 UI 아이콘). start/solve가 소신호 등가회로 노드 KCL을 세우지 않고 알려진 블록(CG 1/g_m, CS/CE/SF 이득, 전류 분배, 복제 저항 합성)으로 끝나 authoring '소신호 등가회로 그림' 필수 조건 미해당. 따라서 병렬쌍 순서·출력 오른쪽·노드 점/색·Vt/it 배치 대조 대상 없음."
+          },
+          "GAIN-01": {
+            "disposition": "applied",
+            "evidence": "트랜스임피던스 전체는 예외; PMOS CS 단에 data-gain-route(G_m2=g_m2 → R_out2=R_M∥R_F → −g_m2(R_M∥R_F))."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "축퇴 구조 없음."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "W·I_D 배율·전류 거울 비례식·X*/ΔX 변화량을 묻지 않는 귀환 해석 문항."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "DC 노드 전압·포화/활성 경계 부등식을 묻지 않는 소신호 귀환 해석."
+          },
+          "NOTATION-01": {
+            "disposition": "applied",
+            "evidence": "요약에서 R_0를 aligned 2행 display, R_in,open·R_out,open을 각각 별도 display로 분리(한 행 한 식). 본문 기호·final 굵게 유지."
+          },
+          "EXPLAIN-01": {
+            "disposition": "applied",
+            "evidence": "일곱 구역. verify(1): 부호 사슬, R_F→∞ 복귀."
+          },
+          "CORRECT-01": {
+            "disposition": "applied",
+            "evidence": "md 참고 답 −g_m1g_m2R_D[R_F∥(1/g_m1)](R_M∥R_F)와 동치형으로 제시; 부호(CG 비반전·PMOS CS 반전) verify에서 확인."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "커패시턴스·주파수 응답이 없는 저주파 저항 해석이라 팔로워 Z_out(s) 꼴 비적용."
+          }
+        }
+      },
+      "p8:2": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "rules": {
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "원문에 소자 수치가 없는 기호 문항이라 단위 환산·10^3 인자 대상 없음. verify에서 차원(이득 무차원, 저항 Ω, 트랜스임피던스 Ω) 확인만 수행."
+          },
+          "CALC-01": {
+            "disposition": "applied",
+            "evidence": "K → KR_0 → 1+KR_0 정리 → 폐루프 이득·R_in,closed."
+          },
+          "CALC-02": {
+            "disposition": "applied",
+            "evidence": "분자·분모에 1+g_m1R_F를 곱해 단일 분수로 정리(수치 없음)."
+          },
+          "CIRCUIT-01": {
+            "disposition": "applied",
+            "evidence": "폐루프 입력 임피던스는 전류 비교(병렬)라 ÷(1+KR_0) 판단."
+          },
+          "CIRCUIT-02": {
+            "disposition": "not_applicable",
+            "evidence": "G_m·R_out 측정이 아닌 귀환율·폐루프 공식 적용 소문항. 조각에 생성 SVG 없음(stage의 svg 10개는 템플릿 UI 아이콘). start/solve가 소신호 등가회로 노드 KCL을 세우지 않고 알려진 블록(CG 1/g_m, CS/CE/SF 이득, 전류 분배, 복제 저항 합성)으로 끝나 authoring '소신호 등가회로 그림' 필수 조건 미해당. 따라서 병렬쌍 순서·출력 오른쪽·노드 점/색·Vt/it 배치 대조 대상 없음."
+          },
+          "GAIN-01": {
+            "disposition": "not_applicable",
+            "evidence": "트랜스임피던스 폐루프 공식 적용(GAIN-01 예외: 트랜스임피던스)."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "축퇴 구조 없음."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "W·I_D 배율·전류 거울 비례식·X*/ΔX 변화량을 묻지 않는 귀환 해석 문항."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "DC 노드 전압·포화/활성 경계 부등식을 묻지 않는 소신호 귀환 해석."
+          },
+          "NOTATION-01": {
+            "disposition": "applied",
+            "evidence": "R_L=R_M∥R_F 축약 정의를 본문·final에 동일 사용."
+          },
+          "EXPLAIN-01": {
+            "disposition": "applied",
+            "evidence": "일곱 구역. verify(2): −R_F 극한, 분모 무차원·결과 Ω 차원."
+          },
+          "CORRECT-01": {
+            "disposition": "applied",
+            "evidence": "K=−1/R_F와 R_0<0 부호를 함께 유지해 1+KR_0>1 부궤환 명시(pitfall). 원문이 묻지 않은 폐루프 출력 임피던스는 계산하지 않고 retry로만."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "커패시턴스·주파수 응답이 없는 저주파 저항 해석이라 팔로워 Z_out(s) 꼴 비적용."
+          }
+        }
+      },
+      "p9:1": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "rules": {
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "원문에 소자 수치가 없는 기호 문항이라 단위 환산·10^3 인자 대상 없음. verify에서 차원(이득 무차원, 저항 Ω, 트랜스임피던스 Ω) 확인만 수행."
+          },
+          "CALC-01": {
+            "disposition": "applied",
+            "evidence": "R_L → v_X → SF 단 이득 → R_0 → K → T=|KR_0| → D 정의 → 폐루프 이득."
+          },
+          "CALC-02": {
+            "disposition": "applied",
+            "evidence": "R_0=R_F T 관계로 정리하고 (1+g_m1R_F)(1+g_m2R_L)을 곱해 D로 단일 분수화(수치 없음)."
+          },
+          "CIRCUIT-01": {
+            "disposition": "applied",
+            "evidence": "SF 출력 1/g_m2와 외부 R_M∥R_F의 병렬, 입력 노드 R_F 전류 분배."
+          },
+          "CIRCUIT-02": {
+            "disposition": "applied",
+            "evidence": "SF 단 G_m은 출력 단락(i_out=−g_m2 v_X), R_out은 v_X=0에서 1/g_m2∥R_L. 몸체효과 무시 가정 명시. 조각에 생성 SVG 없음(stage의 svg 10개는 템플릿 UI 아이콘). start/solve가 소신호 등가회로 노드 KCL을 세우지 않고 알려진 블록(CG 1/g_m, CS/CE/SF 이득, 전류 분배, 복제 저항 합성)으로 끝나 authoring '소신호 등가회로 그림' 필수 조건 미해당. 따라서 병렬쌍 순서·출력 오른쪽·노드 점/색·Vt/it 배치 대조 대상 없음."
+          },
+          "GAIN-01": {
+            "disposition": "applied",
+            "evidence": "SF 단에 data-gain-route: G_m2=−g_m2 → R_out,open=1/g_m2∥R_M∥R_F → v_out/v_X=g_m2R_L/(1+g_m2R_L)."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "축퇴 구조 없음."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "W·I_D 배율·전류 거울 비례식·X*/ΔX 변화량을 묻지 않는 귀환 해석 문항."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "DC 노드 전압·포화/활성 경계 부등식을 묻지 않는 소신호 귀환 해석."
+          },
+          "NOTATION-01": {
+            "disposition": "applied",
+            "evidence": "T, D 보조 기호를 정의 후 사용, final 굵게."
+          },
+          "EXPLAIN-01": {
+            "disposition": "applied",
+            "evidence": "일곱 구역. verify: T≪1 시 R_0(1+T)로 이득 증가, 분모 1−T 부호 검산."
+          },
+          "CORRECT-01": {
+            "disposition": "applied",
+            "evidence": "루프 이득 KR_0=−T<0 정궤환과 T<1 유효 조건을 solve·final·pitfall·요약에 일관 명시. md 참고 답과 동치."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "커패시턴스·주파수 응답이 없는 저주파 저항 해석이라 팔로워 Z_out(s) 꼴 비적용."
+          }
+        }
+      },
+      "p9:2": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "rules": {
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "원문에 소자 수치가 없는 기호 문항이라 단위 환산·10^3 인자 대상 없음. verify에서 차원(이득 무차원, 저항 Ω, 트랜스임피던스 Ω) 확인만 수행."
+          },
+          "CALC-01": {
+            "disposition": "applied",
+            "evidence": "R_in,open, R_out,open을 먼저 쓰고 1−T로 나눠 D로 정리."
+          },
+          "CALC-02": {
+            "disposition": "applied",
+            "evidence": "(1+g_m1R_F)(1+g_m2R_L)을 곱해 (1)의 D와 같은 분모로 정리."
+          },
+          "CIRCUIT-01": {
+            "disposition": "applied",
+            "evidence": "입력 노드 R_F∥(1/g_m1), 출력 1/g_m2∥R_M∥R_F 블록 사용."
+          },
+          "CIRCUIT-02": {
+            "disposition": "applied",
+            "evidence": "개루프 임피던스 측정 조건(복제 단락)을 (1)과 공유. 조각에 생성 SVG 없음(stage의 svg 10개는 템플릿 UI 아이콘). start/solve가 소신호 등가회로 노드 KCL을 세우지 않고 알려진 블록(CG 1/g_m, CS/CE/SF 이득, 전류 분배, 복제 저항 합성)으로 끝나 authoring '소신호 등가회로 그림' 필수 조건 미해당. 따라서 병렬쌍 순서·출력 오른쪽·노드 점/색·Vt/it 배치 대조 대상 없음."
+          },
+          "GAIN-01": {
+            "disposition": "not_applicable",
+            "evidence": "임피던스만 구하는 소문항."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "축퇴 구조 없음."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "W·I_D 배율·전류 거울 비례식·X*/ΔX 변화량을 묻지 않는 귀환 해석 문항."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "DC 노드 전압·포화/활성 경계 부등식을 묻지 않는 소신호 귀환 해석."
+          },
+          "NOTATION-01": {
+            "disposition": "applied",
+            "evidence": "R_in,closed/R_out,closed 기호와 D 공유 표기 일관."
+          },
+          "EXPLAIN-01": {
+            "disposition": "applied",
+            "evidence": "일곱 구역. verify(2): R_D→0 시 개루프 값 복귀, D 무차원."
+          },
+          "CORRECT-01": {
+            "disposition": "applied",
+            "evidence": "정궤환이라 임피던스가 커진다는 결론과 T<1 조건을 final에 병기."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "커패시턴스·주파수 응답이 없는 저주파 저항 해석이라 팔로워 Z_out(s) 꼴 비적용."
+          }
+        }
+      },
+      "p10:main": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "rules": {
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "원문에 소자 수치가 없는 기호 문항이라 단위 환산·10^3 인자 대상 없음. verify에서 차원(이득 무차원, 저항 Ω, 트랜스임피던스 Ω) 확인만 수행."
+          },
+          "CALC-01": {
+            "disposition": "applied",
+            "evidence": "v_π=I_in(R_F∥r_π) → v_out → R_0, R_in,open, R_out,open → K, KR_0 → 폐루프."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "수치 없음."
+          },
+          "CIRCUIT-01": {
+            "disposition": "applied",
+            "evidence": "베이스 노드 R_F∥r_π, 컬렉터 R_C∥r_O∥R_F 병렬 합성(V_A<∞로 r_O 유지)."
+          },
+          "CIRCUIT-02": {
+            "disposition": "applied",
+            "evidence": "두 복제 단락 조건을 start에 명시. CE 블록으로 끝나 등가회로 그림 불요. 조각에 생성 SVG 없음(stage의 svg 10개는 템플릿 UI 아이콘). start/solve가 소신호 등가회로 노드 KCL을 세우지 않고 알려진 블록(CG 1/g_m, CS/CE/SF 이득, 전류 분배, 복제 저항 합성)으로 끝나 authoring '소신호 등가회로 그림' 필수 조건 미해당. 따라서 병렬쌍 순서·출력 오른쪽·노드 점/색·Vt/it 배치 대조 대상 없음."
+          },
+          "GAIN-01": {
+            "disposition": "not_applicable",
+            "evidence": "단일 CE 트랜스임피던스(GAIN-01 예외: 트랜스임피던스)라 R_0를 v_π→g_m v_π 블록으로 직접 계산."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "이미터 접지 CE, 축퇴 없음."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "W·I_D 배율·전류 거울 비례식·X*/ΔX 변화량을 묻지 않는 귀환 해석 문항."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "DC 노드 전압·포화/활성 경계 부등식을 묻지 않는 소신호 귀환 해석."
+          },
+          "NOTATION-01": {
+            "disposition": "applied",
+            "evidence": "r_π, r_O, R_0, K 기호 일관, final 굵게. 요약 문장이 '−g_m에 입력 쪽 병렬 저항과 출력 쪽 병렬 저항을 곱한 값'으로 고쳐져 아래 display R_0=−g_m(R_F∥r_π)(R_C∥r_O∥R_F)와 기호·부호·차원(S·Ω·Ω=Ω) 일치."
+          },
+          "EXPLAIN-01": {
+            "disposition": "applied",
+            "evidence": "일곱 구역 순서·'이렇게 풀어요' 유지, 판단→식→결과 연결. retry 3번은 'R_F≫r_π, R_C∥r_O 영역' 조건이 있어 답(|K|·KR_0 증가)이 유일. 요약 R_0 aligned 2행 display와 설명 문장 분리."
+          },
+          "CORRECT-01": {
+            "disposition": "applied",
+            "evidence": "유한 r_π·r_O 유지(pitfall에서 r_π 무한대 금지 명시), K 부호 정의."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "커패시턴스·주파수 응답이 없는 저주파 저항 해석이라 팔로워 Z_out(s) 꼴 비적용."
+          }
+        }
+      },
+      "p11:main": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "rules": {
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "원문에 소자 수치가 없는 기호 문항이라 단위 환산·10^3 인자 대상 없음. verify에서 차원(이득 무차원, 저항 Ω, 트랜스임피던스 Ω) 확인만 수행."
+          },
+          "CALC-01": {
+            "disposition": "applied",
+            "evidence": "R_A, R_B, R_S1 정의 → i_1 → v_X → 둘째 단 이득 → R_0, R_in,open, R_out,open → V_N → K → 폐루프."
+          },
+          "CALC-02": {
+            "disposition": "applied",
+            "evidence": "K를 −(R2∥R_F)/[R_F(R1+R2∥R_F)]에서 −R2/(R1R2+R1R_F+R2R_F)로 약분 정리(수치 없음)."
+          },
+          "CIRCUIT-01": {
+            "disposition": "applied",
+            "evidence": "T형 귀환망의 두 복제(A 쪽 R_F+R1∥R2, 출력 쪽 R1+R2∥R_F)를 먼 쪽부터 합성, CG 소스 저항 R_S1≈(1/g_m1)(1+R_D1/r_O1) 블록(g_m1r_O1≫1)."
+          },
+          "CIRCUIT-02": {
+            "disposition": "applied",
+            "evidence": "둘째 단 G_m2 출력 단락, R_out2 입력 영점·전류원 개방·λ>0로 r_O2 유지. 조각에 생성 SVG 없음(stage의 svg 10개는 템플릿 UI 아이콘). start/solve가 소신호 등가회로 노드 KCL을 세우지 않고 알려진 블록(CG 1/g_m, CS/CE/SF 이득, 전류 분배, 복제 저항 합성)으로 끝나 authoring '소신호 등가회로 그림' 필수 조건 미해당. 따라서 병렬쌍 순서·출력 오른쪽·노드 점/색·Vt/it 배치 대조 대상 없음."
+          },
+          "GAIN-01": {
+            "disposition": "applied",
+            "evidence": "트랜스임피던스 전체는 예외; 전류원 부하 CS 단에 data-gain-route(G_m2=g_m2 → R_out2=r_O2∥R_B → −g_m2(r_O2∥R_B))."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "축퇴 꼴이 아닌 전류 분배 R_A/(R_A+R_S1)."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "W·I_D 배율·전류 거울 비례식·X*/ΔX 변화량을 묻지 않는 귀환 해석 문항."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "DC 노드 전압·포화/활성 경계 부등식을 묻지 않는 소신호 귀환 해석."
+          },
+          "NOTATION-01": {
+            "disposition": "applied",
+            "evidence": "요약에서 R_A, R_B, R_0(aligned 2행), K를 각각 별도 display로 분리(한 행 한 식), 본문·final과 기호 일치."
+          },
+          "EXPLAIN-01": {
+            "disposition": "applied",
+            "evidence": "일곱 구역. verify: R1→0 시 K→−1/R_F, 1/K를 노드 N 전류로 재현, r_O1≫R_D1 복귀, 차원."
+          },
+          "CORRECT-01": {
+            "disposition": "applied",
+            "evidence": "R_S1은 g_m1r_O1≫1 근사 ≈로 표시(정확형은 본문에 없음), λ>0·몸체효과 무시 가정 final 병기."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "커패시턴스·주파수 응답이 없는 저주파 저항 해석이라 팔로워 Z_out(s) 꼴 비적용."
+          }
+        }
+      }
+    }
+  },
+  "source_visual": {
+    "status": "pass",
+    "reviewer": "a211e3557f3e77499",
+    "evidence": "source.json·문제 md·그림 바이트가 이전 검토 시도와 동일(cmp)하여 같은 원본 쪽 대조를 사용. p1(E12.07): 12장.pdf p8 대조, 일치 — 조건·소문항·구할 것·그림(md5 동일/재작도 연결 일치); p2(E12.26): 12장.pdf p26 대조, 일치 — 조건·소문항·구할 것·그림(md5 동일/재작도 연결 일치); p3(P12.41): 12장.pdf p43 대조, 일치 — 조건·소문항·구할 것·그림(md5 동일/재작도 연결 일치); p4(P12.42): 12장.pdf p43 대조, 일치 — 조건·소문항·구할 것·그림(md5 동일/재작도 연결 일치); p5(E12.28): 12장.pdf p27 대조, 일치 — 조건·소문항·구할 것·그림(md5 동일/재작도 연결 일치); p6(E12.27): 12장.pdf p26 대조, 일치 — 조건·소문항·구할 것·그림(md5 동일/재작도 연결 일치); p7(E12.29): 12장.pdf p27 대조, 일치 — 조건·소문항·구할 것·그림(md5 동일/재작도 연결 일치); p8(2023-1_기말-Q2): 기말고사.pdf p2 대조, 일치 — 조건·소문항·구할 것·그림(md5 동일/재작도 연결 일치); p9(2021-1_기말-Q3): Final0617_1p_rev.pdf p1 대조, 일치 — 조건·소문항·구할 것·그림(md5 동일/재작도 연결 일치); p10(P12.49): 12장.pdf p43 대조, 일치 — 조건·소문항·구할 것·그림(md5 동일/재작도 연결 일치); p11(P12.47): 12장.pdf p43 대조, 일치 — 조건·소문항·구할 것·그림(md5 동일/재작도 연결 일치). 차이 0건(E12.26 원문 오식은 원문대로 옮기고 주석, E12.29 λ=0은 교재 풀이 처리와 일치하는 참고사항)."
+  },
+  "browser": {
+    "status": "pass",
+    "reviewer": "ae208c53b50b4a64b",
+    "evidence": "answer.html splitRelations 수정 뒤 새 stage를 playwright-headless(Chromium 153.0.8010.12), 127.0.0.1:51307에서 측정. epe_browser_check 1280x900/375x812 x light/dark 모두 visible, topics·sums 11, katex 1292·katexErrors 0, rawDollar false, hScroll/panelOverflow/spacingErrors/brokenImages/external/consoleErrors 0(work/browser/browser.json, shots 44장). layout_probe 결함 0(probe.json). interact.json: 1024 목차·문제 패널 열림/1023 닫힘, pager 1/11·요약 1개, 원문 탭, 테마 토글·새로고침 유지, 콘솔 오류 0. 생성 SVG 0개. 참고: p6 요약의 인라인 식이 375px에서 자연 줄바꿈되나 넘침·잘림 없음(허용 범위)."
+  },
+  "content": {
+    "status": "pass",
+    "reviewer": "afef969f8fb417e51",
+    "evidence": "같은 리뷰어의 누적 검토: 1차 11조각 전체, 2차 p1·p4·p8·p10·p11(finding 7건 resolved), 3차 p10 요약(resolved), 4차 p5·p6 답 문장 괄호 조건 분리(식·값 불변, data-answer-final 안 유지, 새 결함 0). 각 단계에서 바뀌지 않은 조각은 바이트 동일을 확인하고 이전 판정을 사용. p5·p6만 final 괄호 조건 분리(식·값·조건 불변), 나머지 9개 조각 해시 동일, stage 조각·MD·HTML 반영 확인. p5:main·p6:main content pass, 13 rule 감사 pass, 새 결함 없음.",
+    "items": {
+      "p1:a": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "evidence": "[2차 재검토, 이후 바이트 동일] (a) 구역 내용은 이전과 동일(diff상 (a) 변경 없음). 일곱 구역·final 3개·소문항 a,b,c 유지. 네 성분·부궤환 판단 정확. 요약 '네 성분' 동일."
+      },
+      "p1:b": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "evidence": "[2차 재검토, 이후 바이트 동일] 변경: A_1·A_closed를 ≈로(R_out≈R_D 근사와 일관). G_m=−g_m→R_out≈R_D→A1≈g_mR_D 경로 유지, 식 값은 그대로라 이전 재유도·crosscheck(차 0) 유효. verify 극한·차원 불변, final 조건 병기, 요약 A_1≈ 동기화. 새 결함 없음."
+      },
+      "p1:c": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "evidence": "[2차 재검토, 이후 바이트 동일] 변경: R_in,closed·R_out,closed ≈ 및 (c) final 조건 (λ=0, R1+R2≫R_D) 병기 → 이전 N1 해소. 식 값 불변, 소스 시험전압 직접 확인 유지. MD·stage HTML에 수정 수식 반영 확인."
+      },
+      "p2:main": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "evidence": "[1차 검토, 이후 바이트 동일] 원문 오식 해석 공개, λ=0 추가 가정 표시. start 복제 종단(감지=게이트 포트 개방→R1+R2, 반송=V_out 포트 단락→R1∥R2, 게이트 전류 0) 정확. G_m→R_out→A_open, K, KA_open 약분, 폐루프 3식이 textbook 식(12.123–125)·blind와 동치(차 0). verify 출력 노드 KCL v_out(1/R_D+1/(R1+R2))=g_m1(v_in−Kv_out)을 직접 풀어 동일 확인(게이트 전류 0이라 정확). 극한 2개·차원. 요약 일치."
+      },
+      "p3:main": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "evidence": "[1차 검토, 이후 바이트 동일] Fig 12.104 이상적 전류원 부하 확인, λ=0 추가 가정 표시. A_open=g_m1(R1+R2), KA=g_m1R2, A_closed=g_m1(R1+R2)/(1+g_m1R2), R_in,closed=1/g_m1+R2(직접 KCL로 재유도 일치), R_out,closed=(R1+R2)/(1+g_m1R2). verify: p2에 R_D→∞ 대입 일치, 1/K, 차원. 요약 일치."
+      },
+      "p4:main": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "evidence": "[2차 재검토, 이후 바이트 동일] 변경: A_closed·R_out,closed ≈ 통일 + 근사 출처 설명 문장. A_open '=' 유지는 G_m 정확식이라 타당. 'R_out,closed = R_L/(1+KA_open) ≈ …' 사슬은 설명 문장이 근사 출처를 밝혀 허용. 식 값 불변(blind 대비 1e-3, β→∞ 비 1). 요약 동기화."
+      },
+      "p5:main": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "evidence": "[4차 재검토 34916f7d, p5·p6 수정 조각] 직전 검토본 대비 diff는 verify final 한 곳: 괄호 '(λ=0; g_m1(R1∥R2)≫1이면 A_open≈g_m2R_D1R_L/(R1∥R2))'를 '(λ=0)' + 별도 <p> 'g_m1(R1∥R2)≫1이면 A_open≈g_m2R_D1R_L/(R1∥R2)예요.'로 분리. 식·조건·≈ 불변, 두 문장 모두 data-answer-final 안(final 1개 유지). R_L은 start 정의 R_D2∥(R1+R2)와 동일. 나머지 본문 바이트 동일로 이전 판정(재유도·textbook 식 12.133–138 일치, verify 극한·차원) 유지. stage fragments=bucket, 수식 105개 MD·HTML 모두 반영."
+      },
+      "p6:main": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "evidence": "[4차 재검토 34916f7d, p5·p6 수정 조각] 직전 검토본 대비 diff는 verify final 한 곳: 괄호 '(R_L=r_ON∥r_OP∥(R1+R2), 대칭·이상적 테일·거울 근사)'를 '(대칭·이상적 테일·거울 근사)' + 별도 <p> '여기서 R_L=r_ON∥r_OP∥(R1+R2)예요.'로 분리. R_L 정의·근사 조건 불변, 두 문장 모두 data-answer-final 안(final 1개 유지). 나머지 본문 바이트 동일로 이전 판정(textbook 식 12.126–132 일치, verify 극한·특수값·차원) 유지. stage fragments=bucket, 수식 106개 MD·HTML 모두 반영."
+      },
+      "p7:main": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "evidence": "[1차 검토, 이후 바이트 동일] Fig 12.58(a) 확인. 두 복제 단락, 전류 분배 g_m1R_F/(1+g_m1R_F), v_X=+i_1R_D1(CG 비반전) 부호 확인, R_0·R_in,open·R_out,open·K=−1/R_F·KR_0가 textbook 식(12.139–147)과 동치. verify: KR_0≫1→−R_F 물리 해석, R_F→∞ 복귀, 차원. 요약 일치."
+      },
+      "p8:1": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "evidence": "[2차 재검토, 이후 바이트 동일] 본문 불변, 요약만 변경: R_0 aligned 2행, R_in,open=R_F∥(1/g_m1), R_out,open=R_M∥R_F 별도 display — 본문 값과 동일. 문장/식 분리로 한 행 한 식 충족."
+      },
+      "p8:2": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "evidence": "[2차 재검토, 이후 바이트 동일] 본문 불변. 요약 폐루프 문장 'K=−1/R_F이고 이득과 R_in은 1+KR_0로 나뉘어요' 유지, 본문과 일치(원문이 R_out,closed를 묻지 않음과도 일관)."
+      },
+      "p9:1": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "evidence": "[1차 검토, 이후 바이트 동일] 2021-1 Q3 그림(M2 NMOS SF, 소스=V_out) 확인. 두 비반전 단→R_0>0, K=−1/R_F→KR_0=−T<0 정궤환을 본문·final·pitfall·요약에 일관 명시, T<1 유효 조건. R_0=R_FT, 폐루프 g_m1R_FR_Dg_m2R_L/D가 md 참고 답과 동치(차 0). verify T≪1 근사·분모 부호."
+      },
+      "p9:2": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "evidence": "[1차 검토, 이후 바이트 동일] R_in,closed=R_F(1+g_m2R_L)/D, R_out,closed=R_L(1+g_m1R_F)/D 대수 재확인, md 참고 답 [R_F∥(1/g_m1)]/(1−A_OL/R_F) 등과 동치. 정궤환이라 증가 판단 정확. verify R_D→0 극한·차원."
+      },
+      "p10:main": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "evidence": "[3차 재검토, 이후 바이트 동일] 직전 검토본 대비 diff는 요약 문장 1줄뿐: '개루프 트랜스임피던스는 −g_m에 입력 쪽 병렬 저항과 출력 쪽 병렬 저항을 곱한 값이에요.' 아래 display R_0=−g_m(R_F∥r_π)(R_C∥r_O∥R_F)와 정확히 대응(부호·g_m·차원 Ω). 나머지 본문(일곱 구역, final 1개, retry 3번 조건화)은 바이트 동일로 이전 pass 판정 유지: R_0·R_in,open·R_out,open·K·폐루프 식 재유도 일치, verify 극한·차원 정상. stage fragments=bucket 조각, p10 수식 96개 stage MD·HTML 모두 반영, 옛 문장은 MD·HTML에서 사라짐(남은 '입력 쪽과 출력 쪽'은 p11 문장). 나머지 10개 조각 해시 동일 확인."
+      },
+      "p11:main": {
+        "status": "pass",
+        "reviewer": "afef969f8fb417e51",
+        "evidence": "[2차 재검토, 이후 바이트 동일] 본문 불변, 요약만 변경: R_A, R_B, R_0, K 별도 display, 값이 본문·final과 동일. 새 결함 없음."
+      }
+    }
+  },
+  "independent": {
+    "status": "pass",
+    "reviewer": "afb102e1883c11548",
+    "evidence": "explain-blind 채택본 evidence/independent-blind.json(봉인 문제·그림만 입력); evidence/coordinator-crosscheck.py를 이 attempt에서 재실행해 출력 동일: 15소문항 조각 답과 simplify 차 0(p5·p6 식 불변), md 참고 답과 일치, p10 retry 3 검산 일치, disputed 없음.",
+    "items": {
+      "p1:a": {
+        "status": "pass",
+        "method": "qualitative",
+        "conclusion": "순방향 시스템 = M1·R_D로 된 CG 증폭기(입력 V_in이 소스로 들어감). 감지 장치 = V_out 노드에 병렬로 걸린 R1–R2 분배기(출력 전압 감지). 귀환 회로망 = R1–R2 분배기, K = V_F/V_out = R2/(R1+R2) (V_F = M1 게이트 전압). 비교 장치 = M1 자신: 드레인 전류가 v_GS = V_F − V_in에 비례하므로 오차 E = V_in − V_F를 M1이 만든다(전압-전압 귀환, 음귀환).",
+        "evidence": "봉인 그림 p1-figure-1: V_out–R1–게이트 노드–R2–접지, M1 게이트=분배기 중점, 소스=V_in. i_d = g_m(V_F − V_in), V_out = −i_d R_D = g_m R_D (V_in − V_F)로 부호 확인.",
+        "reviewer": "afb102e1883c11548"
+      },
+      "p1:b": {
+        "status": "pass",
+        "method": "symbolic",
+        "conclusion": "개루프 A_v,open = g_m R_D (게이트 교류 접지 CG). 폐루프 A_v,closed = g_m R_D / (1 + g_m R_D R2/(R1+R2)).",
+        "evidence": "V_out = g_m R_D(V_in − K V_out), K = R2/(R1+R2) → V_out/V_in = g_mR_D/(1+K g_mR_D). R1+R2 ≫ R_D이므로 분배기 부하 무시, λ=0. 직접 KCL과 식 (12.2) 결과 일치.",
+        "reviewer": "afb102e1883c11548"
+      },
+      "p1:c": {
+        "status": "pass",
+        "method": "symbolic",
+        "conclusion": "R_in,open = 1/g_m, R_in,closed = (1/g_m)(1 + g_m R_D R2/(R1+R2)) (전압 귀환 입력이라 증가). R_out,open = R_D, R_out,closed = R_D/(1 + g_m R_D R2/(R1+R2)) (전압 감지라 감소).",
+        "evidence": "입력: i_in = g_m(V_in − K V_out) = g_m V_in/(1+Kg_mR_D) → R_in = (1+Kg_mR_D)/g_m. 출력(V_in=0): I_X = V_X/R_D + g_m K V_X → R_out = R_D/(1+g_mKR_D). 두 직접 계산이 (1+루프이득) 배율과 일치.",
+        "reviewer": "afb102e1883c11548"
+      },
+      "p2:main": {
+        "status": "pass",
+        "method": "symbolic",
+        "conclusion": "루프를 끊으면 감지 복제(출력 포트 개방)로 V_out에 R1+R2가 접지로 걸리고, 반송 복제(입력 포트 단락)는 게이트에 R1∥R2를 거는데 게이트 전류가 0이라 영향 없음. R_L' = R_D∥(R1+R2)일 때 A_v,open = g_m1 R_L', R_in,open = 1/g_m1, R_out,open = R_L', K = R2/(R1+R2). 폐루프: A_v,closed = g_m1R_L'/(1+g_m1R_L'R2/(R1+R2)) = g_m1R_D(R1+R2)/(R_D+R1+R2+g_m1R_DR2), R_in,closed = (1+g_m1R_L'R2/(R1+R2))/g_m1, R_out,closed = R_L'/(1+g_m1R_L'R2/(R1+R2)) = R_D(R1+R2)/(R_D+R1+R2+g_m1R_DR2).",
+        "evidence": "g_m=5mS, R_D=2k, R1=3k, R2=1.5k로 정확한 노드 해석(KCL)과 비교: 이득·R_in·R_out 상대오차 0 (이 회로는 게이트 전류가 0이라 두 포트 분해가 정확). 조건 문구는 '충분히 크지 않을 때'로 해석.",
+        "tolerance": 1e-09,
+        "residual": 0.0,
+        "reviewer": "afb102e1883c11548"
+      },
+      "p3:main": {
+        "status": "pass",
+        "method": "symbolic",
+        "conclusion": "이상적 전류원 부하(R_D→∞, λ=0 가정)이므로 출력 부하는 R1+R2뿐. A_v,open = g_m(R1+R2), R_in,open = 1/g_m, R_out,open = R1+R2, K = R2/(R1+R2), 루프 이득 = g_m R2. 폐루프: A_v,closed = g_m(R1+R2)/(1+g_mR2) (g_mR2≫1이면 1+R1/R2), R_in,closed = (1+g_mR2)/g_m = 1/g_m + R2, R_out,closed = (R1+R2)/(1+g_mR2).",
+        "evidence": "P2 식에서 R_D→∞; 정확한 KCL V_out(1/(R1+R2)+g_mK) = g_mV_in과 수치 비교 상대오차 0. λ>0이면 r_O가 출력에 병렬로 들어가 R1+R2 자리에 r_O∥(R1+R2)를 써야 하나(그때 CG 입력 저항도 바뀜) 문제는 예제 12.26처럼 λ=0으로 봄.",
+        "tolerance": 1e-09,
+        "residual": 0.0,
+        "reviewer": "afb102e1883c11548"
+      },
+      "p4:main": {
+        "status": "pass",
+        "method": "symbolic",
+        "conclusion": "루프 끊기: 베이스에 R_B = R1∥R2(반송 복제, 입력 포트 단락), 컬렉터에 R1+R2(감지 복제, 출력 포트 개방). R_L' = R_C∥(R1+R2). 개루프 A_v,open = βR_L'/(r_π + R1∥R2), R_in,open = (r_π + R1∥R2)/(β+1) ≈ 1/g_m + (R1∥R2)/(β+1), R_out,open = R_L' (V_A=∞). K = R2/(R1+R2). 루프 이득 T = [R2/(R1+R2)]·βR_L'/(r_π+R1∥R2). 폐루프: A_v,closed = A_v,open/(1+T), R_in,closed = R_in,open(1+T), R_out,closed = R_L'/(1+T).",
+        "evidence": "베이스 전류가 R1∥R2에 전압 강하를 만들어 이득을 r_π/(r_π+R_B) 배로 줄임. β=100, g_m=5mS, R_C=2k, R1=3k, R2=1.5k로 정확한 2노드 해석과 비교: 이득 1.0e-3, R_in·R_out 2.3e-3 상대오차(귀환망 피드포워드·베이스 전류의 1/β 항 무시분).",
+        "tolerance": 0.02,
+        "residual": 0.0023,
+        "reviewer": "afb102e1883c11548"
+      },
+      "p5:main": {
+        "status": "pass",
+        "method": "symbolic",
+        "conclusion": "전압-전압 귀환(V_out 감지, M1 소스에 반송; 음귀환). 루프 끊기: M1 소스에 R1∥R2 축퇴(반송 복제), V_out에 R1+R2 부하(감지 복제). λ=0. A_v,open = g_m2 R_D1 [R_D2∥(R1+R2)] / (1/g_m1 + R1∥R2), R_in,open = ∞, R_out,open = R_D2∥(R1+R2), K = R2/(R1+R2). 폐루프: A_v,closed = A_v,open/(1+K A_v,open), R_in,closed = ∞, R_out,closed = [R_D2∥(R1+R2)]/(1+K A_v,open).",
+        "evidence": "부호: V_in↑→X↓→V_out↑→소스↑→v_GS1↓ 음귀환. g_m1=4mS, g_m2=6mS, R_D1=5k, R_D2=4k, R1=3k, R2=1.5k에서 정확한 3노드 해석과 비교: 이득 6.1e-4, R_out 1.05e-2 상대오차(R1을 통한 피드포워드 무시분).",
+        "tolerance": 0.02,
+        "residual": 0.0105,
+        "reviewer": "afb102e1883c11548"
+      },
+      "p6:main": {
+        "status": "pass",
+        "method": "symbolic",
+        "conclusion": "V_in(M1 게이트)→V_out은 비반전, 분배기 중점이 M2 게이트로 가서 음귀환(전압-전압). 루프 끊기: V_out에 R1+R2 부하, M2 게이트의 R1∥R2는 게이트 전류 0이라 무관. A_v,open = g_mN [r_ON∥r_OP∥(R1+R2)], R_in,open = R_in,closed = ∞, R_out,open = r_ON∥r_OP∥(R1+R2), K = R2/(R1+R2). 폐루프: A_v,closed = A_v,open/(1+K A_v,open), R_out,closed = R_out,open/(1+K A_v,open).",
+        "evidence": "전류 거울 부하 차동쌍의 G_m = g_mN, 출력 저항 r_ON∥r_OP 모델로 정확한 KCL과 비교 상대오차 0.",
+        "tolerance": 1e-09,
+        "residual": 0.0,
+        "reviewer": "afb102e1883c11548"
+      },
+      "p7:main": {
+        "status": "pass",
+        "method": "symbolic",
+        "conclusion": "전압-전류 귀환. 루프 끊기: 입력 노드와 V_out에 각각 R_F가 접지로. λ=0. 개루프 R_0 = V_out/I_in = −g_m1 g_m2 R_D1 R_F (R_D2∥R_F)/(1+g_m1R_F), R_in,open = R_F∥(1/g_m1) = R_F/(1+g_m1R_F), R_out,open = R_D2∥R_F. K = I_2/V_1 = −1/R_F, 루프 이득 KR_0 = g_m1g_m2R_D1(R_D2∥R_F)/(1+g_m1R_F) > 0. 폐루프: V_out/I_in = R_0/(1+KR_0) = −g_m1g_m2R_D1R_F(R_D2∥R_F)/(1+g_m1R_F+g_m1g_m2R_D1(R_D2∥R_F)) (→ −R_F), R_in,closed = R_in,open/(1+KR_0), R_out,closed = (R_D2∥R_F)/(1+KR_0).",
+        "evidence": "전류 분배 I_in·R_F/(R_F+1/g_m1)이 M1을 거쳐 R_D1로 감. g_m1=4mS, g_m2=6mS, R_D1=5k, R_D2=4k, R_F=10k로 정확한 노드 해석과 비교: 이득 8.9e-5, R_in 7.4e-4 상대오차.",
+        "tolerance": 0.02,
+        "residual": 0.00075,
+        "reviewer": "afb102e1883c11548"
+      },
+      "p8:1": {
+        "status": "pass",
+        "method": "symbolic",
+        "conclusion": "M1 NMOS CG(게이트 V_b, 드레인 R_D), M2 PMOS CS(게이트=M1 드레인, 드레인=V_out, 부하 R_M), R_F가 V_out→입력 노드: 전압-전류 귀환. 루프 끊기로 입력 노드와 V_out에 R_F를 접지로 붙임. 개루프 이득 R_0 = V_out/I_in = −g_m1 g_m2 R_D R_F (R_M∥R_F)/(1+g_m1R_F). R_in,open = R_F∥(1/g_m1) = R_F/(1+g_m1R_F). R_out,open = R_M∥R_F.",
+        "evidence": "v_s = I_in/(g_m1+1/R_F), v_A = g_m1R_D v_s, PMOS 드레인 전류 = −g_m2 v_A가 R_M∥R_F로 흐름 → V_out = −g_m2 v_A (R_M∥R_F). 부호: I_in↑→v_A↑→M2 전류↓→V_out↓ 음귀환.",
+        "tolerance": 0.02,
+        "residual": 0.00073,
+        "reviewer": "afb102e1883c11548"
+      },
+      "p8:2": {
+        "status": "pass",
+        "method": "symbolic",
+        "conclusion": "Feedback factor K = −1/R_F (V_out 쪽에 V_1, 입력 쪽 단락 전류 I_2). 루프 이득 T = KR_0 = g_m1g_m2R_D(R_M∥R_F)/(1+g_m1R_F). Closed-loop gain = R_0/(1+T) = −g_m1g_m2R_DR_F(R_M∥R_F)/(1+g_m1R_F+g_m1g_m2R_D(R_M∥R_F)) (T≫1이면 ≈ −R_F). R_in,closed = R_in,open/(1+T) = R_F/(1+g_m1R_F+g_m1g_m2R_D(R_M∥R_F)).",
+        "evidence": "g_m1=4mS, g_m2=6mS, R_D=5k, R_M=3k, R_F=10k(T≈6.75)로 정확한 3노드 해석과 비교: 폐루프 이득 1.1e-4, R_in 7.3e-4 상대오차.",
+        "tolerance": 0.02,
+        "residual": 0.00073,
+        "reviewer": "afb102e1883c11548"
+      },
+      "p9:1": {
+        "status": "pass",
+        "method": "symbolic",
+        "conclusion": "M2가 소스 팔로워(드레인 V_DD, 소스=V_out, R_M)라 경로에 반전이 없다(CG 비반전, 팔로워 비반전): R_0 = V_out/I_in = [g_m1R_DR_F/(1+g_m1R_F)]·[g_m2(R_M∥R_F)/(1+g_m2(R_M∥R_F))] > 0. K = −1/R_F이므로 루프 이득 KR_0 = −g_m1g_m2R_D(R_M∥R_F)/[(1+g_m1R_F)(1+g_m2(R_M∥R_F))] < 0 → 양귀환. 정의 |T| = g_m1g_m2R_D(R_M∥R_F)/[(1+g_m1R_F)(1+g_m2(R_M∥R_F))]로 쓰면 Feedback factor K = −1/R_F, closed-loop gain = R_0/(1+KR_0) = R_0/(1−|T|) (|T|<1일 때만 유한·안정한 값; 개루프보다 커짐).",
+        "evidence": "부호: I_in↑→v_s↑→i_D1↓→v_A↑→V_out↑→R_F로 입력 노드에 전류 주입→v_s 더 상승(양귀환). g_m1=4mS, g_m2=6mS, R_D=5k, R_M=3k, R_F=10k에서 KR_0 = −0.455, 정확한 노드 해석과 비교: 이득 1.5e-3 상대오차.",
+        "tolerance": 0.02,
+        "residual": 0.0016,
+        "reviewer": "afb102e1883c11548"
+      },
+      "p9:2": {
+        "status": "pass",
+        "method": "symbolic",
+        "conclusion": "R_in,open = R_F∥(1/g_m1) = R_F/(1+g_m1R_F), R_out,open = (1/g_m2)∥R_M∥R_F. 루프 이득이 음수(KR_0 = −|T|)라 R_in,closed = R_in,open/(1−|T|), R_out,closed = [(1/g_m2)∥R_M∥R_F]/(1−|T|): 양귀환이므로 두 임피던스가 개루프보다 커진다(|T|<1 가정).",
+        "evidence": "같은 수치에서 정확한 노드 해석(R_out은 I_in=0, 출력 시험 전압)과 비교: R_in·R_out 모두 7.0e-4 상대오차.",
+        "tolerance": 0.02,
+        "residual": 0.0007,
+        "reviewer": "afb102e1883c11548"
+      },
+      "p10:main": {
+        "status": "pass",
+        "method": "symbolic",
+        "conclusion": "단일 BJT CE + 컬렉터–베이스 R_F: 전압-전류 귀환. 루프 끊기: 베이스와 컬렉터에 각각 R_F 접지. V_A<∞이므로 r_O 포함. R_0 = −g_m (R_F∥r_π)(R_C∥r_O∥R_F), R_in,open = R_F∥r_π, R_out,open = R_C∥r_O∥R_F, K = −1/R_F, 루프 이득 T = g_m(R_F∥r_π)(R_C∥r_O∥R_F)/R_F. 폐루프: V_out/I_in = R_0/(1+T), R_in,closed = (R_F∥r_π)/(1+T), R_out,closed = (R_C∥r_O∥R_F)/(1+T).",
+        "evidence": "g_m=40mS, β=100, r_O=50k, R_C=2k, R_F=5k로 정확한 2노드 해석과 비교: 이득 2.6e-4, R_in·R_out 4.7e-3 상대오차(R_F 피드포워드 무시분).",
+        "tolerance": 0.02,
+        "residual": 0.0048,
+        "reviewer": "afb102e1883c11548"
+      },
+      "p11:main": {
+        "status": "pass",
+        "method": "symbolic",
+        "conclusion": "M1 CG(R_D1, r_O1), M2 NMOS CS(이상적 전류원 부하, r_O2), 귀환망 = R1·R2·R_F의 T형: 전압-전류 귀환(음귀환). 루프 끊기: 입력 노드에 R_A = R_F + R1∥R2, 출력에 R_B = R1 + R2∥R_F. M1 소스에서 본 저항 R_m = (R_D1+r_O1)/(1+g_m1r_O1). 개루프 R_0 = v_out/i_in = −g_m2 R_D1 [R_A/(R_A+R_m)] (r_O2∥R_B), R_in,open = R_A∥R_m, R_out,open = r_O2∥R_B. 귀환율 K = −(R2∥R_F)/[R_F(R1+R2∥R_F)] = −R2/(R1R2+R1R_F+R2R_F). 루프 이득 T = KR_0 > 0. 폐루프: v_out/i_in = R_0/(1+T) (T≫1이면 → −(R1+R_F+R1R_F/R2)), R_in,closed = (R_A∥R_m)/(1+T), R_out,closed = (r_O2∥R_B)/(1+T).",
+        "evidence": "M2 전류원 부하이므로 R_D2 없음. g_m1=4mS, g_m2=6mS, R_D1=5k, r_O1=30k, r_O2=40k, R1=3k, R2=1.5k, R_F=8k(T≈4.15)에서 정확한 4노드 해석과 비교: 이득 6.9e-5, R_in·R_out 2.9e-4 상대오차.",
+        "tolerance": 0.02,
+        "residual": 0.00029,
+        "reviewer": "afb102e1883c11548"
+      }
+    }
+  },
+  "artifact_hashes": {
+    ".assets/figures_문제설명_1120_Nonideal_IO_Feedback/0ae5ae6010d8cce4-fig-Q3.png": "0ae5ae6010d8cce46366c756fc231817ab1c58cdb649a43f74f0b2910ae29cf3",
+    ".assets/figures_문제설명_1120_Nonideal_IO_Feedback/10bb90bd2a77741b-fig12-110.png": "10bb90bd2a77741ba2d260dcca0846560a5d6fc0e487a30a5c9e2e34e71fd64a",
+    ".assets/figures_문제설명_1120_Nonideal_IO_Feedback/82fb31540b771af0-fig12-57-a.png": "82fb31540b771af02e232eefe8b8e082f0e68f2d705ac62e964c528e8844ca2b",
+    ".assets/figures_문제설명_1120_Nonideal_IO_Feedback/a3a76a952146d040-fig12-55-a.png": "a3a76a952146d04050259b28880cdf191a83c9446779557d23493faf44ed3bb3",
+    ".assets/figures_문제설명_1120_Nonideal_IO_Feedback/ae3790b9497ec188-fig12-11.png": "ae3790b9497ec188868d65b3aad7c0e7c85d1e62ec3a1569c526b04142e95538",
+    ".assets/figures_문제설명_1120_Nonideal_IO_Feedback/c124029e2dae02aa-fig12-112.png": "c124029e2dae02aa384e11156f6c4203c22f6c5be7774e7a44db88beaffe863a",
+    ".assets/figures_문제설명_1120_Nonideal_IO_Feedback/c6d70566abed4fc9-fig12-56-a.png": "c6d70566abed4fc9c38a7dc96d4128da5709d60206508d3df17a3a73a775f1a7",
+    ".assets/figures_문제설명_1120_Nonideal_IO_Feedback/d2d2f99a43248ad7-fig12-58-a.png": "d2d2f99a43248ad70b17cc0fa1c3b75f8c5601f0f9d9031dc6e0031033a2492b",
+    ".assets/figures_문제설명_1120_Nonideal_IO_Feedback/e312bc90b9bec784-fig12-105.png": "e312bc90b9bec7845653f7840aaa24db36f92467dd0b09a570766b8c20d936d9",
+    ".assets/figures_문제설명_1120_Nonideal_IO_Feedback/e8e06b7b1b76ac7d-fig-Q2.png": "e8e06b7b1b76ac7d76351690921ca44a492bc5015c58795d7749ee59e62a31cd",
+    ".assets/figures_문제설명_1120_Nonideal_IO_Feedback/ff102bf2edaf75e6-fig12-104.png": "ff102bf2edaf75e6c87bfffccb5a6af6c28ca083e320b4202906397298dd3b63",
+    ".assets/문제설명_1120_Nonideal_IO_Feedback.md": "2db519e94fa9050021b79ab3d139d9898734ca9c893bfdc78ddc116a3731055e",
+    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/answer-overlay.json": "dc832a905fcfe74cece0ae2347b1a30d9a1f9def8466f12814b979ff829224db",
+    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/evidence/coordinator-crosscheck.py": "f65a6b6dae05eb6d03a18549650bb29a5798db249e76d57cfde232f4bbaf00b2",
+    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/evidence/coordinator-crosscheck.txt": "a63131914bc1ad1e0b7421e378299b7d1f3e79423e6ba6dba9088d29575fd6c8",
+    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/evidence/independent-blind.json": "88752f994d0adfcf6477720eb7db00d2f7b1e85057f29e9340344593bee310f9",
+    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/fragments/p1.html": "d169badc2ab1fbf2ea6ff93f8394582c067a345cc4e54cf1fabf30e3c1c00d2a",
+    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/fragments/p10.html": "e407e2afd2de30a066d2efb4c014ca22e665de269abbe304a7a81f4bb92e042c",
+    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/fragments/p11.html": "896096f03ce5e0ac41b87cb2f6b7f2bfd8c0d276138547a8854156e248c1829b",
+    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/fragments/p2.html": "a34436b50c70226a120ee773c9fbf11a56f85009c1c951fd5bda3493d51784df",
+    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/fragments/p3.html": "f74c56c6e178ff60507e0909cdb55716a9265e6f76bb5c066b47dea2f138a293",
+    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/fragments/p4.html": "d41c148ac206dbd8669c1a29ee90eb3b000323cabf062fce31c75fb711c74439",
+    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/fragments/p5.html": "38fd1581cebb5d7ba8b3ce5a19686636ad365523faeb5b4eaddc5e3873def6d7",
+    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/fragments/p6.html": "9206e917a1389795556a6fb223f399b1087029f88c627a153b83f3c666a46088",
+    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/fragments/p7.html": "9d49a85d7f7be7a1183828c99d6ca8ddcadc2a43891f498421dc72474f4ca5ab",
+    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/fragments/p8.html": "59028ff37642889cdb00448b6656cca63b07d8a46532b750101afe2916a688c8",
+    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/fragments/p9.html": "c4acb60831a9ad464137ef708f9132d2b4473a953bc18b9cba56e005c7a20488",
+    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/template-provenance.json": "69f885ea5f798b5132305e84c4e454228d50fb784330bfab3b2d4fd3697650fc",
+    "문제설명_1120_Nonideal_IO_Feedback.html": "4a14183a40d20f684ba048a5fc88ad19c63304295d06e5a9085b592ff1d1a905",
+    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/manifest.json": "20ff97ac73673a84fb34372ce74036c53167cbc91fcdd9ac726112f1f6a942c2"
+  }
+}

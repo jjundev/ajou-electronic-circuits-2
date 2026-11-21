@@ -1,0 +1,98 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 읽어요</h4>
+  <p>두 단짜리 증폭기예요. 입력 $V_{in}$은 $M_1$의 게이트로 들어가고, $M_1$ 드레인($R_{D1}$ 부하)이 $M_2$의 게이트를 구동해요. $M_2$는 소스가 접지된 공통 소스(CS) 단이고, 드레인($R_{D2}$ 부하)이 출력 $V_{out}$이에요.</p>
+  <p>$V_{out}$과 접지 사이에 $R_1$, $R_2$가 직렬로 있고, 그 가운데 노드가 $M_1$의 <em>소스</em>예요. 즉 출력 전압의 일부가 $M_1$ 소스로 돌아가요.</p>
+  <p>원문에 소자 값과 $\lambda$가 없어요. 이 장의 예제처럼 $\lambda=0$으로 보고 $r_O$를 쓰지 않아요(추가 가정).</p>
+  <p>구할 것은 개루프·폐루프 전압 이득과 폐루프 입력·출력 임피던스예요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 개념과 공식을 떠올려요</h4>
+  <p><strong>단서:</strong> 출력 전압을 분압해 $M_1$ 소스로 되돌리니 전압-전압 귀환(voltage-voltage feedback)이에요. $M_1$은 게이트 $v_{in}$과 소스 $v_F$의 차 $v_{GS}$에 반응하므로 비교 장치 역할을 해요.</p>
+  <p><strong>끊는 법칙:</strong> 출력 쪽 복제는 귀환망 출력 포트($M_1$ 소스 쪽)를 열어 $V_{out}$에서 $R_1+R_2$를 보고, 입력 쪽 복제는 귀환망 입력 포트($V_{out}$ 쪽)를 단락해 $M_1$ 소스에서 $R_1\parallel R_2$를 봐요.</p>
+  <p><strong>소스 축퇴(source degeneration):</strong> 소스에 저항 $R_S$가 있는 CS 단의 트랜스컨덕턴스는 저항 합의 꼴로 써요.</p>
+  $$G_{m1}=\frac{g_{m1}}{1+g_{m1}R_S}=\frac1{1/g_{m1}+R_S}$$
+  <p>$g_{m1}R_S\gg1$이면 $G_{m1}\approx1/R_S$로 줄어요. 여기서는 $R_S$가 귀환망의 부하이므로 저항 합 꼴을 그대로 두고 근사는 따로 표시해요.</p>
+  <p><strong>폐루프 공식:</strong> $K=R_2/(R_1+R_2)$이고 $A_{closed}=A_{open}/(1+KA_{open})$예요. 출력 임피던스는 $1/(1+KA_{open})$배가 되고, 입력은 게이트라 무한대예요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <div data-answer-step="귀환망 끊기">
+    <p>부하를 넣은 개루프 회로는 $M_1$이 소스에 $R_1\parallel R_2$를 단 축퇴 CS 단이고, $M_2$의 출력에 $R_{D2}$와 $R_1+R_2$가 병렬로 붙은 회로예요.</p>
+    $$R_S=R_1\parallel R_2$$
+    $$R_L=R_{D2}\parallel(R_1+R_2)$$
+  </div>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>이렇게 풀어요</h4>
+  <div data-subpart="main">
+    <p>첫 단의 결과를 노드 X($M_1$ 드레인)의 전압으로 넘기고, 전체 증폭기를 $G_m$ → $R_{out}$ → 이득 순서로 묶어요. $i_{out}$은 출력 노드에서 $M_2$ 드레인으로 흘러 들어가는 방향을 양으로 잡아 $A_v=-G_mR_{out}$을 써요.</p>
+    <div data-answer-step="첫 단">
+      <p>$M_1$은 축퇴 CS 단이고, $M_2$ 게이트는 전류를 끌지 않아 X의 부하는 $R_{D1}$뿐이에요.</p>
+      $$v_X=-G_{m1}R_{D1}v_{in}=-\frac{R_{D1}}{1/g_{m1}+R_S}v_{in}$$
+    </div>
+    <div data-answer-step="개루프 이득" data-gain-route="gm-rout">
+      <div data-gain-stage="gm">
+        <p>출력을 단락하면 $i_{out}=g_{m2}v_X$예요.</p>
+        $$G_m=\frac{i_{out}}{v_{in}}=-\frac{g_{m2}R_{D1}}{1/g_{m1}+R_1\parallel R_2}$$
+      </div>
+      <div data-gain-stage="rout">
+        <p>입력을 0으로 두면 $v_X=0$이라 $M_2$는 전류를 만들지 않고, $\lambda=0$이라 드레인 쪽은 무한대예요.</p>
+        $$R_{out}=R_L=R_{D2}\parallel(R_1+R_2)$$
+      </div>
+      <div data-gain-stage="gain">
+        $$\begin{aligned}A_{open}&=-G_mR_{out}\\&=\frac{g_{m2}R_{D1}\left[R_{D2}\parallel(R_1+R_2)\right]}{1/g_{m1}+R_1\parallel R_2}\end{aligned}$$
+      </div>
+    </div>
+    <p>두 CS 단이 각각 반전이라 전체 개루프 이득은 양수예요. 그래서 출력이 오르면 $M_1$ 소스도 올라 $v_{GS1}$이 줄어드는 부궤환이에요.</p>
+    <div data-answer-step="개루프 임피던스와 귀환율">
+      $$R_{in,open}=\infty$$
+      $$R_{out,open}=R_{D2}\parallel(R_1+R_2)$$
+      $$K=\frac{R_2}{R_1+R_2}$$
+    </div>
+    <div data-answer-step="폐루프 변수">
+      $$A_{closed}=\frac{A_{open}}{1+KA_{open}}$$
+      $$R_{in,closed}=\infty$$
+      $$R_{out,closed}=\frac{R_{D2}\parallel(R_1+R_2)}{1+KA_{open}}$$
+      <p>$KA_{open}=\dfrac{R_2}{R_1+R_2}\cdot\dfrac{g_{m2}R_{D1}R_L}{1/g_{m1}+R_1\parallel R_2}$이에요.</p>
+    </div>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <div data-answer-final="">
+      <p><strong>$A_{open}=\dfrac{g_{m2}R_{D1}[R_{D2}\parallel(R_1+R_2)]}{1/g_{m1}+R_1\parallel R_2}$, $R_{in,open}=\infty$, $R_{out,open}=R_{D2}\parallel(R_1+R_2)$, $K=R_2/(R_1+R_2)$예요.</strong></p>
+      <p><strong>$A_{closed}=A_{open}/(1+KA_{open})$, $R_{in,closed}=\infty$, $R_{out,closed}=[R_{D2}\parallel(R_1+R_2)]/(1+KA_{open})$예요.</strong> ($\lambda=0$)</p>
+      <p>$g_{m1}(R_1\parallel R_2)\gg1$이면 $A_{open}\approx g_{m2}R_{D1}R_L/(R_1\parallel R_2)$예요.</p>
+    </div>
+    <p>극한: 루프 이득이 커지면 $A_{closed}\to1/K=1+R_1/R_2$예요. 출력 전압을 분압한 값이 입력을 따라가야 하므로 맞아요.</p>
+    <p>극한: $R_2\to0$이면 $K\to0$, $R_S\to0$이 되어 귀환이 사라지고 두 CS 단의 곱 $g_{m1}R_{D1}g_{m2}(R_{D2}\parallel R_1)$이 남아요.</p>
+    <p>단위: $R_{D1}/(1/g_{m1}+R_S)$와 $g_{m2}R_L$이 각각 무차원이라 이득이 무차원이에요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>주의할 점</h4>
+  <ul>
+    <li>입력 쪽 복제 $R_1\parallel R_2$는 $M_1$ <em>소스</em>에 붙어 축퇴를 만들어요. 게이트에 붙던 앞 문항과 달리 이득을 줄이므로 꼭 넣어요.</li>
+    <li>출력 쪽에는 $R_1+R_2$, 소스 쪽에는 $R_1\parallel R_2$예요. 두 종단을 바꾸지 않아요.</li>
+    <li>두 단이 모두 반전이라 개루프 이득은 양수예요. 한 단의 부호만 보고 정궤환으로 판단하지 않아요.</li>
+    <li>입력은 게이트라 폐루프에서도 입력 임피던스는 무한대예요. $1+KA_{open}$을 곱해도 그대로예요.</li>
+  </ul>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>조건을 바꾸어 생각해요</h4>
+  <ol>
+    <li>$M_2$에 $\lambda\gt0$을 주면 개루프 출력 저항에 무엇이 병렬로 더해지나요?</li>
+    <li>$g_{m1}(R_1\parallel R_2)\gg1$이면 첫 단 이득은 어떤 저항비로 줄어드나요?</li>
+    <li>$R_1+R_2\gg R_{D2}$이고 $R_1\parallel R_2\ll1/g_{m1}$이면 개루프 이득은 어떤 꼴로 단순해지나요?</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <p class="sum-lead">입력 쪽 복제 $R_1\parallel R_2$가 $M_1$을 축퇴시키고 출력 쪽 복제 $R_1+R_2$가 $R_{D2}$와 병렬이 돼요.</p>
+  <div class="summary-group">
+    <h4>핵심 식</h4>
+    <p>$A_{open}=g_{m2}R_{D1}R_L/(1/g_{m1}+R_1\parallel R_2)$이고 $R_L=R_{D2}\parallel(R_1+R_2)$예요.</p>
+    <p>$K=R_2/(R_1+R_2)$, $A_{closed}=A_{open}/(1+KA_{open})$예요.</p>
+    <p>$R_{in}=\infty$이고 $R_{out,closed}=R_L/(1+KA_{open})$예요.</p>
+  </div>
+</div>
