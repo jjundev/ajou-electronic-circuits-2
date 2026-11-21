@@ -1,0 +1,99 @@
+{
+  "id": "cg-vv-feedback-causal-loading",
+  "title": "CG 단 V-V 귀환 +Δv 인과와 분배기 로딩",
+  "archetype": "probe",
+  "source_sha256": "0af18fe5c700863a54b2e9fda1a83e67b9b7c3d3b64e85ff42617f4951d3de70",
+  "sources": [
+    "복습노트/1120/정리노트_1120_Nonideal_IO_Feedback.html#s2-vv-ideal",
+    "복습노트/1120/정리노트_1120_Nonideal_IO_Feedback.html#s2-vv-open",
+    "복습노트/1120/정리노트_1120_Nonideal_IO_Feedback.html#s2-vv-closed",
+    "복습노트/1120/정리노트_1120_Nonideal_IO_Feedback.html#s4-procedure",
+    "복습노트/1120/정리노트_1120_Nonideal_IO_Feedback.html#s5-cheatsheet",
+    "STT/1120 전회2.md"
+  ],
+  "gates": {
+    "machine": "pass",
+    "numeric_independent": "pass",
+    "probe": "pass",
+    "browser": "pass"
+  },
+  "gate_details": {
+    "machine": {
+      "status": "pass",
+      "command": "node .agents/skills/ec2-interactive/scripts/check.cjs $RUN/02/lab.js",
+      "output": "ok",
+      "exit_code": 0
+    },
+    "numeric_independent": {
+      "status": "pass",
+      "script": "$RUN/02/verify_independent.py",
+      "method": "Independent pure-Python nodal KCL+VCCS Gaussian elimination solver + closed-form analytical CG feedback equations (without importing mna.js or lab.js evaluate)",
+      "cases_verified": 42,
+      "steps_txt_verified": 23,
+      "defaults": {
+        "closed": {
+          "v_in_mv": 10.0,
+          "v_g_mv": 6.6667,
+          "v_out_mv": 26.6667,
+          "av_closed": 2.666667,
+          "av_noload_closed": 3.2,
+          "noload_err_pct": 20.0,
+          "i_d1_ua": -13.3333,
+          "i_rd_ua": -6.6667,
+          "i_div_ua": 6.6667
+        },
+        "open": {
+          "rout_open_ohm": 2000.0,
+          "av_open": 8.0,
+          "v_out_mv": 80.0,
+          "v_g_mv": 0.0,
+          "v_sense_mid_mv": 20.0,
+          "i_d1_ua": -40.0,
+          "i_rd_ua": -20.0,
+          "i_div_ua": 20.0
+        }
+      },
+      "extremes": {
+        "rdiv_1k_closed_av": 1.777778,
+        "rdiv_1k_noload_err_pct": 80.0,
+        "rdiv_40k_closed_av": 3.137255,
+        "rdiv_40k_noload_err_pct": 2.0,
+        "vin_neg20_closed_vout_mv": -53.3333,
+        "vin_0_closed_vout_mv": 0.0
+      }
+    },
+    "probe": {
+      "status": "pass",
+      "command": "python3 .agents/skills/ec2-interactive/scripts/probe_interactive.py",
+      "widths": [1440, 375],
+      "themes": ["light", "dark"],
+      "checks": 96,
+      "defect_count": 0,
+      "blocked_requests": []
+    },
+    "browser": {
+      "status": "pass",
+      "script": "$RUN/02/browser_check.py",
+      "viewports": ["1440x900 light/dark", "375x812 dark"],
+      "verified_flows": [
+        "predict card answer feedback and dismiss without locking controls",
+        "4-beat +Δv causal domino stepping (1..4) highlighting SVG nodes/branches and badges",
+        "vin = 0 mV neutral zero-signal handling with exact finite gain (2.67 V/V)",
+        "vin = -20 mV reversed polarity (-53.33 mV) and rdiv = 1 kΩ heavy loading (1.78 V/V, +80.0% error)",
+        "step 4 click resets sliders back to defaults (vin=+10 mV, rdiv=4 kΩ)",
+        "mode switch closed <-> open and theme toggle light <-> dark",
+        "mobile 375px right drawer open and Escape close",
+        "visual screenshot verification across desktop light/dark and mobile dark"
+      ],
+      "console_errors": 0,
+      "page_errors": 0
+    }
+  },
+  "fixes_during_validation": [
+    "Shortened mode segment labels to '폐루프 귀환' and '복제 개루프' to eliminate 2px overflow on .seg at 375px mobile viewport.",
+    "Wrapped multi-step equations inside KaTeX aligned blocks so span.katex-display stays within .formula-box at both 1440px and 375px.",
+    "Increased SVG spacing around static box captions ('귀환 분배기 K', '반송 복제 (접지)', '감지 복제 (개방)') and 'vG' in open mode to pass 0.6em label_gaps with 0 defects.",
+    "Replaced plain 'kΩ' with fmtOhmsTex inside KaTeX math strings in diagnosis.text.",
+    "Moved '(+XX.X%)' into Tile 3 label ('로딩 무시 (+20.0%)') with clean '3.20 V/V' value so mobile 3-column tiles do not wrap '%' onto a third line."
+  ]
+}
