@@ -1,77 +1,125 @@
-// Builds a standalone page (opens directly in a browser) from a .dc.html source.
-// Usage: node build.cjs <자료_인터렉티브_NN_<이름>/Main.dc.html> <인터렉티브_NN_<이름>.html>
+// Builds a standalone HTML page from a v2 lab.js spec without creating canvas.json.
+// Usage: node build.cjs <lab.js> <out.html>
 const fs = require('node:fs');
 const path = require('node:path');
+const vm = require('node:vm');
 
-const RUNTIME_PATH = path.join(__dirname, '..', 'assets', 'dc-runtime.js');
-const FONT_CSS = 'https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/static/pretendard.css';
+const ASSETS_DIR = path.join(__dirname, '..', 'assets');
+const TEMPLATE_PATH = path.join(ASSETS_DIR, 'lab-template.html');
+const MNA_PATH = path.join(ASSETS_DIR, 'mna.js');
+const RUNTIME_PATH = path.join(ASSETS_DIR, 'lab-runtime.js');
 
-function titleOf(src) {
-  const m = src.match(/<title>([\s\S]*?)<\/title>/);
-  return m ? m[1].trim() : '';
+const ALLOWED_CDNS = Object.freeze([
+  'https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/static/pretendard.css',
+  'https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css',
+  'https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js',
+  'https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js',
+]);
+
+function escapeHtml(text) {
+  return String(text == null ? '' : text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function sanitizeComment(text) {
+  return String(text == null ? '' : text).replace(/--/g, '- -');
+}
+
+function escapeScript(code) {
+  return String(code == null ? '' : code).replace(/<\/(script)/gi, '<\\/$1');
+}
+
+function replaceLiteral(str, placeholder, value) {
+  return str.split(placeholder).join(value);
+}
+
+// Execute lab.js in an isolated CommonJS wrapper matching browser IIFE globals
+// (no Node require/process leaks, no require.cache staleness).
+function loadLab(srcFile) {
+  const resolved = path.resolve(String(srcFile || ''));
+  const src = fs.readFileSync(resolved, 'utf8');
+  const wrapped = `(function (module, exports, require, __filename, __dirname) { ${src}\n});`;
+  const script = new vm.Script(wrapped, { filename: resolved });
+  const factory = script.runInThisContext();
+  const mod = { exports: {} };
+  factory(mod, mod.exports, undefined, undefined, undefined);
+  const spec = mod.exports;
+  if (!spec || typeof spec !== 'object' || Array.isArray(spec)) {
+    throw new Error('lab.js must export a spec object');
+  }
+  return spec;
+}
+
+function titleOf(spec) {
+  if (!spec || typeof spec !== 'object') return '';
+  return typeof spec.title === 'string' ? spec.title.trim() : '';
 }
 
 function build(srcFile, outFile) {
-  const src = fs.readFileSync(srcFile, 'utf8');
-  // Uploaded /_blob fonts only resolve inside the canvas; the page loads Pretendard from the CDN like the notes.
-  const helmet = src.match(/<helmet>([\s\S]*?)<\/helmet>/)[1].replace(/@font-face\s*{[^}]*}\n?/g, '').trim();
-  const markup = src.slice(src.indexOf('</helmet>') + '</helmet>'.length, src.indexOf('</x-dc>')).trim();
-  const script = src.match(/<script type="text\/x-dc"[^>]*>([\s\S]*?)<\/script>/)[1].trim();
-  const runtime = fs.readFileSync(RUNTIME_PATH, 'utf8').trim();
-  const rel = path.relative(path.dirname(outFile), srcFile).split(path.sep).join('/');
-  return [
-    '<!doctype html>',
-    '<html lang="ko">',
-    '<head>',
-    '<meta charset="utf-8">',
-    '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">',
-    `<title>${titleOf(src)}</title>`,
-    `<!-- 생성 파일: ${rel}을 고친 뒤 ec2-interactive/scripts/build.cjs로 다시 만드세요. -->`,
-    `<link rel="stylesheet" href="${FONT_CSS}">`,
-    helmet,
-    '</head>',
-    '<body>',
-    '<div id="dc-root"></div>',
-    '<template id="dc-template">',
-    markup,
-    '</template>',
-    '<script>',
-    runtime,
-    script,
-    'mountDC(Component);',
-    '</script>',
-    '</body>',
-    '</html>',
-    '',
-  ].join('\n');
-}
+  const resolvedSrc = path.resolve(srcFile);
+  const resolvedOut = path.resolve(outFile);
+  const spec = loadLab(resolvedSrc);
+  const title = titleOf(spec);
+  if (!title) {
+    throw new Error('lab.js spec is missing a non-empty title');
+  }
 
-// Manifest for publishing the source folder as a Design canvas later.
-function canvasJson(title) {
-  return JSON.stringify({
-    v: 3,
-    createdOnFiles: { v: 1, at: new Date().toISOString() },
-    title,
-    launch: { view: 'focused', file: 'Main.dc.html' },
-    pages: [],
-    boards: { 'Main.dc.html': { x: 0, y: 0, w: 1440, h: 900, title, expand: 'fill', is_interactive: true } },
-    order: ['Main.dc.html'],
-    notes: {},
-    designSystems: [],
-  });
+  const template = fs.readFileSync(TEMPLATE_PATH, 'utf8');
+  const mnaSrc = fs.readFileSync(MNA_PATH, 'utf8').trim();
+  const runtimeSrc = fs.readFileSync(RUNTIME_PATH, 'utf8').trim();
+  const labSrc = fs.readFileSync(resolvedSrc, 'utf8').trim();
+
+  const rel = path.relative(path.dirname(resolvedOut), resolvedSrc).split(path.sep).join('/');
+  const sourceComment = `생성 파일: ${sanitizeComment(rel)}을 고친 뒤 ec2-interactive/scripts/build.cjs로 다시 만드세요.`;
+
+  const labBundle = [
+    '(function () {',
+    '  var module = { exports: {} };',
+    '  var exports = module.exports;',
+    '  (function (module, exports) {',
+    labSrc,
+    '  })(module, exports);',
+    '  var spec = module.exports;',
+    '  function boot() {',
+    '    var root = document.getElementById("ec2-lab-root");',
+    '    if (!root || !globalThis.EC2Lab) return;',
+    '    globalThis.EC2Lab.mount(spec, root, { mna: globalThis.EC2MNA });',
+    '  }',
+    '  if (document.getElementById("ec2-lab-root")) {',
+    '    boot();',
+    '  } else if (document.readyState === "loading") {',
+    '    document.addEventListener("DOMContentLoaded", boot, { once: true });',
+    '  } else {',
+    '    boot();',
+    '  }',
+    '})();',
+  ].join('\n');
+
+  let out = template;
+  out = replaceLiteral(out, '__TITLE__', escapeHtml(title));
+  out = replaceLiteral(out, '__SOURCE_COMMENT__', sourceComment);
+  out = replaceLiteral(out, '__MNA_SCRIPT__', escapeScript(mnaSrc));
+  out = replaceLiteral(out, '__RUNTIME_SCRIPT__', escapeScript(runtimeSrc));
+  out = replaceLiteral(out, '__LAB_SCRIPT__', escapeScript(labBundle));
+  return out;
 }
 
 if (require.main === module) {
-const [srcArg,outArg] = process.argv.slice(2);
-if (!srcArg || !outArg) {
-  console.error('usage: node build.cjs <Main.dc.html> <out.html>');
-  process.exit(2);
-}
-const srcFile = path.resolve(srcArg), outFile = path.resolve(outArg);
-  fs.writeFileSync(outFile, build(srcFile, outFile));
-  const manifest = path.join(path.dirname(srcFile), 'canvas.json');
-  if (!fs.existsSync(manifest)) fs.writeFileSync(manifest, canvasJson(titleOf(fs.readFileSync(srcFile, 'utf8'))));
+  const [srcArg, outArg] = process.argv.slice(2);
+  if (!srcArg || !outArg || !fs.existsSync(srcArg) || !fs.statSync(srcArg).isFile()) {
+    console.error('usage: node build.cjs <lab.js> <out.html>');
+    process.exit(2);
+  }
+  const srcFile = path.resolve(srcArg);
+  const outFile = path.resolve(outArg);
+  const html = build(srcFile, outFile);
+  fs.mkdirSync(path.dirname(outFile), { recursive: true });
+  fs.writeFileSync(outFile, html, 'utf8');
   console.log('wrote ' + outFile);
 }
 
-module.exports = { build, canvasJson, titleOf, FONT_CSS };
+module.exports = { build, loadLab, titleOf, ALLOWED_CDNS };

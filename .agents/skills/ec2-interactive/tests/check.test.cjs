@@ -1,5 +1,5 @@
 const test = require('node:test');
-const assert = require('node:assert');
+const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
@@ -7,154 +7,170 @@ const { spawnSync } = require('node:child_process');
 const { check } = require('../scripts/check.cjs');
 
 const SKILL = path.join(__dirname, '..');
-const T = path.join(SKILL, 'assets', 'template.dc.html');
-const A = { allowTemplate: true };
-const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'bi-check-'));
-let n = 0;
+const EX = path.join(SKILL, 'references', 'example-lab.js');
+const CLI = path.join(SKILL, 'scripts', 'check.cjs');
+const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'ec2-check-'));
+let seq = 0;
 
 function mutate(fn) {
-  const src = fs.readFileSync(T, 'utf8');
+  const src = fs.readFileSync(EX, 'utf8');
   const out = fn(src);
   assert.notEqual(out, src, 'mutation changed nothing');
-  const p = path.join(TMP, 'm' + (n++) + '.dc.html');
-  fs.writeFileSync(p, out);
-  return p;
+  const file = path.join(TMP, `m${seq++}.js`);
+  fs.writeFileSync(file, out, 'utf8');
+  return file;
 }
 
-test('template passes with allowTemplate', () => {
-  const r = check(T, A);
+function writeRaw(code) {
+  const file = path.join(TMP, `raw${seq++}.js`);
+  fs.writeFileSync(file, code, 'utf8');
+  return file;
+}
+
+test('example-lab.js passes all checks cleanly', () => {
+  const r = check(EX);
+  assert.equal(r.ok, true, (r.details || []).join('\n'));
   assert.deepEqual(r.errors, []);
-  assert.equal(r.ok, true);
 });
 
-test('template left as-is is rejected', () => {
-  const r = check(T);
+test('missing SVG hooks produce HOOK_MISSING', () => {
+  const missingNode = mutate((s) => s.replaceAll('data-node="out"', 'data-node="other"'));
+  const r1 = check(missingNode);
+  assert.equal(r1.ok, false);
+  assert.ok(r1.errors.some((e) => e.code === 'HOOK_MISSING' && /out/.test(e.message)), r1.details.join('\n'));
+
+  const missingBranch = mutate((s) => s.replace('data-branch="i_div"', 'data-branch="other"'));
+  assert.ok(check(missingBranch).errors.some((e) => e.code === 'HOOK_MISSING'));
+
+  const missingElem = mutate((s) => s.replace('data-elem="r2"', 'data-elem="other"'));
+  assert.ok(check(missingElem).errors.some((e) => e.code === 'HOOK_MISSING'));
+
+  const missingPort = mutate((s) => s.replace('data-port="load"', 'data-port="other"'));
+  assert.ok(check(missingPort).errors.some((e) => e.code === 'HOOK_MISSING'));
+
+  const missingStep = mutate((s) => s.replace('data-causal-step="3"', 'data-causal-step="99"'));
+  assert.ok(check(missingStep).errors.some((e) => e.code === 'HOOK_MISSING'));
+});
+
+test('plain-text subscripts and $...$ inside SVG <text> produce SVG_TEXT_NOTATION (Review Focus #3)', () => {
+  const f1 = mutate((s) => s.replace('v<tspan baseline-shift="sub" font-size="78%">out</tspan>', 'V_out'));
+  const r1 = check(f1);
+  assert.equal(r1.ok, false);
+  assert.ok(r1.errors.some((e) => e.code === 'SVG_TEXT_NOTATION'), r1.details.join('\n'));
+
+  const f2 = mutate((s) => s.replace('R<tspan baseline-shift="sub" font-size="78%">1</tspan>', '$g_m$'));
+  const r2 = check(f2);
+  assert.equal(r2.ok, false);
+  assert.ok(r2.errors.some((e) => e.code === 'SVG_TEXT_NOTATION'), r2.details.join('\n'));
+
+  const f3 = mutate((s) => s.replace('R<tspan baseline-shift="sub" font-size="78%">2</tspan>', '\\(v_o\\)'));
+  assert.ok(check(f3).errors.some((e) => e.code === 'SVG_TEXT_NOTATION'));
+});
+
+test('hardcoded hex color in SVG produces HEX_IN_SVG while url(#id) does not', () => {
+  const badHex = mutate((s) => s.replace('class="fig-ink" data-branch="i_div"', 'stroke="#2563eb" data-branch="i_div"'));
+  const r1 = check(badHex);
+  assert.equal(r1.ok, false);
+  assert.ok(r1.errors.some((e) => e.code === 'HEX_IN_SVG'), r1.details.join('\n'));
+
+  const validUrlRef = mutate((s) => s.replace('<g data-badges>', '<defs><marker id="ace"><path d="M0 0L4 2"/></marker></defs><line marker-end="url(#ace)" x1="0" y1="0" x2="0" y2="0"/><g data-badges>'));
+  const r2 = check(validUrlRef);
+  assert.equal(r2.errors.some((e) => e.code === 'HEX_IN_SVG'), false, r2.details.join('\n'));
+});
+
+test('mistakes length != 3 or empty fields produce MISTAKES_INVALID', () => {
+  const tooFew = mutate((s) => s.replace(
+    /\{\s*title: '하단 경로 개방 시 0 V로 착각'[\s\S]*?\},/,
+    ''
+  ));
+  const r1 = check(tooFew);
+  assert.equal(r1.ok, false);
+  assert.ok(r1.errors.some((e) => e.code === 'MISTAKES_INVALID'), r1.details.join('\n'));
+
+  const emptyTitle = mutate((s) => s.replace("title: '부하 저항을 무시한 무부하 공식 고집'", "title: '   '"));
+  assert.ok(check(emptyTitle).errors.some((e) => e.code === 'MISTAKES_INVALID'));
+});
+
+test('NaN/Infinity or throwing evaluate() produces EVAL_NON_FINITE / EVAL_THROW', () => {
+  const nanNode = mutate((s) => s.replace('v: Number(vOut.toFixed(2))', 'v: NaN'));
+  const r1 = check(nanNode);
+  assert.equal(r1.ok, false);
+  assert.ok(r1.errors.some((e) => e.code === 'EVAL_NON_FINITE'), r1.details.join('\n'));
+
+  const nanTile = mutate((s) => s.replace("val: `${vOut.toFixed(2)} V`", "val: `${NaN} V`"));
+  assert.ok(check(nanTile).errors.some((e) => e.code === 'EVAL_NON_FINITE'));
+
+  const extremeThrow = mutate((s) => s.replace(
+    'const vin = Number(state.params.vin);',
+    'const vin = Number(state.params.vin); if (vin === -10 && Number(state.params.r1) === 10) throw new Error("boom at extreme");'
+  ));
+  const r3 = check(extremeThrow);
+  assert.equal(r3.ok, false);
+  assert.ok(r3.errors.some((e) => e.code === 'EVAL_THROW' && /boom at extreme/.test(e.message)), r3.details.join('\n'));
+});
+
+test('bench archetype allows intentional singular diagnosis when diagnosis.singular === true and no NaN strings leak', () => {
+  const benchOk = writeRaw(`
+    module.exports = {
+      id: 'bench-singular',
+      title: '종단 벤치',
+      archetype: 'bench',
+      modes: [{
+        key: 'vv',
+        label: 'V-V',
+        viewBox: '0 0 200 100',
+        ariaLabel: 'V-V 회로',
+        svg: '<svg viewBox="0 0 200 100"><g data-port="p1"><text class="port-chip" x="40" y="50">단락</text></g></svg>',
+        ports: [{ id: 'p1', label: '포트', options: [{ id: 'open', label: '개방' }, { id: 'short', label: '단락' }], def: 'open', answer: 'open' }],
+      }],
+      mistakes: { vv: [{ title: '1', text: 'a' }, { title: '2', text: 'b' }, { title: '3', text: 'c' }] },
+      evaluate(state, mna) {
+        if (state.ports.p1 === 'short') {
+          const r = mna.solveCircuit({ elements: [{ id: 'vs', type: 'vsrc', n1: 'a', n2: '0', value: 1 }, { id: 'sh', type: 'short', n1: 'a', n2: '0' }] });
+          return { tiles: [{ label: '상태', val: '단락' }], diagnosis: { kind: 'bad', singular: r.singular, title: '전압원 단락', text: r.reason } };
+        }
+        return { tiles: [{ label: '상태', val: '정상' }], diagnosis: { kind: 'ok', title: '정상', text: '개방' } };
+      },
+    };
+  `);
+  const r = check(benchOk);
+  assert.equal(r.ok, true, r.details.join('\n'));
+});
+
+test('disallowed external URL produces EXTERNAL_URL', () => {
+  const badUrl = mutate((s) => s.replace(
+    "id: 'example-voltage-divider',",
+    "id: 'example-voltage-divider',\n  badRef: 'https://evil.example.com/script.js',"
+  ));
+  const r = check(badUrl);
   assert.equal(r.ok, false);
-  for (const e of ['TEMPLATE_LEFT:__TITLE__', 'TEMPLATE_LEFT:DEMO']) assert.ok(r.errors.includes(e), e);
+  assert.ok(r.errors.some((e) => e.code === 'EXTERNAL_URL'), r.details.join('\n'));
 });
 
-test('missing shell piece', () => assert.ok(check(mutate((s) => s.replace('class="scrim', 'class="dim')), A).errors.includes('SHELL_MISSING:class="scrim')));
+test('schema errors and load errors are reported accurately', () => {
+  const badPredict = mutate((s) => s.replace("answerId: 'same'", "answerId: 'wrong-id'"));
+  assert.ok(check(badPredict).errors.some((e) => e.code === 'SCHEMA_INVALID'));
 
-test('unknown hole', () => assert.ok(check(mutate((s) => s.replace('{{themeLabel}}"', '{{themLabel}}"')), A).errors.includes('HOLE_UNKNOWN:themLabel')));
+  const badArch = mutate((s) => s.replace("archetype: 'probe'", "archetype: '3d'"));
+  assert.ok(check(badArch).errors.some((e) => e.code === 'SCHEMA_INVALID'));
 
-test('loop variable outside its sc-for is unknown', () => {
-  const r = check(mutate((s) => s.replace('<h3 class="sec-title">꼭 기억해요</h3>', '<h3 class="sec-title">꼭 기억해요</h3>{{md.label}}')), A);
-  assert.ok(r.errors.includes('HOLE_UNKNOWN:md'));
+  const syntaxErr = writeRaw('module.exports = { broken: ');
+  assert.ok(check(syntaxErr).errors.some((e) => e.code === 'LOAD_ERROR'));
 });
 
-test('unsupported event', () => assert.ok(check(mutate((s) => s.replace('onClick="{{zoomIn}}"', 'onDoubleClick="{{zoomIn}}"')), A).errors.includes('EVENT_UNSUPPORTED:onDoubleClick')));
-
-test('raw hex in markup', () => assert.ok(check(mutate((s) => s.replace('<div class="scrim', '<div style="color:#123456" class="scrim')), A).errors.includes('HEX_IN_MARKUP:#123456')));
-
-test('scene that throws', () => assert.ok(check(mutate((s) => s.replace(/buildScene\(mode, I, O\) \{/, '$& if (mode === "b") throw new Error("x");')), A).errors.includes('DRAW_THROWS:b')));
-
-test('scene that throws late in playback', () => assert.ok(check(mutate((s) => s.replace(/buildScene\(mode, I, O\) \{/, '$& if (this.sim.f > 9) throw new Error("x");')), A).errors.includes('DRAW_THROWS:b')));
-
-test('scene that throws in dark only', () => {
-  const r = check(mutate((s) => s.replace("link: '#AEB7C4'", 'link: null')), A);
-  assert.ok(r.errors.includes('DRAW_THROWS:a'), r.errors.join());
-});
-
-test('empty scene', () => assert.ok(check(mutate((s) => s.replace(/buildScene\(mode, I, O\) \{/, '$& return;')), A).errors.includes('SCENE_EMPTY:a')));
-
-test('renderVals that throws', () => {
-  const r = check(mutate((s) => s.replace(/extraVals\(st\) \{/, '$& if (st.narrow && st.theme === "dark") throw new Error("x");')), A);
-  assert.ok(r.errors.includes('RENDER_THROWS:narrow-dark-a'), r.errors.join());
-  assert.equal(r.errors.includes('RENDER_THROWS:wide-light-a'), false);
-});
-
-test('cli exit codes', () => {
-  const cli = path.join(SKILL, 'scripts', 'check.cjs');
-  const ok = spawnSync('node', [cli, T, '--allow-template'], { encoding: 'utf8' });
+test('CLI exits 0 with ok, 1 with error lines, 2 on bad usage', () => {
+  const ok = spawnSync(process.execPath, [CLI, EX], { encoding: 'utf8' });
   assert.equal(ok.status, 0);
   assert.equal(ok.stdout.trim(), 'ok');
-  const bad = spawnSync('node', [cli, T], { encoding: 'utf8' });
+
+  const badFile = mutate((s) => s.replace('v<tspan baseline-shift="sub" font-size="78%">out</tspan>', 'V_out'));
+  const bad = spawnSync(process.execPath, [CLI, badFile], { encoding: 'utf8' });
   assert.equal(bad.status, 1);
-  assert.match(bad.stdout, /TEMPLATE_LEFT:DEMO/);
-});
+  assert.match(bad.stdout, /SVG_TEXT_NOTATION/);
 
-test('hole syntax the runtime cannot parse', () => {
-  const r1 = check(mutate((s) => s.replace('<sc-if value="{{hasSteps}}"', '<sc-if value="{{!hasSteps}}"')), A);
-  assert.ok(r1.errors.includes('HOLE_SYNTAX:!hasSteps'), r1.errors.join());
-  const r2 = check(mutate((s) => s.replace('<h3 class="sec-title">꼭 기억해요</h3>', '<h3 class="sec-title">꼭 기억해요</h3>{{isPlaying ? 1 : 2}}')), A);
-  assert.ok(r2.errors.includes('HOLE_SYNTAX:isPlaying ? 1 : 2'), r2.errors.join());
-  const r3 = check(mutate((s) => s.replace('onClick="{{zoomIn}}"', 'onClick="x{{zoomIn}}"')), A);
-  assert.ok(r3.errors.includes('HOLE_SYNTAX:onClick'), r3.errors.join());
-});
+  const usage = spawnSync(process.execPath, [CLI], { encoding: 'utf8' });
+  assert.equal(usage.status, 2);
 
-test('errors carry the exception message', () => {
-  const f = mutate((s) => s.replace(/buildScene\(mode, I, O\) \{/, '$& if (mode === "b") throw new Error("boom here");'));
-  const r = check(f, A);
-  assert.ok(r.errors.includes('DRAW_THROWS:b'));
-  assert.ok(r.details.some((d) => d.startsWith('DRAW_THROWS:b') && d.includes('boom here')), r.details.join());
-  const out = spawnSync('node', [path.join(SKILL, 'scripts', 'check.cjs'), f, '--allow-template'], { encoding: 'utf8' });
-  assert.match(out.stdout, /DRAW_THROWS:b .*boom here/);
-});
-
-test('a hole whose full path is undefined in every mode', () => {
-  const r = check(mutate((s) => s.replace('<sc-if value="{{is.b}}"', '<sc-if value="{{is.cycle}}"')), A);
-  assert.ok(r.errors.includes('HOLE_UNKNOWN:is.cycle'), r.errors.join());
-  const r2 = check(mutate((s) => s.replace('{{s.title}}', '{{s.titel}}')), A);
-  assert.ok(r2.errors.includes('HOLE_UNKNOWN:s.titel'), r2.errors.join());
-});
-
-test('step pointing at a missing mode or past fmax', () => {
-  const r = check(mutate((s) => s.replace("{ mode: 'b', f: 6,", "{ mode: 'c', f: 6,")), A);
-  assert.ok(r.errors.includes('TOPIC_INVALID:STEPS[2].mode'), r.errors.join());
-  const r2 = check(mutate((s) => s.replace("{ mode: 'b', f: 6,", "{ mode: 'b', f: 60,")), A);
-  assert.ok(r2.errors.includes('TOPIC_INVALID:STEPS[2].f'), r2.errors.join());
-});
-
-test('missing mistakes or light palette', () => {
-  const r = check(mutate((s) => s.replace("b: [{ title: '예시 문구'", "x: [{ title: '예시 문구'")), A);
-  assert.ok(r.errors.includes('TOPIC_INVALID:MISTAKES.b'), r.errors.join());
-  const r2 = check(mutate((s) => s.replace("light: { bg: '#ffffff', labelBg", "lite: { bg: '#ffffff', labelBg")), A);
-  assert.ok(r2.errors.includes('TOPIC_INVALID:PAL.light'), r2.errors.join());
-});
-
-test('a step that breaks the scene when picked', () => {
-  const r = check(mutate((s) => s.replace(/buildScene\(mode, I, O\) \{/, '$& if (this.state.step === 0) throw new Error("x");')), A);
-  assert.ok(r.errors.includes('DRAW_THROWS:step1'), r.errors.join());
-});
-
-test('NaN geometry is a blank scene', () => {
-  const r = check(mutate((s) => s.replace("cam: { yaw: 0, pitch: 0, zoom: 1 }, fit: [12.5, 5]", "cam: { yaw: 0, pitch: 0 }, fit: [12.5, 5]")), A);
-  assert.ok(r.errors.includes('SCENE_NAN:b'), r.errors.join());
-});
-
-test('step with f but no phase', () => {
-  const r = check(mutate((s) => s.replace(", phase: '진행'", '')), A);
-  assert.ok(r.errors.includes('TOPIC_INVALID:STEPS[2].phase'), r.details.join('\n'));
-});
-
-test('step whose phase is not in the playback label', () => {
-  const r = check(mutate((s) => s.replace("phase: '진행'", "phase: '연장'")), A);
-  assert.ok(r.errors.includes('STEP_OFF_PHASE:2'), r.details.join('\n'));
-  assert.ok(r.details.some((d) => d.startsWith('STEP_OFF_PHASE:2 — ') && d.includes("'연장'") && d.includes('진행 · 6.0 / 10')), r.details.join('\n'));
-});
-
-test('label that throws is reported as STEP_OFF_PHASE', () => {
-  const r = check(mutate((s) => s.replace("label: (f) => '진행 · '", "label: (f) => f > 5 ? null.x : '진행 · '")), A);
-  assert.ok(r.details.some((d) => d.startsWith('STEP_OFF_PHASE:2 — ')), r.details.join('\n'));
-});
-
-test('phase check skips a step whose f is already invalid', () => {
-  const r = check(mutate((s) => s.replace('f: 6,', 'f: 60,')), A);
-  assert.ok(r.errors.includes('TOPIC_INVALID:STEPS[2].f'), r.details.join('\n'));
-  assert.ok(!r.errors.some((e) => e.startsWith('STEP_OFF_PHASE')), r.details.join('\n'));
-});
-
-test('phase that is only part of the process name is off phase', () => {
-  const r = check(mutate((s) => s.replace("phase: '진행'", "phase: '진'")), A);
-  assert.ok(r.errors.includes('STEP_OFF_PHASE:2'), r.details.join('\n'));
-});
-
-test('blank phase is missing', () => {
-  const r = check(mutate((s) => s.replace("phase: '진행'", "phase: ' '")), A);
-  assert.ok(r.errors.includes('TOPIC_INVALID:STEPS[2].phase'), r.details.join('\n'));
-});
-
-test('phase may be any named part of a nested label', () => {
-  const r = check(mutate((s) => s.replace("label: (f) => '진행 · '", "label: (f) => '첫 구간 · 진행 · '")), A);
-  assert.ok(!r.errors.some((e) => e.startsWith('STEP_OFF_PHASE')), r.details.join('\n'));
+  const missing = spawnSync(process.execPath, [CLI, path.join(TMP, 'missing.js')], { encoding: 'utf8' });
+  assert.equal(missing.status, 2);
 });

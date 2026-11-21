@@ -1,222 +1,456 @@
-// Checks a topic's Main.dc.html against the template contract (references/scene-api.md).
-// Usage: node check.cjs <Main.dc.html> [--allow-template]   → prints "ok" (exit 0) or one error per line (exit 1)
-// check() returns {ok, errors: codes, details: the same codes with the exception message when there was one}.
+// Static and dynamic contract checker for v2 lab.js files.
+// Usage: node check.cjs <lab.js>   → prints "ok" (exit 0) or one error per line (exit 1); usage error exits 2.
+// check(srcFile) returns { ok, errors: Array<{ code, message, ... }>, details: string[] }.
 const fs = require('node:fs');
-const { readDc, loadComponent, makeCtx, makeCanvas } = require('./harness.cjs');
+const path = require('node:path');
+const { loadLab, ALLOWED_CDNS } = require('./build.cjs');
+const EC2MNA = require('../assets/mna.js');
+const { createInitialState, reduceState, buildProbeStates } = require('../assets/lab-runtime.js');
 
-const SHELL = ['class="app"', 'class="topbar"', 'class="layout', 'panel panel-left', 'panel panel-right', 'class="scrim',
-  'class="stage"', 'ref="{{canvasRef}}"', 'class="view-btns"', '@media (max-width: 1023.98px)', 'aria-label="{{themeLabel}}"'];
-const EVENTS = ['onClick', 'onKeyDown', 'onMouseEnter', 'onMouseLeave', 'onChange'];
-const FRAMES = 120;
+const ALLOWED_CDN_SET = new Set(ALLOWED_CDNS);
+const VALID_ARCHETYPES = new Set(['probe', 'bench', 'approx']);
+const URL_RE = /https?:\/\/[^\s"'`<>)]+/g;
+const HEX_IN_SVG_RE = /(?<!&|url\(|href=["'])#[0-9a-fA-F]{3,8}\b/g;
+const PLAIN_SUBSCRIPT_RE = /[A-Za-z]_(?:\{[A-Za-z0-9,]+\}|[A-Za-z0-9])/;
+const LATEX_IN_SVG_TEXT_RE = /\$|\\[\(\[]/;
+const NON_FINITE_STRING_RE = /\b(?:NaN|Infinity)\b/;
 
-// Markup between </helmet> and </x-dc>: the part the runtime compiles.
-function bodyMarkup(src) {
-  return src.slice(src.indexOf('</helmet>') + '</helmet>'.length, src.indexOf('</x-dc>'));
+function isNonEmptyString(v) {
+  return typeof v === 'string' && v.trim().length > 0;
 }
 
-// The runtime only parses {{dotted.path}}; sc-if value, sc-for list, ref and on* must be exactly one hole.
-function holeSyntax(markup) {
-  const bad = new Set();
-  const plain = markup.replace(/\shint-[\w-]+="[^"]*"/g, '');
-  for (const m of plain.matchAll(/\{\{([\s\S]*?)\}\}/g)) if (!/^\s*[\w.$]+\s*$/.test(m[1])) bad.add(m[1].trim());
-  for (const m of plain.matchAll(/<(sc-if|sc-for)\b[^>]*>|\s(ref|on[A-Za-z]+)="([^"]*)"/g)) {
-    const attrs = m[1] ? [...m[0].matchAll(/\s(value|list)="([^"]*)"/g)].map((x) => [x[1], x[2]]) : [[m[2], m[3]]];
-    for (const [name, val] of attrs) if (val.includes('{{') && !/^\s*\{\{\s*[\w.$]+\s*\}\}\s*$/.test(val)) bad.add(name);
-  }
-  return [...bad];
+function matchesMode(item, modeKey) {
+  if (!item || typeof item !== 'object') return false;
+  if (item.mode !== undefined) return item.mode === modeKey;
+  if (Array.isArray(item.modes)) return item.modes.includes(modeKey);
+  return true;
 }
 
-const dig = (o, segs) => segs.reduce((x, k) => (x == null ? undefined : x[k]), o);
+function collectModeList(spec, modeObj, propName) {
+  if (Array.isArray(modeObj && modeObj[propName])) return modeObj[propName];
+  if (Array.isArray(spec && spec[propName])) return spec[propName].filter((item) => matchesMode(item, modeObj.key));
+  return [];
+}
 
-// Every {{hole}} must resolve: its first name is a renderVals key or an enclosing <sc-for as> name,
-// and the full dotted path is defined in at least one checked state (for loop items: in at least one item).
-// `vals` is every renderVals() result the render checks produced.
-function unknownHoles(markup, vals) {
-  const bad = new Set(), scope = [];
-  const keys = new Set(vals.flatMap((v) => Object.keys(v)));
-  const items = (list) => (list ? vals.flatMap((v) => { const a = dig(v, list); return Array.isArray(a) ? a : []; }) : []);
-  // Returns the top-level list path for a loop variable path, or null when it cannot be judged.
-  const judge = (path) => {
-    const segs = path.split('.'), loop = [...scope].reverse().find((e) => e.as === segs[0]);
-    if (loop) {
-      const its = items(loop.list);
-      if (segs.length > 1 && its.length && its.every((it) => dig(it, segs.slice(1)) === undefined)) bad.add(path);
-      return null;
+function hasValidViewBox(modeObj) {
+  const inline = typeof modeObj.svg === 'string'
+    ? modeObj.svg.match(/<svg\b[^>]*\bviewBox\s*=\s*(?:"([^"]*)"|'([^']*)')/i)
+    : null;
+  const vbRaw = inline ? (inline[1] ?? inline[2]) : modeObj.viewBox;
+  if (!isNonEmptyString(vbRaw)) return false;
+  const nums = vbRaw.trim().split(/[\s,]+/).map(Number);
+  return nums.length === 4 && nums.every(Number.isFinite) && nums[2] > 0 && nums[3] > 0;
+}
+
+function extractSvgHooks(svg) {
+  const nodes = new Set();
+  const branches = new Set();
+  const elems = new Set();
+  const ports = new Set();
+  const causalSteps = new Set();
+
+  for (const m of String(svg || '').matchAll(/\bdata-(node|branch|elem|port|causal-step)\s*=\s*(?:"([^"]*)"|'([^']*)')/g)) {
+    const kind = m[1];
+    const val = (m[2] !== undefined ? m[2] : m[3] || '').trim();
+    if (!val) continue;
+    if (kind === 'node') nodes.add(val);
+    else if (kind === 'branch') branches.add(val);
+    else if (kind === 'elem') elems.add(val);
+    else if (kind === 'port') ports.add(val);
+    else if (kind === 'causal-step') {
+      for (const tok of val.split(',')) {
+        const s = tok.trim();
+        if (s) causalSteps.add(s);
+      }
     }
-    if (!keys.has(segs[0])) { bad.add(segs[0]); return null; }
-    if (segs.length > 1 && vals.every((v) => dig(v, segs) === undefined)) bad.add(path);
-    return segs;
-  };
-  const re = /<sc-for\b[^>]*>|<\/sc-for>|\shint-[\w-]+="[^"]*"|\{\{\s*([\w$.]+)\s*\}\}/g;
-  let m;
-  while ((m = re.exec(markup))) {
-    const tok = m[0];
-    if (tok.startsWith('<sc-for')) {
-      const list = tok.match(/list="\{\{\s*([\w$.]+)\s*\}\}"/), as = tok.match(/\sas="([\w$]+)"/);
-      scope.push({ as: as ? as[1] : '', list: list ? judge(list[1]) : null });
-    } else if (tok === '</sc-for>') scope.pop();
-    else if (m[1]) judge(m[1]);
   }
-  return [...bad];
+  return { nodes, branches, elems, ports, causalSteps };
 }
 
-// Topic data the shell relies on. Steps are numbered from 1 in STEPS order.
-// A step with f names its phase: the process name the playback label shows at that f
-// (one whole ' · ' part of a '<과정 이름> · f / fmax' label, so '억제자' does not pass on '억제자 이동').
-function topicChecks(topic, add) {
-  const modes = topic.MODES || [];
-  for (const m of modes) for (const k of ['cam', 'fit', 'D', 'canvasLabel']) if (m[k] == null) add('TOPIC_INVALID:MODES.' + m.key + '.' + k);
-  (topic.STEPS || []).forEach((s, i) => {
-    const n = i + 1, m = modes.find((d) => d.key === s.mode);
-    if (!m) add('TOPIC_INVALID:STEPS[' + n + '].mode');
-    else if (s.f != null && (!m.playback || !(s.f >= 0 && s.f <= m.playback.fmax))) add('TOPIC_INVALID:STEPS[' + n + '].f');
-    else if (s.f != null) phaseCheck(s, n, m.playback, add);
-  });
-  for (const m of modes) {
-    const list = topic.MISTAKES && topic.MISTAKES[m.key];
-    if (!Array.isArray(list) || !list.length) add('TOPIC_INVALID:MISTAKES.' + m.key);
+function checkExternalUrls(text, sourceLabel, add) {
+  for (const m of String(text || '').matchAll(URL_RE)) {
+    const url = m[0];
+    if (!ALLOWED_CDN_SET.has(url)) {
+      add('EXTERNAL_URL', `Disallowed external URL in ${sourceLabel}: ${url}`, { url, source: sourceLabel });
+    }
   }
-  for (const t of ['light', 'dark']) if (!topic.PAL || !topic.PAL[t]) add('TOPIC_INVALID:PAL.' + t);
 }
 
-function phaseCheck(s, n, playback, add) {
-  const phase = typeof s.phase === 'string' ? s.phase.trim() : '';
-  if (!phase) return add('TOPIC_INVALID:STEPS[' + n + '].phase');
-  let label;
-  try {
-    label = String(playback.label(s.f));
-  } catch (e) {
-    return add('STEP_OFF_PHASE:' + n, e);
+function checkSchema(spec, add) {
+  if (!isNonEmptyString(spec.id)) {
+    add('SCHEMA_INVALID', 'spec.id must be a non-empty string');
   }
-  const parts = label.split(' · ').map((x) => x.trim());
-  if (parts.length > 1 ? !parts.includes(phase) : !label.includes(phase)) add('STEP_OFF_PHASE:' + n, "기대 '" + s.phase + "', 실제 '" + label + "'");
-}
+  if (!isNonEmptyString(spec.title)) {
+    add('SCHEMA_INVALID', 'spec.title must be a non-empty string');
+  }
+  if (!VALID_ARCHETYPES.has(spec.archetype)) {
+    add('SCHEMA_INVALID', `spec.archetype must be one of probe, bench, approx (got ${JSON.stringify(spec.archetype)})`);
+  }
+  if (typeof spec.evaluate !== 'function') {
+    add('SCHEMA_INVALID', 'spec.evaluate must be a function');
+  }
+  if (!Array.isArray(spec.modes) || spec.modes.length === 0) {
+    add('SCHEMA_INVALID', 'spec.modes must be a non-empty array');
+  } else {
+    const modeKeys = new Set();
+    for (let i = 0; i < spec.modes.length; i++) {
+      const m = spec.modes[i];
+      if (!m || typeof m !== 'object') {
+        add('SCHEMA_INVALID', `modes[${i}] must be an object`);
+        continue;
+      }
+      if (!isNonEmptyString(m.key)) {
+        add('SCHEMA_INVALID', `modes[${i}].key must be a non-empty string`);
+      } else if (modeKeys.has(m.key)) {
+        add('SCHEMA_INVALID', `duplicate mode key "${m.key}"`);
+      } else {
+        modeKeys.add(m.key);
+      }
+      if (!isNonEmptyString(m.label)) {
+        add('SCHEMA_INVALID', `modes[${i}].label must be a non-empty string`);
+      }
+      if (!isNonEmptyString(m.ariaLabel)) {
+        add('SCHEMA_INVALID', `modes[${i}].ariaLabel must be a non-empty string`);
+      }
+      if (!isNonEmptyString(m.svg) || !/<svg\b/i.test(m.svg)) {
+        add('SCHEMA_INVALID', `modes[${i}].svg must contain an <svg> element`);
+      } else if (!hasValidViewBox(m)) {
+        add('SCHEMA_INVALID', `modes[${i}] must provide a valid 4-number viewBox`);
+      }
+    }
 
-function renderChecks(file, modes, add) {
-  const vals = [];
-  for (const narrow of [true, false]) {
-    for (const theme of ['light', 'dark']) {
-      for (const mode of modes) {
-        try {
-          const { c } = loadComponent(file, { narrow });
-          c.setTheme(theme);
-          c.setMode(mode);
-          vals.push(c.renderVals());
-        } catch (e) {
-          add('RENDER_THROWS:' + (narrow ? 'narrow' : 'wide') + '-' + theme + '-' + mode, e);
+    if (Array.isArray(spec.steps)) {
+      for (let i = 0; i < spec.steps.length; i++) {
+        const s = spec.steps[i];
+        if (s && s.mode !== undefined && !modeKeys.has(s.mode)) {
+          add('SCHEMA_INVALID', `steps[${i}].mode "${s.mode}" does not match any mode`);
+        }
+      }
+    }
+    if (Array.isArray(spec.presets)) {
+      for (let i = 0; i < spec.presets.length; i++) {
+        const p = spec.presets[i];
+        if (p && p.mode !== undefined && !modeKeys.has(p.mode)) {
+          add('SCHEMA_INVALID', `presets[${i}].mode "${p.mode}" does not match any mode`);
         }
       }
     }
   }
-  return vals;
+
+  if (spec.predict !== undefined && spec.predict !== null) {
+    const p = spec.predict;
+    if (typeof p !== 'object' || !isNonEmptyString(p.prompt) || !Array.isArray(p.options) || p.options.length === 0) {
+      add('SCHEMA_INVALID', 'spec.predict must have prompt and non-empty options array');
+    } else {
+      const optIds = new Set();
+      for (let i = 0; i < p.options.length; i++) {
+        const opt = p.options[i];
+        if (opt && typeof opt === 'object') {
+          if (!isNonEmptyString(String(opt.id ?? '')) || !isNonEmptyString(opt.label)) {
+            add('SCHEMA_INVALID', `predict.options[${i}] must have non-empty id and label`);
+          } else {
+            optIds.add(String(opt.id));
+          }
+        } else if (isNonEmptyString(String(opt ?? ''))) {
+          optIds.add(String(opt));
+        } else {
+          add('SCHEMA_INVALID', `predict.options[${i}] must be non-empty`);
+        }
+      }
+      if (p.answerId === undefined || p.answerId === null || !optIds.has(String(p.answerId))) {
+        add('SCHEMA_INVALID', `predict.answerId (${JSON.stringify(p.answerId)}) must match an option id`);
+      }
+    }
+  }
+
+  if (spec.params !== undefined) {
+    if (!Array.isArray(spec.params)) {
+      add('SCHEMA_INVALID', 'spec.params must be an array');
+    } else {
+      for (let i = 0; i < spec.params.length; i++) {
+        const p = spec.params[i];
+        if (!p || typeof p !== 'object' || !isNonEmptyString(p.key)) {
+          add('SCHEMA_INVALID', `params[${i}] must have a non-empty key`);
+          continue;
+        }
+        if (typeof p.min !== 'number' || !Number.isFinite(p.min) || typeof p.max !== 'number' || !Number.isFinite(p.max) || p.min > p.max) {
+          add('SCHEMA_INVALID', `params[${i}] (${p.key}) must have finite min <= max`);
+        }
+        if (p.def !== undefined && (typeof p.def !== 'number' || !Number.isFinite(p.def))) {
+          add('SCHEMA_INVALID', `params[${i}] (${p.key}) def must be finite`);
+        }
+        if (p.scale === 'log' && (p.min <= 0 || p.max <= p.min)) {
+          add('SCHEMA_INVALID', `params[${i}] (${p.key}) log scale requires 0 < min < max`);
+        }
+      }
+    }
+  }
 }
 
-// Draws each mode directly (tick() swallows exceptions): sweeps playback 0→fmax and the
-// camera around, light then dark, then each view option flipped once. Non-finite numbers
-// reaching the canvas mean a blank scene (e.g. a missing cam.zoom).
-const nonFinite = (calls) => calls.some((x) => x.args.some((a) => typeof a === 'number' && !Number.isFinite(a)));
-
-function drawChecks(file, modes, add) {
-  for (const mode of modes) {
-    let c, calls, last = 0;
-    try {
-      ({ c } = loadComponent(file, { narrow: false }));
-      c.setMode(mode);
-      const made = makeCtx();
-      calls = made.calls;
-      c.attachCanvas(makeCanvas(made.ctx, 800, 600));
-    } catch (e) {
-      add('DRAW_THROWS:' + mode, e);
+function checkMistakes(spec, add) {
+  if (!Array.isArray(spec.modes)) return;
+  const raw = spec.mistakes;
+  for (const m of spec.modes) {
+    if (!m || !isNonEmptyString(m.key)) continue;
+    const list = raw && typeof raw === 'object' && !Array.isArray(raw) ? raw[m.key] : null;
+    if (!Array.isArray(list) || list.length !== 3) {
+      add('MISTAKES_INVALID', `mistakes.${m.key} must be an array of length 3`, { mode: m.key });
       continue;
     }
-    const pb = c.modeDef(mode).playback;
-    try {
-      if (pb) c.setState({ playing: true });
-      for (let k = 0; k < FRAMES; k++) {
-        if (k === FRAMES / 2) c.setTheme('dark');
-        if (pb) { c.sim.f = pb.fmax * k / (FRAMES - 1); c.setState({ f: c.sim.f }); }
-        c.cam.yaw += 0.05;
-        last = calls.length;
-        c.draw(0.016, (k + 1) * 16);
+    for (let i = 0; i < list.length; i++) {
+      const item = list[i];
+      if (!item || typeof item !== 'object' || !isNonEmptyString(item.title) || !isNonEmptyString(item.text)) {
+        add('MISTAKES_INVALID', `mistakes.${m.key}[${i}] must have non-empty title and text`, { mode: m.key, index: i });
       }
-      const end = calls.slice(last);
-      if (!end.some((x) => x.op === 'arc' || x.op === 'lineTo' || x.op === 'fillText')) add('SCENE_EMPTY:' + mode);
-      if (nonFinite(calls)) add('SCENE_NAN:' + mode);
-      for (const t of c.renderVals().toggles) {
-        t.toggle();
-        c.draw(0.016, 0);
-        c.renderVals().toggles.find((x) => x.label === t.label).toggle();
-      }
-    } catch (e) {
-      add('DRAW_THROWS:' + mode, e);
     }
   }
 }
 
-// Picks each step from a fresh component and draws the frame it jumps to.
-function stepChecks(file, add) {
-  let c;
-  try {
-    ({ c } = loadComponent(file, { narrow: false }));
-    c.attachCanvas(makeCanvas(makeCtx().ctx, 800, 600));
-  } catch (e) { return; }
-  const n = (c.T.STEPS || []).length;
-  for (let i = 0; i < n; i++) {
-    try {
-      c.pickStep(i);
-      c.renderVals();
-      c.draw(0.016, 0);
-    } catch (e) {
-      add('DRAW_THROWS:step' + (i + 1), e);
+function checkSvgMode(spec, m, add) {
+  if (!m || typeof m.svg !== 'string') return null;
+  checkExternalUrls(m.svg, `mode ${m.key} SVG`, add);
+
+  for (const hm of m.svg.matchAll(HEX_IN_SVG_RE)) {
+    add('HEX_IN_SVG', `Hardcoded hex color ${hm[0]} in mode ${m.key} SVG`, { mode: m.key, hex: hm[0] });
+  }
+
+  for (const tm of m.svg.matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/gi)) {
+    const inner = tm[1].replace(/<[^>]+>/g, '');
+    if (PLAIN_SUBSCRIPT_RE.test(inner) || LATEX_IN_SVG_TEXT_RE.test(inner)) {
+      add(
+        'SVG_TEXT_NOTATION',
+        `Invalid SVG <text> notation in mode ${m.key}: "${inner.trim()}" (use <tspan baseline-shift="sub"> without _ or $...$)`,
+        { mode: m.key, text: inner.trim() }
+      );
     }
   }
+
+  const hooks = extractSvgHooks(m.svg);
+  for (const p of collectModeList(spec, m, 'ports')) {
+    const pid = p && p.id !== undefined ? String(p.id) : '';
+    if (pid && !hooks.ports.has(pid)) {
+      add('HOOK_MISSING', `Missing data-port="${pid}" in mode ${m.key} SVG`, { mode: m.key, hookType: 'port', hookId: pid });
+    }
+  }
+  for (const e of collectModeList(spec, m, 'elems')) {
+    const eid = typeof e === 'string' ? e : (e && e.id !== undefined ? String(e.id) : '');
+    if (eid && !hooks.elems.has(eid)) {
+      add('HOOK_MISSING', `Missing data-elem="${eid}" in mode ${m.key} SVG`, { mode: m.key, hookType: 'elem', hookId: eid });
+    }
+  }
+  const cSteps = collectModeList(spec, m, 'causalSteps');
+  for (let i = 0; i < cSteps.length; i++) {
+    const cs = cSteps[i];
+    const sid = cs && cs.id !== undefined ? String(cs.id) : String(i + 1);
+    if (!hooks.causalSteps.has(sid)) {
+      add('HOOK_MISSING', `Missing data-causal-step="${sid}" in mode ${m.key} SVG`, { mode: m.key, hookType: 'causal-step', hookId: sid });
+    }
+  }
+  return hooks;
 }
 
-function check(file, opts = {}) {
-  const errors = [], details = [];
-  const add = (code, e) => {
-    if (errors.includes(code)) return;
-    errors.push(code);
-    details.push(e ? code + ' — ' + String((e && e.message) || e).split('\n')[0] : code);
+function buildTestStates(spec) {
+  const list = [];
+  const seen = new Set();
+  const push = (label, state) => {
+    const sig = JSON.stringify({
+      mode: state.mode,
+      step: state.step,
+      params: state.params,
+      ports: state.ports,
+      disabledElems: state.disabledElems,
+      causalStep: state.causalStep,
+      predictChoice: state.predictChoice,
+      predictDismissed: state.predictDismissed,
+      toggles: state.toggles,
+    });
+    if (seen.has(sig)) return;
+    seen.add(sig);
+    list.push({ label, state });
   };
-  const src = readDc(file);
-  const head = src.slice(0, src.indexOf('data-dc-script'));
-  const markup = bodyMarkup(src);
 
-  for (const s of SHELL) if (!head.includes(s)) add('SHELL_MISSING:' + s);
-  for (const m of markup.matchAll(/\s(on[A-Z]\w*)=/g)) if (!EVENTS.includes(m[1])) add('EVENT_UNSUPPORTED:' + m[1]);
-  for (const h of holeSyntax(markup)) add('HOLE_SYNTAX:' + h);
-  for (const m of markup.matchAll(/(?<!&)#[0-9a-fA-F]{6}(?![0-9a-fA-F])/g)) add('HEX_IN_MARKUP:' + m[0]);
+  const base = createInitialState(spec);
+  push('초기 상태', base);
 
-  let topic;
+  for (const entry of buildProbeStates(spec)) {
+    push(entry.label, entry.state);
+  }
+
+  for (const m of spec.modes) {
+    if (!m || !isNonEmptyString(m.key)) continue;
+    const modeBase = reduceState(spec, base, { type: 'SET_MODE', mode: m.key });
+    const modeParams = (Array.isArray(spec.params) ? spec.params : []).filter(
+      (p) => p && matchesMode(p, m.key) && typeof p.min === 'number' && Number.isFinite(p.min) && typeof p.max === 'number' && Number.isFinite(p.max)
+    );
+    if (modeParams.length === 0) continue;
+
+    if (modeParams.length <= 5) {
+      const combos = 1 << modeParams.length;
+      for (let mask = 0; mask < combos; mask++) {
+        let st = modeBase;
+        const parts = [];
+        for (let i = 0; i < modeParams.length; i++) {
+          const p = modeParams[i];
+          const val = (mask & (1 << i)) ? p.max : p.min;
+          st = reduceState(spec, st, { type: 'SET_PARAM', key: p.key, value: val });
+          parts.push(`${p.key}=${val}`);
+        }
+        push(`${m.key}:[${parts.join(',')}]`, st);
+      }
+    } else {
+      let allMin = modeBase;
+      let allMax = modeBase;
+      for (const p of modeParams) {
+        push(`${m.key}:${p.key}=min(${p.min})`, reduceState(spec, modeBase, { type: 'SET_PARAM', key: p.key, value: p.min }));
+        push(`${m.key}:${p.key}=max(${p.max})`, reduceState(spec, modeBase, { type: 'SET_PARAM', key: p.key, value: p.max }));
+        allMin = reduceState(spec, allMin, { type: 'SET_PARAM', key: p.key, value: p.min });
+        allMax = reduceState(spec, allMax, { type: 'SET_PARAM', key: p.key, value: p.max });
+      }
+      push(`${m.key}:all-min`, allMin);
+      push(`${m.key}:all-max`, allMax);
+    }
+  }
+  return list;
+}
+
+function inspectEvalValues(val, pathStr, stateLabel, add, visited) {
+  if (typeof val === 'number') {
+    if (!Number.isFinite(val)) {
+      add('EVAL_NON_FINITE', `Non-finite number (${val}) at ${pathStr} in "${stateLabel}"`, { state: stateLabel, path: pathStr });
+    }
+    return;
+  }
+  if (typeof val === 'string') {
+    if (NON_FINITE_STRING_RE.test(val)) {
+      add('EVAL_NON_FINITE', `Non-finite string "${val}" at ${pathStr} in "${stateLabel}"`, { state: stateLabel, path: pathStr });
+    }
+    return;
+  }
+  if (!val || typeof val !== 'object') return;
+  if (visited.has(val)) return;
+  visited.add(val);
+
+  if (Array.isArray(val)) {
+    for (let i = 0; i < val.length; i++) {
+      inspectEvalValues(val[i], `${pathStr}[${i}]`, stateLabel, add, visited);
+    }
+    return;
+  }
+  for (const [k, v] of Object.entries(val)) {
+    inspectEvalValues(v, `${pathStr}.${k}`, stateLabel, add, visited);
+  }
+}
+
+function checkReturnedHooks(res, modeKey, hooks, add) {
+  if (!hooks) return;
+  const groups = [
+    ['nodes', 'node', hooks.nodes],
+    ['branches', 'branch', hooks.branches],
+    ['elems', 'elem', hooks.elems],
+    ['ports', 'port', hooks.ports],
+  ];
+  for (const [prop, attr, set] of groups) {
+    const obj = res[prop];
+    if (!obj || typeof obj !== 'object') continue;
+    for (const id of Object.keys(obj)) {
+      if (!set.has(id)) {
+        add('HOOK_MISSING', `evaluate() returned ${prop}.${id} without data-${attr}="${id}" in mode ${modeKey} SVG`, {
+          mode: modeKey, hookType: attr, hookId: id,
+        });
+      }
+    }
+  }
+}
+
+function check(srcFile) {
+  const errors = [];
+  const details = [];
+  const seen = new Set();
+  const add = (code, message, extra = {}) => {
+    const key = `${code}::${message}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    errors.push(Object.assign({ code, message }, extra));
+    details.push(`${code}: ${message}`);
+  };
+
+  let rawSrc = '';
   try {
-    topic = loadComponent(file).c.topic();
-  } catch (e) {
-    add('RENDER_THROWS:load', e);
+    const resolved = path.resolve(String(srcFile || ''));
+    if (!fs.existsSync(resolved) || !fs.statSync(resolved).isFile()) {
+      add('LOAD_ERROR', `File not found: ${srcFile}`);
+      return { ok: false, errors, details };
+    }
+    rawSrc = fs.readFileSync(resolved, 'utf8');
+  } catch (err) {
+    add('LOAD_ERROR', String(err && err.message ? err.message : err));
     return { ok: false, errors, details };
   }
-  topicChecks(topic, add);
-  const modes = topic.MODES.map((m) => m.key);
-  const vals = renderChecks(file, modes, add);
-  for (const h of unknownHoles(markup, vals)) add('HOLE_UNKNOWN:' + h);
-  drawChecks(file, modes, add);
-  stepChecks(file, add);
 
-  if (!opts.allowTemplate) {
-    for (const p of ['__TITLE__']) if (src.includes(p)) add('TEMPLATE_LEFT:' + p);
-    if (topic.DEMO === true) add('TEMPLATE_LEFT:DEMO');
+  checkExternalUrls(rawSrc, path.basename(srcFile), add);
+
+  let spec;
+  try {
+    spec = loadLab(srcFile);
+  } catch (err) {
+    add('LOAD_ERROR', String(err && err.message ? err.message : err));
+    return { ok: false, errors, details };
   }
+
+  checkSchema(spec, add);
+  checkMistakes(spec, add);
+
+  const hooksByMode = new Map();
+  if (Array.isArray(spec.modes)) {
+    for (const m of spec.modes) {
+      if (m && isNonEmptyString(m.key)) {
+        hooksByMode.set(m.key, checkSvgMode(spec, m, add));
+      }
+    }
+  }
+
+  if (typeof spec.evaluate === 'function' && Array.isArray(spec.modes) && spec.modes.length > 0) {
+    const testStates = buildTestStates(spec);
+    for (const { label, state } of testStates) {
+      let res;
+      try {
+        res = spec.evaluate(state, EC2MNA);
+      } catch (err) {
+        add('EVAL_THROW', `${label}: ${String(err && err.message ? err.message : err)}`, { state: label });
+        continue;
+      }
+      if (!res || typeof res !== 'object') {
+        add('EVAL_THROW', `${label}: evaluate() returned non-object`, { state: label });
+        continue;
+      }
+
+      const isSingular = Boolean(res.diagnosis && res.diagnosis.singular === true);
+      if (isSingular && spec.archetype !== 'bench') {
+        add('EVAL_NON_FINITE', `Singular diagnosis is only allowed in bench archetype (${label})`, { state: label });
+      }
+
+      const visited = new WeakSet();
+      for (const field of ['nodes', 'branches', 'tiles', 'plotData']) {
+        if (res[field] !== undefined) {
+          inspectEvalValues(res[field], field, label, add, visited);
+        }
+      }
+
+      checkReturnedHooks(res, state.mode, hooksByMode.get(state.mode), add);
+    }
+  }
+
   return { ok: errors.length === 0, errors, details };
 }
 
 if (require.main === module) {
   const args = process.argv.slice(2);
   const file = args.find((a) => !a.startsWith('--'));
-  if (!file || !fs.existsSync(file)) {
-    console.error('usage: node check.cjs <Main.dc.html> [--allow-template]');
+  if (!file || !fs.existsSync(file) || !fs.statSync(file).isFile()) {
+    console.error('usage: node check.cjs <lab.js>');
     process.exit(2);
   }
-  const r = check(file, { allowTemplate: args.includes('--allow-template') });
+  const r = check(file);
   console.log(r.ok ? 'ok' : r.details.join('\n'));
   process.exit(r.ok ? 0 : 1);
 }

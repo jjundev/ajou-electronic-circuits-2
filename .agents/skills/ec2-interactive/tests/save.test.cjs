@@ -1,63 +1,64 @@
 const test = require('node:test');
-const assert = require('node:assert');
+const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { spawnSync } = require('node:child_process');
-const nfc = (p) => p.normalize('NFC').replace(/\\/g, '/');
 const { save } = require('../scripts/save.cjs');
 
+const nfc = (p) => p.normalize('NFC').replace(/\\/g, '/');
 const SKILL = path.join(__dirname, '..');
-const T = path.join(SKILL, 'assets', 'template.dc.html');
+const EX = path.join(SKILL, 'references', 'example-lab.js');
 const SCRIPT = path.join(SKILL, 'scripts', 'save.cjs');
 
-// A fresh run folder with one topic (run/1/Main.dc.html) and an empty dest folder.
 function setup() {
-  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'bi-save-'));
-  const src = path.join(tmp, 'run', '1', 'Main.dc.html');
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'ec2-save-'));
+  const src = path.join(tmp, 'run', '1', 'lab.js');
   fs.mkdirSync(path.dirname(src), { recursive: true });
-  fs.writeFileSync(src, fs.readFileSync(T, 'utf8').replaceAll('__TITLE__', '테스트 주제'));
-  const dest = path.join(tmp, '1010');
+  fs.writeFileSync(
+    src,
+    fs.readFileSync(EX, 'utf8').replace("title: '전압 분배기 동작 프로브',", "title: '테스트 주제',"),
+    'utf8'
+  );
+  const dest = path.join(tmp, '1120');
   fs.mkdirSync(dest);
   return { tmp, src, dest };
 }
 
-test('first save gets 01', () => {
+test('first save creates 인터렉티브_01_<이름>.html and .assets/자료_인터렉티브_01_<이름>/lab.js without canvas.json', () => {
   const { src, dest } = setup();
-  const r = save({ src, dest, name: 'Test_Topic' });
+  const r = save({ src, dest, name: '테스트 주제' });
   assert.equal(r.nn, '01');
-  assert.equal(r.html, path.join(dest, '인터렉티브_01_Test_Topic.html'));
-  assert.equal(r.dir, path.join(dest, '.assets', '자료_인터렉티브_01_Test_Topic'));
-  assert.match(fs.readFileSync(r.html, 'utf8'), /<title>테스트 주제<\/title>/);
-  for (const f of ['Main.dc.html', 'canvas.json']) assert.ok(fs.existsSync(path.join(r.dir, f)), f);
-  assert.match(JSON.parse(fs.readFileSync(path.join(r.dir, 'canvas.json'), 'utf8')).title, /테스트 주제/);
+  assert.equal(nfc(r.html), nfc(path.join(dest, '인터렉티브_01_테스트_주제.html')));
+  assert.equal(nfc(r.dir), nfc(path.join(dest, '.assets', '자료_인터렉티브_01_테스트_주제')));
+
+  const built = fs.readFileSync(r.html, 'utf8');
+  assert.match(built, /<title>테스트 주제<\/title>/);
+  assert.match(built, /EC2MNA/);
+  assert.match(built, /EC2Lab/);
+  assert.ok(fs.existsSync(path.join(r.dir, 'lab.js')));
+  assert.equal(fs.existsSync(path.join(r.dir, 'canvas.json')), false);
+  assert.equal(fs.existsSync(path.join(r.dir, 'Main.dc.html')), false);
 });
 
-test('existing html moves to the next number', () => {
+test('existing legacy or v2 html advances next number without touching existing files', () => {
   const { src, dest } = setup();
-  fs.writeFileSync(path.join(dest, '인터렉티브_01.html'), 'x');
-  assert.equal(save({ src, dest, name: 'Test_Topic' }).nn, '02');
-  assert.equal(fs.readFileSync(path.join(dest, '인터렉티브_01.html'), 'utf8'), 'x');
+  fs.writeFileSync(path.join(dest, '인터렉티브_01_기존.html'), 'legacy-1');
+  fs.writeFileSync(path.join(dest, '인터렉티브_02_기존2.html'), 'legacy-2');
+  fs.mkdirSync(path.join(dest, '.assets', '자료_인터렉티브_03_기존3'), { recursive: true });
+  const r = save({ src, dest, name: '새_주제' });
+  assert.equal(r.nn, '04');
+  assert.equal(path.basename(r.html), '인터렉티브_04_새_주제.html');
+  assert.equal(fs.readFileSync(path.join(dest, '인터렉티브_01_기존.html'), 'utf8'), 'legacy-1');
 });
 
-test('skips a number whose data folder exists', () => {
-  const { src, dest } = setup();
-  fs.writeFileSync(path.join(dest, '인터렉티브_01.html'), 'x');
-  fs.mkdirSync(path.join(dest, '.assets', '자료_인터렉티브_02'), { recursive: true });
-  assert.equal(save({ src, dest, name: 'Test_Topic' }).nn, '03');
-});
-
-test('creates a missing dest', () => {
+test('creates missing dest and writes nothing next to source', () => {
   const { tmp, src } = setup();
-  const d = path.join(tmp, 'new', '1010');
-  assert.equal(save({ src, dest: d, name: 'Test_Topic' }).nn, '01');
-  assert.ok(fs.existsSync(path.join(d, '인터렉티브_01_Test_Topic.html')));
-});
-
-test('writes nothing next to the source', () => {
-  const { src, dest } = setup();
+  const d = path.join(tmp, 'new', '1120');
   const before = fs.readdirSync(path.dirname(src)).sort();
-  save({ src, dest, name: 'Test_Topic' });
+  const r = save({ src, dest: d, name: 'Test_Topic' });
+  assert.equal(r.nn, '01');
+  assert.ok(fs.existsSync(path.join(d, '인터렉티브_01_Test_Topic.html')));
   assert.deepEqual(fs.readdirSync(path.dirname(src)).sort(), before);
 });
 
@@ -67,96 +68,74 @@ test('two saves in a row get 01 and 02', () => {
   assert.equal(save({ src, dest, name: 'Test_Topic' }).nn, '02');
 });
 
-test('cli prints the result and exits 2 on bad input', () => {
+test('normalizes spaces and preserves Korean + English proper nouns; rejects unsafe names', () => {
   const { src, dest } = setup();
-  const ok = spawnSync(process.execPath, [SCRIPT, src, dest, 'Test_Topic'], { encoding: 'utf8' });
-  assert.equal(ok.status, 0, ok.stderr);
-  assert.equal(JSON.parse(ok.stdout).nn, '01');
-  assert.equal(spawnSync(process.execPath, [SCRIPT, src], { encoding: 'utf8' }).status, 2);
-  assert.equal(spawnSync(process.execPath, [SCRIPT, src, dest], { encoding: 'utf8' }).status, 2);
-  assert.equal(spawnSync(process.execPath, [SCRIPT, '/no/such/Main.dc.html', dest, 'Test_Topic'], { encoding: 'utf8' }).status, 2);
+  const r = save({ src, dest, name: '  전사와   RNA 가공 ' });
+  assert.equal(path.basename(r.html), '인터렉티브_01_전사와_RNA_가공.html');
+  assert.equal(path.basename(r.dir), '자료_인터렉티브_01_전사와_RNA_가공');
+  assert.match(fs.readFileSync(r.html, 'utf8'), /생성 파일: \.assets\/자료_인터렉티브_01_전사와_RNA_가공\/lab\.js/);
+
+  const { dest: cleanDest } = setup();
+  for (const badName of [undefined, '', '   ', 'a/b', '../x', 'a:b', '..']) {
+    assert.throws(() => save({ src, dest: cleanDest, name: badName }), /name/, String(badName));
+  }
+  assert.deepEqual(fs.readdirSync(cleanDest), []);
 });
 
-test('a failed save leaves no numbered folder', () => {
+test('a failed save leaves no numbered folder or partial files', () => {
   const { tmp, dest } = setup();
   assert.throws(() => save({ src: path.join(tmp, 'run', '1'), dest, name: 'Test_Topic' }));
   assert.deepEqual(fs.readdirSync(dest), []);
-  const bad = path.join(tmp, 'bad.dc.html');
-  fs.writeFileSync(bad, '<title>x</title>');
-  assert.throws(() => save({ src: bad, dest, name: 'Test_Topic' }));
+
+  const badLab = path.join(tmp, 'bad.js');
+  fs.writeFileSync(badLab, 'module.exports = { broken:', 'utf8');
+  assert.throws(() => save({ src: badLab, dest, name: 'Test_Topic' }));
   assert.deepEqual(fs.readdirSync(dest), []);
 });
 
-test('cli rejects a folder as the source', () => {
-  const { tmp, dest } = setup();
-  const r = spawnSync(process.execPath, [SCRIPT, path.join(tmp, 'run', '1'), dest, 'Test_Topic'], { encoding: 'utf8' });
-  assert.equal(r.status, 2);
-  assert.deepEqual(fs.readdirSync(dest), []);
-});
-
-test('numbers count files that already have a name', () => {
+test('concurrent EEXIST on wx never overwrites existing HTML and rolls back .assets dir', () => {
   const { src, dest } = setup();
-  fs.writeFileSync(path.join(dest, '인터렉티브_01_Lac_Operon.html'), 'x');
-  fs.mkdirSync(path.join(dest, '.assets', '자료_인터렉티브_02_Translation'), { recursive: true });
-  const r = save({ src, dest, name: 'Test_Topic' });
-  assert.equal(r.nn, '03');
-  assert.equal(path.basename(r.html), '인터렉티브_03_Test_Topic.html');
-});
-
-test('spaces in the name become underscores', () => {
-  const { src, dest } = setup();
-  const r = save({ src, dest, name: '  Transcription and  RNA Processing ' });
-  assert.equal(path.basename(r.html), '인터렉티브_01_Transcription_and_RNA_Processing.html');
-  assert.equal(path.basename(r.dir), '자료_인터렉티브_01_Transcription_and_RNA_Processing');
-});
-
-test('rejects a missing or unsafe name and writes nothing', () => {
-  const { src, dest } = setup();
-  for (const name of [undefined, '', '   ', 'a/b', '../x', 'a:b'])
-    assert.throws(() => save({ src, dest, name }), /name/, String(name));
-  assert.deepEqual(fs.readdirSync(dest), []);
-});
-
-test('a Korean name with English proper nouns is kept as written', () => {
-  const { src, dest } = setup();
-  const r = save({ src, dest, name: '전사와 RNA 가공' });
-  assert.equal(path.basename(r.html), '인터렉티브_01_전사와_RNA_가공.html');
-});
-
-test('save puts the data folder under .assets', () => {
-  const { src, dest } = setup();
-  const r = save({ src, dest, name: '전사' });
-  assert.equal(nfc(path.relative(dest, r.dir)), '.assets/자료_인터렉티브_01_전사');
-  assert.match(fs.readFileSync(r.html, 'utf8'), /생성 파일: \.assets\/자료_인터렉티브_01_전사\/Main\.dc\.html/);
-  assert.deepEqual(fs.readdirSync(dest).map(nfc).sort(), ['.assets', '인터렉티브_01_전사.html']);
-});
-
-test('a file occupied after number resolution is never overwritten', () => {
-  const {src,dest} = setup();
   const realOpen = fs.openSync;
   let occupied;
   try {
-    fs.openSync = function(file, flags) {
+    fs.openSync = function (file, flags) {
       if (flags === 'wx' && path.dirname(file) === dest) {
         occupied = file;
         fs.writeFileSync(file, 'concurrent owner');
       }
-      return realOpen.apply(this,arguments);
+      return realOpen.apply(this, arguments);
     };
-    assert.throws(() => save({src,dest,name:'CS'}), {code:'EEXIST'});
-  } finally { fs.openSync = realOpen; }
-  assert.equal(fs.readFileSync(occupied,'utf8'),'concurrent owner');
-  assert.ok(!fs.existsSync(path.join(dest,'.assets','자료_인터렉티브_01_CS')));
+    assert.throws(() => save({ src, dest, name: 'CS' }), { code: 'EEXIST' });
+  } finally {
+    fs.openSync = realOpen;
+  }
+  assert.equal(fs.readFileSync(occupied, 'utf8'), 'concurrent owner');
+  assert.equal(fs.existsSync(path.join(dest, '.assets', '자료_인터렉티브_01_CS')), false);
 });
-test('a failed write removes only the new partial HTML', () => {
-  const {src,dest} = setup();
+
+test('simulated writeFileSync failure rolls back partial HTML and .assets dir', () => {
+  const { src, dest } = setup();
   const realWrite = fs.writeFileSync;
   try {
-    fs.writeFileSync = function(file) {
+    fs.writeFileSync = function (file) {
       if (typeof file === 'number') throw new Error('simulated disk failure');
-      return realWrite.apply(this,arguments);
+      return realWrite.apply(this, arguments);
     };
-    assert.throws(() => save({src,dest,name:'CS'}), /disk failure/);
-  } finally { fs.writeFileSync = realWrite; }
-  assert.deepEqual(fs.readdirSync(dest),[]);
+    assert.throws(() => save({ src, dest, name: 'CS' }), /disk failure/);
+  } finally {
+    fs.writeFileSync = realWrite;
+  }
+  assert.deepEqual(fs.readdirSync(dest), []);
+});
+
+test('CLI prints JSON and exits 0; bad input exits 2', () => {
+  const { tmp, src, dest } = setup();
+  const ok = spawnSync(process.execPath, [SCRIPT, src, dest, 'Test_Topic'], { encoding: 'utf8' });
+  assert.equal(ok.status, 0, ok.stderr);
+  assert.equal(JSON.parse(ok.stdout).nn, '01');
+
+  assert.equal(spawnSync(process.execPath, [SCRIPT, src], { encoding: 'utf8' }).status, 2);
+  assert.equal(spawnSync(process.execPath, [SCRIPT, src, dest], { encoding: 'utf8' }).status, 2);
+  assert.equal(spawnSync(process.execPath, [SCRIPT, '/no/such/lab.js', dest, 'Test_Topic'], { encoding: 'utf8' }).status, 2);
+  assert.equal(spawnSync(process.execPath, [SCRIPT, path.join(tmp, 'run', '1'), dest, 'Test_Topic'], { encoding: 'utf8' }).status, 2);
 });
