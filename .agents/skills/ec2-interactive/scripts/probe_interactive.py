@@ -136,13 +136,16 @@ _MEASURE = r"""
   );
   const skipWire = w => {
     if (skipSymbol(w)) return true;
-    if (w.matches('.lab-badge-bg, [data-badge-bg], .port-chip-bg') || w.closest('.plot-wrap')) return true;
+    if (w.matches('.lab-badge-bg, [data-badge-bg], .port-chip-bg, .fig-dot') || w.closest('.plot-wrap')) return true;
     const st = getComputedStyle(w);
     const tag = w.tagName.toLowerCase();
     if (tag === 'rect' && (st.stroke === 'none' || parseFloat(st.strokeWidth || '0') <= 0)) return true;
     if (st.stroke === 'none' && st.fill === 'none') return true;
     return false;
   };
+  const enclosesText = (box, tr) => Boolean(
+    box && box.left <= tr.left && box.right >= tr.right && box.top <= tr.top && box.bottom >= tr.bottom
+  );
   const rectDistance = (r, x, y) => Math.hypot(
     Math.max(r.left - x, 0, x - r.right),
     Math.max(r.top - y, 0, y - r.bottom)
@@ -153,7 +156,7 @@ _MEASURE = r"""
     if (!visible(svg) || svg.parentElement?.closest('svg') || skipUiSvg(svg)) return;
     const wires = [...svg.querySelectorAll('line, path, polyline, rect, circle')]
       .filter(w => !skipWire(w) && visible(w) && typeof w.getTotalLength === 'function');
-    const points = [];
+    const wireItems = [];
     for (const w of wires) {
       const ctm = w.getScreenCTM();
       if (!ctm) continue;
@@ -162,10 +165,13 @@ _MEASURE = r"""
       if (!(length > 0)) continue;
       const scale = Math.hypot(ctm.a, ctm.b) || Math.hypot(ctm.c, ctm.d) || 1;
       const n = Math.max(2, Math.min(400, Math.ceil(length * scale / 2)));
+      const pts = [];
       for (let k = 0; k <= n; k++) {
         const p = w.getPointAtLength(length * k / n);
-        points.push(new DOMPoint(p.x, p.y).matrixTransform(ctm));
+        pts.push(new DOMPoint(p.x, p.y).matrixTransform(ctm));
       }
+      const isRect = w.tagName.toLowerCase() === 'rect';
+      wireItems.push({ isRect, box: isRect ? w.getBoundingClientRect() : null, pts });
     }
     [...svg.querySelectorAll('text')].forEach(t => {
       if (skipSymbol(t) || !visible(t) || !t.textContent.trim()) return;
@@ -174,7 +180,10 @@ _MEASURE = r"""
       const ctm = t.getScreenCTM();
       const font = parseFloat(getComputedStyle(t).fontSize) * (ctm ? Math.hypot(ctm.a, ctm.b) : 1);
       let gap = Infinity;
-      for (const p of points) gap = Math.min(gap, rectDistance(r, p.x, p.y));
+      for (const item of wireItems) {
+        if (item.isRect && enclosesText(item.box, r)) continue;
+        for (const p of item.pts) gap = Math.min(gap, rectDistance(r, p.x, p.y));
+      }
       if (gap < gapEm * font) {
         const badgeEl = t.closest('[data-badge-for]');
         const entry = {
@@ -246,9 +255,10 @@ _MEASURE = r"""
 """
 
 
-def _ensure_page_resources(page, failed_resources: set[str]) -> None:
-    if failed_resources:
-        raise RuntimeError('Page resource failed to load: ' + ', '.join(sorted(failed_resources)))
+def _ensure_local_resources(local_failures: set[str], blocked_requests: set[str]) -> None:
+    unblocked_failures = local_failures - blocked_requests
+    if unblocked_failures:
+        raise RuntimeError('Page resource failed to load: ' + ', '.join(sorted(unblocked_failures)))
 
 
 def _drain_check(
@@ -259,6 +269,8 @@ def _drain_check(
     state_label: str,
     console_errors: list[str],
     page_errors: list[str],
+    blocked_requests: set[str],
+    reported_blocked: set[str],
     drawer_ok: bool = True,
     drawer_error: str | None = None,
 ) -> dict:
@@ -267,6 +279,8 @@ def _drain_check(
     perrs = list(page_errors)
     console_errors.clear()
     page_errors.clear()
+    new_blocked = sorted(blocked_requests - reported_blocked)
+    reported_blocked.update(new_blocked)
     if drawer_error:
         perrs.append(drawer_error)
     return {
@@ -276,6 +290,7 @@ def _drain_check(
         'drawer': measured['drawer'],
         'console_errors': errs,
         'page_errors': perrs,
+        'blocked_requests': new_blocked,
         'horizontal_scroll_px': measured['horizontal_scroll_px'],
         'overflow': measured['overflow'],
         'label_gaps': measured['label_gaps'],
@@ -293,13 +308,15 @@ def _probe_mobile_drawers(
     base_state: dict | None,
     console_errors: list[str],
     page_errors: list[str],
-    failed_resources: set[str],
+    blocked_requests: set[str],
+    reported_blocked: set[str],
+    local_failures: set[str],
 ) -> list[dict]:
     results = []
     if base_state is not None:
         page.evaluate('st => window.__EC2_LAB__.applyProbeState(st)', base_state)
         page.wait_for_timeout(80)
-        _ensure_page_resources(page, failed_resources)
+        _ensure_local_resources(local_failures, blocked_requests)
 
     for side in ('left', 'right'):
         btn = page.locator(f'[data-drawer-btn="{side}"]')
@@ -312,6 +329,8 @@ def _probe_mobile_drawers(
                     state_label=f'서랍: {side}',
                     console_errors=console_errors,
                     page_errors=page_errors,
+                    blocked_requests=blocked_requests,
+                    reported_blocked=reported_blocked,
                     drawer_ok=False,
                     drawer_error=f'Drawer button [data-drawer-btn="{side}"] missing or hidden at {width}px',
                 )
@@ -320,7 +339,7 @@ def _probe_mobile_drawers(
 
         btn.first.click()
         page.wait_for_timeout(280)
-        _ensure_page_resources(page, failed_resources)
+        _ensure_local_resources(local_failures, blocked_requests)
 
         opened_attr = page.evaluate("() => document.getElementById('ec2-lab-root')?.getAttribute('data-drawer')")
         open_err = None if opened_attr == side else f'Expected data-drawer="{side}", got "{opened_attr}"'
@@ -331,6 +350,8 @@ def _probe_mobile_drawers(
             state_label=f'서랍: {side}',
             console_errors=console_errors,
             page_errors=page_errors,
+            blocked_requests=blocked_requests,
+            reported_blocked=reported_blocked,
             drawer_ok=(open_err is None),
             drawer_error=open_err,
         )
@@ -351,6 +372,7 @@ def _count_defects(checks: list[dict]) -> int:
     for c in checks:
         total += len(c['console_errors'])
         total += len(c['page_errors'])
+        total += len(c.get('blocked_requests', ()))
         if c['horizontal_scroll_px'] > 1:
             total += 1
         total += len(c['overflow'])
@@ -376,6 +398,7 @@ def probe(html: Path, widths: list[int], themes: list[str]) -> dict:
     local_root = next((p for p in html.parents if normalize('NFC', p.name) == '복습노트'), html.parent)
     url = local_url(html, local_root)
     checks: list[dict] = []
+    all_blocked: set[str] = set()
 
     with sync_playwright() as pw:
         browser = launch_chromium(pw)
@@ -392,30 +415,40 @@ def probe(html: Path, widths: list[int], themes: list[str]) -> dict:
                     try:
                         console_errors: list[str] = []
                         page_errors: list[str] = []
-                        failed_resources: set[str] = set()
+                        blocked_requests: set[str] = set()
+                        reported_blocked: set[str] = set()
+                        local_failures: set[str] = set()
                         page.on('console', lambda msg: console_errors.append(msg.text) if msg.type == 'error' else None)
                         page.on('pageerror', lambda err: page_errors.append(str(err)))
-                        page.on('requestfailed', lambda req: failed_resources.add(req.url))
-                        page.on('response', lambda resp: failed_resources.add(resp.url) if resp.status >= 400 else None)
+                        page.on(
+                            'requestfailed',
+                            lambda req: local_failures.add(req.url) if req.url not in blocked_requests else None,
+                        )
+                        page.on(
+                            'response',
+                            lambda resp: local_failures.add(resp.url)
+                            if resp.status >= 400 and resp.url not in blocked_requests
+                            else None,
+                        )
                         install_render_routes(
                             page,
                             local_roots=(local_root,),
                             vendor_resolver=vendor_route.resolve_asset,
-                            blocked=failed_resources,
+                            blocked=blocked_requests,
                         )
 
                         response = page.goto(url, wait_until='load')
                         if response is None or not response.ok:
                             raise RuntimeError(f'Local HTML did not load: {html}')
 
-                        _ensure_page_resources(page, failed_resources)
+                        _ensure_local_resources(local_failures, blocked_requests)
                         missing_katex = page.evaluate(_KATEX_MISSING)
-                        if missing_katex:
+                        if missing_katex and not blocked_requests:
                             raise RuntimeError(f'KaTeX not loaded ({missing_katex})')
 
                         ctrl = page.evaluate(_CHECK_CONTROLLER)
                         if not ctrl['present']:
-                            if console_errors or page_errors:
+                            if console_errors or page_errors or blocked_requests:
                                 checks.append(
                                     _drain_check(
                                         page,
@@ -424,8 +457,11 @@ def probe(html: Path, widths: list[int], themes: list[str]) -> dict:
                                         state_label='__boot__',
                                         console_errors=console_errors,
                                         page_errors=page_errors,
+                                        blocked_requests=blocked_requests,
+                                        reported_blocked=reported_blocked,
                                     )
                                 )
+                                all_blocked.update(blocked_requests)
                                 continue
                             raise RuntimeError('window.__EC2_LAB__ is missing on this page')
                         if not ctrl['valid']:
@@ -434,7 +470,7 @@ def probe(html: Path, widths: list[int], themes: list[str]) -> dict:
                         page.evaluate('t => window.__EC2_LAB__.setTheme(t)', theme)
                         page.evaluate('() => document.fonts.ready.then(() => null)')
                         page.wait_for_timeout(120)
-                        _ensure_page_resources(page, failed_resources)
+                        _ensure_local_resources(local_failures, blocked_requests)
 
                         states = page.evaluate('() => window.__EC2_LAB__.listProbeStates()')
                         if not isinstance(states, list) or not states:
@@ -445,7 +481,7 @@ def probe(html: Path, widths: list[int], themes: list[str]) -> dict:
                             page.evaluate('st => window.__EC2_LAB__.applyProbeState(st)', entry.get('state'))
                             page.evaluate('() => document.fonts.ready.then(() => null)')
                             page.wait_for_timeout(40)
-                            _ensure_page_resources(page, failed_resources)
+                            _ensure_local_resources(local_failures, blocked_requests)
                             checks.append(
                                 _drain_check(
                                     page,
@@ -454,6 +490,8 @@ def probe(html: Path, widths: list[int], themes: list[str]) -> dict:
                                     state_label=label,
                                     console_errors=console_errors,
                                     page_errors=page_errors,
+                                    blocked_requests=blocked_requests,
+                                    reported_blocked=reported_blocked,
                                 )
                             )
 
@@ -466,9 +504,12 @@ def probe(html: Path, widths: list[int], themes: list[str]) -> dict:
                                     base_state=states[0].get('state'),
                                     console_errors=console_errors,
                                     page_errors=page_errors,
-                                    failed_resources=failed_resources,
+                                    blocked_requests=blocked_requests,
+                                    reported_blocked=reported_blocked,
+                                    local_failures=local_failures,
                                 )
                             )
+                        all_blocked.update(blocked_requests)
                     finally:
                         page.close()
         finally:
@@ -480,6 +521,7 @@ def probe(html: Path, widths: list[int], themes: list[str]) -> dict:
         'html': str(html),
         'html_sha256': hashlib.sha256(html.read_bytes()).hexdigest(),
         'defect_count': defect_count,
+        'blocked_requests': sorted(all_blocked),
         'checks': checks,
     }
 

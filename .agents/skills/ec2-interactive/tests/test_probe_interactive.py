@@ -170,13 +170,14 @@ def test_probe_catches_katex_error_and_console_error(tmp_path):
     assert any(c['console_errors'] or c['page_errors'] for c in data2['checks'])
 
 
-def test_probe_rejects_disallowed_external_url_and_bad_usage(tmp_path):
-    """미등록 외부 요청 및 잘못된 인자는 exit 2로 실패하고 out 파일을 쓰지 않는다."""
+def test_probe_flags_disallowed_external_url_and_exits_2_on_bad_usage(tmp_path):
+    """미등록 외부 요청은 blocked_requests 결함(exit 1 + --out 기록), 사용법/런타임 오류는 exit 2."""
     html = tmp_path / 'ext.html'
     out = tmp_path / 'ext-probe.json'
     subprocess.run(['node', str(BUILD), str(EXAMPLE), str(html)], check=True)
     html.write_text(
-        html.read_text(encoding='utf-8').replace(
+        _replace_once(
+            html.read_text(encoding='utf-8'),
             '</head>',
             '<link rel="stylesheet" href="https://example.invalid/blocked.css"></head>',
         ),
@@ -187,15 +188,59 @@ def test_probe_rejects_disallowed_external_url_and_bad_usage(tmp_path):
         capture_output=True,
         text=True,
     )
-    assert res.returncode == 2, res.stdout + res.stderr
-    err = json.loads(res.stdout)
-    assert err['status'] == 'error'
-    assert 'example.invalid' in err['reason']
-    assert not out.exists()
+    assert res.returncode == 1, res.stdout + res.stderr
+    assert out.is_file()
+    data = json.loads(out.read_text(encoding='utf-8'))
+    assert data['ok'] is False
+    assert 'https://example.invalid/blocked.css' in data['blocked_requests']
+    assert any('https://example.invalid/blocked.css' in c['blocked_requests'] for c in data['checks'])
 
     res_missing = subprocess.run(
-        [sys.executable, str(PROBE), str(tmp_path / 'missing.html')],
+        [sys.executable, str(PROBE), str(tmp_path / 'missing.html'), '--out', str(tmp_path / 'missing.json')],
         capture_output=True,
         text=True,
     )
     assert res_missing.returncode == 2
+    assert json.loads(res_missing.stdout)['status'] == 'error'
+    assert not (tmp_path / 'missing.json').exists()
+
+    no_runtime = tmp_path / 'plain.html'
+    no_runtime_out = tmp_path / 'plain.json'
+    no_runtime.write_text('<!doctype html><html><body><p>no lab runtime</p></body></html>', encoding='utf-8')
+    res_plain = subprocess.run(
+        [sys.executable, str(PROBE), str(no_runtime), '--widths', '1440', '--themes', 'light', '--out', str(no_runtime_out)],
+        capture_output=True,
+        text=True,
+    )
+    assert res_plain.returncode == 2
+    assert json.loads(res_plain.stdout)['status'] == 'error'
+    assert not no_runtime_out.exists()
+
+
+def test_probe_ignores_fig_dot_and_enclosing_block_rect(tmp_path):
+    """노드 점(.fig-dot)과 텍스트를 감싸는 블록 <rect>는 label_gaps 오탐을 내지 않는다."""
+    extra_svg = (
+        "  '  <line class=\"fig-ink\" x1=\"100\" y1=\"190\" x2=\"155\" y2=\"190\"/>',\n"
+        "  '  <circle class=\"fig-dot\" cx=\"128\" cy=\"190\" r=\"4\"/>',\n"
+        "  '  <text class=\"fig-text\" x=\"128\" y=\"177\" text-anchor=\"middle\">Vx</text>',\n"
+        "  '  <rect class=\"fig-ink\" x=\"120\" y=\"20\" width=\"44\" height=\"24\" rx=\"3\"/>',\n"
+        "  '  <text class=\"fig-text\" x=\"142\" y=\"36\" text-anchor=\"middle\">A</text>',\n"
+        "  '  <g data-badges>',"
+    )
+    lab = tmp_path / 'dot-rect-lab.js'
+    lab.write_text(
+        _replace_once(EXAMPLE.read_text(encoding='utf-8'), "  '  <g data-badges>',", extra_svg),
+        encoding='utf-8',
+    )
+    html = tmp_path / 'dot-rect.html'
+    out = tmp_path / 'dot-rect-probe.json'
+    subprocess.run(['node', str(BUILD), str(lab), str(html)], check=True)
+    res = subprocess.run(
+        [sys.executable, str(PROBE), str(html), '--widths', '1440,375', '--themes', 'light', '--out', str(out)],
+        capture_output=True,
+        text=True,
+    )
+    assert res.returncode == 0, res.stdout + res.stderr
+    data = json.loads(out.read_text(encoding='utf-8'))
+    assert data['ok'] is True
+    assert all(not c['label_gaps'] for c in data['checks'])
