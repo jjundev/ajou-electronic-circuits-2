@@ -2,7 +2,7 @@
   "id": "feedback-four-terminations-bench",
   "title": "네 가지 귀환 복제 종단 조립",
   "archetype": "bench",
-  "source_sha256": "2f74a7894816db181e6e6ad689e98d43594a180527ad70c2f4f6a482e06e9012",
+  "source_sha256": "aa65d473f9d2a6902aa7c15c953ade93abbf0b706991b45e787049839370ca06",
   "sources": [
     "복습노트/1120/정리노트_1120_Nonideal_IO_Feedback.html#s0-loading-recap",
     "복습노트/1120/정리노트_1120_Nonideal_IO_Feedback.html#s0-four-terminations",
@@ -85,7 +85,7 @@
         "predict card answer and skip without locking controls",
         "keyboard Enter/Escape popover interaction on data-port",
         "mouse click port popover switching V-V sense-rem->open, return-rem->short to pass diagnosis",
-        "slider parameter min/max update (vv_r1=10 kΩ)",
+        "slider parameter min/max update (vv_r1=10 kΩ) and step click parameter reset back to 3 kΩ",
         "mode switch V-V -> C-C and theme toggle light <-> dark",
         "mobile 375px right drawer open and Escape close",
         "visual inspection of desktop-light, desktop-dark, and mobile-dark screenshots"
@@ -97,6 +97,8 @@
   "fixes_during_validation": [
     "Guarded null percentage formatting when open termination yields zero current (R_load = ∞) in V-C mode.",
     "Replaced raw LaTeX delimiters in left-panel steps[].text with clean plain Unicode units because renderMathInElement runs on panelRightInner and predictSlot.",
-    "Replaced transparent <rect> port hit box with <ellipse> inside <g data-port> so CSS .is-hot/.is-bad rect border rules do not draw a box outline while preserving full-area pointer/touch hit targets."
+    "Replaced transparent <rect> port hit box with <ellipse> inside <g data-port> so CSS .is-hot/.is-bad rect border rules do not draw a box outline while preserving full-area pointer/touch hit targets.",
+    "Fix Round 1: Clarified mistakes.vv[2] so finite non-ideal port impedance examples match BJT base r_pi / drain R_D and explicitly distinguish V-V gate feedback (∞) from V-C/C-C CG current input (1/g_m -> ideal 0).",
+    "Fix Round 1: Added explicit default params to every entry in steps[] so PICK_STEP resets sliders to match the resistance values cited in steps[].text."
   ]
 }

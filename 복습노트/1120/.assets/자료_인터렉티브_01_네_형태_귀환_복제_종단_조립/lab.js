@@ -664,6 +664,7 @@ const spec = {
       title: '1. 원래 연결 위치 확인',
       who: '감지→전압 입력(∞) · 반송→전압 출력(0)',
       text: '감지 복제의 남은 포트는 원래 전압 입력(∞)에, 반송 복제의 남은 포트는 원래 전압 출력(0)에 붙어 있었어요. 초기 상태처럼 반대로 꽂으면 양쪽 로딩이 모두 틀어져요.',
+      params: { vv_r1: 3, vv_r2: 1, vt: 1 },
       ports: { 'sense-rem': 'short', 'return-rem': 'open' },
     },
     {
@@ -671,6 +672,7 @@ const spec = {
       title: '2. V-V 정답 종단 조립',
       who: '감지 개방 · 반송 단락',
       text: '감지 복제를 개방하면 출력 로딩 R1 + R2 = 4.00 kΩ, 반송 복제를 단락하면 입력 로딩 R1 ∥ R2 = 750 Ω이 정확히 남아요.',
+      params: { vv_r1: 3, vv_r2: 1, vt: 1 },
       ports: { 'sense-rem': 'open', 'return-rem': 'short' },
     },
     {
@@ -678,6 +680,7 @@ const spec = {
       title: '1. 둘 다 개방했을 때의 함정',
       who: 'RF 전류 경로 차단 → 로딩 소실',
       text: 'V-V처럼 감지 복제를 개방하면 RF에 전류가 0이 되어 출력·입력 로딩이 모두 ∞로 사라져요.',
+      params: { vc_rf: 10, vt: 1 },
       ports: { 'sense-rem': 'open', 'return-rem': 'open' },
     },
     {
@@ -685,6 +688,7 @@ const spec = {
       title: '2. V-C 정답 종단 조립',
       who: '감지 단락 · 반송 단락',
       text: '원래 전류 입력(0)과 전압 출력(0) 자리이므로 두 복제본 모두 접지로 단락해 양쪽 모두 RF = 10.0 kΩ 로딩을 남겨요.',
+      params: { vc_rf: 10, vt: 1 },
       ports: { 'sense-rem': 'short', 'return-rem': 'short' },
     },
     {
@@ -692,6 +696,7 @@ const spec = {
       title: '1. 둘 다 접지했을 때의 단락 왜곡',
       who: 'RM이 우회되어 0 Ω',
       text: 'C-V에서 남은 포트를 접지로 단락하면 RM 양단이 접지되어 직렬 로딩이 0 Ω으로 사라져요. (교과서 보충: Razavi 예제 12.30)',
+      params: { cv_rm: 0.5, it: 1 },
       ports: { 'sense-rem': 'short', 'return-rem': 'short' },
     },
     {
@@ -699,6 +704,7 @@ const spec = {
       title: '2. C-V 정답 종단 조립',
       who: '감지 개방 · 반송 개방',
       text: '원래 전압 입력(∞)과 전류 출력(∞) 자리이므로 두 복제본 모두 개방해 직렬 로딩 RM = 500 Ω을 유지해요.',
+      params: { cv_rm: 0.5, it: 1 },
       ports: { 'sense-rem': 'open', 'return-rem': 'open' },
     },
     {
@@ -706,6 +712,7 @@ const spec = {
       title: '1. 달린 쪽 기준으로 반대 조립한 오답',
       who: '감지 개방 · 반송 단락 (반대)',
       text: '감지 복제가 출력 쪽이라고 개방하고 반송 복제를 입력 쪽이라고 단락하면 출력 로딩은 +50%, 입력 로딩은 −33.3% 왜곡돼요. (교과서 보충: Razavi 예제 12.32)',
+      params: { cc_rm: 1.5, cc_rf: 3, it: 1 },
       ports: { 'sense-rem': 'open', 'return-rem': 'short' },
     },
     {
@@ -713,6 +720,7 @@ const spec = {
       title: '2. C-C 정답 종단 조립',
       who: '감지 단락 · 반송 개방',
       text: '감지 복제는 원래 전류 입력(0)이라 단락해 RM ∥ RF = 1.00 kΩ, 반송 복제는 원래 전류 출력(∞)이라 개방해 RF + RM = 4.50 kΩ이 돼요.',
+      params: { cc_rm: 1.5, cc_rf: 3, it: 1 },
       ports: { 'sense-rem': 'short', 'return-rem': 'open' },
     },
   ],
@@ -728,8 +736,8 @@ const spec = {
         text: '반송 복제의 남은 포트는 원래 전방 증폭기의 전압 출력($0$)에 붙어 있었으므로 단락해야 해요. 개방하면 $R_1$ 경로가 끊겨 $R_1\\parallel R_2$가 아니라 $R_2$만 보여요.',
       },
       {
-        title: '실제 입력 저항과 이상적 임피던스의 혼동',
-        text: 'CG 단의 실제 입력 저항이 $1/g_m$이더라도 전압 입력 포트의 이상적 임피던스는 $\\infty$이므로 감지 복제는 개방으로 근사해요.',
+        title: '실제 포트 저항과 이상적 임피던스의 혼동',
+        text: '유한한 비이상 임피던스(예: BJT 베이스 $r_\\pi$나 드레인 출력 저항 $R_D$)가 있어도 복제 종단은 포트의 이상값($R_{\\text{in}}\\approx\\infty\\Rightarrow$ 개방, $R_{\\text{out}}\\approx 0\\Rightarrow$ 단락)으로 근사해요. 참고로 V-V CG 단에서는 귀환이 게이트($\\infty$)로 들어가며, $1/g_m$은 V-C/C-C의 전류 입력(이상값 $0$)에 해당해요.',
       },
     ],
     vc: [
