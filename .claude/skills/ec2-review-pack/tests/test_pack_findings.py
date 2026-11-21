@@ -865,3 +865,30 @@ def test_label_only_join_rejects_leftover_review_join_finding(note_run):
     state['findings']['leftover'] = dict(id='leftover', review_id='review-join', status='open')
     with pytest.raises(flow.FlowError, match='label-only join cannot carry review-join findings'):
         ledger.join_reviews(state)
+
+def test_summary_before_join_is_empty(note_run):
+    from pack_findings import applicability_summary
+    assert applicability_summary(flow.load_state(note_run[0])) == dict(current=0, history=0, by_rule={}, cells=None, items=[])
+
+def test_summary_counts_current_disagreements_and_reaches_report(note_run):
+    from pack_findings import applicability_summary
+    run, _ = note_run
+    submit_review(note_run, 'content-review', disposition='applied')
+    state = submit_review(note_run, 'style-audit')
+    audit = json.loads(Path(state['active_audit']).read_text())
+    rule = next(iter(audit['items']['s1-mean']['rules']))
+    summary = applicability_summary(state)
+    assert (summary['current'], summary['history'], summary['by_rule']) == (1, 1, {rule: 1})
+    assert summary['cells'] == sum(len(i['rules']) for i in audit['items'].values())
+    import pack_actions
+    pack_actions.write_report(run)
+    assert flow._read(run/'report.json')['applicability'] == summary
+
+def test_summary_counts_only_current_candidate(note_run):
+    from pack_findings import applicability_summary
+    submit_review(note_run, 'content-review', disposition='applied')
+    state = submit_review(note_run, 'style-audit')
+    old = dict(state['applicability_disagreements'][0], candidate_digest='older-candidate')
+    state['applicability_disagreements'].append(old)
+    summary = applicability_summary(state)
+    assert (summary['current'], summary['history']) == (1, 2)

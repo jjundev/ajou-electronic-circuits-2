@@ -6,6 +6,7 @@ source-backed findings across candidate revisions and charge accepted correction
 """
 from __future__ import annotations
 
+from collections import Counter
 import hashlib
 import json
 from pathlib import Path
@@ -464,6 +465,17 @@ def join_reviews(state):
     for task in (style, content):
         task['receipt']['verified_files'].append(record)
 
+
+
+def applicability_summary(state):
+    """Count label-only note-review disagreements on the joined candidate, per rule."""
+    history = state.get('applicability_disagreements', [])
+    digest = state.get('joined_review', {}).get('candidate_digest')
+    items = [d for d in history if digest and d['candidate_digest'] == digest]
+    audit = state.get('active_audit')
+    cells = sum(len(i['rules']) for i in f._read(Path(audit))['items'].values()) if audit else None
+    return dict(current=len(items), history=len(history), by_rule=dict(Counter(d['rule'] for d in items)),
+                cells=cells, items=items)
 
 def _adjudicate_conflicts(state, merged, conflicts):
     """Contract 1: route label mismatches between the note reviews as review-join findings."""
