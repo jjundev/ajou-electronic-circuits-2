@@ -1,0 +1,88 @@
+{
+  "source_sha256": "b38f30a95b6c085abaedaf0998592e15d6e124b6050c175ac695f1a118dbd8f1",
+  "template_sha256": "21b4af549b20352aedda06f2e8c753e94ddacec3f38be7acdd286708e42a18e4",
+  "gates": {
+    "machine": "pass",
+    "numeric_independent": "pass",
+    "probe": "pass",
+    "browser": "pass"
+  },
+  "machine": {
+    "check": "ok",
+    "step_snapshots": 10
+  },
+  "numeric_independent": {
+    "method": "독립 복소수 KCL, MNA 출력과 대조",
+    "equations": "v_sg = v_x/(1+s R_S C_GS), i_x=(g_m+s C_GS)v_sg",
+    "states": 26,
+    "numeric_assertions": 2392,
+    "reference_values": {
+      "초기 상태": {
+        "z_ohm": 100.77851879369469,
+        "ic_uA": 1.246831039134866,
+        "igm_uA": 99.21966153935917
+      },
+      "소스 팔로워: 게이트–소스 C (1 pF) OFF": {
+        "z_ohm": 100.0,
+        "ic_uA": 0.0,
+        "igm_uA": 100.0
+      },
+      "소스 팔로워: 프리셋 저주파 · 1 MHz": {
+        "z_ohm": 100.00195416180618,
+        "ic_uA": 0.0628306128574498,
+        "igm_uA": 99.99802613756331
+      },
+      "소스 팔로워: 프리셋 고주파 · 30 GHz": {
+        "z_ohm": 998.609777395671,
+        "ic_uA": 9.99985927910424,
+        "igm_uA": 0.5305090114975991
+      },
+      "소스 팔로워: 프리셋 경계 · Rₛ = 1/gₘ": {
+        "z_ohm": 100.00000000000001,
+        "ic_uA": 53.20180445014081,
+        "igm_uA": 84.67330159648304
+      }
+    }
+  },
+  "probe": {
+    "defect_count": 0,
+    "checks": 44,
+    "widths": [
+      1440,
+      375
+    ],
+    "themes": [
+      "light",
+      "dark"
+    ]
+  },
+  "browser": {
+    "engine": "Google Chrome",
+    "preview": [
+      "1440×900 light",
+      "1440×900 dark",
+      "375×812 light",
+      "375×812 dark"
+    ],
+    "interactions": [
+      "예측 카드 응답·건너뛰기",
+      "회로 소자 Enter·Space 토글",
+      "슬라이더 Home·End",
+      "대표 설정·안내 단계",
+      "인과 맥동",
+      "근사 플롯",
+      "모바일 단일 서랍·Escape"
+    ],
+    "visual": "테마별 회로 기호·라벨·배지·패널 대비와 예측 카드·회로·그래프 간 겹침 확인",
+    "saved": [
+      "1440×900 light",
+      "1440×900 dark",
+      "375×812 light",
+      "375×812 dark"
+    ]
+  },
+  "findings_and_fixes": [
+    "높이 부족 시 공통 템플릿의 세로 flex 항목들이 줄어 회로가 예측 버튼·그래프와 겹쳤습니다. 카드·회로·그래프의 높이를 보존하고 세로 스크롤로 처리했습니다.",
+    "팔로워 종속 전류원 식을 시험원 기호에서 떨어뜨렸습니다."
+  ]
+}

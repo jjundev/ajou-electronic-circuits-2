@@ -1,0 +1,108 @@
+{
+  "source_sha256": "8c04bae9fc3d8189260127d0eb75fb3b21f4ab861cfeafa8048bf9b107c5613b",
+  "template_sha256": "21b4af549b20352aedda06f2e8c753e94ddacec3f38be7acdd286708e42a18e4",
+  "gates": {
+    "machine": "pass",
+    "numeric_independent": "pass",
+    "probe": "pass",
+    "browser": "pass"
+  },
+  "machine": {
+    "check": "ok",
+    "step_snapshots": 10
+  },
+  "numeric_independent": {
+    "method": "독립 복소수 KCL, MNA 출력과 대조",
+    "equations": "(1/R_S+s(C_GS1+C_GD1))X-sC_GD1 Y=Vsig/R_S; (g_m1-sC_GD1)X+(g_m2+s(C_Y0+C_GD1))Y=0; (1/R_L+sC_out)O=g_m2 Y",
+    "states": 26,
+    "numeric_assertions": 5486,
+    "reference_values": {
+      "초기 상태": {
+        "lowest_pole_mhz": 39.78873577297383,
+        "bandwidth_mhz": 33.14867531496416,
+        "tau_ns": [
+          4.0,
+          0.14,
+          2.0
+        ]
+      },
+      "MOS 캐스코드: X–Y 연결 C (0.2 pF) OFF": {
+        "lowest_pole_mhz": 66.31455962162306,
+        "bandwidth_mhz": 46.467472543078884,
+        "tau_ns": [
+          2.4,
+          0.06,
+          2.0
+        ]
+      },
+      "MOS 캐스코드: 프리셋 입력 극이 낮음": {
+        "lowest_pole_mhz": 39.78873577297383,
+        "bandwidth_mhz": 33.14867531496416,
+        "tau_ns": [
+          4.0,
+          0.14,
+          2.0
+        ]
+      },
+      "MOS 캐스코드: 프리셋 두 극이 만나는 곳": {
+        "lowest_pole_mhz": 39.78873577297383,
+        "bandwidth_mhz": 25.51483563769607,
+        "tau_ns": [
+          4.0,
+          0.14,
+          4.0
+        ]
+      },
+      "MOS 캐스코드: 프리셋 출력 극이 낮음": {
+        "lowest_pole_mhz": 15.915494309189533,
+        "bandwidth_mhz": 14.021902790251426,
+        "tau_ns": [
+          4.0,
+          0.14,
+          10.0
+        ]
+      }
+    }
+  },
+  "probe": {
+    "defect_count": 0,
+    "checks": 44,
+    "widths": [
+      1440,
+      375
+    ],
+    "themes": [
+      "light",
+      "dark"
+    ]
+  },
+  "browser": {
+    "engine": "Google Chrome",
+    "preview": [
+      "1440×900 light",
+      "1440×900 dark",
+      "375×812 light",
+      "375×812 dark"
+    ],
+    "interactions": [
+      "예측 카드 응답·건너뛰기",
+      "회로 소자 Enter·Space 토글",
+      "슬라이더 Home·End",
+      "대표 설정·안내 단계",
+      "인과 맥동",
+      "근사 플롯",
+      "모바일 단일 서랍·Escape"
+    ],
+    "visual": "테마별 회로 기호·라벨·배지·패널 대비와 예측 카드·회로·그래프 간 겹침 확인",
+    "saved": [
+      "1440×900 light",
+      "1440×900 dark",
+      "375×812 light",
+      "375×812 dark"
+    ]
+  },
+  "findings_and_fixes": [
+    "높이 부족 시 공통 템플릿의 세로 flex 항목들이 줄어 회로가 예측 버튼·그래프와 겹쳤습니다. 카드·회로·그래프의 높이를 보존하고 세로 스크롤로 처리했습니다.",
+    "접지 커패시터 표기를 도선 옆 여백으로 옮겼습니다."
+  ]
+}
