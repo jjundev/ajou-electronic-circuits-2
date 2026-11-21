@@ -1201,9 +1201,9 @@
             dispatch({ type: 'PULSE_CAUSAL', delta: 1 });
             return;
           }
+          pulseTimer = setInterval(() => dispatch({ type: 'PULSE_CAUSAL', delta: 1 }), 900);
           pulseBtn.setAttribute('aria-pressed', 'true');
           dispatch({ type: 'PULSE_CAUSAL', delta: 1 });
-          pulseTimer = setInterval(() => dispatch({ type: 'PULSE_CAUSAL', delta: 1 }), 900);
         });
 
         bar.appendChild(nextBtn);

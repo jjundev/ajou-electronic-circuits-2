@@ -18,6 +18,7 @@ test('lab-template.html matches ec2-review-pack CDN URLs and SVG CSS classes', (
     'id="ec2-lab-root"', 'data-drawer="none"',
     'data-drawer-btn="left"', 'data-drawer-btn="right"',
     '.is-hot', '.is-bad', '.is-dim', '.is-off', '.port-chip', '.lab-badge', '.lab-badge-bg',
+    'svg .is-hot :is(', 'svg .is-done :is(', 'svg .is-bad :is(',
     '.predict-card', '.plot-wrap', 'od-theme',
   ]) {
     assert.ok(tpl.includes(needle), `missing ${needle}`);
@@ -463,44 +464,59 @@ test('mounted SVG hooks handle Enter/Space, badges preserve transform, and appro
   };
 
   const ctrl = mount(spec, root, { document: fakeDoc, window: fakeWin, narrow: false });
-  assert.ok(getMathCalls() >= 1);
+  try {
+    assert.ok(getMathCalls() >= 1);
 
-  const elemHook = root.querySelector('[data-elem]');
-  assert.equal(elemHook.getAttribute('tabindex'), '0');
-  assert.equal(elemHook.getAttribute('role'), 'button');
-  elemHook.dispatchEvent({ type: 'keydown', key: ' ' });
-  assert.deepEqual(ctrl.getState().disabledElems, ['rf']);
-  assert.ok(elemHook.classList.contains('is-off'));
-  elemHook.dispatchEvent({ type: 'keydown', key: 'Enter' });
-  assert.deepEqual(ctrl.getState().disabledElems, []);
+    const elemHook = root.querySelector('[data-elem]');
+    assert.equal(elemHook.getAttribute('tabindex'), '0');
+    assert.equal(elemHook.getAttribute('role'), 'button');
+    elemHook.dispatchEvent({ type: 'keydown', key: ' ' });
+    assert.deepEqual(ctrl.getState().disabledElems, ['rf']);
+    assert.ok(elemHook.classList.contains('is-off'));
+    elemHook.dispatchEvent({ type: 'keydown', key: 'Enter' });
+    assert.deepEqual(ctrl.getState().disabledElems, []);
 
-  const portHook = root.querySelector('[data-port]');
-  assert.equal(portHook.getAttribute('tabindex'), '0');
-  portHook.dispatchEvent({ type: 'keydown', key: 'Enter' });
-  const pop = root.querySelector('.port-popover');
-  assert.ok(pop);
-  fakeDoc.dispatchEvent({ type: 'keydown', key: 'Escape' });
-  assert.equal(root.querySelector('.port-popover'), null);
+    const portHook = root.querySelector('[data-port]');
+    assert.equal(portHook.getAttribute('tabindex'), '0');
+    portHook.dispatchEvent({ type: 'keydown', key: 'Enter' });
+    const pop = root.querySelector('.port-popover');
+    assert.ok(pop);
+    fakeDoc.dispatchEvent({ type: 'keydown', key: 'Escape' });
+    assert.equal(root.querySelector('.port-popover'), null);
 
-  portHook.dispatchEvent({ type: 'keydown', key: ' ' });
-  const pop2 = root.querySelector('.port-popover');
-  const openBtn = pop2.querySelectorAll('button')[1];
-  openBtn.dispatchEvent({ type: 'click' });
-  assert.equal(ctrl.getState().ports.p1, 'open');
-  assert.equal(portHook.querySelector('.port-chip').querySelector('text').textContent, '개방');
+    portHook.dispatchEvent({ type: 'keydown', key: ' ' });
+    const pop2 = root.querySelector('.port-popover');
+    const openBtn = pop2.querySelectorAll('button')[1];
+    openBtn.dispatchEvent({ type: 'click' });
+    assert.equal(ctrl.getState().ports.p1, 'open');
+    assert.equal(portHook.querySelector('.port-chip').querySelector('text').textContent, '개방');
 
-  const badgeSlot = root.querySelector('[data-badge-for="out"]');
-  assert.equal(badgeSlot.getAttribute('transform'), 'translate(220, 32)');
-  assert.ok(badgeSlot.querySelector('[data-badge-bg="1"]'));
-  assert.equal(badgeSlot.querySelector('.lab-badge-text').textContent, '2.67 V ↑');
+    const badgeSlot = root.querySelector('[data-badge-for="out"]');
+    assert.equal(badgeSlot.getAttribute('transform'), 'translate(220, 32)');
+    assert.ok(badgeSlot.querySelector('[data-badge-bg="1"]'));
+    assert.equal(badgeSlot.querySelector('.lab-badge-text').textContent, '2.67 V ↑');
 
-  ctrl.pulseCausal(1);
-  const stepEls = root.querySelectorAll('[data-causal-step]');
-  assert.ok(stepEls[0].classList.contains('is-hot'));
-  assert.ok(stepEls[1].classList.contains('is-dim'));
+    ctrl.pulseCausal(1);
+    const stepEls = root.querySelectorAll('[data-causal-step]');
+    assert.ok(stepEls[0].classList.contains('is-hot'));
+    assert.ok(stepEls[1].classList.contains('is-dim'));
 
-  assert.ok(root.querySelector('.plot-wrap'));
-  assert.ok(root.querySelector('.err-badge.is-bad'));
-  assert.ok(root.querySelector('.fig-accent'));
-  ctrl.destroy();
+    const resetBtn = root.querySelector('[data-causal-action="reset"]');
+    resetBtn.dispatchEvent({ type: 'click' });
+    assert.equal(ctrl.getState().causalStep, 0);
+
+    const pulseBtn = root.querySelector('[data-causal-action="pulse"]');
+    assert.equal(pulseBtn.getAttribute('aria-pressed'), 'false');
+    pulseBtn.dispatchEvent({ type: 'click' });
+    assert.equal(pulseBtn.getAttribute('aria-pressed'), 'true');
+    assert.equal(ctrl.getState().causalStep, 1);
+    pulseBtn.dispatchEvent({ type: 'click' });
+    assert.equal(pulseBtn.getAttribute('aria-pressed'), 'false');
+
+    assert.ok(root.querySelector('.plot-wrap'));
+    assert.ok(root.querySelector('.err-badge.is-bad'));
+    assert.ok(root.querySelector('.fig-accent'));
+  } finally {
+    ctrl.destroy();
+  }
 });

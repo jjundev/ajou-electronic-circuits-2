@@ -345,11 +345,16 @@
     svg :is(.fig-dot, .fig-text)[data-node-color="red"] { fill: var(--danger, #dc2626); }
     .fig-muted { fill: var(--ink-2); font-size: var(--fs-fig); font-family: inherit; }
 
-    svg .is-hot:is(line, path, polyline, rect, circle, polygon) { stroke: var(--accent); stroke-width: 3; }
-    svg .is-hot:is(text, tspan) { fill: var(--accent-ink); }
-    svg .is-done:is(line, path, polyline) { stroke: var(--accent); }
-    svg .is-bad:is(line, path, polyline, rect, circle, polygon) { stroke: var(--danger); stroke-width: 3; }
-    svg .is-bad:is(text, tspan) { fill: var(--danger); }
+    svg .is-hot:is(line, path, polyline, rect, circle, polygon),
+    svg .is-hot :is(line, path, polyline, rect, circle, polygon):not(.lab-badge-bg):not(.port-chip-bg):not(.fig-dot) { stroke: var(--accent); stroke-width: 3; }
+    svg .is-hot:is(text, tspan),
+    svg .is-hot :is(text, tspan):not(.lab-badge-text):not(.port-chip) { fill: var(--accent-ink); }
+    svg .is-done:is(line, path, polyline),
+    svg .is-done :is(line, path, polyline) { stroke: var(--accent); }
+    svg .is-bad:is(line, path, polyline, rect, circle, polygon),
+    svg .is-bad :is(line, path, polyline, rect, circle, polygon):not(.lab-badge-bg):not(.port-chip-bg):not(.fig-dot) { stroke: var(--danger); stroke-width: 3; }
+    svg .is-bad:is(text, tspan),
+    svg .is-bad :is(text, tspan):not(.lab-badge-text):not(.port-chip) { fill: var(--danger); }
     svg .is-dim { opacity: 0.32; }
     svg .is-off { opacity: 0.36; }
     svg .is-off :is(line, path, polyline, rect, circle, polygon),
@@ -363,7 +368,9 @@
     svg .lab-badge-text { fill: var(--ink); font-size: 11px; font-family: Pretendard, sans-serif; font-weight: 700; }
     svg .port-chip-bg { fill: var(--surface); stroke: var(--accent); stroke-width: 1.5; }
     svg .is-bad .port-chip-bg { stroke: var(--danger); }
-    svg .port-chip { fill: var(--ink); font-size: 11px; font-family: Pretendard, sans-serif; font-weight: 700; }
+    svg .port-chip,
+    svg .is-hot .port-chip text,
+    svg .is-bad .port-chip text { fill: var(--ink); font-size: 11px; font-family: Pretendard, sans-serif; font-weight: 700; }
   </style>
 </head>
 <body>
