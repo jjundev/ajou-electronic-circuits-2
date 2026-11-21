@@ -8,6 +8,7 @@ const EC2MNA = require('../assets/mna.js');
 const { createInitialState, reduceState, buildProbeStates } = require('../assets/lab-runtime.js');
 
 const ALLOWED_CDN_SET = new Set(ALLOWED_CDNS);
+const SVG_XMLNS_URIS = new Set(['http://www.w3.org/2000/svg', 'http://www.w3.org/1999/xlink']);
 const VALID_ARCHETYPES = new Set(['probe', 'bench', 'approx']);
 const URL_RE = /https?:\/\/[^\s"'`<>)]+/g;
 const HEX_IN_SVG_RE = /(?<!&|url\(|href=["'])#[0-9a-fA-F]{3,8}\b/g;
@@ -33,10 +34,9 @@ function collectModeList(spec, modeObj, propName) {
 }
 
 function hasValidViewBox(modeObj) {
-  const inline = typeof modeObj.svg === 'string'
-    ? modeObj.svg.match(/<svg\b[^>]*\bviewBox\s*=\s*(?:"([^"]*)"|'([^']*)')/i)
-    : null;
-  const vbRaw = inline ? (inline[1] ?? inline[2]) : modeObj.viewBox;
+  if (typeof modeObj.svg !== 'string') return false;
+  const inline = modeObj.svg.match(/<svg\b[^>]*\bviewBox\s*=\s*(?:"([^"]*)"|'([^']*)')/i);
+  const vbRaw = inline ? (inline[1] ?? inline[2]) : null;
   if (!isNonEmptyString(vbRaw)) return false;
   const nums = vbRaw.trim().split(/[\s,]+/).map(Number);
   return nums.length === 4 && nums.every(Number.isFinite) && nums[2] > 0 && nums[3] > 0;
@@ -70,7 +70,7 @@ function extractSvgHooks(svg) {
 function checkExternalUrls(text, sourceLabel, add) {
   for (const m of String(text || '').matchAll(URL_RE)) {
     const url = m[0];
-    if (!ALLOWED_CDN_SET.has(url)) {
+    if (!ALLOWED_CDN_SET.has(url) && !SVG_XMLNS_URIS.has(url)) {
       add('EXTERNAL_URL', `Disallowed external URL in ${sourceLabel}: ${url}`, { url, source: sourceLabel });
     }
   }

@@ -137,7 +137,22 @@ test('bench archetype allows intentional singular diagnosis when diagnosis.singu
   assert.equal(r.ok, true, r.details.join('\n'));
 });
 
-test('disallowed external URL produces EXTERNAL_URL', () => {
+test('disallowed external URL produces EXTERNAL_URL while standard SVG xmlns URIs pass', () => {
+  const svgXmlnsOk = mutate((s) => s.replace(
+    '<svg viewBox="0 0 380 220"',
+    '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 380 220"'
+  ));
+  const okRes = check(svgXmlnsOk);
+  assert.equal(okRes.ok, true, okRes.details.join('\n'));
+
+  const evilXmlnsPrefix = mutate((s) => s.replace(
+    '<svg viewBox="0 0 380 220"',
+    '<svg xmlns="http://www.w3.org/2000/svg/evil" viewBox="0 0 380 220"'
+  ));
+  const prefixRes = check(evilXmlnsPrefix);
+  assert.equal(prefixRes.ok, false);
+  assert.ok(prefixRes.errors.some((e) => e.code === 'EXTERNAL_URL'), prefixRes.details.join('\n'));
+
   const badUrl = mutate((s) => s.replace(
     "id: 'example-voltage-divider',",
     "id: 'example-voltage-divider',\n  badRef: 'https://evil.example.com/script.js',"
@@ -148,6 +163,11 @@ test('disallowed external URL produces EXTERNAL_URL', () => {
 });
 
 test('schema errors and load errors are reported accurately', () => {
+  const missingInlineViewBox = mutate((s) => s.replace(' viewBox="0 0 380 220"', ''));
+  const vbRes = check(missingInlineViewBox);
+  assert.equal(vbRes.ok, false);
+  assert.ok(vbRes.errors.some((e) => e.code === 'SCHEMA_INVALID'), vbRes.details.join('\n'));
+
   const badPredict = mutate((s) => s.replace("answerId: 'same'", "answerId: 'wrong-id'"));
   assert.ok(check(badPredict).errors.some((e) => e.code === 'SCHEMA_INVALID'));
 
