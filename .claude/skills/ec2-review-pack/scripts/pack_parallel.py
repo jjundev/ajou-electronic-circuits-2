@@ -263,7 +263,9 @@ def claim_worker(state, task):
         data.update(explain_run=state['explain_run'], manifest=str(output(state, 'selection', 'manifest.json')),
                     candidate_pack=state['actions']['stage-problem-index']['pack']['root'],
                     public_pack=str(public(state)), snapshot=str(snapshot),
-                    instruction='Extract against this candidate pack and slug. Use the accepted fragments and independent results. Complete all child reviews.')
+                    instruction=('Extract against this candidate pack and slug. Use the accepted fragments and independent results. '
+                                 'For a new pack, apply the optional circuit lab selection in problem-explain-integration.md '
+                                 'before the final explanation build. Complete all child reviews.'))
     repairs = [r for r in state.get('findings', {}).values()
                if r['owner_task'] == task['id'] and r.get('pending_request') and not findings.repair_record(state, r)]
     if repairs:

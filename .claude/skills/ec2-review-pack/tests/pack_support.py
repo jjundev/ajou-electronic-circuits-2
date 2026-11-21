@@ -57,7 +57,7 @@ def receipt_for(run, task_id, attempt):
     return path
 
 
-def genuine_child_run(tmp_path, *, existing=None):
+def genuine_child_run(tmp_path, *, existing=None, lab=False):
     """Real child extract/build/check with explicitly synthetic review records."""
     import importlib.util
     import json
@@ -105,6 +105,22 @@ def genuine_child_run(tmp_path, *, existing=None):
             shutil.copyfile(state['tasks']['explain-author']['artifacts']['explanations/' + p.id + '.html'], dest)
         else:
             dest.write_text(util.fragment(p), encoding='utf-8')
+    if lab:
+        problem, = item['pack'].problems
+        (item['folder'] / 'lab-candidates.json').write_text(json.dumps([{
+            'workbook_id': problem.workbook_id, 'section': 'start', 'subpart': problem.subparts[0],
+            'decision': 'Which port?', 'action': 'Connect the port', 'observation': 'Current changes',
+            'return_to': 'Current equation', 'label': 'Try the circuit',
+        }]))
+        call('select-lab', '--run', child_run)
+        lab_dir = item['folder'] / 'lab'
+        (lab_dir / 'lab.js').write_text('module.exports = {};')
+        (lab_dir / 'index.html').write_text('<html><title>Synthetic lab</title></html>')
+        (lab_dir / 'lab-validation.json').write_text(json.dumps({
+            'brief_sha256': _sha(lab_dir / 'brief.json'), 'source_sha256': _sha(lab_dir / 'lab.js'),
+            'html_sha256': _sha(lab_dir / 'index.html'),
+            'gates': dict.fromkeys(('machine', 'numeric_independent', 'probe', 'browser'), 'pass'),
+        }))
     call('build', '--run', child_run); call('check', '--run', child_run)
     artifacts = load_artifacts(item)
     review = util.approved(item['pack'], load_fragments(item), artifacts)

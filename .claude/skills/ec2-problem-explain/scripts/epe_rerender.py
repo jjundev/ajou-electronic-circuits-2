@@ -98,8 +98,10 @@ def verified_resources(stored, current, repo):
         path=relocated(repo/name,repo)
         if not path.is_file() or sha256(path)!=digest:
             return False
-        mapped[path.relative_to(repo).as_posix()]=digest
-    return mapped==current
+        mapped[inside(path.resolve(), repo).relative_to(repo).as_posix()]=digest
+    canonical = {inside((repo / name).resolve(), repo).relative_to(repo).as_posix(): digest
+                 for name, digest in current.items()}
+    return mapped == canonical
 
 def reference_dependencies(path,repo, *, pack_paths=None):
     if path.suffix.lower() not in ('.html','.md','.svg'):
@@ -176,6 +178,7 @@ def rerender(repo,target,run):
     from epe_cli import extract,load_run,load_fragments,build,read_json
     from epe_render import names,dump
     from epe_contract import payload_hash
+    from epe_labs import FILES
     repo=Path(repo).resolve()
     failed=bool(extract(repo,target,run))
     errors=[]
@@ -234,7 +237,18 @@ def rerender(repo,target,run):
                 print('rerender: 원본 파일은 바뀌었지만 문항 내용은 같아요')
             refs,valid=verified_references(stored.get('references'),Path(manifest.get('repo',str(repo))),repo)
             same=same and valid and verified_resources(manifest.get('source_resources'),source_resources(pack,repo),repo)
-            build(item,fragments)
+            if same and (lab := manifest.get('lab')):
+                source = inside(pack.folder / lab['html'], data / 'labs').parent
+                destination = folder / 'lab'
+                destination.mkdir()
+                for name in FILES:
+                    path = inside(source / name, source)
+                    if path.relative_to(pack.folder).as_posix() not in manifest['files']:
+                        raise ExplainError(f'실험 산출 해시 누락: {name}')
+                    shutil.copyfile(path, destination / name)
+            previous_html = inside(existing_path(pack.folder / (names(pack)[0] + '.html')), repo)
+            include_problem_pdf = '원 문제 보기</a>' in previous_html.read_text(encoding='utf-8')
+            build(item,fragments,include_problem_pdf=include_problem_pdf)
             fresh=read_json(folder/'review.json')
             # Keep stale references visible when manual re-review is required; publish will reject them.
             if not valid:

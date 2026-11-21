@@ -29,10 +29,11 @@ def child_fixture(code, *args):
 
 
 class Trial:
-    def __init__(self, root, *, problem=False, existing=False):
+    def __init__(self, root, *, problem=False, existing=False, lab=False):
         self.root, self.repo, self.run = root, root/'repo', root/'run'
         self.public = self.repo/'복습노트/0909'
         self.problem = problem
+        self.lab = lab
         for name in ('교과서/마이크로전자회로/_tools', 'from_the_past/md/_tools',
                      'workbook/templates', '.claude/skills/ec2-problem-explain',
                      '.claude/skills/ec2-review-pack/scripts', '복습노트/.assets/vendor'):
@@ -127,7 +128,7 @@ class Trial:
 
     def produce(self, tid, brief, outputs):
         if tid == 'child-coordinator':
-            genuine_child_run(self.root, existing=(self.repo, self.run))
+            genuine_child_run(self.root, existing=(self.repo, self.run), lab=self.lab)
             return
         if tid in ('explain-author', 'explain-blind'):
             question, = read(brief['questions'])['problems']
@@ -182,7 +183,7 @@ def public_files(root):
 
 
 def test_parallel_full_pack_accepts_only_current_evidence(tmp_path):
-    trial = Trial(tmp_path, problem=True)
+    trial = Trial(tmp_path, problem=True, lab=True)
     trial.prepare_note()
     trial.action('stage-problem-index')
     trial.worker('explain-author')
@@ -211,6 +212,9 @@ def test_parallel_full_pack_accepts_only_current_evidence(tmp_path):
                  '복습문제_0909_Mini_Test-문제.pdf', '복습문제_0909_Mini_Test-답안.pdf',
                  '문제설명_0909_Mini_Test.html'):
         assert (trial.public/name).is_file()
+    lab = trial.public / '.assets/자료_문제설명_0909_Mini_Test/labs/P10.01/index.html'
+    assert lab.is_file()
+    assert 'data-ec2-problem-lab' in (trial.public/'문제설명_0909_Mini_Test.html').read_text()
     tasks = read(trial.run/'run-status.json')['tasks']
     assert tasks['explain-blind']['receipt']['fresh_approvals'] == independent
     accepted = tasks['pdf-qa']['receipt']

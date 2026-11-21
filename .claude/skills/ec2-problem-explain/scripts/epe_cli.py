@@ -10,6 +10,7 @@ import uuid
 from epe_contract import initial_reviews, payload_hash, validate_fragment
 from epe_source import inside, load_source, resolve_sources, sha256
 from epe_render import build_explanation, check_artifacts, artifact_hashes, dump
+from epe_labs import load_lab, select_lab
 from epe_publish import build_explanation_candidate, publish_explanation
 from epe_shared import REPO
 from pack_paths import PackPaths
@@ -112,10 +113,14 @@ def load_artifacts(item):
     files = tuple(inside(stage / name, stage) for name in manifest['files']) + (paths[2],)
     return Artifacts(*paths, files)
 
-def build(item, fragments):
+def build(item, fragments, *, include_problem_pdf=True):
     folder = item['folder']
     stage = folder / 'stage' / uuid.uuid4().hex
-    artifacts = build_explanation(item['pack'], fragments, stage, item['repo'])
+    lab, diagnostic = load_lab(folder, item['pack'], fragments)
+    if diagnostic:
+        print(f'{item["pack"].range}: 실험 보류 ({diagnostic})')
+    artifacts = build_explanation(item['pack'], fragments, stage, item['repo'], lab=lab,
+                                  include_problem_pdf=include_problem_pdf)
     # Evidence is copied before binding the artifact hashes; review approval comes later.
     evidence = inside(folder / 'evidence', item['run'])
     if evidence.is_dir():
@@ -159,7 +164,7 @@ def main(argv=None):
     rendering.add_argument('--repo',type=Path,required=True)
     rendering.add_argument('--target',required=True)
     rendering.add_argument('--run',type=Path,required=True)
-    for name in ('build', 'check', 'publish'):
+    for name in ('build', 'check', 'publish', 'select-lab'):
         command = commands.add_parser(name)
         command.add_argument('--run', type=Path, required=True)
         if name == 'publish':
@@ -188,7 +193,10 @@ def main(argv=None):
         for item in items:
             try:
                 fragments = load_fragments(item)
-                if args.command == 'build':
+                if args.command == 'select-lab':
+                    selected = select_lab(item['folder'], item['pack'], fragments)
+                    print(f"실험 후보: {selected['workbook_id']}" if selected else '실험 후보 없음')
+                elif args.command == 'build':
                     build(item, fragments)
                 else:
                     artifacts = load_artifacts(item)

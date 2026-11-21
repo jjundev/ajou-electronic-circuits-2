@@ -21,6 +21,10 @@ python3 "$REPO/.claude/skills/ec2-problem-explain/scripts/epe_cli.py" extract --
 8. 아래 렌더 페이지 검토를 수행하고 runner의 `run --action publish-answer`를 실행한다. 이후 `run --action final-check`로 기존 검사를 **유예 없이** 실행한다. extract 뒤 노트 링크를 자동 삽입하지 않는다.
 9. 기본 팩·설명·답안·최종 검사와 복구/withheld 상태를 함께 보고한다. 자식/PDF/최종 검사 실패는 전체 완료가 아니다. 다른 팩은 계속할 수 있다.
 
+## 새 팩의 문항별 회로 실험
+
+조정자는 새 팩의 채택된 해설 조각과 독립 풀이를 받은 뒤 [문항별 회로 실험](../../ec2-problem-explain/references/problem-labs.md)을 적용한다. 적합 후보가 있을 때만 팩당 최대 한 개를 만들고 승인된 실험을 마지막 해설 build에 포함한다. 병렬 부모는 동일한 `explain-verify` 후보와 `publish-pack` 경로를 쓰고, 레거시 부모는 기존 `publish-explanation` 경로를 쓴다. 영수증에는 승인된 스테이지의 HTML·소스·브리프·실험 검증 기록도 `review.json.artifact_hashes`에 있는 경로와 해시로 포함한다. 실험 보류 사유는 보고하고 기본 해설 검토를 이어 간다. 기존 팩을 재출판할 때는 해시가 유지된 기존 실험을 재사용한다.
+
 ## 자식 코디네이터의 위임 경계와 영수증
 
 - **쓰기 경계:** 저장소 발행·기본 팩/설명 선제 정리·제목 맵 갱신·백업 후 제거·복구는 최상위 부모만 수행한다. 코디네이터와 작업자는 할당된 `EXPLAIN_RUN` 안에만 쓰고, 부모가 별도로 지정한 PDF 검토는 해당 부모 `RUN` 안에만 쓴다. `RUN/repo` 같은 링크를 통해 저장소에 쓰지 않는다. 문제 md·그림·정리노트·목록·PDF 등 보호 입력을 고치지 않는다. 자식 스킬의 publish 단계는 이 통합 호출에 한해 부모 실행 요청으로 바꾸며 단독 호출 계약은 바꾸지 않는다.

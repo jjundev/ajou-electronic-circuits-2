@@ -1,0 +1,102 @@
+{
+  "source_sha256": "23910185fcd02e6d7b4f9d0217513dfaa4573ad9b213bac91a0cbe98ba2e6d0d",
+  "html_sha256": "8a653a6a949a53bb159d1ec996e051f3d50f17d0fbe5891f21dca4bd7cde472a",
+  "brief_sha256": "3f1974da76ae0297a1fa1def3ebc47ab7b241bec8d53c0e5cab1d8d50907c4c7",
+  "gates": {
+    "machine": "pass",
+    "numeric_independent": "pass",
+    "probe": "pass",
+    "browser": "pass"
+  },
+  "source": "Razavi E12.27, Fig. 12.56(b), Eq. 12.128",
+  "numeric_independent": {
+    "reviewer": "독립 회로 검토자",
+    "method": "개방: (1−v_m)/12000=v_m/8000. 단락: v_m=0, R₂ 전류는 0, 단락 전류는 R₁ 전류와 같음.",
+    "open": {
+      "mid_v": 0.4,
+      "r1_ua": 50,
+      "r2_ua": 50,
+      "load_ohm": 20000
+    },
+    "short": {
+      "mid_v": 0,
+      "r1_ua": 83.33333333333333,
+      "r2_ua": 0,
+      "load_ohm": 12000
+    }
+  },
+  "probe": {
+    "checks": 32,
+    "defects": 0,
+    "route": "Playwright offline"
+  },
+  "browser": {
+    "route": "visible Chromium, real focus and input",
+    "checks": [
+      {
+        "width": 1440,
+        "height": 900,
+        "theme": "light",
+        "visible": true,
+        "ports": [
+          "open",
+          "short"
+        ],
+        "keyboard": [
+          "Enter",
+          "Escape",
+          "Space"
+        ],
+        "console_errors": []
+      },
+      {
+        "width": 1440,
+        "height": 900,
+        "theme": "dark",
+        "visible": true,
+        "ports": [
+          "open",
+          "short"
+        ],
+        "keyboard": [
+          "Enter",
+          "Escape",
+          "Space"
+        ],
+        "console_errors": []
+      },
+      {
+        "width": 375,
+        "height": 812,
+        "theme": "light",
+        "visible": true,
+        "ports": [
+          "open",
+          "short"
+        ],
+        "keyboard": [
+          "Enter",
+          "Escape",
+          "Space"
+        ],
+        "console_errors": []
+      },
+      {
+        "width": 375,
+        "height": 812,
+        "theme": "dark",
+        "visible": true,
+        "ports": [
+          "open",
+          "short"
+        ],
+        "keyboard": [
+          "Enter",
+          "Escape",
+          "Space"
+        ],
+        "console_errors": []
+      }
+    ]
+  }
+}

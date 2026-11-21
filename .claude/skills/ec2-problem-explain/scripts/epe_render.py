@@ -13,6 +13,7 @@ from epe_contract import validate_fragment, payload_hash, markup_errors
 from epe_shared import parse, inner, outer, compact, Ctx, convert, check_md
 from epe_source import sha256, inside, existing_path
 from epe_types import BUNDLE, ExplainError, Artifacts
+from epe_labs import FILES as LAB_FILES, find_section, verify_lab
 from epe_labels import normalize_subpart_labels
 from epe_core import make_overlay
 from readability import readability_errors, public_location_errors
@@ -129,7 +130,25 @@ def resources(markup, problem, pack, repo, stage, fig_name, destination, scope="
             node.attrs['href'] = quote(Path(os.path.relpath(pack.pack_paths.logical(target) if pack.pack_paths else target, destination)).as_posix(), safe='/') + (f'#{url.fragment}' if url.fragment else '')
     return inner(root)
 
-def build_explanation(pack, fragments, stage: Path, repo: Path) -> Artifacts:
+def _add_lab_link(markup, lab, relative):
+    root = parse(markup)
+    section = find_section(root, lab.section)
+    decision = f'({lab.subpart}) {lab.decision}' if lab.subpart != 'main' else lab.decision
+    link = next(parse(
+        '<p>' + html.escape(decision) + ' '
+        f'<a data-ec2-problem-lab href="{quote(relative)}" target="_blank" rel="noopener noreferrer">'
+        + html.escape(lab.label) + '</a></p>'
+    ).find_all(lambda node: node.tag == 'p'))
+    after_heading = next(i + 1 for i, node in enumerate(section.children)
+                         if getattr(node, 'tag', '') == 'h4')
+    position = next((i for i, node in enumerate(section.children)
+                     if getattr(node, 'attrs', {}).get('data-subpart') == lab.subpart), after_heading)
+    section.children.insert(position, link)
+    return inner(root)
+
+
+def build_explanation(pack, fragments, stage: Path, repo: Path, *, lab=None,
+                      include_problem_pdf=True) -> Artifacts:
     stage = Path(stage).resolve()
     if stage.exists() and any(stage.iterdir()):
         raise ExplainError('stage는 비어 있어야 해요: ' + str(stage))
@@ -147,6 +166,11 @@ def build_explanation(pack, fragments, stage: Path, repo: Path) -> Artifacts:
     data_dir.mkdir(parents=True)
     (bundle / fig_name).mkdir()
     shutil.copy2(ASSETS / 'template-provenance.json', data_dir / 'template-provenance.json')
+    lab_path = None
+    if lab:
+        lab_folder = data_dir / 'labs' / lab.workbook_id
+        lab.copy_to(lab_folder)
+        lab_path = (lab_folder / 'index.html').relative_to(stage).as_posix()
     articles = []
     toc = []
     for p in pack.problems:
@@ -164,12 +188,14 @@ def build_explanation(pack, fragments, stage: Path, repo: Path) -> Artifacts:
         reading = f'<div class="problem-pane" data-problem-for="{p.id}">'+reading+'</div>'
         normalized = normalize_subpart_labels(fragments[p.id])
         explanation = resources(normalized, p, pack, repo, stage, f'{BUNDLE}/{fig_name}', pack.folder)
+        if lab and p.id == lab.problem_id:
+            explanation = _add_lab_link(explanation, lab, lab_path)
         problem_pdf = f'복습문제_{pack.range}_{pack.slug}-문제.pdf'
         try:
             has_pdf = (pack.pack_paths.work_file(problem_pdf) if pack.pack_paths else existing_path(pack.folder / problem_pdf)).is_file()
         except ExplainError:
             has_pdf = False
-        original_link = (f' · <a href="{quote(problem_pdf, safe="")}">원 문제 보기</a>' if has_pdf else '')
+        original_link = (f' · <a href="{quote(problem_pdf, safe="")}">원 문제 보기</a>' if include_problem_pdf and has_pdf else '')
         articles.append(f'<article class="topic" id="{p.id}"><h3>{html.escape(p.title)}</h3>'
                         + f'<p class="panel-meta">{html.escape(p.source)}{original_link}</p>'
                         + reading + explanation + '</article>')
@@ -201,6 +227,9 @@ def build_explanation(pack, fragments, stage: Path, repo: Path) -> Artifacts:
                 'problems': [{'id': p.id, 'subparts': list(p.subparts)} for p in pack.problems],
                 'learning_style': pack.learning_style,
                 'answer_overlay': overlay_path.relative_to(stage).as_posix(), 'files': {}}
+    if lab:
+        manifest['lab'] = {'workbook_id': lab.workbook_id, 'section': lab.section,
+                           'subpart': lab.subpart, 'html': lab_path}
     # The exporter reads the original-fragment hash from this provisional manifest.
     dump(manifest_path, manifest)
     dump(overlay_path, make_overlay(pack, html_path, repo))
@@ -271,6 +300,31 @@ def check_artifacts(pack, artifacts):
                 original = list(document.find_all(lambda n: n.attrs.get('data-original-problem') == p.id))
                 if len(original) != 1 or compact(p.original_html) not in compact(original[0].text()):
                     errors.append(f'{p.id}: 원문 보존 실패')
+        lab = manifest.get('lab', {})
+        lab_links = list(document.find_all(lambda n: 'data-ec2-problem-lab' in n.attrs))
+        if len(lab_links) != bool(lab):
+            errors.append('실험 링크 개수 불일치')
+        if lab and len(lab_links) == 1:
+            problem = next((p for p in pack.problems if p.workbook_id == lab['workbook_id']), None)
+            article = next((n for n in topics if problem and n.attrs.get('id') == problem.id), None)
+            section = find_section(article, lab['section']) if article else None
+            link = lab_links[0]
+            directory = f"{BUNDLE}/{names(pack)[2]}/labs/{lab['workbook_id']}"
+            relative = directory + '/index.html'
+            md_relative = quote('../' + relative)
+            if (problem is None or lab['subpart'] not in problem.subparts or section is None
+                    or link.parent.parent is not section or lab['html'] != relative
+                    or link.attrs.get('href') != quote(relative) or f']({md_relative})' not in markdown
+                    or any(f'{directory}/{name}' not in manifest['files'] for name in LAB_FILES)):
+                errors.append('실험 링크와 문항/산출물 불일치')
+            else:
+                try:
+                    brief = verify_lab(inside(root / directory, root))
+                    if (any(brief.get(key) != lab[key] for key in ('workbook_id', 'section', 'subpart'))
+                            or brief.get('range') != pack.range or brief.get('input_hash') != manifest['input_hash']):
+                        errors.append('실험 브리프와 현재 해설 입력 불일치')
+                except (OSError, ValueError, TypeError, AttributeError) as exc:
+                    errors.append(f'실험 검증 확인 실패: {exc}')
         for node in document.find_all(lambda n: n.tag in ('img', 'link', 'script', 'a')):
             href = node.attrs.get('src') or node.attrs.get('href')
             if not href:
@@ -286,7 +340,7 @@ def check_artifacts(pack, artifacts):
                     errors.append('링크 앵커 없음: ' + href)
                 continue
             path = root / unquote(url.path)
-            if node.tag == 'a':
+            if node.tag == 'a' and 'data-ec2-problem-lab' not in node.attrs:
                 path = (pack.pack_paths.link(pack.folder, unquote(url.path)) if pack.pack_paths else
                         Path(manifest['destination']) / unquote(url.path))
             if not path.is_file():

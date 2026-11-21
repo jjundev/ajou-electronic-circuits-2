@@ -39,7 +39,7 @@ PDF에는 [저작 규칙](references/authoring.md)의 선택 표지를 쓴 핵�
 - 인자 없음: `problems.txt`가 있는 팩 중 폴더명 끝 날짜가 가장 늦은 팩. 같은 끝 날짜 후보가 여럿이면 후보를 보여 주고 멈춘다.
 - `problems.txt`가 없는 팩(예: 0902·0904)을 지정하면 "문제 없는 팩"으로 멈춘다. 기출 회차·임의 문제 id·설계과제는 대상이 아니다.
 
-새 문제, 정리노트, PDF, 영상, 자동 채점은 만들지 않는다. 원본(`problems.txt`, 문제 md, 문제 그림, 복습문제 PDF, 정리노트 HTML·MD)은 고치지 않는다. 부모의 공통 선발 명세는 `../ec2-review-pack/references/problem-selection.md`(기출 우선 최대 20개, 다른 회차 사용 문항 항상 제외)다. 참고 풀이가 없어도 원문에서 직접 풀고 독립 검산한다. 없음 자체는 disputed가 아니다. md의 `## 풀이`는 참고 답안일 뿐 독립 검산을 대신하지 않는다. md 풀이가 틀렸다고 보이면 고치지 말고 disputed로 보고한다(수정은 `workbook-solution` 몫). 원문이 모호하거나 풀이 불일치가 해결되지 않으면 withheld로 부모에 보고하며 임의로 문제를 바꾸지 않는다. 정리노트에 링크를 자동으로 넣지 않는다.
+새 문제, 정리노트, PDF, 영상, 자동 채점은 만들지 않는다. 원본(`problems.txt`, 문제 md, 문제 그림, 복습문제 PDF, 정리노트 HTML·MD)은 고치지 않는다. 부모의 공통 선발 명세는 `../ec2-review-pack/references/problem-selection.md`(기출 우선 최대 20개, 다른 회차 사용 문항 항상 제외)다. 참고 풀이가 없어도 원문에서 직접 풀고 독립 검산한다. 없음 자체는 disputed가 아니다. md의 `## 풀이`는 참고 답안일 뿐 독립 검산을 대신하지 않는다. md 풀이가 틀렸다고 보이면 고치지 말고 disputed로 보고한다(수정은 `workbook-solution` 몫). 원문이 모호하거나 풀이 불일치가 해결되지 않으면 withheld로 부모에 보고하며 임의로 문제를 바꾸지 않는다. 문항별 실험 링크는 문제설명의 해당 풀이 단계에만 넣는다.
 
 ## 경로 약속
 
@@ -50,7 +50,7 @@ PDF에는 [저작 규칙](references/authoring.md)의 선택 표지를 쓴 핵�
 - `BUCKET` = `RUN/review-<range>-<slug>/` (팩마다 하나, extract가 만든다)
 - 셸 상태는 Bash 호출 사이에 이어지지 않는다. 아래 명령의 `$SKILL`, `$RUN`, `$REPO`, `$BUCKET`은 실행할 때마다 실제 절대 경로로 바꿔 쓰거나, 같은 셸 호출에서 `SKILL=…; RUN=…; REPO=…;`로 먼저 설정한다. `RUN=… python3 … "$RUN"`처럼 인자 확장과 같은 명령 앞에 설정하지 않는다. `cd`는 쓰지 않고 파일도 절대 경로로 넘긴다.
 
-CLI는 [scripts/epe_cli.py](scripts/epe_cli.py) 하나이며 `extract`, `build`, `check`, `publish`, `rerender` 다섯 명령이 있다. 설명은 에이전트가 저작한다. CLI만 실행하면 풀이가 자동으로 써지지 않는다.
+CLI는 [scripts/epe_cli.py](scripts/epe_cli.py) 하나이며 `extract`, `build`, `check`, `publish`, `rerender` 및 선택 실험용 `select-lab` 명령이 있다. 설명은 에이전트가 저작한다. CLI만 실행하면 풀이가 자동으로 써지지 않는다.
 
 ## 절차
 
@@ -107,6 +107,12 @@ python3 "$SKILL/scripts/epe_cli.py" extract --repo "$REPO" --target 1007 --run "
 - 산출: SymPy 스크립트 `BUCKET/evidence/pN-sympy.py`와 실행 출력 `BUCKET/evidence/pN-result.txt`, 그리고 소문항별 판정(JSON 형태로 응답: `pN:a` → status/method/conclusion/evidence).
 - 조각 답이 틀렸으면 그 작성자에게 고치게 하고 같은 검산을 다시 한다. md `## 풀이`와 독립 검산이 다르면(조각을 어느 쪽에 맞춰도 해소되지 않음) 그 팩을 disputed로 표시한다. 다른 팩은 계속한다.
 - evidence는 build가 stage로 복사하므로 **build 전에** 모두 써 둔다.
+
+### 4a. 새 팩의 문항별 회로 실험 (선택)
+부모가 새로 작성하는 팩이면 별도 요청 없이 [문항별 회로 실험](references/problem-labs.md)의 선정 절차를 적용한다. 조정자가 채택한 해설과 독립 풀이를 대조한 뒤 후보를 고른다. 적합 후보가 있을 때만 팩당 한 개까지 `ec2-interactive`의 문항 모드를 실행한다. 기존 팩은 명시한 문항의 연결 요청과 기존 연결의 검증된 rerender를 지원한다.
+```bash
+python3 "$SKILL/scripts/epe_cli.py" select-lab --run "$RUN"
+```
 
 ### 5. build·check
 ```bash
