@@ -6,7 +6,7 @@
 
 ## 병렬 RUN의 검토 기록
 
-브리프에 `workflow=parallel`이 있으면 두 검토자는 각각 `note`의 고정본을 읽고 자기 attempt의 `report`와 `audit_output`에 기록한다. 감사의 모든 토픽에 실제로 바인딩한 검토자 ID를 쓴다. 두 검토가 모두 통과하면 실행기가 근거를 합친다. 같은 토픽·규칙의 적용 여부가 엇갈리면 두 보고의 원문 근거를 다시 대조한다.
+브리프에 `workflow=parallel`이 있으면 두 검토자는 각각 `note`의 고정본을 읽고 자기 attempt의 `report`와 `audit_output`에 기록한다. 감사의 모든 토픽에 실제로 바인딩한 검토자 ID를 쓴다. 두 검토가 모두 통과하면 실행기가 근거를 합친다. 적용 표시는 개인화 감사가 확정한다. 내용 리뷰의 표시가 다르면 실행기가 기록만 남기고 발행을 막지 않는다. 규칙 위반이라고 판단하면 표시를 바꾸지 말고 해당 rule ID로 `unresolved` 결함을 올린다. 표시의 뜻과 노트 토픽 기준은 [note-rule-applicability.md](note-rule-applicability.md)를 따른다.
 
 결함이 있으면 receipt의 `status`를 `needs-fix`로 두고 `unresolved`에 결함별로 다음 필드를 남긴다. `rule`은 규칙, `target`은 회차가 바뀌어도 찾을 수 있는 토픽·문항·그림·쪽 ID, `defect`는 해당 위치의 구체적인 오류다. 같은 오류를 다시 확인할 때는 이 세 값을 유지한다. `severity`는 Critical, Important, Minor 중 하나이며 `owner_task`는 수정할 파일을 만든 선행 작업 ID다. `evidence`에는 원문과 실제 산출물에서 확인한 근거를 적는다. 보고서의 심각도 소제목 아래 각 결함을 `- [target] [rule] defect` 한 줄로 적는다. 세 값은 해당 unresolved 항목과 정확히 일치해야 한다. 화면 결함은 실제 PNG를 outputs에 포함한다.
 

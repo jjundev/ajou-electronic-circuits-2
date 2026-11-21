@@ -892,3 +892,12 @@ def test_summary_counts_only_current_candidate(note_run):
     state['applicability_disagreements'].append(old)
     summary = applicability_summary(state)
     assert (summary['current'], summary['history']) == (1, 2)
+
+def test_note_reviewers_read_shared_applicability_reference(note_run):
+    run, _ = note_run
+    for tid in ('style-audit', 'content-review'):
+        claim = flow.claim_task(run, tid)
+        refs = flow._read(claim['brief'])['references']
+        paths = [r['path'] if isinstance(r, dict) else r for r in refs]
+        assert any(str(p).endswith('references/note-rule-applicability.md') for p in paths)
+        flow.release_task(run, tid, claim['attempt'], 'reference check only')
