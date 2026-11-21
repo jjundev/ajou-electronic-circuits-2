@@ -1,0 +1,131 @@
+{
+  "source_sha256": "59427aa69aafaf1bea00923ca0124ca77f35d847455804bb1d04e3608c945ebd",
+  "preview_html_sha256": "ee1a3176359e74d8d2acd5ebfd64941f8a5e3eb5d841e48bdfc6def3f3116c1e",
+  "machine": "pass",
+  "numeric_independent": "pass",
+  "probe": "pass",
+  "browser": "pass",
+  "evidence": {
+    "machine": {
+      "check": "ok",
+      "steps_snapshots": "/tmp/ec2-interactive-1030.RssYyL/2/steps.txt"
+    },
+    "numeric_independent": {
+      "method": "별도 Python 복소수 노드 방정식과 게이트 전류 합산",
+      "states": 20,
+      "slider_corners_with_both_element_states": 8,
+      "all_plot_points_compared": true,
+      "reference_values": {
+        "초기 상태": {
+          "effective_fF": 102.7807464253309,
+          "low_frequency_fF": 102.72727272727272,
+          "source_phase_deg": -0.6994153991802631,
+          "input_conductance_uS": -0.5228539365689229,
+          "error_percent": 0.05202696022161319
+        },
+        "소스 팔로워: 프리셋 가벼운 부하 · 저주파": {
+          "effective_fF": 102.7807464253309,
+          "low_frequency_fF": 102.72727272727272,
+          "source_phase_deg": -0.6994153991802631,
+          "input_conductance_uS": -0.5228539365689229,
+          "error_percent": 0.05202696022161319
+        },
+        "소스 팔로워: 프리셋 가벼운 부하 · 고주파": {
+          "effective_fF": 243.2633036702341,
+          "low_frequency_fF": 102.72727272727272,
+          "source_phase_deg": -14.151690551639618,
+          "input_conductance_uS": -1374.130080331178,
+          "error_percent": 57.77115940736831
+        },
+        "소스 팔로워: 프리셋 무거운 부하 · 고주파": {
+          "effective_fF": 257.7310866531119,
+          "low_frequency_fF": 294.2857142857143,
+          "source_phase_deg": 15.550889264475956,
+          "input_conductance_uS": 2274.5101638063675,
+          "error_percent": 14.18324351450951
+        },
+        "단계 3: 저항을 줄여 기울기 뒤집기": {
+          "effective_fF": 257.7310866531119,
+          "low_frequency_fF": 294.2857142857143,
+          "source_phase_deg": 15.550889264475956,
+          "input_conductance_uS": 2274.5101638063675,
+          "error_percent": 14.18324351450951
+        },
+        "단계 4: 두 경향이 만나는 부하": {
+          "effective_fF": 246.66666666666666,
+          "low_frequency_fF": 246.66666666666666,
+          "source_phase_deg": -6.277715144959371e-15,
+          "input_conductance_uS": -5.736904168840399e-13,
+          "error_percent": 0.0
+        }
+      },
+      "full_result": "/tmp/ec2-interactive-1030.RssYyL/2/numeric.json"
+    },
+    "probe": {
+      "checks": 52,
+      "defects": 0,
+      "full_result": "/tmp/ec2-interactive-1030.RssYyL/2/probe.json"
+    },
+    "browser": {
+      "engine": "Chrome 157.0.8103.80",
+      "combinations": [
+        {
+          "viewport": [
+            1440,
+            900
+          ],
+          "theme": "light",
+          "console_errors": []
+        },
+        {
+          "viewport": [
+            1440,
+            900
+          ],
+          "theme": "dark",
+          "console_errors": []
+        },
+        {
+          "viewport": [
+            375,
+            812
+          ],
+          "theme": "light",
+          "console_errors": []
+        },
+        {
+          "viewport": [
+            375,
+            812
+          ],
+          "theme": "dark",
+          "console_errors": []
+        }
+      ],
+      "actions": [
+        "예측 응답·건너뛰기",
+        "소자 키보드 전환·모바일 탭",
+        "슬라이더 최소·최대",
+        "수동·자동 인과 맥동",
+        "대표 설정과 근사 플롯 변화",
+        "모바일 설명·조작 서랍과 Escape",
+        "핵심 수식 렌더링"
+      ],
+      "screenshot_directory": "/tmp/ec2-interactive-1030.RssYyL/2",
+      "visual_review": "두 테마의 데스크톱과 모바일 화면 및 설명 서랍"
+    },
+    "saved_html": {
+      "browser_smoke": "pass",
+      "note_link": "added",
+      "note_section": "s2-input-cap",
+      "new_tab": "pass",
+      "repeat_link_run": "unchanged"
+    }
+  },
+  "corrections": [
+    "브라우저에서 비어 있던 핵심 수식 영역을 공통 런타임의 equations 필드에 맞춰 수정.",
+    "375 px에서 회로 라벨과 전압 배지의 글자 크기를 키움.",
+    "모바일 회로의 종속 전류원 라벨을 왼쪽 여백으로 옮겨 도선과의 간격을 확보."
+  ],
+  "saved_html_sha256": "0b34cf14e8401c6ebbd5489cdd25f677dffd3ca1af8c8626e907901326beb202"
+}
