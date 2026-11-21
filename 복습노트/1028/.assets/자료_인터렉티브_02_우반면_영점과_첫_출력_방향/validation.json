@@ -1,0 +1,82 @@
+{
+  "source_sha256": "8a5d82a722be5dfdb300bdc473c36875f24eaccc5efe14c2aa8e8f615fbf198d",
+  "sources": [
+    "1028 정리노트 s3-direct·s3-zero·s4-compare",
+    "1028 STT Part 06–07",
+    "Lec5 s28·30–32·34",
+    "Razavi 11.4.1·11.4.4 pp. 599–603"
+  ],
+  "gates": {
+    "machine": "pass",
+    "numeric_independent": "pass",
+    "probe": "pass",
+    "browser": "pass"
+  },
+  "evidence": {
+    "machine": {
+      "check": "ok",
+      "step_snapshots": 15
+    },
+    "numeric_independent": {
+      "states": 48,
+      "status": "pass",
+      "curves": "all sampled points",
+      "method": "독립 전하보존 노드방정식을 구성해 아핀 상태 행렬의 지수함수로 계단 응답 평가",
+      "reference_values": {
+        "default_at_10_ps_exact_uV_rounded": 36.6,
+        "default_at_10_ps_miller_uV_rounded": -6.28,
+        "cgd_off_at_10_ps_both_uV_rounded": -61.39,
+        "final_mV_rounded": -13.33,
+        "equal_pole_case_rs_ohm": 800,
+        "equal_pole_case_cgd": "off"
+      }
+    },
+    "probe": {
+      "checks": 64,
+      "defect_count": 0
+    },
+    "browser": {
+      "viewports": [
+        {
+          "width": 1440,
+          "height": 900,
+          "theme": "light",
+          "status": "pass"
+        },
+        {
+          "width": 1440,
+          "height": 900,
+          "theme": "dark",
+          "status": "pass"
+        },
+        {
+          "width": 375,
+          "height": 812,
+          "theme": "light",
+          "status": "pass"
+        },
+        {
+          "width": 375,
+          "height": 812,
+          "theme": "dark",
+          "status": "pass"
+        }
+      ],
+      "engine": "Chromium",
+      "screenshots_reviewed": true,
+      "controls": [
+        "prediction answer and skip",
+        "slider ends",
+        "pause/reset pulse",
+        "element toggle",
+        "comparison plot",
+        "early/full mode switch"
+      ]
+    }
+  },
+  "fixes": [
+    "현행 공통 셸로 재빌드해 데스크톱 예측 카드가 SVG에 가려지지 않도록 확인",
+    "CGD 터치 영역 확대와 출력 접합점 색 통일",
+    "조작 패널에서 렌더되지 않는 수식 표기를 평문으로 수정"
+  ]
+}
