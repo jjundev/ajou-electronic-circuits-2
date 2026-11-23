@@ -1,0 +1,145 @@
+{
+  "source_sha256": "4870721c52a28b62c0eb1c11b45535584cebcf93eb9020c6125154c5b8a4007c",
+  "preview_html_sha256": "6d9c273402719e97e40961a2ee1ccd99cccad502668ed8fb68a16b56f2c1fda5",
+  "gates": {
+    "machine": "pass",
+    "numeric_independent": "pass",
+    "probe": "pass",
+    "browser": "pass"
+  },
+  "sources": {
+    "notes": [
+      "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/복습노트/1118/.assets/정리노트_1118_Feedback_Loading.md"
+    ],
+    "stt": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/STT/1118 전회2.md",
+    "lecture": "L06 슬라이드 47–49",
+    "textbook": "Razavi 12.7, 그림 12.52–12.53"
+  },
+  "machine": {
+    "check": "ok",
+    "step_snapshots": 11
+  },
+  "numeric_independent": {
+    "method": "감지 쪽과 반송 쪽의 등가저항과 분압을 별도로 구했다. 독립 시험원에 직결되는 단락이나 부유 노드는 모든 개방·접지·유한 저항 조합에서 발생하지 않는다.",
+    "status": "pass",
+    "states": 48,
+    "examples": [
+      {
+        "state": "초기 상태",
+        "expected_tiles": [
+          2.0,
+          0.5,
+          0.952380952
+        ],
+        "actual_tiles": [
+          "2.000 kΩ",
+          "0.500 kΩ",
+          "0.952 V"
+        ]
+      },
+      {
+        "state": "종단 조립: 대표 오조립",
+        "expected_tiles": [
+          1.0,
+          0.5,
+          0.909090909
+        ],
+        "actual_tiles": [
+          "1.000 kΩ",
+          "0.500 kΩ",
+          "0.909 V"
+        ]
+      },
+      {
+        "state": "종단 조립: 프리셋 이상 종단 조립",
+        "expected_tiles": [
+          2.0,
+          0.5,
+          0.952380952
+        ],
+        "actual_tiles": [
+          "2.000 kΩ",
+          "0.500 kΩ",
+          "0.952 V"
+        ]
+      },
+      {
+        "state": "종단 조립: 프리셋 원래 저항으로 종단",
+        "expected_tiles": [
+          1.99009901,
+          0.523809524,
+          0.952155377
+        ],
+        "actual_tiles": [
+          "1.990 kΩ",
+          "0.524 kΩ",
+          "0.952 V"
+        ]
+      },
+      {
+        "state": "종단 조립: 프리셋 개방·접지 뒤바꾸기",
+        "expected_tiles": [
+          1.0,
+          1.0,
+          0.909090909
+        ],
+        "actual_tiles": [
+          "1.000 kΩ",
+          "1.000 kΩ",
+          "0.909 V"
+        ]
+      },
+      {
+        "state": "반송 단독 오조립",
+        "expected_tiles": [
+          2.0,
+          1.0,
+          0.952380952
+        ],
+        "actual_tiles": [
+          "2.000 kΩ",
+          "1.000 kΩ",
+          "0.952 V"
+        ]
+      }
+    ]
+  },
+  "probe": {
+    "checks": 48,
+    "defect_count": 0,
+    "viewport_widths": [
+      1440,
+      375
+    ],
+    "themes": [
+      "light",
+      "dark"
+    ]
+  },
+  "browser": {
+    "engine": "Google Chrome 157.0.8103.80",
+    "viewports": [
+      "1440×900",
+      "375×812"
+    ],
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "visual_review": "회로 기호와 도선 사이 여백, 패널 대비, 모바일 도식 및 설명 서랍을 확인했다.",
+    "interactions": [
+      "예측 응답·건너뛰기",
+      "슬라이더가 예측 중에도 동작",
+      "키보드 슬라이더 끝값",
+      "모바일 서랍과 Escape",
+      "포트 메뉴 Enter/Space/Arrow/Escape, 포커스 복귀",
+      "포트 칩 클릭과 44 px 터치 영역",
+      "개방·접지·유한 종단 결과"
+    ],
+    "saved_html": "정리노트 링크에서 새 탭이 열리고 원래 노트가 유지됐다. 핵심 조작과 콘솔을 확인했다."
+  },
+  "fixes": [
+    "Chrome 모바일 육안 검사에서 포트 칩을 확인하고 세로 터치 영역을 확대했다. 375×812에서 두 칩 모두 최소 44 CSS px를 만족하는지 확인하고 네 검증을 재실행했다."
+  ],
+  "html_sha256": "1d9697e9eff7c167771e7f345810d13b7b0979ccb55306fbe01f50229c25e51a"
+}

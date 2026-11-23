@@ -65,9 +65,13 @@ python3 "$SKILL/scripts/probe_interactive.py" "$RUN/<n>/preview.html" --widths 1
 ```
 
 - **게이트 3 (`probe_interactive.py`):** 오프라인 Playwright로 `window.__EC2_LAB__`의 모든 프로브 상태(`listProbeStates`/`applyProbeState`)를 `1440`·`375` 폭과 `light`·`dark` 테마에서 순회하며 콘솔/페이지 오류, 미등록 외부 요청, 가로 스크롤·오버플로, KaTeX 렌더링, `0.6em` `label_gaps`, 모바일 단일 서랍·`Escape` 닫기를 검증해 `defect_count === 0`(종료 0)을 확인한다.
-- **게이트 4 (실제 브라우저 확인):** `probe_interactive.py` 통과 후에도 실제 브라우저(`1440×900`·`375×812`, 라이트·다크)에서 `preview.html`을 직접 열어 예측 카드 건너뛰기/응답, 포트 팝오버(`Enter`/`Space`/`Arrow`/`Escape`), 소자 토글, 슬라이더 끝값, `+Δv` 인과 맥동, 근사 플롯, 라벨 겹침과 패널 대비를 육안·직접 조작으로 확인한다.
+- **게이트 4 (실제 브라우저 확인):** `probe_interactive.py` 통과 후 **Codex 내부 브라우저(`iab`)를 우선** 사용한다. `cua_repl`에서 로컬 HTTP 미리보기의 `preview.html`을 열고, `1440×900`·`375×812` 각각에서 라이트·다크를 확인한다. 예측 카드 건너뛰기/응답, 포트 팝오버(`Enter`/`Space`/`Arrow`/`Escape`), 소자 토글, 슬라이더 끝값, `+Δv` 인과 맥동, 근사 플롯 중 자료에 있는 기능을 직접 조작한다. 대표 수치·상태 변화, 라벨 겹침, 패널 대비와 콘솔 오류를 확인한다.
 
-`RUN/<n>/validation.json`에 `lab.js`의 현재 `source_sha256`과 4개 게이트(`machine`, `numeric_independent`, `probe`, `browser`)의 `pass`/`fail`/`not_run`, 독립 검산 기준값, 발견/수정 내역을 기록한다. 소스가 바뀌면 해시와 4개 게이트를 다시 갱신한다.
+**로컬 HTTP 미리보기:** `127.0.0.1`에만 바인딩하는 임시 서버에서 이번 검증에 필요한 HTML과 참조하는 로컬 리소스만 제공한다. 정리노트와 실험 파일을 함께 검사할 때 상대 URL이 동작하도록 원래 상대 위치를 유지한다. 테스트한 URL은 검증 기록에 남기고, 작업용 서버는 검사 후 종료한다. 사용자가 미리보기 주소도 요청했다면 접속 가능한 임시 주소를 전달한다.
+
+**Playwright 폴백:** `iab` 도구가 없거나, 허용된 미리보기 접근·뷰포트 설정·조작 확인이 해당 세션에서 불가능할 때 남은 게이트 4 항목을 Playwright 브라우저에서 같은 조건으로 직접 조작하고 화면을 확인한다. 브라우저 정책이 차단한 동작은 해당 제한을 따른다. 관찰된 UI 결함은 수정하고 다시 검사한다. 게이트 3의 오프라인 Playwright 프로브는 매번 실행한다.
+
+`RUN/<n>/validation.json`에 `lab.js`의 현재 `source_sha256`과 4개 게이트(`machine`, `numeric_independent`, `probe`, `browser`)의 `pass`/`fail`/`not_run`, 독립 검산 기준값, 발견/수정 내역을 기록한다. 브라우저 증거에는 항목별 실제 브라우저, URL, 뷰포트·테마, 조작 결과와 폴백을 썼을 때의 이유(`fallback_reason`)를 남긴다. 소스가 바뀌면 해시와 4개 게이트를 다시 갱신한다.
 
 ### 7. 저장 (`save.cjs`)
 
@@ -77,7 +81,7 @@ python3 "$SKILL/scripts/probe_interactive.py" "$RUN/<n>/preview.html" --widths 1
 node "$SKILL/scripts/save.cjs" "$RUN/<n>/lab.js" "$DEST" "<이름>"
 ```
 
-출력 JSON(`{"nn", "html", "dir"}`)의 경로를 사용해 `brief.md`·`validation.json`을 `dir`로 복사한다(`save.cjs`는 `dir/lab.js`와 최상위 HTML만 쓰며 기존 번호를 덮어쓰지 않는다). 저장된 최종 HTML을 브라우저에서 다시 열어 핵심 조작과 콘솔 오류 없음을 확인한다.
+출력 JSON(`{"nn", "html", "dir"}`)의 경로를 사용해 `brief.md`·`validation.json`을 `dir`로 복사한다(`save.cjs`는 `dir/lab.js`와 최상위 HTML만 쓰며 기존 번호를 덮어쓰지 않는다). 저장된 최종 HTML을 6단계의 브라우저 우선순위로 다시 열어 핵심 조작과 콘솔 오류 없음을 확인한다.
 
 ### 8. 정리노트 연결 (`link-notes.cjs`)
 
@@ -93,5 +97,6 @@ node "$SKILL/scripts/link-notes.cjs" "$RUN/note-links.json"
 ### 9. 무결성 확인 및 보고
 
 - 정리노트 연결에서 `added`만 있으면 삽입된 `<p class="interactive-note" data-ec2-interactive="...">` 블록을 제거했을 때 백업 원 HTML과 바이트 단위 동등한지 확인한다(`updated`는 해당 링크의 `target`/`rel` 보정 외 원문 바이트 유지).
+- 정리노트 링크와 위젯을 브라우저에서 검증할 때도 6단계의 우선순위를 따른다. 관련 절에서 링크를 직접 열어 기존 노트 탭이 유지되고 새 탭에서 저장된 실험의 핵심 조작이 작동하는지 확인한다.
 - 기존 정리노트 MD·PDF·그림의 SHA-256이 작업 전과 같은지 대조한다.
 - 저장된 실제 절대 경로, 주제 선정 이유(아키타입 및 `.widget` 확장 근거), 4개 게이트 결과와 수정 내역, 연결 절별 `added`/`updated`/`unchanged`/`skipped`, 보류 사유, `RUN`/백업 경로를 보고한다. 실행하지 않은 검사는 완료로 보고하지 않으며, 요청이 없으면 커밋하지 않는다.

@@ -1,0 +1,2665 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>V–V 귀환망 종단 조립</title>
+  <!-- 생성 파일: .assets/자료_인터렉티브_02_전압_전압_귀환망_종단_조립/lab.js을 고친 뒤 ec2-interactive/scripts/build.cjs로 다시 만드세요. -->
+  <script>document.documentElement.classList.add('js');try{const t=localStorage.getItem('od-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/static/pretendard.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+    onload="if(window.__EC2_LAB__&&window.__EC2_LAB__.renderMath)window.__EC2_LAB__.renderMath();"></script>
+  <style>
+    /* ---------- 토큰 (ec2-review-pack 규약) ---------- */
+    :root {
+      color-scheme: light;
+      --scroll: #c9d0db; --scroll-hover: #9aa3b2;
+      --bg: #ffffff; --surface: #f7f8fa; --ink: #111111; --ink-2: #6b7280; --line: #d9dee7;
+      --accent: #1677ff; --accent-ink: #1b64da; --btn-bg: #1b64da; --on-btn: #ffffff;
+      --warn: #b54708; --prof: #6941c6; --supp: #067647; --danger: #d92d20;
+      --font: 'Pretendard', system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      --fs-body: 16px; --fs-sub: 15px; --fs-small: 14px; --fs-label: 13px; --fs-fig: 12px;
+      --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px;
+      --radius: 8px; --tap: 44px;
+      --dur: 220ms; --dur-exit: 150ms; --ease-out: cubic-bezier(.2, .8, .2, 1);
+      --scrim: rgba(0, 0, 0, .4);
+      --pl: clamp(260px, 21vw, 320px);
+      --pr: clamp(320px, 26vw, 420px);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        color-scheme: dark;
+        --scroll: #3f414b; --scroll-hover: #5b5e6a;
+        --bg: #17171c; --surface: #212128; --ink: #f2f4f6; --ink-2: #a3abb8; --line: #34353d;
+        --accent: #3182f6; --accent-ink: #6ea4ff; --btn-bg: #1b64da; --on-btn: #ffffff;
+        --warn: #f5a15c; --prof: #b69cff; --supp: #5fd39a; --danger: #ff6b61;
+      }
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --scroll: #3f414b; --scroll-hover: #5b5e6a;
+      --bg: #17171c; --surface: #212128; --ink: #f2f4f6; --ink-2: #a3abb8; --line: #34353d;
+      --accent: #3182f6; --accent-ink: #6ea4ff; --btn-bg: #1b64da; --on-btn: #ffffff;
+      --warn: #f5a15c; --prof: #b69cff; --supp: #5fd39a; --danger: #ff6b61;
+    }
+
+    /* ---------- 기본 ---------- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { height: 100%; overflow-x: hidden; -webkit-text-size-adjust: 100%; }
+    body {
+      height: 100%; margin: 0; overflow: hidden;
+      background: var(--bg); color: var(--ink);
+      font-family: var(--font); font-size: var(--fs-body); line-height: 1.6;
+      word-break: keep-all; overflow-wrap: anywhere;
+    }
+    button, input, select { font-family: inherit; color: inherit; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+    [hidden] { display: none !important; }
+    .num { font-variant-numeric: tabular-nums; }
+
+    #ec2-lab-root.lab-app {
+      height: 100%; width: 100%; min-width: 0;
+      display: grid; grid-template-rows: auto minmax(0, 1fr);
+      overflow: hidden; background: var(--bg); color: var(--ink);
+    }
+
+    /* ---------- 상단 바 ---------- */
+    .topbar {
+      display: flex; align-items: center; gap: var(--s2);
+      min-height: 58px; min-width: 0; padding: var(--s2) var(--s3);
+      background: var(--bg); border-bottom: 1px solid var(--line);
+    }
+    .brand {
+      flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis;
+      font-size: 17px; font-weight: 700; white-space: nowrap;
+    }
+    .text-btn {
+      flex: none; min-height: var(--tap); min-width: var(--tap);
+      padding: 0 var(--s3); border: 0; border-radius: var(--radius);
+      background: transparent; color: var(--ink);
+      font: 600 var(--fs-small)/1 var(--font); cursor: pointer;
+    }
+    .panel-toggle { display: inline-flex; align-items: center; gap: var(--s1); padding: 0 var(--s2); }
+    .panel-toggle svg, .theme-toggle svg {
+      flex: none; width: 20px; height: 20px;
+      fill: none; stroke: currentColor; stroke-width: 2;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+    .panel-toggle .strip { fill: transparent; stroke: none; transition: fill 150ms ease-out; }
+    .panel-toggle[aria-expanded="true"] { color: var(--accent-ink); }
+    .panel-toggle[aria-expanded="true"] .strip { fill: currentColor; }
+    .theme-toggle { display: inline-flex; align-items: center; justify-content: center; padding: 0; }
+    .theme-toggle .i-sun { display: none; }
+    :root[data-theme="dark"] .theme-toggle .i-sun { display: block; }
+    :root[data-theme="dark"] .theme-toggle .i-moon { display: none; }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .theme-toggle .i-sun { display: block; }
+      :root:not([data-theme="light"]) .theme-toggle .i-moon { display: none; }
+    }
+
+    .seg {
+      flex: 0 1 auto; display: flex; gap: 2px; padding: 2px; min-width: 0;
+      border: 1px solid var(--line); border-radius: var(--radius);
+      max-width: 100%; overflow-x: auto;
+    }
+    .seg button {
+      min-height: 44px; min-width: 44px; padding: 0 var(--s3); border: 0; border-radius: 6px;
+      background: transparent; color: var(--ink-2);
+      font-size: var(--fs-small); font-weight: 700; cursor: pointer; white-space: nowrap;
+    }
+    .seg button[aria-pressed="true"] { background: var(--btn-bg); color: var(--on-btn); }
+
+    /* ---------- 3단 레이아웃 ---------- */
+    .layout {
+      display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
+      min-height: 0; min-width: 0;
+    }
+    .panel {
+      position: relative; display: flex; flex-direction: column;
+      min-height: 0; min-width: 0; overflow: hidden;
+      background: var(--bg); color: var(--ink);
+    }
+    .panel-left { grid-column: 1; border-right: 1px solid var(--line); }
+    .panel-right { grid-column: 3; border-left: 1px solid var(--line); }
+    .panel-inner {
+      flex: 1 1 auto; min-height: 0; min-width: 0;
+      overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain;
+      padding: var(--s4) var(--s4) var(--s6);
+      overflow-wrap: anywhere;
+    }
+    .panel-inner::-webkit-scrollbar, .stage::-webkit-scrollbar { width: 8px; }
+    .panel-inner::-webkit-scrollbar-track, .stage::-webkit-scrollbar-track { background: transparent; }
+    .panel-inner::-webkit-scrollbar-thumb, .stage::-webkit-scrollbar-thumb {
+      background: var(--scroll); border-radius: 8px; border: 2px solid var(--bg);
+    }
+    .panel-inner::-webkit-scrollbar-thumb:hover, .stage::-webkit-scrollbar-thumb:hover { background: var(--scroll-hover); }
+    @supports (scrollbar-color: auto) {
+      .panel-inner, .stage { scrollbar-width: thin; scrollbar-color: var(--scroll) transparent; }
+    }
+    .panel-head { display: flex; align-items: center; gap: var(--s2); min-height: var(--tap); margin-bottom: var(--s2); }
+    .panel-head h2 { flex: 1 1 0; min-width: 0; margin: 0; font-size: 20px; line-height: 1.4; }
+    .scrim { display: none; }
+
+    @media (min-width: 1024px) {
+      .panel-head { display: none; }
+      .panel-left { width: var(--pl); }
+      .panel-right { width: var(--pr); }
+      .panel:not(.is-open) { width: 0; border-width: 0; visibility: hidden; }
+      .panel.is-open { visibility: visible; }
+      .panel-left .panel-inner { width: var(--pl); }
+      .panel-right .panel-inner { width: var(--pr); }
+    }
+    @media (max-width: 1023.98px) {
+      .layout { grid-template-columns: minmax(0, 1fr); }
+      .stage { grid-column: 1; }
+      .panel {
+        position: fixed; top: 0; bottom: 0; z-index: 40; visibility: hidden;
+        transition: transform var(--dur-exit) ease-in, visibility 0s linear var(--dur-exit);
+      }
+      .panel-left { left: 0; width: min(304px, 88vw); max-width: 88vw; transform: translateX(-100%); }
+      .panel-right { right: 0; width: min(360px, 88vw); max-width: 88vw; transform: translateX(100%); }
+      .panel.is-open { visibility: visible; transform: none; transition: transform var(--dur) var(--ease-out); }
+      .panel-inner { padding-top: calc(var(--s3) + env(safe-area-inset-top)); padding-bottom: calc(var(--s6) + env(safe-area-inset-bottom)); }
+      .scrim {
+        display: block; position: fixed; inset: 0; z-index: 35;
+        background: var(--scrim); opacity: 0; visibility: hidden;
+        transition: opacity var(--dur-exit) ease-in, visibility 0s linear var(--dur-exit);
+      }
+      .scrim.is-on { opacity: 1; visibility: visible; transition: opacity var(--dur) var(--ease-out); }
+    }
+    @media (max-width: 640px) { .brand { display: none; } .topbar { justify-content: space-between; } }
+    @media (max-width: 480px) {
+      .panel-toggle span { display: none; }
+      .panel-toggle { padding: 0 var(--s1); }
+      .seg button { padding: 0 var(--s2); font-size: 13px; }
+    }
+    @media (hover: hover) {
+      .text-btn:hover, .btn:hover, .predict-btn:hover { background: var(--surface); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .panel, .panel.is-open, .scrim, .scrim.is-on, .panel-toggle .strip { transition: none; }
+    }
+
+    /* ---------- 좌/우 패널 섹션 ---------- */
+    .sec { margin-top: var(--s5); padding-top: var(--s4); border-top: 1px solid var(--line); min-width: 0; }
+    .panel-inner > .sec:first-child, .panel-head + .sec { margin-top: 0; padding-top: 0; border-top: 0; }
+    .sec-title { display: block; margin: 0 0 var(--s3); font-size: 17px; font-weight: 700; line-height: 1.4; letter-spacing: -0.01em; }
+    .sub { margin: var(--s2) 0 0; font-size: var(--fs-small); color: var(--ink-2); }
+
+    .opt, .preset-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s2); }
+    .btn {
+      display: flex; align-items: center; gap: var(--s2); width: 100%; min-height: var(--tap);
+      padding: var(--s2) var(--s3); border: 1px solid var(--line); border-radius: var(--radius);
+      background: var(--bg); color: var(--ink);
+      font-size: var(--fs-small); font-weight: 600; line-height: 1.35; text-align: left; cursor: pointer;
+    }
+    .btn[aria-pressed="true"] { border-color: var(--accent); color: var(--accent-ink); background: var(--surface); }
+    .btn .box { flex: none; width: 12px; height: 12px; border-radius: 3px; border: 1.5px solid currentColor; }
+    .btn[aria-pressed="true"] .box { background: currentColor; }
+
+    .slider-list, .steps, .port-controls, .elem-controls { display: flex; flex-direction: column; gap: var(--s3); min-width: 0; }
+    .slider-row { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+    .slider-head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s2); font-size: var(--fs-small); }
+    .slider-head label { font-weight: 600; }
+    .slider-val { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--accent-ink); }
+    .slider-row input[type=range] { width: 100%; min-height: 36px; margin: 0; accent-color: var(--accent); cursor: pointer; }
+
+    .causal-bar { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s2); margin-bottom: var(--s2); }
+    .causal-bar .btn { justify-content: center; text-align: center; padding: 0 var(--s2); }
+    .step-num {
+      flex: none; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center;
+      border-radius: 50%; border: 2px solid currentColor; font-size: 12px; font-weight: 700;
+    }
+    .step-txt { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+    .step-txt b { font-size: 14px; font-weight: 700; }
+    .step-txt span { font-size: 12px; font-weight: 500; color: var(--ink-2); }
+    .detail { margin-top: var(--s3); padding: var(--s3); border-radius: var(--radius); background: var(--surface); font-size: var(--fs-small); line-height: 1.6; }
+
+    .port-group { display: flex; flex-direction: column; gap: var(--s1); min-width: 0; }
+    .port-group-label { font-size: var(--fs-label); font-weight: 700; color: var(--ink-2); }
+    .port-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s2); }
+    .port-choices .btn { justify-content: center; text-align: center; }
+
+    /* ---------- 우측 설명 패널 ---------- */
+    .tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s2); min-width: 0; }
+    .tiles.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .tile { padding: var(--s3); border-radius: var(--radius); background: var(--surface); min-width: 0; overflow-wrap: anywhere; }
+    .tile b { display: block; font-size: 18px; font-weight: 700; line-height: 1.3; font-variant-numeric: tabular-nums; }
+    .tile span { display: block; font-size: var(--fs-label); line-height: 1.4; color: var(--ink-2); }
+
+    .diagnosis {
+      padding: var(--s3) var(--s4); border-radius: var(--radius); background: var(--surface);
+      border-left: 3px solid var(--accent); font-size: var(--fs-small); line-height: 1.6;
+      min-width: 0; overflow-wrap: anywhere;
+    }
+    .diagnosis.is-ok { border-left-color: var(--supp); }
+    .diagnosis.is-warn { border-left-color: var(--warn); }
+    .diagnosis.is-bad { border-left-color: var(--danger); }
+    .diagnosis b { display: block; margin-bottom: 2px; font-weight: 700; }
+
+    .formula-box {
+      padding: var(--s3); border-radius: var(--radius); background: var(--surface);
+      font-size: var(--fs-sub); min-width: 0; overflow-wrap: anywhere;
+    }
+    .formula-box .eq-item + .eq-item { margin-top: var(--s2); padding-top: var(--s2); border-top: 1px solid var(--line); }
+    .formula-box .eq-name { display: block; font-size: var(--fs-label); font-weight: 600; color: var(--ink-2); margin-bottom: 2px; }
+    .katex-display { max-width: 100%; overflow-x: auto; overflow-y: hidden; margin: var(--s1) 0; }
+    .panel-inner table { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: var(--fs-small); }
+    .panel-inner th, .panel-inner td { border-bottom: 1px solid var(--line); padding: var(--s2); text-align: left; overflow-wrap: anywhere; }
+
+    .sec.warn { border-top: 0; padding: var(--s4); border-radius: var(--radius); background: var(--surface); font-size: var(--fs-small); line-height: 1.65; }
+    .sec.warn .sec-title { color: var(--warn); font-size: 16px; margin-bottom: var(--s2); }
+    .mistake { margin-top: var(--s3); min-width: 0; overflow-wrap: anywhere; }
+    .mistake:first-of-type { margin-top: 0; }
+    .mistake b { display: block; font-weight: 700; }
+    .mistake span { color: var(--ink-2); }
+
+    /* ---------- 중앙 스테이지 & 예측 카드 & 플롯 ---------- */
+    .stage {
+      grid-column: 2; position: relative; min-width: 0; min-height: 0;
+      overflow-y: auto; overflow-x: hidden;
+      display: flex; flex-direction: column; gap: var(--s3); padding: var(--s3);
+      background: var(--bg);
+    }
+    .predict-slot, .plot-slot { flex: none; }
+    .predict-slot:empty, .plot-slot:empty { display: none; }
+    .predict-card {
+      flex: none; width: 100%; max-width: 760px; margin: 0 auto; min-width: 0;
+      background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+      padding: var(--s3) var(--s4); display: flex; flex-direction: column; gap: var(--s2);
+    }
+    .predict-head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--s2); }
+    .predict-prompt { margin: 0; font-size: var(--fs-sub); font-weight: 700; line-height: 1.5; }
+    .predict-skip { flex: none; min-height: var(--tap); padding: 0 var(--s2); border: 0; border-radius: 6px; background: transparent; color: var(--ink-2); font-size: var(--fs-label); font-weight: 600; cursor: pointer; }
+    .predict-opts { display: flex; flex-wrap: wrap; gap: var(--s2); }
+    .predict-btn {
+      min-height: var(--tap); padding: var(--s2) var(--s3); border: 1px solid var(--line);
+      border-radius: var(--radius); background: var(--bg); color: var(--ink);
+      font-size: var(--fs-small); font-weight: 600; cursor: pointer;
+    }
+    .predict-btn[aria-pressed="true"] { border-color: var(--accent); color: var(--accent-ink); }
+    .predict-feedback {
+      font-size: var(--fs-small); line-height: 1.55; padding: var(--s2) var(--s3);
+      border-radius: 6px; background: var(--bg); border-left: 3px solid var(--supp);
+    }
+    .predict-feedback.is-wrong { border-left-color: var(--warn); }
+
+    .lab-stage-wrap {
+      position: relative; flex: 1 0 auto; min-width: 0; min-height: 220px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .lab-stage {
+      width: 100%; max-width: 760px; min-width: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .lab-stage svg {
+      width: 100%; height: auto; max-height: 540px; display: block; color: var(--ink); overflow: visible;
+    }
+
+    .port-popover {
+      position: absolute; z-index: 25; min-width: 148px; max-width: calc(100% - 16px);
+      padding: var(--s2); border-radius: var(--radius); border: 1px solid var(--line);
+      background: var(--bg); box-shadow: 0 8px 24px rgba(0, 0, 0, .18);
+      display: flex; flex-direction: column; gap: var(--s1);
+    }
+    .port-popover-title { font-size: 12px; font-weight: 700; color: var(--ink-2); padding: 2px var(--s2); }
+    .port-popover button {
+      min-height: var(--tap); padding: 0 var(--s3); border: 1px solid var(--line);
+      border-radius: 6px; background: var(--surface); font-size: var(--fs-small);
+      font-weight: 600; text-align: left; cursor: pointer;
+    }
+    .port-popover button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent-ink); background: var(--bg); }
+
+    .plot-wrap {
+      flex: none; width: 100%; max-width: 760px; margin: 0 auto; min-width: 0;
+      padding: var(--s3); border-radius: var(--radius);
+      background: var(--surface); border: 1px solid var(--line);
+      display: flex; flex-direction: column; gap: var(--s2);
+    }
+    .plot-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--s2); font-size: var(--fs-label); }
+    .plot-legend { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s3); color: var(--ink-2); }
+    .plot-sw { display: inline-block; width: 18px; height: 3px; vertical-align: middle; margin-right: 4px; border-radius: 2px; }
+    .plot-sw.exact { background: var(--accent); }
+    .plot-sw.approx { border-top: 2px dashed var(--ink); height: 0; }
+    .err-badge {
+      display: inline-flex; align-items: center; padding: 2px var(--s2);
+      border-radius: 6px; font-size: 12px; font-weight: 700;
+      background: var(--bg); border: 1px solid var(--line); color: var(--supp);
+    }
+    .err-badge.is-bad { border-color: var(--danger); color: var(--danger); }
+    .plot-wrap svg { width: 100%; height: auto; display: block; color: var(--ink); }
+    .plot-axis { stroke: var(--line); stroke-width: 1.5; }
+    .plot-guide { stroke: var(--ink-2); stroke-width: 1.2; stroke-dasharray: 3 3; }
+
+    /* ---------- SVG 규약 (ec2-review-pack 일치) + 동적 상태 ---------- */
+    .fig-ink { stroke: currentColor; fill: none; stroke-width: 2; }
+    .fig-accent { stroke: var(--accent); fill: none; stroke-width: 2.5; }
+    .fig-danger { stroke: var(--danger); fill: none; stroke-width: 2.5; }
+    .fig-dot { fill: var(--accent); }
+    .fig-text { fill: currentColor; font-size: 13px; font-family: inherit; }
+    svg text, svg text[class], svg text tspan, .fig-math, .fig-math tspan {
+      font-family: Pretendard, sans-serif; font-weight: 600; font-style: normal;
+    }
+    svg tspan[baseline-shift="sub"], svg tspan[baseline-shift="super"] { font-size: 78%; }
+    svg :is(.fig-dot, .fig-text)[data-node-color="blue"] { fill: var(--accent, #2563eb); }
+    svg :is(.fig-dot, .fig-text)[data-node-color="red"] { fill: var(--danger, #dc2626); }
+    .fig-muted { fill: var(--ink-2); font-size: var(--fs-fig); font-family: inherit; }
+
+    svg .is-hot:is(line, path, polyline, rect, circle, polygon),
+    svg .is-hot :is(line, path, polyline, rect, circle, polygon):not(.lab-badge-bg):not(.port-chip-bg):not(.fig-dot) { stroke: var(--accent); stroke-width: 3; }
+    svg .is-hot:is(text, tspan),
+    svg .is-hot :is(text, tspan):not(.lab-badge-text):not(.port-chip) { fill: var(--accent-ink); }
+    svg .is-done:is(line, path, polyline),
+    svg .is-done :is(line, path, polyline) { stroke: var(--accent); }
+    svg .is-bad:is(line, path, polyline, rect, circle, polygon),
+    svg .is-bad :is(line, path, polyline, rect, circle, polygon):not(.lab-badge-bg):not(.port-chip-bg):not(.fig-dot) { stroke: var(--danger); stroke-width: 3; }
+    svg .is-bad:is(text, tspan),
+    svg .is-bad :is(text, tspan):not(.lab-badge-text):not(.port-chip) { fill: var(--danger); }
+    svg .is-dim { opacity: 0.32; }
+    svg .is-off { opacity: 0.36; }
+    svg .is-off :is(line, path, polyline, rect, circle, polygon),
+    svg .is-off:is(line, path, polyline, rect, circle, polygon) { stroke-dasharray: 5 4; }
+    svg [data-port], svg [data-elem], svg [data-node] { cursor: pointer; }
+    svg [data-port]:focus-visible, svg [data-elem]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    svg .lab-badge-bg { fill: var(--surface); stroke: var(--accent); stroke-width: 1.5; }
+    svg .lab-badge.is-bad .lab-badge-bg,
+    svg [data-badge-for].is-bad .lab-badge-bg { stroke: var(--danger); }
+    svg .lab-badge-text { fill: var(--ink); font-size: 11px; font-family: Pretendard, sans-serif; font-weight: 700; }
+    svg .port-chip-bg { fill: var(--surface); stroke: var(--accent); stroke-width: 1.5; }
+    svg .is-bad .port-chip-bg { stroke: var(--danger); }
+    svg .port-chip,
+    svg .is-hot .port-chip text,
+    svg .is-bad .port-chip text { fill: var(--ink); font-size: 11px; font-family: Pretendard, sans-serif; font-weight: 700; }
+  </style>
+</head>
+<body>
+<div id="ec2-lab-root" class="lab-app" data-drawer="none">
+  <header class="topbar">
+    <button class="text-btn panel-toggle" type="button" data-drawer-btn="left" aria-label="조작 패널" aria-expanded="true" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="strip" x="3" y="4" width="6" height="16" rx="1"></rect><rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="M9 4v16"></path></svg><span>조작</span></button>
+    <strong class="brand">V–V 귀환망 종단 조립</strong>
+    <div class="seg" role="group" aria-label="모드 선택"></div>
+    <button class="text-btn theme-toggle" type="button" aria-label="다크 모드로 전환" title="다크 모드로 전환"><svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"></path></svg><svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg></button>
+    <button class="text-btn panel-toggle" type="button" data-drawer-btn="right" aria-label="설명 패널" aria-expanded="true" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="strip" x="15" y="4" width="6" height="16" rx="1"></rect><rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="M15 4v16"></path></svg><span>설명</span></button>
+  </header>
+  <div class="layout">
+    <aside class="panel panel-left" aria-label="조작">
+      <div class="panel-inner"></div>
+    </aside>
+    <main class="stage" aria-label="회로 실험실">
+      <div class="predict-slot"></div>
+      <div class="lab-stage-wrap">
+        <div class="lab-stage"></div>
+      </div>
+      <div class="plot-slot"></div>
+    </main>
+    <aside class="panel panel-right" aria-label="설명">
+      <div class="panel-inner"></div>
+    </aside>
+  </div>
+  <div class="scrim" aria-hidden="true"></div>
+</div>
+<script>
+// Lightweight complex small-signal Modified Nodal Analysis (MNA) solver.
+// Zero dependencies; exposes globalThis.EC2MNA and CommonJS module.exports.
+(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module && module.exports) {
+    module.exports = api;
+  }
+  if (root) {
+    root.EC2MNA = api;
+  }
+})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+  'use strict';
+
+  const PIVOT_EPS = 1e-14;
+  const SUPPORTED_TYPES = new Set(['R', 'C', 'L', 'vccs', 'vsrc', 'isrc', 'short', 'open']);
+
+  function c(re, im = 0) {
+    return { re, im };
+  }
+
+  function cAdd(a, b) {
+    return { re: a.re + b.re, im: a.im + b.im };
+  }
+
+  function cSub(a, b) {
+    return { re: a.re - b.re, im: a.im - b.im };
+  }
+
+  function cMul(a, b) {
+    return {
+      re: a.re * b.re - a.im * b.im,
+      im: a.re * b.im + a.im * b.re,
+    };
+  }
+
+  function cDiv(a, b) {
+    const denom = b.re * b.re + b.im * b.im;
+    return {
+      re: (a.re * b.re + a.im * b.im) / denom,
+      im: (a.im * b.re - a.re * b.im) / denom,
+    };
+  }
+
+  function cAbs(a) {
+    return Math.hypot(a.re, a.im);
+  }
+
+  function toPhasor(z) {
+    const re = z.re === 0 ? 0 : z.re;
+    const im = z.im === 0 ? 0 : z.im;
+    const mag = Math.hypot(re, im);
+    const phaseDeg = mag === 0 ? 0 : (Math.atan2(im, re) * 180) / Math.PI;
+    return { re, im, mag, phaseDeg };
+  }
+
+  function fail(reason) {
+    return { ok: false, singular: true, reason };
+  }
+
+  function isNonEmptyString(v) {
+    return typeof v === 'string' && v.length > 0;
+  }
+
+  function parseComplexOrReal(v) {
+    if (typeof v === 'number' && Number.isFinite(v)) {
+      return c(v, 0);
+    }
+    if (v && typeof v === 'object' && Number.isFinite(v.re) && Number.isFinite(v.im)) {
+      return c(v.re, v.im);
+    }
+    return null;
+  }
+
+  function solveLinearComplex(A, b, varNames) {
+    const n = b.length;
+    for (let col = 0; col < n; col++) {
+      let pivotRow = col;
+      let pivotMag = cAbs(A[col][col]);
+      for (let row = col + 1; row < n; row++) {
+        const mag = cAbs(A[row][col]);
+        if (mag > pivotMag) {
+          pivotMag = mag;
+          pivotRow = row;
+        }
+      }
+      if (!Number.isFinite(pivotMag) || pivotMag < PIVOT_EPS) {
+        const label = varNames[col] || `col ${col}`;
+        return { ok: false, reason: `Singular circuit matrix at ${label} (|pivot|=${pivotMag})` };
+      }
+      if (pivotRow !== col) {
+        const tmpRow = A[col];
+        A[col] = A[pivotRow];
+        A[pivotRow] = tmpRow;
+        const tmpB = b[col];
+        b[col] = b[pivotRow];
+        b[pivotRow] = tmpB;
+      }
+      const pivot = A[col][col];
+      for (let row = col + 1; row < n; row++) {
+        const entry = A[row][col];
+        if (entry.re === 0 && entry.im === 0) continue;
+        const factor = cDiv(entry, pivot);
+        A[row][col] = c(0, 0);
+        for (let j = col + 1; j < n; j++) {
+          A[row][j] = cSub(A[row][j], cMul(factor, A[col][j]));
+        }
+        b[row] = cSub(b[row], cMul(factor, b[col]));
+      }
+    }
+
+    const x = new Array(n);
+    for (let row = n - 1; row >= 0; row--) {
+      let sum = b[row];
+      for (let j = row + 1; j < n; j++) {
+        sum = cSub(sum, cMul(A[row][j], x[j]));
+      }
+      const val = cDiv(sum, A[row][row]);
+      if (!Number.isFinite(val.re) || !Number.isFinite(val.im)) {
+        return { ok: false, reason: `Non-finite solution at ${varNames[row] || row}` };
+      }
+      x[row] = val;
+    }
+    return { ok: true, x };
+  }
+
+  function validateElements(elements) {
+    const seenIds = new Set();
+    for (let i = 0; i < elements.length; i++) {
+      const el = elements[i];
+      if (!el || typeof el !== 'object') {
+        return `Invalid element at index ${i}`;
+      }
+      if (!isNonEmptyString(el.id)) {
+        return `Element at index ${i} is missing a valid id`;
+      }
+      if (seenIds.has(el.id)) {
+        return `Duplicate element id: ${el.id}`;
+      }
+      seenIds.add(el.id);
+
+      if (!SUPPORTED_TYPES.has(el.type)) {
+        return `Unsupported element type "${el.type}" for ${el.id}`;
+      }
+      if (!isNonEmptyString(el.n1) || !isNonEmptyString(el.n2)) {
+        return `Element ${el.id} is missing valid node names n1/n2`;
+      }
+
+      if (el.type === 'R') {
+        if (typeof el.value !== 'number' || !Number.isFinite(el.value) || el.value <= 0 || !Number.isFinite(1 / el.value)) {
+          return `Resistor ${el.id} must have finite value > 0`;
+        }
+      } else if (el.type === 'C' || el.type === 'L') {
+        if (typeof el.value !== 'number' || !Number.isFinite(el.value) || el.value < 0) {
+          return `${el.type} element ${el.id} must have finite value >= 0`;
+        }
+      } else if (el.type === 'vccs') {
+        if (!isNonEmptyString(el.cp) || !isNonEmptyString(el.cn)) {
+          return `VCCS ${el.id} is missing valid control nodes cp/cn`;
+        }
+        if (typeof el.gm !== 'number' || !Number.isFinite(el.gm)) {
+          return `VCCS ${el.id} must have finite gm`;
+        }
+      } else if (el.type === 'vsrc' || el.type === 'isrc') {
+        if (!parseComplexOrReal(el.value)) {
+          return `Source ${el.id} must have finite numeric value`;
+        }
+      }
+    }
+    return null;
+  }
+
+  function solveCircuit(netlist, options = {}) {
+    if (!netlist || typeof netlist !== 'object' || !Array.isArray(netlist.elements)) {
+      return fail('Invalid netlist: elements array is required');
+    }
+
+    const ground = isNonEmptyString(netlist.ground) ? netlist.ground : '0';
+    if (options !== undefined && options !== null && typeof options !== 'object') {
+      return fail('Invalid options: expected an object');
+    }
+    const freqHz = options && options.freqHz !== undefined ? options.freqHz : 0;
+    if (typeof freqHz !== 'number' || !Number.isFinite(freqHz) || freqHz < 0) {
+      return fail('Invalid options.freqHz: must be a finite number >= 0');
+    }
+
+    const elements = netlist.elements;
+    const validationError = validateElements(elements);
+    if (validationError) {
+      return fail(validationError);
+    }
+
+    const omega = 2 * Math.PI * freqHz;
+    if (!Number.isFinite(omega)) {
+      return fail('options.freqHz is too large (omega overflow)');
+    }
+    const isShortInductor = (el) => el.type === 'L' && (!Number.isFinite(1 / (omega * el.value)) || omega * el.value === 0);
+    const nodeIndex = new Map();
+    const nodeNames = [];
+    const registerNode = (name) => {
+      if (name === ground || nodeIndex.has(name)) return;
+      nodeIndex.set(name, nodeNames.length);
+      nodeNames.push(name);
+    };
+
+    const branchVars = [];
+    for (const el of elements) {
+      registerNode(el.n1);
+      registerNode(el.n2);
+      if (el.type === 'vccs') {
+        registerNode(el.cp);
+        registerNode(el.cn);
+      }
+      const isVsrcLike =
+        el.type === 'vsrc' ||
+        el.type === 'short' ||
+        isShortInductor(el);
+      if (isVsrcLike) {
+        branchVars.push(el.id);
+      }
+    }
+
+    const numNodes = nodeNames.length;
+    const dim = numNodes + branchVars.length;
+    if (dim === 0) {
+      const branches = {};
+      for (const el of elements) {
+        if (el.type === 'isrc') {
+          branches[el.id] = toPhasor(parseComplexOrReal(el.value));
+        } else {
+          branches[el.id] = toPhasor(c(0, 0));
+        }
+      }
+      return {
+        ok: true,
+        singular: false,
+        nodes: { [ground]: toPhasor(c(0, 0)) },
+        branches,
+      };
+    }
+
+    const A = Array.from({ length: dim }, () => Array.from({ length: dim }, () => c(0, 0)));
+    const b = Array.from({ length: dim }, () => c(0, 0));
+    const idx = (name) => (name === ground ? -1 : nodeIndex.get(name));
+    const addA = (r, col, re, im) => {
+      if (r < 0 || col < 0) return;
+      A[r][col].re += re;
+      A[r][col].im += im;
+    };
+    const addB = (r, re, im) => {
+      if (r < 0) return;
+      b[r].re += re;
+      b[r].im += im;
+    };
+    const stampAdmittance = (i1, i2, yRe, yIm) => {
+      addA(i1, i1, yRe, yIm);
+      addA(i2, i2, yRe, yIm);
+      addA(i1, i2, -yRe, -yIm);
+      addA(i2, i1, -yRe, -yIm);
+    };
+
+    const branchRowById = new Map();
+    let branchCursor = 0;
+
+    for (const el of elements) {
+      const i1 = idx(el.n1);
+      const i2 = idx(el.n2);
+
+      if (el.type === 'R') {
+        stampAdmittance(i1, i2, 1 / el.value, 0);
+      } else if (el.type === 'C') {
+        if (freqHz > 0 && el.value > 0) {
+          const bCap = omega * el.value;
+          if (!Number.isFinite(bCap)) {
+            return fail(`Susceptance overflow for capacitor ${el.id}`);
+          }
+          stampAdmittance(i1, i2, 0, bCap);
+        }
+      } else if (el.type === 'L') {
+        if (!isShortInductor(el)) {
+          stampAdmittance(i1, i2, 0, -1 / (omega * el.value));
+        } else {
+          const k = numNodes + branchCursor++;
+          branchRowById.set(el.id, k);
+          addA(i1, k, 1, 0);
+          addA(i2, k, -1, 0);
+          addA(k, i1, 1, 0);
+          addA(k, i2, -1, 0);
+        }
+      } else if (el.type === 'vccs') {
+        const icp = idx(el.cp);
+        const icn = idx(el.cn);
+        addA(i1, icp, el.gm, 0);
+        addA(i1, icn, -el.gm, 0);
+        addA(i2, icp, -el.gm, 0);
+        addA(i2, icn, el.gm, 0);
+      } else if (el.type === 'isrc') {
+        const val = parseComplexOrReal(el.value);
+        addB(i1, -val.re, -val.im);
+        addB(i2, val.re, val.im);
+      } else if (el.type === 'vsrc' || el.type === 'short') {
+        const k = numNodes + branchCursor++;
+        branchRowById.set(el.id, k);
+        addA(i1, k, 1, 0);
+        addA(i2, k, -1, 0);
+        addA(k, i1, 1, 0);
+        addA(k, i2, -1, 0);
+        if (el.type === 'vsrc') {
+          const val = parseComplexOrReal(el.value);
+          addB(k, val.re, val.im);
+        }
+      }
+      // 'open' adds no stamps.
+    }
+
+    const varNames = [
+      ...nodeNames.map((n) => `node ${n}`),
+      ...branchVars.map((id) => `branch ${id}`),
+    ];
+    const solved = solveLinearComplex(A, b, varNames);
+    if (!solved.ok) {
+      return fail(solved.reason);
+    }
+
+    const x = solved.x;
+    const nodeVoltage = (name) => {
+      const i = idx(name);
+      return i < 0 ? c(0, 0) : x[i];
+    };
+
+    const nodes = { [ground]: toPhasor(c(0, 0)) };
+    for (let i = 0; i < nodeNames.length; i++) {
+      nodes[nodeNames[i]] = toPhasor(x[i]);
+    }
+
+    const branches = {};
+    for (const el of elements) {
+      const v1 = nodeVoltage(el.n1);
+      const v2 = nodeVoltage(el.n2);
+      const vDiff = cSub(v1, v2);
+      let current;
+
+      if (el.type === 'R') {
+        current = cMul(c(1 / el.value, 0), vDiff);
+      } else if (el.type === 'C') {
+        current = freqHz > 0 && el.value > 0
+          ? cMul(c(0, omega * el.value), vDiff)
+          : c(0, 0);
+      } else if (el.type === 'L') {
+        current = !isShortInductor(el)
+          ? cMul(c(0, -1 / (omega * el.value)), vDiff)
+          : x[branchRowById.get(el.id)];
+      } else if (el.type === 'vccs') {
+        const vc = cSub(nodeVoltage(el.cp), nodeVoltage(el.cn));
+        current = cMul(c(el.gm, 0), vc);
+      } else if (el.type === 'isrc') {
+        current = parseComplexOrReal(el.value);
+      } else if (el.type === 'vsrc' || el.type === 'short') {
+        current = x[branchRowById.get(el.id)];
+      } else {
+        current = c(0, 0);
+      }
+
+      if (!Number.isFinite(current.re) || !Number.isFinite(current.im)) {
+        return fail(`Non-finite branch current for ${el.id}`);
+      }
+      branches[el.id] = toPhasor(current);
+    }
+
+    return { ok: true, singular: false, nodes, branches };
+  }
+
+  return { solveCircuit };
+});
+</script>
+<script>
+// Standard HTML/SVG interactive lab runtime for ec2-interactive v2.
+// Supports 3 archetypes ('probe', 'bench', 'approx') with pure state reducers
+// and DOM mounting; exposes globalThis.EC2Lab and CommonJS module.exports.
+(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module && module.exports) {
+    module.exports = api;
+  }
+  if (root) {
+    root.EC2Lab = api;
+  }
+})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+  'use strict';
+
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+
+  // ---------- Spec Readers ----------
+
+  function getModes(spec) {
+    return Array.isArray(spec && spec.modes) ? spec.modes : [];
+  }
+
+  function getModeDef(spec, modeKey) {
+    const modes = getModes(spec);
+    return modes.find((m) => m.key === modeKey) || modes[0] || null;
+  }
+
+  function matchesMode(item, modeKey) {
+    if (!item || typeof item !== 'object') return false;
+    if (item.mode !== undefined) return item.mode === modeKey;
+    if (Array.isArray(item.modes)) return item.modes.includes(modeKey);
+    return true;
+  }
+
+  function getParamsForMode(spec, modeKey) {
+    return (Array.isArray(spec && spec.params) ? spec.params : []).filter((p) => matchesMode(p, modeKey));
+  }
+
+  function normalizePortOptions(opts) {
+    return (Array.isArray(opts) ? opts : []).map((o) => {
+      if (o && typeof o === 'object') {
+        const id = o.id !== undefined ? String(o.id) : String(o.value ?? o.label ?? '');
+        return { id, label: String(o.label ?? id), shortLabel: String(o.shortLabel ?? o.label ?? id) };
+      }
+      const s = String(o);
+      return { id: s, label: s, shortLabel: s };
+    });
+  }
+
+  function getPortsForMode(spec, modeKey) {
+    const m = getModeDef(spec, modeKey);
+    const list = (m && Array.isArray(m.ports))
+      ? m.ports
+      : (Array.isArray(spec && spec.ports) ? spec.ports.filter((p) => matchesMode(p, modeKey)) : []);
+    return list.map((p) => {
+      const options = normalizePortOptions(p.options);
+      const id = String(p.id);
+      const def = p.def !== undefined ? String(p.def) : (options[0] ? options[0].id : '');
+      return {
+        id,
+        label: String(p.label || id),
+        options,
+        def,
+        answer: p.answer !== undefined ? String(p.answer) : (p.correct !== undefined ? String(p.correct) : undefined),
+        badOption: p.badOption !== undefined ? String(p.badOption) : undefined,
+      };
+    });
+  }
+
+  function getElemsForMode(spec, modeKey) {
+    const m = getModeDef(spec, modeKey);
+    const list = (m && Array.isArray(m.elems))
+      ? m.elems
+      : (Array.isArray(spec && spec.elems) ? spec.elems.filter((e) => matchesMode(e, modeKey)) : []);
+    return list.map((e) => (typeof e === 'string'
+      ? { id: e, label: e }
+      : { id: String(e.id), label: String(e.label || e.id) }));
+  }
+
+  function getCausalStepsForMode(spec, modeKey) {
+    const m = getModeDef(spec, modeKey);
+    const list = (m && Array.isArray(m.causalSteps))
+      ? m.causalSteps
+      : (Array.isArray(spec && spec.causalSteps) ? spec.causalSteps.filter((s) => matchesMode(s, modeKey)) : []);
+    return list.map((s, idx) => ({
+      id: s.id !== undefined ? s.id : idx + 1,
+      label: String(s.label || s.title || `단계 ${idx + 1}`),
+      detail: String(s.detail || s.text || ''),
+    }));
+  }
+
+  function getStepsForMode(spec, modeKey) {
+    const steps = Array.isArray(spec && spec.steps) ? spec.steps : [];
+    const out = [];
+    for (let i = 0; i < steps.length; i++) {
+      if (!steps[i].mode || steps[i].mode === modeKey) out.push({ s: steps[i], i });
+    }
+    return out;
+  }
+
+  function normalizeToggleEntry(d) {
+    return Array.isArray(d)
+      ? { key: String(d[0]), label: String(d[1] ?? d[0]), def: Boolean(d[2]) }
+      : { key: String(d.key), label: String(d.label ?? d.key), def: Boolean(d.def) };
+  }
+
+  function getTogglesForMode(spec, modeKey) {
+    const raw = spec && spec.toggles;
+    if (!raw) return [];
+    const list = Array.isArray(raw) ? raw.filter((t) => Array.isArray(t) || matchesMode(t, modeKey)) : (raw[modeKey] || []);
+    return list.map(normalizeToggleEntry);
+  }
+
+  function getPresetsForMode(spec, modeKey) {
+    const m = getModeDef(spec, modeKey);
+    const list = (m && Array.isArray(m.presets))
+      ? m.presets
+      : (Array.isArray(spec && spec.presets) ? spec.presets.filter((p) => matchesMode(p, modeKey)) : []);
+    return list.map((p, idx) => ({
+      id: String(p.id ?? p.key ?? idx),
+      label: String(p.label || p.title || `프리셋 ${idx + 1}`),
+      mode: p.mode,
+      params: p.params || null,
+      ports: p.ports || null,
+      disabledElems: Array.isArray(p.disabledElems) ? p.disabledElems.slice() : null,
+      causalStep: p.causalStep,
+    }));
+  }
+
+  function getMistakesForMode(spec, modeKey) {
+    const raw = spec && spec.mistakes;
+    if (!raw) return [];
+    return Array.isArray(raw) ? raw : (Array.isArray(raw[modeKey]) ? raw[modeKey] : []);
+  }
+
+  // ---------- Pure State Functions ----------
+
+  function clampParam(spec, key, rawVal) {
+    if (rawVal === '' || rawVal === null || rawVal === undefined || typeof rawVal === 'boolean') return null;
+    const num = Number(rawVal);
+    if (!Number.isFinite(num)) return null;
+    const def = (Array.isArray(spec && spec.params) ? spec.params : []).find((p) => p.key === key);
+    if (!def) return num;
+    const min = typeof def.min === 'number' ? def.min : -Infinity;
+    const max = typeof def.max === 'number' ? def.max : Infinity;
+    return Math.min(max, Math.max(min, num));
+  }
+
+  function collectInitialToggles(spec) {
+    const toggles = {};
+    const raw = spec && spec.toggles;
+    if (!raw) return toggles;
+    const lists = Array.isArray(raw) ? [raw] : Object.values(raw);
+    for (const list of lists) {
+      for (const item of list || []) {
+        const t = normalizeToggleEntry(item);
+        if (!(t.key in toggles)) toggles[t.key] = t.def;
+      }
+    }
+    return toggles;
+  }
+
+  function collectInitialPorts(spec, firstModeKey) {
+    const ports = {};
+    const addPorts = (list) => {
+      for (const p of list || []) {
+        const id = String(p.id);
+        if (!(id in ports)) {
+          const opts = normalizePortOptions(p.options);
+          ports[id] = p.def !== undefined ? String(p.def) : (opts[0] ? opts[0].id : '');
+        }
+      }
+    };
+    for (const m of getModes(spec)) addPorts(m.ports);
+    addPorts(spec && spec.ports);
+    if (firstModeKey) {
+      for (const p of getPortsForMode(spec, firstModeKey)) ports[p.id] = p.def;
+    }
+    return ports;
+  }
+
+  function createInitialState(spec) {
+    const firstMode = getModes(spec)[0];
+    const mode = firstMode ? firstMode.key : '';
+    const params = {};
+    for (const p of Array.isArray(spec && spec.params) ? spec.params : []) {
+      params[p.key] = p.def !== undefined ? p.def : p.min;
+    }
+    const disabledElems = Array.isArray(spec && spec.initialDisabledElems)
+      ? spec.initialDisabledElems.map(String)
+      : [];
+    return {
+      mode,
+      step: -1,
+      params,
+      disabledElems,
+      ports: collectInitialPorts(spec, mode),
+      causalStep: 0,
+      predictChoice: null,
+      predictDismissed: false,
+      toggles: collectInitialToggles(spec),
+      theme: 'light',
+      drawer: null,
+      leftOpen: true,
+      rightOpen: true,
+      focusNode: null,
+    };
+  }
+
+  function cloneState(state) {
+    const out = {
+      mode: state.mode,
+      step: state.step,
+      params: Object.assign({}, state.params),
+      disabledElems: Array.isArray(state.disabledElems) ? state.disabledElems.slice() : [],
+      ports: Object.assign({}, state.ports),
+      causalStep: state.causalStep || 0,
+      predictChoice: state.predictChoice ?? null,
+      predictDismissed: Boolean(state.predictDismissed),
+      toggles: Object.assign({}, state.toggles),
+      theme: state.theme === 'dark' ? 'dark' : 'light',
+      drawer: state.drawer || null,
+      leftOpen: state.leftOpen !== false,
+      rightOpen: state.rightOpen !== false,
+      focusNode: state.focusNode ?? null,
+    };
+    if (state.narrow !== undefined) out.narrow = Boolean(state.narrow);
+    return out;
+  }
+
+  function applyModeSwitch(spec, next, modeKey) {
+    const target = getModes(spec).find((m) => m.key === modeKey);
+    if (!target) return false;
+    next.mode = target.key;
+    next.step = -1;
+    next.causalStep = 0;
+    next.focusNode = null;
+    if (Array.isArray(target.ports)) {
+      for (const p of getPortsForMode(spec, target.key)) next.ports[p.id] = p.def;
+    }
+    return true;
+  }
+
+  function applyPatch(spec, next, patch) {
+    if (patch.params && typeof patch.params === 'object') {
+      for (const [k, v] of Object.entries(patch.params)) {
+        const clamped = clampParam(spec, k, v);
+        if (clamped !== null) next.params[k] = clamped;
+      }
+    }
+    if (patch.ports && typeof patch.ports === 'object') {
+      for (const [k, v] of Object.entries(patch.ports)) next.ports[k] = String(v);
+    }
+    if (Array.isArray(patch.disabledElems)) next.disabledElems = patch.disabledElems.map(String);
+    if (patch.causalStep !== undefined) next.causalStep = patch.causalStep;
+  }
+
+  function reduceState(spec, state, action) {
+    if (!action || typeof action !== 'object') return state;
+    const next = cloneState(state);
+
+    switch (action.type) {
+      case 'SET_MODE': {
+        if (action.mode === state.mode) return state;
+        return applyModeSwitch(spec, next, action.mode) ? next : state;
+      }
+
+      case 'PICK_STEP': {
+        const idx = action.index !== undefined ? action.index : action.step;
+        if (idx === -1) {
+          next.step = -1;
+          return next;
+        }
+        const s = (Array.isArray(spec && spec.steps) ? spec.steps : [])[idx];
+        if (!s) return state;
+        if (s.mode && s.mode !== next.mode) applyModeSwitch(spec, next, s.mode);
+        applyPatch(spec, next, s);
+        next.step = idx;
+        return next;
+      }
+
+      case 'SET_PARAM': {
+        const clamped = clampParam(spec, action.key, action.value);
+        if (clamped === null) return state;
+        next.params[action.key] = clamped;
+        next.step = -1;
+        return next;
+      }
+
+      case 'APPLY_PRESET': {
+        const id = String(action.id ?? action.key ?? '');
+        const preset = action.preset || getPresetsForMode(spec, next.mode).find((p) => p.id === id)
+          || (Array.isArray(spec && spec.presets) ? spec.presets.find((p) => String(p.id ?? p.key) === id) : null);
+        if (!preset) return state;
+        if (preset.mode && preset.mode !== next.mode) applyModeSwitch(spec, next, preset.mode);
+        applyPatch(spec, next, preset);
+        next.step = -1;
+        return next;
+      }
+
+      case 'TOGGLE_ELEM': {
+        const id = String(action.id);
+        const idx = next.disabledElems.indexOf(id);
+        if (idx >= 0) next.disabledElems.splice(idx, 1);
+        else next.disabledElems.push(id);
+        return next;
+      }
+
+      case 'SET_PORT': {
+        const portId = String(action.portId ?? action.id ?? action.port ?? '');
+        if (!portId) return state;
+        next.ports[portId] = String(action.value);
+        return next;
+      }
+
+      case 'PULSE_CAUSAL': {
+        if (action.reset === true || action.step === 0 || action.causalStep === 0) {
+          next.causalStep = 0;
+          return next;
+        }
+        const explicit = action.step !== undefined ? action.step : action.causalStep;
+        if (explicit !== undefined) {
+          next.causalStep = explicit;
+          return next;
+        }
+        const ids = getCausalStepsForMode(spec, next.mode).map((s) => s.id);
+        if (ids.length === 0) return state;
+        const delta = action.delta !== undefined ? action.delta : 1;
+        const idx = ids.indexOf(next.causalStep);
+        if (delta < 0) next.causalStep = idx <= 0 ? 0 : ids[idx - 1];
+        else next.causalStep = idx < 0 ? ids[0] : (idx + 1 < ids.length ? ids[idx + 1] : 0);
+        return next;
+      }
+
+      case 'ANSWER_PREDICT': {
+        next.predictChoice = action.choice ?? action.optionId ?? action.id ?? null;
+        return next;
+      }
+
+      case 'DISMISS_PREDICT': {
+        next.predictDismissed = true;
+        return next;
+      }
+
+      case 'TOGGLE_OPT': {
+        next.toggles[action.key] = !next.toggles[action.key];
+        return next;
+      }
+
+      case 'SET_THEME': {
+        if (action.theme !== 'light' && action.theme !== 'dark') return state;
+        next.theme = action.theme;
+        return next;
+      }
+
+      case 'TOGGLE_PANEL': {
+        const side = action.side;
+        if (side !== 'left' && side !== 'right') return state;
+        if (action.narrow) next.drawer = next.drawer === side ? null : side;
+        else if (side === 'left') next.leftOpen = !next.leftOpen;
+        else next.rightOpen = !next.rightOpen;
+        return next;
+      }
+
+      case 'CLOSE_DRAWER': {
+        next.drawer = null;
+        return next;
+      }
+
+      case 'FOCUS_NODE': {
+        const nid = action.nodeId ? String(action.nodeId) : null;
+        next.focusNode = next.focusNode === nid ? null : nid;
+        return next;
+      }
+
+      default:
+        return state;
+    }
+  }
+
+  function buildProbeStates(spec) {
+    const states = [];
+    const base = createInitialState(spec);
+    states.push({ label: '초기 상태', state: base });
+
+    if (spec && spec.predict && Array.isArray(spec.predict.options) && spec.predict.options.length > 0) {
+      const opt = spec.predict.options[0];
+      const choice = typeof opt === 'object' ? opt.id : opt;
+      states.push({
+        label: '예측 카드 응답',
+        state: reduceState(spec, base, { type: 'ANSWER_PREDICT', choice }),
+      });
+    }
+
+    for (const m of getModes(spec)) {
+      let modeState = reduceState(spec, base, { type: 'SET_MODE', mode: m.key });
+      modeState = reduceState(spec, modeState, { type: 'DISMISS_PREDICT' });
+      const mLabel = m.label || m.key;
+      states.push({ label: `모드: ${mLabel}`, state: modeState });
+
+      const cSteps = getCausalStepsForMode(spec, m.key);
+      if (cSteps.length > 0) {
+        states.push({
+          label: `${mLabel}: 인과 마지막 박자`,
+          state: reduceState(spec, modeState, { type: 'PULSE_CAUSAL', step: cSteps[cSteps.length - 1].id }),
+        });
+      }
+
+      const portDefs = getPortsForMode(spec, m.key);
+      if (portDefs.length > 0) {
+        let correctState = modeState;
+        const answers = {};
+        for (const p of portDefs) {
+          const ans = p.answer !== undefined ? p.answer : (p.options[0] ? p.options[0].id : p.def);
+          answers[p.id] = ans;
+          correctState = reduceState(spec, correctState, { type: 'SET_PORT', portId: p.id, value: ans });
+        }
+        states.push({ label: `${mLabel}: 정답 조립`, state: correctState });
+
+        const badTarget = portDefs.find((p) => p.options.some((o) => o.id !== answers[p.id]));
+        if (badTarget) {
+          const badOpt = badTarget.badOption && badTarget.options.some((o) => o.id === badTarget.badOption)
+            ? badTarget.badOption
+            : badTarget.options.find((o) => o.id !== answers[badTarget.id]).id;
+          states.push({
+            label: `${mLabel}: 대표 오조립`,
+            state: reduceState(spec, correctState, { type: 'SET_PORT', portId: badTarget.id, value: badOpt }),
+          });
+        }
+      }
+
+      for (const elItem of getElemsForMode(spec, m.key)) {
+        states.push({
+          label: `${mLabel}: ${elItem.label} OFF`,
+          state: reduceState(spec, modeState, { type: 'TOGGLE_ELEM', id: elItem.id }),
+        });
+      }
+
+      for (const preset of getPresetsForMode(spec, m.key)) {
+        states.push({
+          label: `${mLabel}: 프리셋 ${preset.label}`,
+          state: reduceState(spec, modeState, { type: 'APPLY_PRESET', id: preset.id }),
+        });
+      }
+    }
+
+    const allSteps = Array.isArray(spec && spec.steps) ? spec.steps : [];
+    for (let i = 0; i < allSteps.length; i++) {
+      let st = reduceState(spec, base, { type: 'PICK_STEP', index: i });
+      st = reduceState(spec, st, { type: 'DISMISS_PREDICT' });
+      states.push({
+        label: `단계 ${i + 1}: ${allSteps[i].title || allSteps[i].label || ''}`.trim(),
+        state: st,
+      });
+    }
+
+    return states;
+  }
+
+  // ---------- DOM & Formatting Helpers ----------
+
+  function el(doc, tag, attrs, text) {
+    const node = doc.createElement(tag);
+    if (attrs) {
+      for (const [k, v] of Object.entries(attrs)) {
+        if (v === undefined || v === null || v === false) continue;
+        if (k === 'className') node.className = String(v);
+        else node.setAttribute(k, v === true ? '' : String(v));
+      }
+    }
+    if (text !== undefined && text !== null) node.textContent = String(text);
+    return node;
+  }
+
+  function svgEl(doc, tag, attrs, text) {
+    const node = doc.createElementNS(SVG_NS, tag);
+    if (attrs) {
+      for (const [k, v] of Object.entries(attrs)) {
+        if (v !== undefined && v !== null) node.setAttribute(k, String(v));
+      }
+    }
+    if (text !== undefined && text !== null) node.textContent = String(text);
+    return node;
+  }
+
+  function formatParamValue(p, val) {
+    if (typeof p.format === 'function') return String(p.format(val));
+    const num = Number(val);
+    if (!Number.isFinite(num)) return String(val ?? '');
+    let numStr;
+    if (Math.abs(num) >= 100 || Number.isInteger(num)) numStr = String(Math.round(num * 100) / 100);
+    else if (Math.abs(num) >= 1) numStr = num.toFixed(2).replace(/\.?0+$/, '');
+    else numStr = num.toPrecision(3).replace(/\.?0+$/, '');
+    return p.unit ? `${numStr} ${p.unit}` : numStr;
+  }
+
+  function formatTick(v) {
+    if (!Number.isFinite(v)) return '';
+    if (v === 0) return '0';
+    const abs = Math.abs(v);
+    if (abs >= 1000 || abs < 0.01) return v.toExponential(1).replace(/\.0e/, 'e');
+    if (abs >= 10) return String(Math.round(v * 10) / 10);
+    return String(Math.round(v * 100) / 100);
+  }
+
+  function formatNodeBadge(info) {
+    if (info === null || info === undefined) return '';
+    if (typeof info === 'string') return info;
+    if (typeof info === 'number') return Number.isFinite(info) ? formatTick(info) : '';
+    let base = '';
+    if (info.badge !== undefined) base = String(info.badge);
+    else if (info.text !== undefined) base = String(info.text);
+    else if (info.v !== undefined || info.val !== undefined) {
+      const raw = info.v !== undefined ? info.v : info.val;
+      const numStr = typeof raw === 'number' && Number.isFinite(raw) ? formatTick(raw) : String(raw);
+      base = info.unit ? `${numStr} ${info.unit}` : numStr;
+    }
+    if (!base) return '';
+    if (info.dir === 'up' && !base.includes('↑')) return `${base} ↑`;
+    if (info.dir === 'down' && !base.includes('↓')) return `${base} ↓`;
+    if ((info.dir === '↑' || info.dir === '↓') && !base.includes(info.dir)) return `${base} ${info.dir}`;
+    return base;
+  }
+
+  function ensureShell(doc, rootEl, spec) {
+    rootEl.classList.add('lab-app');
+    if (!rootEl.getAttribute('data-drawer')) rootEl.setAttribute('data-drawer', 'none');
+
+    let topbar = rootEl.querySelector('.topbar');
+    let layout = rootEl.querySelector('.layout');
+    let scrim = rootEl.querySelector('.scrim');
+
+    if (!topbar || !layout) {
+      rootEl.replaceChildren();
+      const makeToggleSvg = (leftSide) => {
+        const s = svgEl(doc, 'svg', { viewBox: '0 0 24 24', 'aria-hidden': 'true' });
+        s.appendChild(svgEl(doc, 'rect', { class: 'strip', x: leftSide ? '3' : '15', y: '4', width: '6', height: '16', rx: '1' }));
+        s.appendChild(svgEl(doc, 'rect', { x: '3', y: '4', width: '18', height: '16', rx: '3' }));
+        s.appendChild(svgEl(doc, 'path', { d: leftSide ? 'M9 4v16' : 'M15 4v16' }));
+        return s;
+      };
+
+      const leftBtn = el(doc, 'button', {
+        className: 'text-btn panel-toggle', type: 'button',
+        'data-drawer-btn': 'left', 'aria-label': '조작 패널', 'aria-expanded': 'true', 'aria-pressed': 'true',
+      });
+      leftBtn.appendChild(makeToggleSvg(true));
+      leftBtn.appendChild(el(doc, 'span', null, '조작'));
+
+      const themeBtn = el(doc, 'button', {
+        className: 'text-btn theme-toggle', type: 'button',
+        'aria-label': '다크 모드로 전환', title: '다크 모드로 전환',
+      });
+      const moon = svgEl(doc, 'svg', { class: 'i-moon', viewBox: '0 0 24 24', 'aria-hidden': 'true' });
+      moon.appendChild(svgEl(doc, 'path', { d: 'M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z' }));
+      const sun = svgEl(doc, 'svg', { class: 'i-sun', viewBox: '0 0 24 24', 'aria-hidden': 'true' });
+      sun.appendChild(svgEl(doc, 'circle', { cx: '12', cy: '12', r: '4' }));
+      sun.appendChild(svgEl(doc, 'path', { d: 'M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4' }));
+      themeBtn.appendChild(moon);
+      themeBtn.appendChild(sun);
+
+      const rightBtn = el(doc, 'button', {
+        className: 'text-btn panel-toggle', type: 'button',
+        'data-drawer-btn': 'right', 'aria-label': '설명 패널', 'aria-expanded': 'true', 'aria-pressed': 'true',
+      });
+      rightBtn.appendChild(makeToggleSvg(false));
+      rightBtn.appendChild(el(doc, 'span', null, '설명'));
+
+      topbar = el(doc, 'header', { className: 'topbar' });
+      topbar.appendChild(leftBtn);
+      topbar.appendChild(el(doc, 'strong', { className: 'brand' }, spec.title || ''));
+      topbar.appendChild(el(doc, 'div', { className: 'seg', role: 'group', 'aria-label': '모드 선택' }));
+      topbar.appendChild(themeBtn);
+      topbar.appendChild(rightBtn);
+
+      const panelLeft = el(doc, 'aside', { className: 'panel panel-left is-open', 'aria-label': '조작' });
+      panelLeft.appendChild(el(doc, 'div', { className: 'panel-inner' }));
+
+      const stage = el(doc, 'main', { className: 'stage', 'aria-label': '회로 실험실' });
+      stage.appendChild(el(doc, 'div', { className: 'predict-slot' }));
+      const wrap = el(doc, 'div', { className: 'lab-stage-wrap' });
+      wrap.appendChild(el(doc, 'div', { className: 'lab-stage' }));
+      stage.appendChild(wrap);
+      stage.appendChild(el(doc, 'div', { className: 'plot-slot' }));
+
+      const panelRight = el(doc, 'aside', { className: 'panel panel-right is-open', 'aria-label': '설명' });
+      panelRight.appendChild(el(doc, 'div', { className: 'panel-inner' }));
+
+      layout = el(doc, 'div', { className: 'layout' });
+      layout.appendChild(panelLeft);
+      layout.appendChild(stage);
+      layout.appendChild(panelRight);
+
+      scrim = el(doc, 'div', { className: 'scrim', 'aria-hidden': 'true' });
+
+      rootEl.appendChild(topbar);
+      rootEl.appendChild(layout);
+      rootEl.appendChild(scrim);
+    }
+
+    const panelLeft = rootEl.querySelector('.panel-left');
+    const panelRight = rootEl.querySelector('.panel-right');
+    return {
+      leftBtn: rootEl.querySelector('[data-drawer-btn="left"]'),
+      rightBtn: rootEl.querySelector('[data-drawer-btn="right"]'),
+      brandEl: rootEl.querySelector('.brand'),
+      modeSegEl: rootEl.querySelector('.seg'),
+      themeBtn: rootEl.querySelector('.theme-toggle'),
+      panelLeft,
+      panelLeftInner: panelLeft ? panelLeft.querySelector('.panel-inner') : null,
+      panelRight,
+      panelRightInner: panelRight ? panelRight.querySelector('.panel-inner') : null,
+      stageEl: rootEl.querySelector('.stage'),
+      predictSlot: rootEl.querySelector('.predict-slot'),
+      stageWrap: rootEl.querySelector('.lab-stage-wrap'),
+      svgHost: rootEl.querySelector('.lab-stage'),
+      plotSlot: rootEl.querySelector('.plot-slot'),
+      scrimEl: rootEl.querySelector('.scrim'),
+    };
+  }
+
+  function buildPlotSvg(doc, plotData) {
+    const W = 480;
+    const H = 228;
+    const x0 = 72;
+    const x1 = 460;
+    const y0 = 20;
+    const y1 = 166;
+    const pw = x1 - x0;
+    const ph = y1 - y0;
+
+    const exact = Array.isArray(plotData.exact) ? plotData.exact.filter((pt) => Number.isFinite(pt[0]) && Number.isFinite(pt[1])) : [];
+    const approx = Array.isArray(plotData.approx) ? plotData.approx.filter((pt) => Number.isFinite(pt[0]) && Number.isFinite(pt[1])) : [];
+    const allPts = exact.concat(approx);
+    if (allPts.length === 0) return null;
+
+    let xMin = typeof plotData.xMin === 'number' ? plotData.xMin : Math.min(...allPts.map((p) => p[0]));
+    let xMax = typeof plotData.xMax === 'number' ? plotData.xMax : Math.max(...allPts.map((p) => p[0]));
+    if (xMax <= xMin) xMax = xMin + 1;
+
+    let yMin = typeof plotData.yMin === 'number' ? plotData.yMin : Math.min(...allPts.map((p) => p[1]));
+    let yMax = typeof plotData.yMax === 'number' ? plotData.yMax : Math.max(...allPts.map((p) => p[1]));
+    if (yMax <= yMin) {
+      yMin -= 1;
+      yMax += 1;
+    }
+
+    const isLogX = plotData.xScale === 'log' && xMin > 0 && xMax > 0;
+    const mapX = (x) => {
+      const t = isLogX
+        ? (Math.log10(Math.max(x, xMin)) - Math.log10(xMin)) / (Math.log10(xMax) - Math.log10(xMin))
+        : (x - xMin) / (xMax - xMin);
+      return x0 + Math.max(0, Math.min(1, t)) * pw;
+    };
+    const mapY = (y) => y1 - Math.max(0, Math.min(1, (y - yMin) / (yMax - yMin))) * ph;
+    const toPathD = (pts) => pts.map((pt, i) => `${i === 0 ? 'M' : 'L'}${mapX(pt[0]).toFixed(1)},${mapY(pt[1]).toFixed(1)}`).join(' ');
+
+    const svg = svgEl(doc, 'svg', {
+      viewBox: `0 0 ${W} ${H}`,
+      role: 'img',
+      'aria-label': plotData.ariaLabel || `${plotData.xLabel || 'x'} 대비 ${plotData.yLabel || 'y'} 비교 그래프`,
+    });
+
+    svg.appendChild(svgEl(doc, 'line', { class: 'plot-axis', x1: x0, y1: y0, x2: x0, y2: y1 }));
+    svg.appendChild(svgEl(doc, 'line', { class: 'plot-axis', x1: x0, y1: y1, x2: x1, y2: y1 }));
+
+    for (const yt of [yMin, (yMin + yMax) / 2, yMax]) {
+      const py = mapY(yt);
+      svg.appendChild(svgEl(doc, 'line', { class: 'plot-axis', x1: x0, y1: py.toFixed(1), x2: x0 + 5, y2: py.toFixed(1) }));
+      svg.appendChild(svgEl(doc, 'text', {
+        class: 'fig-muted', x: x0 - 14, y: (py + 4).toFixed(1), 'text-anchor': 'end',
+      }, formatTick(yt)));
+    }
+
+    const xTicks = isLogX ? [xMin, Math.sqrt(xMin * xMax), xMax] : [xMin, (xMin + xMax) / 2, xMax];
+    for (const xt of xTicks) {
+      const px = mapX(xt);
+      svg.appendChild(svgEl(doc, 'line', { class: 'plot-axis', x1: px.toFixed(1), y1: y1 - 5, x2: px.toFixed(1), y2: y1 }));
+      svg.appendChild(svgEl(doc, 'text', {
+        class: 'fig-muted', x: px.toFixed(1), y: y1 + 24, 'text-anchor': 'middle',
+      }, formatTick(xt)));
+    }
+
+    if (plotData.xLabel) {
+      svg.appendChild(svgEl(doc, 'text', {
+        class: 'fig-muted', x: (x0 + x1) / 2, y: H - 8, 'text-anchor': 'middle',
+      }, plotData.xLabel));
+    }
+    if (plotData.yLabel) {
+      const cy = (y0 + y1) / 2;
+      svg.appendChild(svgEl(doc, 'text', {
+        class: 'fig-muted', x: 16, y: cy, 'text-anchor': 'middle', transform: `rotate(-90 16 ${cy})`,
+      }, plotData.yLabel));
+    }
+
+    if (approx.length >= 2) svg.appendChild(svgEl(doc, 'path', { class: 'fig-ink', 'stroke-dasharray': '6 4', d: toPathD(approx) }));
+    if (exact.length >= 2) svg.appendChild(svgEl(doc, 'path', { class: 'fig-accent', d: toPathD(exact) }));
+
+    if (Array.isArray(plotData.marker) && Number.isFinite(plotData.marker[0]) && Number.isFinite(plotData.marker[1])) {
+      const mx = mapX(plotData.marker[0]);
+      const my = mapY(plotData.marker[1]);
+      svg.appendChild(svgEl(doc, 'line', { class: 'plot-guide', x1: mx.toFixed(1), y1: y1, x2: mx.toFixed(1), y2: my.toFixed(1) }));
+      svg.appendChild(svgEl(doc, 'circle', { class: 'fig-dot', cx: mx.toFixed(1), cy: my.toFixed(1), r: '4.5' }));
+    }
+    if (Array.isArray(plotData.approxMarker) && Number.isFinite(plotData.approxMarker[0]) && Number.isFinite(plotData.approxMarker[1])) {
+      svg.appendChild(svgEl(doc, 'circle', {
+        class: 'fig-ink', cx: mapX(plotData.approxMarker[0]).toFixed(1), cy: mapY(plotData.approxMarker[1]).toFixed(1), r: '4',
+      }));
+    }
+    return svg;
+  }
+
+  function findHookEl(svg, attr, value) {
+    if (!svg) return null;
+    for (const node of svg.querySelectorAll(`[${attr}]`)) {
+      if (node.getAttribute(attr) === value) return node;
+    }
+    return null;
+  }
+
+  function estimateBadgeAnchor(svg, nodeId) {
+    const matches = [];
+    for (const node of svg.querySelectorAll('[data-node]')) {
+      if (node.getAttribute('data-node') === nodeId) matches.push(node);
+    }
+    if (matches.length === 0) return null;
+    const target = matches.find((n) => n.tagName && n.tagName.toLowerCase() === 'circle') || matches[0];
+    const cx = parseFloat(target.getAttribute('cx'));
+    const cy = parseFloat(target.getAttribute('cy'));
+    if (Number.isFinite(cx) && Number.isFinite(cy)) return [cx, cy - 22];
+    const x = parseFloat(target.getAttribute('x'));
+    const y = parseFloat(target.getAttribute('y'));
+    if (Number.isFinite(x) && Number.isFinite(y)) return [x, y - 18];
+    try {
+      if (typeof target.getBBox === 'function') {
+        const b = target.getBBox();
+        return [b.x + b.width / 2, b.y - 16];
+      }
+    } catch (e) {}
+    return [40, 24];
+  }
+
+  function addPanelSection(doc, parent, title, bodyEl) {
+    const sec = el(doc, 'div', { className: 'sec' });
+    sec.appendChild(el(doc, 'h3', { className: 'sec-title' }, title));
+    sec.appendChild(bodyEl);
+    parent.appendChild(sec);
+    return sec;
+  }
+
+  // ---------- Mount ----------
+
+  function mount(spec, rootEl, deps) {
+    const d = deps || {};
+    const doc = d.document || (typeof document !== 'undefined' ? document : null);
+    const win = d.window || (typeof window !== 'undefined' ? window : null);
+    const mna = d.mna || (typeof globalThis !== 'undefined' ? globalThis.EC2MNA : null);
+
+    if (!doc || !rootEl) {
+      throw new Error('EC2Lab.mount requires a valid document and root element');
+    }
+
+    const systemDark = () => {
+      try { return Boolean(win && win.matchMedia && win.matchMedia('(prefers-color-scheme: dark)').matches); } catch (e) { return false; }
+    };
+    const isNarrowViewport = () => {
+      if (d.narrow !== undefined) return Boolean(d.narrow);
+      try { return Boolean(win && win.matchMedia && win.matchMedia('(max-width: 1023.98px)').matches); } catch (e) { return false; }
+    };
+    const isReduceMotion = () => {
+      try { return Boolean(win && win.matchMedia && win.matchMedia('(prefers-reduced-motion: reduce)').matches); } catch (e) { return false; }
+    };
+
+    let savedTheme = null;
+    try {
+      savedTheme = win && win.localStorage ? win.localStorage.getItem('od-theme') : null;
+    } catch (e) {
+      savedTheme = null;
+    }
+
+    let state = createInitialState(spec);
+    state.theme = (savedTheme === 'light' || savedTheme === 'dark') ? savedTheme : (systemDark() ? 'dark' : 'light');
+    state.narrow = isNarrowViewport();
+
+    const dom = ensureShell(doc, rootEl, spec);
+    if (dom.brandEl) dom.brandEl.textContent = spec.title || '';
+
+    let openPortMenu = null;
+    let lastModeKey = null;
+    let lastSvgEl = null;
+    let leftBuiltMode = null;
+    let pulseTimer = null;
+    let loggedEvalErr = false;
+
+    const stopPulse = () => {
+      if (pulseTimer !== null) {
+        clearInterval(pulseTimer);
+        pulseTimer = null;
+      }
+    };
+
+    const renderMath = () => {
+      if (!win || typeof win.renderMathInElement !== 'function') return;
+      const opts = {
+        delimiters: [{ left: '$$', right: '$$', display: true }, { left: '$', right: '$', display: false }],
+        throwOnError: false,
+        ignoredTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'svg'],
+      };
+      try {
+        if (dom.panelRightInner) win.renderMathInElement(dom.panelRightInner, opts);
+        if (dom.predictSlot) win.renderMathInElement(dom.predictSlot, opts);
+      } catch (e) {}
+    };
+
+    function updateSvgPortAria() {
+      if (!lastSvgEl) return;
+      for (const portEl of lastSvgEl.querySelectorAll('[data-port]')) {
+        portEl.setAttribute('aria-expanded', openPortMenu === portEl.getAttribute('data-port') ? 'true' : 'false');
+      }
+    }
+
+    function closePortPopover(restoreFocus) {
+      const existing = dom.stageWrap && dom.stageWrap.querySelector('.port-popover');
+      if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
+      const prevId = openPortMenu;
+      openPortMenu = null;
+      if (restoreFocus && prevId && lastSvgEl) {
+        const portEl = findHookEl(lastSvgEl, 'data-port', prevId);
+        if (portEl && typeof portEl.focus === 'function') portEl.focus();
+      }
+      updateSvgPortAria();
+    }
+
+    function openPortPopover(portId, anchorEl) {
+      const portDef = getPortsForMode(spec, state.mode).find((p) => p.id === portId);
+      if (!portDef || portDef.options.length === 0) return;
+      if (openPortMenu === portId) {
+        closePortPopover(false);
+        return;
+      }
+      closePortPopover(false);
+      openPortMenu = portId;
+      updateSvgPortAria();
+
+      const pop = el(doc, 'div', { className: 'port-popover', role: 'menu', 'aria-label': portDef.label });
+      pop.appendChild(el(doc, 'div', { className: 'port-popover-title' }, portDef.label));
+      const menuBtns = [];
+      for (const opt of portDef.options) {
+        const pressed = state.ports[portId] === opt.id ? 'true' : 'false';
+        const btn = el(doc, 'button', {
+          type: 'button', role: 'menuitemradio', 'aria-pressed': pressed, 'aria-checked': pressed,
+        }, opt.label);
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          closePortPopover(true);
+          dispatch({ type: 'SET_PORT', portId, value: opt.id });
+        });
+        menuBtns.push(btn);
+        pop.appendChild(btn);
+      }
+      pop.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+          if (menuBtns.length === 0) return;
+          e.preventDefault();
+          const cur = menuBtns.indexOf(doc.activeElement);
+          const nextIdx = e.key === 'ArrowDown'
+            ? (cur + 1) % menuBtns.length
+            : (cur <= 0 ? menuBtns.length - 1 : cur - 1);
+          if (menuBtns[nextIdx] && menuBtns[nextIdx].focus) menuBtns[nextIdx].focus();
+        }
+      });
+      dom.stageWrap.appendChild(pop);
+      const focusTarget = menuBtns.find((b) => b.getAttribute('aria-pressed') === 'true') || menuBtns[0];
+      if (focusTarget && typeof focusTarget.focus === 'function') {
+        try { focusTarget.focus(); } catch (e) {}
+      }
+
+      try {
+        if (anchorEl && anchorEl.getBoundingClientRect && dom.stageWrap.getBoundingClientRect) {
+          const wr = dom.stageWrap.getBoundingClientRect();
+          const ar = anchorEl.getBoundingClientRect();
+          if (wr.width > 0 && ar.width >= 0) {
+            pop.style.left = `${Math.round(Math.max(8, Math.min(ar.left - wr.left, Math.max(8, wr.width - 170))))}px`;
+            pop.style.top = `${Math.round(Math.max(8, Math.min(ar.bottom - wr.top + 6, Math.max(8, wr.height - 120))))}px`;
+          }
+        }
+      } catch (e) {}
+    }
+
+    function bindSvgHooks(svg) {
+      for (const nodeEl of svg.querySelectorAll('[data-node]')) {
+        const nid = nodeEl.getAttribute('data-node');
+        nodeEl.addEventListener('click', () => dispatch({ type: 'FOCUS_NODE', nodeId: nid }));
+      }
+      for (const elemEl of svg.querySelectorAll('[data-elem]')) {
+        const eid = elemEl.getAttribute('data-elem');
+        elemEl.setAttribute('role', 'button');
+        elemEl.setAttribute('tabindex', '0');
+        const toggle = (e) => { e.stopPropagation(); dispatch({ type: 'TOGGLE_ELEM', id: eid }); };
+        elemEl.addEventListener('click', toggle);
+        elemEl.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(e); }
+        });
+      }
+      for (const portEl of svg.querySelectorAll('[data-port]')) {
+        const pid = portEl.getAttribute('data-port');
+        portEl.setAttribute('role', 'button');
+        portEl.setAttribute('tabindex', '0');
+        portEl.setAttribute('aria-haspopup', 'menu');
+        portEl.setAttribute('aria-expanded', 'false');
+        const open = (e) => { e.stopPropagation(); openPortPopover(pid, portEl); };
+        portEl.addEventListener('click', open);
+        portEl.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(e); }
+        });
+      }
+    }
+
+    function syncBadges(svg, evalRes) {
+      const showLabels = state.toggles && ('labels' in state.toggles) ? Boolean(state.toggles.labels) : true;
+      const badgeMap = new Map();
+      const collect = (mapObj, onlyExistingSlot) => {
+        if (!showLabels || !mapObj || typeof mapObj !== 'object') return;
+        for (const [id, info] of Object.entries(mapObj)) {
+          if (badgeMap.has(id)) continue;
+          if (onlyExistingSlot && !findHookEl(svg, 'data-badge-for', id)) continue;
+          const txt = formatNodeBadge(info);
+          if (txt) badgeMap.set(id, { txt, info });
+        }
+      };
+      collect(evalRes && evalRes.nodes, false);
+      collect(evalRes && evalRes.branches, false);
+      collect(evalRes && evalRes.ports, true);
+
+      const existingSlots = new Map();
+      for (const slot of svg.querySelectorAll('[data-badge-for]')) {
+        const id = slot.getAttribute('data-badge-for');
+        existingSlots.set(id, slot);
+        if (!badgeMap.has(id)) {
+          slot.replaceChildren();
+          slot.classList.remove('lab-badge', 'is-hot', 'is-bad');
+        }
+      }
+
+      let badgesLayer = svg.querySelector('[data-badges]');
+      for (const [id, entry] of badgeMap.entries()) {
+        let slot = existingSlots.get(id);
+        if (!slot) {
+          const anchor = estimateBadgeAnchor(svg, id);
+          if (!anchor) continue;
+          if (!badgesLayer) {
+            badgesLayer = svgEl(doc, 'g', { 'data-badges': '' });
+            svg.appendChild(badgesLayer);
+          }
+          slot = svgEl(doc, 'g', {
+            'data-badge-for': id,
+            'data-auto-badge': '1',
+            transform: `translate(${Math.round(anchor[0])}, ${Math.round(anchor[1])})`,
+          });
+          badgesLayer.appendChild(slot);
+        }
+
+        slot.classList.add('lab-badge');
+        const info = entry.info && typeof entry.info === 'object' ? entry.info : {};
+        slot.classList.toggle('is-hot', Boolean(info.hot || state.focusNode === id));
+        slot.classList.toggle('is-bad', Boolean(info.bad));
+
+        const rect = svgEl(doc, 'rect', { class: 'lab-badge-bg', 'data-badge-bg': '1', y: '-11', height: '22', rx: '6' });
+        const textNode = svgEl(doc, 'text', { class: 'lab-badge-text', x: '0', y: '4', 'text-anchor': 'middle' }, entry.txt);
+        slot.replaceChildren(rect, textNode);
+
+        let textW = 0;
+        try { if (textNode.getComputedTextLength) textW = textNode.getComputedTextLength(); } catch (e) { textW = 0; }
+        const w = Math.max(42, Math.ceil((textW > 0 ? textW : entry.txt.length * 7.2) + 14));
+        rect.setAttribute('x', String(-w / 2));
+        rect.setAttribute('width', String(w));
+      }
+    }
+
+    function syncSvg(evalRes) {
+      const m = getModeDef(spec, state.mode);
+      if (!m) return;
+
+      if (lastModeKey !== state.mode) {
+        dom.svgHost.innerHTML = m.svg || '';
+        lastSvgEl = dom.svgHost.querySelector('svg');
+        if (lastSvgEl) {
+          if (!lastSvgEl.getAttribute('role')) lastSvgEl.setAttribute('role', 'img');
+          if (!lastSvgEl.getAttribute('aria-label') && (m.ariaLabel || spec.title)) {
+            lastSvgEl.setAttribute('aria-label', m.ariaLabel || spec.title);
+          }
+          bindSvgHooks(lastSvgEl);
+        }
+        lastModeKey = state.mode;
+      }
+
+      const svg = lastSvgEl;
+      if (!svg) return;
+
+      for (const elNode of svg.querySelectorAll('[data-node]')) {
+        const id = elNode.getAttribute('data-node');
+        const info = evalRes && evalRes.nodes ? evalRes.nodes[id] : null;
+        const isObj = info && typeof info === 'object';
+        elNode.classList.toggle('is-hot', Boolean((isObj && info.hot) || state.focusNode === id));
+        elNode.classList.toggle('is-bad', Boolean(isObj && info.bad));
+        elNode.classList.toggle('is-dim', Boolean(isObj && info.dim));
+      }
+
+      for (const elBr of svg.querySelectorAll('[data-branch]')) {
+        const id = elBr.getAttribute('data-branch');
+        const info = evalRes && evalRes.branches ? evalRes.branches[id] : null;
+        const isObj = info && typeof info === 'object';
+        const rev = Boolean(isObj && (info.dir === -1 || info.dir === 'rev'));
+        elBr.classList.toggle('is-hot', info === true || Boolean(isObj && (info.hot || info.active)));
+        elBr.classList.toggle('is-bad', Boolean(isObj && info.bad));
+        elBr.classList.toggle('is-dim', Boolean(isObj && info.dim));
+        elBr.classList.toggle('is-rev', rev);
+        if (isObj && info.dir !== undefined) elBr.setAttribute('data-dir', rev ? 'rev' : 'fwd');
+      }
+
+      for (const elItem of svg.querySelectorAll('[data-elem]')) {
+        const id = elItem.getAttribute('data-elem');
+        const isOff = state.disabledElems.includes(id);
+        const info = evalRes && evalRes.elems ? evalRes.elems[id] : null;
+        elItem.classList.toggle('is-off', isOff);
+        elItem.classList.toggle('is-hot', Boolean(!isOff && info && info.hot));
+        elItem.classList.toggle('is-bad', Boolean(info && info.bad));
+        elItem.classList.toggle('is-dim', Boolean(info && info.dim));
+        elItem.setAttribute('aria-pressed', isOff ? 'false' : 'true');
+      }
+
+      const portDefs = getPortsForMode(spec, state.mode);
+      for (const portEl of svg.querySelectorAll('[data-port]')) {
+        const id = portEl.getAttribute('data-port');
+        const val = state.ports[id];
+        const portDef = portDefs.find((p) => p.id === id);
+        const opt = portDef ? portDef.options.find((o) => o.id === val) : null;
+        const info = evalRes && evalRes.ports ? evalRes.ports[id] : null;
+        portEl.classList.toggle('is-bad', Boolean(info && info.bad));
+        portEl.classList.toggle('is-hot', Boolean(info && (info.hot || info.ok)));
+        portEl.setAttribute('data-port-state', val != null ? String(val) : '');
+
+        for (const viewEl of portEl.querySelectorAll('[data-port-view]')) {
+          if (viewEl.getAttribute('data-port-view') === val) {
+            viewEl.removeAttribute('hidden');
+            viewEl.removeAttribute('display');
+          } else {
+            viewEl.setAttribute('hidden', '');
+            viewEl.setAttribute('display', 'none');
+          }
+        }
+        const chip = portEl.querySelector('.port-chip');
+        if (chip && opt) {
+          const chipText = chip.tagName && chip.tagName.toLowerCase() === 'text'
+            ? chip
+            : chip.querySelector('text');
+          if (chipText) chipText.textContent = opt.shortLabel || opt.label;
+          else chip.textContent = opt.shortLabel || opt.label;
+        }
+      }
+
+      const curStep = Number(state.causalStep) || 0;
+      for (const cEl of svg.querySelectorAll('[data-causal-step]')) {
+        const nums = (cEl.getAttribute('data-causal-step') || '').split(',').map((s) => Number(s.trim())).filter(Number.isFinite);
+        if (curStep <= 0 || nums.length === 0) {
+          cEl.classList.remove('is-hot', 'is-done', 'is-dim');
+        } else {
+          const isCur = nums.includes(curStep);
+          const isDone = !isCur && nums.some((n) => n < curStep);
+          cEl.classList.toggle('is-hot', isCur);
+          cEl.classList.toggle('is-done', isDone);
+          cEl.classList.toggle('is-dim', !isCur && !isDone);
+        }
+      }
+
+      syncBadges(svg, evalRes);
+      updateSvgPortAria();
+    }
+
+    function renderPredictCard() {
+      const p = spec.predict;
+      if (!p || state.predictDismissed) {
+        dom.predictSlot.replaceChildren();
+        return;
+      }
+      const card = el(doc, 'section', { className: 'predict-card', 'aria-label': '예측 확인' });
+      const head = el(doc, 'div', { className: 'predict-head' });
+      head.appendChild(el(doc, 'p', { className: 'predict-prompt' }, p.prompt || '먼저 결과를 예상해 보세요.'));
+      const skipBtn = el(doc, 'button', { type: 'button', className: 'predict-skip' }, state.predictChoice != null ? '닫기' : '건너뛰기');
+      skipBtn.addEventListener('click', () => dispatch({ type: 'DISMISS_PREDICT' }));
+      head.appendChild(skipBtn);
+      card.appendChild(head);
+
+      const optsRow = el(doc, 'div', { className: 'predict-opts' });
+      for (const rawOpt of p.options || []) {
+        const oid = typeof rawOpt === 'object' ? rawOpt.id : rawOpt;
+        const olabel = typeof rawOpt === 'object' ? rawOpt.label : rawOpt;
+        const btn = el(doc, 'button', {
+          type: 'button', className: 'predict-btn', 'aria-pressed': state.predictChoice === oid ? 'true' : 'false',
+        }, olabel);
+        btn.addEventListener('click', () => dispatch({ type: 'ANSWER_PREDICT', choice: oid }));
+        optsRow.appendChild(btn);
+      }
+      card.appendChild(optsRow);
+
+      if (state.predictChoice != null) {
+        const correct = p.answerId !== undefined && state.predictChoice === p.answerId;
+        card.appendChild(el(doc, 'div', {
+          className: `predict-feedback${correct ? '' : ' is-wrong'}`, 'aria-live': 'polite',
+        }, (correct ? '맞았어요. ' : '다시 살펴볼까요? ') + (p.explain || '')));
+      }
+      dom.predictSlot.replaceChildren(card);
+    }
+
+    function renderPlot(evalRes) {
+      const pd = evalRes && evalRes.plotData;
+      if (!pd) {
+        dom.plotSlot.replaceChildren();
+        return;
+      }
+      const wrap = el(doc, 'section', { className: 'plot-wrap', 'aria-label': pd.title || '근사 비교 그래프' });
+      const head = el(doc, 'div', { className: 'plot-head' });
+      const legend = el(doc, 'div', { className: 'plot-legend' });
+
+      const exactItem = el(doc, 'span');
+      exactItem.appendChild(el(doc, 'span', { className: 'plot-sw exact' }));
+      exactItem.appendChild(el(doc, 'span', null, pd.exactLabel || '정확식 (실선)'));
+      legend.appendChild(exactItem);
+
+      if (Array.isArray(pd.approx) && pd.approx.length > 0) {
+        const approxItem = el(doc, 'span');
+        approxItem.appendChild(el(doc, 'span', { className: 'plot-sw approx' }));
+        approxItem.appendChild(el(doc, 'span', null, pd.approxLabel || '근사식 (점선)'));
+        legend.appendChild(approxItem);
+      }
+      head.appendChild(legend);
+
+      if (typeof pd.errPct === 'number' && Number.isFinite(pd.errPct)) {
+        const threshold = pd.thresholdPct !== undefined ? pd.thresholdPct : 10;
+        const broken = pd.errPct >= threshold;
+        head.appendChild(el(doc, 'span', {
+          className: `err-badge${broken ? ' is-bad' : ''}`,
+        }, `오차 ${pd.errPct.toFixed(1)}% · ${broken ? `${threshold}% 초과 (근사 붕괴)` : `${threshold}% 이내`}`));
+      }
+      wrap.appendChild(head);
+
+      const plotSvg = buildPlotSvg(doc, pd);
+      if (plotSvg) wrap.appendChild(plotSvg);
+      dom.plotSlot.replaceChildren(wrap);
+    }
+
+    function buildLeftPanel() {
+      const inner = dom.panelLeftInner;
+      if (!inner) return;
+      inner.replaceChildren();
+
+      const pHead = el(doc, 'div', { className: 'panel-head' });
+      pHead.appendChild(el(doc, 'h2', null, '조작'));
+      const closeBtn = el(doc, 'button', { type: 'button', className: 'text-btn' }, '닫기');
+      closeBtn.addEventListener('click', () => dispatch({ type: 'CLOSE_DRAWER' }));
+      pHead.appendChild(closeBtn);
+      inner.appendChild(pHead);
+
+      let sections = 0;
+
+      const toggles = getTogglesForMode(spec, state.mode);
+      if (toggles.length > 0) {
+        sections++;
+        const grid = el(doc, 'div', { className: 'opt' });
+        for (const t of toggles) {
+          const btn = el(doc, 'button', {
+            type: 'button', className: 'btn', 'data-toggle-key': t.key,
+            'aria-pressed': state.toggles[t.key] ? 'true' : 'false',
+          });
+          btn.appendChild(el(doc, 'span', { className: 'box', 'aria-hidden': 'true' }));
+          btn.appendChild(el(doc, 'span', null, t.label));
+          btn.addEventListener('click', () => dispatch({ type: 'TOGGLE_OPT', key: t.key }));
+          grid.appendChild(btn);
+        }
+        addPanelSection(doc, inner, '보기 옵션', grid);
+      }
+
+      const cSteps = getCausalStepsForMode(spec, state.mode);
+      if (cSteps.length > 0) {
+        sections++;
+        const wrap = el(doc, 'div');
+        const bar = el(doc, 'div', { className: 'causal-bar' });
+        const pulseBtn = el(doc, 'button', { type: 'button', className: 'btn', 'data-causal-action': 'pulse', 'aria-pressed': 'false' }, '자동 맥동');
+        const nextBtn = el(doc, 'button', { type: 'button', className: 'btn', 'data-causal-action': 'next' }, '다음 박자');
+        const resetBtn = el(doc, 'button', { type: 'button', className: 'btn', 'data-causal-action': 'reset' }, '초기화');
+
+        nextBtn.addEventListener('click', () => { stopPulse(); pulseBtn.setAttribute('aria-pressed', 'false'); dispatch({ type: 'PULSE_CAUSAL', delta: 1 }); });
+        resetBtn.addEventListener('click', () => { stopPulse(); pulseBtn.setAttribute('aria-pressed', 'false'); dispatch({ type: 'PULSE_CAUSAL', reset: true }); });
+        pulseBtn.addEventListener('click', () => {
+          if (pulseTimer !== null) {
+            stopPulse();
+            pulseBtn.setAttribute('aria-pressed', 'false');
+            return;
+          }
+          if (isReduceMotion()) {
+            dispatch({ type: 'PULSE_CAUSAL', delta: 1 });
+            return;
+          }
+          pulseTimer = setInterval(() => dispatch({ type: 'PULSE_CAUSAL', delta: 1 }), 900);
+          pulseBtn.setAttribute('aria-pressed', 'true');
+          dispatch({ type: 'PULSE_CAUSAL', delta: 1 });
+        });
+
+        bar.appendChild(nextBtn);
+        bar.appendChild(pulseBtn);
+        bar.appendChild(resetBtn);
+        wrap.appendChild(bar);
+
+        const list = el(doc, 'div', { className: 'steps' });
+        for (let i = 0; i < cSteps.length; i++) {
+          const cs = cSteps[i];
+          const btn = el(doc, 'button', {
+            type: 'button', className: 'btn', 'data-causal-id': String(cs.id),
+            'aria-pressed': state.causalStep === cs.id ? 'true' : 'false',
+          });
+          btn.appendChild(el(doc, 'span', { className: 'step-num num' }, String(i + 1)));
+          const txt = el(doc, 'span', { className: 'step-txt' });
+          txt.appendChild(el(doc, 'b', null, cs.label));
+          if (cs.detail) txt.appendChild(el(doc, 'span', null, cs.detail));
+          btn.appendChild(txt);
+          btn.addEventListener('click', () => {
+            stopPulse();
+            pulseBtn.setAttribute('aria-pressed', 'false');
+            dispatch({ type: 'PULSE_CAUSAL', step: cs.id });
+          });
+          list.appendChild(btn);
+        }
+        wrap.appendChild(list);
+        addPanelSection(doc, inner, '+Δv 인과 도미노', wrap);
+      }
+
+      const portDefs = getPortsForMode(spec, state.mode);
+      if (portDefs.length > 0) {
+        sections++;
+        const list = el(doc, 'div', { className: 'port-controls' });
+        for (const p of portDefs) {
+          const grp = el(doc, 'div', { className: 'port-group' });
+          grp.appendChild(el(doc, 'span', { className: 'port-group-label' }, p.label));
+          const row = el(doc, 'div', { className: 'port-choices' });
+          for (const opt of p.options) {
+            const btn = el(doc, 'button', {
+              type: 'button', className: 'btn', 'data-port-ctrl': p.id, 'data-port-opt': opt.id,
+              'aria-pressed': state.ports[p.id] === opt.id ? 'true' : 'false',
+            }, opt.label);
+            btn.addEventListener('click', () => { closePortPopover(false); dispatch({ type: 'SET_PORT', portId: p.id, value: opt.id }); });
+            row.appendChild(btn);
+          }
+          grp.appendChild(row);
+          list.appendChild(grp);
+        }
+        addPanelSection(doc, inner, '포트 종단 조립', list);
+      }
+
+      const elems = getElemsForMode(spec, state.mode);
+      if (elems.length > 0) {
+        sections++;
+        const list = el(doc, 'div', { className: 'elem-controls' });
+        for (const item of elems) {
+          const btn = el(doc, 'button', {
+            type: 'button', className: 'btn', 'data-elem-ctrl': item.id,
+            'aria-pressed': state.disabledElems.includes(item.id) ? 'false' : 'true',
+          });
+          btn.appendChild(el(doc, 'span', { className: 'box', 'aria-hidden': 'true' }));
+          btn.appendChild(el(doc, 'span', null, item.label));
+          btn.addEventListener('click', () => dispatch({ type: 'TOGGLE_ELEM', id: item.id }));
+          list.appendChild(btn);
+        }
+        addPanelSection(doc, inner, '소자 포함 여부', list);
+      }
+
+      const params = getParamsForMode(spec, state.mode);
+      if (params.length > 0) {
+        sections++;
+        const list = el(doc, 'div', { className: 'slider-list' });
+        for (const p of params) {
+          const row = el(doc, 'div', { className: 'slider-row' });
+          const head = el(doc, 'div', { className: 'slider-head' });
+          const inputId = `param-${p.key}`;
+          head.appendChild(el(doc, 'label', { for: inputId }, p.label || p.key));
+          head.appendChild(el(doc, 'span', { className: 'slider-val', 'data-param-val': p.key }, formatParamValue(p, state.params[p.key])));
+          row.appendChild(head);
+
+          const isLog = p.scale === 'log' && p.min > 0 && p.max > p.min;
+          const rangeAttrs = isLog
+            ? {
+                id: inputId, type: 'range', min: '0', max: '1000', step: '1',
+                'data-param-key': p.key, 'data-param-log': '1',
+                value: String(Math.round(1000 * Math.log(state.params[p.key] / p.min) / Math.log(p.max / p.min))),
+              }
+            : {
+                id: inputId, type: 'range', min: String(p.min), max: String(p.max),
+                step: String(p.step !== undefined ? p.step : 'any'),
+                'data-param-key': p.key, value: String(state.params[p.key]),
+              };
+          const slider = el(doc, 'input', rangeAttrs);
+          slider.addEventListener('input', (e) => {
+            const raw = Number(e.target.value);
+            dispatch({ type: 'SET_PARAM', key: p.key, value: isLog ? p.min * Math.pow(p.max / p.min, raw / 1000) : raw });
+          });
+          row.appendChild(slider);
+          list.appendChild(row);
+        }
+        addPanelSection(doc, inner, '소자·입력 값', list);
+      }
+
+      const presets = getPresetsForMode(spec, state.mode);
+      if (presets.length > 0) {
+        sections++;
+        const grid = el(doc, 'div', { className: 'preset-grid' });
+        for (const pr of presets) {
+          const btn = el(doc, 'button', { type: 'button', className: 'btn', 'data-preset-id': pr.id }, pr.label);
+          btn.addEventListener('click', () => dispatch({ type: 'APPLY_PRESET', id: pr.id }));
+          grid.appendChild(btn);
+        }
+        addPanelSection(doc, inner, '대표 설정', grid);
+      }
+
+      const steps = getStepsForMode(spec, state.mode);
+      if (steps.length > 0) {
+        sections++;
+        const wrap = el(doc, 'div');
+        const list = el(doc, 'div', { className: 'steps' });
+        for (let k = 0; k < steps.length; k++) {
+          const { s, i } = steps[k];
+          const btn = el(doc, 'button', {
+            type: 'button', className: 'btn', 'data-step-idx': String(i),
+            'aria-pressed': state.step === i ? 'true' : 'false',
+          });
+          btn.appendChild(el(doc, 'span', { className: 'step-num num' }, String(k + 1)));
+          const txt = el(doc, 'span', { className: 'step-txt' });
+          txt.appendChild(el(doc, 'b', null, s.title || s.label || `단계 ${k + 1}`));
+          if (s.who || s.subtitle) txt.appendChild(el(doc, 'span', null, s.who || s.subtitle));
+          btn.appendChild(txt);
+          btn.addEventListener('click', () => dispatch({ type: 'PICK_STEP', index: i }));
+          list.appendChild(btn);
+        }
+        wrap.appendChild(list);
+        wrap.appendChild(el(doc, 'div', { className: 'detail', 'data-step-detail': '', 'aria-live': 'polite', hidden: true }));
+        addPanelSection(doc, inner, '단계별 살펴보기', wrap);
+      }
+
+      if (sections === 0) {
+        inner.appendChild(el(doc, 'p', { className: 'sub' }, '이 보기에는 추가 조작이 없어요.'));
+      }
+      leftBuiltMode = state.mode;
+    }
+
+    function syncStepDetail() {
+      if (!dom.panelLeftInner) return;
+      const detailEl = dom.panelLeftInner.querySelector('[data-step-detail]');
+      if (!detailEl) return;
+      const s = state.step >= 0 && Array.isArray(spec.steps) ? spec.steps[state.step] : null;
+      if (s && (s.text || s.detail)) {
+        detailEl.removeAttribute('hidden');
+        detailEl.textContent = s.text || s.detail;
+      } else {
+        detailEl.setAttribute('hidden', '');
+        detailEl.textContent = '';
+      }
+    }
+
+    function syncLeftPanelInPlace() {
+      if (!dom.panelLeftInner) return;
+      if (leftBuiltMode !== state.mode) {
+        buildLeftPanel();
+        syncStepDetail();
+        return;
+      }
+      const inner = dom.panelLeftInner;
+      for (const btn of inner.querySelectorAll('[data-toggle-key]')) {
+        btn.setAttribute('aria-pressed', state.toggles[btn.getAttribute('data-toggle-key')] ? 'true' : 'false');
+      }
+      for (const btn of inner.querySelectorAll('[data-causal-id]')) {
+        btn.setAttribute('aria-pressed', String(state.causalStep) === btn.getAttribute('data-causal-id') ? 'true' : 'false');
+      }
+      const pulseBtn = inner.querySelector('[data-causal-action="pulse"]');
+      if (pulseBtn) pulseBtn.setAttribute('aria-pressed', pulseTimer !== null ? 'true' : 'false');
+      for (const btn of inner.querySelectorAll('[data-port-ctrl]')) {
+        const match = state.ports[btn.getAttribute('data-port-ctrl')] === btn.getAttribute('data-port-opt');
+        btn.setAttribute('aria-pressed', match ? 'true' : 'false');
+      }
+      for (const btn of inner.querySelectorAll('[data-elem-ctrl]')) {
+        btn.setAttribute('aria-pressed', state.disabledElems.includes(btn.getAttribute('data-elem-ctrl')) ? 'false' : 'true');
+      }
+      for (const p of getParamsForMode(spec, state.mode)) {
+        const val = state.params[p.key];
+        const labelEl = findHookEl(inner, 'data-param-val', p.key);
+        if (labelEl) labelEl.textContent = formatParamValue(p, val);
+        const inputEl = findHookEl(inner, 'data-param-key', p.key);
+        if (inputEl) {
+          inputEl.value = inputEl.hasAttribute('data-param-log') && p.min > 0 && p.max > p.min
+            ? String(Math.round(1000 * Math.log(val / p.min) / Math.log(p.max / p.min)))
+            : String(val);
+        }
+      }
+      for (const btn of inner.querySelectorAll('[data-step-idx]')) {
+        btn.setAttribute('aria-pressed', state.step === Number(btn.getAttribute('data-step-idx')) ? 'true' : 'false');
+      }
+      syncStepDetail();
+    }
+
+    function renderRightPanel(evalRes) {
+      const inner = dom.panelRightInner;
+      if (!inner) return;
+      inner.replaceChildren();
+
+      const pHead = el(doc, 'div', { className: 'panel-head' });
+      pHead.appendChild(el(doc, 'h2', null, '설명'));
+      const closeBtn = el(doc, 'button', { type: 'button', className: 'text-btn' }, '닫기');
+      closeBtn.addEventListener('click', () => dispatch({ type: 'CLOSE_DRAWER' }));
+      pHead.appendChild(closeBtn);
+      inner.appendChild(pHead);
+
+      if (evalRes && Array.isArray(evalRes.tiles) && evalRes.tiles.length > 0) {
+        const grid = el(doc, 'div', { className: `tiles${evalRes.tiles.length === 3 ? ' three' : ''}` });
+        for (const t of evalRes.tiles) {
+          const tile = el(doc, 'div', { className: 'tile' });
+          tile.appendChild(el(doc, 'b', { className: 'num' }, t.val ?? t.value ?? ''));
+          tile.appendChild(el(doc, 'span', null, t.label ?? ''));
+          grid.appendChild(tile);
+        }
+        addPanelSection(doc, inner, '수치 요약', grid);
+      }
+
+      if (evalRes && evalRes.diagnosis) {
+        const diag = typeof evalRes.diagnosis === 'string' ? { kind: 'info', text: evalRes.diagnosis } : evalRes.diagnosis;
+        const kind = diag.kind || (diag.singular ? 'bad' : 'info');
+        const box = el(doc, 'div', {
+          className: `diagnosis${kind === 'ok' ? ' is-ok' : kind === 'warn' ? ' is-warn' : kind === 'bad' ? ' is-bad' : ''}`,
+          'aria-live': 'polite',
+        });
+        if (diag.title) box.appendChild(el(doc, 'b', null, diag.title));
+        box.appendChild(el(doc, 'span', null, diag.text || diag.reason || ''));
+        addPanelSection(doc, inner, '회로 진단', box);
+      }
+
+      const eqs = [];
+      if (evalRes && evalRes.formula) eqs.push(typeof evalRes.formula === 'string' ? { tex: evalRes.formula } : evalRes.formula);
+      if (evalRes && Array.isArray(evalRes.equations)) {
+        for (const eq of evalRes.equations) eqs.push(typeof eq === 'string' ? { tex: eq } : eq);
+      }
+      if (eqs.length > 0) {
+        const box = el(doc, 'div', { className: 'formula-box' });
+        for (const eq of eqs) {
+          const item = el(doc, 'div', { className: 'eq-item' });
+          if (eq.name || eq.title) item.appendChild(el(doc, 'span', { className: 'eq-name' }, eq.name || eq.title));
+          item.appendChild(el(doc, 'div', null, eq.tex || eq.text || ''));
+          box.appendChild(item);
+        }
+        addPanelSection(doc, inner, '핵심 수식', box);
+      }
+
+      const activeCausal = getCausalStepsForMode(spec, state.mode).find((c) => c.id === state.causalStep);
+      const summaryText = (evalRes && evalRes.summary) || (activeCausal && activeCausal.detail) || '';
+      if (summaryText) {
+        addPanelSection(doc, inner, '지금 일어나는 일', el(doc, 'p', { className: 'summary-box', 'aria-live': 'polite' }, summaryText));
+      }
+
+      const mistakes = getMistakesForMode(spec, state.mode);
+      if (mistakes.length > 0) {
+        const sec = el(doc, 'div', { className: 'sec warn' });
+        sec.appendChild(el(doc, 'h3', { className: 'sec-title' }, '꼭 기억해요'));
+        for (const mk of mistakes) {
+          const item = el(doc, 'div', { className: 'mistake' });
+          item.appendChild(el(doc, 'b', null, mk.title || ''));
+          item.appendChild(el(doc, 'span', null, mk.text || ''));
+          sec.appendChild(item);
+        }
+        inner.appendChild(sec);
+      }
+    }
+
+    function syncTopbarAndPanels() {
+      try {
+        doc.documentElement.setAttribute('data-theme', state.theme);
+        if (doc.documentElement.dataset) doc.documentElement.dataset.theme = state.theme;
+      } catch (e) {}
+
+      if (dom.themeBtn) {
+        const lbl = state.theme === 'dark' ? '라이트 모드로 전환' : '다크 모드로 전환';
+        dom.themeBtn.setAttribute('aria-label', lbl);
+        dom.themeBtn.setAttribute('title', lbl);
+      }
+
+      if (dom.modeSegEl) {
+        const modes = getModes(spec);
+        if (modes.length <= 1) {
+          dom.modeSegEl.setAttribute('hidden', '');
+          dom.modeSegEl.replaceChildren();
+        } else {
+          dom.modeSegEl.removeAttribute('hidden');
+          dom.modeSegEl.replaceChildren();
+          for (const m of modes) {
+            const btn = el(doc, 'button', {
+              type: 'button', 'aria-pressed': m.key === state.mode ? 'true' : 'false',
+            }, m.label || m.key);
+            btn.addEventListener('click', () => dispatch({ type: 'SET_MODE', mode: m.key }));
+            dom.modeSegEl.appendChild(btn);
+          }
+        }
+      }
+
+      rootEl.setAttribute('data-drawer', state.narrow ? (state.drawer || 'none') : 'none');
+      const leftOn = state.narrow ? state.drawer === 'left' : state.leftOpen;
+      const rightOn = state.narrow ? state.drawer === 'right' : state.rightOpen;
+
+      if (dom.panelLeft) dom.panelLeft.classList.toggle('is-open', leftOn);
+      if (dom.panelRight) dom.panelRight.classList.toggle('is-open', rightOn);
+      if (dom.scrimEl) dom.scrimEl.classList.toggle('is-on', Boolean(state.narrow && state.drawer));
+
+      for (const [btn, on] of [[dom.leftBtn, leftOn], [dom.rightBtn, rightOn]]) {
+        if (!btn) continue;
+        btn.setAttribute('aria-expanded', on ? 'true' : 'false');
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      }
+    }
+
+    function render() {
+      syncTopbarAndPanels();
+
+      let evalRes = null;
+      try {
+        evalRes = typeof spec.evaluate === 'function' ? spec.evaluate(state, mna) : {};
+      } catch (err) {
+        if (!loggedEvalErr) {
+          loggedEvalErr = true;
+          if (typeof console !== 'undefined' && console.error) console.error(err);
+        }
+        evalRes = { diagnosis: { kind: 'bad', title: '계산 오류', text: String(err && err.message ? err.message : err) } };
+      }
+
+      renderPredictCard();
+      syncSvg(evalRes);
+      renderPlot(evalRes);
+      syncLeftPanelInPlace();
+      renderRightPanel(evalRes);
+      renderMath();
+    }
+
+    function dispatch(action) {
+      const next = reduceState(spec, state, action);
+      if (next === state) return;
+      if (action.type === 'SET_MODE' || action.type === 'APPLY_PRESET' || action.type === 'PICK_STEP') {
+        stopPulse();
+        closePortPopover(false);
+      }
+      if (action.type === 'SET_THEME') {
+        try {
+          if (win && win.localStorage) {
+            if ((next.theme === 'dark') === systemDark()) win.localStorage.removeItem('od-theme');
+            else win.localStorage.setItem('od-theme', next.theme);
+          }
+        } catch (e) {}
+      }
+      state = next;
+      render();
+    }
+
+    if (dom.leftBtn) dom.leftBtn.addEventListener('click', () => dispatch({ type: 'TOGGLE_PANEL', side: 'left', narrow: state.narrow }));
+    if (dom.rightBtn) dom.rightBtn.addEventListener('click', () => dispatch({ type: 'TOGGLE_PANEL', side: 'right', narrow: state.narrow }));
+    if (dom.scrimEl) dom.scrimEl.addEventListener('click', () => dispatch({ type: 'CLOSE_DRAWER' }));
+    if (dom.themeBtn) dom.themeBtn.addEventListener('click', () => dispatch({ type: 'SET_THEME', theme: state.theme === 'dark' ? 'light' : 'dark' }));
+
+    const onDocClick = (e) => {
+      if (!openPortMenu) return;
+      const pop = dom.stageWrap && dom.stageWrap.querySelector('.port-popover');
+      if (pop && !pop.contains(e.target)) closePortPopover(false);
+    };
+    const onKeyDown = (e) => {
+      if (e.key !== 'Escape') return;
+      if (openPortMenu) {
+        e.preventDefault();
+        closePortPopover(true);
+      } else if (state.narrow && state.drawer) {
+        e.preventDefault();
+        dispatch({ type: 'CLOSE_DRAWER' });
+      }
+    };
+    const onDocReady = () => renderMath();
+    let mq = null;
+    const onMqChange = () => {
+      const narrowNow = isNarrowViewport();
+      if (narrowNow !== state.narrow) {
+        state = Object.assign(cloneState(state), { narrow: narrowNow, drawer: null });
+        render();
+      }
+    };
+
+    try { doc.addEventListener('click', onDocClick); } catch (e) {}
+    try { doc.addEventListener('keydown', onKeyDown); } catch (e) {}
+    try {
+      if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', onDocReady);
+      if (win) win.addEventListener('load', onDocReady);
+    } catch (e) {}
+    try {
+      if (win && win.matchMedia) {
+        mq = win.matchMedia('(max-width: 1023.98px)');
+        if (mq && mq.addEventListener) mq.addEventListener('change', onMqChange);
+      }
+    } catch (e) {}
+
+    render();
+
+    const controller = {
+      getState: () => cloneState(state),
+      setMode: (mode) => dispatch({ type: 'SET_MODE', mode }),
+      pickStep: (index) => dispatch({ type: 'PICK_STEP', index }),
+      setParam: (key, value) => dispatch({ type: 'SET_PARAM', key, value }),
+      applyPreset: (id) => dispatch({ type: 'APPLY_PRESET', id }),
+      toggleElem: (id) => dispatch({ type: 'TOGGLE_ELEM', id }),
+      setPort: (portId, value) => dispatch({ type: 'SET_PORT', portId, value }),
+      pulseCausal: (step) => dispatch(step === undefined ? { type: 'PULSE_CAUSAL', delta: 1 } : { type: 'PULSE_CAUSAL', step }),
+      answerPredict: (choice) => dispatch({ type: 'ANSWER_PREDICT', choice }),
+      dismissPredict: () => dispatch({ type: 'DISMISS_PREDICT' }),
+      setTheme: (theme) => dispatch({ type: 'SET_THEME', theme }),
+      togglePanel: (side) => dispatch({ type: 'TOGGLE_PANEL', side, narrow: state.narrow }),
+      closeDrawer: () => dispatch({ type: 'CLOSE_DRAWER' }),
+      renderMath,
+      listProbeStates: () => buildProbeStates(spec),
+      applyProbeState: (probeState) => {
+        if (!probeState || typeof probeState !== 'object') return;
+        stopPulse();
+        closePortPopover(false);
+        const init = createInitialState(spec);
+        const merged = Object.assign(init, cloneState({
+          ...init,
+          ...probeState,
+          params: Object.assign({}, init.params, probeState.params || {}),
+          ports: Object.assign({}, init.ports, probeState.ports || {}),
+          toggles: Object.assign({}, init.toggles, probeState.toggles || {}),
+          disabledElems: Array.isArray(probeState.disabledElems) ? probeState.disabledElems : init.disabledElems,
+          theme: state.theme,
+          drawer: (probeState.drawer === 'left' || probeState.drawer === 'right') ? probeState.drawer : state.drawer,
+          leftOpen: probeState.leftOpen !== undefined ? probeState.leftOpen : state.leftOpen,
+          rightOpen: probeState.rightOpen !== undefined ? probeState.rightOpen : state.rightOpen,
+        }));
+        merged.narrow = state.narrow;
+        state = merged;
+        render();
+      },
+      destroy: () => {
+        stopPulse();
+        try { doc.removeEventListener('click', onDocClick); } catch (e) {}
+        try { doc.removeEventListener('keydown', onKeyDown); } catch (e) {}
+        try {
+          if (win) win.removeEventListener('load', onDocReady);
+          if (mq && mq.removeEventListener) mq.removeEventListener('change', onMqChange);
+        } catch (e) {}
+      },
+    };
+
+    if (win) win.__EC2_LAB__ = controller;
+    return controller;
+  }
+
+  return { createInitialState, reduceState, buildProbeStates, mount };
+});
+</script>
+<script>
+(function () {
+  var module = { exports: {} };
+  var exports = module.exports;
+  (function (module, exports) {
+const math = String.raw;
+const dividerResistance = 1000;
+const sourceVoltage = 1;
+const idealPorts = { sense: 'open', return: 'short' };
+const finitePorts = { sense: 'rated', return: 'rated' };
+const swappedPorts = { sense: 'short', return: 'open' };
+
+const gnd = (x, y) => `<path class="fig-ink sym" d="M${x - 10} ${y}h20m-16 5h12m-8 5h4"/>`;
+const verticalResistor = (x, y) => `<path class="fig-ink sym" d="M${x} ${y}l-7 5 14 5-14 5 14 5-14 5 14 5-7 10"/>`;
+const horizontalResistor = (x, y) => `<path class="fig-ink sym" d="M${x} ${y}l5-7 5 14 5-14 5 14 5-14 5 14 10-7"/>`;
+const oneVoltSource = (x, y) => `<g class="sym">
+  <circle class="fig-ink" cx="${x}" cy="${y}" r="19"/>
+  <path class="fig-ink" d="M${x - 5} ${y - 7}h10m-5-5v10m-5 10h10"/>
+</g>`;
+
+function termination(id, x, y, label) {
+  return `<g data-port="${id}" aria-label="${label}">
+    <path class="fig-ink" d="M${x} ${y}v22"/>
+    <circle class="fig-ink sym" cx="${x}" cy="${y + 25}" r="3"/>
+    <g data-port-view="open" display="none"/>
+    <g data-port-view="short" display="none">
+      <path class="fig-ink" d="M${x} ${y + 28}v71"/>
+      ${gnd(x, y + 99)}
+    </g>
+    <g data-port-view="rated" display="none">
+      <path class="fig-ink" d="M${x} ${y + 28}v15m0 40v16"/>
+      ${verticalResistor(x, y + 43)}
+      ${gnd(x, y + 99)}
+    </g>
+    <g class="port-chip">
+      <rect class="port-chip-bg" x="${x - 39}" y="${y + 115}" width="78" height="68" rx="8"/>
+      <text class="port-chip" style="font-size:15px" x="${x}" y="${y + 155}" text-anchor="middle"></text>
+    </g>
+  </g>`;
+}
+
+const circuit = `<svg viewBox="0 0 410 535" role="img" aria-label="분압기를 두 벌 복제해 감지 복제본의 자유 출력과 반송 복제본의 자유 입력을 각각 종단하는 회로예요.">
+  <text class="fig-text" style="font-size:18px;font-weight:700" x="20" y="29">감지 복제본 · 순방향 출력에 연결</text>
+  <path class="fig-ink" d="M45 112V78h64m40 0h46m0 0h24m40 0h17m0 0h85 M45 150v34 M276 78v36m0 40v30"/>
+  ${oneVoltSource(45, 131)}
+  ${horizontalResistor(109, 78)}
+  ${horizontalResistor(219, 78)}
+  ${verticalResistor(276, 114)}
+  ${gnd(45, 184)}
+  ${gnd(276, 184)}
+  ${termination('sense', 361, 78, '감지 복제본의 자유 출력 종단')}
+  <text class="fig-text fig-math" style="font-size:15px" x="128" y="60" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">o</tspan></text>
+  <text class="fig-text fig-math" style="font-size:15px" x="239" y="109" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+  <text class="fig-text fig-math" style="font-size:15px" x="253" y="139" text-anchor="end">R<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+  <text class="fig-text" x="78" y="135">내부 1 V</text>
+  <circle class="fig-dot" data-node="output" data-node-color="blue" cx="195" cy="78" r="4"/>
+  <text class="fig-text fig-math" data-node-color="blue" x="194" y="109" text-anchor="middle">V<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+  <circle class="fig-dot" cx="276" cy="78" r="4"/>
+  <text class="fig-text" x="361" y="58" text-anchor="middle">자유 출력</text>
+
+  <text class="fig-text" style="font-size:18px;font-weight:700" x="20" y="283">반송 복제본 · 순방향 입력에 연결</text>
+  <path class="fig-ink" d="M49 335h64m40 0h68m0 0h144v34 M221 335v36m0 40v30 M365 407v34"/>
+  ${horizontalResistor(113, 335)}
+  ${verticalResistor(221, 371)}
+  ${oneVoltSource(365, 388)}
+  ${gnd(221, 441)}
+  ${gnd(365, 441)}
+  ${termination('return', 49, 335, '반송 복제본의 자유 입력 종단')}
+  <text class="fig-text" x="49" y="316" text-anchor="middle">자유 입력</text>
+  <text class="fig-text fig-math" style="font-size:15px" x="133" y="316" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+  <text class="fig-text fig-math" style="font-size:15px" x="245" y="396">R<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+  <text class="fig-text" x="335" y="392" text-anchor="end">시험원 1 V</text>
+  <circle class="fig-dot" cx="221" cy="335" r="4"/>
+  <text class="fig-muted" x="205" y="525" text-anchor="middle">두 복제본 모두 R₁ = R₂ = 1 kΩ인 예시예요.</text>
+  <g data-badges>
+    <g data-badge-for="output" transform="translate(203 54)"/>
+  </g>
+</svg>`;
+
+const spec = {
+  id: '1118-vv-termination',
+  title: 'V–V 귀환망 종단 조립',
+  archetype: 'bench',
+  modes: [{ key: 'termination', label: '종단 조립', svg: circuit, ariaLabel: 'V–V 귀환망의 감지와 반송 복제본' }],
+  predict: {
+    prompt: '감지 복제본의 자유 출력이 원래 이상적인 전압 입력을 봤다면, 어떤 종단을 달까요?',
+    options: [
+      { id: 'open', label: '개방해요' },
+      { id: 'short', label: '접지해요' },
+    ],
+    answerId: 'open',
+    explain: '이상적인 전압 입력은 전류를 받지 않아요. 그 포트가 보던 무한대 저항을 개방으로 나타내요.',
+  },
+  params: [
+    { key: 'rin', label: '원래 전압 입력 저항', min: 1, max: 100, step: 1, def: 100, unit: 'kΩ' },
+    { key: 'rout', label: '원래 전압 출력 저항', min: 10, max: 1000, step: 10, def: 100, unit: 'Ω' },
+  ],
+  ports: [
+    {
+      id: 'sense', label: '감지 복제본의 자유 출력', def: 'open', answer: 'open', badOption: 'short',
+      options: [
+        { id: 'open', label: '개방', shortLabel: '개방' },
+        { id: 'short', label: '접지', shortLabel: '접지' },
+        { id: 'rated', label: '원래 입력저항', shortLabel: '입력저항' },
+      ],
+    },
+    {
+      id: 'return', label: '반송 복제본의 자유 입력', def: 'short', answer: 'short', badOption: 'open',
+      options: [
+        { id: 'open', label: '개방', shortLabel: '개방' },
+        { id: 'short', label: '접지', shortLabel: '접지' },
+        { id: 'rated', label: '원래 출력저항', shortLabel: '출력저항' },
+      ],
+    },
+  ],
+  presets: [
+    { id: 'ideal', label: '이상 종단 조립', ports: idealPorts, params: { rin: 100, rout: 100 } },
+    { id: 'finite', label: '원래 저항으로 종단', ports: finitePorts, params: { rin: 100, rout: 100 } },
+    { id: 'swapped', label: '개방·접지 뒤바꾸기', ports: swappedPorts, params: { rin: 100, rout: 100 } },
+  ],
+  steps: [
+    { title: '감지 복제본의 자유 출력', text: '개방에서 접지로 바꿔 분압기의 아래쪽 저항이 우회되는 모습을 확인해요.', ports: idealPorts },
+    { title: '반송 복제본의 자유 입력', text: '접지에서 개방으로 바꿔 시험원 전류가 어느 저항으로만 흐르는지 확인해요.', ports: idealPorts },
+    { title: '유한 저항이 종단에 들어갈 때', text: '원래 입력저항을 1 kΩ까지 낮추고 감지 부하가 얼마나 달라지는지 보세요.', ports: finitePorts, params: { rin: 100, rout: 100 } },
+  ],
+  toggles: [['labels', '출력 전압 배지', true]],
+  mistakes: {
+    termination: [
+      { title: '두 포트를 같은 방식으로 열기', text: '자유 포트가 원래 보던 임피던스가 달라요. 감지 출력은 전압 입력을 보고, 반송 입력은 전압 출력을 봐요.' },
+      { title: '감지 출력을 열면 감지 부하도 사라진다고 생각하기', text: math`자유 출력이 열려 있어도 순방향 출력은 분압기의 $R_1+R_2$ 경로에 전류를 공급해요.` },
+      { title: '항상 이상 종단과 같은 값이 나온다고 생각하기', text: '원래 포트 저항이 분압기 저항과 비슷하면 개방·접지 근사의 차이가 커져요.' },
+    ],
+  },
+  evaluate(state, mna) {
+    const rin = state.params.rin * 1000;
+    const rout = state.params.rout;
+    const sense = state.ports.sense;
+    const returned = state.ports.return;
+    function load(id, setting, n1, value) {
+      if (setting === 'rated') return { id, type: 'R', n1, n2: '0', value };
+      return { id, type: setting, n1, n2: '0' };
+    }
+
+    const solved = mna.solveCircuit({
+      elements: [
+        { id: 'drive', type: 'vsrc', n1: 'drive', n2: '0', value: sourceVoltage },
+        { id: 'ro', type: 'R', n1: 'drive', n2: 'output', value: rout },
+        { id: 'senseR1', type: 'R', n1: 'output', n2: 'senseFree', value: dividerResistance },
+        { id: 'senseR2', type: 'R', n1: 'senseFree', n2: '0', value: dividerResistance },
+        load('senseTerm', sense, 'senseFree', rin),
+        { id: 'test', type: 'vsrc', n1: 'returnOutput', n2: '0', value: sourceVoltage },
+        { id: 'returnR1', type: 'R', n1: 'returnFree', n2: 'returnOutput', value: dividerResistance },
+        { id: 'returnR2', type: 'R', n1: 'returnOutput', n2: '0', value: dividerResistance },
+        load('returnTerm', returned, 'returnFree', rout),
+      ],
+    });
+    if (!solved.ok) throw new Error(solved.reason);
+
+    const output = solved.nodes.output.re;
+    const senseLoad = output / solved.branches.senseR1.re;
+    const returnLoad = sourceVoltage / -solved.branches.test.re;
+    const incorrectSense = sense === 'short';
+    const incorrectReturn = returned === 'open';
+    const incorrect = incorrectSense || incorrectReturn;
+    const senseSummary = {
+      open: '감지 쪽 출력 부하는 R₁과 R₂의 직렬 합이에요.',
+      short: '감지 쪽 R₂의 양단이 접지되어 R₁만 출력 부하로 남아요.',
+      rated: '감지 쪽 원래 입력저항이 R₂와 병렬로 걸려요.',
+    };
+    const returnSummary = {
+      open: '반송 쪽 시험 전류는 R₂만 흘러요.',
+      short: '반송 쪽 시험 전류는 R₁과 R₂에 나뉘어 흘러요.',
+      rated: '반송 쪽 원래 출력저항이 R₁에 직렬로 더해져요.',
+    };
+    const kohm = ohm => `${(ohm / 1000).toFixed(3)} kΩ`;
+    const vout = `${output.toFixed(3)} V`;
+
+    return {
+      tiles: [
+        { label: '감지 쪽 출력 부하', val: kohm(senseLoad) },
+        { label: '반송 쪽 입력 부하', val: kohm(returnLoad) },
+        { label: '부하를 단 출력', val: vout },
+      ],
+      diagnosis: incorrect
+        ? { kind: 'bad', title: 'V–V의 표준 종단과 달라요', text: [
+          incorrectSense && '감지 복제본의 자유 출력은 원래 전압 입력을 봐요.',
+          incorrectReturn && '반송 복제본의 자유 입력은 원래 전압 출력을 봐요.',
+        ].filter(Boolean).join(' ') }
+        : { kind: 'ok', title: sense === 'open' && returned === 'short' ? '이상 종단 조립' : '유한 저항을 포함한 종단', text: '두 분압기가 각각 입력 쪽과 출력 쪽에 부하를 남겨요.' },
+      equations: [
+        { name: '감지 복제본의 부하', tex: math`$$R_{\mathrm{S}}=R_1+(R_2\parallel R_{\mathrm{T,S}})$$` },
+        { name: '반송 복제본의 부하', tex: math`$$R_{\mathrm{R}}=R_2\parallel(R_1+R_{\mathrm{T,R}})$$` },
+        { name: '분압기 예시의 출력 로딩 (교과서 보충)', tex: math`$$V_{\mathrm{out}}=1\,\mathrm{V}\cdot\frac{R_{\mathrm S}}{R_o+R_{\mathrm S}}$$` },
+      ],
+      summary: `${senseSummary[sense]} ${returnSummary[returned]}`,
+      nodes: { output: { v: output, badge: vout } },
+      ports: {
+        sense: { bad: incorrectSense, ok: !incorrectSense },
+        return: { bad: incorrectReturn, ok: !incorrectReturn },
+      },
+    };
+  },
+};
+
+module.exports = spec;
+  })(module, exports);
+  var spec = module.exports;
+  function boot() {
+    var root = document.getElementById("ec2-lab-root");
+    if (!root || !globalThis.EC2Lab) return;
+    globalThis.EC2Lab.mount(spec, root, { mna: globalThis.EC2MNA });
+  }
+  if (document.getElementById("ec2-lab-root")) {
+    boot();
+  } else if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot, { once: true });
+  } else {
+    boot();
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+{
+  "source_sha256": "0a09884a92d9eb3c3d01eeedc37fa9134eb7a6ca013263cf0c507a0d9083b9d0",
+  "preview_html_sha256": "75c4a37136a3746377f7371c9bf220e8a854110cf768a63710dfc417893cddb4",
+  "gates": {
+    "machine": "pass",
+    "numeric_independent": "pass",
+    "probe": "pass",
+    "browser": "pass"
+  },
+  "sources": {
+    "notes": [
+      "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/복습노트/1118/.assets/정리노트_1118_Feedback_Loading.md"
+    ],
+    "stt": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/STT/1118 전회2.md",
+    "lecture": "L06 슬라이드 36–37",
+    "textbook": "Razavi 12.6.2, 그림 12.39, 식 12.78"
+  },
+  "machine": {
+    "check": "ok",
+    "step_snapshots": 11
+  },
+  "numeric_independent": {
+    "method": "입력·출력 노드 KCL과 종속원 방향을 별도로 대조했다. Vout=Vx, Ix=Vx/1000+K·Vout이고 귀환을 끄면 K=0이다.",
+    "status": "pass",
+    "states": 19,
+    "examples": [
+      {
+        "state": "초기 상태",
+        "expected_tiles": [
+          2.0,
+          1.0,
+          500.0
+        ],
+        "actual_tiles": [
+          "2.00 mA",
+          "1.00 mA",
+          "500 Ω"
+        ]
+      },
+      {
+        "state": "입력저항 측정: 프리셋 귀환 전류원 끄기",
+        "expected_tiles": [
+          1.0,
+          0,
+          1000.0
+        ],
+        "actual_tiles": [
+          "1.00 mA",
+          "0.00 mA",
+          "1000 Ω"
+        ]
+      },
+      {
+        "state": "입력저항 측정: 프리셋 시험 전류 두 배",
+        "expected_tiles": [
+          2.0,
+          1.0,
+          500.0
+        ],
+        "actual_tiles": [
+          "2.00 mA",
+          "1.00 mA",
+          "500 Ω"
+        ]
+      },
+      {
+        "state": "입력저항 측정: 프리셋 부귀환 T = 9",
+        "expected_tiles": [
+          10.0,
+          9.0,
+          100.0
+        ],
+        "actual_tiles": [
+          "10.00 mA",
+          "9.00 mA",
+          "100 Ω"
+        ]
+      }
+    ]
+  },
+  "probe": {
+    "checks": 48,
+    "defect_count": 0,
+    "viewport_widths": [
+      1440,
+      375
+    ],
+    "themes": [
+      "light",
+      "dark"
+    ]
+  },
+  "browser": {
+    "engine": "Google Chrome 157.0.8103.80",
+    "viewports": [
+      "1440×900",
+      "375×812"
+    ],
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "visual_review": "회로 기호와 도선 사이 여백, 패널 대비, 모바일 도식 및 설명 서랍을 확인했다.",
+    "interactions": [
+      "예측 응답·건너뛰기",
+      "슬라이더가 예측 중에도 동작",
+      "키보드 슬라이더 끝값",
+      "모바일 서랍과 Escape",
+      "귀환 전류원 Enter/Space 토글",
+      "+Δv 자동 맥동과 수동 단계"
+    ],
+    "saved_html": "정리노트 링크에서 새 탭이 열리고 원래 노트가 유지됐다. 핵심 조작과 콘솔을 확인했다."
+  },
+  "fixes": [
+    "자동 프로브에서 I_X·V_X 라벨과 입력 도선 간격이 0.6em 미만이었다. 두 라벨을 SVG 좌표 7만큼 위로 올리고 네 검증을 재실행했다."
+  ],
+  "html_sha256": "6a511c9b317500be76b92027d2d38ebfa8a3ee5d83653c7db54893d2bb9e3fd9"
+}
