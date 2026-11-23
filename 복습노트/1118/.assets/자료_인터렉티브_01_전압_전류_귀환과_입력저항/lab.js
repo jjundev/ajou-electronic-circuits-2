@@ -68,6 +68,11 @@ const spec = {
     ],
     answerId: 'lower',
     explain: math`분자 $V_X$가 일정하고 분모 $I_X$가 커지므로 $V_X/I_X$는 작아져요.`,
+    check: {
+      before: { params: { feedback: 1 }, disabledElems: ['feedback'] },
+      after: { disabledElems: [], causalStep: 4 },
+      tiles: ['시험 전류', '입력저항'],
+    },
   },
   params: [
     { key: 'voltage', label: '시험 전압', min: 0.1, max: 1, step: 0.1, def: 1, unit: 'V' },

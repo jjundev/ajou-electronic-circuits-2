@@ -29,11 +29,17 @@ module.exports = {
   title: '전압 분배기 동작 프로브',       // 필수: 상단 바·<title> 제목
   archetype: 'probe',                 // 필수: 'probe' | 'bench' | 'approx'
   modes: [/* Mode, ... */],           // 필수: 1개 이상
-  predict: {                          // 선택: 부드러운 1초 예측 카드
+  predict: {                          // 선택: 회로에서 검증할 예측 카드
+    mode: 'divider',                  // 선택: 질문이 적용되는 모드만 표시
     prompt: '질문 ($...$ 가능)',
     options: [{ id: 'a', label: '보기 1' }, { id: 'b', label: '보기 2' }],
     answerId: 'a',
-    explain: '선택 직후 보여 줄 한두 문장 해설',
+    explain: '검증 후 관측값을 설명하는 한두 문장',
+    check: {
+      before: { params: { vin: 4 }, ports: { load: 'open' } },
+      after: { params: { vin: 8 } },
+      tiles: ['출력 전압', '분압비'],
+    },
   },
   params: [/* Param, ... */],         // 선택: 슬라이더 목록
   ports: [/* Port, ... */],           // 선택: 종단/연결 포트(또는 Mode.ports)
@@ -64,11 +70,12 @@ module.exports = {
 - `Preset`: `{ id, label, mode?, params?, ports?, disabledElems?, causalStep? }`.
 - `Step`: `{ mode?, title, who?, text?, params?, ports?, disabledElems?, causalStep? }`.
 - `toggles`: `[[key, label, def], ...]` 또는 `[{ key, label, def, mode? }]` 또는 `{ [modeKey]: [...] }`.
+- `predict.check`의 `before`와 `after`는 `params`, `ports`, `disabledElems`, `causalStep`을 설정한다. 비교 조건은 `before`에, 바꿀 조작은 `after`에 넣는다. 관측값이 달라지는 조작은 양쪽에 지정하면 전후 값을 표시한다. 한 상태의 두 결과를 비교할 때는 `before`를 생략하고 `after`로 조건을 재현한다. `tiles`는 표시 순서대로 결과 타일의 `id` 또는 고정 `label`을 나열한다.
 
 ### `evaluate(state, mna)` 입출력
-- `state`: `{ mode, step, params, disabledElems, ports, causalStep, predictChoice, predictDismissed, toggles, theme, drawer, leftOpen, rightOpen, focusNode }`
+- `state`: `{ mode, step, params, disabledElems, ports, causalStep, predictChoice, predictDismissed, predictExpanded, predictVerified, toggles, theme, drawer, leftOpen, rightOpen, focusNode }`
 - 반환 `EvalResult`:
-  - `tiles`: `[{ label, val }]` (3개일 때 `.tiles.three` 3열 그리드).
+  - `tiles`: `[{ id?, label, val }]` (3개일 때 `.tiles.three` 3열 그리드). 라벨이 상태에 따라 달라지는 타일은 예측 카드에서 참조할 고정 `id`를 둔다.
   - `diagnosis`: `{ kind: 'ok'|'warn'|'bad'|'info', title?, text, singular? }` 또는 문자열.
   - `formula` / `equations`: KaTeX 문자열(`$$...$$`) 또는 `{ name?, tex }` (단일·배열).
   - `summary`: 오른쪽 패널 「지금 일어나는 일」 문장(인라인 `$...$` 가능).

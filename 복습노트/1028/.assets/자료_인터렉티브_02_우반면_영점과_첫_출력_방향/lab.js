@@ -129,6 +129,12 @@ const spec = {
     options: [{ id: 'up', label: '위로 움직여요' }, { id: 'down', label: '아래로 움직여요' }],
     answerId: 'up',
     explain: '먼저 $C_{GD}$가 드레인에 전류를 넣어 출력이 조금 올라가요. 이후 트랜지스터가 전류를 끌어가 출력은 음전압으로 향해요.',
+    mode: 'early',
+    check: {
+      before: { params: { earlyTime: 0 }, disabledElems: [] },
+      after: { params: { earlyTime: 10 }, causalStep: 2 },
+      tiles: ['정확 출력'],
+    },
   },
   params: [
     { key: 'rs', label: '신호원 저항 RS', min: 100, max: 1000, step: 25, def: 200, unit: 'Ω' },

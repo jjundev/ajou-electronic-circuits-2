@@ -270,21 +270,25 @@
       background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
       padding: var(--s3) var(--s4); display: flex; flex-direction: column; gap: var(--s2);
     }
-    .predict-head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--s2); }
-    .predict-prompt { margin: 0; font-size: var(--fs-sub); font-weight: 700; line-height: 1.5; }
+    .predict-prompt { margin: 0; font-size: var(--fs-sub); font-weight: 700; line-height: 1.5; overflow-wrap: anywhere; }
     .predict-skip { flex: none; min-height: var(--tap); padding: 0 var(--s2); border: 0; border-radius: 6px; background: transparent; color: var(--ink-2); font-size: var(--fs-label); font-weight: 600; cursor: pointer; }
-    .predict-opts { display: flex; flex-wrap: wrap; gap: var(--s2); }
+    .predict-opts, .predict-actions { display: flex; flex-wrap: wrap; gap: var(--s2); }
     .predict-btn {
       min-height: var(--tap); padding: var(--s2) var(--s3); border: 1px solid var(--line);
       border-radius: var(--radius); background: var(--bg); color: var(--ink);
-      font-size: var(--fs-small); font-weight: 600; cursor: pointer;
+      font-size: var(--fs-small); font-weight: 600; cursor: pointer; max-width: 100%; overflow-wrap: anywhere;
     }
     .predict-btn[aria-pressed="true"] { border-color: var(--accent); color: var(--accent-ink); }
+    .predict-open, .predict-verify { color: var(--accent-ink); }
+    .predict-verify:disabled { color: var(--ink-2); opacity: .65; cursor: default; }
     .predict-feedback {
       font-size: var(--fs-small); line-height: 1.55; padding: var(--s2) var(--s3);
       border-radius: 6px; background: var(--bg); border-left: 3px solid var(--supp);
+      overflow-wrap: anywhere;
     }
     .predict-feedback.is-wrong { border-left-color: var(--warn); }
+    .predict-feedback p, .predict-readings { margin: var(--s1) 0 0; }
+    .predict-readings { padding-inline-start: 1.2em; font-variant-numeric: tabular-nums; }
 
     .lab-stage-wrap {
       position: relative; flex: 1 0 auto; min-width: 0; min-height: 220px;
@@ -977,6 +981,8 @@
       causalStep: 0,
       predictChoice: null,
       predictDismissed: false,
+      predictExpanded: false,
+      predictVerified: false,
       toggles: collectInitialToggles(spec),
       theme: 'light',
       drawer: null,
@@ -996,6 +1002,8 @@
       causalStep: state.causalStep || 0,
       predictChoice: state.predictChoice ?? null,
       predictDismissed: Boolean(state.predictDismissed),
+      predictExpanded: Boolean(state.predictExpanded),
+      predictVerified: Boolean(state.predictVerified),
       toggles: Object.assign({}, state.toggles),
       theme: state.theme === 'dark' ? 'dark' : 'light',
       drawer: state.drawer || null,
@@ -1014,6 +1022,8 @@
     next.step = -1;
     next.causalStep = 0;
     next.focusNode = null;
+    next.predictChoice = null;
+    next.predictVerified = false;
     if (Array.isArray(target.ports)) {
       for (const p of getPortsForMode(spec, target.key)) next.ports[p.id] = p.def;
     }
@@ -1112,12 +1122,40 @@
       }
 
       case 'ANSWER_PREDICT': {
-        next.predictChoice = action.choice ?? action.optionId ?? action.id ?? null;
+        const prediction = spec.predict;
+        const choice = action.choice ?? action.optionId ?? action.id;
+        if (!matchesMode(prediction, state.mode) || state.predictDismissed ||
+            !prediction.options.some((option) => (typeof option === 'object' ? option.id : option) === choice)) return state;
+        next.predictChoice = choice;
+        next.predictExpanded = true;
+        next.predictVerified = false;
+        return next;
+      }
+
+      case 'VERIFY_PREDICT': {
+        const prediction = spec.predict;
+        if (!matchesMode(prediction, state.mode) || state.predictDismissed ||
+            state.predictChoice === null || state.predictVerified) return state;
+        if (prediction.check) {
+          applyPatch(spec, next, prediction.check.before || {});
+          applyPatch(spec, next, prediction.check.after);
+          next.step = -1;
+        }
+        next.predictVerified = true;
+        return next;
+      }
+
+      case 'OPEN_PREDICT': {
+        next.predictExpanded = true;
+        next.predictDismissed = false;
         return next;
       }
 
       case 'DISMISS_PREDICT': {
+        next.predictChoice = null;
         next.predictDismissed = true;
+        next.predictExpanded = false;
+        next.predictVerified = false;
         return next;
       }
 
@@ -1163,12 +1201,15 @@
     states.push({ label: '초기 상태', state: base });
 
     if (spec && spec.predict && Array.isArray(spec.predict.options) && spec.predict.options.length > 0) {
-      const opt = spec.predict.options[0];
-      const choice = typeof opt === 'object' ? opt.id : opt;
-      states.push({
-        label: '예측 카드 응답',
-        state: reduceState(spec, base, { type: 'ANSWER_PREDICT', choice }),
-      });
+      const mode = getModes(spec).find((m) => matchesMode(spec.predict, m.key));
+      if (mode) {
+        const start = reduceState(spec, base, { type: 'SET_MODE', mode: mode.key });
+        const opt = spec.predict.options[0];
+        const choice = typeof opt === 'object' ? opt.id : opt;
+        const chosen = reduceState(spec, start, { type: 'ANSWER_PREDICT', choice });
+        states.push({ label: '예측 카드 응답', state: chosen });
+        states.push({ label: '예측 결과 확인', state: reduceState(spec, chosen, { type: 'VERIFY_PREDICT' }) });
+      }
     }
 
     for (const m of getModes(spec)) {
@@ -1856,39 +1897,89 @@
       updateSvgPortAria();
     }
 
-    function renderPredictCard() {
+    function renderPredictCard(evalRes, focusedControl, verifiedNow) {
       const p = spec.predict;
-      if (!p || state.predictDismissed) {
-        dom.predictSlot.replaceChildren();
+      const slot = dom.predictSlot;
+      if (!slot) return;
+      if (!matchesMode(p, state.mode)) {
+        slot.replaceChildren();
         return;
       }
-      const card = el(doc, 'section', { className: 'predict-card', 'aria-label': '예측 확인' });
-      const head = el(doc, 'div', { className: 'predict-head' });
-      head.appendChild(el(doc, 'p', { className: 'predict-prompt' }, p.prompt || '먼저 결과를 예상해 보세요.'));
-      const skipBtn = el(doc, 'button', { type: 'button', className: 'predict-skip' }, state.predictChoice != null ? '닫기' : '건너뛰기');
-      skipBtn.addEventListener('click', () => dispatch({ type: 'DISMISS_PREDICT' }));
-      head.appendChild(skipBtn);
-      card.appendChild(head);
+      const sidebar = !state.narrow && state.rightOpen && dom.panelRightInner;
+      const destination = sidebar || dom.stageEl;
+      if (slot.parentElement !== destination) destination.prepend(slot);
 
+      function button(label, className, control, action, attrs) {
+        const btn = el(doc, 'button', {
+          type: 'button', className, 'data-predict-focus': control, ...attrs,
+        }, label);
+        btn.addEventListener('click', () => dispatch(action));
+        return btn;
+      }
+
+      if (state.predictDismissed || (!sidebar && !state.predictExpanded)) {
+        const open = button('예측해 보기', 'predict-btn predict-open', 'open',
+          { type: 'OPEN_PREDICT' }, { 'aria-expanded': 'false' });
+        slot.replaceChildren(open);
+        if (focusedControl) open.focus({ preventScroll: true });
+        return;
+      }
+
+      const card = el(doc, 'section', { className: 'predict-card', 'aria-label': '예측 확인' });
+      card.appendChild(el(doc, 'p', { className: 'predict-prompt' }, p.prompt));
       const optsRow = el(doc, 'div', { className: 'predict-opts' });
-      for (const rawOpt of p.options || []) {
+      for (const [index, rawOpt] of p.options.entries()) {
         const oid = typeof rawOpt === 'object' ? rawOpt.id : rawOpt;
         const olabel = typeof rawOpt === 'object' ? rawOpt.label : rawOpt;
-        const btn = el(doc, 'button', {
-          type: 'button', className: 'predict-btn', 'aria-pressed': state.predictChoice === oid ? 'true' : 'false',
-        }, olabel);
-        btn.addEventListener('click', () => dispatch({ type: 'ANSWER_PREDICT', choice: oid }));
-        optsRow.appendChild(btn);
+        optsRow.appendChild(button(olabel, 'predict-btn', `choice-${index}`,
+          { type: 'ANSWER_PREDICT', choice: oid }, { 'aria-pressed': String(state.predictChoice === oid) }));
       }
       card.appendChild(optsRow);
 
-      if (state.predictChoice != null) {
-        const correct = p.answerId !== undefined && state.predictChoice === p.answerId;
-        card.appendChild(el(doc, 'div', {
-          className: `predict-feedback${correct ? '' : ' is-wrong'}`, 'aria-live': 'polite',
-        }, (correct ? '맞았어요. ' : '다시 살펴볼까요? ') + (p.explain || '')));
+      if (state.predictVerified) {
+        const correct = state.predictChoice === p.answerId;
+        const feedback = el(doc, 'div', {
+          className: `predict-feedback${correct ? '' : ' is-wrong'}`,
+          'data-predict-focus': 'result', tabindex: '-1',
+        });
+        feedback.appendChild(el(doc, 'b', null, correct ? '예측과 같아요.' : '예측과 달랐어요.'));
+        if (p.check) {
+          let before;
+          if (p.check.before) {
+            const baseline = cloneState(state);
+            applyPatch(spec, baseline, p.check.before);
+            before = evaluate(baseline);
+          }
+          const readings = el(doc, 'ul', { className: 'predict-readings' });
+          for (const id of p.check.tiles) {
+            const tile = (evalRes.tiles || []).find((entry) => (entry.id ?? entry.label) === id);
+            if (!tile) continue;
+            const prior = before?.tiles?.find((entry) => (entry.id ?? entry.label) === id);
+            const value = tile.val ?? tile.value;
+            const reading = prior ? `${prior.val ?? prior.value} → ${value}` : value;
+            readings.appendChild(el(doc, 'li', null, `${tile.label} · ${reading}`));
+          }
+          if (readings.children.length) feedback.appendChild(readings);
+        }
+        if (p.explain) feedback.appendChild(el(doc, 'p', null, p.explain));
+        card.appendChild(feedback);
       }
-      dom.predictSlot.replaceChildren(card);
+      const actions = el(doc, 'div', { className: 'predict-actions' });
+      if (!state.predictVerified) {
+        const verify = button('회로에서 확인', 'predict-btn predict-verify', 'verify', { type: 'VERIFY_PREDICT' });
+        verify.disabled = state.predictChoice === null;
+        actions.appendChild(verify);
+      }
+      actions.appendChild(button(state.predictVerified ? '예측 접기' : '바로 실험하기', 'predict-skip', 'skip',
+        { type: 'DISMISS_PREDICT' }));
+      card.appendChild(actions);
+      slot.replaceChildren(card);
+      if (verifiedNow) card.querySelector('[data-predict-focus="result"]').focus();
+      else if (focusedControl) {
+        const target = focusedControl === 'open' ? card.querySelector('.predict-opts button')
+          : card.querySelector(`[data-predict-focus="${focusedControl}"]`);
+        (target || card.querySelector('.predict-opts button'))?.focus({ preventScroll: true });
+      }
     }
 
     function renderPlot(evalRes) {
@@ -2299,34 +2390,40 @@
       }
     }
 
-    function render() {
-      syncTopbarAndPanels();
-
-      let evalRes = null;
+    function evaluate(snapshot) {
       try {
-        evalRes = typeof spec.evaluate === 'function' ? spec.evaluate(state, mna) : {};
+        return typeof spec.evaluate === 'function' ? spec.evaluate(snapshot, mna) : {};
       } catch (err) {
         if (!loggedEvalErr) {
           loggedEvalErr = true;
           if (typeof console !== 'undefined' && console.error) console.error(err);
         }
-        evalRes = { diagnosis: { kind: 'bad', title: '계산 오류', text: String(err && err.message ? err.message : err) } };
+        return { diagnosis: { kind: 'bad', title: '계산 오류', text: String(err && err.message ? err.message : err) } };
       }
+    }
 
-      renderPredictCard();
+    function render(verifiedNow = false) {
+      const focusedControl = dom.predictSlot?.contains(doc.activeElement)
+        ? doc.activeElement.getAttribute('data-predict-focus') : null;
+      syncTopbarAndPanels();
+      const evalRes = evaluate(state);
       syncSvg(evalRes);
       renderPlot(evalRes);
       syncLeftPanelInPlace();
       renderRightPanel(evalRes);
+      renderPredictCard(evalRes, focusedControl, verifiedNow);
       renderMath();
     }
 
     function dispatch(action) {
       const next = reduceState(spec, state, action);
       if (next === state) return;
-      if (action.type === 'SET_MODE' || action.type === 'APPLY_PRESET' || action.type === 'PICK_STEP') {
+      if (['SET_MODE', 'APPLY_PRESET', 'PICK_STEP', 'VERIFY_PREDICT'].includes(action.type)) {
         stopPulse();
         closePortPopover(false);
+      }
+      if (['SET_PARAM', 'SET_PORT', 'TOGGLE_ELEM', 'APPLY_PRESET', 'PICK_STEP'].includes(action.type)) {
+        next.predictVerified = false;
       }
       if (action.type === 'SET_THEME') {
         try {
@@ -2337,7 +2434,7 @@
         } catch (e) {}
       }
       state = next;
-      render();
+      render(action.type === 'VERIFY_PREDICT');
     }
 
     if (dom.leftBtn) dom.leftBtn.addEventListener('click', () => dispatch({ type: 'TOGGLE_PANEL', side: 'left', narrow: state.narrow }));
@@ -2512,10 +2609,14 @@ module.exports = {
   archetype: 'approx',
   modes: [{ key: 'cascode', label: 'MOS 캐스코드', svg: circuit, ariaLabel: 'MOS 캐스코드 소신호 등가 회로' }],
   predict: {
-    prompt: '출력 부하 저항을 키워 입력과 출력의 추정 극 주파수가 같아졌어요. 전체 −3 dB 대역폭은 그 주파수와 어떻게 비교될까요?',
+    prompt: '출력 부하 저항을 키워 입력과 출력의 추정 극 주파수가 가까워졌어요. 전체 −3 dB 대역폭은 그 주파수와 어떻게 비교될까요?',
     options: [{ id: 'lower', label: '더 낮다' }, { id: 'equal', label: '거의 같다' }, { id: 'higher', label: '더 높다' }],
     answerId: 'lower',
-    explain: '입력과 출력에서 감쇠가 겹칩니다. 대표 설정 ‘두 극이 만나는 곳’에서 두 수치를 비교해 보세요.',
+    explain: '입력과 출력에서 감쇠가 겹쳐 전체 응답이 더 낮은 주파수에서 −3 dB에 도달합니다.',
+    check: {
+      after: { params: { ...defaults, rl: 4 }, disabledElems: [], causalStep: 3 },
+      tiles: ['한 극으로 추정', '전체 −3 dB'],
+    },
   },
   params: [
     { key: 'rl', label: '부하 저항 Rₗ', min: 1, max: 20, step: 0.05, unit: 'kΩ', def: defaults.rl },

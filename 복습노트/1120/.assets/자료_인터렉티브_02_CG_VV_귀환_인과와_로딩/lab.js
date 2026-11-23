@@ -372,6 +372,11 @@ const spec = {
     ],
     answerId: 'larger',
     explain: '분배기 $R_1+R_2$가 $R_D$와 병렬로 걸려 실제 개루프 이득이 $g_{m1}[R_D\\parallel(R_1+R_2)]$로 줄어들므로, 이를 빼먹으면 폐루프 이득도 실제보다 크게(기본값 $2.67$ 대신 $3.20$, $+20\\%$) 나와요.',
+    mode: 'closed',
+    check: {
+      after: { params: { vin: 10, rdiv: 4, gm1: 4, rd: 4 }, causalStep: 4 },
+      tiles: ['no-load-gain', '폐루프 이득 Av,closed'],
+    },
   },
   params: [
     {
@@ -545,7 +550,7 @@ const spec = {
       tiles = [
         { label: '폐루프 이득 Av,closed', val: `${d.avClosed.toFixed(2)} V/V` },
         { label: '출력 전압 vout', val: fmtSignedMvShort(d.vOutMv) },
-        { label: `로딩 무시 (+${d.noLoadErrPct.toFixed(1)}%)`, val: `${d.avNoLoadClosed.toFixed(2)} V/V` },
+        { id: 'no-load-gain', label: `로딩 무시 (+${d.noLoadErrPct.toFixed(1)}%)`, val: `${d.avNoLoadClosed.toFixed(2)} V/V` },
       ];
 
       if (isZero) {

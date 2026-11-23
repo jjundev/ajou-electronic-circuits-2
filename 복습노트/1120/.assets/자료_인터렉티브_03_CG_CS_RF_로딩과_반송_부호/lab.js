@@ -495,14 +495,20 @@ const spec = {
     },
   ],
   predict: {
-    prompt: '예제 II(기본값: $R_{D2}=2\\ \\text{k}\\Omega$, $1/g_{m1}=100\\ \\Omega$, $R_F=10\\ \\text{k}\\Omega$)에서 $R_F$ 로딩은 어느 쪽에서 더 크게 나타날까요?',
+    prompt: 'CG–CS 회로에서 출력 쪽 $R_F$ 복제만 끄면 개루프 이득의 크기 $|R_0|$는 어떻게 될까요?',
     options: [
-      { id: 'out', label: '출력 쪽 감지 복제 (RD2 ∥ RF)' },
-      { id: 'in', label: '입력 쪽 반송 복제 (1/gm1 ∥ RF)' },
-      { id: 'same', label: '양쪽 복제의 비율 감소가 같다' },
+      { id: 'up', label: '커져요' },
+      { id: 'down', label: '작아져요' },
+      { id: 'same', label: '그대로예요' },
     ],
-    answerId: 'out',
-    explain: '$R_F=10\\ \\text{k}\\Omega$은 입력 $1/g_{m1}=100\\ \\Omega$의 $100$배($1\\%$ 감소)이지만, 출력 $R_{D2}=2\\ \\text{k}\\Omega$의 $5$배뿐이라 출력 부하가 $16.7\\%$($2\\ \\text{k}\\Omega \\to 1.67\\ \\text{k}\\Omega$) 줄어들어요.',
+    answerId: 'up',
+    explain: '출력 복제가 켜져 있으면 $R_F$가 $R_{D2}$와 병렬이에요. 복제를 끄면 출력 쪽 저항이 $R_{D2}$로 커지면서 개루프 이득의 크기도 커져요.',
+    mode: 'loading',
+    check: {
+      before: { disabledElems: [] },
+      after: { disabledElems: ['rf-out'] },
+      tiles: ['개루프 R0'],
+    },
   },
   params: [
     { key: 'rf', label: '귀환 저항 RF', min: 1, max: 100, scale: 'log', unit: 'kΩ', def: 10, format: fmtKOhmParam },

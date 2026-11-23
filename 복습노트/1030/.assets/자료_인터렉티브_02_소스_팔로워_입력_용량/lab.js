@@ -77,6 +77,11 @@ module.exports = {
     options: [{ id: 'up', label: '커진다' }, { id: 'down', label: '작아진다' }],
     answerId: 'up',
     explain: '무거운 저항 부하는 소스 전압이 게이트를 따라가는 정도를 줄여요. 그러면 $C_{GS}$의 양단 전압 차가 커져요.',
+    check: {
+      before: { params: start, disabledElems: [] },
+      after: { params: { rl: heavy.rl }, causalStep: 3 },
+      tiles: ['현재 입력 용량', '게이트–소스 전압 차'],
+    },
   },
   params: [
     { key: 'rl', label: '부하 저항 Rʟ', min: 25, max: 10000, def: start.rl, unit: 'Ω', scale: 'log' },

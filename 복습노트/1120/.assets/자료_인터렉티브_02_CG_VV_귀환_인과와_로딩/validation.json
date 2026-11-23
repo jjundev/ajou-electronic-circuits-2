@@ -2,7 +2,7 @@
   "id": "cg-vv-feedback-causal-loading",
   "title": "CG 단 V-V 귀환 +Δv 인과와 분배기 로딩",
   "archetype": "probe",
-  "source_sha256": "c8ccec3e47643e2f3942f31ff82e4c27cf278ad7ba9a7bcccca9e07e2076b0c9",
+  "source_sha256": "fe0391170ddcc82add4b127b2ce4e67a8d85016fde4cad4fc3f784e355938752",
   "sources": [
     "복습노트/1120/정리노트_1120_Nonideal_IO_Feedback.html#s2-vv-ideal",
     "복습노트/1120/정리노트_1120_Nonideal_IO_Feedback.html#s2-vv-open",
@@ -65,8 +65,14 @@
     "probe": {
       "status": "pass",
       "command": "python3 .agents/skills/ec2-interactive/scripts/probe_interactive.py",
-      "widths": [1440, 375],
-      "themes": ["light", "dark"],
+      "widths": [
+        1440,
+        375
+      ],
+      "themes": [
+        "light",
+        "dark"
+      ],
       "checks": 96,
       "defect_count": 0,
       "blocked_requests": []
@@ -74,7 +80,10 @@
     "browser": {
       "status": "pass",
       "script": "$RUN/02/browser_check.py",
-      "viewports": ["1440x900 light/dark", "375x812 dark"],
+      "viewports": [
+        "1440x900 light/dark",
+        "375x812 dark"
+      ],
       "verified_flows": [
         "predict card answer feedback and dismiss without locking controls",
         "4-beat +Δv causal domino stepping (1..4) highlighting SVG nodes/branches and badges",
@@ -96,5 +105,64 @@
     "Replaced plain 'kΩ' with fmtOhmsTex inside KaTeX math strings in diagnosis.text.",
     "Moved '(+XX.X%)' into Tile 3 label ('로딩 무시 (+20.0%)') with clean '3.20 V/V' value so mobile 3-column tiles do not wrap '%' onto a third line.",
     "Fix Round 1: Corrected steps[3].text inverted percentage base ('20% 낮은' -> '로딩 무시 오답 3.20(실제 대비 +20% 과대) 대신 실제 이득 2.67을 얻어요') and refreshed HTML + validation hash."
-  ]
+  ],
+  "html_sha256": "1a0412918c39f4bf6d43b963f21d39d9256e2d0153878791cd0879782df1e155",
+  "prediction_revision": {
+    "date": "2026-11-23",
+    "previous_source_sha256": "c8ccec3e47643e2f3942f31ff82e4c27cf278ad7ba9a7bcccca9e07e2076b0c9",
+    "previous_html_sha256": "22ea3ef871090c252cf5a0bdb203183c9c1cbffe7915c13bd9ce7188d68eeb20",
+    "machine": "pass",
+    "numeric": {
+      "unchanged_model_states": 24
+    },
+    "probe": {
+      "checks": 100,
+      "defects": 0
+    },
+    "browser": {
+      "route": "Chromium with vendored assets",
+      "checks": [
+        {
+          "width": 1440,
+          "height": 900,
+          "theme": "light",
+          "verification_readings": [
+            "3.20 V/V",
+            "2.67 V/V"
+          ],
+          "console_errors": []
+        },
+        {
+          "width": 1440,
+          "height": 900,
+          "theme": "dark",
+          "verification_readings": [
+            "3.20 V/V",
+            "2.67 V/V"
+          ],
+          "console_errors": []
+        },
+        {
+          "width": 375,
+          "height": 812,
+          "theme": "light",
+          "verification_readings": [
+            "3.20 V/V",
+            "2.67 V/V"
+          ],
+          "console_errors": []
+        },
+        {
+          "width": 375,
+          "height": 812,
+          "theme": "dark",
+          "verification_readings": [
+            "3.20 V/V",
+            "2.67 V/V"
+          ],
+          "console_errors": []
+        }
+      ]
+    }
+  }
 }

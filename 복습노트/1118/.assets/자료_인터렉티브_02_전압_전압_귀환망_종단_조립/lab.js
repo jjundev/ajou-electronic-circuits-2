@@ -78,13 +78,19 @@ const spec = {
   archetype: 'bench',
   modes: [{ key: 'termination', label: '종단 조립', svg: circuit, ariaLabel: 'V–V 귀환망의 감지와 반송 복제본' }],
   predict: {
-    prompt: '감지 복제본의 자유 출력이 원래 이상적인 전압 입력을 봤다면, 어떤 종단을 달까요?',
+    prompt: '감지 복제본의 자유 출력을 접지에서 개방으로 바꾸면 출력 부하는 어떻게 될까요?',
     options: [
-      { id: 'open', label: '개방해요' },
-      { id: 'short', label: '접지해요' },
+      { id: 'up', label: '커져요' },
+      { id: 'down', label: '작아져요' },
+      { id: 'same', label: '그대로예요' },
     ],
-    answerId: 'open',
-    explain: '이상적인 전압 입력은 전류를 받지 않아요. 그 포트가 보던 무한대 저항을 개방으로 나타내요.',
+    answerId: 'up',
+    explain: '접지할 때 우회되던 아래쪽 저항에도 다시 전류가 흘러요. 출력 쪽에서 보면 두 저항이 직렬이에요.',
+    check: {
+      before: { ports: { sense: 'short' } },
+      after: { ports: { sense: 'open' } },
+      tiles: ['감지 쪽 출력 부하'],
+    },
   },
   params: [
     { key: 'rin', label: '원래 전압 입력 저항', min: 1, max: 100, step: 1, def: 100, unit: 'kΩ' },

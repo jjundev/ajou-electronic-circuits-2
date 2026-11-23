@@ -65,6 +65,32 @@ test('runtime binds keyboard activation (Enter/Space) on data-port and data-elem
   assert.match(src, /Escape/);
 });
 
+test('prediction verification changes the target port only and stays in its mode', () => {
+  const spec = {
+    modes: [{ key: 'vv' }, { key: 'vc' }],
+    ports: [{ id: 'sense', def: 'short' }, { id: 'return', def: 'open' }],
+    predict: {
+      mode: 'vv',
+      options: [{ id: 'up', label: '커져요' }],
+      check: { before: { ports: { sense: 'short' } }, after: { ports: { sense: 'open' } }, tiles: ['부하'] },
+    },
+  };
+  const verify = { type: 'VERIFY_PREDICT' };
+  const initial = createInitialState(spec);
+  assert.equal(reduceState(spec, initial, verify), initial);
+  const chosen = reduceState(spec, initial, { type: 'ANSWER_PREDICT', choice: 'up' });
+  assert.equal(chosen.ports.sense, 'short');
+  const verified = reduceState(spec, chosen, verify);
+  assert.deepEqual(verified.ports, { sense: 'open', return: 'open' });
+  assert.equal(verified.predictVerified, true);
+  assert.equal(chosen.ports.sense, 'short');
+  const skipped = reduceState(spec, verified, { type: 'DISMISS_PREDICT' });
+  assert.deepEqual(skipped.ports, verified.ports);
+  assert.equal(skipped.predictChoice, null);
+  const otherMode = reduceState(spec, chosen, { type: 'SET_MODE', mode: 'vc' });
+  assert.equal(reduceState(spec, otherMode, verify), otherMode);
+});
+
 test('bench archetype handles port setting, single-drawer toggle, presets, and probe states', () => {
   const spec = {
     id: 'bench-demo',

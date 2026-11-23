@@ -87,6 +87,11 @@ const spec = {
     ],
     answerId: 'same',
     explain: '선형 저항 분배기의 분압비 $R_2 / (R_1 + R_2)$는 저항비로만 결정되므로 입력 크기가 커져도 분압비는 일정합니다.',
+    check: {
+      before: { params: { vin: 4 }, ports: { load: 'open' }, disabledElems: [] },
+      after: { params: { vin: 8 }, causalStep: 3 },
+      tiles: ['출력 전압', '분압비'],
+    },
   },
   params: [
     { key: 'vin', label: '입력 전압', min: -10, max: 10, step: 0.5, unit: 'V', def: 4 },

@@ -1,6 +1,6 @@
 {
-  "source_sha256": "4870721c52a28b62c0eb1c11b45535584cebcf93eb9020c6125154c5b8a4007c",
-  "preview_html_sha256": "6d9c273402719e97e40961a2ee1ccd99cccad502668ed8fb68a16b56f2c1fda5",
+  "source_sha256": "67ead01b29d0f7b57f798a7aa4b551d235331218c272f1a7256aeb09b472c46b",
+  "preview_html_sha256": "cca4039729e37d51747ef75910323f9391a93d9c80d45065c6a9aad6d0ff4b45",
   "gates": {
     "machine": "pass",
     "numeric_independent": "pass",
@@ -141,5 +141,59 @@
   "fixes": [
     "Chrome 모바일 육안 검사에서 포트 칩을 확인하고 세로 터치 영역을 확대했다. 375×812에서 두 칩 모두 최소 44 CSS px를 만족하는지 확인하고 네 검증을 재실행했다."
   ],
-  "html_sha256": "1d9697e9eff7c167771e7f345810d13b7b0979ccb55306fbe01f50229c25e51a"
+  "html_sha256": "cca4039729e37d51747ef75910323f9391a93d9c80d45065c6a9aad6d0ff4b45",
+  "prediction_revision": {
+    "date": "2026-11-23",
+    "previous_source_sha256": "4870721c52a28b62c0eb1c11b45535584cebcf93eb9020c6125154c5b8a4007c",
+    "previous_html_sha256": "1d9697e9eff7c167771e7f345810d13b7b0979ccb55306fbe01f50229c25e51a",
+    "machine": "pass",
+    "numeric": {
+      "unchanged_model_states": 13
+    },
+    "probe": {
+      "checks": 52,
+      "defects": 0
+    },
+    "browser": {
+      "route": "Chromium with vendored assets",
+      "checks": [
+        {
+          "width": 1440,
+          "height": 900,
+          "theme": "light",
+          "verification_readings": [
+            "1.000 kΩ → 2.000 kΩ"
+          ],
+          "console_errors": []
+        },
+        {
+          "width": 1440,
+          "height": 900,
+          "theme": "dark",
+          "verification_readings": [
+            "1.000 kΩ → 2.000 kΩ"
+          ],
+          "console_errors": []
+        },
+        {
+          "width": 375,
+          "height": 812,
+          "theme": "light",
+          "verification_readings": [
+            "1.000 kΩ → 2.000 kΩ"
+          ],
+          "console_errors": []
+        },
+        {
+          "width": 375,
+          "height": 812,
+          "theme": "dark",
+          "verification_readings": [
+            "1.000 kΩ → 2.000 kΩ"
+          ],
+          "console_errors": []
+        }
+      ]
+    }
+  }
 }

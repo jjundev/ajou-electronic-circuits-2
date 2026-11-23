@@ -80,6 +80,11 @@ const spec = {
     options: [{ id: 'none', label: '흐르지 않아요' }, { id: 'flows', label: '흐를 수 있어요' }],
     answerId: 'none',
     explain: '단락에서는 $C_{DB}$ 양단의 AC 전압이 0이라 전류도 0이에요.',
+    check: {
+      before: { ports: { drain: 'load' }, disabledElems: [] },
+      after: { ports: { drain: 'short' }, causalStep: 3 },
+      tiles: ['CDB 전류'],
+    },
   },
   ports: [{
     id: 'drain', label: '드레인 측정 종단', def: 'short', answer: 'short', badOption: 'load',
@@ -182,6 +187,7 @@ const spec = {
 
     return {
       tiles: [
+        { label: 'CDB 전류', val: `${cdCurrent.toFixed(3)} nA` },
         { label: '종단 전류', val: `${termCurrent.toFixed(3)} nA` },
         { label: '전류 이득 크기', val: conducting ? gain.toFixed(3) : '측정선 개방' },
         { label: '단락 fT', val: `${fT.toFixed(3)} GHz` },

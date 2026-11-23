@@ -2,7 +2,7 @@
   "id": "cg-cs-rf-loading-and-sign",
   "title": "CG+CS 귀환 RF 로딩과 반송 부호",
   "archetype": "approx",
-  "source_sha256": "c13c4e39727611d31aa82ab49bf4be3b787fd1ab4b28c2600c2487f87fe0aba9",
+  "source_sha256": "1ccf98892f6678734ca1ab67044bb86666a4a8ab5c321741688e6bcea9423218",
   "sources": [
     "복습노트/1120/정리노트_1120_Nonideal_IO_Feedback.html#s3-vc-ideal",
     "복습노트/1120/정리노트_1120_Nonideal_IO_Feedback.html#s3-vc-open",
@@ -55,8 +55,14 @@
     "probe": {
       "status": "pass",
       "command": "python3 .agents/skills/ec2-interactive/scripts/probe_interactive.py",
-      "widths": [1440, 375],
-      "themes": ["light", "dark"],
+      "widths": [
+        1440,
+        375
+      ],
+      "themes": [
+        "light",
+        "dark"
+      ],
       "checks": 104,
       "defect_count": 0,
       "blocked_requests": []
@@ -64,7 +70,10 @@
     "browser": {
       "status": "pass",
       "script": "$RUN/03/browser_check.py",
-      "viewports": ["1440x900 light/dark", "375x812 dark"],
+      "viewports": [
+        "1440x900 light/dark",
+        "375x812 dark"
+      ],
       "verified_flows": [
         "predict card answer feedback and dismiss without locking controls",
         "direct click on SVG [data-elem='rf-out'] triggering 20.0% breakdown badge and updating tiles/plot",
@@ -82,5 +91,60 @@
     "Wrapped multi-step equations inside KaTeX aligned blocks so span.katex-display fits within .formula-box at both 1440px and 375px with zero overflow.",
     "Compacted loading SVG to viewBox='0 0 700 302' with max-height:216px so .lab-stage never overhangs .predict-card or .plot-wrap vertically on 1440x900.",
     "Fixed KaTeX formatting in diagnosis messages (fmtKOhmTex, missing $...$ in feedthrough warning, distinct message when both replicas are off within 10%) and used fmtSignedMaTex for upright mA units."
-  ]
+  ],
+  "html_sha256": "aa75f72b241f9d1d140744373d0493bf375cf2b48927bbaf09c5e5bb40bd437b",
+  "prediction_revision": {
+    "date": "2026-11-23",
+    "previous_source_sha256": "c13c4e39727611d31aa82ab49bf4be3b787fd1ab4b28c2600c2487f87fe0aba9",
+    "previous_html_sha256": "fbb2571900df73dd86ed5bed928efc02da0dc5a746f767d45ea05cf2417bf3b1",
+    "machine": "pass",
+    "numeric": {
+      "unchanged_model_states": 27
+    },
+    "probe": {
+      "checks": 108,
+      "defects": 0
+    },
+    "browser": {
+      "route": "Chromium with vendored assets",
+      "checks": [
+        {
+          "width": 1440,
+          "height": 900,
+          "theme": "light",
+          "verification_readings": [
+            "−82.51 kΩ → −99.01 kΩ"
+          ],
+          "console_errors": []
+        },
+        {
+          "width": 1440,
+          "height": 900,
+          "theme": "dark",
+          "verification_readings": [
+            "−82.51 kΩ → −99.01 kΩ"
+          ],
+          "console_errors": []
+        },
+        {
+          "width": 375,
+          "height": 812,
+          "theme": "light",
+          "verification_readings": [
+            "−82.51 kΩ → −99.01 kΩ"
+          ],
+          "console_errors": []
+        },
+        {
+          "width": 375,
+          "height": 812,
+          "theme": "dark",
+          "verification_readings": [
+            "−82.51 kΩ → −99.01 kΩ"
+          ],
+          "console_errors": []
+        }
+      ]
+    }
+  }
 }

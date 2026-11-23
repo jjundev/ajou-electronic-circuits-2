@@ -57,6 +57,11 @@ module.exports = {
     options: [{ id: 'up', label: '커진다' }, { id: 'down', label: '작아진다' }, { id: 'flat', label: '그대로다' }],
     answerId: 'up',
     explain: '높은 주파수에서는 게이트가 소스를 따라 움직이고 시험 전류가 커패시터를 거쳐 앞단 저항으로 흐릅니다.',
+    check: {
+      before: { params: { ...defaultParams, freq: 1 }, disabledElems: [] },
+      after: { params: { freq: 30000 }, causalStep: 3 },
+      tiles: ['출력 임피던스 크기'],
+    },
   },
   params: [
     { key: 'freq', label: '시험 주파수', min: 1, max: 30000, scale: 'log', unit: 'MHz', def: defaultParams.freq },

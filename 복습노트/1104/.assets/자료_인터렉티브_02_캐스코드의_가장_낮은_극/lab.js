@@ -65,10 +65,14 @@ module.exports = {
   archetype: 'approx',
   modes: [{ key: 'cascode', label: 'MOS 캐스코드', svg: circuit, ariaLabel: 'MOS 캐스코드 소신호 등가 회로' }],
   predict: {
-    prompt: '출력 부하 저항을 키워 입력과 출력의 추정 극 주파수가 같아졌어요. 전체 −3 dB 대역폭은 그 주파수와 어떻게 비교될까요?',
+    prompt: '출력 부하 저항을 키워 입력과 출력의 추정 극 주파수가 가까워졌어요. 전체 −3 dB 대역폭은 그 주파수와 어떻게 비교될까요?',
     options: [{ id: 'lower', label: '더 낮다' }, { id: 'equal', label: '거의 같다' }, { id: 'higher', label: '더 높다' }],
     answerId: 'lower',
-    explain: '입력과 출력에서 감쇠가 겹칩니다. 대표 설정 ‘두 극이 만나는 곳’에서 두 수치를 비교해 보세요.',
+    explain: '입력과 출력에서 감쇠가 겹쳐 전체 응답이 더 낮은 주파수에서 −3 dB에 도달합니다.',
+    check: {
+      after: { params: { ...defaults, rl: 4 }, disabledElems: [], causalStep: 3 },
+      tiles: ['한 극으로 추정', '전체 −3 dB'],
+    },
   },
   params: [
     { key: 'rl', label: '부하 저항 Rₗ', min: 1, max: 20, step: 0.05, unit: 'kΩ', def: defaults.rl },

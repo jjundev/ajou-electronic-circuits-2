@@ -2,7 +2,7 @@
   "id": "feedback-four-terminations-bench",
   "title": "네 가지 귀환 복제 종단 조립",
   "archetype": "bench",
-  "source_sha256": "aa65d473f9d2a6902aa7c15c953ade93abbf0b706991b45e787049839370ca06",
+  "source_sha256": "d575aaa80044ad1bc8ab8d812e88e77692832749d7d032dbbd92308c2805fa23",
   "sources": [
     "복습노트/1120/정리노트_1120_Nonideal_IO_Feedback.html#s0-loading-recap",
     "복습노트/1120/정리노트_1120_Nonideal_IO_Feedback.html#s0-four-terminations",
@@ -71,8 +71,14 @@
     "probe": {
       "status": "pass",
       "command": "python3 .agents/skills/ec2-interactive/scripts/probe_interactive.py",
-      "widths": [1440, 375],
-      "themes": ["light", "dark"],
+      "widths": [
+        1440,
+        375
+      ],
+      "themes": [
+        "light",
+        "dark"
+      ],
       "checks": 140,
       "defect_count": 0,
       "blocked_requests": []
@@ -80,7 +86,10 @@
     "browser": {
       "status": "pass",
       "script": "$RUN/01/browser_check.py",
-      "viewports": ["1440x900 light/dark", "375x812 dark"],
+      "viewports": [
+        "1440x900 light/dark",
+        "375x812 dark"
+      ],
       "verified_flows": [
         "predict card answer and skip without locking controls",
         "keyboard Enter/Escape popover interaction on data-port",
@@ -100,5 +109,64 @@
     "Replaced transparent <rect> port hit box with <ellipse> inside <g data-port> so CSS .is-hot/.is-bad rect border rules do not draw a box outline while preserving full-area pointer/touch hit targets.",
     "Fix Round 1: Clarified mistakes.vv[2] so finite non-ideal port impedance examples match BJT base r_pi / drain R_D and explicitly distinguish V-V gate feedback (∞) from V-C/C-C CG current input (1/g_m -> ideal 0).",
     "Fix Round 1: Added explicit default params to every entry in steps[] so PICK_STEP resets sliders to match the resistance values cited in steps[].text."
-  ]
+  ],
+  "html_sha256": "2bad61fd0ceead74362fb775318c944d0826d08f7652f6d5a8334e2f7177cf26",
+  "prediction_revision": {
+    "date": "2026-11-23",
+    "previous_source_sha256": "aa65d473f9d2a6902aa7c15c953ade93abbf0b706991b45e787049839370ca06",
+    "previous_html_sha256": "53330278883ab91c3194d7f4b3a7b3d34ca579271571b79fa4a19dea4e6332b6",
+    "machine": "pass",
+    "numeric": {
+      "unchanged_model_states": 36
+    },
+    "probe": {
+      "checks": 144,
+      "defects": 0
+    },
+    "browser": {
+      "route": "Chromium with vendored assets",
+      "checks": [
+        {
+          "width": 1440,
+          "height": 900,
+          "theme": "light",
+          "verification_readings": [
+            "3.00 kΩ → 4.00 kΩ"
+          ],
+          "console_errors": []
+        },
+        {
+          "width": 1440,
+          "height": 900,
+          "theme": "dark",
+          "verification_readings": [
+            "3.00 kΩ → 4.00 kΩ"
+          ],
+          "console_errors": []
+        },
+        {
+          "width": 375,
+          "height": 812,
+          "theme": "light",
+          "verification_readings": [
+            "3.00 kΩ → 4.00 kΩ"
+          ],
+          "console_errors": []
+        },
+        {
+          "width": 375,
+          "height": 812,
+          "theme": "dark",
+          "verification_readings": [
+            "3.00 kΩ → 4.00 kΩ"
+          ],
+          "console_errors": []
+        }
+      ],
+      "in_app": [
+        "Desktop: selection leaves 3.00 kΩ unchanged; verification shows 3.00 kΩ → 4.00 kΩ",
+        "375×812 dark: card opens from the circuit stage and skip returns to the collapsed control"
+      ]
+    }
+  }
 }

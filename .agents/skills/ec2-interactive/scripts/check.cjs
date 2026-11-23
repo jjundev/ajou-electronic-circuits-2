@@ -160,6 +160,17 @@ function checkSchema(spec, add) {
       if (p.answerId === undefined || p.answerId === null || !optIds.has(String(p.answerId))) {
         add('SCHEMA_INVALID', `predict.answerId (${JSON.stringify(p.answerId)}) must match an option id`);
       }
+      if (p.mode !== undefined && (!Array.isArray(spec.modes) || !spec.modes.some((mode) => mode?.key === p.mode))) {
+        add('SCHEMA_INVALID', 'predict.mode must match a lab mode');
+      }
+      if (p.check !== undefined) {
+        const isPatch = (value) => value && typeof value === 'object' && !Array.isArray(value);
+        if (!isPatch(p.check) || !isPatch(p.check.after) ||
+            (p.check.before !== undefined && !isPatch(p.check.before)) ||
+            !Array.isArray(p.check.tiles) || !p.check.tiles.length || !p.check.tiles.every(isNonEmptyString)) {
+          add('SCHEMA_INVALID', 'predict.check needs an after patch and at least one result tile id or label');
+        }
+      }
     }
   }
 
@@ -262,6 +273,7 @@ function buildTestStates(spec) {
       causalStep: state.causalStep,
       predictChoice: state.predictChoice,
       predictDismissed: state.predictDismissed,
+      predictVerified: state.predictVerified,
       toggles: state.toggles,
     });
     if (seen.has(sig)) return;

@@ -640,13 +640,20 @@ const spec = {
     };
   }),
   predict: {
-    prompt: 'V-V 귀환에서 출력 쪽에 다는 「감지 복제」의 남은 포트는 어떻게 종단해야 할까요?',
+    prompt: 'V–V 귀환에서 감지 복제의 남은 포트를 단락에서 개방으로 바꾸면 출력 쪽에서 보이는 저항은 어떻게 될까요?',
     options: [
-      { id: 'open', label: '개방 (원래 전압 입력, $Z_{\\text{in}} = \\infty$)' },
-      { id: 'short', label: '단락/접지 (원래 전압 출력, $Z_{\\text{out}} = 0$)' },
+      { id: 'up', label: '커져요' },
+      { id: 'down', label: '작아져요' },
+      { id: 'same', label: '그대로예요' },
     ],
-    answerId: 'open',
-    explain: '감지 복제는 출력에 달지만 남은 포트는 원래 전방 증폭기의 전압 입력($Z_{\\text{in}}=\\infty$)에 붙어 있었으므로 개방해야 해요.',
+    answerId: 'up',
+    explain: '단락할 때 우회되던 $R_2$에 다시 전류가 흘러요. 그래서 출력에서 보는 저항에 $R_2$가 더해져요.',
+    mode: 'vv',
+    check: {
+      before: { ports: { 'sense-rem': 'short' } },
+      after: { ports: { 'sense-rem': 'open' } },
+      tiles: ['출력측 감지 로딩'],
+    },
   },
   params: [
     { key: 'vv_r1', mode: 'vv', label: '상단 저항 R1', min: 1, max: 10, step: 0.5, unit: 'kΩ', def: 3 },

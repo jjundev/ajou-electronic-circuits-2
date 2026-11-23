@@ -52,13 +52,18 @@ module.exports = {
     badOption: 'short',
   }],
   predict: {
-    prompt: '귀환을 끊은 뒤에도 출력에서 R₂를 지나는 전류가 흐를까요?',
+    prompt: '귀환을 끊고 감지 포트를 개방하면 아래 저항 R₂에 전류가 흐를까요?',
     options: [
       { id: 'flows', label: '감지 포트를 개방하면 흐른다' },
       { id: 'stops', label: '감지 포트를 개방하면 멈춘다' },
     ],
     answerId: 'flows',
     explain: '감지 포트의 가지는 열려도, 출력에서 두 저항을 거쳐 접지에 이르는 가지는 이어져 있어요.',
+    check: {
+      before: { ports: { sense: 'short' } },
+      after: { ports: { sense: 'open' } },
+      tiles: ['아래 저항 전류', '출력에 걸리는 부하'],
+    },
   },
   params: [],
   steps: [

@@ -79,7 +79,12 @@ module.exports = {
       { id: 'same', label: '출력 쪽이 계속 대역폭을 제한한다' },
     ],
     answerId: 'shift',
-    explain: '$R_D$를 줄이면 출력 극점이 올라갑니다. 두 극점이 만나는 구간에서는 두 노드가 함께 대역폭을 제한합니다.',
+    explain: '$R_D$를 줄이면 출력 극점이 올라갑니다. 이 실험에서는 입력 극점이 더 낮아져 입력 쪽이 대역폭을 주로 제한합니다.',
+    check: {
+      before: { params: { rs: 1000, rd: start.rd }, disabledElems: [] },
+      after: { params: { rd: inputFirst.rd, f: inputFirst.f }, causalStep: 3 },
+      tiles: ['입력 극점', '출력 극점', '−3 dB 대역폭'],
+    },
   },
   params: [
     { key: 'rs', label: '신호원 저항 Rₛ', min: 25, max: 2000, def: start.rs, unit: 'Ω', scale: 'log' },

@@ -15,6 +15,8 @@ description: '전자회로2 복습노트 날짜나 주제로 회로도·파형·
 
 **기존 자료 연결만 요청:** 새 자료를 만들지 않고 요청 범위의 기존 노트·자료를 읽어 8–9단계만 실행한다(`전체`는 `복습노트/` 아래 기존 자료 전체).
 
+**기존 실험 수정 요청:** HTML에 표시된 원본 `lab.js`와 공통 셸을 수정하고, `build.cjs`로 기존 위치의 HTML을 재생성한다. 검증을 갱신하고, 문제설명에 연결된 실험은 `lab-validation.json`과 해당 팩 매니페스트의 파일 해시도 대조한다.
+
 ## 문제설명에서 문항 모드로 호출
 `ec2-problem-explain`이 전달한 `lab/brief.json`과 원문·해설 근거로 문항별 실험 한 개를 만든다. 주제 점수와 날짜별 수량 대신 브리프의 한 가지 조작과 관찰을 따른다. 3–6단계 검증을 수행해 같은 임시 `lab/`에 `lab.js`, `index.html`, `lab-validation.json`을 반환한다. 검증 기록은 아래 네 게이트와 `source_sha256`, `html_sha256`, `brief_sha256`을 포함한다. 현재 문항과 결선·기호·가정·정답 방향을 대조하고 예시값은 화면에 표시한다. 빌드 출력은 소스 옆에 두어 재생성 경로가 발행 후에도 유효하게 한다. 스테이징과 발행은 호출한 문제설명 또는 부모 복습팩이 담당한다.
 
@@ -40,7 +42,7 @@ description: '전자회로2 복습노트 날짜나 주제로 회로도·파형·
 
 - **네이티브 SVG (`CIRCUIT-02`):** `.fig-ink`, `.fig-accent`, `.fig-danger`, `.fig-dot`, `.fig-text`, `.fig-math`, `.fig-muted`, `.sym`, `data-node-color="blue"|"red"`만 사용한다. SVG 하드코딩 hex와 평문 `_`/`$...$` 첨자를 금지하고 `<tspan baseline-shift="sub" font-size="78%">`를 사용한다. 허용 CDN 4종 외 외부 URL을 쓰지 않는다.
 - **5종 `data-*` 훅과 배지:** `data-node`, `data-branch`, `data-elem`, `data-port`, `data-causal-step`을 선언·반환값과 정확히 일치시키고, `<g data-badges><g data-badge-for="...">` 슬롯을 도선에서 0.6em 이상 떨어진 여백에 둔다.
-- **MNA와 UI 계약:** `evaluate(state, mna)` 안에서 `assets/mna.js`의 `solveCircuit`을 써 회로·배지·타일·진단·플롯을 단일 모델로 계산한다. `predict`는 조작을 잠그지 않는 부드러운 1초 카드로 두고, 모드마다 `mistakes` 3개를 채운다.
+- **MNA와 UI 계약:** `evaluate(state, mna)` 안에서 `assets/mna.js`의 `solveCircuit`을 써 회로·배지·타일·진단·플롯을 단일 모델로 계산한다. 카드가 가리키는 조작과 관측값이 있을 때 `predict.check`를 작성한다. 선택 후 ‘회로에서 확인’을 누르면 검증 조작을 적용하고 같은 모델의 수치와 이유를 보여준다. ‘바로 실험하기’는 현재 회로에서 이어간다. 모드마다 `mistakes` 3개를 채운다.
 
 ### 4. 기계 검사 (`check.cjs` & `steps.cjs`) — 게이트 1
 
@@ -65,7 +67,7 @@ python3 "$SKILL/scripts/probe_interactive.py" "$RUN/<n>/preview.html" --widths 1
 ```
 
 - **게이트 3 (`probe_interactive.py`):** 오프라인 Playwright로 `window.__EC2_LAB__`의 모든 프로브 상태(`listProbeStates`/`applyProbeState`)를 `1440`·`375` 폭과 `light`·`dark` 테마에서 순회하며 콘솔/페이지 오류, 미등록 외부 요청, 가로 스크롤·오버플로, KaTeX 렌더링, `0.6em` `label_gaps`, 모바일 단일 서랍·`Escape` 닫기를 검증해 `defect_count === 0`(종료 0)을 확인한다.
-- **게이트 4 (실제 브라우저 확인):** `probe_interactive.py` 통과 후 **Codex 내부 브라우저(`iab`)를 우선** 사용한다. `cua_repl`에서 로컬 HTTP 미리보기의 `preview.html`을 열고, `1440×900`·`375×812` 각각에서 라이트·다크를 확인한다. 예측 카드 건너뛰기/응답, 포트 팝오버(`Enter`/`Space`/`Arrow`/`Escape`), 소자 토글, 슬라이더 끝값, `+Δv` 인과 맥동, 근사 플롯 중 자료에 있는 기능을 직접 조작한다. 대표 수치·상태 변화, 라벨 겹침, 패널 대비와 콘솔 오류를 확인한다.
+- **게이트 4 (실제 브라우저 확인):** `probe_interactive.py` 통과 후 **Codex 내부 브라우저(`iab`)를 우선** 사용한다. `cua_repl`에서 로컬 HTTP 미리보기의 `preview.html`을 열고, `1440×900`·`375×812` 각각에서 라이트·다크를 확인한다. 예측 카드가 있으면 응답 → 회로에서 확인 → 관측값·설명, 건너뛰기 전후 회로 유지, 설명 패널을 닫았을 때의 위치를 확인한다. 해당 실험의 포트 팝오버(`Enter`/`Space`/`Arrow`/`Escape`), 소자 토글, 슬라이더 끝값, `+Δv` 인과 맥동, 근사 플롯도 직접 조작한다. 대표 수치·상태 변화, 라벨 겹침, 패널 대비와 콘솔 오류를 확인한다.
 
 **로컬 HTTP 미리보기:** `127.0.0.1`에만 바인딩하는 임시 서버에서 이번 검증에 필요한 HTML과 참조하는 로컬 리소스만 제공한다. 정리노트와 실험 파일을 함께 검사할 때 상대 URL이 동작하도록 원래 상대 위치를 유지한다. 테스트한 URL은 검증 기록에 남기고, 작업용 서버는 검사 후 종료한다. 사용자가 미리보기 주소도 요청했다면 접속 가능한 임시 주소를 전달한다.
 
