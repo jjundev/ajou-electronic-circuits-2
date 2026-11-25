@@ -424,10 +424,13 @@ def render_widget(node, ctx):
     static = next(node.find_all(lambda n: "widget-static" in n.classes), None)
     note = " *(정적 스냅샷 — 직접 조작은 HTML 버전)*" if static else " *(인터랙티브 — HTML 버전에서 조작)*"
     lines = []
+    # 접힌 위젯: details의 summary가 제목이고 설명·범례도 그 안에 있다
+    kids = []
     for c in node.children:
-        if not isinstance(c, Node):
-            continue
-        if c.tag == "h4":
+        if isinstance(c, Node):
+            kids += [x for x in c.children if isinstance(x, Node)] if c.tag == "details" else [c]
+    for c in kids:
+        if c.tag in ("h4", "summary"):
             if wid:
                 lines += ["", f'<a id="{wid}"></a>']
             lines += ["", "#### " + "".join(inline(x, ctx) for x in c.children).strip() + note]

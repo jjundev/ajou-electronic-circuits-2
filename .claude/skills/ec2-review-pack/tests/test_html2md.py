@@ -208,6 +208,18 @@ class TestHtml2Md(unittest.TestCase):
         self.assertFalse((d / ".assets" / "figures_0101").exists())
         self.assertTrue(Path(note_md).exists())
 
+    def test_folded_widget_keeps_anchor_and_text(self):
+        d = self.tmp / "folded"
+        d.mkdir()
+        note = small_note(d, '<section id="s"><h2>A</h2><div class="widget" id="widget-f"><details><summary>결과 확인</summary>'
+                             '<p class="widget-help">도움말</p><p class="legend"><span>범례 하나</span></p>'
+                             '<div class="widget-static" hidden><p>정적 표</p></div></details></div></section>')
+        note_md, _ = html2md.convert_note(note)
+        md = Path(note_md).read_text(encoding="utf-8")
+        for part in ('<a id="widget-f"></a>', "#### 결과 확인", "도움말", "범례: 범례 하나", "정적 표"):
+            self.assertIn(part, md)
+        self.assertEqual(html2md.check_md(note, note_md), [])
+
     def test_nfd_named_note_converts(self):
         d = self.tmp / "nfd"
         d.mkdir()
