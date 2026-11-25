@@ -8,10 +8,11 @@ class GuidedAcceptanceTests(Sandbox):
   import video
   from solution_video.sources import discover
   from unittest.mock import patch
-  pairs=discover(REPO,'1002',['E10.13'])
+  pairs=discover(FROZEN_1002,'1002',['E10.13'])
   with patch.object(video,'discover',return_value=pairs):batch=video.prepare_batch(self.run,'1002',['E10.13'],False)
   run=batch/read(batch/'batch.json')['items'][0]['run'];result=author_guided(run)
   return run,result
+ @needs_browser
  def test_four_core_connections_and_exact_source_preservation(self):
   run,result=self.guided()
   self.assertEqual(len(result['core_step_ids']),4)
@@ -27,6 +28,7 @@ class GuidedAcceptanceTests(Sandbox):
   from solution_video.lesson import load_lesson
   self.assertIsNotNone(load_lesson(run,m,l,load_teaching(run,m,l)))
 
+ @needs_browser
  def test_fake_audio_never_approves(self):
   run,_=self.guided();m=read(run/'source/manifest.json');l=read(run/'layers/layers.json')
   from solution_video.annotations import load_teaching
@@ -38,6 +40,7 @@ class GuidedAcceptanceTests(Sandbox):
   t=build_teaching_timeline(m,l,audio,default_config(),default_writing(),load_teaching(run,m,l))
   self.assertEqual(analyze_narration_pacing(t,audio,run)['status'],'review-required')
   self.assertFalse((run/'verification/audio-review.json').exists())
+ @needs_browser
  def test_guided_caption_semantic_coverage(self):
   from solution_video.subtitles import split_caption,caption_units
   run,_=self.guided();segments=read(run/'source/manifest.json')['segments']
@@ -53,6 +56,7 @@ class GuidedAcceptanceTests(Sandbox):
     output.extend(chunks)
   for symbol in ['r_O1','r_O3','g_m1']:self.assertIn(symbol,' '.join(output))
 
+ @needs_browser
  def test_repeated_original_svg_gate_stays_exact(self):
   # Rebuilding identical static SVG must not capture compositor intermediate frames.
   for attempt in range(8):

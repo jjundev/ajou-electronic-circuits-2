@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import fitz
+import pymupdf as fitz
 import matplotlib
 import matplotlib.pyplot as plt
 import schemdraw.elements as elm

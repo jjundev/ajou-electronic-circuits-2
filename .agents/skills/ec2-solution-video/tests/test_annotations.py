@@ -44,6 +44,7 @@ class AnnotationContractTests(Sandbox):
   with self.assertRaises(InputError):validate_teaching(f,a,m,l)
 
 class AnnotationGeometryTests(Sandbox):
+ @needs_browser
  def test_arrow_ellipse_and_label_outlines(self):
   import solution_video.annotations as module
   self.assertTrue(hasattr(module,'compile_annotations'),'annotation geometry compiler missing')
@@ -60,6 +61,7 @@ class AnnotationEarlyHideTests(Sandbox):
   with self.assertRaisesRegex(InputError,'a'):validate_teaching(f,a,m,l)
 
 class StandaloneAnnotationTests(Sandbox):
+ @needs_browser
  def test_font_outline_compilation_does_not_depend_on_pdf_export_import(self):
   import subprocess
   code=f"""import sys,json
@@ -87,6 +89,7 @@ class InkWidthTests(Sandbox):
  def test_label_rejects_stroke_width(self):
   f,a,m,l=teaching_fixture();a['items'][0].update(kind='label',stroke_width_px=6,geometry={'runs':[dict(text='v',origin=[40,60],font_size_pt=12)]})
   with self.assertRaises(InputError):validate_teaching(f,a,m,l)
+ @needs_browser
  def test_compiled_stroke_and_color(self):
   from solution_video.annotations import compile_annotations
   import xml.etree.ElementTree as ET
@@ -109,6 +112,7 @@ class ChunkAnnotationTests(Sandbox):
    with self.subTest(mutate=mutate),self.assertRaises(InputError):validate_teaching(f,a,m,l)
 
 class MathLabelAliasTests(Sandbox):
+ @needs_browser
  def test_math_label_keeps_authored_unicode_with_shared_font_glyphs(self):
   from solution_video.annotations import compile_annotations
   f,a,m,l=teaching_fixture();a['items'][0].update(kind='label',geometry={'runs':[dict(text='+ΔI−',origin=[40,60],font_size_pt=12)]})

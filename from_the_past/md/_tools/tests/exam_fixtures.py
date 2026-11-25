@@ -1,7 +1,19 @@
 """기출 도구 테스트 공용 픽스처."""
+import unicodedata
 from pathlib import Path
 
-import fitz
+import pymupdf as fitz
+
+
+def aliases_nfd(folder):
+    """Whether this filesystem opens an NFC name through its NFD spelling (APFS does, NTFS does not)."""
+    name = unicodedata.normalize("NFC", "전자회로")
+    probe = Path(folder) / name
+    probe.mkdir()
+    try:
+        return (Path(folder) / unicodedata.normalize("NFD", name)).is_dir()
+    finally:
+        probe.rmdir()
 
 
 def make_pdf(path: Path, pages: int = 1) -> None:

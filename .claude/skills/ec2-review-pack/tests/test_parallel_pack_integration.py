@@ -201,6 +201,7 @@ def test_parallel_full_pack_accepts_only_current_evidence(tmp_path):
     lost = 'pdf-page:1'
     previous = next(entry for entry in state['approval_ledger']
                     if entry['attempt'] == brief['attempt'] and entry['target'] == lost)
+    Path(previous['screen']).chmod(0o644)  # Windows cannot unlink a read-only file
     Path(previous['screen']).unlink()
     assert 'publish-pack' not in trial.next()['actions']
     renewed = trial.worker('pdf-qa')

@@ -1,13 +1,20 @@
 """Small synthetic fixtures for the candidate/publication boundary."""
 from pathlib import Path
 import json
+import os
 import shutil
 import sys
+import tempfile
 
 import pytest
 
 SKILL = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(SKILL/'scripts'))
+# RUN folders and publication locks made by tests stay out of the user's ~/.cache.
+# A spawned process re-imports this module and must keep its parent's locks.
+if "EC2_CACHE_ROOT" not in os.environ:
+    _cache_temp = tempfile.TemporaryDirectory(prefix="ec2-test-cache-", ignore_cleanup_errors=True)
+    os.environ["EC2_CACHE_ROOT"] = _cache_temp.name
 import concept
 import source
 import pack_flow

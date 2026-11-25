@@ -294,13 +294,19 @@ def _nfd(p): import unicodedata; return unicodedata.normalize('NFD', str(p))
 def _nfc(p): import unicodedata; return unicodedata.normalize('NFC', str(p))
 
 
+def _needs_nfd_alias(folder):
+    from _util import aliases_nfd
+    if not aliases_nfd(folder): pytest.skip('filesystem keeps NFC and NFD names apart')
+
+
 def _real_pdf(path):
-    import fitz
+    import pymupdf as fitz
     path.parent.mkdir(parents=True, exist_ok=True)
     doc = fitz.open(); doc.new_page().insert_text((72, 72), 'slide'); doc.save(path); doc.close()
 
 
 def test_init_stores_nfc_repo(tmp_path):
+    _needs_nfd_alias(tmp_path)
     repo, run = make_run(tmp_path, repo_name=_nfd('전자회로2'), init_repo=Path(_nfd(tmp_path / '전자회로2')))
     state = f.load_state(run)
     assert state['repo'] == _nfc(state['repo']) and state['run'] == _nfc(state['run'])
@@ -308,6 +314,7 @@ def test_init_stores_nfc_repo(tmp_path):
 
 
 def test_source_map_accepts_mixed_nfd_component(tmp_path):
+    _needs_nfd_alias(tmp_path)
     from pack_receipts import _source
     repo, run = make_run(tmp_path, repo_name=_nfd('전자회로2'), init_repo=Path(_nfc(tmp_path / '전자회로2')))
     pdf = repo / _nfd('강의노트') / 'x.pdf'; _real_pdf(pdf)
@@ -326,5 +333,6 @@ def test_source_map_rejects_sibling_outside_repo(tmp_path):
 
 
 def test_state_loads_when_run_is_spelled_nfd(tmp_path):
+    _needs_nfd_alias(tmp_path)
     _, run = make_run(tmp_path)
     assert f.load_state(Path(_nfd(run)))['run_id'] == f.load_state(run)['run_id']

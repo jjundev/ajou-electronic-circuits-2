@@ -47,6 +47,7 @@ class VerifyTests(Sandbox):
         write(self.run/'source/timeline.json',{'writing':{'mode':'typing'}})
         report=verify_run(self.run,Path('/missing/hyperframes'))
         self.assertEqual(report['checks']['writing_animation']['status'],'passed')
+    @needs_browser
     def test_actual_composition_tampering_is_rejected(self):
         from test_composition import CompositionTests
         from solution_video.util import write,read,digest,file_hash
@@ -63,6 +64,7 @@ class VerifyTests(Sandbox):
                 entry.write_text(original.replace('</body>',"<script>const realRender=window.renderSolutionFrame;window.renderSolutionFrame=f=>{realRender(f);"+mutation+";};</script></body>"))
                 r=verify_run(self.run,Path('/missing/hyperframes'))
                 self.assertEqual(r['checks']['original_svg']['status'],'passed');self.assertEqual(r['checks']['writing_animation']['status'],'unverified');self.assertFalse(r['complete'])
+    @needs_browser
     def test_blank_timeline_cannot_pass_original_gate(self):
         from test_composition import CompositionTests
         from solution_video.util import read,write
@@ -77,6 +79,7 @@ class VerifyTests(Sandbox):
         r=verify_run(self.run,Path('/missing/hyperframes'))
         self.assertIn('teaching_animation',r['checks'])
         self.assertEqual(r['checks']['teaching_animation']['status'],'unverified')
+    @needs_browser
     def test_original_gate_survives_annotations(self):
         from test_composition import CompositionTests
         from solution_video.util import read,write,digest,file_hash
@@ -88,6 +91,7 @@ class VerifyTests(Sandbox):
         self.assertEqual(report['checks']['original_svg']['status'],'passed');self.assertEqual(report['checks']['teaching_animation']['status'],'passed');self.assertFalse(report['complete'])
         t=read(self.run/'source/timeline.json');t['teaching']['spans'][0]['end_frame']+=1;write(self.run/'source/timeline.json',t)
         self.assertEqual(verify_run(self.run,Path('/missing/hyperframes'))['checks']['teaching_animation']['status'],'unverified')
+    @needs_browser
     def test_teaching_visual_pencil_setting_does_not_require_retime(self):
         from test_composition import CompositionTests
         from solution_video.util import read,write
@@ -100,6 +104,7 @@ class VerifyTests(Sandbox):
 
 
 class DenseTeachingScreenTests(Sandbox):
+    @needs_browser
     def test_dense_teaching_screen_has_budget_for_complete_frame_oracles(self):
         # Catch accidental use of the generic120s subprocess budget for dense ink.
         import solution_video.verify as verification

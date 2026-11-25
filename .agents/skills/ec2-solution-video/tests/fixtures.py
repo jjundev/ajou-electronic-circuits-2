@@ -1,14 +1,25 @@
 from pathlib import Path
-import sys,tempfile,unittest,json,wave,hashlib
+import os,shutil,sys,tempfile,unittest,json,wave,hashlib
 S=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(S/'scripts'))
 REPO=S.parents[2]
+# The 1002 pack and its problems as published just before commit f67ec5fa, which replaced its problem set.
+FROZEN_1002=S/'tests/frozen/1002-before-f67ec5fa'
+def _missing_browser():
+    from solution_video.util import browser_config
+    from solution_video.contracts import InputError
+    if shutil.which('node') is None: return 'node missing'
+    try: browser_config()
+    except InputError as ex: return str(ex)
+# EC2_REQUIRE_TOOLS=1 runs these tests anyway, so a missing tool fails instead of skipping.
+_browser_reason=None if os.environ.get('EC2_REQUIRE_TOOLS')=='1' else _missing_browser()
+needs_browser=unittest.skipIf(_browser_reason,_browser_reason or '')
 class Sandbox(unittest.TestCase):
     def setUp(self):
         self.tmp=tempfile.TemporaryDirectory(); self.run=Path(self.tmp.name)
     def tearDown(self): self.tmp.cleanup()
 def math_pdf(dest):
-    import fitz
+    import pymupdf as fitz
     doc=fitz.open(); p=doc.new_page(width=400,height=300)
     p.insert_text((10,30),'P10.1'); p.insert_text((110,120),'x + y = 2',fontsize=14)
     p.insert_text((130,128),'1',fontsize=8); p.draw_line((150,140),(180,140)); p.draw_rect((105,180,290,220),color=(0,0,1))

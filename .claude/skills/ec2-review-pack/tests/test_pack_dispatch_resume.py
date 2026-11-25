@@ -240,6 +240,7 @@ def test_quiz_crash_reuses_only_matching_public_receipt_marker_and_blind_proof(t
         row.update(status='running')
         private = Path(row['attempt_dir'])
         for name in ('stopped.json','result.json','concept-check-result.json'):
+            (private/name).chmod(0o644)  # Windows cannot unlink a read-only file
             (private/name).unlink()
         for key in ('verified_files','source_inputs','artifacts'):
             row.pop(key)
@@ -277,6 +278,16 @@ def test_batch_rechecks_input_after_validation_before_revision_commit(tmp_path,m
     result = runner.accept_batch(run, [item])
     assert result['items'][0]['status'] == 'rejected'
     assert not f._done(f.load_state(run),'explain-blind')
+
+
+def test_missing_file_is_recognised_by_type_not_by_message():
+    from pack_parallel import _missing_file
+    try:
+        try: raise FileNotFoundError(2, '지정된 파일을 찾을 수 없습니다')
+        except OSError as exc: raise f.FlowError('wrapped') from exc
+    except f.FlowError as exc:
+        assert _missing_file(exc)
+    assert not _missing_file(PermissionError(13, 'denied')) and not _missing_file(f.FlowError('other'))
 
 
 def test_host_can_release_confirmed_stopped_private_machine_only(tmp_path):

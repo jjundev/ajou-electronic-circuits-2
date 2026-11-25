@@ -7,7 +7,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from check_exam import check_file, exam_title, main, md_files  # noqa: E402
-from exam_fixtures import VALID_Q1, VALID_Q2, make_exam  # noqa: E402
+from exam_fixtures import VALID_Q1, VALID_Q2, aliases_nfd, make_exam  # noqa: E402
 
 
 class ExamTitleTest(unittest.TestCase):
@@ -112,6 +112,8 @@ class CheckFileTest(unittest.TestCase):
 
     def test_nfd_exam_dir(self):
         import unicodedata
+        if not aliases_nfd(self.root):
+            self.skipTest("이 파일시스템은 NFC/NFD 이름을 다른 파일로 본다")
         exam = make_exam(self.root, {"Q2.md": VALID_Q2})
         nfd = Path(unicodedata.normalize("NFD", str(exam)))
         self.assertEqual(check_file(nfd / "Q2.md", nfd), ([], []))

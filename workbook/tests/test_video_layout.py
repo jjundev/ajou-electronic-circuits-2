@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import fitz
+import pymupdf as fitz
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import build_workbook
 from assemble import build_data, ids_selection

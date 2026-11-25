@@ -41,6 +41,7 @@ class WritingFlowTests(Sandbox):
         t=build_timeline(m,l,read(self.run/'source/audio.json')['voices'],default_config(),default_writing());write(self.run/'source/timeline.json',t)
         assemble({'problem':{'snapshot':'pencil.pdf','page_index':0}},l,m,t,self.run,S.parent/'ec2-review-video/assets/runtime/vendor/gsap.min.js')
         return l,t
+    @needs_browser
     def test_native_piece_pixels_order_camera_and_mutations(self):
         from solution_video.util import browser
         l,t=self.spatial_fixture()
@@ -51,8 +52,9 @@ class WritingFlowTests(Sandbox):
         for mutation,key in [("window.solutionTimeline.writing_spans.find(s=>s.kind==='draw').unit_id='wrong'",'order_ok'),("document.querySelector('#answer-page>svg').setAttribute('viewBox','0 0 10 10')",'fit_ok')]:
             entry.write_text(original.replace('</body>',"<script>const prior=window.renderSolutionFrame;window.renderSolutionFrame=f=>{prior(f);"+mutation+";};</script></body>"))
             self.assertFalse(browser(['--mode','writing-flow',*args])[key],key)
+    @needs_browser
     def test_native_radical_outline_accumulates_without_future_leak(self):
-        import fitz
+        import pymupdf as fitz
         from solution_video.pdf_pages import export_page,extract_layers
         from solution_video.reveal import build_timeline
         from solution_video.writing import default_writing
@@ -75,8 +77,9 @@ class WritingFlowTests(Sandbox):
         assemble({'problem':{'snapshot':'radical.pdf','page_index':0}},l,m,t,self.run,S.parent/'ec2-review-video/assets/runtime/vendor/gsap.min.js')
         w=browser(['--mode','timeline','--entry',str(self.run/'composition/index.html'),'--layers',str(self.run/'layers/layers.json'),'--dest',str(self.run/'verification/radical')])['writing']
         self.assertEqual(w['hidden_leaks'],0,w);self.assertEqual(w['complete_diff'],0,w);self.assertTrue(w['seek_equal'],w)
+    @needs_browser
     def test_native_vertical_stroke_is_visible_before_completion(self):
-        import fitz
+        import pymupdf as fitz
         from PIL import Image,ImageChops
         from solution_video.pdf_pages import export_page,extract_layers
         from solution_video.reveal import build_timeline

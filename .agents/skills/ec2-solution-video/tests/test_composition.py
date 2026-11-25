@@ -16,8 +16,9 @@ class CompositionTests(Sandbox):
         t=dict(total_frames=130,segments=[dict(start_sample=0,end_sample=80000)],events=[dict(id='g1',frame=5,kind='glyph')])
         with self.assertRaisesRegex(InputError,'camera clips'):
             camera_keys(m,l,t)
+    @needs_browser
     def test_wide_pdf_fills_frame_and_preserves_caption_clip(self):
-        import fitz
+        import pymupdf as fitz
         p=self.run/'wide.pdf';d=fitz.open();pg=d.new_page(width=1440,height=810)
         pg.insert_text((10,30),'P10.1');pg.insert_text((110,120),'x + y = 2',fontsize=21);d.save(p)
         candidate=export_page(p,0,self.run/'layers');mp=mapping(candidate);layers=extract_layers(candidate,mp)
@@ -28,6 +29,7 @@ class CompositionTests(Sandbox):
         self.assertEqual(r['svg']['width'],1920);self.assertEqual(r['svg']['height'],1080)
         self.assertEqual(r['svg']['x'],0);self.assertEqual(r['viewport']['height'],900)
         self.assertTrue(r['seek_equal']);self.assertEqual(r['final_cursor'],'0')
+    @needs_browser
     def test_parts_have_exact_frame_coverage(self):
         p=math_pdf(self.run/'a.pdf'); candidate=export_page(p,0,self.run/'layers'); mp=mapping(candidate); layers=extract_layers(candidate,mp)
         m,_,_,_=example(); m['segments']=m['segments'][:2]; m['segments'][1]['step_id']='solution'; m['reveal_order']=mp['steps'][0]['glyph_ids']; m['shape_anchors']={s['id']:m['reveal_order'][-1] for s in layers['shapes']}
@@ -56,7 +58,7 @@ class CompositionTests(Sandbox):
         from solution_video.writing import default_writing
         p=self.run/'pencil.pdf'
         if complex_svg:
-            import fitz
+            import pymupdf as fitz
             d=fitz.open();pg=d.new_page(width=400,height=300);pg.insert_text((110,120),'xx',fontsize=18);pg.insert_text((115,124),'1',fontsize=8);pg.insert_text((110,160),'한글',fontname='korea',fontsize=14)
             for xref in pg.get_contents():d.update_stream(xref,b'q\n1 0.04 0 1 0 0 cm\n100 100 120 100 re W n\n'+d.xref_stream(xref)+b'\nQ\n')
             pg.draw_line((115,133),(140,133));d.save(p)
@@ -76,10 +78,12 @@ class CompositionTests(Sandbox):
         assemble({'problem':{'snapshot':'pencil.pdf','page_index':0}},l,m,t,self.run,S.parent/'ec2-review-video/assets/runtime/vendor/gsap.min.js')
         if not check_browser:return
         return browser(['--mode','timeline','--entry',str(self.run/'composition/index.html'),'--layers',str(self.run/'layers/layers.json'),'--dest',str(self.run/'verification')])
+    @needs_browser
     def test_pencil_partial_and_precomplete(self):
         r=self.pencil_fixture()['writing']
         self.assertEqual(r['precomplete_diff'],0);self.assertEqual(r['complete_diff'],0);self.assertEqual(r['hidden_leaks'],0)
         self.assertLessEqual(r['tip_error_px'],1);self.assertTrue(r['bounds_ok']);self.assertTrue(r['seek_equal']);self.assertTrue(r['gsap_seek_equal'])
+    @needs_browser
     def test_no_pencil_in_holds_or_whitespace(self):
         r=self.pencil_fixture()['writing'];self.assertFalse(r['final_visible']);self.assertTrue(r['inactive_hidden'])
     def test_camera_contains_pencil_at_four_edges(self):
@@ -103,6 +107,7 @@ class CompositionTests(Sandbox):
                         dx=(xx-meta['tip_px'][0])*scale*(-1 if k.get('mirror') else 1);dy=(yy-meta['tip_px'][1])*scale
                         sx=nibx+dx*math.cos(r)-dy*math.sin(r);sy=y+dx*math.sin(r)+dy*math.cos(r)
                         self.assertGreaterEqual(sx,0);self.assertLessEqual(sx,1920);self.assertGreaterEqual(sy,0);self.assertLessEqual(sy,900)
+    @needs_browser
     def test_existing_clip_transform_and_grouped_glyph(self):
         r=self.pencil_fixture(True)['writing']
         self.assertEqual(r['precomplete_diff'],0);self.assertEqual(r['complete_diff'],0);self.assertEqual(r['hidden_leaks'],0);self.assertTrue(r['bounds_ok'])
@@ -130,6 +135,7 @@ class CompositionTests(Sandbox):
         l['metadata']={'width_pt':1440,'height_pt':810};l['glyphs']=[dict(id='g',text='x',bbox=[365,100,380,120],svg_ids=[],paint_order=0)];l['map']['steps']=[dict(id='s',glyph_ids=['g'])]
         t=build_timeline(m,l,[make_audio('w',800,self.run)],default_config(),default_writing());k=camera_keys(m,l,t)[1]
         self.assertAlmostEqual(k['viewbox'][0],0);self.assertAlmostEqual(k['viewbox'][1],0);self.assertAlmostEqual(k['viewbox'][2],400);self.assertAlmostEqual(k['viewbox'][3],225);self.assertTrue(k['mirror'])
+    @needs_browser
     def test_mirrored_png_stays_aligned_in_browser(self):
         r=self.pencil_fixture(mirrored=True)['writing']
         self.assertTrue(r['bounds_ok']);self.assertLessEqual(r['tip_error_px'],1);self.assertEqual(r['precomplete_diff'],0);self.assertEqual(r['hidden_leaks'],0)
@@ -149,6 +155,7 @@ class CompositionTests(Sandbox):
         for stage in STAGES[:6]:
             out=self.run/(stage+'.txt');out.write_text(stage)
             finish_stage(self.run,stage,[self.run/'source/timeline.json'] if stage=='timing' else [out])
+    @needs_browser
     def test_visual_settings_refresh_without_retime(self):
         from test_cli import cli
         from types import SimpleNamespace
@@ -169,6 +176,7 @@ class CompositionTests(Sandbox):
         self.assertFalse((self.run/'usage.json').exists())
         writing['chars_per_second']=4;write(self.run/'source/writing.json',writing)
         with self.assertRaisesRegex(ValueError,'prerequisite stage: timing'):cli.run_stage('assemble',self.run,SimpleNamespace(runtime=S.parent/'ec2-review-video/assets/runtime/vendor/gsap.min.js'))
+    @needs_browser
     def test_visual_settings_verify_against_current_composition(self):
         from solution_video.util import read,write
         from solution_video.verify import verify_run
@@ -194,16 +202,19 @@ class CompositionTests(Sandbox):
         write(self.run/'source/manifest.json',m);write(self.run/'source/audio.json',{'voices':audio});write(self.run/'source/timeline.json',t)
         assemble({'problem':{'snapshot':'pencil.pdf','page_index':0}},l,m,t,self.run,S.parent/'ec2-review-video/assets/runtime/vendor/gsap.min.js')
         return t
+    @needs_browser
     def test_typing_annotations_load_pencil_but_legacy_does_not(self):
         t=self.teaching_fixture('typing');html=(self.run/'composition/index.html').read_text()
         self.assertIn('id="pencil"',html);self.assertTrue((self.run/'composition/annotations/compiled.json').is_file())
         self.assertIn('annotations.js',html)
         self.assertEqual(html.count('id="pencil"'),1)
+    @needs_browser
     def test_annotation_and_original_share_one_pen(self):
         self.teaching_fixture()
         r=browser(['--mode','teaching','--entry',str(self.run/'composition/index.html'),'--layers',str(self.run/'layers/layers.json'),'--dest',str(self.run/'verification/teaching-frames')])
         self.assertTrue(r['bounds_ok']);self.assertTrue(r['seek_equal']);self.assertTrue(r['gsap_seek_equal']);self.assertLessEqual(r['tip_error_px'],1)
         self.assertEqual(r['original_pixel_diff'],0);self.assertEqual(r['annotation_pixel_diff'],0);self.assertFalse(r['final_visible'])
+    @needs_browser
     def test_teaching_mutations_block_completion(self):
         self.teaching_fixture('typing');html=self.run/'composition/index.html';base=html.read_text()
         for change in ["document.getElementById('annotation-arrow').remove();", "document.getElementById('pencil').style.transform='translate(50px,50px)';", "document.getElementById('annotation-arrow').style.opacity='1';", "document.querySelector('#answer-page>svg').setAttribute('viewBox','0 0 200 100');"]:
@@ -215,6 +226,7 @@ class CompositionTests(Sandbox):
                 self.assertFalse(r.get('bounds_ok',False) and r.get('seek_equal',False) and r.get('tip_error_px',2)<=1 and r.get('annotation_pixel_diff',1)==0 and r.get('cameras_equal',False) and not r.get('final_visible',True))
         html.write_text(base)
 
+    @needs_browser
     def test_labels_whitespace_and_focus_only_in_browser(self):
         from solution_video.util import read,write
         from solution_video.annotations import load_teaching
@@ -227,6 +239,7 @@ class CompositionTests(Sandbox):
             assemble({'problem':{'snapshot':'pencil.pdf','page_index':0}},l,m,t,self.run,S.parent/'ec2-review-video/assets/runtime/vendor/gsap.min.js')
             r=browser(['--mode','teaching','--entry',str(self.run/'composition/index.html'),'--layers',str(self.run/'layers/layers.json'),'--dest',str(self.run/'verification/teaching-frames')])
             self.assertEqual(r['annotation_pixel_diff'],0);self.assertEqual(r['original_pixel_diff'],0);self.assertTrue(r['bounds_ok']);self.assertTrue(r['inactive_hidden'])
+    @needs_browser
     def test_different_figures_do_not_drag_pen_from_hidden_camera(self):
         from solution_video.util import read,write
         from solution_video.annotations import load_teaching
@@ -239,6 +252,7 @@ class CompositionTests(Sandbox):
         audio=[make_audio(s['id'],2400,self.run) for s in m['segments']];t=build_teaching_timeline(m,l,audio,default_config(),read(self.run/'source/writing.json'),load_teaching(self.run,m,l));write(self.run/'source/timeline.json',t)
         assemble({'problem':{'snapshot':'pencil.pdf','page_index':0}},l,m,t,self.run,S.parent/'ec2-review-video/assets/runtime/vendor/gsap.min.js')
         r=browser(['--mode','teaching','--entry',str(self.run/'composition/index.html'),'--layers',str(self.run/'layers/layers.json'),'--dest',str(self.run/'verification/teaching-frames')]);self.assertTrue(r['bounds_ok'])
+    @needs_browser
     def test_annotation_glyph_definition_tampering_is_detected(self):
         from solution_video.util import read,write
         from solution_video.annotations import load_teaching
@@ -250,8 +264,9 @@ class CompositionTests(Sandbox):
         entry=self.run/'composition/index.html';entry.write_text(entry.read_text().replace('</body>',"<script>document.querySelectorAll('#teaching-annotations defs path').forEach(p=>p.setAttribute('d',''));</script></body>"))
         r=browser(['--mode','teaching','--entry',str(entry),'--layers',str(self.run/'layers/layers.json'),'--dest',str(self.run/'verification/teaching-frames')])
         self.assertGreater(r['annotation_pixel_diff'],0)
+    @needs_browser
     def test_focus_return_preserves_last_draw_screen_tip(self):
-        import fitz
+        import pymupdf as fitz
         from solution_video.writing import default_writing
         from solution_video.annotations import load_teaching
         from solution_video.teaching import build_teaching_timeline

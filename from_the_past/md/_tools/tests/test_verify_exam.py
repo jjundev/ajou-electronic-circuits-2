@@ -9,7 +9,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from crop_exam import crop_all  # noqa: E402
 from draw_exam import draw_all  # noqa: E402
-from exam_fixtures import VALID_Q1, VALID_Q2, make_exam  # noqa: E402
+from exam_fixtures import VALID_Q1, VALID_Q2, aliases_nfd, make_exam  # noqa: E402
 from make_exam_index import build_exam_index  # noqa: E402
 from verify_exam import main, verify  # noqa: E402
 
@@ -116,6 +116,8 @@ class VerifyTest(unittest.TestCase):
 
     def test_nfd_folder_path(self):
         import unicodedata
+        if not aliases_nfd(self.exam):
+            self.skipTest("이 파일시스템은 NFC/NFD 이름을 다른 파일로 본다")
         nfd = Path(unicodedata.normalize("NFD", str(self.exam)))
         self.assertEqual(verify(nfd, recrop=True), [])
 

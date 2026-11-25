@@ -107,12 +107,13 @@ class CLITests(Sandbox):
         # This test isolates review hash; stage invalidation is tested separately.
         with patch.object(cli,'_gate'),patch.object(cli,'recover_run',return_value='voice'),patch.object(cli,'generate_voice') as voice:
             result=cli.run_stage('tts',run,args);self.assertEqual(result['status'],'awaiting-review');voice.assert_not_called()
+    @needs_browser
     def test_export_failure_preserves_other_prepared_items(self):
         from unittest.mock import patch
         from solution_video.contracts import ExtractionError
         from solution_video.sources import discover
         from solution_video.util import read
-        pairs=discover(REPO,'1002',['E10.11','E10.13']); original=cli.export_page
+        pairs=discover(FROZEN_1002,'1002',['E10.11','E10.13']); original=cli.export_page
         def export(pdf,index,dest):
             if index==1:raise ExtractionError('injected unsupported solution')
             return original(pdf,index,dest)
@@ -125,7 +126,7 @@ class CLITests(Sandbox):
         from unittest.mock import patch
         from solution_video.sources import discover
         from solution_video.util import read
-        pairs=discover(REPO,'1002',['E10.11'])
+        pairs=discover(FROZEN_1002,'1002',['E10.11'])
         with patch.object(cli,'discover',return_value=pairs):
             for mode in ['pencil','typing']:
                 batch=cli.prepare_batch(self.run,'1002',None,False,mode)
@@ -217,7 +218,7 @@ class CLITests(Sandbox):
         from unittest.mock import patch
         from solution_video.sources import discover
         from test_render_options import M5,AUTO
-        pairs=discover(REPO,'1002',['E10.11'])
+        pairs=discover(FROZEN_1002,'1002',['E10.11'])
         with patch.object(cli,'discover',return_value=pairs),patch('solution_video.render_options.detect_hardware',return_value=M5):
             batch=cli.prepare_batch(self.run,'1002')
         run=batch/read(batch/'batch.json')['items'][0]['run']
