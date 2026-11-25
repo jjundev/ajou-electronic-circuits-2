@@ -184,13 +184,28 @@ def test_circuit_that_scrolls_away_is_reported(tmp_path):
     problems = {(c['view'], c['panel'], c['problem']) for c in report['circuits']}
     assert ('1280x720', 'closed', 'circuit not fully visible') in problems
     assert ('375x667', 'closed', 'circuit not fully visible') in problems
-    assert not any(c['panel'] == 'open' for c in report['circuits'])
+    assert ('1280x720', 'open', 'circuit not fully visible') in problems
 
 
-def test_circuit_clipped_in_the_panel_is_reported(tmp_path):
-    code, _, report = _probe_note(tmp_path, _note(tmp_path, css='.circuits .circuit svg{height:1400px!important;max-height:none!important}'))
+def test_circuit_taller_than_the_body_is_reported(tmp_path):
+    code, _, report = _probe_note(tmp_path, _note(tmp_path, css='.js .layer .circuit svg{height:1400px!important;max-height:none!important}'))
     assert code == 1
-    assert {c['panel'] for c in report['circuits']} == {'open'}
+    assert {c['panel'] for c in report['circuits'] if c['problem'] == 'circuit not fully visible'} == {'open', 'closed'}
+
+
+TWO = STEPS + '<h4 class="sub">next</h4>' + CIRCUIT.format(name='w', y=40) + STEPS
+
+
+def test_two_circuits_hand_over_cleanly(tmp_path):
+    code, out, report = _probe_note(tmp_path, _note(tmp_path, steps=TWO))
+    assert code == 0, out + json.dumps(report['circuits'], ensure_ascii=False)
+
+
+def test_earlier_circuit_showing_below_is_reported(tmp_path):
+    code, _, report = _probe_note(tmp_path, _note(
+        tmp_path, steps=TWO, css='.js .layer .circuit:has(#fig-circuit-v){padding-bottom:40px!important}'))
+    assert code == 1
+    assert {(c['circuit'], c['problem']) for c in report['circuits']} == {('fig-circuit-w', 'earlier circuit shows below')}
 
 
 def test_circuit_covering_its_equation_is_reported(tmp_path):
@@ -201,16 +216,16 @@ def test_circuit_covering_its_equation_is_reported(tmp_path):
 
 
 def test_circuit_note_without_any_topic_figure_is_an_error(tmp_path):
-    note = _note(tmp_path, css='article.topic svg, .circuits svg{display:none!important}')
+    note = _note(tmp_path, css='article.topic svg{display:none!important}')
     code, out, report = _probe_note(tmp_path, note)
     assert code == 2 and 'no topic figure' in out and report is None
 
 
-@pytest.mark.parametrize('panel', ['open', 'closed'])
-def test_template_keeps_one_copy_and_prints_in_the_body(tmp_path, panel):
+def test_circuit_stays_pinned_in_the_body(tmp_path):
     from playwright.sync_api import sync_playwright
     note = _note(tmp_path)
-    count = "() => [document.querySelectorAll('.circuits figure').length, document.querySelectorAll('main figure.circuit').length]"
+    place = ("() => { const f = document.querySelector('figure.circuit'); return [document.querySelectorAll('figure.circuit').length,"
+             " !!f.closest('main .layer.formal'), f.hidden, getComputedStyle(f).position]; }")
     with sync_playwright() as pw:
         browser = pw.chromium.launch()
         try:
@@ -219,21 +234,18 @@ def test_template_keeps_one_copy_and_prints_in_the_body(tmp_path, panel):
             page.on('pageerror', lambda e: errors.append(str(e)))
             page.goto(note.as_uri() + '#s1-var')
             page.wait_for_timeout(300)
-            if panel == 'closed':
-                page.click('#toggle-right')
-            assert page.evaluate(count) == ([1, 0] if panel == 'open' else [0, 1])
-            page.evaluate("() => dispatchEvent(new Event('beforeprint'))")
-            assert page.evaluate(count) == [0, 1]
-            page.evaluate("() => dispatchEvent(new Event('afterprint'))")
-            assert page.evaluate(count) == ([1, 0] if panel == 'open' else [0, 1])
-            page.set_viewport_size({'width': 900, 'height': 720})
-            page.wait_for_timeout(200)
-            assert page.evaluate(count) == [0, 1]
-            page.evaluate("() => { location.hash = '#s1-mean' }")
-            page.set_viewport_size({'width': 1280, 'height': 720})
+            assert page.get_attribute('#toggle-right', 'aria-expanded') == 'true'
+            assert page.evaluate(place) == [1, True, False, 'sticky']
+            page.click('#toggle-right')
             page.wait_for_timeout(300)
-            if panel == 'open':
-                assert page.locator('.circuits figure').is_hidden()
+            assert page.evaluate(place) == [1, True, False, 'sticky']
+            page.emulate_media(media='print')
+            assert page.evaluate(place) == [1, True, False, 'static']
+            page.emulate_media(media='screen')
+            for size, position in (((900, 720), 'sticky'), ((375, 667), 'sticky'), ((667, 375), 'static')):
+                page.set_viewport_size({'width': size[0], 'height': size[1]})
+                page.wait_for_timeout(200)
+                assert page.evaluate(place) == [1, True, False, position]
             assert not [e for e in errors if 'renderMathInElement' not in e and 'katex' not in e.lower()]
         finally:
             browser.close()

@@ -54,7 +54,7 @@ const textNodes = Array.from(document.querySelectorAll('main *, #panel-right *')
   widgets: Array.from(document.querySelectorAll('.widget')).map((w) => ({ id: w.id, drawn: Array.from(w.querySelectorAll('svg')).some((s) => !s.closest('[hidden]') && s.childElementCount > 0) })),
 })
 ```
-`panelOverflow`는 토픽마다 넘겨 가며 "회로와 요약" 패널의 식이 패널 폭을 넘는지 잰다. 패널 식은 가로 스크롤이 되지만 스크롤바가 안 보여 잘린 것처럼 보이므로 넘침으로 친다. 1280px에서 재야 패널이 열려 있다. 같은 실행에 아래 정의도 붙여 넣는다.
+`panelOverflow`는 토픽마다 넘겨 가며 "요약" 패널의 식이 패널 폭을 넘는지 잰다. 패널 식은 가로 스크롤이 되지만 스크롤바가 안 보여 잘린 것처럼 보이므로 넘침으로 친다. 1280px에서 재야 패널이 열려 있다. 같은 실행에 아래 정의도 붙여 넣는다.
 ```js
 async function panelOverflow() {
   const wait = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -72,13 +72,13 @@ async function panelOverflow() {
 ```
 통과: `katexErrors: 0`, `rawDollar: false`, `sumsInPanel`이 manifest에서 `layers`가 빈 목록이 아닌 토픽 수, `sumsLeftInMain: 0`, `hScroll: []`, `panelOverflow: []`, 모든 위젯 `drawn: true`. `read_console_messages`에 오류 없음. `panelOverflow`에 나온 식은 그 토픽 작성자에게 `.sum`의 식을 여러 줄로 나누라고 되돌린다(`references/content-rules.md` 페이지 요약).
 
-개념 토픽 하나로 넘겨(`location.hash = '#<토픽 id>'`) 오른쪽 "회로와 요약" 패널에 그 토픽의 요약이 보이는지 스크린샷으로 확인한다(1280px 이상에서는 패널이 기본으로 열린다).
+개념 토픽 하나로 넘겨(`location.hash = '#<토픽 id>'`) 오른쪽 "요약" 패널에 그 토픽의 요약이 보이는지 스크린샷으로 확인한다(1280px 이상에서는 패널이 기본으로 열린다).
 
 ## 토픽 회로 (`body[data-circuits]` 노트)
 먼저 `layout_probe.py`의 결과가 현재 노트 해시로 결함 0인지 본다(`circuits`·`label_gaps`·`overflow`, 각 check의 `topic_svgs`가 1 이상). 그다음 회로가 있는 토픽을 모두 화면으로 본다.
-- 패널 열림(1280px): 그 토픽의 회로만 패널 맨 위에 있고, 요약을 아래로 읽은 뒤 다음 토픽으로 넘기면 패널이 맨 위로 돌아온다. 회로가 둘이면 둘 다 잘리지 않고 글자를 읽을 수 있다.
-- 패널 닫힘(1280px)과 375px: formal을 끝까지 내리는 동안 회로가 위쪽에 고정되고 식을 가리지 않는다.
-- 패널을 닫았다 열면 회로가 본문과 패널을 오가며 중복되지 않는다. 인쇄 미리보기에는 모든 회로가 본문 자리에 있다.
+- 1280px(패널 열림·닫힘)과 375px: formal을 끝까지 내리는 동안 회로가 상단 바 아래에 고정되고 식을 가리지 않으며, 글자를 읽을 수 있다.
+- 회로가 둘이면 해당 구간에서 다음 회로로 넘어가고, 앞 회로가 그 아래로 비집고 나오지 않는다.
+- 패널을 여닫아도 회로는 본문에 남고, 패널에는 그 토픽의 요약만 있다. 높이 500px 미만에서는 고정하지 않는다. 인쇄 미리보기에는 모든 회로가 본문 자리에 있다.
 - 글의 ㉠㉡㉢이 회로의 그 자리를 가리키고, 라이트·다크에서 모두 보인다.
 
 위젯마다 그 토픽으로 넘긴 뒤 슬라이더 하나를 바꾸고(`input` 이벤트) readout 값이 `.widget-static` 표의 같은 설정 값과 같은지 확인한다.

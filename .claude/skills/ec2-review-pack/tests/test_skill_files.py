@@ -132,8 +132,10 @@ class TestWhyPageDocs(unittest.TestCase):
         self.assertIn("## 토픽 회로", self.read("references/browser-check.md"))
         self.assertIn("위치 표시 예외", self.read("references/solution-style.md"))
         template = self.read("assets/note-template.html")
-        for s in ('data-circuits="1"', '<div class="circuits"></div>', "od:panels", "beforeprint", ".fig-loc"):
+        for s in ('data-circuits="1"', ".js .layer .circuit { position: sticky", ".fig-loc", "<span>요약</span>"):
             self.assertIn(s, template)
+        for s in ("placeCircuits", 'class="circuits"', "회로와 요약", "회로·요약"):
+            self.assertNotIn(s, template)
 
     def test_summary_prompt_collects_motivation(self):
         self.assertIn("## 동기 발언", self.read("references/stt-summary-prompt.md"))

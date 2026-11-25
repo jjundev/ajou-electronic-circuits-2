@@ -41,7 +41,7 @@ WHY_TITLE = "들어가며: 왜 이런 회로를 쓸까"
 WHY_SHORT = "왜 쓸까"
 WHY_TOPIC_TITLE = "왜 이런 회로를 쓸까"
 WHY_REQUIRED_LAYERS = ("eli5", "formal")
-# 토픽 회로(topics[].circuits): 오른쪽 패널 / 본문 위쪽에 고정되는 figure.circuit 계획
+# 토픽 회로(topics[].circuits): 본문 "정확히 말하면" 위쪽에 고정되는 figure.circuit 계획
 MAX_CIRCUITS = 2
 CIRCUIT_ID_RE = re.compile(r"fig-circuit-[a-z0-9]+(?:-[a-z0-9]+)*")
 CIRCUIT_SOURCE_RE = re.compile(r"L\d{2} s\d+(?:[-–]\d+)?|new: \S.*")

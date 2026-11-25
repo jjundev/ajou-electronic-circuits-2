@@ -10,7 +10,8 @@ Notes built from the circuit template (body data-circuits) are also walked topic
   overflow    the same boxes on every topic screen
   label_gaps  labels of every figure.circuit (location marks .fig-loc: 0.25 em)
   circuits    the circuit preceding each formal equation must be fully visible and must not
-              cover that equation (1280x720 with the panel closed and open, 375x667)
+              cover that equation, and an earlier circuit must not show below it
+              (1280x720 with the panel closed and open, 375x667)
 
 Usage:
   python3 layout_probe.py NOTE.html [--widths 1280,375] [--themes light,dark] --out probe.json
@@ -90,9 +91,9 @@ id => new Promise(done => {
 })
 """
 _TOPIC_IDS = "() => [...document.querySelectorAll('article.topic')].map(t => t.id)"
-_TOPIC_SVGS = ("() => [...document.querySelectorAll('article.topic svg, .circuits svg')]"
+_TOPIC_SVGS = ("() => [...document.querySelectorAll('article.topic svg')]"
                ".filter(s => s.getClientRects().length).length")
-# Run while every circuit is at its place in the body: [equation index -> svg id].
+# [equation index -> svg id].
 _PAIR_CIRCUITS = r"""
 id => {
   const formal = document.querySelector(`#${CSS.escape(id)} > .layer.formal`);
@@ -116,7 +117,7 @@ _CIRCUITS_VISIBLE = r"""
     e.scrollIntoView({block: 'end', behavior: 'instant'});
     const svg = document.getElementById(pairs[i]);
     const figure = svg.closest('figure.circuit');
-    const port = (svg.closest('.panel-inner') ?? svg.closest('.content') ?? document.documentElement).getBoundingClientRect();
+    const port = (svg.closest('.content') ?? document.documentElement).getBoundingClientRect();
     const r = svg.getBoundingClientRect();
     const top = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
     const shown = r.height > 0 && r.top >= port.top - 2 && r.bottom <= Math.min(port.bottom, innerHeight) + 2
@@ -125,6 +126,12 @@ _CIRCUITS_VISIBLE = r"""
     const f = figure.getBoundingClientRect(), q = e.getBoundingClientRect();
     if (!figure.contains(e) && q.top < f.bottom - 1 && q.bottom > f.top + 1 && q.left < f.right - 1 && q.right > f.left + 1)
       out.push({topic: id, equation: i + 1, circuit: svg.id, problem: 'circuit covers the equation'});
+    for (const old of formal.querySelectorAll('figure.circuit')) {
+      if (old === figure) break;
+      const o = old.getBoundingClientRect();
+      if (o.top < f.bottom && o.bottom > f.bottom + 1)
+        out.push({topic: id, equation: i + 1, circuit: svg.id, problem: 'earlier circuit shows below'});
+    }
   });
   return out;
 }
