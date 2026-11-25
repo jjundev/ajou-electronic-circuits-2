@@ -146,7 +146,7 @@ def main() -> int:
         if args.command == 'snapshot':
             snapshot = read_style(args.repo)
             args.out.parent.mkdir(parents=True, exist_ok=True)
-            args.out.write_text(json.dumps(snapshot, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+            args.out.write_text(json.dumps(snapshot, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
             print(f'style snapshot: {args.out}')
         else:
             snapshot = json.loads(args.snapshot.read_text(encoding='utf-8'))

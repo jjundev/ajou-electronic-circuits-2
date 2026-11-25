@@ -53,7 +53,7 @@ def make_cover(n: int, submit_date: str | None = None, root: Path | None = None)
     p = config.paths(n, root, info)
     date = submit_date or datetime.now().strftime(info["date_format"])
     p.cover_html.parent.mkdir(parents=True, exist_ok=True)
-    p.cover_html.write_text(render_cover_html(cover_title(n), info, date), encoding="utf-8")
+    p.cover_html.write_text(render_cover_html(cover_title(n), info, date), encoding="utf-8", newline="\n")
     html_to_pdf(p.cover_html, p.cover_pdf, chrome=info["chrome"])
     pages, w, h = _page_mm(p.cover_pdf)
     if pages != 1 or not (A4_W_MM[0] <= w <= A4_W_MM[1] and A4_H_MM[0] <= h <= A4_H_MM[1]):

@@ -378,5 +378,5 @@ def check(html: Path, out: Path, shots: Path, *, source: dict,
     report["status"] = "fail" if report["failures"] else "pass"
     out = Path(out)
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    out.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8", newline="\n")
     return report

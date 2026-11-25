@@ -19,7 +19,7 @@ import re
 import unicodedata
 
 try:
-    import fitz  # PyMuPDF
+    import pymupdf as fitz  # PyMuPDF
 except ImportError:
     fitz = None
 

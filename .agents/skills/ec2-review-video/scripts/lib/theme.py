@@ -37,7 +37,7 @@ def snapshot_theme(pack,run):
         parser=Styles(); parser.feed(text)
         css='\n'.join(parser.parts)
         css_path=run/'source'/('template.css' if kind=='note' else 'review-template.css')
-        css_path.write_text(css,encoding='utf-8')
+        css_path.write_text(css,encoding='utf-8', newline='\n')
         match=re.search(r':root\[data-theme="dark"\]\s*\{([^}]+)\}',css)
         theme['tokens'][kind]=dict(re.findall(r'(--[\w-]+)\s*:\s*([^;]+)',match[1]))
         theme['templates'][kind]={'path':saved.relative_to(run).as_posix(),'sha256':_hash(saved),

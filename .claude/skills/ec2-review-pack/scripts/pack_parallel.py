@@ -395,6 +395,15 @@ class SelectionHistoryChanged(f.FlowError):
         self.attempt = attempt
 
 
+def _missing_file(exc):
+    """A vanished file, by type: Windows translates the OS error message."""
+    while exc is not None:
+        if isinstance(exc, FileNotFoundError):
+            return True
+        exc = exc.__cause__ or (None if exc.__suppress_context__ else exc.__context__)
+    return False
+
+
 def check_selection_history(state, receipt):
     if 'selection_history' not in receipt:
         return
@@ -797,7 +806,7 @@ def _accept_batch(run, submissions, *, stop=None):
         except SelectionHistoryChanged as exc:
             changed_selections.add(exc.attempt)
         except (OSError, f.FlowError) as exc:
-            if retry == 23 or not any(reason in str(exc) for reason in
+            if retry == 23 or not _missing_file(exc) and not any(reason in str(exc) for reason in
                                       ('revision conflict','lock busy','batch snapshot changed','No such file','brief changed after claim')):
                 raise
             time.sleep(0.01 * (retry + 1))
@@ -1035,7 +1044,7 @@ def retain_quiz_evidence(task, quiz, *, approved=None):
         parent = Path(f._read(quiz/'source.json')['parent_run'])
         approved = prior_blind_approval(parent, receipt['run_id'], task['attempt'], receipt.get('blind_certificate'), new)
     for cid,row in approved.items():
-        answers = row['proof']
+        answers = Path(row['proof']).as_posix()  # older Windows ledgers stored '\'
         folder = Path(answers).parent.parent
         names = [name for name in hashes if Path(name).is_relative_to(folder/'packet')]
         if names and copy_group([answers, Path(answers).with_name('submission.json').as_posix(),

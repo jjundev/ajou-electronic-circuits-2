@@ -213,7 +213,7 @@ def merge_transcripts(
     raw_text = "".join(full_content)
     cleaned_text = re.sub(r"\n{3,}", "\n\n", raw_text).strip() + "\n"
 
-    with open(output_path, "w", encoding="utf-8") as out:
+    with open(output_path, "w", encoding="utf-8", newline="\n") as out:
         out.write(cleaned_text)
 
     print(f"Master transcript successfully created: {output_path}")

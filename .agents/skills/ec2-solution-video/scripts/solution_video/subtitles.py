@@ -216,7 +216,7 @@ def write_srt(timeline,dest):
             end=start+round(duration*(offset+length)/weights); begin=start+round(duration*offset/weights); offset+=length
             if end-begin<24: raise InputError('caption too short for millisecond resolution')
             num+=1; lines.append(f'{num}\n{_stamp(begin,timeline["rate"])} --> {_stamp(end,timeline["rate"])}\n{c}\n')
-    dest=Path(dest); dest.parent.mkdir(parents=True,exist_ok=True); dest.write_text('\n'.join(lines),encoding='utf-8'); return dest
+    dest=Path(dest); dest.parent.mkdir(parents=True,exist_ok=True); dest.write_text('\n'.join(lines),encoding='utf-8', newline='\n'); return dest
 
 def caption_srt_matches(timeline: dict, srt: Path) -> bool:
     """Check complete cue text and sample-derived timestamps, without mutation."""

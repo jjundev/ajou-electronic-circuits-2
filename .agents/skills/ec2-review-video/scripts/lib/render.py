@@ -176,9 +176,9 @@ def render_parts(parts,run,backend):
             try: r=command(args,run,timeout=3600)
             except subprocess.TimeoutExpired as ex:
                 def text(value): return value.decode('utf-8',errors='replace') if isinstance(value,bytes) else (value or '')
-                out.with_suffix('.log').write_text(text(ex.stdout)+'\n'+text(ex.stderr)+'\nrender timeout',encoding='utf-8')
+                out.with_suffix('.log').write_text(text(ex.stdout)+'\n'+text(ex.stderr)+'\nrender timeout',encoding='utf-8', newline='\n')
                 raise
-            out.with_suffix('.log').write_text(r.stdout+'\n'+r.stderr,encoding='utf-8')
+            out.with_suffix('.log').write_text(r.stdout+'\n'+r.stderr,encoding='utf-8', newline='\n')
             if r.returncode or not pending.is_file() or not frames_ok(pending,part['frames']):
                 raise RuntimeError('scene render failed: '+part['id'])
             record={'key':key,'output_sha256':file_hash(pending),'frames':part['frames'],
@@ -219,7 +219,7 @@ def mux(parts,audio,timeline,destination):
         r=command(['ffmpeg','-y','-v','error','-i',p,'-map','0:v:0','-an','-c:v','copy',target])
         if r.returncode: raise RuntimeError('video-only extraction failed')
         lines.append("file '"+target.name+"'")
-    (work/'concat.txt').write_text('\n'.join(lines),encoding='utf-8')
+    (work/'concat.txt').write_text('\n'.join(lines),encoding='utf-8', newline='\n')
     pcm=bytearray(timeline['total_samples']*2); voices={a['id']:a for a in audio}
     for seg in timeline['segments']:
         rec=voices[seg['id']]; path=run/rec['path']

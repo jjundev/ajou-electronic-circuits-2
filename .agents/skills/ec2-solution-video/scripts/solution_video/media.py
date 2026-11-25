@@ -87,16 +87,16 @@ def render_master(parts: list[dict],timeline: dict,audio: list[dict],run: Path,h
         try:
             pending.unlink(missing_ok=True)
             r=command(args,cwd=html.parent,timeout=7200)
-            log.write_text(r.stdout+'\n'+r.stderr,encoding='utf-8')
+            log.write_text(r.stdout+'\n'+r.stderr,encoding='utf-8', newline='\n')
             if r.returncode or not pending.is_file():raise InputError('HyperFrames render failed; inspect '+str(log))
             frames=part['last_frame']-part['first_frame'];_validate_media(pending,frames)
             record=dict(key=part['key'],worker_selection=selection,command=args,elapsed_seconds=time.perf_counter()-start,output_sha256=file_hash(pending),frames=frames)
             os.replace(pending,out);outputs.append(out);records.append(record)
         except Exception as ex:
             if isinstance(ex,subprocess.TimeoutExpired):
-                log.write_text(_log_text(ex.stdout)+'\n'+_log_text(ex.stderr)+'\n'+str(ex),encoding='utf-8')
+                log.write_text(_log_text(ex.stdout)+'\n'+_log_text(ex.stderr)+'\n'+str(ex),encoding='utf-8', newline='\n')
             else:
-                with log.open('a',encoding='utf-8') as f:f.write('\n'+str(ex))
+                with log.open('a',encoding='utf-8', newline='\n') as f:f.write('\n'+str(ex))
             raise
         finally:pending.unlink(missing_ok=True)
     mixed=bytearray(timeline['total_samples']*2);voices={a['id']:a for a in audio}
@@ -111,7 +111,7 @@ def render_master(parts: list[dict],timeline: dict,audio: list[dict],run: Path,h
         mixed[start:start+len(raw)]=raw
     with wave.open(str(work/'narration.wav'),'wb') as f:f.setparams((1,2,24000,0,'NONE',''));f.writeframes(mixed)
     for i,p in enumerate(outputs):shutil.copyfile(p,work/f'part-{i}.mp4')
-    (work/'concat.txt').write_text('\n'.join("file 'part-"+str(i)+".mp4'" for i in range(len(outputs))),encoding='utf-8')
+    (work/'concat.txt').write_text('\n'.join("file 'part-"+str(i)+".mp4'" for i in range(len(outputs))),encoding='utf-8', newline='\n')
     master=work/'master.mp4';pending=work/'master.pending.mp4'
     try:
         pending.unlink(missing_ok=True)
@@ -120,7 +120,7 @@ def render_master(parts: list[dict],timeline: dict,audio: list[dict],run: Path,h
         receipt=dict(schema_version=1,options=options,parts=records,master_sha256=file_hash(pending))
         _commit_master_and_receipt(pending,receipt,master,run/'verification/render-receipt.json')
     except Exception as ex:
-        with (work/'master.log').open('a',encoding='utf-8') as f:
+        with (work/'master.log').open('a',encoding='utf-8', newline='\n') as f:
             if isinstance(ex,subprocess.TimeoutExpired):f.write(_log_text(ex.stdout)+'\n'+_log_text(ex.stderr)+'\n')
             f.write(str(ex)+'\n')
         raise

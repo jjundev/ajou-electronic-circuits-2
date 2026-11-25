@@ -4,6 +4,7 @@ import hashlib
 import json
 from epe_independent import independent_errors
 from collections import Counter
+from pathlib import Path
 from urllib.parse import urlsplit
 from epe_shared import Node, parse, math_delimiter_errors, validate_style_audit
 from epe_solution import solution_nodes
@@ -93,7 +94,7 @@ def initial_reviews(pack, fragments):
     keys = [f'{p.id}:{s}' for p in pack.problems for s in p.subparts]
     pending = {'status': 'not_run', 'reviewer': '', 'evidence': ''}
     style_path = next((name for name in pack.inputs
-                       if name.endswith('/' + pack.learning_style['path'])), None)
+                       if Path(name).as_posix().endswith('/' + pack.learning_style['path'])), None)
     references = [{'path': style_path, 'sha256': pack.learning_style['sha256']}] if style_path else []
     audit = {'learning_style': pack.learning_style, 'items': {k: {
         'status': 'not_run', 'reviewer': '', 'rules': {rule: {

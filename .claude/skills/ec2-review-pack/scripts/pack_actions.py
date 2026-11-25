@@ -77,7 +77,7 @@ def action_argv(state: dict, action: str) -> list[str]:
 
 def _gate_call(folder, function, *args, **kwargs):
     # Third-party imports may print warnings. Keep those in the same file logs.
-    with (folder/'stdout.log').open('a',encoding='utf-8') as out, (folder/'stderr.log').open('a',encoding='utf-8') as err:
+    with (folder/'stdout.log').open('a',encoding='utf-8', newline='\n') as out, (folder/'stderr.log').open('a',encoding='utf-8', newline='\n') as err:
         with redirect_stdout(out), redirect_stderr(err):
             return function(*args,**kwargs)
 
@@ -468,7 +468,7 @@ def run_action(run: Path, action: str) -> dict:
             except (OSError,ValueError):
                 result['inventory_trusted']=False
             result['error_code']=type(exc).__name__
-            (folder/'error.txt').write_text(str(exc),encoding='utf-8')
+            (folder/'error.txt').write_text(str(exc),encoding='utf-8', newline='\n')
         return _save_result(run,state,action,folder,result)
 
 
@@ -493,7 +493,7 @@ def reconcile_action(run: Path, action: str) -> dict:
             if state['stale_inputs'] or any(not f._done(state,d) for d in record['dependencies']): raise f.FlowError('predecessor evidence changed')
             result.update(inputs=started['inputs'],outputs=_records(_gate_call(folder,_postconditions,state,action,folder)),exit_code=0,status='done',error_code=None,inventory_trusted=True)
         except (OSError,ValueError,KeyError) as exc:
-            folder.mkdir(parents=True,exist_ok=True); (folder/'reconcile-error.txt').write_text(str(exc),encoding='utf-8')
+            folder.mkdir(parents=True,exist_ok=True); (folder/'reconcile-error.txt').write_text(str(exc),encoding='utf-8', newline='\n')
         return _save_result(run,state,action,folder,result)
 
 
@@ -644,7 +644,7 @@ def publication_verifier(manifest_data, paths, audit, *, answer_review=None):
             note_name = manifest.note_name(manifest_data)
             allowed = {note_name, '.assets/' + Path(note_name).with_suffix('.md').name,
                        '.assets/figures_' + manifest_data['range']}
-            actual = {str(f.nfc_path(name)) for name in _roots(root, manifest_data['range'])}
+            actual = {f.nfc_path(name).as_posix() for name in _roots(root, manifest_data['range'])}
             extra = actual - allowed
             if extra:
                 raise f.FlowError('unexpected zero-problem pack outputs: ' + ', '.join(sorted(extra)))
@@ -726,8 +726,8 @@ def candidate_action(state, action, paths, attempt, *, audit=None, explain_run=N
                     args += ['--answer-page-order', attempt/'page-order.json']
                 args += ['--answer-overlay', paths.work_file(f".assets/자료_문제설명_{m['range']}_{m['slug']}/answer-overlay.json")]
         proc = subprocess.run([sys.executable, *map(str, args)], capture_output=True, text=True)
-        (attempt/'producer-stdout.log').write_text(proc.stdout, encoding='utf-8')
-        (attempt/'producer-stderr.log').write_text(proc.stderr, encoding='utf-8')
+        (attempt/'producer-stdout.log').write_text(proc.stdout, encoding='utf-8', newline='\n')
+        (attempt/'producer-stderr.log').write_text(proc.stderr, encoding='utf-8', newline='\n')
         if proc.returncode:
             raise f.FlowError(f'{action} failed: {proc.stderr}')
         if action == 'explain-verify':
@@ -962,6 +962,8 @@ def resume_machine(run, state, row, path):
                         raise f.FlowError('unverified quiz publication')
                     public_receipt = Path(run)/'concept-check-result.json'
                     private = root/'concept-check-result.json'
+                    if private.is_file():
+                        private.chmod(0o644)  # sealed before the crash; Windows cannot replace a read-only file
                     f._atomic_json(private, quiz)
                     sources = parallel.file_records([public_receipt, *map(Path, quiz['files'])])
                     result = dict(status='done', artifacts={'concept-check-result.json': str(private)},

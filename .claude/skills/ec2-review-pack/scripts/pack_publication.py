@@ -15,7 +15,7 @@ import tempfile
 import threading
 
 import pack_files
-from pack_flow import FlowError, _atomic_json, _read, _sha
+from pack_flow import FlowError, _atomic_json, _read, _sha, cache_root
 
 sys.path.append(str(Path(__file__).resolve().parents[4] / 'workbook'))
 from pack_paths import PackPaths, checked_file
@@ -51,7 +51,7 @@ def _key(public):
 
 def _control(public):
     # The original concept publisher uses this inode. Never unlink a lock.
-    folder = Path.home() / '.cache/ec2-concept-check/locks'
+    folder = cache_root() / 'ec2-concept-check/locks'
     _mkdirs(folder)
     return folder / hashlib.sha256(_key(public).encode()).hexdigest()
 

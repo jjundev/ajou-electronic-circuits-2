@@ -9,7 +9,7 @@ import sys
 import unicodedata
 from pathlib import Path
 
-import fitz
+import pymupdf as fitz
 import yaml
 
 TEXTBOOK_TOOLS = Path(__file__).resolve().parents[3] / "교과서" / "마이크로전자회로" / "_tools"

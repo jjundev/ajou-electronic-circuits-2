@@ -79,7 +79,7 @@ def select_lab(bucket, pack, fragments):
         raise ValueError('실험 브리프 경로에 심볼릭 링크가 있어요')
     if selected is not None or brief.exists():
         brief.parent.mkdir(exist_ok=True)
-        brief.write_text(json.dumps(selected, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+        brief.write_text(json.dumps(selected, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
     return selected
 
 

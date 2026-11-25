@@ -15,7 +15,7 @@ def atomic_json(path,value):
     path=Path(path); path.parent.mkdir(parents=True,exist_ok=True)
     tmp=None
     try:
-        with tempfile.NamedTemporaryFile(mode='w',encoding='utf-8',dir=path.parent,delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode='w',encoding='utf-8',dir=path.parent,delete=False, newline='\n') as f:
             tmp=Path(f.name)
             json.dump(value,f,ensure_ascii=False,indent=2,allow_nan=False)
             f.flush(); os.fsync(f.fileno())

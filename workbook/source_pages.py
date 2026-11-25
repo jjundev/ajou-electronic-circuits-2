@@ -18,7 +18,7 @@ import sys
 import unicodedata
 from pathlib import Path
 
-import fitz
+import pymupdf as fitz
 
 import paths  # noqa: F401  (기존 도구 import 경로 설정)
 from check_md import split_frontmatter, split_sections, split_subsections
@@ -141,7 +141,7 @@ def render(mds, out, dpi=200):
                 text = page.get_text().strip()
                 if len(text) >= TEXT_MIN:
                     txt = stem.with_name(stem.name + ".txt")
-                    txt.write_text(text + "\n", encoding="utf-8")
+                    txt.write_text(text + "\n", encoding="utf-8", newline="\n")
                     written.append(txt)
     return written
 

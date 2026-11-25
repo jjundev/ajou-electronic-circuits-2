@@ -85,7 +85,7 @@ def main(argv):
     except (ValueError, KeyError, TypeError, yaml.YAMLError) as e:
         print(f"ERROR {e} (check_exam.py로 먼저 확인)", file=sys.stderr)
         return 1
-    out.write_text(text, encoding="utf-8")
+    out.write_text(text, encoding="utf-8", newline="\n")
     print(f"{out} 작성")
     return 0
 

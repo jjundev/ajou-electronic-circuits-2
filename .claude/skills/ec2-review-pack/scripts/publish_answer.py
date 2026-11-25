@@ -114,7 +114,7 @@ def _install_answer(repo: Path, overlay_path: Path, pdf_path: Path, review_path:
             'pdf_sha256': review['pdf_sha256'], 'overlay_sha256': review['overlay_sha256'],
             'learning_style_sha256': review['learning_style_sha256'], 'review_sha256': review_hash,
             'backup': str(backup) if backup else None, 'backup_sha256': old_hash},
-            ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+            ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
         # Validate current source/style/reviews again after preparing all outputs.
         load_answer_overlay(overlay_path, repo, ids)
         _require(_digest(review_path) == review_hash, 'Review record changed during preparation')

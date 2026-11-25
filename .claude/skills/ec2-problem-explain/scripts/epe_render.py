@@ -30,7 +30,7 @@ def names(pack):
 
 def dump(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
 
 def artifact_hashes(artifacts):
     root = artifacts.html.parent
@@ -53,7 +53,7 @@ def convert_markdown(html_path, md_path, ctx):
         node.tag, node.attrs, node.children = 'p', {}, [f'![{alt}]({src})']
     footer = next(document.find_all(lambda n: n.tag == 'footer'), None)
     temporary = html_path.with_name('.' + html_path.stem + '-md-input.html')
-    temporary.write_text('<html><body>' + outer(main) + (outer(footer) if footer else '') + '</body></html>', encoding='utf-8')
+    temporary.write_text('<html><body>' + outer(main) + (outer(footer) if footer else '') + '</body></html>', encoding='utf-8', newline='\n')
     try:
         convert(str(temporary), str(md_path), ctx, ['문제의 첫 줄부터 검산까지 설명해요.'])
     finally:
@@ -201,7 +201,7 @@ def build_explanation(pack, fragments, stage: Path, repo: Path, *, lab=None,
                         + reading + explanation + '</article>')
         toc.append(f'<li><a href="#{p.id}">{html.escape(p.title)}</a></li>')
         (data_dir / 'fragments').mkdir(exist_ok=True)
-        (data_dir / 'fragments' / f'{p.id}.html').write_text(normalized, encoding='utf-8')
+        (data_dir / 'fragments' / f'{p.id}.html').write_text(normalized, encoding='utf-8', newline='\n')
     title = f'전자회로2 복습 {pack.range} 문제설명'
     values = {'PAGE_TITLE': html.escape(title), 'BRAND': '문제풀이 입문 설명', 'DESCRIPTION': '첫 줄부터 완성 답과 검산까지 설명해요.',
               'TOC': '<ul class="toc-list">' + ''.join(toc) + '</ul>', 'TITLE': html.escape(title),
@@ -214,7 +214,7 @@ def build_explanation(pack, fragments, stage: Path, repo: Path, *, lab=None,
         text = text.replace('{{' + key + '}}', value)
     if re.search(r'\{\{[A-Z_]+\}\}', text):
         raise ExplainError('미치환 템플릿 슬롯')
-    html_path.write_text(text, encoding='utf-8')
+    html_path.write_text(text, encoding='utf-8', newline='\n')
     ctx = Ctx([(html_path.name, md_path.name)], str(bundle / fig_name), fig_name, prefix='explain', rebase='../')
     convert_markdown(html_path, md_path, ctx)
     manifest_path = data_dir / 'manifest.json'

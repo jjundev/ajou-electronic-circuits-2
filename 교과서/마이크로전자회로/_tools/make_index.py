@@ -112,7 +112,7 @@ def main(argv):
         print(f"장 폴더가 없음: {ch_dir}", file=sys.stderr)
         return 2
     out = ch_dir / "README.md"
-    out.write_text(build_index(ch_dir, argv[2] if len(argv) == 3 else None), encoding="utf-8")
+    out.write_text(build_index(ch_dir, argv[2] if len(argv) == 3 else None), encoding="utf-8", newline="\n")
     print(f"{out} 작성")
     return 0
 

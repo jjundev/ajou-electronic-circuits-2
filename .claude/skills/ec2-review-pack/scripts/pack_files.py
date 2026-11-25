@@ -121,7 +121,7 @@ def _backup(pack,run,r,kind):
         record['backup']=str(backup.resolve())
         for rel in roots: _copy(pack/rel,backup/rel)
         _validate(record,run,r)
-    path.write_text(json.dumps(record,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    path.write_text(json.dumps(record,ensure_ascii=False,indent=2)+'\n',encoding='utf-8', newline='\n')
     return record
 
 
@@ -150,7 +150,7 @@ def prepare_pack(repo: Path, run: Path, manifest_path: Path) -> dict:
                 raise FlowError('First inventory missing for existing backup')
             # Persist the single first pre-change state before either backup.
             # Exclusive creation prevents a retry from replacing this evidence.
-            with first_inventory.open('x',encoding='utf-8') as stream:
+            with first_inventory.open('x',encoding='utf-8', newline='\n') as stream:
                 json.dump({'range':r,'inventory':current},stream,ensure_ascii=False,indent=2)
                 stream.write('\n'); stream.flush(); os.fsync(stream.fileno())
         initial=json.loads(first_inventory.read_text(encoding='utf-8'))

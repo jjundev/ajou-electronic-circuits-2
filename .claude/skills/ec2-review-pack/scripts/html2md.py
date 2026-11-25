@@ -413,7 +413,7 @@ def export_svg(svg, ctx, name=None):
            f'<rect x="{vb[0]}" y="{vb[1]}" width="{w}" height="{h}" rx="10" fill="{LIGHT["surface"]}"/>'
            f"{body}</svg>\n")
     fname = _fig_name(svg, ctx, name)
-    with open(os.path.join(ctx.fig_dir_abs, fname), "w", encoding="utf-8") as f:
+    with open(os.path.join(ctx.fig_dir_abs, fname), "w", encoding="utf-8", newline="\n") as f:
         f.write(doc)
     ctx.figs.append(fname)
     return f"{ctx.fig_dir_name}/{fname}"
@@ -582,7 +582,7 @@ def convert(path, out_path, ctx, intro):
     lines = join_blocks(parts)
     text = "\n".join(lines)
     text = re.sub(r"\n{3,}", "\n\n", text).replace("---\n\n---", "---")
-    with open(out_path, "w", encoding="utf-8") as f:
+    with open(out_path, "w", encoding="utf-8", newline="\n") as f:
         f.write(text.strip() + "\n")
 
 
