@@ -152,6 +152,8 @@
     .fig-text { fill: currentColor; font-size: 13px; font-family: inherit; }
     svg text, svg text[class], svg text tspan, .fig-math, .fig-math tspan { font-family: Pretendard, sans-serif; font-weight: 600; font-style: normal; }
     svg tspan[baseline-shift="sub"], svg tspan[baseline-shift="super"] { font-size: 78%; }
+    svg .fig-loc { fill: var(--prof); }
+    .layer .loc, .circuit .loc { font-weight: 700; color: var(--prof); }
     svg :is(.fig-dot, .fig-text)[data-node-color="blue"] { fill: var(--accent, #2563eb); }
     svg :is(.fig-dot, .fig-text)[data-node-color="red"] { fill: var(--danger, #dc2626); }
     .fig-muted { fill: var(--ink-2); font-size: var(--fs-fig); font-family: inherit; }
@@ -303,6 +305,23 @@
     .flow { margin: 0; padding-left: 1.4em; font-size: var(--fs-sub); }
     .flow li { margin: var(--s2) 0; }
 
+    /* 강의노트 회로: 화면 크기와 상관없이 본문 "정확히 말하면" 위쪽에 고정 */
+    .layer .circuit svg { max-width: 420px; }
+    @media screen and (min-height: 500px) {
+      .js .layer .circuit { position: sticky; top: 0; z-index: 3; margin: 0 0 var(--s4); padding: var(--s2) 0; background: var(--bg); border-bottom: 1px solid var(--line); }
+      .js .layer .circuit svg { display: block; max-height: min(30dvh, 210px); margin: 0 auto; }
+      .js .layer .circuit figcaption { line-height: 1.4; }
+      /* 회로가 둘인 토픽: 높이를 맞춰 뒤 회로가 앞 회로를 빈틈없이 덮게 한다 */
+      .js .layer:has(> .circuit ~ .circuit) > .circuit svg { height: min(30dvh, 210px); }
+      .js .layer:has(> .circuit ~ .circuit) > .circuit figcaption { min-height: 3.1em; }
+    }
+    /* 넓고 높은 화면에서는 글자가 읽히게 조금 더 크게 */
+    @media screen and (min-width: 900px) and (min-height: 600px) {
+      .js .layer .circuit svg { max-width: 560px; max-height: min(27dvh, 300px); }
+      .js .layer:has(> .circuit ~ .circuit) > .circuit svg { height: min(27dvh, 300px); }
+    }
+    @media screen and (max-width: 560px) { .js .layer .circuit figcaption { display: none; } }
+
     @media (hover: hover) { .solved-btn:hover { background: var(--surface); } }
 
     /* 넓은 화면: 본문 옆에 붙는 패널 */
@@ -356,7 +375,7 @@
     }
   </style>
 </head>
-<body data-screens="article.topic" data-panels="note" data-range="1106" data-guide="1">
+<body data-screens="article.topic" data-panels="note" data-range="1106" data-guide="1" data-circuits="1">
   <header class="topbar">
     <div class="topbar-inner">
       <button class="text-btn panel-toggle" id="toggle-left" type="button" aria-controls="panel-left" aria-expanded="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="strip" x="3" y="4" width="6" height="16" rx="1"/><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg><span>목차</span></button>
@@ -500,6 +519,75 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <figure class="figure circuit">
+      <svg id="fig-circuit-bjt-cascode-poles" viewBox="0 0 330 229" role="img" aria-label="Q1의 베이스 X, Q1과 Q2 사이 Y, Q2 컬렉터의 출력에 접지 커패시터가 달려 있어요.">
+        <path class="fig-ink" d="M142 14V18 M142 42V67 M142 67V83 M142 107V133 M142 133V160 M142 184V210 M75 95H122 M31 172H40 M66 172H122 M91 172V191 M91 197V215 M142 133H245V148 M245 154V171 M142 67H307 M245 67V82 M245 88V106"/>
+        <g data-symbol="part">
+          <g transform="translate(142 172)">
+            <path class="fig-ink" d="M-12 -13v26 M-20 0H-12 M-12 -7L0 -12 M-12 7L0 12 M-5 6L0 12L-7 13"/>
+          </g>
+        </g>
+        <g data-symbol="part">
+          <g transform="translate(142 95)">
+            <path class="fig-ink" d="M-12 -13v26 M-20 0H-12 M-12 -7L0 -12 M-12 7L0 12 M-5 6L0 12L-7 13"/>
+          </g>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M130 14h24"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M142 18l5 4l-10 4l10 4l-10 4l10 4l-5 4"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M40 172l4.33333 -4 l4.33333 8 l4.33333 -8 l4.33333 8 l4.33333 -8 l4.33333 4"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M83 191h16 m-16 6h16"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M237 148h16 m-16 6h16"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M237 82h16 m-16 6h16"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M82 215h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M133 210h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M236 171h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M236 106h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <circle class="fig-ink" cx="28" cy="172" r="3"/>
+        <circle class="fig-ink" cx="72" cy="95" r="3"/>
+        <circle class="fig-ink" cx="310" cy="67" r="3"/>
+        <circle class="fig-dot" cx="91" cy="172" r="3.2"/>
+        <circle class="fig-dot" cx="142" cy="133" r="3.2"/>
+        <circle class="fig-dot" cx="142" cy="67" r="3.2"/>
+        <circle class="fig-dot" cx="245" cy="67" r="3.2"/>
+        <text class="fig-text fig-math" x="166" y="19" text-anchor="start" style="font-size:14px">V<tspan baseline-shift="sub" font-size="78%">CC</tspan></text>
+        <text class="fig-text fig-math" x="164" y="42" text-anchor="middle" style="font-size:14px">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text>
+        <text class="fig-text fig-math" x="155" y="103" text-anchor="start" style="font-size:14px">Q<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+        <text class="fig-text fig-math" x="155" y="180" text-anchor="start" style="font-size:14px">Q<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        <text class="fig-text fig-math" x="66" y="74" text-anchor="middle" style="font-size:14px">V<tspan baseline-shift="sub" font-size="78%">b1</tspan></text>
+        <text class="fig-text fig-math" x="25" y="154" text-anchor="middle" style="font-size:14px">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
+        <text class="fig-text fig-math" x="53" y="192" text-anchor="middle" style="font-size:14px">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text>
+        <text class="fig-text fig-math" x="92" y="153" text-anchor="middle" style="font-size:14px">X</text>
+        <text class="fig-text fig-math" x="124" y="130" text-anchor="middle" style="font-size:14px">Y</text>
+        <text class="fig-text fig-math" x="303" y="48" text-anchor="middle" style="font-size:14px">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+        <text class="fig-text fig-math" x="78" y="210" text-anchor="end" style="font-size:13px">C<tspan baseline-shift="sub" font-size="78%">π1</tspan>+2C<tspan baseline-shift="sub" font-size="78%">μ1</tspan></text>
+        <text class="fig-text fig-math" x="241" y="192" text-anchor="middle" style="font-size:13px">C<tspan baseline-shift="sub" font-size="78%">CS1</tspan>+C<tspan baseline-shift="sub" font-size="78%">π2</tspan>+2C<tspan baseline-shift="sub" font-size="78%">μ1</tspan></text>
+        <text class="fig-text fig-math" x="283" y="105" text-anchor="middle" style="font-size:13px">C<tspan baseline-shift="sub" font-size="78%">CS2</tspan>+C<tspan baseline-shift="sub" font-size="78%">μ2</tspan></text>
+        <text class="fig-text fig-loc" x="112" y="199" text-anchor="middle" style="font-size:17px">㉠</text>
+        <text class="fig-text fig-loc" x="196" y="158" text-anchor="middle" style="font-size:17px">㉡</text>
+        <text class="fig-text fig-loc" x="276" y="53" text-anchor="middle" style="font-size:17px">㉢</text>
+      </svg>
+      <figcaption><span class="loc">㉠</span> 입력 X · <span class="loc">㉡</span> 내부 노드 Y · <span class="loc">㉢</span> 출력 (Lec5 53쪽)</figcaption>
+    </figure>
     <h4 class="sub">숫자로 먼저 보는 밀러 배율</h4>
     <p>작은 예로 $C_{\mu1}=10\,\mathrm{fF}$이고 $g_{m1}=g_{m2}$라고 해요. X에서 Y로 가는 이득이 −1이면 X를 1 mV 올릴 때 Y는 1 mV 내려가요.</p>
     <p>그러면 $C_{\mu1}$ 양단 전압은 2 mV 변해서 <b>X에서는 $2\times10=20\,\mathrm{fF}$, Y에서도 $2\times10=20\,\mathrm{fF}$로 보여요.</b> 같은 규칙으로 $g_{m1}/g_{m2}=4$인 MOS 캐스코드라면 X 쪽 배율은 $1+4=5$, Y 쪽 배율은 $1+1/4=1.25$가 돼요.</p>
@@ -516,18 +604,18 @@
         $$A_{v,XY}\approx-1$$
       </li>
       <li>
-        <p><strong>X의 커패시턴스와 저항을 모아요.</strong> $Q_1$ 이미터가 접지라 $C_{\pi1}$은 그대로 보이고, $C_{\mu1}$은 X 쪽 밀러 성분으로 보여요.</p>
+        <p><strong><span class="loc">㉠</span> X의 커패시턴스와 저항을 모아요.</strong> $Q_1$ 이미터가 접지라 $C_{\pi1}$은 그대로 보이고, $C_{\mu1}$은 X 쪽 밀러 성분으로 보여요.</p>
         $$\left(1-A_{v,XY}\right)C_{\mu1}\approx2C_{\mu1}$$
         <p>X에서 왼쪽은 앞단의 출력 임피던스 $R_S$, 오른쪽 베이스로는 $r_{\pi1}$이 보여요. 입력 신호원을 0으로 두면 두 저항은 X와 AC 접지 사이에 있으므로 병렬 $R_S\parallel r_{\pi1}$이에요.</p>
         $$\omega_{p,X}=\frac{1}{(R_S\parallel r_{\pi1})(C_{\pi1}+2C_{\mu1})}$$
       </li>
       <li>
-        <p><strong>Y의 커패시턴스와 저항을 모아요.</strong> $Q_1$의 컬렉터–기판 $C_{CS1}$, 베이스가 AC 접지인 $Q_2$의 $C_{\pi2}$, $C_{\mu1}$의 Y 쪽 밀러 성분이 보여요.</p>
+        <p><strong><span class="loc">㉡</span> Y의 커패시턴스와 저항을 모아요.</strong> $Q_1$의 컬렉터–기판 $C_{CS1}$, 베이스가 AC 접지인 $Q_2$의 $C_{\pi2}$, $C_{\mu1}$의 Y 쪽 밀러 성분이 보여요.</p>
         $$\left(1-\frac{1}{A_{v,XY}}\right)C_{\mu1}\approx2C_{\mu1}$$
         $$\omega_{p,Y}=\frac{1}{\frac{1}{g_{m2}}(C_{CS1}+C_{\pi2}+2C_{\mu1})}$$
       </li>
       <li>
-        <p><strong>출력의 커패시턴스와 저항을 모아요.</strong> $Q_2$의 베이스가 AC 접지이므로 $C_{\mu2}$는 플로팅이 아닌 접지형 커패시터(grounded capacitor)예요. 여기에 컬렉터–기판 $C_{CS2}$가 더해져요.</p>
+        <p><strong><span class="loc">㉢</span> 출력의 커패시턴스와 저항을 모아요.</strong> $Q_2$의 베이스가 AC 접지이므로 $C_{\mu2}$는 플로팅이 아닌 접지형 커패시터(grounded capacitor)예요. 여기에 컬렉터–기판 $C_{CS2}$가 더해져요.</p>
         <p>출력에서 아래로 보이는 캐스코드 저항은 $R_{cas}\approx g_{m2}r_{o2}(r_{o1}\parallel r_{\pi2})$예요. 이 값이 $R_L$보다 훨씬 크므로 출력 저항은 $R_L\parallel R_{cas}\approx R_L$로 봐요.</p>
         $$\omega_{p,out}=\frac{1}{R_L(C_{CS2}+C_{\mu2})}$$
       </li>
@@ -578,30 +666,168 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <figure class="figure circuit">
+      <svg id="fig-circuit-mos-cascode-impedance" viewBox="0 0 330 229" role="img" aria-label="MOS 캐스코드의 X와 출력에서 회로 안쪽을 바라봐요. X 왼쪽의 R S는 신호원 쪽 저항이에요.">
+        <path class="fig-ink" d="M142 14V18 M142 42V67 M142 67V83 M142 107V133 M142 133V160 M142 184V210 M75 95H122 M31 172H40 M66 172H122 M91 172V191 M91 197V215 M142 133H245V148 M245 154V171 M142 67H307 M245 67V82 M245 88V106"/>
+        <g data-symbol="part">
+          <g transform="translate(142 172)">
+            <path class="fig-ink" d="M-20 -13v26 M-15 -15v30 M-15 -12H0 M-15 12H0 M-9 8L-3 12L-9 16"/>
+          </g>
+        </g>
+        <g data-symbol="part">
+          <g transform="translate(142 95)">
+            <path class="fig-ink" d="M-20 -13v26 M-15 -15v30 M-15 -12H0 M-15 12H0 M-9 8L-3 12L-9 16"/>
+          </g>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M130 14h24"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M142 18l5 4l-10 4l10 4l-10 4l10 4l-5 4"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M40 172l4.33333 -4 l4.33333 8 l4.33333 -8 l4.33333 8 l4.33333 -8 l4.33333 4"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M83 191h16 m-16 6h16"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M237 148h16 m-16 6h16"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M237 82h16 m-16 6h16"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M82 215h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M133 210h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M236 171h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M236 106h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <circle class="fig-ink" cx="28" cy="172" r="3"/>
+        <circle class="fig-ink" cx="72" cy="95" r="3"/>
+        <circle class="fig-ink" cx="310" cy="67" r="3"/>
+        <circle class="fig-dot" cx="91" cy="172" r="3.2"/>
+        <circle class="fig-dot" cx="142" cy="133" r="3.2"/>
+        <circle class="fig-dot" cx="142" cy="67" r="3.2"/>
+        <circle class="fig-dot" cx="245" cy="67" r="3.2"/>
+        <text class="fig-text fig-math" x="166" y="19" text-anchor="start" style="font-size:14px">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text>
+        <text class="fig-text fig-math" x="164" y="42" text-anchor="middle" style="font-size:14px">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text>
+        <text class="fig-text fig-math" x="155" y="103" text-anchor="start" style="font-size:14px">M<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+        <text class="fig-text fig-math" x="155" y="180" text-anchor="start" style="font-size:14px">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        <text class="fig-text fig-math" x="66" y="74" text-anchor="middle" style="font-size:14px">V<tspan baseline-shift="sub" font-size="78%">b</tspan></text>
+        <text class="fig-text fig-math" x="25" y="154" text-anchor="middle" style="font-size:14px">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
+        <text class="fig-text fig-math" x="53" y="192" text-anchor="middle" style="font-size:14px">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text>
+        <text class="fig-text fig-math" x="92" y="153" text-anchor="middle" style="font-size:14px">X</text>
+        <text class="fig-text fig-math" x="124" y="130" text-anchor="middle" style="font-size:14px">Y</text>
+        <text class="fig-text fig-math" x="303" y="48" text-anchor="middle" style="font-size:14px">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+        <text class="fig-text fig-math" x="78" y="210" text-anchor="end" style="font-size:13px">C<tspan baseline-shift="sub" font-size="78%">X</tspan></text>
+        <text class="fig-text fig-math" x="241" y="192" text-anchor="middle" style="font-size:13px">C<tspan baseline-shift="sub" font-size="78%">Y</tspan></text>
+        <text class="fig-text fig-math" x="283" y="105" text-anchor="middle" style="font-size:13px">C<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+        <text class="fig-text fig-loc" x="112" y="199" text-anchor="middle" style="font-size:17px">㉠</text>
+        <text class="fig-text fig-loc" x="276" y="53" text-anchor="middle" style="font-size:17px">㉡</text>
+      </svg>
+      <figcaption><span class="loc">㉠</span> MOS 입력 X · <span class="loc">㉡</span> MOS 출력 (Lec5 54쪽. 커패시터 합은 노드별 기호로 표기했어요)</figcaption>
+    </figure>
+    <h4 class="sub">MOS 캐스코드의 입출력 임피던스</h4>
+    <ol class="steps">
+      <li>
+        <p><strong><span class="loc">㉠</span> MOS 캐스코드의 입력.</strong> 저주파에서는 게이트로 전류가 흐르지 않아 $Z_{in}=\infty$예요. 그림에서 X에 붙은 $C_X$는 $C_{GS1}$과 X에서 Y로의 이득으로 밀러 변환한 $C_{GD1}$의 밀러 성분을 모은 값이에요.</p>
+        $$Z_{in}=\frac{1}{\left[C_{GS1}+\left(1+\frac{g_{m1}}{g_{m2}}\right)C_{GD1}\right]s}$$
+        <p>$\omega\to\infty$이면 $Z_{in}\to0$이에요. 그 사이에서는 커패시턴스의 임피던스가 주파수에 따라 바뀌어요.</p>
+      </li>
+      <li>
+        <p><strong><span class="loc">㉡</span> MOS 캐스코드의 출력.</strong> 저주파에서는 아래로 보이는 캐스코드 저항이 $R_L$보다 훨씬 커서 $Z_{out}\approx R_L$이에요. 그림의 $C_{out}$은 게이트가 AC 접지인 $M_2$의 $C_{GD2}$와 $C_{DB2}$의 합이에요.</p>
+        $$Z_{out}=R_L\parallel\frac{1}{(C_{GD2}+C_{DB2})s}$$
+      </li>
+    </ol>
+    <figure class="figure circuit">
+      <svg id="fig-circuit-bjt-cascode-impedance" viewBox="0 0 330 229" role="img" aria-label="BJT 캐스코드의 X와 출력에서 회로 안쪽을 바라봐요. X 왼쪽의 R S는 신호원 쪽 저항이에요.">
+        <path class="fig-ink" d="M142 14V18 M142 42V67 M142 67V83 M142 107V133 M142 133V160 M142 184V210 M75 95H122 M31 172H40 M66 172H122 M91 172V191 M91 197V215 M142 133H245V148 M245 154V171 M142 67H307 M245 67V82 M245 88V106"/>
+        <g data-symbol="part">
+          <g transform="translate(142 172)">
+            <path class="fig-ink" d="M-12 -13v26 M-20 0H-12 M-12 -7L0 -12 M-12 7L0 12 M-5 6L0 12L-7 13"/>
+          </g>
+        </g>
+        <g data-symbol="part">
+          <g transform="translate(142 95)">
+            <path class="fig-ink" d="M-12 -13v26 M-20 0H-12 M-12 -7L0 -12 M-12 7L0 12 M-5 6L0 12L-7 13"/>
+          </g>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M130 14h24"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M142 18l5 4l-10 4l10 4l-10 4l10 4l-5 4"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M40 172l4.33333 -4 l4.33333 8 l4.33333 -8 l4.33333 8 l4.33333 -8 l4.33333 4"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M83 191h16 m-16 6h16"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M237 148h16 m-16 6h16"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M237 82h16 m-16 6h16"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M82 215h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M133 210h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M236 171h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M236 106h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <circle class="fig-ink" cx="28" cy="172" r="3"/>
+        <circle class="fig-ink" cx="72" cy="95" r="3"/>
+        <circle class="fig-ink" cx="310" cy="67" r="3"/>
+        <circle class="fig-dot" cx="91" cy="172" r="3.2"/>
+        <circle class="fig-dot" cx="142" cy="133" r="3.2"/>
+        <circle class="fig-dot" cx="142" cy="67" r="3.2"/>
+        <circle class="fig-dot" cx="245" cy="67" r="3.2"/>
+        <text class="fig-text fig-math" x="166" y="19" text-anchor="start" style="font-size:14px">V<tspan baseline-shift="sub" font-size="78%">CC</tspan></text>
+        <text class="fig-text fig-math" x="164" y="42" text-anchor="middle" style="font-size:14px">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text>
+        <text class="fig-text fig-math" x="155" y="103" text-anchor="start" style="font-size:14px">Q<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+        <text class="fig-text fig-math" x="155" y="180" text-anchor="start" style="font-size:14px">Q<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        <text class="fig-text fig-math" x="66" y="74" text-anchor="middle" style="font-size:14px">V<tspan baseline-shift="sub" font-size="78%">b1</tspan></text>
+        <text class="fig-text fig-math" x="25" y="154" text-anchor="middle" style="font-size:14px">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
+        <text class="fig-text fig-math" x="53" y="192" text-anchor="middle" style="font-size:14px">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text>
+        <text class="fig-text fig-math" x="92" y="153" text-anchor="middle" style="font-size:14px">X</text>
+        <text class="fig-text fig-math" x="124" y="130" text-anchor="middle" style="font-size:14px">Y</text>
+        <text class="fig-text fig-math" x="303" y="48" text-anchor="middle" style="font-size:14px">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+        <text class="fig-text fig-math" x="78" y="210" text-anchor="end" style="font-size:13px">C<tspan baseline-shift="sub" font-size="78%">π1</tspan>+2C<tspan baseline-shift="sub" font-size="78%">μ1</tspan></text>
+        <text class="fig-text fig-math" x="241" y="192" text-anchor="middle" style="font-size:13px">C<tspan baseline-shift="sub" font-size="78%">CS1</tspan>+C<tspan baseline-shift="sub" font-size="78%">π2</tspan>+2C<tspan baseline-shift="sub" font-size="78%">μ1</tspan></text>
+        <text class="fig-text fig-math" x="283" y="105" text-anchor="middle" style="font-size:13px">C<tspan baseline-shift="sub" font-size="78%">CS2</tspan>+C<tspan baseline-shift="sub" font-size="78%">μ2</tspan></text>
+        <text class="fig-text fig-loc" x="112" y="199" text-anchor="middle" style="font-size:17px">㉢</text>
+        <text class="fig-text fig-loc" x="276" y="53" text-anchor="middle" style="font-size:17px">㉣</text>
+      </svg>
+      <figcaption><span class="loc">㉢</span> BJT 입력 X · <span class="loc">㉣</span> BJT 출력 (Lec5 56쪽)</figcaption>
+    </figure>
     <h4 class="sub">숫자로 보는 입력 임피던스의 꺾임</h4>
     <p>작은 예로 BJT 캐스코드에서 $r_{\pi1}=2.6\,\mathrm{k\Omega}$, 입력 쪽 커패시턴스 $C_{in}=C_{\pi1}+2C_{\mu1}=1\,\mathrm{pF}$라고 해요. $2.6\,\mathrm{k\Omega}\times1\,\mathrm{pF}=2.6\,\mathrm{ns}$이므로 꺾이는 주파수는 다음과 같아요.</p>
     $$\begin{aligned}f_c&amp;=\frac{1}{2\pi r_{\pi1}C_{in}}\\&amp;=\frac{1}{2\pi\times2.6\,\mathrm{ns}}\\&amp;\approx61.21\,\mathrm{MHz}\end{aligned}$$
     $$|Z_{in}|=\frac{r_{\pi1}}{\sqrt{1+(f/f_c)^2}}$$
     <p>$f=0.1f_c$이면 $|Z_{in}|\approx2.59\,\mathrm{k\Omega}$로 거의 $r_{\pi1}$이에요. $f=f_c$이면 $r_{\pi1}/\sqrt2\approx1.84\,\mathrm{k\Omega}$, $f=10f_c$이면 약 $0.26\,\mathrm{k\Omega}$예요. <b>꺾인 뒤에는 주파수가 10배 될 때마다 크기가 약 10배 작아져요.</b></p>
-    <h4 class="sub">MOS와 BJT의 입출력 임피던스</h4>
     <ol class="steps">
       <li>
-        <p><strong>MOS 캐스코드의 입력.</strong> 저주파에서는 게이트로 전류가 흐르지 않아 $Z_{in}=\infty$예요. 주파수가 오르면 $C_{GS1}$과, X에서 Y로의 이득으로 밀러 변환한 $C_{GD1}$이 보여요.</p>
-        $$Z_{in}=\frac{1}{\left[C_{GS1}+\left(1+\frac{g_{m1}}{g_{m2}}\right)C_{GD1}\right]s}$$
-        <p>$\omega\to\infty$이면 $Z_{in}\to0$이에요. 그 사이에서는 커패시턴스의 임피던스가 주파수에 따라 바뀌어요.</p>
-      </li>
-      <li>
-        <p><strong>MOS 캐스코드의 출력.</strong> 저주파에서는 아래로 보이는 캐스코드 저항이 $R_L$보다 훨씬 커서 $Z_{out}\approx R_L$이에요. 게이트가 AC 접지인 $M_2$의 $C_{GD2}$와 $C_{DB2}$가 접지형으로 병렬로 붙어요.</p>
-        $$Z_{out}=R_L\parallel\frac{1}{(C_{GD2}+C_{DB2})s}$$
-      </li>
-      <li>
-        <p><strong>바이폴라 캐스코드의 입력.</strong> 저주파 입력 임피던스는 무한대가 아니라 베이스–이미터의 $r_{\pi1}$이에요. 여기에 $C_{\pi1}$과 밀러 성분 $2C_{\mu1}$이 병렬로 붙어요.</p>
+        <p><strong><span class="loc">㉢</span> 바이폴라 캐스코드의 입력.</strong> 저주파 입력 임피던스는 무한대가 아니라 베이스–이미터의 $r_{\pi1}$이에요. 여기에 $C_{\pi1}$과 밀러 성분 $2C_{\mu1}$이 병렬로 붙어요.</p>
         $$Z_{in}=r_{\pi1}\parallel\frac{1}{(C_{\pi1}+2C_{\mu1})s}$$
         <p>이 $Z_{in}$은 베이스에서 본 값이라 앞단의 $R_S$는 들어 있지 않아요.</p>
       </li>
-      <li><div class="drow"><div>$$Z_{out}=R_L\parallel\frac{1}{(C_{\mu2}+C_{CS2})s}$$</div><p class="why"><strong>바이폴라 캐스코드의 출력.</strong> 저주파의 $R_L$에 $C_{\mu2}$와 $C_{CS2}$가 병렬로 붙어요.</p></div></li>
+      <li><div class="drow"><div>$$Z_{out}=R_L\parallel\frac{1}{(C_{\mu2}+C_{CS2})s}$$</div><p class="why"><strong><span class="loc">㉣</span> 바이폴라 캐스코드의 출력.</strong> 저주파의 $R_L$에 $C_{\mu2}$와 $C_{CS2}$가 병렬로 붙어요.</p></div></li>
       <li>
-        <p><strong>극점과 같은 현상이에요.</strong> 노드 X에서 접지까지 보이는 임피던스는 $R_S$와 $Z_{in}$의 병렬이에요.</p>
+        <p><strong>극점과 같은 현상이에요.</strong> <span class="loc">㉢</span> 노드 X에서 접지까지 보이는 임피던스는 $R_S$와 $Z_{in}$의 병렬이에요.</p>
         $$\begin{aligned}R_S\parallel Z_{in}&amp;=(R_S\parallel r_{\pi1})\\&amp;\quad\parallel\frac{1}{(C_{\pi1}+2C_{\mu1})s}\end{aligned}$$
         <p>이 임피던스가 꺾이는 각주파수 $1/[(R_S\parallel r_{\pi1})(C_{\pi1}+2C_{\mu1})]$이 바로 $\omega_{p,X}$예요. 출력의 $Z_{out}$이 꺾이는 각주파수도 $\omega_{p,out}$과 같아요.</p>
       </li>
@@ -650,6 +876,61 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <figure class="figure circuit">
+      <svg id="fig-circuit-m3-cascode" viewBox="0 0 304 226" role="img" aria-label="PMOS M3가 전원에서 Y로 전류를 공급해요. M2와 M1은 부하 저항 아래에 쌓여 있고, M3가 달린 Y와 출력은 서로 다른 노드예요.">
+        <path class="fig-ink" d="M145 24H248 M145 24V29 M145 57V72 M145 72V85 M145 109V130 M145 130V166 M145 190V209 M248 24V52 M248 76V130H145 M79 97H125 M204 64H228 M27 178H39 M65 178H125 M145 72H177"/>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M185 24h24"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M145 29l5 4.66667l-10 4.66667l10 4.66667l-10 4.66667l10 4.66667l-5 4.66667"/>
+        </g>
+        <g data-symbol="part">
+          <g transform="translate(145 97)">
+            <path class="fig-ink" d="M-20 -13v26 M-15 -15v30 M-15 -12H0 M-15 12H0 M-9 8L-3 12L-9 16"/>
+          </g>
+        </g>
+        <g data-symbol="part">
+          <g transform="translate(248 64)">
+            <path class="fig-ink" d="M-20 -13v26 M-15 -15v30 M-15 -12H0 M-15 12H0 M-4 -16L-10 -12L-4 -8"/>
+          </g>
+        </g>
+        <g data-symbol="part">
+          <g transform="translate(145 178)">
+            <path class="fig-ink" d="M-20 -13v26 M-15 -15v30 M-15 -12H0 M-15 12H0 M-9 8L-3 12L-9 16"/>
+          </g>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M136 209h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M39 178l4.33333 -4 l4.33333 8 l4.33333 -8 l4.33333 8 l4.33333 -8 l4.33333 4"/>
+        </g>
+        <circle class="fig-ink" cx="24" cy="178" r="3"/>
+        <circle class="fig-ink" cx="76" cy="97" r="3"/>
+        <circle class="fig-ink" cx="201" cy="64" r="3"/>
+        <circle class="fig-ink" cx="180" cy="72" r="3"/>
+        <circle class="fig-dot" cx="145" cy="72" r="3.2"/>
+        <circle class="fig-dot" cx="145" cy="130" r="3.2"/>
+        <text class="fig-text fig-math" x="277" y="27" text-anchor="middle" style="font-size:14px">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text>
+        <text class="fig-text fig-math" x="122" y="52" text-anchor="middle" style="font-size:14px">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text>
+        <text class="fig-text fig-math" x="118" y="119" text-anchor="middle" style="font-size:14px">M<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+        <text class="fig-text fig-math" x="271" y="70" text-anchor="middle" style="font-size:14px">M<tspan baseline-shift="sub" font-size="78%">3</tspan></text>
+        <text class="fig-text fig-math" x="169" y="185" text-anchor="middle" style="font-size:14px">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        <text class="fig-text fig-math" x="84" y="77" text-anchor="middle" style="font-size:14px">V<tspan baseline-shift="sub" font-size="78%">b1</tspan></text>
+        <text class="fig-text fig-math" x="223" y="90" text-anchor="middle" style="font-size:14px">V<tspan baseline-shift="sub" font-size="78%">b2</tspan></text>
+        <text class="fig-text fig-math" x="46" y="201" text-anchor="middle" style="font-size:14px">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text>
+        <text class="fig-text fig-math" x="24" y="159" text-anchor="middle" style="font-size:14px">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
+        <text class="fig-text fig-math" x="91" y="201" text-anchor="middle" style="font-size:14px">X</text>
+        <text class="fig-text fig-math" x="130" y="147" text-anchor="middle" style="font-size:14px">Y</text>
+        <text class="fig-text fig-math" x="175" y="54" text-anchor="middle" style="font-size:14px">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+        <text class="fig-text fig-loc" x="180" y="155" text-anchor="middle" style="font-size:17px">㉠</text>
+        <text class="fig-text fig-loc" x="266" y="98" text-anchor="middle" style="font-size:17px">㉡</text>
+        <text class="fig-text fig-loc" x="193" y="89" text-anchor="middle" style="font-size:17px">㉢</text>
+        <text class="fig-text fig-loc" x="98" y="158" text-anchor="middle" style="font-size:17px">㉣</text>
+      </svg>
+      <figcaption><span class="loc">㉠</span> 전류가 합쳐지는 Y · <span class="loc">㉡</span> PMOS 전류원 가지 · <span class="loc">㉢</span> 출력 · <span class="loc">㉣</span> 입력 노드 X (Lec5 55쪽)</figcaption>
+    </figure>
     <h4 class="sub">바이어스와 소신호 전류 분배의 작은 예</h4>
     <p>작은 예로 $R_L=1\,\mathrm{k\Omega}$에 $0.5\,\mathrm{mA}$가 흐르면 IR 드롭은 $0.5\,\mathrm{V}$예요. $g_{m1}$을 키우려고 전류를 2배로 늘리면 $1\,\mathrm{V}$, 4배로 늘리면 $2\,\mathrm{V}$가 $R_L$에 걸려요.</p>
     <p><b>$M_3$가 $I_{D3}=1.5\,\mathrm{mA}$를 따로 흘리면 $I_{D1}=2\,\mathrm{mA}$로 4배가 되어도 $I_{D2}=0.5\,\mathrm{mA}$라서 IR 드롭은 $0.5\,\mathrm{V}$ 그대로예요.</b> 제곱 법칙 모델에서 $W/L$이 같으면 $g_m\propto\sqrt{I_D}$이므로 $g_{m1}$은 2배가 돼요.</p>
@@ -657,12 +938,12 @@
     <h4 class="sub">바이어스 · 이득 · 극점 해석</h4>
     <ol class="steps">
       <li>
-        <p><strong>바이어스 전류를 나눠요.</strong> $M_3$는 게이트가 $V_{b2}$에 묶인 PMOS 전류원이에요. 노드 Y에서 KCL을 쓰면 $M_1$ 전류는 $M_2$ 전류와 $M_3$ 전류의 합이에요.</p>
+        <p><strong>바이어스 전류를 나눠요.</strong> $M_3$는 게이트가 $V_{b2}$에 묶인 PMOS 전류원이에요. <span class="loc">㉠</span> 노드 Y에는 <span class="loc">㉡</span> PMOS 가지의 전류와 부하 쪽 전류가 모여요. 여기에 KCL을 쓰면 $M_1$ 전류는 $M_2$ 전류와 $M_3$ 전류의 합이에요.</p>
         $$I_{D1}=I_{D2}+I_{D3}$$
         <p>$R_L$에는 $I_{D2}$만 흐르므로 $R_L$의 IR 드롭은 $I_{D2}R_L$이에요. $I_{D1}$을 늘려 $g_{m1}$을 키우면서 IR 드롭은 늘리지 않을 수 있고, 같은 전압 여유에서 더 큰 $R_L$도 쓸 수 있어요.</p>
       </li>
       <li>
-        <p><strong>전압이득을 $G_m$과 $R_{out}$으로 나눠 구해요.</strong> 입력은 $M_1$ 게이트 쪽 $v_{in}$, 출력은 $M_2$ 드레인의 $v_{out}$이에요. 바이어스 전압 $V_{b1}$, $V_{b2}$, $V_{DD}$는 AC 접지로 두고 몸체효과는 무시해요.</p>
+        <p><strong>전압이득을 $G_m$과 $R_{out}$으로 나눠 구해요.</strong> 입력 $v_{in}$은 <span class="loc">㉣</span> X를 거쳐 $M_1$ 게이트에 걸리고, <span class="loc">㉢</span> 출력은 $M_2$ 드레인에서 읽어요. 바이어스 전압 $V_{b1}$, $V_{b2}$, $V_{DD}$는 AC 접지로 두고 몸체효과는 무시해요.</p>
         <div data-gain-route="gm-rout">
           <div data-gain-stage="gm">
             <p>출력을 오른쪽에서 접지로 단락해 $v_{out}=0$으로 두고, 단락선에서 출력 단자를 거쳐 회로로 들어가는 $i_{out}$을 양으로 정해요. $M_1$이 Y에서 끌어내리는 $g_{m1}v_{in}$은 $M_2$ 소스($\approx1/g_{m2}$), $r_{o3}$, $r_{o1}$ 쪽에서 나뉘어 와요.</p>
@@ -697,7 +978,7 @@
         <p>바이어스 전류를 보태는 역할은 같지만 출력 전류와 이득이 줄어요. 일부러 이득을 줄이려는 경우가 아니면 쓰지 않아요.</p>
       </li>
       <li>
-        <p><strong>극점을 모아요.</strong> 극점의 저항도 바이어스 값이 아니라 소신호의 전압 변화량/전류 변화량으로 구해요. $M_3$는 Y에만 붙어 있으므로 X와 출력 노드의 식 꼴은 앞의 캐스코드와 같아요.</p>
+        <p><strong>극점을 모아요.</strong> 극점의 저항도 바이어스 값이 아니라 소신호의 전압 변화량/전류 변화량으로 구해요. <span class="loc">㉡</span> $M_3$는 <span class="loc">㉠</span> Y에 붙어요. <span class="loc">㉣</span> X와 <span class="loc">㉢</span> 출력의 극점 식은 앞의 캐스코드와 같은 형태예요.</p>
         $$\begin{aligned}\omega_{p,X}&amp;=\frac{1}{R_SC_X}\\C_X&amp;=C_{GS1}+\left(1+\frac{g_{m1}}{g_{m2}}\right)C_{GD1}\end{aligned}$$
         $$\omega_{p,out}=\frac{1}{R_L(C_{GD2}+C_{DB2})}$$
         <p>Y의 저항은 $(1/g_{m2})\parallel r_{o3}\parallel r_{o1}\approx1/g_{m2}$예요. 커패시턴스에는 $M_3$의 $C_{GD3}$(게이트가 AC 접지라 접지형)와 $C_{DB3}$ 두 개가 더해져요.</p>
@@ -745,12 +1026,166 @@
     <figure class="figure"><svg id="fig-diffpair-half" viewBox="0 0 562 240" role="img" aria-label="왼쪽은 꼬리 노드 P에 전류원이 달린 MOS 차동쌍에 +vid/2와 −vid/2를 넣은 그림이고, 오른쪽은 소스를 접지한 반회로로 RS, M1, RD와 커패시터 CGS1, CGD1, CDB1이 있는 공통 소스 단입니다."><path class="fig-ink" d="M106 30 H166 M106 30 V46.0 L112 48.5 L100 53.5 L112 58.5 L100 63.5 L112 68.5 L100 73.5 L106 76.0 V92 M166 30 V46.0 L172 48.5 L160 53.5 L172 58.5 L160 63.5 L172 68.5 L160 73.5 L166 76.0 V92 M76 101 V139 M80 101 V139 M80 106 H106 M80 134 H106 M196 101 V139 M192 101 V139 M192 106 H166 M192 134 H166 M106 92 V106 M106 134 V175 H166 V134 M166 92 V106 M136 175 V190 M136 216 V226 M136 226 v8 m-8 0 h16 m-13 4 h10 m-8 4 h6 M136 195 V211 m-5 -5 l5 5 l5 -5 M14 120 H23.0 L25.5 114 L30.5 126 L35.5 114 L40.5 126 L45.5 114 L50.5 126 L53.0 120 H62 H76 M196 120 H212.0 L214.5 114 L219.5 126 L224.5 114 L229.5 126 L234.5 114 L239.5 126 L242.0 120 H258 M413 30 H463 M438 30 V41.0 L444 43.5 L432 48.5 L444 53.5 L432 58.5 L444 63.5 L432 68.5 L438 71.0 V82 M408 123 V161 M412 123 V161 M412 128 H438 M412 156 H438 M438 82 V128 M438 156 V200 M438 200 v8 m-8 0 h16 m-13 4 h10 m-8 4 h6 M318 142 H330.0 L332.5 136 L337.5 148 L342.5 136 L347.5 148 L352.5 136 L357.5 148 L360.0 142 H372 H408 M384 142 V180 M374 180 H394 M374 187 H394 M384 187 V196 M384 196 v8 m-8 0 h16 m-13 4 h10 m-8 4 h6 M384 142 V98 H410 M410 88 V108 M417 88 V108 M417 98 H438 M438 98 H540 M500 98 V136 M490 136 H510 M490 143 H510 M500 143 V152 M500 152 v8 m-8 0 h16 m-13 4 h10 m-8 4 h6"/><circle class="fig-ink" cx="136" cy="203" r="13"/><path class="fig-accent" d="M270 66 H306 m-8 -6 l8 6 l-8 6"/><circle class="fig-dot" cx="14" cy="120" r="3.6" data-node="in1" data-node-color="blue"/><circle class="fig-dot" cx="258" cy="120" r="3.6" data-node="in2" data-node-color="red"/><circle class="fig-dot" cx="136" cy="175" r="3.6" data-node="P" data-node-color="red"/><circle class="fig-dot" cx="318" cy="142" r="3.6" data-node="hin" data-node-color="blue"/><circle class="fig-dot" cx="384" cy="142" r="3.6" data-node="X" data-node-color="red"/><circle class="fig-dot" cx="438" cy="98" r="3.6" data-node="hout" data-node-color="blue"/><circle class="fig-dot" cx="500" cy="98" r="3.6" data-node="hout" data-node-color="blue"/><circle class="fig-dot" cx="540" cy="98" r="3.6" data-node="hout" data-node-color="blue"/><text class="fig-text fig-math" x="6" y="97" text-anchor="start" font-size="14" data-node="in1" data-node-color="blue">+v<tspan baseline-shift="sub" font-size="78%">id</tspan>/2</text><text class="fig-text fig-math" x="266" y="97" text-anchor="end" font-size="14" data-node="in2" data-node-color="red">−v<tspan baseline-shift="sub" font-size="78%">id</tspan>/2</text><text class="fig-text fig-math" x="38" y="143" text-anchor="middle" font-size="14">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><text class="fig-text fig-math" x="228" y="143" text-anchor="middle" font-size="14">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><text class="fig-text fig-math" x="94" y="65" text-anchor="end" font-size="14">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text><text class="fig-text fig-math" x="178" y="65" text-anchor="start" font-size="14">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text><text class="fig-text fig-math" x="80" y="164" text-anchor="start" font-size="14">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" x="192" y="164" text-anchor="end" font-size="14">M<tspan baseline-shift="sub" font-size="78%">2</tspan></text><text class="fig-text fig-math" x="130" y="167" text-anchor="end" font-size="14" data-node="P" data-node-color="red">P</text><text class="fig-text fig-math" x="136" y="14" text-anchor="middle" font-size="14">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text><text class="fig-text fig-math" x="156" y="207" text-anchor="start" font-size="14">I<tspan baseline-shift="sub" font-size="78%">SS</tspan></text><text class="fig-text" x="288" y="50" text-anchor="middle" font-size="13">반회로</text><text class="fig-text fig-math" x="318" y="124" text-anchor="middle" font-size="14" data-node="hin" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">in1</tspan></text><text class="fig-text fig-math" x="345" y="164" text-anchor="middle" font-size="14">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><text class="fig-text fig-math" x="374" y="132" text-anchor="end" font-size="14" data-node="X" data-node-color="red">X</text><text class="fig-text fig-math" x="396" y="196" text-anchor="start" font-size="14">C<tspan baseline-shift="sub" font-size="78%">GS1</tspan></text><text class="fig-text fig-math" x="414" y="80" text-anchor="middle" font-size="14">C<tspan baseline-shift="sub" font-size="78%">GD1</tspan></text><text class="fig-text fig-math" x="512" y="147" text-anchor="start" font-size="14">C<tspan baseline-shift="sub" font-size="78%">DB1</tspan></text><text class="fig-text fig-math" x="450" y="60" text-anchor="start" font-size="14">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text><text class="fig-text fig-math" x="448" y="150" text-anchor="start" font-size="14">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" x="540" y="80" text-anchor="middle" font-size="14" data-node="hout" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">out1</tspan></text><text class="fig-text fig-math" x="438" y="14" text-anchor="middle" font-size="14">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text></svg><figcaption>차동 입력이면 P를 접지로 바꾼 오른쪽 반회로 하나만 풀면 돼요.</figcaption></figure>
   </div>
   <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <figure class="figure circuit">
+      <svg id="fig-circuit-mos-differential-half" viewBox="0 0 420 270" role="img" aria-label="왼쪽은 소자 두 개가 꼬리 전류원을 공유하는 차동쌍이고, 오른쪽은 꼬리 노드를 접지한 왼쪽 반회로예요.">
+        <path class="fig-ink" d="M77 16H169 M77 16V26 M169 16V26 M77 48V118 M169 48V118 M77 64H46 M40 64H27 M169 64H200 M206 64H219 M77 104H55 M49 104V130 M169 104H193 M199 104V130 M17 130H22 M40 130H57 M189 130H206 M224 130H229 M49 130V155 M49 161V181H77 M199 130V155 M199 161V181H169 M77 142V181H169V142 M123 181V195 M123 219V230"/>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M77 26l5 3.66667l-10 3.66667l10 3.66667l-10 3.66667l10 3.66667l-5 3.66667"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M169 26l5 3.66667l-10 3.66667l10 3.66667l-10 3.66667l10 3.66667l-5 3.66667"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M40 57v14 m6 -14v14"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M200 57v14 m6 -14v14"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M27 56v16 m-4 -13v10 m-4 -7v4 M219 56v16 m4 -13v10 m4 -7v4"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M49 97v14 m6 -14v14"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M193 97v14 m6 -14v14"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M41 155h16 m-16 6h16"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M191 155h16 m-16 6h16"/>
+        </g>
+        <g data-symbol="part">
+          <g transform="translate(77 130)">
+            <path class="fig-ink" d="M-20 -13v26 M-15 -15v30 M-15 -12H0 M-15 12H0 M-9 8L-3 12L-9 16"/>
+          </g>
+        </g>
+        <g data-symbol="part">
+          <g transform="translate(169 130)">
+            <path class="fig-ink" d="M20 -13v26 M15 -15v30 M15 -12H0 M15 12H0 M9 8L3 12L9 16"/>
+          </g>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M22 130l3 -4 l3 8 l3 -8 l3 8 l3 -8 l3 4"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M206 130l3 -4 l3 8 l3 -8 l3 8 l3 -8 l3 4"/>
+        </g>
+        <circle class="fig-ink" cx="14" cy="130" r="3"/>
+        <circle class="fig-ink" cx="232" cy="130" r="3"/>
+        <circle class="fig-dot" cx="77" cy="64" r="3.2"/>
+        <circle class="fig-dot" cx="169" cy="64" r="3.2"/>
+        <circle class="fig-dot" cx="77" cy="104" r="3.2"/>
+        <circle class="fig-dot" cx="169" cy="104" r="3.2"/>
+        <circle class="fig-dot" cx="49" cy="130" r="3.2"/>
+        <circle class="fig-dot" cx="199" cy="130" r="3.2"/>
+        <circle class="fig-dot" cx="77" cy="181" r="3.2"/>
+        <circle class="fig-dot" cx="169" cy="181" r="3.2"/>
+        <circle class="fig-dot" cx="123" cy="181" r="3.2"/>
+        <g data-symbol="part">
+          <circle class="fig-ink" cx="123" cy="207" r="12"/>
+          <path class="fig-ink" d="M123 200v14"/>
+          <g data-symbol="part">
+            <path class="fig-ink" d="M123 214l-4 -6m4 6l4 -6"/>
+          </g>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M114 230h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <text class="fig-text fig-math" x="123" y="42" text-anchor="middle" style="font-size:14px">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text>
+        <text class="fig-text fig-math" x="59" y="43" text-anchor="middle" style="font-size:13px">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text>
+        <text class="fig-text fig-math" x="188" y="43" text-anchor="middle" style="font-size:13px">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text>
+        <text class="fig-text fig-math" x="35" y="46" text-anchor="middle" style="font-size:12px">C<tspan baseline-shift="sub" font-size="78%">DB1</tspan></text>
+        <text class="fig-text fig-math" x="212" y="46" text-anchor="middle" style="font-size:12px">C<tspan baseline-shift="sub" font-size="78%">DB2</tspan></text>
+        <text class="fig-text fig-math" x="37" y="85" text-anchor="middle" style="font-size:12px">C<tspan baseline-shift="sub" font-size="78%">GD1</tspan></text>
+        <text class="fig-text fig-math" x="209" y="85" text-anchor="middle" style="font-size:12px">C<tspan baseline-shift="sub" font-size="78%">GD2</tspan></text>
+        <text class="fig-text fig-math" x="26" y="114" text-anchor="middle" style="font-size:12px">v<tspan baseline-shift="sub" font-size="78%">in1</tspan></text>
+        <text class="fig-text fig-math" x="220" y="114" text-anchor="middle" style="font-size:12px">v<tspan baseline-shift="sub" font-size="78%">in2</tspan></text>
+        <text class="fig-text fig-math" x="18" y="152" text-anchor="middle" style="font-size:12px">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text>
+        <text class="fig-text fig-math" x="228" y="152" text-anchor="middle" style="font-size:12px">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text>
+        <text class="fig-text fig-math" x="20" y="171" text-anchor="middle" style="font-size:12px">C<tspan baseline-shift="sub" font-size="78%">GS1</tspan></text>
+        <text class="fig-text fig-math" x="222" y="171" text-anchor="middle" style="font-size:12px">C<tspan baseline-shift="sub" font-size="78%">GS2</tspan></text>
+        <text class="fig-text fig-math" x="93" y="137" text-anchor="middle" style="font-size:13px">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        <text class="fig-text fig-math" x="149" y="137" text-anchor="middle" style="font-size:13px">M<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+        <text class="fig-text fig-math" x="111" y="165" text-anchor="middle" style="font-size:13px">P</text>
+        <text class="fig-text fig-math" x="147" y="220" text-anchor="middle" style="font-size:12px">I<tspan baseline-shift="sub" font-size="78%">SS</tspan></text>
+        <path class="fig-ink" d="M77 181V198 M77 204V220 M169 181V198 M169 204V220"/>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M69 198h16 m-16 6h16"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M161 198h16 m-16 6h16"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M68 220h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M160 220h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <text class="fig-text fig-math" x="54" y="207" text-anchor="middle" style="font-size:12px">C<tspan baseline-shift="sub" font-size="78%">SB1</tspan></text>
+        <text class="fig-text fig-math" x="194" y="207" text-anchor="middle" style="font-size:12px">C<tspan baseline-shift="sub" font-size="78%">SB2</tspan></text>
+        <text class="fig-text fig-loc" x="137" y="169" text-anchor="middle" style="font-size:17px">㉠</text>
+        <g transform="translate(249 0)">
+          <path class="fig-ink" d="M94 48V54 M94 80V126 M94 95H148 M128 95V116 M128 122V142 M94 110H62 M56 110H47V138 M16 138H21 M43 138H74 M47 138V157 M47 163V184H94 M94 150V201"/>
+          <g data-symbol="part">
+            <g transform="translate(94 138)">
+              <path class="fig-ink" d="M-20 -13v26 M-15 -15v30 M-15 -12H0 M-15 12H0 M-9 8L-3 12L-9 16"/>
+            </g>
+          </g>
+          <g data-symbol="part">
+            <path class="fig-ink" d="M82 48h24"/>
+          </g>
+          <g data-symbol="part">
+            <path class="fig-ink" d="M94 54l5 4.33333l-10 4.33333l10 4.33333l-10 4.33333l10 4.33333l-5 4.33333"/>
+          </g>
+          <g data-symbol="part">
+            <path class="fig-ink" d="M21 138l3.66667 -4 l3.66667 8 l3.66667 -8 l3.66667 8 l3.66667 -8 l3.66667 4"/>
+          </g>
+          <g data-symbol="part">
+            <path class="fig-ink" d="M56 103v14 m6 -14v14"/>
+          </g>
+          <g data-symbol="part">
+            <path class="fig-ink" d="M39 157h16 m-16 6h16"/>
+          </g>
+          <g data-symbol="part">
+            <path class="fig-ink" d="M120 116h16 m-16 6h16"/>
+          </g>
+          <g data-symbol="part">
+            <path class="fig-ink" d="M85 201h18 m-15 4h12 m-9 4h6"/>
+          </g>
+          <g data-symbol="part">
+            <path class="fig-ink" d="M119 142h18 m-15 4h12 m-9 4h6"/>
+          </g>
+          <circle class="fig-ink" cx="13" cy="138" r="3"/>
+          <circle class="fig-ink" cx="151" cy="95" r="3"/>
+          <circle class="fig-dot" cx="94" cy="95" r="3.2"/>
+          <circle class="fig-dot" cx="128" cy="95" r="3.2"/>
+          <circle class="fig-dot" cx="94" cy="110" r="3.2"/>
+          <circle class="fig-dot" cx="47" cy="138" r="3.2"/>
+          <circle class="fig-dot" cx="94" cy="184" r="3.2"/>
+          <text class="fig-text fig-math" x="126" y="43" text-anchor="middle" style="font-size:13px">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text>
+          <text class="fig-text fig-math" x="73" y="75" text-anchor="middle" style="font-size:13px">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text>
+          <text class="fig-text fig-math" x="144" y="77" text-anchor="middle" style="font-size:13px">v<tspan baseline-shift="sub" font-size="78%">out1</tspan></text>
+          <text class="fig-text fig-math" x="149" y="128" text-anchor="middle" style="font-size:12px">C<tspan baseline-shift="sub" font-size="78%">DB1</tspan></text>
+          <text class="fig-text fig-math" x="54" y="93" text-anchor="middle" style="font-size:13px">C<tspan baseline-shift="sub" font-size="78%">GD1</tspan></text>
+          <text class="fig-text fig-math" x="19" y="121" text-anchor="middle" style="font-size:12px">v<tspan baseline-shift="sub" font-size="78%">in1</tspan></text>
+          <text class="fig-text fig-math" x="20" y="158" text-anchor="middle" style="font-size:12px">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text>
+          <text class="fig-text fig-math" x="73" y="164" text-anchor="middle" style="font-size:12px">C<tspan baseline-shift="sub" font-size="78%">GS1</tspan></text>
+          <text class="fig-text fig-math" x="113" y="170" text-anchor="middle" style="font-size:13px">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+          <text class="fig-text fig-loc" x="111" y="221" text-anchor="middle" style="font-size:17px">㉡</text>
+        </g>
+        <text class="fig-text" x="120" y="257" text-anchor="middle" style="font-size:14px">전체 차동쌍</text>
+        <text class="fig-text" x="340" y="257" text-anchor="middle" style="font-size:14px">반회로</text>
+      </svg>
+      <figcaption><span class="loc">㉠</span> 전체 회로의 꼬리 노드 P · <span class="loc">㉡</span> 왼쪽 반회로의 AC 접지 (Lec5 57쪽. 반회로의 C_SB1 양단은 AC 접지라 생략했어요)</figcaption>
+    </figure>
     <h4 class="sub">차동 입력과 가상 접지</h4>
-    <p>작은 예시를 먼저 식으로 적어요. 입력을 $v_{in1}=+v_{id}/2$, $v_{in2}=-v_{id}/2$로 넣으면 대칭 회로에서 두 가지 전류의 변화는 크기가 같고 방향이 반대예요. <b>꼬리로 모이는 전류의 합이 변하지 않으므로 꼬리 노드 P의 소신호 전압은 0이에요.</b> 이것이 차동 증폭기에서 배운 <a href="../0923/정리노트_0923_Differential_Amplifiers.html#s3-virtual-ground">가상 접지</a>예요.</p>
+    <p>작은 예시를 먼저 식으로 적어요. 입력을 $v_{in1}=+v_{id}/2$, $v_{in2}=-v_{id}/2$로 넣으면 대칭 회로에서 두 가지 전류의 변화는 크기가 같고 방향이 반대예요. <b><span class="loc">㉠</span> 꼬리로 모이는 전류의 합이 변하지 않아 P의 소신호 전압은 0이에요. 그래서 <span class="loc">㉡</span> 반회로에서 $M_1$ 소스를 AC 접지에 연결해요.</b> 이것이 차동 증폭기에서 배운 <a href="../0923/정리노트_0923_Differential_Amplifiers.html#s3-virtual-ground">가상 접지</a>예요.</p>
     <p>저주파 이득도 이 판단으로 반회로 하나에서 구했어요. $v_{out2}=-v_{out1}$이므로 차동 입력 대비 차동 출력 이득은 반회로 이득과 부호까지 같아요.</p>
     <p>$$\frac{v_{out1}-v_{out2}}{v_{in1}-v_{in2}}=\frac{2v_{out1}}{2v_{in1}}=\frac{v_{out1}}{v_{in1}}$$</p>
     <h4 class="sub">고주파 반회로와 극점·영점</h4>
-    <p>커패시턴스가 들어가도 같은 순서로 판단해요.</p>
+    <p><span class="loc">㉡</span> 반회로의 주파수 응답은 $R_S$로 구동하는 CS 단에서 구해요.</p>
     <ol class="steps">
       <li><strong>조건</strong> — 좌우의 소자, 바이어스, $R_D$, $R_S$가 대칭이고 입력은 순수 차동이에요. 그림의 커패시터는 따로 달아 준 소자가 아니라 트랜지스터에 내재된 커패시턴스를 표시한 것이고, $R_S$는 앞단의 소스 임피던스예요.</li>
       <li><strong>꼬리 노드</strong> — 커패시터가 있어도 좌우 대칭은 그대로라서 모든 주파수에서 $v_P=0$이에요. 그래서 꼬리 노드와 접지 사이의 $C_{SB1}$, $C_{SB2}$는 양단 전압이 0이 되어 반회로에서 빠져요.</li>
@@ -763,8 +1198,147 @@
     <p>$$\begin{aligned}|\omega_{p,in}|&amp;=1\Big/\Big(R_S\big[C_{GS1}\\&amp;\qquad+(1+g_{m1}R_D)C_{GD1}\big]\Big)\end{aligned}$$</p>
     <p>$$\begin{aligned}|\omega_{p,out}|&amp;=1\Big/\Big(R_D\Big[C_{DB1}\\&amp;\qquad+\Big(1+\frac{1}{g_{m1}R_D}\Big)C_{GD1}\Big]\Big)\end{aligned}$$</p>
     <p>CS 단을 정확히 풀었을 때 $C_{GD1}$을 지나 앞으로 새는 전류가 만드는 영점 $g_{m1}/C_{GD1}$도 차동쌍에 그대로 있어요.</p>
+    <figure class="figure circuit">
+      <svg id="fig-circuit-bjt-differential-half" viewBox="0 0 420 270" role="img" aria-label="왼쪽은 소자 두 개가 꼬리 전류원을 공유하는 차동쌍이고, 오른쪽은 꼬리 노드를 접지한 왼쪽 반회로예요.">
+        <path class="fig-ink" d="M77 16H169 M77 16V26 M169 16V26 M77 48V118 M169 48V118 M77 64H46 M40 64H27 M169 64H200 M206 64H219 M77 104H55 M49 104V130 M169 104H193 M199 104V130 M17 130H22 M40 130H57 M189 130H206 M224 130H229 M49 130V155 M49 161V181H77 M199 130V155 M199 161V181H169 M77 142V181H169V142 M123 181V195 M123 219V230"/>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M77 26l5 3.66667l-10 3.66667l10 3.66667l-10 3.66667l10 3.66667l-5 3.66667"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M169 26l5 3.66667l-10 3.66667l10 3.66667l-10 3.66667l10 3.66667l-5 3.66667"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M40 57v14 m6 -14v14"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M200 57v14 m6 -14v14"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M27 56v16 m-4 -13v10 m-4 -7v4 M219 56v16 m4 -13v10 m4 -7v4"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M49 97v14 m6 -14v14"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M193 97v14 m6 -14v14"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M41 155h16 m-16 6h16"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M191 155h16 m-16 6h16"/>
+        </g>
+        <g data-symbol="part">
+          <g transform="translate(77 130)">
+            <path class="fig-ink" d="M-12 -13v26 M-20 0H-12 M-12 -7L0 -12 M-12 7L0 12 M-5 6L0 12L-7 13"/>
+          </g>
+        </g>
+        <g data-symbol="part">
+          <g transform="translate(169 130)">
+            <path class="fig-ink" d="M12 -13v26 M20 0H12 M12 -7L0 -12 M12 7L0 12 M5 6L0 12L7 13"/>
+          </g>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M22 130l3 -4 l3 8 l3 -8 l3 8 l3 -8 l3 4"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M206 130l3 -4 l3 8 l3 -8 l3 8 l3 -8 l3 4"/>
+        </g>
+        <circle class="fig-ink" cx="14" cy="130" r="3"/>
+        <circle class="fig-ink" cx="232" cy="130" r="3"/>
+        <circle class="fig-dot" cx="77" cy="64" r="3.2"/>
+        <circle class="fig-dot" cx="169" cy="64" r="3.2"/>
+        <circle class="fig-dot" cx="77" cy="104" r="3.2"/>
+        <circle class="fig-dot" cx="169" cy="104" r="3.2"/>
+        <circle class="fig-dot" cx="49" cy="130" r="3.2"/>
+        <circle class="fig-dot" cx="199" cy="130" r="3.2"/>
+        <circle class="fig-dot" cx="77" cy="181" r="3.2"/>
+        <circle class="fig-dot" cx="169" cy="181" r="3.2"/>
+        <circle class="fig-dot" cx="123" cy="181" r="3.2"/>
+        <g data-symbol="part">
+          <circle class="fig-ink" cx="123" cy="207" r="12"/>
+          <path class="fig-ink" d="M123 200v14"/>
+          <g data-symbol="part">
+            <path class="fig-ink" d="M123 214l-4 -6m4 6l4 -6"/>
+          </g>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M114 230h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <text class="fig-text fig-math" x="123" y="42" text-anchor="middle" style="font-size:14px">V<tspan baseline-shift="sub" font-size="78%">CC</tspan></text>
+        <text class="fig-text fig-math" x="59" y="43" text-anchor="middle" style="font-size:13px">R<tspan baseline-shift="sub" font-size="78%">C</tspan></text>
+        <text class="fig-text fig-math" x="188" y="43" text-anchor="middle" style="font-size:13px">R<tspan baseline-shift="sub" font-size="78%">C</tspan></text>
+        <text class="fig-text fig-math" x="35" y="46" text-anchor="middle" style="font-size:12px">C<tspan baseline-shift="sub" font-size="78%">CS1</tspan></text>
+        <text class="fig-text fig-math" x="212" y="46" text-anchor="middle" style="font-size:12px">C<tspan baseline-shift="sub" font-size="78%">CS2</tspan></text>
+        <text class="fig-text fig-math" x="37" y="85" text-anchor="middle" style="font-size:12px">C<tspan baseline-shift="sub" font-size="78%">μ1</tspan></text>
+        <text class="fig-text fig-math" x="209" y="85" text-anchor="middle" style="font-size:12px">C<tspan baseline-shift="sub" font-size="78%">μ2</tspan></text>
+        <text class="fig-text fig-math" x="26" y="114" text-anchor="middle" style="font-size:12px">v<tspan baseline-shift="sub" font-size="78%">in1</tspan></text>
+        <text class="fig-text fig-math" x="220" y="114" text-anchor="middle" style="font-size:12px">v<tspan baseline-shift="sub" font-size="78%">in2</tspan></text>
+        <text class="fig-text fig-math" x="18" y="152" text-anchor="middle" style="font-size:12px">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text>
+        <text class="fig-text fig-math" x="228" y="152" text-anchor="middle" style="font-size:12px">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text>
+        <text class="fig-text fig-math" x="20" y="171" text-anchor="middle" style="font-size:12px">C<tspan baseline-shift="sub" font-size="78%">π1</tspan></text>
+        <text class="fig-text fig-math" x="222" y="171" text-anchor="middle" style="font-size:12px">C<tspan baseline-shift="sub" font-size="78%">π2</tspan></text>
+        <text class="fig-text fig-math" x="93" y="137" text-anchor="middle" style="font-size:13px">Q<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        <text class="fig-text fig-math" x="149" y="137" text-anchor="middle" style="font-size:13px">Q<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+        <text class="fig-text fig-math" x="111" y="165" text-anchor="middle" style="font-size:13px">P</text>
+        <text class="fig-text fig-math" x="147" y="220" text-anchor="middle" style="font-size:12px">I<tspan baseline-shift="sub" font-size="78%">EE</tspan></text>
+        <text class="fig-text fig-loc" x="137" y="169" text-anchor="middle" style="font-size:17px">㉢</text>
+        <g transform="translate(249 0)">
+          <path class="fig-ink" d="M94 48V54 M94 80V126 M94 95H148 M128 95V116 M128 122V142 M94 110H62 M56 110H47V138 M16 138H21 M43 138H74 M47 138V157 M47 163V184H94 M94 150V201"/>
+          <g data-symbol="part">
+            <g transform="translate(94 138)">
+              <path class="fig-ink" d="M-12 -13v26 M-20 0H-12 M-12 -7L0 -12 M-12 7L0 12 M-5 6L0 12L-7 13"/>
+            </g>
+          </g>
+          <g data-symbol="part">
+            <path class="fig-ink" d="M82 48h24"/>
+          </g>
+          <g data-symbol="part">
+            <path class="fig-ink" d="M94 54l5 4.33333l-10 4.33333l10 4.33333l-10 4.33333l10 4.33333l-5 4.33333"/>
+          </g>
+          <g data-symbol="part">
+            <path class="fig-ink" d="M21 138l3.66667 -4 l3.66667 8 l3.66667 -8 l3.66667 8 l3.66667 -8 l3.66667 4"/>
+          </g>
+          <g data-symbol="part">
+            <path class="fig-ink" d="M56 103v14 m6 -14v14"/>
+          </g>
+          <g data-symbol="part">
+            <path class="fig-ink" d="M39 157h16 m-16 6h16"/>
+          </g>
+          <g data-symbol="part">
+            <path class="fig-ink" d="M120 116h16 m-16 6h16"/>
+          </g>
+          <g data-symbol="part">
+            <path class="fig-ink" d="M85 201h18 m-15 4h12 m-9 4h6"/>
+          </g>
+          <g data-symbol="part">
+            <path class="fig-ink" d="M119 142h18 m-15 4h12 m-9 4h6"/>
+          </g>
+          <circle class="fig-ink" cx="13" cy="138" r="3"/>
+          <circle class="fig-ink" cx="151" cy="95" r="3"/>
+          <circle class="fig-dot" cx="94" cy="95" r="3.2"/>
+          <circle class="fig-dot" cx="128" cy="95" r="3.2"/>
+          <circle class="fig-dot" cx="94" cy="110" r="3.2"/>
+          <circle class="fig-dot" cx="47" cy="138" r="3.2"/>
+          <circle class="fig-dot" cx="94" cy="184" r="3.2"/>
+          <text class="fig-text fig-math" x="126" y="43" text-anchor="middle" style="font-size:13px">V<tspan baseline-shift="sub" font-size="78%">CC</tspan></text>
+          <text class="fig-text fig-math" x="73" y="75" text-anchor="middle" style="font-size:13px">R<tspan baseline-shift="sub" font-size="78%">C</tspan></text>
+          <text class="fig-text fig-math" x="144" y="77" text-anchor="middle" style="font-size:13px">v<tspan baseline-shift="sub" font-size="78%">out1</tspan></text>
+          <text class="fig-text fig-math" x="149" y="128" text-anchor="middle" style="font-size:12px">C<tspan baseline-shift="sub" font-size="78%">CS1</tspan></text>
+          <text class="fig-text fig-math" x="54" y="93" text-anchor="middle" style="font-size:13px">C<tspan baseline-shift="sub" font-size="78%">μ1</tspan></text>
+          <text class="fig-text fig-math" x="19" y="121" text-anchor="middle" style="font-size:12px">v<tspan baseline-shift="sub" font-size="78%">in1</tspan></text>
+          <text class="fig-text fig-math" x="20" y="158" text-anchor="middle" style="font-size:12px">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text>
+          <text class="fig-text fig-math" x="73" y="164" text-anchor="middle" style="font-size:12px">C<tspan baseline-shift="sub" font-size="78%">π1</tspan></text>
+          <text class="fig-text fig-math" x="113" y="170" text-anchor="middle" style="font-size:13px">Q<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+          <text class="fig-text fig-loc" x="111" y="221" text-anchor="middle" style="font-size:17px">㉣</text>
+        </g>
+        <text class="fig-text" x="120" y="257" text-anchor="middle" style="font-size:14px">전체 차동쌍</text>
+        <text class="fig-text" x="340" y="257" text-anchor="middle" style="font-size:14px">반회로</text>
+      </svg>
+      <figcaption><span class="loc">㉢</span> 전체 회로의 꼬리 노드 P · <span class="loc">㉣</span> 왼쪽 반회로의 AC 접지 (Lec5 59쪽. Cπ 첨자를 각 트랜지스터 번호와 맞췄어요)</figcaption>
+    </figure>
     <h4 class="sub">바이폴라 차동쌍의 극점</h4>
-    <p><strong>바이폴라 차동쌍</strong> — 차동 입력에서 꼬리 노드가 가상 접지인 것은 같고, 반회로는 CE 단이에요. 기호는 $C_{GS}\to C_\pi$, $C_{GD}\to C_\mu$, $C_{DB}\to C_{CS}$, $R_D\to R_C$로 바뀌어요. <b>베이스로 $r_{\pi1}$이 보이므로 입력 노드의 저항은 $R_S\parallel r_{\pi1}$이에요.</b></p>
+    <p><span class="loc">㉢</span> BJT 차동쌍도 차동 입력에서는 꼬리 P가 가상 접지예요. <span class="loc">㉣</span> 왼쪽 반회로는 이미터를 접지한 CE 단이에요. 기호는 $C_{GS}\to C_\pi$, $C_{GD}\to C_\mu$, $C_{DB}\to C_{CS}$, $R_D\to R_C$로 바뀌어요. <b>베이스로 $r_{\pi1}$이 보이므로 입력 노드의 저항은 $R_S\parallel r_{\pi1}$이에요.</b></p>
     <p>$$\begin{aligned}|\omega_{p,in}|&amp;=1\Big/\Big((R_S\parallel r_{\pi1})\big[C_{\pi1}\\&amp;\qquad+(1+g_{m1}R_C)C_{\mu1}\big]\Big)\end{aligned}$$</p>
     <p>$$\begin{aligned}|\omega_{p,out}|&amp;=1\Big/\Big(R_C\Big[C_{CS1}\\&amp;\qquad+\Big(1+\frac{1}{g_{m1}R_C}\Big)C_{\mu1}\Big]\Big)\end{aligned}$$</p>
     <h4 class="sub">공통 모드 반회로</h4>
@@ -807,30 +1381,175 @@
     <figure class="figure"><svg id="fig-cascode-half" viewBox="0 0 480 280" role="img" aria-label="반회로는 RS를 지난 입력이 M1 게이트 X로 들어가고 M1 드레인 Y 위에 게이트가 Vb인 M3, 그 위에 RD가 있는 캐스코드 단이며, 노드 X, Y, 출력에 각각 접지로 가는 커패시터 CX, CY, Cout이 하나씩 있습니다."><path class="fig-ink" d="M235 28 H285 M260 28 V42.0 L266 44.5 L254 49.5 L266 54.5 L254 59.5 L266 64.5 L254 69.5 L260 72.0 V86 M260 86 V100 M230 99 V137 M234 99 V137 M234 104 H260 M234 132 H260 M230 197 V235 M234 197 V235 M234 202 H260 M234 230 H260 M260 100 V104 M260 132 V202 M260 230 V252 M260 252 v8 m-8 0 h16 m-13 4 h10 m-8 4 h6 M173 118 H230 M260 100 H440 M380 100 V134 M370 134 H390 M370 141 H390 M380 141 V150 M380 150 v8 m-8 0 h16 m-13 4 h10 m-8 4 h6 M260 166 H330 M330 166 V192 M320 192 H340 M320 199 H340 M330 199 V208 M330 208 v8 m-8 0 h16 m-13 4 h10 m-8 4 h6 M60 216 H80.0 L82.5 210 L87.5 222 L92.5 210 L97.5 222 L102.5 210 L107.5 222 L110.0 216 H130 H230 M170 216 V244 M160 244 H180 M160 251 H180 M170 251 V258 M170 258 v8 m-8 0 h16 m-13 4 h10 m-8 4 h6"/><circle class="fig-ink" cx="170" cy="118" r="3"/><circle class="fig-dot" cx="60" cy="216" r="3.6" data-node="cin" data-node-color="blue"/><circle class="fig-dot" cx="170" cy="216" r="3.6" data-node="cX" data-node-color="red"/><circle class="fig-dot" cx="260" cy="166" r="3.6" data-node="cY" data-node-color="blue"/><circle class="fig-dot" cx="260" cy="100" r="3.6" data-node="cout" data-node-color="red"/><circle class="fig-dot" cx="380" cy="100" r="3.6" data-node="cout" data-node-color="red"/><circle class="fig-dot" cx="440" cy="100" r="3.6" data-node="cout" data-node-color="red"/><text class="fig-text fig-math" x="60" y="198" text-anchor="middle" font-size="14" data-node="cin" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><text class="fig-text fig-math" x="95" y="240" text-anchor="middle" font-size="14">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><text class="fig-text fig-math" x="158" y="206" text-anchor="end" font-size="14" data-node="cX" data-node-color="red">X</text><text class="fig-text fig-math" x="182" y="266" text-anchor="start" font-size="14">C<tspan baseline-shift="sub" font-size="78%">X</tspan></text><text class="fig-text fig-math" x="272" y="155" text-anchor="start" font-size="14" data-node="cY" data-node-color="blue">Y</text><text class="fig-text fig-math" x="342" y="208" text-anchor="start" font-size="14">C<tspan baseline-shift="sub" font-size="78%">Y</tspan></text><text class="fig-text fig-math" x="392" y="149" text-anchor="start" font-size="14">C<tspan baseline-shift="sub" font-size="78%">out</tspan></text><text class="fig-text fig-math" x="440" y="82" text-anchor="middle" font-size="14" data-node="cout" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><text class="fig-text fig-math" x="170" y="100" text-anchor="middle" font-size="14">V<tspan baseline-shift="sub" font-size="78%">b</tspan></text><text class="fig-text fig-math" x="260" y="13" text-anchor="middle" font-size="14">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text><text class="fig-text fig-math" x="272" y="62" text-anchor="start" font-size="14">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text><text class="fig-text fig-math" x="272" y="128" text-anchor="start" font-size="14">M<tspan baseline-shift="sub" font-size="78%">3</tspan></text><text class="fig-text fig-math" x="272" y="226" text-anchor="start" font-size="14">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text></svg><figcaption>각 노드의 커패시터를 접지로 모으면 노드마다 극점이 하나씩 보여요.</figcaption></figure>
   </div>
   <div class="layer formal"><span class="layer-title">정확히 말하면</span>
+    <figure class="figure circuit">
+      <svg id="fig-circuit-cascode-differential-pair" viewBox="0 0 330 262" role="img" aria-label="차동쌍의 M1과 M2가 꼬리 전류원을 공유해요. 그 위에 M3과 M4가 쌓여 있고 두 드레인 사이에서 차동 출력을 읽어요.">
+        <path class="fig-ink" d="M88 18H232 M88 18V28 M232 18V28 M88 55V85 M232 55V85 M88 68H141 M232 68H179 M88 109V158 M232 109V158 M108 97H212 M160 97V112 M19 170H28 M56 170H68 M252 170H264 M292 170H306 M88 182V203H232V182 M160 203V214 M160 238V250"/>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M88 28l5 4.5l-10 4.5l10 4.5l-10 4.5l10 4.5l-5 4.5"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M232 28l5 4.5l-10 4.5l10 4.5l-10 4.5l10 4.5l-5 4.5"/>
+        </g>
+        <g data-symbol="part">
+          <g transform="translate(88 97)">
+            <path class="fig-ink" d="M20 -13v26 M15 -15v30 M15 -12H0 M15 12H0 M9 8L3 12L9 16"/>
+          </g>
+        </g>
+        <g data-symbol="part">
+          <g transform="translate(232 97)">
+            <path class="fig-ink" d="M-20 -13v26 M-15 -15v30 M-15 -12H0 M-15 12H0 M-9 8L-3 12L-9 16"/>
+          </g>
+        </g>
+        <g data-symbol="part">
+          <g transform="translate(88 170)">
+            <path class="fig-ink" d="M-20 -13v26 M-15 -15v30 M-15 -12H0 M-15 12H0 M-9 8L-3 12L-9 16"/>
+          </g>
+        </g>
+        <g data-symbol="part">
+          <g transform="translate(232 170)">
+            <path class="fig-ink" d="M20 -13v26 M15 -15v30 M15 -12H0 M15 12H0 M9 8L3 12L9 16"/>
+          </g>
+        </g>
+        <circle class="fig-ink" cx="160" cy="115" r="3"/>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M28 170l4.66667 -4 l4.66667 8 l4.66667 -8 l4.66667 8 l4.66667 -8 l4.66667 4"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M264 170l4.66667 -4 l4.66667 8 l4.66667 -8 l4.66667 8 l4.66667 -8 l4.66667 4"/>
+        </g>
+        <circle class="fig-ink" cx="16" cy="170" r="3"/>
+        <circle class="fig-ink" cx="309" cy="170" r="3"/>
+        <circle class="fig-ink" cx="144" cy="68" r="3"/>
+        <circle class="fig-ink" cx="176" cy="68" r="3"/>
+        <circle class="fig-dot" cx="88" cy="68" r="3.2"/>
+        <circle class="fig-dot" cx="232" cy="68" r="3.2"/>
+        <circle class="fig-dot" cx="160" cy="97" r="3.2"/>
+        <circle class="fig-dot" cx="160" cy="203" r="3.2"/>
+        <g data-symbol="part">
+          <circle class="fig-ink" cx="160" cy="226" r="12"/>
+          <path class="fig-ink" d="M160 219v14"/>
+          <g data-symbol="part">
+            <path class="fig-ink" d="M160 233l-4 -6m4 6l4 -6"/>
+          </g>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M151 250h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <text class="fig-text fig-math" x="195" y="45" text-anchor="middle" style="font-size:14px">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text>
+        <text class="fig-text fig-math" x="65" y="51" text-anchor="middle" style="font-size:14px">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text>
+        <text class="fig-text fig-math" x="254" y="51" text-anchor="middle" style="font-size:14px">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text>
+        <text class="fig-text fig-math" x="160" y="43" text-anchor="middle" style="font-size:14px">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+        <text class="fig-text fig-math" x="139" y="56" text-anchor="middle" style="font-size:12px">+</text>
+        <text class="fig-text fig-math" x="181" y="56" text-anchor="middle" style="font-size:12px">−</text>
+        <text class="fig-text fig-math" x="150" y="134" text-anchor="middle" style="font-size:14px">V<tspan baseline-shift="sub" font-size="78%">b</tspan></text>
+        <text class="fig-text fig-math" x="65" y="101" text-anchor="middle" style="font-size:14px">M<tspan baseline-shift="sub" font-size="78%">3</tspan></text>
+        <text class="fig-text fig-math" x="252" y="98" text-anchor="middle" style="font-size:14px">M<tspan baseline-shift="sub" font-size="78%">4</tspan></text>
+        <text class="fig-text fig-math" x="110" y="175" text-anchor="middle" style="font-size:14px">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        <text class="fig-text fig-math" x="210" y="175" text-anchor="middle" style="font-size:14px">M<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+        <text class="fig-text fig-math" x="19" y="152" text-anchor="middle" style="font-size:14px">v<tspan baseline-shift="sub" font-size="78%">in1</tspan></text>
+        <text class="fig-text fig-math" x="305" y="152" text-anchor="middle" style="font-size:14px">v<tspan baseline-shift="sub" font-size="78%">in2</tspan></text>
+        <text class="fig-text fig-math" x="38" y="194" text-anchor="middle" style="font-size:14px">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text>
+        <text class="fig-text fig-math" x="280" y="194" text-anchor="middle" style="font-size:14px">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text>
+        <text class="fig-text fig-math" x="184" y="235" text-anchor="middle" style="font-size:14px">I<tspan baseline-shift="sub" font-size="78%">SS</tspan></text>
+        <text class="fig-text fig-math" x="142" y="190" text-anchor="middle" style="font-size:14px">P</text>
+        <text class="fig-text fig-loc" x="160" y="190" text-anchor="middle" style="font-size:17px">㉠</text>
+        <text class="fig-text fig-loc" x="177" y="125" text-anchor="middle" style="font-size:17px">㉡</text>
+      </svg>
+      <figcaption><span class="loc">㉠</span> 두 입력 소자가 공유하는 P · <span class="loc">㉡</span> 캐스코드 소자에 공통 바이어스를 거는 도선 (Lec5 58쪽 위. 꼬리 노드 이름과 차동 출력의 기준 극성을 덧붙였어요)</figcaption>
+    </figure>
     <h4 class="sub">세 극점과 보드 선도의 기울기</h4>
-    <p>작은 예시부터 적용해요. 저주파 이득에서 평평하게 시작하는 저역통과 응답이고, 영점은 관심 대역보다 훨씬 높아 영향이 없다고 둬요. <b>세 극점이 충분히 떨어져 있으면 점근선의 기울기는 극점을 지날 때마다 $-20\,\mathrm{dB/dec}$씩 더해져요.</b> 이득이 한 번에 20 dB 떨어지는 것이 아니라 기울기가 바뀌는 것이고, 실제 곡선은 각 극점 근처에서 부드럽게 휘어요.</p>
+    <p><span class="loc">㉠</span> 공통 꼬리 노드 P는 차동 입력에서 AC 접지가 돼요. <span class="loc">㉡</span> 공통 바이어스에 연결된 $M_3$, $M_4$가 두 가지의 캐스코드 소자예요. 저주파 이득에서 평평하게 시작하는 저역통과 응답이고, 영점은 관심 대역보다 훨씬 높아 영향이 없다고 둬요. <b>세 극점이 충분히 떨어져 있으면 점근선의 기울기는 극점을 지날 때마다 $-20\,\mathrm{dB/dec}$씩 더해져요.</b> 이득이 한 번에 20 dB 떨어지는 것이 아니라 기울기가 바뀌는 것이고, 실제 곡선은 각 극점 근처에서 부드럽게 휘어요.</p>
     <figure class="figure"><svg id="fig-cascode-bode" viewBox="0 0 490 260" role="img" aria-label="평평한 이득이 세 극점 주파수를 지날 때마다 기울기가 0, −20, −40, −60 dB/dec로 바뀌는 점근선입니다."><path class="fig-ink" d="M60 34 L64 28 L68 34 M64 28 V200 H454 m-6 -4 l6 4 l-6 4 M170 196 V204 M270 196 V204 M370 196 V204"/><path class="fig-ink" stroke-dasharray="3 4" d="M170 50 V196 M270 50 V196 M370 50 V196"/><path class="fig-accent" d="M70 50.0 L170 50.0 L270 75.0 L370 125.0 L440 177.5"/><text class="fig-text fig-math" x="64" y="20" text-anchor="middle" font-size="13">|H| (dB)</text><text class="fig-text fig-math" x="462" y="204" text-anchor="start" font-size="14">ω</text><text class="fig-text fig-math" x="170" y="222" text-anchor="middle" font-size="14">ω<tspan baseline-shift="sub" font-size="78%">p1</tspan></text><text class="fig-text fig-math" x="270" y="222" text-anchor="middle" font-size="14">ω<tspan baseline-shift="sub" font-size="78%">p2</tspan></text><text class="fig-text fig-math" x="370" y="222" text-anchor="middle" font-size="14">ω<tspan baseline-shift="sub" font-size="78%">p3</tspan></text><text class="fig-text" x="115" y="42" text-anchor="middle" font-size="13">0</text><text class="fig-text" x="228" y="91" text-anchor="middle" font-size="13">−20</text><text class="fig-text" x="336" y="142" text-anchor="middle" font-size="13">−40</text><text class="fig-text" x="430" y="146" text-anchor="start" font-size="13">−60</text><text class="fig-text" x="258" y="250" text-anchor="middle" font-size="12">숫자는 각 구간의 기울기(dB/dec)</text></svg><figcaption>세 극점을 크기 순으로 $\omega_{p1}\lt\omega_{p2}\lt\omega_{p3}$라 부르면 기울기가 0, −20, −40, −60 dB/dec로 바뀌어요.</figcaption></figure>
     <p>그림의 순서는 크기 순으로 다시 붙인 이름이에요. 노드 X, Y, 출력 중 어느 극점이 가장 낮은지는 소자 값에 따라 달라요.</p>
+    <figure class="figure circuit">
+      <svg id="fig-circuit-cascode-differential-half" viewBox="0 0 330 229" role="img" aria-label="차동 캐스코드의 왼쪽 반회로예요. M1과 M3가 쌓여 있고 X, Y, 출력에 접지 커패시터가 달려 있어요.">
+        <path class="fig-ink" d="M142 14V18 M142 42V67 M142 67V83 M142 107V133 M142 133V160 M142 184V210 M75 95H122 M31 172H40 M66 172H122 M91 172V191 M91 197V215 M142 133H245V148 M245 154V171 M142 67H307 M245 67V82 M245 88V106"/>
+        <g data-symbol="part">
+          <g transform="translate(142 172)">
+            <path class="fig-ink" d="M-20 -13v26 M-15 -15v30 M-15 -12H0 M-15 12H0 M-9 8L-3 12L-9 16"/>
+          </g>
+        </g>
+        <g data-symbol="part">
+          <g transform="translate(142 95)">
+            <path class="fig-ink" d="M-20 -13v26 M-15 -15v30 M-15 -12H0 M-15 12H0 M-9 8L-3 12L-9 16"/>
+          </g>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M130 14h24"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M142 18l5 4l-10 4l10 4l-10 4l10 4l-5 4"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M40 172l4.33333 -4 l4.33333 8 l4.33333 -8 l4.33333 8 l4.33333 -8 l4.33333 4"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M83 191h16 m-16 6h16"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M237 148h16 m-16 6h16"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M237 82h16 m-16 6h16"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M82 215h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M133 210h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M236 171h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M236 106h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <circle class="fig-ink" cx="28" cy="172" r="3"/>
+        <circle class="fig-ink" cx="72" cy="95" r="3"/>
+        <circle class="fig-ink" cx="310" cy="67" r="3"/>
+        <circle class="fig-dot" cx="91" cy="172" r="3.2"/>
+        <circle class="fig-dot" cx="142" cy="133" r="3.2"/>
+        <circle class="fig-dot" cx="142" cy="67" r="3.2"/>
+        <circle class="fig-dot" cx="245" cy="67" r="3.2"/>
+        <text class="fig-text fig-math" x="166" y="19" text-anchor="start" style="font-size:14px">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text>
+        <text class="fig-text fig-math" x="164" y="42" text-anchor="middle" style="font-size:14px">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text>
+        <text class="fig-text fig-math" x="155" y="103" text-anchor="start" style="font-size:14px">M<tspan baseline-shift="sub" font-size="78%">3</tspan></text>
+        <text class="fig-text fig-math" x="155" y="180" text-anchor="start" style="font-size:14px">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        <text class="fig-text fig-math" x="66" y="74" text-anchor="middle" style="font-size:14px">V<tspan baseline-shift="sub" font-size="78%">b</tspan></text>
+        <text class="fig-text fig-math" x="25" y="154" text-anchor="middle" style="font-size:14px">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
+        <text class="fig-text fig-math" x="53" y="192" text-anchor="middle" style="font-size:14px">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text>
+        <text class="fig-text fig-math" x="92" y="153" text-anchor="middle" style="font-size:14px">X</text>
+        <text class="fig-text fig-math" x="124" y="130" text-anchor="middle" style="font-size:14px">Y</text>
+        <text class="fig-text fig-math" x="303" y="48" text-anchor="middle" style="font-size:14px">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+        <text class="fig-text fig-math" x="78" y="210" text-anchor="end" style="font-size:13px">C<tspan baseline-shift="sub" font-size="78%">X</tspan></text>
+        <text class="fig-text fig-math" x="241" y="192" text-anchor="middle" style="font-size:13px">C<tspan baseline-shift="sub" font-size="78%">Y</tspan></text>
+        <text class="fig-text fig-math" x="283" y="105" text-anchor="middle" style="font-size:13px">C<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+        <text class="fig-text fig-loc" x="112" y="199" text-anchor="middle" style="font-size:17px">㉢</text>
+        <text class="fig-text fig-loc" x="196" y="158" text-anchor="middle" style="font-size:17px">㉣</text>
+        <text class="fig-text fig-loc" x="276" y="53" text-anchor="middle" style="font-size:17px">㉤</text>
+      </svg>
+      <figcaption><span class="loc">㉢</span> 입력 X · <span class="loc">㉣</span> 내부 노드 Y · <span class="loc">㉤</span> 출력 (Lec5 58쪽 아래. 커패시터 합은 본문의 노드별 기호로 표기했어요)</figcaption>
+    </figure>
     <h4 class="sub">저주파 이득 $A_0$ 구하기</h4>
     <p>이제 극점을 구해요. 순수 차동 입력에서는 꼬리 노드가 가상 접지이므로(<a href="#s1-half-circuit">차동쌍은 반회로와 같은 극점·영점을 가져요</a>), 반회로는 $R_S$로 구동되는 입력 소자 $M_1$ 위에 캐스코드 소자 $M_3$가 얹힌 캐스코드 단이에요. 반대쪽 $M_2$, $M_4$는 다른 반쪽에서 같은 역할을 해요. <b>그래서 캐스코드 단의 극점을 소자 번호만 바꿔 그대로 쓰고, 슬라이드처럼 $\lambda=0$ 모델을 써요.</b> 그림의 $C_X$, $C_Y$, $C_{out}$은 아래 각 단계에서 그 노드와 접지 사이에 모은 커패시턴스의 합이에요.</p>
     <div data-gain-route="gm-rout">
-      <p data-gain-stage="gm"><strong>출력 단락의 $G_m$</strong> — 저주파에서는 커패시터가 개방이고 게이트 전류가 없어 $v_X=v_{in}$이에요. 출력을 AC 접지에 단락하면 $M_1$이 만든 소신호 전류는 노드 Y에서 $M_3$ 소스 말고는 갈 곳이 없어 그대로 단락선까지 가요.
+      <p data-gain-stage="gm"><strong><span class="loc">㉤</span> 출력 단락의 $G_m$</strong> — 저주파에서는 커패시터가 개방이고 게이트 전류가 없어 $v_X=v_{in}$이에요. 출력을 AC 접지에 단락하면 $M_1$이 만든 소신호 전류는 노드 Y에서 $M_3$ 소스 말고는 갈 곳이 없어 그대로 단락선까지 가요.
         $$G_m=\frac{i_{out}}{v_{in}}=g_{m1}$$</p>
-      <p data-gain-stage="rout"><strong>입력 영점의 $R_{out}$</strong> — 입력을 0으로 두고 출력에서 보면 위로 $R_D$, 아래로 캐스코드 저항이 보여요. 아래쪽은 $\lambda=0$이면 무한대이고, $r_o$를 넣어도 $g_{m3}r_{o3}r_{o1}$ 정도로 $R_D$보다 훨씬 커요.
+      <p data-gain-stage="rout"><strong><span class="loc">㉤</span> 출력에서 바라본 $R_{out}$</strong> — 입력을 0으로 두고 출력에서 보면 위로 $R_D$, 아래로 캐스코드 저항이 보여요. 아래쪽은 $\lambda=0$이면 무한대이고, $r_o$를 넣어도 $g_{m3}r_{o3}r_{o1}$ 정도로 $R_D$보다 훨씬 커요.
         $$R_{out}\approx R_D\parallel(g_{m3}r_{o3}r_{o1})\approx R_D$$</p>
       <p data-gain-stage="gain"><strong>저주파 이득</strong> — 같은 입출력 정의로 곱해요.
         $$A_0=-G_mR_{out}\approx-g_{m1}R_D$$</p>
     </div>
     <h4 class="sub">노드 X · Y · 출력의 세 극점과 전달함수</h4>
     <ol class="steps">
-      <li><strong>노드 X</strong> — 소스가 가상 접지라 $C_{GS1}$은 접지 커패시터예요. $C_{GD1}$은 X와 Y 사이에 떠 있어서 밀러 근사로 나눠요. Y에서 $M_3$ 소스로 보이는 저항이 $1/g_{m3}$이므로 X에서 Y로의 이득은 다음과 같아요.
+      <li><strong><span class="loc">㉢</span> 노드 X</strong> — 소스가 가상 접지라 $C_{GS1}$은 접지 커패시터예요. $C_{GD1}$은 X와 Y 사이에 떠 있어서 밀러 근사로 나눠요. Y에서 $M_3$ 소스로 보이는 저항이 $1/g_{m3}$이므로 X에서 Y로의 이득은 다음과 같아요.
         <p>$$A_{v,XY}\approx-\frac{g_{m1}}{g_{m3}}$$</p>
         X 쪽에는 $(1-A_{v,XY})C_{GD1}$이 보이고, X의 저항은 $R_S$예요(MOS 게이트의 저주파 입력저항은 무한대).
         <p>$$\begin{aligned}\omega_{p,X}&amp;=1\Big/\Big(R_S\Big[C_{GS1}\\&amp;\qquad+\Big(1+\frac{g_{m1}}{g_{m3}}\Big)C_{GD1}\Big]\Big)\end{aligned}$$</p></li>
-      <li><strong>노드 Y</strong> — 저항은 $M_3$ 소스로 보이는 $1/g_{m3}$이에요. 커패시터는 $M_1$의 $C_{DB1}$, 게이트가 $V_b$로 AC 접지인 $M_3$의 $C_{GS3}$와 $C_{SB3}$, 그리고 $C_{GD1}$의 Y 쪽 몫이에요.
+      <li><strong><span class="loc">㉣</span> 노드 Y</strong> — 저항은 $M_3$ 소스로 보이는 $1/g_{m3}$이에요. 커패시터는 $M_1$의 $C_{DB1}$, 게이트가 $V_b$로 AC 접지인 $M_3$의 $C_{GS3}$와 $C_{SB3}$, 그리고 $C_{GD1}$의 Y 쪽 몫이에요.
         <p>$$\begin{aligned}&amp;\left(1-\frac{1}{A_{v,XY}}\right)C_{GD1}\\&amp;=\left(1+\frac{g_{m3}}{g_{m1}}\right)C_{GD1}\end{aligned}$$</p>
         <p>$$\begin{aligned}&amp;\omega_{p,Y}=1\Big/\Big(\frac{1}{g_{m3}}\Big[C_{DB1}\\&amp;\quad+\Big(1+\frac{g_{m3}}{g_{m1}}\Big)C_{GD1}\\&amp;\quad+C_{GS3}+C_{SB3}\Big]\Big)\end{aligned}$$</p></li>
-      <li><strong>출력 노드</strong> — 저항은 $R_D$예요(아래의 캐스코드 저항은 훨씬 커요). $M_3$ 게이트가 AC 접지라 $C_{GD3}$도 접지 커패시터가 되어 $C_{DB3}$와 더해져요.
+      <li><strong><span class="loc">㉤</span> 출력 노드</strong> — 저항은 $R_D$예요(아래의 캐스코드 저항은 훨씬 커요). $M_3$ 게이트가 AC 접지라 $C_{GD3}$도 접지 커패시터가 되어 $C_{DB3}$와 더해져요.
         <p>$$\omega_{p,out}=\frac{1}{R_D(C_{DB3}+C_{GD3})}$$</p></li>
       <li><strong>전달함수</strong> — 세 노드의 극점을 곱으로 묶어요.
         <p>$$\begin{aligned}H(s)&amp;=\frac{A_0}{\left(1+\frac{s}{\omega_{p,X}}\right)\left(1+\frac{s}{\omega_{p,Y}}\right)}\\&amp;\quad\times\frac{1}{1+\frac{s}{\omega_{p,out}}}\end{aligned}$$</p>
@@ -906,6 +1625,45 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <figure class="figure circuit">
+      <svg id="fig-circuit-feedback-system" viewBox="0 0 328 158" role="img" aria-label="입력 X에서 귀환 신호 X F를 빼고 A1이 그 차이를 증폭해요. 출력 Y를 감지해 K를 거친 신호가 비교부로 돌아와요.">
+        <path class="fig-ink" d="M28 52H79 M105 52H137 M193 52H304"/>
+        <path class="fig-accent" d="M254 52V114H205 M169 114H92V65"/>
+        <g data-symbol="part">
+          <circle class="fig-ink" cx="92" cy="52" r="13"/>
+          <path class="fig-ink" d="M86 52h12 M92 46v12"/>
+          <text class="fig-text fig-math" x="68" y="43" text-anchor="middle" style="font-size:13px">+</text>
+          <text class="fig-text fig-math" x="75" y="90" text-anchor="middle" style="font-size:13px">−</text>
+        </g>
+        <g data-symbol="part">
+          <rect class="fig-ink" x="137" y="35" width="56" height="34" rx="3"/>
+          <text class="fig-text fig-math" x="165.0" y="57.0" text-anchor="middle" style="font-size:14px">A<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M205 97v34L169 114Z"/>
+          <text class="fig-text fig-math" x="193" y="119" text-anchor="middle" style="font-size:14px">K</text>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-accent" d="M301 52l-6 -4m6 4l-6 4"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-accent" d="M205 114l6 -4m-6 4l6 4"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-accent" d="M92 65l-4 6m4 -6l4 6"/>
+        </g>
+        <circle class="fig-ink" cx="25" cy="52" r="3"/>
+        <circle class="fig-dot" data-node-color="red" cx="254" cy="52" r="3.2"/>
+        <text class="fig-text fig-math" x="25" y="32" text-anchor="middle" style="font-size:14px">X</text>
+        <text class="fig-text fig-math" x="298" y="32" text-anchor="middle" style="font-size:14px">Y</text>
+        <text class="fig-text fig-math" x="128" y="95" text-anchor="middle" style="font-size:14px">X<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+        <text class="fig-text fig-loc" x="63" y="79" text-anchor="middle" style="font-size:17px">㉠</text>
+        <text class="fig-text fig-loc" x="165" y="26" text-anchor="middle" style="font-size:17px">㉡</text>
+        <text class="fig-text fig-loc" x="274" y="83" text-anchor="middle" style="font-size:17px">㉢</text>
+        <text class="fig-text fig-loc" x="188" y="145" text-anchor="middle" style="font-size:17px">㉣</text>
+      </svg>
+      <figcaption><span class="loc">㉠</span> 입력 비교 · <span class="loc">㉡</span> 전방 시스템 · <span class="loc">㉢</span> 출력 감지 · <span class="loc">㉣</span> 귀환 회로망 (Lec6 3쪽)</figcaption>
+    </figure>
     <h4 class="sub">음귀환과 양귀환의 차이</h4>
     <p>귀환(feedback)은 출력을 다시 입력 쪽으로 되돌리는 구조예요. 되돌린 신호를 빼는지 더하는지에 따라 두 가지로 나뉘어요.</p>
     <ul>
@@ -916,7 +1674,7 @@
     <h4 class="sub">음귀환 시스템을 이루는 네 부분</h4>
     <p>지금까지 다룬 회로는 입력을 넣으면 출력이 그대로 나오는 개루프(open loop) 시스템이에요.</p>
     $$Y=A_1X$$
-    <p>음귀환 시스템은 여기에 세 부분을 더해 모두 네 부분으로 이루어져요.</p>
+    <p>그림의 <span class="loc">㉠</span> 비교부에서 $X_F$를 빼면 <span class="loc">㉡</span> 전방 시스템이 그 차이를 증폭해요. <span class="loc">㉢</span> 출력의 감지점에서 갈라진 신호가 <span class="loc">㉣</span> 귀환 회로망 $K$를 지나 비교부의 (−) 입력으로 돌아와요.</p>
     <div class="table-wrap"><table>
       <tr><th>부분</th><th>하는 일</th><th>비반전 증폭기에서</th></tr>
       <tr><td>전방 시스템(feedforward system) $A_1$</td><td>들어온 신호를 증폭해요. 예: CS 단</td><td>op-amp</td></tr>
@@ -978,17 +1736,55 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <figure class="figure circuit">
+      <svg id="fig-circuit-closed-loop-gain" viewBox="0 0 328 158" role="img" aria-label="입력 X에서 귀환 신호 X F를 빼고 A1이 그 차이를 증폭해요. 출력 Y를 감지해 K를 거친 신호가 비교부로 돌아와요.">
+        <path class="fig-ink" d="M28 52H79 M105 52H137 M193 52H304"/>
+        <path class="fig-accent" d="M254 52V114H205 M169 114H92V65"/>
+        <g data-symbol="part">
+          <circle class="fig-ink" cx="92" cy="52" r="13"/>
+          <path class="fig-ink" d="M86 52h12 M92 46v12"/>
+          <text class="fig-text fig-math" x="68" y="43" text-anchor="middle" style="font-size:13px">+</text>
+          <text class="fig-text fig-math" x="75" y="90" text-anchor="middle" style="font-size:13px">−</text>
+        </g>
+        <g data-symbol="part">
+          <rect class="fig-ink" x="137" y="35" width="56" height="34" rx="3"/>
+          <text class="fig-text fig-math" x="165.0" y="57.0" text-anchor="middle" style="font-size:14px">A<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M205 97v34L169 114Z"/>
+          <text class="fig-text fig-math" x="193" y="119" text-anchor="middle" style="font-size:14px">K</text>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-accent" d="M301 52l-6 -4m6 4l-6 4"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-accent" d="M205 114l6 -4m-6 4l6 4"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-accent" d="M92 65l-4 6m4 -6l4 6"/>
+        </g>
+        <circle class="fig-ink" cx="25" cy="52" r="3"/>
+        <circle class="fig-dot" data-node-color="red" cx="254" cy="52" r="3.2"/>
+        <text class="fig-text fig-math" x="25" y="32" text-anchor="middle" style="font-size:14px">X</text>
+        <text class="fig-text fig-math" x="298" y="32" text-anchor="middle" style="font-size:14px">Y</text>
+        <text class="fig-text fig-math" x="128" y="95" text-anchor="middle" style="font-size:14px">X<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+        <text class="fig-text fig-loc" x="274" y="83" text-anchor="middle" style="font-size:17px">㉠</text>
+        <text class="fig-text fig-loc" x="188" y="145" text-anchor="middle" style="font-size:17px">㉡</text>
+        <text class="fig-text fig-loc" x="63" y="79" text-anchor="middle" style="font-size:17px">㉢</text>
+      </svg>
+      <figcaption><span class="loc">㉠</span> 출력 감지점 · <span class="loc">㉡</span> 귀환 회로망 · <span class="loc">㉢</span> 입력을 비교하는 곳 (Lec6 4쪽)</figcaption>
+    </figure>
     <h4 class="sub">숫자로 먼저 보는 폐루프 이득</h4>
     <p>먼저 작은 예에 적용해 봐요. $A_1=1000$, $K=0.1$이면 다음과 같아요.</p>
     $$1+KA_1=1+0.1\times1000=101$$
     $$\frac{Y}{X}=\frac{1000}{101}\approx9.90$$
     <p>개루프 이득(open-loop gain)은 귀환이 없을 때 입력–출력 비 $A_1$이에요($Y=A_1X$).</p>
-    <p>출력을 감지해 귀환 회로망에서 $K$배 한 것이 귀환 신호 $X_F$예요.</p>
+    <p><span class="loc">㉠</span> 출력 $Y$를 감지해 <span class="loc">㉡</span> 귀환 회로망에서 $K$배 한 것이 귀환 신호 $X_F$예요.</p>
     $$X_F=KY$$
     $$K=\frac{X_F}{Y}$$
     <p><b>$K$를 귀환율(feedback factor)이라고 하고, "피드백 게인"이라고 부르기도 해요.</b> 어떤 교재는 $K$ 대신 $\beta$를 써서 $\beta A_1$처럼 적어요. $\beta$도 같은 귀환율이에요.</p>
     <h4 class="sub">폐루프 이득 유도하기</h4>
-    <p>폐루프에서는 $A_1$에 $X$가 아니라 $X$에서 $X_F$를 뺀 신호가 들어가요. 칠판 유도는 이 순서예요.</p>
+    <p><span class="loc">㉢</span> 비교부에서 입력 $X$에서 $X_F$를 빼고, 그 차이를 $A_1$에 넣어요. 칠판 유도는 이 순서예요.</p>
     <ol class="steps">
       <li><div class="drow"><div>$$Y=A_1(X-X_F)$$</div><p class="why">$A_1$의 입력은 $X-X_F$예요.</p></div></li>
       <li><div class="drow"><div>$$Y=A_1(X-KY)$$</div><p class="why">$X_F=KY$를 대입해요.</p></div></li>
@@ -1058,12 +1854,45 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <figure class="figure circuit">
+      <svg id="fig-circuit-noninverting-feedback" viewBox="0 0 330 226" role="img" aria-label="입력 X는 op-amp의 더하기 입력에 걸려요. 출력 Y의 전압을 R1과 R2가 나누고 그 중간 전압 X F가 빼기 입력으로 돌아와요.">
+        <path class="fig-ink" d="M50 63H105 M86 87H105 M163 75H286 M222 75V99 M222 128V153H86V87 M222 153V167 M222 196V210"/>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M105 42V108L163 75Z"/>
+          <text class="fig-text fig-math" x="117" y="67" text-anchor="middle" style="font-size:12px">+</text>
+          <text class="fig-text fig-math" x="117" y="91" text-anchor="middle" style="font-size:12px">−</text>
+          <text class="fig-text fig-math" x="138" y="79" text-anchor="middle" style="font-size:13px">A<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M222 99l5 4.83333l-10 4.83333l10 4.83333l-10 4.83333l10 4.83333l-5 4.83333"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M222 167l5 4.83333l-10 4.83333l10 4.83333l-10 4.83333l10 4.83333l-5 4.83333"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M213 210h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <circle class="fig-ink" cx="47" cy="63" r="3"/>
+        <circle class="fig-ink" cx="289" cy="75" r="3"/>
+        <circle class="fig-dot" cx="222" cy="75" r="3.2"/>
+        <circle class="fig-dot" cx="222" cy="153" r="3.2"/>
+        <text class="fig-text fig-math" x="248" y="117" text-anchor="middle" style="font-size:14px">R<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        <text class="fig-text fig-math" x="248" y="189" text-anchor="middle" style="font-size:14px">R<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+        <text class="fig-text fig-math" x="36" y="45" text-anchor="middle" style="font-size:14px">X</text>
+        <text class="fig-text fig-math" x="293" y="57" text-anchor="middle" style="font-size:14px">Y</text>
+        <text class="fig-text fig-math" x="121" y="132" text-anchor="middle" style="font-size:14px">X<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+        <text class="fig-text fig-loc" x="77" y="46" text-anchor="middle" style="font-size:17px">㉠</text>
+        <text class="fig-text fig-loc" x="266" y="101" text-anchor="middle" style="font-size:17px">㉡</text>
+        <text class="fig-text fig-loc" x="155" y="174" text-anchor="middle" style="font-size:17px">㉢</text>
+      </svg>
+      <figcaption><span class="loc">㉠</span> 입력과 비교부 · <span class="loc">㉡</span> 출력 감지점 · <span class="loc">㉢</span> 분배점에서 돌아오는 귀환 경로 (Lec6 5쪽)</figcaption>
+    </figure>
     <h4 class="sub">회로와 귀환 네 부분의 대응</h4>
     <p>귀환의 네 부분은 이 회로에서 다음과 같이 대응해요.</p>
     <ul>
       <li>전방 시스템: op-amp $A_1$이에요.</li>
-      <li>출력 감지와 귀환 회로망: 출력과 접지 사이의 저항 분배기 $R_1$, $R_2$가 출력 전압을 감지해 일정 비율로 나눠요.</li>
-      <li>입력 비교: op-amp의 차동 입력이에요. $X$는 (+) 입력, $X_F$는 (−) 입력으로 들어가 서로 빠져요.</li>
+      <li>출력 감지와 귀환 회로망은 <span class="loc">㉡</span> 출력 $Y$에서 접지까지 이어진 저항 분배기 $R_1$, $R_2$예요.</li>
+      <li><span class="loc">㉠</span> op-amp의 (+) 입력에는 $X$가 들어와요. <span class="loc">㉢</span> 분배점의 전압 $X_F$는 (−) 입력으로 돌아오므로 $A_1$에는 $X-X_F$가 걸려요.</li>
     </ul>
     <p><b>분배기가 없어서 (−) 입력이 접지되면 $X_F=0$이라 개루프이고, $Y=A_1X$예요.</b></p>
     <h4 class="sub">숫자로 먼저 보는 비반전 증폭기</h4>
@@ -1074,7 +1903,7 @@
     <h4 class="sub">유한한 $A_1$과 무한대 $A_1$의 폐루프 이득</h4>
     <p>일반식은 이 순서로 구해요. op-amp 입력으로 전류가 흐르지 않는다고 보고 분배기를 써요.</p>
     <ol class="steps">
-      <li><div class="drow"><div>$$X_F=\frac{R_2}{R_1+R_2}Y$$</div><p class="why">저항 분배기의 가운데 노드가 귀환 신호예요.</p></div></li>
+      <li><div class="drow"><div>$$X_F=\frac{R_2}{R_1+R_2}Y$$</div><p class="why"><span class="loc">㉡</span> 출력 전압은 $R_1+R_2$ 전체에 걸리고, <span class="loc">㉢</span> 분배점의 귀환 전압은 $R_2$에 걸려요.</p></div></li>
       <li><div class="drow"><div>$$K=\frac{R_2}{R_1+R_2}$$</div><p class="why">귀환율은 그 비율이에요.</p></div></li>
       <li><div class="drow"><div>$$\frac{Y}{X}=\frac{A_1}{1+\frac{R_2}{R_1+R_2}A_1}$$</div><p class="why">폐루프 이득 $\frac{A_1}{1+KA_1}$에 대입해요.</p></div></li>
       <li><div class="drow"><div>$$\frac{Y}{X}\to\frac{1}{K}=\frac{R_1+R_2}{R_2}=1+\frac{R_1}{R_2}$$</div><p class="why">이상적인 op-amp처럼 $A_1\to\infty$이면 분모의 1을 무시할 수 있어요.</p></div></li>
@@ -1134,15 +1963,54 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <figure class="figure circuit">
+      <svg id="fig-circuit-feedback-error" viewBox="0 0 328 158" role="img" aria-label="입력 X에서 귀환 신호 X F를 빼고 A1이 그 차이를 증폭해요. 출력 Y를 감지해 K를 거친 신호가 비교부로 돌아와요.">
+        <path class="fig-ink" d="M28 52H79 M105 52H137 M193 52H304"/>
+        <path class="fig-accent" d="M254 52V114H205 M169 114H92V65"/>
+        <g data-symbol="part">
+          <circle class="fig-ink" cx="92" cy="52" r="13"/>
+          <path class="fig-ink" d="M86 52h12 M92 46v12"/>
+          <text class="fig-text fig-math" x="68" y="43" text-anchor="middle" style="font-size:13px">+</text>
+          <text class="fig-text fig-math" x="75" y="90" text-anchor="middle" style="font-size:13px">−</text>
+        </g>
+        <g data-symbol="part">
+          <rect class="fig-ink" x="137" y="35" width="56" height="34" rx="3"/>
+          <text class="fig-text fig-math" x="165.0" y="57.0" text-anchor="middle" style="font-size:14px">A<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M205 97v34L169 114Z"/>
+          <text class="fig-text fig-math" x="193" y="119" text-anchor="middle" style="font-size:14px">K</text>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-accent" d="M301 52l-6 -4m6 4l-6 4"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-accent" d="M205 114l6 -4m-6 4l6 4"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-accent" d="M92 65l-4 6m4 -6l4 6"/>
+        </g>
+        <circle class="fig-ink" cx="25" cy="52" r="3"/>
+        <circle class="fig-dot" data-node-color="red" cx="254" cy="52" r="3.2"/>
+        <text class="fig-text fig-math" x="25" y="32" text-anchor="middle" style="font-size:14px">X</text>
+        <text class="fig-text fig-math" x="298" y="32" text-anchor="middle" style="font-size:14px">Y</text>
+        <text class="fig-text fig-math" x="128" y="95" text-anchor="middle" style="font-size:14px">X<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+        <text class="fig-text fig-loc" x="116" y="75" text-anchor="middle" style="font-size:17px">㉠</text>
+        <text class="fig-text fig-loc" x="165" y="26" text-anchor="middle" style="font-size:17px">㉡</text>
+        <text class="fig-text fig-loc" x="188" y="145" text-anchor="middle" style="font-size:17px">㉢</text>
+        <text class="fig-text fig-math" x="120" y="35" text-anchor="middle" style="font-size:14px">E</text>
+      </svg>
+      <figcaption><span class="loc">㉠</span> 비교부 출력의 오차 · <span class="loc">㉡</span> 전방 증폭기 · <span class="loc">㉢</span> 귀환 회로망 (Lec6 6쪽)</figcaption>
+    </figure>
     <h4 class="sub">오차 신호 $E$의 정의와 작은 예</h4>
-    <p>음귀환에서는 입력이 그대로 $A_1$에 들어가지 않고, 입력과 귀환 신호의 차이가 들어가요. <b>이 차이를 오차 신호(error signal) $E$라고 해요.</b></p>
+    <p><span class="loc">㉠</span> 비교부에서 입력 $X$와 귀환 신호 $X_F$의 차이를 만들고, 그 차이를 <span class="loc">㉡</span> $A_1$에 넣어요. <b>이 차이를 오차 신호(error signal) $E$라고 해요.</b></p>
     $$E=X-X_F$$
     <p>먼저 작은 예에 적용해 봐요. $X=1\,\mathrm{V}$, $A_1=1000$, $K=0.1$이면 $1+KA_1=101$이에요.</p>
     $$E=\frac{1\,\mathrm{V}}{101}\approx9.90\,\mathrm{mV}$$
     $$Y=A_1E=\frac{1000}{101}\,\mathrm{V}\approx9.90\,\mathrm{V}$$
     $$X_F=KY=\frac{100}{101}\,\mathrm{V}\approx0.99\,\mathrm{V}$$
     <h4 class="sub">오차 $E=\frac{X}{1+KA_1}$ 유도하기</h4>
-    <p>$E$는 어떻게 이렇게 작아질까요? 칠판 유도는 이 순서예요.</p>
+    <p><span class="loc">㉡</span> $A_1$이 오차 $E$를 증폭해 $Y$를 만들고, <span class="loc">㉢</span> 귀환 회로망이 $Y$를 $K$배 해서 비교부로 보내요. 이 관계를 $E=X-X_F$에 넣어요.</p>
     <ol class="steps">
       <li><div class="drow"><div>$$E=X-X_F$$</div><p class="why">오차의 정의에서 시작해요.</p></div></li>
       <li><div class="drow"><div>$$X_F=KA_1E$$</div><p class="why">$X_F=KY$이고 $Y=A_1E$예요.</p></div></li>
@@ -1157,12 +2025,50 @@
       <tr><td>$100$</td><td>$\frac{1}{101}\approx0.99\,\%$</td></tr>
       <tr><td>$1000$</td><td>$\frac{1}{1001}\approx0.10\,\%$</td></tr>
     </table></div>
+    <figure class="figure circuit">
+      <svg id="fig-circuit-feedback-replica" viewBox="0 0 330 226" role="img" aria-label="비반전 증폭기의 두 입력에 X와 분배기 중간점의 X F가 걸려요. 두 입력의 파형은 거의 같고 출력 Y의 파형은 진폭이 커요.">
+        <path class="fig-ink" d="M50 63H105 M86 87H105 M163 75H286 M222 75V99 M222 128V153H86V87 M222 153V167 M222 196V210"/>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M105 42V108L163 75Z"/>
+          <text class="fig-text fig-math" x="117" y="67" text-anchor="middle" style="font-size:12px">+</text>
+          <text class="fig-text fig-math" x="117" y="91" text-anchor="middle" style="font-size:12px">−</text>
+          <text class="fig-text fig-math" x="138" y="79" text-anchor="middle" style="font-size:13px">A<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M222 99l5 4.83333l-10 4.83333l10 4.83333l-10 4.83333l10 4.83333l-5 4.83333"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M222 167l5 4.83333l-10 4.83333l10 4.83333l-10 4.83333l10 4.83333l-5 4.83333"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M213 210h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <circle class="fig-ink" cx="47" cy="63" r="3"/>
+        <circle class="fig-ink" cx="289" cy="75" r="3"/>
+        <circle class="fig-dot" cx="222" cy="75" r="3.2"/>
+        <circle class="fig-dot" cx="222" cy="153" r="3.2"/>
+        <text class="fig-text fig-math" x="248" y="117" text-anchor="middle" style="font-size:14px">R<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        <text class="fig-text fig-math" x="248" y="189" text-anchor="middle" style="font-size:14px">R<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+        <text class="fig-text fig-math" x="36" y="45" text-anchor="middle" style="font-size:14px">X</text>
+        <text class="fig-text fig-math" x="293" y="57" text-anchor="middle" style="font-size:14px">Y</text>
+        <text class="fig-text fig-math" x="121" y="132" text-anchor="middle" style="font-size:14px">X<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+        <g data-symbol="part">
+          <path class="fig-accent" d="M11 116c7 -15 14 -15 21 0s14 15 21 0 M11 154c7 -15 14 -15 21 0s14 15 21 0 M271 111c8 -22 16 -22 24 0s16 22 24 0"/>
+        </g>
+        <text class="fig-text fig-math" x="31" y="99" text-anchor="middle" style="font-size:12px">X</text>
+        <text class="fig-text fig-math" x="32" y="181" text-anchor="middle" style="font-size:12px">X<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+        <text class="fig-text fig-math" x="298" y="147" text-anchor="middle" style="font-size:12px">Y</text>
+        <text class="fig-text fig-loc" x="76" y="42" text-anchor="middle" style="font-size:17px">㉣</text>
+        <text class="fig-text fig-loc" x="149" y="174" text-anchor="middle" style="font-size:17px">㉤</text>
+      </svg>
+      <figcaption><span class="loc">㉣</span> op-amp의 두 입력 · <span class="loc">㉤</span> 입력을 따라가는 귀환 신호 (Lec6 7쪽)</figcaption>
+    </figure>
     <h4 class="sub">가상 단락과 복제</h4>
     <p>$A_1\to\infty$이면 $E\to0$이에요. 하지만 $E$는 정확히 0이 아니에요. $E=0$이면 $Y=A_1E$도 0이 되어 아무 의미가 없어요. $A_1$이 아주 커도 작은 $E$가 들어가야 유한한 출력이 나와요.</p>
     <p>그래서 $E$가 거의 0이라는 것은 입력과 귀환 신호가 거의 같다는 뜻이에요.</p>
     $$X\approx X_F$$
-    <p>이것이 op-amp에서 배운 가상 단락(virtual short)이에요. 두 입력 단자의 전압이 거의 같다는 가정이에요.</p>
-    <p><b>$KA_1$이 클수록 귀환 신호는 입력의 좋은 복제(replica)가 돼요.</b> 출력 $Y$는 커도 $K$로 줄인 $X_F$는 입력 모양을 거의 그대로 따라가요.</p>
+    <p>이것이 op-amp에서 배운 가상 단락(virtual short)이에요. <span class="loc">㉣</span> 두 입력 단자의 전압이 거의 같다는 근사예요.</p>
+    <p><b>$KA_1$이 클수록 귀환 신호는 입력의 좋은 복제(replica)가 돼요.</b> 출력 $Y$는 커도 <span class="loc">㉤</span> 분배점의 $X_F$는 입력 파형을 거의 그대로 따라가요.</p>
     <p>비반전 증폭기에서 $E\approx0$으로 두면 저항비 이득이 바로 나와요. <a href="#s2-noninverting">비반전 증폭기를 귀환으로 보기</a></p>
     $$X_F=\frac{R_2}{R_1+R_2}Y\approx X$$
     $$\frac{Y}{X}\approx1+\frac{R_1}{R_2}$$
@@ -1259,8 +2165,62 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
+    <figure class="figure circuit">
+      <svg id="fig-circuit-loop-gain-test" viewBox="0 0 333 169" role="img" aria-label="입력을 접지하고 A1 출력 N과 귀환망 K의 입력 M 사이를 끊어요. M에 시험 전압을 걸고 N에서 돌아오는 전압을 재요.">
+        <path class="fig-ink" d="M27 59V42H59 M85 42H122 M178 42H235"/>
+        <path class="fig-accent" d="M268 105H193 M157 105H72V56"/>
+        <path class="fig-ink" d="M268 105V118 M268 142V153"/>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M18 59h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <g data-symbol="part">
+          <circle class="fig-ink" cx="72" cy="42" r="13"/>
+          <path class="fig-ink" d="M66 42h12 M72 36v12"/>
+          <text class="fig-text fig-math" x="48" y="33" text-anchor="middle" style="font-size:13px">+</text>
+          <text class="fig-text fig-math" x="55" y="80" text-anchor="middle" style="font-size:13px">−</text>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M193 88v34L157 105Z"/>
+          <text class="fig-text fig-math" x="181" y="110" text-anchor="middle" style="font-size:14px">K</text>
+        </g>
+        <g data-symbol="part">
+          <rect class="fig-ink" x="122" y="25" width="56" height="34" rx="3"/>
+          <text class="fig-text fig-math" x="150.0" y="47.0" text-anchor="middle" style="font-size:14px">A<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-accent" d="M72 56l-4 6m4 -6l4 6"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-accent" d="M193 105l6 -4m-6 4l6 4"/>
+        </g>
+        <circle class="fig-ink" cx="235" cy="42" r="3"/>
+        <circle class="fig-dot" data-node-color="blue" cx="268" cy="105" r="3.2"/>
+        <g data-symbol="part">
+          <circle class="fig-ink" cx="268" cy="130" r="12"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M259 153h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <text class="fig-text fig-math" x="233" y="24" text-anchor="middle" style="font-size:14px">N</text>
+        <text class="fig-text fig-math" x="267" y="87" text-anchor="middle" style="font-size:14px">M</text>
+        <text class="fig-text fig-math" x="279" y="66" text-anchor="middle" style="font-size:14px">V<tspan baseline-shift="sub" font-size="78%">N</tspan></text>
+        <g data-symbol="part">
+          <text class="fig-text fig-math" x="250" y="54" text-anchor="middle" style="font-size:12px">+</text>
+          <text class="fig-text fig-math" x="250" y="78" text-anchor="middle" style="font-size:12px">−</text>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M226 79h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <text class="fig-text fig-math" x="291" y="113" text-anchor="middle" style="font-size:12px">+</text>
+        <text class="fig-text fig-math" x="291" y="153" text-anchor="middle" style="font-size:12px">−</text>
+        <text class="fig-text fig-math" x="287" y="135" text-anchor="start" style="font-size:14px">V<tspan baseline-shift="sub" font-size="78%">test</tspan></text>
+        <text class="fig-text fig-loc" x="219" y="28" text-anchor="middle" style="font-size:17px">㉡</text>
+        <text class="fig-text fig-loc" x="206" y="91" text-anchor="middle" style="font-size:17px">㉠</text>
+      </svg>
+      <figcaption><span class="loc">㉠</span> 시험 전압을 넣는 $M$ · <span class="loc">㉡</span> 돌아온 전압을 재는 $N$ (Lec6 8쪽 오른쪽)</figcaption>
+    </figure>
     <h4 class="sub">숫자로 먼저 보는 루프 이득</h4>
-    <p>먼저 작은 예에 적용해 봐요. $A_1=1000$, $K=0.1$이고 끊은 자리에 $V_{test}=1\,\mathrm{mV}$를 넣어요.</p>
+    <p>먼저 작은 예에 적용해 봐요. $A_1=1000$, $K=0.1$이고 <span class="loc">㉠</span> $M$에 $V_{test}=1\,\mathrm{mV}$를 넣어요.</p>
     $$KV_{test}=0.1\times1\,\mathrm{mV}=0.1\,\mathrm{mV}$$
     $$0-KV_{test}=-0.1\,\mathrm{mV}$$
     $$V_N=1000\times(-0.1\,\mathrm{mV})=-100\,\mathrm{mV}$$
@@ -1270,10 +2230,10 @@
     <ol class="steps">
       <li><strong>루프 끊기</strong> — $A_1$ 출력과 $K$ 입력 사이를 끊어요. $A_1$ 출력 쪽 끝이 $N$, $K$ 입력 쪽 끝이 $M$이에요. 신호가 흐르는 방향은 바꾸지 않아요. $M$에서 $K$, 비교부, $A_1$을 거쳐 $N$으로 가요.</li>
       <li><strong>입력 영점</strong> — 입력을 접지해 $X=0$으로 둬요. 그래야 $N$에 돌아온 신호가 모두 $V_{test}$에서 온 것이에요.</li>
-      <li><strong>시험 신호</strong> — 끊은 자리 $M$에 $V_{test}$를 넣어요.</li>
+      <li><strong>시험 신호</strong> — <span class="loc">㉠</span> $K$ 입력 쪽 $M$에 $V_{test}$를 넣어요.</li>
       <li><div class="drow"><div>$$X_F=KV_{test}$$</div><p class="why"><strong>귀환 회로망</strong> — $K$를 지나면 귀환 신호가 돼요.</p></div></li>
       <li><div class="drow"><div>$$0-KV_{test}=-KV_{test}$$</div><p class="why"><strong>비교부</strong> — 입력 0에서 귀환 신호를 빼요.</p></div></li>
-      <li><div class="drow"><div>$$V_N=-KA_1V_{test}$$</div><p class="why"><strong>전방 시스템</strong> — $A_1$을 지나 끊은 자리 $N$으로 돌아와요.</p></div></li>
+      <li><div class="drow"><div>$$V_N=-KA_1V_{test}$$</div><p class="why"><strong>전방 시스템</strong> — $A_1$을 지나 <span class="loc">㉡</span> 열린 단자 $N$에서 돌아온 전압을 읽어요.</p></div></li>
       <li><strong>부호와 정의</strong> — 한 바퀴 돈 비 $\frac{V_N}{V_{test}}=-KA_1$은 음수예요. 음귀환이라 비교부에서 한 번 빼기 때문이에요. <b>크기를 나타내려고 마이너스를 붙여 루프 이득으로 정의해요.</b> $$KA_1=-\frac{V_N}{V_{test}}$$</li>
     </ol>
     <p>$K=0$이면 $M$에 넣은 신호가 비교부로 돌아오지 않아 $V_N=0$이고, 루프 이득도 0이에요. 귀환이 없는 개루프예요.</p>
@@ -1348,9 +2308,103 @@
   </div>
   <div class="layer formal">
     <span class="layer-title">정확히 말하면</span>
-    <h4 class="sub">개루프 · 루프 · 폐루프 이득 비교</h4>
-    <p>먼저 작은 예에 적용해 봐요. $A_1=1000$, $K=0.1$이면 두 값은 다음과 같아요.</p>
+    <figure class="figure circuit">
+      <svg id="fig-circuit-compare-loop-test" viewBox="0 0 333 169" role="img" aria-label="입력을 접지하고 A1 출력 N과 귀환망 K의 입력 M 사이를 끊어요. M에 시험 전압을 걸고 N에서 돌아오는 전압을 재요.">
+        <path class="fig-ink" d="M27 59V42H59 M85 42H122 M178 42H235"/>
+        <path class="fig-accent" d="M268 105H193 M157 105H72V56"/>
+        <path class="fig-ink" d="M268 105V118 M268 142V153"/>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M18 59h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <g data-symbol="part">
+          <circle class="fig-ink" cx="72" cy="42" r="13"/>
+          <path class="fig-ink" d="M66 42h12 M72 36v12"/>
+          <text class="fig-text fig-math" x="48" y="33" text-anchor="middle" style="font-size:13px">+</text>
+          <text class="fig-text fig-math" x="55" y="80" text-anchor="middle" style="font-size:13px">−</text>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M193 88v34L157 105Z"/>
+          <text class="fig-text fig-math" x="181" y="110" text-anchor="middle" style="font-size:14px">K</text>
+        </g>
+        <g data-symbol="part">
+          <rect class="fig-ink" x="122" y="25" width="56" height="34" rx="3"/>
+          <text class="fig-text fig-math" x="150.0" y="47.0" text-anchor="middle" style="font-size:14px">A<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-accent" d="M72 56l-4 6m4 -6l4 6"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-accent" d="M193 105l6 -4m-6 4l6 4"/>
+        </g>
+        <circle class="fig-ink" cx="235" cy="42" r="3"/>
+        <circle class="fig-dot" data-node-color="blue" cx="268" cy="105" r="3.2"/>
+        <g data-symbol="part">
+          <circle class="fig-ink" cx="268" cy="130" r="12"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M259 153h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <text class="fig-text fig-math" x="233" y="24" text-anchor="middle" style="font-size:14px">N</text>
+        <text class="fig-text fig-math" x="267" y="87" text-anchor="middle" style="font-size:14px">M</text>
+        <text class="fig-text fig-math" x="279" y="66" text-anchor="middle" style="font-size:14px">V<tspan baseline-shift="sub" font-size="78%">N</tspan></text>
+        <g data-symbol="part">
+          <text class="fig-text fig-math" x="250" y="54" text-anchor="middle" style="font-size:12px">+</text>
+          <text class="fig-text fig-math" x="250" y="78" text-anchor="middle" style="font-size:12px">−</text>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M226 79h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <text class="fig-text fig-math" x="291" y="113" text-anchor="middle" style="font-size:12px">+</text>
+        <text class="fig-text fig-math" x="291" y="153" text-anchor="middle" style="font-size:12px">−</text>
+        <text class="fig-text fig-math" x="287" y="135" text-anchor="start" style="font-size:14px">V<tspan baseline-shift="sub" font-size="78%">test</tspan></text>
+        <text class="fig-text fig-loc" x="219" y="28" text-anchor="middle" style="font-size:17px">㉡</text>
+        <text class="fig-text fig-loc" x="206" y="91" text-anchor="middle" style="font-size:17px">㉠</text>
+      </svg>
+      <figcaption><span class="loc">㉠</span> 시험 전압을 넣는 $M$ · <span class="loc">㉡</span> 돌아온 전압을 재는 $N$ (Lec6 8쪽 오른쪽)</figcaption>
+    </figure>
+    <h4 class="sub">루프를 끊고 루프 이득 재기</h4>
+    <p>입력을 0으로 두고 <span class="loc">㉠</span> $M$에 시험 전압을 걸어 <span class="loc">㉡</span> $N$에서 돌아온 전압을 재요. $A_1=1000$, $K=0.1$인 예에 적용해요.</p>
     $$KA_1=0.1\times1000=100$$
+    <figure class="figure circuit">
+      <svg id="fig-circuit-compare-closed-loop" viewBox="0 0 328 158" role="img" aria-label="입력 X에서 귀환 신호 X F를 빼고 A1이 그 차이를 증폭해요. 출력 Y를 감지해 K를 거친 신호가 비교부로 돌아와요.">
+        <path class="fig-ink" d="M28 52H79 M105 52H137 M193 52H304"/>
+        <path class="fig-accent" d="M254 52V114H205 M169 114H92V65"/>
+        <g data-symbol="part">
+          <circle class="fig-ink" cx="92" cy="52" r="13"/>
+          <path class="fig-ink" d="M86 52h12 M92 46v12"/>
+          <text class="fig-text fig-math" x="68" y="43" text-anchor="middle" style="font-size:13px">+</text>
+          <text class="fig-text fig-math" x="75" y="90" text-anchor="middle" style="font-size:13px">−</text>
+        </g>
+        <g data-symbol="part">
+          <rect class="fig-ink" x="137" y="35" width="56" height="34" rx="3"/>
+          <text class="fig-text fig-math" x="165.0" y="57.0" text-anchor="middle" style="font-size:14px">A<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M205 97v34L169 114Z"/>
+          <text class="fig-text fig-math" x="193" y="119" text-anchor="middle" style="font-size:14px">K</text>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-accent" d="M301 52l-6 -4m6 4l-6 4"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-accent" d="M205 114l6 -4m-6 4l6 4"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-accent" d="M92 65l-4 6m4 -6l4 6"/>
+        </g>
+        <circle class="fig-ink" cx="25" cy="52" r="3"/>
+        <circle class="fig-dot" data-node-color="red" cx="254" cy="52" r="3.2"/>
+        <text class="fig-text fig-math" x="25" y="32" text-anchor="middle" style="font-size:14px">X</text>
+        <text class="fig-text fig-math" x="298" y="32" text-anchor="middle" style="font-size:14px">Y</text>
+        <text class="fig-text fig-math" x="128" y="95" text-anchor="middle" style="font-size:14px">X<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+        <text class="fig-text fig-loc" x="52" y="34" text-anchor="middle" style="font-size:17px">㉢</text>
+        <text class="fig-text fig-loc" x="300" y="82" text-anchor="middle" style="font-size:17px">㉣</text>
+        <text class="fig-text fig-math" x="120" y="35" text-anchor="middle" style="font-size:14px">E</text>
+      </svg>
+      <figcaption><span class="loc">㉢</span> 외부 입력 · <span class="loc">㉣</span> 외부 출력 (Lec6 6쪽)</figcaption>
+    </figure>
+    <h4 class="sub">루프를 닫고 폐루프 이득 재기</h4>
+    <p>루프가 이어진 상태에서 <span class="loc">㉢</span> 입력 $X$를 넣고 <span class="loc">㉣</span> 출력 $Y$를 읽어요.</p>
     $$\frac{Y}{X}=\frac{A_1}{1+KA_1}=\frac{1000}{101}\approx9.90$$
     <p><b>같은 $A_1$과 $K$로 만든 값인데 하나는 $100$, 하나는 약 $9.90$이에요.</b> 재는 대상이 다르기 때문이에요.</p>
     <p>여기에 귀환이 없을 때의 <a href="#s2-closed-loop">개루프 이득</a> $A_1=1000$까지 더하면 이름에 "루프"가 들어간 이득이 세 개예요. 한 표로 나란히 놓고 봐요.</p>
