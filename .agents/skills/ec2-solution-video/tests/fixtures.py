@@ -14,8 +14,9 @@ def _missing_browser():
 # EC2_REQUIRE_TOOLS=1 runs these tests anyway, so a missing tool fails instead of skipping.
 _browser_reason=None if os.environ.get('EC2_REQUIRE_TOOLS')=='1' else _missing_browser()
 needs_browser=unittest.skipIf(_browser_reason,_browser_reason or '')
-# These tests require two differently built screens to match byte for byte. On Windows, Chrome's CPU and GPU
-# rasterizers each leave a few antialiased edge pixels different, and none tried passes them all. macOS runs them.
+# These tests require two differently built screens to match byte for byte. On Windows a few antialiased edge pixels
+# differ: CPU raster fails four of them, GPU and SwiftShader fail the fifth, and WARP failed the fifth in 7 of 8 runs.
+# macOS runs them all.
 exact_pixels=unittest.skipIf(os.name=='nt','exact-pixel comparison depends on the Chrome rasterizer on Windows')
 class Sandbox(unittest.TestCase):
     def setUp(self):
