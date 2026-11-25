@@ -87,7 +87,7 @@ def _publish(batch,production,root):
             catalog.append({'problem_id':item['id'],'path':item['filename'],'size':target.stat().st_size,'sha256':file_hash(target),'run':item['run']})
         write(staging/'catalog.json',{'batch':str(batch),'complete':not errors,'files':catalog})
         install(staging/'catalog.json',batch/'catalog.json')
-        (staging/'README.md').write_text('\n'.join(f"- {c['problem_id']}: {c['path']} ({c['sha256']})" for c in catalog)+'\n',encoding='utf-8')
+        (staging/'README.md').write_text('\n'.join(f"- {c['problem_id']}: {c['path']} ({c['sha256']})" for c in catalog)+'\n',encoding='utf-8', newline='\n')
         install(staging/'README.md',batch/'README.md')
         if not errors:
             write(staging/'latest.json',{'batch':batch.relative_to(production).as_posix(),'files':catalog})

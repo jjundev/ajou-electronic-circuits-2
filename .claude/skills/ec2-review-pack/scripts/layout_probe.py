@@ -270,7 +270,7 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps({'status': 'error', 'reason': str(exc)[:240]}, ensure_ascii=False))
         return 2
     a.out.parent.mkdir(parents=True, exist_ok=True)
-    a.out.write_text(json.dumps(report, ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
+    a.out.write_text(json.dumps(report, ensure_ascii=False, indent=1) + '\n', encoding='utf-8', newline='\n')
     defects = sum(len(c['overflow']) + len(c['label_gaps']) for c in report['checks'])
     defects += len(report.get('circuits', []))
     print(json.dumps({'status': 'pass' if defects == 0 else 'defects', 'defects': defects, 'out': str(a.out)},

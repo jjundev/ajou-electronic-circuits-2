@@ -30,6 +30,23 @@ if ML_SKILL is None:
 
 sys.path.insert(0, str(SCRIPTS))
 
+# RUN folders and publication locks made by tests stay out of the user's ~/.cache.
+# A spawned process re-imports this module and must keep its parent's locks.
+if "EC2_CACHE_ROOT" not in os.environ:
+    _cache_temp = tempfile.TemporaryDirectory(prefix="ec2-test-cache-", ignore_cleanup_errors=True)
+    os.environ["EC2_CACHE_ROOT"] = _cache_temp.name
+
+
+def aliases_nfd(folder: Path) -> bool:
+    """Whether this filesystem opens an NFC name through its NFD spelling (APFS does, NTFS does not)."""
+    name = unicodedata.normalize("NFC", "전자회로 별칭")
+    probe = Path(folder) / name
+    probe.mkdir()
+    try:
+        return (Path(folder) / unicodedata.normalize("NFD", name)).is_dir()
+    finally:
+        probe.rmdir()
+
 
 def find_nfc(directory: Path, name: str) -> Path | None:
     """macOS NFD 파일명을 NFC 이름으로 찾는다."""

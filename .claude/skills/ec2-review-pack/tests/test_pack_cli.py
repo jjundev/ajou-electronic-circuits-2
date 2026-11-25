@@ -294,9 +294,10 @@ def test_init_allows_tmp_with_flag(tmp_path):
 
 def test_init_without_run_uses_cache_dir(tmp_path):
     repo = _repo_only(tmp_path)
-    p, d = call('init', '--repo', repo, '--range', '0909', '--allow-tmp', env=dict(os.environ, HOME=str(tmp_path)))
+    p, d = call('init', '--repo', repo, '--range', '0909', '--allow-tmp', env=dict(os.environ, EC2_CACHE_ROOT=str(tmp_path / '.cache')))
     assert p.returncode == 0, d
-    assert d['details_path'].startswith(str((tmp_path / '.cache/ec2-review-pack').resolve()) + '/0909-')
+    run = Path(d['details_path']).parent
+    assert run.parent == (tmp_path / '.cache/ec2-review-pack').resolve() and run.name.startswith('0909-')
     assert Path(d['details_path']).is_file()
 
 

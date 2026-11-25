@@ -110,7 +110,7 @@ class SpiceIoTests(unittest.TestCase):
 class SpiceRunTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        subprocess.run(["python3", "handcalc.py"], cwd=SIM, check=True, capture_output=True)
+        subprocess.run([sys.executable, "handcalc.py"], cwd=SIM, check=True, capture_output=True)
         subprocess.run(["ngspice", "-b", "cascode.cir"], cwd=SIM, check=True, capture_output=True)
         import spice_io as s
         cls.op = (SIM / "op.txt").read_text()
@@ -166,7 +166,7 @@ class PolemapTests(unittest.TestCase):
 
     @unittest.skipUnless(shutil.which("ngspice"), "ngspice not installed")
     def test_real_map_x_is_dominant(self):
-        subprocess.run(["python3", "polemap.py"], cwd=SIM, check=True, capture_output=True)
+        subprocess.run([sys.executable, "polemap.py"], cwd=SIM, check=True, capture_output=True)
         pm = json.loads((SIM / "polemap.json").read_text())
         self.assertEqual(set(pm), {"X", "Y", "out"})
         self.assertEqual(pm["X"]["index"], 0)
@@ -259,7 +259,7 @@ class PostTests(unittest.TestCase):
 
     @unittest.skipUnless(shutil.which("ngspice"), "ngspice not installed")
     def test_outputs_written(self):
-        subprocess.run(["python3", "post.py"], cwd=SIM, check=True, capture_output=True)
+        subprocess.run([sys.executable, "post.py"], cwd=SIM, check=True, capture_output=True)
         figs = SIM.parent / "report/figs"
         for f in ("02_bode_design.png", "04_ac_bode.png"):
             self.assertTrue((figs / f).stat().st_size > 10_000)
@@ -269,7 +269,7 @@ class PostTests(unittest.TestCase):
 
 class AscTests(unittest.TestCase):
     def test_asc_encoding_and_content(self):
-        subprocess.run(["python3", "make_asc.py"], cwd=SIM / "ltspice", check=True, capture_output=True)
+        subprocess.run([sys.executable, "make_asc.py"], cwd=SIM / "ltspice", check=True, capture_output=True)
         raw = (SIM / "ltspice/cascode.asc").read_bytes()
         self.assertFalse(raw.startswith(b"\xff\xfe"))           # BOM 금지
         txt = raw.decode("utf-16-le")
@@ -278,7 +278,7 @@ class AscTests(unittest.TestCase):
 
     def test_asc_mos_label_short_junction_params_hidden(self):
         # 화면에 보이는 Value2는 l, w만 (길면 RL 값과 .op 라벨을 덮는다). ad/as/pd/ps는 SpiceLine으로
-        subprocess.run(["python3", "make_asc.py"], cwd=SIM / "ltspice", check=True, capture_output=True)
+        subprocess.run([sys.executable, "make_asc.py"], cwd=SIM / "ltspice", check=True, capture_output=True)
         txt = (SIM / "ltspice/cascode.asc").read_bytes().decode("utf-16-le")
         v2 = [l for l in txt.splitlines() if l.startswith("SYMATTR Value2")]
         sl = [l for l in txt.splitlines() if l.startswith("SYMATTR SpiceLine")]

@@ -218,7 +218,7 @@ def record(data, answers, previous, round_, *, packet_dir=None, author=None, sol
         metadata = saved/'submission.json'
         digests = dict(issued_sha256=sha(archive/'issued.json'), answers_sha256=sha(saved/'answers.md'))
         write(metadata, dict(author=author, solver=solver, round=round_, previous=predecessors, **digests))
-        proof = dict(proof=str((saved/'answers.md').relative_to(previous.parent)), submission_sha256=sha(metadata), **digests)
+        proof = dict(proof=(saved/'answers.md').relative_to(previous.parent).as_posix(), submission_sha256=sha(metadata), **digests)
         for row in responses.values():
             row.update(proof)
     return {**prior, **responses}

@@ -8,7 +8,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-import fitz
+import pymupdf as fitz
 import yaml
 
 from check_md import ID_RE, KIND_BY_PREFIX, md_files, split_frontmatter
@@ -192,7 +192,7 @@ def check_recrop(ch_dir):
             tmp_ch = Path(t) / ch_dir.name
             (tmp_ch / "figures").mkdir(parents=True)
             (tmp_ch / "figures" / "figures.yaml").write_text(
-                yaml.safe_dump(spec, allow_unicode=True), encoding="utf-8")
+                yaml.safe_dump(spec, allow_unicode=True), encoding="utf-8", newline="\n")
             for out in crop_all(tmp_ch):
                 current = fig_dir / out.name
                 if not current.exists():

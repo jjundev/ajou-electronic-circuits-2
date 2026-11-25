@@ -157,6 +157,7 @@ class Ec2SttTests(unittest.TestCase):
                 prefix="1002 전회2",
                 out_file=str(out_file),
                 keep_parts=True,
+                group_parts=1,
             )
             self.assertTrue(out_file.is_file())
             content = out_file.read_text(encoding="utf-8")

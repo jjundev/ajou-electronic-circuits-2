@@ -94,10 +94,10 @@ def check_sources(run,entry,timeout=300):
             p=run/'verification'/('source-check-'+part['id']+'.txt'); p.parent.mkdir(parents=True,exist_ok=True)
             try: r=command(['node',entry,'check',str(stage),'--json','--at-transitions'],stage,timeout=timeout)
             except subprocess.TimeoutExpired:
-                p.write_text('Source check timed out; not verified.',encoding='utf-8')
+                p.write_text('Source check timed out; not verified.',encoding='utf-8', newline='\n')
                 evidence.append(p.relative_to(run).as_posix()); errors.append('timeout: '+part['id']); timed_out=True
                 continue
-            p.write_text(r.stdout+'\n'+r.stderr,encoding='utf-8'); evidence.append(p.relative_to(run).as_posix())
+            p.write_text(r.stdout+'\n'+r.stderr,encoding='utf-8', newline='\n'); evidence.append(p.relative_to(run).as_posix())
             if r.returncode: errors.append('HyperFrames source check: '+part['id'])
     return {'status':'unverified' if timed_out else ('failed' if errors else 'passed'),'evidence':evidence,'errors':errors}
 

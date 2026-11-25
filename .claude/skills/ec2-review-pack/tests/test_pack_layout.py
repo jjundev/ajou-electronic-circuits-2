@@ -15,7 +15,8 @@ NOTES = REPO / "복습노트"
 def stray_entries(notes_dir):
     """팩 폴더 맨 위에서 규칙에 맞지 않는 항목(`<range>/<이름>`, NFC) 목록."""
     out = []
-    for pack in sorted(p for p in notes_dir.iterdir() if p.is_dir()):
+    # 맨 위 .assets/는 팩이 아니라 팩들이 함께 쓰는 vendor 폴더다.
+    for pack in sorted(p for p in notes_dir.iterdir() if p.is_dir() and p.name != manifest.BUNDLE):
         for entry in sorted(pack.iterdir()):
             name = unicodedata.normalize("NFC", entry.name)
             if name == ".DS_Store":

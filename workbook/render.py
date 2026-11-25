@@ -117,7 +117,7 @@ def _render_html(html_path, pdf_path=None, timeout_ms=120_000, *, preflight=Fals
                         proof = dict(schema_version=1, pdf_sha256=hashlib.sha256(Path(pdf_path).read_bytes()).hexdigest(),
                                      count=count, browser_version=browser_version,
                                      pages=page_order if len(page_order) == count else [])
-                        Path(order_path).write_text(json.dumps(proof), encoding='utf-8')
+                        Path(order_path).write_text(json.dumps(proof), encoding='utf-8', newline='\n')
             finally:
                 browser.close()
     except PlaywrightError as e:
@@ -185,7 +185,7 @@ def render_preflight(output_dir: Path) -> dict:
             svg.write_text(
                 '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 80">'
                 '<path d="M10 40h140 M80 10v60" stroke="black" stroke-width="4"/></svg>',
-                encoding="utf-8",
+                encoding="utf-8", newline="\n"
             )
             data = {
                 "meta": {"title": "복습팩 렌더 사전 검사", "total": 1},
@@ -196,14 +196,14 @@ def render_preflight(output_dir: Path) -> dict:
                     "figures": [{"src": svg.name, "w_mm": 40, "h_mm": 20}],
                 }],
             }
-            html.write_text(inject(load_template("problems", "video-16x9"), data), encoding="utf-8")
+            html.write_text(inject(load_template("problems", "video-16x9"), data), encoding="utf-8", newline="\n")
             candidate = folder / pdf.name
             evidence = _render_html(html, candidate, preflight=True)
             result["browser_version"] = evidence["browser_version"]
             if evidence["overflow"]:
                 raise RenderError("사전 검사 템플릿에 페이지 넘침이 있음")
             stage = "pdf_failed"
-            import fitz
+            import pymupdf as fitz
             with fitz.open(candidate) as document:
                 result["page_count"] = document.page_count
                 if not document.is_pdf or document.page_count != 1:

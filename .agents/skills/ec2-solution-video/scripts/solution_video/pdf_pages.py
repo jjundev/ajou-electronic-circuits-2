@@ -15,7 +15,7 @@ def _painted(root):
     walk(root); return out
 
 def export_page(pdf,page_index,dest):
-    try: import fitz
+    try: import pymupdf as fitz
     except ImportError: raise ExtractionError('PyMuPDF missing in this Python; use a configured interpreter') from None
     dest=Path(dest); dest.mkdir(parents=True,exist_ok=True)
     with fitz.open(pdf) as doc:
@@ -23,7 +23,7 @@ def export_page(pdf,page_index,dest):
         if 'data-text=' not in svg: raise ExtractionError('scan-only or no extractable glyphs')
         pg.get_pixmap(matrix=fitz.Matrix(2,2)).save(dest/'native.png')
         metadata={'source_sha256':file_hash(pdf),'page_index':page_index,'width_pt':pg.rect.width,'height_pt':pg.rect.height,'pymupdf':fitz.VersionBind}
-    original=dest/'original.svg'; original.write_text(svg,encoding='utf-8')
+    original=dest/'original.svg'; original.write_text(svg,encoding='utf-8', newline='\n')
     items=browser(['--mode','inventory','--svg',str(original.resolve())]); root=ET.fromstring(svg); nodes=_painted(root)
     if len(items)!=len(nodes): raise ExtractionError('SVG paint inventory differs')
     glyphs=[]; shapes=[]; images=[]
@@ -40,7 +40,7 @@ def export_page(pdf,page_index,dest):
             w,h=b[2]-b[0],b[3]-b[1]
             kind='answer_box' if w<=3 and h>=15 else 'fraction_bar' if h<=2 and w>3 else 'radical_bar' if w<=2 and h>3 else 'step_badge' if 6<=w<=20 and 6<=h<=20 else 'bullet' if w<=5 and h<=5 else 'answer_box' if w>50 and 15<=h<=180 else 'unclassified'
             shapes.append(dict(id=f's{i:05d}',bbox=b,svg_ids=[item['id']],kind=kind,paint_order=i))
-    candidate=dest/'candidate.svg'; candidate.write_text(ET.tostring(root,encoding='unicode'),encoding='utf-8')
+    candidate=dest/'candidate.svg'; candidate.write_text(ET.tostring(root,encoding='unicode'),encoding='utf-8', newline='\n')
     result=dict(original_svg=str(original.resolve()),animated_svg=str(candidate.resolve()),reference_png=str((dest/'native.png').resolve()),glyphs=glyphs,shapes=shapes,map=None,images=images,metadata=metadata)
     write(dest/'candidates.json',result); return result
 
@@ -66,7 +66,7 @@ def extract_layers(page,mapping):
     for i in selected:
         for sid in all_items[i]['svg_ids']:
             n=dom[sid]; n.set('data-reveal',i); n.set('style',n.get('style','')+';opacity:0')
-    dest=Path(page['original_svg']).parent/'animated.svg'; dest.write_text(ET.tostring(root,encoding='unicode'),encoding='utf-8'); result['animated_svg']=str(dest.resolve()); return result
+    dest=Path(page['original_svg']).parent/'animated.svg'; dest.write_text(ET.tostring(root,encoding='unicode'),encoding='utf-8', newline='\n'); result['animated_svg']=str(dest.resolve()); return result
 
 def compare_completed(page,evidence):
     from PIL import Image,ImageChops

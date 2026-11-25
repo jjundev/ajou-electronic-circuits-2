@@ -125,12 +125,12 @@ def build_one(sel, args):
         args.build_dir.mkdir(parents=True, exist_ok=True)
         if args.layout == 'video-16x9' and not args.json_only:
             baseline = args.build_dir / f"{stem}-typography.html"
-            baseline.write_text(inject(load_template(mode), data), encoding="utf-8")
+            baseline.write_text(inject(load_template(mode), data), encoding="utf-8", newline="\n")
             data['meta']['typography'] = measure_typography(baseline)
         (args.build_dir / f"{stem}.json").write_text(
-            json.dumps(data, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+            json.dumps(data, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
         html_path = args.build_dir / f"{stem}.html"
-        html_path.write_text(inject(load_template(mode, args.layout), data), encoding="utf-8")
+        html_path.write_text(inject(load_template(mode, args.layout), data), encoding="utf-8", newline="\n")
         print(html_path)
         if args.json_only:
             continue

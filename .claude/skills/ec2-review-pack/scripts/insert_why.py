@@ -85,7 +85,7 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     # 쓰다가 멈춰도 노트가 잘리지 않게 같은 폴더의 임시 파일에 쓴 뒤 바꿔 끼운다.
     fd, tmp = tempfile.mkstemp(dir=note.parent, prefix=".insert_why-", suffix=".html")
-    with os.fdopen(fd, "w", encoding="utf-8") as f:
+    with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as f:
         f.write(out)
     os.replace(tmp, note)
     print(note)

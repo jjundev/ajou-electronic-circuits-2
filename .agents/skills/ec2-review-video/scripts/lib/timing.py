@@ -36,5 +36,5 @@ def write_subtitles(timeline,run):
     run=Path(run)
     text='\n'.join(f"{i}\n{_stamp(s['start_sample'])} --> {_stamp(s['end_sample'])}\n{s['text']}\n"
                    for i,s in enumerate(timeline['segments'],1))
-    (run/'narration.srt').write_text(text,encoding='utf-8')
-    (run/'chapters.txt').write_text('\n'.join(_stamp(s['start_sample'],'.')+' '+s['title'] for s in timeline['scenes']),encoding='utf-8')
+    (run/'narration.srt').write_text(text,encoding='utf-8', newline='\n')
+    (run/'chapters.txt').write_text('\n'.join(_stamp(s['start_sample'],'.')+' '+s['title'] for s in timeline['scenes']),encoding='utf-8', newline='\n')

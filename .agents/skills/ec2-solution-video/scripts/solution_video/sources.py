@@ -12,7 +12,7 @@ def _dates(selector):
     return dates[0],dates[-1]
 def _norm(s): return unicodedata.normalize('NFC',s)
 def _pages(pdf,ids):
-    import fitz
+    import pymupdf as fitz
     found={}
     with fitz.open(pdf) as doc:
         for idx,pg in enumerate(doc):
@@ -44,7 +44,7 @@ def _pages(pdf,ids):
     return found
 
 def _conditions(ref):
-    import fitz
+    import pymupdf as fitz
     with fitz.open(ref['snapshot']) as d:
         p=d[ref['page_index']]
         # The gray condition panel can widen during fitting; use its actual PDF rectangle.
@@ -54,7 +54,7 @@ def _conditions(ref):
         text=p.get_text(clip=clip)
     return re.sub(r'\s+','',_norm(text))
 def _answer_hash(ref):
-    import fitz
+    import pymupdf as fitz
     with fitz.open(ref['snapshot']) as d:
         # Workbook content band excludes the fixed heading/pagination/footer only.
         pg=d[ref['page_index']];layout=page_layout(pg.rect.width,pg.rect.height)
@@ -131,5 +131,5 @@ def freeze_sources(pairs,batch):
             if source['md_snapshot']: source['md_snapshot']=freeze(source['md_snapshot'])
         for role in ['problem','answer']: p[role]['snapshot']=freeze(p[role]['snapshot'])
         if p['md_snapshot']: p['md_snapshot']=freeze(p['md_snapshot'])
-    import fitz,sys
+    import pymupdf as fitz,sys
     write(batch/'source/inputs.json',{'files':provenance,'pairs':result,'tools':{'python':sys.version,'pymupdf':fitz.VersionBind}}); return result

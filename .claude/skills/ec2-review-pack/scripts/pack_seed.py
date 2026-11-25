@@ -6,6 +6,8 @@ depends on an action and is redone through the normal dependency chain.
 """
 from __future__ import annotations
 
+import hashlib
+import json
 from pathlib import Path
 import re
 import shutil
@@ -15,6 +17,7 @@ import pack_flow as f
 # Never carried: the child run has its own receipts, and PDF review follows actions.
 _NEVER = {'child-coordinator', 'pdf-qa'}
 _TEXT = {'.json', '.md', '.txt', '.html', '.svg', '.csv', '.tex'}
+_JSON_STRING = re.compile(r'"(?:[^"\\]|\\.)*"')
 
 
 def _seedable(old: dict) -> None:
@@ -53,6 +56,39 @@ class _Copier:
         if isinstance(value, dict): return {k: self.value(v) for k, v in value.items()}
         return value
 
+    def json_text(self, text: str) -> str:
+        """Rewrite decoded JSON strings: a Windows path is escaped inside the file."""
+        json.loads(text)
+
+        def one(match):
+            raw = match.group()
+            value = json.loads(raw)
+            changed = self.path(value)
+            return raw if changed == value else json.dumps(changed, ensure_ascii=raw.isascii())
+        return _JSON_STRING.sub(one, text)
+
+    def text(self, text: str, suffix: str) -> str:
+        if suffix == '.json':
+            try: return self.json_text(text)
+            except ValueError: pass
+        return self.path(text)
+
+    def contents(self, source: Path) -> bytes:
+        """The bytes this copier writes for source."""
+        data = source.read_bytes()
+        if source.suffix.lower() in _TEXT:
+            try:
+                data = self.text(data.decode('utf-8'), source.suffix.lower()).encode('utf-8')
+            except UnicodeDecodeError: pass
+        return data
+
+    def same(self, source: Path, target: Path, digest: str) -> bool:
+        """target still holds the receipt-bound source, modulo RUN paths."""
+        if not target.is_file(): return False
+        current = f._sha(target)
+        return current == digest or (source.is_file() and f._sha(source) == digest
+                                     and current == hashlib.sha256(self.contents(source)).hexdigest())
+
     def file(self, source: Path, expected: str | None = None, *, keep_existing: bool = False) -> dict:
         """keep_existing: a file the new RUN already wrote stays, and the record binds it."""
         source = source.resolve()
@@ -64,12 +100,7 @@ class _Copier:
         if keep_existing and target.is_file():
             return {'path': str(target), 'sha256': f._sha(target)}
         target.parent.mkdir(parents=True, exist_ok=True)
-        data = source.read_bytes()
-        if source.suffix.lower() in _TEXT:
-            try:
-                data = self.pattern.sub(lambda _: str(self.new), data.decode('utf-8')).encode('utf-8')
-            except UnicodeDecodeError: pass
-        target.write_bytes(data)
+        target.write_bytes(self.contents(source))
         record = {'path': str(target), 'sha256': f._sha(target)}
         self.done[str(source)] = record
         return record
@@ -201,14 +232,13 @@ def _deferred_mismatch(copier: _Copier, prior: dict, task: dict) -> str | None:
         if not source.is_relative_to(old_run): continue
         relative = source.relative_to(old_run)
         if relative.as_posix() == 'manifest.json' or relative.parts[0] == 'briefs': continue
-        target = copier.new / relative
-        if not target.is_file() or f._sha(target) != item['sha256']:
+        if not copier.same(source, copier.new / relative, item['sha256']):
             return 'upstream input changed: ' + relative.as_posix()
     for item in (prior['receipt'] or {}).get('outputs', []):
         source = Path(item['path']).resolve()
         if not source.is_relative_to(old_run): continue
         target = copier.new / source.relative_to(old_run)
-        if target.exists() and f._sha(target) != item['sha256']: return 'output already rewritten in new RUN'
+        if target.exists() and not copier.same(source, target, item['sha256']): return 'output already rewritten in new RUN'
     return None
 
 

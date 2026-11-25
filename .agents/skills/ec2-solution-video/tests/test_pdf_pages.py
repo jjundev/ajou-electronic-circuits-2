@@ -2,11 +2,13 @@ from fixtures import *
 from solution_video.pdf_pages import export_page,extract_layers,compare_completed
 from solution_video.contracts import ExtractionError
 class PDFTests(Sandbox):
+    @needs_browser
     def test_completed_svg_matches_original(self):
         page=export_page(math_pdf(self.run/'a.pdf'),0,self.run/'page')
         layers=extract_layers(page,mapping(page))
         r=compare_completed(layers,self.run/'evidence')
         self.assertEqual([r[k] for k in ('pixel_diff','non_target_diff','hidden_leaks')],[0,0,0])
+    @needs_browser
     def test_glyph_clip_and_math_primitives(self):
         page=export_page(math_pdf(self.run/'a.pdf'),0,self.run/'page')
         m=mapping(page); layers=extract_layers(page,m)
@@ -15,11 +17,12 @@ class PDFTests(Sandbox):
         m['steps'][0]['glyph_ids'].append(page['glyphs'][0]['id'])
         with self.assertRaises(ExtractionError): extract_layers(page,m)
     def test_scan_rejected(self):
-        import fitz
+        import pymupdf as fitz
         d=fitz.open(); d.new_page(); d.save(self.run/'scan.pdf')
         with self.assertRaises(ExtractionError): export_page(self.run/'scan.pdf',0,self.run/'p')
+    @needs_browser
     def test_shared_defs_clipped_overlapping_subscript(self):
-        import fitz
+        import pymupdf as fitz
         pdf=self.run/'clip.pdf';d=fitz.open();p=d.new_page(width=400,height=300)
         p.insert_text((110,120),'xx',fontsize=18);p.insert_text((115,124),'1',fontsize=8)
         for xref in p.get_contents():

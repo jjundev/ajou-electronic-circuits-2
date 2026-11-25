@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-import fitz
+import pymupdf as fitz
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from assemble import build_data, ids_selection  # noqa: E402

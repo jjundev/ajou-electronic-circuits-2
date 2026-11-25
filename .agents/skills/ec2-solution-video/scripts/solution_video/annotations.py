@@ -89,7 +89,7 @@ def _validate(focus,annotations,manifest,layers):
    if not isinstance(runs,list) or not runs:fail(name,'label runs required')
    if font is None:
     if not FONT.is_file():fail(name,'local label font missing')
-    import fitz
+    import pymupdf as fitz
     font=fitz.Font(fontfile=str(FONT))
    boxes=[]
    for run in runs:
@@ -134,7 +134,7 @@ def load_teaching(run,manifest,layers):
 
 def compile_annotations(plan,layers,dest):
  """Generate trusted paths and font outlines only; inventory measures their real bounds."""
- import fitz,xml.etree.ElementTree as ET
+ import pymupdf as fitz,xml.etree.ElementTree as ET
  from .util import browser,file_hash,write
  from .composition import _prefix
  ns='http://www.w3.org/2000/svg';ET.register_namespace('',ns);ET.register_namespace('xlink','http://www.w3.org/1999/xlink')
@@ -152,7 +152,7 @@ def compile_annotations(plan,layers,dest):
      if not c.isspace():pg.insert_text((x,y),c,fontname='teaching',fontsize=size)
      units.append(dict(text=c,origin=[x,y],font_size_pt=size,svg_ids=[],bbox=[x,y,x,y]));x+=font.text_length(c,fontsize=size)
    svg=_prefix(pg.get_svg_image(text_as_path=True),'annotation-'+ident+'-');doc.close()
-   sub=ET.fromstring(svg);filename=dest/(ident+'.svg');filename.write_text(ET.tostring(sub,encoding='unicode'))
+   sub=ET.fromstring(svg);filename=dest/(ident+'.svg');filename.write_text(ET.tostring(sub,encoding='unicode'),encoding='utf-8', newline='\n')
    inventory=browser(['--mode','inventory','--svg',str(filename.resolve())]);paint=[n for n in sub.iter() if n.tag.split('}')[-1]=='use' and 'data-text' in n.attrib];inv=[e for e in inventory if e['text'] is not None];chars=[u for u in units if not u['text'].isspace()]
    if len(inv)!=len(chars) or len(paint)!=len(chars):fail(ident,'font outline inventory differs from label')
    for u,n,e in zip(chars,paint,inv):
@@ -177,8 +177,8 @@ def compile_annotations(plan,layers,dest):
      d+=f' L {left[0]} {left[1]} L {b[0]} {b[1]} L {right[0]} {right[1]}'
    path=ET.SubElement(node,'{'+ns+'}path',id='annotation-'+ident+'-path',d=d,fill='none',stroke=i['color'],**{'stroke-width':str(i['stroke_width_px']),'vector-effect':'non-scaling-stroke','stroke-linecap':'round','stroke-linejoin':'round'})
    i.update(path=d,path_id=path.get('id'),start_point=start,body_height=None)
-   temp=dest/(ident+'.svg');temp.write_text(ET.tostring(root,encoding='unicode'))
+   temp=dest/(ident+'.svg');temp.write_text(ET.tostring(root,encoding='unicode'),encoding='utf-8', newline='\n')
    inv=browser(['--mode','inventory','--svg',str(temp.resolve())]);entry=inv[-1];boxes=[entry['bbox']]
   i['bbox']=[min(b[0] for b in boxes),min(b[1] for b in boxes),max(b[2] for b in boxes),max(b[3] for b in boxes)];check_box(i['bbox'],layers,ident);items.append(i)
- path=dest/'annotations.svg';path.write_text(ET.tostring(root,encoding='unicode'))
+ path=dest/'annotations.svg';path.write_text(ET.tostring(root,encoding='unicode'),encoding='utf-8', newline='\n')
  result=dict(items=items,svg=str(path.resolve()),font_sha256=file_hash(FONT) if font_used else None);write(dest/'compiled.json',result);return result

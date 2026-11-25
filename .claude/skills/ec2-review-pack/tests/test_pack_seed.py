@@ -37,7 +37,7 @@ def test_carries_accepted_work_and_redoes_named_task(tmp_path, legacy):
     assert [t['id'] for t in nxt['tasks']] == ['author-s1']
     brief = json.loads(Path(state['tasks']['author-s1']['brief']).read_text(encoding='utf-8'))
     assert brief['request_paths'][0] == str(new / 'requests/seed-redo/redo.md')
-    assert any('seed-previous' in p and p.endswith('sections/s1.html') for p in brief['request_paths'])
+    assert any('seed-previous' in p and Path(p).as_posix().endswith('sections/s1.html') for p in brief['request_paths'])
     assert all(Path(p).is_relative_to(new) for p in [*brief['allowed_outputs'], *brief['allowed_output_roots']])
     for task in state['tasks'].values():
         if task.get('carried'):
@@ -99,6 +99,21 @@ def test_copier_rewrites_embedded_run_paths(tmp_path):
     data = json.loads(Path(record['path']).read_text(encoding='utf-8'))
     assert data == {'out': str(new / 'sections/s0.html'), 'other': str(old) + '0/x'}
     assert record['sha256'] == flow._sha(Path(record['path']))
+
+
+@pytest.mark.parametrize('ascii_', [True, False])
+def test_copier_rewrites_paths_however_json_escapes_them(tmp_path, ascii_):
+    old, new = tmp_path / 'run 한글', tmp_path / 'run 이어받기'
+    old.mkdir(); new.mkdir()
+    source = old / 'report.json'
+    source.write_text(json.dumps({'path': str(old / 'a.md')}, ensure_ascii=ascii_, indent=3), encoding='utf-8', newline='')
+    copier = _Copier(old, new)
+    digest = flow._sha(source)
+    target = Path(copier.file(source, digest)['path'])
+    assert json.loads(target.read_text(encoding='utf-8')) == {'path': str(new / 'a.md')}
+    assert copier.same(source, target, digest)
+    target.write_text('{}', encoding='utf-8')
+    assert not copier.same(source, target, digest)
 
 
 def _seed_redo_scope_final(tmp_path):

@@ -53,7 +53,7 @@ def burn_subtitles(video,srt,destination):
     if light: raise ValueError(f'source video is not dark mode at {light}s; re-render scenes via render_parts')
     work=destination.parent/(destination.stem+'.subwork'); work.mkdir(parents=True,exist_ok=True)
     try:
-        (work/'subs.srt').write_text(split_srt(srt),encoding='utf-8')
+        (work/'subs.srt').write_text(split_srt(srt),encoding='utf-8', newline='\n')
         fonts=work/'fonts'; fonts.mkdir(exist_ok=True)
         for ttf in FONT_DIR.glob('*.ttf'): shutil.copy2(ttf,fonts/ttf.name)
         pending=destination.with_name(destination.stem+'.pending.mp4')

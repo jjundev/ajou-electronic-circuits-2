@@ -121,7 +121,7 @@ def stage_problem_index(paths: PackPaths, manifest: dict, selection: Path, title
     for relative, value in records.items():
         target = paths.work_file(relative)
         target.parent.mkdir(parents=True, exist_ok=True)
-        with target.open('x', encoding='utf-8') as stream:
+        with target.open('x', encoding='utf-8', newline='\n') as stream:
             stream.write(value)
         outputs[target.name] = target
     return outputs
@@ -136,7 +136,7 @@ def assemble(run_dir: Path | str, out_dir: Path | str, *, repo: Path | None = No
             raise AssembleError('후보 note 출력 폴더 불일치')
         html = build_note(m, run_dir)
         target.parent.mkdir(parents=True, exist_ok=True)
-        with target.open('x', encoding='utf-8') as stream:
+        with target.open('x', encoding='utf-8', newline='\n') as stream:
             stream.write(html)
         return target
     selection_path = run_dir / 'selection.json'
@@ -144,20 +144,20 @@ def assemble(run_dir: Path | str, out_dir: Path | str, *, repo: Path | None = No
     note_html = build_note(m, run_dir)  # 조각이 하나라도 없으면 아무것도 쓰지 않는다
     out_dir.mkdir(parents=True, exist_ok=True)
     note_path = out_dir / manifest_mod.note_name(m)
-    note_path.write_text(note_html, encoding="utf-8")
+    note_path.write_text(note_html, encoding="utf-8", newline="\n")
     listing = out_dir / manifest_mod.BUNDLE / manifest_mod.PROBLEMS_TXT
     if m["problems"]:
         listing.parent.mkdir(exist_ok=True)
-        listing.write_text(problems_txt(m), encoding="utf-8")
+        listing.write_text(problems_txt(m), encoding="utf-8", newline="\n")
         if selection_text is not None:
-            (listing.parent / 'selection.json').write_text(selection_text, encoding='utf-8')
+            (listing.parent / 'selection.json').write_text(selection_text, encoding='utf-8', newline='\n')
     elif listing.exists():
         listing.unlink()
     if selected is not None:
         pack = out_dir / '.pack'
         pack.mkdir(exist_ok=True)
         (pack / 'selection-review.json').write_text(
-            json.dumps(selected['review'], ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+            json.dumps(selected['review'], ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
     return note_path
 
 

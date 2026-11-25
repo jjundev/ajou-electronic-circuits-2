@@ -6,7 +6,7 @@ import unittest
 from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 
-import fitz
+import pymupdf as fitz
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from source_pages import SourceError, main, pending, read_ledger, render, source_pdf  # noqa: E402

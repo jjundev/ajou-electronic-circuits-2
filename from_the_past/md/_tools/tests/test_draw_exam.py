@@ -5,7 +5,7 @@ import unittest
 from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 
-import fitz
+import pymupdf as fitz
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from draw_exam import FONT_SIZE, draw_all, main, png_size, printed_font_pt  # noqa: E402

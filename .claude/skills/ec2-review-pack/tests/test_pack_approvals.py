@@ -332,6 +332,7 @@ def test_real_browser_claim_loses_one_topic_view_and_rejects_cross_attempt_scree
     detail.write_bytes(original_detail)
     lost = 'note-visual:why-topic:mobile-dark'
     item, = [a for a in accepted['approval_ledger'] if a['target']==lost]
+    Path(item['screen']).chmod(0o644)  # Windows cannot unlink a read-only file
     Path(item['screen']).unlink()
     assert 'browser-qa' in flow.next_work(run,slots=8)['dispatch']
     replacement,d,s = compact(run,'browser-qa','another browser fixture')

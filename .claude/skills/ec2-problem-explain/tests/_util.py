@@ -1,11 +1,19 @@
 """Shared test helpers: puts scripts/ on sys.path and builds a minimal temp repo."""
+import os
 import shutil
 import sys
+import tempfile
 import unicodedata
 from pathlib import Path
 
 SKILL = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(SKILL / 'scripts'))
+
+# RUN folders and publication locks made by tests stay out of the user's ~/.cache.
+# A spawned process re-imports this module and must keep its parent's locks.
+if "EC2_CACHE_ROOT" not in os.environ:
+    _cache_temp = tempfile.TemporaryDirectory(prefix="ec2-test-cache-", ignore_cleanup_errors=True)
+    os.environ["EC2_CACHE_ROOT"] = _cache_temp.name
 
 from epe_shared import (REPO, load_problem, problem_figures, textbook_figure_filename,  # noqa: E402
                         exam_figure_filename, TEXTBOOK_ID_RE, EXAM_ID_RE, KIND_DIR)

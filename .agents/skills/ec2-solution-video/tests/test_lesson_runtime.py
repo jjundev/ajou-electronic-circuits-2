@@ -8,6 +8,7 @@ from solution_video.annotations import load_teaching
 class LessonRuntimeTests(Sandbox):
  pencil_fixture=test_composition.CompositionTests.pencil_fixture
  teaching_fixture=test_composition.CompositionTests.teaching_fixture
+ @needs_browser
  def test_lesson_focus_mutant(self):
   self.teaching_fixture('typing');m=read(self.run/'source/manifest.json');l=read(self.run/'layers/layers.json');t=read(self.run/'source/timeline.json');p=load_teaching(self.run,m,l)
   row=dict(step_id='solution',mode='circuit',reason_segment_ids=['r'],check_segment_ids=[],region_ids=['circuit'],annotation_ids=['arrow'])
@@ -23,6 +24,7 @@ class LessonRuntimeTests(Sandbox):
    with self.subTest(change=change):self.assertFalse(browser(args)['lesson_flow'])
   entry.write_text(base)
 
+ @needs_browser
  def test_horizontal_underline_counts_as_painted_lesson_evidence(self):
   self.teaching_fixture('typing');m=read(self.run/'source/manifest.json');l=read(self.run/'layers/layers.json');a=read(self.run/'source/annotations.json')
   a['items'][0].update(kind='underline',stroke_width_px=8,geometry={'from':[60,40],'to':[80,40]});write(self.run/'source/annotations.json',a)

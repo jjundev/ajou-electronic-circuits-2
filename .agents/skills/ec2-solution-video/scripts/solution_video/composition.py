@@ -114,7 +114,7 @@ def _prefix(svg,prefix):
     return svg
 
 def assemble(pair,layers,manifest,timeline,run,runtime):
-    import fitz
+    import pymupdf as fitz
     run=Path(run).resolve(); runtime=Path(runtime)
     if runtime.is_dir(): runtime=runtime/'gsap.min.js'
     if not runtime.is_file(): raise InputError('local GSAP runtime missing')
@@ -151,7 +151,7 @@ def assemble(pair,layers,manifest,timeline,run,runtime):
     contents+=('<script src="writing.js"></script><script src="pencil.js"></script><script>window.pencilMeta='+encode(asset_meta)+';</script>' if has_pen else '')
     if compiled:contents+='<script src="annotations.js"></script><script>window.solutionAnnotationsData='+encode(compiled)+';</script>'
     contents+='<script>window.solutionLayout='+encode(layout)+';window.solutionTimeline='+encode(t)+';window.solutionGlyphs='+encode({g['id']:g for g in layers['glyphs']+(layers['shapes'] if t.get('writing_unit_spans') else [])})+';</script><script>'+(dest/'player.js').read_text(encoding='utf-8')+'</script></body></html>'
-    (dest/'index.html').write_text(contents,encoding='utf-8')
+    (dest/'index.html').write_text(contents,encoding='utf-8', newline='\n')
     write(dest/'hyperframes.json',{'width':1920,'height':1080,'fps':30})
     write(dest/'runtime.json',{'gsap_sha256':file_hash(dest/'gsap.min.js'),'player_sha256':file_hash(dest/'player.js'),'layout_sha256':file_hash(dest/'layout.css')})
     if has_pen:

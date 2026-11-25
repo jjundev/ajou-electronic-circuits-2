@@ -180,7 +180,7 @@ def build(run, data):
     link(vendor_path(data), run / "preview" / _paths.VENDOR_REL)
     note = Path(data["note"])
     link(note, path.parent / note.name)
-    path.write_text(page, encoding="utf-8")
+    path.write_text(page, encoding="utf-8", newline="\n")
     return path
 
 

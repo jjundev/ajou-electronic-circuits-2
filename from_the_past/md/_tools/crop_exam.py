@@ -10,7 +10,7 @@ import re
 import sys
 from pathlib import Path
 
-import fitz
+import pymupdf as fitz
 import yaml
 
 FIG_ID_RE = re.compile(r"^Q[1-9]\d*(-[2-9]|-[1-9]\d+)?$")

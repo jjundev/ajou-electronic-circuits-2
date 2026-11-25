@@ -36,13 +36,19 @@ def nfc_path(p: str | Path) -> Path:
 
 
 # RUN holds state, receipts and backups; the OS clears these on reboot.
-TEMP_ROOTS = ('/tmp', '/private/tmp', '/var/folders', '/private/var/folders')
+TEMP_ROOTS = ('/tmp', '/private/tmp', '/var/folders', '/private/var/folders',
+              str(Path(tempfile.gettempdir()).resolve()))
 BLIND_HISTORY_VERSION = 2  # Includes packet files from every uncertified round.
+
+
+def cache_root() -> Path:
+    """~/.cache, or EC2_CACHE_ROOT so tests on any OS stay out of the home folder."""
+    return Path(os.environ.get('EC2_CACHE_ROOT') or Path.home() / '.cache')
 
 
 def default_run_dir(range_: str, now) -> Path:
     """~/.cache/ec2-review-pack/<range>-<YYYYmmdd-HHMMSS>: survives a reboot."""
-    return Path.home() / '.cache' / 'ec2-review-pack' / f"{range_}-{now.strftime('%Y%m%d-%H%M%S')}"
+    return cache_root() / 'ec2-review-pack' / f"{range_}-{now.strftime('%Y%m%d-%H%M%S')}"
 
 
 def is_temp_path(path: str | Path) -> bool:
@@ -162,7 +168,7 @@ def _atomic_json(path: Path, data: dict):
     temporary = None
     try:
         with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=path.parent,
-                                         prefix=f".{path.name}.", suffix=".tmp", delete=False) as handle:
+                                         prefix=f".{path.name}.", suffix=".tmp", delete=False, newline="\n") as handle:
             temporary = Path(handle.name)
             json.dump(data, handle, ensure_ascii=False, indent=2)
             handle.write("\n")

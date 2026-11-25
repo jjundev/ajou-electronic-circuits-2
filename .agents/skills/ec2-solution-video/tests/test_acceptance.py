@@ -16,12 +16,13 @@ class AcceptanceTests(Sandbox):
         for i in data['items']:
             self.assertTrue(i['media_passed']); self.assertEqual(i['pixel_diff'],0)
             self.assertEqual(i['final_sha256'],hashlib.sha256(Path(i['final']).read_bytes()).hexdigest())
+    @needs_browser
     def test_selected_real_pdf_acceptance_mapping(self):
         import acceptance,video
         from unittest.mock import patch
         from solution_video.sources import discover
         from solution_video.util import read
-        pairs=discover(REPO,'1002',acceptance.IDS)
+        pairs=discover(FROZEN_1002,'1002',acceptance.IDS)
         with patch.object(video,'discover',return_value=pairs):batch=video.prepare_batch(self.run,'1002')
         data=read(batch/'batch.json');self.assertEqual([i['id'] for i in data['items']],acceptance.IDS)
         for item in data['items']:

@@ -8,7 +8,7 @@ class SourceTests(Sandbox):
         self.assertEqual({p['problem_id'] for p in pairs if p['problem_id'].startswith('202')},
                          {'2021-1_중간-Q5','2023-1_중간-Q2'})
     def test_wide_conditions_compare_entire_panel(self):
-        import fitz
+        import pymupdf as fitz
         refs=[]
         for i in range(2):
             p=self.run/f'wide{i}.pdf';d=fitz.open();pg=d.new_page(width=1440,height=810)
@@ -18,7 +18,7 @@ class SourceTests(Sandbox):
         with self.assertRaisesRegex(InputError,'conditions differ'):
             validate_pairs([dict(problem_id='E10.11',problem=refs[0],answer=refs[1])])
     def test_1002_pairs_skip_hint(self):
-        pairs=discover(REPO,'1002',None); self.assertEqual(len(pairs),10); self.assertTrue(all(p['md_snapshot'] for p in pairs))
+        pairs=discover(FROZEN_1002,'1002',None); self.assertEqual(len(pairs),10); self.assertTrue(all(p['md_snapshot'] for p in pairs))
         self.assertEqual(next(p for p in pairs if p['problem_id']=='E10.11')['answer']['page_index'],1)
         self.assertEqual(next(p for p in pairs if p['problem_id']=='2021-1_중간-Q3')['problem']['page_index'],7)
         frozen=freeze_sources(pairs,self.run); self.assertFalse(Path(frozen[0]['answer']['snapshot']).is_absolute())
@@ -26,8 +26,8 @@ class SourceTests(Sandbox):
     def test_ambiguous_pair_and_duplicate_conflict(self):
         for selector in ['0931','1002-0911','bad']:
             with self.assertRaises(InputError): discover(REPO,selector,None)
-        with self.assertRaises(InputError): discover(REPO,'1002',['E10.99'])
-        pairs=discover(REPO,'1002',['E10.11']); self.assertEqual(len(pairs),1)
+        with self.assertRaises(InputError): discover(FROZEN_1002,'1002',['E10.99'])
+        pairs=discover(FROZEN_1002,'1002',['E10.11']); self.assertEqual(len(pairs),1)
         duplicate=dict(pairs[0],answer=dict(pairs[0]['answer'],page_index=2))
         with self.assertRaises(InputError): validate_pairs(pairs+[duplicate])
     def test_zero_padded_actual_dates_and_selected_only(self):
@@ -35,11 +35,11 @@ class SourceTests(Sandbox):
         self.assertEqual(len(discover(REPO,'0930',['E10.16'])),1)
         root=self.run/'selected';folder=root/'복습노트/1002';folder.mkdir(parents=True)
         import shutil
-        for p in (REPO/'복습노트/1002').glob('*.pdf'):shutil.copyfile(p,folder/p.name)
+        for p in (FROZEN_1002/'복습노트/1002').glob('*.pdf'):shutil.copyfile(p,folder/p.name)
         (folder/'.assets').mkdir(exist_ok=True);(folder/'.assets'/'problems.txt').write_text('E10.11 | valid\nE10.99 | unrelated missing page\n')
         self.assertEqual(len(discover(root,'1002',['E10.11'])),1)
     def test_pagination_is_not_a_different_solution(self):
-        import fitz
+        import pymupdf as fitz
         pairs=[]
         for i in range(2):
             p=self.run/f'page{i}.pdf';d=fitz.open();pg=d.new_page(width=842,height=595)
@@ -47,7 +47,7 @@ class SourceTests(Sandbox):
             ref=dict(snapshot=str(p),page_index=0,width_pt=842,height_pt=595);pairs.append(dict(problem_id='E10.11',problem=ref,answer=ref,md_snapshot=None))
         validate_pairs(pairs)
     def test_duplicate_footer_preserves_all_frozen_correspondences(self):
-        import fitz
+        import pymupdf as fitz
         root=self.run/'dedup'
         for i,date in enumerate(['1001','1002']):
             folder=root/'복습노트'/date;folder.mkdir(parents=True);(folder/'.assets').mkdir(exist_ok=True);(folder/'.assets'/'problems.txt').write_text('E10.11 | identical\n')
@@ -61,6 +61,6 @@ class SourceTests(Sandbox):
         root=self.run/'partial';bad=root/'복습노트/1001';good=root/'복습노트/1002';bad.mkdir(parents=True);good.mkdir()
         (bad/'.assets').mkdir(exist_ok=True);(bad/'.assets'/'problems.txt').write_text('P10.01 | malformed\n');(good/'.assets').mkdir(exist_ok=True);(good/'.assets'/'problems.txt').write_text('E10.11 | valid\n')
         for role in ['문제','답안']:(bad/f'bad-{role}.pdf').write_bytes(b'not a pdf')
-        for p in (REPO/'복습노트/1002').glob('*.pdf'):shutil.copyfile(p,good/p.name)
+        for p in (FROZEN_1002/'복습노트/1002').glob('*.pdf'):shutil.copyfile(p,good/p.name)
         errors=[];pairs=discover(root,'1001-1002',failures=errors)
         self.assertEqual([p['problem_id'] for p in pairs],['E10.11']);self.assertEqual(errors[0]['problem_id'],'P10.01')

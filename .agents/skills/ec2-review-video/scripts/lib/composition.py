@@ -35,7 +35,7 @@ def stage_assets(source,run):
         shutil.copyfile(src,run/'assets/fonts'/src.name)
         css.append("@font-face{font-family:Pretendard;src:url('"+src.name+"') format('woff2');font-weight:"+weight+";font-display:block}")
     shutil.copyfile(source/'vendor/gsap.min.js',run/'assets/vendor/gsap.min.js')
-    (run/'assets/fonts/fonts.css').write_text('\n'.join(css),encoding='utf-8')
+    (run/'assets/fonts/fonts.css').write_text('\n'.join(css),encoding='utf-8', newline='\n')
     for name in ('SOURCE.md','LICENSE','OFL.txt'):
         if (source/'fonts'/name).exists(): shutil.copyfile(source/'fonts'/name,run/'assets/fonts'/name)
     if (source/'vendor/katex').is_dir(): shutil.copytree(source/'vendor/katex',run/'assets/vendor/katex',dirs_exist_ok=True)
@@ -85,7 +85,7 @@ def assemble(m,timeline,theme,run):
                 if not (vendor/font).is_file(): raise ValueError('missing KaTeX font: '+font)
             page=page.replace('</head>','<link rel="stylesheet" href="assets/vendor/katex/katex.min.css"><script src="assets/vendor/katex/katex.min.js"></script><script src="assets/vendor/katex/auto-render.min.js"></script></head>')
             page=page.replace('</body>','<script>renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}]});</script></body>')
-        entry=sid+'.html'; (run/entry).write_text(page,encoding='utf-8')
+        entry=sid+'.html'; (run/entry).write_text(page,encoding='utf-8', newline='\n')
         css=(run/theme['templates'][scene['template_kind']]['css_path']).read_text(encoding='utf-8')
         css+='\n'+(run/'source/video-layout.css').read_text(encoding='utf-8')
         css+='\n.video-scene{'+''.join(k+':'+v+';' for k,v in theme['tokens'][scene['template_kind']].items())+'background:var(--bg);color:var(--ink)}'
@@ -93,7 +93,7 @@ def assemble(m,timeline,theme,run):
             math_links='<link rel="stylesheet" href="assets/vendor/katex/katex.min.css"><script src="assets/vendor/katex/katex.min.js"></script><script src="assets/vendor/katex/auto-render.min.js"></script>'
             math_script='<script>renderMathInElement(document.getElementById('+json.dumps(sid+'-root')+'),{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}]});</script>'
         sub='<template>'+math_links+'<style>'+css+'</style>'+body+script+math_script+'</template>'
-        (dest/(sid+'.html')).write_text(sub,encoding='utf-8')
+        (dest/(sid+'.html')).write_text(sub,encoding='utf-8', newline='\n')
         assets={p.relative_to(run).as_posix():file_hash(p) for p in (run/'assets').rglob('*') if p.is_file() and 'voice' not in p.parts} if (run/'assets').exists() else {}
         key=digest({'page':page,'motions':motions,'theme':theme,'assets':assets,'frames':frames})
         parts.append({'id':sid,'entry':entry,'frames':frames,'key':key})
@@ -103,6 +103,6 @@ def assemble(m,timeline,theme,run):
         if s.get('path'):
             audio.append(f'<audio id="audio-{s["id"]}" src="{html.escape(s["path"],quote=True)}" data-start="{s["start_sample"]/24000:.9f}" data-duration="{(s["end_sample"]-s["start_sample"])/24000:.9f}" data-track-index="2"></audio>')
     root=f'<div id="main" data-composition-id="main" data-width="1920" data-height="1080" data-duration="{timeline["total_frames"]/30:.9f}">'+''.join(hosts+audio)+'</div><script>window.__timelines=window.__timelines||{};window.__timelines.main=gsap.timeline({paused:true});</script>'
-    (run/'index.html').write_text(scene_shell(root,'note',theme),encoding='utf-8')
+    (run/'index.html').write_text(scene_shell(root,'note',theme),encoding='utf-8', newline='\n')
     atomic_json(run/'source/parts.json',{'parts':parts})
     return parts

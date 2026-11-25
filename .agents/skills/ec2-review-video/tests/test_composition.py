@@ -76,7 +76,7 @@ class CompositionTest(unittest.TestCase):
             # Exercise the generated standalone JS contract separately from dormant <template>.
             text=(run/'source/compositions/scene-dm.html').read_text()
             self.assertIn('renderMathInElement',text);self.assertIn('assets/vendor/katex/katex.min.js',text)
-            self.assertIn('.video-scene{--bg:',text)
+            self.assertRegex(text,r'\.video-scene\{[^}]*--bg:')
 
     def test_timeline_registration_waits_for_fonts(self):
         import re,subprocess

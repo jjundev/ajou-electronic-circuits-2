@@ -899,7 +899,7 @@ def test_note_reviewers_read_shared_applicability_reference(note_run):
         claim = flow.claim_task(run, tid)
         refs = flow._read(claim['brief'])['references']
         paths = [r['path'] if isinstance(r, dict) else r for r in refs]
-        assert any(str(p).endswith('references/note-rule-applicability.md') for p in paths)
+        assert any(Path(p).as_posix().endswith('references/note-rule-applicability.md') for p in paths)
         flow.release_task(run, tid, claim['attempt'], 'reference check only')
 
 def test_label_only_join_leaves_precheck_unblocked(note_run):

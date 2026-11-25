@@ -171,7 +171,7 @@ def append_record(output_dir, kind, page_id, url, source, when) -> dict:
     path.write_text(
         json.dumps({"schema": RECORD_SCHEMA, "uploads": records},
                    ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8")
+        encoding="utf-8", newline="\n")
     return record
 
 

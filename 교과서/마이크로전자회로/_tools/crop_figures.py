@@ -9,7 +9,7 @@ import re
 import sys
 from pathlib import Path
 
-import fitz
+import pymupdf as fitz
 import yaml
 
 CROP_NAME_RE = re.compile(r"^[a-z0-9]+$")

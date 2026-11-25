@@ -89,7 +89,7 @@ def push(n: int, root: Path | None = None, token: str | None = None,
                          source=p.report_md.name,
                          when=now or datetime.now().strftime("%Y-%m-%d %H:%M"))
     pulled = notion.pull_markdown(page["page_id"], token)
-    p.baseline(version).write_text(pulled, encoding="utf-8")
+    p.baseline(version).write_text(pulled, encoding="utf-8", newline="\n")
     return {"title": title, "version": version, "url": page["url"],
             "page_id": page["page_id"], "baseline": p.baseline(version),
             "info": [f for f in findings if f.level in ("info", "warn")] + unported,
@@ -107,7 +107,7 @@ def recover_baselines(n: int, root: Path | None = None, token: str | None = None
     out = []
     for r in missing:
         path = p.baseline(r["version"])
-        path.write_text(notion.pull_markdown(r["page_id"], token), encoding="utf-8")
+        path.write_text(notion.pull_markdown(r["page_id"], token), encoding="utf-8", newline="\n")
         out.append(path)
     return out
 
@@ -130,7 +130,7 @@ def _diff(p, rec: dict, token: str) -> dict:
     if not base.exists():
         raise notion.NotionError(f"{base.name} 이 없습니다 — 먼저 `sync recover --n <n>` 로 되읽는다")
     pulled = notion.pull_markdown(rec["page_id"], token)
-    p.pulled(v).write_text(pulled, encoding="utf-8")
+    p.pulled(v).write_text(pulled, encoding="utf-8", newline="\n")
     lines = list(difflib.unified_diff(_text_lines(base.read_text(encoding="utf-8")),
                                       _text_lines(pulled), base.name, p.pulled(v).name,
                                       n=0, lineterm=""))
@@ -172,7 +172,7 @@ def check_images(n: int, root: Path | None = None, token: str | None = None) -> 
     latest = _latest_record(p)
     token = token or notion.load_token()
     text = notion.pull_markdown(latest["page_id"], token)
-    p.pulled(latest["version"]).write_text(text, encoding="utf-8")
+    p.pulled(latest["version"]).write_text(text, encoding="utf-8", newline="\n")
     return check_pulled_images(text)
 
 
