@@ -79,6 +79,7 @@ class CompositionTests(Sandbox):
         if not check_browser:return
         return browser(['--mode','timeline','--entry',str(self.run/'composition/index.html'),'--layers',str(self.run/'layers/layers.json'),'--dest',str(self.run/'verification')])
     @needs_browser
+    @exact_pixels
     def test_pencil_partial_and_precomplete(self):
         r=self.pencil_fixture()['writing']
         self.assertEqual(r['precomplete_diff'],0);self.assertEqual(r['complete_diff'],0);self.assertEqual(r['hidden_leaks'],0)
@@ -108,6 +109,7 @@ class CompositionTests(Sandbox):
                         sx=nibx+dx*math.cos(r)-dy*math.sin(r);sy=y+dx*math.sin(r)+dy*math.cos(r)
                         self.assertGreaterEqual(sx,0);self.assertLessEqual(sx,1920);self.assertGreaterEqual(sy,0);self.assertLessEqual(sy,900)
     @needs_browser
+    @exact_pixels
     def test_existing_clip_transform_and_grouped_glyph(self):
         r=self.pencil_fixture(True)['writing']
         self.assertEqual(r['precomplete_diff'],0);self.assertEqual(r['complete_diff'],0);self.assertEqual(r['hidden_leaks'],0);self.assertTrue(r['bounds_ok'])
@@ -136,6 +138,7 @@ class CompositionTests(Sandbox):
         t=build_timeline(m,l,[make_audio('w',800,self.run)],default_config(),default_writing());k=camera_keys(m,l,t)[1]
         self.assertAlmostEqual(k['viewbox'][0],0);self.assertAlmostEqual(k['viewbox'][1],0);self.assertAlmostEqual(k['viewbox'][2],400);self.assertAlmostEqual(k['viewbox'][3],225);self.assertTrue(k['mirror'])
     @needs_browser
+    @exact_pixels
     def test_mirrored_png_stays_aligned_in_browser(self):
         r=self.pencil_fixture(mirrored=True)['writing']
         self.assertTrue(r['bounds_ok']);self.assertLessEqual(r['tip_error_px'],1);self.assertEqual(r['precomplete_diff'],0);self.assertEqual(r['hidden_leaks'],0)
@@ -177,6 +180,7 @@ class CompositionTests(Sandbox):
         writing['chars_per_second']=4;write(self.run/'source/writing.json',writing)
         with self.assertRaisesRegex(ValueError,'prerequisite stage: timing'):cli.run_stage('assemble',self.run,SimpleNamespace(runtime=S.parent/'ec2-review-video/assets/runtime/vendor/gsap.min.js'))
     @needs_browser
+    @exact_pixels
     def test_visual_settings_verify_against_current_composition(self):
         from solution_video.util import read,write
         from solution_video.verify import verify_run
@@ -227,6 +231,7 @@ class CompositionTests(Sandbox):
         html.write_text(base)
 
     @needs_browser
+    @exact_pixels
     def test_labels_whitespace_and_focus_only_in_browser(self):
         from solution_video.util import read,write
         from solution_video.annotations import load_teaching
