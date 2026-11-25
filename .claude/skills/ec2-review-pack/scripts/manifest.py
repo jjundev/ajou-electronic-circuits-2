@@ -41,6 +41,10 @@ WHY_TITLE = "들어가며: 왜 이런 회로를 쓸까"
 WHY_SHORT = "왜 쓸까"
 WHY_TOPIC_TITLE = "왜 이런 회로를 쓸까"
 WHY_REQUIRED_LAYERS = ("eli5", "formal")
+# 토픽 회로(topics[].circuits): 오른쪽 패널 / 본문 위쪽에 고정되는 figure.circuit 계획
+MAX_CIRCUITS = 2
+CIRCUIT_ID_RE = re.compile(r"fig-circuit-[a-z0-9]+(?:-[a-z0-9]+)*")
+CIRCUIT_SOURCE_RE = re.compile(r"L\d{2} s\d+(?:[-–]\d+)?|new: \S.*")
 PROBLEMS_TXT = "problems.txt"
 # 팩 폴더 맨 위에는 .pack/·HTML·PDF만 두고, md·그림·problems.txt 등 나머지는 여기 모은다.
 BUNDLE = ".assets"
@@ -119,6 +123,32 @@ def _check_why(m: dict, errors: list[str]) -> None:
         errors.append(f"sections[0].topics[0].layers: {WHY_TOPIC_ID}에는 eli5와 formal이 필요함")
 
 
+def _check_circuits(t: dict, where: str, errors: list[str], new_id) -> None:
+    """개념 토픽마다 회로 계획을 둔다. 회로가 없으면 이유를 적는다. why-circuit과 layers가 []인 토픽에는 두지 않는다."""
+    circuits = t.get("circuits")
+    if not t["layers"] or t["id"] == WHY_TOPIC_ID:
+        if circuits not in (None, []):
+            errors.append(f"{where}.circuits: 이 토픽에는 회로를 두지 않음")
+        return
+    if not isinstance(circuits, list):
+        errors.append(f"{where}.circuits: list 필요")
+        return
+    if len(circuits) > MAX_CIRCUITS:
+        errors.append(f"{where}.circuits: 최대 {MAX_CIRCUITS}개 ({len(circuits)}개)")
+    for k, c in _objects(circuits, f"{where}.circuits", errors):
+        cw = f"{where}.circuits[{k}]"
+        if _need(c, "id", str, cw, errors):
+            if CIRCUIT_ID_RE.fullmatch(c["id"]):
+                new_id(c["id"], cw)
+            else:
+                errors.append(f"{cw}.id: fig-circuit-<kebab> 형식이어야 함: {c['id']}")
+        if _need(c, "source", str, cw, errors) and not CIRCUIT_SOURCE_RE.fullmatch(c["source"]):
+            errors.append(f"{cw}.source: 'LNN sK' 또는 'new: <근거>' 형식이어야 함: {c['source']}")
+    reason = t.get("circuit_reason")
+    if not circuits and not (isinstance(reason, str) and reason.strip()):
+        errors.append(f"{where}.circuit_reason: 회로가 없는 이유 필요")
+
+
 def _check_snapshot(snapshot: dict, errors: list[str]) -> None:
     if set(snapshot) != {"path", "sha256", "rule_ids"}:
         errors.append("manifest.learning_style: path/sha256/rule_ids 필요")
@@ -190,6 +220,7 @@ def validate(m: dict, repo: Path | str | None = None) -> list[str]:
             unknown = set(t["layers"]) - LAYER_NAMES
             if unknown:
                 errors.append(f"{tw}.layers: 알 수 없는 레이어 {sorted(unknown)}")
+            _check_circuits(t, tw, errors, new_id)
 
     _check_why(m, errors)
     _strings(m["forbidden_outside_preview"], "forbidden_outside_preview", errors)

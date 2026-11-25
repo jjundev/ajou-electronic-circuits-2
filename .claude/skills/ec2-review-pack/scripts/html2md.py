@@ -33,6 +33,8 @@ NAME_RE = re.compile(r"^(정리노트|복습문제)_(\d{4}(?:-\d{4})?)_([A-Za-z0
 FONT = "Pretendard, -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif"
 LIGHT = {"ink": "#1b2130", "ink-2": "#4a5468", "line": "#dde2ea", "accent": "#2f6fdb", "warn": "#b54708",
          "prof": "#6941c6", "supp": "#067647", "danger": "#d92d20", "surface": "#ffffff"}
+# 회로 위치 표시(㉠㉡㉢)가 있는 그림에만 붙인다.
+LOC_CSS = f"svg .fig-loc {{ fill: {LIGHT['prof']}; }}\n"
 SVG_CSS = f"""
 svg {{ color: {LIGHT['ink']}; font-family: {FONT}; }}
 .fig-ink {{ stroke: {LIGHT['ink']}; fill: none; stroke-width: 2; }}
@@ -404,9 +406,10 @@ def export_svg(svg, ctx, name=None):
     if uses_xlink and "xmlns:xlink" not in attrs:
         attrs["xmlns:xlink"] = "http://www.w3.org/1999/xlink"
     svg_text = "".join(n.text() for n in svg.find_all(lambda n: n.tag == "text"))
+    css = SVG_CSS + (LOC_CSS if "fig-loc" in body else "")
     doc = (f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="{" ".join(vb)}"'
            f"{_svg_attrs(attrs)}>"
-           f"<style>{html.escape(svg_font_css(svg_text) + SVG_CSS, quote=False)}</style>"
+           f"<style>{html.escape(svg_font_css(svg_text) + css, quote=False)}</style>"
            f'<rect x="{vb[0]}" y="{vb[1]}" width="{w}" height="{h}" rx="10" fill="{LIGHT["surface"]}"/>'
            f"{body}</svg>\n")
     fname = _fig_name(svg, ctx, name)

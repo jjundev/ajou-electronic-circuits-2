@@ -259,5 +259,45 @@ class TestManifest(unittest.TestCase):
         self.assertFalse(hasattr(manifest, "review_name"))
 
 
+class TestCircuits(unittest.TestCase):
+    def errors(self, topic=0, section=1, **fields):
+        m = mini()
+        t = m["sections"][section]["topics"][topic]
+        for key, value in fields.items():
+            t.pop(key, None) if value is None else t.__setitem__(key, value)
+        return [e for e in manifest.validate(m) if "circuit" in e]
+
+    def test_plan_is_required_for_concept_topics(self):
+        self.assertTrue(any(e.endswith("circuits: list 필요") for e in self.errors(circuits=None)))
+
+    def test_empty_plan_needs_a_reason(self):
+        self.assertEqual(self.errors(), [])
+        for reason in (None, "", "  "):
+            self.assertTrue(any("circuit_reason" in e for e in self.errors(circuit_reason=reason)), reason)
+
+    def test_valid_sources(self):
+        for source in ("L06 s37", "L06 s37-38", "new: STT 1118 전압계 예시"):
+            self.assertEqual(self.errors(circuits=[{"id": "fig-circuit-a", "source": source}]), [], source)
+
+    def test_bad_items(self):
+        good = {"id": "fig-circuit-a", "source": "L06 s37"}
+        for bad in (dict(good, id="fig-a"), dict(good, source="s37"), dict(good, source="new:"), {"id": "fig-circuit-a"}, "x"):
+            self.assertNotEqual(self.errors(circuits=[bad]), [], bad)
+        self.assertTrue(any("중복 id" in e for e in manifest.validate(self.with_circuits([good, dict(good)]))))
+        three = [dict(good, id=f"fig-circuit-{n}") for n in "abc"]
+        self.assertTrue(any("최대 2개" in e for e in self.errors(circuits=three)))
+
+    def with_circuits(self, circuits):
+        m = mini()
+        m["sections"][1]["topics"][0]["circuits"] = circuits
+        return m
+
+    def test_why_and_layerless_topics_have_none(self):
+        good = [{"id": "fig-circuit-a", "source": "L06 s37"}]
+        self.assertNotEqual(self.errors(section=0, circuits=good), [])
+        self.assertNotEqual(self.errors(section=2, circuits=good), [])
+        self.assertEqual(self.errors(section=0, circuits=[]), [])
+
+
 if __name__ == "__main__":
     unittest.main()

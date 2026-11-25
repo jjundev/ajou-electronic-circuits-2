@@ -150,6 +150,70 @@ class TestPack(unittest.TestCase):
         note.write_text(text.replace('<div class="quiz after">', '<div class="quiz">'), encoding="utf-8")
         self.assertEqual(self.codes(note), [])
 
+    # ---- 토픽 회로 ----
+    FORMAL = '<span class="layer-title">정확히 말하면</span><p>$$'
+    CIRCUIT = ('<figure class="figure circuit"><svg id="fig-circuit-mean" viewBox="0 0 60 60" role="img" aria-label="회로">'
+               '<text class="fig-text fig-loc" x="9" y="9">㉠</text></svg><figcaption><span class="loc">㉠</span> 입력 (강의노트 s1)</figcaption></figure>')
+
+    def plan(self, circuits):
+        path = self.run / "manifest.json"
+        m = self.m()
+        m["sections"][1]["topics"][0]["circuits"] = circuits
+        path.write_text(json.dumps(m, ensure_ascii=False), encoding="utf-8")
+
+    def draw(self, figure=None, text='<p><span class="loc">㉠</span> 입력이에요.</p>'):
+        self.plan([{"id": "fig-circuit-mean", "source": "L01 s1"}])
+        self.edit("sections/s1.html", self.FORMAL,
+                  '<span class="layer-title">정확히 말하면</span>' + (figure or self.CIRCUIT) + text + '<p>$$')
+
+    def test_planned_circuit_passes(self):
+        self.draw()
+        self.assertEqual(self.codes(), [])
+
+    def test_missing_planned_circuit(self):
+        self.plan([{"id": "fig-circuit-mean", "source": "L01 s1"}])
+        self.assertEqual(self.codes(), ["missing-circuit"])
+
+    def test_circuit_after_first_display_math(self):
+        self.draw()
+        text = (self.run / "sections/s1.html").read_text(encoding="utf-8").replace(self.CIRCUIT, "", 1)
+        (self.run / "sections/s1.html").write_text(
+            text.replace("x_n$$</p></div>", "x_n$$</p>" + self.CIRCUIT + "</div>", 1), encoding="utf-8")
+        self.assertEqual(self.codes(), ["circuit-after-math"])
+
+    def test_circuit_must_be_direct_child_of_formal(self):
+        self.draw("<div>" + self.CIRCUIT + "</div>")
+        self.assertEqual(self.codes(), ["circuit-place"])
+
+    def test_circuit_needs_caption_and_id(self):
+        self.draw(self.CIRCUIT.replace('<span class="loc">㉠</span> 입력 (강의노트 s1)', ""))
+        self.assertEqual(self.codes(), ["circuit-caption"])
+        self.edit("sections/s1.html", "fig-circuit-mean", "fig-mean-circuit")
+        self.assertEqual(self.codes(), ["circuit-caption", "circuit-id", "missing-circuit"])
+
+    def test_too_many_circuits(self):
+        self.draw(self.CIRCUIT + "".join(self.CIRCUIT.replace("circuit-mean", f"circuit-mean-{n}") for n in (2, 3)))
+        self.assertEqual(self.codes(), ["too-many-circuits"])
+
+    def test_location_marks_must_match_both_ways(self):
+        self.draw(text='<p><span class="loc">㉡</span> 없는 곳이에요.</p>')
+        self.assertEqual(self.codes(), ["loc-not-in-circuit", "loc-unused"])
+
+    def test_caption_alone_does_not_use_a_mark(self):
+        self.draw(text="")
+        self.assertEqual(self.codes(), ["loc-unused"])
+
+    def test_circuit_is_refused_in_why_page(self):
+        self.edit("sections/why.html", '<span class="layer-title">정확히 말하면</span>',
+                  '<span class="layer-title">정확히 말하면</span>' + self.CIRCUIT + '<p><span class="loc">㉠</span></p>')
+        self.assertEqual(self.codes(), ["circuit-place"])
+
+    def test_circuit_checks_skip_notes_without_marker(self):
+        self.plan([{"id": "fig-circuit-mean", "source": "L01 s1"}])
+        note = self.build()
+        note.write_text(note.read_text(encoding="utf-8").replace(' data-circuits="1"', ""), encoding="utf-8")
+        self.assertEqual(self.codes(note), [])
+
     def test_cli_exit_codes(self):
         note = self.build()
         args = ["--manifest", str(self.run / "manifest.json"), "--note", str(note)]

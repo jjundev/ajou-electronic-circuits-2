@@ -3,7 +3,7 @@
 정리노트 HTML 검사기 (표준 라이브러리만 사용).
 
 - 공통 검사: lang, 중복 id, 외부 리소스 허용 목록, 수식 구분자, 링크(복습문제 PDF 포함), 남은 슬롯, 위젯 정적 대체물
-- manifest 검사: 섹션·토픽 id, 필수 용어, 레이어, 보충 배지, 페이지 요약, 예고 밖 금지어, 링크
+- manifest 검사: 섹션·토픽 id, 필수 용어, 레이어, 보충 배지, 페이지 요약, 예고 밖 금지어, 링크, 회로
 CLI:
   check_html.py FILE [FILE ...]
   check_html.py --manifest run/manifest.json --note NOTE.html
@@ -358,6 +358,54 @@ def check_guide(source: str, m: dict) -> list[Problem]:
     return out
 
 
+def check_circuits(source: str, m: dict) -> list[Problem]:
+    """회로 템플릿(body data-circuits)으로 만든 노트만: 계획한 회로, 회로 자리, 글과 회로의 ㉠㉡㉢ 짝."""
+    builder = Builder()
+    builder.feed(source)
+    root = builder.root
+    body = next(root.find_all(lambda n: n.tag == "body"), None)
+    if body is None or "data-circuits" not in body.attrs:
+        return []
+    topics = {n.attrs.get("id"): n for n in root.find_all(lambda n: n.tag == "article" and "topic" in n.classes)}
+    out: list[Problem] = []
+    for t in (t for s in m["sections"] for t in s["topics"]):
+        tid, art = t["id"], topics.get(t["id"])
+        if art is None:
+            continue  # missing-topic이 이미 알린다
+        figures = list(art.find_all(lambda n: n.tag == "figure" and "circuit" in n.classes))
+        drawn = set()
+        for fig in figures:
+            svg = next(fig.find_all(lambda n: n.tag == "svg"), None)
+            fid = svg.attrs.get("id", "") if svg else ""
+            drawn.add(fid)
+            if not fid.startswith("fig-circuit-"):
+                out.append(Problem("circuit-id", tid, f'회로 svg id는 fig-circuit-<kebab>: "{fid}"'))
+            cap = next(fig.find_all(lambda n: n.tag == "figcaption"), None)
+            if cap is None or not cap.text().strip():
+                out.append(Problem("circuit-caption", tid, f"{fid}: figcaption(위치 이름과 출처) 필요"))
+            if not {"layer", "formal"} <= fig.parent.classes or fig.parent.parent is not art:
+                out.append(Problem("circuit-place", tid, f"{fid}: 정확히 말하면 레이어의 직계 자식이어야 함"))
+        out += [Problem("missing-circuit", tid, c["id"]) for c in t.get("circuits") or [] if c["id"] not in drawn]
+        if figures and (not t["layers"] or tid == manifest_mod.WHY_TOPIC_ID):
+            out.append(Problem("circuit-place", tid, "이 토픽에는 회로를 두지 않음"))
+        if len(figures) > manifest_mod.MAX_CIRCUITS:
+            out.append(Problem("too-many-circuits", tid, f"{len(figures)}개 (최대 {manifest_mod.MAX_CIRCUITS}개)"))
+        formal = next((c for c in _kids(art) if {"layer", "formal"} <= c.classes), None)
+        if formal is not None and any(f.parent is formal for f in figures):
+            for kid in _kids(formal):
+                if kid in figures:
+                    break
+                if "$$" in kid.text():
+                    out.append(Problem("circuit-after-math", tid, "회로는 첫 $$ 식보다 앞에 둔다"))
+                    break
+        marks = {n.text().strip() for f in figures for n in f.find_all(lambda n: "fig-loc" in n.classes)}
+        refs = {n.text().strip() for n in art.find_all(lambda n: "loc" in n.classes)
+                if not any(a in figures for a in _ancestors(n, art))}
+        out += [Problem("loc-not-in-circuit", tid, f"{x}: 회로에 없는 위치") for x in sorted(refs - marks)]
+        out += [Problem("loc-unused", tid, f"{x}: 글에서 짚지 않은 위치") for x in sorted(marks - refs)]
+    return out
+
+
 def _ancestors(node: Node, stop: Node):
     node = node.parent
     while node is not None and node is not stop:
@@ -396,7 +444,7 @@ def check_pack(m: dict, note_path: Path | str, *, repo: Path, style_audit: dict,
             target = note_path.parent / pdf
             if target.exists() and not target.is_file():
                 common.append(Problem("pdf-file", note_path.name, f"PDF 파일이 아님: {pdf}"))
-    return out + common + check_note(doc, m) + check_guide(source, m)
+    return out + common + check_note(doc, m) + check_guide(source, m) + check_circuits(source, m)
 
 
 def main(argv: list[str] | None = None) -> int:

@@ -6,6 +6,11 @@ Reports two machine-checkable defects that cost browser fix rounds:
               (scrollWidth - clientWidth > 1 px)
   label_gaps  an SVG text label closer than 0.6 em to a wire (line/path/polyline),
               element symbols (.sym, [data-symbol]) and <defs> excluded
+Notes built from the circuit template (body data-circuits) are also walked topic by topic:
+  overflow    the same boxes on every topic screen
+  label_gaps  labels of every figure.circuit (location marks .fig-loc: 0.25 em)
+  circuits    the circuit preceding each formal equation must be fully visible and must not
+              cover that equation (1280x720 with the panel closed and open, 375x667)
 
 Usage:
   python3 layout_probe.py NOTE.html [--widths 1280,375] [--themes light,dark] --out probe.json
@@ -26,6 +31,8 @@ from unicodedata import normalize
 
 REPO = Path(__file__).resolve().parents[4]
 GAP_EM = 0.6
+LOC_GAP_EM = 0.25
+CIRCUIT_VIEWS = ((1280, 720), (375, 667))
 # The page asked for KaTeX (a script tag) but the library never arrived.
 _KATEX_MISSING = ("() => [...document.scripts].some(s => /katex/i.test(s.src))"
                   " && typeof window.katex === 'undefined'")
@@ -33,7 +40,8 @@ OVERFLOW_SELECTOR = ('.katex-display, .page-summary, .panel-right .panel-inner, 
                      '.panel-right .sum, .panel-right .katex-display, table')
 
 _MEASURE = r"""
-({selector, gapEm}) => {
+({selector, gapEm, locGapEm, scope}) => {
+  const inScope = el => !scope || el.closest(scope);
   const visible = el => el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden';
   const name = (el, i) => el.tagName.toLowerCase() + (el.id ? '#' + el.id : '') +
     (el.classList.length ? '.' + [...el.classList].join('.') : '') + `[${i}]`;
@@ -47,7 +55,7 @@ _MEASURE = r"""
   const rectDistance = (r, x, y) => Math.hypot(Math.max(r.left - x, 0, x - r.right), Math.max(r.top - y, 0, y - r.bottom));
   const label_gaps = [];
   [...document.querySelectorAll('svg')].forEach((svg, si) => {
-    if (!visible(svg) || svg.parentElement?.closest('svg')) return;
+    if (!visible(svg) || svg.parentElement?.closest('svg') || !inScope(svg)) return;
     const wires = [...svg.querySelectorAll('line, path, polyline')].filter(w => !skip(w) && visible(w) && w.getTotalLength);
     const points = [];
     for (const w of wires) {
@@ -66,14 +74,100 @@ _MEASURE = r"""
       const font = parseFloat(getComputedStyle(t).fontSize) * (ctm ? Math.hypot(ctm.a, ctm.b) : 1);
       let gap = Infinity;
       for (const p of points) gap = Math.min(gap, rectDistance(r, p.x, p.y));
-      if (gap < gapEm * font)
+      const need = (svg.closest('figure.circuit') && t.classList.contains('fig-loc') ? locGapEm : gapEm) * font;
+      if (gap < need)
         label_gaps.push({svg_id: svg.id || `svg[${si}]`, text: t.textContent.trim().slice(0, 40),
-                         gap_px: Math.round(gap * 10) / 10, min_px: Math.round(gapEm * font * 10) / 10});
+                         gap_px: Math.round(gap * 10) / 10, min_px: Math.round(need * 10) / 10});
     });
   });
   return {overflow, label_gaps};
 }
 """
+_SHOW_TOPIC = r"""
+id => new Promise(done => {
+  location.hash = '#' + id;
+  requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(done, 60)));
+})
+"""
+_TOPIC_IDS = "() => [...document.querySelectorAll('article.topic')].map(t => t.id)"
+_TOPIC_SVGS = ("() => [...document.querySelectorAll('article.topic svg, .circuits svg')]"
+               ".filter(s => s.getClientRects().length).length")
+# Run while every circuit is at its place in the body: [equation index -> svg id].
+_PAIR_CIRCUITS = r"""
+id => {
+  const formal = document.querySelector(`#${CSS.escape(id)} > .layer.formal`);
+  const figures = formal ? [...formal.querySelectorAll('figure.circuit')] : [];
+  if (!figures.length) return [];
+  const equations = [...formal.querySelectorAll('.katex-display')];
+  const items = equations.length ? equations : [formal.lastElementChild];
+  return items.map(e => {
+    const before = figures.filter(f => f === e || f.compareDocumentPosition(e) & Node.DOCUMENT_POSITION_FOLLOWING);
+    return (before.at(-1) ?? figures[0]).querySelector('svg').id;
+  });
+}
+"""
+_CIRCUITS_VISIBLE = r"""
+({id, pairs}) => {
+  const formal = document.querySelector(`#${CSS.escape(id)} > .layer.formal`);
+  const equations = [...formal.querySelectorAll('.katex-display')];
+  const items = equations.length ? equations : [formal.lastElementChild];
+  const out = [];
+  items.forEach((e, i) => {
+    e.scrollIntoView({block: 'end', behavior: 'instant'});
+    const svg = document.getElementById(pairs[i]);
+    const figure = svg.closest('figure.circuit');
+    const port = (svg.closest('.panel-inner') ?? svg.closest('.content') ?? document.documentElement).getBoundingClientRect();
+    const r = svg.getBoundingClientRect();
+    const top = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+    const shown = r.height > 0 && r.top >= port.top - 2 && r.bottom <= Math.min(port.bottom, innerHeight) + 2
+      && r.left >= port.left - 2 && r.right <= port.right + 2 && top && figure.contains(top);
+    if (!shown) out.push({topic: id, equation: i + 1, circuit: svg.id, problem: 'circuit not fully visible'});
+    const f = figure.getBoundingClientRect(), q = e.getBoundingClientRect();
+    if (!figure.contains(e) && q.top < f.bottom - 1 && q.bottom > f.top + 1 && q.left < f.right - 1 && q.right > f.left + 1)
+      out.push({topic: id, equation: i + 1, circuit: svg.id, problem: 'circuit covers the equation'});
+  });
+  return out;
+}
+"""
+
+
+def _set_panel(page, open_: bool) -> None:
+    toggle = page.locator('#toggle-right')
+    if toggle.count() and toggle.first.is_visible() and (toggle.first.get_attribute('aria-expanded') == 'true') != open_:
+        toggle.first.click()
+        page.wait_for_timeout(300)
+
+
+def _walk_topics(page, result: dict) -> int:
+    """Add the defects of every topic screen to `result`; return how many topic SVGs were measured."""
+    svgs = 0
+    for topic in page.evaluate(_TOPIC_IDS):
+        page.evaluate(_SHOW_TOPIC, topic)
+        svgs += page.evaluate(_TOPIC_SVGS)
+        found = page.evaluate(_MEASURE, {'selector': OVERFLOW_SELECTOR, 'gapEm': GAP_EM, 'locGapEm': LOC_GAP_EM,
+                                         'scope': 'figure.circuit'})
+        for key, items in found.items():
+            result[key] += [dict(item, topic=topic) for item in items]
+    return svgs
+
+
+def _circuit_visibility(page, size: tuple[int, int]) -> list[dict]:
+    page.set_viewport_size({'width': size[0], 'height': size[1]})
+    page.wait_for_timeout(200)
+    _set_panel(page, False)
+    pairs = {}
+    for topic in page.evaluate(_TOPIC_IDS):
+        page.evaluate(_SHOW_TOPIC, topic)
+        if found := page.evaluate(_PAIR_CIRCUITS, topic):
+            pairs[topic] = found
+    out = []
+    for panel in ((False, True) if size[0] >= 1024 else (False,)):
+        _set_panel(page, panel)
+        for topic, pair in pairs.items():
+            page.evaluate(_SHOW_TOPIC, topic)
+            out += [dict(view=f'{size[0]}x{size[1]}', panel='open' if panel else 'closed', **item)
+                    for item in page.evaluate(_CIRCUITS_VISIBLE, {'id': topic, 'pairs': pair})]
+    return out
 
 
 def probe(html: Path, widths: list[int], themes: list[str], *, pack_paths=None) -> dict:
@@ -95,7 +189,7 @@ def probe(html: Path, widths: list[int], themes: list[str], *, pack_paths=None) 
     else:
         roots = (local_root,)
         url = local_url(html, local_root)
-    checks = []
+    checks, circuits, walked = [], [], False
     with sync_playwright() as pw:
         browser = launch_chromium(pw)
         try:
@@ -124,12 +218,22 @@ def probe(html: Path, widths: list[int], themes: list[str], *, pack_paths=None) 
                     page.evaluate("document.fonts.ready.then(() => null)")
                     if failed_resources:
                         raise RuntimeError('Page resource failed to load: ' + ', '.join(sorted(failed_resources)))
-                    result = page.evaluate(_MEASURE, {'selector': OVERFLOW_SELECTOR, 'gapEm': GAP_EM})
+                    result = page.evaluate(_MEASURE, {'selector': OVERFLOW_SELECTOR, 'gapEm': GAP_EM,
+                                                      'locGapEm': LOC_GAP_EM, 'scope': None})
+                    if page.evaluate("() => 'circuits' in document.body.dataset"):
+                        if not (svgs := _walk_topics(page, result)):
+                            raise RuntimeError('circuit note: no topic figure was measured')
+                        result['topic_svgs'] = svgs
+                        if not walked:
+                            walked = True
+                            for size in CIRCUIT_VIEWS:
+                                circuits += _circuit_visibility(page, size)
                     checks.append(dict(width=width, theme=theme, **result))
                     page.close()
         finally:
             browser.close()
-    return dict(html_sha256=hashlib.sha256(html.read_bytes()).hexdigest(), checks=checks)
+    report = dict(html_sha256=hashlib.sha256(html.read_bytes()).hexdigest(), checks=checks)
+    return dict(report, circuits=circuits) if walked else report
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -161,6 +265,7 @@ def main(argv: list[str] | None = None) -> int:
     a.out.parent.mkdir(parents=True, exist_ok=True)
     a.out.write_text(json.dumps(report, ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
     defects = sum(len(c['overflow']) + len(c['label_gaps']) for c in report['checks'])
+    defects += len(report.get('circuits', []))
     print(json.dumps({'status': 'pass' if defects == 0 else 'defects', 'defects': defects, 'out': str(a.out)},
                      ensure_ascii=False))
     return 0 if defects == 0 else 1

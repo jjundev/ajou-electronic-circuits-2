@@ -40,6 +40,16 @@ class TestHtml2Md(unittest.TestCase):
         self.assertEqual(Path(self.note_md), self.tmp / ".assets" / "정리노트_0101-0102_Mini_Test.md")
         self.assertEqual(html2md.check_md(self.note, self.note_md), [])
 
+    def test_location_mark_color_only_where_used(self):
+        note = small_note(self.tmp, '<figure class="figure circuit"><svg id="fig-circuit-a" viewBox="0 0 60 60"><text class="fig-text fig-loc" x="9" y="20">㉠</text></svg><figcaption><span class="loc">㉠</span> 입력</figcaption></figure>'
+                          '<figure><svg id="fig-plain" viewBox="0 0 60 60"><text class="fig-text" x="9" y="20">A</text></svg></figure>')
+        md, count = html2md.convert_note(note)
+        self.assertEqual(count, 2)
+        svg = {p.stem: p.read_text(encoding="utf-8") for p in Path(md).parent.rglob("fig-*.svg")}
+        self.assertIn("svg .fig-loc {", svg["fig-circuit-a"])
+        self.assertNotIn("fig-loc", svg["fig-plain"])
+        self.assertIn("*㉠ 입력*", Path(md).read_text(encoding="utf-8"))
+
     def test_exported_svg_contains_real_semibold_and_native_subscripts(self):
         import base64
         import io

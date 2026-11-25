@@ -122,6 +122,19 @@ class TestWhyPageDocs(unittest.TestCase):
             self.assertIn(s, template)
         self.assertNotIn("details.more", template)
 
+    def test_topic_circuits_for_author_reviewer_designer_and_template(self):
+        rules = self.read("references/content-rules.md")
+        self.assertIn("## 토픽 회로 (`figure.circuit`)", rules)
+        for s in ('<figure class="figure circuit">', "fig-loc", '<span class="loc">', "data-symbol", "loc-unused"):
+            self.assertIn(s, rules)
+        self.assertIn('`circuits`', self.read("references/manifest-guide.md"))
+        self.assertIn("**토픽 회로**", self.read("references/review-prompt.md"))
+        self.assertIn("## 토픽 회로", self.read("references/browser-check.md"))
+        self.assertIn("위치 표시 예외", self.read("references/solution-style.md"))
+        template = self.read("assets/note-template.html")
+        for s in ('data-circuits="1"', '<div class="circuits"></div>', "od:panels", "beforeprint", ".fig-loc"):
+            self.assertIn(s, template)
+
     def test_summary_prompt_collects_motivation(self):
         self.assertIn("## 동기 발언", self.read("references/stt-summary-prompt.md"))
 

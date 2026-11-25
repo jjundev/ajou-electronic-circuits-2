@@ -121,3 +121,119 @@ def test_candidate_probe_reads_shared_course_css_and_ignores_stale_pack_css(tmp_
     proc = subprocess.run([sys.executable, str(PROBE), str(note), '--out', str(tmp_path/'bad.json'), *options],
                           capture_output=True, text=True)
     assert proc.returncode == 2 and 'stale.css' in proc.stdout
+
+
+# ---- circuit notes: real template, every topic ----
+CIRCUIT = ('<figure class="figure circuit"><svg id="fig-circuit-{name}" viewBox="0 0 320 200" role="img" aria-label="c">'
+           '<path class="fig-ink" d="M20 100H300"/><g data-symbol="r"><path class="fig-ink" d="M100 60H200"/></g>'
+           '<text class="fig-text" x="150" y="{y}">R</text><text class="fig-text" x="150" y="58">S</text>'
+           '<text class="fig-text fig-loc" style="font-size:17px" x="60" y="60">㉠</text></svg><figcaption>c</figcaption></figure>')
+STEPS = '<p>step</p><p style="height:40px"></p>$$x=1$$' * 12
+
+
+def _note(tmp_path, *, y=40, css='', steps=STEPS):
+    import json as _json
+    import shutil
+    import assemble
+    from _util import MINI_RUN
+    run = tmp_path / 'run'
+    shutil.copytree(MINI_RUN, run)
+    m = _json.loads((run / 'manifest.json').read_text(encoding='utf-8'))
+    m['sections'][1]['topics'][1]['circuits'] = [{'id': 'fig-circuit-v', 'source': 'L01 s1'}]
+    (run / 'manifest.json').write_text(_json.dumps(m), encoding='utf-8')
+    path = run / 'sections/s1.html'
+    text = path.read_text(encoding='utf-8')
+    old = '<span class="layer-title">정확히 말하면</span><p>$\\sigma'
+    assert text.count(old) == 1
+    path.write_text(text.replace(old, '<span class="layer-title">정확히 말하면</span>' + CIRCUIT.format(name='v', y=y)
+                                 + steps + '<p>$\\sigma'), encoding='utf-8')
+    note = assemble.assemble(run, tmp_path / 'out')
+    if css:
+        note.write_text(note.read_text(encoding='utf-8').replace('</head>', f'<style>{css}</style></head>'), encoding='utf-8')
+    return note
+
+
+def _probe_note(tmp_path, note):
+    out = tmp_path / 'probe.json'
+    p = subprocess.run([sys.executable, str(PROBE), str(note), '--out', str(out), '--widths', '1280', '--themes', 'light'],
+                       capture_output=True, text=True, encoding='utf-8')
+    return p.returncode, p.stdout, json.loads(out.read_text(encoding='utf-8')) if out.exists() else None
+
+
+def test_circuit_note_passes_and_counts_topic_figures(tmp_path):
+    code, out, report = _probe_note(tmp_path, _note(tmp_path))
+    assert code == 0, out + json.dumps(report, ensure_ascii=False)
+    assert report['circuits'] == [] and report['checks'][0]['topic_svgs'] >= 1
+
+
+def test_label_gap_is_found_on_a_hidden_topic(tmp_path):
+    code, _, report = _probe_note(tmp_path, _note(tmp_path, y=97))
+    assert code == 1
+    assert [(g['topic'], g['text']) for g in report['checks'][0]['label_gaps']] == [('s1-var', 'R')]
+
+
+def test_overflow_is_found_on_a_hidden_topic(tmp_path):
+    code, _, report = _probe_note(tmp_path, _note(tmp_path, steps='<div class="table-wrap"></div>$$' + 'abcdefghij+' * 30 + 'x$$'))
+    assert code == 1
+    assert {o['topic'] for o in report['checks'][0]['overflow']} == {'s1-var'}
+
+
+def test_circuit_that_scrolls_away_is_reported(tmp_path):
+    code, _, report = _probe_note(tmp_path, _note(tmp_path, css='.js .layer .circuit{position:static!important}'))
+    assert code == 1
+    problems = {(c['view'], c['panel'], c['problem']) for c in report['circuits']}
+    assert ('1280x720', 'closed', 'circuit not fully visible') in problems
+    assert ('375x667', 'closed', 'circuit not fully visible') in problems
+    assert not any(c['panel'] == 'open' for c in report['circuits'])
+
+
+def test_circuit_clipped_in_the_panel_is_reported(tmp_path):
+    code, _, report = _probe_note(tmp_path, _note(tmp_path, css='.circuits .circuit svg{height:1400px!important;max-height:none!important}'))
+    assert code == 1
+    assert {c['panel'] for c in report['circuits']} == {'open'}
+
+
+def test_circuit_covering_its_equation_is_reported(tmp_path):
+    code, _, report = _probe_note(tmp_path, _note(
+        tmp_path, css='.js .layer .circuit{min-height:100dvh}'))
+    assert code == 1
+    assert 'circuit covers the equation' in {c['problem'] for c in report['circuits']}
+
+
+def test_circuit_note_without_any_topic_figure_is_an_error(tmp_path):
+    note = _note(tmp_path, css='article.topic svg, .circuits svg{display:none!important}')
+    code, out, report = _probe_note(tmp_path, note)
+    assert code == 2 and 'no topic figure' in out and report is None
+
+
+@pytest.mark.parametrize('panel', ['open', 'closed'])
+def test_template_keeps_one_copy_and_prints_in_the_body(tmp_path, panel):
+    from playwright.sync_api import sync_playwright
+    note = _note(tmp_path)
+    count = "() => [document.querySelectorAll('.circuits figure').length, document.querySelectorAll('main figure.circuit').length]"
+    with sync_playwright() as pw:
+        browser = pw.chromium.launch()
+        try:
+            page = browser.new_page(viewport={'width': 1280, 'height': 720}, offline=True)
+            errors = []
+            page.on('pageerror', lambda e: errors.append(str(e)))
+            page.goto(note.as_uri() + '#s1-var')
+            page.wait_for_timeout(300)
+            if panel == 'closed':
+                page.click('#toggle-right')
+            assert page.evaluate(count) == ([1, 0] if panel == 'open' else [0, 1])
+            page.evaluate("() => dispatchEvent(new Event('beforeprint'))")
+            assert page.evaluate(count) == [0, 1]
+            page.evaluate("() => dispatchEvent(new Event('afterprint'))")
+            assert page.evaluate(count) == ([1, 0] if panel == 'open' else [0, 1])
+            page.set_viewport_size({'width': 900, 'height': 720})
+            page.wait_for_timeout(200)
+            assert page.evaluate(count) == [0, 1]
+            page.evaluate("() => { location.hash = '#s1-mean' }")
+            page.set_viewport_size({'width': 1280, 'height': 720})
+            page.wait_for_timeout(300)
+            if panel == 'open':
+                assert page.locator('.circuits figure').is_hidden()
+            assert not [e for e in errors if 'renderMathInElement' not in e and 'katex' not in e.lower()]
+        finally:
+            browser.close()
