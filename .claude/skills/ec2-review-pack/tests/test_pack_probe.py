@@ -153,7 +153,7 @@ def test_probe_missing_browser_reason_is_unavailable(tmp_path, reason):
 
 def test_run_layout_keeps_the_error_reason(tmp_path, monkeypatch):
     import layout_probe, pack_probe
-    def failing(html, widths, themes, *, pack_paths=None):
+    def failing(html, widths, themes, **options):
         raise RuntimeError('KaTeX not loaded')
     monkeypatch.setattr(layout_probe, 'probe', failing)
     preview = tmp_path/'preview.html'; preview.write_text('<html></html>', encoding='utf-8')
@@ -256,14 +256,9 @@ def test_probe_uses_the_note_builder_even_after_workbook_assemble_loaded(tmp_pat
     assert fragment_probe(run, tid, attempt, layout=CLEAN)['status'] == 'pass'
 
 
-def test_probe_walks_circuits_only_when_the_section_draws_figures(tmp_path):
-    # A circuit note fails "no topic figure was measured" when nothing is drawn. In the full
-    # note other sections hold figures; alone, a figure-free section must still be measurable.
-    plain = '<article class="topic" id="s1-mean"><p>글만 있는 토픽</p></article>'
-    run, tid, attempt = claimed_author(tmp_path, text=plain)
-    fragment_probe(run, tid, attempt, layout=CLEAN)
-    assert 'data-circuits' not in (attempt_dir(run, tid)/'probe/preview.html').read_text(encoding='utf-8')
-    run, tid, attempt = claimed_author(tmp_path/'drawn', fragment=FIXTURE/'sections/s1.html')
+def test_probe_preview_keeps_the_circuit_walk(tmp_path):
+    # Topic screens are walked only in circuit mode, so a figure-free preview must keep it.
+    run, tid, attempt = claimed_author(tmp_path, text='<article class="topic" id="s1-mean"><p>글</p></article>')
     fragment_probe(run, tid, attempt, layout=CLEAN)
     assert 'data-circuits' in (attempt_dir(run, tid)/'probe/preview.html').read_text(encoding='utf-8')
 
@@ -272,3 +267,20 @@ def test_probe_real_layout_passes_a_figure_free_section(tmp_path):
     pytest.importorskip('playwright')
     run, tid, attempt = claimed_author(tmp_path, text='<article class="topic" id="s1-mean"><p>글</p></article>')
     assert fragment_probe(run, tid, attempt)['layout']['status'] in ('pass', 'unavailable')
+
+
+WIDE = ('<div class="katex-display" style="overflow-x:auto"><span style="white-space:nowrap">'
+        + 'W' * 600 + '</span></div>')
+FIGURE = ('<figure class="circuit"><svg id="c1" viewBox="0 0 10 10" width="40" height="40">'
+          '<line x1="0" y1="0" x2="10" y2="10" stroke="black"/></svg></figure>')
+
+
+@pytest.mark.parametrize('first', ['<p>plain</p>', FIGURE], ids=['figure-free', 'with-figure'])
+def test_probe_real_layout_walks_every_topic(tmp_path, first):
+    # Only one topic screen is visible at a time; a defect behind the first must still count.
+    pytest.importorskip('playwright')
+    text = (f'<article class="topic" id="s1-mean"><h3>a</h3>{first}</article>'
+            f'<article class="topic" id="s1-two"><h3>b</h3>{WIDE}</article>')
+    run, tid, attempt = claimed_author(tmp_path, text=text)
+    result = fragment_probe(run, tid, attempt)
+    assert result['layout']['status'] == 'defects' and result['status'] == 'defects'

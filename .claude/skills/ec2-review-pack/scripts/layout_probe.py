@@ -177,7 +177,8 @@ def _circuit_visibility(page, size: tuple[int, int]) -> list[dict]:
     return out
 
 
-def probe(html: Path, widths: list[int], themes: list[str], *, pack_paths=None) -> dict:
+def probe(html: Path, widths: list[int], themes: list[str], *, pack_paths=None,
+          require_figures: bool = True) -> dict:
     from playwright.sync_api import sync_playwright
     if str(REPO / 'workbook') not in sys.path:
         sys.path.insert(0, str(REPO / 'workbook'))
@@ -228,7 +229,8 @@ def probe(html: Path, widths: list[int], themes: list[str], *, pack_paths=None) 
                     result = page.evaluate(_MEASURE, {'selector': OVERFLOW_SELECTOR, 'gapEm': GAP_EM,
                                                       'locGapEm': LOC_GAP_EM, 'scope': None})
                     if page.evaluate("() => 'circuits' in document.body.dataset"):
-                        if not (svgs := _walk_topics(page, result)):
+                        # Every topic screen is still walked; only the whole-note guard is optional.
+                        if not (svgs := _walk_topics(page, result)) and require_figures:
                             raise RuntimeError('circuit note: no topic figure was measured')
                         result['topic_svgs'] = svgs
                         if not walked:
@@ -252,6 +254,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument('--widths', default='1280,375')
     ap.add_argument('--themes', default='light,dark')
     ap.add_argument('--out', type=Path, required=True)
+    ap.add_argument('--allow-no-figures', action='store_true',
+                    help='a part of a circuit note (one section) may have no topic figure')
     a = ap.parse_args(argv)
     try:
         widths = [int(w) for w in a.widths.split(',') if w.strip()]
@@ -265,7 +269,7 @@ def main(argv: list[str] | None = None) -> int:
             sys.path.append(str(REPO / 'workbook'))
             from pack_paths import PackPaths
             view = PackPaths(a.repo, a.public_pack, a.candidate_pack)
-        report = probe(a.html, widths, themes, pack_paths=view)
+        report = probe(a.html, widths, themes, pack_paths=view, require_figures=not a.allow_no_figures)
     except Exception as exc:  # browser missing, bad arguments
         print(json.dumps({'status': 'error', 'reason': str(exc)[:240]}, ensure_ascii=False))
         return 2

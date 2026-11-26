@@ -31,7 +31,10 @@ def run_layout(preview: Path, out: Path):
     import layout_probe
     printed = io.StringIO()
     with contextlib.redirect_stdout(printed):
-        code = layout_probe.main([str(preview), '--widths', WIDTHS, '--themes', THEMES, '--out', str(out)])
+        # A single section of a circuit note may draw no figure; the whole note's browser-qa keeps
+        # that guard. Every topic screen is still walked, and any figures it has are measured.
+        code = layout_probe.main([str(preview), '--widths', WIDTHS, '--themes', THEMES, '--out', str(out),
+                                  '--allow-no-figures'])
     if code in (0, 1):
         return code, json.loads(out.read_text(encoding='utf-8')) if out.is_file() else None
     reason = None
@@ -72,18 +75,24 @@ def _excluded(code: str, detail: str, allowed: set[str]) -> bool:
     return code == 'broken-link' and (detail in allowed or detail.partition('#')[0] in allowed)
 
 
+_ASSEMBLE = None
+
+
 def _note_builder():
     """This skill's assemble.build_note; workbook/assemble.py shares the module name."""
+    global _ASSEMBLE
     import importlib.util
     import sys
     path = Path(__file__).resolve().with_name('assemble.py')
     loaded = sys.modules.get('assemble')
     if loaded is not None and Path(getattr(loaded, '__file__', '') or '.').resolve() == path:
         return loaded.build_note
-    spec = importlib.util.spec_from_file_location('ec2_review_pack_assemble', path)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module.build_note
+    if _ASSEMBLE is None:  # load once: importing it inserts its folder into sys.path
+        spec = importlib.util.spec_from_file_location('ec2_review_pack_assemble', path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        _ASSEMBLE = module
+    return _ASSEMBLE.build_note
 
 
 def fragment_probe(run: Path, task_id: str, attempt: str, *, layout=None) -> dict:
@@ -113,11 +122,6 @@ def fragment_probe(run: Path, task_id: str, attempt: str, *, layout=None) -> dic
     markup = build_note(dict(manifest, sections=sections), root)
     preview.write_text(markup, encoding='utf-8', newline='\n')
     _, diagnostics = common_diagnostics(markup, preview, None)
-    if not re.search(r'<svg\b', fragment.read_text(encoding='utf-8'), re.I):
-        # The circuit walk requires at least one topic figure, which a whole note always has
-        # somewhere; a figure-free section alone is measured as an ordinary page instead.
-        markup = re.sub(r'(<body\b[^>]*?)\s+data-circuits="[^"]*"', r'\1', markup, count=1)
-    preview.write_text(markup, encoding='utf-8', newline='\n')
     allowed = _assembly_only_links(manifest, sid)
     problems = [dict(code=code, where=sid, detail=detail) for code, detail in sorted(diagnostics)
                 if not _excluded(code, detail, allowed)]

@@ -221,6 +221,18 @@ def test_circuit_note_without_any_topic_figure_is_an_error(tmp_path):
     assert code == 2 and 'no topic figure' in out and report is None
 
 
+def test_allow_no_figures_still_walks_every_topic(tmp_path):
+    # One section of a circuit note may draw nothing; its hidden topics are still measured.
+    wide = '<div class="table-wrap"></div>$$' + 'abcdefghij+' * 30 + 'x$$'
+    note = _note(tmp_path, steps=wide, css='article.topic svg{display:none!important}')
+    out = tmp_path / 'probe.json'
+    p = subprocess.run([sys.executable, str(PROBE), str(note), '--out', str(out), '--widths', '1280',
+                        '--themes', 'light', '--allow-no-figures'], capture_output=True, text=True, encoding='utf-8')
+    report = json.loads(out.read_text(encoding='utf-8'))
+    assert p.returncode == 1 and report['checks'][0]['topic_svgs'] == 0
+    assert {o['topic'] for o in report['checks'][0]['overflow']} == {'s1-var'}
+
+
 def test_circuit_stays_pinned_in_the_body(tmp_path):
     from playwright.sync_api import sync_playwright
     note = _note(tmp_path)
