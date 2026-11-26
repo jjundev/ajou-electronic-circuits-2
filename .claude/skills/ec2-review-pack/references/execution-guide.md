@@ -188,7 +188,7 @@
 python3 "$SKILL/scripts/insert_why.py" --note "$REPO/복습노트/<range>/<정리노트>.html" --fragment <why.html>
 ```
 4. `python3 "$SKILL/scripts/check_html.py" <정리노트>.html`이 `OK`, `html2md.py <정리노트>.html --check`가 `OK`(`.assets/`의 md와 `.assets/figures_<range>/fig-why.svg`를 새로 만든다)여야 한다. 커밋할 때 이 svg도 함께 넣는다.
-5. 7단계처럼 브라우저로 본다: 표지 다음 첫 화면이 why 토픽인지, 오른쪽 회로·요약 패널, 링크 이동, 다크모드, 375px.
+5. 7단계처럼 브라우저로 본다: 표지 다음 첫 화면이 why 토픽인지, 본문 상단에 고정되는 회로, 오른쪽 요약 패널, 링크 이동, 다크모드, 375px.
 
 ## 오류 처리
 | 상황 | 동작 |
