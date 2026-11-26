@@ -15,7 +15,7 @@ description: "전자회로2 복습팩이 이미 고른 workbook 문제(날짜별
 
 **기본 근사와 회로 표기:** 공통 `solution-style.md`의 수업 기본 근사를 적용한다. $g_mr_o\gg1$, $g_mR_e\gg1$의 주항을 쓰고 캐스코드의 곱 인자 소자를 밝힌다. 내부 $r_e=1/g_m$는 축퇴 저항과 구분하고 유한 $r_\pi$는 보존한다. 생성 SVG는 NOTATION-01의 native text/tspan 실제 첨자(기본 78%)·Pretendard 600 정체로 통일하고 실제 face 사용을 HTML·독립 SVG·PDF에서 검토한다. CM 이득은 성립 조건을 확인한 $2R_{SS}$ 반회로를 본풀이에 앞세우고 테일 저항 유도는 보충으로 분리한다. 부하 불일치·거울 결합·원문 지정 방법의 예외는 PROFILE CIRCUIT-02를 따른다.
 
-**전압이득의 계산 순서:** PROFILE GAIN-01에 따라 단별 로딩을 포함한 연쇄 곱이 성립하는지 먼저 판단한다. 성립하면 중간 노드 기준으로 각 단의 부호 있는 전압이득을 구해 곱한다. $G_m$·$R_{out}$ 경로의 적용 조건과 저작 표지는 [저작 규칙](references/authoring.md#전압이득의-계산-순서)을 따른다.
+**이득의 계산 순서:** PROFILE GAIN-01에 따라 단별 로딩을 포함한 연쇄 곱이 성립하는지 판단한다. 성립하면 목표 전달비를 중간 노드 기준의 곱으로 먼저 쓰고 각 항을 채운다. 귀환 문항은 포트 역할과 복제 종단부터 읽고, 바로 읽히는 재사용 저항을 항 계산 전에 둔다. 병렬 전류 입력이 노턴 등가로 분리되면 $v_{\mathrm{Th}}=I_{in}R_p$로 놓고 $R_p$에 테브난 전압 기준 이득을 곱한다. 실제 입력 노드까지의 분압은 그 이득에 포함하고 $R_{in,\mathrm{open}}$은 별도로 구한다. 귀환율의 측정 조건과 기준 방향은 해당 식 앞에 놓는다. $G_m$·$R_{out}$ 경로의 적용 조건과 저작 표지는 [저작 규칙](references/authoring.md#전압이득의-계산-순서)을 따른다.
 
 **표시 제목:** 대상 팩 `.assets/display-titles.json`의 workbook ID별 짧은 제목을 사용한다. 없다면 검토 전에 선정된 ID 전체의 맵을 작성한다. 값에는 `P<n>.` 접두사나 Fig 번호를 넣지 않고 목차·본문·MD에서 생성기가 붙이는 `P<n>. 짧은 제목`을 사용한다. 원본 문제은행 제목과 출처는 유지한다. 맵 변경은 입력 해시를 바꾸므로 기존 승인을 재사용하지 않는다.
 
@@ -92,7 +92,7 @@ python3 "$SKILL/scripts/epe_cli.py" extract --repo "$REPO" --target 1007 --run "
 
 ### 3. 저작 (문항마다 작성자 1명, 병렬)
 - 문항마다 작성자 1명을 **한 메시지에서 병렬로** 띄운다. 위 모델 선택 규칙을 적용한다.
-- 브리프 필수 슬롯: `<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md` 실제 절대 경로, `BUCKET/source.json.learning_style` snapshot, 원문 `subparts` 순서, 간략 `circuit-explanation` 풀이 구역, 회로 위치 표시와 첫 식의 대응, 소문항별 답안 선택 표지, 마지막 sum, 독립 계산 한 행 규칙, 규칙별 적용 위치 또는 비적용 이유 보고.
+- 브리프 필수 슬롯: `<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md` 실제 절대 경로, `BUCKET/source.json.learning_style` snapshot, 원문 `subparts` 순서, 간략 `circuit-explanation` 풀이 구역, 회로 위치 표시와 첫 식의 대응, 소문항별 답안 선택 표지, 마지막 sum, 독립 계산 한 행 규칙, 연쇄 곱이면 목표식·재사용 저항·항별 이득 순서와 귀환율의 시험 방향, 규칙별 적용 위치 또는 비적용 이유 보고.
 - 브리프에 적을 것: [저작 규칙](references/authoring.md)의 절대 경로를 먼저 읽으라는 지시, `BUCKET/source.json` 경로와 문항 id(`pN`), 그 문항의 `subparts`, 2에서 정한 참고 자료 경로와 쪽, 출력 파일 `BUCKET/explanations/pN.html` 하나(다른 곳에는 쓰지 않는다), 임시 파일은 `RUN/work/pN/`에만.
 - 작성자는 원문·조건·구할 것·그림을 다시 쓰지 않는다(조립기가 md에서 붙인다).
 - 브리프의 회로 슬롯: PROFILE의 `CIRCUIT-02`와 [저작 규칙](references/authoring.md)의 “소신호 등가회로 그림”을 적용한다. 해당 계산 앞에는 측정 조건을 실제 연결한 회로·생략 근거·노드 관계를 보인다. $G_m$의 출력 단락 접지와 $R_{out}$의 입력 영점·시험원을 구별하고, 입력·노드·축퇴 저항을 식과 대응시키고, 병렬쌍은 전류원 왼쪽/$r_o$ 오른쪽으로 둔다. 상세 KCL/KVL에 필요한 모델은 해당 식이 참조하는 그림에 보존한다. $R_{out}$ 정확 전체 모델은 아래 예외가 아니면 내부 검산에만 둔다. 유한 β·$r_o$가 필요한 핵심을 큰 β 그림으로 바꾸지 않는다. 순수 DC는 제외한다. 같은 목적의 그림을 핵심/상세로 복제하지 않으며 측정 조건·필수 모델이 다르면 필요한 그림을 해당 단계에 둔다.

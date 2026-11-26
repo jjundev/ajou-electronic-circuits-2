@@ -235,24 +235,22 @@ $R_F$가 크지 않고, $R_M$이 작지 않으며, 레이저 다이오드가 저
 
 ㉡ 출력 쪽 복제의 반송 포트를 단락하면 $P$에서 $R_F$와 $R_M$이 병렬이에요. 레이저를 떼고 $I_{in}=0$으로 두면 $V_X=0$이므로, 두 레이저 단자 사이에서는 $r_{O2}$와 이 병렬 저항이 교류 접지를 거쳐 직렬로 보여요.
 
-$g_{m1}R_Dg_{m2}r_{O2}\gg R_M/(R_F+R_M)$에서 $R_F$의 직접 순방향 전달을 생략하고, $X$를 기준으로 두 단을 곱해요.
-
 $$
-A_{I,open}=\frac{V_X}{I_{in}}\frac{I_{out}}{V_X}
+R_{out,open}=r_{O2}+(R_F\parallel R_M)
 $$
 
 $$
 R_{in,open}=(1/g_{m1})\parallel(R_F+R_M)
 $$
 
-$$
-R_{out,open}=r_{O2}+(R_F\parallel R_M)
-$$
-
-입력의 노턴 전류원을 테브난 전압원 $I_{in}(R_F+R_M)$으로 바꾸고 CG 전압 이득을 곱해요.
+$g_{m1}R_Dg_{m2}r_{O2}\gg R_M/(R_F+R_M)$에서 $R_F$의 직접 순방향 전달을 생략해요. 노턴 입력의 테브난 전압은 $V_{\mathrm{Th}}=I_{in}(R_F+R_M)$이고 직렬 저항은 $R_F+R_M$이에요. 첫 인자 $R_F+R_M$은 $V_{\mathrm{Th}}/I_{in}$이에요. 테브난 전압에서 $X$까지의 이득에는 $R_F+R_M$과 $1/g_{m1}$의 분압이 들어가요.
 
 $$
-\frac{V_X}{I_{in}}=\frac{(R_F+R_M)R_D}{R_F+R_M+1/g_{m1}}
+A_{I,open}=(R_F+R_M)\frac{V_X}{V_{\mathrm{Th}}}\frac{I_{out}}{V_X}
+$$
+
+$$
+\frac{V_X}{V_{\mathrm{Th}}}=\frac{R_D}{R_F+R_M+1/g_{m1}}
 $$
 
 레이저를 연결하면 PMOS 전류 $-g_{m2}V_X$가 $r_{O2}$와 레이저 가지로 나뉘어요.
@@ -334,14 +332,18 @@ X12.32 · 연습문제 12.32 · [원 문제 보기](../%EB%B3%B5%EC%8A%B5%EB%AC%
 
 ㉠ 레이저 $R_L$ 자리를 도선으로 바꾸고 $I_{in}$은 그대로 흘려요. 이 도선에서 $D$에서 $P$로 흐르는 전류가 $I_N$이에요. 예제 12.32의 개루프 이득에 $R_L=0$을 대입해요.
 
-$g_{m1}R_Dg_{m2}r_{O2}\gg R_M/(R_F+R_M)$에서 $R_F$의 직접 순방향 전달을 생략한 예제의 2포트 식을 써요.
+$g_{m1}R_Dg_{m2}r_{O2}\gg R_M/(R_F+R_M)$에서 $R_F$의 직접 순방향 전달을 생략한 예제의 2포트 식을 써요. 테브난 전압은 $V_{\mathrm{Th}}=I_{in}(R_F+R_M)$이에요. 첫 인자 $R_F+R_M$에 소스 분압을 포함한 $V_X/V_{\mathrm{Th}}$와 단락 출력의 전류 변환 이득을 곱해요.
 
 $$
 R_{out,open}=r_{O2}+(R_F\parallel R_M)
 $$
 
 $$
-A_0=A_{I,open}\big|_{R_L=0}=\frac{(R_F+R_M)R_D}{R_F+R_M+1/g_{m1}}\cdot\frac{-g_{m2}r_{O2}}{R_{out,open}}
+A_0=A_{I,open}\big|_{R_L=0}=(R_F+R_M)\frac{V_X}{V_{\mathrm{Th}}}\left.\frac{I_{out}}{V_X}\right|_{R_L=0}
+$$
+
+$$
+A_0=\frac{(R_F+R_M)R_D}{R_F+R_M+1/g_{m1}}\cdot\frac{-g_{m2}r_{O2}}{R_{out,open}}
 $$
 
 $$
@@ -403,29 +405,37 @@ E12.33 · 예제 12.33 · [원 문제 보기](../%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%
 
 *V–C 개루프 소신호 회로. $V_{DD}$와 $V_b$는 AC 접지예요.*
 
-㉠ 입력 전류는 병렬로 합쳐지고 출력 전압은 병렬로 감지해요. 두 복제의 반대쪽 포트를 단락하면 입력에는 $R_F$, 출력에는 $R_M$과 $R_F$가 접지로 걸려요. $g_{m1}R_Dg_{m2}R_F\gg1$에서 $R_F$의 직접 순방향 전달을 생략하고 $X$에서 두 단을 나눠요.
-
-$$
-R_O=\frac{V_X}{I_{in}}\frac{V_{out}}{V_X}
-$$
-
-$N$의 전류원과 $R_F$를 테브난 등가로 바꾸면 전압은 $I_{in}R_F$, 직렬 저항은 $R_F$예요.
-
-$$
-\frac{V_X}{I_{in}}=\frac{R_FR_D}{R_F+1/g_{m1}}
-$$
-
-㉡ PMOS의 전류 변화 $-g_{m2}V_X$가 출력의 세 병렬 가지에 걸려요.
+㉡ 출력 전압을 병렬로 감지하고 ㉠ 입력 $N$에서 전류를 병렬로 합쳐요. 두 복제의 반대쪽을 단락하면 출력에는 $R_M$과 $R_F$, 입력에는 $R_F$가 접지로 걸려요.
 
 $$
 R_{out,open}=r_{O2}\parallel R_M\parallel R_F
 $$
 
 $$
+R_{in,open}=\frac{1}{g_{m1}}\parallel R_F
+$$
+
+$g_{m1}R_Dg_{m2}R_F\gg1$에서 $R_F$의 직접 순방향 전달을 생략해요. $N$의 노턴 입력은 테브난 전압 $V_{\mathrm{Th}}=I_{in}R_F$와 직렬 $R_F$로 바뀌어요. 첫 인자 $R_F$는 $V_{\mathrm{Th}}/I_{in}$이에요. 테브난 전압에서 $X$까지의 이득에는 $R_F$와 $1/g_{m1}$의 분압이 들어가요.
+
+$$
+R_O=\frac{V_{out}}{I_{in}}=R_F\frac{V_X}{V_{\mathrm{Th}}}\frac{V_{out}}{V_X}
+$$
+
+$$
+\frac{V_X}{V_{\mathrm{Th}}}=\frac{R_D}{R_F+1/g_{m1}}
+$$
+
+PMOS가 공급하는 전류의 변화 $-g_{m2}V_X$에 앞서 구한 출력저항을 곱해요.
+
+$$
 \frac{V_{out}}{V_X}=-g_{m2}R_{out,open}
 $$
 
-귀환망만 떼어 $N$을 접지하면 $R_F$ 전류는 양의 $V_{out}$에서 $P\to N$으로 흘러요. 귀환 전류 $I_F$의 양의 방향은 $N\to P$예요.
+귀환망만 떼어 $N$을 접지하고 $P$에 $V_{out}$을 걸어요. 양의 $I_F$는 $N$에서 $P$로 향해요.
+
+$$
+V_{out}=-R_FI_F
+$$
 
 $$
 K=\frac{I_F}{V_{out}}=-\frac1{R_F}
@@ -433,14 +443,6 @@ $$
 
 $$
 T=KR_O=\frac{g_{m2}R_DR_{out,open}}{R_F+1/g_{m1}}
-$$
-
-$$
-R_O=-\frac{g_{m2}R_DR_FR_{out,open}}{R_F+1/g_{m1}}
-$$
-
-$$
-R_{in,open}=\frac1{g_{m1}}\parallel R_F
 $$
 
 병렬 입력·병렬 감지라 폐루프 이득과 두 포트 저항이 모두 $1+T$로 나뉘어요.
@@ -457,7 +459,7 @@ $$
 R_{out,closed}\approx\frac{R_{out,open}}{1+T}
 $$
 
-교과서의 $r_{O2}\toinfty$ 모델에서는 출력 병렬 부하가 $R_M\parallel R_F$로 줄어요. E12.32는 $R_M$이 레이저와 직렬로 전류를 감지해 출력저항을 높이고, 이 회로는 $R_F$가 출력 전압을 병렬로 감지해 출력저항을 낮춰요. 입력 복제도 E12.32에서는 $R_F+R_M$, 여기서는 $R_F$예요.
+교과서의 $r_{O2}\to\infty$ 모델에서는 출력 병렬 부하가 $R_M\parallel R_F$로 줄어요. E12.32는 $R_M$이 레이저와 직렬로 전류를 감지해 출력저항을 높이고, 이 회로는 $R_F$가 출력 전압을 병렬로 감지해 출력저항을 낮춰요. 입력 복제도 E12.32에서는 $R_F+R_M$, 여기서는 $R_F$예요.
 
 **페이지 요약**
 

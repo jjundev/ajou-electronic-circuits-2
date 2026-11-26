@@ -38,28 +38,30 @@
     <figcaption class="circuit-state">V–C 개루프 소신호 회로. $V_{DD}$와 $V_b$는 AC 접지예요.</figcaption>
   </figure>
   <div data-subpart="main">
-    <div data-answer-step="개루프 이득과 로딩">
-      <p><span class="loc">㉠</span> 입력 전류는 병렬로 합쳐지고 출력 전압은 병렬로 감지해요. 두 복제의 반대쪽 포트를 단락하면 입력에는 $R_F$, 출력에는 $R_M$과 $R_F$가 접지로 걸려요. $g_{m1}R_Dg_{m2}R_F\gg1$에서 $R_F$의 직접 순방향 전달을 생략하고 $X$에서 두 단을 나눠요.</p>
-      $$R_O=\frac{V_X}{I_{in}}\frac{V_{out}}{V_X}$$
-      <p>$N$의 전류원과 $R_F$를 테브난 등가로 바꾸면 전압은 $I_{in}R_F$, 직렬 저항은 $R_F$예요.</p>
-      $$\frac{V_X}{I_{in}}=\frac{R_FR_D}{R_F+1/g_{m1}}$$
-      <p><span class="loc">㉡</span> PMOS의 전류 변화 $-g_{m2}V_X$가 출력의 세 병렬 가지에 걸려요.</p>
+    <div data-answer-step="병렬 감지·반송과 개루프 저항">
+      <p><span class="loc">㉡</span> 출력 전압을 병렬로 감지하고 <span class="loc">㉠</span> 입력 $N$에서 전류를 병렬로 합쳐요. 두 복제의 반대쪽을 단락하면 출력에는 $R_M$과 $R_F$, 입력에는 $R_F$가 접지로 걸려요.</p>
       $$R_{out,open}=r_{O2}\parallel R_M\parallel R_F$$
+      $$R_{in,open}=\frac{1}{g_{m1}}\parallel R_F$$
+    </div>
+    <div data-answer-step="목표 전달저항과 두 단의 이득">
+      <p>$g_{m1}R_Dg_{m2}R_F\gg1$에서 $R_F$의 직접 순방향 전달을 생략해요. $N$의 노턴 입력은 테브난 전압 $V_{\mathrm{Th}}=I_{in}R_F$와 직렬 $R_F$로 바뀌어요. 첫 인자 $R_F$는 $V_{\mathrm{Th}}/I_{in}$이에요. 테브난 전압에서 $X$까지의 이득에는 $R_F$와 $1/g_{m1}$의 분압이 들어가요.</p>
+      $$R_O=\frac{V_{out}}{I_{in}}=R_F\frac{V_X}{V_{\mathrm{Th}}}\frac{V_{out}}{V_X}$$
+      $$\frac{V_X}{V_{\mathrm{Th}}}=\frac{R_D}{R_F+1/g_{m1}}$$
+      <p>PMOS가 공급하는 전류의 변화 $-g_{m2}V_X$에 앞서 구한 출력저항을 곱해요.</p>
       $$\frac{V_{out}}{V_X}=-g_{m2}R_{out,open}$$
     </div>
-    <div data-answer-step="귀환율과 루프 이득">
-      <p>귀환망만 떼어 $N$을 접지하면 $R_F$ 전류는 양의 $V_{out}$에서 $P\to N$으로 흘러요. 귀환 전류 $I_F$의 양의 방향은 $N\to P$예요.</p>
+    <div data-answer-step="귀환율 시험과 루프 이득">
+      <p>귀환망만 떼어 $N$을 접지하고 $P$에 $V_{out}$을 걸어요. 양의 $I_F$는 $N$에서 $P$로 향해요.</p>
+      $$V_{out}=-R_FI_F$$
       $$K=\frac{I_F}{V_{out}}=-\frac1{R_F}$$
       $$T=KR_O=\frac{g_{m2}R_DR_{out,open}}{R_F+1/g_{m1}}$$
     </div>
     <div data-answer-final="">
-      $$R_O=-\frac{g_{m2}R_DR_FR_{out,open}}{R_F+1/g_{m1}}$$
-      $$R_{in,open}=\frac1{g_{m1}}\parallel R_F$$
       <p>병렬 입력·병렬 감지라 폐루프 이득과 두 포트 저항이 모두 $1+T$로 나뉘어요.</p>
       $$R_{O,closed}\approx\frac{R_O}{1+T}$$
       $$R_{in,closed}\approx\frac{R_{in,open}}{1+T}$$
       $$R_{out,closed}\approx\frac{R_{out,open}}{1+T}$$
-      <p>교과서의 $r_{O2}\toinfty$ 모델에서는 출력 병렬 부하가 $R_M\parallel R_F$로 줄어요. E12.32는 $R_M$이 레이저와 직렬로 전류를 감지해 출력저항을 높이고, 이 회로는 $R_F$가 출력 전압을 병렬로 감지해 출력저항을 낮춰요. 입력 복제도 E12.32에서는 $R_F+R_M$, 여기서는 $R_F$예요.</p>
+      <p>교과서의 $r_{O2}\to\infty$ 모델에서는 출력 병렬 부하가 $R_M\parallel R_F$로 줄어요. E12.32는 $R_M$이 레이저와 직렬로 전류를 감지해 출력저항을 높이고, 이 회로는 $R_F$가 출력 전압을 병렬로 감지해 출력저항을 낮춰요. 입력 복제도 E12.32에서는 $R_F+R_M$, 여기서는 $R_F$예요.</p>
     </div>
   </div>
 </div>

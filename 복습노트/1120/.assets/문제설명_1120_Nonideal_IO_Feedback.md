@@ -416,41 +416,41 @@ E12.28 · 예제 12.28 · [원 문제 보기](../%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%
 
 *두 복제를 저항으로 합친 개루프 회로*
 
-#### 반송 복제가 첫 단을 축퇴시켜요
-
-㉠ 반송 복제를 단락해 얻은 $R_S$가 $M_1$ 소스에 달려요. 두 MOS는 $\lambda=0$으로 가정해요.
+출력 전압을 감지하고 입력 쪽에서는 $M_1$ 소스 전압으로 돌려줘요. ㉠ 반송 복제의 반대 포트를 단락하면 $R_S$가 첫 단 소스에 달려요. 두 MOS는 $\lambda=0$으로 가정해요.
 
 $$
 R_S=R_1\parallel R_2
 $$
 
-㉢ 첫 단 출력 $X$에서는 $M_2$ 게이트 전류가 0이라 부하가 $R_{D1}$이에요.
-
-$$
-\frac{v_X}{v_{in}}=-\frac{R_{D1}}{1/g_{m1}+R_S}
-$$
-
-㉡ 감지 복제의 가운데 포트가 열려 있어 $R_1+R_2$가 $R_{D2}$에 병렬로 붙어요.
+㉡ 감지 복제의 가운데 포트는 개방이어서 $R_1+R_2$가 $R_{D2}$에 병렬로 붙어요.
 
 $$
 R_{\mathrm{out,open}}=R_{D2}\parallel(R_1+R_2)
 $$
 
+㉢ 첫 단의 출력 $X$가 둘째 단 게이트를 구동해요.
+
+$$
+A_{\mathrm{open}}=\frac{v_X}{v_{in}}\frac{v_{out}}{v_X}
+$$
+
+$M_2$ 게이트에 전류가 흐르지 않으므로 첫 단의 드레인 부하는 $R_{D1}$이고, 소스에는 $R_S$가 달려요.
+
+$$
+\frac{v_X}{v_{in}}=-\frac{R_{D1}}{1/g_{m1}+R_S}
+$$
+
+둘째 단도 반전해요. 앞에서 구한 개루프 출력저항을 부하로 쓰므로 전체 이득은 양수예요.
+
 $$
 \frac{v_{out}}{v_X}=-g_{m2}R_{\mathrm{out,open}}
 $$
 
-두 공통 소스 단이 각각 반전하므로 개루프 이득은 양수예요.
-
-$$
-A_{\mathrm{open}}=\frac{v_X}{v_{in}}\frac{v_{out}}{v_X} =\frac{g_{m2}R_{D1}R_{\mathrm{out,open}}}{1/g_{m1}+R_S}
-$$
+귀환망에 출력 전압을 걸고 반송 포트를 개방해요. 그 포트에서 접지 쪽에 있는 $R_2$의 전압이 반송돼요.
 
 $$
 K=\frac{R_2}{R_1+R_2}
 $$
-
-#### 폐루프 답
 
 분압기를 통한 직접 전달을 무시하는 복제법의 결과예요.
 
@@ -600,43 +600,53 @@ $R_F$가 매우 크지 않다고 가정할 때 그림 12.58(a)의 회로를 해�
 
 *입력·출력에 단락 복제를 붙인 개루프 회로*
 
-두 복제의 반대 포트를 단락해 ㉠ 입력과 ㉡ 출력에 각각 $R_F$를 접지로 붙여요. $\lambda=0$으로 두어요.
+㉡ 출력 전압을 감지해 ㉠ 입력에서 전류를 병렬로 합쳐요. 두 복제의 반대 포트를 단락하면 입력과 출력에 각각 $R_F$가 접지로 붙어요. $\lambda=0$으로 두고 몸체 효과를 생략해요.
 
-$I_{in}\parallel R_F$를 테브난 등가 $I_{in}R_F$와 직렬 $R_F$로 바꾸면 ㉢ $X$ 전압은 CG 이득으로 구해요.
-
-$$
-\frac{v_X}{I_{in}}=R_F\frac{R_{D1}}{R_F+1/g_{m1}}
-$$
-
-㉣ CS 단의 출력 전류는 드레인으로 들어가는 방향이 양이에요.
-
-$$
-G_{m2}=g_{m2}
-$$
+입력 전류원을 개방하고 출력에서 보면 $R_{D2}$와 $R_F$가 같은 출력 노드와 AC 접지 사이에 있어요.
 
 $$
 R_{out,\mathrm{open}}=R_{D2}\parallel R_F
 $$
 
-$$
-\frac{v_{out}}{v_X}=-G_{m2}R_{out,\mathrm{open}}
-$$
-
-입력을 단락하면 $v_{out}\gt0$에서 $R_F$ 전류가 입력 노드로 들어와요. 그 노드에서 빠져나가는 방향을 $I_F$의 양으로 잡아요.
+입력에서는 CG 소스의 $1/g_{m1}$과 $R_F$가 병렬이에요.
 
 $$
-R_0=\frac{v_X}{I_{in}}\frac{v_{out}}{v_X}
+R_{in,\mathrm{open}}=\frac{1}{g_{m1}}\parallel R_F
 $$
 
+㉢ $I_{in}\parallel R_F$를 테브난 전압 $v_{\mathrm{Th}}=I_{in}R_F$와 직렬 $R_F$로 바꿔요. 첫 인자 $R_F$는 $v_{\mathrm{Th}}/I_{in}$이에요. $X$에서 두 단을 나눠요.
+
 $$
-R_{in,\mathrm{open}}=R_F\parallel\frac{1}{g_{m1}}
+R_0=\frac{v_{out}}{I_{in}}=R_F\frac{v_X}{v_{\mathrm{Th}}}\frac{v_{out}}{v_X}
+$$
+
+테브난 전압은 직렬 $R_F$와 소스에서 보이는 $1/g_{m1}$ 사이에서 분배돼요. 다음 이득에는 이 분압과 소스에서 $X$까지의 CG 이득이 함께 들어가요. 드레인 부하는 $R_{D1}$예요.
+
+$$
+\frac{v_X}{v_{\mathrm{Th}}}=\frac{R_{D1}}{R_F+1/g_{m1}}
+$$
+
+㉣ NMOS 공통 소스 단은 반전해요. 앞에서 구한 출력저항을 부하로 써요.
+
+$$
+\frac{v_{out}}{v_X}=-g_{m2}R_{out,\mathrm{open}}
+$$
+
+![왼쪽 반송단은 접지예요. 귀환 저항 오른쪽에 출력 전압을 걸고 귀환 전류의 양의 방향은 왼쪽에서 오른쪽으로 잡아요.](figures_문제설명_1120_Nonideal_IO_Feedback/p7-svg2-p7-rf-feedback-test.svg)
+
+*반송단을 단락한 귀환율 시험*
+
+귀환망만 떼어 반송단을 접지해요. 그 단자에서 출력 쪽으로 향하는 방향을 $I_F$의 양으로 잡아요. 원 회로의 $i_{RF}$ 화살표는 반대여서 $I_F=-i_{RF}$예요.
+
+$$
+v_{out}=-R_F I_F
 $$
 
 $$
 K=\frac{I_F}{v_{out}}=-\frac{1}{R_F}
 $$
 
-$KR_0\gt0$인 부궤환이에요. 복제법에서 다음 폐루프 값이 나와요.
+복제법에서는 귀환 저항을 통한 입력에서 출력으로의 직접 전달을 생략해요. $KR_0\gt0$인 부귀환이에요.
 
 $$
 \frac{v_{out}}{I_{in}}\approx\frac{R_0}{1+KR_0}
@@ -691,45 +701,51 @@ CG–CS의 $R_0$와 $K=-1/R_F$가 모두 음수여서 $1+KR_0\gt1$이에요.
 
 #### (1) 개루프
 
-두 복제를 단락해 ㉠ 입력에 $R_F$, ㉡ 출력에 $R_M\parallel R_F$를 남겨요. $\lambda=0$이에요.
+㉡ 출력 전압을 감지해 ㉠ 입력에서 전류를 병렬로 합쳐요. 두 복제의 반대 포트를 단락하면 입력과 출력에 각각 $R_F$가 접지로 붙어요. $\lambda=0$으로 두고 몸체 효과를 생략해요.
 
-$I_{in}\parallel R_F$의 테브난 전압은 $I_{in}R_F$예요. 직렬 $R_F$가 붙은 CG 단에서 ㉢ $X$까지의 이득을 써요.
-
-$$
-\frac{v_X}{I_{in}}=R_F\frac{R_D}{R_F+1/g_{m1}}
-$$
-
-㉣ PMOS CS는 반전이에요. $v_X$가 오르면 $M_2$가 출력으로 공급하는 전류가 줄어요. $i_{out}$은 증폭기로 들어가는 방향을 양으로 잡아요.
-
-$$
-G_{m2}=g_{m2}
-$$
+입력 전류원을 개방하고 출력에서 보면 $R_M$과 $R_F$가 같은 출력 노드와 AC 접지 사이에 있어요.
 
 $$
 R_{out,\mathrm{open}}=R_M\parallel R_F
 $$
 
-$$
-\frac{v_{out}}{v_X}=-G_{m2}R_{out,\mathrm{open}}
-$$
+입력에서는 CG 소스의 $1/g_{m1}$과 $R_F$가 병렬이에요.
 
 $$
-R_0=\frac{v_X}{I_{in}}\frac{v_{out}}{v_X}
+R_{in,\mathrm{open}}=\frac{1}{g_{m1}}\parallel R_F
 $$
 
+㉢ $I_{in}\parallel R_F$를 테브난 전압 $v_{\mathrm{Th}}=I_{in}R_F$와 직렬 $R_F$로 바꿔요. 첫 인자 $R_F$는 $v_{\mathrm{Th}}/I_{in}$이에요. $X$에서 두 단을 나눠요.
+
 $$
-R_{in,\mathrm{open}}=R_F\parallel\frac{1}{g_{m1}}
+R_0=\frac{v_{out}}{I_{in}}=R_F\frac{v_X}{v_{\mathrm{Th}}}\frac{v_{out}}{v_X}
+$$
+
+테브난 전압은 직렬 $R_F$와 소스에서 보이는 $1/g_{m1}$ 사이에서 분배돼요. 다음 이득에는 이 분압과 소스에서 $X$까지의 CG 이득이 함께 들어가요. 드레인 부하는 $R_D$예요.
+
+$$
+\frac{v_X}{v_{\mathrm{Th}}}=\frac{R_D}{R_F+1/g_{m1}}
+$$
+
+㉣ PMOS 공통 소스 단은 $v_X$가 오르면 출력에 공급하는 전류가 줄어요. 앞에서 구한 출력저항을 부하로 쓰면 이 항이 음수예요.
+
+$$
+\frac{v_{out}}{v_X}=-g_{m2}R_{out,\mathrm{open}}
 $$
 
 #### (2) 귀환율과 폐루프
 
-입력을 단락하면 $v_{out}\gt0$에서 $R_F$ 전류가 입력 노드로 들어와요. 그 노드에서 빠져나가는 방향을 $I_F$의 양으로 잡아요.
+귀환망만 떼어 반송단을 접지해요. 그 단자에서 출력 쪽으로 향하는 방향을 $I_F$의 양으로 잡아요.
+
+$$
+v_{out}=-R_F I_F
+$$
 
 $$
 K=\frac{I_F}{v_{out}}=-\frac{1}{R_F}
 $$
 
-복제법으로 폐루프 값을 근사해요.
+복제법에서는 귀환 저항을 통한 입력에서 출력으로의 직접 전달을 생략해요. $KR_0\gt0$인 부귀환이에요.
 
 $$
 \frac{v_{out}}{I_{in}}\approx\frac{R_0}{1+KR_0}
@@ -780,33 +796,37 @@ PMOS CS가 반전하므로 출력 부하 $R_M\parallel R_F$를 넣은 $R_0$는 �
 
 #### (1) 귀환율과 폐루프 이득
 
-두 복제를 단락하면 ㉠ 입력과 ㉡ 출력에 $R_F$가 각각 남아요. $\lambda=0$이고 몸체 효과는 무시해요.
+㉡ 출력 전압을 감지해 ㉠ 입력에서 전류를 병렬로 합쳐요. 복제의 반대 포트 두 곳을 단락하면 입출력에 각각 $R_F$가 남아요. $\lambda=0$이고 몸체 효과는 무시해요.
 
-테브난 전압 $I_{in}R_F$에 직렬 $R_F$가 붙으므로 ㉢ $X$까지의 CG 이득을 바로 써요.
-
-$$
-\frac{v_X}{I_{in}}=R_F\frac{R_D}{R_F+1/g_{m1}}
-$$
-
-㉣ $M_2$의 소스가 출력이에요. $i_{out}$을 증폭기 쪽으로 들어가는 방향으로 잡으면 $G_{m2}$가 음수예요.
-
-$$
-G_{m2}=-g_{m2}
-$$
+입력 전류원을 개방한 상태에서 ㉣ $M_2$ 소스를 바라보면 $1/g_{m2}$, $R_M$, $R_F$가 출력과 AC 접지 사이에 놓여요.
 
 $$
 R_{out,\mathrm{open}}=\frac{1}{g_{m2}}\parallel R_M\parallel R_F
 $$
 
-$$
-\frac{v_{out}}{v_X}=-G_{m2}R_{out,\mathrm{open}}
-$$
+㉢ $I_{in}\parallel R_F$를 테브난 전압 $v_{\mathrm{Th}}=I_{in}R_F$와 직렬 $R_F$로 바꿔요. 첫 인자 $R_F$는 $v_{\mathrm{Th}}/I_{in}$이에요. $X$에서 두 단을 나눠요.
 
 $$
-R_0=\frac{v_X}{I_{in}}\frac{v_{out}}{v_X}\gt0
+R_0=\frac{v_{out}}{I_{in}}=R_F\frac{v_X}{v_{\mathrm{Th}}}\frac{v_{out}}{v_X}
 $$
 
-입력 단락 시 그 노드에서 빠져나가는 방향을 $I_F$의 양으로 잡아요.
+테브난 전압은 직렬 $R_F$와 소스에서 보이는 $1/g_{m1}$ 사이에서 분배돼요. 다음 이득에는 이 분압과 소스에서 $X$까지의 CG 이득이 함께 들어가요. 드레인 부하는 $R_D$예요.
+
+$$
+\frac{v_X}{v_{\mathrm{Th}}}=\frac{R_D}{R_F+1/g_{m1}}
+$$
+
+소스 팔로워는 비반전이에요. 게이트 전압 $v_X$가 오를 때 출력 소스로 밀어 넣는 전류가 늘어요.
+
+$$
+\frac{v_{out}}{v_X}=+g_{m2}R_{out,\mathrm{open}}
+$$
+
+귀환망만 떼어 반송단을 접지해요. 그 단자에서 출력 쪽으로 향하는 방향을 $I_F$의 양으로 잡아요.
+
+$$
+v_{out}=-R_F I_F
+$$
 
 $$
 K=\frac{I_F}{v_{out}}=-\frac{1}{R_F}
@@ -816,7 +836,7 @@ $$
 T=-KR_0=\frac{R_0}{R_F}
 $$
 
-CG와 소스 팔로워가 모두 비반전이므로 정궤환이에요. 저주파 복제 모델에서 $T\lt1$인 경우를 써요.
+두 단이 모두 비반전이어서 정궤환이에요. 귀환 저항의 직접 전달을 생략하는 저주파 복제 모델에서 $T\lt1$인 경우를 써요.
 
 $$
 \frac{v_{out}}{I_{in}}\approx\frac{R_0}{1-T}
@@ -824,8 +844,10 @@ $$
 
 #### (2) 폐루프 입출력 저항
 
+입력에서 본 $1/g_{m1}$과 반송 복제 $R_F$가 병렬이에요. 출력에는 (1)에서 구한 저항을 써요.
+
 $$
-R_{in,\mathrm{open}}=R_F\parallel\frac{1}{g_{m1}}
+R_{in,\mathrm{open}}=\frac{1}{g_{m1}}\parallel R_F
 $$
 
 $$
@@ -872,31 +894,47 @@ Figure 12.112 depicts a popular transimpedance amplifier topology. Repeat the an
 
 *단락 복제를 붙인 CE 소신호 회로*
 
-두 복제를 단락하면 ㉠ 베이스와 ㉡ 컬렉터에 각각 $R_F$가 붙어요. $V_A\lt\infty$이므로 컬렉터의 $r_O$를 남겨요.
-
-$$
-R_{in,\mathrm{open}}=r_\pi\parallel R_F
-$$
-
-$$
-v_\pi=I_{in}R_{in,\mathrm{open}}
-$$
+㉡ 컬렉터의 전압을 감지하고 ㉠ 베이스에 전류를 반송해요. 두 복제의 반대 포트를 단락하면 베이스와 컬렉터에 각각 $R_F$가 붙어요. $V_A\lt\infty$이므로 컬렉터의 $r_O$를 남겨요.
 
 $$
 R_{out,\mathrm{open}}=R_C\parallel r_O\parallel R_F
 $$
 
 $$
-R_0=-g_mR_{in,\mathrm{open}}R_{out,\mathrm{open}}
+R_{in,\mathrm{open}}=r_\pi\parallel R_F
 $$
 
-입력을 단락하고 출력에 $v_{out}$을 걸어요. 베이스 노드에서 나가는 방향을 $I_F$의 양으로 잡아요.
+입력의 $I_{in}\parallel R_F$를 테브난 전압 $v_{\mathrm{Th}}=I_{in}R_F$와 직렬 $R_F$로 바꿔요. 첫 인자 $R_F$는 $v_{\mathrm{Th}}/I_{in}$이에요.
+
+$$
+R_0=\frac{v_{out}}{I_{in}}=R_F\frac{v_{out}}{v_{\mathrm{Th}}}
+$$
+
+직렬 $R_F$와 $r_\pi$의 분압으로 실제 베이스 전압 $v_\pi$를 구하고, 베이스에서 컬렉터까지의 반전 이득을 곱해요.
+
+$$
+\frac{v_\pi}{v_{\mathrm{Th}}}=\frac{r_\pi}{R_F+r_\pi}
+$$
+
+$$
+\frac{v_{out}}{v_\pi}=-g_mR_{out,\mathrm{open}}
+$$
+
+$$
+R_0=R_F\frac{r_\pi}{R_F+r_\pi}(-g_mR_{out,\mathrm{open}})
+$$
+
+귀환망만 떼어 반송단을 접지해요. 그 단자에서 출력 쪽으로 향하는 방향을 $I_F$의 양으로 잡아요.
+
+$$
+v_{out}=-R_F I_F
+$$
 
 $$
 K=\frac{I_F}{v_{out}}=-\frac{1}{R_F}
 $$
 
-복제법으로 폐루프 값을 근사해요.
+복제법에서는 귀환 저항을 통한 입력에서 출력으로의 직접 전달을 생략해요. $KR_0\gt0$인 부귀환이에요.
 
 $$
 \frac{v_{out}}{I_{in}}\approx\frac{R_0}{1+KR_0}
@@ -946,7 +984,7 @@ Repeat Example 12-29 for the circuit illustrated in Fig. 12.110. Assume $\lambda
 
 *분배 귀환망의 두 단락 포트*
 
-㉠ 출력 포트를 단락하면 ㉡ 입력 $A$에서 본 반송 복제가 $R_A$예요. 반대로 $A$를 단락하면 출력에서 본 감지 복제가 $R_B$예요.
+출력 전압을 감지하고 입력 $A$에 전류를 병렬로 돌려줘요. ㉠ 출력 포트를 단락해 ㉡ $A$에서 본 반송 부하를 $R_A$로, $A$를 단락해 출력에서 본 감지 부하를 $R_B$로 잡아요.
 
 $$
 R_A=R_F+(R_1\parallel R_2)
@@ -956,51 +994,53 @@ $$
 R_B=R_1+(R_2\parallel R_F)
 $$
 
-$\lambda\gt0$이라 두 $r_O$를 남기고, 몸체 효과는 무시해요. $g_{m1}r_{O1}\gg1$에서 $M_1$ 소스 저항을 $R_{S1}$로 근사해요.
-
-$$
-R_{S1}\approx\frac{1}{g_{m1}}\left(1+\frac{R_{D1}}{r_{O1}}\right)
-$$
-
-$i_{in}\parallel R_A$를 전압 $i_{in}R_A$와 직렬 $R_A$로 바꿔 CG 이득을 곱해요.
-
-$$
-\frac{v_X}{i_{in}}\approx R_A\frac{R_{D1}}{R_A+R_{S1}}
-$$
-
-이상적 전류원 부하는 소신호에서 개방이에요. $i_{out}$은 $M_2$ 드레인에 들어가는 방향이 양이에요.
-
-$$
-G_{m2}=g_{m2}
-$$
+$\lambda\gt0$이라 두 $r_O$를 남기고 몸체 효과를 무시해요. 이상적 전류원 부하는 소신호에서 개방이에요.
 
 $$
 R_{out,\mathrm{open}}=r_{O2}\parallel R_B
 $$
 
-$$
-\frac{v_{out}}{v_X}=-G_{m2}R_{out,\mathrm{open}}
-$$
-
-$A$를 단락하고 $v_{out}$을 걸면 ㉢ $N$의 아래쪽 저항은 $R_2\parallel R_F$예요. $A$에서 빠져나가는 방향을 $i_F$의 양으로 잡아요.
+$g_{m1}r_{O1}\gg1$에서 $M_1$ 소스 쪽 저항 $R_{S1}$은 다음과 같아요. 입력에서는 이 저항과 반송 부하 $R_A$를 병렬로 읽어요.
 
 $$
-v_N=\frac{R_2\parallel R_F}{R_B}v_{out}
-$$
-
-$$
-R_0=\frac{v_X}{i_{in}}\frac{v_{out}}{v_X}
+R_{S1}\approx\frac{1}{g_{m1}}\left(1+\frac{R_{D1}}{r_{O1}}\right)
 $$
 
 $$
 R_{in,\mathrm{open}}\approx R_A\parallel R_{S1}
 $$
 
+$i_{in}\parallel R_A$를 테브난 전압 $v_{\mathrm{Th}}=i_{in}R_A$와 직렬 $R_A$로 바꿔요. 첫 인자 $R_A$는 $v_{\mathrm{Th}}/i_{in}$이에요. 테브난 전압에서 $X$까지의 이득에는 $R_A$와 $R_{S1}$의 분압이 들어가요.
+
+$$
+R_0=R_A\frac{v_X}{v_{\mathrm{Th}}}\frac{v_{out}}{v_X}
+$$
+
+$$
+\frac{v_X}{v_{\mathrm{Th}}}\approx\frac{R_{D1}}{R_A+R_{S1}}
+$$
+
+둘째 단은 CS라 반전하고, 감지 부하를 포함한 개루프 출력저항을 재사용해요.
+
+$$
+\frac{v_{out}}{v_X}=-g_{m2}R_{out,\mathrm{open}}
+$$
+
+$A$를 접지하고 $v_{out}$을 걸면 ㉢ $N$의 아래쪽 저항은 $R_2\parallel R_F$예요. $i_F$의 양의 방향은 $A$에서 $N$ 쪽이에요.
+
+$$
+v_N=\frac{R_2\parallel R_F}{R_B}v_{out}
+$$
+
+$$
+i_F=-\frac{v_N}{R_F}
+$$
+
 $$
 K=\frac{i_F}{v_{out}}=-\frac{R_2}{R_1R_2+R_1R_F+R_2R_F}
 $$
 
-복제법으로 폐루프 값을 근사해요.
+귀환망의 직접 전달을 생략하는 복제법으로 폐루프 값을 근사해요.
 
 $$
 \frac{v_{out}}{i_{in}}\approx\frac{R_0}{1+KR_0}

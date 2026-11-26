@@ -1,20 +1,9 @@
-import sympy as s
-g,h,D,r,L,M,F=s.symbols('gm1 gm2 RD ro2 RL RM RF', positive=True)
-H=M/(M+F)
-S=M*F/(M+F)
-B=g+1/(M+F)
-Z=r+L+S
-v,p,I,j=s.symbols('vi vp Iin j')
-sol=s.solve([I-g*v-(v-p)/F, p/M-j-(v-p)/F, j+h*D*g*v+(p+L*j)/r],[v,p,j])
-for name,C in [('exact',r*h*D*g+H),('unilateral',r*h*D*g)]:
- A=-C/(B*Z)
- T=-A*H
- gain=A/(1+T)
- ri=1/(B*(1+T))
- rn=r+S+C*H/B
- if name=='exact':
-  assert s.simplify(sol[j]/I-gain)==0 and s.simplify(sol[v]/I-ri)==0
- n={g:.002,h:.003,D:10000,r:60000,L:500,M:200,F:5000}
- for label,z in [('Aopen',A),('Ri_open',1/B),('Ro_open',r+S),('K',-H),('T',T),('gain',gain),('Ri',ri),('Ro laser removed',rn)]:
-  print(name,label,z,float(z.subs(n)))
-print('Exact Aopen refers to cutting only the reverse controlled feedback term. Unilateral model drops H compared with gm1 RD gm2 ro2.')
+from sympy import symbols,simplify,solve
+g,b,F,M,L,r,i,j,u,p=symbols('gm1 b RF RM RL ro2 i j u p')
+# b=gm2 gm1 RD; u=input, p=sense node
+Z=1/(g+1/(F+M)); P=F*M/(F+M); k=M/(F+M)
+A=-b*r*Z/(r+L+P)
+Ae=-(b*r+k)*Z/(r+L+P)
+s=solve([g*u+(u-p)/F-i,p/M+(p-u)/F-j,j+b*u+(p+L*j)/r],[u,p,j])
+assert simplify(s[j]/i-Ae/(1-k*Ae))==0
+print('Textbook Aopen=',A,'K=',-k,'Zin0=',Z,'Zout0=',r+P,'gain=A/(1-k*A); Zin=Z/(1-k*A); stated textbook Zout=(r+P)(1-k*A). For unloaded port evaluate A with RL=0. Exact nodal replacement Ae=',Ae)

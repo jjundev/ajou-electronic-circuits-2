@@ -1,12 +1,13 @@
-Loaded replica: R0 = -h/(Yin*Yout) ; Rin0 = 1/Yin ; Rout0 = 1/Yout
-Return convention: i_in+i_f, i_f=f*vo at vi=0; f>0; T=-f*R0.
-Equivalent subtracting convention: i_in-K*vo with K=-f.
-Loaded replica closed: R=R0/(1+T); Rin=Rin0/(1+T); Rout=Rout0/(1+T).
-Exact closed physical circuit: replace h by h-f in the above expressions.
-Exact D = Yin*Yout+f*(h-f); R=(f-h)/D; Rin=Yout/D; Rout=Yin/D.
-Replica drops reciprocal forward feedthrough; R comparison requires |f/h| << 1.
-Close to D=0, also check that the determinant change f**2 is negligible.
-G_input= (gm1 + go1)/(RD1*go1 + 1) ; G_output= go2 ; h= RD1*gm2*(gm1 + go1)/(RD1*go1 + 1)
-Yin=G_input+1/(RF+(R1||R2)); Yout=go2+1/(R1+(RF||R2)).
-f=R2/(RF*R1+RF*R2+R1*R2).
-R2 -> infinity reduces to RF+R1 series feedback; R2 -> 0 breaks return and grounds tap.
+Zi=[(ro1+RD1)/(1+gm1 ro1)]||[RF+(R1||R2)], Zo=ro2||[R1+(R2||RF)], G=gm2(gm1+1/ro1)(RD1||ro1), kf=R2/[R1 R2+RF(R1+R2)]. With actual return current added at the input, textbook loaded unilateral results R0=−G Zi Zo, D=1−kf R0, Rcl=R0/D, Rin=Zi/D, Rout=Zo/D (signed K=−kf in the 1+K R0 convention). Exact reciprocal network additionally includes forward passive current: replace G by G−kf in R0 and in D. Full exact KCL included in evidence.
+Zi = 1/(1/(F + 1/(1/R2 + 1/R1)) + (g1*ro1 + 1)/(D1 + ro1))
+Zo = 1/(1/(R1 + 1/(1/R2 + 1/F)) + 1/ro2)
+R0 = -g2*(g1 + 1/ro1)/((1/ro1 + 1/D1)*(1/(F + 1/(1/R2 + 1/R1)) + (g1*ro1 + 1)/(D1 + ro1))*(1/(R1 + 1/(1/R2 + 1/F)) + 1/ro2))
+K_signed_subtractive = -R2/(F*(R1 + R2) + R1*R2)
+K_return_current = R2/(F*(R1 + R2) + R1*R2)
+D = R2*g2*(g1 + 1/ro1)/((1/ro1 + 1/D1)*(F*(R1 + R2) + R1*R2)*(1/(F + 1/(1/R2 + 1/R1)) + (g1*ro1 + 1)/(D1 + ro1))*(1/(R1 + 1/(1/R2 + 1/F)) + 1/ro2)) + 1
+Rclosed_replica = -g2*(g1 + 1/ro1)/((1/ro1 + 1/D1)*(R2*g2*(g1 + 1/ro1)/((1/ro1 + 1/D1)*(F*(R1 + R2) + R1*R2)*(1/(F + 1/(1/R2 + 1/R1)) + (g1*ro1 + 1)/(D1 + ro1))*(1/(R1 + 1/(1/R2 + 1/F)) + 1/ro2)) + 1)*(1/(F + 1/(1/R2 + 1/R1)) + (g1*ro1 + 1)/(D1 + ro1))*(1/(R1 + 1/(1/R2 + 1/F)) + 1/ro2))
+Rin_replica = 1/((R2*g2*(g1 + 1/ro1)/((1/ro1 + 1/D1)*(F*(R1 + R2) + R1*R2)*(1/(F + 1/(1/R2 + 1/R1)) + (g1*ro1 + 1)/(D1 + ro1))*(1/(R1 + 1/(1/R2 + 1/F)) + 1/ro2)) + 1)*(1/(F + 1/(1/R2 + 1/R1)) + (g1*ro1 + 1)/(D1 + ro1)))
+Rout_replica = 1/((R2*g2*(g1 + 1/ro1)/((1/ro1 + 1/D1)*(F*(R1 + R2) + R1*R2)*(1/(F + 1/(1/R2 + 1/R1)) + (g1*ro1 + 1)/(D1 + ro1))*(1/(R1 + 1/(1/R2 + 1/F)) + 1/ro2)) + 1)*(1/(R1 + 1/(1/R2 + 1/F)) + 1/ro2))
+Rclosed_exact = (R2/(F*(R1 + R2) + R1*R2) - g2*(g1 + 1/ro1)/(1/ro1 + 1/D1))/(R2*(-R2/(F*(R1 + R2) + R1*R2) + g2*(g1 + 1/ro1)/(1/ro1 + 1/D1))/(F*(R1 + R2) + R1*R2) + (1/(F + 1/(1/R2 + 1/R1)) + (g1*ro1 + 1)/(D1 + ro1))*(1/(R1 + 1/(1/R2 + 1/F)) + 1/ro2))
+Rin_exact = (1/(R1 + 1/(1/R2 + 1/F)) + 1/ro2)/(R2*(-R2/(F*(R1 + R2) + R1*R2) + g2*(g1 + 1/ro1)/(1/ro1 + 1/D1))/(F*(R1 + R2) + R1*R2) + (1/(F + 1/(1/R2 + 1/R1)) + (g1*ro1 + 1)/(D1 + ro1))*(1/(R1 + 1/(1/R2 + 1/F)) + 1/ro2))
+Rout_exact = (1/(F + 1/(1/R2 + 1/R1)) + (g1*ro1 + 1)/(D1 + ro1))/(R2*(-R2/(F*(R1 + R2) + R1*R2) + g2*(g1 + 1/ro1)/(1/ro1 + 1/D1))/(F*(R1 + R2) + R1*R2) + (1/(F + 1/(1/R2 + 1/R1)) + (g1*ro1 + 1)/(D1 + ro1))*(1/(R1 + 1/(1/R2 + 1/F)) + 1/ro2))

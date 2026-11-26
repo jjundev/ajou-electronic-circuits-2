@@ -1,12 +1,5 @@
-exact closed Av OK   RC*(R1*beta + R2*beta + R2)/(R1*R2 + R1*rpi + R2*RC*beta + R2*RC + R2*rpi + RC*rpi)
-exact closed Rin OK   (R1*R2 + R1*rpi + R2*RC*beta + R2*RC + R2*rpi + RC*rpi)/((beta + 1)*(R1 + R2 + RC))
-exact closed Rout OK   RC*(R1*R2 + R1*rpi + R2*rpi)/(R1*R2 + R1*rpi + R2*RC*beta + R2*RC + R2*rpi + RC*rpi)
-split Gm into short OK   -beta*(R1 + R2)/(R1*R2 + R1*rpi + R2*rpi)
-split Rin OK   (R1*R2 + R1*rpi + R2*rpi)/((R1 + R2)*(beta + 1))
-split Rout OK   RC*(R1 + R2)/(R1 + R2 + RC)
-finite-beta correction from divider OK   R2/(beta*(R1 + R2))
-Set S=R1+R2, F=R2/S, P=R1||R2, L=RC||S.
-Exact G=(beta+F)/(rpi+P), T=F L G.
-Av=L G/(1+T), Rin=(rpi+P)(1+T)/(beta+1), Rout=L/(1+T).
-Large beta: use G0=beta/(rpi+P), T0=F L G0 instead of G,T.
-The relative excess of exact G over G0 is F/beta.
+Exact finite-beta hybrid-pi: B=1/R1+1/R2+1/rπ, C=1/RC+1/R1, h=1/R1, Δ=BC+h(gm−h). Av=[B gm−(gm−h)/rπ]/Δ, vb/ve=(C/rπ+h gm)/Δ, Rin=1/[(gm+1/rπ)(1−vb/ve)], Rout=B/Δ. rπ=β/gm. Includes passive emitter-base-collector feedthrough.
+Av = RC*(R1*gm*rp + R2*gm*rp + R2)/(R1*R2 + R1*rp + R2*RC*gm*rp + R2*RC + R2*rp + RC*rp)
+Rin = (R1*R2 + R1*rp + R2*RC*gm*rp + R2*RC + R2*rp + RC*rp)/((gm*rp + 1)*(R1 + R2 + RC))
+Rout = RC*(R1*R2 + R1*rp + R2*rp)/(R1*R2 + R1*rp + R2*RC*gm*rp + R2*RC + R2*rp + RC*rp)
+rpi = beta/gm

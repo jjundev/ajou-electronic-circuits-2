@@ -1,17 +1,1 @@
-exact Aopen (-RD*gm1*gm2*ro2 - RM/(RF + RM))/((gm1 + 1/(RF + RM))*(RF*RM/(RF + RM) + RL + ro2)) -27.056522802570427
-exact Ri_open 1/(gm1 + 1/(RF + RM)) 456.140350877193
-exact Ro_open RF*RM/(RF + RM) + ro2 60192.307692307695
-exact K -RM/(RF + RM) -0.038461538461538464
-exact T -RM*(-RD*gm1*gm2*ro2 - RM/(RF + RM))/((RF + RM)*(gm1 + 1/(RF + RM))*(RF*RM/(RF + RM) + RL + ro2)) 1.040635492406555
-exact gain (-RD*gm1*gm2*ro2 - RM/(RF + RM))/((gm1 + 1/(RF + RM))*(-RM*(-RD*gm1*gm2*ro2 - RM/(RF + RM))/((RF + RM)*(gm1 + 1/(RF + RM))*(RF*RM/(RF + RM) + RL + ro2)) + 1)*(RF*RM/(RF + RM) + RL + ro2)) -13.258871024860115
-exact Ri 1/((gm1 + 1/(RF + RM))*(-RM*(-RD*gm1*gm2*ro2 - RM/(RF + RM))/((RF + RM)*(gm1 + 1/(RF + RM))*(RF*RM/(RF + RM) + RL + ro2)) + 1)) 223.528578511226
-exact Ro laser removed RF*RM/(RF + RM) + RM*(RD*gm1*gm2*ro2 + RM/(RF + RM))/((RF + RM)*(gm1 + 1/(RF + RM))) + ro2 123350.87719298247
-unilateral Aopen -RD*gm1*gm2*ro2/((gm1 + 1/(RF + RM))*(RF*RM/(RF + RM) + RL + ro2)) -27.056233740244146
-unilateral Ri_open 1/(gm1 + 1/(RF + RM)) 456.140350877193
-unilateral Ro_open RF*RM/(RF + RM) + ro2 60192.307692307695
-unilateral K -RM/(RF + RM) -0.038461538461538464
-unilateral T RD*RM*gm1*gm2*ro2/((RF + RM)*(gm1 + 1/(RF + RM))*(RF*RM/(RF + RM) + RL + ro2)) 1.040624374624775
-unilateral gain -RD*gm1*gm2*ro2/((gm1 + 1/(RF + RM))*(RD*RM*gm1*gm2*ro2/((RF + RM)*(gm1 + 1/(RF + RM))*(RF*RM/(RF + RM) + RL + ro2)) + 1)*(RF*RM/(RF + RM) + RL + ro2)) -13.25880160831617
-unilateral Ri 1/((gm1 + 1/(RF + RM))*(RD*RM*gm1*gm2*ro2/((RF + RM)*(gm1 + 1/(RF + RM))*(RF*RM/(RF + RM) + RL + ro2)) + 1)) 223.5297963453303
-unilateral Ro laser removed RD*RM*gm1*gm2*ro2/((RF + RM)*(gm1 + 1/(RF + RM))) + RF*RM/(RF + RM) + ro2 123350.20242914981
-Exact Aopen refers to cutting only the reverse controlled feedback term. Unilateral model drops H compared with gm1 RD gm2 ro2.
+Textbook Aopen= -b*ro2/((gm1 + 1/(RF + RM))*(RF*RM/(RF + RM) + RL + ro2)) K= -RM/(RF + RM) Zin0= 1/(gm1 + 1/(RF + RM)) Zout0= RF*RM/(RF + RM) + ro2 gain=A/(1-k*A); Zin=Z/(1-k*A); stated textbook Zout=(r+P)(1-k*A). For unloaded port evaluate A with RL=0. Exact nodal replacement Ae= (-RM/(RF + RM) - b*ro2)/((gm1 + 1/(RF + RM))*(RF*RM/(RF + RM) + RL + ro2))

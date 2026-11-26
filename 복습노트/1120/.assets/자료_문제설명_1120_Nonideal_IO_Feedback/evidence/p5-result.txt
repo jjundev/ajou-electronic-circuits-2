@@ -1,8 +1,10 @@
-Rth=R1||R2; R_L=RD2||ro2||(R1+R2); K=R2/(R1+R2)
-D=1+go1*RD1+(gm1+go1)*Rth; P=gm1/D; Q=K*(gm1+go1)/D; B=gm2*RD1
-Open replicas: A0=B*P*R_L; Rin0=infinity; Rout0=R_L
-Closed replicas: A=A0/(1+B*Q*R_L); Rin=infinity; Rout=R_L/(1+B*Q*R_L)
-Original closed circuit: replace B by B+K in A and Rout.
-Direct +K path is due to M1 source current contributing to the output through R1.
-At lambda1=0, P=gm1/(1+gm1*Rth), Q=K*P, so replica loop gain=K*A0.
-At lambda2=0, remove ro2 from R_L.
+Textbook unilateral replica: P=R1||R2, Z=RD2||(R1+R2), A0=gm1 RD1 gm2 Z/(1+gm1 P); k=R2/(R1+R2), D=1+kA0; Av=A0/D, Rin0=Rin=∞, Rout0=Z, Rout=Z/D. Exact bidirectional-divider KCL in result file retains forward passive transmission from source node to output.
+K = R2/(R1 + R2)
+Aopen = D1*g1*g2/((g1/(1/R2 + 1/R1) + 1)*(1/(R1 + R2) + 1/D2))
+Rin_open = oo
+Rout_open = 1/(1/(R1 + R2) + 1/D2)
+Av_replica = D1*g1*g2/((g1/(1/R2 + 1/R1) + 1)*(D1*R2*g1*g2/((R1 + R2)*(g1/(1/R2 + 1/R1) + 1)*(1/(R1 + R2) + 1/D2)) + 1)*(1/(R1 + R2) + 1/D2))
+Rin_closed = oo
+Rout_replica = 1/((D1*R2*g1*g2/((R1 + R2)*(g1/(1/R2 + 1/R1) + 1)*(1/(R1 + R2) + 1/D2)) + 1)*(1/(R1 + R2) + 1/D2))
+Av_exact = D2*g1*(D1*R1*g2 + D1*R2*g2 + R2)/(D1*D2*R2*g1*g2 + D2*R2*g1 + D2 + R1*R2*g1 + R1 + R2)
+Rout_exact = D2*(R1*R2*g1 + R1 + R2)/(D1*D2*R2*g1*g2 + D2*R2*g1 + D2 + R1*R2*g1 + R1 + R2)

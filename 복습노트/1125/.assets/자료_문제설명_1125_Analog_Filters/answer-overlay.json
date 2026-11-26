@@ -5,7 +5,7 @@
   "slug": "Analog_Filters",
   "learning_style": {
     "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
-    "sha256": "7ee51c9e67b297855e47735a97d761c25f4db3c96ed747f111a09520a891a0ea",
+    "sha256": "e644bb2da081cd8ba965b335d14c8dc8fa4ac1b2224633ba2ab9a644308bc5a1",
     "rule_ids": [
       "UNIT-01",
       "CALC-01",
@@ -22,7 +22,7 @@
       "FREQ-01"
     ]
   },
-  "input_hash": "d346937b9633c4ed83809d366b63915c304de1fe3600f8b0fd4df29f549a083b",
+  "input_hash": "1375fb5e13b25a3116ee57bdccd1b90a19da50824e58c562d8bf31ccc4d89696",
   "source_inputs": {
     "복습노트/1125/.assets/problems.txt": "5d475aa95b8ba798d9c6ea70331ae0ca8d425305eeda1a8f1e61c2de217e6813",
     "복습노트/1125/.assets/display-titles.json": "4d975adb70fcf02dac9e915b8d268a6097cb01f98c2b67f3405380556d3e02a3",
@@ -36,7 +36,7 @@
     "from_the_past/md/2023-1_기말/figures/redrawn/fig-Q3.png": "bfd5b190ccf70f42024bbea44ffba6d8b25e419d1b733b31af3665896da0913c",
     "교과서/마이크로전자회로/ch12/figures/fig12-61-a.png": "1be4114edb619bd3c856900c8d2858e4ba743c390d5b866a57ad2db14652a6ff",
     "교과서/마이크로전자회로/ch12/figures/fig12-62-a.png": "665fd9502b42338569ef28ec7e8458b231728bacff8826f3b57ea4044ba82897",
-    ".claude/skills/ec2-review-pack/references/solution-style.md": "7ee51c9e67b297855e47735a97d761c25f4db3c96ed747f111a09520a891a0ea"
+    ".claude/skills/ec2-review-pack/references/solution-style.md": "e644bb2da081cd8ba965b335d14c8dc8fa4ac1b2224633ba2ab9a644308bc5a1"
   },
   "problems": [
     {
@@ -115,12 +115,27 @@
           "subpart": "main",
           "label": "출력 포트",
           "html": "<p data-answer-step=\"출력 포트\"> 출력 쪽 복제의 반송 포트를 단락하면 $P$에서 $R_F$와 $R_M$이 병렬이에요. 레이저를 떼고 $I_{in}=0$으로 두면 $V_X=0$이므로, 두 레이저 단자 사이에서는 $r_{O2}$와 이 병렬 저항이 교류 접지를 거쳐 직렬로 보여요.</p>"
+        },
+        {
+          "subpart": "main",
+          "label": "직접 읽는 두 포트 저항",
+          "html": "\n$$R_{out,open}=r_{O2}+(R_F\\parallel R_M)$$\n$$R_{in,open}=(1/g_{m1})\\parallel(R_F+R_M)$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "목표 전류 이득과 두 항",
+          "html": "\n<p>$g_{m1}R_Dg_{m2}r_{O2}\\gg R_M/(R_F+R_M)$에서 $R_F$의 직접 순방향 전달을 생략해요. 노턴 입력의 테브난 전압은 $V_{\\mathrm{Th}}=I_{in}(R_F+R_M)$이고 직렬 저항은 $R_F+R_M$이에요. 첫 인자 $R_F+R_M$은 $V_{\\mathrm{Th}}/I_{in}$이에요. 테브난 전압에서 $X$까지의 이득에는 $R_F+R_M$과 $1/g_{m1}$의 분압이 들어가요.</p>\n$$A_{I,open}=(R_F+R_M)\\frac{V_X}{V_{\\mathrm{Th}}}\\frac{I_{out}}{V_X}$$\n$$\\frac{V_X}{V_{\\mathrm{Th}}}=\\frac{R_D}{R_F+R_M+1/g_{m1}}$$\n<p>레이저를 연결하면 PMOS 전류 $-g_{m2}V_X$가 $r_{O2}$와 레이저 가지로 나뉘어요.</p>\n$$\\frac{I_{out}}{V_X}=\\frac{-g_{m2}r_{O2}}{R_{out,open}+R_L}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "직렬 감지와 귀환율",
+          "html": "\n<p> 귀환망만 떼어 $N$을 단락하면 $I_{out}$의 일부가 $P$에서 $R_F$를 거쳐 $N$으로 흘러요. $I_F$의 기준 방향은 $N$에서 $P$이므로 귀환율은 음수예요.</p>\n$$K=\\frac{I_F}{I_{out}}=-\\frac{R_M}{R_M+R_F}$$\n$$T=K A_{I,open}&gt;0$$\n"
         }
       ],
       "answers": [
         {
           "subpart": "main",
-          "html": "\n<p>$g_{m1}R_Dg_{m2}r_{O2}\\gg R_M/(R_F+R_M)$에서 $R_F$의 직접 순방향 전달을 생략하고, $X$를 기준으로 두 단을 곱해요.</p>\n$$A_{I,open}=\\frac{V_X}{I_{in}}\\frac{I_{out}}{V_X}$$\n$$R_{in,open}=(1/g_{m1})\\parallel(R_F+R_M)$$\n$$R_{out,open}=r_{O2}+(R_F\\parallel R_M)$$\n<p>입력의 노턴 전류원을 테브난 전압원 $I_{in}(R_F+R_M)$으로 바꾸고 CG 전압 이득을 곱해요.</p>\n$$\\frac{V_X}{I_{in}}=\\frac{(R_F+R_M)R_D}{R_F+R_M+1/g_{m1}}$$\n<p>레이저를 연결하면 PMOS 전류 $-g_{m2}V_X$가 $r_{O2}$와 레이저 가지로 나뉘어요.</p>\n$$\\frac{I_{out}}{V_X}=\\frac{-g_{m2}r_{O2}}{R_{out,open}+R_L}$$\n<p> 귀환망만 떼어 $N$을 단락하면 $I_{out}$의 일부가 $P$에서 $R_F$를 거쳐 $N$으로 흘러요. $I_F$의 기준 방향은 $N$에서 $P$이므로 귀환율은 음수예요.</p>\n$$K=\\frac{I_F}{I_{out}}=-\\frac{R_M}{R_M+R_F}$$\n$$T=K A_{I,open}&gt;0$$\n<h4>폐루프 이득과 임피던스</h4>\n$$A_{I,closed}\\approx\\frac{A_{I,open}}{1+T}$$\n<p>입력은 병렬 합산이므로 입력 저항이 줄어요.</p>\n$$R_{in,closed}\\approx\\frac{R_{in,open}}{1+T}$$\n<p>출력은 직렬 감지이므로 저항이 커져요. 레이저를 뗀 포트 자체의 저항을 구할 때는 레이저 단락 조건의 루프 이득을 써요.</p>\n$$T_0=T\\big|_{R_L=0}$$\n$$R_{out,closed}\\approx R_{out,open}(1+T_0)$$\n<p>$R_L\\ll R_{out,open}$이면 $T_0\\approx T$예요.</p>\n"
+          "html": "\n$$A_{I,closed}\\approx\\frac{A_{I,open}}{1+T}$$\n<p>입력은 병렬 합산이므로 입력 저항이 줄어요.</p>\n$$R_{in,closed}\\approx\\frac{R_{in,open}}{1+T}$$\n<p>출력은 직렬 감지이므로 저항이 커져요. 레이저를 뗀 포트 자체의 저항을 구할 때는 레이저 단락 조건의 루프 이득을 써요.</p>\n$$T_0=T\\big|_{R_L=0}$$\n$$R_{out,closed}\\approx R_{out,open}(1+T_0)$$\n<p>$R_L\\ll R_{out,open}$이면 $T_0\\approx T$예요.</p>\n"
         }
       ]
     },
@@ -139,7 +154,7 @@
         {
           "subpart": "main",
           "label": "단락 상태의 이득",
-          "html": "\n<p>$g_{m1}R_Dg_{m2}r_{O2}\\gg R_M/(R_F+R_M)$에서 $R_F$의 직접 순방향 전달을 생략한 예제의 2포트 식을 써요.</p>\n$$R_{out,open}=r_{O2}+(R_F\\parallel R_M)$$\n$$A_0=A_{I,open}\\big|_{R_L=0}=\\frac{(R_F+R_M)R_D}{R_F+R_M+1/g_{m1}}\\cdot\\frac{-g_{m2}r_{O2}}{R_{out,open}}$$\n$$T_0=-\\frac{R_M}{R_M+R_F}A_0$$\n"
+          "html": "\n<p>$g_{m1}R_Dg_{m2}r_{O2}\\gg R_M/(R_F+R_M)$에서 $R_F$의 직접 순방향 전달을 생략한 예제의 2포트 식을 써요. 테브난 전압은 $V_{\\mathrm{Th}}=I_{in}(R_F+R_M)$이에요. 첫 인자 $R_F+R_M$에 소스 분압을 포함한 $V_X/V_{\\mathrm{Th}}$와 단락 출력의 전류 변환 이득을 곱해요.</p>\n$$R_{out,open}=r_{O2}+(R_F\\parallel R_M)$$\n$$A_0=A_{I,open}\\big|_{R_L=0}=(R_F+R_M)\\frac{V_X}{V_{\\mathrm{Th}}}\\left.\\frac{I_{out}}{V_X}\\right|_{R_L=0}$$\n$$A_0=\\frac{(R_F+R_M)R_D}{R_F+R_M+1/g_{m1}}\\cdot\\frac{-g_{m2}r_{O2}}{R_{out,open}}$$\n$$T_0=-\\frac{R_M}{R_M+R_F}A_0$$\n"
         },
         {
           "subpart": "main",
@@ -163,19 +178,24 @@
       "steps": [
         {
           "subpart": "main",
-          "label": "개루프 이득과 로딩",
-          "html": "\n      <p> 입력 전류는 병렬로 합쳐지고 출력 전압은 병렬로 감지해요. 두 복제의 반대쪽 포트를 단락하면 입력에는 $R_F$, 출력에는 $R_M$과 $R_F$가 접지로 걸려요. $g_{m1}R_Dg_{m2}R_F\\gg1$에서 $R_F$의 직접 순방향 전달을 생략하고 $X$에서 두 단을 나눠요.</p>\n      $$R_O=\\frac{V_X}{I_{in}}\\frac{V_{out}}{V_X}$$\n      <p>$N$의 전류원과 $R_F$를 테브난 등가로 바꾸면 전압은 $I_{in}R_F$, 직렬 저항은 $R_F$예요.</p>\n      $$\\frac{V_X}{I_{in}}=\\frac{R_FR_D}{R_F+1/g_{m1}}$$\n      <p> PMOS의 전류 변화 $-g_{m2}V_X$가 출력의 세 병렬 가지에 걸려요.</p>\n      $$R_{out,open}=r_{O2}\\parallel R_M\\parallel R_F$$\n      $$\\frac{V_{out}}{V_X}=-g_{m2}R_{out,open}$$\n    "
+          "label": "병렬 감지·반송과 개루프 저항",
+          "html": "\n      <p> 출력 전압을 병렬로 감지하고  입력 $N$에서 전류를 병렬로 합쳐요. 두 복제의 반대쪽을 단락하면 출력에는 $R_M$과 $R_F$, 입력에는 $R_F$가 접지로 걸려요.</p>\n      $$R_{out,open}=r_{O2}\\parallel R_M\\parallel R_F$$\n      $$R_{in,open}=\\frac{1}{g_{m1}}\\parallel R_F$$\n    "
         },
         {
           "subpart": "main",
-          "label": "귀환율과 루프 이득",
-          "html": "\n      <p>귀환망만 떼어 $N$을 접지하면 $R_F$ 전류는 양의 $V_{out}$에서 $P\\to N$으로 흘러요. 귀환 전류 $I_F$의 양의 방향은 $N\\to P$예요.</p>\n      $$K=\\frac{I_F}{V_{out}}=-\\frac1{R_F}$$\n      $$T=KR_O=\\frac{g_{m2}R_DR_{out,open}}{R_F+1/g_{m1}}$$\n    "
+          "label": "목표 전달저항과 두 단의 이득",
+          "html": "\n      <p>$g_{m1}R_Dg_{m2}R_F\\gg1$에서 $R_F$의 직접 순방향 전달을 생략해요. $N$의 노턴 입력은 테브난 전압 $V_{\\mathrm{Th}}=I_{in}R_F$와 직렬 $R_F$로 바뀌어요. 첫 인자 $R_F$는 $V_{\\mathrm{Th}}/I_{in}$이에요. 테브난 전압에서 $X$까지의 이득에는 $R_F$와 $1/g_{m1}$의 분압이 들어가요.</p>\n      $$R_O=\\frac{V_{out}}{I_{in}}=R_F\\frac{V_X}{V_{\\mathrm{Th}}}\\frac{V_{out}}{V_X}$$\n      $$\\frac{V_X}{V_{\\mathrm{Th}}}=\\frac{R_D}{R_F+1/g_{m1}}$$\n      <p>PMOS가 공급하는 전류의 변화 $-g_{m2}V_X$에 앞서 구한 출력저항을 곱해요.</p>\n      $$\\frac{V_{out}}{V_X}=-g_{m2}R_{out,open}$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "귀환율 시험과 루프 이득",
+          "html": "\n      <p>귀환망만 떼어 $N$을 접지하고 $P$에 $V_{out}$을 걸어요. 양의 $I_F$는 $N$에서 $P$로 향해요.</p>\n      $$V_{out}=-R_FI_F$$\n      $$K=\\frac{I_F}{V_{out}}=-\\frac1{R_F}$$\n      $$T=KR_O=\\frac{g_{m2}R_DR_{out,open}}{R_F+1/g_{m1}}$$\n    "
         }
       ],
       "answers": [
         {
           "subpart": "main",
-          "html": "\n      $$R_O=-\\frac{g_{m2}R_DR_FR_{out,open}}{R_F+1/g_{m1}}$$\n      $$R_{in,open}=\\frac1{g_{m1}}\\parallel R_F$$\n      <p>병렬 입력·병렬 감지라 폐루프 이득과 두 포트 저항이 모두 $1+T$로 나뉘어요.</p>\n      $$R_{O,closed}\\approx\\frac{R_O}{1+T}$$\n      $$R_{in,closed}\\approx\\frac{R_{in,open}}{1+T}$$\n      $$R_{out,closed}\\approx\\frac{R_{out,open}}{1+T}$$\n      <p>교과서의 $r_{O2}\\toinfty$ 모델에서는 출력 병렬 부하가 $R_M\\parallel R_F$로 줄어요. E12.32는 $R_M$이 레이저와 직렬로 전류를 감지해 출력저항을 높이고, 이 회로는 $R_F$가 출력 전압을 병렬로 감지해 출력저항을 낮춰요. 입력 복제도 E12.32에서는 $R_F+R_M$, 여기서는 $R_F$예요.</p>\n    "
+          "html": "\n      <p>병렬 입력·병렬 감지라 폐루프 이득과 두 포트 저항이 모두 $1+T$로 나뉘어요.</p>\n      $$R_{O,closed}\\approx\\frac{R_O}{1+T}$$\n      $$R_{in,closed}\\approx\\frac{R_{in,open}}{1+T}$$\n      $$R_{out,closed}\\approx\\frac{R_{out,open}}{1+T}$$\n      <p>교과서의 $r_{O2}\\to\\infty$ 모델에서는 출력 병렬 부하가 $R_M\\parallel R_F$로 줄어요. E12.32는 $R_M$이 레이저와 직렬로 전류를 감지해 출력저항을 높이고, 이 회로는 $R_F$가 출력 전압을 병렬로 감지해 출력저항을 낮춰요. 입력 복제도 E12.32에서는 $R_F+R_M$, 여기서는 $R_F$예요.</p>\n    "
         }
       ]
     }

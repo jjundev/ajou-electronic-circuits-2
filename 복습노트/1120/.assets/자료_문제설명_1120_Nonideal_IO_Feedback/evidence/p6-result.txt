@@ -1,7 +1,8 @@
-Rsum=R1+R2; G_L=1/Rsum; K=R2/Rsum.
-Open: Gm_eff = gm_n*(2*gm_p + go_p)/(2*gm_p + go_n + 2*go_p)
-Open amplifier g_o_eff before external load = 2*(gm_p + go_p)*(go_n + go_p)/(2*gm_p + go_n + 2*go_p)
-Rout0=1/(g_o_eff+1/Rsum); A0=Gm_eff*Rout0; Rin0=infinity.
-Closed (exact): A0/(1+K*A0); Rin=infinity; Rout0/(1+K*A0).
-For gm_p >> go_p,go_n, Gm_eff -> gm_n.
-In the same limit, g_o_eff -> go_n+go_p and Rout0 -> ro_n||ro_p||Rsum.
+Effective differential transconductance gmN and Z=roN||roP||(R1+R2) give A0=gmN Z, k=R2/(R1+R2), D=1+kA0. Av=A0/D, Rin0=Rin=∞, Rout0=Z, Rout=Z/D in the matched mirror-loaded stage model.
+K = R2/(R1 + R2)
+Aopen = gm/(1/(R1 + R2) + 1/roP + 1/roN)
+Rin_open = oo
+Rout_open = 1/(1/(R1 + R2) + 1/roP + 1/roN)
+Aclosed = gm/((R2*gm/((R1 + R2)*(1/(R1 + R2) + 1/roP + 1/roN)) + 1)*(1/(R1 + R2) + 1/roP + 1/roN))
+Rin_closed = oo
+Rout_closed = 1/((R2*gm/((R1 + R2)*(1/(R1 + R2) + 1/roP + 1/roN)) + 1)*(1/(R1 + R2) + 1/roP + 1/roN))

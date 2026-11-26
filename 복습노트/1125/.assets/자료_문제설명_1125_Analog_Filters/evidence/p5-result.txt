@@ -1,17 +1,1 @@
-exact Zopen (-RD*gm1*gm2 + 1/RF)/((gm1 + 1/RF)*(1/ro2 + 1/RM + 1/RF)) -5210.572175428405
-exact Ri_open 1/(gm1 + 1/RF) 454.5454545454545
-exact Ro_open 1/(1/ro2 + 1/RM + 1/RF) 191.69329073482427
-exact K -1/RF -0.0002
-exact T -(-RD*gm1*gm2 + 1/RF)/(RF*(gm1 + 1/RF)*(1/ro2 + 1/RM + 1/RF)) 1.042114435085681
-exact Zcl (-RD*gm1*gm2 + 1/RF)/((1 - (-RD*gm1*gm2 + 1/RF)/(RF*(gm1 + 1/RF)*(1/ro2 + 1/RM + 1/RF)))*(gm1 + 1/RF)*(1/ro2 + 1/RM + 1/RF)) -2551.5573887071537
-exact Ri 1/((1 - (-RD*gm1*gm2 + 1/RF)/(RF*(gm1 + 1/RF)*(1/ro2 + 1/RM + 1/RF)))*(gm1 + 1/RF)) 222.58569193571327
-exact Ro 1/((1 - (-RD*gm1*gm2 + 1/RF)/(RF*(gm1 + 1/RF)*(1/ro2 + 1/RM + 1/RF)))*(1/ro2 + 1/RM + 1/RF)) 93.87000426681838
-unilateral Zopen -RD*gm1*gm2/((gm1 + 1/RF)*(1/ro2 + 1/RM + 1/RF)) -5227.998838222479
-unilateral Ri_open 1/(gm1 + 1/RF) 454.5454545454545
-unilateral Ro_open 1/(1/ro2 + 1/RM + 1/RF) 191.69329073482427
-unilateral K -1/RF -0.0002
-unilateral T RD*gm1*gm2/(RF*(gm1 + 1/RF)*(1/ro2 + 1/RM + 1/RF)) 1.045599767644496
-unilateral Zcl -RD*gm1*gm2/((gm1 + 1/RF)*(RD*gm1*gm2/(RF*(gm1 + 1/RF)*(1/ro2 + 1/RM + 1/RF)) + 1)*(1/ro2 + 1/RM + 1/RF)) -2555.729092716172
-unilateral Ri 1/((gm1 + 1/RF)*(RD*gm1*gm2/(RF*(gm1 + 1/RF)*(1/ro2 + 1/RM + 1/RF)) + 1)) 222.20644611671165
-unilateral Ro 1/((RD*gm1*gm2/(RF*(gm1 + 1/RF)*(1/ro2 + 1/RM + 1/RF)) + 1)*(1/ro2 + 1/RM + 1/RF)) 93.71006673292632
-If channel-length modulation neglected use ro2 -> infinity. Unilateral approximation needs gm1 RD gm2 >> 1/RF.
+b=gm2 gm1 RD; A_V/I= -b/((gm1 + 1/RF)*(1/ro2 + 1/RM + 1/RF)) K= -1/RF Zinopen= 1/(gm1 + 1/RF) Zoutopen= 1/(1/ro2 + 1/RM + 1/RF) D=1-A/F; closed A/D, Zinopen/D, Zoutopen/D. Exact MNA uses Ae= (-b + 1/RF)/((gm1 + 1/RF)*(1/ro2 + 1/RM + 1/RF)) in all three. Current sensing drives Zin down/Zout up, voltage sensing drives both down.

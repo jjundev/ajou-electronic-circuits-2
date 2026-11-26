@@ -4,9 +4,10 @@
 <h4>레이저 단락 전류</h4>
 <p data-answer-step="단락 조건"><span class="loc">㉠</span> 레이저 $R_L$ 자리를 도선으로 바꾸고 $I_{in}$은 그대로 흘려요. 이 도선에서 $D$에서 $P$로 흐르는 전류가 $I_N$이에요. 예제 12.32의 개루프 이득에 $R_L=0$을 대입해요.</p>
 <div data-answer-step="단락 상태의 이득">
-<p>$g_{m1}R_Dg_{m2}r_{O2}\gg R_M/(R_F+R_M)$에서 $R_F$의 직접 순방향 전달을 생략한 예제의 2포트 식을 써요.</p>
+<p>$g_{m1}R_Dg_{m2}r_{O2}\gg R_M/(R_F+R_M)$에서 $R_F$의 직접 순방향 전달을 생략한 예제의 2포트 식을 써요. 테브난 전압은 $V_{\mathrm{Th}}=I_{in}(R_F+R_M)$이에요. 첫 인자 $R_F+R_M$에 소스 분압을 포함한 $V_X/V_{\mathrm{Th}}$와 단락 출력의 전류 변환 이득을 곱해요.</p>
 $$R_{out,open}=r_{O2}+(R_F\parallel R_M)$$
-$$A_0=A_{I,open}\big|_{R_L=0}=\frac{(R_F+R_M)R_D}{R_F+R_M+1/g_{m1}}\cdot\frac{-g_{m2}r_{O2}}{R_{out,open}}$$
+$$A_0=A_{I,open}\big|_{R_L=0}=(R_F+R_M)\frac{V_X}{V_{\mathrm{Th}}}\left.\frac{I_{out}}{V_X}\right|_{R_L=0}$$
+$$A_0=\frac{(R_F+R_M)R_D}{R_F+R_M+1/g_{m1}}\cdot\frac{-g_{m2}r_{O2}}{R_{out,open}}$$
 $$T_0=-\frac{R_M}{R_M+R_F}A_0$$
 </div>
 <h4>두 단자에서 본 저항</h4>

@@ -43,30 +43,37 @@
   </figure>
   <div data-subpart="1">
     <h4>(1) 귀환율과 폐루프 이득</h4>
-    <div data-answer-step="두 복제와 CG 단">
-      <p>두 복제를 단락하면 <span class="loc">㉠</span> 입력과 <span class="loc">㉡</span> 출력에 $R_F$가 각각 남아요. $\lambda=0$이고 몸체 효과는 무시해요.</p>
-      <p>테브난 전압 $I_{in}R_F$에 직렬 $R_F$가 붙으므로 <span class="loc">㉢</span> $X$까지의 CG 이득을 바로 써요.</p>
-      $$\frac{v_X}{I_{in}}=R_F\frac{R_D}{R_F+1/g_{m1}}$$
+    <div data-answer-step="감지·반송과 개루프 출력저항">
+      <p><span class="loc">㉡</span> 출력 전압을 감지해 <span class="loc">㉠</span> 입력에서 전류를 병렬로 합쳐요. 복제의 반대 포트 두 곳을 단락하면 입출력에 각각 $R_F$가 남아요. $\lambda=0$이고 몸체 효과는 무시해요.</p>
+      <p>입력 전류원을 개방한 상태에서 <span class="loc">㉣</span> $M_2$ 소스를 바라보면 $1/g_{m2}$, $R_M$, $R_F$가 출력과 AC 접지 사이에 놓여요.</p>
+      $$R_{out,\mathrm{open}}=\frac{1}{g_{m2}}\parallel R_M\parallel R_F$$
     </div>
-    <div data-answer-step="소스 팔로워" data-gain-route="gm-rout">
-      <p><span class="loc">㉣</span> $M_2$의 소스가 출력이에요. $i_{out}$을 증폭기 쪽으로 들어가는 방향으로 잡으면 $G_{m2}$가 음수예요.</p>
-      <div data-gain-stage="gm">$$G_{m2}=-g_{m2}$$</div>
-      <div data-gain-stage="rout">$$R_{out,\mathrm{open}}=\frac{1}{g_{m2}}\parallel R_M\parallel R_F$$</div>
-      <div data-gain-stage="gain">$$\frac{v_{out}}{v_X}=-G_{m2}R_{out,\mathrm{open}}$$</div>
-      $$R_0=\frac{v_X}{I_{in}}\frac{v_{out}}{v_X}\gt0$$
+    <div data-answer-step="목표 전달비와 공통 게이트 항">
+      <p><span class="loc">㉢</span> $I_{in}\parallel R_F$를 테브난 전압 $v_{\mathrm{Th}}=I_{in}R_F$와 직렬 $R_F$로 바꿔요. 첫 인자 $R_F$는 $v_{\mathrm{Th}}/I_{in}$이에요. $X$에서 두 단을 나눠요.</p>
+      $$R_0=\frac{v_{out}}{I_{in}}=R_F\frac{v_X}{v_{\mathrm{Th}}}\frac{v_{out}}{v_X}$$
+      <p>테브난 전압은 직렬 $R_F$와 소스에서 보이는 $1/g_{m1}$ 사이에서 분배돼요. 다음 이득에는 이 분압과 소스에서 $X$까지의 CG 이득이 함께 들어가요. 드레인 부하는 $R_D$예요.</p>
+      $$\frac{v_X}{v_{\mathrm{Th}}}=\frac{R_D}{R_F+1/g_{m1}}$$
+    </div>
+    <div data-answer-step="소스 팔로워 항">
+      <p>소스 팔로워는 비반전이에요. 게이트 전압 $v_X$가 오를 때 출력 소스로 밀어 넣는 전류가 늘어요.</p>
+      $$\frac{v_{out}}{v_X}=+g_{m2}R_{out,\mathrm{open}}$$
+    </div>
+    <div data-answer-step="귀환망 시험과 전류 방향">
+      <p>귀환망만 떼어 반송단을 접지해요. 그 단자에서 출력 쪽으로 향하는 방향을 $I_F$의 양으로 잡아요.</p>
+      $$v_{out}=-R_F I_F$$
+      $$K=\frac{I_F}{v_{out}}=-\frac{1}{R_F}$$
     </div>
     <div data-answer-final="">
-      <p>입력 단락 시 그 노드에서 빠져나가는 방향을 $I_F$의 양으로 잡아요.</p>
-      $$K=\frac{I_F}{v_{out}}=-\frac{1}{R_F}$$
       $$T=-KR_0=\frac{R_0}{R_F}$$
-      <p>CG와 소스 팔로워가 모두 비반전이므로 정궤환이에요. 저주파 복제 모델에서 $T\lt1$인 경우를 써요.</p>
+      <p>두 단이 모두 비반전이어서 정궤환이에요. 귀환 저항의 직접 전달을 생략하는 저주파 복제 모델에서 $T\lt1$인 경우를 써요.</p>
       $$\frac{v_{out}}{I_{in}}\approx\frac{R_0}{1-T}$$
     </div>
   </div>
   <div data-subpart="2">
     <h4>(2) 폐루프 입출력 저항</h4>
-    <div data-answer-step="개루프 입력 저항">
-      $$R_{in,\mathrm{open}}=R_F\parallel\frac{1}{g_{m1}}$$
+    <div data-answer-step="개루프 입력저항">
+      <p>입력에서 본 $1/g_{m1}$과 반송 복제 $R_F$가 병렬이에요. 출력에는 (1)에서 구한 저항을 써요.</p>
+      $$R_{in,\mathrm{open}}=\frac{1}{g_{m1}}\parallel R_F$$
     </div>
     <div data-answer-final="">
       $$R_{in,\mathrm{closed}}\approx\frac{R_{in,\mathrm{open}}}{1-T}$$

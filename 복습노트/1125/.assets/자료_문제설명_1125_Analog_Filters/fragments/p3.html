@@ -17,19 +17,24 @@
 <h4>입력과 출력에 남는 저항</h4>
 <p data-answer-step="귀환망 로딩"><span class="loc">㉠</span> 입력 $N$에서 전류를 병렬로 합치고 출력에서 레이저 전류를 직렬로 감지하는 C-C 귀환이에요. 입력 쪽 복제의 감지 포트를 열면 $N$에서 접지까지 $R_F+R_M$이 남아요. $r_{O1}\to\infty$로 두고 몸체 효과를 무시하면 $M_1$ 소스 쪽 저항은 $1/g_{m1}$이에요.</p>
 <p data-answer-step="출력 포트"><span class="loc">㉡</span> 출력 쪽 복제의 반송 포트를 단락하면 $P$에서 $R_F$와 $R_M$이 병렬이에요. 레이저를 떼고 $I_{in}=0$으로 두면 $V_X=0$이므로, 두 레이저 단자 사이에서는 $r_{O2}$와 이 병렬 저항이 교류 접지를 거쳐 직렬로 보여요.</p>
-<div data-answer-final="">
-<p>$g_{m1}R_Dg_{m2}r_{O2}\gg R_M/(R_F+R_M)$에서 $R_F$의 직접 순방향 전달을 생략하고, $X$를 기준으로 두 단을 곱해요.</p>
-$$A_{I,open}=\frac{V_X}{I_{in}}\frac{I_{out}}{V_X}$$
-$$R_{in,open}=(1/g_{m1})\parallel(R_F+R_M)$$
+<div data-answer-step="직접 읽는 두 포트 저항">
 $$R_{out,open}=r_{O2}+(R_F\parallel R_M)$$
-<p>입력의 노턴 전류원을 테브난 전압원 $I_{in}(R_F+R_M)$으로 바꾸고 CG 전압 이득을 곱해요.</p>
-$$\frac{V_X}{I_{in}}=\frac{(R_F+R_M)R_D}{R_F+R_M+1/g_{m1}}$$
+$$R_{in,open}=(1/g_{m1})\parallel(R_F+R_M)$$
+</div>
+<div data-answer-step="목표 전류 이득과 두 항">
+<p>$g_{m1}R_Dg_{m2}r_{O2}\gg R_M/(R_F+R_M)$에서 $R_F$의 직접 순방향 전달을 생략해요. 노턴 입력의 테브난 전압은 $V_{\mathrm{Th}}=I_{in}(R_F+R_M)$이고 직렬 저항은 $R_F+R_M$이에요. 첫 인자 $R_F+R_M$은 $V_{\mathrm{Th}}/I_{in}$이에요. 테브난 전압에서 $X$까지의 이득에는 $R_F+R_M$과 $1/g_{m1}$의 분압이 들어가요.</p>
+$$A_{I,open}=(R_F+R_M)\frac{V_X}{V_{\mathrm{Th}}}\frac{I_{out}}{V_X}$$
+$$\frac{V_X}{V_{\mathrm{Th}}}=\frac{R_D}{R_F+R_M+1/g_{m1}}$$
 <p>레이저를 연결하면 PMOS 전류 $-g_{m2}V_X$가 $r_{O2}$와 레이저 가지로 나뉘어요.</p>
 $$\frac{I_{out}}{V_X}=\frac{-g_{m2}r_{O2}}{R_{out,open}+R_L}$$
+</div>
+<div data-answer-step="직렬 감지와 귀환율">
 <p><span class="loc">㉢</span> 귀환망만 떼어 $N$을 단락하면 $I_{out}$의 일부가 $P$에서 $R_F$를 거쳐 $N$으로 흘러요. $I_F$의 기준 방향은 $N$에서 $P$이므로 귀환율은 음수예요.</p>
 $$K=\frac{I_F}{I_{out}}=-\frac{R_M}{R_M+R_F}$$
 $$T=K A_{I,open}>0$$
+</div>
 <h4>폐루프 이득과 임피던스</h4>
+<div data-answer-final="">
 $$A_{I,closed}\approx\frac{A_{I,open}}{1+T}$$
 <p>입력은 병렬 합산이므로 입력 저항이 줄어요.</p>
 $$R_{in,closed}\approx\frac{R_{in,open}}{1+T}$$

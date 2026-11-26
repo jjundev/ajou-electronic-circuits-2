@@ -1,61 +1,17 @@
-"""Independent verification of E12.29."""
 import sympy as s
-
-Yin, Yout, h, f = s.symbols('Yin Yout h f', real=True, nonzero=True)
-u, o, i_in, i_out = s.symbols('v_in v_out i_in i_out')
-
-g1, g2, go1, go2, RD1, Raux = s.symbols('gm1 gm2 go1 go2 RD1 R_aux',positive=True)
-x = s.symbols('v_x')
-# Drain of common-gate M1 drives the insulated gate of M2.
-xsol = s.solve(x/RD1 + go1*(x-u)-g1*u,x)[0]
-g_input = s.factor((g1*u+go1*(u-xsol))/u)
-assert s.factor(xsol-RD1*g_input*u) == 0
-
-# M2 is a NMOS CS output device. R_aux = RD2.
-g_output = 1/Raux+go2
-h_actual = g2*xsol/u
-
-# Yin/Yout include the feedback network's short-circuit diagonal admittances.
-# h is the forward dependent current leaving output per input voltage.
-# f*vo is the feedback-network input current toward the summing node at vi=0.
-# The reciprocal forward term -f*vi at output is present in the physical circuit.
-trial = s.solve([Yin*u-f*o-i_in, (h-f)*u+Yout*o-i_out],(u,o))
-det = Yin*Yout+f*(h-f)
-assert s.factor(trial[o].diff(i_in)-(f-h)/det) == 0
-assert s.factor(trial[u].diff(i_in)-Yout/det) == 0
-assert s.factor(trial[o].diff(i_out)-Yin/det) == 0
-
-R0 = -h/(Yin*Yout)
-Rin0, Rout0 = 1/Yin, 1/Yout
-T = -f*R0
-replica = s.solve([Yin*u-f*o-i_in,h*u+Yout*o-i_out],(u,o))
-assert s.factor(replica[o].diff(i_in)-R0/(1+T)) == 0
-assert s.factor(replica[u].diff(i_in)-Rin0/(1+T)) == 0
-assert s.factor(replica[o].diff(i_out)-Rout0/(1+T)) == 0
-probes = [(o,i_in),(u,i_in),(o,i_out)]
-for measured, injection in probes:
-    exact_result = trial[measured].diff(injection)
-    replica_result = replica[measured].diff(injection)
-    assert s.factor(s.limit(exact_result-replica_result,f,0)) == 0
-print('Loaded replica: R0 =',R0,'; Rin0 =',Rin0,'; Rout0 =',Rout0)
-print('Return convention: i_in+i_f, i_f=f*vo at vi=0; f>0; T=-f*R0.')
-print('Equivalent subtracting convention: i_in-K*vo with K=-f.')
-print('Loaded replica closed: R=R0/(1+T); Rin=Rin0/(1+T); Rout=Rout0/(1+T).')
-print('Exact closed physical circuit: replace h by h-f in the above expressions.')
-print('Exact D = Yin*Yout+f*(h-f); R=(f-h)/D; Rin=Yout/D; Rout=Yin/D.')
-print('Replica drops reciprocal forward feedthrough; R comparison requires |f/h| << 1.')
-print('Close to D=0, also check that the determinant change f**2 is negligible.')
-
-Rf = s.symbols('R_F',positive=True)
-feedback = 1/Rf
-yin, yout = g_input+feedback, g_output+feedback
-physical_input = g_input*u+(u-o)/Rf
-physical_output = g_output*o+h_actual*u+(o-u)/Rf
-assert s.factor(physical_input-(Yin*u-f*o).subs({Yin:yin,f:feedback})) == 0
-assert s.factor(physical_output-((h-f)*u+Yout*o).subs({h:h_actual,Yout:yout,f:feedback})) == 0
-print('f=1/R_F; Yin=g_input+1/R_F; Yout=g_output+1/R_F.')
-for label, value in [('g_input',g_input),('g_output',g_output),('h',h_actual)]:
-    print(label,'=',s.factor(value))
-
-print('R_aux=RD2. For lambda=0: g_input=gm1; g_output=1/RD2; h=gm1*gm2*RD1.')
-print('The MOS CS path is inverting, T>0. In the full circuit h>f is required for inversion.')
+gm,g1,g2,RD,D1,D2,RM,F,R1,R2,RC,rp,ro,r1,r2,rn,rr=s.symbols('gm g1 g2 RD D1 D2 RM F R1 R2 RC rp ro ro1 ro2 roN roP',positive=True)
+def par(*args): return 1/s.Add(*(1/x for x in args))
+def show(**entries):
+    for key,value in entries.items(): print(key,'=',value)
+S=R1+R2
+k=R2/S
+Zi=par(1/g1,F); Zo=par(D2,F); gc=g1*D1*g2; kf=1/F
+a=1/Zi; d=1/Zo
+A=-gc*Zi*Zo
+D=1-kf*A
+show(Zi=Zi,Zo=Zo,R0=A,K_signed_subtractive=-kf,K_return_current=kf,D=D,Rclosed_replica=A/D,Rin_replica=Zi/D,Rout_replica=Zo/D)
+# Reciprocal passive network transmits -kf in both off-diagonal admittances.
+M=s.Matrix([[a,-kf],[gc-kf,d]])
+det=a*d+kf*(gc-kf)
+assert s.simplify(M.det()-det)==0
+show(Rclosed_exact=(kf-gc)/det,Rin_exact=d/det,Rout_exact=a/det)

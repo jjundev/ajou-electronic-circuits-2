@@ -23,31 +23,32 @@
   </figure>
   <div data-subpart="main">
     <div data-answer-step="감지·반송 복제의 부하">
-      <p><span class="loc">㉠</span> 출력 포트를 단락하면 <span class="loc">㉡</span> 입력 $A$에서 본 반송 복제가 $R_A$예요. 반대로 $A$를 단락하면 출력에서 본 감지 복제가 $R_B$예요.</p>
+      <p>출력 전압을 감지하고 입력 $A$에 전류를 병렬로 돌려줘요. <span class="loc">㉠</span> 출력 포트를 단락해 <span class="loc">㉡</span> $A$에서 본 반송 부하를 $R_A$로, $A$를 단락해 출력에서 본 감지 부하를 $R_B$로 잡아요.</p>
       $$R_A=R_F+(R_1\parallel R_2)$$
       $$R_B=R_1+(R_2\parallel R_F)$$
     </div>
-    <div data-answer-step="개루프 첫 단">
-      <p>$\lambda\gt0$이라 두 $r_O$를 남기고, 몸체 효과는 무시해요. $g_{m1}r_{O1}\gg1$에서 $M_1$ 소스 저항을 $R_{S1}$로 근사해요.</p>
+    <div data-answer-step="개루프 출력저항과 입력저항">
+      <p>$\lambda\gt0$이라 두 $r_O$를 남기고 몸체 효과를 무시해요. 이상적 전류원 부하는 소신호에서 개방이에요.</p>
+      $$R_{out,\mathrm{open}}=r_{O2}\parallel R_B$$
+      <p>$g_{m1}r_{O1}\gg1$에서 $M_1$ 소스 쪽 저항 $R_{S1}$은 다음과 같아요. 입력에서는 이 저항과 반송 부하 $R_A$를 병렬로 읽어요.</p>
       $$R_{S1}\approx\frac{1}{g_{m1}}\left(1+\frac{R_{D1}}{r_{O1}}\right)$$
-      <p>$i_{in}\parallel R_A$를 전압 $i_{in}R_A$와 직렬 $R_A$로 바꿔 CG 이득을 곱해요.</p>
-      $$\frac{v_X}{i_{in}}\approx R_A\frac{R_{D1}}{R_A+R_{S1}}$$
+      $$R_{in,\mathrm{open}}\approx R_A\parallel R_{S1}$$
     </div>
-    <div data-answer-step="개루프 둘째 단" data-gain-route="gm-rout">
-      <p>이상적 전류원 부하는 소신호에서 개방이에요. $i_{out}$은 $M_2$ 드레인에 들어가는 방향이 양이에요.</p>
-      <div data-gain-stage="gm">$$G_{m2}=g_{m2}$$</div>
-      <div data-gain-stage="rout">$$R_{out,\mathrm{open}}=r_{O2}\parallel R_B$$</div>
-      <div data-gain-stage="gain">$$\frac{v_{out}}{v_X}=-G_{m2}R_{out,\mathrm{open}}$$</div>
+    <div data-answer-step="목표 전달비와 두 단의 이득">
+      <p>$i_{in}\parallel R_A$를 테브난 전압 $v_{\mathrm{Th}}=i_{in}R_A$와 직렬 $R_A$로 바꿔요. 첫 인자 $R_A$는 $v_{\mathrm{Th}}/i_{in}$이에요. 테브난 전압에서 $X$까지의 이득에는 $R_A$와 $R_{S1}$의 분압이 들어가요.</p>
+      $$R_0=R_A\frac{v_X}{v_{\mathrm{Th}}}\frac{v_{out}}{v_X}$$
+      $$\frac{v_X}{v_{\mathrm{Th}}}\approx\frac{R_{D1}}{R_A+R_{S1}}$$
+      <p>둘째 단은 CS라 반전하고, 감지 부하를 포함한 개루프 출력저항을 재사용해요.</p>
+      $$\frac{v_{out}}{v_X}=-g_{m2}R_{out,\mathrm{open}}$$
     </div>
-    <div data-answer-step="귀환율 측정">
-      <p>$A$를 단락하고 $v_{out}$을 걸면 <span class="loc">㉢</span> $N$의 아래쪽 저항은 $R_2\parallel R_F$예요. $A$에서 빠져나가는 방향을 $i_F$의 양으로 잡아요.</p>
+    <div data-answer-step="귀환율 시험">
+      <p>$A$를 접지하고 $v_{out}$을 걸면 <span class="loc">㉢</span> $N$의 아래쪽 저항은 $R_2\parallel R_F$예요. $i_F$의 양의 방향은 $A$에서 $N$ 쪽이에요.</p>
       $$v_N=\frac{R_2\parallel R_F}{R_B}v_{out}$$
+      $$i_F=-\frac{v_N}{R_F}$$
+      $$K=\frac{i_F}{v_{out}}=-\frac{R_2}{R_1R_2+R_1R_F+R_2R_F}$$
     </div>
     <div data-answer-final="">
-      $$R_0=\frac{v_X}{i_{in}}\frac{v_{out}}{v_X}$$
-      $$R_{in,\mathrm{open}}\approx R_A\parallel R_{S1}$$
-      $$K=\frac{i_F}{v_{out}}=-\frac{R_2}{R_1R_2+R_1R_F+R_2R_F}$$
-      <p>복제법으로 폐루프 값을 근사해요.</p>
+      <p>귀환망의 직접 전달을 생략하는 복제법으로 폐루프 값을 근사해요.</p>
       $$\frac{v_{out}}{i_{in}}\approx\frac{R_0}{1+KR_0}$$
       $$R_{in,\mathrm{closed}}\approx\frac{R_{in,\mathrm{open}}}{1+KR_0}$$
       $$R_{out,\mathrm{closed}}\approx\frac{R_{out,\mathrm{open}}}{1+KR_0}$$

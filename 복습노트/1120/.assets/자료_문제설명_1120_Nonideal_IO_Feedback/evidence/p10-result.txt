@@ -1,15 +1,13 @@
-Loaded replica: R0 = -h/(Yin*Yout) ; Rin0 = 1/Yin ; Rout0 = 1/Yout
-Return convention: i_in+i_f, i_f=f*vo at vi=0; f>0; T=-f*R0.
-Equivalent subtracting convention: i_in-K*vo with K=-f.
-Loaded replica closed: R=R0/(1+T); Rin=Rin0/(1+T); Rout=Rout0/(1+T).
-Exact closed physical circuit: replace h by h-f in the above expressions.
-Exact D = Yin*Yout+f*(h-f); R=(f-h)/D; Rin=Yout/D; Rout=Yin/D.
-Replica drops reciprocal forward feedthrough; R comparison requires |f/h| << 1.
-Close to D=0, also check that the determinant change f**2 is negligible.
-f=1/R_F; Yin=g_input+1/R_F; Yout=g_output+1/R_F.
-g_input = 1/r_pi
-g_output = (RC + r_o)/(RC*r_o)
-h = gm
-Open transresistance = -gm*(r_pi||RF)*(RC||ro||RF).
-Open input = r_pi||RF; open output = RC||ro||RF.
-Exact full circuit high-gm limit: negative transresistance -> -RF.
+Zi=rπ||RF, Zo=RC||ro||RF, G=gm. Finite Early resistance included. kf=1/RF. With actual return current added at the input, textbook loaded unilateral results R0=−G Zi Zo, D=1−kf R0, Rcl=R0/D, Rin=Zi/D, Rout=Zo/D (signed K=−kf in the 1+K R0 convention). Exact reciprocal network additionally includes forward passive current: replace G by G−kf in R0 and in D. Full exact KCL included in evidence.
+Zi = 1/(1/rp + 1/F)
+Zo = 1/(1/ro + 1/RC + 1/F)
+R0 = -gm/((1/rp + 1/F)*(1/ro + 1/RC + 1/F))
+K_signed_subtractive = -1/F
+K_return_current = 1/F
+D = 1 + gm/(F*(1/rp + 1/F)*(1/ro + 1/RC + 1/F))
+Rclosed_replica = -gm/((1 + gm/(F*(1/rp + 1/F)*(1/ro + 1/RC + 1/F)))*(1/rp + 1/F)*(1/ro + 1/RC + 1/F))
+Rin_replica = 1/((1 + gm/(F*(1/rp + 1/F)*(1/ro + 1/RC + 1/F)))*(1/rp + 1/F))
+Rout_replica = 1/((1 + gm/(F*(1/rp + 1/F)*(1/ro + 1/RC + 1/F)))*(1/ro + 1/RC + 1/F))
+Rclosed_exact = (-gm + 1/F)/((1/rp + 1/F)*(1/ro + 1/RC + 1/F) + (gm - 1/F)/F)
+Rin_exact = (1/ro + 1/RC + 1/F)/((1/rp + 1/F)*(1/ro + 1/RC + 1/F) + (gm - 1/F)/F)
+Rout_exact = (1/rp + 1/F)/((1/rp + 1/F)*(1/ro + 1/RC + 1/F) + (gm - 1/F)/F)

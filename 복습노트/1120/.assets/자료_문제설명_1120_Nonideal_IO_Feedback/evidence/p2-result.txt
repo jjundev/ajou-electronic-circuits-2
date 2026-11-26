@@ -1,9 +1,8 @@
-A0 exact = (g_m + g_o)/(G_L + g_o) ; lambda=0 = g_m/G_L
-Rin0 exact = (G_L + g_o)/(G_L*(g_m + g_o)) ; lambda=0 = 1/g_m
-Rout0 exact = 1/(G_L + g_o) ; lambda=0 = 1/G_L
-Acl exact = (g_m + g_o)/(G_L + K*g_m + g_o) ; lambda=0 = g_m/(G_L + K*g_m)
-Rincl exact = (G_L + K*g_m + g_o)/(G_L*(g_m + g_o)) ; lambda=0 = (G_L + K*g_m)/(G_L*g_m)
-Routcl exact = 1/(G_L + K*g_m + g_o) ; lambda=0 = 1/(G_L + K*g_m)
-K = R_2/(R_1+R_2), G_L = 1/R_D+1/(R_1+R_2).
-Gate current is zero, so the divider input loading does not alter G_m.
-Finite g_o adds an intrinsic drain-to-source term to the closed denominator.
+With S=R1+R2, Z=RD||S, k=R2/S, A0=gm Z, D=1+kA0. Av=A0/D, Rin0=1/gm, Rout0=Z, Rin=D/gm, Rout=Z/D. Gate-side R1||R2 takes no current. General result sidesteps wording ambiguity.
+K = R2/(R1 + R2)
+Aopen = gm/(1/(R1 + R2) + 1/RD)
+Rin_open = 1/gm
+Rout_open = 1/(1/(R1 + R2) + 1/RD)
+Aclosed = gm/((R2*gm/((R1 + R2)*(1/(R1 + R2) + 1/RD)) + 1)*(1/(R1 + R2) + 1/RD))
+Rin_closed = (R2*gm/((R1 + R2)*(1/(R1 + R2) + 1/RD)) + 1)/gm
+Rout_closed = 1/((R2*gm/((R1 + R2)*(1/(R1 + R2) + 1/RD)) + 1)*(1/(R1 + R2) + 1/RD))

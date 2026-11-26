@@ -1,8 +1,8 @@
-A0 exact = (g_m + g_o)/(G_L + g_o) ; lambda=0 = g_m/G_L
-Rin0 exact = (G_L + g_o)/(G_L*(g_m + g_o)) ; lambda=0 = 1/g_m
-Rout0 exact = 1/(G_L + g_o) ; lambda=0 = 1/G_L
-Acl exact = (g_m + g_o)/(G_L + K*g_m + g_o) ; lambda=0 = g_m/(G_L + K*g_m)
-Rincl exact = (G_L + K*g_m + g_o)/(G_L*(g_m + g_o)) ; lambda=0 = (G_L + K*g_m)/(G_L*g_m)
-Routcl exact = 1/(G_L + K*g_m + g_o) ; lambda=0 = 1/(G_L + K*g_m)
-The ideal DC source is AC-open. G_L = 1/(R_1+R_2), K = R_2/(R_1+R_2).
-At lambda=0 the closed denominator simplifies to 1+g_m*R_2.
+Ideal current-source load is open for AC: Z=S=R1+R2, k=R2/S. A0=gm S, D=1+gm R2. Av=gm S/D, Rin0=1/gm, Rout0=S, Rin=D/gm, Rout=S/D (no transistor output resistance specified).
+K = R2/(R1 + R2)
+Aopen = gm*(R1 + R2)
+Rin_open = 1/gm
+Rout_open = R1 + R2
+Aclosed = gm*(R1 + R2)/(R2*gm + 1)
+Rin_closed = (R2*gm + 1)/gm
+Rout_closed = (R1 + R2)/(R2*gm + 1)
