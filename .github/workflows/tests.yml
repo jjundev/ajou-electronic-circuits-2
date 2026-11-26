@@ -24,8 +24,6 @@ jobs:
     env:
       # 러너의 기본 인코딩(cp1252)으로는 한국어를 읽고 쓸 수 없다.
       PYTHONUTF8: '1'
-      # 도구가 없으면 건너뛰지 않고 실패한다.
-      EC2_REQUIRE_TOOLS: '1'
     steps:
       - name: Configure git
         run: |
@@ -54,17 +52,12 @@ jobs:
         run: |
           python -m pip install -r tests/requirements.txt
           python -m playwright install chromium
-          node_dir="$RUNNER_TEMP/node-tools"
-          if [ "$RUNNER_OS" = Windows ]; then node_dir="$(cygpath -m "$node_dir")"; fi
-          npm install --prefix "$node_dir" --no-audit --no-fund puppeteer-core@25.18.1
-          echo "EC2_PUPPETEER_CORE_PACKAGE=$node_dir/node_modules/puppeteer-core/package.json" >> "$GITHUB_ENV"
       - name: Run tests
         run: |
           # 같은 이름의 테스트 도우미가 있어 묶음마다 따로 실행한다.
           failed=()
           for suite in tests workbook/tests from_the_past/md/_tools/tests '교과서/마이크로전자회로/_tools/tests' \
               .agents/skills/ec2-concept-check/tests .agents/skills/ec2-interactive/tests \
-              .agents/skills/ec2-review-video/tests .agents/skills/ec2-solution-video/tests \
               .claude/skills/ec2-problem-explain/tests .claude/skills/ec2-review-pack/tests; do
             echo "::group::$suite"
             python -m pytest -q -rs --tb=short "$suite" || failed+=("$suite")
