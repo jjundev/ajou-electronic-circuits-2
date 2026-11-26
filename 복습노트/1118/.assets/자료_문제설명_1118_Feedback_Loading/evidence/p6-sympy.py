@@ -1,15 +1,15 @@
-"""Qualitative test: series current sampling versus a parallel voltage tap."""
-import sympy as sp
+from sympy import symbols, Eq, solve, simplify, factor, limit, oo
 
-gm, K, Rout = sp.symbols('G_m K R_out', positive=True)
-vx, ix, io, va = sp.symbols('v_test i_test i_out v_error')
-# Delivered output current io points away from the amplifier. Test current enters it.
-series_model = [io+ix, va+K*io, ix-vx/Rout+gm*va]
-sol = sp.solve(series_model, (io, va, vx), dict=True)[0]
-assert sp.simplify(sol[vx]/ix-Rout*(1+gm*K))==0
-print("Fig. 12.45 attaches K to the output node as a tap.")
-print("The branch does not put the current-sense port in series with the output test source.")
-print("A common node specifies the same voltage but does not force the same branch current.")
-print("With a series sensor, i_out=-i_test, v_error=-K*i_out.")
-print("Illustration for ideal sampling and unilateral transconductance: v_test/i_test =", sp.factor(sol[vx]/ix))
-print("This expression follows from the corrected series model, not the pictured tap.")
+def check(left, right):
+    assert simplify(left-right) == 0, (left,right)
+
+# Independent proof by equations. Positive test current ix enters DUT;
+# terminal output current io is positive FROM the DUT. gm*va delivers
+# current to output node where R is connected in parallel.
+R,gm,k = symbols("R gm k",positive=True)
+v,va,ix,io=symbols("v va ix io")
+z=solve([Eq(io,-ix),Eq(va,-k*io),Eq(ix,v/R-gm*va)],(v,va,io),dict=True)[0][v]/ix
+check(z,R*(1+gm*k))
+print("Fig. 12.45 wires K in parallel from the output node; this supplies node voltage, and does not define/decode the net output current.")
+print("For current-output, voltage-input feedback use a series current sensor in the load/test path, after the Rout split; retain Rout as a shunt to ground.")
+print("Proof with nominal output current pointing out: io=-Ix, VA=-K io, Ix=Vx/Rout-Gm VA. Therefore Vx/Ix=Rout(1+Gm K). K here has impedance units and is taken positive for negative feedback.")

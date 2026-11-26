@@ -1,3 +1,4 @@
-(a) iin up -> vs up -> vx up -> vo down. The output-to-input feedback current decreases, opposing iin.
-(b) unloaded open-loop vo/iin = -RD1*RD2*gm2 ohms
-(c) closed-loop vo/iin = -RD1*RD2*RF*gm2/(RD1*RD2*gm2 + RF) ohms
+a) Positive injected current raises s and x, depresses output; delta i_RF=(delta o-delta s)/RF opposes input in the intended large-RF regime.
+b) Open-loop transimpedance = -a*b*g2 ohm
+c) Textbook large-RF transimpedance = -a*b*g2/(a*b*g2/f + 1) ohm
+Direct nodal finite-RF check = -b*(a*f*g1*g2 - 1)/(a*b*g1*g2 + b*g1 + f*g1 + 1) ohm. Dropped resistances b and 1/g1 are small vs f; input-output feedthrough negligible when f*g1*g2*a >> 1.

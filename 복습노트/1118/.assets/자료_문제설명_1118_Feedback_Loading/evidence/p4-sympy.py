@@ -1,18 +1,19 @@
-"""Fig. 12.38(a): output test with the independent input current source open."""
-import sympy as sp
+from sympy import symbols, Eq, solve, simplify, factor, limit, oo
 
-g1, g2, D1, D2, F = sp.symbols('g_m1 g_m2 R_D1 R_D2 R_F', positive=True)
-s, x, o, it = sp.symbols('v_s v_x v_o i_test')
-kcl = [g1*s + (s-o)/F, x/D1-g1*s, o/D2+g2*x+(o-s)/F-it]
-sol = sp.solve(kcl, (s, x, o), dict=True)[0]
-z = sp.factor(sol[o]/it)
-z_expected = 1/(1/D2+(1+g2*D1)/(F+1/g1))
-assert sp.simplify(z-z_expected) == 0
-print("s, x, o KCL residuals:", [sp.simplify(eq.subs(sol)) for eq in kcl])
-print("Exact Zout:", z)
-print("Exact Yout = 1/R_D2 + (1+g_m2 R_D1)/(R_F+1/g_m1)")
-print("v_s/v_o:", sp.factor(sol[s]/sol[o]))
-print("v_x/v_o:", sp.factor(sol[x]/sol[o]))
-print("At R_F >> 1/g_m1 and R_F >> R_D2, omit direct R_F loading:")
-print("Zout ≈ R_D2/(1+g_m2 R_D1 R_D2/R_F)")
-print("Infinite R_F limit:", sp.limit(z, F, sp.oo))
+def check(left, right):
+    assert simplify(left-right) == 0, (left,right)
+
+# s = M1 source (input); x = M1 drain; o = output.
+# g1,g2 stand for gm1,gm2; a,b,f stand for RD1,RD2,RF.
+g1,g2,a,b,f = symbols("g1 g2 a b f", positive=True)
+s,x,o,i,j = symbols("s x o i j")
+# i injects into input, j injects into output.
+eqs=[Eq(i, g1*s+(s-o)/f), Eq(x/a,g1*s), Eq(j,o/b+g2*x+(o-s)/f)]
+sol = solve(eqs,(s,x,o),dict=True)[0]
+Q=f+b+1/g1+g2*a*b
+T=g2*a*b/f
+zout=factor(sol[o].subs(i,0)/j)
+check(zout,b*(f+1/g1)/Q)
+check(zout,b*(1+1/(f*g1))/(1+T+(b+1/g1)/f))
+print("Zero input current = open independent source; RF stays connected. Inject test current into output.")
+print("Exact Rout =",zout,"ohm. Under RF >> RD2,1/gm1, Rout ~",b/(1+T),"ohm.")

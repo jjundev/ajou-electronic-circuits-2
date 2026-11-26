@@ -1,6 +1,3 @@
-Fig. 12.45 attaches K to the output node as a tap.
-The branch does not put the current-sense port in series with the output test source.
-A common node specifies the same voltage but does not force the same branch current.
-With a series sensor, i_out=-i_test, v_error=-K*i_out.
-Illustration for ideal sampling and unilateral transconductance: v_test/i_test = R_out*(G_m*K + 1)
-This expression follows from the corrected series model, not the pictured tap.
+Fig. 12.45 wires K in parallel from the output node; this supplies node voltage, and does not define/decode the net output current.
+For current-output, voltage-input feedback use a series current sensor in the load/test path, after the Rout split; retain Rout as a shunt to ground.
+Proof with nominal output current pointing out: io=-Ix, VA=-K io, Ix=Vx/Rout-Gm VA. Therefore Vx/Ix=Rout(1+Gm K). K here has impedance units and is taken positive for negative feedback.

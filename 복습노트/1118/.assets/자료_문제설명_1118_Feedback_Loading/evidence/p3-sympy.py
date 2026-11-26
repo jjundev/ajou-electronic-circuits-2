@@ -1,21 +1,22 @@
-from sympy import Eq, Symbol, symbols, solve, simplify, limit, oo
+from sympy import symbols, Eq, solve, simplify, factor, limit, oo
 
-gm1, gm2, RD1, RD2, RF = symbols("gm1 gm2 RD1 RD2 RF", positive=True)
-vs, vx, vo, iin = symbols("vs vx vo iin", real=True)
-A = gm2 * RD1 * RD2
+def check(left, right):
+    assert simplify(left-right) == 0, (left,right)
 
-# Test source is applied at M1 source with feedback connected.
-network = [Eq(iin, gm1*vs + (vs-vo)/RF),
-           Eq(vx/RD1, gm1*vs),
-           Eq(vo/RD2 + gm2*vx + (vo-vs)/RF, 0)]
-solution = solve(network, (vs, vx, vo), dict=True)[0]
-exact = simplify(solution[vs]/iin)
-assert simplify(exact - (RF+RD2)/(1+gm1*(RF+RD2+A))) == 0
-print("with finite RF and both loading effects: Rin =", exact, "ohms")
-# Disregard the small source-end voltage in iRF, and the load at the output.
-model = solve([Eq(gm1*vs, iin+vo/RF), Eq(vo, -A*gm1*vs)],
-              [vs, vo], dict=True)[0]
-zin = simplify(model[vs]/iin)
-assert simplify(zin - 1/(gm1*(1+A/RF))) == 0
-print("under the stated large-RF approximation: Rin =", zin, "ohms")
-print("open-loop 1/gm1 is reduced by 1 + A/RF")
+# s = M1 source (input); x = M1 drain; o = output.
+# g1,g2 stand for gm1,gm2; a,b,f stand for RD1,RD2,RF.
+g1,g2,a,b,f = symbols("g1 g2 a b f", positive=True)
+s,x,o,i,j = symbols("s x o i j")
+# i injects into input, j injects into output.
+eqs=[Eq(i, g1*s+(s-o)/f), Eq(x/a,g1*s), Eq(j,o/b+g2*x+(o-s)/f)]
+sol = solve(eqs,(s,x,o),dict=True)[0]
+Q=f+b+1/g1+g2*a*b
+T=g2*a*b/f
+zin=factor(sol[s].subs(j,0)/i)
+check(zin,(f+b)/(g1*Q))
+zin_text=1/(g1*(1+T))
+# Compare normalized numerator/denominator exactly; both correction terms
+# are small relative to unity/the retained denominator when f>>b,1/g1.
+check(zin, (1/g1)*(1+b/f)/(1+T+(b+1/g1)/f))
+print("Apply input test current, output test injection zero. Exact Zin =",zin,"ohm.")
+print("With RF >> RD2, 1/gm1: Zin ~",zin_text,"ohm. gm1 is the input transistor's transconductance.")

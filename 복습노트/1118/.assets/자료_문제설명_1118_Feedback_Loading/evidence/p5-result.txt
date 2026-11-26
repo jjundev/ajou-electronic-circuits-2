@@ -1,7 +1,5 @@
-KCL residuals: [0, 0, 0]
-beta = R_2/(R_1 + R_2) ; loaded drain resistance = 1/(1/(R_1 + R_2) + 1/R_D)
-v_o/i_in (i_test=0) = R_D*(R_1 + R_2)/(R_1 + R_2*R_D*g_m2 + R_2 + R_D)
-v_in/i_in (i_test=0) = (R_1 + R_2 + R_D)/(g_m1*(R_1 + R_2*R_D*g_m2 + R_2 + R_D))
-v_o/i_test (i_in=0) = R_D*(R_1 + R_2)/(R_1 + R_2*R_D*g_m2 + R_2 + R_D)
-R1+R2 >> RD: T=beta*g_m2*R_D; Ztrans=R_D/(1+T); Zin=1/[g_m1(1+T)]; Zout=R_D/(1+T)
-Voltage ratio v_o/v_in, if requested: R_D*g_m1*(R_1 + R_2)/(R_1 + R_2 + R_D)
+beta=R2/(R1+R2), D=RD || (R1+R2), T=gm2*beta*D.
+Closed-loop Vout/Iin = D/(1+T) [ohm] and positive.
+Input impedance = 1/[gm1*(1+T)] [ohm].
+Output impedance with Iin=0 open = D/(1+T) [ohm].
+For R1+R2 >> RD take D approximately RD throughout; beta is retained.

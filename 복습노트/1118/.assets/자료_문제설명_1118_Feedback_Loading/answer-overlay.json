@@ -5,7 +5,7 @@
   "slug": "Feedback_Loading",
   "learning_style": {
     "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
-    "sha256": "3c9f68f55d804966c95a35cdcd2f729754e9dc9a453fcc0df7f5b01152edeb9f",
+    "sha256": "a13ae9a80c6c1145955d9cc9b663fc93037fdd399644743fc25860525ecc2094",
     "rule_ids": [
       "UNIT-01",
       "CALC-01",
@@ -22,7 +22,7 @@
       "FREQ-01"
     ]
   },
-  "input_hash": "2e404c6a55cbe91cb651fe61db29d877599964aa7dc31c95dc6037fcea08bfb2",
+  "input_hash": "05b1c43f215f9d781d0f65648cc9b80569e36d921507a09a78dfe0867a9be1ca",
   "source_inputs": {
     "복습노트/1118/.assets/problems.txt": "0ababbc43f8f4cf6fb95e5ef00753742bc43f4fbcfd9f94f2db12e6b5623f276",
     "복습노트/1118/.assets/display-titles.json": "7b15cf314ce428a9138452eb19cac7807ce9192fdfbb7e3a8414a1204b42a495",
@@ -36,7 +36,7 @@
     "교과서/마이크로전자회로/ch12/figures/fig12-38-a.png": "b1113696292b6aa1644fe70f6c102f18e3a5ad12a5e2c6116a7c5b15fc37aa27",
     "교과서/마이크로전자회로/ch12/figures/fig12-97.png": "f09b9bae52d6cde8d922ed9e8a3d8380de1faa416edf41df4d65d7babff1d0c4",
     "교과서/마이크로전자회로/ch12/figures/fig12-45.png": "e9ecb477df3c8cbedbf1e3d0e3b17655c74e4ebb9a930b6f9ceda9a2e9852607",
-    ".claude/skills/ec2-review-pack/references/solution-style.md": "3c9f68f55d804966c95a35cdcd2f729754e9dc9a453fcc0df7f5b01152edeb9f"
+    ".claude/skills/ec2-review-pack/references/solution-style.md": "a13ae9a80c6c1145955d9cc9b663fc93037fdd399644743fc25860525ecc2094"
   },
   "problems": [
     {
@@ -61,12 +61,12 @@
         {
           "subpart": "b",
           "label": "귀환을 끊고 두 단의 전류와 전압 연결하기",
-          "html": "<p>$R_F\\gg R_{D2}$라서 출력에 걸리는 귀환망의 부하 효과를 생략해요. $R_F$를 떼면 입력 전류는 $M_1$ 소스에서 드레인으로 올라와 $R_{D1}$으로 흘러요.</p><p>$$v_X=i_{in}R_{D1}$$</p><p>$M_2$가 $g_{m2}v_X$를 접지 쪽으로 끌어가므로 드레인 전압은 내려가요.</p><p>$$v_{out}=-R_{D2}g_{m2}v_X$$</p><p>$$R_0=\\frac{v_{out}}{i_{in}}\\approx -g_{m2}R_{D1}R_{D2}$$</p>"
+          "html": "<p>$R_F\\gg R_{D2}$라서 순방향 이득을 구할 때 출력에 걸리는 귀환망 로딩을 생략해요. $X$에서 공통 게이트와 공통 소스 두 단을 나눠요.</p><p>$$R_0=\\frac{v_{out}}{i_{in}}=\\frac{v_X}{i_{in}}\\frac{v_{out}}{v_X}$$</p><p>$R_F$를 떼면 $i_{in}$이 $M_1$ 소스에서 드레인으로 흘러 $v_X$를 올려요.</p><p>$$\\frac{v_X}{i_{in}}\\approx R_{D1}$$</p><p>$M_2$는 $R_{D2}$에 걸리는 전압을 반전시켜요.</p><p>$$\\frac{v_{out}}{v_X}\\approx -g_{m2}R_{D2}$$</p>"
         },
         {
           "subpart": "c",
           "label": "반송 전류의 기준을 맞추기",
-          "html": "<p>반송 경로만 볼 때 입력 전류원은 개방해요. 출력에서 밀어 넣은 전류가 $R_F$와 공통 게이트 소스 쪽의 $1/g_{m1}$을 차례로 지나므로</p><p>$$i_{RF}=\\frac{v_{out}}{R_F+1/g_{m1}}\\approx\\frac{v_{out}}{R_F}$$</p><p>마지막 근사는 $R_F\\gg1/g_{m1}$에서 써요. 뺄셈기에 쓰는 전류는 입력에서 빠져나가는 방향이라 $i_F=-i_{RF}$예요.</p><p>$$K=\\frac{i_F}{v_{out}}\\approx-\\frac{1}{R_F}$$</p>"
+          "html": "\n<figure class=\"figure\">\n  <svg id=\"p1-svg2-p1-feedback-return-test\" viewBox=\"0 0 378 115\" role=\"img\" aria-label=\"출력에 테스트 전압을 걸면 R F와 공통 게이트 소스 저항이 직렬이에요. i F는 접지 쪽에서 출력 쪽으로 가는 오른쪽 화살표예요.\">\n    <path class=\"fig-ink\" d=\"M46 42H86l5-7 8 14 8-14 8 14 8-14 8 14 5-7H221l5-7 8 14 8-14 8 14 8-14 8 14 5-7H332 M46 42v25 m-12 0h24 m-19 5h14 m-12 5h10 M111 72H267m-7-5 7 5-7 5\"/>\n    <circle class=\"fig-dot\" data-node=\"s\" data-node-color=\"blue\" cx=\"175\" cy=\"42\" r=\"3.5\"/>\n    <circle class=\"fig-dot\" data-node=\"out\" data-node-color=\"red\" cx=\"332\" cy=\"42\" r=\"3.5\"/>\n    <text class=\"fig-text fig-math\" x=\"110\" y=\"16\" text-anchor=\"middle\">1/g<tspan baseline-shift=\"sub\" font-size=\"78%\">m1</tspan></text>\n    <text class=\"fig-text fig-math\" x=\"175\" y=\"16\" text-anchor=\"middle\" data-node=\"s\" data-node-color=\"blue\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">s</tspan></text>\n    <text class=\"fig-text fig-math\" x=\"245\" y=\"16\" text-anchor=\"middle\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">F</tspan></text>\n    <text class=\"fig-text fig-math\" x=\"332\" y=\"16\" text-anchor=\"middle\" data-node=\"out\" data-node-color=\"red\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text>\n    <text class=\"fig-text fig-math\" x=\"188\" y=\"96\" text-anchor=\"middle\">i<tspan baseline-shift=\"sub\" font-size=\"78%\">F</tspan></text>\n  </svg>\n  <figcaption>입력 전류원을 개방하면 공통 게이트 소스의 저항을 거쳐 접지에 닿아요.</figcaption>\n</figure>\n<p>반송 경로를 볼 때 입력 전류원을 개방하고 출력에 전압을 걸어요. 출력에서 입력으로 들어오는 화살표가 $i_{RF}$이고, 입력에서 빠져나가는 양을 $i_F=-i_{RF}$로 둬요.</p><p>출력에서 본 반송 경로에는 $R_F$와 공통 게이트 소스 쪽의 $1/g_{m1}$이 직렬이에요.</p><p>$$i_F=-\\frac{v_{out}}{R_F+1/g_{m1}}$$</p><p>$R_F\\gg 1/g_{m1}$이면</p><p>$$K=\\frac{i_F}{v_{out}}\\approx-\\frac{1}{R_F}$$</p>"
         },
         {
           "subpart": "c",

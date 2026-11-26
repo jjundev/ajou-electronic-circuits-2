@@ -1,19 +1,22 @@
-"""Fig. 12.97: simultaneous independent input and output current injections."""
-import sympy as sp
+from sympy import symbols, Eq, solve, simplify, factor, limit, oo
 
-g1, g2, D, R1, R2 = sp.symbols('g_m1 g_m2 R_D R_1 R_2', positive=True)
-s, f, o, ii, it = sp.symbols('v_in v_div v_o i_in i_test')
-kcl = [g1*s+g2*f-ii, (f-o)/R1+f/R2, o/D+(o-f)/R1-g1*s-it]
-sol = sp.solve(kcl, (s, f, o), dict=True)[0]
-beta = R2/(R1+R2)
-D_loaded = 1/(1/D+1/(R1+R2))
-T = beta*g2*D_loaded
-closed = [sp.diff(sol[o], ii), sp.diff(sol[s], ii), sp.diff(sol[o], it)]
-expected = [D_loaded/(1+T), 1/(g1*(1+T)), D_loaded/(1+T)]
-assert all(sp.simplify(a-b)==0 for a,b in zip(closed, expected))
-print("KCL residuals:", [sp.simplify(eq.subs(sol)) for eq in kcl])
-print("beta =", beta, "; loaded drain resistance =", D_loaded)
-for label, form in zip(("v_o/i_in (i_test=0)", "v_in/i_in (i_test=0)", "v_o/i_test (i_in=0)"), closed):
-    print(label, "=", sp.factor(form))
-print("R1+R2 >> RD: T=beta*g_m2*R_D; Ztrans=R_D/(1+T); Zin=1/[g_m1(1+T)]; Zout=R_D/(1+T)")
-print("Voltage ratio v_o/v_in, if requested:", sp.factor(closed[0]/closed[1]))
+def check(left, right):
+    assert simplify(left-right) == 0, (left,right)
+
+# Circuit has RD--M1--M2 stack. s = common M1 source / M2 drain input;
+# h = M2 gate, o = M1 drain output. i,j are injected port currents.
+g1,g2,d,r1,r2 = symbols("g1 g2 d r1 r2", positive=True)
+s,h,o,i,j = symbols("s h o i j")
+eqs=[Eq(i,g1*s+g2*h), Eq(j,o/d+(o-h)/r1-g1*s), Eq((o-h)/r1,h/r2)]
+sol=solve(eqs,(s,h,o),dict=True)[0]
+beta=r2/(r1+r2)
+D=1/(1/d+1/(r1+r2))
+T=D*g2*beta
+check(sol[o].subs(j,0)/i,D/(1+T))
+check(sol[s].subs(j,0)/i,1/(g1*(1+T)))
+check(sol[o].subs(i,0)/j,D/(1+T))
+print("beta=R2/(R1+R2), D=RD || (R1+R2), T=gm2*beta*D.")
+print("Closed-loop Vout/Iin = D/(1+T) [ohm] and positive.")
+print("Input impedance = 1/[gm1*(1+T)] [ohm].")
+print("Output impedance with Iin=0 open = D/(1+T) [ohm].")
+print("For R1+R2 >> RD take D approximately RD throughout; beta is retained.")
