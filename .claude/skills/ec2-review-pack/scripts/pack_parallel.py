@@ -79,7 +79,8 @@ def original_worker_inputs(state, spec):
     for dep in spec.dependencies:
         row = f._record(state, dep)
         if dep == 'source-prep':
-            paths.update(x['path'] for x in row['receipt']['verified_files']
+            frozen = row['receipt']['verified_files'] if dep in state['tasks'] else row.get('source_inputs', [])
+            paths.update(x['path'] for x in frozen
                          if Path(x['path']).is_relative_to(Path(state['repo'])))
         paths.update(row.get('artifacts', {}).values())
         if adopted := row.get('pack'):
@@ -1096,6 +1097,15 @@ def execute_action(state, spec, root):
         files = {'concept-check-result.json': root/'concept-check-result.json'}
         shutil.copyfile(result, files['concept-check-result.json'])
         extras['source_inputs'] = file_records([result, *map(Path, f._read(result)['files'])])
+    elif tid == 'source-prep':
+        from pack_sources import lecture_pdfs, prepare_sources
+        stt = {date: Path(p) for date in state['sessions'] for p in state['hashes']
+               if f.nfc_path(p).parent.name == 'STT' and f.nfc_path(p).name == f'{date} 전회2.md'}
+        pdfs = [path for _, path in lecture_pdfs(repo)]
+        files = prepare_sources(repo, state['sessions'], stt, root)
+        # The STTs and every lecture PDF, readable or not, are frozen here instead of in a
+        # worker receipt, so repairing a damaged PDF stales this action.
+        extras['source_inputs'] = file_records([*stt.values(), *pdfs])
     elif tid == 'render-preflight':
         from render import render_preflight
         result = render_preflight(root)

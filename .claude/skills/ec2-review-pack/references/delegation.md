@@ -33,7 +33,6 @@ snapshot **파일 경로**로 전체 객체를 전달한다. 담당자는 이를
 
 | 역할 | 직접 읽는 상세/참조 | RUN 안 산출과 인계 |
 |---|---|---|
-| 자료 준비자 | execution-guide `1`의 1, STT·PDF | `source-map.json`, `slides.txt`; 날짜별 PDF/미게시/추출 실패 |
 | 날짜별 요약자 | stt-summary-prompt, 해당 STT 전체·자료 | `summaries/stt-<날짜>.md`; 기존 총평 3줄 |
 | 범위 설계자 | manifest-guide, 모든 요약·필요한 근거 | `scope.json`, manifest 초안→선발 후 확정본, `briefs/<sid>.json`, 브리프 `report` |
 | 문제 선발자 | problem-selection 전체, scope·후보·이력·원문/그림 | candidates/catalog, manifest의 problems/links, selection-review/selection, 표시 제목 후보, `work/selection/report.md` |
@@ -44,6 +43,8 @@ snapshot **파일 경로**로 전체 객체를 전달한다. 담당자는 이를
 | 독립 SVG QA (`standalone-svg-qa`) | PROFILE 전체·NOTATION-01/CIRCUIT-02·execution-guide `8`, 변환된 MD/SVG | `work/standalone-svg-qa/report.json`, `report.md`, 대상별 지정 PNG·receipt; MD/SVG 읽기 전용 |
 | 문제설명 조정자 | problem-explain-integration 부모 호출·형제 스킬/참조 | EXPLAIN_RUN 전체 stage/검산/검토, `child-receipt.json`; 발행 직전 반환 |
 | PDF QA | 통합 계약 `답안 PDF 렌더 검토 기록`·승인 HTML/overlay | `answer-pages/`, 브리프 `report`, `answer-review.json` |
+
+원문 준비는 `source-prep` 기계 작업이다(`source_contract` RUN).
 
 `scope.json`은 날짜별 배운 절/슬라이드·예고/금지어 근거·필요 PDF/쪽·미루거나 제외한 내용·관련 요약 경로를 보관하는 작업 인계물이다. 새 검증기 입력으로 가정하지 않는다. 기존 manifest/selection/audit/review JSON 스키마는 바꾸지 않는다.
 

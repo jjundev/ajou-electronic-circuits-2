@@ -12,7 +12,7 @@ from uuid import uuid4
 
 ACTIONS = ('prepare-pack','assemble-note','build-problems','precheck','convert-md',
            'publish-explanation','build-answers','publish-answer','final-check',
-           'render-preflight','candidate-index','stage-problem-index','explain-verify','publish-pack','structural-precheck','concept-draft','concept-publish')
+           'render-preflight','candidate-index','stage-problem-index','explain-verify','publish-pack','structural-precheck','concept-draft','concept-publish','source-prep')
 
 class UsageError(ValueError): pass
 class HelpRequested(Exception): pass

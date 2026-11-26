@@ -21,7 +21,7 @@ owner 기본은 workers다. 도구가 실제 있는 주체를 전달하며 unava
 새 RUN의 기본값은 `parallel`이다. 레거시 새 RUN은 `init --workflow legacy`로 시작한다. `--seed-from`은 기존 레거시 RUN의 이어받기 옵션이며 모드를 생략해도 새 레거시 RUN을 만든다. 기존 RUN은 저장한 계약을 따르며 `workflow` 필드가 없는 RUN은 레거시로 이어간다.
 
 1. `next --run <RUN> [--slots <n>]`(생략하면 준비된 작업자를 모두 낸다)의 `actions`, `dispatch`, `review_locally`, `blocked`를 확인한다. `claim`의 지정 경로로 역할을 배정하고 실제 작업자 ID를 `bind`한다. 기계 작업은 슬롯 수와 별도로 `run --action <ID>`로 병행할 수 있다.
-2. 시작할 때 source-prep, candidate-index, render-preflight를 함께 연다. selection이 채택되고 stage-problem-index가 봉인되면 explain-author와 explain-blind를 다른 작업자에게 동시에 맡긴다. 저작·독립 풀이가 채택되면 child-coordinator가 검증을 잇는다. 확인문제도 convert-md·selection이 승인되는 즉시 concept-draft → concept-review까지 진행한다. 최종 발행은 publish-pack·final-check 승인 뒤 별도로 진행한다.
+2. 시작할 때 세 기계 작업 source-prep·candidate-index·render-preflight를 `advance`로 실행한다. selection이 채택되고 stage-problem-index가 봉인되면 explain-author와 explain-blind를 다른 작업자에게 동시에 맡긴다. 저작·독립 풀이가 채택되면 child-coordinator가 검증을 잇는다. 확인문제도 convert-md·selection이 승인되는 즉시 concept-draft → concept-review까지 진행한다. 최종 발행은 publish-pack·final-check 승인 뒤 별도로 진행한다.
 3. 작업자는 자신의 브리프에서 `task build-receipt`와 `task check`를 실행한다. 메인은 완료한 작업만 `[{"task_id":"…","attempt":"…","receipt":"/절대/receipt.json"}]` 배열에 모아 `task accept-batch --run <RUN> --submissions <파일>`로 인계한다. 각 항목의 accepted/already_accepted/rejected와 거부 사유를 확인한다. `task accept`, `task check`로 한 항목씩 진단할 수 있다.
 4. `advance --run <RUN> --max-actions 4`는 최대 네 기계 작업을 실행한다. 사람이 필요한 작업이나 차단을 만나면 `waiting_for`와 `blocked`에 ID가 나온다. 다음 묶음을 배정하고 계속한다. 결과가 접혔으면 `details_path`에서 해당 항목만 읽는다. 진행 표시는 시도 시작·승인·수정·차단·재개·발행처럼 상태가 변했을 때만 한다.
 

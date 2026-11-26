@@ -202,7 +202,8 @@ def test_cli_advances_one_action_and_recovers_its_real_stopped_marker(tmp_path, 
         shutil.copytree(REPO/source, repo/source)
     for module in (REPO/'workbook').glob('*.py'):
         shutil.copyfile(module,repo/'workbook'/module.name)
-    invoke(run,'task','claim','--task','source-prep')
+    invoke(run,'run','--action','source-prep')
+    invoke(run,'task','claim','--task','stt-0909')
     result = invoke(run,'advance','--max-actions','1')
     assert result['executed'] == ['candidate-index']
     state = f.load_state(run)
