@@ -39,6 +39,7 @@ def nfc_path(p: str | Path) -> Path:
 TEMP_ROOTS = ('/tmp', '/private/tmp', '/var/folders', '/private/var/folders',
               str(Path(tempfile.gettempdir()).resolve()))
 BLIND_HISTORY_VERSION = 2  # Includes packet files from every uncertified round.
+UNBOUNDED_SLOTS = 2**31  # `next_work` slots meaning "every ready worker".
 
 
 def cache_root() -> Path:

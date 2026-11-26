@@ -55,6 +55,15 @@ def test_new_init_defaults_to_parallel(tmp_path):
     assert data['next']['kind'] == 'dispatch'
     assert data['next']['tasks'][0]['id'] == 'source-prep'
 
+def test_next_without_slots_dispatches_every_ready_worker(tmp_path):
+    repo, _ = make_run(tmp_path)  # only the repo is reused; the RUN below is a new parallel one
+    new = tmp_path / 'p'
+    assert call('init', '--repo', repo, '--run', new, '--range', '0909', '--allow-tmp')[0].returncode == 0
+    p, data = call('next', '--run', new)
+    assert p.returncode == 0
+    assert data['next']['dispatch'] == ['source-prep']
+
+
 @pytest.mark.parametrize('args', [[],['--help'],['task','--help'],['wat'],['next'],['run','--run','x','--action','evil']])
 def test_every_response_is_one_json_under_2000_chars(args):
     call(*args)
