@@ -32,7 +32,7 @@
 ```text
 당신은 ec2-review-pack의 {role} 작업자다. 브리프: {brief}
 run_id={run_id} attempt={attempt} — receipt에는 이 두 값만 쓴다.
-1. 브리프를 직접 읽고, `reference_sections`에 적힌 절과 inputs를 읽는다. 브리프에 `profile`이 있으면 PROFILE 전체를 읽는다.
+1. 브리프를 직접 읽고, 브리프에 `reference_sections`가 있으면 거기 적힌 절을, 없으면 `references`에 적힌 절을 inputs와 함께 읽는다. 브리프에 `profile`이 있으면 PROFILE 전체를 읽는다.
 2. 쓰기는 브리프의 allowed_outputs와 allowed_output_roots 안에서만 한다. 원본·저장소·RUN/repo 링크는 읽기 전용이다.
 3. 경로 문자열은 모두 NFC 절대 경로로 쓴다(macOS 폴더 이름은 NFD일 수 있다).
 4. receipt 형식은 runner-contract.md의 `배치·재개` 절과 `역할 파일의 JSON 타입` 절을 따른다. done·ready-for-publish이면 unresolved=[]이고 비차단 메모는 report에만 적는다.
