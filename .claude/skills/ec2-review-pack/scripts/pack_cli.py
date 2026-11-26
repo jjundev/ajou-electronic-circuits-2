@@ -73,7 +73,7 @@ def parser():
     c=command('accept-batch',ts); c.add_argument('--submissions',required=True,type=absolute)
     c=command('advance'); c.add_argument('--max-actions',required=True,type=int)
     c=command('resume'); c.add_argument('--stopped-attempts',required=True,type=absolute)
-    for name in ('claim','bind','build-receipt','accept','check','release','fix','authorize-fix'):
+    for name in ('claim','bind','build-receipt','accept','check','probe','release','fix','authorize-fix'):
         c=command(name,ts)
         if name=='authorize-fix': c.add_argument('--authorization',required=True,type=absolute); continue
         if name=='fix': c.add_argument('--request',required=True,type=absolute); continue
@@ -114,7 +114,7 @@ def count_cli(a):
     from pack_actions import cli_trace_directory
     if not a.run or not (a.run/'run-status.json').exists():
         return
-    if (a.command in ('status','next') or getattr(a,'task_command',None)=='check') and not os.environ.get('EC2_CLI_TRACE_DIR'):
+    if (a.command in ('status','next') or getattr(a,'task_command',None) in ('check','probe')) and not os.environ.get('EC2_CLI_TRACE_DIR'):
         return
     state = f.load_state(a.run)
     if state.get('workflow') == 'parallel':
@@ -179,6 +179,12 @@ def execute(a):
             # Read-only: the worker's pre-return check runs accept's validation without state changes.
             result=f.check_task(run,a.task,a.attempt,a.receipt)
             return dict(result,details_path=str(a.receipt)),int(result['status']!='ok')
+        elif a.task_command=='probe':
+            # Read-only for RUN state: writes only <attempt>/probe/ for the author's own check.
+            from pack_probe import fragment_probe
+            result=fragment_probe(run,a.task,a.attempt)
+            path=Path(f.load_state(run)['tasks'][a.task]['attempt_dir'])/'probe'/'probe.json'
+            return dict(status=result['status'],details_path=str(path)),int(result['status']!='pass')
         elif a.task_command=='release': f.release_task(run,a.task,a.attempt,a.reason)
         elif a.task_command=='authorize-fix': f.authorize_extra_fix(run,a.authorization)
         else: f.request_fixes(run,a.request)
@@ -225,8 +231,8 @@ def main(argv: list[str] | None=None) -> int:
             trace=traceback.format_exc()
             default_code = 'validation_failed' if isinstance(exc, (ValueError, OSError)) else 'execution_failed'
             result=dict(status='failed',error_code=getattr(exc, 'error_code', default_code),reason=str(exc)[:240])
-        # Read-only queries (status, next, task check) never create logs, including on failure/noisy imports.
-        read_only=a is not None and (a.command in ('status','next') or getattr(a,'task_command',None)=='check')
+        # Read-only queries (status, next, task check/probe) never create logs, including on failure/noisy imports.
+        read_only=a is not None and (a.command in ('status','next') or getattr(a,'task_command',None) in ('check','probe'))
         if a is not None and a.run is not None and not read_only and (a.run/'run-status.json').is_file():
             try:
                 noise.flush(); noise.seek(0)
