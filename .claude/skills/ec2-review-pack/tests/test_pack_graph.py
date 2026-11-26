@@ -73,6 +73,22 @@ def test_source_prep_stays_worker_without_contract(tmp_path):
     assert flow.next_work(run, slots=1)['dispatch'] == ['source-prep']
 
 
+def test_repaired_lecture_pdf_stales_source_prep(tmp_path):
+    import pymupdf
+    import pack_parallel
+    repo, run, _ = parallel(tmp_path)
+    bad = repo/'강의노트/2026F_Lec1_Bad.pdf'
+    bad.parent.mkdir()
+    bad.write_bytes(b'not a pdf')
+    row = pack_parallel.run_action(run, 'source-prep')
+    assert row['status'] == 'done'
+    assert any(Path(x['path']).name == bad.name for x in row['source_inputs'])
+    assert flow.inspect_state(run)['actions']['source-prep']['status'] == 'done'
+    with pymupdf.open() as doc:
+        doc.new_page()
+        doc.save(bad)
+    assert flow.inspect_state(run)['actions']['source-prep']['status'] == 'stale'
+
 def test_selection_unlocks_pdf_and_blind_before_note_qa(tmp_path):
     from pack_graph import ready_work
     state = selected(tmp_path, ['P10.02'])

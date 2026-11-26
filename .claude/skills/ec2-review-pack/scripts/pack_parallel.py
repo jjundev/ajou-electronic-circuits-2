@@ -1098,13 +1098,14 @@ def execute_action(state, spec, root):
         shutil.copyfile(result, files['concept-check-result.json'])
         extras['source_inputs'] = file_records([result, *map(Path, f._read(result)['files'])])
     elif tid == 'source-prep':
-        from pack_sources import prepare_sources
+        from pack_sources import lecture_pdfs, prepare_sources
         stt = {date: Path(p) for date in state['sessions'] for p in state['hashes']
                if f.nfc_path(p).parent.name == 'STT' and f.nfc_path(p).name == f'{date} 전회2.md'}
+        pdfs = [path for _, path in lecture_pdfs(repo)]
         files = prepare_sources(repo, state['sessions'], stt, root)
-        pdfs = {p for session in f._read(files['source-map.json'])['sessions'] for p in session['pdfs']}
-        # The adopted STT and lecture PDFs are frozen here instead of in a worker receipt.
-        extras['source_inputs'] = file_records([*stt.values(), *map(Path, pdfs)])
+        # The STTs and every lecture PDF, readable or not, are frozen here instead of in a
+        # worker receipt, so repairing a damaged PDF stales this action.
+        extras['source_inputs'] = file_records([*stt.values(), *pdfs])
     elif tid == 'render-preflight':
         from render import render_preflight
         result = render_preflight(root)
