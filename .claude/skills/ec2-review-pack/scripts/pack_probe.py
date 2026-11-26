@@ -11,6 +11,7 @@ import contextlib
 import io
 import json
 from pathlib import Path
+import re
 
 import pack_flow as f
 
@@ -19,13 +20,32 @@ WIDTHS = '1280,375'
 THEMES = 'light,dark'
 
 
+# layout_probe exits 2 for any exception. Only these reasons mean no browser could run:
+# the Playwright import, and browser_runtime.launch_chromium's per-candidate failures.
+_UNAVAILABLE = re.compile(r"^(No module named '(playwright|browser_runtime|vendor_route)\b"
+                          r"|Playwright Chromium: |Google Chrome: )")
+
+
 def run_layout(preview: Path, out: Path):
-    """Run layout_probe on the preview; return (exit_code, report or None)."""
+    """Run layout_probe on the preview; return (exit_code, report), report={'error': reason} on exit 2."""
     import layout_probe
-    with contextlib.redirect_stdout(io.StringIO()):
+    printed = io.StringIO()
+    with contextlib.redirect_stdout(printed):
         code = layout_probe.main([str(preview), '--widths', WIDTHS, '--themes', THEMES, '--out', str(out)])
-    report = json.loads(out.read_text(encoding='utf-8')) if code in (0, 1) and out.is_file() else None
-    return code, report
+    if code in (0, 1):
+        return code, json.loads(out.read_text(encoding='utf-8')) if out.is_file() else None
+    reason = None
+    for line in reversed(printed.getvalue().splitlines()):
+        try:
+            reason = json.loads(line).get('reason')
+            break
+        except (ValueError, AttributeError):
+            continue
+    return code, {'error': reason or printed.getvalue().strip()[:240] or 'layout probe failed'}
+
+
+def browser_unavailable(reason) -> bool:
+    return isinstance(reason, str) and bool(_UNAVAILABLE.match(reason))
 
 
 def _defects(report) -> int:
@@ -39,6 +59,9 @@ def _assembly_only_links(manifest: dict, sid: str) -> set[str]:
     import manifest as manifest_mod
     names = {manifest_mod.problem_pdf_name(manifest), manifest_mod.answer_pdf_name(manifest),
              manifest_mod.note_name(manifest)}
+    # Manifest links (cross-note, workbook PDFs) are relative to the published pack and are
+    # owned by scope-draft/scope-final, as in pack_parallel.machine_report.
+    names |= {link['href'] for link in manifest.get('links', [])}
     # In-page anchors to other sections and their topics exist only after assembly.
     anchors = {'#' + x for s in manifest['sections'] if s['id'] != sid
                for x in (s['id'], *(t['id'] for t in s.get('topics', [])))}
@@ -86,8 +109,15 @@ def fragment_probe(run: Path, task_id: str, attempt: str, *, layout=None) -> dic
         defects = _defects(report)
         status = 'defects' if code == 1 or defects else 'pass'
         view = dict(status=status, defects=defects, report=str(out) if out.is_file() else None)
-    else:  # 2: no browser or the page could not be measured
-        view = dict(status='unavailable', defects=0, report=None)
+    else:  # 2: no browser, or the page could not be loaded or measured
+        reason = (report or {}).get('error')
+        if reason is None:  # a layout runner that reported nothing: no browser evidence either way
+            view = dict(status='unavailable', defects=0, report=None)
+        else:
+            f._atomic_json(out, dict(error=reason))
+            missing = browser_unavailable(reason)
+            view = dict(status='unavailable' if missing else 'defects', defects=0 if missing else 1,
+                        report=str(out))
     result = dict(schema_version=1, task_id=task_id, attempt=attempt, fragment_sha256=fragment_sha,
                   problems=problems, layout=view,
                   status='pass' if not problems and view['status'] in ('pass', 'unavailable') else 'defects')

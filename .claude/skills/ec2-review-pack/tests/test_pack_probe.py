@@ -7,7 +7,7 @@ import pytest
 from _util import FIXTURES, prepare_mini_run
 import pack_flow as flow
 from pack_probe import fragment_probe
-from test_pack_graph import seed, selected
+from test_pack_graph import parallel, seed
 
 FIXTURE = FIXTURES / 'mini-run'
 SID = 's1'
@@ -18,20 +18,30 @@ def attempt_dir(run, tid):
     return Path(flow.load_state(run)['tasks'][tid]['attempt_dir'])
 
 
-def claimed_author(tmp_path, *, fragment=None, text=None):
-    """Seed through scope-final with the mini-run manifest, claim author-s1, write its fragment."""
-    state = selected(tmp_path, [])
-    run = Path(state['run'])
+def claimed_author(tmp_path, *, fragment=None, text=None, links=()):
+    """Seed through scope-final with the mini-run manifest, claim author-s1, write its fragment.
+
+    The seeding is `test_pack_graph.selected` applied to the persisted state, then scope-final.
+    """
+    from pack_graph import refresh
+    _, run, _ = parallel(tmp_path)
     fixture = prepare_mini_run(run / 'note-fixture')
     manifest = json.loads((fixture / 'manifest.json').read_text(encoding='utf-8'))
-    state['scope_sections'] = manifest['sections']
-    state['link_sections'] = []
-    for tid in ('scope-draft', 'selection'):
-        state['tasks'][tid].setdefault('artifacts', {})['manifest.json'] = str(fixture / 'manifest.json')
-    seed(state, ['scope-final'])
-    state['tasks']['scope-final'].setdefault('artifacts', {})['manifest.json'] = str(fixture / 'manifest.json')
-    from pack_graph import refresh
-    flow.update_state(run, flow.load_state(run)['revision'], lambda s: refresh(state))
+    manifest['links'] += [{'topic': 's1-mean', 'href': href} for href in links]
+    (fixture / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False), encoding='utf-8')
+
+    def setup(s):
+        seed(s, ['source-prep', 'stt-0909', 'candidate-index', 'scope-draft'])
+        s['scope_sections'] = manifest['sections']
+        s['link_sections'] = []
+        s['selected_ids'] = []
+        seed(s, ['selection', 'render-preflight'])
+        for tid in ('scope-draft', 'selection'):
+            s['tasks'][tid].setdefault('artifacts', {})['manifest.json'] = str(fixture / 'manifest.json')
+        seed(s, ['scope-final'])
+        s['tasks']['scope-final'].setdefault('artifacts', {})['manifest.json'] = str(fixture / 'manifest.json')
+        return refresh(s)
+    flow.update_state(run, flow.load_state(run)['revision'], setup)
     tid = 'author-' + SID
     attempt = flow.claim_task(run, tid)['attempt']
     target = attempt_dir(run, tid) / 'sections' / (SID + '.html')
@@ -95,6 +105,59 @@ def test_probe_ignores_links_resolved_only_in_the_full_note(tmp_path):
     run, tid, attempt = claimed_author(tmp_path, text=text)
     result = fragment_probe(run, tid, attempt, layout=CLEAN)
     assert [(p['code'], p['detail']) for p in result['problems']] == [('broken-link', '#nowhere')]
+
+
+def test_probe_ignores_hrefs_listed_in_manifest_links(tmp_path):
+    # Cross-note links resolve against the published pack, never against <attempt>/probe/.
+    listed = '../0930/정리노트_0930_Other.html#s1-mean'
+    text = (f'<article class="topic" id="s1-mean"><p><a href="{listed}">listed</a> '
+            '<a href="../0930/unlisted.html#x">unlisted</a></p></article>')
+    run, tid, attempt = claimed_author(tmp_path, text=text, links=[listed])
+    result = fragment_probe(run, tid, attempt, layout=CLEAN)
+    assert [(p['code'], p['detail']) for p in result['problems']] == [('broken-link', '../0930/unlisted.html#x')]
+    assert result['status'] == 'defects'
+
+
+def test_probe_listed_cross_note_link_passes(tmp_path):
+    listed = '../0930/정리노트_0930_Other.html#s1-mean'
+    text = f'<article class="topic" id="s1-mean"><p><a href="{listed}">listed</a></p></article>'
+    run, tid, attempt = claimed_author(tmp_path, text=text, links=[listed])
+    assert fragment_probe(run, tid, attempt, layout=CLEAN)['status'] == 'pass'
+
+
+@pytest.mark.parametrize('reason', [
+    'Page resource failed to load: http://127.0.0.1/x.png',
+    'KaTeX not loaded',
+    'circuit note: no topic figure was measured',
+])
+def test_probe_page_errors_are_layout_defects(tmp_path, reason):
+    run, tid, attempt = claimed_author(tmp_path, fragment=FIXTURE/'sections/s1.html')
+    result = fragment_probe(run, tid, attempt, layout=lambda h, o: (2, {'error': reason}))
+    out = attempt_dir(run, tid)/'probe/layout.json'
+    assert result['layout'] == {'status': 'defects', 'defects': 1, 'report': str(out)}
+    assert result['status'] == 'defects' and flow._read(out) == {'error': reason}
+
+
+@pytest.mark.parametrize('reason', [
+    "No module named 'playwright'",
+    "Playwright Chromium: BrowserType.launch: Executable doesn't exist at C:\\ms-playwright\\chrome.exe\n"
+    "Google Chrome: BrowserType.launch: Chromium distribution 'chrome' is not found",
+])
+def test_probe_missing_browser_reason_is_unavailable(tmp_path, reason):
+    run, tid, attempt = claimed_author(tmp_path, fragment=FIXTURE/'sections/s1.html')
+    result = fragment_probe(run, tid, attempt, layout=lambda h, o: (2, {'error': reason}))
+    out = attempt_dir(run, tid)/'probe/layout.json'
+    assert result['layout'] == {'status': 'unavailable', 'defects': 0, 'report': str(out)}
+    assert result['status'] == 'pass' and flow._read(out) == {'error': reason}
+
+
+def test_run_layout_keeps_the_error_reason(tmp_path, monkeypatch):
+    import layout_probe, pack_probe
+    def failing(html, widths, themes, *, pack_paths=None):
+        raise RuntimeError('KaTeX not loaded')
+    monkeypatch.setattr(layout_probe, 'probe', failing)
+    preview = tmp_path/'preview.html'; preview.write_text('<html></html>', encoding='utf-8')
+    assert pack_probe.run_layout(preview, tmp_path/'layout.json') == (2, {'error': 'KaTeX not loaded'})
 
 
 def test_probe_rejects_inactive_attempt_and_non_author(tmp_path):
