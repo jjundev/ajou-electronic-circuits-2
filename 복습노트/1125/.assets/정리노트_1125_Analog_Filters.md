@@ -1077,7 +1077,7 @@ $$
 \begin{aligned}A_{I,open}&=\frac{220}{23}\ \mathrm{k\Omega}\times\left(-\frac{2750}{571}\ \mathrm{mS}\right)\\&=-\frac{605000}{13133}\approx-46.07\end{aligned}
 $$
 
-이상적 귀환망이면 $R_F\to\infty$, $R_M\to0$이라 첫째 비는 1이 되고 부하 경로에는 $R_L$만 남아요.
+이상적 귀환망이면 $R_F\to\infty$, $R_M\to0$이라 첫째 비는 $R_D$가 되고 부하 경로에는 $R_L$만 남아요.
 
 $$
 A_{I,open}\to\frac{-g_{m2}R_Dr_{O2}}{r_{O2}+R_L}\approx-49.02
