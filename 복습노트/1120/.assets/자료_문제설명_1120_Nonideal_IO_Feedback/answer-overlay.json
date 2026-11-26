@@ -5,7 +5,7 @@
   "slug": "Nonideal_IO_Feedback",
   "learning_style": {
     "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
-    "sha256": "3c9f68f55d804966c95a35cdcd2f729754e9dc9a453fcc0df7f5b01152edeb9f",
+    "sha256": "824109c2d41910f5e6a3433c128b01ba05e936bc1e37946199791cad496109e0",
     "rule_ids": [
       "UNIT-01",
       "CALC-01",
@@ -22,7 +22,7 @@
       "FREQ-01"
     ]
   },
-  "input_hash": "af896c9b89963bdb48362f27c61944e190787e5446cdfbce2e06ae3c3da5a294",
+  "input_hash": "9152facc722c66687aefbae1ae07b2681919d6e7848499f4eb833f9bc50d01a9",
   "source_inputs": {
     "복습노트/1120/.assets/problems.txt": "2007de2ee28d5d90605ab5819a5bf832e18666713be06d68348133bd1e9ad478",
     "복습노트/1120/.assets/display-titles.json": "baaa58e3e80b55cfd388256f7f87cf4ea813a16e7cf98444425e32458ad5fb30",
@@ -49,7 +49,7 @@
     "from_the_past/md/2021-1_기말/figures/redrawn/fig-Q3.png": "0ae5ae6010d8cce46366c756fc231817ab1c58cdb649a43f74f0b2910ae29cf3",
     "교과서/마이크로전자회로/ch12/figures/fig12-112.png": "c124029e2dae02aa384e11156f6c4203c22f6c5be7774e7a44db88beaffe863a",
     "교과서/마이크로전자회로/ch12/figures/fig12-110.png": "10bb90bd2a77741ba2d260dcca0846560a5d6fc0e487a30a5c9e2e34e71fd64a",
-    ".claude/skills/ec2-review-pack/references/solution-style.md": "3c9f68f55d804966c95a35cdcd2f729754e9dc9a453fcc0df7f5b01152edeb9f"
+    ".claude/skills/ec2-review-pack/references/solution-style.md": "824109c2d41910f5e6a3433c128b01ba05e936bc1e37946199791cad496109e0"
   },
   "problems": [
     {
@@ -316,13 +316,13 @@
       "steps": [
         {
           "subpart": "main",
-          "label": "귀환망 끊기",
-          "html": "\n    <p>부하를 넣은 개루프 회로에서는 $M_1$ 소스 노드에 $R_F$가 접지로, $V_{out}$에도 $R_F$가 접지로 붙어요. 첫 줄은 입력 노드에서 $I_{in}$이 $R_F$와 $M_1$로 나뉘는 전류 분배예요.</p>\n    $$i_1=\\frac{R_F}{R_F+1/g_{m1}}I_{in}=\\frac{g_{m1}R_F}{1+g_{m1}R_F}I_{in}$$\n  "
+          "label": "귀환망 끊기와 테브난 변환",
+          "html": "\n    <p>부하를 넣은 개루프 회로에서는 $M_1$ 소스 노드에 $R_F$가 접지로, $V_{out}$에도 $R_F$가 접지로 붙어요. 입력 노드의 $I_{in}\\parallel R_F$를 노턴→테브난 변환으로 바꿔요.</p>\n    $$V_{in}=I_{in}R_F$$\n  "
         },
         {
           "subpart": "main",
           "label": "첫 단",
-          "html": "\n      $$v_X=i_1R_{D1}=\\frac{g_{m1}R_F}{1+g_{m1}R_F}R_{D1}I_{in}$$\n    "
+          "html": "\n      <p>직렬 소스 저항 $R_F$가 붙은 CG 단의 전압이득 $\\frac{V_X}{V_{in}}=\\frac{R_{D1}}{R_F+1/g_{m1}}$에 $R_F$를 곱해 $V_X/I_{in}$을 바로 얻어요.</p>\n      $$\\frac{V_X}{I_{in}}=R_F\\cdot\\frac{V_X}{V_{in}}=\\frac{R_FR_{D1}}{R_F+1/g_{m1}}=\\frac{g_{m1}R_F}{1+g_{m1}R_F}R_{D1}$$\n    "
         },
         {
           "subpart": "main",
@@ -332,12 +332,12 @@
         {
           "subpart": "main",
           "label": "개루프 변수",
-          "html": "\n      $$\\begin{aligned}R_0&amp;=\\frac{V_{out}}{I_{in}}\\\\&amp;=-\\frac{g_{m1}R_F}{1+g_{m1}R_F}R_{D1}g_{m2}(R_{D2}\\parallel R_F)\\end{aligned}$$\n      $$R_{in,open}=R_F\\parallel\\frac1{g_{m1}}=\\frac{R_F}{1+g_{m1}R_F}$$\n      $$R_{out,open}=R_{D2}\\parallel R_F$$\n    "
+          "html": "\n      $$\\begin{aligned}R_0&amp;=\\frac{V_{out}}{I_{in}}=\\frac{V_X}{I_{in}}\\cdot\\frac{V_{out}}{V_X}\\\\&amp;=-\\frac{g_{m1}R_F}{1+g_{m1}R_F}R_{D1}g_{m2}(R_{D2}\\parallel R_F)\\end{aligned}$$\n      $$R_{in,open}=R_F\\parallel\\frac1{g_{m1}}=\\frac{R_F}{1+g_{m1}R_F}$$\n      $$R_{out,open}=R_{D2}\\parallel R_F$$\n    "
         },
         {
           "subpart": "main",
           "label": "귀환율과 루프 이득",
-          "html": "\n      <p>$V_1$을 $V_{out}$ 쪽에 걸고 입력 쪽을 단락하면 $R_F$에 $V_1/R_F$가 흘러 입력 노드로 들어가요. 빠져나가는 방향이 양이라 부호가 음이에요.</p>\n      $$K=\\frac{I_2}{V_1}=-\\frac1{R_F}$$\n      $$KR_0=\\frac{g_{m1}R_{D1}g_{m2}(R_{D2}\\parallel R_F)}{1+g_{m1}R_F}$$\n      <p>$R_0\\lt0$, $K\\lt0$이라 루프 이득이 양수이므로 부궤환이에요.</p>\n    "
+          "html": "\n      <p>$V_{out}$을 출력 쪽에 걸고 입력 쪽을 단락하면 $R_F$에 $V_{out}/R_F$가 흘러 입력 노드로 들어가요. 입력 노드에서 빠져나가는 방향($I_F$)이 양이라 부호가 음이에요.</p>\n      $$K=\\frac{I_F}{V_{out}}=-\\frac1{R_F}$$\n      $$KR_0=\\frac{g_{m1}R_{D1}g_{m2}(R_{D2}\\parallel R_F)}{1+g_{m1}R_F}$$\n      <p>$R_0\\lt0$, $K\\lt0$이라 루프 이득이 양수이므로 부궤환이에요.</p>\n    "
         },
         {
           "subpart": "main",
@@ -362,13 +362,13 @@
       "steps": [
         {
           "subpart": "1",
-          "label": "귀환망 끊기",
-          "html": "\n    <p>개루프 회로에서는 입력 노드에 $R_F$, 출력 노드에 $R_F$가 각각 접지로 붙어요. 출력 노드의 부하를 이름 붙여요.</p>\n    $$R_L=R_M\\parallel R_F$$\n    <p>첫 줄은 입력 노드의 전류 분배예요.</p>\n    $$i_1=\\frac{g_{m1}R_F}{1+g_{m1}R_F}I_{in}$$\n  "
+          "label": "귀환망 끊기와 테브난 변환",
+          "html": "\n    <p>개루프 회로에서는 입력 노드에 $R_F$, 출력 노드에 $R_F$가 각각 접지로 붙어요. 출력 노드의 부하를 이름 붙여요.</p>\n    $$R_L=R_M\\parallel R_F$$\n    <p>입력 노드의 $I_{in}\\parallel R_F$를 노턴→테브난 등가로 바꿔요.</p>\n    $$V_{in}=I_{in}R_F$$\n  "
         },
         {
           "subpart": "1",
           "label": "첫 단",
-          "html": "\n      <p>$i_1$이 $M_1$ 소스로 들어가 드레인으로 나가고 $R_D$를 지나 $V_{DD}$로 흘러요.</p>\n      $$v_X=i_1R_D=\\frac{g_{m1}R_F}{1+g_{m1}R_F}R_DI_{in}$$\n    "
+          "html": "\n      <p>직렬 소스 저항 $R_F$가 붙은 CG 단의 전압이득 $\\frac{V_X}{V_{in}}=\\frac{R_D}{R_F+1/g_{m1}}$에 $R_F$를 곱해요.</p>\n      $$\\frac{V_X}{I_{in}}=R_F\\cdot\\frac{V_X}{V_{in}}=\\frac{R_FR_D}{R_F+1/g_{m1}}=\\frac{g_{m1}R_F}{1+g_{m1}R_F}R_D$$\n    "
         },
         {
           "subpart": "1",
@@ -378,12 +378,12 @@
         {
           "subpart": "1",
           "label": "개루프 변수",
-          "html": "\n      $$\\begin{aligned}R_0&amp;=\\frac{V_{out}}{I_{in}}\\\\&amp;=-\\frac{g_{m1}R_F}{1+g_{m1}R_F}R_Dg_{m2}(R_M\\parallel R_F)\\end{aligned}$$\n      $$R_{in,open}=R_F\\parallel\\frac1{g_{m1}}=\\frac{R_F}{1+g_{m1}R_F}$$\n      $$R_{out,open}=R_M\\parallel R_F$$\n    "
+          "html": "\n      $$\\begin{aligned}R_0&amp;=\\frac{V_{out}}{I_{in}}=\\frac{V_X}{I_{in}}\\cdot\\frac{V_{out}}{V_X}\\\\&amp;=-\\frac{g_{m1}R_F}{1+g_{m1}R_F}R_Dg_{m2}(R_M\\parallel R_F)\\end{aligned}$$\n      $$R_{in,open}=R_F\\parallel\\frac1{g_{m1}}=\\frac{R_F}{1+g_{m1}R_F}$$\n      $$R_{out,open}=R_M\\parallel R_F$$\n    "
         },
         {
           "subpart": "2",
           "label": "귀환율과 루프 이득",
-          "html": "\n      $$K=\\frac{I_2}{V_1}=-\\frac1{R_F}$$\n      $$KR_0=\\frac{g_{m1}R_Dg_{m2}(R_M\\parallel R_F)}{1+g_{m1}R_F}$$\n      <p>$R_0\\lt0$, $K\\lt0$이라 루프 이득이 양수이고 부궤환이에요.</p>\n    "
+          "html": "\n      <p>$V_{out}$을 출력 쪽에 걸고 입력 쪽을 단락하면 $R_F$에 $V_{out}/R_F$가 입력 노드로 들어가므로, 빠져나가는 방향 $I_F$ 기준 음수예요.</p>\n      $$K=\\frac{I_F}{V_{out}}=-\\frac1{R_F}$$\n      $$KR_0=\\frac{g_{m1}R_Dg_{m2}(R_M\\parallel R_F)}{1+g_{m1}R_F}$$\n      <p>$R_0\\lt0$, $K\\lt0$이라 루프 이득이 양수이고 부궤환이에요.</p>\n    "
         },
         {
           "subpart": "2",
@@ -413,7 +413,7 @@
         {
           "subpart": "1",
           "label": "귀환망 끊기와 첫 단",
-          "html": "\n    <p>개루프 회로에서는 입력 노드와 출력 노드에 각각 $R_F$가 접지로 붙어요. 출력 노드의 외부 부하를 이름 붙여요.</p>\n    $$R_L=R_M\\parallel R_F$$\n    <p>입력 노드의 전류 분배에서 CG를 지나 X에 생기는 전압을 적어요.</p>\n    $$v_X=\\frac{g_{m1}R_F}{1+g_{m1}R_F}R_DI_{in}$$\n  "
+          "html": "\n    <p>개루프 회로에서는 입력 노드와 출력 노드에 각각 $R_F$가 접지로 붙어요. 출력 노드의 외부 부하를 이름 붙여요.</p>\n    $$R_L=R_M\\parallel R_F$$\n    <p>입력 노드의 $I_{in}\\parallel R_F$를 노턴→테브난 변환($V_{in}=I_{in}R_F$, 직렬 $R_F$)으로 바꿔 CG 전압이득에 곱해요.</p>\n    $$V_{in}=I_{in}R_F$$\n    $$\\frac{V_X}{I_{in}}=R_F\\cdot\\frac{V_X}{V_{in}}=\\frac{R_FR_D}{R_F+1/g_{m1}}=\\frac{g_{m1}R_F}{1+g_{m1}R_F}R_D$$\n  "
         },
         {
           "subpart": "1",
@@ -423,12 +423,12 @@
         {
           "subpart": "1",
           "label": "개루프 트랜스임피던스",
-          "html": "\n      $$R_0=\\frac{g_{m1}R_F}{1+g_{m1}R_F}R_D\\cdot\\frac{g_{m2}R_L}{1+g_{m2}R_L}$$\n      <p>두 단이 모두 비반전이라 $R_0\\gt0$이에요.</p>\n    "
+          "html": "\n      $$R_0=\\frac{V_X}{I_{in}}\\cdot\\frac{V_{out}}{V_X}=\\frac{g_{m1}R_F}{1+g_{m1}R_F}R_D\\cdot\\frac{g_{m2}R_L}{1+g_{m2}R_L}$$\n      <p>두 단이 모두 비반전이라 $R_0\\gt0$이에요.</p>\n    "
         },
         {
           "subpart": "1",
           "label": "귀환율과 루프 부호",
-          "html": "\n      $$K=\\frac{I_2}{V_1}=-\\frac1{R_F}$$\n      <p>계산을 짧게 하려고 $T=|KR_0|$를 정의해요.</p>\n      $$T=\\frac{g_{m1}R_Dg_{m2}R_L}{(1+g_{m1}R_F)(1+g_{m2}R_L)}$$\n      $$KR_0=-T\\lt0$$\n      <p>루프 이득이 음수라 정궤환이에요. $I_{in}$이 늘면 입력 노드 전압이 오르고, X와 $V_{out}$이 따라 오르며, $R_F$를 통해 입력 노드로 전류가 더 들어가 처음 변화를 키워요.</p>\n    "
+          "html": "\n      <p>$V_{out}$을 출력 쪽에 걸고 입력 쪽을 단락하면 $R_F$로 $V_{out}/R_F$가 입력 노드로 들어가므로, 빠져나가는 방향 $I_F$ 기준 음수예요.</p>\n      $$K=\\frac{I_F}{V_{out}}=-\\frac1{R_F}$$\n      <p>계산을 짧게 하려고 $T=|KR_0|$를 정의해요.</p>\n      $$T=\\frac{g_{m1}R_Dg_{m2}R_L}{(1+g_{m1}R_F)(1+g_{m2}R_L)}$$\n      $$KR_0=-T\\lt0$$\n      <p>루프 이득이 음수라 정궤환이에요. $I_{in}$이 늘면 입력 노드 전압이 오르고, X와 $V_{out}$이 따라 오르며, $R_F$를 통해 입력 노드로 전류가 더 들어가 처음 변화를 키워요.</p>\n    "
         },
         {
           "subpart": "1",
@@ -472,7 +472,7 @@
         {
           "subpart": "main",
           "label": "귀환율과 루프 이득",
-          "html": "\n      $$K=\\frac{I_2}{V_1}=-\\frac1{R_F}$$\n      $$KR_0=\\frac{g_m(R_F\\parallel r_\\pi)(R_C\\parallel r_O\\parallel R_F)}{R_F}$$\n      <p>$R_0\\lt0$, $K\\lt0$이라 루프 이득이 양수이고 부궤환이에요.</p>\n    "
+          "html": "\n      <p>$V_{out}$을 컬렉터 쪽에 걸고 베이스 쪽을 단락하면 $R_F$로 $V_{out}/R_F$가 입력 노드로 들어가므로, 빠져나가는 방향 $I_F$ 기준 음수예요.</p>\n      $$K=\\frac{I_F}{V_{out}}=-\\frac1{R_F}$$\n      $$KR_0=\\frac{g_m(R_F\\parallel r_\\pi)(R_C\\parallel r_O\\parallel R_F)}{R_F}$$\n      <p>$R_0\\lt0$, $K\\lt0$이라 루프 이득이 양수이고 부궤환이에요.</p>\n    "
         },
         {
           "subpart": "main",
@@ -496,13 +496,13 @@
       "steps": [
         {
           "subpart": "main",
-          "label": "귀환망 끊기",
-          "html": "\n    <p>두 복제가 만드는 저항에 이름을 붙여요.</p>\n    $$R_A=R_F+R_1\\parallel R_2$$\n    $$R_B=R_1+R_2\\parallel R_F$$\n    <p>노드 A에서 $i_{in}$은 $R_A$와 $M_1$ 소스($R_{S1}$)로 나뉘어요.</p>\n    $$i_1=\\frac{R_A}{R_A+R_{S1}}i_{in}$$\n  "
+          "label": "귀환망 끊기와 테브난 변환",
+          "html": "\n    <p>두 복제가 만드는 저항에 이름을 붙여요.</p>\n    $$R_A=R_F+R_1\\parallel R_2$$\n    $$R_B=R_1+R_2\\parallel R_F$$\n    <p>노드 A의 $i_{in}\\parallel R_A$를 노턴→테브난 변환으로 바꿔요.</p>\n    $$v_{in}=i_{in}R_A$$\n  "
         },
         {
           "subpart": "main",
           "label": "첫 단",
-          "html": "\n      <p>$i_1$은 $M_1$을 지나 X에서 $R_{D1}$로 흘러요. $M_2$ 게이트는 전류를 끌지 않아요.</p>\n      $$v_X=i_1R_{D1}=\\frac{R_A}{R_A+R_{S1}}R_{D1}i_{in}$$\n    "
+          "html": "\n      <p>직렬 저항 $R_A$를 거쳐 $M_1$ 소스($R_{S1}$)를 구동하므로 CG 단의 전압이득은 $\\frac{v_X}{v_{in}}=\\frac{R_{D1}}{R_A+R_{S1}}$예요($M_2$ 게이트 전류 0). 여기에 $R_A$를 곱해 $v_X/i_{in}$을 바로 얻어요.</p>\n      $$\\frac{v_X}{i_{in}}=R_A\\cdot\\frac{v_X}{v_{in}}=\\frac{R_A}{R_A+R_{S1}}R_{D1}$$\n    "
         },
         {
           "subpart": "main",
@@ -512,12 +512,12 @@
         {
           "subpart": "main",
           "label": "개루프 변수",
-          "html": "\n      $$\\begin{aligned}R_0&amp;=\\frac{v_{out}}{i_{in}}\\\\&amp;=-\\frac{R_A}{R_A+R_{S1}}R_{D1}g_{m2}(r_{O2}\\parallel R_B)\\end{aligned}$$\n      $$R_{in,open}=R_A\\parallel R_{S1}$$\n      $$R_{out,open}=r_{O2}\\parallel\\left[R_1+(R_2\\parallel R_F)\\right]$$\n    "
+          "html": "\n      $$\\begin{aligned}R_0&amp;=\\frac{v_{out}}{i_{in}}=\\frac{v_X}{i_{in}}\\cdot\\frac{v_{out}}{v_X}\\\\&amp;=-\\frac{R_A}{R_A+R_{S1}}R_{D1}g_{m2}(r_{O2}\\parallel R_B)\\end{aligned}$$\n      $$R_{in,open}=R_A\\parallel R_{S1}$$\n      $$R_{out,open}=r_{O2}\\parallel\\left[R_1+(R_2\\parallel R_F)\\right]$$\n    "
         },
         {
           "subpart": "main",
           "label": "귀환율",
-          "html": "\n      <p>$V_1$을 걸고 A를 접지하면 N은 $R_1$과 $R_2\\parallel R_F$의 분압이에요. $R_F$에는 $V_N/R_F$가 흘러 A로 들어가므로 빠져나가는 방향으로는 음수예요.</p>\n      $$V_N=\\frac{R_2\\parallel R_F}{R_1+R_2\\parallel R_F}V_1$$\n      $$\\begin{aligned}K&amp;=\\frac{I_2}{V_1}=-\\frac{R_2\\parallel R_F}{R_F\\left(R_1+R_2\\parallel R_F\\right)}\\\\&amp;=-\\frac{R_2}{R_1R_2+R_1R_F+R_2R_F}\\end{aligned}$$\n      <p>$R_0\\lt0$, $K\\lt0$이라 $KR_0\\gt0$이고 부궤환이에요.</p>\n    "
+          "html": "\n      <p>$v_{out}$을 출력 쪽에 걸고 A를 접지하면 N은 $R_1$과 $R_2\\parallel R_F$의 분압이에요. $R_F$에는 $v_N/R_F$가 흘러 A로 들어가므로 A에서 빠져나가는 방향 $i_F$ 기준 음수예요.</p>\n      $$v_N=\\frac{R_2\\parallel R_F}{R_1+R_2\\parallel R_F}v_{out}$$\n      $$\\begin{aligned}K&amp;=\\frac{i_F}{v_{out}}=-\\frac{R_2\\parallel R_F}{R_F\\left(R_1+R_2\\parallel R_F\\right)}\\\\&amp;=-\\frac{R_2}{R_1R_2+R_1R_F+R_2R_F}\\end{aligned}$$\n      <p>$R_0\\lt0$, $K\\lt0$이라 $KR_0\\gt0$이고 부궤환이에요.</p>\n    "
         },
         {
           "subpart": "main",

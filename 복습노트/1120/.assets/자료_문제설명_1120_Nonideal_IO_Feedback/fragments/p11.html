@@ -13,27 +13,27 @@
     <li>출력 쪽 복제: A 쪽 포트를 단락하면 $v_{out}$에서 $R_1+(R_2\parallel R_F)$가 접지로 보여요.</li>
     <li>입력 쪽 복제: $v_{out}$ 쪽 포트를 단락하면 A에서 $R_F+(R_1\parallel R_2)$가 접지로 보여요.</li>
   </ul>
-  <p><strong>귀환율:</strong> $v_{out}$ 쪽에 $V_1$을 걸고 A 쪽을 단락해 $R_F$로 흐르는 전류를 재요. A에서 빠져나가는 귀환 전류를 양으로 잡아 부호를 정해요.</p>
-  <p><strong>CG 블록($\lambda\gt0$):</strong> 게이트 전류가 0이라 소스로 들어간 전류는 그대로 드레인으로 나가요. 소스에서 본 저항은 드레인 부하 $R_{D1}$ 때문에 $1/g_{m1}$보다 조금 커져요. 수업 기본 근사 $g_{m1}r_{O1}\gg1$에서 다음 블록을 써요.</p>
+  <p><strong>귀환율:</strong> 교과서 Fig 12.54(b)의 $I_2/V_1$을 원 회로 기호 그대로 써서, $v_{out}$ 쪽에 전압을 걸고 A 쪽을 단락해 A에서 빠져나가는 귀환 전류 $i_F$를 재어 $K=i_F/v_{out}$으로 바로 구해요.</p>
+  <p><strong>CG 블록($\lambda\gt0$)과 테브난 변환:</strong> 게이트 전류가 0이라 소스로 들어간 전류는 그대로 드레인으로 나가요. 소스에서 본 저항은 드레인 부하 $R_{D1}$ 때문에 $1/g_{m1}$보다 조금 커지며, 수업 기본 근사 $g_{m1}r_{O1}\gg1$에서 아래 블록을 써요. 입력 노드 A의 $i_{in}\parallel R_A$를 노턴→테브난 변환($v_{in}=i_{in}R_A$와 직렬 저항 $R_A$)으로 바꾸면 직렬 저항이 붙은 CG 전압이득 블록 $\frac{v_X}{v_{in}}=\frac{R_{D1}}{R_A+R_{S1}}$을 바로 곱할 수 있어요.</p>
   $$R_{S1}\approx\frac1{g_{m1}}\left(1+\frac{R_{D1}}{r_{O1}}\right)$$
-  <p><strong>폐루프 공식:</strong> 이득과 입력·출력 임피던스가 모두 $1+KR_0$로 나뉘어요.</p>
+  <p><strong>폐루프 공식:</strong> 이득과 입력·출력 임피던스가 모두 개루프의 $\frac{1}{1+KR_0}$배가 돼요.</p>
 </div>
 <div class="layer formal" data-explanation="start">
   <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="귀환망 끊기">
+  <div data-answer-step="귀환망 끊기와 테브난 변환">
     <p>두 복제가 만드는 저항에 이름을 붙여요.</p>
     $$R_A=R_F+R_1\parallel R_2$$
     $$R_B=R_1+R_2\parallel R_F$$
-    <p>노드 A에서 $i_{in}$은 $R_A$와 $M_1$ 소스($R_{S1}$)로 나뉘어요.</p>
-    $$i_1=\frac{R_A}{R_A+R_{S1}}i_{in}$$
+    <p>노드 A의 $i_{in}\parallel R_A$를 노턴→테브난 변환으로 바꿔요.</p>
+    $$v_{in}=i_{in}R_A$$
   </div>
 </div>
 <div class="layer formal" data-explanation="solve">
   <h4>이렇게 풀어요</h4>
   <div data-subpart="main">
     <div data-answer-step="첫 단">
-      <p>$i_1$은 $M_1$을 지나 X에서 $R_{D1}$로 흘러요. $M_2$ 게이트는 전류를 끌지 않아요.</p>
-      $$v_X=i_1R_{D1}=\frac{R_A}{R_A+R_{S1}}R_{D1}i_{in}$$
+      <p>직렬 저항 $R_A$를 거쳐 $M_1$ 소스($R_{S1}$)를 구동하므로 CG 단의 전압이득은 $\frac{v_X}{v_{in}}=\frac{R_{D1}}{R_A+R_{S1}}$예요($M_2$ 게이트 전류 0). 여기에 $R_A$를 곱해 $v_X/i_{in}$을 바로 얻어요.</p>
+      $$\frac{v_X}{i_{in}}=R_A\cdot\frac{v_X}{v_{in}}=\frac{R_A}{R_A+R_{S1}}R_{D1}$$
     </div>
     <p>둘째 단은 전류원 부하 CS 단이에요. $i_{out}$은 출력 노드에서 $M_2$ 드레인으로 흘러 들어가는 방향을 양으로 잡아요.</p>
     <div data-answer-step="둘째 단 전압 이득" data-gain-route="gm-rout">
@@ -49,14 +49,14 @@
       </div>
     </div>
     <div data-answer-step="개루프 변수">
-      $$\begin{aligned}R_0&=\frac{v_{out}}{i_{in}}\\&=-\frac{R_A}{R_A+R_{S1}}R_{D1}g_{m2}(r_{O2}\parallel R_B)\end{aligned}$$
+      $$\begin{aligned}R_0&=\frac{v_{out}}{i_{in}}=\frac{v_X}{i_{in}}\cdot\frac{v_{out}}{v_X}\\&=-\frac{R_A}{R_A+R_{S1}}R_{D1}g_{m2}(r_{O2}\parallel R_B)\end{aligned}$$
       $$R_{in,open}=R_A\parallel R_{S1}$$
       $$R_{out,open}=r_{O2}\parallel\left[R_1+(R_2\parallel R_F)\right]$$
     </div>
     <div data-answer-step="귀환율">
-      <p>$V_1$을 걸고 A를 접지하면 N은 $R_1$과 $R_2\parallel R_F$의 분압이에요. $R_F$에는 $V_N/R_F$가 흘러 A로 들어가므로 빠져나가는 방향으로는 음수예요.</p>
-      $$V_N=\frac{R_2\parallel R_F}{R_1+R_2\parallel R_F}V_1$$
-      $$\begin{aligned}K&=\frac{I_2}{V_1}=-\frac{R_2\parallel R_F}{R_F\left(R_1+R_2\parallel R_F\right)}\\&=-\frac{R_2}{R_1R_2+R_1R_F+R_2R_F}\end{aligned}$$
+      <p>$v_{out}$을 출력 쪽에 걸고 A를 접지하면 N은 $R_1$과 $R_2\parallel R_F$의 분압이에요. $R_F$에는 $v_N/R_F$가 흘러 A로 들어가므로 A에서 빠져나가는 방향 $i_F$ 기준 음수예요.</p>
+      $$v_N=\frac{R_2\parallel R_F}{R_1+R_2\parallel R_F}v_{out}$$
+      $$\begin{aligned}K&=\frac{i_F}{v_{out}}=-\frac{R_2\parallel R_F}{R_F\left(R_1+R_2\parallel R_F\right)}\\&=-\frac{R_2}{R_1R_2+R_1R_F+R_2R_F}\end{aligned}$$
       <p>$R_0\lt0$, $K\lt0$이라 $KR_0\gt0$이고 부궤환이에요.</p>
     </div>
     <div data-answer-step="폐루프 변수">
@@ -107,9 +107,9 @@
   </div>
   <div class="summary-group">
     <h4>핵심 식</h4>
-    <p>개루프 트랜스임피던스는 전류 분배와 두 단 이득의 곱이에요.</p>
+    <p>개루프 트랜스임피던스는 1단 테브난 변환과 두 단 이득의 곱이에요.</p>
     $$\begin{aligned}R_0=&-\frac{R_A}{R_A+R_{S1}}\\&\times R_{D1}g_{m2}(r_{O2}\parallel R_B)\end{aligned}$$
-    <p>귀환율은 분압비와 $R_F$가 함께 정해요.</p>
+    <p>귀환율 $K=i_F/v_{out}$은 분압비와 $R_F$가 함께 정해요.</p>
     $$K=-\frac{R_2}{R_1R_2+R_1R_F+R_2R_F}$$
     <p>모든 폐루프 값이 $1+KR_0$로 나뉘어요.</p>
   </div>

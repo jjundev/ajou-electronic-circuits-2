@@ -572,7 +572,7 @@
       <h1>전자회로2 복습 1120 문제설명</h1>
       <p>주어진 조건을 읽고, 첫 줄을 쓰고, 이유를 따라가며 답을 확인해요.</p>
     </div>
-<section id="problems"><h2>문항별 설명</h2><article class="topic" id="p1"><h3>P1. 분배기 귀환 CG 단의 네 성분과 이상적 해석</h3><p class="panel-meta">E12.07 · 예제 12.7</p><div class="problem-pane" data-problem-for="p1"><div class="layer formal" data-source-problem="p1"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>가정: $\lambda = 0$, $R_1 + R_2 \gg R_D$</li><li>소자 값은 주어지지 않음 (답은 $g_m$, $R_D$, $R_1$, $R_2$의 식으로)</li><li>귀환 시스템의 네 성분: 피드포워드(순방향) 시스템, 출력 감지 장치, 귀환 회로망(귀환율 $K = X_F/Y$), 비교(반송) 장치(오차 $E = X - X_F$)</li><li>식 (12.2): $\dfrac{Y}{X} = \dfrac{A_1}{1 + KA_1}$</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>(a) 귀환 시스템의 네 가지 성분</li><li>(b) 개루프와 폐루프 전압 이득</li><li>(c) 개루프와 폐루프 입력·출력 임피던스</li></ul></div><figure><img src=".assets/figures_문제설명_1120_Nonideal_IO_Feedback/ae3790b9497ec188-fig12-11.png" alt="그림 E12.07"></figure></div><details class="original" data-original-problem="p1"><summary>원문 보기</summary><p>그림 12.11은 그림 12.2 귀환 회로의 트랜지스터 레벨 실현을 보여 준다. 단순화를 위해 $\lambda = 0$과 $R_1 + R_2 \gg R_D$라고 가정한다. (a) 귀환 시스템의 네 가지 성분을 밝혀라. (b) 개루프와 폐루프 전압 이득을 결정하라. (c) 개루프와 폐루프 I/O 임피던스를 결정하라.</p></details></div><div class="layer eli5" data-explanation="understand">
+<section id="problems"><h2>문항별 설명</h2><article class="topic" id="p1"><h3>P1. 분배기 귀환 CG 단의 네 성분과 이상적 해석</h3><p class="panel-meta">E12.07 · 예제 12.7 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1120_Nonideal_IO_Feedback-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p1"><div class="layer formal" data-source-problem="p1"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>가정: $\lambda = 0$, $R_1 + R_2 \gg R_D$</li><li>소자 값은 주어지지 않음 (답은 $g_m$, $R_D$, $R_1$, $R_2$의 식으로)</li><li>귀환 시스템의 네 성분: 피드포워드(순방향) 시스템, 출력 감지 장치, 귀환 회로망(귀환율 $K = X_F/Y$), 비교(반송) 장치(오차 $E = X - X_F$)</li><li>식 (12.2): $\dfrac{Y}{X} = \dfrac{A_1}{1 + KA_1}$</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>(a) 귀환 시스템의 네 가지 성분</li><li>(b) 개루프와 폐루프 전압 이득</li><li>(c) 개루프와 폐루프 입력·출력 임피던스</li></ul></div><figure><img src=".assets/figures_문제설명_1120_Nonideal_IO_Feedback/ae3790b9497ec188-fig12-11.png" alt="그림 E12.07"></figure></div><details class="original" data-original-problem="p1"><summary>원문 보기</summary><p>그림 12.11은 그림 12.2 귀환 회로의 트랜지스터 레벨 실현을 보여 준다. 단순화를 위해 $\lambda = 0$과 $R_1 + R_2 \gg R_D$라고 가정한다. (a) 귀환 시스템의 네 가지 성분을 밝혀라. (b) 개루프와 폐루프 전압 이득을 결정하라. (c) 개루프와 폐루프 I/O 임피던스를 결정하라.</p></details></div><div class="layer eli5" data-explanation="understand">
   <h4>문제를 읽어요</h4>
   <p>입력 $V_{in}$은 $M_1$의 소스로 들어가고, 출력 $V_{out}$은 $M_1$의 드레인이에요. 드레인과 접지 사이에 $R_1$, $R_2$가 직렬로 있고, 그 가운데 노드가 $M_1$의 게이트에 붙어 있어요.</p>
   <p>즉 출력 전압의 일부가 게이트로 되돌아가는 회로예요. 문제는 이것을 귀환 시스템으로 읽으라고 해요.</p>
@@ -707,7 +707,7 @@
     <p>$R_{in}$은 $1+KA_1$배로 커지고 $R_{out}$은 $1+KA_1$로 나뉘어요.</p>
   </div>
 </div>
-</article><article class="topic" id="p2"><h3>P2. 복제 종단으로 푸는 분배기 귀환 CG 단</h3><p class="panel-meta">E12.26 · 예제 12.26</p><div class="problem-pane" data-problem-for="p2"><div class="layer formal" data-source-problem="p2"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>조건: $R_1 + R_2$가 $R_D$보다 충분히 작지 않을 때</li><li>문맥과 맞지 않음(오식으로 보임): 같은 회로를 다룬 예제 12.25는 "$R_1 + R_2$가 $R_D$에 비해 훨씬 크지 않다", 다음 예제 12.27은 "충분히 크지 않을 때"로 적고, 이 예제 풀이도 결과가 예제 12.25와 일치한다고 함. "충분히 크지 않을 때"의 뜻으로 보임</li><li>해석 = 12.7.1절의 여섯 단계로 개루프·폐루프 이득과 I/O 임피던스를 구함</li><li>12.7.1절의 여섯 단계: 순방향 증폭기 확인, 귀환 회로망 확인, 법칙에 따라 귀환 회로망 끊기, 개루프 변수 계산, 법칙에 따라 귀환율 결정, 폐루프 변수 계산</li><li>전압-전압 귀환에서 귀환 회로망을 끊는 법칙 (본문 Fig 12.53(a)): 출력에 연결한 복사물(감지 복제)의 출력 포트는 개방, 입력에 연결한 복사물(반송 복제)의 입력 포트는 단락</li><li>전압-전압 귀환의 귀환율 (본문 Fig 12.54(a)): 귀환 회로망 입력 포트에 $V_1$을 인가하고 출력 포트를 개방한 채 출력 전압 $V_2$를 보아 $K = V_2/V_1$</li><li>소자 값은 주어지지 않음 (답은 $g_{m1}$, $R_D$, $R_1$, $R_2$의 식으로)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>증폭기의 해석: 개루프·폐루프 전압 이득, 폐루프 입력·출력 임피던스</li></ul></div><figure><img src=".assets/figures_문제설명_1120_Nonideal_IO_Feedback/a3a76a952146d040-fig12-55-a.png" alt="그림 E12.26"></figure></div><details class="original" data-original-problem="p2"><summary>원문 보기</summary><p>$R_1 + R_2$가 $R_D$보다 충분히 작지 않을 때 그림 12.55(a)에 그려진 증폭기를 해석하라.</p></details></div><div class="layer eli5" data-explanation="understand">
+</article><article class="topic" id="p2"><h3>P2. 복제 종단으로 푸는 분배기 귀환 CG 단</h3><p class="panel-meta">E12.26 · 예제 12.26 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1120_Nonideal_IO_Feedback-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p2"><div class="layer formal" data-source-problem="p2"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>조건: $R_1 + R_2$가 $R_D$보다 충분히 작지 않을 때</li><li>문맥과 맞지 않음(오식으로 보임): 같은 회로를 다룬 예제 12.25는 "$R_1 + R_2$가 $R_D$에 비해 훨씬 크지 않다", 다음 예제 12.27은 "충분히 크지 않을 때"로 적고, 이 예제 풀이도 결과가 예제 12.25와 일치한다고 함. "충분히 크지 않을 때"의 뜻으로 보임</li><li>해석 = 12.7.1절의 여섯 단계로 개루프·폐루프 이득과 I/O 임피던스를 구함</li><li>12.7.1절의 여섯 단계: 순방향 증폭기 확인, 귀환 회로망 확인, 법칙에 따라 귀환 회로망 끊기, 개루프 변수 계산, 법칙에 따라 귀환율 결정, 폐루프 변수 계산</li><li>전압-전압 귀환에서 귀환 회로망을 끊는 법칙 (본문 Fig 12.53(a)): 출력에 연결한 복사물(감지 복제)의 출력 포트는 개방, 입력에 연결한 복사물(반송 복제)의 입력 포트는 단락</li><li>전압-전압 귀환의 귀환율 (본문 Fig 12.54(a)): 귀환 회로망 입력 포트에 $V_1$을 인가하고 출력 포트를 개방한 채 출력 전압 $V_2$를 보아 $K = V_2/V_1$</li><li>소자 값은 주어지지 않음 (답은 $g_{m1}$, $R_D$, $R_1$, $R_2$의 식으로)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>증폭기의 해석: 개루프·폐루프 전압 이득, 폐루프 입력·출력 임피던스</li></ul></div><figure><img src=".assets/figures_문제설명_1120_Nonideal_IO_Feedback/a3a76a952146d040-fig12-55-a.png" alt="그림 E12.26"></figure></div><details class="original" data-original-problem="p2"><summary>원문 보기</summary><p>$R_1 + R_2$가 $R_D$보다 충분히 작지 않을 때 그림 12.55(a)에 그려진 증폭기를 해석하라.</p></details></div><div class="layer eli5" data-explanation="understand">
   <h4>문제를 읽어요</h4>
   <p>회로는 앞 문항과 같은 분배기 귀환 CG 단이에요. 입력 $V_{in}$은 $M_1$ 소스, 출력 $V_{out}$은 $M_1$ 드레인이고, $R_1$–$R_2$ 분압기의 가운데 노드가 게이트로 돌아가요.</p>
   <p>원문 조건 "충분히 작지 않을 때"는 문맥상 "$R_1+R_2$가 $R_D$보다 충분히 <em>크지</em> 않을 때"로 읽어요. 그러면 분압기가 출력에서 빼 가는 전류를 더 이상 무시할 수 없어요. 이것을 귀환 회로망의 부하 효과(loading)라고 해요.</p>
@@ -816,7 +816,7 @@
     <p>$R_{in}$은 $1+KA_{open}$배, $R_{out}$은 $1/(1+KA_{open})$배예요.</p>
   </div>
 </div>
-</article><article class="topic" id="p3"><h3>P3. 전류원 부하 CG 단에서 커지는 로딩 효과</h3><p class="panel-meta">P12.41 · 장말문제 12.41</p><div class="problem-pane" data-problem-for="p3"><div class="layer formal" data-source-problem="p3"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>부하가 이상적 전류원이므로 $R_1$, $R_2$가 일으키는 부하 효과를 고려해야 함</li><li>예제 12.26을 이 회로로 되풀이 (원문 표기 "Example 12-26")</li><li>예제 12.26: $R_1 + R_2$가 $R_D$보다 충분히 작지 않을 때 그림 12.55(a)의 증폭기(전압-전압 귀환 CG 단)를 해석하라 — 개루프 변수와 귀환율 $K$를 구하고 폐루프 이득 $A_{v,closed}$, $R_{in,closed}$, $R_{out,closed}$를 구함</li><li>참고 회로 (본문 Fig 12.55(a)): $V_{DD}$에서 $R_D$를 거쳐 $M_1$ 드레인 $= V_{out}$, $V_{out}$과 접지 사이에 $R_1$, $R_2$ 직렬, 그 가운데 노드가 $M_1$ 게이트, $M_1$ 소스가 $V_{in}$</li><li>식 (12.120)–(12.121): $K = \dfrac{V_2}{V_1} = \dfrac{R_2}{R_1 + R_2}$, 예제 12.26의 귀환율</li><li>소자 값은 주어지지 않음 (답은 기호로)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>예제 12.26처럼 $R_1$, $R_2$의 부하 효과를 넣어 개루프 회로를 만들고, 귀환율, 폐루프 전압 이득, 폐루프 입력·출력 임피던스를 구함</li></ul></div><figure><img src=".assets/figures_문제설명_1120_Nonideal_IO_Feedback/ff102bf2edaf75e6-fig12-104.png" alt="그림 P12.41"></figure></div><details class="original" data-original-problem="p3"><summary>원문 보기</summary><p>The common-gate stage shown in Fig. 12.104 employs an ideal current source as its load, requiring that the loading introduced by $R_1$ and $R_2$ be taken into account. Repeat Example 12-26 for this circuit.</p></details></div><div class="layer eli5" data-explanation="understand">
+</article><article class="topic" id="p3"><h3>P3. 전류원 부하 CG 단에서 커지는 로딩 효과</h3><p class="panel-meta">P12.41 · 장말문제 12.41 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1120_Nonideal_IO_Feedback-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p3"><div class="layer formal" data-source-problem="p3"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>부하가 이상적 전류원이므로 $R_1$, $R_2$가 일으키는 부하 효과를 고려해야 함</li><li>예제 12.26을 이 회로로 되풀이 (원문 표기 "Example 12-26")</li><li>예제 12.26: $R_1 + R_2$가 $R_D$보다 충분히 작지 않을 때 그림 12.55(a)의 증폭기(전압-전압 귀환 CG 단)를 해석하라 — 개루프 변수와 귀환율 $K$를 구하고 폐루프 이득 $A_{v,closed}$, $R_{in,closed}$, $R_{out,closed}$를 구함</li><li>참고 회로 (본문 Fig 12.55(a)): $V_{DD}$에서 $R_D$를 거쳐 $M_1$ 드레인 $= V_{out}$, $V_{out}$과 접지 사이에 $R_1$, $R_2$ 직렬, 그 가운데 노드가 $M_1$ 게이트, $M_1$ 소스가 $V_{in}$</li><li>식 (12.120)–(12.121): $K = \dfrac{V_2}{V_1} = \dfrac{R_2}{R_1 + R_2}$, 예제 12.26의 귀환율</li><li>소자 값은 주어지지 않음 (답은 기호로)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>예제 12.26처럼 $R_1$, $R_2$의 부하 효과를 넣어 개루프 회로를 만들고, 귀환율, 폐루프 전압 이득, 폐루프 입력·출력 임피던스를 구함</li></ul></div><figure><img src=".assets/figures_문제설명_1120_Nonideal_IO_Feedback/ff102bf2edaf75e6-fig12-104.png" alt="그림 P12.41"></figure></div><details class="original" data-original-problem="p3"><summary>원문 보기</summary><p>The common-gate stage shown in Fig. 12.104 employs an ideal current source as its load, requiring that the loading introduced by $R_1$ and $R_2$ be taken into account. Repeat Example 12-26 for this circuit.</p></details></div><div class="layer eli5" data-explanation="understand">
   <h4>문제를 읽어요</h4>
   <p>예제 12.26의 분배기 귀환 CG 단에서 부하 $R_D$를 이상적 전류원으로 바꾼 회로예요. 입력 $V_{in}$은 $M_1$ 소스, 출력 $V_{out}$은 드레인이고, $R_1$–$R_2$ 가운데 노드가 게이트로 돌아가요.</p>
   <p>이상적 전류원은 소신호에서 개방이에요. 그러면 출력 노드에서 접지로 가는 소신호 경로는 $R_1+R_2$뿐이라 분압기의 부하 효과가 결과를 좌우해요.</p>
@@ -908,7 +908,7 @@
     <p>$R_{in,closed}=1/g_{m1}+R_2$, $R_{out,closed}=(R_1+R_2)/(1+g_{m1}R_2)$예요.</p>
   </div>
 </div>
-</article><article class="topic" id="p4"><h3>P4. 바이폴라 CB 단의 분배기 귀환 로딩</h3><p class="panel-meta">P12.42 · 장말문제 12.42</p><div class="problem-pane" data-problem-for="p4"><div class="layer formal" data-source-problem="p4"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>예제 12.26의 회로 (본문 Fig 12.55(a)): $R_D$를 부하로 한 NMOS 공통 게이트 단, $V_{out}$과 접지 사이 $R_1$, $R_2$ 분압기의 가운데 노드가 $M_1$ 게이트로 귀환. $R_1 + R_2$가 $R_D$보다 충분히 작지 않을 때 해석</li><li>$R_1 + R_2$는 매우 크지 않다고 가정 (부하 효과를 고려)</li><li>$1 \ll \beta &lt; \infty$</li><li>$V_A = \infty$</li><li>소자 값은 주어지지 않음 (답은 기호로)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>폐루프 이득</li><li>폐루프 입력·출력 임피던스</li></ul></div><figure><img src=".assets/figures_문제설명_1120_Nonideal_IO_Feedback/e312bc90b9bec784-fig12-105.png" alt="그림 P12.42"></figure></div><details class="original" data-original-problem="p4"><summary>원문 보기</summary><p>Figure 12.105 depicts the bipolar counterpart of the circuit studied in Example 12-26. Assuming $R_1 + R_2$ is not very large, $1 \ll \beta &lt; \infty$ and $V_A = \infty$, determine the closed-loop gain and I/O impedances.</p></details></div><div class="layer eli5" data-explanation="understand">
+</article><article class="topic" id="p4"><h3>P4. 바이폴라 CB 단의 분배기 귀환 로딩</h3><p class="panel-meta">P12.42 · 장말문제 12.42 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1120_Nonideal_IO_Feedback-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p4"><div class="layer formal" data-source-problem="p4"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>예제 12.26의 회로 (본문 Fig 12.55(a)): $R_D$를 부하로 한 NMOS 공통 게이트 단, $V_{out}$과 접지 사이 $R_1$, $R_2$ 분압기의 가운데 노드가 $M_1$ 게이트로 귀환. $R_1 + R_2$가 $R_D$보다 충분히 작지 않을 때 해석</li><li>$R_1 + R_2$는 매우 크지 않다고 가정 (부하 효과를 고려)</li><li>$1 \ll \beta &lt; \infty$</li><li>$V_A = \infty$</li><li>소자 값은 주어지지 않음 (답은 기호로)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>폐루프 이득</li><li>폐루프 입력·출력 임피던스</li></ul></div><figure><img src=".assets/figures_문제설명_1120_Nonideal_IO_Feedback/e312bc90b9bec784-fig12-105.png" alt="그림 P12.42"></figure></div><details class="original" data-original-problem="p4"><summary>원문 보기</summary><p>Figure 12.105 depicts the bipolar counterpart of the circuit studied in Example 12-26. Assuming $R_1 + R_2$ is not very large, $1 \ll \beta &lt; \infty$ and $V_A = \infty$, determine the closed-loop gain and I/O impedances.</p></details></div><div class="layer eli5" data-explanation="understand">
   <h4>문제를 읽어요</h4>
   <p>예제 12.26 회로의 바이폴라 판이에요. 입력 $V_{in}$은 $Q_1$의 이미터, 출력 $V_{out}$은 컬렉터이고, 컬렉터 부하는 $R_C$예요. $R_1$–$R_2$ 분압기의 가운데 노드가 $Q_1$의 베이스로 돌아가요. 즉 공통 베이스(common-base, CB) 단에 전압 귀환을 건 회로예요.</p>
   <p>조건은 세 가지예요. $R_1+R_2$가 아주 크지 않으니 분압기 부하를 넣어요. $1\ll\beta\lt\infty$이니 베이스 전류는 작지만 0은 아니에요. $V_A=\infty$이니 $r_O$는 없어요.</p>
@@ -1004,7 +1004,7 @@
     <p>$R_{in,closed}\approx1/g_m+R_B/\beta+KR_L$이고 $R_{out}$은 $1/(1+KA_{open})$배예요.</p>
   </div>
 </div>
-</article><article class="topic" id="p5"><h3>P5. 소스로 귀환하는 2단 CS 증폭기의 로딩 해석</h3><p class="panel-meta">E12.28 · 예제 12.28</p><div class="problem-pane" data-problem-for="p5"><div class="layer formal" data-source-problem="p5"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>해석 = 개루프·폐루프 이득과 I/O 임피던스를 구함</li><li>전압-전압 귀환에서 귀환 회로망을 끊는 법칙 (본문 Fig 12.53(a)): 감지 복제의 출력 포트는 개방, 반송 복제의 입력 포트는 단락. 귀환율은 입력 포트에 $V_1$을 인가하고 출력 포트를 개방해 $K = V_2/V_1$ (본문 Fig 12.54(a))</li><li>소자 값은 주어지지 않음</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>회로의 해석: 개루프·폐루프 전압 이득, 폐루프 입력·출력 임피던스</li></ul></div><figure><img src=".assets/figures_문제설명_1120_Nonideal_IO_Feedback/82fb31540b771af0-fig12-57-a.png" alt="그림 E12.28"></figure></div><details class="original" data-original-problem="p5"><summary>원문 보기</summary><p>그림 12.57(a)의 회로를 해석하라.</p></details></div><div class="layer eli5" data-explanation="understand">
+</article><article class="topic" id="p5"><h3>P5. 소스로 귀환하는 2단 CS 증폭기의 로딩 해석</h3><p class="panel-meta">E12.28 · 예제 12.28 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1120_Nonideal_IO_Feedback-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p5"><div class="layer formal" data-source-problem="p5"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>해석 = 개루프·폐루프 이득과 I/O 임피던스를 구함</li><li>전압-전압 귀환에서 귀환 회로망을 끊는 법칙 (본문 Fig 12.53(a)): 감지 복제의 출력 포트는 개방, 반송 복제의 입력 포트는 단락. 귀환율은 입력 포트에 $V_1$을 인가하고 출력 포트를 개방해 $K = V_2/V_1$ (본문 Fig 12.54(a))</li><li>소자 값은 주어지지 않음</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>회로의 해석: 개루프·폐루프 전압 이득, 폐루프 입력·출력 임피던스</li></ul></div><figure><img src=".assets/figures_문제설명_1120_Nonideal_IO_Feedback/82fb31540b771af0-fig12-57-a.png" alt="그림 E12.28"></figure></div><details class="original" data-original-problem="p5"><summary>원문 보기</summary><p>그림 12.57(a)의 회로를 해석하라.</p></details></div><div class="layer eli5" data-explanation="understand">
   <h4>문제를 읽어요</h4>
   <p>두 단짜리 증폭기예요. 입력 $V_{in}$은 $M_1$의 게이트로 들어가고, $M_1$ 드레인($R_{D1}$ 부하)이 $M_2$의 게이트를 구동해요. $M_2$는 소스가 접지된 공통 소스(CS) 단이고, 드레인($R_{D2}$ 부하)이 출력 $V_{out}$이에요.</p>
   <p>$V_{out}$과 접지 사이에 $R_1$, $R_2$가 직렬로 있고, 그 가운데 노드가 $M_1$의 <em>소스</em>예요. 즉 출력 전압의 일부가 $M_1$ 소스로 돌아가요.</p>
@@ -1102,7 +1102,7 @@
     <p>$R_{in}=\infty$이고 $R_{out,closed}=R_L/(1+KA_{open})$예요.</p>
   </div>
 </div>
-</article><article class="topic" id="p6"><h3>P6. 분배기 귀환 차동 증폭기의 로딩 해석</h3><p class="panel-meta">E12.27 · 예제 12.27</p><div class="problem-pane" data-problem-for="p6"><div class="layer formal" data-source-problem="p6"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>조건: $R_1 + R_2$가 $r_{OP} \parallel r_{ON}$보다 충분히 크지 않음</li><li>$r_{ON}$, $r_{OP}$: NMOS($M_1$, $M_2$)와 PMOS($M_3$, $M_4$)의 출력 저항, $g_{mN}$: NMOS 입력 쌍의 트랜스컨덕턴스</li><li>해석 = 개루프·폐루프 이득과 I/O 임피던스를 구함</li><li>전압-전압 귀환에서 귀환 회로망을 끊는 법칙 (본문 Fig 12.53(a)): 감지 복제의 출력 포트는 개방, 반송 복제의 입력 포트는 단락. 귀환율은 입력 포트에 $V_1$을 인가하고 출력 포트를 개방해 $K = V_2/V_1$ (본문 Fig 12.54(a))</li><li>소자 값은 주어지지 않음</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>회로의 해석: 개루프·폐루프 전압 이득, 폐루프 입력·출력 임피던스</li></ul></div><figure><img src=".assets/figures_문제설명_1120_Nonideal_IO_Feedback/c6d70566abed4fc9-fig12-56-a.png" alt="그림 E12.27"></figure></div><details class="original" data-original-problem="p6"><summary>원문 보기</summary><p>$R_1 + R_2$가 $r_{OP} \parallel r_{ON}$보다 충분히 크지 않을 때 그림 12.56(a)의 회로를 해석하라.</p></details></div><div class="layer eli5" data-explanation="understand">
+</article><article class="topic" id="p6"><h3>P6. 분배기 귀환 차동 증폭기의 로딩 해석</h3><p class="panel-meta">E12.27 · 예제 12.27 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1120_Nonideal_IO_Feedback-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p6"><div class="layer formal" data-source-problem="p6"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>조건: $R_1 + R_2$가 $r_{OP} \parallel r_{ON}$보다 충분히 크지 않음</li><li>$r_{ON}$, $r_{OP}$: NMOS($M_1$, $M_2$)와 PMOS($M_3$, $M_4$)의 출력 저항, $g_{mN}$: NMOS 입력 쌍의 트랜스컨덕턴스</li><li>해석 = 개루프·폐루프 이득과 I/O 임피던스를 구함</li><li>전압-전압 귀환에서 귀환 회로망을 끊는 법칙 (본문 Fig 12.53(a)): 감지 복제의 출력 포트는 개방, 반송 복제의 입력 포트는 단락. 귀환율은 입력 포트에 $V_1$을 인가하고 출력 포트를 개방해 $K = V_2/V_1$ (본문 Fig 12.54(a))</li><li>소자 값은 주어지지 않음</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>회로의 해석: 개루프·폐루프 전압 이득, 폐루프 입력·출력 임피던스</li></ul></div><figure><img src=".assets/figures_문제설명_1120_Nonideal_IO_Feedback/c6d70566abed4fc9-fig12-56-a.png" alt="그림 E12.27"></figure></div><details class="original" data-original-problem="p6"><summary>원문 보기</summary><p>$R_1 + R_2$가 $r_{OP} \parallel r_{ON}$보다 충분히 크지 않을 때 그림 12.56(a)의 회로를 해석하라.</p></details></div><div class="layer eli5" data-explanation="understand">
   <h4>문제를 읽어요</h4>
   <p>NMOS 차동쌍 $M_1$, $M_2$에 테일 전류원 $I_{SS}$, PMOS 전류 거울 부하 $M_3$(다이오드 접속, $M_1$ 쪽)와 $M_4$($M_2$ 쪽)를 쓴 증폭기예요. 입력 $V_{in}$은 $M_1$ 게이트, 출력 $V_{out}$은 $M_2$·$M_4$ 드레인이에요.</p>
   <p>$V_{out}$과 접지 사이의 $R_1$–$R_2$ 분압기 가운데 노드가 $M_2$ 게이트로 돌아가요. 즉 출력의 일부를 차동쌍의 다른 입력에 걸어요.</p>
@@ -1193,10 +1193,10 @@
     <p>$R_{in}=\infty$이고 $R_{out}$은 $1/(1+KA_{open})$배예요.</p>
   </div>
 </div>
-</article><article class="topic" id="p7"><h3>P7. 귀환 저항이 크지 않은 트랜스임피던스 증폭기</h3><p class="panel-meta">E12.29 · 예제 12.29</p><div class="problem-pane" data-problem-for="p7"><div class="layer formal" data-source-problem="p7"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>$R_F$가 매우 크지 않음 (귀환 회로망이 순방향 증폭기에 주는 부하를 무시할 수 없음)</li><li>소자 값은 주어지지 않음 (답은 소신호 파라미터 기호로, $\lambda = 0$으로 봄)</li><li>본문의 해석 순서: 순방향 증폭기와 귀환 회로망을 확인하고, 종지 법칙(Fig 12.53)에 따라 루프를 끊어 개루프 변수를 구한 뒤, Fig 12.54의 법칙으로 귀환율을 구하고 폐루프 변수를 계산</li><li>전압-전류 귀환의 종지 법칙 (본문 Fig 12.53(b)): 감지 복제의 출력 포트와 반송 복제의 입력 포트를 모두 단락</li><li>전압-전류 귀환의 귀환율 (본문 Fig 12.54(b)): 귀환 회로망 입력에 전압 $V_1$을 걸고 단락된 출력 포트의 전류 $I_2$를 재어 $K = I_2/V_1$</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>회로 해석: 개루프 이득 $R_0 = V_{out}/I_{in}$, 개루프 입력·출력 임피던스, 귀환율 $K$, 폐루프 이득과 폐루프 입력·출력 임피던스</li></ul></div><figure><img src=".assets/figures_문제설명_1120_Nonideal_IO_Feedback/d2d2f99a43248ad7-fig12-58-a.png" alt="그림 E12.29"></figure></div><details class="original" data-original-problem="p7"><summary>원문 보기</summary><p>$R_F$가 매우 크지 않다고 가정할 때 그림 12.58(a)의 회로를 해석하라.</p></details></div><div class="layer eli5" data-explanation="understand">
+</article><article class="topic" id="p7"><h3>P7. 귀환 저항이 크지 않은 트랜스임피던스 증폭기</h3><p class="panel-meta">E12.29 · 예제 12.29 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1120_Nonideal_IO_Feedback-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p7"><div class="layer formal" data-source-problem="p7"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>$R_F$가 매우 크지 않음 (귀환 회로망이 순방향 증폭기에 주는 부하를 무시할 수 없음)</li><li>소자 값은 주어지지 않음 (답은 소신호 파라미터 기호로, $\lambda = 0$으로 봄)</li><li>본문의 해석 순서: 순방향 증폭기와 귀환 회로망을 확인하고, 종지 법칙(Fig 12.53)에 따라 루프를 끊어 개루프 변수를 구한 뒤, Fig 12.54의 법칙으로 귀환율을 구하고 폐루프 변수를 계산</li><li>전압-전류 귀환의 종지 법칙 (본문 Fig 12.53(b)): 감지 복제의 출력 포트와 반송 복제의 입력 포트를 모두 단락</li><li>전압-전류 귀환의 귀환율 (본문 Fig 12.54(b)): 귀환 회로망 입력에 전압 $V_1$을 걸고 단락된 출력 포트의 전류 $I_2$를 재어 $K = I_2/V_1$</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>회로 해석: 개루프 이득 $R_0 = V_{out}/I_{in}$, 개루프 입력·출력 임피던스, 귀환율 $K$, 폐루프 이득과 폐루프 입력·출력 임피던스</li></ul></div><figure><img src=".assets/figures_문제설명_1120_Nonideal_IO_Feedback/d2d2f99a43248ad7-fig12-58-a.png" alt="그림 E12.29"></figure></div><details class="original" data-original-problem="p7"><summary>원문 보기</summary><p>$R_F$가 매우 크지 않다고 가정할 때 그림 12.58(a)의 회로를 해석하라.</p></details></div><div class="layer eli5" data-explanation="understand">
   <h4>문제를 읽어요</h4>
   <p>입력은 전류 $I_{in}$이고 $M_1$의 소스 노드로 들어가요. $M_1$은 게이트가 $V_b$인 공통 게이트(CG) 단이고 드레인 X에 $R_{D1}$이 달려 있어요. X가 $M_2$(소스 접지 CS 단)의 게이트를 구동하고, $M_2$ 드레인($R_{D2}$ 부하)이 출력 $V_{out}$이에요.</p>
-  <p>$R_F$가 $V_{out}$과 $M_1$ 소스 노드 사이에 걸려 있어요. 출력 전압에 비례하는 전류 $i_{RF}$가 입력 노드로 되돌아가요.</p>
+  <p>$R_F$가 $V_{out}$과 $M_1$ 소스 노드 사이에 걸려 있어요. 출력 전압에 비례하는 전류 $I_F$가 입력 노드로 되돌아가요.</p>
   <p>$R_F$가 매우 크지 않으니 귀환망이 입력·출력 양쪽에 주는 부하를 넣어야 해요. $\lambda=0$으로 봐요.</p>
   <p>구할 것은 개루프 트랜스임피던스 $R_0=V_{out}/I_{in}$, 개루프 입력·출력 임피던스, 귀환율 $K$, 폐루프 이득과 폐루프 입력·출력 임피던스예요.</p>
 </div>
@@ -1204,24 +1204,25 @@
   <h4>이 개념과 공식을 떠올려요</h4>
   <p><strong>단서:</strong> $R_F$가 출력 노드에 병렬로 붙어 전압을 감지하고, 입력 노드에 병렬로 붙어 전류를 되돌려요. 전압-전류 귀환(voltage-current feedback, shunt-shunt)이고, 이득은 트랜스임피던스(transimpedance)예요.</p>
   <p><strong>끊는 법칙(Fig 12.53(b)):</strong> 감지 복제의 출력 포트와 반송 복제의 입력 포트를 모두 <em>단락</em>해요. 그래서 출력 노드에도, 입력 노드에도 각각 $R_F$가 접지로 붙어요.</p>
-  <p><strong>귀환율(Fig 12.54(b)):</strong> 귀환망 입력에 $V_1$을 걸고 단락된 출력 포트의 전류 $I_2$를 재요. 입력 노드에서 빠져나가는 귀환 전류를 양으로 잡으면 $K=I_2/V_1=-1/R_F$예요.</p>
-  <p><strong>폐루프 공식:</strong> 출력에서 전압 감지, 입력에서 전류 비교라 두 임피던스가 모두 $1+KR_0$로 나뉘어요.</p>
+  <p><strong>귀환율(Fig 12.54(b)):</strong> 교과서 Fig 12.54(b)에서는 $K=I_2/V_1$로 쓰지만, 여기서는 원 회로 기호 그대로 $V_{out}$ 쪽에 전압을 걸고 단락한 입력 노드에서 빠져나가는 귀환 전류 $I_F$를 재어 $K=I_F/V_{out}=-1/R_F$로 바로 써요.</p>
+  <p><strong>폐루프 공식:</strong> 출력에서 전압 감지, 입력에서 전류 비교라 이득과 두 임피던스가 모두 개루프의 $\frac{1}{1+KR_0}$배가 돼요.</p>
   $$\frac{V_{out}}{I_{in}}=\frac{R_0}{1+KR_0}$$
-  <p><strong>CG 블록:</strong> $\lambda=0$이면 소스에서 본 저항은 $1/g_{m1}$이고, 게이트 전류가 0이라 소스로 들어간 전류가 그대로 드레인으로 나가요.</p>
+  <p><strong>CG 블록과 테브난 변환:</strong> $\lambda=0$이면 CG 소스에서 본 저항은 $1/g_{m1}$이에요. 입력의 전류원 $I_{in}$과 병렬 저항 $R_F$를 노턴→테브난 변환으로 $V_{in}=I_{in}R_F$와 직렬 저항 $R_F$로 바꾸면 직렬 소스 저항이 붙은 CG 전압이득 블록 $\frac{V_X}{V_{in}}=\frac{R_{D1}}{R_F+1/g_{m1}}$을 바로 곱해 풀 수 있어요.</p>
 </div>
 <div class="layer formal" data-explanation="start">
   <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="귀환망 끊기">
-    <p>부하를 넣은 개루프 회로에서는 $M_1$ 소스 노드에 $R_F$가 접지로, $V_{out}$에도 $R_F$가 접지로 붙어요. 첫 줄은 입력 노드에서 $I_{in}$이 $R_F$와 $M_1$로 나뉘는 전류 분배예요.</p>
-    $$i_1=\frac{R_F}{R_F+1/g_{m1}}I_{in}=\frac{g_{m1}R_F}{1+g_{m1}R_F}I_{in}$$
+  <div data-answer-step="귀환망 끊기와 테브난 변환">
+    <p>부하를 넣은 개루프 회로에서는 $M_1$ 소스 노드에 $R_F$가 접지로, $V_{out}$에도 $R_F$가 접지로 붙어요. 입력 노드의 $I_{in}\parallel R_F$를 노턴→테브난 변환으로 바꿔요.</p>
+    $$V_{in}=I_{in}R_F$$
   </div>
-  <p>$i_1$은 $M_1$ 소스로 들어가 드레인으로 나가고, X에서 $R_{D1}$을 지나 $V_{DD}$로 흘러요. 그래서 $v_X=i_1R_{D1}$이에요.</p>
+  <p>이제 직렬 저항 $R_F$를 통해 전압원 $V_{in}$이 CG 단 $M_1$의 소스를 구동하는 익숙한 전압 입력 회로가 돼요.</p>
 </div>
 <div class="layer formal" data-explanation="solve">
   <h4>이렇게 풀어요</h4>
   <div data-subpart="main">
     <div data-answer-step="첫 단">
-      $$v_X=i_1R_{D1}=\frac{g_{m1}R_F}{1+g_{m1}R_F}R_{D1}I_{in}$$
+      <p>직렬 소스 저항 $R_F$가 붙은 CG 단의 전압이득 $\frac{V_X}{V_{in}}=\frac{R_{D1}}{R_F+1/g_{m1}}$에 $R_F$를 곱해 $V_X/I_{in}$을 바로 얻어요.</p>
+      $$\frac{V_X}{I_{in}}=R_F\cdot\frac{V_X}{V_{in}}=\frac{R_FR_{D1}}{R_F+1/g_{m1}}=\frac{g_{m1}R_F}{1+g_{m1}R_F}R_{D1}$$
     </div>
     <p>둘째 단은 X를 입력으로 하는 CS 단이에요. $i_{out}$은 출력 노드에서 $M_2$ 드레인으로 흘러 들어가는 방향을 양으로 잡아요.</p>
     <div data-answer-step="둘째 단 전압 이득" data-gain-route="gm-rout">
@@ -1237,13 +1238,13 @@
       </div>
     </div>
     <div data-answer-step="개루프 변수">
-      $$\begin{aligned}R_0&amp;=\frac{V_{out}}{I_{in}}\\&amp;=-\frac{g_{m1}R_F}{1+g_{m1}R_F}R_{D1}g_{m2}(R_{D2}\parallel R_F)\end{aligned}$$
+      $$\begin{aligned}R_0&amp;=\frac{V_{out}}{I_{in}}=\frac{V_X}{I_{in}}\cdot\frac{V_{out}}{V_X}\\&amp;=-\frac{g_{m1}R_F}{1+g_{m1}R_F}R_{D1}g_{m2}(R_{D2}\parallel R_F)\end{aligned}$$
       $$R_{in,open}=R_F\parallel\frac1{g_{m1}}=\frac{R_F}{1+g_{m1}R_F}$$
       $$R_{out,open}=R_{D2}\parallel R_F$$
     </div>
     <div data-answer-step="귀환율과 루프 이득">
-      <p>$V_1$을 $V_{out}$ 쪽에 걸고 입력 쪽을 단락하면 $R_F$에 $V_1/R_F$가 흘러 입력 노드로 들어가요. 빠져나가는 방향이 양이라 부호가 음이에요.</p>
-      $$K=\frac{I_2}{V_1}=-\frac1{R_F}$$
+      <p>$V_{out}$을 출력 쪽에 걸고 입력 쪽을 단락하면 $R_F$에 $V_{out}/R_F$가 흘러 입력 노드로 들어가요. 입력 노드에서 빠져나가는 방향($I_F$)이 양이라 부호가 음이에요.</p>
+      $$K=\frac{I_F}{V_{out}}=-\frac1{R_F}$$
       $$KR_0=\frac{g_{m1}R_{D1}g_{m2}(R_{D2}\parallel R_F)}{1+g_{m1}R_F}$$
       <p>$R_0\lt0$, $K\lt0$이라 루프 이득이 양수이므로 부궤환이에요.</p>
     </div>
@@ -1271,14 +1272,14 @@
   <ul>
     <li>전압-전류 귀환에서는 두 복제를 모두 단락해요. 전압-전압 귀환처럼 출력 쪽을 개방하면 $R_F$가 출력 부하에서 빠져 버려요.</li>
     <li>$K$의 부호를 빼먹으면 $1+KR_0$가 $1-|KR_0|$로 바뀌어 정궤환처럼 계산돼요. $R_0\lt0$와 $K=-1/R_F$를 함께 써요.</li>
-    <li>입력 노드의 $R_F$를 잊으면 $I_{in}$이 모두 $M_1$로 간다고 계산하게 돼요. 전류 분배 계수 $g_{m1}R_F/(1+g_{m1}R_F)$가 필요해요.</li>
+    <li>입력 노드의 $R_F$를 잊으면 $I_{in}$이 모두 $M_1$로 간다고 계산하게 돼요. 테브난 변환 뒤 직렬 저항 $R_F$가 분모 $R_F+1/g_{m1}$에 들어가야 해요.</li>
     <li>전압-전류 귀환은 입력·출력 임피던스를 모두 줄여요. 입력을 키운다고 쓰지 않아요.</li>
   </ul>
 </div>
 <div class="layer eli5" data-explanation="retry">
   <h4>조건을 바꾸어 생각해요</h4>
   <ol>
-    <li>$g_{m1}R_F\gg1$이면 전류 분배 계수와 $R_{in,open}$은 각각 무엇으로 단순해지나요?</li>
+    <li>$g_{m1}R_F\gg1$이면 1단 인자 $g_{m1}R_F/(1+g_{m1}R_F)$와 $R_{in,open}$은 각각 무엇으로 단순해지나요?</li>
     <li>$M_2$를 PMOS CS 단으로 바꾸어도 루프 이득의 부호는 그대로인가요?</li>
     <li>$\lambda\gt0$이면 $R_{out,open}$에 어떤 저항이 더해지나요?</li>
   </ol>
@@ -1288,14 +1289,15 @@
   <div class="summary-group">
     <h4>끊는 법칙</h4>
     <p>두 복제를 모두 단락해 입력 노드와 출력 노드에 각각 $R_F$를 접지로 붙여요.</p>
+    <p>1단은 $I_{in}\parallel R_F$ 노턴→테브난 변환으로 CG 블록에 곱해요.</p>
   </div>
   <div class="summary-group">
     <h4>핵심 식</h4>
     <p>$R_0=-\dfrac{g_{m1}R_F}{1+g_{m1}R_F}R_{D1}g_{m2}(R_{D2}\parallel R_F)$예요.</p>
-    <p>$K=-1/R_F$이고 이득·$R_{in}$·$R_{out}$이 모두 $1+KR_0$로 나뉘어요.</p>
+    <p>$K=I_F/V_{out}=-1/R_F$이고 이득·$R_{in}$·$R_{out}$이 모두 $1+KR_0$로 나뉘어요.</p>
   </div>
 </div>
-</article><article class="topic" id="p8"><h3>P8. CG와 PMOS CS로 만든 트랜스임피던스 증폭기의 개루프·폐루프 해석</h3><p class="panel-meta">2023-1_기말-Q2 · 기출 2</p><div class="problem-pane" data-problem-for="p8"><div class="layer formal" data-source-problem="p8"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>$R_F$는 매우 크지 않다고 가정</li><li>$\lambda = 0$으로 가정</li><li>소자 값($R_D$, $R_F$, $R_M$, $V_b$, $V_{DD}$, 트랜지스터 크기)은 주어지지 않음</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>(1) Open-loop gain과 open-loop 입력 임피던스, open-loop 출력 임피던스를 각각 구함</li><li>(2) Feedback factor, closed-loop gain, closed-loop 입력 임피던스를 각각 구함</li></ul></div><figure><img src=".assets/figures_문제설명_1120_Nonideal_IO_Feedback/e8e06b7b1b76ac7d-fig-Q2.png" alt="그림 2023-1_기말-Q2"></figure></div><details class="original" data-original-problem="p8"><summary>원문 보기</summary><p>다음 회로에서 $R_F$는 매우 크지 않다고 가정하며, $\lambda = 0$으로 가정한다.</p><p>(1) Open-loop gain과 open-loop 입력 및 출력 임피던스를 각각 구하시오.</p><p>(2) Feedback factor, closed-loop gain, closed-loop 입력 임피던스를 각각 구하시오.</p></details></div><div class="layer eli5" data-explanation="understand">
+</article><article class="topic" id="p8"><h3>P8. CG와 PMOS CS로 만든 트랜스임피던스 증폭기의 개루프·폐루프 해석</h3><p class="panel-meta">2023-1_기말-Q2 · 기출 2 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1120_Nonideal_IO_Feedback-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p8"><div class="layer formal" data-source-problem="p8"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>$R_F$는 매우 크지 않다고 가정</li><li>$\lambda = 0$으로 가정</li><li>소자 값($R_D$, $R_F$, $R_M$, $V_b$, $V_{DD}$, 트랜지스터 크기)은 주어지지 않음</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>(1) Open-loop gain과 open-loop 입력 임피던스, open-loop 출력 임피던스를 각각 구함</li><li>(2) Feedback factor, closed-loop gain, closed-loop 입력 임피던스를 각각 구함</li></ul></div><figure><img src=".assets/figures_문제설명_1120_Nonideal_IO_Feedback/e8e06b7b1b76ac7d-fig-Q2.png" alt="그림 2023-1_기말-Q2"></figure></div><details class="original" data-original-problem="p8"><summary>원문 보기</summary><p>다음 회로에서 $R_F$는 매우 크지 않다고 가정하며, $\lambda = 0$으로 가정한다.</p><p>(1) Open-loop gain과 open-loop 입력 및 출력 임피던스를 각각 구하시오.</p><p>(2) Feedback factor, closed-loop gain, closed-loop 입력 임피던스를 각각 구하시오.</p></details></div><div class="layer eli5" data-explanation="understand">
   <h4>문제를 읽어요</h4>
   <p>입력 전류 $I_{in}$이 $M_1$의 소스 노드로 들어가요. $M_1$은 게이트가 $V_b$인 NMOS 공통 게이트(CG) 단이고, 드레인 노드(아래에서 X라 불러요)에 $R_D$가 $V_{DD}$로 달려 있어요.</p>
   <p>X는 PMOS $M_2$의 게이트를 구동해요. $M_2$는 소스가 $V_{DD}$인 공통 소스(CS) 단이고, 드레인이 출력 $V_{out}$이에요. $V_{out}$에서 $R_M$이 접지로 내려가고, $R_F$가 $V_{out}$과 $M_1$ 소스 노드를 이어요.</p>
@@ -1306,17 +1308,17 @@
   <h4>이 개념과 공식을 떠올려요</h4>
   <p><strong>단서:</strong> $R_F$가 출력 노드에 병렬로 붙어 전압을 감지하고 입력 노드로 전류를 되돌려요. 전압-전류 귀환(voltage-current feedback)이에요.</p>
   <p><strong>끊는 법칙:</strong> 감지 복제와 반송 복제의 포트를 모두 단락해요. 입력 노드와 출력 노드에 각각 $R_F$가 접지로 붙어요.</p>
-  <p><strong>귀환율:</strong> 귀환망 입력($V_{out}$ 쪽)에 $V_1$을 걸고 단락한 출력 포트 전류를 재요. 입력 노드에서 빠져나가는 귀환 전류를 양으로 잡으면 $K=-1/R_F$예요.</p>
-  <p><strong>폐루프 공식:</strong> 이득과 입력·출력 임피던스가 모두 $1+KR_0$로 나뉘어요.</p>
-  <p><strong>블록:</strong> CG 소스에서 본 저항은 $1/g_{m1}$이고 소스로 들어간 전류가 드레인으로 그대로 나가요. PMOS CS 단은 게이트 전압이 오르면 $v_{SG}$가 줄어 출력으로 밀어 주는 전류가 줄어드는 반전 단이에요.</p>
+  <p><strong>귀환율:</strong> 교과서 Fig 12.54(b)의 $I_2/V_1$을 원 회로 기호 그대로 $V_{out}$ 쪽에 전압을 걸고 단락한 입력 노드에서 빠져나가는 귀환 전류 $I_F$를 재어 $K=I_F/V_{out}=-1/R_F$로 바로 써요.</p>
+  <p><strong>폐루프 공식:</strong> 이득과 입력·출력 임피던스가 모두 개루프의 $\frac{1}{1+KR_0}$배가 돼요.</p>
+  <p><strong>블록:</strong> 입력의 $I_{in}\parallel R_F$를 노턴→테브난 변환으로 $V_{in}=I_{in}R_F$와 직렬 저항 $R_F$로 바꾸면 직렬 저항이 붙은 CG 전압이득 블록 $\frac{V_X}{V_{in}}=\frac{R_D}{R_F+1/g_{m1}}$을 바로 곱할 수 있어요. PMOS CS 단은 게이트 전압이 오르면 $v_{SG}$가 줄어 출력으로 밀어 주는 전류가 줄어드는 반전 단이에요.</p>
 </div>
 <div class="layer formal" data-explanation="start">
   <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="귀환망 끊기" data-answer-subpart="1">
+  <div data-answer-step="귀환망 끊기와 테브난 변환" data-answer-subpart="1">
     <p>개루프 회로에서는 입력 노드에 $R_F$, 출력 노드에 $R_F$가 각각 접지로 붙어요. 출력 노드의 부하를 이름 붙여요.</p>
     $$R_L=R_M\parallel R_F$$
-    <p>첫 줄은 입력 노드의 전류 분배예요.</p>
-    $$i_1=\frac{g_{m1}R_F}{1+g_{m1}R_F}I_{in}$$
+    <p>입력 노드의 $I_{in}\parallel R_F$를 노턴→테브난 등가로 바꿔요.</p>
+    $$V_{in}=I_{in}R_F$$
   </div>
 </div>
 <div class="layer formal" data-explanation="solve">
@@ -1324,8 +1326,8 @@
   <div data-subpart="1">
     <h4>(1) 개루프 이득과 개루프 입력·출력 임피던스</h4>
     <div data-answer-step="첫 단">
-      <p>$i_1$이 $M_1$ 소스로 들어가 드레인으로 나가고 $R_D$를 지나 $V_{DD}$로 흘러요.</p>
-      $$v_X=i_1R_D=\frac{g_{m1}R_F}{1+g_{m1}R_F}R_DI_{in}$$
+      <p>직렬 소스 저항 $R_F$가 붙은 CG 단의 전압이득 $\frac{V_X}{V_{in}}=\frac{R_D}{R_F+1/g_{m1}}$에 $R_F$를 곱해요.</p>
+      $$\frac{V_X}{I_{in}}=R_F\cdot\frac{V_X}{V_{in}}=\frac{R_FR_D}{R_F+1/g_{m1}}=\frac{g_{m1}R_F}{1+g_{m1}R_F}R_D$$
     </div>
     <p>둘째 단은 PMOS CS 단이에요. $i_{out}$은 출력 노드에서 증폭기 쪽으로 흘러 들어가는 방향을 양으로 잡아요. $M_2$가 출력으로 밀어 주는 전류는 $g_{m2}v_{SG}=-g_{m2}v_X$이므로 $i_{out}=g_{m2}v_X$예요.</p>
     <div data-answer-step="둘째 단 전압 이득" data-gain-route="gm-rout">
@@ -1341,7 +1343,7 @@
       </div>
     </div>
     <div data-answer-step="개루프 변수">
-      $$\begin{aligned}R_0&amp;=\frac{V_{out}}{I_{in}}\\&amp;=-\frac{g_{m1}R_F}{1+g_{m1}R_F}R_Dg_{m2}(R_M\parallel R_F)\end{aligned}$$
+      $$\begin{aligned}R_0&amp;=\frac{V_{out}}{I_{in}}=\frac{V_X}{I_{in}}\cdot\frac{V_{out}}{V_X}\\&amp;=-\frac{g_{m1}R_F}{1+g_{m1}R_F}R_Dg_{m2}(R_M\parallel R_F)\end{aligned}$$
       $$R_{in,open}=R_F\parallel\frac1{g_{m1}}=\frac{R_F}{1+g_{m1}R_F}$$
       $$R_{out,open}=R_M\parallel R_F$$
     </div>
@@ -1349,7 +1351,8 @@
   <div data-subpart="2">
     <h4>(2) 귀환율, 폐루프 이득, 폐루프 입력 임피던스</h4>
     <div data-answer-step="귀환율과 루프 이득">
-      $$K=\frac{I_2}{V_1}=-\frac1{R_F}$$
+      <p>$V_{out}$을 출력 쪽에 걸고 입력 쪽을 단락하면 $R_F$에 $V_{out}/R_F$가 입력 노드로 들어가므로, 빠져나가는 방향 $I_F$ 기준 음수예요.</p>
+      $$K=\frac{I_F}{V_{out}}=-\frac1{R_F}$$
       $$KR_0=\frac{g_{m1}R_Dg_{m2}(R_M\parallel R_F)}{1+g_{m1}R_F}$$
       <p>$R_0\lt0$, $K\lt0$이라 루프 이득이 양수이고 부궤환이에요.</p>
     </div>
@@ -1401,7 +1404,7 @@
   <div class="summary-group">
     <h4>개루프</h4>
     <p>입력 노드와 출력 노드에 각각 $R_F$를 접지로 붙여요.</p>
-    <p>개루프 트랜스임피던스는 전류 분배와 두 단 이득의 곱이에요.</p>
+    <p>개루프 트랜스임피던스는 1단 테브난 변환과 두 단 이득의 곱이에요.</p>
     $$\begin{aligned}R_0=&amp;-\frac{g_{m1}R_F}{1+g_{m1}R_F}\\&amp;\times R_Dg_{m2}(R_M\parallel R_F)\end{aligned}$$
     <p>개루프 입력·출력 저항은 다음과 같아요.</p>
     $$R_{in,open}=R_F\parallel\frac1{g_{m1}}$$
@@ -1409,10 +1412,10 @@
   </div>
   <div class="summary-group">
     <h4>폐루프</h4>
-    <p>$K=-1/R_F$이고 이득과 $R_{in}$은 $1+KR_0$로 나뉘어요.</p>
+    <p>$K=I_F/V_{out}=-1/R_F$이고 이득과 $R_{in}$은 $1+KR_0$로 나뉘어요.</p>
   </div>
 </div>
-</article><article class="topic" id="p9"><h3>P9. CG와 소스 팔로워 귀환 회로의 루프 부호와 폐루프 해석</h3><p class="panel-meta">2021-1_기말-Q3 · 기출 3</p><div class="problem-pane" data-problem-for="p9"><div class="layer formal" data-source-problem="p9"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>$R_F$는 매우 크지 않다고 가정</li><li>$\lambda = 0$으로 가정</li><li>소자 값($R_D$, $R_F$, $R_M$, $V_b$, $V_{DD}$, 트랜지스터 크기)은 주어지지 않음</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>(1) Feedback factor와 closed-loop gain을 각각 구함</li><li>(2) Closed-loop input impedance와 closed-loop output impedance를 각각 구함</li></ul></div><figure><img src=".assets/figures_문제설명_1120_Nonideal_IO_Feedback/0ae5ae6010d8cce4-fig-Q3.png" alt="그림 2021-1_기말-Q3"></figure></div><details class="original" data-original-problem="p9"><summary>원문 보기</summary><p>다음 회로에서 $R_F$는 매우 크지 않다고 가정하며, $\lambda = 0$으로 가정한다.</p><p>(1) Feedback factor와 closed-loop gain을 각각 구하시오.</p><p>(2) Closed-loop input impedance와 closed-loop output impedance를 각각 구하시오.</p></details></div><div class="layer eli5" data-explanation="understand">
+</article><article class="topic" id="p9"><h3>P9. CG와 소스 팔로워 귀환 회로의 루프 부호와 폐루프 해석</h3><p class="panel-meta">2021-1_기말-Q3 · 기출 3 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1120_Nonideal_IO_Feedback-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p9"><div class="layer formal" data-source-problem="p9"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>$R_F$는 매우 크지 않다고 가정</li><li>$\lambda = 0$으로 가정</li><li>소자 값($R_D$, $R_F$, $R_M$, $V_b$, $V_{DD}$, 트랜지스터 크기)은 주어지지 않음</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>(1) Feedback factor와 closed-loop gain을 각각 구함</li><li>(2) Closed-loop input impedance와 closed-loop output impedance를 각각 구함</li></ul></div><figure><img src=".assets/figures_문제설명_1120_Nonideal_IO_Feedback/0ae5ae6010d8cce4-fig-Q3.png" alt="그림 2021-1_기말-Q3"></figure></div><details class="original" data-original-problem="p9"><summary>원문 보기</summary><p>다음 회로에서 $R_F$는 매우 크지 않다고 가정하며, $\lambda = 0$으로 가정한다.</p><p>(1) Feedback factor와 closed-loop gain을 각각 구하시오.</p><p>(2) Closed-loop input impedance와 closed-loop output impedance를 각각 구하시오.</p></details></div><div class="layer eli5" data-explanation="understand">
   <h4>문제를 읽어요</h4>
   <p>입력 전류 $I_{in}$이 $M_1$의 소스 노드로 들어가요. $M_1$은 게이트가 $V_b$인 공통 게이트(CG) 단이고, 드레인 노드(X라 불러요)에 $R_D$가 $V_{DD}$로 달려 있어요.</p>
   <p>X는 NMOS $M_2$의 게이트를 구동해요. $M_2$는 드레인이 $V_{DD}$이고 소스가 출력 $V_{out}$인 소스 팔로워(source follower)예요. $V_{out}$에서 $R_M$이 접지로, $R_F$가 $M_1$ 소스 노드로 이어져요.</p>
@@ -1422,9 +1425,9 @@
 <div class="layer formal" data-explanation="recall">
   <h4>이 개념과 공식을 떠올려요</h4>
   <p><strong>단서:</strong> $R_F$가 출력 노드에서 전압을 감지하고 입력 노드로 전류를 되돌리니 전압-전류 귀환(voltage-current feedback)의 모양이에요. 개루프 값은 두 복제를 모두 단락해 입력·출력 노드에 각각 $R_F$를 접지로 붙여 구해요.</p>
-  <p><strong>귀환율:</strong> 입력 노드에서 빠져나가는 귀환 전류를 양으로 잡으면 $K=-1/R_F$예요.</p>
+  <p><strong>귀환율:</strong> 교과서 Fig 12.54(b)의 $I_2/V_1$을 원 회로 기호 그대로 써서, 입력 노드에서 빠져나가는 귀환 전류 $I_F$를 양으로 잡으면 $K=I_F/V_{out}=-1/R_F$예요.</p>
   <p><strong>폐루프 공식:</strong> 이득과 입력·출력 임피던스가 모두 $1+KR_0$로 나뉘어요. 단, 이 공식은 $KR_0$의 부호를 그대로 넣어 써요. $KR_0\gt0$이면 부궤환, $KR_0\lt0$이면 정궤환이에요.</p>
-  <p><strong>블록:</strong> CG는 소스 입력에서 드레인 출력까지 비반전이에요. 소스 팔로워도 비반전이고, 출력 단락에서 $G_m=g_{m2}$, 소스 쪽에서 본 저항은 $1/g_{m2}$예요.</p>
+  <p><strong>블록:</strong> 입력의 $I_{in}\parallel R_F$를 노턴→테브난 변환($V_{in}=I_{in}R_F$와 직렬 $R_F$)으로 바꾸면 직렬 저항이 붙은 CG 단 전압이득 블록 $\frac{V_X}{V_{in}}=\frac{R_D}{R_F+1/g_{m1}}$을 바로 곱할 수 있어요. CG와 소스 팔로워는 모두 비반전이고, 소스 팔로워는 출력 단락에서 $G_m=-g_{m2}$, 소스 쪽 저항은 $1/g_{m2}$예요.</p>
   <p><strong>선택 이유:</strong> 두 단이 모두 비반전이면 $R_0\gt0$이 되어 $K=-1/R_F$와 곱한 루프 이득이 음수가 돼요. 그래서 공식을 쓰기 전에 부호부터 따져야 해요.</p>
 </div>
 <div class="layer formal" data-explanation="start">
@@ -1432,8 +1435,9 @@
   <div data-answer-step="귀환망 끊기와 첫 단" data-answer-subpart="1">
     <p>개루프 회로에서는 입력 노드와 출력 노드에 각각 $R_F$가 접지로 붙어요. 출력 노드의 외부 부하를 이름 붙여요.</p>
     $$R_L=R_M\parallel R_F$$
-    <p>입력 노드의 전류 분배에서 CG를 지나 X에 생기는 전압을 적어요.</p>
-    $$v_X=\frac{g_{m1}R_F}{1+g_{m1}R_F}R_DI_{in}$$
+    <p>입력 노드의 $I_{in}\parallel R_F$를 노턴→테브난 변환($V_{in}=I_{in}R_F$, 직렬 $R_F$)으로 바꿔 CG 전압이득에 곱해요.</p>
+    $$V_{in}=I_{in}R_F$$
+    $$\frac{V_X}{I_{in}}=R_F\cdot\frac{V_X}{V_{in}}=\frac{R_FR_D}{R_F+1/g_{m1}}=\frac{g_{m1}R_F}{1+g_{m1}R_F}R_D$$
   </div>
 </div>
 <div class="layer formal" data-explanation="solve">
@@ -1455,11 +1459,12 @@
       </div>
     </div>
     <div data-answer-step="개루프 트랜스임피던스">
-      $$R_0=\frac{g_{m1}R_F}{1+g_{m1}R_F}R_D\cdot\frac{g_{m2}R_L}{1+g_{m2}R_L}$$
+      $$R_0=\frac{V_X}{I_{in}}\cdot\frac{V_{out}}{V_X}=\frac{g_{m1}R_F}{1+g_{m1}R_F}R_D\cdot\frac{g_{m2}R_L}{1+g_{m2}R_L}$$
       <p>두 단이 모두 비반전이라 $R_0\gt0$이에요.</p>
     </div>
     <div data-answer-step="귀환율과 루프 부호">
-      $$K=\frac{I_2}{V_1}=-\frac1{R_F}$$
+      <p>$V_{out}$을 출력 쪽에 걸고 입력 쪽을 단락하면 $R_F$로 $V_{out}/R_F$가 입력 노드로 들어가므로, 빠져나가는 방향 $I_F$ 기준 음수예요.</p>
+      $$K=\frac{I_F}{V_{out}}=-\frac1{R_F}$$
       <p>계산을 짧게 하려고 $T=|KR_0|$를 정의해요.</p>
       $$T=\frac{g_{m1}R_Dg_{m2}R_L}{(1+g_{m1}R_F)(1+g_{m2}R_L)}$$
       $$KR_0=-T\lt0$$
@@ -1526,7 +1531,7 @@
   <p class="sum-lead">CG와 소스 팔로워가 모두 비반전이라 $R_F$ 루프는 정궤환이에요.</p>
   <div class="summary-group">
     <h4>핵심 식</h4>
-    <p>$K=-1/R_F$이고 $R_0=\dfrac{g_{m1}R_F}{1+g_{m1}R_F}R_D\dfrac{g_{m2}R_L}{1+g_{m2}R_L}\gt0$이에요.</p>
+    <p>$K=I_F/V_{out}=-1/R_F$이고 $R_0=\dfrac{g_{m1}R_F}{1+g_{m1}R_F}R_D\dfrac{g_{m2}R_L}{1+g_{m2}R_L}\gt0$이에요.</p>
     <p>$KR_0=-T$라 폐루프 값은 모두 $1-T$로 나뉘어요.</p>
   </div>
   <div class="summary-group">
@@ -1534,7 +1539,7 @@
     <p>$T\lt1$일 때만 유한하고, 이득과 두 임피던스가 개루프보다 커져요.</p>
   </div>
 </div>
-</article><article class="topic" id="p10"><h3>P10. 단일 BJT 트랜스임피던스 증폭기의 로딩 해석</h3><p class="panel-meta">P12.49 · 장말문제 12.49</p><div class="problem-pane" data-problem-for="p10"><div class="layer formal" data-source-problem="p10"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>예제 12.29의 해석을 이 회로로 되풀이 (원문 표기 "Example 12-29")</li><li>예제 12.29: $R_F$가 매우 크지 않다고 가정할 때 그림 12.58(a)의 회로를 해석하라 — 전압-전류 귀환으로 보고 개루프 트랜스임피던스 $R_0$, $R_{in,open}$, $R_{out,open}$, 귀환율 $K$를 구한 뒤 폐루프 이득 $V_{out}/I_{in}$, $R_{in,closed}$, $R_{out,closed}$를 구함</li><li>참고 회로 (본문 Fig 12.58(a)): $I_{in}$이 $M_1$ 소스로 들어가고, $M_1$ (게이트 $V_b$, 드레인 X, $R_{D1}$ 부하) → $M_2$ (소스 접지, 드레인 $R_{D2}$ 부하 = $V_{out}$), $V_{out}$에서 $R_F$를 거쳐 $M_1$ 소스로 귀환</li><li>$V_A &lt; \infty$</li><li>소자 값은 주어지지 않음 (답은 기호로)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>예제 12.29처럼 개루프 트랜스임피던스·개루프 입력·출력 임피던스, 귀환율, 폐루프 이득 $V_{out}/I_{in}$과 폐루프 입력·출력 임피던스</li></ul></div><figure><img src=".assets/figures_문제설명_1120_Nonideal_IO_Feedback/c124029e2dae02aa-fig12-112.png" alt="그림 P12.49"></figure></div><details class="original" data-original-problem="p10"><summary>원문 보기</summary><p>Figure 12.112 depicts a popular transimpedance amplifier topology. Repeat the analysis of Example 12-29 for this circuit. Assume $V_A &lt; \infty$.</p></details></div><div class="layer eli5" data-explanation="understand">
+</article><article class="topic" id="p10"><h3>P10. 단일 BJT 트랜스임피던스 증폭기의 로딩 해석</h3><p class="panel-meta">P12.49 · 장말문제 12.49 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1120_Nonideal_IO_Feedback-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p10"><div class="layer formal" data-source-problem="p10"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>예제 12.29의 해석을 이 회로로 되풀이 (원문 표기 "Example 12-29")</li><li>예제 12.29: $R_F$가 매우 크지 않다고 가정할 때 그림 12.58(a)의 회로를 해석하라 — 전압-전류 귀환으로 보고 개루프 트랜스임피던스 $R_0$, $R_{in,open}$, $R_{out,open}$, 귀환율 $K$를 구한 뒤 폐루프 이득 $V_{out}/I_{in}$, $R_{in,closed}$, $R_{out,closed}$를 구함</li><li>참고 회로 (본문 Fig 12.58(a)): $I_{in}$이 $M_1$ 소스로 들어가고, $M_1$ (게이트 $V_b$, 드레인 X, $R_{D1}$ 부하) → $M_2$ (소스 접지, 드레인 $R_{D2}$ 부하 = $V_{out}$), $V_{out}$에서 $R_F$를 거쳐 $M_1$ 소스로 귀환</li><li>$V_A &lt; \infty$</li><li>소자 값은 주어지지 않음 (답은 기호로)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>예제 12.29처럼 개루프 트랜스임피던스·개루프 입력·출력 임피던스, 귀환율, 폐루프 이득 $V_{out}/I_{in}$과 폐루프 입력·출력 임피던스</li></ul></div><figure><img src=".assets/figures_문제설명_1120_Nonideal_IO_Feedback/c124029e2dae02aa-fig12-112.png" alt="그림 P12.49"></figure></div><details class="original" data-original-problem="p10"><summary>원문 보기</summary><p>Figure 12.112 depicts a popular transimpedance amplifier topology. Repeat the analysis of Example 12-29 for this circuit. Assume $V_A &lt; \infty$.</p></details></div><div class="layer eli5" data-explanation="understand">
   <h4>문제를 읽어요</h4>
   <p>트랜지스터 하나로 만든 트랜스임피던스 증폭기예요. 입력 전류 $I_{in}$이 $Q_1$의 베이스 노드로 들어가고, $Q_1$은 이미터가 접지된 공통 이미터(CE) 단이에요. 컬렉터에 $R_C$가 $V_{CC}$로 달려 있고 컬렉터가 출력 $V_{out}$이에요.</p>
   <p>$R_F$가 컬렉터($V_{out}$)와 베이스 사이에 걸려 있어요. 출력 전압에 비례하는 전류가 입력 노드로 되돌아가요.</p>
@@ -1545,9 +1550,9 @@
   <h4>이 개념과 공식을 떠올려요</h4>
   <p><strong>단서:</strong> $R_F$가 출력 노드에 병렬로 붙어 전압을 감지하고 입력 노드에 병렬로 붙어 전류를 되돌려요. 전압-전류 귀환(voltage-current feedback)이에요.</p>
   <p><strong>끊는 법칙:</strong> 두 복제를 모두 단락해요. 베이스 노드와 컬렉터 노드에 각각 $R_F$가 접지로 붙어요.</p>
-  <p><strong>귀환율:</strong> 입력 노드에서 빠져나가는 귀환 전류를 양으로 잡으면 $K=-1/R_F$예요.</p>
+  <p><strong>귀환율:</strong> 교과서 Fig 12.54(b)의 $I_2/V_1$을 원 회로 기호 그대로 써서, 입력 노드에서 빠져나가는 귀환 전류 $I_F$를 양으로 잡으면 $K=I_F/V_{out}=-1/R_F$예요.</p>
   <p><strong>CE 블록:</strong> 베이스에서 본 저항은 $r_\pi$, 컬렉터 전류는 $g_mv_\pi$이고, 컬렉터에서 본 트랜지스터 저항은 $r_O$예요. $V_A\lt\infty$라는 조건 때문에 $r_O$가 출력 노드에 병렬로 남아요.</p>
-  <p><strong>폐루프 공식:</strong> $V_{out}/I_{in}=R_0/(1+KR_0)$이고 입력·출력 임피던스가 모두 $1+KR_0$로 나뉘어요.</p>
+  <p><strong>폐루프 공식:</strong> $V_{out}/I_{in}=R_0/(1+KR_0)$이고 입력·출력 임피던스가 모두 개루프의 $\frac{1}{1+KR_0}$배가 돼요.</p>
 </div>
 <div class="layer formal" data-explanation="start">
   <h4>종이에 쓸 첫 줄</h4>
@@ -1567,7 +1572,8 @@
       $$R_{out,open}=R_C\parallel r_O\parallel R_F$$
     </div>
     <div data-answer-step="귀환율과 루프 이득">
-      $$K=\frac{I_2}{V_1}=-\frac1{R_F}$$
+      <p>$V_{out}$을 컬렉터 쪽에 걸고 베이스 쪽을 단락하면 $R_F$로 $V_{out}/R_F$가 입력 노드로 들어가므로, 빠져나가는 방향 $I_F$ 기준 음수예요.</p>
+      $$K=\frac{I_F}{V_{out}}=-\frac1{R_F}$$
       $$KR_0=\frac{g_m(R_F\parallel r_\pi)(R_C\parallel r_O\parallel R_F)}{R_F}$$
       <p>$R_0\lt0$, $K\lt0$이라 루프 이득이 양수이고 부궤환이에요.</p>
     </div>
@@ -1616,10 +1622,10 @@
   </div>
   <div class="summary-group">
     <h4>폐루프</h4>
-    <p>$K=-1/R_F$이고 이득·$R_{in}$·$R_{out}$이 모두 $1+KR_0$로 나뉘어요.</p>
+    <p>$K=I_F/V_{out}=-1/R_F$이고 이득·$R_{in}$·$R_{out}$이 모두 $1+KR_0$로 나뉘어요.</p>
   </div>
 </div>
-</article><article class="topic" id="p11"><h3>P11. 분배기와 귀환 저항을 함께 쓴 트랜스임피던스 증폭기</h3><p class="panel-meta">P12.47 · 장말문제 12.47</p><div class="problem-pane" data-problem-for="p11"><div class="layer formal" data-source-problem="p11"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>예제 12.29를 이 회로로 되풀이 (원문 표기 "Example 12-29")</li><li>예제 12.29: $R_F$가 매우 크지 않다고 가정할 때 그림 12.58(a)의 회로를 해석하라 — 전압-전류 귀환으로 보고 개루프 트랜스임피던스 $R_0$, $R_{in,open}$, $R_{out,open}$, 귀환율 $K$를 구한 뒤 폐루프 이득 $V_{out}/I_{in}$, $R_{in,closed}$, $R_{out,closed}$를 구함</li><li>참고 회로 (본문 Fig 12.58(a)): $I_{in}$이 $M_1$ 소스로 들어가고, $M_1$ (게이트 $V_b$, 드레인 X, $R_{D1}$ 부하) → $M_2$ (소스 접지, 드레인 $R_{D2}$ 부하 = $V_{out}$), $V_{out}$에서 $R_F$를 거쳐 $M_1$ 소스로 귀환</li><li>$\lambda &gt; 0$</li><li>소자 값은 주어지지 않음 (답은 기호로)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>예제 12.29처럼 개루프 트랜스임피던스·개루프 입력·출력 임피던스, 귀환율, 폐루프 이득 $v_{out}/i_{in}$과 폐루프 입력·출력 임피던스</li></ul></div><figure><img src=".assets/figures_문제설명_1120_Nonideal_IO_Feedback/10bb90bd2a77741b-fig12-110.png" alt="그림 P12.47"></figure></div><details class="original" data-original-problem="p11"><summary>원문 보기</summary><p>Repeat Example 12-29 for the circuit illustrated in Fig. 12.110. Assume $\lambda &gt; 0$.</p></details></div><div class="layer eli5" data-explanation="understand">
+</article><article class="topic" id="p11"><h3>P11. 분배기와 귀환 저항을 함께 쓴 트랜스임피던스 증폭기</h3><p class="panel-meta">P12.47 · 장말문제 12.47 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1120_Nonideal_IO_Feedback-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p11"><div class="layer formal" data-source-problem="p11"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>예제 12.29를 이 회로로 되풀이 (원문 표기 "Example 12-29")</li><li>예제 12.29: $R_F$가 매우 크지 않다고 가정할 때 그림 12.58(a)의 회로를 해석하라 — 전압-전류 귀환으로 보고 개루프 트랜스임피던스 $R_0$, $R_{in,open}$, $R_{out,open}$, 귀환율 $K$를 구한 뒤 폐루프 이득 $V_{out}/I_{in}$, $R_{in,closed}$, $R_{out,closed}$를 구함</li><li>참고 회로 (본문 Fig 12.58(a)): $I_{in}$이 $M_1$ 소스로 들어가고, $M_1$ (게이트 $V_b$, 드레인 X, $R_{D1}$ 부하) → $M_2$ (소스 접지, 드레인 $R_{D2}$ 부하 = $V_{out}$), $V_{out}$에서 $R_F$를 거쳐 $M_1$ 소스로 귀환</li><li>$\lambda &gt; 0$</li><li>소자 값은 주어지지 않음 (답은 기호로)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>예제 12.29처럼 개루프 트랜스임피던스·개루프 입력·출력 임피던스, 귀환율, 폐루프 이득 $v_{out}/i_{in}$과 폐루프 입력·출력 임피던스</li></ul></div><figure><img src=".assets/figures_문제설명_1120_Nonideal_IO_Feedback/10bb90bd2a77741b-fig12-110.png" alt="그림 P12.47"></figure></div><details class="original" data-original-problem="p11"><summary>원문 보기</summary><p>Repeat Example 12-29 for the circuit illustrated in Fig. 12.110. Assume $\lambda &gt; 0$.</p></details></div><div class="layer eli5" data-explanation="understand">
   <h4>문제를 읽어요</h4>
   <p>입력 전류 $i_{in}$이 $M_1$의 소스 노드(아래에서 A라 불러요)로 들어가요. $M_1$은 게이트가 $V_b$인 공통 게이트(CG) 단이고, 드레인 노드(X)에 $R_{D1}$이 $V_{DD}$로 달려 있어요.</p>
   <p>X는 $M_2$의 게이트를 구동해요. $M_2$는 소스가 접지된 공통 소스(CS) 단이고, 부하는 $V_{DD}$에서 내려오는 이상적 전류원이에요. $M_2$ 드레인이 출력 $v_{out}$이에요.</p>
@@ -1634,27 +1640,27 @@
     <li>출력 쪽 복제: A 쪽 포트를 단락하면 $v_{out}$에서 $R_1+(R_2\parallel R_F)$가 접지로 보여요.</li>
     <li>입력 쪽 복제: $v_{out}$ 쪽 포트를 단락하면 A에서 $R_F+(R_1\parallel R_2)$가 접지로 보여요.</li>
   </ul>
-  <p><strong>귀환율:</strong> $v_{out}$ 쪽에 $V_1$을 걸고 A 쪽을 단락해 $R_F$로 흐르는 전류를 재요. A에서 빠져나가는 귀환 전류를 양으로 잡아 부호를 정해요.</p>
-  <p><strong>CG 블록($\lambda\gt0$):</strong> 게이트 전류가 0이라 소스로 들어간 전류는 그대로 드레인으로 나가요. 소스에서 본 저항은 드레인 부하 $R_{D1}$ 때문에 $1/g_{m1}$보다 조금 커져요. 수업 기본 근사 $g_{m1}r_{O1}\gg1$에서 다음 블록을 써요.</p>
+  <p><strong>귀환율:</strong> 교과서 Fig 12.54(b)의 $I_2/V_1$을 원 회로 기호 그대로 써서, $v_{out}$ 쪽에 전압을 걸고 A 쪽을 단락해 A에서 빠져나가는 귀환 전류 $i_F$를 재어 $K=i_F/v_{out}$으로 바로 구해요.</p>
+  <p><strong>CG 블록($\lambda\gt0$)과 테브난 변환:</strong> 게이트 전류가 0이라 소스로 들어간 전류는 그대로 드레인으로 나가요. 소스에서 본 저항은 드레인 부하 $R_{D1}$ 때문에 $1/g_{m1}$보다 조금 커지며, 수업 기본 근사 $g_{m1}r_{O1}\gg1$에서 아래 블록을 써요. 입력 노드 A의 $i_{in}\parallel R_A$를 노턴→테브난 변환($v_{in}=i_{in}R_A$와 직렬 저항 $R_A$)으로 바꾸면 직렬 저항이 붙은 CG 전압이득 블록 $\frac{v_X}{v_{in}}=\frac{R_{D1}}{R_A+R_{S1}}$을 바로 곱할 수 있어요.</p>
   $$R_{S1}\approx\frac1{g_{m1}}\left(1+\frac{R_{D1}}{r_{O1}}\right)$$
-  <p><strong>폐루프 공식:</strong> 이득과 입력·출력 임피던스가 모두 $1+KR_0$로 나뉘어요.</p>
+  <p><strong>폐루프 공식:</strong> 이득과 입력·출력 임피던스가 모두 개루프의 $\frac{1}{1+KR_0}$배가 돼요.</p>
 </div>
 <div class="layer formal" data-explanation="start">
   <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="귀환망 끊기">
+  <div data-answer-step="귀환망 끊기와 테브난 변환">
     <p>두 복제가 만드는 저항에 이름을 붙여요.</p>
     $$R_A=R_F+R_1\parallel R_2$$
     $$R_B=R_1+R_2\parallel R_F$$
-    <p>노드 A에서 $i_{in}$은 $R_A$와 $M_1$ 소스($R_{S1}$)로 나뉘어요.</p>
-    $$i_1=\frac{R_A}{R_A+R_{S1}}i_{in}$$
+    <p>노드 A의 $i_{in}\parallel R_A$를 노턴→테브난 변환으로 바꿔요.</p>
+    $$v_{in}=i_{in}R_A$$
   </div>
 </div>
 <div class="layer formal" data-explanation="solve">
   <h4>이렇게 풀어요</h4>
   <div data-subpart="main">
     <div data-answer-step="첫 단">
-      <p>$i_1$은 $M_1$을 지나 X에서 $R_{D1}$로 흘러요. $M_2$ 게이트는 전류를 끌지 않아요.</p>
-      $$v_X=i_1R_{D1}=\frac{R_A}{R_A+R_{S1}}R_{D1}i_{in}$$
+      <p>직렬 저항 $R_A$를 거쳐 $M_1$ 소스($R_{S1}$)를 구동하므로 CG 단의 전압이득은 $\frac{v_X}{v_{in}}=\frac{R_{D1}}{R_A+R_{S1}}$예요($M_2$ 게이트 전류 0). 여기에 $R_A$를 곱해 $v_X/i_{in}$을 바로 얻어요.</p>
+      $$\frac{v_X}{i_{in}}=R_A\cdot\frac{v_X}{v_{in}}=\frac{R_A}{R_A+R_{S1}}R_{D1}$$
     </div>
     <p>둘째 단은 전류원 부하 CS 단이에요. $i_{out}$은 출력 노드에서 $M_2$ 드레인으로 흘러 들어가는 방향을 양으로 잡아요.</p>
     <div data-answer-step="둘째 단 전압 이득" data-gain-route="gm-rout">
@@ -1670,14 +1676,14 @@
       </div>
     </div>
     <div data-answer-step="개루프 변수">
-      $$\begin{aligned}R_0&amp;=\frac{v_{out}}{i_{in}}\\&amp;=-\frac{R_A}{R_A+R_{S1}}R_{D1}g_{m2}(r_{O2}\parallel R_B)\end{aligned}$$
+      $$\begin{aligned}R_0&amp;=\frac{v_{out}}{i_{in}}=\frac{v_X}{i_{in}}\cdot\frac{v_{out}}{v_X}\\&amp;=-\frac{R_A}{R_A+R_{S1}}R_{D1}g_{m2}(r_{O2}\parallel R_B)\end{aligned}$$
       $$R_{in,open}=R_A\parallel R_{S1}$$
       $$R_{out,open}=r_{O2}\parallel\left[R_1+(R_2\parallel R_F)\right]$$
     </div>
     <div data-answer-step="귀환율">
-      <p>$V_1$을 걸고 A를 접지하면 N은 $R_1$과 $R_2\parallel R_F$의 분압이에요. $R_F$에는 $V_N/R_F$가 흘러 A로 들어가므로 빠져나가는 방향으로는 음수예요.</p>
-      $$V_N=\frac{R_2\parallel R_F}{R_1+R_2\parallel R_F}V_1$$
-      $$\begin{aligned}K&amp;=\frac{I_2}{V_1}=-\frac{R_2\parallel R_F}{R_F\left(R_1+R_2\parallel R_F\right)}\\&amp;=-\frac{R_2}{R_1R_2+R_1R_F+R_2R_F}\end{aligned}$$
+      <p>$v_{out}$을 출력 쪽에 걸고 A를 접지하면 N은 $R_1$과 $R_2\parallel R_F$의 분압이에요. $R_F$에는 $v_N/R_F$가 흘러 A로 들어가므로 A에서 빠져나가는 방향 $i_F$ 기준 음수예요.</p>
+      $$v_N=\frac{R_2\parallel R_F}{R_1+R_2\parallel R_F}v_{out}$$
+      $$\begin{aligned}K&amp;=\frac{i_F}{v_{out}}=-\frac{R_2\parallel R_F}{R_F\left(R_1+R_2\parallel R_F\right)}\\&amp;=-\frac{R_2}{R_1R_2+R_1R_F+R_2R_F}\end{aligned}$$
       <p>$R_0\lt0$, $K\lt0$이라 $KR_0\gt0$이고 부궤환이에요.</p>
     </div>
     <div data-answer-step="폐루프 변수">
@@ -1728,9 +1734,9 @@
   </div>
   <div class="summary-group">
     <h4>핵심 식</h4>
-    <p>개루프 트랜스임피던스는 전류 분배와 두 단 이득의 곱이에요.</p>
+    <p>개루프 트랜스임피던스는 1단 테브난 변환과 두 단 이득의 곱이에요.</p>
     $$\begin{aligned}R_0=&amp;-\frac{R_A}{R_A+R_{S1}}\\&amp;\times R_{D1}g_{m2}(r_{O2}\parallel R_B)\end{aligned}$$
-    <p>귀환율은 분압비와 $R_F$가 함께 정해요.</p>
+    <p>귀환율 $K=i_F/v_{out}$은 분압비와 $R_F$가 함께 정해요.</p>
     $$K=-\frac{R_2}{R_1R_2+R_1R_F+R_2R_F}$$
     <p>모든 폐루프 값이 $1+KR_0$로 나뉘어요.</p>
   </div>

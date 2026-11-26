@@ -1,0 +1,20 @@
+=== p9: 2021-1_기말-Q3 (NMOS Source Follower M2, positive feedback, lambda = 0) ===
+V_X/I_in (direct KCL)      = R_D*R_F*g_m1/(R_F*g_m1 + 1)
+V_X/I_in (Norton->Thevenin)= R_D*R_F*g_m1/(R_F*g_m1 + 1)
+diff(KCL - Thevenin)       = 0
+R_0 (open-loop transimp)   = R_D*R_F**2*R_M*g_m1*g_m2/(R_F**2*R_M*g_m1*g_m2 + R_F**2*g_m1 + R_F*R_M*g_m1 + R_F*R_M*g_m2 + R_F + R_M)
+R_in_open                  = R_F/(R_F*g_m1 + 1)
+R_out_open                 = R_F*R_M/(R_F*R_M*g_m2 + R_F + R_M)
+[Part 1] K                 = -1/R_F
+KR_0 = -T                  = -R_D*R_F*R_M*g_m1*g_m2/(R_F**2*R_M*g_m1*g_m2 + R_F**2*g_m1 + R_F*R_M*g_m1 + R_F*R_M*g_m2 + R_F + R_M)
+T = -KR_0 (> 0 verified)   = R_D*R_F*R_M*g_m1*g_m2/(R_F**2*R_M*g_m1*g_m2 + R_F**2*g_m1 + R_F*R_M*g_m1 + R_F*R_M*g_m2 + R_F + R_M)
+1 + KR_0 = 1 - T           = -(R_D*R_F*R_M*g_m1*g_m2 - R_F**2*R_M*g_m1*g_m2 - R_F**2*g_m1 - R_F*R_M*g_m1 - R_F*R_M*g_m2 - R_F - R_M)/((R_F*g_m1 + 1)*(R_F*R_M*g_m2 + R_F + R_M))
+[Part 1] R_closed          = R_D*R_F**2*R_M*g_m1*g_m2/(-R_D*R_F*R_M*g_m1*g_m2 + R_F**2*R_M*g_m1*g_m2 + R_F**2*g_m1 + R_F*R_M*g_m1 + R_F*R_M*g_m2 + R_F + R_M)
+[Part 2] R_in_closed       = R_F*(-R_F*R_M*g_m2 - R_F - R_M)/(R_D*R_F*R_M*g_m1*g_m2 - R_F**2*R_M*g_m1*g_m2 - R_F**2*g_m1 - R_F*R_M*g_m1 - R_F*R_M*g_m2 - R_F - R_M)
+[Part 2] R_out_closed      = R_F*R_M*(-R_F*g_m1 - 1)/(R_D*R_F*R_M*g_m1*g_m2 - R_F**2*R_M*g_m1*g_m2 - R_F**2*g_m1 - R_F*R_M*g_m1 - R_F*R_M*g_m2 - R_F - R_M)
+Compact textbook form & positive feedback assertions: ALL PASSED (diff == 0)
+--- Exact unbroken KCL comparison ---
+R_closed_exact             = R_M*(R_D*R_F*g_m1*g_m2 + 1)/(-R_D*R_M*g_m1*g_m2 + R_F*R_M*g_m1*g_m2 + R_F*g_m1 + R_M*g_m1 + R_M*g_m2 + 1)
+R_in_exact                 = (R_F*R_M*g_m2 + R_F + R_M)/(-R_D*R_M*g_m1*g_m2 + R_F*R_M*g_m1*g_m2 + R_F*g_m1 + R_M*g_m1 + R_M*g_m2 + 1)
+R_out_exact                = R_M*(R_F*g_m1 + 1)/(-R_D*R_M*g_m1*g_m2 + R_F*R_M*g_m1*g_m2 + R_F*g_m1 + R_M*g_m1 + R_M*g_m2 + 1)
+Numeric check (gm1=1m,gm2=2m,RD=500,RM=5k,RF=10k): KR_0=-0.0395, T=0.0395, R_closed_fb=411.52, R_closed_exact=454.55

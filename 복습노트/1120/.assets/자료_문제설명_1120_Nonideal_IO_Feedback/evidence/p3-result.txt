@@ -1,0 +1,16 @@
+=== p3 (P12.41) SymPy Verification ===
+R_sense = R_1 + R_2
+R_return = R_1*R_2/(R_1 + R_2)
+A_v_open     = g_m1*(R_1 + R_2)
+R_in_open    = 1/g_m1
+R_out_open   = R_1 + R_2
+K            = R_2/(R_1 + R_2)
+Loop gain T  = R_2*g_m1
+A_v_closed   = g_m1*(R_1 + R_2)/(R_2*g_m1 + 1)
+R_in_closed  = R_2 + 1/g_m1 = R_2 + 1/g_m1
+R_out_closed = (R_1 + R_2)/(R_2*g_m1 + 1)
+Exact KCL vs Feedback Method difference == 0: ASSERT PASSED
+
+Finite r_O1 cross-check (reduces to primary as r_O1 -> oo):
+  Exact A_v_closed(r_O1)  = (R_1 + R_2)*(g_m1*r_O1 + 1)/(R_1 + R_2*g_m1*r_O1 + R_2 + r_O1)
+  Exact R_in_closed(r_O1) = (R_1 + R_2*g_m1*r_O1 + R_2 + r_O1)/(g_m1*r_O1 + 1)

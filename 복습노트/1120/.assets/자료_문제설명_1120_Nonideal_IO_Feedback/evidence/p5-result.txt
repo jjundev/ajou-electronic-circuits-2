@@ -1,0 +1,29 @@
+=== p5 (E12.28) SymPy Verification ===
+R_sense = R_1 + R_2
+R_return = R_1*R_2/(R_1 + R_2)
+
+--- Two-Port Feedback Method ---
+A_v_open          = R_D1*R_D2*g_m1*g_m2*(R_1 + R_2)/((R_1*R_2*g_m1/(R_1 + R_2) + 1)*(R_1 + R_2 + R_D2))
+R_in_open         = oo
+R_out_open        = R_D2*(R_1 + R_2)/(R_1 + R_2 + R_D2)
+K                 = R_2/(R_1 + R_2)
+Loop gain T       = R_2*R_D1*R_D2*g_m1*g_m2/((R_1*R_2*g_m1/(R_1 + R_2) + 1)*(R_1 + R_2 + R_D2))
+A_v_closed (fb)   = R_D1*R_D2*g_m1*g_m2*(R_1 + R_2)**2/(R_1**2*R_2*g_m1 + R_1**2 + R_1*R_2**2*g_m1 + R_1*R_2*R_D1*R_D2*g_m1*g_m2 + R_1*R_2*R_D2*g_m1 + 2*R_1*R_2 + R_1*R_D2 + R_2**2*R_D1*R_D2*g_m1*g_m2 + R_2**2 + R_2*R_D2)
+R_in_closed (fb)  = oo
+R_out_closed (fb) = R_D2*(R_1 + R_2)*(R_1*R_2*g_m1 + R_1 + R_2)/(R_1**2*R_2*g_m1 + R_1**2 + R_1*R_2**2*g_m1 + R_1*R_2*R_D1*R_D2*g_m1*g_m2 + R_1*R_2*R_D2*g_m1 + 2*R_1*R_2 + R_1*R_D2 + R_2**2*R_D1*R_D2*g_m1*g_m2 + R_2**2 + R_2*R_D2)
+Canonical forms match SymPy solve: ASSERT PASSED
+
+--- Exact Full Small-Signal KCL (including direct feedforward through R_1) ---
+A_v_closed (exact)   = R_D2*g_m1*(R_1*R_D1*g_m2 + R_2*R_D1*g_m2 + R_2)/(R_1*R_2*g_m1 + R_1 + R_2*R_D1*R_D2*g_m1*g_m2 + R_2*R_D2*g_m1 + R_2 + R_D2)
+R_out_closed (exact) = R_D2*(R_1*R_2*g_m1 + R_1 + R_2)/(R_1*R_2*g_m1 + R_1 + R_2*R_D1*R_D2*g_m1*g_m2 + R_2*R_D2*g_m1 + R_2 + R_D2)
+Ratio A_v_exact / A_v_fb = (R_1*R_D1*g_m2 + R_2*R_D1*g_m2 + R_2)*(R_1**2*R_2*g_m1 + R_1**2 + R_1*R_2**2*g_m1 + R_1*R_2*R_D1*R_D2*g_m1*g_m2 + R_1*R_2*R_D2*g_m1 + 2*R_1*R_2 + R_1*R_D2 + R_2**2*R_D1*R_D2*g_m1*g_m2 + R_2**2 + R_2*R_D2)/(R_D1*g_m2*(R_1**2 + 2*R_1*R_2 + R_2**2)*(R_1*R_2*g_m1 + R_1 + R_2*R_D1*R_D2*g_m1*g_m2 + R_2*R_D2*g_m1 + R_2 + R_D2))
+
+Numerical check (g_m1=5mS, g_m2=10mS, R_D1=2k, R_D2=2k, R_1=3k, R_2=1k):
+  A_v_open                  = 28.0702
+  K                         = 0.250000
+  T                         = 7.01754
+  A_v_closed (fb)           = 3.50109
+  A_v_closed (exact KCL)    = 3.50649
+  R_out_open                = 1333.33
+  R_out_closed (fb)         = 166.302
+  R_out_closed (exact KCL)  = 164.502

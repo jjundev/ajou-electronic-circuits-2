@@ -1,0 +1,20 @@
+=== p1 (E12.07) SymPy Verification ===
+Part (a) 4 components:
+  Feedforward system: CG stage (M1 + R_D), A_1 = g_m * R_D
+  Output sensing: Node V_out (parallel voltage sensing)
+  Feedback network: Resistive divider R_1, R_2 (K = R_2 / (R_1 + R_2))
+  Comparison (subtraction): M1 itself via V_in - V_F = V_S - V_G = -V_GS
+
+--- Results ---
+A_v_open         = R_D*g_m
+K                = R_2/(R_1 + R_2)
+Loop gain T      = R_2*R_D*g_m/(R_1 + R_2)
+A_v_closed (fb)  = R_D*g_m*(R_1 + R_2)/(R_1 + R_2*R_D*g_m + R_2)
+R_in_open        = 1/g_m
+R_out_open       = R_D
+R_in_closed (fb) = (R_1 + R_2*R_D*g_m + R_2)/(g_m*(R_1 + R_2)) = R_1/(R_1*g_m + R_2*g_m) + R_2*R_D*g_m/(R_1*g_m + R_2*g_m) + R_2/(R_1*g_m + R_2*g_m)
+R_out_closed(fb) = R_D*(R_1 + R_2)/(R_1 + R_2*R_D*g_m + R_2)
+Exact KCL limit (R1+R2 -> oo) matches feedback formulas: ASSERT PASSED
+Exact finite-(R1+R2) A_v_closed   = R_D*g_m*(R_1 + R_2)/(R_1 + R_2*R_D*g_m + R_2 + R_D)
+Exact finite-(R1+R2) R_in_closed  = (R_1 + R_2*R_D*g_m + R_2 + R_D)/(g_m*(R_1 + R_2 + R_D))
+Exact finite-(R1+R2) R_out_closed = R_D*(R_1 + R_2)/(R_1 + R_2*R_D*g_m + R_2 + R_D)

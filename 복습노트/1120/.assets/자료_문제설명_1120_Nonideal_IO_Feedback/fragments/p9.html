@@ -8,9 +8,9 @@
 <div class="layer formal" data-explanation="recall">
   <h4>이 개념과 공식을 떠올려요</h4>
   <p><strong>단서:</strong> $R_F$가 출력 노드에서 전압을 감지하고 입력 노드로 전류를 되돌리니 전압-전류 귀환(voltage-current feedback)의 모양이에요. 개루프 값은 두 복제를 모두 단락해 입력·출력 노드에 각각 $R_F$를 접지로 붙여 구해요.</p>
-  <p><strong>귀환율:</strong> 입력 노드에서 빠져나가는 귀환 전류를 양으로 잡으면 $K=-1/R_F$예요.</p>
+  <p><strong>귀환율:</strong> 교과서 Fig 12.54(b)의 $I_2/V_1$을 원 회로 기호 그대로 써서, 입력 노드에서 빠져나가는 귀환 전류 $I_F$를 양으로 잡으면 $K=I_F/V_{out}=-1/R_F$예요.</p>
   <p><strong>폐루프 공식:</strong> 이득과 입력·출력 임피던스가 모두 $1+KR_0$로 나뉘어요. 단, 이 공식은 $KR_0$의 부호를 그대로 넣어 써요. $KR_0\gt0$이면 부궤환, $KR_0\lt0$이면 정궤환이에요.</p>
-  <p><strong>블록:</strong> CG는 소스 입력에서 드레인 출력까지 비반전이에요. 소스 팔로워도 비반전이고, 출력 단락에서 $G_m=g_{m2}$, 소스 쪽에서 본 저항은 $1/g_{m2}$예요.</p>
+  <p><strong>블록:</strong> 입력의 $I_{in}\parallel R_F$를 노턴→테브난 변환($V_{in}=I_{in}R_F$와 직렬 $R_F$)으로 바꾸면 직렬 저항이 붙은 CG 단 전압이득 블록 $\frac{V_X}{V_{in}}=\frac{R_D}{R_F+1/g_{m1}}$을 바로 곱할 수 있어요. CG와 소스 팔로워는 모두 비반전이고, 소스 팔로워는 출력 단락에서 $G_m=-g_{m2}$, 소스 쪽 저항은 $1/g_{m2}$예요.</p>
   <p><strong>선택 이유:</strong> 두 단이 모두 비반전이면 $R_0\gt0$이 되어 $K=-1/R_F$와 곱한 루프 이득이 음수가 돼요. 그래서 공식을 쓰기 전에 부호부터 따져야 해요.</p>
 </div>
 <div class="layer formal" data-explanation="start">
@@ -18,8 +18,9 @@
   <div data-answer-step="귀환망 끊기와 첫 단" data-answer-subpart="1">
     <p>개루프 회로에서는 입력 노드와 출력 노드에 각각 $R_F$가 접지로 붙어요. 출력 노드의 외부 부하를 이름 붙여요.</p>
     $$R_L=R_M\parallel R_F$$
-    <p>입력 노드의 전류 분배에서 CG를 지나 X에 생기는 전압을 적어요.</p>
-    $$v_X=\frac{g_{m1}R_F}{1+g_{m1}R_F}R_DI_{in}$$
+    <p>입력 노드의 $I_{in}\parallel R_F$를 노턴→테브난 변환($V_{in}=I_{in}R_F$, 직렬 $R_F$)으로 바꿔 CG 전압이득에 곱해요.</p>
+    $$V_{in}=I_{in}R_F$$
+    $$\frac{V_X}{I_{in}}=R_F\cdot\frac{V_X}{V_{in}}=\frac{R_FR_D}{R_F+1/g_{m1}}=\frac{g_{m1}R_F}{1+g_{m1}R_F}R_D$$
   </div>
 </div>
 <div class="layer formal" data-explanation="solve">
@@ -41,11 +42,12 @@
       </div>
     </div>
     <div data-answer-step="개루프 트랜스임피던스">
-      $$R_0=\frac{g_{m1}R_F}{1+g_{m1}R_F}R_D\cdot\frac{g_{m2}R_L}{1+g_{m2}R_L}$$
+      $$R_0=\frac{V_X}{I_{in}}\cdot\frac{V_{out}}{V_X}=\frac{g_{m1}R_F}{1+g_{m1}R_F}R_D\cdot\frac{g_{m2}R_L}{1+g_{m2}R_L}$$
       <p>두 단이 모두 비반전이라 $R_0\gt0$이에요.</p>
     </div>
     <div data-answer-step="귀환율과 루프 부호">
-      $$K=\frac{I_2}{V_1}=-\frac1{R_F}$$
+      <p>$V_{out}$을 출력 쪽에 걸고 입력 쪽을 단락하면 $R_F$로 $V_{out}/R_F$가 입력 노드로 들어가므로, 빠져나가는 방향 $I_F$ 기준 음수예요.</p>
+      $$K=\frac{I_F}{V_{out}}=-\frac1{R_F}$$
       <p>계산을 짧게 하려고 $T=|KR_0|$를 정의해요.</p>
       $$T=\frac{g_{m1}R_Dg_{m2}R_L}{(1+g_{m1}R_F)(1+g_{m2}R_L)}$$
       $$KR_0=-T\lt0$$
@@ -112,7 +114,7 @@
   <p class="sum-lead">CG와 소스 팔로워가 모두 비반전이라 $R_F$ 루프는 정궤환이에요.</p>
   <div class="summary-group">
     <h4>핵심 식</h4>
-    <p>$K=-1/R_F$이고 $R_0=\dfrac{g_{m1}R_F}{1+g_{m1}R_F}R_D\dfrac{g_{m2}R_L}{1+g_{m2}R_L}\gt0$이에요.</p>
+    <p>$K=I_F/V_{out}=-1/R_F$이고 $R_0=\dfrac{g_{m1}R_F}{1+g_{m1}R_F}R_D\dfrac{g_{m2}R_L}{1+g_{m2}R_L}\gt0$이에요.</p>
     <p>$KR_0=-T$라 폐루프 값은 모두 $1-T$로 나뉘어요.</p>
   </div>
   <div class="summary-group">

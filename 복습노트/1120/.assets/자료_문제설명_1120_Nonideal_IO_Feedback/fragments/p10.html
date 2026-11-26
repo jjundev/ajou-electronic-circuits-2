@@ -9,9 +9,9 @@
   <h4>이 개념과 공식을 떠올려요</h4>
   <p><strong>단서:</strong> $R_F$가 출력 노드에 병렬로 붙어 전압을 감지하고 입력 노드에 병렬로 붙어 전류를 되돌려요. 전압-전류 귀환(voltage-current feedback)이에요.</p>
   <p><strong>끊는 법칙:</strong> 두 복제를 모두 단락해요. 베이스 노드와 컬렉터 노드에 각각 $R_F$가 접지로 붙어요.</p>
-  <p><strong>귀환율:</strong> 입력 노드에서 빠져나가는 귀환 전류를 양으로 잡으면 $K=-1/R_F$예요.</p>
+  <p><strong>귀환율:</strong> 교과서 Fig 12.54(b)의 $I_2/V_1$을 원 회로 기호 그대로 써서, 입력 노드에서 빠져나가는 귀환 전류 $I_F$를 양으로 잡으면 $K=I_F/V_{out}=-1/R_F$예요.</p>
   <p><strong>CE 블록:</strong> 베이스에서 본 저항은 $r_\pi$, 컬렉터 전류는 $g_mv_\pi$이고, 컬렉터에서 본 트랜지스터 저항은 $r_O$예요. $V_A\lt\infty$라는 조건 때문에 $r_O$가 출력 노드에 병렬로 남아요.</p>
-  <p><strong>폐루프 공식:</strong> $V_{out}/I_{in}=R_0/(1+KR_0)$이고 입력·출력 임피던스가 모두 $1+KR_0$로 나뉘어요.</p>
+  <p><strong>폐루프 공식:</strong> $V_{out}/I_{in}=R_0/(1+KR_0)$이고 입력·출력 임피던스가 모두 개루프의 $\frac{1}{1+KR_0}$배가 돼요.</p>
 </div>
 <div class="layer formal" data-explanation="start">
   <h4>종이에 쓸 첫 줄</h4>
@@ -31,7 +31,8 @@
       $$R_{out,open}=R_C\parallel r_O\parallel R_F$$
     </div>
     <div data-answer-step="귀환율과 루프 이득">
-      $$K=\frac{I_2}{V_1}=-\frac1{R_F}$$
+      <p>$V_{out}$을 컬렉터 쪽에 걸고 베이스 쪽을 단락하면 $R_F$로 $V_{out}/R_F$가 입력 노드로 들어가므로, 빠져나가는 방향 $I_F$ 기준 음수예요.</p>
+      $$K=\frac{I_F}{V_{out}}=-\frac1{R_F}$$
       $$KR_0=\frac{g_m(R_F\parallel r_\pi)(R_C\parallel r_O\parallel R_F)}{R_F}$$
       <p>$R_0\lt0$, $K\lt0$이라 루프 이득이 양수이고 부궤환이에요.</p>
     </div>
@@ -80,6 +81,6 @@
   </div>
   <div class="summary-group">
     <h4>폐루프</h4>
-    <p>$K=-1/R_F$이고 이득·$R_{in}$·$R_{out}$이 모두 $1+KR_0$로 나뉘어요.</p>
+    <p>$K=I_F/V_{out}=-1/R_F$이고 이득·$R_{in}$·$R_{out}$이 모두 $1+KR_0$로 나뉘어요.</p>
   </div>
 </div>
