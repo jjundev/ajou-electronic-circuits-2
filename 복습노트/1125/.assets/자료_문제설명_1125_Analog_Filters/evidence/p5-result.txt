@@ -1,32 +1,17 @@
-=== P5 (Example 12.33, Fig 12.62(a)): Voltage-Current Feedback ===
-Input stage V_X / I_in (Norton->Thevenin): R_D*R_F*g_m1/(R_F*g_m1 + 1)
-Input stage V_X / I_in (Direct KCL):       R_D*R_F*g_m1/(R_F*g_m1 + 1)
-Difference (simplify == 0):                0
-R_in_open (eq 12.176): R_F/(R_F*g_m1 + 1)
-
---- 2-Port Feedback Results (finite r_o2 & r_o2 -> oo limit) ---
-R_O (finite r_o2):           -R_D*R_F**2*R_M*g_m1*g_m2*r_o2/((R_F*g_m1 + 1)*(R_F*R_M + R_F*r_o2 + R_M*r_o2))
-R_O (r_o2 -> oo, eq 12.175): -R_D*R_F**2*R_M*g_m1*g_m2/((R_F + R_M)*(R_F*g_m1 + 1))
-R_out_open (finite r_o2):    R_F*R_M*r_o2/(R_F*R_M + R_F*r_o2 + R_M*r_o2)
-R_out_open (r_o2 -> oo):     R_F*R_M/(R_F + R_M)
-K (eq 12.180):               -1/R_F
-T (finite r_o2):             R_D*R_F*R_M*g_m1*g_m2*r_o2/((R_F*g_m1 + 1)*(R_F*R_M + R_F*r_o2 + R_M*r_o2))
-T (r_o2 -> oo, = T_0):       R_D*R_F*R_M*g_m1*g_m2/((R_F + R_M)*(R_F*g_m1 + 1))
-R_closed (finite r_o2):      -R_D*R_F**2*R_M*g_m1*g_m2*r_o2/(R_D*R_F*R_M*g_m1*g_m2*r_o2 + R_F**2*R_M*g_m1 + R_F**2*g_m1*r_o2 + R_F*R_M*g_m1*r_o2 + R_F*R_M + R_F*r_o2 + R_M*r_o2)
-R_in_closed (finite r_o2):   R_F*(R_F*R_M + R_F*r_o2 + R_M*r_o2)/(R_D*R_F*R_M*g_m1*g_m2*r_o2 + R_F**2*R_M*g_m1 + R_F**2*g_m1*r_o2 + R_F*R_M*g_m1*r_o2 + R_F*R_M + R_F*r_o2 + R_M*r_o2)
-R_out_closed (finite r_o2):  R_F*R_M*r_o2*(R_F*g_m1 + 1)/(R_D*R_F*R_M*g_m1*g_m2*r_o2 + R_F**2*R_M*g_m1 + R_F**2*g_m1*r_o2 + R_F*R_M*g_m1*r_o2 + R_F*R_M + R_F*r_o2 + R_M*r_o2)
-R_closed (r_o2 -> oo):       -R_D*R_F**2*R_M*g_m1*g_m2/(R_D*R_F*R_M*g_m1*g_m2 + R_F**2*g_m1 + R_F*R_M*g_m1 + R_F + R_M)
-R_in_closed (r_o2 -> oo):    R_F*(R_F + R_M)/(R_D*R_F*R_M*g_m1*g_m2 + R_F**2*g_m1 + R_F*R_M*g_m1 + R_F + R_M)
-R_out_closed (r_o2 -> oo):   R_F*R_M*(R_F*g_m1 + 1)/(R_D*R_F*R_M*g_m1*g_m2 + R_F**2*g_m1 + R_F*R_M*g_m1 + R_F + R_M)
-
---- Exact Full-Circuit KCL (finite r_o2 & r_o2 -> oo) ---
-R_closed (exact, finite r_o2):     -R_M*r_o2*(R_D*R_F*g_m1*g_m2 - 1)/(R_D*R_M*g_m1*g_m2*r_o2 + R_F*R_M*g_m1 + R_F*g_m1*r_o2 + R_M*g_m1*r_o2 + R_M + r_o2)
-R_closed (exact, r_o2 -> oo):      -R_M*(R_D*R_F*g_m1*g_m2 - 1)/(R_D*R_M*g_m1*g_m2 + R_F*g_m1 + R_M*g_m1 + 1)
-R_in_closed (exact, r_o2 -> oo):   (R_F + R_M)/(R_D*R_M*g_m1*g_m2 + R_F*g_m1 + R_M*g_m1 + 1)
-R_out_closed (exact, r_o2 -> oo):  R_M*(R_F*g_m1 + 1)/(R_D*R_M*g_m1*g_m2 + R_F*g_m1 + R_M*g_m1 + 1)
-
-Bilateral R_F forward feedthrough (y_12 = -1/R_F) differences (r_o2 -> oo):
-  R_closed_exact - R_closed_2p:     R_M*(R_F + R_M)*(R_F*g_m1 + 1)/((R_D*R_M*g_m1*g_m2 + R_F*g_m1 + R_M*g_m1 + 1)*(R_D*R_F*R_M*g_m1*g_m2 + R_F**2*g_m1 + R_F*R_M*g_m1 + R_F + R_M))
-  R_in_closed_exact - R_in_closed_2p: R_M*(R_F + R_M)/((R_D*R_M*g_m1*g_m2 + R_F*g_m1 + R_M*g_m1 + 1)*(R_D*R_F*R_M*g_m1*g_m2 + R_F**2*g_m1 + R_F*R_M*g_m1 + R_F + R_M))
-  R_out_closed_exact - R_out_closed_2p: R_M**2*(R_F*g_m1 + 1)/((R_D*R_M*g_m1*g_m2 + R_F*g_m1 + R_M*g_m1 + 1)*(R_D*R_F*R_M*g_m1*g_m2 + R_F**2*g_m1 + R_F*R_M*g_m1 + R_F + R_M))
-ALL P5 CHECKS PASSED.
+exact Zopen (-RD*gm1*gm2 + 1/RF)/((gm1 + 1/RF)*(1/ro2 + 1/RM + 1/RF)) -5210.572175428405
+exact Ri_open 1/(gm1 + 1/RF) 454.5454545454545
+exact Ro_open 1/(1/ro2 + 1/RM + 1/RF) 191.69329073482427
+exact K -1/RF -0.0002
+exact T -(-RD*gm1*gm2 + 1/RF)/(RF*(gm1 + 1/RF)*(1/ro2 + 1/RM + 1/RF)) 1.042114435085681
+exact Zcl (-RD*gm1*gm2 + 1/RF)/((1 - (-RD*gm1*gm2 + 1/RF)/(RF*(gm1 + 1/RF)*(1/ro2 + 1/RM + 1/RF)))*(gm1 + 1/RF)*(1/ro2 + 1/RM + 1/RF)) -2551.5573887071537
+exact Ri 1/((1 - (-RD*gm1*gm2 + 1/RF)/(RF*(gm1 + 1/RF)*(1/ro2 + 1/RM + 1/RF)))*(gm1 + 1/RF)) 222.58569193571327
+exact Ro 1/((1 - (-RD*gm1*gm2 + 1/RF)/(RF*(gm1 + 1/RF)*(1/ro2 + 1/RM + 1/RF)))*(1/ro2 + 1/RM + 1/RF)) 93.87000426681838
+unilateral Zopen -RD*gm1*gm2/((gm1 + 1/RF)*(1/ro2 + 1/RM + 1/RF)) -5227.998838222479
+unilateral Ri_open 1/(gm1 + 1/RF) 454.5454545454545
+unilateral Ro_open 1/(1/ro2 + 1/RM + 1/RF) 191.69329073482427
+unilateral K -1/RF -0.0002
+unilateral T RD*gm1*gm2/(RF*(gm1 + 1/RF)*(1/ro2 + 1/RM + 1/RF)) 1.045599767644496
+unilateral Zcl -RD*gm1*gm2/((gm1 + 1/RF)*(RD*gm1*gm2/(RF*(gm1 + 1/RF)*(1/ro2 + 1/RM + 1/RF)) + 1)*(1/ro2 + 1/RM + 1/RF)) -2555.729092716172
+unilateral Ri 1/((gm1 + 1/RF)*(RD*gm1*gm2/(RF*(gm1 + 1/RF)*(1/ro2 + 1/RM + 1/RF)) + 1)) 222.20644611671165
+unilateral Ro 1/((RD*gm1*gm2/(RF*(gm1 + 1/RF)*(1/ro2 + 1/RM + 1/RF)) + 1)*(1/ro2 + 1/RM + 1/RF)) 93.71006673292632
+If channel-length modulation neglected use ro2 -> infinity. Unilateral approximation needs gm1 RD gm2 >> 1/RF.
