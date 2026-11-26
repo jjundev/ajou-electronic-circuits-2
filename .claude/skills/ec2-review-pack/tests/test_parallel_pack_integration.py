@@ -341,6 +341,46 @@ def test_coordinator_finding_reopens_only_that_problem_author(tmp_path):
     assert {t for t in trial.next()['dispatch'] if t.startswith('explain-')} == {'explain-author-p2'}
 
 
+def test_coordinator_finding_on_p2_repairs_and_resolves_without_touching_other_problems(tmp_path):
+    trial = two_problem_coordinator_trial(tmp_path)
+    before = read(trial.run/'run-status.json')['tasks']
+    kept = {tid: before[tid]['attempt'] for tid in ('explain-author-p1', 'explain-blind-p1', 'explain-blind-p2')}
+    first = coordinator_judgment(trial, unresolved=[dict(COORDINATOR_DEFECT, target='P10.02')])
+    row, = read(trial.run/'run-status.json')['findings'].values()
+    assert row['owner_task'] == 'explain-author-p2'
+    fix_coordinator_findings(trial, 'fix-p2')
+    assert {t for t in trial.next()['dispatch'] if t.startswith('explain-')} == {'explain-author-p2'}
+    repaired = trial.worker('explain-author-p2')
+    assert [r['id'] for r in repaired['repair_findings']] == [row['id']]
+    assert set(repaired['previous_outputs']) == {'explanations/p2.html'}
+
+    second = coordinator_judgment(trial, fix_results=['resolved'])
+    pending, = second['recheck_findings']
+    state = read(trial.run/'run-status.json')
+    assert pending['repair_attempt'] == state['tasks']['explain-author-p2']['attempt']
+    assert second['candidate_digest'] != first['candidate_digest']
+    assert state['findings'][row['id']]['status'] == 'resolved'
+    assert state['tasks']['child-coordinator']['status'] == 'done'
+    assert {tid: state['tasks'][tid]['attempt'] for tid in kept} == kept
+    assert all(state['tasks'][tid]['status'] == 'done' for tid in kept)
+
+
+def test_coordinator_finding_owner_mismatch_names_the_problem_author(tmp_path):
+    trial = two_problem_coordinator_trial(tmp_path)
+    defect = dict(COORDINATOR_DEFECT, target='P10.02', owner_task='explain-author-p1')
+    claim = trial.cli('task', 'claim', '--task', 'child-coordinator')['next']
+    brief = read(claim['brief'])
+    task = ('--task', 'child-coordinator', '--attempt', claim['attempt'])
+    trial.cli('task', 'bind', *task, '--agent-id', 'synthetic-coordinator')
+    report = Path(brief['report'])
+    report.write_text(f"## Important\n- [{defect['target']}] [{defect['rule']}] {defect['defect']}\n")
+    submission = Path(brief['run'])/'submission.json'
+    write(submission, dict(status='needs-fix', report=str(report), outputs=[], reviews=[str(report)],
+                           counts=dict(targets=brief['targets']), unresolved=[defect]))
+    rejected = trial.cli('task', 'build-receipt', *task, '--submission', submission, error=True)
+    assert 'child-coordinator findings are owned by explain-author-p2' in rejected['reason']
+
+
 def test_coordinator_finding_cannot_be_owned_by_a_blind_solver(tmp_path):
     trial = coordinator_trial(tmp_path)
     defect = dict(COORDINATOR_DEFECT, owner_task='explain-blind-p1')

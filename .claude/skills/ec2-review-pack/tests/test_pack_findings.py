@@ -769,6 +769,50 @@ def test_latest_machine_observation_cannot_charge_an_unchecked_earlier_candidate
     assert (result['reviewed_owner_attempt'], result['current_outcome']) == (later, 'unresolved')
 
 
+def test_latest_machine_observation_cannot_charge_an_unchecked_earlier_candidate_under_probe_contract(note_run):
+    # Same ledger rule with the probe gate on: the defect is a circuit figure without a caption,
+    # which only precheck's check_circuits reports, so every repair passes `task probe`.
+    from test_pack_graph import cli
+    import subprocess, sys
+    run, fixture = note_run
+    assert flow.load_state(run).get('probe_contract') == 1
+    p = fixture/'sections/s1.html'
+    formal = '<div class="layer formal"><span class="layer-title">정확히 말하면</span>'
+    figure = ('<figure class="circuit"><svg id="fig-circuit-mean" viewBox="0 0 10 10" role="img" '
+              'aria-label="평균 회로"><line x1="0" y1="0" x2="10" y2="10"/></svg></figure>')
+    text = p.read_text()
+    assert text.count(formal) == 2
+    p.write_text(text.replace(formal, formal + figure, 1))
+    caption = '<figcaption>㉠ 평균 회로 (L01 s1)</figcaption></figure>'
+    flow.update_state(run, flow.load_state(run)['revision'], lambda s: dict(s, actions={
+        **s['actions'], 'assemble-note': dict(s['actions']['assemble-note'], status='stale')}))
+    cli('run', '--run', run, '--action', 'assemble-note')
+    def check(tid, expected):
+        subprocess.run([sys.executable, SCRIPTS/'pack_cli.py', 'run', '--run', run, '--action', tid],
+                       capture_output=True, text=True)
+        assert flow.load_state(run)['actions'][tid]['status'] == expected
+    def full():
+        check('structural-precheck', 'done')
+        submit_review(note_run, 'content-review')
+        submit_review(note_run, 'style-audit')
+        check('precheck', 'needs_fix')
+    full()
+    first, = flow.load_state(run)['findings'].values()
+    assert (first['rule'], first['owner_task']) == ('circuit-caption', 'author-s1')
+    attempt = request_and_repair(note_run, [first], 'add-caption',
+        rewrite=lambda text: text.replace('</svg></figure>', '</svg>' + caption, 1)
+                                 .replace('id="s1-mean"', 'id="lost-topic"'))
+    check('structural-precheck', 'needs_fix')
+    structural = [r for r in flow.load_state(run)['findings'].values() if r['review_id'] == 'structural-precheck']
+    later = request_and_repair(note_run, structural, 'restore-title')
+    full()
+    row = flow.load_state(run)['findings'][first['id']]
+    assert row['status'] == 'open' and not row['unsuccessful_attempts']
+    result, = row['repairs']
+    assert (result['attempt'], result['outcome']) == (attempt, 'not_reviewed')
+    assert (result['reviewed_owner_attempt'], result['current_outcome']) == (later, 'unresolved')
+
+
 @pytest.mark.parametrize('collision_id', ['theme-toggle', 'section-marker'])
 def test_cross_source_duplicate_footer_id_routes_one_editable_owner(note_run, collision_id):
     from test_pack_graph import cli
