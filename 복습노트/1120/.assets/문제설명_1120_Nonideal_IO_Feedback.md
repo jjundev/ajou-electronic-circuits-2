@@ -510,10 +510,28 @@ $R_1 + R_2$가 $r_{OP} \parallel r_{ON}$보다 충분히 크지 않을 때 그�
 
 ㉠ 반송 복제의 $R_1\parallel R_2$에는 게이트 전류가 흐르지 않아 $M_2$ 게이트가 교류 접지예요. ㉡ 감지 복제의 $R_1+R_2$는 출력 저항과 병렬이에요.
 
-대칭 차동쌍, 이상적 테일 전류원과 ㉢ 거울 근사($g_{mP}(r_{ON}\parallel r_{OP})\gg1$)를 써요. 출력 단락에서 증폭기로 들어가는 전류를 양으로 잡아요.
+대칭 차동쌍, 이상적 테일 전류원과 ㉢ 거울 근사($g_{mP}(r_{ON}\parallel r_{OP})\gg1$)를 써요.
+
+![출력 단락 상태. 아래를 양으로 잰 전류 변화는 M4에서 양수, M2에서 음수예요. 오른쪽 단락선에서 증폭기로 들어가는 화살표가 출력 단락 전류의 기준 방향이에요.](figures_문제설명_1120_Nonideal_IO_Feedback/explain-fig-5.svg)
+
+*출력 단락 · 양의 입력에서의 소신호 전류 변화*
+
+입력을 올리면 $M_4$는 위에서 더 공급하고 $M_2$는 아래로 덜 끌어가요. 그림에서 두 가지 전류는 아래를 양으로, $i_{\mathrm{sc}}$는 오른쪽 단락선에서 증폭기로 들어가는 쪽을 양으로 잡아요. 대칭 차동쌍에서 $g_{m1}=g_{m2}=g_{mN}$이에요. 남는 전류는 단락선으로 나가므로 $i_{\mathrm{sc}}$는 음수예요.
 
 $$
-G_m\approx-g_{mN}
+\Delta i_4\approx+\frac{g_{mN}v_{in}}{2}
+$$
+
+$$
+\Delta i_2\approx-\frac{g_{mN}v_{in}}{2}
+$$
+
+$$
+i_{\mathrm{sc}}=\Delta i_2-\Delta i_4\approx -g_{m1}v_{in}
+$$
+
+$$
+G_m=\frac{i_{\mathrm{sc}}}{v_{in}}\approx -g_{m1}
 $$
 
 입력을 0으로 두고 출력에서 본 저항이에요.
@@ -523,7 +541,7 @@ R_{\mathrm{out,open}}\approx r_{ON}\parallel r_{OP}\parallel(R_1+R_2)
 $$
 
 $$
-A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}\approx g_{mN}R_{\mathrm{out,open}}
+A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}\approx g_{m1}R_{\mathrm{out,open}}
 $$
 
 $$
