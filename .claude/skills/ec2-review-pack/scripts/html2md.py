@@ -34,7 +34,15 @@ FONT = "Pretendard, -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-s
 LIGHT = {"ink": "#1b2130", "ink-2": "#4a5468", "line": "#dde2ea", "accent": "#2f6fdb", "warn": "#b54708",
          "prof": "#6941c6", "supp": "#067647", "danger": "#d92d20", "surface": "#ffffff"}
 # 회로 위치 표시(㉠㉡㉢)가 있는 그림에만 붙인다.
-LOC_CSS = f"svg .fig-loc {{ fill: {LIGHT['prof']}; }}\n"
+LOC_CSS = (f"svg .fig-loc {{ fill: {LIGHT['prof']}; }}\n"
+           f"svg .fig-loc-ring {{ fill: none; stroke: {LIGHT['prof']}; }}\n")
+# Pretendard에는 원 문자 ㉠–㉭(U+3260–326D)가 없어 독립 SVG가 사용자 글꼴에 기대게 된다.
+# 독립 SVG에서는 원과 Pretendard 자모로 다시 그린다(HTML 노트의 원문 표시는 그대로 둔다).
+LOC_JAMO = dict(zip(map(chr, range(0x3260, 0x326E)), "ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ"))
+# 글자 크기 대비 비율. 원은 흔한 대체 글꼴(Noto Sans KR 600)의 ㉠ 외곽(가로 중심 0.5em,
+# 세로 중심 기준선 위 0.38em, 반지름 0.47em)에 맞추고, 자모는 Pretendard ㄱ 잉크의
+# 세로 중심(자모 글자 크기의 0.356em)을 원 중심에 둔다.
+LOC_CENTER, LOC_RADIUS, LOC_STROKE, LOC_JAMO_SIZE, LOC_JAMO_MID = 0.38, 0.44, 0.07, 0.85, 0.356
 SVG_CSS = f"""
 svg {{ color: {LIGHT['ink']}; font-family: {FONT}; }}
 .fig-ink {{ stroke: {LIGHT['ink']}; fill: none; stroke-width: 2; }}
@@ -181,15 +189,52 @@ def _svg_attrs(attrs):
     return "".join(f' {SVG_ATTR_CASE.get(k, k)}="{html.escape(v)}"' for k, v in attrs.items())
 
 
-def serialize(node):
-    """SVG 하위 트리를 XML로 직렬화한다(SVG 태그·속성 대소문자 복원)."""
+def _float(v):
+    try:
+        return float(v)
+    except (TypeError, ValueError):
+        return None
+
+
+def _n(v):
+    return f"{v:.2f}".rstrip("0").rstrip(".")
+
+
+def loc_mark(node):
+    """원 문자 위치 표시 하나를 원 + Pretendard 자모로 그린 SVG. 해당하지 않으면 None."""
+    if not isinstance(node, Node) or node.tag != "text" or "fig-loc" not in node.classes:
+        return None
+    jamo = LOC_JAMO.get(node.text().strip())
+    x, y = _float(node.attrs.get("x")), _float(node.attrs.get("y"))
+    if jamo is None or x is None or y is None or any(isinstance(c, Node) for c in node.children):
+        return None
+    size = re.search(r"font-size:\s*([0-9.]+)px", node.attrs.get("style", ""))
+    size = float(size.group(1)) if size else _float((node.attrs.get("font-size") or "").removesuffix("px")) or 13.0
+    shift = {"middle": 0.0, "end": -0.5}.get(node.attrs.get("text-anchor", "start"), 0.5)
+    cx, cy, inner = x + shift * size, y - LOC_CENTER * size, LOC_JAMO_SIZE * size
+    group = {k: v for k, v in node.attrs.items() if k == "transform" or k.startswith("data-")}
+    text = {k: v for k, v in node.attrs.items() if k not in group and k not in ("x", "y", "text-anchor", "style")}
+    return (f'<g class="fig-loc-mark"{_svg_attrs(group)}>'
+            f'<circle class="fig-loc-ring" cx="{_n(cx)}" cy="{_n(cy)}" r="{_n(LOC_RADIUS * size)}"'
+            f' style="stroke-width:{_n(LOC_STROKE * size)}px"/>'
+            f'<text{_svg_attrs(text)} x="{_n(cx)}" y="{_n(cy + LOC_JAMO_MID * inner)}" text-anchor="middle"'
+            f' style="font-size:{_n(inner)}px">{jamo}</text></g>')
+
+
+def serialize(node, standalone=False):
+    """SVG 하위 트리를 XML로 직렬화한다(SVG 태그·속성 대소문자 복원).
+
+    standalone: 독립 SVG 파일용. 위치 표시 ㉠은 loc_mark로 바꾼다.
+    """
     if isinstance(node, str):
         return html.escape(node, quote=False)
+    if standalone and (mark := loc_mark(node)):
+        return mark
     tag = SVG_TAG_CASE.get(node.tag, node.tag)
     attrs = _svg_attrs(node.attrs)
     if not node.children and node.tag not in ("text",):
         return f"<{tag}{attrs}/>"
-    return f"<{tag}{attrs}>" + "".join(serialize(c) for c in node.children) + f"</{tag}>"
+    return f"<{tag}{attrs}>" + "".join(serialize(c, standalone) for c in node.children) + f"</{tag}>"
 
 
 # ---------------------------------------------------------------- inline
@@ -399,13 +444,14 @@ def export_svg(svg, ctx, name=None):
         w0, h0 = _num(svg.attrs.get("width")), _num(svg.attrs.get("height"))
         vb = ["0", "0", w0, h0] if w0 and h0 else ["0", "0", "600", "300"]
     w, h = vb[2], vb[3]
-    body = "".join(serialize(c) for c in svg.children)
+    body = "".join(serialize(c, standalone=True) for c in svg.children)
     drop = ("id", "class", "viewbox", "width", "height", "xmlns")
     attrs = {k: v for k, v in svg.attrs.items() if k not in drop}
     uses_xlink = "xlink:" in body or any(k.startswith("xlink:") for k in attrs)
     if uses_xlink and "xmlns:xlink" not in attrs:
         attrs["xmlns:xlink"] = "http://www.w3.org/1999/xlink"
-    svg_text = "".join(n.text() for n in svg.find_all(lambda n: n.tag == "text"))
+    svg_text = "".join(LOC_JAMO.get(n.text().strip(), n.text()) if loc_mark(n) else n.text()
+                       for n in svg.find_all(lambda n: n.tag == "text"))
     css = SVG_CSS + (LOC_CSS if "fig-loc" in body else "")
     doc = (f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="{" ".join(vb)}"'
            f"{_svg_attrs(attrs)}>"
