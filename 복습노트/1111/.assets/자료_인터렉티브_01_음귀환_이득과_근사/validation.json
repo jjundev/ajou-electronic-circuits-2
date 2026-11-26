@@ -1,0 +1,120 @@
+{
+  "source_sha256": "b91e8007dbde68ea62b1978464a795486167e4abe298b1b02b511a0f91af9458",
+  "reference": "Lec6 s10–13 / Razavi §12.2.1–2 / 1111 STT 이득 둔감화·대역폭",
+  "gates": {
+    "machine": "pass",
+    "numeric_independent": "pass",
+    "probe": "pass",
+    "browser": "pass"
+  },
+  "numeric_independent": {
+    "method": "KCL: g_m(v_in-Kv_out)=(1/R+j2πfC)v_out. H=A₀/(1+KA₀+jf/f₀). 검산은 독립 해석식의 복소수 크기를 사용했다.",
+    "checks": 9972,
+    "reports": [
+      {
+        "a0": 100,
+        "k": 0.1,
+        "cap": false,
+        "f": 100,
+        "gain": 9.090909090909092,
+        "errPct": 10.000000000000034
+      },
+      {
+        "a0": 100,
+        "k": 0.1,
+        "cap": false,
+        "f": 11000,
+        "gain": 9.090909090909092,
+        "errPct": 10.000000000000034
+      },
+      {
+        "a0": 100,
+        "k": 0.1,
+        "cap": false,
+        "f": 1000000,
+        "gain": 9.090909090909092,
+        "errPct": 10.000000000000034
+      },
+      {
+        "a0": 100,
+        "k": 0.1,
+        "cap": true,
+        "f": 100,
+        "gain": 9.090533456791587,
+        "errPct": 10.004545360634832
+      },
+      {
+        "a0": 100,
+        "k": 0.1,
+        "cap": true,
+        "f": 11000,
+        "gain": 6.428243465332249,
+        "errPct": 55.56349186104048
+      },
+      {
+        "a0": 100,
+        "k": 0.1,
+        "cap": true,
+        "f": 1000000,
+        "gain": 0.09999395054898215,
+        "errPct": 9900.604981699857
+      }
+    ]
+  },
+  "probe": {
+    "checks": 36,
+    "defect_count": 0,
+    "preview_sha256": "b71e0e4d2ad4d61047ad2dd85ca44c5f7af2d9f347966b6b7ac71fe95dcde878"
+  },
+  "browser": {
+    "name": "Codex in-app browser",
+    "url": "http://127.0.0.1:18111/1/preview.html",
+    "viewports": [
+      {
+        "width": 1440,
+        "height": 900,
+        "theme": "light"
+      },
+      {
+        "width": 1440,
+        "height": 900,
+        "theme": "dark"
+      },
+      {
+        "width": 375,
+        "height": 812,
+        "theme": "light"
+      },
+      {
+        "width": 375,
+        "height": 812,
+        "theme": "dark"
+      }
+    ],
+    "interactions": [
+      "예측 카드에서 9.90 → 3.33 V/V, 1/K는 10.00 V/V",
+      "건너뛰기 전후 그래프 유지, 설명 패널을 닫으면 예측이 중앙으로 이동",
+      "A₀·K·주파수 슬라이더 양 끝, C를 Space/Enter로 제거·복원",
+      "11 kHz의 극점 프리셋에서 6.43 V/V, C를 빼면 모델 내 극점 없음",
+      "모바일 슬라이더와 Escape 서랍 닫기, 정확/근사 곡선과 노드 배지 확인"
+    ],
+    "console_errors": [],
+    "saved": {
+      "url": "http://127.0.0.1:18111/%EC%9D%B8%ED%84%B0%EB%A0%89%ED%8B%B0%EB%B8%8C_01_%EC%9D%8C%EA%B7%80%ED%99%98_%EC%9D%B4%EB%93%9D%EA%B3%BC_%EA%B7%BC%EC%82%AC.html",
+      "browser": "Codex in-app browser",
+      "interaction": "극점 프리셋에서 6.43 V/V, 폐루프 대역폭 11.00 kHz",
+      "console_errors": [],
+      "html_sha256": "8b0c060ac51e1512678588d0dc65f6c141f77381263f2af3901b7cb0345f3d97",
+      "note_new_tabs": [
+        "s1-desensitization",
+        "s2-pole-shift"
+      ]
+    }
+  },
+  "fixes": [
+    "출력 노드 vout과 도선 간격 확대",
+    "고정 dB 축으로 오차 크기 비교",
+    "기본 이득을 120으로 두어 10% 경계에서 시작하지 않도록 조정",
+    "작은 이득과 배지 값을 유효 숫자로 표시"
+  ]
+}

@@ -1,0 +1,238 @@
+{
+  "source_sha256": "99e0d7191c260074522df6bda8455bd269b0f688dc0cf1137663ea904f859d29",
+  "reference": "Lec6 s17–20 / Razavi §12.4 그림 12.21–22 / 1111 STT 출력 전압·전류 감지",
+  "gates": {
+    "machine": "pass",
+    "numeric_independent": "pass",
+    "probe": "pass",
+    "browser": "pass"
+  },
+  "numeric_independent": {
+    "method": "KCL/KVL: 1 kΩ으로 정규화한 R_S=r에서 v_L은 기준 1/2, 병렬 1/(2+1/r), 직렬 1/(2+r), 개방 0 V이다. 직렬 감지 전압은 r v_L, 병렬 감지 전류는 v_L/r mA이다.",
+    "checks": 108,
+    "reports": [
+      {
+        "mode": "voltage",
+        "port": "ref",
+        "r_kohm": 0.01,
+        "load_V": 0.5,
+        "load_mA": 0.5
+      },
+      {
+        "mode": "voltage",
+        "port": "ref",
+        "r_kohm": 1,
+        "load_V": 0.5,
+        "load_mA": 0.5
+      },
+      {
+        "mode": "voltage",
+        "port": "ref",
+        "r_kohm": 100,
+        "load_V": 0.5,
+        "load_mA": 0.5
+      },
+      {
+        "mode": "voltage",
+        "port": "parallel",
+        "r_kohm": 0.01,
+        "load_V": 0.00980392156862745,
+        "load_mA": 0.00980392156862745
+      },
+      {
+        "mode": "voltage",
+        "port": "parallel",
+        "r_kohm": 1,
+        "load_V": 0.3333333333333333,
+        "load_mA": 0.3333333333333333
+      },
+      {
+        "mode": "voltage",
+        "port": "parallel",
+        "r_kohm": 100,
+        "load_V": 0.49751243781094534,
+        "load_mA": 0.49751243781094534
+      },
+      {
+        "mode": "voltage",
+        "port": "series",
+        "r_kohm": 0.01,
+        "load_V": 0.49751243781094534,
+        "load_mA": 0.49751243781094534
+      },
+      {
+        "mode": "voltage",
+        "port": "series",
+        "r_kohm": 1,
+        "load_V": 0.3333333333333333,
+        "load_mA": 0.3333333333333333
+      },
+      {
+        "mode": "voltage",
+        "port": "series",
+        "r_kohm": 100,
+        "load_V": 0.00980392156862745,
+        "load_mA": 0.00980392156862745
+      },
+      {
+        "mode": "voltage",
+        "port": "open",
+        "r_kohm": 0.01,
+        "load_V": 0,
+        "load_mA": 0
+      },
+      {
+        "mode": "voltage",
+        "port": "open",
+        "r_kohm": 1,
+        "load_V": 0,
+        "load_mA": 0
+      },
+      {
+        "mode": "voltage",
+        "port": "open",
+        "r_kohm": 100,
+        "load_V": 0,
+        "load_mA": 0
+      },
+      {
+        "mode": "current",
+        "port": "ref",
+        "r_kohm": 0.01,
+        "load_V": 0.5,
+        "load_mA": 0.5
+      },
+      {
+        "mode": "current",
+        "port": "ref",
+        "r_kohm": 1,
+        "load_V": 0.5,
+        "load_mA": 0.5
+      },
+      {
+        "mode": "current",
+        "port": "ref",
+        "r_kohm": 100,
+        "load_V": 0.5,
+        "load_mA": 0.5
+      },
+      {
+        "mode": "current",
+        "port": "parallel",
+        "r_kohm": 0.01,
+        "load_V": 0.00980392156862745,
+        "load_mA": 0.00980392156862745
+      },
+      {
+        "mode": "current",
+        "port": "parallel",
+        "r_kohm": 1,
+        "load_V": 0.3333333333333333,
+        "load_mA": 0.3333333333333333
+      },
+      {
+        "mode": "current",
+        "port": "parallel",
+        "r_kohm": 100,
+        "load_V": 0.49751243781094534,
+        "load_mA": 0.49751243781094534
+      },
+      {
+        "mode": "current",
+        "port": "series",
+        "r_kohm": 0.01,
+        "load_V": 0.49751243781094534,
+        "load_mA": 0.49751243781094534
+      },
+      {
+        "mode": "current",
+        "port": "series",
+        "r_kohm": 1,
+        "load_V": 0.3333333333333333,
+        "load_mA": 0.3333333333333333
+      },
+      {
+        "mode": "current",
+        "port": "series",
+        "r_kohm": 100,
+        "load_V": 0.00980392156862745,
+        "load_mA": 0.00980392156862745
+      },
+      {
+        "mode": "current",
+        "port": "open",
+        "r_kohm": 0.01,
+        "load_V": 0,
+        "load_mA": 0
+      },
+      {
+        "mode": "current",
+        "port": "open",
+        "r_kohm": 1,
+        "load_V": 0,
+        "load_mA": 0
+      },
+      {
+        "mode": "current",
+        "port": "open",
+        "r_kohm": 100,
+        "load_V": 0,
+        "load_mA": 0
+      }
+    ]
+  },
+  "probe": {
+    "checks": 48,
+    "defect_count": 0,
+    "preview_sha256": "db985069501f13b5e58c1b4a8a872359bd81fa862013ea7f7766bfab08cde68a"
+  },
+  "browser": {
+    "name": "Codex in-app browser",
+    "url": "http://127.0.0.1:18111/2/preview.html",
+    "viewports": [
+      {
+        "width": 1440,
+        "height": 900,
+        "theme": "light"
+      },
+      {
+        "width": 1440,
+        "height": 900,
+        "theme": "dark"
+      },
+      {
+        "width": 375,
+        "height": 812,
+        "theme": "light"
+      },
+      {
+        "width": 375,
+        "height": 812,
+        "theme": "dark"
+      }
+    ],
+    "interactions": [
+      "예측 카드에서 0.333 → 0.498 V, 부하 감소 33.3% → 0.5%",
+      "건너뛰기 전후 결선·수치 유지",
+      "회로 포트 Enter/Space, 메뉴 ArrowDown, Escape, 선택",
+      "직렬 전류계 10 Ω에서 0.498 mA, 병렬 오결선 감지, 개방에서 부하 전류 0.000 mA",
+      "저항 슬라이더 양 끝과 모바일 포트 위치, 배지와 조작 확인"
+    ],
+    "console_errors": [],
+    "saved": {
+      "url": "http://127.0.0.1:18111/%EC%9D%B8%ED%84%B0%EB%A0%89%ED%8B%B0%EB%B8%8C_02_%EC%B6%9C%EB%A0%A5_%EC%A0%84%EC%95%95%EA%B3%BC_%EC%A0%84%EB%A5%98_%EA%B0%90%EC%A7%80.html",
+      "browser": "Codex in-app browser",
+      "interaction": "전류 모드의 10 Ω 직렬 전류계에서 부하 전류 0.498 mA",
+      "console_errors": [],
+      "html_sha256": "ab0480d74316c07bf7cfb7d1565b6263a8c3eb9db62d59e5fae2b0993b26f30e",
+      "note_new_tabs": [
+        "s5-voltage-sense",
+        "s5-current-sense"
+      ]
+    }
+  },
+  "fixes": [
+    "부하 노드 vL과 도선 간격 확대",
+    "노드 배지와 수치 요약을 같은 소수점 셋째 자리까지 표시"
+  ]
+}
