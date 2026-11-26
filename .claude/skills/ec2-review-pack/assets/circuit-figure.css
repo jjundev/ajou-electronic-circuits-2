@@ -1,0 +1,21 @@
+    /* 회로는 참조하는 해설 구간 안에서만 고정 */
+    .layer .circuit svg { max-width: 420px; }
+    @media screen and (min-height: 500px) {
+      .js .layer .circuit { position: sticky; top: 0; z-index: 3; margin: 0 0 var(--s4); padding: var(--s2) 0; background: var(--bg); border-bottom: 1px solid var(--line); }
+      .js .layer .circuit svg { display: block; max-height: min(30dvh, 210px); margin: 0 auto; }
+      .js .layer .circuit figcaption { line-height: 1.4; }
+      /* 회로가 둘인 토픽: 높이를 맞춰 뒤 회로가 앞 회로를 빈틈없이 덮게 한다 */
+      .js .layer:has(> .circuit ~ .circuit) > .circuit svg { height: min(30dvh, 210px); }
+      .js .layer:has(> .circuit ~ .circuit) > .circuit figcaption { min-height: 3.1em; }
+    }
+    /* 넓고 높은 화면에서는 글자가 읽히게 조금 더 크게 */
+    @media screen and (min-width: 900px) and (min-height: 600px) {
+      .js .layer .circuit svg { max-width: 560px; max-height: min(27dvh, 300px); }
+      .js .layer:has(> .circuit ~ .circuit) > .circuit svg { height: min(27dvh, 300px); }
+    }
+    @media screen and (max-width: 560px) {
+      .js .layer .circuit figcaption:not(.circuit-state), .circuit-state .circuit-key { display: none; }
+      .js .layer .circuit:has(.circuit-state) svg { max-height: min(25dvh, 180px); }
+    }
+    svg .fig-loc { fill: var(--prof); }
+    .layer .loc, .circuit .loc { font-weight: 700; color: var(--prof); }

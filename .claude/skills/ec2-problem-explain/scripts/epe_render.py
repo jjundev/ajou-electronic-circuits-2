@@ -19,6 +19,7 @@ from epe_core import make_overlay
 from readability import readability_errors, public_location_errors
 
 ASSETS = Path(__file__).resolve().parents[1] / 'assets'
+CIRCUIT_STYLES = ASSETS.parent.parent / 'ec2-review-pack' / 'assets' / 'circuit-figure.css'
 ALLOWED_EXTERNAL_PREFIXES = (
     'https://cdn.jsdelivr.net/npm/katex@0.16.11/',
     'https://cdn.jsdelivr.net/npm/pretendard@1.3.9/',
@@ -139,10 +140,11 @@ def _add_lab_link(markup, lab, relative):
         f'<a data-ec2-problem-lab href="{quote(relative)}" target="_blank" rel="noopener noreferrer">'
         + html.escape(lab.label) + '</a></p>'
     ).find_all(lambda node: node.tag == 'p'))
-    after_heading = next(i + 1 for i, node in enumerate(section.children)
-                         if getattr(node, 'tag', '') == 'h4')
     position = next((i for i, node in enumerate(section.children)
-                     if getattr(node, 'attrs', {}).get('data-subpart') == lab.subpart), after_heading)
+                     if getattr(node, 'attrs', {}).get('data-subpart') == lab.subpart), None)
+    if position is None:
+        position = next((i + 1 for i, node in enumerate(section.children)
+                         if getattr(node, 'tag', '') == 'h4'), len(section.children))
     section.children.insert(position, link)
     return inner(root)
 
@@ -203,12 +205,13 @@ def build_explanation(pack, fragments, stage: Path, repo: Path, *, lab=None,
         (data_dir / 'fragments').mkdir(exist_ok=True)
         (data_dir / 'fragments' / f'{p.id}.html').write_text(normalized, encoding='utf-8', newline='\n')
     title = f'전자회로2 복습 {pack.range} 문제설명'
-    values = {'PAGE_TITLE': html.escape(title), 'BRAND': '문제풀이 입문 설명', 'DESCRIPTION': '첫 줄부터 완성 답과 검산까지 설명해요.',
+    values = {'PAGE_TITLE': html.escape(title), 'BRAND': '문제풀이 설명', 'DESCRIPTION': '문제의 첫 판단부터 답까지 이어지는 풀이예요.',
               'TOC': '<ul class="toc-list">' + ''.join(toc) + '</ul>', 'TITLE': html.escape(title),
-              'SUBTITLE': '주어진 조건을 읽고, 첫 줄을 쓰고, 이유를 따라가며 답을 확인해요.',
+              'SUBTITLE': '회로와 첫 식을 짚고 핵심 계산으로 답을 구해요.',
               'SECTIONS': '<section id="problems"><h2>문항별 설명</h2>' + ''.join(articles) + '</section>',
               'FOOTER': '원 문제·정리노트·PDF는 보존해요.', 'SCRIPTS': '',
               'RANGE': f'ec2-problem-explain-review-{pack.range}-{pack.slug}'}
+    values['CIRCUIT_STYLES'] = CIRCUIT_STYLES.read_text(encoding='utf-8').rstrip()
     text = (ASSETS / 'note-template.html').read_text(encoding='utf-8')
     for key, value in values.items():
         text = text.replace('{{' + key + '}}', value)

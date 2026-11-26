@@ -15,7 +15,7 @@ from problem import (load_problem, html_fields, problem_figures, solution, Probl
                      textbook_figure_filename, exam_figure_filename)  # noqa: E402
 from assemble import TEXTBOOK_ID_RE, EXAM_ID_RE, KIND_DIR  # noqa: E402
 from html2md import Builder, Node, Ctx, VOID, serialize, convert, check_md  # noqa: E402
-from check_html import math_delimiter_errors  # noqa: E402
+from check_html import check_location_marks, math_delimiter_errors  # noqa: E402
 from learning_style import (StyleSnapshot, StyleAudit, LearningStyleError, read_style,
                             check_style, validate_style_audit, PERSONALIZED_REVIEW_POLICY, STYLE_PATH)  # noqa: E402
 

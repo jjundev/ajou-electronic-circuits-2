@@ -1,91 +1,68 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>NMOS 차동쌍 $M_1$, $M_2$에 테일 전류원 $I_{SS}$, PMOS 전류 거울 부하 $M_3$(다이오드 접속, $M_1$ 쪽)와 $M_4$($M_2$ 쪽)를 쓴 증폭기예요. 입력 $V_{in}$은 $M_1$ 게이트, 출력 $V_{out}$은 $M_2$·$M_4$ 드레인이에요.</p>
-  <p>$V_{out}$과 접지 사이의 $R_1$–$R_2$ 분압기 가운데 노드가 $M_2$ 게이트로 돌아가요. 즉 출력의 일부를 차동쌍의 다른 입력에 걸어요.</p>
-  <p>$r_{ON}$, $r_{OP}$는 NMOS·PMOS의 출력 저항이고 $g_{mN}$은 입력쌍의 트랜스컨덕턴스예요. 조건은 $R_1+R_2$가 $r_{OP}\parallel r_{ON}$보다 충분히 크지 않다는 것이라, 분압기 부하를 넣어야 해요.</p>
-  <p>구할 것은 개루프·폐루프 전압 이득과 폐루프 입력·출력 임피던스예요. 대칭 소자($M_1=M_2$, $M_3=M_4$)와 이상적 테일 전류원을 가정해요.</p>
-</div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p><strong>단서:</strong> 출력 전압을 분압해 $M_2$ 게이트로 되돌리니 전압-전압 귀환(voltage-voltage feedback)이에요. 차동쌍이 $v_{in}-v_F$를 만들어 비교 장치 역할을 해요.</p>
-  <p><strong>전류 거울 부하 차동 증폭기:</strong> $M_1$ 게이트에서 출력까지는 비반전이고 $M_2$ 게이트는 반전 입력이에요. 출력 단락에서 $|G_m|\approx g_{mN}$, 입력 0에서 $R_{out}\approx r_{ON}\parallel r_{OP}$를 알려진 블록으로 써요. 이는 거울이 전류를 그대로 복사한다는 근사($g_{mP}r_{OP}\gg1$)와 이상적 테일에서 성립해요.</p>
-  <p><strong>끊는 법칙:</strong> 출력 쪽 복제는 귀환망 출력 포트($M_2$ 게이트 쪽)를 열어 $V_{out}$에서 $R_1+R_2$를 보고, 입력 쪽 복제는 귀환망 입력 포트($V_{out}$ 쪽)를 단락해 $M_2$ 게이트에서 $R_1\parallel R_2$를 봐요.</p>
-  <p><strong>폐루프 공식:</strong> $K=R_2/(R_1+R_2)$, $A_{closed}=A_{open}/(1+KA_{open})$, 출력 임피던스는 $1/(1+KA_{open})$배예요.</p>
-</div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="귀환망 끊기">
-    <p>$M_2$ 게이트의 $R_1\parallel R_2$는 게이트 전류가 0이라 전압강하가 없어요. 그래서 개루프에서 $M_2$ 게이트는 AC 접지예요. 출력 노드에는 $R_1+R_2$가 병렬로 더해져요.</p>
-    $$R_L=r_{ON}\parallel r_{OP}\parallel(R_1+R_2)$$
-  </div>
-</div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
+<div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit">
+<svg viewBox="0 0 395 219" role="img" aria-label="전류 거울 부하 차동쌍의 개루프 회로. M2 게이트에는 반송 복제의 병렬 저항, 출력에는 감지 복제의 직렬 저항이 붙어요. 이상적 테일 전류원은 개방돼 있어요.">
+<path class="fig-ink" d="M65 15H256M93 15V40M225 15V40M93 64V118M225 64V118M113 52H205M138 52V90H93M25 130H73M245 130H278V148M278 184V195M93 142V167H225V142M158 167V199.5M225 98H351M327 98V128M327 164V183"/>
+<path class="fig-ink" d="M93 40H107M93 64H107M107 36V68M113 39V65M99 35L104 40L99 45"/>
+<path class="fig-ink" d="M225 40H211M225 64H211M211 36V68M205 39V65M219 35L214 40L219 45"/>
+<path class="fig-ink" d="M93 118H79M93 142H79M79 114V146M73 117V143"/><path class="fig-ink" d="M85 137L90 142L85 147"/>
+<path class="fig-ink" d="M225 118H239M225 142H239M239 114V146M245 117V143"/><path class="fig-ink" d="M233 137L228 142L233 147"/>
+<path class="fig-ink" d="M278 148l-7 3 14 6 -14 6 14 6 -14 6 14 6 -7 3"/>
+<path class="fig-ink" d="M327 128l-7 3 14 6 -14 6 14 6 -14 6 14 6 -7 3"/>
+<path class="fig-ink" d="M268 195h20M272 200h12M275 205h6"/>
+<path class="fig-ink" d="M317 183h20M321 188h12M324 193h6"/>
+<circle class="fig-dot" data-node-color="blue" cx="25" cy="130" r="3.5"/>
+<circle class="fig-dot" data-node-color="blue" cx="138" cy="52" r="3.5"/>
+<circle class="fig-dot" data-node-color="blue" cx="93" cy="90" r="3.5"/>
+<circle class="fig-dot" data-node-color="red" cx="225" cy="98" r="3.5"/>
+<circle class="fig-dot" data-node-color="red" cx="327" cy="98" r="3.5"/>
+<circle class="fig-dot" data-node-color="red" cx="351" cy="98" r="3.5"/>
+<circle class="fig-dot" data-node-color="blue" cx="158" cy="167" r="3.5"/>
+<circle class="fig-ink" cx="158" cy="203" r="3.5"/>
+<text class="fig-text fig-math" x="269" y="19" text-anchor="start">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text>
+<text class="fig-text fig-math" x="25" y="115" text-anchor="middle" data-node-color="blue">V<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
+<text class="fig-text fig-math" x="350" y="84" text-anchor="middle" data-node-color="red">V<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+<text class="fig-text fig-math" x="66" y="56" text-anchor="end">M<tspan baseline-shift="sub" font-size="78%">3</tspan></text>
+<text class="fig-text fig-math" x="241" y="56" text-anchor="start">M<tspan baseline-shift="sub" font-size="78%">4</tspan></text>
+<text class="fig-text fig-math" x="107" y="134" text-anchor="start">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+<text class="fig-text fig-math" x="211" y="134" text-anchor="end">M<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+<text class="fig-text fig-math" x="263" y="170" text-anchor="end">R<tspan baseline-shift="sub" font-size="78%">1</tspan> ‖ R<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+<text class="fig-text fig-math" x="341" y="151" text-anchor="start">R<tspan baseline-shift="sub" font-size="78%">1</tspan> + R<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+<text class="fig-loc" font-size="17" text-anchor="middle" x="296" y="179">㉠</text>
+<text class="fig-loc" font-size="17" text-anchor="middle" x="310" y="117">㉡</text>
+<text class="fig-loc" font-size="17" text-anchor="middle" x="159" y="41">㉢</text>
+</svg>
+<figcaption class="circuit-state">두 복제를 저항으로 합친 차동쌍 개루프 회로</figcaption>
+</figure>
   <div data-subpart="main">
-    <p>$i_{out}$은 출력 노드에서 증폭기($M_2$·$M_4$) 쪽으로 흘러 들어가는 방향을 양으로 잡아 $A_v=-G_mR_{out}$을 써요.</p>
+    <h4>전류 거울 출력에 분압기 부하가 붙어요</h4>
+    <div data-answer-step="두 복제의 부하">
+      <p><span class="loc">㉠</span> 반송 복제의 $R_1\parallel R_2$에는 게이트 전류가 흐르지 않아 $M_2$ 게이트가 교류 접지예요. <span class="loc">㉡</span> 감지 복제의 $R_1+R_2$는 출력 저항과 병렬이에요.</p>
+    </div>
     <div data-answer-step="개루프 이득" data-gain-route="gm-rout">
       <div data-gain-stage="gm">
-        <p>출력을 단락하고 $v_{in}$을 걸면 $M_1$ 전류가 $g_{mN}v_{in}/2$만큼 늘고 $M_2$ 전류는 같은 양만큼 줄어요. $M_4$는 $M_1$의 증가분을 복사해 출력으로 밀어 넣으니, 출력으로 밀려드는 전류는 $g_{mN}v_{in}$이에요.</p>
+        <p>대칭 차동쌍, 이상적 테일 전류원과 <span class="loc">㉢</span> 거울 근사($g_{mP}(r_{ON}\parallel r_{OP})\gg1$)를 써요. 출력 단락에서 증폭기로 들어가는 전류를 양으로 잡아요.</p>
         $$G_m\approx-g_{mN}$$
       </div>
       <div data-gain-stage="rout">
-        <p>입력을 0으로 두면 출력에서 아래로 $r_{ON}$, 위로 $r_{OP}$ 쪽 블록이 보이고, 출력 쪽 복제가 병렬로 붙어요.</p>
-        $$R_{out}\approx r_{ON}\parallel r_{OP}\parallel(R_1+R_2)$$
+        <p>입력을 0으로 두고 출력에서 본 저항이에요.</p>
+        $$R_L=r_{ON}\parallel r_{OP}\parallel(R_1+R_2)$$
+        $$R_{\mathrm{out,open}}\approx R_L$$
       </div>
       <div data-gain-stage="gain">
-        $$\begin{aligned}A_{open}&=-G_mR_{out}\\&\approx g_{mN}\left[r_{ON}\parallel r_{OP}\parallel(R_1+R_2)\right]\end{aligned}$$
+        $$A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}\approx g_{mN}R_L$$
       </div>
     </div>
-    <p>음수 $G_m$은 $M_1$ 입력에서 출력까지 비반전이라는 뜻이에요. 출력이 오르면 $M_2$ 게이트도 올라 출력을 끌어내리므로 부궤환이에요.</p>
-    <div data-answer-step="개루프 임피던스와 귀환율">
-      $$R_{in,open}=\infty$$
-      $$R_{out,open}\approx r_{ON}\parallel r_{OP}\parallel(R_1+R_2)$$
+    <div data-answer-step="귀환율">
       $$K=\frac{R_2}{R_1+R_2}$$
     </div>
-    <div data-answer-step="폐루프 변수">
-      $$\begin{aligned}A_{closed}&=\frac{A_{open}}{1+KA_{open}}\\&\approx\frac{g_{mN}R_L}{1+\dfrac{R_2}{R_1+R_2}g_{mN}R_L}\end{aligned}$$
-      $$R_{in,closed}=\infty$$
-      $$R_{out,closed}\approx\frac{R_L}{1+\dfrac{R_2}{R_1+R_2}g_{mN}R_L}$$
-      <p>여기서 $R_L=r_{ON}\parallel r_{OP}\parallel(R_1+R_2)$예요.</p>
-    </div>
-  </div>
-</div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
+    <h4>폐루프 답</h4>
     <div data-answer-final="">
-      <p><strong>$A_{open}\approx g_{mN}R_L$, $R_{in,open}=\infty$, $R_{out,open}\approx R_L$, $K=R_2/(R_1+R_2)$예요.</strong></p>
-      <p><strong>$A_{closed}\approx\dfrac{g_{mN}R_L}{1+g_{mN}R_LR_2/(R_1+R_2)}$, $R_{in,closed}=\infty$, $R_{out,closed}\approx\dfrac{R_L}{1+g_{mN}R_LR_2/(R_1+R_2)}$예요.</strong> (대칭·이상적 테일·거울 근사)</p>
-      <p>여기서 $R_L=r_{ON}\parallel r_{OP}\parallel(R_1+R_2)$예요.</p>
+      $$A_{\mathrm{closed}}\approx\frac{g_{mN}R_L}{1+Kg_{mN}R_L}$$
+      $$R_{\mathrm{in,open}}=R_{\mathrm{in,closed}}=\infty$$
+      $$R_{\mathrm{out,closed}}\approx\frac{R_L}{1+Kg_{mN}R_L}$$
     </div>
-    <p>극한: $R_1+R_2\to\infty$이면 $R_L\to r_{ON}\parallel r_{OP}$로 부하 효과가 없는 결과로 돌아가요.</p>
-    <p>극한: 루프 이득이 크면 $A_{closed}\to(R_1+R_2)/R_2=1/K$예요.</p>
-    <p>특수값: $R_2\to\infty$이면 $K\to1$이라 폐루프 이득이 1에 가까운 버퍼가 돼요.</p>
-    <p>단위: $g_{mN}$[S]×$R_L$[Ω]이라 무차원이에요.</p>
   </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <ul>
-    <li>$M_2$ 게이트에 붙는 $R_1\parallel R_2$를 테일이나 소스 저항처럼 넣지 않아요. 게이트 전류가 0이라 영향이 없어요.</li>
-    <li>출력 쪽 복제 $R_1+R_2$를 빼고 $r_{ON}\parallel r_{OP}$만 쓰면 이 문항의 조건을 무시한 셈이에요.</li>
-    <li>전류 거울 덕분에 출력으로 밀려드는 전류는 $g_{mN}v_{in}/2$가 아니라 $g_{mN}v_{in}$이에요. 반쪽 값만 쓰면 이득이 절반이 돼요.</li>
-  </ul>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol>
-    <li>$R_1+R_2\gg r_{ON}\parallel r_{OP}$이면 개루프 이득과 루프 이득은 각각 어떻게 단순해지나요?</li>
-    <li>전류 거울 대신 $M_2$ 쪽에만 저항 부하를 두고 그 드레인에서 출력을 취하면 $|G_m|$은 $g_{mN}$의 몇 배인가요?</li>
-    <li>$R_1=0$(출력을 $M_2$ 게이트에 직접 연결)이면 $K$와 폐루프 이득은 얼마인가요?</li>
-  </ol>
 </div>
 <div class="sum" hidden>
-  <p class="sum-lead">출력 쪽 복제 $R_1+R_2$가 $r_{ON}\parallel r_{OP}$와 병렬로 붙는 것이 부하 효과의 전부예요.</p>
-  <div class="summary-group">
-    <h4>핵심 식</h4>
-    <p>$A_{open}\approx g_{mN}[r_{ON}\parallel r_{OP}\parallel(R_1+R_2)]$예요.</p>
-    <p>$K=R_2/(R_1+R_2)$, $A_{closed}=A_{open}/(1+KA_{open})$예요.</p>
-    <p>$R_{in}=\infty$이고 $R_{out}$은 $1/(1+KA_{open})$배예요.</p>
-  </div>
+  <p class="sum-lead">감지 복제 $R_1+R_2$가 차동쌍의 출력 부하에 더해져요.</p><p>$R_L=r_{ON}\parallel r_{OP}\parallel(R_1+R_2)$예요.</p>
 </div>

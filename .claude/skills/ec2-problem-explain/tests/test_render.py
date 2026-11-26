@@ -50,6 +50,49 @@ class RenderTest(unittest.TestCase):
         self.assertIn('ec2-problem-explain-review-1007-Diff_Amp', result.html.read_text(encoding='utf-8'))
         self.assertIn('전자회로2 복습 1007 문제설명', result.html.read_text(encoding='utf-8'))
 
+    def test_circuit_uses_shared_styles_and_checks_location_in_its_section(self):
+        pack, fragments, _ = self.build(ids=('E9.05',))
+        circuit = (
+            '<figure class="figure circuit"><svg viewBox="0 0 100 100">'
+            '<text class="fig-text fig-loc" x="10" y="20">㉠</text></svg>'
+            '<figcaption>입력 회로</figcaption></figure>'
+        )
+        marked_start = '<h4>종이에 쓸 첫 줄</h4>' + circuit + '<p><span class="loc">㉠</span> 입력</p>'
+        body = fragments['p1'].replace('<h4>종이에 쓸 첫 줄</h4>', marked_start)
+        result = build_explanation(pack, {'p1': body}, self.tmp / 'marked', self.repo)
+        self.assertIn('.js .layer .circuit { position: sticky', result.html.read_text())
+        self.assertEqual(check_artifacts(pack, result), [])
+        misplaced = body.replace('<span class="loc">㉠</span> 입력', '입력').replace(
+            '<h4>이렇게 풀어요</h4>', '<h4>이렇게 풀어요</h4><p><span class="loc">㉠</span> 입력</p>')
+        with self.assertRaisesRegex(ExplainError, 'loc-not-in-circuit'):
+            build_explanation(pack, {'p1': misplaced}, self.tmp / 'misplaced', self.repo)
+
+    def test_concise_body_exports_its_visible_answer_and_rejects_unmapped_marks(self):
+        pack, _, _ = self.build(ids=('E9.05',))
+        body = (
+            '<div class="layer formal circuit-explanation" data-explanation="solve">'
+            '<figure class="figure circuit"><svg viewBox="0 0 100 100">'
+            '<text class="fig-loc" x="10" y="20">㉠</text></svg>'
+            '<figcaption class="circuit-state">개루프 회로</figcaption></figure>'
+            '<div data-subpart="main"><h4>첫 식과 답</h4>'
+            '<p data-answer-step="입력"><span class="loc">㉠</span> 입력을 접지해요.</p>'
+            '<p data-answer-final="">$$R=2$$</p></div></div>'
+            '<div class="sum" hidden><p>입력을 접지해요.</p></div>'
+        )
+        result = build_explanation(pack, {'p1': body}, self.tmp / 'concise', self.repo)
+        self.assertEqual(check_artifacts(pack, result), [])
+        overlay_path = result.manifest.with_name('answer-overlay.json')
+        overlay = json.loads(overlay_path.read_text())
+        self.assertIn('$$R=2$$', json.dumps(overlay))
+        self.assertNotIn('㉠', json.dumps(overlay, ensure_ascii=False))
+        self.assertIn('개루프 회로', result.md.read_text())
+        with self.assertRaisesRegex(ExplainError, 'loc-not-in-circuit'):
+            build_explanation(pack, {'p1': body.replace('㉠</span>', '㉡</span>')},
+                              self.tmp / 'bad-mark', self.repo)
+        with self.assertRaisesRegex(ExplainError, 'final 정확히 하나'):
+            build_explanation(pack, {'p1': body.replace(' data-answer-final=""', '')},
+                              self.tmp / 'no-final', self.repo)
+
     def test_figures_copied_into_owned_dir(self):
         pack, _, result = self.build()
         document = parse(result.html.read_text(encoding='utf-8'))

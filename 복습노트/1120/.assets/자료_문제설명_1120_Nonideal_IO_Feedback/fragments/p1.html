@@ -1,135 +1,32 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>입력 $V_{in}$은 $M_1$의 소스로 들어가고, 출력 $V_{out}$은 $M_1$의 드레인이에요. 드레인과 접지 사이에 $R_1$, $R_2$가 직렬로 있고, 그 가운데 노드가 $M_1$의 게이트에 붙어 있어요.</p>
-  <p>즉 출력 전압의 일부가 게이트로 되돌아가는 회로예요. 문제는 이것을 귀환 시스템으로 읽으라고 해요.</p>
-  <p>$\lambda=0$이라 $M_1$의 $r_O$는 없어요. $R_1+R_2\gg R_D$는 분압기가 출력 노드에서 빼 가는 전류가 $R_D$ 전류보다 아주 작다는 뜻이에요. 그래서 개루프 계산에서 분압기의 부하를 무시해도 돼요. 이것이 제목의 "이상적 해석"이에요.</p>
-  <p>구할 것은 (a) 네 성분, (b) 개루프·폐루프 전압 이득, (c) 개루프·폐루프 입력·출력 임피던스예요. 소자 값이 없으니 답은 $g_m$, $R_D$, $R_1$, $R_2$의 식이에요.</p>
-</div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p><strong>단서:</strong> "출력 전압을 분압해 게이트로 되돌린다"는 그림이에요. 출력 전압을 감지하고 입력 쪽에 전압으로 되돌리니 전압-전압 귀환(voltage-voltage feedback, series-shunt)을 떠올려요.</p>
-  <p><strong>귀환 공식:</strong> 순방향 이득을 $A_1$, 귀환율(feedback factor)을 $K=X_F/Y$라 하면 폐루프 이득은 식 (12.2)예요.</p>
-  $$\frac{Y}{X}=\frac{A_1}{1+KA_1}$$
-  <p><strong>임피던스 규칙:</strong> 출력에서 전압을 감지하면 출력 임피던스는 $1+KA_1$로 나뉘어 작아져요. 입력에서 전압끼리 비교하면 입력 임피던스는 $1+KA_1$배 커져요.</p>
-  <p><strong>공통 게이트(common-gate, CG) 블록:</strong> $\lambda=0$이면 소스에서 본 저항은 $1/g_m$이고, 드레인 쪽에서 본 트랜지스터 저항은 무한대예요. 소스 입력에서 드레인 출력까지는 비반전이에요.</p>
-  <p><strong>선택 이유:</strong> $M_1$의 드레인 전류는 $i_D=g_m(v_G-v_S)$로 게이트와 소스 전압의 <em>차이</em>에 반응해요. 그래서 따로 빼기 회로가 없어도 $M_1$이 비교 장치 역할을 해요.</p>
-</div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="귀환 구조 판단" data-answer-subpart="a">
-    <p>게이트로 돌아오는 전압을 $v_F$라 쓰고, $M_1$ 전류를 두 단자 전압의 차로 적어요.</p>
-    $$v_F=\frac{R_2}{R_1+R_2}v_{out}$$
-    $$i_D=g_m(v_F-v_{in})$$
-    $$v_{out}=-i_DR_D=g_mR_D(v_{in}-v_F)$$
-  </div>
-  <p>마지막 식이 "오차 $v_{in}-v_F$에 순방향 이득 $g_mR_D$를 곱한다"는 귀환 시스템의 모양이에요. 여기서 네 성분을 바로 읽을 수 있어요.</p>
-</div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
-  <div data-subpart="a">
-    <h4>(a) 귀환 시스템의 네 성분</h4>
-    <div data-answer-step="네 성분">
-      <ul>
-        <li><strong>순방향(피드포워드) 시스템:</strong> $M_1$과 $R_D$로 된 CG 단이에요.</li>
-        <li><strong>출력 감지 장치:</strong> 출력 노드에 병렬로 붙은 $R_1$–$R_2$ 분압기가 $V_{out}$을 전압으로 감지해요.</li>
-        <li><strong>귀환 회로망:</strong> 같은 $R_1$–$R_2$ 분압기가 $V_F=KV_{out}$을 게이트로 되돌려요. $K=R_2/(R_1+R_2)$예요.</li>
-        <li><strong>비교 장치:</strong> $M_1$ 자신이에요. $i_D=g_m(v_F-v_{in})$이라 오차 $v_{in}-v_F$에 반응해요.</li>
-      </ul>
-    </div>
-    <p>부궤환인지도 확인해요. $V_{out}$이 오르면 $V_F$가 오르고, $i_D$가 커져 $R_D$ 전압강하가 커지므로 $V_{out}$이 다시 내려가요.</p>
-  </div>
-  <div data-subpart="b">
-    <h4>(b) 개루프와 폐루프 전압 이득</h4>
-    <p>개루프는 귀환을 끊은 순방향 CG 단이에요. 게이트를 AC 접지로 두고 $G_m$ → $R_{out}$ → 이득 순서로 구해요. $i_{out}$은 출력 노드에서 $M_1$ 드레인으로 흘러 들어가는 방향을 양으로 잡아요. 그러면 $v_{out}=-i_{out}R_{out}$이라 $A_v=-G_mR_{out}$이에요.</p>
-    <div data-answer-step="개루프 이득" data-gain-route="gm-rout">
-      <div data-gain-stage="gm">
-        <p>출력을 접지에 단락하면 $i_{out}=i_D=g_m(0-v_{in})$이에요.</p>
-        $$G_m=\frac{i_{out}}{v_{in}}=-g_m$$
-      </div>
+<div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit"><svg id="p1-fig-circuit-s2-cg-feedback" viewBox="0 0 300 226" role="img" aria-label="소스로 입력 Vin을 받는 M1의 드레인이 RD를 거쳐 VDD에 닿고 출력 Vout이 돼요. 출력과 접지 사이에 R1과 R2가 직렬이고 그 가운데 노드가 M1 게이트에 연결돼요."><g data-symbol="rail"><path class="fig-ink" d="M64 18H96"/></g><text class="fig-text fig-math" text-anchor="start" x="108" y="23">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text><path class="fig-ink" d="M80 18L80 28 M80 64L80 124 M80 84L250.5 84 M80 148L80 188L35.5 188 M100 136L190 136 M190 84L190 92 M190 128L190 148 M190 184L190 196"/><g data-symbol="part"><path class="fig-ink" d="M80 28l-7 3 14 6 -14 6 14 6 -14 6 14 6 -7 3"/></g><g data-symbol="part"><path class="fig-ink" d="M190 92l-7 3 14 6 -14 6 14 6 -14 6 14 6 -7 3"/></g><g data-symbol="part"><path class="fig-ink" d="M190 148l-7 3 14 6 -14 6 14 6 -14 6 14 6 -7 3"/></g><g data-symbol="part"><path class="fig-ink" d="M180 196h20M184 201h12M187 206h6"/></g><path class="fig-ink" d="M80 124H94M80 148H94"/><g data-symbol="mos"><path class="fig-ink" d="M94 120V152M100 123V149M88 143L83 148L88 153"/></g><circle class="fig-dot" data-node-color="red" cx="80" cy="84" r="3.5"/><circle class="fig-dot" data-node-color="red" cx="190" cy="84" r="3.5"/><circle class="fig-dot" data-node-color="blue" cx="190" cy="136" r="3.5"/><circle class="fig-ink" cx="254" cy="84" r="3.5"/><circle class="fig-ink" cx="32" cy="188" r="3.5"/><text class="fig-text fig-math" text-anchor="end" x="64" y="51">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text><text class="fig-text fig-math" text-anchor="end" x="66" y="141">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" text-anchor="start" x="206" y="115">R<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" text-anchor="start" x="206" y="171">R<tspan baseline-shift="sub" font-size="78%">2</tspan></text><text class="fig-text fig-math" text-anchor="middle" x="254" y="66" data-node-color="red">V<tspan baseline-shift="sub" font-size="78%">out</tspan></text><text class="fig-text fig-math" text-anchor="middle" x="32" y="170">V<tspan baseline-shift="sub" font-size="78%">in</tspan></text><text class="fig-text fig-math" text-anchor="middle" x="150" y="118">V<tspan baseline-shift="sub" font-size="78%">F</tspan></text><text class="fig-loc" text-anchor="middle" x="96" y="184" font-size="17">㉠</text><text class="fig-loc" text-anchor="middle" x="64" y="104" font-size="17">㉡</text><text class="fig-loc" text-anchor="middle" x="170" y="158" font-size="17">㉢</text></svg><figcaption class="circuit-state">분배기 귀환이 연결된 원래 회로<span class="circuit-key"> · <span class="loc">㉠</span> $M_1$ 소스(입력) · <span class="loc">㉡</span> 드레인(출력) · <span class="loc">㉢</span> 분배기 가운데 노드와 게이트 (강의노트 s53 왼쪽)</span></figcaption></figure>
+<div data-subpart="a"><h4>(a) 귀환의 네 성분</h4>
+<div data-answer-step="게이트와 소스의 전압 차"><p>$R_1$–$R_2$가 <span class="loc">㉡</span> 출력 전압을 나눠 <span class="loc">㉢</span> 게이트에 돌려줘요. <span class="loc">㉠</span> 소스에 $v_{in}$이 들어와요.</p>
+    $$K=\frac{R_2}{R_1+R_2}$$
+    $$v_F=Kv_{out}$$
+    $$i_D=g_m(v_F-v_{in})$$</div>
+<div data-answer-final=""><p>순방향은 $M_1$과 $R_D$로 이루어진 CG 단, 출력 감지와 귀환은 $R_1$–$R_2$ 분압기, 전압 비교는 $M_1$이 맡아요.</p></div></div>
+<div data-subpart="b"><h4>(b) 전압 이득</h4>
+<div data-answer-step="출력 단락과 개루프 부하"><p>개루프에서 게이트를 AC 접지하고 출력을 단락해요. 드레인으로 들어가는 전류가 양의 방향이에요.</p>
+    <div data-gain-route="gm-rout">
+      <div data-gain-stage="gm">$$G_m=-g_m$$</div>
       <div data-gain-stage="rout">
-        <p>입력을 0으로 두면 소스가 AC 접지예요. $\lambda=0$이라 드레인 쪽은 무한대이고, $R_1+R_2\gg R_D$라 분압기 부하는 무시해요.</p>
-        $$R_{out}\approx R_D$$
+        <p>입력을 0으로 둬요. $\lambda=0$이고 $R_1+R_2\gg R_D$이므로 출력 부하는 $R_D$로 근사해요.</p>
+        $$R_{out,\mathrm{open}}\approx R_D$$
       </div>
-      <div data-gain-stage="gain">
-        $$A_1=-G_mR_{out}\approx g_mR_D$$
-      </div>
-    </div>
-    <p>음수 $G_m$은 이 단이 비반전이라는 뜻이고, 그래서 $A_1$이 양수예요.</p>
-    <div data-answer-step="폐루프 이득">
-      <p>귀환율을 쓰고 식 (12.2)에 넣어요.</p>
-      $$K=\frac{R_2}{R_1+R_2}$$
-      $$\begin{aligned}A_{closed}&=\frac{A_1}{1+KA_1}\\&\approx\frac{g_mR_D}{1+\dfrac{R_2}{R_1+R_2}g_mR_D}\end{aligned}$$
-    </div>
-  </div>
-  <div data-subpart="c">
-    <h4>(c) 개루프와 폐루프 I/O 임피던스</h4>
-    <div data-answer-step="개루프 임피던스">
-      <p>개루프 입력은 CG의 소스예요. 게이트가 AC 접지이고 $\lambda=0$이에요.</p>
-      $$R_{in,open}=\frac1{g_m}$$
-      <p>개루프 출력은 (b)의 $R_{out}$과 같아요.</p>
-      $$R_{out,open}\approx R_D$$
-    </div>
-    <div data-answer-step="폐루프 임피던스">
-      <p>입력은 전압끼리 비교하니 $1+KA_1$배, 출력은 전압을 감지하니 $1+KA_1$로 나눠요.</p>
-      $$R_{in,closed}\approx\frac1{g_m}\left(1+\frac{R_2}{R_1+R_2}g_mR_D\right)$$
-      $$R_{out,closed}\approx\frac{R_D}{1+\dfrac{R_2}{R_1+R_2}g_mR_D}$$
-    </div>
-  </div>
+      <div data-gain-stage="gain">$$A_{\mathrm{open}}=-G_mR_{out,\mathrm{open}}\approx g_mR_D$$</div>
+    </div></div>
+<div data-answer-final="">$$A_{\mathrm{closed}}\approx\frac{A_{\mathrm{open}}}{1+KA_{\mathrm{open}}}$$</div></div>
+<div data-subpart="c"><h4>(c) 입출력 임피던스</h4>
+<div data-answer-step="전압 직렬 비교와 병렬 감지"><p>출력 개루프 저항은 (b)의 값이에요. 전압을 직렬로 비교하는 입력은 $1+KA_{\mathrm{open}}$배, 전압을 병렬로 감지하는 출력은 그 값으로 나눠요.</p></div>
+<div data-answer-final="">$$R_{in,\mathrm{open}}=\frac{1}{g_m}$$
+    $$R_{in,\mathrm{closed}}\approx R_{in,\mathrm{open}}(1+KA_{\mathrm{open}})$$
+    $$R_{out,\mathrm{closed}}\approx\frac{R_{out,\mathrm{open}}}{1+KA_{\mathrm{open}}}$$</div></div>
 </div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="a">
-    <h4>(a) 검산</h4>
-    <div data-answer-final="">
-      <p><strong>순방향 시스템은 CG 단($M_1$, $R_D$), 감지 장치와 귀환 회로망은 $R_1$–$R_2$ 분압기($K=R_2/(R_1+R_2)$), 비교 장치는 $M_1$이에요.</strong></p>
-    </div>
-    <p>$v_{out}=g_mR_D(v_{in}-v_F)$에서 $v_F=0$이면 순방향 단만 남고, $v_F$가 커지면 출력이 줄어요. 비교가 뺄셈으로 이루어지니 부궤환과 맞아요.</p>
-  </div>
-  <div data-subpart="b">
-    <h4>(b) 검산</h4>
-    <div data-answer-final="">
-      <p><strong>$A_1\approx g_mR_D$이고 $A_{closed}\approx\dfrac{g_mR_D}{1+g_mR_DR_2/(R_1+R_2)}$예요.</strong> ($\lambda=0$, $R_1+R_2\gg R_D$)</p>
-    </div>
-    <p>극한: $g_mR_D\to\infty$이면 $A_{closed}\to(R_1+R_2)/R_2=1/K$예요. 이상적인 귀환 증폭기의 이득이 $1/K$라는 것과 맞아요.</p>
-    <p>극한: $R_2\to0$이면 $K\to0$이고 $A_{closed}\to g_mR_D$로 개루프 이득이 돌아와요.</p>
-    <p>단위: $g_m$[S]×$R_D$[Ω]이라 무차원이에요.</p>
-  </div>
-  <div data-subpart="c">
-    <h4>(c) 검산</h4>
-    <div data-answer-final="">
-      <p><strong>$R_{in,open}=1/g_m$, $R_{out,open}\approx R_D$이고, $R_{in,closed}\approx\dfrac1{g_m}\left(1+\dfrac{g_mR_DR_2}{R_1+R_2}\right)$, $R_{out,closed}\approx\dfrac{R_D}{1+g_mR_DR_2/(R_1+R_2)}$예요.</strong> ($\lambda=0$, $R_1+R_2\gg R_D$)</p>
-    </div>
-    <p>직접 확인: 소스에 시험 전압 $v_x$를 걸면 $i_D=g_m(Kv_{out}-v_x)$, $v_{out}=-i_DR_D$예요. 정리하면 소스로 들어가는 전류가 $g_mv_x/(1+g_mKR_D)$라서 위 $R_{in,closed}$와 같아요.</p>
-    <p>극한: $g_m\to0$이면 $R_{out,closed}\to R_D$로 귀환이 사라진 값이 돼요.</p>
-  </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <ul>
-    <li>비교 장치를 회로에서 따로 찾다가 못 찾는 경우가 많아요. 게이트와 소스의 전압 차에 반응하는 $M_1$ 자신이 비교 장치예요.</li>
-    <li>CG 단은 비반전이라 $A_1=+g_mR_D$예요. CS 단처럼 음수로 쓰면 $1+KA_1$의 부호가 바뀌어 부궤환 판단이 틀어져요.</li>
-    <li>입력에서 전압을 비교하므로 입력 임피던스는 커져요. 출력 쪽과 같이 줄어든다고 쓰지 않아요.</li>
-    <li>$R_1+R_2\gg R_D$는 분압기 부하를 빼는 근거예요. 이 가정이 깨지면 다음 문항처럼 $R_D\parallel(R_1+R_2)$로 바꿔야 해요.</li>
-  </ul>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol>
-    <li>$R_1+R_2$가 $R_D$와 비슷하다면 개루프 출력 저항은 무엇으로 바뀌나요?</li>
-    <li>$R_2=0$이면 귀환율과 폐루프 이득은 각각 얼마인가요?</li>
-    <li>$Kg_mR_D\gg1$이면 폐루프 이득은 어떤 저항비에 가까워지나요?</li>
-  </ol>
-</div>
-<div class="sum" hidden>
-  <p class="sum-lead">분압기가 출력 전압을 감지해 게이트로 되돌리는 전압-전압 귀환이에요.</p>
+<div class="sum" hidden="">
+  <p class="sum-lead">출력 분압 전압과 소스 입력을 $M_1$이 비교해요.</p>
   <div class="summary-group">
-    <h4>네 성분</h4>
-    <p>순방향은 CG 단, 감지·귀환은 $R_1$–$R_2$, 비교는 $M_1$이에요.</p>
-  </div>
-  <div class="summary-group">
-    <h4>핵심 식</h4>
-    <p>$A_1\approx g_mR_D$이고 $K=R_2/(R_1+R_2)$예요.</p>
-    <p>$A_{closed}=A_1/(1+KA_1)$예요.</p>
-    <p>$R_{in}$은 $1+KA_1$배로 커지고 $R_{out}$은 $1+KA_1$로 나뉘어요.</p>
+    <h4>개루프에서 남는 부하</h4>
+    <p>$R_1+R_2\gg R_D$이므로 $R_{out,\mathrm{open}}\approx R_D$예요.</p>
   </div>
 </div>

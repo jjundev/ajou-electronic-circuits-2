@@ -1,22 +1,9 @@
-=== p2 (E12.26) SymPy Verification ===
-R_sense (open port 2) = R_1 + R_2
-R_return (short port 1) = R_1*R_2/(R_1 + R_2)
-A_v_open     = R_D*g_m1*(R_1 + R_2)/(R_1 + R_2 + R_D)
-R_in_open    = 1/g_m1
-R_out_open   = R_D*(R_1 + R_2)/(R_1 + R_2 + R_D)
-K            = R_2/(R_1 + R_2)
-Loop gain T  = R_2*R_D*g_m1/(R_1 + R_2 + R_D)
-A_v_closed   = R_D*g_m1*(R_1 + R_2)/(R_1 + R_2*R_D*g_m1 + R_2 + R_D)
-R_in_closed  = (R_1 + R_2*R_D*g_m1 + R_2 + R_D)/(g_m1*(R_1 + R_2 + R_D)) = R_2*R_D/(R_1 + R_2 + R_D) + 1/g_m1
-R_out_closed = R_D*(R_1 + R_2)/(R_1 + R_2*R_D*g_m1 + R_2 + R_D)
-Exact KCL vs Feedback Method difference == 0: ASSERT PASSED for all quantities
-
-Numerical check (g_m1=10mS, R_D=2k, R_1=3k, R_2=1k):
-  A_v_open       = 13.3333
-  K              = 0.250000
-  T              = 3.33333
-  A_v_closed     = 3.07692
-  R_in_open      = 100.000
-  R_in_closed    = 433.333
-  R_out_open     = 1333.33
-  R_out_closed   = 307.692
+A0 exact = (g_m + g_o)/(G_L + g_o) ; lambda=0 = g_m/G_L
+Rin0 exact = (G_L + g_o)/(G_L*(g_m + g_o)) ; lambda=0 = 1/g_m
+Rout0 exact = 1/(G_L + g_o) ; lambda=0 = 1/G_L
+Acl exact = (g_m + g_o)/(G_L + K*g_m + g_o) ; lambda=0 = g_m/(G_L + K*g_m)
+Rincl exact = (G_L + K*g_m + g_o)/(G_L*(g_m + g_o)) ; lambda=0 = (G_L + K*g_m)/(G_L*g_m)
+Routcl exact = 1/(G_L + K*g_m + g_o) ; lambda=0 = 1/(G_L + K*g_m)
+K = R_2/(R_1+R_2), G_L = 1/R_D+1/(R_1+R_2).
+Gate current is zero, so the divider input loading does not alter G_m.
+Finite g_o adds an intrinsic drain-to-source term to the closed denominator.

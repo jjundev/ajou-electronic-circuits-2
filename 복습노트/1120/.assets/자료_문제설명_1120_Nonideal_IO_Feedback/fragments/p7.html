@@ -1,104 +1,34 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>입력은 전류 $I_{in}$이고 $M_1$의 소스 노드로 들어가요. $M_1$은 게이트가 $V_b$인 공통 게이트(CG) 단이고 드레인 X에 $R_{D1}$이 달려 있어요. X가 $M_2$(소스 접지 CS 단)의 게이트를 구동하고, $M_2$ 드레인($R_{D2}$ 부하)이 출력 $V_{out}$이에요.</p>
-  <p>$R_F$가 $V_{out}$과 $M_1$ 소스 노드 사이에 걸려 있어요. 출력 전압에 비례하는 전류 $I_F$가 입력 노드로 되돌아가요.</p>
-  <p>$R_F$가 매우 크지 않으니 귀환망이 입력·출력 양쪽에 주는 부하를 넣어야 해요. $\lambda=0$으로 봐요.</p>
-  <p>구할 것은 개루프 트랜스임피던스 $R_0=V_{out}/I_{in}$, 개루프 입력·출력 임피던스, 귀환율 $K$, 폐루프 이득과 폐루프 입력·출력 임피던스예요.</p>
-</div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p><strong>단서:</strong> $R_F$가 출력 노드에 병렬로 붙어 전압을 감지하고, 입력 노드에 병렬로 붙어 전류를 되돌려요. 전압-전류 귀환(voltage-current feedback, shunt-shunt)이고, 이득은 트랜스임피던스(transimpedance)예요.</p>
-  <p><strong>끊는 법칙(Fig 12.53(b)):</strong> 감지 복제의 출력 포트와 반송 복제의 입력 포트를 모두 <em>단락</em>해요. 그래서 출력 노드에도, 입력 노드에도 각각 $R_F$가 접지로 붙어요.</p>
-  <p><strong>귀환율(Fig 12.54(b)):</strong> 교과서 Fig 12.54(b)에서는 $K=I_2/V_1$로 쓰지만, 여기서는 원 회로 기호 그대로 $V_{out}$ 쪽에 전압을 걸고 단락한 입력 노드에서 빠져나가는 귀환 전류 $I_F$를 재어 $K=I_F/V_{out}=-1/R_F$로 바로 써요.</p>
-  <p><strong>폐루프 공식:</strong> 출력에서 전압 감지, 입력에서 전류 비교라 이득과 두 임피던스가 모두 개루프의 $\frac{1}{1+KR_0}$배가 돼요.</p>
-  $$\frac{V_{out}}{I_{in}}=\frac{R_0}{1+KR_0}$$
-  <p><strong>CG 블록과 테브난 변환:</strong> $\lambda=0$이면 CG 소스에서 본 저항은 $1/g_{m1}$이에요. 입력의 전류원 $I_{in}$과 병렬 저항 $R_F$를 노턴→테브난 변환으로 $V_{in}=I_{in}R_F$와 직렬 저항 $R_F$로 바꾸면 직렬 소스 저항이 붙은 CG 전압이득 블록 $\frac{V_X}{V_{in}}=\frac{R_{D1}}{R_F+1/g_{m1}}$을 바로 곱해 풀 수 있어요.</p>
-</div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="귀환망 끊기와 테브난 변환">
-    <p>부하를 넣은 개루프 회로에서는 $M_1$ 소스 노드에 $R_F$가 접지로, $V_{out}$에도 $R_F$가 접지로 붙어요. 입력 노드의 $I_{in}\parallel R_F$를 노턴→테브난 변환으로 바꿔요.</p>
-    $$V_{in}=I_{in}R_F$$
-  </div>
-  <p>이제 직렬 저항 $R_F$를 통해 전압원 $V_{in}$이 CG 단 $M_1$의 소스를 구동하는 익숙한 전압 입력 회로가 돼요.</p>
-</div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
+<div class="layer formal circuit-explanation" data-explanation="solve">
+  <figure class="figure circuit">
+  <svg id="fig-circuit-s4-rf-duplicates" viewBox="0 0 340 254" role="img" aria-label="M1은 소스로 Iin을 받는 공통 게이트이고 드레인 X가 RD1과 M2 게이트에 연결돼요. M2 드레인은 RD2가 달린 출력이에요. RF 사본 하나는 M1 소스에서 접지로, 다른 하나는 출력에서 접지로 연결돼요."><g data-symbol="rail"><path class="fig-ink" d="M70 20H260"/></g><text class="fig-text fig-math" text-anchor="start" x="272" y="25">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text><path class="fig-ink" d="M100 20L100 32 M100 68L100 124 M100 96L206 96 M100 148L100 186L50 186L50 198 M50 226L50 236 M120 136L148 136 M226 20L226 24 M226 60L226 84 M226 72L300.5 72 M226 108L226 120 M100 186L140 186 M176 186L194 186L194 200 M276 72L276 142 M276 178L276 200"/><g data-symbol="part"><path class="fig-ink" d="M100 32l-7 3 14 6 -14 6 14 6 -14 6 14 6 -7 3"/></g><g data-symbol="part"><path class="fig-ink" d="M40 236h20M44 241h12M47 246h6"/></g><g data-symbol="part"><path class="fig-ink" d="M226 24l-7 3 14 6 -14 6 14 6 -14 6 14 6 -7 3"/></g><g data-symbol="part"><path class="fig-ink" d="M216 120h20M220 125h12M223 130h6"/></g><g data-symbol="part"><path class="fig-ink" d="M140 186l3 -7 6 14 6 -14 6 14 6 -14 6 14 3 -7"/></g><g data-symbol="part"><path class="fig-ink" d="M184 200h20M188 205h12M191 210h6"/></g><g data-symbol="part"><path class="fig-ink" d="M276 142l-7 3 14 6 -14 6 14 6 -14 6 14 6 -7 3"/></g><g data-symbol="part"><path class="fig-ink" d="M266 200h20M270 205h12M273 210h6"/></g><path class="fig-ink" d="M100 124H114M100 148H114"/><g data-symbol="mos"><path class="fig-ink" d="M114 120V152M120 123V149M108 143L103 148L108 153"/></g><path class="fig-ink" d="M226 84H212M226 108H212"/><g data-symbol="mos"><path class="fig-ink" d="M212 80V112M206 83V109M218 103L223 108L218 113"/></g><g data-symbol="source"><circle class="fig-ink" cx="50" cy="212" r="14"/><path class="fig-ink" d="M50 220V204m-5 6l5 -6 5 6"/></g><circle class="fig-dot" data-node-color="red" cx="100" cy="96" r="3.5"/><circle class="fig-dot" data-node-color="blue" cx="100" cy="186" r="3.5"/><circle class="fig-dot" data-node-color="blue" cx="226" cy="72" r="3.5"/><circle class="fig-dot" data-node-color="blue" cx="276" cy="72" r="3.5"/><circle class="fig-ink" cx="304" cy="72" r="3.5"/><circle class="fig-ink" cx="151.5" cy="136" r="3.5"/><text class="fig-text fig-math" text-anchor="end" x="84" y="55">R<tspan baseline-shift="sub" font-size="78%">D1</tspan></text><text class="fig-text fig-math" text-anchor="start" x="242" y="47">R<tspan baseline-shift="sub" font-size="78%">D2</tspan></text><text class="fig-text fig-math" text-anchor="end" x="84" y="91" data-node-color="red">X</text><text class="fig-text fig-math" text-anchor="end" x="84" y="141">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" text-anchor="start" x="244" y="101">M<tspan baseline-shift="sub" font-size="78%">2</tspan></text><text class="fig-text fig-math" text-anchor="start" x="164" y="141">V<tspan baseline-shift="sub" font-size="78%">b</tspan></text><text class="fig-text fig-math" text-anchor="middle" x="302" y="54">V<tspan baseline-shift="sub" font-size="78%">out</tspan></text><text class="fig-text fig-math" text-anchor="end" x="28" y="217">I<tspan baseline-shift="sub" font-size="78%">in</tspan></text><text class="fig-text fig-math" text-anchor="middle" x="158" y="170">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text><text class="fig-text fig-math" text-anchor="start" x="294" y="165">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text><text class="fig-loc" font-size="17" text-anchor="middle" x="158" y="214">㉠</text><text class="fig-loc" font-size="17" text-anchor="middle" x="252" y="166">㉡</text><text class="fig-loc" font-size="17" text-anchor="middle" x="128" y="118">㉢</text><text class="fig-loc" font-size="17" text-anchor="middle" x="210" y="74">㉣</text></svg>
+    <figcaption class="circuit-state">입력·출력에 단락 복제를 붙인 개루프 회로</figcaption>
+  </figure>
   <div data-subpart="main">
-    <div data-answer-step="첫 단">
-      <p>직렬 소스 저항 $R_F$가 붙은 CG 단의 전압이득 $\frac{V_X}{V_{in}}=\frac{R_{D1}}{R_F+1/g_{m1}}$에 $R_F$를 곱해 $V_X/I_{in}$을 바로 얻어요.</p>
-      $$\frac{V_X}{I_{in}}=R_F\cdot\frac{V_X}{V_{in}}=\frac{R_FR_{D1}}{R_F+1/g_{m1}}=\frac{g_{m1}R_F}{1+g_{m1}R_F}R_{D1}$$
+    <div data-answer-step="두 복제와 CG 단">
+      <p>두 복제의 반대 포트를 단락해 <span class="loc">㉠</span> 입력과 <span class="loc">㉡</span> 출력에 각각 $R_F$를 접지로 붙여요. $\lambda=0$으로 두어요.</p>
+      <p>$I_{in}\parallel R_F$를 테브난 등가 $I_{in}R_F$와 직렬 $R_F$로 바꾸면 <span class="loc">㉢</span> $X$ 전압은 CG 이득으로 구해요.</p>
+      $$\frac{v_X}{I_{in}}=R_F\frac{R_{D1}}{R_F+1/g_{m1}}$$
     </div>
-    <p>둘째 단은 X를 입력으로 하는 CS 단이에요. $i_{out}$은 출력 노드에서 $M_2$ 드레인으로 흘러 들어가는 방향을 양으로 잡아요.</p>
-    <div data-answer-step="둘째 단 전압 이득" data-gain-route="gm-rout">
-      <div data-gain-stage="gm">
-        $$G_{m2}=\frac{i_{out}}{v_X}=g_{m2}$$
-      </div>
-      <div data-gain-stage="rout">
-        <p>$\lambda=0$이라 $M_2$ 드레인 쪽은 무한대이고, $R_{D2}$와 출력 쪽 복제 $R_F$가 병렬이에요.</p>
-        $$R_{out2}=R_{D2}\parallel R_F$$
-      </div>
-      <div data-gain-stage="gain">
-        $$\frac{v_{out}}{v_X}=-G_{m2}R_{out2}=-g_{m2}(R_{D2}\parallel R_F)$$
-      </div>
+    <div data-answer-step="CS 단" data-gain-route="gm-rout">
+      <p><span class="loc">㉣</span> CS 단의 출력 전류는 드레인으로 들어가는 방향이 양이에요.</p>
+      <div data-gain-stage="gm">$$G_{m2}=g_{m2}$$</div>
+      <div data-gain-stage="rout">$$R_{out,\mathrm{open}}=R_{D2}\parallel R_F$$</div>
+      <div data-gain-stage="gain">$$\frac{v_{out}}{v_X}=-G_{m2}R_{out,\mathrm{open}}$$</div>
     </div>
-    <div data-answer-step="개루프 변수">
-      $$\begin{aligned}R_0&=\frac{V_{out}}{I_{in}}=\frac{V_X}{I_{in}}\cdot\frac{V_{out}}{V_X}\\&=-\frac{g_{m1}R_F}{1+g_{m1}R_F}R_{D1}g_{m2}(R_{D2}\parallel R_F)\end{aligned}$$
-      $$R_{in,open}=R_F\parallel\frac1{g_{m1}}=\frac{R_F}{1+g_{m1}R_F}$$
-      $$R_{out,open}=R_{D2}\parallel R_F$$
+    <div data-answer-step="귀환 전류의 방향">
+      <p>입력을 단락하면 $v_{out}\gt0$에서 $R_F$ 전류가 입력 노드로 들어와요. 그 노드에서 빠져나가는 방향을 $I_F$의 양으로 잡아요.</p>
     </div>
-    <div data-answer-step="귀환율과 루프 이득">
-      <p>$V_{out}$을 출력 쪽에 걸고 입력 쪽을 단락하면 $R_F$에 $V_{out}/R_F$가 흘러 입력 노드로 들어가요. 입력 노드에서 빠져나가는 방향($I_F$)이 양이라 부호가 음이에요.</p>
-      $$K=\frac{I_F}{V_{out}}=-\frac1{R_F}$$
-      $$KR_0=\frac{g_{m1}R_{D1}g_{m2}(R_{D2}\parallel R_F)}{1+g_{m1}R_F}$$
-      <p>$R_0\lt0$, $K\lt0$이라 루프 이득이 양수이므로 부궤환이에요.</p>
-    </div>
-    <div data-answer-step="폐루프 변수">
-      $$\frac{V_{out}}{I_{in}}=\frac{R_0}{1+KR_0}$$
-      $$R_{in,closed}=\frac{R_F/(1+g_{m1}R_F)}{1+KR_0}$$
-      $$R_{out,closed}=\frac{R_{D2}\parallel R_F}{1+KR_0}$$
-    </div>
-  </div>
-</div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
     <div data-answer-final="">
-      <p><strong>$R_0=-\dfrac{g_{m1}R_F}{1+g_{m1}R_F}R_{D1}g_{m2}(R_{D2}\parallel R_F)$, $R_{in,open}=\dfrac{R_F}{1+g_{m1}R_F}$, $R_{out,open}=R_{D2}\parallel R_F$, $K=-1/R_F$예요.</strong></p>
-      <p><strong>$V_{out}/I_{in}=R_0/(1+KR_0)$, $R_{in,closed}=R_{in,open}/(1+KR_0)$, $R_{out,closed}=R_{out,open}/(1+KR_0)$이고 $KR_0=\dfrac{g_{m1}R_{D1}g_{m2}(R_{D2}\parallel R_F)}{1+g_{m1}R_F}$예요.</strong> ($\lambda=0$)</p>
+      $$R_0=\frac{v_X}{I_{in}}\frac{v_{out}}{v_X}$$
+      $$R_{in,\mathrm{open}}=R_F\parallel\frac{1}{g_{m1}}$$
+      $$K=\frac{I_F}{v_{out}}=-\frac{1}{R_F}$$
+      <p>$KR_0\gt0$인 부궤환이에요. 복제법에서 다음 폐루프 값이 나와요.</p>
+      $$\frac{v_{out}}{I_{in}}\approx\frac{R_0}{1+KR_0}$$
+      $$R_{in,\mathrm{closed}}\approx\frac{R_{in,\mathrm{open}}}{1+KR_0}$$
+      $$R_{out,\mathrm{closed}}\approx\frac{R_{out,\mathrm{open}}}{1+KR_0}$$
     </div>
-    <p>극한: $KR_0\gg1$이면 $V_{out}/I_{in}\to1/K=-R_F$예요. 입력 노드가 거의 고정되어 $I_{in}$이 모두 $R_F$로 흐르면 $V_{out}=-I_{in}R_F$이므로 맞아요.</p>
-    <p>극한: $R_F\to\infty$이면 $K\to0$이고 $R_0\to-R_{D1}g_{m2}R_{D2}$, $R_{in,open}\to1/g_{m1}$로 귀환 없는 CG+CS 값이 돼요.</p>
-    <p>단위: $R_0$는 $R_{D1}$[Ω]×$g_{m2}R_{D2}$[무차원]이라 Ω이고, $KR_0$는 무차원이에요.</p>
   </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <ul>
-    <li>전압-전류 귀환에서는 두 복제를 모두 단락해요. 전압-전압 귀환처럼 출력 쪽을 개방하면 $R_F$가 출력 부하에서 빠져 버려요.</li>
-    <li>$K$의 부호를 빼먹으면 $1+KR_0$가 $1-|KR_0|$로 바뀌어 정궤환처럼 계산돼요. $R_0\lt0$와 $K=-1/R_F$를 함께 써요.</li>
-    <li>입력 노드의 $R_F$를 잊으면 $I_{in}$이 모두 $M_1$로 간다고 계산하게 돼요. 테브난 변환 뒤 직렬 저항 $R_F$가 분모 $R_F+1/g_{m1}$에 들어가야 해요.</li>
-    <li>전압-전류 귀환은 입력·출력 임피던스를 모두 줄여요. 입력을 키운다고 쓰지 않아요.</li>
-  </ul>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol>
-    <li>$g_{m1}R_F\gg1$이면 1단 인자 $g_{m1}R_F/(1+g_{m1}R_F)$와 $R_{in,open}$은 각각 무엇으로 단순해지나요?</li>
-    <li>$M_2$를 PMOS CS 단으로 바꾸어도 루프 이득의 부호는 그대로인가요?</li>
-    <li>$\lambda\gt0$이면 $R_{out,open}$에 어떤 저항이 더해지나요?</li>
-  </ol>
 </div>
 <div class="sum" hidden>
-  <p class="sum-lead">$R_F$가 출력 전압을 감지해 입력 노드로 전류를 되돌리는 전압-전류 귀환이에요.</p>
-  <div class="summary-group">
-    <h4>끊는 법칙</h4>
-    <p>두 복제를 모두 단락해 입력 노드와 출력 노드에 각각 $R_F$를 접지로 붙여요.</p>
-    <p>1단은 $I_{in}\parallel R_F$ 노턴→테브난 변환으로 CG 블록에 곱해요.</p>
-  </div>
-  <div class="summary-group">
-    <h4>핵심 식</h4>
-    <p>$R_0=-\dfrac{g_{m1}R_F}{1+g_{m1}R_F}R_{D1}g_{m2}(R_{D2}\parallel R_F)$예요.</p>
-    <p>$K=I_F/V_{out}=-1/R_F$이고 이득·$R_{in}$·$R_{out}$이 모두 $1+KR_0$로 나뉘어요.</p>
-  </div>
+  <p class="sum-lead">CG–CS의 $R_0$와 $K=-1/R_F$가 모두 음수여서 $1+KR_0\gt1$이에요.</p>
 </div>

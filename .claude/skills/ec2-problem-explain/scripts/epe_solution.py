@@ -17,6 +17,7 @@ SECTION_TITLES = {
 }
 SELECTION = ('data-answer-step', 'data-answer-final', 'data-answer-subpart')
 LEGACY = ('data-personalization', 'data-core-subpart', 'data-solution-core', 'data-core-label')
+CONCISE_CLASS = 'circuit-explanation'
 
 
 def _body(node):
@@ -31,7 +32,9 @@ def solution_nodes(problem, markup, *, fragment_only=True):
     root = parse(markup)
     errors, steps, answers = [], [], []
     sections = list(root.find_all(lambda n: 'data-explanation' in n.attrs))
-    if [n.attrs['data-explanation'] for n in sections] != list(SECTION_TITLES):
+    concise = any(CONCISE_CLASS in section.classes for section in sections)
+    expected_sections = ['solve'] if concise else list(SECTION_TITLES)
+    if [n.attrs['data-explanation'] for n in sections] != expected_sections:
         errors.append('통합 일곱 설명 구역과 원문 순서가 필요해요')
     if any(list(root.find_all(lambda n: k in n.attrs)) for k in LEGACY):
         errors.append('새 저작에는 별도 핵심 풀이 route/구형 표지를 넣지 마세요')
@@ -46,8 +49,9 @@ def solution_nodes(problem, markup, *, fragment_only=True):
     for section in sections:
         key = section.attrs['data-explanation']
         headings = [n for n in section.children if isinstance(n, Node) and n.tag == 'h4']
-        if (section.parent is not root or key not in SECTION_TITLES or len(headings) != 1
-                or headings[0].text().strip() != SECTION_TITLES.get(key) or not _body(section)):
+        if section.parent is not root or not _body(section):
+            errors.append(f'{key}: 내용이 있는 직계 구역과 확정한 h4 제목이 필요해요')
+        elif not concise and (len(headings) != 1 or headings[0].text().strip() != SECTION_TITLES.get(key)):
             errors.append(f'{key}: 내용이 있는 직계 구역과 확정한 h4 제목이 필요해요')
         items = list(section.find_all(lambda n: 'data-subpart' in n.attrs))
         if key in ('solve', 'verify'):
@@ -73,7 +77,7 @@ def solution_nodes(problem, markup, *, fragment_only=True):
         if key == 'start':
             subpart = explicit or (problem.subparts[0] if len(problem.subparts) == 1 else None)
         if (step == final or not _body(node) or key not in ('start', 'solve', 'verify')
-                or (final and key != 'verify') or (step and key == 'verify')
+                or (final and key != ('solve' if concise else 'verify')) or (step and key == 'verify')
                 or subpart not in problem.subparts or (explicit is not None and explicit != subpart)
                 or any(any(k in n.attrs for k in SELECTION[:2]) for n in ancestors)):
             errors.append('답안 선택은 start/solve의 비중첩 step 또는 verify의 final이며 소문항 범위가 명확해야 해요')
@@ -97,9 +101,20 @@ def extract_solution(problem, markup):
     steps, answers, errors = solution_nodes(problem, markup, fragment_only=False)
     if errors or not problem.workbook_id.strip():
         raise ExplainError(f'{problem.id}: ' + ' / '.join(errors or ['workbook ID 누락']))
+
+    def answer_markup(node):
+        section = node.parent
+        while section is not None and 'data-explanation' not in section.attrs:
+            section = section.parent
+        if section is not None and CONCISE_CLASS in section.classes:
+            # Answer sheets use node and component names without HTML location marks.
+            for mark in list(node.find_all(lambda n: n.tag == 'span' and 'loc' in n.classes)):
+                mark.parent.children.remove(mark)
+        return inner(node) if node.tag == 'div' else outer(node)
+
     return {'id': problem.workbook_id, 'explanation_id': problem.id,
             'subparts': list(problem.subparts),
-            'steps': [{'subpart': s, 'label': label, 'html': inner(n) if n.tag == 'div' else outer(n)}
+            'steps': [{'subpart': s, 'label': label, 'html': answer_markup(n)}
                       for s in problem.subparts for part, label, n in steps if part == s],
-            'answers': [{'subpart': s, 'html': inner(n) if n.tag == 'div' else outer(n)}
+            'answers': [{'subpart': s, 'html': answer_markup(n)}
                         for s in problem.subparts for part, n in answers if part == s]}

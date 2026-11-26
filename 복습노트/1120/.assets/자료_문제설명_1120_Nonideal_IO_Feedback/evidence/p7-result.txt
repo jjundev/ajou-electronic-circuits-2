@@ -1,19 +1,14 @@
-=== p7: E12.29 (Fig. 12.58) ===
-V_X/I_in (direct KCL)      = R_D1*R_F*g_m1/(R_F*g_m1 + 1)
-V_X/I_in (Norton->Thevenin)= R_D1*R_F*g_m1/(R_F*g_m1 + 1)
-diff(KCL - Thevenin)       = 0
-R_0 (open-loop transimp)   = -R_D1*R_D2*R_F**2*g_m1*g_m2/(R_D2*R_F*g_m1 + R_D2 + R_F**2*g_m1 + R_F)
-R_in_open                  = R_F/(R_F*g_m1 + 1)
-R_out_open                 = R_D2*R_F/(R_D2 + R_F)
-K                          = -1/R_F
-KR_0 (loop gain)           = R_D1*R_D2*R_F*g_m1*g_m2/(R_D2*R_F*g_m1 + R_D2 + R_F**2*g_m1 + R_F)
-1 + KR_0                   = (R_D1*R_D2*R_F*g_m1*g_m2 + R_D2*R_F*g_m1 + R_D2 + R_F**2*g_m1 + R_F)/((R_D2 + R_F)*(R_F*g_m1 + 1))
-R_closed (feedback)        = -R_D1*R_D2*R_F**2*g_m1*g_m2/(R_D1*R_D2*R_F*g_m1*g_m2 + R_D2*R_F*g_m1 + R_D2 + R_F**2*g_m1 + R_F)
-R_in_closed (feedback)     = R_F*(R_D2 + R_F)/(R_D1*R_D2*R_F*g_m1*g_m2 + R_D2*R_F*g_m1 + R_D2 + R_F**2*g_m1 + R_F)
-R_out_closed (feedback)    = R_D2*R_F*(R_F*g_m1 + 1)/(R_D1*R_D2*R_F*g_m1*g_m2 + R_D2*R_F*g_m1 + R_D2 + R_F**2*g_m1 + R_F)
-Compact textbook form assertions: ALL PASSED (diff == 0)
---- Exact unbroken KCL comparison ---
-R_closed_exact             = R_D2*(-R_D1*R_F*g_m1*g_m2 + 1)/(R_D1*R_D2*g_m1*g_m2 + R_D2*g_m1 + R_F*g_m1 + 1)
-R_in_exact                 = (R_D2 + R_F)/(R_D1*R_D2*g_m1*g_m2 + R_D2*g_m1 + R_F*g_m1 + 1)
-R_out_exact                = R_D2*(R_F*g_m1 + 1)/(R_D1*R_D2*g_m1*g_m2 + R_D2*g_m1 + R_F*g_m1 + 1)
-Numeric check (gm1=1m,gm2=2m,RD1=RD2=5k,RF=10k): KR_0=3.0303, R_closed_fb=-7518.80, R_closed_exact=-7500.00
+Loaded replica: R0 = -h/(Yin*Yout) ; Rin0 = 1/Yin ; Rout0 = 1/Yout
+Return convention: i_in+i_f, i_f=f*vo at vi=0; f>0; T=-f*R0.
+Equivalent subtracting convention: i_in-K*vo with K=-f.
+Loaded replica closed: R=R0/(1+T); Rin=Rin0/(1+T); Rout=Rout0/(1+T).
+Exact closed physical circuit: replace h by h-f in the above expressions.
+Exact D = Yin*Yout+f*(h-f); R=(f-h)/D; Rin=Yout/D; Rout=Yin/D.
+Replica drops reciprocal forward feedthrough; R comparison requires |f/h| << 1.
+Close to D=0, also check that the determinant change f**2 is negligible.
+f=1/R_F; Yin=g_input+1/R_F; Yout=g_output+1/R_F.
+g_input = (gm1 + go1)/(RD1*go1 + 1)
+g_output = (R_aux*go2 + 1)/R_aux
+h = RD1*gm2*(gm1 + go1)/(RD1*go1 + 1)
+R_aux=RD2. For lambda=0: g_input=gm1; g_output=1/RD2; h=gm1*gm2*RD1.
+The MOS CS path is inverting, T>0. In the full circuit h>f is required for inversion.

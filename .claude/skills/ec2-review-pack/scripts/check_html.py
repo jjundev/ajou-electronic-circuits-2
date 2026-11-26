@@ -398,12 +398,18 @@ def check_circuits(source: str, m: dict) -> list[Problem]:
                 if "$$" in kid.text():
                     out.append(Problem("circuit-after-math", tid, "회로는 첫 $$ 식보다 앞에 둔다"))
                     break
-        marks = {n.text().strip() for f in figures for n in f.find_all(lambda n: "fig-loc" in n.classes)}
-        refs = {n.text().strip() for n in art.find_all(lambda n: "loc" in n.classes)
-                if not any(a in figures for a in _ancestors(n, art))}
-        out += [Problem("loc-not-in-circuit", tid, f"{x}: 회로에 없는 위치") for x in sorted(refs - marks)]
-        out += [Problem("loc-unused", tid, f"{x}: 글에서 짚지 않은 위치") for x in sorted(marks - refs)]
+        out.extend(check_location_marks(art, figures, tid))
     return out
+
+
+def check_location_marks(scope: Node, figures: list[Node], scope_id: str) -> list[Problem]:
+    marks = {n.text().strip() for f in figures for n in f.find_all(lambda n: "fig-loc" in n.classes)}
+    refs = {n.text().strip() for n in scope.find_all(lambda n: "loc" in n.classes)
+            if not any(a in figures for a in _ancestors(n, scope))}
+    return [
+        *(Problem("loc-not-in-circuit", scope_id, f"{x}: 회로에 없는 위치") for x in sorted(refs - marks)),
+        *(Problem("loc-unused", scope_id, f"{x}: 글에서 짚지 않은 위치") for x in sorted(marks - refs)),
+    ]
 
 
 def _ancestors(node: Node, stop: Node):

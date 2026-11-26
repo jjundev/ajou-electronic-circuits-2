@@ -1,30 +1,10 @@
-=== p4 (P12.42) SymPy Verification ===
-R_sense = R_1 + R_2
-R_return = R_1*R_2/(R_1 + R_2)
-
---- Two-Port Feedback Method (exact beta & 1<<beta canonical) ---
-A_v_open            = R_C*beta*g_m*(R_1 + R_2)**2/((R_1 + R_2 + R_C)*(R_1*R_2*g_m + R_1*beta + R_2*beta))
-R_in_open (exact b) = (R_1*R_2*g_m + R_1*beta + R_2*beta)/(g_m*(R_1 + R_2)*(beta + 1))
-R_in_open (1<<b)    = R_1*R_2/(beta*(R_1 + R_2)) + 1/g_m
-R_out_open          = R_C*(R_1 + R_2)/(R_1 + R_2 + R_C)
-K                   = R_2/(R_1 + R_2)
-Loop gain T         = R_2*R_C*beta*g_m*(R_1 + R_2)/((R_1 + R_2 + R_C)*(R_1*R_2*g_m + R_1*beta + R_2*beta))
-A_v_closed (fb)     = R_C*g_m*(R_1 + R_2)/((R_1 + R_2 + R_C)*(R_1*R_2*g_m/(beta*(R_1 + R_2)) + R_2*R_C*g_m/(R_1 + R_2 + R_C) + 1))
-R_in_closed (fb, b) = (R_1**2*R_2*g_m + R_1**2*beta + R_1*R_2**2*g_m + R_1*R_2*R_C*beta*g_m + R_1*R_2*R_C*g_m + 2*R_1*R_2*beta + R_1*R_C*beta + R_2**2*R_C*beta*g_m + R_2**2*beta + R_2*R_C*beta)/(g_m*(R_1 + R_2)*(beta + 1)*(R_1 + R_2 + R_C))
-R_in_closed (1<<b)  = R_1*R_2/(beta*(R_1 + R_2)) + R_2*R_C/(R_1 + R_2 + R_C) + 1/g_m
-R_out_closed (fb)   = R_C*(R_1 + R_2)/((R_2*R_C*g_m/((R_1*R_2*g_m/(beta*(R_1 + R_2)) + 1)*(R_1 + R_2 + R_C)) + 1)*(R_1 + R_2 + R_C))
-Canonical forms match SymPy solve: ASSERT PASSED
-
---- Exact Full Small-Signal KCL (including i_b feedforward through R1) ---
-A_v_closed (exact)  = R_C*g_m*(R_1*beta + R_2*beta + R_2)/(R_1*R_2*g_m + R_1*beta + R_2*R_C*beta*g_m + R_2*R_C*g_m + R_2*beta + R_C*beta)
-R_in_closed (exact) = (R_1*R_2*g_m + R_1*beta + R_2*R_C*beta*g_m + R_2*R_C*g_m + R_2*beta + R_C*beta)/(g_m*(beta + 1)*(R_1 + R_2 + R_C))
-R_out_closed(exact) = R_C*(R_1*R_2*g_m + R_1*beta + R_2*beta)/(R_1*R_2*g_m + R_1*beta + R_2*R_C*beta*g_m + R_2*R_C*g_m + R_2*beta + R_C*beta)
-
-Numerical comparison (g_m=40mS, beta=100 => r_pi=2.5k, R_C=2k, R_1=3k, R_2=1k):
-  A_v_closed (fb)                = 3.64465
-  A_v_closed (exact)             = 3.64545
-  R_in_closed (fb, exact beta)   = 362.211
-  R_in_closed (fb, 1<<beta)      = 365.833
-  R_in_closed (exact KCL)        = 363.036
-  R_out_closed (fb)              = 118.451
-  R_out_closed (exact KCL)       = 118.182
+A0 replica = beta*R_L/(r_pi+Rth)
+effective A0 full KCL = (beta+K)*R_L/(r_pi+Rth)
+Rin0 = (r_pi+Rth)/(beta+1)
+Rout0 = R_L
+Acl = A0/(1+K*A0)
+Rin = Rin0*(1+K*A0)
+Rout = Rout0/(1+K*A0)
+Rth=R1||R2; R_L=RC||(R1+R2); K=R2/(R1+R2)
+The finite beta exact forward term adds +K from the base-current path through R1.
+All exact/replica ratios tend to 1 for beta -> infinity.

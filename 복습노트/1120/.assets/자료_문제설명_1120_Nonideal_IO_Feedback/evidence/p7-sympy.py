@@ -1,118 +1,61 @@
-import sympy as sp
+"""Independent verification of E12.29."""
+import sympy as s
 
+Yin, Yout, h, f = s.symbols('Yin Yout h f', real=True, nonzero=True)
+u, o, i_in, i_out = s.symbols('v_in v_out i_in i_out')
 
-def par(a, b):
-    return (a * b) / (a + b)
+g1, g2, go1, go2, RD1, Raux = s.symbols('gm1 gm2 go1 go2 RD1 R_aux',positive=True)
+x = s.symbols('v_x')
+# Drain of common-gate M1 drives the insulated gate of M2.
+xsol = s.solve(x/RD1 + go1*(x-u)-g1*u,x)[0]
+g_input = s.factor((g1*u+go1*(u-xsol))/u)
+assert s.factor(xsol-RD1*g_input*u) == 0
 
+# M2 is a NMOS CS output device. R_aux = RD2.
+g_output = 1/Raux+go2
+h_actual = g2*xsol/u
 
-def main():
-    I_in, g_m1, g_m2, R_D1, R_D2, R_F = sp.symbols(
-        "I_in g_m1 g_m2 R_D1 R_D2 R_F", positive=True
-    )
-    V_S1, V_X, V_out = sp.symbols("V_S1 V_X V_out")
+# Yin/Yout include the feedback network's short-circuit diagonal admittances.
+# h is the forward dependent current leaving output per input voltage.
+# f*vo is the feedback-network input current toward the summing node at vi=0.
+# The reciprocal forward term -f*vi at output is present in the physical circuit.
+trial = s.solve([Yin*u-f*o-i_in, (h-f)*u+Yout*o-i_out],(u,o))
+det = Yin*Yout+f*(h-f)
+assert s.factor(trial[o].diff(i_in)-(f-h)/det) == 0
+assert s.factor(trial[u].diff(i_in)-Yout/det) == 0
+assert s.factor(trial[o].diff(i_out)-Yin/det) == 0
 
-    # 1. Open-loop circuit (Fig. 12.58(b)):
-    eq_open = [
-        sp.Eq(I_in, V_S1 / R_F + g_m1 * V_S1),
-        sp.Eq(V_X / R_D1 - g_m1 * V_S1, 0),
-        sp.Eq(V_out / R_D2 + V_out / R_F + g_m2 * V_X, 0),
-    ]
-    sol_open = sp.solve(eq_open, [V_S1, V_X, V_out])
+R0 = -h/(Yin*Yout)
+Rin0, Rout0 = 1/Yin, 1/Yout
+T = -f*R0
+replica = s.solve([Yin*u-f*o-i_in,h*u+Yout*o-i_out],(u,o))
+assert s.factor(replica[o].diff(i_in)-R0/(1+T)) == 0
+assert s.factor(replica[u].diff(i_in)-Rin0/(1+T)) == 0
+assert s.factor(replica[o].diff(i_out)-Rout0/(1+T)) == 0
+probes = [(o,i_in),(u,i_in),(o,i_out)]
+for measured, injection in probes:
+    exact_result = trial[measured].diff(injection)
+    replica_result = replica[measured].diff(injection)
+    assert s.factor(s.limit(exact_result-replica_result,f,0)) == 0
+print('Loaded replica: R0 =',R0,'; Rin0 =',Rin0,'; Rout0 =',Rout0)
+print('Return convention: i_in+i_f, i_f=f*vo at vi=0; f>0; T=-f*R0.')
+print('Equivalent subtracting convention: i_in-K*vo with K=-f.')
+print('Loaded replica closed: R=R0/(1+T); Rin=Rin0/(1+T); Rout=Rout0/(1+T).')
+print('Exact closed physical circuit: replace h by h-f in the above expressions.')
+print('Exact D = Yin*Yout+f*(h-f); R=(f-h)/D; Rin=Yout/D; Rout=Yin/D.')
+print('Replica drops reciprocal forward feedthrough; R comparison requires |f/h| << 1.')
+print('Close to D=0, also check that the determinant change f**2 is negligible.')
 
-    V_X_kcl = sp.simplify(sol_open[V_X])
-    R_0 = sp.simplify(sol_open[V_out] / I_in)
+Rf = s.symbols('R_F',positive=True)
+feedback = 1/Rf
+yin, yout = g_input+feedback, g_output+feedback
+physical_input = g_input*u+(u-o)/Rf
+physical_output = g_output*o+h_actual*u+(o-u)/Rf
+assert s.factor(physical_input-(Yin*u-f*o).subs({Yin:yin,f:feedback})) == 0
+assert s.factor(physical_output-((h-f)*u+Yout*o).subs({h:h_actual,Yout:yout,f:feedback})) == 0
+print('f=1/R_F; Yin=g_input+1/R_F; Yout=g_output+1/R_F.')
+for label, value in [('g_input',g_input),('g_output',g_output),('h',h_actual)]:
+    print(label,'=',s.factor(value))
 
-    # 2. Norton-to-Thevenin verification on input node:
-    R_p = R_F
-    V_in_th = I_in * R_p
-    V_S1_th, V_X_th = sp.symbols("V_S1_th V_X_th")
-    eq_th = [
-        sp.Eq((V_in_th - V_S1_th) / R_p, g_m1 * V_S1_th),
-        sp.Eq(V_X_th / R_D1 - g_m1 * V_S1_th, 0),
-    ]
-    sol_th = sp.solve(eq_th, [V_S1_th, V_X_th])
-    V_X_thev = sp.simplify(sol_th[V_X_th])
-    diff_thev = sp.simplify(V_X_kcl / I_in - V_X_thev / I_in)
-    assert diff_thev == 0, f"Norton-Thevenin mismatch: {diff_thev}"
-
-    # 3. Open-loop input & output impedances
-    V_t, I_t = sp.symbols("V_t I_t")
-    sol_rin = sp.solve([sp.Eq(I_t, V_t / R_F + g_m1 * V_t)], [I_t])
-    R_in_open = sp.simplify(V_t / sol_rin[I_t])
-
-    sol_rout = sp.solve([sp.Eq(I_t, V_t / R_D2 + V_t / R_F)], [I_t])
-    R_out_open = sp.simplify(V_t / sol_rout[I_t])
-
-    # 4. Feedback factor K
-    V_1, I_2 = sp.symbols("V_1 I_2")
-    sol_k = sp.solve([sp.Eq(I_2 + (V_1 - 0) / R_F, 0)], [I_2])
-    K = sp.simplify(sol_k[I_2] / V_1)
-
-    # 5. Loop gain and closed-loop quantities (feedback method)
-    KR_0 = sp.simplify(K * R_0)
-    denom = sp.simplify(1 + KR_0)
-    R_closed = sp.simplify(R_0 / denom)
-    R_in_closed = sp.simplify(R_in_open / denom)
-    R_out_closed = sp.simplify(R_out_open / denom)
-
-    # 6. Verify compact textbook forms match sympy.solve identically
-    R_0_compact = -(g_m1 * R_F / (1 + g_m1 * R_F)) * R_D1 * g_m2 * par(R_D2, R_F)
-    R_in_open_compact = par(R_F, 1 / g_m1)
-    R_out_open_compact = par(R_D2, R_F)
-    KR_0_compact = (g_m1 * R_D1 / (1 + g_m1 * R_F)) * g_m2 * par(R_D2, R_F)
-    assert sp.simplify(R_0 - R_0_compact) == 0
-    assert sp.simplify(R_in_open - R_in_open_compact) == 0
-    assert sp.simplify(R_out_open - R_out_open_compact) == 0
-    assert sp.simplify(K - (-1 / R_F)) == 0
-    assert sp.simplify(KR_0 - KR_0_compact) == 0
-
-    # 7. Exact unbroken closed-loop KCL for comparison (bilateral R_F feedforward check)
-    V_S1_ex, V_X_ex, V_out_ex = sp.symbols("V_S1_ex V_X_ex V_out_ex")
-    eq_exact = [
-        sp.Eq(I_in, (V_S1_ex - V_out_ex) / R_F + g_m1 * V_S1_ex),
-        sp.Eq(V_X_ex / R_D1 - g_m1 * V_S1_ex, 0),
-        sp.Eq(V_out_ex / R_D2 + (V_out_ex - V_S1_ex) / R_F + g_m2 * V_X_ex, 0),
-    ]
-    sol_exact = sp.solve(eq_exact, [V_S1_ex, V_X_ex, V_out_ex])
-    R_closed_exact = sp.simplify(sol_exact[V_out_ex] / I_in)
-    R_in_exact = sp.simplify(sol_exact[V_S1_ex] / I_in)
-
-    V_S1_ro, V_X_ro = sp.symbols("V_S1_ro V_X_ro")
-    eq_ro_exact = [
-        sp.Eq(0, (V_S1_ro - V_t) / R_F + g_m1 * V_S1_ro),
-        sp.Eq(V_X_ro / R_D1 - g_m1 * V_S1_ro, 0),
-        sp.Eq(I_t, V_t / R_D2 + (V_t - V_S1_ro) / R_F + g_m2 * V_X_ro),
-    ]
-    sol_ro_exact = sp.solve(eq_ro_exact, [V_S1_ro, V_X_ro, I_t])
-    R_out_exact = sp.simplify(V_t / sol_ro_exact[I_t])
-
-    subs_num = {g_m1: 1e-3, g_m2: 2e-3, R_D1: 5e3, R_D2: 5e3, R_F: 10e3}
-
-    print("=== p7: E12.29 (Fig. 12.58) ===")
-    print(f"V_X/I_in (direct KCL)      = {sp.simplify(V_X_kcl / I_in)}")
-    print(f"V_X/I_in (Norton->Thevenin)= {sp.simplify(V_X_thev / I_in)}")
-    print(f"diff(KCL - Thevenin)       = {diff_thev}")
-    print(f"R_0 (open-loop transimp)   = {R_0}")
-    print(f"R_in_open                  = {R_in_open}")
-    print(f"R_out_open                 = {R_out_open}")
-    print(f"K                          = {K}")
-    print(f"KR_0 (loop gain)           = {KR_0}")
-    print(f"1 + KR_0                   = {sp.factor(denom)}")
-    print(f"R_closed (feedback)        = {R_closed}")
-    print(f"R_in_closed (feedback)     = {R_in_closed}")
-    print(f"R_out_closed (feedback)    = {R_out_closed}")
-    print("Compact textbook form assertions: ALL PASSED (diff == 0)")
-    print("--- Exact unbroken KCL comparison ---")
-    print(f"R_closed_exact             = {R_closed_exact}")
-    print(f"R_in_exact                 = {R_in_exact}")
-    print(f"R_out_exact                = {R_out_exact}")
-    print(
-        f"Numeric check (gm1=1m,gm2=2m,RD1=RD2=5k,RF=10k): "
-        f"KR_0={float(KR_0.subs(subs_num)):.4f}, "
-        f"R_closed_fb={float(R_closed.subs(subs_num)):.2f}, "
-        f"R_closed_exact={float(R_closed_exact.subs(subs_num)):.2f}"
-    )
-
-
-if __name__ == "__main__":
-    main()
+print('R_aux=RD2. For lambda=0: g_input=gm1; g_output=1/RD2; h=gm1*gm2*RD1.')
+print('The MOS CS path is inverting, T>0. In the full circuit h>f is required for inversion.')

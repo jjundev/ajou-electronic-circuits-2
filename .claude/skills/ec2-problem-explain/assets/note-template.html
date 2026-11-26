@@ -90,6 +90,7 @@
     .layer:is([data-explanation="solve"], [data-explanation="verify"]) > :not(h4, .layer-title) + [data-subpart] { margin-top: var(--s6); }
     .layer:is([data-explanation="solve"], [data-explanation="verify"]) > [data-subpart] > :first-child { margin-top: 0; }
     .layer:is([data-explanation="solve"], [data-explanation="verify"]) > [data-subpart] > :last-child { margin-bottom: 0; }
+    .circuit-explanation [data-subpart] h4:not(:first-child) { margin-top: var(--s5); }
     @media (max-width: 1023px) {
       .layer:is([data-explanation="solve"], [data-explanation="verify"]) > :not(h4, .layer-title) + [data-subpart] { margin-top: var(--s5); }
     }
@@ -517,6 +518,7 @@
     .math-pan-hint { display:block; margin:var(--s1) 0 var(--s3); color:var(--ink-2); font:var(--fs-small)/1.5 var(--font); }
     table { display:block; max-width:100%; overflow-x:auto; }
     img, svg { max-width:100%; height:auto; }
+{{CIRCUIT_STYLES}}
   </style>
 </head>
 <body data-screens="article.topic" data-panels="explain" data-range="{{RANGE}}">

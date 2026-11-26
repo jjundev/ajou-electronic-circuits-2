@@ -623,6 +623,10 @@ def test_early_index_seals_real_questions_for_independent_attempts(tmp_path):
     second = flow.claim_task(run, 'explain-blind')
     author, blind = (json.loads(Path(r['brief']).read_text()) for r in (first, second))
     assert blind['questions'] == author['questions']
+    assert {Path(ref).name for ref in author['references']} == {'SKILL.md', 'authoring.md'}
+    assert Path(author['profile']).name == 'solution-style.md'
+    assert '간략 해설' in author['instruction']
+    assert 'references' not in blind and 'profile' not in blind
     assert set(a['path'] for a in blind['inputs']) == {str(p) for p in Path(blind['questions']).parent.iterdir()}
     question, = json.loads(Path(blind['questions']).read_text())['problems']
     assert question['id'] == 'p1' and question['ask_html'] and question['figures']
