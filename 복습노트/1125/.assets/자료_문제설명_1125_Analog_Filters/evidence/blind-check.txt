@@ -1,0 +1,19 @@
+P1 max rel residual (gain, loop gain, Rin, Rout seen by laser): 4.941329387824402e-13
+P1 textbook-convention Rout=(1/gm2+RM)(1+T incl RL) vs exact: max rel diff 0.9309260679334396 (-> 0 as RL/(1/gm2+RM) -> 0)
+P2 scaling check: ratio exact/approx -> 1 as gm*ro grows
+  gm*ro=10: A_open 0.954545, T 0.954545, Aclosed 0.997921, Rout_open 1.000000, Rout_closed(laser view) 0.956503, textbook (ro1+RM)(1+T) 0.971747
+  gm*ro=100: A_open 0.995050, T 0.995050, Aclosed 0.999984, Rout_open 1.000000, Rout_closed(laser view) 0.995065, textbook (ro1+RM)(1+T) 0.997427
+  gm*ro=1000: A_open 0.999500, T 0.999500, Aclosed 1.000000, Rout_open 1.000000, Rout_closed(laser view) 0.999501, textbook (ro1+RM)(1+T) 0.999749
+  gm*ro=10000: A_open 0.999950, T 0.999950, Aclosed 1.000000, Rout_open 1.000000, Rout_closed(laser view) 0.999950, textbook (ro1+RM)(1+T) 0.999975
+P3/P4 scaling check (gm1=gm2=g, ro2=k/g, RD=RF=2k, RM=500, RL=50)
+  gm*ro=10: Acl exact/2port 1.001118, Rin exact/2port 0.998622, Rout exact vs closed-form exact 1.000000000, Rout exact/(Ro+G) 1.001391, Rout exact/textbook Ro(1+T(RL)) 1.010923, IN exact/2port 1.001108, Norton check IN*RN/(RN+RL) vs Iout 1.000000000
+  gm*ro=100: Acl exact/2port 1.000103, Rin exact/2port 0.999853, Rout exact vs closed-form exact 1.000000000, Rout exact/(Ro+G) 1.000147, Rout exact/textbook Ro(1+T(RL)) 1.001305, IN exact/2port 1.000103, Norton check IN*RN/(RN+RL) vs Iout 1.000000000
+  gm*ro=1000: Acl exact/2port 1.000010, Rin exact/2port 0.999985, Rout exact vs closed-form exact 1.000000000, Rout exact/(Ro+G) 1.000015, Rout exact/textbook Ro(1+T(RL)) 1.000133, IN exact/2port 1.000010, Norton check IN*RN/(RN+RL) vs Iout 1.000000000
+  gm*ro=10000: Acl exact/2port 1.000001, Rin exact/2port 0.999999, Rout exact vs closed-form exact 1.000000000, Rout exact/(Ro+G) 1.000001, Rout exact/textbook Ro(1+T(RL)) 1.000013, IN exact/2port 1.000001, Norton check IN*RN/(RN+RL) vs Iout 1.000000000
+P4 two-port identities (Acl = IN*RN/(RN+RL), RN = Ro(1+T|RL=0)) and exact Rout closed form: max rel residual 1.0217063161696433e-10
+P5 scaling (exact/2port)
+  gm1*gm2*RD*RF=0.64: Vout/Iin -0.626537, Rin 1.113843, Rout 1.113843
+  gm1*gm2*RD*RF=64: Vout/Iin 0.993429, Rin 1.009198, Rout 1.009198
+  gm1*gm2*RD*RF=6.4e+03: Vout/Iin 0.999991, Rin 1.000147, Rout 1.000147
+  gm1*gm2*RD*RF=6.4e+05: Vout/Iin 1.000000, Rin 1.000002, Rout 1.000002
+P5 exact closed forms vs node solve: max rel residual 8.409498523607384e-13

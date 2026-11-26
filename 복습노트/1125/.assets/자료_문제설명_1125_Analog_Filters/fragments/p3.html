@@ -1,0 +1,96 @@
+<div class="layer eli5" data-explanation="understand">
+  <h4>문제를 읽어요</h4>
+  <p>입력은 전류 $I_{in}$이에요. 접지에서 입력 노드(여기서는 $N$이라 부를게요)로 들어가고, $N$은 $M_1$의 소스예요. $M_1$ 게이트는 고정 전압 $V_b$라서 $M_1$은 공통 게이트(CG) 단이고, 드레인 $X$에 $R_D$가 달려 있어요.</p>
+  <p>$X$가 PMOS $M_2$의 게이트를 움직이고, $M_2$의 드레인 전류 $I_{out}$이 레이저($R_L$)를 지나 노드 $P$로 들어가요. $P$는 $R_M$으로 접지되고, $R_F$가 $P$와 $N$을 이어요.</p>
+  <p>$I_{out}$은 $R_M$을 직렬로 지나며 감지되고, $R_F$를 흐르는 전류 $I_F$가 입력 노드 $N$에서 $I_{in}$과 병렬로 합쳐져요. 전류를 감지해 전류로 되돌리니 전류-전류(C-C) 귀환이에요.</p>
+  <p>$R_F$가 크지 않고 $R_M$이 작지 않으니 둘 다 로딩으로 넣어야 해요. 원문은 $r_{O2}$만 유한하다고 했으므로 $M_1$의 $r_o$는 무한대로 두고, 몸체 효과는 무시해요.</p>
+  <p>구할 것은 개루프 전류 이득 $A_{I,open}=I_{out}/I_{in}$, 개루프 입력·출력 임피던스, 귀환율 $K$, 그리고 폐루프 이득과 폐루프 입력·출력 임피던스예요. 출력 임피던스는 레이저를 떼어 낸 두 단자에서 들여다본 값으로 정의해요.</p>
+</div>
+<div class="layer formal" data-explanation="recall">
+  <h4>이 개념과 공식을 떠올려요</h4>
+  <p><strong>단서 → 개념.</strong> “$R_F$가 크지 않고 $R_M$이 작지 않다”는 귀환망 $R_F$·$R_M$이 순방향 증폭기를 무겁게 누른다는 뜻이에요. 그래서 귀환망을 감지 복제와 반송 복제로 나눠 붙이는 종지 법칙(termination rule)을 써요.</p>
+  <p><strong>C-C의 종지 법칙.</strong> 감지 복제는 출력 쪽에 붙고, 반송 포트($N$ 쪽)를 단락해요. 반송이 병렬이기 때문이에요. 그러면 $P$에서 $R_M$과 접지로 간 $R_F$가 병렬로 보여 $R_M\parallel R_F$가 돼요. 반송 복제는 입력 쪽에 붙고, 감지 포트($P$ 쪽)를 개방해요. 감지가 직렬이기 때문이에요. 그러면 $N$에서 $R_F+R_M$이 접지까지 직렬로 보여요.</p>
+  <p><strong>귀환율.</strong> 귀환망 입력($P$)에 $I_1$을 넣고 단락한 출력 포트의 전류 $I_2$를 재서 $K=I_2/I_1$이에요. $I_2$의 양의 방향은 그림의 $I_F$(즉 $N\to P$)로 잡아요. 루프 이득은 $T=KA_{I,open}$, 폐루프 이득은 $A_{I,open}/(1+T)$예요.</p>
+  <p><strong>임피던스 규칙.</strong> 입력에서 전류를 병렬로 합치므로 $R_{in}$은 $(1+T)$로 나누고, 출력에서 전류를 직렬로 감지하므로 $R_{out}$은 $(1+T)$를 곱해요.</p>
+  <p><strong>알려진 블록.</strong> CG 소스의 입력 저항은 $1/g_{m1}$이고, $N$에 들어온 전류는 $1/g_{m1}$과 $R_F+R_M$으로 나뉘어요. PMOS $M_2$는 $g_{m2}v_{sg2}$와 $r_{O2}$의 병렬이라 출력 부하와 전류를 나눠요.</p>
+</div>
+<div class="layer formal" data-explanation="start">
+  <h4>종이에 쓸 첫 줄</h4>
+  <div data-answer-step="개루프 회로와 첫 식">
+    <p>종지 법칙대로 $N$에는 $R_F+R_M$을, $P$에는 $R_M\parallel R_F$를 붙인 개루프 회로를 먼저 그려요.</p>
+    <figure class="figure"><svg viewBox="0 0 460 345" role="img" aria-label="개루프 회로. V_DD에서 R_D를 거쳐 노드 X, M1 드레인 X, 게이트 V_b, 소스 입력 노드 N. 왼쪽 I_in이 접지에서 N으로 흐르고, N에는 귀환망 복제 R_F와 R_M이 직렬로 접지까지. X는 PMOS M2 게이트, M2 소스 V_DD, 드레인에서 I_out이 레이저 R_L을 지나 노드 P, P에서 R_M과 R_F가 각각 접지로 병렬."><path class="fig-ink" d="M120 30 L400 30"/><text class="fig-text fig-math" x="409.2" y="35">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text><path class="fig-ink" d="M140 30 V41.0 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 V100"/><text class="fig-text fig-math" x="121" y="70" text-anchor="end">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text><path class="fig-ink" d="M140 100 L140 116"/><circle class="fig-dot" data-node="X" data-node-color="red" cx="140" cy="108" r="3.5"/><text class="fig-text fig-math" x="127.6" y="113" text-anchor="end" data-node-color="red" data-node="X">X</text><path class="fig-ink" d="M156 134 V166 M163 137 V163 M163 150 H186 M156 139 H140 V116 M156 161 H140 V184"/><path class="fig-ink" d="M152.0 157 L144.0 161 L152.0 165"/><text class="fig-text fig-math" x="128" y="155" text-anchor="end">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" x="195.2" y="155">V<tspan baseline-shift="sub" font-size="78%">b</tspan></text><path class="fig-ink" d="M140 184 L140 210"/><circle class="fig-dot" data-node="N" data-node-color="blue" cx="140" cy="200" r="3.5"/><text class="fig-text fig-math" x="151.12" y="195.58" data-node-color="blue" data-node="N">N</text><path class="fig-ink" d="M140 200 L60 200 L60 222"/><circle class="fig-ink" cx="60" cy="236" r="14"/><path class="fig-ink" d="M60 244 V228 M55 233 L60 228 L65 233"/><path class="fig-ink" d="M60 250 L60 262"/><path class="fig-ink" d="M60 262 v8 M50 270 H70 M54 275 H66 M58 280 H62"/><text class="fig-text fig-math" x="36.2" y="241" text-anchor="end">I<tspan baseline-shift="sub" font-size="78%">in</tspan></text><path class="fig-ink" d="M140 210 V212.0 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 V262"/><text class="fig-text fig-math" x="158.4" y="240">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text><path class="fig-ink" d="M140 262 V264.0 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 V314"/><path class="fig-ink" d="M140 314 v8 M130 322 H150 M134 327 H146 M138 332 H142"/><text class="fig-text fig-math" x="158.4" y="292">R<tspan baseline-shift="sub" font-size="78%">M</tspan></text><path class="fig-ink" d="M140 108 L300 108"/><path class="fig-ink" d="M330 92 V124 M323 95 V121 M323 108 H300 M330 97 H346 V74 M330 119 H346 V142"/><path class="fig-ink" d="M342.0 93 L334.0 97 L342.0 101"/><text class="fig-text fig-math" x="358" y="113">M<tspan baseline-shift="sub" font-size="78%">2</tspan></text><path class="fig-ink" d="M346 74 L346 30"/><path class="fig-ink" d="M346 142 L346 180"/><path class="fig-ink" d="M346 148 V166 M341 160 L346 166 L351 160"/><text class="fig-text fig-math" x="360.6" y="162">I<tspan baseline-shift="sub" font-size="78%">out</tspan></text><rect class="fig-ink" x="306" y="180" width="80" height="56"/><text class="fig-text fig-math" x="346" y="201" text-anchor="middle">레이저</text><text class="fig-text fig-math" x="346" y="219.4" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text><path class="fig-ink" d="M346 236 L346 260"/><circle class="fig-dot" data-node="P" data-node-color="blue" cx="346" cy="260" r="3.5"/><text class="fig-text fig-math" x="328" y="258" text-anchor="end" data-node-color="blue" data-node="P">P</text><path class="fig-ink" d="M346 260 V264.0 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 V316"/><path class="fig-ink" d="M346 316 v8 M336 324 H356 M340 329 H352 M344 334 H348"/><text class="fig-text fig-math" x="327.4" y="296" text-anchor="end">R<tspan baseline-shift="sub" font-size="78%">M</tspan></text><path class="fig-ink" d="M346 260 L410 260"/><path class="fig-ink" d="M410 260 V264.0 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 V316"/><path class="fig-ink" d="M410 316 v8 M400 324 H420 M404 329 H416 M408 334 H412"/><text class="fig-text fig-math" x="428.4" y="296">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text></svg><figcaption>C-C 귀환의 개루프 회로: $V_{DD}$·$V_b$는 AC 접지, $N$의 $R_F+R_M$은 반송 복제(감지 포트 개방), $P$의 $R_M$과 접지된 $R_F$는 감지 복제(반송 포트 단락)예요.</figcaption></figure>
+    $$A_{I,open}=\frac{I_{out}}{I_{in}}=\frac{V_X}{I_{in}}\cdot\frac{I_{out}}{V_X}$$
+  </div>
+</div>
+<div class="layer formal" data-explanation="solve">
+  <h4>이렇게 풀어요</h4>
+  <div data-subpart="main">
+    <div data-answer-step="개루프 이득과 개루프 임피던스">
+      <p><strong>1단 (전류 → $V_X$).</strong> $I_{in}$은 $N$에서 $R_F+R_M$과 $M_1$ 소스($1/g_{m1}$)로 나뉘어요. $M_1$ 소스로 들어간 몫만큼 $M_1$ 드레인 전류가 줄고, 그만큼 $R_D$의 전압강하가 줄어 $X$가 올라가요.</p>
+      $$\frac{V_X}{I_{in}}=\frac{(R_F+R_M)R_D}{R_F+R_M+1/g_{m1}}$$
+      <p><strong>2단 ($V_X$ → 전류).</strong> $M_2$의 소신호 전류원 $g_{m2}v_{sg2}=-g_{m2}V_X$가 $r_{O2}$와 부하(레이저 + $R_M\parallel R_F$)로 나뉘어요.</p>
+      $$\frac{I_{out}}{V_X}=\frac{-g_{m2}r_{O2}}{r_{O2}+R_L+R_M\parallel R_F}$$
+      $$A_{I,open}=\frac{(R_F+R_M)R_D}{R_F+R_M+1/g_{m1}}\cdot\frac{-g_{m2}r_{O2}}{r_{O2}+R_L+R_M\parallel R_F}$$
+      <p><strong>개루프 임피던스.</strong> 입력 노드 $N$에서는 $1/g_{m1}$과 $R_F+R_M$이 병렬이에요. 레이저 자리에서는 $I_{in}=0$이라 $X$가 고정되므로 위로 $r_{O2}$, 아래로 $R_F\parallel R_M$이 직렬로 보여요.</p>
+      $$R_{in,open}=\frac{1}{g_{m1}}\parallel(R_F+R_M)$$
+      $$R_{out,open}=r_{O2}+R_F\parallel R_M$$
+    </div>
+    <div data-answer-step="귀환율과 루프 이득">
+      <p>$P$에 $I_1$을 넣고 $N$ 쪽을 단락하면 $I_1$이 $R_M$과 $R_F$로 나뉘어, $R_F$로는 $I_1R_M/(R_M+R_F)$가 $P\to N$ 방향으로 흘러요. $I_F$($N\to P$) 기준으로는 음수예요.</p>
+      $$K=\frac{I_F}{I_1}=-\frac{R_M}{R_M+R_F}$$
+      <p>$A_{I,open}\lt0$, $K\lt0$이라 $T=KA_{I,open}\gt0$으로 음귀환이에요.</p>
+      $$T=\frac{R_M}{R_F+R_M+1/g_{m1}}\cdot\frac{g_{m2}r_{O2}R_D}{r_{O2}+R_L+R_M\parallel R_F}$$
+    </div>
+    <div data-answer-step="폐루프 이득과 임피던스">
+      $$A_{I,closed}=\frac{A_{I,open}}{1+T}=\frac{A_{I,open}}{1-\dfrac{R_M}{R_M+R_F}A_{I,open}}$$
+      $$R_{in,closed}\approx\frac{(1/g_{m1})\parallel(R_F+R_M)}{1+T}$$
+      <p>폐루프 입력 임피던스도 $R_F$를 통한 순방향 전달을 무시한 2포트 근사라서 $\approx$로 써요.</p>
+      <p>출력 임피던스는 교과서 식 $(r_{O2}+R_F\parallel R_M)(1+T)$의 꼴이에요. 레이저 자리를 시험원으로 둔 조건과 루프 이득을 맞추려면, 그 상태의 루프 이득 $T_0$($T$에서 $R_L=0$)를 곱해요. 이 값도 $R_F$를 통한 순방향 전달을 무시한 2포트 근사라서 $\approx$로 써요.</p>
+      $$T_0=\frac{R_M}{R_F+R_M+1/g_{m1}}\cdot\frac{g_{m2}r_{O2}R_D}{r_{O2}+R_M\parallel R_F}$$
+      $$R_{out,closed}\approx(r_{O2}+R_F\parallel R_M)(1+T_0)=r_{O2}+R_F\parallel R_M+\frac{g_{m2}r_{O2}R_DR_M}{R_F+R_M+1/g_{m1}}$$
+      <p>보통 레이저 저항은 $r_{O2}+R_F\parallel R_M$보다 훨씬 작아서 $T_0\approx T$이고, 교과서 식과 사실상 같은 값이에요.</p>
+    </div>
+  </div>
+</div>
+<div class="layer formal" data-explanation="verify">
+  <h4>완성 답과 검산</h4>
+  <div data-subpart="main">
+    <h4>검산</h4>
+    <div data-answer-final="">
+      <p><strong>$A_{I,open}=\dfrac{(R_F+R_M)R_D}{R_F+R_M+1/g_{m1}}\cdot\dfrac{-g_{m2}r_{O2}}{r_{O2}+R_L+R_M\parallel R_F}$, $R_{in,open}=\dfrac1{g_{m1}}\parallel(R_F+R_M)$, $R_{out,open}=r_{O2}+R_F\parallel R_M$, $K=-\dfrac{R_M}{R_M+R_F}$</strong>예요.</p>
+      <p><strong>$A_{I,closed}=\dfrac{A_{I,open}}{1+T}$, $R_{in,closed}\approx\dfrac{R_{in,open}}{1+T}$, 레이저에서 본 $R_{out,closed}\approx R_{out,open}(1+T_0)$</strong>이고 $T=-\dfrac{R_M}{R_M+R_F}A_{I,open}$, $T_0=T|_{R_L=0}$예요. $R_L\ll r_{O2}+R_F\parallel R_M$이면 $T_0\approx T$예요. 두 폐루프 임피던스는 2포트 근사값이에요.</p>
+    </div>
+    <p><strong>단위:</strong> 두 인자 $(R_F+R_M)R_D/(\cdots)$는 Ω, $g_{m2}r_{O2}/(\cdots)$는 S라 $A_{I,open}$은 단위가 없어요. $K$도 단위가 없어요.</p>
+    <p><strong>강한 귀환:</strong> $T\gg1$이면 $A_{I,closed}\to1/K=-(1+R_F/R_M)$이에요. 이때 $I_{in}$이 거의 다 $R_F$로 흐르고 $N$의 전압은 거의 0이라 $V_P\approx-R_FI_{in}$이 되고, $P$의 KCL $I_{out}=V_P/R_M-I_{in}$과 일치해요.</p>
+    <p><strong>귀환 제거:</strong> $R_F\to\infty$이면 $K\to0$이고, $R_{in,open}\to1/g_{m1}$, $A_{I,open}\to R_D\cdot(-g_{m2}r_{O2})/(r_{O2}+R_L+R_M)$로 단순 직렬 연결이 돼요.</p>
+  </div>
+</div>
+<div class="layer warn" data-explanation="pitfall">
+  <h4>주의할 점</h4>
+  <ul>
+    <li>C-C에서는 입력 쪽이 $R_F+R_M$(감지 포트 개방), 출력 쪽이 $R_M\parallel R_F$(반송 포트 단락)예요. 둘을 바꾸면 V-C 규칙과 섞여요.</li>
+    <li>$K$의 부호는 $I_F$의 기준 방향에서 나와요. $A_{I,open}$이 음수이므로 $K$도 음수여야 $T\gt0$이에요.</li>
+    <li>$R_{out,open}$에 $R_F\parallel R_M$을 빠뜨리거나 레이저 $R_L$을 넣지 않아요. 레이저는 출력 임피던스를 보는 쪽이에요.</li>
+    <li>입력 임피던스는 병렬 합침이라 $(1+T)$로 나눠요. 출력처럼 곱하지 않아요.</li>
+  </ul>
+</div>
+<div class="layer eli5" data-explanation="retry">
+  <h4>조건을 바꾸어 생각해요</h4>
+  <ol>
+    <li>$R_F\to\infty$이면 $K$, $T$, 폐루프 이득은 각각 어떻게 되나요?</li>
+    <li>강한 귀환에서 $R_M$을 두 배로 키우면 $A_{I,closed}$의 크기는 커지나요, 작아지나요?</li>
+    <li>레이저를 없애고 $P$의 전압을 출력으로 본다면 입력 쪽 로딩은 $R_F+R_M$ 대신 무엇이 되나요?</li>
+  </ol>
+</div>
+<div class="sum" hidden>
+  <p class="sum-lead">C-C 귀환은 입력에 $R_F+R_M$, 출력에 $R_M\parallel R_F$를 붙인 개루프로 풀어요.</p>
+  <div class="summary-group"><h4>개루프와 귀환율</h4>
+    <p>$A_{I,open}$은 1단 $V_X/I_{in}$과 2단 $I_{out}/V_X$의 곱이고 음수예요.</p>
+    <p>$K=-R_M/(R_M+R_F)$이라 $T=KA_{I,open}\gt0$이에요.</p>
+  </div>
+  <div class="summary-group"><h4>폐루프</h4>
+    <p>이득은 $A_{I,open}/(1+T)$이고 $T\gg1$이면 $-(1+R_F/R_M)$이에요.</p>
+    <p>2포트 근사로 입력 임피던스는 $R_{in,closed}\approx R_{in,open}/(1+T)$예요.</p>
+    <p>2포트 근사로 레이저에서 본 출력 임피던스는 $R_{out,closed}\approx R_{out,open}(1+T_0)$예요.</p>
+  </div>
+</div>
