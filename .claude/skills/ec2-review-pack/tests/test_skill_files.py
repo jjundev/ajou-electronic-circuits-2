@@ -205,6 +205,13 @@ class TestUnboundedDocs(unittest.TestCase):
         self.assertIn("reference_sections",
                       (refs / "worker-prompt.md").read_text(encoding="utf-8"))
 
+    def test_summarizers_match_slides_themselves(self):
+        refs = SKILL / "references"
+        self.assertIn("slides.txt 전체에서 이 날짜 STT가 다룬 강의 블록을 찾아",
+                      (refs / "stt-summary-prompt.md").read_text(encoding="utf-8"))
+        self.assertNotIn("| 자료 준비자 |",
+                         (refs / "delegation.md").read_text(encoding="utf-8"))
+
 
 if __name__ == "__main__":
     unittest.main()
