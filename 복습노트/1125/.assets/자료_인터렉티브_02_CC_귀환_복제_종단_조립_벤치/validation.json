@@ -1,0 +1,193 @@
+{
+  "source_sha256": "a8fe24775a01f1bc36ada8b6f58549bfa877bfd1e5c5b57b01542e247f7f3b27",
+  "sources": [
+    "정리노트_1125_Analog_Filters.md (s2-cc-break, s2-cc-io, s2-cc-closed)",
+    "강의노트 L06 s59-60",
+    "1125 전회2.md"
+  ],
+  "gates": {
+    "machine": "pass",
+    "numeric_independent": "pass",
+    "probe": "pass",
+    "browser": "pass"
+  },
+  "machine_evidence": {
+    "check_cjs": "ok",
+    "steps_cjs": "/tmp/ec2-interactive-1125-Ur8Ran/2/steps.txt"
+  },
+  "numeric_independent_evidence": {
+    "status": "pass",
+    "count": 15,
+    "checks": [
+      {
+        "label": "break_ok.Rout_rep",
+        "got": 0.91,
+        "exp": 0.9091,
+        "err": 0.000909,
+        "ok": true
+      },
+      {
+        "label": "break_ok.Ai_open",
+        "got": -46.07,
+        "exp": -46.0672,
+        "err": 0.002841,
+        "ok": true
+      },
+      {
+        "label": "break_both_open.Rout_rep",
+        "got": 1.0,
+        "exp": 1,
+        "err": 0.0,
+        "ok": true
+      },
+      {
+        "label": "break_both_open.Ai_open",
+        "got": -45.99,
+        "exp": -45.9866,
+        "err": 0.003378,
+        "ok": true
+      },
+      {
+        "label": "break_both_gnd.Rout_rep",
+        "got": 0.91,
+        "exp": 0.9091,
+        "err": 0.000909,
+        "ok": true
+      },
+      {
+        "label": "break_both_gnd.Ai_open",
+        "got": -45.87,
+        "exp": -45.8677,
+        "err": 0.002266,
+        "ok": true
+      },
+      {
+        "label": "break_corner_min.Rout_rep",
+        "got": 0.09,
+        "exp": 0.0909,
+        "err": 0.000909,
+        "ok": true
+      },
+      {
+        "label": "break_corner_min.Ai_open",
+        "got": -33.64,
+        "exp": -33.641,
+        "err": 0.001014,
+        "ok": true
+      },
+      {
+        "label": "break_corner_max.Rout_rep",
+        "got": 8.33,
+        "exp": 8.3333,
+        "err": 0.003333,
+        "ok": true
+      },
+      {
+        "label": "break_corner_max.Ai_open",
+        "got": -41.79,
+        "exp": -41.7866,
+        "err": 0.00339,
+        "ok": true
+      },
+      {
+        "label": "k_ok.K",
+        "got": -0.0909,
+        "exp": -0.0909,
+        "err": 9e-06,
+        "ok": true
+      },
+      {
+        "label": "k_ok.VP",
+        "got": 909.1,
+        "exp": 909.0909,
+        "err": 0.009091,
+        "ok": true
+      },
+      {
+        "label": "k_open_ret.IF",
+        "got": 0.0,
+        "exp": 0.0,
+        "err": 0.0,
+        "ok": true
+      },
+      {
+        "label": "k_open_ret.VP",
+        "got": 1000.0,
+        "exp": 1000.0,
+        "err": 0.0,
+        "ok": true
+      },
+      {
+        "label": "k_gnd_sense.VP",
+        "got": 0.0,
+        "exp": 0.0,
+        "err": 0.0,
+        "ok": true
+      }
+    ]
+  },
+  "probe_evidence": {
+    "defect_count": 0,
+    "checks": 64,
+    "html_sha256": "96606c0de418d9a27091963c6bf16033088645322a7da4106329e244791f27e7"
+  },
+  "browser_evidence": {
+    "browser": "chromium (Playwright fallback)",
+    "fallback_reason": "iab/cua_repl unavailable in this session",
+    "url": "http://127.0.0.1:50568/2/preview.html",
+    "viewports_themes": [
+      {
+        "viewport": "1440x900",
+        "theme": "light",
+        "horizontal_scroll_px": 0,
+        "console_errors": 0,
+        "page_errors": 0
+      },
+      {
+        "viewport": "1440x900",
+        "theme": "dark",
+        "horizontal_scroll_px": 0,
+        "console_errors": 0,
+        "page_errors": 0
+      },
+      {
+        "viewport": "375x812",
+        "theme": "light",
+        "horizontal_scroll_px": 0,
+        "console_errors": 0,
+        "page_errors": 0
+      },
+      {
+        "viewport": "375x812",
+        "theme": "dark",
+        "horizontal_scroll_px": 0,
+        "console_errors": 0,
+        "page_errors": 0
+      }
+    ],
+    "interactions": [
+      {
+        "step": "port_popover_and_bad_wiring",
+        "pop_open": 1,
+        "pop_closed": 0,
+        "tiles": []
+      },
+      {
+        "step": "k_measure_mode",
+        "tiles": []
+      },
+      {
+        "step": "toggle_right_panel",
+        "ok": true
+      }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "status": "pass"
+  },
+  "findings_and_fixes": [
+    "감지 포트 칩 평문 밑줄 제거(I_out 인가 -> 전류원)",
+    "S_1·V_X 라벨 여백 조정",
+    "수식 aligned 2줄 줄바꿈"
+  ]
+}

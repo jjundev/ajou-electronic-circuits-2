@@ -1,0 +1,209 @@
+{
+  "source_sha256": "dc30f267c22e4083f38f3789e83102f87d74bccd467439f660d6aea9181283a8",
+  "sources": [
+    "정리노트_1125_Analog_Filters.md (s2-cc-gain, s2-cc-closed)",
+    "강의노트 L06 s59-60",
+    "1125 전회2.md"
+  ],
+  "gates": {
+    "machine": "pass",
+    "numeric_independent": "pass",
+    "probe": "pass",
+    "browser": "pass"
+  },
+  "machine_evidence": {
+    "check_cjs": "ok",
+    "steps_cjs": "/tmp/ec2-interactive-1125-Ur8Ran/3/steps.txt"
+  },
+  "numeric_independent_evidence": {
+    "status": "pass",
+    "count": 18,
+    "checks": [
+      {
+        "label": "open_default.Ai_open",
+        "got": -46.07,
+        "exp": -46.0672,
+        "err": 0.002841,
+        "ok": true
+      },
+      {
+        "label": "open_default.I_out",
+        "got": -46.07,
+        "exp": -46.0672,
+        "err": 0.002841,
+        "ok": true
+      },
+      {
+        "label": "open_low_ro2.Ai_open",
+        "got": -34.61,
+        "exp": -34.611,
+        "err": 0.000984,
+        "ok": true
+      },
+      {
+        "label": "open_low_ro2.I_out",
+        "got": -34.61,
+        "exp": -34.611,
+        "err": 0.000984,
+        "ok": true
+      },
+      {
+        "label": "open_zero_in.Ai_open",
+        "got": -46.07,
+        "exp": -46.0672,
+        "err": 0.002841,
+        "ok": true
+      },
+      {
+        "label": "open_zero_in.I_out",
+        "got": 0.0,
+        "exp": -0.0,
+        "err": 0.0,
+        "ok": true
+      },
+      {
+        "label": "closed_default.I_F",
+        "got": 0.816,
+        "exp": 0.8156,
+        "err": 0.000372,
+        "ok": true
+      },
+      {
+        "label": "closed_default.I_out",
+        "got": -8.88,
+        "exp": -8.8797,
+        "err": 0.000278,
+        "ok": true
+      },
+      {
+        "label": "closed_default.V_P",
+        "got": -8.06,
+        "exp": -8.0641,
+        "err": 0.004094,
+        "ok": true
+      },
+      {
+        "label": "closed_strong_fb.I_F",
+        "got": 0.916,
+        "exp": 0.9157,
+        "err": 0.000307,
+        "ok": true
+      },
+      {
+        "label": "closed_strong_fb.I_out",
+        "got": -3.95,
+        "exp": -3.954,
+        "err": 0.003954,
+        "ok": true
+      },
+      {
+        "label": "closed_strong_fb.V_P",
+        "got": -9.11,
+        "exp": -9.1148,
+        "err": 0.004781,
+        "ok": true
+      },
+      {
+        "label": "closed_neg_in.I_F",
+        "got": -1.631,
+        "exp": -1.6313,
+        "err": 0.000256,
+        "ok": true
+      },
+      {
+        "label": "closed_neg_in.I_out",
+        "got": 17.76,
+        "exp": 17.7594,
+        "err": 0.000555,
+        "ok": true
+      },
+      {
+        "label": "closed_neg_in.V_P",
+        "got": 16.13,
+        "exp": 16.1282,
+        "err": 0.001811,
+        "ok": true
+      },
+      {
+        "label": "closed_corner_max.I_F",
+        "got": 4.059,
+        "exp": 4.0594,
+        "err": 0.000401,
+        "ok": true
+      },
+      {
+        "label": "closed_corner_max.I_out",
+        "got": -44.56,
+        "exp": -44.5594,
+        "err": 0.000647,
+        "ok": true
+      },
+      {
+        "label": "closed_corner_max.V_P",
+        "got": -202.5,
+        "exp": -202.4998,
+        "err": 0.000243,
+        "ok": true
+      }
+    ]
+  },
+  "probe_evidence": {
+    "defect_count": 0,
+    "checks": 56,
+    "html_sha256": "b4a39141303d4692171a28e0be48032b26e19f95890ff7a3f95baea40546eed2"
+  },
+  "browser_evidence": {
+    "browser": "chromium (Playwright fallback)",
+    "fallback_reason": "iab/cua_repl unavailable in this session",
+    "url": "http://127.0.0.1:50568/3/preview.html",
+    "viewports_themes": [
+      {
+        "viewport": "1440x900",
+        "theme": "light",
+        "horizontal_scroll_px": 0,
+        "console_errors": 0,
+        "page_errors": 0
+      },
+      {
+        "viewport": "1440x900",
+        "theme": "dark",
+        "horizontal_scroll_px": 0,
+        "console_errors": 0,
+        "page_errors": 0
+      },
+      {
+        "viewport": "375x812",
+        "theme": "light",
+        "horizontal_scroll_px": 0,
+        "console_errors": 0,
+        "page_errors": 0
+      },
+      {
+        "viewport": "375x812",
+        "theme": "dark",
+        "horizontal_scroll_px": 0,
+        "console_errors": 0,
+        "page_errors": 0
+      }
+    ],
+    "interactions": [
+      {
+        "step": "causal_and_extremes",
+        "tiles_cl": [],
+        "tiles_min": [],
+        "tiles_max": []
+      },
+      {
+        "step": "toggle_right_panel",
+        "ok": true
+      }
+    ],
+    "console_errors": [],
+    "page_errors": [],
+    "status": "pass"
+  },
+  "findings_and_fixes": [
+    "V_b·V_X 라벨 여백 조정",
+    "수식 aligned 2줄 줄바꿈(375px 오버플로 해소)"
+  ]
+}
