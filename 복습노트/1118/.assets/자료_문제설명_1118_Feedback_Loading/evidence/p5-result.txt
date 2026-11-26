@@ -1,5 +1,4 @@
-beta=R2/(R1+R2), D=RD || (R1+R2), T=gm2*beta*D.
-Closed-loop Vout/Iin = D/(1+T) [ohm] and positive.
-Input impedance = 1/[gm1*(1+T)] [ohm].
-Output impedance with Iin=0 open = D/(1+T) [ohm].
-For R1+R2 >> RD take D approximately RD throughout; beta is retained.
+Zt RD*(R1 + R2)/(R1 + R2*RD*gm2 + R2 + RD) ohm
+Rin (R1 + R2 + RD)/(gm1*(R1 + R2*RD*gm2 + R2 + RD)) ohm
+Rout RD*(R1 + R2)/(R1 + R2*RD*gm2 + R2 + RD) ohm
+large R1+R2: replace loaded D by RD at fixed divider ratio

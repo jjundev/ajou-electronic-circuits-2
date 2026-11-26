@@ -1,30 +1,22 @@
-from sympy import symbols, Eq, solve, simplify, factor, limit, oo
+from sympy import *
+g,h,D,E,F=symbols('gm1 gm2 RD1 RD2 RF',positive=True)
+v,x,y,i,t=symbols('vs vx vo iin itest')
+# vs is the CG input, vx the interstage node, vo the CS output.
+kcl_in=g*v+(v-y)/F
+kcl_x=x/D-g*v
+kcl_out=y/E+h*x+(y-v)/F
 
-def check(left, right):
-    assert simplify(left-right) == 0, (left,right)
+s=solve([kcl_in-i,kcl_x,kcl_out],[v,x,y])
+z=simplify(s[y]/i)
+zin=simplify(s[v]/i)
 
-# s = M1 source (input); x = M1 drain; o = output.
-# g1,g2 stand for gm1,gm2; a,b,f stand for RD1,RD2,RF.
-g1,g2,a,b,f = symbols("g1 g2 a b f", positive=True)
-s,x,o,i,j = symbols("s x o i j")
-# i injects into input, j injects into output.
-eqs=[Eq(i, g1*s+(s-o)/f), Eq(x/a,g1*s), Eq(j,o/b+g2*x+(o-s)/f)]
-sol = solve(eqs,(s,x,o),dict=True)[0]
-Q=f+b+1/g1+g2*a*b
-T=g2*a*b/f
-# Open feedback resistor: no loading or return.
-open_sol=solve([Eq(i,g1*s),Eq(x/a,g1*s),Eq(o/b,-g2*x)],(s,x,o),dict=True)[0]
-R0 = -g2*a*b
-check(open_sol[o]/i,R0)
-z=factor(sol[o].subs(j,0)/i)
-check(z,b*(1/g1-f*g2*a)/Q)
-# An increase in s raises x and lowers the unloaded output, so return
-# current (o-s)/f into the input has negative incremental slope.
-return_slope=(open_sol[o]-open_sol[s]).diff(i)/f
-assert return_slope.is_negative
-# Unilateral teaching model: neglect RF loading and input-voltage term.
-check(solve(Eq(o,R0*(i+o/f)),o)[0]/i, R0/(1+T))
-print("a) Positive injected current raises s and x, depresses output; delta i_RF=(delta o-delta s)/RF opposes input in the intended large-RF regime.")
-print("b) Open-loop transimpedance =", R0, "ohm")
-print("c) Textbook large-RF transimpedance =",R0/(1+T),"ohm")
-print("Direct nodal finite-RF check =", z,"ohm. Dropped resistances b and 1/g1 are small vs f; input-output feedthrough negligible when f*g1*g2*a >> 1.")
+sol_open=solve([g*v-i,kcl_x,y/E+h*x],[v,x,y])
+A=h*D*E
+assert simplify(sol_open[y]/i+A)==0
+# At large RF the feedback current entering the CG source is vo/RF.
+yb=solve(Eq(y,-A*(i+y/F)),y)[0]
+assert simplify(yb/i+A/(1+A/F))==0
+assert simplify(z+E*(g*h*D*F-1)/(g*F+g*E+1+g*A))==0
+print('loop: incremental source current + -> vs + -> vx + -> vo - -> returned current -')
+print('RF open',factor(sol_open[y]/i),'ohm')
+print('large RF',factor(yb/i),'ohm; exact',factor(z),'ohm')

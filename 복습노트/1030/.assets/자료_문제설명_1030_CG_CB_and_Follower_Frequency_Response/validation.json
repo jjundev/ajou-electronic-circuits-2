@@ -1,40 +1,28 @@
 {
   "review_policy_version": "problem-explain-2026-10-21-learning-style",
-  "input_hash": "52decf2b15fb9eb6864c4e61f25d63a7bc91c112ac346d02f431b7857ebc4744",
+  "input_hash": "4318953c5ecf31e3ae4c70dd17a06d39b57530c517afc2b1eeee2a44caddf774",
   "references": [
     {
-      "path": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\교과서\\마이크로전자회로\\11장.pdf",
+      "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.claude/skills/ec2-review-pack/references/solution-style.md",
+      "sha256": "e644bb2da081cd8ba965b335d14c8dc8fa4ac1b2224633ba2ab9a644308bc5a1"
+    },
+    {
+      "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.claude/skills/ec2-problem-explain/references/authoring.md",
+      "sha256": "4550af0b4f8c7a4ca1f9d6ae3b004aca5817daca42dc7c387d9aeb45d6f4ab2c"
+    },
+    {
+      "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.claude/skills/ec2-problem-explain/references/verification.md",
+      "sha256": "7fcf1e69f067d433ad7f0f82e0c76d969e455501d770605f03aa1516aac2d92c"
+    },
+    {
+      "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/교과서/마이크로전자회로/11장.pdf",
       "sha256": "c948160fe9a61f9aa8c0f0e9d84ca001dc4afe5bb27d9f326a3b918f18d930fb"
-    },
-    {
-      "path": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\강의노트\\2026F_Lec5_FrequencyResponse_rev4.pdf",
-      "sha256": "0ce4ed9ad2ce0a4960267d2295b21843b4a694b0e017ffdafa7d07bee51cdf6a"
-    },
-    {
-      "path": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\복습노트\\1030\\정리노트_1030_CG_CB_and_Follower_Frequency_Response.html",
-      "sha256": "dd16d44e4c2fd16b39c03763fca3ec6bd37853e9efd8191a751897011baef70a"
-    },
-    {
-      "path": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\.claude\\skills\\ec2-review-pack\\references\\solution-style.md",
-      "sha256": "15dd74dba003093e0a3e627a7531d1b89dbc4b081ebfb2f04245d065758f62fe"
-    },
-    {
-      "path": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\.claude\\skills\\ec2-problem-explain\\references\\verification.md",
-      "sha256": "940f73f4cc3fe7382a2241dfb44f535bfb2364a14a45f84223057f18d2e0e511"
-    },
-    {
-      "path": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\.claude\\skills\\ec2-problem-explain\\references\\authoring.md",
-      "sha256": "b3a3dafdac5852b8024fc27696b1771c9761fcc63e1944839a393ef304917b3b"
-    },
-    {
-      "path": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\교과서\\마이크로전자회로\\ch11\\figures\\fig11-38.png",
-      "sha256": "f8fb827db46b3e626250fcdba740418998e003bbaa1792877790ee6d30e4d028"
     }
   ],
   "learning_style_audit": {
     "learning_style": {
       "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
-      "sha256": "15dd74dba003093e0a3e627a7531d1b89dbc4b081ebfb2f04245d065758f62fe",
+      "sha256": "e644bb2da081cd8ba965b335d14c8dc8fa4ac1b2224633ba2ab9a644308bc5a1",
       "rule_ids": [
         "UNIT-01",
         "CALC-01",
@@ -47,223 +35,240 @@
         "BIAS-01",
         "NOTATION-01",
         "EXPLAIN-01",
-        "CORRECT-01"
+        "CORRECT-01",
+        "FREQ-01"
       ]
     },
     "items": {
       "p1:main": {
         "status": "pass",
-        "reviewer": "content_review",
+        "reviewer": "Codex parent reviewer (different from the fragment author)",
         "rules": {
-          "UNIT-01": {
-            "disposition": "not_applicable",
-            "evidence": "기호 계산만 수행; 극점 rad/s."
-          },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "중간값 CX,CY,RX,RY를 통해 결과 도출."
-          },
-          "CALC-02": {
-            "disposition": "not_applicable",
-            "evidence": "수치 대입·반올림 없는 기호 계산."
+            "evidence": "X와 Y 저항·용량을 각각 정의하고 역시간상수로 연결한다."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "CX=CGS1+CSB1, CY=CGD1+CDB1+CGS2+CDB2, RX=RS||1/gm1, RY=1/gm2에서 음의 두 극점. 두 λ=0·몸체효과 무시, 요약 및 Rs→∞/CGD2 retry 일치."
+            "evidence": "Y에서 gate-drain이 직접 연결된 M2가 보이고 λ=0이라 1/gm2로 치환한다."
           },
           "CIRCUIT-02": {
-            "disposition": "not_applicable",
-            "evidence": "RC 블록 합성으로 Gm/Rout 측정 그림 불필요. 실제 화면·PDF 글리프 간격 미검토."
-          },
-          "GAIN-01": {
-            "disposition": "not_applicable",
-            "evidence": "극점 문제."
-          },
-          "DEGEN-01": {
-            "disposition": "not_applicable",
-            "evidence": "축퇴 저항 유도 문제 아님."
-          },
-          "SCALE-01": {
-            "disposition": "not_applicable",
-            "evidence": "폭·전류 배율 역산 없음."
-          },
-          "BIAS-01": {
-            "disposition": "not_applicable",
-            "evidence": "DC 동작점·포화 경계 계산 없음."
+            "disposition": "applied",
+            "evidence": "게이트·벌크를 AC 접지로 둔 X–Y 모델과 위치 표시를 사용하고 소스에서 드레인으로 향하는 제어원 방향을 보존한다."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "기호·조건·근사 및 본문/요약 대조. CX=CGS1+CSB1, CY=CGD1+CDB1+CGS2+CDB2, RX=RS||1/gm1, RY=1/gm2에서 음의 두 극점. 두 λ=0·몸체효과 무시, 요약 및 Rs→∞/CGD2 retry 일치."
+            "evidence": "X·Y의 위치와 두 시간상수 기호를 일관되게 쓰고 SVG에는 첨자를 사용한다."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "일곱 구역·solve 제목·retry 확인. CX=CGS1+CSB1, CY=CGD1+CDB1+CGS2+CDB2, RX=RS||1/gm1, RY=1/gm2에서 음의 두 극점. 두 λ=0·몸체효과 무시, 요약 및 Rs→∞/CGD2 retry 일치."
+            "evidence": "㉠에서 입력 저항과 Cx, ㉡에서 출력 저항과 Cy를 지정한 뒤 두 극점을 낸다."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "수치 필기 교정 사례와 다른 주파수 문제; λ·몸체효과 모델 확인. CX=CGS1+CSB1, CY=CGD1+CDB1+CGS2+CDB2, RX=RS||1/gm1, RY=1/gm2에서 음의 두 극점. 두 λ=0·몸체효과 무시, 요약 및 Rs→∞/CGD2 retry 일치."
+            "evidence": "그림에서 X에 달린 것은 C_GS1이다. 교재 식 11.101의 C_GD1 인쇄와 달리 회로와 참고 MD에 맞게 썼다."
+          },
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "원문에 소자 수치가 없어 공학 단위 환산이 필요하지 않다."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "기호 답이며 반올림 없이 보인다."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "소자 크기 또는 전류의 배율 변화를 구하는 문항이 아니다."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "이미 바이어스된 소신호 회로이며 동작 영역의 경계나 노드 DC 전압을 요구하지 않는다."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "팔로워 출력 임피던스 Zout(s)에만 적용되는 형태이며 이 문항은 입력 용량·CG 극점·전달함수를 구한다."
+          },
+          "GAIN-01": {
+            "disposition": "not_applicable",
+            "evidence": "전압 전달비나 증폭기 이득이 아니라 두 극점이 목표다."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "입력 저항은 Rs에 물린 공통 게이트 입력이므로 소스 축퇴 블록의 제어전압 역산은 필요하지 않다."
           }
         }
       },
       "p2:main": {
         "status": "pass",
-        "reviewer": "content_review",
+        "reviewer": "Codex parent reviewer (different from the fragment author)",
         "rules": {
-          "UNIT-01": {
-            "disposition": "not_applicable",
-            "evidence": "기호 계산만 수행; sRC 무차원."
-          },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "중간값 CX,Zx,RL,CY,τ를 통해 결과 도출."
-          },
-          "CALC-02": {
-            "disposition": "not_applicable",
-            "evidence": "수치 대입·반올림 없는 기호 계산."
+            "evidence": "공통 C_X와 경우별 R_L,C_Y를 분리하고 마지막 H_k(s)에 조립한다."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "세 부하 a,c=1/gm2||ro2, b=ro2와 각 CY 분류를 원 회로 단자와 대조. 입력·출력 두 시간상수의 양의 CG 전달함수, M1 λ=0, M2 ro 유지, Rout 및 전달함수 ≈와 요약·retry 일치."
+            "evidence": "(a)는 소스를 보는 다이오드 접속, (b)는 제어 전압이 0인 드레인, (c)는 게이트·드레인을 보는 다이오드 접속으로 구분한다."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "단락 그림 X→Y 제어원, Y 접지; 입력 0 그림 RL·CY 병렬과 오른쪽 시험점. 실제 화면·PDF 글리프 간격 미검토."
+            "evidence": "X와 Y를 분리한 λ1=0 소신호 회로가 본문 첫 두 식의 단자와 맞는다."
           },
           "GAIN-01": {
             "disposition": "applied",
-            "evidence": "단락 Gm→입력 영점 Rout→Av; Rout 근사 표기."
-          },
-          "DEGEN-01": {
-            "disposition": "not_applicable",
-            "evidence": "축퇴 저항 유도 문제 아님."
-          },
-          "SCALE-01": {
-            "disposition": "not_applicable",
-            "evidence": "폭·전류 배율 역산 없음."
-          },
-          "BIAS-01": {
-            "disposition": "not_applicable",
-            "evidence": "DC 동작점·포화 경계 계산 없음."
+            "evidence": "H_k(s)=(v_X/v_in)(v_Y/v_X)부터 쓰고 λ1=0에서 출력 부하가 X로 역전달되지 않음을 근거로 한다."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "기호·조건·근사 및 본문/요약 대조. 세 부하 a,c=1/gm2||ro2, b=ro2와 각 CY 분류를 원 회로 단자와 대조. 입력·출력 두 시간상수의 양의 CG 전달함수, M1 λ=0, M2 ro 유지, Rout 및 전달함수 ≈와 요약·retry 일치."
+            "evidence": "한 R_L,k와 C_Y,k를 표기하고 X/Y와 부하 가지 위치를 ㉠/㉡에 연결했다."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "일곱 구역·solve 제목·retry 확인. 세 부하 a,c=1/gm2||ro2, b=ro2와 각 CY 분류를 원 회로 단자와 대조. 입력·출력 두 시간상수의 양의 CG 전달함수, M1 λ=0, M2 ro 유지, Rout 및 전달함수 ≈와 요약·retry 일치."
+            "evidence": "공통 입력 분압부터 쓰고 원문별 출력 단자 차이를 한 문장씩 설명한 후 전달함수로 끝낸다."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "수치 필기 교정 사례와 다른 주파수 문제; λ·몸체효과 모델 확인. 세 부하 a,c=1/gm2||ro2, b=ro2와 각 CY 분류를 원 회로 단자와 대조. 입력·출력 두 시간상수의 양의 CG 전달함수, M1 λ=0, M2 ro 유지, Rout 및 전달함수 ≈와 요약·retry 일치."
+            "evidence": "λ1=0만 사용하고 부하 M2의 유한 r_o2와 단자별 접합 용량을 보존한다."
+          },
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "원문에 소자 수치가 없어 공학 단위 환산이 필요하지 않다."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "기호 답이며 반올림 없이 보인다."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "소자 크기 또는 전류의 배율 변화를 구하는 문항이 아니다."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "이미 바이어스된 소신호 회로이며 동작 영역의 경계나 노드 DC 전압을 요구하지 않는다."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "팔로워 출력 임피던스 Zout(s)에만 적용되는 형태이며 이 문항은 입력 용량·CG 극점·전달함수를 구한다."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "입력은 소스에 직접 인가되고 공통 게이트 입력 분압을 계산하므로 소스 축퇴 CS 이득을 적용하지 않는다."
           }
         }
       },
       "p3:main": {
         "status": "pass",
-        "reviewer": "content_review",
+        "reviewer": "Codex parent reviewer (different from the fragment author)",
         "rules": {
-          "UNIT-01": {
-            "disposition": "not_applicable",
-            "evidence": "기호 계산만 수행; gmRL 무차원, Cin 단위 F."
-          },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "중간값 RL,Av를 통해 결과 도출."
-          },
-          "CALC-02": {
-            "disposition": "not_applicable",
-            "evidence": "수치 대입·반올림 없는 기호 계산."
+            "evidence": "먼저 R_L=ro1∥ro2, 이어 소스 추종 이득과 입력 전하로 정리한다."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "RL=ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgd1+Cgs1/(1+gm1RL). RL→∞와 추종 증가의 의미, 몸체효과 무시와 요약 일치."
+            "evidence": "두 트랜지스터의 ro는 같은 두 AC 노드에 걸려 병렬이며 M2의 Vgs는 고정된다."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "단락에서 소스 접지라 vgs=vin이며 제어원 접지→출력. 입력 0에서 1/gm1||ro1||ro2 및 오른쪽 시험점. 실제 화면·PDF 글리프 간격 미검토."
-          },
-          "GAIN-01": {
-            "disposition": "applied",
-            "evidence": "단락 Gm→입력 영점 Rout→Av; Rout 근사 표기."
+            "evidence": "그림에 소스 노드, 입력 노드와 Cgs 접속, 출력 유효 부하와 Cgd의 접지 가지를 구분했다."
           },
           "DEGEN-01": {
-            "disposition": "not_applicable",
-            "evidence": "축퇴 저항 유도 문제 아님."
-          },
-          "SCALE-01": {
-            "disposition": "not_applicable",
-            "evidence": "폭·전류 배율 역산 없음."
-          },
-          "BIAS-01": {
-            "disposition": "not_applicable",
-            "evidence": "DC 동작점·포화 경계 계산 없음."
+            "disposition": "applied",
+            "evidence": "KCL에서 제어전압 v_in−v_s를 사용하고 v_s/R_L로 소스 전류를 연결한다."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "기호·조건·근사 및 본문/요약 대조. RL=ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgd1+Cgs1/(1+gm1RL). RL→∞와 추종 증가의 의미, 몸체효과 무시와 요약 일치."
+            "evidence": "v_s와 R_L을 그림·첫 식에서 대응시키고 값이 필요한 곳에만 참조한다."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "일곱 구역·solve 제목·retry 확인. RL=ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgd1+Cgs1/(1+gm1RL). RL→∞와 추종 증가의 의미, 몸체효과 무시와 요약 일치. (1−Av)vin이 answer-step 내부에 있음."
+            "evidence": "㉠에서 출력 부하를 고르고 두 단자의 전하 차이로 입력 용량에 도달한다."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "수치 필기 교정 사례와 다른 주파수 문제; λ·몸체효과 모델 확인. RL=ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgd1+Cgs1/(1+gm1RL). RL→∞와 추종 증가의 의미, 몸체효과 무시와 요약 일치."
+            "evidence": "λ≠0인 두 ro와 드레인 AC 접지에 놓인 Cgd1을 유지한다."
+          },
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "원문에 소자 수치가 없어 공학 단위 환산이 필요하지 않다."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "기호 답이며 반올림 없이 보인다."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "소자 크기 또는 전류의 배율 변화를 구하는 문항이 아니다."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "이미 바이어스된 소신호 회로이며 동작 영역의 경계나 노드 DC 전압을 요구하지 않는다."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "팔로워 출력 임피던스 Zout(s)에만 적용되는 형태이며 이 문항은 입력 용량·CG 극점·전달함수를 구한다."
+          },
+          "GAIN-01": {
+            "disposition": "not_applicable",
+            "evidence": "입력 용량이 목표이고 소스 팔로워의 이득 한 항을 보조 계산한다."
           }
         }
       },
       "p4:main": {
         "status": "pass",
-        "reviewer": "content_review",
+        "reviewer": "Codex parent reviewer (different from the fragment author)",
         "rules": {
-          "UNIT-01": {
-            "disposition": "not_applicable",
-            "evidence": "기호 계산만 수행; gmRL 무차원, Cin 단위 F."
-          },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "중간값 RL,Av를 통해 결과 도출."
-          },
-          "CALC-02": {
-            "disposition": "not_applicable",
-            "evidence": "수치 대입·반올림 없는 기호 계산."
+            "evidence": "R_L을 독립 계산한 뒤 추종 전압비와 입력 전하로 이어 간다."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "RL=1/gm2||ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgs1/(1+gm1RL). gm2→0 및 추종 증가 극한, Cgs1만 사용·몸체효과 무시와 요약 일치."
+            "evidence": "M2 게이트와 드레인이 소스 추종 노드에 함께 묶여 1/gm2∥ro2가 되며 ro1을 같은 노드에서 병렬로 합친다."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "단락에서 vgs=vin, 입력 0에서 1/gm1||ro1||(1/gm2||ro2). 시험점 오른쪽, 유입 시험전류 왼쪽 방향. 병렬 저항 라벨은 U+2016 double vertical line ‖ 사용. 실제 화면·PDF 글리프 간격 미검토."
-          },
-          "GAIN-01": {
-            "disposition": "applied",
-            "evidence": "단락 Gm→입력 영점 Rout→Av; Rout 근사 표기."
+            "evidence": "그림의 소스와 Cgs1 접속, 출력 부하의 AC 접지를 원문에 대조했다."
           },
           "DEGEN-01": {
-            "disposition": "not_applicable",
-            "evidence": "축퇴 저항 유도 문제 아님."
-          },
-          "SCALE-01": {
-            "disposition": "not_applicable",
-            "evidence": "폭·전류 배율 역산 없음."
-          },
-          "BIAS-01": {
-            "disposition": "not_applicable",
-            "evidence": "DC 동작점·포화 경계 계산 없음."
+            "disposition": "applied",
+            "evidence": "제어 전압 v_in−v_s가 결정하는 소스 전류를 유효 부하 전류와 같게 둔다."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "기호·조건·근사 및 본문/요약 대조. RL=1/gm2||ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgs1/(1+gm1RL). gm2→0 및 추종 증가 극한, Cgs1만 사용·몸체효과 무시와 요약 일치."
+            "evidence": "같은 소스 전압·부하를 그림과 식에 쓰고 ㉠은 연결 위치를 가리킨다."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "일곱 구역·solve 제목·retry 확인. RL=1/gm2||ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgs1/(1+gm1RL). gm2→0 및 추종 증가 극한, Cgs1만 사용·몸체효과 무시와 요약 일치. (1−Av)vin이 answer-step 내부에 있음."
+            "evidence": "왜 M2를 저항으로 읽는지 먼저 짚은 뒤 용량의 양단 전압과 최종 용량을 계산한다."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "수치 필기 교정 사례와 다른 주파수 문제; λ·몸체효과 모델 확인. RL=1/gm2||ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgs1/(1+gm1RL). gm2→0 및 추종 증가 극한, Cgs1만 사용·몸체효과 무시와 요약 일치."
+            "evidence": "λ≠0인 출력저항들을 제거하지 않고 원문의 지시에 따라 Cgs1 이외의 용량은 사용하지 않는다."
+          },
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "원문에 소자 수치가 없어 공학 단위 환산이 필요하지 않다."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "기호 답이며 반올림 없이 보인다."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "소자 크기 또는 전류의 배율 변화를 구하는 문항이 아니다."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "이미 바이어스된 소신호 회로이며 동작 영역의 경계나 노드 DC 전압을 요구하지 않는다."
+          },
+          "FREQ-01": {
+            "disposition": "not_applicable",
+            "evidence": "팔로워 출력 임피던스 Zout(s)에만 적용되는 형태이며 이 문항은 입력 용량·CG 극점·전달함수를 구한다."
+          },
+          "GAIN-01": {
+            "disposition": "not_applicable",
+            "evidence": "입력 용량 목표의 단일 팔로워 전압비 계산이라 단간 이득 분해가 없다."
           }
         }
       }
@@ -271,73 +276,73 @@
   },
   "source_visual": {
     "status": "pass",
-    "reviewer": "child-coordinator",
-    "evidence": "C:\\Users\\Hyunjun\\AppData\\Local\\Temp\\ec2-review-pack-1030-20261102-finish\\problem-explain\\952a6f4e-af3a-4664-92c5-eec0d3311f25\\source-visual-glyph.md"
+    "reviewer": "Codex parent reviewer (different from the fragment author)",
+    "evidence": "E11.19, 11장 PDF p20 Fig 11.38(a)/(b), λ=0, 두 노드가 각각 접지 용량을 갖는 연결 확인. P11.46, 11장 PDF p36 Fig 11.88(a)–(c), M1만 λ=0. 상단 소자의 AC 접속과 세 원문 그림 확인. E11.23, 11장 PDF p23 Fig 11.45, λ≠0와 M1 팔로워/M2 바이어스 가지 확인. P11.47, 11장 PDF p36 Fig 11.89, λ≠0, Cgs1만 사용, M2 gate-drain 결선 확인."
   },
   "browser": {
     "status": "pass",
-    "reviewer": "child-coordinator",
-    "evidence": "C:\\Users\\Hyunjun\\AppData\\Local\\Temp\\ec2-review-pack-1030-20261102-finish\\problem-explain\\952a6f4e-af3a-4664-92c5-eec0d3311f25\\browser-review-glyph.md"
+    "reviewer": "Codex parent reviewer (different from the fragment author)",
+    "evidence": "Chromium stage 7184110445b644b9add9b9334be69a70. 1280×900·1024×900·375×812 × light/dark 여섯 조합, 4문항, KaTeX·누락 그림·콘솔·가로 넘침 오류 0. 1023/1024 기본 열림 경계, 닫힘 저장, 원문 탭, 도킹·띄우기·이동, 이전/다음과 테마 토글을 별도로 실제 조작했다. 회로 라벨 Pretendard SemiBold 확인, + 위치 기호는 HTML 기본 원문 표시와 독립 SVG의 원/자모 렌더를 구분한다. 별도 내부 답안 미리보기 5쪽에서 선택 수식·답과 쪽 넘침 없음 확인. browser-7184110445b644b9add9b9334be69a70/browser.json 및 panels.json."
   },
   "content": {
     "status": "pass",
-    "reviewer": "content_review",
-    "evidence": "C:\\Users\\Hyunjun\\AppData\\Local\\Temp\\ec2-review-pack-1030-20261102-finish\\problem-explain\\952a6f4e-af3a-4664-92c5-eec0d3311f25\\stage-content-glyph.json; evidence/content-review-glyph.json",
+    "reviewer": "Codex parent reviewer (different from the fragment author)",
+    "evidence": "stage HTML, MD, 회로 위치와 근사 조건, 소문항별 최종 식과 요약을 대조했다.",
     "items": {
       "p1:main": {
         "status": "pass",
-        "reviewer": "content_review",
-        "evidence": "CX=CGS1+CSB1, CY=CGD1+CDB1+CGS2+CDB2, RX=RS||1/gm1, RY=1/gm2에서 음의 두 극점. 두 λ=0·몸체효과 무시, 요약 및 Rs→∞/CGD2 retry 일치. RC 블록 합성으로 Gm/Rout 측정 그림 불필요.; C:\\Users\\Hyunjun\\AppData\\Local\\Temp\\ec2-review-pack-1030-20261102-finish\\problem-explain\\952a6f4e-af3a-4664-92c5-eec0d3311f25\\stage-content-glyph.json"
+        "reviewer": "Codex parent reviewer (different from the fragment author)",
+        "evidence": "입력 (Rs∥1/gm1)(Cgs1+Csb1), 출력 (Cgd1+Cdb1+Cgs2+Cdb2)/gm2로 각각의 시간상수를 구하고 극점에 음수를 적용한다. MD는 양의 크기를 쓴다. 그림 위치-첫 식과 HTML/MD/요약의 표기·조건을 대조했다."
       },
       "p2:main": {
         "status": "pass",
-        "reviewer": "content_review",
-        "evidence": "세 부하 a,c=1/gm2||ro2, b=ro2와 각 CY 분류를 원 회로 단자와 대조. 입력·출력 두 시간상수의 양의 CG 전달함수, M1 λ=0, M2 ro 유지, Rout 및 전달함수 ≈와 요약·retry 일치. 단락 그림 X→Y 제어원, Y 접지; 입력 0 그림 RL·CY 병렬과 오른쪽 시험점.; C:\\Users\\Hyunjun\\AppData\\Local\\Temp\\ec2-review-pack-1030-20261102-finish\\problem-explain\\952a6f4e-af3a-4664-92c5-eec0d3311f25\\stage-content-glyph.json"
+        "reviewer": "Codex parent reviewer (different from the fragment author)",
+        "evidence": "세 경우의 공통 입력 분압과 독립적인 출력 유효 어드미턴스를 곱한다. a/c의 도통성은 gm2+go2, b에서는 go2만 남고 상단 소자의 용량 접속을 세 경우에 나눴다. 그림 위치-첫 식과 HTML/MD/요약의 표기·조건을 대조했다."
       },
       "p3:main": {
         "status": "pass",
-        "reviewer": "content_review",
-        "evidence": "RL=ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgd1+Cgs1/(1+gm1RL). RL→∞와 추종 증가의 의미, 몸체효과 무시와 요약 일치. 단락에서 소스 접지라 vgs=vin이며 제어원 접지→출력. 입력 0에서 1/gm1||ro1||ro2 및 오른쪽 시험점.; C:\\Users\\Hyunjun\\AppData\\Local\\Temp\\ec2-review-pack-1030-20261102-finish\\problem-explain\\952a6f4e-af3a-4664-92c5-eec0d3311f25\\stage-content-glyph.json"
+        "reviewer": "Codex parent reviewer (different from the fragment author)",
+        "evidence": "Yin/s의 DC 극한으로 Cgd1+Cgs1/(1+gm1(ro1∥ro2))를 얻으며 MD와 본문이 동일하다. 그림 위치-첫 식과 HTML/MD/요약의 표기·조건을 대조했다."
       },
       "p4:main": {
         "status": "pass",
-        "reviewer": "content_review",
-        "evidence": "RL=1/gm2||ro1||ro2, 단락 Gm=−gm1, 저주파 Cin≈Cgs1/(1+gm1RL). gm2→0 및 추종 증가 극한, Cgs1만 사용·몸체효과 무시와 요약 일치. 단락에서 vgs=vin, 입력 0에서 1/gm1||ro1||(1/gm2||ro2). 시험점 오른쪽, 유입 시험전류 왼쪽 방향. 병렬 저항 라벨은 U+2016 double vertical line ‖ 사용.; C:\\Users\\Hyunjun\\AppData\\Local\\Temp\\ec2-review-pack-1030-20261102-finish\\problem-explain\\952a6f4e-af3a-4664-92c5-eec0d3311f25\\stage-content-glyph.json"
+        "reviewer": "Codex parent reviewer (different from the fragment author)",
+        "evidence": "Yin/s의 DC 극한으로 Cgs1/(1+gm1((1/gm2)∥ro1∥ro2))를 얻으며 MD와 본문이 동일하다. 그림 위치-첫 식과 HTML/MD/요약의 표기·조건을 대조했다."
       }
     }
   },
   "independent": {
     "status": "pass",
-    "reviewer": "child-coordinator cross-check; finish_verify_a, finish_verify_b",
-    "evidence": "evidence/comparison.md; pN-sympy.py and pN-result.txt",
+    "reviewer": "Codex parent blind derivation (sealed questions and original figures before viewing answers)",
+    "evidence": "문제와 원문 그림만으로 저장한 기호 검산을 이후 참고 풀이와 새 조각에 대조했다.",
     "items": {
       "p1:main": {
         "status": "pass",
-        "reviewer": "finish_verify_a",
-        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt, evidence/comparison.md",
+        "reviewer": "Codex parent blind derivation (sealed questions and original figures before viewing answers)",
         "method": "symbolic",
-        "conclusion": "두 극점이 몸체 효과 무시 모델에서 MD·조각 일치. 입력 교재 인쇄식 오식은 원 그림과 대조."
+        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt",
+        "conclusion": "입력 (Rs∥1/gm1)(Cgs1+Csb1), 출력 (Cgd1+Cdb1+Cgs2+Cdb2)/gm2로 각각의 시간상수를 구하고 극점에 음수를 적용한다. MD는 양의 크기를 쓴다."
       },
       "p2:main": {
         "status": "pass",
-        "reviewer": "finish_verify_a",
-        "evidence": "evidence/p2-sympy.py, evidence/p2-result.txt, evidence/comparison.md",
+        "reviewer": "Codex parent blind derivation (sealed questions and original figures before viewing answers)",
         "method": "symbolic",
-        "conclusion": "세 부하 전달함수 및 각 커패시턴스가 MD·조각과 일치."
+        "evidence": "evidence/p2-sympy.py, evidence/p2-result.txt",
+        "conclusion": "세 경우의 공통 입력 분압과 독립적인 출력 유효 어드미턴스를 곱한다. a/c의 도통성은 gm2+go2, b에서는 go2만 남고 상단 소자의 용량 접속을 세 경우에 나눴다."
       },
       "p3:main": {
         "status": "pass",
-        "reviewer": "finish_verify_b",
-        "evidence": "evidence/p3-sympy.py, evidence/p3-result.txt, evidence/comparison.md",
+        "reviewer": "Codex parent blind derivation (sealed questions and original figures before viewing answers)",
         "method": "symbolic",
-        "conclusion": "저주파 Cin은 gmb1=Cgb1=0에서 MD·조각과 일치."
+        "evidence": "evidence/p3-sympy.py, evidence/p3-result.txt",
+        "conclusion": "Yin/s의 DC 극한으로 Cgd1+Cgs1/(1+gm1(ro1∥ro2))를 얻으며 MD와 본문이 동일하다."
       },
       "p4:main": {
         "status": "pass",
-        "reviewer": "finish_verify_b",
-        "evidence": "evidence/p4-sympy.py, evidence/p4-result.txt, evidence/comparison.md",
+        "reviewer": "Codex parent blind derivation (sealed questions and original figures before viewing answers)",
         "method": "symbolic",
-        "conclusion": "저주파 Cin은 gmb1=0에서 MD·조각과 일치; SVG 문자만 변경."
+        "evidence": "evidence/p4-sympy.py, evidence/p4-result.txt",
+        "conclusion": "Yin/s의 DC 극한으로 Cgs1/(1+gm1((1/gm2)∥ro1∥ro2))를 얻으며 MD와 본문이 동일하다."
       }
     }
   },
@@ -345,30 +350,27 @@
     ".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/0698e985053ddeb7-fig11-45.png": "0698e985053ddeb73927d0cef46b5a7d0d0d9fe5ba59045bf0d74ca46b092641",
     ".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/2046c31ebf68d939-fig11-38-a.png": "2046c31ebf68d9393644fb4761cb41be26b30d02e81a1de12355dd2fc34d3f32",
     ".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/35483282c4896f77-fig11-89.png": "35483282c4896f7794d919f38645aa7c9e3e1823d470a9c9d8efa25e1dd5a8ba",
-    ".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/explain-fig-1.svg": "7b8fd72e7a79cf4122c821d3afb3e3e2ae448a116c104b50bec6eebdb427db59",
-    ".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/explain-fig-2.svg": "1efd902daba4613d44e80468e7a45813aec2a0c040a695375797504f9ef03b1c",
-    ".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/explain-fig-3.svg": "79d9b403242e823b71ae68d633cde660fc32cd28813117d1f9832b176214caff",
-    ".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/explain-fig-4.svg": "155b1ff9d533d9ddaacc4d78870ccce9793d3330e0e313c5dc30039333a95340",
-    ".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/explain-fig-5.svg": "79d9b403242e823b71ae68d633cde660fc32cd28813117d1f9832b176214caff",
-    ".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/explain-fig-6.svg": "d252c5e724447282447b23431ebcf78c460be656681ce0a6c0ee4c4439432704",
     ".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/f67fe8bc75ae39f3-fig11-88.png": "f67fe8bc75ae39f36dee53cf02cf1283e84f5288f1f557fb4b758d5f007b9995",
-    ".assets/문제설명_1030_CG_CB_and_Follower_Frequency_Response.md": "4b3e5f39bca5964555c4694e5a90c77569d4b8f58ba3aa60c65abb9fff2fc465",
-    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/answer-overlay.json": "ea0fdaf161b39c35b9657181ec34cd7771b4b2bbc6f2dae035da61ade6c37968",
-    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/evidence/comparison.md": "b997d91a0b702e22cb88493e90b50a062e5fe5e32535da568c62d1471b5db437",
-    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/evidence/content-review-final.json": "166dd75e68fefb91770c5a4f63c3f67c412ee3a6e79d852b344b8b4fb1aa6a25",
-    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/evidence/content-review-glyph.json": "6b956ae2047275928ffd1c1f2439e1fc43f1c2eee2692e8b13a1e262b247cc23",
-    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/evidence/content-review-recheck.json": "7a33444831bde33c25f0810b75de187c5d439785b68e1e202ad366e24189e9e5",
-    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/evidence/E11.19-p20.png": "2e0d0ba9631d190ee9ac9acf9a63afb7c0da7abcdbd75fdb42328ca02eb8f86f",
-    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/evidence/E11.23-p23.png": "287717f726d0e698248705f96478ef73b90d63f57f85b71709d3752f55f4e1e6",
-    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/evidence/independent-p1-p2.md": "8d7133bd76bdb2df383b176338e45c6e7146013f984ae0a4b3585edd83dfa914",
-    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/evidence/independent-p3-p4.md": "8c1fc296334ad60a71b3a247ab02e5f736c8b1136539206eac8d2ca5eb62bb49",
-    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/evidence/P11.46-p36.png": "c1ab4e84ee15131e956776e7cb0d39f1b60e4997b9bec6575ecab05778009bce",
-    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/fragments/p1.html": "2a15ab690cc9ea5d7a18a0a64fff72dcdd1b66da278e3dfc789819076e5b531c",
-    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/fragments/p2.html": "1ab85bcf0d60c222489adb4308a6ce5ac4e211a4f25aca573232a94a6657d37d",
-    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/fragments/p3.html": "792b64734f10469153c547f19be377d934396fa7cb99316646f2c47e524318c9",
-    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/fragments/p4.html": "c48ccda223f83c7df86cbefb18b8ea28573ec4a0894bd9c37b2e19c74695e3b2",
-    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/template-provenance.json": "df58e3bc22a94c057389598742586ab4ec80b9ad9e584abf4b48f2fc735c4f17",
-    "문제설명_1030_CG_CB_and_Follower_Frequency_Response.html": "4804c046997ca5dc1a607b2cf997d4c8a1dfb9e2ada7de84ebdf0eecbc2f23e0",
-    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/manifest.json": "eb5efe6573a304388bd2fae058ce81eb7dd1003f967a9a929868a58b0e448f87"
+    ".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/p1-fig-p1-1.svg": "5068cc017f18d6c7db247308e431a81dfde00f1dbf8de52668eacbaceea877f4",
+    ".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/p2-fig-p2-1.svg": "6301d477ab168894ead0015254705aa76193cda6bd5db633a786eb556af31b8b",
+    ".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/p3-fig-p3-1.svg": "495a53e93b2b3290b7eb21bab0979ff86461418a8284a595e4d154784d135214",
+    ".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/p4-fig-p4-1.svg": "33e5f2cf05df702838c54df5ffae146296954358f078426a90f07f8d23d2caf0",
+    ".assets/문제설명_1030_CG_CB_and_Follower_Frequency_Response.md": "ecf1984e861d85198ce8d67091dcad4aa1792422629e44ebff940ae2f80c13fb",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/answer-overlay.json": "49016ccf96c564fad32fccbd8de71475ae008c83407e14b50d310830426dbd03",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/evidence/p1-result.txt": "0af239742fd58fd5d25e462bcca2a5e1274185accf91340451e76790cd80e2e3",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/evidence/p1-sympy.py": "8396f2eb3814021a6f3bac4d6ce439c117b5de95ac7cc540fcac81b437482483",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/evidence/p2-result.txt": "c1521c71e37f1bb5dbc4d2d8c4f40fa177e6f351153f1c1891c326d011537cc9",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/evidence/p2-sympy.py": "a2e8a96c476f3e45b887660e85835f772d4a1bae0762114560468c9a8ed17904",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/evidence/p3-result.txt": "55ab41715347246d55d5def6e7998f846ab086525691fa092876bf63f2baa6e9",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/evidence/p3-sympy.py": "5638b03dbff845b31b43f093864461e8d3e0c2a4e3391ee9c14d499237079f41",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/evidence/p4-result.txt": "1106ee099fa94cc2c13ddb01c01efcc92c62aa73a5d7c3a9f0f4c31fa9bedcd9",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/evidence/p4-sympy.py": "57d269bb323aacdc8454278ed6060eb43922d3d30b9c54227abbfeb96e5c892d",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/fragments/p1.html": "0603ab3fcfc64f5935589263276fe71c25695725a3413e3dca719528fafe45f2",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/fragments/p2.html": "1fe72fbdd58b991c13a17dc4fa2a20595e94edc928f3bb039fa48d24532a8703",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/fragments/p3.html": "8356671752730ea3f6eb3718ba8589bfb0a93039d4da0c27994c63cbe26bb0c8",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/fragments/p4.html": "b67d81e628d76832b0cd140d5ca80b80b88a9749804310a6005daf929a804e0d",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/template-provenance.json": "69f885ea5f798b5132305e84c4e454228d50fb784330bfab3b2d4fd3697650fc",
+    "문제설명_1030_CG_CB_and_Follower_Frequency_Response.html": "e0d77d1d53c651dbe5f4cb73f8db84e50cc21e62f987a0c887c66b1f31d55877",
+    ".assets/자료_문제설명_1030_CG_CB_and_Follower_Frequency_Response/manifest.json": "3bb3e55d778d49f10018207da361cbb31b1802838075ddbf123346fe3274e10c"
   }
 }

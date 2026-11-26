@@ -1,96 +1,16 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>그림 11.86은 NMOS $M_1$과 PMOS $M_2$의 게이트를 한 노드로 묶고, 두 드레인을 출력에 묶은 회로예요. 입력 $V_{in}$은 $R_S$를 거쳐 공통 게이트 노드로 들어가요. $M_1$ 소스는 접지, $M_2$ 소스는 $V_{DD}$예요.</p>
-  <p>구할 것은 밀러 정리를 쓰지 않은 전달 함수 $V_{out}/V_{in}$이에요. $\lambda&gt;0$이라 두 소자 모두 $r_O$가 있어요.</p>
+<div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit"><svg id="fig-p10-model" viewBox="0 0 520 186" role="img" aria-label="왼쪽 v in 단자가 R S를 거쳐 입력 노드 X에 이어진다. X에서 C X가 접지로 내려가고 X와 출력 노드 Y 사이에 C XY가 떠 있다. Y에서 아래로 흐르는 종속 전류원 g m v X, g m은 g m1 더하기 g m2, 그 오른쪽 R L, 그 오른쪽 C Y이 접지로 내려가고 맨 오른쪽이 출력 단자 v out이다."><circle class="fig-dot" data-node="vin" data-node-color="blue" cx="24" cy="44" r="4"/><text class="fig-text fig-math" data-node="vin" data-node-color="blue" x="14" y="32">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><path class="fig-ink" d="M24 44 H32 L37.3 37 L48.0 51 L58.7 37 L69.3 51 L80.0 37 L90.7 51 L96 44 H104"/><text class="fig-text fig-math" x="64" y="28" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><path class="fig-ink" d="M104 44 H124"/><circle class="fig-dot" data-node="X" data-node-color="red" cx="124" cy="44" r="4"/><text class="fig-text fig-math" data-node="X" data-node-color="red" x="118" y="32" text-anchor="end">X</text><path class="fig-ink" d="M124 44 V89 M124 99 V154"/><path class="fig-accent" d="M111 89 H137 M111 99 H137"/><text class="fig-text fig-math" x="101" y="99" text-anchor="end">C<tspan baseline-shift="sub" font-size="78%">X</tspan></text><path class="fig-ink" d="M124 44 H164 M174 44 H214"/><path class="fig-danger" d="M164 32 V56 M174 32 V56"/><text class="fig-text fig-math" x="169" y="20" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">XY</tspan></text><path class="fig-ink" d="M214 44 H505"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="214" cy="44" r="4"/><text class="fig-text fig-math" data-node="Y" data-node-color="blue" x="214" y="66" text-anchor="middle">Y</text><path class="fig-ink" d="M254 44 V84 M254 112 V154"/><polygon class="fig-ink" points="254,84 268,98 254,112 240,98"/><path class="fig-ink" d="M254 90 V105 M250 101 L254 106 L258 101"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="254" cy="44" r="4"/><text class="fig-text fig-math" x="232" y="103" text-anchor="end">g<tspan baseline-shift="sub" font-size="78%">m</tspan>v<tspan baseline-shift="sub" font-size="78%">X</tspan></text><path class="fig-ink" d="M300 44 V52 L307 59.8 L293 75.5 L307 91.2 L293 106.8 L307 122.5 L293 138.2 L300 146 V154"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="300" cy="44" r="4"/><text class="fig-text fig-math" x="313" y="104">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text><path class="fig-ink" d="M380 44 V89 M380 99 V154"/><path class="fig-accent" d="M367 89 H393 M367 99 H393"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="380" cy="44" r="4"/><text class="fig-text fig-math" x="402" y="99">C<tspan baseline-shift="sub" font-size="78%">Y</tspan></text><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="505" cy="44" r="4"/><text class="fig-text fig-math" data-node="Y" data-node-color="blue" x="505" y="32" text-anchor="end">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M124 154 H380"/><path class="fig-ink" d="M244 154 V162 M234 162 H254 M238 167 H250 M242 172 H246"/><text class="fig-loc" x="186" y="36" font-size="15" text-anchor="middle" >㉠</text></svg><figcaption class="circuit-state">입력용량, X–Y 브리지, 출력용량을 분리한 상보 공통 소스 모델이에요.</figcaption></figure>
+<div data-subpart="main">
+<div data-answer-step="두 트랜지스터 합성"><span class="loc">㉠</span> 입력 X가 오르면 NMOS가 끌어가는 전류는 늘고 PMOS가 밀어 넣는 전류는 줄어요. 출력에서 빠져나가는 방향으로 두 변화가 더해져요.
+$$g_m=g_{m1}+g_{m2}$$
+$$R_L=r_{o1}\parallel r_{o2}$$
+$$C_X=C_{GS1}+C_{GS2}$$
+$$C_{XY}=C_{GD1}+C_{GD2}$$
+$$C_Y=C_{DB1}+C_{DB2}$$</div><div data-answer-step="두 노드의 KCL"><p>브리지 전류를 X에서 출력 쪽으로 잡고 그대로 연립해요.</p>
+$$(V_{in}-V_X)/R_S=sC_XV_X+sC_{XY}(V_X-V_{out})$$
+$$sC_{XY}(V_X-V_{out})=g_m V_X+(1/R_L+sC_Y)V_{out}$$</div><div data-answer-final="">$$\frac{V_{out}}{V_{in}}=\frac{R_L(sC_{XY}-g_m)}{as^2+bs+1}$$
+$$a=R_SR_L[C_X C_Y+(C_X+C_Y)C_{XY}]$$
+$$b=R_SC_X+R_L C_Y+(R_S+R_L+g_m R_S R_L)C_{XY}$$</div>
 </div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p><strong>단서:</strong> "without using Miller's theorem"은 노드 방정식으로 직접 풀라는 뜻이에요. <a href="정리노트_1028_CS_Stage_Frequency_Response.html#s3-direct">직접 해석(KCL로 정확한 전달 함수 세우기)</a>을 떠올려요.</p>
-  <p><strong>개념:</strong> 두 트랜지스터는 게이트 전압 $v_X$를 함께 받고 같은 출력에 전류를 보내요. 소신호에서 두 소스가 모두 AC 접지라 두 소자는 병렬로 합쳐져 하나의 CS 단처럼 행동해요.</p>
-  <p><strong>기호의 뜻:</strong> $g_m=g_{m1}+g_{m2}$는 합친 트랜스컨덕턴스, $R_L=r_{O1}\parallel r_{O2}$는 출력 노드 저항, $C_X$는 게이트 노드–접지, $C_{XY}$는 게이트–출력, $C_Y$는 출력–접지 커패시턴스예요.</p>
-  <p><strong>근사 조건:</strong> 저주파 모델에 기생 커패시턴스를 더한 모델이고, 몸체는 각 소스에 붙어 있어 $C_{SB}$는 양 끝이 AC 접지라 빠져요. 이 모델 안에서 근사 없이 풀어요.</p>
-  <p><strong>선택 이유:</strong> 합친 회로는 노드가 X와 출력 두 개뿐이라 KCL 두 식으로 $V_X$를 소거하면 2차 분모가 나와요. 결과는 정리노트의 통합 CS 모델 식과 같은 꼴이라 검산도 쉬워요.</p>
 </div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="두 소자를 하나로 합치기">
-    <p>$v_X$가 오르면 $M_1$은 출력에서 $g_{m1}v_X$를 더 끌어내리고, PMOS $M_2$는 $v_{SG2}=-v_X$가 되어 출력으로 밀어 넣던 전류를 $g_{m2}v_X$만큼 줄여요. 둘 다 출력에서 빠져나가는 방향이라 더해져요.</p>
-    $$g_m=g_{m1}+g_{m2}$$
-    $$R_L=r_{O1}\parallel r_{O2}$$
-    $$C_X=C_{GS1}+C_{GS2}$$
-    $$C_{XY}=C_{GD1}+C_{GD2}$$
-    $$C_Y=C_{DB1}+C_{DB2}$$
-  </div>
-  <div data-answer-step="두 노드의 KCL">
-    <figure class="figure"><svg id="fig-p10-model" viewBox="0 0 520 186" role="img" aria-label="왼쪽 v in 단자가 R S를 거쳐 입력 노드 X에 이어진다. X에서 C X가 접지로 내려가고 X와 출력 노드 Y 사이에 C XY가 떠 있다. Y에서 아래로 흐르는 종속 전류원 g m v X, g m은 g m1 더하기 g m2, 그 오른쪽 R L, 그 오른쪽 C Y이 접지로 내려가고 맨 오른쪽이 출력 단자 v out이다."><circle class="fig-dot" data-node="vin" data-node-color="blue" cx="24" cy="44" r="4"/><text class="fig-text fig-math" data-node="vin" data-node-color="blue" x="14" y="32">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><path class="fig-ink" d="M24 44 H32 L37.3 37 L48.0 51 L58.7 37 L69.3 51 L80.0 37 L90.7 51 L96 44 H104"/><text class="fig-text fig-math" x="64" y="28" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><path class="fig-ink" d="M104 44 H124"/><circle class="fig-dot" data-node="X" data-node-color="red" cx="124" cy="44" r="4"/><text class="fig-text fig-math" data-node="X" data-node-color="red" x="118" y="32" text-anchor="end">X</text><path class="fig-ink" d="M124 44 V89 M124 99 V154"/><path class="fig-accent" d="M111 89 H137 M111 99 H137"/><text class="fig-text fig-math" x="101" y="99" text-anchor="end">C<tspan baseline-shift="sub" font-size="78%">X</tspan></text><path class="fig-ink" d="M124 44 H164 M174 44 H214"/><path class="fig-danger" d="M164 32 V56 M174 32 V56"/><text class="fig-text fig-math" x="169" y="20" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">XY</tspan></text><path class="fig-ink" d="M214 44 H505"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="214" cy="44" r="4"/><text class="fig-text fig-math" data-node="Y" data-node-color="blue" x="214" y="66" text-anchor="middle">Y</text><path class="fig-ink" d="M254 44 V84 M254 112 V154"/><polygon class="fig-ink" points="254,84 268,98 254,112 240,98"/><path class="fig-ink" d="M254 90 V105 M250 101 L254 106 L258 101"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="254" cy="44" r="4"/><text class="fig-text fig-math" x="232" y="103" text-anchor="end">g<tspan baseline-shift="sub" font-size="78%">m</tspan>v<tspan baseline-shift="sub" font-size="78%">X</tspan></text><path class="fig-ink" d="M300 44 V52 L307 59.8 L293 75.5 L307 91.2 L293 106.8 L307 122.5 L293 138.2 L300 146 V154"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="300" cy="44" r="4"/><text class="fig-text fig-math" x="313" y="104">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text><path class="fig-ink" d="M380 44 V89 M380 99 V154"/><path class="fig-accent" d="M367 89 H393 M367 99 H393"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="380" cy="44" r="4"/><text class="fig-text fig-math" x="402" y="99">C<tspan baseline-shift="sub" font-size="78%">Y</tspan></text><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="505" cy="44" r="4"/><text class="fig-text fig-math" data-node="Y" data-node-color="blue" x="505" y="32" text-anchor="end">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M124 154 H380"/><path class="fig-ink" d="M244 154 V162 M234 162 H254 M238 167 H250 M242 172 H246"/></svg><figcaption>$V_{DD}$는 AC 접지예요. 병렬인 $M_1$·$M_2$를 $g_m=g_{m1}+g_{m2}$의 종속원 하나와 $R_L=r_{O1}\parallel r_{O2}$로 합치고, 커패시턴스를 $C_X$, $C_{XY}$, $C_Y$로 묶었어요. 종속원 전류는 출력 노드 Y에서 접지로 흐르는 방향이 양이에요.</figcaption></figure>
-    <p>노드 X: $R_S$로 들어온 전류가 $C_X$와 $C_{XY}$로 나가요($C_{XY}$ 전류는 X→출력 방향을 양으로).</p>
-    $$\frac{V_{in}-V_X}{R_S}=sC_XV_X+sC_{XY}(V_X-V_{out})$$
-    <p>출력 노드: $C_{XY}$로 들어온 전류가 종속원·$R_L$·$C_Y$로 나가요.</p>
-    $$sC_{XY}(V_X-V_{out})=g_mV_X+\frac{V_{out}}{R_L}+sC_YV_{out}$$
-  </div>
-</div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
-  <div data-subpart="main">
-    <div data-answer-step="출력 노드 식에서 V_X 구하기">
-      <p>출력 노드 식에서 $V_X$ 항을 왼쪽에 모아요.</p>
-      $$V_X(sC_{XY}-g_m)=V_{out}\left[\frac{1}{R_L}+s(C_Y+C_{XY})\right]$$
-      $$V_X=V_{out}\,\frac{1/R_L+s(C_Y+C_{XY})}{sC_{XY}-g_m}$$
-    </div>
-    <div data-answer-step="X 노드 식에 대입">
-      <p>X 노드 식을 $V_X$와 $V_{out}$으로 정리해요.</p>
-      $$\frac{V_{in}}{R_S}=V_X\left[\frac{1}{R_S}+s(C_X+C_{XY})\right]-sC_{XY}V_{out}$$
-      <p>$V_X$를 넣고 양변에 $R_SR_L(sC_{XY}-g_m)$을 곱하면 분수가 사라져요.</p>
-      $$V_{in}R_L(sC_{XY}-g_m)=V_{out}\Big\{[1+sR_L(C_Y+C_{XY})][1+sR_S(C_X+C_{XY})]-sR_SR_LC_{XY}(sC_{XY}-g_m)\Big\}$$
-    </div>
-    <div data-answer-step="계수 정리와 전달 함수">
-      <p>중괄호를 $s$ 차수별로 모아요. $s^2$ 항에서 $C_{XY}^2$이 서로 지워져요.</p>
-      $$s^2:\ R_SR_L\left[(C_Y+C_{XY})(C_X+C_{XY})-C_{XY}^2\right]=R_SR_L(C_XC_{XY}+C_YC_{XY}+C_XC_Y)$$
-      $$s^1:\ R_L(C_Y+C_{XY})+R_S(C_X+C_{XY})+g_mR_SR_LC_{XY}$$
-      $$\frac{V_{out}}{V_{in}}=\frac{(C_{XY}s-g_m)R_L}{as^2+bs+1}$$
-      $$a=R_SR_L(C_XC_{XY}+C_YC_{XY}+C_XC_Y)$$
-      $$b=(1+g_mR_L)C_{XY}R_S+R_SC_X+R_L(C_{XY}+C_Y)$$
-    </div>
-  </div>
-</div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <div data-answer-final>
-      $$\frac{V_{out}}{V_{in}}=\frac{(C_{XY}s-g_m)R_L}{as^2+bs+1}$$
-      $$a=R_SR_L(C_XC_{XY}+C_YC_{XY}+C_XC_Y)$$
-      $$b=(1+g_mR_L)C_{XY}R_S+R_SC_X+R_L(C_{XY}+C_Y)$$
-      <p>기호 대응은 다음과 같아요.</p>
-      $$g_m=g_{m1}+g_{m2}$$
-      $$R_L=r_{O1}\parallel r_{O2}$$
-      $$C_X=C_{GS1}+C_{GS2}$$
-      $$C_{XY}=C_{GD1}+C_{GD2}$$
-      $$C_Y=C_{DB1}+C_{DB2}$$
-    </div>
-    <p><strong>저주파 극한:</strong> $s\to0$이면 $-g_mR_L=-(g_{m1}+g_{m2})(r_{O1}\parallel r_{O2})$로 반전 이득이 나와요. 두 소자가 함께 일하는 인버터 증폭기의 이득과 같아요.</p>
-    <p><strong>영점:</strong> 분자가 0이 되는 $s=g_m/C_{XY}$는 우반면 영점이에요. 이 주파수에서 $C_{XY}$로 흐르는 전류가 $g_mV_X$와 같아 출력 전류가 0이 돼요.</p>
-    <p><strong>차원:</strong> $a$는 $[\Omega^2\mathrm{F}^2]=[\mathrm{s}^2]$, $b$의 각 항은 $[\Omega\cdot\mathrm{F}]=[\mathrm{s}]$, 분자는 $[\mathrm{F}\cdot\mathrm{s^{-1}}\cdot\Omega]$와 $[\mathrm{S}\cdot\Omega]$로 무차원이에요.</p>
-    <p><strong>특수값:</strong> $C_{XY}=0$이면 $a=R_SR_LC_XC_Y$, $b=R_SC_X+R_LC_Y$라 분모가 $(1+sR_SC_X)(1+sR_LC_Y)$로 인수분해돼 두 노드가 독립된 RC가 돼요.</p>
-  </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <p>PMOS의 전류를 반대 부호로 넣어 $g_m=g_{m1}-g_{m2}$로 쓰면 틀려요. 게이트 전압이 오를 때 NMOS는 더 끌어내리고 PMOS는 덜 밀어 올리니 출력 노드 입장에서는 같은 방향이에요.</p>
-  <p>$C_{GS2}$를 게이트–출력 커패시턴스로 착각하기 쉬워요. $M_2$의 소스는 $V_{DD}$라 $C_{GS2}$는 X–AC 접지예요.</p>
-  <p>KCL에서 $C_{XY}$ 전류의 부호를 두 식에서 다르게 정의하면 분자의 $sC_{XY}$ 부호가 뒤집혀요. 한 방향(X→출력)을 정하고 두 식에 같은 항을 써요.</p>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol>
-    <li>$M_2$를 빼고 그 자리에 저항 $R_D$를 두면 $g_m$, $R_L$, $C_X$, $C_{XY}$, $C_Y$는 각각 무엇이 될까요?</li>
-    <li>$C_{XY}\to0$일 때 분모가 두 RC 인수의 곱으로 나뉘는 이유를 노드 독립성으로 설명해 보세요.</li>
-  </ol>
-</div>
-<div class="sum" hidden>
-  <p class="sum-lead">게이트와 드레인을 묶은 NMOS·PMOS는 하나의 CS 단으로 합쳐요.</p>
-  <p>합친 트랜스컨덕턴스는 $g_m=g_{m1}+g_{m2}$예요.</p>
-  <p>출력 노드 저항은 $R_L=r_{O1}\parallel r_{O2}$예요.</p>
-  <p>$\dfrac{V_{out}}{V_{in}}=\dfrac{(C_{XY}s-g_m)R_L}{as^2+bs+1}$</p>
-  <p>$a=R_SR_L(C_XC_{XY}+C_YC_{XY}+C_XC_Y)$</p>
-  <p>$b=(1+g_mR_L)C_{XY}R_S+R_SC_X+R_L(C_{XY}+C_Y)$</p>
-</div>
+<div class="sum" hidden><p class="sum-lead">브리지 전류를 한 번 정의해 두 노드의 KCL에 반대 부호로 넣어요.</p></div>

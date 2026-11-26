@@ -1,9 +1,4 @@
-wire: i_L/i_in = R_S/(R_L + R_S)
-CG: i_L/i_in (current delivered to R_L) = R_S*(g_m*r_O + 1)/(R_L + R_S*g_m*r_O + R_S + r_O)
-CG, ro->oo: R_S*g_m/(R_S*g_m + 1)   (independent of R_L)
-wire, R_L->oo vs CG: wire ratio -> 0
-CG Rin (ro->oo) = 1/g_m
-CG Rout with source resistance R_S = R_S*g_m*r_O + R_S + r_O ; with ideal i_in (R_S->oo): oo
-numeric (R_S=10k, R_L=10k, gm=10mS, rO=50k): wire 0.5  CG 0.9881656804733728
-sign: with RL from drain to ac gnd, v_d/i_in = R_L*R_S*(g_m*r_O + 1)/(R_L + R_S*g_m*r_O + R_S + r_O) > 0 => current leaves drain into load in same sense as i_in (|A_I|=1)
-CG ratio with gm->oo: 1
+Rin (ideal device): 1/gm Rout as ro tends to infinity: oo
+For a current-source input in the ideal device model: imposed i_in=gm vs; d(vs)/d(vout)=0
+
+A biased common-gate stage acts as a current buffer: its low input resistance and high output resistance decouple the two voltages. A changing output voltage has little effect on input voltage/current, and each side can operate at a different DC voltage within compliance. A wire ties the two voltages together. Unity current gain alone does not express this isolation.

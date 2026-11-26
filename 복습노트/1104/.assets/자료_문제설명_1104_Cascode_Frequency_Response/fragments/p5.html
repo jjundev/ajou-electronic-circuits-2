@@ -1,118 +1,17 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>공통 소스(CS) 단 $M_1$의 게이트가 $X$, 공통 게이트(CG) 단 $M_2$의 소스가 $Y$예요. 신호는 입력원에서 $R_G$를 거쳐 $X$로 들어가고 $M_2$의 드레인에서 나와요. 두 저항을 키우면 해당 노드의 커패시터를 충전하는 시간이 길어져요. 지정한 극점 주파수를 유지할 수 있는 저항 한계를 찾고 그때의 저주파 이득을 구해요.</p>
+<div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit"><svg id="fig-p5-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 238" role="img" aria-label="밀러 분리한 입력 영점의 캐스코드 소신호 회로"><path class="fig-ink" d="M26 66h18l4 -6 8 12 8 -12 8 12 8 -12 8 12 4 -6h45 M251 121h40m-40 0v15m0 28v26 M251 190v22 M251 121v-7m0 -28V66h231 M386 66v16l-6 4 12 8 -12 8 12 8 -6 4v18 M26 66v66"/><path class="fig-ink" d="M137 66h45"/><path class="fig-ink" d="M182 66v17m-9 0h18m-18 7h18m-9 0v17"/><path class="fig-ink" d="M182 107v9m-9 0h18m-15 4h12m-9 4h6"/><path class="fig-ink" d="M26 132v9m-9 0h18m-15 4h12m-9 4h6"/><path class="fig-ink" d="M291 121v17m-9 0h18m-18 7h18m-9 0v17"/><path class="fig-ink" d="M291 162v9m-9 0h18m-15 4h12m-9 4h6"/><path class="fig-ink" d="M251 212v9m-9 0h18m-15 4h12m-9 4h6"/><path class="fig-ink" d="M386 132v9m-9 0h18m-15 4h12m-9 4h6"/><path class="fig-ink" d="M438 66v17m-9 0h18m-18 7h18m-9 0v17"/><path class="fig-ink" d="M438 107v9m-9 0h18m-15 4h12m-9 4h6"/><circle class="fig-ink" cx="251" cy="100" r="14"/><path class="fig-ink" d="M251 92v16m-4 -4l4 4 4 -4"/><circle class="fig-ink" cx="251" cy="150" r="14"/><path class="fig-ink" d="M251 142v16m-4 -4l4 4 4 -4"/><circle class="fig-dot" cx="137" cy="66" r="3.5" data-node-id="p5-hf-X" data-node-color="blue"/><circle class="fig-dot" cx="251" cy="121" r="3.5" data-node-id="p5-hf-Y" data-node-color="red"/><circle class="fig-dot" cx="482" cy="66" r="3.5" data-node-id="p5-hf-out" data-node-color="blue"/><circle class="fig-dot" cx="251" cy="66" r="3.5" data-node-id="p5-hf-out" data-node-color="blue"/><circle class="fig-dot" cx="386" cy="66" r="3.5" data-node-id="p5-hf-out" data-node-color="blue"/><circle class="fig-dot" cx="438" cy="66" r="3.5" data-node-id="p5-hf-out" data-node-color="blue"/><text class="fig-text fig-math" x="137" y="47" text-anchor="middle" data-node-id="p5-hf-X" data-node-color="blue">X</text><text class="fig-text fig-math" x="226" y="123" text-anchor="middle" data-node-id="p5-hf-Y" data-node-color="red">Y</text><text class="fig-text fig-math" x="482" y="45" text-anchor="middle" data-node-id="p5-hf-out" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><text class="fig-text fig-math" x="66" y="48" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">G</tspan></text><text class="fig-text fig-math" x="155" y="93" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">X</tspan></text><text class="fig-text fig-math" x="316" y="147" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">Y</tspan></text><text class="fig-text fig-math" x="361" y="103" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text><text class="fig-text fig-math" x="467" y="94" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">out</tspan></text><text class="fig-text fig-math" x="309" y="105" text-anchor="middle">−g<tspan baseline-shift="sub" font-size="78%">m2</tspan>v<tspan baseline-shift="sub" font-size="78%">Y</tspan></text><text class="fig-text fig-math" x="203" y="160" text-anchor="middle">g<tspan baseline-shift="sub" font-size="78%">m1</tspan>v<tspan baseline-shift="sub" font-size="78%">X</tspan></text><text class="fig-loc" x="115" y="40" font-size="15" text-anchor="middle" >㉠</text><text class="fig-loc" x="478" y="22" font-size="15" text-anchor="middle" >㉡</text></svg><figcaption class="circuit-state">밀러 분리 후 입력 X, 중간 Y, 출력에 남는 용량과 저항</figcaption></figure>
+<div data-subpart="main">
+<div data-answer-step="밀러 이득과 소자 크기"><span class="loc">㉠</span> 두 소자가 같고 $\lambda=0$이므로 Y의 공통 게이트 입력저항은 $1/g_{m2}$예요. 여기에 $M_1$이 전류를 흘려요.
+$$A_{XY}=-g_{m1}/g_{m2}=-1$$
+$$W=\frac{2I_D L}{\mu_n C_{ox}V_{ov}^2}=45\,\mu\mathrm m$$
+$$g_{m1}=g_{m2}=2I_D/V_{ov}=5\,\mathrm{mS}$$
+$$C_{GS}=\tfrac23 WLC_{ox}=64.8\,\mathrm{fF}$$
+$$C_{GD}=C_0W=9\,\mathrm{fF}$$</div><div data-answer-step="두 극점의 설계 경계"><figure class="figure"><svg id="fig-p5-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 150" role="img" aria-label="밀러 분리 전후"><path class="fig-ink" d="M42 54h75m0 -10v20m8 -20v20m0 -10h75"/><circle class="fig-dot" cx="42" cy="54" r="3.5" data-node-id="p5-miller-before-X" data-node-color="blue"/><text class="fig-text fig-math" x="42" y="35" text-anchor="middle" data-node-id="p5-miller-before-X" data-node-color="blue">X</text><circle class="fig-dot" cx="200" cy="54" r="3.5" data-node-id="p5-miller-before-Y" data-node-color="red"/><text class="fig-text fig-math" x="200" y="35" text-anchor="middle" data-node-id="p5-miller-before-Y" data-node-color="red">Y</text><text class="fig-text fig-math" x="121" y="84" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">GD1</tspan></text><path class="fig-ink" d="M243 58h36m-7 -6l7 6-7 6"/><circle class="fig-dot" cx="339" cy="54" r="3.5" data-node-id="p5-miller-after-X" data-node-color="blue"/><text class="fig-text fig-math" x="339" y="35" text-anchor="middle" data-node-id="p5-miller-after-X" data-node-color="blue">X</text><path class="fig-ink" d="M339 54v17m-9 0h18m-18 7h18m-9 0v17"/><path class="fig-ink" d="M339 95v9m-9 0h18m-15 4h12m-9 4h6"/><text class="fig-text fig-math" x="339" y="137" text-anchor="middle">2C<tspan baseline-shift="sub" font-size="78%">GD1</tspan></text><circle class="fig-dot" cx="464" cy="54" r="3.5" data-node-id="p5-miller-after-Y" data-node-color="red"/><text class="fig-text fig-math" x="464" y="35" text-anchor="middle" data-node-id="p5-miller-after-Y" data-node-color="red">Y</text><path class="fig-ink" d="M464 54v17m-9 0h18m-18 7h18m-9 0v17"/><path class="fig-ink" d="M464 95v9m-9 0h18m-15 4h12m-9 4h6"/><text class="fig-text fig-math" x="464" y="137" text-anchor="middle">2C<tspan baseline-shift="sub" font-size="78%">GD1</tspan></text></svg><figcaption class="circuit-state">$A_{XY}=-1$이므로 $C_{GD1}$이 양쪽에서 각각 두 배로 보여요.</figcaption></figure>
+$$C_X\approx C_{GS1}+2C_{GD1}=82.8\,\mathrm{fF}$$
+<span class="loc">㉡</span> 주어진 용량만 고려하면 출력에는 $C_{GD2}$가 접지로 이어져요. 각 극점 주파수가 목표값과 같을 때 허용 저항이 가장 커요. 저주파에서는 게이트 전류가 0이므로 $v_X=v_{in}$이에요.
+$$A_v=\frac{v_Y}{v_{in}}\frac{v_{out}}{v_Y}=\left(-\frac{g_{m1}}{g_{m2}}\right)g_{m2}R_D=-g_{m1}R_D$$</div><div data-answer-final="">$$R_{G,\max}\approx\frac{1}{2\pi(5\,\mathrm{GHz})C_X}\approx384.43\,\Omega$$
+$$R_{D,\max}=\frac{1}{2\pi(10\,\mathrm{GHz})C_{GD2}}\approx1.77\,\mathrm{k}\Omega$$
+$$A_v\big|_{R_{D,\max}}\approx-8.84\,\mathrm{V/V}$$</div>
 </div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p>$C_{GD1}$은 $X$와 $Y$를 잇기 때문에 양단의 전압차로 충전돼요. $X$가 올라갈 때 $Y$가 같은 크기로 내려가면 전압차의 변화는 두 배예요. 밀러 근사(Miller approximation)는 두 노드의 전압비를 저주파 값 $A_{XY}=v_Y/v_X$로 고정해 이 가지를 각 노드와 접지 사이의 커패시턴스로 바꿔요.</p>
-  <p>분리한 노드의 극점은 $f_p\approx1/(2\pi RC)$로 추정해요. $R$은 독립 입력원을 0으로 두고 해당 노드에서 본 저항이고, $C$는 그 노드에서 접지로 보이는 합성 커패시턴스예요.</p>
 </div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="소신호 모델과 밀러 이득" data-gain-route="gm-rout">
-  <figure class="figure">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 195" role="img" aria-label="Y 단락 측정">
-<path class="fig-ink" d="M63 52V94 M63 120v50m-9 0h18m-15 4h12m-9 4h6 M59 103h8m-4-4v8 M59 112h8"/>
-<circle class="fig-ink" cx="63" cy="107" r="13"/>
-<circle class="fig-dot" cx="63" cy="52" r="3.5" data-node-id="p5-short-y-X" data-node-color="blue"/>
-<text class="fig-text fig-math" x="63" y="30" text-anchor="middle" data-node-id="p5-short-y-X" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">X</tspan></text>
-<path class="fig-ink" d="M195 52H350V170m-9 0h18m-15 4h12m-9 4h6 M195 52V125 M195 149v21m-9 0h18m-15 4h12m-9 4h6 M195 131v12m-4-4l4 4 4-4 M325 52h-42m4-4l-4 4 4 4"/>
-
-<circle class="fig-ink" cx="195" cy="137" r="12"/>
-<circle class="fig-dot" cx="350" cy="52" r="3.5" data-node-id="p5-short-y-port" data-node-color="red"/>
-<text class="fig-text fig-math" x="350" y="30" text-anchor="middle" data-node-id="p5-short-y-port" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">Y</tspan> = 0</text>
-<text class="fig-text fig-math" x="306" y="77" text-anchor="middle">i<tspan baseline-shift="sub" font-size="78%">Y,sc</tspan></text>
-<text class="fig-text fig-math" x="216" y="143">g<tspan baseline-shift="sub" font-size="78%">m1</tspan>v<tspan baseline-shift="sub" font-size="78%">X</tspan></text>
-</svg><figcaption>$v_Y=0$이므로 $M_2$ 제어원 전류는 0이에요.</figcaption></figure>
-    <p>$V_b$와 $V_{DD}$는 AC 접지예요. $\lambda=0$이어서 $r_o$는 열고, 교재의 모델을 따라 몸체 효과와 주어지지 않은 접합 커패시턴스는 생략해요. 저주파 이득을 구할 때는 커패시터 가지를 열어요.</p>
-    <p>밀러 이득의 출력 $Y$를 단락하면 $M_1$이 단락 쪽에서 회로 안으로 끌어가는 전류는 $g_{m1}v_X$예요.</p>
-    <div data-gain-stage="gm">$$G_{m,XY}=\frac{i_{Y,\mathrm{sc}}}{v_X}=g_{m1}$$</div>
-    <p>입력 영점에서 $Y$로 들어가 보는 저항은 CG 단의 소스 저항 $1/g_{m2}$예요. 이 저항을 $R_Y$로 쓰면 두 소자의 $g_m$이 같아서 다음과 같아요.</p>
-    <div data-gain-stage="rout">$$R_Y=1/g_{m2}$$</div>
-    <div data-gain-stage="gain">$$A_{XY}=-G_{m,XY}R_Y=-\frac{g_{m1}}{g_{m2}}=-1$$</div>
-  </div>
-</div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
-  <div data-subpart="main">
-    <div data-answer-step="폭과 소신호 파라미터">
-      <p>포화 영역 제곱 법칙에서 폭을 역산해요. 전류는 $500\,\mu\mathrm{A}$, 과구동 전압은 $0.2\,\mathrm{V}$로 바꿔 대입해요. 두 소자의 파라미터는 같아요.</p>
-      $$\frac WL=\frac{2I_D}{\mu_n C_{ox}V_{ov}^2}$$
-      $$\frac WL=\frac{2(500\,\mu\mathrm{A})}{(100\,\mu\mathrm{A/V^2})(0.2\,\mathrm{V})^2}=250$$
-      $$W=250L=250(0.18\,\mu\mathrm{m})=45\,\mu\mathrm{m}$$
-      $$g_m=\frac{2I_D}{V_{ov}}=\frac{2(0.5\,\mathrm{mA})}{0.2\,\mathrm{V}}=5\,\mathrm{mS}$$
-      $$C_{GS}=\frac23 WLC_{ox}$$
-      $$C_{GS}=\frac23(45\,\mu\mathrm{m})(0.18\,\mu\mathrm{m})(12\,\mathrm{fF/\mu m^2})=64.8\,\mathrm{fF}$$
-      $$C_{GD}=C_0W=(0.2\,\mathrm{fF/\mu m})(45\,\mu\mathrm{m})=9\,\mathrm{fF}$$
-    </div>
-    <p>$X$ 쪽에서 $C_{GD1}$로 흐르는 전류는 $sC_{GD1}(v_X-v_Y)$예요. $v_Y\approx A_{XY}v_X$를 넣으면 $v_X$에 곱해진 커패시턴스가 $(1-A_{XY})C_{GD1}$로 보여요. $Y$ 쪽에서는 전압차 순서를 바꾸고 $v_X\approx v_Y/A_{XY}$를 넣어 $(1-1/A_{XY})C_{GD1}$을 얻어요.</p>
-    <div data-answer-step="밀러 분리와 노드별 RC"><figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 150" role="img" aria-label="밀러 분리 전후"><path class="fig-ink" d="M42 54h75m0 -10v20m8 -20v20m0 -10h75"/><circle class="fig-dot" cx="42" cy="54" r="3.5" data-node-id="p5-miller-before-X" data-node-color="blue"/><text class="fig-text fig-math" x="42" y="35" text-anchor="middle" data-node-id="p5-miller-before-X" data-node-color="blue">X</text><circle class="fig-dot" cx="200" cy="54" r="3.5" data-node-id="p5-miller-before-Y" data-node-color="red"/><text class="fig-text fig-math" x="200" y="35" text-anchor="middle" data-node-id="p5-miller-before-Y" data-node-color="red">Y</text><text class="fig-text fig-math" x="121" y="84" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">GD1</tspan></text><path class="fig-ink" d="M243 58h36m-7 -6l7 6-7 6"/><circle class="fig-dot" cx="339" cy="54" r="3.5" data-node-id="p5-miller-after-X" data-node-color="blue"/><text class="fig-text fig-math" x="339" y="35" text-anchor="middle" data-node-id="p5-miller-after-X" data-node-color="blue">X</text><path class="fig-ink" d="M339 54v17m-9 0h18m-18 7h18m-9 0v17"/><path class="fig-ink" d="M339 95v9m-9 0h18m-15 4h12m-9 4h6"/><text class="fig-text fig-math" x="339" y="137" text-anchor="middle">2C<tspan baseline-shift="sub" font-size="78%">GD1</tspan></text><circle class="fig-dot" cx="464" cy="54" r="3.5" data-node-id="p5-miller-after-Y" data-node-color="red"/><text class="fig-text fig-math" x="464" y="35" text-anchor="middle" data-node-id="p5-miller-after-Y" data-node-color="red">Y</text><path class="fig-ink" d="M464 54v17m-9 0h18m-18 7h18m-9 0v17"/><path class="fig-ink" d="M464 95v9m-9 0h18m-15 4h12m-9 4h6"/><text class="fig-text fig-math" x="464" y="137" text-anchor="middle">2C<tspan baseline-shift="sub" font-size="78%">GD1</tspan></text></svg><figcaption>왼쪽은 X와 Y 사이의 원래 가지예요. 오른쪽은 두 노드가 각각 접지로 보는 등가 가지예요.</figcaption></figure></div>
-    <div data-answer-step="입력 영점의 고주파 소신호 회로"><figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 238" role="img" aria-label="밀러 분리한 입력 영점의 캐스코드 소신호 회로"><path class="fig-ink" d="M26 66h18l4 -6 8 12 8 -12 8 12 8 -12 8 12 4 -6h45 M251 121h40m-40 0v15m0 28v26 M251 190v22 M251 121v-7m0 -28V66h231 M386 66v16l-6 4 12 8 -12 8 12 8 -6 4v18 M26 66v66"/><path class="fig-ink" d="M137 66h45"/><path class="fig-ink" d="M182 66v17m-9 0h18m-18 7h18m-9 0v17"/><path class="fig-ink" d="M182 107v9m-9 0h18m-15 4h12m-9 4h6"/><path class="fig-ink" d="M26 132v9m-9 0h18m-15 4h12m-9 4h6"/><path class="fig-ink" d="M291 121v17m-9 0h18m-18 7h18m-9 0v17"/><path class="fig-ink" d="M291 162v9m-9 0h18m-15 4h12m-9 4h6"/><path class="fig-ink" d="M251 212v9m-9 0h18m-15 4h12m-9 4h6"/><path class="fig-ink" d="M386 132v9m-9 0h18m-15 4h12m-9 4h6"/><path class="fig-ink" d="M438 66v17m-9 0h18m-18 7h18m-9 0v17"/><path class="fig-ink" d="M438 107v9m-9 0h18m-15 4h12m-9 4h6"/><circle class="fig-ink" cx="251" cy="100" r="14"/><path class="fig-ink" d="M251 92v16m-4 -4l4 4 4 -4"/><circle class="fig-ink" cx="251" cy="150" r="14"/><path class="fig-ink" d="M251 142v16m-4 -4l4 4 4 -4"/><circle class="fig-dot" cx="137" cy="66" r="3.5" data-node-id="p5-hf-X" data-node-color="blue"/><circle class="fig-dot" cx="251" cy="121" r="3.5" data-node-id="p5-hf-Y" data-node-color="red"/><circle class="fig-dot" cx="482" cy="66" r="3.5" data-node-id="p5-hf-out" data-node-color="blue"/><circle class="fig-dot" cx="251" cy="66" r="3.5" data-node-id="p5-hf-out" data-node-color="blue"/><circle class="fig-dot" cx="386" cy="66" r="3.5" data-node-id="p5-hf-out" data-node-color="blue"/><circle class="fig-dot" cx="438" cy="66" r="3.5" data-node-id="p5-hf-out" data-node-color="blue"/><text class="fig-text fig-math" x="137" y="47" text-anchor="middle" data-node-id="p5-hf-X" data-node-color="blue">X</text><text class="fig-text fig-math" x="226" y="123" text-anchor="middle" data-node-id="p5-hf-Y" data-node-color="red">Y</text><text class="fig-text fig-math" x="482" y="45" text-anchor="middle" data-node-id="p5-hf-out" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><text class="fig-text fig-math" x="66" y="48" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">G</tspan></text><text class="fig-text fig-math" x="155" y="93" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">X</tspan></text><text class="fig-text fig-math" x="316" y="147" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">Y</tspan></text><text class="fig-text fig-math" x="361" y="103" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text><text class="fig-text fig-math" x="467" y="94" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">out</tspan></text><text class="fig-text fig-math" x="309" y="105" text-anchor="middle">−g<tspan baseline-shift="sub" font-size="78%">m2</tspan>v<tspan baseline-shift="sub" font-size="78%">Y</tspan></text><text class="fig-text fig-math" x="203" y="160" text-anchor="middle">g<tspan baseline-shift="sub" font-size="78%">m1</tspan>v<tspan baseline-shift="sub" font-size="78%">X</tspan></text></svg><figcaption>입력 영점에서 $X$는 $R_G$와 $C_X$의 병렬, 출력은 $R_D$와 $C_{\mathrm{out}}$의 병렬이에요. 제어 전류원의 화살표는 각 MOS의 드레인에서 소스로 향해요.</figcaption></figure></div>
-    <div data-answer-step="입력 노드의 RC와 최대 게이트 저항">
-      <p>$C_{GS1}$과 밀러 분리로 생긴 $X$ 쪽 커패시턴스는 모두 $X$에서 AC 접지로 이어지므로 병렬 합산해요. 입력원을 0으로 두면 $X$에서 $R_G$가 접지로 이어져요.</p>
-      $$C_X\approx C_{GS1}+(1-A_{XY})C_{GD1}$$
-      $$C_X\approx64.8\,\mathrm{fF}+(1+1)(9\,\mathrm{fF})=82.8\,\mathrm{fF}$$
-      <p>목표가 극점 주파수의 하한이므로 $f_{p,X}\ge 5\,\mathrm{GHz}$에서 $R_G\le R_{G,\max}$예요. 허용 저항의 최댓값은 경계에서 구해요.</p>
-      $$R_{G,\max}\approx\frac{1}{2\pi f_{p,X}C_X}$$
-      $$R_{G,\max}\approx\frac{1}{2\pi(5\times10^{9}\,\mathrm{s^{-1}})(82.8\times10^{-15}\,\mathrm{F})}\approx384.43\,\Omega$$
-    </div>
-    <div data-gain-route="gm-rout">
-    <div data-answer-step="출력 단락에서의 트랜스컨덕턴스">
-    <figure class="figure">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 195" role="img" aria-label="out 단락 측정">
-<path class="fig-ink" d="M63 52V94 M63 120v50m-9 0h18m-15 4h12m-9 4h6 M59 103h8m-4-4v8 M59 112h8"/>
-<circle class="fig-ink" cx="63" cy="107" r="13"/>
-<circle class="fig-dot" cx="63" cy="52" r="3.5" data-node-id="p5-short-out-X" data-node-color="blue"/>
-<text class="fig-text fig-math" x="63" y="30" text-anchor="middle" data-node-id="p5-short-out-X" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">in</tspan> = v<tspan baseline-shift="sub" font-size="78%">X</tspan></text>
-<path class="fig-ink" d="M195 52H350V170m-9 0h18m-15 4h12m-9 4h6  M195 149v21m-9 0h18m-15 4h12m-9 4h6 M195 131v12m-4-4l4 4 4-4 M325 52h-42m4-4l-4 4 4 4"/>
-<circle class="fig-ink" cx="195" cy="89" r="12"/><path class="fig-ink" d="M195 52V77 M195 101V125 M195 83v12m-4-4l4 4 4-4"/><circle class="fig-dot" cx="195" cy="114" r="3.5" data-node-id="p5-short-out-Y" data-node-color="red"/><text class="fig-text fig-math" x="177" y="114" text-anchor="end" data-node-id="p5-short-out-Y" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">Y</tspan></text><text class="fig-text fig-math" x="216" y="97">−g<tspan baseline-shift="sub" font-size="78%">m2</tspan>v<tspan baseline-shift="sub" font-size="78%">Y</tspan></text>
-<circle class="fig-ink" cx="195" cy="137" r="12"/>
-<circle class="fig-dot" cx="350" cy="52" r="3.5" data-node-id="p5-short-out-port" data-node-color="blue"/>
-<text class="fig-text fig-math" x="350" y="30" text-anchor="middle" data-node-id="p5-short-out-port" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">out</tspan> = 0</text>
-<text class="fig-text fig-math" x="306" y="77" text-anchor="middle">i<tspan baseline-shift="sub" font-size="78%">out,sc</tspan></text>
-<text class="fig-text fig-math" x="216" y="143">g<tspan baseline-shift="sub" font-size="78%">m1</tspan>v<tspan baseline-shift="sub" font-size="78%">X</tspan></text>
-</svg><figcaption>저주파 출력 단락에서 $R_D$의 양단 전압은 0이에요.</figcaption></figure>
-      <p>저주파에서 실제 출력인 $M_2$ 드레인을 단락해요. 게이트 전류가 0이므로 $v_X=v_{in}$이고, $M_1$의 전류 변화가 $M_2$에 그대로 흘러요. 단락 쪽에서 회로로 들어가는 전류를 양으로 잡아요.</p>
-      <div data-gain-stage="gm">$$G_m=\frac{i_{\mathrm{out,sc}}}{v_{in}}=g_{m1}$$</div>
-    </div>
-    <div data-answer-step="출력 노드의 RC와 최대 드레인 저항">
-      <p>입력 영점에서 출력에 시험전압을 걸면 $r_{o2}$ 가지가 열려 있고 $M_2$의 제어 전압은 변하지 않아요. 드레인 안쪽은 이 모델에서 열려 있어요. $M_2$ 게이트가 AC 접지라 출력 커패시턴스는 $C_{\mathrm{out}}=C_{GD2}$예요.</p>
-      <div data-gain-stage="rout">$$R_{\mathrm{out}}=R_D\parallel\infty=R_D$$</div>
-      <p>$f_{p,\mathrm{out}}\ge 10\,\mathrm{GHz}$를 만족하려면 $R_D\le R_{D,\max}$여야 해요. 최대 저항과 이득은 이 경계에서 얻어요.</p>
-      $$R_{D,\max}\approx\frac{1}{2\pi f_{p,\mathrm{out}}C_{GD2}}$$
-      $$R_{D,\max}\approx\frac{1}{2\pi(10^{10}\,\mathrm{s^{-1}})(9\times10^{-15}\,\mathrm{F})}\approx1.77\,\mathrm{k\Omega}$$
-      <p>출력 단락을 풀면 $M_2$가 끌어가는 전류가 $R_D$에 전압 강하를 만들어요. 반올림 전의 $R_D$를 사용해 이득을 구해요.</p>
-      <div data-gain-stage="gain">$$A_v=-G_mR_D\approx-(5\,\mathrm{mS})(1.768\,\mathrm{k\Omega})\approx-8.84\,\mathrm{V/V}$$</div>
-    </div>
-    </div>
-  </div>
-</div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <div data-answer-final>
-      <p>밀러 근사로 구한 저항 한계와 그때의 저주파 전압 이득이에요.</p>
-      $$R_{G,\max}\approx384.43\,\Omega$$
-      $$R_{D,\max}\approx1.77\,\mathrm{k\Omega}$$
-      $$A_v\approx-8.84\,\mathrm{V/V}$$
-    </div>
-    <p>$\Omega\cdot\mathrm{F}$는 초예요. 반올림 전의 저항으로 계산하면 입력과 출력의 시정수는 각각 약 $31.83\,\mathrm{ps}$와 $15.92\,\mathrm{ps}$라서 출력 극점 주파수가 입력의 두 배예요. 같은 커패시턴스에서 저항을 더 키우면 해당 극점 주파수가 목표보다 낮아져요.</p>
-    <p>$Y$에도 $C_{GS2}$와 밀러 분리분이 병렬로 붙어요. 두 소자가 동일해서 합은 약 $82.8\,\mathrm{fF}$예요. $R_Y=1/g_{m2}=200\,\Omega$를 적용하면 중간 노드 극점은 약 $9.61\,\mathrm{GHz}$예요. 출력 극점과 가깝기 때문에 세 노드의 극점 추정치를 회로 전체의 정확한 대역폭으로 읽으면 안 돼요.</p>
-  </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <p>$C_{GD1}$에 곱하는 밀러 계수는 그 커패시터의 두 단자 $X$와 $Y$ 사이에서 결정돼요. 최종 출력까지의 이득을 사용하면 입력 커패시턴스를 과대평가해요.</p>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol><li>소자와 입력 목표는 그대로 두고 출력 극점 목표만 두 배로 높이면 $R_{D,\max}$와 저주파 이득의 크기는 각각 몇 배가 될까요?</li></ol>
-</div>
-<div class="sum" hidden>
-  <p>$C_{GD1}$에는 $M_1$ 게이트에서 $M_2$ 소스까지의 이득을 써요.</p>
-  <p>$A_{XY}=-1$이므로 $C_X\approx C_{GS1}+2C_{GD1}$이에요.</p>
-  <p>$C_{\mathrm{out}}=C_{GD2}$이며 $R_{\mathrm{out}}=R_D$예요.</p>
-  <p>밀러 근사에서 $R_{G,\max}\approx384.43\,\Omega$예요.</p>
-  <p>출력 극점 조건에서 $R_{D,\max}\approx1.77\,\mathrm{k\Omega}$예요.</p>
-  <p>저항 한계에서 저주파 이득은 약 $-8.84\,\mathrm{V/V}$예요.</p>
-</div>
+<div class="sum" hidden><p class="sum-lead">입력은 밀러 용량을 포함하고, 출력은 위쪽 소자의 게이트–드레인 용량을 보아요.</p></div>

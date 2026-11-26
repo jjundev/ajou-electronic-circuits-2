@@ -1,5 +1,6 @@
-Y/X(a) = A1*(R1 + R2)/(A1*K*R2 + R1 + R2)   check A_OL/(1+T) diff: 0   A1->oo: (R1 + R2)/(K*R2)
-Y/X(b) = -A1*(R1 + R2)/(A1*R2*R_D*g_m3 + R1 + R2)   check A_OL/(1+T) diff: 0   A1->oo: (-R1 - R2)/(R2*R_D*g_m3)
-Y/X(c) = -A1/(A1*R_D*g_m3 + 1)   check A_OL/(1+T) diff: 0   A1->oo: -1/(R_D*g_m3)
-Y/X(d) = A1*R2*g_m1/(A1*R2*g_m1 + R2*g_m1 + 1)   check A_OL/(1+T) diff: 0   A1->oo: 1
-(d) with body effect: A1*R2*g_m1/(A1*R2*g_m1 + R2*g_m1 + R2*g_mb1 + 1)
+a loop return signed -A*K*R2/(R1 + R2) closed-loop gain A*(R1 + R2)/(A*K*R2 + R1 + R2)
+b loop return signed -A*R2*RD*gm3/(R1 + R2) closed-loop gain -A*(R1 + R2)/(A*R2*RD*gm3 + R1 + R2)
+c loop return signed -A*RD*gm3 closed-loop gain -A/(A*RD*gm3 + 1)
+d loop return signed -A*R2*gm1/(R2*gm1 + 1) closed-loop gain A*R2*gm1/(A*R2*gm1 + R2*gm1 + 1)
+
+With b=R2/(R1+R2) and f=gm1 R2/(1+gm1 R2), closed-loop gains (a–d) are A1/(1+A1Kb), −A1/(1+A1gm3RD b), −A1/(1+A1gm3RD), A1 f/(1+A1 f). Signs in (b,c) follow the X→minus connection.

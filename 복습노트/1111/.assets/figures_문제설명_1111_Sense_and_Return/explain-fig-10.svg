@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="480" height="170" viewBox="0 0 480 170" role="img" aria-label="두 회로를 나란히 그린 그림. 왼쪽 (a)는 위쪽을 향한 전류원 i in, 커패시터 Cp, 저항 RD가 같은 위쪽 도선에 왼쪽부터 매달려 각각 접지로 가고, 도선의 맨 오른쪽 끝이 출력 vout이에요. 오른쪽 (b)는 위쪽을 향한 전류원 i in과 커패시터 Cp가 소스 노드 vs에 매달리고, 맨 오른쪽에 M1을 소스에서 본 저항 1/gm1이 접지로 내려가며 그 위 도선에 아래쪽을 향한 i d 화살표가 있어요."><style>/* Copyright (c) 2021, Kil Hyung-jin (https://github.com/orioncactus/pretendard),
+<svg xmlns="http://www.w3.org/2000/svg" width="460" height="160" viewBox="0 0 460 160" role="img" aria-label="NMOS 캐스코드의 트랜스컨덕턴스 증폭기 모델. 왼쪽 입력 단자 v in에서 R in이 접지로 내려가고 값은 무한대예요. 오른쪽에는 아래쪽을 향한 종속 전류원 Gm v in이 왼쪽에, 출력 저항 R out이 그 오른쪽에 출력 노드와 접지 사이에 병렬로 있어요. 맨 오른쪽이 출력 단자이고, 그 왼쪽 도선에 왼쪽을 향한 i out 화살표가 있어요."><style>/* Copyright (c) 2021, Kil Hyung-jin (https://github.com/orioncactus/pretendard),
 with Reserved Font Name Pretendard.
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
@@ -93,7 +93,7 @@ DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM
 OTHER DEALINGS IN THE FONT SOFTWARE.
  */
-@font-face { font-family: Pretendard; font-style: normal; font-weight: 600; src: url(data:font/woff;base64,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) format('woff'); }
+@font-face { font-family: Pretendard; font-style: normal; font-weight: 600; src: url(data:font/woff2;base64,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) format('woff2'); }
 
 svg { color: #1b2130; font-family: Pretendard, -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; }
 .fig-ink { stroke: #1b2130; fill: none; stroke-width: 2; }
@@ -117,44 +117,28 @@ svg :is(.fig-dot, .fig-text)[data-node-color="red"] { fill: #d92d20; }
 .plot-like { fill: none; stroke: #2f6fdb; stroke-width: 2; }
 .plot-prior { fill: none; stroke: #6941c6; stroke-width: 2; stroke-dasharray: 6 4; }
 .plot-post { fill: none; stroke: #067647; stroke-width: 3; }
-</style><rect x="0" y="0" width="480" height="170" rx="10" fill="#ffffff"/>
-        <g fill="none" stroke-width="2">
-          <circle class="fig-accent" cx="40" cy="95" r="14"/>
-          <circle class="fig-accent" cx="280" cy="95" r="14"/>
-          <path class="fig-ink" d="M40 50V81"/>
-          <path class="fig-ink" d="M40 109V146M30 146H50M34 151H46M38 156H42"/>
-          <path class="fig-ink" d="M40 104V86M35 91L40 86L45 91"/>
-          <path class="fig-ink" d="M100 50V93M100 103V146M90 146H110M94 151H106M98 156H102"/>
-          <path class="fig-ink" d="M88 93H112M88 103H112"/>
-          <path class="fig-ink" d="M40 50H190"/>
-          <path class="fig-ink" d="M155 50V62"/>
-          <path class="fig-ink" d="M155 62v10l8 4l-16 8l16 8l-16 8l16 8l-16 8l8 4v10"/>
-          <path class="fig-ink" d="M155 130V146M145 146H165M149 151H161M153 156H157"/>
-          <path class="fig-ink" d="M280 50V81"/>
-          <path class="fig-ink" d="M280 109V146M270 146H290M274 151H286M278 156H282"/>
-          <path class="fig-ink" d="M280 104V86M275 91L280 86L285 91"/>
-          <path class="fig-ink" d="M340 50V93M340 103V146M330 146H350M334 151H346M338 156H342"/>
-          <path class="fig-ink" d="M328 93H352M328 103H352"/>
-          <path class="fig-ink" d="M280 50H400V74"/>
-          <path class="fig-ink" d="M400 74v10l8 4l-16 8l16 8l-16 8l16 8l-16 8l8 4v10"/>
-          <path class="fig-ink" d="M400 142V146M390 146H410M394 151H406M398 156H402"/>
-          <path class="fig-ink" d="M394 56L400 64L406 56"/>
-        </g>
-        <circle class="fig-dot" data-node-id="p12a-vout" data-node-color="red" cx="100" cy="50" r="4"/>
-        <circle class="fig-dot" data-node-id="p12a-vout" data-node-color="red" cx="155" cy="50" r="4"/>
-        <circle class="fig-dot" data-node-id="p12a-vout" data-node-color="red" cx="190" cy="50" r="4"/>
-        <circle class="fig-dot" data-node-id="p12b-vs" data-node-color="blue" cx="340" cy="50" r="4"/>
-        <g font-family="Pretendard, sans-serif" font-weight="600" font-size="14">
-          <text class="fig-text" x="10" y="22">(a)</text>
-          <text class="fig-text" x="250" y="22">(b)</text>
-          <text class="fig-text fig-math" x="20" y="100" text-anchor="end">i<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
-          <text class="fig-text fig-math" x="116" y="102">C<tspan baseline-shift="sub" font-size="78%">p</tspan></text>
-          <text class="fig-text fig-math" x="169" y="102">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text>
-          <text class="fig-text fig-math" data-node-id="p12a-vout" data-node-color="red" x="190" y="32" text-anchor="middle">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
-          <text class="fig-text fig-math" x="260" y="100" text-anchor="end">i<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
-          <text class="fig-text fig-math" x="356" y="102">C<tspan baseline-shift="sub" font-size="78%">p</tspan></text>
-          <text class="fig-text fig-math" data-node-id="p12b-vs" data-node-color="blue" x="340" y="32" text-anchor="middle">v<tspan baseline-shift="sub" font-size="78%">s</tspan></text>
-          <text class="fig-text fig-math" x="412" y="66">i<tspan baseline-shift="sub" font-size="78%">d</tspan></text>
-          <text class="fig-text fig-math" x="414" y="114">1/g<tspan baseline-shift="sub" font-size="78%">m1</tspan></text>
-        </g>
-      </svg>
+</style><rect x="0" y="0" width="460" height="160" rx="10" fill="#ffffff"/>
+          <g fill="none" stroke-width="2">
+            <path class="fig-ink" d="M30 50H80V62"/>
+            <path class="fig-ink" d="M80 62v10l8 4l-16 8l16 8l-16 8l16 8l-16 8l8 4v10"/>
+            <path class="fig-ink" d="M80 130V136M70 136H90M74 141H86M78 146H82"/>
+            <polygon class="fig-ink" points="280,80 296,100 280,120 264,100"/>
+            <path class="fig-ink" d="M280 120V136M270 136H290M274 141H286M278 146H282"/>
+            <path class="fig-ink" d="M280 88V111M275 106L280 111L285 106"/>
+            <path class="fig-ink" d="M280 80V50H430"/>
+            <path class="fig-ink" d="M360 50V62"/>
+            <path class="fig-ink" d="M360 62v10l8 4l-16 8l16 8l-16 8l16 8l-16 8l8 4v10"/>
+            <path class="fig-ink" d="M360 130V136M350 136H370M354 141H366M358 146H362"/>
+            <path class="fig-ink" d="M402 44L394 50L402 56"/>
+          </g>
+          <circle class="fig-dot" data-node-id="p11m-vin" data-node-color="blue" cx="30" cy="50" r="4"/>
+          <circle class="fig-dot" data-node-id="p11m-out" data-node-color="red" cx="360" cy="50" r="4"/>
+          <circle class="fig-dot" data-node-id="p11m-out" data-node-color="red" cx="430" cy="50" r="4"/>
+          <g font-family="Pretendard, sans-serif" font-weight="600" font-size="14">
+            <text class="fig-text fig-math" data-node-id="p11m-vin" data-node-color="blue" x="30" y="32" text-anchor="middle">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
+            <text class="fig-text fig-math" x="96" y="102">R<tspan baseline-shift="sub" font-size="78%">in</tspan> = ∞</text>
+            <text class="fig-text fig-math" x="376" y="102">R<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+            <text class="fig-text fig-math" x="398" y="32" text-anchor="middle">i<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+            <text class="fig-text fig-math" x="256" y="105" text-anchor="end">G<tspan baseline-shift="sub" font-size="78%">m</tspan>v<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
+          </g>
+        </svg>

@@ -1,11 +1,3 @@
-R = ro1 || ro2, go = 1/ro3, C = Cgs3
-Gate KCL: C*s*(v_x - v_y) + v_x/R
-Source KCL: -i_test + v_y*(gmb + go) + (-v_x + v_y)*(C*s + gm)
-Zout: (C*R*s + 1)/(C*R*gmb*s + C*R*go*s + C*s + gm + gmb + go)
-Zout with no body effect: (C*R*s + 1)/(C*R*go*s + C*s + gm + go)
-DC: 1/(gm + gmb + go)
-High frequency: C*R/(C*R*gmb + C*R*go + C)
-ro3 infinite, no body effect: (C*R*s + 1)/(C*s + gm)
-Pole: (-gm - gmb - go)/(C*(R*gmb + R*go + 1))
-Zero: -1/(C*R)
-All five symbolic assertions passed.
+Retain ro3 from output to AC ground.
+Zout: (Cgs3*ro1*ro2*s/(ro1 + ro2) + 1)/(Cgs3*s*(ro1*ro2/(ro3*(ro1 + ro2)) + 1) + gm3 + 1/ro3) ; ro3→∞: (Cgs3*ro1*ro2*s/(ro1 + ro2) + 1)/(Cgs3*s + gm3)
+Zout(0): 1/(gm3 + 1/ro3) ; Zout(inf): Cgs3*ro1*ro2*(ro1*ro3 + ro2*ro3)/((ro1 + ro2)*(Cgs3*ro1*ro2 + Cgs3*ro1*ro3 + Cgs3*ro2*ro3))

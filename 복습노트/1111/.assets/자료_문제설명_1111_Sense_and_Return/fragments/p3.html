@@ -1,106 +1,39 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>그림 12.2는 연산증폭기 $A_1$과 저항 분배기 $R_1$, $R_2$로 만든 비반전 증폭기예요. 입력 $X$는 + 입력으로 들어가고, 출력 $Y$를 $R_1$, $R_2$로 나눈 접속점 전압 $X_F$가 − 입력으로 돌아가요.</p>
-  <p>원문은 "공칭 전압이 4"라고 인쇄되어 있지만, 문맥상 공칭 전압 이득이 4라는 뜻으로 읽어요. 공칭(nominal) 이득은 $A_1$이 무한히 클 때의 이상적인 이득이에요. 교과서 풀이도 이 값으로 $R_1/R_2=3$을 정해요.</p>
-  <p>구할 것은 두 가지예요.</p>
-  <ul>
-    <li>(a) 실제 연산증폭기 이득이 $A_1=1000$일 때의 실제 이득 $Y/X$</li>
-    <li>(b) $A_1$이 $1000$에서 $500$으로 반이 될 때 폐루프 이득이 (a)의 값에서 몇 % 바뀌는지</li>
-  </ul>
-  <p>$R_1$, $R_2$의 비는 그대로이고 $A_1$만 바뀐다고 봐요. (b)에서 $A_1$이 (a)의 1000에서 출발해 500이 된다는 것과 이 가정은 원문에 없는 해석이에요.</p>
+<div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit"><svg id="fig-circuit-noninverting-feedback" viewBox="0 0 330 226" role="img" aria-label="입력 X는 op-amp의 더하기 입력에 걸려요. 출력 Y의 전압을 R1과 R2가 나누고 그 중간 전압 X F가 빼기 입력으로 돌아와요.">
+        <path class="fig-ink" d="M50 63H105 M86 87H105 M163 75H286 M222 75V99 M222 128V153H86V87 M222 153V167 M222 196V210"/>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M105 42V108L163 75Z"/>
+          <text class="fig-text fig-math" x="117" y="67" text-anchor="middle" font-size="12">+</text>
+          <text class="fig-text fig-math" x="117" y="91" text-anchor="middle" font-size="12">−</text>
+          <text class="fig-text fig-math" x="138" y="79" text-anchor="middle" font-size="13">A<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M222 99l5 4.83333l-10 4.83333l10 4.83333l-10 4.83333l10 4.83333l-5 4.83333"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M222 167l5 4.83333l-10 4.83333l10 4.83333l-10 4.83333l10 4.83333l-5 4.83333"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M213 210h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <circle class="fig-dot" cx="47" cy="63" r="3" data-node-color="red" data-node-id="p3-in"/>
+        <circle class="fig-dot" cx="289" cy="75" r="3" data-node-color="blue" data-node-id="p3-out"/>
+        <circle class="fig-dot" cx="222" cy="75" r="3.2" data-node-color="blue" data-node-id="p3-out"/>
+        <circle class="fig-dot" cx="222" cy="153" r="3.2" data-node-color="red" data-node-id="p3-feedback"/>
+        <text class="fig-text fig-math" x="248" y="117" text-anchor="middle" font-size="14">R<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        <text class="fig-text fig-math" x="248" y="189" text-anchor="middle" font-size="14">R<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+        <text class="fig-text fig-math" x="36" y="45" text-anchor="middle" font-size="14" data-node-color="red" data-node-id="p3-in">X</text>
+        <text class="fig-text fig-math" x="293" y="57" text-anchor="middle" font-size="14" data-node-color="blue" data-node-id="p3-out">Y</text>
+        <text class="fig-text fig-math" x="192" y="139" text-anchor="middle" font-size="14" data-node-color="red" data-node-id="p3-feedback">X<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+
+
+        <text class="fig-text fig-loc" x="155" y="174" text-anchor="middle" font-size="17">㉠</text>
+      </svg><figcaption class="circuit-state">비반전 증폭기의 반전 입력으로 출력 분배 전압이 돌아와요.</figcaption></figure>
+<div data-subpart="a"><h4>(a) 실제 이득</h4><div data-answer-step="공칭 이득"><p><span class="loc">㉠</span> 분배점의 귀환율 $K$는 저항비로 정해져요. 원문의 공칭값 4는 큰 루프 이득에서의 전압 이득이에요.</p>$$1/K=4$$
+</div><div data-answer-final=""><p>유한한 $A_1$을 폐루프 식에 대입해요.</p>$$G=A_1/(1+KA_1)=1000/251\approx3.98$$
+</div></div>
+<div data-subpart="b"><h4>(b) 개루프 이득이 절반이 될 때</h4><div data-answer-step="변경 후 이득"><p>저항이 같으므로 $K=1/4$도 그대로예요.</p>$$G^*=500/(1+500/4)=250/63$$
+</div><div data-answer-final=""><p>변화율은 변경 전 실제 이득 $G$를 기준으로 구해요.</p>$$(G^*-G)/G=(250/63)/(1000/251)-1=-1/252\approx-0.4\%$$
+</div></div>
 </div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p>"출력을 $R_1$, $R_2$로 나눠 − 입력에 되돌린다"는 그림에서 음귀환 시스템을 떠올려요. 귀환율(feedback factor) $K$는 출력 중 되돌아가는 몫이라 분배비예요.</p>
-  $$K=\frac{R_2}{R_1+R_2}$$
-  <p>폐루프 이득(closed-loop gain)은 개루프 이득 $A_1$과 루프 이득 $KA_1$로 정해져요.</p>
-  $$\frac{Y}{X}=\frac{A_1}{1+KA_1}$$
-  <p>"공칭"이라는 말에서 이득 둔감화(gain desensitization)를 떠올려요. $KA_1\gg1$이면 분모의 1을 무시할 수 있어 이득이 $A_1$과 무관한 값이 돼요. 설계자가 목표로 잡는 이 값이 공칭 이득이에요(<a href="정리노트_1111_Sense_and_Return.html#s1-desensitization">루프 이득이 크면 이득은 1/K가 돼요</a>).</p>
-  $$\frac{Y}{X}\approx\frac1K=1+\frac{R_1}{R_2}$$
-  <p>(b)의 "% 변화율"은 바뀐 뒤의 값에 $^*$를 붙여 $\dfrac{G^*-G}{G}$로 계산해요. 여기서 $G$는 (a)의 폐루프 이득이에요. $1/K$와의 차이인 오차(error)와는 다른 질문이에요(<a href="정리노트_1111_Sense_and_Return.html#s1-large-loop-gain">루프 이득이 커야 하고, 그 대가로 이득은 줄어요</a>).</p>
-  <p>공칭값으로 $K$를 먼저 정하고, 그 $K$를 유한한 $A_1$의 폐루프 식에 넣는 순서로 풀어요.</p>
-</div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="공칭 이득에서 K 정하기" data-answer-subpart="a">
-    <p>공칭 이득 4는 $A_1\to\infty$일 때의 값이라 $1/K$와 같아요. 이 한 줄이 첫 식이에요.</p>
-    $$\frac1K=1+\frac{R_1}{R_2}=4$$
-    <p>저항의 비와 귀환율로 바꿔 써요. $K$의 분자·분모를 $R_2$로 나누면 비만으로 쓸 수 있어요.</p>
-    $$\frac{R_1}{R_2}=3$$
-    $$K=\frac{1}{1+R_1/R_2}=\frac14$$
-  </div>
-</div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
-  <div data-subpart="a">
-    <h4>(a) $A_1=1000$일 때 실제 이득</h4>
-    <div data-answer-step="루프 이득과 실제 이득">
-      <p>분모에 들어갈 루프 이득을 먼저 구해요.</p>
-      $$KA_1=\frac{1000}{4}=250$$
-      <p>폐루프 식에 넣어요. 다음 소문항에서 다시 쓰므로 분수 꼴을 유지해요.</p>
-      $$G=\frac{A_1}{1+KA_1}=\frac{1000}{251}\approx3.98$$
-    </div>
-    <p>공칭값 4보다 조금 작아요. 유한한 $A_1$ 때문에 생긴 차이예요.</p>
-  </div>
-  <div data-subpart="b">
-    <h4>(b) $A_1$이 500으로 줄 때 % 변화율</h4>
-    <div data-answer-step="바뀐 이득과 변화율">
-      <p>$K=1/4$는 저항의 비라 그대로이고 $A_1$만 $A_1^*=500$으로 바뀌어요. 루프 이득도 반이 돼요.</p>
-      $$KA_1^*=\frac{500}{4}=125$$
-      $$G^*=\frac{A_1^*}{1+KA_1^*}=\frac{500}{126}=\frac{250}{63}\approx3.97$$
-      <p>변화율은 반올림한 소수가 아니라 두 분수의 비로 계산해요.</p>
-      $$\frac{G^*}{G}=\frac{250}{63}\times\frac{251}{1000}=\frac{251}{252}$$
-      $$\frac{G^*-G}{G}=\frac{251}{252}-1=-\frac{1}{252}\approx-0.40\,\%$$
-    </div>
-    <p>$A_1$은 50% 줄었는데 폐루프 이득은 약 0.40%만 줄었어요. 루프 이득 덕분에 변화가 약 $1/126$로 줄어든 거예요.</p>
-  </div>
-</div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="a">
-    <h4>(a) 검산</h4>
-    <div data-answer-final>
-      <p>$K=1/4$($R_1/R_2=3$), 루프 이득 $KA_1=250$일 때 실제 이득이에요.</p>
-      $$\frac{Y}{X}=\frac{1000}{251}\approx3.98$$
-    </div>
-    <p>공칭값 $1/K$ 대비 모자란 비율은 $1/(1+KA_1)$이어야 해요. 실제 이득을 공칭값으로 나눠 확인해요.</p>
-    $$KG=\frac14\times\frac{1000}{251}=\frac{250}{251}$$
-    $$1-KG=\frac{1}{251}=\frac{1}{1+KA_1}$$
-    <p>$A_1\to\infty$이면 $1000/251$ 자리의 값이 $1/K=4$로 돌아가고, 이득은 V/V로 무차원이에요.</p>
-  </div>
-  <div data-subpart="b">
-    <h4>(b) 검산</h4>
-    <div data-answer-final>
-      <p>$A_1$이 1000에서 500으로 줄면 폐루프 이득은 $1000/251$에서 $250/63$으로 바뀌어요.</p>
-      $$\frac{G^*-G}{G}=-\frac{1}{252}\approx-0.40\,\%$$
-      <p>즉 이득이 약 0.40% 줄어요.</p>
-    </div>
-    <p>다른 길로 확인해요. 두 폐루프 식의 비를 먼저 써요.</p>
-    $$\frac{G^*}{G}=\frac{A_1^*}{A_1}\cdot\frac{1+KA_1}{1+KA_1^*}$$
-    <p>1을 빼고 분모 $A_1(1+KA_1^*)$로 통분하면 $KA_1A_1^*$ 항이 지워져요. 상대 변화는 개루프 이득의 상대 변화를 바뀐 뒤의 $1+KA_1^*$로 나눈 값이에요.</p>
-    $$\frac{G^*-G}{G}=\frac{(A_1^*-A_1)/A_1}{1+KA_1^*}=\frac{-0.5}{126}=-\frac{1}{252}$$
-    <p>교과서의 $(3.984-3.968)/3.984\approx0.4\,\%$와도 같아요.</p>
-  </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <p>반올림한 $3.98$과 $3.97$로 변화율을 계산하면 $0.01/3.98\approx0.25\,\%$가 나와 틀려요. 두 값의 차이가 아주 작아서 반올림 오차가 결과를 바꿔요. 분수 $1000/251$, $250/63$을 끝까지 쓰거나 위의 상대 변화 식을 써요.</p>
-  <p>(a)의 $1/K$ 대비 오차 $1/251$과 (b)의 변화율 $1/252$는 크기가 비슷해도 다른 양이에요. 앞의 것은 이상값과의 차이, 뒤의 것은 $A_1$이 바뀌기 전후의 차이예요.</p>
-  <p>"공칭 전압이 4"를 출력 전압 4 V로 읽으면 풀 수 없어요. 문제의 공칭값은 이득 $1/K=1+R_1/R_2$예요.</p>
-  <p>$R_1/R_2=3$을 보고 $K=1/3$로 두기 쉬워요. $K$는 $R_2$가 전체에서 차지하는 몫이라 $1/(3+1)=1/4$이에요.</p>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol>
-    <li>같은 회로($K=1/4$)에서 $A_1$이 1000에서 200으로 줄면 폐루프 이득은 몇 % 바뀌나요?</li>
-    <li>공칭 이득을 8로 바꾸고 $A_1$이 1000에서 500으로 줄면, 변화율이 이 문제의 약 0.40%보다 커지나요, 작아지나요? 값도 구해 보세요.</li>
-  </ol>
-</div>
-<div class="sum" hidden>
-  <p class="sum-lead">공칭 이득 $1/K$로 $K$를 정하고, 유한한 $A_1$을 폐루프 식에 넣어요.</p>
-  $$K=\frac{1}{1+R_1/R_2}=\frac14$$
-  $$\frac{Y}{X}=\frac{A_1}{1+KA_1}=\frac{1000}{251}\approx3.98$$
-  $$\frac{G^*-G}{G}=\frac{(A_1^*-A_1)/A_1}{1+KA_1^*}=-\frac{1}{252}$$
-  <p>$A_1$이 50% 줄어도 폐루프 이득은 약 0.40%만 줄어요.</p>
-  <p>변화율은 반올림한 소수가 아니라 분수로 계산해요.</p>
-</div>
+<div class="sum" hidden><p class="sum-lead">공칭 이득의 역수로 귀환율을 먼저 정해요.</p><p>변화율의 분모에는 변경 전의 실제 이득을 써요.</p></div>

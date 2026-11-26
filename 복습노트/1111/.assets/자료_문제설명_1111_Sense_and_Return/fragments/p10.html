@@ -1,69 +1,73 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>그림 12.19의 네 회로는 수업에서 본 "네 가지 증폭기 형태를 트랜지스터로 만든 예"예요. 구할 것은 각 회로를 그림 12.18의 실제 증폭기 모델로 다시 그리는 것이에요. 모델은 입력 저항 $R_{in}$, 출력 저항 $R_{out}$, 그리고 이득을 가진 종속 전원 하나로 이루어져요.</p>
-  <p>네 회로의 입력과 출력을 먼저 읽어요.</p>
-  <ul>
-    <li>(a) 입력은 $M_1$ 게이트의 전압 $V_{in}$, 출력은 소스 팔로워 $M_2$ 소스의 전압 $V_{out}$이에요.</li>
-    <li>(b) 입력은 $M_1$ 소스로 들어가는 전류 $I_{in}$, 출력은 $M_2$ 소스의 전압 $V_{out}$이에요. $M_1$ 게이트는 바이어스 $V_b$에 묶여 있어요.</li>
-    <li>(c) 입력은 $M_1$ 게이트의 전압 $V_{in}$, 출력은 드레인으로 흐르는 전류 $I_{out}$이에요.</li>
-    <li>(d) 입력은 $M_1$ 소스로 들어가는 전류 $I_{in}$, 출력은 드레인으로 흐르는 전류 $I_{out}$이에요.</li>
-  </ul>
-  <p>그림에는 $R_{in}$, $R_{out}$ 값이 이미 적혀 있어요. 그래서 할 일은 형태를 고르고, 종속 전원의 이득을 구하고, 세 값을 모델 그림에 조립하는 것이에요. 이득은 교과서 12.3.2절처럼 $\lambda=0$, 몸체효과 무시, 이상적인 바이어스 전류원으로 구해요. 이 가정은 P12.15 원문에는 없고 교과서 본문에서 가져온 것이에요. (c)의 $R_{out}=r_O$만 $\lambda&gt;0$을 남긴 그림의 값이에요.</p>
-</div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p>"입력이 게이트 전압이냐, 소스로 들어오는 전류냐", "출력이 $V_{out}$ 노드냐, $I_{out}$ 화살표냐"라는 단서에서 네 가지 증폭기 형태(amplifier types)를 떠올려요(<a href="정리노트_1111_Sense_and_Return.html#s4-four-types">입력과 출력이 전압이냐 전류냐</a>). 입력과 출력의 종류 두 개가 형태를 정해요.</p>
-  <p>그림 12.18의 실제 모델은 이 규칙으로 그려요.</p>
-  <ul>
-    <li>전압 입력은 입력 단자와 접지 사이에 $R_{in}$을 병렬로 둬요. 전류 입력은 $i_{in}$이 $R_{in}$으로 흘러 들어가요.</li>
-    <li>전압 출력은 종속 전압원에 $R_{out}$을 직렬로 붙인 테브난(Thevenin) 꼴이에요. 전류 출력은 종속 전류원에 $R_{out}$을 병렬로 붙인 노턴(Norton) 꼴이에요.</li>
-  </ul>
-  <p>종속 전원의 이득은 출력의 종류에 맞는 조건에서 재요. 테브난 꼴은 출력을 열면 $R_{out}$에 전류가 흐르지 않아 종속 전압원 값이 그대로 나오고, 노턴 꼴은 출력을 단락하면 $R_{out}$ 양단이 0이라 종속 전류원 값이 그대로 단락선으로 나와요.</p>
-  $$A_0=\frac{v_{out}}{v_{in}}\Big|_{\text{출력 개방}}$$
-  $$R_0=\frac{v_{out}}{i_{in}}\Big|_{\text{출력 개방}}$$
-  $$G_m=\frac{i_{out}}{v_{in}}\Big|_{\text{출력 단락}}$$
-  $$A_I=\frac{i_{out}}{i_{in}}\Big|_{\text{출력 단락}}$$
-  <p>트랜지스터 단의 저항은 아는 블록으로 바로 써요(<a href="정리노트_1111_Sense_and_Return.html#s4-examples">네 형태를 트랜지스터로 만들면</a>). 게이트 입력은 저주파에서 전류가 흐르지 않아 $R_{in}=\infty$예요. 게이트를 고정하고 소스로 받는 공통 게이트(common-gate, CG) 입력은 $R_{in}\approx1/g_{m1}$이에요. 소스 팔로워(source follower) 출력은 $R_{out}\approx1/g_{m2}$이고, 소스가 접지된 트랜지스터의 드레인 출력은 $R_{out}=r_O$예요. $1/g_m$ 꼴은 $\lambda=0$과 몸체효과를 무시한 값이에요.</p>
-  <p>$g_{m1}$, $g_{m2}$는 각 트랜지스터의 트랜스컨덕턴스이고, $r_O$는 채널 길이 변조로 생기는 출력 저항이에요. 형태의 이득 $G_m$(대문자)과 소자의 $g_m$, 트랜스임피던스 이득 $R_0$와 소자의 $r_O$는 다른 양이에요.</p>
-</div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="형태와 측정 조건">
-    <p>종이에 먼저 네 회로의 입력·출력 종류로 형태를 정하고, 이득을 잴 출력 조건을 옆에 적어요.</p>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>회로</th><th>입력</th><th>출력</th><th>형태</th><th>이득과 측정 조건</th></tr></thead>
-        <tbody>
-          <tr><td>(a)</td><td>게이트 전압</td><td>소스 팔로워 전압</td><td>전압 증폭기</td><td>$A_0$, 출력 개방</td></tr>
-          <tr><td>(b)</td><td>CG 소스 전류</td><td>소스 팔로워 전압</td><td>트랜스임피던스 증폭기</td><td>$R_0$, 출력 개방</td></tr>
-          <tr><td>(c)</td><td>게이트 전압</td><td>드레인 전류</td><td>트랜스컨덕턴스 증폭기</td><td>$G_m$, 출력 단락</td></tr>
-          <tr><td>(d)</td><td>CG 소스 전류</td><td>드레인 전류</td><td>전류 증폭기</td><td>$A_I$, 출력 단락</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p>첫 식은 (a)의 $M_1$ 드레인 노드 $n_1$이에요. 팔로워 게이트는 전류를 끌지 않으니 $M_1$의 소신호 드레인 전류 $g_{m1}v_{in}$이 모두 $R_D$를 지나요. 드레인 전류가 늘면 $R_D$의 전압 강하가 커져 $n_1$이 내려가요.</p>
-    $$v_{n1}=-g_{m1}R_Dv_{in}$$
-  </div>
-</div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
-  <div data-subpart="main">
-    <div data-answer-step="(a) 전압 증폭기 모델" data-gain-route="gm-rout">
-      <p>(a)의 입력은 게이트라서 $R_{in}=\infty$예요. 출력 전압 $A_0$는 이 단 전체의 단락 트랜스컨덕턴스와 출력 저항으로 나눠 구해요.</p>
-      <p>출력을 단락하면($v_{out}=0$) $M_2$의 소신호 게이트–소스 전압은 $v_{n1}$이에요. $M_2$ 소스에서 단락선으로 나가는 전류는 $g_{m2}v_{n1}$이므로, 단락선에서 출력 노드로 들어오는 방향을 양으로 잡은 단락 전류는 그 반대예요.</p>
-      <div data-gain-stage="gm">
-        $$i_{out,sc}=-g_{m2}v_{n1}=g_{m1}g_{m2}R_Dv_{in}$$
-        $$G_{m,a}=\frac{i_{out,sc}}{v_{in}}=g_{m1}g_{m2}R_D$$
-      </div>
-      <p>입력을 0으로 두면 $n_1$의 신호도 0이라 $M_2$ 게이트가 AC 접지예요. 아래 전류원이 이상적이므로 출력에서는 팔로워 소스 쪽 저항만 보여요.</p>
-      <div data-gain-stage="rout">
-        $$R_{out}\approx\frac{1}{g_{m2}}$$
-      </div>
-      <p>출력 노드로 들어오는 전류를 양으로 잡았으니 개방 전압 이득은 $-G_mR_{out}$이에요.</p>
-      <div data-gain-stage="gain">
-        $$A_0=-G_{m,a}R_{out}\approx-g_{m1}g_{m2}R_D\cdot\frac{1}{g_{m2}}=-g_{m1}R_D$$
-      </div>
-      <figure class="figure">
+<div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit"><svg id="fig-circuit-amp-vin" viewBox="0 0 330 213" role="img" aria-label="(a) 게이트로 입력 전압을 받아 소스 팔로워에서 전압을 내보내요. (c) 같은 게이트 입력을 받아 드레인에서 전류를 읽어요.">
+        <g transform="translate(2 0)">
+          <g data-symbol="part">
+            <g transform="translate(59 110)">
+              <path class="fig-ink" d="M-20 -13v26 M-15 -15v30 M-15 -12H0 M-15 12H0 M-9 8L-3 12L-9 16"/>
+            </g>
+          </g>
+          <path class="fig-ink" d="M20 110H39 M59 122V154"/>
+          <circle class="fig-dot" cx="17" cy="110" r="3" data-node-color="blue" data-node-id="p10-a-in"/>
+          <g data-symbol="part">
+            <path class="fig-ink" d="M50 154h18 m-15 4h12 m-9 4h6"/>
+          </g>
+          <text class="fig-text fig-math" x="20" y="89" text-anchor="middle" font-size="13" data-node-color="blue" data-node-id="p10-a-in">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
+          <path class="fig-ink" d="M59 98V70 M59 40V24H116V55 M59 70H96 M116 79V109H143 M116 109V148 M116 172V191"/>
+          <g data-symbol="part">
+            <path class="fig-ink" d="M59 40l5 5l-10 5l10 5l-10 5l10 5l-5 5"/>
+          </g>
+          <g data-symbol="part">
+            <g transform="translate(116 67)">
+              <path class="fig-ink" d="M-20 -13v26 M-15 -15v30 M-15 -12H0 M-15 12H0 M-9 8L-3 12L-9 16"/>
+            </g>
+          </g>
+          <g data-symbol="part">
+            <circle class="fig-ink" cx="116" cy="160" r="12"/>
+            <path class="fig-ink" d="M116 153v14"/>
+            <g data-symbol="part">
+              <path class="fig-ink" d="M116 167l-4 -6m4 6l4 -6"/>
+            </g>
+          </g>
+          <g data-symbol="part">
+            <path class="fig-ink" d="M107 191h18 m-15 4h12 m-9 4h6"/>
+          </g>
+          <circle class="fig-dot" cx="59" cy="70" r="3.2" data-node-color="red" data-node-id="p10-a-X"/>
+          <circle class="fig-dot" data-node-color="blue" cx="116" cy="109" r="3.2" data-node-id="p10-a-out"/>
+          <circle class="fig-dot" cx="146" cy="109" r="3" data-node-color="blue" data-node-id="p10-a-out"/>
+          <text class="fig-text fig-math" x="143" y="92" text-anchor="middle" font-size="13" data-node-color="blue" data-node-id="p10-a-out">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+          <text class="fig-text fig-math" x="142" y="23" text-anchor="middle" font-size="13" data-node-color="red" data-node-id="p10-a-supply">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text>
+          <text class="fig-text fig-math" x="138" y="60" text-anchor="middle" font-size="13">M<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+          <text class="fig-text fig-math" x="38" y="58" text-anchor="middle" font-size="13">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text>
+          <text class="fig-text fig-math" x="79" y="128" text-anchor="middle" font-size="12">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+          <text class="fig-text fig-loc" x="16" y="21" text-anchor="middle" font-size="17">㉠</text>
+          <text class="fig-text fig-math" x="36" y="21" text-anchor="middle" font-size="13">(a)</text>
+        <circle cx="116" cy="24" r="3.2" data-node-color="red" data-node-id="p10-a-supply" class="fig-dot"/><text x="73" y="58" data-node-color="red" data-node-id="p10-a-X" class="fig-text fig-math" font-size="13">n</text></g>
+        <g transform="translate(174 0)">
+          <g data-symbol="part">
+            <g transform="translate(59 110)">
+              <path class="fig-ink" d="M-20 -13v26 M-15 -15v30 M-15 -12H0 M-15 12H0 M-9 8L-3 12L-9 16"/>
+            </g>
+          </g>
+          <path class="fig-ink" d="M20 110H39 M59 122V154"/>
+          <circle class="fig-dot" cx="17" cy="110" r="3" data-node-color="blue" data-node-id="p10-c-in"/>
+          <g data-symbol="part">
+            <path class="fig-ink" d="M50 154h18 m-15 4h12 m-9 4h6"/>
+          </g>
+          <text class="fig-text fig-math" x="20" y="89" text-anchor="middle" font-size="13" data-node-color="blue" data-node-id="p10-c-in">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
+          <path class="fig-ink" d="M59 98V64H126"/>
+          <circle class="fig-dot" cx="129" cy="64" r="3" data-node-color="red" data-node-id="p10-c-out"/>
+          <g data-symbol="part">
+            <path class="fig-accent" d="M89 64l6 -4m-6 4l6 4"/>
+          </g>
+          <text class="fig-text fig-math" x="109" y="43" text-anchor="middle" font-size="13">i<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+          <text class="fig-text fig-math" x="80" y="128" text-anchor="middle" font-size="13">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+          <text class="fig-text fig-loc" x="16" y="21" text-anchor="middle" font-size="17">㉡</text>
+          <text class="fig-text fig-math" x="36" y="21" text-anchor="middle" font-size="13">(c)</text>
+        </g>
+      </svg><figcaption class="circuit-state">게이트에서 전압을 받는 원 회로 (a)·(c)예요. 두 모델의 출력 포트가 달라요.</figcaption></figure>
+<div data-subpart="main"><h4>입출력 포트로 고르는 네 모델</h4><div data-answer-step="전압 출력의 연쇄 이득"><p><span class="loc">㉠</span> (a)·(b)는 출력 개방에서 $M_1$ 드레인과 팔로워 게이트 사이 노드를 $n$으로 잡아요. 몸체 효과와 채널 길이 변조를 무시하고 이상적 바이어스 전류원을 쓰면 팔로워의 무부하 이득은 1이에요.</p>$$A_{0,a}=(v_n/v_{in})(v_{out}/v_n)=(-g_{m1}R_D)(1)$$
+$$R_{0,b}=(v_n/i_{in})(v_{out}/v_n)=(+R_D)(1)$$
+</div><div data-answer-step="전류 출력의 기준"><p><span class="loc">㉡</span> (c)는 출력 단락에서 $r_O$ 양단 전압이 0이어서 제어 전류가 그대로 드레인으로 들어가요. 입력을 영으로 두면 유한한 $r_O$가 출력에 남아요. (d)는 소스로 넣은 전류가 모두 드레인으로 나와요. 그림 12.19(d)의 아래쪽 화살표로 재면 $i_{out}/i_{in}=-1$, 여기서 그린 모델의 유출 기준으로는 $+1$이에요.</p></div><div data-answer-step="두 포트의 저항"><p>게이트 입력은 개방이고 공통 게이트의 소스 입력은 출력 단락에서 약 $1/g_{m1}$이에요. (a)·(b)의 출력에서는 팔로워 소스 저항을 봐요. (d)의 입력 전류원을 영으로 두면 소스가 열려 드레인 시험전류가 흐를 길이 없어요.</p></div><div data-answer-step="전압 증폭기 모델"><figure class="figure">
         <svg viewBox="0 0 460 160" role="img" aria-label="(a)의 전압 증폭기 모델. 왼쪽 입력 단자 v in에서 R in이 접지로 내려가고 값은 무한대예요. 오른쪽에는 아래가 접지인 종속 전압원 A0 v in이 있고, 위 단자에서 직렬 저항 R out을 지나 맨 오른쪽 출력 단자 v out으로 이어져요.">
           <g fill="none" stroke-width="2">
             <path class="fig-ink" d="M30 50H80V62"/>
@@ -87,20 +91,8 @@
             <text class="fig-text fig-math" x="256" y="105" text-anchor="end">A<tspan baseline-shift="sub" font-size="78%">0</tspan>v<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
           </g>
         </svg>
-        <figcaption>(a) 전압 증폭기 모델이에요. $R_{in}=\infty$는 입력이 개방이라는 뜻이고, 종속 전압원은 $A_0v_{in}=-g_{m1}R_Dv_{in}$이에요.</figcaption>
-      </figure>
-    </div>
-    <div data-answer-step="(b) 트랜스임피던스 증폭기 모델">
-      <p>(b)의 입력은 게이트가 $V_b$로 고정된 CG 단의 소스예요. $\lambda=0$이라 드레인 쪽 $R_D$와 관계없이 소스에서 $1/g_{m1}$이 보여요.</p>
-      $$R_{in}\approx\frac{1}{g_{m1}}$$
-      <p>$R_0$는 출력을 열고 구해요. $M_1$ 소스 노드에는 입력 전류원 $I_{in}$과 $M_1$만 이어져 있고 게이트로는 전류가 흐르지 않아요. 그래서 소스로 들어온 $i_{in}$은 모두 $M_1$을 거쳐 $R_D$ 쪽으로 올라가요. 그래서 위에서 아래로 흐르는 $M_1$의 드레인 전류가 $i_{in}$만큼 줄어요.</p>
-      $$i_{d1}=-i_{in}$$
-      <p>$R_D$에 흐르는 전류가 줄면 전압 강하가 줄어 $n_1$이 올라가요. 소스 팔로워는 $\lambda=0$, 몸체효과 무시, 이상적 전류원에서 출력을 열면 이득이 1이라 $v_{out}=v_{n1}$이에요.</p>
-      $$v_{n1}=-R_Di_{d1}=R_Di_{in}$$
-      $$R_0=\frac{v_{out}}{i_{in}}=R_D$$
-      <p>출력 저항은 입력 전류원을 0(개방)으로 두고 봐요. $M_1$에 신호 전류가 없으니 $n_1$이 고정되고, (a)와 같은 팔로워 출력이 보여요.</p>
-      $$R_{out}\approx\frac{1}{g_{m2}}$$
-      <figure class="figure">
+        <figcaption>(a) 전압 증폭기. 입력은 개방이고 출력은 테브난 전압원과 직렬 저항이에요.</figcaption>
+      </figure></div><div data-answer-step="트랜스임피던스 증폭기 모델"><figure class="figure">
         <svg viewBox="0 0 460 160" role="img" aria-label="(b)의 트랜스임피던스 증폭기 모델. 왼쪽 입력 단자에서 오른쪽을 향한 화살표의 전류 i in이 R in으로 흘러 접지로 가고 R in은 약 1/gm1이에요. 오른쪽에는 아래가 접지인 종속 전압원 R0 i in이 있고, 직렬 저항 R out을 지나 맨 오른쪽 출력 단자 v out으로 이어져요.">
           <g fill="none" stroke-width="2">
             <path class="fig-ink" d="M30 50H80V62"/>
@@ -125,16 +117,8 @@
             <text class="fig-text fig-math" x="256" y="105" text-anchor="end">R<tspan baseline-shift="sub" font-size="78%">0</tspan>i<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
           </g>
         </svg>
-        <figcaption>(b) 트랜스임피던스 증폭기 모델이에요. 입력 전류가 작은 $R_{in}$으로 흘러 들어가고, 종속 전압원은 $R_0i_{in}=R_Di_{in}$이에요.</figcaption>
-      </figure>
-    </div>
-    <div data-answer-step="(c) 트랜스컨덕턴스 증폭기 모델">
-      <p>(c)의 입력은 게이트라서 $R_{in}=\infty$예요. $G_m$은 출력을 단락하고 구해요. 드레인이 AC 접지이면 $r_O$ 양단 전압이 0이라 $r_O$로는 신호 전류가 흐르지 않아요. 그래서 $\lambda&gt;0$이어도 제어 전류 전체가 단락선으로 나와요. 그림의 $I_{out}$처럼 드레인으로 들어가는 방향이 양이에요.</p>
-      $$i_{out}=g_{m1}v_{in}$$
-      $$G_m=\frac{i_{out}}{v_{in}}=g_{m1}$$
-      <p>입력을 0으로 두면 제어 전류도 0이라 드레인에서는 $r_O$만 보여요.</p>
-      $$R_{out}=r_O$$
-      <figure class="figure">
+        <figcaption>(b) 트랜스임피던스 증폭기. 소스에 입력 전류를 넣고 팔로워 출력 전압을 읽어요.</figcaption>
+      </figure></div><div data-answer-step="트랜스컨덕턴스 증폭기 모델"><figure class="figure">
         <svg viewBox="0 0 460 160" role="img" aria-label="(c)의 트랜스컨덕턴스 증폭기 모델. 왼쪽 입력 단자 v in에서 R in이 접지로 내려가고 값은 무한대예요. 오른쪽에는 아래쪽을 향한 종속 전류원 Gm v in이 왼쪽에, 출력 저항 R out = rO가 그 오른쪽에 출력 노드와 접지 사이에 병렬로 있어요. 맨 오른쪽이 출력 단자이고, 그 왼쪽 도선에 왼쪽을 향한 i out 화살표가 있어요.">
           <g fill="none" stroke-width="2">
             <path class="fig-ink" d="M30 50H80V62"/>
@@ -160,16 +144,8 @@
             <text class="fig-text fig-math" x="256" y="105" text-anchor="end">G<tspan baseline-shift="sub" font-size="78%">m</tspan>v<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
           </g>
         </svg>
-        <figcaption>(c) 트랜스컨덕턴스 증폭기 모델이에요. 종속 전류원 $G_mv_{in}=g_{m1}v_{in}$은 왼쪽, $R_{out}=r_O$는 오른쪽에 병렬이고, $i_{out}$은 출력 단자에서 회로로 들어가는 방향이에요.</figcaption>
-      </figure>
-    </div>
-    <div data-answer-step="(d) 전류 증폭기 모델">
-      <p>(d)의 입력은 (b)와 같은 CG 소스라서 $R_{in}\approx1/g_{m1}$이에요. $A_I$는 출력을 단락하고 구해요. 소스로 들어온 $i_{in}$은 (b)처럼 갈 곳이 $M_1$뿐이라, 그대로 $M_1$을 지나 드레인 밖으로 흘러 나가요. 출력 전류를 드레인에서 나가는 방향으로 잡으면 들어온 전류와 같아요.</p>
-      $$i_{out}=i_{in}$$
-      $$A_I=\frac{i_{out}}{i_{in}}=1$$
-      <p>출력 저항은 입력 전류원을 0(개방)으로 두고 드레인에서 봐요. 소스에 이어진 것이 열린 전류원뿐이라 소신호 전류가 지나갈 길이 없어요. 드레인 전압을 바꿔도 드레인 전류가 변할 수 없으므로 $R_{out}$은 무한대예요. $\lambda&gt;0$이어도 소스 쪽이 열려 있으니 같은 결론이에요.</p>
-      $$R_{out}=\infty$$
-      <figure class="figure">
+        <figcaption>(c) 트랜스컨덕턴스 증폭기. 모델의 출력 전류 기준은 드레인으로 들어가는 방향이에요.</figcaption>
+      </figure></div><div data-answer-step="전류 증폭기 모델"><figure class="figure">
         <svg viewBox="0 0 460 160" role="img" aria-label="(d)의 전류 증폭기 모델. 왼쪽 입력 단자에서 오른쪽을 향한 화살표의 전류 i in이 R in으로 흘러 접지로 가고 R in은 약 1/gm1이에요. 오른쪽에는 위쪽을 향한 종속 전류원 AI i in이 왼쪽에, R out = 무한대가 그 오른쪽에 출력 노드와 접지 사이에 병렬로 있어요. 맨 오른쪽이 출력 단자이고, 그 왼쪽 도선에 오른쪽을 향한 i out 화살표가 있어요.">
           <g fill="none" stroke-width="2">
             <path class="fig-ink" d="M30 50H80V62"/>
@@ -196,65 +172,7 @@
             <text class="fig-text fig-math" x="256" y="105" text-anchor="end">A<tspan baseline-shift="sub" font-size="78%">I</tspan>i<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
           </g>
         </svg>
-        <figcaption>(d) 전류 증폭기 모델이에요. 종속 전류원 $A_Ii_{in}=i_{in}$이 출력 단자 쪽으로 전류를 내보내고, $R_{out}=\infty$는 그 자리가 열려 있다는 뜻이에요.</figcaption>
-      </figure>
-    </div>
-  </div>
+        <figcaption>(d) 전류 증폭기. 모델에서 출력 전류는 드레인 밖으로 나가는 방향이에요.</figcaption>
+      </figure></div><div data-answer-final=""><p>전압 출력은 종속 전압원과 직렬 출력저항, 전류 출력은 종속 전류원과 병렬 출력저항으로 그려요. 표의 전류 기준은 아래 모델의 화살표를 따라요.</p><table><thead><tr><th>회로</th><th>입력저항</th><th>이득</th><th>출력저항</th></tr></thead><tbody><tr><th>(a) 전압</th><td>$\infty$</td><td>$-g_{m1}R_D$</td><td>$1/g_{m2}$</td></tr><tr><th>(b) 트랜스임피던스</th><td>$1/g_{m1}$</td><td>$+R_D$</td><td>$1/g_{m2}$</td></tr><tr><th>(c) 트랜스컨덕턴스</th><td>$\infty$</td><td>$+g_{m1}$</td><td>$r_O$</td></tr><tr><th>(d) 전류</th><td>$\simeq1/g_{m1}$</td><td>$+1$ (유출 기준)</td><td>$\infty$</td></tr></tbody></table></div></div>
 </div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <div data-answer-final>
-      <p>이득은 $\lambda=0$, 몸체효과 무시, 이상적 바이어스 전류원에서 구한 값이에요. (d)의 $A_I=1$은 출력 전류를 드레인에서 나가는 방향으로 잡은 값이에요.</p>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>회로</th><th>모델</th><th>$R_{in}$</th><th>종속 전원</th><th>$R_{out}$</th></tr></thead>
-          <tbody>
-            <tr><td>(a)</td><td>전압 증폭기(전압원+직렬 $R_{out}$)</td><td>$\infty$</td><td>$A_0=-g_{m1}R_D$</td><td>$\approx1/g_{m2}$</td></tr>
-            <tr><td>(b)</td><td>트랜스임피던스 증폭기(전압원+직렬 $R_{out}$)</td><td>$\approx1/g_{m1}$</td><td>$R_0=R_D$</td><td>$\approx1/g_{m2}$</td></tr>
-            <tr><td>(c)</td><td>트랜스컨덕턴스 증폭기(전류원+병렬 $R_{out}$)</td><td>$\infty$</td><td>$G_m=g_{m1}$</td><td>$r_O$</td></tr>
-            <tr><td>(d)</td><td>전류 증폭기(전류원+병렬 $R_{out}$)</td><td>$\approx1/g_{m1}$</td><td>$A_I=1$</td><td>$\infty$</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <p>(a)를 다른 길로 확인해요. 공통 소스 단의 이득에 팔로워의 개방 이득 1을 곱해도 같은 값이에요.</p>
-    $$A_0=(-g_{m1}R_D)\times1=-g_{m1}R_D$$
-    <p>테브난 꼴과 노턴 꼴도 서로 맞아요. (a)의 단락 전류를 개방 전압과 $R_{out}$으로 다시 쓰면 앞에서 구한 $G_{m,a}$가 나와요.</p>
-    $$\frac{-A_0}{R_{out}}=g_{m1}R_D\cdot g_{m2}=G_{m,a}$$
-    <p>단위를 봐요. $A_0$는 $\mathrm{mS}\times\mathrm{k\Omega}=1$이라 무차원, $R_0=R_D$는 $\Omega$, $G_m=g_{m1}$은 $\mathrm{S}$, $A_I$는 무차원이에요. 네 이득 정의의 단위와 같아요.</p>
-    <p>이상적인 형태와도 비교해요. 전압 입력인 (a), (c)는 $R_{in}=\infty$, 전류 입력인 (b), (d)는 $R_{in}$이 작은 $1/g_{m1}$이에요. 전압 출력인 (a), (b)는 $R_{out}$이 작은 $1/g_{m2}$, 전류 출력인 (c), (d)는 $R_{out}$이 큰 $r_O$와 $\infty$예요. 네 회로 모두 자기 형태가 원하는 방향의 임피던스를 가져요.</p>
-    <p>극한도 맞아요. (c)에서 $\lambda\to0$이면 $r_O\to\infty$라 (d)처럼 이상적인 전류 출력이 돼요.</p>
-  </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <p>그림 12.18에는 부정확한 모델도 섞여 있어요. 전압 출력에 $R_{out}$을 병렬로 붙이거나, 전압 입력의 $R_{in}$을 신호 경로에 직렬로 넣으면 안 돼요. 전압 입력은 $R_{in}$을 접지와 병렬로, 전압 출력은 $R_{out}$을 전압원과 직렬로 붙여요.</p>
-  <p>이득을 잴 때 출력 조건을 바꾸지 않아요. (b)의 출력을 단락하면 $v_{out}=0$이라 $R_0$를 잴 수 없고, (c)의 출력을 열면 제어 전류가 모두 $r_O$로 흘러 출력 단자로는 전류가 나오지 않아요.</p>
-  <p>(d)에서 그림의 $I_{out}$ 화살표는 드레인으로 들어가는 방향이에요. 그 방향을 그대로 쓰면 $i_{out}=-i_{in}$이 돼요. 교과서의 $A_I=1$은 입력 전류가 같은 방향으로 계속 흘러 드레인 밖으로 나간다는 뜻이라, 크기는 1이고 기준 방향만 다른 거예요.</p>
-  <p>(a)의 형태 이득 $A_0$를 $g_{m2}$까지 곱한 $G_{m,a}$와 헷갈리지 않아요. $G_{m,a}$는 전압 이득을 구하려고 잠깐 쓴 중간량이고, 모델에 그리는 종속 전원은 $A_0v_{in}$이에요.</p>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol>
-    <li>(a)에서 소스 팔로워 $M_2$를 빼고 $M_1$ 드레인 노드를 바로 출력으로 쓰면 $A_0$와 $R_{out}$은 어떻게 바뀌나요? ($\lambda=0$)</li>
-    <li>(b)에서 $M_1$의 $g_{m1}$만 두 배로 키우면 $R_{in}$과 $R_0$는 각각 어떻게 되나요?</li>
-    <li>(c)에서 출력이 전류인데도 출력에 부하 저항을 달아 전압을 꺼내면, 그 회로를 전압 증폭기 모델로 다시 그릴 때 개방 전압 이득은 얼마인가요? 부하 없이 $r_O$만 있는 경우로 답해요.</li>
-  </ol>
-</div>
-<div class="sum" hidden>
-  <p class="sum-lead">입력이 전압이냐 전류냐, 출력이 전압이냐 전류냐로 형태를 고르고 그림 12.18의 모델에 $R_{in}$, 이득, $R_{out}$을 채워요.</p>
-  <div class="summary-group">
-    <h4>네 모델</h4>
-    <p>(a) 전압 증폭기는 $R_{in}=\infty$, $A_0=-g_{m1}R_D$, $R_{out}\approx1/g_{m2}$예요.</p>
-    <p>(b) 트랜스임피던스 증폭기는 $R_{in}\approx1/g_{m1}$, $R_0=R_D$, $R_{out}\approx1/g_{m2}$예요.</p>
-    <p>(c) 트랜스컨덕턴스 증폭기는 $R_{in}=\infty$, $G_m=g_{m1}$, $R_{out}=r_O$예요.</p>
-    <p>(d) 전류 증폭기는 $R_{in}\approx1/g_{m1}$, $A_I=1$, $R_{out}=\infty$예요.</p>
-  </div>
-  <div class="summary-group">
-    <h4>판단 기준</h4>
-    <p>전압 출력은 전압원과 직렬 $R_{out}$, 전류 출력은 전류원과 병렬 $R_{out}$으로 그려요.</p>
-    <p>전압 출력의 이득은 출력을 열고, 전류 출력의 이득은 출력을 단락하고 재요.</p>
-    <p>(d)의 $A_I=1$은 출력 전류를 드레인에서 나가는 방향으로 잡은 값이에요.</p>
-  </div>
-</div>
+<div class="sum" hidden><p class="sum-lead">전압 출력의 이득은 출력을 열고, 전류 출력의 이득은 출력을 단락하고 구해요.</p><p>공통 게이트의 전류 이득에는 출력 전류의 기준 방향을 함께 적어요.</p></div>

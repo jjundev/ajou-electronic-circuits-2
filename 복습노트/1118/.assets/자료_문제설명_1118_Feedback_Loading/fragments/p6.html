@@ -1,47 +1,19 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>그림 12.45에서 $G_m$은 입력 전압을 출력 전류로 바꾸는 순방향 증폭기예요. $K$는 그 출력 전류를 읽고 입력 뺄셈기로 전압을 돌려줘야 해요. 오른쪽 시험원 $V_X$가 보낸 전류 $I_X$를 따라가며, $K$가 실제로 어느 전류를 읽게 되는지 확인해요.</p>
+<div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit">
+<svg id="fig-circuit-s1-cv-output" viewBox="0 0 324 218" role="img" aria-label="입력을 단락하고 출력에 시험전압 VX를 건 회로. 시험전류 IX가 Rout과 Gm 출력으로 갈라진 뒤 합쳐져 K 안의 도선을 지나요."><path class="fig-ink" d="M110 36L22 36L22 80L44 80L44 200L110 200 M110 80L74 80L74 148L110 148 M176 36L278 36L278 45 M278 71L278 80L242 80L242 200L164 200L164 148L212 148L212 80L176 80 M194 36L194 40 M194 76L194 80"/><g data-symbol="part"><path class="fig-ink" d="M194 40l-7 3 14 6 -14 6 14 6 -14 6 14 6 -7 3"/></g><rect class="fig-ink" stroke-width="3" x="110" y="22" width="66" height="72"/><text class="fig-text fig-math" text-anchor="middle" x="143" y="63">G<tspan baseline-shift="sub" font-size="78%">m</tspan></text><rect class="fig-ink" stroke-width="3" x="110" y="132" width="66" height="80"/><text class="fig-text fig-math" text-anchor="middle" x="138" y="177">K</text><g data-symbol="source"><circle class="fig-ink" cx="278" cy="58" r="13"/></g><circle class="fig-dot" data-node-color="blue" cx="194" cy="36" r="3.5" data-node="test"/><circle class="fig-dot" cx="278" cy="36" r="3.5" data-node="test" data-node-color="blue"/><circle class="fig-dot" data-node="return" data-node-color="red" cx="194" cy="80" r="3.5"/><g data-symbol="arrow"><path class="fig-accent" d="M248 30L239 36L248 42"/></g><text class="fig-text fig-math" text-anchor="middle" x="244" y="18">I<tspan baseline-shift="sub" font-size="78%">X</tspan></text><text class="fig-text fig-math" text-anchor="start" x="206" y="62">R<tspan baseline-shift="sub" font-size="78%">out</tspan></text><g data-symbol="arrow"><path class="fig-accent" d="M206 110L212 119L218 110"/></g><text class="fig-text fig-math" text-anchor="end" x="202" y="120">I<tspan baseline-shift="sub" font-size="78%">X</tspan></text><g data-symbol="arrow"><path class="fig-accent" d="M236 122L242 113L248 122"/></g><text class="fig-text fig-math" text-anchor="start" x="252" y="120">I<tspan baseline-shift="sub" font-size="78%">X</tspan></text><text class="fig-text fig-math" text-anchor="middle" x="302" y="47">+</text><text class="fig-text fig-math" text-anchor="middle" x="302" y="84">−</text><text class="fig-text fig-math" text-anchor="middle" x="281" y="17" data-node="test" data-node-color="blue">V<tspan baseline-shift="sub" font-size="78%">X</tspan>(+)</text><text class="fig-text fig-math" text-anchor="middle" x="103" y="169.5">+</text><text class="fig-text fig-math" text-anchor="middle" x="84" y="179">KI<tspan baseline-shift="sub" font-size="78%">X</tspan></text><text class="fig-text fig-math" text-anchor="middle" x="103" y="188">−</text><text class="fig-loc" x="38" y="65" font-size="17">㉠</text><text class="fig-loc" x="132" y="153" font-size="17">㉡</text></svg>
+<figcaption class="circuit-state">올바른 직렬 접속. 순방향 출력의 내부 가지 전류가 다시 합쳐져 감지 포트를 통과해요.</figcaption>
+</figure>
+<div data-subpart="main">
+<h4>시험 전류가 지나야 하는 경로</h4>
+<div data-answer-step="시험원과 감지 포트의 전류">
+<p><span class="loc">㉠</span> 독립 입력 전압을 0으로 두고 출력에 시험원을 연결해요. <span class="loc">㉡</span> 전류 감지 포트는 순방향 출력 포트와 직렬이어야 하므로, 같은 순환 방향을 기준으로 다음 조건이 성립해야 해요.</p>
+$$I_X=I_{\mathrm{port}}=I_{\mathrm{sense}}$$
 </div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p>전류 감지(current sensing)에서는 전류계처럼 감지 포트를 측정할 경로에 직렬로 넣어요. 이상적인 감지 포트의 입력저항은 0이에요. 직렬 경로에 전압 강하를 더하지 않으면서 그 경로의 전류 전부를 읽기 위해서예요.</p>
+<div data-answer-final="">
+<p>원문 그림 12.45에서는 $V_X$를 출력과 병렬로 연결해 시험 전류가 순방향 출력과 $K$의 감지 입력으로 갈라져요. 위 회로처럼 감지 포트를 출력의 귀로에 직렬로 넣어야 $K$가 시험 전류 전체를 읽어요.</p>
 </div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="세 포트 전류의 일치">
-    <p>독립 입력 전압은 0으로 두고, 시험원에서 나와 순방향 출력 포트로 들어가는 방향을 양으로 잡아요. 같은 순환 방향으로 감지 포트 전류도 정의하면 올바른 직렬 연결의 조건은 다음과 같아요.</p>
-    $$I_X=I_{\mathrm{port}}=I_{\mathrm{sense}}$$
-  </div>
-  <p>$I_{\mathrm{port}}$는 순방향 출력 단자를 통과하는 전체 전류예요. 내부의 $R_{out}$ 한 가지에 흐르는 전류와는 구별해요.</p>
 </div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
-  <div data-subpart="main">
-    <div data-answer-step="그림 12.45의 출력 접속점">
-      <p>$V_X$의 위 단자에서 왼쪽으로 가면 $K$로 내려가는 갈림길을 만나요. 왼쪽으로 더 가면 $G_m$의 출력과 $R_{out}$으로 이어져요. 시험원과 감지 포트가 출력에 병렬로 붙었으므로 $I_X$ 전부가 감지 포트를 거친다고 할 수 없어요.</p>
-    </div>
-    <p>바르게 연결하려면 순방향 출력과 그 귀환 경로 사이를 열고 그 자리에 감지 포트와 시험원을 직렬로 넣어요. 그러면 그림 12.43(b)처럼 시험원이 보낸 전류가 순방향 출력 포트와 감지 포트를 모두 통과해요.</p>
-  </div>
-</div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <div data-answer-final="시험원과 전류 감지 포트의 연결">
-      <p><strong>그림 12.45에서는 감지 포트가 순방향 출력과 병렬이라 시험 전류 $I_X$가 두 경로로 갈라져요.</strong> 전류–전압 귀환의 출력 임피던스를 재려면 입력을 영점화한 뒤 시험원, 순방향 출력 포트, 귀환망의 감지 포트를 한 직렬 경로에 두어야 해요.</p>
-    </div>
-    <p>감지 입력저항이 0에 가까워지는 극한으로 확인해요. 잘못된 병렬 연결에서는 같은 $V_X\ne0$가 그 작은 저항에도 걸리므로 감지 가지 전류가 한없이 커져요. 올바른 직렬 연결에서는 감지 포트의 전압 강하만 0에 가까워져요.</p>
-  </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <p>그림의 $I_X$ 화살표는 시험원에서 나가는 전체 전류의 방향만 표시해요. 화살표 뒤에 갈림길이 있는지 확인해야 $K$에 실제로 들어가는 전류를 판별할 수 있어요.</p>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ul><li>이번에는 출력 <strong>전압</strong>을 감지한다고 하면 감지 포트를 어디에 연결하고, 그 입력저항은 어느 방향으로 커지거나 작아져야 할까요?</li></ul>
 </div>
 <div class="sum" hidden>
-  <p class="sum-lead">전류 감지에서는 시험원과 순방향 출력 포트, 감지 포트가 한 직렬 경로의 전류를 공유해야 해요.</p>
-  <p>그림 12.45에서는 시험원이 출력에 병렬로 붙어 $I_X$가 갈라져요.</p>
-  <p>이상적인 전류 감지 포트의 입력저항은 0이에요.</p>
+<p class="sum-lead">출력 전류를 감지할 때는 시험원, 순방향 출력 포트, 감지 포트가 같은 전류를 공유해야 해요.</p>
 </div>

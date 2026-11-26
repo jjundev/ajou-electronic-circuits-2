@@ -1,44 +1,5 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>두 회로 모두 밀러 정리로 극점을 구하라는 문제예요. 값이 없으니 답은 기호로 써요.</p>
-  <p>(1) 회로 (a): 입력은 $R_G$를 지나 $M_1$ 게이트로 들어가요. 이 게이트를 $X$, $M_1$ 드레인을 $A$라고 불러요(그림에는 이름이 없어요). $A$에는 $M_2$ 소스와 NMOS $M_3$의 소스가 함께 붙어요. $M_3$는 드레인이 $V_{DD}$, 게이트가 $V_{b2}$예요. 출력은 $M_2$ 드레인이고, 위에는 게이트와 드레인을 묶은 다이오드 연결 PMOS $M_4$가 있어요. $\lambda=0$이에요.</p>
-  <p>(2) 회로 (b): $M_1$, $M_2$가 꼬리 소자 $M_{SS}$를 공유하는 차동 증폭기예요. 각 출력 노드에는 PMOS 전류원($M_5$, $M_6$)과 NMOS $M_3$, $M_4$가 붙어 있어요. $M_3$, $M_4$는 게이트와 드레인이 모두 $V_{DD}$이고 소스가 출력 노드예요. $\lambda\neq0$이라 $r_O$를 남겨요.</p>
-  <p>그림 (b)에는 $V_{in}$이 없고 $V_{in1}$, $V_{in2}$만 있어요. 그래서 $V_{in}=V_{in1}-V_{in2}$인 차동 입력, $V_{out}$은 두 출력 단자 사이의 차동 출력(왼쪽 출력 − 오른쪽 출력)으로 해석해요. 몸체 효과는 무시해요.</p>
-</div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p>"Miller's theorem을 사용하여"가 첫 단서예요. 두 신호 노드 사이에 떠 있는 $C_{GD1}$을 저주파 노드 이득 $A$로 각 노드–접지 커패시터로 나눠요(<a href="../1028/정리노트_1028_CS_Stage_Frequency_Response.html#s2-cs-miller">CS 단의 밀러 효과</a>).</p>
-  $$C_{\mathrm{in},M}=(1-A)C_{GD1}$$
-  $$C_{\mathrm{out},M}=\left(1-\frac{1}{A}\right)C_{GD1}$$
-  <p>(1) "게이트가 AC 접지인 MOS의 소스"는 소스에서 보면 $1/g_m$이에요($\lambda=0$). $A$에 $M_2$와 $M_3$의 소스가 함께 붙으므로 두 $1/g_m$이 병렬이에요. 다이오드 연결 MOS는 $\lambda=0$에서 $1/g_m$ 블록이에요(<a href="정리노트_1106_Negative_Feedback.html#s0-bjt-poles">캐스코드의 노드별 극점</a>).</p>
-  <p>(2) "차동 증폭기"와 좌우 대칭이 단서예요. 순수 차동 입력이면 꼬리 노드가 가상 접지라 반회로 하나만 풀면 되고, 차동 출력/차동 입력의 이득과 극점은 반회로와 같아요(<a href="정리노트_1106_Negative_Feedback.html#s1-half-circuit">차동쌍은 반회로와 같은 극점·영점을 가져요</a>). 반회로는 소스 접지 CS 단이라 떠 있는 $C_{GD1}$이 입력 게이트와 출력 사이에 걸려요.</p>
-  <p>(2)의 $M_3$는 게이트와 드레인이 모두 $V_{DD}$(AC 접지)라 소스에서 보면 게이트–드레인 결선 MOS 블록 $(1/g_{m3})\parallel r_{O3}$예요. $\lambda\neq0$이 원문 조건이므로 $r_O$를 생략하지 않아요.</p>
-</div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="회로 (a) 노드 판단" data-answer-subpart="1">
-    <p>$V_{DD}$, $V_{b1}$, $V_{b2}$를 AC 접지로 보내요. 극점 후보는 커패시터가 모이는 세 노드 $X$, $A$, 출력이에요. $C_{GD1}$만 $X$–$A$ 사이에 떠 있고, $M_4$의 $C_{GD4}$는 게이트와 드레인이 같은 노드라 양단 전압이 0이어서 빠져요.</p>
-  </div>
-  <div data-answer-step="회로 (b) 반회로 판단" data-answer-subpart="2">
-    <p>좌우가 대칭이고 $V_{in1}=+V_{in}/2$, $V_{in2}=-V_{in}/2$이면 꼬리 노드(양쪽 소스)가 AC 접지예요. 왼쪽 반회로는 $V_{in1}\to R_S\to X$($M_1$ 게이트), $M_1$ 소스 접지, $M_1$ 드레인 $=$ 왼쪽 출력 $v_{o1}$이에요. 오른쪽 출력은 $v_{o2}=-v_{o1}$이므로 차동 출력은 다음과 같아요.</p>
-    $$\frac{V_{out}}{V_{in}}=\frac{v_{o1}-v_{o2}}{v_{in1}-v_{in2}}=\frac{2v_{o1}}{2v_{in1}}=\frac{v_{o1}}{v_{in1}}$$
-  </div>
-</div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
-  <div data-subpart="1">
-    <h4>(1) 회로 (a)의 극점</h4>
-    <div data-answer-step="X에서 A까지의 저주파 이득" data-gain-route="gm-rout">
-      <p>입력 $v_X$, 출력 $v_A$로 정하고 커패시터는 열어요. $A$를 단락하면 $M_2$, $M_3$의 게이트–소스 전압이 0이라 $M_1$ 제어 전류가 그대로 단락선으로 가요.</p>
-      <p>$A$를 접지로 단락해 $v_A=0$으로 두고, 접지에서 단락선을 지나 $A$로 들어가는 전류를 $i_{A,\mathrm{sc}}$의 양의 방향으로 둬요. $M_1$이 $A$에서 끌어내리는 $g_{m1}v_X$를 단락선이 그대로 대 주므로 $i_{A,\mathrm{sc}}=g_{m1}v_X$예요.</p>
-      <div data-gain-stage="gm">$$G_{m,XA}=\frac{i_{A,\mathrm{sc}}}{v_X}=g_{m1}$$</div>
-      <p>$v_X=0$으로 두고 $A$에서 보면 $M_1$ 드레인은 $\lambda=0$이라 개방이에요. 위로 $M_2$ 소스의 $1/g_{m2}$, 왼쪽으로 $M_3$ 소스의 $1/g_{m3}$이 같은 두 노드($A$와 AC 접지)에 붙어 병렬이에요.</p>
-      <div data-gain-stage="rout">$$R_A=\frac{1}{g_{m2}}\parallel\frac{1}{g_{m3}}=\frac{1}{g_{m2}+g_{m3}}$$</div>
-      <div data-gain-stage="gain">$$A_{XA}=-G_{m,XA}R_A=-\frac{g_{m1}}{g_{m2}+g_{m3}}$$</div>
-    </div>
-    <p>고주파 모델에서 커패시터 위치를 확인해요. $M_2$ 게이트가 $V_{b1}$이라 $C_{GS2}$는 $A$–접지, $C_{GD2}$는 출력–접지예요. $M_3$는 게이트·드레인이 AC 접지라 $C_{GS3}$, $C_{SB3}$가 $A$–접지이고 $C_{GD3}$, $C_{DB3}$는 양단이 모두 AC 접지라 빠져요. $M_4$는 소스·몸체가 $V_{DD}$이고 게이트가 출력이라 $C_{GS4}$, $C_{DB4}$가 출력–접지예요.</p>
-    <figure class="figure">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 235" role="img" aria-label="회로 (a)의 고주파 모델입니다. 입력이 R_G를 지나 X에 연결됩니다. X에서 접지로 C_GS1이 있고 X와 A 사이에 C_GD1이 떠 있습니다. A에서 접지로 M1 제어 전류원, M3 제어 전류원, C_A0이 있고, A에서 출력으로 M2 제어 전류원이 위로 흐릅니다. 출력에서 접지로 1/g_m4와 C_out이 있습니다." font-family="Pretendard, sans-serif" font-size="14" font-weight="600">
+<div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 235" role="img" aria-label="회로 (a)의 고주파 모델입니다. 입력이 R_G를 지나 X에 연결됩니다. X에서 접지로 C_GS1이 있고 X와 A 사이에 C_GD1이 떠 있습니다. A에서 접지로 M1 제어 전류원, M3 제어 전류원, C_A0이 있고, A에서 출력으로 M2 제어 전류원이 위로 흐릅니다. 출력에서 접지로 1/g_m4와 C_out이 있습니다." font-family="Pretendard, sans-serif" font-size="14" font-weight="600">
 <path class="fig-ink" d="M24 150 H52.0 l4 -6 8 12 8 -12 8 12 8 -12 4 6 H120"/>
 <circle class="fig-dot" cx="24" cy="150" r="3.5" data-node-id="p4a-in" data-node-color="red"/>
 <text class="fig-text fig-math" x="24" y="132" text-anchor="middle" data-node-id="p4a-in" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
@@ -78,14 +39,10 @@
 <text class="fig-text fig-math" x="452" y="72" text-anchor="start">C<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
 <circle class="fig-dot" cx="520" cy="36" r="3.5" data-node-id="p4a-out" data-node-color="blue"/>
 <text class="fig-text fig-math" x="520" y="18" text-anchor="middle" data-node-id="p4a-out" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
-</svg>
-<figcaption>$V_{DD}$, $V_{b1}$, $V_{b2}$를 AC 접지로 보내고 각 MOS를 제어 전류원으로 바꿨어요($\lambda=0$, 몸체 효과 무시). $M_3$는 드레인·게이트가 AC 접지라 $A$에서 접지로 $g_{m3}v_A$를 흘리고, 다이오드 연결 $M_4$는 $1/g_{m4}$예요. $C_{A0}=C_{DB1}+C_{GS2}+C_{SB2}+C_{GS3}+C_{SB3}$, $C_{\mathrm{out}}=C_{GD2}+C_{DB2}+C_{GS4}+C_{DB4}$예요.</figcaption>
-</figure>
-    $$i_{X,C}=sC_{GD1}(v_X-v_A)\approx sv_XC_{GD1}(1-A_{XA})$$
-    $$i_{A,C}=sC_{GD1}(v_A-v_X)\approx sv_AC_{GD1}\left(1-\frac{1}{A_{XA}}\right)$$
-    <div data-answer-step="밀러 분리와 노드별 커패시턴스">
-      <figure class="figure">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 150" role="img" aria-label="왼쪽은 X와 A 사이에 떠 있는 C_GD1입니다. 오른쪽은 X와 A에 각각 접지로 연결된 밀러 커패시터입니다." font-family="Pretendard, sans-serif" font-size="14" font-weight="600">
+<text class="fig-loc" x="268" y="120" font-family="Pretendard, sans-serif" font-weight="600" font-size="17">㉠</text></svg><figcaption class="circuit-state">(1) 회로 (a)의 소신호 회로. $C_{A0}$는 밀러 성분을 더하기 전 내부 노드의 접지 커패시턴스예요.</figcaption></figure>
+<div data-subpart="1"><h4>(1) 두 공통 게이트 소스의 병렬 부하</h4><div data-answer-step="Q1 원 회로의 내부 이득"><p><span class="loc">㉠</span> $A$에서 보면 $M_2$와 $M_3$의 소스가 모두 AC 접지 쪽의 경로를 만들어요. $\lambda=0$이고 몸체 효과를 무시하면 두 입력 저항은 병렬이에요.</p>$$R_A=(1/g_{m2})\parallel(1/g_{m3})=1/(g_{m2}+g_{m3})$$
+$$A_{XA}=v_A/v_X=-g_{m1}R_A$$
+</div><div data-answer-step="밀러 분리 전후의 회로"><figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 181" role="img" aria-label="왼쪽은 X와 A 사이에 떠 있는 C_GD1입니다. 오른쪽은 X와 A에 각각 접지로 연결된 밀러 커패시터입니다." font-family="Pretendard, sans-serif" font-size="14" font-weight="600">
 <text class="fig-text fig-math" x="97" y="16" text-anchor="middle">분리 전</text>
 <text class="fig-text fig-math" x="360" y="16" text-anchor="middle">분리 후</text>
 <path class="fig-ink" d="M24 68 H92.0 M92.0 56 V80 M102.0 56 V80 M102.0 68 H170"/>
@@ -101,26 +58,18 @@
 <path class="fig-ink" d="M240 131 h20 m-16 5 h12 m-8 5 h4"/>
 <circle class="fig-dot" cx="250" cy="68" r="3.5" data-node-id="p4a-qa" data-node-color="blue"/>
 <text class="fig-text fig-math" x="250" y="48" text-anchor="middle" data-node-id="p4a-qa" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">X</tspan></text>
-<text class="fig-text fig-math" x="272" y="115" text-anchor="start">(1 − A<tspan baseline-shift="sub" font-size="78%">XA</tspan>)C<tspan baseline-shift="sub" font-size="78%">GD1</tspan></text>
+<text class="fig-text fig-math" x="261" y="166" text-anchor="middle">(1 + g<tspan baseline-shift="sub" font-size="78%">m1</tspan>R<tspan baseline-shift="sub" font-size="78%">A</tspan>)C<tspan baseline-shift="sub" font-size="78%">GD1</tspan></text>
 <path class="fig-ink" d="M400 68 V96"/>
 <path class="fig-ink" d="M400 96 V106.0 M388 106.0 H412 M388 114.0 H412 M400 114.0 V124"/>
 <path class="fig-ink" d="M400 124 V131"/>
 <path class="fig-ink" d="M390 131 h20 m-16 5 h12 m-8 5 h4"/>
 <circle class="fig-dot" cx="400" cy="68" r="3.5" data-node-id="p4a-qb" data-node-color="red"/>
 <text class="fig-text fig-math" x="400" y="48" text-anchor="middle" data-node-id="p4a-qb" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">A</tspan></text>
-<text class="fig-text fig-math" x="422" y="115" text-anchor="start">(1 − 1/A<tspan baseline-shift="sub" font-size="78%">XA</tspan>)C<tspan baseline-shift="sub" font-size="78%">GD1</tspan></text>
-</svg>
-<figcaption>$A_{XA}=-g_{m1}/(g_{m2}+g_{m3})$이므로 $X$ 쪽은 $(1-A_{XA})C_{GD1}$, $A$ 쪽은 $(1-1/A_{XA})C_{GD1}$이고 두 가지 모두 접지로 이어져요.</figcaption>
-</figure>
-      $$C_{in}=C_{GS1}+\left(1+\frac{g_{m1}}{g_{m2}+g_{m3}}\right)C_{GD1}$$
-      $$C_A=C_{DB1}+C_{GS2}+C_{SB2}+C_{GS3}+C_{SB3}+\left(1+\frac{g_{m2}+g_{m3}}{g_{m1}}\right)C_{GD1}$$
-      $$C_{out}=C_{GD2}+C_{DB2}+C_{GS4}+C_{DB4}$$
-    </div>
-    <div data-answer-step="노드 저항과 세 극점">
-      <p>입력을 0으로 두면 $X$는 $R_G$만 봐요. $A$는 위에서 구한 $1/(g_{m2}+g_{m3})$예요. 출력에서는 위로 다이오드 연결 $M_4$의 $1/g_{m4}$, 아래로 $M_2$ 드레인($\lambda=0$이라 무한대)이 보여요.</p>
-      $$R_{out}=\frac{1}{g_{m4}}\parallel\infty=\frac{1}{g_{m4}}$$
-      <figure class="figure">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 579 125" role="img" aria-label="입력 X, 중간 A, 출력에서 각각 노드 저항과 접지 기준 커패시턴스가 병렬로 연결된 세 개의 자연응답 회로" font-family="Pretendard, sans-serif" font-size="14" font-weight="600">
+<text class="fig-text fig-math" x="427" y="166" text-anchor="middle">(1 + 1/(g<tspan baseline-shift="sub" font-size="78%">m1</tspan>R<tspan baseline-shift="sub" font-size="78%">A</tspan>))C<tspan baseline-shift="sub" font-size="78%">GD1</tspan></text>
+</svg><figcaption >(1) $A_{XA}=-g_{m1}R_A$이므로 내부 노드 쪽에는 역수 배율이 들어가요.</figcaption></figure></div><div data-answer-step="밀러 분리"><p>$C_{GD1}$만 $X$와 $A$를 가로질러요. 출력의 다이오드 접속 $M_4$에서는 게이트와 드레인이 같아 $C_{GD4}$가 빠져요.</p>$$C_{in}=C_{GS1}+(1-A_{XA})C_{GD1}$$
+$$C_A=C_{DB1}+C_{GS2}+C_{SB2}+C_{GS3}+C_{SB3}+(1-1/A_{XA})C_{GD1}$$
+$$C_{out}=C_{GD2}+C_{DB2}+C_{GS4}+C_{DB4}$$
+</div><div data-answer-step="노드별 자연응답 회로"><figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 579 125" role="img" aria-label="입력 X, 중간 A, 출력에서 각각 노드 저항과 접지 기준 커패시턴스가 병렬로 연결된 세 개의 자연응답 회로" font-family="Pretendard, sans-serif" font-size="14" font-weight="600">
 <path class="fig-ink" d="M36 37 H96"/>
 <path class="fig-ink" d="M36 37 V55.0 l6 3 -12 6 12 6 -12 6 12 6 -12 6 6 3 V109"/>
 <path class="fig-ink" d="M26 109 h20 m-16 5 h12 m-8 5 h4"/>
@@ -148,26 +97,11 @@
 <text class="fig-text fig-math" x="446" y="19" text-anchor="middle" data-node-id="p4a-out" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
 <text class="fig-text fig-math" x="430" y="78" text-anchor="end">1/g<tspan baseline-shift="sub" font-size="78%">m4</tspan></text>
 <text class="fig-text fig-math" x="528" y="78" text-anchor="start">C<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
-</svg>
-<figcaption>밀러 분리 뒤 입력을 0으로 둔 회로 (a) 각 노드의 자연응답 회로예요.</figcaption>
-</figure>
-      $$|\omega_{p,in}|=\frac{1}{R_GC_{in}}$$
-      $$|\omega_{p,A}|=\frac{g_{m2}+g_{m3}}{C_A}$$
-      $$|\omega_{p,out}|=\frac{g_{m4}}{C_{out}}$$
-    </div>
-  </div>
-  <div data-subpart="2">
-    <h4>(2) 회로 (b)의 극점과 전달함수</h4>
-    <div data-answer-step="반회로 저주파 이득" data-gain-route="gm-rout">
-      <p>입력 $v_{in1}$(저주파에서 $v_X=v_{in1}$), 출력 $v_{o1}$로 정해요. 출력을 단락하면 $r_{O1}$과 부하 가지 양단이 0이라 $M_1$ 제어 전류가 단락선으로 가요.</p>
-      <div data-gain-stage="gm">$$G_m=\frac{i_{o1,\mathrm{sc}}}{v_{in1}}=g_{m1}$$</div>
-      <p>입력을 0으로 두고 출력에서 바라봐요. 먼 쪽부터 블록을 정해요. $M_3$는 게이트와 드레인이 AC 접지라 $(1/g_{m3})\parallel r_{O3}$, $M_5$는 게이트($V_{b1}$)와 소스가 AC 접지라 $r_{O5}$, $M_1$은 게이트와 소스(가상 접지)가 AC 접지라 $r_{O1}$이에요. 셋 다 출력과 AC 접지 사이에 있으므로 마지막에 병렬로 묶어요.</p>
-      <div data-gain-stage="rout">$$R_{out}=\frac{1}{g_{m3}}\parallel r_{O3}\parallel r_{O5}\parallel r_{O1}$$</div>
-      <div data-gain-stage="gain">$$A_v=\frac{v_{o1}}{v_{in1}}=-G_mR_{out}=-g_{m1}R_{out}$$</div>
-    </div>
-    <p>반회로의 고주파 모델에서 $C_{GS1}$은 소스가 가상 접지라 $X$–접지예요. 출력에는 $C_{DB1}$, $M_5$의 $C_{GD5}$·$C_{DB5}$, $M_3$의 $C_{GS3}$·$C_{SB3}$가 접지로 붙어요. $M_3$의 $C_{GD3}$, $C_{DB3}$와 $M_5$의 $C_{GS5}$는 양단이 AC 접지라 빠져요. 꼬리 노드 커패시턴스도 양단 전압이 0이라 빠져요.</p>
-    <figure class="figure">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 530 170" role="img" aria-label="회로 (b)의 왼쪽 반회로 고주파 모델입니다. 입력이 R_S를 지나 X에 연결되고 X에서 접지로 C_GS1이 있습니다. X와 출력 사이에 C_GD1이 떠 있습니다. 출력에서 접지로 왼쪽부터 M1 제어 전류원, r_O1, 부하 저항 R_L 프라임, C_o0이 병렬로 있고 맨 오른쪽이 출력 단자입니다." font-family="Pretendard, sans-serif" font-size="14" font-weight="600">
+</svg><figcaption >(1) 각 노드의 RC 경로. 가운데 저항은 $R_A=1/(g_{m2}+g_{m3})$예요.</figcaption></figure></div><div data-answer-final=""><p>입력원을 영으로 두면 세 노드가 보는 저항은 $R_G$, $R_A$, $1/g_{m4}$예요. 밀러 근사의 극점 크기(rad/s)를 써요.</p>$$|\omega_{p,in}|\simeq1/(R_G C_{in})$$
+$$|\omega_{p,A}|\simeq1/(R_A C_A)$$
+$$|\omega_{p,out}|\simeq g_{m4}/C_{out}$$
+</div></div>
+<figure class="figure circuit"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 530 170" role="img" aria-label="회로 (b)의 왼쪽 반회로 고주파 모델입니다. 입력이 R_S를 지나 X에 연결되고 X에서 접지로 C_GS1이 있습니다. X와 출력 사이에 C_GD1이 떠 있습니다. 출력에서 접지로 왼쪽부터 M1 제어 전류원, r_O1, 부하 저항 R_L 프라임, C_o0이 병렬로 있고 맨 오른쪽이 출력 단자입니다." font-family="Pretendard, sans-serif" font-size="14" font-weight="600">
 <path class="fig-ink" d="M24 60 H52.0 l4 -6 8 12 8 -12 8 12 8 -12 4 6 H120"/>
 <circle class="fig-dot" cx="24" cy="60" r="3.5" data-node-id="p4b-in" data-node-color="red"/>
 <text class="fig-text fig-math" x="24" y="42" text-anchor="middle" data-node-id="p4b-in" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">in1</tspan></text>
@@ -199,14 +133,10 @@
 <text class="fig-text fig-math" x="482" y="112" text-anchor="start">C<tspan baseline-shift="sub" font-size="78%">o0</tspan></text>
 <circle class="fig-dot" cx="510" cy="60" r="3.5" data-node-id="p4b-out" data-node-color="red"/>
 <text class="fig-text fig-math" x="510" y="42" text-anchor="middle" data-node-id="p4b-out" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">o1</tspan></text>
-</svg>
-<figcaption>꼬리 노드를 가상 접지로 둔 왼쪽 반회로예요. $V_{DD}$, $V_{b1}$을 AC 접지로 보내고 $M_1$은 제어 전류원과 $r_{O1}$, 부하는 $R_L'=(1/g_{m3})\parallel r_{O3}\parallel r_{O5}$로 바꿨어요(몸체 효과 무시). $C_{o0}=C_{DB1}+C_{GD5}+C_{DB5}+C_{GS3}+C_{SB3}$예요.</figcaption>
-</figure>
-    $$i_{X,C}=sC_{GD1}(v_X-v_{o1})\approx sv_XC_{GD1}(1-A_v)$$
-    $$i_{o1,C}=sC_{GD1}(v_{o1}-v_X)\approx sv_{o1}C_{GD1}\left(1-\frac{1}{A_v}\right)$$
-    <div data-answer-step="밀러 분리와 노드별 커패시턴스">
-      <figure class="figure">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 150" role="img" aria-label="왼쪽은 X와 출력 사이에 떠 있는 C_GD1입니다. 오른쪽은 X와 출력에 각각 접지로 연결된 밀러 커패시터입니다." font-family="Pretendard, sans-serif" font-size="14" font-weight="600">
+<text class="fig-loc" x="475" y="35" font-family="Pretendard, sans-serif" font-weight="600" font-size="17">㉡</text></svg><figcaption class="circuit-state">(2) 회로 (b)의 차동 반회로. 출력의 부하 가지에 $M_3$와 $M_5$의 저항이 들어가요.</figcaption></figure>
+<div data-subpart="2"><h4>(2) 유한 출력저항을 보존한 차동 반회로</h4><div data-answer-step="저주파 이득"><p><span class="loc">㉡</span> 순수 차동 입력에서 꼬리 전압은 고정돼요. $M_3$의 게이트와 드레인은 AC 접지이고, $M_5$의 게이트와 소스도 AC 접지예요. 따라서 $M_3$ 소스 저항, $r_{O5}$, $r_{O1}$이 반회로 출력에 병렬로 걸려요.</p>$$R_{out}=(1/g_{m3})\parallel r_{O3}\parallel r_{O5}\parallel r_{O1}$$
+$$A_v=v_{o1}/v_{in1}=-g_{m1}R_{out}$$
+</div><div data-answer-step="밀러 분리 전후의 회로"><figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 181" role="img" aria-label="왼쪽은 X와 출력 사이에 떠 있는 C_GD1입니다. 오른쪽은 X와 출력에 각각 접지로 연결된 밀러 커패시터입니다." font-family="Pretendard, sans-serif" font-size="14" font-weight="600">
 <text class="fig-text fig-math" x="97" y="16" text-anchor="middle">분리 전</text>
 <text class="fig-text fig-math" x="360" y="16" text-anchor="middle">분리 후</text>
 <path class="fig-ink" d="M24 68 H92.0 M92.0 56 V80 M102.0 56 V80 M102.0 68 H170"/>
@@ -222,24 +152,17 @@
 <path class="fig-ink" d="M240 131 h20 m-16 5 h12 m-8 5 h4"/>
 <circle class="fig-dot" cx="250" cy="68" r="3.5" data-node-id="p4b-qa" data-node-color="blue"/>
 <text class="fig-text fig-math" x="250" y="48" text-anchor="middle" data-node-id="p4b-qa" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">X</tspan></text>
-<text class="fig-text fig-math" x="272" y="115" text-anchor="start">(1 − A<tspan baseline-shift="sub" font-size="78%">v</tspan>)C<tspan baseline-shift="sub" font-size="78%">GD1</tspan></text>
+<text class="fig-text fig-math" x="261" y="166" text-anchor="middle">(1 + g<tspan baseline-shift="sub" font-size="78%">m1</tspan>R<tspan baseline-shift="sub" font-size="78%">out</tspan>)C<tspan baseline-shift="sub" font-size="78%">GD1</tspan></text>
 <path class="fig-ink" d="M400 68 V96"/>
 <path class="fig-ink" d="M400 96 V106.0 M388 106.0 H412 M388 114.0 H412 M400 114.0 V124"/>
 <path class="fig-ink" d="M400 124 V131"/>
 <path class="fig-ink" d="M390 131 h20 m-16 5 h12 m-8 5 h4"/>
 <circle class="fig-dot" cx="400" cy="68" r="3.5" data-node-id="p4b-qb" data-node-color="red"/>
 <text class="fig-text fig-math" x="400" y="48" text-anchor="middle" data-node-id="p4b-qb" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">o1</tspan></text>
-<text class="fig-text fig-math" x="422" y="115" text-anchor="start">(1 − 1/A<tspan baseline-shift="sub" font-size="78%">v</tspan>)C<tspan baseline-shift="sub" font-size="78%">GD1</tspan></text>
-</svg>
-<figcaption>$A_v=-g_{m1}R_{\mathrm{out}}$이므로 $X$ 쪽은 $(1+g_{m1}R_{\mathrm{out}})C_{GD1}$, 출력 쪽은 $[1+1/(g_{m1}R_{\mathrm{out}})]C_{GD1}$이고 두 가지 모두 접지로 이어져요.</figcaption>
-</figure>
-      $$C_{in}=C_{GS1}+(1+g_{m1}R_{out})C_{GD1}$$
-      $$C_{out}=C_{DB1}+\left(1+\frac{1}{g_{m1}R_{out}}\right)C_{GD1}+C_{GD5}+C_{DB5}+C_{GS3}+C_{SB3}$$
-    </div>
-    <div data-answer-step="두 극점과 전달함수">
-      <p>입력을 0으로 두면 $X$는 $R_S$, 출력은 $R_{out}$을 봐요.</p>
-      <figure class="figure">
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 550 125" role="img" aria-label="입력 X와 출력에서 각각 노드 저항과 접지 기준 커패시턴스가 병렬로 연결된 두 개의 자연응답 회로" font-family="Pretendard, sans-serif" font-size="14" font-weight="600">
+<text class="fig-text fig-math" x="427" y="166" text-anchor="middle">(1 + 1/(g<tspan baseline-shift="sub" font-size="78%">m1</tspan>R<tspan baseline-shift="sub" font-size="78%">out</tspan>))C<tspan baseline-shift="sub" font-size="78%">GD1</tspan></text>
+</svg><figcaption >(2) 유한한 반회로 출력저항을 포함한 $A_v=-g_{m1}R_{out}$으로 밀러 분리해요.</figcaption></figure></div><div data-answer-step="밀러 커패시턴스"><p>양쪽 반회로에서 입력과 출력이 각각 반대 부호이므로 $V_{out}/V_{in}=v_{o1}/v_{in1}$예요. $C_{GD1}$을 이득 $A_v$로 나눠요.</p>$$C_{in}=C_{GS1}+(1-A_v)C_{GD1}$$
+$$C_{out}=C_{DB1}+(1-1/A_v)C_{GD1}+C_{GD5}+C_{DB5}+C_{GS3}+C_{SB3}$$
+</div><div data-answer-step="노드별 자연응답 회로"><figure class="figure"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 550 125" role="img" aria-label="입력 X와 출력에서 각각 노드 저항과 접지 기준 커패시턴스가 병렬로 연결된 두 개의 자연응답 회로" font-family="Pretendard, sans-serif" font-size="14" font-weight="600">
 <g transform="translate(102 0)">
 <path class="fig-ink" d="M36 37 H96"/>
 <path class="fig-ink" d="M36 37 V55.0 l6 3 -12 6 12 6 -12 6 12 6 -12 6 6 3 V109"/>
@@ -260,67 +183,9 @@
 <text class="fig-text fig-math" x="196" y="78" text-anchor="end">R<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
 <text class="fig-text fig-math" x="294" y="78" text-anchor="start">C<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
 </g>
-</svg>
-<figcaption>밀러 분리 뒤 입력을 0으로 둔 반회로의 두 노드 자연응답 회로예요.</figcaption>
-</figure>
-      $$|\omega_{p,in}|=\frac{1}{R_SC_{in}}$$
-      $$|\omega_{p,out}|=\frac{1}{R_{out}C_{out}}$$
-      <p>밀러 분리로 두 노드가 독립된 $RC$가 되었으므로 저주파 이득에 두 1차 저역통과 인자를 곱해요. 차동 전달함수는 반회로 전달함수와 같아요.</p>
-      $$\frac{V_{out}}{V_{in}}(s)=\frac{-g_{m1}R_{out}}{\left(1+\dfrac{s}{|\omega_{p,in}|}\right)\left(1+\dfrac{s}{|\omega_{p,out}|}\right)}$$
-    </div>
-  </div>
+</svg><figcaption >(2) 차동 반회로에서 입력원을 영으로 둘 때의 두 RC 경로예요.</figcaption></figure></div><div data-answer-final=""><p>두 극점의 크기와 차동 전달함수는 밀러 근사에서 다음과 같아요.</p>$$|\omega_{p,in}|\simeq1/(R_S C_{in})$$
+$$|\omega_{p,out}|\simeq1/(R_{out} C_{out})$$
+$$\frac{V_{out}}{V_{in}}(s)\simeq\frac{A_v}{(1+sR_S C_{in})(1+sR_{out}C_{out})}$$
+</div></div>
 </div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="1">
-    <h4>(1) 검산</h4>
-    <div data-answer-final>
-      <p>$\lambda=0$, 몸체 효과 무시, $A_{XA}=-g_{m1}/(g_{m2}+g_{m3})$로 밀러 근사를 적용한 세 극점(크기, rad/s)이에요.</p>
-      $$|\omega_{p,in}|=\frac{1}{R_G\left[C_{GS1}+\left(1+\dfrac{g_{m1}}{g_{m2}+g_{m3}}\right)C_{GD1}\right]}$$
-      $$|\omega_{p,A}|=\frac{g_{m2}+g_{m3}}{C_{DB1}+C_{GS2}+C_{SB2}+C_{GS3}+C_{SB3}+\left(1+\dfrac{g_{m2}+g_{m3}}{g_{m1}}\right)C_{GD1}}$$
-      $$|\omega_{p,out}|=\frac{g_{m4}}{C_{GD2}+C_{DB2}+C_{GS4}+C_{DB4}}$$
-    </div>
-    <p>단위: $g_m/C$와 $1/(RC)$는 모두 1/s예요.</p>
-    <p>특수값: $M_3$를 떼어 $g_{m3}\to0$으로 두면 $A_{XA}=-g_{m1}/g_{m2}$, $|\omega_{p,A}|=g_{m2}/C_A$가 되어 일반 캐스코드의 결과로 돌아가요.</p>
-  </div>
-  <div data-subpart="2">
-    <h4>(2) 검산</h4>
-    <div data-answer-final>
-      <p>순수 차동 입력 $V_{in}=V_{in1}-V_{in2}$, 차동 출력 $V_{out}$, $\lambda\neq0$, 밀러 근사의 결과예요. $R_{out}=(1/g_{m3})\parallel r_{O3}\parallel r_{O5}\parallel r_{O1}$이에요.</p>
-      $$|\omega_{p,in}|=\frac{1}{R_S\left[C_{GS1}+(1+g_{m1}R_{out})C_{GD1}\right]}$$
-      $$|\omega_{p,out}|=\frac{1}{R_{out}\left[C_{DB1}+\left(1+\dfrac{1}{g_{m1}R_{out}}\right)C_{GD1}+C_{GD5}+C_{DB5}+C_{GS3}+C_{SB3}\right]}$$
-      $$\frac{V_{out}}{V_{in}}(s)=\frac{-g_{m1}R_{out}}{\left(1+\dfrac{s}{|\omega_{p,in}|}\right)\left(1+\dfrac{s}{|\omega_{p,out}|}\right)}$$
-    </div>
-    <p>저주파 극한: $s\to0$이면 $V_{out}/V_{in}\to-g_{m1}R_{out}$으로 반회로 이득과 같아요.</p>
-    <p>$\lambda\to0$ 극한: 모든 $r_O\to\infty$이면 $R_{out}\to1/g_{m3}$이고 이득은 $-g_{m1}/g_{m3}$로 다이오드형 부하 증폭기 꼴이 돼요.</p>
-    <p>단위: $g_{m1}R_{out}$은 무차원, $R\cdot C$는 s라서 전달함수는 무차원이고 극점은 rad/s예요.</p>
-  </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <p>(1)의 $M_3$를 PMOS 전류원처럼 보면 안 돼요. NMOS이고 소스가 $A$에 붙어 있어 $1/g_{m3}$이 $1/g_{m2}$와 병렬로 보여요. 그래서 $A$ 저항과 밀러 이득에 $g_{m2}+g_{m3}$가 들어가요.</p>
-  <p>(2)의 $M_3$, $M_4$를 개방 전류원으로 두면 안 돼요. 게이트와 드레인이 모두 $V_{DD}$라 소스에서 $(1/g_{m3})\parallel r_{O3}$로 보여요.</p>
-  <p>(2)에서 $V_{in}$을 한 입력만으로 읽으면 이득이 절반이 돼요. 차동 입력·차동 출력으로 정의하면 반회로 이득과 같아요.</p>
-  <p>밀러 근사는 저주파 이득으로 양쪽을 나눠서 $C_{GD1}$을 지나 앞으로 새는 전류가 만드는 영점 $g_{m1}/C_{GD1}$을 놓쳐요. 이 문제는 밀러 정리를 쓰라고 했으므로 위 두 극점 꼴이 요구한 답이에요.</p>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol>
-    <li>회로 (a)에서 $M_3$를 제거하면 $A$의 저항과 $X$ 쪽 $C_{GD1}$ 계수는 어떻게 바뀌나요?</li>
-    <li>회로 (b)에서 $M_3$, $M_4$를 없애고 $M_5$, $M_6$ 전류원만 부하로 남기면 $R_{out}$은 무엇이 되고, 입력 쪽 밀러 커패시턴스는 커지나요 작아지나요?</li>
-    <li>회로 (b)를 단일 출력 $V_{out1}/V_{in}$으로 정의하면 저주파 이득은 얼마인가요?</li>
-  </ol>
-</div>
-<div class="sum" hidden>
-  <div class="summary-group"><h4>(1) 회로 (a)</h4>
-    <p>$A$ 노드는 $M_2$, $M_3$의 소스가 함께 붙어 $1/(g_{m2}+g_{m3})$를 봐요.</p>
-    $$A_{XA}=-\frac{g_{m1}}{g_{m2}+g_{m3}}$$
-    <p>세 극점은 $1/(R_GC_{in})$, $(g_{m2}+g_{m3})/C_A$, $g_{m4}/C_{out}$이에요.</p>
-  </div>
-  <div class="summary-group"><h4>(2) 회로 (b)</h4>
-    <p>차동 입력이면 꼬리가 가상 접지라 CS 반회로로 풀어요.</p>
-    $$R_{out}=\frac{1}{g_{m3}}\parallel r_{O3}\parallel r_{O5}\parallel r_{O1}$$
-    <p>$C_{in}=C_{GS1}+(1+g_{m1}R_{out})C_{GD1}$이고 두 극점은 $1/(R_SC_{in})$, $1/(R_{out}C_{out})$이에요.</p>
-    $$\frac{V_{out}}{V_{in}}=\frac{-g_{m1}R_{out}}{(1+s/|\omega_{p,in}|)(1+s/|\omega_{p,out}|)}$$
-  </div>
-</div>
+<div class="sum" hidden><p class="sum-lead">밀러 정리에 넣는 이득은 $C_{GD1}$의 두 단자 사이에서 구해요.</p><p>(1)은 $M_2$와 $M_3$의 소스가 같은 노드에 연결돼요.</p><p>(2)는 차동 반회로의 출력에 유한한 $r_{O1}$, $r_{O3}$, $r_{O5}$가 남아요.</p></div>

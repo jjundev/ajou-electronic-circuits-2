@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>전자회로2 복습 1030 문제설명</title>
-  <meta name="description" content="첫 줄부터 완성 답과 검산까지 설명해요.">
+  <meta name="description" content="문제의 첫 판단부터 답까지 이어지는 풀이예요.">
   <script>document.documentElement.classList.add('js');try{const t=localStorage.getItem('od-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/static/pretendard.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
@@ -90,6 +90,7 @@
     .layer:is([data-explanation="solve"], [data-explanation="verify"]) > :not(h4, .layer-title) + [data-subpart] { margin-top: var(--s6); }
     .layer:is([data-explanation="solve"], [data-explanation="verify"]) > [data-subpart] > :first-child { margin-top: 0; }
     .layer:is([data-explanation="solve"], [data-explanation="verify"]) > [data-subpart] > :last-child { margin-bottom: 0; }
+    .circuit-explanation [data-subpart] h4:not(:first-child) { margin-top: var(--s5); }
     @media (max-width: 1023px) {
       .layer:is([data-explanation="solve"], [data-explanation="verify"]) > :not(h4, .layer-title) + [data-subpart] { margin-top: var(--s5); }
     }
@@ -517,6 +518,27 @@
     .math-pan-hint { display:block; margin:var(--s1) 0 var(--s3); color:var(--ink-2); font:var(--fs-small)/1.5 var(--font); }
     table { display:block; max-width:100%; overflow-x:auto; }
     img, svg { max-width:100%; height:auto; }
+    /* 회로는 참조하는 해설 구간 안에서만 고정 */
+    .layer .circuit svg { max-width: 420px; }
+    @media screen and (min-height: 500px) {
+      .js .layer .circuit { position: sticky; top: 0; z-index: 3; margin: 0 0 var(--s4); padding: var(--s2) 0; background: var(--bg); border-bottom: 1px solid var(--line); }
+      .js .layer .circuit svg { display: block; max-height: min(30dvh, 210px); margin: 0 auto; }
+      .js .layer .circuit figcaption { line-height: 1.4; }
+      /* 회로가 둘인 토픽: 높이를 맞춰 뒤 회로가 앞 회로를 빈틈없이 덮게 한다 */
+      .js .layer:has(> .circuit ~ .circuit) > .circuit svg { height: min(30dvh, 210px); }
+      .js .layer:has(> .circuit ~ .circuit) > .circuit figcaption { min-height: 3.1em; }
+    }
+    /* 넓고 높은 화면에서는 글자가 읽히게 조금 더 크게 */
+    @media screen and (min-width: 900px) and (min-height: 600px) {
+      .js .layer .circuit svg { max-width: 560px; max-height: min(27dvh, 300px); }
+      .js .layer:has(> .circuit ~ .circuit) > .circuit svg { height: min(27dvh, 300px); }
+    }
+    @media screen and (max-width: 560px) {
+      .js .layer .circuit figcaption:not(.circuit-state), .circuit-state .circuit-key { display: none; }
+      .js .layer .circuit:has(.circuit-state) svg { max-height: min(25dvh, 180px); }
+    }
+    svg .fig-loc { fill: var(--prof); }
+    .layer .loc, .circuit .loc { font-weight: 700; color: var(--prof); }
   </style>
 </head>
 <body data-screens="article.topic" data-panels="explain" data-range="ec2-problem-explain-review-1030-CG_CB_and_Follower_Frequency_Response">
@@ -524,7 +546,7 @@
     <div class="topbar-inner">
       <button class="text-btn panel-toggle" id="toggle-left" type="button" aria-controls="panel-left" aria-expanded="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="strip" x="3" y="4" width="6" height="16" rx="1"/><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg><span>목차</span></button>
       <button class="text-btn panel-toggle" id="toggle-prob" type="button" aria-controls="panel-prob" aria-expanded="true"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="strip" x="9" y="4" width="6" height="16" rx="1"/><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16 M15 4v16"/></svg><span>문제</span></button>
-      <strong class="brand">문제풀이 입문 설명</strong>
+      <strong class="brand">문제풀이 설명</strong>
       <button class="text-btn theme-toggle" id="theme-toggle" type="button" aria-label="다크 모드로 전환" title="다크 모드로 전환"><svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg><svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
       <button class="text-btn panel-toggle" id="toggle-right" type="button" aria-controls="panel-right" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect class="strip" x="15" y="4" width="6" height="16" rx="1"/><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M15 4v16"/></svg><span>요약</span></button>
     </div>
@@ -570,146 +592,66 @@
   <main>
     <div class="hero">
       <h1>전자회로2 복습 1030 문제설명</h1>
-      <p>주어진 조건을 읽고, 첫 줄을 쓰고, 이유를 따라가며 답을 확인해요.</p>
+      <p>회로와 첫 식을 짚고 핵심 계산으로 답을 구해요.</p>
     </div>
-<section id="problems"><h2>문항별 설명</h2><article class="topic" id="p1"><h3>P1. 다이오드 부하 CG 단의 극점</h3><p class="panel-meta">E11.19 · 예제 11.19 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1030_CG_CB_and_Follower_Frequency_Response-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p1"><div class="layer formal" data-source-problem="p1"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>$\lambda = 0$</li><li>소자 값은 주어지지 않음 (답은 기호로)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>회로의 극점 계산</li></ul></div><figure><img src=".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/2046c31ebf68d939-fig11-38-a.png" alt="그림 E11.19"></figure></div><details class="original" data-original-problem="p1"><summary>원문 보기</summary><p>그림 11.38(a)의 회로의 극점을 계산하라. $\lambda = 0$으로 가정한다.</p></details></div><div class="layer eli5" data-explanation="understand"><h4>문제를 읽어요</h4><p>입력은 M1 소스의 X, 출력은 M1 드레인과 M2 게이트·드레인이 만나는 Y예요. 각 노드에서 저장되는 전하와 빠져나가는 경로를 찾아 두 극점을 구해요.</p></div>
-<div class="layer formal" data-explanation="recall"><h4>이 개념과 공식을 떠올려요</h4><p>게이트 바이어스와 전원은 교류 접지예요. 채널 길이 변조를 무시하면 M1의 출력저항은 무한대이고, 게이트도 접지이므로 X에서 Y로 신호를 되돌리는 수동 가지가 없어요. 두 노드의 시간상수는 각각 $RC$예요.</p><p>$g_m$은 게이트–소스 전압에 대한 드레인 전류의 변화율이며, 몸체 효과를 무시하는 교재 모델에서 접지된 게이트를 가진 소스의 입력저항은 $1/g_m$이에요. $s=-1/(RC)$가 극점이에요.</p></div>
-<div class="layer formal" data-explanation="start"><h4>종이에 쓸 첫 줄</h4><div data-answer-step="노드와 커패시턴스"><p>전원과 $V_b$를 교류 접지로 놓고, 원 회로의 단자 연결을 따라 합쳐요.</p>$$C_X=C_{GS1}+C_{SB1}$$ $$C_Y=C_{GD1}+C_{DB1}+C_{GS2}+C_{DB2}$$</div><p>$C_{GD2}$는 양 끝이 Y이고 $C_{SB2}$는 양 끝이 교류 접지이므로 어느 쪽에도 전압이 걸리지 않아요.</p></div>
-<div class="layer formal" data-explanation="solve"><h4>이렇게 풀어요</h4><div data-subpart="main"><div data-answer-step="노드 저항과 극점"><p>입력 전압원을 0으로 만들면 X에는 $R_S$와 M1 소스의 $1/g_{m1}$이 병렬이에요.</p>$$R_X=R_S\parallel\frac{1}{g_{m1}}$$<p>Y에서는 M1의 $r_{o1}$이 무한대이고, 다이오드 연결 M2의 저항만 남아요.</p>$$R_Y=\frac{1}{g_{m2}}$$ $$p_X=-\frac{1}{R_XC_X}$$ $$p_Y=-\frac{1}{R_YC_Y}$$</div></div></div>
-<div class="layer formal" data-explanation="verify"><h4>완성 답과 검산</h4><div data-subpart="main"><div data-answer-final="두 극점">$$p_X=-\frac{1}{(R_S\parallel 1/g_{m1})(C_{GS1}+C_{SB1})}$$ $$p_Y=-\frac{g_{m2}}{C_{GD1}+C_{DB1}+C_{GS2}+C_{DB2}}$$<p>몸체 효과를 무시하고 두 소자의 $\lambda=0$인 소신호 모델의 결과이며 단위는 rad/s예요.</p></div><p>$R C$는 초이므로 역수는 초의 역수예요. $R_S\to0$이면 X가 이상적 전압원에 고정되어 입력 극점의 크기는 무한대로 가요. 교재 식 (11.101)의 $C_{GD1}$은 그림의 X에 연결되지 않아 $C_{GS1}$로 바로잡았어요.</p></div></div>
-<div class="layer warn" data-explanation="pitfall"><h4>주의할 점</h4><p>$C_{GD1}$은 게이트–드레인, 즉 교류 접지와 Y 사이예요. X의 $C_{GS1}$과 바꾸지 않아요. 극점 자체는 음수이고 크기만 표시하면 양수예요.</p></div>
-<div class="layer eli5" data-explanation="retry"><h4>조건을 바꾸어 생각해요</h4><ol><li>$R_S$를 매우 크게 하면 X의 저항은 무엇에 가까워지고 극점은 어떻게 되나요? <span>답: $1/g_{m1}$, $p_X\to-g_{m1}/C_X$예요.</span></li><li>M2의 $C_{GD2}$가 두 배가 되면 Y 극점은 바뀌나요? <span>답: 양 단자가 같은 Y이므로 바뀌지 않아요.</span></li></ol></div>
-<div class="sum" hidden=""><p>몸체 효과를 무시하고 두 소자의 $\lambda=0$일 때:</p>$$C_Y=C_{GD1}+C_{DB1}+C_{GS2}+C_{DB2}$$ $$p_X=-\frac{1}{(R_S\parallel1/g_{m1})(C_{GS1}+C_{SB1})}$$ $$p_Y=-\frac{g_{m2}}{C_Y}$$</div>
-</article><article class="topic" id="p2"><h3>P2. 세 가지 부하의 CG 단 전달함수</h3><p class="panel-meta">P11.46 · 장말문제 11.46 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1030_CG_CB_and_Follower_Frequency_Response-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p2"><div class="layer formal" data-source-problem="p2"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>$M_1$에 대해 $\lambda = 0$으로 가정</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>(a), (b), (c) 각 회로의 전달 함수 $V_{out}/V_{in}$</li></ul></div><figure><img src=".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/f67fe8bc75ae39f3-fig11-88.png" alt="그림 P11.46"></figure></div><details class="original" data-original-problem="p2"><summary>원문 보기</summary><p>Determine the transfer function of the circuits shown in Fig. 11.88. Assume $\lambda = 0$ for $M_1$.</p></details></div><div class="layer eli5" data-explanation="understand"><h4>문제를 읽어요</h4><p>세 회로는 입력 $v_{in}$에서 $R_S$를 거쳐 M1 소스 X로 들어가고 드레인 Y에서 출력해요. 달라지는 M2 부하를 각각 구해 같은 전달함수에 넣어요.</p></div>
-<div class="layer formal" data-explanation="recall"><h4>이 개념과 공식을 떠올려요</h4><p>M1의 $\lambda=0$이면 $r_{o1}$은 무한대예요. 게이트와 전원은 교류 접지이므로 X와 Y 사이에 수동 피드백 가지가 없고, 각 노드의 접지 커패시턴스를 합칠 수 있어요. $g_m$은 제어 전압에 대한 전류 변화율, $r_o$는 유한 채널 길이 변조에 따른 저항이에요.</p><p>교재의 몸체 효과를 무시한 소신호 모델을 사용해요. M2의 $\lambda$는 0으로 주어지지 않았으므로 $r_{o2}$를 유지해요. $s$ 영역에서 커패시터의 어드미턴스는 $sC$예요.</p></div>
-<div class="layer formal" data-explanation="start"><h4>종이에 쓸 첫 줄</h4><div data-answer-step="입력 노드와 부하 정의"><p>원 회로에서 X는 $C_{GS1}$과 $C_{SB1}$을 교류 접지에 연결해요. $R_L$은 해당 M2가 Y에서 접지까지 보이는 저항이고, $C_Y$는 Y에서 접지까지의 커패시턴스 합이에요.</p>$$C_X=C_{GS1}+C_{SB1}$$ $$Z_X=\frac{1}{g_{m1}+sC_X}$$ $$\frac{v_X}{v_{in}}=\frac{Z_X}{R_S+Z_X}$$</div><p>마지막 식은 $R_S$와 X의 접지 임피던스 $Z_X$에 적용한 전압 분배예요. $g_{m1}v_X$의 크기만큼 출력에 전류가 공급돼요.</p></div>
-<div class="layer formal" data-explanation="solve"><h4>이렇게 풀어요</h4><div data-subpart="main"><div data-gain-route="gm-rout"><div data-gain-stage="gm" data-answer-step="출력 단락 전달 컨덕턴스"><figure><svg viewBox="0 0 700 250" role="img" aria-label="출력 단락 회로" width="650" font-family="Pretendard, sans-serif" font-weight="600" font-size="16"><g stroke="currentColor" stroke-width="2" fill="none"><path d="M30 150H70l8 -8 10 16 10 -16 10 16 10 -16 12 8H210H300V140 M300 100V55H600 M210 150V180 M198 180H222 M198 190H222 M210 190V215 M200 215H220 M203 220H217 M206 225H214 M300 100V105 M300 140V135 M300 130V111 M295 117l5 -7 5 7 M400 55V85l-8 8 16 8 -16 8 16 8 -8 8V215 M390 215H410 M393 220H407 M396 225H404 M485 55V105 M473 105H497 M473 115H497 M485 115V215 M475 215H495 M478 220H492 M481 225H489 M570 55H540 M548 50l-8 5 8 5 M600 55V215 M590 215H610 M593 220H607 M596 225H604"/><circle cx="300" cy="120" r="15"/></g><g fill="currentColor"><text x="85" y="135">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><text x="228" y="191">C<tspan baseline-shift="sub" font-size="78%">X</tspan></text><text x="318" y="125">g<tspan baseline-shift="sub" font-size="78%">m1</tspan>v<tspan baseline-shift="sub" font-size="78%">X</tspan></text><text x="415" y="110">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text><text x="500" y="114">C<tspan baseline-shift="sub" font-size="78%">Y</tspan></text><text x="540" y="80">i<tspan baseline-shift="sub" font-size="78%">out,sc</tspan></text></g><g fill="#2563eb"><circle cx="210" cy="150" r="4"/><text x="180" y="130">v<tspan baseline-shift="sub" font-size="78%">X</tspan></text><circle cx="30" cy="150" r="4"/><text x="10" y="130">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text></g><g fill="#dc2626"><circle cx="600" cy="55" r="4"/><text x="580" y="30">v<tspan baseline-shift="sub" font-size="78%">out</tspan> = 0</text></g></svg><figcaption>출력을 단락하고 입력을 유지해요. M1의 제어 전류는 X에서 Y로 흐르고 $r_{o1}$은 무한대예요.</figcaption></figure><p>출력 전류를 Y에서 증폭기 쪽으로 들어가는 방향으로 정의하고 Y를 단락하면, M1이 Y에 공급하는 전류의 부호는 음수예요.</p>$$G_m(s)=\frac{i_{out,sc}}{v_{in}}=-\frac{g_{m1}}{1+g_{m1}R_S+sR_SC_X}$$</div><div data-gain-stage="rout" data-answer-step="입력 영점의 출력 임피던스"><figure><svg viewBox="0 0 700 250" role="img" aria-label="입력 영점 시험 회로" width="650" font-family="Pretendard, sans-serif" font-weight="600" font-size="16"><g stroke="currentColor" stroke-width="2" fill="none"><path d="M30 150H70l8 -8 10 16 10 -16 10 16 10 -16 12 8H210H300V140 M300 100V55H600 M210 150V180 M198 180H222 M198 190H222 M210 190V215 M200 215H220 M203 220H217 M206 225H214 M300 100V105 M300 140V135 M300 130V111 M295 117l5 -7 5 7 M400 55V85l-8 8 16 8 -16 8 16 8 -8 8V215 M390 215H410 M393 220H407 M396 225H404 M485 55V105 M473 105H497 M473 115H497 M485 115V215 M475 215H495 M478 220H492 M481 225H489 M570 55H540 M548 50l-8 5 8 5 M30 150V215 M20 215H40 M23 220H37 M26 225H34"/><circle cx="300" cy="120" r="15"/></g><g fill="currentColor"><text x="85" y="135">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><text x="228" y="191">C<tspan baseline-shift="sub" font-size="78%">X</tspan></text><text x="318" y="125">g<tspan baseline-shift="sub" font-size="78%">m1</tspan>v<tspan baseline-shift="sub" font-size="78%">X</tspan></text><text x="415" y="110">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text><text x="500" y="114">C<tspan baseline-shift="sub" font-size="78%">Y</tspan></text><text x="540" y="80">i<tspan baseline-shift="sub" font-size="78%">t</tspan></text></g><g fill="#2563eb"><circle cx="210" cy="150" r="4"/><text x="180" y="130">v<tspan baseline-shift="sub" font-size="78%">X</tspan> = 0</text></g><g fill="#dc2626"><circle cx="600" cy="55" r="4"/><text x="580" y="30">v<tspan baseline-shift="sub" font-size="78%">t</tspan> (+)</text></g></svg><figcaption>입력 영점, 오른쪽 시험전압과 유입 시험전류로 $R_{out}=v_t/i_t$를 측정해요. $v_X=0$이라 제어 전류는 0이에요.</figcaption></figure><p>입력을 0으로 하면 X도 0이고 M1 출력저항은 무한대예요. 따라서 몸체 효과를 무시하고 $r_{o1}\to\infty$로 둔 모델에서 M2의 저항과 Y의 커패시턴스가 병렬인 근사를 써요.</p>$$R_{out}(s)\approx\frac{R_L}{1+sR_LC_Y}$$</div><div data-gain-stage="gain" data-answer-step="공통 전달함수"><p>같은 출력 전류 방향에 대해 $A_v=-G_mR_{out}$에 위 출력 임피던스 근사를 적용해요.</p>$$\frac{v_{out}}{v_{in}}\approx\frac{g_{m1}R_L}{1+g_{m1}R_S}\frac{1}{[1+s(R_S\parallel 1/g_{m1})C_X](1+sR_LC_Y)}$$</div></div>
-<div data-answer-step="세 부하 적용"><p>(a) M2 게이트와 드레인은 교류 접지이고 소스가 Y예요.</p>$$R_{L,a}=\frac{1}{g_{m2}}\parallel r_{o2}$$ $$C_{Y,a}=C_{GD1}+C_{DB1}+C_{GS2}+C_{SB2}$$<p>(b) M2 게이트와 소스가 교류 접지이고 드레인이 Y예요.</p>$$R_{L,b}=r_{o2}$$ $$C_{Y,b}=C_{GD1}+C_{DB1}+C_{GD2}+C_{DB2}$$<p>(c) 이상적 전류원은 개방이고 M2의 게이트와 드레인이 Y예요.</p>$$R_{L,c}=\frac{1}{g_{m2}}\parallel r_{o2}$$ $$C_{Y,c}=C_{GD1}+C_{DB1}+C_{GS2}+C_{DB2}$$</div></div></div>
-<div class="layer formal" data-explanation="verify"><h4>완성 답과 검산</h4><div data-subpart="main"><div data-answer-final="세 전달함수"><p>$k=a,b,c$에 대해 다음 식에 위에서 구한 각 $R_{L,k}$와 $C_{Y,k}$를 대입해요.</p>$$H_k(s)=\frac{v_{out}}{v_{in}}\approx\frac{g_{m1}R_{L,k}}{1+g_{m1}R_S}\frac{1}{[1+s(R_S\parallel1/g_{m1})C_X](1+sR_{L,k}C_{Y,k})}$$<p>$C_X=C_{GS1}+C_{SB1}$이며 M1의 $\lambda=0$, 몸체 효과를 무시한 모델이에요.</p></div><p>$s=0$이면 양의 저주파 CG 이득이 되고, $R_S\to0$이면 입력 극점 인자가 1이 돼요. 두 $sRC$는 무차원이에요.</p></div></div>
-<div class="layer warn" data-explanation="pitfall"><h4>주의할 점</h4><p>(a)의 M2는 소스가 출력이라 $C_{SB2}$가 Y에 붙지만, (c)의 소스는 접지라 $C_{SB2}$ 양 끝이 접지예요. (c)의 $C_{GD2}$는 양 끝이 Y라 전압이 걸리지 않아요. M1에만 주어진 $\lambda=0$을 M2까지 확대하지 않아요.</p></div>
-<div class="layer eli5" data-explanation="retry"><h4>조건을 바꾸어 생각해요</h4><ol><li>(b)에서 $r_{o2}$가 커지면 출력 극점의 크기는 어떻게 되나요? <span>답: $1/(r_{o2}C_{Y,b})$이므로 작아져요.</span></li><li>(c)에서 $C_{GD2}$가 커지면 전달함수는 바뀌나요? <span>답: 두 단자가 Y로 연결되어 바뀌지 않아요.</span></li></ol></div>
-<div class="sum" hidden=""><p>몸체 효과를 무시하고 M1의 $\lambda=0$이며 M2의 $r_{o2}$를 유지해요.</p>$$C_X=C_{GS1}+C_{SB1}$$ $$\tau_X=(R_S\parallel 1/g_{m1})C_X$$ $$\tau_{Y,k}=R_{L,k}C_{Y,k}$$ $$H_k(s)\approx\frac{g_{m1}R_{L,k}}{1+g_{m1}R_S}\frac{1}{(1+s\tau_X)(1+s\tau_{Y,k})}$$ $$R_{L,a}=1/g_{m2}\parallel r_{o2}$$ $$C_{Y,a}=C_{GD1}+C_{DB1}+C_{GS2}+C_{SB2}$$ $$R_{L,b}=r_{o2}$$ $$C_{Y,b}=C_{GD1}+C_{DB1}+C_{GD2}+C_{DB2}$$ $$R_{L,c}=1/g_{m2}\parallel r_{o2}$$ $$C_{Y,c}=C_{GD1}+C_{DB1}+C_{GS2}+C_{DB2}$$</div>
-</article><article class="topic" id="p3"><h3>P3. 전류원 부하 팔로워의 입력 커패시턴스</h3><p class="panel-meta">E11.23 · 예제 11.23 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1030_CG_CB_and_Follower_Frequency_Response-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p3"><div class="layer formal" data-source-problem="p3"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>$\lambda \neq 0$</li><li>소자 값은 주어지지 않음 (답은 기호로)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>폴로어의 입력 커패시턴스</li></ul></div><figure><img src=".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/0698e985053ddeb7-fig11-45.png" alt="그림 E11.23"></figure></div><details class="original" data-original-problem="p3"><summary>원문 보기</summary><p>그림 11.45에 있는 폴로어의 입력 커패시턴스를 계산하라. $\lambda \neq 0$을 가정한다.</p></details></div><div class="layer eli5" data-explanation="understand">
-<h4>문제를 읽어요</h4>
-<p>$M_1$의 게이트가 입력이고 소스가 출력이에요. 소스가 게이트를 따라 움직이면 두 단자 사이 $C_{GS1}$에 걸리는 변화가 줄어들어요. $C_{GD1}$의 반대쪽인 드레인은 AC 접지라 그 기여는 그대로 더해요.</p>
-</div>
-<div class="layer formal" data-explanation="recall">
-<h4>이 개념과 공식을 떠올려요</h4>
-<p>두 노드를 잇는 커패시터의 입력 전류는 두 단자의 전압 변화 차이로 정해져요. 저주파 소스 전압비를 $A_v=v_s/v_{in}$이라 하면 밀러 정리(Miller theorem)의 입력 성분은 $(1-A_v)C_{GS1}$이에요.</p>
-<p>$g_{m1}$은 게이트–소스 전압에 대한 드레인 전류의 변화율이고, $r_{O1},r_{O2}$는 채널 길이 변조에 따른 출력저항이에요. 이 저주파 모델에서 몸체 효과는 무시해요. 실제 주파수에 따라 $A_v$도 달라지므로 아래 결과는 저주파 입력 커패시턴스예요.</p>
-</div>
-<div class="layer formal" data-explanation="start">
-<h4>종이에 쓸 첫 줄</h4>
-<div data-answer-step="소스 부하 판단"><p>$V_{DD}$와 고정 바이어스는 AC 접지예요. 따라서 $M_1$의 $r_{O1}$은 소스와 접지 사이에 놓여요. 고정 바이어스 전류원 $M_2$의 게이트와 소스는 AC 접지이므로 그 출력저항 $r_{O2}$가 남아요.</p>
-$$R_L=r_{O1}\parallel r_{O2}$$</div>
-<p>여기서 $R_L$은 소스 노드에서 접지로 보이는 저항 중 $M_1$의 제어 전류원을 제외한 병렬 합이에요. 입력 커패시턴스를 구할 저주파 전압비에는 커패시터를 개방해요.</p>
-</div>
-<div class="layer formal" data-explanation="solve">
-<h4>이렇게 풀어요</h4>
+<section id="problems"><h2>문항별 설명</h2><article class="topic" id="p1"><h3>P1. 다이오드 부하 CG 단의 극점</h3><p class="panel-meta">E11.19 · 예제 11.19 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1030_CG_CB_and_Follower_Frequency_Response-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p1"><div class="layer formal" data-source-problem="p1"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>$\lambda = 0$</li><li>소자 값은 주어지지 않음 (답은 기호로)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>회로의 극점 계산</li></ul></div><figure><img src=".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/2046c31ebf68d939-fig11-38-a.png" alt="그림 E11.19"></figure></div><details class="original" data-original-problem="p1"><summary>원문 보기</summary><p>그림 11.38(a)의 회로의 극점을 계산하라. $\lambda = 0$으로 가정한다.</p></details></div><div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit"><svg id="p1-fig-p1-1" viewBox="0 0 510 142" role="img" aria-label="공통 게이트의 X·Y 소신호 모델"><circle cx="26" cy="65" r="3.5" data-node="in" fill="#2672b4"/><text class="node-label" x="26" y="51" font-size="15" text-anchor="middle" fill="#2672b4" data-node="in">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><path class="fig-ink" d="M26 65 H54 l4 -4 6 8 6 -8 6 8 6 -8 4 4 H198" fill="none"/><text class="fig-text" x="70" y="48" font-size="15" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><circle cx="138" cy="65" r="3.5" data-node="X" fill="#be3346"/><text class="node-label" x="138" y="51" font-size="15" text-anchor="middle" fill="#be3346" data-node="X">X</text><path class="fig-ink" d="M138 65 v28 m-10 0 h20 m-20 6 h20 m-10 0 v26" fill="none"/><path class="fig-ink" d="M138 125 h-9 h18 m-15 4 h12 m-9 4 h6" fill="none"/><text class="fig-text" x="160" y="117" font-size="15" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">X</tspan></text><text class="fig-loc" x="112" y="51" font-size="15" text-anchor="middle">㉠</text><path class="fig-ink" d="M198 65 l22 -15 22 15 -22 15 Z M207 65 h24 m-6 -3 6 3 -6 3 M242 65 H483" fill="none"/><text class="fig-text" x="220" y="40" font-size="15" text-anchor="middle">g<tspan baseline-shift="sub" font-size="78%">m1</tspan>v<tspan baseline-shift="sub" font-size="78%">X</tspan></text><path class="fig-ink" d="M333 65 v18 l-4 4 8 6 -8 6 8 6 -8 6 4 4 v10" fill="none"/><path class="fig-ink" d="M333 125 h-9 h18 m-15 4 h12 m-9 4 h6" fill="none"/><text class="fig-text" x="350" y="85" font-size="15" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">Y</tspan></text><path class="fig-ink" d="M408 65 v28 m-10 0 h20 m-20 6 h20 m-10 0 v26" fill="none"/><path class="fig-ink" d="M408 125 h-9 h18 m-15 4 h12 m-9 4 h6" fill="none"/><text class="fig-text" x="430" y="117" font-size="15" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">Y</tspan></text><circle cx="483" cy="65" r="3.5" data-node="Y" fill="#2672b4"/><text class="node-label" x="483" y="51" font-size="15" text-anchor="middle" fill="#2672b4" data-node="Y">Y</text><text class="fig-loc" x="457" y="51" font-size="15" text-anchor="middle">㉡</text></svg><figcaption class="circuit-state">공통 게이트 소신호 모델. 종속 전류는 소스 X에서 드레인 Y로 흘러요.</figcaption></figure>
 <div data-subpart="main">
-<div data-gain-route="gm-rout">
-<div data-gain-stage="gm" data-answer-step="출력 단락 트랜스컨덕턴스"><p>출력 전류를 소자 쪽으로 들어가는 방향으로 정의하고 소스를 단락하면 $v_{gs1}=v_{in}$이에요. 제어 전류는 출력에서 빠져나가므로 부호가 음수예요.</p>
-<figure><svg viewBox="0 0 640 235" role="img" aria-label="출력 단락에서 소스 폴로워의 트랜스컨덕턴스 측정 회로" font-family="Pretendard, sans-serif" font-weight="600" font-size="17" fill="none" stroke="currentColor" stroke-width="2">
-<path d="M65 95 H115"/><circle cx="65" cy="95" r="4" fill="#2563eb" stroke="#2563eb"/><text x="35" y="77" fill="#2563eb" stroke="none">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
-<path d="M285 95 H285 M285 95 V65 M270 65 H300 M275 58 H295 M280 51 H290 M285 95 V109"/><circle cx="285" cy="132" r="23"/><path d="M285 117 V146 M279 139 L285 146 L291 139 M285 155 V180 H605"/>
-<path d="M605 180 V200 M590 200 H620 M595 207 H615 M600 214 H610"/><circle cx="605" cy="180" r="4" fill="#dc2626" stroke="#dc2626"/>
-<text x="322" y="137" fill="currentColor" stroke="none">g<tspan baseline-shift="sub" font-size="78%">m1</tspan>v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><text x="532" y="165" fill="#dc2626" stroke="none">v<tspan baseline-shift="sub" font-size="78%">out</tspan> = 0</text>
-<path d="M565 190 H500 M500 190 L509 184 M500 190 L509 196"/><text x="516" y="219" fill="currentColor" stroke="none">i<tspan baseline-shift="sub" font-size="78%">out,sc</tspan></text></svg><figcaption>출력 단락 시 소스와 드레인이 모두 AC 접지여서 두 출력저항과 부하에는 전압이 걸리지 않아요. 입력 게이트는 절연되어 있고 입력 전압 $v_{in}$은 접지를 기준으로 해요. 출력 소스가 단락되어 제어 전압은 $v_{gs1}=v_{in}$이에요.</figcaption></figure>
-$$G_m=\frac{i_{out,sc}}{v_{in}}=-g_{m1}$$</div>
-<div data-gain-stage="rout" data-answer-step="출력 저항"><p>입력을 영점으로 두면 소스에서 본 $M_1$ 쪽 저항은 $1/g_{m1}\parallel r_{O1}$이에요. 여기에 외부 부하를 병렬로 포함해요.</p>
-<figure><svg viewBox="0 0 700 255" role="img" aria-label="입력 영점에서 소스 출력에 시험 전압을 건 회로" font-family="Pretendard, sans-serif" font-weight="600" font-size="17" fill="none" stroke="currentColor" stroke-width="2">
-<path d="M65 95 H105 V118 M90 118 H120 M95 125 H115 M100 132 H110"/><text x="24" y="80" fill="currentColor" stroke="none">v<tspan baseline-shift="sub" font-size="78%">in</tspan> = 0</text>
-<path d="M195 80 H650 M195 80 V110 M185 110 H205 V160 H185 Z M195 160 V194 M180 194 H210 M185 201 H205 M190 208 H200"/>
-<path d="M330 80 V110 M320 110 H340 V160 H320 Z M330 160 V194 M315 194 H345 M320 201 H340 M325 208 H335"/>
-<path d="M470 80 V110 M460 110 H480 V160 H460 Z M470 160 V194 M455 194 H485 M460 201 H480 M465 208 H475"/>
-<circle cx="195" cy="80" r="4" fill="#dc2626" stroke="#dc2626"/><circle cx="330" cy="80" r="4" fill="#dc2626" stroke="#dc2626"/><circle cx="470" cy="80" r="4" fill="#dc2626" stroke="#dc2626"/><circle cx="650" cy="80" r="4" fill="#dc2626" stroke="#dc2626"/>
-<path d="M615 69 H555 M555 69 L565 63 M555 69 L565 75"/><text x="568" y="101" fill="currentColor" stroke="none">i<tspan baseline-shift="sub" font-size="78%">t</tspan></text>
-<text x="625" y="55" fill="#dc2626" stroke="none">v<tspan baseline-shift="sub" font-size="78%">t</tspan> (+)</text>
-<text x="172" y="137" text-anchor="end" fill="currentColor" stroke="none">1/g<tspan baseline-shift="sub" font-size="78%">m1</tspan></text><text x="350" y="137" fill="currentColor" stroke="none">r<tspan baseline-shift="sub" font-size="78%">O1</tspan></text><text x="490" y="137" fill="currentColor" stroke="none">r<tspan baseline-shift="sub" font-size="78%">O2</tspan></text></svg><figcaption>입력 영점에서 $M_1$의 제어 전류원은 소스에서 $1/g_{m1}$로 보이며 $r_{O1}$ 및 부하와 병렬이에요. 시험전류는 오른쪽에서 회로로 들어가고 $R_{out}=v_t/i_t$예요.</figcaption></figure>
-$$R_{out}\approx\left(\frac1{g_{m1}}\parallel r_{O1}\right)\parallel r_{O2}$$</div>
-<div data-gain-stage="gain" data-answer-step="저주파 전압비"><p>같은 소스 출력에서 단락 전류와 저항을 연결하면 비반전 이득을 얻어요.</p>
-$$A_v=-G_mR_{out}\approx\frac{g_{m1}R_L}{1+g_{m1}R_L}$$</div>
+<div data-answer-step="소스 노드"><span class="loc">㉠</span> 입력원을 0으로 두면 X에서 $R_S$와 공통 게이트 입력저항이 병렬이에요. 게이트·벌크는 교류 접지예요.
+$$R_X=R_S\parallel 1/g_{m1}$$
+$$C_X=C_{GS1}+C_{SB1}$$</div><div data-answer-step="드레인 노드"><span class="loc">㉡</span> 두 소자의 $\lambda=0$이고 몸체 효과를 생략하면 Y에서 다이오드 접속 $M_2$의 저항만 보여요. $C_{GD2}$는 양쪽이 Y예요.
+$$R_Y=1/g_{m2}$$
+$$C_Y=C_{GD1}+C_{DB1}+C_{GS2}+C_{DB2}$$</div><div data-answer-final="">$$p_X=-1/(R_XC_X)$$
+$$p_Y=-1/(R_YC_Y)$$</div><p>교재 식 (11.101)의 입력 용량 표기는 그림에서 소스 X와 접지 사이에 연결된 $C_{GS1}$로 읽어요.</p>
 </div>
-<div data-answer-step="입력 커패시턴스"><p>입력 전압이 $v_{in}$만큼 변할 때 소스는 $A_vv_{in}$만큼 따라가므로 $C_{GS1}$ 양단에는 $(1-A_v)v_{in}$만 걸려요. $C_{GD1}$의 반대쪽인 드레인은 AC 접지라 그 기여는 그대로 더해요.</p>
-<p>따라서 입력에서 보이는 저주파 커패시턴스는</p>
-$$C_{in}\approx C_{GD1}+\dfrac{C_{GS1}}{1+g_{m1}R_L}$$</div>
-</div></div>
-<div class="layer formal" data-explanation="verify">
-<h4>완성 답과 검산</h4>
-<div data-subpart="main"><div data-answer-final="최종 답"><p>몸체 효과를 무시한 저주파 모델에서</p>
-$$\boxed{C_{in}\approx C_{GD1}+\dfrac{C_{GS1}}{1+g_{m1}R_L}}$$
-$$R_L=r_{O1}\parallel r_{O2}$$</div>
-<p>$R_L\to\infty$이면 $C_{GS1}$의 기여는 0이 되어 $C_{in}\to C_{GD1}$이에요. 또한 $g_{m1}R_L$은 무차원이므로 답의 단위는 커패시턴스예요.</p></div>
 </div>
-<div class="layer warn" data-explanation="pitfall">
-<h4>주의할 점</h4>
-<p>$r_{O1}$을 빠뜨리지 마세요. $M_1$의 드레인이 AC 접지이므로 이 저항도 소스 부하에 병렬로 들어가요. $C_{GD1}$은 접지에 직접 연결되어 있어 $(1-A_v)$를 곱하지 않아요.</p>
-</div>
-<div class="layer eli5" data-explanation="retry">
-<h4>조건을 바꾸어 생각해요</h4>
-<ol><li>$r_{O1},r_{O2}$가 모두 무한대로 커지면 $C_{GS1}$의 입력 기여는 어떻게 될까요?</li><li>소스가 입력을 더 잘 따라가면 $C_{GS1}$ 양단 전압과 입력 기여는 각각 어떻게 변할까요?</li></ol>
-</div>
-<div class="sum" hidden=""><p class="sum-lead">소스가 입력을 따라갈수록 $C_{GS1}$의 입력 기여가 줄어요.</p><p>저주파에서 $C_{in}\approx C_{GD1}+\dfrac{C_{GS1}}{1+g_{m1}R_L}$이에요.</p><p>$R_L=r_{O1}\parallel r_{O2}$이며 몸체 효과는 무시해요.</p></div></article><article class="topic" id="p4"><h3>P4. 다이오드 부하 팔로워의 입력 커패시턴스</h3><p class="panel-meta">P11.47 · 장말문제 11.47 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1030_CG_CB_and_Follower_Frequency_Response-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p4"><div class="layer formal" data-source-problem="p4"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>커패시턴스는 $C_{GS1}$만 고려</li><li>$\lambda \neq 0$으로 가정</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>회로의 입력 커패시턴스 $C_{in}$</li></ul></div><figure><img src=".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/35483282c4896f77-fig11-89.png" alt="그림 P11.47"></figure></div><details class="original" data-original-problem="p4"><summary>원문 보기</summary><p>Consider the source follower shown in Fig. 11.89, where the current source is mistakenly replaced with a diode-connected device. Taking into account only $C_{GS1}$, compute the input capacitance of the circuit. Assume $\lambda \neq 0$.</p></details></div><div class="layer eli5" data-explanation="understand">
-<h4>문제를 읽어요</h4>
-<p>$M_1$의 게이트가 입력이고 소스가 출력이에요. 소스가 게이트를 따라 움직이면 두 단자 사이 $C_{GS1}$에 걸리는 변화가 줄어들어요. 문제에서 지정한 $C_{GS1}$만 고려해요.</p>
-</div>
-<div class="layer formal" data-explanation="recall">
-<h4>이 개념과 공식을 떠올려요</h4>
-<p>두 노드를 잇는 커패시터의 입력 전류는 두 단자의 전압 변화 차이로 정해져요. 저주파 소스 전압비를 $A_v=v_s/v_{in}$이라 하면 밀러 정리(Miller theorem)의 입력 성분은 $(1-A_v)C_{GS1}$이에요.</p>
-<p>$g_{m1}$은 게이트–소스 전압에 대한 드레인 전류의 변화율이고, $r_{O1},r_{O2}$는 채널 길이 변조에 따른 출력저항이에요. 이 저주파 모델에서 몸체 효과는 무시해요. 실제 주파수에 따라 $A_v$도 달라지므로 아래 결과는 저주파 입력 커패시턴스예요.</p>
-</div>
-<div class="layer formal" data-explanation="start">
-<h4>종이에 쓸 첫 줄</h4>
-<div data-answer-step="소스 부하 판단"><p>$V_{DD}$와 고정 바이어스는 AC 접지예요. 따라서 $M_1$의 $r_{O1}$은 소스와 접지 사이에 놓여요. 다이오드 연결된 $M_2$는 몸체 효과를 무시하면 $1/g_{m2}\parallel r_{O2}$로 보여요.</p>
-$$R_L=\dfrac{1}{g_{m2}}\parallel r_{O1}\parallel r_{O2}$$</div>
-<p>여기서 $R_L$은 소스 노드에서 접지로 보이는 저항 중 $M_1$의 제어 전류원을 제외한 병렬 합이에요. 입력 커패시턴스를 구할 저주파 전압비에는 커패시터를 개방해요.</p>
-</div>
-<div class="layer formal" data-explanation="solve">
-<h4>이렇게 풀어요</h4>
+<div class="sum" hidden=""><p class="sum-lead">소스 X와 드레인 Y에서 접지로 이어진 용량과 저항을 각각 모아요.</p></div>
+</article><article class="topic" id="p2"><h3>P2. 세 가지 부하의 CG 단 전달함수</h3><p class="panel-meta">P11.46 · 장말문제 11.46 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1030_CG_CB_and_Follower_Frequency_Response-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p2"><div class="layer formal" data-source-problem="p2"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>$M_1$에 대해 $\lambda = 0$으로 가정</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>(a), (b), (c) 각 회로의 전달 함수 $V_{out}/V_{in}$</li></ul></div><figure><img src=".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/f67fe8bc75ae39f3-fig11-88.png" alt="그림 P11.46"></figure></div><details class="original" data-original-problem="p2"><summary>원문 보기</summary><p>Determine the transfer function of the circuits shown in Fig. 11.88. Assume $\lambda = 0$ for $M_1$.</p></details></div><div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit"><svg id="p2-fig-p2-1" viewBox="0 0 510 142" role="img" aria-label="공통 게이트의 X·Y 소신호 모델"><circle cx="26" cy="65" r="3.5" data-node="in" fill="#2672b4"/><text class="node-label" x="26" y="51" font-size="15" text-anchor="middle" fill="#2672b4" data-node="in">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><path class="fig-ink" d="M26 65 H54 l4 -4 6 8 6 -8 6 8 6 -8 4 4 H198" fill="none"/><text class="fig-text" x="70" y="48" font-size="15" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><circle cx="138" cy="65" r="3.5" data-node="X" fill="#be3346"/><text class="node-label" x="138" y="51" font-size="15" text-anchor="middle" fill="#be3346" data-node="X">X</text><path class="fig-ink" d="M138 65 v28 m-10 0 h20 m-20 6 h20 m-10 0 v26" fill="none"/><path class="fig-ink" d="M138 125 h-9 h18 m-15 4 h12 m-9 4 h6" fill="none"/><text class="fig-text" x="160" y="117" font-size="15" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">X</tspan></text><text class="fig-loc" x="112" y="51" font-size="15" text-anchor="middle">㉠</text><path class="fig-ink" d="M198 65 l22 -15 22 15 -22 15 Z M207 65 h24 m-6 -3 6 3 -6 3 M242 65 H483" fill="none"/><text class="fig-text" x="220" y="40" font-size="15" text-anchor="middle">g<tspan baseline-shift="sub" font-size="78%">m1</tspan>v<tspan baseline-shift="sub" font-size="78%">X</tspan></text><path class="fig-ink" d="M333 65 v18 l-4 4 8 6 -8 6 8 6 -8 6 4 4 v10" fill="none"/><path class="fig-ink" d="M333 125 h-9 h18 m-15 4 h12 m-9 4 h6" fill="none"/><text class="fig-text" x="350" y="85" font-size="15" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text><path class="fig-ink" d="M408 65 v28 m-10 0 h20 m-20 6 h20 m-10 0 v26" fill="none"/><path class="fig-ink" d="M408 125 h-9 h18 m-15 4 h12 m-9 4 h6" fill="none"/><text class="fig-text" x="430" y="117" font-size="15" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">Y</tspan></text><circle cx="483" cy="65" r="3.5" data-node="Y" fill="#2672b4"/><text class="node-label" x="483" y="51" font-size="15" text-anchor="middle" fill="#2672b4" data-node="Y">Y</text><text class="fig-loc" x="457" y="51" font-size="15" text-anchor="middle">㉡</text></svg><figcaption class="circuit-state">공통 게이트 소신호 모델. 종속 전류는 소스 X에서 드레인 Y로 흘러요.</figcaption></figure>
 <div data-subpart="main">
-<div data-gain-route="gm-rout">
-<div data-gain-stage="gm" data-answer-step="출력 단락 트랜스컨덕턴스"><p>출력 전류를 소자 쪽으로 들어가는 방향으로 정의하고 소스를 단락하면 $v_{gs1}=v_{in}$이에요. 제어 전류는 출력에서 빠져나가므로 부호가 음수예요.</p>
-<figure><svg viewBox="0 0 640 235" role="img" aria-label="출력 단락에서 소스 폴로워의 트랜스컨덕턴스 측정 회로" font-family="Pretendard, sans-serif" font-weight="600" font-size="17" fill="none" stroke="currentColor" stroke-width="2">
-<path d="M65 95 H115"/><circle cx="65" cy="95" r="4" fill="#2563eb" stroke="#2563eb"/><text x="35" y="77" fill="#2563eb" stroke="none">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
-<path d="M285 95 H285 M285 95 V65 M270 65 H300 M275 58 H295 M280 51 H290 M285 95 V109"/><circle cx="285" cy="132" r="23"/><path d="M285 117 V146 M279 139 L285 146 L291 139 M285 155 V180 H605"/>
-<path d="M605 180 V200 M590 200 H620 M595 207 H615 M600 214 H610"/><circle cx="605" cy="180" r="4" fill="#dc2626" stroke="#dc2626"/>
-<text x="322" y="137" fill="currentColor" stroke="none">g<tspan baseline-shift="sub" font-size="78%">m1</tspan>v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><text x="532" y="165" fill="#dc2626" stroke="none">v<tspan baseline-shift="sub" font-size="78%">out</tspan> = 0</text>
-<path d="M565 190 H500 M500 190 L509 184 M500 190 L509 196"/><text x="516" y="219" fill="currentColor" stroke="none">i<tspan baseline-shift="sub" font-size="78%">out,sc</tspan></text></svg><figcaption>출력 단락 시 소스와 드레인이 모두 AC 접지여서 두 출력저항과 부하에는 전압이 걸리지 않아요. 입력 게이트는 절연되어 있고 입력 전압 $v_{in}$은 접지를 기준으로 해요. 출력 소스가 단락되어 제어 전압은 $v_{gs1}=v_{in}$이에요.</figcaption></figure>
-$$G_m=\frac{i_{out,sc}}{v_{in}}=-g_{m1}$$</div>
-<div data-gain-stage="rout" data-answer-step="출력 저항"><p>입력을 영점으로 두면 소스에서 본 $M_1$ 쪽 저항은 $1/g_{m1}\parallel r_{O1}$이에요. 여기에 외부 부하를 병렬로 포함해요.</p>
-<figure><svg viewBox="0 0 700 255" role="img" aria-label="입력 영점에서 소스 출력에 시험 전압을 건 회로" font-family="Pretendard, sans-serif" font-weight="600" font-size="17" fill="none" stroke="currentColor" stroke-width="2">
-<path d="M65 95 H105 V118 M90 118 H120 M95 125 H115 M100 132 H110"/><text x="24" y="80" fill="currentColor" stroke="none">v<tspan baseline-shift="sub" font-size="78%">in</tspan> = 0</text>
-<path d="M195 80 H650 M195 80 V110 M185 110 H205 V160 H185 Z M195 160 V194 M180 194 H210 M185 201 H205 M190 208 H200"/>
-<path d="M330 80 V110 M320 110 H340 V160 H320 Z M330 160 V194 M315 194 H345 M320 201 H340 M325 208 H335"/>
-<path d="M470 80 V110 M460 110 H480 V160 H460 Z M470 160 V194 M455 194 H485 M460 201 H480 M465 208 H475"/>
-<circle cx="195" cy="80" r="4" fill="#dc2626" stroke="#dc2626"/><circle cx="330" cy="80" r="4" fill="#dc2626" stroke="#dc2626"/><circle cx="470" cy="80" r="4" fill="#dc2626" stroke="#dc2626"/><circle cx="650" cy="80" r="4" fill="#dc2626" stroke="#dc2626"/>
-<path d="M615 69 H555 M555 69 L565 63 M555 69 L565 75"/><text x="568" y="101" fill="currentColor" stroke="none">i<tspan baseline-shift="sub" font-size="78%">t</tspan></text>
-<text x="625" y="55" fill="#dc2626" stroke="none">v<tspan baseline-shift="sub" font-size="78%">t</tspan> (+)</text>
-<text x="172" y="137" text-anchor="end" fill="currentColor" stroke="none">1/g<tspan baseline-shift="sub" font-size="78%">m1</tspan></text><text x="350" y="137" fill="currentColor" stroke="none">r<tspan baseline-shift="sub" font-size="78%">O1</tspan></text><text x="490" y="137" fill="currentColor" stroke="none">1/g<tspan baseline-shift="sub" font-size="78%">m2</tspan> ‖ r<tspan baseline-shift="sub" font-size="78%">O2</tspan></text></svg><figcaption>입력 영점에서 $M_1$의 제어 전류원은 소스에서 $1/g_{m1}$로 보이며 $r_{O1}$ 및 부하와 병렬이에요. 시험전류는 오른쪽에서 회로로 들어가고 $R_{out}=v_t/i_t$예요.</figcaption></figure>
-$$R_{out}\approx\left(\frac1{g_{m1}}\parallel r_{O1}\right)\parallel \left(\dfrac{1}{g_{m2}}\parallel r_{O2}\right)$$</div>
-<div data-gain-stage="gain" data-answer-step="저주파 전압비"><p>같은 소스 출력에서 단락 전류와 저항을 연결하면 비반전 이득을 얻어요.</p>
-$$A_v=-G_mR_{out}\approx\frac{g_{m1}R_L}{1+g_{m1}R_L}$$</div>
+<div data-answer-step="전달비 분해"><span class="loc">㉠</span> $M_1$의 $r_{o1}\to\infty$이고 게이트가 교류 접지라 Y의 부하가 X로 되먹임되지 않아요. 몸체 효과는 생략해요.
+$$H_k(s)=\frac{v_X}{v_{in}}\frac{v_Y}{v_X}$$
+$$C_X=C_{GS1}+C_{SB1}$$
+$$\frac{v_X}{v_{in}}=\frac{1}{1+R_S(g_{m1}+sC_X)}$$</div><div data-answer-step="세 회로의 출력 부하"><span class="loc">㉡</span> Y에서는 $g_{m1}v_X$가 $R_{L,k}\parallel 1/(sC_{Y,k})$로 흘러요. $M_2$의 유한 $r_{o2}$를 유지해요.
+$$\frac{v_Y}{v_X}=\frac{g_{m1}R_{L,k}}{1+sR_{L,k}C_{Y,k}}$$
+<p>(a) Y가 $M_2$의 소스예요.</p>
+$$R_{L,a}=(1/g_{m2})\parallel r_{o2}$$
+$$C_{Y,a}=C_{GD1}+C_{DB1}+C_{GS2}+C_{SB2}$$
+<p>(b) Y가 $M_2$의 드레인이고 게이트와 소스는 교류 접지예요.</p>
+$$R_{L,b}=r_{o2}$$
+$$C_{Y,b}=C_{GD1}+C_{DB1}+C_{GD2}+C_{DB2}$$
+<p>(c) Y가 다이오드 접속 $M_2$의 게이트·드레인이에요.</p>
+$$R_{L,c}=(1/g_{m2})\parallel r_{o2}$$
+$$C_{Y,c}=C_{GD1}+C_{DB1}+C_{GS2}+C_{DB2}$$</div><div data-answer-final=""><p>각 회로 $k=a,b,c$에서</p>
+$$H_k(s)=\frac{g_{m1}R_{L,k}}{[1+g_{m1}R_S+sR_SC_X](1+sR_{L,k}C_{Y,k})}$$</div>
 </div>
-<div data-answer-step="입력 커패시턴스"><p>입력 전압이 $v_{in}$만큼 변할 때 소스는 $A_vv_{in}$만큼 따라가므로 $C_{GS1}$ 양단에는 $(1-A_v)v_{in}$만 걸려요. 문제에서 지정한 $C_{GS1}$만 고려해요.</p>
-<p>따라서 입력에서 보이는 저주파 커패시턴스는</p>
-$$C_{in}\approx\dfrac{C_{GS1}}{1+g_{m1}R_L}$$</div>
-</div></div>
-<div class="layer formal" data-explanation="verify">
-<h4>완성 답과 검산</h4>
-<div data-subpart="main"><div data-answer-final="최종 답"><p>몸체 효과를 무시한 저주파 모델에서</p>
-$$\boxed{C_{in}\approx\dfrac{C_{GS1}}{1+g_{m1}R_L}}$$
-$$R_L=\dfrac{1}{g_{m2}}\parallel r_{O1}\parallel r_{O2}$$</div>
-<p>$g_{m2}\to0$이면 전류원 부하의 $C_{GS1}$ 기여로 돌아가요. 또한 $g_{m1}R_L$은 무차원이므로 답의 단위는 커패시턴스예요.</p></div>
 </div>
-<div class="layer warn" data-explanation="pitfall">
-<h4>주의할 점</h4>
-<p>$r_{O1}$을 빠뜨리지 마세요. $M_1$의 드레인이 AC 접지이므로 이 저항도 소스 부하에 병렬로 들어가요. 다이오드 연결 $M_2$를 이상적인 전류원으로 취급하면 $1/g_{m2}$ 가지를 놓쳐요.</p>
+<div class="sum" hidden=""><p class="sum-lead">입력 분압은 세 회로에서 같고, 출력 저항과 용량은 M₂의 접속으로 정해져요.</p></div>
+</article><article class="topic" id="p3"><h3>P3. 전류원 부하 팔로워의 입력 커패시턴스</h3><p class="panel-meta">E11.23 · 예제 11.23 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1030_CG_CB_and_Follower_Frequency_Response-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p3"><div class="layer formal" data-source-problem="p3"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>$\lambda \neq 0$</li><li>소자 값은 주어지지 않음 (답은 기호로)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>폴로어의 입력 커패시턴스</li></ul></div><figure><img src=".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/0698e985053ddeb7-fig11-45.png" alt="그림 E11.23"></figure></div><details class="original" data-original-problem="p3"><summary>원문 보기</summary><p>그림 11.45에 있는 폴로어의 입력 커패시턴스를 계산하라. $\lambda \neq 0$을 가정한다.</p></details></div><div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit"><svg id="p3-fig-p3-1" viewBox="0 0 445 148" role="img" aria-label="소스 전압을 따라 충전되는 게이트–소스 커패시터"><circle cx="40" cy="70" r="3.5" data-node="gate" fill="#2672b4"/><text class="node-label" x="40" y="56" font-size="15" text-anchor="middle" fill="#2672b4" data-node="gate">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><path class="fig-ink" d="M40 70 H140 M140 70 V35 H208 M208 26 V44 M214 26 V44 M214 35 H290 V70 H414" fill="none"/><text class="fig-text" x="210" y="18" font-size="15" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">GS1</tspan></text><circle cx="414" cy="70" r="3.5" data-node="source" fill="#be3346"/><text class="node-label" x="414" y="56" font-size="15" text-anchor="middle" fill="#be3346" data-node="source">v<tspan baseline-shift="sub" font-size="78%">s</tspan></text><text class="fig-loc" x="381" y="54" font-size="15" text-anchor="middle">㉠</text><path class="fig-ink" d="M85 70 v28 m-10 0 h20 m-20 6 h20 m-10 0 v26" fill="none"/><path class="fig-ink" d="M85 130 h-9 h18 m-15 4 h12 m-9 4 h6" fill="none"/><text class="fig-text" x="107" y="122" font-size="15" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">GD1</tspan></text><circle cx="85" cy="70" r="3.5" data-node="gate" fill="#2672b4"/><path class="fig-ink" d="M260 70 H290 M260 70 V82 l12 14 -12 14 -12 -14 Z M260 103 V89 m-4 5 4 -5 4 5 M260 110 V130" fill="none"/><path class="fig-ink" d="M260 130 h-9 h18 m-15 4 h12 m-9 4 h6" fill="none"/><text class="fig-text" x="210" y="103" font-size="15" text-anchor="middle">g<tspan baseline-shift="sub" font-size="78%">m1</tspan>v<tspan baseline-shift="sub" font-size="78%">gs1</tspan></text><path class="fig-ink" d="M350 70 v18 l-4 4 8 6 -8 6 8 6 -8 6 4 4 v10" fill="none"/><path class="fig-ink" d="M350 130 h-9 h18 m-15 4 h12 m-9 4 h6" fill="none"/><text class="fig-text" x="367" y="90" font-size="15" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text><circle cx="350" cy="70" r="3.5" data-node="source" fill="#be3346"/><text class="fig-text" x="115" y="98" font-size="15" text-anchor="middle">게이트</text></svg><figcaption class="circuit-state">소스에서 본 두 출력저항을 부하에 포함해요.</figcaption></figure>
+<div data-subpart="main">
+<div data-answer-step="소스 부하와 저주파 전압비"><span class="loc">㉠</span> 소스에서 $M_1$ 드레인과 $M_2$ 소스가 모두 교류 접지로 이어져 두 출력저항이 병렬이에요.
+$$R_L=r_{o1}\parallel r_{o2}$$
+<p>몸체 효과를 생략하고 저주파에서 커패시터를 열면 소스에서 전류가 균형을 이뤄요.</p>
+$$v_s/R_L=g_{m1}(v_{in}-v_s)$$
+$$A_v=\frac{v_s}{v_{in}}=\frac{g_{m1}R_L}{1+g_{m1}R_L}$$</div><div data-answer-step="게이트 전하"><p>드레인은 교류 접지라 $C_{GD1}$에는 입력 전압 전체가 걸려요. $C_{GS1}$ 양단에는 입력과 소스 전압의 차이만 걸려요.</p>
+$$q_{in}=C_{GD1}v_{in}+C_{GS1}(v_{in}-v_s)$$</div><div data-answer-final="">$$C_{in}=\frac{q_{in}}{v_{in}}\approx C_{GD1}+\frac{C_{GS1}}{1+g_{m1}R_L}$$</div>
 </div>
-<div class="layer eli5" data-explanation="retry">
-<h4>조건을 바꾸어 생각해요</h4>
-<ol><li>다이오드 연결이 사라져 $g_{m2}=0$이 되면 $R_L$과 $C_{in}$은 어떻게 변할까요?</li><li>소스가 입력을 더 잘 따라가면 $C_{GS1}$ 양단 전압과 입력 기여는 각각 어떻게 변할까요?</li></ol>
 </div>
-<div class="sum" hidden=""><p class="sum-lead">소스가 입력을 따라갈수록 $C_{GS1}$의 입력 기여가 줄어요.</p><p>저주파에서 $C_{in}\approx\dfrac{C_{GS1}}{1+g_{m1}R_L}$이에요.</p><p>$R_L=\dfrac{1}{g_{m2}}\parallel r_{O1}\parallel r_{O2}$이며 몸체 효과는 무시해요.</p></div></article></section>
+<div class="sum" hidden=""><p class="sum-lead">소스가 게이트를 따라갈수록 게이트–소스 전하 변화가 작아져요.</p></div>
+</article><article class="topic" id="p4"><h3>P4. 다이오드 부하 팔로워의 입력 커패시턴스</h3><p class="panel-meta">P11.47 · 장말문제 11.47 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1030_CG_CB_and_Follower_Frequency_Response-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p4"><div class="layer formal" data-source-problem="p4"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>커패시턴스는 $C_{GS1}$만 고려</li><li>$\lambda \neq 0$으로 가정</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>회로의 입력 커패시턴스 $C_{in}$</li></ul></div><figure><img src=".assets/figures_문제설명_1030_CG_CB_and_Follower_Frequency_Response/35483282c4896f77-fig11-89.png" alt="그림 P11.47"></figure></div><details class="original" data-original-problem="p4"><summary>원문 보기</summary><p>Consider the source follower shown in Fig. 11.89, where the current source is mistakenly replaced with a diode-connected device. Taking into account only $C_{GS1}$, compute the input capacitance of the circuit. Assume $\lambda \neq 0$.</p></details></div><div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit"><svg id="p4-fig-p4-1" viewBox="0 0 445 148" role="img" aria-label="소스 전압을 따라 충전되는 게이트–소스 커패시터"><circle cx="40" cy="70" r="3.5" data-node="gate" fill="#2672b4"/><text class="node-label" x="40" y="56" font-size="15" text-anchor="middle" fill="#2672b4" data-node="gate">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><path class="fig-ink" d="M40 70 H140 M140 70 V35 H208 M208 26 V44 M214 26 V44 M214 35 H290 V70 H414" fill="none"/><text class="fig-text" x="210" y="18" font-size="15" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">GS1</tspan></text><circle cx="414" cy="70" r="3.5" data-node="source" fill="#be3346"/><text class="node-label" x="414" y="56" font-size="15" text-anchor="middle" fill="#be3346" data-node="source">v<tspan baseline-shift="sub" font-size="78%">s</tspan></text><text class="fig-loc" x="381" y="54" font-size="15" text-anchor="middle">㉠</text><path class="fig-ink" d="M260 70 H290 M260 70 V82 l12 14 -12 14 -12 -14 Z M260 103 V89 m-4 5 4 -5 4 5 M260 110 V130" fill="none"/><path class="fig-ink" d="M260 130 h-9 h18 m-15 4 h12 m-9 4 h6" fill="none"/><text class="fig-text" x="210" y="103" font-size="15" text-anchor="middle">g<tspan baseline-shift="sub" font-size="78%">m1</tspan>v<tspan baseline-shift="sub" font-size="78%">gs1</tspan></text><path class="fig-ink" d="M350 70 v18 l-4 4 8 6 -8 6 8 6 -8 6 4 4 v10" fill="none"/><path class="fig-ink" d="M350 130 h-9 h18 m-15 4 h12 m-9 4 h6" fill="none"/><text class="fig-text" x="367" y="90" font-size="15" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text><circle cx="350" cy="70" r="3.5" data-node="source" fill="#be3346"/><text class="fig-text" x="115" y="98" font-size="15" text-anchor="middle">게이트</text></svg><figcaption class="circuit-state">소스의 부하에는 다이오드 접속 부하의 컨덕턴스도 들어가요.</figcaption></figure>
+<div data-subpart="main">
+<div data-answer-step="소스 부하와 저주파 전압비"><span class="loc">㉠</span> 소스에서 다이오드 접속 $M_2$를 보므로 두 출력저항에 $1/g_{m2}$가 병렬로 붙어요.
+$$R_L=(1/g_{m2})\parallel r_{o1}\parallel r_{o2}$$
+<p>몸체 효과를 생략하고 저주파에서 커패시터를 열면 소스에서 전류가 균형을 이뤄요.</p>
+$$v_s/R_L=g_{m1}(v_{in}-v_s)$$
+$$A_v=\frac{v_s}{v_{in}}=\frac{g_{m1}R_L}{1+g_{m1}R_L}$$</div><div data-answer-step="게이트 전하"><p>$C_{GS1}$ 양단에는 입력과 소스 전압의 차이만 걸려요.</p>
+$$q_{in}=C_{GS1}(v_{in}-v_s)$$</div><div data-answer-final="">$$C_{in}=\frac{q_{in}}{v_{in}}\approx \frac{C_{GS1}}{1+g_{m1}R_L}$$</div>
+</div>
+</div>
+<div class="sum" hidden=""><p class="sum-lead">소스가 게이트를 따라갈수록 게이트–소스 전하 변화가 작아져요.</p></div>
+</article></section>
   </main>
   <footer>원 문제·정리노트·PDF는 보존해요.</footer>
     </div>

@@ -1,27 +1,17 @@
-import cmath, math, random
-random.seed(1)
-def kcl(s, R1, Cin, Cxy, Cout, gm, RL):
-    # unknowns Vx, Vy with Vin=1 (stdlib, Cramer)
-    # X: Vx(1/R1 + s Cin + s Cxy) - Vy s Cxy = 1/R1
-    # Y: Vx(gm - s Cxy) + Vy(1/RL + s Cout + s Cxy) = 0
-    a11=1/R1+s*Cin+s*Cxy; a12=-s*Cxy; a21=gm-s*Cxy; a22=(1/RL if RL!=math.inf else 0)+s*Cout+s*Cxy
-    det=a11*a22-a12*a21
-    return (a11*0 - a21*(1/R1))/det
-def formula(s, R1, Cin, Cxy, Cout, gm, RL):
-    a=R1*RL*(Cin*Cxy+Cout*Cxy+Cin*Cout); b=(1+gm*RL)*Cxy*R1+R1*Cin+RL*(Cxy+Cout)
-    return (Cxy*s-gm)*RL/(a*s*s+b*s+1)
-def quad(a,b):
-    d=cmath.sqrt(b*b-4*a); return ((-b+d)/(2*a), (-b-d)/(2*a))
-
-print("p12: stdlib numerical (SymPy absent); lambda=0")
-RS=200; RD=1000; ID=1e-3; Cgs=50e-15; Cgd=10e-15; Cdb=15e-15; Vov=0.2
-gm=2*ID/Vov; A=gm*RD; print("gm=",gm,"gmRD=",A)
-Cin=Cgs+(1+A)*Cgd; Cout=Cdb+(1+1/A)*Cgd
-wi=1/(RS*Cin); wo=1/(RD*Cout)
-print("(a) Miller: Cin=",Cin,"Cout=",Cout,"w_in=",wi,"f=",wi/2/math.pi,"w_out=",wo,"f=",wo/2/math.pi)
-a=RS*RD*(Cgs*Cgd+Cdb*Cgd+Cgs*Cdb); b=(1+A)*Cgd*RS+RS*Cgs+RD*(Cgd+Cdb)
-p=quad(a,b); print("(b) Eq.11.73: a=",a,"b=",b,"poles=",p,"f(Hz)=",[abs(x)/2/math.pi for x in p])
-print("    dominant-pole ref: 1/b=",1/b," b/a=",b/a)
-print("ratio exact p1 / Miller lower (w_in)=",abs(p[0])/wi, " exact p2 / Miller w_out=",abs(p[1])/wo)
-mx=max(abs(kcl(s,RS,Cgs,Cgd,Cdb,gm,RD)-formula(s,RS,Cgs,Cgd,Cdb,gm,RD))/abs(formula(s,RS,Cgs,Cgd,Cdb,gm,RD)) for s in [complex(random.uniform(-1e10,1e10),random.uniform(1e8,1e11)) for _ in range(6)])
-print("KCL vs Eq.11.73 max rel residual",mx)
+from sympy import *
+import json
+result = {}
+def report(part, method, conclusion, **values):
+    result[part] = dict(method=method, conclusion=conclusion, values={k:str(v) for k,v in values.items()})
+g=Rational(2,1000)/Rational(200,1000);r=1000;rs=200
+ff=Rational(1,10**15);cg=50*ff;cf=10*ff;cd=15*ff
+b=rs*(cg+cf)+r*(cd+cf)+g*rs*r*cf
+a=rs*r*(cg*cd+cg*cf+cf*cd)
+ti=rs*(cg+(1+g*r)*cf);to=r*(cd+(1+1/(g*r))*cf)
+hz=lambda x:float(x/(2*pi*10**9))
+M=sorted([hz(1/ti),hz(1/to)])
+E=sorted([hz((b+k*sqrt(b**2-4*a))/(2*a)) for k in [-1,1]])
+report('p12:a','symbolic','밀러 근사, λ나 ro 자료가 없어 ro≫RD. 낮은 쪽은 입력, 높은 쪽은 출력이다. 출력의 1/(gmRD)를 생략하면 출력 극점은 6.3662 GHz.',gm=g,omega_in=1/ti,omega_out=1/to,f_sorted_GHz=M)
+report('p12:b','exact','정확한 2노드 KCL 분모에서 두 근을 계산한다. 두 고유 극점을 입력/출력 각각으로 분리하지 않는다.',b1_s=b,b2_s2=a,f_sorted_GHz=E)
+report('p12:main','exact','밀러 근사는 정확한 저주파 극점을 높게, 고주파 극점을 낮게 평가한다.',miller_over_exact=[M[i]/E[i] for i in range(2)])
+print(json.dumps(result,ensure_ascii=False,indent=2))

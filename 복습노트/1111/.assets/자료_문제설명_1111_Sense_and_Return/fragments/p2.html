@@ -1,22 +1,5 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>예제 12.3과 같은 그림 12.1의 귀환 시스템이에요. 입력 $X$는 뺄셈기의 + 입력, 귀환 회로망 $K$의 출력 $X_F$는 뺄셈기의 − 입력으로 들어가고, 뺄셈기 출력이 $A_1$을 지나 출력 $Y$가 돼요.</p>
-  <p>바뀐 것은 끊는 자리뿐이에요. 이번에는 뺄셈기의 입력에서 끊어요. 뺄셈기 입력은 두 개지만 루프 위에 있는 것은 귀환 신호가 들어가는 − 입력 하나예요. + 입력에는 외부 입력 $X$만 들어와서 그곳을 끊어도 루프가 끊어지지 않아요. 원문은 어느 입력인지 적지 않아서, $K$ 출력과 뺄셈기 − 입력 사이를 끊는다고 읽어요. 이것은 원문에 없는 해석이에요.</p>
-  <p>구할 것은 루프 이득이고, 답은 $A_1$과 $K$로 써요. 블록은 이상적이라 끊은 자리에서 부하 효과가 없다고 봐요. 이것도 원문에 없는 가정이에요.</p>
-</div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p>"루프를 끊을 때 루프 이득"이라는 말에서 루프 이득 측정법을 떠올려요(<a href="정리노트_1111_Sense_and_Return.html#s0-break-anywhere">루프는 어디서 끊어도 루프 이득이 같아요</a>). $X=0$으로 두고, 끊은 두 끝 중 신호를 루프 안으로 내보내는 쪽 $M$에 $V_{test}$를 걸고, 한 바퀴 돌아 도착하는 쪽 $N$의 $V_N$을 읽어요.</p>
-  $$KA_1=-\frac{V_N}{V_{test}}$$
-  <p>이번 끊는 자리에서 신호 방향을 따져요. 귀환 신호는 $K$ 출력에서 뺄셈기 − 입력으로 흘러요. 그러니 뺄셈기 − 입력 쪽 끝이 $M$, $K$ 출력 쪽 끝이 $N$이에요.</p>
-  <p>이 자리를 고르면 뺄셈기의 빼기($-1$)가 루프의 맨 처음에 곱해져요. 예제 12.3에서는 맨 끝에 곱해졌어요. 루프 위 인자 $-1$, $A_1$, $K$는 그대로이고 곱하는 순서만 바뀌므로 루프 이득은 같아야 해요.</p>
-</div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="끊는 자리와 시험 신호">
-    <p>$X=0$이라 뺄셈기의 + 입력을 접지해요. $K$ 출력에서 오는 귀환선을 뺄셈기 − 입력 앞에서 끊고, − 입력 쪽 끝 $M$에 $V_{test}$를 걸어요. $K$ 출력 쪽 끝 $N$은 열어 두고 $V_N$을 읽어요.</p>
-    <figure class="figure">
-      <svg viewBox="0 0 380 225" role="img" aria-label="뺄셈기의 마이너스 입력에서 루프를 끊은 블록도. 뺄셈기의 플러스 입력은 접지되어 있어요. 뺄셈기 출력은 A1 상자를 지나 출력 노드 Y로 가요. Y에서 갈라진 선이 아래로 내려가 왼쪽을 향한 K 삼각형의 입력으로 들어가고, K 출력은 왼쪽 열린 끝 N에서 끝나요. N 왼쪽의 노드 M에는 아래가 접지된 시험 전압원 V test가 걸려 있고, M에서 왼쪽으로 간 뒤 위로 꺾여 뺄셈기의 마이너스 입력으로 들어가요.">
+<div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit"><svg viewBox="0 0 380 225" role="img" aria-label="뺄셈기의 마이너스 입력에서 루프를 끊은 블록도. 뺄셈기의 플러스 입력은 접지되어 있어요. 뺄셈기 출력은 A1 상자를 지나 출력 노드 Y로 가요. Y에서 갈라진 선이 아래로 내려가 왼쪽을 향한 K 삼각형의 입력으로 들어가고, K 출력은 왼쪽 열린 끝 N에서 끝나요. N 왼쪽의 노드 M에는 아래가 접지된 시험 전압원 V test가 걸려 있고, M에서 왼쪽으로 간 뒤 위로 꺾여 뺄셈기의 마이너스 입력으로 들어가요.">
         <g fill="none" stroke-width="2">
           <path class="fig-ink" d="M30 60V72M20 72H40M24 77H36M28 82H32"/>
           <path class="fig-ink" d="M30 60H76"/>
@@ -52,65 +35,9 @@
           <text class="fig-text" x="120" y="190" text-anchor="middle" font-size="11">−</text>
           <text class="fig-text fig-math" x="97" y="186" text-anchor="end">V<tspan baseline-shift="sub" font-size="78%">test</tspan></text>
         </g>
-      </svg>
-      <figcaption>입력 $X$를 0(접지)으로 두고 $K$ 출력 $N$과 뺄셈기 − 입력 쪽 끝 $M$ 사이를 끊었어요. $M$에는 $V_{test}$를 걸고 $N$에서 $V_N$을 읽어요.</figcaption>
-    </figure>
-    <p>첫 줄은 $M$에서 출발한 신호가 처음 만나는 뺄셈기의 식이에요. + 입력은 0, − 입력은 $V_{test}$예요. 뺄셈기 출력을 $E$라고 부를게요.</p>
-    $$E=0-V_{test}=-V_{test}$$
-  </div>
+      <text class="fig-loc" x="90" y="137" font-family="Pretendard, sans-serif" font-weight="600" font-size="17">㉠</text><text class="fig-loc" x="185" y="132" font-family="Pretendard, sans-serif" font-weight="600" font-size="17">㉡</text></svg><figcaption class="circuit-state">비교부 반전 입력과 귀환망 출력 사이를 끊은 회로예요.</figcaption></figure>
+<div data-subpart="main"><h4>비교부 입력에서 측정한 루프 이득</h4><div data-answer-step="시험 포트"><p>외부 입력 $X=0$에서 <span class="loc">㉠</span> 비교부 반전 입력 $M$에 $V_{test}$를 걸고 <span class="loc">㉡</span> 귀환망 출력 $N$을 열어 $V_N$을 재요. 이상적 블록에서 비교부의 출력 $E$는 처음부터 반대 부호예요.</p>$$V_N/V_{test}=(E/V_{test})(Y/E)(V_N/Y)$$
+</div><div data-answer-final=""><p>비교부, $A_1$, $K$를 지나는 곱이에요. 증폭기 입력에서 끊을 때와 같은 세 인자가 들어가요.</p>$$T=-V_N/V_{test}=-(-1)A_1K=KA_1$$
+</div></div>
 </div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
-  <div data-subpart="main">
-    <div data-answer-step="루프를 따라 V_N 구하기">
-      <p>뺄셈기 출력 $E$가 $A_1$을 지나 출력이 돼요.</p>
-      $$Y=A_1E=-A_1V_{test}$$
-      <p>귀환 회로망이 출력을 $K$배 해서 끊은 끝 $N$에 도착해요.</p>
-      $$V_N=KY=-KA_1V_{test}$$
-    </div>
-    <div data-answer-step="정의에 대입">
-      <p>루프 이득의 정의에 넣으면 $V_{test}$가 약분돼요.</p>
-      $$-\frac{V_N}{V_{test}}=-\frac{-KA_1V_{test}}{V_{test}}=KA_1$$
-    </div>
-    <p>뺄셈기 입력에서 끊어도 루프 이득은 $KA_1$이에요. 이번에는 빼기의 $-1$이 루프의 처음에 곱해졌을 뿐, 예제 12.3과 같은 세 인자의 곱이에요.</p>
-  </div>
-</div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <div data-answer-final>
-      <p>$X=0$에서 $K$ 출력과 뺄셈기 − 입력 사이를 끊어 − 입력 쪽에 $V_{test}$를 넣으면 $V_N=-KA_1V_{test}$예요.</p>
-      $$\text{루프 이득}=-\frac{V_N}{V_{test}}=KA_1$$
-    </div>
-    <p>세 자리에서 끊은 결과를 나란히 놓아요. 인자 $(-1)$, $A_1$, $K$를 곱하는 순서만 달라요.</p>
-    <p>$A_1$ 출력에서 끊으면 $K$ → 빼기 → $A_1$ 순서예요.</p>
-    $$V_N=A_1\bigl(0-KV_{test}\bigr)=-KA_1V_{test}$$
-    <p>$A_1$ 입력에서 끊으면(예제 12.3) $A_1$ → $K$ → 빼기 순서예요.</p>
-    $$V_N=0-KA_1V_{test}=-KA_1V_{test}$$
-    <p>뺄셈기 입력에서 끊으면(이 문제) 빼기 → $A_1$ → $K$ 순서예요.</p>
-    $$V_N=K\cdot A_1\bigl(0-V_{test}\bigr)=-KA_1V_{test}$$
-    <p>단위는 V/V로 무차원이고, 음귀환이라 $V_N$이 $V_{test}$와 반대 극성이어서 루프 이득은 양수예요.</p>
-    <p>이해를 위한 예시로 $A_1=200$, $K=0.05$, $V_{test}=1\,\mathrm{mV}$이면 $E=-1\,\mathrm{mV}$, $Y=-200\,\mathrm{mV}$, $V_N=-10\,\mathrm{mV}$라 루프 이득은 $10=KA_1$이에요.</p>
-  </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <p>뺄셈기의 + 입력($X$ 쪽)을 끊는 자리로 고르면 안 돼요. + 입력은 루프 위에 있지 않아서 거기에 $V_{test}$를 넣으면 루프 이득이 아니라 $X$에서 출력 쪽으로 가는 전달을 재게 돼요.</p>
-  <p>$M$과 $N$을 바꾸면 안 돼요. 이 자리에서는 신호가 $K$ 출력에서 뺄셈기로 흐르므로 $V_{test}$는 뺄셈기 − 입력 쪽 끝에 걸어요. $K$ 출력 쪽에 걸면 신호 흐름을 거스르는 측정(교과서 그림 12.6의 잘못된 방법)이 돼요.</p>
-  <p>빼기가 첫 단계라 $E=-V_{test}$로 시작해요. 이 부호를 놓치면 $V_N=+KA_1V_{test}$가 되어 루프 이득이 $-KA_1$로 잘못 나와요.</p>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol>
-    <li>$Y$에서 $K$로 가는 선, 즉 $K$의 입력에서 끊는다면 $V_{test}$를 어느 쪽 끝에 걸고 $V_N$을 어디서 읽어야 하나요?</li>
-    <li>이 문제처럼 $K$ 출력과 뺄셈기 − 입력 사이에서 끊었을 때 $A_1=1000$, $K=0.1$이면 $V_{test}=2\,\mathrm{mV}$에 대해 $V_N$은 얼마인가요?</li>
-  </ol>
-</div>
-<div class="sum" hidden>
-  <p class="sum-lead">뺄셈기 입력에서 끊어도 루프 이득은 $KA_1$이에요.</p>
-  $$E=-V_{test}$$
-  $$V_N=KA_1E=-KA_1V_{test}$$
-  <p>끊는 자리는 루프 위에 있는 − 입력이고, + 입력($X$ 쪽)은 루프 밖이에요.</p>
-  <p>$V_{test}$는 신호가 나가는 뺄셈기 − 입력 쪽 끝 $M$에 걸고, $K$ 출력 쪽 끝 $N$에서 읽어요.</p>
-  <p>어디서 끊어도 $(-1)$, $A_1$, $K$의 곱이라 결과가 같아요.</p>
-</div>
+<div class="sum" hidden><p class="sum-lead">귀환선을 끊으면 시험 신호가 가장 먼저 비교부의 반전 입력을 만나요.</p><p>블록의 순서만 바뀌므로 $KA_1$은 같아요.</p></div>

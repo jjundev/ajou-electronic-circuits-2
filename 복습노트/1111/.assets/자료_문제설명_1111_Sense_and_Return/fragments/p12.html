@@ -1,21 +1,5 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>그림 12.19(d)는 게이트를 바이어스 $V_b$에 고정한 공통 게이트(common-gate, CG) 트랜지스터 $M_1$ 하나예요. 입력 전류 $I_{in}$이 소스로 들어가고, 출력은 드레인으로 흐르는 전류 $I_{out}$이에요. 그림에 $R_{in}=1/g_{m1}$, $R_{out}=\infty$가 적혀 있어요.</p>
-  <p>입력 전류가 그대로 출력으로 흐르니 전류 이득은 1이에요. 전류를 그대로 옮기기만 한다면 전선 한 조각으로 입력과 부하를 바로 이어도 될 것 같아요. 묻는 것은 그런데도 이 회로를 쓰는 장점이에요.</p>
-  <p>소자 값이 없어서 답은 정성적인 설명이에요. 다만 장점을 분명히 보이려고 교과서처럼 한 상황을 정해 두 연결을 비교해요. 입력 전류원에 큰 기생 커패시턴스 $C_p$가 붙어 있고, 그 전류를 부하 저항 $R_D$에 전압으로 바꾸려는 상황이에요. $\lambda=0$, 몸체효과 무시, 저주파 소신호 모델을 쓰고, $C_p$ 말고 다른 커패시턴스는 무시해요. 이 비교 상황과 가정은 원문에 없고 교과서 풀이에서 가져온 것이에요.</p>
-</div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p>"이득이 1인데 무엇이 좋은가"라는 질문에서는 이득 말고 입력·출력 임피던스를 봐요. 전류를 받는 증폭기는 입력 저항이 작을수록, 전류를 내보내는 증폭기는 출력 저항이 클수록 좋아요(<a href="정리노트_1111_Sense_and_Return.html#s4-four-types">입력과 출력이 전압이냐 전류냐</a>). CG 단은 소스에서 본 저항이 $1/g_{m1}$로 작아 전류를 받기에 알맞아요(<a href="정리노트_1111_Sense_and_Return.html#s4-examples">네 형태를 트랜지스터로 만들면</a>).</p>
-  <p>전류원에 붙은 $C_p$와 증폭기 입력은 같은 노드에서 전류를 나눠 가져요. 주파수가 오르면 $C_p$의 임피던스 $1/(sC_p)$가 작아져 전류가 $C_p$로 새요. 노드에 보이는 저항이 작을수록 이 누설이 늦게 시작해요.</p>
-  <p>한 노드에 저항 $R$과 커패시턴스 $C$만 있으면 그 노드는 극점 $\omega_p=1/(RC)$ 하나를 만들어요. CG 입력에서는 소스에 보이는 저항이 $1/g_m$이라 입력 극점이 $g_m/C$로 높아져요(<a href="../1030/정리노트_1030_CG_CB_and_Follower_Frequency_Response.html#s1-poles">입력과 출력의 두 극점</a>). 이 문제는 그 결과를 "전선 대신 CG를 쓰는 이유"로 읽는 연습이에요.</p>
-</div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="비교할 두 연결과 첫 KCL">
-    <p>두 연결을 소신호 회로로 나란히 그려요. (a)는 전선으로 전류원을 $R_D$에 바로 이은 것이고, (b)는 전류원을 CG 단 $M_1$의 소스에 이은 것이에요. (b)에서 $M_1$은 게이트가 AC 접지이고 $\lambda=0$이라 소스 쪽에 저항 $1/g_{m1}$로 보여요. 소스의 바이어스 전류원은 이상적이라 소신호에서는 개방이에요.</p>
-    <figure class="figure">
-      <svg viewBox="0 0 480 170" role="img" aria-label="두 회로를 나란히 그린 그림. 왼쪽 (a)는 위쪽을 향한 전류원 i in, 커패시터 Cp, 저항 RD가 같은 위쪽 도선에 왼쪽부터 매달려 각각 접지로 가고, 도선의 맨 오른쪽 끝이 출력 vout이에요. 오른쪽 (b)는 위쪽을 향한 전류원 i in과 커패시터 Cp가 소스 노드 vs에 매달리고, 맨 오른쪽에 M1을 소스에서 본 저항 1/gm1이 접지로 내려가며 그 위 도선에 아래쪽을 향한 i d 화살표가 있어요.">
+<div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit"><svg viewBox="0 0 480 170" role="img" aria-label="두 회로를 나란히 그린 그림. 왼쪽 (a)는 위쪽을 향한 전류원 i in, 커패시터 Cp, 저항 RD가 같은 위쪽 도선에 왼쪽부터 매달려 각각 접지로 가고, 도선의 맨 오른쪽 끝이 출력 vout이에요. 오른쪽 (b)는 위쪽을 향한 전류원 i in과 커패시터 Cp가 소스 노드 vs에 매달리고, 맨 오른쪽에 M1을 소스에서 본 저항 1/gm1이 접지로 내려가며 그 위 도선에 아래쪽을 향한 i d 화살표가 있어요.">
         <g fill="none" stroke-width="2">
           <circle class="fig-accent" cx="40" cy="95" r="14"/>
           <circle class="fig-accent" cx="280" cy="95" r="14"/>
@@ -55,75 +39,10 @@
           <text class="fig-text fig-math" x="412" y="66">i<tspan baseline-shift="sub" font-size="78%">d</tspan></text>
           <text class="fig-text fig-math" x="414" y="114">1/g<tspan baseline-shift="sub" font-size="78%">m1</tspan></text>
         </g>
-      </svg>
-      <figcaption>(a) 전류원 $i_{in}$과 기생 $C_p$를 $R_D$에 바로 이은 회로예요. (b) 같은 전류원을 CG 단의 소스에 이은 회로로, $M_1$을 소스에서 본 저항 $1/g_{m1}$로 바꿨어요. 이 가지로 들어간 전류 $i_d$는 실제로는 $M_1$을 지나 드레인 밖으로 나가 $R_D$로 흘러요.</figcaption>
-    </figure>
-    <p>(a)의 출력 노드에서 KCL을 세워요. 들어오는 $i_{in}$이 $C_p$와 $R_D$로 나뉘어요.</p>
-    $$i_{in}=sC_pv_{out}+\frac{v_{out}}{R_D}$$
-    <p>(b)의 소스 노드에서도 KCL을 세워요. 들어오는 $i_{in}$이 $C_p$와 $M_1$로 나뉘고, $M_1$으로 가는 전류는 $g_{m1}v_s$예요.</p>
-    $$i_{in}=sC_pv_s+g_{m1}v_s$$
-  </div>
+      <text class="fig-loc" x="143" y="42" font-family="Pretendard, sans-serif" font-weight="600" font-size="17">㉠</text><text class="fig-loc" x="370" y="41" font-family="Pretendard, sans-serif" font-weight="600" font-size="17">㉡</text></svg><figcaption class="circuit-state">(a) 저항에 직접 연결한 입력 노드와 (b) 공통 게이트 단으로 분리한 입력 노드예요.</figcaption></figure>
+<div data-subpart="main"><h4>입력 기생 커패시턴스가 보는 저항</h4><div data-answer-step="직접 연결"><p><span class="loc">㉠</span> 입력 기생 커패시턴스 $C_p$가 부하 $R_D$와 같은 노드에 걸려요.</p>$$\omega_{p,a}=1/(R_DC_p)$$
+</div><div data-answer-step="공통 게이트 단으로 분리"><p><span class="loc">㉡</span> 게이트를 AC 접지로 두면 $C_p$가 보는 소스 입력 저항은 $1/g_{m1}$예요. $\lambda=0$이고 몸체 효과와 다른 기생 커패시턴스를 무시한 모델이에요.</p>$$\omega_{p,b}=g_{m1}/C_p$$
+</div><div data-answer-final=""><p>저주파에서는 같은 전류가 부하로 전달돼요. $1/g_{m1}\ll R_D$이면 입력 극점이 올라가므로 큰 $C_p$를 가진 전류원도 더 높은 주파수까지 부하를 구동할 수 있어요.</p>$$\omega_{p,b}/\omega_{p,a}=g_{m1}R_D$$
+</div></div>
 </div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
-  <div data-subpart="main">
-    <div data-answer-step="(a) 저항에 바로 이을 때">
-      <p>(a)의 KCL을 $v_{out}$으로 정리해요. $C_p$가 바라보는 저항이 $R_D$ 전체예요.</p>
-      $$\frac{v_{out}}{i_{in}}=\frac{R_D}{1+sR_DC_p}$$
-      $$\omega_{p,a}=\frac{1}{R_DC_p}$$
-      <p>$R_D$가 크면 이 극점이 낮아요. 그보다 높은 주파수에서는 $i_{in}$의 대부분이 $R_D$ 대신 $C_p$로 빠져 출력 전압이 줄어요.</p>
-    </div>
-    <div data-answer-step="(b) CG를 거쳐 이을 때">
-      <p>(b)의 KCL을 $v_s$로 정리하고, $M_1$으로 들어가는 전류 $i_d=g_{m1}v_s$를 구해요. $C_p$가 바라보는 저항이 작은 $1/g_{m1}$로 바뀌어요.</p>
-      $$v_s=\frac{i_{in}}{g_{m1}+sC_p}$$
-      $$\frac{i_d}{i_{in}}=\frac{1}{1+sC_p/g_{m1}}$$
-      <p>$i_d$는 드레인 밖으로 나가 $R_D$로 흐르므로 $R_D$의 아래 방향 전류가 그만큼 줄고, 출력 전압이 $R_Di_d$만큼 올라가요. 드레인 출력 저항이 무한대라 $i_d$는 부하가 무엇이든 그대로 $R_D$에 전달돼요.</p>
-      $$\frac{v_{out}}{i_{in}}=\frac{R_D}{1+sC_p/g_{m1}}$$
-      $$\omega_{p,b}=\frac{g_{m1}}{C_p}$$
-    </div>
-    <div data-answer-step="두 연결의 비교">
-      <p>두 식의 저주파 값은 모두 $R_D$라서 전달하는 신호의 크기는 같아요. 다른 것은 입력 쪽 극점뿐이에요. 두 극점의 비를 구해요.</p>
-      $$\frac{\omega_{p,b}}{\omega_{p,a}}=\frac{g_{m1}/C_p}{1/(R_DC_p)}=g_{m1}R_D$$
-      <p>$1/g_{m1}\ll R_D$, 즉 $g_{m1}R_D\gg1$이면 CG를 쓴 쪽의 입력 극점이 훨씬 높아요. 전류 이득은 1이지만, 큰 $C_p$를 가진 전류원과 큰 부하 저항 $R_D$를 서로 떼어 놓아 같은 이득을 더 넓은 대역에서 얻어요.</p>
-    </div>
-  </div>
-</div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <div data-answer-final>
-      <p>장점은 낮은 입력 임피던스 $R_{in}\approx1/g_{m1}$에 있어요. 전류원이 큰 기생 커패시턴스 $C_p$를 가지면, $R_D$에 바로 이을 때 입력 극점이 $1/(R_DC_p)$로 낮아 높은 주파수의 전류가 $C_p$로 새요. CG 단을 거치면 $C_p$가 작은 $1/g_{m1}$만 보게 되어 입력 극점이 $g_{m1}/C_p$로 $g_{m1}R_D$배 높아져요.</p>
-      $$\omega_{p,a}=\frac{1}{R_DC_p}$$
-      <p>CG 단을 거치면 입력 극점이 $g_{m1}R_D$배 높아져요.</p>
-      $$\omega_{p,b}=\frac{g_{m1}}{C_p}$$
-      <p>저주파 전달 $v_{out}/i_{in}=R_D$는 그대로이고, 출력 저항이 무한대라 받은 전류를 부하에 그대로 전달해요. 이 비교는 $\lambda=0$, 몸체효과 무시, $C_p$ 외의 커패시턴스를 무시한 결과예요.</p>
-    </div>
-    <p>극한으로 확인해요. $s\to0$이면 두 식 모두 $R_D$가 되어 직류에서는 전선과 CG가 같아요. $s\to\infty$이면 두 식 모두 0이라 결국 모든 전류가 $C_p$로 가요. 차이는 그 사이에서 누설이 시작되는 주파수뿐이에요.</p>
-    <p>(b)에서 $C_p\to0$이면 $i_d/i_{in}=1$이라 그림 12.19(d)의 전류 이득 1로 돌아와요.</p>
-    <p>단위도 맞아요. $R_DC_p$는 $\Omega\cdot\mathrm{F}=\mathrm{s}$라 $1/(R_DC_p)$는 $\mathrm{rad/s}$이고, $g_{m1}/C_p$도 $\mathrm{S/F}=1/\mathrm{s}$예요. 비 $g_{m1}R_D$는 무차원이에요.</p>
-    <p>"노드 저항 × 노드 커패시턴스" 규칙으로도 같은 결론이에요. $C_p$가 걸린 노드의 저항이 (a)는 $R_D$, (b)는 $1/g_{m1}$이라 시정수가 $g_{m1}R_D$배 짧아져요.</p>
-  </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <p>전류 이득 1만 보고 "아무 일도 안 하는 회로"라고 결론 내리기 쉬워요. 이 회로의 쓸모는 이득이 아니라 작은 입력 저항과 큰 출력 저항이라는 임피던스에 있어요.</p>
-  <p>CG를 넣어도 출력 노드의 극점은 사라지지 않아요. 드레인 노드에도 커패시턴스가 있으면 $R_D$와 그 커패시턴스가 만드는 극점이 남아요. 이 비교는 큰 $C_p$를 $R_D$에서 떼어 놓는 효과만 본 거예요.</p>
-  <p>$R_{in}\approx1/g_{m1}$은 $\lambda=0$과 몸체효과 무시에서의 값이에요. $\lambda&gt;0$이면 드레인 쪽 저항이 $r_O$보다 충분히 작아야 이 값이 성립하고, 그렇지 않으면 입력 저항이 커져 장점이 줄어요.</p>
-  <p>CG 단의 소스에는 직류 바이어스 전류를 흘릴 전류원이 따로 필요해요. 이 전류원은 이상적이면 소신호에서 개방이라 위 비교에 들어가지 않아요.</p>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol>
-    <li>$C_p$와 $R_D$는 그대로 두고 $g_{m1}$만 두 배로 키우면 (b)의 입력 극점과 저주파 $v_{out}/i_{in}$은 각각 어떻게 되나요?</li>
-    <li>$R_D$만 10배로 키우면 (a)와 (b)의 입력 쪽 극점은 각각 어떻게 바뀌나요?</li>
-    <li>입력 전류원에 $C_p$ 대신 병렬 저항 $R_p$가 붙어 있다면, 저주파에서 $R_D$까지 전달되는 전류의 비율은 (a)와 (b)에서 각각 얼마인가요?</li>
-  </ol>
-</div>
-<div class="sum" hidden>
-  <p class="sum-lead">전류 이득이 1인 CG 단의 장점은 작은 입력 저항 $1/g_{m1}$이에요.</p>
-  $$\omega_{p,a}=\frac{1}{R_DC_p}$$
-  $$\omega_{p,b}=\frac{g_{m1}}{C_p}$$
-  <p>큰 $C_p$를 가진 전류원을 $R_D$에 바로 이으면 $C_p$가 $R_D$를 보아 입력 극점이 낮아요.</p>
-  <p>CG를 거치면 $C_p$가 $1/g_{m1}$만 보아 입력 극점이 $g_{m1}R_D$배 높아져요.</p>
-  <p>저주파 전달 $R_D$는 같고, 큰 출력 저항 덕분에 받은 전류를 부하에 그대로 넘겨요.</p>
-</div>
+<div class="sum" hidden><p class="sum-lead">공통 게이트 단의 장점은 입력 커패시턴스가 보는 저항을 작게 만드는 데 있어요.</p><p>입력 극점이 대역폭을 제한할 때 이 효과가 드러나요.</p></div>

@@ -1,15 +1,12 @@
-# p1: omega_T = g_m/C_GS ; with C_GS=(2/3)WLCox, g_m=mu Cox (W/L) Vov -> omega_T = 3 mu Vov /(2 L^2)
-# SymPy unavailable: stdlib random-point check.
-import random, math
-print("Definition: f_T = freq where |i_d/i_g| (drain AC-shorted) = 1; i_d=g_m v_gs, i_g = j w C_GS v_gs -> w_T=g_m/C_GS")
-maxres=0
-for _ in range(6):
-    mu=random.uniform(0.01,0.1); Cox=random.uniform(1e-3,1e-2); W=random.uniform(1e-6,1e-4); L=random.uniform(5e-8,1e-6); Vov=random.uniform(0.05,0.5)
-    gm=mu*Cox*W/L*Vov; Cgs=2/3*W*L*Cox
-    wT=gm/Cgs
-    # check |beta(j wT)| = gm/(wT Cgs) = 1
-    beta=abs(gm/(1j*wT*Cgs))
-    target=1.5*mu*Vov/L**2
-    r=abs(wT-target)/target; maxres=max(maxres,r)
-    print(f"wT={wT:.6e} target={target:.6e} |beta(wT)|={beta:.12f} relres={r:.2e}")
-print("max relative residual", maxres)
+from sympy import *
+import json
+result = {}
+def report(part, method, conclusion, **values):
+    result[part] = dict(method=method, conclusion=conclusion, values={k:str(v) for k,v in values.items()})
+mu,W,L,Cox,Vov,w,vg=symbols('mu W L Cox Vov omega vg', positive=True)
+gm=mu*Cox*W*Vov/L
+Cgs=Rational(2,3)*W*L*Cox
+current_gain=simplify(gm*vg/(I*w*Cgs*vg))
+wt=solve(Abs(current_gain)-1,w)[0]
+report('p1:main','symbolic','MOSFET 출력 단락 상태에서 소신호 드레인 전류와 게이트 전류 크기가 같아지는 주파수가 f_T다. C_GD=0에서 i_g=jωC_GS v_gs, i_d=g_m v_gs이므로 ω_T=g_m/C_GS이고 f_T=ω_T/(2π). 포화 장채널 식을 대입한다.',omega_T=wt,f_T=wt/(2*pi))
+print(json.dumps(result,ensure_ascii=False,indent=2))

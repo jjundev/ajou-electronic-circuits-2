@@ -1,0 +1,4 @@
+a, M2 with gate/drain at AC ground; output at source H = gm1/((Ci1*R_S*s + R_S*gm1 + 1)*(Cd1*s + Cs2*s + gm2 + go2)) ; DC = gm1/((gm2 + go2)*(R_S*gm1 + 1))
+b, M2 with source/gate at AC ground; output at drain H = gm1/((Cd1*s + Cd2*s + go2)*(Ci1*R_S*s + R_S*gm1 + 1)) ; DC = gm1/(go2*(R_S*gm1 + 1))
+c, diode at output with source grounded H = gm1/((Ci1*R_S*s + R_S*gm1 + 1)*(Cd1*s + Cs2*s + gm2 + go2)) ; DC = gm1/((gm2 + go2)*(R_S*gm1 + 1))
+Take go2=0 only if allowed and the output retains a DC conductance. For (a), add gmb2 if the bulk is at AC ground and body effect is included.

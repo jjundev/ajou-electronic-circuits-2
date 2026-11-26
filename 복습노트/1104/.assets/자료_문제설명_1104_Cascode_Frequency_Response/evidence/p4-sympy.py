@@ -1,38 +1,24 @@
-import sympy as sp
+"""Independent derivation from the sealed statement and figure."""
+from sympy import Eq, I, Symbol, factor, limit, oo, pi, simplify, solve, symbols
 
-s = sp.symbols("s")
-Rs, Rp, Rd, gm1, gm2, Ci, Cx, Co, Cf = sp.symbols(
-    "R_s R_p R_D g_m1 g_m2 C_i C_x C_o C_f", positive=True
-)
-G = gm2 + 1 / Rp
-A = -gm1 / G
-# KCL at gate, cascode junction, and output. Source is set to AC zero.
-Y = sp.Matrix([
-    [1 / Rs + s * (Ci + Cf), -s * Cf, 0],
-    [gm1 - s * Cf, G + s * (Cx + Cf), 0],
-    [0, -gm2, 1 / Rd + s * Co],
-])
-q = sp.expand(Y[:2, :2].det() * Rs / G)
-tau_i = Rs * (Ci + Cf * (1 - A))
-tau_x = (Cx + Cf * (1 - 1 / A)) / G
-tau_o = Rd * Co
-miller_q = sp.expand((1 + s * tau_i) * (1 + s * tau_x))
-assert sp.simplify(Y.det() * Rs * Rd / G - q * (1 + s * tau_o)) == 0
-assert sp.simplify(q.subs(Cf, 0) - miller_q.subs(Cf, 0)) == 0
-assert sp.simplify(q.coeff(s, 1) - tau_i - (Cx + Cf) / G) == 0
-assert sp.simplify(Y[:2, :2][1, 0].subs(s, 0) + G * A) == 0
+s = Symbol("s")
 
-a, b = (sp.factor(q.coeff(s, i)) for i in (1, 2))
-vg, vx, vo = Y.inv() * sp.Matrix([1 / Rs, 0, 0])
-assert sp.simplify(vo * q * (1 + s * tau_o) - gm2 * Rd * (s * Cf - gm1) / G) == 0
-print("A(0) =", sp.factor(A))
-print("Miller poles [rad/s] =", [-1 / tau for tau in (tau_i, tau_x, tau_o)])
-print("Exact normalized characteristic = (1+s*R_D*C_o)*(1+a*s+b*s**2)")
-print("a =", sp.expand(a))
-print("b =", sp.factor(b))
-print("Exact x/gate pair =", [(-a + sign * sp.sqrt(a**2 - 4*b))/(2*b) for sign in (1,-1)])
-print("R_p -> infinity: G =", sp.limit(G, Rp, sp.oo))
-print("R_p -> 0: A =", sp.limit(A, Rp, 0, dir="+"))
-print("R_p -> 0: exact normalized gate/junction factor =", sp.simplify(sp.limit(q, Rp, 0, dir="+")))
-print("C_f = 0: exact and Miller characteristics agree")
-print("PASS: determinant, DC gain, first-order coefficient, zero-bridge limit, output transfer")
+rs,rp,rd,g1,g2,c1,cd1,c2,cd2=symbols("R_S R_P R_D gm1 gm2 Cgs1 Cgd1 Cgs2 Cgd2",positive=True)
+vi,g,x,y=symbols("Vin Vg Vx Vout")
+gz=g2+1/rp
+low=solve([gz*x+g1*g,y/rd-g2*x],(x,y))
+av=factor(low[x]/g)
+ci=c1+cd1*(1-av)
+cx=c2+cd1*(1-1/av)
+h=factor(solve([(g-vi)/rs+s*ci*g,(gz+s*cx)*x+g1*g,(1/rd+s*cd2)*y-g2*x],(g,x,y))[y]/vi)
+print("DC local gain across Cgd1:",av)
+print("Miller split:",ci,cx)
+print("Miller one-way H(s):",h)
+print("Pole locations:",-1/(rs*ci),-gz/cx,-1/(rd*cd2))
+
+# Junction-capacitance instantiation following the independent three-node derivation.
+cdb1,csb2,cdb2=symbols("Cdb1 Csb2 Cdb2",positive=True)
+full=h.subs({c2:cdb1+c2+csb2,cd2:cd2+cdb2},simultaneous=True)
+expected=-g1*g2/((1+s*rs*ci)*(gz+s*(cx+cdb1+csb2))*(1/rd+s*(cd2+cdb2)))
+assert simplify(full-expected)==0
+print("With the node junction capacitances retained:",full)

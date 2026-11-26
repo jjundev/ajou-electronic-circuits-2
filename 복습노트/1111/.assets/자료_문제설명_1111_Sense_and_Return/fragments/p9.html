@@ -1,88 +1,11 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>그림 12.82는 블록 귀환 시스템 안에 실제 트랜지스터 단을 넣은 회로예요. 덧셈기(⊕)가 $V_{in}$에서 $K$ 블록의 출력을 빼서 $M_1$ 게이트로 보내요. $M_1$은 소스가 접지인 공통 소스(CS) 단이고, 드레인 부하는 이상적 전류원, 출력 노드에는 $C_L$이 붙어 있어요. 출력 $V_{out}$은 $K$ 블록을 거쳐 덧셈기로 돌아가요.</p>
-  <p>$\lambda>0$이라 $M_1$의 출력 저항 $r_O$가 유한해요. $C_L$ 말고 다른 커패시턴스는 무시하라고 했으니 극점은 출력 노드 하나뿐이에요. 전류원이 이상적이라는 것과 $K$ 블록이 출력에 부하를 주지 않는 이상적 블록이라는 것은 원문에 없는 가정이에요.</p>
-  <p>구할 것은 폐루프 −3 dB 대역폭이 $B$가 되게 하는 $K$예요. 답은 $B$, $C_L$, $g_m$, $r_O$의 기호로 써요.</p>
-  <p>부호 하나를 미리 짚어요. CS 단은 반전 증폭기라 개루프 저주파 이득이 음수예요. 덧셈기가 귀환 신호를 빼는 이 그림에서 부귀환이 되려면 루프 이득 $KA_0$가 양수여야 하므로 $K$ 자체는 음수(반전 귀환 블록)여야 해요. 이 해설은 $K$를 부호까지 구하고 크기 $|K|$도 함께 적어요.</p>
+<div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit"><svg viewBox="0 0 420 180" role="img" aria-label="공통 소스 단의 저주파 소신호 모델. 게이트가 제어하는 전류원과 유한 출력저항이 드레인과 교류 접지 사이에 병렬로 놓여 있어요." font-family="Pretendard, sans-serif" font-weight="600" font-size="15">
+<g fill="none" stroke-width="2"><path class="fig-ink" d="M35 55H75 M75 45V65 M145 55H386 M145 55V84 M145 124V155 M135 155H155 M139 160H151 M142 165H148 M255 55V80l-6 5 12 8-12 8 12 8-12 8 6 5V155 M245 155H265 M249 160H261 M252 165H258"/><polygon class="fig-ink" points="145,84 159,104 145,124 131,104"/><path class="fig-ink" d="M145 93V113 M140 108L145 113L150 108"/></g>
+<circle class="fig-dot" cx="35" cy="55" r="3" data-node-id="p9-in" data-node-color="blue"/><circle class="fig-dot" cx="255" cy="55" r="3" data-node-id="p9-out" data-node-color="red"/><circle class="fig-dot" cx="386" cy="55" r="3" data-node-id="p9-out" data-node-color="red"/>
+<g class="fig-text fig-math"><text x="31" y="39" data-node-id="p9-in" data-node-color="blue" class="fig-text fig-math">v<tspan baseline-shift="sub" font-size="78%">g</tspan></text><text x="166" y="108">g<tspan baseline-shift="sub" font-size="78%">m</tspan>v<tspan baseline-shift="sub" font-size="78%">g</tspan></text><text x="268" y="105">r<tspan baseline-shift="sub" font-size="78%">O</tspan></text><text x="359" y="38" data-node-id="p9-out" data-node-color="red" class="fig-text fig-math">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text></g><path class="fig-ink" d="M326 55V92 M314 92H338 M314 101H338 M326 101V155 M316 155H336 M320 160H332 M323 165H329"/><circle class="fig-dot" cx="326" cy="55" r="3" data-node-id="p9-out" data-node-color="red"/><text class="fig-text fig-math" x="340" y="104">C<tspan baseline-shift="sub" font-size="78%">L</tspan></text><text class="fig-loc" x="275" y="76" font-family="Pretendard, sans-serif" font-weight="600" font-size="17">㉠</text></svg><figcaption class="circuit-state">드레인의 출력저항과 부하 커패시터가 같은 출력 노드와 AC 접지에 연결돼요.</figcaption></figure>
+<div data-subpart="main"><h4>목표 대역폭에서 귀환율 역산</h4><div data-answer-step="개루프 전달함수"><p><span class="loc">㉠</span> $r_O$와 $C_L$이 드레인에서 병렬이에요. 게이트 전압이 오르면 드레인으로 끌어가는 전류가 늘어 출력 전압은 내려가요.</p>$$A_1(s)= -g_m(r_O\parallel 1/(sC_L))=-g_mr_O/(1+sr_OC_L)$$
+</div><div data-answer-step="음귀환 부호"><p>비교부에서 $v_g=v_{in}-Kv_{out}$으로 빼므로 분모는 $1+KA_1(s)$예요. $A_1(0)=-g_mr_O$인 반전 단에서 음귀환이 되려면 $K\lt 0$이어야 해요.</p>$$B=(1-Kg_mr_O)/(r_OC_L)$$
+</div><div data-answer-final=""><p>$B$는 각주파수(rad/s)예요. 대역폭을 넓히는 경우 $B>1/(r_OC_L)$이고, 목표가 개루프 대역폭과 같으면 $K=0$이에요.</p>$$K=(1-Br_OC_L)/(g_mr_O)$$
+</div></div>
 </div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p>"closed-loop −3 dB bandwidth"라는 단서에서 대역폭 확장 식을 떠올려요. 개루프가 단일 극점 $A_0/(1+s/\omega_0)$이면 폐루프도 단일 극점이고 극점이 $1+KA_0$배 높아져요(<a href="정리노트_1111_Sense_and_Return.html#s2-pole-shift">극점이 (1+루프 이득)배 높아져요</a>).</p>
-  $$\omega_{-3\mathrm{dB,closed}}=(1+KA_0)\omega_0$$
-  <p>그러니 이 회로의 개루프 $A_0$와 $\omega_0$만 구하면 돼요. 개루프 이득은 $G_m$과 $R_{out}$으로 나눠 구해요. $g_m$은 게이트 전압 변화가 드레인 전류를 얼마나 바꾸는지, $r_O=1/(\lambda I_D)$는 채널 길이 변조로 생기는 출력 저항이에요.</p>
-  $$A_0=-G_mR_{out}$$
-  <p>극점은 노드마다 그 노드에서 본 저항과 커패시턴스의 곱으로 정해져요(<a href="../1014/정리노트_1014_Frequency_Response.html#s0-cs-cl">부하 커패시턴스가 있는 CS 단</a>). 출력 노드의 저항은 위에서 구한 $R_{out}$이에요.</p>
-  $$\omega_0=\frac{1}{R_{out}C_L}$$
-  <p>근사 조건은 두 개예요. 전류원은 이상적이라 출력에 저항을 더하지 않고, $C_L$ 외의 커패시턴스가 없어 개루프가 정확히 단일 극점이에요. 그래서 폐루프 대역폭 식을 근사 없이 그대로 쓸 수 있어요.</p>
-</div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="개루프 저주파 이득" data-gain-route="gm-rout">
-    <p>귀환을 끊고 순방향 CS 단만 봐요. 입력은 게이트 전압 $v_g$(덧셈기 출력), 출력은 $v_{out}$이에요. 저주파라 $C_L$은 열어 둬요.</p>
-    <p>출력을 접지로 단락해 $v_{out}=0$으로 두고, 접지에서 단락선을 지나 출력 노드로 들어가는 전류를 $i_{out,sc}$의 양의 방향으로 둬요. $M_1$이 출력 노드에서 끌어내리는 $g_mv_g$를 단락선이 그대로 대 주므로 $i_{out,sc}=g_mv_g$예요.</p>
-    <div data-gain-stage="gm">$$G_m=\frac{i_{out,sc}}{v_g}=g_m$$</div>
-    <p>이제 $v_g=0$으로 두고 출력에서 바라봐요. 제어 전류원은 꺼지고, 위쪽 이상적 전류원은 개방이라 아래쪽 $M_1$의 $r_O$만 남아요.</p>
-    <div data-gain-stage="rout">$$R_{out}=r_O$$</div>
-    <p>같은 입출력 정의로 곱하면 반전 이득이 나와요.</p>
-    <div data-gain-stage="gain">$$A_0=-G_mR_{out}=-g_mr_O$$</div>
-  </div>
-</div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
-  <div data-subpart="main">
-    <div data-answer-step="개루프 극점">
-      <p>출력 노드에서 $R_{out}=r_O$와 $C_L$이 병렬이에요. 그래서 개루프 전달 함수는 $G_m$에 이 병렬 임피던스를 곱한 꼴이에요.</p>
-      $$A_1(s)=-g_m\left(r_O\parallel\frac{1}{sC_L}\right)=\frac{-g_mr_O}{1+sr_OC_L}$$
-      <p>식 (12.19)의 꼴 $A_0/(1+s/\omega_0)$과 맞춰 읽으면 극점이 나와요.</p>
-      $$\omega_0=\frac{1}{r_OC_L}$$
-    </div>
-    <div data-answer-step="대역폭 조건에서 K 역산">
-      <p>폐루프 −3 dB 대역폭을 $B$로 놓아요.</p>
-      $$B=(1+KA_0)\omega_0=\frac{1+KA_0}{r_OC_L}$$
-      <p>먼저 필요한 루프 이득을 구해요.</p>
-      $$KA_0=Br_OC_L-1$$
-      <p>$A_0=-g_mr_O$로 나눠 $K$를 구해요.</p>
-      $$K=\frac{Br_OC_L-1}{-g_mr_O}=-\frac{Br_OC_L-1}{g_mr_O}$$
-      <p>크기만 쓰면 다음과 같아요.</p>
-      $$|K|=\frac{Br_OC_L-1}{g_mr_O}$$
-      <p>귀환은 대역폭을 넓힐 뿐이므로 $B>1/(r_OC_L)$, 즉 목표 대역폭이 개루프 대역폭보다 커야 해요. 그래야 루프 이득 $Br_OC_L-1$이 양수인 부귀환이에요.</p>
-    </div>
-  </div>
-</div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <div data-answer-final>
-      <p>개루프 $A_0=-g_mr_O$, $\omega_0=1/(r_OC_L)$인 단일 극점이므로, 폐루프 −3 dB 대역폭 $B$(단, $B>1/(r_OC_L)$)에 필요한 귀환율은 다음과 같아요.</p>
-      $$K=-\frac{Br_OC_L-1}{g_mr_O}$$
-      <p><strong>크기는 $|K|=(Br_OC_L-1)/(g_mr_O)$이고, 반전 CS 단 때문에 부귀환이 되려면 $K$는 음수(반전 귀환)여야 해요.</strong> 이때 루프 이득은 $KA_0=Br_OC_L-1$이에요.</p>
-    </div>
-    <p>대입 확인: 답을 $1+KA_0$에 넣으면 $1+(Br_OC_L-1)=Br_OC_L$이고, $\omega_0=1/(r_OC_L)$을 곱하면 정확히 $B$예요.</p>
-    <p>특수값 확인: $B=1/(r_OC_L)$이면 $K=0$이에요. 개루프 대역폭 그대로라 귀환이 필요 없다는 뜻이라 맞아요.</p>
-    <p>극한 확인: $\lambda\to0$이라 $r_O\to\infty$이면 $|K|\to BC_L/g_m$이에요. 이때 개루프는 적분기처럼 되고 폐루프 극점은 $|K|g_m/C_L$이므로 같은 결과예요.</p>
-    <p>이득–대역폭 확인: 폐루프 저주파 이득은 $A_0/(1+KA_0)=-g_m/(BC_L)$이에요. 크기에 $B$를 곱하면 $g_m/C_L=|A_0|\omega_0$로, 귀환 전후 이득–대역폭 곱이 같아요.</p>
-    <p>단위: $Br_OC_L$은 (1/s)·Ω·F로 무차원이고 $g_mr_O$도 S·Ω로 무차원이라 $K$는 무차원이에요.</p>
-  </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <p>$\lambda>0$을 놓치고 $R_{out}=\infty$로 두면 $A_0$와 $\omega_0$가 정의되지 않아요. 이상적 전류원 부하에서 출력 저항을 정하는 것은 $M_1$의 $r_O$뿐이에요.</p>
-  <p>$1+KA_0$의 1을 빠뜨리면 $Br_OC_L\gg1$일 때만 맞는 근사 $K\approx-BC_L/g_m$(크기 $|K|\approx BC_L/g_m$)이 돼요. 원문은 정확한 $K$를 묻고 있으니 1을 남겨요. 이 근사에서도 $A_0=-g_mr_O$의 음의 부호를 빠뜨려 $K=+BC_L/g_m$으로 쓰지 않도록 해요.</p>
-  <p>부호를 무시하고 $K>0$인 블록을 그대로 쓰면 반전 CS 단과 덧셈기의 뺄셈이 겹쳐 정귀환이 돼요. 그러면 극점이 $(1-|K|g_mr_O)/(r_OC_L)$로 오히려 낮아져요.</p>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol>
-    <li>$\lambda\to0$이라 $r_O\to\infty$인 경우에도 대역폭 $B$를 만들 수 있나요? 필요한 $|K|$는 어떤 식인가요?</li>
-    <li>목표 대역폭을 $2B$로 바꾸면 필요한 루프 이득과 폐루프 저주파 이득의 크기는 각각 어떻게 되나요?</li>
-    <li>$K$ 블록이 양수(비반전)라면 극점은 어디로 가고, $|K|g_mr_O$가 1을 넘으면 무슨 일이 생기나요?</li>
-  </ol>
-</div>
-<div class="sum" hidden>
-  <p class="sum-lead">개루프 $A_0$와 $\omega_0$를 구한 뒤 $B=(1+KA_0)\omega_0$에서 $K$를 역산해요.</p>
-  $$A_0=-G_mR_{out}=-g_mr_O$$
-  $$\omega_0=\frac{1}{r_OC_L}$$
-  $$K=-\frac{Br_OC_L-1}{g_mr_O}$$
-  <p>크기는 $(Br_OC_L-1)/(g_mr_O)$이고, 반전 CS 단이라 부귀환을 위해 $K$는 음수예요.</p>
-  <p>$B$는 개루프 대역폭 $1/(r_OC_L)$보다 커야 해요.</p>
-</div>
+<div class="sum" hidden><p class="sum-lead">출력에서 $r_O$와 $C_L$이 만드는 극점이 개루프 대역폭을 정해요.</p><p>비교부가 귀환 신호를 빼고 공통 소스 단이 반전하므로 대역폭을 넓히는 $K$는 음수예요.</p></div>

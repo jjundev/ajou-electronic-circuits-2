@@ -1,7 +1,12 @@
-p15: stdlib numerical (SymPy absent). Dominant pole approx of P11.40 (RL->inf)
- RL=1e+04 dominant 1/b=3.167e+08 (x RL=3.167e+12) b/a=1.366e+11 | exact |p1|=3.175e+08 |p2|=1.363e+11 | ratio p2 exact/dom=0.99767608
- RL=1e+06 dominant 1/b=3.248e+06 (x RL=3.248e+12) b/a=1.332e+11 | exact |p1|=3.248e+06 |p2|=1.332e+11 | ratio p2 exact/dom=0.99997561
- RL=1e+08 dominant 1/b=3.249e+04 (x RL=3.249e+12) b/a=1.332e+11 | exact |p1|=3.249e+04 |p2|=1.332e+11 | ratio p2 exact/dom=0.99999976
- RL=1e+10 dominant 1/b=324.9 (x RL=3.249e+12) b/a=1.332e+11 | exact |p1|=324.9 |p2|=1.332e+11 | ratio p2 exact/dom=1.00000000
- RL=1e+12 dominant 1/b=3.249 (x RL=3.249e+12) b/a=1.332e+11 | exact |p1|=3.249 |p2|=1.332e+11 | ratio p2 exact/dom=1.00000000
-limit: wp1=1/b ~ 1/{RL[(gm R +1)Cmu + Ccs]} -> 0 ; wp2=b/a -> 133173076923.07695 = exact limit (identical to P11.40(b)); Miller wrongly gives both ->0
+{
+  "p15:main": {
+    "method": "proof",
+    "conclusion": "Ri=RS∥rπ. 출력에 임시 저항 R을 두고 분모 1+b1s+b2s²의 주극점 근사 −1/b1, −b1/b2를 구한 다음 R→∞로 보낸다. 첫 극점은 원점이고 둘째는 유한하다. 두 극이 무한히 분리되는 이상적 극한에서 결과는 p14의 정확한 두 극과 일치한다. C_CS를 생략하면 p2=−(1+gm Ri)/(Ri Cπ).",
+    "values": {
+      "b1": "R*(C_CS + C_mu*R_i*g_m + C_mu) + R_i*(C_mu + C_pi)",
+      "b2": "R*R_i*(C_CS*C_mu + C_CS*C_pi + C_mu*C_pi)",
+      "p1": "0",
+      "p2": "(-C_CS - C_mu*R_i*g_m - C_mu)/(R_i*(C_CS*C_mu + C_CS*C_pi + C_mu*C_pi))"
+    }
+  }
+}

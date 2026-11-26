@@ -1,31 +1,5 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>그림 12.80의 네 회로는 모두 연산증폭기 $A_1$의 출력이 어떤 경로를 거쳐 다시 $A_1$의 입력으로 돌아오는 귀환 회로예요. 구할 것은 각 회로의 루프 이득(loop gain)이고, 입력 $X$에서 출력 $Y$까지의 이득이 아니에요.</p>
-  <p>연산증폭기는 개루프 이득이 $A_1$이고 나머지는 이상적이에요. 입력 단자로 전류가 들어가지 않고 출력 저항이 0이라는 뜻이에요. 또 $\lambda=0$이라 MOS의 $r_o$는 무한대예요.</p>
-  <p>네 회로의 귀환 경로는 이렇게 달라요.</p>
-  <ul>
-    <li>(a) 출력 $Y$ → 분배기 $R_1$, $R_2$ → 이득 $K$인 블록 → − 입력이에요. $X$는 + 입력이에요.</li>
-    <li>(b) 출력 $Y$ → 분배기 → $M_3$ 게이트, $M_3$ 드레인($R_D$ 부하) → + 입력이에요. $X$는 − 입력이에요.</li>
-    <li>(c) 출력 $Y$ → $M_3$ 게이트, $M_3$ 드레인($R_D$ 부하) → + 입력이에요. $X$는 − 입력이에요.</li>
-    <li>(d) $A_1$ 출력 → $M_1$ 게이트, $M_1$ 소스($R_2$ 부하)가 출력 $Y$ → − 입력이에요. $X$는 + 입력이에요.</li>
-  </ul>
-  <p>$M_1$, $M_3$는 포화 영역에서 동작하고 몸체효과(body effect)는 무시한다고 보고 풀어요. 소자 값이 없으니 답은 $A_1$, $K$, $R_1$, $R_2$, $R_D$, $g_m$으로 써요.</p>
-</div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p>"루프 이득을 구하라"는 말에서 수업의 측정 방법을 떠올려요. 입력을 $X=0$으로 두고, 루프를 한 곳에서 끊어 끊은 자리에 시험 신호 $V_{test}$를 넣은 뒤, 루프를 한 바퀴 돌아 끊은 반대쪽 노드 $N$에 나타난 전압 $V_N$을 구해요(<a href="정리노트_1106_Negative_Feedback.html#s3-loop-gain">루프를 끊고 시험 신호를 넣어요</a>).</p>
-  $$\text{루프 이득}=-\frac{V_N}{V_{test}}$$
-  <p>음귀환에서는 한 바퀴 도는 동안 신호가 한 번 뒤집혀 $V_N/V_{test}$가 음수예요. 마이너스를 붙여 양수가 되게 정의한 값이 수업의 $KA_1$이에요. 이 문제에서도 이 부호 관례를 써서 각 회로의 루프 이득을 $T_a$, $T_b$, $T_c$, $T_d$로 적어요.</p>
-  <p>끊는 자리는 수업처럼 $A_1$의 출력(노드 $N$)과 그 출력이 구동하는 귀환 경로의 입력(노드 $M$) 사이로 잡아요. $A_1$의 출력 저항이 0이고, $M$ 쪽은 저항 분배기나 MOS 게이트라서, 끊어도 각 블록이 보는 부하가 바뀌지 않아요. 그래서 끊기 전과 같은 루프 이득이 나와요.</p>
-  <p>루프 안의 블록 이득은 이미 아는 블록으로 바로 써요. 저항 분배기는 $R_2/(R_1+R_2)$, 저항 부하 공통 소스(CS) 단은 $-g_mR_D$, 소스 팔로워(source follower)는 $g_mR_2/(1+g_mR_2)$예요. $\lambda=0$이고 연산증폭기 입력이 전류를 끌지 않아 다른 부하가 붙지 않아요. 마지막으로 $A_1$은 두 입력의 차 $v_+-v_-$를 증폭해요.</p>
-  $$V_N=A_1(v_+-v_-)$$
-</div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="루프를 끊는 자리">
-    <p>(a)를 예로 끊은 회로를 그려요. $X=0$이라 + 입력은 접지예요. $A_1$ 출력 노드 $N$은 열어 두고, 원래 거기에 붙어 있던 분배기 위쪽 끝 $M$에 $V_{test}$를 걸어요.</p>
-    <figure class="figure">
-      <svg viewBox="-40 0 560 262" role="img" aria-label="회로 (a)의 루프를 끊은 그림. 연산증폭기의 플러스 입력은 접지되어 있고, 출력 노드 N은 열린 단자예요. 노드 M에는 시험 전압원이 접지와의 사이에 걸려 있고, M에서 R1을 거쳐 노드 V1, R2를 거쳐 접지로 이어져요. V1에서 왼쪽을 향한 K 블록을 지나 연산증폭기의 마이너스 입력으로 돌아가요.">
+<div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit"><svg viewBox="-40 0 560 262" role="img" aria-label="회로 (a)의 루프를 끊은 그림. 연산증폭기의 플러스 입력은 접지되어 있고, 출력 노드 N은 열린 단자예요. 노드 M에는 시험 전압원이 접지와의 사이에 걸려 있고, M에서 R1을 거쳐 노드 V1, R2를 거쳐 접지로 이어져요. V1에서 왼쪽을 향한 K 블록을 지나 연산증폭기의 마이너스 입력으로 돌아가요.">
         <g fill="none" stroke-width="2">
           <polygon class="fig-ink" points="90,30 90,110 170,70"/>
           <path class="fig-ink" d="M90 50H40V60M28 60H52M32 65H48M36 70H44"/>
@@ -57,103 +31,15 @@
           <text class="fig-text fig-math" data-node-id="p7-V1" data-node-color="blue" x="404" y="166">V<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
           <text class="fig-text fig-math" x="287" y="175" text-anchor="middle" font-size="13">K</text>
         </g>
-      </svg>
-      <figcaption>입력 $X$를 0(접지)으로 두고 $A_1$ 출력 $N$과 분배기 위쪽 끝 $M$ 사이를 끊어 $M$에 $V_{test}$를 걸었어요. $V_1$은 분배기 접속점 전압이에요.</figcaption>
-    </figure>
-    <p>(b)도 같은 자리, 즉 $A_1$ 출력과 분배기 위쪽 끝 사이를 끊어요. (c)는 $A_1$ 출력과 그 출력이 구동하는 $M_3$ 게이트 사이, (d)는 $A_1$ 출력과 $M_1$ 게이트 사이를 끊어요. 네 회로 모두 $M$에 $V_{test}$를 걸고 $N$의 전압을 구해요.</p>
-  </div>
-  <div data-answer-step="첫 식">
-    <p>신호를 $M$에서 $N$까지 따라가며 블록 이득을 곱해요. (a)의 첫 식은 분배기 → $K$ → − 입력 → $A_1$이에요.</p>
-    $$V_1=\frac{R_2}{R_1+R_2}V_{test}$$
-    $$v_-=KV_1$$
-    $$V_N=A_1(0-v_-)=-A_1K\frac{R_2}{R_1+R_2}V_{test}$$
-  </div>
+      <text class="fig-loc" x="318" y="56" font-family="Pretendard, sans-serif" font-weight="600" font-size="17">㉠</text><text class="fig-loc" x="196" y="56" font-family="Pretendard, sans-serif" font-weight="600" font-size="17">㉡</text></svg><figcaption class="circuit-state">(a)의 개루프 시험 회로. $M$에 넣은 신호가 분배기와 귀환망을 지나 $N$으로 돌아와요.</figcaption></figure>
+<div data-subpart="main"><h4>시험 신호가 한 바퀴 도는 경로</h4><div data-answer-step="시험 포트와 기준 방향"><p>외부 입력 $X=0$에서 $A_1$ 출력과 다음 단 사이를 끊어요. <span class="loc">㉠</span> 다음 단의 입력 $M$에 $V_{test}$를 넣고 <span class="loc">㉡</span> 열린 증폭기 출력 $N$에서 귀환 전압을 읽어요. 이상적 연산증폭기의 출력 저항은 0이어서 끊기 전의 구동 조건을 유지해요.</p>$$T=-V_N/V_{test}$$
+</div><div data-answer-step="경로를 따라 곱할 이득"><p>(a)·(b)의 분배점은 전류를 끌지 않아요. (b)·(c)는 $M_3$ 공통 소스 단에서 반전되고, (d)는 $M_1$ 소스 팔로워를 거쳐 반전 입력으로 돌아와요. $\lambda=0$이고 몸체 효과를 무시해요.</p>$$D=R_2/(R_1+R_2)$$
+$$v_{d3}/v_{g3}=-g_mR_D$$
+$$F=v_{s1}/v_{g1}=R_2/(1/g_m+R_2)$$
+</div><div data-answer-final=""><p>각 줄은 시험점에서 출발하는 순서예요. 앞의 마이너스는 루프 이득의 정의, $\pm A_1$의 부호는 어느 입력으로 돌아오는지를 나타내요.</p>$$T_a=-D\,K\,(-A_1)=DKA_1$$
+$$T_b=-D\,(-g_mR_D)\,A_1=Dg_mR_DA_1$$
+$$T_c=-(-g_mR_D)\,A_1=g_mR_DA_1$$
+$$T_d=-F\,(-A_1)=FA_1$$
+</div></div>
 </div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
-  <div data-subpart="main">
-    <div data-answer-step="(a) 분배기와 K 블록">
-      <p>(a)는 첫 식에서 정의대로 마이너스를 붙이면 끝나요.</p>
-      $$T_a=-\frac{V_N}{V_{test}}=KA_1\frac{R_2}{R_1+R_2}$$
-    </div>
-    <div data-answer-step="(b)·(c)의 M3 공통 소스 단" data-gain-route="gm-rout">
-      <p>(b)와 (c)에는 $M_3$와 $R_D$로 된 저항 부하 CS 단이 루프 안에 있어요. 입력은 $M_3$ 게이트 전압 $v_{g3}$, 출력은 드레인 전압 $v_{d3}$예요. 이 단의 전압 이득을 $G_m$과 $R_{out}$으로 나눠 구해요.</p>
-      <p>드레인을 단락하면 드레인에서 접지로 흐르는 단락 전류는 $g_mv_{g3}$예요.</p>
-      <div data-gain-stage="gm">$$G_m=\frac{i_{d,\mathrm{sc}}}{v_{g3}}=g_m$$</div>
-      <p>게이트 입력을 0으로 두면 $\lambda=0$이라 $r_{o3}\to\infty$이고, 연산증폭기 + 입력은 전류를 끌지 않아요. 드레인에서 보이는 저항은 $R_D$뿐이에요.</p>
-      <div data-gain-stage="rout">$$R_{out}=R_D$$</div>
-      <p>드레인으로 들어오는 전류를 양으로 잡았으니 이득은 반전이에요.</p>
-      <div data-gain-stage="gain">$$\frac{v_{d3}}{v_{g3}}=-G_mR_{out}=-g_mR_D$$</div>
-    </div>
-    <div data-answer-step="(b) 분배기와 CS 단">
-      <p>$M$의 $V_{test}$가 분배기를 지나 $M_3$ 게이트에 $V_1$로 들어가요.</p>
-      $$V_1=\frac{R_2}{R_1+R_2}V_{test}$$
-      <p>CS 단을 지나 드레인 전압이 되고, 그 드레인이 + 입력이에요. − 입력은 $X=0$이에요.</p>
-      $$v_+=-g_mR_DV_1$$
-      $$V_N=A_1(v_+-0)=-g_mR_DA_1\frac{R_2}{R_1+R_2}V_{test}$$
-      $$T_b=-\frac{V_N}{V_{test}}=g_mR_DA_1\frac{R_2}{R_1+R_2}$$
-    </div>
-    <div data-answer-step="(c) CS 단만">
-      <p>(c)는 분배기 없이 $V_{test}$가 $M_3$ 게이트에 바로 걸려요.</p>
-      $$v_+=-g_mR_DV_{test}$$
-      $$V_N=A_1(v_+-0)=-g_mR_DA_1V_{test}$$
-      $$T_c=-\frac{V_N}{V_{test}}=g_mR_DA_1$$
-    </div>
-    <div data-answer-step="(d)의 M1 소스 팔로워" data-gain-route="gm-rout">
-      <p>(d)는 $V_{test}$가 $M_1$ 게이트에 걸리고, 소스 노드가 $Y$이자 − 입력이에요. 이 팔로워의 이득도 $G_m$과 $R_{out}$으로 나눠 구해요.</p>
-      <p>소스를 단락하면 $v_{gs1}=V_{test}$라서, 소스에서 단락선으로 흘러 나가는 전류가 $g_mV_{test}$예요.</p>
-      <div data-gain-stage="gm">$$G_m=\frac{i_{s,\mathrm{sc}}}{V_{test}}=g_m$$</div>
-      <p>게이트 입력을 0으로 두면 소스에서 $M_1$ 쪽은 $1/g_m$($\lambda=0$, 몸체효과 무시), 아래쪽은 $R_2$예요. 두 가지는 같은 소스 노드와 AC 접지 사이에 있어 병렬이에요.</p>
-      <div data-gain-stage="rout">$$R_{out}=\frac{1}{g_m}\parallel R_2=\frac{R_2}{1+g_mR_2}$$</div>
-      <p>단락 전류를 소스에서 밖으로 나가는 방향으로 잡았으니, 그 전류가 $R_{out}$에 만드는 전압은 같은 부호예요. 그래서 팔로워 이득은 비반전이에요.</p>
-      <div data-gain-stage="gain">$$\frac{v_{s1}}{V_{test}}=+G_mR_{out}=\frac{g_mR_2}{1+g_mR_2}$$</div>
-    </div>
-    <div data-answer-step="(d) 루프 이득">
-      <p>소스 전압이 − 입력으로 들어가고 + 입력은 $X=0$이에요.</p>
-      $$V_N=A_1(0-v_{s1})=-A_1\frac{g_mR_2}{1+g_mR_2}V_{test}$$
-      $$T_d=-\frac{V_N}{V_{test}}=\frac{g_mR_2}{1+g_mR_2}A_1$$
-    </div>
-    <p>네 루프 이득이 모두 양수예요. 루프 안에서 신호가 정확히 한 번 뒤집히기 때문이에요. (a)와 (d)는 − 입력으로 돌아와서, (b)와 (c)는 + 입력으로 돌아오지만 CS 단이 한 번 뒤집어서 음귀환이 돼요.</p>
-  </div>
-</div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <div data-answer-final>
-      <p>$X=0$에서 $A_1$ 출력과 귀환 경로 입력 사이를 끊고 루프 이득 $=-V_N/V_{test}$로 정의한 결과예요($\lambda=0$, 몸체효과 무시).</p>
-      $$T_a=KA_1\frac{R_2}{R_1+R_2}$$
-      $$T_b=g_mR_DA_1\frac{R_2}{R_1+R_2}$$
-      $$T_c=g_mR_DA_1$$
-      $$T_d=\frac{g_mR_2}{1+g_mR_2}A_1$$
-    </div>
-    <p>차원을 확인해요. $R_2/(R_1+R_2)$와 $g_mR_D$, $g_mR_2$는 모두 무차원이고 $A_1$, $K$도 전압비라서 네 루프 이득은 모두 무차원이에요.</p>
-    <p>특수값을 넣어 봐요. (a)에서 $K=1$이면 $T_a=A_1R_2/(R_1+R_2)$로, 수업의 비반전 증폭기 루프 이득 $KA_1$과 같아져요. (b)에서 $R_1=0$이면 분배기가 사라져 $T_b=T_c$가 돼요.</p>
-    <p>(d)에서 $g_mR_2\gg1$이면 팔로워 이득이 1에 다가가 $T_d\approx A_1$이에요. 출력을 − 입력에 바로 연결한 전압 팔로워와 같아져요. 반대로 $R_2\to0$이면 소스가 접지되어 신호가 돌아오지 못하므로 $T_d\to0$이에요.</p>
-    <p>(b), (c)에서 $g_m\to0$이면 $M_3$가 신호를 전달하지 못해 루프 이득이 0이 되고 귀환이 사라져요.</p>
-  </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <p>루프 이득을 구할 때는 반드시 $X=0$이에요. $X$를 남겨 두고 $Y/X$를 구하면 그것은 폐루프 이득이라 다른 양이에요.</p>
-  <p>(b), (c)는 귀환이 + 입력으로 돌아와서 양귀환처럼 보이지만, CS 단의 $-g_mR_D$가 한 번 뒤집어요. 부호를 따라가면 $V_N/V_{test}$가 음수라 음귀환이고 루프 이득은 양수예요.</p>
-  <p>(d)의 $M_1$ 팔로워 이득을 1로 두면 $T_d=A_1$이 되어 $g_mR_2$가 크지 않은 경우를 놓쳐요. 문제는 $g_m$, $R_2$를 기호로 남기라고 했으니 $g_mR_2/(1+g_mR_2)$를 유지해요.</p>
-  <p>마이너스를 빼고 $V_N/V_{test}$ 자체를 답으로 쓰면 네 답의 부호가 모두 뒤집혀요. 정의 $-V_N/V_{test}$를 먼저 적어 두어요.</p>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol>
-    <li>(c)에서 연산증폭기의 두 입력을 바꿔 $X$를 + 입력, $M_3$ 드레인을 − 입력에 연결하면 $-V_N/V_{test}$는 얼마인가요? 이 회로는 음귀환인가요?</li>
-    <li>(c)에서 $M_3$의 $\lambda\neq0$이라 $r_{o3}$가 남는다면 CS 단의 $R_{out}$과 $T_c$는 어떻게 바뀌나요?</li>
-    <li>(a)에서 루프를 $A_1$ 출력 대신 $K$ 블록 출력과 − 입력 사이에서 끊어도 같은 $T_a$가 나오나요? 그렇게 판단하는 이유를 말해 보세요.</li>
-  </ol>
-</div>
-<div class="sum" hidden>
-  <p class="sum-lead">$X=0$에서 $A_1$ 출력 $N$과 귀환 경로 입력 $M$ 사이를 끊고 $M$에 $V_{test}$를 넣어요.</p>
-  $$T=-\frac{V_N}{V_{test}}$$
-  <p>분배기 $R_2/(R_1+R_2)$, CS 단 $-g_mR_D$, 팔로워 $g_mR_2/(1+g_mR_2)$, $A_1(v_+-v_-)$를 차례로 곱해요.</p>
-  $$T_a=KA_1\frac{R_2}{R_1+R_2}$$
-  $$T_b=g_mR_DA_1\frac{R_2}{R_1+R_2}$$
-  $$T_c=g_mR_DA_1$$
-  $$T_d=\frac{g_mR_2}{1+g_mR_2}A_1$$
-  <p>(b)·(c)는 + 입력으로 돌아오지만 CS 단이 한 번 뒤집어 음귀환이에요.</p>
-</div>
+<div class="sum" hidden><p class="sum-lead">입력을 영으로 둔 뒤 시험점에서 귀환 전압까지 각 단의 부호 있는 이득을 곱해요.</p><p>(b)·(c)는 공통 소스 단에서, (a)·(d)는 연산증폭기의 반전 입력에서 부호가 바뀌어요.</p></div>

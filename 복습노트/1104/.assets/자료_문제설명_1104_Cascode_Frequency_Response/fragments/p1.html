@@ -1,23 +1,5 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>공통 소스(CS) 단의 드레인 전압이 소스 폴로어의 게이트를 구동해요. 출력은 폴로어의 소스에 있어요. 이 출력에 작은 시험 신호를 넣고, 주파수에 따라 얼마나 많은 전류가 들어가는지 살펴봐요.</p>
-</div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p>"출력은 폴로어의 소스"와 "$C_{GS3}$만 남겨요"라는 조건에서 소스 팔로워의 출력 임피던스(output impedance) $Z_{out}(s)$를 떠올려요. 출력 임피던스를 볼 때는 독립 입력을 0으로 두고 출력 단자에서 안쪽을 바라봐요. 그러면 CS 단은 폴로어의 게이트를 AC 접지에 이어 주는 저항 $R_G$로 줄어요. 강의 슬라이드의 게이트 쪽 저항 $R_S$ 자리에 이 $R_G$가 들어가요.</p>
-  <p>$g_{m3}$는 게이트–소스 전압을 제어 전류로 바꾸는 트랜스컨덕턴스예요. $C_{GS3}$는 그 제어 포트(게이트–소스) 사이에 걸린 커패시터이고 임피던스는 $1/(sC_{GS3})$예요.</p>
-  <p>소스 팔로워의 출력 임피던스는 커패시터를 뺀 저주파 값에서 바로 쓸 수 있어요. 저주파 값을 $B/A$로 놓아요. $A$는 출력 노드로 들어오는 총 컨덕턴스이고, $B=A\cdot Z_{out}(0)$은 무차원 수예요.</p>
-  $$Z_{out}(s)=\frac{R_SC_{GS}s+B}{C_{GS}s+A}$$
-  <p>이 꼴은 게이트 쪽이 입력 영점 뒤 저항 하나이고, 커패시터가 제어 포트에만 있고, $r_o$를 무시하는 모델에서만 바로 써요. $C_{GD}$나 $r_o$가 추가되면 KCL 유도로 돌아가고 이 꼴은 검산에 써요. 이 문제는 $M_3$가 $\lambda=0$이고 $C_{GS3}$만 남기므로 세 조건을 모두 만족해요. 그래서 KCL을 세우지 않고 저주파 값만 구하면 돼요(<a href="정리노트_1104_Cascode_Frequency_Response.html#s0-source-impedance">소스 팔로워 출력 임피던스</a>, <a href="정리노트_1104_Cascode_Frequency_Response.html#s0-cs-buffer">CS 단 뒤의 폴로어</a>, <a href="정리노트_1104_Cascode_Frequency_Response.html#s0-emitter-impedance">캡 없는 값에서 바로 쓰기</a>).</p>
-</div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="출력 시험 회로">
-    <p>$v_{in}=0$으로 두면 CS 단의 $M_1,M_2$는 게이트와 소스가 각각 AC 접지여서 제어 전류가 0이에요. 두 드레인에서 접지로 이어지는 저항을 합쳐요.</p>
-    $$R_G=r_{o1}\parallel r_{o2}$$
-    <p>폴로어 $M_3$의 $r_{o3}$와 이상적 바이어스 전류원은 AC에서 열린 가지예요. 출력에 $V_X$를 걸고 회로 안으로 들어가는 전류를 $I_X$로 잡아요.</p>
-    <figure class="figure">
-      <svg viewBox="0 0 510 208" width="510" height="208" role="img" aria-label="입력 영점에서 출력으로 시험전류를 넣는 소스 폴로어 소신호 회로. 왼쪽 게이트 쪽 저항이 접지와 게이트 노드를 잇고, 게이트 노드와 출력 소스 노드 사이에 게이트–소스 커패시터가 있어요. 소스 노드에서 접지로 이어진 제어 전류원은 위쪽으로 흐르고, 오른쪽 끝 출력 단자에 시험 전압을 걸어 시험 전류가 왼쪽으로 들어가요.">
+<div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit"><svg id="fig-p1-1" viewBox="0 0 510 208" width="510" height="208" role="img" aria-label="입력 영점에서 출력으로 시험전류를 넣는 소스 폴로어 소신호 회로. 왼쪽 게이트 쪽 저항이 접지와 게이트 노드를 잇고, 게이트 노드와 출력 소스 노드 사이에 게이트–소스 커패시터가 있어요. 소스 노드에서 접지로 이어진 제어 전류원은 위쪽으로 흐르고, 오른쪽 끝 출력 단자에 시험 전압을 걸어 시험 전류가 왼쪽으로 들어가요.">
         <g fill="none" stroke="currentColor" stroke-width="2">
           <path class="fig-ink" d="M45 122V95H85L92 87L102 103L112 87L122 103L132 87L142 103L152 95H235M45 122v7m-10 0h20m-16 5h12m-8 5h4"/>
           <path class="fig-ink" d="M235 95h14m0-13v26m8-26v26m0-13h223"/>
@@ -37,70 +19,14 @@
           <text class="fig-text fig-math" x="431" y="120" text-anchor="middle">I<tspan baseline-shift="sub" font-size="78%">X</tspan></text>
           <text class="fig-text fig-math" x="381" y="150">g<tspan baseline-shift="sub" font-size="78%">m3</tspan>(V<tspan baseline-shift="sub" font-size="78%">G</tspan> − V<tspan baseline-shift="sub" font-size="78%">X</tspan>)</text>
         </g>
-      </svg>
-      <figcaption>$v_{in}$과 $V_{DD}$·$V_b$를 AC 접지로 보내 CS 단을 $R_G$로 바꾸고, $M_3$는 제어 전류원과 $C_{GS3}$로 바꿨어요($r_{o3}$·바이어스 전류원은 개방).</figcaption>
-    </figure>
-  </div>
-  <div data-answer-step="캡 없는 저주파 값">
-    <p>먼저 $C_{GS3}$를 열어 저주파 값을 써요. $R_G$에 전류가 흐르지 않으니 $V_G=0$이고, 게이트가 AC 접지인 MOS의 소스를 바라보는 블록이 돼요.</p>
-    $$Z_{out}(0)=\frac{1}{g_{m3}}$$
-    <p>$r_{o3}$가 열린 가지라서 출력 노드로 들어오는 컨덕턴스는 $g_{m3}$ 하나예요. 이것을 $A$로 두고 $B$를 정규화해요.</p>
-    $$A=g_{m3}$$
-    $$B=A\cdot Z_{out}(0)=1$$
-  </div>
+      <text class="fig-loc" x="176" y="59" font-size="15" text-anchor="middle" >㉠</text></svg><figcaption class="circuit-state">입력을 0으로 둔 소스 팔로워의 출력 시험 회로</figcaption></figure>
+<div data-subpart="main">
+<div data-answer-step="게이트 종단과 저주파 저항"><span class="loc">㉠</span> 입력을 0으로 두면 $M_1,M_2$의 제어 전류가 사라져 게이트에는 두 출력저항만 남아요.
+$$R_G=r_{o1}\parallel r_{o2}$$
+<p>$C_{GS3}$를 열면 $V_G=0$이고 $M_3$의 $\lambda=0$이므로</p>
+$$Z_{out}(0)=1/g_{m3}$$</div><div data-answer-step="표준형의 계수"><p>게이트 종단이 저항 하나이고 제어 포트에만 용량이 있어요. 저주파 출력 컨덕턴스 $A$와 정규화 상수 $B$를 읽어요.</p>
+$$A=g_{m3}$$
+$$B=A Z_{out}(0)=1$$</div><div data-answer-final="">$$Z_{out}(s)=\frac{R_G C_{GS3}s+B}{C_{GS3}s+A}=\frac{1+sR_GC_{GS3}}{g_{m3}+sC_{GS3}}$$</div><p>고주파에서는 게이트와 소스가 단락되어 $Z_{out}\to R_G$예요.</p>
 </div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
-  <div data-subpart="main">
-    <div data-answer-step="꼴에 대입">
-      <p>게이트 쪽은 $R_G$ 하나이고, 커패시터는 제어 포트의 $C_{GS3}$뿐이며, $r_{o3}$는 열려 있어요. 그래서 KCL 없이 저주파 값의 꼴에 커패시터 항을 바로 더해요.</p>
-      $$Z_{out}(s)=\frac{R_GC_{GS3}s+B}{C_{GS3}s+A}$$
-      <p>$A=g_{m3}$, $B=1$을 넣어요.</p>
-      $$Z_{out}(s)=\frac{R_GC_{GS3}s+1}{C_{GS3}s+g_{m3}}$$
-    </div>
-    <p>분모의 $C_{GS3}s$는 출력에서 커패시터로 새는 어드미턴스예요. 분자의 $R_GC_{GS3}s$는 주파수가 높아질수록 $C_{GS3}$가 게이트를 출력에 묶어 $R_G$가 보이게 만드는 항이에요. 마지막에 $R_G$를 원래 소자로 펼쳐요.</p>
-    $$Z_{out}(s)=\frac{(r_{o1}\parallel r_{o2})C_{GS3}s+1}{C_{GS3}s+g_{m3}}$$
-  </div>
 </div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <div data-answer-final>
-      <p>입력 영점에서 $C_{GS3}$만 남기고 $r_{o3}$를 열린 가지로 둔 모델의 출력 임피던스예요.</p>
-      $$Z_{out}(s)=\frac{1+sR_GC_{GS3}}{g_{m3}+sC_{GS3}}$$
-      $$R_G=r_{o1}\parallel r_{o2}$$
-    </div>
-    <p>분자는 무차원이고 분모의 두 항은 모두 지멘스(S)라서 결과는 옴($\Omega$)이에요.</p>
-    <p>저주파 극한에서는 $C_{GS3}$가 열려 처음에 쓴 캡 없는 값으로 돌아와요.</p>
-    $$Z_{out}(0)=\frac{B}{A}=\frac{1}{g_{m3}}$$
-    <p>고주파 극한에서는 $s$항만 남아 $C_{GS3}$가 약분돼요. 게이트와 소스가 함께 움직여 제어 전압이 0으로 가고 출력에서 $R_G$가 보여요.</p>
-    $$\lim_{s\to\infty}Z_{out}(s)=\frac{R_GC_{GS3}}{C_{GS3}}=R_G$$
-    <p>영점은 $1/(R_GC_{GS3})$, 극점은 $g_{m3}/C_{GS3}$에 있어요.</p>
-    $$\omega_z=\frac{1}{R_GC_{GS3}}$$
-    $$\omega_p=\frac{g_{m3}}{C_{GS3}}$$
-    <p>$R_G&gt;1/g_{m3}$이면 $\omega_z&lt;\omega_p$라 영점을 먼저 지나요. 그러면 크기가 $1/g_{m3}$에서 $R_G$로 주파수와 함께 올라가 출력이 유도성(inductive)으로 보여요. 보통 $r_{o1}\parallel r_{o2}$가 $1/g_{m3}$보다 커서 이 경우에 해당해요.</p>
-  </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <p>입력 신호를 접지해도 폴로어 게이트는 $R_G$를 거쳐 접지돼요. 게이트를 바로 AC 접지로 보면 $R_G=0$이 되어 분자의 $R_GC_{GS3}s$ 항이 사라지고, 유도성으로 보이는 결과를 놓쳐요.</p>
-  <p>$Z_{out}(0)=1/g_{m3}$만 보고 $A=1$, $B=1/g_{m3}$로 두면 두 극한은 맞아도 분모 $C_{GS3}s+1$의 차원이 맞지 않아요. $A$는 출력 노드의 총 컨덕턴스 $g_{m3}$, $B$는 $A\cdot Z_{out}(0)=1$로 정규화해요.</p>
-  <p>이 꼴은 지름길 조건에서만 KCL 없이 써요. $C_{GD3}$나 $r_{o3}$가 남는 문제라면 KCL을 세우고 이 꼴은 검산에 써요.</p>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol>
-    <li>CS 단이 이상적인 전압원처럼 폴로어를 구동한다고 가정해 $R_G=0$으로 바꿔 보세요. $A$와 $B$는 그대로인가요? 새 $Z_{out}(s)$와 크기가 주파수에 따라 오르는지 내리는지 판단해 보세요.</li>
-    <li>$M_3$의 $\lambda\neq0$이라 $r_{o3}$가 출력과 AC 접지 사이에 남는다면 지름길 꼴을 그대로 쓸 수 있나요? 결과가 위 답과 어떤 관계여야 하는지 말해 보세요.</li>
-  </ol>
-</div>
-<div class="sum" hidden>
-  <p class="sum-lead">입력을 0으로 두고 CS 단을 폴로어 게이트에서 본 저항으로 합쳐요.</p>
-  $$R_G=r_{o1}\parallel r_{o2}$$
-  <p>$C_{GS3}$를 뺀 저주파 값에서 $A=g_{m3}$, $B=1$로 정규화해요.</p>
-  $$Z_{out}(0)=\frac{1}{g_{m3}}$$
-  <p>게이트 쪽이 $R_G$ 하나이고 $r_{o3}$가 열려 있어 KCL 없이 꼴에 바로 넣어요.</p>
-  $$Z_{out}=\frac{1+sR_GC_{GS3}}{g_{m3}+sC_{GS3}}$$
-  <p>저주파에서는 $1/g_{m3}$, 고주파에서는 $R_G$로 수렴해요.</p>
-  <p>$R_G>1/g_{m3}$이면 크기가 주파수와 함께 올라 유도성으로 보여요.</p>
-</div>
+<div class="sum" hidden><p class="sum-lead">게이트 저항과 제어 포트 용량이 출력 임피던스의 저주파·고주파 한계를 정해요.</p></div>

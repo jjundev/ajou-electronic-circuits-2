@@ -1,55 +1,8 @@
-======================================================================
-Fig 12.87(a)
-M2 terminal on Vout: ['G'] | M2 terminal on n1 (I_in node): ['S']
-  sense port Z_in(FB) = oo | limit ro2->oo: oo
-  M2 is a shunt branch from Vout (not in series with M1/I1 output current path) -> senses V_out (parallel)
-  return: i_F into n1 (n1 shorted) = g_m2*v_out  => K = i_F/v_out = g_m2
-  return port Z_out(FB) = r_o2/(g_m2*r_o2 + 1) | ro2->oo: 1/g_m2
-  M2 terminal tied to the same node n1 as I_in (parallel with input source) -> returns CURRENT (parallel)
-  loop gain (break at M2 gate), LG = -v_ret/v_t = g_m1*g_m2*r_I1*r_I2*r_o1*r_o2/((r_I1 + r_o1)*(g_m2*r_I2*r_o2 + r_I2 + r_o2))
-  sign(LG) for positive params (two sets): 1 1 -> NEGATIVE feedback
-  LG ideal-limit (ro,rI->oo): oo
-  Vout/Iin exact = -g_m1*r_I1*r_I2*r_o1*r_o2/(g_m1*g_m2*r_I1*r_I2*r_o1*r_o2 + g_m2*r_I1*r_I2*r_o2 + g_m2*r_I2*r_o1*r_o2 + r_I1*r_I2 + r_I1*r_o2 + r_I2*r_o1 + r_o1*r_o2)
-  Vout/Iin (rI2->oo, ro2->oo) = -g_m1*r_I1*r_o1/(g_m2*(g_m1*r_I1*r_o1 + r_I1 + r_o1))
-======================================================================
-Fig 12.87(b)
-M2 terminal on Vout: ['G'] | M2 terminal on n1 (I_in node): ['D']
-  sense port Z_in(FB) = oo | limit ro2->oo: oo
-  M2 is a shunt branch from Vout (not in series with M1/I1 output current path) -> senses V_out (parallel)
-  return: i_F into n1 (n1 shorted) = -g_m2*v_out  => K = i_F/v_out = -g_m2
-  return port Z_out(FB) = r_o2 | ro2->oo: oo
-  M2 terminal tied to the same node n1 as I_in (parallel with input source) -> returns CURRENT (parallel)
-  loop gain (break at M2 gate), LG = -v_ret/v_t = -g_m1*g_m2*r_I1*r_I2*r_o1*r_o2/((r_I1 + r_o1)*(r_I2 + r_o2))
-  sign(LG) for positive params (two sets): -1 -1 -> POSITIVE feedback
-  Vout/Iin exact = g_m1*r_I1*r_I2*r_o1*r_o2/(g_m1*g_m2*r_I1*r_I2*r_o1*r_o2 - r_I1*r_I2 - r_I1*r_o2 - r_I2*r_o1 - r_o1*r_o2)
-======================================================================
-Fig 12.87(c)
-M2 terminal on Vout: ['S'] | M2 terminal on n1 (I_in node): ['D']
-  sense port Z_in(FB) = r_o2/(g_m2*r_o2 + 1) | limit ro2->oo: 1/g_m2
-  M2 is a shunt branch from Vout (not in series with M1/I1 output current path) -> senses V_out (parallel)
-  return: i_F into n1 (n1 shorted) = g_m2*v_out + v_out/r_o2  => K = i_F/v_out = g_m2 + 1/r_o2
-  return port Z_out(FB) = r_o2 | ro2->oo: oo
-  M2 terminal tied to the same node n1 as I_in (parallel with input source) -> returns CURRENT (parallel)
-  loop gain (break at M1 gate), LG = -v_ret/v_t = g_m1*r_I1*r_I2*r_o1*(g_m2*r_o2 + 1)/(g_m2*r_I1*r_o1*r_o2 + r_I1*r_I2 + r_I1*r_o1 + r_I1*r_o2 + r_I2*r_o1 + r_o1*r_o2)
-  sign(LG) for positive params (two sets): 1 1 -> NEGATIVE feedback
-  LG ideal-limit (ro,rI->oo): oo
-  Vout/Iin exact = -r_I1*r_I2*r_o1*(g_m1*r_o2 - 1)/(g_m1*g_m2*r_I1*r_I2*r_o1*r_o2 + g_m1*r_I1*r_I2*r_o1 + g_m2*r_I1*r_o1*r_o2 + r_I1*r_I2 + r_I1*r_o1 + r_I1*r_o2 + r_I2*r_o1 + r_o1*r_o2)
-  Vout/Iin ideal (all ro, rI -> oo) = -1/g_m2
-======================================================================
-Fig 12.87(d)
-M2 terminal on Vout: ['G'] | M2 terminal on n1 (I_in node): ['D']
-  sense port Z_in(FB) = oo | limit ro2->oo: oo
-  M2 is a shunt branch from Vout (not in series with M1/I1 output current path) -> senses V_out (parallel)
-  return: i_F into n1 (n1 shorted) = -g_m2*v_out  => K = i_F/v_out = -g_m2
-  return port Z_out(FB) = r_o2 | ro2->oo: oo
-  M2 terminal tied to the same node n1 as I_in (parallel with input source) -> returns CURRENT (parallel)
-  loop gain (break at M2 gate), LG = -v_ret/v_t = g_m2*r_I1*r_I2*r_o2*(g_m1*r_o1 + 1)/(g_m1*r_I2*r_o1*r_o2 + r_I1*r_I2 + r_I1*r_o2 + r_I2*r_o1 + r_I2*r_o2 + r_o1*r_o2)
-  sign(LG) for positive params (two sets): 1 1 -> NEGATIVE feedback
-  LG ideal-limit (ro,rI->oo): oo
-  Vout/Iin exact = r_I1*r_I2*r_o2*(g_m1*r_o1 + 1)/(g_m1*g_m2*r_I1*r_I2*r_o1*r_o2 + g_m1*r_I2*r_o1*r_o2 + g_m2*r_I1*r_I2*r_o2 + r_I1*r_I2 + r_I1*r_o2 + r_I2*r_o1 + r_I2*r_o2 + r_o1*r_o2)
-  Vout/Iin ideal (all ro, rI -> oo) = 1/g_m2
-======================================================================
-VERDICT a : sense V_out (M2 gate, Z=inf, parallel) / return current to n1 (M2 source, parallel with I_in) : voltage-current (shunt-shunt)
-VERDICT b : sense V_out (M2 gate, Z=inf, parallel) / return current to n1 (M2 drain, Zout=ro2, parallel)   : voltage-current (shunt-shunt)
-VERDICT c : sense V_out (M2 source shunt at Vout, Z~1/gm2, parallel) / return current to n1 (M2 drain, parallel): voltage-current (shunt-shunt)
-VERDICT d : sense V_out (M2 gate, Z=inf, parallel) / return current to n1=M1 source (M2 drain, parallel)  : voltage-current (shunt-shunt)
+(a) M2 NMOS 게이트가 출력전압을 검출하고 소스가 M1 게이트 노드에 전류를 돌려준다.
+(b) M2 PMOS 게이트가 출력전압을 검출하고 드레인이 M1 게이트 노드에 전류를 돌려준다.
+(c) M2 PMOS의 소스가 출력전압을 검출한다. Vb가 고정되어 VSG2가 변하고 드레인 전류가 M1 게이트 노드로 돌아간다.
+(d) M2 PMOS 게이트가 출력전압을 검출하고 드레인 전류가 Iin 및 M1 소스의 공통 노드에 합쳐진다.
+(a) dI_delivered_to_X / dVout = gm
+(b) dI_delivered_to_X / dVout = -gm
+(c) dI_delivered_to_X / dVout = gm
+(d) dI_delivered_to_X / dVout = -gm

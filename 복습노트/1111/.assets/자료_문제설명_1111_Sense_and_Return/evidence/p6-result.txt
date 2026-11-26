@@ -1,11 +1,20 @@
-H from A1/(1+K A1) - Eq12.22 = 0
-pole: [omega_0*(-A_0*K - 1)]  dc gain: A_0/(A_0*K + 1)
-K=0: dc gain=200 = 200.000 (46.021 dB), -3dB BW=omega_0, |H(BW)|/dc=sqrt(2)/2, GBW=200*omega_0
-   lim w->oo |H|*w = 200*omega_0
-   (w/w0, dB): [(0.1, 45.98), (1, 43.01), (10, 25.98), (21, 19.57), (101, 5.93), (200, -0.0), (1000, -13.98)]
-K=1/10: dc gain=200/21 = 9.52381 (19.576 dB), -3dB BW=21*omega_0, |H(BW)|/dc=sqrt(2)/2, GBW=200*omega_0
-   lim w->oo |H|*w = 200*omega_0
-   (w/w0, dB): [(0.1, 19.58), (1, 19.57), (10, 18.69), (21, 16.57), (101, 5.75), (200, -0.05), (1000, -13.98)]
-K=1/2: dc gain=200/101 = 1.98020 (5.9342 dB), -3dB BW=101*omega_0, |H(BW)|/dc=sqrt(2)/2, GBW=200*omega_0
-   lim w->oo |H|*w = 200*omega_0
-   (w/w0, dB): [(0.1, 5.93), (1, 5.93), (10, 5.89), (21, 5.75), (101, 2.92), (200, -0.99), (1000, -14.02)]
+K: 0 DC: 200 46.020599913279625 dB; pole/omega0: 1
+omega/omega0 0 magnitude 200.0 phase degrees 0.0
+omega/omega0 1 magnitude 141.4213562373095 phase degrees -45.0
+omega/omega0 21 magnitude 9.513029883089882 phase degrees -87.27368900609373
+omega/omega0 101 magnitude 1.9801009679225972 phase degrees -89.43273359014206
+omega/omega0 1000 magnitude 0.199999900000075 phase degrees -89.9427042395855
+K: 1/10 DC: 200/21 19.576214018601238 dB; pole/omega0: 21
+omega/omega0 0 magnitude 9.523809523809524 phase degrees 0.0
+omega/omega0 1 magnitude 9.513029883089882 phase degrees -2.7263109939062655
+omega/omega0 21 magnitude 6.734350297014738 phase degrees -45.0
+omega/omega0 101 magnitude 1.9387346324839387 phase degrees -78.25436657471205
+omega/omega0 1000 magnitude 0.19995591458071668 phase degrees -88.79696545551101
+K: 1/2 DC: 200/101 5.934172437626772 dB; pole/omega0: 101
+omega/omega0 0 magnitude 1.9801980198019802 phase degrees 0.0
+omega/omega0 1 magnitude 1.9801009679225972 phase degrees -0.5672664098579343
+omega/omega0 21 magnitude 1.9387346324839387 phase degrees -11.745633425287949
+omega/omega0 101 magnitude 1.4002114478941534 phase degrees -45.0
+omega/omega0 1000 magnitude 0.1989876387718664 phase degrees -84.23268400259091
+
+For x=ω/ω0, |H|=200/√[(1+200K)^2+x²], phase=−atan[x/(1+200K)]. (DC gain, pole/ω0) for K=0,0.1,0.5 are (200,1),(200/21,21),(200/101,101). Initial dB levels 46.02,19.58,5.93. All slopes after the corner tend to −20 dB/decade, |H|≈200/x. Absolute ω0 is unspecified.

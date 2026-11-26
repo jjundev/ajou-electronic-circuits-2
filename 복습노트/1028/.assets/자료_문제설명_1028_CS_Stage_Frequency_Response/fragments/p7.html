@@ -1,96 +1,18 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>그림 11.31(a)의 공통 이미터(CE) 단이에요. 입력은 $R_S$를 거쳐 $Q_1$ 베이스로, 출력은 컬렉터 저항 위 노드예요. 이 문제에서는 컬렉터 저항을 $R_L$이라고 불러요.</p>
-  <p>주어진 값은 $R_S=200\ \Omega$, $I_C=1\ \mathrm{mA}$, $\beta=100$, $C_\pi=100\ \mathrm{fF}$, $C_\mu=20\ \mathrm{fF}$, $C_{CS}=30\ \mathrm{fF}$예요. $V_A$는 주어지지 않아 $r_O$는 무시해요.</p>
-  <p>(a)는 $R_L=2\ \mathrm{k\Omega}$일 때 두 극점을 계산하고 어느 노드가 대역폭을 제한하는지, (b)는 $R_L$을 골라 출력 극점이 대역폭을 제한하게 만들 수 있는지 물어요.</p>
+<div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit"><svg id="fig-p7-miller" viewBox="0 0 520 368" role="img" aria-label="① 변환 전: 왼쪽 v Th 단자가 R S 병렬 r 파이를 거쳐 입력 노드 X에 이어진다. X에서 C 파이가 접지로 내려가고 X와 출력 노드 Y 사이에 C 뮤가 떠 있다. Y에서 아래로 흐르는 종속 전류원 g m v 파이, 그 오른쪽 R L, 그 오른쪽 C CS이 접지로 내려가고 맨 오른쪽이 출력 단자 v out이다. ② 변환 후: C 뮤 대신 X에 접지 커패시턴스 C in,M, Y에 접지 커패시턴스 C out,M이 붙고 X와 Y 사이 연결이 없다."><text class="fig-text fig-math" x="4" y="18">①</text><circle class="fig-dot" data-node="vin" data-node-color="blue" cx="24" cy="48" r="4"/><text class="fig-text fig-math" data-node="vin" data-node-color="blue" x="14" y="36">v<tspan baseline-shift="sub" font-size="78%">Th</tspan></text><path class="fig-ink" d="M24 48 H32 L37.3 41 L48.0 55 L58.7 41 L69.3 55 L80.0 41 L90.7 55 L96 48 H104"/><text class="fig-text fig-math" x="64" y="32" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">S</tspan>‖r<tspan baseline-shift="sub" font-size="78%">π</tspan></text><path class="fig-ink" d="M104 48 H124"/><circle class="fig-dot" data-node="X" data-node-color="red" cx="124" cy="48" r="4"/><text class="fig-text fig-math" data-node="X" data-node-color="red" x="118" y="36" text-anchor="end">X</text><path class="fig-ink" d="M124 48 V93 M124 103 V158"/><path class="fig-accent" d="M111 93 H137 M111 103 H137"/><text class="fig-text fig-math" x="101" y="103" text-anchor="end">C<tspan baseline-shift="sub" font-size="78%">π</tspan></text><path class="fig-ink" d="M124 48 H164 M174 48 H214"/><path class="fig-danger" d="M164 36 V60 M174 36 V60"/><text class="fig-text fig-math" x="169" y="24" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">μ</tspan></text><path class="fig-ink" d="M214 48 H505"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="214" cy="48" r="4"/><text class="fig-text fig-math" data-node="Y" data-node-color="blue" x="214" y="70" text-anchor="middle">Y</text><path class="fig-ink" d="M254 48 V88 M254 116 V158"/><polygon class="fig-ink" points="254,88 268,102 254,116 240,102"/><path class="fig-ink" d="M254 94 V109 M250 105 L254 110 L258 105"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="254" cy="48" r="4"/><text class="fig-text fig-math" x="232" y="107" text-anchor="end">g<tspan baseline-shift="sub" font-size="78%">m</tspan>v<tspan baseline-shift="sub" font-size="78%">π</tspan></text><path class="fig-ink" d="M300 48 V56 L307 63.8 L293 79.5 L307 95.2 L293 110.8 L307 126.5 L293 142.2 L300 150 V158"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="300" cy="48" r="4"/><text class="fig-text fig-math" x="313" y="108">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text><path class="fig-ink" d="M380 48 V93 M380 103 V158"/><path class="fig-accent" d="M367 93 H393 M367 103 H393"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="380" cy="48" r="4"/><text class="fig-text fig-math" x="402" y="103">C<tspan baseline-shift="sub" font-size="78%">CS</tspan></text><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="505" cy="48" r="4"/><text class="fig-text fig-math" data-node="Y" data-node-color="blue" x="505" y="36" text-anchor="end">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M124 158 H380"/><path class="fig-ink" d="M244 158 V166 M234 166 H254 M238 171 H250 M242 176 H246"/><text class="fig-text fig-math" x="4" y="203">②</text><circle class="fig-dot" data-node="vin" data-node-color="blue" cx="24" cy="233" r="4"/><text class="fig-text fig-math" data-node="vin" data-node-color="blue" x="14" y="221">v<tspan baseline-shift="sub" font-size="78%">Th</tspan></text><path class="fig-ink" d="M24 233 H32 L37.3 226 L48.0 240 L58.7 226 L69.3 240 L80.0 226 L90.7 240 L96 233 H104"/><text class="fig-text fig-math" x="64" y="217" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">S</tspan>‖r<tspan baseline-shift="sub" font-size="78%">π</tspan></text><path class="fig-ink" d="M104 233 H170"/><circle class="fig-dot" data-node="X" data-node-color="red" cx="124" cy="233" r="4"/><text class="fig-text fig-math" data-node="X" data-node-color="red" x="118" y="221" text-anchor="end">X</text><path class="fig-ink" d="M124 233 V278 M124 288 V343"/><path class="fig-accent" d="M111 278 H137 M111 288 H137"/><text class="fig-text fig-math" x="101" y="288" text-anchor="end">C<tspan baseline-shift="sub" font-size="78%">π</tspan></text><path class="fig-ink" d="M170 233 V278 M170 288 V343"/><path class="fig-danger" d="M157 278 H183 M157 288 H183"/><text class="fig-text fig-math" x="178" y="267">C<tspan baseline-shift="sub" font-size="78%">in,M</tspan></text><path class="fig-ink" d="M124 343 H170"/><path class="fig-ink" d="M147 343 V351 M137 351 H157 M141 356 H153 M145 361 H149"/><path class="fig-ink" d="M280 233 H505"/><path class="fig-ink" d="M280 233 V273 M280 301 V343"/><polygon class="fig-ink" points="280,273 294,287 280,301 266,287"/><path class="fig-ink" d="M280 279 V294 M276 290 L280 295 L284 290"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="280" cy="233" r="4"/><text class="fig-text fig-math" x="258" y="292" text-anchor="end">g<tspan baseline-shift="sub" font-size="78%">m</tspan>v<tspan baseline-shift="sub" font-size="78%">π</tspan></text><path class="fig-ink" d="M322 233 V241 L329 248.8 L315 264.5 L329 280.2 L315 295.8 L329 311.5 L315 327.2 L322 335 V343"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="322" cy="233" r="4"/><text class="fig-text fig-math" x="333" y="293">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text><path class="fig-ink" d="M385 233 V278 M385 288 V343"/><path class="fig-accent" d="M372 278 H398 M372 288 H398"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="385" cy="233" r="4"/><text class="fig-text fig-math" x="403" y="288">C<tspan baseline-shift="sub" font-size="78%">CS</tspan></text><path class="fig-ink" d="M455 233 V278 M455 288 V343"/><path class="fig-danger" d="M442 278 H468 M442 288 H468"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="455" cy="233" r="4"/><text class="fig-text fig-math" x="470" y="313">C<tspan baseline-shift="sub" font-size="78%">out,M</tspan></text><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="505" cy="233" r="4"/><text class="fig-text fig-math" data-node="Y" data-node-color="blue" x="505" y="221" text-anchor="end">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M280 343 H455"/><path class="fig-ink" d="M368 343 V351 M358 351 H378 M362 356 H374 M366 361 H370"/><text class="fig-loc" x="186" y="36" font-size="15" text-anchor="middle" >㉠</text></svg><figcaption class="circuit-state">베이스 입력을 테브난 등가로 바꾸고 베이스–컬렉터 용량을 분리해요.</figcaption></figure>
+<div data-subpart="a">
+<h4>(a) 대역폭을 제한하는 노드</h4><div data-answer-step="베이스와 컬렉터 시정수"><span class="loc">㉠</span> $V_T=26\,\mathrm{mV}$, $r_o\to\infty$인 교재 모델을 사용해요. $C_\mu$ 양단의 저주파 이득은 $-g_mR_L$이에요.
+$$g_m=I_C/V_T=1/(26\,\Omega)$$
+$$r_\pi=\beta/g_m=2.6\,\mathrm{k}\Omega$$
+$$R_{Th}=R_S\parallel r_\pi\approx185.71\,\Omega$$
+$$\tau_X=R_{Th}[C_\pi+(1+g_m R_L)C_\mu]$$
+$$\tau_Y=R_L(C_{CS}+C_\mu)+C_\mu/g_m$$</div><div data-answer-final="">$$f_X\approx1/(2\pi\tau_X)\approx516.74\,\mathrm{MHz}$$
+$$f_Y\approx1/(2\pi\tau_Y)\approx1.58\,\mathrm{GHz}$$
+<p>입력 극점이 더 낮아 베이스에서 대역폭이 제한돼요.</p></div>
 </div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p><strong>단서:</strong> 베이스–컬렉터 사이의 $C_\mu$가 입력과 출력 사이에 떠 있어요. "입력과 출력 극점"이라는 말에서 <a href="정리노트_1028_CS_Stage_Frequency_Response.html#s2-ce-miller">CE 단 밀러 근사</a>를 떠올려요.</p>
-  <p><strong>개념:</strong> 밀러 정리로 $C_\mu$를 입력 쪽 $(1+g_mR_L)C_\mu$와 출력 쪽 $(1+1/(g_mR_L))C_\mu$로 나누고 노드마다 $1/(RC)$를 구해요.</p>
-  <p><strong>기호의 뜻:</strong> $g_m=I_C/V_T$, $r_\pi=\beta/g_m$은 베이스–이미터 소신호 저항, $C_{CS}$는 컬렉터–기판 커패시턴스예요. 입력 노드 X의 전압이 $v_\pi$예요.</p>
-  <p><strong>근사 조건:</strong> $V_T=26\ \mathrm{mV}$를 써요. 베이스 쪽에서 접지로 보이는 저항은 $R_S$만이 아니라 $R_S\parallel r_\pi$예요(유한 $r_\pi$ 유지). 밀러 배수에는 $C_\mu$ 양 끝 사이의 저주파 이득 $v_{out}/v_X=-g_mR_L$을 써요.</p>
-  <p><strong>선택 이유:</strong> 두 노드에 각각 RC가 하나씩 남으므로 수치 대입이 간단해요. (b)는 두 극점 식을 부등식으로 세우면 $R_L$에 대한 1차 부등식이 돼요.</p>
+<div data-subpart="b">
+<h4>(b) 부하 저항으로 지배극 바꾸기</h4><div data-answer-step="출력 극점이 더 낮을 조건"><p>$\tau_Y>\tau_X$가 되려면 다음 부등식을 만족해야 해요.</p>
+$$R_L(C_{CS}+C_\mu-g_m R_{Th}C_\mu)>R_{Th}(C_\pi+C_\mu)-C_\mu/g_m$$</div><div data-answer-final=""><p>왼쪽은 약 $(-92.86\,\mathrm{fF})R_L$이고 오른쪽은 약 $21.77\,\mathrm{ps}$예요. 양의 $R_L$로는 출력 극점이 대역폭을 제한하게 할 수 없어요.</p></div>
 </div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="소신호 값과 밀러 등가회로" data-answer-subpart="a">
-    <p>먼저 소자 값을 구해요. $g_m$은 S 단위 분수로 두고 kΩ과 곱할 때 $10^3$을 붙여요.</p>
-    $$g_m=\frac{I_C}{V_T}=\frac{1\ \mathrm{mA}}{26\ \mathrm{mV}}=\frac{1}{26}\ \mathrm{S}\approx38.46\ \mathrm{mS}$$
-    $$r_\pi=\frac{\beta}{g_m}=100\times26\ \Omega=2.6\ \mathrm{k\Omega}$$
-    $$R_{Th}=R_S\parallel r_\pi=\frac{200\times2600}{2800}\ \Omega\approx185.71\ \Omega$$
-    <figure class="figure"><svg id="fig-p7-miller" viewBox="0 0 520 368" role="img" aria-label="① 변환 전: 왼쪽 v Th 단자가 R S 병렬 r 파이를 거쳐 입력 노드 X에 이어진다. X에서 C 파이가 접지로 내려가고 X와 출력 노드 Y 사이에 C 뮤가 떠 있다. Y에서 아래로 흐르는 종속 전류원 g m v 파이, 그 오른쪽 R L, 그 오른쪽 C CS이 접지로 내려가고 맨 오른쪽이 출력 단자 v out이다. ② 변환 후: C 뮤 대신 X에 접지 커패시턴스 C in,M, Y에 접지 커패시턴스 C out,M이 붙고 X와 Y 사이 연결이 없다."><text class="fig-text fig-math" x="4" y="18">①</text><circle class="fig-dot" data-node="vin" data-node-color="blue" cx="24" cy="48" r="4"/><text class="fig-text fig-math" data-node="vin" data-node-color="blue" x="14" y="36">v<tspan baseline-shift="sub" font-size="78%">Th</tspan></text><path class="fig-ink" d="M24 48 H32 L37.3 41 L48.0 55 L58.7 41 L69.3 55 L80.0 41 L90.7 55 L96 48 H104"/><text class="fig-text fig-math" x="64" y="32" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">S</tspan>‖r<tspan baseline-shift="sub" font-size="78%">π</tspan></text><path class="fig-ink" d="M104 48 H124"/><circle class="fig-dot" data-node="X" data-node-color="red" cx="124" cy="48" r="4"/><text class="fig-text fig-math" data-node="X" data-node-color="red" x="118" y="36" text-anchor="end">X</text><path class="fig-ink" d="M124 48 V93 M124 103 V158"/><path class="fig-accent" d="M111 93 H137 M111 103 H137"/><text class="fig-text fig-math" x="101" y="103" text-anchor="end">C<tspan baseline-shift="sub" font-size="78%">π</tspan></text><path class="fig-ink" d="M124 48 H164 M174 48 H214"/><path class="fig-danger" d="M164 36 V60 M174 36 V60"/><text class="fig-text fig-math" x="169" y="24" text-anchor="middle">C<tspan baseline-shift="sub" font-size="78%">μ</tspan></text><path class="fig-ink" d="M214 48 H505"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="214" cy="48" r="4"/><text class="fig-text fig-math" data-node="Y" data-node-color="blue" x="214" y="70" text-anchor="middle">Y</text><path class="fig-ink" d="M254 48 V88 M254 116 V158"/><polygon class="fig-ink" points="254,88 268,102 254,116 240,102"/><path class="fig-ink" d="M254 94 V109 M250 105 L254 110 L258 105"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="254" cy="48" r="4"/><text class="fig-text fig-math" x="232" y="107" text-anchor="end">g<tspan baseline-shift="sub" font-size="78%">m</tspan>v<tspan baseline-shift="sub" font-size="78%">π</tspan></text><path class="fig-ink" d="M300 48 V56 L307 63.8 L293 79.5 L307 95.2 L293 110.8 L307 126.5 L293 142.2 L300 150 V158"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="300" cy="48" r="4"/><text class="fig-text fig-math" x="313" y="108">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text><path class="fig-ink" d="M380 48 V93 M380 103 V158"/><path class="fig-accent" d="M367 93 H393 M367 103 H393"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="380" cy="48" r="4"/><text class="fig-text fig-math" x="402" y="103">C<tspan baseline-shift="sub" font-size="78%">CS</tspan></text><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="505" cy="48" r="4"/><text class="fig-text fig-math" data-node="Y" data-node-color="blue" x="505" y="36" text-anchor="end">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M124 158 H380"/><path class="fig-ink" d="M244 158 V166 M234 166 H254 M238 171 H250 M242 176 H246"/><text class="fig-text fig-math" x="4" y="203">②</text><circle class="fig-dot" data-node="vin" data-node-color="blue" cx="24" cy="233" r="4"/><text class="fig-text fig-math" data-node="vin" data-node-color="blue" x="14" y="221">v<tspan baseline-shift="sub" font-size="78%">Th</tspan></text><path class="fig-ink" d="M24 233 H32 L37.3 226 L48.0 240 L58.7 226 L69.3 240 L80.0 226 L90.7 240 L96 233 H104"/><text class="fig-text fig-math" x="64" y="217" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">S</tspan>‖r<tspan baseline-shift="sub" font-size="78%">π</tspan></text><path class="fig-ink" d="M104 233 H170"/><circle class="fig-dot" data-node="X" data-node-color="red" cx="124" cy="233" r="4"/><text class="fig-text fig-math" data-node="X" data-node-color="red" x="118" y="221" text-anchor="end">X</text><path class="fig-ink" d="M124 233 V278 M124 288 V343"/><path class="fig-accent" d="M111 278 H137 M111 288 H137"/><text class="fig-text fig-math" x="101" y="288" text-anchor="end">C<tspan baseline-shift="sub" font-size="78%">π</tspan></text><path class="fig-ink" d="M170 233 V278 M170 288 V343"/><path class="fig-danger" d="M157 278 H183 M157 288 H183"/><text class="fig-text fig-math" x="178" y="267">C<tspan baseline-shift="sub" font-size="78%">in,M</tspan></text><path class="fig-ink" d="M124 343 H170"/><path class="fig-ink" d="M147 343 V351 M137 351 H157 M141 356 H153 M145 361 H149"/><path class="fig-ink" d="M280 233 H505"/><path class="fig-ink" d="M280 233 V273 M280 301 V343"/><polygon class="fig-ink" points="280,273 294,287 280,301 266,287"/><path class="fig-ink" d="M280 279 V294 M276 290 L280 295 L284 290"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="280" cy="233" r="4"/><text class="fig-text fig-math" x="258" y="292" text-anchor="end">g<tspan baseline-shift="sub" font-size="78%">m</tspan>v<tspan baseline-shift="sub" font-size="78%">π</tspan></text><path class="fig-ink" d="M322 233 V241 L329 248.8 L315 264.5 L329 280.2 L315 295.8 L329 311.5 L315 327.2 L322 335 V343"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="322" cy="233" r="4"/><text class="fig-text fig-math" x="333" y="293">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text><path class="fig-ink" d="M385 233 V278 M385 288 V343"/><path class="fig-accent" d="M372 278 H398 M372 288 H398"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="385" cy="233" r="4"/><text class="fig-text fig-math" x="403" y="288">C<tspan baseline-shift="sub" font-size="78%">CS</tspan></text><path class="fig-ink" d="M455 233 V278 M455 288 V343"/><path class="fig-danger" d="M442 278 H468 M442 288 H468"/><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="455" cy="233" r="4"/><text class="fig-text fig-math" x="470" y="313">C<tspan baseline-shift="sub" font-size="78%">out,M</tspan></text><circle class="fig-dot" data-node="Y" data-node-color="blue" cx="505" cy="233" r="4"/><text class="fig-text fig-math" data-node="Y" data-node-color="blue" x="505" y="221" text-anchor="end">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M280 343 H455"/><path class="fig-ink" d="M368 343 V351 M358 351 H378 M362 356 H374 M366 361 H370"/></svg><figcaption>$V_{CC}$는 AC 접지, $Q_1$은 $r_\pi$·$C_\pi$·$C_\mu$·$C_{CS}$와 $g_mv_\pi$로 바꿨고($V_A=\infty$), 입력은 $R_S$와 $r_\pi$의 테브난 등가($v_{Th}$, $R_S\parallel r_\pi$)로 묶었어요. ②는 $C_{in,M}=(1+g_mR_L)C_\mu$, $C_{out,M}=(1+\frac{1}{g_mR_L})C_\mu$예요.</figcaption></figure>
-  </div>
 </div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
-  <div data-subpart="a">
-    <h4>(a) $R_L=2\ \mathrm{k\Omega}$의 두 극점</h4>
-    <div data-answer-step="밀러 배수에 쓸 이득" data-gain-route="gm-rout">
-      <p>$C_\mu$ 양 끝, 즉 입력 노드 X($v_\pi$)에서 출력까지의 저주파 이득을 구해요.</p>
-      <div data-gain-stage="gm"><p>출력을 단락하면 이미터가 접지라 전류는 $g_mv_\pi$예요.</p>
-      $$G_m=\frac{i_{out}}{v_X}=g_m=\frac{1}{26}\ \mathrm{S}$$</div>
-      <div data-gain-stage="rout"><p>입력을 0으로 두면 $V_A=\infty$라 출력에는 $R_L$만 보여요.</p>
-      $$R_{out}\approx R_L=2\ \mathrm{k\Omega}$$</div>
-      <div data-gain-stage="gain">$$\frac{v_{out}}{v_X}=-G_mR_{out}=-\frac{1000}{26}\times2\approx-76.92$$</div>
-    </div>
-    <div data-answer-step="입력 극점">
-      $$(1+g_mR_L)C_\mu\approx77.92\times20\ \mathrm{fF}\approx1.56\ \mathrm{pF}$$
-      $$|\omega_{p,in}|=\frac{1}{R_{Th}[C_\pi+(1+g_mR_L)C_\mu]}\approx\frac{1}{185.71\ \Omega\times1.66\ \mathrm{pF}}\approx2\pi\times516.74\ \mathrm{MHz}$$
-    </div>
-    <div data-answer-step="출력 극점과 장애 노드">
-      $$|\omega_{p,out}|=\frac{1}{R_L\left[C_{CS}+\left(1+\dfrac{1}{g_mR_L}\right)C_\mu\right]}\approx\frac{1}{2\ \mathrm{k\Omega}\times50.26\ \mathrm{fF}}\approx2\pi\times1.58\ \mathrm{GHz}$$
-      <p>두 극점 값은 반올림 전 $R_{Th}=1300/7\ \Omega$, $C_\pi+(1+g_mR_L)C_\mu=1658.46\ \mathrm{fF}$로 계산했어요(괄호의 표시값은 반올림). 입력 극점이 약 3배 낮아요. $C_\mu$가 밀러 효과로 약 78배가 되어 입력 노드가 속도의 장애요인이에요.</p>
-    </div>
-  </div>
-  <div data-subpart="b">
-    <h4>(b) 출력 극점이 지배하게 만들 수 있나</h4>
-    <div data-answer-step="부등식 세우기">
-      <p>출력 극점이 더 낮으려면 출력 시정수가 입력 시정수보다 커야 해요.</p>
-      $$R_L\left[C_{CS}+\left(1+\frac{1}{g_mR_L}\right)C_\mu\right]&gt;R_{Th}\left[C_\pi+(1+g_mR_L)C_\mu\right]$$
-      <p>괄호를 풀면 $R_L$이 들어간 항이 양변에 생겨요. 한쪽으로 모아요.</p>
-      $$R_L(C_{CS}+C_\mu)+\frac{C_\mu}{g_m}&gt;R_{Th}(C_\pi+C_\mu)+g_mR_{Th}R_LC_\mu$$
-      $$R_L\left[C_{CS}+C_\mu-g_mR_{Th}C_\mu\right]&gt;R_{Th}(C_\pi+C_\mu)-\frac{C_\mu}{g_m}$$
-    </div>
-    <div data-answer-step="수치로 판정">
-      $$g_mR_{Th}=\frac{185.71}{26}\approx7.14$$
-      $$C_{CS}+C_\mu-g_mR_{Th}C_\mu\approx50\ \mathrm{fF}-142.86\ \mathrm{fF}\approx-92.86\ \mathrm{fF}$$
-      $$R_{Th}(C_\pi+C_\mu)-\frac{C_\mu}{g_m}\approx22.29\ \mathrm{ps}-0.52\ \mathrm{ps}\approx21.77\ \mathrm{ps}$$
-      <p>좌변은 $R_L&gt;0$이면 항상 음수이고 우변은 양수라 부등식이 성립하지 않아요.</p>
-    </div>
-  </div>
-</div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="a">
-    <h4>(a) 검산</h4>
-    <p data-answer-final><strong>$|\omega_{p,in}|\approx2\pi\times516.74\ \mathrm{MHz}$, $|\omega_{p,out}|\approx2\pi\times1.58\ \mathrm{GHz}$이고 입력 노드가 대역폭을 제한해요.</strong> ($V_T=26\ \mathrm{mV}$, $r_O$ 무시, 밀러 근사)</p>
-    <p>단위: $g_mR_L=[\mathrm{S}\cdot\Omega]$로 무차원, $R\cdot C=[\Omega\cdot\mathrm{F}]=[\mathrm{s}]$예요. $1/(185.71\times1.658\times10^{-12})\approx3.25\times10^9\ \mathrm{rad/s}$이고 $2\pi$로 나누면 $517\ \mathrm{MHz}$ 근처라 맞아요.</p>
-    <p>출력 쪽 계수 $1+1/(g_mR_L)\approx1.01$이라 출력 노드에는 $C_\mu$가 거의 그대로 붙어요.</p>
-  </div>
-  <div data-subpart="b">
-    <h4>(b) 검산</h4>
-    <p data-answer-final><strong>불가능해요.</strong> $C_{CS}+C_\mu-g_m(R_S\parallel r_\pi)C_\mu\approx-92.86\ \mathrm{fF}&lt;0$이라 어떤 $R_L$로도 출력 극점이 입력 극점보다 낮아지지 않아요.</p>
-    <p>이유 확인: $R_L$을 키우면 출력 시정수도 늘지만 밀러 배수 $1+g_mR_L$도 같이 커져 입력 시정수가 더 빨리 늘어요. $R_L$의 계수만 비교하면 출력 쪽 $C_{CS}+C_\mu=50\ \mathrm{fF}$, 입력 쪽 $g_mR_{Th}C_\mu\approx142.86\ \mathrm{fF}$라 입력 쪽이 언제나 커요.</p>
-    <p>극한: $R_L\to0$이면 좌변이 0, 우변이 $21.77\ \mathrm{ps}&gt;0$이라 역시 성립하지 않아요.</p>
-  </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <p>입력 노드의 저항을 $R_S$만으로 두면 $r_\pi=2.6\ \mathrm{k\Omega}$를 빠뜨려요. MOS와 달리 베이스에는 $r_\pi$가 접지로 이어져 있어요.</p>
-  <p>(b)에서 "$R_L$을 크게 하면 출력 극점이 내려가니 가능하다"고 끝내면 틀려요. 입력 극점도 $R_L$에 따라 내려가므로 두 시정수의 $R_L$ 계수를 비교해야 해요.</p>
-  <p>$g_m=1/26\ \mathrm{S}$에 $2\ \mathrm{k\Omega}$을 곱할 때 $10^3$을 빼면 $g_mR_L$을 $0.077$로 잘못 써요.</p>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol>
-    <li>$R_S$를 $20\ \Omega$로 줄이면 (b)의 $R_L$ 계수 $C_{CS}+C_\mu-g_mR_{Th}C_\mu$의 부호는 어떻게 될까요? (힌트: $R_{Th}\approx R_S$)</li>
-    <li>$C_\mu=0$이라면 두 극점은 각각 어떤 식이 되고 어느 쪽이 더 낮을까요?</li>
-  </ol>
-</div>
-<div class="sum" hidden>
-  <p class="sum-lead">CE 단의 입력 노드 저항은 $R_S\parallel r_\pi$이고 $C_\mu$는 밀러로 $(1+g_mR_L)$배가 돼요.</p>
-  <p>$|\omega_{p,in}|=\dfrac{1}{(R_S\parallel r_\pi)[C_\pi+(1+g_mR_L)C_\mu]}\approx2\pi\times516.74\ \mathrm{MHz}$</p>
-  <p>$|\omega_{p,out}|=\dfrac{1}{R_L[C_{CS}+(1+\frac{1}{g_mR_L})C_\mu]}\approx2\pi\times1.58\ \mathrm{GHz}$</p>
-  <p>$R_L$의 계수 $C_{CS}+C_\mu-g_m(R_S\parallel r_\pi)C_\mu&lt;0$이면 출력 극점이 지배할 수 없어요.</p>
-</div>
+<div class="sum" hidden><p class="sum-lead">컬렉터 부하를 바꾸면 출력 시정수와 입력의 밀러 시정수가 함께 변해요.</p></div>

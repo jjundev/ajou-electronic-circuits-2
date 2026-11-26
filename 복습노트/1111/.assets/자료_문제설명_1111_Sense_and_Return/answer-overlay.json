@@ -5,7 +5,7 @@
   "slug": "Sense_and_Return",
   "learning_style": {
     "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
-    "sha256": "3c9f68f55d804966c95a35cdcd2f729754e9dc9a453fcc0df7f5b01152edeb9f",
+    "sha256": "e644bb2da081cd8ba965b335d14c8dc8fa4ac1b2224633ba2ab9a644308bc5a1",
     "rule_ids": [
       "UNIT-01",
       "CALC-01",
@@ -22,7 +22,7 @@
       "FREQ-01"
     ]
   },
-  "input_hash": "7b118f4a80b4d3757ec0e51fc9853f8a0d6b5d6784e26853e19cdd8c287a86e0",
+  "input_hash": "3e9f3e1f33215c6cde9fc68c141bae1a65ad5d77321a0f81722de353a3e6baad",
   "source_inputs": {
     "복습노트/1111/.assets/problems.txt": "8a2fcf0ca19befaa8fcd01add10b9182ccaf86d86cf3fb209b463820436169c4",
     "복습노트/1111/.assets/display-titles.json": "74a2d43e89d156145abaf60187640fd36e9341614c40e3220f7b80ae7d69c980",
@@ -50,7 +50,7 @@
     "교과서/마이크로전자회로/ch12/figures/fig12-19-d.png": "19705a27b8a852ecd2d2281b52037440b0381d55d43cbffe3d8211ed57e47032",
     "교과서/마이크로전자회로/ch12/figures/fig12-85.png": "77804bf74233a04a9234c7f2599de09870715c1390a7f1363327aef00271dbfa",
     "교과서/마이크로전자회로/ch12/figures/fig12-86.png": "2eab9383a45bbf2ff3e4025a26537c7546aa720ca97f304244b26b6ce21678ff",
-    ".claude/skills/ec2-review-pack/references/solution-style.md": "3c9f68f55d804966c95a35cdcd2f729754e9dc9a453fcc0df7f5b01152edeb9f"
+    ".claude/skills/ec2-review-pack/references/solution-style.md": "e644bb2da081cd8ba965b335d14c8dc8fa4ac1b2224633ba2ab9a644308bc5a1"
   },
   "problems": [
     {
@@ -62,24 +62,14 @@
       "steps": [
         {
           "subpart": "main",
-          "label": "끊는 자리와 시험 신호",
-          "html": "\n    <p>$X=0$이라 뺄셈기의 + 입력을 접지해요. 뺄셈기 출력 끝이 $N$, $A_1$ 입력 끝이 $M$이에요. 신호는 $M$에서 $A_1$로 나가 $K$와 뺄셈기를 거쳐 $N$으로 돌아오므로 $V_{test}$는 $M$에 걸어요.</p>\n    <figure class=\"figure\">\n      <svg viewBox=\"0 0 440 190\" role=\"img\" aria-label=\"A1 입력에서 루프를 끊은 블록도. 뺄셈기의 플러스 입력은 접지되어 있고, 뺄셈기 출력은 열린 끝 N에서 끝나요. 그 오른쪽의 노드 M에는 아래가 접지된 시험 전압원 V test가 걸려 있고, M에서 A1 상자를 지나 출력 노드 Y로 가요. Y에서 갈라진 선이 아래로 내려가 왼쪽을 향한 K 삼각형의 입력으로 들어가고, K 출력은 왼쪽으로 가서 위로 꺾여 뺄셈기의 마이너스 입력으로 들어가요.\">\n        <g fill=\"none\" stroke-width=\"2\">\n          <path class=\"fig-ink\" d=\"M30 60V72M20 72H40M24 77H36M28 82H32\"/>\n          <path class=\"fig-ink\" d=\"M30 60H76\"/>\n          <circle class=\"fig-ink\" cx=\"90\" cy=\"60\" r=\"14\"/>\n          <path class=\"fig-ink\" d=\"M80 60H100M90 50V70\"/>\n          <path class=\"fig-ink\" d=\"M104 60H150\"/>\n          <path class=\"fig-ink\" d=\"M200 60H240\"/>\n          <path class=\"fig-accent\" d=\"M200 60V87M200 113V125\"/>\n          <circle class=\"fig-accent\" cx=\"200\" cy=\"100\" r=\"13\"/>\n          <path class=\"fig-ink\" d=\"M190 125H210M194 130H206M198 135H202\"/>\n          <path class=\"fig-ink\" d=\"M240 42H300V78H240Z\"/>\n          <path class=\"fig-ink\" d=\"M300 60H410\"/>\n          <path class=\"fig-ink\" d=\"M380 55L386 60L380 65\"/>\n          <path class=\"fig-ink\" d=\"M350 60V150H300\"/>\n          <polygon class=\"fig-ink\" points=\"300,132 300,168 262,150\"/>\n          <path class=\"fig-ink\" d=\"M262 150H90V74\"/>\n          <path class=\"fig-ink\" d=\"M85 100L90 94L95 100\"/>\n        </g>\n        <circle class=\"fig-dot\" data-node-id=\"p1-N\" data-node-color=\"blue\" cx=\"150\" cy=\"60\" r=\"4\"/>\n        <circle class=\"fig-dot\" data-node-id=\"p1-M\" data-node-color=\"red\" cx=\"200\" cy=\"60\" r=\"4\"/>\n        <circle class=\"fig-dot\" data-node-id=\"p1-Y\" data-node-color=\"blue\" cx=\"350\" cy=\"60\" r=\"4\"/>\n        <circle class=\"fig-dot\" data-node-id=\"p1-Y\" data-node-color=\"blue\" cx=\"410\" cy=\"60\" r=\"4\"/>\n        <g font-family=\"Pretendard, sans-serif\" font-weight=\"600\" font-size=\"14\">\n          <text class=\"fig-text\" x=\"64\" y=\"50\" text-anchor=\"middle\">+</text>\n          <text class=\"fig-text\" x=\"78\" y=\"98\" text-anchor=\"middle\">−</text>\n          <text class=\"fig-text fig-math\" data-node-id=\"p1-N\" data-node-color=\"blue\" x=\"150\" y=\"45\" text-anchor=\"middle\">N</text>\n          <text class=\"fig-text fig-math\" data-node-id=\"p1-N\" data-node-color=\"blue\" x=\"150\" y=\"86\" text-anchor=\"middle\">V<tspan baseline-shift=\"sub\" font-size=\"78%\">N</tspan></text>\n          <text class=\"fig-text fig-math\" data-node-id=\"p1-M\" data-node-color=\"red\" x=\"200\" y=\"45\" text-anchor=\"middle\">M</text>\n          <text class=\"fig-text\" x=\"200\" y=\"98\" text-anchor=\"middle\" font-size=\"11\">+</text>\n          <text class=\"fig-text\" x=\"200\" y=\"110\" text-anchor=\"middle\" font-size=\"11\">−</text>\n          <text class=\"fig-text fig-math\" x=\"222\" y=\"112\">V<tspan baseline-shift=\"sub\" font-size=\"78%\">test</tspan></text>\n          <text class=\"fig-text fig-math\" x=\"270\" y=\"65\" text-anchor=\"middle\">A<tspan baseline-shift=\"sub\" font-size=\"78%\">1</tspan></text>\n          <text class=\"fig-text fig-math\" data-node-id=\"p1-Y\" data-node-color=\"blue\" x=\"410\" y=\"45\" text-anchor=\"middle\">Y</text>\n          <text class=\"fig-text fig-math\" x=\"287\" y=\"155\" text-anchor=\"middle\" font-size=\"13\">K</text>\n        </g>\n      </svg>\n      <figcaption>입력 $X$를 0(접지)으로 두고 뺄셈기 출력 $N$과 $A_1$ 입력 $M$ 사이를 끊었어요. $M$에는 $V_{test}$를 걸고 $N$에서 $V_N$을 읽어요.</figcaption>\n    </figure>\n    <p>첫 줄은 $M$에서 출발해 신호 방향으로 한 블록을 지나는 식이에요. $A_1$의 입력이 바로 $V_{test}$예요.</p>\n    $$Y=A_1V_{test}$$\n  "
-        },
-        {
-          "subpart": "main",
-          "label": "루프를 따라 V_N 구하기",
-          "html": "\n      <p>출력 $Y$를 귀환 회로망이 감지해 $K$배 해요. 이것이 뺄셈기의 − 입력으로 들어가는 귀환 신호예요.</p>\n      $$X_F=KY=KA_1V_{test}$$\n      <p>뺄셈기는 + 입력에서 − 입력을 빼요. + 입력은 $X=0$이라 0이에요. 뺄셈기 출력이 바로 끊은 끝 $N$이에요.</p>\n      $$V_N=0-X_F$$\n      $$V_N=-KA_1V_{test}$$\n    "
-        },
-        {
-          "subpart": "main",
-          "label": "정의에 대입",
-          "html": "\n      <p>루프 이득의 정의에 넣어요. $V_{test}$가 약분되어 블록 이득만 남아요.</p>\n      $$-\\frac{V_N}{V_{test}}=-\\frac{-KA_1V_{test}}{V_{test}}=KA_1$$\n    "
+          "label": "시험 포트",
+          "html": "<p>외부 입력 $X=0$에서  $A_1$ 입력 $M$에 $V_{test}$를 걸고,  비교부 출력 $N$을 열어 $V_N$을 재요. 이상적 단방향 블록의 입력은 앞 단을 로딩하지 않아요.</p>$$V_N/V_{test}=(Y/V_{test})(X_F/Y)(V_N/X_F)$$\n"
         }
       ],
       "answers": [
         {
           "subpart": "main",
-          "html": "\n      <p>$X=0$에서 $A_1$ 입력을 끊어 $V_{test}$를 넣으면 $V_N=-KA_1V_{test}$예요.</p>\n      $$\\text{루프 이득}=-\\frac{V_N}{V_{test}}=KA_1$$\n    "
+          "html": "<p>신호는 $A_1$, 귀환망 $K$, 비교부의 반전 입력을 차례로 지나므로 귀환 전압에 마이너스가 붙어요.</p>$$T=-V_N/V_{test}=-A_1K(-1)=KA_1$$\n"
         }
       ]
     },
@@ -92,24 +82,14 @@
       "steps": [
         {
           "subpart": "main",
-          "label": "끊는 자리와 시험 신호",
-          "html": "\n    <p>$X=0$이라 뺄셈기의 + 입력을 접지해요. $K$ 출력에서 오는 귀환선을 뺄셈기 − 입력 앞에서 끊고, − 입력 쪽 끝 $M$에 $V_{test}$를 걸어요. $K$ 출력 쪽 끝 $N$은 열어 두고 $V_N$을 읽어요.</p>\n    <figure class=\"figure\">\n      <svg viewBox=\"0 0 380 225\" role=\"img\" aria-label=\"뺄셈기의 마이너스 입력에서 루프를 끊은 블록도. 뺄셈기의 플러스 입력은 접지되어 있어요. 뺄셈기 출력은 A1 상자를 지나 출력 노드 Y로 가요. Y에서 갈라진 선이 아래로 내려가 왼쪽을 향한 K 삼각형의 입력으로 들어가고, K 출력은 왼쪽 열린 끝 N에서 끝나요. N 왼쪽의 노드 M에는 아래가 접지된 시험 전압원 V test가 걸려 있고, M에서 왼쪽으로 간 뒤 위로 꺾여 뺄셈기의 마이너스 입력으로 들어가요.\">\n        <g fill=\"none\" stroke-width=\"2\">\n          <path class=\"fig-ink\" d=\"M30 60V72M20 72H40M24 77H36M28 82H32\"/>\n          <path class=\"fig-ink\" d=\"M30 60H76\"/>\n          <circle class=\"fig-ink\" cx=\"90\" cy=\"60\" r=\"14\"/>\n          <path class=\"fig-ink\" d=\"M80 60H100M90 50V70\"/>\n          <path class=\"fig-ink\" d=\"M104 60H150\"/>\n          <path class=\"fig-ink\" d=\"M150 42H210V78H150Z\"/>\n          <path class=\"fig-ink\" d=\"M210 60H340\"/>\n          <path class=\"fig-ink\" d=\"M310 55L316 60L310 65\"/>\n          <path class=\"fig-ink\" d=\"M280 60V150H250\"/>\n          <polygon class=\"fig-ink\" points=\"250,132 250,168 212,150\"/>\n          <path class=\"fig-ink\" d=\"M212 150H170\"/>\n          <path class=\"fig-ink\" d=\"M120 150H90V74\"/>\n          <path class=\"fig-ink\" d=\"M85 110L90 104L95 110\"/>\n          <path class=\"fig-accent\" d=\"M120 150V167M120 193V205\"/>\n          <circle class=\"fig-accent\" cx=\"120\" cy=\"180\" r=\"13\"/>\n          <path class=\"fig-ink\" d=\"M110 205H130M114 210H126M118 215H122\"/>\n        </g>\n        <circle class=\"fig-dot\" data-node-id=\"p2-Y\" data-node-color=\"blue\" cx=\"280\" cy=\"60\" r=\"4\"/>\n        <circle class=\"fig-dot\" data-node-id=\"p2-Y\" data-node-color=\"blue\" cx=\"340\" cy=\"60\" r=\"4\"/>\n        <circle class=\"fig-dot\" data-node-id=\"p2-N\" data-node-color=\"blue\" cx=\"170\" cy=\"150\" r=\"4\"/>\n        <circle class=\"fig-dot\" data-node-id=\"p2-M\" data-node-color=\"red\" cx=\"120\" cy=\"150\" r=\"4\"/>\n        <g font-family=\"Pretendard, sans-serif\" font-weight=\"600\" font-size=\"14\">\n          <text class=\"fig-text\" x=\"64\" y=\"50\" text-anchor=\"middle\">+</text>\n          <text class=\"fig-text\" x=\"78\" y=\"98\" text-anchor=\"middle\">−</text>\n          <text class=\"fig-text fig-math\" x=\"180\" y=\"65\" text-anchor=\"middle\">A<tspan baseline-shift=\"sub\" font-size=\"78%\">1</tspan></text>\n          <text class=\"fig-text fig-math\" data-node-id=\"p2-Y\" data-node-color=\"blue\" x=\"340\" y=\"45\" text-anchor=\"middle\">Y</text>\n          <text class=\"fig-text fig-math\" x=\"237\" y=\"155\" text-anchor=\"middle\" font-size=\"13\">K</text>\n          <text class=\"fig-text fig-math\" data-node-id=\"p2-N\" data-node-color=\"blue\" x=\"170\" y=\"135\" text-anchor=\"middle\">N</text>\n          <text class=\"fig-text fig-math\" data-node-id=\"p2-N\" data-node-color=\"blue\" x=\"170\" y=\"176\" text-anchor=\"middle\">V<tspan baseline-shift=\"sub\" font-size=\"78%\">N</tspan></text>\n          <text class=\"fig-text fig-math\" data-node-id=\"p2-M\" data-node-color=\"red\" x=\"120\" y=\"135\" text-anchor=\"middle\">M</text>\n          <text class=\"fig-text\" x=\"120\" y=\"178\" text-anchor=\"middle\" font-size=\"11\">+</text>\n          <text class=\"fig-text\" x=\"120\" y=\"190\" text-anchor=\"middle\" font-size=\"11\">−</text>\n          <text class=\"fig-text fig-math\" x=\"97\" y=\"186\" text-anchor=\"end\">V<tspan baseline-shift=\"sub\" font-size=\"78%\">test</tspan></text>\n        </g>\n      </svg>\n      <figcaption>입력 $X$를 0(접지)으로 두고 $K$ 출력 $N$과 뺄셈기 − 입력 쪽 끝 $M$ 사이를 끊었어요. $M$에는 $V_{test}$를 걸고 $N$에서 $V_N$을 읽어요.</figcaption>\n    </figure>\n    <p>첫 줄은 $M$에서 출발한 신호가 처음 만나는 뺄셈기의 식이에요. + 입력은 0, − 입력은 $V_{test}$예요. 뺄셈기 출력을 $E$라고 부를게요.</p>\n    $$E=0-V_{test}=-V_{test}$$\n  "
-        },
-        {
-          "subpart": "main",
-          "label": "루프를 따라 V_N 구하기",
-          "html": "\n      <p>뺄셈기 출력 $E$가 $A_1$을 지나 출력이 돼요.</p>\n      $$Y=A_1E=-A_1V_{test}$$\n      <p>귀환 회로망이 출력을 $K$배 해서 끊은 끝 $N$에 도착해요.</p>\n      $$V_N=KY=-KA_1V_{test}$$\n    "
-        },
-        {
-          "subpart": "main",
-          "label": "정의에 대입",
-          "html": "\n      <p>루프 이득의 정의에 넣으면 $V_{test}$가 약분돼요.</p>\n      $$-\\frac{V_N}{V_{test}}=-\\frac{-KA_1V_{test}}{V_{test}}=KA_1$$\n    "
+          "label": "시험 포트",
+          "html": "<p>외부 입력 $X=0$에서  비교부 반전 입력 $M$에 $V_{test}$를 걸고  귀환망 출력 $N$을 열어 $V_N$을 재요. 이상적 블록에서 비교부의 출력 $E$는 처음부터 반대 부호예요.</p>$$V_N/V_{test}=(E/V_{test})(Y/E)(V_N/Y)$$\n"
         }
       ],
       "answers": [
         {
           "subpart": "main",
-          "html": "\n      <p>$X=0$에서 $K$ 출력과 뺄셈기 − 입력 사이를 끊어 − 입력 쪽에 $V_{test}$를 넣으면 $V_N=-KA_1V_{test}$예요.</p>\n      $$\\text{루프 이득}=-\\frac{V_N}{V_{test}}=KA_1$$\n    "
+          "html": "<p>비교부, $A_1$, $K$를 지나는 곱이에요. 증폭기 입력에서 끊을 때와 같은 세 인자가 들어가요.</p>$$T=-V_N/V_{test}=-(-1)A_1K=KA_1$$\n"
         }
       ]
     },
@@ -123,28 +103,23 @@
       "steps": [
         {
           "subpart": "a",
-          "label": "공칭 이득에서 K 정하기",
-          "html": "\n    <p>공칭 이득 4는 $A_1\\to\\infty$일 때의 값이라 $1/K$와 같아요. 이 한 줄이 첫 식이에요.</p>\n    $$\\frac1K=1+\\frac{R_1}{R_2}=4$$\n    <p>저항의 비와 귀환율로 바꿔 써요. $K$의 분자·분모를 $R_2$로 나누면 비만으로 쓸 수 있어요.</p>\n    $$\\frac{R_1}{R_2}=3$$\n    $$K=\\frac{1}{1+R_1/R_2}=\\frac14$$\n  "
-        },
-        {
-          "subpart": "a",
-          "label": "루프 이득과 실제 이득",
-          "html": "\n      <p>분모에 들어갈 루프 이득을 먼저 구해요.</p>\n      $$KA_1=\\frac{1000}{4}=250$$\n      <p>폐루프 식에 넣어요. 다음 소문항에서 다시 쓰므로 분수 꼴을 유지해요.</p>\n      $$G=\\frac{A_1}{1+KA_1}=\\frac{1000}{251}\\approx3.98$$\n    "
+          "label": "공칭 이득",
+          "html": "<p> 분배점의 귀환율 $K$는 저항비로 정해져요. 원문의 공칭값 4는 큰 루프 이득에서의 전압 이득이에요.</p>$$1/K=4$$\n"
         },
         {
           "subpart": "b",
-          "label": "바뀐 이득과 변화율",
-          "html": "\n      <p>$K=1/4$는 저항의 비라 그대로이고 $A_1$만 $A_1^*=500$으로 바뀌어요. 루프 이득도 반이 돼요.</p>\n      $$KA_1^*=\\frac{500}{4}=125$$\n      $$G^*=\\frac{A_1^*}{1+KA_1^*}=\\frac{500}{126}=\\frac{250}{63}\\approx3.97$$\n      <p>변화율은 반올림한 소수가 아니라 두 분수의 비로 계산해요.</p>\n      $$\\frac{G^*}{G}=\\frac{250}{63}\\times\\frac{251}{1000}=\\frac{251}{252}$$\n      $$\\frac{G^*-G}{G}=\\frac{251}{252}-1=-\\frac{1}{252}\\approx-0.40\\,\\%$$\n    "
+          "label": "변경 후 이득",
+          "html": "<p>저항이 같으므로 $K=1/4$도 그대로예요.</p>$$G^*=500/(1+500/4)=250/63$$\n"
         }
       ],
       "answers": [
         {
           "subpart": "a",
-          "html": "\n      <p>$K=1/4$($R_1/R_2=3$), 루프 이득 $KA_1=250$일 때 실제 이득이에요.</p>\n      $$\\frac{Y}{X}=\\frac{1000}{251}\\approx3.98$$\n    "
+          "html": "<p>유한한 $A_1$을 폐루프 식에 대입해요.</p>$$G=A_1/(1+KA_1)=1000/251\\approx3.98$$\n"
         },
         {
           "subpart": "b",
-          "html": "\n      <p>$A_1$이 1000에서 500으로 줄면 폐루프 이득은 $1000/251$에서 $250/63$으로 바뀌어요.</p>\n      $$\\frac{G^*-G}{G}=-\\frac{1}{252}\\approx-0.40\\,\\%$$\n      <p>즉 이득이 약 0.40% 줄어요.</p>\n    "
+          "html": "<p>변화율은 변경 전 실제 이득 $G$를 기준으로 구해요.</p>$$(G^*-G)/G=(250/63)/(1000/251)-1=-1/252\\approx-0.4\\%$$\n"
         }
       ]
     },
@@ -157,34 +132,19 @@
       "steps": [
         {
           "subpart": "main",
-          "label": "변화 전후의 비",
-          "html": "\n    <p>$K$는 그대로이고 $A_1$만 $A_1^*$로 바뀌어요. 두 폐루프 이득의 비를 첫 줄로 써요.</p>\n    $$\\frac{G^*}{G}=\\frac{A_1^*}{A_1}\\cdot\\frac{1+KA_1}{1+KA_1^*}$$\n    <p>$A_1^*=(1+\\delta)A_1$과 $T=KA_1$을 넣어요.</p>\n    $$\\frac{G^*}{G}=\\frac{(1+\\delta)(1+T)}{1+(1+\\delta)T}$$\n  "
+          "label": "변경 전후의 이득비",
+          "html": "<p>귀환율 $K$를 고정하고 공칭 루프 이득을 $T=KA_1$, 개루프 상대 변화를 $\\delta=(A_1^*-A_1)/A_1$로 둬요.</p>$$G^*/G=(1+\\delta)(1+T)/[1+(1+\\delta)T]$$\n$$(G^*-G)/G=\\delta/[1+(1+\\delta)T]$$\n"
         },
         {
           "subpart": "main",
-          "label": "상대 변화의 일반식",
-          "html": "\n      <p>비에서 1을 빼고 통분해요. 분자의 $(1+\\delta)T$ 항이 서로 지워져요.</p>\n      $$\\frac{G^*-G}{G}=\\frac{(1+\\delta)(1+T)-1-(1+\\delta)T}{1+(1+\\delta)T}$$\n      $$\\frac{G^*-G}{G}=\\frac{\\delta}{1+(1+\\delta)T}$$\n      <p>폐루프 이득의 변화율은 개루프 이득의 변화율 $\\delta$를 변한 뒤의 $1+KA_1^*$로 나눈 값이에요. 루프 이득이 클수록 변화가 크게 줄어요.</p>\n    "
-        },
-        {
-          "subpart": "main",
-          "label": "A1이 20% 줄 때",
-          "html": "\n      <p>$\\delta=-0.2$이면 분모에 $0.8T$가 들어가요. 변화의 크기가 1% 미만이어야 해요.</p>\n      $$\\frac{0.2}{1+0.8T}&lt;0.01$$\n      $$1+0.8T&gt;20$$\n      $$T&gt;\\frac{19}{0.8}=23.75$$\n    "
-        },
-        {
-          "subpart": "main",
-          "label": "A1이 20% 늘 때",
-          "html": "\n      <p>$\\delta=+0.2$이면 분모에 $1.2T$가 들어가요.</p>\n      $$\\frac{0.2}{1+1.2T}&lt;0.01$$\n      $$1+1.2T&gt;20$$\n      $$T&gt;\\frac{19}{1.2}\\approx15.83$$\n    "
-        },
-        {
-          "subpart": "main",
-          "label": "두 방향을 모두 보장",
-          "html": "\n      <p>줄어드는 쪽은 변한 뒤 루프 이득이 작아져 둔감화가 약해지므로 더 엄격해요. 두 조건을 모두 만족하려면 큰 쪽을 골라요.</p>\n      $$KA_1&gt;23.75$$\n    "
+          "label": "최악의 방향",
+          "html": "<p>분자의 크기는 두 방향 모두 0.2예요. 감소할 때 변경 후 루프 이득이 $0.8T$로 더 작아 분모가 작아져요.</p>$$0.2/(1+0.8T)\\lt0.01$$\n"
         }
       ],
       "answers": [
         {
           "subpart": "main",
-          "html": "\n      <p>$K$가 일정하고 $A_1$이 ±20% 변할 때, 폐루프 이득 변화를 1% 미만으로 보장하는 최소 루프 이득(변화 전 공칭값)이에요. $A_1$이 줄어드는 경우가 조건을 정해요.</p>\n      $$KA_1&gt;23.75$$\n    "
+          "html": "<p>감소를 견디면 증가 조건도 만족해요. 경계에서는 변화가 정확히 1%이므로 공칭 루프 이득은 경계보다 커야 해요.</p>$$T=KA_1&gt;23.75$$\n"
         }
       ]
     },
@@ -197,34 +157,24 @@
       "steps": [
         {
           "subpart": "main",
-          "label": "CS 단의 개루프 이득",
-          "html": "\n    <p>입력은 $M_1$ 게이트 전압 $v_{g}$, 출력은 드레인 전압 $v_{out}$이에요. 출력을 접지로 단락하고, 접지에서 단락선을 지나 출력 노드로 들어오는 단락 전류 $i_{out,sc}$를 양으로 잡아요. 게이트가 $v_g$만큼 오르면 $M_1$이 드레인에서 소스로 $g_mv_g$를 더 끌어내리고, 그 전류를 단락선이 출력 노드로 공급해요.</p>\n    <div data-gain-stage=\"gm\">$$G_m=\\frac{i_{out,sc}}{v_g}=g_m$$</div>\n    <p>입력 소신호를 0으로 두면 $M_1$은 $r_O$로 보여요. 이상적 전류원은 개방이라 드레인 노드에는 $r_O$만 남아요.</p>\n    <div data-gain-stage=\"rout\">$$R_{out}=r_O$$</div>\n    <p>단락을 풀면 $M_1$이 끌어내리는 전류 $G_mv_g$를 단락선 대신 $R_{out}$이 공급해야 해서 출력 전압이 내려가요. 그래서 같은 전류 정의에서 이득은 반전이에요.</p>\n    <div data-gain-stage=\"gain\">$$A_1=-G_mR_{out}=-g_mr_O$$</div>\n    <p>크기에 $g_m$, $r_O$를 넣으면 어떤 파라미터가 어떻게 들어가는지 보여요.</p>\n    $$|A_1|=\\frac{1}{\\lambda I_D}\\sqrt{2\\mu_nC_{ox}\\frac{W}{L}I_D}=\\frac{1}{\\lambda}\\sqrt{\\frac{2\\mu_nC_{ox}(W/L)}{I_D}}$$\n  "
+          "label": "개루프 이득 크기",
+          "html": "<p> 이상적 전류원으로 $I_D$가 고정되므로 드레인의 부하는 $r_O=1/(\\lambda I_D)$예요. 반전 공통 소스 단에서 $T=KA_1&gt;0$이 되도록 음귀환을 걸어요.</p>$$A_1=-g_m r_O$$\n$$\\lvert A_1\\rvert\\propto\\sqrt{\\mu_n C_{ox}}/\\lambda$$\n"
         },
         {
           "subpart": "main",
-          "label": "개루프 이득의 최악 배율",
-          "html": "\n      <p>고정 인자부터 지워요. $W/L$과 $I_D$는 일정하므로 변하는 인자만 남아요.</p>\n      $$|A_1|\\propto\\frac{\\sqrt{\\mu_nC_{ox}}}{\\lambda}$$\n      <p>각 인자의 배율을 따로 봐요. $\\mu_nC_{ox}$가 ±10% 변하면 $\\sqrt{\\mu_nC_{ox}}$는 $\\sqrt{0.9}$배에서 $\\sqrt{1.1}$배, $\\lambda$가 ±20% 변하면 $1/\\lambda$는 $1/1.2$배에서 $1/0.8$배예요.</p>\n      <p>가장 작은 이득은 $\\mu_nC_{ox}$가 10% 줄고 $\\lambda$가 20% 늘 때예요. 이 배율을 $a$라고 해요.</p>\n      $$a=\\frac{\\sqrt{0.9}}{1.2}\\approx0.79$$\n      <p>가장 큰 이득은 $\\mu_nC_{ox}$가 10% 늘고 $\\lambda$가 20% 줄 때예요. 이 배율을 $b$라고 해요.</p>\n      $$b=\\frac{\\sqrt{1.1}}{0.8}\\approx1.31$$\n      <p>개루프 이득은 약 20.94% 줄거나 약 31.10% 늘 수 있어요. 귀환이 없으면 이 변동이 그대로 나타나요.</p>\n    "
+          "label": "최악 배율",
+          "html": "<p>변경 후 개루프 이득의 배율 $q=A_1^*/A_1$은 이동도 계수가 작고 $\\lambda$가 클 때 최소예요. 반대 조합이 최대예요.</p>$$q_{\\min}=\\sqrt{0.9}/1.2$$\n$$q_{\\max}=\\sqrt{1.1}/0.8$$\n"
         },
         {
           "subpart": "main",
-          "label": "이득이 줄어드는 경우",
-          "html": "\n      <p>$A_1^*/A_1=a$를 상대 변화 식에 넣고 크기가 5% 미만이 되게 해요. 수치는 마지막에 넣어요.</p>\n      $$\\frac{1-a}{1+aT}&lt;0.05$$\n      $$1+aT&gt;20(1-a)$$\n      $$T&gt;\\frac{19}{a}-20=\\frac{22.8}{\\sqrt{0.9}}-20\\approx4.03$$\n    "
-        },
-        {
-          "subpart": "main",
-          "label": "이득이 늘어나는 경우",
-          "html": "\n      <p>$A_1^*/A_1=b$일 때도 같은 방법이에요.</p>\n      $$\\frac{b-1}{1+bT}&lt;0.05$$\n      $$1+bT&gt;20(b-1)$$\n      $$T&gt;20-\\frac{21}{b}=20-\\frac{16.8}{\\sqrt{1.1}}\\approx3.98$$\n    "
-        },
-        {
-          "subpart": "main",
-          "label": "두 경우를 모두 보장",
-          "html": "\n      <p>두 조건을 모두 만족해야 하므로 큰 쪽을 골라요. 이득이 줄어드는 경우가 정해요. 그 경우 변한 뒤의 루프 이득 $aT$도 작아져 둔감화가 약해지기 때문이에요.</p>\n      $$KA_1&gt;\\frac{19}{a}-20\\approx4.03$$\n    "
+          "label": "두 끝 비교",
+          "html": "<p>귀환율을 고정하면 $(G^*-G)/G=(q-1)/(1+qT)$예요. 이 값은 $q$와 함께 증가하므로 양 끝에서 각각 5% 조건을 검사해요.</p>$$T&gt;19/q_{\\min}-20\\approx4.03$$\n$$T&gt;20-21/q_{\\max}\\approx3.98$$\n"
         }
       ],
       "answers": [
         {
           "subpart": "main",
-          "html": "\n      <p>이상적 전류원으로 $I_D$가 고정되고 $K$가 일정할 때, $\\mu_nC_{ox}$ ±10%·$\\lambda$ ±20%에도 폐루프 이득 변동을 ±5% 미만으로 보장하는 최소 루프 이득(공칭값)이에요.</p>\n      $$KA_1&gt;\\frac{19\\times1.2}{\\sqrt{0.9}}-20\\approx4.03$$\n    "
+          "html": "<p>이득이 감소하는 쪽에서 요구하는 공칭 루프 이득이 더 커요. 엄밀한 경계는 근호 식이고 소수는 반올림값이에요.</p>$$T=KA_1&gt;22.8/\\sqrt{0.9}-20$$\n"
         }
       ]
     },
@@ -237,24 +187,14 @@
       "steps": [
         {
           "subpart": "main",
-          "label": "배수 1+KA0 먼저 구하기",
-          "html": "\n    <p>고정된 값은 $A_0=200$과 $\\omega_0$이고, 바뀌는 것은 $K$뿐이에요. 그래서 경우마다 배수 $1+KA_0$부터 써요.</p>\n    $$K=0:\\ 1+KA_0=1+0\\times200=1$$\n    $$K=0.1:\\ 1+KA_0=1+0.1\\times200=21$$\n    $$K=0.5:\\ 1+KA_0=1+0.5\\times200=101$$\n    <p>이 배수로 저주파 이득은 나누고, 극점은 곱해요.</p>\n  "
-        },
-        {
-          "subpart": "main",
-          "label": "평탄 이득과 극점",
-          "html": "\n      <p>$K=0$이면 귀환이 없어요. 식 (12.22)가 개루프 식 (12.19)로 돌아가요.</p>\n      $$\\frac{Y}{X}(0)=200\\ [\\mathrm{V/V}]\\approx46.02\\ \\mathrm{dB}$$\n      $$\\omega_{p}=\\omega_0$$\n      <p>$K=0.1$이면 이득은 21로 나누고 극점은 21배 해요. 간단한 분수 $200/21$을 유지하다가 마지막에 반올림해요.</p>\n      $$\\frac{Y}{X}(0)=\\frac{200}{21}\\approx9.52\\ [\\mathrm{V/V}]\\approx19.58\\ \\mathrm{dB}$$\n      $$\\omega_{p}=21\\omega_0$$\n      <p>$K=0.5$이면 배수가 101이에요.</p>\n      $$\\frac{Y}{X}(0)=\\frac{200}{101}\\approx1.98\\ [\\mathrm{V/V}]\\approx5.93\\ \\mathrm{dB}$$\n      $$\\omega_{p}=101\\omega_0$$\n      <p>dB 값은 크기에 $20\\log_{10}$을 취한 거예요. 이득을 배수로 나누면 dB에서는 그 배수의 dB만큼 빼요.</p>\n      $$20\\log_{10}21\\approx26.44\\,\\mathrm{dB}$$\n      $$20\\log_{10}101\\approx40.09\\,\\mathrm{dB}$$\n    "
-        },
-        {
-          "subpart": "main",
-          "label": "고주파 하강선이 겹치는 이유",
-          "html": "\n      <p>극점보다 훨씬 높은 주파수 $\\omega\\gg(1+KA_0)\\omega_0$에서는 분모의 1을 무시할 수 있어요. 남는 식에서 $1+KA_0$가 약분돼요.</p>\n      $$\\left|\\frac{Y}{X}(j\\omega)\\right|\\approx\\frac{A_0}{1+KA_0}\\cdot\\frac{(1+KA_0)\\omega_0}{\\omega}=\\frac{A_0\\omega_0}{\\omega}$$\n      <p>결과에 $K$가 없어요. 그래서 세 곡선의 하강선은 모두 같은 직선 위에 있고, 그 직선은 $\\omega=A_0\\omega_0=200\\omega_0$에서 0 dB에 닿아요. 이득을 나눈 만큼 극점을 곱했으니 평탄 이득 × 극점은 셋 다 $200\\omega_0$예요.</p>\n      <figure class=\"figure\">\n<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 500 270\" role=\"img\" aria-label=\"가로축은 로그 눈금의 각주파수, 세로축은 데시벨 이득인 보데 직선 근사입니다. K=0 곡선은 46.02 dB에서 평탄하다가 오메가0에서 꺾이고, K=0.1 곡선은 19.58 dB에서 평탄하다가 21 오메가0에서 꺾이며, K=0.5 곡선은 5.93 dB에서 평탄하다가 101 오메가0에서 꺾입니다. 세 곡선은 꺾인 뒤 같은 마이너스 20 dB/dec 직선을 따라 200 오메가0에서 0 dB에 닿습니다.\" font-family=\"Pretendard, sans-serif\" font-size=\"14\" font-weight=\"600\">\n<path class=\"fig-ink\" d=\"M80 20 V220 H470\"/>\n<path class=\"fig-ink\" d=\"M75 25 L80 18 L85 25\"/>\n<path class=\"fig-ink\" d=\"M463 215 L470 220 L463 225\"/>\n<text class=\"fig-text fig-math\" x=\"88\" y=\"16\" text-anchor=\"start\">|Y/X| (dB)</text>\n<text class=\"fig-text fig-math\" x=\"476\" y=\"225\" text-anchor=\"start\">ω</text>\n<path class=\"fig-ink\" d=\"M75 54.33 H80 M75 149.51 H80 M75 198.65 H80\"/>\n<text class=\"fig-text fig-math\" x=\"71\" y=\"59\" text-anchor=\"end\">46.02</text>\n<text class=\"fig-text fig-math\" x=\"71\" y=\"154\" text-anchor=\"end\">19.58</text>\n<text class=\"fig-text fig-math\" x=\"71\" y=\"203\" text-anchor=\"end\">5.93</text>\n<text class=\"fig-text fig-math\" x=\"71\" y=\"225\" text-anchor=\"end\">0</text>\n<path class=\"fig-ink\" stroke-dasharray=\"3 4\" d=\"M140 54.33 V220 M298.7 149.51 V220 M380.5 198.65 V220\"/>\n<path class=\"fig-ink\" d=\"M416.1 220 V244\"/>\n<text class=\"fig-text fig-math\" x=\"140\" y=\"240\" text-anchor=\"middle\">ω<tspan baseline-shift=\"sub\" font-size=\"78%\">0</tspan></text>\n<text class=\"fig-text fig-math\" x=\"298.7\" y=\"240\" text-anchor=\"middle\">21ω<tspan baseline-shift=\"sub\" font-size=\"78%\">0</tspan></text>\n<text class=\"fig-text fig-math\" x=\"380.5\" y=\"240\" text-anchor=\"middle\">101ω<tspan baseline-shift=\"sub\" font-size=\"78%\">0</tspan></text>\n<text class=\"fig-text fig-math\" x=\"416.1\" y=\"260\" text-anchor=\"middle\">A<tspan baseline-shift=\"sub\" font-size=\"78%\">0</tspan>ω<tspan baseline-shift=\"sub\" font-size=\"78%\">0</tspan> = 200ω<tspan baseline-shift=\"sub\" font-size=\"78%\">0</tspan></text>\n<path class=\"fig-ink\" d=\"M80 54.33 H140 L416.1 220\"/>\n<path class=\"fig-accent\" d=\"M80 149.51 H298.7 L416.1 220\"/>\n<path class=\"fig-danger\" stroke-dasharray=\"6 4\" d=\"M80 198.65 H380.5 L416.1 220\"/>\n<text class=\"fig-text fig-math\" x=\"92\" y=\"45\" text-anchor=\"start\">K = 0</text>\n<text class=\"fig-text fig-math\" x=\"92\" y=\"140\" text-anchor=\"start\">K = 0.1</text>\n<text class=\"fig-text fig-math\" x=\"92\" y=\"189\" text-anchor=\"start\">K = 0.5</text>\n<text class=\"fig-text fig-math\" x=\"262\" y=\"104\" text-anchor=\"start\">−20 dB/dec</text>\n</svg>\n<figcaption>$A_0=200$일 때 식 (12.22)의 보데 직선 근사예요. 세로 점선은 각 경우의 극점 $\\omega_0$, $21\\omega_0$, $101\\omega_0$이고, 꺾인 뒤의 하강선은 셋 다 같은 직선이라 겹쳐 보여요. 실제 곡선은 각 극점에서 평탄 이득보다 약 3 dB 낮게 부드럽게 꺾여요.</figcaption>\n</figure>\n    "
+          "label": "응답의 두 축",
+          "html": "<p>단일 극점에서 $D=1+KA_0$로 놓으면 평탄 이득은 $D$로 나누고 극점은 $D$배 해요.</p>$$G(s)=(200/D)/(1+s/(D\\omega_0))$$\n"
         }
       ],
       "answers": [
         {
           "subpart": "main",
-          "html": "\n      <p>$A_0=200$에서 폐루프 응답은 셋 다 단일 극점 저역통과 꼴이에요.</p>\n      $$K=0:\\ \\frac{Y}{X}(0)=200\\ [\\mathrm{V/V}]\\approx46.02\\,\\mathrm{dB}$$\n      $$K=0:\\ \\omega_p=\\omega_0$$\n      $$K=0.1:\\ \\frac{Y}{X}(0)\\approx9.52\\ [\\mathrm{V/V}]\\approx19.58\\,\\mathrm{dB}$$\n      $$K=0.1:\\ \\omega_p=21\\omega_0$$\n      $$K=0.5:\\ \\frac{Y}{X}(0)\\approx1.98\\ [\\mathrm{V/V}]\\approx5.93\\,\\mathrm{dB}$$\n      $$K=0.5:\\ \\omega_p=101\\omega_0$$\n      <p><strong>$K$가 커질수록 평탄 이득은 $1+KA_0$배 낮아지고 극점은 같은 배수로 오른쪽으로 가요.</strong> 극점 뒤 $-20\\,\\mathrm{dB/dec}$ 하강선은 세 곡선이 같아 $200\\omega_0$에서 0 dB에 닿아요.</p>\n    "
+          "html": "<p>$(K, D)$는 차례로 $(0,1)$, $(0.1,21)$, $(0.5,101)$이에요. 각 줄의 분자는 평탄 이득(V/V), 분모는 극점의 위치를 보여 줘요. 공통 고주파 점근선은 $200\\omega_0/\\omega$예요.</p>$$G_{K=0}(s)=200/(1+s/\\omega_0)$$\n$$G_{K=0.1}(s)=(200/21)/(1+s/(21\\omega_0))$$\n$$G_{K=0.5}(s)=(200/101)/(1+s/(101\\omega_0))$$\n<figure class=\"figure\">\n<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 500 270\" role=\"img\" aria-label=\"가로축은 로그 눈금의 각주파수, 세로축은 데시벨 이득인 보데 직선 근사입니다. K=0 곡선은 46.02 dB에서 평탄하다가 오메가0에서 꺾이고, K=0.1 곡선은 19.58 dB에서 평탄하다가 21 오메가0에서 꺾이며, K=0.5 곡선은 5.93 dB에서 평탄하다가 101 오메가0에서 꺾입니다. 세 곡선은 꺾인 뒤 같은 마이너스 20 dB/dec 직선을 따라 200 오메가0에서 0 dB에 닿습니다.\" font-family=\"Pretendard, sans-serif\" font-size=\"14\" font-weight=\"600\">\n<path class=\"fig-ink\" d=\"M80 20 V220 H470\"/>\n<path class=\"fig-ink\" d=\"M75 25 L80 18 L85 25\"/>\n<path class=\"fig-ink\" d=\"M463 215 L470 220 L463 225\"/>\n<text class=\"fig-text fig-math\" x=\"88\" y=\"16\" text-anchor=\"start\">|Y/X| (dB)</text>\n<text class=\"fig-text fig-math\" x=\"476\" y=\"225\" text-anchor=\"start\">ω</text>\n<path class=\"fig-ink\" d=\"M75 54.33 H80 M75 149.51 H80 M75 198.65 H80\"/>\n<text class=\"fig-text fig-math\" x=\"71\" y=\"59\" text-anchor=\"end\">46.02</text>\n<text class=\"fig-text fig-math\" x=\"71\" y=\"154\" text-anchor=\"end\">19.58</text>\n<text class=\"fig-text fig-math\" x=\"71\" y=\"203\" text-anchor=\"end\">5.93</text>\n<text class=\"fig-text fig-math\" x=\"71\" y=\"225\" text-anchor=\"end\">0</text>\n<path class=\"fig-ink\" stroke-dasharray=\"3 4\" d=\"M140 54.33 V220 M298.7 149.51 V220 M380.5 198.65 V220\"/>\n<path class=\"fig-ink\" d=\"M416.1 220 V244\"/>\n<text class=\"fig-text fig-math\" x=\"140\" y=\"240\" text-anchor=\"middle\">ω<tspan baseline-shift=\"sub\" font-size=\"78%\">0</tspan></text>\n<text class=\"fig-text fig-math\" x=\"298.7\" y=\"240\" text-anchor=\"middle\">21ω<tspan baseline-shift=\"sub\" font-size=\"78%\">0</tspan></text>\n<text class=\"fig-text fig-math\" x=\"380.5\" y=\"240\" text-anchor=\"middle\">101ω<tspan baseline-shift=\"sub\" font-size=\"78%\">0</tspan></text>\n<text class=\"fig-text fig-math\" x=\"416.1\" y=\"260\" text-anchor=\"middle\">A<tspan baseline-shift=\"sub\" font-size=\"78%\">0</tspan>ω<tspan baseline-shift=\"sub\" font-size=\"78%\">0</tspan> = 200ω<tspan baseline-shift=\"sub\" font-size=\"78%\">0</tspan></text>\n<path class=\"fig-ink\" d=\"M80 54.33 H140 L416.1 220\"/>\n<path class=\"fig-accent\" d=\"M80 149.51 H298.7 L416.1 220\"/>\n<path class=\"fig-danger\" stroke-dasharray=\"6 4\" d=\"M80 198.65 H380.5 L416.1 220\"/>\n<text class=\"fig-text fig-math\" x=\"92\" y=\"45\" text-anchor=\"start\">K = 0</text>\n<text class=\"fig-text fig-math\" x=\"92\" y=\"140\" text-anchor=\"start\">K = 0.1</text>\n<text class=\"fig-text fig-math\" x=\"92\" y=\"189\" text-anchor=\"start\">K = 0.5</text>\n<text class=\"fig-text fig-math\" x=\"262\" y=\"104\" text-anchor=\"start\">−20 dB/dec</text>\n</svg>\n<figcaption>단일 극점 응답의 보데 점근선. 실제 크기는 각 꺾임 주파수에서 해당 평탄 이득보다 약 3 dB 낮아요.</figcaption>\n</figure>"
         }
       ]
     },
@@ -267,29 +207,14 @@
       "steps": [
         {
           "subpart": "main",
-          "label": "10% 감소 조건식",
-          "html": "\n    <p>\"10% 감소\"는 각 시스템 자신의 저주파 이득에 대한 비율이에요. 개루프는 $A_0$의 0.9배가 되는 $\\omega$를 찾아요.</p>\n    $$\\frac{A_0}{\\sqrt{1+(\\omega_{-1}/\\omega_0)^2}}=0.9A_0$$\n    <p>폐루프는 $A_0/(1+KA_0)$의 0.9배예요. 개루프 이득의 0.9배와 비교하지 않아요.</p>\n    $$\\frac{A_0/(1+KA_0)}{\\sqrt{1+\\left[\\dfrac{\\omega_{-1,c}}{(1+KA_0)\\omega_0}\\right]^2}}=0.9\\,\\frac{A_0}{1+KA_0}$$\n  "
-        },
-        {
-          "subpart": "main",
-          "label": "공통 배수 구하기",
-          "html": "\n      <p>두 조건식 모두 저주파 이득이 양변에서 약분돼요. 남는 식을 $x=\\omega/\\omega_p$로 쓰면 하나로 정리돼요.</p>\n      $$\\frac{1}{\\sqrt{1+x^2}}=0.9$$\n      <p>양변을 제곱해 뒤집어요. $0.81=81/100$을 분수로 두면 계산이 깔끔해요.</p>\n      $$1+x^2=\\frac{1}{0.81}=\\frac{100}{81}$$\n      $$x^2=\\frac{100}{81}-1=\\frac{19}{81}$$\n      $$x=\\frac{\\sqrt{19}}{9}\\approx0.48$$\n      <p>즉 이득이 10% 떨어지는 주파수는 어떤 단일 극점 시스템에서든 극점의 $\\sqrt{19}/9$배예요.</p>\n    "
-        },
-        {
-          "subpart": "main",
-          "label": "개루프와 폐루프에 대입",
-          "html": "\n      <p>개루프는 극점이 $\\omega_0$예요.</p>\n      $$\\omega_{-1,\\mathrm{open}}=\\frac{\\sqrt{19}}{9}\\,\\omega_0\\approx0.48\\,\\omega_0$$\n      <p>폐루프는 극점이 $(1+KA_0)\\omega_0$예요.</p>\n      $$\\omega_{-1,\\mathrm{closed}}=\\frac{\\sqrt{19}}{9}(1+KA_0)\\,\\omega_0\\approx0.48(1+KA_0)\\,\\omega_0$$\n    "
-        },
-        {
-          "subpart": "main",
-          "label": "배율 판단",
-          "html": "\n      <p>두 결과의 비를 구하면 공통 배수 $\\sqrt{19}/9$가 약분돼요.</p>\n      $$\\frac{\\omega_{-1,\\mathrm{closed}}}{\\omega_{-1,\\mathrm{open}}}=1+KA_0$$\n      <p>그래서 −1 dB 대역폭도 귀환으로 정확히 $1+KA_0$배 늘어난다고 말할 수 있어요. 이유는 귀환이 단일 극점 응답의 모양을 바꾸지 않고 높이와 가로 위치만 옮기기 때문이에요. 같은 모양이면 \"몇 % 떨어지는 주파수\"는 극점과 같은 배율로 움직여요.</p>\n    "
+          "label": "이득을 각자의 저주파 값으로 정규화",
+          "html": "<p>원문이 정한 10% 감소 기준을 쓰면 단일 극점 응답에서 공통으로 $x=\\omega/\\omega_p$가 다음을 만족해요.</p>$$1/\\sqrt{1+x^2}=0.9$$\n$$x=\\sqrt{19}/9$$\n"
         }
       ],
       "answers": [
         {
           "subpart": "main",
-          "html": "\n      <p>이득이 자신의 저주파 값의 90%가 되는 주파수로 정의한 −1 dB 대역폭은 다음과 같아요.</p>\n      $$\\omega_{-1,\\mathrm{open}}=\\frac{\\sqrt{19}}{9}\\,\\omega_0\\approx0.48\\,\\omega_0$$\n      $$\\omega_{-1,\\mathrm{closed}}=\\frac{\\sqrt{19}}{9}(1+KA_0)\\,\\omega_0\\approx0.48(1+KA_0)\\,\\omega_0$$\n      <p><strong>네, 말할 수 있어요.</strong> 개루프와 폐루프가 모두 단일 극점 꼴이라 −1 dB 대역폭의 비는 정확히 $1+KA_0$예요.</p>\n    "
+          "html": "<p>개루프와 폐루프 극점에 같은 $x$를 곱하므로 이 정의에서도 대역폭은 정확히 $1+KA_0$배로 넓어져요.</p>$$\\omega_{-1,\\mathrm{open}}=(\\sqrt{19}/9)\\omega_0$$\n$$\\omega_{-1,\\mathrm{closed}}=(\\sqrt{19}/9)(1+KA_0)\\omega_0$$\n"
         }
       ]
     },
@@ -302,24 +227,14 @@
       "steps": [
         {
           "subpart": "main",
-          "label": "크기를 1로 놓기",
-          "html": "\n    <p>$\\omega=\\omega_u$에서 크기를 1로 놓아요.</p>\n    $$\\frac{\\dfrac{A_0}{1+KA_0}}{\\sqrt{1+\\dfrac{\\omega_u^2}{(1+KA_0)^2\\omega_0^2}}}=1$$\n    <p>근호를 없애려고 분모를 넘기고 양변을 제곱해요.</p>\n    $$\\left(\\frac{A_0}{1+KA_0}\\right)^2=1+\\frac{\\omega_u^2}{(1+KA_0)^2\\omega_0^2}$$\n  "
-        },
-        {
-          "subpart": "main",
-          "label": "정확한 ω_u",
-          "html": "\n      <p>양변에 $(1+KA_0)^2\\omega_0^2$를 곱해 $\\omega_u^2$만 남겨요.</p>\n      $$\\omega_u^2=\\omega_0^2\\left[A_0^2-(1+KA_0)^2\\right]$$\n      $$\\omega_u=\\omega_0\\sqrt{A_0^2-(1+KA_0)^2}$$\n      <p>이 식은 아직 근사가 없는 정확한 결과예요. 근호 안이 양수여야 하므로 폐루프 저주파 이득 $A_0/(1+KA_0)$이 1보다 클 때만 $\\omega_u$가 존재해요.</p>\n    "
-        },
-        {
-          "subpart": "main",
-          "label": "두 가정으로 K 지우기",
-          "html": "\n      <p>근호 안에서 $A_0^2$을 묶어 내요. 괄호 안에 $K$가 들어간 항이 하나로 모여요.</p>\n      $$\\omega_u=A_0\\omega_0\\sqrt{1-\\left(\\frac{1+KA_0}{A_0}\\right)^2}=A_0\\omega_0\\sqrt{1-\\left(K+\\frac{1}{A_0}\\right)^2}$$\n      <p>첫째 가정 $1+KA_0\\gg1$은 $KA_0\\gg1$, 즉 $1/A_0\\ll K$라는 뜻이에요. 그래서 괄호 안의 $1/A_0$를 버려요. 교재 식 (12.28)의 $(1+KA_0)^2\\approx K^2A_0^2$와 같은 단계예요.</p>\n      $$\\omega_u\\approx A_0\\omega_0\\sqrt{1-K^2}$$\n      <p>둘째 가정 $K^2\\ll1$이면 근호가 1에 가까워요.</p>\n      $$\\omega_u\\approx A_0\\omega_0$$\n      <p>결과에 $K$가 없어요. 그리고 $A_0\\omega_0$는 귀환 전 개루프의 이득–대역폭 곱이에요. 귀환을 얼마나 걸든 폐루프 이득이 1이 되는 주파수는 같다는 뜻이에요.</p>\n    "
+          "label": "이득 크기를 1로 놓기",
+          "html": "<p>양의 교차 주파수가 있으려면 저주파 폐루프 이득이 1보다 커야 해요. 크기가 1이 되는 식을 제곱해 정리해요.</p>$$\\frac{A_0}{\\sqrt{(1+KA_0)^2+(\\omega_u/\\omega_0)^2}}=1$$\n$$\\omega_u=A_0\\omega_0\\sqrt{1-(K+1/A_0)^2}$$\n"
         }
       ],
       "answers": [
         {
           "subpart": "main",
-          "html": "\n      <p>정확한 단일 이득 대역폭은 $\\omega_u=\\omega_0\\sqrt{A_0^2-(1+KA_0)^2}$예요. $1+KA_0\\gg1$(그래서 $1/A_0\\ll K$)과 $K^2\\ll1$이면 다음과 같아요.</p>\n      $$\\omega_u\\approx A_0\\omega_0$$\n      <p><strong>$\\omega_u$는 $K$와 관계없이 개루프 이득–대역폭 곱 $A_0\\omega_0$로 일정해요.</strong></p>\n    "
+          "html": "<p>$1+KA_0\\gg1$이므로 $1/A_0\\ll K$이고, $K^2\\ll1$이므로 남은 근호는 1에 가까워요. 따라서 이 근사에서 교차 주파수는 $K$와 무관해요.</p>$$\\omega_u\\simeq A_0\\omega_0\\sqrt{1-K^2}\\simeq A_0\\omega_0$$\n"
         }
       ]
     },
@@ -332,24 +247,19 @@
       "steps": [
         {
           "subpart": "main",
-          "label": "개루프 저주파 이득",
-          "html": "\n    <p>귀환을 끊고 순방향 CS 단만 봐요. 입력은 게이트 전압 $v_g$(덧셈기 출력), 출력은 $v_{out}$이에요. 저주파라 $C_L$은 열어 둬요.</p>\n    <p>출력을 접지로 단락해 $v_{out}=0$으로 두고, 접지에서 단락선을 지나 출력 노드로 들어가는 전류를 $i_{out,sc}$의 양의 방향으로 둬요. $M_1$이 출력 노드에서 끌어내리는 $g_mv_g$를 단락선이 그대로 대 주므로 $i_{out,sc}=g_mv_g$예요.</p>\n    <div data-gain-stage=\"gm\">$$G_m=\\frac{i_{out,sc}}{v_g}=g_m$$</div>\n    <p>이제 $v_g=0$으로 두고 출력에서 바라봐요. 제어 전류원은 꺼지고, 위쪽 이상적 전류원은 개방이라 아래쪽 $M_1$의 $r_O$만 남아요.</p>\n    <div data-gain-stage=\"rout\">$$R_{out}=r_O$$</div>\n    <p>같은 입출력 정의로 곱하면 반전 이득이 나와요.</p>\n    <div data-gain-stage=\"gain\">$$A_0=-G_mR_{out}=-g_mr_O$$</div>\n  "
+          "label": "개루프 전달함수",
+          "html": "<p> $r_O$와 $C_L$이 드레인에서 병렬이에요. 게이트 전압이 오르면 드레인으로 끌어가는 전류가 늘어 출력 전압은 내려가요.</p>$$A_1(s)= -g_m(r_O\\parallel 1/(sC_L))=-g_mr_O/(1+sr_OC_L)$$\n"
         },
         {
           "subpart": "main",
-          "label": "개루프 극점",
-          "html": "\n      <p>출력 노드에서 $R_{out}=r_O$와 $C_L$이 병렬이에요. 그래서 개루프 전달 함수는 $G_m$에 이 병렬 임피던스를 곱한 꼴이에요.</p>\n      $$A_1(s)=-g_m\\left(r_O\\parallel\\frac{1}{sC_L}\\right)=\\frac{-g_mr_O}{1+sr_OC_L}$$\n      <p>식 (12.19)의 꼴 $A_0/(1+s/\\omega_0)$과 맞춰 읽으면 극점이 나와요.</p>\n      $$\\omega_0=\\frac{1}{r_OC_L}$$\n    "
-        },
-        {
-          "subpart": "main",
-          "label": "대역폭 조건에서 K 역산",
-          "html": "\n      <p>폐루프 −3 dB 대역폭을 $B$로 놓아요.</p>\n      $$B=(1+KA_0)\\omega_0=\\frac{1+KA_0}{r_OC_L}$$\n      <p>먼저 필요한 루프 이득을 구해요.</p>\n      $$KA_0=Br_OC_L-1$$\n      <p>$A_0=-g_mr_O$로 나눠 $K$를 구해요.</p>\n      $$K=\\frac{Br_OC_L-1}{-g_mr_O}=-\\frac{Br_OC_L-1}{g_mr_O}$$\n      <p>크기만 쓰면 다음과 같아요.</p>\n      $$|K|=\\frac{Br_OC_L-1}{g_mr_O}$$\n      <p>귀환은 대역폭을 넓힐 뿐이므로 $B&gt;1/(r_OC_L)$, 즉 목표 대역폭이 개루프 대역폭보다 커야 해요. 그래야 루프 이득 $Br_OC_L-1$이 양수인 부귀환이에요.</p>\n    "
+          "label": "음귀환 부호",
+          "html": "<p>비교부에서 $v_g=v_{in}-Kv_{out}$으로 빼므로 분모는 $1+KA_1(s)$예요. $A_1(0)=-g_mr_O$인 반전 단에서 음귀환이 되려면 $K\\lt 0$이어야 해요.</p>$$B=(1-Kg_mr_O)/(r_OC_L)$$\n"
         }
       ],
       "answers": [
         {
           "subpart": "main",
-          "html": "\n      <p>개루프 $A_0=-g_mr_O$, $\\omega_0=1/(r_OC_L)$인 단일 극점이므로, 폐루프 −3 dB 대역폭 $B$(단, $B&gt;1/(r_OC_L)$)에 필요한 귀환율은 다음과 같아요.</p>\n      $$K=-\\frac{Br_OC_L-1}{g_mr_O}$$\n      <p><strong>크기는 $|K|=(Br_OC_L-1)/(g_mr_O)$이고, 반전 CS 단 때문에 부귀환이 되려면 $K$는 음수(반전 귀환)여야 해요.</strong> 이때 루프 이득은 $KA_0=Br_OC_L-1$이에요.</p>\n    "
+          "html": "<p>$B$는 각주파수(rad/s)예요. 대역폭을 넓히는 경우 $B&gt;1/(r_OC_L)$이고, 목표가 개루프 대역폭과 같으면 $K=0$이에요.</p>$$K=(1-Br_OC_L)/(g_mr_O)$$\n"
         }
       ]
     },
@@ -362,34 +272,44 @@
       "steps": [
         {
           "subpart": "main",
-          "label": "형태와 측정 조건",
-          "html": "\n    <p>종이에 먼저 네 회로의 입력·출력 종류로 형태를 정하고, 이득을 잴 출력 조건을 옆에 적어요.</p>\n    <div class=\"table-wrap\">\n      <table>\n        <thead><tr><th>회로</th><th>입력</th><th>출력</th><th>형태</th><th>이득과 측정 조건</th></tr></thead>\n        <tbody>\n          <tr><td>(a)</td><td>게이트 전압</td><td>소스 팔로워 전압</td><td>전압 증폭기</td><td>$A_0$, 출력 개방</td></tr>\n          <tr><td>(b)</td><td>CG 소스 전류</td><td>소스 팔로워 전압</td><td>트랜스임피던스 증폭기</td><td>$R_0$, 출력 개방</td></tr>\n          <tr><td>(c)</td><td>게이트 전압</td><td>드레인 전류</td><td>트랜스컨덕턴스 증폭기</td><td>$G_m$, 출력 단락</td></tr>\n          <tr><td>(d)</td><td>CG 소스 전류</td><td>드레인 전류</td><td>전류 증폭기</td><td>$A_I$, 출력 단락</td></tr>\n        </tbody>\n      </table>\n    </div>\n    <p>첫 식은 (a)의 $M_1$ 드레인 노드 $n_1$이에요. 팔로워 게이트는 전류를 끌지 않으니 $M_1$의 소신호 드레인 전류 $g_{m1}v_{in}$이 모두 $R_D$를 지나요. 드레인 전류가 늘면 $R_D$의 전압 강하가 커져 $n_1$이 내려가요.</p>\n    $$v_{n1}=-g_{m1}R_Dv_{in}$$\n  "
+          "label": "전압 출력의 연쇄 이득",
+          "html": "<p> (a)·(b)는 출력 개방에서 $M_1$ 드레인과 팔로워 게이트 사이 노드를 $n$으로 잡아요. 몸체 효과와 채널 길이 변조를 무시하고 이상적 바이어스 전류원을 쓰면 팔로워의 무부하 이득은 1이에요.</p>$$A_{0,a}=(v_n/v_{in})(v_{out}/v_n)=(-g_{m1}R_D)(1)$$\n$$R_{0,b}=(v_n/i_{in})(v_{out}/v_n)=(+R_D)(1)$$\n"
         },
         {
           "subpart": "main",
-          "label": "(a) 전압 증폭기 모델",
-          "html": "\n      <p>(a)의 입력은 게이트라서 $R_{in}=\\infty$예요. 출력 전압 $A_0$는 이 단 전체의 단락 트랜스컨덕턴스와 출력 저항으로 나눠 구해요.</p>\n      <p>출력을 단락하면($v_{out}=0$) $M_2$의 소신호 게이트–소스 전압은 $v_{n1}$이에요. $M_2$ 소스에서 단락선으로 나가는 전류는 $g_{m2}v_{n1}$이므로, 단락선에서 출력 노드로 들어오는 방향을 양으로 잡은 단락 전류는 그 반대예요.</p>\n      <div data-gain-stage=\"gm\">\n        $$i_{out,sc}=-g_{m2}v_{n1}=g_{m1}g_{m2}R_Dv_{in}$$\n        $$G_{m,a}=\\frac{i_{out,sc}}{v_{in}}=g_{m1}g_{m2}R_D$$\n      </div>\n      <p>입력을 0으로 두면 $n_1$의 신호도 0이라 $M_2$ 게이트가 AC 접지예요. 아래 전류원이 이상적이므로 출력에서는 팔로워 소스 쪽 저항만 보여요.</p>\n      <div data-gain-stage=\"rout\">\n        $$R_{out}\\approx\\frac{1}{g_{m2}}$$\n      </div>\n      <p>출력 노드로 들어오는 전류를 양으로 잡았으니 개방 전압 이득은 $-G_mR_{out}$이에요.</p>\n      <div data-gain-stage=\"gain\">\n        $$A_0=-G_{m,a}R_{out}\\approx-g_{m1}g_{m2}R_D\\cdot\\frac{1}{g_{m2}}=-g_{m1}R_D$$\n      </div>\n      <figure class=\"figure\">\n        <svg viewBox=\"0 0 460 160\" role=\"img\" aria-label=\"(a)의 전압 증폭기 모델. 왼쪽 입력 단자 v in에서 R in이 접지로 내려가고 값은 무한대예요. 오른쪽에는 아래가 접지인 종속 전압원 A0 v in이 있고, 위 단자에서 직렬 저항 R out을 지나 맨 오른쪽 출력 단자 v out으로 이어져요.\">\n          <g fill=\"none\" stroke-width=\"2\">\n            <path class=\"fig-ink\" d=\"M30 50H80V62\"/>\n            <path class=\"fig-ink\" d=\"M80 62v10l8 4l-16 8l16 8l-16 8l16 8l-16 8l8 4v10\"/>\n            <path class=\"fig-ink\" d=\"M80 130V136M70 136H90M74 141H86M78 146H82\"/>\n            <polygon class=\"fig-ink\" points=\"280,80 296,100 280,120 264,100\"/>\n            <path class=\"fig-ink\" d=\"M280 120V136M270 136H290M274 141H286M278 146H282\"/>\n            <path class=\"fig-ink\" d=\"M280 80V50H310\"/>\n            <path class=\"fig-ink\" d=\"M310 50h10l4 -8l8 16l8 -16l8 16l8 -16l8 16l4 -8h10\"/>\n            <path class=\"fig-ink\" d=\"M378 50H430\"/>\n          </g>\n          <circle class=\"fig-dot\" data-node-id=\"p10a-vin\" data-node-color=\"blue\" cx=\"30\" cy=\"50\" r=\"4\"/>\n          <circle class=\"fig-dot\" data-node-id=\"p10a-vout\" data-node-color=\"red\" cx=\"430\" cy=\"50\" r=\"4\"/>\n          <g font-family=\"Pretendard, sans-serif\" font-weight=\"600\" font-size=\"14\">\n            <text class=\"fig-text fig-math\" data-node-id=\"p10a-vin\" data-node-color=\"blue\" x=\"30\" y=\"32\" text-anchor=\"middle\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text>\n            <text class=\"fig-text fig-math\" x=\"96\" y=\"102\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan> = ∞</text>\n            <text class=\"fig-text\" x=\"280\" y=\"97\" text-anchor=\"middle\" font-size=\"12\">+</text>\n            <text class=\"fig-text\" x=\"280\" y=\"114\" text-anchor=\"middle\" font-size=\"12\">−</text>\n            <text class=\"fig-text fig-math\" x=\"344\" y=\"30\" text-anchor=\"middle\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan> ≈ 1/g<tspan baseline-shift=\"sub\" font-size=\"78%\">m2</tspan></text>\n            <text class=\"fig-text fig-math\" data-node-id=\"p10a-vout\" data-node-color=\"red\" x=\"430\" y=\"32\" text-anchor=\"middle\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text>\n            <text class=\"fig-text fig-math\" x=\"256\" y=\"105\" text-anchor=\"end\">A<tspan baseline-shift=\"sub\" font-size=\"78%\">0</tspan>v<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text>\n          </g>\n        </svg>\n        <figcaption>(a) 전압 증폭기 모델이에요. $R_{in}=\\infty$는 입력이 개방이라는 뜻이고, 종속 전압원은 $A_0v_{in}=-g_{m1}R_Dv_{in}$이에요.</figcaption>\n      </figure>\n    "
+          "label": "전류 출력의 기준",
+          "html": "<p> (c)는 출력 단락에서 $r_O$ 양단 전압이 0이어서 제어 전류가 그대로 드레인으로 들어가요. 입력을 영으로 두면 유한한 $r_O$가 출력에 남아요. (d)는 소스로 넣은 전류가 모두 드레인으로 나와요. 그림 12.19(d)의 아래쪽 화살표로 재면 $i_{out}/i_{in}=-1$, 여기서 그린 모델의 유출 기준으로는 $+1$이에요.</p>"
         },
         {
           "subpart": "main",
-          "label": "(b) 트랜스임피던스 증폭기 모델",
-          "html": "\n      <p>(b)의 입력은 게이트가 $V_b$로 고정된 CG 단의 소스예요. $\\lambda=0$이라 드레인 쪽 $R_D$와 관계없이 소스에서 $1/g_{m1}$이 보여요.</p>\n      $$R_{in}\\approx\\frac{1}{g_{m1}}$$\n      <p>$R_0$는 출력을 열고 구해요. $M_1$ 소스 노드에는 입력 전류원 $I_{in}$과 $M_1$만 이어져 있고 게이트로는 전류가 흐르지 않아요. 그래서 소스로 들어온 $i_{in}$은 모두 $M_1$을 거쳐 $R_D$ 쪽으로 올라가요. 그래서 위에서 아래로 흐르는 $M_1$의 드레인 전류가 $i_{in}$만큼 줄어요.</p>\n      $$i_{d1}=-i_{in}$$\n      <p>$R_D$에 흐르는 전류가 줄면 전압 강하가 줄어 $n_1$이 올라가요. 소스 팔로워는 $\\lambda=0$, 몸체효과 무시, 이상적 전류원에서 출력을 열면 이득이 1이라 $v_{out}=v_{n1}$이에요.</p>\n      $$v_{n1}=-R_Di_{d1}=R_Di_{in}$$\n      $$R_0=\\frac{v_{out}}{i_{in}}=R_D$$\n      <p>출력 저항은 입력 전류원을 0(개방)으로 두고 봐요. $M_1$에 신호 전류가 없으니 $n_1$이 고정되고, (a)와 같은 팔로워 출력이 보여요.</p>\n      $$R_{out}\\approx\\frac{1}{g_{m2}}$$\n      <figure class=\"figure\">\n        <svg viewBox=\"0 0 460 160\" role=\"img\" aria-label=\"(b)의 트랜스임피던스 증폭기 모델. 왼쪽 입력 단자에서 오른쪽을 향한 화살표의 전류 i in이 R in으로 흘러 접지로 가고 R in은 약 1/gm1이에요. 오른쪽에는 아래가 접지인 종속 전압원 R0 i in이 있고, 직렬 저항 R out을 지나 맨 오른쪽 출력 단자 v out으로 이어져요.\">\n          <g fill=\"none\" stroke-width=\"2\">\n            <path class=\"fig-ink\" d=\"M30 50H80V62\"/>\n            <path class=\"fig-ink\" d=\"M50 44L58 50L50 56\"/>\n            <path class=\"fig-ink\" d=\"M80 62v10l8 4l-16 8l16 8l-16 8l16 8l-16 8l8 4v10\"/>\n            <path class=\"fig-ink\" d=\"M80 130V136M70 136H90M74 141H86M78 146H82\"/>\n            <polygon class=\"fig-ink\" points=\"280,80 296,100 280,120 264,100\"/>\n            <path class=\"fig-ink\" d=\"M280 120V136M270 136H290M274 141H286M278 146H282\"/>\n            <path class=\"fig-ink\" d=\"M280 80V50H310\"/>\n            <path class=\"fig-ink\" d=\"M310 50h10l4 -8l8 16l8 -16l8 16l8 -16l8 16l4 -8h10\"/>\n            <path class=\"fig-ink\" d=\"M378 50H430\"/>\n          </g>\n          <circle class=\"fig-dot\" data-node-id=\"p10b-in\" data-node-color=\"blue\" cx=\"30\" cy=\"50\" r=\"4\"/>\n          <circle class=\"fig-dot\" data-node-id=\"p10b-vout\" data-node-color=\"red\" cx=\"430\" cy=\"50\" r=\"4\"/>\n          <g font-family=\"Pretendard, sans-serif\" font-weight=\"600\" font-size=\"14\">\n            <text class=\"fig-text fig-math\" x=\"54\" y=\"32\" text-anchor=\"middle\">i<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text>\n            <text class=\"fig-text fig-math\" x=\"96\" y=\"102\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan> ≈ 1/g<tspan baseline-shift=\"sub\" font-size=\"78%\">m1</tspan></text>\n            <text class=\"fig-text\" x=\"280\" y=\"97\" text-anchor=\"middle\" font-size=\"12\">+</text>\n            <text class=\"fig-text\" x=\"280\" y=\"114\" text-anchor=\"middle\" font-size=\"12\">−</text>\n            <text class=\"fig-text fig-math\" x=\"344\" y=\"30\" text-anchor=\"middle\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan> ≈ 1/g<tspan baseline-shift=\"sub\" font-size=\"78%\">m2</tspan></text>\n            <text class=\"fig-text fig-math\" data-node-id=\"p10b-vout\" data-node-color=\"red\" x=\"430\" y=\"32\" text-anchor=\"middle\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text>\n            <text class=\"fig-text fig-math\" x=\"256\" y=\"105\" text-anchor=\"end\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">0</tspan>i<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text>\n          </g>\n        </svg>\n        <figcaption>(b) 트랜스임피던스 증폭기 모델이에요. 입력 전류가 작은 $R_{in}$으로 흘러 들어가고, 종속 전압원은 $R_0i_{in}=R_Di_{in}$이에요.</figcaption>\n      </figure>\n    "
+          "label": "두 포트의 저항",
+          "html": "<p>게이트 입력은 개방이고 공통 게이트의 소스 입력은 출력 단락에서 약 $1/g_{m1}$이에요. (a)·(b)의 출력에서는 팔로워 소스 저항을 봐요. (d)의 입력 전류원을 영으로 두면 소스가 열려 드레인 시험전류가 흐를 길이 없어요.</p>"
         },
         {
           "subpart": "main",
-          "label": "(c) 트랜스컨덕턴스 증폭기 모델",
-          "html": "\n      <p>(c)의 입력은 게이트라서 $R_{in}=\\infty$예요. $G_m$은 출력을 단락하고 구해요. 드레인이 AC 접지이면 $r_O$ 양단 전압이 0이라 $r_O$로는 신호 전류가 흐르지 않아요. 그래서 $\\lambda&gt;0$이어도 제어 전류 전체가 단락선으로 나와요. 그림의 $I_{out}$처럼 드레인으로 들어가는 방향이 양이에요.</p>\n      $$i_{out}=g_{m1}v_{in}$$\n      $$G_m=\\frac{i_{out}}{v_{in}}=g_{m1}$$\n      <p>입력을 0으로 두면 제어 전류도 0이라 드레인에서는 $r_O$만 보여요.</p>\n      $$R_{out}=r_O$$\n      <figure class=\"figure\">\n        <svg viewBox=\"0 0 460 160\" role=\"img\" aria-label=\"(c)의 트랜스컨덕턴스 증폭기 모델. 왼쪽 입력 단자 v in에서 R in이 접지로 내려가고 값은 무한대예요. 오른쪽에는 아래쪽을 향한 종속 전류원 Gm v in이 왼쪽에, 출력 저항 R out = rO가 그 오른쪽에 출력 노드와 접지 사이에 병렬로 있어요. 맨 오른쪽이 출력 단자이고, 그 왼쪽 도선에 왼쪽을 향한 i out 화살표가 있어요.\">\n          <g fill=\"none\" stroke-width=\"2\">\n            <path class=\"fig-ink\" d=\"M30 50H80V62\"/>\n            <path class=\"fig-ink\" d=\"M80 62v10l8 4l-16 8l16 8l-16 8l16 8l-16 8l8 4v10\"/>\n            <path class=\"fig-ink\" d=\"M80 130V136M70 136H90M74 141H86M78 146H82\"/>\n            <polygon class=\"fig-ink\" points=\"280,80 296,100 280,120 264,100\"/>\n            <path class=\"fig-ink\" d=\"M280 120V136M270 136H290M274 141H286M278 146H282\"/>\n            <path class=\"fig-ink\" d=\"M280 88V111M275 106L280 111L285 106\"/>\n            <path class=\"fig-ink\" d=\"M280 80V50H430\"/>\n            <path class=\"fig-ink\" d=\"M360 50V62\"/>\n            <path class=\"fig-ink\" d=\"M360 62v10l8 4l-16 8l16 8l-16 8l16 8l-16 8l8 4v10\"/>\n            <path class=\"fig-ink\" d=\"M360 130V136M350 136H370M354 141H366M358 146H362\"/>\n            <path class=\"fig-ink\" d=\"M402 44L394 50L402 56\"/>\n          </g>\n          <circle class=\"fig-dot\" data-node-id=\"p10c-vin\" data-node-color=\"blue\" cx=\"30\" cy=\"50\" r=\"4\"/>\n          <circle class=\"fig-dot\" data-node-id=\"p10c-out\" data-node-color=\"red\" cx=\"360\" cy=\"50\" r=\"4\"/>\n          <circle class=\"fig-dot\" data-node-id=\"p10c-out\" data-node-color=\"red\" cx=\"430\" cy=\"50\" r=\"4\"/>\n          <g font-family=\"Pretendard, sans-serif\" font-weight=\"600\" font-size=\"14\">\n            <text class=\"fig-text fig-math\" data-node-id=\"p10c-vin\" data-node-color=\"blue\" x=\"30\" y=\"32\" text-anchor=\"middle\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text>\n            <text class=\"fig-text fig-math\" x=\"96\" y=\"102\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan> = ∞</text>\n            <text class=\"fig-text fig-math\" x=\"376\" y=\"102\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan> = r<tspan baseline-shift=\"sub\" font-size=\"78%\">O</tspan></text>\n            <text class=\"fig-text fig-math\" x=\"398\" y=\"32\" text-anchor=\"middle\">i<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text>\n            <text class=\"fig-text fig-math\" x=\"256\" y=\"105\" text-anchor=\"end\">G<tspan baseline-shift=\"sub\" font-size=\"78%\">m</tspan>v<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text>\n          </g>\n        </svg>\n        <figcaption>(c) 트랜스컨덕턴스 증폭기 모델이에요. 종속 전류원 $G_mv_{in}=g_{m1}v_{in}$은 왼쪽, $R_{out}=r_O$는 오른쪽에 병렬이고, $i_{out}$은 출력 단자에서 회로로 들어가는 방향이에요.</figcaption>\n      </figure>\n    "
+          "label": "전압 증폭기 모델",
+          "html": "<figure class=\"figure\">\n        <svg viewBox=\"0 0 460 160\" role=\"img\" aria-label=\"(a)의 전압 증폭기 모델. 왼쪽 입력 단자 v in에서 R in이 접지로 내려가고 값은 무한대예요. 오른쪽에는 아래가 접지인 종속 전압원 A0 v in이 있고, 위 단자에서 직렬 저항 R out을 지나 맨 오른쪽 출력 단자 v out으로 이어져요.\">\n          <g fill=\"none\" stroke-width=\"2\">\n            <path class=\"fig-ink\" d=\"M30 50H80V62\"/>\n            <path class=\"fig-ink\" d=\"M80 62v10l8 4l-16 8l16 8l-16 8l16 8l-16 8l8 4v10\"/>\n            <path class=\"fig-ink\" d=\"M80 130V136M70 136H90M74 141H86M78 146H82\"/>\n            <polygon class=\"fig-ink\" points=\"280,80 296,100 280,120 264,100\"/>\n            <path class=\"fig-ink\" d=\"M280 120V136M270 136H290M274 141H286M278 146H282\"/>\n            <path class=\"fig-ink\" d=\"M280 80V50H310\"/>\n            <path class=\"fig-ink\" d=\"M310 50h10l4 -8l8 16l8 -16l8 16l8 -16l8 16l4 -8h10\"/>\n            <path class=\"fig-ink\" d=\"M378 50H430\"/>\n          </g>\n          <circle class=\"fig-dot\" data-node-id=\"p10a-vin\" data-node-color=\"blue\" cx=\"30\" cy=\"50\" r=\"4\"/>\n          <circle class=\"fig-dot\" data-node-id=\"p10a-vout\" data-node-color=\"red\" cx=\"430\" cy=\"50\" r=\"4\"/>\n          <g font-family=\"Pretendard, sans-serif\" font-weight=\"600\" font-size=\"14\">\n            <text class=\"fig-text fig-math\" data-node-id=\"p10a-vin\" data-node-color=\"blue\" x=\"30\" y=\"32\" text-anchor=\"middle\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text>\n            <text class=\"fig-text fig-math\" x=\"96\" y=\"102\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan> = ∞</text>\n            <text class=\"fig-text\" x=\"280\" y=\"97\" text-anchor=\"middle\" font-size=\"12\">+</text>\n            <text class=\"fig-text\" x=\"280\" y=\"114\" text-anchor=\"middle\" font-size=\"12\">−</text>\n            <text class=\"fig-text fig-math\" x=\"344\" y=\"30\" text-anchor=\"middle\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan> ≈ 1/g<tspan baseline-shift=\"sub\" font-size=\"78%\">m2</tspan></text>\n            <text class=\"fig-text fig-math\" data-node-id=\"p10a-vout\" data-node-color=\"red\" x=\"430\" y=\"32\" text-anchor=\"middle\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text>\n            <text class=\"fig-text fig-math\" x=\"256\" y=\"105\" text-anchor=\"end\">A<tspan baseline-shift=\"sub\" font-size=\"78%\">0</tspan>v<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text>\n          </g>\n        </svg>\n        <figcaption>(a) 전압 증폭기. 입력은 개방이고 출력은 테브난 전압원과 직렬 저항이에요.</figcaption>\n      </figure>"
         },
         {
           "subpart": "main",
-          "label": "(d) 전류 증폭기 모델",
-          "html": "\n      <p>(d)의 입력은 (b)와 같은 CG 소스라서 $R_{in}\\approx1/g_{m1}$이에요. $A_I$는 출력을 단락하고 구해요. 소스로 들어온 $i_{in}$은 (b)처럼 갈 곳이 $M_1$뿐이라, 그대로 $M_1$을 지나 드레인 밖으로 흘러 나가요. 출력 전류를 드레인에서 나가는 방향으로 잡으면 들어온 전류와 같아요.</p>\n      $$i_{out}=i_{in}$$\n      $$A_I=\\frac{i_{out}}{i_{in}}=1$$\n      <p>출력 저항은 입력 전류원을 0(개방)으로 두고 드레인에서 봐요. 소스에 이어진 것이 열린 전류원뿐이라 소신호 전류가 지나갈 길이 없어요. 드레인 전압을 바꿔도 드레인 전류가 변할 수 없으므로 $R_{out}$은 무한대예요. $\\lambda&gt;0$이어도 소스 쪽이 열려 있으니 같은 결론이에요.</p>\n      $$R_{out}=\\infty$$\n      <figure class=\"figure\">\n        <svg viewBox=\"0 0 460 160\" role=\"img\" aria-label=\"(d)의 전류 증폭기 모델. 왼쪽 입력 단자에서 오른쪽을 향한 화살표의 전류 i in이 R in으로 흘러 접지로 가고 R in은 약 1/gm1이에요. 오른쪽에는 위쪽을 향한 종속 전류원 AI i in이 왼쪽에, R out = 무한대가 그 오른쪽에 출력 노드와 접지 사이에 병렬로 있어요. 맨 오른쪽이 출력 단자이고, 그 왼쪽 도선에 오른쪽을 향한 i out 화살표가 있어요.\">\n          <g fill=\"none\" stroke-width=\"2\">\n            <path class=\"fig-ink\" d=\"M30 50H80V62\"/>\n            <path class=\"fig-ink\" d=\"M50 44L58 50L50 56\"/>\n            <path class=\"fig-ink\" d=\"M80 62v10l8 4l-16 8l16 8l-16 8l16 8l-16 8l8 4v10\"/>\n            <path class=\"fig-ink\" d=\"M80 130V136M70 136H90M74 141H86M78 146H82\"/>\n            <polygon class=\"fig-ink\" points=\"280,80 296,100 280,120 264,100\"/>\n            <path class=\"fig-ink\" d=\"M280 120V136M270 136H290M274 141H286M278 146H282\"/>\n            <path class=\"fig-ink\" d=\"M280 112V89M275 94L280 89L285 94\"/>\n            <path class=\"fig-ink\" d=\"M280 80V50H430\"/>\n            <path class=\"fig-ink\" d=\"M360 50V62\"/>\n            <path class=\"fig-ink\" d=\"M360 62v10l8 4l-16 8l16 8l-16 8l16 8l-16 8l8 4v10\"/>\n            <path class=\"fig-ink\" d=\"M360 130V136M350 136H370M354 141H366M358 146H362\"/>\n            <path class=\"fig-ink\" d=\"M394 44L402 50L394 56\"/>\n          </g>\n          <circle class=\"fig-dot\" data-node-id=\"p10d-in\" data-node-color=\"blue\" cx=\"30\" cy=\"50\" r=\"4\"/>\n          <circle class=\"fig-dot\" data-node-id=\"p10d-out\" data-node-color=\"red\" cx=\"360\" cy=\"50\" r=\"4\"/>\n          <circle class=\"fig-dot\" data-node-id=\"p10d-out\" data-node-color=\"red\" cx=\"430\" cy=\"50\" r=\"4\"/>\n          <g font-family=\"Pretendard, sans-serif\" font-weight=\"600\" font-size=\"14\">\n            <text class=\"fig-text fig-math\" x=\"54\" y=\"32\" text-anchor=\"middle\">i<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text>\n            <text class=\"fig-text fig-math\" x=\"96\" y=\"102\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan> ≈ 1/g<tspan baseline-shift=\"sub\" font-size=\"78%\">m1</tspan></text>\n            <text class=\"fig-text fig-math\" x=\"376\" y=\"102\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan> = ∞</text>\n            <text class=\"fig-text fig-math\" x=\"398\" y=\"32\" text-anchor=\"middle\">i<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text>\n            <text class=\"fig-text fig-math\" x=\"256\" y=\"105\" text-anchor=\"end\">A<tspan baseline-shift=\"sub\" font-size=\"78%\">I</tspan>i<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text>\n          </g>\n        </svg>\n        <figcaption>(d) 전류 증폭기 모델이에요. 종속 전류원 $A_Ii_{in}=i_{in}$이 출력 단자 쪽으로 전류를 내보내고, $R_{out}=\\infty$는 그 자리가 열려 있다는 뜻이에요.</figcaption>\n      </figure>\n    "
+          "label": "트랜스임피던스 증폭기 모델",
+          "html": "<figure class=\"figure\">\n        <svg viewBox=\"0 0 460 160\" role=\"img\" aria-label=\"(b)의 트랜스임피던스 증폭기 모델. 왼쪽 입력 단자에서 오른쪽을 향한 화살표의 전류 i in이 R in으로 흘러 접지로 가고 R in은 약 1/gm1이에요. 오른쪽에는 아래가 접지인 종속 전압원 R0 i in이 있고, 직렬 저항 R out을 지나 맨 오른쪽 출력 단자 v out으로 이어져요.\">\n          <g fill=\"none\" stroke-width=\"2\">\n            <path class=\"fig-ink\" d=\"M30 50H80V62\"/>\n            <path class=\"fig-ink\" d=\"M50 44L58 50L50 56\"/>\n            <path class=\"fig-ink\" d=\"M80 62v10l8 4l-16 8l16 8l-16 8l16 8l-16 8l8 4v10\"/>\n            <path class=\"fig-ink\" d=\"M80 130V136M70 136H90M74 141H86M78 146H82\"/>\n            <polygon class=\"fig-ink\" points=\"280,80 296,100 280,120 264,100\"/>\n            <path class=\"fig-ink\" d=\"M280 120V136M270 136H290M274 141H286M278 146H282\"/>\n            <path class=\"fig-ink\" d=\"M280 80V50H310\"/>\n            <path class=\"fig-ink\" d=\"M310 50h10l4 -8l8 16l8 -16l8 16l8 -16l8 16l4 -8h10\"/>\n            <path class=\"fig-ink\" d=\"M378 50H430\"/>\n          </g>\n          <circle class=\"fig-dot\" data-node-id=\"p10b-in\" data-node-color=\"blue\" cx=\"30\" cy=\"50\" r=\"4\"/>\n          <circle class=\"fig-dot\" data-node-id=\"p10b-vout\" data-node-color=\"red\" cx=\"430\" cy=\"50\" r=\"4\"/>\n          <g font-family=\"Pretendard, sans-serif\" font-weight=\"600\" font-size=\"14\">\n            <text class=\"fig-text fig-math\" x=\"54\" y=\"32\" text-anchor=\"middle\">i<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text>\n            <text class=\"fig-text fig-math\" x=\"96\" y=\"102\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan> ≈ 1/g<tspan baseline-shift=\"sub\" font-size=\"78%\">m1</tspan></text>\n            <text class=\"fig-text\" x=\"280\" y=\"97\" text-anchor=\"middle\" font-size=\"12\">+</text>\n            <text class=\"fig-text\" x=\"280\" y=\"114\" text-anchor=\"middle\" font-size=\"12\">−</text>\n            <text class=\"fig-text fig-math\" x=\"344\" y=\"30\" text-anchor=\"middle\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan> ≈ 1/g<tspan baseline-shift=\"sub\" font-size=\"78%\">m2</tspan></text>\n            <text class=\"fig-text fig-math\" data-node-id=\"p10b-vout\" data-node-color=\"red\" x=\"430\" y=\"32\" text-anchor=\"middle\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text>\n            <text class=\"fig-text fig-math\" x=\"256\" y=\"105\" text-anchor=\"end\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">0</tspan>i<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text>\n          </g>\n        </svg>\n        <figcaption>(b) 트랜스임피던스 증폭기. 소스에 입력 전류를 넣고 팔로워 출력 전압을 읽어요.</figcaption>\n      </figure>"
+        },
+        {
+          "subpart": "main",
+          "label": "트랜스컨덕턴스 증폭기 모델",
+          "html": "<figure class=\"figure\">\n        <svg viewBox=\"0 0 460 160\" role=\"img\" aria-label=\"(c)의 트랜스컨덕턴스 증폭기 모델. 왼쪽 입력 단자 v in에서 R in이 접지로 내려가고 값은 무한대예요. 오른쪽에는 아래쪽을 향한 종속 전류원 Gm v in이 왼쪽에, 출력 저항 R out = rO가 그 오른쪽에 출력 노드와 접지 사이에 병렬로 있어요. 맨 오른쪽이 출력 단자이고, 그 왼쪽 도선에 왼쪽을 향한 i out 화살표가 있어요.\">\n          <g fill=\"none\" stroke-width=\"2\">\n            <path class=\"fig-ink\" d=\"M30 50H80V62\"/>\n            <path class=\"fig-ink\" d=\"M80 62v10l8 4l-16 8l16 8l-16 8l16 8l-16 8l8 4v10\"/>\n            <path class=\"fig-ink\" d=\"M80 130V136M70 136H90M74 141H86M78 146H82\"/>\n            <polygon class=\"fig-ink\" points=\"280,80 296,100 280,120 264,100\"/>\n            <path class=\"fig-ink\" d=\"M280 120V136M270 136H290M274 141H286M278 146H282\"/>\n            <path class=\"fig-ink\" d=\"M280 88V111M275 106L280 111L285 106\"/>\n            <path class=\"fig-ink\" d=\"M280 80V50H430\"/>\n            <path class=\"fig-ink\" d=\"M360 50V62\"/>\n            <path class=\"fig-ink\" d=\"M360 62v10l8 4l-16 8l16 8l-16 8l16 8l-16 8l8 4v10\"/>\n            <path class=\"fig-ink\" d=\"M360 130V136M350 136H370M354 141H366M358 146H362\"/>\n            <path class=\"fig-ink\" d=\"M402 44L394 50L402 56\"/>\n          </g>\n          <circle class=\"fig-dot\" data-node-id=\"p10c-vin\" data-node-color=\"blue\" cx=\"30\" cy=\"50\" r=\"4\"/>\n          <circle class=\"fig-dot\" data-node-id=\"p10c-out\" data-node-color=\"red\" cx=\"360\" cy=\"50\" r=\"4\"/>\n          <circle class=\"fig-dot\" data-node-id=\"p10c-out\" data-node-color=\"red\" cx=\"430\" cy=\"50\" r=\"4\"/>\n          <g font-family=\"Pretendard, sans-serif\" font-weight=\"600\" font-size=\"14\">\n            <text class=\"fig-text fig-math\" data-node-id=\"p10c-vin\" data-node-color=\"blue\" x=\"30\" y=\"32\" text-anchor=\"middle\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text>\n            <text class=\"fig-text fig-math\" x=\"96\" y=\"102\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan> = ∞</text>\n            <text class=\"fig-text fig-math\" x=\"376\" y=\"102\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan> = r<tspan baseline-shift=\"sub\" font-size=\"78%\">O</tspan></text>\n            <text class=\"fig-text fig-math\" x=\"398\" y=\"32\" text-anchor=\"middle\">i<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text>\n            <text class=\"fig-text fig-math\" x=\"256\" y=\"105\" text-anchor=\"end\">G<tspan baseline-shift=\"sub\" font-size=\"78%\">m</tspan>v<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text>\n          </g>\n        </svg>\n        <figcaption>(c) 트랜스컨덕턴스 증폭기. 모델의 출력 전류 기준은 드레인으로 들어가는 방향이에요.</figcaption>\n      </figure>"
+        },
+        {
+          "subpart": "main",
+          "label": "전류 증폭기 모델",
+          "html": "<figure class=\"figure\">\n        <svg viewBox=\"0 0 460 160\" role=\"img\" aria-label=\"(d)의 전류 증폭기 모델. 왼쪽 입력 단자에서 오른쪽을 향한 화살표의 전류 i in이 R in으로 흘러 접지로 가고 R in은 약 1/gm1이에요. 오른쪽에는 위쪽을 향한 종속 전류원 AI i in이 왼쪽에, R out = 무한대가 그 오른쪽에 출력 노드와 접지 사이에 병렬로 있어요. 맨 오른쪽이 출력 단자이고, 그 왼쪽 도선에 오른쪽을 향한 i out 화살표가 있어요.\">\n          <g fill=\"none\" stroke-width=\"2\">\n            <path class=\"fig-ink\" d=\"M30 50H80V62\"/>\n            <path class=\"fig-ink\" d=\"M50 44L58 50L50 56\"/>\n            <path class=\"fig-ink\" d=\"M80 62v10l8 4l-16 8l16 8l-16 8l16 8l-16 8l8 4v10\"/>\n            <path class=\"fig-ink\" d=\"M80 130V136M70 136H90M74 141H86M78 146H82\"/>\n            <polygon class=\"fig-ink\" points=\"280,80 296,100 280,120 264,100\"/>\n            <path class=\"fig-ink\" d=\"M280 120V136M270 136H290M274 141H286M278 146H282\"/>\n            <path class=\"fig-ink\" d=\"M280 112V89M275 94L280 89L285 94\"/>\n            <path class=\"fig-ink\" d=\"M280 80V50H430\"/>\n            <path class=\"fig-ink\" d=\"M360 50V62\"/>\n            <path class=\"fig-ink\" d=\"M360 62v10l8 4l-16 8l16 8l-16 8l16 8l-16 8l8 4v10\"/>\n            <path class=\"fig-ink\" d=\"M360 130V136M350 136H370M354 141H366M358 146H362\"/>\n            <path class=\"fig-ink\" d=\"M394 44L402 50L394 56\"/>\n          </g>\n          <circle class=\"fig-dot\" data-node-id=\"p10d-in\" data-node-color=\"blue\" cx=\"30\" cy=\"50\" r=\"4\"/>\n          <circle class=\"fig-dot\" data-node-id=\"p10d-out\" data-node-color=\"red\" cx=\"360\" cy=\"50\" r=\"4\"/>\n          <circle class=\"fig-dot\" data-node-id=\"p10d-out\" data-node-color=\"red\" cx=\"430\" cy=\"50\" r=\"4\"/>\n          <g font-family=\"Pretendard, sans-serif\" font-weight=\"600\" font-size=\"14\">\n            <text class=\"fig-text fig-math\" x=\"54\" y=\"32\" text-anchor=\"middle\">i<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text>\n            <text class=\"fig-text fig-math\" x=\"96\" y=\"102\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan> ≈ 1/g<tspan baseline-shift=\"sub\" font-size=\"78%\">m1</tspan></text>\n            <text class=\"fig-text fig-math\" x=\"376\" y=\"102\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan> = ∞</text>\n            <text class=\"fig-text fig-math\" x=\"398\" y=\"32\" text-anchor=\"middle\">i<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text>\n            <text class=\"fig-text fig-math\" x=\"256\" y=\"105\" text-anchor=\"end\">A<tspan baseline-shift=\"sub\" font-size=\"78%\">I</tspan>i<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text>\n          </g>\n        </svg>\n        <figcaption>(d) 전류 증폭기. 모델에서 출력 전류는 드레인 밖으로 나가는 방향이에요.</figcaption>\n      </figure>"
         }
       ],
       "answers": [
         {
           "subpart": "main",
-          "html": "\n      <p>이득은 $\\lambda=0$, 몸체효과 무시, 이상적 바이어스 전류원에서 구한 값이에요. (d)의 $A_I=1$은 출력 전류를 드레인에서 나가는 방향으로 잡은 값이에요.</p>\n      <div class=\"table-wrap\">\n        <table>\n          <thead><tr><th>회로</th><th>모델</th><th>$R_{in}$</th><th>종속 전원</th><th>$R_{out}$</th></tr></thead>\n          <tbody>\n            <tr><td>(a)</td><td>전압 증폭기(전압원+직렬 $R_{out}$)</td><td>$\\infty$</td><td>$A_0=-g_{m1}R_D$</td><td>$\\approx1/g_{m2}$</td></tr>\n            <tr><td>(b)</td><td>트랜스임피던스 증폭기(전압원+직렬 $R_{out}$)</td><td>$\\approx1/g_{m1}$</td><td>$R_0=R_D$</td><td>$\\approx1/g_{m2}$</td></tr>\n            <tr><td>(c)</td><td>트랜스컨덕턴스 증폭기(전류원+병렬 $R_{out}$)</td><td>$\\infty$</td><td>$G_m=g_{m1}$</td><td>$r_O$</td></tr>\n            <tr><td>(d)</td><td>전류 증폭기(전류원+병렬 $R_{out}$)</td><td>$\\approx1/g_{m1}$</td><td>$A_I=1$</td><td>$\\infty$</td></tr>\n          </tbody>\n        </table>\n      </div>\n    "
+          "html": "<p>전압 출력은 종속 전압원과 직렬 출력저항, 전류 출력은 종속 전류원과 병렬 출력저항으로 그려요. 표의 전류 기준은 아래 모델의 화살표를 따라요.</p><table><thead><tr><th>회로</th><th>입력저항</th><th>이득</th><th>출력저항</th></tr></thead><tbody><tr><th>(a) 전압</th><td>$\\infty$</td><td>$-g_{m1}R_D$</td><td>$1/g_{m2}$</td></tr><tr><th>(b) 트랜스임피던스</th><td>$1/g_{m1}$</td><td>$+R_D$</td><td>$1/g_{m2}$</td></tr><tr><th>(c) 트랜스컨덕턴스</th><td>$\\infty$</td><td>$+g_{m1}$</td><td>$r_O$</td></tr><tr><th>(d) 전류</th><td>$\\simeq1/g_{m1}$</td><td>$+1$ (유출 기준)</td><td>$\\infty$</td></tr></tbody></table>"
         }
       ]
     },
@@ -402,24 +322,19 @@
       "steps": [
         {
           "subpart": "main",
-          "label": "형태와 Gm 측정 회로",
-          "html": "\n    <p>입력은 게이트 전압, 출력은 드레인 전류라서 트랜스컨덕턴스 증폭기로 그려요. 저주파에서 게이트로는 전류가 흐르지 않으므로 입력 저항은 무한대예요.</p>\n    $$R_{in}=\\infty$$\n    <p>$G_m$을 재려고 출력을 접지로 단락한 소신호 회로를 그려요. $M_1$은 제어 전류원 $g_{m1}v_{in}$과 $r_{O1}$로 바꾸고, $M_2$는 소스에서 본 저항으로 바꿔요.</p>\n    $$R_{up}=\\frac{1}{g_{m2}}\\parallel r_{O2}\\approx\\frac{1}{g_{m2}}$$\n    <figure class=\"figure\">\n      <svg viewBox=\"0 0 460 160\" role=\"img\" aria-label=\"NMOS 캐스코드의 Gm 측정 소신호 회로. 왼쪽에 아래쪽을 향한 제어 전류원 gm1 vin, 그 오른쪽에 rO1이 노드 X와 접지 사이에 병렬로 있어요. X에서 오른쪽으로 M2를 대신한 저항 1/gm2 병렬 rO2를 지나 맨 오른쪽 출력 노드로 가고, 출력 노드는 단락선으로 접지에 이어져 vout은 0이에요. 출력 노드 왼쪽 도선에 왼쪽을 향한 i out 화살표가 있어요.\">\n        <g fill=\"none\" stroke-width=\"2\">\n          <polygon class=\"fig-ink\" points=\"130,80 146,100 130,120 114,100\"/>\n          <path class=\"fig-ink\" d=\"M130 88V111M125 106L130 111L135 106\"/>\n          <path class=\"fig-ink\" d=\"M130 120V136M120 136H140M124 141H136M128 146H132\"/>\n          <path class=\"fig-ink\" d=\"M130 80V50H270\"/>\n          <path class=\"fig-ink\" d=\"M210 50V62\"/>\n          <path class=\"fig-ink\" d=\"M210 62v10l8 4l-16 8l16 8l-16 8l16 8l-16 8l8 4v10\"/>\n          <path class=\"fig-ink\" d=\"M210 130V136M200 136H220M204 141H216M208 146H212\"/>\n          <path class=\"fig-ink\" d=\"M270 50h10l4 -8l8 16l8 -16l8 16l8 -16l8 16l4 -8h10\"/>\n          <path class=\"fig-ink\" d=\"M338 50H400V136M390 136H410M394 141H406M398 146H402\"/>\n          <path class=\"fig-ink\" d=\"M378 44L370 50L378 56\"/>\n        </g>\n        <circle class=\"fig-dot\" data-node-id=\"p11-x\" data-node-color=\"blue\" cx=\"210\" cy=\"50\" r=\"4\"/>\n        <circle class=\"fig-dot\" data-node-id=\"p11-out\" data-node-color=\"red\" cx=\"400\" cy=\"50\" r=\"4\"/>\n        <g font-family=\"Pretendard, sans-serif\" font-weight=\"600\" font-size=\"14\">\n          <text class=\"fig-text fig-math\" x=\"106\" y=\"105\" text-anchor=\"end\">g<tspan baseline-shift=\"sub\" font-size=\"78%\">m1</tspan>v<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text>\n          <text class=\"fig-text fig-math\" x=\"226\" y=\"102\">r<tspan baseline-shift=\"sub\" font-size=\"78%\">O1</tspan></text>\n          <text class=\"fig-text fig-math\" data-node-id=\"p11-x\" data-node-color=\"blue\" x=\"204\" y=\"36\" text-anchor=\"end\">X, v<tspan baseline-shift=\"sub\" font-size=\"78%\">X</tspan></text>\n          <text class=\"fig-text fig-math\" x=\"304\" y=\"28\" text-anchor=\"middle\">1/g<tspan baseline-shift=\"sub\" font-size=\"78%\">m2</tspan> ‖ r<tspan baseline-shift=\"sub\" font-size=\"78%\">O2</tspan></text>\n          <text class=\"fig-text fig-math\" data-node-id=\"p11-out\" data-node-color=\"red\" x=\"400\" y=\"34\" text-anchor=\"middle\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan> = 0</text>\n          <text class=\"fig-text fig-math\" x=\"370\" y=\"76\" text-anchor=\"middle\">i<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text>\n        </g>\n      </svg>\n      <figcaption>출력을 단락($v_{out}=0$)하고 $M_1$을 제어 전류원 $g_{m1}v_{in}$과 $r_{O1}$로, 게이트와 드레인이 모두 AC 접지인 $M_2$를 소스에서 본 저항 $(1/g_{m2})\\parallel r_{O2}$로 바꿨어요. 이 치환은 드레인이 단락된 이 측정에서만 써요. $i_{out}$은 단락선에서 $M_2$ 드레인으로 들어가는 전류예요.</figcaption>\n    </figure>\n    <p>노드 $X$의 전압을 $v_X$라 하고 KCL을 세워요. 위에서 들어오는 전류는 $i_{out}$이고, 아래로 나가는 전류는 제어 전류원의 $g_{m1}v_{in}$과 $r_{O1}$의 $v_X/r_{O1}$이에요.</p>\n    $$i_{out}=g_{m1}v_{in}+\\frac{v_X}{r_{O1}}$$\n    <p>위쪽 가지는 접지(0 V)인 출력에서 $X$로 $R_{up}$을 지나는 전류예요.</p>\n    $$i_{out}=\\frac{0-v_X}{R_{up}}$$\n  "
+          "label": "단락 출력의 전류 분배",
+          "html": "<p> 출력 단락에서 $M_2$ 소스가 보는 $R_{up}$과 $r_{O1}$이 병렬이에요. $M_1$의 제어 전류 중 위 가지가 공급하는 몫이 드레인으로 들어가는 출력 전류예요.</p>$$R_{up}=(1/g_{m2})\\parallel r_{O2}$$\n$$G_m=i_{out,sc}/v_{in}=g_{m1}r_{O1}/(r_{O1}+R_{up})$$\n"
         },
         {
           "subpart": "main",
-          "label": "Gm, Rout, 이득",
-          "html": "\n      <p>두 번째 식에서 $v_X=-i_{out}R_{up}$을 얻어 KCL 식에 넣고 $i_{out}$끼리 모아요.</p>\n      $$i_{out}\\left(1+\\frac{R_{up}}{r_{O1}}\\right)=g_{m1}v_{in}$$\n      <p>양변을 정리하면 $M_1$의 전류가 $r_{O1}$과 $R_{up}$으로 나뉘는 전류 분배 꼴이 돼요. $R_{up}\\approx1/g_{m2}$가 $r_{O1}$보다 훨씬 작으므로, 즉 $g_{m2}r_{O1}\\gg1$이므로 거의 전부가 출력으로 나와요.</p>\n      <div data-gain-stage=\"gm\">\n        $$G_m=\\frac{i_{out}}{v_{in}}=g_{m1}\\frac{r_{O1}}{r_{O1}+R_{up}}\\approx g_{m1}$$\n      </div>\n      <p>$R_{out}$은 입력을 0으로 두고 출력에서 먼 쪽부터 합성해요. $v_{in}=0$이면 $M_1$의 제어 전류가 사라져 $M_2$ 소스 아래에는 $r_{O1}$만 남아요. 이 축퇴 저항 위에 $M_2$가 쌓였으니 캐스코드 규칙대로 $M_2$의 $g_{m2}r_{O2}$를 곱해요.</p>\n      <div data-gain-stage=\"rout\">\n        $$R_{out}\\approx g_{m2}r_{O2}r_{O1}$$\n      </div>\n      <p>이 모델에서 형태의 이득은 $G_m$ 자체예요. 같은 모델로 전압 이득도 바로 읽을 수 있어요. 드레인에 AC 접지로 이어진 부하 $R_L$을 달면, 드레인으로 들어가는 전류를 양으로 잡았으니 이득은 반전이에요. 부하가 이상적인 전류원($R_L\\to\\infty$)이면 $R_{out}$만 남아요.</p>\n      <div data-gain-stage=\"gain\">\n        $$A_v=-G_m(R_{out}\\parallel R_L)$$\n        $$A_v\\big|_{R_L\\to\\infty}\\approx-g_{m1}g_{m2}r_{O1}r_{O2}$$\n      </div>\n    "
-        },
-        {
-          "subpart": "main",
-          "label": "모델 조립",
-          "html": "\n      <p>세 값을 그림 12.18(e)의 트랜스컨덕턴스 증폭기 모델에 넣어요. 종속 전류원은 왼쪽, $R_{out}$은 오른쪽에 병렬이고, 출력 단자는 맨 오른쪽이에요.</p>\n      <figure class=\"figure\">\n        <svg viewBox=\"0 0 460 160\" role=\"img\" aria-label=\"NMOS 캐스코드의 트랜스컨덕턴스 증폭기 모델. 왼쪽 입력 단자 v in에서 R in이 접지로 내려가고 값은 무한대예요. 오른쪽에는 아래쪽을 향한 종속 전류원 Gm v in이 왼쪽에, 출력 저항 R out이 그 오른쪽에 출력 노드와 접지 사이에 병렬로 있어요. 맨 오른쪽이 출력 단자이고, 그 왼쪽 도선에 왼쪽을 향한 i out 화살표가 있어요.\">\n          <g fill=\"none\" stroke-width=\"2\">\n            <path class=\"fig-ink\" d=\"M30 50H80V62\"/>\n            <path class=\"fig-ink\" d=\"M80 62v10l8 4l-16 8l16 8l-16 8l16 8l-16 8l8 4v10\"/>\n            <path class=\"fig-ink\" d=\"M80 130V136M70 136H90M74 141H86M78 146H82\"/>\n            <polygon class=\"fig-ink\" points=\"280,80 296,100 280,120 264,100\"/>\n            <path class=\"fig-ink\" d=\"M280 120V136M270 136H290M274 141H286M278 146H282\"/>\n            <path class=\"fig-ink\" d=\"M280 88V111M275 106L280 111L285 106\"/>\n            <path class=\"fig-ink\" d=\"M280 80V50H430\"/>\n            <path class=\"fig-ink\" d=\"M360 50V62\"/>\n            <path class=\"fig-ink\" d=\"M360 62v10l8 4l-16 8l16 8l-16 8l16 8l-16 8l8 4v10\"/>\n            <path class=\"fig-ink\" d=\"M360 130V136M350 136H370M354 141H366M358 146H362\"/>\n            <path class=\"fig-ink\" d=\"M402 44L394 50L402 56\"/>\n          </g>\n          <circle class=\"fig-dot\" data-node-id=\"p11m-vin\" data-node-color=\"blue\" cx=\"30\" cy=\"50\" r=\"4\"/>\n          <circle class=\"fig-dot\" data-node-id=\"p11m-out\" data-node-color=\"red\" cx=\"360\" cy=\"50\" r=\"4\"/>\n          <circle class=\"fig-dot\" data-node-id=\"p11m-out\" data-node-color=\"red\" cx=\"430\" cy=\"50\" r=\"4\"/>\n          <g font-family=\"Pretendard, sans-serif\" font-weight=\"600\" font-size=\"14\">\n            <text class=\"fig-text fig-math\" data-node-id=\"p11m-vin\" data-node-color=\"blue\" x=\"30\" y=\"32\" text-anchor=\"middle\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text>\n            <text class=\"fig-text fig-math\" x=\"96\" y=\"102\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan> = ∞</text>\n            <text class=\"fig-text fig-math\" x=\"376\" y=\"102\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text>\n            <text class=\"fig-text fig-math\" x=\"398\" y=\"32\" text-anchor=\"middle\">i<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text>\n            <text class=\"fig-text fig-math\" x=\"256\" y=\"105\" text-anchor=\"end\">G<tspan baseline-shift=\"sub\" font-size=\"78%\">m</tspan>v<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text>\n          </g>\n        </svg>\n        <figcaption>NMOS 캐스코드의 트랜스컨덕턴스 증폭기 모델이에요. $R_{in}=\\infty$, $G_mv_{in}\\approx g_{m1}v_{in}$, $R_{out}\\approx g_{m2}r_{O2}r_{O1}$이고, $i_{out}$은 그림 12.84의 $I_{out}$처럼 출력 단자에서 드레인으로 들어가는 방향이에요.</figcaption>\n      </figure>\n    "
+          "label": "입력 영점에서 출력저항",
+          "html": "<p>게이트 입력을 영으로 두면  위쪽 $M_2$의 소스 아래에 $r_{O1}$이 남아요. $g_{m2}r_{O1}\\gg1$, $g_{m2}r_{O2}\\gg1$일 때 캐스코드 주항에는 위 소자의 $g_{m2}r_{O2}$가 곱해져요.</p>"
         }
       ],
       "answers": [
         {
           "subpart": "main",
-          "html": "\n      <p>저주파, 몸체효과 무시, $g_mr_O\\gg1$에서 그림 12.84는 트랜스컨덕턴스 증폭기예요.</p>\n      $$R_{in}=\\infty$$\n      $$G_m\\approx g_{m1}$$\n      $$R_{out}\\approx g_{m2}r_{O2}r_{O1}$$\n      <p>모델은 출력 노드와 접지 사이에 종속 전류원 $G_mv_{in}$과 $R_{out}$을 병렬로 둔 노턴 꼴이에요.</p>\n    "
+          "html": "<p>몸체 효과를 무시한 저주파 모델이에요. 게이트는 개방이고, 출력에는 제어 전류원과 유한한 출력저항을 병렬로 둬요.</p>$$R_{in}=\\infty$$\n$$G_m\\simeq g_{m1}$$\n$$R_{out}\\simeq g_{m2}r_{O2}r_{O1}$$\n<figure class=\"figure\">\n        <svg viewBox=\"0 0 460 160\" role=\"img\" aria-label=\"NMOS 캐스코드의 트랜스컨덕턴스 증폭기 모델. 왼쪽 입력 단자 v in에서 R in이 접지로 내려가고 값은 무한대예요. 오른쪽에는 아래쪽을 향한 종속 전류원 Gm v in이 왼쪽에, 출력 저항 R out이 그 오른쪽에 출력 노드와 접지 사이에 병렬로 있어요. 맨 오른쪽이 출력 단자이고, 그 왼쪽 도선에 왼쪽을 향한 i out 화살표가 있어요.\">\n          <g fill=\"none\" stroke-width=\"2\">\n            <path class=\"fig-ink\" d=\"M30 50H80V62\"/>\n            <path class=\"fig-ink\" d=\"M80 62v10l8 4l-16 8l16 8l-16 8l16 8l-16 8l8 4v10\"/>\n            <path class=\"fig-ink\" d=\"M80 130V136M70 136H90M74 141H86M78 146H82\"/>\n            <polygon class=\"fig-ink\" points=\"280,80 296,100 280,120 264,100\"/>\n            <path class=\"fig-ink\" d=\"M280 120V136M270 136H290M274 141H286M278 146H282\"/>\n            <path class=\"fig-ink\" d=\"M280 88V111M275 106L280 111L285 106\"/>\n            <path class=\"fig-ink\" d=\"M280 80V50H430\"/>\n            <path class=\"fig-ink\" d=\"M360 50V62\"/>\n            <path class=\"fig-ink\" d=\"M360 62v10l8 4l-16 8l16 8l-16 8l16 8l-16 8l8 4v10\"/>\n            <path class=\"fig-ink\" d=\"M360 130V136M350 136H370M354 141H366M358 146H362\"/>\n            <path class=\"fig-ink\" d=\"M402 44L394 50L402 56\"/>\n          </g>\n          <circle class=\"fig-dot\" data-node-id=\"p11m-vin\" data-node-color=\"blue\" cx=\"30\" cy=\"50\" r=\"4\"/>\n          <circle class=\"fig-dot\" data-node-id=\"p11m-out\" data-node-color=\"red\" cx=\"360\" cy=\"50\" r=\"4\"/>\n          <circle class=\"fig-dot\" data-node-id=\"p11m-out\" data-node-color=\"red\" cx=\"430\" cy=\"50\" r=\"4\"/>\n          <g font-family=\"Pretendard, sans-serif\" font-weight=\"600\" font-size=\"14\">\n            <text class=\"fig-text fig-math\" data-node-id=\"p11m-vin\" data-node-color=\"blue\" x=\"30\" y=\"32\" text-anchor=\"middle\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text>\n            <text class=\"fig-text fig-math\" x=\"96\" y=\"102\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan> = ∞</text>\n            <text class=\"fig-text fig-math\" x=\"376\" y=\"102\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text>\n            <text class=\"fig-text fig-math\" x=\"398\" y=\"32\" text-anchor=\"middle\">i<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text>\n            <text class=\"fig-text fig-math\" x=\"256\" y=\"105\" text-anchor=\"end\">G<tspan baseline-shift=\"sub\" font-size=\"78%\">m</tspan>v<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text>\n          </g>\n        </svg>\n        <figcaption>캐스코드의 노턴 모델. 포트 전류는 드레인으로 들어가는 방향이에요.</figcaption>\n      </figure>"
         }
       ]
     },
@@ -432,29 +347,19 @@
       "steps": [
         {
           "subpart": "main",
-          "label": "비교할 두 연결과 첫 KCL",
-          "html": "\n    <p>두 연결을 소신호 회로로 나란히 그려요. (a)는 전선으로 전류원을 $R_D$에 바로 이은 것이고, (b)는 전류원을 CG 단 $M_1$의 소스에 이은 것이에요. (b)에서 $M_1$은 게이트가 AC 접지이고 $\\lambda=0$이라 소스 쪽에 저항 $1/g_{m1}$로 보여요. 소스의 바이어스 전류원은 이상적이라 소신호에서는 개방이에요.</p>\n    <figure class=\"figure\">\n      <svg viewBox=\"0 0 480 170\" role=\"img\" aria-label=\"두 회로를 나란히 그린 그림. 왼쪽 (a)는 위쪽을 향한 전류원 i in, 커패시터 Cp, 저항 RD가 같은 위쪽 도선에 왼쪽부터 매달려 각각 접지로 가고, 도선의 맨 오른쪽 끝이 출력 vout이에요. 오른쪽 (b)는 위쪽을 향한 전류원 i in과 커패시터 Cp가 소스 노드 vs에 매달리고, 맨 오른쪽에 M1을 소스에서 본 저항 1/gm1이 접지로 내려가며 그 위 도선에 아래쪽을 향한 i d 화살표가 있어요.\">\n        <g fill=\"none\" stroke-width=\"2\">\n          <circle class=\"fig-accent\" cx=\"40\" cy=\"95\" r=\"14\"/>\n          <circle class=\"fig-accent\" cx=\"280\" cy=\"95\" r=\"14\"/>\n          <path class=\"fig-ink\" d=\"M40 50V81\"/>\n          <path class=\"fig-ink\" d=\"M40 109V146M30 146H50M34 151H46M38 156H42\"/>\n          <path class=\"fig-ink\" d=\"M40 104V86M35 91L40 86L45 91\"/>\n          <path class=\"fig-ink\" d=\"M100 50V93M100 103V146M90 146H110M94 151H106M98 156H102\"/>\n          <path class=\"fig-ink\" d=\"M88 93H112M88 103H112\"/>\n          <path class=\"fig-ink\" d=\"M40 50H190\"/>\n          <path class=\"fig-ink\" d=\"M155 50V62\"/>\n          <path class=\"fig-ink\" d=\"M155 62v10l8 4l-16 8l16 8l-16 8l16 8l-16 8l8 4v10\"/>\n          <path class=\"fig-ink\" d=\"M155 130V146M145 146H165M149 151H161M153 156H157\"/>\n          <path class=\"fig-ink\" d=\"M280 50V81\"/>\n          <path class=\"fig-ink\" d=\"M280 109V146M270 146H290M274 151H286M278 156H282\"/>\n          <path class=\"fig-ink\" d=\"M280 104V86M275 91L280 86L285 91\"/>\n          <path class=\"fig-ink\" d=\"M340 50V93M340 103V146M330 146H350M334 151H346M338 156H342\"/>\n          <path class=\"fig-ink\" d=\"M328 93H352M328 103H352\"/>\n          <path class=\"fig-ink\" d=\"M280 50H400V74\"/>\n          <path class=\"fig-ink\" d=\"M400 74v10l8 4l-16 8l16 8l-16 8l16 8l-16 8l8 4v10\"/>\n          <path class=\"fig-ink\" d=\"M400 142V146M390 146H410M394 151H406M398 156H402\"/>\n          <path class=\"fig-ink\" d=\"M394 56L400 64L406 56\"/>\n        </g>\n        <circle class=\"fig-dot\" data-node-id=\"p12a-vout\" data-node-color=\"red\" cx=\"100\" cy=\"50\" r=\"4\"/>\n        <circle class=\"fig-dot\" data-node-id=\"p12a-vout\" data-node-color=\"red\" cx=\"155\" cy=\"50\" r=\"4\"/>\n        <circle class=\"fig-dot\" data-node-id=\"p12a-vout\" data-node-color=\"red\" cx=\"190\" cy=\"50\" r=\"4\"/>\n        <circle class=\"fig-dot\" data-node-id=\"p12b-vs\" data-node-color=\"blue\" cx=\"340\" cy=\"50\" r=\"4\"/>\n        <g font-family=\"Pretendard, sans-serif\" font-weight=\"600\" font-size=\"14\">\n          <text class=\"fig-text\" x=\"10\" y=\"22\">(a)</text>\n          <text class=\"fig-text\" x=\"250\" y=\"22\">(b)</text>\n          <text class=\"fig-text fig-math\" x=\"20\" y=\"100\" text-anchor=\"end\">i<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text>\n          <text class=\"fig-text fig-math\" x=\"116\" y=\"102\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">p</tspan></text>\n          <text class=\"fig-text fig-math\" x=\"169\" y=\"102\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">D</tspan></text>\n          <text class=\"fig-text fig-math\" data-node-id=\"p12a-vout\" data-node-color=\"red\" x=\"190\" y=\"32\" text-anchor=\"middle\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">out</tspan></text>\n          <text class=\"fig-text fig-math\" x=\"260\" y=\"100\" text-anchor=\"end\">i<tspan baseline-shift=\"sub\" font-size=\"78%\">in</tspan></text>\n          <text class=\"fig-text fig-math\" x=\"356\" y=\"102\">C<tspan baseline-shift=\"sub\" font-size=\"78%\">p</tspan></text>\n          <text class=\"fig-text fig-math\" data-node-id=\"p12b-vs\" data-node-color=\"blue\" x=\"340\" y=\"32\" text-anchor=\"middle\">v<tspan baseline-shift=\"sub\" font-size=\"78%\">s</tspan></text>\n          <text class=\"fig-text fig-math\" x=\"412\" y=\"66\">i<tspan baseline-shift=\"sub\" font-size=\"78%\">d</tspan></text>\n          <text class=\"fig-text fig-math\" x=\"414\" y=\"114\">1/g<tspan baseline-shift=\"sub\" font-size=\"78%\">m1</tspan></text>\n        </g>\n      </svg>\n      <figcaption>(a) 전류원 $i_{in}$과 기생 $C_p$를 $R_D$에 바로 이은 회로예요. (b) 같은 전류원을 CG 단의 소스에 이은 회로로, $M_1$을 소스에서 본 저항 $1/g_{m1}$로 바꿨어요. 이 가지로 들어간 전류 $i_d$는 실제로는 $M_1$을 지나 드레인 밖으로 나가 $R_D$로 흘러요.</figcaption>\n    </figure>\n    <p>(a)의 출력 노드에서 KCL을 세워요. 들어오는 $i_{in}$이 $C_p$와 $R_D$로 나뉘어요.</p>\n    $$i_{in}=sC_pv_{out}+\\frac{v_{out}}{R_D}$$\n    <p>(b)의 소스 노드에서도 KCL을 세워요. 들어오는 $i_{in}$이 $C_p$와 $M_1$로 나뉘고, $M_1$으로 가는 전류는 $g_{m1}v_s$예요.</p>\n    $$i_{in}=sC_pv_s+g_{m1}v_s$$\n  "
+          "label": "직접 연결",
+          "html": "<p> 입력 기생 커패시턴스 $C_p$가 부하 $R_D$와 같은 노드에 걸려요.</p>$$\\omega_{p,a}=1/(R_DC_p)$$\n"
         },
         {
           "subpart": "main",
-          "label": "(a) 저항에 바로 이을 때",
-          "html": "\n      <p>(a)의 KCL을 $v_{out}$으로 정리해요. $C_p$가 바라보는 저항이 $R_D$ 전체예요.</p>\n      $$\\frac{v_{out}}{i_{in}}=\\frac{R_D}{1+sR_DC_p}$$\n      $$\\omega_{p,a}=\\frac{1}{R_DC_p}$$\n      <p>$R_D$가 크면 이 극점이 낮아요. 그보다 높은 주파수에서는 $i_{in}$의 대부분이 $R_D$ 대신 $C_p$로 빠져 출력 전압이 줄어요.</p>\n    "
-        },
-        {
-          "subpart": "main",
-          "label": "(b) CG를 거쳐 이을 때",
-          "html": "\n      <p>(b)의 KCL을 $v_s$로 정리하고, $M_1$으로 들어가는 전류 $i_d=g_{m1}v_s$를 구해요. $C_p$가 바라보는 저항이 작은 $1/g_{m1}$로 바뀌어요.</p>\n      $$v_s=\\frac{i_{in}}{g_{m1}+sC_p}$$\n      $$\\frac{i_d}{i_{in}}=\\frac{1}{1+sC_p/g_{m1}}$$\n      <p>$i_d$는 드레인 밖으로 나가 $R_D$로 흐르므로 $R_D$의 아래 방향 전류가 그만큼 줄고, 출력 전압이 $R_Di_d$만큼 올라가요. 드레인 출력 저항이 무한대라 $i_d$는 부하가 무엇이든 그대로 $R_D$에 전달돼요.</p>\n      $$\\frac{v_{out}}{i_{in}}=\\frac{R_D}{1+sC_p/g_{m1}}$$\n      $$\\omega_{p,b}=\\frac{g_{m1}}{C_p}$$\n    "
-        },
-        {
-          "subpart": "main",
-          "label": "두 연결의 비교",
-          "html": "\n      <p>두 식의 저주파 값은 모두 $R_D$라서 전달하는 신호의 크기는 같아요. 다른 것은 입력 쪽 극점뿐이에요. 두 극점의 비를 구해요.</p>\n      $$\\frac{\\omega_{p,b}}{\\omega_{p,a}}=\\frac{g_{m1}/C_p}{1/(R_DC_p)}=g_{m1}R_D$$\n      <p>$1/g_{m1}\\ll R_D$, 즉 $g_{m1}R_D\\gg1$이면 CG를 쓴 쪽의 입력 극점이 훨씬 높아요. 전류 이득은 1이지만, 큰 $C_p$를 가진 전류원과 큰 부하 저항 $R_D$를 서로 떼어 놓아 같은 이득을 더 넓은 대역에서 얻어요.</p>\n    "
+          "label": "공통 게이트 단으로 분리",
+          "html": "<p> 게이트를 AC 접지로 두면 $C_p$가 보는 소스 입력 저항은 $1/g_{m1}$예요. $\\lambda=0$이고 몸체 효과와 다른 기생 커패시턴스를 무시한 모델이에요.</p>$$\\omega_{p,b}=g_{m1}/C_p$$\n"
         }
       ],
       "answers": [
         {
           "subpart": "main",
-          "html": "\n      <p>장점은 낮은 입력 임피던스 $R_{in}\\approx1/g_{m1}$에 있어요. 전류원이 큰 기생 커패시턴스 $C_p$를 가지면, $R_D$에 바로 이을 때 입력 극점이 $1/(R_DC_p)$로 낮아 높은 주파수의 전류가 $C_p$로 새요. CG 단을 거치면 $C_p$가 작은 $1/g_{m1}$만 보게 되어 입력 극점이 $g_{m1}/C_p$로 $g_{m1}R_D$배 높아져요.</p>\n      $$\\omega_{p,a}=\\frac{1}{R_DC_p}$$\n      <p>CG 단을 거치면 입력 극점이 $g_{m1}R_D$배 높아져요.</p>\n      $$\\omega_{p,b}=\\frac{g_{m1}}{C_p}$$\n      <p>저주파 전달 $v_{out}/i_{in}=R_D$는 그대로이고, 출력 저항이 무한대라 받은 전류를 부하에 그대로 전달해요. 이 비교는 $\\lambda=0$, 몸체효과 무시, $C_p$ 외의 커패시턴스를 무시한 결과예요.</p>\n    "
+          "html": "<p>저주파에서는 같은 전류가 부하로 전달돼요. $1/g_{m1}\\ll R_D$이면 입력 극점이 올라가므로 큰 $C_p$를 가진 전류원도 더 높은 주파수까지 부하를 구동할 수 있어요.</p>$$\\omega_{p,b}/\\omega_{p,a}=g_{m1}R_D$$\n"
         }
       ]
     },
@@ -467,34 +372,19 @@
       "steps": [
         {
           "subpart": "main",
-          "label": "판별 순서와 반송 식",
-          "html": "\n    <p>회로마다 세 가지를 차례로 적어요.</p>\n    <ol>\n      <li>출력 표시가 $V_{out}$ 노드인가, $I_{out}$ 화살표인가?</li>\n      <li>$M_2$ 게이트에 이어진 노드의 전압 $v_F$를 출력으로 쓰면?</li>\n      <li>$v_F$가 걸리는 $M_2$ 게이트는 $v_{in}$이 걸리는 $M_1$ 게이트와 같은 노드인가?</li>\n    </ol>\n    <p>3번은 여섯 회로가 같아요. $v_{in}$은 $M_1$ 게이트, $v_F$는 $M_2$ 게이트로 서로 다른 노드라서, 첫 줄에 차동쌍의 뺄셈 식을 그대로 적어요.</p>\n    $$I_{out1}-I_{out2}=g_m(v_{in}-v_F)$$\n  "
+          "label": "반송 포트",
+          "html": "<p> 입력이 $M_1$ 게이트,  귀환이 $M_2$ 게이트에 걸려 차동쌍이 두 전압을 빼요.</p>$$v_{G1}-v_{G2}=v_{in}-v_F$$\n"
         },
         {
           "subpart": "main",
-          "label": "반송 방식",
-          "html": "\n      <p>여섯 회로 모두 $v_F$가 $M_2$ 게이트에 걸리고 $v_{in}$은 $M_1$ 게이트에 걸려요. 두 신호가 직접 이어져 있지는 않지만, 차동쌍이 두 전압의 차이로 전류를 만들므로 전압을 빼는 구조예요. 입력과 다른 노드에 걸리니 직렬 연결이에요.</p>\n      <p>그래서 반송은 여섯 회로 모두 전압 반송(직렬)이에요.</p>\n    "
-        },
-        {
-          "subpart": "main",
-          "label": "(a)·(b)·(f) 출력 전압을 바로 감지",
-          "html": "\n      <p>세 회로는 출력이 $V_{out}$ 노드로 표시돼 있고, 그 노드가 도선으로 $M_2$ 게이트에 바로 이어져요. 귀환 회로망은 도선 하나라서 출력 전압이 그대로 돌아가요.</p>\n      $$v_F=v_{out}$$\n      <p>$M_2$ 게이트가 출력 노드와 접지 사이에 병렬로 붙어 출력 전압을 재는 셈이에요. 저주파에서 게이트로 전류가 흐르지 않으니 감지하는 쪽 입력 임피던스가 무한대인 이상적인 볼트미터와 같아요. 그래서 감지는 전압 감지(병렬)예요.</p>\n      <p>(a)의 $M_3$은 소스 팔로워, (b)의 $M_3$은 PMOS 공통 소스 단, (f)의 $M_4$–$M_3$은 전류 거울이에요. 이것들은 출력을 만드는 순방향 증폭기의 일부이고, 감지 방식을 바꾸지 않아요.</p>\n    "
-        },
-        {
-          "subpart": "main",
-          "label": "(e) 저항 분배기로 출력 전압 감지",
-          "html": "\n      <p>(e)는 출력 $V_{out}$ 노드에서 접지까지 $R_1$, $R_2$를 직렬로 걸고, 두 저항 사이 전압을 $M_2$ 게이트로 보내요. $M_2$ 게이트는 전류를 끌지 않으니 두 저항에 같은 전류가 흘러 분배식이 그대로 성립해요.</p>\n      $$v_F=\\frac{R_2}{R_1+R_2}v_{out}$$\n      <p>분배기 전체가 출력 노드와 접지 사이에 병렬로 붙어 출력 전압에 비례하는 신호를 만들어요. 감지는 전압 감지(병렬)이고, 귀환율은 $K=R_2/(R_1+R_2)$예요. 교과서 예제 12.10의 그림 12.25와 같은 구조예요.</p>\n    "
-        },
-        {
-          "subpart": "main",
-          "label": "(c)·(d) R1으로 출력 전류 감지",
-          "html": "\n      <p>두 회로는 출력이 $R_1$으로 흐르는 전류 $I_{out}$으로 표시돼 있어요. $R_1$은 출력 전류가 흐르는 길에 직렬로 놓여 있고, $R_1$ 위 노드의 전압이 $M_2$ 게이트로 가요.</p>\n      $$v_F=I_{out}R_1$$\n      <p>$R_1$이 전류계의 작은 저항 역할을 해서 출력 전류를 전압으로 바꿔 돌려보내요. 그래서 감지는 전류 감지(직렬)예요. (d)는 교과서 그림 12.22(d)처럼 트랜지스터 소스 아래의 저항으로 전류를 재는 구조이고, (c)는 PMOS $M_3$ 드레인 아래의 저항으로 재는 구조예요.</p>\n      <p>(c)는 (b)와 소자·연결이 똑같아요. (b)는 출력을 $R_1$ 위 노드의 전압으로 정했으니 그 노드에 바로 붙은 $M_2$ 게이트가 출력 전압을 감지하는 것이고, (c)는 출력을 $R_1$의 전류로 정했으니 $R_1$이 그 전류를 감지하는 것이에요. 출력을 무엇으로 정했는지가 감지 방식을 정해요.</p>\n    "
+          "label": "출력 감지",
+          "html": "<p>(b)·(c)는 연결은 같고 출력의 정의가 달라요. (b)는 출력 노드 전압을 게이트로 보내고, (c)는 지정된 출력 전류가 지나는 $R_1$의 전압을 게이트로 보내요.</p>"
         }
       ],
       "answers": [
         {
           "subpart": "main",
-          "html": "\n      <p>여섯 회로 모두 차동쌍 $M_1$–$M_2$가 전압 뺄셈기로 반송해요. 감지는 출력 표시에 따라 갈려요.</p>\n      <div class=\"table-wrap\">\n        <table>\n          <thead><tr><th>회로</th><th>감지</th><th>반송</th><th>귀환 신호 $v_F$</th></tr></thead>\n          <tbody>\n            <tr><td>(a)</td><td>출력 전압(병렬)</td><td>전압(직렬)</td><td>$v_{out}$</td></tr>\n            <tr><td>(b)</td><td>출력 전압(병렬)</td><td>전압(직렬)</td><td>$v_{out}$</td></tr>\n            <tr><td>(c)</td><td>출력 전류(직렬, $R_1$)</td><td>전압(직렬)</td><td>$I_{out}R_1$</td></tr>\n            <tr><td>(d)</td><td>출력 전류(직렬, $R_1$)</td><td>전압(직렬)</td><td>$I_{out}R_1$</td></tr>\n            <tr><td>(e)</td><td>출력 전압(병렬, 분배기)</td><td>전압(직렬)</td><td>$\\frac{R_2}{R_1+R_2}v_{out}$</td></tr>\n            <tr><td>(f)</td><td>출력 전압(병렬)</td><td>전압(직렬)</td><td>$v_{out}$</td></tr>\n          </tbody>\n        </table>\n      </div>\n    "
+          "html": "<p>모두 입력 전압과 귀환 전압의 차를 사용하므로 반송은 전압 직렬 반송이에요. 출력 감지는 다음과 같아요.</p><table><thead><tr><th>회로</th><th>감지</th><th>귀환 전압 $v_F$</th></tr></thead><tbody><tr><th>(a)·(b)·(f)</th><td>전압 · 병렬</td><td>$v_{out}$</td></tr><tr><th>(e)</th><td>전압 · 병렬</td><td>$[R_2/(R_1+R_2)]v_{out}$</td></tr><tr><th>(c)·(d)</th><td>전류 · 직렬</td><td>$I_{out}R_1$</td></tr></tbody></table>"
         }
       ]
     },
@@ -507,29 +397,19 @@
       "steps": [
         {
           "subpart": "main",
-          "label": "판별 순서와 반송 식",
-          "html": "\n    <p>회로마다 세 가지를 차례로 적어요.</p>\n    <ol>\n      <li>출력 표시가 $V_{out}$ 노드인가, $I_{out}$ 화살표인가?</li>\n      <li>$M_1$ 게이트에 이어진 노드의 전압 $v_F$를 출력으로 쓰면?</li>\n      <li>$v_F$가 걸리는 $M_1$ 게이트는 $v_{in}$이 걸리는 $M_1$ 소스와 같은 노드인가?</li>\n    </ol>\n    <p>3번은 네 회로가 같아요. 게이트와 소스는 다른 노드라서, 첫 줄에 트랜지스터 하나의 뺄셈 식을 적어요.</p>\n    $$i_{D1}=g_{m1}(v_F-v_{in})$$\n  "
+          "label": "반송 포트",
+          "html": "<p> 입력이 $M_1$ 소스,  귀환이 같은 트랜지스터의 게이트에 걸려 두 전압의 차가 드레인 전류를 정해요.</p>$$v_{GS1}=v_F-v_{in}$$\n"
         },
         {
           "subpart": "main",
-          "label": "반송 방식",
-          "html": "\n      <p>네 회로 모두 $v_{in}$은 $M_1$ 소스, $v_F$는 $M_1$ 게이트에 걸려요. $M_1$의 드레인 전류가 $v_F-v_{in}$에 비례하므로 $M_1$이 두 전압을 빼는 역할을 해요. 귀환 신호가 입력과 다른 노드에 걸리니 직렬 연결이에요.</p>\n      <p>그래서 반송은 네 회로 모두 전압 반송(직렬)이에요.</p>\n    "
-        },
-        {
-          "subpart": "main",
-          "label": "(a)·(b)·(d) 출력 전압을 바로 감지",
-          "html": "\n      <p>세 회로는 출력이 $V_{out}$ 노드로 표시돼 있고, 그 노드가 도선으로 $M_1$ 게이트에 바로 이어져요. 귀환 회로망이 도선 하나라 출력 전압이 그대로 돌아가요.</p>\n      $$v_F=v_{out}$$\n      <p>$M_1$ 게이트가 출력 노드와 접지 사이에 병렬로 붙어 출력 전압을 재는 셈이고, 게이트로 전류가 흐르지 않으니 감지하는 쪽 입력 임피던스가 무한대예요. 그래서 감지는 전압 감지(병렬)예요.</p>\n      <p>(a)의 소스 팔로워 $M_2$, (b)의 PMOS 공통 소스 단 $M_2$, (d)의 다이오드 접속 부하 $M_3$은 출력을 만드는 순방향 증폭기의 일부예요. 감지 방식을 바꾸지 않아요.</p>\n    "
-        },
-        {
-          "subpart": "main",
-          "label": "(c) R1으로 출력 전류 감지",
-          "html": "\n      <p>(c)는 출력이 $R_1$으로 흐르는 전류 $I_{out}$으로 표시돼 있어요. $R_1$은 출력 전류가 흐르는 길에 직렬로 놓여 있고, $R_1$ 위 노드의 전압이 $M_1$ 게이트로 가요.</p>\n      $$v_F=I_{out}R_1$$\n      <p>$R_1$이 출력 전류를 전압으로 바꿔 돌려보내므로 감지는 전류 감지(직렬)예요.</p>\n      <p>(c)는 (b)와 소자·연결이 똑같아요. 출력을 $R_1$ 위 노드의 전압으로 정한 (b)는 전압 감지이고, $R_1$의 전류로 정한 (c)는 전류 감지예요. 출력을 무엇으로 정했는지가 감지 방식을 정해요.</p>\n    "
+          "label": "출력 감지",
+          "html": "<p>(b)·(c)는 연결은 같고 출력의 정의가 달라요. (b)는 출력 노드 전압을 게이트로 보내고, (c)는 지정된 출력 전류가 지나는 $R_1$의 전압을 게이트로 보내요.</p>"
         }
       ],
       "answers": [
         {
           "subpart": "main",
-          "html": "\n      <p>네 회로 모두 $M_1$ 하나가 게이트($v_F$)와 소스($v_{in}$)의 차이로 전류를 만드는 전압 뺄셈기로 반송해요. 감지는 출력 표시에 따라 갈려요.</p>\n      <div class=\"table-wrap\">\n        <table>\n          <thead><tr><th>회로</th><th>감지</th><th>반송</th><th>귀환 신호 $v_F$</th></tr></thead>\n          <tbody>\n            <tr><td>(a)</td><td>출력 전압(병렬)</td><td>전압(직렬)</td><td>$v_{out}$</td></tr>\n            <tr><td>(b)</td><td>출력 전압(병렬)</td><td>전압(직렬)</td><td>$v_{out}$</td></tr>\n            <tr><td>(c)</td><td>출력 전류(직렬, $R_1$)</td><td>전압(직렬)</td><td>$I_{out}R_1$</td></tr>\n            <tr><td>(d)</td><td>출력 전압(병렬)</td><td>전압(직렬)</td><td>$v_{out}$</td></tr>\n          </tbody>\n        </table>\n      </div>\n    "
+          "html": "<p>모두 입력 전압과 귀환 전압의 차를 사용하므로 반송은 전압 직렬 반송이에요. 출력 감지는 다음과 같아요.</p><table><thead><tr><th>회로</th><th>감지</th><th>귀환 전압 $v_F$</th></tr></thead><tbody><tr><th>(a)·(b)·(d)</th><td>전압 · 병렬</td><td>$v_{out}$</td></tr><tr><th>(c)</th><td>전류 · 직렬</td><td>$I_{out}R_1$</td></tr></tbody></table>"
         }
       ]
     }

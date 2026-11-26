@@ -1,26 +1,5 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>그림 12.84는 NMOS 두 개를 쌓은 캐스코드(cascode)예요. 아래 $M_1$은 게이트로 입력 $V_{in}$을 받고 소스가 접지예요. 위 $M_2$는 게이트가 바이어스 $V_b$에 고정되고, 소스가 $M_1$ 드레인에 이어져요. 출력은 $M_2$ 드레인으로 흘러 들어가는 전류 $I_{out}$이에요.</p>
-  <p>구할 것은 이 회로의 증폭기 모델이에요. 입력·출력이 전압인지 전류인지로 형태를 정하고, 입력 저항 $R_{in}$, 이득, 출력 저항 $R_{out}$을 구해 그림 12.18의 모델로 그려요.</p>
-  <p>$\lambda&gt;0$이라 두 트랜지스터 모두 유한한 $r_{O1}$, $r_{O2}$를 가져요. 저주파 소신호 모델에서 몸체효과는 무시하고, 수업 기본 근사 $g_mr_O\gg1$을 써요. 이 두 가정은 원문에 없는 보충 가정이에요.</p>
-</div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p>"게이트로 전압을 받고, 출력은 $I_{out}$ 화살표"라는 단서에서 트랜스컨덕턴스 증폭기(transconductance amplifier)를 떠올려요. 전압을 받아 전류를 내보내는 형태예요(<a href="정리노트_1111_Sense_and_Return.html#s4-four-types">입력과 출력이 전압이냐 전류냐</a>).</p>
-  <p>그림 12.18(e)의 모델은 입력 단자와 접지 사이의 $R_{in}$, 출력 노드와 접지 사이에 병렬로 놓인 종속 전류원 $G_mv_{in}$과 $R_{out}$이에요. 이득 $G_m$은 출력을 단락하고 재요. 단락하면 $R_{out}$ 양단이 0이라 종속 전류원의 전류가 모두 단락선으로 나오기 때문이에요.</p>
-  $$G_m=\frac{i_{out}}{v_{in}}\Big|_{v_{out}=0}$$
-  <p>캐스코드에서 이미 아는 두 결과를 이 틀에 넣어요. 단락 트랜스컨덕턴스 $G_m$은 거의 $g_{m1}$이고(<a href="../0911/정리노트_0911_Cascode_Amplifier.html#s2-gm">단락 트랜스컨덕턴스</a>), 출력 저항은 $M_1$의 $r_{O1}$을 $M_2$의 $g_{m2}r_{O2}$배로 키운 값이에요(<a href="../0909/정리노트_0909_Cascode_Stage.html#s2-rout">캐스코드의 출력저항</a>). $r_{O1}$, $r_{O2}$는 각 트랜지스터의 채널 길이 변조 저항이고, $g_{m1}$, $g_{m2}$는 각 트랜지스터의 트랜스컨덕턴스예요.</p>
-  <p>$G_m$을 구할 때 출력 단락이면 $M_2$의 게이트와 드레인이 모두 AC 접지예요. 그래서 $M_2$의 소스 쪽에서 보면 다이오드 접속 블록과 같은 $(1/g_{m2})\parallel r_{O2}$가 보여요. 이 저항이 $r_{O1}$보다 훨씬 작으면 $M_1$이 만든 전류가 거의 다 $M_2$로 올라가요.</p>
-</div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="형태와 Gm 측정 회로">
-    <p>입력은 게이트 전압, 출력은 드레인 전류라서 트랜스컨덕턴스 증폭기로 그려요. 저주파에서 게이트로는 전류가 흐르지 않으므로 입력 저항은 무한대예요.</p>
-    $$R_{in}=\infty$$
-    <p>$G_m$을 재려고 출력을 접지로 단락한 소신호 회로를 그려요. $M_1$은 제어 전류원 $g_{m1}v_{in}$과 $r_{O1}$로 바꾸고, $M_2$는 소스에서 본 저항으로 바꿔요.</p>
-    $$R_{up}=\frac{1}{g_{m2}}\parallel r_{O2}\approx\frac{1}{g_{m2}}$$
-    <figure class="figure">
-      <svg viewBox="0 0 460 160" role="img" aria-label="NMOS 캐스코드의 Gm 측정 소신호 회로. 왼쪽에 아래쪽을 향한 제어 전류원 gm1 vin, 그 오른쪽에 rO1이 노드 X와 접지 사이에 병렬로 있어요. X에서 오른쪽으로 M2를 대신한 저항 1/gm2 병렬 rO2를 지나 맨 오른쪽 출력 노드로 가고, 출력 노드는 단락선으로 접지에 이어져 vout은 0이에요. 출력 노드 왼쪽 도선에 왼쪽을 향한 i out 화살표가 있어요.">
+<div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit"><svg viewBox="0 0 460 160" role="img" aria-label="NMOS 캐스코드의 Gm 측정 소신호 회로. 왼쪽에 아래쪽을 향한 제어 전류원 gm1 vin, 그 오른쪽에 rO1이 노드 X와 접지 사이에 병렬로 있어요. X에서 오른쪽으로 M2를 대신한 저항 1/gm2 병렬 rO2를 지나 맨 오른쪽 출력 노드로 가고, 출력 노드는 단락선으로 접지에 이어져 vout은 0이에요. 출력 노드 왼쪽 도선에 왼쪽을 향한 i out 화살표가 있어요.">
         <g fill="none" stroke-width="2">
           <polygon class="fig-ink" points="130,80 146,100 130,120 114,100"/>
           <path class="fig-ink" d="M130 88V111M125 106L130 111L135 106"/>
@@ -43,38 +22,13 @@
           <text class="fig-text fig-math" data-node-id="p11-out" data-node-color="red" x="400" y="34" text-anchor="middle">v<tspan baseline-shift="sub" font-size="78%">out</tspan> = 0</text>
           <text class="fig-text fig-math" x="370" y="76" text-anchor="middle">i<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
         </g>
-      </svg>
-      <figcaption>출력을 단락($v_{out}=0$)하고 $M_1$을 제어 전류원 $g_{m1}v_{in}$과 $r_{O1}$로, 게이트와 드레인이 모두 AC 접지인 $M_2$를 소스에서 본 저항 $(1/g_{m2})\parallel r_{O2}$로 바꿨어요. 이 치환은 드레인이 단락된 이 측정에서만 써요. $i_{out}$은 단락선에서 $M_2$ 드레인으로 들어가는 전류예요.</figcaption>
-    </figure>
-    <p>노드 $X$의 전압을 $v_X$라 하고 KCL을 세워요. 위에서 들어오는 전류는 $i_{out}$이고, 아래로 나가는 전류는 제어 전류원의 $g_{m1}v_{in}$과 $r_{O1}$의 $v_X/r_{O1}$이에요.</p>
-    $$i_{out}=g_{m1}v_{in}+\frac{v_X}{r_{O1}}$$
-    <p>위쪽 가지는 접지(0 V)인 출력에서 $X$로 $R_{up}$을 지나는 전류예요.</p>
-    $$i_{out}=\frac{0-v_X}{R_{up}}$$
-  </div>
-</div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
-  <div data-subpart="main">
-    <div data-answer-step="Gm, Rout, 이득" data-gain-route="gm-rout">
-      <p>두 번째 식에서 $v_X=-i_{out}R_{up}$을 얻어 KCL 식에 넣고 $i_{out}$끼리 모아요.</p>
-      $$i_{out}\left(1+\frac{R_{up}}{r_{O1}}\right)=g_{m1}v_{in}$$
-      <p>양변을 정리하면 $M_1$의 전류가 $r_{O1}$과 $R_{up}$으로 나뉘는 전류 분배 꼴이 돼요. $R_{up}\approx1/g_{m2}$가 $r_{O1}$보다 훨씬 작으므로, 즉 $g_{m2}r_{O1}\gg1$이므로 거의 전부가 출력으로 나와요.</p>
-      <div data-gain-stage="gm">
-        $$G_m=\frac{i_{out}}{v_{in}}=g_{m1}\frac{r_{O1}}{r_{O1}+R_{up}}\approx g_{m1}$$
-      </div>
-      <p>$R_{out}$은 입력을 0으로 두고 출력에서 먼 쪽부터 합성해요. $v_{in}=0$이면 $M_1$의 제어 전류가 사라져 $M_2$ 소스 아래에는 $r_{O1}$만 남아요. 이 축퇴 저항 위에 $M_2$가 쌓였으니 캐스코드 규칙대로 $M_2$의 $g_{m2}r_{O2}$를 곱해요.</p>
-      <div data-gain-stage="rout">
-        $$R_{out}\approx g_{m2}r_{O2}r_{O1}$$
-      </div>
-      <p>이 모델에서 형태의 이득은 $G_m$ 자체예요. 같은 모델로 전압 이득도 바로 읽을 수 있어요. 드레인에 AC 접지로 이어진 부하 $R_L$을 달면, 드레인으로 들어가는 전류를 양으로 잡았으니 이득은 반전이에요. 부하가 이상적인 전류원($R_L\to\infty$)이면 $R_{out}$만 남아요.</p>
-      <div data-gain-stage="gain">
-        $$A_v=-G_m(R_{out}\parallel R_L)$$
-        $$A_v\big|_{R_L\to\infty}\approx-g_{m1}g_{m2}r_{O1}r_{O2}$$
-      </div>
-    </div>
-    <div data-answer-step="모델 조립">
-      <p>세 값을 그림 12.18(e)의 트랜스컨덕턴스 증폭기 모델에 넣어요. 종속 전류원은 왼쪽, $R_{out}$은 오른쪽에 병렬이고, 출력 단자는 맨 오른쪽이에요.</p>
-      <figure class="figure">
+      <text class="fig-loc" x="236" y="40" font-family="Pretendard, sans-serif" font-weight="600" font-size="17">㉠</text></svg><figcaption class="circuit-state">출력 단락 상태. 아래 소자의 전류는 내부 노드에서 $r_{O1}$과 위 소자 방향으로 나뉘어요.</figcaption></figure>
+<div data-subpart="main"><h4>캐스코드의 트랜스컨덕턴스 모델</h4><div data-answer-step="단락 출력의 전류 분배"><p><span class="loc">㉠</span> 출력 단락에서 $M_2$ 소스가 보는 $R_{up}$과 $r_{O1}$이 병렬이에요. $M_1$의 제어 전류 중 위 가지가 공급하는 몫이 드레인으로 들어가는 출력 전류예요.</p>$$R_{up}=(1/g_{m2})\parallel r_{O2}$$
+$$G_m=i_{out,sc}/v_{in}=g_{m1}r_{O1}/(r_{O1}+R_{up})$$
+</div><div data-answer-step="입력 영점에서 출력저항"><p>게이트 입력을 영으로 두면 <span class="loc">㉠</span> 위쪽 $M_2$의 소스 아래에 $r_{O1}$이 남아요. $g_{m2}r_{O1}\gg1$, $g_{m2}r_{O2}\gg1$일 때 캐스코드 주항에는 위 소자의 $g_{m2}r_{O2}$가 곱해져요.</p></div><div data-answer-final=""><p>몸체 효과를 무시한 저주파 모델이에요. 게이트는 개방이고, 출력에는 제어 전류원과 유한한 출력저항을 병렬로 둬요.</p>$$R_{in}=\infty$$
+$$G_m\simeq g_{m1}$$
+$$R_{out}\simeq g_{m2}r_{O2}r_{O1}$$
+<figure class="figure">
         <svg viewBox="0 0 460 160" role="img" aria-label="NMOS 캐스코드의 트랜스컨덕턴스 증폭기 모델. 왼쪽 입력 단자 v in에서 R in이 접지로 내려가고 값은 무한대예요. 오른쪽에는 아래쪽을 향한 종속 전류원 Gm v in이 왼쪽에, 출력 저항 R out이 그 오른쪽에 출력 노드와 접지 사이에 병렬로 있어요. 맨 오른쪽이 출력 단자이고, 그 왼쪽 도선에 왼쪽을 향한 i out 화살표가 있어요.">
           <g fill="none" stroke-width="2">
             <path class="fig-ink" d="M30 50H80V62"/>
@@ -100,49 +54,7 @@
             <text class="fig-text fig-math" x="256" y="105" text-anchor="end">G<tspan baseline-shift="sub" font-size="78%">m</tspan>v<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
           </g>
         </svg>
-        <figcaption>NMOS 캐스코드의 트랜스컨덕턴스 증폭기 모델이에요. $R_{in}=\infty$, $G_mv_{in}\approx g_{m1}v_{in}$, $R_{out}\approx g_{m2}r_{O2}r_{O1}$이고, $i_{out}$은 그림 12.84의 $I_{out}$처럼 출력 단자에서 드레인으로 들어가는 방향이에요.</figcaption>
-      </figure>
-    </div>
-  </div>
+        <figcaption>캐스코드의 노턴 모델. 포트 전류는 드레인으로 들어가는 방향이에요.</figcaption>
+      </figure></div></div>
 </div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <div data-answer-final>
-      <p>저주파, 몸체효과 무시, $g_mr_O\gg1$에서 그림 12.84는 트랜스컨덕턴스 증폭기예요.</p>
-      $$R_{in}=\infty$$
-      $$G_m\approx g_{m1}$$
-      $$R_{out}\approx g_{m2}r_{O2}r_{O1}$$
-      <p>모델은 출력 노드와 접지 사이에 종속 전류원 $G_mv_{in}$과 $R_{out}$을 병렬로 둔 노턴 꼴이에요.</p>
-    </div>
-    <p>극한으로 확인해요. $\lambda\to0$이면 $r_{O1},r_{O2}\to\infty$라 $R_{up}\to1/g_{m2}$이고 분배 비가 1이 되어 $G_m=g_{m1}$이 정확히 나와요. 같은 극한에서 $R_{out}\to\infty$라 이상적인 트랜스컨덕턴스 증폭기가 돼요.</p>
-    $$\lim_{r_{O1}\to\infty}g_{m1}\frac{r_{O1}}{r_{O1}+R_{up}}=g_{m1}$$
-    <p>단위도 맞아요. $G_m$은 $g_{m1}$과 같은 $\mathrm{S}$이고, $R_{out}$은 $\mathrm{mS}\times\mathrm{k\Omega}\times\mathrm{k\Omega}=\mathrm{k\Omega}$예요.</p>
-    <p>캐스코드 이득과도 맞아요. 부하가 이상적 전류원일 때 $-G_mR_{out}\approx-g_{m1}g_{m2}r_{O1}r_{O2}$로, 수업에서 구한 캐스코드 증폭기의 이득과 같아요(<a href="../0911/정리노트_0911_Cascode_Amplifier.html#s2-cascode-amp">MOS 캐스코드 증폭기의 이득</a>).</p>
-    <p>트랜지스터 하나와 비교해요. 그림 12.19(c)의 $M_1$ 하나는 $G_m=g_{m1}$, $R_{out}=r_{O1}$이에요. 캐스코드는 $G_m$을 거의 그대로 두고 $R_{out}$만 $g_{m2}r_{O2}$배 키워 전류 출력에 더 알맞아요.</p>
-  </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <p>$M_2$를 $(1/g_{m2})\parallel r_{O2}$로 바꾸는 것은 드레인이 단락된 $G_m$ 측정에서만 맞아요. $R_{out}$을 잴 때는 드레인 전압이 움직이므로 이 치환을 쓰면 $R_{out}$이 작게 나와요. 그때는 캐스코드 규칙으로 $r_{O1}$에 $g_{m2}r_{O2}$를 곱해요.</p>
-  <p>$G_m$은 입력 소자 $M_1$이 정해요. 위 $M_2$는 전류를 거의 그대로 전달할 뿐이라 $G_m\approx g_{m1}$이고, $g_{m2}$나 $g_{m1}g_{m2}r_{O1}$처럼 쓰지 않아요.</p>
-  <p>전압원과 직렬 저항으로 그린 전압 증폭기 모델도 수학적으로는 같은 회로를 나타낼 수 있어요. 하지만 $R_{out}$이 매우 크고 원문의 출력이 $I_{out}$이라, 형태는 트랜스컨덕턴스 증폭기이고 노턴 꼴로 그려요.</p>
-  <p>곱 인자의 소자 번호를 바꾸지 않아요. $R_{out}\approx g_{m2}r_{O2}r_{O1}$에서 $g_{m2}r_{O2}$는 위 소자 $M_2$의 증대 인자이고, $r_{O1}$은 그 아래 축퇴 저항이에요.</p>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol>
-    <li>$\lambda=0$으로 바꾸면 모델의 $G_m$과 $R_{out}$은 각각 얼마가 되나요?</li>
-    <li>드레인에 AC 접지로 이어진 부하 $R_L$을 달고 $R_L\ll R_{out}$이면 전압 이득은 대략 얼마인가요?</li>
-    <li>$M_2$를 빼고 $M_1$ 하나만 쓰면 $G_m$과 $R_{out}$ 중 무엇이 바뀌나요?</li>
-  </ol>
-</div>
-<div class="sum" hidden>
-  <p class="sum-lead">게이트로 전압을 받고 드레인 전류를 내보내는 캐스코드는 트랜스컨덕턴스 증폭기예요.</p>
-  $$R_{in}=\infty$$
-  $$G_m\approx g_{m1}$$
-  $$R_{out}\approx g_{m2}r_{O2}r_{O1}$$
-  <p>$G_m$은 출력을 단락하고 재며, $M_2$ 쪽 저항 약 $1/g_{m2}$가 $r_{O1}$보다 훨씬 작아 $M_1$의 전류가 거의 다 출력으로 나와요.</p>
-  <p>$R_{out}$은 입력을 0으로 두고 $r_{O1}$에 위 소자의 $g_{m2}r_{O2}$를 곱해요.</p>
-  <p>부하가 이상적 전류원이면 전압 이득은 $-G_mR_{out}\approx-g_{m1}g_{m2}r_{O1}r_{O2}$예요.</p>
-</div>
+<div class="sum" hidden><p class="sum-lead">단락 출력에서는 위 소자의 낮은 소스 저항 때문에 입력 소자의 전류가 거의 전부 전달돼요.</p><p>입력을 영으로 두면 같은 위 소자가 아래쪽 출력저항을 크게 키워요.</p></div>

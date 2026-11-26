@@ -594,19 +594,34 @@
       <h1>전자회로2 복습 1118 문제설명</h1>
       <p>회로와 첫 식을 짚고 핵심 계산으로 답을 구해요.</p>
     </div>
-<section id="problems"><h2>문항별 설명</h2><article class="topic" id="p1"><h3>P1. 트랜스임피던스 귀환의 극성과 이득</h3><p class="panel-meta">E12.18 · 예제 12.18 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1118_Feedback_Loading-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p1"><div class="layer formal" data-source-problem="p1"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>가정: $\lambda = 0$, $R_F$가 매우 큼</li><li>소자 값은 주어지지 않음 (답은 $g_m$, 저항의 식으로)</li><li>식 (12.72): $\dfrac{V_{out}}{I_{in}} = \dfrac{R_0}{1 + KR_0}$</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>(a) 귀환이 부귀환임을 증명</li><li>(b) 개루프 이득</li><li>(c) 폐루프 이득</li></ul></div><figure><img src=".assets/figures_문제설명_1118_Feedback_Loading/b1113696292b6aa1-fig12-38-a.png" alt="그림 E12.18"></figure></div><details class="original" data-original-problem="p1"><summary>원문 보기</summary><p>그림 12.38(a)의 회로에서 $\lambda = 0$과 $R_F$가 매우 크다고 가정하고, (a) 귀환이 부귀환임을 증명하라. (b) 개루프 이득을 계산하라. (c) 폐루프 이득을 계산하라.</p></details></div><div class="layer eli5" data-explanation="understand"><h4>문제를 읽어요</h4>
-<p>전류원이 $M_1$의 소스에 신호를 넣고 $M_2$ 드레인에서 전압을 읽어요. 먼저 입력을 조금 늘려 $R_F$가 되돌리는 전류의 변화를 따라가요. 그런 다음 귀환을 풀고 구한 비를 이용해 연결했을 때의 비를 계산해요.</p>
+<section id="problems"><h2>문항별 설명</h2><article class="topic" id="p1"><h3>P1. 트랜스임피던스 귀환의 극성과 이득</h3><p class="panel-meta">E12.18 · 예제 12.18 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1118_Feedback_Loading-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p1"><div class="layer formal" data-source-problem="p1"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>가정: $\lambda = 0$, $R_F$가 매우 큼</li><li>소자 값은 주어지지 않음 (답은 $g_m$, 저항의 식으로)</li><li>식 (12.72): $\dfrac{V_{out}}{I_{in}} = \dfrac{R_0}{1 + KR_0}$</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>(a) 귀환이 부귀환임을 증명</li><li>(b) 개루프 이득</li><li>(c) 폐루프 이득</li></ul></div><figure><img src=".assets/figures_문제설명_1118_Feedback_Loading/b1113696292b6aa1-fig12-38-a.png" alt="그림 E12.18"></figure></div><details class="original" data-original-problem="p1"><summary>원문 보기</summary><p>그림 12.38(a)의 회로에서 $\lambda = 0$과 $R_F$가 매우 크다고 가정하고, (a) 귀환이 부귀환임을 증명하라. (b) 개루프 이득을 계산하라. (c) 폐루프 이득을 계산하라.</p></details></div><div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit">
+<svg id="p1-fig-circuit-s3-closed" viewBox="0 0 340 254" role="img" aria-label="M1은 소스로 Iin을 받는 공통 게이트이고 드레인 X가 RD1과 M2 게이트에 연결돼요. M2 드레인은 RD2가 달린 출력이에요. 출력에서 RF가 M1 소스로 연결되고, 귀환 전류 IF는 입력 노드에서 RF로 빠지는 방향이 양이에요."><g data-symbol="rail"><path class="fig-ink" d="M70 20H260"/></g><text class="fig-text fig-math" text-anchor="start" x="272" y="25">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text><path class="fig-ink" d="M100 20L100 32 M100 68L100 124 M100 96L206 96 M100 148L100 186L50 186L50 198 M50 226L50 236 M120 136L151.5 136 M226 20L226 24 M226 60L226 84 M226 72L304 72 M226 108L226 120 M276 72L276 186L212 186 M176 186L100 186"/><g data-symbol="part"><path class="fig-ink" d="M100 32l-7 3 14 6 -14 6 14 6 -14 6 14 6 -7 3"/></g><g data-symbol="part"><path class="fig-ink" d="M40 236h20M44 241h12M47 246h6"/></g><g data-symbol="part"><path class="fig-ink" d="M226 24l-7 3 14 6 -14 6 14 6 -14 6 14 6 -7 3"/></g><g data-symbol="part"><path class="fig-ink" d="M216 120h20M220 125h12M223 130h6"/></g><g data-symbol="part"><path class="fig-ink" d="M176 186l3 -7 6 14 6 -14 6 14 6 -14 6 14 3 -7"/></g><path class="fig-ink" d="M100 124H114M100 148H114"/><g data-symbol="mos"><path class="fig-ink" d="M114 120V152M120 123V149M108 143L103 148L108 153"/></g><path class="fig-ink" d="M226 84H212M226 108H212"/><g data-symbol="mos"><path class="fig-ink" d="M212 80V112M206 83V109M218 103L223 108L218 113"/></g><g data-symbol="source"><circle class="fig-ink" cx="50" cy="212" r="14"/><path class="fig-ink" d="M50 220V204m-5 6l5 -6 5 6"/></g><circle class="fig-dot" data-node-color="red" cx="100" cy="96" r="3.5"/><circle class="fig-dot" data-node-color="blue" cx="100" cy="186" r="3.5"/><circle class="fig-dot" data-node="out" data-node-color="blue" cx="226" cy="72" r="3.5"/><circle class="fig-dot" data-node="out" data-node-color="blue" cx="276" cy="72" r="3.5"/><circle class="fig-dot" data-node="out" data-node-color="blue" cx="304" cy="72" r="3.5"/><circle class="fig-dot" data-node="bias" data-node-color="red" cx="151.5" cy="136" r="3.5"/><text class="fig-text fig-math" text-anchor="end" x="84" y="55">R<tspan baseline-shift="sub" font-size="78%">D1</tspan></text><text class="fig-text fig-math" text-anchor="start" x="242" y="47">R<tspan baseline-shift="sub" font-size="78%">D2</tspan></text><text class="fig-text fig-math" text-anchor="end" x="84" y="91" data-node-color="red">X</text><text class="fig-text fig-math" text-anchor="end" x="84" y="141">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" text-anchor="start" x="244" y="101">M<tspan baseline-shift="sub" font-size="78%">2</tspan></text><text class="fig-text fig-math" text-anchor="start" x="164" y="141" data-node="bias" data-node-color="red">V<tspan baseline-shift="sub" font-size="78%">b</tspan></text><text class="fig-text fig-math" text-anchor="middle" x="302" y="54" data-node="out" data-node-color="blue">V<tspan baseline-shift="sub" font-size="78%">out</tspan></text><text class="fig-text fig-math" text-anchor="end" x="28" y="217">I<tspan baseline-shift="sub" font-size="78%">in</tspan></text><text class="fig-text fig-math" text-anchor="middle" x="194" y="170">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text><g data-symbol="arrow"><path class="fig-accent" d="M136 180L145 186L136 192"/></g><text class="fig-text fig-math" text-anchor="middle" x="140" y="168">I<tspan baseline-shift="sub" font-size="78%">F</tspan></text><text class="fig-loc" x="73" y="181" font-size="17">㉠</text><text class="fig-loc" x="125" y="84" font-size="17">㉡</text></svg>
+<figcaption class="circuit-state">공통 게이트 입력과 공통 소스 출력 사이를 귀환 저항이 연결해요.</figcaption>
+</figure>
+<div data-subpart="a">
+<h4>(a) 귀환의 극성</h4>
+<div data-answer-step="입력 노드로 돌아오는 변화">
+<p><span class="loc">㉠</span> 입력 전류가 늘면 $M_1$의 소스 전압이 올라 드레인 전류가 줄어요. <span class="loc">㉡</span> 드레인 $X$의 전압이 오르면 $M_2$가 더 많은 전류를 끌어 출력 전압은 내려가요.</p>
 </div>
-<div class="layer formal" data-explanation="recall"><h4>이 개념과 공식을 떠올려요</h4>
-<p>출력 전압을 감지해 입력에 전류를 돌려주므로 전압–전류 귀환(voltage–current feedback)이에요. 순방향 트랜스임피던스(transimpedance) $R_0$의 단위는 $\Omega$이고, 귀환율 $K$의 단위는 $\mathrm{S}$예요.</p><p>$\lambda=0$이면 두 MOS의 소신호 출력저항은 무한대예요. 큰 $R_F$ 조건은 출력 부하에 대한 비교와 입력 쪽 귀환 전류에 대한 비교로 나누어 써요.</p>
+<div data-answer-final="">
+<p>출력에서 $R_F$를 거쳐 입력으로 들어오는 전류가 줄어 처음 변화를 상쇄하므로 부귀환이에요.</p>
 </div>
-<div class="layer formal" data-explanation="start"><h4>종이에 쓸 첫 줄</h4>
-<div data-answer-step="그림의 화살표를 기준으로 한 첫 식" data-answer-subpart="a"><figure class="figure"><svg viewBox="0 0 420 200" role="img" aria-label="입력 소스에서 X로 흐르는 제어 전류와 출력을 아래로 당기는 제어 전류를 표시한 소신호 회로. 귀환 저항은 출력과 소스 사이에 연결된다."><path class="fig-ink" d="M40 129H105V93 M105 61V42H183V54"/><path class="fig-ink" d="M105 61 l15 16 -15 16 -15 -16 z"/><path class="fig-ink" d="M105 84v-14 m-4 5 4 -5 4 5"/><text class="fig-text fig-math" x="75" y="82" text-anchor="end">g<tspan baseline-shift="sub" font-size="78%">m1</tspan>v<tspan baseline-shift="sub" font-size="78%">s</tspan></text><path class="fig-ink" d="M183 54v6 l5 3 -10 5 10 5 -10 5 10 5 -5 3 v6"/><path class="fig-ink" d="M183 92v6 m-9 0h18 m-15 4h12 m-9 4h6"/><text class="fig-text fig-math" x="194" y="79">R<tspan baseline-shift="sub" font-size="78%">D1</tspan></text><circle class="fig-dot" data-node="X" data-node-color="red" cx="105" cy="42" r="3.1"/><text class="fig-text fig-math" x="91" y="30" data-node="X" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">X</tspan></text><circle class="fig-dot" data-node="s" data-node-color="blue" cx="105" cy="129" r="3.1"/><text class="fig-text fig-math" x="85" y="116" data-node="s" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">s</tspan></text><path class="fig-ink" d="M40 129V145 M40 171V180"/><circle class="fig-ink" cx="40" cy="158" r="13"/><path class="fig-ink" d="M40 165v-14 m-4 5 4 -5 4 5"/><text class="fig-text fig-math" x="8" y="162">i<tspan baseline-shift="sub" font-size="78%">in</tspan></text><path class="fig-ink" d="M40 180v6 m-9 0h18 m-15 4h12 m-9 4h6"/><path class="fig-ink" d="M105 129V177H190 M228 177H369V42 M265 42H397 M265 42V80 M265 112V127 M330 42V73"/><path class="fig-ink" d="M265 80 l15 16 -15 16 -15 -16 z"/><path class="fig-ink" d="M265 89v14 m-4 -5 4 5 4 -5"/><path class="fig-ink" d="M265 127v6 m-9 0h18 m-15 4h12 m-9 4h6"/><text class="fig-text fig-math" x="231" y="152">g<tspan baseline-shift="sub" font-size="78%">m2</tspan>v<tspan baseline-shift="sub" font-size="78%">X</tspan></text><path class="fig-ink" d="M330 73v6 l5 3 -10 5 10 5 -10 5 10 5 -5 3 v6"/><path class="fig-ink" d="M330 111v6 m-9 0h18 m-15 4h12 m-9 4h6"/><text class="fig-text fig-math" x="337" y="99">R<tspan baseline-shift="sub" font-size="78%">D2</tspan></text><circle class="fig-dot" data-node="out" data-node-color="blue" cx="330" cy="42" r="3.1"/><circle class="fig-dot" data-node="out" data-node-color="blue" cx="369" cy="42" r="3.1"/><circle class="fig-dot" data-node="out" data-node-color="blue" cx="397" cy="42" r="3.1"/><text class="fig-text fig-math" x="372" y="29" data-node="out" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M190 177h6 l3 -5 5 10 5 -10 5 10 5 -10 3 5 h6"/><text class="fig-text fig-math" x="194" y="164">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text><path class="fig-ink" d="M318 171H294 m5 -4 -5 4 5 4"/><text class="fig-text fig-math" x="302" y="162">i<tspan baseline-shift="sub" font-size="78%">RF</tspan></text></svg><figcaption>$V_b$와 $V_{DD}$는 AC 접지예요. $\lambda=0$이므로 두 $r_o$를 생략했어요. $M_1$은 소스에서 드레인으로 향하는 $g_{m1}v_s$로 그렸어요.</figcaption></figure><p>$v_s$를 입력 노드의 소신호 전압으로 두고, 저항의 출력 쪽 끝에서 입력 쪽 끝을 빼요.</p><p>$$i_{RF}=\frac{v_{out}-v_s}{R_F}$$</p></div>
 </div>
-<div class="layer formal" data-explanation="solve"><h4>이렇게 풀어요</h4>
-<div data-subpart="a"><h4>(a) 귀환의 극성</h4><div data-answer-step="전류 변화의 방향을 한 바퀴 따라가기"><p>$i_{in}$을 조금 늘리면 처음에는 소스 전압 $v_s$가 올라가요. $v_{gs1}=-v_s$이므로 드레인에서 소스로 흐르는 $M_1$의 전류가 줄고, $R_{D1}$의 전압 강하가 줄어 $v_X$가 올라가요.</p><p>$M_2$는 게이트 전압 $v_X$가 오르면 더 많은 전류를 끌어가요. 따라서 $v_{out}$이 내려가고, 출력에서 입력으로 들어오는 $i_{RF}$도 줄어요. 이 변화가 처음의 전류 증가를 상쇄해요.</p></div></div><div data-subpart="b"><h4>(b) 개루프 트랜스임피던스</h4><div data-answer-step="귀환을 끊고 두 단의 전류와 전압 연결하기"><p>$R_F\gg R_{D2}$라서 순방향 이득을 구할 때 출력에 걸리는 귀환망 로딩을 생략해요. $X$에서 공통 게이트와 공통 소스 두 단을 나눠요.</p><p>$$R_0=\frac{v_{out}}{i_{in}}=\frac{v_X}{i_{in}}\frac{v_{out}}{v_X}$$</p><p>$R_F$를 떼면 $i_{in}$이 $M_1$ 소스에서 드레인으로 흘러 $v_X$를 올려요.</p><p>$$\frac{v_X}{i_{in}}\approx R_{D1}$$</p><p>$M_2$는 $R_{D2}$에 걸리는 전압을 반전시켜요.</p><p>$$\frac{v_{out}}{v_X}\approx -g_{m2}R_{D2}$$</p></div></div><div data-subpart="c"><h4>(c) 폐루프 트랜스임피던스</h4><div data-answer-step="반송 전류의 기준을 맞추기">
-<figure class="figure">
-  <svg id="p1-svg2-p1-feedback-return-test" viewBox="0 0 378 115" role="img" aria-label="출력에 테스트 전압을 걸면 R F와 공통 게이트 소스 저항이 직렬이에요. i F는 접지 쪽에서 출력 쪽으로 가는 오른쪽 화살표예요.">
+<div data-subpart="b">
+<h4>(b) 개루프 트랜스임피던스</h4>
+<div data-answer-step="중간 노드에서 나눈 두 단">
+<p>$R_F\gg 1/g_{m1},\,R_{D2}$이므로 개루프 계산에서는 두 포트에 붙는 $R_F$의 부하를 생략해요. $\lambda=0$에서 공통 게이트 단에 들어간 전류는 $R_{D1}$의 전압을 올리고, 둘째 단은 반전해요.</p>
+$$R_0=\frac{v_X}{i_{in}}\frac{v_{out}}{v_X}$$
+$$\frac{v_X}{i_{in}}\approx R_{D1}$$
+$$\frac{v_{out}}{v_X}\approx -g_{m2}R_{D2}$$
+</div>
+<div data-answer-final="">
+$$R_0\approx -g_{m2}R_{D1}R_{D2}$$
+</div>
+</div>
+<figure class="figure circuit">
+<svg id="p1-svg2-p1-feedback-return-test" viewBox="0 0 378 115" role="img" aria-label="출력에 테스트 전압을 걸면 R F와 공통 게이트 소스 저항이 직렬이에요. i F는 접지 쪽에서 출력 쪽으로 가는 오른쪽 화살표예요.">
     <path class="fig-ink" d="M46 42H86l5-7 8 14 8-14 8 14 8-14 8 14 5-7H221l5-7 8 14 8-14 8 14 8-14 8 14 5-7H332 M46 42v25 m-12 0h24 m-19 5h14 m-12 5h10 M111 72H267m-7-5 7 5-7 5"/>
     <circle class="fig-dot" data-node="s" data-node-color="blue" cx="175" cy="42" r="3.5"/>
     <circle class="fig-dot" data-node="out" data-node-color="red" cx="332" cy="42" r="3.5"/>
@@ -615,224 +630,137 @@
     <text class="fig-text fig-math" x="245" y="16" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
     <text class="fig-text fig-math" x="332" y="16" text-anchor="middle" data-node="out" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
     <text class="fig-text fig-math" x="188" y="96" text-anchor="middle">i<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
-  </svg>
-  <figcaption>입력 전류원을 개방하면 공통 게이트 소스의 저항을 거쳐 접지에 닿아요.</figcaption>
+  <text class="fig-loc" x="216" y="65" font-size="17">㉢</text></svg>
+<figcaption class="circuit-state">독립 입력 전류원을 개방하고 출력에 시험전압을 걸었어요. 귀환 전류의 양의 방향은 입력에서 출력 쪽이에요.</figcaption>
 </figure>
-<p>반송 경로를 볼 때 입력 전류원을 개방하고 출력에 전압을 걸어요. 출력에서 입력으로 들어오는 화살표가 $i_{RF}$이고, 입력에서 빠져나가는 양을 $i_F=-i_{RF}$로 둬요.</p><p>출력에서 본 반송 경로에는 $R_F$와 공통 게이트 소스 쪽의 $1/g_{m1}$이 직렬이에요.</p><p>$$i_F=-\frac{v_{out}}{R_F+1/g_{m1}}$$</p><p>$R_F\gg 1/g_{m1}$이면</p><p>$$K=\frac{i_F}{v_{out}}\approx-\frac{1}{R_F}$$</p></div><div data-answer-step="순방향 입력 전류로 루프 닫기"><p>순방향으로 남는 전류는 $i_{in}-Kv_{out}$이에요. 출력이 들어 있는 항을 왼쪽에 모아요.</p><p>$$v_{out}=R_0(i_{in}-Kv_{out})$$</p><p>$$(1+KR_0)v_{out}=R_0i_{in}$$</p><p>$$T=KR_0\approx\frac{g_{m2}R_{D1}R_{D2}}{R_F}$$</p></div></div>
+<div data-subpart="c">
+<h4>(c) 폐루프 트랜스임피던스</h4>
+<div data-answer-step="반송 전류의 시험 방향">
+<p><span class="loc">㉢</span> 독립 입력 전류원을 열고 출력을 구동하면 $R_F$와 $M_1$의 소스 저항이 직렬이에요. $i_F$는 입력에서 빠져나오는 방향이 양이므로 양의 시험전압에 대해 음수예요.</p>
+$$K=\frac{i_F}{v_{out}}=-\frac{1}{R_F+1/g_{m1}}\approx-\frac1{R_F}$$
 </div>
-<div class="layer formal" data-explanation="verify"><h4>완성 답과 검산</h4>
-<div data-subpart="a"><h4>(a) 극성 검산</h4><div data-answer-final="완성 답"><p><strong>부귀환이에요.</strong> $i_{in}$의 증가에 대해 입력으로 되돌아오는 $i_{RF}$는 감소해요.</p></div><p>반대로 입력을 줄여 보면 $v_X$가 내려가고 $v_{out}$은 올라가요. 이번에는 입력으로 반송되는 전류가 늘어 처음 감소분을 메워요.</p></div><div data-subpart="b"><h4>(b) 단위와 부호</h4><div data-answer-final="완성 답"><p>$\lambda=0$이고 $R_F\gg R_{D2}$이면 개루프 답은 <strong>$R_0\approx-g_{m2}R_{D1}R_{D2}$</strong>예요.</p></div><p>$\mathrm{S}\cdot\Omega^2=\Omega$예요. 입력 전류와 반대로 출력 전압이 변해 음의 부호도 맞아요.</p></div><div data-subpart="c"><h4>(c) 귀환을 약하게 또는 강하게 했을 때</h4><div data-answer-final="완성 답"><p>$\lambda=0$, $R_F\gg R_{D2}$, $R_F\gg1/g_{m1}$에서 폐루프 답은 다음과 같아요.</p><p>$$\boxed{\frac{v_{out}}{i_{in}}\approx\frac{-g_{m2}R_{D1}R_{D2}}{1+g_{m2}R_{D1}R_{D2}/R_F}}$$</p></div><p>$R_F\to\infty$이면 $T\to0$이라 개루프 값으로 돌아가요. 반대로 같은 로딩 근사에서 $T\gg1$이면 분모의 1을 생략해 $v_{out}/i_{in}\approx-R_F$를 얻어요.</p></div>
+<div data-answer-final="">
+$$\frac{v_{out}}{i_{in}}=\frac{R_0}{1+KR_0}\approx\frac{-g_{m2}R_{D1}R_{D2}}{1+g_{m2}R_{D1}R_{D2}/R_F}$$
 </div>
-<div class="layer warn" data-explanation="pitfall"><h4>주의할 점</h4>
-<p>$R_F$가 크다는 이유로 (c)에서도 가지를 지워 버리면 $K$가 0이 돼요. 부하를 작다고 두는 단계와, 남은 반송 전류가 큰 순방향 이득을 거치는 단계를 구분해요.</p>
 </div>
-<div class="layer eli5" data-explanation="retry"><h4>조건을 바꾸어 생각해요</h4>
-<ol><li>두 로딩 근사가 성립하고 나머지 소자값은 고정이에요. $R_F$를 두 배로 하면 $T$와 폐루프 트랜스임피던스의 크기는 각각 어떻게 바뀌나요?</li></ol>
-</div>
-<div class="sum" hidden=""><p class="sum-lead">출력에서 입력으로 향하는 전류 $i_{RF}$의 변화가 입력 변화를 상쇄해요.</p><p>$\lambda=0$, $R_F\gg R_{D2},\,1/g_{m1}$일 때 $R_0\approx-g_{m2}R_{D1}R_{D2}$예요.</p><p>$i_F=-i_{RF}$이므로 $K\approx-1/R_F$예요.</p><p>$v_{out}/i_{in}=R_0/(1+KR_0)$에서 $KR_0\gg1$이면 답은 약 $-R_F$예요.</p></div>
-</article><article class="topic" id="p2"><h3>P2. 큰 루프 이득과 입력 가상 접지</h3><p class="panel-meta">X12.18 · 연습문제 12.18 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1118_Feedback_Loading-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p2"><div class="layer formal" data-source-problem="p2"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>예제 12.18과 같은 회로: Fig 12.38(a) ($M_1$ 공통 게이트 첫째 단(게이트 $V_b$, 드레인 $X$ – $R_{D1}$ – $V_{DD}$, 소스 = 입력 노드, 입력 전류원 $i_{in}$), $M_2$ 공통 소스 둘째 단(게이트 $X$, 드레인 $v_{out}$ – $R_{D2}$ – $V_{DD}$), $v_{out}$과 입력 노드 사이 귀환 저항 $R_F$)</li><li>예제의 가정을 이어받음: $\lambda = 0$, $R_F$가 매우 큼</li><li>바뀐 점: $R_{D1} \to \infty$</li><li>힌트: 무한대의 개루프 이득은 $M_1$의 소스에서 가상 접지 노드를 만든다</li><li>예제 12.18의 결과 (식 12.75): $\left.\dfrac{V_{out}}{I_{in}}\right|_{closed} = \dfrac{-g_{m2}R_{D1}R_{D2}}{1 + \dfrac{g_{m2}R_{D1}R_{D2}}{R_F}}$</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>$R_{D1} \to \infty$일 때 폐루프 이득</li><li>이 결과의 해석</li></ul></div><figure><img src=".assets/figures_문제설명_1118_Feedback_Loading/b1113696292b6aa1-fig12-38-a.png" alt="그림 X12.18"></figure></div><details class="original" data-original-problem="p2"><summary>원문 보기</summary><p>$R_{D1} \to \infty$이면 폐루프 이득은 얼마인가? 이 결과는 어떻게 해석될 수 있는가?(힌트: 무한대의 개루프 이득은 $M_1$의 소스에서 가상 접지 노드를 만든다.)</p></details></div><div class="layer eli5" data-explanation="understand"><h4>문제를 읽어요</h4>
-<p>같은 회로에서 첫째 단의 드레인 저항 $R_{D1}$만 커져요. 입력 전류는 유한하게 고정하고, 출력 전압이 입력 전류의 몇 배인지와 그 값을 정하는 전류 경로를 찾아요.</p>
-</div>
-<div class="layer formal" data-explanation="recall"><h4>이 개념과 공식을 떠올려요</h4>
-<p>큰 순방향 이득에서는 아주 작은 오차 전류만 있어도 유한한 출력 전압을 만들어요. 공통 게이트 소스 쪽으로 들어가는 전류가 작아지면 $1/g_{m1}$에 걸리는 입력 전압도 작아져요. 이렇게 귀환이 소신호 전압을 0에 붙잡는 노드를 가상 접지(virtual ground)라고 해요.</p><p>$\lambda=0$, $R_F\gg R_{D2}$, $R_F\gg1/g_{m1}$를 유지하고 $g_{m1},g_{m2},R_{D2},R_F$는 유한한 양수로 고정해요.</p>
-</div>
-<div class="layer formal" data-explanation="start"><h4>종이에 쓸 첫 줄</h4>
-<div data-answer-step="루프 이득으로 분자와 분모 나누기"><p>예제의 식에서 무차원 루프 이득 $T=g_{m2}R_{D1}R_{D2}/R_F$를 묶어요. 그러면 분자에도 같은 $T$가 나타나요.</p><p>$$\frac{v_{out}}{i_{in}}\approx -R_F\frac{T}{1+T}$$</p></div>
-</div>
-<div class="layer formal" data-explanation="solve"><h4>이렇게 풀어요</h4>
-<div data-subpart="main"><div data-answer-step="유한한 출력과 가상 접지 연결하기"><p>$$\frac{T}{1+T}=\frac{1}{1+1/T}\longrightarrow 1$$</p><p>$R_{D1}\to\infty$이면 $T\to\infty$예요. 고정된 입력 전류에서 출력은 유한한데 $|R_0|$는 무한대로 가므로, 순방향 오차 전류 $i_e=v_{out}/R_0$는 0으로 가요.</p><p>$$v_s=\frac{i_e}{g_{m1}}\longrightarrow 0$$</p></div><div data-answer-step="입력 전류가 흐르는 저항 확인하기"><figure class="figure"><svg viewBox="0 0 360 121" role="img" aria-label="가상 접지인 소스 노드로 들어온 입력 전류가 귀환 저항을 거쳐 오른쪽 출력으로 흐르는 극한 등가회로."><path class="fig-ink" d="M42 50H120 M42 50V66 M42 92V97"/><circle class="fig-ink" cx="42" cy="79" r="13"/><path class="fig-ink" d="M42 86v-14 m-4 5 4 -5 4 5"/><path class="fig-ink" d="M42 97v6 m-9 0h18 m-15 4h12 m-9 4h6"/><text class="fig-text fig-math" x="11" y="82">i<tspan baseline-shift="sub" font-size="78%">in</tspan></text><circle class="fig-dot" data-node="s" data-node-color="blue" cx="84" cy="50" r="3.1"/><text class="fig-text fig-math" x="61" y="32" data-node="s" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">s</tspan> → 0</text><path class="fig-ink" d="M120 50h6 l3 -5 5 10 5 -10 5 10 5 -10 3 5 h6"/><path class="fig-ink" d="M158 50H300"/><text class="fig-text fig-math" x="121" y="32">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text><circle class="fig-dot" data-node="out" data-node-color="red" cx="300" cy="50" r="3.1"/><text class="fig-text fig-math" x="285" y="32" data-node="out" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M195 59H223 m-5 -4 5 4 -5 4"/><text class="fig-text fig-math" x="194" y="82">i<tspan baseline-shift="sub" font-size="78%">in</tspan></text></svg><figcaption>큰 루프 이득의 극한에서 $M_1$ 소스에 들어가는 소신호 전류가 0으로 가므로, 입력 전류가 $R_F$를 따라 흐르는 경로만 남겨 그렸어요.</figcaption></figure><p>입력 전류가 $R_F$를 통해 입력에서 출력 쪽으로 흘러요. 따라서 입력 쪽 전위에서 출력 쪽 전위를 뺀 값이 저항의 전압 강하예요.</p><p>$$v_s-v_{out}\longrightarrow i_{in}R_F$$</p></div></div>
-</div>
-<div class="layer formal" data-explanation="verify"><h4>완성 답과 검산</h4>
-<div data-subpart="main"><div data-answer-final="완성 답"><p>$\lambda=0$인 예제의 큰 $R_F$ 가정에서 $R_{D1}\to\infty$이면 <strong>$v_{out}/i_{in}\to-R_F$</strong>예요. $M_1$ 소스는 소신호 가상 접지가 되고 입력 전류는 $R_F$로 흘러요.</p></div><p>양의 $i_{in}$이 0 V에 가까운 노드에서 저항을 따라 나가려면 출력 쪽 전위가 더 낮아야 해요. 따라서 $\mathrm{V/A}=\Omega$의 차원과 반전 부호가 모두 맞아요.</p></div>
-</div>
-<div class="layer warn" data-explanation="pitfall"><h4>주의할 점</h4>
-<p>가상 접지는 소신호 전압을 말해요. 실제 접지선을 연결하면 입력 전류가 그 선으로도 흐를 수 있어서 위의 $R_F$ 전류 해석을 그대로 쓸 수 없어요.</p>
-</div>
-<div class="layer eli5" data-explanation="retry"><h4>조건을 바꾸어 생각해요</h4>
-<ol><li>두 로딩 근사를 유지하되 $R_{D1}$이 유한해서 $T=9$라면, 출력 트랜스임피던스의 크기는 $R_F$의 몇 배인가요?</li></ol>
-</div>
-<div class="sum" hidden=""><p class="sum-lead">$R_{D1}\to\infty$이면 $T\to\infty$가 되어 폐루프 트랜스임피던스는 $-R_F$에 다가가요.</p><p>$\lambda=0$인 예제의 큰 $R_F$ 조건에서 $v_s\to0$이에요.</p><p>입력 전류가 가상 접지에서 $R_F$를 거쳐 출력 쪽으로 흘러요.</p></div>
-</article><article class="topic" id="p3"><h3>P3. 전류 반송으로 낮아지는 입력저항</h3><p class="panel-meta">E12.19 · 예제 12.19 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1118_Feedback_Loading-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p3"><div class="layer formal" data-source-problem="p3"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>예제 12.18의 회로: Fig 12.38(a) ($M_1$ 공통 게이트 첫째 단(게이트 $V_b$, 드레인 $X$ – $R_{D1}$ – $V_{DD}$, 소스 = 입력 노드, 입력 전류원 $i_{in}$), $M_2$ 공통 소스 둘째 단(게이트 $X$, 드레인 $v_{out}$ – $R_{D2}$ – $V_{DD}$), $v_{out}$과 입력 노드 사이 귀환 저항 $R_F$)</li><li>예제 12.18의 가정을 이어받음: $\lambda = 0$, $R_F$가 매우 큼</li><li>소자 값은 주어지지 않음 (답은 $g_m$, 저항의 식으로)</li><li>식 (12.78): $\dfrac{V_X}{I_X} = \dfrac{R_{in}}{1 + KR_0}$</li><li>예제 12.18의 결과: $R_0 = R_{D1}(-g_{m2}R_{D2})$, $K = -1/R_F$, 폐루프 이득의 분모 $1 + KR_0 = 1 + \dfrac{g_{m2}R_{D1}R_{D2}}{R_F}$ (식 12.75)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>회로의 폐루프 입력 임피던스</li></ul></div><figure><img src=".assets/figures_문제설명_1118_Feedback_Loading/b1113696292b6aa1-fig12-38-a.png" alt="그림 E12.19"></figure></div><details class="original" data-original-problem="p3"><summary>원문 보기</summary><p>예제 12.18에서 배운 회로의 폐루프 입력 임피던스를 결정하라.</p></details></div><div class="layer eli5" data-explanation="understand"><h4>문제를 읽어요</h4>
-<p>$M_1$ 소스에 시험 전류 $i_t$를 넣고 같은 소스 노드의 전압 $v_s$를 재요. 귀환선을 연결한 상태에서 신호원이 보는 저항은 $v_s/i_t$예요. 그림의 $X$는 첫째 단 드레인이므로 입력 시험 전압과 구별해요.</p>
-</div>
-<div class="layer formal" data-explanation="recall"><h4>이 개념과 공식을 떠올려요</h4>
-<p>입력에 전류를 병렬로 반송하는 구조(shunt mixing)에서는 같은 입력 전압을 만들려면 순방향 가지와 귀환 가지에 전류를 모두 공급해야 해요. 전압을 총전류로 나눈 입력저항은 그만큼 작아져요.</p><p>$\lambda=0$이고 게이트 바이어스는 AC 접지예요. 순방향 증폭기만 보면 소스에 $v_s$를 가했을 때 $g_{m1}v_s$가 들어가므로 그 입력저항은 $R_{in}=1/g_{m1}$이에요.</p>
-</div>
-<div class="layer formal" data-explanation="start"><h4>종이에 쓸 첫 줄</h4>
-<div data-answer-step="시험 전류를 두 가지로 나누기"><figure class="figure"><svg viewBox="0 0 403 164" role="img" aria-label="입력 시험 전류가 순방향 입력 저항과 반송 제어 전류원으로 갈라진다. 출력은 순방향 입력 전류에 비례하는 전압원이다."><path class="fig-ink" d="M35 53H200 M35 53V85 M35 111V122"/><circle class="fig-ink" cx="35" cy="98" r="13"/><path class="fig-ink" d="M35 105v-14 m-4 5 4 -5 4 5"/><path class="fig-ink" d="M35 122v6 m-9 0h18 m-15 4h12 m-9 4h6"/><text class="fig-text fig-math" x="6" y="102">i<tspan baseline-shift="sub" font-size="78%">t</tspan></text><circle class="fig-dot" data-node="s" data-node-color="blue" cx="115" cy="53" r="3.1"/><text class="fig-text fig-math" x="92" y="37" data-node="s" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">s</tspan></text><path class="fig-ink" d="M115 53V78"/><path class="fig-ink" d="M115 78v6 l5 3 -10 5 10 5 -10 5 10 5 -5 3 v6"/><path class="fig-ink" d="M115 116v6 m-9 0h18 m-15 4h12 m-9 4h6"/><text class="fig-text fig-math" x="124" y="110">R<tspan baseline-shift="sub" font-size="78%">in</tspan></text><path class="fig-ink" d="M142 64H163 m-4 -3 4 3 -4 3"/><text class="fig-text fig-math" x="146" y="86">i<tspan baseline-shift="sub" font-size="78%">F</tspan></text><path class="fig-ink" d="M116 64v8 m-3 -3 3 3 3 -3"/><text class="fig-text fig-math" x="89" y="84">i<tspan baseline-shift="sub" font-size="78%">e</tspan></text><path class="fig-ink" d="M200 53V82 M200 114V123"/><path class="fig-ink" d="M200 82 l15 16 -15 16 -15 -16 z"/><path class="fig-ink" d="M200 91v14 m-4 -5 4 5 4 -5"/><path class="fig-ink" d="M200 123v6 m-9 0h18 m-15 4h12 m-9 4h6"/><text class="fig-text fig-math" x="221" y="103">Kv<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M317 123V114 M317 82V53H368"/><path class="fig-ink" d="M317 82 l15 16 -15 16 -15 -16 z"/><path class="fig-ink" d="M317 123v6 m-9 0h18 m-15 4h12 m-9 4h6"/><text class="fig-text fig-math" x="313" y="97">+</text><text class="fig-text fig-math" x="314" y="111">−</text><text class="fig-text fig-math" x="337" y="105">R<tspan baseline-shift="sub" font-size="78%">0</tspan>i<tspan baseline-shift="sub" font-size="78%">e</tspan></text><circle class="fig-dot" data-node="out" data-node-color="red" cx="368" cy="53" r="3.1"/><text class="fig-text fig-math" x="351" y="37" data-node="out" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text></svg><figcaption>큰 $R_F$에서 순방향 증폭기를 입력 저항 $R_{in}$과 제어 전압원 $R_0i_e$로 나타냈어요. 반송 전류 $i_F$의 양의 방향은 입력에서 빠져나가는 쪽이에요.</figcaption></figure><p>$i_e$는 순방향 입력으로 들어가고 $i_F$는 반송 가지로 빠져나가요. 시험 전류원의 화살표는 입력 노드로 들어오므로 첫 줄은 입력 노드의 전류 보존식이에요.</p><p>$$i_t=i_e+i_F$$</p></div>
-</div>
-<div class="layer formal" data-explanation="solve"><h4>이렇게 풀어요</h4>
-<div data-subpart="main"><div data-answer-step="반송 전류를 순방향 전류로 표현하기"><p>$i_e$가 만드는 출력은 $v_{out}=R_0i_e$예요. 반송 가지의 $i_F=Kv_{out}$에 이 전압을 넣으면</p><p>$$i_F=KR_0i_e$$</p><p>$$i_t=(1+KR_0)i_e$$</p><p>$R_F\gg R_{D2}$에서 $R_0\approx-g_{m2}R_{D1}R_{D2}$이고, $R_F\gg1/g_{m1}$에서 $K\approx-1/R_F$예요. 따라서 $T=KR_0$는 양수예요.</p></div><div data-answer-step="입력 노드의 전압을 전체 시험 전류로 나누기"><p>$$v_s=R_{in}i_e$$</p><p>$$R_{in,\mathrm{closed}}=\frac{v_s}{i_t}=\frac{R_{in}}{1+T}$$</p></div></div>
-</div>
-<div class="layer formal" data-explanation="verify"><h4>완성 답과 검산</h4>
-<div data-subpart="main"><div data-answer-final="완성 답"><p>$\lambda=0$, $R_F\gg R_{D2}$, $R_F\gg1/g_{m1}$에서 폐루프 입력저항은 다음과 같아요.</p><p>$$\boxed{R_{in,\mathrm{closed}}\approx\frac{1/g_{m1}}{1+g_{m2}R_{D1}R_{D2}/R_F}}$$</p></div><p>$R_F\to\infty$이면 $T\to0$이어서 소스에서 본 $1/g_{m1}$로 돌아가요. $R_{D1}\to\infty$이면 $T\to\infty$이므로 입력저항이 0으로 가고, 유한한 시험 전류에서 입력이 가상 접지가 되는 결과와 맞아요.</p></div>
-</div>
-<div class="layer warn" data-explanation="pitfall"><h4>주의할 점</h4>
-<p>$v_s/i_e$를 구하면 귀환이 동작해도 $1/g_{m1}$만 나와요. 입력 전류원이 실제로 공급하는 양은 반송 가지까지 포함한 $i_t$예요.</p>
-</div>
-<div class="layer eli5" data-explanation="retry"><h4>조건을 바꾸어 생각해요</h4>
-<ol><li>같은 $g_{m1}$에서 무차원 루프 이득이 $T=3$이면, 같은 입력 전압을 유지하는 총 시험 전류는 귀환을 끊었을 때의 몇 배인가요?</li></ol>
-</div>
-<div class="sum" hidden=""><p class="sum-lead">입력에서 빠지는 반송 전류 때문에 같은 전압을 내려면 더 큰 시험 전류가 필요해요.</p><p>$R_{in,\mathrm{closed}}=R_{in}/(1+T)$예요.</p><p>$\lambda=0$에서 $R_{in}=1/g_{m1}$이에요.</p><p>$R_F\gg R_{D2},\,1/g_{m1}$이면 $T\approx g_{m2}R_{D1}R_{D2}/R_F$예요.</p></div>
-</article><article class="topic" id="p4"><h3>P4. 전압 출력의 폐루프 출력저항</h3><p class="panel-meta">E12.20 · 예제 12.20 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1118_Feedback_Loading-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p4"><div class="layer formal" data-source-problem="p4"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>예제 12.18의 회로: Fig 12.38(a) ($M_1$ 공통 게이트 첫째 단(게이트 $V_b$, 드레인 $X$ – $R_{D1}$ – $V_{DD}$, 소스 = 입력 노드, 입력 전류원 $i_{in}$), $M_2$ 공통 소스 둘째 단(게이트 $X$, 드레인 $v_{out}$ – $R_{D2}$ – $V_{DD}$), $v_{out}$과 입력 노드 사이 귀환 저항 $R_F$)</li><li>예제 12.18의 가정을 이어받음: $\lambda = 0$, $R_F$가 매우 큼</li><li>소자 값은 주어지지 않음 (답은 $g_m$, 저항의 식으로)</li><li>식 (12.82): $\dfrac{V_X}{I_X} = \dfrac{R_{out}}{1 + KR_0}$</li><li>예제 12.18의 결과: $R_0 = R_{D1}(-g_{m2}R_{D2})$, $K = -1/R_F$, 폐루프 이득의 분모 $1 + KR_0 = 1 + \dfrac{g_{m2}R_{D1}R_{D2}}{R_F}$ (식 12.75)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>회로의 폐루프 출력 임피던스</li></ul></div><figure><img src=".assets/figures_문제설명_1118_Feedback_Loading/b1113696292b6aa1-fig12-38-a.png" alt="그림 E12.20"></figure></div><details class="original" data-original-problem="p4"><summary>원문 보기</summary><p>예제 12.18에서 배운 회로의 폐루프 출력 임피던스를 계산하라.</p></details></div><div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>그림 12.38(a)에서 시험할 곳은 $M_2$의 드레인인 $v_{out}$이에요. 이 단자에 바깥에서 전류를 조금 밀어 넣었을 때 전압이 얼마나 바뀌는지 구해요. 왼쪽 $M_1$의 소스는 신호 입력이고, 드레인 $X$는 $M_2$를 구동해요.</p>
-</div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p>$R_F$는 출력 전압을 감지해 입력에 전류를 돌려줘요. 전압 감지(voltage sensing) 음귀환은 출력 전압의 변화를 억제하므로, 개루프 출력저항을 $1+T$로 나누어요. $T$는 뺄셈 규약으로 정의한 양의 루프 이득(loop gain)이에요.</p>
-  <p>여기서 두 양의 단위가 모두 Ω이에요. $R_0$은 입력 전류를 출력 전압으로 바꾸는 순방향 트랜스임피던스이고, $R_{out,0}$은 출력 단자 자체에서 본 개루프 저항이에요.</p>
-</div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="출력 단자에서 보는 조건">
-    <p>입력 전류원은 개방하고 $V_{DD}$와 $V_b$는 AC 접지로 두어요. 귀환을 연결한 채 출력으로 들어가는 시험전류 $i_t$와 접지 기준 시험전압 $v_t$를 정의해요.</p>
-    $$R_{out,cl}=\frac{v_t}{i_t}\approx\frac{R_{out,0}}{1+T}$$
-  </div>
-</div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
-  <div data-subpart="main">
-    <p>$\lambda=0$이라 $M_2$의 $r_{o2}$는 무한대예요. 또 $R_F\gg R_{D2}$여서 감지 가지가 출력에 주는 직접 부하는 무시할 수 있어요. 따라서 식의 분자에는 $R_{out,0}\approx R_{D2}$를 넣어요.</p>
-    <div data-answer-step="예제 12.18의 루프 이득">
-      <p>공통 게이트 첫째 단은 입력 전류가 증가하면 $X$ 전압을 올리고, 공통 소스 둘째 단은 이를 반전해요. 예제 12.18의 순방향 전달량은 다음과 같아요.</p>
-      $$R_0\approx -g_{m2}R_{D1}R_{D2}$$
-      <p>$R_F\gg 1/g_{m1}$이므로 출력에서 입력으로 들어오는 귀환 전류는 약 $v_{out}/R_F$예요. 입력에서 <strong>빼는</strong> 전류를 기준으로 한 귀환율은 $K\approx-1/R_F$예요.</p>
-      $$T=KR_0\approx \frac{g_{m2}R_{D1}R_{D2}}{R_F}$$
-    </div>
-    <p>출력에 양의 시험전압을 걸면 $R_F$가 입력에 전류를 더 보내요. 그러면 $X$ 전압이 올라 $M_2$가 전류를 더 끌어내므로, 같은 시험전압을 유지하려면 시험원이 더 많은 전류를 보내야 해요.</p>
-  </div>
-</div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <div data-answer-final="폐루프 출력저항">
-      <p><strong>폐루프 출력저항</strong> ($\lambda=0$, $R_F\gg R_{D2}$ 및 $R_F\gg 1/g_{m1}$)</p>
-      $$R_{out,cl}\approx\frac{R_{D2}}{1+g_{m2}R_{D1}R_{D2}/R_F}$$
-    </div>
-    <p>분모의 루프 이득은 $\mathrm{S}\cdot\Omega^2/\Omega=1$로 무차원이에요. $R_F\to\infty$로 두면 귀환 전류가 사라지고 결과가 $R_{D2}$로 돌아와요.</p>
-  </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <p>입력 전류원을 끌 때 $M_1$의 소스를 접지하면 $R_F$가 되돌린 전류가 접지로 빠져요. 개방하는 것은 독립 전류원 가지뿐이에요.</p>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ul><li>다른 소신호 값은 그대로 두고 $R_F$만 두 배로 하면, $T$와 폐루프 출력저항은 각각 어떻게 변할까요?</li></ul>
 </div>
 <div class="sum" hidden="">
-  <p class="sum-lead">출력 전압을 감지하는 음귀환은 개루프 출력저항을 $1+T$로 나누어요.</p>
-  <p>$\lambda=0$이고 $R_F$가 $R_{D2}$와 $1/g_{m1}$보다 훨씬 커요.</p>
-  $$T\approx g_{m2}R_{D1}R_{D2}/R_F$$
-  $$R_{out,cl}\approx R_{D2}/(1+T)$$
+<p class="sum-lead">공통 게이트 단은 비반전, 공통 소스 단은 반전이어서 순방향 트랜스임피던스는 음수예요.</p>
+<p>입력에서 빠져나가는 전류를 기준으로 잡으면 귀환율도 음수여서 $KR_0&gt;0$이에요.</p>
 </div>
-</article><article class="topic" id="p5"><h3>P5. 능동 전류 반송의 이득과 두 임피던스</h3><p class="panel-meta">P12.33 · 장말문제 12.33 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1118_Feedback_Loading-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p5"><div class="layer formal" data-source-problem="p5"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>$R_1 + R_2$가 매우 큼</li><li>$\lambda = 0$</li><li>소자 값은 주어지지 않음 (답은 $g_m$, 저항의 식으로)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>폐루프 이득</li><li>입력 임피던스와 출력 임피던스 (I/O impedances)</li></ul></div><figure><img src=".assets/figures_문제설명_1118_Feedback_Loading/f09b9bae52d6cde8-fig12-97.png" alt="그림 P12.33"></figure></div><details class="original" data-original-problem="p5"><summary>원문 보기</summary><p>The amplifier depicted in Fig. 12.97 consists of a common-gate stage ($M_1$ and $R_D$) and a feedback network ($R_1$, $R_2$, and $M_2$). Assuming $R_1 + R_2$ is very large and $\lambda = 0$, compute the closed-loop gain and I/O impedances.</p></details></div><div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>입력 화살표 $I_{in}$은 $M_1$의 소스와 $M_2$의 드레인이 만나는 노드로 들어가요. 출력은 $M_1$ 드레인의 전압 $V_{out}$이에요. 따라서 구할 이득은 단위가 Ω인 트랜스임피던스(transimpedance) $V_{out}/I_{in}$이에요. 입력저항과 출력저항은 각각 자기 단자에서 전압을 전류로 나누어 구해요.</p>
+</article><article class="topic" id="p2"><h3>P2. 큰 루프 이득과 입력 가상 접지</h3><p class="panel-meta">X12.18 · 연습문제 12.18 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1118_Feedback_Loading-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p2"><div class="layer formal" data-source-problem="p2"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>예제 12.18과 같은 회로: Fig 12.38(a) ($M_1$ 공통 게이트 첫째 단(게이트 $V_b$, 드레인 $X$ – $R_{D1}$ – $V_{DD}$, 소스 = 입력 노드, 입력 전류원 $i_{in}$), $M_2$ 공통 소스 둘째 단(게이트 $X$, 드레인 $v_{out}$ – $R_{D2}$ – $V_{DD}$), $v_{out}$과 입력 노드 사이 귀환 저항 $R_F$)</li><li>예제의 가정을 이어받음: $\lambda = 0$, $R_F$가 매우 큼</li><li>바뀐 점: $R_{D1} \to \infty$</li><li>힌트: 무한대의 개루프 이득은 $M_1$의 소스에서 가상 접지 노드를 만든다</li><li>예제 12.18의 결과 (식 12.75): $\left.\dfrac{V_{out}}{I_{in}}\right|_{closed} = \dfrac{-g_{m2}R_{D1}R_{D2}}{1 + \dfrac{g_{m2}R_{D1}R_{D2}}{R_F}}$</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>$R_{D1} \to \infty$일 때 폐루프 이득</li><li>이 결과의 해석</li></ul></div><figure><img src=".assets/figures_문제설명_1118_Feedback_Loading/b1113696292b6aa1-fig12-38-a.png" alt="그림 X12.18"></figure></div><details class="original" data-original-problem="p2"><summary>원문 보기</summary><p>$R_{D1} \to \infty$이면 폐루프 이득은 얼마인가? 이 결과는 어떻게 해석될 수 있는가?(힌트: 무한대의 개루프 이득은 $M_1$의 소스에서 가상 접지 노드를 만든다.)</p></details></div><div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit">
+<svg viewBox="0 0 360 121" role="img" aria-label="가상 접지인 소스 노드로 들어온 입력 전류가 귀환 저항을 거쳐 오른쪽 출력으로 흐르는 극한 등가회로."><path class="fig-ink" d="M42 50H120 M42 50V66 M42 92V97"/><circle class="fig-ink" cx="42" cy="79" r="13"/><path class="fig-ink" d="M42 86v-14 m-4 5 4 -5 4 5"/><path class="fig-ink" d="M42 97v6 m-9 0h18 m-15 4h12 m-9 4h6"/><text class="fig-text fig-math" x="11" y="82">i<tspan baseline-shift="sub" font-size="78%">in</tspan></text><circle class="fig-dot" data-node="s" data-node-color="blue" cx="42" cy="50" r="3.1"/><text class="fig-text fig-math" x="30" y="32" data-node="s" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">s</tspan> → 0</text><path class="fig-ink" d="M120 50h6 l3 -5 5 10 5 -10 5 10 5 -10 3 5 h6"/><path class="fig-ink" d="M158 50H300"/><text class="fig-text fig-math" x="121" y="32">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text><circle class="fig-dot" data-node="out" data-node-color="red" cx="300" cy="50" r="3.1"/><text class="fig-text fig-math" x="285" y="32" data-node="out" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M195 59H223 m-5 -4 5 4 -5 4"/><text class="fig-text fig-math" x="194" y="82">i<tspan baseline-shift="sub" font-size="78%">in</tspan></text><text class="fig-loc" x="76" y="73" font-size="17">㉠</text><text class="fig-loc" x="153" y="78" font-size="17">㉡</text></svg>
+<figcaption class="circuit-state">루프 이득이 무한대로 갈 때의 입력 전류 경로</figcaption>
+</figure>
+<div data-subpart="main">
+<h4>입력 노드의 가상 접지</h4>
+<div data-answer-step="입력에서 출력으로 흐르는 전류">
+<p><span class="loc">㉠</span> $R_{D1}\to\infty$이면 무한히 큰 개루프 이득이 유한한 출력을 내는 데 필요한 오차 전류 $i_e$는 0으로 가요. $M_1$의 소스 전압 $v_s=i_e/g_{m1}$도 0으로 가므로 여기가 가상 접지예요.</p>
+<p><span class="loc">㉡</span> 입력 전류가 모두 $R_F$를 통해 출력으로 흘러요.</p>
+$$v_s-v_{out}\longrightarrow i_{in}R_F$$
 </div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p>출력에는 저항 분배기가 병렬로 연결되고, 입력에는 $M_2$의 드레인 전류가 병렬로 연결돼요. 출력 전압이 오르면 $M_2$가 입력에서 더 많은 전류를 가져가서 $M_1$로 들어갈 전류가 줄어요. 전압–전류 음귀환(shunt–shunt feedback)이에요.</p>
-  <p>순방향 트랜스임피던스를 $R_0$, 출력 전압에 대한 귀환 전류의 비를 $K$라 하면 루프 이득은 $T=KR_0$예요. 입력의 전류 반송과 출력의 전압 감지는 각각 해당 포트의 저항을 $1+T$로 나누어요.</p>
+<div data-answer-final="">
+$$\lim_{R_{D1}\to\infty}\frac{v_{out}}{i_{in}}=-R_F$$
 </div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="분압과 귀환율">
-    <p>$M_2$의 게이트는 분압기 중간점에 있고 소스는 접지예요. 출력에 걸리는 전체 저항 $R_1+R_2$는 $R_D$보다 매우 크지만, 아래쪽 저항에 걸리는 전압의 비는 유지해요.</p>
-    $$\alpha=\frac{R_2}{R_1+R_2}$$
-    <p>$v_{gs2}=\alpha v_{out}$이므로 $M_2$가 입력 노드에서 접지로 빼내는 귀환 전류는 $i_F=g_{m2}\alpha v_{out}$이에요.</p>
-    $$K=\frac{i_F}{v_{out}}=g_{m2}\alpha$$
-  </div>
 </div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
-  <div data-subpart="main">
-    <div data-answer-step="공통 게이트 단과 루프 이득">
-      <p>$\lambda=0$이므로 두 MOS의 $r_o$는 무한대예요. 공통 게이트 $M_1$의 소스로 들어온 소신호 전류가 드레인에서 부하로 전달돼요. 출력에서 본 부하는 $R_D\parallel(R_1+R_2)\approx R_D$이므로 순방향 트랜스임피던스는 $R_0\approx +R_D$예요.</p>
-      $$T=KR_0\approx g_{m2}\alpha R_D$$
-    </div>
-    <p>귀환을 닫으면 $M_1$에 전달되는 전류는 $i_{in}-i_F$예요. 따라서 전압 출력의 변화가 원래보다 $1+T$배 작아져요.</p>
-    $$\frac{v_{out}}{i_{in}}=\frac{R_0}{1+T}$$
-    <div data-answer-step="두 포트의 개루프 저항">
-      <p>입력은 AC 접지된 게이트를 가진 $M_1$의 소스에서 보므로 $R_{in,0}=1/g_{m1}$이에요. 출력에서 볼 때는 독립 입력 전류원을 개방해요. 개루프 출력저항은 $R_{out,0}\approx R_D$예요.</p>
-      <p>입력은 전류를 병렬로 반송하고 출력은 전압을 병렬로 감지하므로, 두 값에 같은 분모 $1+T$를 적용해요.</p>
-    </div>
-  </div>
-</div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <div data-answer-final="폐루프 이득과 입출력 임피던스">
-      <p><strong>$\lambda=0$, $R_1+R_2\gg R_D$에서의 세 결과</strong>예요. 공통 분모는 $D=1+g_{m2}R_D R_2/(R_1+R_2)$예요.</p>
-      $$\frac{v_{out}}{i_{in}}\approx +\frac{R_D}{D}$$
-      $$R_{in,cl}\approx\frac{1}{g_{m1}D}$$
-      $$R_{out,cl}\approx\frac{R_D}{D}$$
-    </div>
-    <p>세 결과의 단위는 모두 Ω이에요. $g_{m2}\to0$이면 $D\to1$이므로 이득은 $+R_D$, 입력저항은 $1/g_{m1}$, 출력저항은 $R_D$로 돌아와요. 첫째와 셋째의 값이 같은 것은 이 공통 게이트 단에서 순방향 트랜스임피던스와 개루프 출력저항이 모두 약 $R_D$이기 때문이에요.</p>
-  </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <p>분배기 전류가 작아도 게이트에는 분압이 걸려요. 두 저항을 동시에 같은 배수로 키우면 분배기의 부하 효과는 작아지지만 $R_2/(R_1+R_2)$와 귀환율 $K$는 그대로예요.</p>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ul><li>$R_1+R_2$와 두 소자의 $g_m$을 유지하며 $R_2$의 비중을 높이면 폐루프 입력저항은 커질까요, 작아질까요?</li></ul>
 </div>
 <div class="sum" hidden="">
-  <p class="sum-lead">$M_2$가 분압된 출력에 비례해 입력 전류를 빼내므로 양쪽 포트 저항과 트랜스임피던스가 함께 줄어요.</p>
-  <p>$\lambda=0$, $R_1+R_2\gg R_D$일 때 공통 분모는 $D=1+g_{m2}R_D\frac{R_2}{R_1+R_2}$예요.</p>
-  $$v_{out}/i_{in}\approx +R_D/D$$
-  $$R_{in,cl}\approx 1/(g_{m1}D)$$
-  $$R_{out,cl}\approx R_D/D$$
+<p class="sum-lead">큰 루프 이득의 극한에서는 $M_1$ 소스가 가상 접지가 되고, 입력 전류 전체가 $R_F$로 흘러요.</p>
 </div>
-</article><article class="topic" id="p6"><h3>P6. 출력 시험원 연결에서 잘못된 점 찾기</h3><p class="panel-meta">E12.23 · 예제 12.23 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1118_Feedback_Loading-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p6"><div class="layer formal" data-source-problem="p6"><h4>주어진 조건</h4><div data-source-field="conditions"></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>이 토폴로지가 실제 (전류-전압 귀환) 회로의 잘못된 표현인 이유 설명</li></ul></div><figure><img src=".assets/figures_문제설명_1118_Feedback_Loading/e9ecb477df3c8cbe-fig12-45.png" alt="그림 E12.23"></figure></div><details class="original" data-original-problem="p6"><summary>원문 보기</summary><p>학생이 그림 12.45에 그려진 회로의 도움을 받아 전류-전압 귀환 토폴로지의 출력 임피던스를 계산하려고 한다. 왜 이 토폴로지가 실제 회로의 잘못된 표현인지 설명하라.</p></details></div><div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>그림 12.45에서 $G_m$은 입력 전압을 출력 전류로 바꾸는 순방향 증폭기예요. $K$는 그 출력 전류를 읽고 입력 뺄셈기로 전압을 돌려줘야 해요. 오른쪽 시험원 $V_X$가 보낸 전류 $I_X$를 따라가며, $K$가 실제로 어느 전류를 읽게 되는지 확인해요.</p>
+</article><article class="topic" id="p3"><h3>P3. 전류 반송으로 낮아지는 입력저항</h3><p class="panel-meta">E12.19 · 예제 12.19 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1118_Feedback_Loading-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p3"><div class="layer formal" data-source-problem="p3"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>예제 12.18의 회로: Fig 12.38(a) ($M_1$ 공통 게이트 첫째 단(게이트 $V_b$, 드레인 $X$ – $R_{D1}$ – $V_{DD}$, 소스 = 입력 노드, 입력 전류원 $i_{in}$), $M_2$ 공통 소스 둘째 단(게이트 $X$, 드레인 $v_{out}$ – $R_{D2}$ – $V_{DD}$), $v_{out}$과 입력 노드 사이 귀환 저항 $R_F$)</li><li>예제 12.18의 가정을 이어받음: $\lambda = 0$, $R_F$가 매우 큼</li><li>소자 값은 주어지지 않음 (답은 $g_m$, 저항의 식으로)</li><li>식 (12.78): $\dfrac{V_X}{I_X} = \dfrac{R_{in}}{1 + KR_0}$</li><li>예제 12.18의 결과: $R_0 = R_{D1}(-g_{m2}R_{D2})$, $K = -1/R_F$, 폐루프 이득의 분모 $1 + KR_0 = 1 + \dfrac{g_{m2}R_{D1}R_{D2}}{R_F}$ (식 12.75)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>회로의 폐루프 입력 임피던스</li></ul></div><figure><img src=".assets/figures_문제설명_1118_Feedback_Loading/b1113696292b6aa1-fig12-38-a.png" alt="그림 E12.19"></figure></div><details class="original" data-original-problem="p3"><summary>원문 보기</summary><p>예제 12.18에서 배운 회로의 폐루프 입력 임피던스를 결정하라.</p></details></div><div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit">
+<svg viewBox="0 0 403 164" role="img" aria-label="입력 시험 전류가 순방향 입력 저항과 반송 제어 전류원으로 갈라진다. 출력은 순방향 입력 전류에 비례하는 전압원이다."><path class="fig-ink" d="M35 53H200 M35 53V85 M35 111V122"/><circle class="fig-ink" cx="35" cy="98" r="13"/><path class="fig-ink" d="M35 105v-14 m-4 5 4 -5 4 5"/><path class="fig-ink" d="M35 122v6 m-9 0h18 m-15 4h12 m-9 4h6"/><text class="fig-text fig-math" x="6" y="102">i<tspan baseline-shift="sub" font-size="78%">t</tspan></text><circle class="fig-dot" data-node="s" data-node-color="blue" cx="115" cy="53" r="3.1"/><text class="fig-text fig-math" x="92" y="37" data-node="s" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">s</tspan></text><path class="fig-ink" d="M115 53V78"/><path class="fig-ink" d="M115 78v6 l5 3 -10 5 10 5 -10 5 10 5 -5 3 v6"/><path class="fig-ink" d="M115 116v6 m-9 0h18 m-15 4h12 m-9 4h6"/><text class="fig-text fig-math" x="124" y="110">R<tspan baseline-shift="sub" font-size="78%">in,0</tspan></text><path class="fig-ink" d="M142 64H163 m-4 -3 4 3 -4 3"/><text class="fig-text fig-math" x="146" y="86">i<tspan baseline-shift="sub" font-size="78%">F</tspan></text><path class="fig-ink" d="M116 64v8 m-3 -3 3 3 3 -3"/><text class="fig-text fig-math" x="89" y="84">i<tspan baseline-shift="sub" font-size="78%">e</tspan></text><path class="fig-ink" d="M200 53V82 M200 114V123"/><path class="fig-ink" d="M200 82 l15 16 -15 16 -15 -16 z"/><path class="fig-ink" d="M200 91v14 m-4 -5 4 5 4 -5"/><path class="fig-ink" d="M200 123v6 m-9 0h18 m-15 4h12 m-9 4h6"/><text class="fig-text fig-math" x="221" y="103">Kv<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M317 123V114 M317 82V53H368"/><path class="fig-ink" d="M317 82 l15 16 -15 16 -15 -16 z"/><path class="fig-ink" d="M317 123v6 m-9 0h18 m-15 4h12 m-9 4h6"/><text class="fig-text fig-math" x="313" y="97">+</text><text class="fig-text fig-math" x="314" y="111">−</text><text class="fig-text fig-math" x="337" y="105">R<tspan baseline-shift="sub" font-size="78%">0</tspan>i<tspan baseline-shift="sub" font-size="78%">e</tspan></text><circle class="fig-dot" data-node="out" data-node-color="red" cx="368" cy="53" r="3.1"/><text class="fig-text fig-math" x="351" y="37" data-node="out" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><text class="fig-loc" x="63" y="82" font-size="17">㉠</text></svg>
+<figcaption class="circuit-state">큰 귀환 저항을 가정한 입력 시험 회로. 시험 전류는 입력 저항과 반송 전류원으로 나뉘어요.</figcaption>
+</figure>
+<div data-subpart="main">
+<h4>전류 반송이 있는 입력 포트</h4>
+<div data-answer-step="입력 노드에서 시험 전류 분배">
+<p><span class="loc">㉠</span> 입력에 시험 전류 $i_t$를 넣으면 순방향 입력으로 $i_e$가 흐르고 반송 가지로 $i_F=Kv_{out}$이 빠져요. $v_{out}=R_0i_e$를 대입해요.</p>
+$$i_t=i_e+i_F=(1+KR_0)i_e$$
+<p>$\lambda=0$이고 $R_F\gg 1/g_{m1},\,R_{D2}$이므로 개루프에서는 $M_1$ 소스에서 본 저항과 예제 12.18의 루프 이득을 써요.</p>
+$$R_{in,0}\approx 1/g_{m1}$$
+$$KR_0\approx \frac{g_{m2}R_{D1}R_{D2}}{R_F}$$
 </div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p>전류 감지(current sensing)에서는 전류계처럼 감지 포트를 측정할 경로에 직렬로 넣어요. 이상적인 감지 포트의 입력저항은 0이에요. 직렬 경로에 전압 강하를 더하지 않으면서 그 경로의 전류 전부를 읽기 위해서예요.</p>
+<div data-answer-final="">
+$$R_{in,cl}=\frac{v_s}{i_t}\approx\frac{1/g_{m1}}{1+g_{m2}R_{D1}R_{D2}/R_F}$$
 </div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="세 포트 전류의 일치">
-    <p>독립 입력 전압은 0으로 두고, 시험원에서 나와 순방향 출력 포트로 들어가는 방향을 양으로 잡아요. 같은 순환 방향으로 감지 포트 전류도 정의하면 올바른 직렬 연결의 조건은 다음과 같아요.</p>
-    $$I_X=I_{\mathrm{port}}=I_{\mathrm{sense}}$$
-  </div>
-  <p>$I_{\mathrm{port}}$는 순방향 출력 단자를 통과하는 전체 전류예요. 내부의 $R_{out}$ 한 가지에 흐르는 전류와는 구별해요.</p>
 </div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
-  <div data-subpart="main">
-    <div data-answer-step="그림 12.45의 출력 접속점">
-      <p>$V_X$의 위 단자에서 왼쪽으로 가면 $K$로 내려가는 갈림길을 만나요. 왼쪽으로 더 가면 $G_m$의 출력과 $R_{out}$으로 이어져요. 시험원과 감지 포트가 출력에 병렬로 붙었으므로 $I_X$ 전부가 감지 포트를 거친다고 할 수 없어요.</p>
-    </div>
-    <p>바르게 연결하려면 순방향 출력과 그 귀환 경로 사이를 열고 그 자리에 감지 포트와 시험원을 직렬로 넣어요. 그러면 그림 12.43(b)처럼 시험원이 보낸 전류가 순방향 출력 포트와 감지 포트를 모두 통과해요.</p>
-  </div>
-</div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <div data-answer-final="시험원과 전류 감지 포트의 연결">
-      <p><strong>그림 12.45에서는 감지 포트가 순방향 출력과 병렬이라 시험 전류 $I_X$가 두 경로로 갈라져요.</strong> 전류–전압 귀환의 출력 임피던스를 재려면 입력을 영점화한 뒤 시험원, 순방향 출력 포트, 귀환망의 감지 포트를 한 직렬 경로에 두어야 해요.</p>
-    </div>
-    <p>감지 입력저항이 0에 가까워지는 극한으로 확인해요. 잘못된 병렬 연결에서는 같은 $V_X\ne0$가 그 작은 저항에도 걸리므로 감지 가지 전류가 한없이 커져요. 올바른 직렬 연결에서는 감지 포트의 전압 강하만 0에 가까워져요.</p>
-  </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <p>그림의 $I_X$ 화살표는 시험원에서 나가는 전체 전류의 방향만 표시해요. 화살표 뒤에 갈림길이 있는지 확인해야 $K$에 실제로 들어가는 전류를 판별할 수 있어요.</p>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ul><li>이번에는 출력 <strong>전압</strong>을 감지한다고 하면 감지 포트를 어디에 연결하고, 그 입력저항은 어느 방향으로 커지거나 작아져야 할까요?</li></ul>
 </div>
 <div class="sum" hidden="">
-  <p class="sum-lead">전류 감지에서는 시험원과 순방향 출력 포트, 감지 포트가 한 직렬 경로의 전류를 공유해야 해요.</p>
-  <p>그림 12.45에서는 시험원이 출력에 병렬로 붙어 $I_X$가 갈라져요.</p>
-  <p>이상적인 전류 감지 포트의 입력저항은 0이에요.</p>
+<p class="sum-lead">병렬 전류 반송에서는 같은 입력 전압을 만들 때 시험원이 더 많은 전류를 공급해요.</p>
+$$R_{in,cl}\approx R_{in,0}/(1+KR_0)$$
+</div>
+</article><article class="topic" id="p4"><h3>P4. 전압 출력의 폐루프 출력저항</h3><p class="panel-meta">E12.20 · 예제 12.20 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1118_Feedback_Loading-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p4"><div class="layer formal" data-source-problem="p4"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>예제 12.18의 회로: Fig 12.38(a) ($M_1$ 공통 게이트 첫째 단(게이트 $V_b$, 드레인 $X$ – $R_{D1}$ – $V_{DD}$, 소스 = 입력 노드, 입력 전류원 $i_{in}$), $M_2$ 공통 소스 둘째 단(게이트 $X$, 드레인 $v_{out}$ – $R_{D2}$ – $V_{DD}$), $v_{out}$과 입력 노드 사이 귀환 저항 $R_F$)</li><li>예제 12.18의 가정을 이어받음: $\lambda = 0$, $R_F$가 매우 큼</li><li>소자 값은 주어지지 않음 (답은 $g_m$, 저항의 식으로)</li><li>식 (12.82): $\dfrac{V_X}{I_X} = \dfrac{R_{out}}{1 + KR_0}$</li><li>예제 12.18의 결과: $R_0 = R_{D1}(-g_{m2}R_{D2})$, $K = -1/R_F$, 폐루프 이득의 분모 $1 + KR_0 = 1 + \dfrac{g_{m2}R_{D1}R_{D2}}{R_F}$ (식 12.75)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>회로의 폐루프 출력 임피던스</li></ul></div><figure><img src=".assets/figures_문제설명_1118_Feedback_Loading/b1113696292b6aa1-fig12-38-a.png" alt="그림 E12.20"></figure></div><details class="original" data-original-problem="p4"><summary>원문 보기</summary><p>예제 12.18에서 배운 회로의 폐루프 출력 임피던스를 계산하라.</p></details></div><div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit">
+<svg id="p4-fig-circuit-s0-vc-output" viewBox="0 0 328 186" role="img" aria-label="입력 전류를 0으로 두고 출력 단자에 시험전압 v_t를 건 회로. K가 출력 단자의 전압을 감지해요."><path class="fig-ink" d="M20 60L116 60 M72 60L72 152L130 152 M170 60L178 60 M214 60L284 60L284 88 M238 60L238 152L184 152 M284 116L284 140"/><g data-symbol="part"><path class="fig-ink" d="M178 60l3 -7 6 14 6 -14 6 14 6 -14 6 14 3 -7"/></g><g data-symbol="part"><path class="fig-ink" d="M274 140h20M278 145h12M281 150h6"/></g><g data-symbol="amp"><path class="fig-ink" stroke-width="3" d="M116 30L170 60L116 90Z"/></g><text class="fig-text fig-math" text-anchor="middle" x="135.44" y="65">R<tspan baseline-shift="sub" font-size="78%">0</tspan></text><rect class="fig-ink" stroke-width="3" x="130" y="130" width="54" height="44"/><text class="fig-text fig-math" text-anchor="middle" x="157" y="157">K</text><g data-symbol="source"><circle class="fig-ink" cx="284" cy="102" r="14"/></g><circle class="fig-dot" data-node-color="blue" cx="72" cy="60" r="3.5"/><circle class="fig-dot" data-node-color="blue" cx="238" cy="60" r="3.5" data-node="test"/><circle class="fig-dot" cx="284" cy="60" r="3.5" data-node="test" data-node-color="blue"/><g data-symbol="arrow"><path class="fig-accent" d="M38 54L47 60L38 66"/></g><text class="fig-text fig-math" text-anchor="middle" x="42" y="44">0</text><g data-symbol="arrow"><path class="fig-accent" d="M66 100L72 109L78 100"/></g><text class="fig-text fig-math" text-anchor="start" x="82" y="110">I<tspan baseline-shift="sub" font-size="78%">F</tspan></text><text class="fig-text fig-math" text-anchor="middle" x="196" y="40">R<tspan baseline-shift="sub" font-size="78%">out</tspan></text><g data-symbol="arrow"><path class="fig-accent" d="M268 54L259 60L268 66"/></g><text class="fig-text fig-math" text-anchor="middle" x="255" y="84">i<tspan baseline-shift="sub" font-size="78%">t</tspan></text><text class="fig-text fig-math" text-anchor="middle" x="268" y="86">+</text><text class="fig-text fig-math" text-anchor="middle" x="268" y="128">−</text><text class="fig-text fig-math" text-anchor="middle" x="284" y="41" data-node="test" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">t</tspan>(+)</text><text class="fig-loc" x="68" y="43" font-size="17">㉠</text><text class="fig-loc" x="296" y="80" font-size="17">㉡</text></svg>
+<figcaption class="circuit-state">입력 전류원을 개방하고 귀환을 연결한 출력 시험 회로</figcaption>
+</figure>
+<div data-subpart="main">
+<h4>출력 전압 시험</h4>
+<div data-answer-step="시험 조건과 개루프 저항">
+<p><span class="loc">㉠</span> 독립 입력 전류원을 열어도 $R_F$의 반송 경로는 남아요. <span class="loc">㉡</span> 출력에 시험전압 $v_t$를 걸면 귀환이 출력 전압 상승을 억제하므로, 같은 $v_t$를 유지하는 데 더 큰 유입 전류 $i_t$가 필요해요.</p>
+<p>$\lambda=0$, $R_F\gg R_{D2},\,1/g_{m1}$에서 $M_2$의 드레인에 보이는 개루프 저항과 루프 이득은 다음과 같아요.</p>
+$$R_{out,0}\approx R_{D2}$$
+$$T=KR_0\approx \frac{g_{m2}R_{D1}R_{D2}}{R_F}$$
+</div>
+<div data-answer-final="">
+$$R_{out,cl}=\frac{v_t}{i_t}\approx\frac{R_{D2}}{1+T}$$
+</div>
+</div>
+</div>
+<div class="sum" hidden="">
+<p class="sum-lead">출력 전압을 병렬로 감지하면 폐루프 출력저항은 $R_{out,0}/(1+T)$로 줄어요.</p>
+</div>
+</article><article class="topic" id="p5"><h3>P5. 능동 전류 반송의 이득과 두 임피던스</h3><p class="panel-meta">P12.33 · 장말문제 12.33 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1118_Feedback_Loading-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p5"><div class="layer formal" data-source-problem="p5"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>$R_1 + R_2$가 매우 큼</li><li>$\lambda = 0$</li><li>소자 값은 주어지지 않음 (답은 $g_m$, 저항의 식으로)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>폐루프 이득</li><li>입력 임피던스와 출력 임피던스 (I/O impedances)</li></ul></div><figure><img src=".assets/figures_문제설명_1118_Feedback_Loading/f09b9bae52d6cde8-fig12-97.png" alt="그림 P12.33"></figure></div><details class="original" data-original-problem="p5"><summary>원문 보기</summary><p>The amplifier depicted in Fig. 12.97 consists of a common-gate stage ($M_1$ and $R_D$) and a feedback network ($R_1$, $R_2$, and $M_2$). Assuming $R_1 + R_2$ is very large and $\lambda = 0$, compute the closed-loop gain and I/O impedances.</p></details></div><div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit">
+<svg viewBox="0 0 350 257" role="img" aria-label="출력 분압기 R1, R2의 중간점이 M2 게이트를 구동하고, M2 드레인이 M1 소스의 입력 전류를 빼는 공통 게이트 증폭기."><path class="fig-ink" d="M112 16v15 M112 63v38h15 M112 125h15 M133 113h19 M112 125v28H40v13 M40 192v10 M112 153v25h15 M112 202h15v0 M112 202v12 M133 190h131 M112 80h205 M264 80v15 M264 127v63 M264 190v7 M264 229v8"/><path class="fig-ink" d="M112 31v3l-5 3 10 5 -10 5 10 5 -10 5 5 3v3"/><text class="fig-text fig-math" x="122" y="51">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text><path class="fig-ink" d="M264 95v3l-5 3 10 5 -10 5 10 5 -10 5 5 3v3"/><text class="fig-text fig-math" x="274" y="115">R<tspan baseline-shift="sub" font-size="78%">1</tspan></text><path class="fig-ink" d="M264 197v3l-5 3 10 5 -10 5 10 5 -10 5 5 3v3"/><text class="fig-text fig-math" x="274" y="217">R<tspan baseline-shift="sub" font-size="78%">2</tspan></text><path class="fig-ink" d="M127 98v30 M133 100v26 M118 120l-6 5 6 5 M127 174v31 M133 177v25 M118 197l-6 5 6 5 M101 16h22"/><text class="fig-text fig-math" x="129" y="21">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text><text class="fig-text fig-math" x="73" y="118">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" x="72" y="194">M<tspan baseline-shift="sub" font-size="78%">2</tspan></text><text class="fig-text fig-math" x="152" y="96" text-anchor="middle" data-node="bias" data-node-color="red">V<tspan baseline-shift="sub" font-size="78%">b</tspan></text><circle class="fig-dot" cx="152" cy="113" r="3.3" data-node="bias" data-node-color="red"/><text class="fig-text fig-math" x="152" y="113" data-node="bias" data-node-color="red"></text><path class="fig-ink" d="M40 185v-12m-4 5 4-5 4 5"/><circle class="fig-ink" cx="40" cy="179" r="13"/><text class="fig-text fig-math" x="13" y="181">i<tspan baseline-shift="sub" font-size="78%">in</tspan></text><path class="fig-ink" d="M31 202h18 m-15 4h12 m-9 4h6"/><path class="fig-ink" d="M103 214h18 m-15 4h12 m-9 4h6"/><path class="fig-ink" d="M255 237h18 m-15 4h12 m-9 4h6"/><circle class="fig-dot" cx="112" cy="153" r="3.3" data-node="s" data-node-color="blue"/><text class="fig-text fig-math" x="122" y="143" data-node="s" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">s</tspan></text><circle class="fig-dot" cx="317" cy="80" r="3.3" data-node="out" data-node-color="red"/><text class="fig-text fig-math" x="301" y="67" data-node="out" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><circle class="fig-dot" cx="264" cy="190" r="3.3" data-node="F" data-node-color="blue"/><text class="fig-text fig-math" x="273" y="178" data-node="F" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">F</tspan></text><circle class="fig-dot" cx="112" cy="80" r="3.2" data-node="out" data-node-color="red"/><circle class="fig-dot" cx="264" cy="80" r="3.2" data-node="out" data-node-color="red"/><text class="fig-loc" x="230" y="113" font-size="17">㉠</text><text class="fig-loc" x="78" y="149" font-size="17">㉡</text></svg>
+<figcaption class="circuit-state">분압기로 출력을 감지하고 $M_2$의 드레인으로 전류를 반송해요.</figcaption>
+</figure>
+<div data-subpart="main">
+<h4>분압기의 부하와 전류 반송</h4>
+<div data-answer-step="감지·반송 포트와 개루프 저항">
+<p><span class="loc">㉠</span> 분압기의 반송 출력을 열어도 $R_1+R_2$는 출력에서 접지로 이어져요. $\lambda=0$이고 $R_1+R_2\gg R_D$인 조건을 적용해요. <span class="loc">㉡</span> 반송 소자 $M_2$의 $r_{o2}$는 무한대이므로 입력에서 순방향으로 보이는 것은 $M_1$의 소스 저항이에요.</p>
+$$R_{out,0}=R_D\parallel(R_1+R_2)\approx R_D$$
+$$R_{in,0}=1/g_{m1}$$
+</div>
+<div data-answer-step="공통 게이트 단과 귀환율">
+<p>순방향 전류 $i_e$가 $M_1$의 소스로 들어가면 $v_{out}$은 올라가요. 공통 게이트 단에서 이 전류 전체가 출력 부하에 전달돼요.</p>
+$$R_0=\frac{v_{out}}{i_e}=R_{out,0}$$
+<p>출력에 시험전압을 걸고, $i_F$는 $M_2$가 입력에서 접지로 빼는 방향으로 잡아요. 게이트 전압은 분압기 아래 저항 $R_2$에 걸리는 전압이에요.</p>
+$$K=\frac{i_F}{v_{out}}=g_{m2}\frac{R_2}{R_1+R_2}$$
+$$T=KR_0\approx g_{m2}R_D\frac{R_2}{R_1+R_2}$$
+</div>
+<div data-answer-final="">
+<p>출력의 전압 감지와 입력의 전류 반송이 모두 병렬이므로 세 결과의 분모가 같아요.</p>
+$$\frac{v_{out}}{i_{in}}\approx +\frac{R_D}{1+T}$$
+$$R_{in,cl}\approx\frac{1/g_{m1}}{1+T}$$
+$$R_{out,cl}\approx\frac{R_D}{1+T}$$
+</div>
+</div>
+</div>
+<div class="sum" hidden="">
+<p class="sum-lead">큰 분압 저항은 출력 부하를 거의 바꾸지 않지만 $R_2/(R_1+R_2)$는 귀환율에 남아요.</p>
+<p>전류 반송과 전압 감지가 모두 병렬이므로 두 포트 저항은 각각 $1+T$로 나뉘어요.</p>
+</div>
+</article><article class="topic" id="p6"><h3>P6. 출력 시험원 연결에서 잘못된 점 찾기</h3><p class="panel-meta">E12.23 · 예제 12.23 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1118_Feedback_Loading-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p6"><div class="layer formal" data-source-problem="p6"><h4>주어진 조건</h4><div data-source-field="conditions"></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>이 토폴로지가 실제 (전류-전압 귀환) 회로의 잘못된 표현인 이유 설명</li></ul></div><figure><img src=".assets/figures_문제설명_1118_Feedback_Loading/e9ecb477df3c8cbe-fig12-45.png" alt="그림 E12.23"></figure></div><details class="original" data-original-problem="p6"><summary>원문 보기</summary><p>학생이 그림 12.45에 그려진 회로의 도움을 받아 전류-전압 귀환 토폴로지의 출력 임피던스를 계산하려고 한다. 왜 이 토폴로지가 실제 회로의 잘못된 표현인지 설명하라.</p></details></div><div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit">
+<svg id="p6-fig-circuit-s1-cv-output" viewBox="0 0 324 218" role="img" aria-label="입력을 단락하고 출력에 시험전압 VX를 건 회로. 시험전류 IX가 Rout과 Gm 출력으로 갈라진 뒤 합쳐져 K 안의 도선을 지나요."><path class="fig-ink" d="M110 36L22 36L22 80L44 80L44 200L110 200 M110 80L74 80L74 148L110 148 M176 36L278 36L278 45 M278 71L278 80L242 80L242 200L164 200L164 148L212 148L212 80L176 80 M194 36L194 40 M194 76L194 80"/><g data-symbol="part"><path class="fig-ink" d="M194 40l-7 3 14 6 -14 6 14 6 -14 6 14 6 -7 3"/></g><rect class="fig-ink" stroke-width="3" x="110" y="22" width="66" height="72"/><text class="fig-text fig-math" text-anchor="middle" x="143" y="63">G<tspan baseline-shift="sub" font-size="78%">m</tspan></text><rect class="fig-ink" stroke-width="3" x="110" y="132" width="66" height="80"/><text class="fig-text fig-math" text-anchor="middle" x="138" y="177">K</text><g data-symbol="source"><circle class="fig-ink" cx="278" cy="58" r="13"/></g><circle class="fig-dot" data-node-color="blue" cx="194" cy="36" r="3.5" data-node="test"/><circle class="fig-dot" cx="278" cy="36" r="3.5" data-node="test" data-node-color="blue"/><circle class="fig-dot" data-node="return" data-node-color="red" cx="194" cy="80" r="3.5"/><g data-symbol="arrow"><path class="fig-accent" d="M248 30L239 36L248 42"/></g><text class="fig-text fig-math" text-anchor="middle" x="244" y="18">I<tspan baseline-shift="sub" font-size="78%">X</tspan></text><text class="fig-text fig-math" text-anchor="start" x="206" y="62">R<tspan baseline-shift="sub" font-size="78%">out</tspan></text><g data-symbol="arrow"><path class="fig-accent" d="M206 110L212 119L218 110"/></g><text class="fig-text fig-math" text-anchor="end" x="202" y="120">I<tspan baseline-shift="sub" font-size="78%">X</tspan></text><g data-symbol="arrow"><path class="fig-accent" d="M236 122L242 113L248 122"/></g><text class="fig-text fig-math" text-anchor="start" x="252" y="120">I<tspan baseline-shift="sub" font-size="78%">X</tspan></text><text class="fig-text fig-math" text-anchor="middle" x="302" y="47">+</text><text class="fig-text fig-math" text-anchor="middle" x="302" y="84">−</text><text class="fig-text fig-math" text-anchor="middle" x="281" y="17" data-node="test" data-node-color="blue">V<tspan baseline-shift="sub" font-size="78%">X</tspan>(+)</text><text class="fig-text fig-math" text-anchor="middle" x="103" y="169.5">+</text><text class="fig-text fig-math" text-anchor="middle" x="84" y="179">KI<tspan baseline-shift="sub" font-size="78%">X</tspan></text><text class="fig-text fig-math" text-anchor="middle" x="103" y="188">−</text><text class="fig-loc" x="38" y="65" font-size="17">㉠</text><text class="fig-loc" x="132" y="153" font-size="17">㉡</text></svg>
+<figcaption class="circuit-state">올바른 직렬 접속. 순방향 출력의 내부 가지 전류가 다시 합쳐져 감지 포트를 통과해요.</figcaption>
+</figure>
+<div data-subpart="main">
+<h4>시험 전류가 지나야 하는 경로</h4>
+<div data-answer-step="시험원과 감지 포트의 전류">
+<p><span class="loc">㉠</span> 독립 입력 전압을 0으로 두고 출력에 시험원을 연결해요. <span class="loc">㉡</span> 전류 감지 포트는 순방향 출력 포트와 직렬이어야 하므로, 같은 순환 방향을 기준으로 다음 조건이 성립해야 해요.</p>
+$$I_X=I_{\mathrm{port}}=I_{\mathrm{sense}}$$
+</div>
+<div data-answer-final="">
+<p>원문 그림 12.45에서는 $V_X$를 출력과 병렬로 연결해 시험 전류가 순방향 출력과 $K$의 감지 입력으로 갈라져요. 위 회로처럼 감지 포트를 출력의 귀로에 직렬로 넣어야 $K$가 시험 전류 전체를 읽어요.</p>
+</div>
+</div>
+</div>
+<div class="sum" hidden="">
+<p class="sum-lead">출력 전류를 감지할 때는 시험원, 순방향 출력 포트, 감지 포트가 같은 전류를 공유해야 해요.</p>
 </div>
 </article></section>
   </main>

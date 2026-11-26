@@ -1,32 +1,6 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>예제 12.13의 두 단 회로에서 $M_2$의 연결만 바꿔요. 나머지 소자 $M_1$, $R_{D1}$, $R_{D2}$, $R_{F1}$, $R_{F2}$와 연결은 그대로예요.</p>
-  <p>바뀐 $M_2$는 공통 게이트(common-gate, CG) 단이에요. 소스는 첫 단 출력 노드 $A$에, 게이트는 고정 바이어스 전압 $V_b$에, 드레인은 전과 같이 $R_{D2}$와 출력 $V_{out}$에 붙어요.</p>
-  <p>입력은 $M_1$ 게이트의 $V_{in}$이고 출력은 $M_2$ 드레인의 $V_{out}$이에요. 출력 전압을 $R_{F1}$–$R_{F2}$ 분배기가 나눠 가운데 노드 $X$, 즉 $M_1$의 소스로 되돌려요. 이 분배기가 귀환 회로망(feedback network)이에요.</p>
-  <p>구할 것은 숫자가 아니라 귀환의 극성(polarity), 즉 부귀환(negative feedback)인지 정귀환(positive feedback)인지예요. 소자 값이 없으니 각 노드가 오르는지 내리는지 방향만 따라가요.</p>
-  <p>판정에는 $M_1$과 $M_2$가 모두 포화 영역에서 증폭기로 동작하도록 바이어스되어 있다고 둬요. 원문이 따로 적지 않은 가정이지만, 예제 12.13도 같은 전제로 방향을 추적해요.</p>
-</div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p><b>단서</b>: "귀환의 극성"과 "위의 예제를 다시 풀어라"라는 말이 12.5절의 극성 판정 절차를 불러요.</p>
-  <p><b>개념</b>: 극성 판정(determining the polarity of feedback)은 세 단계예요. (1) 입력이 오른다고(또는 내린다고) 가정해요. (2) 그 변화를 순방향 증폭기와 귀환 회로망을 따라 루프 한 바퀴 추적해요. (3) 돌아온 양이 처음 변화를 방해하면 부귀환, 키우면 정귀환이에요.</p>
-  <p><b>반송 지점</b>: 귀환은 $M_1$의 소스로 돌아와요. $M_1$의 전류를 정하는 제어 전압은 게이트와 소스의 차이므로, 여기서 입력과 귀환 신호가 빼져요.</p>
-  $$V_{GS1}=V_{in}-V_X$$
-  <p>그래서 $V_X$가 $V_{in}$과 같은 방향으로 움직이면 $V_{GS1}$의 변화가 줄어 부귀환이고, 반대 방향으로 움직이면 $V_{GS1}$의 변화가 커져 정귀환이에요.</p>
-  <p><b>단마다의 부호</b>: 공통 소스(common-source, CS) 단은 게이트 입력·드레인 출력이라 반전해요. 게이트가 오르면 드레인 전류가 늘고, 부하 저항의 전압 강하가 커져 드레인 전압이 내려가요.</p>
-  $$\frac{v_A}{v_{in}}\lt 0$$
-  <p>공통 게이트(CG) 단은 게이트가 고정이고 소스 입력·드레인 출력이라 반전하지 않아요. 소스가 내려가면 $V_{GS}$가 커져 드레인 전류가 늘고, 드레인 전압도 내려가요.</p>
-  $$\frac{v_{out}}{v_A}\gt 0$$
-  <p>저항 분배기는 출력 전압을 나눌 뿐이라 $V_X$는 $V_{out}$과 같은 방향으로 움직여요.</p>
-  <p><b>반전 횟수 규칙</b>: 정리노트의 정리처럼, 입력에서 $X$까지 반전이 두 번이면 $V_X$가 $V_{in}$과 같은 방향이라 음귀환(부귀환)이고, 한 번이면 반대 방향이라 양귀환(정귀환)이에요(<a href="정리노트_1113_Voltage_Voltage_Feedback.html#s3-polarity-two-stage">반전이 두 번이면 음귀환</a>). 수업 슬라이드의 메모도 같은 회로에서 "$M_2$가 있어서 부귀환, 없으면 정귀환"이라고 적었어요.</p>
-  <p><b>선택 이유</b>: 묻는 것이 크기가 아니라 부호이고 소자 값도 없어요. 그래서 소신호 등가회로나 $G_m$·$R_{out}$을 구하지 않고, 원 회로에서 노드마다 오르내림만 추적하는 극성 판정 절차를 첫 도구로 써요.</p>
-</div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="바뀐 회로와 첫 줄">
-    <p>먼저 바뀐 연결을 직접 그려요. 교과서 그림은 바뀌기 전 회로라서 $M_2$의 게이트가 $A$에, 소스가 접지에 붙어 있어요.</p>
-    <figure class="figure">
-      <svg viewBox="0 0 460 300" role="img" aria-label="V_DD 레일에 R_D1과 R_D2가 매달려 있어요. R_D1 아래 노드 A는 M1 드레인에 붙고, 오른쪽으로 나간 도선이 아래로 돌아 M2 소스에 붙어요. M1 게이트는 왼쪽 입력 v_in에, M1 소스는 아래 도선을 따라 오른쪽 노드 X에 붙어요. M2 게이트는 고정 바이어스 V_b 단자에, M2 드레인은 R_D2 아래 노드에 붙고 그 노드는 오른쪽으로 분배기 위쪽 접속점을 지나 맨 오른쪽 출력 v_out 단자로 이어져요. 분배기는 v_out 접속점에서 R_F1, 노드 X, R_F2를 거쳐 접지로 내려가요.">
+<div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit">
+<svg viewBox="0 0 460 300" role="img" aria-label="V_DD 레일에 R_D1과 R_D2가 매달려 있어요. R_D1 아래 노드 A는 M1 드레인에 붙고, 오른쪽으로 나간 도선이 아래로 돌아 M2 소스에 붙어요. M1 게이트는 왼쪽 입력 v_in에, M1 소스는 아래 도선을 따라 오른쪽 노드 X에 붙어요. M2 게이트는 고정 바이어스 V_b 단자에, M2 드레인은 R_D2 아래 노드에 붙고 그 노드는 오른쪽으로 분배기 위쪽 접속점을 지나 맨 오른쪽 출력 v_out 단자로 이어져요. 분배기는 v_out 접속점에서 R_F1, 노드 X, R_F2를 거쳐 접지로 내려가요.">
         <path class="fig-ink" d="M110 30 H300"/>
         <text class="fig-text fig-math" x="310" y="35">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text>
         <path class="fig-ink" d="M130 30 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/>
@@ -62,103 +36,21 @@
         <path class="fig-ink" d="M400 200 v10 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 v10"/>
         <text class="fig-text fig-math" x="418" y="240">R<tspan baseline-shift="sub" font-size="78%">F2</tspan></text>
         <path class="fig-ink" d="M400 268 v8 M390 276 H410 M394 281 H406 M398 286 H402"/>
-      </svg>
-      <figcaption>예제 12.13 회로에서 $M_2$만 CG 단으로 바꿨어요. $M_2$ 소스는 $A$에, 게이트는 고정 바이어스 $V_b$에 붙고, 드레인은 그대로 $R_{D2}$와 $v_{out}$에 붙어요. 극성만 보므로 소신호 등가회로가 아닌 원 회로를 그렸어요.</figcaption>
-    </figure>
-    <p>그림에서 바뀐 두 단의 제어 전압을 먼저 적어요. $M_1$은 게이트에 입력, 소스에 귀환을 받아요.</p>
-    $$V_{GS1}=V_{in}-V_X$$
-    <p>$M_2$는 게이트가 $V_b$로 고정이고 소스가 $A$라서, $V_A$가 내려가면 $V_{GS2}$가 커져요.</p>
-    $$V_{GS2}=V_b-V_A$$
-    <p>노드 $A$에서는 $M_1$이 끌어내리는 전류를 $R_{D1}$과 $M_2$가 함께 공급해요. $M_2$의 드레인 전류는 소스를 지나 $A$로 들어오기 때문이에요.</p>
-    $$I_{D1}=I_{R_{D1}}+I_{D2}$$
-    <p>그다음 종이 첫 줄에 "가정: $V_{in}\uparrow$"를 쓰고 루프를 한 바퀴 따라가요.</p>
-  </div>
+      <text class="fig-loc" x="133" y="160" font-size="17">㉠</text><text class="fig-loc" x="366" y="215" font-size="17">㉡</text></svg>
+<figcaption class="circuit-state">둘째 단의 게이트를 고정하고, 첫째 단 드레인 $A$를 둘째 단 소스에 연결한 회로</figcaption>
+</figure>
+<div data-subpart="main">
+<h4>둘째 단을 공통 게이트로 바꿀 때</h4>
+<div data-answer-step="소스 입력의 전달 부호">
+<p><span class="loc">㉠</span> $v_{in}$이 오르면 $M_1$ 전류가 늘고 $v_A$가 내려가요. $A$는 이제 게이트가 고정된 $M_2$의 <strong>소스</strong>예요. 소스가 내려가면 $v_{GS2}$가 커지고 $R_{D2}$의 전압 강하가 늘어 $v_{out}$도 내려가요.</p>
+<p><span class="loc">㉡</span> 출력의 하강이 분압기를 거쳐 $M_1$의 소스 전압 $v_X$를 내려요.</p>
 </div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
-  <div data-subpart="main">
-    <div data-answer-step="루프 추적">
-      <p>입력이 오르면 $M_1$의 제어 전압이 커져 드레인 전류가 늘려고 해요.</p>
-      $$V_{in}\uparrow\ \Rightarrow\ V_{GS1}\uparrow\ \Rightarrow\ I_{D1}\uparrow$$
-      <p>늘어난 $I_{D1}$은 $A$에서 $R_{D1}$과 $M_2$가 더 공급해야 해요. $R_{D1}$이 전류를 더 흘리려면 $V_A$가 내려가야 하고, $M_2$가 더 흘리려면 $V_{GS2}=V_b-V_A$가 커져야 하니 역시 $V_A$가 내려가야 해요. 그래서 $M_1$은 CS 단으로 반전해요.</p>
-      $$I_{D1}\uparrow\ \Rightarrow\ V_A\downarrow$$
-      <p>$M_2$는 게이트가 고정된 CG 단이라, 소스 $A$가 내려간 만큼 $V_{GS2}$가 커져 전류가 늘어요.</p>
-      $$V_A\downarrow\ \Rightarrow\ V_{GS2}\uparrow\ \Rightarrow\ I_{D2}\uparrow$$
-      <p>$M_2$가 출력 노드에서 전류를 더 끌어내리므로 $R_{D2}$의 전압 강하가 커져 출력이 내려가요. $V_A$와 $V_{out}$이 같은 방향이니 CG 단은 반전하지 않아요.</p>
-      $$I_{D2}\uparrow\ \Rightarrow\ V_{out}\downarrow$$
-      <p>분배기는 출력을 나눌 뿐이라 $X$도 같이 내려가요.</p>
-      $$V_{out}\downarrow\ \Rightarrow\ V_X\downarrow$$
-      <p>$X$는 $M_1$의 소스예요. 소스가 내려가면 $V_{GS1}=V_{in}-V_X$가 처음보다 더 커져요.</p>
-      $$V_X\downarrow\ \Rightarrow\ V_{GS1}\uparrow\ \Rightarrow\ I_{D1}\uparrow$$
-      <p>돌아온 신호가 처음 변화($I_{D1}$ 증가)를 방해하지 않고 더 키워요. 따라서 귀환은 정귀환이에요.</p>
-    </div>
-    <div data-answer-step="예제 12.13과 비교">
-      <p>반전 횟수로 정리하면 원래 회로와 차이가 한눈에 보여요. 바뀐 것은 둘째 단의 부호 하나뿐이에요.</p>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>단</th><th>예제 12.13 ($M_2$ CS)</th><th>연습문제 12.13 ($M_2$ CG)</th></tr></thead>
-          <tbody>
-            <tr><td>$M_1$: $V_{in}\to V_A$</td><td>CS, 반전</td><td>CS, 반전</td></tr>
-            <tr><td>$M_2$: $V_A\to V_{out}$</td><td>CS(게이트 입력), 반전</td><td>CG(소스 입력), 비반전</td></tr>
-            <tr><td>분배기: $V_{out}\to V_X$</td><td>비반전</td><td>비반전</td></tr>
-            <tr><td>$V_X$의 방향</td><td>$V_{in}$과 같음 ($\uparrow$)</td><td>$V_{in}$과 반대 ($\downarrow$)</td></tr>
-            <tr><td>$V_{GS1}=V_{in}-V_X$</td><td>변화가 줄어요</td><td>변화가 커져요</td></tr>
-            <tr><td>극성</td><td>부귀환</td><td>정귀환</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p>반전이 두 번에서 한 번으로 줄었으니 $V_X$가 $V_{in}$과 반대로 움직이고, 소스로 돌아온 그 신호가 $V_{GS1}$의 변화를 키워요.</p>
-    </div>
-  </div>
+<div data-answer-final="">
+<p>$v_{GS1}=v_{in}-v_X$가 더 커져 처음의 전류 증가를 키우므로 정귀환이에요.</p>
 </div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <div data-answer-final="">
-      <p><b>귀환은 정귀환(positive feedback)이에요.</b></p>
-      <p>조건: $M_1$·$M_2$가 포화 영역의 증폭기로 동작하고 $M_2$ 게이트가 고정 바이어스(소신호 접지)일 때, 신호가 $M_1$(CS, 반전) → $M_2$(CG, 비반전) → 분배기(비반전)를 지나 $M_1$ 소스로 돌아오는 루프 기준이에요.</p>
-    </div>
-    <p><b>루프를 끊어 다시 확인</b>: 12.5절의 다른 방법이에요. 입력 $V_{in}$을 고정(소신호 0)하고 $M_1$ 소스와 노드 $X$ 사이를 끊어요. $M_1$ 소스에 시험 전압 $V_{test}$를 올리고 분배기의 $X$에 돌아오는 $V_{ret}$을 봐요.</p>
-    $$V_{test}\uparrow\ \Rightarrow\ V_{GS1}\downarrow\ \Rightarrow\ I_{D1}\downarrow\ \Rightarrow\ V_A\uparrow$$
-    $$V_A\uparrow\ \Rightarrow\ V_{GS2}\downarrow\ \Rightarrow\ I_{D2}\downarrow$$
-    $$I_{D2}\downarrow\ \Rightarrow\ V_{out}\uparrow\ \Rightarrow\ V_{ret}\uparrow$$
-    <p>끊은 자리를 다시 이으면 소스를 올린 변화가 소스를 더 올리는 쪽으로 돌아와요. $V_{ret}/V_{test}\gt 0$이라 스스로를 키우는 정귀환이고, 루프 추적 결과와 같아요.</p>
-    <p><b>원래 예제로 방법 점검</b>: 같은 끊기를 예제 12.13(CS인 $M_2$)에 하면 $V_A\uparrow$에서 $M_2$ 게이트가 올라 $I_{D2}\uparrow$, $V_{out}\downarrow$, $V_{ret}\downarrow$예요. $V_{ret}/V_{test}\lt 0$이라 교과서 답인 부귀환이 나오므로, 같은 방법이 바뀐 회로에서 정귀환을 주는 것이 일관돼요.</p>
-    <p><b>부호의 곱</b>: 입력에서 $X$까지의 부호를 곱하면 $V_X$의 방향이 나와요.</p>
-    $$\operatorname{sgn}\frac{v_X}{v_{in}}=(-)(+)(+)=(-)$$
-    <p>$V_X$가 $V_{in}$과 반대로 움직이고 반송이 소스에서 빼지므로 $V_{GS1}$ 변화가 커져요. 정리노트의 "반전이 한 번이면 양귀환", 슬라이드 메모의 "$M_2$가 없으면 정귀환"과도 맞아요. 비반전인 CG 단은 부호로 보면 $M_2$가 없는 것과 같기 때문이에요.</p>
-    <p><b>소자 값과 무관</b>: 모든 저항과 $g_m$이 양수인 한 단마다의 부호는 바뀌지 않아요. 저항 크기는 루프 이득의 크기만 바꾸고 극성은 바꾸지 않아요.</p>
-  </div>
 </div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <ul>
-    <li>"두 단 증폭기니까 예제처럼 부귀환"이라고 단 수만 세면 틀려요. 극성은 단의 개수가 아니라 각 단이 반전하는지로 정해요.</li>
-    <li>모든 트랜지스터 단이 반전한다고 생각하면 안 돼요. CG 단은 소스가 내려가면 $V_{GS}$가 커져 드레인도 내려가는 비반전 단이에요.</li>
-    <li>$V_X$의 방향만 보고 끝내지 않아요. 귀환이 $M_1$의 소스로 돌아오므로 $V_X$의 상승은 $V_{GS1}$을 줄이고, 하강은 키워요. 같은 $V_X$라도 게이트 쪽으로 돌아오면 판정이 반대예요.</li>
-    <li>$I_{D1}$이 $X$로 직접 흘러 $R_{F1}$·$R_{F2}$에서 전압을 만드는 효과는 $M_1$ 자신의 국부 소스 축퇴(degeneration)예요. 극성을 묻는 귀환은 출력 $V_{out}$을 거쳐 분배기로 돌아오는 루프이니 둘을 섞지 않아요.</li>
-    <li>정귀환은 풀이가 틀렸다는 신호가 아니에요. 다만 수업에서 말했듯 정귀환 루프는 잡음이 계속 커져 발진할 수 있어서, 이 연결은 증폭기로 쓰기 어려워요.</li>
-  </ul>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol>
-    <li>$M_2$를 소스 팔로워(게이트 $A$, 드레인 $V_{DD}$, 소스가 $V_{out}$이고 소스 아래 저항으로 접지)로 바꾸고 분배기는 그대로 $V_{out}$에서 받는다면 극성은 무엇인가요?</li>
-    <li>$M_2$는 CG 단 그대로 두고, $V_{out}$ 뒤에 저항 부하 CS 단($M_3$, 게이트가 $V_{out}$) 하나를 더 넣어 그 드레인에서 분배기를 받는다면 극성은 무엇인가요?</li>
-    <li>예제 12.13의 원래 회로($M_2$ CS)에서 분배기 위쪽 끝을 $V_{out}$ 대신 노드 $A$에 연결하면 극성은 무엇인가요?</li>
-  </ol>
 </div>
 <div class="sum" hidden>
-  <p class="sum-lead">$M_2$를 CG 단으로 바꾸면 반전이 $M_1$ 한 번뿐이라 정귀환이에요.</p>
-  <div class="summary-group">
-    <h4>판단 기준</h4>
-    <p>CS 단(게이트 입력)은 반전하고, CG 단(소스 입력)과 분배기는 반전하지 않아요.</p>
-    <p>귀환이 $M_1$ 소스로 돌아오므로 $V_{GS1}=V_{in}-V_X$로 빼져요.</p>
-    <p>$V_X$가 $V_{in}$과 반대로 움직이면 $V_{GS1}$ 변화가 커져 정귀환이에요.</p>
-  </div>
-  <div class="summary-group">
-    <h4>추적</h4>
-    <p>$V_{in}\uparrow\Rightarrow V_A\downarrow\Rightarrow V_{out}\downarrow\Rightarrow V_X\downarrow\Rightarrow I_{D1}$이 더 늘어요.</p>
-    <p>원래 예제($M_2$ CS)는 반전이 두 번이라 부귀환이에요.</p>
-  </div>
+<p class="sum-lead">공통 게이트인 둘째 단은 소스 전압의 하강을 같은 방향으로 출력에 전달해요.</p>
+<p>내려간 전압이 첫째 단 소스로 돌아와 게이트–소스 전압을 더 키워요.</p>
 </div>

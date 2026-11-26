@@ -1,20 +1,40 @@
 {
   "review_policy_version": "problem-explain-2026-10-21-learning-style",
-  "input_hash": "05b1c43f215f9d781d0f65648cc9b80569e36d921507a09a78dfe0867a9be1ca",
+  "input_hash": "5d7ecf6948b91058c82e118a6cab84f388fb4c1a1bca981e7aea4e69a8e69e65",
   "references": [
-    {
-      "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.claude/skills/ec2-review-pack/references/solution-style.md",
-      "sha256": "a13ae9a80c6c1145955d9cc9b663fc93037fdd399644743fc25860525ecc2094"
-    },
     {
       "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/교과서/마이크로전자회로/12장.pdf",
       "sha256": "351797bf72941f867d90c948e17d4c24f09e733a16796ae76aca500f9fd96498"
+    },
+    {
+      "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.claude/skills/ec2-review-pack/references/solution-style.md",
+      "sha256": "e644bb2da081cd8ba965b335d14c8dc8fa4ac1b2224633ba2ab9a644308bc5a1"
+    },
+    {
+      "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.claude/skills/ec2-problem-explain/references/verification.md",
+      "sha256": "7fcf1e69f067d433ad7f0f82e0c76d969e455501d770605f03aa1516aac2d92c"
+    },
+    {
+      "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.claude/skills/ec2-problem-explain/references/authoring.md",
+      "sha256": "4550af0b4f8c7a4ca1f9d6ae3b004aca5817daca42dc7c387d9aeb45d6f4ab2c"
+    },
+    {
+      "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/교과서/마이크로전자회로/ch12/figures/fig12-38-a.png",
+      "sha256": "b1113696292b6aa1644fe70f6c102f18e3a5ad12a5e2c6116a7c5b15fc37aa27"
+    },
+    {
+      "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/교과서/마이크로전자회로/ch12/figures/fig12-97.png",
+      "sha256": "f09b9bae52d6cde8d922ed9e8a3d8380de1faa416edf41df4d65d7babff1d0c4"
+    },
+    {
+      "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/교과서/마이크로전자회로/ch12/figures/fig12-45.png",
+      "sha256": "e9ecb477df3c8cbedbf1e3d0e3b17655c74e4ebb9a930b6f9ceda9a2e9852607"
     }
   ],
   "learning_style_audit": {
     "learning_style": {
       "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
-      "sha256": "a13ae9a80c6c1145955d9cc9b663fc93037fdd399644743fc25860525ecc2094",
+      "sha256": "e644bb2da081cd8ba965b335d14c8dc8fa4ac1b2224633ba2ab9a644308bc5a1",
       "rule_ids": [
         "UNIT-01",
         "CALC-01",
@@ -34,465 +54,465 @@
     "items": {
       "p1:a": {
         "status": "pass",
-        "reviewer": "/root/review_1118",
+        "reviewer": "feedback_review_b (내용·원문 대조)",
         "rules": {
           "UNIT-01": {
             "disposition": "not_applicable",
-            "evidence": "양·음 변화 방향을 묻는 (a)에는 단위 환산 또는 수치 답이 없다."
+            "evidence": "원문은 포트 유형/변화 방향 판정이며 수치·공학 단위 환산이 없다."
           },
           "CALC-01": {
-            "disposition": "applied",
-            "evidence": "양의 iin 변화에서 시작해 vs, vX, vout, iRF를 순서대로 추적하고 부귀환을 판정한다."
+            "disposition": "not_applicable",
+            "evidence": "기호의 값이나 수치 역산이 없는 정성적 판단이다."
           },
           "CALC-02": {
             "disposition": "not_applicable",
-            "evidence": "증감의 정성 증명에 반올림할 수치가 없다."
+            "evidence": "주어진 수치가 없어 소수 반올림이나 분수 수치 대입이 없다."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "입력은 M1의 소스, 출력은 M2의 드레인, 반송은 그 둘 사이 RF임을 회로에서 확인한다."
+            "evidence": "소스와 X 상승, 반전 출력 하강, 출력에서 입력으로 돌아오는 전류 감소로 부귀환."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "Vb와 VDD를 AC 접지로 보내고 λ=0의 ro 생략을 그림 옆에 명시한다. M1 제어원은 소스에서 X로 향한다."
+            "evidence": "SVG의 지정 노드·가지 및 입력/출력 경로를 원문, 결과와 대조. 소스와 X 상승, 반전 출력 하강, 출력에서 입력으로 돌아오는 전류 감소로 부귀환. / 검정 외곽점 대신 실제 출력 끝점과 Vout 라벨이 파랑, Vb와 그 단자가 빨강임을 새 도식에서 확인."
           },
           "GAIN-01": {
             "disposition": "not_applicable",
-            "evidence": "요구가 귀환 극성 증명으로, 전달함수의 크기나 단별 곱을 구하지 않는다."
+            "evidence": "회로의 극성·검출 방식, 포트 저항 또는 극한 판단에 단별 이득 곱이나 Gm–Rout 분리 계산을 사용하지 않는다."
           },
           "DEGEN-01": {
             "disposition": "not_applicable",
-            "evidence": "vs가 제어 전압에 들어가지만 소스 축퇴 소자나 축퇴 단 전류 유도는 없다."
+            "evidence": "이미터·소스 축퇴 저항을 포함한 GM 경로와 합성 저항 계산이 없다."
           },
           "SCALE-01": {
             "disposition": "not_applicable",
-            "evidence": "입력의 작은 (+)/(−) 변화는 부호 시험이며 소자 배율은 바꾸지 않는다."
+            "evidence": "폭·바이어스 배율·전류 거울 비율의 비교가 요구되지 않는다."
           },
           "BIAS-01": {
             "disposition": "not_applicable",
-            "evidence": "Vb는 고정 바이어스이며 DC 전압이나 동작 경계는 구하지 않는다."
+            "evidence": "주어진 동작점 부근의 소신호 방향·저주파 회로를 보며 대신호 포화/활성 경계를 구하지 않는다."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "원본 iRF 화살표는 출력에서 소스 쪽으로 향한다. 같은 방향의 (vout−vs)/RF를 첫 식으로 사용한다."
+            "evidence": "원문 노드명·부호와 SVG 및 식의 기준을 확인. 소스와 X 상승, 반전 출력 하강, 출력에서 입력으로 돌아오는 전류 감소로 부귀환. / 검정 외곽점 대신 실제 출력 끝점과 Vout 라벨이 파랑, Vb와 그 단자가 빨강임을 새 도식에서 확인."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "소스 전압 상승 → vgs1 감소 → X 상승 → 출력 하강의 인과를 각 소자와 연결한다."
+            "evidence": "짐작할 출력 방향/경로를 한 단계씩 이은 본문과 요약을 비교. 소스와 X 상승, 반전 출력 하강, 출력에서 입력으로 돌아오는 전류 감소로 부귀환."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "시험 전류를 감소시켜 보면 반송 증가가 최초 변화를 상쇄한다. 이득의 음의 부호 하나로 귀환 극성을 단정하지 않는다."
+            "evidence": "입력 섭동/측정 경계 및 최종 방향을 별도 검산과 대조. 소스와 X 상승, 반전 출력 하강, 출력에서 입력으로 돌아오는 전류 감소로 부귀환."
           },
           "FREQ-01": {
             "disposition": "not_applicable",
-            "evidence": "고정 바이어스 MOS 두 단의 저주파 부호 시험에 팔로워 Zout(s)가 없다."
+            "evidence": "정적 저주파 귀환 문제이며 커패시터가 있는 팔로워 출력 임피던스가 없다."
           }
         }
       },
       "p1:b": {
         "status": "pass",
-        "reviewer": "/root/review_1118",
+        "reviewer": "feedback_review_b (내용·원문 대조)",
         "rules": {
           "UNIT-01": {
             "disposition": "applied",
-            "evidence": "최종 −gm2 RD1 RD2는 S·Ω²=Ω이며 첫 단은 Ω, 둘째 단은 V/V이다."
+            "evidence": "이득·포트 저항의 기호식은 Ω 차원, 반송 계수는 S, 루프 곱은 무차원. 큰 RF의 양 포트 부하 생략 후 vx/iin, vo/vx 순으로 곱하여 −gm2 RD1 RD2."
           },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "첫 식 R0=(vX/iin)(vout/vX) 뒤에 CG와 CS 항을 각각 한 줄로 계산한다."
+            "evidence": "중간량을 결과 앞에서 정의한다. 큰 RF의 양 포트 부하 생략 후 vx/iin, vo/vx 순으로 곱하여 −gm2 RD1 RD2."
           },
           "CALC-02": {
-            "disposition": "applied",
-            "evidence": "기호 인자를 그대로 곱하며 RF를 제거한 모델과 원 회로 사이의 근사를 ≈로 구분한다."
+            "disposition": "not_applicable",
+            "evidence": "주어진 수치가 없어 소수 반올림이나 분수 수치 대입이 없다."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "λ=0이고 M2 게이트 전류는 0이다. 이때 X의 전류가 RD1에 전압을 만들고 CS 출력 부하는 RD2이다."
+            "evidence": "큰 RF의 양 포트 부하 생략 후 vx/iin, vo/vx 순으로 곱하여 −gm2 RD1 RD2."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "예제 식 (12.73)은 큰 RF에서 RF를 제거하는 순방향 시험이다. 유한한 RF 복제의 종단·Thevenin 변환을 이 모델에 강제하지 않는다."
+            "evidence": "SVG의 지정 노드·가지 및 입력/출력 경로를 원문, 결과와 대조. 큰 RF의 양 포트 부하 생략 후 vx/iin, vo/vx 순으로 곱하여 −gm2 RD1 RD2."
           },
           "GAIN-01": {
             "disposition": "applied",
-            "evidence": "중간 노드 X에서 목표비를 먼저 나누고 양의 RD1과 음의 −gm2 RD2를 곱한다. 별도의 출력단락 Gm 측정을 세우지 않는다."
+            "evidence": "큰 RF의 양 포트 부하 생략 후 vx/iin, vo/vx 순으로 곱하여 −gm2 RD1 RD2."
           },
           "DEGEN-01": {
             "disposition": "not_applicable",
-            "evidence": "순방향으로 들어오는 소스 전류가 RD1에 전달되는 CG 단이다. 축퇴 저항의 제어 전압을 계산하지 않는다."
+            "evidence": "이미터·소스 축퇴 저항을 포함한 GM 경로와 합성 저항 계산이 없다."
           },
           "SCALE-01": {
             "disposition": "not_applicable",
-            "evidence": "gm2, RD1, RD2에 수치 배율을 주는 문항이 아니며 관계를 기호식으로 계산한다."
+            "evidence": "폭·바이어스 배율·전류 거울 비율의 비교가 요구되지 않는다."
           },
           "BIAS-01": {
             "disposition": "not_applicable",
-            "evidence": "λ=0인 소신호 이득에서 동작점 설계나 포화 경계를 추가할 필요가 없다."
+            "evidence": "주어진 동작점 부근의 소신호 방향·저주파 회로를 보며 대신호 포화/활성 경계를 구하지 않는다."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "vX가 두 전달비의 공통 노드이고 gm2·RD2는 모두 둘째 단 소자다. R0 기호를 최종 식과 요약에서 재사용한다."
+            "evidence": "원문 노드명·부호와 SVG 및 식의 기준을 확인. 큰 RF의 양 포트 부하 생략 후 vx/iin, vo/vx 순으로 곱하여 −gm2 RD1 RD2."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "RF≫RD2에서 감지 부하 생략 → X에서 두 항으로 분리 → 각 항의 부호와 부하 → 개루프 답 순서를 따른다."
+            "evidence": "짐작할 출력 방향/경로를 한 단계씩 이은 본문과 요약을 비교. 큰 RF의 양 포트 부하 생략 후 vx/iin, vo/vx 순으로 곱하여 −gm2 RD1 RD2."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "큰 RF 원 회로에 대한 개루프 이득 −gm2 RD1 RD2에 근사와 반전 부호가 붙고 요약의 조건이 충분하다."
+            "evidence": "입력 섭동/측정 경계 및 최종 방향을 별도 검산과 대조. 큰 RF의 양 포트 부하 생략 후 vx/iin, vo/vx 순으로 곱하여 −gm2 RD1 RD2."
           },
           "FREQ-01": {
             "disposition": "not_applicable",
-            "evidence": "CG–CS 순방향 트랜스임피던스에 주파수 의존 소자나 팔로워 출력이 없다."
+            "evidence": "정적 저주파 귀환 문제이며 커패시터가 있는 팔로워 출력 임피던스가 없다."
           }
         }
       },
       "p1:c": {
         "status": "pass",
-        "reviewer": "/root/review_1118",
+        "reviewer": "feedback_review_b (내용·원문 대조)",
         "rules": {
           "UNIT-01": {
             "disposition": "applied",
-            "evidence": "iF/vout의 단위는 S이고 K R0는 무차원이라 폐루프 답이 Ω로 남는다."
+            "evidence": "이득·포트 저항의 기호식은 Ω 차원, 반송 계수는 S, 루프 곱은 무차원. 출력 시험과 입력원을 개방한 RF+1/gm1의 음의 반송 계수, 1+KR0 분모와 음의 트랜스임피던스."
           },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "iF식 → K → 폐루프 관계 → T → 결과로 대입한다. 관계식, 정리한 식, T를 별도 행에 둔다."
+            "evidence": "중간량을 결과 앞에서 정의한다. 출력 시험과 입력원을 개방한 RF+1/gm1의 음의 반송 계수, 1+KR0 분모와 음의 트랜스임피던스."
           },
           "CALC-02": {
-            "disposition": "applied",
-            "evidence": "RF+1/gm1을 유지한 식에서 먼저 시험하고 RF≫1/gm1에서만 K를 −1/RF로 근사한다."
+            "disposition": "not_applicable",
+            "evidence": "주어진 수치가 없어 소수 반올림이나 분수 수치 대입이 없다."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "출력 시험전압에서 RF를 거쳐 게이트가 AC 접지인 M1 소스를 본다. 1/gm1은 이 경로의 직렬 항이다."
+            "evidence": "출력 시험과 입력원을 개방한 RF+1/gm1의 음의 반송 계수, 1+KR0 분모와 음의 트랜스임피던스."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "입력 전류원 개방과 출력 전압 시험을 첫 줄에 명시한다. 감지 복제에서 별도로 반송 포트를 단락하는 유한 로딩 문제와 달리 예제 (12.74)는 실제 CG 소스 종단을 본다. 새 국소 SVG는 이 유한한 직렬 경로와 입력 전류원 개방 조건을 직접 보여 준다."
+            "evidence": "SVG의 지정 노드·가지 및 입력/출력 경로를 원문, 결과와 대조. 출력 시험과 입력원을 개방한 RF+1/gm1의 음의 반송 계수, 1+KR0 분모와 음의 트랜스임피던스."
           },
           "GAIN-01": {
             "disposition": "applied",
-            "evidence": "앞의 R0를 그대로 쓰고 R0/(1+K R0)로 닫는다. 이미 구한 두 단 이득을 다시 전개할 필요가 없다."
+            "evidence": "출력 시험과 입력원을 개방한 RF+1/gm1의 음의 반송 계수, 1+KR0 분모와 음의 트랜스임피던스."
           },
           "DEGEN-01": {
             "disposition": "not_applicable",
-            "evidence": "RF와 CG 입력 저항의 직렬 시험이며 gm 소스 축퇴 연립식이 필요하지 않다."
+            "evidence": "이미터·소스 축퇴 저항을 포함한 GM 경로와 합성 저항 계산이 없다."
           },
           "SCALE-01": {
-            "disposition": "applied",
-            "evidence": "다른 값 고정에서 RF→∞의 T→0 검산과 동일 로딩 근사에서 T≫1인 −RF 극한을 구분한다."
+            "disposition": "not_applicable",
+            "evidence": "폭·바이어스 배율·전류 거울 비율의 비교가 요구되지 않는다."
           },
           "BIAS-01": {
             "disposition": "not_applicable",
-            "evidence": "고정 바이어스의 소신호 반송을 구하며 DC 노드 전압 범위나 경계조건은 없다."
+            "evidence": "주어진 동작점 부근의 소신호 방향·저주파 회로를 보며 대신호 포화/활성 경계를 구하지 않는다."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "인쇄 iRF와 반대 방향의 iF를 정하고 같은 기호로 음의 비를 구한다. 새 그림의 오른쪽 화살표·vs·vout·실제 첨자는 HTML과 동반 MD의 SVG에서 일치한다. vs 및 vout에 각각 data-node=s/out이 점·라벨 모두에 있고 각 쌍은 파랑·빨강으로 대응한다."
+            "evidence": "원문 노드명·부호와 SVG 및 식의 기준을 확인. 출력 시험과 입력원을 개방한 RF+1/gm1의 음의 반송 계수, 1+KR0 분모와 음의 트랜스임피던스."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "출력 전압을 가하는 방향, 입력에서 빠지는 전류의 기준, 반송 가지, 근사 조건을 해당 식 앞에서 설명한다."
+            "evidence": "짐작할 출력 방향/경로를 한 단계씩 이은 본문과 요약을 비교. 출력 시험과 입력원을 개방한 RF+1/gm1의 음의 반송 계수, 1+KR0 분모와 음의 트랜스임피던스."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "R0<0, K<0인 규약에서 T>0이므로 억압 분모는 1+T다. 두 큰 RF 조건과 λ=0이 최종 답에 붙는다."
+            "evidence": "입력 섭동/측정 경계 및 최종 방향을 별도 검산과 대조. 출력 시험과 입력원을 개방한 RF+1/gm1의 음의 반송 계수, 1+KR0 분모와 음의 트랜스임피던스."
           },
           "FREQ-01": {
             "disposition": "not_applicable",
-            "evidence": "반송 저항 시험의 주파수 의존성이나 팔로워 포트는 주어지지 않는다."
+            "evidence": "정적 저주파 귀환 문제이며 커패시터가 있는 팔로워 출력 임피던스가 없다."
           }
         }
       },
       "p2:main": {
         "status": "pass",
-        "reviewer": "/root/review_1118",
+        "reviewer": "feedback_review_b (내용·원문 대조)",
         "rules": {
           "UNIT-01": {
             "disposition": "applied",
-            "evidence": "vout/iin의 V/A가 Ω이고 RF에 곱한 T/(1+T)는 무차원이다."
+            "evidence": "이득·포트 저항의 기호식은 Ω 차원, 반송 계수는 S, 루프 곱은 무차원. RD1→∞에서 ie와 vs→0, RF로 흐르는 전체 입력전류가 −RF 극한을 준다."
           },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "−RF T/(1+T)의 공통 인자를 먼저 정리하고 오차 전류, 소스 전압, RF 전압 강하를 한 행씩 잇는다."
+            "evidence": "중간량을 결과 앞에서 정의한다. RD1→∞에서 ie와 vs→0, RF로 흐르는 전체 입력전류가 −RF 극한을 준다."
           },
           "CALC-02": {
-            "disposition": "applied",
-            "evidence": "극한을 1/(1+1/T)로 정리하여 1을 얻고 유한 T 계산에 반올림을 쓰지 않는다."
+            "disposition": "not_applicable",
+            "evidence": "주어진 수치가 없어 소수 반올림이나 분수 수치 대입이 없다."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "M1 소스에서 RF 쪽으로 입력 전류가 빠지고 출력 전압이 음으로 내려가야 함을 극한 회로에서 확인한다."
+            "evidence": "RD1→∞에서 ie와 vs→0, RF로 흐르는 전체 입력전류가 −RF 극한을 준다."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "가상 접지는 vs→0인 동작 극한이다. 실제 접지 도선을 그어 입력 전류를 우회시키지 않은 극한 회로다."
+            "evidence": "SVG의 지정 노드·가지 및 입력/출력 경로를 원문, 결과와 대조. RD1→∞에서 ie와 vs→0, RF로 흐르는 전체 입력전류가 −RF 극한을 준다."
           },
           "GAIN-01": {
-            "disposition": "applied",
-            "evidence": "예제의 폐루프 이득이 조건으로 주어져 T/(1+T) 극한을 취한다. 새 전압이득을 분해할 단은 없다."
+            "disposition": "not_applicable",
+            "evidence": "회로의 극성·검출 방식, 포트 저항 또는 극한 판단에 단별 이득 곱이나 Gm–Rout 분리 계산을 사용하지 않는다."
           },
           "DEGEN-01": {
             "disposition": "not_applicable",
-            "evidence": "vs=ie/gm1는 CG 입력 관계다. 축퇴 저항에 의한 이득 유도는 요구하지 않는다."
+            "evidence": "이미터·소스 축퇴 저항을 포함한 GM 경로와 합성 저항 계산이 없다."
           },
           "SCALE-01": {
-            "disposition": "applied",
-            "evidence": "gm1, gm2, RD2, RF, 입력 전류를 고정한 뒤 RD1→∞로 보내고 T 변화와 결과를 추적한다."
+            "disposition": "not_applicable",
+            "evidence": "폭·바이어스 배율·전류 거울 비율의 비교가 요구되지 않는다."
           },
           "BIAS-01": {
             "disposition": "not_applicable",
-            "evidence": "vs→0은 소신호 가상 접지로 DC 바이어스 전압을 설계하지 않는다."
+            "evidence": "주어진 동작점 부근의 소신호 방향·저주파 회로를 보며 대신호 포화/활성 경계를 구하지 않는다."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "입력 노드 vs와 출력 vout, RF에 왼쪽에서 오른쪽으로 향하는 iin가 그림·MD 식 vs−vout에 대응한다."
+            "evidence": "원문 노드명·부호와 SVG 및 식의 기준을 확인. RD1→∞에서 ie와 vs→0, RF로 흐르는 전체 입력전류가 −RF 극한을 준다."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "대수적 극한에 이어 가상 접지에서 RF로 흘러야 하는 전류와 음의 출력 부호를 설명한다."
+            "evidence": "짐작할 출력 방향/경로를 한 단계씩 이은 본문과 요약을 비교. RD1→∞에서 ie와 vs→0, RF로 흐르는 전체 입력전류가 −RF 극한을 준다."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "입력 전류 유한·T→∞에서 ie→0으로 실제 접지와 가상 접지를 구분하며 −RF에 이른다."
+            "evidence": "입력 섭동/측정 경계 및 최종 방향을 별도 검산과 대조. RD1→∞에서 ie와 vs→0, RF로 흐르는 전체 입력전류가 −RF 극한을 준다."
           },
           "FREQ-01": {
             "disposition": "not_applicable",
-            "evidence": "큰 루프 이득 극한을 다루며 커패시터가 포함된 팔로워가 없다."
+            "evidence": "정적 저주파 귀환 문제이며 커패시터가 있는 팔로워 출력 임피던스가 없다."
           }
         }
       },
       "p3:main": {
         "status": "pass",
-        "reviewer": "/root/review_1118",
+        "reviewer": "feedback_review_b (내용·원문 대조)",
         "rules": {
           "UNIT-01": {
             "disposition": "applied",
-            "evidence": "Rin,closed의 분자 1/gm1은 Ω이고 분모 1+T는 무차원이다."
+            "evidence": "이득·포트 저항의 기호식은 Ω 차원, 반송 계수는 S, 루프 곱은 무차원. 입력 시험원의 전류를 ie+iF로 나누고 R0·K·Rin,0로 12.79를 얻는다."
           },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "it=ie+iF, iF=Tie, vs=Rin ie를 독립된 행으로 산출해 vs/it를 구한다."
+            "evidence": "중간량을 결과 앞에서 정의한다. 입력 시험원의 전류를 ie+iF로 나누고 R0·K·Rin,0로 12.79를 얻는다."
           },
           "CALC-02": {
-            "disposition": "applied",
-            "evidence": "두 RF 조건을 별도로 밝히고 T와 Rin,closed의 기호값을 유지해 중간 반올림이 없다."
+            "disposition": "not_applicable",
+            "evidence": "주어진 수치가 없어 소수 반올림이나 분수 수치 대입이 없다."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "M1의 소스에서 바라보는 개루프 입력은 1/gm1이다. 순방향 입력전류와 주입한 총 시험전류를 구분한다."
+            "evidence": "입력 시험원의 전류를 ie+iF로 나누고 R0·K·Rin,0로 12.79를 얻는다."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "시험원 it가 왼쪽 입력에 유입하고 제어 전류 iF가 입력에서 빠지는 병렬 혼합 등가회로가 KCL과 일치한다."
+            "evidence": "SVG의 지정 노드·가지 및 입력/출력 경로를 원문, 결과와 대조. 입력 시험원의 전류를 ie+iF로 나누고 R0·K·Rin,0로 12.79를 얻는다."
           },
           "GAIN-01": {
             "disposition": "not_applicable",
-            "evidence": "입력저항을 묻고 원문이 식 (12.78)을 제시한다. 이전 예제 T를 재사용하며 단별 전압이득을 새로 풀지 않는다."
+            "evidence": "회로의 극성·검출 방식, 포트 저항 또는 극한 판단에 단별 이득 곱이나 Gm–Rout 분리 계산을 사용하지 않는다."
           },
           "DEGEN-01": {
             "disposition": "not_applicable",
-            "evidence": "CG 소스의 구동점 저항 1/gm1과 병렬 전류 반송의 결합으로, 소스 축퇴 회로가 없다."
+            "evidence": "이미터·소스 축퇴 저항을 포함한 GM 경로와 합성 저항 계산이 없다."
           },
           "SCALE-01": {
-            "disposition": "applied",
-            "evidence": "RF→∞에서 T→0, RD1→∞에서 T→∞인 두 극한을 다른 소자값이 같은 조건에서 비교한다."
+            "disposition": "not_applicable",
+            "evidence": "폭·바이어스 배율·전류 거울 비율의 비교가 요구되지 않는다."
           },
           "BIAS-01": {
             "disposition": "not_applicable",
-            "evidence": "시험 전류와 소신호 입력저항을 구하며 DC 게이트 전압 값이나 영역 경계는 필요하지 않다."
+            "evidence": "주어진 동작점 부근의 소신호 방향·저주파 회로를 보며 대신호 포화/활성 경계를 구하지 않는다."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "원 그림 X는 첫째 단 드레인이고 시험 노드는 vs다. 그림에서 it, ie, iF의 세 전류를 구별한다."
+            "evidence": "원문 노드명·부호와 SVG 및 식의 기준을 확인. 입력 시험원의 전류를 ie+iF로 나누고 R0·K·Rin,0로 12.79를 얻는다."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "귀환 전류까지 공급해야 같은 vs가 유지된다는 판단이 it=ie+iF의 첫 식으로 이어진다."
+            "evidence": "짐작할 출력 방향/경로를 한 단계씩 이은 본문과 요약을 비교. 입력 시험원의 전류를 ie+iF로 나누고 R0·K·Rin,0로 12.79를 얻는다."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "vs/ie와 vs/it의 차이와 T>0인 저항 감소를 검산한다. 원문 식 (12.79)와 최종식이 대응한다."
+            "evidence": "입력 섭동/측정 경계 및 최종 방향을 별도 검산과 대조. 입력 시험원의 전류를 ie+iF로 나누고 R0·K·Rin,0로 12.79를 얻는다."
           },
           "FREQ-01": {
             "disposition": "not_applicable",
-            "evidence": "CG 입력 임피던스이므로 팔로워 Zout(s) 형식을 적용하지 않는다."
+            "evidence": "정적 저주파 귀환 문제이며 커패시터가 있는 팔로워 출력 임피던스가 없다."
           }
         }
       },
       "p4:main": {
         "status": "pass",
-        "reviewer": "/root/review_1118",
+        "reviewer": "feedback_review_b (내용·원문 대조)",
         "rules": {
           "UNIT-01": {
             "disposition": "applied",
-            "evidence": "R0와 Rout,0는 물리량이 다르지만 단위는 Ω다. gm2 RD1 RD2/RF는 무차원이다."
+            "evidence": "이득·포트 저항의 기호식은 Ω 차원, 반송 계수는 S, 루프 곱은 무차원. 입력 전류원을 열고 출력 병렬 감지, RD2/(1+T) 근사."
           },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "첫 식 vt/it≈Rout,0/(1+T)에서 분자 RD2와 T를 구분해 채운다."
+            "evidence": "중간량을 결과 앞에서 정의한다. 입력 전류원을 열고 출력 병렬 감지, RD2/(1+T) 근사."
           },
           "CALC-02": {
-            "disposition": "applied",
-            "evidence": "큰 RF의 로딩 근사부터 Rout,cl≈RD2/(1+T)로 쓰며 수치 대입은 없다."
+            "disposition": "not_applicable",
+            "evidence": "주어진 수치가 없어 소수 반올림이나 분수 수치 대입이 없다."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "M2 드레인에서 시험하며 λ=0으로 ro2가 사라지고 큰 RF 직접 부하를 생략하면 RD2가 남는다."
+            "evidence": "입력 전류원을 열고 출력 병렬 감지, RD2/(1+T) 근사."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "입력 전류원을 개방하고 VDD·Vb를 AC 접지, 출력으로 유입하는 전류와 출력 전압을 정의한다. 알려진 전압 감지 블록을 사용한다."
+            "evidence": "SVG의 지정 노드·가지 및 입력/출력 경로를 원문, 결과와 대조. 입력 전류원을 열고 출력 병렬 감지, RD2/(1+T) 근사. / 맨 오른쪽 vt(+) 점과 파란 전압명, 왼쪽으로 향하는 it 화살표 및 아래 라벨을 본문의 vt/it와 대조."
           },
           "GAIN-01": {
             "disposition": "not_applicable",
-            "evidence": "요구한 양은 출력저항이다. 식 (12.82) 및 예제의 R0를 써서 별도 개루프 이득 유도가 필요하지 않다."
+            "evidence": "회로의 극성·검출 방식, 포트 저항 또는 극한 판단에 단별 이득 곱이나 Gm–Rout 분리 계산을 사용하지 않는다."
           },
           "DEGEN-01": {
             "disposition": "not_applicable",
-            "evidence": "출력 소자는 공통 소스이고 축퇴 저항값이나 제어 전압은 요구하지 않는다."
+            "evidence": "이미터·소스 축퇴 저항을 포함한 GM 경로와 합성 저항 계산이 없다."
           },
           "SCALE-01": {
-            "disposition": "applied",
-            "evidence": "다른 소신호 파라미터를 유지하며 RF→∞ 때 RD2를 회복함을 확인한다."
+            "disposition": "not_applicable",
+            "evidence": "폭·바이어스 배율·전류 거울 비율의 비교가 요구되지 않는다."
           },
           "BIAS-01": {
             "disposition": "not_applicable",
-            "evidence": "Rout의 소신호 시험에서 입력 독립원 영점화가 요구되며 DC 설계 조건은 없다."
+            "evidence": "주어진 동작점 부근의 소신호 방향·저주파 회로를 보며 대신호 포화/활성 경계를 구하지 않는다."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "포트 자가저항 Rout,0를 전달저항 R0와 구분하고 T는 K R0에만 사용한다."
+            "evidence": "원문 노드명·부호와 SVG 및 식의 기준을 확인. 입력 전류원을 열고 출력 병렬 감지, RD2/(1+T) 근사. / 맨 오른쪽 vt(+) 점과 파란 전압명, 왼쪽으로 향하는 it 화살표 및 아래 라벨을 본문의 vt/it와 대조."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "양의 vt가 입력에 전류를 돌려 M2가 더 많이 끌어내므로 같은 vt에 더 큰 it가 필요하다는 설명이 저항 감소에 대응한다."
+            "evidence": "짐작할 출력 방향/경로를 한 단계씩 이은 본문과 요약을 비교. 입력 전류원을 열고 출력 병렬 감지, RD2/(1+T) 근사."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "입력 소스를 접지하는 오류를 짚고 RD2/(1+T)의 근사 조건과 약한 귀환 극한을 명시한다."
+            "evidence": "입력 섭동/측정 경계 및 최종 방향을 별도 검산과 대조. 입력 전류원을 열고 출력 병렬 감지, RD2/(1+T) 근사."
           },
           "FREQ-01": {
             "disposition": "not_applicable",
-            "evidence": "M2의 저주파 출력저항 문제로 주파수 의존 팔로워 임피던스가 없다."
+            "evidence": "정적 저주파 귀환 문제이며 커패시터가 있는 팔로워 출력 임피던스가 없다."
           }
         }
       },
       "p5:main": {
         "status": "pass",
-        "reviewer": "/root/review_1118",
+        "reviewer": "feedback_review_b (내용·원문 대조)",
         "rules": {
           "UNIT-01": {
             "disposition": "applied",
-            "evidence": "이득 단위가 V/A이고 두 포트 저항과 함께 Ω로 보고된다. gm2 α RD가 무차원이다."
+            "evidence": "이득·포트 저항의 기호식은 Ω 차원, 반송 계수는 S, 루프 곱은 무차원. Rout,0=RD∥(R1+R2), Rin,0=1/gm1. K=gm2 R2/(R1+R2); Zt 및 두 저항 모두 1+T로 나뉜다."
           },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "분압 α → K → R0, T → 세 폐루프 값 순서이며 세 답을 각각 한 행으로 표시한다."
+            "evidence": "중간량을 결과 앞에서 정의한다. Rout,0=RD∥(R1+R2), Rin,0=1/gm1. K=gm2 R2/(R1+R2); Zt 및 두 저항 모두 1+T로 나뉜다."
           },
           "CALC-02": {
-            "disposition": "applied",
-            "evidence": "분압비는 기호 분수로 보존한다. RD∥(R1+R2)≈RD는 원문의 큰 합 가정에서만 쓰인다."
+            "disposition": "not_applicable",
+            "evidence": "주어진 수치가 없어 소수 반올림이나 분수 수치 대입이 없다."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "소스 접지 M2의 게이트가 분압을 감지하고 드레인이 입력에서 전류를 빼는 경로다. 출력 부하는 RD와 직렬분압기 전체의 병렬이다."
+            "evidence": "Rout,0=RD∥(R1+R2), Rin,0=1/gm1. K=gm2 R2/(R1+R2); Zt 및 두 저항 모두 1+T로 나뉜다."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "입력전류 병렬 반송과 출력전압 병렬 감지를 원 그림에서 확인한다. 출력저항은 입력 전류원을 개방해 본다."
+            "evidence": "SVG의 지정 노드·가지 및 입력/출력 경로를 원문, 결과와 대조. Rout,0=RD∥(R1+R2), Rin,0=1/gm1. K=gm2 R2/(R1+R2); Zt 및 두 저항 모두 1+T로 나뉜다. / Vb 라벨이 게이트 단자점과 같은 빨강인 상태를 확인."
           },
           "GAIN-01": {
             "disposition": "applied",
-            "evidence": "전달은 단일 CG라 별도 중간 노드 곱이 없다. R0≈+RD와 루프 이득 T를 직접 써 개루프 대비 1/(1+T)를 적용한다."
+            "evidence": "Rout,0=RD∥(R1+R2), Rin,0=1/gm1. K=gm2 R2/(R1+R2); Zt 및 두 저항 모두 1+T로 나뉜다."
           },
           "DEGEN-01": {
             "disposition": "not_applicable",
-            "evidence": "M2는 입력에서 빼는 전류원이다. 직렬 소스 축퇴 전압 방정식이 필요한 구조가 아니다."
+            "evidence": "이미터·소스 축퇴 저항을 포함한 GM 경로와 합성 저항 계산이 없다."
           },
           "SCALE-01": {
-            "disposition": "applied",
-            "evidence": "두 분압 저항을 같은 배수로 키우면 합은 커져도 α와 K는 일정한 점을 밝힌다."
+            "disposition": "not_applicable",
+            "evidence": "폭·바이어스 배율·전류 거울 비율의 비교가 요구되지 않는다."
           },
           "BIAS-01": {
             "disposition": "not_applicable",
-            "evidence": "λ=0에서 이루어지는 소신호 포트 해석이며 DC 문턱전압·동작점 설계를 요구하지 않는다."
+            "evidence": "주어진 동작점 부근의 소신호 방향·저주파 회로를 보며 대신호 포화/활성 경계를 구하지 않는다."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "분압점의 α vout, iF=gm2 α vout 및 D=1+T 대응이 세 답과 요약에서 유지된다."
+            "evidence": "원문 노드명·부호와 SVG 및 식의 기준을 확인. Rout,0=RD∥(R1+R2), Rin,0=1/gm1. K=gm2 R2/(R1+R2); Zt 및 두 저항 모두 1+T로 나뉜다. / Vb 라벨이 게이트 단자점과 같은 빨강인 상태를 확인."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "분압기의 작은 로딩과 유지되는 분압을 구별해 K의 첫 식으로 연결하고 두 저항이 같은 억압을 받는 이유를 붙인다."
+            "evidence": "짐작할 출력 방향/경로를 한 단계씩 이은 본문과 요약을 비교. Rout,0=RD∥(R1+R2), Rin,0=1/gm1. K=gm2 R2/(R1+R2); Zt 및 두 저항 모두 1+T로 나뉜다."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "gm2→0이면 +RD, 1/gm1, RD를 회복한다. 같은 값의 전방 전달저항과 출력저항이 각각 무엇인지 설명한다."
+            "evidence": "입력 섭동/측정 경계 및 최종 방향을 별도 검산과 대조. Rout,0=RD∥(R1+R2), Rin,0=1/gm1. K=gm2 R2/(R1+R2); Zt 및 두 저항 모두 1+T로 나뉜다."
           },
           "FREQ-01": {
             "disposition": "not_applicable",
-            "evidence": "공통 게이트와 능동 반송망의 저주파 문제로 팔로워 커패시턴스 모델이 없다."
+            "evidence": "정적 저주파 귀환 문제이며 커패시터가 있는 팔로워 출력 임피던스가 없다."
           }
         }
       },
       "p6:main": {
         "status": "pass",
-        "reviewer": "/root/review_1118",
+        "reviewer": "feedback_review_b (내용·원문 대조)",
         "rules": {
           "UNIT-01": {
             "disposition": "not_applicable",
-            "evidence": "전류 감지 포트 연결의 정성 오류를 묻고 단위 환산이나 수치 저항을 요구하지 않는다."
+            "evidence": "원문은 포트 유형/변화 방향 판정이며 수치·공학 단위 환산이 없다."
           },
           "CALC-01": {
-            "disposition": "applied",
-            "evidence": "목표를 IX=Iport=Isense로 놓고 원 그림의 갈림길을 찾아 수정할 연결을 설명한다."
+            "disposition": "not_applicable",
+            "evidence": "기호의 값이나 수치 역산이 없는 정성적 판단이다."
           },
           "CALC-02": {
             "disposition": "not_applicable",
-            "evidence": "직렬 전류 동일성 및 병렬 감지의 모순만 판단하므로 반올림이나 수치 대입은 없다."
+            "evidence": "주어진 수치가 없어 소수 반올림이나 분수 수치 대입이 없다."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "시험원에서 왼쪽으로 포트를 추적해 귀환 K가 출력 포트와 병렬임을 읽는다. Rout 가지 하나의 전류는 전체 포트 전류와 구별한다."
+            "evidence": "원 그림의 K 병렬 접속, 순방향 출력과 직렬인 감지포트에 전체 IX가 흐르는 수정 구조."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "독립 입력 전압을 0으로 놓고 IX의 기준을 출력 포트 유입으로 정해 시험원·출력·감지 포트를 한 직렬 경로로 복원한다."
+            "evidence": "SVG의 지정 노드·가지 및 입력/출력 경로를 원문, 결과와 대조. 원 그림의 K 병렬 접속, 순방향 출력과 직렬인 감지포트에 전체 IX가 흐르는 수정 구조. / 출력 시험점 VX(+)와 왼쪽 IX, 좌측의 단락 표지 ㉠ 및 K 감지 경로에 있는 ㉡의 실제 위치를 확인."
           },
           "GAIN-01": {
             "disposition": "not_applicable",
-            "evidence": "출력저항 측정 토폴로지의 오류 설명이다. 블록 Gm의 값이나 개루프 전압이득은 대상이 아니다."
+            "evidence": "회로의 극성·검출 방식, 포트 저항 또는 극한 판단에 단별 이득 곱이나 Gm–Rout 분리 계산을 사용하지 않는다."
           },
           "DEGEN-01": {
             "disposition": "not_applicable",
-            "evidence": "순방향 Gm을 블록으로 둔 포트 그림에 소스·이미터 축퇴 저항은 지정되지 않는다."
+            "evidence": "이미터·소스 축퇴 저항을 포함한 GM 경로와 합성 저항 계산이 없다."
           },
           "SCALE-01": {
-            "disposition": "applied",
-            "evidence": "감지 입력저항이 0으로 갈 때 고정된 0 아닌 VX를 병렬로 가한 잘못된 회로의 전류 발산을 검산한다."
+            "disposition": "not_applicable",
+            "evidence": "폭·바이어스 배율·전류 거울 비율의 비교가 요구되지 않는다."
           },
           "BIAS-01": {
             "disposition": "not_applicable",
-            "evidence": "시험원과 두 포트 연결을 다루는 선형 블록 문제라 트랜지스터 DC 바이어스가 없다."
+            "evidence": "주어진 동작점 부근의 소신호 방향·저주파 회로를 보며 대신호 포화/활성 경계를 구하지 않는다."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "원 그림의 IX와 별도로 Iport, Isense를 정의하며 올바른 시험 연결에서 동일한 순환 방향의 전류가 된다."
+            "evidence": "원문 노드명·부호와 SVG 및 식의 기준을 확인. 원 그림의 K 병렬 접속, 순방향 출력과 직렬인 감지포트에 전체 IX가 흐르는 수정 구조. / 출력 시험점 VX(+)와 왼쪽 IX, 좌측의 단락 표지 ㉠ 및 K 감지 경로에 있는 ㉡의 실제 위치를 확인."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "IX 화살표에서 첫 갈림길을 짚고 시험원을 함께 직렬 배치해야 하는 이유를 짧게 잇는다."
+            "evidence": "짐작할 출력 방향/경로를 한 단계씩 이은 본문과 요약을 비교. 원 그림의 K 병렬 접속, 순방향 출력과 직렬인 감지포트에 전체 IX가 흐르는 수정 구조."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "이상 감지기의 0 입력저항은 올바른 직렬 포트의 전압 강하를 없앤다. 병렬에서는 유한 시험 전압과 모순되어 원문의 잘못을 설명한다."
+            "evidence": "입력 섭동/측정 경계 및 최종 방향을 별도 검산과 대조. 원 그림의 K 병렬 접속, 순방향 출력과 직렬인 감지포트에 전체 IX가 흐르는 수정 구조."
           },
           "FREQ-01": {
             "disposition": "not_applicable",
-            "evidence": "증폭기의 전류 감지 토폴로지 문제로 팔로워의 Zout(s) 계산은 없다."
+            "evidence": "정적 저주파 귀환 문제이며 커패시터가 있는 팔로워 출력 임피던스가 없다."
           }
         }
       }
@@ -500,154 +520,157 @@
   },
   "source_visual": {
     "status": "pass",
-    "reviewer": "/root",
-    "evidence": "p1 E12.18 12장.pdf PDF 18쪽 및 19쪽 — 그림 12.38(a) CG–CS, 입력 전류 화살표와 귀환 화살표, 큰 R_F·λ=0 및 (a)–(c) 대조. p2 X12.18 12장.pdf PDF 19쪽 및 20쪽 — E12.18의 R_D1→∞와 그림 12.38(a) 참조 대조. p3 E12.19 12장.pdf PDF 19쪽 및 20쪽 — E12.18의 폐루프 입력 임피던스와 그림 12.39 포트 대조. p4 E12.20 12장.pdf PDF 19쪽 및 20쪽 — E12.18의 폐루프 출력 임피던스와 그림 12.40 포트 대조. p5 P12.33 12장.pdf PDF 42쪽 및 43쪽 — 그림 12.97의 CG와 트랜지스터 반송망, 큰 분압 저항·λ=0 대조. p6 E12.23 12장.pdf PDF 22쪽 및 23쪽 — 그림 12.45의 잘못 연결된 출력 전류 감지 블록과 설명 요구 대조. 기존 발행본과 stage의 원문·조건·구할 것·회로·소문항 바이트를 대조해 모두 일치 확인."
+    "reviewer": "feedback_review_b (내용·원문 대조)",
+    "evidence": "p1(E12.18): 12장.pdf p18–19, 그림 12.38(a–c), λ=0·큰 RF, 극성·개폐루프 3항; stage 원문·조건·구할 것·원 그림 일치. p2(X12.18): 12장.pdf p19, 연습문제 12.18의 RD1→∞와 가상 접지; stage 원문·조건·구할 것·원 그림 일치. p3(E12.19): 12장.pdf p19, 예제 12.19의 폐루프 입력저항; stage 원문·조건·구할 것·원 그림 일치. p4(E12.20): 12장.pdf p19–20, 예제 12.20의 폐루프 출력저항; stage 원문·조건·구할 것·원 그림 일치. p5(P12.33): 12장.pdf p42, 그림 12.97의 M2 게이트 분압·드레인 반송, 큰 R1+R2·λ=0; stage 원문·조건·구할 것·원 그림 일치. p6(E12.23): 12장.pdf p22–23, 그림 12.45 오류 지적, 출력 전류 감지 포트 직렬 조건; stage 원문·조건·구할 것·원 그림 일치."
   },
   "browser": {
     "status": "pass",
-    "reviewer": "/root",
-    "evidence": "최종 stage accf3c82a6cc40b28c72574f117412fc. 헤드리스 Chromium 1280×900·375×812 × 라이트·다크에서 6문항씩 순회. 렌더링·요약·리소스·가로 오버플로·간격·콘솔 결함 0. 새 시험 회로의 네 화면 조합에서 Pretendard 600, 라벨 간격과 잘림을 대조했고 동반 MD용 SVG에서 포함 글꼴 로드를 확인."
+    "reviewer": "Codex parent browser reviewer",
+    "evidence": "Chromium stage 0960caa3837e4f4185554567477a1562, 1280×900·1024×900·375×812 라이트와 다크에서 전 문항 통과. 1023/1024 기본 열림 경계, 닫힘 유지, 도킹/이동/크기, 앞뒤 이동, 원문 및 확대 가능한 초기 문제의 탭·확대, 테마 조작을 확인했다. SVG의 실제 회로 글꼴과 렌더는 브라우저 측정·별도 내용 검토에서 대조했다. 검토용 답안 PDF 렌더에 넘친 쪽이 없었다. browser-0960caa3837e4f4185554567477a1562/browser.json 및 panels.json."
   },
   "content": {
     "status": "pass",
-    "reviewer": "/root/review_1118",
-    "evidence": "최종 stage 18d3b9af6b574fcb97d11a18515839d6에서 source.json 여섯 문항, 설명 조각 p1–p6, HTML·MD의 수식·요약·소문항, 원본 세 회로, 생성 SVG 4개, 내부 링크와 문제 PDF 경로를 대조했다. P1(c)의 개방 시험 회로와 iF 기준 화살표가 식에 맞고, 새 그림의 점·전압 라벨에 s/out 식별자와 대응 색이 있다. 감사 범위는 내용과 개인 풀이 방식이다. 새 그림의 상단 라벨 네 개만 y=24에서 16으로 이동했고 소문항별 수식·내용과 MD의 독립 SVG 연결이 유지됨을 확인했다.",
+    "reviewer": "feedback_review_b (내용·원문 대조)",
+    "evidence": "최종 stage의 모든 학습 article을 비교했다. 원문·조건·구할 것·본문·요약은 이전 대조와 같고, 바뀐 SVG는 실제 렌더에서 회로 접속·부호·표지·노드 색을 재확인했다.",
     "items": {
       "p1:a": {
         "status": "pass",
-        "reviewer": "/root/review_1118",
-        "evidence": "Fig. 12.38(a)의 입력 주입과 iRF 방향을 확인했다. 증가한 vs가 vX를 높이고 반전 M2가 vout을 낮춰 반송 전류가 줄어드는 논증은 양의 입력 변화와 반대이며 요약의 부귀환 판정과 같다."
+        "reviewer": "feedback_review_b (내용·원문 대조)",
+        "evidence": "소스와 X 상승, 반전 출력 하강, 출력에서 입력으로 돌아오는 전류 감소로 부귀환. | 기존 참고 답과 결론 대조. / 검정 외곽점 대신 실제 출력 끝점과 Vout 라벨이 파랑, Vb와 그 단자가 빨강임을 새 도식에서 확인."
       },
       "p1:b": {
         "status": "pass",
-        "reviewer": "/root/review_1118",
-        "evidence": "RF≫RD2, λ=0인 순방향 시험에서 X를 경계로 목표비를 먼저 분해한다. 두 인자 +RD1, −gm2 RD2를 곱한 −gm2 RD1 RD2는 식 (12.73) 및 최종 답·요약과 같다. 별도로 쓰이는 유한 로딩 저항은 이 소문항에서 묻지 않는다."
+        "reviewer": "feedback_review_b (내용·원문 대조)",
+        "evidence": "큰 RF의 양 포트 부하 생략 후 vx/iin, vo/vx 순으로 곱하여 −gm2 RD1 RD2. | 기존 참고 답과 결론 대조."
       },
       "p1:c": {
         "status": "pass",
-        "reviewer": "/root/review_1118",
-        "evidence": "식 (12.74)의 입력원 개방 테스트에는 CG 소스 저항 1/gm1이 남는다. 새 시험 가지의 접지에서 오른쪽 출력까지 1/gm1, vs, RF 순으로 연결되며 iF가 오른쪽이므로 K≈−1/RF, T>0, R0/(1+T)가 따른다. 입력과 출력의 점·전압 라벨에는 각각 같은 식별자와 색이 있고 HTML 및 동반 MD의 SVG가 대응한다."
+        "reviewer": "feedback_review_b (내용·원문 대조)",
+        "evidence": "출력 시험과 입력원을 개방한 RF+1/gm1의 음의 반송 계수, 1+KR0 분모와 음의 트랜스임피던스. | 기존 참고 답과 결론 대조."
       },
       "p2:main": {
         "status": "pass",
-        "reviewer": "/root/review_1118",
-        "evidence": "RF, gm1, gm2, RD2가 유한한 양수로 고정일 때 RD1→∞면 T/(1+T)→1. vs→0이고 입력 전류가 RF를 타고 출력으로 가서 −RF가 된다. 해당 극한 그림·본문·MD·요약 및 X12.18의 힌트와 대응한다."
+        "reviewer": "feedback_review_b (내용·원문 대조)",
+        "evidence": "RD1→∞에서 ie와 vs→0, RF로 흐르는 전체 입력전류가 −RF 극한을 준다. | 기존 참고 풀이 없음. 원문 그림에서 도출한 별도 결과와 대조."
       },
       "p3:main": {
         "status": "pass",
-        "reviewer": "/root/review_1118",
-        "evidence": "입력 포트 소스의 시험 전류 it와 순방향 전류 ie를 구분한다. 입력 분류 it=ie+iF=(1+T)ie 및 vs=ie/gm1에서 나온 폐루프 입력저항은 식 (12.79)에 대응한다. 그림과 요약은 동일한 포트와 기준 방향을 쓴다."
+        "reviewer": "feedback_review_b (내용·원문 대조)",
+        "evidence": "입력 시험원의 전류를 ie+iF로 나누고 R0·K·Rin,0로 12.79를 얻는다. | 기존 참고 답과 결론 대조."
       },
       "p4:main": {
         "status": "pass",
-        "reviewer": "/root/review_1118",
-        "evidence": "입력 독립 전류원만 개방하고 출력을 시험한다. λ=0, 큰 RF에서 분자는 개루프 출력저항 RD2이며 루프 억압을 받는다. 최종 RD2/(1+T), RF→∞ 검산, 식 (12.83) 및 요약·MD가 일치한다."
+        "reviewer": "feedback_review_b (내용·원문 대조)",
+        "evidence": "입력 전류원을 열고 출력 병렬 감지, RD2/(1+T) 근사. | 기존 참고 답과 결론 대조. / 맨 오른쪽 vt(+) 점과 파란 전압명, 왼쪽으로 향하는 it 화살표 및 아래 라벨을 본문의 vt/it와 대조."
       },
       "p5:main": {
         "status": "pass",
-        "reviewer": "/root/review_1118",
-        "evidence": "Fig. 12.97에서 M2 게이트는 분압점에, 드레인은 입력에 연결된다. R1+R2≫RD, λ=0일 때 양의 전달 저항 RD와 K=gm2 R2/(R1+R2)에서 세 결과 +RD/D, 1/(gm1 D), RD/D가 나오며 세 양 모두 Ω이다. 요약과 MD에 세 결과가 따로 남았다."
+        "reviewer": "feedback_review_b (내용·원문 대조)",
+        "evidence": "Rout,0=RD∥(R1+R2), Rin,0=1/gm1. K=gm2 R2/(R1+R2); Zt 및 두 저항 모두 1+T로 나뉜다. | 기존 참고 풀이 없음. 원문 그림에서 도출한 별도 결과와 대조. / Vb 라벨이 게이트 단자점과 같은 빨강인 상태를 확인."
       },
       "p6:main": {
         "status": "pass",
-        "reviewer": "/root/review_1118",
-        "evidence": "Fig. 12.45의 위 도선에서 K 감지 입력이 병렬로 분기한다. IX를 출력 포트와 감지 포트 모두에 흘리려면 감지기를 직렬로 넣어야 한다. 감지저항→0일 때 병렬 시험에서 전류가 발산한다는 그림의 오류 설명이 소스 해답 및 요약과 맞다."
+        "reviewer": "feedback_review_b (내용·원문 대조)",
+        "evidence": "원 그림의 K 병렬 접속, 순방향 출력과 직렬인 감지포트에 전체 IX가 흐르는 수정 구조. | 기존 참고 답과 결론 대조. / 출력 시험점 VX(+)와 왼쪽 IX, 좌측의 단락 표지 ㉠ 및 K 감지 경로에 있는 ㉡의 실제 위치를 확인."
       }
     }
   },
   "independent": {
     "status": "pass",
-    "reviewer": "/root/blind_1118",
-    "evidence": "풀이가 제거된 조건·목표·그림을 받아 먼저 독립 풀이 저장 및 문항별 스크립트 실행. 조정자가 완료된 결과를 참고 풀이와 조립 해설에서 대조.",
+    "reviewer": "원문 전용 별도 검산자 independent-1118, 비교 feedback_review_b",
+    "evidence": "봉인된 별도 검산 결과를 참고 풀이와 학습자용 stage 식/방향에 대조. 비교에 상충하는 수치 또는 극성 없음.",
     "items": {
       "p1:a": {
         "status": "pass",
-        "reviewer": "/root/blind_1118",
-        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt",
-        "method": "qualitative",
-        "conclusion": "iin 증가 → X 증가 → 출력과 원문 기준 iRF 감소, 부귀환."
+        "reviewer": "원문 전용 별도 검산자 independent-1118, 비교 feedback_review_b",
+        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt: 소스와 X 상승, 반전 출력 하강, 출력에서 입력으로 돌아오는 전류 감소로 부귀환. | 기존 참고 답과 결론 대조.",
+        "method": "proof",
+        "conclusion": "입력에 양의 잔차전류를 가하면 vs와 X가 오르고 M2 드레인 전압은 내린다. RF를 통해 출력에서 소스로 들어오는 전류가 감소해 잔차전류 변화를 상쇄한다."
       },
       "p1:b": {
         "status": "pass",
-        "reviewer": "/root/blind_1118",
-        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt",
+        "reviewer": "원문 전용 별도 검산자 independent-1118, 비교 feedback_review_b",
+        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt: 큰 RF의 양 포트 부하 생략 후 vx/iin, vo/vx 순으로 곱하여 −gm2 RD1 RD2. | 기존 참고 답과 결론 대조.",
         "method": "symbolic",
-        "conclusion": "CG 전류→전압과 CS 반전 곱은 −gm2 RD1 RD2."
+        "conclusion": "RF를 연 개루프 transimpedance는 vo/iin=−gm2 RD1 RD2 [Ω]."
       },
       "p1:c": {
         "status": "pass",
-        "reviewer": "/root/blind_1118",
-        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt",
+        "reviewer": "원문 전용 별도 검산자 independent-1118, 비교 feedback_review_b",
+        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt: 출력 시험과 입력원을 개방한 RF+1/gm1의 음의 반송 계수, 1+KR0 분모와 음의 트랜스임피던스. | 기존 참고 답과 결론 대조.",
         "method": "symbolic",
-        "conclusion": "큰 RF에서 K≈−1/RF와 분모 1+gm2 RD1 RD2/RF."
+        "conclusion": "A=gm2 RD1 RD2>0라 두면 부하 무시 근사 폐루프 transimpedance는 −A/(1+A/RF). 유한 RF에서 정확히 vo/iin=−RD2 (gm1 gm2 RD1 RF−1)/(gm1 RF+gm1 RD2+1+gm1 gm2 RD1 RD2)."
       },
       "p2:main": {
         "status": "pass",
-        "reviewer": "/root/blind_1118",
-        "evidence": "evidence/p2-sympy.py, evidence/p2-result.txt",
+        "reviewer": "원문 전용 별도 검산자 independent-1118, 비교 feedback_review_b",
+        "evidence": "evidence/p2-sympy.py, evidence/p2-result.txt: RD1→∞에서 ie와 vs→0, RF로 흐르는 전체 입력전류가 −RF 극한을 준다. | 기존 참고 풀이 없음. 원문 그림에서 도출한 별도 결과와 대조.",
         "method": "symbolic",
-        "conclusion": "RD1→∞에서 −RF, M1 소스 소신호가 0으로 수렴."
+        "conclusion": "RD1→∞이면 vs→0, vo/iin→−RF. M1 소스가 가상접지가 되며 1차 소신호에서 주입 전류가 RF를 거쳐 출력으로 흐른다."
       },
       "p3:main": {
         "status": "pass",
-        "reviewer": "/root/blind_1118",
-        "evidence": "evidence/p3-sympy.py, evidence/p3-result.txt",
+        "reviewer": "원문 전용 별도 검산자 independent-1118, 비교 feedback_review_b",
+        "evidence": "evidence/p3-sympy.py, evidence/p3-result.txt: 입력 시험원의 전류를 ie+iF로 나누고 R0·K·Rin,0로 12.79를 얻는다. | 기존 참고 답과 결론 대조.",
         "method": "symbolic",
-        "conclusion": "유한 RF 절점해에서 큰 RF 조건을 적용하면 Rin≈[gm1(1+T)]⁻¹."
+        "conclusion": "A=gm2 RD1 RD2에서 Rin,CL≈(1/gm1)/(1+A/RF). 유한 RF의 정확식은 (RF+RD2)/(1+gm1(RF+RD2+A))."
       },
       "p4:main": {
         "status": "pass",
-        "reviewer": "/root/blind_1118",
-        "evidence": "evidence/p4-sympy.py, evidence/p4-result.txt",
+        "reviewer": "원문 전용 별도 검산자 independent-1118, 비교 feedback_review_b",
+        "evidence": "evidence/p4-sympy.py, evidence/p4-result.txt: 입력 전류원을 열고 출력 병렬 감지, RD2/(1+T) 근사. | 기존 참고 답과 결론 대조.",
         "method": "symbolic",
-        "conclusion": "유한 RF 절점해에서 큰 RF 조건을 적용하면 Rout≈RD2/(1+T)."
+        "conclusion": "입력 독립 전류원을 열고 출력에 시험전류를 주면 Rout,CL≈RD2/(1+gm2 RD1 RD2/RF). 유한 RF 정확식은 RD2(1+gm1 RF)/[1+gm1(RF+RD2+gm2 RD1 RD2)]."
       },
       "p5:main": {
         "status": "pass",
-        "reviewer": "/root/blind_1118",
-        "evidence": "evidence/p5-sympy.py, evidence/p5-result.txt",
+        "reviewer": "원문 전용 별도 검산자 independent-1118, 비교 feedback_review_b",
+        "evidence": "evidence/p5-sympy.py, evidence/p5-result.txt: Rout,0=RD∥(R1+R2), Rin,0=1/gm1. K=gm2 R2/(R1+R2); Zt 및 두 저항 모두 1+T로 나뉜다. | 기존 참고 풀이 없음. 원문 그림에서 도출한 별도 결과와 대조.",
         "method": "symbolic",
-        "conclusion": "부하를 포함한 D=RD∥(R1+R2)에서 세 값을 대조, 큰 분압 저항이면 D≈RD."
+        "conclusion": "k=R2/(R1+R2), D=RD∥(R1+R2), T=gm2 k D. Zt=+D/(1+T), Rin=(1/gm1)/(1+T), Rout=D/(1+T). 문제의 큰 R1+R2 조건에서 D≈RD이다."
       },
       "p6:main": {
         "status": "pass",
-        "reviewer": "/root/blind_1118",
-        "evidence": "evidence/p6-sympy.py, evidence/p6-result.txt",
-        "method": "qualitative",
-        "conclusion": "출력 노드 전압을 병렬 검출한 원래 그림과 직렬 포트 전류 검출을 비교."
+        "reviewer": "원문 전용 별도 검산자 independent-1118, 비교 feedback_review_b",
+        "evidence": "evidence/p6-sympy.py, evidence/p6-result.txt: 원 그림의 K 병렬 접속, 순방향 출력과 직렬인 감지포트에 전체 IX가 흐르는 수정 구조. | 기존 참고 답과 결론 대조.",
+        "method": "proof",
+        "conclusion": "K가 출력에 병렬 분기되어 있어 출력전압만 볼 수 있다. 출력전류를 검출하려면 부하/시험원 전류가 센서를 통과하도록 출력 포트에 직렬로 놓아야 한다. Rout을 흐르는 분기 전류와 외부 포트 전류를 구별해야 하며 직렬 전류 검출은 음귀환에서 출력 임피던스를 증가시킨다."
       }
     }
   },
   "artifact_hashes": {
     ".assets/figures_문제설명_1118_Feedback_Loading/b1113696292b6aa1-fig12-38-a.png": "b1113696292b6aa1644fe70f6c102f18e3a5ad12a5e2c6116a7c5b15fc37aa27",
     ".assets/figures_문제설명_1118_Feedback_Loading/e9ecb477df3c8cbe-fig12-45.png": "e9ecb477df3c8cbedbf1e3d0e3b17655c74e4ebb9a930b6f9ceda9a2e9852607",
-    ".assets/figures_문제설명_1118_Feedback_Loading/explain-fig-1.svg": "222f55bfe06033f42e6f0de6d7da885cde7f614b0efdd96dbd460ec0ffed0841",
-    ".assets/figures_문제설명_1118_Feedback_Loading/explain-fig-2.svg": "e375167190ca944718f524587f1c0ad46c23a78658f3f28c6a77689240c7a9d6",
-    ".assets/figures_문제설명_1118_Feedback_Loading/explain-fig-3.svg": "d33011c08b2275602d4de756cf1c3d3faf9ad3d8b3f6fe86124d1e062ed3b540",
+    ".assets/figures_문제설명_1118_Feedback_Loading/explain-fig-1.svg": "381dfb6ca8b0fc26811e918ab71ff44031be37cb6da0c97e429879c5c7812fa9",
+    ".assets/figures_문제설명_1118_Feedback_Loading/explain-fig-2.svg": "7f9548ca0562e7abbcd35f7b1faff51dc522ec0287c140cdb62fc7987d0e9a6c",
+    ".assets/figures_문제설명_1118_Feedback_Loading/explain-fig-3.svg": "d7a8f7b31ec448e8e92ae1c0457a4421b5284f35f325bfa13e3907b0b3200be2",
     ".assets/figures_문제설명_1118_Feedback_Loading/f09b9bae52d6cde8-fig12-97.png": "f09b9bae52d6cde8d922ed9e8a3d8380de1faa416edf41df4d65d7babff1d0c4",
-    ".assets/figures_문제설명_1118_Feedback_Loading/p1-svg2-p1-feedback-return-test.svg": "8b00c834c3275e4dc8b59dd946b36ac33f13355297032bd5f83f5ebfcb735bdb",
-    ".assets/문제설명_1118_Feedback_Loading.md": "1ba28caefb072cc4498d09ed7b2e87b2fa51d3cdbc5553ec7d5a84bcd688a57a",
-    ".assets/자료_문제설명_1118_Feedback_Loading/answer-overlay.json": "2d4b77262a00ef736e23abbb2d4b8ce5eb5997349fddd3adf9a14cd9fb348734",
-    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p1-result.txt": "f670533168db6a44381c2747536a77f9a2b03da70f3ace47918bb9a63b84de60",
-    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p1-sympy.py": "f6853e367bece9263d5fff8195d3e591343d5753b4267b6603196476e45156b4",
-    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p2-result.txt": "16863f4008723f6520f839a78197bb2e806e425be08fe3cf60bc1a3e826fdde6",
-    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p2-sympy.py": "fd36e6fc82625bfd01469ddd9df5500bcae99de407c7f049bf9ae2017e7f159b",
-    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p3-result.txt": "5ddc3db83a786dbe5477403f87feb92805d6594a96e5390a8878e182dfb1dd30",
-    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p3-sympy.py": "a0fa0c3df20f9534af1b6b49659fecab963b4ceb2c7f8f4c0ed19bfea2967d1a",
-    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p4-result.txt": "57d92ea3e50aa2886baa822dad30899db1f672e2e26d5951f13ae085bda9134d",
-    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p4-sympy.py": "be2e9057abbfaefcb0fdbc3e777e7a6f2723454b4e640f343aedfec23d887472",
-    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p5-result.txt": "e91e83b185f177f04bbe3e7bfacf3bdcb9a6ba56c0f1eb55f0f7efbc72d2f7b4",
-    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p5-sympy.py": "c9149ed19740f796cead054a247afa6ba8869a2ad0554062f71fb034536af992",
-    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p6-result.txt": "7b71c23a2dcf471779abfcc994628059234f22e2d561cc901df37e3cf9f37672",
-    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p6-sympy.py": "d35cf4b406cfaaf429a6d9c5d686e7ecba37b36f72d18b9feee3cfe4f7f8b431",
-    ".assets/자료_문제설명_1118_Feedback_Loading/fragments/p1.html": "fa7c76d0d79d6726f1b38808a2c789194d99b2f063d84a8a2a3171256972f2e5",
-    ".assets/자료_문제설명_1118_Feedback_Loading/fragments/p2.html": "0085868aaa3f7c8fa9a4a78dd4299d44d3919d9a2d4748fc01f760caf68f5ab4",
-    ".assets/자료_문제설명_1118_Feedback_Loading/fragments/p3.html": "1f5b40acfd11659f15824d0a75dd04a6532a64309c4fc623682b769675ccff6b",
-    ".assets/자료_문제설명_1118_Feedback_Loading/fragments/p4.html": "e97c2a9fba2c9cd60d83e97f4d5041d7319a1e8b17886949d14ec2d993c5dfad",
-    ".assets/자료_문제설명_1118_Feedback_Loading/fragments/p5.html": "b5aebac0457dd81107597fc5de78181c436f24512295c61ccabd3f3e903b8b38",
-    ".assets/자료_문제설명_1118_Feedback_Loading/fragments/p6.html": "400cf344d633fd0498eacc7d5287136a20c148161d0f41866744b69467d0449c",
+    ".assets/figures_문제설명_1118_Feedback_Loading/p1-fig-circuit-s3-closed.svg": "f1f3740eae3c0135e7c5e7a80d0b1ab5def7b3f6d6648f131607fc1deac8add0",
+    ".assets/figures_문제설명_1118_Feedback_Loading/p1-svg2-p1-feedback-return-test.svg": "327dc3fd687f304c75beeae4576f5ecbb4bb780bae2e80986ee7418807553460",
+    ".assets/figures_문제설명_1118_Feedback_Loading/p4-fig-circuit-s0-vc-output.svg": "202917e8978f9a2ff496f95d872eaab56011c5355534031355a06e720315b290",
+    ".assets/figures_문제설명_1118_Feedback_Loading/p6-fig-circuit-s1-cv-output.svg": "ddf529bfa79958493654354d347994a4dd1913bca63dfa10076fe59b6996d79d",
+    ".assets/문제설명_1118_Feedback_Loading.md": "c57392458d9097b9c527524938cbbbf58ce9a18f7b2896578c0e1dd048f2ba0d",
+    ".assets/자료_문제설명_1118_Feedback_Loading/answer-overlay.json": "b7d6886f42641d8944b28f9e737019aaead77553198f36eab95e0ce59b039cf3",
+    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p1-result.txt": "f7547d615322a8ec2e68afe3bbbbc28a39c0e95d5198472bb19d9d433bf0676b",
+    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p1-sympy.py": "ed2415163e317cca420b5b7078704f1997eb8b7d872f43e7e85937f346733d6d",
+    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p2-result.txt": "4889f6398af905f4f7a581cd49e9cbc4d27d1d9e28a24cfbf36f4fc41f74d51f",
+    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p2-sympy.py": "4458553d57d1c91f2dad2e3680bde0a70c896c6a982b45a873e49b42413ab59d",
+    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p3-result.txt": "a752d81b9dc23dfb063a8af9a16f4febed08347f7e1363e6bacddcb55d7624d7",
+    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p3-sympy.py": "5fd7c0f362b977bc8ac7dacb4c5a546d9ae96a7fa29d7366eb7317b71662c938",
+    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p4-result.txt": "063cfed84dd94a4c8f5213e51903cf67ea218520a3942b418ed565f3c98588cb",
+    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p4-sympy.py": "f0b437cbecf7c96ecff2249cbfd9c4aedc6488c6e2e90fe2d91aa8a1edbe9564",
+    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p5-result.txt": "1a492eba4edf07a03575921bdfbf003bc41718083ed7ac0766532b9bd3f4b1ae",
+    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p5-sympy.py": "bb7063c4ad84e381c8b30f267fe1f11000bbf30b0ae295bb5adbd810f61b6900",
+    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p6-result.txt": "4554f2d6e45c4152a095004ca1441d4e9d3ad92436c2573f2858a7ba220543d2",
+    ".assets/자료_문제설명_1118_Feedback_Loading/evidence/p6-sympy.py": "7f7796edc57f2f06205885fc37c8859c9c2dd89b3f6eaeb6af97edfe02ef83df",
+    ".assets/자료_문제설명_1118_Feedback_Loading/fragments/p1.html": "487da7ab5ef420c1132b4f0e6f2ff5f647b0109a005e79202f9b63358d941c45",
+    ".assets/자료_문제설명_1118_Feedback_Loading/fragments/p2.html": "1ddc4efc5d6946d4f547e86f4981efa4a78f75200fdcbcbc19912fcc1d235dfd",
+    ".assets/자료_문제설명_1118_Feedback_Loading/fragments/p3.html": "022e65ed3835bd9bbce9066cc5e594fd610f0cad48c868111db475754857da6a",
+    ".assets/자료_문제설명_1118_Feedback_Loading/fragments/p4.html": "78a31d192ab644f95e8410721a04dd278d0bd8c6505292b16135b762b7fb5df6",
+    ".assets/자료_문제설명_1118_Feedback_Loading/fragments/p5.html": "68ab80cf76237941f453e5528b744ac7b3203c7efd1cbcdffc03070368415b13",
+    ".assets/자료_문제설명_1118_Feedback_Loading/fragments/p6.html": "9bfa87831c0fb505d8c28c23012c8848dc73e31317b917b61e8e8500288de1dc",
     ".assets/자료_문제설명_1118_Feedback_Loading/template-provenance.json": "69f885ea5f798b5132305e84c4e454228d50fb784330bfab3b2d4fd3697650fc",
-    "문제설명_1118_Feedback_Loading.html": "277b07b23bfd7d66f0fc8ae7d81e642261334738d5ec32afda4328ce20cc1033",
-    ".assets/자료_문제설명_1118_Feedback_Loading/manifest.json": "92cb518855405f32014424ae74615cb0d020db92816e6e9d1280aa8f5c25dd8d"
+    "문제설명_1118_Feedback_Loading.html": "c22f676fdcb8dc4e7c4eadc89c66d66daee3765badffb36d73558b4431b86540",
+    ".assets/자료_문제설명_1118_Feedback_Loading/manifest.json": "f289e0c3bb5f094961ab14b37e8753e8cd7ba41d1485e920e4afb4529e476c76"
   }
 }

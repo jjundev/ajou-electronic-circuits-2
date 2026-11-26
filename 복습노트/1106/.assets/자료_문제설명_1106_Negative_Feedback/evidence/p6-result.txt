@@ -1,10 +1,3 @@
-Y/X = A1/(A1*R2/(R1 + R2) + 1)  = 1/(K + 1/A1)
-limit A1->oo : (R1 + R2)/R2 = 1/K = 1+R1/R2
-relative error 1 - (Y/X)/(1/K) = (R1 + R2)/(A1*R2 + R1 + R2) = 1/(1+K A1) -> 0
-E = X - X_F = X/(A1*R2/(R1 + R2) + 1)  -> limit 0
-Argument: E->0 so X_F ~= X (good replica). X_F = K*Y fixed by divider -> Y = X/K = (1+R1/R2) X.
-Gain set only by resistor ratio, insensitive to A1 (desensitization).
- A1=    10 K=1/8: Y/X=4.4444 (1/K=8)
- A1=   100 K=1/8: Y/X=7.4074 (1/K=8)
- A1=  1000 K=1/8: Y/X=7.9365 (1/K=8)
- A1= 10000 K=1/8: Y/X=7.9936 (1/K=8)
+H A/(A*R2/(R1 + R2) + 1) relative gain deficit vs ideal (R1 + R2)/(A*R2 + R1 + R2) limit (R1 + R2)/R2
+
+With β=R2/(R1+R2), Y/X=(1/β)·A1β/(1+A1β). The high loop gain leaves fractional error 1/(1+A1β), so XF≈X and Y/X→1+R1/R2.

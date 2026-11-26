@@ -1,7 +1,6 @@
-T(a) = A1*K*R2/(R1 + R2)
-T(b) = A1*R2*R_D*g_m3/(R1 + R2)
-T(c) = A1*R_D*g_m3
-T(d_body) = A1*R2*g_m1/(R2*g_m1 + R2*g_mb1 + 1)
-T(d) = A1*R2*g_m1/(R2*g_m1 + 1)
-All T>0: negative feedback in (a)-(d).
-(d) with body effect: T = A1 gm1 R2/(1+(gm1+gmb1)R2); textbook-level answer ignores gmb.
+a loop return signed -A*K*R2/(R1 + R2) closed-loop gain A*(R1 + R2)/(A*K*R2 + R1 + R2)
+b loop return signed -A*R2*RD*gm3/(R1 + R2) closed-loop gain -A*(R1 + R2)/(A*R2*RD*gm3 + R1 + R2)
+c loop return signed -A*RD*gm3 closed-loop gain -A/(A*RD*gm3 + 1)
+d loop return signed -A*R2*gm1/(R2*gm1 + 1) closed-loop gain A*R2*gm1/(A*R2*gm1 + R2*gm1 + 1)
+
+Write b=R2/(R1+R2), f=gm1 R2/(1+gm1 R2). Positive loop-gain magnitudes (signed return is negative) in (a–d): A1 K b, A1 gm3 RD b, A1 gm3 RD, A1 f.

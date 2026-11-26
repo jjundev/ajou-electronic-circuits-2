@@ -1,6 +1,16 @@
-W'/W=2: I ratio-1=0.0e+00, gm ratio=1.000000, Cgs ratio=4.000, fT ratio=0.250000
-W'/W=2: I ratio-1=0.0e+00, gm ratio=1.000000, Cgs ratio=4.000, fT ratio=0.250000
-W'/W=2: I ratio-1=0.0e+00, gm ratio=1.000000, Cgs ratio=4.000, fT ratio=0.250000
-W'/W=2: I ratio-1=0.0e+00, gm ratio=1.000000, Cgs ratio=4.000, fT ratio=0.250000
-W'/W=2: I ratio-1=0.0e+00, gm ratio=1.000000, Cgs ratio=4.000, fT ratio=0.250000
-max residual vs (W x2, fT x1/4): 0
+{
+  "p3:a": {
+    "method": "symbolic",
+    "conclusion": "동일 과구동 전압에서 I_D를 유지하려면 W/L 일정.",
+    "values": {
+      "new_width": "2*W"
+    }
+  },
+  "p3:b": {
+    "method": "symbolic",
+    "conclusion": "g_m은 그대로이고 C_GS는 네 배이므로 f_T는 1/4. 채널 길이 변조는 1차 설계식에서 무시한다.",
+    "values": {
+      "speed_ratio": "1/4"
+    }
+  }
+}

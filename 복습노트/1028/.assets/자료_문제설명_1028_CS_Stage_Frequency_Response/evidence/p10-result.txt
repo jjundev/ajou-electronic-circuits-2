@@ -1,11 +1,11 @@
-p10: stdlib numerical KCL vs closed form at random points (SymPy absent)
-Model: X=gate node, Cin=CGS1+CGS2, CXY=CGD1+CGD2, Cout=CDB1+CDB2, gm=gm1+gm2, RL=ro1||ro2
- pt 0 rel residual 1.0906533751997982e-16
- pt 1 rel residual 5.272367058665006e-17
- pt 2 rel residual 1.813946709434765e-16
- pt 3 rel residual 1.4681743037847286e-16
- pt 4 rel residual 4.353708402377177e-16
- pt 5 rel residual 1.1427957351294294e-16
- pt 6 rel residual 2.66249193180465e-16
- pt 7 rel residual 2.546990168447277e-16
-max rel residual 4.353708402377177e-16
+{
+  "p10:main": {
+    "method": "symbolic",
+    "conclusion": "두 노드 KCL을 연립. g=g_m1+g_m2, R=r_o1∥r_o2, C_g=C_GS1+C_GS2, C_f=C_GD1+C_GD2, C_d=C_DB1+C_DB2이다. 전달함수 H=R(s C_f−g)/(1+b1 s+b2 s²). 영점은 +g/C_f로 우반평면이다.",
+    "values": {
+      "b1": "C_f*R*R_S*g + R*(C_d + C_f) + R_S*(C_f + C_g)",
+      "b2": "R*R_S*(C_d*C_f + C_d*C_g + C_f*C_g)",
+      "H": "R*(C_f*s - g)/(C_d*C_f*R*R_S*s**2 + C_d*C_g*R*R_S*s**2 + C_d*R*s + C_f*C_g*R*R_S*s**2 + C_f*R*R_S*g*s + C_f*R*s + C_f*R_S*s + C_g*R_S*s + 1)"
+    }
+  }
+}

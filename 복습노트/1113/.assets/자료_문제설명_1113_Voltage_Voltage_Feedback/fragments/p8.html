@@ -1,153 +1,25 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>그림 12.89의 네 회로는 뼈대가 같아요. 입력 전압 $V_{in}$이 저항 $R_S$를 거쳐 한 노드로 들어가요. 이 노드는 원문에 이름이 없어서, 이 해설에서는 $R_S$ 오른쪽 접속점을 노드 $X$라고 불러요. 출력은 오른쪽의 $V_{out}$ 노드예요.</p>
-  <p>$V_{out}$ 위의 $I_1$과 $X$ 아래의 전류원은 이상적인 바이어스 전류원이에요. $X$ 아래 전류원은 (a)–(c)에서 라벨이 없어서 이 해설에서 $I_2$라고 부르고, (d)에서는 원문대로 아래쪽 $I_1$이라고 불러요. 둘 다 전류가 고정이라 신호에 따라 전류를 바꾸지 않아요.</p>
-  <p>$M_1$은 $X$의 변화를 $V_{out}$으로 옮기는 순방향 증폭기이고, $M_2$는 $V_{out}$의 변화를 $X$로 되돌리는 귀환 소자예요. 회로마다 두 소자의 단자 연결이 달라요.</p>
-  <ul>
-    <li>(a) $M_1$은 게이트가 $X$인 공통 소스(CS) 단이에요. NMOS $M_2$는 게이트가 $V_{out}$, 드레인이 $V_{DD}$, 소스가 $X$예요.</li>
-    <li>(b) $M_1$은 (a)와 같은 CS 단이에요. PMOS $M_2$는 소스가 $V_{DD}$, 게이트가 $V_{out}$, 드레인이 $X$예요.</li>
-    <li>(c) $M_1$은 (a)와 같은 CS 단이에요. PMOS $M_2$는 소스가 $V_{out}$, 게이트가 고정 전압 $V_b$, 드레인이 $X$예요.</li>
-    <li>(d) $M_1$은 게이트가 $V_b$, 소스가 $X$, 드레인이 $V_{out}$인 공통 게이트(CG) 단이에요. PMOS $M_2$는 (b)와 같이 소스가 $V_{DD}$, 게이트가 $V_{out}$, 드레인이 $X$예요.</li>
-  </ul>
-  <p>구할 것은 네 회로 각각의 귀환이 입력이 만든 변화를 줄이는 음귀환(부귀환, negative feedback)인지, 키우는 양귀환(정귀환, positive feedback)인지예요. 이 해설에서는 문제 표현대로 부귀환·정귀환이라고 불러요. 소자 값이 없으니 크기는 계산하지 않고, 전류·전압이 오르는지($\uparrow$) 내리는지($\downarrow$)만 따라가요. (d) 그림의 $Z_{in}$ 화살표는 이 문제에서 묻지 않아요.</p>
+<div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit">
+<svg viewBox="0 -18 540 398" role="img" aria-label="네 회로의 M1과 반송 트랜지스터 M2. (a)는 소스 팔로워, (b)와 (d)는 게이트로 출력을 받는 PMOS, (c)는 소스로 출력을 받는 PMOS예요."><g transform="translate(0 0)"><text class="fig-text fig-math" x="4" y="17" >(a)</text><path class="fig-ink" d="M80 19H195 M184 19v8 M184 47v42 M184 62h52"/><circle class="fig-ink" cx="184" cy="37" r="10"/><path class="fig-ink" d="M184 31v12m-3 -4 3 4 3 -4"/><text class="fig-text fig-math" x="126" y="3" >V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text><path class="fig-ink" d="M82 119v21 M82 160v8"/><circle class="fig-ink" cx="82" cy="150" r="10"/><path class="fig-ink" d="M82 144v12m-3 -4 3 4 3 -4"/><path class="fig-ink" d="M73 168h18 m-15 4h12 m-9 4h6"/><path class="fig-ink" d="M12 119h13l2 -4 4 8 4 -8 4 8 4 -8 4 8 3 -4h32"/><circle class="fig-dot" cx="12" cy="119" r="3.3" data-node="vin" data-node-color="red"/><text class="fig-text fig-math" x="6" y="107" data-node="vin" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><text class="fig-text fig-math" x="29" y="142" >R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><path class="fig-ink" d="M184 89H172 M184 109H172 M172 86v26 M168 88v22 M168 99h-9 M178 106l4 3 -4 3"/><path class="fig-ink" d="M159 99H143v20H82 M184 109v25"/><path class="fig-ink" d="M175 134h18 m-15 4h12 m-9 4h6"/><text class="fig-text fig-math" x="194" y="104" >M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><path class="fig-ink" d="M82 52H94 M82 72H94 M94 49v26 M98 51v22 M98 62h9 M88 69l-4 3 4 3"/><path class="fig-ink" d="M82 19v33 M82 72v47 M107 62h77"/><text class="fig-text fig-math" x="48" y="72" >M<tspan baseline-shift="sub" font-size="78%">2</tspan></text><circle class="fig-dot" cx="82" cy="119" r="3.3" data-node="X" data-node-color="blue"/><text class="fig-text fig-math" x="91" y="137" data-node="X" data-node-color="blue">X</text><circle class="fig-dot" cx="236" cy="62" r="3.3" data-node="out" data-node-color="red"/><text class="fig-text fig-math" x="224" y="50" data-node="out" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><circle class="fig-dot" cx="184" cy="62" r="3.3" data-node="out" data-node-color="red"/></g><g transform="translate(270 0)"><text class="fig-text fig-math" x="4" y="17" >(b)</text><path class="fig-ink" d="M80 19H195 M184 19v8 M184 47v42 M184 62h52"/><circle class="fig-ink" cx="184" cy="37" r="10"/><path class="fig-ink" d="M184 31v12m-3 -4 3 4 3 -4"/><text class="fig-text fig-math" x="126" y="3" >V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text><path class="fig-ink" d="M82 119v21 M82 160v8"/><circle class="fig-ink" cx="82" cy="150" r="10"/><path class="fig-ink" d="M82 144v12m-3 -4 3 4 3 -4"/><path class="fig-ink" d="M73 168h18 m-15 4h12 m-9 4h6"/><path class="fig-ink" d="M12 119h13l2 -4 4 8 4 -8 4 8 4 -8 4 8 3 -4h32"/><circle class="fig-dot" cx="12" cy="119" r="3.3" data-node="vin" data-node-color="red"/><text class="fig-text fig-math" x="6" y="107" data-node="vin" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><text class="fig-text fig-math" x="29" y="142" >R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><path class="fig-ink" d="M184 89H172 M184 109H172 M172 86v26 M168 88v22 M168 99h-9 M178 106l4 3 -4 3"/><path class="fig-ink" d="M159 99H143v20H82 M184 109v25"/><path class="fig-ink" d="M175 134h18 m-15 4h12 m-9 4h6"/><text class="fig-text fig-math" x="194" y="104" >M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><path class="fig-ink" d="M82 52H94 M82 72H94 M94 49v26 M98 51v22 M98 62h9 M84 49l4 3 -4 3"/><path class="fig-ink" d="M82 19v33 M82 72v47 M107 62h77"/><text class="fig-text fig-math" x="48" y="72" >M<tspan baseline-shift="sub" font-size="78%">2</tspan></text><circle class="fig-dot" cx="82" cy="119" r="3.3" data-node="X" data-node-color="blue"/><text class="fig-text fig-math" x="91" y="137" data-node="X" data-node-color="blue">X</text><circle class="fig-dot" cx="236" cy="62" r="3.3" data-node="out" data-node-color="red"/><text class="fig-text fig-math" x="224" y="50" data-node="out" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><circle class="fig-dot" cx="184" cy="62" r="3.3" data-node="out" data-node-color="red"/></g><g transform="translate(0 190)"><text class="fig-text fig-math" x="4" y="17" >(c)</text><path class="fig-ink" d="M80 19H195 M184 19v8 M184 47v42 M184 62h52"/><circle class="fig-ink" cx="184" cy="37" r="10"/><path class="fig-ink" d="M184 31v12m-3 -4 3 4 3 -4"/><text class="fig-text fig-math" x="126" y="3" >V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text><path class="fig-ink" d="M82 119v21 M82 160v8"/><circle class="fig-ink" cx="82" cy="150" r="10"/><path class="fig-ink" d="M82 144v12m-3 -4 3 4 3 -4"/><path class="fig-ink" d="M73 168h18 m-15 4h12 m-9 4h6"/><path class="fig-ink" d="M12 119h13l2 -4 4 8 4 -8 4 8 4 -8 4 8 3 -4h32"/><circle class="fig-dot" cx="12" cy="119" r="3.3" data-node="vin" data-node-color="red"/><text class="fig-text fig-math" x="6" y="107" data-node="vin" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><text class="fig-text fig-math" x="29" y="142" >R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><path class="fig-ink" d="M184 89H172 M184 109H172 M172 86v26 M168 88v22 M168 99h-9 M178 106l4 3 -4 3"/><path class="fig-ink" d="M159 99H143v20H82 M184 109v25"/><path class="fig-ink" d="M175 134h18 m-15 4h12 m-9 4h6"/><text class="fig-text fig-math" x="194" y="104" >M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><path class="fig-ink" d="M82 68H94 M82 88H94 M94 65v26 M98 67v22 M98 78h9 M84 65l4 3 -4 3"/><path class="fig-ink" d="M82 68v-6h102 M82 88v31 M107 78h16"/><circle class="fig-dot" cx="123" cy="78" r="3.3" data-node="bias" data-node-color="blue"/><text class="fig-text fig-math" x="118" y="101" data-node="bias" data-node-color="blue">V<tspan baseline-shift="sub" font-size="78%">b</tspan></text><text class="fig-text fig-math" x="51" y="85" >M<tspan baseline-shift="sub" font-size="78%">2</tspan></text><circle class="fig-dot" cx="82" cy="119" r="3.3" data-node="X" data-node-color="blue"/><text class="fig-text fig-math" x="91" y="137" data-node="X" data-node-color="blue">X</text><circle class="fig-dot" cx="236" cy="62" r="3.3" data-node="out" data-node-color="red"/><text class="fig-text fig-math" x="224" y="50" data-node="out" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><circle class="fig-dot" cx="184" cy="62" r="3.3" data-node="out" data-node-color="red"/></g><g transform="translate(270 190)"><text class="fig-text fig-math" x="4" y="17" >(d)</text><path class="fig-ink" d="M80 19H195 M184 19v8 M184 47v42 M184 62h52"/><circle class="fig-ink" cx="184" cy="37" r="10"/><path class="fig-ink" d="M184 31v12m-3 -4 3 4 3 -4"/><text class="fig-text fig-math" x="126" y="3" >V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text><path class="fig-ink" d="M82 119v21 M82 160v8"/><circle class="fig-ink" cx="82" cy="150" r="10"/><path class="fig-ink" d="M82 144v12m-3 -4 3 4 3 -4"/><path class="fig-ink" d="M73 168h18 m-15 4h12 m-9 4h6"/><path class="fig-ink" d="M12 119h13l2 -4 4 8 4 -8 4 8 4 -8 4 8 3 -4h32"/><circle class="fig-dot" cx="12" cy="119" r="3.3" data-node="vin" data-node-color="red"/><text class="fig-text fig-math" x="6" y="107" data-node="vin" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><text class="fig-text fig-math" x="29" y="142" >R<tspan baseline-shift="sub" font-size="78%">S</tspan></text><path class="fig-ink" d="M184 89H196 M184 109H196 M196 86v26 M200 88v22 M200 99h9 M190 106l-4 3 4 3"/><path class="fig-ink" d="M209 99h12 M184 109v10H82"/><text class="fig-text fig-math" x="200" y="123" >M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><circle class="fig-dot" cx="221" cy="99" r="3.3" data-node="bias" data-node-color="blue"/><text class="fig-text fig-math" x="217" y="87" data-node="bias" data-node-color="blue">V<tspan baseline-shift="sub" font-size="78%">b</tspan></text><path class="fig-ink" d="M82 52H94 M82 72H94 M94 49v26 M98 51v22 M98 62h9 M84 49l4 3 -4 3"/><path class="fig-ink" d="M82 19v33 M82 72v47 M107 62h77"/><text class="fig-text fig-math" x="48" y="72" >M<tspan baseline-shift="sub" font-size="78%">2</tspan></text><circle class="fig-dot" cx="82" cy="119" r="3.3" data-node="X" data-node-color="blue"/><text class="fig-text fig-math" x="91" y="137" data-node="X" data-node-color="blue">X</text><circle class="fig-dot" cx="236" cy="62" r="3.3" data-node="out" data-node-color="red"/><text class="fig-text fig-math" x="224" y="50" data-node="out" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><circle class="fig-dot" cx="184" cy="62" r="3.3" data-node="out" data-node-color="red"/></g><text class="fig-loc" x="132" y="135" font-size="17">㉠</text><text class="fig-loc" x="427" y="272" font-size="17">㉡</text></svg>
+<figcaption class="circuit-state">같은 입력 저항을 통해 $X$를 조금 올렸을 때의 네 가지 연결</figcaption>
+</figure>
+<div data-subpart="main">
+<h4>처음 올린 입력 노드로 돌아오는 변화</h4>
+<div data-answer-step="공통 소스 첫째 단 (a)–(c)">
+<p><span class="loc">㉠</span> $R_S$를 통해 $v_X$를 올리면 (a)–(c)의 $M_1$ 게이트가 올라가 $v_{out}$은 내려가요. 이제 $M_2$가 $X$에 넣는 전류를 비교해요.</p>
+<p>(a) 소스 팔로워의 게이트가 내려가 $X$에 넣는 전류가 줄어요.</p>
+<p>(b) PMOS의 게이트가 내려가 $v_{SG2}$가 커져요. $X$에 넣는 전류도 늘어요.</p>
+<p>(c) 게이트가 고정된 PMOS의 소스가 내려가 $v_{SG2}$가 작아져요. $X$에 넣는 전류가 줄어요.</p>
 </div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p><strong>단서</strong>: "귀환의 극성을 결정하라"와, $V_{out}$에서 $M_2$를 거쳐 입력 노드 $X$로 돌아가는 경로가 단서예요. 귀환의 극성(polarity of feedback) 판정 세 단계를 떠올려요(<a href="정리노트_1113_Voltage_Voltage_Feedback.html#s3-polarity-steps">입력을 올려 보고 루프를 한 바퀴 따라가요</a>).</p>
-  <ol>
-    <li>입력이 오른다(또는 내린다)고 가정해요.</li>
-    <li>그 변화를 순방향 증폭기와 귀환 소자를 거쳐 루프를 따라 추적해요.</li>
-    <li>돌아온 양이 처음 변화를 방해하면 부귀환(음귀환), 키우면 정귀환(양귀환)이에요.</li>
-  </ol>
-  <p><strong>개념, 단마다의 위상</strong>: 전류를 하나씩 따라가는 대신 각 단의 부호만 곱해도 돼요(<a href="정리노트_1113_Voltage_Voltage_Feedback.html#s3-polarity-two-stage">단마다 부호를 곱해 극성 보기</a>). 게이트로 받아 드레인으로 내는 CS 단은 반전(−)이에요. 게이트로 받아 소스로 내는 소스 팔로워(source follower)는 비반전(+)이에요. 소스로 받아 드레인으로 내는 CG 단도 비반전(+)이에요. 몇 번 반전이 부귀환인지는 신호가 돌아오는 곳이 정해요. 예제 12.13처럼 빼는 단자(소스)로 돌아오면 짝수 번 반전이 부귀환이지만, 이 문항처럼 입력과 같은 노드 $X$로 돌아오면 홀수 번 반전이 부귀환이에요.</p>
-  <p><strong>기호의 뜻</strong>: $V_X$는 노드 $X$의 전압, $I_{D1}$·$I_{D2}$는 $M_1$·$M_2$의 드레인 전류예요. MOS 전류는 게이트–소스 전압이 정하므로 NMOS는 $V_{GS}$, PMOS는 $V_{SG}$가 커질수록 전류가 늘어요.</p>
-  <p><strong>돌아오는 곳</strong>: 이 네 회로는 입력과 귀환이 같은 노드 $X$에서 만나요. $R_S$로 들어오는 입력 전류와 $M_2$가 넣는 귀환 전류가 $X$에서 더해지고, $R_S$가 그 합을 $V_X$로 바꿔요. 예제 12.13처럼 소스라는 빼는 단자로 돌아오는 구조가 아니므로, 루프 안 반전이 홀수 번이면 부귀환, 짝수 번(0번 포함)이면 정귀환이에요.</p>
-  <p><strong>근사 조건</strong>: 모든 트랜지스터가 포화 영역에 있고, 게이트 전류는 0이며, 바이어스 전류원은 전류가 고정이라고 둬요. 증감 방향만 따지므로 수업 기본 근사 $g_mr_o\gg1$은 이 부호 판단에 들어가지 않아요. 이상적인 $I_1$과 $\lambda=0$을 그대로 쓰면 $V_{out}$ 노드에서 본 저항이 (a)·(b)·(d)에서 무한대라 출력 변화의 크기가 정해지지 않지만, 실제 소자의 유한한 출력 저항을 생각하면 $V_{out}$이 움직이는 방향은 그대로예요.</p>
-  <p><strong>선택 이유</strong>: 구할 것이 수치가 아니라 방향이고, 네 회로가 순방향과 귀환 각각 한 단씩으로 짧아요. 그래서 세 단계 추적으로 답을 내고, 위상 곱으로 한 번 더 확인해요.</p>
+<div data-answer-step="공통 게이트 첫째 단 (d)">
+<p><span class="loc">㉡</span> (d)는 $X$가 $M_1$ 소스여서 $v_X$ 상승이 $v_{GS1}$을 낮추고 $v_{out}$을 올려요. PMOS $M_2$의 게이트가 오르면 $X$에 넣는 전류가 줄어요.</p>
 </div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="입력 노드 X의 KCL과 판정 기준">
-    <p>먼저 입력 노드 $X$에서 KCL을 적어요. $M_1$ 게이트로는 전류가 흐르지 않아요. (a)–(c)에서 $X$로 들어오는 전류는 $R_S$ 전류와 $M_2$ 전류이고, 나가는 전류는 $I_2$예요.</p>
-    $$\frac{V_{in}-V_X}{R_S}+I_{D2}=I_2$$
-    <p>(d)에서는 $M_1$ 소스 전류도 $X$로 들어오고, 나가는 전류는 아래쪽 $I_1$이에요.</p>
-    $$\frac{V_{in}-V_X}{R_S}+I_{D1}+I_{D2}=I_1$$
-    <p>(a)–(c)의 식을 $V_X$에 대해 정리하면, $X$로 들어오는 $M_2$ 전류가 $R_S$를 거쳐 $V_X$를 바꾸는 꼴이 돼요.</p>
-    $$V_X=V_{in}-R_S\left(I_2-I_{D2}\right)$$
-    <p>판정 기준은 이 식에서 나와요. $V_{in}\uparrow$로 $V_X\uparrow$가 된 뒤 루프를 돌아 $I_{D2}\downarrow$가 오면 $V_X$를 끌어내려 부귀환이고, $I_{D2}\uparrow$가 오면 $V_X$를 더 올려 정귀환이에요.</p>
-  </div>
-  <p>(d)도 같은 방법으로 정리하면 $V_X=V_{in}-R_S(I_1-I_{D1}-I_{D2})$이고, 판정 기준은 같아요. $M_1$ 소스 전류가 더해지는 점만 다르며 아래 풀이에서 따로 확인해요.</p>
+<div data-answer-final="">
+<p>(a), (c), (d)는 $X$를 다시 낮추는 <strong>부귀환</strong>이에요. (b)는 $X$를 더 올리는 <strong>정귀환</strong>이에요.</p>
 </div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
-  <div data-subpart="main">
-    <p>네 회로 모두 1단계로 $V_{in}$이 오른다고 가정해요. $R_S$로 들어오는 전류가 늘어 $V_X$가 오르려 해요. 이 $V_X\uparrow$를 처음 변화로 삼고, 루프를 돌아온 변화를 같은 $V_X$끼리 비교해요.</p>
-    $$V_{in}\uparrow\ \Rightarrow\ V_X\uparrow$$
-    <div data-answer-step="(a) CS 단과 소스 팔로워 M2">
-      <h5>(a) CS 단 $M_1$과 소스 팔로워 $M_2$</h5>
-      <p>$X$는 $M_1$ 게이트이고 $M_1$ 소스는 접지라서 $V_{GS1}=V_X$가 커져요.</p>
-      $$V_X\uparrow\ \Rightarrow\ I_{D1}\uparrow$$
-      <p>$V_{out}$ 노드에는 $I_1$이 고정 전류를 넣고 $M_1$이 빼 가요($M_2$ 게이트로는 전류가 흐르지 않아요). $M_1$이 더 많이 빼려 하니 $V_{out}$이 내려가요.</p>
-      $$I_{D1}\uparrow\ \Rightarrow\ V_{out}\downarrow$$
-      <p>$V_{out}$은 $M_2$ 게이트이고 $M_2$ 소스는 $X$예요. 게이트가 내려가 $V_{GS2}=V_{out}-V_X$가 줄어 $M_2$가 $X$로 넣는 전류가 줄어요.</p>
-      $$V_{out}\downarrow\ \Rightarrow\ I_{D2}\downarrow\ \Rightarrow\ V_X\downarrow$$
-      <p>처음 $V_X\uparrow$였는데 돌아온 변화는 $V_X\downarrow$예요. 소스 팔로워는 소스가 게이트를 따라가는 비반전 단이라 $V_{out}$의 하강을 그대로 $X$로 옮겨요. 그래서 (a)는 <strong>부귀환</strong>이에요.</p>
-    </div>
-    <div data-answer-step="(b) CS 단과 PMOS CS 단 M2">
-      <h5>(b) CS 단 $M_1$과 PMOS CS 단 $M_2$</h5>
-      <p>순방향은 (a)와 같아요.</p>
-      $$V_X\uparrow\ \Rightarrow\ I_{D1}\uparrow\ \Rightarrow\ V_{out}\downarrow$$
-      <p>$V_{out}$은 PMOS $M_2$의 게이트이고 소스는 $V_{DD}$예요. 게이트가 내려가 $V_{SG2}=V_{DD}-V_{out}$이 커지니 $M_2$가 드레인으로 $X$에 넣는 전류가 늘어요.</p>
-      $$V_{out}\downarrow\ \Rightarrow\ V_{SG2}\uparrow\ \Rightarrow\ I_{D2}\uparrow$$
-      <p>$X$로 들어오는 전류가 늘어 $V_X$가 더 올라가요.</p>
-      $$I_{D2}\uparrow\ \Rightarrow\ V_X\uparrow$$
-      <p>처음 $V_X\uparrow$를 돌아온 $V_X\uparrow$가 키워요. $M_1$ CS 단에서 한 번, 게이트로 받아 드레인으로 내는 $M_2$ CS 단에서 또 한 번 반전되어 같은 위상으로 같은 노드에 돌아왔어요. 그래서 (b)는 <strong>정귀환</strong>이에요.</p>
-    </div>
-    <div data-answer-step="(c) CS 단과 CG 단 M2">
-      <h5>(c) CS 단 $M_1$과 공통 게이트(CG) PMOS $M_2$</h5>
-      <p>순방향은 (a)와 같아요. $V_{out}$ 노드에는 $I_1$이 넣는 전류를 $M_1$과 $M_2$가 나눠 가지지만, $I_{D1}$이 늘려는 쪽으로 $V_{out}$이 내려가는 방향은 같아요.</p>
-      $$V_X\uparrow\ \Rightarrow\ I_{D1}\uparrow\ \Rightarrow\ V_{out}\downarrow$$
-      <p>$V_{out}$은 PMOS $M_2$의 소스이고 게이트는 고정 전압 $V_b$예요. 소스가 내려가 $V_{SG2}=V_{out}-V_b$가 줄어드니 $M_2$가 드레인으로 $X$에 넣는 전류가 줄어요.</p>
-      $$V_{out}\downarrow\ \Rightarrow\ V_{SG2}\downarrow\ \Rightarrow\ I_{D2}\downarrow$$
-      <p>$X$로 들어오는 전류가 줄어 $V_X$가 내려가요.</p>
-      $$I_{D2}\downarrow\ \Rightarrow\ V_X\downarrow$$
-      <p>처음 $V_X\uparrow$를 돌아온 $V_X\downarrow$가 방해해요. 소스로 받아 드레인으로 내는 CG 단은 비반전이라 루프 안 반전은 $M_1$의 한 번뿐이에요. 그래서 (c)는 <strong>부귀환</strong>이에요.</p>
-    </div>
-    <div data-answer-step="(d) CG 단과 PMOS CS 단 M2">
-      <h5>(d) CG 단 $M_1$과 PMOS CS 단 $M_2$</h5>
-      <p>이번에는 $X$가 $M_1$의 소스이고 게이트는 고정 전압 $V_b$예요. 소스가 오르면 $V_{GS1}=V_b-V_X$가 줄어 $M_1$ 전류가 줄어요.</p>
-      $$V_X\uparrow\ \Rightarrow\ V_{GS1}\downarrow\ \Rightarrow\ I_{D1}\downarrow$$
-      <p>$V_{out}$ 노드에는 위쪽 $I_1$이 고정 전류를 넣고 $M_1$이 빼 가요. $M_1$이 덜 빼니 남는 전류가 $V_{out}$을 올려요.</p>
-      $$I_{D1}\downarrow\ \Rightarrow\ V_{out}\uparrow$$
-      <p>$V_{out}$은 PMOS $M_2$의 게이트이고 소스는 $V_{DD}$예요. 게이트가 올라가 $V_{SG2}=V_{DD}-V_{out}$이 줄어 $M_2$가 $X$로 넣는 전류가 줄어요.</p>
-      $$V_{out}\uparrow\ \Rightarrow\ V_{SG2}\downarrow\ \Rightarrow\ I_{D2}\downarrow$$
-      $$I_{D2}\downarrow\ \Rightarrow\ V_X\downarrow$$
-      <p>처음 $V_X\uparrow$를 돌아온 $V_X\downarrow$가 방해해요. 순방향 CG 단은 비반전이고 귀환 $M_2$ CS 단에서 한 번 반전돼요. 그래서 (d)는 <strong>부귀환</strong>이에요.</p>
-    </div>
-    <p>(d)에서는 $M_1$ 소스 전류 $I_{D1}$도 $X$로 들어와요. 첫 단계의 $I_{D1}\downarrow$ 자체도 $X$로 들어오는 전류를 줄여 $V_X$를 끌어내리는데, 이것은 $M_2$를 거치지 않는 $M_1$ 자신의 국부 효과(소스에서 본 저항 $1/g_{m1}$)예요. $M_2$ 루프가 돌려준 $V_X\downarrow$와 같은 방향이라 극성 결론은 바뀌지 않아요. 이 문제가 묻는 $V_{out}\to M_2\to X$ 루프의 극성은 위 체인이 정해요.</p>
-  </div>
 </div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <div data-answer-final>
-      <p><strong>(a) 부귀환, (b) 정귀환, (c) 부귀환, (d) 부귀환이에요.</strong></p>
-      <table>
-        <thead><tr><th>회로</th><th>순방향 $X\to V_{out}$</th><th>귀환 $V_{out}\to X$</th><th>루프 부호</th><th>극성</th></tr></thead>
-        <tbody>
-          <tr><td>(a)</td><td>$M_1$ CS (−)</td><td>$M_2$ 소스 팔로워 (+)</td><td>(−)</td><td>부귀환</td></tr>
-          <tr><td>(b)</td><td>$M_1$ CS (−)</td><td>$M_2$ PMOS CS (−)</td><td>(+)</td><td>정귀환</td></tr>
-          <tr><td>(c)</td><td>$M_1$ CS (−)</td><td>$M_2$ CG (+)</td><td>(−)</td><td>부귀환</td></tr>
-          <tr><td>(d)</td><td>$M_1$ CG (+)</td><td>$M_2$ PMOS CS (−)</td><td>(−)</td><td>부귀환</td></tr>
-        </tbody>
-      </table>
-      <p>성립 조건은 모든 트랜지스터가 포화 영역에 있고, 바이어스 전류원의 전류가 고정이며, 입력과 귀환이 같은 노드 $X$에서 더해진다는 것이에요.</p>
-    </div>
-    <p>교과서의 두 번째 방법인 루프 끊기로 확인해요. 입력을 0으로 두면 $V_{in}$ 쪽은 고정되고, $X$는 $R_S$를 거쳐 고정 전압에 이어진 노드가 돼요. 게이트는 전류를 흘리지 않으므로 게이트 앞에서 끊으면 끊은 곳의 부하가 바뀌지 않아요.</p>
-    <p>(a)–(c)는 $M_1$ 게이트 앞에서 끊고, 게이트에 시험 전압 $V_{test}$를 넣은 뒤 노드 $X$의 변화를 $V_{ret}$로 읽어요. 순방향은 세 회로 모두 CS 반전이에요.</p>
-    $$V_{test}\uparrow\ \Rightarrow\ I_{D1}\uparrow\ \Rightarrow\ V_{out}\downarrow$$
-    <p>(a)의 소스 팔로워와 (c)의 CG 단은 $V_{out}\downarrow$를 그대로 옮겨 $V_{ret}\downarrow$이고, (b)의 PMOS CS 단은 뒤집어 $V_{ret}\uparrow$예요. 그래서 $V_{ret}/V_{test}$는 (a)·(c)에서 음수, (b)에서 양수예요.</p>
-    <p>(d)는 $M_1$ 게이트가 $V_b$라 루프 밖이므로, $M_2$ 게이트 앞에서 끊고 $V_{out}$ 노드의 변화를 $V_{ret}$로 읽어요.</p>
-    $$V_{test}\uparrow\ \Rightarrow\ I_{D2}\downarrow\ \Rightarrow\ V_X\downarrow$$
-    $$V_X\downarrow\ \Rightarrow\ I_{D1}\uparrow\ \Rightarrow\ V_{ret}=V_{out}\downarrow$$
-    <p>$V_{ret}/V_{test}&lt;0$이라 부귀환이에요. 두 방법의 결론이 네 회로 모두 같아요.</p>
-    <p>경계도 확인해요. $R_S\to0$이면 $V_{in}$이 $X$를 직접 고정해서 $M_2$가 넣는 전류가 $V_X$를 바꾸지 못해요. 돌아오는 신호가 사라질 뿐 극성이 뒤집히지는 않아요. $R_S$가 0보다 큰 동안에는 귀환의 세기만 달라지고 극성은 그대로예요.</p>
-    <p>입력이 내린다고($V_{in}\downarrow$) 가정해도 모든 화살표가 뒤집혀 비교 결과가 같아요. 극성은 처음 가정한 방향에 따라 바뀌지 않아요.</p>
-  </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <ul>
-    <li>이 네 회로는 귀환이 빼는 단자(소스)가 아니라 입력과 같은 노드 $X$로 돌아와요. 예제 12.13처럼 "CS 두 번 반전이면 부귀환"을 그대로 쓰면 (b)를 부귀환으로 틀려요. 같은 노드로 돌아오면 반전 횟수가 홀수일 때 부귀환이에요.</li>
-    <li>(a)와 (b)는 둘 다 게이트가 $V_{out}$이지만 $X$에 붙은 단자가 달라요. (a)는 소스가 $X$인 팔로워(+), (b)는 드레인이 $X$인 CS 단(−)이에요. 소자 종류(NMOS·PMOS)보다 어느 단자로 받아 어느 단자로 내는지가 부호를 정해요.</li>
-    <li>(c)의 $M_2$는 게이트가 고정이라 귀환 소자가 아니라고 보기 쉬워요. 소스가 $V_{out}$, 드레인이 $X$라서 CG 단으로 신호를 옮기는 귀환 경로예요.</li>
-    <li>(d)는 $M_1$이 CG 단이라 순방향이 비반전이에요. (b)와 $M_2$ 연결이 같다고 정귀환으로 답하면 안 돼요.</li>
-    <li>돌아온 변화는 처음과 같은 양끼리 비교해요. 처음 $V_X\uparrow$와 중간의 $V_{out}\downarrow$를 비교하면 판단이 흔들려요. 한 바퀴 돌아 다시 $V_X$에 도착한 변화로 비교해요.</li>
-    <li>$X$ 아래의 바이어스 전류원은 전류가 고정이라 귀환 소자가 아니에요. 루프에는 들어가지 않아요.</li>
-  </ul>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol>
-    <li>(a)의 $M_2$를 PMOS 소스 팔로워(게이트 $V_{out}$, 소스 $X$, 드레인 접지)로 바꾸면 극성은 무엇인가요?</li>
-    <li>(d)에서 $M_2$를 지우고 $V_{out}$과 $X$ 사이에 저항 $R_F$ 하나를 달면 극성은 무엇인가요?</li>
-    <li>(a)에서 $R_S$를 0으로 줄여 $V_{in}$을 $X$에 바로 걸면 $M_2$가 돌려주는 전류는 $V_X$를 바꿀 수 있나요?</li>
-  </ol>
 </div>
 <div class="sum" hidden>
-  <p class="sum-lead">입력과 귀환이 같은 노드 $X$로 돌아오므로 루프 안 반전이 한 번이면 부귀환, 두 번이면 정귀환이에요.</p>
-  <div class="summary-group">
-    <h4>첫 식</h4>
-    $$V_X=V_{in}-R_S\left(I_2-I_{D2}\right)$$
-    <p>돌아온 $I_{D2}$가 줄면 $V_X$가 내려가 부귀환, 늘면 정귀환이에요.</p>
-  </div>
-  <div class="summary-group">
-    <h4>단마다의 부호</h4>
-    <p>게이트→드레인 CS 단은 반전(−)이에요.</p>
-    <p>게이트→소스 팔로워와 소스→드레인 CG 단은 비반전(+)이에요.</p>
-  </div>
-  <div class="summary-group">
-    <h4>답</h4>
-    <p>(a) 부귀환, (b) 정귀환, (c) 부귀환, (d) 부귀환이에요.</p>
-  </div>
+<p class="sum-lead">$X$를 올린 뒤 $M_2$가 $X$로 공급하는 전류를 추적해요.</p>
+<p>그 전류가 증가하면 정귀환, 감소하면 부귀환이에요.</p>
 </div>

@@ -1,8 +1,4 @@
-Half circuit: M1 (input) + M3 (cascode) + R_D; X=M1 gate, Y=M1 drain/M3 source; A_XY=-gm1/gm3 (=-1 if gm1=gm3)
-w_pX  = 1/(R_S*(C_GD1*(g_m1/g_m3 + 1) + C_GS1))  -> gm1=gm3: 1/[R_S(C_GS1+2C_GD1)]
-w_pY  = g_m3/(C_DB1 + C_GD1*(1 + g_m3/g_m1) + C_GS3 + C_SB3)  -> gm1=gm3: gm3/(C_DB1+C_GS3+C_SB3+2C_GD1)
-w_pout= 1/(R_D*(C_DB3 + C_GD3))
-Same poles for M2/M4 side by symmetry; tail node not a pole for differential signal.
-sample: {R_S: 10000.0, R_D: 5000.0, g_m1: 0.002, g_m3: 0.002, C_GS1: 1e-13, C_GD1: 2e-14, C_DB1: 3e-14, C_GS3: 1e-13, C_SB3: 3e-14, C_DB3: 3e-14, C_GD3: 2e-14}
-exact |poles| = [706667197.2727073, 4000000000.0, 13349936576.312199]
-Miller poles  = [714285714.2857144, 4000000000.0, 10000000000.0]
+Miller estimates (rad/s): 1/(Rs*(Cgd1*(gm1/gm3 + 1) + Cgs1)) gm3/(Cdb1 + Cgd1*(1 + gm3/gm1) + Cgs3 + Csb3) 1/(Rd*(Cdb3 + Cgd3))
+equal gm: 2 2
+
+Under odd-mode differential excitation the common-source node is virtual ground. For a matched pair with large ro and negligible body effect, ωg=1/{Rs[Cgs1+(1+gm1/gm3)Cgd1]}, ωx=gm3/[Cdb1+Cgs3+Csb3+(1+gm3/gm1)Cgd1], ωo=1/[RD(Cgd3+Cdb3)]. Add any externally specified load to output capacitance. For identical cascode and input gm, each Miller factor is 2. The source–bulk term depends on body connection/model.

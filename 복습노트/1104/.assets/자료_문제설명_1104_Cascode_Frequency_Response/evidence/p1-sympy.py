@@ -1,30 +1,15 @@
-import sympy as sp
+"""Independent derivation from the sealed statement and figure."""
+from sympy import Eq, I, Symbol, factor, limit, oo, pi, simplify, solve, symbols
 
-s = sp.symbols("s")
-ro1, ro2, C, gm = sp.symbols("ro1 ro2 Cgs3 gm3", positive=True)
-gmb = sp.symbols("gmb3", nonnegative=True)
-vx, vt, it = sp.symbols("vx vt it")
-R = sp.symbols("R", positive=True)
-parallel = 1 / (1 / ro1 + 1 / ro2)
+s = Symbol("s")
 
-# Gate-node KCL and current entering the output port.
-gate_kcl = vx / R + s * C * (vx - vt)
-output_kcl = (gm + s * C) * (vt - vx) + gmb * vt - it
-solution = sp.solve([gate_kcl, output_kcl], [vx, vt])
-z_general = sp.factor(solution[vt] / it)
-z = sp.factor(z_general.subs(gmb, 0))
-assert sp.simplify(z - (1 + s * R * C) / (gm + s * C)) == 0
-assert sp.simplify(gate_kcl.subs(solution)) == 0
-assert sp.simplify(output_kcl.subs(solution)) == 0
-assert sp.limit(z, s, 0) == 1 / gm
-assert sp.limit(z, s, sp.oo) == R
-assert sp.limit(z, C, 0) == 1 / gm
-print("R =", parallel)
-print("vx/vt =", sp.solve(gate_kcl, vx)[0] / vt)
-print("Zout =", z)
-print("Zout with R expanded =", sp.factor(z.subs(R, parallel)))
-print("Zout with grounded-body effect =", z_general)
-print("DC limit =", sp.limit(z, s, 0))
-print("High-frequency limit =", sp.limit(z, s, sp.oo))
-print("Cgs3 -> 0 limit =", sp.limit(z, C, 0))
-print("Both KCL residuals and closed-form agreement verified.")
+r1, r2, gm, c = symbols("ro1 ro2 gm3 Cgs3", positive=True)
+x, y, it = symbols("Vx Vout It")
+rg=r1*r2/(r1+r2)
+system=[x/rg+s*c*(x-y),(gm+s*c)*(y-x)-it]
+z=factor(solve(system,(x,y))[y]/it)
+candidate=(1+s*rg*c)/(gm+s*c)
+assert simplify(z-candidate)==0
+print("Input grounded; CS drain is shunted by ro1||ro2.")
+print("Zout:",candidate)
+print("Zout(0):",z.subs(s,0),"Zout(inf):",limit(z,s,oo))

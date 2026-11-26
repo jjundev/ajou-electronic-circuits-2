@@ -1,20 +1,6 @@
-=== (a) CS M1 + follower M2, ideal I1 load ===
-A0 exact (ro1,ro2 finite) = -R_D*g_m1*g_m2*r_O1*r_O2/(R_D*g_m2*r_O2 + R_D + g_m2*r_O1*r_O2 + r_O1)
-A0 (lambda=0) = -R_D*g_m1
-Rout exact = r_O2/(g_m2*r_O2 + 1) ; lambda=0 -> 1/g_m2
-Rin = oo (input is MOS gate, no gate current)
-=== (b) CG M1 (input current at source) + follower M2 ===
-Rin exact = (R_D + r_O1)/(g_m1*r_O1 + 1) ; lambda=0 -> 1/g_m1
-v_n1/i_in = R_D
-R0 = v_out/i_in (lambda=0) = R_D
-Rout = 1/g_m2 (same follower as (a))
-=== (c) CS M1, output = drain current I_out (into drain) ===
-Gm = I_out/v_in |vd=0 : g_m1
-Rout = vd/I_out |vin=0 : r_O
-Rin = oo
-=== (d) CG M1, input current at source, output = drain current I_out (down into drain) ===
-I_out(down into drain)/i_in = -1 (literal arrow directions: I_in up into source, I_out down into drain)
-|A_I| = 1; with I_out taken as current leaving drain upward (same sense as I_in), A_I = +1
-Rin exact (vd=0) = r_O1/(g_m1*r_O1 + 1)  lambda=0 -> 1/g_m1
-Rout: source node floats except through M1 (ideal Iin source open) -> i_t = 0 for any v_d -> Rout = oo
-Check with finite source-side resistance RS: Rout = R_S*g_m1*r_O1 + R_S + r_O1 ; RS->oo: oo
+a Vth/Vin -RD*gm1
+b Vth/Iin RD
+c drain-in Norton current / Vin gm1
+d drain-in Norton current / source-in Iin -1
+
+(a) voltage amplifier: input open, Thevenin source −gm1 RD Vin in series with 1/gm2. (b) transimpedance: input resistance 1/gm1, Thevenin source +RD Iin in series with 1/gm2. (c) transconductance: input open, Norton sink gm1 Vin in parallel with ro. (d) current amplifier: input resistance 1/gm1, Norton source delivering Iin toward the external load in parallel with ∞. With the figure’s downward arrow into the drain Iout=−Iin; the magnitude is unity. These are the simplified parameters printed on the original figures.

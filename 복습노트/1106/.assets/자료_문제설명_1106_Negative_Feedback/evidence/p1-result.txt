@@ -1,12 +1,6 @@
-Assumptions: VA=inf (all ro=inf), IC2=IC1-0.75IC1=0.25IC1 -> gm2=gm1/4; Q3 base AC ground, ro3=inf;
-Q3 collector caps C_mu3, C_CS3 load node Y; impedance into Q2 emitter ~1/gm2 (beta>>1).
-A_v,XY = -gm1/gm2 = -4
-|w_pX| = 1/[(R_B||r_pi1)(C_pi1+5C_mu1)] : (R_B + r_pi1)/(R_B*r_pi1*(5*C_mu1 + C_pi1))
-|w_pY| = 1/[(1/gm2)(C_pi2+C_CS1+C_mu3+C_CS3+(5/4)C_mu1)], 1/gm2=4/gm1 : g_m1/(4*C_CS1 + 4*C_CS3 + 5*C_mu1 + 4*C_mu3 + 4*C_pi2)
-|w_pout| = 1/[R_C(C_mu2+C_CS2)] : 1/(R_C*(C_CS2 + C_mu2))
-Standard cascode (gm1=gm2): Miller factor on C_mu1 at X = 2; here 5 -> Miller effect MORE significant.
-Exact H(s) = R_C*g_m1*r_pi1*r_pi2*(C_mu1*s - g_m1)/((C_CS2*R_C*s + C_mu2*R_C*s + 1)*(4*C_CS1*C_mu1*R_B*r_pi1*r_pi2*s**2 + 4*C_CS1*C_pi1*R_B*r_pi1*r_pi2*s**2 + 4*C_CS1*R_B*r_pi2*s + 4*C_CS1*r_pi1*r_pi2*s + 4*C_CS3*C_mu1*R_B*r_pi1*r_pi2*s**2 + 4*C_CS3*C_pi1*R_B*r_pi1*r_pi2*s**2 + 4*C_CS3*R_B*r_pi2*s + 4*C_CS3*r_pi1*r_pi2*s + 4*C_mu1*C_mu3*R_B*r_pi1*r_pi2*s**2 + 4*C_mu1*C_pi1*R_B*r_pi1*r_pi2*s**2 + 4*C_mu1*C_pi2*R_B*r_pi1*r_pi2*s**2 + 5*C_mu1*R_B*g_m1*r_pi1*r_pi2*s + 4*C_mu1*R_B*r_pi1*s + 4*C_mu1*R_B*r_pi2*s + 4*C_mu1*r_pi1*r_pi2*s + 4*C_mu3*C_pi1*R_B*r_pi1*r_pi2*s**2 + 4*C_mu3*R_B*r_pi2*s + 4*C_mu3*r_pi1*r_pi2*s + 4*C_pi1*C_pi2*R_B*r_pi1*r_pi2*s**2 + C_pi1*R_B*g_m1*r_pi1*r_pi2*s + 4*C_pi1*R_B*r_pi1*s + 4*C_pi2*R_B*r_pi2*s + 4*C_pi2*r_pi1*r_pi2*s + R_B*g_m1*r_pi2 + 4*R_B + g_m1*r_pi1*r_pi2 + 4*r_pi1))
-Numeric check (sample values): {R_B: 1000.0, R_C: 2000.0, g_m1: 0.04, r_pi1: 2500, r_pi2: 10000.0, C_pi1: 1e-11, C_mu1: 1e-12, C_pi2: 3e-12, C_mu2: 1e-12, C_CS1: 5e-13, C_CS2: 5e-13, C_mu3: 5e-13, C_CS3: 5e-13}
-exact poles |w| = [92230035.09259635, 333333333.3333334, 2576677527.9326143]
-Miller  poles   = [93333333.33333334, 333333333.3333333, 1739130434.782609]
-(X dominant; Miller X-pole vs exact agree when the other poles are far; Y pole uses rpi2->inf.)
+Ax/base = -gm1/(gm2 + gpi2)  = -4; ordinary value -1
+pole [rad/s] = -(RB + rpi1)*(gm2 + gpi2)/(RB*rpi1*(Cmu1*gm1 + Cmu1*gm2 + Cmu1*gpi2 + Cpi1*gm2 + Cpi1*gpi2))
+pole [rad/s] = -gm1*(gm2 + gpi2)/(Cmu1*gm1 + Cmu1*gm2 + Cmu1*gpi2 + Cmu3*gm1 + Cpi2*gm1)
+pole [rad/s] = -1/(Cmu2*RC)
+
+Q2 emitter current = IC1/4, so Gx=gm2+1/rπ2=gm1/4. Miller ac gain x/base=-4 versus -1 for conventional cascode. Pole magnitudes in rad/s are 1/[(RB||rπ1)(Cπ1+5Cμ1)], (gm2+1/rπ2)/[Cπ2+Cμ3+1.25Cμ1], and 1/(RC Cμ2). Add collector–substrate or load capacitances at their respective nodes if retained. Miller input loading increases. Frequencies in Hz divide by 2π.

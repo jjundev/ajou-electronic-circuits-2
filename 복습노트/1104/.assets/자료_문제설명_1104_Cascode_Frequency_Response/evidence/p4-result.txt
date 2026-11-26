@@ -1,11 +1,5 @@
-A(0) = -R_p*g_m1/(R_p*g_m2 + 1)
-Miller poles [rad/s] = [-1/(R_s*(C_f*(g_m1/(g_m2 + 1/R_p) + 1) + C_i)), -(g_m2 + 1/R_p)/(C_f*(1 + (g_m2 + 1/R_p)/g_m1) + C_x), -1/(C_o*R_D)]
-Exact normalized characteristic = (1+s*R_D*C_o)*(1+a*s+b*s**2)
-a = C_f*R_p*R_s*g_m1/(R_p*g_m2 + 1) + C_f*R_p*R_s*g_m2/(R_p*g_m2 + 1) + C_f*R_p/(R_p*g_m2 + 1) + C_f*R_s/(R_p*g_m2 + 1) + C_i*R_p*R_s*g_m2/(R_p*g_m2 + 1) + C_i*R_s/(R_p*g_m2 + 1) + C_x*R_p/(R_p*g_m2 + 1)
-b = R_p*R_s*(C_f*C_i + C_f*C_x + C_i*C_x)/(R_p*g_m2 + 1)
-Exact x/gate pair = [(R_p*g_m2 + 1)*(sqrt(-4*R_p*R_s*(C_f*C_i + C_f*C_x + C_i*C_x)/(R_p*g_m2 + 1) + (C_f*R_p*R_s*g_m1 + C_f*R_p*R_s*g_m2 + C_f*R_p + C_f*R_s + C_i*R_p*R_s*g_m2 + C_i*R_s + C_x*R_p)**2/(R_p*g_m2 + 1)**2) - (C_f*R_p*R_s*g_m1 + C_f*R_p*R_s*g_m2 + C_f*R_p + C_f*R_s + C_i*R_p*R_s*g_m2 + C_i*R_s + C_x*R_p)/(R_p*g_m2 + 1))/(2*R_p*R_s*(C_f*C_i + C_f*C_x + C_i*C_x)), (R_p*g_m2 + 1)*(-sqrt(-4*R_p*R_s*(C_f*C_i + C_f*C_x + C_i*C_x)/(R_p*g_m2 + 1) + (C_f*R_p*R_s*g_m1 + C_f*R_p*R_s*g_m2 + C_f*R_p + C_f*R_s + C_i*R_p*R_s*g_m2 + C_i*R_s + C_x*R_p)**2/(R_p*g_m2 + 1)**2) - (C_f*R_p*R_s*g_m1 + C_f*R_p*R_s*g_m2 + C_f*R_p + C_f*R_s + C_i*R_p*R_s*g_m2 + C_i*R_s + C_x*R_p)/(R_p*g_m2 + 1))/(2*R_p*R_s*(C_f*C_i + C_f*C_x + C_i*C_x))]
-R_p -> infinity: G = g_m2
-R_p -> 0: A = 0
-R_p -> 0: exact normalized gate/junction factor = C_f*R_s*s + C_i*R_s*s + 1
-C_f = 0: exact and Miller characteristics agree
-PASS: determinant, DC gain, first-order coefficient, zero-bridge limit, output transfer
+DC local gain across Cgd1: -R_P*gm1/(R_P*gm2 + 1)
+Miller split: Cgd1*(R_P*gm1/(R_P*gm2 + 1) + 1) + Cgs1 Cgd1*(1 + (R_P*gm2 + 1)/(R_P*gm1)) + Cgs2
+Miller one-way H(s): -R_D*R_P*gm1**2*gm2*(R_P*gm2 + 1)/((Cgd2*R_D*s + 1)*(Cgd1*R_P*gm1*s + Cgd1*R_P*gm2*s + Cgd1*s + Cgs2*R_P*gm1*s + R_P*gm1*gm2 + gm1)*(Cgd1*R_P*R_S*gm1*s + Cgd1*R_P*R_S*gm2*s + Cgd1*R_S*s + Cgs1*R_P*R_S*gm2*s + Cgs1*R_S*s + R_P*gm2 + 1))
+Pole locations: -1/(R_S*(Cgd1*(R_P*gm1/(R_P*gm2 + 1) + 1) + Cgs1)) (-gm2 - 1/R_P)/(Cgd1*(1 + (R_P*gm2 + 1)/(R_P*gm1)) + Cgs2) -1/(Cgd2*R_D)
+With the node junction capacitances retained: -R_D*R_P*gm1**2*gm2*(R_P*gm2 + 1)/((R_D*s*(Cdb2 + Cgd2) + 1)*(Cgd1*R_P*gm1*s + Cgd1*R_P*gm2*s + Cgd1*s + R_P*gm1*gm2 + R_P*gm1*s*(Cdb1 + Cgs2 + Csb2) + gm1)*(Cgd1*R_P*R_S*gm1*s + Cgd1*R_P*R_S*gm2*s + Cgd1*R_S*s + Cgs1*R_P*R_S*gm2*s + Cgs1*R_S*s + R_P*gm2 + 1))

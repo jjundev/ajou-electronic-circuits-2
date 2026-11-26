@@ -1,78 +1,39 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>그림 12.3은 연산증폭기 $A_1$과 저항 분배기 $R_1$, $R_2$로 만든 비반전 증폭기예요. 입력 $X$는 + 입력에 들어가고, 출력 $Y$를 $R_1$, $R_2$로 나눈 접속점 전압 $X_F$가 − 입력으로 돌아가요.</p>
-  <p>입력은 피크 진폭 $2\,\mathrm{mV}$인 사인파이고 $A_1=500$, $R_1/R_2=7$이에요. 구할 것은 두 가지예요. 출력 $Y$의 진폭과, 분배기 접속점에서 되돌아가는 귀환 파형 $X_F$의 진폭이에요.</p>
-  <p>회로 전체가 선형이라 사인파는 같은 주파수의 사인파로 나와요. 그래서 진폭끼리의 비가 곧 이득이에요.</p>
+<div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit"><svg id="fig-circuit-noninverting-feedback" viewBox="0 0 330 226" role="img" aria-label="입력 X는 op-amp의 더하기 입력에 걸려요. 출력 Y의 전압을 R1과 R2가 나누고 그 중간 전압 X F가 빼기 입력으로 돌아와요.">
+        <path class="fig-ink" d="M50 63H105 M86 87H105 M163 75H286 M222 75V99 M222 128V153H86V87 M222 153V167 M222 196V210"/>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M105 42V108L163 75Z"/>
+          <text class="fig-text fig-math" x="117" y="67" text-anchor="middle" font-size="12">+</text>
+          <text class="fig-text fig-math" x="117" y="91" text-anchor="middle" font-size="12">−</text>
+          <text class="fig-text fig-math" x="138" y="79" text-anchor="middle" font-size="13">A<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M222 99l5 4.83333l-10 4.83333l10 4.83333l-10 4.83333l10 4.83333l-5 4.83333"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M222 167l5 4.83333l-10 4.83333l10 4.83333l-10 4.83333l10 4.83333l-5 4.83333"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M213 210h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <circle class="fig-dot" cx="47" cy="63" r="3" data-node-color="red" data-node-id="p5-in"/>
+        <circle class="fig-dot" cx="289" cy="75" r="3" data-node-color="blue" data-node-id="p5-out"/>
+        <circle class="fig-dot" cx="222" cy="75" r="3.2" data-node-color="blue" data-node-id="p5-out"/>
+        <circle class="fig-dot" cx="222" cy="153" r="3.2" data-node-color="red" data-node-id="p5-feedback"/>
+        <text class="fig-text fig-math" x="248" y="117" text-anchor="middle" font-size="14">R<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        <text class="fig-text fig-math" x="248" y="189" text-anchor="middle" font-size="14">R<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+        <text class="fig-text fig-math" x="36" y="45" text-anchor="middle" font-size="14" data-node-color="red" data-node-id="p5-in">X</text>
+        <text class="fig-text fig-math" x="293" y="57" text-anchor="middle" font-size="14" data-node-color="blue" data-node-id="p5-out">Y</text>
+        <text class="fig-text fig-math" x="192" y="139" text-anchor="middle" font-size="14" data-node-color="red" data-node-id="p5-feedback">X<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+
+
+        <text class="fig-text fig-loc" x="155" y="174" text-anchor="middle" font-size="17">㉠</text>
+      </svg><figcaption class="circuit-state">출력 $Y$를 분배한 전압이 반전 입력으로 돌아가는 비반전 증폭기예요.</figcaption></figure>
+<div data-subpart="main"><h4>출력과 분배점의 피크 진폭</h4><div data-answer-step="귀환율"><p><span class="loc">㉠</span> 반전 입력이 전류를 끌지 않으므로 $R_2$ 양단의 귀환 전압은 출력 진폭의 $K$배예요.</p>$$K=R_2/(R_1+R_2)=1/8$$
+</div><div data-answer-step="폐루프 이득"><p>증폭기는 입력과 분배점 전압의 차를 증폭해요.</p>$$Y=A_1(X-KY)$$
+$$G=Y/X=A_1/(1+KA_1)=1000/127$$
+</div><div data-answer-final=""><p>입력 피크 진폭 $2\,\mathrm{mV}$에 이득을 곱하고, 분배점에는 $K$를 한 번 더 곱해요.</p>$$Y_{\mathrm{pk}}=G X_{\mathrm{pk}}=(2000/127)\,\mathrm{mV}\approx15.75\,\mathrm{mV}$$
+$$X_{F,\mathrm{pk}}=K Y_{\mathrm{pk}}=(250/127)\,\mathrm{mV}\approx1.97\,\mathrm{mV}$$
+</div></div>
 </div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p>"출력을 $R_1$, $R_2$로 나눠 − 입력에 되돌린다"는 그림에서 음귀환 시스템(negative feedback system)을 떠올려요. $A_1$이 뺄셈과 증폭을 함께 하는 순방향 시스템(feedforward system)이고, $R_1$, $R_2$가 출력을 감지해 귀환 신호를 만들어요(<a href="정리노트_1106_Negative_Feedback.html#s2-noninverting">비반전 증폭기를 귀환으로 보기</a>).</p>
-  <p>귀환율(feedback factor) $K$는 출력 중 얼마가 되돌아가는지를 나타내요. 분배기에서 $X_F=KY$이므로 $K=R_2/(R_1+R_2)$예요.</p>
-  <p>입력과 귀환 신호의 차이 $E=X-X_F$를 $A_1$이 증폭해 $Y=A_1E$가 돼요. 두 관계를 합치면 폐루프 이득(closed-loop gain)과 오차(error)가 모두 같은 분모 $1+KA_1$을 가져요(<a href="정리노트_1106_Negative_Feedback.html#s2-closed-loop">폐루프 이득</a>, <a href="정리노트_1106_Negative_Feedback.html#s2-error-signal">오차 신호</a>).</p>
-  $$\frac{Y}{X}=\frac{A_1}{1+KA_1}$$
-  $$E=X-X_F=\frac{X}{1+KA_1}$$
-  <p>이 문제는 $A_1$이 유한한 값 500으로 주어졌어요. 그래서 $Y/X\approx1/K$로 바로 쓰지 않고 위 식에 그대로 넣어 유한 이득의 효과까지 계산해요.</p>
-</div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="귀환율과 루프 이득">
-    <p>비 $R_1/R_2=7$만 주어졌으니 $K$를 그 비로 바꿔 써요. 분자·분모를 $R_2$로 나누면 돼요.</p>
-    $$K=\frac{R_2}{R_1+R_2}=\frac{1}{R_1/R_2+1}=\frac{1}{8}$$
-    <p>폐루프 식의 분모에 들어갈 $KA_1$을 먼저 구해요.</p>
-    $$KA_1=\frac{500}{8}=62.5$$
-    $$1+KA_1=63.5$$
-  </div>
-</div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
-  <div data-subpart="main">
-    <div data-answer-step="출력 진폭">
-      <p>사인파의 피크 진폭에 폐루프 이득을 곱하면 출력의 피크 진폭이에요. 분수 꼴을 유지하다가 마지막에 소수로 바꿔요.</p>
-      $$\frac{Y}{X}=\frac{A_1}{1+KA_1}=\frac{500}{63.5}=\frac{1000}{127}\approx7.87$$
-      $$|Y|=\frac{1000}{127}\times2\,\mathrm{mV}=\frac{2000}{127}\,\mathrm{mV}\approx15.75\,\mathrm{mV}$$
-    </div>
-    <div data-answer-step="귀환 파형 진폭">
-      <p>귀환 파형은 분배기 접속점의 전압이라 출력의 $K$배예요. 반올림한 15.75를 다시 쓰지 않고 분수로 곱해요.</p>
-      $$|X_F|=K|Y|=\frac{1}{8}\times\frac{2000}{127}\,\mathrm{mV}=\frac{250}{127}\,\mathrm{mV}\approx1.97\,\mathrm{mV}$$
-    </div>
-    <p>모든 계수가 양의 실수라서 $Y$와 $X_F$는 입력과 같은 위상의 사인파예요. 귀환 파형은 입력 $2\,\mathrm{mV}$와 거의 같은 크기라서 교과서 그림의 "Good Replica"에 해당해요.</p>
-  </div>
-</div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <div data-answer-final>
-      <p>$K=1/8$, $KA_1=62.5$일 때 출력과 귀환 파형의 피크 진폭이에요.</p>
-      $$|Y|=\frac{2000}{127}\,\mathrm{mV}\approx15.75\,\mathrm{mV}$$
-      $$|X_F|=\frac{250}{127}\,\mathrm{mV}\approx1.97\,\mathrm{mV}$$
-    </div>
-    <p>오차 식으로 따로 확인해요. 오차는 입력을 $1+KA_1$로 나눈 값이에요.</p>
-    $$|E|=\frac{2\,\mathrm{mV}}{63.5}=\frac{4}{127}\,\mathrm{mV}\approx31.5\,\mu\mathrm{V}$$
-    <p>입력에서 오차를 빼면 귀환 파형과 같아요.</p>
-    $$|X|-|E|=\frac{254-4}{127}\,\mathrm{mV}=\frac{250}{127}\,\mathrm{mV}$$
-    <p>$A_1$에 오차를 곱하면 출력과도 같아요.</p>
-    $$A_1|E|=500\times\frac{4}{127}\,\mathrm{mV}=\frac{2000}{127}\,\mathrm{mV}$$
-    <p>극한도 맞아요. $A_1\to\infty$이면 $Y/X\to1/K=1+R_1/R_2=8$이라 출력은 $16\,\mathrm{mV}$, 귀환 파형은 $2\,\mathrm{mV}$가 돼요. 유한한 $A_1=500$ 때문에 출력이 그보다 조금 작은 $15.75\,\mathrm{mV}$로 나온 것이 자연스러워요.</p>
-  </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <p>$R_1/R_2=7$을 보고 $K=1/7$로 두기 쉬워요. $K$는 $R_2$가 전체 $R_1+R_2$에서 차지하는 몫이라 $1/(7+1)=1/8$이에요.</p>
-  <p>귀환 파형을 오차 $E$와 헷갈리지 않아요. 귀환 파형 $X_F$는 입력과 거의 같은 약 $1.97\,\mathrm{mV}$이고, 아주 작은 약 $31.5\,\mu\mathrm{V}$는 두 신호의 차이 $E$예요.</p>
-  <p>$A_1$이 유한하게 주어졌는데 $Y/X=1+R_1/R_2$로 바로 쓰면 $16\,\mathrm{mV}$가 나와 문제의 의도인 유한 이득 효과를 놓쳐요.</p>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol>
-    <li>$R_1/R_2=7$은 그대로 두고 $A_1$만 $5000$으로 키우면 출력 진폭은 $16\,\mathrm{mV}$에 더 가까워지나요, 멀어지나요? 오차 $E$는 몇 배쯤 줄어드는지 말해 보세요.</li>
-    <li>$A_1=500$은 그대로 두고 $R_1/R_2=0$(출력을 − 입력에 직접 연결)으로 바꾸면 $K$와 출력 진폭은 얼마인가요?</li>
-  </ol>
-</div>
-<div class="sum" hidden>
-  <p class="sum-lead">비반전 증폭기는 $K=R_2/(R_1+R_2)$인 음귀환이라 진폭에 폐루프 이득을 곱해요.</p>
-  $$K=\frac{1}{R_1/R_2+1}=\frac18$$
-  $$\frac{Y}{X}=\frac{A_1}{1+KA_1}=\frac{500}{63.5}$$
-  <p>출력 진폭은 약 $15.75\,\mathrm{mV}$예요.</p>
-  <p>귀환 파형은 $X_F=KY$라서 약 $1.97\,\mathrm{mV}$로 입력과 거의 같아요.</p>
-  <p>오차는 $E=X/(1+KA_1)\approx31.5\,\mu\mathrm{V}$로 확인해요.</p>
-</div>
+<div class="sum" hidden><p class="sum-lead">출력 진폭에는 폐루프 이득을, 귀환 진폭에는 출력에서 본 분배비를 적용해요.</p><p>$X_{F,\mathrm{pk}}$가 입력 피크 진폭보다 조금 작은 것은 두 입력 사이에 유한한 오차가 남기 때문이에요.</p></div>

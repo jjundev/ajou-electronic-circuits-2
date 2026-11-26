@@ -1,14 +1,8 @@
-|A1| = gm*ro = sqrt(2)*sqrt(WL)*sqrt(muCox)/(sqrt(I_D)*lambda)
-A1'/A1 = sqrt(x)/y
-  mu x 9/10  lam x 4/5  -> A1'/A1 = 1.1858541
-  mu x 9/10  lam x 6/5  -> A1'/A1 = 0.79056942
-  mu x 11/10  lam x 4/5  -> A1'/A1 = 1.3110111
-  mu x 11/10  lam x 6/5  -> A1'/A1 = 0.87400737
-A1 range factor: 0.79056942 to 1.3110111
-exact: |change|=5% at a = 0.79056942 -> T = [4.0333102]
-exact: |change|=5% at a = 1.3110111 -> T = [3.9818285]
-exact minimum loop gain T = 4.0333102
-residual check |rel| at Tmin, amin: 0.05000000000  amax: 0.04946329384
-linearized: dA/A = 1/4 -> 1+T = dA/A / 0.05 -> T = [4]
-  differential with |dA/A|= 0.209431 -> T = 3.18861
-  differential with |dA/A|= 0.311011 -> T = 5.22022
+open-loop ratio 0.7905694150420949 T bound -20 + 38*sqrt(10)/5 4.033310217279683
+open-loop ratio 0.8740073734751262 T bound -20 + 114*sqrt(110)/55 1.7389470347995049
+open-loop ratio 1.1858541225631423 T bound 20 - 28*sqrt(10)/5 2.2912451030570757
+open-loop ratio 1.3110110602126894 T bound 20 - 84*sqrt(110)/55 3.981828500674049
+active bound -20 + 38*sqrt(10)/5 4.033310217279683
+small-signal approximation T > 4
+
+With ideal bias fixing ID, |A|≈gm ro∝√(μnCox)/λ. Worst ratios are rlow=√0.9/1.2 and rhigh=√1.1/0.8. Each gives T>(|r−1|/0.05−1)/r. The binding low-gain corner gives T>19/rlow−20=4.033310...; the high-gain corner gives ≈3.98. Linear sensitivity gives T>4. T denotes the nominal magnitude with negative-feedback polarity; for the illustrated inverting CS and subtractor the signed K must be negative.

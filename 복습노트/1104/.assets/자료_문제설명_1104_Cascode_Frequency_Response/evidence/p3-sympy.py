@@ -1,25 +1,19 @@
-import sympy as sp
+"""Independent derivation from the sealed statement and figure."""
+from sympy import Eq, I, Symbol, factor, limit, oo, pi, simplify, solve, symbols
 
-s, vb, ve, it = sp.symbols("s vb ve it")
-a, b, gm, cu, cp = sp.symbols("a b gm cu cp", positive=True)
-A, B = a + s*cu, b + s*cp
-base = A*vb + B*(vb-ve)
-emitter = (B+gm)*(ve-vb) - it
-sol = sp.solve((base, emitter), (vb, ve))
-zout = sp.factor(sol[ve]/it)
-assert sp.cancel(zout - (A+B)/(A*(B+gm))) == 0
-print("Base KCL:", base)
-print("Emitter KCL:", emitter)
-print("Zout =", zout)
-print("Zout(0) =", zout.subs(s, 0))
-print("lim s*Zout =", sp.limit(s*zout, s, sp.oo))
-print("Cmu=0:", sp.factor(zout.subs(cu, 0)))
-print("RB=0:", sp.limit(zout, a, sp.oo))
-print("omega_z, omega_p1, omega_p2:", (a+b)/(cu+cp), a/cu, (b+gm)/cp)
+s = Symbol("s")
 
-x, P, Q, N = sp.symbols("x P Q N", positive=True)
-mag_squared = (1+N*x)/((1+P*x)*(1+Q*x))
-derivative_numerator = sp.factor(sp.diff(mag_squared, x)*((1+P*x)*(1+Q*x))**2)
-assert sp.expand(derivative_numerator - (N-P-Q-2*P*Q*x-N*P*Q*x**2)) == 0
-print("Normalized squared magnitude derivative numerator:", derivative_numerator)
-print("x=omega^2, N=omega_z^-2, P=omega_p1^-2, Q=omega_p2^-2")
+rb,rpi,gm,cp,cm=symbols("R_B r_pi gm C_pi C_mu", positive=True)
+b,e,it=symbols("Vb Ve It")
+yb=1/rb+s*cm
+yp=1/rpi+s*cp
+system=[yb*b+yp*(b-e),(gm+yp)*(e-b)-it]
+z=factor(solve(system,(b,e))[e]/it)
+candidate=(yb+yp)/(yb*(yp+gm))
+assert simplify(z-candidate)==0
+print("Zout:",candidate)
+print("Pole corners:",1/(rb*cm),(gm+1/rpi)/cp)
+print("Zero corner:",(1/rb+1/rpi)/(cp+cm))
+print("Zout(0):",factor(z.subs(s,0)),"Zout(inf):",limit(z,s,oo))
+print("HF coefficient s*Zout:",limit(s*z,s,oo))
+print("Magnitude asymptotes start flat. Add 20 dB/dec at the zero and subtract 20 dB/dec at each pole in actual corner order; end at -20 dB/dec.")

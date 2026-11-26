@@ -1,13 +1,13 @@
-use_ro= False
- Vov ratio 1.0  gm ratio 0.5  ro ratio 2.0  gain ratio 0.5
- formula residual in/out 0.0 0.0
- Miller w_in old/new 6930924129.110557 20588745030.457184  ratio 2.97056274847714
- Miller w_out old/new 19186006674.590405 36871361251.31403  ratio 1.921784031282851
- exact poles old [5506096029.646813, 78963862300.00813]  new [15460644826.618305, 112487574372.60184]
- KCL vs closed-form denominator residual 3.7866294328493518e-16
-use_ro= True
- Vov ratio 1.0  gm ratio 0.5  ro ratio 2.0  gain ratio 0.5238095238095238
- Miller w_in old/new 7368658477.80659 21075777519.88559  ratio 2.860191930914291
- Miller w_out old/new 21019060467.415165 38564112841.6982  ratio 1.8347210571796146
- exact poles old [5925020812.933042, 80718850560.20013]  new [16001353848.1934, 114120778394.505]
- KCL vs closed-form denominator residual 2.0391882209661882e-16
+{
+  "p5:main": {
+    "method": "symbolic",
+    "conclusion": "고정 RD, 고유 기생용량이 폭에 비례하며 ro≫RD라고 둔다. 바이어스 전류와 폭이 함께 절반이므로 V_OV는 동일하고 gm 및 각 기생용량은 절반이다. 저주파 이득은 절반. 고이득의 밀러 지배 입력에서는 입력 극점은 약 4배, 출력 극점은 약 2배. 일반식은 아래 식. 만약 유한 ro를 고려하면 R은 원래 RD∥ro, 변경 후 RD∥(2ro)로 각각 대체한다.",
+    "values": {
+      "Av_new": "-R_D*g_m/2",
+      "omega_in_new": "4/(R_S*(C_GD*R_D*g_m + 2*C_GD + 2*C_GS))",
+      "omega_out_new": "2*g_m/(C_DB*R_D*g_m + C_GD*R_D*g_m + 2*C_GD)",
+      "omega_in_ratio": "4*(C_GD*R_D*g_m + C_GD + C_GS)/(C_GD*R_D*g_m + 2*C_GD + 2*C_GS)",
+      "omega_out_ratio": "2*(C_DB*R_D*g_m + C_GD*R_D*g_m + C_GD)/(C_DB*R_D*g_m + C_GD*R_D*g_m + 2*C_GD)"
+    }
+  }
+}

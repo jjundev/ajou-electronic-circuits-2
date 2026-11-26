@@ -1,120 +1,62 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>그림 12.1은 일반적인 귀환 시스템이에요. 입력 $X$가 뺄셈기(비교부)의 + 입력으로 들어가고, 뺄셈기 출력이 순방향 블록 $A_1$을 지나 출력 $Y$가 돼요. $Y$는 귀환 회로망 $K$를 거쳐 귀환 신호 $X_F$로 뺄셈기의 − 입력에 돌아가요.</p>
-  <p>구할 것은 루프 이득(loop gain)이에요. 입력 $X$에서 출력 $Y$까지의 폐루프 이득이 아니에요. 끊는 자리는 원문이 정해 줬어요. 뺄셈기 출력과 $A_1$ 입력 사이, 즉 $A_1$의 입력이에요.</p>
-  <p>블록 안의 소자 값은 없으니 답은 $A_1$과 $K$로 써요. 각 블록은 신호를 한 방향으로만 전달하고, 끊은 자리에서 다음 블록이 앞 블록에 부하를 주지 않는 이상적인 블록도라고 보고 풀어요. 이 이상적 블록 가정은 원문에 없는 가정이에요.</p>
-</div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p>"루프를 끊어서 루프 이득을 계산하라"는 말에서 수업의 루프 이득 측정법을 떠올려요(<a href="정리노트_1111_Sense_and_Return.html#s0-break-anywhere">루프는 어디서 끊어도 루프 이득이 같아요</a>). 순서는 세 가지예요.</p>
-  <ul>
-    <li>입력 영점: $X=0$으로 둬서 루프를 도는 신호가 모두 시험 신호에서 오게 해요.</li>
-    <li>끊기와 이름 붙이기: 끊은 두 끝 중 신호를 루프 안으로 내보내는 쪽(다음 블록의 입력)을 $M$, 루프를 돌아 신호가 도착하는 쪽을 $N$이라고 불러요.</li>
-    <li>시험 신호: $M$에 $V_{test}$를 넣고 $N$에 나타나는 $V_N$을 구해요.</li>
-  </ul>
-  $$KA_1=-\frac{V_N}{V_{test}}$$
-  <p>마이너스가 붙는 이유는 음귀환(negative feedback)이기 때문이에요. 뺄셈기가 루프를 한 바퀴 도는 신호에 $-1$을 곱하므로 $V_N/V_{test}$는 음수로 나와요. 이것을 양수로 나타내려고 정의에 마이너스를 붙여요.</p>
-  <p>루프 한 바퀴의 이득은 루프 위의 $A_1$, $K$, 뺄셈기의 $-1$을 모두 곱한 값이에요. 곱셈은 순서를 바꿔도 같으므로 어디서 끊어도 결과는 같아야 해요. 지난 시간에는 $A_1$ 출력 쪽에서 끊었고(<a href="../1106/정리노트_1106_Negative_Feedback.html#s3-loop-gain">루프를 끊고 시험 신호를 넣어요</a>), 이 문제는 같은 정의를 $A_1$ 입력 쪽에 적용하는 연습이에요.</p>
-</div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="끊는 자리와 시험 신호">
-    <p>$X=0$이라 뺄셈기의 + 입력을 접지해요. 뺄셈기 출력 끝이 $N$, $A_1$ 입력 끝이 $M$이에요. 신호는 $M$에서 $A_1$로 나가 $K$와 뺄셈기를 거쳐 $N$으로 돌아오므로 $V_{test}$는 $M$에 걸어요.</p>
-    <figure class="figure">
-      <svg viewBox="0 0 440 190" role="img" aria-label="A1 입력에서 루프를 끊은 블록도. 뺄셈기의 플러스 입력은 접지되어 있고, 뺄셈기 출력은 열린 끝 N에서 끝나요. 그 오른쪽의 노드 M에는 아래가 접지된 시험 전압원 V test가 걸려 있고, M에서 A1 상자를 지나 출력 노드 Y로 가요. Y에서 갈라진 선이 아래로 내려가 왼쪽을 향한 K 삼각형의 입력으로 들어가고, K 출력은 왼쪽으로 가서 위로 꺾여 뺄셈기의 마이너스 입력으로 들어가요.">
-        <g fill="none" stroke-width="2">
-          <path class="fig-ink" d="M30 60V72M20 72H40M24 77H36M28 82H32"/>
-          <path class="fig-ink" d="M30 60H76"/>
-          <circle class="fig-ink" cx="90" cy="60" r="14"/>
-          <path class="fig-ink" d="M80 60H100M90 50V70"/>
-          <path class="fig-ink" d="M104 60H150"/>
-          <path class="fig-ink" d="M200 60H240"/>
-          <path class="fig-accent" d="M200 60V87M200 113V125"/>
-          <circle class="fig-accent" cx="200" cy="100" r="13"/>
-          <path class="fig-ink" d="M190 125H210M194 130H206M198 135H202"/>
-          <path class="fig-ink" d="M240 42H300V78H240Z"/>
-          <path class="fig-ink" d="M300 60H410"/>
-          <path class="fig-ink" d="M380 55L386 60L380 65"/>
-          <path class="fig-ink" d="M350 60V150H300"/>
-          <polygon class="fig-ink" points="300,132 300,168 262,150"/>
-          <path class="fig-ink" d="M262 150H90V74"/>
-          <path class="fig-ink" d="M85 100L90 94L95 100"/>
+<div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit"><svg id="fig-circuit-loop-input" viewBox="0 0 324 145" role="img" aria-label="입력을 접지하고 비교부 출력 N과 A1 입력 M 사이를 끊어요. M에 시험 전압을 걸고 N에서 돌아오는 전압을 재요.">
+        <path class="fig-ink" d="M27 59V42H59 M85 42H108 M144 42H174 M230 42H264H300"/>
+        <path class="fig-accent" d="M264 42V118H193 M157 118H72V56"/>
+        <path class="fig-ink" d="M144 42V69 M144 93V99"/>
+        <g data-symbol="part">
+          <circle class="fig-ink" cx="144" cy="81" r="12"/>
         </g>
-        <circle class="fig-dot" data-node-id="p1-N" data-node-color="blue" cx="150" cy="60" r="4"/>
-        <circle class="fig-dot" data-node-id="p1-M" data-node-color="red" cx="200" cy="60" r="4"/>
-        <circle class="fig-dot" data-node-id="p1-Y" data-node-color="blue" cx="350" cy="60" r="4"/>
-        <circle class="fig-dot" data-node-id="p1-Y" data-node-color="blue" cx="410" cy="60" r="4"/>
-        <g font-family="Pretendard, sans-serif" font-weight="600" font-size="14">
-          <text class="fig-text" x="64" y="50" text-anchor="middle">+</text>
-          <text class="fig-text" x="78" y="98" text-anchor="middle">−</text>
-          <text class="fig-text fig-math" data-node-id="p1-N" data-node-color="blue" x="150" y="45" text-anchor="middle">N</text>
-          <text class="fig-text fig-math" data-node-id="p1-N" data-node-color="blue" x="150" y="86" text-anchor="middle">V<tspan baseline-shift="sub" font-size="78%">N</tspan></text>
-          <text class="fig-text fig-math" data-node-id="p1-M" data-node-color="red" x="200" y="45" text-anchor="middle">M</text>
-          <text class="fig-text" x="200" y="98" text-anchor="middle" font-size="11">+</text>
-          <text class="fig-text" x="200" y="110" text-anchor="middle" font-size="11">−</text>
-          <text class="fig-text fig-math" x="222" y="112">V<tspan baseline-shift="sub" font-size="78%">test</tspan></text>
-          <text class="fig-text fig-math" x="270" y="65" text-anchor="middle">A<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
-          <text class="fig-text fig-math" data-node-id="p1-Y" data-node-color="blue" x="410" y="45" text-anchor="middle">Y</text>
-          <text class="fig-text fig-math" x="287" y="155" text-anchor="middle" font-size="13">K</text>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M135 99h18 m-15 4h12 m-9 4h6"/>
         </g>
-      </svg>
-      <figcaption>입력 $X$를 0(접지)으로 두고 뺄셈기 출력 $N$과 $A_1$ 입력 $M$ 사이를 끊었어요. $M$에는 $V_{test}$를 걸고 $N$에서 $V_N$을 읽어요.</figcaption>
-    </figure>
-    <p>첫 줄은 $M$에서 출발해 신호 방향으로 한 블록을 지나는 식이에요. $A_1$의 입력이 바로 $V_{test}$예요.</p>
-    $$Y=A_1V_{test}$$
-  </div>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M18 59h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <g data-symbol="part">
+          <circle class="fig-ink" cx="72" cy="42" r="13"/>
+          <path class="fig-ink" d="M66 42h12 M72 36v12"/>
+          <text class="fig-text fig-math" x="48" y="33" text-anchor="middle" font-size="13">+</text>
+          <text class="fig-text fig-math" x="55" y="80" text-anchor="middle" font-size="13">−</text>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M193 101v34L157 118Z"/>
+          <text class="fig-text fig-math" x="181" y="123" text-anchor="middle" font-size="14">K</text>
+        </g>
+        <g data-symbol="part">
+          <rect class="fig-ink" x="174" y="25" width="56" height="34" rx="3"/>
+          <text class="fig-text fig-math" x="202.0" y="47.0" text-anchor="middle" font-size="14">A<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-accent" d="M296 42l-6 -4m6 4l-6 4"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-accent" d="M72 56l-4 6m4 -6l4 6"/>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-accent" d="M193 118l6 -4m-6 4l6 4"/>
+        </g>
+        <circle class="fig-dot" cx="108" cy="42" r="3" data-node-color="red" data-node-id="p1-N"/>
+        <circle class="fig-dot" data-node-color="blue" cx="144" cy="42" r="3.2" data-node-id="p1-M"/>
+        <circle class="fig-dot" data-node-color="red" cx="264" cy="42" r="3.2" data-node-id="p1-Y"/>
+        <text class="fig-text fig-math" x="107" y="24" text-anchor="middle" font-size="14" data-node-color="red" data-node-id="p1-N">N</text>
+        <text class="fig-text fig-math" x="144" y="24" text-anchor="middle" font-size="14" data-node-color="blue" data-node-id="p1-M">M</text>
+        <text class="fig-text fig-math" x="107" y="83" text-anchor="middle" font-size="14" data-node-color="red" data-node-id="p1-N">V<tspan baseline-shift="sub" font-size="78%">N</tspan></text>
+        <text class="fig-text fig-math" x="157" y="68" text-anchor="middle" font-size="12" data-node-color="blue" data-node-id="p1-M">+</text>
+        <g data-symbol="part">
+          <text class="fig-text fig-math" x="96" y="54" text-anchor="middle" font-size="12" data-node-color="red" data-node-id="p1-N">+</text>
+          <text class="fig-text fig-math" x="96" y="95" text-anchor="middle" font-size="12" data-node-color="red" data-node-id="p1-N">−</text>
+        </g>
+        <g data-symbol="part">
+          <path class="fig-ink" d="M100 97h18 m-15 4h12 m-9 4h6"/>
+        </g>
+        <text class="fig-text fig-math" x="157" y="101" text-anchor="middle" font-size="12" data-node-color="blue" data-node-id="p1-M">−</text>
+        <text class="fig-text fig-math" x="162" y="89" text-anchor="start" font-size="14" data-node-color="blue" data-node-id="p1-M">V<tspan baseline-shift="sub" font-size="78%">test</tspan></text>
+        <text class="fig-text fig-math" x="298" y="24" text-anchor="middle" font-size="14" data-node-color="red" data-node-id="p1-Y">Y</text>
+        <text class="fig-text fig-loc" x="116" y="68" text-anchor="middle" font-size="17">㉡</text>
+        <text class="fig-text fig-loc" x="161" y="25" text-anchor="middle" font-size="17">㉠</text>
+      <circle cx="300" cy="42" r="3.2" data-node-color="red" data-node-id="p1-Y" class="fig-dot"/></svg><figcaption class="circuit-state">$A_1$ 입력에서 끊은 회로. $M$에서 주입하고 $N$에서 읽어요.</figcaption></figure>
+<div data-subpart="main"><h4>증폭기 입력에서 측정한 루프 이득</h4><div data-answer-step="시험 포트"><p>외부 입력 $X=0$에서 <span class="loc">㉠</span> $A_1$ 입력 $M$에 $V_{test}$를 걸고, <span class="loc">㉡</span> 비교부 출력 $N$을 열어 $V_N$을 재요. 이상적 단방향 블록의 입력은 앞 단을 로딩하지 않아요.</p>$$V_N/V_{test}=(Y/V_{test})(X_F/Y)(V_N/X_F)$$
+</div><div data-answer-final=""><p>신호는 $A_1$, 귀환망 $K$, 비교부의 반전 입력을 차례로 지나므로 귀환 전압에 마이너스가 붙어요.</p>$$T=-V_N/V_{test}=-A_1K(-1)=KA_1$$
+</div></div>
 </div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
-  <div data-subpart="main">
-    <div data-answer-step="루프를 따라 V_N 구하기">
-      <p>출력 $Y$를 귀환 회로망이 감지해 $K$배 해요. 이것이 뺄셈기의 − 입력으로 들어가는 귀환 신호예요.</p>
-      $$X_F=KY=KA_1V_{test}$$
-      <p>뺄셈기는 + 입력에서 − 입력을 빼요. + 입력은 $X=0$이라 0이에요. 뺄셈기 출력이 바로 끊은 끝 $N$이에요.</p>
-      $$V_N=0-X_F$$
-      $$V_N=-KA_1V_{test}$$
-    </div>
-    <div data-answer-step="정의에 대입">
-      <p>루프 이득의 정의에 넣어요. $V_{test}$가 약분되어 블록 이득만 남아요.</p>
-      $$-\frac{V_N}{V_{test}}=-\frac{-KA_1V_{test}}{V_{test}}=KA_1$$
-    </div>
-    <p>$A_1$ 입력에서 끊어도 루프 이득은 $KA_1$이에요. 교과서 식 (12.9)와 같고, 출력 쪽에서 끊은 식 (12.7)의 결과와도 같아요.</p>
-  </div>
-</div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <div data-answer-final>
-      <p>$X=0$에서 $A_1$ 입력을 끊어 $V_{test}$를 넣으면 $V_N=-KA_1V_{test}$예요.</p>
-      $$\text{루프 이득}=-\frac{V_N}{V_{test}}=KA_1$$
-    </div>
-    <p>출력 쪽에서 끊은 경우와 비교해요. $K$ 입력에 $V_{test}$를 넣으면 $K$ → 뺄셈기 → $A_1$ 순서로 지나요. 같은 세 인자를 순서만 바꿔 곱하므로 결과가 같아요.</p>
-    $$V_N=A_1\bigl(0-KV_{test}\bigr)=-KA_1V_{test}$$
-    <p>단위도 맞아요. $V_N$과 $V_{test}$가 모두 전압이라 루프 이득은 무차원(V/V)이에요.</p>
-    <p>부호도 확인해요. 음귀환이라 $V_N$은 $V_{test}$와 반대 극성이고, 정의의 마이너스 덕분에 루프 이득은 $K$, $A_1$이 양수일 때 양수예요.</p>
-    <p>이해를 위한 예시로 $A_1=200$, $K=0.05$를 넣으면 $V_{test}=1\,\mathrm{mV}$에서 $Y=200\,\mathrm{mV}$, $X_F=10\,\mathrm{mV}$, $V_N=-10\,\mathrm{mV}$라 루프 이득은 $10$이에요. $KA_1=0.05\times200=10$과 같아요.</p>
-  </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <p>루프 이득 $KA_1$을 폐루프 이득 $A_1/(1+KA_1)$과 헷갈리지 않아요. 폐루프 이득은 $X$에서 $Y$까지의 관계이고, 루프 이득은 $X=0$에서 루프를 한 바퀴 돈 이득이에요.</p>
-  <p>입력 $X$를 그대로 두면 $N$에 입력에서 온 신호까지 섞여요. 그러면 $V_N/V_{test}$가 루프만의 이득이 아니게 돼요.</p>
-  <p>$V_{test}$를 $N$(뺄셈기 출력) 쪽에 걸고 $M$에서 읽으면 신호를 거꾸로 보내는 셈이에요. 시험 신호는 항상 신호가 나아가는 방향의 다음 블록 입력에 걸어요.</p>
-  <p>정의의 마이너스를 빼먹으면 $-KA_1$이 나와요. 음귀환의 루프 이득은 양수로 나와야 해요.</p>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol>
-    <li>뺄셈기를 두 입력 모두 + 인 덧셈기로 바꾸고 같은 자리에서 끊으면 $-V_N/V_{test}$는 얼마인가요? 그 부호가 뜻하는 귀환의 종류도 말해 보세요.</li>
-    <li>$A_1=500$, $K=0.02$이면 루프 이득과 폐루프 이득은 각각 얼마인가요?</li>
-    <li>이 문제에서 $X$를 0으로 두지 않고 $X=1\,\mathrm{mV}$를 그대로 넣은 채 측정하면 $V_N$에 어떤 항이 더해지나요?</li>
-  </ol>
-</div>
-<div class="sum" hidden>
-  <p class="sum-lead">$X=0$에서 $A_1$ 입력을 끊어도 루프 이득은 $KA_1$이에요.</p>
-  $$V_N=-KA_1V_{test}$$
-  $$KA_1=-\frac{V_N}{V_{test}}$$
-  <p>$V_{test}$는 신호가 나가는 쪽 끝 $M$($A_1$ 입력)에 걸고, 돌아오는 끝 $N$(뺄셈기 출력)에서 읽어요.</p>
-  <p>음귀환이라 비가 음수로 나오므로 정의에 마이너스를 붙여요.</p>
-  <p>루프 이득 $KA_1$과 폐루프 이득 $A_1/(1+KA_1)$은 다른 양이에요.</p>
-</div>
+<div class="sum" hidden><p class="sum-lead">루프를 따라간 부호 있는 전압비에 마이너스를 붙이면 루프 이득이에요.</p><p>이 끊기 위치에서는 비교부의 반전이 신호 경로 마지막에 와요.</p></div>

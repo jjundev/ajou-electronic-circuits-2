@@ -1,24 +1,12 @@
-import cmath, math, random
-random.seed(1)
-def kcl(s, R1, Cin, Cxy, Cout, gm, RL):
-    # unknowns Vx, Vy with Vin=1 (stdlib, Cramer)
-    # X: Vx(1/R1 + s Cin + s Cxy) - Vy s Cxy = 1/R1
-    # Y: Vx(gm - s Cxy) + Vy(1/RL + s Cout + s Cxy) = 0
-    a11=1/R1+s*Cin+s*Cxy; a12=-s*Cxy; a21=gm-s*Cxy; a22=(1/RL if RL!=math.inf else 0)+s*Cout+s*Cxy
-    det=a11*a22-a12*a21
-    return (a11*0 - a21*(1/R1))/det
-def formula(s, R1, Cin, Cxy, Cout, gm, RL):
-    a=R1*RL*(Cin*Cxy+Cout*Cxy+Cin*Cout); b=(1+gm*RL)*Cxy*R1+R1*Cin+RL*(Cxy+Cout)
-    return (Cxy*s-gm)*RL/(a*s*s+b*s+1)
-def quad(a,b):
-    d=cmath.sqrt(b*b-4*a); return ((-b+d)/(2*a), (-b-d)/(2*a))
-
-print("p15: stdlib numerical (SymPy absent). Dominant pole approx of P11.40 (RL->inf)")
-RS=1000; rpi=2600; R=RS*rpi/(RS+rpi); gm=1/26; Cpi=100e-15; Cmu=10e-15; Ccs=20e-15
-wp2=((1+gm*R)*Cmu+Ccs)/(R*(Cpi*Cmu+Cmu*Ccs+Cpi*Ccs))
-for RL in [1e4,1e6,1e8,1e10,1e12]:
-    A=gm*RL
-    a=R*RL*(Cpi*Cmu+Ccs*Cmu+Cpi*Ccs); b=(1+A)*Cmu*R+R*Cpi+RL*(Cmu+Ccs)
-    p=quad(a,b)
-    print(" RL=%.0e dominant 1/b=%.4g (x RL=%.4g) b/a=%.4g | exact |p1|=%.4g |p2|=%.4g | ratio p2 exact/dom=%.8f"%(RL,1/b,RL/b,b/a,abs(p[0]),abs(p[1]),abs(p[1])/(b/a)))
-print("limit: wp1=1/b ~ 1/{RL[(gm R +1)Cmu + Ccs]} -> 0 ; wp2=b/a ->",wp2,"= exact limit (identical to P11.40(b)); Miller wrongly gives both ->0")
+from sympy import *
+import json
+result = {}
+def report(part, method, conclusion, **values):
+    result[part] = dict(method=method, conclusion=conclusion, values={k:str(v) for k,v in values.items()})
+r,ri,g,cg,cf,cd=symbols('R R_i g_m C_pi C_mu C_CS',positive=True)
+B=cd+cf+g*ri*cf; A=ri*(cg*cd+cg*cf+cd*cf)
+b=ri*(cg+cf)+r*B; a=r*A
+pole1=limit(-1/b,r,oo);pole2=simplify(limit(-b/a,r,oo))
+assert simplify(pole2+B/A)==0
+report('p15:main','proof','Ri=RS∥rπ. 출력에 임시 저항 R을 두고 분모 1+b1s+b2s²의 주극점 근사 −1/b1, −b1/b2를 구한 다음 R→∞로 보낸다. 첫 극점은 원점이고 둘째는 유한하다. 두 극이 무한히 분리되는 이상적 극한에서 결과는 p14의 정확한 두 극과 일치한다. C_CS를 생략하면 p2=−(1+gm Ri)/(Ri Cπ).',b1=b,b2=a,p1=pole1,p2=pole2)
+print(json.dumps(result,ensure_ascii=False,indent=2))

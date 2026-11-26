@@ -1,61 +1,12 @@
-<div class="layer eli5" data-explanation="understand">
-<h4>문제를 읽어요</h4>
-<p>$M_1$의 게이트가 입력이고 소스가 출력이에요. 소스가 게이트를 따라 움직이면 두 단자 사이 $C_{GS1}$에 걸리는 변화가 줄어들어요. 문제에서 지정한 $C_{GS1}$만 고려해요.</p>
-</div>
-<div class="layer formal" data-explanation="recall">
-<h4>이 개념과 공식을 떠올려요</h4>
-<p>두 노드를 잇는 커패시터의 입력 전류는 두 단자의 전압 변화 차이로 정해져요. 저주파 소스 전압비를 $A_v=v_s/v_{in}$이라 하면 밀러 정리(Miller theorem)의 입력 성분은 $(1-A_v)C_{GS1}$이에요.</p>
-<p>$g_{m1}$은 게이트–소스 전압에 대한 드레인 전류의 변화율이고, $r_{O1},r_{O2}$는 채널 길이 변조에 따른 출력저항이에요. 이 저주파 모델에서 몸체 효과는 무시해요. 실제 주파수에 따라 $A_v$도 달라지므로 아래 결과는 저주파 입력 커패시턴스예요.</p>
-</div>
-<div class="layer formal" data-explanation="start">
-<h4>종이에 쓸 첫 줄</h4>
-<div data-answer-step="소스 부하 판단"><p>$V_{DD}$와 고정 바이어스는 AC 접지예요. 따라서 $M_1$의 $r_{O1}$은 소스와 접지 사이에 놓여요. 다이오드 연결된 $M_2$는 몸체 효과를 무시하면 $1/g_{m2}\parallel r_{O2}$로 보여요.</p>
-$$R_L=\dfrac{1}{g_{m2}}\parallel r_{O1}\parallel r_{O2}$$</div>
-<p>여기서 $R_L$은 소스 노드에서 접지로 보이는 저항 중 $M_1$의 제어 전류원을 제외한 병렬 합이에요. 입력 커패시턴스를 구할 저주파 전압비에는 커패시터를 개방해요.</p>
-</div>
-<div class="layer formal" data-explanation="solve">
-<h4>이렇게 풀어요</h4>
+<div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit"><svg id="fig-p4-1" viewBox="0 0 445 148" role="img" aria-label="소스 전압을 따라 충전되는 게이트–소스 커패시터"><circle cx="40" cy="70" r="3.5" data-node="gate" fill="#2672b4"/><text class="node-label" x="40" y="56" font-size="15" text-anchor="middle" fill="#2672b4" data-node="gate">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><path class="fig-ink" d="M40 70 H140 M140 70 V35 H208 M208 26 V44 M214 26 V44 M214 35 H290 V70 H414" fill="none"/><text class="fig-text" x="210" y="18" font-size="15" text-anchor="middle" >C<tspan baseline-shift="sub" font-size="78%">GS1</tspan></text><circle cx="414" cy="70" r="3.5" data-node="source" fill="#be3346"/><text class="node-label" x="414" y="56" font-size="15" text-anchor="middle" fill="#be3346" data-node="source">v<tspan baseline-shift="sub" font-size="78%">s</tspan></text><text class="fig-loc" x="381" y="54" font-size="15" text-anchor="middle" >㉠</text><path class="fig-ink" d="M260 70 H290 M260 70 V82 l12 14 -12 14 -12 -14 Z M260 103 V89 m-4 5 4 -5 4 5 M260 110 V130" fill="none"/><path class="fig-ink" d="M260 130 h-9 h18 m-15 4 h12 m-9 4 h6" fill="none"/><text class="fig-text" x="210" y="103" font-size="15" text-anchor="middle" >g<tspan baseline-shift="sub" font-size="78%">m1</tspan>v<tspan baseline-shift="sub" font-size="78%">gs1</tspan></text><path class="fig-ink" d="M350 70 v18 l-4 4 8 6 -8 6 8 6 -8 6 4 4 v10" fill="none"/><path class="fig-ink" d="M350 130 h-9 h18 m-15 4 h12 m-9 4 h6" fill="none"/><text class="fig-text" x="367" y="90" font-size="15" text-anchor="middle" >R<tspan baseline-shift="sub" font-size="78%">L</tspan></text><circle cx="350" cy="70" r="3.5" data-node="source" fill="#be3346"/><text class="fig-text" x="115" y="98" font-size="15" text-anchor="middle" >게이트</text></svg><figcaption class="circuit-state">소스의 부하에는 다이오드 접속 부하의 컨덕턴스도 들어가요.</figcaption></figure>
 <div data-subpart="main">
-<div data-gain-route="gm-rout">
-<div data-gain-stage="gm" data-answer-step="출력 단락 트랜스컨덕턴스"><p>출력 전류를 소자 쪽으로 들어가는 방향으로 정의하고 소스를 단락하면 $v_{gs1}=v_{in}$이에요. 제어 전류는 출력에서 빠져나가므로 부호가 음수예요.</p>
-<figure><svg viewBox="0 0 640 235" role="img" aria-label="출력 단락에서 소스 폴로워의 트랜스컨덕턴스 측정 회로" font-family="Pretendard, sans-serif" font-weight="600" font-size="17" fill="none" stroke="currentColor" stroke-width="2">
-<path d="M65 95 H115"/><circle cx="65" cy="95" r="4" fill="#2563eb" stroke="#2563eb"/><text x="35" y="77" fill="#2563eb" stroke="none">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
-<path d="M285 95 H285 M285 95 V65 M270 65 H300 M275 58 H295 M280 51 H290 M285 95 V109"/><circle cx="285" cy="132" r="23"/><path d="M285 117 V146 M279 139 L285 146 L291 139 M285 155 V180 H605"/>
-<path d="M605 180 V200 M590 200 H620 M595 207 H615 M600 214 H610"/><circle cx="605" cy="180" r="4" fill="#dc2626" stroke="#dc2626"/>
-<text x="322" y="137" fill="currentColor" stroke="none">g<tspan baseline-shift="sub" font-size="78%">m1</tspan>v<tspan baseline-shift="sub" font-size="78%">in</tspan></text><text x="532" y="165" fill="#dc2626" stroke="none">v<tspan baseline-shift="sub" font-size="78%">out</tspan> = 0</text>
-<path d="M565 190 H500 M500 190 L509 184 M500 190 L509 196"/><text x="516" y="219" fill="currentColor" stroke="none">i<tspan baseline-shift="sub" font-size="78%">out,sc</tspan></text></svg><figcaption>출력 단락 시 소스와 드레인이 모두 AC 접지여서 두 출력저항과 부하에는 전압이 걸리지 않아요. 입력 게이트는 절연되어 있고 입력 전압 $v_{in}$은 접지를 기준으로 해요. 출력 소스가 단락되어 제어 전압은 $v_{gs1}=v_{in}$이에요.</figcaption></figure>
-$$G_m=\frac{i_{out,sc}}{v_{in}}=-g_{m1}$$</div>
-<div data-gain-stage="rout" data-answer-step="출력 저항"><p>입력을 영점으로 두면 소스에서 본 $M_1$ 쪽 저항은 $1/g_{m1}\parallel r_{O1}$이에요. 여기에 외부 부하를 병렬로 포함해요.</p>
-<figure><svg viewBox="0 0 700 255" role="img" aria-label="입력 영점에서 소스 출력에 시험 전압을 건 회로" font-family="Pretendard, sans-serif" font-weight="600" font-size="17" fill="none" stroke="currentColor" stroke-width="2">
-<path d="M65 95 H105 V118 M90 118 H120 M95 125 H115 M100 132 H110"/><text x="24" y="80" fill="currentColor" stroke="none">v<tspan baseline-shift="sub" font-size="78%">in</tspan> = 0</text>
-<path d="M195 80 H650 M195 80 V110 M185 110 H205 V160 H185 Z M195 160 V194 M180 194 H210 M185 201 H205 M190 208 H200"/>
-<path d="M330 80 V110 M320 110 H340 V160 H320 Z M330 160 V194 M315 194 H345 M320 201 H340 M325 208 H335"/>
-<path d="M470 80 V110 M460 110 H480 V160 H460 Z M470 160 V194 M455 194 H485 M460 201 H480 M465 208 H475"/>
-<circle cx="195" cy="80" r="4" fill="#dc2626" stroke="#dc2626"/><circle cx="330" cy="80" r="4" fill="#dc2626" stroke="#dc2626"/><circle cx="470" cy="80" r="4" fill="#dc2626" stroke="#dc2626"/><circle cx="650" cy="80" r="4" fill="#dc2626" stroke="#dc2626"/>
-<path d="M615 69 H555 M555 69 L565 63 M555 69 L565 75"/><text x="568" y="101" fill="currentColor" stroke="none">i<tspan baseline-shift="sub" font-size="78%">t</tspan></text>
-<text x="625" y="55" fill="#dc2626" stroke="none">v<tspan baseline-shift="sub" font-size="78%">t</tspan> (+)</text>
-<text x="172" y="137" text-anchor="end" fill="currentColor" stroke="none">1/g<tspan baseline-shift="sub" font-size="78%">m1</tspan></text><text x="350" y="137" fill="currentColor" stroke="none">r<tspan baseline-shift="sub" font-size="78%">O1</tspan></text><text x="490" y="137" fill="currentColor" stroke="none">1/g<tspan baseline-shift="sub" font-size="78%">m2</tspan> ‖ r<tspan baseline-shift="sub" font-size="78%">O2</tspan></text></svg><figcaption>입력 영점에서 $M_1$의 제어 전류원은 소스에서 $1/g_{m1}$로 보이며 $r_{O1}$ 및 부하와 병렬이에요. 시험전류는 오른쪽에서 회로로 들어가고 $R_{out}=v_t/i_t$예요.</figcaption></figure>
-$$R_{out}\approx\left(\frac1{g_{m1}}\parallel r_{O1}\right)\parallel \left(\dfrac{1}{g_{m2}}\parallel r_{O2}\right)$$</div>
-<div data-gain-stage="gain" data-answer-step="저주파 전압비"><p>같은 소스 출력에서 단락 전류와 저항을 연결하면 비반전 이득을 얻어요.</p>
-$$A_v=-G_mR_{out}\approx\frac{g_{m1}R_L}{1+g_{m1}R_L}$$</div>
+<div data-answer-step="소스 부하와 저주파 전압비"><span class="loc">㉠</span> 소스에서 다이오드 접속 $M_2$를 보므로 두 출력저항에 $1/g_{m2}$가 병렬로 붙어요.
+$$R_L=(1/g_{m2})\parallel r_{o1}\parallel r_{o2}$$
+<p>몸체 효과를 생략하고 저주파에서 커패시터를 열면 소스에서 전류가 균형을 이뤄요.</p>
+$$v_s/R_L=g_{m1}(v_{in}-v_s)$$
+$$A_v=\frac{v_s}{v_{in}}=\frac{g_{m1}R_L}{1+g_{m1}R_L}$$</div><div data-answer-step="게이트 전하"><p>$C_{GS1}$ 양단에는 입력과 소스 전압의 차이만 걸려요.</p>
+$$q_{in}=C_{GS1}(v_{in}-v_s)$$</div><div data-answer-final="">$$C_{in}=\frac{q_{in}}{v_{in}}\approx \frac{C_{GS1}}{1+g_{m1}R_L}$$</div>
 </div>
-<div data-answer-step="입력 커패시턴스"><p>입력 전압이 $v_{in}$만큼 변할 때 소스는 $A_vv_{in}$만큼 따라가므로 $C_{GS1}$ 양단에는 $(1-A_v)v_{in}$만 걸려요. 문제에서 지정한 $C_{GS1}$만 고려해요.</p>
-<p>따라서 입력에서 보이는 저주파 커패시턴스는</p>
-$$C_{in}\approx\dfrac{C_{GS1}}{1+g_{m1}R_L}$$</div>
-</div></div>
-<div class="layer formal" data-explanation="verify">
-<h4>완성 답과 검산</h4>
-<div data-subpart="main"><div data-answer-final="최종 답"><p>몸체 효과를 무시한 저주파 모델에서</p>
-$$\boxed{C_{in}\approx\dfrac{C_{GS1}}{1+g_{m1}R_L}}$$
-$$R_L=\dfrac{1}{g_{m2}}\parallel r_{O1}\parallel r_{O2}$$</div>
-<p>$g_{m2}\to0$이면 전류원 부하의 $C_{GS1}$ 기여로 돌아가요. 또한 $g_{m1}R_L$은 무차원이므로 답의 단위는 커패시턴스예요.</p></div>
 </div>
-<div class="layer warn" data-explanation="pitfall">
-<h4>주의할 점</h4>
-<p>$r_{O1}$을 빠뜨리지 마세요. $M_1$의 드레인이 AC 접지이므로 이 저항도 소스 부하에 병렬로 들어가요. 다이오드 연결 $M_2$를 이상적인 전류원으로 취급하면 $1/g_{m2}$ 가지를 놓쳐요.</p>
-</div>
-<div class="layer eli5" data-explanation="retry">
-<h4>조건을 바꾸어 생각해요</h4>
-<ol><li>다이오드 연결이 사라져 $g_{m2}=0$이 되면 $R_L$과 $C_{in}$은 어떻게 변할까요?</li><li>소스가 입력을 더 잘 따라가면 $C_{GS1}$ 양단 전압과 입력 기여는 각각 어떻게 변할까요?</li></ol>
-</div>
-<div class="sum" hidden><p class="sum-lead">소스가 입력을 따라갈수록 $C_{GS1}$의 입력 기여가 줄어요.</p><p>저주파에서 $C_{in}\approx\dfrac{C_{GS1}}{1+g_{m1}R_L}$이에요.</p><p>$R_L=\dfrac{1}{g_{m2}}\parallel r_{O1}\parallel r_{O2}$이며 몸체 효과는 무시해요.</p></div>
+<div class="sum" hidden><p class="sum-lead">소스가 게이트를 따라갈수록 게이트–소스 전하 변화가 작아져요.</p></div>

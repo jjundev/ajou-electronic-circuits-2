@@ -1,9 +1,3 @@
-R = 1/(1/ro2 + 1/ro1)
-vx/vt = Cgs3*R*s/(Cgs3*R*s + 1)
-Zout = (Cgs3*R*s + 1)/(Cgs3*s + gm3)
-Zout with R expanded = (Cgs3*ro1*ro2*s + ro1 + ro2)/((ro1 + ro2)*(Cgs3*s + gm3))
-Zout with grounded-body effect = (Cgs3*R*s + 1)/(Cgs3*R*gmb3*s + Cgs3*s + gm3 + gmb3)
-DC limit = 1/gm3
-High-frequency limit = R
-Cgs3 -> 0 limit = 1/gm3
-Both KCL residuals and closed-form agreement verified.
+Input grounded; CS drain is shunted by ro1||ro2.
+Zout: (Cgs3*ro1*ro2*s/(ro1 + ro2) + 1)/(Cgs3*s + gm3)
+Zout(0): 1/gm3 Zout(inf): ro1*ro2/(ro1 + ro2)

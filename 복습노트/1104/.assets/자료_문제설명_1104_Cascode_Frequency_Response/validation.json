@@ -1,40 +1,28 @@
 {
   "review_policy_version": "problem-explain-2026-10-21-learning-style",
-  "input_hash": "db4f0d373d6d75e62b5a077a8b0fb185ab478c7597968f3248b5d04dd3edc5c7",
+  "input_hash": "c255f4526246bf9c7484979336965d912fb44d6fc8f636c46feba46f2c9c382f",
   "references": [
     {
       "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.claude/skills/ec2-review-pack/references/solution-style.md",
-      "sha256": "3c9f68f55d804966c95a35cdcd2f729754e9dc9a453fcc0df7f5b01152edeb9f"
+      "sha256": "e644bb2da081cd8ba965b335d14c8dc8fa4ac1b2224633ba2ab9a644308bc5a1"
     },
     {
-      "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/복습노트/1104/정리노트_1104_Cascode_Frequency_Response.html",
-      "sha256": "1fcb76f882d9272971bfbba11b25711071bd9bad9e6b30b8e7f8358dc125b4e6"
+      "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.claude/skills/ec2-problem-explain/references/authoring.md",
+      "sha256": "4550af0b4f8c7a4ca1f9d6ae3b004aca5817daca42dc7c387d9aeb45d6f4ab2c"
     },
     {
-      "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/강의노트/2026F_Lec5_FrequencyResponse_rev4.pdf",
-      "sha256": "0ce4ed9ad2ce0a4960267d2295b21843b4a694b0e017ffdafa7d07bee51cdf6a"
+      "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.claude/skills/ec2-problem-explain/references/verification.md",
+      "sha256": "7fcf1e69f067d433ad7f0f82e0c76d969e455501d770605f03aa1516aac2d92c"
     },
     {
       "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/교과서/마이크로전자회로/11장.pdf",
       "sha256": "c948160fe9a61f9aa8c0f0e9d84ca001dc4afe5bb27d9f326a3b918f18d930fb"
-    },
-    {
-      "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.claude/skills/ec2-problem-explain/references/verification.md",
-      "sha256": "b5050b53279274e63602df3ca8a9e32352c265cbe4257476391f2d47becc864a"
-    },
-    {
-      "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.claude/skills/ec2-problem-explain/references/authoring.md",
-      "sha256": "224df76f0a6a16ab2a6c79e9c4a9ade64df375d69f7e1842e3309cff012317d3"
-    },
-    {
-      "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.claude/skills/ec2-problem-explain/SKILL.md",
-      "sha256": "143e5a0759cc6e784f1d06f5703346482b60cfd93bd0836655547f0e4ca73684"
     }
   ],
   "learning_style_audit": {
     "learning_style": {
       "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
-      "sha256": "3c9f68f55d804966c95a35cdcd2f729754e9dc9a453fcc0df7f5b01152edeb9f",
+      "sha256": "e644bb2da081cd8ba965b335d14c8dc8fa4ac1b2224633ba2ab9a644308bc5a1",
       "rule_ids": [
         "UNIT-01",
         "CALC-01",
@@ -54,291 +42,291 @@
     "items": {
       "p1:main": {
         "status": "pass",
-        "reviewer": "content reviewer (opus, non-author)",
+        "reviewer": "Codex parent reviewer (different from the fragment author)",
         "rules": {
-          "UNIT-01": {
-            "disposition": "applied",
-            "evidence": "Symbolic problem; dimensional check in verify: numerator dimensionless, both denominator terms in S, so Z_out in Ω; pitfall uses the same dimension argument to reject A=1,B=1/g_m3. No numerical conversion needed."
-          },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "Target Z_out built from named intermediates in order: R_G=r_o1∥r_o2 → Z_out(0)=1/g_m3 → A=g_m3 → B=A·Z(0)=1 → form → expand R_G last; each intermediate on its own display line."
-          },
-          "CALC-02": {
-            "disposition": "not_applicable",
-            "evidence": "No numerical values given (answer symbolic); no rounding. Symbolic simplification (R_G kept as a symbol until the last line) is done before expansion."
+            "evidence": "Rg를 먼저 정의하고 저주파 A, B를 차례로 정규화한다."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "Far part first: CS stage with v_in=0 collapses to R_G=r_o1∥r_o2 seen from the M3 gate; then known block 'MOS source looking in with gate at AC ground' gives Z_out(0)=1/g_m3; r_o3 and ideal bias source stated as open branches."
+            "evidence": "출력에서 게이트 쪽을 보아 ro1∥ro2부터 합친다."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "Measurement condition applied in start figure: v_in, V_DD, V_b to AC ground (caption), test V_X at the rightmost wire end with V_X(+) above the dot, I_X arrow leftward left of the dot with gap, label below; input side (R_G to ground) on left; gate blue / source red with matching dots. No KCL is written; figure kept under authoring's high-frequency equivalent-circuit rule and it shows the shortcut conditions (single gate-side R, C only gate–source). No parallel controlled-source/r_o pair (r_o3 open)."
-          },
-          "GAIN-01": {
-            "disposition": "not_applicable",
-            "evidence": "Goal is output impedance Z_out(s), not a voltage gain; no G_m/R_out/A_v route applies."
-          },
-          "DEGEN-01": {
-            "disposition": "not_applicable",
-            "evidence": "No source/emitter degeneration G_m; the follower impedance is handled by FREQ-01."
-          },
-          "SCALE-01": {
-            "disposition": "not_applicable",
-            "evidence": "No parameter scaling or ratio question; retry uses limits (R_G=0, r_o3 present), not fixed-factor scaling."
-          },
-          "BIAS-01": {
-            "disposition": "not_applicable",
-            "evidence": "No DC node voltage or saturation boundary asked."
+            "evidence": "입력 영점·전류원 개방·출력 시험 회로를 원문에 대응한다."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "SVG labels native <text class=\"fig-text fig-math\"> with tspan baseline-shift sub 78% (R_G, C_GS3, V_G, V_X(+), I_X, g_m3(V_G − V_X)); Pretendard 600 upright; no plain gm/ro, no unicode pseudo-subscripts; node dot/label colors paired (gate blue, source red); final answer in data-answer-final block."
+            "evidence": "Rg와 Vg 및 출력 시험 전류의 역할을 그림과 식에 연결한다."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "Seven sections in order, solve titled '이렇게 풀어요'; each step pairs a one-line judgement with its equation (e.g. 'R_G에 전류가 흐르지 않으니 V_G=0' → Z(0)=1/g_m3; 'r_o3가 열린 가지라서' → A=g_m3); summary/body/MD agree on R_G, A, B, Z_out, limits."
+            "evidence": "㉠의 게이트 종단을 읽고 A,B를 구한 뒤 정해진 형식의 답으로 연결한다."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "Model conditions stated with the answer (input zeroed, only C_GS3, r_o3 open); inductive claim conditioned on R_G>1/g_m3 rather than asserted; no approximate-as-exact; answer is exact for the stated model."
+            "evidence": "유한 ro1/ro2만 남기고 λ=0인 M3의 ro는 생략한다."
           },
           "FREQ-01": {
             "disposition": "applied",
-            "evidence": "Shortcut applied as briefed, no KCL: start Z_out(0)=1/g_m3 → A=g_m3 (total conductance into output node), B=A·Z(0)=1 (dimensionless) → solve (R_GC_GS3s+B)/(C_GS3s+A) with R_G in the R_S slot → verify s→0 = B/A = 1/g_m3, s→∞ = R_G, R_G>1/g_m3 ⇒ inductive. Shortcut conditions checked explicitly in recall and solve (single gate-side R after input zero, C only at control port, r_o3 ignored since λ3=0). Pitfall warns that C_GD3 or r_o3 would require KCL with the form as a check. r_o parallel n/a (open); 1/g_m visible."
+            "evidence": "게이트 단일 저항과 Cgs3 한 성분이므로 저주파 Zout→A,B→표준 꼴의 순서다. 고주파 Rg와 저주파 1/gm3를 검산했다."
+          },
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "원문에 소자 수치가 없어 공학 단위 환산이 필요하지 않다."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "기호 답이며 반올림 없이 보인다."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "소자 크기 또는 전류의 배율 변화를 구하는 문항이 아니다."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "이미 바이어스된 소신호 회로이며 동작 영역의 경계나 노드 DC 전압을 요구하지 않는다."
+          },
+          "GAIN-01": {
+            "disposition": "not_applicable",
+            "evidence": "전압이득이 아니라 출력 구동점 임피던스를 구한다."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "소스에 별도 축퇴 저항이 없고 게이트 저항이 시험주파수의 효과를 정한다."
           }
         }
       },
       "p2:main": {
         "status": "pass",
-        "reviewer": "content reviewer (opus, non-author)",
+        "reviewer": "Codex parent reviewer (different from the fragment author)",
         "rules": {
-          "UNIT-01": {
-            "disposition": "applied",
-            "evidence": "Symbolic; verify states C_GS3s and g_m3 are conductances so the fraction is in Ω; limits r_O3∥1/g_m3, r_O3∥R_G are resistances."
-          },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "Intermediates R_G → V_G → V_GS3 → I_X/V_X admittance sum → parallel form, each on its own line."
-          },
-          "CALC-02": {
-            "disposition": "not_applicable",
-            "evidence": "No numerical data; symbolic answer, no rounding."
+            "evidence": "게이트 KCL로 Vgs3를 구해 출력 시험식을 한 번 정리한다."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "R_G=r_O1∥r_O2 from the CS stage with input zeroed; final result read as r_O3 in parallel with the follower impedance (same two nodes: output and AC ground)."
+            "evidence": "게이트 종단을 합친 뒤 출력점의 병렬 ro3를 따로 유지한다."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "KCL needed (r_O3), so the small-signal model is drawn: input zero, test source at right; controlled source left, r_O3 right, output dot rightmost (parallel-pair order met); I_X arrow left of the dot with gap, V_X(+) above; gate blue, output red, branch dots at real junctions. First equation (gate KCL) and source KCL match the figure node names and the caption's current reference direction."
-          },
-          "GAIN-01": {
-            "disposition": "not_applicable",
-            "evidence": "Output-impedance problem; no voltage gain."
+            "evidence": "입력 영점과 유한 ro3가 실제 시험 도면에 있고 출력 시험전류가 왼쪽으로 향한다."
           },
           "DEGEN-01": {
-            "disposition": "not_applicable",
-            "evidence": "No degeneration structure."
-          },
-          "SCALE-01": {
-            "disposition": "not_applicable",
-            "evidence": "No scaling/ratio question."
-          },
-          "BIAS-01": {
-            "disposition": "not_applicable",
-            "evidence": "No DC bias boundary."
+            "disposition": "applied",
+            "evidence": "게이트 KCL에서 남는 제어전압 Vg−Vx를 구하며 시험전류에 ro3 전류를 합친다."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "Native tspan subscripts (V_G, V_X(+), C_GS3, R_G, g_m3V_GS3, r_O3, I_X), Pretendard 600, no pseudo-subscripts; node colors paired. Notation within P2 consistent (r_O). Advisory: P1 uses r_o (pre-existing case difference, lecture uses r_O) — not blocking."
+            "evidence": "출력 전압과 시험 전류 Vx/Ix가 맨 오른쪽 출력 단자에 대응한다."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "Seven sections, fixed solve title; judgements linked to equations ('C_GS3와 R_G는 직렬 경로, r_O3는 그 경로 전체와 병렬' → admittance sum → parallel reading). Summary/MD match body."
+            "evidence": "㉠ 게이트 종단과 ㉡ ro3 가지에서 다음 한 식씩을 세운다."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "Approximation Z(0)≈1/g_m3 marked with ≈ and condition g_m3r_O3≫1; model statement (only C_GS3, no body effect) attached to the final answer."
+            "evidence": "ro3를 유지하고 λ3→0 극한에서 예제 복원 확인."
           },
           "FREQ-01": {
             "disposition": "applied",
-            "evidence": "r_O3 present → KCL kept (start gate KCL, solve source KCL). Form used only as a check in verify: fraction = (R_GC_GS3s+B)/(C_GS3s+A) with A=g_m3, B=1, B/A=1/g_m3; removing r_O3 (→∞) returns to E11.24; r_O3 attached in parallel last, with the explicit warning not to fold 1/r_O3 into A. Both limits checked (r_O3∥1/g_m3, r_O3∥R_G) and inductive condition stated. The general form (1+Z_BY_c)/(g_m+Y_c) coincides with the fraction here because Z_B=R_G is purely resistive."
+            "evidence": "출력에 추가 shunt가 있으므로 출발은 KCL이다. 저주파와 고주파 검산에 기존 꼴을 비교한다."
+          },
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "원문에 소자 수치가 없어 공학 단위 환산이 필요하지 않다."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "기호 답이며 반올림 없이 보인다."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "소자 크기 또는 전류의 배율 변화를 구하는 문항이 아니다."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "이미 바이어스된 소신호 회로이며 동작 영역의 경계나 노드 DC 전압을 요구하지 않는다."
+          },
+          "GAIN-01": {
+            "disposition": "not_applicable",
+            "evidence": "전달비 대신 출력 시험 임피던스가 목표다."
           }
         }
       },
       "p3:main": {
         "status": "pass",
-        "reviewer": "content reviewer (opus, non-author)",
+        "reviewer": "Codex parent reviewer (different from the fragment author)",
         "rules": {
-          "UNIT-01": {
-            "disposition": "applied",
-            "evidence": "Symbolic; pitfall states A is a conductance and B dimensionless (unnormalized β+1, r_π+R_B break units); break frequencies in rad/s with Hz conversion by 2π noted; slopes labelled dB/dec."
-          },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "Intermediates Z_B and Z_π defined first (each own line), then v_b in terms of v_π, v_t, i_t, Z_out; zero/pole frequencies listed one per line."
-          },
-          "CALC-02": {
-            "disposition": "not_applicable",
-            "evidence": "No numerical values; symbolic answer."
+            "evidence": "ZB·Zπ를 먼저 정의하고 β를 포함한 정확식·영점/극점을 조립한다."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "Branches combined before KCL: R_B∥C_μ at base (collector AC ground so C_μ is base–ground) = Z_B; r_π∥C_π = Z_π; ideal bias source open; V_A=∞ so r_o open."
+            "evidence": "출력 이미터에서 베이스 저항과 베이스-컬렉터 용량이 연결된 가지를 분리한다."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "KCL model drawn: input zeroed (R_B to ground left), C_μ base–ground, r_π∥C_π base–emitter, g_mv_π collector(ground)→emitter, test v_t/i_t at right with dot at wire end, arrow left of dot; base blue, emitter red; KCL equations use the same node names and v_π polarity."
-          },
-          "GAIN-01": {
-            "disposition": "not_applicable",
-            "evidence": "Output impedance and |Z_out| sketch; no voltage gain."
+            "evidence": "입력 영점과 컬렉터 접지, Cμ와 Cπ의 다른 가지, 출력 시험 점과 방향이 원문과 대응한다."
           },
           "DEGEN-01": {
-            "disposition": "not_applicable",
-            "evidence": "No degeneration G_m; the resistor-sum 1/g_m+R_B/(β+1) is the FREQ-01 low-frequency form, not a degenerated transconductance."
-          },
-          "SCALE-01": {
-            "disposition": "not_applicable",
-            "evidence": "No scaling question."
-          },
-          "BIAS-01": {
-            "disposition": "not_applicable",
-            "evidence": "No bias boundary."
+            "disposition": "applied",
+            "evidence": "vπ=vb−vt를 선언해 i_t의 부호와 유한 rπ를 사용한다."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "SVG labels native tspan (R_B, C_μ, v_b, r_π, C_π, g_mv_π, i_t, v_t(+)); Bode axis label 20 log10(|Z_out|/Ω) with tspan subscripts; no pseudo-subscripts; node colors paired; answer emphasized with <strong> in data-answer-final."
+            "evidence": "vπ, vt, it 및 두 극과 영점 기호를 구분했다."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "Seven sections, fixed solve title; each KCL line preceded by a one-line judgement of current direction; Bode reasoning (zero +20, pole −20, ordering conditions) linked to the sketch. Summary/MD consistent."
+            "evidence": "㉠ 베이스의 두 임피던스→㉡ 시험전류→식과 선도 순으로 문제의 두 요구에 답한다."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "Ordering statements given as conditions (R_B>1/g_m, R_BC_μ<r_πC_π) and the impossible ordering proven; ≈ used for β≫1 reduction; high-frequency series-C claim limited to the high-frequency limit in pitfall."
+            "evidence": "정해지지 않은 코너 순서를 일반화하지 않고 가능한 두 방향을 명시한다."
           },
           "FREQ-01": {
             "disposition": "applied",
-            "evidence": "C_μ changes the base-side impedance → KCL kept (recall says why). Verify uses the form as a check: C_μ=0 → (R_BC_πs+B)/(C_πs+A) with normalized A=(β+1)/r_π, B=1+R_B/r_π; general form (1+Z_BY_c)/(g_m+Y_c) with Y_c=1/Z_π equals the derived (Z_B+Z_π)/(1+g_mZ_π); low-frequency B/A=(r_π+R_B)/(β+1)≈1/g_m+R_B/(β+1) (1/g_m visible); s→∞ gives R_B and the inductive judgement R_B>1/g_m; r_o n/a (V_A=∞). Pitfall forbids unnormalized β+1, r_π+R_B as A, B."
+            "evidence": "Cμ가 별도 가지라 단일 커패시터 표준형을 적용하지 않고 전체 KCL과 고주파 기울기로 검산한다."
+          },
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "원문에 소자 수치가 없어 공학 단위 환산이 필요하지 않다."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "기호 답이며 반올림 없이 보인다."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "소자 크기 또는 전류의 배율 변화를 구하는 문항이 아니다."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "이미 바이어스된 소신호 회로이며 동작 영역의 경계나 노드 DC 전압을 요구하지 않는다."
+          },
+          "GAIN-01": {
+            "disposition": "not_applicable",
+            "evidence": "이득을 구하지 않고 출력 주파수 의존성을 구한다."
           }
         }
       },
       "p4:main": {
         "status": "pass",
-        "reviewer": "content reviewer (opus, non-author)",
+        "reviewer": "Codex parent reviewer (different from the fragment author)",
         "rules": {
-          "UNIT-01": {
-            "disposition": "applied",
-            "evidence": "Symbolic; verify states RC has units of seconds and |s_p| is in rad/s."
-          },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "R_Y and A_XY computed first, then C_X, C_Y, C_out (one per line), then each pole; intermediate R_Y reused symbolically."
-          },
-          "CALC-02": {
-            "disposition": "not_applicable",
-            "evidence": "No numeric values; symbolic poles."
+            "evidence": "R_Y, A_XY, 각각의 C_X/C_Y/Cout을 분리한 뒤 역시간상수에서 극을 얻는다."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "Known block: looking into M2 source (λ=0) gives 1/g_m2, in parallel with R_P at the same node Y → R_Y=R_P∥1/g_m2; output sees only R_D (no resistive path back through M2 drain)."
+            "evidence": "Y에서 Rp와 CG 입력저항을 병렬로 합쳐 상단과 하단 역할을 구분한다."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "G_m measurement figure draws the actual Y-to-ground short, v_Y=0 and i_Y,sc direction (into circuit, leftward arrow), caption explains why R_P and M2 carry no current; high-frequency model with all caps wired to real nodes, output rightmost; Miller before/after pair with grounded C_X,M, C_Y,M; per-node RC natural-response figure."
-          },
-          "GAIN-01": {
-            "disposition": "applied",
-            "evidence": "Miller gain X→Y written as data-gain-route gm-rout: G_m,XY=i_Y,sc/v_X=g_m1 (short) → R_Y=R_P∥1/g_m2 (input zero) → A_XY=−G_m,XYR_Y=−g_m1R_Y; sign kept."
-          },
-          "DEGEN-01": {
-            "disposition": "not_applicable",
-            "evidence": "No degeneration; R_P loads the intermediate node rather than degenerating M1's source."
-          },
-          "SCALE-01": {
-            "disposition": "applied",
-            "evidence": "Retry fixes bias and small-signal parameters explicitly and asks how R_YC_Y changes as R_P shrinks (fixed factors → changing factor → direction); verify R_P→∞ limit recovers the standard cascode."
-          },
-          "BIAS-01": {
-            "disposition": "not_applicable",
-            "evidence": "No DC bias question."
+            "evidence": "중간 노드와 출력 노드의 소신호 모델, Miller 전후 그림과 입력 영점 노드 상태가 맞는다."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "All SVG labels native tspan (v_X, v_Y, v_out, R_S, C_GD1, C_GS1, g_m1v_X, g_m2v_Y, R_P, C_Y0, R_D, C_out, C_X,M, C_Y,M, i_Y,sc); no pseudo-subscripts; figcaptions use $…$; node colors paired and same node same color."
+            "evidence": "같은 Y 노드 저항 R_Y를 이득 및 극점에서 유지하고 C_Y0와 C_Y를 명시한다."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "Seven sections, fixed solve title; recall explains physically why X and Y move oppositely before the Miller formula; each capacitance sum preceded by a node-by-node judgement. Summary/MD consistent."
+            "evidence": "㉠에서 Rp에 따른 부하를 읽고 Miller 분리 후 ㉡에서 출력 용량을 모은다."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "Miller poles marked ≈ and pitfall states they are estimates with frozen low-frequency ratio; output pole given with = and justified (unilateral output node)."
+            "evidence": "유한 Rp로 변하는 중간전압과 본래 들고 있던 접합 용량을 유지한다."
+          },
+          "UNIT-01": {
+            "disposition": "not_applicable",
+            "evidence": "원문에 소자 수치가 없어 공학 단위 환산이 필요하지 않다."
+          },
+          "CALC-02": {
+            "disposition": "not_applicable",
+            "evidence": "기호 답이며 반올림 없이 보인다."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "소자 크기 또는 전류의 배율 변화를 구하는 문항이 아니다."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "이미 바이어스된 소신호 회로이며 동작 영역의 경계나 노드 DC 전압을 요구하지 않는다."
           },
           "FREQ-01": {
             "disposition": "not_applicable",
-            "evidence": "Cascode pole problem (Miller), not a follower output impedance; outside FREQ-01 scope as briefed."
+            "evidence": "캐스코드 극점이 목표여서 팔로워 표준형이 적용되지 않는다."
+          },
+          "GAIN-01": {
+            "disposition": "not_applicable",
+            "evidence": "원문이 Miller 극점법 지정, 두 단 총 이득보다 Cgd1 양단의 저주파 이득만 보조 계산한다."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "Rp는 캐스코드 중간 노드의 병렬 부하이고 별도 축퇴 제어전압 문제가 아니다."
           }
         }
       },
       "p5:main": {
         "status": "pass",
-        "reviewer": "content reviewer (opus, non-author)",
+        "reviewer": "Codex parent reviewer (different from the fragment author)",
         "rules": {
           "UNIT-01": {
             "disposition": "applied",
-            "evidence": "Fixed: substituted lines now carry units per factor — W/L with µA, µA/V², V; W with µm; g_m with mA/V→mS; C_GS with µm·µm·fF/µm²; C_GD with fF/µm·µm; C_X with fF; R_G,max and R_D,max with s⁻¹ and F (10⁹·10⁻¹⁵ conversion visible); A_v=−G_mR_D≈−(5 mS)(1.768 kΩ) with mS×kΩ=1 → ≈−8.84 V/V. All values recomputed and correct."
+            "evidence": "mA·μA/V²·μm 조합으로 W를, GHz·fF 조합의 역수로 Ω를 얻고 기호 단위를 유지한다."
           },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "Back-calculation chain W/L → W → g_m → C_GS, C_GD → C_X → R_G,max and C_GD2 → R_D,max → A_v; design written as constraint f_p ≥ target ⇒ R ≤ R_max with the boundary chosen as the maximum, then checked (τ values, pole ratio 2)."
+            "evidence": "극점 목표에서 두 저항 상한을 역산하고 폭, gm, 용량을 한 줄씩 보인다. 더 큰 저항이 극점을 낮추므로 경계가 최대다."
           },
           "CALC-02": {
             "disposition": "applied",
-            "evidence": "Two-decimal display (384.43 Ω, 1.77 kΩ, −8.84 V/V, 31.83 ps, 15.92 ps, 9.61 GHz) with ≈; gain explicitly computed from the unrounded R_D (my check: 5 mS×1768.39 Ω=8.8419). Re-checked in final stage: substituted lines keep two-decimal display with ≈; A_v=−G_mR_D≈−(5 mS)(1.768 kΩ)≈−8.84 V/V marks the rounded R_D with ≈ (unrounded product 8.842)."
+            "evidence": "저항의 수치 표시는 둘째 자리까지 하고 Av는 반올림 전 Rd로 계산한다."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "R_Y=1/g_m2 looking into the CG source; R_out=R_D∥∞ (r_o2 open, λ=0); R_G as the node resistance at X with the source zeroed."
+            "evidence": "중간 노드의 CG 입력저항과 출력의 RD·Cgd2 연결을 읽는다."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "Two G_m measurement figures with real shorts to ground (Y short for A_XY, output short for A_v), v=0 labels, leftward short-current arrows at right; Miller pair figure; input-zeroed high-frequency circuit with output dot rightmost."
+            "evidence": "Miller 분리 회로의 X,Y,출력 위치와 AC 접지, 분리 전후를 일치시킨다."
           },
           "GAIN-01": {
             "disposition": "applied",
-            "evidence": "Two gm-rout routes: A_XY (G_m,XY=g_m1, R_Y=1/g_m2, A_XY=−1) and A_v (G_m=g_m1 with output short, R_out=R_D, A_v=−G_mR_D≈−8.84 V/V)."
-          },
-          "DEGEN-01": {
-            "disposition": "not_applicable",
-            "evidence": "No degeneration; M2 is a CG cascode device, not a degeneration resistor."
-          },
-          "SCALE-01": {
-            "disposition": "applied",
-            "evidence": "Retry asks the factor change of R_D,max and |A_v| when only the output-pole target doubles (g_m and C_GD2 fixed → both halve); verify states output pole frequency is twice the input pole from τ ratio."
-          },
-          "BIAS-01": {
-            "disposition": "not_applicable",
-            "evidence": "V_ov=200 mV given; no saturation boundary or node-voltage limit is asked."
+            "evidence": "저주파 총 이득을 X에서 Y, Y에서 출력 연쇄로 쓰고 두 단 부호와 RD를 보존한다."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "Fixed: the three captions now use inline math ($v_Y=0$, $M_2$, $X$, $R_G$, $C_X$, $R_D$, $C_{\\mathrm{out}}$); no unicode pseudo-subscripts or HTML <sub> remain in the fragment or the MD p5 section. SVG labels native <text class=\"fig-text fig-math\"> with tspan subscripts, Pretendard 600, node colors paired (X/out blue, Y red)."
+            "evidence": "R_G/R_D와 노드 X/Y 표기를 통일하고 분리 후 같은 C_X를 입력 극에서 사용한다."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "Seven sections, fixed solve title; judgement lines precede each design step (target is a lower bound on pole frequency ⇒ resistor upper bound). Summary/MD consistent with body."
+            "evidence": "중간 노드 저항을 짚고 용량을 계산한 다음 목표 극점에서 두 발산 경계를 정한다."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "Signed gain A_v≈−8.84 V/V distinguished from the reference |A_v|=8.84; unspecified junction caps stated as neglected; verify warns the Y pole (9.61 GHz) is close to the output pole so node estimates are not an exact bandwidth."
+            "evidence": "크기만 적힌 참고답에 CS–CG의 반전 방향과 V/V 단위를 더해 원문 전압이득을 명확히 한다."
+          },
+          "SCALE-01": {
+            "disposition": "not_applicable",
+            "evidence": "소자의 변화를 비교하는 설계가 아니며 동일 소자의 한 폭을 계산한다."
+          },
+          "BIAS-01": {
+            "disposition": "not_applicable",
+            "evidence": "Vov는 주어졌고 포화 조건 또는 DC 노드 경계를 묻지 않는다."
           },
           "FREQ-01": {
             "disposition": "not_applicable",
-            "evidence": "Cascode design with Miller approximation; no follower output impedance; outside FREQ-01 scope as briefed."
+            "evidence": "소스/이미터 팔로워가 아니므로 적용하지 않는다."
+          },
+          "DEGEN-01": {
+            "disposition": "not_applicable",
+            "evidence": "캐스코드 위쪽은 공통 게이트 이득 블록이며 외부 축퇴 저항이 없다."
           }
         }
       }
@@ -346,85 +334,85 @@
   },
   "source_visual": {
     "status": "pass",
-    "reviewer": "main coordinator (Claude Opus 5.5)",
-    "evidence": "work/source-visual/report.md, pages/E11.24-p25.png, pages/P11.48-p36.png: E11.24/X11.24/P11.48 conditions, figures and asks match the textbook pages; stage problem/condition/ask blocks byte-identical to the prior approved publication; P11.50/P11.58 inputs unchanged. Carried over: reviewed stage 4efbf304 (RUN 1104-20261104-freq01) HTML, MD and figures are byte-identical to this stage; only manifest absolute paths changed (NFC→NFD repo path for answer-PDF validation)."
+    "reviewer": "Codex parent reviewer (different from the fragment author)",
+    "evidence": "E11.24, 11장 PDF p25 Fig 11.49(a)·(b), M1·M2의 λ≠0, M3의 λ=0, Cgs3만 유지하는 지시를 확인했다. X11.24, 11장 PDF p25 예제 바로 다음 연습문제, 세 소자의 λ≠0으로 바꾸고 동일 회로와 Cgs3만 유지한다. P11.48, 11장 PDF p36 Fig 11.90, V_A=∞와 Cμ 포함, 출력 임피던스와 크기 선도 두 요구를 확인했다. P11.50, 11장 PDF p37 Fig 11.92, λ=0, 기생 Rp의 Y 접속, Miller 지정 방법을 확인했다. P11.58, 11장 PDF p37 Fig 11.97, 5/10 GHz, 소자 값과 200 mV 과구동, Miller 근사 지시를 확인했다."
   },
   "browser": {
     "status": "pass",
-    "reviewer": "main coordinator (Claude Opus 5.5)",
-    "evidence": "work/browser-final.json, shots/*.png: re-run on this stage, playwright-headless 1280x900/375x812 × light/dark all visible, 581 KaTeX, 0 errors, no overflow, no console errors, no broken images."
+    "reviewer": "Codex parent reviewer (different from the fragment author)",
+    "evidence": "Chromium 브라우저에서 1280×900·1024×900·375×812 라이트/다크 여섯 조합, 5문항 수식·그림·콘솔·폭 검사 통과. 1023/1024 경계와 닫힘 저장, 원문/문제 탭, 도킹/띄우기/이동, 이전/다음 및 테마를 실제 조작. 라이트/다크 회로 이미지와 Pretendard SemiBold face 확인. 8쪽 내부 답안 PDF에서 Miller 분리 그림, 보데 선도, 답안 산식 및 폰트 임베딩·쪽 넘침 0 확인. browser-a567c1a78ca04458b8ad2272eb5bf814/browser.json 및 panels.json."
   },
   "content": {
     "status": "pass",
-    "reviewer": "content reviewer (opus, non-author)",
-    "evidence": "Final stage 4efbf304aa0647d49c42153db6da7994: diffed against 053a7353… — HTML and MD each differ only in the p5 A_v line ('=−(5 mS)(1.768 kΩ)' → '≈−(5 mS)(1.768 kΩ)'); everything else byte-identical. Final re-review on rebuilt stage 053a73532c8f413aa726a89c154d51d9. Programmatic comparison against the previously reviewed stage 3dfd32e2…: articles p1–p4 in the stage HTML and the p1–p4 sections of the companion MD are byte-identical; the non-article template part has identical length; only p5 changed. Read verification.md (content + learning_style_audit), authoring.md, solution-style.md (sha256 3c9f68f5…eb9f verified, 13 rule_ids), source.json (p1–p5, subparts main), originally reviewed stage HTML 3dfd32e2…/문제설명_1104_Cascode_Frequency_Response.html and .assets MD, lecture Lec5 slides 46–56 (text extracted), concept-note anchors s0-source-impedance/s0-cs-buffer/s0-emitter-impedance (exist; content consistent with FREQ-01 wording). Diffed new p1–p3 against prev/p1–p3: changes are exactly the FREQ-01 rewrite (P1 shortcut, P2/P3 form-as-check). Programmatic check: every $…$/$$…$$ string of all five fragments appears in both the stage HTML and the companion MD; stage articles each have the 7 data-explanation sections in order with the fixed headings; 5 summaries; no learning-volume rows. Independent sympy KCL (my own script, scratchpad/crv/chk.py) reproduces P1, P2, P3 expressions, the P2 R_G→0 and P3 R_B=0 retry results, the P3 C_μ=0 form and high-frequency limit (all diffs 0), and P5 numerics. Retry questions answered by me before reading work/p1/retry-expected.txt, work/p3/retry-answer.txt and the coordinator's p2 statement; all agree. All five items pass content; two learning-style defects found in P5 (see defects). Carried over: reviewed stage 4efbf304 (RUN 1104-20261104-freq01) HTML, MD and figures are byte-identical to this stage; only manifest absolute paths changed (NFC→NFD repo path for answer-PDF validation).",
+    "reviewer": "Codex parent reviewer (different from the fragment author)",
+    "evidence": "stage HTML, MD, 회로 위치와 근사 조건, 소문항별 최종 식과 요약을 대조했다.",
     "items": {
       "p1:main": {
         "status": "pass",
-        "reviewer": "content reviewer (opus, non-author)",
-        "evidence": "Stage article p1 has 7 sections in order (understand→recall→start→solve('이렇게 풀어요')→verify→pitfall→retry), one data-subpart=main in solve/verify, one data-answer-final. FREQ-01 shortcut path as briefed: recall gives clue (output at follower source, only C_GS3) → concept Z_out(s) → symbols g_m3/C_GS3 → shortcut conditions (single gate-side R, C only at control port, r_o ignored; M3 λ=0) → reason for no KCL; start writes R_G=r_o1∥r_o2 (input zeroed, M1/M2 control currents 0), Z_out(0)=1/g_m3, A=g_m3, B=A·Z(0)=1; solve substitutes into (R_GC s+B)/(Cs+A) with no KCL, then expands R_G. Verify: units (S, Ω), s→0 = B/A = 1/g_m3, s→∞ = R_G, ω_z=1/(R_GC_GS3), ω_p=g_m3/C_GS3, inductive iff R_G>1/g_m3 (zero first) — all actually computed. My sympy KCL (gate+source nodes, λ3=0) gives Z=(R_GCs+1)/(Cs+g_m3), diff 0; matches reference_answer. Figure (no KCL in text, kept per authoring high-frequency-model rule and it shows the shortcut conditions): R_G gate-to-ground at left, C_GS3 gate–source, g_m3(V_G−V_X) source pointing up into source node (drain=AC ground), output dot at x=480 is wire end, V_X(+) above it, I_X arrow 457→404 left of the dot with gap, label below; gate blue/source red. Pitfalls correct (A=1,B=1/g_m3 gives right limits but wrong dimension — verified). Retry solved before reading writer file: Q1 R_G=0 → A,B unchanged, Z=1/(g_m3+sC_GS3), magnitude falls (capacitive); Q2 r_o3 present → shortcut invalid, KCL, result r_o3∥previous answer; matches work/p1/retry-expected.txt. Summary/body/MD: all 107 fragment math strings present in MD and stage HTML; summary formulas equal body. R_out boundary: Z(0)=1/g_m3 is exact under the problem's λ3=0, no exact→approx display. Advisory only: P1 writes r_o1 (lowercase) while P2/lecture s48 use r_O — pre-existing, not changed in this run."
+        "reviewer": "Codex parent reviewer (different from the fragment author)",
+        "evidence": "Rg=ro1∥ro2인 입력 영점 모델의 게이트 KCL과 출력 시험 KCL로 (1+sRgCgs3)/(gm3+sCgs3). 두 극한 1/gm3와 Rg도 일치한다. 그림 위치-첫 식과 HTML/MD/요약의 표기·조건을 대조했다."
       },
       "p2:main": {
         "status": "pass",
-        "reviewer": "content reviewer (opus, non-author)",
-        "evidence": "7 sections in order, solve title fixed, main subpart once in solve/verify. KCL kept as FREQ-01 requires for r_O3: start figure is the KCL model (R_G gate–ground left, C_GS3 gate–output, controlled source g_m3V_GS3 left / r_O3 right / output dot x=414 rightmost; I_X arrow 396→368 left of dot, V_X(+) above dot; caption states drain→source reference so leaving-node current is −g_m3V_GS3) and the first equation V_G/R_G+(V_G−V_X)sC_GS3=0 is the gate node KCL of exactly this figure; solve source-node KCL I_X=V_X/r_O3−g_m3V_GS3+(V_X−V_G)sC_GS3 matches figure branches and signs. Form used only as check in verify: fraction = (R_GCs+B)/(Cs+A) with A=g_m3,B=1; r_O3→∞ returns to E11.24; r_O3 attached in parallel last and explicit warning that folding 1/r_O3 into A breaks the s→∞ limit (I verified: that form gives R_G, not r_O3∥R_G). Verify computes s→0 r_O3/(1+g_m3r_O3)=r_O3∥1/g_m3≈1/g_m3 (g_m3r_O3≫1 stated) and s→∞ r_O3∥R_G; inductive condition R_G>1/g_m3 checked (zero<pole iff g_m3R_G>1). My sympy: Z−r_O3(1+R_GCs)/(1+g_mr_O3+(r_O3+R_G)Cs)=0; equals reference_answer. R_out boundary: the problem's explicit change (M3 λ≠0) makes r_O3 the requested content, so the exact Z_out(s) and its s→0 value are the requested result (exception), not an added exact→approx R_out derivation. Retry solved first: R_G→0 → r_O3 ∥ 1/g_m3 ∥ 1/(sC_GS3) = r_O3∥1/(g_m3+C_GS3s); matches coordinator's expected answer (sympy check 0). Summary consistent with body and MD (75 math strings all present). Advisory only: start <figure> lacks class=\"figure\" (unchanged from prior approval; browser review covers rendering)."
+        "reviewer": "Codex parent reviewer (different from the fragment author)",
+        "evidence": "시험 KCL로 ro3∥((1+sRgCgs3)/(gm3+sCgs3)). ro3→∞에서 예제 답, 고주파에서 ro3∥Rg가 된다. 그림 위치-첫 식과 HTML/MD/요약의 표기·조건을 대조했다."
       },
       "p3:main": {
         "status": "pass",
-        "reviewer": "content reviewer (opus, non-author)",
-        "evidence": "7 sections in order, solve title fixed, main once each, data-answer-final present. KCL kept (C_μ changes base-side impedance) and recall states why; form used only in verify. Figure vs first equations: R_B and C_μ base→ground at left, r_π∥C_π base–emitter, g_mv_π source collector(ground)→emitter pointing up, output dot x=426 wire end, i_t arrow 400→365 left of dot, v_t(+) above; base blue, emitter red. Base KCL v_b/Z_B+v_π/Z_π=0 and emitter KCL i_t+g_mv_π=−v_π/Z_π match the figure's node names/directions/polarity (v_π=v_b−v_t). Result (Z_B+Z_π)/(1+g_mZ_π) and expanded form verified by my sympy (diff 0), equal to reference_answer. Bode claims checked algebraically: R_B>1/g_m ⇒ ω_z<ω_π; ω_z<ω_B ⇔ R_BC_μ<r_πC_π; ω_z cannot exceed both poles (R_B[βC_π+(β+1)C_μ]>r_πC_π shown correctly); high-frequency 1/(C_s s) with series C (sympy limit matches). Sketch (asymptotes flat, +20, flat, −20) matches the zero-first case; pole-first case described in text and summary. Verify FREQ-01 checks: C_μ=0 → (R_BC_πs+B)/(C_πs+A) with A=(β+1)/r_π, B=1+R_B/r_π (sympy diff 0), general form (1+Z_BY_c)/(g_m+Y_c) with Y_c=1/Z_π equals derived expression, B/A=(r_π+R_B)/(β+1)≈1/g_m+R_B/(β+1) (1/g_m visible), s→∞ → R_B, inductive iff R_B>1/g_m (exact equivalence). Pitfall on unnormalized β+1, r_π+R_B is correct. Retry solved first: R_B=0 → C_μ has 0 V across (both ends AC ground) and drops out; Z=1/(g_m+1/r_π+sC_π), flat r_π/(β+1)≈1/g_m, single pole (β+1)/(r_πC_π), 0→−20 dB/dec; matches work/p3/retry-answer.txt. Z_out(0) exact finite-β value is the s=0 level of the requested full Z_out (and the lecture/FREQ-01 form), so not an R_out-boundary violation. Summary/MD consistent (116 math strings present)."
+        "reviewer": "Codex parent reviewer (different from the fragment author)",
+        "evidence": "Yb=1/Rb+sCμ, Yπ=1/rπ+sCπ일 때 Zout=(Yb+Yπ)/(Yb(Yπ+gm))으로 참고식에 일치한다. 첫 꺾임에 따라 기울기가 달라지고 최종 -20 dB/dec다. 그림 위치-첫 식과 HTML/MD/요약의 표기·조건을 대조했다."
       },
       "p4:main": {
         "status": "pass",
-        "reviewer": "content reviewer (opus, non-author)",
-        "evidence": "Unchanged fragment re-audited. 7 sections in order, solve title fixed. Start uses gm-rout route for the Miller gain X→Y: figure shows Y shorted to ground with v_Y=0 label at right, i_Y,sc arrow leftward, g_m1v_X source Y→ground; G_m,XY=g_m1, R_Y=R_P∥1/g_m2=R_P/(1+g_m2R_P), A_XY=−g_m1R_Y. Solve: full high-frequency model (C_GD1 X–Y, C_GS1 X–gnd, M1 source Y→gnd, M2 source Y→out labelled g_m2v_Y upward = −g_m2v_GS2 drain→source, R_P Y–gnd, R_D/C_out at output, output dot rightmost); Miller derivation i_X,C≈sv_XC_GD1(1−A_XY), i_Y,C≈sv_YC_GD1(1−1/A_XY); before/after pair figure with grounded C_X,M, C_Y,M; per-node RC figure. C_X, C_Y, C_out and poles match reference_answer and lecture s51 (R_P→∞ gives R_Y→1/g_m2 and the slide formula, checked). Verify: RC unit seconds, sign negative, R_P→∞ limit, output pole exact because output node is unilateral (λ=0, M2 gate grounded) — correct. Pitfall: Miller factor uses v_Y/v_X not overall gain; Miller poles are estimates — correct. Retry solved: smaller R_P → R_Y↓ → Y-side Miller factor (1+1/(g_m1R_Y))↑, but R_YC_Y=R_Y(C_DB1+C_GS2+C_SB2+C_GD1)+C_GD1/g_m1 decreases — question is well-posed and answerable. Summary/MD consistent (106 math strings present). FREQ-01 out of scope (cascode poles)."
+        "reviewer": "Codex parent reviewer (different from the fragment author)",
+        "evidence": "M2 소스에서 Rp∥1/gm2가 보이고 Axy=−gm1 Ry. Miller 근사의 X,Y극과 독립 출력극이 MD와 일치한다. 그림 위치-첫 식과 HTML/MD/요약의 표기·조건을 대조했다."
       },
       "p5:main": {
         "status": "pass",
-        "reviewer": "content reviewer (opus, non-author)",
-        "evidence": "Final stage 4efbf304aa0647d49c42153db6da7994: diffed against 053a7353… — HTML and MD each differ only in the p5 A_v line ('=−(5 mS)(1.768 kΩ)' → '≈−(5 mS)(1.768 kΩ)'); everything else byte-identical. Re-reviewed in stage 053a73532c8f413aa726a89c154d51d9 after the writer fix (diffed work/p5/p5.orig.html vs explanations/p5.html: changes limited to the three figure captions and added unit-bearing substitution lines; no structural/answer change). All 110 p5 math strings appear in the new stage HTML and MD; MD p5 section has no '₂' and no <sub>; 7 sections in order with the fixed solve title. New substituted numbers recomputed: 2(500 µA)/((100 µA/V²)(0.2 V)²)=250; 250(0.18 µm)=45 µm; 2(0.5 mA)/0.2 V=5 mS; (2/3)(45 µm)(0.18 µm)(12 fF/µm²)=64.8 fF; (0.2 fF/µm)(45 µm)=9 fF; C_X=64.8 fF+(1+1)(9 fF)=82.8 fF (1−A_XY with A_XY=−1); 1/(2π·5×10⁹ s⁻¹·82.8×10⁻¹⁵ F)=384.43 Ω; 1/(2π·10¹⁰ s⁻¹·9×10⁻¹⁵ F)=1768.39 Ω≈1.77 kΩ; (5 mS)(1.768 kΩ)=8.84 (unrounded 8.842) → A_v≈−8.84 V/V. Each calculation on its own display line (symbolic line, then substituted line). Remaining content unchanged from first review: Gm-route twice (A_XY=−1 via G_m,XY=g_m1, R_Y=1/g_m2; A_v=−G_mR_D with output-short figure), constraint inequality f_p≥target ⇒ R≤R_max, Miller pair and input-zeroed hf circuit, τ_in=31.83 ps, τ_out=15.92 ps, Y pole 9.61 GHz, retry (doubling output-pole target halves R_D,max and |A_v|) answered and correct; summary/MD consistent. The A_v line now reads A_v=−G_mR_D≈−(5 mS)(1.768 kΩ)≈−8.84 V/V, so the rounded R_D is marked with ≈ (earlier advisory resolved)."
+        "reviewer": "Codex parent reviewer (different from the fragment author)",
+        "evidence": "원문 숫자로 W=45μm, gm=5mS, Cgs=64.8fF, Cgd=9fF, Rg,max=384.432…Ω, Rd,max=1768.388…Ω. MD는 |Av|=8.84이고 본문은 부호를 포함해 −8.84 V/V이다. 그림 위치-첫 식과 HTML/MD/요약의 표기·조건을 대조했다."
       }
     }
   },
   "independent": {
     "status": "pass",
-    "reviewer": "blind verifiers from prior run (inputs unchanged) + coordinator comparison",
-    "evidence": "evidence/p1–p5 re-executed byte-identical; new fragment answers compared in work/independent/comparison.md Carried over: reviewed stage 4efbf304 (RUN 1104-20261104-freq01) HTML, MD and figures are byte-identical to this stage; only manifest absolute paths changed (NFC→NFD repo path for answer-PDF validation).",
+    "reviewer": "Codex parent blind derivation (sealed questions and original figures before viewing answers)",
+    "evidence": "문제와 원문 그림만으로 저장한 기호 검산을 이후 참고 풀이와 새 조각에 대조했다.",
     "items": {
       "p1:main": {
         "status": "pass",
-        "reviewer": "/root/child/blind_p1 (blind, prior run; re-executed here)",
+        "reviewer": "Codex parent blind derivation (sealed questions and original figures before viewing answers)",
         "method": "symbolic",
-        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt: re-executed in this RUN, output byte-identical; work/independent/comparison.md. New shortcut-path final Z_out=(1+sR_G C_GS3)/(g_m3+sC_GS3), R_G=r_o1||r_o2 equals evidence Zout; DC 1/gm3, HF R_G.",
-        "conclusion": "R=ro1∥ro2에서 (1+sRCgs3)/(gm3+sCgs3), 원문 식 (11.133) 및 조각과 일치. DC, 고주파 극한 확인. / New shortcut-path final Z_out=(1+sR_G C_GS3)/(g_m3+sC_GS3), R_G=r_o1||r_o2 equals evidence Zout; DC 1/gm3, HF R_G."
+        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt",
+        "conclusion": "Rg=ro1∥ro2인 입력 영점 모델의 게이트 KCL과 출력 시험 KCL로 (1+sRgCgs3)/(gm3+sCgs3). 두 극한 1/gm3와 Rg도 일치한다."
       },
       "p2:main": {
         "status": "pass",
-        "reviewer": "/root/child/blind_p2 (blind, prior run; re-executed here)",
+        "reviewer": "Codex parent blind derivation (sealed questions and original figures before viewing answers)",
         "method": "symbolic",
-        "evidence": "evidence/p2-sympy.py, evidence/p2-result.txt: re-executed in this RUN, output byte-identical; work/independent/comparison.md. data-answer-final unchanged from prior approval; new verify limits (s→0 r_O3||1/g_m3, s→∞ r_O3||R_G) match evidence.",
-        "conclusion": "ro3∥Z0로 정리되는 KCL 결과가 workbook 단일분수 및 조각 병렬식과 일치. 유한 ro3 및 고주파 극한 확인. / data-answer-final unchanged from prior approval; new verify limits (s→0 r_O3||1/g_m3, s→∞ r_O3||R_G) match evidence."
+        "evidence": "evidence/p2-sympy.py, evidence/p2-result.txt",
+        "conclusion": "시험 KCL로 ro3∥((1+sRgCgs3)/(gm3+sCgs3)). ro3→∞에서 예제 답, 고주파에서 ro3∥Rg가 된다."
       },
       "p3:main": {
         "status": "pass",
-        "reviewer": "/root/child/blind_p3 (blind, prior run; re-executed here)",
+        "reviewer": "Codex parent blind derivation (sealed questions and original figures before viewing answers)",
         "method": "symbolic",
-        "evidence": "evidence/p3-sympy.py, evidence/p3-result.txt: re-executed in this RUN, output byte-identical; work/independent/comparison.md. data-answer-final unchanged; new C_mu=0 form (R_B C_pi s+B)/(C_pi s+A), A=g_m+1/r_pi, B=1+R_B/r_pi equals evidence Cmu=0 line; general-form identity checked symbolically.",
-        "conclusion": "유한 rπ, Cπ, Cμ 두 KCL 결과·두 극/한 영점과 조건부 점근선이 workbook 및 조각과 일치. DC·고주파 극한 확인. / data-answer-final unchanged; new C_mu=0 form (R_B C_pi s+B)/(C_pi s+A), A=g_m+1/r_pi, B=1+R_B/r_pi equals evidence Cmu=0 line; general-form identity checked symbolically."
+        "evidence": "evidence/p3-sympy.py, evidence/p3-result.txt",
+        "conclusion": "Yb=1/Rb+sCμ, Yπ=1/rπ+sCπ일 때 Zout=(Yb+Yπ)/(Yb(Yπ+gm))으로 참고식에 일치한다. 첫 꺾임에 따라 기울기가 달라지고 최종 -20 dB/dec다."
       },
       "p4:main": {
         "status": "pass",
-        "reviewer": "/root/child/blind_p4 (blind, prior run; re-executed here)",
+        "reviewer": "Codex parent blind derivation (sealed questions and original figures before viewing answers)",
         "method": "symbolic",
-        "evidence": "evidence/p4-sympy.py, evidence/p4-result.txt: re-executed in this RUN, output byte-identical; work/independent/comparison.md. Fragment unchanged; evidence reproduces.",
-        "conclusion": "입력·중간 Miller 근사 극과 모델에서 분리된 출력 극 일치. 정확한 결합식은 내부 검산에 유지. / Fragment unchanged; evidence reproduces."
+        "evidence": "evidence/p4-sympy.py, evidence/p4-result.txt",
+        "conclusion": "M2 소스에서 Rp∥1/gm2가 보이고 Axy=−gm1 Ry. Miller 근사의 X,Y극과 독립 출력극이 MD와 일치한다."
       },
       "p5:main": {
         "status": "pass",
-        "reviewer": "/root/child/blind_p5 (blind, prior run; re-executed here)",
+        "reviewer": "Codex parent blind derivation (sealed questions and original figures before viewing answers)",
         "method": "symbolic",
-        "evidence": "evidence/p5-sympy.py, evidence/p5-result.txt: re-executed in this RUN, output byte-identical; work/independent/comparison.md. Only notation/unit substitution lines added; final values 384.43 Ω, 1.77 kΩ, −8.84 V/V match evidence.",
-        "conclusion": "RG,max≈384.43 Ω, RD,max≈1.77 kΩ, 부호 포함 Av≈−8.84 V/V. 5/10 GHz 조건 역대입 및 workbook 반올림과 일치. / Only notation/unit substitution lines added; final values 384.43 Ω, 1.77 kΩ, −8.84 V/V match evidence."
+        "evidence": "evidence/p5-sympy.py, evidence/p5-result.txt",
+        "conclusion": "원문 숫자로 W=45μm, gm=5mS, Cgs=64.8fF, Cgd=9fF, Rg,max=384.432…Ω, Rd,max=1768.388…Ω. MD는 |Av|=8.84이고 본문은 부호를 포함해 −8.84 V/V이다."
       }
     }
   },
@@ -432,38 +420,35 @@
     ".assets/figures_문제설명_1104_Cascode_Frequency_Response/3a88ef570d579101-fig11-90.png": "3a88ef570d579101f23092628274d51273bcdfa2e2e4184552cfdb60e6e9a524",
     ".assets/figures_문제설명_1104_Cascode_Frequency_Response/987fa03d89679685-fig11-49-a.png": "987fa03d896796854948b111650ccffa8ce82ef1c69163eaa9cc6746cfd93c06",
     ".assets/figures_문제설명_1104_Cascode_Frequency_Response/e2e839b0311d0f9d-fig11-97.png": "e2e839b0311d0f9dee7803ec3a0959e57ed46b47e7f3f34a9f7c3a4ddd9d539b",
-    ".assets/figures_문제설명_1104_Cascode_Frequency_Response/explain-fig-1.svg": "d422964a75daf24e1620de736879d8347f300dcb71de6bbfb1e488512b1b98f8",
-    ".assets/figures_문제설명_1104_Cascode_Frequency_Response/explain-fig-10.svg": "6cf7267d7d111faeca3058c782d86288ba91362f2145b57e50e83c2e2cab9dda",
-    ".assets/figures_문제설명_1104_Cascode_Frequency_Response/explain-fig-11.svg": "e0e308c23c7909586f7688f259ce5053db80593637ea5176f67ad567bd2c9cd0",
-    ".assets/figures_문제설명_1104_Cascode_Frequency_Response/explain-fig-12.svg": "48ba1fe0d5d4cf62c638a187c3efe00ba513831e1e3112d7e554b3c91e5dbd7a",
-    ".assets/figures_문제설명_1104_Cascode_Frequency_Response/explain-fig-2.svg": "e6b0492434bc0dd0b63138f89fea3200fbbf8e5fcec5fbea5625d8251961c74e",
-    ".assets/figures_문제설명_1104_Cascode_Frequency_Response/explain-fig-3.svg": "1741d7a0d67b2398748c5c16ebbabc53d8d8abdb5ef96e12026a205997fa7cd5",
-    ".assets/figures_문제설명_1104_Cascode_Frequency_Response/explain-fig-4.svg": "6c8633a9bc010ab0991d54015895a23ac14f7e6a00b94b39af526db28a0d0667",
-    ".assets/figures_문제설명_1104_Cascode_Frequency_Response/explain-fig-5.svg": "f54bbff5ce1ab9dc67d007c8df5ab2a925d292a71c0816b90b8c8d19ddada09c",
-    ".assets/figures_문제설명_1104_Cascode_Frequency_Response/explain-fig-6.svg": "13b7bc5798a84ea29850f2630953a50a46f6fb2626b6b8a004011fd3f4fd009c",
-    ".assets/figures_문제설명_1104_Cascode_Frequency_Response/explain-fig-7.svg": "156ff3fa23f0e7f4b1774081e0267f0ce036504561cb6c79e8a2f71906436b71",
-    ".assets/figures_문제설명_1104_Cascode_Frequency_Response/explain-fig-8.svg": "bf76cf2418028841a175c21ab52b518a410a7ff7fa530352ceb765275c342552",
-    ".assets/figures_문제설명_1104_Cascode_Frequency_Response/explain-fig-9.svg": "7e344539ba747e42b2a6051c5a09e15f90654ddd057e59538d25560c48720cec",
     ".assets/figures_문제설명_1104_Cascode_Frequency_Response/fc4f843f03f7f36c-fig11-92.png": "fc4f843f03f7f36ccc463e8a35826c18c75c3c1f8c5cd7ee53a42b2227abbb9d",
-    ".assets/문제설명_1104_Cascode_Frequency_Response.md": "57a360a2ee05c1e8b5b505da66c5880f406bf5356f2c3ff3523842de7d79923d",
-    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/answer-overlay.json": "d6d9a22f0f22a5a5d1e14d5e31cd41d8566d3af6c821c8114598285582e45bf6",
-    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/evidence/p1-result.txt": "7b6d15c274687b7300b9cc303c1e220f482bf42506f77fe86f2c694cff75f55b",
-    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/evidence/p1-sympy.py": "94d043e47d452cb06179a37ef2988ab8324de126d8ab52773f79720755231026",
-    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/evidence/p2-result.txt": "a78c6a302a0159c33c0acc6c01df9439b16e9e865cdc3ca8717d465839728589",
-    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/evidence/p2-sympy.py": "7b33bbd8a1cc1d30762e4ceaf280c49b2edc8b0fc045957d50fc69bf015b1b21",
-    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/evidence/p3-result.txt": "4dee8fab29b7bbea9ed42d298deb8b78af44e0f762f7cddc9b2cdf94f8708f9f",
-    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/evidence/p3-sympy.py": "d24a90ad6a863837e46e83b3574a6a5edc43f5dfccdd3e5fb1965c7d6f50aeb3",
-    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/evidence/p4-result.txt": "6eeb39719c411d651aa40e5242b697baa044d2304c4da1ab77d8f603c03cfa6b",
-    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/evidence/p4-sympy.py": "204bcb85db9e47d30e752b659be49a84b67562dc01717ad3a317e323cbea1aff",
-    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/evidence/p5-result.txt": "51be2e55c148a1d8d973c846446c01cc95a5afed2102bc73fec3a699bdf5a651",
-    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/evidence/p5-sympy.py": "caeec231ae70c4646d277fa588be2913aa3a6bfd05ca3f351548c988c33f8076",
-    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/fragments/p1.html": "7d05f1df1b425648081bc9a30a6545e82ef9e14cac8d18d016ee3bcd92dfde1d",
-    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/fragments/p2.html": "a3d84597cf1fa67f508eb0217988d5193dc57207d7476d8af1c6f495eaa0ce06",
-    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/fragments/p3.html": "9f4d645f32045ac64825604cb9e3a1fe810e66332cf719b833dd850766bb2697",
-    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/fragments/p4.html": "0b7c56af4684e9594c46dedcb52249ded8968e79d5f98bb7ceb000137049c64d",
-    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/fragments/p5.html": "5e81cce2a6b439c27d93b4b136678db07c70802531d24f9abcc26c44fb30aedc",
+    ".assets/figures_문제설명_1104_Cascode_Frequency_Response/p1-fig-p1-1.svg": "5fa0d93746ab7f3ec510564a795c343cad9d4594cc6dddf668d99a5e5aec37f6",
+    ".assets/figures_문제설명_1104_Cascode_Frequency_Response/p2-fig-p2-1.svg": "5b966efa7d3e14c49038fb84ba057e326da9e0139610d443a4b442469959d454",
+    ".assets/figures_문제설명_1104_Cascode_Frequency_Response/p3-fig-p3-1.svg": "9c368ba019bf081933c6319b027f777de94a0358f9f118ab3ba6ded3dafd3749",
+    ".assets/figures_문제설명_1104_Cascode_Frequency_Response/p3-svg2-fig-p3-2.svg": "aa6ce62ed073b8d8feb7f54b4382c77fee9caadf22c2b8b7ef41d0645572faa9",
+    ".assets/figures_문제설명_1104_Cascode_Frequency_Response/p4-fig-p4-1.svg": "863d52a221436b2da3739cbdfe4d72c51565ccf29ea84d09a15a9c1366ab3cce",
+    ".assets/figures_문제설명_1104_Cascode_Frequency_Response/p4-svg2-fig-p4-2.svg": "e895f6cf75ad89199186a67eaa212a821a986e9788907a9c0e3ef63ea6cc3f58",
+    ".assets/figures_문제설명_1104_Cascode_Frequency_Response/p4-svg3-fig-p4-3.svg": "4fed9818b9884051ae555f22b7cf81349741e719a1d6706900467c4d0540a846",
+    ".assets/figures_문제설명_1104_Cascode_Frequency_Response/p5-fig-p5-1.svg": "d0e248d652704a8e9d00bca3f5d9b6f47185432e227ea5e3584ae865df79d3af",
+    ".assets/figures_문제설명_1104_Cascode_Frequency_Response/p5-svg2-fig-p5-2.svg": "81274a6ee798459e79ea982ed4fc2f7cc47b09cc91fbbd9200cc2cae478c218d",
+    ".assets/문제설명_1104_Cascode_Frequency_Response.md": "7cd643a2771b4d14d797657d0f6f5dedfb121e23aeadd511dabf8b8e15bb3298",
+    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/answer-overlay.json": "5e08cbba64328a5e04f1e2f10981c69466112af95f9882f8eac155ba7d202a5c",
+    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/evidence/p1-result.txt": "b2e8a376fcf3e4ddfa1be4a1f0b5f672c98c36d770a2d6f187b6a276b868e930",
+    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/evidence/p1-sympy.py": "e2ea4e538dbe8b46fc96e950018e897a568d083afc71f5d90ec9068775f6672c",
+    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/evidence/p2-result.txt": "21672a13ece7f23b5a61f5eec8b0237ab3a7b56218bc7e3bd38120c9de58e103",
+    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/evidence/p2-sympy.py": "1b56118b2f69b10f14d904b05ba55dfffbc39615ff5c935d158c234f99230b77",
+    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/evidence/p3-result.txt": "5876b00efb0cb9bc0051eb9cc403e4ac74ec89338b591a3da0fff984d2d32a94",
+    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/evidence/p3-sympy.py": "ba40ea801b948e006d8f72bb3ccb5ac80c6045a7826df9d022caeb71bd9bb5c9",
+    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/evidence/p4-result.txt": "0260260e50ff352d757f85b19c451db18fdf0aaf4a4c2fecb13312eea2ebf431",
+    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/evidence/p4-sympy.py": "86a7be40a6d8df554bd5f67b86a629633f6623442f3cbb86d49d550b125df8ef",
+    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/evidence/p5-result.txt": "33f33bfbf002ec642e84ff23eafbfb4bcf7d5a69cffb0732aa2e9a2accbe6c4f",
+    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/evidence/p5-sympy.py": "0c0fe7aff43ebe4d60247fd68105a905c0b9a451f8b8f5a2f6c733de5591e40e",
+    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/fragments/p1.html": "24b021c96ec54306e5c717de8abd90194e944e3abb1952da79a8899b2320932c",
+    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/fragments/p2.html": "5e0bfdb1f83e3977faabd214749e08d2acffe09b07ee65474b7548c02ab6912e",
+    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/fragments/p3.html": "570273a70e282149997994ede5284cc131fed60ec87dff0ecdea687ad75e029b",
+    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/fragments/p4.html": "98ef79a3fe75027d6f0efc734ee4fe57bce56219710987ab9e51eab0bca94486",
+    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/fragments/p5.html": "f9f82eba826ae888dac461025193a0d836f46b56348d9827762fbbba1951dcea",
     ".assets/자료_문제설명_1104_Cascode_Frequency_Response/template-provenance.json": "69f885ea5f798b5132305e84c4e454228d50fb784330bfab3b2d4fd3697650fc",
-    "문제설명_1104_Cascode_Frequency_Response.html": "0264cc746bb25792d61416f5ace862c10e9c83ae0537a115afd58e2d43d37e6e",
-    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/manifest.json": "3d6dc19253c42ba147e12cb4c9d5621b6e31404d97d0ef2c832084e11c46583a"
+    "문제설명_1104_Cascode_Frequency_Response.html": "5fae1c2c2a8058d356a7c00f42987def18436e9804b4f1681da2f020e2af3f82",
+    ".assets/자료_문제설명_1104_Cascode_Frequency_Response/manifest.json": "978ec7aedc4ed41f51e8ed913dd03c93a7bb01e7404d6b794122d5b2c90ebd86"
   }
 }

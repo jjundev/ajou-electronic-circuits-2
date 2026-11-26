@@ -1,9 +1,43 @@
-a Av= -0.3444206262955256  Miller(in,out)= ['1.3455e+10', '1.9726e+10']  formula res 0.0 0.0  exact poles ['1.1726e+10', '5.7449e+10']  KCLres 3.44965305230871e-16
-a Av= -0.3415027183326118  Miller(in,out)= ['6.0232e+10', '4.0356e+10']  formula res 0.0 0.0  exact poles ['4.3111e+10', '8.0246e+10']  KCLres 3.2914474026545987e-16
-a Av= -1.0923228985806464  Miller(in,out)= ['5.0127e+09', '2.5957e+10']  formula res 0.0 0.0  exact poles ['4.6475e+09', '7.4822e+10']  KCLres 4.0807490737906303e-16
-b Av= -0.5208698751301563  Miller(in,out)= ['1.8340e+10', '2.0796e+10']  formula res 0.0 0.0  exact poles ['1.4390e+10', '6.0086e+10']  KCLres 8.222739430326759e-16
-b Av= -1.2626975774793623  Miller(in,out)= ['7.8744e+09', '3.1209e+10']  formula res 0.0 0.0  exact poles ['7.2047e+09', '7.9090e+10']  KCLres 1.9966551698612636e-16
-b Av= -0.26817024614847906  Miller(in,out)= ['1.7643e+10', '2.6093e+10']  formula res 0.0 0.0  exact poles ['1.6064e+10', '6.4282e+10']  KCLres 4.4372753952367303e-16
-c Av= -42.76966920957144  Miller(in,out)= ['5.2023e+09', '9.3143e+08']  formula res 0.0 0.0  exact poles ['7.9709e+08', '2.7102e+11']  KCLres 7.234744120473143e-16
-c Av= -26.991388408117274  Miller(in,out)= ['2.7145e+09', '1.0297e+09']  formula res 0.0 0.0  exact poles ['7.6280e+08', '8.1930e+10']  KCLres 2.848852893986497e-16
-c Av= -38.01812865655039  Miller(in,out)= ['1.6176e+09', '6.7031e+08']  formula res 0.0 0.0  exact poles ['4.7847e+08', '7.1162e+10']  KCLres 2.807061712494691e-16
+{
+  "p6:a": {
+    "method": "symbolic",
+    "conclusion": "A=g_m,drive R은 노드간 이득의 절댓값. 표기한 ω는 극의 양의 크기. (b)는 벌크 AC 접지이며 소스-벌크 접합용량/바디효과를 생략하는 모델이면 C_SB2 또는 g_mb2를 0으로 둔다.",
+    "values": {
+      "R": "1/(g_m2 + 1/r_o2 + 1/r_o1)",
+      "Av": "-g_m1/(g_m2 + 1/r_o2 + 1/r_o1)",
+      "Cin": "C_GD1*(g_m1/(g_m2 + 1/r_o2 + 1/r_o1) + 1) + C_GS1",
+      "Cout": "C_DB1 + C_DB2 + C_GD1*(1 + (g_m2 + 1/r_o2 + 1/r_o1)/g_m1) + C_GS2",
+      "omega_in": "1/(R_S*(C_GD1*(g_m1/(g_m2 + 1/r_o2 + 1/r_o1) + 1) + C_GS1))",
+      "omega_out": "(g_m2 + 1/r_o2 + 1/r_o1)/(C_DB1 + C_DB2 + C_GD1*(1 + (g_m2 + 1/r_o2 + 1/r_o1)/g_m1) + C_GS2)"
+    }
+  },
+  "p6:b": {
+    "method": "symbolic",
+    "conclusion": "A=g_m,drive R은 노드간 이득의 절댓값. 표기한 ω는 극의 양의 크기. (b)는 벌크 AC 접지이며 소스-벌크 접합용량/바디효과를 생략하는 모델이면 C_SB2 또는 g_mb2를 0으로 둔다.",
+    "values": {
+      "R": "1/(g_m2 + g_mb2 + 1/r_o2 + 1/r_o1)",
+      "Av": "-g_m1/(g_m2 + g_mb2 + 1/r_o2 + 1/r_o1)",
+      "Cin": "C_GD1*(g_m1/(g_m2 + g_mb2 + 1/r_o2 + 1/r_o1) + 1) + C_GS1",
+      "Cout": "C_DB1 + C_GD1*(1 + (g_m2 + g_mb2 + 1/r_o2 + 1/r_o1)/g_m1) + C_GS2 + C_SB2",
+      "omega_in": "1/(R_S*(C_GD1*(g_m1/(g_m2 + g_mb2 + 1/r_o2 + 1/r_o1) + 1) + C_GS1))",
+      "omega_out": "(g_m2 + g_mb2 + 1/r_o2 + 1/r_o1)/(C_DB1 + C_GD1*(1 + (g_m2 + g_mb2 + 1/r_o2 + 1/r_o1)/g_m1) + C_GS2 + C_SB2)"
+    }
+  },
+  "p6:c": {
+    "method": "symbolic",
+    "conclusion": "A=g_m,drive R은 노드간 이득의 절댓값. 표기한 ω는 극의 양의 크기. (b)는 벌크 AC 접지이며 소스-벌크 접합용량/바디효과를 생략하는 모델이면 C_SB2 또는 g_mb2를 0으로 둔다.",
+    "values": {
+      "R": "1/(1/r_o2 + 1/r_o1)",
+      "Av": "-g_m2/(1/r_o2 + 1/r_o1)",
+      "Cin": "C_GD2*(g_m2/(1/r_o2 + 1/r_o1) + 1) + C_GS2",
+      "Cout": "C_DB1 + C_DB2 + C_GD1 + C_GD2*(1 + (1/r_o2 + 1/r_o1)/g_m2)",
+      "omega_in": "1/(R_S*(C_GD2*(g_m2/(1/r_o2 + 1/r_o1) + 1) + C_GS2))",
+      "omega_out": "(1/r_o2 + 1/r_o1)/(C_DB1 + C_DB2 + C_GD1 + C_GD2*(1 + (1/r_o2 + 1/r_o1)/g_m2))"
+    }
+  },
+  "p6:main": {
+    "method": "symbolic",
+    "conclusion": "(a) 다이오드 접속 PMOS, (b) 게이트·드레인 AC 접지 NMOS 소스 부하, (c) PMOS 입력과 고정 바이어스 NMOS 부하. 각 값은 p6:a,b,c. 고이득 출력 근사 시 1+1/A를 1로 둔다.",
+    "values": {}
+  }
+}

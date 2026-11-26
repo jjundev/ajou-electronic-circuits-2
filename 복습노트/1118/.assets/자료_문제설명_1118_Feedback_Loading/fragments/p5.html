@@ -1,60 +1,31 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>입력 화살표 $I_{in}$은 $M_1$의 소스와 $M_2$의 드레인이 만나는 노드로 들어가요. 출력은 $M_1$ 드레인의 전압 $V_{out}$이에요. 따라서 구할 이득은 단위가 Ω인 트랜스임피던스(transimpedance) $V_{out}/I_{in}$이에요. 입력저항과 출력저항은 각각 자기 단자에서 전압을 전류로 나누어 구해요.</p>
+<div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit">
+<svg viewBox="0 0 350 257" role="img" aria-label="출력 분압기 R1, R2의 중간점이 M2 게이트를 구동하고, M2 드레인이 M1 소스의 입력 전류를 빼는 공통 게이트 증폭기."><path class="fig-ink" d="M112 16v15 M112 63v38h15 M112 125h15 M133 113h19 M112 125v28H40v13 M40 192v10 M112 153v25h15 M112 202h15v0 M112 202v12 M133 190h131 M112 80h205 M264 80v15 M264 127v63 M264 190v7 M264 229v8"/><path class="fig-ink" d="M112 31v3l-5 3 10 5 -10 5 10 5 -10 5 5 3v3"/><text class="fig-text fig-math" x="122" y="51" >R<tspan baseline-shift="sub" font-size="78%">D</tspan></text><path class="fig-ink" d="M264 95v3l-5 3 10 5 -10 5 10 5 -10 5 5 3v3"/><text class="fig-text fig-math" x="274" y="115" >R<tspan baseline-shift="sub" font-size="78%">1</tspan></text><path class="fig-ink" d="M264 197v3l-5 3 10 5 -10 5 10 5 -10 5 5 3v3"/><text class="fig-text fig-math" x="274" y="217" >R<tspan baseline-shift="sub" font-size="78%">2</tspan></text><path class="fig-ink" d="M127 98v30 M133 100v26 M118 120l-6 5 6 5 M127 174v31 M133 177v25 M118 197l-6 5 6 5 M101 16h22"/><text class="fig-text fig-math" x="129" y="21" >V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text><text class="fig-text fig-math" x="73" y="118" >M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" x="72" y="194" >M<tspan baseline-shift="sub" font-size="78%">2</tspan></text><text class="fig-text fig-math" x="152" y="96" text-anchor="middle" data-node="bias" data-node-color="red">V<tspan baseline-shift="sub" font-size="78%">b</tspan></text><circle class="fig-dot" cx="152" cy="113" r="3.3" data-node="bias" data-node-color="red"/><text class="fig-text fig-math" x="152" y="113" data-node="bias" data-node-color="red"></text><path class="fig-ink" d="M40 185v-12m-4 5 4-5 4 5"/><circle class="fig-ink" cx="40" cy="179" r="13"/><text class="fig-text fig-math" x="13" y="181" >i<tspan baseline-shift="sub" font-size="78%">in</tspan></text><path class="fig-ink" d="M31 202h18 m-15 4h12 m-9 4h6"/><path class="fig-ink" d="M103 214h18 m-15 4h12 m-9 4h6"/><path class="fig-ink" d="M255 237h18 m-15 4h12 m-9 4h6"/><circle class="fig-dot" cx="112" cy="153" r="3.3" data-node="s" data-node-color="blue"/><text class="fig-text fig-math" x="122" y="143" data-node="s" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">s</tspan></text><circle class="fig-dot" cx="317" cy="80" r="3.3" data-node="out" data-node-color="red"/><text class="fig-text fig-math" x="301" y="67" data-node="out" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text><circle class="fig-dot" cx="264" cy="190" r="3.3" data-node="F" data-node-color="blue"/><text class="fig-text fig-math" x="273" y="178" data-node="F" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">F</tspan></text><circle class="fig-dot" cx="112" cy="80" r="3.2" data-node="out" data-node-color="red"/><circle class="fig-dot" cx="264" cy="80" r="3.2" data-node="out" data-node-color="red"/><text class="fig-loc" x="230" y="113" font-size="17">㉠</text><text class="fig-loc" x="78" y="149" font-size="17">㉡</text></svg>
+<figcaption class="circuit-state">분압기로 출력을 감지하고 $M_2$의 드레인으로 전류를 반송해요.</figcaption>
+</figure>
+<div data-subpart="main">
+<h4>분압기의 부하와 전류 반송</h4>
+<div data-answer-step="감지·반송 포트와 개루프 저항">
+<p><span class="loc">㉠</span> 분압기의 반송 출력을 열어도 $R_1+R_2$는 출력에서 접지로 이어져요. $\lambda=0$이고 $R_1+R_2\gg R_D$인 조건을 적용해요. <span class="loc">㉡</span> 반송 소자 $M_2$의 $r_{o2}$는 무한대이므로 입력에서 순방향으로 보이는 것은 $M_1$의 소스 저항이에요.</p>
+$$R_{out,0}=R_D\parallel(R_1+R_2)\approx R_D$$
+$$R_{in,0}=1/g_{m1}$$
 </div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p>출력에는 저항 분배기가 병렬로 연결되고, 입력에는 $M_2$의 드레인 전류가 병렬로 연결돼요. 출력 전압이 오르면 $M_2$가 입력에서 더 많은 전류를 가져가서 $M_1$로 들어갈 전류가 줄어요. 전압–전류 음귀환(shunt–shunt feedback)이에요.</p>
-  <p>순방향 트랜스임피던스를 $R_0$, 출력 전압에 대한 귀환 전류의 비를 $K$라 하면 루프 이득은 $T=KR_0$예요. 입력의 전류 반송과 출력의 전압 감지는 각각 해당 포트의 저항을 $1+T$로 나누어요.</p>
+<div data-answer-step="공통 게이트 단과 귀환율">
+<p>순방향 전류 $i_e$가 $M_1$의 소스로 들어가면 $v_{out}$은 올라가요. 공통 게이트 단에서 이 전류 전체가 출력 부하에 전달돼요.</p>
+$$R_0=\frac{v_{out}}{i_e}=R_{out,0}$$
+<p>출력에 시험전압을 걸고, $i_F$는 $M_2$가 입력에서 접지로 빼는 방향으로 잡아요. 게이트 전압은 분압기 아래 저항 $R_2$에 걸리는 전압이에요.</p>
+$$K=\frac{i_F}{v_{out}}=g_{m2}\frac{R_2}{R_1+R_2}$$
+$$T=KR_0\approx g_{m2}R_D\frac{R_2}{R_1+R_2}$$
 </div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="분압과 귀환율">
-    <p>$M_2$의 게이트는 분압기 중간점에 있고 소스는 접지예요. 출력에 걸리는 전체 저항 $R_1+R_2$는 $R_D$보다 매우 크지만, 아래쪽 저항에 걸리는 전압의 비는 유지해요.</p>
-    $$\alpha=\frac{R_2}{R_1+R_2}$$
-    <p>$v_{gs2}=\alpha v_{out}$이므로 $M_2$가 입력 노드에서 접지로 빼내는 귀환 전류는 $i_F=g_{m2}\alpha v_{out}$이에요.</p>
-    $$K=\frac{i_F}{v_{out}}=g_{m2}\alpha$$
-  </div>
+<div data-answer-final="">
+<p>출력의 전압 감지와 입력의 전류 반송이 모두 병렬이므로 세 결과의 분모가 같아요.</p>
+$$\frac{v_{out}}{i_{in}}\approx +\frac{R_D}{1+T}$$
+$$R_{in,cl}\approx\frac{1/g_{m1}}{1+T}$$
+$$R_{out,cl}\approx\frac{R_D}{1+T}$$
 </div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
-  <div data-subpart="main">
-    <div data-answer-step="공통 게이트 단과 루프 이득">
-      <p>$\lambda=0$이므로 두 MOS의 $r_o$는 무한대예요. 공통 게이트 $M_1$의 소스로 들어온 소신호 전류가 드레인에서 부하로 전달돼요. 출력에서 본 부하는 $R_D\parallel(R_1+R_2)\approx R_D$이므로 순방향 트랜스임피던스는 $R_0\approx +R_D$예요.</p>
-      $$T=KR_0\approx g_{m2}\alpha R_D$$
-    </div>
-    <p>귀환을 닫으면 $M_1$에 전달되는 전류는 $i_{in}-i_F$예요. 따라서 전압 출력의 변화가 원래보다 $1+T$배 작아져요.</p>
-    $$\frac{v_{out}}{i_{in}}=\frac{R_0}{1+T}$$
-    <div data-answer-step="두 포트의 개루프 저항">
-      <p>입력은 AC 접지된 게이트를 가진 $M_1$의 소스에서 보므로 $R_{in,0}=1/g_{m1}$이에요. 출력에서 볼 때는 독립 입력 전류원을 개방해요. 개루프 출력저항은 $R_{out,0}\approx R_D$예요.</p>
-      <p>입력은 전류를 병렬로 반송하고 출력은 전압을 병렬로 감지하므로, 두 값에 같은 분모 $1+T$를 적용해요.</p>
-    </div>
-  </div>
 </div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <div data-answer-final="폐루프 이득과 입출력 임피던스">
-      <p><strong>$\lambda=0$, $R_1+R_2\gg R_D$에서의 세 결과</strong>예요. 공통 분모는 $D=1+g_{m2}R_D R_2/(R_1+R_2)$예요.</p>
-      $$\frac{v_{out}}{i_{in}}\approx +\frac{R_D}{D}$$
-      $$R_{in,cl}\approx\frac{1}{g_{m1}D}$$
-      $$R_{out,cl}\approx\frac{R_D}{D}$$
-    </div>
-    <p>세 결과의 단위는 모두 Ω이에요. $g_{m2}\to0$이면 $D\to1$이므로 이득은 $+R_D$, 입력저항은 $1/g_{m1}$, 출력저항은 $R_D$로 돌아와요. 첫째와 셋째의 값이 같은 것은 이 공통 게이트 단에서 순방향 트랜스임피던스와 개루프 출력저항이 모두 약 $R_D$이기 때문이에요.</p>
-  </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <p>분배기 전류가 작아도 게이트에는 분압이 걸려요. 두 저항을 동시에 같은 배수로 키우면 분배기의 부하 효과는 작아지지만 $R_2/(R_1+R_2)$와 귀환율 $K$는 그대로예요.</p>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ul><li>$R_1+R_2$와 두 소자의 $g_m$을 유지하며 $R_2$의 비중을 높이면 폐루프 입력저항은 커질까요, 작아질까요?</li></ul>
 </div>
 <div class="sum" hidden>
-  <p class="sum-lead">$M_2$가 분압된 출력에 비례해 입력 전류를 빼내므로 양쪽 포트 저항과 트랜스임피던스가 함께 줄어요.</p>
-  <p>$\lambda=0$, $R_1+R_2\gg R_D$일 때 공통 분모는 $D=1+g_{m2}R_D\frac{R_2}{R_1+R_2}$예요.</p>
-  $$v_{out}/i_{in}\approx +R_D/D$$
-  $$R_{in,cl}\approx 1/(g_{m1}D)$$
-  $$R_{out,cl}\approx R_D/D$$
+<p class="sum-lead">큰 분압 저항은 출력 부하를 거의 바꾸지 않지만 $R_2/(R_1+R_2)$는 귀환율에 남아요.</p>
+<p>전류 반송과 전압 감지가 모두 병렬이므로 두 포트 저항은 각각 $1+T$로 나뉘어요.</p>
 </div>

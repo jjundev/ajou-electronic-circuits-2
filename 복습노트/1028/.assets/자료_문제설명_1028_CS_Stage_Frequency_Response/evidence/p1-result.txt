@@ -1,8 +1,10 @@
-Definition: f_T = freq where |i_d/i_g| (drain AC-shorted) = 1; i_d=g_m v_gs, i_g = j w C_GS v_gs -> w_T=g_m/C_GS
-wT=6.469577e+10 target=6.469577e+10 |beta(wT)|=1.000000000000 relres=2.36e-16
-wT=4.598239e+11 target=4.598239e+11 |beta(wT)|=1.000000000000 relres=2.65e-16
-wT=2.310020e+10 target=2.310020e+10 |beta(wT)|=1.000000000000 relres=0.00e+00
-wT=1.628794e+10 target=1.628794e+10 |beta(wT)|=1.000000000000 relres=1.17e-16
-wT=9.712116e+10 target=9.712116e+10 |beta(wT)|=1.000000000000 relres=0.00e+00
-wT=1.622269e+12 target=1.622269e+12 |beta(wT)|=1.000000000000 relres=1.50e-16
-max relative residual 2.6547187972521047e-16
+{
+  "p1:main": {
+    "method": "symbolic",
+    "conclusion": "MOSFET 출력 단락 상태에서 소신호 드레인 전류와 게이트 전류 크기가 같아지는 주파수가 f_T다. C_GD=0에서 i_g=jωC_GS v_gs, i_d=g_m v_gs이므로 ω_T=g_m/C_GS이고 f_T=ω_T/(2π). 포화 장채널 식을 대입한다.",
+    "values": {
+      "omega_T": "3*Vov*mu/(2*L**2)",
+      "f_T": "3*Vov*mu/(4*pi*L**2)"
+    }
+  }
+}

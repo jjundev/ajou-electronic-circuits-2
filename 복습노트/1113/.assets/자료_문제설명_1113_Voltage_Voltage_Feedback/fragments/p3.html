@@ -1,110 +1,20 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>그림 12.28은 능동 부하(active load)를 단 차동쌍이에요. $M_1$–$M_2$가 차동쌍(differential pair), $M_3$–$M_4$가 그 부하인 전류 거울(current mirror)이고, 두 소스는 꼬리 전류원 $I_{SS}$에 함께 묶여 있어요.</p>
-  <p>입력 $v_{in}$은 $M_1$ 게이트로 들어가요. 출력 $v_{out}$은 $M_2$ 드레인이고, 이 노드는 $M_4$ 드레인과 같은 노드예요.</p>
-  <p>출력에서 $R_1$–$R_2$ 분배기가 $v_{out}$을 나누고, 가운데 노드 $X$가 $M_2$ 게이트로 돌아가요. 출력의 일부가 차동쌍의 다른 쪽 입력으로 되돌아오는 루프(loop)가 있다는 뜻이에요.</p>
-  <p>구할 것은 이 귀환이 입력 변화의 효과를 줄이는 부귀환인지, 키우는 정귀환인지예요. 소자 값이 없으니 크기는 계산하지 않고, 각 전류·전압이 오르는지($\uparrow$) 내리는지($\downarrow$)만 따라가요.</p>
+<div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit">
+<svg id="fig-circuit-s3-polarity-ex1" viewBox="12 0 318 214" role="img" aria-label="PMOS 전류 거울 M3, M4를 부하로 둔 NMOS 차동쌍 M1, M2와 꼬리 전류원 ISS. 출력 Vout을 R1과 R2로 나눈 VX가 M2 게이트로 돌아가요."><g data-symbol="pmos"><path class="fig-ink" d="M130 29V59M126 26V62M126 32H104M126 56H104M114 27l6 5 -6 5"/></g><g data-symbol="pmos"><path class="fig-ink" d="M180 29V59M184 26V62M184 32H206M184 56H206M196 27l-6 5 6 5"/></g><g data-symbol="nmos"><path class="fig-ink" d="M78 113V143M82 110V146M82 116H104M82 140H104M92 135l6 5 -6 5"/></g><g data-symbol="nmos"><path class="fig-ink" d="M232 113V143M228 110V146M228 116H206M228 140H206M218 135l-6 5 6 5"/></g><path class="fig-ink" d="M92 14L236 14 M104 14L104 32 M206 14L206 32 M130 44L180 44 M155 44L155 72L104 72 M104 56L104 116 M206 56L206 116 M104 140L104 156L206 156L206 140 M155 156L155 167 M155 191L155 198 M36 128L78 128"/><g data-symbol="part"><path class="fig-ink" d="M145 198h20M149 203h12M152 208h6"/></g><g data-symbol="source"><circle class="fig-ink" cx="155" cy="179" r="12"/><path class="fig-ink" d="M155 171V187m-5 -6l5 6 5 -6"/></g><circle class="fig-dot" data-node-color="blue" cx="236" cy="14" r="3.5"/><text class="fig-text fig-math" text-anchor="start" x="246" y="19" data-node-color="blue">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text><circle class="fig-dot" data-node-color="blue" cx="104" cy="72" r="3.5"/><circle class="fig-dot" data-node-color="blue" cx="155" cy="44" r="3.5"/><circle class="fig-dot" data-node-color="blue" cx="36" cy="128" r="3.5"/><text class="fig-text fig-math" text-anchor="middle" x="36" y="110" data-node-color="blue">V<tspan baseline-shift="sub" font-size="78%">in</tspan></text><text class="fig-text fig-math" text-anchor="end" x="92" y="49">M<tspan baseline-shift="sub" font-size="78%">3</tspan></text><text class="fig-text fig-math" text-anchor="start" x="218" y="49">M<tspan baseline-shift="sub" font-size="78%">4</tspan></text><text class="fig-text fig-math" text-anchor="start" x="114" y="133">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" text-anchor="end" x="196" y="133">M<tspan baseline-shift="sub" font-size="78%">2</tspan></text><text class="fig-text fig-math" text-anchor="start" x="176" y="184">I<tspan baseline-shift="sub" font-size="78%">SS</tspan></text><circle class="fig-dot" data-node-color="blue" cx="155" cy="156" r="3.5"/><path class="fig-ink" d="M206 88L306 88 M272 88L272 90 M272 126L272 136 M272 172L272 180 M232 128L272 128"/><g data-symbol="part"><path class="fig-ink" d="M272 90l-7 3 14 6 -14 6 14 6 -14 6 14 6 -7 3"/></g><g data-symbol="part"><path class="fig-ink" d="M272 136l-7 3 14 6 -14 6 14 6 -14 6 14 6 -7 3"/></g><g data-symbol="part"><path class="fig-ink" d="M262 180h20M266 185h12M269 190h6"/></g><circle class="fig-dot" data-node-color="red" cx="206" cy="88" r="3.5"/><circle class="fig-dot" data-node-color="red" cx="272" cy="88" r="3.5"/><circle class="fig-dot" data-node-color="red" cx="306" cy="88" r="3.5"/><text class="fig-text fig-math" text-anchor="middle" x="306" y="70" data-node-color="red">V<tspan baseline-shift="sub" font-size="78%">out</tspan></text><circle class="fig-dot" data-node-color="blue" cx="272" cy="128" r="3.5"/><text class="fig-text fig-math" text-anchor="start" x="286" y="133" data-node-color="blue">V<tspan baseline-shift="sub" font-size="78%">X</tspan></text><text class="fig-text fig-math" text-anchor="start" x="288" y="112">R<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" text-anchor="start" x="288" y="160">R<tspan baseline-shift="sub" font-size="78%">2</tspan></text><g data-symbol="arrow"><path class="fig-accent" d="M98 90L104 99L110 90"/></g><text class="fig-text fig-math" text-anchor="end" x="92" y="100">I<tspan baseline-shift="sub" font-size="78%">D1</tspan></text><g data-symbol="arrow"><path class="fig-accent" d="M200 98L206 107L212 98"/></g><text class="fig-text fig-math" text-anchor="end" x="194" y="108">I<tspan baseline-shift="sub" font-size="78%">D2</tspan></text><text class="fig-text fig-loc" font-size="17" text-anchor="middle" x="58" y="150">㉠</text><text class="fig-text fig-loc" font-size="17" text-anchor="middle" x="234" y="79">㉡</text><text class="fig-text fig-loc" font-size="17" text-anchor="middle" x="248" y="150">㉢</text></svg>
+<figcaption class="circuit-state">전류 거울 부하 차동쌍의 오른쪽 드레인에서 분압기로 되먹임해요.</figcaption>
+</figure>
+<div data-subpart="main">
+<h4>오른쪽 드레인에서 되돌아오는 변화</h4>
+<div data-answer-step="오른쪽 드레인과 차동 입력의 부호">
+<p><span class="loc">㉠</span> $v_{in}$이 오르면 꼬리 전류가 $M_1$ 쪽으로 옮겨가요. <span class="loc">㉡</span> 오른쪽 출력에서 $M_4$가 공급하는 전류는 늘고 $M_2$가 빼는 전류는 줄어 $v_{out}$이 올라요.</p>
+<p><span class="loc">㉢</span> 출력이 오르면 분압된 $v_X$도 올라요.</p>
+$$\Delta v_X=\frac{R_2}{R_1+R_2}\Delta v_{out}$$
 </div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p>"귀환의 극성을 결정하라"와, 출력에서 분배기를 거쳐 입력 쪽 트랜지스터 게이트로 돌아가는 경로가 단서예요. 여기서 귀환의 극성(polarity of feedback) 판정 세 단계를 떠올려요(<a href="정리노트_1113_Voltage_Voltage_Feedback.html#s3-polarity-steps">입력을 올려 보고 루프를 한 바퀴 따라가요</a>).</p>
-  <ol>
-    <li>입력이 오른다(또는 내린다)고 가정해요.</li>
-    <li>그 변화를 순방향 증폭기와 귀환 회로망을 거쳐 루프를 따라 추적해요.</li>
-    <li>돌아온 양이 처음 변화의 효과를 방해하면 부귀환(음귀환, negative feedback), 키우면 정귀환(양귀환, positive feedback)이에요.</li>
-  </ol>
-  <p>이 회로에서 순방향 증폭기는 $M_1$–$M_4$이고, 귀환 회로망은 $R_1$–$R_2$ 분배기예요. 차동쌍은 두 게이트 전압의 차로 전류를 나누므로 귀환 신호를 입력에서 빼는 역할을 해요(<a href="정리노트_1113_Voltage_Voltage_Feedback.html#s1-sense-return-example">차동쌍이 빼고 저항 분배기가 감지해요</a>).</p>
-  <p>따라갈 기호는 다음과 같아요. $I_{D1}$, $I_{D2}$는 $M_1$, $M_2$의 드레인 전류예요. $I_{D4}$는 $M_4$가 출력 노드로 밀어 넣는 전류예요. $V_X$는 분배기 가운데 노드, 즉 $M_2$ 게이트의 전압이에요.</p>
-  <p>꼬리 전류원이 두 전류의 합을 고정해요. 그래서 한쪽 전류가 늘면 다른 쪽은 그만큼 줄어요.</p>
-  $$I_{D1}+I_{D2}=I_{SS}$$
-  <p>$M_2$ 게이트로는 전류가 흐르지 않으므로 분배기는 출력 전압을 일정한 양의 비율로 줄여요. 그래서 $V_X$는 언제나 $V_{out}$과 같은 방향으로 움직여요.</p>
-  $$V_X=\frac{R_2}{R_1+R_2}V_{out}$$
-  <p>성립 조건은 모든 트랜지스터가 포화 영역에서 동작하고 꼬리 전류원이 $I_{SS}$를 일정하게 흘린다는 것이에요. 증감 방향만 따지므로 $g_m$, $r_o$나 저항 값은 필요 없어요. 수업 기본 근사 $g_mr_o\gg1$은 크기를 정할 때 쓰는 것이고, 이 문항의 부호 판단에는 들어가지 않아요.</p>
-  <p>이 절차를 고르는 이유는 구할 것이 수치가 아니라 방향이기 때문이에요. 값 없이도 각 소자가 전류를 늘리는지 줄이는지만 알면 루프를 한 바퀴 돌릴 수 있어요.</p>
+<div data-answer-final="">
+<p>$v_X$는 $M_2$ 게이트에 돌아와 차동 입력 $v_{in}-v_X$의 증가를 줄여요. 따라서 부귀환이에요.</p>
 </div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="가정과 첫 줄">
-    <p>1단계로 입력이 오른다고 가정해요. 다른 전원과 바이어스는 고정하고, 각 양이 움직이려는 방향만 적어요.</p>
-    $$V_{in}\uparrow\ \Rightarrow\ I_{D1}\uparrow$$
-    <p>꼬리 전류가 고정이므로 $M_1$이 더 가져간 만큼 $M_2$ 전류는 줄어요.</p>
-    $$I_{D1}+I_{D2}=I_{SS}$$
-    $$I_{D1}\uparrow\ \Rightarrow\ I_{D2}\downarrow$$
-  </div>
-  <p>첫 줄의 이유는 차동쌍의 전류 분배가 두 게이트 전압의 차 $V_{in}-V_X$로 정해진다는 점이에요. 이 순간에는 $V_X$가 아직 변하지 않았다고 보고 따라가므로, 차가 커져 $M_1$ 쪽으로 전류가 더 몰려요. 루프를 한 바퀴 돈 뒤 $V_X$의 변화가 이 첫 변화를 되돌리는지 키우는지를 보는 것이 3단계예요.</p>
 </div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
-  <div data-subpart="main">
-    <div data-answer-step="순방향 경로: 입력에서 출력까지">
-      <p>$M_1$ 전류는 다이오드로 연결된 $M_3$를 지나요. $M_4$는 $M_3$와 게이트·소스를 공유하는 전류 거울이라 $M_1$의 전류 변화를 같은 방향으로 복사해 출력 노드로 밀어 넣어요.</p>
-      $$I_{D1}\uparrow\ \Rightarrow\ I_{D4}\uparrow$$
-      <p>출력 노드에서는 $M_4$가 전류를 넣고 $M_2$가 전류를 빼 가요. 넣는 전류는 늘고 빼는 전류는 줄었으니, 출력 노드에 들어오는 전류의 변화량은 양수예요.</p>
-      $$\Delta I_{D4}-\Delta I_{D2}&gt;0$$
-      <p>남는 전류가 출력 노드를 충전하므로 출력 전압은 오르려 해요.</p>
-      $$V_{out}\uparrow$$
-    </div>
-    <p>전류 거울 쪽을 전압으로 보아도 같아요. $I_{D1}$이 늘면 $M_3$의 $V_{SG3}$가 커져야 하므로 $M_1$ 드레인 노드 전압이 내려가요. 이 노드가 $M_4$ 게이트라서 $V_{SG4}$도 커지고, $M_4$가 전류를 더 밀어 넣어요. $M_1$ 드레인은 출력이 아니라 거울의 게이트 노드라는 점을 구별해요.</p>
-    <div data-answer-step="귀환 경로와 처음 변화의 비교">
-      <p>2단계의 나머지로 귀환 회로망을 지나가요. 분배비가 양수이므로 $V_X$는 $V_{out}$을 따라 올라가요.</p>
-      $$V_{out}\uparrow\ \Rightarrow\ V_X\uparrow$$
-      <p>$V_X$는 $M_2$ 게이트예요. $M_2$ 게이트가 오르면 $M_2$가 더 켜지고, 꼬리 전류가 고정이므로 $M_1$ 전류는 줄어요.</p>
-      $$V_X\uparrow\ \Rightarrow\ I_{D2}\uparrow,\ I_{D1}\downarrow$$
-      <p>3단계로 처음 변화와 같은 양끼리 비교해요. 입력이 만든 변화는 $I_{D1}\uparrow$, $I_{D2}\downarrow$였는데, 돌아온 변화는 $I_{D1}\downarrow$, $I_{D2}\uparrow$예요. 돌아온 양이 입력 변화의 효과를 방해하므로 이 귀환은 <strong>부귀환</strong>이에요.</p>
-    </div>
-    <p>차의 관점으로 한 번 더 읽으면, $V_X$는 $V_{in}$과 같은 방향으로 움직이면서 차동쌍에서 빼는 쪽 입력으로 돌아와요. 그래서 차동쌍이 보는 차 $V_{in}-V_X$가 입력만 바뀌었을 때보다 작아지고, 출력 변화도 그만큼 작게 자리 잡아요.</p>
-  </div>
-</div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <div data-answer-final>
-      <p><strong>부귀환(negative feedback)이에요.</strong> $V_{in}\uparrow$이면 $I_{D1}\uparrow$, $I_{D2}\downarrow$로 $V_{out}$과 $V_X$가 오르고, $V_X\uparrow$가 $I_{D2}\uparrow$, $I_{D1}\downarrow$로 입력 변화의 효과를 방해해요.</p>
-      <p>성립 조건은 모든 트랜지스터가 포화 영역에서 동작하고 꼬리 전류 $I_{SS}$가 일정하며, $R_1$, $R_2$가 양의 저항이고 $X$가 $M_2$ 게이트로 돌아간다는 것이에요.</p>
-    </div>
-    <p>교과서의 두 번째 방법인 루프 끊기로 확인해요. 입력을 0으로 두어 $M_1$ 게이트를 고정하고, $M_2$ 게이트에서 루프를 끊어 시험 전압 $V_{test}$를 넣어요. $M_2$ 게이트는 전류를 흘리지 않으므로 여기서 끊어도 분배기의 부하가 바뀌지 않아요.</p>
-    $$V_{test}\uparrow\ \Rightarrow\ I_{D2}\uparrow,\ I_{D1}\downarrow$$
-    $$I_{D1}\downarrow\ \Rightarrow\ I_{D4}\downarrow$$
-    $$\Delta I_{D4}-\Delta I_{D2}&lt;0\ \Rightarrow\ V_{out}\downarrow$$
-    $$V_{ret}=V_X\downarrow$$
-    <p>올린 $V_{test}$에 대해 돌아온 $V_{ret}$가 내려가므로 $V_{ret}/V_{test}$는 음수예요. 첫 방법과 같은 부귀환이에요.</p>
-    <p>위상(반전 횟수)으로도 확인해요. $M_1$ 게이트에서 $M_1$ 드레인으로 한 번, $M_4$ 게이트에서 $M_4$ 드레인으로 또 한 번 반전되므로 $V_{out}$은 $V_{in}$과 같은 위상이에요. 분배기는 부호를 바꾸지 않아 $V_X$도 같은 위상이고, 이 신호가 빼는 입력인 $M_2$ 게이트로 돌아오므로 차가 줄어 부귀환이에요.</p>
-    <p>경계도 확인해요. $R_2\to0$이면 $X$가 접지되어 $V_X$가 변하지 않으므로 돌아오는 신호 자체가 없어요. 이때 귀환이 사라질 뿐 정귀환으로 뒤집히지는 않아요. 분배비가 0보다 큰 동안에는 크기만 달라지고 극성은 그대로예요.</p>
-    <p>입력이 내린다고($V_{in}\downarrow$) 가정해도 모든 화살표가 뒤집혀 $I_{D1}\downarrow$ 뒤에 $I_{D1}\uparrow$가 돌아오므로 결론은 같아요. 극성은 처음 가정한 방향에 따라 바뀌지 않아요.</p>
-  </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <ul>
-    <li>돌아온 변화는 처음 가정한 것과 같은 양끼리 비교해요. 처음의 $I_{D2}\downarrow$와 돌아온 $I_{D1}\downarrow$를 비교하면 같은 방향으로 보여 정귀환으로 착각하기 쉬워요. $I_{D1}$은 $\uparrow$에서 $\downarrow$로, $I_{D2}$는 $\downarrow$에서 $\uparrow$로 돌아왔어요.</li>
-    <li>"$V_X$가 $V_{in}$과 같은 방향으로 움직이니 정귀환"이라고 판단하지 않아요. 같은 방향의 신호라도 차동쌍의 빼는 입력($M_2$ 게이트)으로 돌아오면 차가 줄어 부귀환이에요. 방향과 함께 돌아오는 위치를 봐야 해요.</li>
-    <li>출력은 $M_2$·$M_4$ 드레인이에요. $M_1$ 드레인은 $I_{D1}\uparrow$일 때 내려가지만 거울의 게이트 노드일 뿐 출력이 아니에요. 이 노드를 출력으로 읽으면 $V_{out}\downarrow$로 잘못 따라가요.</li>
-    <li>전류 거울을 빼먹고 $M_2$만 보고 출력을 정하지 않아요. 이 회로에서는 $M_4$가 $M_1$의 변화를 복사해 넣고 $M_2$가 빼 가는 두 변화가 출력 노드에서 같은 방향으로 더해져요.</li>
-    <li>극성은 저항 값이나 $g_m$을 계산해서 정하는 것이 아니에요. 값이 없다고 판정을 미루지 말고 방향만 따라가요.</li>
-  </ul>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol>
-    <li>$R_2$를 없애($R_2\to\infty$) $X$가 $R_1$만 거쳐 출력에 이어지면, 즉 $V_X=V_{out}$이면 극성은 어떻게 되나요?</li>
-    <li>입력과 귀환의 자리를 바꿔 $v_{in}$을 $M_2$ 게이트에, 노드 $X$를 $M_1$ 게이트에 연결하면(출력은 그대로 $M_2$ 드레인) 극성은 무엇인가요?</li>
-    <li>전류 거울 $M_3$–$M_4$를 같은 저항 $R_D$ 두 개로 바꾸고 출력은 그대로 $M_2$ 드레인에서 꺼내면 극성은 무엇인가요?</li>
-  </ol>
 </div>
 <div class="sum" hidden>
-  <p class="sum-lead">입력을 올려 루프를 한 바퀴 따라가면 돌아온 $V_X$가 처음의 $I_{D1}$ 증가를 되돌리므로 부귀환이에요.</p>
-  <div class="summary-group">
-    <h4>따라갈 체인</h4>
-    $$\begin{aligned}V_{in}\uparrow&\Rightarrow I_{D1}\uparrow,\ I_{D2}\downarrow\\&\Rightarrow V_{out}\uparrow,\ V_X\uparrow\\&\Rightarrow I_{D2}\uparrow,\ I_{D1}\downarrow\end{aligned}$$
-  </div>
-  <div class="summary-group">
-    <h4>핵심 식</h4>
-    $$I_{D1}+I_{D2}=I_{SS}$$
-    $$V_X=\frac{R_2}{R_1+R_2}V_{out}$$
-  </div>
-  <div class="summary-group">
-    <h4>판단 기준</h4>
-    <p>돌아온 변화는 처음과 같은 양($I_{D1}$)끼리 비교해요.</p>
-    <p>출력과 같은 방향의 $V_X$가 빼는 입력인 $M_2$ 게이트로 돌아오면 차 $V_{in}-V_X$가 줄어 부귀환이에요.</p>
-  </div>
+<p class="sum-lead">오른쪽 드레인 전압이 오르면 분압된 신호가 반대쪽 입력 $M_2$ 게이트를 올려 차동 입력의 변화를 줄여요.</p>
 </div>

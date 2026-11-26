@@ -1,5 +1,3 @@
-closed-loop Y/X = A1/(A1*K + 1)
-V_N = -A1*K*V_test
-loop gain = -V_N/V_test = A1*K
-check LG - K*A1 = 0
-check Y/X - A1/(1+LG) = 0
+signed returned/test: -A1*K negative-feedback loop gain: A1*K
+
+Set the external input to zero and open the input of A1. Test v→A1v→KA1v→−KA1v. Returned/test = −KA1, positive loop-gain convention T=KA1.

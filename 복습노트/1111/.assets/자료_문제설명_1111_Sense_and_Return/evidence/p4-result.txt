@@ -1,8 +1,5 @@
-relative change of closed-loop gain = (a - 1)/(T*a + 1)
-sensitivity (dG/G)/(dA/A) = 1/(A1*K + 1)
-differential: 0.2/(1+T)=0.01 -> T = [19]
-exact a=4/5: |change|=1% at T = [95/4] [23.750000]
-exact a=6/5: |change|=1% at T = [95/6] [15.833333]
-check T=19 differential: 1/100
-exact change at T=19, a=0.8: -0.012345679  a=1.2: 0.0084033613
-exact change at T=23.75, a=0.8: -0.010000000
+r 4/5 strict nominal T > 95/4 23.75
+r 6/5 strict nominal T > 95/6 15.833333333333334
+linearized strict threshold 19
+
+For r=A1,new/A1,nom the fractional closed-loop change is (r−1)/(1+rT). A 20% decrease requires T>95/4=23.75, while a 20% increase requires T>95/6≈15.8333. To guarantee either sign, use T>23.75. Small-signal sensitivity gives the first-order rule T>19. The strict bound is an infimum.

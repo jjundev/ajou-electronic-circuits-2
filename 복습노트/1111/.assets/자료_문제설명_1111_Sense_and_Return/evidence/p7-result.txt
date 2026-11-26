@@ -1,6 +1,4 @@
-open-loop -1dB(10%) BW: [sqrt(19)*omega_0/9] = [0.484322] * w0
-closed-loop -1dB(10%) BW: [sqrt(19)*omega_0*(A_0*K + 1)/9]
-ratio closed/open: A_0*K + 1
-check sqrt(19)/9 = 0.48432210
-strict -1 dB: open [0.508847] *w0; ratio A_0*K + 1
-10% drop in dB: -0.91515 dB
+amplitude fraction 9/10 bandwidth / pole sqrt(19)/9 0.4843221048378526
+amplitude fraction 10**(19/20)/10 bandwidth / pole sqrt(-1 + 10**(1/10)) 0.5088471399095874
+
+Under the specified 10% amplitude drop, bandwidths are (√19/9)ω0≈0.48432ω0 and (√19/9)(1+KA0)ω0. Their ratio is exactly 1+KA0. A literal −1.000 dB threshold gives √(10^0.1−1)≈0.50885 instead and the same ratio.

@@ -1,98 +1,24 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>그림 12.86의 네 회로는 입력 쪽이 모두 같아요. 입력 $V_{in}$이 $M_1$의 소스에 걸리고, 출력 쪽에서 무언가가 $M_1$의 게이트로 되돌아와요. $M_1$ 드레인 노드는 (a)–(c)에서 위쪽 전류원, (d)에서 다이오드 접속 PMOS $M_3$이 부하예요.</p>
-  <p>출력 쪽은 회로마다 달라요.</p>
-  <ul>
-    <li>(a) $M_1$ 드레인 노드가 NMOS 소스 팔로워 $M_2$를 구동하고, $M_2$ 소스가 출력 $V_{out}$이에요. $V_{out}$이 $M_1$ 게이트에 바로 이어져요.</li>
-    <li>(b) $M_1$ 드레인 노드가 PMOS $M_2$의 게이트를 구동하고, $M_2$ 드레인과 $R_1$ 사이가 출력 $V_{out}$이에요. $V_{out}$이 $M_1$ 게이트에 바로 이어져요.</li>
-    <li>(c) 회로는 (b)와 같지만 출력이 $R_1$으로 흘러 내려가는 전류 $I_{out}$으로 표시돼 있어요. $R_1$ 위 노드가 $M_1$ 게이트에 이어져요.</li>
-    <li>(d) (b)의 위쪽 전류원 자리에 다이오드 접속 $M_3$이 들어가고, 나머지는 (b)와 같아요. $V_{out}$이 $M_1$ 게이트에 바로 이어져요.</li>
-  </ul>
-  <p>구할 것은 각 회로의 감지(sense) 방식과 반송(return) 방식이에요. 감지는 출력 전압(병렬)인지 출력 전류(직렬)인지, 반송은 전압(직렬)인지 전류(병렬)인지로 답해요. 감지·반송을 병렬·직렬과 짝짓는 이 기준은 원문에 없고 수업·교과서 12.4절의 정의를 따른 것이에요. 귀환의 극성은 이 문제가 묻지 않아요.</p>
+<div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit"><svg id="fig-circuit-return-mos" viewBox="0 0 330 159" role="img" aria-label="단일 MOS에서 소스에 v in, 게이트에 v F를 걸어요. 드레인 소신호 전류의 기준 방향은 아래쪽이에요.">
+        <path class="fig-ink" d="M145 49V85 M145 109V136H76 M165 97H228"/>
+        <g data-symbol="part">
+          <g transform="translate(145 97)">
+            <path class="fig-ink" d="M20 -13v26 M15 -15v30 M15 -12H0 M15 12H0 M9 8L3 12L9 16"/>
+          </g>
+        </g>
+        <circle class="fig-dot" cx="73" cy="136" r="3" data-node-color="blue" data-node-id="p14-in"/>
+        <circle class="fig-dot" cx="231" cy="97" r="3" data-node-color="red" data-node-id="p14-F"/>
+        <g data-symbol="part">
+          <path class="fig-accent" d="M145 63l-4 -6m4 6l4 -6"/>
+        </g>
+        <text class="fig-text fig-math" x="71" y="154" text-anchor="end" font-size="14" data-node-color="blue" data-node-id="p14-in">v<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
+        <text class="fig-text fig-math" x="258" y="96" text-anchor="middle" font-size="14" data-node-color="red" data-node-id="p14-F">v<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+        <text class="fig-text fig-math" x="172" y="60" text-anchor="middle" font-size="14">i<tspan baseline-shift="sub" font-size="78%">D</tspan></text>
+        <text class="fig-text fig-math" x="167" y="125" text-anchor="middle" font-size="14">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+        <text class="fig-text fig-loc" x="110" y="116" text-anchor="middle" font-size="17">㉠</text>
+        <text class="fig-text fig-loc" x="204" y="79" text-anchor="middle" font-size="17">㉡</text>
+      </svg><figcaption class="circuit-state">각 회로에 공통인 입력 반송 부분이에요.</figcaption></figure>
+<div data-subpart="main"><h4>입력 반송과 출력 감지</h4><div data-answer-step="반송 포트"><p><span class="loc">㉠</span> 입력이 $M_1$ 소스, <span class="loc">㉡</span> 귀환이 같은 트랜지스터의 게이트에 걸려 두 전압의 차가 드레인 전류를 정해요.</p>$$v_{GS1}=v_F-v_{in}$$
+</div><div data-answer-step="출력 감지"><p>(b)·(c)는 연결은 같고 출력의 정의가 달라요. (b)는 출력 노드 전압을 게이트로 보내고, (c)는 지정된 출력 전류가 지나는 $R_1$의 전압을 게이트로 보내요.</p></div><div data-answer-final=""><p>모두 입력 전압과 귀환 전압의 차를 사용하므로 반송은 전압 직렬 반송이에요. 출력 감지는 다음과 같아요.</p><table><thead><tr><th>회로</th><th>감지</th><th>귀환 전압 $v_F$</th></tr></thead><tbody><tr><th>(a)·(b)·(d)</th><td>전압 · 병렬</td><td>$v_{out}$</td></tr><tr><th>(c)</th><td>전류 · 직렬</td><td>$I_{out}R_1$</td></tr></tbody></table></div></div>
 </div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p>"입력은 소스, 귀환은 게이트"라는 연결에서 트랜지스터 하나로 만든 전압 뺄셈기(voltage subtractor)를 떠올려요(<a href="정리노트_1111_Sense_and_Return.html#s6-return-circuits">트랜지스터 하나와 차동쌍으로 전압 빼기</a>). 드레인 전류는 게이트–소스 전압으로 정해지므로, 게이트에 $v_F$, 소스에 $v_{in}$이 걸리면 전류가 두 전압의 차이에 비례해요. 포화 영역의 저주파 소신호 모델에서 $r_O$와 몸체효과를 무시하면 다음과 같아요.</p>
-  $$v_{GS1}=v_F-v_{in}$$
-  $$i_{D1}=g_{m1}(v_F-v_{in})$$
-  <p>직렬인지 병렬인지는 귀환 신호가 입력과 같은 노드에 걸리는지로 가려요. 다른 노드이면 직렬, 즉 전압 반송이고, 같은 노드이면 병렬, 즉 전류 반송이에요(<a href="정리노트_1111_Sense_and_Return.html#s6-voltage-return">전압은 입력원과 직렬로 빼요</a>).</p>
-  <p>감지는 원문이 출력을 어떻게 표시했는지로 정해요. $V_{out}$ 노드이면 그 노드에 병렬로 대는 전압 감지이고, MOS 게이트는 입력 임피던스가 무한대라 이상적인 볼트미터 역할을 해요(<a href="정리노트_1111_Sense_and_Return.html#s5-voltage-sense">전압은 병렬로, 큰 임피던스로 감지해요</a>). $I_{out}$ 화살표이면 그 전류의 길에 직렬로 넣은 저항의 전압 $I_{out}R$을 돌려보내는 전류 감지예요(<a href="정리노트_1111_Sense_and_Return.html#s5-current-sense">전류는 직렬로, 작은 임피던스로 감지해요</a>).</p>
-</div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="판별 순서와 반송 식">
-    <p>회로마다 세 가지를 차례로 적어요.</p>
-    <ol>
-      <li>출력 표시가 $V_{out}$ 노드인가, $I_{out}$ 화살표인가?</li>
-      <li>$M_1$ 게이트에 이어진 노드의 전압 $v_F$를 출력으로 쓰면?</li>
-      <li>$v_F$가 걸리는 $M_1$ 게이트는 $v_{in}$이 걸리는 $M_1$ 소스와 같은 노드인가?</li>
-    </ol>
-    <p>3번은 네 회로가 같아요. 게이트와 소스는 다른 노드라서, 첫 줄에 트랜지스터 하나의 뺄셈 식을 적어요.</p>
-    $$i_{D1}=g_{m1}(v_F-v_{in})$$
-  </div>
-</div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
-  <div data-subpart="main">
-    <div data-answer-step="반송 방식">
-      <p>네 회로 모두 $v_{in}$은 $M_1$ 소스, $v_F$는 $M_1$ 게이트에 걸려요. $M_1$의 드레인 전류가 $v_F-v_{in}$에 비례하므로 $M_1$이 두 전압을 빼는 역할을 해요. 귀환 신호가 입력과 다른 노드에 걸리니 직렬 연결이에요.</p>
-      <p>그래서 반송은 네 회로 모두 전압 반송(직렬)이에요.</p>
-    </div>
-    <div data-answer-step="(a)·(b)·(d) 출력 전압을 바로 감지">
-      <p>세 회로는 출력이 $V_{out}$ 노드로 표시돼 있고, 그 노드가 도선으로 $M_1$ 게이트에 바로 이어져요. 귀환 회로망이 도선 하나라 출력 전압이 그대로 돌아가요.</p>
-      $$v_F=v_{out}$$
-      <p>$M_1$ 게이트가 출력 노드와 접지 사이에 병렬로 붙어 출력 전압을 재는 셈이고, 게이트로 전류가 흐르지 않으니 감지하는 쪽 입력 임피던스가 무한대예요. 그래서 감지는 전압 감지(병렬)예요.</p>
-      <p>(a)의 소스 팔로워 $M_2$, (b)의 PMOS 공통 소스 단 $M_2$, (d)의 다이오드 접속 부하 $M_3$은 출력을 만드는 순방향 증폭기의 일부예요. 감지 방식을 바꾸지 않아요.</p>
-    </div>
-    <div data-answer-step="(c) R1으로 출력 전류 감지">
-      <p>(c)는 출력이 $R_1$으로 흐르는 전류 $I_{out}$으로 표시돼 있어요. $R_1$은 출력 전류가 흐르는 길에 직렬로 놓여 있고, $R_1$ 위 노드의 전압이 $M_1$ 게이트로 가요.</p>
-      $$v_F=I_{out}R_1$$
-      <p>$R_1$이 출력 전류를 전압으로 바꿔 돌려보내므로 감지는 전류 감지(직렬)예요.</p>
-      <p>(c)는 (b)와 소자·연결이 똑같아요. 출력을 $R_1$ 위 노드의 전압으로 정한 (b)는 전압 감지이고, $R_1$의 전류로 정한 (c)는 전류 감지예요. 출력을 무엇으로 정했는지가 감지 방식을 정해요.</p>
-    </div>
-  </div>
-</div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <div data-answer-final>
-      <p>네 회로 모두 $M_1$ 하나가 게이트($v_F$)와 소스($v_{in}$)의 차이로 전류를 만드는 전압 뺄셈기로 반송해요. 감지는 출력 표시에 따라 갈려요.</p>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>회로</th><th>감지</th><th>반송</th><th>귀환 신호 $v_F$</th></tr></thead>
-          <tbody>
-            <tr><td>(a)</td><td>출력 전압(병렬)</td><td>전압(직렬)</td><td>$v_{out}$</td></tr>
-            <tr><td>(b)</td><td>출력 전압(병렬)</td><td>전압(직렬)</td><td>$v_{out}$</td></tr>
-            <tr><td>(c)</td><td>출력 전류(직렬, $R_1$)</td><td>전압(직렬)</td><td>$I_{out}R_1$</td></tr>
-            <tr><td>(d)</td><td>출력 전압(병렬)</td><td>전압(직렬)</td><td>$v_{out}$</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <p>형태와 맞는지 확인해요. 입력은 모두 소스 단자에 거는 전압 $V_{in}$이라 반송은 전압이어야 하고, 실제로 모두 전압 반송이에요. 출력이 전압인 (a), (b), (d)는 전압 증폭기, 출력이 전류인 (c)는 트랜스컨덕턴스 증폭기의 조합과 같아요.</p>
-    <p>뺄셈 식의 특수값으로도 봐요. $v_F=0$이면 $i_{D1}=-g_{m1}v_{in}$으로 입력만 남는 보통의 공통 게이트 동작이 되고, $v_F$가 $v_{in}$과 같은 방향으로 움직이면 그만큼 $v_{in}$의 효과를 깎아요. 두 전압이 차이로만 전류를 만든다는 뜻이에요.</p>
-    <p>(c)의 귀환 신호 $I_{out}R_1$은 $\mathrm{A}\times\Omega=\mathrm{V}$라 게이트에 걸 수 있는 전압이에요. 단위가 맞아요.</p>
-  </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <p>입력이 소스로 들어가니 공통 게이트 단처럼 "전류 입력, 병렬 반송"이라고 답하기 쉬워요. 여기서 $V_{in}$은 소스 단자에 거는 전압이고, 귀환은 게이트라는 다른 노드로 들어오므로 직렬 전압 반송이에요.</p>
-  <p>(b)와 (c)를 회로 모양만 보고 같은 답으로 쓰지 않아요. 같은 회로라도 출력을 $V_{out}$으로 정했는지 $I_{out}$으로 정했는지에 따라 감지 방식이 달라요.</p>
-  <p>(d)의 다이오드 접속 $M_3$을 귀환 회로망으로 착각하지 않아요. $M_3$은 $M_1$ 드레인의 부하이자 $M_2$와 함께 순방향 경로를 이루고, 출력에서 $M_1$ 게이트로 돌아가는 것은 도선 하나예요.</p>
-  <p>감지·반송 판별은 귀환의 극성과 별개예요. 음귀환인지는 입력을 올려 루프를 따라가는 다른 절차로 따로 확인해요.</p>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol>
-    <li>귀환 신호를 $M_1$ 게이트 대신 $V_{in}$이 걸린 $M_1$ 소스 노드로 돌려보낸다면 반송은 직렬인가요, 병렬인가요?</li>
-    <li>(a)에서 $V_{out}$과 접지 사이에 $R_1$, $R_2$ 분배기를 달고 그 접속점을 $M_1$ 게이트에 이으면 감지 방식과 $v_F$는 어떻게 되나요?</li>
-    <li>(c)의 그림에서 $I_{out}$ 화살표를 지우고 $R_1$ 위 노드에 $V_{out}$을 표시하면 감지 방식은 무엇이 되나요?</li>
-  </ol>
-</div>
-<div class="sum" hidden>
-  <p class="sum-lead">입력은 $M_1$ 소스, 귀환은 $M_1$ 게이트로 서로 다른 노드라 네 회로 모두 전압 반송(직렬)이에요.</p>
-  $$i_{D1}=g_{m1}(v_F-v_{in})$$
-  <p>$V_{out}$을 $M_1$ 게이트에 바로 잇는 (a), (b), (d)는 전압 감지(병렬)이고 $v_F=v_{out}$이에요.</p>
-  <p>$R_1$에 흐르는 $I_{out}$을 $v_F=I_{out}R_1$로 돌려보내는 (c)는 전류 감지(직렬)예요.</p>
-  <p>입력이 소스로 들어가도 귀환이 다른 노드인 게이트로 오면 병렬이 아니라 직렬이에요.</p>
-</div>
+<div class="sum" hidden><p class="sum-lead">반송은 입력에서 무엇을 빼는지 보고, 감지는 지정된 출력량에서 귀환 전압까지의 경로를 따라가요.</p><p>같은 저항이라도 회로가 지정한 출력이 단자 전압인지 가지 전류인지에 따라 감지 방식이 달라져요.</p></div>

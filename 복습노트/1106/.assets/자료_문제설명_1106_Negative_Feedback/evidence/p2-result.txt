@@ -1,9 +1,5 @@
-ID2 = ID1-ID3 = 0.001 A ; gm1 = 0.02 S, gm2 = 0.01 S, gm3 = 0.01 S (gm3 unused, ro3=inf)
-A_v,XY = -gm1/gm2 = -2.0
-w_pX = 1/[R_S(C_GS1+3C_GD1)] = 1/(300*C_GD1 + 100*C_GS1) rad/s ; f_pX = w/(2pi)
-w_pY = gm2/[C_GS2+C_SB2+C_DB1+C_GD3+C_DB3+1.5C_GD1] = 1/(100*(C_DB1 + C_DB3 + 3*C_GD1/2 + C_GD3 + C_GS2 + C_SB2)) rad/s (1/gm2=100 ohm)
-(extra) w_pout = 1/[R_L(C_GD2+C_DB2)] = 1/(500*C_DB2 + 500*C_GD2)
-sample caps: {C_GS1: 2e-13, C_GD1: 5e-14, C_DB1: 5e-14, C_GS2: 1e-13, C_GD2: 2.5e-14, C_SB2: 2.5e-14, C_DB2: 2.5e-14, C_GD3: 5e-14, C_DB3: 5e-14}
-exact |poles| = [19047619047.619026, 40000000000.000114, 66666666666.66654]
-Miller poles  = [28571428571.42857, 28571428571.42857, 40000000000.0]
-Note: with these sample caps X and Y poles are comparable, so Miller (pole-splitting ignored) deviates from exact; Miller form is what the problem asks.
+gm1, gm2, Ayx: 1/50 1/100 -2
+omega_X 1/(300*Cgd1 + 100*Cgs1)
+omega_Y 1/(100*(Cdb1 + Cdb3 + 3*Cgd1/2 + Cgd3 + Cgs2 + Csb2))
+
+ID2=1 mA. Ignoring body transconductance gives gm1=20 mS and gm2=10 mS, AY/X=-2. Miller pole magnitudes ωX=1/[100(Cgs1+3Cgd1)], ωY=1/[100(Cdb1+Cgs2+Csb2+Cgd3+Cdb3+1.5Cgd1)]. Angular to Hz: divide by 2π. Source–bulk Csb2 may be omitted in a gate-capacitance-only or source-tied-body model (also omit the other junction terms in a gate-only model).

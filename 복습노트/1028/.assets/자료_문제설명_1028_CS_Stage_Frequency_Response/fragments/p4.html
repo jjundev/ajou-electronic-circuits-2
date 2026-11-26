@@ -1,69 +1,8 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>회로의 전압 여유(headroom)를 늘리려고 과구동 전압 $V_{GS}-V_{TH}$를 절반으로 줄이려 해요. 길이 $L$은 고정이에요.</p>
-  <p>과구동 전압을 줄이는 방법이 두 가지예요. (a) $I_D$는 그대로 두고 폭 $W$를 늘리거나, (b) $W$는 그대로 두고 $I_D$를 줄여요. 각 경우 $f_T$가 어떻게 변하는지 구해요.</p>
+<div class="layer formal circuit-explanation" data-explanation="solve">
+
+<div data-subpart="main">
+<div data-answer-step="변경 후 바이어스"><p>$I_D\propto (W/L)V_{ov}^2$이고 과구동 전압은 절반이에요. (a) 전류를 유지하면 $W^*=4W$이고, (b) 폭을 유지하면 $I_D^*=I_D/4$예요.</p></div><div data-answer-final=""><p>두 경우 모두 길이와 이동도가 같으므로 장채널 포화 모델에서</p>
+$$\frac{f_T^*}{f_T}\approx\frac{V_{ov}^*}{V_{ov}}=\frac12$$</div>
 </div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p><strong>단서:</strong> "$f_T$의 변화"와 "$I_D$ 또는 $W$ 중 하나만 고정"이라는 말에서 <a href="정리노트_1028_CS_Stage_Frequency_Response.html#s0-ft-mos">$2\pi f_T\approx g_m/C_{GS}$</a>와 제곱 법칙 전류식을 함께 쓰면 된다는 걸 알 수 있어요.</p>
-  <p><strong>개념:</strong> 폭 $W$를 소거하면 $2\pi f_T\approx\frac{3}{2}\frac{\mu_n}{L^2}(V_{GS}-V_{TH})$가 돼요. <a href="정리노트_1028_CS_Stage_Frequency_Response.html#s0-ft-scaling">$L$이 고정</a>이면 $f_T$는 과구동 전압에만 비례해요.</p>
-  <p><strong>기호의 뜻:</strong> $g_m=\dfrac{2I_D}{V_{GS}-V_{TH}}$는 전류와 과구동 전압으로 쓴 트랜스컨덕턴스, $C_{GS}\approx\frac{2}{3}WLC_{ox}$는 게이트 면적에 비례하는 커패시턴스예요. 바뀐 뒤 값은 별표($X^*$)로 써요.</p>
-  <p><strong>근사 조건:</strong> 장채널 제곱 법칙, 포화, $C_{GD}$ 무시, $\mu_n$과 $C_{ox}$ 고정이에요.</p>
-  <p><strong>선택 이유:</strong> 두 방법이 결국 같은 답이 되는지 확인하려면 $g_m$과 $C_{GS}$를 경우별로 따로 구해 나누는 것이 가장 분명해요. 마지막에 $W$를 소거한 식으로 교차 확인해요.</p>
 </div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="f_T와 전류식">
-    <p>목표: $(V_{GS}-V_{TH})^*=\frac{1}{2}(V_{GS}-V_{TH})$, $L$ 고정.</p>
-    $$I_D=\frac{1}{2}\mu_nC_{ox}\frac{W}{L}(V_{GS}-V_{TH})^2$$
-    $$2\pi f_T\approx\frac{g_m}{C_{GS}}=\frac{2I_D/(V_{GS}-V_{TH})}{\frac{2}{3}WLC_{ox}}$$
-  </div>
-</div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
-  <div data-subpart="main">
-    <div data-answer-step="(a) I_D 고정, W 증가">
-      <p><strong>(a)</strong> 전류식에서 $I_D$와 $L$이 고정이면 $W\propto1/(V_{GS}-V_{TH})^2$이에요. 과구동 전압이 1/2이면 폭은 4배예요.</p>
-      $$W^*=\frac{W}{(1/2)^2}=4W$$
-      <p>$g_m$은 전류가 같고 과구동 전압이 절반이라 2배예요.</p>
-      $$g_m^*=\frac{2I_D}{(V_{GS}-V_{TH})/2}=2g_m$$
-      <p>$C_{GS}$는 $W$에 비례하므로 4배예요.</p>
-      $$C_{GS}^*=4C_{GS}$$
-      $$\frac{f_T^*}{f_T}=\frac{2}{4}=\frac{1}{2}$$
-    </div>
-    <div data-answer-step="(b) W 고정, I_D 감소">
-      <p><strong>(b)</strong> $W$와 $L$이 고정이면 $I_D\propto(V_{GS}-V_{TH})^2$이라 전류는 1/4이 돼요.</p>
-      $$I_D^*=\left(\frac{1}{2}\right)^2I_D=\frac{1}{4}I_D$$
-      <p>$g_m$은 전류 1/4을 과구동 전압 1/2로 나눠 1/2배예요.</p>
-      $$g_m^*=\frac{2(I_D/4)}{(V_{GS}-V_{TH})/2}=\frac{1}{2}g_m$$
-      <p>$C_{GS}$는 면적이 같아 그대로예요.</p>
-      $$\frac{f_T^*}{f_T}=\frac{1/2}{1}=\frac{1}{2}$$
-    </div>
-  </div>
-</div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <p data-answer-final><strong>(a) $f_T$는 절반이 돼요</strong>($W$ 4배, $g_m$ 2배, $C_{GS}$ 4배). <strong>(b) $f_T$는 역시 절반이 돼요</strong>($I_D$ 1/4배, $g_m$ 1/2배, $C_{GS}$ 그대로). 어느 방법이든 $L$이 고정이면 $f_T\propto V_{GS}-V_{TH}$라 절반이에요.</p>
-    <p><strong>교차 확인:</strong> $2\pi f_T\approx\frac{3}{2}\mu_n(V_{GS}-V_{TH})/L^2$에는 $W$도 $I_D$도 없어요. 과구동 전압이 1/2, $L$이 고정이니 두 경우 모두 $1/2$이에요.</p>
-    <p><strong>대칭 확인:</strong> (a)와 (b)는 $g_m$과 $C_{GS}$의 배율이 서로 다르지만 비 $g_m/C_{GS}$는 같아요. 배율을 따로 구한 결과와 소거식이 일치해요.</p>
-  </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <p>(a)에서 "$g_m$이 2배가 되니 $f_T$도 2배"라고 끝내면 틀려요. 폭을 4배로 키운 대가로 $C_{GS}$가 4배가 돼요.</p>
-  <p>(b)에서 $g_m=\mu_nC_{ox}(W/L)(V_{GS}-V_{TH})$로 보면 바로 1/2배예요. $g_m=\sqrt{2\mu_nC_{ox}(W/L)I_D}$로 보면 $\sqrt{1/4}=1/2$배로 같아요. 세 식 중 어떤 것을 써도 고정 조건을 맞게 넣으면 결과가 같아야 해요.</p>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol>
-    <li>과구동 전압을 그대로 두고 $L$만 절반으로 줄이면(전류는 유지) $f_T$는 몇 배가 될까요?</li>
-    <li>(a) 방법에서 과구동 전압을 1/3로 줄이려면 $W$는 몇 배가 되고 $f_T$는 몇 배가 될까요?</li>
-  </ol>
-</div>
-<div class="sum" hidden>
-  <p class="sum-lead">$L$이 고정이면 $f_T\propto V_{GS}-V_{TH}$예요.</p>
-  <p>$2\pi f_T\approx\dfrac{3}{2}\dfrac{\mu_n}{L^2}(V_{GS}-V_{TH})$</p>
-  <p>(a) $W$ 4배, $g_m$ 2배, $C_{GS}$ 4배라 $f_T$는 1/2이에요.</p>
-  <p>(b) $I_D$ 1/4, $g_m$ 1/2배, $C_{GS}$ 그대로라 $f_T$는 1/2이에요.</p>
-</div>
+<div class="sum" hidden><p class="sum-lead">같은 길이에서는 과구동 전압을 낮춘 비율만큼 트랜싯 주파수가 낮아져요.</p></div>
