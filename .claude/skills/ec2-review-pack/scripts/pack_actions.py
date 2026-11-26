@@ -1115,7 +1115,7 @@ def runner_metrics(state):
     for directory in {Path(state['run'])/'work/cli-counts', cli_trace_directory(state)}:
         for path in directory.glob('*.json'):
             counters.update([f._read(path)['command']])
-    graph = ready_work(state, slots=2**31)
+    graph = ready_work(state, slots=f.UNBOUNDED_SLOTS)
     blocked = blocker_ids(state,graph)
     details = dict(events=events, attempts=attempts, overlaps=overlaps,
                    confirmed_host_gap_seconds=sum((b-a).total_seconds() for a,b in merged),

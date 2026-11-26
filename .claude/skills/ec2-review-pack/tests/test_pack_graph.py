@@ -768,3 +768,9 @@ def test_stopped_identity_cannot_replace_scheduler_attempt(tmp_path, monkeypatch
     repaired = runner.run_action(run, 'candidate-index', reconcile=True)
     assert repaired['attempt'] == result['attempt'] and repaired['status'] == 'done'
     assert json.loads((marker.parent/'result.json').read_text())['attempt'] == repaired['attempt']
+
+
+def test_parallel_brief_names_runner_python(tmp_path):
+    _, run, _ = parallel(tmp_path)
+    brief = json.loads(Path(flow.claim_task(run, 'source-prep')['brief']).read_text())
+    assert brief['python'] == sys.executable

@@ -65,7 +65,7 @@ def parser():
     c.add_argument('--workflow', choices=('legacy', 'parallel'),
                    help='defaults to parallel for new runs and legacy for --seed-from')
     c.add_argument('--allow-tmp',action='store_true')
-    for owner in ('browser','pdf'): c.add_argument('--'+owner+'-owner',choices=('workers','main','unavailable'),default='main')
+    for owner in ('browser','pdf'): c.add_argument('--'+owner+'-owner',choices=('workers','main','unavailable'),default='workers')
     c.add_argument('--seed-from',type=absolute); c.add_argument('--redo',default='')
     c.add_argument('--redo-note',type=absolute)
     command('status'); c=command('next'); c.add_argument('--slots',required=False,type=int,default=None)

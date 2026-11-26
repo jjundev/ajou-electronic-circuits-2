@@ -805,7 +805,7 @@ def write_briefs(state: dict) -> None:
         if role in ('author', 'style-audit', 'content-review'):
             refs.append({'path': str(skill / 'references/execution-guide.md'), 'sections': _COMMON_SECTIONS})
         snapshot = _read(run / 'learning-style.json')
-        data = dict(task_id=task['id'], run_id=state['run_id'], attempt=None, role=role, range=state['range'],
+        data = dict(task_id=task['id'], run_id=state['run_id'], python=sys.executable, attempt=None, role=role, range=state['range'],
             repo=str(repo), run=str(run), skill=str(skill), profile=str(repo / snapshot['path']),
             profile_read='전체 필수', snapshot=str(run / 'learning-style.json'), references=refs,
             targets=task['targets'], inputs=_inputs(state, task), allowed_outputs=outputs,

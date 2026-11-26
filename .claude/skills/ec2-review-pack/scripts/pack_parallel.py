@@ -170,7 +170,7 @@ def claim_worker(state, task):
         review = root / 'work/standalone-svg-qa/report.md'
     if role == 'pdf-qa':
         review = root / 'answer-review.md'
-    data = dict(workflow='parallel', run_id=state['run_id'], role=role, task_id=spec.id,
+    data = dict(workflow='parallel', python=sys.executable, run_id=state['run_id'], role=role, task_id=spec.id,
                 range=state['range'], attempt=attempt, run=str(root), targets=task['targets'],
                 inputs=worker_inputs(state, spec), allowed_outputs=list(required), required_outputs=required,
                 allowed_output_roots=[str(root)], report=str(review), receipt=str(root/'receipt.json'),

@@ -449,3 +449,9 @@ def test_new_pack_queues_concept_check_after_final_check(tmp_path):
     report = json.loads(write_report(run).read_text(encoding="utf-8"))
     assert report["status"] == "complete"
     assert report["concept_check"]["status"] == "withheld"
+
+
+def test_legacy_brief_names_runner_python(tmp_path):
+    _, run = make_run(tmp_path)
+    brief = json.loads(Path(flow.load_state(run)['tasks']['source-prep']['brief']).read_text())
+    assert brief['python'] == sys.executable
