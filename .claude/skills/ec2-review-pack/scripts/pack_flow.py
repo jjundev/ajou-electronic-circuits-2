@@ -749,6 +749,7 @@ _REFERENCES = {
     'child-coordinator': [('problem-explain-integration.md', '전체')],
     'pdf-qa': [('problem-explain-integration.md', '답안 PDF 렌더 검토 기록')],
 }
+PROFILE_EXEMPT = ('stt', 'selection', 'scope-final')
 _COMMON_SECTIONS = ['기본 근사와 회로 표기', '전압이득의 계산 순서', '확정한 문제 해설 형식',
                     '본문과 페이지 요약의 계약', '수치 표시', 'HTML 가독성 생성·검사']
 
