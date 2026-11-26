@@ -5,7 +5,7 @@
   "slug": "Nonideal_IO_Feedback",
   "learning_style": {
     "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
-    "sha256": "b86ffed624375cc99029088fea1fcbccb78e4855917a76a3d1698c379c157734",
+    "sha256": "7ee51c9e67b297855e47735a97d761c25f4db3c96ed747f111a09520a891a0ea",
     "rule_ids": [
       "UNIT-01",
       "CALC-01",
@@ -22,7 +22,7 @@
       "FREQ-01"
     ]
   },
-  "input_hash": "2533882133c908a9795d075a3868b3e7df2e89f4bd5e1bbe1e10b9c599a374c6",
+  "input_hash": "2ed2c91ac66bf7a4a031bf54814f67abd7af355f232beec1b20ba1906cf6b09f",
   "source_inputs": {
     "복습노트/1120/.assets/problems.txt": "2007de2ee28d5d90605ab5819a5bf832e18666713be06d68348133bd1e9ad478",
     "복습노트/1120/.assets/display-titles.json": "baaa58e3e80b55cfd388256f7f87cf4ea813a16e7cf98444425e32458ad5fb30",
@@ -49,7 +49,7 @@
     "from_the_past/md/2021-1_기말/figures/redrawn/fig-Q3.png": "0ae5ae6010d8cce46366c756fc231817ab1c58cdb649a43f74f0b2910ae29cf3",
     "교과서/마이크로전자회로/ch12/figures/fig12-112.png": "c124029e2dae02aa384e11156f6c4203c22f6c5be7774e7a44db88beaffe863a",
     "교과서/마이크로전자회로/ch12/figures/fig12-110.png": "10bb90bd2a77741ba2d260dcca0846560a5d6fc0e487a30a5c9e2e34e71fd64a",
-    ".claude/skills/ec2-review-pack/references/solution-style.md": "b86ffed624375cc99029088fea1fcbccb78e4855917a76a3d1698c379c157734"
+    ".claude/skills/ec2-review-pack/references/solution-style.md": "7ee51c9e67b297855e47735a97d761c25f4db3c96ed747f111a09520a891a0ea"
   },
   "problems": [
     {
@@ -182,12 +182,12 @@
         {
           "subpart": "main",
           "label": "첫 단과 둘째 단 연결",
-          "html": "\n      <p> 반송 복제를 단락해 얻은 $R_S$가 $M_1$ 소스에 달려요.  감지 복제의 열린 가운데 포트는 출력에 $R_1+R_2$를 남겨요. 두 MOS는 $\\lambda=0$으로 가정해요.</p>\n      $$R_S=R_1\\parallel R_2$$\n      <p> 첫 단 출력 $X$에서는 $M_2$ 게이트 전류가 0이라 부하가 $R_{D1}$이에요.</p>\n      $$\\frac{v_X}{v_{in}}=-\\frac{R_{D1}}{1/g_{m1}+R_S}$$\n    "
+          "html": "\n      <p> 반송 복제를 단락해 얻은 $R_S$가 $M_1$ 소스에 달려요. 두 MOS는 $\\lambda=0$으로 가정해요.</p>\n      $$R_S=R_1\\parallel R_2$$\n      <p> 첫 단 출력 $X$에서는 $M_2$ 게이트 전류가 0이라 부하가 $R_{D1}$이에요.</p>\n      $$\\frac{v_X}{v_{in}}=-\\frac{R_{D1}}{1/g_{m1}+R_S}$$\n    "
         },
         {
           "subpart": "main",
-          "label": "개루프 이득",
-          "html": "\n      <div data-gain-stage=\"gm\">\n        <p>출력 단락에서 $M_2$ 드레인으로 들어가는 전류를 양으로 잡아요.</p>\n        $$G_m=g_{m2}\\frac{v_X}{v_{in}}=-\\frac{g_{m2}R_{D1}}{1/g_{m1}+R_S}$$\n      </div>\n      <div data-gain-stage=\"rout\">\n        <p>입력을 0으로 두고 출력에서 본 저항이에요.</p>\n        $$R_{\\mathrm{out,open}}=R_{D2}\\parallel(R_1+R_2)$$\n      </div>\n      <div data-gain-stage=\"gain\">\n        $$A_{\\mathrm{open}}=-G_mR_{\\mathrm{out,open}}=\\frac{g_{m2}R_{D1}R_{\\mathrm{out,open}}}{1/g_{m1}+R_S}$$\n      </div>\n    "
+          "label": "둘째 단과 개루프 이득",
+          "html": "\n      <p> 감지 복제의 가운데 포트가 열려 있어 $R_1+R_2$가 $R_{D2}$에 병렬로 붙어요.</p>\n      $$R_{\\mathrm{out,open}}=R_{D2}\\parallel(R_1+R_2)$$\n      $$\\frac{v_{out}}{v_X}=-g_{m2}R_{\\mathrm{out,open}}$$\n      <p>두 공통 소스 단이 각각 반전하므로 개루프 이득은 양수예요.</p>\n      $$A_{\\mathrm{open}}=\\frac{v_X}{v_{in}}\\frac{v_{out}}{v_X}\n      =\\frac{g_{m2}R_{D1}R_{\\mathrm{out,open}}}{1/g_{m1}+R_S}$$\n    "
         },
         {
           "subpart": "main",
