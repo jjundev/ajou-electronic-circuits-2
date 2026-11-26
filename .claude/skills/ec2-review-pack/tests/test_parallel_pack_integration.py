@@ -414,3 +414,16 @@ def test_author_brief_lists_sections_to_read(tmp_path):
     guide = next(p for p in brief['references'] if p.endswith('execution-guide.md'))
     assert brief['reference_sections'][guide] == ['3. 작성', *COMMON_SECTIONS]
     assert brief['profile_read'] == '전체 필수'
+
+
+def test_run_without_contract_keeps_profile_for_exempt_roles(tmp_path):
+    import pack_flow
+    trial = Trial(tmp_path)
+    trial.action('candidate-index')
+    trial.worker('source-prep')
+    state = pack_flow.load_state(trial.run)
+    state.pop('approval_contract', None)
+    pack_flow.update_state(trial.run, state['revision'], lambda _: state)
+    brief = read(trial.cli('task', 'claim', '--task', 'stt-0909')['next']['brief'])
+    assert brief['profile_read'] == '전체 필수' and 'profile' in brief and 'snapshot' in brief
+    assert 'reference_sections' in brief

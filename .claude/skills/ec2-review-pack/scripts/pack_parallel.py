@@ -185,12 +185,12 @@ def claim_worker(state, task):
         refs = repo / '.claude/skills/ec2-review-pack/references'
         sections = {}
         for ref, section in f._REFERENCES.get(role, []):
-            sections[str(refs / ref)] = [section]
+            sections.setdefault(str(refs / ref), []).append(section)
         if role in ('author', 'style-audit', 'content-review'):
             guide = str(refs / 'execution-guide.md')
             sections[guide] = [*sections.get(guide, []), *f._COMMON_SECTIONS]
         data.update(repo=str(repo), references=list(sections), reference_sections=sections)
-        if role in f.PROFILE_EXEMPT:
+        if state.get('approval_contract') and role in f.PROFILE_EXEMPT:
             data['constraints'] = ['Read the referenced review criteria sections. Perform the actual inspection.']
         else:
             data.update(snapshot=str(snapshot), profile=str(repo / f._read(snapshot)['path']), profile_read='전체 필수',
