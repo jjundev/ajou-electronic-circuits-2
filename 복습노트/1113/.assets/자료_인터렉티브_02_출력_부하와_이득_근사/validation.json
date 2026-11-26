@@ -1,0 +1,97 @@
+{
+  "source_sha256": "7b956da29ad411ae793ef698445c4218715ef62ca7f29711c5bce6b038f91120",
+  "preview_sha256": "f7dcbfb6c7ce6a54b36133f5260e79c106188ab96b2c7ee317a66657f2f7661d",
+  "gates": {
+    "machine": "pass",
+    "numeric_independent": "pass",
+    "probe": "pass",
+    "browser": "pass"
+  },
+  "machine": {
+    "commands": [
+      "check.cjs",
+      "steps.cjs"
+    ],
+    "evidence": "/tmp/ec2-1113.ZjqgMjzf/2/steps.txt"
+  },
+  "numeric_independent": {
+    "method": "테브난 출력 분압과 폐루프 식. vout = α A₀(vin−Kvout), α = 1 또는 1/11.",
+    "states": 20,
+    "exact_curve_points": 660,
+    "examples": {
+      "A0 100, load off": {
+        "gain": 9.090909090909092,
+        "loop_gain": 10.0,
+        "error_pct": 9.090909090909092
+      },
+      "A0 100, load on": {
+        "gain": 4.761904761904762,
+        "loop_gain": 0.9090909090909092,
+        "error_pct": 52.38095238095238
+      },
+      "A0 10000, load on": {
+        "gain": 9.891196834817013,
+        "loop_gain": 90.9090909090909,
+        "error_pct": 1.0880316518298714
+      },
+      "A0 990, load on": {
+        "gain": 9.0,
+        "loop_gain": 9.0,
+        "error_pct": 10.0
+      }
+    }
+  },
+  "probe": {
+    "widths": [
+      1440,
+      375
+    ],
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "defect_count": 0,
+    "checks": 48,
+    "evidence": "/tmp/ec2-1113.ZjqgMjzf/2/probe.json"
+  },
+  "browser": {
+    "browser": "Codex in-app browser (iab)",
+    "preview_url": "http://127.0.0.1:53971/2/preview.html",
+    "viewports": {
+      "desktop": [
+        1440,
+        900
+      ],
+      "mobile": [
+        375,
+        812
+      ]
+    },
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "checks": [
+      "두 화면 크기에서 예측 응답→회로에서 확인 및 수치·설명 확인. 건너뛰기는 회로 수치/배지를 유지.",
+      "데스크톱에서 설명 패널을 닫으면 예측 영역이 메인에 위치. 모바일에서 메인에 예측 카드 표시, 서랍 전환과 Escape 닫기 확인.",
+      "SVG 부하 토글의 Space/Enter, 두 슬라이더 끝값, 정확/근사 곡선, 부하 연결과 A₀=10000에서 오차 1.09% 확인.",
+      "회로, 라벨, 패널 대비 시각 확인. 콘솔 오류 0건."
+    ],
+    "saved": {
+      "url": "http://127.0.0.1:53971/1113/%EC%9D%B8%ED%84%B0%EB%A0%89%ED%8B%B0%EB%B8%8C_02_%EC%B6%9C%EB%A0%A5_%EB%B6%80%ED%95%98%EC%99%80_%EC%9D%B4%EB%93%9D_%EA%B7%BC%EC%82%AC.html",
+      "viewport": [
+        567,
+        762
+      ],
+      "theme": "light",
+      "result": "정리노트의 해당 절에서 별도 탭으로 열림. 원래 정리노트 탭 유지. 예측 응답, 회로 검증과 수치 설명 표시. 브라우저 콘솔 오류 0건.",
+      "note_url": "http://127.0.0.1:53971/1113/%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1113_Voltage_Voltage_Feedback.html",
+      "note_section": "s5-loop-gain-rule",
+      "note_widgets": "기존 루프 이득 슬라이더와 극성 단계 진행을 브라우저에서 확인. 두 위젯 보존."
+    }
+  },
+  "fixes": [
+    "외부 부하 예시가 교과서 보충임을 화면 설명에 표시."
+  ],
+  "html_sha256": "d62909875b6080a035edc0453de2f39335bc8a349d57522281ccd4f11c22053e"
+}

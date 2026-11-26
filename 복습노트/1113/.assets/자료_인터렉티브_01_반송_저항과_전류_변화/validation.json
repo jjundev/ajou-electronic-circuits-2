@@ -1,0 +1,101 @@
+{
+  "source_sha256": "2f6f76a0661c129078eea743c2c2d8ea525bd70597890a6e36782778b57d2515",
+  "preview_sha256": "b710ca97b2b5f70d8a5ae02fd94fa6d541d7b9f80ab4a80c9ced4c0be4d1ea0a",
+  "gates": {
+    "machine": "pass",
+    "numeric_independent": "pass",
+    "probe": "pass",
+    "browser": "pass"
+  },
+  "machine": {
+    "commands": [
+      "check.cjs",
+      "steps.cjs"
+    ],
+    "evidence": "/tmp/ec2-1113.ZjqgMjzf/1/steps.txt"
+  },
+  "numeric_independent": {
+    "method": "옴의 법칙과 입력 노드 KCL. ΔiF = vn/R, ie = vn/(1 kΩ), itest = iF + ie.",
+    "states": 24,
+    "exact_curve_points": 0,
+    "examples": {
+      "mos 10 mV, 1 kΩ": {
+        "returned": 19.0,
+        "deviation": 10.0,
+        "input": 10.0,
+        "test": 29.0
+      },
+      "mos 10 mV, 1000 kΩ": {
+        "returned": 9.01,
+        "deviation": 0.01,
+        "input": 10.0,
+        "test": 19.01
+      },
+      "resistor 10 mV, 1 kΩ": {
+        "returned": 19.0,
+        "deviation": 10.0,
+        "input": 10.0,
+        "test": 29.0
+      },
+      "resistor 10 mV, 1000 kΩ": {
+        "returned": 9.01,
+        "deviation": 0.01,
+        "input": 10.0,
+        "test": 19.01
+      }
+    }
+  },
+  "probe": {
+    "widths": [
+      1440,
+      375
+    ],
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "defect_count": 0,
+    "checks": 68,
+    "evidence": "/tmp/ec2-1113.ZjqgMjzf/1/probe.json"
+  },
+  "browser": {
+    "browser": "Codex in-app browser (iab)",
+    "preview_url": "http://127.0.0.1:53971/1/preview.html",
+    "viewports": {
+      "desktop": [
+        1440,
+        900
+      ],
+      "mobile": [
+        375,
+        812
+      ]
+    },
+    "themes": [
+      "light",
+      "dark"
+    ],
+    "checks": [
+      "두 화면 크기에서 예측 응답→회로에서 확인 및 수치·설명 확인. 건너뛰기는 회로 수치/배지를 유지.",
+      "데스크톱에서 설명 패널을 닫으면 예측 영역이 메인에 위치. 모바일에서 메인에 예측 카드 표시, 서랍 전환과 Escape 닫기 확인.",
+      "MOS 및 저항 반송 전환, 입력 전압·저항 끝값, 단계 맥동, 10 mV·1 MΩ에서 ΔiF=0.01 µA 확인.",
+      "회로, 라벨, 패널 대비 시각 확인. 콘솔 오류 0건."
+    ],
+    "saved": {
+      "url": "http://127.0.0.1:53971/1113/%EC%9D%B8%ED%84%B0%EB%A0%89%ED%8B%B0%EB%B8%8C_01_%EB%B0%98%EC%86%A1_%EC%A0%80%ED%95%AD%EA%B3%BC_%EC%A0%84%EB%A5%98_%EB%B3%80%ED%99%94.html",
+      "viewport": [
+        567,
+        762
+      ],
+      "theme": "light",
+      "result": "정리노트의 해당 절에서 별도 탭으로 열림. 원래 정리노트 탭 유지. 예측 응답, 회로 검증과 수치 설명 표시. 브라우저 콘솔 오류 0건.",
+      "note_url": "http://127.0.0.1:53971/1113/%EC%A0%95%EB%A6%AC%EB%85%B8%ED%8A%B8_1113_Voltage_Voltage_Feedback.html",
+      "note_section": "s0-current-return-circuits",
+      "note_widgets": "기존 루프 이득 슬라이더와 극성 단계 진행을 브라우저에서 확인. 두 위젯 보존."
+    }
+  },
+  "fixes": [
+    "브라우저에서 인접 저항과 겹친 MOS 종속원 라벨을 왼쪽 여백으로 이동. 저항 반송 슬라이더의 저항명 표기를 정리."
+  ],
+  "html_sha256": "92645ccb88338e6ebb01e7b50fd5627e0747aaa95c34f36b8155e4d01be717cc"
+}
