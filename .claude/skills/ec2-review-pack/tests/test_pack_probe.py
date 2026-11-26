@@ -284,3 +284,42 @@ def test_probe_real_layout_walks_every_topic(tmp_path, first):
     run, tid, attempt = claimed_author(tmp_path, text=text)
     result = fragment_probe(run, tid, attempt)
     assert result['layout']['status'] == 'defects' and result['status'] == 'defects'
+
+
+def edit_brief_manifest(run, tid, **fields):
+    path = Path(flow._read(flow.load_state(run)['tasks'][tid]['brief'])['manifest'])
+    manifest = json.loads(path.read_text(encoding='utf-8'))
+    manifest.update(fields)
+    path.chmod(0o644)
+    path.write_text(json.dumps(manifest, ensure_ascii=False), encoding='utf-8')
+
+
+def test_probe_does_not_charge_the_author_for_a_note_title_defect(tmp_path):
+    # machine_report routes metadata diagnostics to scope-draft; an author refusal would deadlock.
+    run, tid, attempt = claimed_author(tmp_path, fragment=FIXTURE/'sections/s1.html')
+    edit_brief_manifest(run, tid, note_title='Gain $')
+    result = fragment_probe(run, tid, attempt, layout=CLEAN)
+    assert (result['status'], result['problems']) == ('pass', [])
+
+
+@pytest.mark.parametrize('collision_id', ['theme-toggle', 's1-mean'])
+def test_probe_does_not_charge_the_author_for_a_footer_id_collision(tmp_path, collision_id):
+    run, tid, attempt = claimed_author(tmp_path, fragment=FIXTURE/'sections/s1.html')
+    edit_brief_manifest(run, tid, footer_note=f'<span id="{collision_id}">footer</span>')
+    result = fragment_probe(run, tid, attempt, layout=CLEAN)
+    assert (result['status'], result['problems']) == ('pass', [])
+
+
+def test_probe_still_charges_an_unbalanced_math_fragment(tmp_path):
+    run, tid, attempt = claimed_author(tmp_path, text='<article class="topic" id="s1-mean"><p>Gain $x</p></article>')
+    result = fragment_probe(run, tid, attempt, layout=CLEAN)
+    assert result['status'] == 'defects' and any(p['code'] == 'math' for p in result['problems'])
+
+
+def test_probe_still_charges_a_fragment_defect_beside_a_metadata_defect(tmp_path):
+    bad = '<article class="topic" id="dup"></article><article class="topic" id="dup"></article>'
+    run, tid, attempt = claimed_author(tmp_path, text=bad)
+    edit_brief_manifest(run, tid, note_title='Gain $')
+    result = fragment_probe(run, tid, attempt, layout=CLEAN)
+    assert result['status'] == 'defects'
+    assert [(p['code'], p['detail']) for p in result['problems']] == [('duplicate-id', 'dup')]

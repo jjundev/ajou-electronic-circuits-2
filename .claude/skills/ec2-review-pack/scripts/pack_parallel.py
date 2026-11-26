@@ -996,6 +996,23 @@ def metadata_diagnostics(manifest, note, paths):
     return {field: common_diagnostics(value, note, paths) for field, value in markup.items()}
 
 
+def diagnostic_source(code, detail, entry):
+    """Whether one `common_diagnostics` entry (doc, diagnostics) produces the page diagnostic."""
+    doc, diagnostics = entry
+    return (code, detail) in diagnostics or (code == 'duplicate-id' and detail in doc.ids)
+
+
+def fragment_owns(code, detail, fragment, metadata):
+    """machine_report's attribution of one page diagnostic to the section fragment.
+
+    A duplicate id that a manifest field also carries goes only to scope-draft, and a
+    diagnostic the fragment itself does not produce goes to the metadata or template owner.
+    """
+    if code == 'duplicate-id' and any(diagnostic_source(code, detail, entry) for entry in metadata.values()):
+        return False
+    return diagnostic_source(code, detail, fragment)
+
+
 def machine_report(state, root, problems, note, manifest, paths=None):
     issues = []
     sections = None
@@ -1014,14 +1031,12 @@ def machine_report(state, root, problems, note, manifest, paths=None):
             if sections is None:
                 sections = fragment_diagnostics(state, manifest, note, paths)
             targets = [('author-' + sid, sid if problem.where == note.name else problem.where)
-                       for sid, (doc, diagnostics) in sections.items()
-                       if (problem.code, problem.detail) in diagnostics or problem.where in doc.ids
-                       or (problem.code == 'duplicate-id' and problem.detail in doc.ids)]
+                       for sid, entry in sections.items()
+                       if diagnostic_source(problem.code, problem.detail, entry) or problem.where in entry[0].ids]
             if metadata is None:
                 metadata = metadata_diagnostics(manifest, note, paths)
-            metadata_targets = [('scope-draft', field) for field, (doc, diagnostics) in metadata.items()
-                                if (problem.code, problem.detail) in diagnostics
-                                or (problem.code == 'duplicate-id' and problem.detail in doc.ids)]
+            metadata_targets = [('scope-draft', field) for field, entry in metadata.items()
+                                if diagnostic_source(problem.code, problem.detail, entry)]
             if problem.code == 'duplicate-id' and metadata_targets:
                 # Renaming the manifest occurrence can preserve the section or
                 # template anchor. Reassembly checks any remaining duplicates.
