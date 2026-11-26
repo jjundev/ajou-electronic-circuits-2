@@ -380,6 +380,7 @@ def init_run(repo: Path, run: Path, range_: str, *,
         if workflow == 'parallel':
             state['approval_contract'] = 1
             state['source_contract'] = 1
+            state['problem_contract'] = 1  # one explain-author/-blind pair per selected problem
             state['concept_contract'] = 1
             state['join_contract'] = 2  # pack_findings.LABEL_ONLY_JOIN
             from pack_publication import publication_inventory, publication_lock

@@ -32,8 +32,9 @@ def seed(state, tids):
         record.update(status='done', attempt='synthetic-test-' + tid, receipt={'verified_files': evidence},
                       verified_files=evidence)
         from pack_approvals import ROLES, review_policy
-        if tid in ROLES:
-            record['receipt'].update(approval_policy=review_policy(tid), target_reviews=str(marker),
+        from pack_graph import role_of
+        if role_of(tid) in ROLES:
+            record['receipt'].update(approval_policy=review_policy(role_of(tid)), target_reviews=str(marker),
                                      fresh_approvals={},reused_approvals={})
 
 
@@ -95,7 +96,7 @@ def test_selection_unlocks_pdf_and_blind_before_note_qa(tmp_path):
     seed(state, ['stage-problem-index'])
     nxt = ready_work(state, slots=6)
     assert 'build-problems' in nxt['actions']
-    assert {'explain-author', 'explain-blind', 'author-why'} <= set(nxt['dispatch'])
+    assert {'explain-author-p1', 'explain-blind-p1', 'author-why'} <= set(nxt['dispatch'])
 
 
 def test_fixed_html_unlocks_browser_and_svg_conversion(tmp_path):
@@ -114,6 +115,64 @@ def test_zero_problems_omits_every_workbook_action(tmp_path):
     assert {'stage-problem-index', 'build-problems', 'explain-author', 'explain-blind',
             'child-coordinator', 'explain-verify', 'build-answers', 'pdf-qa'}.isdisjoint(ids)
     assert 'publish-pack' in ids
+
+
+def test_problem_contract_opens_one_author_and_solver_per_problem(tmp_path):
+    from pack_graph import ready_work
+    state = selected(tmp_path, ['P10.01', 'P10.02', 'P10.03'])
+    state['problem_contract'] = 1
+    seed(state, ['stage-problem-index'])
+    nxt = ready_work(state, slots=2**31)
+    expected = {f'explain-{r}-p{i}' for r in ('author', 'blind') for i in (1, 2, 3)}
+    assert expected <= set(nxt['dispatch'])
+    assert 'explain-author' not in nxt['dispatch']
+
+
+def test_problem_contract_zero_problems_has_no_explain_tasks(tmp_path):
+    # Review Focus 2
+    from pack_graph import task_specs
+    state = selected(tmp_path, []); state['problem_contract'] = 1
+    assert not {s.id for s in task_specs(state)} & {'child-coordinator'} and \
+        not any(s.id.startswith('explain-') for s in task_specs(state))
+
+
+def test_existing_run_keeps_single_explain_tasks(tmp_path):
+    # Review Focus 5
+    from pack_graph import ready_work
+    state = selected(tmp_path, ['P10.01', 'P10.02'])
+    state.pop('problem_contract', None)
+    seed(state, ['stage-problem-index'])
+    assert {'explain-author', 'explain-blind'} <= set(ready_work(state, slots=6)['dispatch'])
+
+
+def test_twenty_problem_dispatch_fits_cli_envelope(tmp_path):
+    # Review Focus 3
+    from pack_cli import format_result
+    from pack_graph import ready_work
+    state = selected(tmp_path, [f'P10.{i:02}' for i in range(1, 21)]); state['problem_contract'] = 1
+    seed(state, ['stage-problem-index'])
+    nxt = ready_work(state, slots=2**31)
+    out = json.loads(format_result(dict(next=nxt)))
+    assert len([t for t in out['next']['dispatch'] if t.startswith('explain-')]) == 40
+
+
+def test_problem_task_names_map_to_roles_and_targets(tmp_path):
+    from pack_graph import explain_ids, problem_key, problem_keys, refresh, role_of, targets
+    state = selected(tmp_path, ['P10.01', 'P10.02'])
+    assert state['problem_contract'] == 1  # set by init_run for new parallel RUNs
+    assert explain_ids(dict(state, problem_contract=None), 'explain-author') == ['explain-author']
+    assert problem_keys(state) == ['p1', 'p2']
+    assert explain_ids(state, 'explain-blind') == ['explain-blind-p1', 'explain-blind-p2']
+    assert [role_of(t) for t in ('author-why', 'stt-0909', 'explain-author-p2', 'explain-blind-p10',
+                                 'explain-author', 'child-coordinator')] == \
+        ['author', 'stt', 'explain-author', 'explain-blind', 'explain-author', 'child-coordinator']
+    assert [problem_key(t) for t in ('explain-blind-p12', 'explain-blind', 'stt-0909')] == ['p12', None, None]
+    assert targets(state, 'explain-author-p2') == ['P10.02']
+    seed(state, ['stage-problem-index'])
+    refresh(state)
+    assert state['tasks']['explain-blind-p2']['role'] == 'explain-blind'
+    assert state['tasks']['child-coordinator']['dependencies'] == [
+        'stage-problem-index', 'explain-author-p1', 'explain-author-p2', 'explain-blind-p1', 'explain-blind-p2']
 
 
 def test_existing_state_uses_legacy_scheduler(tmp_path):
@@ -653,8 +712,8 @@ def test_early_index_seals_real_questions_for_independent_attempts(tmp_path):
     refresh(state)
     flow.update_state(run, state['revision'], lambda old: state)
     cli('run', '--run', run, '--action', 'stage-problem-index')
-    first = flow.claim_task(run, 'explain-author')
-    second = flow.claim_task(run, 'explain-blind')
+    first = flow.claim_task(run, 'explain-author-p1')
+    second = flow.claim_task(run, 'explain-blind-p1')
     author, blind = (json.loads(Path(r['brief']).read_text()) for r in (first, second))
     assert blind['questions'] == author['questions']
     assert set(a['path'] for a in blind['inputs']) == {str(p) for p in Path(blind['questions']).parent.iterdir()}
@@ -666,7 +725,7 @@ def test_early_index_seals_real_questions_for_independent_attempts(tmp_path):
     assert not (repo/'복습노트/0909').exists()
 
     from pack_support import genuine_child_run, parallel_worker
-    for tid, attempt in [('explain-author', first), ('explain-blind', second)]:
+    for tid, attempt in [('explain-author-p1', first), ('explain-blind-p1', second)]:
         flow.release_task(run, tid, attempt['attempt'], 'released synthetic fixture reviewer')
     def write(brief, outputs):
         if brief['role'] == 'child-coordinator':
@@ -677,10 +736,10 @@ def test_early_index_seals_real_questions_for_independent_attempts(tmp_path):
                     'Path(sys.argv[3]).write_text(fragment(SimpleNamespace(subparts=json.loads(sys.argv[2]))))')
             subprocess.run([sys.executable, '-c', expr, helper, json.dumps(question['subparts']), outputs[0]], check=True)
         else:
-            items = {f'p1:{key}': dict(reviewer='synthetic-explain-blind', evidence='test fixture',
+            items = {f'p1:{key}': dict(reviewer='synthetic-explain-blind-p1', evidence='test fixture',
                     method='exact', conclusion='1=1') for key in question['subparts']}
             outputs[0].write_text(json.dumps(dict(items=items)))
-    for tid in ('explain-blind', 'explain-author', 'child-coordinator'):
+    for tid in ('explain-blind-p1', 'explain-author-p1', 'child-coordinator'):
         parallel_worker(run, tid, write)
     shutil.copytree(REPO/'.claude/skills/ec2-problem-explain', repo/'.claude/skills/ec2-problem-explain')
     shutil.copytree(REPO/'.claude/skills/ec2-review-pack/scripts', repo/'.claude/skills/ec2-review-pack/scripts')
@@ -711,6 +770,65 @@ def test_early_index_seals_real_questions_for_independent_attempts(tmp_path):
     assert not (repo/'복습노트/0909').exists()
 
 
+def test_problem_contract_seals_each_question_separately(tmp_path):
+    from pack_graph import refresh
+    repo, run, state = parallel(tmp_path)
+    state['problem_contract'] = 1
+    helper = REPO/'.claude/skills/ec2-problem-explain/tests'
+    for pid in ('P10.01', 'P10.02'):
+        subprocess.run([sys.executable, '-c', 'import sys; from pathlib import Path; '
+            'sys.path.insert(0, sys.argv[1]); from _util import _copy_problem; '
+            '_copy_problem(sys.argv[3], Path(sys.argv[2]))', helper, repo, pid], check=True)
+    marker = run/'synthetic-upstream.json'
+    marker.write_text('{"synthetic_fixture":true}')
+    evidence = [dict(path=str(marker), sha256=flow._sha(marker))]
+    def mark(tid):
+        refresh(state)
+        row = flow._record(state, tid)
+        row.update(status='done', attempt='synthetic-'+tid, verified_files=evidence, receipt={'verified_files': evidence})
+        return row
+    for tid in ('source-prep', 'candidate-index', 'stt-0909', 'scope-draft'):
+        mark(tid)
+    state['scope_sections'] = [dict(id='why', topics=[dict(id='why-circuit')])]
+    selection = mark('selection')
+    state['selected_ids'] = ['P10.01', 'P10.02']
+    qs = [dict(id=pid, kind='장말문제', why='practice', priority='core', estimated_minutes=10,
+               learning_goals=['gain'], subpart_count=1) for pid in state['selected_ids']]
+    data = {'manifest.json': dict(problems=qs, range='0909', slug='Test', selection_policy='exam-first-v2'),
+            'selection.json': dict(schema_version=2, policy='exam-first-v2', problems=qs,
+                workload=dict(estimated_minutes=20), review=dict(candidates=[], coverage=[])),
+            'display-titles.json': {'P10.01': 'First', 'P10.02': 'Practice'}}
+    selection['artifacts'] = {}
+    for name, obj in data.items():
+        p = run/'fixture-selection'/name
+        p.parent.mkdir(exist_ok=True)
+        p.write_text(json.dumps(obj))
+        selection['artifacts'][name] = str(p)
+    refresh(state)
+    flow.update_state(run, state['revision'], lambda old: state)
+    cli('run', '--run', run, '--action', 'stage-problem-index')
+    stage = flow.inspect_state(run)['actions']['stage-problem-index']
+    assert set(stage['problem_questions']) == {'p1', 'p2'}
+    whole = Path(stage['artifacts']['questions.json'])
+    assert whole.parent.name == 'sealed' and len(json.loads(whole.read_text())['problems']) == 2
+    assert all(Path(p).is_file() for p in stage['questions'])
+    verified = {x['path'] for x in stage['verified_files']}
+    assert {p for files in stage['problem_questions'].values() for p in files} <= verified
+    for key in ('p1', 'p2'):
+        own, = (p for p in stage['problem_questions'][key] if p.endswith('questions.json'))
+        question, = json.loads(Path(own).read_text())['problems']
+        assert question['id'] == key
+        assert set(stage['problem_questions'][key]) == {str(p) for p in Path(own).parent.iterdir()}
+    blind = json.loads(Path(flow.claim_task(run, 'explain-blind-p1')['brief']).read_text())
+    assert blind['role'] == 'explain-blind' and blind['targets'] == ['P10.01']
+    assert Path(blind['questions']).parent.name == 'p1'
+    assert {Path(p).parent.name for p in blind['input_paths'] if 'sealed' in p} == {'p1'}
+    author = json.loads(Path(flow.claim_task(run, 'explain-author-p2')['brief']).read_text())
+    assert Path(author['questions']).parent.name == 'p2'
+    assert {Path(a['path']).parent.name for a in author['inputs']} == {'p2'}
+    assert not (repo/'복습노트/0909').exists()
+
+
 def test_completed_producer_loses_approval_when_frozen_attempt_is_superseded(tmp_path):
     _, _, state = parallel(tmp_path)
     marker = Path(state['run'])/'proof.json'
@@ -738,7 +856,7 @@ def test_ready_work_rechecks_accepted_evidence(tmp_path):
     seed(state, ['stage-problem-index'])
     Path(state['actions']['stage-problem-index']['verified_files'][0]['path']).write_text('edited')
     ready = ready_work(state, slots=4)
-    assert 'build-problems' not in ready['actions'] and 'explain-blind' not in ready['dispatch']
+    assert 'build-problems' not in ready['actions'] and 'explain-blind-p1' not in ready['dispatch']
 
 @pytest.mark.parametrize('crash_before_adoption', [False, True])
 def test_matching_stopped_stale_attempt_can_be_discarded_and_retried(tmp_path, monkeypatch, crash_before_adoption):

@@ -1,6 +1,7 @@
 """Explicit dependency graph for opt-in parallel review packs."""
 from dataclasses import dataclass
 import copy
+import re
 from typing import Literal
 
 import pack_flow as f
@@ -18,6 +19,37 @@ class TaskSpec:
     @property
     def dependencies(self):
         return tuple(dict.fromkeys((*self.direct_inputs, *self.required_approvals)))
+
+
+def problem_keys(state: dict) -> list[str]:
+    return [f'p{i}' for i in range(1, len(state['selected_ids']) + 1)]
+
+
+def explain_ids(state: dict, role: str) -> list[str]:
+    if role not in ('explain-author', 'explain-blind'):
+        raise ValueError('not an explanation role: ' + role)
+    if not state.get('problem_contract'):
+        return [role]
+    return [f'{role}-{k}' for k in problem_keys(state)]
+
+
+_PROBLEM_SUFFIX = re.compile(r'-p(\d+)$')
+
+
+def problem_key(task_id: str) -> str | None:
+    match = _PROBLEM_SUFFIX.search(task_id)
+    return 'p' + match.group(1) if match else None
+
+
+def role_of(task_id: str) -> str:
+    if task_id.startswith('author-'):
+        return 'author'
+    if task_id.startswith('stt-'):
+        return 'stt'
+    for role in ('explain-author', 'explain-blind'):
+        if task_id.startswith(role + '-') and problem_key(task_id) == task_id[len(role) + 1:]:
+            return role
+    return task_id
 
 
 def task_specs(state: dict) -> tuple[TaskSpec, ...]:
@@ -67,11 +99,18 @@ def task_specs(state: dict) -> tuple[TaskSpec, ...]:
     pdf_qa = ()
     if ids:
         action('stage-problem-index', ('selection',), ('problem index', 'questions.json'))
-        worker('explain-author', ('stage-problem-index',),
-               tuple(f'explanations/p{i}.html' for i in range(1, len(ids) + 1)))
-        worker('explain-blind', ('stage-problem-index',), ('independent.json',))
-        worker('child-coordinator', ('stage-problem-index', 'explain-author', 'explain-blind'),
-               ('child/child-receipt.json',))
+        if state.get('problem_contract'):
+            for k in problem_keys(state):
+                worker(f'explain-author-{k}', ('stage-problem-index',), (f'explanations/{k}.html',))
+                worker(f'explain-blind-{k}', ('stage-problem-index',), ('independent.json',))
+            worker('child-coordinator', ('stage-problem-index', *explain_ids(state, 'explain-author'),
+                                         *explain_ids(state, 'explain-blind')), ('child/child-receipt.json',))
+        else:
+            worker('explain-author', ('stage-problem-index',),
+                   tuple(f'explanations/p{i}.html' for i in range(1, len(ids) + 1)))
+            worker('explain-blind', ('stage-problem-index',), ('independent.json',))
+            worker('child-coordinator', ('stage-problem-index', 'explain-author', 'explain-blind'),
+                   ('child/child-receipt.json',))
         action('explain-verify', ('stage-problem-index',), ('explanation bundle',), ('child-coordinator',))
         action('build-problems', ('stage-problem-index', 'render-preflight'), ('problem PDF',))
         action('build-answers', ('stage-problem-index', 'explain-verify', 'render-preflight'), ('answer PDF',))
@@ -104,6 +143,8 @@ def targets(state, tid):
         return [item['path'] for item in state['converted_assets']['svgs']]
     if tid in ('explain-author', 'explain-blind', 'child-coordinator', 'pdf-qa'):
         return state['selected_ids']
+    if role_of(tid) in ('explain-author', 'explain-blind'):
+        return [state['selected_ids'][int(problem_key(tid)[1:]) - 1]]
     if tid == 'scope-final': return [section['id'] for section in state['scope_sections']]
     return state['sessions']
 
@@ -117,8 +158,7 @@ def refresh(state):
             row['status'] = 'stale'
         row['dependencies'] = dependencies
         if spec.kind == 'worker':
-            role = 'author' if spec.id.startswith('author-') else 'stt' if spec.id.startswith('stt-') else spec.id
-            row.update(role=role, targets=targets(state, spec.id))
+            row.update(role=role_of(spec.id), targets=targets(state, spec.id))
             row.setdefault('brief', None)
             row.setdefault('attempt', None)
             row.setdefault('receipt', None)

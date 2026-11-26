@@ -193,6 +193,23 @@ class TestHardenedContracts(unittest.TestCase):
                     self.assertIn(token, text)
 
 
+class TestPerProblemDocs(unittest.TestCase):
+    def read(self, rel):
+        return (SKILL / rel).read_text(encoding="utf-8")
+
+    def test_per_problem_explanation_documented(self):
+        expected = {
+            "references/runner-contract.md": ("explain-author-pN", "같은 문항", "pN:<소문항>", "선택된 workbook ID"),
+            "references/problem-explain-integration.md": ("explain-author-pN", "explain-blind-pN", "problem_contract"),
+            "references/worker-prompt.md": ("sealed/pN/",),
+        }
+        for rel, tokens in expected.items():
+            text = self.read(rel)
+            for token in tokens:
+                with self.subTest(file=rel, token=token):
+                    self.assertIn(token, text)
+
+
 class TestUnboundedDocs(unittest.TestCase):
     def test_docs_have_no_slot_caps_or_python3(self):
         refs = SKILL / "references"

@@ -102,7 +102,8 @@ def genuine_child_run(tmp_path, *, existing=None, lab=False):
     for p in item['pack'].problems:
         dest = item['folder'] / 'explanations' / (p.id + '.html')
         if parallel:
-            shutil.copyfile(state['tasks']['explain-author']['artifacts']['explanations/' + p.id + '.html'], dest)
+            author = state['tasks'].get(f'explain-author-{p.id}') or state['tasks']['explain-author']
+            shutil.copyfile(author['artifacts']['explanations/' + p.id + '.html'], dest)
         else:
             dest.write_text(util.fragment(p), encoding='utf-8')
     if lab:
@@ -127,8 +128,8 @@ def genuine_child_run(tmp_path, *, existing=None, lab=False):
     review['content']['reviewer'] = 'synthetic-content-reviewer'
     review['browser']['reviewer'] = 'synthetic-browser-reviewer'
     if parallel:
-        blind = Path(state['tasks']['explain-blind']['artifacts']['independent.json'])
-        for k, entry in json.loads(blind.read_text())['items'].items():
+        from pack_parallel import blind_items
+        for k, entry in blind_items(state).items():
             review['independent']['items'][k].update(entry)
     (item['folder'] / 'review.json').write_text(json.dumps(review), encoding='utf-8')
     if not existing:
@@ -136,7 +137,8 @@ def genuine_child_run(tmp_path, *, existing=None, lab=False):
     child = dict(schema_version=1, status='ready-for-publish', range='0909', slug=slug, run=str(child_run),
         bucket=item['folder'].name, stage=str(artifacts.html.parent), input_hash=review['input_hash'], review_policy_version=review['review_policy_version'],
         counts={'problems': 1}, reviews={}, unresolved=[], reviewers={
-            'authors': {p.id: 'synthetic-explain-author' if parallel else 'synthetic-author' for p in item['pack'].problems},
+            'authors': {p.id: ('synthetic-explain-author-' + p.id if state.get('problem_contract') else 'synthetic-explain-author')
+                        if parallel else 'synthetic-author' for p in item['pack'].problems},
             'independent': {k: v['reviewer'] for k,v in review['independent']['items'].items()},
             'content': review['content']['reviewer'], 'browser': review['browser']['reviewer']})
     files = {*[p for p in child_run.rglob('*') if p.is_file()], manifest, run / 'learning-style.json', *[item['pack'].pack_paths.source_file(p) if parallel else Path(p) for p in item['pack'].inputs], *[Path(x['path']) for x in review['references']]}

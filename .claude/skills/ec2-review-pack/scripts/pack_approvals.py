@@ -456,7 +456,8 @@ def make_plan(state, brief):
     ledger = state.get('approval_ledger', [])
     result = collect_current_reviews(required, ledger, run_root=run)
     if role == 'explain-blind':
-        author = state['tasks']['explain-author'].get('agent_id')
+        from pack_parallel import counterpart
+        author = state['tasks'][counterpart(brief['task_id'])].get('agent_id')
         for target, row in list(result['current'].items()):
             if row['reviewer'] == author:
                 del result['current'][target]

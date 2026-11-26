@@ -907,3 +907,17 @@ def test_label_only_join_leaves_precheck_unblocked(note_run):
     submit_review(note_run, 'content-review', disposition='applied')
     state = submit_review(note_run, 'style-audit')
     assert blocked_reason(state, 'precheck') is None
+
+
+def test_coordinator_owner_routes_target_to_its_problem_author():
+    from pack_findings import coordinator_owner
+    state = dict(selected_ids=['P10.01', 'P10.02'])
+    assert coordinator_owner(state, 'P10.02') == 'explain-author'
+    state['problem_contract'] = 1
+    assert coordinator_owner(state, 'P10.02') == 'explain-author-p2'
+    assert coordinator_owner(state, 'P10.01') == 'explain-author-p1'
+    assert coordinator_owner(state, 'p2') == 'explain-author-p2'
+    assert coordinator_owner(state, 'p1:a') == 'explain-author-p1'
+    for target in ('p3', 'p0', 'p1:', 'P10.03', 's1-topic', 'p01'):
+        with pytest.raises(flow.FlowError, match='coordinator finding target is not a selected problem'):
+            coordinator_owner(state, target)

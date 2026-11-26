@@ -4,7 +4,7 @@
 
 공통 조립·검사는 통합 일곱 구역을 검증하고, 본문의 `data-answer-step`/`data-answer-final` 선택 요소에서 overlay를 추출한다. 새 원고에 구형 route를 요구하지 않는다. 표지 누락·검토 실패 시 설명/답안 발행을 withheld로 보고하며 검사 우회·숨긴 중복 핵심·구버전 승인을 사용하지 않는다. 과거 발행 자료의 구형 추출 검증은 새 저작 승인과 구분한다.
 
-병렬 RUN은 선발과 stage-problem-index가 승인된 직후 explain-author와 explain-blind를 서로 다른 시도로 배정한다. 두 작업자는 브리프가 봉인한 문제·그림으로 시작한다. 각 시도의 영수증을 일괄 인계하고 조정자가 채택된 전체 독립 풀이와 설명 조각으로 기존 네 검토를 수행한다. 조정자·PDF·최종 발행은 그래프에 표시된 직접 입력 및 승인 뒤에만 열린다. 중단된 검산은 [같은 RUN 재개](runner-contract.md#같은-병렬-run-재개)의 증거로 이어간다. 조정자가 설명 조각에서 내용 결함을 찾으면 자식 안에서 조각을 고치지 않고 `needs-fix`와 구조화된 결함을 반환한다. 부모는 [병렬 RUN의 내용 검토와 수정](runner-contract.md#병렬-run의-내용-검토와-수정)에 따라 explain-author만 다시 연다. 수정본이 접수되면 조정자가 새 attempt로 다시 검토한다.
+병렬 RUN은 선발과 stage-problem-index가 승인된 직후 문항마다 `explain-author-pN`과 `explain-blind-pN`을 동시에 배정한다(`problem_contract` RUN이며, 계약이 없는 RUN은 단일 `explain-author`/`explain-blind`를 쓴다). 같은 문항의 작성자와 풀이자는 다른 에이전트여야 하고 다른 문항끼리는 같은 에이전트가 맡을 수 있다. 두 작업자는 자기 문항 폴더 `sealed/pN/`의 문제·그림으로 시작한다. 각 시도의 영수증을 일괄 인계하고 조정자가 채택된 전체 독립 풀이와 설명 조각으로 기존 네 검토를 수행한다. 조정자·PDF·최종 발행은 그래프에 표시된 직접 입력 및 승인 뒤에만 열린다. 중단된 검산은 [같은 RUN 재개](runner-contract.md#같은-병렬-run-재개)의 증거로 이어간다. 조정자가 설명 조각에서 내용 결함을 찾으면 자식 안에서 조각을 고치지 않고 `needs-fix`와 구조화된 결함을 반환한다. 부모는 [병렬 RUN의 내용 검토와 수정](runner-contract.md#병렬-run의-내용-검토와-수정)에 따라 결함 문항의 `explain-author-pN`만 다시 연다(계약이 없는 RUN은 `explain-author`). 수정본이 접수되면 조정자가 새 attempt로 다시 검토한다.
 
 레거시 실행 순서는 명세 snapshot → 범위/manifest → 작성/조립 → 문제지만 빌드 → 부모 내용/화면/MD/개인화 감사 + 답안 링크 예비 검사 + 변환 SVG 독립 화면 검토 → 자식 코디네이터의 발행 준비 → 부모의 설명 발행 → 승인 overlay 답안 빌드 → PDF 화면 검토 → 부모의 답안 발행 → 유예 없는 최종 검사다.
 

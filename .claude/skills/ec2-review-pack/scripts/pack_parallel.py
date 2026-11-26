@@ -12,7 +12,22 @@ import time
 
 import pack_flow as f
 import pack_findings as findings
-from pack_graph import task_specs
+from pack_graph import explain_ids, problem_key, problem_keys, role_of, task_specs
+
+
+def counterpart(task_id: str) -> str:
+    """The other half of one problem's independence pair: author <-> blind solver."""
+    role = role_of(task_id)
+    other = {'explain-author': 'explain-blind', 'explain-blind': 'explain-author'}[role]
+    return other if task_id == role else f'{other}-{problem_key(task_id)}'
+
+
+def sealed_question_paths(state, spec):
+    """The sealed files one explanation worker may read: all of them, or one problem's folder."""
+    row = f._record(state, 'stage-problem-index')
+    if state.get('problem_contract'):
+        return list(map(Path, row['problem_questions'][problem_key(spec.id)]))
+    return list(map(Path, row['questions']))
 
 
 def spec_for(state, tid):
@@ -72,9 +87,8 @@ def public(state):
 
 
 def original_worker_inputs(state, spec):
-    row = f._record(state, 'stage-problem-index')
-    if spec.id in ('explain-blind', 'explain-author'):
-        return file_records(Path(p) for p in row['questions'])
+    if role_of(spec.id) in ('explain-blind', 'explain-author'):
+        return file_records(sealed_question_paths(state, spec))
     paths = set(state['hashes'])
     for dep in spec.dependencies:
         row = f._record(state, dep)
@@ -92,8 +106,8 @@ def worker_inputs(state, spec):
     if not state.get('approval_contract'):
         return original_worker_inputs(state, spec)
     role = f._record(state, spec.id)['role']
-    if role in ('explain-blind', 'explain-author'):
-        return file_records(map(Path, state['actions']['stage-problem-index']['questions']))
+    if role_of(spec.id) in ('explain-blind', 'explain-author'):
+        return file_records(sealed_question_paths(state, spec))
     snapshot = Path(state['run'])/'learning-style.json'
     paths = set() if role in f.PROFILE_EXEMPT else {snapshot, Path(state['repo'])/f._read(snapshot)['path']}
     if role == 'concept-review':
@@ -145,10 +159,11 @@ def worker_inputs(state, spec):
 
 
 def explanation_digest(state):
-    """The child coordinator's candidate: the accepted explain-author fragment set."""
-    author = state['tasks'][findings.COORDINATOR_OWNER]
-    names = spec_for(state, author['id']).outputs
-    files = {name: f._sha(Path(author['artifacts'][name])) for name in names}
+    """The child coordinator's candidate: the accepted fragment set of every explanation author."""
+    files = {}
+    for tid in explain_ids(state, 'explain-author'):
+        author = state['tasks'][tid]
+        files.update({name: f._sha(Path(author['artifacts'][name])) for name in spec_for(state, tid).outputs})
     return hashlib.sha256(json.dumps(files, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
 
 
@@ -177,7 +192,11 @@ def claim_worker(state, task):
                 allowed_output_roots=[str(root)], report=str(review), receipt=str(root/'receipt.json'),
                 request_paths=task.get('request_paths', []))
     if role in ('explain-author', 'explain-blind'):
-        data['questions'] = str(output(state, 'stage-problem-index', 'questions.json'))
+        if state.get('problem_contract'):
+            data['questions'] = str(output(state, 'stage-problem-index', 'questions.json').parent
+                                    / problem_key(spec.id) / 'questions.json')
+        else:
+            data['questions'] = str(output(state, 'stage-problem-index', 'questions.json'))
         data['instruction'] = ('Use only the sealed question text and figures. Submit independent.json with items '
                                'keyed by pN:subpart, method, conclusion and evidence.' if role == 'explain-blind'
                                else 'Write one child explanation HTML fragment per problem using the sealed question and figures.')
@@ -276,6 +295,13 @@ def claim_worker(state, task):
                     instruction=('Extract against this candidate pack and slug. Use the accepted fragments and independent results. '
                                  'For a new pack, apply the optional circuit lab selection in problem-explain-integration.md '
                                  'before the final explanation build. Complete all child reviews.'))
+        if state.get('problem_contract'):
+            joined = Path(state['run']) / 'adopted' / 'blind-join' / str(uuid4()) / 'independent.json'
+            joined.parent.mkdir(parents=True)
+            f._atomic_json(joined, dict(items=blind_items(state)))
+            joined.chmod(0o444)
+            data['independent'] = str(joined)
+            data['inputs'].extend(file_records([joined]))
     repairs = [r for r in state.get('findings', {}).values()
                if r['owner_task'] == task['id'] and r.get('pending_request') and not findings.repair_record(state, r)]
     if repairs:
@@ -426,19 +452,35 @@ def check_selection_history(state, receipt):
         raise SelectionHistoryChanged(receipt['attempt'])
 
 
+def blind_items(state: dict) -> dict:
+    """All accepted independent solutions, joined across the blind solver tasks."""
+    joined = {}
+    for tid in explain_ids(state, 'explain-blind'):
+        for key, item in f._read(output(state, tid, 'independent.json'))['items'].items():
+            if key in joined:
+                raise f.FlowError('duplicate independent item')
+            joined[key] = item
+    return joined
+
+
 def check_leaf_join(state, child_root):
     child = f._read(child_root / 'child-receipt.json')
-    author = state['tasks']['explain-author']
     folder = child_root / child['bucket']
-    for name in spec_for(state, 'explain-author').outputs:
-        if f._sha(output(state, 'explain-author', name)) != f._sha(local_path(folder, name)):
-            raise f.FlowError('child replaced accepted author fragment')
-    items = f._read(output(state, 'explain-blind', 'independent.json'))['items']
+    for tid in explain_ids(state, 'explain-author'):
+        for name in spec_for(state, tid).outputs:
+            if f._sha(output(state, tid, name)) != f._sha(local_path(folder, name)):
+                raise f.FlowError('child replaced accepted author fragment')
+    items = blind_items(state)
     reviewed = f._read(folder / 'review.json')['independent']['items']
     if set(items) != set(reviewed) or any(any(reviewed[k].get(field) != val for field, val in item.items())
                                           for k, item in items.items()):
         raise f.FlowError('child independent review differs from accepted blind solution')
-    if any(agent != author['agent_id'] for agent in child['reviewers']['authors'].values()):
+    authors = child['reviewers']['authors']
+    if state.get('problem_contract'):
+        if set(authors) != set(problem_keys(state)) or any(
+                authors[k] != state['tasks'][f'explain-author-{k}']['agent_id'] for k in authors):
+            raise f.FlowError('child author identity mismatch')
+    elif any(agent != state['tasks'][explain_ids(state, 'explain-author')[0]]['agent_id'] for agent in authors.values()):
         raise f.FlowError('child author identity mismatch')
 
 
@@ -539,15 +581,16 @@ def validate_worker(state, task, receipt_path):
     if role in ('explain-author', 'explain-blind'):
         if not task.get('agent_id'):
             raise f.FlowError('bound leaf reviewer identity required')
-        other = state['tasks']['explain-blind' if role == 'explain-author' else 'explain-author']
+        other = state['tasks'][counterpart(task['id'])]
         if role == 'explain-author' and other['status'] == 'done':
-            solved = f._read(output(state, 'explain-blind', 'independent.json'))['items']
+            solved = f._read(output(state, counterpart(task['id']), 'independent.json'))['items']
             if any(item['reviewer'] == task['agent_id'] for item in solved.values()):
                 raise f.FlowError('independent solver cannot author their reused solution')
         if other.get('agent_id') == task['agent_id']:
             raise f.FlowError('independent solver must differ from author')
     if role == 'explain-blind':
-        questions = f._read(output(state, 'stage-problem-index', 'questions.json'))['problems']
+        questions = f._read(brief['questions'] if state.get('problem_contract')
+                            else output(state, 'stage-problem-index', 'questions.json'))['problems']
         keys = {p['id'] + ':' + sub for p in questions for sub in p['subparts']}
         items = (receipt['joined_independent'] if 'joined_independent' in receipt
                  else f._read(root/'independent.json')['items'])
@@ -557,7 +600,7 @@ def validate_worker(state, task, receipt_path):
                                       run_root=Path(state['run']))['current']
         solvers = {plan['targets'][t]['item']:r['reviewer'] for t,r in old.items()}
         if set(items) != keys or any(item.get('reviewer') != solvers.get(k, task['agent_id']) or
-                item.get('reviewer') == state['tasks']['explain-author'].get('agent_id') or
+                item.get('reviewer') == state['tasks'][counterpart(task['id'])].get('agent_id') or
                 not all(isinstance(item.get(k), str) and item[k].strip() for k in ('method', 'conclusion', 'evidence'))
                 for k,item in items.items()):
             raise f.FlowError('blind solution must cover every subpart with the bound solver')
@@ -858,11 +901,24 @@ def seal_questions(state, paths, root, slug):
             item['figures'].append(name)
         problems.append(item)
     f._atomic_json(sealed/'questions.json', dict(problems=problems))
+    per_problem = {}
+    if state.get('problem_contract'):
+        from pack_graph import problem_keys
+        if [item['id'] for item in problems] != problem_keys(state):
+            raise f.FlowError('sealed question IDs differ from the selection order')
+        # Each per-problem worker gets a folder holding only its own question and figures.
+        for item in problems:
+            folder = sealed / item['id']
+            folder.mkdir()
+            for name in item['figures']:
+                shutil.copyfile(sealed/name, folder/name)
+            f._atomic_json(folder/'questions.json', dict(problems=[item]))
+            per_problem[item['id']] = sorted(folder.iterdir())
     inputs = [paths.source_file(p) for p in source['inputs']]
     digest = hashlib.sha256(''.join(f._sha(p) for p in inputs).encode()).hexdigest()
     if digest != source['sha256']:
         raise f.FlowError('question inputs changed during extraction')
-    return sealed, inputs
+    return sealed, inputs, per_problem
 
 
 def input_bundle(state, spec, root):
@@ -1149,9 +1205,11 @@ def execute_action(state, spec, root):
         roster = {p.relative_to(paths.work_pack).as_posix(): f._sha(p) for p in produced}
         extras.update(pack=dict(root=str(paths.work_pack), files=roster), candidate_root=str(paths.work_pack))
         if tid == 'stage-problem-index':
-            sealed, sources = seal_questions(state, paths, root, f._read(bundle/'manifest.json')['slug'])
-            extras.update(questions=[str(p) for p in sorted(sealed.iterdir())],
+            sealed, sources, per_problem = seal_questions(state, paths, root, f._read(bundle/'manifest.json')['slug'])
+            extras.update(questions=[str(p) for p in sorted(sealed.iterdir()) if p.is_file()],
                           source_inputs=file_records(sources))
+            if state.get('problem_contract'):
+                extras['problem_questions'] = {k: [str(p) for p in v] for k, v in per_problem.items()}
             files['questions.json'] = sealed/'questions.json'
         if tid == 'assemble-note': files['note'], = produced
         if tid == 'build-answers':
@@ -1165,6 +1223,7 @@ def execute_action(state, spec, root):
                                                md=file_records(produced[:1])[0], svgs=file_records(produced[1:]))
     extras['artifacts'] = {key: str(path) for key, path in files.items()}
     evidence = set(files.values()) | set(map(Path, extras.get('questions', [])))
+    evidence.update(Path(p) for group in extras.get('problem_questions', {}).values() for p in group)
     for name in extras.get('pack', {}).get('files', {}):
         evidence.add(paths.work_file(name))
     if tid == 'precheck':
@@ -1270,7 +1329,7 @@ def stopped_candidate(state, tid, attempt, root):
     if record['status'] == 'done' and verify_receipt_files(record):
         raise f.FlowError('completed attempt files changed')
     fields = ('status', 'error_code', 'detail', 'artifacts', 'pack', 'candidate_root', 'questions',
-              'source_inputs', 'verified_files', 'converted_assets', 'completed_at')
+              'problem_questions', 'source_inputs', 'verified_files', 'converted_assets', 'completed_at')
     return {key: record[key] for key in fields if key in record}
 
 
