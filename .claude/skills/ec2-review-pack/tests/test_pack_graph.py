@@ -47,11 +47,30 @@ def selected(tmp_path, problems):
 
 
 def test_source_and_render_preflight_are_independent(tmp_path):
+    import pack_parallel
     _, run, _ = parallel(tmp_path)
+    assert pack_parallel.run_action(run, 'source-prep')['status'] == 'done'
     initial = flow.next_work(run, slots=1)
     assert set(initial['actions']) == {'render-preflight', 'candidate-index'}
-    assert initial['dispatch'] == ['source-prep']
+    assert initial['dispatch'] == ['stt-0909']
     assert not flow.next_work(run, slots=0)['dispatch']
+
+
+def test_source_prep_is_machine_action_under_contract(tmp_path):
+    _, run, state = parallel(tmp_path)
+    assert state['source_contract'] == 1
+    nxt = flow.next_work(run, slots=1)
+    assert set(nxt['actions']) == {'source-prep', 'candidate-index', 'render-preflight'}
+    assert nxt['dispatch'] == []
+
+
+def test_source_prep_stays_worker_without_contract(tmp_path):
+    # Review Focus 5
+    _, run, state = parallel(tmp_path)
+    flow.update_state(run, state['revision'], lambda s: {k: v for k, v in s.items() if k != 'source_contract'} | {'tasks': {}, 'actions': {}})
+    state = flow.load_state(run)
+    flow.update_state(run, state['revision'], lambda s: flow.refresh_tasks(s))
+    assert flow.next_work(run, slots=1)['dispatch'] == ['source-prep']
 
 
 def test_selection_unlocks_pdf_and_blind_before_note_qa(tmp_path):
@@ -110,16 +129,17 @@ def test_opt_in_cli_runs_candidate_action_and_isolates_worker_attempts(tmp_path)
         shutil.copyfile(module, repo / 'workbook' / module.name)
     cli('init', '--repo', repo, '--run', run, '--range', '0909', '--workflow', 'parallel', '--allow-tmp')
     assert flow.load_state(run)['public_baseline'] == {existing.name: flow._sha(existing)}
-    claim = cli('task', 'claim', '--task', 'source-prep', '--run', run)['next']
+    cli('run', '--action', 'source-prep', '--run', run)
+    claim = cli('task', 'claim', '--task', 'stt-0909', '--run', run)['next']
     brief = json.loads(Path(claim['brief']).read_text())
     assert all(Path(name).is_relative_to(Path(brief['report']).parent) for name in brief['allowed_outputs'])
     cli('run', '--action', 'candidate-index', '--run', run)
     state = flow.inspect_state(run)
-    assert state['tasks']['source-prep']['status'] == 'claimed'
+    assert state['tasks']['stt-0909']['status'] == 'claimed'
     assert state['actions']['candidate-index']['status'] == 'done'
     assert existing.read_text() == 'previous note'
-    cli('task', 'release', '--task', 'source-prep', '--attempt', claim['attempt'], '--reason', 'stopped', '--run', run)
-    retry = cli('task', 'claim', '--task', 'source-prep', '--run', run)['next']
+    cli('task', 'release', '--task', 'stt-0909', '--attempt', claim['attempt'], '--reason', 'stopped', '--run', run)
+    retry = cli('task', 'claim', '--task', 'stt-0909', '--run', run)['next']
     assert Path(retry['brief']).parent != Path(claim['brief']).parent
 
 
@@ -168,18 +188,15 @@ def exercise_zero_problem_cli(tmp_path, monkeypatch, scope_change, *, quiz_repai
     m = json.loads((fixture/'manifest.json').read_text())
     m.update(range='0909', problems=[], links=[], link_sections=['s2'], selection_policy='exam-first-v2')
     m['sessions'][0].update(date='0909', stt='STT/0909 전회2.md')
-    pdf = repo/'lecture.pdf'
+    pdf = repo/'강의노트/2026F_Lec1_Synthetic.pdf'
+    pdf.parent.mkdir()
     with pymupdf.open() as doc:
         doc.new_page()
         doc.save(pdf)
-    source = dict(schema_version=1, sessions=[dict(date='0909', stt=str(repo/'STT/0909 전회2.md'),
-                                                    pdfs=[str(pdf)], status='ready', missing=[])])
     def write(brief, outputs):
         extra = []
         for target in outputs:
-            if target.name == 'source-map.json':
-                target.write_text(json.dumps(source))
-            elif target.name == 'manifest.json':
+            if target.name == 'manifest.json':
                 target.write_text(json.dumps(m))
             elif target.name in ('selection.json', 'selection-review.json'):
                 rows = json.loads(Path(brief['candidates']).read_text())
@@ -219,7 +236,8 @@ def exercise_zero_problem_cli(tmp_path, monkeypatch, scope_change, *, quiz_repai
     def action(tid):
         cli('run', '--action', tid, '--run', run)
     action('candidate-index')
-    for tid in ['source-prep', 'stt-0909', 'scope-draft', 'author-why', 'author-s1', 'selection',
+    action('source-prep')
+    for tid in ['stt-0909', 'scope-draft', 'author-why', 'author-s1', 'selection',
                 'scope-final', 'author-s2']:
         if tid == 'scope-final' and scope_change:
             if scope_change == 'sessions':
@@ -682,7 +700,8 @@ def test_completed_producer_loses_approval_when_frozen_attempt_is_superseded(tmp
     marker = Path(state['run'])/'proof.json'
     marker.write_text('{}')
     files = [{'path': str(marker), 'sha256': flow._sha(marker)}]
-    state['tasks']['source-prep'].update(status='done', attempt='replacement', receipt={'verified_files':files})
+    flow._record(state, 'source-prep').update(status='done', attempt='replacement', receipt={'verified_files':files},
+                                              verified_files=files)
     state['actions']['test-consumer'] = dict(status='done', input_version={'source-prep':'original'},
                                            verified_files=files, dependencies=['source-prep'])
     assert flow._current(state)['actions']['test-consumer']['status'] == 'stale'
@@ -769,8 +788,3 @@ def test_stopped_identity_cannot_replace_scheduler_attempt(tmp_path, monkeypatch
     assert repaired['attempt'] == result['attempt'] and repaired['status'] == 'done'
     assert json.loads((marker.parent/'result.json').read_text())['attempt'] == repaired['attempt']
 
-
-def test_parallel_brief_names_runner_python(tmp_path):
-    _, run, _ = parallel(tmp_path)
-    brief = json.loads(Path(flow.claim_task(run, 'source-prep')['brief']).read_text())
-    assert brief['python'] == sys.executable

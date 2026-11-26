@@ -29,7 +29,10 @@ def task_specs(state: dict) -> tuple[TaskSpec, ...]:
     def action(name, inputs=(), outputs=(), approvals=()):
         specs.append(TaskSpec(name, 'action', tuple(inputs), tuple(approvals), tuple(outputs)))
 
-    worker('source-prep', outputs=('source-map.json', 'slides.txt'))
+    if state.get('source_contract'):
+        action('source-prep', outputs=('source-map.json', 'slides.txt'))
+    else:
+        worker('source-prep', outputs=('source-map.json', 'slides.txt'))
     action('candidate-index', outputs=('candidates.json', 'catalog/index.json'))
     action('render-preflight', outputs=('render-preflight.json', 'render-preflight.pdf'))
     if not f._done(state, 'source-prep'):

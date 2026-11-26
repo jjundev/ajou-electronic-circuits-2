@@ -47,7 +47,8 @@ class Trial:
         self.stt = self.repo/'STT/0909 전회2.md'
         self.stt.parent.mkdir()
         self.stt.write_text('합성 테스트 강의')
-        self.pdf = self.repo/'slides.pdf'
+        self.pdf = self.repo/'강의노트/2026F_Lec1_Synthetic.pdf'
+        self.pdf.parent.mkdir()
         with pymupdf.open() as doc:
             doc.new_page()
             doc.save(self.pdf)
@@ -89,7 +90,8 @@ class Trial:
 
     def prepare_note(self):
         self.action('candidate-index')
-        for tid in ('source-prep', 'stt-0909', 'scope-draft', 'author-why', 'author-s1',
+        self.action('source-prep')
+        for tid in ('stt-0909', 'scope-draft', 'author-why', 'author-s1',
                     'selection', 'scope-final', 'author-s2'):
             self.worker(tid)
         self.action('assemble-note')
@@ -146,10 +148,7 @@ class Trial:
                     for key in question['subparts']}))
             return
         for path in outputs:
-            if path.name == 'source-map.json':
-                write(path, dict(schema_version=1, sessions=[dict(date='0909', stt=str(self.stt),
-                     pdfs=[str(self.pdf)], status='ready', missing=[])]))
-            elif path.name == 'manifest.json':
+            if path.name == 'manifest.json':
                 write(path, self.manifest)
             elif path.name in ('selection.json', 'selection-review.json'):
                 catalog = read(brief['candidates'])
@@ -399,7 +398,7 @@ def test_legacy_coordinator_needs_fix_without_findings_is_redispatched(tmp_path)
 def test_profile_exempt_roles_omit_profile(tmp_path):
     trial = Trial(tmp_path)
     trial.action('candidate-index')
-    trial.worker('source-prep')
+    trial.action('source-prep')
     brief = trial.worker('stt-0909')
     assert 'profile' not in brief and 'profile_read' not in brief and 'snapshot' not in brief
     assert not any(p.endswith('solution-style.md') for p in brief['input_paths'])
@@ -408,7 +407,8 @@ def test_profile_exempt_roles_omit_profile(tmp_path):
 def test_author_brief_lists_sections_to_read(tmp_path):
     trial = Trial(tmp_path)
     trial.action('candidate-index')
-    for tid in ('source-prep', 'stt-0909', 'scope-draft'):
+    trial.action('source-prep')
+    for tid in ('stt-0909', 'scope-draft'):
         trial.worker(tid)
     brief = trial.worker('author-why')
     guide = next(p for p in brief['references'] if p.endswith('execution-guide.md'))
@@ -420,10 +420,17 @@ def test_run_without_contract_keeps_profile_for_exempt_roles(tmp_path):
     import pack_flow
     trial = Trial(tmp_path)
     trial.action('candidate-index')
-    trial.worker('source-prep')
+    trial.action('source-prep')
     state = pack_flow.load_state(trial.run)
     state.pop('approval_contract', None)
     pack_flow.update_state(trial.run, state['revision'], lambda _: state)
     brief = read(trial.cli('task', 'claim', '--task', 'stt-0909')['next']['brief'])
     assert brief['profile_read'] == '전체 필수' and 'profile' in brief and 'snapshot' in brief
     assert 'reference_sections' in brief
+
+
+def test_parallel_brief_names_runner_python(tmp_path):
+    trial = Trial(tmp_path)
+    trial.action('candidate-index')
+    trial.action('source-prep')
+    assert trial.worker('stt-0909')['python'] == sys.executable

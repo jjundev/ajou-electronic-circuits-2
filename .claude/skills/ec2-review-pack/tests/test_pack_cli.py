@@ -39,7 +39,7 @@ def test_new_init_defaults_to_parallel(tmp_path):
     result, data = call('init', '--run', new, *args)
     assert result.returncode == 0
     assert json.loads((new / 'run-status.json').read_text())['workflow'] == 'parallel'
-    assert set(data['next']['actions']) == {'candidate-index', 'render-preflight'}
+    assert set(data['next']['actions']) == {'source-prep', 'candidate-index', 'render-preflight'}
 
     result, data = call('init', '--run', explicit_legacy, *args, '--workflow', 'legacy')
     assert result.returncode == 0
@@ -61,7 +61,8 @@ def test_next_without_slots_dispatches_every_ready_worker(tmp_path):
     assert call('init', '--repo', repo, '--run', new, '--range', '0909', '--allow-tmp')[0].returncode == 0
     p, data = call('next', '--run', new)
     assert p.returncode == 0
-    assert data['next']['dispatch'] == ['source-prep']
+    assert data['next']['dispatch'] == []
+    assert 'source-prep' in data['next']['actions']
 
 
 @pytest.mark.parametrize('args', [[],['--help'],['task','--help'],['wat'],['next'],['run','--run','x','--action','evil']])
