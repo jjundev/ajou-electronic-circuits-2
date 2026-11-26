@@ -148,7 +148,7 @@
 ### 8. MD 변환
 부모 실행: next가 요청한 `convert-md` action을 runner로 한 번 실행한다. 실제 argv/로그는 RUN에 보존한다.
 
-변환 SVG가 있으면 phase 8의 `standalone-svg-qa`를 이어 수행한다. 브리프에 고정된 MD·모든 SVG를 독립 문서로 직접 열어 PROFILE 전체, NOTATION-01의 native text/tspan 첨자와 실제 Pretendard 600 정체 face, CIRCUIT-02 배치·색·간격·클리핑을 확인한다. 각 SVG의 지정 PNG와 실제 검사 결과를 RUN/work/standalone-svg-qa/report.json 및 report.md에 남긴다. counts.targets는 검토한 SVG 절대 경로 전체다. 실행기는 browser_owner에 따라 작업자/메인/blocked로 안내하며, 이 검토 전에는 자식이나 문제 0개의 최종 검사로 진행하지 않는다. 변환기의 동등성 검사 성공은 실제 SVG·글꼴 검토 승인이 아니다. 실제 출력 SVG가 0개일 때만 명시적 생략이 허용된다.
+변환 SVG가 있으면 phase 8의 `standalone-svg-qa`를 이어 수행한다. 브리프에 고정된 MD·모든 SVG를 독립 문서로 직접 열어 PROFILE 전체, NOTATION-01의 native text/tspan 첨자와 실제 Pretendard 600 정체 face, CIRCUIT-02 배치·색·간격·클리핑을 확인한다. 각 SVG의 지정 PNG와 실제 검사 결과를 RUN/work/standalone-svg-qa/report.json 및 report.md에 남긴다. counts.targets는 검토한 SVG 절대 경로 전체다. 실행기는 browser_owner에 따라 작업자/메인/blocked로 안내하며, 이 검토 전에는 자식이나 문제 0개의 최종 검사로 진행하지 않는다. 위치 표시 ㉠–㉭는 Pretendard에 없는 글자라 변환기가 독립 SVG에서 원(`.fig-loc-ring`)과 Pretendard 자모로 다시 그린다. 이 표시는 대체 글꼴 결함이 아니며, 위치와 간격이 HTML 회로와 같은지 확인한다. 변환기의 동등성 검사 성공은 실제 SVG·글꼴 검토 승인이 아니다. 실제 출력 SVG가 0개일 때만 명시적 생략이 허용된다.
 - `OK`가 나와야 한다.
 - 누락이 나오면 대부분 HTML 조각의 마크업 문제다(수식이 `svg`나 `.controls` 안에 있는 경우 등). 조각을 고치고 4단계부터 다시 한다.
 

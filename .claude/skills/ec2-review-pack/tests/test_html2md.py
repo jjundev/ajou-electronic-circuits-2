@@ -50,6 +50,48 @@ class TestHtml2Md(unittest.TestCase):
         self.assertNotIn("fig-loc", svg["fig-plain"])
         self.assertIn("*㉠ 입력*", Path(md).read_text(encoding="utf-8"))
 
+    def test_location_mark_redrawn_with_pretendard_jamo(self):
+        """Pretendard has no ㉠–㉭: the standalone SVG draws a ring and a Pretendard jamo instead."""
+        import base64
+        import io
+        import re
+        from fontTools.ttLib import TTFont
+        marks = ('<text class="fig-text fig-loc" style="font-size:20px" text-anchor="middle" x="40" y="50" data-node="n1">㉠</text>'
+                 '<text class="fig-text fig-loc" x="10" y="30">㉭</text>'
+                 '<text class="fig-text fig-loc" x="90" y="30" text-anchor="end" transform="rotate(5)">㉡</text>')
+        note = small_note(self.tmp, f'<figure class="figure circuit"><svg id="fig-circuit-a" viewBox="0 0 120 80">{marks}</svg>'
+                                    '<figcaption><span class="loc">㉠</span> 입력</figcaption></figure>')
+        html2md.convert_note(note)
+        svg = (self.tmp / ".assets/figures_0101/fig-circuit-a.svg").read_text(encoding="utf-8")
+        doc = xml.dom.minidom.parseString(svg)
+        self.assertIsNone(re.search("[㉠-㉭]", svg))
+        groups = doc.getElementsByTagName("g")
+        self.assertEqual([g.getAttribute("class") for g in groups], ["fig-loc-mark"] * 3)
+        rings = [g.getElementsByTagName("circle")[0] for g in groups]
+        texts = [g.getElementsByTagName("text")[0] for g in groups]
+        self.assertEqual([t.firstChild.data for t in texts], ["ㄱ", "ㅎ", "ㄴ"])
+        # middle: centred on x; start: half an em right; end: half an em left. Centre 0.38 em above the baseline.
+        self.assertEqual([(c.getAttribute("cx"), c.getAttribute("cy"), c.getAttribute("r")) for c in rings],
+                         [("40", "42.4", "8.8"), ("16.5", "25.06", "5.72"), ("83.5", "25.06", "5.72")])
+        self.assertTrue(all(t.getAttribute("x") == c.getAttribute("cx") and t.getAttribute("text-anchor") == "middle"
+                            for t, c in zip(texts, rings)))
+        self.assertTrue(all("fig-loc" in t.getAttribute("class").split() for t in texts))
+        self.assertEqual(groups[0].getAttribute("data-node"), "n1")
+        self.assertEqual(groups[2].getAttribute("transform"), "rotate(5)")
+        css = doc.getElementsByTagName("style")[0].firstChild.data
+        self.assertIn("svg .fig-loc-ring {", css)
+        raw = base64.b64decode(re.search(r"base64,([A-Za-z0-9+/=]+)", css).group(1))
+        cmap = TTFont(io.BytesIO(raw)).getBestCmap()
+        for ch in "ㄱㄴㅎ":
+            self.assertIn(ord(ch), cmap)
+
+    def test_inline_serialize_keeps_location_mark(self):
+        """Pages load fonts themselves: only standalone export redraws the mark."""
+        parser = html2md.Builder()
+        parser.feed('<svg><text class="fig-text fig-loc" x="1" y="2">㉠</text></svg>')
+        self.assertIn(">㉠</text>", html2md.serialize(parser.root.children[0]))
+        self.assertNotIn("fig-loc-mark", html2md.serialize(parser.root.children[0]))
+
     def test_exported_svg_contains_real_semibold_and_native_subscripts(self):
         import base64
         import io
