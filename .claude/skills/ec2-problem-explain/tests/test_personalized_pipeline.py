@@ -5,7 +5,7 @@ import subprocess
 import sys
 
 import pytest
-from _util import REPO, SKILL, approved, fragment, make_repo
+from _util import REPO, SKILL, approved, concise_fragment, make_repo
 from epe_cli import load_artifacts, load_fragments, load_run
 
 
@@ -24,7 +24,7 @@ class Pipeline:
         self.call('extract', '--repo', self.repo, '--target', '1007', '--run', self.run)
         self.item = load_run(self.run)[0]
         p = self.item['pack'].problems[0]
-        (self.item['folder'] / 'explanations/p1.html').write_text(fragment(p))
+        (self.item['folder'] / 'explanations/p1.html').write_text(concise_fragment(p))
         self.call('build', '--run', self.run)
         self.call('check', '--run', self.run)
         self.artifacts = load_artifacts(self.item)

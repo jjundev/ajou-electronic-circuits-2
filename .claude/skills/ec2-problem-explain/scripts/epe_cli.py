@@ -12,6 +12,7 @@ from epe_source import inside, load_source, resolve_sources, sha256
 from epe_render import build_explanation, check_artifacts, artifact_hashes, dump
 from epe_labs import load_lab, select_lab
 from epe_publish import build_explanation_candidate, publish_explanation
+from epe_rerender import verify_rerender_origin
 from epe_shared import REPO
 from pack_paths import PackPaths
 from epe_types import Artifacts, ExplainError
@@ -113,14 +114,17 @@ def load_artifacts(item):
     files = tuple(inside(stage / name, stage) for name in manifest['files']) + (paths[2],)
     return Artifacts(*paths, files)
 
-def build(item, fragments, *, include_problem_pdf=True):
-    folder = item['folder']
+def build(item, fragments, *, include_problem_pdf=True, rerender_from=None):
+    folder, pack, repo = item['folder'], item['pack'], item['repo']
+    from_publication = rerender_from is not None
+    if from_publication:
+        verify_rerender_origin(pack, fragments, repo, rerender_from, folder / 'explanations')
     stage = folder / 'stage' / uuid.uuid4().hex
-    lab, diagnostic = load_lab(folder, item['pack'], fragments)
+    lab, diagnostic = load_lab(folder, pack, fragments, allow_legacy=from_publication)
     if diagnostic:
         print(f'{item["pack"].range}: 실험 보류 ({diagnostic})')
-    artifacts = build_explanation(item['pack'], fragments, stage, item['repo'], lab=lab,
-                                  include_problem_pdf=include_problem_pdf)
+    artifacts = build_explanation(pack, fragments, stage, repo, lab=lab,
+                                  include_problem_pdf=include_problem_pdf, allow_legacy=from_publication)
     # Evidence is copied before binding the artifact hashes; review approval comes later.
     evidence = inside(folder / 'evidence', item['run'])
     if evidence.is_dir():
@@ -131,6 +135,8 @@ def build(item, fragments, *, include_problem_pdf=True):
                 dest.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(source, dest)
     manifest = read_json(artifacts.manifest)
+    if rerender_from is not None:
+        manifest['rerender_from'] = rerender_from
     files = tuple(sorted(p for p in stage.rglob('*') if p.is_file() and p != artifacts.manifest))
     manifest['files'] = {p.relative_to(stage).as_posix(): sha256(p) for p in files}
     dump(artifacts.manifest, manifest)
@@ -201,9 +207,19 @@ def main(argv=None):
                 else:
                     artifacts = load_artifacts(item)
                     if args.command == 'check':
-                        errors = check_artifacts(item['pack'], artifacts)
-                        errors += [e for p in item['pack'].problems for e in validate_fragment(p, fragments[p.id])]
-                        if read_json(artifacts.manifest).get('input_hash') != payload_hash(item['pack'], fragments):
+                        pack = item['pack']
+                        manifest = read_json(artifacts.manifest)
+                        errors = check_artifacts(pack, artifacts)
+                        allow_legacy = 'rerender_from' in manifest
+                        if allow_legacy:
+                            try:
+                                verify_rerender_origin(pack, fragments, item['repo'], manifest['rerender_from'],
+                                                       item['folder'] / 'explanations')
+                            except (ExplainError, OSError, ValueError, TypeError) as exc:
+                                errors.append(str(exc))
+                        errors += [e for p in pack.problems for e in
+                                   validate_fragment(p, fragments[p.id], allow_legacy=allow_legacy)]
+                        if manifest.get('input_hash') != payload_hash(pack, fragments):
                             errors.append('설명 조각 변경: build부터 다시 실행하세요')
                         dump(item['folder'] / 'machine.json', {'status': 'fail' if errors else 'pass', 'errors': errors,
                                                               'artifact_hashes': artifact_hashes(artifacts)})
@@ -219,7 +235,7 @@ def main(argv=None):
                             continue
                         published = publish_explanation(item['pack'], artifacts, fragments, review,
                                                         item['pack'].folder, item['folder'] / 'backups',
-                                                        item['repo'])
+                                                        item['repo'], fragment_dir=item['folder'] / 'explanations')
                         print('publish:', published[0], 'backup:', item['folder'] / 'backups')
             except (ExplainError, OSError, ValueError, KeyError, TypeError) as exc:
                 failed = True

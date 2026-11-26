@@ -5,11 +5,9 @@ import re
 import shutil
 import subprocess
 import sys
-import tempfile
-from dataclasses import replace, fields
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
-from epe_source import inside, load_source, sha256, existing_path
+from epe_source import inside, sha256, existing_path
 from epe_shared import parse, STYLE_PATH
 from epe_types import ExplainError
 from epe_review_policy import carry_reviews, POLICY_VERSION
@@ -49,7 +47,7 @@ def relocated(path, repo):
     found = [inside(p,repo) for p in candidates if p.is_file()]
     return found[0] if len(found) == 1 else path
 
-def equivalent_text(old, current, old_path, new_path, repo, allow_moved_targets=False):
+def equivalent_text(old, current, old_path, new_path, repo):
     """Accept CSS/code-only changes; resolve URL relocations to verified actual files."""
     decode = lambda data: CODE_RE.sub('',data.decode('utf-8'))
     a,b = decode(old),decode(current)
@@ -67,28 +65,9 @@ def equivalent_text(old, current, old_path, new_path, repo, allow_moved_targets=
             or not u.path or not v.path or u.query != v.query or u.fragment != v.fragment):
             return False
         p,q = inside(old_path.parent/unquote(u.path),repo),inside(new_path.parent/unquote(v.path),repo)
-        if allow_moved_targets:  # only source inputs, guarded later by historical source_resources hashes
-            p,q=relocated(p,repo),relocated(q,repo)
         if not p.is_file() or not q.is_file() or sha256(p) != sha256(q):
             return False
     return pattern.sub('URL',a) == pattern.sub('URL',b)
-
-def same_problems(previous, current, path, repo):
-    if len(previous) != len(current):
-        return False
-    for old,new in zip(previous,current):
-        for field in fields(old):
-            left,right=getattr(old,field.name),getattr(new,field.name)
-            if left == right:
-                continue
-            if isinstance(left,str) and isinstance(right,str) and field.name.endswith('_html'):
-                if equivalent_text(left.encode(),right.encode(),path,path,repo,allow_moved_targets=True):
-                    continue
-            if field.name == 'figures_html' and len(left)==len(right):
-                if all(equivalent_text(a.encode(),b.encode(),path,path,repo,allow_moved_targets=True) for a,b in zip(left,right)):
-                    continue
-            return False
-    return True
 
 def verified_resources(stored, current, repo):
     if not isinstance(stored,dict):
@@ -174,10 +153,56 @@ def source_resources(pack,repo):
             result[logical.relative_to(repo).as_posix()]=sha256(path)
     return result
 
+def published_bundle(pack, repo, *, expected_manifest=None):
+    """Check the published bundle and bind every source fragment to its manifest."""
+    from epe_render import names
+    from epe_types import BUNDLE
+
+    folder = inside(pack.folder, repo)
+    data = inside(folder / BUNDLE / names(pack)[2], folder)
+    manifest_path = inside(data / 'manifest.json', folder)
+    manifest_bytes = manifest_path.read_bytes()
+    digest = hashlib.sha256(manifest_bytes).hexdigest()
+    if expected_manifest is not None and digest != expected_manifest:
+        raise ExplainError('재렌더링 원본 manifest가 변경됐어요')
+    manifest = json.loads(manifest_bytes)
+    if not isinstance(manifest, dict) or (manifest.get('range'), manifest.get('slug')) != (pack.range, pack.slug):
+        raise ExplainError('재렌더링 원본 manifest와 대상 팩이 달라요')
+    files = manifest.get('files')
+    directory = inside(data / 'fragments', folder)
+    if not isinstance(files, dict) or not files or not directory.is_dir():
+        raise ExplainError('발행된 조각/검산 자료 목록이 없어요: 정상 저작 절차를 쓰세요')
+    paths = {p.id: inside(directory / f'{p.id}.html', folder) for p in pack.problems}
+    if {p.stem for p in directory.glob('*.html')} != set(paths) or any(
+        path.relative_to(folder).as_posix() not in files for path in paths.values()
+    ):
+        raise ExplainError('발행된 조각 없음/불일치: 정상 저작 절차를 쓰세요')
+    for name, expected in files.items():
+        source = inside(folder / name, folder)
+        if not source.is_file() or sha256(source) != expected:
+            raise ExplainError('발행된 조각/검산 자료 변경: 정상 저작 절차를 쓰세요')
+    return manifest, digest, paths
+
+
+def verify_rerender_origin(pack, fragments, repo, manifest_hash, fragment_dir):
+    """A stage annotation alone never grants permission to use old authoring."""
+    if not isinstance(manifest_hash, str) or not re.fullmatch(r'[0-9a-f]{64}', manifest_hash):
+        raise ExplainError('재렌더링 원본 manifest hash가 올바르지 않아요')
+    if fragment_dir is None:
+        raise ExplainError('재렌더링 원본 조각과 대조할 RUN 경로가 필요해요')
+    manifest, _, paths = published_bundle(pack, repo, expected_manifest=manifest_hash)
+    for pid, path in paths.items():
+        source_hash = manifest['files'][path.relative_to(pack.folder).as_posix()]
+        local_bytes = inside(fragment_dir / f'{pid}.html', fragment_dir).read_bytes()
+        normalized = local_bytes.decode('utf-8').replace('\r\n', '\n').replace('\r', '\n')
+        if hashlib.sha256(local_bytes).hexdigest() != source_hash or fragments.get(pid) != normalized:
+            raise ExplainError(f'{pid}: 재렌더링 원본 조각과 달라요: 새 원고로 build 하세요')
+
+
 def rerender(repo,target,run):
     from epe_cli import extract,load_run,load_fragments,build,read_json
     from epe_render import names,dump
-    from epe_contract import payload_hash
+    from epe_contract import payload_hash, validate_fragment
     from epe_labs import FILES
     repo=Path(repo).resolve()
     failed=bool(extract(repo,target,run))
@@ -194,47 +219,27 @@ def rerender(repo,target,run):
         try:
             pack,folder=item['pack'],item['folder']
             data=pack.folder/'.assets'/names(pack)[2]
-            ids={p.id for p in pack.problems}
-            published=inside(data/'fragments',repo)
-            if not published.is_dir() or {p.stem for p in published.glob('*.html')} != ids:
-                raise ExplainError('발행된 조각 없음/불일치: 정상 저작 절차를 쓰세요')
-            manifest=read_json(inside(data/'manifest.json',repo))
+            manifest, manifest_hash, published = published_bundle(pack, repo)
             stored=read_json(inside(data/'validation.json',repo))
-            intact=True
-            for name,digest in manifest.get('files',{}).items():
-                source=inside(pack.folder/Path(name),repo)
-                intact = intact and source.is_file() and sha256(source)==digest
-            if not manifest.get('files') or not intact:
-                raise ExplainError('발행된 조각/검산 자료 변경: 정상 저작 절차를 쓰세요')
-            for p in pack.problems:
-                shutil.copy2(inside(published/f'{p.id}.html',repo),folder/'explanations'/f'{p.id}.html')
+            if not isinstance(stored, dict):
+                raise ExplainError('발행 검토 기록은 JSON 객체여야 해요')
+            for pid, source in published.items():
+                shutil.copy2(source, folder / 'explanations' / f'{pid}.html')
             evidence=data/'evidence'
             if evidence.is_dir():
                 for child in evidence.rglob('*'):
                     inside(child,repo)
                 shutil.copytree(evidence,folder/'evidence',dirs_exist_ok=True)
             fragments=load_fragments(item)
-            from epe_contract import validate_fragment
             if any(validate_fragment(p, fragments[p.id]) for p in pack.problems):
                 raise ExplainError('통합 본문/답안 선택 형식 불일치: 새 저작 필요')
-            same=(stored.get('input_hash')==payload_hash(pack,fragments)
+            manifest_key = (data / 'manifest.json').relative_to(pack.folder).as_posix()
+            artifact_hashes = {**manifest['files'], manifest_key: manifest_hash}
+            same=(stored.get('input_hash')==manifest.get('input_hash')==payload_hash(pack,fragments)
+                  and stored.get('artifact_hashes')==artifact_hashes
                   and manifest.get('learning_style')==pack.learning_style
                   and manifest.get('review_policy_version')==POLICY_VERSION
                   and type(manifest.get('version')) is int and manifest['version']==1)
-            # Only HTML adapters can recover a style-only historical input. EC2's digest covers all MD/images.
-            if not same and False and pack.profile=='review' and stored.get('input_hash'):
-                old=git_blob(pack.path,manifest.get('source_sha256',''))
-                if old is not None:
-                    with tempfile.TemporaryDirectory() as tmp:
-                        path=Path(tmp)/pack.path.parent.name/pack.path.name
-                        path.parent.mkdir();path.write_bytes(old)
-                        try:
-                            previous=load_source(path,Path(tmp))
-                            same=(same_problems(previous.problems,pack.problems,pack.path,repo) and payload_hash(replace(pack,sha256=manifest['source_sha256']),fragments)==stored['input_hash'])
-                        except (ExplainError,OSError):
-                            same=False
-            if same and stored.get('input_hash')!=payload_hash(pack,fragments):
-                print('rerender: 원본 파일은 바뀌었지만 문항 내용은 같아요')
             refs,valid=verified_references(stored.get('references'),Path(manifest.get('repo',str(repo))),repo)
             same=same and valid and verified_resources(manifest.get('source_resources'),source_resources(pack,repo),repo)
             if same and (lab := manifest.get('lab')):
@@ -248,7 +253,7 @@ def rerender(repo,target,run):
                     shutil.copyfile(path, destination / name)
             previous_html = inside(existing_path(pack.folder / (names(pack)[0] + '.html')), repo)
             include_problem_pdf = '원 문제 보기</a>' in previous_html.read_text(encoding='utf-8')
-            build(item,fragments,include_problem_pdf=include_problem_pdf)
+            build(item, fragments, include_problem_pdf=include_problem_pdf, rerender_from=manifest_hash)
             fresh=read_json(folder/'review.json')
             # Keep stale references visible when manual re-review is required; publish will reject them.
             if not valid:

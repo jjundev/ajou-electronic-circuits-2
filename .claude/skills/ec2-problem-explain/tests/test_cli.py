@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from _util import SKILL, make_repo, fragment, approved
+from _util import SKILL, make_repo, concise_fragment, fragment, approved
 from epe_source import load_source
 from epe_cli import load_run, load_artifacts, load_fragments
 
@@ -27,9 +27,9 @@ class CliTest(unittest.TestCase):
     def repo(self, **kw):
         return make_repo(self.tmp / 'repo', **kw)
 
-    def write_fragments(self, item):
+    def write_fragments(self, item, body=concise_fragment):
         for p in item['pack'].problems:
-            (item['folder'] / 'explanations' / f'{p.id}.html').write_text(fragment(p), encoding='utf-8')
+            (item['folder'] / 'explanations' / f'{p.id}.html').write_text(body(p), encoding='utf-8')
 
     def test_missing_target_returns_one(self):
         repo = self.repo()
@@ -107,6 +107,72 @@ class CliTest(unittest.TestCase):
         self.assertEqual(result.returncode, 1)
         machine = json.loads((item['folder'] / 'machine.json').read_text(encoding='utf-8'))
         self.assertEqual(machine['status'], 'fail')
+
+    def test_new_build_rejects_the_seven_section_format(self):
+        repo = self.repo(ids=('E9.05',))
+        result = call('extract', '--repo', repo, '--target', '1007', '--run', self.run_dir)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.write_fragments(load_run(self.run_dir)[0], fragment)
+        result = call('build', '--run', self.run_dir)
+        self.assertEqual(result.returncode, 1, result.stdout)
+        self.assertIn('p1: 새 원고', result.stderr)
+        self.assertFalse(list(self.run_dir.rglob('stage.json')))
+
+    def test_legacy_rerender_rechecks_the_published_origin(self):
+        from shutil import copyfile
+        from epe_render import build_explanation, dump
+
+        repo = self.repo(ids=('E9.05',))
+        result = call('extract', '--repo', repo, '--target', '1007', '--run', self.run_dir)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        item, = load_run(self.run_dir)
+        self.write_fragments(item, lambda problem: fragment(problem) + '\n')
+        fragments = load_fragments(item)
+        pack = item['pack']
+        historical = build_explanation(pack, fragments, self.tmp / 'historical', repo)
+        for source in historical.files:
+            dest = pack.folder / source.relative_to(historical.html.parent)
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            copyfile(source, dest)
+        published_manifest = pack.folder / historical.manifest.relative_to(historical.html.parent)
+        dump(published_manifest.with_name('validation.json'), approved(pack, fragments, historical))
+
+        rebuilt = self.tmp / 'rebuilt'
+        result = call('rerender', '--repo', repo, '--target', '1007', '--run', rebuilt)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        rebuilt_item, = load_run(rebuilt)
+        stage = load_artifacts(rebuilt_item)
+        dump(rebuilt_item['folder'] / 'review.json', approved(pack, load_fragments(rebuilt_item), stage))
+        self.assertEqual(call('check', '--run', rebuilt).returncode, 0)
+
+        original_manifest = published_manifest.read_bytes()
+        published_manifest.write_bytes(original_manifest + b'\n')
+        for command in ('check', 'publish'):
+            result = call(command, '--run', rebuilt)
+            self.assertEqual(result.returncode, 1, result.stdout)
+            self.assertIn('재렌더링 원본', result.stderr)
+
+        published_manifest.write_bytes(original_manifest)
+
+        explanation = rebuilt_item['folder'] / 'explanations/p1.html'
+        original_fragment = explanation.read_bytes()
+        self.assertIn(b'\n', original_fragment)
+        explanation.write_bytes(original_fragment.replace(b'\n', b'\r\n'))
+        for command in ('check', 'publish'):
+            result = call(command, '--run', rebuilt)
+            self.assertEqual(result.returncode, 1, result.stdout)
+            self.assertIn('재렌더링 원본 조각', result.stderr)
+        explanation.write_bytes(original_fragment)
+
+        result = call('publish', '--run', rebuilt)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        second = self.tmp / 'rebuilt-again'
+        result = call('rerender', '--repo', repo, '--target', '1007', '--run', second)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        second_item, = load_run(second)
+        review = json.loads((second_item['folder'] / 'review.json').read_text(encoding='utf-8'))
+        self.assertEqual(review['content']['status'], 'pass')
+        self.assertEqual(review['browser']['status'], 'not_run')
 
     def test_end_to_end_publish(self):
         repo = self.repo(ids=('P10.02',))

@@ -107,7 +107,7 @@ def test_canonically_equal_sibling_directory_is_not_inside_repo(tmp_path):
 def published_fixture(tmp_path, reference=False):
     import shutil
     from epe_cli import extract, load_run, build, load_artifacts, load_fragments
-    from _util import approved
+    from _util import approved, concise_fragment
     repo=tmp_path/'published-repo'
     from _util import make_repo
     make_repo(repo,ids=('P10.02',))
@@ -117,7 +117,7 @@ def published_fixture(tmp_path, reference=False):
     assert extract(repo,target,run)==0
     item=load_run(run)[0]
     for problem in item['pack'].problems:
-        (item['folder']/'explanations'/f'{problem.id}.html').write_text(fragment(problem),encoding='utf-8')
+        (item['folder']/'explanations'/f'{problem.id}.html').write_text(concise_fragment(problem),encoding='utf-8')
     build(item,load_fragments(item))
     artifacts=load_artifacts(item)
     reviews=approved(item['pack'],load_fragments(item),artifacts)

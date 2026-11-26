@@ -142,8 +142,8 @@ class Trial:
         if role_of(tid) in ('explain-author', 'explain-blind'):
             question, = read(brief['questions'])['problems']
             if role_of(tid) == 'explain-author':
-                child_fixture('from _util import fragment; from types import SimpleNamespace; import json; '
-                              'Path(sys.argv[3]).write_text(fragment(SimpleNamespace(subparts=json.loads(sys.argv[2]))))',
+                child_fixture('from _util import concise_fragment; from types import SimpleNamespace; import json; '
+                              'Path(sys.argv[3]).write_text(concise_fragment(SimpleNamespace(subparts=json.loads(sys.argv[2]))))',
                               json.dumps(question['subparts']), outputs[0])
                 if brief.get('repair_findings'):
                     # A synthetic correction: new bytes for the reopened fragment.

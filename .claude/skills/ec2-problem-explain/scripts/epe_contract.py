@@ -56,13 +56,24 @@ def math_errors(root):
         errors.extend(e for e in math_delimiter_errors(leaf) if e not in errors)
     return errors
 
-def validate_fragment(problem, fragment):
+def validate_fragment(problem, fragment, *, allow_legacy=True):
     root = parse(fragment)
     errors = markup_errors(root, allow_summary=True)
     errors.extend(f'{code}: {detail}' for code, detail in readability_errors(fragment))
     errors.extend(solution_nodes(problem, fragment)[2])
     sections = list(root.find_all(lambda n: 'data-explanation' in n.attrs))
     concise = any(CONCISE_CLASS in node.classes for node in sections)
+    if not allow_legacy and not (
+        len(sections) == 1 and sections[0].parent is root
+        and sections[0].tag == 'div'
+        and {'layer', 'formal', CONCISE_CLASS} <= sections[0].classes
+        and sections[0].attrs['data-explanation'] == 'solve'
+    ):
+        return [f'{problem.id}: 새 원고는 단일 div.layer.formal.circuit-explanation[data-explanation="solve"]이 필요해요']
+    if concise and not allow_legacy:
+        groups = sections[0].find_all(lambda n: 'data-subpart' in n.attrs)
+        if any(n.tag != 'div' for n in groups):
+            errors.append('새 원고의 소문항은 직계 div[data-subpart]로 작성하세요')
     if not concise:
         counts = Counter(n.attrs['data-explanation'] for n in sections)
         if counts != Counter(KEYS):
@@ -94,6 +105,9 @@ def validate_fragment(problem, fragment):
     summaries = list(root.find_all(lambda n: 'sum' in n.classes))
     if len(summaries) != 1 or summaries[0].parent is not root or 'hidden' not in summaries[0].attrs or not summaries[0].text().strip():
         errors.append('직계 sum[hidden] 요약 하나 필요')
+    elif not allow_legacy and next(n for n in reversed(root.children)
+                                  if not isinstance(n, str) or n.strip()) is not summaries[0]:
+        errors.append('새 원고의 숨긴 sum은 마지막에 작성하세요')
     errors.extend(math_errors(root))
     return [f'{problem.id}: {e}' for e in errors]
 

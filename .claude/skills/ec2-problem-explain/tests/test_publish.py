@@ -4,7 +4,7 @@ import unittest
 from dataclasses import replace
 from pathlib import Path
 
-from _util import make_repo, fragment, approved
+from _util import make_repo, concise_fragment, approved
 import epe_files
 from epe_publish import publish_explanation
 from epe_render import build_explanation
@@ -22,7 +22,7 @@ class PublishTest(unittest.TestCase):
         self.folder = self.src.parent.parent
         self.backup = self.tmp / 'backup'
         self.pack = load_source(self.src, self.repo)
-        self.fragments = {p.id: fragment(p) for p in self.pack.problems}
+        self.fragments = {p.id: concise_fragment(p) for p in self.pack.problems}
         self.artifacts = build_explanation(self.pack, self.fragments, self.tmp / 'stage', self.repo)
 
     def publish(self, reviews=None, pack=None, artifacts=None, destination=None):
@@ -193,7 +193,7 @@ class PublishTest(unittest.TestCase):
         shutil.rmtree(self.tmp / 'repo', ignore_errors=True)
         self.repo = make_repo(self.tmp / 'repo', ids=('P10.02',))
         self.pack = load_source(self.src, self.repo)
-        self.fragments = {p.id: fragment(p) for p in self.pack.problems}
+        self.fragments = {p.id: concise_fragment(p) for p in self.pack.problems}
         self.artifacts = build_explanation(self.pack, self.fragments, self.tmp / 'stage', self.repo)
 
     def test_changed_figure_or_md_refuses_publish(self):

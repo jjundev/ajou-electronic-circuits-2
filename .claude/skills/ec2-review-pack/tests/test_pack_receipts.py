@@ -167,6 +167,18 @@ def test_genuine_child_current_stage_success_and_parent_problem_binding(tmp_path
     with pytest.raises(f.FlowError, match='parent'): validate_receipt(state, state['tasks'][tid], path)
 
 
+def test_parent_rejects_old_authoring_from_an_earlier_child_runner(tmp_path):
+    from pack_support import genuine_child_run
+
+    _, run, tid, _ = genuine_child_run(tmp_path, historical_markup=True)
+    attempt = f.claim_task(run, tid)['attempt']
+    path = receipt_for(run, tid, attempt)
+    edit(path, status='ready-for-publish')
+    state = f.load_state(run)
+    with pytest.raises(f.FlowError, match='p1: 새 원고'):
+        validate_receipt(state, state['tasks'][tid], path)
+
+
 def test_content_supplement_uses_owned_version_and_preserves_audit_input(tmp_path):
     run, tid, attempt, path = setup(tmp_path, 'content-review', outputs=['work/content-review/learning-style-audit-note.json'])
     snapshot = json.loads((run / 'learning-style.json').read_text())

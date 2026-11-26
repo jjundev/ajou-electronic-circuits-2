@@ -3,7 +3,7 @@ from urllib.parse import quote
 
 import pytest
 
-from _util import approved, fragment, make_repo
+from _util import approved, concise_fragment, fragment, make_repo
 from epe_cli import build, extract, load_artifacts, load_run, main
 from epe_publish import publish_explanation
 from epe_render import check_artifacts, dump, names
@@ -17,13 +17,13 @@ def context(tmp_path):
     run = tmp_path / 'run'
     assert extract(repo, '1007', run) == 0
     item, = load_run(run)
-    fragments = {p.id: fragment(p) for p in item['pack'].problems}
+    fragments = {p.id: concise_fragment(p) for p in item['pack'].problems}
     for pid, html in fragments.items():
         (item['folder'] / 'explanations' / f'{pid}.html').write_text(html, encoding='utf-8')
     return repo, run, item, fragments
 
 
-def candidate(workbook_id, section='start'):
+def candidate(workbook_id, section='solve'):
     return dict(workbook_id=workbook_id, section=section, subpart='main',
                 decision='출력 부하 판단', action='포트 개방 또는 단락',
                 observation='R2 전류가 달라져요.', return_to='출력 저항의 첫 식',
@@ -46,8 +46,12 @@ def finish(lab):
         gates=dict.fromkeys(('machine', 'numeric_independent', 'probe', 'browser'), 'pass')))
 
 
-def test_selection_prioritizes_start_and_selects_only_one(context):
-    folder = select(context, [candidate('P10.02', 'retry'), candidate('E12.27')])
+def test_selection_skips_legacy_sections_and_selects_only_one(context):
+    _, _, item, _ = context
+    first = item['pack'].problems[0]
+    (item['folder'] / 'explanations' / f'{first.id}.html').write_text(fragment(first), encoding='utf-8')
+    folder = select(context, [candidate('P10.02', 'start'), candidate('P10.02', 'retry'),
+                              candidate('E12.27')])
     selected = json.loads((folder / 'brief.json').read_text(encoding='utf-8'))
     assert selected['workbook_id'] == 'E12.27'
     assert len(list(folder.glob('*.json'))) == 1
@@ -116,7 +120,7 @@ def test_incomplete_or_stale_lab_has_no_public_link(context, capsys):
     assert 'data-ec2-problem-lab' not in load_artifacts(item).html.read_text(encoding='utf-8')
     assert '실험 보류' in capsys.readouterr().out
     finish(item['folder'] / 'lab')
-    changed = {**fragments, 'p2': fragments['p2'].replace('구할 것을 읽어요.', '조건을 읽어요.')}
+    changed = {**fragments, 'p2': fragments['p2'].replace('판단과 식은', '첫 판단과 식은')}
     build(item, changed)
     assert 'data-ec2-problem-lab' not in load_artifacts(item).html.read_text(encoding='utf-8')
     assert '실험 보류' in capsys.readouterr().out
@@ -157,12 +161,7 @@ def test_lab_link_stays_outside_selected_answer_step(context, tmp_path):
     first, second = item['pack'].problems
     second = replace(second, subparts=('a', 'b'))
     pack = replace(item['pack'], problems=(first, second))
-    fragments[second.id] = fragment(second).replace(
-        '<div data-subpart="a"><div data-answer-step="회로 판단">'
-        '<p>판단과 식은 $1=1$이에요.</p></div></div>',
-        '<div data-subpart="a" data-answer-step="회로 판단">'
-        '<p>판단과 식은 $1=1$이에요.</p></div>',
-    )
+    fragments[second.id] = concise_fragment(second)
     base = build_explanation(pack, fragments, tmp_path / 'base', repo)
     dump(item['folder'] / 'lab-candidates.json', [{**candidate('E12.27', 'solve'), 'subpart': 'a'}])
     assert select_lab(item['folder'], pack, fragments)

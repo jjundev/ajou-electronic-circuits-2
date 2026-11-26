@@ -1,4 +1,4 @@
-from epe_rerender import verified_references, reference_dependencies
+from epe_rerender import verified_references, reference_dependencies, verify_rerender_origin
 from epe_review_policy import POLICY_VERSION
 """Gate publication on reviews, then reuse locks, backups and rollback."""
 import json
@@ -14,7 +14,7 @@ from epe_shared import check_style
 from epe_core import make_overlay
 
 
-def _verified_mapping(pack, artifacts, fragments, reviews, destination, repo, *, candidate):
+def _verified_mapping(pack, artifacts, fragments, reviews, destination, repo, *, candidate, fragment_dir=None):
     view = pack.pack_paths
     if view and view.candidate_pack and not candidate:
         raise ExplainError('후보 원본으로 직접 발행할 수 없습니다')
@@ -33,11 +33,15 @@ def _verified_mapping(pack, artifacts, fragments, reviews, destination, repo, *,
         output = PackPaths(repo, pack.folder, destination) if candidate else None
         if not candidate and destination != pack.folder.absolute():
             raise ExplainError('발행 위치는 입력 카드의 디렉터리여야 해요')
+        manifest = json.loads(artifacts.manifest.read_text(encoding='utf-8'))
+        allow_legacy = not candidate and 'rerender_from' in manifest
+        if allow_legacy:
+            verify_rerender_origin(pack, fragments, repo, manifest['rerender_from'], fragment_dir)
         errors = check_artifacts(pack, artifacts) + validate_reviews(pack, fragments, reviews)
-        errors += [e for p in pack.problems for e in validate_fragment(p, fragments.get(p.id, ''))]
+        errors += [e for p in pack.problems for e in
+                   validate_fragment(p, fragments.get(p.id, ''), allow_legacy=allow_legacy)]
         if errors:
             raise ExplainError('발행 보류: ' + ' / '.join(errors))
-        manifest = json.loads(artifacts.manifest.read_text(encoding='utf-8'))
         if manifest.get('review_policy_version') != POLICY_VERSION:
             raise ExplainError('발행 보류: manifest 검토 기준 불일치')
         if manifest['input_hash'] != payload_hash(pack, fragments):
@@ -105,10 +109,11 @@ def _verified_mapping(pack, artifacts, fragments, reviews, destination, repo, *,
         raise ExplainError(str(exc)) from exc
 
 
-def publish_explanation(pack, artifacts, fragments, reviews, destination, backup_dir, repo):
+def publish_explanation(pack, artifacts, fragments, reviews, destination, backup_dir, repo, *, fragment_dir=None):
     try:
         with publication_lock([pack.folder / artifacts.html.name]):
-            mapping = _verified_mapping(pack, artifacts, fragments, reviews, destination, repo, candidate=False)
+            mapping = _verified_mapping(pack, artifacts, fragments, reviews, destination, repo,
+                                        candidate=False, fragment_dir=fragment_dir)
             _install_locked(mapping, Path(backup_dir))
     except OSError as exc:
         raise ExplainError(str(exc)) from exc

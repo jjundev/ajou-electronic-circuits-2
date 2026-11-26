@@ -150,13 +150,14 @@ def _add_lab_link(markup, lab, relative):
 
 
 def build_explanation(pack, fragments, stage: Path, repo: Path, *, lab=None,
-                      include_problem_pdf=True) -> Artifacts:
+                      include_problem_pdf=True, allow_legacy=True) -> Artifacts:
     stage = Path(stage).resolve()
     if stage.exists() and any(stage.iterdir()):
         raise ExplainError('stage는 비어 있어야 해요: ' + str(stage))
     if set(fragments) != {p.id for p in pack.problems}:
         raise ExplainError('문항별 설명 조각 집합 불일치')
-    errors = [e for p in pack.problems for e in validate_fragment(p, fragments[p.id])]
+    errors = [e for p in pack.problems for e in
+              validate_fragment(p, fragments[p.id], allow_legacy=allow_legacy)]
     if errors:
         raise ExplainError(' / '.join(errors))
     stage.mkdir(parents=True, exist_ok=True)

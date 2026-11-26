@@ -57,7 +57,7 @@ def receipt_for(run, task_id, attempt):
     return path
 
 
-def genuine_child_run(tmp_path, *, existing=None, lab=False):
+def genuine_child_run(tmp_path, *, existing=None, lab=False, historical_markup=False):
     """Real child extract/build/check with explicitly synthetic review records."""
     import importlib.util
     import json
@@ -105,11 +105,12 @@ def genuine_child_run(tmp_path, *, existing=None, lab=False):
             author = state['tasks'].get(f'explain-author-{p.id}') or state['tasks']['explain-author']
             shutil.copyfile(author['artifacts']['explanations/' + p.id + '.html'], dest)
         else:
-            dest.write_text(util.fragment(p), encoding='utf-8')
+            markup = util.fragment(p) if historical_markup else util.concise_fragment(p)
+            dest.write_text(markup, encoding='utf-8')
     if lab:
         problem, = item['pack'].problems
         (item['folder'] / 'lab-candidates.json').write_text(json.dumps([{
-            'workbook_id': problem.workbook_id, 'section': 'start', 'subpart': problem.subparts[0],
+            'workbook_id': problem.workbook_id, 'section': 'solve', 'subpart': problem.subparts[0],
             'decision': 'Which port?', 'action': 'Connect the port', 'observation': 'Current changes',
             'return_to': 'Current equation', 'label': 'Try the circuit',
         }]))
@@ -122,7 +123,21 @@ def genuine_child_run(tmp_path, *, existing=None, lab=False):
             'html_sha256': _sha(lab_dir / 'index.html'),
             'gates': dict.fromkeys(('machine', 'numeric_independent', 'probe', 'browser'), 'pass'),
         }))
-    call('build', '--run', child_run); call('check', '--run', child_run)
+    if historical_markup:
+        # Simulate an older child runner that can still assemble/check a historical fragment.
+        from epe_render import artifact_hashes, build_explanation, check_artifacts, dump
+        bucket = item['folder']
+        stage = bucket / 'stage' / 'historical'
+        artifacts = build_explanation(item['pack'], load_fragments(item), stage, repo)
+        assert check_artifacts(item['pack'], artifacts) == []
+        dump(bucket / 'stage.json', {
+            'stage': stage.relative_to(bucket).as_posix(), 'html': artifacts.html.name,
+            'md': artifacts.md.relative_to(stage).as_posix(),
+            'manifest': artifacts.manifest.relative_to(stage).as_posix(),
+        })
+        dump(bucket / 'machine.json', {'status': 'pass', 'errors': [], 'artifact_hashes': artifact_hashes(artifacts)})
+    else:
+        call('build', '--run', child_run); call('check', '--run', child_run)
     artifacts = load_artifacts(item)
     review = util.approved(item['pack'], load_fragments(item), artifacts)
     review['content']['reviewer'] = 'synthetic-content-reviewer'

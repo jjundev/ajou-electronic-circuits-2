@@ -333,7 +333,8 @@ def _child(state, brief, receipt, verified):
         machine = obj(folder / 'machine.json')
         require(machine.get('status') == 'pass' and machine.get('errors') == [] and machine.get('artifact_hashes') == artifact_hashes(artifacts), 'child machine evidence stale or failed')
         errors = validate_reviews(pack, fragments, reviews) + check_artifacts(pack, artifacts)
-        errors += [e for p in pack.problems for e in validate_fragment(p, fragments[p.id])]
+        errors += [e for p in pack.problems for e in
+                   validate_fragment(p, fragments[p.id], allow_legacy=False)]
         require(not errors, 'child review/artifact validation: ' + '; '.join(errors))
         manifest = obj(artifacts.manifest)
         require(child['input_hash'] == manifest['input_hash'] == payload_hash(pack, fragments) and child['review_policy_version'] == reviews['review_policy_version'], 'child input/policy mismatch')

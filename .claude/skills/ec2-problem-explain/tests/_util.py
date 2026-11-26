@@ -116,7 +116,7 @@ def legacy_fragment(p=None):
 
 
 def fragment(p=None):
-    """New authoring fixture: selected body, never a separate core copy."""
+    """Historical seven-section fixture with integrated answer selections."""
     from epe_solution import SECTION_TITLES
     p = p or problem()
     solve = ''.join(f'<div data-subpart="{key}"><div data-answer-step="회로 판단">'
@@ -131,6 +131,18 @@ def fragment(p=None):
     return ''.join(f'<div class="layer {layer}" data-explanation="{key}"><h4>{title}</h4>{body}</div>'
         for (key,title),body,layer in zip(SECTION_TITLES.items(),bodies,
         ('eli5','formal','formal','formal','formal','warn','formal'))) + '<div class="sum" hidden><p>시작·판단·검산</p></div>'
+
+
+def concise_fragment(p=None):
+    p = p or problem()
+    groups = ''.join(
+        f'<div data-subpart="{key}"><div data-answer-step="회로 판단">'
+        '<p>판단과 식은 $1=1$이에요.</p></div>'
+        '<div data-answer-final><p>최종 답은 $1$이에요.</p></div></div>'
+        for key in p.subparts
+    )
+    return ('<div class="layer formal circuit-explanation" data-explanation="solve">'
+            f'{groups}</div><div class="sum" hidden><p>첫 식 판단</p></div>')
 
 
 def pack(path=Path('.assets/problems.txt')):

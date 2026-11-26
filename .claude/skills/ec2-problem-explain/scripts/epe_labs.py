@@ -43,13 +43,14 @@ def _read(path):
     return json.loads(path.read_text(encoding='utf-8'))
 
 
-def _matches(candidate, problem, fragments):
+def _matches(candidate, problem, fragments, *, allow_legacy=False):
     workbook_id = candidate.get('workbook_id')
     section = candidate.get('section')
     subpart = candidate.get('subpart')
+    sections = SECTIONS if allow_legacy else ('solve',)
     return (isinstance(workbook_id, str) and workbook_id == problem.workbook_id
             and re.fullmatch(r'[\w][\w.-]*', workbook_id)
-            and section in SECTIONS and subpart in problem.subparts
+            and section in sections and subpart in problem.subparts
             and all(isinstance(candidate.get(key), str) and candidate[key].strip() for key in TEXT_FIELDS)
             and find_section(parse(fragments[problem.id]), section) is not None)
 
@@ -67,10 +68,9 @@ def select_lab(bucket, pack, fragments):
         print(f'{pack.range}: 실험 후보 보류 ({exc})')
         candidates = []
 
-    matches = [(SECTIONS.index(item['section']), problem.number, item)
-               for problem in pack.problems for item in candidates
-               if isinstance(item, dict) and _matches(item, problem, fragments)]
-    selected = min(matches, key=lambda match: match[:2])[2] if matches else None
+    selected = next((item for problem in sorted(pack.problems, key=lambda p: p.number)
+                     for item in candidates
+                     if isinstance(item, dict) and _matches(item, problem, fragments)), None)
     if selected is not None:
         keys = ('workbook_id', 'section', 'subpart', *TEXT_FIELDS)
         selected = {**{key: selected[key] for key in keys}, 'schema_version': 1, 'range': pack.range,
@@ -83,7 +83,7 @@ def select_lab(bucket, pack, fragments):
     return selected
 
 
-def load_lab(bucket, pack, fragments):
+def load_lab(bucket, pack, fragments, *, allow_legacy=False):
     """Return a current lab and a diagnostic for an optional failed experiment."""
     directory = bucket / 'lab'
     brief_path = directory / FILES[0]
@@ -99,7 +99,7 @@ def load_lab(bucket, pack, fragments):
         if (not isinstance(brief, dict) or brief.get('schema_version') != 1
                 or brief.get('range') != pack.range or brief.get('input_hash') != payload_hash(pack, fragments)):
             raise ValueError('실험 브리프와 현재 해설 입력이 달라요')
-        problem = next((p for p in pack.problems if _matches(brief, p, fragments)), None)
+        problem = next((p for p in pack.problems if _matches(brief, p, fragments, allow_legacy=allow_legacy)), None)
         if problem is None:
             raise ValueError('실험에 맞는 문항이나 해설 구역이 없어요')
 

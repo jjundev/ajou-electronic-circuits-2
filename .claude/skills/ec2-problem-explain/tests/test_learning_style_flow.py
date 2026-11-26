@@ -3,7 +3,7 @@ import json
 from types import SimpleNamespace
 
 import pytest
-from _util import make_repo, fragment, approved
+from _util import make_repo, concise_fragment, approved
 from epe_cli import extract, load_run, build, load_fragments, load_artifacts, rerender
 from epe_publish import publish_explanation
 from epe_render import dump, artifact_hashes
@@ -18,7 +18,7 @@ def bundle(tmp_path):
     assert extract(repo, '1007', run) == 0
     item = load_run(run)[0]
     p = item['pack'].problems[0]
-    (item['folder'] / 'explanations/p1.html').write_text(fragment(p), encoding='utf-8')
+    (item['folder'] / 'explanations/p1.html').write_text(concise_fragment(p), encoding='utf-8')
     fragments = load_fragments(item)
     build(item, fragments)
     artifacts = load_artifacts(item)
@@ -82,7 +82,7 @@ def test_profile_missing_before_extract(tmp_path):
 
 def test_integrated_formal_body_is_in_md(bundle):
     md = bundle.artifacts.md.read_text()
-    for text in ('이렇게 풀어요', '최종 답은', '이 개념과 공식을 떠올려요', '판단과 식은'):
+    for text in ('최종 답은', '판단과 식은'):
         assert text in md
 
 
@@ -169,7 +169,7 @@ def test_incomplete_style_audit_blocks_publish(bundle, change):
         bundle.publish()
 
 
-@pytest.mark.parametrize('kind', ['manifest_policy', 'audit_shape'])
+@pytest.mark.parametrize('kind', ['manifest_policy', 'audit_shape', 'artifact_hashes'])
 def test_rerender_never_inherits_mismatched_manifest_or_malformed_audit(bundle, tmp_path, kind):
     bundle.publish()
     data = bundle.item['pack'].folder / bundle.artifacts.manifest.relative_to(bundle.artifacts.html.parent).parent
@@ -178,7 +178,11 @@ def test_rerender_never_inherits_mismatched_manifest_or_malformed_audit(bundle, 
         value = json.loads(path.read_text()); value['review_policy_version'] = 'old-policy'
     else:
         path = data / 'validation.json'
-        value = json.loads(path.read_text()); value['learning_style_audit'] = []
+        value = json.loads(path.read_text())
+        if kind == 'audit_shape':
+            value['learning_style_audit'] = []
+        else:
+            value['artifact_hashes'][bundle.artifacts.html.name] = '0' * 64
     dump(path, value)
     review = rebuilt(bundle, tmp_path)
     assert review['content']['status'] == 'not_run'

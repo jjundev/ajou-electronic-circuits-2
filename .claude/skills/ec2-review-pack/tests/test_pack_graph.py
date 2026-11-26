@@ -736,8 +736,8 @@ def test_early_index_seals_real_questions_for_independent_attempts(tmp_path):
             genuine_child_run(tmp_path, existing=(repo, run))
         elif brief['role'] == 'explain-author':
             expr = ('import sys; from types import SimpleNamespace; from pathlib import Path; import json; '
-                    'sys.path.insert(0,sys.argv[1]); from _util import fragment; '
-                    'Path(sys.argv[3]).write_text(fragment(SimpleNamespace(subparts=json.loads(sys.argv[2]))))')
+                    'sys.path.insert(0,sys.argv[1]); from _util import concise_fragment; '
+                    'Path(sys.argv[3]).write_text(concise_fragment(SimpleNamespace(subparts=json.loads(sys.argv[2]))))')
             subprocess.run([sys.executable, '-c', expr, helper, json.dumps(question['subparts']), outputs[0]], check=True)
         else:
             items = {f'p1:{key}': dict(reviewer='synthetic-explain-blind-p1', evidence='test fixture',
