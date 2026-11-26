@@ -6,11 +6,11 @@
 file:// 미리보기에서는 스크립트가 돌지 않는다. 빈 포트로 서버를 띄운다. 셸 상태는 Bash 호출 사이에 이어지지 않으므로 포트 번호를 먼저 출력해 두고, 이후 명령과 URL에는 그 숫자를 직접 쓴다.
 1. 빈 포트 찾기(출력된 숫자가 `<port>`):
    ```bash
-   python3 -c "import socket; s=socket.socket(); s.bind(('',0)); print(s.getsockname()[1])"
+   python -c "import socket; s=socket.socket(); s.bind(('',0)); print(s.getsockname()[1])"
    ```
 2. 서버 띄우기: Bash 도구의 `run_in_background: true`로 실행한다(명령 끝에 `&`를 붙이지 않는다). 반환된 작업 ID나 실제 서버 PID를 `<RUN>/work/browser/`에 기록해 소유 프로세스를 식별한다.
    ```bash
-   python3 -m http.server <port> --directory "<RUN>/repo"
+   python -m http.server <port> --directory "<RUN>/repo"
    ```
 3. URL: `http://localhost:<port>/복습노트/<range>/<파일명>` (한글 그대로).
 4. 끝나면 이번 QA가 시작한 서버만 종료한다. 기록한 백그라운드 작업 ID(TaskStop 등)나 PID를 확인하고 해당 작업/프로세스만 멈춘다. 이름·명령 패턴으로 서버를 일괄 종료하지 않는다.

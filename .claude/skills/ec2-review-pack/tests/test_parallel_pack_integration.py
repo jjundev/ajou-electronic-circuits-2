@@ -10,6 +10,7 @@ import pymupdf
 
 from _util import REPO, SCRIPTS, prepare_mini_run
 from pack_support import add_target_judgments, genuine_child_run
+from pack_flow import _COMMON_SECTIONS as COMMON_SECTIONS
 from problem_index import record_selection
 
 
@@ -393,3 +394,36 @@ def test_legacy_coordinator_needs_fix_without_findings_is_redispatched(tmp_path)
     assert [r['review_id'] for r in state['findings'].values()] == ['child-coordinator']
     # With a ledger finding it waits for task fix instead of looping.
     assert 'child-coordinator' not in trial.next()['dispatch']
+
+
+def test_profile_exempt_roles_omit_profile(tmp_path):
+    trial = Trial(tmp_path)
+    trial.action('candidate-index')
+    trial.worker('source-prep')
+    brief = trial.worker('stt-0909')
+    assert 'profile' not in brief and 'profile_read' not in brief and 'snapshot' not in brief
+    assert not any(p.endswith('solution-style.md') for p in brief['input_paths'])
+
+
+def test_author_brief_lists_sections_to_read(tmp_path):
+    trial = Trial(tmp_path)
+    trial.action('candidate-index')
+    for tid in ('source-prep', 'stt-0909', 'scope-draft'):
+        trial.worker(tid)
+    brief = trial.worker('author-why')
+    guide = next(p for p in brief['references'] if p.endswith('execution-guide.md'))
+    assert brief['reference_sections'][guide] == ['3. 작성', *COMMON_SECTIONS]
+    assert brief['profile_read'] == '전체 필수'
+
+
+def test_run_without_contract_keeps_profile_for_exempt_roles(tmp_path):
+    import pack_flow
+    trial = Trial(tmp_path)
+    trial.action('candidate-index')
+    trial.worker('source-prep')
+    state = pack_flow.load_state(trial.run)
+    state.pop('approval_contract', None)
+    pack_flow.update_state(trial.run, state['revision'], lambda _: state)
+    brief = read(trial.cli('task', 'claim', '--task', 'stt-0909')['next']['brief'])
+    assert brief['profile_read'] == '전체 필수' and 'profile' in brief and 'snapshot' in brief
+    assert 'reference_sections' in brief

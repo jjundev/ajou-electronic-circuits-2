@@ -94,7 +94,7 @@ def worker_inputs(state, spec):
     if role in ('explain-blind', 'explain-author'):
         return file_records(map(Path, state['actions']['stage-problem-index']['questions']))
     snapshot = Path(state['run'])/'learning-style.json'
-    paths = {snapshot, Path(state['repo'])/f._read(snapshot)['path']}
+    paths = set() if role in f.PROFILE_EXEMPT else {snapshot, Path(state['repo'])/f._read(snapshot)['path']}
     if role == 'concept-review':
         source = output(state, 'concept-draft', 'source.json')
         paths.update([source, *map(Path, f._read(source)['inputs'])])
@@ -170,7 +170,7 @@ def claim_worker(state, task):
         review = root / 'work/standalone-svg-qa/report.md'
     if role == 'pdf-qa':
         review = root / 'answer-review.md'
-    data = dict(workflow='parallel', run_id=state['run_id'], role=role, task_id=spec.id,
+    data = dict(workflow='parallel', python=sys.executable, run_id=state['run_id'], role=role, task_id=spec.id,
                 range=state['range'], attempt=attempt, run=str(root), targets=task['targets'],
                 inputs=worker_inputs(state, spec), allowed_outputs=list(required), required_outputs=required,
                 allowed_output_roots=[str(root)], report=str(review), receipt=str(root/'receipt.json'),
@@ -183,9 +183,18 @@ def claim_worker(state, task):
     else:
         repo = Path(state['repo'])
         refs = repo / '.claude/skills/ec2-review-pack/references'
-        data.update(repo=str(repo), snapshot=str(snapshot), profile=str(repo / f._read(snapshot)['path']),
-                    profile_read='전체 필수', references=[str(refs / ref) for ref, _ in f._REFERENCES[role]],
-                    constraints=['Read the complete profile and referenced review criteria. Perform the actual inspection.'])
+        sections = {}
+        for ref, section in f._REFERENCES.get(role, []):
+            sections.setdefault(str(refs / ref), []).append(section)
+        if role in ('author', 'style-audit', 'content-review'):
+            guide = str(refs / 'execution-guide.md')
+            sections[guide] = [*sections.get(guide, []), *f._COMMON_SECTIONS]
+        data.update(repo=str(repo), references=list(sections), reference_sections=sections)
+        if state.get('approval_contract') and role in f.PROFILE_EXEMPT:
+            data['constraints'] = ['Read the referenced review criteria sections. Perform the actual inspection.']
+        else:
+            data.update(snapshot=str(snapshot), profile=str(repo / f._read(snapshot)['path']), profile_read='전체 필수',
+                        constraints=['Read the complete profile and referenced review criteria. Perform the actual inspection.'])
     if role == 'concept-review':
         quiz = root/'quiz'
         quiz.mkdir()

@@ -6,7 +6,7 @@
 
 ## 1. 후보 목록
 ```bash
-python3 <SKILL>/scripts/problem_index.py --repo <REPO> --used <REPO>/복습노트 --exclude-range <range> --chapters <이번 범위 장, 예: 9,10> --format json --catalog-out <RUN>/exam-catalog > <RUN>/candidates.json
+<python> <SKILL>/scripts/problem_index.py --repo <REPO> --used <REPO>/복습노트 --exclude-range <range> --chapters <이번 범위 장, 예: 9,10> --format json --catalog-out <RUN>/exam-catalog > <RUN>/candidates.json
 ```
 - JSON schema v2의 `problems`에는 교과서의 기존 절/난이도 정보와 기출의 `selection`(주제·필요 개념·학습 목표·분류 근거/상태), `subparts`, `depends_on`, `detail_path`가 있다. 기출의 `detail_path`는 `catalog_root` 기준이다. `reference_solution`은 `none | answer_only | solution`, `used_in_ranges`는 이번 회차를 제외한 사용 회차 목록이다. 풀이 상태는 우선순위나 범위·정답 승인 근거가 아니다.
 - 상세 JSON은 원본 MD 전체·구획별 본문·exam.yaml·원본/다시 그린 그림 경로를 보존한다. 그림 경로와 `md_path`는 REPO 기준이다. JSON은 출력용 workbook JSON과 다른 선별 자료다.
@@ -47,7 +47,7 @@ python3 <SKILL>/scripts/problem_index.py --repo <REPO> --used <REPO>/복습노�
 
 문제가 1개 이상이면 확정 뒤 **처음 후보와 같은 `--chapters`, `--used`, `--exclude-range`**로 실행해 선택 근거·카탈로그/내용 해시·전체 소문항·의존성을 기록한다. 이 명령은 AI의 실제 범위 검토를 대신하지 않는다. 문제 0개이면 생략한다.
 ```bash
-python3 <SKILL>/scripts/problem_index.py --repo <REPO> --used <REPO>/복습노트 --exclude-range <range> --chapters <장> --format json --catalog-out <RUN>/exam-catalog --candidates-input <RUN>/candidates.json --selection-manifest <RUN>/manifest.json --selection-review <RUN>/selection-review.json --selection-out <RUN>/selection.json > <RUN>/selection-candidates.json
+<python> <SKILL>/scripts/problem_index.py --repo <REPO> --used <REPO>/복습노트 --exclude-range <range> --chapters <장> --format json --catalog-out <RUN>/exam-catalog --candidates-input <RUN>/candidates.json --selection-manifest <RUN>/manifest.json --selection-review <RUN>/selection-review.json --selection-out <RUN>/selection.json > <RUN>/selection-candidates.json
 ```
 - 원본·후보·사용 이력이 달라지면 기록을 거부한다. `candidates.json`을 새로 만들고 내용을 다시 검토한다. 입력 `candidates.json`에 stdout을 덮어쓰지 않는다.
 - 후보 외/USED/중복 ID, 일부 소문항 선택, 전제 누락·역순을 거부한다. 순환 의존성은 어떤 순서도 통과하지 못한다.
@@ -62,7 +62,7 @@ python3 <SKILL>/scripts/problem_index.py --repo <REPO> --used <REPO>/복습노�
 
 ## 5. 문제지 먼저 만들기 (4단계 조립에서)
 ```bash
-python3 <REPO>/workbook/build_workbook.py --ids <id1,id2,…(manifest 순서)> --name 복습문제_<range>_<slug> \
+<python> <REPO>/workbook/build_workbook.py --ids <id1,id2,…(manifest 순서)> --name 복습문제_<range>_<slug> \
   --mode problems --layout video-16x9 --pdf-dir <REPO>/복습노트/<range> --build-dir <RUN>/workbook-build
 ```
 - 초기 결과는 `복습노트/<range>/복습문제_<range>_<slug>-문제.pdf` 하나다. 답안은 자식의 새 핵심 풀이·네 검토·개인화 감사·publish 후 발행된 overlay에서 부모가 만든다. [부모 통합 계약](problem-explain-integration.md)의 답안 제작·렌더 검토·원자적 교체 순서를 따른다. 원본 MD의 참고 풀이로 답안을 선행 제작하지 않는다.

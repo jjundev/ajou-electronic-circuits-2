@@ -132,6 +132,29 @@ def test_advance_stops_at_review_gate(tmp_path):
     assert not f._done(f.inspect_state(run), 'publish-pack')
 
 
+def test_advance_runs_actions_past_local_review(tmp_path, monkeypatch):
+    # browser_owner=main -> browser-qa is review_locally; convert-md must still run.
+    import pack_actions
+    state = selected(tmp_path, [])
+    state['capabilities']['browser_owner'] = 'main'
+    state['concept_check_enabled'] = False
+    seed(state, ['scope-final', 'author-why', 'assemble-note', 'structural-precheck',
+                 'style-audit', 'content-review', 'precheck'])
+    run = Path(state['run'])
+    f.update_state(run, state['revision'], lambda _: f.refresh_tasks(state))
+
+    def fake_run_action(run, tid):  # the real converter needs a rendered pack; record only the outcome
+        def done(s):
+            s['actions'][tid]['status'] = 'done'
+            return s
+        f.update_state(run, f.load_state(run)['revision'], done)
+        return dict(status='done')
+    monkeypatch.setattr(pack_actions, 'run_action', fake_run_action)
+    advanced = pack_actions.advance_actions(run, max_actions=1)
+    assert advanced['executed'] == ['convert-md']
+    assert 'browser-qa' in advanced['waiting_for']
+
+
 def test_legacy_graph_is_not_upgraded_by_resume(tmp_path):
     _, run = make_run(tmp_path)
     path = write(run/'stops.json', {})

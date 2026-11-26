@@ -753,12 +753,13 @@ def advance_actions(run: Path, *, max_actions: int) -> dict:
         raise f.FlowError('max-actions must be nonnegative')
     executed = []
     while True:
-        nxt = f.next_work(run, slots=2**31)
-        humans = nxt.get('dispatch', []) + nxt.get('review_locally', [])
+        nxt = f.next_work(run, slots=f.UNBOUNDED_SLOTS)
+        dispatch = nxt.get('dispatch', [])
+        humans = dispatch + nxt.get('review_locally', [])
         blockers = blocker_ids(f.load_state(run), nxt)
         active = [tid for tid,why in nxt.get('waiting', []) if why == 'active attempt']
         actions = nxt.get('actions', [])
-        if humans or blockers or not actions or len(executed) == max_actions:
+        if dispatch or blockers or not actions or len(executed) == max_actions:
             return dict(executed=executed, waiting_for=humans or blockers or active, blocked=blockers, next=nxt)
         tid = actions[0]
         record = run_action(run, tid)
@@ -1114,7 +1115,7 @@ def runner_metrics(state):
     for directory in {Path(state['run'])/'work/cli-counts', cli_trace_directory(state)}:
         for path in directory.glob('*.json'):
             counters.update([f._read(path)['command']])
-    graph = ready_work(state, slots=2**31)
+    graph = ready_work(state, slots=f.UNBOUNDED_SLOTS)
     blocked = blocker_ids(state,graph)
     details = dict(events=events, attempts=attempts, overlaps=overlaps,
                    confirmed_host_gap_seconds=sum((b-a).total_seconds() for a,b in merged),

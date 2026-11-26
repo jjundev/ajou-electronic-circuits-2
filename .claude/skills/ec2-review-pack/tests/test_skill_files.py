@@ -193,5 +193,18 @@ class TestHardenedContracts(unittest.TestCase):
                     self.assertIn(token, text)
 
 
+class TestUnboundedDocs(unittest.TestCase):
+    def test_docs_have_no_slot_caps_or_python3(self):
+        refs = SKILL / "references"
+        text = "\n".join(p.read_text(encoding="utf-8") for p in refs.glob("*.md"))
+        for banned in ("전체 슬롯 최대 4", "메인+직접 작업자 최대 3명",
+                       "예상 종료 시각으로 슬롯을 재배정하지 않는다", "python3 "):
+            self.assertNotIn(banned, text)
+        self.assertIn("준비된 독립 작업은 한 메시지에서 모두 띄운다",
+                      (refs / "delegation.md").read_text(encoding="utf-8"))
+        self.assertIn("reference_sections",
+                      (refs / "worker-prompt.md").read_text(encoding="utf-8"))
+
+
 if __name__ == "__main__":
     unittest.main()

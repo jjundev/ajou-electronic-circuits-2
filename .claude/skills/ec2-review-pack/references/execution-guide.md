@@ -16,7 +16,7 @@
 
 가용 모델의 등급과 기본 모델 적용은 [역할·파일 인계 계약](delegation.md#실행과-컨텍스트)의 모델 선택 규칙을 따른다.
 
-**진행 표시**는 작업 배정·인계·검토·차단·재개·발행 상태가 달라졌을 때 한 줄로 남긴다. 병렬 RUN의 가용 슬롯과 독립 풀이 시작 시점은 [병렬 실행 순서](runner-contract.md#병렬-실행-순서)를 따른다.
+**진행 표시**는 작업 배정·인계·검토·차단·재개·발행 상태가 달라졌을 때 한 줄로 남긴다. 병렬 RUN의 독립 풀이 시작 시점은 [병렬 실행 순서](runner-contract.md#병렬-실행-순서)를 따른다.
 
 **경로 약속**
 - `SKILL` = 이 파일이 있는 폴더(`.claude/skills/ec2-review-pack`)의 절대 경로
@@ -41,15 +41,15 @@
 
 ### 0. 준비
 1. `REPO`에 `STT/`, `강의노트/`, `교과서/마이크로전자회로/`, `workbook/build_workbook.py`가 모두 있는지 확인한다. 하나라도 없으면 "전자회로2 저장소에서만 동작해요"라고 알리고 멈춘다.
-2. STT 목록은 NFC로 읽는다. macOS에는 NFD 파일명이 섞여 있다.
+2. STT 목록은 NFC로 읽는다(macOS에서 `python`이 없으면 `python3`을 쓴다). macOS에는 NFD 파일명이 섞여 있다.
    ```bash
-   python3 -c "import os,unicodedata as u,re;n=[u.normalize('NFC',f) for f in os.listdir('$REPO/STT')];print(sorted(m.group(1) for f in n if f.endswith('전회2.md') and (m:=re.match(r'(\d{4})',f))))"
+   python -c "import os,unicodedata as u,re;n=[u.normalize('NFC',f) for f in os.listdir('$REPO/STT')];print(sorted(m.group(1) for f in n if f.endswith('전회2.md') and (m:=re.match(r'(\d{4})',f))))"
    ```
 3. 기간을 정한다.
    - 인자가 있으면 그 기간을 쓴다.
    - 인자가 없으면 `복습노트/*/정리노트_<range>_*.html` 중 가장 늦은 끝 날짜를 찾는다(NFD 폴더·파일명도 잡히게 NFC로 비교).
      ```bash
-     python3 -c "import os,re,unicodedata as u
+     python -c "import os,re,unicodedata as u
      packs=[]
      for d in os.listdir('$REPO/복습노트'):
          for f in os.listdir(os.path.join('$REPO/복습노트', d)):
@@ -75,7 +75,7 @@
    - `<YYYY-MM-DD>`: 연도는 이번 학기 연도(오늘 날짜 기준), 월·일은 `<MMDD>`.
 3. **요약이 모두 끝난 뒤** 문제 선발자가 후보 문제 목록을 만든다(`references/problem-selection.md` 1).
    ```bash
-   python3 "$SKILL/scripts/problem_index.py" --repo "$REPO" --used "$REPO/복습노트" --exclude-range <range> --chapters <장> --format json --catalog-out "$RUN/exam-catalog" > "$RUN/candidates.json"
+   <python> "$SKILL/scripts/problem_index.py" --repo "$REPO" --used "$REPO/복습노트" --exclude-range <range> --chapters <장> --format json --catalog-out "$RUN/exam-catalog" > "$RUN/candidates.json"
    ```
    장은 각 요약의 `## 교과서 절 대조`에서 "다룸"·"일부"로 적힌 절 번호마다 **첫 번째 숫자**(예: `9.1.2` → `9`)를 모아 만든 집합이다(슬라이드 제목이 아니다). 어떤 요약에도 Razavi 절이 없으면(순수 전자회로1 복습, Lec1–2뿐) 이 단계를 건너뛴다(문제 0개).
 
@@ -85,7 +85,7 @@
 - 첫 섹션은 항상 `why`(토픽 `why-circuit`, "들어가며: 왜 이런 회로를 쓸까")다. 요약의 `## 동기 발언`으로 `required_terms`를 고른다(`references/manifest-guide.md`).
 - 문제 선별의 공통 명세는 `references/problem-selection.md`다. 새 manifest는 `selection_policy: exam-first-v2`로 **기출 우선 최대 20문항**, 핵심/추가 연습·학습 목표·추정 시간을 기록한다. 교과서는 기출의 빈틈을 보완하고 종류별 고정 비율/최소 개수를 강제하지 않는다. 다른 회차에서 사용한 문항은 선행 문제도 항상 제외한다. 풀이 없는 문제도 원문에서 직접 풀어 검토하며 무해설을 불이익으로 삼지 않는다. 기출 상세 JSON의 원문·전체 소문항·실제 그림을 읽고 미분류·draft·stale은 MD로 재확인한다. 전체 문항만 채택하며 범위 밖 소문항이 있으면 미학습 개념과 함께 보류해 이후 회차에서 재검토한다.
 - 문제가 1개 이상이면 manifest 검증 후 `RUN/selection-review.json`(미사용 기출 전체/선택 문항의 판정·보류·coverage·전체 시험 범위 점검)을 작성하고 `references/problem-selection.md` 4의 명령으로 `RUN/selection.json`을 만든다. 원본/후보/사용 이력 변경이면 다시 검토한다. 목록이나 핵심/추가·시간·목표가 바뀔 때마다 기록을 갱신한다. 조립 시 `.assets/selection.json`과 `.pack/selection-review.json`을 보존한다. PDF 빌드 전 ID·순서가 manifest와 같아야 한다. 후보는 있으나 최종 0개이면 제외·보류 이유를 보고하고 문제 없는 팩 절차를 따른다.
-- 검증: `python3 "$SKILL/scripts/manifest.py" "$RUN/manifest.json" "$REPO"` 결과가 `OK`여야 한다.
+- 검증: `<python> "$SKILL/scripts/manifest.py" "$RUN/manifest.json" "$REPO"` 결과가 `OK`여야 한다.
 
 ### 3. 작성
 - 작성·수정 모두 `references/content-rules.md`의 "이해되는 설명의 순서"를 적용한다. 작성자는 첫 설명과 작은 예시만으로 풀 수 있는 적용 질문·답·이유를 보고한다. 기존 팩을 수정할 때도 대상 토픽에 적용하고 HTML에서 MD·SVG를 다시 생성한다.
@@ -99,7 +99,7 @@
 - 접지·전압 라벨·노드 색 대응: 접지 기호에 직접 닿는 점과 접지만 표시하는 비분기 입력 단자의 점은 생략한다. 접지로 이어지는 회로라도 별도의 실제 분기 접속점·이름 있는 비접지 노드는 유지한다. $v_e$ 등 전압 이름은 다른 소자나 저항 옆으로 멀리 밀지 않고 해당 노드 바로 곁에 둔다. 아래첨자·극성을 포함한 실제 글리프 경계로 도선과 최소 0.6em 간격을 확보하면서 가능하면 0.6–1em 정도의 가까운 간격을 목표로 한다. 혼잡 때문에 더 벌리면 배치 이유를 검토에 기록한다. 노드 점과 해당 전압 이름·극성은 같은 파랑 또는 빨강으로 묶는다. 주요 신호 경로를 따라 파랑·빨강을 교대하고 가까운 전압 라벨끼리 최대한 다른 색을 쓴다. 같은 전기적 노드는 다른 위치의 점도 같은 색이며, 모든 인접 노드를 반대색으로 만드는 그래프 채색을 강제하지 않는다. 접지 표기·도선·소자/제어원 라벨·전류 화살표/라벨·본문 수식의 색은 이 노드 색 규칙으로 바꾸지 않는다. 색 없이도 노드 이름과 극성으로 구분되어야 한다. SVG에는 대응 노드 식별자와 색을 명시하고, HTML 테마와 PDF에서 실제 계산된 색이 파랑/빨강인지 확인한다. PDF의 문항 종류별 초록/주황 `--kind`를 노드 파랑의 대체값으로 사용하지 않는다. 풀이 본문의 모든 SVG와 MD에 참조된 같은 그림, 라이트·다크 HTML 및 실제 답안 PDF에서 접지 점 생략·가까운 라벨·점/전압 색 일치를 검토한다.
 - 출력저항 표시/검산 경계: $R_{out}$은 처음부터 유효한 근사식으로 시작하고 조건과 $\approx$를 유지한다. 이 규칙은 생성하는 풀이 본문(start/solve/verify·formal/보충 포함) HTML·요약·동반 MD·답안 PDF 모두에 적용한다. 정확식 → 근사식 유도나 정확식과 수치 비교를 학습 본문에 추가하지 않는다. 정확한 $R_{out}$의 전체 모델·유도·수치/극한 대조는 내부 독립 검산 evidence에만 둔다. 원문이 정확식·유한 β 전체 결과 또는 수업 기본 큰 곱 근사와 반대인 조건·수치를 명시하면 예외 이유를 짧게 밝히고 필요한 모델과 결과를 제시한다. 유한 β 또는 $r_o$가 있다는 사실만으로 예외를 선언하지 않는다. 이 제한은 $R_{out}$에 한정하며 다른 개념의 필요한 상세 유도를 줄이지 않는다.
 - 섹션마다 작성자 1명을 띄운다. 브리프는 `references/content-rules.md`, 위젯 규칙은 `references/widget-rules.md`에 있다. spawn 지시문은 `references/worker-prompt.md`를 채워 쓰고, 작성자는 인계 전에 `layout_probe.py`와 `task check`를 실행한다(delegation의 인계 전 묶음 점검).
-- 독립 작성자는 가용 슬롯만큼 **배치로 병렬** 실행한다. 모델은 [역할·파일 인계 계약](delegation.md#실행과-컨텍스트)의 모델 선택 기준을 적용한다. 병렬 작성자끼리 임시 파일이 섞이지 않게 브리프에 각자의 임시 폴더 `<RUN>/work/<sid>/`를 적어 준다.
+- 독립 작성자는 준비된 만큼 **한 번에 병렬** 실행한다. 모델은 [역할·파일 인계 계약](delegation.md#실행과-컨텍스트)의 모델 선택 기준을 적용한다. 병렬 작성자끼리 임시 파일이 섞이지 않게 브리프에 각자의 임시 폴더 `<RUN>/work/<sid>/`를 적어 준다.
 - 브리프의 `<…>` 자리는 실제 경로, id, 금지어 목록(`<forbidden 목록>`), 예고 토픽 id(`<preview_topic>`), 섹션 작성자에게 필요한 교과서 장 PDF와 쪽(`<N>장.pdf`, `<쪽>`), 그리고 manifest `links` 중 그 섹션 토픽에 속한 것만(`<이 섹션의 links 목록>`) 채워 넣는다. 요약·예고 섹션 작성자에게는 문제 수(0이면 "문제 없음")도 알린다.
 - 토픽마다 manifest `circuits`의 회로를 강의노트 PDF 쪽에서 먼저 옮겨 그리고, 글이 그 회로의 ㉠㉡㉢을 짚어 유도한다(content-rules의 "토픽 회로"). 회로를 빼거나 바꿔야 하면 작성자가 임의로 정하지 않고 범위 설계 수정으로 보고한다.
 - `why` 섹션 작성자도 함께 병렬로 띄운다. 브리프의 `<뒤 섹션 토픽 id·제목 목록>`에 manifest의 나머지 토픽 id와 제목을 모두 적어 준다(링크 대상). 위젯은 두지 않는다.
@@ -185,9 +185,9 @@
 2. 팩마다 작성자 1명을 [역할·파일 인계 계약](delegation.md#실행과-컨텍스트)의 모델 선택 규칙에 따라 병렬로 시작한다. `references/content-rules.md`의 작성자 브리프를 섹션 `why`로 채워 넘긴다. 기존 노트(읽기 전용), 그 날짜 STT, 노트 태그의 강의자료, Razavi 장 도입부를 근거로 삼는다. `<뒤 섹션 토픽 id·제목 목록>`은 노트의 `article class="topic" id=…`에서 뽑아 채운다. 출력은 scratchpad의 `why.html` 한 파일이다.
 3. 끼워넣는다. 이미 why 섹션이 있으면 교체하므로 다시 실행해도 된다.
 ```bash
-python3 "$SKILL/scripts/insert_why.py" --note "$REPO/복습노트/<range>/<정리노트>.html" --fragment <why.html>
+<python> "$SKILL/scripts/insert_why.py" --note "$REPO/복습노트/<range>/<정리노트>.html" --fragment <why.html>
 ```
-4. `python3 "$SKILL/scripts/check_html.py" <정리노트>.html`이 `OK`, `html2md.py <정리노트>.html --check`가 `OK`(`.assets/`의 md와 `.assets/figures_<range>/fig-why.svg`를 새로 만든다)여야 한다. 커밋할 때 이 svg도 함께 넣는다.
+4. `<python> "$SKILL/scripts/check_html.py" <정리노트>.html`이 `OK`, `html2md.py <정리노트>.html --check`가 `OK`(`.assets/`의 md와 `.assets/figures_<range>/fig-why.svg`를 새로 만든다)여야 한다. 커밋할 때 이 svg도 함께 넣는다.
 5. 7단계처럼 브라우저로 본다: 표지 다음 첫 화면이 why 토픽인지, 본문 상단에 고정되는 회로, 오른쪽 요약 패널, 링크 이동, 다크모드, 375px.
 
 ## 오류 처리

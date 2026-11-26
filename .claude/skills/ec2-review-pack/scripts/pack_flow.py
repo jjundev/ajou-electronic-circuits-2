@@ -39,6 +39,7 @@ def nfc_path(p: str | Path) -> Path:
 TEMP_ROOTS = ('/tmp', '/private/tmp', '/var/folders', '/private/var/folders',
               str(Path(tempfile.gettempdir()).resolve()))
 BLIND_HISTORY_VERSION = 2  # Includes packet files from every uncertified round.
+UNBOUNDED_SLOTS = 2**31  # `next_work` slots meaning "every ready worker".
 
 
 def cache_root() -> Path:
@@ -748,6 +749,7 @@ _REFERENCES = {
     'child-coordinator': [('problem-explain-integration.md', '전체')],
     'pdf-qa': [('problem-explain-integration.md', '답안 PDF 렌더 검토 기록')],
 }
+PROFILE_EXEMPT = ('stt', 'selection', 'scope-final')
 _COMMON_SECTIONS = ['기본 근사와 회로 표기', '전압이득의 계산 순서', '확정한 문제 해설 형식',
                     '본문과 페이지 요약의 계약', '수치 표시', 'HTML 가독성 생성·검사']
 
@@ -804,7 +806,7 @@ def write_briefs(state: dict) -> None:
         if role in ('author', 'style-audit', 'content-review'):
             refs.append({'path': str(skill / 'references/execution-guide.md'), 'sections': _COMMON_SECTIONS})
         snapshot = _read(run / 'learning-style.json')
-        data = dict(task_id=task['id'], run_id=state['run_id'], attempt=None, role=role, range=state['range'],
+        data = dict(task_id=task['id'], run_id=state['run_id'], python=sys.executable, attempt=None, role=role, range=state['range'],
             repo=str(repo), run=str(run), skill=str(skill), profile=str(repo / snapshot['path']),
             profile_read='전체 필수', snapshot=str(run / 'learning-style.json'), references=refs,
             targets=task['targets'], inputs=_inputs(state, task), allowed_outputs=outputs,

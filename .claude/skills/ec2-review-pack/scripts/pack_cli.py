@@ -65,10 +65,10 @@ def parser():
     c.add_argument('--workflow', choices=('legacy', 'parallel'),
                    help='defaults to parallel for new runs and legacy for --seed-from')
     c.add_argument('--allow-tmp',action='store_true')
-    for owner in ('browser','pdf'): c.add_argument('--'+owner+'-owner',choices=('workers','main','unavailable'),default='main')
+    for owner in ('browser','pdf'): c.add_argument('--'+owner+'-owner',choices=('workers','main','unavailable'),default='workers')
     c.add_argument('--seed-from',type=absolute); c.add_argument('--redo',default='')
     c.add_argument('--redo-note',type=absolute)
-    command('status'); c=command('next'); c.add_argument('--slots',required=True,type=int)
+    command('status'); c=command('next'); c.add_argument('--slots',required=False,type=int,default=None)
     t=sub.add_parser('task'); ts=t.add_subparsers(dest='task_command',required=True)
     c=command('accept-batch',ts); c.add_argument('--submissions',required=True,type=absolute)
     c=command('advance'); c.add_argument('--max-actions',required=True,type=int)
@@ -163,7 +163,7 @@ def execute(a):
         submissions=json.loads(a.submissions.read_text(encoding='utf-8'))
         return dispatch_result(run, accept_batch(run, submissions))
     elif a.command=='status': pass
-    elif a.command=='next': extra=f.next_work(run,slots=a.slots)
+    elif a.command=='next': extra=f.next_work(run,slots=f.UNBOUNDED_SLOTS if a.slots is None else a.slots)
     elif a.command=='task':
         if a.task_command=='claim': extra=f.claim_task(run,a.task)
         elif a.task_command=='bind': f.bind_task(run,a.task,a.attempt,a.agent_id)
