@@ -23,7 +23,7 @@ owner 기본은 workers다. 도구가 실제 있는 주체를 전달하며 unava
 1. `next --run <RUN> [--slots <n>]`(생략하면 준비된 작업자를 모두 낸다)의 `actions`, `dispatch`, `review_locally`, `blocked`를 확인한다. `claim`의 지정 경로로 역할을 배정하고 실제 작업자 ID를 `bind`한다. 기계 작업은 슬롯 수와 별도로 `run --action <ID>`로 병행할 수 있다.
 2. 시작할 때 세 기계 작업 source-prep·candidate-index·render-preflight를 `advance`로 실행한다. selection이 채택되고 stage-problem-index가 봉인되면 문항마다 `explain-author-pN`과 `explain-blind-pN`을 동시에 맡긴다(`problem_contract` RUN. 같은 문항의 작성자와 풀이자는 다른 에이전트여야 하고, 계약이 없는 RUN은 단일 `explain-author`/`explain-blind`를 다른 작업자에게 맡긴다). 저작·독립 풀이가 채택되면 child-coordinator가 검증을 잇는다. 확인문제도 convert-md·selection이 승인되는 즉시 concept-draft → concept-review까지 진행한다. 최종 발행은 publish-pack·final-check 승인 뒤 별도로 진행한다.
 3. 작업자는 자신의 브리프에서 `task build-receipt`와 `task check`를 실행한다. 메인은 완료한 작업만 `[{"task_id":"…","attempt":"…","receipt":"/절대/receipt.json"}]` 배열에 모아 `task accept-batch --run <RUN> --submissions <파일>`로 인계한다. 각 항목의 accepted/already_accepted/rejected와 거부 사유를 확인한다. `task accept`, `task check`로 한 항목씩 진단할 수 있다.
-4. `advance --run <RUN> --max-actions 4`는 최대 네 기계 작업을 실행한다. 사람이 필요한 작업이나 차단을 만나면 `waiting_for`와 `blocked`에 ID가 나온다. 다음 묶음을 배정하고 계속한다. 결과가 접혔으면 `details_path`에서 해당 항목만 읽는다. 진행 표시는 시도 시작·승인·수정·차단·재개·발행처럼 상태가 변했을 때만 한다.
+4. `advance --run <RUN> --max-actions 4`는 최대 네 기계 작업을 실행한다. 메인 검토(`review_locally`)만 기다리는 동안에는 기계 작업을 계속 실행하고, 맡길 작업자(`dispatch`)가 생기거나 차단·실행할 기계 작업 없음·`--max-actions` 도달 중 하나가 되면 멈춘다. 멈추면 `waiting_for`에 dispatch·review_locally ID가, `blocked`에 차단 ID가 나온다. 다음 묶음을 배정하고 계속한다. 결과가 접혔으면 `details_path`에서 해당 항목만 읽는다. 진행 표시는 시도 시작·승인·수정·차단·재개·발행처럼 상태가 변했을 때만 한다.
 
 ### 같은 병렬 RUN 재개
 
@@ -39,9 +39,9 @@ owner 기본은 workers다. 도구가 실제 있는 주체를 전달하며 unava
 
 ## 레거시 배치·재개 — 메인과 역할 담당자
 
-next.kind는 dispatch/run/review_locally/wait/recover/concept_check/report/blocked다. dispatch는 `task claim --run <RUN> --task <id>`로 먼저 예약한다. 반환 attempt/brief로 새 컨텍스트 작업자를 실행하고 `task bind --run <RUN> --task <id> --attempt <UUID> --agent-id <실제 ID>`로 연결한다. Codex는 spawn_agent(fork_turns="none"), OpenCode는 전체 대화를 복사하지 않는 새 작업 컨텍스트를 사용한다. 작업자 지시문은 [worker-prompt](worker-prompt.md) 템플릿을 채워 쓴다. claim 뒤 brief.json에는 `run_id`와 `attempt`가 들어 있다. 작업자는 반환 전에 `task check --run <RUN> --task <id> --attempt <UUID> --receipt <절대 경로>`를 실행한다. 이 명령은 accept와 같은 검증을 하되 상태를 바꾸지 않고, 실패하면 exit 1과 reason(예: `unresolved successful receipt`, `receipt identity mismatch`)을 돌려준다. 반환 뒤 `task accept --run <RUN> --task <id> --attempt <UUID> --receipt <절대 경로>`를 실행한다. 늦게 온 다른 attempt는 거부한다. 가용 슬롯·독립 역할·기존 담당자 재개 규칙은 [delegation](delegation.md)을 따른다.
+next.kind는 dispatch/run/review_locally/wait/recover/concept_check/report/blocked다. dispatch는 `task claim --run <RUN> --task <id>`로 먼저 예약한다. 반환 attempt/brief로 새 컨텍스트 작업자를 실행하고 `task bind --run <RUN> --task <id> --attempt <UUID> --agent-id <실제 ID>`로 연결한다. Codex는 spawn_agent(fork_turns="none"), OpenCode는 전체 대화를 복사하지 않는 새 작업 컨텍스트를 사용한다. 작업자 지시문은 [worker-prompt](worker-prompt.md) 템플릿을 채워 쓴다. claim 뒤 brief.json에는 `run_id`와 `attempt`가 들어 있다. 작업자는 반환 전에 `task check --run <RUN> --task <id> --attempt <UUID> --receipt <절대 경로>`를 실행한다. 이 명령은 accept와 같은 검증을 하되 상태를 바꾸지 않고, 실패하면 exit 1과 reason(예: `unresolved successful receipt`, `receipt identity mismatch`)을 돌려준다. 반환 뒤 `task accept --run <RUN> --task <id> --attempt <UUID> --receipt <절대 경로>`를 실행한다. 늦게 온 다른 attempt는 거부한다. 준비된 독립 역할의 동시 배정과 기존 담당자 재개 규칙은 [delegation](delegation.md)을 따른다.
 
-브리프는 `RUN/work/<task>/brief.json`이다. role/targets/references/inputs/allowed_outputs/allowed_output_roots/report/receipt/request_paths를 직접 읽는다. author는 section_brief도 읽는다. 실행기가 고정한 inputs를 빼거나 임의 출력을 추가해 쓰기 권한을 늘리지 않는다. [공통 교육 계약](execution-guide.md)의 지정 절은 `profile` 유무와 상관없이 필수다. PROFILE 전체는 브리프에 `profile`이 있을 때만 읽는다.
+브리프는 `RUN/work/<task>/brief.json`이다. role/targets/references/reference_sections/inputs/allowed_outputs/allowed_output_roots/report/receipt/request_paths/python을 직접 읽는다. author는 section_brief도 읽는다. 실행기가 고정한 inputs를 빼거나 임의 출력을 추가해 쓰기 권한을 늘리지 않는다. [공통 교육 계약](execution-guide.md)의 `reference_sections`(없으면 `references`)의 절은 `profile` 유무와 상관없이 필수다. 작업자 명령의 `<python>`은 브리프의 `python` 값이다. PROFILE 전체는 브리프에 `profile`이 있을 때만 읽는다.
 
 receipt는 `{schema_version:1,run_id,task_id,attempt,status,inputs,outputs,report,reviews,counts,unresolved}`다. inputs/outputs는 `{path,sha256}` 배열이고 실제 현재 바이트 해시다. status는 done/needs-fix/blocked/ready-for-publish/withheld다. envelope·보고·출력은 허용 RUN 안, 읽기 전용 입력은 REPO 또는 RUN 안이다. reviews는 기존 승인 파일을 참조하며 새 envelope가 실제 검토를 대신하지 않는다. 상세 수식·원문·감사·문항 보고는 파일에 보존하고 최종 반환은 **800자 이하**의 task/status/receipt 경로다(개행 포함 Python len). 조정자는 leaf 브리프에도 같은 제한을 명시한다.
 
@@ -60,9 +60,11 @@ receipt는 `{schema_version:1,run_id,task_id,attempt,status,inputs,outputs,repor
 | source-map.sessions[].pdfs | REPO 내부 PDF **절대 경로 문자열 배열**. path/sha256 객체를 넣지 않음 |
 | source-map.sessions[].missing | 누락 이유 문자열 배열. 없음은 `[]` |
 
-content-review와 browser-qa는 실제 검토를 마친 대상만 `counts.targets`로 선언한다. 현재 brief.targets가 `["why-circuit","cascode-gain"]`인 가상 검토의 필드 예시는 `"counts":{"targets":["why-circuit","cascode-gain"],"reviewed":2}`다. ID를 임의 토픽명·섹션명·총 개수로 바꾸지 않는다. `reviewed:2` 같은 집계만으로 coverage를 대신할 수 없고, 아래 source-prep 예시의 counts를 검토 역할에 그대로 쓰지 않는다. 실제 누락이 있으면 done으로 맞춰 쓰지 말고 `status:"needs-fix"`와 unresolved에 대상/이유를 기록한다. 이 메타데이터는 실제 검토·기존 승인 근거를 대체하지 않는다.
+content-review와 browser-qa는 실제 검토를 마친 대상만 `counts.targets`로 선언한다. 현재 brief.targets가 `["why-circuit","cascode-gain"]`인 가상 검토의 필드 예시는 `"counts":{"targets":["why-circuit","cascode-gain"],"reviewed":2}`다. ID를 임의 토픽명·섹션명·총 개수로 바꾸지 않는다. `reviewed:2` 같은 집계만으로 coverage를 대신할 수 없고, 아래 예시의 counts를 검토 역할에 그대로 쓰지 않는다. 실제 누락이 있으면 done으로 맞춰 쓰지 말고 `status:"needs-fix"`와 unresolved에 대상/이유를 기록한다. 이 메타데이터는 실제 검토·기존 승인 근거를 대체하지 않는다.
 
-아래는 **inputs가 STT 한 개뿐인 가상 브리프**의 타입 예시다. 실제로는 현재 brief.inputs 전체·run_id·claim attempt·산출 해시로 바꾼다. 예시 경로/해시를 승인 근거로 재사용하지 않는다.
+`source_contract`가 있는 RUN에서 source-prep은 작업자 역할이 아니라 기계 작업이다. `run --action source-prep`(또는 `advance`)이 `scripts/pack_sources.py`로 source-map.json과 slides.txt를 만들어 산출로 고정하며 작업자 receipt가 없다. 아래 receipt·source-map 예시는 **기존 RUN(`source_contract` 없음)**의 source-prep 작업자 계약이다.
+
+아래는 **inputs가 STT 한 개뿐인 가상 브리프**의 타입 예시다(기존 RUN(`source_contract` 없음)의 source-prep 작업자). 실제로는 현재 brief.inputs 전체·run_id·claim attempt·산출 해시로 바꾼다. 예시 경로/해시를 승인 근거로 재사용하지 않는다.
 
 ```json
 {
@@ -80,7 +82,7 @@ content-review와 browser-qa는 실제 검토를 마친 대상만 `counts.target
 
 같은 역할의 source-map 타입 예시: `{"schema_version":1,"sessions":[{"date":"0909","stt":"C:/repo/STT/0909 전회2.md","pdfs":["C:/repo/강의노트/Lec.pdf"],"status":"ready","missing":[]}]}`. report/reviews/stt/pdfs에 `{path,sha256}` 객체를 넣지 않는다.
 
-source-prep의 source-map.json은 `{schema_version:1,sessions:[{date,stt,pdfs,status,missing}]}`다. 실제 MMDD 집합, REPO 내부 STT/PDF 절대 경로, ready/missing 및 누락 이유 배열을 기록한다. scope.json은 의미 인계물이므로 임의 기계 스키마로 확장하지 않는다. manifest는 scope-draft→selection→scope-final 단일 작성자 순서다. selection은 `RUN/display-titles.json`에 선발 ID와 정확히 같은 키/비어 있지 않은 제목을 반환한다(0개는 {}). runner는 제목을 선택하지 않는다.
+source-map.json은 어느 RUN에서나 `{schema_version:1,sessions:[{date,stt,pdfs,status,missing}]}`다. 실제 MMDD 집합, REPO 내부 STT/PDF 절대 경로, ready/missing 및 누락 이유 배열을 기록한다. scope.json은 의미 인계물이므로 임의 기계 스키마로 확장하지 않는다. manifest는 scope-draft→selection→scope-final 단일 작성자 순서다. selection은 `RUN/display-titles.json`에 선발 ID와 정확히 같은 키/비어 있지 않은 제목을 반환한다(0개는 {}). runner는 제목을 선택하지 않는다.
 
 기존 순차 RUN의 style-audit/content-review는 브리프의 **audit_output**에 쓴다. 앞 작성자의 감사 파일을 덮지 않는다. content-review의 보완 감사만 단일 작성자 인계로 채택되며 precheck를 다시 수행한다. 브라우저/PDF owner=main은 review_locally: 메인이 실제 근거를 읽고 검사한 뒤 동일 claim/receipt/accept 계약을 수행한다. 도구 없는 작업자에게 pass를 요청하지 않는다.
 
