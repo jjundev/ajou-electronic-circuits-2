@@ -1,7 +1,26 @@
-T: simplify(KCL-blind)=0, simplify(blind-fragment)=0
-Iout/Vin: simplify(KCL-blind)=0, simplify(blind-fragment)=0
-R_in,closed: simplify(KCL-blind)=0, simplify(blind-fragment)=0
-R_out,closed(laser view): simplify(KCL-blind)=0, simplify(blind-fragment)=0
-R_out md - fragment: 0
-혼합형 - 레이저에서 본 값 = -R_D*R_L*R_M*g_m1*g_m2/(R_L*g_m2 + R_M*g_m2 + 1) (R_L->0에서만 0)
-레이저 포함 루프 전체 (1/g2+RL+RM)(1+T) - RL - fragment = 0
+=== P1 (2021-1 Final Q4): CG M1 + SF M2, lambda = 0 ===
+Open-loop Stage 1 (VX / Vin): R_D*g_m1
+R_in_open: 1/g_m1
+Open-loop Stage 2 (Iout / VX) KCL:   g_m2/(R_L*g_m2 + R_M*g_m2 + 1)
+Open-loop Stage 2 (Iout / VX) chain: g_m2/(R_L*g_m2 + R_M*g_m2 + 1)
+SF chain-rule vs KCL difference:     0
+Open-loop gain G_m_open = Iout/Vin: R_D*g_m1*g_m2/(R_L*g_m2 + R_M*g_m2 + 1)
+R_out_open (seen by Laser): R_M + 1/g_m2
+Feedback factor K = V_F / I_out: R_M
+Direct loop return v_F / v_test:     -R_D*R_M*g_m1*g_m2/(R_L*g_m2 + R_M*g_m2 + 1)
+Loop gain T = -v_F/v_test = K*A_open: R_D*R_M*g_m1*g_m2/(R_L*g_m2 + R_M*g_m2 + 1)
+T_0 (with R_L = 0):                  R_D*R_M*g_m1*g_m2/(R_M*g_m2 + 1)
+
+--- 2-Port Feedback Results ---
+A_closed (2-port):     R_D*g_m1*g_m2/(R_D*R_M*g_m1*g_m2 + R_L*g_m2 + R_M*g_m2 + 1)
+R_in_closed (2-port):  (R_D*R_M*g_m1*g_m2 + R_L*g_m2 + R_M*g_m2 + 1)/(g_m1*(R_L*g_m2 + R_M*g_m2 + 1))
+R_out_closed (2-port): R_D*R_M*g_m1 + R_M + 1/g_m2
+
+--- Exact KCL Verification ---
+A_closed (exact KCL):     R_D*g_m1*g_m2/(R_D*R_M*g_m1*g_m2 + R_L*g_m2 + R_M*g_m2 + 1)
+R_in_closed (exact KCL):  (R_D*R_M*g_m1*g_m2 + R_L*g_m2 + R_M*g_m2 + 1)/(g_m1*(R_L*g_m2 + R_M*g_m2 + 1))
+R_out_closed (exact KCL): R_D*R_M*g_m1 + R_M + 1/g_m2
+diff A_closed:     0
+diff R_in_closed:  0
+diff R_out_closed: 0
+ALL P1 CHECKS PASSED (differences == 0).

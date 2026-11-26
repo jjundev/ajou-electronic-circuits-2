@@ -1,15 +1,28 @@
-fragment R_out,closed 전개형 일치: 0
-fragment T 전개형 일치: 0
-A: simplify(blind - fragment) = 0
-Rin: simplify(blind - fragment) = 0
-Ro: simplify(blind - fragment) = 0
-K: simplify(blind - fragment) = 0
-Acl: simplify(blind - fragment) = 0
-Rinc: simplify(blind - fragment) = 0
-md(식 12.173) - blind R_out,closed: 0
-fragment R_out,closed / 교과서(blind) 식: R_L->0 극한 = 1
-같은 비: R_L/(r_O2+R_F||R_M)->0 이면 1, 예) r_O2->oo 극한 = 1
-g_m r_O2=10: A_I,closed exact/2port=5.631930, R_out exact/fragment=1.031363, R_out exact/textbook=1.031396
-g_m r_O2=100: A_I,closed exact/2port=1.033667, R_out exact/fragment=1.001981, R_out exact/textbook=1.002009
-g_m r_O2=1000: A_I,closed exact/2port=1.000078, R_out exact/fragment=1.000022, R_out exact/textbook=1.000033
-g_m r_O2=10000: A_I,closed exact/2port=1.000000, R_out exact/fragment=1.000000, R_out exact/textbook=1.000002
+=== P3 (Example 12.32, Fig 12.61(a)): Current-Current Feedback ===
+Input stage V_X / I_in (Norton->Thevenin): R_D*g_m1*(R_F + R_M)/(R_F*g_m1 + R_M*g_m1 + 1)
+Input stage V_X / I_in (Direct KCL):       R_D*g_m1*(R_F + R_M)/(R_F*g_m1 + R_M*g_m1 + 1)
+Difference (simplify == 0):                0
+R_in_open: (R_F + R_M)/(R_F*g_m1 + R_M*g_m1 + 1)
+Output stage I_out / V_X (open-loop): -g_m2*r_o2*(R_F + R_M)/(R_F*R_L + R_F*R_M + R_F*r_o2 + R_L*R_M + R_M*r_o2)
+A_I_open (matches eq 12.166): -R_D*g_m1*g_m2*r_o2*(R_F + R_M)**2/((R_F*g_m1 + R_M*g_m1 + 1)*(R_F*R_L + R_F*R_M + R_F*r_o2 + R_L*R_M + R_M*r_o2))
+R_out_open (matches eq 12.168): (R_F*R_M + R_F*r_o2 + R_M*r_o2)/(R_F + R_M)
+Feedback factor K (eq 12.170): -R_M/(R_F + R_M)
+Loop gain magnitude T = K*A_I_open = -(R_M/(R_M+R_F))*A_I_open > 0:
+  R_D*R_M*g_m1*g_m2*r_o2*(R_F + R_M)/((R_F*g_m1 + R_M*g_m1 + 1)*(R_F*R_L + R_F*R_M + R_F*r_o2 + R_L*R_M + R_M*r_o2))
+T_0 (with R_L = 0): R_D*R_M*g_m1*g_m2*r_o2*(R_F + R_M)/((R_F*R_M + R_F*r_o2 + R_M*r_o2)*(R_F*g_m1 + R_M*g_m1 + 1))
+
+--- 2-Port Feedback Results (Razavi eqs 12.171-12.173) ---
+A_I_closed (eq 12.171):               -R_D*g_m1*g_m2*r_o2*(R_F + R_M)**2/(R_D*R_F*R_M*g_m1*g_m2*r_o2 + R_D*R_M**2*g_m1*g_m2*r_o2 + R_F**2*R_L*g_m1 + R_F**2*R_M*g_m1 + R_F**2*g_m1*r_o2 + 2*R_F*R_L*R_M*g_m1 + R_F*R_L + R_F*R_M**2*g_m1 + 2*R_F*R_M*g_m1*r_o2 + R_F*R_M + R_F*r_o2 + R_L*R_M**2*g_m1 + R_L*R_M + R_M**2*g_m1*r_o2 + R_M*r_o2)
+R_in_closed (eq 12.172):              (R_F + R_M)*(R_F*R_L + R_F*R_M + R_F*r_o2 + R_L*R_M + R_M*r_o2)/(R_D*R_F*R_M*g_m1*g_m2*r_o2 + R_D*R_M**2*g_m1*g_m2*r_o2 + R_F**2*R_L*g_m1 + R_F**2*R_M*g_m1 + R_F**2*g_m1*r_o2 + 2*R_F*R_L*R_M*g_m1 + R_F*R_L + R_F*R_M**2*g_m1 + 2*R_F*R_M*g_m1*r_o2 + R_F*R_M + R_F*r_o2 + R_L*R_M**2*g_m1 + R_L*R_M + R_M**2*g_m1*r_o2 + R_M*r_o2)
+R_out_closed (eq 12.173 with R_L=0):  (R_D*R_F*R_M*g_m1*g_m2*r_o2 + R_D*R_M**2*g_m1*g_m2*r_o2 + R_F**2*R_M*g_m1 + R_F**2*g_m1*r_o2 + R_F*R_M**2*g_m1 + 2*R_F*R_M*g_m1*r_o2 + R_F*R_M + R_F*r_o2 + R_M**2*g_m1*r_o2 + R_M*r_o2)/((R_F + R_M)*(R_F*g_m1 + R_M*g_m1 + 1))
+
+--- Exact Full-Circuit KCL vs 2-Port Feedback Comparison ---
+A_I_closed (exact KCL):    -(R_D*R_F*g_m1*g_m2*r_o2 + R_D*R_M*g_m1*g_m2*r_o2 + R_M)/(R_D*R_M*g_m1*g_m2*r_o2 + R_F*R_L*g_m1 + R_F*R_M*g_m1 + R_F*g_m1*r_o2 + R_L*R_M*g_m1 + R_L + R_M*g_m1*r_o2 + R_M + r_o2)
+R_in_closed (exact KCL):   (R_F*R_L + R_F*R_M + R_F*r_o2 + R_L*R_M + R_M*r_o2)/(R_D*R_M*g_m1*g_m2*r_o2 + R_F*R_L*g_m1 + R_F*R_M*g_m1 + R_F*g_m1*r_o2 + R_L*R_M*g_m1 + R_L + R_M*g_m1*r_o2 + R_M + r_o2)
+R_out_closed (exact KCL):  (R_D*R_M*g_m1*g_m2*r_o2 + R_F*R_M*g_m1 + R_F*g_m1*r_o2 + R_M*g_m1*r_o2 + R_M + r_o2)/(R_F*g_m1 + R_M*g_m1 + 1)
+Note on bilateral h_12 feedthrough:
+  R_out_closed_exact - R_out_closed_2p = R_M**2/(R_F**2*g_m1 + 2*R_F*R_M*g_m1 + R_F + R_M**2*g_m1 + R_M)
+  (i.e. R_M||(R_F + 1/g_m1) in exact KCL vs R_M||R_F in 2-port unilateral approximation)
+  A_I_closed_exact - A_I_closed_2p     = -R_M*(R_F*g_m1 + R_M*g_m1 + 1)*(R_F*R_L + R_F*R_M + R_F*r_o2 + R_L*R_M + R_M*r_o2)/((R_D*R_M*g_m1*g_m2*r_o2 + R_F*R_L*g_m1 + R_F*R_M*g_m1 + R_F*g_m1*r_o2 + R_L*R_M*g_m1 + R_L + R_M*g_m1*r_o2 + R_M + r_o2)*(R_D*R_F*R_M*g_m1*g_m2*r_o2 + R_D*R_M**2*g_m1*g_m2*r_o2 + R_F**2*R_L*g_m1 + R_F**2*R_M*g_m1 + R_F**2*g_m1*r_o2 + 2*R_F*R_L*R_M*g_m1 + R_F*R_L + R_F*R_M**2*g_m1 + 2*R_F*R_M*g_m1*r_o2 + R_F*R_M + R_F*r_o2 + R_L*R_M**2*g_m1 + R_L*R_M + R_M**2*g_m1*r_o2 + R_M*r_o2))
+  R_in_closed_exact - R_in_closed_2p   = -R_M**2*(R_F*R_L + R_F*R_M + R_F*r_o2 + R_L*R_M + R_M*r_o2)/((R_D*R_M*g_m1*g_m2*r_o2 + R_F*R_L*g_m1 + R_F*R_M*g_m1 + R_F*g_m1*r_o2 + R_L*R_M*g_m1 + R_L + R_M*g_m1*r_o2 + R_M + r_o2)*(R_D*R_F*R_M*g_m1*g_m2*r_o2 + R_D*R_M**2*g_m1*g_m2*r_o2 + R_F**2*R_L*g_m1 + R_F**2*R_M*g_m1 + R_F**2*g_m1*r_o2 + 2*R_F*R_L*R_M*g_m1 + R_F*R_L + R_F*R_M**2*g_m1 + 2*R_F*R_M*g_m1*r_o2 + R_F*R_M + R_F*r_o2 + R_L*R_M**2*g_m1 + R_L*R_M + R_M**2*g_m1*r_o2 + R_M*r_o2))
+ALL P3 CHECKS PASSED.

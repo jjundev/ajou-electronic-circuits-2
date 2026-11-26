@@ -9,9 +9,9 @@
   <h4>이 개념과 공식을 떠올려요</h4>
   <p><strong>단서 → 개념.</strong> “관심 있는 출력은 $V_{out}$”이라는 말이 귀환 종류를 바꿔요. 회로는 그대로여도 출력을 전압으로 정의하면 감지가 병렬(전압)이 되어 V-C 귀환의 종지 법칙을 써요.</p>
   <p><strong>V-C의 종지 법칙.</strong> 감지도 병렬, 반송도 병렬이라 두 복제의 남는 포트를 모두 단락해요. 반송 복제는 $P$ 쪽이 단락되어 $N$에서 $R_F$가 접지로 보여요. 감지 복제는 $N$ 쪽이 단락되어 $P$에서 $R_F$가 접지로 보여요.</p>
-  <p><strong>귀환율.</strong> 귀환망 입력($P$)에 전압 $V_1$을 걸고 단락한 출력 포트의 전류 $I_2$를 재서 $K=I_2/V_1$(단위 S)이에요. $I_2$의 기준 방향은 예제 12.32와 같은 $I_F$($N\to P$)로 잡아요. 개루프 이득 $R_O$는 Ω이라 $T=KR_O$는 단위가 없어요.</p>
+  <p><strong>귀환율.</strong> 교과서 Fig 12.54(b)에서는 $K=I_2/V_1$로 쓰지만, 여기서는 원 회로 기호 그대로 $P$에 $V_{out}$을 걸고 단락한 $N$ 쪽의 $I_F$($N\to P$ 양의 방향)를 재어 $K=I_F/V_{out}$(단위 S)로 바로 구해요. 개루프 이득 $R_O$는 Ω이라 $T=KR_O$는 단위가 없어요.</p>
   <p><strong>임피던스 규칙.</strong> 입력·출력이 모두 병렬 연결이라 $R_{in}$과 $R_{out}$을 모두 $(1+T)$로 나눠요. 전압 출력이 귀환으로 단단해지는(낮은 출력 임피던스) 그림이에요.</p>
-  <p><strong>알려진 블록.</strong> 1단은 예제 12.32처럼 CG의 전류 분배이고, 2단은 PMOS 공통 소스(CS) 전압이득 $-g_{m2}\times$(출력 노드의 저항)이에요.</p>
+  <p><strong>알려진 블록.</strong> 1단은 입력의 $I_{in}\parallel R_F$를 노턴→테브난 변환으로 바꿔 CG 전압이득 블록에 곱하고, 2단은 PMOS 공통 소스(CS) 전압이득 $-g_{m2}\times$(출력 노드의 저항)이에요.</p>
 </div>
 <div class="layer formal" data-explanation="start">
   <h4>종이에 쓸 첫 줄</h4>
@@ -24,9 +24,10 @@
 <div class="layer formal" data-explanation="solve">
   <h4>이렇게 풀어요</h4>
   <div data-subpart="main">
-    <div data-answer-step="1단 전류 분배">
-      <p>$I_{in}$은 $N$에서 $R_F$와 $M_1$ 소스($1/g_{m1}$)로 나뉘고, $M_1$ 소스로 들어간 몫이 $R_D$에서 $V_X$를 올려요.</p>
-      $$\frac{V_X}{I_{in}}=\frac{R_FR_D}{R_F+1/g_{m1}}$$
+    <div data-answer-step="1단 노턴→테브난 변환">
+      <p>입력 노드 $N$의 전류원 $I_{in}$과 병렬 저항 $R_F$를 테브난 등가 전압원 $V_{in}=I_{in}R_F$와 직렬 소스 저항 $R_F$로 바꿔요. 여기에 직렬 저항 $R_F$가 붙은 CG 단의 전압이득 $\frac{V_X}{V_{in}}=\frac{R_D}{R_F+1/g_{m1}}$을 바로 곱해요.</p>
+      $$V_{in}=I_{in}R_F$$
+      $$\frac{V_X}{I_{in}}=R_F\cdot\frac{V_X}{V_{in}}=\frac{R_FR_D}{R_F+1/g_{m1}}$$
     </div>
     <div data-answer-step="2단 PMOS CS의 전압이득">
       <p>2단의 입력은 $V_X$, 출력은 $V_{out}$이에요.</p>
@@ -47,11 +48,12 @@
     <div data-answer-step="개루프 값과 귀환율">
       $$R_O=-\frac{g_{m2}R_DR_F}{R_F+1/g_{m1}}(r_{O2}\parallel R_M\parallel R_F)$$
       $$R_{in,open}=\frac{1}{g_{m1}}\parallel R_F$$
-      <p>$P$에 $V_1$을 걸고 $N$ 쪽을 단락하면 $R_F$로 $V_1/R_F$가 $P\to N$으로 흘러요. $I_F$($N\to P$) 기준으로는 음수예요.</p>
-      $$K=\frac{I_F}{V_1}=-\frac{1}{R_F}$$
+      <p>$P$에 $V_{out}$을 걸고 $N$ 쪽을 단락하면 $R_F$로 $V_{out}/R_F$가 $P\to N$으로 흘러요. $I_F$($N\to P$) 기준으로는 음수예요.</p>
+      $$K=\frac{I_F}{V_{out}}=-\frac{1}{R_F}$$
       $$T=KR_O=\frac{g_{m2}R_D(r_{O2}\parallel R_M\parallel R_F)}{R_F+1/g_{m1}}$$
     </div>
     <div data-answer-step="폐루프 값">
+      <p>입력과 출력이 모두 병렬 연결이라 개루프 이득과 입·출력 임피던스가 모두 $\frac{1}{1+T}$배가 돼요.</p>
       $$R_{O,closed}=\frac{R_O}{1+T}$$
       $$R_{in,closed}\approx\frac{(1/g_{m1})\parallel R_F}{1+T}$$
       $$R_{out,closed}\approx\frac{r_{O2}\parallel R_M\parallel R_F}{1+T}$$
@@ -106,8 +108,8 @@
 <div class="sum" hidden>
   <p class="sum-lead">출력을 $V_{out}$으로 보면 같은 회로가 V-C 귀환이 되어 두 복제를 모두 단락해요.</p>
   <div class="summary-group"><h4>개루프와 귀환율</h4>
-    <p>$N$에는 $R_F$, $P$에는 $r_{O2}\parallel R_M\parallel R_F$가 보여요.</p>
-    <p>$K=-1/R_F$이고 $T=KR_O\gt0$이에요.</p>
+    <p>1단은 $I_{in}\parallel R_F$ 테브난 변환으로, 2단은 PMOS CS($r_{O2}\parallel R_M\parallel R_F$)로 구해요.</p>
+    <p>$K=I_F/V_{out}=-1/R_F$이고 $T=KR_O\gt0$이에요.</p>
   </div>
   <div class="summary-group"><h4>폐루프와 차이</h4>
     <p>$R_O$는 $1+T$로 나누고, $R_{in}$과 $R_{out}$도 2포트 근사로 $1+T$로 나눠요.</p>

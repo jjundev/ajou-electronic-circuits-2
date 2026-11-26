@@ -1,13 +1,32 @@
-R_O: simplify(blind - fragment) = 0
-R_in: simplify(blind - fragment) = 0
-R_out: simplify(blind - fragment) = 0
-K: simplify(blind - fragment) = 0
-T: simplify(blind - fragment) = 0
-R_O_closed: simplify(md - fragment) = 0
-R_in_closed: simplify(md - fragment) = 0
-R_out_closed: simplify(md - fragment) = 0
-T>>1 극한 R_O,closed -> 1/K: -R_F
-g_m1 g_m2 R_D R_F=16/25: R_O,cl exact/2port=-0.917581, R_in exact/2port=1.631256, R_out exact/2port=1.631256
-g_m1 g_m2 R_D R_F=64: R_O,cl exact/2port=0.996803, R_in exact/2port=1.012625, R_out exact/2port=1.012625
-g_m1 g_m2 R_D R_F=6400: R_O,cl exact/2port=0.999984, R_in exact/2port=1.000140, R_out exact/2port=1.000140
-g_m1 g_m2 R_D R_F=640000: R_O,cl exact/2port=1.000000, R_in exact/2port=1.000001, R_out exact/2port=1.000001
+=== P5 (Example 12.33, Fig 12.62(a)): Voltage-Current Feedback ===
+Input stage V_X / I_in (Norton->Thevenin): R_D*R_F*g_m1/(R_F*g_m1 + 1)
+Input stage V_X / I_in (Direct KCL):       R_D*R_F*g_m1/(R_F*g_m1 + 1)
+Difference (simplify == 0):                0
+R_in_open (eq 12.176): R_F/(R_F*g_m1 + 1)
+
+--- 2-Port Feedback Results (finite r_o2 & r_o2 -> oo limit) ---
+R_O (finite r_o2):           -R_D*R_F**2*R_M*g_m1*g_m2*r_o2/((R_F*g_m1 + 1)*(R_F*R_M + R_F*r_o2 + R_M*r_o2))
+R_O (r_o2 -> oo, eq 12.175): -R_D*R_F**2*R_M*g_m1*g_m2/((R_F + R_M)*(R_F*g_m1 + 1))
+R_out_open (finite r_o2):    R_F*R_M*r_o2/(R_F*R_M + R_F*r_o2 + R_M*r_o2)
+R_out_open (r_o2 -> oo):     R_F*R_M/(R_F + R_M)
+K (eq 12.180):               -1/R_F
+T (finite r_o2):             R_D*R_F*R_M*g_m1*g_m2*r_o2/((R_F*g_m1 + 1)*(R_F*R_M + R_F*r_o2 + R_M*r_o2))
+T (r_o2 -> oo, = T_0):       R_D*R_F*R_M*g_m1*g_m2/((R_F + R_M)*(R_F*g_m1 + 1))
+R_closed (finite r_o2):      -R_D*R_F**2*R_M*g_m1*g_m2*r_o2/(R_D*R_F*R_M*g_m1*g_m2*r_o2 + R_F**2*R_M*g_m1 + R_F**2*g_m1*r_o2 + R_F*R_M*g_m1*r_o2 + R_F*R_M + R_F*r_o2 + R_M*r_o2)
+R_in_closed (finite r_o2):   R_F*(R_F*R_M + R_F*r_o2 + R_M*r_o2)/(R_D*R_F*R_M*g_m1*g_m2*r_o2 + R_F**2*R_M*g_m1 + R_F**2*g_m1*r_o2 + R_F*R_M*g_m1*r_o2 + R_F*R_M + R_F*r_o2 + R_M*r_o2)
+R_out_closed (finite r_o2):  R_F*R_M*r_o2*(R_F*g_m1 + 1)/(R_D*R_F*R_M*g_m1*g_m2*r_o2 + R_F**2*R_M*g_m1 + R_F**2*g_m1*r_o2 + R_F*R_M*g_m1*r_o2 + R_F*R_M + R_F*r_o2 + R_M*r_o2)
+R_closed (r_o2 -> oo):       -R_D*R_F**2*R_M*g_m1*g_m2/(R_D*R_F*R_M*g_m1*g_m2 + R_F**2*g_m1 + R_F*R_M*g_m1 + R_F + R_M)
+R_in_closed (r_o2 -> oo):    R_F*(R_F + R_M)/(R_D*R_F*R_M*g_m1*g_m2 + R_F**2*g_m1 + R_F*R_M*g_m1 + R_F + R_M)
+R_out_closed (r_o2 -> oo):   R_F*R_M*(R_F*g_m1 + 1)/(R_D*R_F*R_M*g_m1*g_m2 + R_F**2*g_m1 + R_F*R_M*g_m1 + R_F + R_M)
+
+--- Exact Full-Circuit KCL (finite r_o2 & r_o2 -> oo) ---
+R_closed (exact, finite r_o2):     -R_M*r_o2*(R_D*R_F*g_m1*g_m2 - 1)/(R_D*R_M*g_m1*g_m2*r_o2 + R_F*R_M*g_m1 + R_F*g_m1*r_o2 + R_M*g_m1*r_o2 + R_M + r_o2)
+R_closed (exact, r_o2 -> oo):      -R_M*(R_D*R_F*g_m1*g_m2 - 1)/(R_D*R_M*g_m1*g_m2 + R_F*g_m1 + R_M*g_m1 + 1)
+R_in_closed (exact, r_o2 -> oo):   (R_F + R_M)/(R_D*R_M*g_m1*g_m2 + R_F*g_m1 + R_M*g_m1 + 1)
+R_out_closed (exact, r_o2 -> oo):  R_M*(R_F*g_m1 + 1)/(R_D*R_M*g_m1*g_m2 + R_F*g_m1 + R_M*g_m1 + 1)
+
+Bilateral R_F forward feedthrough (y_12 = -1/R_F) differences (r_o2 -> oo):
+  R_closed_exact - R_closed_2p:     R_M*(R_F + R_M)*(R_F*g_m1 + 1)/((R_D*R_M*g_m1*g_m2 + R_F*g_m1 + R_M*g_m1 + 1)*(R_D*R_F*R_M*g_m1*g_m2 + R_F**2*g_m1 + R_F*R_M*g_m1 + R_F + R_M))
+  R_in_closed_exact - R_in_closed_2p: R_M*(R_F + R_M)/((R_D*R_M*g_m1*g_m2 + R_F*g_m1 + R_M*g_m1 + 1)*(R_D*R_F*R_M*g_m1*g_m2 + R_F**2*g_m1 + R_F*R_M*g_m1 + R_F + R_M))
+  R_out_closed_exact - R_out_closed_2p: R_M**2*(R_F*g_m1 + 1)/((R_D*R_M*g_m1*g_m2 + R_F*g_m1 + R_M*g_m1 + 1)*(R_D*R_F*R_M*g_m1*g_m2 + R_F**2*g_m1 + R_F*R_M*g_m1 + R_F + R_M))
+ALL P5 CHECKS PASSED.

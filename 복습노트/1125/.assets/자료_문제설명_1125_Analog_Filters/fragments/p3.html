@@ -10,9 +10,9 @@
   <h4>이 개념과 공식을 떠올려요</h4>
   <p><strong>단서 → 개념.</strong> “$R_F$가 크지 않고 $R_M$이 작지 않다”는 귀환망 $R_F$·$R_M$이 순방향 증폭기를 무겁게 누른다는 뜻이에요. 그래서 귀환망을 감지 복제와 반송 복제로 나눠 붙이는 종지 법칙(termination rule)을 써요.</p>
   <p><strong>C-C의 종지 법칙.</strong> 감지 복제는 출력 쪽에 붙고, 반송 포트($N$ 쪽)를 단락해요. 반송이 병렬이기 때문이에요. 그러면 $P$에서 $R_M$과 접지로 간 $R_F$가 병렬로 보여 $R_M\parallel R_F$가 돼요. 반송 복제는 입력 쪽에 붙고, 감지 포트($P$ 쪽)를 개방해요. 감지가 직렬이기 때문이에요. 그러면 $N$에서 $R_F+R_M$이 접지까지 직렬로 보여요.</p>
-  <p><strong>귀환율.</strong> 귀환망 입력($P$)에 $I_1$을 넣고 단락한 출력 포트의 전류 $I_2$를 재서 $K=I_2/I_1$이에요. $I_2$의 양의 방향은 그림의 $I_F$(즉 $N\to P$)로 잡아요. 루프 이득은 $T=KA_{I,open}$, 폐루프 이득은 $A_{I,open}/(1+T)$예요.</p>
+  <p><strong>귀환율.</strong> 교과서 Fig 12.54(c)에서는 $K=I_2/I_1$로 쓰지만, 여기서는 원 회로 기호 그대로 $P$에 $I_{out}$을 흘려 넣고 단락한 $N$ 쪽의 $I_F$($N\to P$ 양의 방향)를 재어 $K=I_F/I_{out}$으로 바로 구해요. 루프 이득은 $T=KA_{I,open}$, 폐루프 이득은 $A_{I,open}/(1+T)$예요.</p>
   <p><strong>임피던스 규칙.</strong> 입력에서 전류를 병렬로 합치므로 $R_{in}$은 $(1+T)$로 나누고, 출력에서 전류를 직렬로 감지하므로 $R_{out}$은 $(1+T)$를 곱해요.</p>
-  <p><strong>알려진 블록.</strong> CG 소스의 입력 저항은 $1/g_{m1}$이고, $N$에 들어온 전류는 $1/g_{m1}$과 $R_F+R_M$으로 나뉘어요. PMOS $M_2$는 $g_{m2}v_{sg2}$와 $r_{O2}$의 병렬이라 출력 부하와 전류를 나눠요.</p>
+  <p><strong>알려진 블록.</strong> 입력 노드 $N$의 전류원 $I_{in}$과 병렬 저항 $R_F+R_M$은 노턴→테브난 변환으로 $V_{in}=I_{in}(R_F+R_M)$과 직렬 소스 저항 $R_F+R_M$으로 바꾸면 익숙한 CG 전압이득 블록으로 바로 풀려요. PMOS $M_2$는 소신호 드레인 전류원 $I^*=-g_{m2}V_X$와 $r_{O2}$의 병렬이라 출력 부하($R_L+R_M\parallel R_F$)와 전류를 나눠요.</p>
 </div>
 <div class="layer formal" data-explanation="start">
   <h4>종이에 쓸 첫 줄</h4>
@@ -26,22 +26,24 @@
   <h4>이렇게 풀어요</h4>
   <div data-subpart="main">
     <div data-answer-step="개루프 이득과 개루프 임피던스">
-      <p><strong>1단 (전류 → $V_X$).</strong> $I_{in}$은 $N$에서 $R_F+R_M$과 $M_1$ 소스($1/g_{m1}$)로 나뉘어요. $M_1$ 소스로 들어간 몫만큼 $M_1$ 드레인 전류가 줄고, 그만큼 $R_D$의 전압강하가 줄어 $X$가 올라가요.</p>
-      $$\frac{V_X}{I_{in}}=\frac{(R_F+R_M)R_D}{R_F+R_M+1/g_{m1}}$$
-      <p><strong>2단 ($V_X$ → 전류).</strong> $M_2$의 소신호 전류원 $g_{m2}v_{sg2}=-g_{m2}V_X$가 $r_{O2}$와 부하(레이저 + $R_M\parallel R_F$)로 나뉘어요.</p>
+      <p><strong>1단 (노턴→테브난 변환으로 $V_X/I_{in}$).</strong> 입력 노드 $N$의 전류원 $I_{in}$과 병렬 저항 $R_F+R_M$을 테브난 등가 전압원 $V_{in}=I_{in}(R_F+R_M)$과 직렬 소스 저항 $R_F+R_M$으로 바꿔요. 그러면 직렬 소스 저항이 붙은 CG 단의 전압이득 $\frac{V_X}{V_{in}}=\frac{R_D}{R_F+R_M+1/g_{m1}}$을 바로 곱해 얻어요.</p>
+      $$V_{in}=I_{in}(R_F+R_M)$$
+      $$\frac{V_X}{I_{in}}=(R_F+R_M)\cdot\frac{V_X}{V_{in}}=\frac{(R_F+R_M)R_D}{R_F+R_M+1/g_{m1}}$$
+      <p><strong>2단 ($V_X \to I_{out}$ 전류 분배).</strong> PMOS $M_2$의 소신호 드레인 전류 $I^*=g_{m2}v_{sg2}=-g_{m2}V_X$가 $r_{O2}$ 가지($I'$)와 출력 부하 가지($R_L+R_M\parallel R_F$, $I_{out}$)로 나뉘어요($I^*=I_{out}+I'$).</p>
       $$\frac{I_{out}}{V_X}=\frac{-g_{m2}r_{O2}}{r_{O2}+R_L+R_M\parallel R_F}$$
       $$A_{I,open}=\frac{(R_F+R_M)R_D}{R_F+R_M+1/g_{m1}}\cdot\frac{-g_{m2}r_{O2}}{r_{O2}+R_L+R_M\parallel R_F}$$
-      <p><strong>개루프 임피던스.</strong> 입력 노드 $N$에서는 $1/g_{m1}$과 $R_F+R_M$이 병렬이에요. 레이저 자리에서는 $I_{in}=0$이라 $X$가 고정되므로 위로 $r_{O2}$, 아래로 $R_F\parallel R_M$이 직렬로 보여요.</p>
+      <p><strong>개루프 임피던스.</strong> 입력 노드 $N$에서는 $1/g_{m1}$과 $R_F+R_M$이 병렬이에요. 레이저 자리에서는 $I_{in}=0$이라 $X$가 교류 접지로 고정되므로, 위 단자에서 보이는 $r_{O2}$는 $V_{DD}$(교류 접지)로, 아래 단자에서 보이는 $R_F\parallel R_M$도 접지로 이어져요. 두 저항이 같은 교류 접지를 통해 한 고리로 묶이므로 곧바로 직렬 합이에요.</p>
       $$R_{in,open}=\frac{1}{g_{m1}}\parallel(R_F+R_M)$$
       $$R_{out,open}=r_{O2}+R_F\parallel R_M$$
     </div>
     <div data-answer-step="귀환율과 루프 이득">
-      <p>$P$에 $I_1$을 넣고 $N$ 쪽을 단락하면 $I_1$이 $R_M$과 $R_F$로 나뉘어, $R_F$로는 $I_1R_M/(R_M+R_F)$가 $P\to N$ 방향으로 흘러요. $I_F$($N\to P$) 기준으로는 음수예요.</p>
-      $$K=\frac{I_F}{I_1}=-\frac{R_M}{R_M+R_F}$$
+      <p>$P$에 $I_{out}$을 흘려 넣고 $N$ 쪽을 접지로 단락하면 $I_{out}$이 $R_M$과 $R_F$로 나뉘어, $R_F$로는 $I_{out}R_M/(R_M+R_F)$가 $P\to N$ 방향으로 흘러요. $I_F$($N\to P$) 기준으로는 음수예요.</p>
+      $$K=\frac{I_F}{I_{out}}=-\frac{R_M}{R_M+R_F}$$
       <p>$A_{I,open}\lt0$, $K\lt0$이라 $T=KA_{I,open}\gt0$으로 음귀환이에요.</p>
       $$T=\frac{R_M}{R_F+R_M+1/g_{m1}}\cdot\frac{g_{m2}r_{O2}R_D}{r_{O2}+R_L+R_M\parallel R_F}$$
     </div>
     <div data-answer-step="폐루프 이득과 임피던스">
+      <p>폐루프에서는 개루프 대비 이득과 입력 임피던스가 $\frac{1}{1+T}$배로 줄고, 출력 임피던스는 $(1+T_0)$배로 커져요.</p>
       $$A_{I,closed}=\frac{A_{I,open}}{1+T}=\frac{A_{I,open}}{1-\dfrac{R_M}{R_M+R_F}A_{I,open}}$$
       $$R_{in,closed}\approx\frac{(1/g_{m1})\parallel(R_F+R_M)}{1+T}$$
       <p>폐루프 입력 임피던스도 $R_F$를 통한 순방향 전달을 무시한 2포트 근사라서 $\approx$로 써요.</p>
@@ -69,7 +71,7 @@
   <h4>주의할 점</h4>
   <ul>
     <li>C-C에서는 입력 쪽이 $R_F+R_M$(감지 포트 개방), 출력 쪽이 $R_M\parallel R_F$(반송 포트 단락)예요. 둘을 바꾸면 V-C 규칙과 섞여요.</li>
-    <li>$K$의 부호는 $I_F$의 기준 방향에서 나와요. $A_{I,open}$이 음수이므로 $K$도 음수여야 $T\gt0$이에요.</li>
+    <li>PMOS $M_2$의 드레인 전류 $I^*=-g_{m2}V_X$에서 음수 부호를 빠뜨리면 $A_{I,open}\gt0$이 되어 $K\lt0$과 모순돼요. $K$와 $A_{I,open}$이 모두 음수여야 $T\gt0$이에요.</li>
     <li>$R_{out,open}$에 $R_F\parallel R_M$을 빠뜨리거나 레이저 $R_L$을 넣지 않아요. 레이저는 출력 임피던스를 보는 쪽이에요.</li>
     <li>입력 임피던스는 병렬 합침이라 $(1+T)$로 나눠요. 출력처럼 곱하지 않아요.</li>
   </ul>
@@ -83,10 +85,10 @@
   </ol>
 </div>
 <div class="sum" hidden>
-  <p class="sum-lead">C-C 귀환은 입력에 $R_F+R_M$, 출력에 $R_M\parallel R_F$를 붙인 개루프로 풀어요.</p>
+  <p class="sum-lead">C-C 귀환은 입력에 $R_F+R_M$(테브난 변환), 출력에 $R_M\parallel R_F$(전류 분배)를 붙여 풀어요.</p>
   <div class="summary-group"><h4>개루프와 귀환율</h4>
     <p>$A_{I,open}$은 1단 $V_X/I_{in}$과 2단 $I_{out}/V_X$의 곱이고 음수예요.</p>
-    <p>$K=-R_M/(R_M+R_F)$이라 $T=KA_{I,open}\gt0$이에요.</p>
+    <p>$K=I_F/I_{out}=-R_M/(R_M+R_F)$이라 $T=KA_{I,open}\gt0$이에요.</p>
   </div>
   <div class="summary-group"><h4>폐루프</h4>
     <p>이득은 $A_{I,open}/(1+T)$이고 $T\gg1$이면 $-(1+R_F/R_M)$이에요.</p>

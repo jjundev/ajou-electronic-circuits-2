@@ -1,4 +1,12 @@
-R_N blind - fragment: 0
-I_N blind - fragment: 0
-노턴 재결합 I_N R_N/(R_N+R_L) - A_I,closed I_in (식 12.171): 0
-R_N에 R_L 없음: True
+=== P4 (Exercise 12.32): Norton Equivalent Driving the Laser ===
+--- 2-Port Feedback Norton Equivalent ---
+I_N (2-port, R_L=0): -I_in*R_D*g_m1*g_m2*r_o2*(R_F + R_M)**2/(R_D*R_F*R_M*g_m1*g_m2*r_o2 + R_D*R_M**2*g_m1*g_m2*r_o2 + R_F**2*R_M*g_m1 + R_F**2*g_m1*r_o2 + R_F*R_M**2*g_m1 + 2*R_F*R_M*g_m1*r_o2 + R_F*R_M + R_F*r_o2 + R_M**2*g_m1*r_o2 + R_M*r_o2)
+R_N (2-port, R_L=0): (R_D*R_F*R_M*g_m1*g_m2*r_o2 + R_D*R_M**2*g_m1*g_m2*r_o2 + R_F**2*R_M*g_m1 + R_F**2*g_m1*r_o2 + R_F*R_M**2*g_m1 + 2*R_F*R_M*g_m1*r_o2 + R_F*R_M + R_F*r_o2 + R_M**2*g_m1*r_o2 + R_M*r_o2)/((R_F + R_M)*(R_F*g_m1 + R_M*g_m1 + 1))
+I_N*R_N/(R_N+R_L) - A_I_closed(R_L)*I_in: 0
+Confirmed: R_N MUST evaluate A_I_open at R_L=0 (leaving R_L inside violates Norton identity).
+
+--- Exact Full-Circuit KCL Norton Equivalent ---
+I_N (exact KCL): -I_in*(R_D*R_F*g_m1*g_m2*r_o2 + R_D*R_M*g_m1*g_m2*r_o2 + R_M)/(R_D*R_M*g_m1*g_m2*r_o2 + R_F*R_M*g_m1 + R_F*g_m1*r_o2 + R_M*g_m1*r_o2 + R_M + r_o2)
+R_N (exact KCL): (R_D*R_M*g_m1*g_m2*r_o2 + R_F*R_M*g_m1 + R_F*g_m1*r_o2 + R_M*g_m1*r_o2 + R_M + r_o2)/(R_F*g_m1 + R_M*g_m1 + 1)
+I_N_exact*R_N_exact/(R_N_exact+R_L) - I_out_exact(R_L): 0
+ALL P4 CHECKS PASSED.

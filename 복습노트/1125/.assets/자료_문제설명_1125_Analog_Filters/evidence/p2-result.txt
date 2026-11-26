@@ -1,8 +1,28 @@
-fragment R_out,closed - md: 0
-fragment A_cl - md A_OL/(1+A_OL R_M): 0
-R_out,open exact - (r_o1+R_M): 0
-g_m r_o=10: A exact/approx=0.954545, A_cl exact/approx=0.986065, R_out,closed exact/fragment=0.967990
-g_m r_o=100: A exact/approx=0.995050, A_cl exact/approx=0.999808, R_out,closed exact/fragment=0.995241
-g_m r_o=1000: A exact/approx=0.999500, A_cl exact/approx=0.999998, R_out,closed exact/fragment=0.999502
-g_m r_o=10000: A exact/approx=0.999950, A_cl exact/approx=1.000000, R_out,closed exact/fragment=0.999950
-R_in,open = inf (M3 gate, no DC/AC gate current) by construction
+=== P2 (2023-1 Final Q3): 5T OTA (M3-M6) + PMOS CS M1, lambda > 0 ===
+Exact 5T-OTA v_X/v_in (matched M3=M4, M5=M6):
+  -g_m3*r_o3*r_o5*(2*g_m5*r_o5 + 1)/(2*(r_o3 + r_o5)*(g_m5*r_o5 + 1))
+Ratio Av1_exact / (-g_m3*(r_o3||r_o5)) as g_m*r_o -> oo: 1
+Matched 5T-OTA exact A_dm: -g_m3*r_o3*r_o5*(2*g_m5*r_o5 + 1)/(2*(r_o3 + r_o5)*(g_m5*r_o5 + 1))
+Matched 5T-OTA exact A_cm: 0
+A_cm asymptotic order (r_o -> r_o/eps as eps->0): 0
+
+Stage 2 (I_out / V_X): -g_m1*r_o1/(R_L + R_M + r_o1)
+A_open (standard OTA gain): g_m1*g_m3*r_o1*r_o3*r_o5/((r_o3 + r_o5)*(R_L + R_M + r_o1))
+R_in_open: oo (MOSFET gate draws 0 current)
+R_in_closed: oo (MOSFET gate draws 0 current)
+R_out_open (seen by Laser): R_M + r_o1
+Feedback factor K: R_M
+Direct loop return v_F/v_test (exact OTA) == -T_exact_ota verified.
+Loop gain T (std): R_M*g_m1*g_m3*r_o1*r_o3*r_o5/((r_o3 + r_o5)*(R_L + R_M + r_o1))
+Loop gain T_0 (std, R_L=0): R_M*g_m1*g_m3*r_o1*r_o3*r_o5/((R_M + r_o1)*(r_o3 + r_o5))
+
+--- 2-Port Closed-Loop (Standard OTA) ---
+A_closed (std 2-port):           g_m1*g_m3*r_o1*r_o3*r_o5/(R_L*r_o3 + R_L*r_o5 + R_M*g_m1*g_m3*r_o1*r_o3*r_o5 + R_M*r_o3 + R_M*r_o5 + r_o1*r_o3 + r_o1*r_o5)
+R_out_closed (std 2-port, T_0):  (R_M*g_m1*g_m3*r_o1*r_o3*r_o5 + (R_M + r_o1)*(r_o3 + r_o5))/(r_o3 + r_o5)
+
+--- Exact Full-Circuit KCL vs Standard 2-Port ---
+A_closed_exact / A_closed_std (g_m*r_o -> oo): 1
+R_out_closed_exact / R_out_closed_std (g_m*r_o -> oo): 1
+Asymptotic check of R_out_closed_exact (r_o -> oo at 1st order in 1/eps): g_m5*r_o5*(r_o3 + r_o5)/(g_m5*r_o3*r_o5 + g_m5*r_o5**2)
+Confirmed: R_out_closed uses T_0 (R_L = 0), NOT T(R_L != 0).
+ALL P2 CHECKS PASSED.
