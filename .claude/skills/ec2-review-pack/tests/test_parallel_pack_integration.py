@@ -11,6 +11,7 @@ import pymupdf
 from _util import REPO, SCRIPTS, prepare_mini_run
 from pack_support import add_target_judgments, genuine_child_run
 from pack_flow import _COMMON_SECTIONS as COMMON_SECTIONS
+from pack_graph import problem_key, role_of
 from problem_index import record_selection
 
 
@@ -30,10 +31,11 @@ def child_fixture(code, *args):
 
 
 class Trial:
-    def __init__(self, root, *, problem=False, existing=False, lab=False):
+    def __init__(self, root, *, problem=False, existing=False, lab=False, ids=('P10.01',)):
         self.root, self.repo, self.run = root, root/'repo', root/'run'
         self.public = self.repo/'복습노트/0909'
         self.problem = problem
+        self.ids = list(ids) if problem else []
         self.lab = lab
         for name in ('교과서/마이크로전자회로/_tools', 'from_the_past/md/_tools',
                      'workbook/templates', '.claude/skills/ec2-problem-explain',
@@ -52,9 +54,9 @@ class Trial:
         with pymupdf.open() as doc:
             doc.new_page()
             doc.save(self.pdf)
-        if problem:
-            child_fixture('from _util import _copy_problem; _copy_problem("P10.01", Path(sys.argv[2]))',
-                          self.repo)
+        for pid in self.ids:
+            child_fixture('from _util import _copy_problem; _copy_problem(sys.argv[3], Path(sys.argv[2]))',
+                          self.repo, pid)
         if existing:
             self.public.mkdir(parents=True)
             (self.public/'정리노트_0909_Previous.html').write_text('Previous published note')
@@ -65,8 +67,9 @@ class Trial:
                              link_sections=['s2'])
         self.manifest['sessions'][0].update(date='0909', stt='STT/0909 전회2.md')
         if problem:
-            self.manifest['problems'] = [dict(id='P10.01', kind='장말문제', anchor='s1-mean',
-                date='0909', why='합성 테스트', priority='core', estimated_minutes=5, learning_goals=['이득'])]
+            self.manifest['problems'] = [dict(id=pid, kind='장말문제', anchor='s1-mean',
+                date='0909', why='합성 테스트', priority='core', estimated_minutes=5, learning_goals=['이득'])
+                for pid in self.ids]
             self.manifest['links'] = [dict(topic='s2-links', href=f'복습문제_0909_Mini_Test-{kind}.pdf')
                                       for kind in ('문제','답안')]
         self.cli('init', '--repo', self.repo, '--range', '0909',
@@ -133,9 +136,9 @@ class Trial:
         if tid == 'child-coordinator':
             genuine_child_run(self.root, existing=(self.repo, self.run), lab=self.lab)
             return
-        if tid in ('explain-author', 'explain-blind'):
+        if role_of(tid) in ('explain-author', 'explain-blind'):
             question, = read(brief['questions'])['problems']
-            if tid == 'explain-author':
+            if role_of(tid) == 'explain-author':
                 child_fixture('from _util import fragment; from types import SimpleNamespace; import json; '
                               'Path(sys.argv[3]).write_text(fragment(SimpleNamespace(subparts=json.loads(sys.argv[2]))))',
                               json.dumps(question['subparts']), outputs[0])
@@ -143,7 +146,7 @@ class Trial:
                     # A synthetic correction: new bytes for the reopened fragment.
                     outputs[0].write_text(outputs[0].read_text() + '\n' * (1 + len(brief['repair_findings'][0]['repairs'])))
             else:
-                write(outputs[0], dict(items={f'p1:{key}':dict(reviewer='synthetic-explain-blind',
+                write(outputs[0], dict(items={f'{problem_key(tid)}:{key}':dict(reviewer='synthetic-' + tid,
                     method='exact', conclusion='1=1', evidence='synthetic independent fixture')
                     for key in question['subparts']}))
             return
@@ -155,11 +158,13 @@ class Trial:
                 review = dict(policy='exam-first-v2', catalog_sha256=catalog['catalog_sha256'],
                               candidates=[], coverage=[])
                 if self.problem:
-                    review['candidates'] = [dict(id='P10.01', disposition='selected', scope='in_scope', reason='합성 테스트')]
-                    review['coverage'] = [dict(goal='이득', problem_ids=['P10.01'])]
+                    review['candidates'] = [dict(id=pid, disposition='selected', scope='in_scope', reason='합성 테스트')
+                                            for pid in self.ids]
+                    review['coverage'] = [dict(goal='이득', problem_ids=self.ids)]
                 write(path, review if path.name == 'selection-review.json' else record_selection(self.manifest, catalog, review))
             elif path.name == 'display-titles.json':
-                write(path, {'P10.01':'Fixture gain'} if self.problem else {})
+                write(path, {pid: 'Fixture gain' + (f' {i}' if i > 1 else '')
+                             for i, pid in enumerate(self.ids, 1)})
             elif path.name == 'learning-style-audit-note.json':
                 audit = read(self.fixture/'learning-style-audit.json')
                 for item in audit['items'].values():
@@ -186,8 +191,8 @@ def test_parallel_full_pack_accepts_only_current_evidence(tmp_path):
     trial = Trial(tmp_path, problem=True, lab=True)
     trial.prepare_note()
     trial.action('stage-problem-index')
-    trial.worker('explain-author')
-    trial.worker('explain-blind')
+    trial.worker('explain-author-p1')
+    trial.worker('explain-blind-p1')
     trial.worker('child-coordinator')
     trial.action('explain-verify')
     trial.action('render-preflight')
@@ -197,7 +202,7 @@ def test_parallel_full_pack_accepts_only_current_evidence(tmp_path):
     trial.convert()
     trial.worker('browser-qa')
     state = read(trial.run/'run-status.json')
-    independent = state['tasks']['explain-blind']['receipt']['fresh_approvals']
+    independent = state['tasks']['explain-blind-p1']['receipt']['fresh_approvals']
     lost = 'pdf-page:1'
     previous = next(entry for entry in state['approval_ledger']
                     if entry['attempt'] == brief['attempt'] and entry['target'] == lost)
@@ -217,7 +222,7 @@ def test_parallel_full_pack_accepts_only_current_evidence(tmp_path):
     assert lab.is_file()
     assert 'data-ec2-problem-lab' in (trial.public/'문제설명_0909_Mini_Test.html').read_text()
     tasks = read(trial.run/'run-status.json')['tasks']
-    assert tasks['explain-blind']['receipt']['fresh_approvals'] == independent
+    assert tasks['explain-blind-p1']['receipt']['fresh_approvals'] == independent
     accepted = tasks['pdf-qa']['receipt']
     assert lost not in accepted['reused_approvals']
     assert accepted['fresh_approvals'][lost]['attempt'] == renewed['attempt']
@@ -307,22 +312,57 @@ def fix_coordinator_findings(trial, rid):
     return rows
 
 
-def coordinator_trial(root):
-    trial = Trial(root, problem=True)
+def coordinator_trial(root, ids=('P10.01',)):
+    trial = Trial(root, problem=True, ids=ids)
     trial.prepare_note()
     trial.action('stage-problem-index')
-    trial.worker('explain-author')
-    trial.worker('explain-blind')
+    for i in range(1, len(ids) + 1):
+        trial.worker(f'explain-author-p{i}')
+        trial.worker(f'explain-blind-p{i}')
     return trial
+
+
+def two_problem_coordinator_trial(root):
+    return coordinator_trial(root, ids=('P10.01', 'P10.02'))
+
+
+def test_coordinator_finding_reopens_only_that_problem_author(tmp_path):
+    trial = two_problem_coordinator_trial(tmp_path)   # P10.01, P10.02 / author·blind p1·p2 accepted
+    coordinator_judgment(trial, unresolved=[dict(COORDINATOR_DEFECT, target='P10.02')])
+    row, = read(trial.run/'run-status.json')['findings'].values()
+    assert row['owner_task'] == 'explain-author-p2'
+    fix_coordinator_findings(trial, 'fix-p2')
+    tasks = read(trial.run/'run-status.json')['tasks']
+    assert tasks['explain-author-p2']['status'] == 'stale'
+    assert tasks['explain-author-p1']['status'] == 'done'
+    assert {t for t in trial.next()['dispatch'] if t.startswith('explain-')} == {'explain-author-p2'}
+
+
+def test_coordinator_finding_cannot_be_owned_by_a_blind_solver(tmp_path):
+    trial = coordinator_trial(tmp_path)
+    defect = dict(COORDINATOR_DEFECT, owner_task='explain-blind-p1')
+    claim = trial.cli('task', 'claim', '--task', 'child-coordinator')['next']
+    brief = read(claim['brief'])
+    task = ('--task', 'child-coordinator', '--attempt', claim['attempt'])
+    trial.cli('task', 'bind', *task, '--agent-id', 'synthetic-coordinator')
+    report = Path(brief['report'])
+    report.write_text(f"## Important\n- [{defect['target']}] [{defect['rule']}] {defect['defect']}\n")
+    submission = Path(brief['run'])/'submission.json'
+    write(submission, dict(status='needs-fix', report=str(report), outputs=[], reviews=[str(report)],
+                           counts=dict(targets=brief['targets']), unresolved=[defect]))
+    rejected = trial.cli('task', 'build-receipt', *task, '--submission', submission, error=True)
+    assert 'invalid or duplicate finding, owner or evidence' in rejected['reason']
+    state = read(trial.run/'run-status.json')
+    assert not state.get('findings') and state['tasks']['explain-blind-p1']['status'] == 'done'
 
 
 def test_coordinator_findings_reopen_only_explain_author(tmp_path):
     trial = coordinator_trial(tmp_path)
-    blind = read(trial.run/'run-status.json')['tasks']['explain-blind']['attempt']
+    blind = read(trial.run/'run-status.json')['tasks']['explain-blind-p1']['attempt']
     first = coordinator_judgment(trial, unresolved=[COORDINATOR_DEFECT])
     state = read(trial.run/'run-status.json')
     row, = state['findings'].values()
-    assert (row['review_id'], row['owner_task'], row['status']) == ('child-coordinator', 'explain-author', 'open')
+    assert (row['review_id'], row['owner_task'], row['status']) == ('child-coordinator', 'explain-author-p1', 'open')
     assert row['input_digest'] == first['candidate_digest'] == state['tasks']['child-coordinator']['candidate_digest']
     assert state['tasks']['child-coordinator']['status'] == 'needs_fix'
     assert 'child-coordinator' not in trial.next()['dispatch']
@@ -330,22 +370,22 @@ def test_coordinator_findings_reopen_only_explain_author(tmp_path):
 
     fix_coordinator_findings(trial, 'coordinator-fix-1')
     tasks = read(trial.run/'run-status.json')['tasks']
-    assert tasks['explain-author']['status'] == 'stale'
+    assert tasks['explain-author-p1']['status'] == 'stale'
     assert tasks['child-coordinator']['status'] == 'stale'
-    assert tasks['explain-blind']['status'] == 'done' and tasks['explain-blind']['attempt'] == blind
-    assert trial.next()['dispatch'] == ['explain-author']
-    repaired = trial.worker('explain-author')
+    assert tasks['explain-blind-p1']['status'] == 'done' and tasks['explain-blind-p1']['attempt'] == blind
+    assert trial.next()['dispatch'] == ['explain-author-p1']
+    repaired = trial.worker('explain-author-p1')
     assert [r['id'] for r in repaired['repair_findings']] == [row['id']]
     assert set(repaired['previous_outputs']) == {'explanations/p1.html'}
 
     second = coordinator_judgment(trial, fix_results=['resolved'])
     pending, = second['recheck_findings']
-    assert pending['repair_attempt'] == read(trial.run/'run-status.json')['tasks']['explain-author']['attempt']
+    assert pending['repair_attempt'] == read(trial.run/'run-status.json')['tasks']['explain-author-p1']['attempt']
     assert second['candidate_digest'] != first['candidate_digest']
     state = read(trial.run/'run-status.json')
     assert state['findings'][row['id']]['status'] == 'resolved'
     assert state['tasks']['child-coordinator']['status'] == 'done'
-    assert state['tasks']['explain-blind']['attempt'] == blind
+    assert state['tasks']['explain-blind-p1']['attempt'] == blind
     assert 'explain-verify' in trial.next()['actions']
 
 
@@ -354,7 +394,7 @@ def test_coordinator_finding_unresolved_twice_is_withheld(tmp_path):
     coordinator_judgment(trial, unresolved=[COORDINATOR_DEFECT])
     for attempt in (1, 2):
         row, = fix_coordinator_findings(trial, f'coordinator-fix-{attempt}')
-        trial.worker('explain-author')
+        trial.worker('explain-author-p1')
         coordinator_judgment(trial, unresolved=[COORDINATOR_DEFECT], fix_results=['unresolved'])
         row = read(trial.run/'run-status.json')['findings'][row['id']]
         assert len(row['unsuccessful_attempts']) == attempt
@@ -367,7 +407,7 @@ def test_coordinator_must_not_be_the_explanation_author(tmp_path):
     claim = trial.cli('task', 'claim', '--task', 'child-coordinator')['next']
     brief = read(claim['brief'])
     task = ('--task', 'child-coordinator', '--attempt', claim['attempt'])
-    trial.cli('task', 'bind', *task, '--agent-id', 'synthetic-explain-author')
+    trial.cli('task', 'bind', *task, '--agent-id', 'synthetic-explain-author-p1')
     report = Path(brief['report'])
     report.write_text('## Important\n- [P10.01] [content/retry] retry step repeats the solve step\n')
     submission = Path(brief['run'])/'submission.json'

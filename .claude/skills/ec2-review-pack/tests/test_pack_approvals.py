@@ -33,8 +33,8 @@ def page_order(pdf):
 def pdf_run(tmp_path):
     state = selected(tmp_path, ['P1', 'P2'])
     run = Path(state['run'])
-    seed(state, ['stage-problem-index', 'explain-author', 'explain-blind', 'child-coordinator',
-                 'explain-verify', 'build-answers'])
+    seed(state, ['stage-problem-index', 'explain-author-p1', 'explain-author-p2', 'explain-blind-p1',
+                 'explain-blind-p2', 'child-coordinator', 'explain-verify', 'build-answers'])
     pdf = run/'answers.pdf'
     pdf_file(pdf)
     overlay = write(run/'overlay.json', dict(learning_style=flow._read(run/'learning-style.json'),
@@ -186,7 +186,12 @@ def test_workbook_print_emits_same_render_page_provenance(tmp_path):
 
 
 def blind_run(tmp_path):
+    """An existing RUN without problem_contract: one explain-blind solves the whole sealed set."""
+    from pack_graph import problem_key
     state = selected(tmp_path, ['P1','P2'])
+    state.pop('problem_contract')
+    for tid in [t for t in state['tasks'] if t.startswith('explain-') and problem_key(t)]:
+        state['tasks'].pop(tid)
     run = Path(state['run'])
     seed(state, ['stage-problem-index'])
     questions = run/'sealed/questions.json'
@@ -528,7 +533,7 @@ def test_policy_only_change_reopens_adopted_and_active_reviews(tmp_path,monkeypa
     flow.accept_task(run,'pdf-qa',brief['attempt'],Path(brief['receipt']))
     monkeypatch.setattr(approvals,'POLICY',policy+'-changed')
     assert flow.inspect_state(run)['tasks']['pdf-qa']['status']=='stale'
-    assert 'explain-blind' in flow.next_work(run,slots=20)['dispatch']
+    assert {'explain-blind-p1', 'explain-blind-p2'} <= set(flow.next_work(run,slots=20)['dispatch'])
     assert 'publish-pack' not in flow.next_work(run,slots=20)['actions']
 
 
@@ -647,13 +652,11 @@ def test_static_css_target_views_capture_the_navigated_fragment(tmp_path):
 
 
 def two_problem_blind_run(tmp_path):
-    """problem_contract=1 with P10.01 and P10.02 sealed one problem per folder."""
+    """problem_contract=1 (set by init_run) with P10.01 and P10.02 sealed one problem per folder."""
     from display_titles import numbered_title
     ids = ['P10.01', 'P10.02']
     state = selected(tmp_path, ids)
-    state['problem_contract'] = 1
-    for tid in ('explain-author', 'explain-blind'):  # rows refreshed before the contract was set
-        state['tasks'].pop(tid)
+    assert state['problem_contract'] == 1 and 'explain-author' not in state['tasks']
     run = Path(state['run'])
     seed(state, ['stage-problem-index'])
     rows = [dict(workbook_id=pid, id=f'p{i}', display_title=pid, title=numbered_title({pid: pid}, pid, i),

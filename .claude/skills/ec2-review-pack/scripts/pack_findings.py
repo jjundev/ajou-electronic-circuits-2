@@ -77,8 +77,22 @@ LABEL_ONLY_JOIN = 2  # join_contract from which label-only mismatches are record
 # The child coordinator judges the accepted explanation fragments. Its findings
 # can only be corrected by explain-author; the blind solutions stay independent.
 COORDINATOR = 'child-coordinator'
-COORDINATOR_OWNER = 'explain-author'
+COORDINATOR_OWNER = 'explain-author'  # RUNs without problem_contract
 LEDGER_REVIEWS = (*REVIEW_ROLES, COORDINATOR)
+_PROBLEM_TARGET = re.compile(r'p([1-9]\d*)(?::.+)?')
+
+
+def coordinator_owner(state: dict, target: str) -> str:
+    """The author who corrects a coordinator finding: that problem's explain-author-pN."""
+    if not state.get('problem_contract'):
+        return COORDINATOR_OWNER
+    ids = state['selected_ids']
+    if target in ids:
+        return f'explain-author-p{ids.index(target) + 1}'
+    match = _PROBLEM_TARGET.fullmatch(target) if isinstance(target, str) else None
+    if match and int(match[1]) <= len(ids):
+        return f'explain-author-p{match[1]}'
+    raise f.FlowError('coordinator finding target is not a selected problem')
 
 
 def finding_key(kind, item):
@@ -180,20 +194,22 @@ def record_findings(state: dict, *, review_id: str, input_digest: str, findings:
             raise f.FlowError('structured review finding required')
         key = finding_key(review_id, item)
         owner = item.get('owner_task')
+        if review_id == COORDINATOR and owner == COORDINATOR_OWNER:
+            owner = coordinator_owner(state, item['target'])  # the problem's own author
         external = owner == 'assemble-note' and review_id in (MACHINE_REVIEW, 'precheck')
         if (key in seen or item.get('severity') not in SEVERITIES
                 or not isinstance(item.get('evidence'), str) or not item['evidence'].strip()
                 or (owner not in state['tasks'] and not external) or owner not in source['input_version']
                 or owner in REVIEW_ROLES or role_of(owner) == 'explain-blind'):
             raise f.FlowError('invalid or duplicate finding, owner or evidence')
-        if review_id == COORDINATOR and owner != COORDINATOR_OWNER:
+        if review_id == COORDINATOR and owner != coordinator_owner(state, item['target']):
             raise f.FlowError('child-coordinator findings are owned by explain-author')
         seen.add(key)
         row = ledger.setdefault(key, dict(id=key, review_id=review_id, status='open',
                                           unsuccessful_attempts=[], repairs=[]))
         if row.get('owner_task', owner) != owner:
             raise f.FlowError('finding correction owner changed')
-        row.update({name: item[name] for name in ('rule', 'target', 'defect', 'severity', 'owner_task', 'evidence')})
+        row.update({name: item[name] for name in ('rule', 'target', 'defect', 'severity', 'evidence')}, owner_task=owner)
         row.update(input_digest=input_digest, review_attempt=judgment_attempt(state, review_id), owner_attempt=source['input_version'][owner],
                    review_reports=review_reports(state, review_id))
         if external:

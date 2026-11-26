@@ -32,8 +32,9 @@ def seed(state, tids):
         record.update(status='done', attempt='synthetic-test-' + tid, receipt={'verified_files': evidence},
                       verified_files=evidence)
         from pack_approvals import ROLES, review_policy
-        if tid in ROLES:
-            record['receipt'].update(approval_policy=review_policy(tid), target_reviews=str(marker),
+        from pack_graph import role_of
+        if role_of(tid) in ROLES:
+            record['receipt'].update(approval_policy=review_policy(role_of(tid)), target_reviews=str(marker),
                                      fresh_approvals={},reused_approvals={})
 
 
@@ -95,7 +96,7 @@ def test_selection_unlocks_pdf_and_blind_before_note_qa(tmp_path):
     seed(state, ['stage-problem-index'])
     nxt = ready_work(state, slots=6)
     assert 'build-problems' in nxt['actions']
-    assert {'explain-author', 'explain-blind', 'author-why'} <= set(nxt['dispatch'])
+    assert {'explain-author-p1', 'explain-blind-p1', 'author-why'} <= set(nxt['dispatch'])
 
 
 def test_fixed_html_unlocks_browser_and_svg_conversion(tmp_path):
@@ -158,8 +159,8 @@ def test_twenty_problem_dispatch_fits_cli_envelope(tmp_path):
 def test_problem_task_names_map_to_roles_and_targets(tmp_path):
     from pack_graph import explain_ids, problem_key, problem_keys, refresh, role_of, targets
     state = selected(tmp_path, ['P10.01', 'P10.02'])
-    assert explain_ids(state, 'explain-author') == ['explain-author']
-    state['problem_contract'] = 1
+    assert state['problem_contract'] == 1  # set by init_run for new parallel RUNs
+    assert explain_ids(dict(state, problem_contract=None), 'explain-author') == ['explain-author']
     assert problem_keys(state) == ['p1', 'p2']
     assert explain_ids(state, 'explain-blind') == ['explain-blind-p1', 'explain-blind-p2']
     assert [role_of(t) for t in ('author-why', 'stt-0909', 'explain-author-p2', 'explain-blind-p10',
@@ -711,8 +712,8 @@ def test_early_index_seals_real_questions_for_independent_attempts(tmp_path):
     refresh(state)
     flow.update_state(run, state['revision'], lambda old: state)
     cli('run', '--run', run, '--action', 'stage-problem-index')
-    first = flow.claim_task(run, 'explain-author')
-    second = flow.claim_task(run, 'explain-blind')
+    first = flow.claim_task(run, 'explain-author-p1')
+    second = flow.claim_task(run, 'explain-blind-p1')
     author, blind = (json.loads(Path(r['brief']).read_text()) for r in (first, second))
     assert blind['questions'] == author['questions']
     assert set(a['path'] for a in blind['inputs']) == {str(p) for p in Path(blind['questions']).parent.iterdir()}
@@ -724,7 +725,7 @@ def test_early_index_seals_real_questions_for_independent_attempts(tmp_path):
     assert not (repo/'복습노트/0909').exists()
 
     from pack_support import genuine_child_run, parallel_worker
-    for tid, attempt in [('explain-author', first), ('explain-blind', second)]:
+    for tid, attempt in [('explain-author-p1', first), ('explain-blind-p1', second)]:
         flow.release_task(run, tid, attempt['attempt'], 'released synthetic fixture reviewer')
     def write(brief, outputs):
         if brief['role'] == 'child-coordinator':
@@ -735,10 +736,10 @@ def test_early_index_seals_real_questions_for_independent_attempts(tmp_path):
                     'Path(sys.argv[3]).write_text(fragment(SimpleNamespace(subparts=json.loads(sys.argv[2]))))')
             subprocess.run([sys.executable, '-c', expr, helper, json.dumps(question['subparts']), outputs[0]], check=True)
         else:
-            items = {f'p1:{key}': dict(reviewer='synthetic-explain-blind', evidence='test fixture',
+            items = {f'p1:{key}': dict(reviewer='synthetic-explain-blind-p1', evidence='test fixture',
                     method='exact', conclusion='1=1') for key in question['subparts']}
             outputs[0].write_text(json.dumps(dict(items=items)))
-    for tid in ('explain-blind', 'explain-author', 'child-coordinator'):
+    for tid in ('explain-blind-p1', 'explain-author-p1', 'child-coordinator'):
         parallel_worker(run, tid, write)
     shutil.copytree(REPO/'.claude/skills/ec2-problem-explain', repo/'.claude/skills/ec2-problem-explain')
     shutil.copytree(REPO/'.claude/skills/ec2-review-pack/scripts', repo/'.claude/skills/ec2-review-pack/scripts')
@@ -855,7 +856,7 @@ def test_ready_work_rechecks_accepted_evidence(tmp_path):
     seed(state, ['stage-problem-index'])
     Path(state['actions']['stage-problem-index']['verified_files'][0]['path']).write_text('edited')
     ready = ready_work(state, slots=4)
-    assert 'build-problems' not in ready['actions'] and 'explain-blind' not in ready['dispatch']
+    assert 'build-problems' not in ready['actions'] and 'explain-blind-p1' not in ready['dispatch']
 
 @pytest.mark.parametrize('crash_before_adoption', [False, True])
 def test_matching_stopped_stale_attempt_can_be_discarded_and_retried(tmp_path, monkeypatch, crash_before_adoption):

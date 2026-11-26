@@ -120,7 +120,7 @@ def test_resume_reuses_completed_child_and_marks_gap(tmp_path, monkeypatch):
 def test_advance_stops_at_review_gate(tmp_path):
     state = selected(tmp_path, ['P1'])
     state['concept_check_enabled'] = False
-    seed(state, ['scope-final','author-why','stage-problem-index','explain-author','explain-blind','child-coordinator',
+    seed(state, ['scope-final','author-why','stage-problem-index','explain-author-p1','explain-blind-p1','child-coordinator',
                  'explain-verify','build-answers','build-problems','assemble-note','structural-precheck','style-audit',
                  'content-review','precheck','browser-qa','convert-md'])
     state['converted_assets'] = {'svgs':[]}
