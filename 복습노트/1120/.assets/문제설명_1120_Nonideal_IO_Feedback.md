@@ -332,24 +332,20 @@ Figure 12.105 depicts the bipolar counterpart of the circuit studied in Example 
 
 *베이스에 반송 복제가 붙은 CB 개루프 회로*
 
-#### 베이스 전류가 흐르는 경로
+#### 이미터에서 보는 저항
 
-㉠ 반송 복제의 위쪽을 단락하면 베이스에 $R_B$가 붙어요. ㉢ 이미터에서는 이 저항이 큰 유한 $\beta$에서 $R_B/\beta$로 보여요.
+㉠ 반송 복제의 위쪽을 단락하면 베이스에 $R_B$가 붙어요. ㉢ 이미터에서 보면 큰 $\beta$에서 $R_B/\beta$가 내부의 $1/g_m$에 직렬로 더해져요.
 
 $$
 R_B=R_1\parallel R_2
 $$
 
-$$
-D=\frac{1}{g_m}+\frac{R_B}{\beta}
-$$
-
 ㉡ 감지 복제의 가운데 포트를 열면 출력에 $R_1+R_2$가 붙어요. $V_A=\infty$이므로 $r_o$는 생략해요.
 
-출력 단락에서 컬렉터로 들어가는 전류를 양으로 잡아요.
+출력을 단락하고 컬렉터로 들어가는 전류를 양으로 잡아요. 베이스가 바로 교류 접지면 $R_B=0$이라서 $-g_m$으로 줄어요.
 
 $$
-G_m=-\frac{\beta}{r_\pi+R_B}=-\frac{1}{D}
+G_m=-\frac{1}{1/g_m+R_B/\beta}
 $$
 
 입력을 0으로 두고 출력에서 본 저항이에요.
@@ -359,11 +355,11 @@ R_{\mathrm{out,open}}=R_L=R_C\parallel(R_1+R_2)
 $$
 
 $$
-A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}=\frac{R_L}{D}
+A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}=\frac{R_L}{1/g_m+R_B/\beta}
 $$
 
 $$
-R_{\mathrm{in,open}}=\frac{r_\pi+R_B}{\beta+1}\approx D
+R_{\mathrm{in,open}}=\frac{r_\pi+R_B}{\beta+1}\approx\frac{1}{g_m}+\frac{R_B}{\beta}
 $$
 
 $$
@@ -373,20 +369,20 @@ $$
 #### 폐루프 답
 
 $$
-A_{\mathrm{closed}}\approx\frac{R_L}{D+KR_L}
+A_{\mathrm{closed}}\approx\frac{A_{\mathrm{open}}}{1+KA_{\mathrm{open}}}
 $$
 
 $$
-R_{\mathrm{in,closed}}\approx D+KR_L
+R_{\mathrm{in,closed}}\approx R_{\mathrm{in,open}}(1+KA_{\mathrm{open}})
 $$
 
 $$
-R_{\mathrm{out,closed}}\approx\frac{R_LD}{D+KR_L}
+R_{\mathrm{out,closed}}\approx\frac{R_L}{1+KA_{\mathrm{open}}}
 $$
 
 **페이지 요약**
 
-반송 복제의 $R_B=R_1\parallel R_2$는 이미터에서 $R_B/\beta$로 보여요.
+㉢ 이미터에서 읽은 $1/g_m+R_B/\beta$의 음의 역수가 출력 단락 $G_m$이에요.
 
 감지 복제의 $R_1+R_2$는 $R_C$와 병렬이에요.
 

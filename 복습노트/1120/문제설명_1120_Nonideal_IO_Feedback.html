@@ -701,40 +701,39 @@
 <figcaption class="circuit-state">베이스에 반송 복제가 붙은 CB 개루프 회로</figcaption>
 </figure>
   <div data-subpart="main">
-    <h4>베이스 전류가 흐르는 경로</h4>
+    <h4>이미터에서 보는 저항</h4>
     <div data-answer-step="두 복제의 부하">
-      <p><span class="loc">㉠</span> 반송 복제의 위쪽을 단락하면 베이스에 $R_B$가 붙어요. <span class="loc">㉢</span> 이미터에서는 이 저항이 큰 유한 $\beta$에서 $R_B/\beta$로 보여요.</p>
+      <p><span class="loc">㉠</span> 반송 복제의 위쪽을 단락하면 베이스에 $R_B$가 붙어요. <span class="loc">㉢</span> 이미터에서 보면 큰 $\beta$에서 $R_B/\beta$가 내부의 $1/g_m$에 직렬로 더해져요.</p>
       $$R_B=R_1\parallel R_2$$
-      $$D=\frac{1}{g_m}+\frac{R_B}{\beta}$$
       <p><span class="loc">㉡</span> 감지 복제의 가운데 포트를 열면 출력에 $R_1+R_2$가 붙어요. $V_A=\infty$이므로 $r_o$는 생략해요.</p>
     </div>
     <div data-answer-step="개루프 이득" data-gain-route="gm-rout">
       <div data-gain-stage="gm">
-        <p>출력 단락에서 컬렉터로 들어가는 전류를 양으로 잡아요.</p>
-        $$G_m=-\frac{\beta}{r_\pi+R_B}=-\frac{1}{D}$$
+        <p>출력을 단락하고 컬렉터로 들어가는 전류를 양으로 잡아요. 베이스가 바로 교류 접지면 $R_B=0$이라서 $-g_m$으로 줄어요.</p>
+        $$G_m=-\frac{1}{1/g_m+R_B/\beta}$$
       </div>
       <div data-gain-stage="rout">
         <p>입력을 0으로 두고 출력에서 본 저항이에요.</p>
         $$R_{\mathrm{out,open}}=R_L=R_C\parallel(R_1+R_2)$$
       </div>
       <div data-gain-stage="gain">
-        $$A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}=\frac{R_L}{D}$$
+        $$A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}=\frac{R_L}{1/g_m+R_B/\beta}$$
       </div>
     </div>
     <div data-answer-step="입력 저항과 귀환율">
-      $$R_{\mathrm{in,open}}=\frac{r_\pi+R_B}{\beta+1}\approx D$$
+      $$R_{\mathrm{in,open}}=\frac{r_\pi+R_B}{\beta+1}\approx\frac{1}{g_m}+\frac{R_B}{\beta}$$
       $$K=\frac{R_2}{R_1+R_2}$$
     </div>
     <h4>폐루프 답</h4>
     <div data-answer-final="">
-      $$A_{\mathrm{closed}}\approx\frac{R_L}{D+KR_L}$$
-      $$R_{\mathrm{in,closed}}\approx D+KR_L$$
-      $$R_{\mathrm{out,closed}}\approx\frac{R_LD}{D+KR_L}$$
+      $$A_{\mathrm{closed}}\approx\frac{A_{\mathrm{open}}}{1+KA_{\mathrm{open}}}$$
+      $$R_{\mathrm{in,closed}}\approx R_{\mathrm{in,open}}(1+KA_{\mathrm{open}})$$
+      $$R_{\mathrm{out,closed}}\approx\frac{R_L}{1+KA_{\mathrm{open}}}$$
     </div>
   </div>
 </div>
 <div class="sum" hidden="">
-  <p class="sum-lead">반송 복제의 $R_B=R_1\parallel R_2$는 이미터에서 $R_B/\beta$로 보여요.</p><p>감지 복제의 $R_1+R_2$는 $R_C$와 병렬이에요.</p>
+  <p class="sum-lead">㉢ 이미터에서 읽은 $1/g_m+R_B/\beta$의 음의 역수가 출력 단락 $G_m$이에요.</p><p>감지 복제의 $R_1+R_2$는 $R_C$와 병렬이에요.</p>
 </div>
 </article><article class="topic" id="p5"><h3>P5. 소스로 귀환하는 2단 CS 증폭기의 로딩 해석</h3><p class="panel-meta">E12.28 · 예제 12.28 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1120_Nonideal_IO_Feedback-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p5"><div class="layer formal" data-source-problem="p5"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>해석 = 개루프·폐루프 이득과 I/O 임피던스를 구함</li><li>전압-전압 귀환에서 귀환 회로망을 끊는 법칙 (본문 Fig 12.53(a)): 감지 복제의 출력 포트는 개방, 반송 복제의 입력 포트는 단락. 귀환율은 입력 포트에 $V_1$을 인가하고 출력 포트를 개방해 $K = V_2/V_1$ (본문 Fig 12.54(a))</li><li>소자 값은 주어지지 않음</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>회로의 해석: 개루프·폐루프 전압 이득, 폐루프 입력·출력 임피던스</li></ul></div><figure><img src=".assets/figures_문제설명_1120_Nonideal_IO_Feedback/82fb31540b771af0-fig12-57-a.png" alt="그림 E12.28"></figure></div><details class="original" data-original-problem="p5"><summary>원문 보기</summary><p>그림 12.57(a)의 회로를 해석하라.</p></details></div><div class="layer formal circuit-explanation" data-explanation="solve">
 <figure class="figure circuit">

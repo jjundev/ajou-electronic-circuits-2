@@ -5,7 +5,7 @@
   "slug": "Nonideal_IO_Feedback",
   "learning_style": {
     "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
-    "sha256": "d95b639ad68e586dd935b02413cd688cd3167be108027480ee5302f650e84048",
+    "sha256": "b86ffed624375cc99029088fea1fcbccb78e4855917a76a3d1698c379c157734",
     "rule_ids": [
       "UNIT-01",
       "CALC-01",
@@ -22,7 +22,7 @@
       "FREQ-01"
     ]
   },
-  "input_hash": "a8781cb410bc1fb9f5965a35d0ef7dd369993a9423e9a0250f306cb616fcef43",
+  "input_hash": "320d911aa39b3f0aca5ecd415dad38665f38fbaa6b4510b831afe67f3708704c",
   "source_inputs": {
     "복습노트/1120/.assets/problems.txt": "2007de2ee28d5d90605ab5819a5bf832e18666713be06d68348133bd1e9ad478",
     "복습노트/1120/.assets/display-titles.json": "baaa58e3e80b55cfd388256f7f87cf4ea813a16e7cf98444425e32458ad5fb30",
@@ -49,7 +49,7 @@
     "from_the_past/md/2021-1_기말/figures/redrawn/fig-Q3.png": "0ae5ae6010d8cce46366c756fc231817ab1c58cdb649a43f74f0b2910ae29cf3",
     "교과서/마이크로전자회로/ch12/figures/fig12-112.png": "c124029e2dae02aa384e11156f6c4203c22f6c5be7774e7a44db88beaffe863a",
     "교과서/마이크로전자회로/ch12/figures/fig12-110.png": "10bb90bd2a77741ba2d260dcca0846560a5d6fc0e487a30a5c9e2e34e71fd64a",
-    ".claude/skills/ec2-review-pack/references/solution-style.md": "d95b639ad68e586dd935b02413cd688cd3167be108027480ee5302f650e84048"
+    ".claude/skills/ec2-review-pack/references/solution-style.md": "b86ffed624375cc99029088fea1fcbccb78e4855917a76a3d1698c379c157734"
   },
   "problems": [
     {
@@ -152,23 +152,23 @@
         {
           "subpart": "main",
           "label": "두 복제의 부하",
-          "html": "\n      <p> 반송 복제의 위쪽을 단락하면 베이스에 $R_B$가 붙어요.  이미터에서는 이 저항이 큰 유한 $\\beta$에서 $R_B/\\beta$로 보여요.</p>\n      $$R_B=R_1\\parallel R_2$$\n      $$D=\\frac{1}{g_m}+\\frac{R_B}{\\beta}$$\n      <p> 감지 복제의 가운데 포트를 열면 출력에 $R_1+R_2$가 붙어요. $V_A=\\infty$이므로 $r_o$는 생략해요.</p>\n    "
+          "html": "\n      <p> 반송 복제의 위쪽을 단락하면 베이스에 $R_B$가 붙어요.  이미터에서 보면 큰 $\\beta$에서 $R_B/\\beta$가 내부의 $1/g_m$에 직렬로 더해져요.</p>\n      $$R_B=R_1\\parallel R_2$$\n      <p> 감지 복제의 가운데 포트를 열면 출력에 $R_1+R_2$가 붙어요. $V_A=\\infty$이므로 $r_o$는 생략해요.</p>\n    "
         },
         {
           "subpart": "main",
           "label": "개루프 이득",
-          "html": "\n      <div data-gain-stage=\"gm\">\n        <p>출력 단락에서 컬렉터로 들어가는 전류를 양으로 잡아요.</p>\n        $$G_m=-\\frac{\\beta}{r_\\pi+R_B}=-\\frac{1}{D}$$\n      </div>\n      <div data-gain-stage=\"rout\">\n        <p>입력을 0으로 두고 출력에서 본 저항이에요.</p>\n        $$R_{\\mathrm{out,open}}=R_L=R_C\\parallel(R_1+R_2)$$\n      </div>\n      <div data-gain-stage=\"gain\">\n        $$A_{\\mathrm{open}}=-G_mR_{\\mathrm{out,open}}=\\frac{R_L}{D}$$\n      </div>\n    "
+          "html": "\n      <div data-gain-stage=\"gm\">\n        <p>출력을 단락하고 컬렉터로 들어가는 전류를 양으로 잡아요. 베이스가 바로 교류 접지면 $R_B=0$이라서 $-g_m$으로 줄어요.</p>\n        $$G_m=-\\frac{1}{1/g_m+R_B/\\beta}$$\n      </div>\n      <div data-gain-stage=\"rout\">\n        <p>입력을 0으로 두고 출력에서 본 저항이에요.</p>\n        $$R_{\\mathrm{out,open}}=R_L=R_C\\parallel(R_1+R_2)$$\n      </div>\n      <div data-gain-stage=\"gain\">\n        $$A_{\\mathrm{open}}=-G_mR_{\\mathrm{out,open}}=\\frac{R_L}{1/g_m+R_B/\\beta}$$\n      </div>\n    "
         },
         {
           "subpart": "main",
           "label": "입력 저항과 귀환율",
-          "html": "\n      $$R_{\\mathrm{in,open}}=\\frac{r_\\pi+R_B}{\\beta+1}\\approx D$$\n      $$K=\\frac{R_2}{R_1+R_2}$$\n    "
+          "html": "\n      $$R_{\\mathrm{in,open}}=\\frac{r_\\pi+R_B}{\\beta+1}\\approx\\frac{1}{g_m}+\\frac{R_B}{\\beta}$$\n      $$K=\\frac{R_2}{R_1+R_2}$$\n    "
         }
       ],
       "answers": [
         {
           "subpart": "main",
-          "html": "\n      $$A_{\\mathrm{closed}}\\approx\\frac{R_L}{D+KR_L}$$\n      $$R_{\\mathrm{in,closed}}\\approx D+KR_L$$\n      $$R_{\\mathrm{out,closed}}\\approx\\frac{R_LD}{D+KR_L}$$\n    "
+          "html": "\n      $$A_{\\mathrm{closed}}\\approx\\frac{A_{\\mathrm{open}}}{1+KA_{\\mathrm{open}}}$$\n      $$R_{\\mathrm{in,closed}}\\approx R_{\\mathrm{in,open}}(1+KA_{\\mathrm{open}})$$\n      $$R_{\\mathrm{out,closed}}\\approx\\frac{R_L}{1+KA_{\\mathrm{open}}}$$\n    "
         }
       ]
     },

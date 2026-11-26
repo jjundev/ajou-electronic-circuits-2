@@ -1,10 +1,12 @@
-A0 replica = beta*R_L/(r_pi+Rth)
-effective A0 full KCL = (beta+K)*R_L/(r_pi+Rth)
-Rin0 = (r_pi+Rth)/(beta+1)
-Rout0 = R_L
-Acl = A0/(1+K*A0)
-Rin = Rin0*(1+K*A0)
-Rout = Rout0/(1+K*A0)
-Rth=R1||R2; R_L=RC||(R1+R2); K=R2/(R1+R2)
-The finite beta exact forward term adds +K from the base-current path through R1.
-All exact/replica ratios tend to 1 for beta -> infinity.
+exact closed Av OK   RC*(R1*beta + R2*beta + R2)/(R1*R2 + R1*rpi + R2*RC*beta + R2*RC + R2*rpi + RC*rpi)
+exact closed Rin OK   (R1*R2 + R1*rpi + R2*RC*beta + R2*RC + R2*rpi + RC*rpi)/((beta + 1)*(R1 + R2 + RC))
+exact closed Rout OK   RC*(R1*R2 + R1*rpi + R2*rpi)/(R1*R2 + R1*rpi + R2*RC*beta + R2*RC + R2*rpi + RC*rpi)
+split Gm into short OK   -beta*(R1 + R2)/(R1*R2 + R1*rpi + R2*rpi)
+split Rin OK   (R1*R2 + R1*rpi + R2*rpi)/((R1 + R2)*(beta + 1))
+split Rout OK   RC*(R1 + R2)/(R1 + R2 + RC)
+finite-beta correction from divider OK   R2/(beta*(R1 + R2))
+Set S=R1+R2, F=R2/S, P=R1||R2, L=RC||S.
+Exact G=(beta+F)/(rpi+P), T=F L G.
+Av=L G/(1+T), Rin=(rpi+P)(1+T)/(beta+1), Rout=L/(1+T).
+Large beta: use G0=beta/(rpi+P), T0=F L G0 instead of G,T.
+The relative excess of exact G over G0 is F/beta.
