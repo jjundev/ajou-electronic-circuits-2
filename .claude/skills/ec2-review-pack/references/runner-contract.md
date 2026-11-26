@@ -10,9 +10,9 @@ OpenCode 우선의 파일 인계 절차이며 Codex도 같은 Python CLI를 쓴�
 
 `init ... --seed-from <보류된 RUN> [--redo <task id,...>] [--redo-note <절대 파일>]`: 이어받기. 아래 `이어받기` 절을 따른다.
 
-owner 기본은 main이다. 도구가 실제 있는 주체를 전달하며 unavailable은 실제 검토 단계에서 blocked다. RUN은 없거나 비어 있어야 한다. snapshot은 `RUN/learning-style.json`이며 init이 만든다. 기존 수기 run-status를 변환하거나 과거 pass를 추정하지 않는다.
+owner 기본은 workers다. 도구가 실제 있는 주체를 전달하며 unavailable은 실제 검토 단계에서 blocked다. RUN은 없거나 비어 있어야 한다. snapshot은 `RUN/learning-style.json`이며 init이 만든다. 기존 수기 run-status를 변환하거나 과거 pass를 추정하지 않는다.
 
-`status --run <RUN>` / `next --run <RUN> --slots <현재 가용 수>`는 읽기 전용이다. 현재 파일/해시와 대조한 view를 반환하고 stale을 저장하지 않는다. slots=0은 새 작업자 dispatch만 기다리며 준비된 기계 작업·메인 검토는 진행한다. 상태를 수동 수정하지 않는다.
+`status --run <RUN>` / `next --run <RUN> [--slots <n>]`는 읽기 전용이다. `--slots`를 생략하면 준비된 작업자를 모두 낸다. 현재 파일/해시와 대조한 view를 반환하고 stale을 저장하지 않는다. slots=0은 새 작업자 dispatch만 기다리며 준비된 기계 작업·메인 검토는 진행한다. 상태를 수동 수정하지 않는다.
 
 모든 응답은 `{schema_version,status,phase,next,counts,details_path,error_code}` JSON 한 개이며 개행 포함 Python `len(str)` **2,000자 이하**다. 접힌 목록은 counts와 details_path 또는 이미 아는 RUN/run-status.json에서 필요한 항목만 읽는다. exit 0은 정상/대기, 1은 실행·검증 실패, 2는 사용법 오류다. 장문 stdout/stderr/traceback은 RUN의 작업 로그에 남긴다. CLI 성공을 실제 검토 pass로 해석하지 않는다.
 
@@ -20,7 +20,7 @@ owner 기본은 main이다. 도구가 실제 있는 주체를 전달하며 unava
 
 새 RUN의 기본값은 `parallel`이다. 레거시 새 RUN은 `init --workflow legacy`로 시작한다. `--seed-from`은 기존 레거시 RUN의 이어받기 옵션이며 모드를 생략해도 새 레거시 RUN을 만든다. 기존 RUN은 저장한 계약을 따르며 `workflow` 필드가 없는 RUN은 레거시로 이어간다.
 
-1. `next --run <RUN> --slots <가용 수>`의 `actions`, `dispatch`, `review_locally`, `blocked`를 확인한다. `claim`의 지정 경로로 역할을 배정하고 실제 작업자 ID를 `bind`한다. 메인과 자식 조정자가 쓴 슬롯을 먼저 빼고 남은 슬롯을 직접 작업자에 배정한다. 기계 작업은 슬롯 수와 별도로 `run --action <ID>`로 병행할 수 있다.
+1. `next --run <RUN> [--slots <n>]`(생략하면 준비된 작업자를 모두 낸다)의 `actions`, `dispatch`, `review_locally`, `blocked`를 확인한다. `claim`의 지정 경로로 역할을 배정하고 실제 작업자 ID를 `bind`한다. 기계 작업은 슬롯 수와 별도로 `run --action <ID>`로 병행할 수 있다.
 2. 시작할 때 source-prep, candidate-index, render-preflight를 함께 연다. selection이 채택되고 stage-problem-index가 봉인되면 explain-author와 explain-blind를 다른 작업자에게 동시에 맡긴다. 저작·독립 풀이가 채택되면 child-coordinator가 검증을 잇는다. 확인문제도 convert-md·selection이 승인되는 즉시 concept-draft → concept-review까지 진행한다. 최종 발행은 publish-pack·final-check 승인 뒤 별도로 진행한다.
 3. 작업자는 자신의 브리프에서 `task build-receipt`와 `task check`를 실행한다. 메인은 완료한 작업만 `[{"task_id":"…","attempt":"…","receipt":"/절대/receipt.json"}]` 배열에 모아 `task accept-batch --run <RUN> --submissions <파일>`로 인계한다. 각 항목의 accepted/already_accepted/rejected와 거부 사유를 확인한다. `task accept`, `task check`로 한 항목씩 진단할 수 있다.
 4. `advance --run <RUN> --max-actions 4`는 최대 네 기계 작업을 실행한다. 사람이 필요한 작업이나 차단을 만나면 `waiting_for`와 `blocked`에 ID가 나온다. 다음 묶음을 배정하고 계속한다. 결과가 접혔으면 `details_path`에서 해당 항목만 읽는다. 진행 표시는 시도 시작·승인·수정·차단·재개·발행처럼 상태가 변했을 때만 한다.
@@ -41,7 +41,7 @@ owner 기본은 main이다. 도구가 실제 있는 주체를 전달하며 unava
 
 next.kind는 dispatch/run/review_locally/wait/recover/concept_check/report/blocked다. dispatch는 `task claim --run <RUN> --task <id>`로 먼저 예약한다. 반환 attempt/brief로 새 컨텍스트 작업자를 실행하고 `task bind --run <RUN> --task <id> --attempt <UUID> --agent-id <실제 ID>`로 연결한다. Codex는 spawn_agent(fork_turns="none"), OpenCode는 전체 대화를 복사하지 않는 새 작업 컨텍스트를 사용한다. 작업자 지시문은 [worker-prompt](worker-prompt.md) 템플릿을 채워 쓴다. claim 뒤 brief.json에는 `run_id`와 `attempt`가 들어 있다. 작업자는 반환 전에 `task check --run <RUN> --task <id> --attempt <UUID> --receipt <절대 경로>`를 실행한다. 이 명령은 accept와 같은 검증을 하되 상태를 바꾸지 않고, 실패하면 exit 1과 reason(예: `unresolved successful receipt`, `receipt identity mismatch`)을 돌려준다. 반환 뒤 `task accept --run <RUN> --task <id> --attempt <UUID> --receipt <절대 경로>`를 실행한다. 늦게 온 다른 attempt는 거부한다. 가용 슬롯·독립 역할·기존 담당자 재개 규칙은 [delegation](delegation.md)을 따른다.
 
-브리프는 `RUN/work/<task>/brief.json`이다. role/targets/references/inputs/allowed_outputs/allowed_output_roots/report/receipt/request_paths를 직접 읽는다. author는 section_brief도 읽는다. 실행기가 고정한 inputs를 빼거나 임의 출력을 추가해 쓰기 권한을 늘리지 않는다. PROFILE 전체와 [공통 교육 계약](execution-guide.md)의 지정 절은 그대로 필수다.
+브리프는 `RUN/work/<task>/brief.json`이다. role/targets/references/inputs/allowed_outputs/allowed_output_roots/report/receipt/request_paths를 직접 읽는다. author는 section_brief도 읽는다. 실행기가 고정한 inputs를 빼거나 임의 출력을 추가해 쓰기 권한을 늘리지 않는다. `reference_sections`의 절, 브리프에 `profile`이 있으면 PROFILE 전체와 [공통 교육 계약](execution-guide.md)의 지정 절은 그대로 필수다.
 
 receipt는 `{schema_version:1,run_id,task_id,attempt,status,inputs,outputs,report,reviews,counts,unresolved}`다. inputs/outputs는 `{path,sha256}` 배열이고 실제 현재 바이트 해시다. status는 done/needs-fix/blocked/ready-for-publish/withheld다. envelope·보고·출력은 허용 RUN 안, 읽기 전용 입력은 REPO 또는 RUN 안이다. reviews는 기존 승인 파일을 참조하며 새 envelope가 실제 검토를 대신하지 않는다. 상세 수식·원문·감사·문항 보고는 파일에 보존하고 최종 반환은 **800자 이하**의 task/status/receipt 경로다(개행 포함 Python len). 조정자는 leaf 브리프에도 같은 제한을 명시한다.
 

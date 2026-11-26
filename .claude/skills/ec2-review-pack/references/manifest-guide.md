@@ -2,7 +2,7 @@
 
 manifest는 이번 팩의 계약이다. 작성자, 검사기, 조립기가 모두 이 파일을 기준으로 삼는다.
 구조 예시(learning_style의 0 해시는 테스트용 placeholder이며 실행에 쓰지 않는다): `tests/fixtures/mini-run/manifest.json`.
-작성 후 반드시 `python3 <SKILL>/scripts/manifest.py <RUN>/manifest.json <REPO>` → `OK`(REPO를 주면 문제 md가 있는지도 본다).
+작성 후 반드시 `<python> <SKILL>/scripts/manifest.py <RUN>/manifest.json <REPO>` → `OK`(REPO를 주면 문제 md가 있는지도 본다).
 
 ## 최상위
 | 키 | 값 |
@@ -64,7 +64,7 @@ manifest는 이번 팩의 계약이다. 작성자, 검사기, 조립기가 모�
 
 
 ## 개인화 입력과 감사
-`python3 "$REPO/workbook/learning_style.py" snapshot --repo "$REPO" --out "$RUN/learning-style-snapshot.json"`으로 명세를 읽고 manifest를 쓸 때 해당 JSON을 `learning_style`에 넣는다. `<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md`의 절대 경로와 snapshot을 작성자·리뷰어 브리프에 함께 넣는다. 저장된 0 해시나 이전 실행 해시는 재사용하지 않는다.
+`<python> "$REPO/workbook/learning_style.py" snapshot --repo "$REPO" --out "$RUN/learning-style-snapshot.json"`으로 명세를 읽고 manifest를 쓸 때 해당 JSON을 `learning_style`에 넣는다. `<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md`의 절대 경로와 snapshot을 작성자·리뷰어 브리프에 함께 넣는다. 저장된 0 해시나 이전 실행 해시는 재사용하지 않는다.
 
 조립은 `assemble.py --repo "$REPO" --run "$RUN" --out <팩 절대경로>`로 하고 쓰기 전에 snapshot을 검사한다. `check_html.py --repo "$REPO" --manifest "$RUN/manifest.json" --note <노트 절대경로>`는 같은 RUN의 `learning-style-audit.json`을 필수로 읽는다. 명시 repo를 생략하면 실행 스크립트의 저장소를 확인한다. 모든 topic ID에 현재 snapshot·전체 규칙별 실제 pass 감사가 필요하다(문제 0개도 포함). 명세가 바뀌면 작성·감사부터 다시 한다.
 
