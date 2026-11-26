@@ -182,7 +182,11 @@ class TestHardenedContracts(unittest.TestCase):
         expected = {
             "SKILL.md": ("~/.cache/ec2-review-pack", "NFC", "worker-prompt.md", "waived"),
             "references/runner-contract.md": ("task check", "--allow-tmp", "waived", "~/.cache/ec2-review-pack"),
-            "references/delegation.md": ("layout_probe.py", "task check"),
+            "references/delegation.md": ("layout_probe.py", "task check",
+                                         "작성자는 인계 전에 `<python> <SKILL>/scripts/pack_cli.py task probe"),
+            "references/worker-prompt.md": (
+                "<python> <SKILL>/scripts/pack_cli.py task probe --run <RUN> --task {task_id} --attempt {attempt}"
+                "   # author만: status pass 확인\n<python> <SKILL>/scripts/pack_cli.py task build-receipt",),
             "references/problem-explain-integration.md": ("bucket", "폴더 이름", "SVG", "task check"),
             "references/execution-guide.md": ("~/.cache/ec2-review-pack", "재부팅"),
         }
@@ -221,6 +225,24 @@ class TestUnboundedDocs(unittest.TestCase):
                       (refs / "delegation.md").read_text(encoding="utf-8"))
         self.assertIn("reference_sections",
                       (refs / "worker-prompt.md").read_text(encoding="utf-8"))
+
+    def test_contract_runs_document_probe_sources_and_brief_fields(self):
+        refs = SKILL / "references"
+        guide = (refs / "execution-guide.md").read_text(encoding="utf-8")
+        runner = (refs / "runner-contract.md").read_text(encoding="utf-8")
+        prompt = (refs / "worker-prompt.md").read_text(encoding="utf-8")
+        self.assertIn("`probe_contract`가 있는 RUN의 작성자는 인계 전에 `<python> <SKILL>/scripts/pack_cli.py "
+                      "task probe --run <RUN> --task <id> --attempt <UUID>`로 status pass를 확인한 뒤 `task check`",
+                      guide)
+        self.assertIn("fragment probe missing, stale or failing", guide)
+        self.assertIn("`reference_sections`(없으면 `references`)의 절", runner)
+        self.assertIn("작업자 명령의 `<python>`은 브리프의 `python` 값이다", runner)
+        self.assertIn("`source_contract`가 있는 RUN에서 source-prep은 작업자 역할이 아니라 기계 작업이다", runner)
+        self.assertIn("**기존 RUN(`source_contract` 없음)**", runner)
+        self.assertIn("메인 검토(`review_locally`)만 기다리는 동안에는 기계 작업을 계속 실행하고", runner)
+        self.assertNotIn("가용 슬롯", runner)
+        self.assertIn("`layout.status`가 `unavailable`이어도", prompt)
+        self.assertIn("browser-qa가 확인한다", prompt)
 
     def test_summarizers_match_slides_themselves(self):
         refs = SKILL / "references"

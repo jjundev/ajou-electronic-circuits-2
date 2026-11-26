@@ -202,8 +202,9 @@ def record_findings(state: dict, *, review_id: str, input_digest: str, findings:
                 or (owner not in state['tasks'] and not external) or owner not in source['input_version']
                 or owner in REVIEW_ROLES or role_of(owner) == 'explain-blind'):
             raise f.FlowError('invalid or duplicate finding, owner or evidence')
-        if review_id == COORDINATOR and owner != coordinator_owner(state, item['target']):
-            raise f.FlowError('child-coordinator findings are owned by explain-author')
+        if review_id == COORDINATOR and owner != (expected := coordinator_owner(state, item['target'])):
+            # Without problem_contract the expected owner is the single explain-author.
+            raise f.FlowError('child-coordinator findings are owned by ' + expected)
         seen.add(key)
         row = ledger.setdefault(key, dict(id=key, review_id=review_id, status='open',
                                           unsuccessful_attempts=[], repairs=[]))
@@ -391,7 +392,8 @@ def apply_request(state, request):
             required = {k for k, r in eligible.items() if r['review_id'] in (*NOTE_REVIEWS, CONFLICT)}
             if not required <= {i.get('finding_id') for i in request['items'] if isinstance(i, dict)}:
                 raise f.FlowError('batch every current note review finding')
-        # One explain-author correction answers the whole coordinator judgment.
+        # One correction request answers the whole coordinator judgment, across every
+        # explain-author-pN that owns one of its findings.
         if eligible[key]['review_id'] == COORDINATOR:
             required = {k for k, r in eligible.items() if r['review_id'] == COORDINATOR}
             if not required <= {i.get('finding_id') for i in request['items'] if isinstance(i, dict)}:

@@ -21,11 +21,12 @@
 반환 전 같은 시도 ID로 아래 명령을 순서대로 실행한다. `<RUN>`은 부모 RUN이고 `<python>`은 브리프의 `python` 값이다.
 
 ```sh
+<python> <SKILL>/scripts/pack_cli.py task probe --run <RUN> --task {task_id} --attempt {attempt}   # author만: status pass 확인
 <python> <SKILL>/scripts/pack_cli.py task build-receipt --run <RUN> --task {task_id} --attempt {attempt} --submission <submission.json의 절대 경로>
 <python> <SKILL>/scripts/pack_cli.py task check --run <RUN> --task {task_id} --attempt {attempt} --receipt <브리프 receipt의 절대 경로>
 ```
 
-두 명령이 성공하면 task ID, 상태, receipt 경로와 미해결 사항을 반환한다. 채택은 메인이 한다.
+`task probe`는 author만 실행한다. 브라우저가 없어 `layout.status`가 `unavailable`이어도 구조 진단이 깨끗하면 probe는 pass이고, 노트 전체 화면은 뒤의 browser-qa가 확인한다. 나머지 두 명령이 성공하면 task ID, 상태, receipt 경로와 미해결 사항을 반환한다. 채택은 메인이 한다.
 
 ## 기존 브리프의 처음 실행
 

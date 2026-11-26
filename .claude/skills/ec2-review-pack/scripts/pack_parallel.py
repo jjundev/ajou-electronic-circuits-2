@@ -484,6 +484,23 @@ def check_leaf_join(state, child_root):
         raise f.FlowError('child author identity mismatch')
 
 
+def fragment_probe_records(task, root):
+    """A done author hands off only the fragment bytes its own passing `task probe` measured."""
+    from pack_probe import AUTHOR
+    path = root/'probe'/'probe.json'
+    fragment = root/'sections'/(task['id'][len(AUTHOR):] + '.html')
+    try:
+        probe = json.loads(path.read_text(encoding='utf-8'))
+        current = (probe.get('status') == 'pass' and probe.get('task_id') == task['id']
+                   and probe.get('attempt') == task.get('attempt')
+                   and probe.get('fragment_sha256') == f._sha(fragment))
+    except (OSError, ValueError, AttributeError):
+        current = False
+    if not current:
+        raise f.FlowError('fragment probe missing, stale or failing')
+    return file_records([path])
+
+
 def validate_worker(state, task, receipt_path):
     from pack_receipts import validate_receipt
     spec = spec_for(state, task['id'])
@@ -558,6 +575,8 @@ def validate_worker(state, task, receipt_path):
     if previous and all(f._sha(Path(path)) == f._sha(local_path(root, name)) for name, path in previous.items()):
         raise f.FlowError('unchanged repair output')
     role = task['role']
+    if role == 'author' and state.get('probe_contract') == 1:
+        receipt['verified_files'].extend(fragment_probe_records(task, root))
     if role == 'concept-review':
         quiz = root/'quiz'
         if f._sha(quiz/'source.json') != f._sha(output(state, 'concept-draft', 'source.json')):
@@ -977,6 +996,23 @@ def metadata_diagnostics(manifest, note, paths):
     return {field: common_diagnostics(value, note, paths) for field, value in markup.items()}
 
 
+def diagnostic_source(code, detail, entry):
+    """Whether one `common_diagnostics` entry (doc, diagnostics) produces the page diagnostic."""
+    doc, diagnostics = entry
+    return (code, detail) in diagnostics or (code == 'duplicate-id' and detail in doc.ids)
+
+
+def fragment_owns(code, detail, fragment, metadata):
+    """machine_report's attribution of one page diagnostic to the section fragment.
+
+    A duplicate id that a manifest field also carries goes only to scope-draft, and a
+    diagnostic the fragment itself does not produce goes to the metadata or template owner.
+    """
+    if code == 'duplicate-id' and any(diagnostic_source(code, detail, entry) for entry in metadata.values()):
+        return False
+    return diagnostic_source(code, detail, fragment)
+
+
 def machine_report(state, root, problems, note, manifest, paths=None):
     issues = []
     sections = None
@@ -995,14 +1031,12 @@ def machine_report(state, root, problems, note, manifest, paths=None):
             if sections is None:
                 sections = fragment_diagnostics(state, manifest, note, paths)
             targets = [('author-' + sid, sid if problem.where == note.name else problem.where)
-                       for sid, (doc, diagnostics) in sections.items()
-                       if (problem.code, problem.detail) in diagnostics or problem.where in doc.ids
-                       or (problem.code == 'duplicate-id' and problem.detail in doc.ids)]
+                       for sid, entry in sections.items()
+                       if diagnostic_source(problem.code, problem.detail, entry) or problem.where in entry[0].ids]
             if metadata is None:
                 metadata = metadata_diagnostics(manifest, note, paths)
-            metadata_targets = [('scope-draft', field) for field, (doc, diagnostics) in metadata.items()
-                                if (problem.code, problem.detail) in diagnostics
-                                or (problem.code == 'duplicate-id' and problem.detail in doc.ids)]
+            metadata_targets = [('scope-draft', field) for field, entry in metadata.items()
+                                if diagnostic_source(problem.code, problem.detail, entry)]
             if problem.code == 'duplicate-id' and metadata_targets:
                 # Renaming the manifest occurrence can preserve the section or
                 # template anchor. Reassembly checks any remaining duplicates.
