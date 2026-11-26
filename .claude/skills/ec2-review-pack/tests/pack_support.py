@@ -299,6 +299,14 @@ def action_run(tmp_path, *, action='assemble-note'):
     return repo,run
 
 
+def author_probe(run, tid, attempt):
+    """Under probe_contract an author hands off only after `task probe`; no browser runs in fixtures."""
+    import pack_flow as f
+    from pack_probe import AUTHOR, fragment_probe
+    if tid.startswith(AUTHOR) and f.load_state(run).get('probe_contract') == 1:
+        fragment_probe(run, tid, attempt, layout=lambda html, out: (0, {'checks': []}))
+
+
 def parallel_worker(run, tid, write_outputs):
     """Claim, bind and submit files for a synthetic fixture reviewer only."""
     import pack_flow as f
@@ -309,6 +317,7 @@ def parallel_worker(run, tid, write_outputs):
     for p in outputs:
         p.parent.mkdir(parents=True, exist_ok=True)
     outputs += write_outputs(brief, outputs) or []
+    author_probe(run, tid, claim['attempt'])
     report = Path(brief['report'])
     report.parent.mkdir(parents=True, exist_ok=True)
     report.write_text('Synthetic fixture review only.')

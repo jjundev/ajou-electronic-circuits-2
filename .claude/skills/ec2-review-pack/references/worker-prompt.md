@@ -21,6 +21,7 @@
 반환 전 같은 시도 ID로 아래 명령을 순서대로 실행한다. `<RUN>`은 부모 RUN이고 `<python>`은 브리프의 `python` 값이다.
 
 ```sh
+<python> <SKILL>/scripts/pack_cli.py task probe --run <RUN> --task {task_id} --attempt {attempt}   # author만: status pass 확인
 <python> <SKILL>/scripts/pack_cli.py task build-receipt --run <RUN> --task {task_id} --attempt {attempt} --submission <submission.json의 절대 경로>
 <python> <SKILL>/scripts/pack_cli.py task check --run <RUN> --task {task_id} --attempt {attempt} --receipt <브리프 receipt의 절대 경로>
 ```

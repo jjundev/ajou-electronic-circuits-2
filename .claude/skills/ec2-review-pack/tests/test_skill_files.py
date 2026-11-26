@@ -182,7 +182,11 @@ class TestHardenedContracts(unittest.TestCase):
         expected = {
             "SKILL.md": ("~/.cache/ec2-review-pack", "NFC", "worker-prompt.md", "waived"),
             "references/runner-contract.md": ("task check", "--allow-tmp", "waived", "~/.cache/ec2-review-pack"),
-            "references/delegation.md": ("layout_probe.py", "task check"),
+            "references/delegation.md": ("layout_probe.py", "task check",
+                                         "작성자는 인계 전에 `<python> <SKILL>/scripts/pack_cli.py task probe"),
+            "references/worker-prompt.md": (
+                "<python> <SKILL>/scripts/pack_cli.py task probe --run <RUN> --task {task_id} --attempt {attempt}"
+                "   # author만: status pass 확인\n<python> <SKILL>/scripts/pack_cli.py task build-receipt",),
             "references/problem-explain-integration.md": ("bucket", "폴더 이름", "SVG", "task check"),
             "references/execution-guide.md": ("~/.cache/ec2-review-pack", "재부팅"),
         }

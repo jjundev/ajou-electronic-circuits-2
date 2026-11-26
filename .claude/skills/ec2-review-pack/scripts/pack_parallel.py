@@ -484,6 +484,23 @@ def check_leaf_join(state, child_root):
         raise f.FlowError('child author identity mismatch')
 
 
+def fragment_probe_records(task, root):
+    """A done author hands off only the fragment bytes its own passing `task probe` measured."""
+    from pack_probe import AUTHOR
+    path = root/'probe'/'probe.json'
+    fragment = root/'sections'/(task['id'][len(AUTHOR):] + '.html')
+    try:
+        probe = json.loads(path.read_text(encoding='utf-8'))
+        current = (probe.get('status') == 'pass' and probe.get('task_id') == task['id']
+                   and probe.get('attempt') == task.get('attempt')
+                   and probe.get('fragment_sha256') == f._sha(fragment))
+    except (OSError, ValueError, AttributeError):
+        current = False
+    if not current:
+        raise f.FlowError('fragment probe missing, stale or failing')
+    return file_records([path])
+
+
 def validate_worker(state, task, receipt_path):
     from pack_receipts import validate_receipt
     spec = spec_for(state, task['id'])
@@ -558,6 +575,8 @@ def validate_worker(state, task, receipt_path):
     if previous and all(f._sha(Path(path)) == f._sha(local_path(root, name)) for name, path in previous.items()):
         raise f.FlowError('unchanged repair output')
     role = task['role']
+    if role == 'author' and state.get('probe_contract') == 1:
+        receipt['verified_files'].extend(fragment_probe_records(task, root))
     if role == 'concept-review':
         quiz = root/'quiz'
         if f._sha(quiz/'source.json') != f._sha(output(state, 'concept-draft', 'source.json')):

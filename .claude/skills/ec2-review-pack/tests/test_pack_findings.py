@@ -735,6 +735,10 @@ def test_latest_machine_observation_cannot_charge_an_unchecked_earlier_candidate
     from test_pack_graph import cli
     import subprocess, sys
     run, fixture = note_run
+    # The later repair hands off a fragment that still lacks its widget fallback, which the
+    # author probe would refuse; the ledger rule under test is pinned on a RUN without the probe gate.
+    flow.update_state(run, flow.load_state(run)['revision'],
+                      lambda s: {k: v for k, v in s.items() if k != 'probe_contract'})
     p = fixture/'sections/s1.html'
     p.write_text(p.read_text().replace('class="widget-static"', 'class="missing-static"'))
     flow.update_state(run, flow.load_state(run)['revision'], lambda s: dict(s, actions={

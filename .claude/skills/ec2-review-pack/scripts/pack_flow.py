@@ -383,7 +383,7 @@ def init_run(repo: Path, run: Path, range_: str, *,
             state['problem_contract'] = 1  # one explain-author/-blind pair per selected problem
             state['concept_contract'] = 1
             state['join_contract'] = 2  # pack_findings.LABEL_ONLY_JOIN
-            state['probe_contract'] = 1  # author fragments carry a passing `task probe` (gate lands later)
+            state['probe_contract'] = 1  # a done author receipt needs a current passing `task probe`
             from pack_publication import publication_inventory, publication_lock
             with publication_lock(repo / '복습노트' / range_):
                 state['public_baseline'] = publication_inventory(repo / '복습노트' / range_, range_)

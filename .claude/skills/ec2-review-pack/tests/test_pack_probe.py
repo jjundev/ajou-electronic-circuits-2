@@ -188,3 +188,87 @@ def test_parallel_init_sets_probe_contract(tmp_path):
     from test_pack_graph import parallel
     _, _, state = parallel(tmp_path)
     assert state['probe_contract'] == 1
+
+
+def submit_author(run, tid, attempt):
+    """The submission/build-receipt half of `pack_support.parallel_worker` for an already-claimed author.
+
+    build-receipt writes the receipt before it prechecks it, so a refused precheck still
+    leaves the receipt for `task check` to judge.
+    """
+    from pack_receipts import build_receipt
+    state = flow.load_state(run)
+    if not state['tasks'][tid].get('agent_id'):
+        flow.bind_task(run, tid, attempt, 'synthetic-' + tid)
+    brief = json.loads(Path(state['tasks'][tid]['brief']).read_text(encoding='utf-8'))
+    outputs = [Path(name) for name in brief['required_outputs']]
+    report = Path(brief['report'])
+    report.parent.mkdir(parents=True, exist_ok=True)
+    report.write_text('Synthetic fixture review only.')
+    info = dict(status='done', report=str(report), reviews=[str(report)],
+                outputs=[str(p) for p in outputs if p.is_file()], counts={'targets': brief['targets']},
+                unresolved=[])
+    submission = Path(brief['run'])/'worker.json'
+    submission.write_text(json.dumps(info))
+    try:
+        build_receipt(flow.inspect_state(run), tid, attempt, submission)
+    except flow.FlowError:
+        pass
+    return Path(brief['receipt'])
+
+
+def test_author_receipt_requires_current_passing_probe(tmp_path):
+    run, tid, attempt = claimed_author(tmp_path, fragment=FIXTURE/'sections/s1.html')
+    receipt = submit_author(run, tid, attempt)                # build-receipt까지
+    assert flow.check_task(run, tid, attempt, receipt)['reason'] == 'fragment probe missing, stale or failing'
+    fragment_probe(run, tid, attempt, layout=lambda h, o: (0, {'checks': []}))
+    assert flow.check_task(run, tid, attempt, receipt)['status'] == 'ok'
+    (attempt_dir(run, tid)/'sections/s1.html').write_text('changed', encoding='utf-8')
+    receipt = submit_author(run, tid, attempt)
+    assert flow.check_task(run, tid, attempt, receipt)['status'] == 'failed'
+
+
+def test_author_receipt_rejects_failing_probe_and_records_passing_one(tmp_path):
+    run, tid, attempt = claimed_author(tmp_path, fragment=FIXTURE/'sections/s1.html')
+    receipt = submit_author(run, tid, attempt)
+    fragment_probe(run, tid, attempt, layout=lambda h, o: (1, {'checks': [{'overflow': [{'id': 'x'}]}]}))
+    assert flow.check_task(run, tid, attempt, receipt)['reason'] == 'fragment probe missing, stale or failing'
+    fragment_probe(run, tid, attempt, layout=CLEAN)
+    from pack_parallel import validate_worker
+    state = flow.load_state(run)
+    verified = validate_worker(state, state['tasks'][tid], receipt)['verified_files']
+    probe = attempt_dir(run, tid)/'probe/probe.json'
+    assert {'path': str(flow.nfc_path(probe)), 'sha256': flow._sha(probe)} in verified
+
+
+def test_author_receipt_without_probe_contract_is_unchanged(tmp_path):
+    run, tid, attempt = claimed_author(tmp_path, fragment=FIXTURE/'sections/s1.html')
+    flow.update_state(run, flow.load_state(run)['revision'], lambda s: (s.pop('probe_contract'), s)[1])
+    receipt = submit_author(run, tid, attempt)
+    assert flow.check_task(run, tid, attempt, receipt)['status'] == 'ok'
+
+
+def test_probe_uses_the_note_builder_even_after_workbook_assemble_loaded(tmp_path, monkeypatch):
+    # workbook/assemble.py shares the module name; a test or action may import it first.
+    import sys, types
+    monkeypatch.setitem(sys.modules, 'assemble', types.ModuleType('assemble'))
+    run, tid, attempt = claimed_author(tmp_path, fragment=FIXTURE/'sections/s1.html')
+    assert fragment_probe(run, tid, attempt, layout=CLEAN)['status'] == 'pass'
+
+
+def test_probe_walks_circuits_only_when_the_section_draws_figures(tmp_path):
+    # A circuit note fails "no topic figure was measured" when nothing is drawn. In the full
+    # note other sections hold figures; alone, a figure-free section must still be measurable.
+    plain = '<article class="topic" id="s1-mean"><p>글만 있는 토픽</p></article>'
+    run, tid, attempt = claimed_author(tmp_path, text=plain)
+    fragment_probe(run, tid, attempt, layout=CLEAN)
+    assert 'data-circuits' not in (attempt_dir(run, tid)/'probe/preview.html').read_text(encoding='utf-8')
+    run, tid, attempt = claimed_author(tmp_path/'drawn', fragment=FIXTURE/'sections/s1.html')
+    fragment_probe(run, tid, attempt, layout=CLEAN)
+    assert 'data-circuits' in (attempt_dir(run, tid)/'probe/preview.html').read_text(encoding='utf-8')
+
+
+def test_probe_real_layout_passes_a_figure_free_section(tmp_path):
+    pytest.importorskip('playwright')
+    run, tid, attempt = claimed_author(tmp_path, text='<article class="topic" id="s1-mean"><p>글</p></article>')
+    assert fragment_probe(run, tid, attempt)['layout']['status'] in ('pass', 'unavailable')

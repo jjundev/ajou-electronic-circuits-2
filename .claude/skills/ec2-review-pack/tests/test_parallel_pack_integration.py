@@ -127,6 +127,9 @@ class Trial:
             add_target_judgments(brief, submission)
         submission_path = Path(brief['run'])/'submission.json'
         write(submission_path, submission)
+        if tid.startswith('author-') and read(self.run/'run-status.json').get('probe_contract'):
+            # Without a browser the layout half is `unavailable`, which still passes.
+            self.cli('task', 'probe', *task)
         self.cli('task', 'build-receipt', *task, '--submission', submission_path)
         self.cli('task', 'check', *task, '--receipt', brief['receipt'])
         self.cli('task', 'accept', *task, '--receipt', brief['receipt'])
