@@ -644,3 +644,141 @@ def test_static_css_target_views_capture_the_navigated_fragment(tmp_path):
                 assert color == ((0,255,0) if view.endswith('dark') else (255,0,0)), (topic,view,color)
                 assert image.size == ((375,812) if view.startswith('mobile') else (1280,900))
             assert row['image_sha256'] == flow._sha(Path(row['image']))
+
+
+def two_problem_blind_run(tmp_path):
+    """problem_contract=1 with P10.01 and P10.02 sealed one problem per folder."""
+    from display_titles import numbered_title
+    ids = ['P10.01', 'P10.02']
+    state = selected(tmp_path, ids)
+    state['problem_contract'] = 1
+    for tid in ('explain-author', 'explain-blind'):  # rows refreshed before the contract was set
+        state['tasks'].pop(tid)
+    run = Path(state['run'])
+    seed(state, ['stage-problem-index'])
+    rows = [dict(workbook_id=pid, id=f'p{i}', display_title=pid, title=numbered_title({pid: pid}, pid, i),
+                 original_html=pid, conditions_html='conditions', ask_html='question', subparts=['a'], figures=[])
+            for i, pid in enumerate(ids, 1)]
+    questions = write(run/'sealed/questions.json', dict(problems=rows))
+    per_problem = {row['id']: [str(write(run/'sealed'/row['id']/'questions.json', dict(problems=[row])))]
+                   for row in rows}
+    pack = run/'candidate-pack'
+    pack.mkdir()
+    manifest = write(run/'selection-manifest.json', dict(range='0909', slug='Test'))
+    index = state['actions']['stage-problem-index']
+    index.update(questions=[str(questions)], problem_questions=per_problem,
+                 artifacts={'questions.json': str(questions)}, pack=dict(root=str(pack), files={}))
+    state['tasks']['selection']['artifacts'] = {'manifest.json': str(manifest)}
+    flow.update_state(run, state['revision'], lambda _: flow.refresh_tasks(state))
+    return run
+
+
+def accept_author(run, tid, agent):
+    from pack_receipts import build_receipt
+    brief, _, submission = compact(run, tid, agent)
+    for name in brief['required_outputs']:
+        p = Path(name)
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text('fixture fragment ' + tid)
+    write(submission, dict(flow._read(submission), reviews=[brief['report']], outputs=brief['required_outputs']))
+    build_receipt(flow.inspect_state(run), tid, brief['attempt'], submission)
+    return flow.accept_task(run, tid, brief['attempt'], Path(brief['receipt']))
+
+
+def accept_blind(run, tid, agent):
+    from pack_receipts import build_receipt
+    brief, decisions, submission = compact(run, tid, agent)
+    write(decisions, {t: dict(status='pass', method='exact', conclusion='1', evidence='fixture inspection')
+                      for t in brief['approval_plan']['pending']})
+    build_receipt(flow.inspect_state(run), tid, brief['attempt'], submission)
+    return flow.accept_task(run, tid, brief['attempt'], Path(brief['receipt']))
+
+
+def test_counterpart_pairs_author_and_solver_per_problem():
+    from pack_parallel import counterpart
+    assert counterpart('explain-author-p3') == 'explain-blind-p3'
+    assert counterpart('explain-blind-p12') == 'explain-author-p12'
+    assert counterpart('explain-author') == 'explain-blind'
+    assert counterpart('explain-blind') == 'explain-author'
+
+
+def test_cross_problem_agent_allowed_same_problem_rejected(tmp_path):
+    run = two_problem_blind_run(tmp_path)
+    accept_author(run, 'explain-author-p1', agent='agent-A')
+    accept_blind(run, 'explain-blind-p2', agent='agent-A')
+    with pytest.raises(flow.FlowError, match='independent solver must differ from author'):
+        accept_blind(run, 'explain-blind-p1', agent='agent-A')
+
+
+def test_per_problem_blind_keys_cover_only_its_own_problem(tmp_path):
+    run = two_problem_blind_run(tmp_path)
+    state = accept_blind(run, 'explain-blind-p1', agent='solver-1')
+    items = flow._read(state['tasks']['explain-blind-p1']['artifacts']['independent.json'])['items']
+    assert set(items) == {'p1:a'}
+
+
+def solved_two_problems(tmp_path):
+    run = two_problem_blind_run(tmp_path)
+    accept_author(run, 'explain-author-p1', agent='author-1')
+    accept_author(run, 'explain-author-p2', agent='author-2')
+    accept_blind(run, 'explain-blind-p1', agent='solver-1')
+    accept_blind(run, 'explain-blind-p2', agent='solver-2')
+    return run
+
+
+def test_coordinator_receives_joined_blind_items(tmp_path):
+    import os, stat
+    run = solved_two_problems(tmp_path)
+    brief = json.loads(Path(flow.claim_task(run, 'child-coordinator')['brief']).read_text())
+    joined = Path(brief['independent'])
+    items = json.loads(joined.read_text())['items']
+    assert {k.split(':')[0] for k in items} == {'p1', 'p2'}
+    assert joined.parent.parent == run/'adopted'/'blind-join'
+    assert not os.stat(joined).st_mode & stat.S_IWRITE
+    assert str(joined) in {r['path'] for r in brief['inputs']}
+    assert {items['p1:a']['reviewer'], items['p2:a']['reviewer']} == {'solver-1', 'solver-2'}
+
+
+def test_blind_items_rejects_duplicate_keys(tmp_path):
+    import pack_parallel
+    run = solved_two_problems(tmp_path)
+    state = flow.inspect_state(run)
+    assert set(pack_parallel.blind_items(state)) == {'p1:a', 'p2:a'}
+    clash = write(run/'clash.json', dict(items={'p1:a': dict(reviewer='solver-2')}))
+    state['tasks']['explain-blind-p2']['artifacts']['independent.json'] = str(clash)
+    with pytest.raises(flow.FlowError, match='duplicate independent item'):
+        pack_parallel.blind_items(state)
+
+
+def test_coordinator_cannot_be_any_problem_author(tmp_path):
+    import pack_findings
+    run = solved_two_problems(tmp_path)
+    state = flow.inspect_state(run)
+    task = dict(state['tasks']['child-coordinator'], agent_id='author-2')
+    with pytest.raises(flow.FlowError, match='cannot review explanations it authored'):
+        pack_findings.check_reviewer(state, task)
+    pack_findings.check_reviewer(state, dict(task, agent_id='coordinator'))
+
+
+def test_leaf_join_checks_each_problem_author(tmp_path):
+    import shutil
+    import pack_parallel
+    run = solved_two_problems(tmp_path)
+    state = flow.inspect_state(run)
+    child = tmp_path/'child'
+    folder = child/'bucket'
+    (folder/'explanations').mkdir(parents=True)
+    for k in ('p1', 'p2'):
+        name = f'explanations/{k}.html'
+        shutil.copyfile(state['tasks'][f'explain-author-{k}']['artifacts'][name], folder/name)
+    write(folder/'review.json', dict(independent=dict(items=pack_parallel.blind_items(state))))
+    receipt = dict(bucket='bucket', reviewers=dict(authors={'p1': 'author-1', 'p2': 'author-2'}))
+    write(child/'child-receipt.json', receipt)
+    pack_parallel.check_leaf_join(state, child)
+    write(child/'child-receipt.json', dict(receipt, reviewers=dict(authors={'p1': 'author-2', 'p2': 'author-1'})))
+    with pytest.raises(flow.FlowError, match='child author identity mismatch'):
+        pack_parallel.check_leaf_join(state, child)
+    write(child/'child-receipt.json', receipt)
+    (folder/'explanations/p2.html').write_text('replaced')
+    with pytest.raises(flow.FlowError, match='child replaced accepted author fragment'):
+        pack_parallel.check_leaf_join(state, child)

@@ -169,6 +169,7 @@ def review_reports(state, review_id):
 
 def record_findings(state: dict, *, review_id: str, input_digest: str, findings: list[dict]) -> dict:
     """Ingest evidence from a validated, current review receipt or machine comparison."""
+    from pack_graph import role_of
     source = _judgment(state, review_id)
     if not _current_judgment(state, review_id) or source['candidate_digest'] != input_digest:
         raise f.FlowError('finding review no longer current')
@@ -183,7 +184,7 @@ def record_findings(state: dict, *, review_id: str, input_digest: str, findings:
         if (key in seen or item.get('severity') not in SEVERITIES
                 or not isinstance(item.get('evidence'), str) or not item['evidence'].strip()
                 or (owner not in state['tasks'] and not external) or owner not in source['input_version']
-                or owner in (*REVIEW_ROLES, 'explain-blind')):
+                or owner in REVIEW_ROLES or role_of(owner) == 'explain-blind'):
             raise f.FlowError('invalid or duplicate finding, owner or evidence')
         if review_id == COORDINATOR and owner != COORDINATOR_OWNER:
             raise f.FlowError('child-coordinator findings are owned by explain-author')
@@ -401,8 +402,9 @@ def check_reviewer(state, task):
     if any(t.get('agent_id') == reviewer for t in authors):
         raise f.FlowError('the correction author cannot approve their own repair')
     if task['id'] == COORDINATOR:
-        author = state['tasks'].get(COORDINATOR_OWNER, {})
-        if reviewer in {author.get('agent_id'), *(r.get('agent_id') for r in author.get('history', []))}:
+        from pack_graph import explain_ids
+        authors = [state['tasks'].get(tid, {}) for tid in explain_ids(state, 'explain-author')]
+        if reviewer in {a for t in authors for a in (t.get('agent_id'), *(r.get('agent_id') for r in t.get('history', [])))}:
             raise f.FlowError('the child coordinator cannot review explanations it authored')
     if task['id'] in NOTE_REVIEWS:
         other = next(tid for tid in NOTE_REVIEWS if tid != task['id'])

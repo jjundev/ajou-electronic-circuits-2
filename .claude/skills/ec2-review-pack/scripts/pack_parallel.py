@@ -12,7 +12,14 @@ import time
 
 import pack_flow as f
 import pack_findings as findings
-from pack_graph import problem_key, role_of, task_specs
+from pack_graph import explain_ids, problem_key, problem_keys, role_of, task_specs
+
+
+def counterpart(task_id: str) -> str:
+    """The other half of one problem's independence pair: author <-> blind solver."""
+    role = role_of(task_id)
+    other = {'explain-author': 'explain-blind', 'explain-blind': 'explain-author'}[role]
+    return other if task_id == role else f'{other}-{problem_key(task_id)}'
 
 
 def sealed_question_paths(state, spec):
@@ -152,10 +159,11 @@ def worker_inputs(state, spec):
 
 
 def explanation_digest(state):
-    """The child coordinator's candidate: the accepted explain-author fragment set."""
-    author = state['tasks'][findings.COORDINATOR_OWNER]
-    names = spec_for(state, author['id']).outputs
-    files = {name: f._sha(Path(author['artifacts'][name])) for name in names}
+    """The child coordinator's candidate: the accepted fragment set of every explanation author."""
+    files = {}
+    for tid in explain_ids(state, 'explain-author'):
+        author = state['tasks'][tid]
+        files.update({name: f._sha(Path(author['artifacts'][name])) for name in spec_for(state, tid).outputs})
     return hashlib.sha256(json.dumps(files, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
 
 
@@ -287,6 +295,13 @@ def claim_worker(state, task):
                     instruction=('Extract against this candidate pack and slug. Use the accepted fragments and independent results. '
                                  'For a new pack, apply the optional circuit lab selection in problem-explain-integration.md '
                                  'before the final explanation build. Complete all child reviews.'))
+        if state.get('problem_contract'):
+            joined = Path(state['run']) / 'adopted' / 'blind-join' / str(uuid4()) / 'independent.json'
+            joined.parent.mkdir(parents=True)
+            f._atomic_json(joined, dict(items=blind_items(state)))
+            joined.chmod(0o444)
+            data['independent'] = str(joined)
+            data['inputs'].extend(file_records([joined]))
     repairs = [r for r in state.get('findings', {}).values()
                if r['owner_task'] == task['id'] and r.get('pending_request') and not findings.repair_record(state, r)]
     if repairs:
@@ -437,19 +452,35 @@ def check_selection_history(state, receipt):
         raise SelectionHistoryChanged(receipt['attempt'])
 
 
+def blind_items(state: dict) -> dict:
+    """All accepted independent solutions, joined across the blind solver tasks."""
+    joined = {}
+    for tid in explain_ids(state, 'explain-blind'):
+        for key, item in f._read(output(state, tid, 'independent.json'))['items'].items():
+            if key in joined:
+                raise f.FlowError('duplicate independent item')
+            joined[key] = item
+    return joined
+
+
 def check_leaf_join(state, child_root):
     child = f._read(child_root / 'child-receipt.json')
-    author = state['tasks']['explain-author']
     folder = child_root / child['bucket']
-    for name in spec_for(state, 'explain-author').outputs:
-        if f._sha(output(state, 'explain-author', name)) != f._sha(local_path(folder, name)):
-            raise f.FlowError('child replaced accepted author fragment')
-    items = f._read(output(state, 'explain-blind', 'independent.json'))['items']
+    for tid in explain_ids(state, 'explain-author'):
+        for name in spec_for(state, tid).outputs:
+            if f._sha(output(state, tid, name)) != f._sha(local_path(folder, name)):
+                raise f.FlowError('child replaced accepted author fragment')
+    items = blind_items(state)
     reviewed = f._read(folder / 'review.json')['independent']['items']
     if set(items) != set(reviewed) or any(any(reviewed[k].get(field) != val for field, val in item.items())
                                           for k, item in items.items()):
         raise f.FlowError('child independent review differs from accepted blind solution')
-    if any(agent != author['agent_id'] for agent in child['reviewers']['authors'].values()):
+    authors = child['reviewers']['authors']
+    if state.get('problem_contract'):
+        if set(authors) != set(problem_keys(state)) or any(
+                authors[k] != state['tasks'][f'explain-author-{k}']['agent_id'] for k in authors):
+            raise f.FlowError('child author identity mismatch')
+    elif any(agent != state['tasks'][explain_ids(state, 'explain-author')[0]]['agent_id'] for agent in authors.values()):
         raise f.FlowError('child author identity mismatch')
 
 
@@ -550,15 +581,16 @@ def validate_worker(state, task, receipt_path):
     if role in ('explain-author', 'explain-blind'):
         if not task.get('agent_id'):
             raise f.FlowError('bound leaf reviewer identity required')
-        other = state['tasks']['explain-blind' if role == 'explain-author' else 'explain-author']
+        other = state['tasks'][counterpart(task['id'])]
         if role == 'explain-author' and other['status'] == 'done':
-            solved = f._read(output(state, 'explain-blind', 'independent.json'))['items']
+            solved = f._read(output(state, counterpart(task['id']), 'independent.json'))['items']
             if any(item['reviewer'] == task['agent_id'] for item in solved.values()):
                 raise f.FlowError('independent solver cannot author their reused solution')
         if other.get('agent_id') == task['agent_id']:
             raise f.FlowError('independent solver must differ from author')
     if role == 'explain-blind':
-        questions = f._read(output(state, 'stage-problem-index', 'questions.json'))['problems']
+        questions = f._read(brief['questions'] if state.get('problem_contract')
+                            else output(state, 'stage-problem-index', 'questions.json'))['problems']
         keys = {p['id'] + ':' + sub for p in questions for sub in p['subparts']}
         items = (receipt['joined_independent'] if 'joined_independent' in receipt
                  else f._read(root/'independent.json')['items'])
@@ -568,7 +600,7 @@ def validate_worker(state, task, receipt_path):
                                       run_root=Path(state['run']))['current']
         solvers = {plan['targets'][t]['item']:r['reviewer'] for t,r in old.items()}
         if set(items) != keys or any(item.get('reviewer') != solvers.get(k, task['agent_id']) or
-                item.get('reviewer') == state['tasks']['explain-author'].get('agent_id') or
+                item.get('reviewer') == state['tasks'][counterpart(task['id'])].get('agent_id') or
                 not all(isinstance(item.get(k), str) and item[k].strip() for k in ('method', 'conclusion', 'evidence'))
                 for k,item in items.items()):
             raise f.FlowError('blind solution must cover every subpart with the bound solver')
