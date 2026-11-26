@@ -12,7 +12,15 @@ import time
 
 import pack_flow as f
 import pack_findings as findings
-from pack_graph import task_specs
+from pack_graph import problem_key, role_of, task_specs
+
+
+def sealed_question_paths(state, spec):
+    """The sealed files one explanation worker may read: all of them, or one problem's folder."""
+    row = f._record(state, 'stage-problem-index')
+    if state.get('problem_contract'):
+        return list(map(Path, row['problem_questions'][problem_key(spec.id)]))
+    return list(map(Path, row['questions']))
 
 
 def spec_for(state, tid):
@@ -72,9 +80,8 @@ def public(state):
 
 
 def original_worker_inputs(state, spec):
-    row = f._record(state, 'stage-problem-index')
-    if spec.id in ('explain-blind', 'explain-author'):
-        return file_records(Path(p) for p in row['questions'])
+    if role_of(spec.id) in ('explain-blind', 'explain-author'):
+        return file_records(sealed_question_paths(state, spec))
     paths = set(state['hashes'])
     for dep in spec.dependencies:
         row = f._record(state, dep)
@@ -92,8 +99,8 @@ def worker_inputs(state, spec):
     if not state.get('approval_contract'):
         return original_worker_inputs(state, spec)
     role = f._record(state, spec.id)['role']
-    if role in ('explain-blind', 'explain-author'):
-        return file_records(map(Path, state['actions']['stage-problem-index']['questions']))
+    if role_of(spec.id) in ('explain-blind', 'explain-author'):
+        return file_records(sealed_question_paths(state, spec))
     snapshot = Path(state['run'])/'learning-style.json'
     paths = set() if role in f.PROFILE_EXEMPT else {snapshot, Path(state['repo'])/f._read(snapshot)['path']}
     if role == 'concept-review':
@@ -177,7 +184,11 @@ def claim_worker(state, task):
                 allowed_output_roots=[str(root)], report=str(review), receipt=str(root/'receipt.json'),
                 request_paths=task.get('request_paths', []))
     if role in ('explain-author', 'explain-blind'):
-        data['questions'] = str(output(state, 'stage-problem-index', 'questions.json'))
+        if state.get('problem_contract'):
+            data['questions'] = str(output(state, 'stage-problem-index', 'questions.json').parent
+                                    / problem_key(spec.id) / 'questions.json')
+        else:
+            data['questions'] = str(output(state, 'stage-problem-index', 'questions.json'))
         data['instruction'] = ('Use only the sealed question text and figures. Submit independent.json with items '
                                'keyed by pN:subpart, method, conclusion and evidence.' if role == 'explain-blind'
                                else 'Write one child explanation HTML fragment per problem using the sealed question and figures.')
@@ -858,11 +869,24 @@ def seal_questions(state, paths, root, slug):
             item['figures'].append(name)
         problems.append(item)
     f._atomic_json(sealed/'questions.json', dict(problems=problems))
+    per_problem = {}
+    if state.get('problem_contract'):
+        from pack_graph import problem_keys
+        if [item['id'] for item in problems] != problem_keys(state):
+            raise f.FlowError('sealed question IDs differ from the selection order')
+        # Each per-problem worker gets a folder holding only its own question and figures.
+        for item in problems:
+            folder = sealed / item['id']
+            folder.mkdir()
+            for name in item['figures']:
+                shutil.copyfile(sealed/name, folder/name)
+            f._atomic_json(folder/'questions.json', dict(problems=[item]))
+            per_problem[item['id']] = sorted(folder.iterdir())
     inputs = [paths.source_file(p) for p in source['inputs']]
     digest = hashlib.sha256(''.join(f._sha(p) for p in inputs).encode()).hexdigest()
     if digest != source['sha256']:
         raise f.FlowError('question inputs changed during extraction')
-    return sealed, inputs
+    return sealed, inputs, per_problem
 
 
 def input_bundle(state, spec, root):
@@ -1149,9 +1173,11 @@ def execute_action(state, spec, root):
         roster = {p.relative_to(paths.work_pack).as_posix(): f._sha(p) for p in produced}
         extras.update(pack=dict(root=str(paths.work_pack), files=roster), candidate_root=str(paths.work_pack))
         if tid == 'stage-problem-index':
-            sealed, sources = seal_questions(state, paths, root, f._read(bundle/'manifest.json')['slug'])
-            extras.update(questions=[str(p) for p in sorted(sealed.iterdir())],
+            sealed, sources, per_problem = seal_questions(state, paths, root, f._read(bundle/'manifest.json')['slug'])
+            extras.update(questions=[str(p) for p in sorted(sealed.iterdir()) if p.is_file()],
                           source_inputs=file_records(sources))
+            if state.get('problem_contract'):
+                extras['problem_questions'] = {k: [str(p) for p in v] for k, v in per_problem.items()}
             files['questions.json'] = sealed/'questions.json'
         if tid == 'assemble-note': files['note'], = produced
         if tid == 'build-answers':
@@ -1165,6 +1191,7 @@ def execute_action(state, spec, root):
                                                md=file_records(produced[:1])[0], svgs=file_records(produced[1:]))
     extras['artifacts'] = {key: str(path) for key, path in files.items()}
     evidence = set(files.values()) | set(map(Path, extras.get('questions', [])))
+    evidence.update(Path(p) for group in extras.get('problem_questions', {}).values() for p in group)
     for name in extras.get('pack', {}).get('files', {}):
         evidence.add(paths.work_file(name))
     if tid == 'precheck':
@@ -1270,7 +1297,7 @@ def stopped_candidate(state, tid, attempt, root):
     if record['status'] == 'done' and verify_receipt_files(record):
         raise f.FlowError('completed attempt files changed')
     fields = ('status', 'error_code', 'detail', 'artifacts', 'pack', 'candidate_root', 'questions',
-              'source_inputs', 'verified_files', 'converted_assets', 'completed_at')
+              'problem_questions', 'source_inputs', 'verified_files', 'converted_assets', 'completed_at')
     return {key: record[key] for key in fields if key in record}
 
 
