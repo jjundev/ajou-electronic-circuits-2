@@ -418,7 +418,7 @@ E12.28 · 예제 12.28 · [원 문제 보기](../%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%
 
 #### 반송 복제가 첫 단을 축퇴시켜요
 
-㉠ 반송 복제를 단락해 얻은 $R_S$가 $M_1$ 소스에 달려요. ㉡ 감지 복제의 열린 가운데 포트는 출력에 $R_1+R_2$를 남겨요. 두 MOS는 $\lambda=0$으로 가정해요.
+㉠ 반송 복제를 단락해 얻은 $R_S$가 $M_1$ 소스에 달려요. 두 MOS는 $\lambda=0$으로 가정해요.
 
 $$
 R_S=R_1\parallel R_2
@@ -430,20 +430,20 @@ $$
 \frac{v_X}{v_{in}}=-\frac{R_{D1}}{1/g_{m1}+R_S}
 $$
 
-출력 단락에서 $M_2$ 드레인으로 들어가는 전류를 양으로 잡아요.
-
-$$
-G_m=g_{m2}\frac{v_X}{v_{in}}=-\frac{g_{m2}R_{D1}}{1/g_{m1}+R_S}
-$$
-
-입력을 0으로 두고 출력에서 본 저항이에요.
+㉡ 감지 복제의 가운데 포트가 열려 있어 $R_1+R_2$가 $R_{D2}$에 병렬로 붙어요.
 
 $$
 R_{\mathrm{out,open}}=R_{D2}\parallel(R_1+R_2)
 $$
 
 $$
-A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}=\frac{g_{m2}R_{D1}R_{\mathrm{out,open}}}{1/g_{m1}+R_S}
+\frac{v_{out}}{v_X}=-g_{m2}R_{\mathrm{out,open}}
+$$
+
+두 공통 소스 단이 각각 반전하므로 개루프 이득은 양수예요.
+
+$$
+A_{\mathrm{open}}=\frac{v_X}{v_{in}}\frac{v_{out}}{v_X} =\frac{g_{m2}R_{D1}R_{\mathrm{out,open}}}{1/g_{m1}+R_S}
 $$
 
 $$
@@ -470,7 +470,7 @@ $$
 
 반송 복제는 첫 단의 소스 축퇴, 감지 복제는 둘째 단의 출력 부하예요.
 
-첫 단의 $v_X/v_{in}$에 $g_{m2}$를 곱하면 전체 $G_m$이에요.
+㉢의 $X$를 기준으로 첫 단의 $v_X/v_{in}$과 둘째 단의 $v_{out}/v_X$를 곱해요.
 
 ---
 
@@ -510,10 +510,28 @@ $R_1 + R_2$가 $r_{OP} \parallel r_{ON}$보다 충분히 크지 않을 때 그�
 
 ㉠ 반송 복제의 $R_1\parallel R_2$에는 게이트 전류가 흐르지 않아 $M_2$ 게이트가 교류 접지예요. ㉡ 감지 복제의 $R_1+R_2$는 출력 저항과 병렬이에요.
 
-대칭 차동쌍, 이상적 테일 전류원과 ㉢ 거울 근사($g_{mP}(r_{ON}\parallel r_{OP})\gg1$)를 써요. 출력 단락에서 증폭기로 들어가는 전류를 양으로 잡아요.
+대칭 차동쌍, 이상적 테일 전류원과 ㉢ 거울 근사($g_{mP}(r_{ON}\parallel r_{OP})\gg1$)를 써요.
+
+![출력 단락 상태. 아래를 양으로 잰 전류 변화는 M4에서 양수, M2에서 음수예요. 오른쪽 단락선에서 증폭기로 들어가는 화살표가 출력 단락 전류의 기준 방향이에요.](figures_문제설명_1120_Nonideal_IO_Feedback/explain-fig-5.svg)
+
+*출력 단락 · 양의 입력에서의 소신호 전류 변화*
+
+입력을 올리면 $M_4$는 위에서 더 공급하고 $M_2$는 아래로 덜 끌어가요. 그림에서 두 가지 전류는 아래를 양으로, $i_{\mathrm{sc}}$는 오른쪽 단락선에서 증폭기로 들어가는 쪽을 양으로 잡아요. 대칭 차동쌍에서 $g_{m1}=g_{m2}=g_{mN}$이에요. 남는 전류는 단락선으로 나가므로 $i_{\mathrm{sc}}$는 음수예요.
 
 $$
-G_m\approx-g_{mN}
+\Delta i_4\approx+\frac{g_{mN}v_{in}}{2}
+$$
+
+$$
+\Delta i_2\approx-\frac{g_{mN}v_{in}}{2}
+$$
+
+$$
+i_{\mathrm{sc}}=\Delta i_2-\Delta i_4\approx -g_{m1}v_{in}
+$$
+
+$$
+G_m=\frac{i_{\mathrm{sc}}}{v_{in}}\approx -g_{m1}
 $$
 
 입력을 0으로 두고 출력에서 본 저항이에요.
@@ -523,7 +541,7 @@ R_{\mathrm{out,open}}\approx r_{ON}\parallel r_{OP}\parallel(R_1+R_2)
 $$
 
 $$
-A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}\approx g_{mN}R_{\mathrm{out,open}}
+A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}\approx g_{m1}R_{\mathrm{out,open}}
 $$
 
 $$

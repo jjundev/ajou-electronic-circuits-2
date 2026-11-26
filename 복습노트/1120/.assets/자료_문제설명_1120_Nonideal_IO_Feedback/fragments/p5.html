@@ -35,23 +35,18 @@
   <div data-subpart="main">
     <h4>반송 복제가 첫 단을 축퇴시켜요</h4>
     <div data-answer-step="첫 단과 둘째 단 연결">
-      <p><span class="loc">㉠</span> 반송 복제를 단락해 얻은 $R_S$가 $M_1$ 소스에 달려요. <span class="loc">㉡</span> 감지 복제의 열린 가운데 포트는 출력에 $R_1+R_2$를 남겨요. 두 MOS는 $\lambda=0$으로 가정해요.</p>
+      <p><span class="loc">㉠</span> 반송 복제를 단락해 얻은 $R_S$가 $M_1$ 소스에 달려요. 두 MOS는 $\lambda=0$으로 가정해요.</p>
       $$R_S=R_1\parallel R_2$$
       <p><span class="loc">㉢</span> 첫 단 출력 $X$에서는 $M_2$ 게이트 전류가 0이라 부하가 $R_{D1}$이에요.</p>
       $$\frac{v_X}{v_{in}}=-\frac{R_{D1}}{1/g_{m1}+R_S}$$
     </div>
-    <div data-answer-step="개루프 이득" data-gain-route="gm-rout">
-      <div data-gain-stage="gm">
-        <p>출력 단락에서 $M_2$ 드레인으로 들어가는 전류를 양으로 잡아요.</p>
-        $$G_m=g_{m2}\frac{v_X}{v_{in}}=-\frac{g_{m2}R_{D1}}{1/g_{m1}+R_S}$$
-      </div>
-      <div data-gain-stage="rout">
-        <p>입력을 0으로 두고 출력에서 본 저항이에요.</p>
-        $$R_{\mathrm{out,open}}=R_{D2}\parallel(R_1+R_2)$$
-      </div>
-      <div data-gain-stage="gain">
-        $$A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}=\frac{g_{m2}R_{D1}R_{\mathrm{out,open}}}{1/g_{m1}+R_S}$$
-      </div>
+    <div data-answer-step="둘째 단과 개루프 이득">
+      <p><span class="loc">㉡</span> 감지 복제의 가운데 포트가 열려 있어 $R_1+R_2$가 $R_{D2}$에 병렬로 붙어요.</p>
+      $$R_{\mathrm{out,open}}=R_{D2}\parallel(R_1+R_2)$$
+      $$\frac{v_{out}}{v_X}=-g_{m2}R_{\mathrm{out,open}}$$
+      <p>두 공통 소스 단이 각각 반전하므로 개루프 이득은 양수예요.</p>
+      $$A_{\mathrm{open}}=\frac{v_X}{v_{in}}\frac{v_{out}}{v_X}
+      =\frac{g_{m2}R_{D1}R_{\mathrm{out,open}}}{1/g_{m1}+R_S}$$
     </div>
     <div data-answer-step="귀환율">
       $$K=\frac{R_2}{R_1+R_2}$$
@@ -66,5 +61,5 @@
   </div>
 </div>
 <div class="sum" hidden>
-  <p class="sum-lead">반송 복제는 첫 단의 소스 축퇴, 감지 복제는 둘째 단의 출력 부하예요.</p><p>첫 단의 $v_X/v_{in}$에 $g_{m2}$를 곱하면 전체 $G_m$이에요.</p>
+  <p class="sum-lead">반송 복제는 첫 단의 소스 축퇴, 감지 복제는 둘째 단의 출력 부하예요.</p><p>㉢의 $X$를 기준으로 첫 단의 $v_X/v_{in}$과 둘째 단의 $v_{out}/v_X$를 곱해요.</p>
 </div>

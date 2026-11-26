@@ -1,119 +1,70 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>그림 12.61(a)와 거의 같은 회로지만 레이저가 없고, $M_2$ 드레인이 곧바로 $R_M$과 $R_F$가 만나는 노드 $P$예요. 관심 출력은 이 노드의 전압 $V_{out}$이에요.</p>
-  <p>입력은 여전히 전류 $I_{in}$이고 입력 노드($N$이라 부를게요)는 CG $M_1$의 소스예요. $R_F$는 출력 전압 $V_{out}$을 병렬로 감지하고, 그 전류를 $N$에서 $I_{in}$과 병렬로 합쳐요. 전압을 감지해 전류로 되돌리니 전압-전류(V-C) 귀환이에요.</p>
-  <p>$R_M$은 이제 전류를 감지하는 저항이 아니라 출력 노드의 평범한 부하예요. 원문은 $r_{O2}$를 따로 말하지 않아요. 비교 대상인 예제 12.32의 가정($r_{O2}\lt\infty$)을 이어받아 $r_{O2}$를 유한으로 두는 일반화를 쓰고, $r_{O2}\to\infty$로 두면 교과서 결과로 돌아가는지 검산에서 확인해요. 다른 $r_o$는 무한대, 몸체 효과는 무시해요.</p>
-  <p>구할 것은 개루프 트랜스임피던스 $R_O=V_{out}/I_{in}$, 개루프 입력·출력 임피던스, 귀환율 $K$, 폐루프 값, 그리고 예제 12.32 회로와의 차이예요.</p>
-</div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p><strong>단서 → 개념.</strong> “관심 있는 출력은 $V_{out}$”이라는 말이 귀환 종류를 바꿔요. 회로는 그대로여도 출력을 전압으로 정의하면 감지가 병렬(전압)이 되어 V-C 귀환의 종지 법칙을 써요.</p>
-  <p><strong>V-C의 종지 법칙.</strong> 감지도 병렬, 반송도 병렬이라 두 복제의 남는 포트를 모두 단락해요. 반송 복제는 $P$ 쪽이 단락되어 $N$에서 $R_F$가 접지로 보여요. 감지 복제는 $N$ 쪽이 단락되어 $P$에서 $R_F$가 접지로 보여요.</p>
-  <p><strong>귀환율.</strong> 교과서 Fig 12.54(b)에서는 $K=I_2/V_1$로 쓰지만, 여기서는 원 회로 기호 그대로 $P$에 $V_{out}$을 걸고 단락한 $N$ 쪽의 $I_F$($N\to P$ 양의 방향)를 재어 $K=I_F/V_{out}$(단위 S)로 바로 구해요. 개루프 이득 $R_O$는 Ω이라 $T=KR_O$는 단위가 없어요.</p>
-  <p><strong>임피던스 규칙.</strong> 입력·출력이 모두 병렬 연결이라 $R_{in}$과 $R_{out}$을 모두 $(1+T)$로 나눠요. 전압 출력이 귀환으로 단단해지는(낮은 출력 임피던스) 그림이에요.</p>
-  <p><strong>알려진 블록.</strong> 1단은 입력의 $I_{in}\parallel R_F$를 노턴→테브난 변환으로 바꿔 CG 전압이득 블록에 곱하고, 2단은 PMOS 공통 소스(CS) 전압이득 $-g_{m2}\times$(출력 노드의 저항)이에요.</p>
-</div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="개루프 회로와 첫 식">
-    <p>두 복제 모두 남는 포트를 단락하므로 $N$에는 $R_F$만, $P$에는 $R_M$과 접지된 $R_F$가 붙은 개루프 회로를 그려요.</p>
-    <figure class="figure"><svg viewBox="0 0 470 340" role="img" aria-label="개루프 회로. V_DD에서 R_D를 거쳐 노드 X, M1 드레인 X, 게이트 V_b, 소스 입력 노드 N. 왼쪽 I_in이 접지에서 N으로 흐르고, N에는 귀환망 복제 R_F가 접지까지. X는 PMOS M2 게이트, M2 소스 V_DD, 드레인이 출력 노드 P. P에서 R_M과 귀환망 복제 R_F가 각각 접지로, 오른쪽 끝이 출력 V_out."><path class="fig-ink" d="M120 30 L380 30"/><text class="fig-text fig-math" x="389.2" y="35">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text><path class="fig-ink" d="M140 30 V41.0 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 V100"/><text class="fig-text fig-math" x="121" y="70" text-anchor="end">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text><path class="fig-ink" d="M140 100 L140 116"/><circle class="fig-dot" data-node="X" data-node-color="red" cx="140" cy="108" r="3.5"/><text class="fig-text fig-math" x="127.6" y="113" text-anchor="end" data-node-color="red" data-node="X">X</text><path class="fig-ink" d="M156 134 V166 M163 137 V163 M163 150 H186 M156 139 H140 V116 M156 161 H140 V184"/><path class="fig-ink" d="M152.0 157 L144.0 161 L152.0 165"/><text class="fig-text fig-math" x="128" y="155" text-anchor="end">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" x="195.2" y="155">V<tspan baseline-shift="sub" font-size="78%">b</tspan></text><path class="fig-ink" d="M140 184 L140 210"/><circle class="fig-dot" data-node="N" data-node-color="blue" cx="140" cy="200" r="3.5"/><text class="fig-text fig-math" x="151.12" y="195.58" data-node-color="blue" data-node="N">N</text><path class="fig-ink" d="M140 200 L60 200 L60 222"/><circle class="fig-ink" cx="60" cy="236" r="14"/><path class="fig-ink" d="M60 244 V228 M55 233 L60 228 L65 233"/><path class="fig-ink" d="M60 250 L60 262"/><path class="fig-ink" d="M60 262 v8 M50 270 H70 M54 275 H66 M58 280 H62"/><text class="fig-text fig-math" x="36.2" y="241" text-anchor="end">I<tspan baseline-shift="sub" font-size="78%">in</tspan></text><path class="fig-ink" d="M140 210 V221.0 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 V280"/><path class="fig-ink" d="M140 280 v8 M130 288 H150 M134 293 H146 M138 298 H142"/><text class="fig-text fig-math" x="158.4" y="250">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text><path class="fig-ink" d="M140 108 L300 108"/><path class="fig-ink" d="M330 92 V124 M323 95 V121 M323 108 H300 M330 97 H346 V74 M330 119 H346 V142"/><path class="fig-ink" d="M342.0 93 L334.0 97 L342.0 101"/><text class="fig-text fig-math" x="358" y="113">M<tspan baseline-shift="sub" font-size="78%">2</tspan></text><path class="fig-ink" d="M346 74 L346 30"/><path class="fig-ink" d="M346 142 L346 200"/><circle class="fig-dot" data-node="P" data-node-color="blue" cx="346" cy="200" r="3.5"/><text class="fig-text fig-math" x="334.32" y="195.35" text-anchor="end" data-node-color="blue" data-node="P">P</text><path class="fig-ink" d="M346 200 V211.0 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 V270"/><path class="fig-ink" d="M346 270 v8 M336 278 H356 M340 283 H352 M344 288 H348"/><text class="fig-text fig-math" x="327" y="244" text-anchor="end">R<tspan baseline-shift="sub" font-size="78%">M</tspan></text><path class="fig-ink" d="M346 200 L450 200"/><path class="fig-ink" d="M400 200 V211.0 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 V270"/><path class="fig-ink" d="M400 270 v8 M390 278 H410 M394 283 H406 M398 288 H402"/><text class="fig-text fig-math" x="418.4" y="244">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text><circle class="fig-dot" data-node="P" data-node-color="blue" cx="450" cy="200" r="3.5"/><text class="fig-text fig-math" x="450" y="180.4" text-anchor="end" data-node-color="blue" data-node="P">V<tspan baseline-shift="sub" font-size="78%">out</tspan></text></svg><figcaption>V-C 귀환의 개루프 회로: $V_{DD}$·$V_b$는 AC 접지, $N$의 $R_F$는 반송 복제($P$ 쪽 단락), $P$의 $R_F$는 감지 복제($N$ 쪽 단락), $R_M$은 출력 부하예요.</figcaption></figure>
-    $$R_O=\frac{V_{out}}{I_{in}}=\frac{V_X}{I_{in}}\cdot\frac{V_{out}}{V_X}$$
-  </div>
-</div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
+<div class="layer formal circuit-explanation" data-explanation="solve">
+  <figure class="figure circuit">
+    <svg viewBox="0 0 538 181" role="img" aria-label="쌍방 종단을 적용한 V–C 개루프 회로. 입력 전류원과 귀환 저항 복제가 입력 N에서 접지에 병렬이고, 공통 게이트 M1의 드레인 X에는 RD가 붙는다. X가 제어하는 PMOS의 소신호 전류원과 rO2, RM, RF가 출력 P에서 접지에 병렬이다.">
+      <path class="fig-ink" d="M26 144H153M40 144V115M40 89V67H153V51M94 67V81l7 4-14 7 14 7-14 7 14 7-7 4v27M153 144V150M143 150H163M147 155H159M151 160H155"/>
+      <circle class="fig-ink" cx="40" cy="102" r="13"/>
+      <path class="fig-accent" d="M40 110V94M35 99L40 94l5 5"/>
+      <path class="fig-ink" d="M153 51h-10m0-3v6m0-14v6m0-14v6m10-4h-10M153 34V24H220V54l7 4-14 7 14 7-14 7 14 7-7 4v20"/>
+      <path class="fig-ink" d="M136 32V53M136 43H119V34M109 34H129M113 29H125M117 24H121M153 51v-9h-6m2-3-3 3 3 3"/>
+      <path class="fig-ink" d="M220 110V116m-10 0h20m-16 5h12m-8 5h4"/>
+      <path class="fig-ink" d="M220 24H246m50 32H512M300 56V83m0 34v27m68-88v26l7 4-14 7 14 7-14 7 14 7-7 4v26m58-88v26l7 4-14 7 14 7-14 7 14 7-7 4v26m58-88v26l7 4-14 7 14 7-14 7 14 7-7 4v26M286 144H498m-102 0v6m-10 0h20m-16 5h12m-8 5h4"/>
+      <path class="fig-ink" d="M247 24H257L282 78" stroke-dasharray="3 4"/>
+      <polygon class="fig-ink" points="300,83 317,100 300,117 283,100"/>
+      <path class="fig-accent" d="M300 107V93m-5 5 5-5 5 5"/>
+      <circle class="fig-dot" cx="94" cy="67" r="3.2" data-node="n" data-node-color="blue"/>
+      <circle class="fig-dot" cx="153" cy="67" r="3.2" data-node="n" data-node-color="blue"/>
+      <circle class="fig-dot" cx="220" cy="24" r="3.2" data-node="x" data-node-color="red"/>
+      <circle class="fig-dot" cx="300" cy="56" r="3.2" data-node="p" data-node-color="blue"/>
+      <circle class="fig-dot" cx="368" cy="56" r="3.2" data-node="p" data-node-color="blue"/>
+      <circle class="fig-dot" cx="426" cy="56" r="3.2" data-node="p" data-node-color="blue"/>
+      <circle class="fig-dot" cx="484" cy="56" r="3.2" data-node="p" data-node-color="blue"/>
+      <circle class="fig-dot" cx="512" cy="56" r="3.2" data-node="p" data-node-color="blue"/>
+      <circle class="fig-dot" cx="40" cy="144" r="2.6"/><circle class="fig-dot" cx="94" cy="144" r="2.6"/>
+      <circle class="fig-dot" cx="300" cy="144" r="2.6"/><circle class="fig-dot" cx="368" cy="144" r="2.6"/><circle class="fig-dot" cx="426" cy="144" r="2.6"/><circle class="fig-dot" cx="484" cy="144" r="2.6"/>
+      <text class="fig-text fig-math" x="59" y="107">I<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
+      <text class="fig-text fig-math" x="109" y="106">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+      <text class="fig-text fig-math" x="94" y="53" text-anchor="middle" data-node="n" data-node-color="blue">N</text>
+      <text class="fig-text fig-math" x="174" y="45">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+      <text class="fig-text fig-math" x="218" y="10" text-anchor="middle" data-node="x" data-node-color="red">V<tspan baseline-shift="sub" font-size="78%">X</tspan></text>
+      <text class="fig-text fig-math" x="201" y="80" text-anchor="end">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text>
+      <text class="fig-text fig-math" x="332" y="129" text-anchor="middle">−g<tspan baseline-shift="sub" font-size="78%">m2</tspan>V<tspan baseline-shift="sub" font-size="78%">X</tspan></text>
+      <text class="fig-text fig-math" x="386" y="102">r<tspan baseline-shift="sub" font-size="78%">O2</tspan></text>
+      <text class="fig-text fig-math" x="444" y="102">R<tspan baseline-shift="sub" font-size="78%">M</tspan></text>
+      <text class="fig-text fig-math" x="502" y="102">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+      <text class="fig-text fig-math" x="513" y="39" text-anchor="end" data-node="p" data-node-color="blue">P, V<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+      <text class="fig-loc" x="127" y="90" font-size="16">㉠</text>
+      <text class="fig-loc" x="427" y="40" font-size="16" text-anchor="middle">㉡</text>
+    </svg>
+    <figcaption class="circuit-state">V–C 개루프 소신호 회로. $V_{DD}$와 $V_b$는 AC 접지예요.</figcaption>
+  </figure>
   <div data-subpart="main">
-    <div data-answer-step="1단 노턴→테브난 변환">
-      <p>입력 노드 $N$의 전류원 $I_{in}$과 병렬 저항 $R_F$를 테브난 등가 전압원 $V_{in}=I_{in}R_F$와 직렬 소스 저항 $R_F$로 바꿔요. 여기에 직렬 저항 $R_F$가 붙은 CG 단의 전압이득 $\frac{V_X}{V_{in}}=\frac{R_D}{R_F+1/g_{m1}}$을 바로 곱해요.</p>
-      $$V_{in}=I_{in}R_F$$
-      $$\frac{V_X}{I_{in}}=R_F\cdot\frac{V_X}{V_{in}}=\frac{R_FR_D}{R_F+1/g_{m1}}$$
+    <div data-answer-step="개루프 이득과 로딩">
+      <p><span class="loc">㉠</span> 입력 전류는 병렬로 합쳐지고 출력 전압은 병렬로 감지해요. 두 복제의 반대쪽 포트를 단락하면 입력에는 $R_F$, 출력에는 $R_M$과 $R_F$가 접지로 걸려요. $g_{m1}R_Dg_{m2}R_F\gg1$에서 $R_F$의 직접 순방향 전달을 생략하고 $X$에서 두 단을 나눠요.</p>
+      $$R_O=\frac{V_X}{I_{in}}\frac{V_{out}}{V_X}$$
+      <p>$N$의 전류원과 $R_F$를 테브난 등가로 바꾸면 전압은 $I_{in}R_F$, 직렬 저항은 $R_F$예요.</p>
+      $$\frac{V_X}{I_{in}}=\frac{R_FR_D}{R_F+1/g_{m1}}$$
+      <p><span class="loc">㉡</span> PMOS의 전류 변화 $-g_{m2}V_X$가 출력의 세 병렬 가지에 걸려요.</p>
+      $$R_{out,open}=r_{O2}\parallel R_M\parallel R_F$$
+      $$\frac{V_{out}}{V_X}=-g_{m2}R_{out,open}$$
     </div>
-    <div data-answer-step="2단 PMOS CS의 전압이득">
-      <p>2단의 입력은 $V_X$, 출력은 $V_{out}$이에요.</p>
-      <div data-gain-route="gm-rout">
-        <div data-gain-stage="gm">
-          <p>$P$를 접지에 단락하고 $P$에서 $M_2$로 빨려 들어가는 전류를 $i_{out}$으로 잡아요. PMOS의 소신호 드레인 전류는 $P$로 $g_{m2}v_{sg2}=-g_{m2}V_X$만큼 나오므로, 들어가는 방향으로는 $+g_{m2}V_X$예요.</p>
-          $$G_{m2}=\frac{i_{out}}{V_X}=g_{m2}$$
-        </div>
-        <div data-gain-stage="rout">
-          <p>$V_X$를 고정하고 $P$에서 보면 $r_{O2}$, $R_M$, 감지 복제 $R_F$가 모두 $P$와 접지 사이에 병렬이에요.</p>
-          $$R_{out,open}=r_{O2}\parallel R_M\parallel R_F$$
-        </div>
-        <div data-gain-stage="gain">
-          $$\frac{V_{out}}{V_X}=-G_{m2}R_{out,open}=-g_{m2}(r_{O2}\parallel R_M\parallel R_F)$$
-        </div>
-      </div>
+    <div data-answer-step="귀환율과 루프 이득">
+      <p>귀환망만 떼어 $N$을 접지하면 $R_F$ 전류는 양의 $V_{out}$에서 $P\to N$으로 흘러요. 귀환 전류 $I_F$의 양의 방향은 $N\to P$예요.</p>
+      $$K=\frac{I_F}{V_{out}}=-\frac1{R_F}$$
+      $$T=KR_O=\frac{g_{m2}R_DR_{out,open}}{R_F+1/g_{m1}}$$
     </div>
-    <div data-answer-step="개루프 값과 귀환율">
-      $$R_O=-\frac{g_{m2}R_DR_F}{R_F+1/g_{m1}}(r_{O2}\parallel R_M\parallel R_F)$$
-      $$R_{in,open}=\frac{1}{g_{m1}}\parallel R_F$$
-      <p>$P$에 $V_{out}$을 걸고 $N$ 쪽을 단락하면 $R_F$로 $V_{out}/R_F$가 $P\to N$으로 흘러요. $I_F$($N\to P$) 기준으로는 음수예요.</p>
-      $$K=\frac{I_F}{V_{out}}=-\frac{1}{R_F}$$
-      $$T=KR_O=\frac{g_{m2}R_D(r_{O2}\parallel R_M\parallel R_F)}{R_F+1/g_{m1}}$$
-    </div>
-    <div data-answer-step="폐루프 값">
-      <p>입력과 출력이 모두 병렬 연결이라 개루프 이득과 입·출력 임피던스가 모두 $\frac{1}{1+T}$배가 돼요.</p>
-      $$R_{O,closed}=\frac{R_O}{1+T}$$
-      $$R_{in,closed}\approx\frac{(1/g_{m1})\parallel R_F}{1+T}$$
-      $$R_{out,closed}\approx\frac{r_{O2}\parallel R_M\parallel R_F}{1+T}$$
-      <p>두 폐루프 임피던스는 $R_F$를 통한 순방향 전달을 무시한 2포트 근사라서 $\approx$로 써요.</p>
-    </div>
-    <div data-answer-step="예제 12.32와의 차이">
-      <p>회로 연결은 거의 같지만 출력의 정의가 달라 해석의 모든 단계가 달라져요.</p>
-      <ul>
-        <li>귀환 종류: 예제 12.32는 $I_{out}$을 $R_M$으로 직렬 감지하는 C-C, 이 문제는 $V_{out}$을 $R_F$로 병렬 감지하는 V-C예요.</li>
-        <li>입력 쪽 로딩: $R_F+R_M$(감지 포트 개방)에서 $R_F$(감지 포트 단락)로 바뀌어요.</li>
-        <li>출력 쪽 로딩: 레이저와 직렬인 $R_M\parallel R_F$에서, $r_{O2}$와 병렬인 $R_M\parallel R_F$로 바뀌어요. $R_M$은 감지 저항이 아니라 부하가 돼요.</li>
-        <li>귀환율: $K=-R_M/(R_M+R_F)$(무단위)에서 $K=-1/R_F$(S)로 바뀌어요.</li>
-        <li>출력 임피던스: 재는 포트부터 달라요. 예제 12.32는 레이저 가지를 끊고 그 자리에 직렬로 시험원을 넣어 보지만, 이 문제는 $P$와 접지 사이에 시험원을 걸어 봐요. 그래서 예제 12.32는 $(1+T)$를 곱해 높아지는 전류원, 이 문제는 $(1+T)$로 나눠 낮아지는 전압원이에요. 강한 귀환의 이득도 $-(1+R_F/R_M)$에서 $-R_F$로 바뀌어요.</li>
-      </ul>
-    </div>
-  </div>
-</div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <h4>검산</h4>
     <div data-answer-final="">
-      <p><strong>$R_O=-\dfrac{g_{m2}R_DR_F(r_{O2}\parallel R_M\parallel R_F)}{R_F+1/g_{m1}}$, $R_{in,open}=\dfrac1{g_{m1}}\parallel R_F$, $R_{out,open}=r_{O2}\parallel R_M\parallel R_F$, $K=-\dfrac1{R_F}$</strong>예요.</p>
-      <p><strong>폐루프는 $R_O$, $R_{in}$, $R_{out}$을 모두 $1+T$로 나누고($R_{in,closed}$, $R_{out,closed}$는 2포트 근사로 $\approx$) $T=\dfrac{g_{m2}R_D(r_{O2}\parallel R_M\parallel R_F)}{R_F+1/g_{m1}}$</strong>예요. 차이: 예제 12.32는 C-C로 출력 임피던스를 높이고, 이 회로는 V-C로 출력 임피던스를 낮춰요.</p>
+      $$R_O=-\frac{g_{m2}R_DR_FR_{out,open}}{R_F+1/g_{m1}}$$
+      $$R_{in,open}=\frac1{g_{m1}}\parallel R_F$$
+      <p>병렬 입력·병렬 감지라 폐루프 이득과 두 포트 저항이 모두 $1+T$로 나뉘어요.</p>
+      $$R_{O,closed}\approx\frac{R_O}{1+T}$$
+      $$R_{in,closed}\approx\frac{R_{in,open}}{1+T}$$
+      $$R_{out,closed}\approx\frac{R_{out,open}}{1+T}$$
+      <p>교과서의 $r_{O2}\toinfty$ 모델에서는 출력 병렬 부하가 $R_M\parallel R_F$로 줄어요. E12.32는 $R_M$이 레이저와 직렬로 전류를 감지해 출력저항을 높이고, 이 회로는 $R_F$가 출력 전압을 병렬로 감지해 출력저항을 낮춰요. 입력 복제도 E12.32에서는 $R_F+R_M$, 여기서는 $R_F$예요.</p>
     </div>
-    <p><strong>단위:</strong> $R_O$는 $R_DR_F\cdot g_{m2}(\cdots)/(\cdots)$라 Ω이고, $K$는 S라서 $T$는 단위가 없어요.</p>
-    <p><strong>강한 귀환:</strong> $T\gg1$이면 $V_{out}/I_{in}\to1/K=-R_F$예요. $I_{in}$이 모두 $R_F$로 흐르고 $N$이 거의 0 V이면 $V_{out}=-I_{in}R_F$가 되는 것과 같아요.</p>
-    <p><strong>귀환 제거:</strong> $R_F\to\infty$이면 $K\to0$, $R_{in}\to1/g_{m1}$, $R_{out}\to r_{O2}\parallel R_M$으로 단순 직렬 연결이 돼요.</p>
-    <p><strong>$r_{O2}\to\infty$ (교과서 가정):</strong> 교과서 풀이(식 12.175·12.178)는 $r_{O2}$를 무한대로 둔 결과예요. 위 식에서 $r_{O2}\parallel R_M\parallel R_F\to R_M\parallel R_F$로 바꾸면 그 꼴로 돌아가요.</p>
-    $$R_O\to-\frac{g_{m2}R_DR_F(R_M\parallel R_F)}{R_F+1/g_{m1}}$$
-    $$T\to\frac{g_{m2}R_D(R_M\parallel R_F)}{R_F+1/g_{m1}}$$
-    $$R_{out,closed}\approx\frac{R_M\parallel R_F}{1+T}\quad(r_{O2}\to\infty)$$
-    <p>$K$와 $R_{in,open}$에는 $r_{O2}$가 없어 그대로예요.</p>
   </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <ul>
-    <li>예제 12.32의 C-C 로딩($N$에 $R_F+R_M$)을 그대로 가져오면 틀려요. V-C는 두 복제 모두 단락이라 $N$에는 $R_F$만 붙어요.</li>
-    <li>$K$의 단위가 S예요. $R_O$가 Ω이라 곱이 단위 없는 $T$가 되는지 확인해요.</li>
-    <li>전압 감지에서는 출력 임피던스를 $(1+T)$로 나눠요. C-C처럼 곱하지 않아요.</li>
-  </ul>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol>
-    <li>강한 귀환에서 $R_M$을 두 배로 키우면 $V_{out}/I_{in}$은 어떻게 변하나요?</li>
-    <li>$P$에 다시 레이저를 넣고 레이저 전류를 출력으로 보면 어떤 귀환 종류와 종지 법칙을 써야 하나요?</li>
-    <li>$T$가 매우 크면 $R_{out,closed}$는 커지나요, 작아지나요?</li>
-  </ol>
 </div>
 <div class="sum" hidden>
-  <p class="sum-lead">출력을 $V_{out}$으로 보면 같은 회로가 V-C 귀환이 되어 두 복제를 모두 단락해요.</p>
-  <div class="summary-group"><h4>개루프와 귀환율</h4>
-    <p>1단은 $I_{in}\parallel R_F$ 테브난 변환으로, 2단은 PMOS CS($r_{O2}\parallel R_M\parallel R_F$)로 구해요.</p>
-    <p>$K=I_F/V_{out}=-1/R_F$이고 $T=KR_O\gt0$이에요.</p>
-  </div>
-  <div class="summary-group"><h4>폐루프와 차이</h4>
-    <p>$R_O$는 $1+T$로 나누고, $R_{in}$과 $R_{out}$도 2포트 근사로 $1+T$로 나눠요.</p>
-    <p>강한 귀환이면 $V_{out}/I_{in}\approx-R_F$예요.</p>
-    <p>C-C는 출력 임피던스를 키우고 V-C는 줄여요.</p>
-  </div>
+  <p class="sum-lead">출력 전압을 병렬로 감지하면 두 복제의 반대 포트를 단락해요.</p>
+  <p>입력은 $R_F$로 종단하고, 출력의 병렬 부하에서 PMOS 이득을 읽어요.</p>
+  <p>폐루프 출력저항은 $1+T$로 나눠요.</p>
 </div>

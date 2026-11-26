@@ -1,86 +1,22 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>예제 12.32의 회로에서 레이저만 떼어 내고, 나머지 전체(귀환 포함)를 레이저의 두 단자에서 본 노턴 등가(Norton equivalent)로 바꾸는 문제예요. 위 단자는 $M_2$ 드레인 쪽(여기서는 $D$라 부를게요), 아래 단자는 노드 $P$예요.</p>
-  <p>노턴 등가는 두 값으로 끝나요. 하나는 두 단자를 단락했을 때 흐르는 전류 $I_N$, 다른 하나는 $I_{in}=0$으로 두고 두 단자 사이에서 본 저항 $R_N$이에요. $I_N$의 양의 방향은 $I_{out}$과 같게, 즉 $D$에서 레이저로 나가는 방향으로 잡아요.</p>
-  <p>예제 12.32의 결과(식 12.166, 12.171, 12.173)를 쓸 수 있어요. 조건은 같아요: $R_F$가 크지 않고, $R_M$이 작지 않고, $r_{O2}$만 유한하며 몸체 효과는 무시해요.</p>
-</div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p><strong>단서 → 개념.</strong> “레이저를 구동하는 전체 회로의 노턴 등가”라는 말에서, 레이저는 부하이고 나머지는 전류원 $I_N$과 병렬 저항 $R_N$으로 줄인다는 정의를 떠올려요. 노턴 값은 부하와 무관해야 하므로 $R_L$이 답에 들어가면 안 돼요.</p>
-  <p><strong>기호의 뜻.</strong> $I_N$은 레이저 자리를 단락($R_L=0$)했을 때의 출력 전류, $R_N$은 레이저에서 본 폐루프 출력 임피던스예요. $R_o=r_{O2}+R_F\parallel R_M$은 개루프 출력 저항이에요.</p>
-  <p><strong>핵심 관찰.</strong> 식 12.166의 둘째 인자는 $-g_{m2}r_{O2}/(R_o+R_L)$ 꼴이에요. 그래서 $A_0$를 $R_L=0$일 때의 개루프 이득이라 하면 $A_{I,open}=A_0\,R_o/(R_o+R_L)$로, $R_L$은 전류 분배로만 들어가요. 노턴 값은 이 $A_0$로 만들어요.</p>
-  <p><strong>선택 이유.</strong> 단락 전류는 식 12.171에 $R_L=0$을 넣으면 되고, 출력 저항은 식 12.173의 꼴에서 루프 이득을 같은 조건($R_L=0$)으로 맞추면 돼요.</p>
-</div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="노턴 등가 회로와 정의">
-    <figure class="figure"><svg viewBox="0 0 400 230" role="img" aria-label="노턴 등가 회로. 위쪽 단자 D와 아래쪽 단자 P 사이에 위로 흐르는 전류원 I_N과 저항 R_N이 병렬. 오른쪽에 레이저 R_L이 D와 P 사이에 연결되고 I_out이 D에서 레이저로 흐름."><path class="fig-ink" d="M80 50 L330 50"/><path class="fig-ink" d="M80 180 L330 180"/><path class="fig-ink" d="M80 50 L80 101"/><circle class="fig-ink" cx="80" cy="115" r="14"/><path class="fig-ink" d="M80 123 V107 M75 112 L80 107 L85 112"/><path class="fig-ink" d="M80 129 L80 180"/><text class="fig-text fig-math" x="56.2" y="120" text-anchor="end">I<tspan baseline-shift="sub" font-size="78%">N</tspan></text><path class="fig-ink" d="M170 50 V91.0 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 V180"/><text class="fig-text fig-math" x="188.4" y="120">R<tspan baseline-shift="sub" font-size="78%">N</tspan></text><circle class="fig-dot" data-node="D" data-node-color="blue" cx="240" cy="50" r="3.5"/><text class="fig-text fig-math" x="240" y="36.8" text-anchor="middle" data-node-color="blue" data-node="D">D</text><circle class="fig-dot" data-node="P" data-node-color="red" cx="240" cy="180" r="3.5"/><text class="fig-text fig-math" x="240" y="204" text-anchor="middle" data-node-color="red" data-node="P">P</text><path class="fig-ink" d="M262 50 H290 M284 45 L290 50 L284 55"/><text class="fig-text fig-math" x="276" y="28.2" text-anchor="middle">I<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M330 50 L330 86"/><rect class="fig-ink" x="290" y="86" width="80" height="60"/><path class="fig-ink" d="M330 146 L330 180"/><text class="fig-text fig-math" x="330" y="108" text-anchor="middle">레이저</text><text class="fig-text fig-math" x="330" y="127" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text></svg><figcaption>레이저에서 본 노턴 등가: 구동 회로 전체를 $D$–$P$ 사이의 전류원 $I_N$과 병렬 $R_N$으로 바꾸고, 오른쪽 레이저 $R_L$을 다시 연결해요.</figcaption></figure>
-    $$I_N=I_{out}\big|_{R_L=0}$$
-    $$R_N=\frac{V_{DP}}{I_t}\Big|_{I_{in}=0}$$
-    <p>둘째 식은 레이저를 떼고 시험전류 $I_t$를 $D$로 흘려 넣어 $P$로 빼낼 때, 두 단자 사이 전압 $V_{DP}=V_D-V_P$로 구한 저항이에요.</p>
-  </div>
-</div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
+<div class="layer formal circuit-explanation" data-explanation="solve">
+  <figure class="figure circuit"><svg id="fig-p4-solve" viewBox="0 0 400 230" role="img" aria-label="노턴 등가 회로. 위쪽 단자 D와 아래쪽 단자 P 사이에 위로 흐르는 전류원 I_N과 저항 R_N이 병렬. 오른쪽에 레이저 R_L이 D와 P 사이에 연결되고 I_out이 D에서 레이저로 흐름."><path class="fig-ink" d="M80 50 L330 50"/><path class="fig-ink" d="M80 180 L330 180"/><path class="fig-ink" d="M80 50 L80 101"/><circle class="fig-ink" cx="80" cy="115" r="14"/><path class="fig-ink" d="M80 123 V107 M75 112 L80 107 L85 112"/><path class="fig-ink" d="M80 129 L80 180"/><text class="fig-text fig-math" x="56.2" y="120" text-anchor="end">I<tspan baseline-shift="sub" font-size="78%">N</tspan></text><path class="fig-ink" d="M170 50 V91.0 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 V180"/><text class="fig-text fig-math" x="188.4" y="120">R<tspan baseline-shift="sub" font-size="78%">N</tspan></text><circle class="fig-dot" data-node="D" data-node-color="blue" cx="240" cy="50" r="3.5"/><text class="fig-text fig-math" x="240" y="36.8" text-anchor="middle" data-node-color="blue" data-node="D">D</text><circle class="fig-dot" data-node="P" data-node-color="red" cx="240" cy="180" r="3.5"/><text class="fig-text fig-math" x="240" y="204" text-anchor="middle" data-node-color="red" data-node="P">P</text><path class="fig-ink" d="M262 50 H290 M284 45 L290 50 L284 55"/><text class="fig-text fig-math" x="276" y="28.2" text-anchor="middle">I<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M330 50 L330 86"/><rect class="fig-ink" x="290" y="86" width="80" height="60"/><path class="fig-ink" d="M330 146 L330 180"/><text class="fig-text fig-math" x="330" y="108" text-anchor="middle">레이저</text><text class="fig-text fig-math" x="330" y="127" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text><text class="fig-loc" x="358" y="75" font-size="17">㉠</text><text class="fig-loc" x="211" y="83" font-size="17">㉡</text></svg><figcaption class="circuit-state">레이저를 다시 연결한 노턴 등가. 내부 전류원의 기준 방향은 $P$에서 $D$, 외부 부하 전류의 기준 방향은 $D$에서 $P$예요.</figcaption></figure>
   <div data-subpart="main">
-    <div data-answer-step="단락 조건의 개루프 이득과 루프 이득">
-      <p>레이저를 단락하면 식 12.166에서 $R_L=0$이에요.</p>
-      $$A_0=\frac{(R_F+R_M)R_D}{R_F+R_M+1/g_{m1}}\cdot\frac{-g_{m2}r_{O2}}{r_{O2}+R_M\parallel R_F}$$
-      <p>귀환율 $K=I_F/I_{out}=-R_M/(R_M+R_F)$는 그대로이므로 같은 조건의 루프 이득은 다음과 같아요.</p>
-      $$T_0=-\frac{R_M}{R_M+R_F}A_0$$
-      $$T_0=\frac{R_M}{R_F+R_M+1/g_{m1}}\cdot\frac{g_{m2}r_{O2}R_D}{r_{O2}+R_M\parallel R_F}$$
-    </div>
-    <div data-answer-step="노턴 전류">
-      <p>식 12.171에 $R_L=0$을 넣어요.</p>
-      $$I_N=\frac{A_0}{1-\dfrac{R_M}{R_M+R_F}A_0}\,I_{in}=\frac{A_0}{1+T_0}\,I_{in}$$
-    </div>
-    <div data-answer-step="노턴 저항">
-      <p>식 12.173의 꼴 $R_o(1+T)$에서 루프 이득을 시험원 조건과 같은 $T_0$로 써요. 그래야 값이 $R_L$에 무관해요.</p>
-      $$R_N\approx(r_{O2}+R_F\parallel R_M)(1+T_0)$$
-      $$R_N\approx r_{O2}+R_F\parallel R_M+\frac{g_{m2}r_{O2}R_DR_M}{R_F+R_M+1/g_{m1}}$$
-      <p>이 값은 $R_F$를 통한 순방향 전달을 무시한 2포트 근사라서, 정의식 $V_{DP}/I_t$와 등호가 아니라 $\approx$로 이어요.</p>
-      <p>귀환이 강하면($T_0\gg1$) $I_N\approx-(1+R_F/R_M)I_{in}$, $R_N\approx g_{m2}r_{O2}R_DR_M/(R_F+R_M+1/g_{m1})$로 읽을 수 있어요. $I_N$이 음수라는 것은 $I_{in}$이 늘 때 레이저 전류가 그만큼 줄어든다는 뜻이에요.</p>
-    </div>
+<h4>레이저 단락 전류</h4>
+<p data-answer-step="단락 조건"><span class="loc">㉠</span> 레이저 $R_L$ 자리를 도선으로 바꾸고 $I_{in}$은 그대로 흘려요. 이 도선에서 $D$에서 $P$로 흐르는 전류가 $I_N$이에요. 예제 12.32의 개루프 이득에 $R_L=0$을 대입해요.</p>
+<div data-answer-step="단락 상태의 이득">
+<p>$g_{m1}R_Dg_{m2}r_{O2}\gg R_M/(R_F+R_M)$에서 $R_F$의 직접 순방향 전달을 생략한 예제의 2포트 식을 써요.</p>
+$$R_{out,open}=r_{O2}+(R_F\parallel R_M)$$
+$$A_0=A_{I,open}\big|_{R_L=0}=\frac{(R_F+R_M)R_D}{R_F+R_M+1/g_{m1}}\cdot\frac{-g_{m2}r_{O2}}{R_{out,open}}$$
+$$T_0=-\frac{R_M}{R_M+R_F}A_0$$
+</div>
+<h4>두 단자에서 본 저항</h4>
+<p data-answer-step="시험원 조건"><span class="loc">㉡</span> 이번에는 레이저를 떼고 독립 전류원 $I_{in}$을 개방해요. 시험전류 $I_t$가 $D$로 들어가 $P$로 나오면 $R_N=(V_D-V_P)/I_t$예요. 예제 12.32의 직렬 전류 감지 결과에 같은 포트의 $T_0$를 써요.</p>
+<div data-answer-final="">
+<p>$D$와 $P$ 사이에 다음 전류원과 저항을 병렬로 연결해요. $I_N$은 내부 전류원의 $P\to D$ 기준값이며, $I_{in}>0$일 때 $A_0\lt 0$이므로 음수예요.</p>
+$$I_N=I_{out}\big|_{R_L=0}\approx\frac{A_0}{1+T_0}I_{in}$$
+<p>$R_F$를 통한 순방향 전달을 무시한 2포트 근사에서 노턴 저항은 다음과 같아요.</p>
+$$R_N\approx R_{out,open}(1+T_0)$$
+</div>
   </div>
 </div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <h4>검산</h4>
-    <div data-answer-final="">
-      <p><strong>노턴 등가: $D$–$P$ 사이에 전류원 $I_N=\dfrac{A_0}{1+T_0}I_{in}$($D$에서 레이저로 나가는 방향)과 병렬 저항 $R_N\approx r_{O2}+R_F\parallel R_M+\dfrac{g_{m2}r_{O2}R_DR_M}{R_F+R_M+1/g_{m1}}$</strong>이에요. $R_N$은 2포트 근사값이에요. 여기서 $A_0=A_{I,open}|_{R_L=0}$, $T_0=-\dfrac{R_M}{R_M+R_F}A_0$예요.</p>
-    </div>
-    <p><strong>레이저를 다시 달기:</strong> 노턴 회로에서 $I_{out}=I_N\,R_N/(R_N+R_L)$이에요. 대입하면 다음이 돼요.</p>
-    $$I_{out}=\frac{A_0}{1+T_0}\cdot\frac{R_o(1+T_0)}{R_o(1+T_0)+R_L}\,I_{in}=\frac{A_0R_o}{R_o(1+T_0)+R_L}\,I_{in}$$
-    <p>식 12.171에 $A_{I,open}=A_0R_o/(R_o+R_L)$을 넣어도 분모가 $R_o+R_L+T_0R_o$가 되어 같은 식이 나와요. 등가 회로가 원래 폐루프 이득을 그대로 재현해요.</p>
-    <p><strong>부하 무관성:</strong> $I_N$과 $R_N$에 $R_L$이 없어요. 식 12.173에 $R_L$이 든 $A_{I,open}$을 그대로 넣으면 $R_N$이 레이저에 따라 바뀌어 노턴 저항이 될 수 없어요.</p>
-    <p><strong>귀환 제거:</strong> $R_F\to\infty$이면 $T_0\to0$이라 $R_N\to r_{O2}+R_M$, $I_N\to A_0I_{in}$으로 귀환 없는 PMOS 전류원이 돼요.</p>
-  </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <ul>
-    <li>노턴 값에 $R_L$이 남으면 안 돼요. 이득과 루프 이득은 레이저 단락($R_L=0$) 조건에서 써요.</li>
-    <li>$R_N$은 $I_N$과 직렬이 아니라 병렬이에요. 레이저가 $R_N$과 전류를 나눠 가져요.</li>
-    <li>$I_N$의 부호는 방향 정의에서 나와요. 음수 값을 크기만 옮기면 화살표 방향을 반대로 그려야 해요.</li>
-  </ul>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol>
-    <li>$R_N\gg R_L$일 때 레이저 저항이 두 배가 되면 $I_{out}$은 얼마나 변하나요?</li>
-    <li>같은 회로를 테브난 등가로 바꾸면 전압원과 직렬 저항은 무엇인가요?</li>
-    <li>$R_F\to\infty$로 귀환을 없애면 $R_N$은 얼마가 되나요?</li>
-  </ol>
-</div>
-<div class="sum" hidden>
-  <p class="sum-lead">노턴 등가는 레이저 단락 전류와 레이저에서 본 저항으로 만들어요.</p>
-  <div class="summary-group"><h4>값</h4>
-    <p>$I_N=A_0I_{in}/(1+T_0)$이고 $A_0$, $T_0$는 $R_L=0$에서 계산해요.</p>
-    <p>2포트 근사로 $R_N\approx(r_{O2}+R_F\parallel R_M)(1+T_0)$예요.</p>
-  </div>
-  <div class="summary-group"><h4>판단</h4>
-    <p>노턴 값에 $R_L$이 들어가면 정의가 섞인 거예요.</p>
-    <p>$I_{out}=I_NR_N/(R_N+R_L)$로 식 12.171을 다시 얻어 확인해요.</p>
-  </div>
-</div>
+<div class="sum" hidden><p class="sum-lead">단락 전류를 잴 때는 입력을 유지하고, 노턴 저항을 잴 때는 입력 전류원을 개방해요.</p></div>

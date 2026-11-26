@@ -1,28 +1,17 @@
-=== P3 (Example 12.32, Fig 12.61(a)): Current-Current Feedback ===
-Input stage V_X / I_in (Norton->Thevenin): R_D*g_m1*(R_F + R_M)/(R_F*g_m1 + R_M*g_m1 + 1)
-Input stage V_X / I_in (Direct KCL):       R_D*g_m1*(R_F + R_M)/(R_F*g_m1 + R_M*g_m1 + 1)
-Difference (simplify == 0):                0
-R_in_open: (R_F + R_M)/(R_F*g_m1 + R_M*g_m1 + 1)
-Output stage I_out / V_X (open-loop): -g_m2*r_o2*(R_F + R_M)/(R_F*R_L + R_F*R_M + R_F*r_o2 + R_L*R_M + R_M*r_o2)
-A_I_open (matches eq 12.166): -R_D*g_m1*g_m2*r_o2*(R_F + R_M)**2/((R_F*g_m1 + R_M*g_m1 + 1)*(R_F*R_L + R_F*R_M + R_F*r_o2 + R_L*R_M + R_M*r_o2))
-R_out_open (matches eq 12.168): (R_F*R_M + R_F*r_o2 + R_M*r_o2)/(R_F + R_M)
-Feedback factor K (eq 12.170): -R_M/(R_F + R_M)
-Loop gain magnitude T = K*A_I_open = -(R_M/(R_M+R_F))*A_I_open > 0:
-  R_D*R_M*g_m1*g_m2*r_o2*(R_F + R_M)/((R_F*g_m1 + R_M*g_m1 + 1)*(R_F*R_L + R_F*R_M + R_F*r_o2 + R_L*R_M + R_M*r_o2))
-T_0 (with R_L = 0): R_D*R_M*g_m1*g_m2*r_o2*(R_F + R_M)/((R_F*R_M + R_F*r_o2 + R_M*r_o2)*(R_F*g_m1 + R_M*g_m1 + 1))
-
---- 2-Port Feedback Results (Razavi eqs 12.171-12.173) ---
-A_I_closed (eq 12.171):               -R_D*g_m1*g_m2*r_o2*(R_F + R_M)**2/(R_D*R_F*R_M*g_m1*g_m2*r_o2 + R_D*R_M**2*g_m1*g_m2*r_o2 + R_F**2*R_L*g_m1 + R_F**2*R_M*g_m1 + R_F**2*g_m1*r_o2 + 2*R_F*R_L*R_M*g_m1 + R_F*R_L + R_F*R_M**2*g_m1 + 2*R_F*R_M*g_m1*r_o2 + R_F*R_M + R_F*r_o2 + R_L*R_M**2*g_m1 + R_L*R_M + R_M**2*g_m1*r_o2 + R_M*r_o2)
-R_in_closed (eq 12.172):              (R_F + R_M)*(R_F*R_L + R_F*R_M + R_F*r_o2 + R_L*R_M + R_M*r_o2)/(R_D*R_F*R_M*g_m1*g_m2*r_o2 + R_D*R_M**2*g_m1*g_m2*r_o2 + R_F**2*R_L*g_m1 + R_F**2*R_M*g_m1 + R_F**2*g_m1*r_o2 + 2*R_F*R_L*R_M*g_m1 + R_F*R_L + R_F*R_M**2*g_m1 + 2*R_F*R_M*g_m1*r_o2 + R_F*R_M + R_F*r_o2 + R_L*R_M**2*g_m1 + R_L*R_M + R_M**2*g_m1*r_o2 + R_M*r_o2)
-R_out_closed (eq 12.173 with R_L=0):  (R_D*R_F*R_M*g_m1*g_m2*r_o2 + R_D*R_M**2*g_m1*g_m2*r_o2 + R_F**2*R_M*g_m1 + R_F**2*g_m1*r_o2 + R_F*R_M**2*g_m1 + 2*R_F*R_M*g_m1*r_o2 + R_F*R_M + R_F*r_o2 + R_M**2*g_m1*r_o2 + R_M*r_o2)/((R_F + R_M)*(R_F*g_m1 + R_M*g_m1 + 1))
-
---- Exact Full-Circuit KCL vs 2-Port Feedback Comparison ---
-A_I_closed (exact KCL):    -(R_D*R_F*g_m1*g_m2*r_o2 + R_D*R_M*g_m1*g_m2*r_o2 + R_M)/(R_D*R_M*g_m1*g_m2*r_o2 + R_F*R_L*g_m1 + R_F*R_M*g_m1 + R_F*g_m1*r_o2 + R_L*R_M*g_m1 + R_L + R_M*g_m1*r_o2 + R_M + r_o2)
-R_in_closed (exact KCL):   (R_F*R_L + R_F*R_M + R_F*r_o2 + R_L*R_M + R_M*r_o2)/(R_D*R_M*g_m1*g_m2*r_o2 + R_F*R_L*g_m1 + R_F*R_M*g_m1 + R_F*g_m1*r_o2 + R_L*R_M*g_m1 + R_L + R_M*g_m1*r_o2 + R_M + r_o2)
-R_out_closed (exact KCL):  (R_D*R_M*g_m1*g_m2*r_o2 + R_F*R_M*g_m1 + R_F*g_m1*r_o2 + R_M*g_m1*r_o2 + R_M + r_o2)/(R_F*g_m1 + R_M*g_m1 + 1)
-Note on bilateral h_12 feedthrough:
-  R_out_closed_exact - R_out_closed_2p = R_M**2/(R_F**2*g_m1 + 2*R_F*R_M*g_m1 + R_F + R_M**2*g_m1 + R_M)
-  (i.e. R_M||(R_F + 1/g_m1) in exact KCL vs R_M||R_F in 2-port unilateral approximation)
-  A_I_closed_exact - A_I_closed_2p     = -R_M*(R_F*g_m1 + R_M*g_m1 + 1)*(R_F*R_L + R_F*R_M + R_F*r_o2 + R_L*R_M + R_M*r_o2)/((R_D*R_M*g_m1*g_m2*r_o2 + R_F*R_L*g_m1 + R_F*R_M*g_m1 + R_F*g_m1*r_o2 + R_L*R_M*g_m1 + R_L + R_M*g_m1*r_o2 + R_M + r_o2)*(R_D*R_F*R_M*g_m1*g_m2*r_o2 + R_D*R_M**2*g_m1*g_m2*r_o2 + R_F**2*R_L*g_m1 + R_F**2*R_M*g_m1 + R_F**2*g_m1*r_o2 + 2*R_F*R_L*R_M*g_m1 + R_F*R_L + R_F*R_M**2*g_m1 + 2*R_F*R_M*g_m1*r_o2 + R_F*R_M + R_F*r_o2 + R_L*R_M**2*g_m1 + R_L*R_M + R_M**2*g_m1*r_o2 + R_M*r_o2))
-  R_in_closed_exact - R_in_closed_2p   = -R_M**2*(R_F*R_L + R_F*R_M + R_F*r_o2 + R_L*R_M + R_M*r_o2)/((R_D*R_M*g_m1*g_m2*r_o2 + R_F*R_L*g_m1 + R_F*R_M*g_m1 + R_F*g_m1*r_o2 + R_L*R_M*g_m1 + R_L + R_M*g_m1*r_o2 + R_M + r_o2)*(R_D*R_F*R_M*g_m1*g_m2*r_o2 + R_D*R_M**2*g_m1*g_m2*r_o2 + R_F**2*R_L*g_m1 + R_F**2*R_M*g_m1 + R_F**2*g_m1*r_o2 + 2*R_F*R_L*R_M*g_m1 + R_F*R_L + R_F*R_M**2*g_m1 + 2*R_F*R_M*g_m1*r_o2 + R_F*R_M + R_F*r_o2 + R_L*R_M**2*g_m1 + R_L*R_M + R_M**2*g_m1*r_o2 + R_M*r_o2))
-ALL P3 CHECKS PASSED.
+exact Aopen (-RD*gm1*gm2*ro2 - RM/(RF + RM))/((gm1 + 1/(RF + RM))*(RF*RM/(RF + RM) + RL + ro2)) -27.056522802570427
+exact Ri_open 1/(gm1 + 1/(RF + RM)) 456.140350877193
+exact Ro_open RF*RM/(RF + RM) + ro2 60192.307692307695
+exact K -RM/(RF + RM) -0.038461538461538464
+exact T -RM*(-RD*gm1*gm2*ro2 - RM/(RF + RM))/((RF + RM)*(gm1 + 1/(RF + RM))*(RF*RM/(RF + RM) + RL + ro2)) 1.040635492406555
+exact gain (-RD*gm1*gm2*ro2 - RM/(RF + RM))/((gm1 + 1/(RF + RM))*(-RM*(-RD*gm1*gm2*ro2 - RM/(RF + RM))/((RF + RM)*(gm1 + 1/(RF + RM))*(RF*RM/(RF + RM) + RL + ro2)) + 1)*(RF*RM/(RF + RM) + RL + ro2)) -13.258871024860115
+exact Ri 1/((gm1 + 1/(RF + RM))*(-RM*(-RD*gm1*gm2*ro2 - RM/(RF + RM))/((RF + RM)*(gm1 + 1/(RF + RM))*(RF*RM/(RF + RM) + RL + ro2)) + 1)) 223.528578511226
+exact Ro laser removed RF*RM/(RF + RM) + RM*(RD*gm1*gm2*ro2 + RM/(RF + RM))/((RF + RM)*(gm1 + 1/(RF + RM))) + ro2 123350.87719298247
+unilateral Aopen -RD*gm1*gm2*ro2/((gm1 + 1/(RF + RM))*(RF*RM/(RF + RM) + RL + ro2)) -27.056233740244146
+unilateral Ri_open 1/(gm1 + 1/(RF + RM)) 456.140350877193
+unilateral Ro_open RF*RM/(RF + RM) + ro2 60192.307692307695
+unilateral K -RM/(RF + RM) -0.038461538461538464
+unilateral T RD*RM*gm1*gm2*ro2/((RF + RM)*(gm1 + 1/(RF + RM))*(RF*RM/(RF + RM) + RL + ro2)) 1.040624374624775
+unilateral gain -RD*gm1*gm2*ro2/((gm1 + 1/(RF + RM))*(RD*RM*gm1*gm2*ro2/((RF + RM)*(gm1 + 1/(RF + RM))*(RF*RM/(RF + RM) + RL + ro2)) + 1)*(RF*RM/(RF + RM) + RL + ro2)) -13.25880160831617
+unilateral Ri 1/((gm1 + 1/(RF + RM))*(RD*RM*gm1*gm2*ro2/((RF + RM)*(gm1 + 1/(RF + RM))*(RF*RM/(RF + RM) + RL + ro2)) + 1)) 223.5297963453303
+unilateral Ro laser removed RD*RM*gm1*gm2*ro2/((RF + RM)*(gm1 + 1/(RF + RM))) + RF*RM/(RF + RM) + ro2 123350.20242914981
+Exact Aopen refers to cutting only the reverse controlled feedback term. Unilateral model drops H compared with gm1 RD gm2 ro2.

@@ -772,23 +772,18 @@
   <div data-subpart="main">
     <h4>반송 복제가 첫 단을 축퇴시켜요</h4>
     <div data-answer-step="첫 단과 둘째 단 연결">
-      <p><span class="loc">㉠</span> 반송 복제를 단락해 얻은 $R_S$가 $M_1$ 소스에 달려요. <span class="loc">㉡</span> 감지 복제의 열린 가운데 포트는 출력에 $R_1+R_2$를 남겨요. 두 MOS는 $\lambda=0$으로 가정해요.</p>
+      <p><span class="loc">㉠</span> 반송 복제를 단락해 얻은 $R_S$가 $M_1$ 소스에 달려요. 두 MOS는 $\lambda=0$으로 가정해요.</p>
       $$R_S=R_1\parallel R_2$$
       <p><span class="loc">㉢</span> 첫 단 출력 $X$에서는 $M_2$ 게이트 전류가 0이라 부하가 $R_{D1}$이에요.</p>
       $$\frac{v_X}{v_{in}}=-\frac{R_{D1}}{1/g_{m1}+R_S}$$
     </div>
-    <div data-answer-step="개루프 이득" data-gain-route="gm-rout">
-      <div data-gain-stage="gm">
-        <p>출력 단락에서 $M_2$ 드레인으로 들어가는 전류를 양으로 잡아요.</p>
-        $$G_m=g_{m2}\frac{v_X}{v_{in}}=-\frac{g_{m2}R_{D1}}{1/g_{m1}+R_S}$$
-      </div>
-      <div data-gain-stage="rout">
-        <p>입력을 0으로 두고 출력에서 본 저항이에요.</p>
-        $$R_{\mathrm{out,open}}=R_{D2}\parallel(R_1+R_2)$$
-      </div>
-      <div data-gain-stage="gain">
-        $$A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}=\frac{g_{m2}R_{D1}R_{\mathrm{out,open}}}{1/g_{m1}+R_S}$$
-      </div>
+    <div data-answer-step="둘째 단과 개루프 이득">
+      <p><span class="loc">㉡</span> 감지 복제의 가운데 포트가 열려 있어 $R_1+R_2$가 $R_{D2}$에 병렬로 붙어요.</p>
+      $$R_{\mathrm{out,open}}=R_{D2}\parallel(R_1+R_2)$$
+      $$\frac{v_{out}}{v_X}=-g_{m2}R_{\mathrm{out,open}}$$
+      <p>두 공통 소스 단이 각각 반전하므로 개루프 이득은 양수예요.</p>
+      $$A_{\mathrm{open}}=\frac{v_X}{v_{in}}\frac{v_{out}}{v_X}
+      =\frac{g_{m2}R_{D1}R_{\mathrm{out,open}}}{1/g_{m1}+R_S}$$
     </div>
     <div data-answer-step="귀환율">
       $$K=\frac{R_2}{R_1+R_2}$$
@@ -803,7 +798,7 @@
   </div>
 </div>
 <div class="sum" hidden="">
-  <p class="sum-lead">반송 복제는 첫 단의 소스 축퇴, 감지 복제는 둘째 단의 출력 부하예요.</p><p>첫 단의 $v_X/v_{in}$에 $g_{m2}$를 곱하면 전체 $G_m$이에요.</p>
+  <p class="sum-lead">반송 복제는 첫 단의 소스 축퇴, 감지 복제는 둘째 단의 출력 부하예요.</p><p>㉢의 $X$를 기준으로 첫 단의 $v_X/v_{in}$과 둘째 단의 $v_{out}/v_X$를 곱해요.</p>
 </div>
 </article><article class="topic" id="p6"><h3>P6. 분배기 귀환 차동 증폭기의 로딩 해석</h3><p class="panel-meta">E12.27 · 예제 12.27 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1120_Nonideal_IO_Feedback-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p6"><div class="layer formal" data-source-problem="p6"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>조건: $R_1 + R_2$가 $r_{OP} \parallel r_{ON}$보다 충분히 크지 않음</li><li>$r_{ON}$, $r_{OP}$: NMOS($M_1$, $M_2$)와 PMOS($M_3$, $M_4$)의 출력 저항, $g_{mN}$: NMOS 입력 쌍의 트랜스컨덕턴스</li><li>해석 = 개루프·폐루프 이득과 I/O 임피던스를 구함</li><li>전압-전압 귀환에서 귀환 회로망을 끊는 법칙 (본문 Fig 12.53(a)): 감지 복제의 출력 포트는 개방, 반송 복제의 입력 포트는 단락. 귀환율은 입력 포트에 $V_1$을 인가하고 출력 포트를 개방해 $K = V_2/V_1$ (본문 Fig 12.54(a))</li><li>소자 값은 주어지지 않음</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>회로의 해석: 개루프·폐루프 전압 이득, 폐루프 입력·출력 임피던스</li></ul></div><figure><img src=".assets/figures_문제설명_1120_Nonideal_IO_Feedback/c6d70566abed4fc9-fig12-56-a.png" alt="그림 E12.27"></figure></div><details class="original" data-original-problem="p6"><summary>원문 보기</summary><p>$R_1 + R_2$가 $r_{OP} \parallel r_{ON}$보다 충분히 크지 않을 때 그림 12.56(a)의 회로를 해석하라.</p></details></div><div class="layer formal circuit-explanation" data-explanation="solve">
 <figure class="figure circuit">
@@ -847,15 +842,55 @@
     </div>
     <div data-answer-step="개루프 이득" data-gain-route="gm-rout">
       <div data-gain-stage="gm">
-        <p>대칭 차동쌍, 이상적 테일 전류원과 <span class="loc">㉢</span> 거울 근사($g_{mP}(r_{ON}\parallel r_{OP})\gg1$)를 써요. 출력 단락에서 증폭기로 들어가는 전류를 양으로 잡아요.</p>
-        $$G_m\approx-g_{mN}$$
+        <p>대칭 차동쌍, 이상적 테일 전류원과 <span class="loc">㉢</span> 거울 근사($g_{mP}(r_{ON}\parallel r_{OP})\gg1$)를 써요.</p>
+<figure class="figure">
+<svg viewBox="0 0 461 219" role="img" aria-label="출력 단락 상태. 아래를 양으로 잰 전류 변화는 M4에서 양수, M2에서 음수예요. 오른쪽 단락선에서 증폭기로 들어가는 화살표가 출력 단락 전류의 기준 방향이에요.">
+<path class="fig-ink" d="M65 15H256M93 15V40M225 15V40M93 64V118M225 64V118M113 52H205M138 52V90H93M25 130H73M245 130H278V148M278 184V195M93 142V167H225V142M158 167V199.5M225 98H433M327 98V128M327 164V183"/>
+<path class="fig-ink" d="M93 40H107M93 64H107M107 36V68M113 39V65M99 35L104 40L99 45"/>
+<path class="fig-ink" d="M225 40H211M225 64H211M211 36V68M205 39V65M219 35L214 40L219 45"/>
+<path class="fig-ink" d="M93 118H79M93 142H79M79 114V146M73 117V143"/><path class="fig-ink" d="M85 137L90 142L85 147"/>
+<path class="fig-ink" d="M225 118H239M225 142H239M239 114V146M245 117V143"/><path class="fig-ink" d="M233 137L228 142L233 147"/>
+<path class="fig-ink" d="M278 148l-7 3 14 6 -14 6 14 6 -14 6 14 6 -7 3"/>
+<path class="fig-ink" d="M327 128l-7 3 14 6 -14 6 14 6 -14 6 14 6 -7 3"/>
+<path class="fig-ink" d="M268 195h20M272 200h12M275 205h6"/>
+<path class="fig-ink" d="M317 183h20M321 188h12M324 193h6"/>
+<circle class="fig-dot" data-node-color="blue" cx="25" cy="130" r="3.5"/>
+<circle class="fig-dot" data-node-color="blue" cx="138" cy="52" r="3.5"/>
+<circle class="fig-dot" data-node-color="blue" cx="93" cy="90" r="3.5"/>
+<circle class="fig-dot" data-node-color="red" cx="225" cy="98" r="3.5"/>
+<circle class="fig-dot" data-node-color="red" cx="327" cy="98" r="3.5"/>
+<circle class="fig-dot" data-node-color="red" cx="433" cy="98" r="3.5"/>
+<circle class="fig-dot" data-node-color="blue" cx="158" cy="167" r="3.5"/>
+<circle class="fig-ink" cx="158" cy="203" r="3.5"/>
+<text class="fig-text fig-math" x="269" y="19" text-anchor="start">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text>
+<text class="fig-text fig-math" x="25" y="115" text-anchor="middle" data-node-color="blue">V<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
+<text class="fig-text fig-math" x="432" y="85" text-anchor="middle" data-node-color="red">V<tspan baseline-shift="sub" font-size="78%">out</tspan> = 0</text>
+<text class="fig-text fig-math" x="66" y="56" text-anchor="end">M<tspan baseline-shift="sub" font-size="78%">3</tspan></text>
+<text class="fig-text fig-math" x="242" y="50" text-anchor="start">M<tspan baseline-shift="sub" font-size="78%">4</tspan></text>
+<text class="fig-text fig-math" x="107" y="134" text-anchor="start">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+<text class="fig-text fig-math" x="211" y="134" text-anchor="end">M<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+<text class="fig-text fig-math" x="264" y="185" text-anchor="end">R<tspan baseline-shift="sub" font-size="78%">1</tspan> ‖ R<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+<text class="fig-text fig-math" x="341" y="151" text-anchor="start">R<tspan baseline-shift="sub" font-size="78%">1</tspan> + R<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+<path class="fig-ink" d="M433 98V183m-10 0h20m-16 5h12m-9 5h6"/>
+<path class="fig-accent" d="M242 66V89m-4-5 4 5 4-5 M210 97V116m-4-5 4 5 4-5 M402 86H354m5-4-5 4 5 4"/>
+<text class="fig-text fig-math" x="255" y="79" text-anchor="start">Δi<tspan baseline-shift="sub" font-size="78%">4</tspan> &gt; 0</text>
+<text class="fig-text fig-math" x="198" y="112" text-anchor="end">Δi<tspan baseline-shift="sub" font-size="78%">2</tspan> &lt; 0</text>
+<text class="fig-text fig-math" x="378" y="72" text-anchor="middle">i<tspan baseline-shift="sub" font-size="78%">sc</tspan> &lt; 0</text>
+</svg>
+<figcaption class="circuit-state">출력 단락 · 양의 입력에서의 소신호 전류 변화</figcaption>
+</figure>
+        <p>입력을 올리면 $M_4$는 위에서 더 공급하고 $M_2$는 아래로 덜 끌어가요. 그림에서 두 가지 전류는 아래를 양으로, $i_{\mathrm{sc}}$는 오른쪽 단락선에서 증폭기로 들어가는 쪽을 양으로 잡아요. 대칭 차동쌍에서 $g_{m1}=g_{m2}=g_{mN}$이에요. 남는 전류는 단락선으로 나가므로 $i_{\mathrm{sc}}$는 음수예요.</p>
+        $$\Delta i_4\approx+\frac{g_{mN}v_{in}}{2}$$
+        $$\Delta i_2\approx-\frac{g_{mN}v_{in}}{2}$$
+        $$i_{\mathrm{sc}}=\Delta i_2-\Delta i_4\approx -g_{m1}v_{in}$$
+        $$G_m=\frac{i_{\mathrm{sc}}}{v_{in}}\approx -g_{m1}$$
       </div>
       <div data-gain-stage="rout">
         <p>입력을 0으로 두고 출력에서 본 저항이에요.</p>
         $$R_{\mathrm{out,open}}\approx r_{ON}\parallel r_{OP}\parallel(R_1+R_2)$$
       </div>
       <div data-gain-stage="gain">
-        $$A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}\approx g_{mN}R_{\mathrm{out,open}}$$
+        $$A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}\approx g_{m1}R_{\mathrm{out,open}}$$
       </div>
     </div>
     <div data-answer-step="귀환율">
