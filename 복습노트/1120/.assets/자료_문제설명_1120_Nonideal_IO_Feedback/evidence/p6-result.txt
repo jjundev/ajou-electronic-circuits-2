@@ -1,28 +1,7 @@
-=== p6 (E12.27) SymPy Verification ===
-R_sense = R_1 + R_2
-R_return = R_1*R_2/(R_1 + R_2)
-K = R_2/(R_1 + R_2)
-
---- Razavi Macro-Model (g_m * r_O >> 1, matching E12.27 symbols g_mN, r_ON, r_OP) ---
-A_v_open     = g_mN*r_ON*r_OP*(R_1 + R_2)/(R_1*r_ON + R_1*r_OP + R_2*r_ON + R_2*r_OP + r_ON*r_OP)
-R_in_open    = oo
-R_out_open   = r_ON*r_OP*(R_1 + R_2)/(R_1*r_ON + R_1*r_OP + R_2*r_ON + R_2*r_OP + r_ON*r_OP)
-Loop gain T  = R_2*g_mN*r_ON*r_OP/(R_1*r_ON + R_1*r_OP + R_2*r_ON + R_2*r_OP + r_ON*r_OP)
-A_v_closed   = g_mN*r_ON*r_OP*(R_1 + R_2)/(R_1*r_ON + R_1*r_OP + R_2*g_mN*r_ON*r_OP + R_2*r_ON + R_2*r_OP + r_ON*r_OP)
-R_in_closed  = oo
-R_out_closed = r_ON*r_OP*(R_1 + R_2)/(R_1*r_ON + R_1*r_OP + R_2*g_mN*r_ON*r_OP + R_2*r_ON + R_2*r_OP + r_ON*r_OP)
-Parallel-conductance canonical forms verified: ASSERT PASSED
-
---- Exact 3-node KCL Verification ---
-Asymptotic limit (g_m*r_O -> oo) R_out_open == macro-model: ASSERT PASSED
-Asymptotic limit (g_m*r_O -> oo) G_m / g_mN == 1: ASSERT PASSED
-
-Numerical comparison (g_mN=g_mP=10mS, r_ON=r_OP=50k => g_m*r_O=500, R_1=30k, R_2=10k):
-  A_v_open (macro)             = 153.846
-  A_v_open (exact 3-node)      = 153.634
-  R_out_open (macro)           = 15384.6
-  R_out_open (exact 3-node)    = 15394.1
-  A_v_closed (macro)           = 3.89864
-  A_v_closed (exact 3-node)    = 3.89850
-  R_out_closed (macro)         = 389.864
-  R_out_closed (exact 3-node)  = 390.629
+Rsum=R1+R2; G_L=1/Rsum; K=R2/Rsum.
+Open: Gm_eff = gm_n*(2*gm_p + go_p)/(2*gm_p + go_n + 2*go_p)
+Open amplifier g_o_eff before external load = 2*(gm_p + go_p)*(go_n + go_p)/(2*gm_p + go_n + 2*go_p)
+Rout0=1/(g_o_eff+1/Rsum); A0=Gm_eff*Rout0; Rin0=infinity.
+Closed (exact): A0/(1+K*A0); Rin=infinity; Rout0/(1+K*A0).
+For gm_p >> go_p,go_n, Gm_eff -> gm_n.
+In the same limit, g_o_eff -> go_n+go_p and Rout0 -> ro_n||ro_p||Rsum.

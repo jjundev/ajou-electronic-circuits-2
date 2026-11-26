@@ -1,124 +1,79 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>입력 전류 $I_{in}$이 $M_1$의 소스 노드로 들어가요. $M_1$은 게이트가 $V_b$인 공통 게이트(CG) 단이고, 드레인 노드(X라 불러요)에 $R_D$가 $V_{DD}$로 달려 있어요.</p>
-  <p>X는 NMOS $M_2$의 게이트를 구동해요. $M_2$는 드레인이 $V_{DD}$이고 소스가 출력 $V_{out}$인 소스 팔로워(source follower)예요. $V_{out}$에서 $R_M$이 접지로, $R_F$가 $M_1$ 소스 노드로 이어져요.</p>
-  <p>조건은 $R_F$가 매우 크지 않다는 것과 $\lambda=0$이에요. 몸체 효과는 언급이 없어 무시해요(추가 가정).</p>
-  <p>(1)은 귀환율과 폐루프 이득, (2)는 폐루프 입력·출력 임피던스예요. 그러려면 부하를 넣은 개루프 값을 먼저 구해야 해요. 이 회로는 루프의 부호를 꼭 확인해야 하는 문항이에요.</p>
-</div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p><strong>단서:</strong> $R_F$가 출력 노드에서 전압을 감지하고 입력 노드로 전류를 되돌리니 전압-전류 귀환(voltage-current feedback)의 모양이에요. 개루프 값은 두 복제를 모두 단락해 입력·출력 노드에 각각 $R_F$를 접지로 붙여 구해요.</p>
-  <p><strong>귀환율:</strong> 교과서 Fig 12.54(b)의 $I_2/V_1$을 원 회로 기호 그대로 써서, 입력 노드에서 빠져나가는 귀환 전류 $I_F$를 양으로 잡으면 $K=I_F/V_{out}=-1/R_F$예요.</p>
-  <p><strong>폐루프 공식:</strong> 이득과 입력·출력 임피던스가 모두 $1+KR_0$로 나뉘어요. 단, 이 공식은 $KR_0$의 부호를 그대로 넣어 써요. $KR_0\gt0$이면 부궤환, $KR_0\lt0$이면 정궤환이에요.</p>
-  <p><strong>블록:</strong> 입력의 $I_{in}\parallel R_F$를 노턴→테브난 변환($V_{in}=I_{in}R_F$와 직렬 $R_F$)으로 바꾸면 직렬 저항이 붙은 CG 단 전압이득 블록 $\frac{V_X}{V_{in}}=\frac{R_D}{R_F+1/g_{m1}}$을 바로 곱할 수 있어요. CG와 소스 팔로워는 모두 비반전이고, 소스 팔로워는 출력 단락에서 $G_m=-g_{m2}$, 소스 쪽 저항은 $1/g_{m2}$예요.</p>
-  <p><strong>선택 이유:</strong> 두 단이 모두 비반전이면 $R_0\gt0$이 되어 $K=-1/R_F$와 곱한 루프 이득이 음수가 돼요. 그래서 공식을 쓰기 전에 부호부터 따져야 해요.</p>
-</div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="귀환망 끊기와 첫 단" data-answer-subpart="1">
-    <p>개루프 회로에서는 입력 노드와 출력 노드에 각각 $R_F$가 접지로 붙어요. 출력 노드의 외부 부하를 이름 붙여요.</p>
-    $$R_L=R_M\parallel R_F$$
-    <p>입력 노드의 $I_{in}\parallel R_F$를 노턴→테브난 변환($V_{in}=I_{in}R_F$, 직렬 $R_F$)으로 바꿔 CG 전압이득에 곱해요.</p>
-    $$V_{in}=I_{in}R_F$$
-    $$\frac{V_X}{I_{in}}=R_F\cdot\frac{V_X}{V_{in}}=\frac{R_FR_D}{R_F+1/g_{m1}}=\frac{g_{m1}R_F}{1+g_{m1}R_F}R_D$$
-  </div>
-</div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
+<div class="layer formal circuit-explanation" data-explanation="solve">
+  <figure class="figure circuit">
+  <svg id="source-follower-loaded-open-loop" viewBox="0 0 362 239" role="img" aria-label="입력과 출력 포트 각각에 단락된 귀환 복제 R F가 붙어요. M1 드레인 X가 M2 게이트를 구동하고, M2 소스의 출력에는 R M과 R F가 병렬이에요.">
+    <path class="fig-ink" d="M82 22V29m0 38V107m0 26v35H46v16m0 24v15M82 83H188v36h30M102 120h27M112 168H82m68 0h11v18"/>
+    <path class="fig-ink" d="M82 107h14m-14 26h14M96 103v34m6-28v22M92 129l-6 4 6 4"/>
+    <path class="fig-ink" d="M73 22h18"/>
+    <path class="fig-ink" d="M82 29 l-6 4 12 6 -12 6 12 6 -12 6 12 6 -6 4"/>
+    <path class="fig-ink" d="M112 168 l4 -6 6 12 6 -12 6 12 6 -12 6 12 4 -6"/>
+    <path class="fig-ink" d="M151 186h20M155 190h12M158 194h6"/>
+    <path class="fig-ink" d="M36 223h20M40 227h12M43 231h6"/>
+    <circle class="fig-ink" cx="46" cy="196" r="12"/>
+    <path class="fig-ink" d="M46 203v-14m-4 4 4-4 4 4"/>
+    <circle class="fig-dot" cx="82" cy="83" r="3" data-node-color="red"/>
+    <circle class="fig-dot" cx="82" cy="168" r="3" data-node-color="blue"/>
+    <circle class="fig-ink" cx="132" cy="120" r="3"/>
+    <text class="fig-text fig-math" x="82" y="15" text-anchor="middle">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text>
+    <text class="fig-text fig-math" x="59" y="51" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text>
+    <text class="fig-text fig-math" x="71" y="126" text-anchor="middle">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+    <text class="fig-text fig-math" x="140" y="105" text-anchor="middle">V<tspan baseline-shift="sub" font-size="78%">b</tspan></text>
+    <text class="fig-text fig-math" x="24" y="201" text-anchor="middle">I<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
+    <text class="fig-text" x="146" y="78" text-anchor="middle" data-node-color="red">X</text>
+    <text class="fig-text fig-math" x="131" y="156" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+    <text class="fig-loc" font-size="17" text-anchor="middle" x="122" y="189">㉠</text>
+    <text class="fig-loc" font-size="17" text-anchor="middle" x="179" y="64">㉢</text>
+    <path class="fig-ink" d="M218 106v26m6-30v34M224 105h15V39m-15 93h15v26h104M234 128l5 4-5 4M230 39h18"/>
+    <text class="fig-text fig-math" x="239" y="31" text-anchor="middle">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text>
+    <text class="fig-text fig-math" x="263" y="123" text-anchor="middle">M<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+    <text class="fig-loc" font-size="17" text-anchor="middle" x="260" y="144">㉣</text>
+    <path class="fig-ink" d="M284 158v12m0 38v10M318 158v12m0 38v10"/>
+    <path class="fig-ink" d="M284 170 l-6 4 12 6 -12 6 12 6 -12 6 12 6 -6 4"/>
+    <path class="fig-ink" d="M318 170 l-6 4 12 6 -12 6 12 6 -12 6 12 6 -6 4"/>
+    <path class="fig-ink" d="M274 218h20M278 222h12M281 226h6"/>
+    <path class="fig-ink" d="M308 218h20M312 222h12M315 226h6"/>
+    <circle class="fig-dot" cx="284" cy="158" r="3" data-node-color="blue"/>
+    <circle class="fig-dot" cx="318" cy="158" r="3" data-node-color="blue"/>
+    <circle class="fig-ink" cx="346" cy="158" r="3"/>
+    <text class="fig-text fig-math" x="341" y="145" text-anchor="middle" data-node-color="blue">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+    <text class="fig-text fig-math" x="270" y="195" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">M</tspan></text>
+    <text class="fig-text fig-math" x="336" y="195" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+    <text class="fig-loc" font-size="17" text-anchor="middle" x="312" y="142">㉡</text>
+  </svg>
+    <figcaption class="circuit-state">단락 복제를 붙인 CG–소스 팔로워 개루프 회로</figcaption>
+  </figure>
   <div data-subpart="1">
     <h4>(1) 귀환율과 폐루프 이득</h4>
-    <p>둘째 단은 소스 팔로워예요. $i_{out}$은 출력 노드에서 증폭기 쪽으로 흘러 들어가는 방향을 양으로 잡아 $A_v=-G_mR_{out}$을 써요.</p>
-    <div data-answer-step="소스 팔로워 전압 이득" data-gain-route="gm-rout">
-      <div data-gain-stage="gm">
-        <p>출력을 단락하면 $M_2$가 출력으로 $g_{m2}v_X$를 밀어 주므로 $i_{out}=-g_{m2}v_X$예요.</p>
-        $$G_{m2}=-g_{m2}$$
-      </div>
-      <div data-gain-stage="rout">
-        <p>입력 $v_X=0$에서 $M_2$ 소스 쪽은 $1/g_{m2}$이고, 외부 부하 $R_L$과 병렬이에요.</p>
-        $$\begin{aligned}R_{out,open}&=\frac1{g_{m2}}\parallel R_M\parallel R_F\\&=\frac{R_L}{1+g_{m2}R_L}\end{aligned}$$
-      </div>
-      <div data-gain-stage="gain">
-        $$\frac{v_{out}}{v_X}=-G_{m2}R_{out,open}=\frac{g_{m2}R_L}{1+g_{m2}R_L}$$
-      </div>
+    <div data-answer-step="두 복제와 CG 단">
+      <p>두 복제를 단락하면 <span class="loc">㉠</span> 입력과 <span class="loc">㉡</span> 출력에 $R_F$가 각각 남아요. $\lambda=0$이고 몸체 효과는 무시해요.</p>
+      <p>테브난 전압 $I_{in}R_F$에 직렬 $R_F$가 붙으므로 <span class="loc">㉢</span> $X$까지의 CG 이득을 바로 써요.</p>
+      $$\frac{v_X}{I_{in}}=R_F\frac{R_D}{R_F+1/g_{m1}}$$
     </div>
-    <div data-answer-step="개루프 트랜스임피던스">
-      $$R_0=\frac{V_X}{I_{in}}\cdot\frac{V_{out}}{V_X}=\frac{g_{m1}R_F}{1+g_{m1}R_F}R_D\cdot\frac{g_{m2}R_L}{1+g_{m2}R_L}$$
-      <p>두 단이 모두 비반전이라 $R_0\gt0$이에요.</p>
+    <div data-answer-step="소스 팔로워" data-gain-route="gm-rout">
+      <p><span class="loc">㉣</span> $M_2$의 소스가 출력이에요. $i_{out}$을 증폭기 쪽으로 들어가는 방향으로 잡으면 $G_{m2}$가 음수예요.</p>
+      <div data-gain-stage="gm">$$G_{m2}=-g_{m2}$$</div>
+      <div data-gain-stage="rout">$$R_{out,\mathrm{open}}=\frac{1}{g_{m2}}\parallel R_M\parallel R_F$$</div>
+      <div data-gain-stage="gain">$$\frac{v_{out}}{v_X}=-G_{m2}R_{out,\mathrm{open}}$$</div>
+      $$R_0=\frac{v_X}{I_{in}}\frac{v_{out}}{v_X}\gt0$$
     </div>
-    <div data-answer-step="귀환율과 루프 부호">
-      <p>$V_{out}$을 출력 쪽에 걸고 입력 쪽을 단락하면 $R_F$로 $V_{out}/R_F$가 입력 노드로 들어가므로, 빠져나가는 방향 $I_F$ 기준 음수예요.</p>
-      $$K=\frac{I_F}{V_{out}}=-\frac1{R_F}$$
-      <p>계산을 짧게 하려고 $T=|KR_0|$를 정의해요.</p>
-      $$T=\frac{g_{m1}R_Dg_{m2}R_L}{(1+g_{m1}R_F)(1+g_{m2}R_L)}$$
-      $$KR_0=-T\lt0$$
-      <p>루프 이득이 음수라 정궤환이에요. $I_{in}$이 늘면 입력 노드 전압이 오르고, X와 $V_{out}$이 따라 오르며, $R_F$를 통해 입력 노드로 전류가 더 들어가 처음 변화를 키워요.</p>
-    </div>
-    <div data-answer-step="폐루프 이득">
-      <p>$R_0=R_FT$라는 점을 쓰면 식이 짧아져요. 분모 $(1+g_{m1}R_F)(1+g_{m2}R_L)$을 곱해 정리한 값을 $D$라 써요.</p>
-      $$\frac{V_{out}}{I_{in}}=\frac{R_0}{1+KR_0}=\frac{R_FT}{1-T}$$
-      $$\begin{aligned}D=&\,(1+g_{m1}R_F)(1+g_{m2}R_L)\\&-g_{m1}R_Dg_{m2}R_L\end{aligned}$$
-      $$\frac{V_{out}}{I_{in}}=\frac{g_{m1}R_FR_Dg_{m2}R_L}{D}$$
-      <p>이 값은 $T\lt1$일 때 유한한 양수예요. $T\ge1$이면 정궤환이 스스로 커져 선형 증폭기로 쓸 수 없어요.</p>
+    <div data-answer-final="">
+      <p>입력 단락 시 그 노드에서 빠져나가는 방향을 $I_F$의 양으로 잡아요.</p>
+      $$K=\frac{I_F}{v_{out}}=-\frac{1}{R_F}$$
+      $$T=-KR_0=\frac{R_0}{R_F}$$
+      <p>CG와 소스 팔로워가 모두 비반전이므로 정궤환이에요. 저주파 복제 모델에서 $T\lt1$인 경우를 써요.</p>
+      $$\frac{v_{out}}{I_{in}}\approx\frac{R_0}{1-T}$$
     </div>
   </div>
   <div data-subpart="2">
-    <h4>(2) 폐루프 입력·출력 임피던스</h4>
-    <div data-answer-step="폐루프 임피던스">
-      <p>개루프 값에서 시작해요.</p>
-      $$R_{in,open}=R_F\parallel\frac1{g_{m1}}=\frac{R_F}{1+g_{m1}R_F}$$
-      <p>$1+KR_0=1-T$로 나누고 $(1+g_{m1}R_F)(1+g_{m2}R_L)$을 곱해 정리해요. 분모는 (1)의 $D$와 같아요.</p>
-      $$R_{in,closed}=\frac{R_{in,open}}{1-T}=\frac{R_F(1+g_{m2}R_L)}{D}$$
-      $$R_{out,closed}=\frac{R_{out,open}}{1-T}=\frac{R_L(1+g_{m1}R_F)}{D}$$
-      <p>정궤환이라 두 임피던스 모두 개루프 값보다 <em>커져요</em>.</p>
+    <h4>(2) 폐루프 입출력 저항</h4>
+    <div data-answer-step="개루프 입력 저항">
+      $$R_{in,\mathrm{open}}=R_F\parallel\frac{1}{g_{m1}}$$
     </div>
-  </div>
-</div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="1">
-    <h4>(1) 검산</h4>
     <div data-answer-final="">
-      <p><strong>$K=-1/R_F$, $\dfrac{V_{out}}{I_{in}}=\dfrac{g_{m1}R_FR_Dg_{m2}R_L}{D}$이고 $D=(1+g_{m1}R_F)(1+g_{m2}R_L)-g_{m1}R_Dg_{m2}R_L$예요.</strong></p>
-      <p>$R_L=R_M\parallel R_F$, $\lambda=0$, 몸체 효과 무시이고, 루프 이득 $KR_0=-T\lt0$이라 정궤환이며 $T\lt1$일 때만 유한한 값이에요.</p>
+      $$R_{in,\mathrm{closed}}\approx\frac{R_{in,\mathrm{open}}}{1-T}$$
+      $$R_{out,\mathrm{closed}}\approx\frac{R_{out,\mathrm{open}}}{1-T}$$
     </div>
-    <p>작은 루프: $T\ll1$이면 $V_{out}/I_{in}\approx R_0(1+T)$라 개루프 값보다 조금 커져요. 정궤환이 이득을 키운다는 판단과 맞아요.</p>
-    <p>부호: 분모가 $1+T$가 아니라 $1-T$예요. 같은 크기의 부궤환보다 이득이 커지는 쪽이 정궤환과 맞아요.</p>
   </div>
-  <div data-subpart="2">
-    <h4>(2) 검산</h4>
-    <div data-answer-final="">
-      <p><strong>$R_{in,closed}=\dfrac{R_F(1+g_{m2}R_L)}{D}$, $R_{out,closed}=\dfrac{R_L(1+g_{m1}R_F)}{D}$이고 $D=(1+g_{m1}R_F)(1+g_{m2}R_L)-g_{m1}R_Dg_{m2}R_L$예요.</strong> ($T\lt1$)</p>
-    </div>
-    <p>극한: $R_D\to0$이면 $D=(1+g_{m1}R_F)(1+g_{m2}R_L)$이라 $R_{in,closed}\to R_F/(1+g_{m1}R_F)$, $R_{out,closed}\to R_L/(1+g_{m2}R_L)$로 개루프 값과 같아져요.</p>
-    <p>단위: $D$는 무차원이라 두 결과 모두 Ω이에요.</p>
-  </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <ul>
-    <li>$R_F$가 출력에서 입력으로 이어진다고 무조건 부궤환이라고 보지 않아요. CG와 소스 팔로워가 모두 비반전이라 $R_0\gt0$이고, $K=-1/R_F$와 곱하면 루프 이득이 음수예요.</li>
-    <li>정궤환에서 $1+KR_0=1-T$예요. 습관대로 $1+T$로 쓰면 이득과 임피던스가 줄어든다는 반대 결론이 나와요.</li>
-    <li>소스 팔로워의 개루프 출력 저항에는 $1/g_{m2}$가 들어가요. $R_M\parallel R_F$만 쓰면 출력 임피던스가 틀려요.</li>
-    <li>$T\ge1$이면 폐루프 공식의 분모가 0 이하가 되어 의미가 없어요. 결과를 쓸 때 $T\lt1$ 조건을 함께 적어요.</li>
-  </ul>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol>
-    <li>$M_2$를 PMOS 공통 소스 단으로 바꾸면 루프 이득의 부호는 어떻게 되나요?</li>
-    <li>$g_{m2}R_L\gg1$이면 $T$는 어떤 꼴로 단순해지고, $T\lt1$ 조건은 무엇이 되나요?</li>
-    <li>$R_D$를 두 배로 키우면 $T$는 어떻게 변하고, $T\lt1$ 조건은 왜 더 지키기 어려워지나요?</li>
-  </ol>
 </div>
 <div class="sum" hidden>
-  <p class="sum-lead">CG와 소스 팔로워가 모두 비반전이라 $R_F$ 루프는 정궤환이에요.</p>
-  <div class="summary-group">
-    <h4>핵심 식</h4>
-    <p>$K=I_F/V_{out}=-1/R_F$이고 $R_0=\dfrac{g_{m1}R_F}{1+g_{m1}R_F}R_D\dfrac{g_{m2}R_L}{1+g_{m2}R_L}\gt0$이에요.</p>
-    <p>$KR_0=-T$라 폐루프 값은 모두 $1-T$로 나뉘어요.</p>
-  </div>
-  <div class="summary-group">
-    <h4>판단 기준</h4>
-    <p>$T\lt1$일 때만 유한하고, 이득과 두 임피던스가 개루프보다 커져요.</p>
-  </div>
+  <p class="sum-lead">두 단이 모두 비반전이므로 폐루프 분모가 $1-T$인 정궤환이에요.</p>
 </div>

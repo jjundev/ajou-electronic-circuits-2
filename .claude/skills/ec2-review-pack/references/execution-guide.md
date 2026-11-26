@@ -31,7 +31,7 @@
 
 ## 확정한 문제 해설 형식
 
-자식 ec2-problem-explain의 문제 해설은 **문제를 읽어요 → 이 개념과 공식을 떠올려요 → 종이에 쓸 첫 줄 → 이렇게 풀어요 → 완성 답과 검산 → 주의할 점 → 조건을 바꾸어 생각해요** 순서다. 사용자 방식의 풀이를 start/solve/verify의 정식 본문으로 삼고 필요한 이유·유도를 각 단계에 연결한다. 앞에 별도 핵심 풀이를 추가하거나 뒤에 같은 상세 풀이를 반복하지 않는다. 요약·동반 MD·답안 PDF는 이 경로와 결과를 따른다. 순수 개념 정리노트는 기존 토픽/레이어 구조를 유지한다.
+자식 ec2-problem-explain은 [간략 해설 저작 규칙](../../ec2-problem-explain/references/authoring.md)에 따라 회로 판단 → 첫 식 → 필수 중간식 → 소문항별 답을 한 흐름으로 쓴다. 요약·동반 MD·답안 PDF는 같은 풀이와 결과를 따른다. 순수 개념 정리노트는 기존 토픽과 레이어 구조를 유지한다.
 
 **한 행에 하나의 식:** 독립된 계산 대상은 각각 별도 display 블록/MD 줄/PDF 행에 쓴다. 서로 다른 $g_m$, $r_\pi$, $r_o$ 계산을 쉼표·\quad·\qquad로 한 줄에 묶지 않는다. 같은 양의 `식 = 대입 = 결과` 연속 등식과 실제 같은 값을 가진 소자의 등식 묶음은 유지할 수 있으며, 폭을 넘으면 단계별로 세로로 나눈다. 설명문의 짧은 기호·조건은 인라인으로 쓸 수 있다.
 
@@ -162,7 +162,7 @@
 - `references/problem-explain-integration.md`의 부모 호출 계약을 따른다.
 - 확정한 manifest `problems`가 1개 이상이면 문제설명 조정자가 형제 `ec2-problem-explain` 스킬의 extract부터 실제 네 검토까지 수행하고, 최상위 메인만 기존 CLI publish를 실행한다. MD 변환 이후이며 최종 보고 이전이다.
 - 문제가 0개이면 `skipped-no-problems`다. 자식·PDF를 건너뛰고 현재 snapshot을 기준으로 모든 토픽 감사와 내용 리뷰를 마치고 유예 없이 최종 노트 검사를 수행한다.
-- extract 이후 정리노트 바이트를 바꾸지 않는다. 자식 조정자는 확정한 일곱 구역의 통합 풀이 저작 → 독립 검산 → build/check → 네 검토 + 전체 개인화 감사를 완료해 ready-for-publish로 인계한다. 메인이 기존 publish 게이트로 발행한다. 자식은 PDF를 직접 교체하지 않는다.
+- extract 이후 정리노트 바이트를 바꾸지 않는다. 자식 조정자는 간략 해설 저작 → 독립 검산 → build/check → 네 검토 + 전체 개인화 감사를 완료해 ready-for-publish로 인계한다. 메인이 기존 publish 게이트로 발행한다. 자식은 PDF를 직접 교체하지 않는다.
 - 자식 publish 성공 후 같은 팩의 발행 overlay를 쓴다. ID는 runner가 현재 manifest 순서로 전달한다.
 부모 실행: next가 요청한 `build-answers` action을 runner로 한 번 실행한다. 실제 argv/로그는 RUN에 보존한다.
 - [통합 계약](problem-explain-integration.md)의 명령으로 PDF 실제 렌더 페이지를 확인하고 `RUN/answer-review.json`을 기록한다. 핵심 회로·판단·계산·최종 답과 자막 여백·넘침을 실제 확인한 기록만 pass다. 빌드 종료 코드가 0이고 OVERFLOW가 없어야 한다.

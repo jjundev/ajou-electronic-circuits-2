@@ -1,108 +1,58 @@
-import sympy as sp
+"""Independent verification of P12.49."""
+import sympy as s
 
+Yin, Yout, h, f = s.symbols('Yin Yout h f', real=True, nonzero=True)
+u, o, i_in, i_out = s.symbols('v_in v_out i_in i_out')
 
-def par2(a, b):
-    return (a * b) / (a + b)
+gm, rp, ro, RC = s.symbols('gm r_pi r_o RC',positive=True)
+# Base is the input, emitter is grounded, collector is the output. VA < infinity.
+g_input = 1/rp
+g_output = 1/RC+1/ro
+h_actual = gm
 
+# Yin/Yout include the feedback network's short-circuit diagonal admittances.
+# h is the forward dependent current leaving output per input voltage.
+# f*vo is the feedback-network input current toward the summing node at vi=0.
+# The reciprocal forward term -f*vi at output is present in the physical circuit.
+trial = s.solve([Yin*u-f*o-i_in, (h-f)*u+Yout*o-i_out],(u,o))
+det = Yin*Yout+f*(h-f)
+assert s.factor(trial[o].diff(i_in)-(f-h)/det) == 0
+assert s.factor(trial[u].diff(i_in)-Yout/det) == 0
+assert s.factor(trial[o].diff(i_out)-Yin/det) == 0
 
-def par3(a, b, c):
-    return 1 / (1 / a + 1 / b + 1 / c)
+R0 = -h/(Yin*Yout)
+Rin0, Rout0 = 1/Yin, 1/Yout
+T = -f*R0
+replica = s.solve([Yin*u-f*o-i_in,h*u+Yout*o-i_out],(u,o))
+assert s.factor(replica[o].diff(i_in)-R0/(1+T)) == 0
+assert s.factor(replica[u].diff(i_in)-Rin0/(1+T)) == 0
+assert s.factor(replica[o].diff(i_out)-Rout0/(1+T)) == 0
+probes = [(o,i_in),(u,i_in),(o,i_out)]
+for measured, injection in probes:
+    exact_result = trial[measured].diff(injection)
+    replica_result = replica[measured].diff(injection)
+    assert s.factor(s.limit(exact_result-replica_result,f,0)) == 0
+print('Loaded replica: R0 =',R0,'; Rin0 =',Rin0,'; Rout0 =',Rout0)
+print('Return convention: i_in+i_f, i_f=f*vo at vi=0; f>0; T=-f*R0.')
+print('Equivalent subtracting convention: i_in-K*vo with K=-f.')
+print('Loaded replica closed: R=R0/(1+T); Rin=Rin0/(1+T); Rout=Rout0/(1+T).')
+print('Exact closed physical circuit: replace h by h-f in the above expressions.')
+print('Exact D = Yin*Yout+f*(h-f); R=(f-h)/D; Rin=Yout/D; Rout=Yin/D.')
+print('Replica drops reciprocal forward feedthrough; R comparison requires |f/h| << 1.')
+print('Close to D=0, also check that the determinant change f**2 is negligible.')
 
+Rf = s.symbols('R_F',positive=True)
+feedback = 1/Rf
+yin, yout = g_input+feedback, g_output+feedback
+physical_input = g_input*u+(u-o)/Rf
+physical_output = g_output*o+h_actual*u+(o-u)/Rf
+assert s.factor(physical_input-(Yin*u-f*o).subs({Yin:yin,f:feedback})) == 0
+assert s.factor(physical_output-((h-f)*u+Yout*o).subs({h:h_actual,Yout:yout,f:feedback})) == 0
+print('f=1/R_F; Yin=g_input+1/R_F; Yout=g_output+1/R_F.')
+for label, value in [('g_input',g_input),('g_output',g_output),('h',h_actual)]:
+    print(label,'=',s.factor(value))
 
-def main():
-    I_in, g_m, r_pi, r_O, R_C, R_F = sp.symbols(
-        "I_in g_m r_pi r_O R_C R_F", positive=True
-    )
-    beta = sp.symbols("beta", positive=True)
-    V_B, V_out = sp.symbols("V_B V_out")
-
-    # 1. Open-loop circuit (P12.49, Fig. 12.112):
-    eq_open = [
-        sp.Eq(I_in, V_B / r_pi + V_B / R_F),
-        sp.Eq(V_out / R_C + V_out / r_O + V_out / R_F + g_m * V_B, 0),
-    ]
-    sol_open = sp.solve(eq_open, [V_B, V_out])
-    R_0 = sp.simplify(sol_open[V_out] / I_in)
-
-    # 2. Open-loop input & output impedances
-    V_t, I_t = sp.symbols("V_t I_t")
-    sol_rin = sp.solve([sp.Eq(I_t, V_t / r_pi + V_t / R_F)], [I_t])
-    R_in_open = sp.simplify(V_t / sol_rin[I_t])
-
-    sol_rout = sp.solve([sp.Eq(I_t, V_t / R_C + V_t / r_O + V_t / R_F)], [I_t])
-    R_out_open = sp.simplify(V_t / sol_rout[I_t])
-
-    # 3. Feedback factor K
-    V_1, I_2 = sp.symbols("V_1 I_2")
-    sol_k = sp.solve([sp.Eq(I_2 + (V_1 - 0) / R_F, 0)], [I_2])
-    K = sp.simplify(sol_k[I_2] / V_1)
-
-    # 4. Loop gain and closed-loop quantities
-    KR_0 = sp.simplify(K * R_0)
-    denom = sp.simplify(1 + KR_0)
-    R_closed = sp.simplify(R_0 / denom)
-    R_in_closed = sp.simplify(R_in_open / denom)
-    R_out_closed = sp.simplify(R_out_open / denom)
-
-    # 5. Verify compact parallel forms match sympy.solve identically
-    R_in_open_compact = par2(r_pi, R_F)
-    R_out_open_compact = par3(r_O, R_C, R_F)
-    R_0_compact = -g_m * R_in_open_compact * R_out_open_compact
-    KR_0_compact = (g_m * r_pi / (r_pi + R_F)) * R_out_open_compact
-    assert sp.simplify(R_in_open - R_in_open_compact) == 0
-    assert sp.simplify(R_out_open - R_out_open_compact) == 0
-    assert sp.simplify(R_0 - R_0_compact) == 0
-    assert sp.simplify(K - (-1 / R_F)) == 0
-    assert sp.simplify(KR_0 - KR_0_compact) == 0
-
-    R_0_beta = sp.simplify(R_0.subs(g_m, beta / r_pi))
-    KR_0_beta = sp.simplify(KR_0.subs(g_m, beta / r_pi))
-    R_closed_beta = sp.simplify(R_closed.subs(g_m, beta / r_pi))
-
-    # 6. Exact unbroken closed-loop KCL for comparison
-    V_B_ex, V_out_ex = sp.symbols("V_B_ex V_out_ex")
-    eq_exact = [
-        sp.Eq(I_in, V_B_ex / r_pi + (V_B_ex - V_out_ex) / R_F),
-        sp.Eq(V_out_ex / R_C + V_out_ex / r_O + (V_out_ex - V_B_ex) / R_F + g_m * V_B_ex, 0),
-    ]
-    sol_exact = sp.solve(eq_exact, [V_B_ex, V_out_ex])
-    R_closed_exact = sp.simplify(sol_exact[V_out_ex] / I_in)
-    R_in_exact = sp.simplify(sol_exact[V_B_ex] / I_in)
-
-    eq_ro_exact = [
-        sp.Eq(0, V_B_ex / r_pi + (V_B_ex - V_t) / R_F),
-        sp.Eq(I_t, V_t / R_C + V_t / r_O + (V_t - V_B_ex) / R_F + g_m * V_B_ex),
-    ]
-    sol_ro_exact = sp.solve(eq_ro_exact, [V_B_ex, I_t])
-    R_out_exact = sp.simplify(V_t / sol_ro_exact[I_t])
-
-    subs_num = {g_m: 1 / 26.0, r_pi: 2600.0, r_O: 100e3, R_C: 5e3, R_F: 20e3}
-
-    print("=== p10: P12.49 (Fig. 12.112, BJT Shunt-Shunt TIA, V_A < inf) ===")
-    print(f"R_0 (open-loop transimp)   = {R_0}")
-    print(f"R_0 (using beta=g_m*r_pi)  = {R_0_beta}")
-    print(f"R_in_open                  = {R_in_open}")
-    print(f"R_out_open                 = {R_out_open}")
-    print(f"K                          = {K}")
-    print(f"KR_0 (loop gain)           = {KR_0}")
-    print(f"KR_0 (using beta=g_m*r_pi) = {KR_0_beta}")
-    print(f"1 + KR_0                   = {sp.factor(denom)}")
-    print(f"R_closed (feedback)        = {R_closed}")
-    print(f"R_closed (beta form)       = {R_closed_beta}")
-    print(f"R_in_closed (feedback)     = {R_in_closed}")
-    print(f"R_out_closed (feedback)    = {R_out_closed}")
-    print("Compact parallel-combination assertions: ALL PASSED (diff == 0)")
-    print("--- Exact unbroken KCL comparison ---")
-    print(f"R_closed_exact             = {R_closed_exact}")
-    print(f"R_in_exact                 = {R_in_exact}")
-    print(f"R_out_exact                = {R_out_exact}")
-    print(
-        f"Numeric check (gm=38.46m,rpi=2.6k,rO=100k,RC=5k,RF=20k): "
-        f"KR_0={float(KR_0.subs(subs_num)):.4f}, "
-        f"R_closed_fb={float(R_closed.subs(subs_num)):.2f}, "
-        f"R_closed_exact={float(R_closed_exact.subs(subs_num)):.2f}"
-    )
-
-
-if __name__ == "__main__":
-    main()
+print('Open transresistance = -gm*(r_pi||RF)*(RC||ro||RF).')
+print('Open input = r_pi||RF; open output = RC||ro||RF.')
+print('Exact full circuit high-gm limit: negative transresistance -> -RF.')
+assert s.limit(((f-h)/det).subs(h,gm),gm,s.oo) == -1/f

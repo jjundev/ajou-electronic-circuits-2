@@ -1,109 +1,29 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>회로는 앞 문항과 같은 분배기 귀환 CG 단이에요. 입력 $V_{in}$은 $M_1$ 소스, 출력 $V_{out}$은 $M_1$ 드레인이고, $R_1$–$R_2$ 분압기의 가운데 노드가 게이트로 돌아가요.</p>
-  <p>원문 조건 "충분히 작지 않을 때"는 문맥상 "$R_1+R_2$가 $R_D$보다 충분히 <em>크지</em> 않을 때"로 읽어요. 그러면 분압기가 출력에서 빼 가는 전류를 더 이상 무시할 수 없어요. 이것을 귀환 회로망의 부하 효과(loading)라고 해요.</p>
-  <p>원문에 $\lambda$ 값은 없어요. 앞 예제처럼 $\lambda=0$으로 보고 $r_O$를 쓰지 않아요(추가 가정).</p>
-  <p>구할 것은 12.7.1절의 여섯 단계로 얻는 개루프·폐루프 전압 이득과 폐루프 입력·출력 임피던스예요. 답은 $g_{m1}$, $R_D$, $R_1$, $R_2$의 식이에요.</p>
-</div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p><strong>단서:</strong> 출력 전압을 분압해 게이트로 되돌리니 전압-전압 귀환(voltage-voltage feedback)이에요. "$R_1+R_2$가 크지 않다"는 말은 부하 효과를 넣으라는 신호예요.</p>
-  <p><strong>귀환망 끊는 법칙(Fig 12.53(a)):</strong> 귀환망을 두 번 복사해 순방향 증폭기에 붙여요. 출력 쪽 복사물(감지 복제)은 귀환망의 출력 포트를 <em>개방</em>하고, 입력 쪽 복사물(반송 복제)은 귀환망의 입력 포트를 <em>단락</em>해요.</p>
-  <p><strong>귀환율(Fig 12.54(a)):</strong> 귀환망 입력 포트에 $V_1$을 걸고 출력 포트를 연 채 $V_2$를 재요. $K=V_2/V_1$이에요.</p>
-  <p><strong>폐루프 공식:</strong> 개루프 값을 부하까지 넣어 구한 뒤 다음처럼 바꿔요.</p>
-  $$A_{closed}=\frac{A_{open}}{1+KA_{open}}$$
-  <p>전압-전압 귀환이라 입력 임피던스는 $1+KA_{open}$배, 출력 임피던스는 $1/(1+KA_{open})$배가 돼요.</p>
-  <p><strong>선택 이유:</strong> 부하를 넣은 개루프 회로는 평범한 CG 단이 되므로, 알고 있는 CG 블록($1/g_m$, 비반전 이득)으로 바로 풀 수 있어요.</p>
-</div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="귀환망 끊기">
-    <p>순방향 증폭기는 $M_1$과 $R_D$의 CG 단, 귀환망은 $R_1$–$R_2$예요. 귀환망의 입력 포트는 $V_{out}$ 쪽, 출력 포트는 게이트 쪽이에요.</p>
-    <ul>
-      <li>출력 쪽 복제: 게이트 쪽 포트를 개방하면 $V_{out}$에서 접지로 $R_1+R_2$가 보여요.</li>
-      <li>입력 쪽 복제: $V_{out}$ 쪽 포트를 단락하면 게이트에서 접지로 $R_1\parallel R_2$가 보여요. 게이트 전류가 0이라 이 저항에는 전압강하가 없어 게이트는 AC 접지와 같아요.</li>
-    </ul>
-    <p>그래서 개루프 회로의 출력 부하를 먼저 적어요.</p>
-    $$R_L=R_D\parallel(R_1+R_2)$$
-  </div>
-</div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
-  <div data-subpart="main">
-    <p>개루프 회로는 게이트가 AC 접지이고 부하가 $R_L$인 CG 단이에요. $G_m$ → $R_{out}$ → 이득 순서로 구해요. $i_{out}$은 출력 노드에서 $M_1$ 드레인으로 흘러 들어가는 방향을 양으로 잡아 $A_v=-G_mR_{out}$을 써요.</p>
-    <div data-answer-step="개루프 이득" data-gain-route="gm-rout">
-      <div data-gain-stage="gm">
-        <p>출력을 단락하면 $i_{out}=g_{m1}(0-v_{in})$이에요.</p>
-        $$G_m=-g_{m1}$$
-      </div>
-      <div data-gain-stage="rout">
-        <p>입력을 0으로 두면 소스가 AC 접지이고, $\lambda=0$이라 드레인 쪽은 무한대예요. 남는 것은 $R_D$와 출력 쪽 복제 $R_1+R_2$의 병렬이에요.</p>
-        $$R_{out}=R_D\parallel(R_1+R_2)$$
-      </div>
-      <div data-gain-stage="gain">
-        $$\begin{aligned}A_{open}&=-G_mR_{out}\\&=g_{m1}\left[R_D\parallel(R_1+R_2)\right]\end{aligned}$$
-      </div>
+<div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit"><svg id="p2-fig-circuit-s2-cg-duplicates" viewBox="0 0 330 218" role="img" aria-label="루프를 끊은 CG 단. 출력에 감지 복제 R1–R2가 달리고 그 가운데 단자는 열려 있어요. 게이트에는 반송 복제의 가운데 노드가 붙고 R1 위 끝과 R2 아래 끝이 접지돼요."><g data-symbol="rail"><path class="fig-ink" d="M54 14H86"/></g><text class="fig-text fig-math" text-anchor="start" x="98" y="19">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text><path class="fig-ink" d="M70 14L70 22 M70 58L70 124 M70 74L300.5 74 M70 148L70 188L27.5 188 M90 136L150 136 M150 132L150 140 M150 96L150 90L188 90L188 102 M150 176L150 186 M250 74L250 82 M250 118L250 138 M250 174L250 186 M250 128L227.5 128"/><g data-symbol="part"><path class="fig-ink" d="M70 22l-7 3 14 6 -14 6 14 6 -14 6 14 6 -7 3"/></g><g data-symbol="part"><path class="fig-ink" d="M150 96l-7 3 14 6 -14 6 14 6 -14 6 14 6 -7 3"/></g><g data-symbol="part"><path class="fig-ink" d="M150 140l-7 3 14 6 -14 6 14 6 -14 6 14 6 -7 3"/></g><g data-symbol="part"><path class="fig-ink" d="M178 102h20M182 107h12M185 112h6"/></g><g data-symbol="part"><path class="fig-ink" d="M140 186h20M144 191h12M147 196h6"/></g><g data-symbol="part"><path class="fig-ink" d="M250 82l-7 3 14 6 -14 6 14 6 -14 6 14 6 -7 3"/></g><g data-symbol="part"><path class="fig-ink" d="M250 138l-7 3 14 6 -14 6 14 6 -14 6 14 6 -7 3"/></g><g data-symbol="part"><path class="fig-ink" d="M240 186h20M244 191h12M247 196h6"/></g><path class="fig-ink" d="M70 124H84M70 148H84"/><g data-symbol="mos"><path class="fig-ink" d="M84 120V152M90 123V149M78 143L73 148L78 153"/></g><circle class="fig-dot" data-node-color="red" cx="70" cy="74" r="3.5"/><circle class="fig-dot" data-node-color="red" cx="250" cy="74" r="3.5"/><circle class="fig-dot" data-node-color="blue" cx="150" cy="136" r="3.5"/><circle class="fig-dot" data-node-color="blue" cx="250" cy="128" r="3.5"/><circle class="fig-ink" cx="304" cy="74" r="3.5"/><circle class="fig-ink" cx="24" cy="188" r="3.5"/><circle class="fig-ink" cx="224" cy="128" r="3.5"/><text class="fig-text fig-math" text-anchor="end" x="54" y="45">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text><text class="fig-text fig-math" text-anchor="end" x="56" y="141">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" text-anchor="end" x="136" y="118">R<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" text-anchor="start" x="166" y="163">R<tspan baseline-shift="sub" font-size="78%">2</tspan></text><text class="fig-text fig-math" text-anchor="start" x="266" y="105">R<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" text-anchor="start" x="266" y="161">R<tspan baseline-shift="sub" font-size="78%">2</tspan></text><text class="fig-text fig-math" text-anchor="middle" x="300" y="56" data-node-color="red">V<tspan baseline-shift="sub" font-size="78%">out</tspan></text><text class="fig-text fig-math" text-anchor="middle" x="24" y="170">V<tspan baseline-shift="sub" font-size="78%">in</tspan></text><text class="fig-text fig-math" text-anchor="middle" x="220" y="152">개방</text><text class="fig-loc" text-anchor="middle" x="290" y="133" font-size="17">㉠</text><text class="fig-loc" text-anchor="middle" x="171" y="136" font-size="17">㉡</text><text class="fig-loc" text-anchor="middle" x="116" y="158" font-size="17">㉢</text><text class="fig-loc" text-anchor="middle" x="86" y="184" font-size="17">㉣</text></svg><figcaption class="circuit-state">감지·반송 복제를 붙인 개루프 회로<span class="circuit-key"> · <span class="loc">㉠</span> 감지 복제 · <span class="loc">㉡</span> 반송 복제 · <span class="loc">㉢</span> 게이트 · <span class="loc">㉣</span> $M_1$ 소스(입력) (강의노트 s53 오른쪽)</span></figcaption></figure>
+<div data-subpart="main"><h4>복제 회로에서 첫 식 세우기</h4>
+<div data-answer-step="감지·반송 복제와 개루프 변수"><p>분압기 부하를 포함하고 $\lambda=0$으로 가정해요.</p>
+    <p><span class="loc">㉠</span> 감지 복제의 가운데 포트를 열면 출력에서 접지까지 $R_1+R_2$가 보여요.</p>
+    <p><span class="loc">㉡</span> 반송 복제의 위쪽 포트를 접지하면 <span class="loc">㉢</span> 게이트에 $R_1\parallel R_2$가 달려요. 게이트 전류가 0이므로 게이트는 AC 접지예요.</p>
+    <h4>개루프 이득과 귀환율</h4>
+    <div data-gain-route="gm-rout">
+      <div data-gain-stage="gm"><p><span class="loc">㉣</span> 소스가 입력이에요. 출력을 단락하고 드레인으로 들어가는 전류를 양으로 잡아요.</p>$$G_m=-g_{m1}$$</div>
+      <div data-gain-stage="rout"><p>입력을 0으로 두고 <span class="loc">㉠</span> 감지 복제와 $R_D$를 병렬로 합쳐요.</p>$$R_{out,\mathrm{open}}=R_D\parallel(R_1+R_2)$$</div>
+      <div data-gain-stage="gain">$$A_{\mathrm{open}}=-G_mR_{out,\mathrm{open}}$$</div>
     </div>
-    <div data-answer-step="개루프 임피던스">
-      <p>입력은 게이트가 AC 접지인 CG의 소스예요.</p>
-      $$R_{in,open}=\frac1{g_{m1}}$$
-      $$R_{out,open}=R_D\parallel(R_1+R_2)$$
+    $$R_{in,\mathrm{open}}=\frac{1}{g_{m1}}$$
+    <p>분압기만 떼어 위쪽에 $V_1$을 걸고 열린 가운데 단자의 $V_2$를 읽어요.</p>
+    $$K=\frac{V_2}{V_1}=\frac{R_2}{R_1+R_2}$$</div>
+<div data-answer-final=""><h4>폐루프 답</h4>
+    $$A_{\mathrm{closed}}=\frac{A_{\mathrm{open}}}{1+KA_{\mathrm{open}}}$$
+    $$R_{in,\mathrm{closed}}=R_{in,\mathrm{open}}(1+KA_{\mathrm{open}})$$
+    $$R_{out,\mathrm{closed}}=\frac{R_{out,\mathrm{open}}}{1+KA_{\mathrm{open}}}$$</div>
+    <p><strong>검산</strong> $R_1+R_2\gg R_D$이면 $R_{out,\mathrm{open}}\approx R_D$이므로 P1과 같은 출력 부하가 돼요.</p>
     </div>
-    <div data-answer-step="귀환율">
-      <p>$V_1$을 $V_{out}$ 쪽에 걸고 게이트 쪽을 열면 분압비가 나와요.</p>
-      $$K=\frac{V_2}{V_1}=\frac{R_2}{R_1+R_2}$$
-    </div>
-    <div data-answer-step="루프 이득">
-      <p>$R_1+R_2$가 약분되도록 먼저 정리해요.</p>
-      $$\begin{aligned}KA_{open}&=\frac{R_2}{R_1+R_2}\cdot\frac{g_{m1}R_D(R_1+R_2)}{R_D+R_1+R_2}\\&=\frac{g_{m1}R_DR_2}{R_D+R_1+R_2}\end{aligned}$$
-    </div>
-    <div data-answer-step="폐루프 변수">
-      $$\begin{aligned}A_{closed}&=\frac{A_{open}}{1+KA_{open}}\\&=\frac{g_{m1}R_D(R_1+R_2)}{R_D+R_1+R_2+g_{m1}R_DR_2}\end{aligned}$$
-      $$R_{in,closed}=\frac1{g_{m1}}\left(1+\frac{g_{m1}R_DR_2}{R_D+R_1+R_2}\right)$$
-      $$\begin{aligned}R_{out,closed}&=\frac{R_D\parallel(R_1+R_2)}{1+KA_{open}}\\&=\frac{R_D(R_1+R_2)}{R_D+R_1+R_2+g_{m1}R_DR_2}\end{aligned}$$
-    </div>
-  </div>
 </div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
-    <div data-answer-final="">
-      <p><strong>$A_{open}=g_{m1}[R_D\parallel(R_1+R_2)]$, $R_{in,open}=1/g_{m1}$, $R_{out,open}=R_D\parallel(R_1+R_2)$, $K=R_2/(R_1+R_2)$예요.</strong></p>
-      <p><strong>$A_{closed}=\dfrac{g_{m1}R_D(R_1+R_2)}{R_D+R_1+R_2+g_{m1}R_DR_2}$, $R_{in,closed}=\dfrac1{g_{m1}}\left(1+\dfrac{g_{m1}R_DR_2}{R_D+R_1+R_2}\right)$, $R_{out,closed}=\dfrac{R_D(R_1+R_2)}{R_D+R_1+R_2+g_{m1}R_DR_2}$예요.</strong> ($\lambda=0$)</p>
-    </div>
-    <p>극한: $R_1+R_2\to\infty$(분모의 $R_D$ 무시)이면 $A_{closed}\to g_{m1}R_D/(1+Kg_{m1}R_D)$로 앞 문항의 이상적 결과와 같아요.</p>
-    <p>직접 확인: 출력 노드에서 전류를 맞추면 $v_{out}\left(\dfrac1{R_D}+\dfrac1{R_1+R_2}\right)=g_{m1}(v_{in}-Kv_{out})$예요. 이것을 풀면 위 $A_{closed}$와 정확히 같아요. 게이트 전류가 0이라 이 회로에서는 부하 효과 해석이 근사 없이 맞아요.</p>
-    <p>극한: $g_{m1}\to\infty$이면 $A_{closed}\to(R_1+R_2)/R_2=1/K$예요. 단위는 이득이 무차원, 저항식은 Ω이에요.</p>
-  </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <ul>
-    <li>두 복제의 종단을 바꿔 쓰기 쉬워요. 출력 쪽은 귀환망 출력 포트를 <em>개방</em>해 $R_1+R_2$, 입력 쪽은 귀환망 입력 포트를 <em>단락</em>해 $R_1\parallel R_2$예요.</li>
-    <li>게이트 쪽 $R_1\parallel R_2$를 소스 저항처럼 이득에 넣지 않아요. 게이트 전류가 0이라 영향이 없어요.</li>
-    <li>귀환율 $K$에는 부하를 넣지 않아요. 부하는 개루프 값에만 들어가요.</li>
-    <li>원문의 "작지 않을 때"를 글자 그대로 "$R_1+R_2\ll R_D$가 아니다"로 읽으면 뜻이 뒤집혀요. 분압기 부하를 고려하라는 문맥으로 읽어요.</li>
-  </ul>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol>
-    <li>$R_D$ 대신 이상적 전류원을 부하로 쓰면 개루프 이득은 무엇이 되나요?</li>
-    <li>$M_1$을 바이폴라 $Q_1$로 바꾸면 입력 쪽 복제 $R_1\parallel R_2$는 왜 더 이상 무시할 수 없나요?</li>
-    <li>귀환율 $K$를 구할 때 $V_{out}$ 쪽 포트와 게이트 쪽 포트 중 어디를 여나요?</li>
-  </ol>
-</div>
-<div class="sum" hidden>
-  <p class="sum-lead">출력 쪽에 $R_1+R_2$를 붙인 CG 단이 부하를 넣은 개루프 회로예요.</p>
+<div class="sum" hidden="">
+  <p class="sum-lead">감지 복제의 $R_1+R_2$가 출력 부하에 들어가요.</p>
   <div class="summary-group">
-    <h4>끊는 법칙</h4>
-    <p>출력 쪽은 귀환망 출력 포트를 열어 $R_1+R_2$를 붙여요.</p>
-    <p>입력 쪽 $R_1\parallel R_2$는 게이트 전류가 0이라 영향이 없어요.</p>
-  </div>
-  <div class="summary-group">
-    <h4>핵심 식</h4>
-    <p>$A_{open}=g_{m1}[R_D\parallel(R_1+R_2)]$이고 $K=R_2/(R_1+R_2)$예요.</p>
-    <p>$A_{closed}=A_{open}/(1+KA_{open})$예요.</p>
-    <p>$R_{in}$은 $1+KA_{open}$배, $R_{out}$은 $1/(1+KA_{open})$배예요.</p>
+    <h4>개루프에서 남는 부하</h4>
+    <p>$R_{out,\mathrm{open}}=R_D\parallel(R_1+R_2)$예요.</p>
   </div>
 </div>

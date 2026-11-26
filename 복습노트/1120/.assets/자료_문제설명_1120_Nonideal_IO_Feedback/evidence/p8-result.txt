@@ -1,18 +1,15 @@
-=== p8: 2023-1_기말-Q2 (PMOS CS M2, lambda = 0) ===
-V_X/I_in (direct KCL)      = R_D*R_F*g_m1/(R_F*g_m1 + 1)
-V_X/I_in (Norton->Thevenin)= R_D*R_F*g_m1/(R_F*g_m1 + 1)
-diff(KCL - Thevenin)       = 0
-[Part 1] R_0               = -R_D*R_F**2*R_M*g_m1*g_m2/(R_F**2*g_m1 + R_F*R_M*g_m1 + R_F + R_M)
-[Part 1] R_in_open         = R_F/(R_F*g_m1 + 1)
-[Part 1] R_out_open        = R_F*R_M/(R_F + R_M)
-[Part 2] K                 = -1/R_F
-KR_0 (loop gain)           = R_D*R_F*R_M*g_m1*g_m2/(R_F**2*g_m1 + R_F*R_M*g_m1 + R_F + R_M)
-1 + KR_0                   = (R_D*R_F*R_M*g_m1*g_m2 + R_F**2*g_m1 + R_F*R_M*g_m1 + R_F + R_M)/((R_F + R_M)*(R_F*g_m1 + 1))
-[Part 2] R_closed          = -R_D*R_F**2*R_M*g_m1*g_m2/(R_D*R_F*R_M*g_m1*g_m2 + R_F**2*g_m1 + R_F*R_M*g_m1 + R_F + R_M)
-[Part 2] R_in_closed       = R_F*(R_F + R_M)/(R_D*R_F*R_M*g_m1*g_m2 + R_F**2*g_m1 + R_F*R_M*g_m1 + R_F + R_M)
-[Extra]  R_out_closed      = R_F*R_M*(R_F*g_m1 + 1)/(R_D*R_F*R_M*g_m1*g_m2 + R_F**2*g_m1 + R_F*R_M*g_m1 + R_F + R_M)
-Compact textbook form assertions: ALL PASSED (diff == 0)
---- Exact unbroken KCL comparison ---
-R_closed_exact             = R_M*(-R_D*R_F*g_m1*g_m2 + 1)/(R_D*R_M*g_m1*g_m2 + R_F*g_m1 + R_M*g_m1 + 1)
-R_in_exact                 = (R_F + R_M)/(R_D*R_M*g_m1*g_m2 + R_F*g_m1 + R_M*g_m1 + 1)
-Numeric check (gm1=1m,gm2=2m,RD=RM=5k,RF=10k): KR_0=3.0303, R_closed_fb=-7518.80, R_closed_exact=-7500.00
+Loaded replica: R0 = -h/(Yin*Yout) ; Rin0 = 1/Yin ; Rout0 = 1/Yout
+Return convention: i_in+i_f, i_f=f*vo at vi=0; f>0; T=-f*R0.
+Equivalent subtracting convention: i_in-K*vo with K=-f.
+Loaded replica closed: R=R0/(1+T); Rin=Rin0/(1+T); Rout=Rout0/(1+T).
+Exact closed physical circuit: replace h by h-f in the above expressions.
+Exact D = Yin*Yout+f*(h-f); R=(f-h)/D; Rin=Yout/D; Rout=Yin/D.
+Replica drops reciprocal forward feedthrough; R comparison requires |f/h| << 1.
+Close to D=0, also check that the determinant change f**2 is negligible.
+f=1/R_F; Yin=g_input+1/R_F; Yout=g_output+1/R_F.
+g_input = gm1
+g_output = 1/R_aux
+h = RD1*gm1*gm2
+RD1=RD and R_aux=RM.
+Open transresistance = -gm1*gm2*RD*(RF||1/gm1)*(RM||RF).
+Open input = RF||1/gm1; open output = RM||RF.

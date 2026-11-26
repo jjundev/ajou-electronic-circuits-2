@@ -1,19 +1,15 @@
-=== p10: P12.49 (Fig. 12.112, BJT Shunt-Shunt TIA, V_A < inf) ===
-R_0 (open-loop transimp)   = -R_C*R_F**2*g_m*r_O*r_pi/(R_C*R_F**2 + R_C*R_F*r_O + R_C*R_F*r_pi + R_C*r_O*r_pi + R_F**2*r_O + R_F*r_O*r_pi)
-R_0 (using beta=g_m*r_pi)  = -R_C*R_F**2*beta*r_O/(R_C*R_F**2 + R_C*R_F*r_O + R_C*R_F*r_pi + R_C*r_O*r_pi + R_F**2*r_O + R_F*r_O*r_pi)
-R_in_open                  = R_F*r_pi/(R_F + r_pi)
-R_out_open                 = R_C*R_F*r_O/(R_C*R_F + R_C*r_O + R_F*r_O)
-K                          = -1/R_F
-KR_0 (loop gain)           = R_C*R_F*g_m*r_O*r_pi/(R_C*R_F**2 + R_C*R_F*r_O + R_C*R_F*r_pi + R_C*r_O*r_pi + R_F**2*r_O + R_F*r_O*r_pi)
-KR_0 (using beta=g_m*r_pi) = R_C*R_F*beta*r_O/(R_C*R_F**2 + R_C*R_F*r_O + R_C*R_F*r_pi + R_C*r_O*r_pi + R_F**2*r_O + R_F*r_O*r_pi)
-1 + KR_0                   = (R_C*R_F**2 + R_C*R_F*g_m*r_O*r_pi + R_C*R_F*r_O + R_C*R_F*r_pi + R_C*r_O*r_pi + R_F**2*r_O + R_F*r_O*r_pi)/((R_F + r_pi)*(R_C*R_F + R_C*r_O + R_F*r_O))
-R_closed (feedback)        = -R_C*R_F**2*g_m*r_O*r_pi/(R_C*R_F**2 + R_C*R_F*g_m*r_O*r_pi + R_C*R_F*r_O + R_C*R_F*r_pi + R_C*r_O*r_pi + R_F**2*r_O + R_F*r_O*r_pi)
-R_closed (beta form)       = -R_C*R_F**2*beta*r_O/(R_C*R_F**2 + R_C*R_F*beta*r_O + R_C*R_F*r_O + R_C*R_F*r_pi + R_C*r_O*r_pi + R_F**2*r_O + R_F*r_O*r_pi)
-R_in_closed (feedback)     = R_F*r_pi*(R_C*R_F + R_C*r_O + R_F*r_O)/(R_C*R_F**2 + R_C*R_F*g_m*r_O*r_pi + R_C*R_F*r_O + R_C*R_F*r_pi + R_C*r_O*r_pi + R_F**2*r_O + R_F*r_O*r_pi)
-R_out_closed (feedback)    = R_C*R_F*r_O*(R_F + r_pi)/(R_C*R_F**2 + R_C*R_F*g_m*r_O*r_pi + R_C*R_F*r_O + R_C*R_F*r_pi + R_C*r_O*r_pi + R_F**2*r_O + R_F*r_O*r_pi)
-Compact parallel-combination assertions: ALL PASSED (diff == 0)
---- Exact unbroken KCL comparison ---
-R_closed_exact             = R_C*r_O*r_pi*(-R_F*g_m + 1)/(R_C*R_F + R_C*g_m*r_O*r_pi + R_C*r_O + R_C*r_pi + R_F*r_O + r_O*r_pi)
-R_in_exact                 = r_pi*(R_C*R_F + R_C*r_O + R_F*r_O)/(R_C*R_F + R_C*g_m*r_O*r_pi + R_C*r_O + R_C*r_pi + R_F*r_O + r_O*r_pi)
-R_out_exact                = R_C*r_O*(R_F + r_pi)/(R_C*R_F + R_C*g_m*r_O*r_pi + R_C*r_O + R_C*r_pi + R_F*r_O + r_O*r_pi)
-Numeric check (gm=38.46m,rpi=2.6k,rO=100k,RC=5k,RF=20k): KR_0=17.0184, R_closed_fb=-18890.02, R_closed_exact=-18888.66
+Loaded replica: R0 = -h/(Yin*Yout) ; Rin0 = 1/Yin ; Rout0 = 1/Yout
+Return convention: i_in+i_f, i_f=f*vo at vi=0; f>0; T=-f*R0.
+Equivalent subtracting convention: i_in-K*vo with K=-f.
+Loaded replica closed: R=R0/(1+T); Rin=Rin0/(1+T); Rout=Rout0/(1+T).
+Exact closed physical circuit: replace h by h-f in the above expressions.
+Exact D = Yin*Yout+f*(h-f); R=(f-h)/D; Rin=Yout/D; Rout=Yin/D.
+Replica drops reciprocal forward feedthrough; R comparison requires |f/h| << 1.
+Close to D=0, also check that the determinant change f**2 is negligible.
+f=1/R_F; Yin=g_input+1/R_F; Yout=g_output+1/R_F.
+g_input = 1/r_pi
+g_output = (RC + r_o)/(RC*r_o)
+h = gm
+Open transresistance = -gm*(r_pi||RF)*(RC||ro||RF).
+Open input = r_pi||RF; open output = RC||ro||RF.
+Exact full circuit high-gm limit: negative transresistance -> -RF.

@@ -1,116 +1,59 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>입력 전류 $i_{in}$이 $M_1$의 소스 노드(아래에서 A라 불러요)로 들어가요. $M_1$은 게이트가 $V_b$인 공통 게이트(CG) 단이고, 드레인 노드(X)에 $R_{D1}$이 $V_{DD}$로 달려 있어요.</p>
-  <p>X는 $M_2$의 게이트를 구동해요. $M_2$는 소스가 접지된 공통 소스(CS) 단이고, 부하는 $V_{DD}$에서 내려오는 이상적 전류원이에요. $M_2$ 드레인이 출력 $v_{out}$이에요.</p>
-  <p>$v_{out}$에서 $R_1$, $R_2$가 직렬로 접지까지 내려가고, 그 가운데 노드(N)에서 $R_F$가 노드 A로 이어져요. 즉 출력 전압을 분압한 뒤 $R_F$를 통해 전류로 되돌려요.</p>
-  <p>$\lambda\gt0$이라 $r_{O1}$, $r_{O2}$를 유지해요. 몸체 효과는 언급이 없어 무시해요(추가 가정). 구할 것은 예제 12.29처럼 $R_0$, 개루프 입력·출력 임피던스, $K$, 폐루프 이득 $v_{out}/i_{in}$과 폐루프 입력·출력 임피던스예요.</p>
-</div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p><strong>단서:</strong> 귀환망($R_1$, $R_2$, $R_F$)이 출력 노드에 병렬로 붙어 전압을 감지하고, 입력 노드 A에 병렬로 붙어 전류를 되돌려요. 전압-전류 귀환(voltage-current feedback)이에요.</p>
-  <p><strong>끊는 법칙:</strong> 두 복제를 모두 단락해요. 귀환망의 입력 포트는 $v_{out}$ 쪽, 출력 포트는 A 쪽이에요.</p>
-  <ul>
-    <li>출력 쪽 복제: A 쪽 포트를 단락하면 $v_{out}$에서 $R_1+(R_2\parallel R_F)$가 접지로 보여요.</li>
-    <li>입력 쪽 복제: $v_{out}$ 쪽 포트를 단락하면 A에서 $R_F+(R_1\parallel R_2)$가 접지로 보여요.</li>
-  </ul>
-  <p><strong>귀환율:</strong> 교과서 Fig 12.54(b)의 $I_2/V_1$을 원 회로 기호 그대로 써서, $v_{out}$ 쪽에 전압을 걸고 A 쪽을 단락해 A에서 빠져나가는 귀환 전류 $i_F$를 재어 $K=i_F/v_{out}$으로 바로 구해요.</p>
-  <p><strong>CG 블록($\lambda\gt0$)과 테브난 변환:</strong> 게이트 전류가 0이라 소스로 들어간 전류는 그대로 드레인으로 나가요. 소스에서 본 저항은 드레인 부하 $R_{D1}$ 때문에 $1/g_{m1}$보다 조금 커지며, 수업 기본 근사 $g_{m1}r_{O1}\gg1$에서 아래 블록을 써요. 입력 노드 A의 $i_{in}\parallel R_A$를 노턴→테브난 변환($v_{in}=i_{in}R_A$와 직렬 저항 $R_A$)으로 바꾸면 직렬 저항이 붙은 CG 전압이득 블록 $\frac{v_X}{v_{in}}=\frac{R_{D1}}{R_A+R_{S1}}$을 바로 곱할 수 있어요.</p>
-  $$R_{S1}\approx\frac1{g_{m1}}\left(1+\frac{R_{D1}}{r_{O1}}\right)$$
-  <p><strong>폐루프 공식:</strong> 이득과 입력·출력 임피던스가 모두 개루프의 $\frac{1}{1+KR_0}$배가 돼요.</p>
-</div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="귀환망 끊기와 테브난 변환">
-    <p>두 복제가 만드는 저항에 이름을 붙여요.</p>
-    $$R_A=R_F+R_1\parallel R_2$$
-    $$R_B=R_1+R_2\parallel R_F$$
-    <p>노드 A의 $i_{in}\parallel R_A$를 노턴→테브난 변환으로 바꿔요.</p>
-    $$v_{in}=i_{in}R_A$$
-  </div>
-</div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
+<div class="layer formal circuit-explanation" data-explanation="solve">
+  <figure class="figure circuit">
+  <svg id="divider-current-feedback-network" viewBox="0 0 322 143" role="img" aria-label="귀환망에서 입력 A는 R F를 통해 분압점 N과 연결돼요. N은 R 1을 통해 출력과 연결되고 R 2를 통해 접지로 이어져요.">
+    <path class="fig-ink" d="M40 49h34m38 0h100m38 0h32M161 49v12m0 38v18"/>
+    <path class="fig-ink" d="M74 49 l4 -6 6 12 6 -12 6 12 6 -12 6 12 4 -6"/>
+    <path class="fig-ink" d="M212 49 l4 -6 6 12 6 -12 6 12 6 -12 6 12 4 -6"/>
+    <path class="fig-ink" d="M161 61 l-6 4 12 6 -12 6 12 6 -12 6 12 6 -6 4"/>
+    <path class="fig-ink" d="M151 117h20M155 121h12M158 125h6"/>
+    <circle class="fig-ink" cx="37" cy="49" r="3"/>
+    <circle class="fig-ink" cx="285" cy="49" r="3"/>
+    <circle class="fig-dot" cx="161" cy="49" r="3" data-node-color="blue"/>
+    <text class="fig-text" x="36" y="29" text-anchor="middle" data-node-color="red">A</text>
+    <text class="fig-text" x="161" y="31" text-anchor="middle" data-node-color="blue">N</text>
+    <text class="fig-text fig-math" x="286" y="29" text-anchor="middle" data-node-color="red">v<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+    <text class="fig-text fig-math" x="92" y="78" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+    <text class="fig-text fig-math" x="230" y="78" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+    <text class="fig-text fig-math" x="183" y="83" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+    <text class="fig-loc" font-size="17" text-anchor="middle" x="38" y="80">㉡</text>
+    <text class="fig-loc" font-size="17" text-anchor="middle" x="283" y="80">㉠</text>
+    <text class="fig-loc" font-size="17" text-anchor="middle" x="183" y="31">㉢</text>
+  </svg>
+    <figcaption class="circuit-state">분배 귀환망의 두 단락 포트</figcaption>
+  </figure>
   <div data-subpart="main">
-    <div data-answer-step="첫 단">
-      <p>직렬 저항 $R_A$를 거쳐 $M_1$ 소스($R_{S1}$)를 구동하므로 CG 단의 전압이득은 $\frac{v_X}{v_{in}}=\frac{R_{D1}}{R_A+R_{S1}}$예요($M_2$ 게이트 전류 0). 여기에 $R_A$를 곱해 $v_X/i_{in}$을 바로 얻어요.</p>
-      $$\frac{v_X}{i_{in}}=R_A\cdot\frac{v_X}{v_{in}}=\frac{R_A}{R_A+R_{S1}}R_{D1}$$
+    <div data-answer-step="감지·반송 복제의 부하">
+      <p><span class="loc">㉠</span> 출력 포트를 단락하면 <span class="loc">㉡</span> 입력 $A$에서 본 반송 복제가 $R_A$예요. 반대로 $A$를 단락하면 출력에서 본 감지 복제가 $R_B$예요.</p>
+      $$R_A=R_F+(R_1\parallel R_2)$$
+      $$R_B=R_1+(R_2\parallel R_F)$$
     </div>
-    <p>둘째 단은 전류원 부하 CS 단이에요. $i_{out}$은 출력 노드에서 $M_2$ 드레인으로 흘러 들어가는 방향을 양으로 잡아요.</p>
-    <div data-answer-step="둘째 단 전압 이득" data-gain-route="gm-rout">
-      <div data-gain-stage="gm">
-        $$G_{m2}=\frac{i_{out}}{v_X}=g_{m2}$$
-      </div>
-      <div data-gain-stage="rout">
-        <p>이상적 전류원은 개방이에요. $\lambda\gt0$이라 $M_2$ 쪽 $r_{O2}$와 출력 쪽 복제 $R_B$가 병렬로 남아요.</p>
-        $$R_{out2}=r_{O2}\parallel R_B$$
-      </div>
-      <div data-gain-stage="gain">
-        $$\frac{v_{out}}{v_X}=-g_{m2}(r_{O2}\parallel R_B)$$
-      </div>
+    <div data-answer-step="개루프 첫 단">
+      <p>$\lambda\gt0$이라 두 $r_O$를 남기고, 몸체 효과는 무시해요. $g_{m1}r_{O1}\gg1$에서 $M_1$ 소스 저항을 $R_{S1}$로 근사해요.</p>
+      $$R_{S1}\approx\frac{1}{g_{m1}}\left(1+\frac{R_{D1}}{r_{O1}}\right)$$
+      <p>$i_{in}\parallel R_A$를 전압 $i_{in}R_A$와 직렬 $R_A$로 바꿔 CG 이득을 곱해요.</p>
+      $$\frac{v_X}{i_{in}}\approx R_A\frac{R_{D1}}{R_A+R_{S1}}$$
     </div>
-    <div data-answer-step="개루프 변수">
-      $$\begin{aligned}R_0&=\frac{v_{out}}{i_{in}}=\frac{v_X}{i_{in}}\cdot\frac{v_{out}}{v_X}\\&=-\frac{R_A}{R_A+R_{S1}}R_{D1}g_{m2}(r_{O2}\parallel R_B)\end{aligned}$$
-      $$R_{in,open}=R_A\parallel R_{S1}$$
-      $$R_{out,open}=r_{O2}\parallel\left[R_1+(R_2\parallel R_F)\right]$$
+    <div data-answer-step="개루프 둘째 단" data-gain-route="gm-rout">
+      <p>이상적 전류원 부하는 소신호에서 개방이에요. $i_{out}$은 $M_2$ 드레인에 들어가는 방향이 양이에요.</p>
+      <div data-gain-stage="gm">$$G_{m2}=g_{m2}$$</div>
+      <div data-gain-stage="rout">$$R_{out,\mathrm{open}}=r_{O2}\parallel R_B$$</div>
+      <div data-gain-stage="gain">$$\frac{v_{out}}{v_X}=-G_{m2}R_{out,\mathrm{open}}$$</div>
     </div>
-    <div data-answer-step="귀환율">
-      <p>$v_{out}$을 출력 쪽에 걸고 A를 접지하면 N은 $R_1$과 $R_2\parallel R_F$의 분압이에요. $R_F$에는 $v_N/R_F$가 흘러 A로 들어가므로 A에서 빠져나가는 방향 $i_F$ 기준 음수예요.</p>
-      $$v_N=\frac{R_2\parallel R_F}{R_1+R_2\parallel R_F}v_{out}$$
-      $$\begin{aligned}K&=\frac{i_F}{v_{out}}=-\frac{R_2\parallel R_F}{R_F\left(R_1+R_2\parallel R_F\right)}\\&=-\frac{R_2}{R_1R_2+R_1R_F+R_2R_F}\end{aligned}$$
-      <p>$R_0\lt0$, $K\lt0$이라 $KR_0\gt0$이고 부궤환이에요.</p>
+    <div data-answer-step="귀환율 측정">
+      <p>$A$를 단락하고 $v_{out}$을 걸면 <span class="loc">㉢</span> $N$의 아래쪽 저항은 $R_2\parallel R_F$예요. $A$에서 빠져나가는 방향을 $i_F$의 양으로 잡아요.</p>
+      $$v_N=\frac{R_2\parallel R_F}{R_B}v_{out}$$
     </div>
-    <div data-answer-step="폐루프 변수">
-      $$\frac{v_{out}}{i_{in}}=\frac{R_0}{1+KR_0}$$
-      $$R_{in,closed}=\frac{R_A\parallel R_{S1}}{1+KR_0}$$
-      $$R_{out,closed}=\frac{r_{O2}\parallel R_B}{1+KR_0}$$
-    </div>
-  </div>
-</div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
     <div data-answer-final="">
-      <p><strong>$R_0=-\dfrac{R_A}{R_A+R_{S1}}R_{D1}g_{m2}(r_{O2}\parallel R_B)$, $R_{in,open}=R_A\parallel R_{S1}$, $R_{out,open}=r_{O2}\parallel R_B$, $K=-\dfrac{R_2}{R_1R_2+R_1R_F+R_2R_F}$예요.</strong></p>
-      <p><strong>$v_{out}/i_{in}=R_0/(1+KR_0)$, $R_{in,closed}=R_{in,open}/(1+KR_0)$, $R_{out,closed}=R_{out,open}/(1+KR_0)$예요.</strong></p>
-      <p>$R_A=R_F+R_1\parallel R_2$, $R_B=R_1+R_2\parallel R_F$, $R_{S1}\approx(1/g_{m1})(1+R_{D1}/r_{O1})$이고 $\lambda\gt0$, $g_{m1}r_{O1}\gg1$, 몸체 효과 무시예요.</p>
+      $$R_0=\frac{v_X}{i_{in}}\frac{v_{out}}{v_X}$$
+      $$R_{in,\mathrm{open}}\approx R_A\parallel R_{S1}$$
+      $$K=\frac{i_F}{v_{out}}=-\frac{R_2}{R_1R_2+R_1R_F+R_2R_F}$$
+      <p>복제법으로 폐루프 값을 근사해요.</p>
+      $$\frac{v_{out}}{i_{in}}\approx\frac{R_0}{1+KR_0}$$
+      $$R_{in,\mathrm{closed}}\approx\frac{R_{in,\mathrm{open}}}{1+KR_0}$$
+      $$R_{out,\mathrm{closed}}\approx\frac{R_{out,\mathrm{open}}}{1+KR_0}$$
     </div>
-    <p>극한: $R_1\to0$이면 $K\to-1/R_F$로 예제 12.29의 귀환율과 같아져요. 분압기가 없으면 출력 전압이 그대로 $R_F$에 걸리기 때문이에요.</p>
-    <p>극한: 루프 이득이 크면 $v_{out}/i_{in}\to1/K=-(R_1R_2+R_1R_F+R_2R_F)/R_2$예요. 입력 노드가 거의 고정되어 $i_{in}$이 모두 $R_F$로 흐르면 N의 전압이 $-i_{in}R_F$이고, $R_2$ 전류를 더해 $R_1$에 걸리는 전압까지 합하면 같은 값이 나와요.</p>
-    <p>극한: $r_{O1}\gg R_{D1}$이면 $R_{S1}\approx1/g_{m1}$로 예제 12.29의 입력 블록이 돼요.</p>
-    <p>단위: $K$는 1/Ω, $R_0$는 Ω이라 $KR_0$는 무차원이에요.</p>
   </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <ul>
-    <li>입력 쪽 복제를 $R_F$만으로 쓰기 쉬워요. $v_{out}$ 쪽 포트를 단락하면 N에서 $R_1\parallel R_2$가 접지로 보이므로 A에서는 $R_F+R_1\parallel R_2$예요.</li>
-    <li>출력 쪽 복제도 $R_1+R_2$가 아니에요. A 쪽 포트가 단락되어 $R_F$가 $R_2$와 병렬이 되므로 $R_1+R_2\parallel R_F$예요.</li>
-    <li>전류원 부하라 $r_{O2}$를 빼면 출력 저항이 $R_B$만 남아 $\lambda\gt0$ 조건을 무시한 셈이 돼요.</li>
-    <li>$K$의 분압비를 $R_2/(R_1+R_2)$로 쓰지 않아요. 측정할 때 A가 단락되어 있어서 $R_F$가 $R_2$와 병렬로 분압에 들어가요.</li>
-  </ul>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol>
-    <li>$R_2\to\infty$(개방)이면 $K$, $R_A$, $R_B$는 각각 무엇이 되나요?</li>
-    <li>전류원 부하 대신 $R_{D2}$를 쓰면 $R_{out,open}$은 어떻게 바뀌나요?</li>
-    <li>$\lambda=0$으로 두면 $R_{S1}$과 $R_{out,open}$은 각각 무엇이 되나요?</li>
-  </ol>
 </div>
 <div class="sum" hidden>
-  <p class="sum-lead">$R_1$–$R_2$ 분압 뒤 $R_F$로 전류를 되돌리는 전압-전류 귀환이에요.</p>
-  <div class="summary-group">
-    <h4>복제 저항</h4>
-    <p>입력 쪽과 출력 쪽 복제는 각각 다음 저항이에요.</p>
-    $$R_A=R_F+R_1\parallel R_2$$
-    $$R_B=R_1+R_2\parallel R_F$$
-  </div>
-  <div class="summary-group">
-    <h4>핵심 식</h4>
-    <p>개루프 트랜스임피던스는 1단 테브난 변환과 두 단 이득의 곱이에요.</p>
-    $$\begin{aligned}R_0=&-\frac{R_A}{R_A+R_{S1}}\\&\times R_{D1}g_{m2}(r_{O2}\parallel R_B)\end{aligned}$$
-    <p>귀환율 $K=i_F/v_{out}$은 분압비와 $R_F$가 함께 정해요.</p>
-    $$K=-\frac{R_2}{R_1R_2+R_1R_F+R_2R_F}$$
-    <p>모든 폐루프 값이 $1+KR_0$로 나뉘어요.</p>
-  </div>
+  <p class="sum-lead">$A$를 단락하면 $R_F$가 $R_2$와 병렬이 되어 감지 부하와 귀환율이 모두 달라져요.</p>
 </div>

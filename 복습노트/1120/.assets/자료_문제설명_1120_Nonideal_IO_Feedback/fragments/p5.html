@@ -1,98 +1,70 @@
-<div class="layer eli5" data-explanation="understand">
-  <h4>문제를 읽어요</h4>
-  <p>두 단짜리 증폭기예요. 입력 $V_{in}$은 $M_1$의 게이트로 들어가고, $M_1$ 드레인($R_{D1}$ 부하)이 $M_2$의 게이트를 구동해요. $M_2$는 소스가 접지된 공통 소스(CS) 단이고, 드레인($R_{D2}$ 부하)이 출력 $V_{out}$이에요.</p>
-  <p>$V_{out}$과 접지 사이에 $R_1$, $R_2$가 직렬로 있고, 그 가운데 노드가 $M_1$의 <em>소스</em>예요. 즉 출력 전압의 일부가 $M_1$ 소스로 돌아가요.</p>
-  <p>원문에 소자 값과 $\lambda$가 없어요. 이 장의 예제처럼 $\lambda=0$으로 보고 $r_O$를 쓰지 않아요(추가 가정).</p>
-  <p>구할 것은 개루프·폐루프 전압 이득과 폐루프 입력·출력 임피던스예요.</p>
-</div>
-<div class="layer formal" data-explanation="recall">
-  <h4>이 개념과 공식을 떠올려요</h4>
-  <p><strong>단서:</strong> 출력 전압을 분압해 $M_1$ 소스로 되돌리니 전압-전압 귀환(voltage-voltage feedback)이에요. $M_1$은 게이트 $v_{in}$과 소스 $v_F$의 차 $v_{GS}$에 반응하므로 비교 장치 역할을 해요.</p>
-  <p><strong>끊는 법칙:</strong> 출력 쪽 복제는 귀환망 출력 포트($M_1$ 소스 쪽)를 열어 $V_{out}$에서 $R_1+R_2$를 보고, 입력 쪽 복제는 귀환망 입력 포트($V_{out}$ 쪽)를 단락해 $M_1$ 소스에서 $R_1\parallel R_2$를 봐요.</p>
-  <p><strong>소스 축퇴(source degeneration):</strong> 소스에 저항 $R_S$가 있는 CS 단의 트랜스컨덕턴스는 저항 합의 꼴로 써요.</p>
-  $$G_{m1}=\frac{g_{m1}}{1+g_{m1}R_S}=\frac1{1/g_{m1}+R_S}$$
-  <p>$g_{m1}R_S\gg1$이면 $G_{m1}\approx1/R_S$로 줄어요. 여기서는 $R_S$가 귀환망의 부하이므로 저항 합 꼴을 그대로 두고 근사는 따로 표시해요.</p>
-  <p><strong>폐루프 공식:</strong> $K=R_2/(R_1+R_2)$이고 $A_{closed}=A_{open}/(1+KA_{open})$예요. 출력 임피던스는 $1/(1+KA_{open})$배가 되고, 입력은 게이트라 무한대예요.</p>
-</div>
-<div class="layer formal" data-explanation="start">
-  <h4>종이에 쓸 첫 줄</h4>
-  <div data-answer-step="귀환망 끊기">
-    <p>부하를 넣은 개루프 회로는 $M_1$이 소스에 $R_1\parallel R_2$를 단 축퇴 CS 단이고, $M_2$의 출력에 $R_{D2}$와 $R_1+R_2$가 병렬로 붙은 회로예요.</p>
-    $$R_S=R_1\parallel R_2$$
-    $$R_L=R_{D2}\parallel(R_1+R_2)$$
-  </div>
-</div>
-<div class="layer formal" data-explanation="solve">
-  <h4>이렇게 풀어요</h4>
+<div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit">
+<svg viewBox="0 0 358 207" role="img" aria-label="두 공통 소스 단의 개루프 등가. 반송 복제의 합성 저항은 M1 소스에, 감지 복제의 직렬 저항은 출력에 붙고 첫 단 출력 X는 둘째 단 게이트로 연결돼요.">
+<path class="fig-ink" d="M77 14H256M105 14V23M105 59V103M219 14V23M219 59V84M219 108V123M105 127V147M105 183V189M25 115H85M105 72H159V96H199M219 67H325M282 67V100M282 136V153"/>
+<path class="fig-ink" d="M105 23l-7 3 14 6 -14 6 14 6 -14 6 14 6 -7 3"/>
+<path class="fig-ink" d="M219 23l-7 3 14 6 -14 6 14 6 -14 6 14 6 -7 3"/>
+<path class="fig-ink" d="M105 147l-7 3 14 6 -14 6 14 6 -14 6 14 6 -7 3"/>
+<path class="fig-ink" d="M282 100l-7 3 14 6 -14 6 14 6 -14 6 14 6 -7 3"/>
+<path class="fig-ink" d="M209 123h20M213 128h12M216 133h6"/>
+<path class="fig-ink" d="M95 189h20M99 194h12M102 199h6"/>
+<path class="fig-ink" d="M272 153h20M276 158h12M279 163h6"/>
+<path class="fig-ink" d="M105 103H91M105 127H91M91 99V131M85 102V128"/><path class="fig-ink" d="M97 122L102 127L97 132"/>
+<path class="fig-ink" d="M219 84H205M219 108H205M205 80V112M199 83V109"/><path class="fig-ink" d="M211 103L216 108L211 113"/>
+<circle class="fig-dot" data-node-color="blue" cx="25" cy="115" r="3.5"/>
+<circle class="fig-dot" data-node-color="red" cx="105" cy="72" r="3.5"/>
+<circle class="fig-dot" data-node-color="blue" cx="219" cy="67" r="3.5"/>
+<circle class="fig-dot" data-node-color="blue" cx="282" cy="67" r="3.5"/>
+<circle class="fig-dot" data-node-color="blue" cx="325" cy="67" r="3.5"/>
+<text class="fig-text fig-math" x="268" y="18" text-anchor="start">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text>
+<text class="fig-text fig-math" x="117" y="45" text-anchor="start">R<tspan baseline-shift="sub" font-size="78%">D1</tspan></text>
+<text class="fig-text fig-math" x="232" y="45" text-anchor="start">R<tspan baseline-shift="sub" font-size="78%">D2</tspan></text>
+<text class="fig-text fig-math" x="25" y="100" text-anchor="middle" data-node-color="blue">V<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
+<text class="fig-text fig-math" x="89" y="75" text-anchor="end" data-node-color="red">X</text>
+<text class="fig-text fig-math" x="322" y="54" text-anchor="middle" data-node-color="blue">V<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+<text class="fig-text fig-math" x="117" y="118" text-anchor="start">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+<text class="fig-text fig-math" x="232" y="100" text-anchor="start">M<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+<text class="fig-text fig-math" x="119" y="171" text-anchor="start">R<tspan baseline-shift="sub" font-size="78%">S</tspan></text>
+<text class="fig-text fig-math" x="296" y="121" text-anchor="start">R<tspan baseline-shift="sub" font-size="78%">1</tspan> + R<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+<text class="fig-loc" font-size="17" text-anchor="middle" x="78" y="166">㉠</text>
+<text class="fig-loc" font-size="17" text-anchor="middle" x="257" y="126">㉡</text>
+<text class="fig-loc" font-size="17" text-anchor="middle" x="146" y="91">㉢</text>
+</svg>
+<figcaption class="circuit-state">두 복제를 저항으로 합친 개루프 회로</figcaption>
+</figure>
   <div data-subpart="main">
-    <p>첫 단의 결과를 노드 X($M_1$ 드레인)의 전압으로 넘기고, 전체 증폭기를 $G_m$ → $R_{out}$ → 이득 순서로 묶어요. $i_{out}$은 출력 노드에서 $M_2$ 드레인으로 흘러 들어가는 방향을 양으로 잡아 $A_v=-G_mR_{out}$을 써요.</p>
-    <div data-answer-step="첫 단">
-      <p>$M_1$은 축퇴 CS 단이고, $M_2$ 게이트는 전류를 끌지 않아 X의 부하는 $R_{D1}$뿐이에요.</p>
-      $$v_X=-G_{m1}R_{D1}v_{in}=-\frac{R_{D1}}{1/g_{m1}+R_S}v_{in}$$
+    <h4>반송 복제가 첫 단을 축퇴시켜요</h4>
+    <div data-answer-step="첫 단과 둘째 단 연결">
+      <p><span class="loc">㉠</span> 반송 복제를 단락해 얻은 $R_S$가 $M_1$ 소스에 달려요. <span class="loc">㉡</span> 감지 복제의 열린 가운데 포트는 출력에 $R_1+R_2$를 남겨요. 두 MOS는 $\lambda=0$으로 가정해요.</p>
+      $$R_S=R_1\parallel R_2$$
+      <p><span class="loc">㉢</span> 첫 단 출력 $X$에서는 $M_2$ 게이트 전류가 0이라 부하가 $R_{D1}$이에요.</p>
+      $$\frac{v_X}{v_{in}}=-\frac{R_{D1}}{1/g_{m1}+R_S}$$
     </div>
     <div data-answer-step="개루프 이득" data-gain-route="gm-rout">
       <div data-gain-stage="gm">
-        <p>출력을 단락하면 $i_{out}=g_{m2}v_X$예요.</p>
-        $$G_m=\frac{i_{out}}{v_{in}}=-\frac{g_{m2}R_{D1}}{1/g_{m1}+R_1\parallel R_2}$$
+        <p>출력 단락에서 $M_2$ 드레인으로 들어가는 전류를 양으로 잡아요.</p>
+        $$G_m=g_{m2}\frac{v_X}{v_{in}}=-\frac{g_{m2}R_{D1}}{1/g_{m1}+R_S}$$
       </div>
       <div data-gain-stage="rout">
-        <p>입력을 0으로 두면 $v_X=0$이라 $M_2$는 전류를 만들지 않고, $\lambda=0$이라 드레인 쪽은 무한대예요.</p>
-        $$R_{out}=R_L=R_{D2}\parallel(R_1+R_2)$$
+        <p>입력을 0으로 두고 출력에서 본 저항이에요.</p>
+        $$R_{\mathrm{out,open}}=R_{D2}\parallel(R_1+R_2)$$
       </div>
       <div data-gain-stage="gain">
-        $$\begin{aligned}A_{open}&=-G_mR_{out}\\&=\frac{g_{m2}R_{D1}\left[R_{D2}\parallel(R_1+R_2)\right]}{1/g_{m1}+R_1\parallel R_2}\end{aligned}$$
+        $$A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}=\frac{g_{m2}R_{D1}R_{\mathrm{out,open}}}{1/g_{m1}+R_S}$$
       </div>
     </div>
-    <p>두 CS 단이 각각 반전이라 전체 개루프 이득은 양수예요. 그래서 출력이 오르면 $M_1$ 소스도 올라 $v_{GS1}$이 줄어드는 부궤환이에요.</p>
-    <div data-answer-step="개루프 임피던스와 귀환율">
-      $$R_{in,open}=\infty$$
-      $$R_{out,open}=R_{D2}\parallel(R_1+R_2)$$
+    <div data-answer-step="귀환율">
       $$K=\frac{R_2}{R_1+R_2}$$
     </div>
-    <div data-answer-step="폐루프 변수">
-      $$A_{closed}=\frac{A_{open}}{1+KA_{open}}$$
-      $$R_{in,closed}=\infty$$
-      $$R_{out,closed}=\frac{R_{D2}\parallel(R_1+R_2)}{1+KA_{open}}$$
-      <p>$KA_{open}=\dfrac{R_2}{R_1+R_2}\cdot\dfrac{g_{m2}R_{D1}R_L}{1/g_{m1}+R_1\parallel R_2}$이에요.</p>
-    </div>
-  </div>
-</div>
-<div class="layer formal" data-explanation="verify">
-  <h4>완성 답과 검산</h4>
-  <div data-subpart="main">
+    <h4>폐루프 답</h4>
     <div data-answer-final="">
-      <p><strong>$A_{open}=\dfrac{g_{m2}R_{D1}[R_{D2}\parallel(R_1+R_2)]}{1/g_{m1}+R_1\parallel R_2}$, $R_{in,open}=\infty$, $R_{out,open}=R_{D2}\parallel(R_1+R_2)$, $K=R_2/(R_1+R_2)$예요.</strong></p>
-      <p><strong>$A_{closed}=A_{open}/(1+KA_{open})$, $R_{in,closed}=\infty$, $R_{out,closed}=[R_{D2}\parallel(R_1+R_2)]/(1+KA_{open})$예요.</strong> ($\lambda=0$)</p>
-      <p>$g_{m1}(R_1\parallel R_2)\gg1$이면 $A_{open}\approx g_{m2}R_{D1}R_L/(R_1\parallel R_2)$예요.</p>
+      <p>분압기를 통한 직접 전달을 무시하는 복제법의 결과예요.</p>
+      $$A_{\mathrm{closed}}\approx\frac{A_{\mathrm{open}}}{1+KA_{\mathrm{open}}}$$
+      $$R_{\mathrm{in,open}}=R_{\mathrm{in,closed}}=\infty$$
+      $$R_{\mathrm{out,closed}}\approx\frac{R_{\mathrm{out,open}}}{1+KA_{\mathrm{open}}}$$
     </div>
-    <p>극한: 루프 이득이 커지면 $A_{closed}\to1/K=1+R_1/R_2$예요. 출력 전압을 분압한 값이 입력을 따라가야 하므로 맞아요.</p>
-    <p>극한: $R_2\to0$이면 $K\to0$, $R_S\to0$이 되어 귀환이 사라지고 두 CS 단의 곱 $g_{m1}R_{D1}g_{m2}(R_{D2}\parallel R_1)$이 남아요.</p>
-    <p>단위: $R_{D1}/(1/g_{m1}+R_S)$와 $g_{m2}R_L$이 각각 무차원이라 이득이 무차원이에요.</p>
   </div>
-</div>
-<div class="layer warn" data-explanation="pitfall">
-  <h4>주의할 점</h4>
-  <ul>
-    <li>입력 쪽 복제 $R_1\parallel R_2$는 $M_1$ <em>소스</em>에 붙어 축퇴를 만들어요. 게이트에 붙던 앞 문항과 달리 이득을 줄이므로 꼭 넣어요.</li>
-    <li>출력 쪽에는 $R_1+R_2$, 소스 쪽에는 $R_1\parallel R_2$예요. 두 종단을 바꾸지 않아요.</li>
-    <li>두 단이 모두 반전이라 개루프 이득은 양수예요. 한 단의 부호만 보고 정궤환으로 판단하지 않아요.</li>
-    <li>입력은 게이트라 폐루프에서도 입력 임피던스는 무한대예요. $1+KA_{open}$을 곱해도 그대로예요.</li>
-  </ul>
-</div>
-<div class="layer eli5" data-explanation="retry">
-  <h4>조건을 바꾸어 생각해요</h4>
-  <ol>
-    <li>$M_2$에 $\lambda\gt0$을 주면 개루프 출력 저항에 무엇이 병렬로 더해지나요?</li>
-    <li>$g_{m1}(R_1\parallel R_2)\gg1$이면 첫 단 이득은 어떤 저항비로 줄어드나요?</li>
-    <li>$R_1+R_2\gg R_{D2}$이고 $R_1\parallel R_2\ll1/g_{m1}$이면 개루프 이득은 어떤 꼴로 단순해지나요?</li>
-  </ol>
 </div>
 <div class="sum" hidden>
-  <p class="sum-lead">입력 쪽 복제 $R_1\parallel R_2$가 $M_1$을 축퇴시키고 출력 쪽 복제 $R_1+R_2$가 $R_{D2}$와 병렬이 돼요.</p>
-  <div class="summary-group">
-    <h4>핵심 식</h4>
-    <p>$A_{open}=g_{m2}R_{D1}R_L/(1/g_{m1}+R_1\parallel R_2)$이고 $R_L=R_{D2}\parallel(R_1+R_2)$예요.</p>
-    <p>$K=R_2/(R_1+R_2)$, $A_{closed}=A_{open}/(1+KA_{open})$예요.</p>
-    <p>$R_{in}=\infty$이고 $R_{out,closed}=R_L/(1+KA_{open})$예요.</p>
-  </div>
+  <p class="sum-lead">반송 복제는 첫 단의 소스 축퇴, 감지 복제는 둘째 단의 출력 부하예요.</p><p>첫 단의 $v_X/v_{in}$에 $g_{m2}$를 곱하면 전체 $G_m$이에요.</p>
 </div>

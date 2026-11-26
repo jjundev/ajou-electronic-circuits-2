@@ -6,8 +6,8 @@ from epe_independent import independent_errors
 from collections import Counter
 from pathlib import Path
 from urllib.parse import urlsplit
-from epe_shared import Node, parse, math_delimiter_errors, validate_style_audit
-from epe_solution import solution_nodes
+from epe_shared import Node, parse, check_location_marks, math_delimiter_errors, validate_style_audit
+from epe_solution import CONCISE_CLASS, solution_nodes
 from readability import readability_errors
 
 KEYS = ('understand', 'recall', 'start', 'solve', 'verify', 'pitfall', 'retry')
@@ -62,13 +62,20 @@ def validate_fragment(problem, fragment):
     errors.extend(f'{code}: {detail}' for code, detail in readability_errors(fragment))
     errors.extend(solution_nodes(problem, fragment)[2])
     sections = list(root.find_all(lambda n: 'data-explanation' in n.attrs))
-    counts = Counter(n.attrs['data-explanation'] for n in sections)
-    if counts != Counter(KEYS):
-        errors.append('일곱 설명 구역(understand/recall/start/solve/verify/pitfall/retry)을 각각 한 번 작성하세요')
-    if tuple(n.attrs['data-explanation'] for n in sections) != KEYS:
-        errors.append('설명 구역 순서는 understand/recall/start/solve/verify/pitfall/retry여야 해요')
+    concise = any(CONCISE_CLASS in node.classes for node in sections)
+    if not concise:
+        counts = Counter(n.attrs['data-explanation'] for n in sections)
+        if counts != Counter(KEYS):
+            errors.append('일곱 설명 구역(understand/recall/start/solve/verify/pitfall/retry)을 각각 한 번 작성하세요')
+        if tuple(n.attrs['data-explanation'] for n in sections) != KEYS:
+            errors.append('설명 구역 순서는 understand/recall/start/solve/verify/pitfall/retry여야 해요')
     for node in sections:
-        if node.attrs['data-explanation'] == 'recall':
+        section = node.attrs['data-explanation']
+        figures = list(node.find_all(lambda n: n.tag == 'figure' and 'circuit' in n.classes))
+        errors.extend(map(str, check_location_marks(node, figures, section)))
+        if concise and any(figure.parent is not node for figure in figures):
+            errors.append('간략 해설의 고정 회로는 풀이 구역의 직계 요소여야 해요')
+        if section == 'recall':
             body = _body_text(node)
             if not body.strip():
                 errors.append('recall: 제목 외에 단서·개념·공식·적용 조건 설명이 필요해요')
@@ -82,7 +89,7 @@ def validate_fragment(problem, fragment):
             items = list(node.find_all(lambda n: n.tag == 'li'))
             if not 1 <= len(items) <= 3 or any(not n.text().strip() for n in items):
                 errors.append('retry: 비어 있지 않은 재풀이 항목 1~3개 필요')
-    if not all(any(layer in node.classes for node in sections) for layer in ('eli5', 'formal', 'warn')):
+    if not concise and not all(any(layer in node.classes for node in sections) for layer in ('eli5', 'formal', 'warn')):
         errors.append('eli5/formal/warn 설명 층 필요')
     summaries = list(root.find_all(lambda n: 'sum' in n.classes))
     if len(summaries) != 1 or summaries[0].parent is not root or 'hidden' not in summaries[0].attrs or not summaries[0].text().strip():

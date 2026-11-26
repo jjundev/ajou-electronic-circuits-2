@@ -69,6 +69,7 @@ def build_note(m: dict, run_dir: Path) -> str:
         scripts += found
         sections.append(f'    <section id="{sec["id"]}"><h2>{esc(sec["title"])}</h2>\n{body.strip()}\n    </section>')
     return fill((ASSETS / "note-template.html").read_text(encoding="utf-8"), {
+        "CIRCUIT_STYLES": (ASSETS / "circuit-figure.css").read_text(encoding="utf-8").rstrip(),
         "PAGE_TITLE": esc(f"전자회로2 정리노트 {m['range']}"),
         "DESCRIPTION": esc(m["note_subtitle"]),
         "TOC": "".join(f'<a href="#{s["id"]}">{esc(s["short"])}</a>' for s in m["sections"]),

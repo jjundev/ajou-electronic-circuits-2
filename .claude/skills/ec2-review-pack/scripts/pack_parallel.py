@@ -197,9 +197,22 @@ def claim_worker(state, task):
                                     / problem_key(spec.id) / 'questions.json')
         else:
             data['questions'] = str(output(state, 'stage-problem-index', 'questions.json'))
-        data['instruction'] = ('Use only the sealed question text and figures. Submit independent.json with items '
-                               'keyed by pN:subpart, method, conclusion and evidence.' if role == 'explain-blind'
-                               else 'Write one child explanation HTML fragment per problem using the sealed question and figures.')
+        if role == 'explain-blind':
+            data['instruction'] = ('Use only the sealed question text and figures. Submit independent.json with items '
+                                   'keyed by pN:subpart, method, conclusion and evidence.')
+        else:
+            repo = Path(state['repo'])
+            explain_skill = repo / '.claude/skills/ec2-problem-explain'
+            explain_refs = [str(explain_skill / name) for name in ('SKILL.md', 'references/authoring.md')]
+            data.update(
+                references=explain_refs,
+                reference_sections={path: ['전체'] for path in explain_refs},
+                profile=str(repo / f._read(snapshot)['path']),
+                profile_read='전체 필수',
+                snapshot=str(snapshot),
+                instruction=('봉인된 문항과 그림, 지정한 스킬과 개인 풀이 명세를 읽고 문항별 간략 해설 HTML 조각을 작성한다. '
+                             '회로 위치 표지에서 첫 판단과 식으로 이어가고 필수 중간식과 소문항별 답을 담는다.'),
+            )
     else:
         repo = Path(state['repo'])
         refs = repo / '.claude/skills/ec2-review-pack/references'

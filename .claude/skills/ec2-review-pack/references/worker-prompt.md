@@ -4,7 +4,7 @@
 
 ## 병렬 브리프에 `input_paths`가 있는 경우
 
-브리프의 `reference_sections`에 적힌 절과 직접 입력을 읽는다. 브리프에 `profile`이 있으면 PROFILE 전체를 읽는다. `explain-author`와 `explain-blind`(문항별 `-pN` 포함)는 봉인된 문제·그림만 연다. `-pN` 작업자는 자기 문항 폴더(`sealed/pN/`)만 연다. 브리프에 `candidate_pack`이 있으면 해당 비공개 후보를 연다. 출력과 보고서는 이 시도 디렉터리에만 쓴다.
+브리프의 `reference_sections`에 적힌 절과 직접 입력을 읽는다. 브리프에 `profile`이 있으면 PROFILE 전체를 읽는다. `explain-author`(문항별 `-pN` 포함)는 봉인된 문제와 그림으로 풀이를 작성하며 브리프의 자식 스킬·저작 규칙과 개인 풀이 명세를 읽는다. `explain-blind`(문항별 `-pN` 포함)는 봉인된 문제와 그림만 연다. `-pN` 작업자는 자기 문항 폴더(`sealed/pN/`)만 연다. 브리프에 `candidate_pack`이 있으면 해당 비공개 후보를 연다. 출력과 보고서는 이 시도 디렉터리에만 쓴다.
 
 작업자가 `submission.json`에 쓰는 필드는 `status`, `report`, `outputs`(파일 경로 배열), `reviews`(검토 파일 경로 배열), `counts`, `unresolved`다. 수정 결과에는 해당하는 `fix_results`와 `reconciliations`도 포함한다. 시도 ID, 입력 목록, 파일 해시는 실행기가 기록한다. 보고서의 차단 지적은 구조화된 unresolved와 하나씩 대응시킨다. 수정 재검토에서는 브리프의 `repair_attempt`, `repair_outputs`, `repair_candidate`와 현재 후보를 각각 확인하고 필요하면 서로 다른 두 화면을 첨부한다.
 

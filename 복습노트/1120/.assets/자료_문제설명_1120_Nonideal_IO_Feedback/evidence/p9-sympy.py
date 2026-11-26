@@ -1,130 +1,76 @@
-import sympy as sp
+"""Independent verification of 2021-1 final Q3."""
+import sympy as s
 
+Yin, Yout, h, f = s.symbols('Yin Yout h f', real=True, nonzero=True)
+u, o, i_in, i_out = s.symbols('v_in v_out i_in i_out')
 
-def par(a, b):
-    return (a * b) / (a + b)
+g1, g2, go1, go2, RD1, Raux = s.symbols('gm1 gm2 go1 go2 RD1 R_aux',positive=True)
+x = s.symbols('v_x')
+# Drain of common-gate M1 drives the insulated gate of M2.
+xsol = s.solve(x/RD1 + go1*(x-u)-g1*u,x)[0]
+g_input = s.factor((g1*u+go1*(u-xsol))/u)
+assert s.factor(xsol-RD1*g_input*u) == 0
 
+# Both devices have lambda=0. NMOS M2 is a source follower: drain at VDD.
+# Its source gm contribution is +gm2*vo-gm2*vx to output KCL.
+g_input = g_input.subs(go1,0)
+g_output = 1/Raux+g2
+h_actual = (-g2*xsol/u).subs(go1,0)
 
-def main():
-    I_in, g_m1, g_m2, R_D, R_M, R_F = sp.symbols(
-        "I_in g_m1 g_m2 R_D R_M R_F", positive=True
-    )
-    V_S1, V_X, V_out = sp.symbols("V_S1 V_X V_out")
+# Yin/Yout include the feedback network's short-circuit diagonal admittances.
+# h is the forward dependent current leaving output per input voltage.
+# f*vo is the feedback-network input current toward the summing node at vi=0.
+# The reciprocal forward term -f*vi at output is present in the physical circuit.
+trial = s.solve([Yin*u-f*o-i_in, (h-f)*u+Yout*o-i_out],(u,o))
+det = Yin*Yout+f*(h-f)
+assert s.factor(trial[o].diff(i_in)-(f-h)/det) == 0
+assert s.factor(trial[u].diff(i_in)-Yout/det) == 0
+assert s.factor(trial[o].diff(i_out)-Yin/det) == 0
 
-    # 1. Open-loop circuit (2021-1_기말-Q3):
-    # M1: NMOS CG with R_D drain load (lambda = 0)
-    # M2: NMOS Source Follower (CD), drain at V_DD (AC GND), gate at X, source at V_out, R_M to GND (lambda = 0)
-    eq_open = [
-        sp.Eq(I_in, V_S1 / R_F + g_m1 * V_S1),
-        sp.Eq(V_X / R_D - g_m1 * V_S1, 0),
-        sp.Eq(V_out / R_M + V_out / R_F - g_m2 * (V_X - V_out), 0),
-    ]
-    sol_open = sp.solve(eq_open, [V_S1, V_X, V_out])
+R0 = -h/(Yin*Yout)
+Rin0, Rout0 = 1/Yin, 1/Yout
+T = -f*R0
+replica = s.solve([Yin*u-f*o-i_in,h*u+Yout*o-i_out],(u,o))
+assert s.factor(replica[o].diff(i_in)-R0/(1+T)) == 0
+assert s.factor(replica[u].diff(i_in)-Rin0/(1+T)) == 0
+assert s.factor(replica[o].diff(i_out)-Rout0/(1+T)) == 0
+probes = [(o,i_in),(u,i_in),(o,i_out)]
+for measured, injection in probes:
+    exact_result = trial[measured].diff(injection)
+    replica_result = replica[measured].diff(injection)
+    assert s.factor(s.limit(exact_result-replica_result,f,0)) == 0
+print('Loaded replica: R0 =',R0,'; Rin0 =',Rin0,'; Rout0 =',Rout0)
+print('Return convention: i_in+i_f, i_f=f*vo at vi=0; f>0; T=-f*R0.')
+print('Equivalent subtracting convention: i_in-K*vo with K=-f.')
+print('Loaded replica closed: R=R0/(1+T); Rin=Rin0/(1+T); Rout=Rout0/(1+T).')
+print('Exact closed physical circuit: replace h by h-f in the above expressions.')
+print('Exact D = Yin*Yout+f*(h-f); R=(f-h)/D; Rin=Yout/D; Rout=Yin/D.')
+print('Replica drops reciprocal forward feedthrough; R comparison requires |f/h| << 1.')
+print('Close to D=0, also check that the determinant change f**2 is negligible.')
 
-    V_X_kcl = sp.simplify(sol_open[V_X])
-    R_0 = sp.simplify(sol_open[V_out] / I_in)
+Rf = s.symbols('R_F',positive=True)
+feedback = 1/Rf
+yin, yout = g_input+feedback, g_output+feedback
+physical_input = g_input*u+(u-o)/Rf
+physical_output = g_output*o+h_actual*u+(o-u)/Rf
+assert s.factor(physical_input-(Yin*u-f*o).subs({Yin:yin,f:feedback})) == 0
+assert s.factor(physical_output-((h-f)*u+Yout*o).subs({h:h_actual,Yout:yout,f:feedback})) == 0
+print('f=1/R_F; Yin=g_input+1/R_F; Yout=g_output+1/R_F.')
+for label, value in [('g_input',g_input),('g_output',g_output),('h',h_actual)]:
+    print(label,'=',s.factor(value))
 
-    # 2. Norton-to-Thevenin verification on input node:
-    R_p = R_F
-    V_in_th = I_in * R_p
-    V_S1_th, V_X_th = sp.symbols("V_S1_th V_X_th")
-    eq_th = [
-        sp.Eq((V_in_th - V_S1_th) / R_p, g_m1 * V_S1_th),
-        sp.Eq(V_X_th / R_D - g_m1 * V_S1_th, 0),
-    ]
-    sol_th = sp.solve(eq_th, [V_S1_th, V_X_th])
-    V_X_thev = sp.simplify(sol_th[V_X_th])
-    diff_thev = sp.simplify(V_X_kcl / I_in - V_X_thev / I_in)
-    assert diff_thev == 0, f"Norton-Thevenin mismatch: {diff_thev}"
-
-    # 3. Open-loop input & output impedances
-    V_t, I_t = sp.symbols("V_t I_t")
-    sol_rin = sp.solve([sp.Eq(I_t, V_t / R_F + g_m1 * V_t)], [I_t])
-    R_in_open = sp.simplify(V_t / sol_rin[I_t])
-
-    sol_rout = sp.solve([sp.Eq(I_t, V_t / R_M + V_t / R_F + g_m2 * V_t)], [I_t])
-    R_out_open = sp.simplify(V_t / sol_rout[I_t])
-
-    # 4. Feedback factor K
-    V_1, I_2 = sp.symbols("V_1 I_2")
-    sol_k = sp.solve([sp.Eq(I_2 + (V_1 - 0) / R_F, 0)], [I_2])
-    K = sp.simplify(sol_k[I_2] / V_1)
-
-    # 5. Loop gain and positive feedback verification: KR_0 = -T < 0, denom = 1 - T
-    KR_0 = sp.simplify(K * R_0)
-    T = sp.simplify(-KR_0)
-    assert T.is_positive, f"Expected T > 0 for positive feedback, got T = {T}"
-    assert KR_0.is_negative, f"Expected KR_0 < 0 for positive feedback, got KR_0 = {KR_0}"
-
-    denom = sp.simplify(1 + KR_0)
-    denom_1_minus_T = sp.simplify(1 - T)
-    assert sp.simplify(denom - denom_1_minus_T) == 0
-
-    R_closed = sp.simplify(R_0 / denom)
-    R_in_closed = sp.simplify(R_in_open / denom)
-    R_out_closed = sp.simplify(R_out_open / denom)
-
-    # 6. Verify compact forms match sympy.solve identically
-    R_L_out = par(R_M, R_F)
-    A_v2 = g_m2 * R_L_out / (1 + g_m2 * R_L_out)
-    R_0_compact = (g_m1 * R_F / (1 + g_m1 * R_F)) * R_D * A_v2
-    R_in_open_compact = par(R_F, 1 / g_m1)
-    R_out_open_compact = par(1 / g_m2, R_L_out)
-    T_compact = (g_m1 * R_D / (1 + g_m1 * R_F)) * A_v2
-    assert sp.simplify(R_0 - R_0_compact) == 0
-    assert sp.simplify(R_in_open - R_in_open_compact) == 0
-    assert sp.simplify(R_out_open - R_out_open_compact) == 0
-    assert sp.simplify(K - (-1 / R_F)) == 0
-    assert sp.simplify(T - T_compact) == 0
-    assert sp.simplify(KR_0 - (-T_compact)) == 0
-
-    # 7. Exact unbroken closed-loop KCL for comparison
-    V_S1_ex, V_X_ex, V_out_ex = sp.symbols("V_S1_ex V_X_ex V_out_ex")
-    eq_exact = [
-        sp.Eq(I_in, (V_S1_ex - V_out_ex) / R_F + g_m1 * V_S1_ex),
-        sp.Eq(V_X_ex / R_D - g_m1 * V_S1_ex, 0),
-        sp.Eq(V_out_ex / R_M + (V_out_ex - V_S1_ex) / R_F - g_m2 * (V_X_ex - V_out_ex), 0),
-    ]
-    sol_exact = sp.solve(eq_exact, [V_S1_ex, V_X_ex, V_out_ex])
-    R_closed_exact = sp.simplify(sol_exact[V_out_ex] / I_in)
-    R_in_exact = sp.simplify(sol_exact[V_S1_ex] / I_in)
-
-    eq_ro_exact = [
-        sp.Eq(0, (V_S1_ex - V_t) / R_F + g_m1 * V_S1_ex),
-        sp.Eq(V_X_ex / R_D - g_m1 * V_S1_ex, 0),
-        sp.Eq(I_t, V_t / R_M + (V_t - V_S1_ex) / R_F - g_m2 * (V_X_ex - V_t)),
-    ]
-    sol_ro_exact = sp.solve(eq_ro_exact, [V_S1_ex, V_X_ex, I_t])
-    R_out_exact = sp.simplify(V_t / sol_ro_exact[I_t])
-
-    subs_num = {g_m1: 1e-3, g_m2: 2e-3, R_D: 500.0, R_M: 5e3, R_F: 10e3}
-
-    print("=== p9: 2021-1_기말-Q3 (NMOS Source Follower M2, positive feedback, lambda = 0) ===")
-    print(f"V_X/I_in (direct KCL)      = {sp.simplify(V_X_kcl / I_in)}")
-    print(f"V_X/I_in (Norton->Thevenin)= {sp.simplify(V_X_thev / I_in)}")
-    print(f"diff(KCL - Thevenin)       = {diff_thev}")
-    print(f"R_0 (open-loop transimp)   = {R_0}")
-    print(f"R_in_open                  = {R_in_open}")
-    print(f"R_out_open                 = {R_out_open}")
-    print(f"[Part 1] K                 = {K}")
-    print(f"KR_0 = -T                  = {KR_0}")
-    print(f"T = -KR_0 (> 0 verified)   = {T}")
-    print(f"1 + KR_0 = 1 - T           = {sp.factor(denom)}")
-    print(f"[Part 1] R_closed          = {R_closed}")
-    print(f"[Part 2] R_in_closed       = {R_in_closed}")
-    print(f"[Part 2] R_out_closed      = {R_out_closed}")
-    print("Compact textbook form & positive feedback assertions: ALL PASSED (diff == 0)")
-    print("--- Exact unbroken KCL comparison ---")
-    print(f"R_closed_exact             = {R_closed_exact}")
-    print(f"R_in_exact                 = {R_in_exact}")
-    print(f"R_out_exact                = {R_out_exact}")
-    print(
-        f"Numeric check (gm1=1m,gm2=2m,RD=500,RM=5k,RF=10k): "
-        f"KR_0={float(KR_0.subs(subs_num)):.4f}, T={float(T.subs(subs_num)):.4f}, "
-        f"R_closed_fb={float(R_closed.subs(subs_num)):.2f}, "
-        f"R_closed_exact={float(R_closed_exact.subs(subs_num)):.2f}"
-    )
-
-
-if __name__ == "__main__":
-    main()
+print('RD1=RD and R_aux=RM.')
+assert h_actual == -g1*g2*RD1
+print('R0 = +gm1*gm2*RD*(RF||1/gm1)*(RM||RF||1/gm2).')
+print('K=f=1/RF with current summing. Denominator is 1-f*R0: positive return.')
+print('Full KCL numerator is gm1*gm2*RD+1/RF and D=Yin*Yout-(gm1*gm2*RD+1/RF)/RF.')
+print('Replica singular at f*R0=1. Full circuit singular at D=0.')
+# One admissible positive-return case and one case with negative static port resistances.
+parameters = {g1:s.Rational(1,1000), g2:s.Rational(1,1000), Raux:1000, Rf:1000}
+physical_det = det.subs({Yin:yin,Yout:yout,h:h_actual,f:feedback})
+for rd in (1000,10000):
+    chosen = {**parameters,RD1:rd}
+    d = physical_det.subs(chosen)
+    assert (d > 0) == (rd == 1000)
+    cl_gain = s.factor((feedback-h_actual).subs(chosen)/d)
+    print(f'Example RD={rd} ohm: D={d} S^2; full KCL R={cl_gain} ohm.')
