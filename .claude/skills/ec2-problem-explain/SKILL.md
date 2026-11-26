@@ -11,6 +11,8 @@ description: "전자회로2 복습팩이 이미 고른 workbook 문제(날짜별
 
 **한 행에 하나의 식:** 독립된 계산 대상은 각각 별도 display 블록/MD 줄/PDF 행에 쓴다. 서로 다른 $g_m$, $r_\pi$, $r_o$ 계산을 쉼표·\quad·\qquad로 한 줄에 묶지 않는다. 같은 양의 `식 = 대입 = 결과` 연속 등식과 실제 같은 값을 가진 소자의 등식 묶음은 유지할 수 있으며, 폭을 넘으면 단계별로 세로로 나눈다. 설명문의 짧은 기호·조건은 인라인으로 쓸 수 있다.
 
+**같은 회로량에는 한 기호:** 계산 경로에서 이미 이름을 붙인 양은 이후 식과 요약에서도 그 기호를 쓴다. 예를 들어 $R_C\parallel(R_1+R_2)$ 전체가 $R_{\mathrm{out,open}}$이면 $R_L$을 추가하지 않고 개루프 출력저항으로 한 번 적는다. 근사식으로 얻었으면 계산한 첫 줄에 $\approx$를 표시한다. 실제로 별도 부하나 다른 측정 조건의 저항을 뜻하는 기호와 원문 지정 기호는 해당 의미를 유지한다. 내용 검토에서 새로 정의한 기호마다 독립된 회로량을 가리키는지 확인한다.
+
 **기본 근사와 회로 표기:** 공통 `solution-style.md`의 수업 기본 근사를 적용한다. $g_mr_o\gg1$, $g_mR_e\gg1$의 주항을 쓰고 캐스코드의 곱 인자 소자를 밝힌다. 내부 $r_e=1/g_m$는 축퇴 저항과 구분하고 유한 $r_\pi$는 보존한다. 생성 SVG는 NOTATION-01의 native text/tspan 실제 첨자(기본 78%)·Pretendard 600 정체로 통일하고 실제 face 사용을 HTML·독립 SVG·PDF에서 검토한다. CM 이득은 성립 조건을 확인한 $2R_{SS}$ 반회로를 본풀이에 앞세우고 테일 저항 유도는 보충으로 분리한다. 부하 불일치·거울 결합·원문 지정 방법의 예외는 PROFILE CIRCUIT-02를 따른다.
 
 **전압이득의 계산 순서:** 새로 작성하거나 내용을 고치는 적용 가능한 증폭기 전압이득 풀이는 PROFILE GAIN-01에 따라 성립 조건·입출력 정의 → 출력 단락의 $G_m$ → 입력 영점·시험원의 부하 포함 $R_{out}$ → 부호 있는 $A_v=-G_mR_{out}$ 순서로 쓴다. 짧게 푸는 것은 대수 전개를 줄이는 것이며 세 중간 계산을 생략하지 않는다. 같은 출력 정의에서 증폭기 쪽 근사 저항과 외부 부하의 병렬을 보인다. 필요한 유한 $r_\pi$·$r_o$와 원문 조건을 유지하고 $R_{out}$ 정확 전체식·긴 노드방정식은 예외가 아니면 내부 검산에 둔다. 순수 DC·전류 전달/트랜스임피던스·원문 지정 증명은 해당 목표와 방법을 유지한다. 기존 미수정 문항 전체에 소급 재작성을 강제하지 않는다.
@@ -127,7 +129,7 @@ python3 "$SKILL/scripts/epe_cli.py" check --run "$RUN"
 ### 6. 검토 기록
 [검토 기록](references/verification.md)을 읽고 네 검토와 `learning_style_audit`의 모든 소문항·규칙 감사를 실제로 수행해 `BUCKET/review.json`에 기록한다.
 - `source_visual`: `workbook/source_pages.py render`로 원본 쪽을 렌더해 문항 조건·그림·소문항과 대조.
-- `content`: 필수 읽기 `<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md` 절대 경로와 `source.json.learning_style`을 브리프에 넣는다. 회로 위치와 첫 식의 대응·한 행에 하나의 식·설명의 간결함과 본문·요약·MD의 답·단위·근사·그림을 대조하고 `learning_style_audit`를 작성한다. 위 모델 선택 규칙을 적용한 별도 리뷰어 1명이 팩의 모든 조각을 읽고 소문항별로 판정한다.
+- `content`: 필수 읽기 `<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md` 절대 경로와 `source.json.learning_style`을 브리프에 넣는다. 회로 위치와 첫 식의 대응·한 행에 하나의 식·같은 회로량의 기호 일관성·설명의 간결함과 본문·요약·MD의 답·단위·근사·그림을 대조하고 `learning_style_audit`를 작성한다. 위 모델 선택 규칙을 적용한 별도 리뷰어 1명이 팩의 모든 조각을 읽고 소문항별로 판정한다.
 - `independent`: 4의 판정을 그대로 옮긴다(evidence 경로는 stage에 복사된 `evidence/`와 같은 이름).
 - `browser`: 메인 에이전트가 stage 폴더를 `python3 -m http.server`로 열고(몇 초 뒤 측정), 네 조합 측정은 헤드리스 Playwright [scripts/epe_browser_check.py](scripts/epe_browser_check.py)로 해요(`playwright`·chromium 필요). 내장 브라우저 창은 목차·pager·테마 토글을 눌러 보는 확인에만 쓰고, 그 페이지의 `document.visibilityState`가 `'visible'`일 때만 결과로 써요. `ERR_CONNECTION_RESET` 같은 연결 끊김은 fail이 아니라 다시 실행해요. evidence에 어느 경로로 확인했는지 적어요.
 - `references`: 실제로 읽은 저장소 자료의 절대 경로와 SHA-256.

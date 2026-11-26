@@ -47,10 +47,10 @@
       </div>
       <div data-gain-stage="rout">
         <p>입력을 0으로 두고 출력에서 본 저항이에요.</p>
-        $$R_{\mathrm{out,open}}=R_L=R_{D2}\parallel(R_1+R_2)$$
+        $$R_{\mathrm{out,open}}=R_{D2}\parallel(R_1+R_2)$$
       </div>
       <div data-gain-stage="gain">
-        $$A_{\mathrm{open}}=-G_mR_L=\frac{g_{m2}R_{D1}R_L}{1/g_{m1}+R_S}$$
+        $$A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}=\frac{g_{m2}R_{D1}R_{\mathrm{out,open}}}{1/g_{m1}+R_S}$$
       </div>
     </div>
     <div data-answer-step="귀환율">
@@ -61,7 +61,7 @@
       <p>분압기를 통한 직접 전달을 무시하는 복제법의 결과예요.</p>
       $$A_{\mathrm{closed}}\approx\frac{A_{\mathrm{open}}}{1+KA_{\mathrm{open}}}$$
       $$R_{\mathrm{in,open}}=R_{\mathrm{in,closed}}=\infty$$
-      $$R_{\mathrm{out,closed}}\approx\frac{R_L}{1+KA_{\mathrm{open}}}$$
+      $$R_{\mathrm{out,closed}}\approx\frac{R_{\mathrm{out,open}}}{1+KA_{\mathrm{open}}}$$
     </div>
   </div>
 </div>

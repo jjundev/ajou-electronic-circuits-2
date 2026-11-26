@@ -714,10 +714,10 @@
       </div>
       <div data-gain-stage="rout">
         <p>입력을 0으로 두고 출력에서 본 저항이에요.</p>
-        $$R_{\mathrm{out,open}}=R_L=R_C\parallel(R_1+R_2)$$
+        $$R_{\mathrm{out,open}}=R_C\parallel(R_1+R_2)$$
       </div>
       <div data-gain-stage="gain">
-        $$A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}=\frac{R_L}{1/g_m+R_B/\beta}$$
+        $$A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}=\frac{R_{\mathrm{out,open}}}{1/g_m+R_B/\beta}$$
       </div>
     </div>
     <div data-answer-step="입력 저항과 귀환율">
@@ -728,7 +728,7 @@
     <div data-answer-final="">
       $$A_{\mathrm{closed}}\approx\frac{A_{\mathrm{open}}}{1+KA_{\mathrm{open}}}$$
       $$R_{\mathrm{in,closed}}\approx R_{\mathrm{in,open}}(1+KA_{\mathrm{open}})$$
-      $$R_{\mathrm{out,closed}}\approx\frac{R_L}{1+KA_{\mathrm{open}}}$$
+      $$R_{\mathrm{out,closed}}\approx\frac{R_{\mathrm{out,open}}}{1+KA_{\mathrm{open}}}$$
     </div>
   </div>
 </div>
@@ -784,10 +784,10 @@
       </div>
       <div data-gain-stage="rout">
         <p>입력을 0으로 두고 출력에서 본 저항이에요.</p>
-        $$R_{\mathrm{out,open}}=R_L=R_{D2}\parallel(R_1+R_2)$$
+        $$R_{\mathrm{out,open}}=R_{D2}\parallel(R_1+R_2)$$
       </div>
       <div data-gain-stage="gain">
-        $$A_{\mathrm{open}}=-G_mR_L=\frac{g_{m2}R_{D1}R_L}{1/g_{m1}+R_S}$$
+        $$A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}=\frac{g_{m2}R_{D1}R_{\mathrm{out,open}}}{1/g_{m1}+R_S}$$
       </div>
     </div>
     <div data-answer-step="귀환율">
@@ -798,7 +798,7 @@
       <p>분압기를 통한 직접 전달을 무시하는 복제법의 결과예요.</p>
       $$A_{\mathrm{closed}}\approx\frac{A_{\mathrm{open}}}{1+KA_{\mathrm{open}}}$$
       $$R_{\mathrm{in,open}}=R_{\mathrm{in,closed}}=\infty$$
-      $$R_{\mathrm{out,closed}}\approx\frac{R_L}{1+KA_{\mathrm{open}}}$$
+      $$R_{\mathrm{out,closed}}\approx\frac{R_{\mathrm{out,open}}}{1+KA_{\mathrm{open}}}$$
     </div>
   </div>
 </div>
@@ -852,11 +852,10 @@
       </div>
       <div data-gain-stage="rout">
         <p>입력을 0으로 두고 출력에서 본 저항이에요.</p>
-        $$R_L=r_{ON}\parallel r_{OP}\parallel(R_1+R_2)$$
-        $$R_{\mathrm{out,open}}\approx R_L$$
+        $$R_{\mathrm{out,open}}\approx r_{ON}\parallel r_{OP}\parallel(R_1+R_2)$$
       </div>
       <div data-gain-stage="gain">
-        $$A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}\approx g_{mN}R_L$$
+        $$A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}\approx g_{mN}R_{\mathrm{out,open}}$$
       </div>
     </div>
     <div data-answer-step="귀환율">
@@ -864,14 +863,14 @@
     </div>
     <h4>폐루프 답</h4>
     <div data-answer-final="">
-      $$A_{\mathrm{closed}}\approx\frac{g_{mN}R_L}{1+Kg_{mN}R_L}$$
+      $$A_{\mathrm{closed}}\approx\frac{A_{\mathrm{open}}}{1+KA_{\mathrm{open}}}$$
       $$R_{\mathrm{in,open}}=R_{\mathrm{in,closed}}=\infty$$
-      $$R_{\mathrm{out,closed}}\approx\frac{R_L}{1+Kg_{mN}R_L}$$
+      $$R_{\mathrm{out,closed}}\approx\frac{R_{\mathrm{out,open}}}{1+KA_{\mathrm{open}}}$$
     </div>
   </div>
 </div>
 <div class="sum" hidden="">
-  <p class="sum-lead">감지 복제 $R_1+R_2$가 차동쌍의 출력 부하에 더해져요.</p><p>$R_L=r_{ON}\parallel r_{OP}\parallel(R_1+R_2)$예요.</p>
+  <p class="sum-lead">감지 복제 $R_1+R_2$가 차동쌍의 출력 부하에 더해져요.</p><p>$R_{\mathrm{out,open}}\approx r_{ON}\parallel r_{OP}\parallel(R_1+R_2)$예요.</p>
 </div>
 </article><article class="topic" id="p7"><h3>P7. 귀환 저항이 크지 않은 트랜스임피던스 증폭기</h3><p class="panel-meta">E12.29 · 예제 12.29 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1120_Nonideal_IO_Feedback-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p7"><div class="layer formal" data-source-problem="p7"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>$R_F$가 매우 크지 않음 (귀환 회로망이 순방향 증폭기에 주는 부하를 무시할 수 없음)</li><li>소자 값은 주어지지 않음 (답은 소신호 파라미터 기호로, $\lambda = 0$으로 봄)</li><li>본문의 해석 순서: 순방향 증폭기와 귀환 회로망을 확인하고, 종지 법칙(Fig 12.53)에 따라 루프를 끊어 개루프 변수를 구한 뒤, Fig 12.54의 법칙으로 귀환율을 구하고 폐루프 변수를 계산</li><li>전압-전류 귀환의 종지 법칙 (본문 Fig 12.53(b)): 감지 복제의 출력 포트와 반송 복제의 입력 포트를 모두 단락</li><li>전압-전류 귀환의 귀환율 (본문 Fig 12.54(b)): 귀환 회로망 입력에 전압 $V_1$을 걸고 단락된 출력 포트의 전류 $I_2$를 재어 $K = I_2/V_1$</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>회로 해석: 개루프 이득 $R_0 = V_{out}/I_{in}$, 개루프 입력·출력 임피던스, 귀환율 $K$, 폐루프 이득과 폐루프 입력·출력 임피던스</li></ul></div><figure><img src=".assets/figures_문제설명_1120_Nonideal_IO_Feedback/d2d2f99a43248ad7-fig12-58-a.png" alt="그림 E12.29"></figure></div><details class="original" data-original-problem="p7"><summary>원문 보기</summary><p>$R_F$가 매우 크지 않다고 가정할 때 그림 12.58(a)의 회로를 해석하라.</p></details></div><div class="layer formal circuit-explanation" data-explanation="solve">
   <figure class="figure circuit">

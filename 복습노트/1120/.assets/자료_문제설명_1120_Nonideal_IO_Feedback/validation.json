@@ -1,6 +1,6 @@
 {
   "review_policy_version": "problem-explain-2026-10-21-learning-style",
-  "input_hash": "320d911aa39b3f0aca5ecd415dad38665f38fbaa6b4510b831afe67f3708704c",
+  "input_hash": "2533882133c908a9795d075a3868b3e7df2e89f4bd5e1bbe1e10b9c599a374c6",
   "references": [
     {
       "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.claude/skills/ec2-problem-explain/references/authoring.md",
@@ -77,6 +77,10 @@
     {
       "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/복습노트/1002/.assets/문제설명_1002_Differential_Amplifiers.md",
       "sha256": "c8b784e82edd1258909f5ecea9da54ad072cf0644bb605d86601b29d6e253b69"
+    },
+    {
+      "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.claude/skills/ec2-problem-explain/SKILL.md",
+      "sha256": "6639f95ef09335971232d132cdd6f3d69d15c7d023f998cf8ea9b816cfe493be"
     }
   ],
   "learning_style_audit": {
@@ -416,7 +420,7 @@
           },
           "GAIN-01": {
             "disposition": "applied",
-            "evidence": "첫 Gm식에 1/gm과 RB/β가 직접 보인다. RB=0이면 −gm이고, 입력 영점 RL=RC∥(R1+R2) 다음 Aopen=−Gm RL이다."
+            "evidence": "공통 베이스 G_m의 1/g_m+R_B/β와 분압 감지 부하는 유지. 이미 정의한 R_out,open 및 A_open・R_in,open으로 폐루프 이득과 저항을 이어 쓰며 기존 계산의 동치 확인."
           },
           "DEGEN-01": {
             "disposition": "applied",
@@ -432,11 +436,11 @@
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "v_b/v_e=RB/(rπ+RB)와 rπ=β/gm에서 Gm=−gm rπ/(rπ+RB)=−1/(1/gm+RB/β)다. 단자와 전류 방향에 따라 대소문자·부호·소자 번호의 의미를 확인했다."
+            "evidence": "v_b/v_e=RB/(rπ+RB)와 rπ=β/gm에서 Gm=−gm rπ/(rπ+RB)=−1/(1/gm+RB/β)다. 단자와 전류 방향에 따라 대소문자·부호·소자 번호의 의미를 확인했다. HTML/MD에서 개루프 출력저항 표기 통일을 확인."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "반송 복제의 RB=R1∥R2를 베이스에서 읽고 출력 단락 시 컬렉터 유입을 양으로 둔다. VA=∞이다. v_b/v_e=RB/(rπ+RB)와 rπ=β/gm에서 Gm=−gm rπ/(rπ+RB)=−1/(1/gm+RB/β)다."
+            "evidence": "공통 베이스 G_m의 1/g_m+R_B/β와 분압 감지 부하는 유지. 이미 정의한 R_out,open 및 A_open・R_in,open으로 폐루프 이득과 저항을 이어 쓰며 기존 계산의 동치 확인."
           },
           "CORRECT-01": {
             "disposition": "applied",
@@ -490,11 +494,11 @@
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "X에서 vX/vin=−RD1/(1/gm1+RS)를 얻고 여기에 gm2를 곱한다. 단자와 전류 방향에 따라 대소문자·부호·소자 번호의 의미를 확인했다."
+            "evidence": "X에서 vX/vin=−RD1/(1/gm1+RS)를 얻고 여기에 gm2를 곱한다. 단자와 전류 방향에 따라 대소문자·부호·소자 번호의 의미를 확인했다. HTML/MD에서 개루프 출력저항 표기 통일을 확인."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "반송 복제는 M1의 소스에, 감지 복제는 M2의 드레인에 걸린다. X에서 vX/vin=−RD1/(1/gm1+RS)를 얻고 여기에 gm2를 곱한다."
+            "evidence": "R_D2∥(R1+R2)는 개루프 출력저항으로 직접 정의. 이득·임피던스 대입과 복제법 근사 범위가 이전과 동치."
           },
           "CORRECT-01": {
             "disposition": "applied",
@@ -548,11 +552,11 @@
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "거울 근사와 이상적 테일 조건에서 전체 단락 Gm≈−gmN, RL=rON∥rOP∥(R1+R2)다. 단자와 전류 방향에 따라 대소문자·부호·소자 번호의 의미를 확인했다."
+            "evidence": "거울 근사와 이상적 테일 조건에서 전체 단락 Gm≈−gmN, RL=rON∥rOP∥(R1+R2)다. 단자와 전류 방향에 따라 대소문자·부호·소자 번호의 의미를 확인했다. HTML/MD에서 개루프 출력저항 표기 통일을 확인."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "반송 복제가 걸린 M2 게이트는 교류 접지이고 감지 복제는 거울 출력에 걸린다. 거울 근사와 이상적 테일 조건에서 전체 단락 Gm≈−gmN, RL=rON∥rOP∥(R1+R2)다."
+            "evidence": "거울 근사 조건을 유지. R_out,open≈r_ON∥r_OP∥(R1+R2)로 직접 표시하고 A_open으로 폐루프 답을 표기. 기존 식과 대수적으로 동치이며 요약의 근사 표기도 일치."
           },
           "CORRECT-01": {
             "disposition": "applied",
@@ -975,17 +979,17 @@
   "source_visual": {
     "status": "pass",
     "reviewer": "Codex coordinator",
-    "evidence": "P12.42 교과서 12장 PDF 43쪽의 Fig. 12.105와 유한 큰 β, V_A=∞, 폐루프 이득·입출력 저항을 다시 대조. 전체 11문항의 원문/그림 입력과 원문 PDF 바이트가 기존 원문 시각 검토와 일치함을 대조했으며 P4 원문 영역과 나머지 10개 HTML·MD도 보존."
+    "evidence": "P12.42 교과서 12장 PDF 43쪽의 Fig. 12.105와 유한 큰 β, V_A=∞, 폐루프 이득·입출력 저항을 다시 대조. 전체 11문항의 원문/그림 입력과 원문 PDF 바이트가 기존 원문 시각 검토와 일치함을 대조했으며 P4 원문 영역과 나머지 10개 HTML·MD도 보존. 새 stage의 모든 원문·조건·SVG가 현행 발행분과 일치함을 직접 대조함."
   },
   "browser": {
     "status": "pass",
     "reviewer": "Codex coordinator",
-    "evidence": "동일 바이트의 최종 HTML/실험에서 Playwright 기본 네 조합과 추가 812×480 두 테마를 검토. 모든 11문항의 위치 표지·회로 고정·인쇄 흐름을 확인했다. P4 수식 넘침 0, P6 실험 새 탭 12 kΩ→20 kΩ 확인."
+    "evidence": "현재 stage HTTP Chromium 1280×900·375×812 각 라이트/다크 11문항. 문제/원문 패널, KaTeX, 그림, 수평 넘침·여백 통과."
   },
   "content": {
     "status": "pass",
     "reviewer": "/root/content_review",
-    "evidence": "stage의 11문항 15개 소문항을 source 원문, 현재 개인 명세 및 조각과 대조했다. 변경된 P4에서 베이스 분압으로 단락 컬렉터 전류를 다시 구했으며 큰 β의 입력저항 근사와 구별했다. 나머지 10개 조각이 기존 발행본과 바이트 동일함을 대조했다.",
+    "evidence": "stage의 11문항 15개 소문항을 source 원문, 현재 개인 명세 및 조각과 대조했다. 변경된 P4에서 베이스 분압으로 단락 컬렉터 전류를 다시 구했으며 큰 β의 입력저항 근사와 구별했다. 나머지 10개 조각이 기존 발행본과 바이트 동일함을 대조했다. 새 표기 수정은 /root/notation_review가 세 문항 대조.",
     "items": {
       "p1:a": {
         "status": "pass",
@@ -1014,18 +1018,18 @@
       },
       "p4:main": {
         "status": "pass",
-        "reviewer": "/root/content_review",
-        "evidence": "반송 복제의 RB=R1∥R2를 베이스에서 읽고 출력 단락 시 컬렉터 유입을 양으로 둔다. VA=∞이다. v_b/v_e=RB/(rπ+RB)와 rπ=β/gm에서 Gm=−gm rπ/(rπ+RB)=−1/(1/gm+RB/β)다. Rin,open=[β/(β+1)](1/gm+RB/β)와 Gm을 구별했다. 1+K Aopen을 쓰면 구 표현의 전압 이득 및 출력저항 식과 대수적으로 같고, 입력저항은 β≫1의 정확도에서 같다."
+        "reviewer": "/root/notation_review",
+        "evidence": "공통 베이스 G_m의 1/g_m+R_B/β와 분압 감지 부하는 유지. 이미 정의한 R_out,open 및 A_open・R_in,open으로 폐루프 이득과 저항을 이어 쓰며 기존 계산의 동치 확인."
       },
       "p5:main": {
         "status": "pass",
-        "reviewer": "/root/content_review",
-        "evidence": "반송 복제는 M1의 소스에, 감지 복제는 M2의 드레인에 걸린다. X에서 vX/vin=−RD1/(1/gm1+RS)를 얻고 여기에 gm2를 곱한다. 게이트 입력저항은 무한대이고 복제법의 직접 전달 무시를 밝혀 폐루프 이득·출력저항에 근사 부호를 쓴다."
+        "reviewer": "/root/notation_review",
+        "evidence": "R_D2∥(R1+R2)는 개루프 출력저항으로 직접 정의. 이득·임피던스 대입과 복제법 근사 범위가 이전과 동치."
       },
       "p6:main": {
         "status": "pass",
-        "reviewer": "/root/content_review",
-        "evidence": "반송 복제가 걸린 M2 게이트는 교류 접지이고 감지 복제는 거울 출력에 걸린다. 거울 근사와 이상적 테일 조건에서 전체 단락 Gm≈−gmN, RL=rON∥rOP∥(R1+R2)다. 폐루프 이득과 출력저항이 1+KgmN RL로 줄며 MOS 입력저항은 무한대다."
+        "reviewer": "/root/notation_review",
+        "evidence": "거울 근사 조건을 유지. R_out,open≈r_ON∥r_OP∥(R1+R2)로 직접 표시하고 A_open으로 폐루프 답을 표기. 기존 식과 대수적으로 동치이며 요약의 근사 표기도 일치."
       },
       "p7:main": {
         "status": "pass",
@@ -1108,21 +1112,21 @@
         "status": "pass",
         "reviewer": "/root/blind_check",
         "method": "symbolic",
-        "evidence": "evidence/p4-sympy.py, evidence/p4-result.txt: 원문 Fig. 12.105만 보고 기저/출력 KCL 및 분리 회로를 계산하여 기호식 7개 검증. 이후 조정자가 새 표기와 대조.",
+        "evidence": "evidence/p4-sympy.py, evidence/p4-result.txt: 원문 Fig. 12.105만 보고 기저/출력 KCL 및 분리 회로를 계산하여 기호식 7개 검증. 이후 조정자가 새 표기와 대조. /root/notation_review가 이번 표기 변경의 대수적 동치 및 측정 조건을 검토함.",
         "conclusion": "Gm=-β/(rπ+RB)=-1/(1/gm+RB/β), Rin,open=(rπ+RB)/(β+1), Rout,open=RL. 폐루프 세 결과는 정확 순방향 항의 상대 보정 K/β와 큰 β 입력저항 근사를 적용한 결과로 기존 답과 동등."
       },
       "p5:main": {
         "status": "pass",
         "method": "symbolic",
         "reviewer": "/root/independent",
-        "evidence": "evidence/p5-sympy.py, evidence/p5-result.txt: M1 드레인·소스와 출력 KCL 및 gm2 RD1≫K에서 복제법 대조",
+        "evidence": "evidence/p5-sympy.py, evidence/p5-result.txt: M1 드레인·소스와 출력 KCL 및 gm2 RD1≫K에서 복제법 대조 /root/notation_review가 이번 표기 변경의 대수적 동치 및 측정 조건을 검토함.",
         "conclusion": "Rth=R1||R2, RL=RD2||(R1+R2)||ro2, K=R2/(R1+R2), D=1+go1 RD1+(gm1+go1)Rth, P=gm1/D, Q=K(gm1+go1)/D, B=gm2 RD1. 복제법 A0=B P RL, Acl=A0/(1+B Q RL), Rin=∞, Rout=RL/(1+B Q RL). 원회로 Acl과 Rout은 B→B+K가 필요한 식. λ=0이면 RL에서 ro2 제외, P=gm1/(1+gm1 Rth), Q=KP."
       },
       "p6:main": {
         "status": "pass",
         "method": "symbolic",
         "reviewer": "/root/independent",
-        "evidence": "evidence/p6-sympy.py, evidence/p6-result.txt: 이상 테일 전류원, 일치한 소자 쌍의 공통 소스·거울·출력 노드 KCL 및 gmP≫goP,goN 극한 확인",
+        "evidence": "evidence/p6-sympy.py, evidence/p6-result.txt: 이상 테일 전류원, 일치한 소자 쌍의 공통 소스·거울·출력 노드 KCL 및 gmP≫goP,goN 극한 확인 /root/notation_review가 이번 표기 변경의 대수적 동치 및 측정 조건을 검토함.",
         "conclusion": "K=R2/(R1+R2). 정확한 Gm,eff=gmN(2gmP+goP)/(2gmP+goN+2goP), go,eff=2(gmP+goP)(goN+goP)/(2gmP+goN+2goP). Rout0=1/[go,eff+1/(R1+R2)], A0=Gm,eff Rout0. 통상 근사 A0≈gmN[roN||roP||(R1+R2)]. Acl=A0/(1+K A0), Rin=∞, Rout=Rout0/(1+K A0)."
       },
       "p7:main": {
@@ -1199,8 +1203,8 @@
     ".assets/figures_문제설명_1120_Nonideal_IO_Feedback/p7-fig-circuit-s4-rf-duplicates.svg": "7a3cc4856dc97d422c550f0d6025a82cf1e2064a3fa8d749f9057210539af6c4",
     ".assets/figures_문제설명_1120_Nonideal_IO_Feedback/p8-pmos-cs-loaded-open-loop.svg": "bb23aed85eba65525d807ec584e2d80e57b2c80e9ea72ae25e4feadc475acf1d",
     ".assets/figures_문제설명_1120_Nonideal_IO_Feedback/p9-source-follower-loaded-open-loop.svg": "bbe98d0eec8c52d4aa254d95e6c4cec73da9de2d36a10757fa40f0fa22a44351",
-    ".assets/문제설명_1120_Nonideal_IO_Feedback.md": "ae2d555dc515f435f1d87e923f705404be1de9f2345d938edf040555dfb5f00e",
-    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/answer-overlay.json": "4c5438249ff97944a0297377830aed3977ad8f7fb8aacedc5eebb0079af0cd85",
+    ".assets/문제설명_1120_Nonideal_IO_Feedback.md": "e7ec7253a74ffda8372720775c78735c95155b4a407185b009d714ad1b6061da",
+    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/answer-overlay.json": "9fd3e05984db84dc38547f35f9ede1171e0971ab9110b3eb7f7b4812a13d8012",
     ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/evidence/coordinator-crosscheck.py": "f65a6b6dae05eb6d03a18549650bb29a5798db249e76d57cfde232f4bbaf00b2",
     ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/evidence/coordinator-crosscheck.txt": "a63131914bc1ad1e0b7421e378299b7d1f3e79423e6ba6dba9088d29575fd6c8",
     ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/evidence/independent-blind.json": "88752f994d0adfcf6477720eb7db00d2f7b1e85057f29e9340344593bee310f9",
@@ -1231,18 +1235,18 @@
     ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/fragments/p11.html": "9f9b34cd57c66b61eea2af6e6a8100e0b7ff0c83da0e13db72524a83a3c2eb16",
     ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/fragments/p2.html": "169793f5f3b4b4924810e529d1f26dddcabd312bdd2ecd95a252492b109700f7",
     ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/fragments/p3.html": "fdafcb80ea86fd1e491e7aa859eb085e715d6c9e29147b1277038b79842f1a13",
-    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/fragments/p4.html": "e487ef80c2cca784f5c50fdaaaad3c860ae56d1f4faaf2e5ff2b8c3869230ba6",
-    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/fragments/p5.html": "a885692ca0f247061195bcbf3584fcb7352fb8a6e2070247558babb610490526",
-    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/fragments/p6.html": "971ade553498f64fbf2c5c3f8bfa007c8d382609bd88074036f8b84f7dad6473",
+    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/fragments/p4.html": "3b54339871f038fd71f192559b474981b7496be96d99adbe121953f6a3bc09a3",
+    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/fragments/p5.html": "d292495a79f6afa4f9181a7e00a66fecffadd9982aaedc6f1cc295edd2131323",
+    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/fragments/p6.html": "7d25b06698b8fd4bf3a14b621f8746ef83a8675400765cd64dacfd90513d85a4",
     ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/fragments/p7.html": "2bfc4a0c8d26d4be5e49a91a336b4ed49558679d845095c21c7a51e586cbea77",
     ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/fragments/p8.html": "6827fe5c3941b5774641ac112bbb06a7b457e34204379d507b35ac3798c6b451",
     ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/fragments/p9.html": "46783e1df9b92fb369bcd18dee69afb8cdeb8446b6b605c2b6c1df30555ac262",
-    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/labs/E12.27/brief.json": "0c1d69afb13d204539f0595e2bac111b3644d8d3fc45a89620eaed53c0d5f0d5",
+    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/labs/E12.27/brief.json": "0a5687563e58988172c20d51360f61381a471e734f0709059a1274dafa8aad85",
     ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/labs/E12.27/index.html": "421ec83c3503969d0a3edba9f9459b6172682c2f216741e778bb533e7f8db41d",
-    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/labs/E12.27/lab-validation.json": "6449164dcfc290e73d7b07ee8ddeb8ae7b14adf7492fd9104dba293cd09749cb",
+    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/labs/E12.27/lab-validation.json": "692aa5b742dbd46f01af602f055cd7385c6c8c608e0eeb8746f3ac8761d9f051",
     ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/labs/E12.27/lab.js": "d873700c77280e47b87b3368a406971f11f1775c98dad31b9ed27eb67ab50ed1",
     ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/template-provenance.json": "69f885ea5f798b5132305e84c4e454228d50fb784330bfab3b2d4fd3697650fc",
-    "문제설명_1120_Nonideal_IO_Feedback.html": "4c781092c080869b3aac9e0b1cdec15a7a859ccf3d55b745b90cd08b91f9f19e",
-    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/manifest.json": "dfcc2e04d0b816c910cb4cd9ff3a34ca5f51af6b87404286fa66a9a80730fd40"
+    "문제설명_1120_Nonideal_IO_Feedback.html": "8f79da2377d73bda94168f8db78d6fe3883cb653c13ba1c0e3996690f0dcebec",
+    ".assets/자료_문제설명_1120_Nonideal_IO_Feedback/manifest.json": "a084b03bd5133cec5d845cbc0424f57e74a5fee23138b7a774a43c63c0b42071"
   }
 }

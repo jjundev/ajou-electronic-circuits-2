@@ -351,11 +351,11 @@ $$
 입력을 0으로 두고 출력에서 본 저항이에요.
 
 $$
-R_{\mathrm{out,open}}=R_L=R_C\parallel(R_1+R_2)
+R_{\mathrm{out,open}}=R_C\parallel(R_1+R_2)
 $$
 
 $$
-A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}=\frac{R_L}{1/g_m+R_B/\beta}
+A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}=\frac{R_{\mathrm{out,open}}}{1/g_m+R_B/\beta}
 $$
 
 $$
@@ -377,7 +377,7 @@ R_{\mathrm{in,closed}}\approx R_{\mathrm{in,open}}(1+KA_{\mathrm{open}})
 $$
 
 $$
-R_{\mathrm{out,closed}}\approx\frac{R_L}{1+KA_{\mathrm{open}}}
+R_{\mathrm{out,closed}}\approx\frac{R_{\mathrm{out,open}}}{1+KA_{\mathrm{open}}}
 $$
 
 **페이지 요약**
@@ -439,11 +439,11 @@ $$
 입력을 0으로 두고 출력에서 본 저항이에요.
 
 $$
-R_{\mathrm{out,open}}=R_L=R_{D2}\parallel(R_1+R_2)
+R_{\mathrm{out,open}}=R_{D2}\parallel(R_1+R_2)
 $$
 
 $$
-A_{\mathrm{open}}=-G_mR_L=\frac{g_{m2}R_{D1}R_L}{1/g_{m1}+R_S}
+A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}=\frac{g_{m2}R_{D1}R_{\mathrm{out,open}}}{1/g_{m1}+R_S}
 $$
 
 $$
@@ -463,7 +463,7 @@ R_{\mathrm{in,open}}=R_{\mathrm{in,closed}}=\infty
 $$
 
 $$
-R_{\mathrm{out,closed}}\approx\frac{R_L}{1+KA_{\mathrm{open}}}
+R_{\mathrm{out,closed}}\approx\frac{R_{\mathrm{out,open}}}{1+KA_{\mathrm{open}}}
 $$
 
 **페이지 요약**
@@ -519,15 +519,11 @@ $$
 입력을 0으로 두고 출력에서 본 저항이에요.
 
 $$
-R_L=r_{ON}\parallel r_{OP}\parallel(R_1+R_2)
+R_{\mathrm{out,open}}\approx r_{ON}\parallel r_{OP}\parallel(R_1+R_2)
 $$
 
 $$
-R_{\mathrm{out,open}}\approx R_L
-$$
-
-$$
-A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}\approx g_{mN}R_L
+A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}\approx g_{mN}R_{\mathrm{out,open}}
 $$
 
 $$
@@ -537,7 +533,7 @@ $$
 #### 폐루프 답
 
 $$
-A_{\mathrm{closed}}\approx\frac{g_{mN}R_L}{1+Kg_{mN}R_L}
+A_{\mathrm{closed}}\approx\frac{A_{\mathrm{open}}}{1+KA_{\mathrm{open}}}
 $$
 
 $$
@@ -545,14 +541,14 @@ R_{\mathrm{in,open}}=R_{\mathrm{in,closed}}=\infty
 $$
 
 $$
-R_{\mathrm{out,closed}}\approx\frac{R_L}{1+Kg_{mN}R_L}
+R_{\mathrm{out,closed}}\approx\frac{R_{\mathrm{out,open}}}{1+KA_{\mathrm{open}}}
 $$
 
 **페이지 요약**
 
 감지 복제 $R_1+R_2$가 차동쌍의 출력 부하에 더해져요.
 
-$R_L=r_{ON}\parallel r_{OP}\parallel(R_1+R_2)$예요.
+$R_{\mathrm{out,open}}\approx r_{ON}\parallel r_{OP}\parallel(R_1+R_2)$예요.
 
 ---
 
