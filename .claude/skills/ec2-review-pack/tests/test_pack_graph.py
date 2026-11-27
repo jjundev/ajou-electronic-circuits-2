@@ -8,6 +8,7 @@ from pathlib import Path
 import pytest
 
 from _util import REPO
+from cli_runner import run_concept
 from pack_support import make_run
 import pack_flow as flow
 
@@ -233,7 +234,8 @@ def test_sections_which_need_final_links_wait_for_selection(tmp_path):
 
 @pytest.mark.parametrize('scope_change', [None, 'sessions', 'preview_topic', 'forbidden_outside_preview', 'early_link', 'owned_link'])
 def test_zero_problem_cli_publishes_only_after_actual_converter_and_review_receipts(tmp_path, monkeypatch, scope_change):
-    exercise_zero_problem_cli(tmp_path, monkeypatch, scope_change)
+    # Only the plain run keeps real Chromium; it also checks that the stub report has the same shape.
+    exercise_zero_problem_cli(tmp_path, monkeypatch, scope_change, real_browser=(scope_change is None))
 
 
 def test_quiz_adoption_rejects_rewritten_existing_sibling_packet(tmp_path, monkeypatch):
@@ -248,7 +250,21 @@ def test_quiz_adoption_freezes_uncertified_predecessor_packet(tmp_path, monkeypa
     exercise_zero_problem_cli(tmp_path, monkeypatch, None, quiz_repair='local-correction')
 
 
-def exercise_zero_problem_cli(tmp_path, monkeypatch, scope_change, *, quiz_repair=None):
+def browser_shape(quiz):
+    """The form of browser.json, with each screenshot replaced by its PNG size; the stub marker is dropped."""
+    from PIL import Image
+    report = flow._read(quiz/'browser.json')
+    report.pop('stub', None)
+    if 'screenshots' in report:
+        sizes = {}
+        for name in report['screenshots']:
+            with Image.open(quiz/'shots'/name) as frame:
+                sizes[name] = frame.size
+        report['screenshots'] = sizes
+    return report
+
+
+def exercise_zero_problem_cli(tmp_path, monkeypatch, scope_change, *, quiz_repair=None, real_browser=False):
     import pack_parallel
     import pymupdf
     from PIL import Image
@@ -349,7 +365,7 @@ def exercise_zero_problem_cli(tmp_path, monkeypatch, scope_change, *, quiz_repai
         quiz = Path(brief['quiz_run'])
         command = [sys.executable, brief['concept_cli']]
         def call(*args):
-            proc = subprocess.run([*command, *args, '--run', quiz], capture_output=True, text=True)
+            proc = run_concept(brief['concept_cli'], *args, '--run', quiz, real_browser=real_browser)
             assert proc.returncode == 0, proc.stderr
         source = flow._read(quiz/'source.json')
         topic, = source['topics']
@@ -369,6 +385,17 @@ def exercise_zero_problem_cli(tmp_path, monkeypatch, scope_change, *, quiz_repai
         call('blind-record', '--answers', answers, '--round', '1', '--packet', packet, '--author', 'fixture-author', '--solver', 'fixture-solver')
         call('build')
         call('browser')
+        if real_browser:
+            twin = tmp_path/'stub-quiz'
+            shutil.copytree(quiz, twin)
+            shutil.rmtree(twin/'shots')  # every screenshot and the report must come from the stub
+            (twin/'browser.json').unlink()
+            with monkeypatch.context() as stub_env:  # the twin always gets the stub, even under EC2_TEST_BROWSER=real
+                stub_env.delenv('EC2_TEST_BROWSER', raising=False)
+                stubbed = run_concept(brief['concept_cli'], 'browser', '--run', twin)
+            assert stubbed.returncode == 0, stubbed.stderr
+            assert 'stub' in flow._read(twin/'browser.json') and 'stub' not in flow._read(quiz/'browser.json')
+            assert browser_shape(twin) == browser_shape(quiz)
         missing = subprocess.run([*command, 'evidence', '--run', quiz], capture_output=True, text=True)
         assert missing.returncode and 'visual-review' in missing.stderr
         browser = flow._read(quiz/'browser.json')
@@ -599,8 +626,7 @@ sys.exit(concept.main(sys.argv[1:]))"""
 def exercise_sibling_repair(brief, tmp_path, repair):
     quiz = Path(brief['quiz_run'])
     def call(*args, expected=True):
-        proc = subprocess.run([sys.executable, brief['concept_cli'], *args, '--run', quiz],
-                              capture_output=True, text=True)
+        proc = run_concept(brief['concept_cli'], *args, '--run', quiz)
         assert (proc.returncode == 0) == expected, (proc.stdout,proc.stderr)
     items = flow._read(quiz/'items.json')['items']
     ledger_path = quiz/'blind-ledger.json'
