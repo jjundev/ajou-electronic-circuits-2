@@ -1,6 +1,20 @@
-a loop return signed -A*K*R2/(R1 + R2) closed-loop gain A*(R1 + R2)/(A*K*R2 + R1 + R2)
-b loop return signed -A*R2*RD*gm3/(R1 + R2) closed-loop gain -A*(R1 + R2)/(A*R2*RD*gm3 + R1 + R2)
-c loop return signed -A*RD*gm3 closed-loop gain -A/(A*RD*gm3 + 1)
-d loop return signed -A*R2*gm1/(R2*gm1 + 1) closed-loop gain A*R2*gm1/(A*R2*gm1 + R2*gm1 + 1)
-
-Write b=R2/(R1+R2), f=gm1 R2/(1+gm1 R2). Positive loop-gain magnitudes (signed return is negative) in (a–d): A1 K b, A1 gm3 RD b, A1 gm3 RD, A1 f.
+P12.04, Fig. 12.80: X = 0, direct signed return v_return/v_test
+Loop gain T is defined by v_return/v_test = -T.
+(a)
+  Eq(v_div/R_2 + (v_div - v_test)/R_1, 0)
+  Eq(v_return, -A_1*K*v_div)
+  signed return = -A_1*K*R_2/(R_1 + R_2); T = A_1*K*R_2/(R_1 + R_2)
+(b)
+  Eq(v_div/R_2 + (v_div - v_test)/R_1, 0)
+  Eq(g_m3*v_div + v_d/R_D, 0)
+  Eq(v_return, A_1*v_d)
+  signed return = -A_1*R_2*R_D*g_m3/(R_1 + R_2); T = A_1*R_2*R_D*g_m3/(R_1 + R_2)
+(c)
+  Eq(g_m3*v_test + v_d/R_D, 0)
+  Eq(v_return, A_1*v_d)
+  signed return = -A_1*R_D*g_m3; T = A_1*R_D*g_m3
+(d)
+  Eq(v_div/R_2, g_m1*(-v_div + v_test))
+  Eq(v_return, -A_1*v_div)
+  signed return = -A_1*R_2*g_m1/(R_2*g_m1 + 1); T = A_1*R_2*g_m1/(R_2*g_m1 + 1)
+PASS: all four symbolic loop returns agree.

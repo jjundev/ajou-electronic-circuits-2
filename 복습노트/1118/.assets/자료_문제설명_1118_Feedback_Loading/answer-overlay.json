@@ -5,7 +5,7 @@
   "slug": "Feedback_Loading",
   "learning_style": {
     "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
-    "sha256": "e644bb2da081cd8ba965b335d14c8dc8fa4ac1b2224633ba2ab9a644308bc5a1",
+    "sha256": "c6c0568c4631ebb85d9ba26c66b1f52b51c1063ae72fc860f17d251341a4a19b",
     "rule_ids": [
       "UNIT-01",
       "CALC-01",
@@ -22,7 +22,7 @@
       "FREQ-01"
     ]
   },
-  "input_hash": "5d7ecf6948b91058c82e118a6cab84f388fb4c1a1bca981e7aea4e69a8e69e65",
+  "input_hash": "90108f25a20ddbc45797df83b4289ded5df0adca6aa36dce95ab7c7dceebb931",
   "source_inputs": {
     "복습노트/1118/.assets/problems.txt": "0ababbc43f8f4cf6fb95e5ef00753742bc43f4fbcfd9f94f2db12e6b5623f276",
     "복습노트/1118/.assets/display-titles.json": "7b15cf314ce428a9138452eb19cac7807ce9192fdfbb7e3a8414a1204b42a495",
@@ -36,7 +36,7 @@
     "교과서/마이크로전자회로/ch12/figures/fig12-38-a.png": "b1113696292b6aa1644fe70f6c102f18e3a5ad12a5e2c6116a7c5b15fc37aa27",
     "교과서/마이크로전자회로/ch12/figures/fig12-97.png": "f09b9bae52d6cde8d922ed9e8a3d8380de1faa416edf41df4d65d7babff1d0c4",
     "교과서/마이크로전자회로/ch12/figures/fig12-45.png": "e9ecb477df3c8cbedbf1e3d0e3b17655c74e4ebb9a930b6f9ceda9a2e9852607",
-    ".claude/skills/ec2-review-pack/references/solution-style.md": "e644bb2da081cd8ba965b335d14c8dc8fa4ac1b2224633ba2ab9a644308bc5a1"
+    ".claude/skills/ec2-review-pack/references/solution-style.md": "c6c0568c4631ebb85d9ba26c66b1f52b51c1063ae72fc860f17d251341a4a19b"
   },
   "problems": [
     {
@@ -148,19 +148,19 @@
       "steps": [
         {
           "subpart": "main",
-          "label": "감지·반송 포트와 개루프 저항",
-          "html": "\n<p> 분압기의 반송 출력을 열어도 $R_1+R_2$는 출력에서 접지로 이어져요. $\\lambda=0$이고 $R_1+R_2\\gg R_D$인 조건을 적용해요.  반송 소자 $M_2$의 $r_{o2}$는 무한대이므로 입력에서 순방향으로 보이는 것은 $M_1$의 소스 저항이에요.</p>\n$$R_{out,0}=R_D\\parallel(R_1+R_2)\\approx R_D$$\n$$R_{in,0}=1/g_{m1}$$\n"
+          "label": "출력 부하를 포함한 개루프 이득",
+          "html": "\n<p> 분압기가 출력 전압을 병렬로 감지하고,  $M_2$가 입력 노드에 전류를 병렬로 반송해요. $M_2$의 드레인에서 반송 경로를 끊어도 $R_1+R_2$는 출력에서 교류 접지로 이어져요. $\\lambda=0$이고 몸체 효과를 무시하면 $M_1$의 소스로 들어가는 전류 $i_e$가 출력 부하에 그대로 전달되어 $v_{out}$이 올라가요.</p>\n$$A_{\\mathrm{open}}=\\frac{v_{out}}{i_e}=R_D\\parallel(R_1+R_2)\\ [\\mathrm{V/A}]$$\n"
         },
         {
           "subpart": "main",
-          "label": "공통 게이트 단과 귀환율",
-          "html": "\n<p>순방향 전류 $i_e$가 $M_1$의 소스로 들어가면 $v_{out}$은 올라가요. 공통 게이트 단에서 이 전류 전체가 출력 부하에 전달돼요.</p>\n$$R_0=\\frac{v_{out}}{i_e}=R_{out,0}$$\n<p>출력에 시험전압을 걸고, $i_F$는 $M_2$가 입력에서 접지로 빼는 방향으로 잡아요. 게이트 전압은 분압기 아래 저항 $R_2$에 걸리는 전압이에요.</p>\n$$K=\\frac{i_F}{v_{out}}=g_{m2}\\frac{R_2}{R_1+R_2}$$\n$$T=KR_0\\approx g_{m2}R_D\\frac{R_2}{R_1+R_2}$$\n"
+          "label": "시험 전압과 귀환 전류",
+          "html": "\n<p>귀환망의 반송단인 $M_2$ 드레인을 교류 접지에 두고 감지단에 시험 전압 $v_{out}$을 걸어요. $i_F$는 $M_2$의 드레인으로 들어가 소스 쪽으로 흐르는 방향이 양이에요. 게이트 전압은 $R_2$ 양단에 걸리는 분압 전압이에요.</p>\n$$K=\\frac{i_F}{v_{out}}=g_{m2}\\frac{R_2}{R_1+R_2}$$\n"
         }
       ],
       "answers": [
         {
           "subpart": "main",
-          "html": "\n<p>출력의 전압 감지와 입력의 전류 반송이 모두 병렬이므로 세 결과의 분모가 같아요.</p>\n$$\\frac{v_{out}}{i_{in}}\\approx +\\frac{R_D}{1+T}$$\n$$R_{in,cl}\\approx\\frac{1/g_{m1}}{1+T}$$\n$$R_{out,cl}\\approx\\frac{R_D}{1+T}$$\n"
+          "html": "\n<p>입력 전류가 순방향 전류 $i_e$와 반송 전류 $i_F$로 나뉘어요. $v_{out}=A_{\\mathrm{open}}i_e$이고 $i_F=Kv_{out}$이므로 다음 이득을 얻어요.</p>\n$$A_{\\mathrm{closed}}=\\frac{v_{out}}{i_{in}}=\\frac{A_{\\mathrm{open}}}{1+KA_{\\mathrm{open}}}$$\n<h4>입력 임피던스와 출력 임피던스</h4>\n<p>개루프 입력에서 $M_1$의 소스를 바라보면 $1/g_{m1}$이 보여요. 개루프 출력은 입력 전류원을 개방한 상태에서 바라봐요. 이때 $M_1$의 소신호 드레인 전류가 0이므로 앞에서 읽은 병렬 부하가 남아요.</p>\n$$R_{\\mathrm{in,open}}=1/g_{m1}$$\n$$R_{\\mathrm{out,open}}=R_D\\parallel(R_1+R_2)$$\n<p>귀환을 연결하면 입력은 병렬 전류 반송, 출력은 병렬 전압 감지이므로 두 저항이 모두 같은 배수로 줄어요.</p>\n$$R_{\\mathrm{in,closed}}=\\frac{R_{\\mathrm{in,open}}}{1+KA_{\\mathrm{open}}}$$\n$$R_{\\mathrm{out,closed}}=\\frac{R_{\\mathrm{out,open}}}{1+KA_{\\mathrm{open}}}$$\n"
         }
       ]
     },

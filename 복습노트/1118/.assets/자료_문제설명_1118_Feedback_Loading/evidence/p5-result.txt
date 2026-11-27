@@ -1,4 +1,11 @@
-Zt RD*(R1 + R2)/(R1 + R2*RD*gm2 + R2 + RD) ohm
-Rin (R1 + R2 + RD)/(gm1*(R1 + R2*RD*gm2 + R2 + RD)) ohm
-Rout RD*(R1 + R2)/(R1 + R2*RD*gm2 + R2 + RD) ohm
-large R1+R2: replace loaded D by RD at fixed divider ratio
+P12.33, Fig. 12.97: intact-loop KCL with a test current at the output
+  Eq(g_m1*v_s + g_m2*v_g, I_in)
+  Eq(-g_m1*v_s + v_out/R_D + (-v_g + v_out)/R_1, I_test)
+  Eq(v_g/R_2 + (v_g - v_out)/R_1, 0)
+R_L = R_D || (R_1 + R_2) = R_D*(R_1 + R_2)/(R_1 + R_2 + R_D); beta = R_2/(R_1 + R_2)
+Gate-cut signed return = -R_2*R_D*g_m2/(R_1 + R_2 + R_D) = -g_m2*beta*R_L
+Take R_1 + R_2 -> infinity with beta fixed.
+Vout/Iin (I_test=0) = R_D*(R_1 + R_2)/(R_1 + R_2*R_D*g_m2 + R_2 + R_D); large-divider limit = R_D/(R_D*beta*g_m2 + 1)
+Zin (I_test=0) = (R_1 + R_2 + R_D)/(g_m1*(R_1 + R_2*R_D*g_m2 + R_2 + R_D)); large-divider limit = 1/(g_m1*(R_D*beta*g_m2 + 1))
+Zout (I_in=0) = R_D*(R_1 + R_2)/(R_1 + R_2*R_D*g_m2 + R_2 + R_D); large-divider limit = R_D/(R_D*beta*g_m2 + 1)
+PASS: signed return, three closed-loop quantities, and their limits agree.

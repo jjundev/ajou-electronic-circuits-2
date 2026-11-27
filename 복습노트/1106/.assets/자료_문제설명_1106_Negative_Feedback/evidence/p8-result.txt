@@ -1,6 +1,27 @@
-a loop return signed -A*K*R2/(R1 + R2) closed-loop gain A*(R1 + R2)/(A*K*R2 + R1 + R2)
-b loop return signed -A*R2*RD*gm3/(R1 + R2) closed-loop gain -A*(R1 + R2)/(A*R2*RD*gm3 + R1 + R2)
-c loop return signed -A*RD*gm3 closed-loop gain -A/(A*RD*gm3 + 1)
-d loop return signed -A*R2*gm1/(R2*gm1 + 1) closed-loop gain A*R2*gm1/(A*R2*gm1 + R2*gm1 + 1)
-
-With b=R2/(R1+R2) and f=gm1 R2/(1+gm1 R2), closed-loop gains (a–d) are A1/(1+A1Kb), −A1/(1+A1gm3RD b), −A1/(1+A1gm3RD), A1 f/(1+A1 f). Signs in (b,c) follow the X→minus connection.
+P12.05, Fig. 12.80: solve the intact loop by op-amp laws and KCL
+(a)
+  Eq(v_div/R_2 + (-Y + v_div)/R_1, 0)
+  Eq(Y, A_1*(-K*v_div + X))
+  forward gain = A_1; T = A_1*K*R_2/(R_1 + R_2)
+  closed-loop Y/X = A_1*(R_1 + R_2)/(A_1*K*R_2 + R_1 + R_2)
+  limit as A_1 -> infinity = (R_1 + R_2)/(K*R_2)
+(b)
+  Eq(v_div/R_2 + (-Y + v_div)/R_1, 0)
+  Eq(g_m3*v_div + v_d/R_D, 0)
+  Eq(Y, A_1*(-X + v_d))
+  forward gain = -A_1; T = A_1*R_2*R_D*g_m3/(R_1 + R_2)
+  closed-loop Y/X = -A_1*(R_1 + R_2)/(A_1*R_2*R_D*g_m3 + R_1 + R_2)
+  limit as A_1 -> infinity = -(R_1 + R_2)/(R_2*R_D*g_m3)
+(c)
+  Eq(Y*g_m3 + v_d/R_D, 0)
+  Eq(Y, A_1*(-X + v_d))
+  forward gain = -A_1; T = A_1*R_D*g_m3
+  closed-loop Y/X = -A_1/(A_1*R_D*g_m3 + 1)
+  limit as A_1 -> infinity = -1/(R_D*g_m3)
+(d)
+  Eq(Y/R_2, g_m1*(-Y + v_g))
+  Eq(v_g, A_1*(X - Y))
+  forward gain = A_1*R_2*g_m1/(R_2*g_m1 + 1); T = A_1*R_2*g_m1/(R_2*g_m1 + 1)
+  closed-loop Y/X = A_1*R_2*g_m1/(A_1*R_2*g_m1 + R_2*g_m1 + 1)
+  limit as A_1 -> infinity = 1
+PASS: all four intact-loop gains agree with forward gain/(1 + T).

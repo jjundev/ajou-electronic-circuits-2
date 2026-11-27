@@ -1236,33 +1236,66 @@ $$X_{F,\mathrm{pk}}=K Y_{\mathrm{pk}}=(250/127)\,\mathrm{mV}\approx1.97\,\mathrm
           <text class="fig-text fig-math" x="287" y="175" text-anchor="middle" font-size="13">K</text>
         </g>
       <text class="fig-loc" x="318" y="56" font-family="Pretendard, sans-serif" font-weight="600" font-size="17">㉠</text><text class="fig-loc" x="196" y="56" font-family="Pretendard, sans-serif" font-weight="600" font-size="17">㉡</text></svg><figcaption class="circuit-state">(a)의 개루프 시험 회로. $M$에 넣은 신호가 분배기와 귀환망을 지나 $N$으로 돌아와요.</figcaption></figure>
-<div data-subpart="main"><h4>시험 신호가 한 바퀴 도는 경로</h4><div data-answer-step="시험 포트와 기준 방향"><p>외부 입력 $X=0$에서 $A_1$ 출력과 다음 단 사이를 끊어요. <span class="loc">㉠</span> 다음 단의 입력 $M$에 $V_{test}$를 넣고 <span class="loc">㉡</span> 열린 증폭기 출력 $N$에서 귀환 전압을 읽어요. 이상적 연산증폭기의 출력 저항은 0이어서 끊기 전의 구동 조건을 유지해요.</p>$$T=-V_N/V_{test}$$
-</div><div data-answer-step="경로를 따라 곱할 이득"><p>(a)·(b)의 분배점은 전류를 끌지 않아요. (b)·(c)는 $M_3$ 공통 소스 단에서 반전되고, (d)는 $M_1$ 소스 팔로워를 거쳐 반전 입력으로 돌아와요. $\lambda=0$이고 몸체 효과를 무시해요.</p>$$D=R_2/(R_1+R_2)$$
-$$v_{d3}/v_{g3}=-g_mR_D$$
-$$F=v_{s1}/v_{g1}=R_2/(1/g_m+R_2)$$
-</div><div data-answer-final=""><p>각 줄은 시험점에서 출발하는 순서예요. 앞의 마이너스는 루프 이득의 정의, $\pm A_1$의 부호는 어느 입력으로 돌아오는지를 나타내요.</p>$$T_a=-D\,K\,(-A_1)=DKA_1$$
-$$T_b=-D\,(-g_mR_D)\,A_1=Dg_mR_DA_1$$
-$$T_c=-(-g_mR_D)\,A_1=g_mR_DA_1$$
-$$T_d=-F\,(-A_1)=FA_1$$
-</div></div>
+<div data-subpart="main">
+  <h4>시험점에서 출발해 되돌아오는 전압</h4>
+  <div data-answer-step="시험 포트와 기준 방향">
+    <p>외부 입력 $X=0$에서 연산증폭기 출력과 다음 단 사이를 끊어요. <span class="loc">㉠</span> 다음 단 쪽 $M$에 $V_{\mathrm{test}}$를 걸고 <span class="loc">㉡</span> 연산증폭기 출력 쪽 $N$에서 $V_N$을 읽어요. 연산증폭기의 출력저항을 0으로 보는 모델이어서 시험 전압원이 다음 단을 같은 조건으로 구동해요.</p>
+    <p>루프 이득은 $-V_N/V_{\mathrm{test}}$예요. 마지막 전압비는 신호가 연산증폭기의 반전 입력으로 돌아오면 $-A_1$, 비반전 입력으로 돌아오면 $+A_1$이에요.</p>
+  </div>
+  <div data-answer-final="">
+    <p>(a) 분배점 $V_1$에서 귀환 블록 $K$를 거쳐 연산증폭기의 반전 입력 $v_-$로 돌아와요.</p>
+    $$\begin{aligned}
+    -\frac{V_N}{V_{\mathrm{test}}}
+    &amp;=-\frac{V_1}{V_{\mathrm{test}}}\frac{v_-}{V_1}\frac{V_N}{v_-}\\
+    &amp;=-\frac{R_2}{R_1+R_2}\,K\,(-A_1)
+    \end{aligned}$$
+    <p>(b) 분압기가 $M_3$의 게이트를 구동해요. 게이트 전류가 0이라 분압비를 바로 읽고, $\lambda=0$에서 공통 소스의 반전 이득을 곱해요.</p>
+    $$\begin{aligned}
+    -\frac{V_N}{V_{\mathrm{test}}}
+    &amp;=-\frac{v_{g3}}{V_{\mathrm{test}}}\frac{v_{d3}}{v_{g3}}\frac{V_N}{v_{d3}}\\
+    &amp;=-\frac{R_2}{R_1+R_2}\,(-g_mR_D)\,A_1
+    \end{aligned}$$
+    <p>(c) 시험 전압을 $M_3$의 게이트에 바로 걸어요. 공통 소스의 드레인 전압 $v_{d3}$이 비반전 입력으로 돌아와요.</p>
+    $$\begin{aligned}
+    -\frac{V_N}{V_{\mathrm{test}}}
+    &amp;=-\frac{v_{d3}}{V_{\mathrm{test}}}\frac{V_N}{v_{d3}}\\
+    &amp;=-(-g_mR_D)A_1
+    \end{aligned}$$
+    <p>(d) 시험 전압을 $M_1$의 게이트에 걸어요. 소스에 부하 $R_2$가 달린 팔로워 공식을 쓰고, 소스 전압 $Y$는 반전 입력으로 돌아와요. 몸체 효과는 생략해요.</p>
+    $$\begin{aligned}
+    -\frac{V_N}{V_{\mathrm{test}}}
+    &amp;=-\frac{Y}{V_{\mathrm{test}}}\frac{V_N}{Y}\\
+    &amp;=-\frac{R_2}{1/g_m+R_2}(-A_1)
+    \end{aligned}$$
+  </div>
 </div>
-<div class="sum" hidden=""><p class="sum-lead">입력을 영으로 둔 뒤 시험점에서 귀환 전압까지 각 단의 부호 있는 이득을 곱해요.</p><p>(b)·(c)는 공통 소스 단에서, (a)·(d)는 연산증폭기의 반전 입력에서 부호가 바뀌어요.</p></div>
+</div>
+<div class="sum" hidden=""><p class="sum-lead">시험점부터 $N$까지의 노드 전압비를 순서대로 곱하고, 앞에 마이너스를 붙여 루프 이득을 구해요.</p><p>(b)·(c)는 공통 소스 단에서, (a)·(d)는 연산증폭기의 반전 입력에서 부호가 바뀌어요.</p></div>
 </article><article class="topic" id="p8"><h3>P8. 연산증폭기 귀환 회로 네 개의 폐루프 이득</h3><p class="panel-meta">P12.05 · 장말문제 12.5 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1106_Negative_Feedback-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p8"><div class="layer formal" data-source-problem="p8"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>문제 12.4의 결과(각 회로의 루프 이득)를 이용</li><li>문제 12.4에서 이어받는 가정: 연산증폭기의 개루프 이득은 $A_1$이고 그 밖에는 이상적, $\lambda = 0$</li><li>소자 값은 주어지지 않음. 답은 $A_1$, $K$, $R_1$, $R_2$, $R_D$, $g_m$ 등 기호로 나타냄</li><li>폐루프 이득은 입력 $X$에서 출력 $Y$까지의 이득 $Y/X$로 봄</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>(a)–(d) 각 회로의 폐루프 이득</li></ul></div><figure><img src=".assets/figures_문제설명_1106_Negative_Feedback/180fe1e53c618de5-fig12-80.png" alt="그림 P12.05"></figure></div><details class="original" data-original-problem="p8"><summary>원문 보기</summary><p>Using the results obtained in Problem 12.4, compute the closed-loop gain of the circuits shown in Fig. 12.80.</p></details></div><div class="layer formal circuit-explanation" data-explanation="solve">
 <figure class="figure circuit"><svg viewBox="0 0 345 183" role="img" aria-label="회로 (d)의 연산증폭기가 M1 게이트를 구동하고 소스 출력이 반전 입력으로 돌아오는 회로">
 <g fill="none" stroke-width="2"><path class="fig-ink" d="M40 59H86 M86 42V110L147 76Z M147 76H192 M192 61V91 M199 57V96 M199 60H214V26 M199 92H214V129H296 M214 129V139l4 3-8 4 8 4-8 4 4 3v9 M204 166H224 M208 170H220 M211 174H217 M86 92H65V129H214 M202 26H226"/></g>
 <circle class="fig-dot" cx="40" cy="59" r="3" data-node-id="p8-in" data-node-color="blue"/><circle class="fig-dot" cx="214" cy="129" r="3" data-node-id="p8-out" data-node-color="blue"/><circle class="fig-dot" cx="296" cy="129" r="3" data-node-id="p8-out" data-node-color="blue"/>
 <g class="fig-text fig-math" font-family="Pretendard, sans-serif" font-weight="600" font-size="14"><text x="34" y="45" data-node-id="p8-in" data-node-color="blue" class="fig-text fig-math">X</text><text x="90" y="65">+</text><text x="90" y="97">−</text><text x="108" y="82">A<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text x="153" y="61" data-node-color="red" data-node-id="p8-gate" class="fig-text fig-math">v<tspan baseline-shift="sub" font-size="78%">g1</tspan></text><text x="225" y="82">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text x="229" y="31" data-node-color="red" data-node-id="p8-supply" class="fig-text fig-math">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text><text x="230" y="155">R<tspan baseline-shift="sub" font-size="78%">2</tspan></text><text x="285" y="113" data-node-id="p8-out" data-node-color="blue" class="fig-text fig-math">Y</text></g><text class="fig-loc" x="260" y="118" font-family="Pretendard, sans-serif" font-weight="600" font-size="17">㉠</text><circle cx="176" cy="76" r="3.2" data-node-color="red" data-node-id="p8-gate" class="fig-dot"/><circle cx="214" cy="26" r="3.2" data-node-color="red" data-node-id="p8-supply" class="fig-dot"/></svg><figcaption class="circuit-state">(d)의 폐루프 회로. 소스 팔로워 출력이 $Y$이며 같은 전압이 반전 입력으로 돌아와요.</figcaption></figure>
-<div data-subpart="main"><h4>루프 이득과 순방향 분자 구분</h4><div data-answer-step="기존 루프 이득 사용"><p>12.4에서 얻은 $T$는 분모를 정해요. 분자는 귀환을 끊었을 때 외부 입력 $X$에서 원래 출력 $Y$까지의 이득이에요.</p>$$G=Y/X=A_{\mathrm{fwd}}/(1+T)$$
-$$D=R_2/(R_1+R_2)$$
-$$F=g_mR_2/(1+g_mR_2)$$
-</div><div data-answer-step="순방향 이득"><p>(a)에서는 $X$가 비반전 입력, (b)·(c)에서는 반전 입력이에요. <span class="loc">㉠</span> (d)의 출력은 $M_1$ 소스이므로 연산증폭기 뒤의 팔로워까지 순방향 곱에 넣어요.</p>$$A_{\mathrm{fwd},d}=(v_{g1}/X)(Y/v_{g1})=A_1F$$
-</div><div data-answer-final=""><p>$\lambda=0$이고 몸체 효과를 무시할 때, 각 회로의 폐루프 이득은 다음과 같아요.</p>$$G_a=A_1/(1+KA_1D)$$
-$$G_b=-A_1/(1+g_mR_DA_1D)$$
-$$G_c=-A_1/(1+g_mR_DA_1)$$
-$$G_d=A_1F/(1+A_1F)$$
-</div></div>
+<div data-subpart="main">
+  <h4>입력에서 출력까지의 이득과 P7의 루프 곱</h4>
+  <div data-answer-step="입력 X에서 출력 Y까지의 개루프 이득">
+    <p>연산증폭기 입력으로 돌아오는 신호를 0으로 두고, 실제 입력 $X$에서 출력 $Y$까지의 전달비를 구해요. (a)는 $X$가 비반전 입력, (b)·(c)는 반전 입력에 들어가고, 세 회로의 $Y$는 연산증폭기 출력이에요.</p>
+    $$A_{\mathrm{open},a}=\left.\frac{Y}{X}\right|_{\mathrm{open},a}=A_1\quad[\mathrm{V/V}]$$
+    $$A_{\mathrm{open},b}=\left.\frac{Y}{X}\right|_{\mathrm{open},b}=-A_1$$
+    $$A_{\mathrm{open},c}=\left.\frac{Y}{X}\right|_{\mathrm{open},c}=-A_1$$
+    <p><span class="loc">㉠</span> (d)의 $Y$는 $M_1$의 소스예요. 연산증폭기가 $M_1$ 게이트를 구동하면, 부하 $R_2$에 걸리는 소스 전압은 팔로워 전압 이득 공식으로 구해요. P7과 같이 $\lambda=0$이고 몸체 효과는 생략해요.</p>
+    $$A_{\mathrm{open},d}=\frac{v_{g1}}{X}\frac{Y}{v_{g1}}=A_1\frac{R_2}{1/g_m+R_2}$$
+  </div>
+  <div data-answer-final="">
+    <p>폐루프 이득 $A_{\mathrm{closed}}=Y/X$의 분자에는 방금 구한 개루프 이득을 넣어요. 분모는 $1$에 P7에서 구한 각 회로의 $-V_N/V_{\mathrm{test}}$를 더한 값이에요.</p>
+    $$A_{\mathrm{closed},a}=\frac{A_1}{1+KA_1\,\dfrac{R_2}{R_1+R_2}}$$
+    $$A_{\mathrm{closed},b}=\frac{-A_1}{1+g_mR_D A_1\,\dfrac{R_2}{R_1+R_2}}$$
+    $$A_{\mathrm{closed},c}=\frac{-A_1}{1+g_mR_DA_1}$$
+    $$A_{\mathrm{closed},d}=\frac{A_1\,\dfrac{R_2}{1/g_m+R_2}}{1+A_1\,\dfrac{R_2}{1/g_m+R_2}}$$
+  </div>
 </div>
-<div class="sum" hidden=""><p class="sum-lead">같은 루프 이득이 분모에 있어도 순방향 경로에 따라 분자가 달라져요.</p><p>(d)는 팔로워가 순방향 경로에 있고 출력 전압이 그대로 귀환하므로 큰 루프 이득에서 폐루프 이득은 1에 가까워져요.</p></div>
+</div>
+<div class="sum" hidden=""><p class="sum-lead">분자는 $X$에서 $Y$까지의 개루프 전달비예요.</p><p>분모에는 P7에서 한 바퀴를 돌며 구한 루프 이득을 더해요.</p><p>(b)·(c)의 공통 소스 이득은 분모에 들어가요.</p><p>(d)의 소스 팔로워 이득은 입력에서 출력으로 가는 경로와 루프 양쪽에 있어 분자와 분모에 모두 들어가요.</p></div>
 </article></section>
   </main>
   <footer>원 문제·정리노트·PDF는 보존해요.</footer>

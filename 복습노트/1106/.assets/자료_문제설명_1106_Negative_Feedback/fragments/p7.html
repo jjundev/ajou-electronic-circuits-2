@@ -32,14 +32,38 @@
           <text class="fig-text fig-math" x="287" y="175" text-anchor="middle" font-size="13">K</text>
         </g>
       <text class="fig-loc" x="318" y="56" font-family="Pretendard, sans-serif" font-weight="600" font-size="17">㉠</text><text class="fig-loc" x="196" y="56" font-family="Pretendard, sans-serif" font-weight="600" font-size="17">㉡</text></svg><figcaption class="circuit-state">(a)의 개루프 시험 회로. $M$에 넣은 신호가 분배기와 귀환망을 지나 $N$으로 돌아와요.</figcaption></figure>
-<div data-subpart="main"><h4>시험 신호가 한 바퀴 도는 경로</h4><div data-answer-step="시험 포트와 기준 방향"><p>외부 입력 $X=0$에서 $A_1$ 출력과 다음 단 사이를 끊어요. <span class="loc">㉠</span> 다음 단의 입력 $M$에 $V_{test}$를 넣고 <span class="loc">㉡</span> 열린 증폭기 출력 $N$에서 귀환 전압을 읽어요. 이상적 연산증폭기의 출력 저항은 0이어서 끊기 전의 구동 조건을 유지해요.</p>$$T=-V_N/V_{test}$$
-</div><div data-answer-step="경로를 따라 곱할 이득"><p>(a)·(b)의 분배점은 전류를 끌지 않아요. (b)·(c)는 $M_3$ 공통 소스 단에서 반전되고, (d)는 $M_1$ 소스 팔로워를 거쳐 반전 입력으로 돌아와요. $\lambda=0$이고 몸체 효과를 무시해요.</p>$$D=R_2/(R_1+R_2)$$
-$$v_{d3}/v_{g3}=-g_mR_D$$
-$$F=v_{s1}/v_{g1}=R_2/(1/g_m+R_2)$$
-</div><div data-answer-final=""><p>각 줄은 시험점에서 출발하는 순서예요. 앞의 마이너스는 루프 이득의 정의, $\pm A_1$의 부호는 어느 입력으로 돌아오는지를 나타내요.</p>$$T_a=-D\,K\,(-A_1)=DKA_1$$
-$$T_b=-D\,(-g_mR_D)\,A_1=Dg_mR_DA_1$$
-$$T_c=-(-g_mR_D)\,A_1=g_mR_DA_1$$
-$$T_d=-F\,(-A_1)=FA_1$$
-</div></div>
+<div data-subpart="main">
+  <h4>시험점에서 출발해 되돌아오는 전압</h4>
+  <div data-answer-step="시험 포트와 기준 방향">
+    <p>외부 입력 $X=0$에서 연산증폭기 출력과 다음 단 사이를 끊어요. <span class="loc">㉠</span> 다음 단 쪽 $M$에 $V_{\mathrm{test}}$를 걸고 <span class="loc">㉡</span> 연산증폭기 출력 쪽 $N$에서 $V_N$을 읽어요. 연산증폭기의 출력저항을 0으로 보는 모델이어서 시험 전압원이 다음 단을 같은 조건으로 구동해요.</p>
+    <p>루프 이득은 $-V_N/V_{\mathrm{test}}$예요. 마지막 전압비는 신호가 연산증폭기의 반전 입력으로 돌아오면 $-A_1$, 비반전 입력으로 돌아오면 $+A_1$이에요.</p>
+  </div>
+  <div data-answer-final="">
+    <p>(a) 분배점 $V_1$에서 귀환 블록 $K$를 거쳐 연산증폭기의 반전 입력 $v_-$로 돌아와요.</p>
+    $$\begin{aligned}
+    -\frac{V_N}{V_{\mathrm{test}}}
+    &=-\frac{V_1}{V_{\mathrm{test}}}\frac{v_-}{V_1}\frac{V_N}{v_-}\\
+    &=-\frac{R_2}{R_1+R_2}\,K\,(-A_1)
+    \end{aligned}$$
+    <p>(b) 분압기가 $M_3$의 게이트를 구동해요. 게이트 전류가 0이라 분압비를 바로 읽고, $\lambda=0$에서 공통 소스의 반전 이득을 곱해요.</p>
+    $$\begin{aligned}
+    -\frac{V_N}{V_{\mathrm{test}}}
+    &=-\frac{v_{g3}}{V_{\mathrm{test}}}\frac{v_{d3}}{v_{g3}}\frac{V_N}{v_{d3}}\\
+    &=-\frac{R_2}{R_1+R_2}\,(-g_mR_D)\,A_1
+    \end{aligned}$$
+    <p>(c) 시험 전압을 $M_3$의 게이트에 바로 걸어요. 공통 소스의 드레인 전압 $v_{d3}$이 비반전 입력으로 돌아와요.</p>
+    $$\begin{aligned}
+    -\frac{V_N}{V_{\mathrm{test}}}
+    &=-\frac{v_{d3}}{V_{\mathrm{test}}}\frac{V_N}{v_{d3}}\\
+    &=-(-g_mR_D)A_1
+    \end{aligned}$$
+    <p>(d) 시험 전압을 $M_1$의 게이트에 걸어요. 소스에 부하 $R_2$가 달린 팔로워 공식을 쓰고, 소스 전압 $Y$는 반전 입력으로 돌아와요. 몸체 효과는 생략해요.</p>
+    $$\begin{aligned}
+    -\frac{V_N}{V_{\mathrm{test}}}
+    &=-\frac{Y}{V_{\mathrm{test}}}\frac{V_N}{Y}\\
+    &=-\frac{R_2}{1/g_m+R_2}(-A_1)
+    \end{aligned}$$
+  </div>
 </div>
-<div class="sum" hidden><p class="sum-lead">입력을 영으로 둔 뒤 시험점에서 귀환 전압까지 각 단의 부호 있는 이득을 곱해요.</p><p>(b)·(c)는 공통 소스 단에서, (a)·(d)는 연산증폭기의 반전 입력에서 부호가 바뀌어요.</p></div>
+</div>
+<div class="sum" hidden><p class="sum-lead">시험점부터 $N$까지의 노드 전압비를 순서대로 곱하고, 앞에 마이너스를 붙여 루프 이득을 구해요.</p><p>(b)·(c)는 공통 소스 단에서, (a)·(d)는 연산증폭기의 반전 입력에서 부호가 바뀌어요.</p></div>
