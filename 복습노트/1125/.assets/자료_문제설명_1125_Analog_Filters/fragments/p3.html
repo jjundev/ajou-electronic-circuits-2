@@ -23,7 +23,7 @@ $$R_{in,open}=(1/g_{m1})\parallel(R_F+R_M)$$
 </div>
 <div data-answer-step="목표 전류 이득과 두 항">
 <p>$g_{m1}R_Dg_{m2}r_{O2}\gg R_M/(R_F+R_M)$에서 $R_F$의 직접 순방향 전달을 생략해요. 노턴 입력의 테브난 전압은 $V_{\mathrm{Th}}=I_{in}(R_F+R_M)$이고 직렬 저항은 $R_F+R_M$이에요. 첫 인자 $R_F+R_M$은 $V_{\mathrm{Th}}/I_{in}$이에요. 테브난 전압에서 $X$까지의 이득에는 $R_F+R_M$과 $1/g_{m1}$의 분압이 들어가요.</p>
-$$A_{I,open}=(R_F+R_M)\frac{V_X}{V_{\mathrm{Th}}}\frac{I_{out}}{V_X}$$
+$$A_{\mathrm{open}}=\frac{I_{out}}{I_{in}}=(R_F+R_M)\frac{V_X}{V_{\mathrm{Th}}}\frac{I_{out}}{V_X}\ [\mathrm{A/A}]$$
 $$\frac{V_X}{V_{\mathrm{Th}}}=\frac{R_D}{R_F+R_M+1/g_{m1}}$$
 <p>레이저를 연결하면 PMOS 전류 $-g_{m2}V_X$가 $r_{O2}$와 레이저 가지로 나뉘어요.</p>
 $$\frac{I_{out}}{V_X}=\frac{-g_{m2}r_{O2}}{R_{out,open}+R_L}$$
@@ -31,18 +31,16 @@ $$\frac{I_{out}}{V_X}=\frac{-g_{m2}r_{O2}}{R_{out,open}+R_L}$$
 <div data-answer-step="직렬 감지와 귀환율">
 <p><span class="loc">㉢</span> 귀환망만 떼어 $N$을 단락하면 $I_{out}$의 일부가 $P$에서 $R_F$를 거쳐 $N$으로 흘러요. $I_F$의 기준 방향은 $N$에서 $P$이므로 귀환율은 음수예요.</p>
 $$K=\frac{I_F}{I_{out}}=-\frac{R_M}{R_M+R_F}$$
-$$T=K A_{I,open}>0$$
+$$KA_{\mathrm{open}}=\frac{R_M R_D g_{m2}r_{O2}}{(R_F+R_M+1/g_{m1})(R_{out,open}+R_L)}>0$$
 </div>
 <h4>폐루프 이득과 임피던스</h4>
 <div data-answer-final="">
-$$A_{I,closed}\approx\frac{A_{I,open}}{1+T}$$
+$$A_{\mathrm{closed}}\approx\frac{A_{\mathrm{open}}}{1+KA_{\mathrm{open}}}$$
 <p>입력은 병렬 합산이므로 입력 저항이 줄어요.</p>
-$$R_{in,closed}\approx\frac{R_{in,open}}{1+T}$$
-<p>출력은 직렬 감지이므로 저항이 커져요. 레이저를 뗀 포트 자체의 저항을 구할 때는 레이저 단락 조건의 루프 이득을 써요.</p>
-$$T_0=T\big|_{R_L=0}$$
-$$R_{out,closed}\approx R_{out,open}(1+T_0)$$
-<p>$R_L\ll R_{out,open}$이면 $T_0\approx T$예요.</p>
+$$R_{in,closed}\approx\frac{R_{in,open}}{1+KA_{\mathrm{open}}}$$
+<p>출력은 직렬 감지이므로 저항이 커져요. 레이저를 단 상태의 $A_{\mathrm{open}}$과 같은 조건으로 $R_{out,open}+R_L$에 귀환 배율을 곱해요. 여기서 $R_L$을 빼면 레이저 두 단자에서 본 구동 회로의 저항이 나와요.</p>
+$$R_{out,closed}\approx (R_{out,open}+R_L)(1+KA_{\mathrm{open}})-R_L$$
 </div>
   </div>
 </div>
-<div class="sum" hidden><p class="sum-lead">레이저를 연결한 전류 이득에는 $T$, 레이저에서 본 출력 저항에는 단락 조건의 $T_0$를 써요.</p></div>
+<div class="sum" hidden><p class="sum-lead">레이저를 연결한 $KA_{\mathrm{open}}$을 써요.</p><p>출력저항은 $(R_{out,open}+R_L)$에 귀환 배율을 곱하고 $R_L$을 빼요.</p></div>

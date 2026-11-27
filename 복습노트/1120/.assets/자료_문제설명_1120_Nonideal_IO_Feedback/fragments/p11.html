@@ -36,7 +36,7 @@
     </div>
     <div data-answer-step="목표 전달비와 두 단의 이득">
       <p>$i_{in}\parallel R_A$를 테브난 전압 $v_{\mathrm{Th}}=i_{in}R_A$와 직렬 $R_A$로 바꿔요. 첫 인자 $R_A$는 $v_{\mathrm{Th}}/i_{in}$이에요. 테브난 전압에서 $X$까지의 이득에는 $R_A$와 $R_{S1}$의 분압이 들어가요.</p>
-      $$R_0=R_A\frac{v_X}{v_{\mathrm{Th}}}\frac{v_{out}}{v_X}$$
+      $$A_{\mathrm{open}}=\frac{v_{out}}{i_{in}}=R_A\frac{v_X}{v_{\mathrm{Th}}}\frac{v_{out}}{v_X}\ [\mathrm{V/A}]$$
       $$\frac{v_X}{v_{\mathrm{Th}}}\approx\frac{R_{D1}}{R_A+R_{S1}}$$
       <p>둘째 단은 CS라 반전하고, 감지 부하를 포함한 개루프 출력저항을 재사용해요.</p>
       $$\frac{v_{out}}{v_X}=-g_{m2}R_{out,\mathrm{open}}$$
@@ -49,9 +49,9 @@
     </div>
     <div data-answer-final="">
       <p>귀환망의 직접 전달을 생략하는 복제법으로 폐루프 값을 근사해요.</p>
-      $$\frac{v_{out}}{i_{in}}\approx\frac{R_0}{1+KR_0}$$
-      $$R_{in,\mathrm{closed}}\approx\frac{R_{in,\mathrm{open}}}{1+KR_0}$$
-      $$R_{out,\mathrm{closed}}\approx\frac{R_{out,\mathrm{open}}}{1+KR_0}$$
+      $$A_{\mathrm{closed}}=\frac{v_{out}}{i_{in}}\approx\frac{A_{\mathrm{open}}}{1+KA_{\mathrm{open}}}$$
+      $$R_{in,\mathrm{closed}}\approx\frac{R_{in,\mathrm{open}}}{1+KA_{\mathrm{open}}}$$
+      $$R_{out,\mathrm{closed}}\approx\frac{R_{out,\mathrm{open}}}{1+KA_{\mathrm{open}}}$$
     </div>
   </div>
 </div>

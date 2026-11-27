@@ -2,21 +2,22 @@
   <figure class="figure circuit"><svg id="fig-p4-solve" viewBox="0 0 400 230" role="img" aria-label="노턴 등가 회로. 위쪽 단자 D와 아래쪽 단자 P 사이에 위로 흐르는 전류원 I_N과 저항 R_N이 병렬. 오른쪽에 레이저 R_L이 D와 P 사이에 연결되고 I_out이 D에서 레이저로 흐름."><path class="fig-ink" d="M80 50 L330 50"/><path class="fig-ink" d="M80 180 L330 180"/><path class="fig-ink" d="M80 50 L80 101"/><circle class="fig-ink" cx="80" cy="115" r="14"/><path class="fig-ink" d="M80 123 V107 M75 112 L80 107 L85 112"/><path class="fig-ink" d="M80 129 L80 180"/><text class="fig-text fig-math" x="56.2" y="120" text-anchor="end">I<tspan baseline-shift="sub" font-size="78%">N</tspan></text><path class="fig-ink" d="M170 50 V91.0 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 V180"/><text class="fig-text fig-math" x="188.4" y="120">R<tspan baseline-shift="sub" font-size="78%">N</tspan></text><circle class="fig-dot" data-node="D" data-node-color="blue" cx="240" cy="50" r="3.5"/><text class="fig-text fig-math" x="240" y="36.8" text-anchor="middle" data-node-color="blue" data-node="D">D</text><circle class="fig-dot" data-node="P" data-node-color="red" cx="240" cy="180" r="3.5"/><text class="fig-text fig-math" x="240" y="204" text-anchor="middle" data-node-color="red" data-node="P">P</text><path class="fig-ink" d="M262 50 H290 M284 45 L290 50 L284 55"/><text class="fig-text fig-math" x="276" y="28.2" text-anchor="middle">I<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M330 50 L330 86"/><rect class="fig-ink" x="290" y="86" width="80" height="60"/><path class="fig-ink" d="M330 146 L330 180"/><text class="fig-text fig-math" x="330" y="108" text-anchor="middle">레이저</text><text class="fig-text fig-math" x="330" y="127" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text><text class="fig-loc" x="358" y="75" font-size="17">㉠</text><text class="fig-loc" x="211" y="83" font-size="17">㉡</text></svg><figcaption class="circuit-state">레이저를 다시 연결한 노턴 등가. 내부 전류원의 기준 방향은 $P$에서 $D$, 외부 부하 전류의 기준 방향은 $D$에서 $P$예요.</figcaption></figure>
   <div data-subpart="main">
 <h4>레이저 단락 전류</h4>
-<p data-answer-step="단락 조건"><span class="loc">㉠</span> 레이저 $R_L$ 자리를 도선으로 바꾸고 $I_{in}$은 그대로 흘려요. 이 도선에서 $D$에서 $P$로 흐르는 전류가 $I_N$이에요. 예제 12.32의 개루프 이득에 $R_L=0$을 대입해요.</p>
-<div data-answer-step="단락 상태의 이득">
-<p>$g_{m1}R_Dg_{m2}r_{O2}\gg R_M/(R_F+R_M)$에서 $R_F$의 직접 순방향 전달을 생략한 예제의 2포트 식을 써요. 테브난 전압은 $V_{\mathrm{Th}}=I_{in}(R_F+R_M)$이에요. 첫 인자 $R_F+R_M$에 소스 분압을 포함한 $V_X/V_{\mathrm{Th}}$와 단락 출력의 전류 변환 이득을 곱해요.</p>
+<p data-answer-step="단락 조건"><span class="loc">㉠</span> 레이저 $R_L$ 자리를 도선으로 바꾸고 $I_{in}$은 그대로 흘려요. 이 도선에서 $D$에서 $P$로 흐르는 전류가 $I_N$이에요. 예제 12.32의 폐루프 전류 전달비를 $R_L=0$에서 평가해요.</p>
+<div data-answer-step="레이저가 연결된 상태의 이득">
+<p>$g_{m1}R_Dg_{m2}r_{O2}\gg R_M/(R_F+R_M)$에서 $R_F$의 직접 순방향 전달을 생략한 예제의 2포트 식을 써요. 테브난 전압은 $V_{\mathrm{Th}}=I_{in}(R_F+R_M)$이에요. 첫 인자 $R_F+R_M$에 소스 분압을 포함한 $V_X/V_{\mathrm{Th}}$와 레이저가 연결된 출력의 전류 변환 이득을 곱해요.</p>
 $$R_{out,open}=r_{O2}+(R_F\parallel R_M)$$
-$$A_0=A_{I,open}\big|_{R_L=0}=(R_F+R_M)\frac{V_X}{V_{\mathrm{Th}}}\left.\frac{I_{out}}{V_X}\right|_{R_L=0}$$
-$$A_0=\frac{(R_F+R_M)R_D}{R_F+R_M+1/g_{m1}}\cdot\frac{-g_{m2}r_{O2}}{R_{out,open}}$$
-$$T_0=-\frac{R_M}{R_M+R_F}A_0$$
+$$A_{\mathrm{open}}=\frac{I_{out}}{I_{in}}=(R_F+R_M)\frac{V_X}{V_{\mathrm{Th}}}\frac{I_{out}}{V_X}\ [\mathrm{A/A}]$$
+$$A_{\mathrm{open}}=\frac{(R_F+R_M)R_D}{R_F+R_M+1/g_{m1}}\cdot\frac{-g_{m2}r_{O2}}{R_{out,open}+R_L}$$
+$$K=-\frac{R_M}{R_M+R_F}$$
 </div>
 <h4>두 단자에서 본 저항</h4>
-<p data-answer-step="시험원 조건"><span class="loc">㉡</span> 이번에는 레이저를 떼고 독립 전류원 $I_{in}$을 개방해요. 시험전류 $I_t$가 $D$로 들어가 $P$로 나오면 $R_N=(V_D-V_P)/I_t$예요. 예제 12.32의 직렬 전류 감지 결과에 같은 포트의 $T_0$를 써요.</p>
+<p data-answer-step="시험원 조건"><span class="loc">㉡</span> 이번에는 레이저를 떼고 독립 전류원 $I_{in}$을 개방해요. 시험전류 $I_t$가 $D$로 들어가 $P$로 나오면 $R_N=(V_D-V_P)/I_t$예요. 노턴 저항은 P3에서 구한 레이저 두 단자의 폐루프 출력저항이에요.</p>
 <div data-answer-final="">
-<p>$D$와 $P$ 사이에 다음 전류원과 저항을 병렬로 연결해요. $I_N$은 내부 전류원의 $P\to D$ 기준값이며, $I_{in}>0$일 때 $A_0\lt 0$이므로 음수예요.</p>
-$$I_N=I_{out}\big|_{R_L=0}\approx\frac{A_0}{1+T_0}I_{in}$$
+<p>$D$와 $P$ 사이에 다음 전류원과 저항을 병렬로 연결해요. $I_N$은 내부 전류원의 $P\to D$ 기준값이며, $I_{in}>0$일 때 $A_{\mathrm{open}}\lt 0$이므로 음수예요.</p>
+$$I_N=I_{out}\big|_{R_L=0}\approx\left.\frac{A_{\mathrm{open}}}{1+KA_{\mathrm{open}}}\right|_{R_L=0}I_{in}$$
 <p>$R_F$를 통한 순방향 전달을 무시한 2포트 근사에서 노턴 저항은 다음과 같아요.</p>
-$$R_N\approx R_{out,open}(1+T_0)$$
+$$R_N=R_{out,closed}\approx (R_{out,open}+R_L)(1+KA_{\mathrm{open}})-R_L$$
+$$R_N\approx r_{O2}+(R_F\parallel R_M)+\frac{R_M R_D g_{m2}r_{O2}}{R_F+R_M+1/g_{m1}}$$
 </div>
   </div>
 </div>

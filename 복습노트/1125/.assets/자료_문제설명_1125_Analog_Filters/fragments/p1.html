@@ -6,16 +6,20 @@
 <div data-subpart="1">
 <h4>(1) 루프 이득과 폐루프 이득</h4>
 <div data-answer-step="CG와 소스 팔로워의 연쇄 이득">
-<p><span class="loc">㉠</span> $M_1$ 게이트는 교류 접지라 소스 입력 CG의 이득은 $V_X/V_{in}=g_{m1}R_D$예요. <span class="loc">㉡</span> $M_2$는 소스 팔로워이고 소스에 레이저와 $R_M$이 직렬로 달려 있어요. 팔로워 이득은 1이 아니라 $1/g_{m2}$ 때문에 1보다 작아서 소스 전압 $V_S$는 $V_X$보다 조금 낮고, 이 $V_S$가 $R_L+R_M$에 걸려 $I_{out}$을 흘려요.</p>
-$$\frac{V_S}{V_X}=\frac{R_L+R_M}{1/g_{m2}+R_L+R_M},\qquad I_{out}=\frac{V_S}{R_L+R_M}$$
+<p>몸체 효과는 생략해요. <span class="loc">㉠</span> $M_1$ 게이트는 교류 접지라 소스 입력 CG의 이득은 $V_X/V_{in}=g_{m1}R_D$예요. <span class="loc">㉡</span> $M_2$는 소스 팔로워이고 소스에 레이저와 $R_M$이 직렬로 달려 있어요. 두 단의 이득을 노드 $X$에서 나눠요.</p>
+$$A_{\mathrm{open}}=\frac{I_{out}}{V_{in}}=\frac{V_X}{V_{in}}\frac{I_{out}}{V_X}\ [\mathrm{A/V}]$$
+<p>팔로워의 $1/g_{m2}$ 때문에 소스 전압 변화의 크기는 $|V_X|$보다 작아요. 레이저와 $R_M$에 걸리는 $V_S$로 $I_{out}$을 구해요.</p>
+$$\frac{V_S}{V_X}=\frac{R_L+R_M}{1/g_{m2}+R_L+R_M}$$
+$$I_{out}=\frac{V_S}{R_L+R_M}$$
 <p>두 식을 곱하면 $R_L+R_M$이 약분돼요. $V_X$가 직렬 저항 $1/g_{m2}+R_L+R_M$에 전류를 흘리는 것과 같아요.</p>
 $$\frac{I_{out}}{V_X}=\frac{1}{1/g_{m2}+R_L+R_M}$$
-$$A=\frac{V_X}{V_{in}}\frac{I_{out}}{V_X}=\frac{g_{m1}R_D}{1/g_{m2}+R_L+R_M}$$
+$$A_{\mathrm{open}}=\frac{g_{m1}R_D}{1/g_{m2}+R_L+R_M}$$
 <p>$V_F=I_{out}R_M$이 입력 $V_{in}-V_F$로 돌아오므로 $K=R_M$인 음귀환이에요.</p>
 </div>
 <div data-answer-final="">
-$$T=KA=\frac{g_{m1}R_DR_M}{1/g_{m2}+R_L+R_M}$$
-$$\frac{I_{out}}{V_{in}}=\frac{A}{1+T}=\frac{g_{m1}R_D}{1/g_{m2}+R_L+R_M+g_{m1}R_DR_M}$$
+$$KA_{\mathrm{open}}=\frac{g_{m1}R_DR_M}{1/g_{m2}+R_L+R_M}$$
+$$A_{\mathrm{closed}}=\frac{A_{\mathrm{open}}}{1+KA_{\mathrm{open}}}$$
+$$A_{\mathrm{closed}}=\frac{g_{m1}R_D}{1/g_{m2}+R_L+R_M+g_{m1}R_DR_M}$$
 </div>
 </div>
 <figure class="figure circuit">
@@ -29,15 +33,16 @@ $$\frac{I_{out}}{V_{in}}=\frac{A}{1+T}=\frac{g_{m1}R_D}{1/g_{m2}+R_L+R_M+g_{m1}R
 <div data-subpart="2">
 <h4>(2) 폐루프 입력·출력 임피던스</h4>
 <div data-answer-step="두 포트의 측정 조건">
-<p>입력은 게이트를 접지한 CG 소스를 보므로 $R_{in,open}=1/g_{m1}$이고, 직렬 전압 비교에는 레이저를 단 상태의 $T$를 써요.</p>
-<p><span class="loc">㉢</span> 레이저를 떼고 $V_{in}=0$으로 두면 개루프의 $X$는 교류 접지예요. 위 단자의 $1/g_{m2}$와 아래 단자의 $R_M$이 접지를 거쳐 직렬로 보이고, 출력 직렬 감지의 루프 이득은 $R_L=0$에서 계산해요.</p>
+<p>입력은 게이트를 접지한 CG 소스를 보므로 $R_{in,open}=1/g_{m1}$이고, 직렬 전압 비교에는 레이저를 단 상태의 $KA_{\mathrm{open}}$을 써요.</p>
+<p><span class="loc">㉢</span> 레이저를 떼고 $V_{in}=0$으로 두면 개루프의 $X$는 교류 접지예요. 위 단자의 $1/g_{m2}$와 아래 단자의 $R_M$이 접지를 거쳐 직렬로 보여요.</p>
 $$R_{out,open}=\frac{1}{g_{m2}}+R_M$$
-$$T_0=\frac{g_{m1}R_DR_M}{R_{out,open}}$$
+<p>레이저를 단 상태의 $A_{\mathrm{open}}$과 같은 조건으로 $R_{out,open}+R_L$에 귀환 배율을 곱해요. 여기서 $R_L$을 빼면 레이저 두 단자에서 본 구동 회로의 저항이 나와요.</p>
 </div>
 <div data-answer-final="">
-$$R_{in,closed}=R_{in,open}(1+T)=\frac{1+T}{g_{m1}}$$
-$$R_{out,closed}=R_{out,open}(1+T_0)=\frac{1}{g_{m2}}+R_M+g_{m1}R_DR_M$$
+$$R_{in,closed}=R_{in,open}(1+KA_{\mathrm{open}})=\frac{1+KA_{\mathrm{open}}}{g_{m1}}$$
+$$R_{out,closed}=(R_{out,open}+R_L)(1+KA_{\mathrm{open}})-R_L$$
+$$R_{out,closed}=\frac{1}{g_{m2}}+R_M+g_{m1}R_DR_M$$
 </div>
 </div>
 </div>
-<div class="sum" hidden><p class="sum-lead">입력저항에는 레이저가 달린 $T$를, 레이저 두 단자에서 본 출력저항에는 $R_L=0$에서 구한 $T_0$를 써요.</p></div>
+<div class="sum" hidden><p class="sum-lead">레이저를 연결한 $KA_{\mathrm{open}}$을 써요.</p><p>출력저항은 $(R_{out,open}+R_L)$에 귀환 배율을 곱하고 $R_L$을 빼요.</p></div>

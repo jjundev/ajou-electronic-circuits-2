@@ -42,11 +42,11 @@
     </div>
     <div data-answer-step="테브난 입력과 공통 이미터 이득">
       <p>입력의 $I_{in}\parallel R_F$를 테브난 전압 $v_{\mathrm{Th}}=I_{in}R_F$와 직렬 $R_F$로 바꿔요. 첫 인자 $R_F$는 $v_{\mathrm{Th}}/I_{in}$이에요.</p>
-      $$R_0=\frac{v_{out}}{I_{in}}=R_F\frac{v_{out}}{v_{\mathrm{Th}}}$$
+      $$A_{\mathrm{open}}=\frac{v_{out}}{I_{in}}=R_F\frac{v_{out}}{v_{\mathrm{Th}}}\ [\mathrm{V/A}]$$
       <p>직렬 $R_F$와 $r_\pi$의 분압으로 실제 베이스 전압 $v_\pi$를 구하고, 베이스에서 컬렉터까지의 반전 이득을 곱해요.</p>
       $$\frac{v_\pi}{v_{\mathrm{Th}}}=\frac{r_\pi}{R_F+r_\pi}$$
       $$\frac{v_{out}}{v_\pi}=-g_mR_{out,\mathrm{open}}$$
-      $$R_0=R_F\frac{r_\pi}{R_F+r_\pi}(-g_mR_{out,\mathrm{open}})$$
+      $$A_{\mathrm{open}}=R_F\frac{r_\pi}{R_F+r_\pi}(-g_mR_{out,\mathrm{open}})$$
     </div>
     <div data-answer-step="귀환망 시험과 전류 방향">
       <p>귀환망만 떼어 반송단을 접지해요. 그 단자에서 출력 쪽으로 향하는 방향을 $I_F$의 양으로 잡아요.</p>
@@ -54,10 +54,10 @@
       $$K=\frac{I_F}{v_{out}}=-\frac{1}{R_F}$$
     </div>
     <div data-answer-final="">
-      <p>복제법에서는 귀환 저항을 통한 입력에서 출력으로의 직접 전달을 생략해요. $KR_0\gt0$인 부귀환이에요.</p>
-      $$\frac{v_{out}}{I_{in}}\approx\frac{R_0}{1+KR_0}$$
-      $$R_{in,\mathrm{closed}}\approx\frac{R_{in,\mathrm{open}}}{1+KR_0}$$
-      $$R_{out,\mathrm{closed}}\approx\frac{R_{out,\mathrm{open}}}{1+KR_0}$$
+      <p>복제법에서는 귀환 저항을 통한 입력에서 출력으로의 직접 전달을 생략해요. $KA_{\mathrm{open}}\gt0$인 부귀환이에요.</p>
+      $$A_{\mathrm{closed}}=\frac{v_{out}}{I_{in}}\approx\frac{A_{\mathrm{open}}}{1+KA_{\mathrm{open}}}$$
+      $$R_{in,\mathrm{closed}}\approx\frac{R_{in,\mathrm{open}}}{1+KA_{\mathrm{open}}}$$
+      $$R_{out,\mathrm{closed}}\approx\frac{R_{out,\mathrm{open}}}{1+KA_{\mathrm{open}}}$$
     </div>
   </div>
 </div>

@@ -19,7 +19,7 @@
         $$R_{\mathrm{out,open}}=R_1+R_2$$
       </div>
       <div data-gain-stage="gain">
-        $$A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}=g_{m1}(R_1+R_2)$$
+        $$A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}=g_{m1}(R_1+R_2)\ [\mathrm{V/V}]$$
       </div>
     </div>
     <div data-answer-step="입력 저항과 루프 이득">
@@ -29,12 +29,12 @@
     </div>
     <h4>폐루프 답</h4>
     <div data-answer-final="">
-      $$A_{\mathrm{closed}}=\frac{g_{m1}(R_1+R_2)}{1+g_{m1}R_2}$$
-      $$R_{\mathrm{in,closed}}=\frac{1}{g_{m1}}+R_2$$
-      $$R_{\mathrm{out,closed}}=\frac{R_1+R_2}{1+g_{m1}R_2}$$
+      $$A_{\mathrm{closed}}=\frac{A_{\mathrm{open}}}{1+KA_{\mathrm{open}}}=\frac{g_{m1}(R_1+R_2)}{1+g_{m1}R_2}$$
+      $$R_{\mathrm{in,closed}}=R_{\mathrm{in,open}}(1+KA_{\mathrm{open}})=\frac{1}{g_{m1}}+R_2$$
+      $$R_{\mathrm{out,closed}}=\frac{R_{\mathrm{out,open}}}{1+KA_{\mathrm{open}}}=\frac{R_1+R_2}{1+g_{m1}R_2}$$
     </div>
   </div>
 </div>
 <div class="sum" hidden>
-  <p class="sum-lead">이상적 전류원을 열면 $R_1+R_2$가 출력 부하에 남아요.</p><p>루프 이득은 $g_{m1}R_2$예요.</p>
+  <p class="sum-lead">이상적 전류원을 열면 $R_1+R_2$가 출력 부하에 남아요.</p><p>루프 이득은 $KA_{\mathrm{open}}=g_{m1}R_2$예요.</p>
 </div>

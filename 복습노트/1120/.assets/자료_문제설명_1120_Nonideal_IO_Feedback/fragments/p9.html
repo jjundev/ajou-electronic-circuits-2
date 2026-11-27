@@ -50,7 +50,7 @@
     </div>
     <div data-answer-step="목표 전달비와 공통 게이트 항">
       <p><span class="loc">㉢</span> $I_{in}\parallel R_F$를 테브난 전압 $v_{\mathrm{Th}}=I_{in}R_F$와 직렬 $R_F$로 바꿔요. 첫 인자 $R_F$는 $v_{\mathrm{Th}}/I_{in}$이에요. $X$에서 두 단을 나눠요.</p>
-      $$R_0=\frac{v_{out}}{I_{in}}=R_F\frac{v_X}{v_{\mathrm{Th}}}\frac{v_{out}}{v_X}$$
+      $$A_{\mathrm{open}}=\frac{v_{out}}{I_{in}}=R_F\frac{v_X}{v_{\mathrm{Th}}}\frac{v_{out}}{v_X}\ [\mathrm{V/A}]$$
       <p>테브난 전압은 직렬 $R_F$와 소스에서 보이는 $1/g_{m1}$ 사이에서 분배돼요. 다음 이득에는 이 분압과 소스에서 $X$까지의 CG 이득이 함께 들어가요. 드레인 부하는 $R_D$예요.</p>
       $$\frac{v_X}{v_{\mathrm{Th}}}=\frac{R_D}{R_F+1/g_{m1}}$$
     </div>
@@ -64,9 +64,9 @@
       $$K=\frac{I_F}{v_{out}}=-\frac{1}{R_F}$$
     </div>
     <div data-answer-final="">
-      $$T=-KR_0=\frac{R_0}{R_F}$$
-      <p>두 단이 모두 비반전이어서 정궤환이에요. 귀환 저항의 직접 전달을 생략하는 저주파 복제 모델에서 $T\lt1$인 경우를 써요.</p>
-      $$\frac{v_{out}}{I_{in}}\approx\frac{R_0}{1-T}$$
+      $$KA_{\mathrm{open}}=-\frac{A_{\mathrm{open}}}{R_F}$$
+      <p>두 단이 모두 비반전이어서 정궤환이에요. 귀환 저항의 직접 전달을 생략하는 저주파 복제 모델에서 $-1\lt KA_{\mathrm{open}}\lt0$인 경우를 써요.</p>
+      $$A_{\mathrm{closed}}=\frac{v_{out}}{I_{in}}\approx\frac{A_{\mathrm{open}}}{1+KA_{\mathrm{open}}}$$
     </div>
   </div>
   <div data-subpart="2">
@@ -76,11 +76,11 @@
       $$R_{in,\mathrm{open}}=\frac{1}{g_{m1}}\parallel R_F$$
     </div>
     <div data-answer-final="">
-      $$R_{in,\mathrm{closed}}\approx\frac{R_{in,\mathrm{open}}}{1-T}$$
-      $$R_{out,\mathrm{closed}}\approx\frac{R_{out,\mathrm{open}}}{1-T}$$
+      $$R_{in,\mathrm{closed}}\approx\frac{R_{in,\mathrm{open}}}{1+KA_{\mathrm{open}}}$$
+      $$R_{out,\mathrm{closed}}\approx\frac{R_{out,\mathrm{open}}}{1+KA_{\mathrm{open}}}$$
     </div>
   </div>
 </div>
 <div class="sum" hidden>
-  <p class="sum-lead">두 단이 모두 비반전이므로 폐루프 분모가 $1-T$인 정궤환이에요.</p>
+  <p class="sum-lead">두 단이 모두 비반전이라 $A_{\mathrm{open}}\gt0$이고, $K=-1/R_F$라 $KA_{\mathrm{open}}\lt0$인 정귀환이에요.</p>
 </div>

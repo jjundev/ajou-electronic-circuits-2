@@ -87,7 +87,7 @@ R_{out,\mathrm{open}}\approx R_D
 $$
 
 $$
-A_{\mathrm{open}}=-G_mR_{out,\mathrm{open}}\approx g_mR_D
+A_{\mathrm{open}}=-G_mR_{out,\mathrm{open}}\approx g_mR_D\ [\mathrm{V/V}]
 $$
 
 $$
@@ -175,7 +175,7 @@ R_{out,\mathrm{open}}=R_D\parallel(R_1+R_2)
 $$
 
 $$
-A_{\mathrm{open}}=-G_mR_{out,\mathrm{open}}
+A_{\mathrm{open}}=-G_mR_{out,\mathrm{open}}\ [\mathrm{V/V}]
 $$
 
 $$
@@ -264,7 +264,7 @@ R_{\mathrm{out,open}}=R_1+R_2
 $$
 
 $$
-A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}=g_{m1}(R_1+R_2)
+A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}=g_{m1}(R_1+R_2)\ [\mathrm{V/V}]
 $$
 
 $$
@@ -282,22 +282,22 @@ $$
 #### 폐루프 답
 
 $$
-A_{\mathrm{closed}}=\frac{g_{m1}(R_1+R_2)}{1+g_{m1}R_2}
+A_{\mathrm{closed}}=\frac{A_{\mathrm{open}}}{1+KA_{\mathrm{open}}}=\frac{g_{m1}(R_1+R_2)}{1+g_{m1}R_2}
 $$
 
 $$
-R_{\mathrm{in,closed}}=\frac{1}{g_{m1}}+R_2
+R_{\mathrm{in,closed}}=R_{\mathrm{in,open}}(1+KA_{\mathrm{open}})=\frac{1}{g_{m1}}+R_2
 $$
 
 $$
-R_{\mathrm{out,closed}}=\frac{R_1+R_2}{1+g_{m1}R_2}
+R_{\mathrm{out,closed}}=\frac{R_{\mathrm{out,open}}}{1+KA_{\mathrm{open}}}=\frac{R_1+R_2}{1+g_{m1}R_2}
 $$
 
 **페이지 요약**
 
 이상적 전류원을 열면 $R_1+R_2$가 출력 부하에 남아요.
 
-루프 이득은 $g_{m1}R_2$예요.
+루프 이득은 $KA_{\mathrm{open}}=g_{m1}R_2$예요.
 
 ---
 
@@ -355,7 +355,7 @@ R_{\mathrm{out,open}}=R_C\parallel(R_1+R_2)
 $$
 
 $$
-A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}=\frac{R_{\mathrm{out,open}}}{1/g_m+R_B/\beta}
+A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}=\frac{R_{\mathrm{out,open}}}{1/g_m+R_B/\beta}\ [\mathrm{V/V}]
 $$
 
 $$
@@ -431,7 +431,7 @@ $$
 ㉢ 첫 단의 출력 $X$가 둘째 단 게이트를 구동해요.
 
 $$
-A_{\mathrm{open}}=\frac{v_X}{v_{in}}\frac{v_{out}}{v_X}
+A_{\mathrm{open}}=\frac{v_X}{v_{in}}\frac{v_{out}}{v_X}\ [\mathrm{V/V}]
 $$
 
 $M_2$ 게이트에 전류가 흐르지 않으므로 첫 단의 드레인 부하는 $R_{D1}$이고, 소스에는 $R_S$가 달려요.
@@ -541,7 +541,7 @@ R_{\mathrm{out,open}}\approx r_{ON}\parallel r_{OP}\parallel(R_1+R_2)
 $$
 
 $$
-A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}\approx g_{m1}R_{\mathrm{out,open}}
+A_{\mathrm{open}}=-G_mR_{\mathrm{out,open}}\approx g_{m1}R_{\mathrm{out,open}}\ [\mathrm{V/V}]
 $$
 
 $$
@@ -617,7 +617,7 @@ $$
 ㉢ $I_{in}\parallel R_F$를 테브난 전압 $v_{\mathrm{Th}}=I_{in}R_F$와 직렬 $R_F$로 바꿔요. 첫 인자 $R_F$는 $v_{\mathrm{Th}}/I_{in}$이에요. $X$에서 두 단을 나눠요.
 
 $$
-R_0=\frac{v_{out}}{I_{in}}=R_F\frac{v_X}{v_{\mathrm{Th}}}\frac{v_{out}}{v_X}
+A_{\mathrm{open}}=\frac{v_{out}}{I_{in}}=R_F\frac{v_X}{v_{\mathrm{Th}}}\frac{v_{out}}{v_X}\ [\mathrm{V/A}]
 $$
 
 테브난 전압은 직렬 $R_F$와 소스에서 보이는 $1/g_{m1}$ 사이에서 분배돼요. 다음 이득에는 이 분압과 소스에서 $X$까지의 CG 이득이 함께 들어가요. 드레인 부하는 $R_{D1}$예요.
@@ -646,23 +646,23 @@ $$
 K=\frac{I_F}{v_{out}}=-\frac{1}{R_F}
 $$
 
-복제법에서는 귀환 저항을 통한 입력에서 출력으로의 직접 전달을 생략해요. $KR_0\gt0$인 부귀환이에요.
+복제법에서는 귀환 저항을 통한 입력에서 출력으로의 직접 전달을 생략해요. $KA_{\mathrm{open}}\gt0$인 부귀환이에요.
 
 $$
-\frac{v_{out}}{I_{in}}\approx\frac{R_0}{1+KR_0}
-$$
-
-$$
-R_{in,\mathrm{closed}}\approx\frac{R_{in,\mathrm{open}}}{1+KR_0}
+A_{\mathrm{closed}}=\frac{v_{out}}{I_{in}}\approx\frac{A_{\mathrm{open}}}{1+KA_{\mathrm{open}}}
 $$
 
 $$
-R_{out,\mathrm{closed}}\approx\frac{R_{out,\mathrm{open}}}{1+KR_0}
+R_{in,\mathrm{closed}}\approx\frac{R_{in,\mathrm{open}}}{1+KA_{\mathrm{open}}}
+$$
+
+$$
+R_{out,\mathrm{closed}}\approx\frac{R_{out,\mathrm{open}}}{1+KA_{\mathrm{open}}}
 $$
 
 **페이지 요약**
 
-CG–CS의 $R_0$와 $K=-1/R_F$가 모두 음수여서 $1+KR_0\gt1$이에요.
+CG–CS의 $A_{\mathrm{open}}$와 $K=-1/R_F$가 모두 음수여서 $1+KA_{\mathrm{open}}\gt1$이에요.
 
 ---
 
@@ -718,7 +718,7 @@ $$
 ㉢ $I_{in}\parallel R_F$를 테브난 전압 $v_{\mathrm{Th}}=I_{in}R_F$와 직렬 $R_F$로 바꿔요. 첫 인자 $R_F$는 $v_{\mathrm{Th}}/I_{in}$이에요. $X$에서 두 단을 나눠요.
 
 $$
-R_0=\frac{v_{out}}{I_{in}}=R_F\frac{v_X}{v_{\mathrm{Th}}}\frac{v_{out}}{v_X}
+A_{\mathrm{open}}=\frac{v_{out}}{I_{in}}=R_F\frac{v_X}{v_{\mathrm{Th}}}\frac{v_{out}}{v_X}\ [\mathrm{V/A}]
 $$
 
 테브난 전압은 직렬 $R_F$와 소스에서 보이는 $1/g_{m1}$ 사이에서 분배돼요. 다음 이득에는 이 분압과 소스에서 $X$까지의 CG 이득이 함께 들어가요. 드레인 부하는 $R_D$예요.
@@ -745,19 +745,19 @@ $$
 K=\frac{I_F}{v_{out}}=-\frac{1}{R_F}
 $$
 
-복제법에서는 귀환 저항을 통한 입력에서 출력으로의 직접 전달을 생략해요. $KR_0\gt0$인 부귀환이에요.
+복제법에서는 귀환 저항을 통한 입력에서 출력으로의 직접 전달을 생략해요. $KA_{\mathrm{open}}\gt0$인 부귀환이에요.
 
 $$
-\frac{v_{out}}{I_{in}}\approx\frac{R_0}{1+KR_0}
+A_{\mathrm{closed}}=\frac{v_{out}}{I_{in}}\approx\frac{A_{\mathrm{open}}}{1+KA_{\mathrm{open}}}
 $$
 
 $$
-R_{in,\mathrm{closed}}\approx\frac{R_{in,\mathrm{open}}}{1+KR_0}
+R_{in,\mathrm{closed}}\approx\frac{R_{in,\mathrm{open}}}{1+KA_{\mathrm{open}}}
 $$
 
 **페이지 요약**
 
-PMOS CS가 반전하므로 출력 부하 $R_M\parallel R_F$를 넣은 $R_0$는 음수예요.
+PMOS CS가 반전하므로 출력 부하 $R_M\parallel R_F$를 넣은 $A_{\mathrm{open}}$는 음수예요.
 
 ---
 
@@ -807,7 +807,7 @@ $$
 ㉢ $I_{in}\parallel R_F$를 테브난 전압 $v_{\mathrm{Th}}=I_{in}R_F$와 직렬 $R_F$로 바꿔요. 첫 인자 $R_F$는 $v_{\mathrm{Th}}/I_{in}$이에요. $X$에서 두 단을 나눠요.
 
 $$
-R_0=\frac{v_{out}}{I_{in}}=R_F\frac{v_X}{v_{\mathrm{Th}}}\frac{v_{out}}{v_X}
+A_{\mathrm{open}}=\frac{v_{out}}{I_{in}}=R_F\frac{v_X}{v_{\mathrm{Th}}}\frac{v_{out}}{v_X}\ [\mathrm{V/A}]
 $$
 
 테브난 전압은 직렬 $R_F$와 소스에서 보이는 $1/g_{m1}$ 사이에서 분배돼요. 다음 이득에는 이 분압과 소스에서 $X$까지의 CG 이득이 함께 들어가요. 드레인 부하는 $R_D$예요.
@@ -833,13 +833,13 @@ K=\frac{I_F}{v_{out}}=-\frac{1}{R_F}
 $$
 
 $$
-T=-KR_0=\frac{R_0}{R_F}
+KA_{\mathrm{open}}=-\frac{A_{\mathrm{open}}}{R_F}
 $$
 
-두 단이 모두 비반전이어서 정궤환이에요. 귀환 저항의 직접 전달을 생략하는 저주파 복제 모델에서 $T\lt1$인 경우를 써요.
+두 단이 모두 비반전이어서 정궤환이에요. 귀환 저항의 직접 전달을 생략하는 저주파 복제 모델에서 $-1\lt KA_{\mathrm{open}}\lt0$인 경우를 써요.
 
 $$
-\frac{v_{out}}{I_{in}}\approx\frac{R_0}{1-T}
+A_{\mathrm{closed}}=\frac{v_{out}}{I_{in}}\approx\frac{A_{\mathrm{open}}}{1+KA_{\mathrm{open}}}
 $$
 
 #### (2) 폐루프 입출력 저항
@@ -851,16 +851,16 @@ R_{in,\mathrm{open}}=\frac{1}{g_{m1}}\parallel R_F
 $$
 
 $$
-R_{in,\mathrm{closed}}\approx\frac{R_{in,\mathrm{open}}}{1-T}
+R_{in,\mathrm{closed}}\approx\frac{R_{in,\mathrm{open}}}{1+KA_{\mathrm{open}}}
 $$
 
 $$
-R_{out,\mathrm{closed}}\approx\frac{R_{out,\mathrm{open}}}{1-T}
+R_{out,\mathrm{closed}}\approx\frac{R_{out,\mathrm{open}}}{1+KA_{\mathrm{open}}}
 $$
 
 **페이지 요약**
 
-두 단이 모두 비반전이므로 폐루프 분모가 $1-T$인 정궤환이에요.
+두 단이 모두 비반전이라 $A_{\mathrm{open}}\gt0$이고, $K=-1/R_F$라 $KA_{\mathrm{open}}\lt0$인 정귀환이에요.
 
 ---
 
@@ -907,7 +907,7 @@ $$
 입력의 $I_{in}\parallel R_F$를 테브난 전압 $v_{\mathrm{Th}}=I_{in}R_F$와 직렬 $R_F$로 바꿔요. 첫 인자 $R_F$는 $v_{\mathrm{Th}}/I_{in}$이에요.
 
 $$
-R_0=\frac{v_{out}}{I_{in}}=R_F\frac{v_{out}}{v_{\mathrm{Th}}}
+A_{\mathrm{open}}=\frac{v_{out}}{I_{in}}=R_F\frac{v_{out}}{v_{\mathrm{Th}}}\ [\mathrm{V/A}]
 $$
 
 직렬 $R_F$와 $r_\pi$의 분압으로 실제 베이스 전압 $v_\pi$를 구하고, 베이스에서 컬렉터까지의 반전 이득을 곱해요.
@@ -921,7 +921,7 @@ $$
 $$
 
 $$
-R_0=R_F\frac{r_\pi}{R_F+r_\pi}(-g_mR_{out,\mathrm{open}})
+A_{\mathrm{open}}=R_F\frac{r_\pi}{R_F+r_\pi}(-g_mR_{out,\mathrm{open}})
 $$
 
 귀환망만 떼어 반송단을 접지해요. 그 단자에서 출력 쪽으로 향하는 방향을 $I_F$의 양으로 잡아요.
@@ -934,18 +934,18 @@ $$
 K=\frac{I_F}{v_{out}}=-\frac{1}{R_F}
 $$
 
-복제법에서는 귀환 저항을 통한 입력에서 출력으로의 직접 전달을 생략해요. $KR_0\gt0$인 부귀환이에요.
+복제법에서는 귀환 저항을 통한 입력에서 출력으로의 직접 전달을 생략해요. $KA_{\mathrm{open}}\gt0$인 부귀환이에요.
 
 $$
-\frac{v_{out}}{I_{in}}\approx\frac{R_0}{1+KR_0}
-$$
-
-$$
-R_{in,\mathrm{closed}}\approx\frac{R_{in,\mathrm{open}}}{1+KR_0}
+A_{\mathrm{closed}}=\frac{v_{out}}{I_{in}}\approx\frac{A_{\mathrm{open}}}{1+KA_{\mathrm{open}}}
 $$
 
 $$
-R_{out,\mathrm{closed}}\approx\frac{R_{out,\mathrm{open}}}{1+KR_0}
+R_{in,\mathrm{closed}}\approx\frac{R_{in,\mathrm{open}}}{1+KA_{\mathrm{open}}}
+$$
+
+$$
+R_{out,\mathrm{closed}}\approx\frac{R_{out,\mathrm{open}}}{1+KA_{\mathrm{open}}}
 $$
 
 **페이지 요약**
@@ -1013,7 +1013,7 @@ $$
 $i_{in}\parallel R_A$를 테브난 전압 $v_{\mathrm{Th}}=i_{in}R_A$와 직렬 $R_A$로 바꿔요. 첫 인자 $R_A$는 $v_{\mathrm{Th}}/i_{in}$이에요. 테브난 전압에서 $X$까지의 이득에는 $R_A$와 $R_{S1}$의 분압이 들어가요.
 
 $$
-R_0=R_A\frac{v_X}{v_{\mathrm{Th}}}\frac{v_{out}}{v_X}
+A_{\mathrm{open}}=\frac{v_{out}}{i_{in}}=R_A\frac{v_X}{v_{\mathrm{Th}}}\frac{v_{out}}{v_X}\ [\mathrm{V/A}]
 $$
 
 $$
@@ -1043,15 +1043,15 @@ $$
 귀환망의 직접 전달을 생략하는 복제법으로 폐루프 값을 근사해요.
 
 $$
-\frac{v_{out}}{i_{in}}\approx\frac{R_0}{1+KR_0}
+A_{\mathrm{closed}}=\frac{v_{out}}{i_{in}}\approx\frac{A_{\mathrm{open}}}{1+KA_{\mathrm{open}}}
 $$
 
 $$
-R_{in,\mathrm{closed}}\approx\frac{R_{in,\mathrm{open}}}{1+KR_0}
+R_{in,\mathrm{closed}}\approx\frac{R_{in,\mathrm{open}}}{1+KA_{\mathrm{open}}}
 $$
 
 $$
-R_{out,\mathrm{closed}}\approx\frac{R_{out,\mathrm{open}}}{1+KR_0}
+R_{out,\mathrm{closed}}\approx\frac{R_{out,\mathrm{open}}}{1+KA_{\mathrm{open}}}
 $$
 
 **페이지 요약**

@@ -53,7 +53,7 @@
     </div>
     <div data-answer-step="목표 전달비와 공통 게이트 항">
       <p><span class="loc">㉢</span> $I_{in}\parallel R_F$를 테브난 전압 $v_{\mathrm{Th}}=I_{in}R_F$와 직렬 $R_F$로 바꿔요. 첫 인자 $R_F$는 $v_{\mathrm{Th}}/I_{in}$이에요. $X$에서 두 단을 나눠요.</p>
-      $$R_0=\frac{v_{out}}{I_{in}}=R_F\frac{v_X}{v_{\mathrm{Th}}}\frac{v_{out}}{v_X}$$
+      $$A_{\mathrm{open}}=\frac{v_{out}}{I_{in}}=R_F\frac{v_X}{v_{\mathrm{Th}}}\frac{v_{out}}{v_X}\ [\mathrm{V/A}]$$
       <p>테브난 전압은 직렬 $R_F$와 소스에서 보이는 $1/g_{m1}$ 사이에서 분배돼요. 다음 이득에는 이 분압과 소스에서 $X$까지의 CG 이득이 함께 들어가요. 드레인 부하는 $R_D$예요.</p>
       $$\frac{v_X}{v_{\mathrm{Th}}}=\frac{R_D}{R_F+1/g_{m1}}$$
     </div>
@@ -70,12 +70,12 @@
       $$K=\frac{I_F}{v_{out}}=-\frac{1}{R_F}$$
     </div>
     <div data-answer-final="">
-      <p>복제법에서는 귀환 저항을 통한 입력에서 출력으로의 직접 전달을 생략해요. $KR_0\gt0$인 부귀환이에요.</p>
-      $$\frac{v_{out}}{I_{in}}\approx\frac{R_0}{1+KR_0}$$
-      $$R_{in,\mathrm{closed}}\approx\frac{R_{in,\mathrm{open}}}{1+KR_0}$$
+      <p>복제법에서는 귀환 저항을 통한 입력에서 출력으로의 직접 전달을 생략해요. $KA_{\mathrm{open}}\gt0$인 부귀환이에요.</p>
+      $$A_{\mathrm{closed}}=\frac{v_{out}}{I_{in}}\approx\frac{A_{\mathrm{open}}}{1+KA_{\mathrm{open}}}$$
+      $$R_{in,\mathrm{closed}}\approx\frac{R_{in,\mathrm{open}}}{1+KA_{\mathrm{open}}}$$
     </div>
   </div>
 </div>
 <div class="sum" hidden>
-  <p class="sum-lead">PMOS CS가 반전하므로 출력 부하 $R_M\parallel R_F$를 넣은 $R_0$는 음수예요.</p>
+  <p class="sum-lead">PMOS CS가 반전하므로 출력 부하 $R_M\parallel R_F$를 넣은 $A_{\mathrm{open}}$는 음수예요.</p>
 </div>
