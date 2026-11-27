@@ -167,39 +167,29 @@ $$
 A_{\mathrm{open}}=\frac{I_{out}}{V_{in}}=\frac{V_X}{V_{in}}\frac{I_{out}}{V_X}\ [\mathrm{A/V}]
 $$
 
-대칭 차동쌍과 1:1 거울, 이상적인 테일 전류원, $g_mr_o\gg1$에서 $R_{out1}\approx r_{o3}\parallel r_{o5}$예요.
+대칭 차동쌍, 1:1 전류 거울, 이상적인 테일 전류원, $g_mr_o\gg1$ 조건에서 차동단 이득은 아래와 같아요.
 
 $$
-a_1\equiv\left|\frac{V_X}{V_{in}}\right|\approx g_{m3}R_{out1}
+\frac{V_X}{V_{in}}\approx-g_{m3}(r_{o3}\parallel r_{o5})
 $$
 
-㉢ 아래 출력 단자 그림처럼 레이저를 떼고 입력을 0으로 두면 $X$가 교류 접지가 되어 위 단자의 $r_{o1}$과 아래 단자의 $R_M$이 접지를 거쳐 직렬로 보여요.
-
-㉡ 레이저를 다시 달고, 공통 소스 단인 $M_1$의 드레인 전압을 $V_D$로 둬요. 드레인에서 교류 접지까지 $r_{o1}$과 레이저 가지 $R_L+R_M$이 병렬이므로 공통 소스의 전압 이득은 다음과 같아요.
+㉡ 레이저를 연결한 상태에서 $M_1$ 드레인부터 교류 접지까지 $r_{o1}$과 레이저 가지 $R_L+R_M$이 병렬이에요. 드레인 전압을 $V_D$로 두면 공통 소스 단의 전압 이득은 아래와 같아요.
 
 $$
 \frac{V_D}{V_X}=-g_{m1}\bigl[r_{o1}\parallel(R_L+R_M)\bigr]
 $$
 
-1번과 같은 순서로, 부하 양단의 전압 $V_D$를 레이저 가지 저항 $R_L+R_M$으로 나눠요.
+1번과 같이 출력 전압을 부하 가지의 전류로 바꿔요. $I_{out}$은 직렬인 레이저와 $R_M$을 모두 지나고, 두 저항에 걸린 전압을 합하면 $V_D$예요. 따라서 $I_{out}=V_D/(R_L+R_M)$이에요. 양변을 $V_X$로 나누고 공통 소스 단의 이득을 넣어요.
 
 $$
-\frac{I_{out}}{V_X}=\frac{V_D}{V_X}\frac{1}{R_L+R_M}
-$$
-
-$$
-\frac{I_{out}}{V_X}=\frac{-g_{m1}r_{o1}}{r_{o1}+R_L+R_M}=\frac{-g_{m1}r_{o1}}{R_{out,open}+R_L}
-$$
-
-$M_3$ 게이트에는 소신호 입력 전류가 흐르지 않아요.
-
-$$
-R_{out,open}=r_{o1}+R_M
+\frac{I_{out}}{V_X}=\frac{V_D}{V_X}\frac{1}{R_L+R_M}=-g_{m1}\frac{r_{o1}\parallel(R_L+R_M)}{R_L+R_M}
 $$
 
 $$
-A_{\mathrm{open}}\approx(-a_1)\frac{-g_{m1}r_{o1}}{R_{out,open}+R_L}
+A_{\mathrm{open}}\approx\frac{V_X}{V_{in}}\left[-g_{m1}\frac{r_{o1}\parallel(R_L+R_M)}{R_L+R_M}\right]
 $$
+
+입력은 $M_3$ 게이트에 연결돼요. 게이트에 소신호 입력 전류가 흐르지 않으므로 입력 임피던스는 무한대예요.
 
 $$
 R_{in,open}=\infty
@@ -209,6 +199,12 @@ $$
 
 *입력을 0으로 두고 레이저를 뺀 개루프 출력 두 단자*
 
+레이저를 떼고 $V_{in}=0$으로 두면 $X$가 교류 접지가 돼요. 레이저가 있던 두 단자 사이에서 위쪽의 $r_{o1}$과 아래쪽의 $R_M$이 교류 접지를 거쳐 직렬로 보여요.
+
+$$
+R_{out,open}=r_{o1}+R_M
+$$
+
 #### (2) 루프 이득과 폐루프 이득·출력 임피던스
 
 출력 전류가 늘면 $V_F=I_{out}R_M$이 올라 $M_4$를 통해 $X$를 올리고 PMOS 전류를 줄여요. 따라서 $K=R_M$인 음귀환이에요.
@@ -216,7 +212,7 @@ $$
 레이저를 단 상태의 $A_{\mathrm{open}}$과 같은 조건으로 $R_{out,open}+R_L$에 귀환 배율을 곱해요. 여기서 $R_L$을 빼면 레이저 두 단자에서 본 구동 회로의 저항이 나와요.
 
 $$
-KA_{\mathrm{open}}\approx\frac{a_1g_{m1}r_{o1}R_M}{R_{out,open}+R_L}
+KA_{\mathrm{open}}=R_M A_{\mathrm{open}}
 $$
 
 $$
@@ -224,18 +220,8 @@ A_{\mathrm{closed}}=\frac{A_{\mathrm{open}}}{1+KA_{\mathrm{open}}}
 $$
 
 $$
-A_{\mathrm{closed}}\approx\frac{a_1g_{m1}r_{o1}}{R_{out,open}+R_L+a_1g_{m1}r_{o1}R_M}
+R_{out,closed}\approx(R_{out,open}+R_L)(1+KA_{\mathrm{open}})-R_L
 $$
-
-$$
-R_{out,closed}\approx (R_{out,open}+R_L)(1+KA_{\mathrm{open}})-R_L
-$$
-
-$$
-R_{out,closed}\approx R_{out,open}+a_1g_{m1}r_{o1}R_M
-$$
-
-$a_1g_{m1}R_M\gg1$과 $a_1g_{m1}r_{o1}\gg1$이 모두 성립하면 마지막 항만 남겨요.
 
 **페이지 요약**
 

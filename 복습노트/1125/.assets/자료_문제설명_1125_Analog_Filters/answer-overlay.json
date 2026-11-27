@@ -5,7 +5,7 @@
   "slug": "Analog_Filters",
   "learning_style": {
     "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
-    "sha256": "f3289a4374575f86d244c221f622690a08ae2d9e1d7e33b9bf93332eaa12da8d",
+    "sha256": "c6c0568c4631ebb85d9ba26c66b1f52b51c1063ae72fc860f17d251341a4a19b",
     "rule_ids": [
       "UNIT-01",
       "CALC-01",
@@ -22,7 +22,7 @@
       "FREQ-01"
     ]
   },
-  "input_hash": "d8a85eecbaca113441af22a31728eab476b7bb0d3bdb0ace84ce6bf3d03b1dce",
+  "input_hash": "81da5c88f0ffd8d67c3e3a8cb3c9c3c570e220c0308997dbdc2e9f043f4537f2",
   "source_inputs": {
     "복습노트/1125/.assets/problems.txt": "5d475aa95b8ba798d9c6ea70331ae0ca8d425305eeda1a8f1e61c2de217e6813",
     "복습노트/1125/.assets/display-titles.json": "4d975adb70fcf02dac9e915b8d268a6097cb01f98c2b67f3405380556d3e02a3",
@@ -36,7 +36,7 @@
     "from_the_past/md/2023-1_기말/figures/redrawn/fig-Q3.png": "bfd5b190ccf70f42024bbea44ffba6d8b25e419d1b733b31af3665896da0913c",
     "교과서/마이크로전자회로/ch12/figures/fig12-61-a.png": "1be4114edb619bd3c856900c8d2858e4ba743c390d5b866a57ad2db14652a6ff",
     "교과서/마이크로전자회로/ch12/figures/fig12-62-a.png": "665fd9502b42338569ef28ec7e8458b231728bacff8826f3b57ea4044ba82897",
-    ".claude/skills/ec2-review-pack/references/solution-style.md": "f3289a4374575f86d244c221f622690a08ae2d9e1d7e33b9bf93332eaa12da8d"
+    ".claude/skills/ec2-review-pack/references/solution-style.md": "c6c0568c4631ebb85d9ba26c66b1f52b51c1063ae72fc860f17d251341a4a19b"
   },
   "problems": [
     {
@@ -80,7 +80,7 @@
         {
           "subpart": "1",
           "label": "차동쌍과 공통 소스의 전압 이득에서 출력 전류 계산",
-          "html": "\n<p> $M_4$ 게이트를 교류 접지하면 $M_3$ 입력은 반전해요. 중간 노드 $X$에서 두 단을 나눠요.</p>\n$$A_{\\mathrm{open}}=\\frac{I_{out}}{V_{in}}=\\frac{V_X}{V_{in}}\\frac{I_{out}}{V_X}\\ [\\mathrm{A/V}]$$\n<p>대칭 차동쌍과 1:1 거울, 이상적인 테일 전류원, $g_mr_o\\gg1$에서 $R_{out1}\\approx r_{o3}\\parallel r_{o5}$예요.</p>\n$$a_1\\equiv\\left|\\frac{V_X}{V_{in}}\\right|\\approx g_{m3}R_{out1}$$\n<p> 아래 출력 단자 그림처럼 레이저를 떼고 입력을 0으로 두면 $X$가 교류 접지가 되어 위 단자의 $r_{o1}$과 아래 단자의 $R_M$이 접지를 거쳐 직렬로 보여요.</p>\n<p> 레이저를 다시 달고, 공통 소스 단인 $M_1$의 드레인 전압을 $V_D$로 둬요. 드레인에서 교류 접지까지 $r_{o1}$과 레이저 가지 $R_L+R_M$이 병렬이므로 공통 소스의 전압 이득은 다음과 같아요.</p>\n$$\\frac{V_D}{V_X}=-g_{m1}\\bigl[r_{o1}\\parallel(R_L+R_M)\\bigr]$$\n<p>1번과 같은 순서로, 부하 양단의 전압 $V_D$를 레이저 가지 저항 $R_L+R_M$으로 나눠요.</p>\n$$\\frac{I_{out}}{V_X}=\\frac{V_D}{V_X}\\frac{1}{R_L+R_M}$$\n$$\\frac{I_{out}}{V_X}=\\frac{-g_{m1}r_{o1}}{r_{o1}+R_L+R_M}=\\frac{-g_{m1}r_{o1}}{R_{out,open}+R_L}$$\n<p>$M_3$ 게이트에는 소신호 입력 전류가 흐르지 않아요.</p>\n"
+          "html": "\n<p> $M_4$ 게이트를 교류 접지하면 $M_3$ 입력은 반전해요. 중간 노드 $X$에서 두 단을 나눠요.</p>\n$$A_{\\mathrm{open}}=\\frac{I_{out}}{V_{in}}=\\frac{V_X}{V_{in}}\\frac{I_{out}}{V_X}\\ [\\mathrm{A/V}]$$\n<p>대칭 차동쌍, 1:1 전류 거울, 이상적인 테일 전류원, $g_mr_o\\gg1$ 조건에서 차동단 이득은 아래와 같아요.</p>\n$$\\frac{V_X}{V_{in}}\\approx-g_{m3}(r_{o3}\\parallel r_{o5})$$\n<p> 레이저를 연결한 상태에서 $M_1$ 드레인부터 교류 접지까지 $r_{o1}$과 레이저 가지 $R_L+R_M$이 병렬이에요. 드레인 전압을 $V_D$로 두면 공통 소스 단의 전압 이득은 아래와 같아요.</p>\n$$\\frac{V_D}{V_X}=-g_{m1}\\bigl[r_{o1}\\parallel(R_L+R_M)\\bigr]$$\n<p>1번과 같이 출력 전압을 부하 가지의 전류로 바꿔요. $I_{out}$은 직렬인 레이저와 $R_M$을 모두 지나고, 두 저항에 걸린 전압을 합하면 $V_D$예요. 따라서 $I_{out}=V_D/(R_L+R_M)$이에요. 양변을 $V_X$로 나누고 공통 소스 단의 이득을 넣어요.</p>\n$$\\frac{I_{out}}{V_X}=\\frac{V_D}{V_X}\\frac{1}{R_L+R_M}=-g_{m1}\\frac{r_{o1}\\parallel(R_L+R_M)}{R_L+R_M}$$\n"
         },
         {
           "subpart": "2",
@@ -91,11 +91,11 @@
       "answers": [
         {
           "subpart": "1",
-          "html": "\n$$R_{out,open}=r_{o1}+R_M$$\n$$A_{\\mathrm{open}}\\approx(-a_1)\\frac{-g_{m1}r_{o1}}{R_{out,open}+R_L}$$\n$$R_{in,open}=\\infty$$\n"
+          "html": "\n$$A_{\\mathrm{open}}\\approx\\frac{V_X}{V_{in}}\\left[-g_{m1}\\frac{r_{o1}\\parallel(R_L+R_M)}{R_L+R_M}\\right]$$\n<p>입력은 $M_3$ 게이트에 연결돼요. 게이트에 소신호 입력 전류가 흐르지 않으므로 입력 임피던스는 무한대예요.</p>\n$$R_{in,open}=\\infty$$\n<figure class=\"figure\">\n<svg viewBox=\"0 0 380 104\" role=\"img\" aria-label=\"레이저를 뺀 개루프에서 위 단자와 아래 단자가 각각 저항을 거쳐 같은 교류 접지에 연결된 등가회로\">\n<path class=\"fig-ink\" d=\"M62 48H82l4 -7 7 14 7 -14 7 14 7 -14 7 14 4 -7H181V76 M181 48H218l4 -7 7 14 7 -14 7 14 7 -14 7 14 4 -7H323 M169 76H193 M173 81H189 M177 86H185\"/>\n<circle class=\"fig-dot\" cx=\"62\" cy=\"48\" r=\"3.5\" data-node-color=\"red\"/><circle class=\"fig-dot\" cx=\"323\" cy=\"48\" r=\"3.5\" data-node-color=\"blue\"/><circle class=\"fig-dot\" cx=\"181\" cy=\"48\" r=\"3\"/>\n<text class=\"fig-text\" x=\"51\" y=\"29\" text-anchor=\"middle\" data-node-color=\"red\">위 단자</text><text class=\"fig-text\" x=\"328\" y=\"29\" text-anchor=\"middle\" data-node-color=\"blue\">아래 단자</text>\n<text class=\"fig-text fig-math\" x=\"102\" y=\"76\" text-anchor=\"middle\">r<tspan baseline-shift=\"sub\" font-size=\"78%\">o1</tspan></text><text class=\"fig-text fig-math\" x=\"239\" y=\"76\" text-anchor=\"middle\">R<tspan baseline-shift=\"sub\" font-size=\"78%\">M</tspan></text></svg>\n<figcaption class=\"circuit-state\">입력을 0으로 두고 레이저를 뺀 개루프 출력 두 단자</figcaption>\n</figure>\n<p>레이저를 떼고 $V_{in}=0$으로 두면 $X$가 교류 접지가 돼요. 레이저가 있던 두 단자 사이에서 위쪽의 $r_{o1}$과 아래쪽의 $R_M$이 교류 접지를 거쳐 직렬로 보여요.</p>\n$$R_{out,open}=r_{o1}+R_M$$\n"
         },
         {
           "subpart": "2",
-          "html": "\n$$KA_{\\mathrm{open}}\\approx\\frac{a_1g_{m1}r_{o1}R_M}{R_{out,open}+R_L}$$\n$$A_{\\mathrm{closed}}=\\frac{A_{\\mathrm{open}}}{1+KA_{\\mathrm{open}}}$$\n$$A_{\\mathrm{closed}}\\approx\\frac{a_1g_{m1}r_{o1}}{R_{out,open}+R_L+a_1g_{m1}r_{o1}R_M}$$\n$$R_{out,closed}\\approx (R_{out,open}+R_L)(1+KA_{\\mathrm{open}})-R_L$$\n$$R_{out,closed}\\approx R_{out,open}+a_1g_{m1}r_{o1}R_M$$\n<p>$a_1g_{m1}R_M\\gg1$과 $a_1g_{m1}r_{o1}\\gg1$이 모두 성립하면 마지막 항만 남겨요.</p>\n"
+          "html": "\n$$KA_{\\mathrm{open}}=R_M A_{\\mathrm{open}}$$\n$$A_{\\mathrm{closed}}=\\frac{A_{\\mathrm{open}}}{1+KA_{\\mathrm{open}}}$$\n$$R_{out,closed}\\approx(R_{out,open}+R_L)(1+KA_{\\mathrm{open}})-R_L$$\n"
         }
       ]
     },
