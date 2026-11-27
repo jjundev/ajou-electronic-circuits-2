@@ -1,6 +1,4 @@
-p2 model: matched differential halves; pnp base/emitter AC ground; finite r_o3
-Gm = g_m1
-Rout = r_o1*r_o3/(r_o1 + r_o3)
-Av_differential = -g_m1*r_o1*r_o3/(r_o1 + r_o3)
-limit ro3->infinity = -g_m1*r_o1
-equal-ro limit = -g_m1*r_o1/2
+Node voltages = {v_1: -g_m1*r_o1*r_o3*v_in/(2*r_o1 + 2*r_o3), v_2: g_m1*r_o1*r_o3*v_in/(2*r_o1 + 2*r_o3), v_p: 0}
+Differential gain = -g_m1*r_o1*r_o3/(r_o1 + r_o3)
+Ideal load limit (r_o3 -> infinity) = -g_m1*r_o1
+KCL residuals = [0, 0, 0]

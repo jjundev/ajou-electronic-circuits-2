@@ -1,10 +1,10 @@
-p3 KCL exact Gm = g1*r1*(g3*r3 + 1)/(g3*r1*r3 + r1 + r3)
-p3 KCL exact Rout = g3*r1*r3 + r1 + r3
-p3 KCL exact Av = -g1*r1*(g3*r3 + 1)
-equal-device exact Av = -gm*ro*(gm*ro + 1)
-main-term Av = -gm**2*ro**2
-exact/main ratio = (gm*ro + 1)/(gm*ro) limit z=gm*ro->infinity = 1
-required I_SS main-term = 2/135 A = 14.81481481 mA
-gm*ro at main-term design = 17.320508
-internal full-model I_SS for exact |Av|=300 = 15.69519622 mA
-full-model |Av| at main-term design = 317.32051
+Differential node voltages = {v_out: -g_m1*g_m3*r_o1*r_o3*v_id - g_m1*g_mb3*r_o1*r_o3*v_id - g_m1*r_o1*v_id, v_x: -g_m1*r_o1*v_id}
+Differential gain = -g_m1*r_o1*(g_m3*r_o3 + g_mb3*r_o3 + 1)
+KCL residuals = [0, 0]
+Matched gain magnitude with no body effect = x*(x + 1)
+High-gain limit of |A_v|/(g_m r_o)^2 = 1
+beta (A/V^2) = 1/90
+Positive exact x = -1/2 + sqrt(1201)/2
+Exact-KCL tail current (mA) = 15.69519622
+High-gain approximate tail current (mA) = 14.81481481
+Exact magnitude at the approximate current = 317.3205081

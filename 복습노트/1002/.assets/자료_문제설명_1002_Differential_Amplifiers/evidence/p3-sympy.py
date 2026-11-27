@@ -1,48 +1,45 @@
-import sympy as s
+"""P10.62: derive a MOS cascode gain from the differential node KCL."""
+import sympy as sp
 
-# Fig 10.42(a), one matched MOS differential half. M1 source and M3
-# gate are AC ground, M1 drain=M3 source=x, M3 drain=output. Ideal upper
-# current source is AC open. Positive i_t enters at output.
-g1, g3, r1, r3 = s.symbols("g1 g3 r1 r3", positive=True)
-u, x, v, it = s.symbols("u x v it")
-eq_x = g1 * u + x / r1 + g3 * x + (x - v) / r3
-eq_out_open = -g3 * x + (v - x) / r3
-open_nodes = s.solve([eq_x, eq_out_open], [x, v], dict=True)[0]
-Av_exact = s.factor(open_nodes[v] / u)
+v_id, v_x, v_out = sp.symbols("v_id v_x v_out", real=True)
+gm1, gm3, ro1, ro3 = sp.symbols("g_m1 g_m3 r_o1 r_o3", positive=True)
+gmb3 = sp.symbols("g_mb3", nonnegative=True)
+x = sp.symbols("x", positive=True)
 
-test_nodes = s.solve([eq_x.subs(u, 0), it - eq_out_open], [x, it], dict=True)[0]
-Rout_exact = s.factor(v / test_nodes[it])
+# voltages and currents below mean left branch minus right branch.
+# The M1/M2 source is shared, and the M3/M4 gates and bulks are at fixed bias.
+i_1 = gm1 * v_id + v_x / ro1
+i_3 = -(gm3 + gmb3) * v_x + (v_out - v_x) / ro3
 
-short_x = s.solve([eq_x.subs(v, 0)], [x], dict=True)[0][x]
-Gm_exact = s.factor(eq_out_open.subs({x: short_x, v: 0}) / u)
-assert s.simplify(Av_exact + Gm_exact * Rout_exact) == 0
-assert s.simplify(Rout_exact - (r1 + r3 + g3 * r1 * r3)) == 0
-assert s.simplify(Av_exact + g1 * r1 * (1 + g3 * r3)) == 0
+# The two ideal loads have zero incremental current.
+kcl = (i_1 - i_3, i_3)
+solution = sp.solve(kcl, (v_x, v_out), dict=True)[0]
+gain = sp.factor(solution[v_out] / v_id)
+matched_magnitude = sp.simplify(
+    -gain.subs({gmb3: 0, gm3: gm1, ro3: ro1}).subs(gm1, x / ro1)
+)
 
-gm, ro, z = s.symbols("gm ro z", positive=True)
-equal_A = s.factor(Av_exact.subs({g1: gm, g3: gm, r1: ro, r3: ro}))
-main_A = -(gm * ro) ** 2
-relative = s.factor(equal_A / main_A)
-assert s.limit(relative.subs(gm, z / ro), z, s.oo) == 1
+beta = sp.Rational(100, 10**6) * 20 / sp.Rational(18, 100)
+channel_modulation = sp.Rational(1, 10)
+target_gain = 300
+# For I_D = I_SS / 2, (g_m r_o)^2 = 4 beta / (lambda^2 I_SS).
+x_exact = sp.solve(matched_magnitude - target_gain, x)[0]
+x_approx = sp.sqrt(target_gain)
+tail_current = 4 * beta / (channel_modulation**2 * x**2)
+tail_exact = tail_current.subs(x, x_exact)
+tail_approx = tail_current.subs(x, x_approx)
 
-mu = s.Rational(100, 10**6)  # A/V^2
-w = s.Rational(20, 1) / s.Rational(18, 100)
-lam = s.Rational(1, 10)  # V^-1
-target = s.Integer(300)
-# I_D = I_SS/2, gm=sqrt(2 mu w I_D), ro=1/(lambda I_D)
-Iss_main = s.simplify(4 * mu * w / (lam**2 * target))
-product_main = s.sqrt(target)
-product_exact = s.simplify((s.sqrt(1 + 4 * target) - 1) / 2)
-Iss_exact = s.simplify(4 * mu * w / (lam**2 * product_exact**2))
-assert s.simplify((product_main**2) - target) == 0
-assert s.simplify(product_exact * (1 + product_exact) - target) == 0
-print("p3 KCL exact Gm =", Gm_exact)
-print("p3 KCL exact Rout =", Rout_exact)
-print("p3 KCL exact Av =", Av_exact)
-print("equal-device exact Av =", equal_A)
-print("main-term Av =", main_A)
-print("exact/main ratio =", relative, "limit z=gm*ro->infinity =", s.limit(relative.subs(gm, z / ro), z, s.oo))
-print("required I_SS main-term =", Iss_main, "A =", s.N(Iss_main * 1000, 10), "mA")
-print("gm*ro at main-term design =", s.N(product_main, 8))
-print("internal full-model I_SS for exact |Av|=300 =", s.N(Iss_exact * 1000, 10), "mA")
-print("full-model |Av| at main-term design =", s.N(product_main * (1 + product_main), 8))
+print("Differential node voltages =", solution)
+print("Differential gain =", gain)
+print("KCL residuals =", [sp.simplify(eq.subs(solution)) for eq in kcl])
+print("Matched gain magnitude with no body effect =", matched_magnitude)
+print("High-gain limit of |A_v|/(g_m r_o)^2 =", sp.limit(matched_magnitude / x**2, x, sp.oo))
+print("beta (A/V^2) =", beta)
+print("Positive exact x =", x_exact)
+print("Exact-KCL tail current (mA) =", sp.N(1000 * tail_exact, 10))
+print("High-gain approximate tail current (mA) =", sp.N(1000 * tail_approx, 10))
+print("Exact magnitude at the approximate current =", sp.N(matched_magnitude.subs(x, x_approx), 10))
+assert all(sp.simplify(eq.subs(solution)) == 0 for eq in kcl)
+assert sp.simplify(matched_magnitude - (x**2 + x)) == 0
+assert sp.simplify(matched_magnitude.subs(x, x_exact)) == target_gain
+assert sp.simplify(x_approx**2) == target_gain

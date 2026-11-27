@@ -1,8 +1,8 @@
-p8(1) exact nodal DM gain = -10200/103 ≈ -99.02912621359223
-p8(1) exact nodal differential Rout = 2040000/103 ≈ 19805.82524271845
-p8(1) leading DM gain = -10000/101 ≈ -99.00990099009901
-p8(2) exact nodal CM gain = -50 ≈ -50.00000000000000
-p8(2) basic tail Gm leading = 1/10000 ≈ 0.0001000000000000000
-p8(1) exact/leading gain 1.00019417476
-p8(1) sympy.limit(upper branch exact/leading,g->infinity) 1
-p8(2) exact minus displayed leading 0
+R_P (ohm): gm3*ro3*ro5 + ro3 + ro5 -> 1020000 = 1020000.00000
+A_d: -gm1*ro1*(gm3*ro3*ro5 + ro3 + ro5)/(gm3*ro3*ro5 + ro1 + ro3 + ro5) -> -10200/103 = -99.0291262136
+A_d (leading): -gm1*ro1 -> -100 = -100.000000000
+A_CM (output mean): -gm1*ro1*(gm3*ro3*ro5 + ro3 + ro5)/(2*gm1*ro1*ro7 + gm3*ro3*ro5 + ro1 + ro3 + ro5 + 2*ro7) -> -50 = -50.0000000000
+A_CM (leading): -gm1*gm3*ro3*ro5/(2*gm1*ro7 + gm3*ro3*ro5/ro1) -> -50 = -50.0000000000
+A_CM denominator term R_P / r_o1: (gm3*ro3*ro5 + ro3 + ro5)/ro1 -> 102 = 102.000000000
+A_CM denominator term 2*r_o7*(gm1 + 1/r_o1): 2*ro7*(gm1 + 1/ro1) -> 101 = 101.000000000
+CM-to-differential gain: 0 -> 0 = 0

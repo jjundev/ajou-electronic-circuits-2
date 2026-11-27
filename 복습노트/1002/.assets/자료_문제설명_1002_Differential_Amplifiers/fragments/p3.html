@@ -1,11 +1,61 @@
-<div class="layer eli5" data-explanation="understand"><h4>문제를 읽어요</h4><p>그림 10.42(a)는 입력 $M_1,M_2$ 위에 $M_3,M_4$를 쌓고 위에는 이상적 전류원을 둔 MOS 캐스코드 차동쌍이에요. 네 NMOS의 $W/L$과 공정값은 같고, 차동 전압 이득의 크기 300을 만들 테일 전류 $I_{SS}$를 찾아요.</p></div>
-<div class="layer formal" data-explanation="recall"><h4>이 개념과 공식을 떠올려요</h4><p>순수 차동 입력에서는 대칭면이 가상 접지여서 $M_1$–$M_3$ 한쪽 반회로로 풀어요. 가지 전류는 $I_D=I_{SS}/2$예요. 입력 $M_1$은 전류 변화를 만들고, 캐스코드 $M_3$은 $M_1$의 $r_{O1}$을 출력에서 크게 보이게 해요.</p><p>저주파 포화 MOS에서 $g_m=\sqrt{2\mu_n C_{ox}(W/L)I_D}$이고 $r_O=1/(\lambda I_D)$예요. $g_mr_O\gg1$의 수업 기본 주항을 적용하며, 위 이상적 전류원 부하는 소신호로 개방해요. 목표 이득의 크기를 식으로 만든 다음 전류를 역산해요.</p></div>
-<div class="layer formal" data-explanation="start"><h4>종이에 쓸 첫 줄</h4><div data-answer-step="원회로와 가지 전류"><p>그림 10.42(a)에서 순수 차동 반회로의 테일 노드를 AC 접지로 둬요. 한쪽 가지는 아래 $M_1$, 위 $M_3$, 출력 $v_{out1}$ 순서이고 상단 이상적 전류원은 개방이에요.</p><p>$$I_D=\frac{I_{SS}}2$$</p></div><p>먼저 $G_m$과 $R_{out}$을 별도로 구한 다음 $|A_v|=300$을 적용해요.</p></div>
-<div class="layer formal" data-explanation="solve"><h4>이렇게 풀어요</h4><div data-subpart="main"><div data-gain-route="gm-rout"><div data-gain-stage="gm" data-answer-step="출력 단락 Gm"><p>$v_{out1}=0$으로 단락하고 오른쪽 단락 접지에서 출력으로 들어와 아래 입력 가지로 흐르는 $i_{out,sc}$를 양으로 둬요. 입력 $M_1$의 드레인 전류 변화가 $M_3$를 지나며, 큰 $g_mr_O$ 주항에서</p><p>$$G_m=\frac{i_{out,sc}}{v_{in1}}\approx g_{m1}=\sqrt{2\mu_n C_{ox}(W/L)I_D}$$</p></div><div data-gain-stage="rout" data-answer-step="입력 영점 Rout"><p>입력을 0으로 두고 출력에서 먼 쪽 $M_1$의 $r_{O1}$을 먼저 봐요. $M_3$이 그 저항을 $g_{m3}r_{O3}$배로 키우고, 상단 이상적 부하는 개방이에요.</p><p>$$r_O=\frac1{\lambda I_D}$$</p><p>$$R_{out}\approx g_{m3}r_{O3}r_{O1}$$</p></div><div data-gain-stage="gain" data-answer-step="목표 이득과 부호"><p>양의 $v_{in1}$이 출력을 낮춰 이득은 음수예요. 네 소자가 같고 같은 $I_D$를 흘리므로 $g_{m1}=g_{m3}=g_m$, $r_{O1}=r_{O3}=r_O$예요.</p><p>$$A_v\approx-G_mR_{out}\approx-(g_mr_O)^2$$</p><p>$$|A_v|\approx(g_mr_O)^2=300$$</p></div></div><p>이제 목표식에서 전류를 역산해요. 단위를 먼저 $\mu_n C_{ox}=0.1\,\mathrm{mA/V^2}$로 맞춰요.</p><div data-answer-step="테일 전류 역산"><p>$$g_mr_O=\frac1\lambda\sqrt{\frac{2\mu_nC_{ox}(W/L)}{I_D}}$$</p><p>$$I_D=\frac{2\mu_n C_{ox}(W/L)}{\lambda^2|A_v|}=\frac{2(0.1\,\mathrm{mA/V^2})(20/0.18)}{(0.1\,\mathrm{V^{-1}})^2(300)}\approx7.41\,\mathrm{mA}$$</p><p>$$I_{SS}=2I_D=\frac{4\mu_n C_{ox}(W/L)}{\lambda^2|A_v|}\approx14.81\,\mathrm{mA}$$</p></div><p>$I_D$의 표시값 7.41 mA를 두 배 하는 대신 위 기호식의 반올림 전 값을 사용했어요.</p></div></div>
-<div class="layer formal" data-explanation="verify"><h4>완성 답과 검산</h4><div data-subpart="main"><p data-answer-final="필요한 테일 전류"><strong>수업의 큰 곱 주항에서 필요한 테일 전류는 $I_{SS}\approx14.81\,\mathrm{mA}$예요.</strong> 목표는 반전 이득 $A_v\approx-300\,\mathrm{V/V}$의 크기 300이에요.</p><p>반올림 전 $I_D=200/27\,\mathrm{mA}$를 쓰면 $g_mr_O=\sqrt{300}\approx17.32$이고 이득 크기가 300으로 돌아와요. $\mu_nC_{ox}/\lambda^2$와 전류식의 차원도 mA예요. 포화와 주항 조건에서 쓰는 설계값이에요.</p></div></div>
-<div class="layer warn" data-explanation="pitfall"><h4>주의할 점</h4><p>각 소자의 전류를 테일 전류 $I_{SS}$로 두면 2배 틀려요. $M_3$의 $g_{m3}r_{O3}$ 인자를 $M_1$의 $g_{m1}$과 구별해요. $g_mr_O$의 반올림 수치를 다시 제곱·대입하지 않고 목표식에서 기호로 역산해요.</p></div>
-<div class="layer eli5" data-explanation="retry"><h4>조건을 바꾸어 생각해요</h4><ol><li>나머지 공정값과 $W/L$이 그대로인데 목표 이득 크기를 300에서 600으로 올리면 주항 모델의 필요 $I_{SS}$는 몇 배가 되나요?</li><li>위 이상적 부하를 유한 저항으로 바꾸면 $R_{out}$의 어느 단계에 새 병렬 경로를 넣어야 하나요?</li></ol></div>
-<div class="sum" hidden><p class="sum-lead">한쪽 가지 전류를 $I_{SS}/2$로 놓고 목표 이득에서 역산해요.</p><p class="panel-label">핵심 식</p><ul class="eq-list"><li><span class="eq-name">출력 단락</span>
-$$G_m\approx g_{m1}$$</li><li><span class="eq-name">입력 영점</span>
-$$R_{out}\approx g_{m3}r_{O3}r_{O1}$$</li><li><span class="eq-name">테일 전류</span>
-$$I_{SS}\approx14.81\,\mathrm{mA}$$</li></ul><p>$|A_v|\approx(g_mr_O)^2=300$을 사용해요.</p></div>
+<div class="layer formal circuit-explanation" data-explanation="solve">
+  <figure class="figure circuit" data-answer-step="캐스코드 차동 반회로" data-answer-subpart="main">
+    <svg id="fig-p3-gain" viewBox="0 0 396 237" role="img" aria-label="아래 M1의 게이트에 왼쪽 입력이 연결되고 소스 P는 가상 접지예요. M3의 게이트는 교류 접지이며 소스는 M1 드레인에 연결돼요. M3의 드레인은 오른쪽 개방 출력이에요. M1 드레인과 M3 소스가 중간 노드 X에서 연결돼요.">
+      <path class="fig-ink" d="M48 159H141 M141 143V176 M152 137V183 M152 142H195V124 M152 178H195V212 M185 212H205 M189 217H201 M192 222H198"/>
+      <path class="fig-ink" d="M81 83H141 M81 83V110 M71 110H91 M75 115H87 M78 120H84 M141 67V100 M152 61V107 M152 66H195V46H346 M152 102H195V124"/>
+      <circle class="fig-dot" data-node="vin1" data-node-color="blue" cx="48" cy="159" r="3.5"/>
+      <circle class="fig-dot" data-node="X" data-node-color="red" cx="195" cy="124" r="3.5"/>
+      <circle class="fig-dot" data-node="vout1" data-node-color="blue" cx="346" cy="46" r="3.5"/>
+      <text class="fig-text fig-math" data-node="vin1" data-node-color="blue" x="48" y="137" text-anchor="middle">v<tspan baseline-shift="sub" font-size="78%">in1</tspan></text>
+      <text class="fig-text fig-math" data-node="vout1" data-node-color="blue" x="345" y="21" text-anchor="middle">v<tspan baseline-shift="sub" font-size="78%">out1</tspan></text>
+      <text class="fig-text fig-math" data-node="X" data-node-color="red" x="212" y="128">X</text>
+      <text class="fig-loc" x="240" y="127" font-size="17">㉡</text>
+      <text class="fig-text fig-math" x="208" y="87">M<tspan baseline-shift="sub" font-size="78%">3</tspan></text>
+      <text class="fig-text fig-math" x="208" y="164">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+      <text class="fig-text fig-math" x="81" y="64" text-anchor="middle">V<tspan baseline-shift="sub" font-size="78%">b1</tspan></text>
+      <text class="fig-loc" x="222" y="206" font-size="17">㉠</text>
+    </svg>
+    <figcaption class="circuit-state">상단 이상적 전류원을 AC 개방한 MOS 캐스코드 차동 반회로</figcaption>
+  </figure>
+  <div data-subpart="main">
+    <h4>반회로의 이득에서 가지 전류 역산</h4>
+    <div data-answer-step="차동 반회로와 바이어스">
+      <p><span class="loc">㉠</span> 대칭 차동쌍의 공통 소스는 순수 차동 신호에 대해 가상 접지예요. 평형에서 테일 전류를 두 가지가 똑같이 나눠요.</p>
+      <p>$$I_D=\frac{I_{SS}}2$$</p>
+    </div>
+    <div data-answer-step="목표 이득의 두 인자">
+      <p>순수 차동 반회로의 이득은 전체 차동 이득과 같아요. 중간 노드 $X$를 기준으로 나눠요.</p>
+      <p>$$A_v=\frac{v_{out1}}{v_{in1}}=\frac{v_X}{v_{in1}}\frac{v_{out1}}{v_X}$$</p>
+    </div>
+    <div data-answer-step="공통 소스 단 이득">
+      <p><span class="loc">㉡</span> 출력의 이상적 전류원은 AC 개방이에요. 따라서 $M_3$의 드레인과 소스에는 신호 전류가 흐르지 않아 $X$에서 $M_1$의 $r_{O1}$만 부하로 남아요.</p>
+      <p>$$\frac{v_X}{v_{in1}}=-g_{m1}r_{O1}$$</p>
+    </div>
+    <div data-answer-step="공통 게이트 단 이득">
+      <p>$M_3$의 게이트가 AC 접지이므로 $v_{gs3}=-v_X$예요. 개방 부하의 공통 게이트 단은 큰 $g_mr_O$에서 양의 이득을 내요.</p>
+      <p>$$\frac{v_{out1}}{v_X}\approx g_{m3}r_{O3}$$</p>
+    </div>
+    <div data-answer-step="같은 소자의 이득 곱">
+      <p>두 소자의 치수와 바이어스 전류가 같아요. 포화 영역·몸체효과 생략 모델의 각 소자 값을 써요.</p>
+      <p>$$g_m=g_{m1}=g_{m3}=\sqrt{2\mu_n C_{ox}(W/L)I_D}$$</p>
+      <p>$$r_O=r_{O1}=r_{O3}=\frac{1}{\lambda I_D}$$</p>
+      <p>$$A_v\approx(-g_{m1}r_{O1})(g_{m3}r_{O3})=-(g_mr_O)^2$$</p>
+    </div>
+    <div data-answer-step="가지 전류 역산">
+      <p>목표인 이득 크기 300을 주항에 적용하고, 공정값은 mA 단위로 맞춰요.</p>
+      <p>$$\mu_n C_{ox}=0.1\,\mathrm{mA/V^2}$$</p>
+      <p>$$g_mr_O=\frac{1}{\lambda}\sqrt{\frac{2\mu_n C_{ox}(W/L)}{I_D}}$$</p>
+      <p>$$I_D\approx\frac{2\mu_n C_{ox}(W/L)}{\lambda^2(300)}=\frac{200}{27}\,\mathrm{mA}$$</p>
+    </div>
+    <div data-answer-final="">
+      <p>반올림 전 가지 전류의 두 배를 써요.</p>
+      <p>$$I_{SS}=2I_D\approx\frac{400}{27}\,\mathrm{mA}\approx14.81\,\mathrm{mA}$$</p>
+    </div>
+  </div>
+</div>
+<div class="sum" hidden>
+  <p class="sum-lead">출력이 AC 개방이라 $M_3$가 중간 노드 $X$에 부하를 더하지 않아요.</p>
+  <p>$$|A_v|\approx(g_mr_O)^2$$</p>
+  <p>테일 전류는 큰 곱 근사에서 구한 가지 전류의 두 배예요.</p>
+  <p>$$I_{SS}\approx14.81\,\mathrm{mA}$$</p>
+</div>

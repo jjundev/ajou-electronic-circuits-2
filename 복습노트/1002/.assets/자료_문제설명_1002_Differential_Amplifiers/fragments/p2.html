@@ -1,11 +1,50 @@
-<div class="layer eli5" data-explanation="understand"><h4>문제를 읽어요</h4><p>그림 10.19(a)는 앞의 이상적 전류원 부하를 실제 pnp $Q_3,Q_4$로 만든 회로예요. 입력 npn $Q_1,Q_2$는 차동쌍이고, 두 출력의 차를 두 입력의 차로 나눈 전압 이득을 구해요.</p></div>
-<div class="layer formal" data-explanation="recall"><h4>이 개념과 공식을 떠올려요</h4><p>순수 차동·좌우 대칭이면 테일 노드 P가 소신호 가상 접지라 공통 이미터(CE) 반회로를 쓸 수 있어요. $Q_3$의 베이스는 고정 $V_b$, 이미터는 $V_{CC}$라 둘 다 AC 접지예요. 따라서 $v_{eb3}=0$이고 pnp 제어 전류원은 출력 단락 전류에 기여하지 않지만, 유한 출력저항 $r_{O3}$은 컬렉터에서 보여요.</p><p>입력 $Q_1$의 트랜스컨덕턴스 $g_{m1}$은 전류를 만들고, $r_{O1}$과 $r_{O3}$은 같은 출력 노드에 붙은 두 저항이에요. 문제에는 소자값이 없으므로 기호로 답해요.</p></div>
-<div class="layer formal" data-explanation="start"><h4>종이에 쓸 첫 줄</h4><div data-answer-step="원회로에서 부하 읽기"><p>그림 10.19(a)를 순수 차동 반회로로 나누면 P, $V_b$, $V_{CC}$가 AC 접지예요. 출력 $v_{out1}$에서 위로는 $Q_3$의 $r_{O3}$, 아래로는 $Q_1$의 $r_{O1}$이 이어져요.</p><p>$$v_{eb3}=0$$</p></div><p>이 조건은 $Q_3$의 DC 전류가 0이라는 말이 아니에요. 작은 신호 전류 변화가 제어원에서 생기지 않는다는 뜻이에요.</p></div>
-<div class="layer formal" data-explanation="solve"><h4>이렇게 풀어요</h4><div data-subpart="main"><div data-gain-route="gm-rout"><div data-gain-stage="gm" data-answer-step="출력 단락 Gm"><p>출력을 AC 접지로 단락해요. 오른쪽 단락 접지에서 출력 단자로 들어와 아래 $Q_1$로 향하는 $i_{out,sc}$를 양으로 정해요. $Q_1$ 이미터가 AC 접지여서 $v_{be1}=v_{in1}$이고, $Q_3$에는 소신호 제어 전류가 없어요.</p><p>$$G_m=\frac{i_{out,sc}}{v_{in1}}=g_{m1}$$</p></div><div data-gain-stage="rout" data-answer-step="위아래 저항 병렬"><p>입력을 0으로 두고 같은 출력에서 봐요. $Q_1$의 $r_{O1}$과 실제 pnp 부하 $Q_3$의 $r_{O3}$이 출력과 AC 접지 사이에서 병렬이에요.</p><p>$$R_{out}\approx r_{O1}\parallel r_{O3}$$</p></div><div data-gain-stage="gain" data-answer-step="부호 있는 차동 이득"><p>$v_{in1}$이 커지면 $Q_1$이 더 많은 전류를 아래로 끌어내므로 $v_{out1}$은 내려가요. 대칭 반회로의 입력과 출력이 함께 절반이므로 전체 차동 이득도 같아요.</p><p>$$A_v=\frac{v_{out1}-v_{out2}}{v_{in1}-v_{in2}}=\frac{v_{out1}}{v_{in1}}\approx-G_mR_{out}=-g_{m1}(r_{O1}\parallel r_{O3})$$</p></div></div><p>이상적 부하라면 위 저항은 무한대지만, 실제 $Q_3$의 $r_{O3}$은 유한해요. 따라서 $r_{O1}$과 비슷한 크기라면 둘 다 결과에 남겨야 해요.</p></div></div>
-<div class="layer formal" data-explanation="verify"><h4>완성 답과 검산</h4><div data-subpart="main"><p data-answer-final="최종 차동 이득"><strong>pnp 전류원 부하를 단 차동 이득은 $A_v\approx-g_{m1}(r_{O1}\parallel r_{O3})$예요.</strong> npn·pnp를 각각 $r_{ON},r_{OP}$로 쓰면 $-g_m(r_{ON}\parallel r_{OP})$예요.</p><p>$r_{O3}\to\infty$의 극한에서는 이상적 부하의 $-g_{m1}r_{O1}$로 돌아가요. 유한한 $r_{O3}$이 병렬로 붙으면 저항과 이득 크기는 그보다 작아요. S·Ω의 곱은 V/V이고 부호는 반전이에요.</p></div></div>
-<div class="layer warn" data-explanation="pitfall"><h4>주의할 점</h4><p>AC 접지된 pnp의 $v_{eb3}=0$을 $Q_3$ 전체가 꺼진 것으로 읽지 않아요. DC 바이어스 전류는 흐르고, 소신호 출력저항 $r_{O3}$도 남아요. 저항 부하 CE 단에서 $R_C\ll r_{O1}$일 때 쓰던 $r_{O1}$ 생략을 여기로 옮기면 안 돼요.</p></div>
-<div class="layer eli5" data-explanation="retry"><h4>조건을 바꾸어 생각해요</h4><ol><li>$r_{O3}=r_{O1}$이라면 실제 부하의 이득 크기는 이상적 부하 때의 몇 배인가요?</li><li>$Q_3$ 베이스에 입력 신호를 직접 넣는다면 $v_{eb3}=0$ 판단을 계속 쓸 수 있나요?</li></ol></div>
-<div class="sum" hidden><p class="sum-lead">pnp 부하의 제어 전류 변화는 0이지만 $r_{O3}$은 출력에 남아요.</p><p class="panel-label">핵심 식</p><ul class="eq-list"><li><span class="eq-name">출력 단락</span>
-$$G_m=g_{m1}$$</li><li><span class="eq-name">입력 영점</span>
-$$R_{out}\approx r_{O1}\parallel r_{O3}$$</li><li><span class="eq-name">차동 이득</span>
-$$A_v\approx-G_mR_{out}$$</li></ul><p>$r_{O3}\to\infty$이면 이상적 전류원 부하의 이득으로 돌아가요.</p></div>
+<div class="layer formal circuit-explanation" data-explanation="solve">
+  <figure class="figure circuit" data-answer-step="출력 단락 반회로" data-answer-subpart="main">
+    <svg id="fig-p2-short" viewBox="0 0 396 240" role="img" aria-label="아래 Q1의 베이스가 왼쪽 입력에 연결돼요. 위쪽 Q3는 베이스와 이미터가 교류 접지예요. 오른쪽 접지에서 두 컬렉터 노드 쪽으로 단락 전류가 흐르도록 방향을 잡아요.">
+      <path class="fig-ink" d="M48 156H145 M145 134V180 M145 144L195 114V105H346V164 M145 169L195 199V212 M185 212H205 M189 217H201 M192 222H198 M336 164H356 M340 169H352 M343 174H349"/>
+      <path class="fig-ink" d="M175 183L183 192L170 190"/>
+      <path class="fig-ink" d="M145 44V82 M145 53L195 29H249V45 M239 45H259 M243 50H255 M246 55H252 M145 73L195 100V105 M75 63H145 M75 63V77 M65 77H85 M69 82H81 M72 87H78"/>
+      <path class="fig-ink" d="M174 36L164 44L176 45 M297 117H256 M262 113L256 117L262 121"/>
+      <circle class="fig-dot" data-node="vin1" data-node-color="blue" cx="48" cy="156" r="3.5"/>
+      <circle class="fig-dot" cx="195" cy="105" r="3.5"/>
+      <circle class="fig-dot" data-node="vout1" data-node-color="red" cx="346" cy="105" r="3.5"/>
+      <circle class="fig-dot" data-node="P" data-node-color="blue" cx="195" cy="199" r="3.5"/>
+      <text class="fig-text fig-math" x="205" y="84">Q<tspan baseline-shift="sub" font-size="78%">3</tspan></text>
+      <text class="fig-text fig-math" x="205" y="183">Q<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+      <text class="fig-text fig-math" x="82" y="47">V<tspan baseline-shift="sub" font-size="78%">b</tspan></text>
+      <text class="fig-text fig-math" x="250" y="15" text-anchor="middle">V<tspan baseline-shift="sub" font-size="78%">CC</tspan></text>
+      <text class="fig-text fig-math" data-node="vin1" data-node-color="blue" x="48" y="134" text-anchor="middle">v<tspan baseline-shift="sub" font-size="78%">in1</tspan></text>
+      <text class="fig-text fig-math" data-node="vout1" data-node-color="red" x="345" y="78" text-anchor="middle">v<tspan baseline-shift="sub" font-size="78%">out1</tspan> = 0</text>
+      <text class="fig-text fig-math" x="277" y="142" text-anchor="middle">i<tspan baseline-shift="sub" font-size="78%">out,sc</tspan></text>
+      <text class="fig-text fig-math" data-node="P" data-node-color="blue" x="213" y="207">P</text>
+      <text class="fig-loc" x="117" y="49" font-size="17">㉠</text>
+    </svg>
+    <figcaption class="circuit-state">위쪽 pnp의 베이스와 이미터를 AC 접지에 둔 출력 단락 반회로</figcaption>
+  </figure>
+  <div data-subpart="main">
+    <h4>바이어스된 pnp 부하의 신호 경로</h4>
+    <div data-answer-step="차동 반회로와 pnp 제어전압">
+      <p><span class="loc">㉠</span> 순수 차동의 대칭면 P가 가상 접지예요. pnp $Q_3$의 베이스 $V_b$와 이미터 $V_{CC}$는 AC 접지예요.</p>
+      <p>$$v_{eb3}=0$$</p>
+    </div>
+    <div data-gain-route="gm-rout">
+      <div data-gain-stage="gm" data-answer-step="출력 단락">
+        <p>오른쪽 단락 접지에서 컬렉터 노드로 들어가는 전류를 양으로 둬요. $Q_3$의 제어전류 변화는 0이고, $Q_1$의 $v_{be1}$은 $v_{in1}$이에요.</p>
+        <p>$$G_m=\frac{i_{out,sc}}{v_{in1}}=g_{m1}$$</p>
+      </div>
+      <div data-gain-stage="rout" data-answer-step="입력 영점">
+        <p>입력을 0으로 두면 출력에서 위쪽 $Q_3$의 얼리 저항과 아래쪽 $Q_1$의 얼리 저항이 각각 AC 접지에 이어져요.</p>
+        <p>$$R_{out}\approx r_{O1}\parallel r_{O3}$$</p>
+      </div>
+      <div data-gain-stage="gain" data-answer-final="">
+        <p>반회로의 입력과 출력은 모두 전체 차동값의 절반이에요. $Q_1$이 끌어가는 전류가 늘면 출력 전압은 내려가요.</p>
+        <p>$$A_v=\frac{v_{out1}}{v_{in1}}\approx-G_mR_{out}=-g_{m1}(r_{O1}\parallel r_{O3})$$</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sum" hidden>
+  <p class="sum-lead">pnp 부하의 제어전류 변화는 0이고, $r_{O3}$은 출력에 남아요.</p>
+  <p>$$R_{out}\approx r_{O1}\parallel r_{O3}$$</p>
+  <p>$$A_v\approx-G_mR_{out}$$</p>
+</div>
