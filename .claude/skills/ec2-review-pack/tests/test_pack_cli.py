@@ -8,11 +8,11 @@ import sys
 import pytest
 from _util import SCRIPTS
 from pack_support import make_run, install_task, receipt_for
+from cli_runner import call_process, run_pack_cli
 
-CLI = SCRIPTS / 'pack_cli.py'
-def call(*args, cwd=None, env=None):
-    p = subprocess.run([sys.executable, str(CLI), *map(str,args)], cwd=cwd, env=env,
-                       capture_output=True, encoding='utf-8')
+def call(*args, cwd=None, env=None, process=False):
+    """In-process by default; a real process when the test is about cwd, env or concurrency."""
+    p = call_process(*args, cwd=cwd, env=env) if process or cwd or env else run_pack_cli(*args)
     assert p.stderr == ''
     assert len(p.stdout) <= 2000
     data = json.loads(p.stdout)
@@ -67,10 +67,10 @@ def test_next_without_slots_dispatches_every_ready_worker(tmp_path):
 
 @pytest.mark.parametrize('args', [[],['--help'],['task','--help'],['wat'],['next'],['run','--run','x','--action','evil']])
 def test_every_response_is_one_json_under_2000_chars(args):
-    call(*args)
+    call(*args, process=True)
 
 def test_long_errors_and_argparse_errors_are_bounded_json(tmp_path):
-    assert call('wat' * 3000)[0].returncode == 2
+    assert call('wat' * 3000, process=True)[0].returncode == 2
     from pack_cli import format_result
     s=format_result({'status':'failed','reason':'x'*10000,'details_path':'p'*6000,'next':{'tasks':[{'brief':'x'*5000}]*100}})
     assert len(s)<=2000 and json.loads(s)['error_code']
@@ -93,7 +93,7 @@ def test_init_next_claim_bind_accept_round_trip(tmp_path):
 def test_two_cli_claims_cannot_dispatch_same_task(tmp_path):
     _,run=make_run(tmp_path); tid=install_task(run)
     with concurrent.futures.ThreadPoolExecutor(2) as pool:
-        results=list(pool.map(lambda _:call('task','claim','--run',run,'--task',tid)[0].returncode,range(2)))
+        results=list(pool.map(lambda _:call('task','claim','--run',run,'--task',tid,process=True)[0].returncode,range(2)))
     assert sorted(results)==[0,1]
 
 def test_claim_without_bind_stays_reserved_after_restart(tmp_path):

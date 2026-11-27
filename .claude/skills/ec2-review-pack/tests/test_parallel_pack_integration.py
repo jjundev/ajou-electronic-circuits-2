@@ -8,7 +8,8 @@ from pathlib import Path
 
 import pymupdf
 
-from _util import REPO, SCRIPTS, prepare_mini_run
+from _util import REPO, prepare_mini_run
+from cli_runner import run_pack_cli
 from pack_support import add_target_judgments, genuine_child_run
 from pack_flow import _COMMON_SECTIONS as COMMON_SECTIONS
 from pack_graph import problem_key, role_of
@@ -23,6 +24,11 @@ def write(path, value):
     Path(path).write_text(json.dumps(value, ensure_ascii=False))
 
 
+def clean_layout(html, out):
+    """The browser half of `task probe` without Chromium: a clean layout report."""
+    return 0, {'checks': []}
+
+
 def child_fixture(code, *args):
     """The child and parent suites both provide a module named _util."""
     helper = REPO / '.claude/skills/ec2-problem-explain/tests'
@@ -31,8 +37,9 @@ def child_fixture(code, *args):
 
 
 class Trial:
-    def __init__(self, root, *, problem=False, existing=False, lab=False, ids=('P10.01',)):
+    def __init__(self, root, *, problem=False, existing=False, lab=False, ids=('P10.01',), real_probe=False):
         self.root, self.repo, self.run = root, root/'repo', root/'run'
+        self.real_probe = real_probe
         self.public = self.repo/'복습노트/0909'
         self.problem = problem
         self.ids = list(ids) if problem else []
@@ -76,8 +83,8 @@ class Trial:
                  '--browser-owner', 'workers', '--pdf-owner', 'workers', '--allow-tmp')
 
     def cli(self, *args, error=False):
-        proc = subprocess.run([sys.executable, SCRIPTS/'pack_cli.py', *args, '--run', self.run],
-                              capture_output=True, text=True)
+        stub = args[:2] == ('task', 'probe') and not self.real_probe
+        proc = run_pack_cli(*args, '--run', self.run, layout=clean_layout if stub else None)
         result = json.loads(proc.stdout)
         assert proc.returncode == int(error), (args, result, proc.stderr)
         return result
@@ -128,7 +135,7 @@ class Trial:
         submission_path = Path(brief['run'])/'submission.json'
         write(submission_path, submission)
         if tid.startswith('author-') and read(self.run/'run-status.json').get('probe_contract'):
-            # Without a browser the layout half is `unavailable`, which still passes.
+            # Only real_probe trials launch Chromium; the rest get a clean layout report.
             self.cli('task', 'probe', *task)
         self.cli('task', 'build-receipt', *task, '--submission', submission_path)
         self.cli('task', 'check', *task, '--receipt', brief['receipt'])
@@ -191,7 +198,8 @@ def public_files(root):
 
 
 def test_parallel_full_pack_accepts_only_current_evidence(tmp_path):
-    trial = Trial(tmp_path, problem=True, lab=True)
+    # The one trial whose author probes run the real browser layout through the CLI.
+    trial = Trial(tmp_path, problem=True, lab=True, real_probe=True)
     trial.prepare_note()
     trial.action('stage-problem-index')
     trial.worker('explain-author-p1')

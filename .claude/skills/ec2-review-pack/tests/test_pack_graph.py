@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from _util import REPO, SCRIPTS
+from _util import REPO
 from pack_support import make_run
 import pack_flow as flow
 
@@ -185,7 +185,8 @@ def test_existing_state_uses_legacy_scheduler(tmp_path):
 
 
 def cli(*args):
-    proc = subprocess.run([sys.executable, SCRIPTS / 'pack_cli.py', *args], capture_output=True, text=True)
+    from cli_runner import run_pack_cli
+    proc = run_pack_cli(*args)
     data = json.loads(proc.stdout)
     assert proc.returncode == 0, data
     return data

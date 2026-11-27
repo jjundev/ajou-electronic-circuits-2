@@ -4,6 +4,7 @@ from pathlib import Path
 
 import pytest
 from _util import SCRIPTS  # noqa: F401  (puts scripts on sys.path)
+from cli_runner import run_pack_cli
 from pack_findings import blocking_findings, owner_of
 from pack_support import make_run, workflow_until
 import pack_flow as flow
@@ -286,9 +287,7 @@ def test_structural_error_accepts_and_rechecks_its_own_correction(note_run):
         return s
     flow.update_state(run, state['revision'], supersede)
     cli('run', '--run', run, '--action', 'assemble-note')
-    import subprocess, sys
-    result = subprocess.run([sys.executable, SCRIPTS/'pack_cli.py', 'run', '--run', run,
-                             '--action', 'structural-precheck'], capture_output=True, text=True)
+    result = run_pack_cli('run', '--run', run, '--action', 'structural-precheck')
     state = flow.load_state(run)
     assert result.returncode and state['actions']['structural-precheck']['status'] == 'needs_fix'
     rows = list(state['findings'].values())
@@ -352,7 +351,6 @@ def test_repair_brief_binds_previous_output_and_rejects_unchanged_fragment(note_
 @pytest.mark.parametrize('code', ['widget-static-missing', 'markdown-link'])
 def test_full_precheck_defect_can_be_fixed_in_the_same_run(note_run, code):
     from test_pack_graph import cli
-    import subprocess, sys
     run, fixture = note_run
     # The structural-only stage checks teaching structure; the full checker
     # also verifies actual widget fallbacks and link targets on the joined view.
@@ -368,8 +366,7 @@ def test_full_precheck_defect_can_be_fixed_in_the_same_run(note_run, code):
     cli('run', '--run', run, '--action', 'structural-precheck')
     submit_review(note_run, 'style-audit')
     submit_review(note_run, 'content-review')
-    proc = subprocess.run([sys.executable, SCRIPTS/'pack_cli.py', 'run', '--run', run,
-                          '--action', 'precheck'], capture_output=True, text=True)
+    proc = run_pack_cli('run', '--run', run, '--action', 'precheck')
     state = flow.load_state(run)
     assert proc.returncode and state['actions']['precheck']['status'] == 'needs_fix'
     widget, = [r for r in state['findings'].values() if r['rule'] == code]
@@ -534,7 +531,6 @@ def test_precheck_rejects_pointer_to_one_independent_report(note_run):
 
 def test_incidental_correction_needs_a_fresh_source_comparison(note_run):
     from test_pack_graph import cli
-    import subprocess, sys
     run, fixture = note_run
     p = fixture/'sections/s1.html'
     original = p.read_text()
@@ -545,8 +541,7 @@ def test_incidental_correction_needs_a_fresh_source_comparison(note_run):
     state = submit_review(note_run, 'style-audit', [defect('topic-order')])
     original_finding, = state['findings'].values()
     # A structural correction starts before content-review has finished.
-    subprocess.run([sys.executable, SCRIPTS/'pack_cli.py', 'run', '--run', run, '--action', 'structural-precheck'],
-                   capture_output=True, text=True, check=False)
+    run_pack_cli('run', '--run', run, '--action', 'structural-precheck')
     fixes = [r for r in flow.load_state(run)['findings'].values() if r['review_id'] == 'structural-precheck']
     p.write_text(original)
     request_and_repair(note_run, fixes, 'fix-structure-first')
@@ -636,8 +631,7 @@ assert pack_parallel.run_action(Path(sys.argv[3]), 'assemble-note')['status'] ==
     cli('run', '--run', run, '--action', 'structural-precheck')
     submit_review(note_run, 'style-audit')
     submit_review(note_run, 'content-review')
-    result = subprocess.run([sys.executable, SCRIPTS/'pack_cli.py', 'run', '--run', run,
-                             '--action', 'precheck'], capture_output=True, text=True)
+    result = run_pack_cli('run', '--run', run, '--action', 'precheck')
     state = flow.load_state(run)
     assert result.returncode and state['actions']['precheck']['status'] == 'needs_fix'
     item, = state['findings'].values()
@@ -707,7 +701,6 @@ def test_prior_parallel_conflict_matches_only_its_two_adopted_reports(note_run):
 
 def test_manifest_math_error_returns_to_title_author(note_run):
     from test_pack_graph import cli
-    import subprocess, sys
     run, fixture = note_run
     path = fixture/'manifest.json'
     manifest = flow._read(path)
@@ -719,8 +712,7 @@ def test_manifest_math_error_returns_to_title_author(note_run):
     cli('run', '--run', run, '--action', 'structural-precheck')
     submit_review(note_run, 'content-review')
     submit_review(note_run, 'style-audit')
-    proc = subprocess.run([sys.executable, SCRIPTS/'pack_cli.py', 'run', '--run', run, '--action', 'precheck'],
-                          capture_output=True, text=True)
+    proc = run_pack_cli('run', '--run', run, '--action', 'precheck')
     assert proc.returncode and flow.load_state(run)['actions']['precheck']['status'] == 'needs_fix'
     item, = flow.load_state(run)['findings'].values()
     assert (item['target'], item['owner_task'], item['status']) == ('note_title', 'scope-draft', 'open')
@@ -733,7 +725,6 @@ def test_manifest_math_error_returns_to_title_author(note_run):
 
 def test_latest_machine_observation_cannot_charge_an_unchecked_earlier_candidate(note_run):
     from test_pack_graph import cli
-    import subprocess, sys
     run, fixture = note_run
     # The later repair hands off a fragment that still lacks its widget fallback, which the
     # author probe would refuse; the ledger rule under test is pinned on a RUN without the probe gate.
@@ -745,8 +736,7 @@ def test_latest_machine_observation_cannot_charge_an_unchecked_earlier_candidate
         **s['actions'], 'assemble-note': dict(s['actions']['assemble-note'], status='stale')}))
     cli('run', '--run', run, '--action', 'assemble-note')
     def check(tid, expected):
-        subprocess.run([sys.executable, SCRIPTS/'pack_cli.py', 'run', '--run', run, '--action', tid],
-                       capture_output=True, text=True)
+        run_pack_cli('run', '--run', run, '--action', tid)
         assert flow.load_state(run)['actions'][tid]['status'] == expected
     def full():
         check('structural-precheck', 'done')
@@ -773,7 +763,6 @@ def test_latest_machine_observation_cannot_charge_an_unchecked_earlier_candidate
     # Same ledger rule with the probe gate on: the defect is a circuit figure without a caption,
     # which only precheck's check_circuits reports, so every repair passes `task probe`.
     from test_pack_graph import cli
-    import subprocess, sys
     run, fixture = note_run
     assert flow.load_state(run).get('probe_contract') == 1
     p = fixture/'sections/s1.html'
@@ -788,8 +777,7 @@ def test_latest_machine_observation_cannot_charge_an_unchecked_earlier_candidate
         **s['actions'], 'assemble-note': dict(s['actions']['assemble-note'], status='stale')}))
     cli('run', '--run', run, '--action', 'assemble-note')
     def check(tid, expected):
-        subprocess.run([sys.executable, SCRIPTS/'pack_cli.py', 'run', '--run', run, '--action', tid],
-                       capture_output=True, text=True)
+        run_pack_cli('run', '--run', run, '--action', tid)
         assert flow.load_state(run)['actions'][tid]['status'] == expected
     def full():
         check('structural-precheck', 'done')
@@ -816,7 +804,6 @@ def test_latest_machine_observation_cannot_charge_an_unchecked_earlier_candidate
 @pytest.mark.parametrize('collision_id', ['theme-toggle', 'section-marker'])
 def test_cross_source_duplicate_footer_id_routes_one_editable_owner(note_run, collision_id):
     from test_pack_graph import cli
-    import subprocess, sys
     run, fixture = note_run
     path = fixture/'manifest.json'
     manifest = flow._read(path)
@@ -831,8 +818,7 @@ def test_cross_source_duplicate_footer_id_routes_one_editable_owner(note_run, co
     cli('run', '--run', run, '--action', 'structural-precheck')
     submit_review(note_run, 'content-review')
     submit_review(note_run, 'style-audit')
-    proc = subprocess.run([sys.executable, SCRIPTS/'pack_cli.py', 'run', '--run', run, '--action', 'precheck'],
-                          capture_output=True, text=True)
+    proc = run_pack_cli('run', '--run', run, '--action', 'precheck')
     state = flow.load_state(run)
     assert proc.returncode and state['actions']['precheck']['status'] == 'needs_fix'
     item, = state['findings'].values()
