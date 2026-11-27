@@ -31,30 +31,6 @@ if ML_SKILL is None:
 sys.path.insert(0, str(SCRIPTS))
 
 
-def _load_receipt_imports():
-    """Import publish_answer (-> answer_overlay -> epe_shared) the way a new pack_cli process does.
-
-    epe_shared binds `TEXTBOOK_ID_RE` from workbook/assemble.py, but tests import
-    scripts/assemble.py under the same name (test_assemble). Which comes first in a test
-    process depends on test order, which xdist changes per worker; so load the chain now,
-    with `assemble` unbound, and then put sys.path and `assemble` back as they were.
-    """
-    saved_path, previous = list(sys.path), sys.modules.pop("assemble", None)
-    try:
-        import publish_answer  # noqa: F401  (prepends workbook/ to sys.path)
-    finally:
-        sys.path[:] = saved_path
-        # Keep epe_shared (bound to workbook/assemble.py) but not publish_answer, so a later
-        # `import publish_answer` still prepends workbook/ to sys.path as in a new process.
-        sys.modules.pop("publish_answer", None)
-        sys.modules.pop("assemble", None)
-        if previous is not None:
-            sys.modules["assemble"] = previous
-
-
-if "pytest" in sys.modules:  # child processes that import this module never need it (~0.2 s each)
-    _load_receipt_imports()
-
 # RUN folders and publication locks made by tests stay out of the user's ~/.cache.
 # A spawned process re-imports this module and must keep its parent's locks.
 if "EC2_CACHE_ROOT" not in os.environ:

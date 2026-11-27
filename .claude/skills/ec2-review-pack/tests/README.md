@@ -24,6 +24,6 @@ Remove-Item Env:EC2_TEST_CLI, Env:EC2_TEST_BROWSER
 
 **`EC2_CACHE_ROOT`는 미리 설정하지 않습니다.** 각 pytest 프로세스(xdist 워커마다)가 `_util.py`에서 따로 임시 폴더를 만들어 RUN과 발행 잠금을 격리합니다. 미리 설정하면 워커들이 같은 폴더를 공유합니다.
 
-**in-process CLI 호출과 monkeypatch:** 기본 모드의 `cli()` 호출은 새 프로세스처럼 pack_cli, pack_flow, pack_probe 외의 scripts/ 모듈을 새로 불러옵니다. 그래서 pack_actions, pack_parallel, pack_receipts 같은 모듈에 건 monkeypatch는 CLI 호출에 닿지 않습니다. 그런 패치는 함수를 직접 부르는 테스트에서만 검증됩니다.
+**in-process CLI 호출과 monkeypatch:** 기본 모드의 `cli()` 호출은 새 프로세스처럼 pack_cli, pack_flow, pack_probe, note_assemble 외의 scripts/ 모듈을 새로 불러옵니다. 그래서 pack_actions, pack_parallel, pack_receipts 같은 모듈에 건 monkeypatch는 CLI 호출에 닿지 않습니다. 그런 패치는 함수를 직접 부르는 테스트에서만 검증됩니다.
 
 **기본 모드에서도 진짜 브라우저가 도는 곳:** `zero_problem[None]`(진짜 퀴즈 브라우저 + 대체 보고서와 형태 비교), layout_probe 테스트, pack_approvals의 실제 브라우저 테스트, standalone-svg-qa, `real_probe=True` 통합 테스트. 그 밖의 퀴즈 시나리오는 `quiz_browser_stub.py`의 대체 보고서를 씁니다.

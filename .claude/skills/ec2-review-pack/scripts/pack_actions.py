@@ -682,7 +682,8 @@ def candidate_action(state, action, paths, attempt, *, audit=None, explain_run=N
         raise f.FlowError('candidate range mismatch')
     note = paths.work_file(manifest.note_name(m))
     if action in ('stage-problem-index', 'assemble-note'):
-        import assemble
+        from note_assemble import note_module
+        assemble = note_module()
         if action == 'stage-problem-index':
             return list(assemble.stage_problem_index(paths, m, run/'selection.json', run/'display-titles.json').values())
         return [assemble.assemble(run, paths.work_pack, repo=paths.repo, pack_paths=paths)]

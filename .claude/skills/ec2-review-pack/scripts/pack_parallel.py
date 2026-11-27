@@ -989,7 +989,8 @@ def common_diagnostics(markup, note, paths):
 
 def fragment_diagnostics(state, manifest, note, paths):
     """Index each accepted fragment by the same diagnostics used for the assembled page."""
-    from assemble import read_fragment
+    from note_assemble import note_module
+    read_fragment = note_module().read_fragment
     result = {}
     for section in manifest['sections']:
         sid = section['id']

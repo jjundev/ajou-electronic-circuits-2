@@ -19,7 +19,8 @@ import sys
 import tempfile
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from assemble import esc  # noqa: E402
+from note_assemble import note_module  # noqa: E402
+esc = note_module().esc
 from check_html import MD_LINK_RE  # noqa: E402
 from manifest import WHY_REQUIRED_LAYERS, WHY_SECTION_ID, WHY_SHORT, WHY_TITLE, WHY_TOPIC_ID  # noqa: E402
 

@@ -77,7 +77,8 @@ def test_fixed_circuit_cannot_replace_a_selected_step_in_the_subpart():
 
 def test_authoring_example_preserves_its_actual_circuit_through_answers_pdf(tmp_path):
     from answer_overlay import apply_answer_overlay, load_answer_overlay
-    from assemble import build_data, ids_selection
+    from epe_shared import workbook_assemble  # the name `assemble` may be either module
+    build_data, ids_selection = workbook_assemble().build_data, workbook_assemble().ids_selection
     from render import inject, load_template, render_pdf
     import pymupdf
 

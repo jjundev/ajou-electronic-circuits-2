@@ -14,6 +14,7 @@ from pathlib import Path
 import re
 
 import pack_flow as f
+from note_assemble import note_module  # re-exported for callers
 
 AUTHOR = 'author-'
 WIDTHS = '1280,375'
@@ -74,30 +75,9 @@ def _assembly_only_links(manifest: dict, sid: str) -> set[str]:
 def _excluded(code: str, detail: str, allowed: set[str]) -> bool:
     return code == 'broken-link' and (detail in allowed or detail.partition('#')[0] in allowed)
 
-
-_ASSEMBLE = None
-
-
-def _note_module():
-    """This skill's assemble module; workbook/assemble.py shares the module name."""
-    global _ASSEMBLE
-    import importlib.util
-    import sys
-    path = Path(__file__).resolve().with_name('assemble.py')
-    loaded = sys.modules.get('assemble')
-    if loaded is not None and Path(getattr(loaded, '__file__', '') or '.').resolve() == path:
-        return loaded
-    if _ASSEMBLE is None:  # load once: importing it inserts its folder into sys.path
-        spec = importlib.util.spec_from_file_location('ec2_review_pack_assemble', path)
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-        _ASSEMBLE = module
-    return _ASSEMBLE
-
-
 def fragment_probe(run: Path, task_id: str, attempt: str, *, layout=None) -> dict:
     from pack_parallel import common_diagnostics, fragment_owns, metadata_diagnostics
-    note_module = _note_module()
+    note_assemble = note_module()
     run = Path(run)
     state = f.load_state(run)
     task = state['tasks'].get(task_id)
@@ -120,12 +100,12 @@ def fragment_probe(run: Path, task_id: str, attempt: str, *, layout=None) -> dic
         stale.unlink(missing_ok=True)
     fragment_sha = f._sha(fragment)
     preview_manifest = dict(manifest, sections=sections)
-    markup = note_module.build_note(preview_manifest, root)
+    markup = note_assemble.build_note(preview_manifest, root)
     preview.write_text(markup, encoding='utf-8', newline='\n')
     _, diagnostics = common_diagnostics(markup, preview, None)
     # Charge the author only what machine_report would route to author-<sid>: manifest-field
     # diagnostics belong to scope-draft and template-only ones to assemble-note.
-    own = common_diagnostics(note_module.read_fragment(fragment, manifest), preview, None)
+    own = common_diagnostics(note_assemble.read_fragment(fragment, manifest), preview, None)
     metadata = metadata_diagnostics(preview_manifest, preview, None)
     allowed = _assembly_only_links(manifest, sid)
     problems = [dict(code=code, where=sid, detail=detail) for code, detail in sorted(diagnostics)

@@ -9,8 +9,8 @@ the `layout` stub cannot reach a child process, so the real browser probe runs).
 Tests about the process boundary itself (cwd, env, concurrency, crashes) call
 `call_process` directly.
 
-Because of that, a monkeypatch on a scripts/ module other than pack_cli, pack_flow and
-pack_probe does not reach an in-process call: the call imports a fresh copy, as a process would.
+Because of that, a monkeypatch on a scripts/ module other than pack_cli, pack_flow,
+pack_probe and note_assemble does not reach an in-process call: the call imports a fresh copy, as a process would.
 
 `run_concept` runs `concept.py` as a process. Its `browser` command gets a synthetic
 report (quiz_browser_stub.py) instead of Chromium; set EC2_TEST_BROWSER=real for the real one.
