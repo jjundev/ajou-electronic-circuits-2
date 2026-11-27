@@ -2121,7 +2121,11 @@ $\omega = \omega_n$에서는 분모의 실수부 $\omega_n^2-\omega^2$이 0이 �
 - [보데 근사: 극점마다 기울기 −20 dB/dec (1014)](../../1014/정리노트_1014_Frequency_Response.html#s1-bode)
 - [직렬 커패시터는 저주파를 막아요 (1016)](../../1016/정리노트_1016_Miller_High_Frequency_Models.html#s1-highpass)
 
-이번 범위에는 workbook 문제가 없어요.
+교과서 15장 핵심 6문항과 추가 연습 1문항이에요.
+
+- [복습문제 7문항 · 문제지 PDF](../복습문제_1127_Second_Order_Filters-문제.pdf)
+- [복습문제 답안 PDF](../복습문제_1127_Second_Order_Filters-답안.pdf)
+- [문제설명](../문제설명_1127_Second_Order_Filters.html)
 
 ---
 

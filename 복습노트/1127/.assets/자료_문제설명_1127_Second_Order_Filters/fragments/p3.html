@@ -1,0 +1,41 @@
+<div class="layer formal circuit-explanation" data-explanation="solve">
+<figure class="figure circuit" data-answer-step="수동과 능동 회로의 임피던스 위치" data-answer-subpart="main">
+<svg id="p3-compare-cancellation" viewBox="0 0 396 150" role="img" aria-label="왼쪽 수동 회로의 입력과 출력 사이에 Z1, 출력과 접지 사이에 Z2가 있어요. 오른쪽 능동 회로의 입력과 반전 노드 사이에 Z1, 반전 노드와 출력 사이에 Z2가 있어요. 비반전 단자는 접지예요.">
+  <text class="fig-text" x="85" y="18" text-anchor="middle">수동</text>
+  <text class="fig-text" x="290" y="18" text-anchor="middle">능동</text>
+  <path class="fig-ink" d="M20 72h33m34 0h57m-29 0v20m0 24v18m-9 0h18m-15 4h12m-9 4h6"/>
+  <rect class="fig-ink" x="53" y="61" width="34" height="22" rx="2"/>
+  <rect class="fig-ink" x="102" y="92" width="26" height="24" rx="2"/>
+  <circle class="fig-dot" data-node="passive-in" data-node-color="blue" cx="20" cy="72" r="3"/>
+  <circle class="fig-dot" data-node="passive-out" data-node-color="red" cx="115" cy="72" r="3"/>
+  <circle class="fig-dot" data-node="passive-out" data-node-color="red" cx="144" cy="72" r="3"/>
+  <text class="fig-text fig-math" data-node="passive-in" data-node-color="blue" x="20" y="55" text-anchor="middle">V<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
+  <text class="fig-text fig-math" data-node="passive-out" data-node-color="red" x="144" y="55" text-anchor="middle">V<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+  <text class="fig-text fig-math" x="70" y="76" text-anchor="middle">Z<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+  <text class="fig-text fig-math" x="115" y="108" text-anchor="middle">Z<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+  <text class="fig-text fig-loc" x="70" y="101" text-anchor="middle">㉠</text>
+  <text class="fig-text fig-loc" x="142" y="108" text-anchor="middle">㉡</text>
+  <path class="fig-ink" d="M194 85h23m34 0h42m-16 0V43h28m34 0h16v57m-13 0h38m-87 14h-17v18m-9 0h18m-15 4h12m-9 4h6"/>
+  <path class="fig-ink" d="M293 71l49 29-49 29zM299 85h9m-9 29h9m-4.5-4.5v9"/>
+  <rect class="fig-ink" x="217" y="74" width="34" height="22" rx="2"/>
+  <rect class="fig-ink" x="305" y="32" width="34" height="22" rx="2"/>
+  <circle class="fig-dot" data-node="active-in" data-node-color="blue" cx="194" cy="85" r="3"/>
+  <circle class="fig-dot" data-node="active-out" data-node-color="red" cx="355" cy="100" r="3"/>
+  <circle class="fig-dot" data-node="active-out" data-node-color="red" cx="380" cy="100" r="3"/>
+  <circle class="fig-dot" cx="277" cy="85" r="3"/>
+  <text class="fig-text fig-math" data-node="active-in" data-node-color="blue" x="194" y="68" text-anchor="middle">V<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
+  <text class="fig-text fig-math" data-node="active-out" data-node-color="red" x="378" y="83" text-anchor="middle">V<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+  <text class="fig-text fig-math" x="234" y="89" text-anchor="middle">Z<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
+  <text class="fig-text fig-math" x="322" y="47" text-anchor="middle">Z<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+  <text class="fig-text fig-loc" x="234" y="114" text-anchor="middle">㉢</text>
+  <text class="fig-text fig-loc" x="322" y="68" text-anchor="middle">㉣</text>
+</svg>
+<figcaption class="circuit-state">각 회로에서 Z<sub>1</sub>은 R<sub>1</sub>과 C<sub>1</sub>의 병렬, Z<sub>2</sub>는 R<sub>2</sub>와 C<sub>2</sub>의 병렬 가지</figcaption>
+</figure>
+<div data-subpart="main">
+<h4>공통 1차 인자를 약분해요</h4>
+<div data-answer-step="극점·영점 일치 조건"><p><span class="loc">㉠</span> 입력 쪽 $R_1C_1$은 두 회로의 영점을 정해요. 수동에서는 <span class="loc">㉡</span> 접지 쪽 가지까지 포함한 분압비를 써요. 능동에서는 <span class="loc">㉢</span> 입력 임피던스에 대한 <span class="loc">㉣</span> 귀환 임피던스의 비를 써요.</p><p>$$H_{\mathrm{passive}}=\frac{Z_2}{Z_1+Z_2}$$</p><p>$$H_{\mathrm{active}}=-\frac{Z_2}{Z_1}$$</p><p>각 전달 함수의 극점에 대응하는 시정수를 $R_1C_1$과 같게 놓아요.</p><p>$$R_1C_1=(R_1\parallel R_2)(C_1+C_2)\quad\text{(수동)}$$</p><p>$$R_1C_1=R_2C_2\quad\text{(이상적 OP-amp)}$$</p></div>
+<div data-answer-final=""><p>수동 조건도 $R_1C_1=R_2C_2$로 정리돼요. 공통 시정수를 $\tau$로 두면 두 임피던스에 같은 인자 $1/(1+s\tau)$가 곱해져요.</p><p>$$Z_i=\frac{R_i}{1+s\tau}\quad(i=1,2)$$</p><p>분압비와 반전 이득에서 이 인자가 약분되므로 두 응답 모두 주파수에 무관해요.</p><p>$$H_{\mathrm{passive}}(s)=\frac{R_2}{R_1+R_2}=\frac{C_1}{C_1+C_2}$$</p><p>$$H_{\mathrm{active}}(s)=-\frac{R_2}{R_1}=-\frac{C_1}{C_2}$$</p></div>
+</div>
+</div>
+<div class="sum" hidden><p class="sum-lead">두 RC 시정수가 같아 극점과 영점이 상쇄되면 수동은 양의 분압비가 남고 이상적 OP-amp를 쓰는 능동 회로는 음의 반전 이득이 남아요.</p></div>

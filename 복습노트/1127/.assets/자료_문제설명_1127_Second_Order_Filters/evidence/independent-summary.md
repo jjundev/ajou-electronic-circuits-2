@@ -1,0 +1,13 @@
+# Independent verification of the 1127 questions
+
+I used only the seven questions and their two circuit figures in `/tmp/ec2-1127-blind-packet`. I ran all seven scripts in `/tmp/ec2-1127-fresh-evidence` with Python 3 and SymPy 1.14.0. Each script exited successfully, and each result file contains its output. The P6 script generated the response plot with Matplotlib.
+
+| Question | Requirements and verification | Evidence |
+| --- | --- | --- |
+| P1 / E15.08 | Solved output-node KCL using the two parallel RC admittances. Checked the normalized transfer function, magnitude squared and high-frequency gain symbolically. The pole frequency is the sum of conductances divided by the sum of capacitances. DC gain is R₂/(R₁+R₂) and the high-frequency limit is C₁/(C₁+C₂). | `p1-sympy.py`, `p1-result.txt` |
+| P2 / E15.09 | Used the ideal op-amp virtual ground and zero input current to solve summing-node KCL. Checked the normalized transfer function, magnitude squared and limits. The zero and pole frequencies are 1/(R₁C₁) and 1/(R₂C₂). Signed gains at DC and high frequency are −R₂/R₁ and −C₁/C₂. | `p2-sympy.py`, `p2-result.txt` |
+| P3 / P15.09 | Factored each pole-frequency minus zero-frequency expression. In both circuits, coincidence is equivalent to R₁C₁ = R₂C₂. Substitution verified the canceled transfer functions are R₂/(R₁+R₂) and −R₂/R₁, respectively. | `p3-sympy.py`, `p3-result.txt` |
+| P4 / P15.10 | Computed the denominator discriminant, solved for positive Q and checked the roots with multiplicity. Q = 1/2 gives a double root at s = −ωₙ, whose common positive pole frequency is ωₙ rad/s. | `p4-sympy.py`, `p4-result.txt` |
+| P5 / P15.11 | Computed the derivatives of the denominator and squared response. For 0 < Q ≤ 1/√2, the denominator increases strictly for every positive frequency. When the numerator is nonzero, the squared response strictly decreases, including at the threshold. DC is the endpoint maximum. | `p5-sympy.py`, `p5-result.txt` |
+| P6 / P15.13 | Verified the reciprocal squared normalized response equals a square plus (ωₙ/Q)². The square vanishes only at ω = ωₙ, establishing the unique peak Q/ωₙ. Plotted the three curves as ωₙ·abs(H)/abs(β) against ω/ωₙ, and checked the plotted peaks (1,2), (1,4) and (1,8). Divide each ordinate by ωₙ to recover abs(H)/abs(β). | `p6-sympy.py`, `p6-result.txt`, `p6-response.png` |
+| P7 / X15.09 | Verified that the high-frequency to DC gain magnitude ratio equals ωₚ/ω_z, and that the derivative sign identifies the passband shelf. A pole frequency five times the zero frequency gives a passband-to-stopband ratio of five, so it cannot meet ten. | `p7-sympy.py`, `p7-result.txt` |

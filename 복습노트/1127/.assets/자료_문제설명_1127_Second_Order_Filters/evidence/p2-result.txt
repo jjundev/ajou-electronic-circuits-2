@@ -1,0 +1,8 @@
+Summing-node KCL: -V_in*(C_1*s + 1/R_1) - V_out*(C_2*s + 1/R_2) = 0
+H(s) = -R_2*(C_1*R_1*s + 1)/(R_1*(C_2*R_2*s + 1))
+H(s) = K(1+s/omega_z)/(1+s/omega_p)
+K = -R_2/R_1 ; omega_z = 1/(C_1*R_1) ; omega_p = 1/(C_2*R_2)
+Actual roots are negatives of the positive break frequencies, except when canceled.
+|H(j omega)| = |K| sqrt[(1+(omega/omega_z)^2)/(1+(omega/omega_p)^2)].
+Phase = pi + atan(omega/omega_z) - atan(omega/omega_p) modulo 2 pi.
+DC = -R_2/R_1 ; high-frequency = -C_1/C_2
