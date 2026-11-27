@@ -1,18 +1,18 @@
 {
   "review_policy_version": "problem-explain-2026-10-21-learning-style",
-  "input_hash": "9a7c0b850a1c4b13418d4f20e0889ec9c7f9fe739151115a08bbe35c7c1da898",
+  "input_hash": "d8a85eecbaca113441af22a31728eab476b7bb0d3bdb0ace84ce6bf3d03b1dce",
   "references": [
     {
       "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.claude/skills/ec2-problem-explain/references/authoring.md",
-      "sha256": "b79293362e57956e65816bd8a9e4349c932c844903816482d50c086ba04c5ae2"
+      "sha256": "01eeecab4e5f1a486641acb6c217a4b62e9fba639bfcd15108c3f1749e1dccde"
     },
     {
       "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.claude/skills/ec2-problem-explain/references/verification.md",
-      "sha256": "3b786393028a9e871d3e96ab622380d990eb813b862f3e4f8ec63eb726824b58"
+      "sha256": "8e228f7c76dfa96e9850574d912625878e67935c2c46b6e243d58e4f37333add"
     },
     {
       "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.claude/skills/ec2-review-pack/references/solution-style.md",
-      "sha256": "af345a47b1ea0c5f0a5050ae537ebff1e8e454a2b400a9bff65430a1944681e3"
+      "sha256": "f3289a4374575f86d244c221f622690a08ae2d9e1d7e33b9bf93332eaa12da8d"
     },
     {
       "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/from_the_past/2021중간_기말/기말/Final0617_2p_rev.pdf",
@@ -28,13 +28,13 @@
     },
     {
       "path": "/Users/hyunjun_macbook_pro/Documents/Univ/전자회로2/.claude/skills/ec2-problem-explain/SKILL.md",
-      "sha256": "2c4157f4666f75ab3f2101beba2c98198ca4319509821e946ba1adcd3f741aea"
+      "sha256": "a5e2b144e2f70442ba1e65b6f671b4cf36dd3b8dbb918b985a173719c9efcdf4"
     }
   ],
   "learning_style_audit": {
     "learning_style": {
       "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
-      "sha256": "af345a47b1ea0c5f0a5050ae537ebff1e8e454a2b400a9bff65430a1944681e3",
+      "sha256": "f3289a4374575f86d244c221f622690a08ae2d9e1d7e33b9bf93332eaa12da8d",
       "rule_ids": [
         "UNIT-01",
         "CALC-01",
@@ -54,407 +54,407 @@
     "items": {
       "p1:1": {
         "status": "pass",
-        "reviewer": "Codex",
+        "reviewer": "/root/voltage_content",
         "rules": {
           "UNIT-01": {
             "disposition": "not_applicable",
-            "evidence": "2021-1_기말-Q4 (1) 기호 해석으로 수치 단위 환산 없음 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "2021-1_기말-Q4 (1) 기호 해석으로 수치 단위 환산 없음"
           },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "2021-1_기말-Q4 (1) CG 양의 전압이득과 레이저 직렬 팔로워 전류 전달을 곱하면 A=gm1RD/(1/gm2+RL+RM). K=RM이고 음귀환 분모이다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "CG 이득은 양수. R_source=R_L+R_M을 소스 팔로워 공식에 넣어 V_S/V_X를 구한 뒤 같은 부하로 나눈다. A_open [A/V], K=R_M."
           },
           "CALC-02": {
             "disposition": "not_applicable",
-            "evidence": "2021-1_기말-Q4 (1) 소수·반올림 대상이 없는 기호식 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "2021-1_기말-Q4 (1) 소수·반올림 대상이 없는 기호식"
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "2021-1_기말-Q4 (1) CG 양의 전압이득과 레이저 직렬 팔로워 전류 전달을 곱하면 A=gm1RD/(1/gm2+RL+RM). K=RM이고 음귀환 분모이다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "CG 이득은 양수. R_source=R_L+R_M을 소스 팔로워 공식에 넣어 V_S/V_X를 구한 뒤 같은 부하로 나눈다. A_open [A/V], K=R_M."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "2021-1_기말-Q4 (1) CG 양의 전압이득과 레이저 직렬 팔로워 전류 전달을 곱하면 A=gm1RD/(1/gm2+RL+RM). K=RM이고 음귀환 분모이다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "CG 이득은 양수. R_source=R_L+R_M을 소스 팔로워 공식에 넣어 V_S/V_X를 구한 뒤 같은 부하로 나눈다. A_open [A/V], K=R_M."
           },
           "GAIN-01": {
             "disposition": "applied",
-            "evidence": "몸체 효과를 생략한 CG–팔로워의 연쇄 곱을 먼저 정의하고 [A/V] 명시. K=R_M과 양의 루프 곱 확인."
+            "evidence": "CG 이득은 양수. R_source=R_L+R_M을 소스 팔로워 공식에 넣어 V_S/V_X를 구한 뒤 같은 부하로 나눈다. A_open [A/V], K=R_M."
           },
           "DEGEN-01": {
             "disposition": "applied",
-            "evidence": "2021-1_기말-Q4 (1) CG 양의 전압이득과 레이저 직렬 팔로워 전류 전달을 곱하면 A=gm1RD/(1/gm2+RL+RM). K=RM이고 음귀환 분모이다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "CG 이득은 양수. R_source=R_L+R_M을 소스 팔로워 공식에 넣어 V_S/V_X를 구한 뒤 같은 부하로 나눈다. A_open [A/V], K=R_M."
           },
           "SCALE-01": {
             "disposition": "not_applicable",
-            "evidence": "2021-1_기말-Q4 (1) 소자 크기나 바이어스 배율 변화가 주어지지 않음 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "2021-1_기말-Q4 (1) 소자 크기나 바이어스 배율 변화가 주어지지 않음"
           },
           "BIAS-01": {
             "disposition": "not_applicable",
-            "evidence": "2021-1_기말-Q4 (1) DC 동작영역 경계를 구하지 않는 소신호 문제 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "2021-1_기말-Q4 (1) DC 동작영역 경계를 구하지 않는 소신호 문제"
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "몸체 효과를 생략한 CG–팔로워의 연쇄 곱을 먼저 정의하고 [A/V] 명시. K=R_M과 양의 루프 곱 확인."
+            "evidence": "CG 이득은 양수. R_source=R_L+R_M을 소스 팔로워 공식에 넣어 V_S/V_X를 구한 뒤 같은 부하로 나눈다. A_open [A/V], K=R_M."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "몸체 효과를 생략한 CG–팔로워의 연쇄 곱을 먼저 정의하고 [A/V] 명시. K=R_M과 양의 루프 곱 확인."
+            "evidence": "CG 이득은 양수. R_source=R_L+R_M을 소스 팔로워 공식에 넣어 V_S/V_X를 구한 뒤 같은 부하로 나눈다. A_open [A/V], K=R_M."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "2021-1_기말-Q4 (1) CG 양의 전압이득과 레이저 직렬 팔로워 전류 전달을 곱하면 A=gm1RD/(1/gm2+RL+RM). K=RM이고 음귀환 분모이다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "CG 이득은 양수. R_source=R_L+R_M을 소스 팔로워 공식에 넣어 V_S/V_X를 구한 뒤 같은 부하로 나눈다. A_open [A/V], K=R_M."
           },
           "FREQ-01": {
             "disposition": "not_applicable",
-            "evidence": "2021-1_기말-Q4 (1) 기생 커패시턴스 및 주파수 변화 없음 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "2021-1_기말-Q4 (1) 기생 커패시턴스 및 주파수 변화 없음"
           }
         }
       },
       "p1:2": {
         "status": "pass",
-        "reviewer": "Codex",
+        "reviewer": "/root/voltage_content",
         "rules": {
           "UNIT-01": {
             "disposition": "not_applicable",
-            "evidence": "2021-1_기말-Q4 (2) 기호 해석으로 수치 단위 환산 없음 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "2021-1_기말-Q4 (2) 기호 해석으로 수치 단위 환산 없음"
           },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "2021-1_기말-Q4 (2) 입력은 레이저를 단 상태의 T, 레이저 제거 출력 두 단자는 1/gm2+RM에 T0를 적용. 합치면 출력저항의 추가항 gm1 RD RM이 나온다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "1/g_m2+R_M을 레이저 포트에서 읽고, 부하를 연결한 KA_open을 써서 입력 저항을 구한다. 출력 식의 레이저 저항은 소거된다."
           },
           "CALC-02": {
             "disposition": "not_applicable",
-            "evidence": "2021-1_기말-Q4 (2) 소수·반올림 대상이 없는 기호식 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "2021-1_기말-Q4 (2) 소수·반올림 대상이 없는 기호식"
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "2021-1_기말-Q4 (2) 입력은 레이저를 단 상태의 T, 레이저 제거 출력 두 단자는 1/gm2+RM에 T0를 적용. 합치면 출력저항의 추가항 gm1 RD RM이 나온다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "1/g_m2+R_M을 레이저 포트에서 읽고, 부하를 연결한 KA_open을 써서 입력 저항을 구한다. 출력 식의 레이저 저항은 소거된다."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "2021-1_기말-Q4 (2) 입력은 레이저를 단 상태의 T, 레이저 제거 출력 두 단자는 1/gm2+RM에 T0를 적용. 합치면 출력저항의 추가항 gm1 RD RM이 나온다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "1/g_m2+R_M을 레이저 포트에서 읽고, 부하를 연결한 KA_open을 써서 입력 저항을 구한다. 출력 식의 레이저 저항은 소거된다."
           },
           "GAIN-01": {
-            "disposition": "not_applicable",
-            "evidence": "출력 두 단자의 1/g_m2+R_M, 레이저를 연결한 이득과 부하 보정식에서 R_L 소거를 시험원과 대조."
+            "disposition": "applied",
+            "evidence": "1/g_m2+R_M을 레이저 포트에서 읽고, 부하를 연결한 KA_open을 써서 입력 저항을 구한다. 출력 식의 레이저 저항은 소거된다. 앞 소문항에서 구한 개루프 이득을 재사용한다."
           },
           "DEGEN-01": {
             "disposition": "applied",
-            "evidence": "2021-1_기말-Q4 (2) 입력은 레이저를 단 상태의 T, 레이저 제거 출력 두 단자는 1/gm2+RM에 T0를 적용. 합치면 출력저항의 추가항 gm1 RD RM이 나온다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "1/g_m2+R_M을 레이저 포트에서 읽고, 부하를 연결한 KA_open을 써서 입력 저항을 구한다. 출력 식의 레이저 저항은 소거된다."
           },
           "SCALE-01": {
             "disposition": "not_applicable",
-            "evidence": "2021-1_기말-Q4 (2) 소자 크기나 바이어스 배율 변화가 주어지지 않음 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "2021-1_기말-Q4 (2) 소자 크기나 바이어스 배율 변화가 주어지지 않음"
           },
           "BIAS-01": {
             "disposition": "not_applicable",
-            "evidence": "2021-1_기말-Q4 (2) DC 동작영역 경계를 구하지 않는 소신호 문제 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "2021-1_기말-Q4 (2) DC 동작영역 경계를 구하지 않는 소신호 문제"
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "출력 두 단자의 1/g_m2+R_M, 레이저를 연결한 이득과 부하 보정식에서 R_L 소거를 시험원과 대조."
+            "evidence": "1/g_m2+R_M을 레이저 포트에서 읽고, 부하를 연결한 KA_open을 써서 입력 저항을 구한다. 출력 식의 레이저 저항은 소거된다."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "출력 두 단자의 1/g_m2+R_M, 레이저를 연결한 이득과 부하 보정식에서 R_L 소거를 시험원과 대조."
+            "evidence": "1/g_m2+R_M을 레이저 포트에서 읽고, 부하를 연결한 KA_open을 써서 입력 저항을 구한다. 출력 식의 레이저 저항은 소거된다."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "2021-1_기말-Q4 (2) 입력은 레이저를 단 상태의 T, 레이저 제거 출력 두 단자는 1/gm2+RM에 T0를 적용. 합치면 출력저항의 추가항 gm1 RD RM이 나온다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "1/g_m2+R_M을 레이저 포트에서 읽고, 부하를 연결한 KA_open을 써서 입력 저항을 구한다. 출력 식의 레이저 저항은 소거된다."
           },
           "FREQ-01": {
             "disposition": "not_applicable",
-            "evidence": "2021-1_기말-Q4 (2) 기생 커패시턴스 및 주파수 변화 없음 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "2021-1_기말-Q4 (2) 기생 커패시턴스 및 주파수 변화 없음"
           }
         }
       },
       "p2:1": {
         "status": "pass",
-        "reviewer": "Codex",
+        "reviewer": "/root/voltage_content",
         "rules": {
           "UNIT-01": {
             "disposition": "not_applicable",
-            "evidence": "2023-1_기말-Q3 (1) 기호 해석으로 수치 단위 환산 없음 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "2023-1_기말-Q3 (1) 기호 해석으로 수치 단위 환산 없음"
           },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "2023-1_기말-Q3 (1) 차동단과 PMOS가 각각 반전하며 λ>0의 ro1과 ro3∥ro5가 남는다. 입력 게이트는 개방, 출력 두 단자는 ro1+RM으로 직렬이다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "V_D는 레이저 위의 PMOS 드레인. r_o1∥(R_L+R_M)을 포함한 공통 소스 이득에서 같은 직렬 가지의 R_L+R_M으로 나눈다. 두 번 반전해 양의 A_open [A/V], 게이트 입력 저항은 무한대."
           },
           "CALC-02": {
             "disposition": "not_applicable",
-            "evidence": "2023-1_기말-Q3 (1) 소수·반올림 대상이 없는 기호식 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "2023-1_기말-Q3 (1) 소수·반올림 대상이 없는 기호식"
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "2023-1_기말-Q3 (1) 차동단과 PMOS가 각각 반전하며 λ>0의 ro1과 ro3∥ro5가 남는다. 입력 게이트는 개방, 출력 두 단자는 ro1+RM으로 직렬이다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "V_D는 레이저 위의 PMOS 드레인. r_o1∥(R_L+R_M)을 포함한 공통 소스 이득에서 같은 직렬 가지의 R_L+R_M으로 나눈다. 두 번 반전해 양의 A_open [A/V], 게이트 입력 저항은 무한대."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "2023-1_기말-Q3 (1) 차동단과 PMOS가 각각 반전하며 λ>0의 ro1과 ro3∥ro5가 남는다. 입력 게이트는 개방, 출력 두 단자는 ro1+RM으로 직렬이다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "V_D는 레이저 위의 PMOS 드레인. r_o1∥(R_L+R_M)을 포함한 공통 소스 이득에서 같은 직렬 가지의 R_L+R_M으로 나눈다. 두 번 반전해 양의 A_open [A/V], 게이트 입력 저항은 무한대."
           },
           "GAIN-01": {
             "disposition": "applied",
-            "evidence": "반전 차동쌍과 PMOS 단의 연쇄 곱 [A/V], 유한 r_o1, 게이트의 무한 입력저항 확인."
+            "evidence": "V_D는 레이저 위의 PMOS 드레인. r_o1∥(R_L+R_M)을 포함한 공통 소스 이득에서 같은 직렬 가지의 R_L+R_M으로 나눈다. 두 번 반전해 양의 A_open [A/V], 게이트 입력 저항은 무한대."
           },
           "DEGEN-01": {
             "disposition": "not_applicable",
-            "evidence": "2023-1_기말-Q3 (1) 외부 이미터·소스 축퇴 저항의 제어전압 방정식을 구하는 단계가 없다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "2023-1_기말-Q3 (1) 외부 이미터·소스 축퇴 저항의 제어전압 방정식을 구하는 단계가 없다."
           },
           "SCALE-01": {
             "disposition": "not_applicable",
-            "evidence": "2023-1_기말-Q3 (1) 소자 크기나 바이어스 배율 변화가 주어지지 않음 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "2023-1_기말-Q3 (1) 소자 크기나 바이어스 배율 변화가 주어지지 않음"
           },
           "BIAS-01": {
             "disposition": "not_applicable",
-            "evidence": "2023-1_기말-Q3 (1) DC 동작영역 경계를 구하지 않는 소신호 문제 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "2023-1_기말-Q3 (1) DC 동작영역 경계를 구하지 않는 소신호 문제"
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "반전 차동쌍과 PMOS 단의 연쇄 곱 [A/V], 유한 r_o1, 게이트의 무한 입력저항 확인."
+            "evidence": "V_D는 레이저 위의 PMOS 드레인. r_o1∥(R_L+R_M)을 포함한 공통 소스 이득에서 같은 직렬 가지의 R_L+R_M으로 나눈다. 두 번 반전해 양의 A_open [A/V], 게이트 입력 저항은 무한대."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "반전 차동쌍과 PMOS 단의 연쇄 곱 [A/V], 유한 r_o1, 게이트의 무한 입력저항 확인."
+            "evidence": "V_D는 레이저 위의 PMOS 드레인. r_o1∥(R_L+R_M)을 포함한 공통 소스 이득에서 같은 직렬 가지의 R_L+R_M으로 나눈다. 두 번 반전해 양의 A_open [A/V], 게이트 입력 저항은 무한대."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "2023-1_기말-Q3 (1) 차동단과 PMOS가 각각 반전하며 λ>0의 ro1과 ro3∥ro5가 남는다. 입력 게이트는 개방, 출력 두 단자는 ro1+RM으로 직렬이다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "V_D는 레이저 위의 PMOS 드레인. r_o1∥(R_L+R_M)을 포함한 공통 소스 이득에서 같은 직렬 가지의 R_L+R_M으로 나눈다. 두 번 반전해 양의 A_open [A/V], 게이트 입력 저항은 무한대."
           },
           "FREQ-01": {
             "disposition": "not_applicable",
-            "evidence": "2023-1_기말-Q3 (1) 기생 커패시턴스 및 주파수 변화 없음 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "2023-1_기말-Q3 (1) 기생 커패시턴스 및 주파수 변화 없음"
           }
         }
       },
       "p2:2": {
         "status": "pass",
-        "reviewer": "Codex",
+        "reviewer": "/root/voltage_content",
         "rules": {
           "UNIT-01": {
             "disposition": "not_applicable",
-            "evidence": "2023-1_기말-Q3 (2) 기호 해석으로 수치 단위 환산 없음 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "2023-1_기말-Q3 (2) 기호 해석으로 수치 단위 환산 없음"
           },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "2023-1_기말-Q3 (2) 반환 전압 증가가 PMOS 공급 전류를 낮춘다. T(RL)과 T0의 분모가 다르며 Rout의 마지막 항 지배에는 명시한 두 큰 곱이 모두 필요하다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "K=R_M, 양의 KA_open, 두 단자 부하 보정 후 R_L 소거. 마지막 항이 지배할 두 큰 곱 조건을 명시했다."
           },
           "CALC-02": {
             "disposition": "not_applicable",
-            "evidence": "2023-1_기말-Q3 (2) 소수·반올림 대상이 없는 기호식 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "2023-1_기말-Q3 (2) 소수·반올림 대상이 없는 기호식"
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "2023-1_기말-Q3 (2) 반환 전압 증가가 PMOS 공급 전류를 낮춘다. T(RL)과 T0의 분모가 다르며 Rout의 마지막 항 지배에는 명시한 두 큰 곱이 모두 필요하다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "K=R_M, 양의 KA_open, 두 단자 부하 보정 후 R_L 소거. 마지막 항이 지배할 두 큰 곱 조건을 명시했다."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "2023-1_기말-Q3 (2) 반환 전압 증가가 PMOS 공급 전류를 낮춘다. T(RL)과 T0의 분모가 다르며 Rout의 마지막 항 지배에는 명시한 두 큰 곱이 모두 필요하다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "K=R_M, 양의 KA_open, 두 단자 부하 보정 후 R_L 소거. 마지막 항이 지배할 두 큰 곱 조건을 명시했다."
           },
           "GAIN-01": {
-            "disposition": "not_applicable",
-            "evidence": "K=R_M, 양의 루프 곱과 기존 근사 유지. 레이저 포함 후 제거한 결과를 두 단자 시험원과 대조."
+            "disposition": "applied",
+            "evidence": "K=R_M, 양의 KA_open, 두 단자 부하 보정 후 R_L 소거. 마지막 항이 지배할 두 큰 곱 조건을 명시했다. 앞 소문항에서 구한 개루프 이득을 재사용한다."
           },
           "DEGEN-01": {
             "disposition": "not_applicable",
-            "evidence": "2023-1_기말-Q3 (2) 외부 이미터·소스 축퇴 저항의 제어전압 방정식을 구하는 단계가 없다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "2023-1_기말-Q3 (2) 외부 이미터·소스 축퇴 저항의 제어전압 방정식을 구하는 단계가 없다."
           },
           "SCALE-01": {
             "disposition": "not_applicable",
-            "evidence": "2023-1_기말-Q3 (2) 소자 크기나 바이어스 배율 변화가 주어지지 않음 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "2023-1_기말-Q3 (2) 소자 크기나 바이어스 배율 변화가 주어지지 않음"
           },
           "BIAS-01": {
             "disposition": "not_applicable",
-            "evidence": "2023-1_기말-Q3 (2) DC 동작영역 경계를 구하지 않는 소신호 문제 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "2023-1_기말-Q3 (2) DC 동작영역 경계를 구하지 않는 소신호 문제"
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "K=R_M, 양의 루프 곱과 기존 근사 유지. 레이저 포함 후 제거한 결과를 두 단자 시험원과 대조."
+            "evidence": "K=R_M, 양의 KA_open, 두 단자 부하 보정 후 R_L 소거. 마지막 항이 지배할 두 큰 곱 조건을 명시했다."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "K=R_M, 양의 루프 곱과 기존 근사 유지. 레이저 포함 후 제거한 결과를 두 단자 시험원과 대조."
+            "evidence": "K=R_M, 양의 KA_open, 두 단자 부하 보정 후 R_L 소거. 마지막 항이 지배할 두 큰 곱 조건을 명시했다."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "2023-1_기말-Q3 (2) 반환 전압 증가가 PMOS 공급 전류를 낮춘다. T(RL)과 T0의 분모가 다르며 Rout의 마지막 항 지배에는 명시한 두 큰 곱이 모두 필요하다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "K=R_M, 양의 KA_open, 두 단자 부하 보정 후 R_L 소거. 마지막 항이 지배할 두 큰 곱 조건을 명시했다."
           },
           "FREQ-01": {
             "disposition": "not_applicable",
-            "evidence": "2023-1_기말-Q3 (2) 기생 커패시턴스 및 주파수 변화 없음 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "2023-1_기말-Q3 (2) 기생 커패시턴스 및 주파수 변화 없음"
           }
         }
       },
       "p3:main": {
         "status": "pass",
-        "reviewer": "Codex",
+        "reviewer": "/root/voltage_content",
         "rules": {
           "UNIT-01": {
             "disposition": "not_applicable",
-            "evidence": "E12.32 (main) 기호 해석으로 수치 단위 환산 없음 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "E12.32 (main) 기호 해석으로 수치 단위 환산 없음"
           },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "E12.32 (main) RF+RM을 입력 테브난 직렬저항으로 사용하고 RD/(RF+RM+1/gm1), −gm2ro2/(Zout+RL)를 순서대로 곱한다. K=−RM/(RF+RM). 식 12.173의 부하 포함 T를 그대로 두면 레이저 제거 포트 자체 저항에 RL이 남는다. 여기서는 T0=T(RL=0)를 써서 포트 저항이 부하와 독립이다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "원문 예제의 2포트 경로를 유지한다. 직접 전달 생략 조건에서 테브난 입력과 출력 변환을 곱하고 음의 A_open [A/A]과 K에서 양의 KA_open을 얻는다."
           },
           "CALC-02": {
             "disposition": "not_applicable",
-            "evidence": "E12.32 (main) 소수·반올림 대상이 없는 기호식 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "E12.32 (main) 소수·반올림 대상이 없는 기호식"
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "E12.32 (main) RF+RM을 입력 테브난 직렬저항으로 사용하고 RD/(RF+RM+1/gm1), −gm2ro2/(Zout+RL)를 순서대로 곱한다. K=−RM/(RF+RM). 식 12.173의 부하 포함 T를 그대로 두면 레이저 제거 포트 자체 저항에 RL이 남는다. 여기서는 T0=T(RL=0)를 써서 포트 저항이 부하와 독립이다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "원문 예제의 2포트 경로를 유지한다. 직접 전달 생략 조건에서 테브난 입력과 출력 변환을 곱하고 음의 A_open [A/A]과 K에서 양의 KA_open을 얻는다."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "E12.32 (main) RF+RM을 입력 테브난 직렬저항으로 사용하고 RD/(RF+RM+1/gm1), −gm2ro2/(Zout+RL)를 순서대로 곱한다. K=−RM/(RF+RM). 식 12.173의 부하 포함 T를 그대로 두면 레이저 제거 포트 자체 저항에 RL이 남는다. 여기서는 T0=T(RL=0)를 써서 포트 저항이 부하와 독립이다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "원문 예제의 2포트 경로를 유지한다. 직접 전달 생략 조건에서 테브난 입력과 출력 변환을 곱하고 음의 A_open [A/A]과 K에서 양의 KA_open을 얻는다."
           },
           "GAIN-01": {
             "disposition": "applied",
-            "evidence": "직접 순방향 전달 생략 조건에서 A_open [A/A]와 K는 음수. 부하 보정식의 R_L 소거와 입출력 저항 배율 확인."
+            "evidence": "원문 예제의 2포트 경로를 유지한다. 직접 전달 생략 조건에서 테브난 입력과 출력 변환을 곱하고 음의 A_open [A/A]과 K에서 양의 KA_open을 얻는다."
           },
           "DEGEN-01": {
             "disposition": "not_applicable",
-            "evidence": "E12.32 (main) 외부 이미터·소스 축퇴 저항의 제어전압 방정식을 구하는 단계가 없다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "E12.32 (main) 외부 이미터·소스 축퇴 저항의 제어전압 방정식을 구하는 단계가 없다."
           },
           "SCALE-01": {
             "disposition": "not_applicable",
-            "evidence": "E12.32 (main) 소자 크기나 바이어스 배율 변화가 주어지지 않음 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "E12.32 (main) 소자 크기나 바이어스 배율 변화가 주어지지 않음"
           },
           "BIAS-01": {
             "disposition": "not_applicable",
-            "evidence": "E12.32 (main) DC 동작영역 경계를 구하지 않는 소신호 문제 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "E12.32 (main) DC 동작영역 경계를 구하지 않는 소신호 문제"
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "직접 순방향 전달 생략 조건에서 A_open [A/A]와 K는 음수. 부하 보정식의 R_L 소거와 입출력 저항 배율 확인."
+            "evidence": "원문 예제의 2포트 경로를 유지한다. 직접 전달 생략 조건에서 테브난 입력과 출력 변환을 곱하고 음의 A_open [A/A]과 K에서 양의 KA_open을 얻는다."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "직접 순방향 전달 생략 조건에서 A_open [A/A]와 K는 음수. 부하 보정식의 R_L 소거와 입출력 저항 배율 확인."
+            "evidence": "원문 예제의 2포트 경로를 유지한다. 직접 전달 생략 조건에서 테브난 입력과 출력 변환을 곱하고 음의 A_open [A/A]과 K에서 양의 KA_open을 얻는다."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "E12.32 (main) RF+RM을 입력 테브난 직렬저항으로 사용하고 RD/(RF+RM+1/gm1), −gm2ro2/(Zout+RL)를 순서대로 곱한다. K=−RM/(RF+RM). 식 12.173의 부하 포함 T를 그대로 두면 레이저 제거 포트 자체 저항에 RL이 남는다. 여기서는 T0=T(RL=0)를 써서 포트 저항이 부하와 독립이다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "원문 예제의 2포트 경로를 유지한다. 직접 전달 생략 조건에서 테브난 입력과 출력 변환을 곱하고 음의 A_open [A/A]과 K에서 양의 KA_open을 얻는다."
           },
           "FREQ-01": {
             "disposition": "not_applicable",
-            "evidence": "E12.32 (main) 기생 커패시턴스 및 주파수 변화 없음 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "E12.32 (main) 기생 커패시턴스 및 주파수 변화 없음"
           }
         }
       },
       "p4:main": {
         "status": "pass",
-        "reviewer": "Codex",
+        "reviewer": "/root/voltage_content",
         "rules": {
           "UNIT-01": {
             "disposition": "not_applicable",
-            "evidence": "X12.32 (main) 기호 해석으로 수치 단위 환산 없음 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "X12.32 (main) 기호 해석으로 수치 단위 환산 없음"
           },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "X12.32 (main) 수정된 A0 연쇄는 (RF+RM)(VX/VTh)(Iout/VX)|RL=0. 단락 시 원 입력을 유지하고 저항 측정에서 개방한다. 내부 전류원 P→D와 외부 단락 전류 D→P 방향이 양립하며 RN=Zout(1+T0). 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "직전 예제의 2포트로 노턴 등가를 구한다. I_N은 입력을 유지한 R_L=0, R_N은 입력 개방에서 구하고 R_L을 소거한다."
           },
           "CALC-02": {
             "disposition": "not_applicable",
-            "evidence": "X12.32 (main) 소수·반올림 대상이 없는 기호식 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "X12.32 (main) 소수·반올림 대상이 없는 기호식"
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "X12.32 (main) 수정된 A0 연쇄는 (RF+RM)(VX/VTh)(Iout/VX)|RL=0. 단락 시 원 입력을 유지하고 저항 측정에서 개방한다. 내부 전류원 P→D와 외부 단락 전류 D→P 방향이 양립하며 RN=Zout(1+T0). 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "직전 예제의 2포트로 노턴 등가를 구한다. I_N은 입력을 유지한 R_L=0, R_N은 입력 개방에서 구하고 R_L을 소거한다."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "X12.32 (main) 수정된 A0 연쇄는 (RF+RM)(VX/VTh)(Iout/VX)|RL=0. 단락 시 원 입력을 유지하고 저항 측정에서 개방한다. 내부 전류원 P→D와 외부 단락 전류 D→P 방향이 양립하며 RN=Zout(1+T0). 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "직전 예제의 2포트로 노턴 등가를 구한다. I_N은 입력을 유지한 R_L=0, R_N은 입력 개방에서 구하고 R_L을 소거한다."
           },
           "GAIN-01": {
             "disposition": "applied",
-            "evidence": "A_open [A/A]에서 단락은 폐루프 전달비 전체에 적용. R_N 계산은 입력을 개방하고 두 단자에서 보며 최종 전개식에서 R_L 소거."
+            "evidence": "직전 예제의 2포트로 노턴 등가를 구한다. I_N은 입력을 유지한 R_L=0, R_N은 입력 개방에서 구하고 R_L을 소거한다."
           },
           "DEGEN-01": {
             "disposition": "not_applicable",
-            "evidence": "X12.32 (main) 외부 이미터·소스 축퇴 저항의 제어전압 방정식을 구하는 단계가 없다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "X12.32 (main) 외부 이미터·소스 축퇴 저항의 제어전압 방정식을 구하는 단계가 없다."
           },
           "SCALE-01": {
             "disposition": "not_applicable",
-            "evidence": "X12.32 (main) 소자 크기나 바이어스 배율 변화가 주어지지 않음 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "X12.32 (main) 소자 크기나 바이어스 배율 변화가 주어지지 않음"
           },
           "BIAS-01": {
             "disposition": "not_applicable",
-            "evidence": "X12.32 (main) DC 동작영역 경계를 구하지 않는 소신호 문제 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "X12.32 (main) DC 동작영역 경계를 구하지 않는 소신호 문제"
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "A_open [A/A]에서 단락은 폐루프 전달비 전체에 적용. R_N 계산은 입력을 개방하고 두 단자에서 보며 최종 전개식에서 R_L 소거."
+            "evidence": "직전 예제의 2포트로 노턴 등가를 구한다. I_N은 입력을 유지한 R_L=0, R_N은 입력 개방에서 구하고 R_L을 소거한다."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "A_open [A/A]에서 단락은 폐루프 전달비 전체에 적용. R_N 계산은 입력을 개방하고 두 단자에서 보며 최종 전개식에서 R_L 소거."
+            "evidence": "직전 예제의 2포트로 노턴 등가를 구한다. I_N은 입력을 유지한 R_L=0, R_N은 입력 개방에서 구하고 R_L을 소거한다."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "X12.32 (main) 수정된 A0 연쇄는 (RF+RM)(VX/VTh)(Iout/VX)|RL=0. 단락 시 원 입력을 유지하고 저항 측정에서 개방한다. 내부 전류원 P→D와 외부 단락 전류 D→P 방향이 양립하며 RN=Zout(1+T0). 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "직전 예제의 2포트로 노턴 등가를 구한다. I_N은 입력을 유지한 R_L=0, R_N은 입력 개방에서 구하고 R_L을 소거한다."
           },
           "FREQ-01": {
             "disposition": "not_applicable",
-            "evidence": "X12.32 (main) 기생 커패시턴스 및 주파수 변화 없음 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "X12.32 (main) 기생 커패시턴스 및 주파수 변화 없음"
           }
         }
       },
       "p5:main": {
         "status": "pass",
-        "reviewer": "Codex",
+        "reviewer": "/root/voltage_content",
         "rules": {
           "UNIT-01": {
             "disposition": "not_applicable",
-            "evidence": "E12.33 (main) 기호 해석으로 수치 단위 환산 없음 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "E12.33 (main) 기호 해석으로 수치 단위 환산 없음"
           },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "E12.33 (main) 두 포트를 단락 종지해 테브난 RF, RD/(RF+1/gm1), −gm2(ro2∥RM∥RF)를 곱한다. K=−1/RF이며 두 저항 모두 D로 나눈다. 레이저 전류 직렬 감지의 출력저항 증가와 다르다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "이 문항은 V_out이 목표라 부하 가지 전류 환산이 없다. 음의 A_open [V/A]과 K를 사용하며 양의 루프 곱으로 양쪽 저항이 감소한다."
           },
           "CALC-02": {
             "disposition": "not_applicable",
-            "evidence": "E12.33 (main) 소수·반올림 대상이 없는 기호식 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "E12.33 (main) 소수·반올림 대상이 없는 기호식"
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "E12.33 (main) 두 포트를 단락 종지해 테브난 RF, RD/(RF+1/gm1), −gm2(ro2∥RM∥RF)를 곱한다. K=−1/RF이며 두 저항 모두 D로 나눈다. 레이저 전류 직렬 감지의 출력저항 증가와 다르다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "이 문항은 V_out이 목표라 부하 가지 전류 환산이 없다. 음의 A_open [V/A]과 K를 사용하며 양의 루프 곱으로 양쪽 저항이 감소한다."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "E12.33 (main) 두 포트를 단락 종지해 테브난 RF, RD/(RF+1/gm1), −gm2(ro2∥RM∥RF)를 곱한다. K=−1/RF이며 두 저항 모두 D로 나눈다. 레이저 전류 직렬 감지의 출력저항 증가와 다르다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "이 문항은 V_out이 목표라 부하 가지 전류 환산이 없다. 음의 A_open [V/A]과 K를 사용하며 양의 루프 곱으로 양쪽 저항이 감소한다."
           },
           "GAIN-01": {
             "disposition": "applied",
-            "evidence": "출력 전압 감지와 전류 반환의 병렬 종단, PMOS 부호, A_open [V/A], 부귀환 곱과 양쪽 저항의 감소 확인."
+            "evidence": "이 문항은 V_out이 목표라 부하 가지 전류 환산이 없다. 음의 A_open [V/A]과 K를 사용하며 양의 루프 곱으로 양쪽 저항이 감소한다."
           },
           "DEGEN-01": {
             "disposition": "not_applicable",
-            "evidence": "E12.33 (main) 외부 이미터·소스 축퇴 저항의 제어전압 방정식을 구하는 단계가 없다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "E12.33 (main) 외부 이미터·소스 축퇴 저항의 제어전압 방정식을 구하는 단계가 없다."
           },
           "SCALE-01": {
             "disposition": "not_applicable",
-            "evidence": "E12.33 (main) 소자 크기나 바이어스 배율 변화가 주어지지 않음 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "E12.33 (main) 소자 크기나 바이어스 배율 변화가 주어지지 않음"
           },
           "BIAS-01": {
             "disposition": "not_applicable",
-            "evidence": "E12.33 (main) DC 동작영역 경계를 구하지 않는 소신호 문제 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "E12.33 (main) DC 동작영역 경계를 구하지 않는 소신호 문제"
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "출력 전압 감지와 전류 반환의 병렬 종단, PMOS 부호, A_open [V/A], 부귀환 곱과 양쪽 저항의 감소 확인."
+            "evidence": "이 문항은 V_out이 목표라 부하 가지 전류 환산이 없다. 음의 A_open [V/A]과 K를 사용하며 양의 루프 곱으로 양쪽 저항이 감소한다."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "출력 전압 감지와 전류 반환의 병렬 종단, PMOS 부호, A_open [V/A], 부귀환 곱과 양쪽 저항의 감소 확인."
+            "evidence": "이 문항은 V_out이 목표라 부하 가지 전류 환산이 없다. 음의 A_open [V/A]과 K를 사용하며 양의 루프 곱으로 양쪽 저항이 감소한다."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "E12.33 (main) 두 포트를 단락 종지해 테브난 RF, RD/(RF+1/gm1), −gm2(ro2∥RM∥RF)를 곱한다. K=−1/RF이며 두 저항 모두 D로 나눈다. 레이저 전류 직렬 감지의 출력저항 증가와 다르다. 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "이 문항은 V_out이 목표라 부하 가지 전류 환산이 없다. 음의 A_open [V/A]과 K를 사용하며 양의 루프 곱으로 양쪽 저항이 감소한다."
           },
           "FREQ-01": {
             "disposition": "not_applicable",
-            "evidence": "E12.33 (main) 기생 커패시턴스 및 주파수 변화 없음 새 조각에서 해당 회로·가정·계산 범위 대조."
+            "evidence": "E12.33 (main) 기생 커패시턴스 및 주파수 변화 없음"
           }
         }
       }
@@ -462,109 +462,109 @@
   },
   "source_visual": {
     "status": "pass",
-    "reviewer": "/root/laser_blind",
-    "evidence": "p1(2021-1_기말-Q4): Final0617_2p_rev.pdf PDF 1쪽, λ=0, 레이저와 RM의 직렬 감지 및 두 소문항 확인\np2(2023-1_기말-Q3): 기말고사.pdf PDF 3쪽, λ>0, 차동쌍과 PMOS 출력 및 두 소문항 확인\np3(E12.32): 12장.pdf PDF 30쪽, 그림 12.61의 레이저 RL·RM·RF 접속과 유한 rO2 조건 확인\np4(X12.32): 12장.pdf PDF 30쪽, 그림 12.61 예제 뒤 연습문의 레이저 단자 노턴 등가 요구 확인\np5(E12.33): 12장.pdf PDF 30–31쪽, 그림 12.62에서 출력 전압을 보는 포트와 I/O 임피던스 요구 확인\n원본 PDF 쪽 렌더 및 기존 발행본과 새 stage의 원문·조건·그림 일치 대조. 문제 패널과 인라인 회로 SVG는 바이트 동일."
+    "reviewer": "Codex",
+    "evidence": "2021 기말 PDF 1쪽의 λ=0, CG–팔로워 및 두 소문항과 2023 기말 PDF 3쪽의 λ>0, 차동쌍·PMOS 및 두 소문항을 렌더해 대조했다. 교과서 12장 PDF 30–31쪽에서 E12.32의 레이저 전류, X12.32의 노턴 등가, E12.33의 출력 전압 요구와 그림을 대조했다. 새 stage의 다섯 원문 패널은 기존 발행분과 바이트 단위로 동일하다."
   },
   "browser": {
     "status": "pass",
     "reviewer": "Codex",
-    "evidence": "새 stage HTTP Chromium 1280×900·375×812 각 라이트/다크, 5문항. KaTeX, 그림, 요약, 수평 넘침 및 패널 점검 통과."
+    "evidence": "로컬 HTTP Playwright Chromium 1280×900·375×812 각 라이트·다크에서 다섯 문항의 KaTeX, 그림, 요약, 너비와 패널을 검토했다. 1024×900을 포함한 6조합에서 문항 이동·원문·문제·인쇄와 패널을 상호작용으로 확인하고, 변경한 식과 P2 드레인 그림을 스크린샷으로 대조했다."
   },
   "content": {
     "status": "pass",
-    "reviewer": "/root/norton_blind",
-    "evidence": "현재 해설 조각과 원문·기존 발행분을 문항별로 비교한 내용 검토. 최종 stage의 단위·부호·저항 조건을 재확인.",
+    "reviewer": "/root/voltage_content",
+    "evidence": "별도 리뷰어가 원문과 stage HTML·동반 MD의 다섯 문항 일곱 소문항에서 계산 순서, 부호와 부하, 그림과 요약을 대조했다.",
     "items": {
       "p1:1": {
         "status": "pass",
-        "reviewer": "/root/norton_blind",
-        "evidence": "몸체 효과를 생략한 CG–팔로워의 연쇄 곱을 먼저 정의하고 [A/V] 명시. K=R_M과 양의 루프 곱 확인."
+        "reviewer": "/root/voltage_content",
+        "evidence": "CG 이득은 양수. R_source=R_L+R_M을 소스 팔로워 공식에 넣어 V_S/V_X를 구한 뒤 같은 부하로 나눈다. A_open [A/V], K=R_M."
       },
       "p1:2": {
         "status": "pass",
-        "reviewer": "/root/norton_blind",
-        "evidence": "출력 두 단자의 1/g_m2+R_M, 레이저를 연결한 이득과 부하 보정식에서 R_L 소거를 시험원과 대조."
+        "reviewer": "/root/voltage_content",
+        "evidence": "1/g_m2+R_M을 레이저 포트에서 읽고, 부하를 연결한 KA_open을 써서 입력 저항을 구한다. 출력 식의 레이저 저항은 소거된다."
       },
       "p2:1": {
         "status": "pass",
-        "reviewer": "/root/norton_blind",
-        "evidence": "반전 차동쌍과 PMOS 단의 연쇄 곱 [A/V], 유한 r_o1, 게이트의 무한 입력저항 확인."
+        "reviewer": "/root/voltage_content",
+        "evidence": "V_D는 레이저 위의 PMOS 드레인. r_o1∥(R_L+R_M)을 포함한 공통 소스 이득에서 같은 직렬 가지의 R_L+R_M으로 나눈다. 두 번 반전해 양의 A_open [A/V], 게이트 입력 저항은 무한대."
       },
       "p2:2": {
         "status": "pass",
-        "reviewer": "/root/norton_blind",
-        "evidence": "K=R_M, 양의 루프 곱과 기존 근사 유지. 레이저 포함 후 제거한 결과를 두 단자 시험원과 대조."
+        "reviewer": "/root/voltage_content",
+        "evidence": "K=R_M, 양의 KA_open, 두 단자 부하 보정 후 R_L 소거. 마지막 항이 지배할 두 큰 곱 조건을 명시했다."
       },
       "p3:main": {
         "status": "pass",
-        "reviewer": "/root/norton_blind",
-        "evidence": "직접 순방향 전달 생략 조건에서 A_open [A/A]와 K는 음수. 부하 보정식의 R_L 소거와 입출력 저항 배율 확인."
+        "reviewer": "/root/voltage_content",
+        "evidence": "원문 예제의 2포트 경로를 유지한다. 직접 전달 생략 조건에서 테브난 입력과 출력 변환을 곱하고 음의 A_open [A/A]과 K에서 양의 KA_open을 얻는다."
       },
       "p4:main": {
         "status": "pass",
-        "reviewer": "/root/norton_blind",
-        "evidence": "A_open [A/A]에서 단락은 폐루프 전달비 전체에 적용. R_N 계산은 입력을 개방하고 두 단자에서 보며 최종 전개식에서 R_L 소거."
+        "reviewer": "/root/voltage_content",
+        "evidence": "직전 예제의 2포트로 노턴 등가를 구한다. I_N은 입력을 유지한 R_L=0, R_N은 입력 개방에서 구하고 R_L을 소거한다."
       },
       "p5:main": {
         "status": "pass",
-        "reviewer": "/root/norton_blind",
-        "evidence": "출력 전압 감지와 전류 반환의 병렬 종단, PMOS 부호, A_open [V/A], 부귀환 곱과 양쪽 저항의 감소 확인."
+        "reviewer": "/root/voltage_content",
+        "evidence": "이 문항은 V_out이 목표라 부하 가지 전류 환산이 없다. 음의 A_open [V/A]과 K를 사용하며 양의 루프 곱으로 양쪽 저항이 감소한다."
       }
     }
   },
   "independent": {
     "status": "pass",
-    "reviewer": "Codex / 독립 회로 검산자",
-    "evidence": "보존된 원 회로 독립 SymPy 증거를 전 문항 재실행. 이번 변경의 대수 동치와 두 단자 시험원 결과를 별도로 대조.",
+    "reviewer": "Codex / 기존 독립 회로 검산자",
+    "evidence": "원문 기반으로 보관된 독립 SymPy 증거 5개를 재실행하여 결과 파일과 일치함을 확인했다. P1/P2는 부하 포함 소신호 KCL에서 전압 이득과 가지 전류를 구해 기존 최종 개루프 이득과의 대수 동치도 검산했다.",
     "items": {
       "p1:1": {
         "status": "pass",
-        "reviewer": "Codex / 독립 회로 검산자",
+        "reviewer": "Codex / 기존 독립 회로 검산자",
+        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt 재실행 일치.",
         "method": "symbolic",
-        "conclusion": "몸체 효과를 생략한 CG–팔로워의 연쇄 곱을 먼저 정의하고 [A/V] 명시. K=R_M과 양의 루프 곱 확인.",
-        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt. 재실행 통과. 독립 보조 검산의 KCL과 대조."
+        "conclusion": "CG 이득은 양수. R_source=R_L+R_M을 소스 팔로워 공식에 넣어 V_S/V_X를 구한 뒤 같은 부하로 나눈다. A_open [A/V], K=R_M."
       },
       "p1:2": {
         "status": "pass",
-        "reviewer": "Codex / 독립 회로 검산자",
+        "reviewer": "Codex / 기존 독립 회로 검산자",
+        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt 재실행 일치.",
         "method": "symbolic",
-        "conclusion": "출력 두 단자의 1/g_m2+R_M, 레이저를 연결한 이득과 부하 보정식에서 R_L 소거를 시험원과 대조.",
-        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt. 재실행 통과. 독립 보조 검산의 KCL과 대조."
+        "conclusion": "1/g_m2+R_M을 레이저 포트에서 읽고, 부하를 연결한 KA_open을 써서 입력 저항을 구한다. 출력 식의 레이저 저항은 소거된다."
       },
       "p2:1": {
         "status": "pass",
-        "reviewer": "Codex / 독립 회로 검산자",
+        "reviewer": "Codex / 기존 독립 회로 검산자",
+        "evidence": "evidence/p2-sympy.py, evidence/p2-result.txt 재실행 일치.",
         "method": "symbolic",
-        "conclusion": "반전 차동쌍과 PMOS 단의 연쇄 곱 [A/V], 유한 r_o1, 게이트의 무한 입력저항 확인.",
-        "evidence": "evidence/p2-sympy.py, evidence/p2-result.txt. 재실행 통과. 독립 보조 검산의 KCL과 대조."
+        "conclusion": "V_D는 레이저 위의 PMOS 드레인. r_o1∥(R_L+R_M)을 포함한 공통 소스 이득에서 같은 직렬 가지의 R_L+R_M으로 나눈다. 두 번 반전해 양의 A_open [A/V], 게이트 입력 저항은 무한대."
       },
       "p2:2": {
         "status": "pass",
-        "reviewer": "Codex / 독립 회로 검산자",
+        "reviewer": "Codex / 기존 독립 회로 검산자",
+        "evidence": "evidence/p2-sympy.py, evidence/p2-result.txt 재실행 일치.",
         "method": "symbolic",
-        "conclusion": "K=R_M, 양의 루프 곱과 기존 근사 유지. 레이저 포함 후 제거한 결과를 두 단자 시험원과 대조.",
-        "evidence": "evidence/p2-sympy.py, evidence/p2-result.txt. 재실행 통과. 독립 보조 검산의 KCL과 대조."
+        "conclusion": "K=R_M, 양의 KA_open, 두 단자 부하 보정 후 R_L 소거. 마지막 항이 지배할 두 큰 곱 조건을 명시했다."
       },
       "p3:main": {
         "status": "pass",
-        "reviewer": "Codex / 독립 회로 검산자",
+        "reviewer": "Codex / 기존 독립 회로 검산자",
+        "evidence": "evidence/p3-sympy.py, evidence/p3-result.txt 재실행 일치.",
         "method": "symbolic",
-        "conclusion": "직접 순방향 전달 생략 조건에서 A_open [A/A]와 K는 음수. 부하 보정식의 R_L 소거와 입출력 저항 배율 확인.",
-        "evidence": "evidence/p3-sympy.py, evidence/p3-result.txt. 재실행 통과. 독립 보조 검산의 KCL과 대조."
+        "conclusion": "원문 예제의 2포트 경로를 유지한다. 직접 전달 생략 조건에서 테브난 입력과 출력 변환을 곱하고 음의 A_open [A/A]과 K에서 양의 KA_open을 얻는다."
       },
       "p4:main": {
         "status": "pass",
-        "reviewer": "Codex / 독립 회로 검산자",
+        "reviewer": "Codex / 기존 독립 회로 검산자",
+        "evidence": "evidence/p4-sympy.py, evidence/p4-result.txt 재실행 일치.",
         "method": "symbolic",
-        "conclusion": "A_open [A/A]에서 단락은 폐루프 전달비 전체에 적용. R_N 계산은 입력을 개방하고 두 단자에서 보며 최종 전개식에서 R_L 소거.",
-        "evidence": "evidence/p4-sympy.py, evidence/p4-result.txt. 재실행 통과. 독립 보조 검산의 KCL과 대조."
+        "conclusion": "직전 예제의 2포트로 노턴 등가를 구한다. I_N은 입력을 유지한 R_L=0, R_N은 입력 개방에서 구하고 R_L을 소거한다."
       },
       "p5:main": {
         "status": "pass",
-        "reviewer": "Codex / 독립 회로 검산자",
+        "reviewer": "Codex / 기존 독립 회로 검산자",
+        "evidence": "evidence/p5-sympy.py, evidence/p5-result.txt 재실행 일치.",
         "method": "symbolic",
-        "conclusion": "출력 전압 감지와 전류 반환의 병렬 종단, PMOS 부호, A_open [V/A], 부귀환 곱과 양쪽 저항의 감소 확인.",
-        "evidence": "evidence/p5-sympy.py, evidence/p5-result.txt. 재실행 통과. 독립 보조 검산의 KCL과 대조."
+        "conclusion": "이 문항은 V_out이 목표라 부하 가지 전류 환산이 없다. 음의 A_open [V/A]과 K를 사용하며 양의 루프 곱으로 양쪽 저항이 감소한다."
       }
     }
   },
@@ -575,13 +575,13 @@
     ".assets/figures_문제설명_1125_Analog_Filters/bfd5b190ccf70f42-fig-Q3.png": "bfd5b190ccf70f42024bbea44ffba6d8b25e419d1b733b31af3665896da0913c",
     ".assets/figures_문제설명_1125_Analog_Filters/explain-fig-1.svg": "1f9794a028d0db6556967ddd8ca46014e6e52e0faa06fa30a676d744241ade36",
     ".assets/figures_문제설명_1125_Analog_Filters/explain-fig-2.svg": "cb9c0594d59c6463bd7e967f3162c4f770719f7e5a5c312d146504cb109bd662",
-    ".assets/figures_문제설명_1125_Analog_Filters/explain-fig-3.svg": "b3230876d92840a240cbb874316002d5306bb5ceddb3c955974cca497b1e22ff",
+    ".assets/figures_문제설명_1125_Analog_Filters/explain-fig-3.svg": "893c306a3497dc7344e0ac8e326987406327287da7bfd00ed5fdbb701205dd77",
     ".assets/figures_문제설명_1125_Analog_Filters/explain-fig-4.svg": "9d0991bab6f67397abdd673b7c3ac20a5c4dda32f2f3da57048a43d2381b6212",
     ".assets/figures_문제설명_1125_Analog_Filters/explain-fig-5.svg": "aa9e9e70e2136411844d36eb787044b8060141055bca98451a33b419e6b3c758",
     ".assets/figures_문제설명_1125_Analog_Filters/p3-fig-p3-solve.svg": "0ee4a399c486fdf695336ec4b825fafbe6149afa3720db35588dc9cf90ade666",
     ".assets/figures_문제설명_1125_Analog_Filters/p4-fig-p4-solve.svg": "11acdf1cc490f688e8654b9469bc12b31a0c0cf680a103661d37935dfc3b4c25",
-    ".assets/문제설명_1125_Analog_Filters.md": "d5d38350d588d5595612a75cf8e82f68e80c4715f232cfc2488ad714ed1230aa",
-    ".assets/자료_문제설명_1125_Analog_Filters/answer-overlay.json": "daa1f32669a036ed6dd24c95e29584d026ff1977c7092d8027f92c393889e8a7",
+    ".assets/문제설명_1125_Analog_Filters.md": "d3cf5b756f76248a8ccd06f9490924bcc6a4307cfd83e1d87637823d8b3be477",
+    ".assets/자료_문제설명_1125_Analog_Filters/answer-overlay.json": "ac21c3fc8506c918865a7f156abf5c426fd1c032c26d99d91aa57514327e68a0",
     ".assets/자료_문제설명_1125_Analog_Filters/evidence/blind-check.py": "22497db6e3fae53ca8129eec58448462d9fbeb08f29a92e3104411be108d589b",
     ".assets/자료_문제설명_1125_Analog_Filters/evidence/blind-check.txt": "850398bce897c7ae733c78ed1e04101a0366a24460357880356c0d2b4afa5f82",
     ".assets/자료_문제설명_1125_Analog_Filters/evidence/p1-result.txt": "2d99f063ab003ed8406b2a023f3f208f69e30ba0ade7cc9a4c399fc6a3e8b039",
@@ -595,13 +595,13 @@
     ".assets/자료_문제설명_1125_Analog_Filters/evidence/p4-sympy.py": "ece9f3449bb3d93942582b2658a120e5c0123bb89f77af681828e0fefac21ced",
     ".assets/자료_문제설명_1125_Analog_Filters/evidence/p5-result.txt": "16c8c65921ee6bc1a600ddb7a88b77e3f26b85950baacf0aa4cd8db1bd0fd852",
     ".assets/자료_문제설명_1125_Analog_Filters/evidence/p5-sympy.py": "74d954b4c56fa333e6ca95703c9e537f4ad1a07e1d4ac73d44f05d0b87aebfd3",
-    ".assets/자료_문제설명_1125_Analog_Filters/fragments/p1.html": "b278659c386b717e990ab1fd610480487cc3ebe27fa7e230bfadd1c2992329e8",
-    ".assets/자료_문제설명_1125_Analog_Filters/fragments/p2.html": "3e846c355c76db1eb9deb08ca10640a6b8f14d6205b5d8610f3b7a875cd02edc",
+    ".assets/자료_문제설명_1125_Analog_Filters/fragments/p1.html": "58000e9426897f415e603c3b990a3b55a93d140010aabbd51952cd9542eda8ce",
+    ".assets/자료_문제설명_1125_Analog_Filters/fragments/p2.html": "953b2abe8bac26641404fc760d3d7363eb1b0b9e905e19c9e7d943459812e7d8",
     ".assets/자료_문제설명_1125_Analog_Filters/fragments/p3.html": "8d37e564063ea9c3b7fd854be5818f75a50cab6fba41ace2565a39d462a0b0a5",
     ".assets/자료_문제설명_1125_Analog_Filters/fragments/p4.html": "13f5543ab4d936e72d152d447c534fea1eb2130220baea99904c19147e226a15",
     ".assets/자료_문제설명_1125_Analog_Filters/fragments/p5.html": "d85b962445f03bc09f835cfe7812194fa5ea3c337822c53d2649911f38ba92a8",
     ".assets/자료_문제설명_1125_Analog_Filters/template-provenance.json": "69f885ea5f798b5132305e84c4e454228d50fb784330bfab3b2d4fd3697650fc",
-    "문제설명_1125_Analog_Filters.html": "2ccf5e5409e4c25f6c4ad8eb52f592ce409f66b1cc6c2f79048ad8c943583993",
-    ".assets/자료_문제설명_1125_Analog_Filters/manifest.json": "365f21403b0ff5f244cb2ece348b57184582d6085a8a3db0e7cfa17ceba9e576"
+    "문제설명_1125_Analog_Filters.html": "30ef419bd465dbee7ea12740b99c258371a5b308e37701c79f14bbc1a484de4b",
+    ".assets/자료_문제설명_1125_Analog_Filters/manifest.json": "449b4d79fc2b844f51415833fccde287113bc4f3df10bbc33f38665d6ec5537c"
   }
 }

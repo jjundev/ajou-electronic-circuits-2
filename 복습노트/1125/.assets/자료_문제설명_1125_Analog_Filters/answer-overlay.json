@@ -5,7 +5,7 @@
   "slug": "Analog_Filters",
   "learning_style": {
     "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
-    "sha256": "af345a47b1ea0c5f0a5050ae537ebff1e8e454a2b400a9bff65430a1944681e3",
+    "sha256": "f3289a4374575f86d244c221f622690a08ae2d9e1d7e33b9bf93332eaa12da8d",
     "rule_ids": [
       "UNIT-01",
       "CALC-01",
@@ -22,7 +22,7 @@
       "FREQ-01"
     ]
   },
-  "input_hash": "9a7c0b850a1c4b13418d4f20e0889ec9c7f9fe739151115a08bbe35c7c1da898",
+  "input_hash": "d8a85eecbaca113441af22a31728eab476b7bb0d3bdb0ace84ce6bf3d03b1dce",
   "source_inputs": {
     "복습노트/1125/.assets/problems.txt": "5d475aa95b8ba798d9c6ea70331ae0ca8d425305eeda1a8f1e61c2de217e6813",
     "복습노트/1125/.assets/display-titles.json": "4d975adb70fcf02dac9e915b8d268a6097cb01f98c2b67f3405380556d3e02a3",
@@ -36,7 +36,7 @@
     "from_the_past/md/2023-1_기말/figures/redrawn/fig-Q3.png": "bfd5b190ccf70f42024bbea44ffba6d8b25e419d1b733b31af3665896da0913c",
     "교과서/마이크로전자회로/ch12/figures/fig12-61-a.png": "1be4114edb619bd3c856900c8d2858e4ba743c390d5b866a57ad2db14652a6ff",
     "교과서/마이크로전자회로/ch12/figures/fig12-62-a.png": "665fd9502b42338569ef28ec7e8458b231728bacff8826f3b57ea4044ba82897",
-    ".claude/skills/ec2-review-pack/references/solution-style.md": "af345a47b1ea0c5f0a5050ae537ebff1e8e454a2b400a9bff65430a1944681e3"
+    ".claude/skills/ec2-review-pack/references/solution-style.md": "f3289a4374575f86d244c221f622690a08ae2d9e1d7e33b9bf93332eaa12da8d"
   },
   "problems": [
     {
@@ -50,7 +50,7 @@
         {
           "subpart": "1",
           "label": "CG와 소스 팔로워의 연쇄 이득",
-          "html": "\n<p>몸체 효과는 생략해요.  $M_1$ 게이트는 교류 접지라 소스 입력 CG의 이득은 $V_X/V_{in}=g_{m1}R_D$예요.  $M_2$는 소스 팔로워이고 소스에 레이저와 $R_M$이 직렬로 달려 있어요. 두 단의 이득을 노드 $X$에서 나눠요.</p>\n$$A_{\\mathrm{open}}=\\frac{I_{out}}{V_{in}}=\\frac{V_X}{V_{in}}\\frac{I_{out}}{V_X}\\ [\\mathrm{A/V}]$$\n<p>팔로워의 $1/g_{m2}$ 때문에 소스 전압 변화의 크기는 $|V_X|$보다 작아요. 레이저와 $R_M$에 걸리는 $V_S$로 $I_{out}$을 구해요.</p>\n$$\\frac{V_S}{V_X}=\\frac{R_L+R_M}{1/g_{m2}+R_L+R_M}$$\n$$I_{out}=\\frac{V_S}{R_L+R_M}$$\n<p>두 식을 곱하면 $R_L+R_M$이 약분돼요. $V_X$가 직렬 저항 $1/g_{m2}+R_L+R_M$에 전류를 흘리는 것과 같아요.</p>\n$$\\frac{I_{out}}{V_X}=\\frac{1}{1/g_{m2}+R_L+R_M}$$\n$$A_{\\mathrm{open}}=\\frac{g_{m1}R_D}{1/g_{m2}+R_L+R_M}$$\n<p>$V_F=I_{out}R_M$이 입력 $V_{in}-V_F$로 돌아오므로 $K=R_M$인 음귀환이에요.</p>\n"
+          "html": "\n<p>몸체 효과는 생략해요.  $M_1$ 게이트는 교류 접지라 소스 입력 CG의 이득은 $V_X/V_{in}=g_{m1}R_D$예요.  $M_2$는 소스 팔로워이고 소스에 레이저와 $R_M$이 직렬로 달려 있어요. 두 단의 이득을 노드 $X$에서 나눠요.</p>\n$$A_{\\mathrm{open}}=\\frac{I_{out}}{V_{in}}=\\frac{V_X}{V_{in}}\\frac{I_{out}}{V_X}\\ [\\mathrm{A/V}]$$\n<p>소스에 달린 부하를 $R_{\\mathrm{source}}=R_L+R_M$으로 두고, 소스 팔로워의 전압 이득 공식을 써요.</p>\n$$\\frac{V_S}{V_X}=\\frac{R_{\\mathrm{source}}}{1/g_{m2}+R_{\\mathrm{source}}}$$\n<p>부하 양단의 전압 $V_S$를 $R_{\\mathrm{source}}$로 나누면 레이저 전류가 나와요.</p>\n$$\\frac{I_{out}}{V_X}=\\frac{V_S}{V_X}\\frac{1}{R_{\\mathrm{source}}}=\\frac{1}{1/g_{m2}+R_L+R_M}$$\n$$A_{\\mathrm{open}}=\\frac{g_{m1}R_D}{1/g_{m2}+R_L+R_M}$$\n<p>$V_F=I_{out}R_M$이 입력 $V_{in}-V_F$로 돌아오므로 $K=R_M$인 음귀환이에요.</p>\n"
         },
         {
           "subpart": "2",
@@ -79,8 +79,8 @@
       "steps": [
         {
           "subpart": "1",
-          "label": "차동쌍의 이득과 출력단 전류 분배",
-          "html": "\n<p> $M_4$ 게이트를 교류 접지하면 $M_3$ 입력은 반전해요. 중간 노드 $X$에서 두 단을 나눠요.</p>\n$$A_{\\mathrm{open}}=\\frac{I_{out}}{V_{in}}=\\frac{V_X}{V_{in}}\\frac{I_{out}}{V_X}\\ [\\mathrm{A/V}]$$\n<p>대칭 차동쌍과 1:1 거울, 이상적인 테일 전류원, $g_mr_o\\gg1$에서 $R_{out1}\\approx r_{o3}\\parallel r_{o5}$예요.</p>\n$$a_1\\equiv\\left|\\frac{V_X}{V_{in}}\\right|\\approx g_{m3}R_{out1}$$\n<p> 아래 출력 단자 그림처럼 레이저를 떼고 입력을 0으로 두면 $X$가 교류 접지가 되어 위 단자의 $r_{o1}$과 아래 단자의 $R_M$이 접지를 거쳐 직렬로 보여요.</p>\n<p> 레이저를 다시 달면 PMOS 전류 $-g_{m1}V_X$가 $r_{o1}$과 $R_L+R_M$으로 나뉘어요. $M_3$ 게이트에는 입력 전류가 흐르지 않아요.</p>\n"
+          "label": "차동쌍과 공통 소스의 전압 이득에서 출력 전류 계산",
+          "html": "\n<p> $M_4$ 게이트를 교류 접지하면 $M_3$ 입력은 반전해요. 중간 노드 $X$에서 두 단을 나눠요.</p>\n$$A_{\\mathrm{open}}=\\frac{I_{out}}{V_{in}}=\\frac{V_X}{V_{in}}\\frac{I_{out}}{V_X}\\ [\\mathrm{A/V}]$$\n<p>대칭 차동쌍과 1:1 거울, 이상적인 테일 전류원, $g_mr_o\\gg1$에서 $R_{out1}\\approx r_{o3}\\parallel r_{o5}$예요.</p>\n$$a_1\\equiv\\left|\\frac{V_X}{V_{in}}\\right|\\approx g_{m3}R_{out1}$$\n<p> 아래 출력 단자 그림처럼 레이저를 떼고 입력을 0으로 두면 $X$가 교류 접지가 되어 위 단자의 $r_{o1}$과 아래 단자의 $R_M$이 접지를 거쳐 직렬로 보여요.</p>\n<p> 레이저를 다시 달고, 공통 소스 단인 $M_1$의 드레인 전압을 $V_D$로 둬요. 드레인에서 교류 접지까지 $r_{o1}$과 레이저 가지 $R_L+R_M$이 병렬이므로 공통 소스의 전압 이득은 다음과 같아요.</p>\n$$\\frac{V_D}{V_X}=-g_{m1}\\bigl[r_{o1}\\parallel(R_L+R_M)\\bigr]$$\n<p>1번과 같은 순서로, 부하 양단의 전압 $V_D$를 레이저 가지 저항 $R_L+R_M$으로 나눠요.</p>\n$$\\frac{I_{out}}{V_X}=\\frac{V_D}{V_X}\\frac{1}{R_L+R_M}$$\n$$\\frac{I_{out}}{V_X}=\\frac{-g_{m1}r_{o1}}{r_{o1}+R_L+R_M}=\\frac{-g_{m1}r_{o1}}{R_{out,open}+R_L}$$\n<p>$M_3$ 게이트에는 소신호 입력 전류가 흐르지 않아요.</p>\n"
         },
         {
           "subpart": "2",

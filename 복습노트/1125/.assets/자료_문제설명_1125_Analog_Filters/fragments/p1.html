@@ -8,11 +8,10 @@
 <div data-answer-step="CG와 소스 팔로워의 연쇄 이득">
 <p>몸체 효과는 생략해요. <span class="loc">㉠</span> $M_1$ 게이트는 교류 접지라 소스 입력 CG의 이득은 $V_X/V_{in}=g_{m1}R_D$예요. <span class="loc">㉡</span> $M_2$는 소스 팔로워이고 소스에 레이저와 $R_M$이 직렬로 달려 있어요. 두 단의 이득을 노드 $X$에서 나눠요.</p>
 $$A_{\mathrm{open}}=\frac{I_{out}}{V_{in}}=\frac{V_X}{V_{in}}\frac{I_{out}}{V_X}\ [\mathrm{A/V}]$$
-<p>팔로워의 $1/g_{m2}$ 때문에 소스 전압 변화의 크기는 $|V_X|$보다 작아요. 레이저와 $R_M$에 걸리는 $V_S$로 $I_{out}$을 구해요.</p>
-$$\frac{V_S}{V_X}=\frac{R_L+R_M}{1/g_{m2}+R_L+R_M}$$
-$$I_{out}=\frac{V_S}{R_L+R_M}$$
-<p>두 식을 곱하면 $R_L+R_M$이 약분돼요. $V_X$가 직렬 저항 $1/g_{m2}+R_L+R_M$에 전류를 흘리는 것과 같아요.</p>
-$$\frac{I_{out}}{V_X}=\frac{1}{1/g_{m2}+R_L+R_M}$$
+<p>소스에 달린 부하를 $R_{\mathrm{source}}=R_L+R_M$으로 두고, 소스 팔로워의 전압 이득 공식을 써요.</p>
+$$\frac{V_S}{V_X}=\frac{R_{\mathrm{source}}}{1/g_{m2}+R_{\mathrm{source}}}$$
+<p>부하 양단의 전압 $V_S$를 $R_{\mathrm{source}}$로 나누면 레이저 전류가 나와요.</p>
+$$\frac{I_{out}}{V_X}=\frac{V_S}{V_X}\frac{1}{R_{\mathrm{source}}}=\frac{1}{1/g_{m2}+R_L+R_M}$$
 $$A_{\mathrm{open}}=\frac{g_{m1}R_D}{1/g_{m2}+R_L+R_M}$$
 <p>$V_F=I_{out}R_M$이 입력 $V_{in}-V_F$로 돌아오므로 $K=R_M$인 음귀환이에요.</p>
 </div>

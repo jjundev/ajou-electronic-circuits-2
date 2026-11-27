@@ -59,20 +59,16 @@ $$
 A_{\mathrm{open}}=\frac{I_{out}}{V_{in}}=\frac{V_X}{V_{in}}\frac{I_{out}}{V_X}\ [\mathrm{A/V}]
 $$
 
-팔로워의 $1/g_{m2}$ 때문에 소스 전압 변화의 크기는 $|V_X|$보다 작아요. 레이저와 $R_M$에 걸리는 $V_S$로 $I_{out}$을 구해요.
+소스에 달린 부하를 $R_{\mathrm{source}}=R_L+R_M$으로 두고, 소스 팔로워의 전압 이득 공식을 써요.
 
 $$
-\frac{V_S}{V_X}=\frac{R_L+R_M}{1/g_{m2}+R_L+R_M}
+\frac{V_S}{V_X}=\frac{R_{\mathrm{source}}}{1/g_{m2}+R_{\mathrm{source}}}
 $$
 
-$$
-I_{out}=\frac{V_S}{R_L+R_M}
-$$
-
-두 식을 곱하면 $R_L+R_M$이 약분돼요. $V_X$가 직렬 저항 $1/g_{m2}+R_L+R_M$에 전류를 흘리는 것과 같아요.
+부하 양단의 전압 $V_S$를 $R_{\mathrm{source}}$로 나누면 레이저 전류가 나와요.
 
 $$
-\frac{I_{out}}{V_X}=\frac{1}{1/g_{m2}+R_L+R_M}
+\frac{I_{out}}{V_X}=\frac{V_S}{V_X}\frac{1}{R_{\mathrm{source}}}=\frac{1}{1/g_{m2}+R_L+R_M}
 $$
 
 $$
@@ -159,7 +155,7 @@ $$
 
 </details>
 
-![개루프 회로. 왼쪽 V_in이 M3에서 M6까지 묶은 차동 블록의 반전 입력, M4 게이트인 비반전 입력은 귀환망 복제 R_M을 거쳐 접지(전류 0). 블록 출력 X가 PMOS M1 게이트에 연결. M1 소스는 V_DD, 드레인에서 I_out이 레이저 R_L을 지나 노드 V_F, V_F에서 R_M을 거쳐 접지.](figures_문제설명_1125_Analog_Filters/explain-fig-3.svg)
+![개루프 회로. 왼쪽 V_in이 M3에서 M6까지 묶은 차동 블록의 반전 입력, M4 게이트인 비반전 입력은 귀환망 복제 R_M을 거쳐 접지(전류 0). 블록 출력 X가 PMOS M1 게이트에 연결. M1 소스는 V_DD, 드레인 V_D에서 I_out이 레이저 R_L을 지나 노드 V_F, V_F에서 R_M을 거쳐 접지.](figures_문제설명_1125_Analog_Filters/explain-fig-3.svg)
 
 *반송 쪽 게이트는 교류 접지이고 감지 저항은 레이저와 직렬인 개루프*
 
@@ -179,7 +175,23 @@ $$
 
 ㉢ 아래 출력 단자 그림처럼 레이저를 떼고 입력을 0으로 두면 $X$가 교류 접지가 되어 위 단자의 $r_{o1}$과 아래 단자의 $R_M$이 접지를 거쳐 직렬로 보여요.
 
-㉡ 레이저를 다시 달면 PMOS 전류 $-g_{m1}V_X$가 $r_{o1}$과 $R_L+R_M$으로 나뉘어요. $M_3$ 게이트에는 입력 전류가 흐르지 않아요.
+㉡ 레이저를 다시 달고, 공통 소스 단인 $M_1$의 드레인 전압을 $V_D$로 둬요. 드레인에서 교류 접지까지 $r_{o1}$과 레이저 가지 $R_L+R_M$이 병렬이므로 공통 소스의 전압 이득은 다음과 같아요.
+
+$$
+\frac{V_D}{V_X}=-g_{m1}\bigl[r_{o1}\parallel(R_L+R_M)\bigr]
+$$
+
+1번과 같은 순서로, 부하 양단의 전압 $V_D$를 레이저 가지 저항 $R_L+R_M$으로 나눠요.
+
+$$
+\frac{I_{out}}{V_X}=\frac{V_D}{V_X}\frac{1}{R_L+R_M}
+$$
+
+$$
+\frac{I_{out}}{V_X}=\frac{-g_{m1}r_{o1}}{r_{o1}+R_L+R_M}=\frac{-g_{m1}r_{o1}}{R_{out,open}+R_L}
+$$
+
+$M_3$ 게이트에는 소신호 입력 전류가 흐르지 않아요.
 
 $$
 R_{out,open}=r_{o1}+R_M
