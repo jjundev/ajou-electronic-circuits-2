@@ -78,10 +78,10 @@ class LearningStyleBriefTest(unittest.TestCase):
         for required in ("<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md", "learning_style", "data-answer-step", "learning_style_audit", "answer-overlay.json"):
             self.assertIn(required, skill)
         author = (SKILL / "references/authoring.md").read_text()
-        for required in ("data-personalization", "data-solution-core", "data-core-label", "data-answer-step", "<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md"):
+        for required in ("data-personalization", "data-solution-core", "data-core-label", "data-answer-step", "<REPO>/.claude/skills/ec2-review-pack/references/solution-style.md", "말로 줄인 연산 금지"):
             self.assertIn(required, author)
         review = (SKILL / "references/verification.md").read_text()
-        for required in ("learning_style_audit", "not_applicable", "핵심", "단위", "근사", "그림"):
+        for required in ("learning_style_audit", "not_applicable", "핵심", "단위", "근사", "그림", "말로 줄인 연산 금지"):
             self.assertIn(required, review)
 
 
