@@ -257,23 +257,13 @@ $R_F$가 크지 않고, $R_M$이 작지 않으며, 레이저 다이오드가 저
 
 </details>
 
-![개루프 회로. V_DD에서 R_D를 거쳐 노드 X, M1 드레인 X, 게이트 V_b, 소스 입력 노드 N. 왼쪽 I_in이 접지에서 N으로 흐르고, N에는 귀환망 복제 R_F와 R_M이 직렬로 접지까지. X는 PMOS M2 게이트, M2 소스 V_DD, 드레인에서 I_out이 레이저 R_L을 지나 노드 P, P에서 R_M과 R_F가 각각 접지로 병렬. 오른쪽 귀환율 측정에서는 N을 단락하고 시험 전류 I_out을 P에 주입.](figures_문제설명_1125_Analog_Filters/p3-fig-p3-solve.svg)
+![개루프 회로. V_DD에서 R_D를 거쳐 노드 X, M1 드레인 X, 게이트 V_b, 소스 입력 노드 N. 왼쪽 I_in이 접지에서 N으로 흐르고, N에는 귀환망 복제 R_F와 R_M이 직렬로 접지까지. X는 PMOS M2 게이트, M2 소스 V_DD, 드레인 D에서 I_out이 레이저 R_L을 지나 노드 P, P에서 R_M과 R_F가 각각 접지로 병렬. 오른쪽 귀환율 측정에서는 N을 단락하고 시험 전류 I_out을 P에 주입.](figures_문제설명_1125_Analog_Filters/p3-fig-p3-solve.svg)
 
 *왼쪽은 C–C 개루프 회로, 오른쪽은 반송 포트 N을 단락한 귀환망이에요.*
 
-#### 입력과 출력에 남는 저항
+#### 레이저를 연결한 개루프 이득
 
 ㉠ 입력 $N$에서 전류를 병렬로 합치고 출력에서 레이저 전류를 직렬로 감지하는 C-C 귀환이에요. 입력 쪽 복제의 감지 포트를 열면 $N$에서 접지까지 $R_F+R_M$이 남아요. $r_{O1}\to\infty$로 두고 몸체 효과를 무시하면 $M_1$ 소스 쪽 저항은 $1/g_{m1}$이에요.
-
-㉡ 출력 쪽 복제의 반송 포트를 단락하면 $P$에서 $R_F$와 $R_M$이 병렬이에요. 레이저를 떼고 $I_{in}=0$으로 두면 $V_X=0$이므로, 두 레이저 단자 사이에서는 $r_{O2}$와 이 병렬 저항이 교류 접지를 거쳐 직렬로 보여요.
-
-$$
-R_{out,open}=r_{O2}+(R_F\parallel R_M)
-$$
-
-$$
-R_{in,open}=(1/g_{m1})\parallel(R_F+R_M)
-$$
 
 $g_{m1}R_Dg_{m2}r_{O2}\gg R_M/(R_F+R_M)$에서 $R_F$의 직접 순방향 전달을 생략해요. 노턴 입력의 테브난 전압은 $V_{\mathrm{Th}}=I_{in}(R_F+R_M)$이고 직렬 저항은 $R_F+R_M$이에요. 첫 인자 $R_F+R_M$은 $V_{\mathrm{Th}}/I_{in}$이에요. 테브난 전압에서 $X$까지의 이득에는 $R_F+R_M$과 $1/g_{m1}$의 분압이 들어가요.
 
@@ -285,10 +275,36 @@ $$
 \frac{V_X}{V_{\mathrm{Th}}}=\frac{R_D}{R_F+R_M+1/g_{m1}}
 $$
 
-레이저를 연결하면 PMOS 전류 $-g_{m2}V_X$가 $r_{O2}$와 레이저 가지로 나뉘어요.
+㉡ 반송 포트를 단락한 출력 복제에서 $P$와 교류 접지 사이에 $R_F\parallel R_M$이 남아요. $M_2$의 드레인부터 교류 접지까지 레이저 가지의 저항은 $R_L+(R_F\parallel R_M)$이에요. 이 가지와 $r_{O2}$가 병렬이므로 공통 소스 단의 전압 이득은 다음과 같아요.
 
 $$
-\frac{I_{out}}{V_X}=\frac{-g_{m2}r_{O2}}{R_{out,open}+R_L}
+\frac{V_D}{V_X}=-g_{m2}\bigl[r_{O2}\parallel\bigl(R_L+(R_F\parallel R_M)\bigr)\bigr]
+$$
+
+레이저 가지 전체에 드레인 전압 $V_D$가 걸려요. 옴의 법칙으로 $I_{out}=V_D/[R_L+(R_F\parallel R_M)]$이에요. 양변을 $V_X$로 나누면 아래 항을 얻어요.
+
+$$
+\frac{I_{out}}{V_X}=\frac{V_D}{V_X}\frac{1}{R_L+(R_F\parallel R_M)}
+$$
+
+두 단을 곱하고 테브난 변환의 첫 인자 $R_F+R_M$을 포함해요.
+
+$$
+A_{\mathrm{open}}=(R_F+R_M)\frac{V_X}{V_{\mathrm{Th}}}(-g_{m2})\frac{r_{O2}\parallel\bigl(R_L+(R_F\parallel R_M)\bigr)}{R_L+(R_F\parallel R_M)}
+$$
+
+#### 개루프 입력·출력 임피던스
+
+입력에서는 $M_1$ 소스 쪽 저항과 반송 복제의 $R_F+R_M$이 병렬이에요.
+
+$$
+R_{in,open}=(1/g_{m1})\parallel(R_F+R_M)
+$$
+
+출력은 레이저를 떼고 입력 전류원을 개방해요. 이때 $V_X=0$이에요. 두 레이저 단자 사이에서는 드레인 쪽의 $r_{O2}$와 감지 쪽의 $R_F\parallel R_M$이 교류 접지를 거쳐 직렬로 보여요.
+
+$$
+R_{out,open}=r_{O2}+(R_F\parallel R_M)
 $$
 
 ㉢ 귀환망만 떼어 $N$을 단락하면 $I_{out}$의 일부가 $P$에서 $R_F$를 거쳐 $N$으로 흘러요. $I_F$의 기준 방향은 $N$에서 $P$이므로 귀환율은 음수예요.
@@ -298,7 +314,7 @@ K=\frac{I_F}{I_{out}}=-\frac{R_M}{R_M+R_F}
 $$
 
 $$
-KA_{\mathrm{open}}=\frac{R_M R_D g_{m2}r_{O2}}{(R_F+R_M+1/g_{m1})(R_{out,open}+R_L)}>0
+KA_{\mathrm{open}}=\left(-\frac{R_M}{R_M+R_F}\right) A_{\mathrm{open}}>0
 $$
 
 #### 폐루프 이득과 임피던스
@@ -360,33 +376,17 @@ X12.32 · 연습문제 12.32 · [원 문제 보기](../%EB%B3%B5%EC%8A%B5%EB%AC%
 
 ㉠ 레이저 $R_L$ 자리를 도선으로 바꾸고 $I_{in}$은 그대로 흘려요. 이 도선에서 $D$에서 $P$로 흐르는 전류가 $I_N$이에요. 예제 12.32의 폐루프 전류 전달비를 $R_L=0$에서 평가해요.
 
-$g_{m1}R_Dg_{m2}r_{O2}\gg R_M/(R_F+R_M)$에서 $R_F$의 직접 순방향 전달을 생략한 예제의 2포트 식을 써요. 테브난 전압은 $V_{\mathrm{Th}}=I_{in}(R_F+R_M)$이에요. 첫 인자 $R_F+R_M$에 소스 분압을 포함한 $V_X/V_{\mathrm{Th}}$와 레이저가 연결된 출력의 전류 변환 이득을 곱해요.
-
-$$
-R_{out,open}=r_{O2}+(R_F\parallel R_M)
-$$
-
-$$
-A_{\mathrm{open}}=\frac{I_{out}}{I_{in}}=(R_F+R_M)\frac{V_X}{V_{\mathrm{Th}}}\frac{I_{out}}{V_X}\ [\mathrm{A/A}]
-$$
-
-$$
-A_{\mathrm{open}}=\frac{(R_F+R_M)R_D}{R_F+R_M+1/g_{m1}}\cdot\frac{-g_{m2}r_{O2}}{R_{out,open}+R_L}
-$$
-
-$$
-K=-\frac{R_M}{R_M+R_F}
-$$
-
-#### 두 단자에서 본 저항
-
-㉡ 이번에는 레이저를 떼고 독립 전류원 $I_{in}$을 개방해요. 시험전류 $I_t$가 $D$로 들어가 $P$로 나오면 $R_N=(V_D-V_P)/I_t$예요. 노턴 저항은 P3에서 구한 레이저 두 단자의 폐루프 출력저항이에요.
-
-$D$와 $P$ 사이에 다음 전류원과 저항을 병렬로 연결해요. $I_N$은 내부 전류원의 $P\to D$ 기준값이며, $I_{in}>0$일 때 $A_{\mathrm{open}}\lt 0$이므로 음수예요.
+3번에서 구한 $A_{\mathrm{open}}=I_{out}/I_{in}$과 $K=-R_M/(R_M+R_F)$를 써요. 폐루프 전류 전달비 전체에 $R_L=0$을 대입해요.
 
 $$
 I_N=I_{out}\big|_{R_L=0}\approx\left.\frac{A_{\mathrm{open}}}{1+KA_{\mathrm{open}}}\right|_{R_L=0}I_{in}
 $$
+
+등가회로의 전류원 기준은 $P\to D$예요. $I_{in}>0$이면 3번의 $A_{\mathrm{open}}$이 음수이므로 $I_N$도 음수예요.
+
+#### 두 단자에서 본 저항
+
+㉡ 이제 레이저를 떼고 독립 전류원 $I_{in}$을 개방해요. 시험전류 $I_t$가 $D$로 들어가 $P$로 나오면 $R_N=(V_D-V_P)/I_t$예요. 이 값은 3번에서 구한 레이저 두 단자의 폐루프 출력저항이에요.
 
 $R_F$를 통한 순방향 전달을 무시한 2포트 근사에서 노턴 저항은 다음과 같아요.
 

@@ -22,7 +22,7 @@
       "FREQ-01"
     ]
   },
-  "input_hash": "81da5c88f0ffd8d67c3e3a8cb3c9c3c570e220c0308997dbdc2e9f043f4537f2",
+  "input_hash": "9375fc8b3ec3742de116f2a59079ebafbc7f8d21e28677a42659a57a2bdbebc2",
   "source_inputs": {
     "복습노트/1125/.assets/problems.txt": "5d475aa95b8ba798d9c6ea70331ae0ca8d425305eeda1a8f1e61c2de217e6813",
     "복습노트/1125/.assets/display-titles.json": "4d975adb70fcf02dac9e915b8d268a6097cb01f98c2b67f3405380556d3e02a3",
@@ -113,23 +113,18 @@
         },
         {
           "subpart": "main",
-          "label": "출력 포트",
-          "html": "<p data-answer-step=\"출력 포트\"> 출력 쪽 복제의 반송 포트를 단락하면 $P$에서 $R_F$와 $R_M$이 병렬이에요. 레이저를 떼고 $I_{in}=0$으로 두면 $V_X=0$이므로, 두 레이저 단자 사이에서는 $r_{O2}$와 이 병렬 저항이 교류 접지를 거쳐 직렬로 보여요.</p>"
-        },
-        {
-          "subpart": "main",
-          "label": "직접 읽는 두 포트 저항",
-          "html": "\n$$R_{out,open}=r_{O2}+(R_F\\parallel R_M)$$\n$$R_{in,open}=(1/g_{m1})\\parallel(R_F+R_M)$$\n"
-        },
-        {
-          "subpart": "main",
           "label": "목표 전류 이득과 두 항",
-          "html": "\n<p>$g_{m1}R_Dg_{m2}r_{O2}\\gg R_M/(R_F+R_M)$에서 $R_F$의 직접 순방향 전달을 생략해요. 노턴 입력의 테브난 전압은 $V_{\\mathrm{Th}}=I_{in}(R_F+R_M)$이고 직렬 저항은 $R_F+R_M$이에요. 첫 인자 $R_F+R_M$은 $V_{\\mathrm{Th}}/I_{in}$이에요. 테브난 전압에서 $X$까지의 이득에는 $R_F+R_M$과 $1/g_{m1}$의 분압이 들어가요.</p>\n$$A_{\\mathrm{open}}=\\frac{I_{out}}{I_{in}}=(R_F+R_M)\\frac{V_X}{V_{\\mathrm{Th}}}\\frac{I_{out}}{V_X}\\ [\\mathrm{A/A}]$$\n$$\\frac{V_X}{V_{\\mathrm{Th}}}=\\frac{R_D}{R_F+R_M+1/g_{m1}}$$\n<p>레이저를 연결하면 PMOS 전류 $-g_{m2}V_X$가 $r_{O2}$와 레이저 가지로 나뉘어요.</p>\n$$\\frac{I_{out}}{V_X}=\\frac{-g_{m2}r_{O2}}{R_{out,open}+R_L}$$\n"
+          "html": "\n<p>$g_{m1}R_Dg_{m2}r_{O2}\\gg R_M/(R_F+R_M)$에서 $R_F$의 직접 순방향 전달을 생략해요. 노턴 입력의 테브난 전압은 $V_{\\mathrm{Th}}=I_{in}(R_F+R_M)$이고 직렬 저항은 $R_F+R_M$이에요. 첫 인자 $R_F+R_M$은 $V_{\\mathrm{Th}}/I_{in}$이에요. 테브난 전압에서 $X$까지의 이득에는 $R_F+R_M$과 $1/g_{m1}$의 분압이 들어가요.</p>\n$$A_{\\mathrm{open}}=\\frac{I_{out}}{I_{in}}=(R_F+R_M)\\frac{V_X}{V_{\\mathrm{Th}}}\\frac{I_{out}}{V_X}\\ [\\mathrm{A/A}]$$\n$$\\frac{V_X}{V_{\\mathrm{Th}}}=\\frac{R_D}{R_F+R_M+1/g_{m1}}$$\n<p> 반송 포트를 단락한 출력 복제에서 $P$와 교류 접지 사이에 $R_F\\parallel R_M$이 남아요. $M_2$의 드레인부터 교류 접지까지 레이저 가지의 저항은 $R_L+(R_F\\parallel R_M)$이에요. 이 가지와 $r_{O2}$가 병렬이므로 공통 소스 단의 전압 이득은 다음과 같아요.</p>\n$$\\frac{V_D}{V_X}=-g_{m2}\\bigl[r_{O2}\\parallel\\bigl(R_L+(R_F\\parallel R_M)\\bigr)\\bigr]$$\n<p>레이저 가지 전체에 드레인 전압 $V_D$가 걸려요. 옴의 법칙으로 $I_{out}=V_D/[R_L+(R_F\\parallel R_M)]$이에요. 양변을 $V_X$로 나누면 아래 항을 얻어요.</p>\n$$\\frac{I_{out}}{V_X}=\\frac{V_D}{V_X}\\frac{1}{R_L+(R_F\\parallel R_M)}$$\n<p>두 단을 곱하고 테브난 변환의 첫 인자 $R_F+R_M$을 포함해요.</p>\n$$A_{\\mathrm{open}}=(R_F+R_M)\\frac{V_X}{V_{\\mathrm{Th}}}(-g_{m2})\\frac{r_{O2}\\parallel\\bigl(R_L+(R_F\\parallel R_M)\\bigr)}{R_L+(R_F\\parallel R_M)}$$\n"
+        },
+        {
+          "subpart": "main",
+          "label": "개루프 입력·출력 임피던스",
+          "html": "\n<p>입력에서는 $M_1$ 소스 쪽 저항과 반송 복제의 $R_F+R_M$이 병렬이에요.</p>\n$$R_{in,open}=(1/g_{m1})\\parallel(R_F+R_M)$$\n<p>출력은 레이저를 떼고 입력 전류원을 개방해요. 이때 $V_X=0$이에요. 두 레이저 단자 사이에서는 드레인 쪽의 $r_{O2}$와 감지 쪽의 $R_F\\parallel R_M$이 교류 접지를 거쳐 직렬로 보여요.</p>\n$$R_{out,open}=r_{O2}+(R_F\\parallel R_M)$$\n"
         },
         {
           "subpart": "main",
           "label": "직렬 감지와 귀환율",
-          "html": "\n<p> 귀환망만 떼어 $N$을 단락하면 $I_{out}$의 일부가 $P$에서 $R_F$를 거쳐 $N$으로 흘러요. $I_F$의 기준 방향은 $N$에서 $P$이므로 귀환율은 음수예요.</p>\n$$K=\\frac{I_F}{I_{out}}=-\\frac{R_M}{R_M+R_F}$$\n$$KA_{\\mathrm{open}}=\\frac{R_M R_D g_{m2}r_{O2}}{(R_F+R_M+1/g_{m1})(R_{out,open}+R_L)}&gt;0$$\n"
+          "html": "\n<p> 귀환망만 떼어 $N$을 단락하면 $I_{out}$의 일부가 $P$에서 $R_F$를 거쳐 $N$으로 흘러요. $I_F$의 기준 방향은 $N$에서 $P$이므로 귀환율은 음수예요.</p>\n$$K=\\frac{I_F}{I_{out}}=-\\frac{R_M}{R_M+R_F}$$\n$$KA_{\\mathrm{open}}=\\left(-\\frac{R_M}{R_M+R_F}\\right) A_{\\mathrm{open}}&gt;0$$\n"
         }
       ],
       "answers": [
@@ -153,19 +148,14 @@
         },
         {
           "subpart": "main",
-          "label": "레이저가 연결된 상태의 이득",
-          "html": "\n<p>$g_{m1}R_Dg_{m2}r_{O2}\\gg R_M/(R_F+R_M)$에서 $R_F$의 직접 순방향 전달을 생략한 예제의 2포트 식을 써요. 테브난 전압은 $V_{\\mathrm{Th}}=I_{in}(R_F+R_M)$이에요. 첫 인자 $R_F+R_M$에 소스 분압을 포함한 $V_X/V_{\\mathrm{Th}}$와 레이저가 연결된 출력의 전류 변환 이득을 곱해요.</p>\n$$R_{out,open}=r_{O2}+(R_F\\parallel R_M)$$\n$$A_{\\mathrm{open}}=\\frac{I_{out}}{I_{in}}=(R_F+R_M)\\frac{V_X}{V_{\\mathrm{Th}}}\\frac{I_{out}}{V_X}\\ [\\mathrm{A/A}]$$\n$$A_{\\mathrm{open}}=\\frac{(R_F+R_M)R_D}{R_F+R_M+1/g_{m1}}\\cdot\\frac{-g_{m2}r_{O2}}{R_{out,open}+R_L}$$\n$$K=-\\frac{R_M}{R_M+R_F}$$\n"
-        },
-        {
-          "subpart": "main",
-          "label": "시험원 조건",
-          "html": "<p data-answer-step=\"시험원 조건\"> 이번에는 레이저를 떼고 독립 전류원 $I_{in}$을 개방해요. 시험전류 $I_t$가 $D$로 들어가 $P$로 나오면 $R_N=(V_D-V_P)/I_t$예요. 노턴 저항은 P3에서 구한 레이저 두 단자의 폐루프 출력저항이에요.</p>"
+          "label": "전류 전달비 재사용",
+          "html": "<p data-answer-step=\"전류 전달비 재사용\">3번에서 구한 $A_{\\mathrm{open}}=I_{out}/I_{in}$과 $K=-R_M/(R_M+R_F)$를 써요. 폐루프 전류 전달비 전체에 $R_L=0$을 대입해요.</p>"
         }
       ],
       "answers": [
         {
           "subpart": "main",
-          "html": "\n<p>$D$와 $P$ 사이에 다음 전류원과 저항을 병렬로 연결해요. $I_N$은 내부 전류원의 $P\\to D$ 기준값이며, $I_{in}&gt;0$일 때 $A_{\\mathrm{open}}\\lt 0$이므로 음수예요.</p>\n$$I_N=I_{out}\\big|_{R_L=0}\\approx\\left.\\frac{A_{\\mathrm{open}}}{1+KA_{\\mathrm{open}}}\\right|_{R_L=0}I_{in}$$\n<p>$R_F$를 통한 순방향 전달을 무시한 2포트 근사에서 노턴 저항은 다음과 같아요.</p>\n$$R_N=R_{out,closed}\\approx (R_{out,open}+R_L)(1+KA_{\\mathrm{open}})-R_L$$\n$$R_N\\approx r_{O2}+(R_F\\parallel R_M)+\\frac{R_M R_D g_{m2}r_{O2}}{R_F+R_M+1/g_{m1}}$$\n"
+          "html": "\n$$I_N=I_{out}\\big|_{R_L=0}\\approx\\left.\\frac{A_{\\mathrm{open}}}{1+KA_{\\mathrm{open}}}\\right|_{R_L=0}I_{in}$$\n<p>등가회로의 전류원 기준은 $P\\to D$예요. $I_{in}&gt;0$이면 3번의 $A_{\\mathrm{open}}$이 음수이므로 $I_N$도 음수예요.</p>\n<h4>두 단자에서 본 저항</h4>\n<p> 이제 레이저를 떼고 독립 전류원 $I_{in}$을 개방해요. 시험전류 $I_t$가 $D$로 들어가 $P$로 나오면 $R_N=(V_D-V_P)/I_t$예요. 이 값은 3번에서 구한 레이저 두 단자의 폐루프 출력저항이에요.</p>\n<p>$R_F$를 통한 순방향 전달을 무시한 2포트 근사에서 노턴 저항은 다음과 같아요.</p>\n$$R_N=R_{out,closed}\\approx (R_{out,open}+R_L)(1+KA_{\\mathrm{open}})-R_L$$\n$$R_N\\approx r_{O2}+(R_F\\parallel R_M)+\\frac{R_M R_D g_{m2}r_{O2}}{R_F+R_M+1/g_{m1}}$$\n"
         }
       ]
     },
