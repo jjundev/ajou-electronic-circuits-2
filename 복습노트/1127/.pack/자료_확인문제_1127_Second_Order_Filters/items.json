@@ -1,0 +1,450 @@
+{
+ "items": [
+  {
+   "id": "q1",
+   "objective": "o1",
+   "format": "short",
+   "title": "멀리 떨어진 신호의 감쇠량",
+   "stem_html": "<p>극점이 $200\\ \\mathrm{kHz}$에 하나 있는 1차 저역 통과 필터가 있어요. 보데 근사로 $200\\ \\mathrm{MHz}$ 신호는 통과 대역보다 몇 dB 작아지나요?</p><p>감쇠량을 양수로, 단위 없이 숫자만 적어요.</p>",
+   "hint": "극점 주파수의 몇 배인지부터 구하고, 10배마다 몇 dB씩 줄어드는지 세요.",
+   "answer": {
+    "canonical": "60",
+    "accepted": [
+     "60.0",
+     "60.00"
+    ]
+   },
+   "solution": [
+    "$200\\ \\mathrm{MHz}/200\\ \\mathrm{kHz}=1000$배라서 세 디케이드 위예요.",
+    "1차 필터는 디케이드마다 $20\\ \\mathrm{dB}$씩 줄어요.",
+    "$3\\times20\\ \\mathrm{dB}=60\\ \\mathrm{dB}$, 크기로는 1/1000배예요."
+   ]
+  },
+  {
+   "id": "q2",
+   "objective": "o1",
+   "format": "mcq",
+   "title": "1차 필터로는 모자란 이유",
+   "stem_html": "<p>내 채널에서 $1\\ \\mathrm{MHz}$ 떨어진 간섭 신호를 약 $40\\ \\mathrm{dB}$, 곧 크기로 1/100배까지 줄여야 해요. 극점이 하나뿐인 1차 저역 통과 필터로는 부족한 이유로 맞는 것은?</p>",
+   "hint": "$-20\\ \\mathrm{dB/dec}$가 어떤 단위의 기울기인지 먼저 읽어요.",
+   "options": [
+    {
+     "id": "A",
+     "text": "컷오프를 지나는 순간 한 번에 $20\\ \\mathrm{dB}$만 떨어지고 그 뒤로는 더 줄지 않아요.",
+     "why": "$-20\\ \\mathrm{dB/dec}$는 주파수가 10배 될 때마다 20 dB씩 계속 떨어진다는 뜻이라 틀려요.",
+     "misconception": "기울기 단위를 한 번의 낙차로 읽음"
+    },
+    {
+     "id": "B",
+     "text": "$-40\\ \\mathrm{dB}$는 크기로 1/20배인데 1차 필터는 1/10배까지만 만들 수 있어요.",
+     "why": "$-40\\ \\mathrm{dB}$는 1/10배를 두 번 곱한 1/100배예요. 1/20배로 읽으면 틀려요.",
+     "misconception": "dB를 20배 나눗셈으로 환산함"
+    },
+    {
+     "id": "C",
+     "text": "기울기가 $-20\\ \\mathrm{dB/dec}$라서 $40\\ \\mathrm{dB}$를 얻으려면 주파수가 100배 멀어져야 해요. 바로 옆 신호는 충분히 줄지 않아요.",
+     "why": "10배에 20 dB, 100배에 40 dB이므로 맞아요."
+    },
+    {
+     "id": "D",
+     "text": "저항을 키우면 기울기가 $-40\\ \\mathrm{dB/dec}$가 되지만 전력을 너무 써서 못 써요.",
+     "why": "기울기는 소자 값이 아니라 극점 수로 정해져요. 극점이 하나면 $-20\\ \\mathrm{dB/dec}$예요.",
+     "misconception": "소자 값이 기울기를 바꾼다고 봄"
+    }
+   ],
+   "answer": "C"
+  },
+  {
+   "id": "q3",
+   "objective": "o2",
+   "format": "mcq",
+   "title": "복소 극점이 필요한 블록",
+   "stem_html": "<p>극점 네 개가 켤레 복소수 두 쌍인 4차 저역 통과 필터를 1차·2차 블록으로 만들려고 해요. 필요한 블록 조합으로 맞는 것은?</p>",
+   "hint": "1차 블록이 만들 수 있는 극점의 종류부터 떠올려요.",
+   "options": [
+    {
+     "id": "A",
+     "text": "1차 블록 4개를 이어요.",
+     "why": "1차 블록은 실수 극점만 만들어서 복소 극점 쌍을 만들 수 없어요.",
+     "misconception": "1차 블록도 복소 극점을 만든다고 봄"
+    },
+    {
+     "id": "B",
+     "text": "2차 블록 2개를 이어요.",
+     "why": "2차 블록 하나가 복소 극점 한 쌍을 만들고 극점 수도 $2\\times2=4$로 맞아요."
+    },
+    {
+     "id": "C",
+     "text": "2차 블록 1개와 1차 블록 2개를 이어요.",
+     "why": "극점은 네 개지만 복소 쌍은 하나뿐이고 나머지는 실수 극점이에요.",
+     "misconception": "극점 개수만 맞추고 종류를 안 봄"
+    },
+    {
+     "id": "D",
+     "text": "2차 블록 4개를 이어요.",
+     "why": "그러면 8차가 돼요. 차수는 블록 수가 아니라 극점 수예요.",
+     "misconception": "차수를 블록 개수로 셈"
+    }
+   ],
+   "answer": "B"
+  },
+  {
+   "id": "q4",
+   "objective": "o3",
+   "format": "short",
+   "title": "1차 전달함수의 DC 이득",
+   "stem_html": "<p>1차 필터 $H(s)=5\\,\\dfrac{s+300}{s+1200}$의 DC 이득 $H(0)$을 구해요. $s$의 단위는 $\\mathrm{rad/s}$예요.</p><p>단위 없이 숫자만 적어요.</p>",
+   "hint": "$s=0$을 넣어 분자·분모의 상수항만 남겨요.",
+   "answer": {
+    "canonical": "1.25",
+    "accepted": [
+     "1.250",
+     "5/4"
+    ]
+   },
+   "solution": [
+    "일반형 $H(s)=\\alpha\\dfrac{s-z_1}{s-p_1}$에서 $\\alpha=5$, $z_1=-300$, $p_1=-1200$이에요.",
+    "$H(0)=\\alpha\\dfrac{z_1}{p_1}=5\\times\\dfrac{300}{1200}=1.25$예요."
+   ]
+  },
+  {
+   "id": "q5",
+   "objective": "o3",
+   "format": "mcq",
+   "title": "극점과 영점 중 어느 쪽이 먼저일까",
+   "stem_html": "<p>1차 필터 $H(s)=4\\,\\dfrac{s+900}{s+30}$이에요. $s$의 단위는 $\\mathrm{rad/s}$예요. 필터 종류와 양 끝의 이득으로 맞는 것은?</p>",
+   "hint": "극점과 영점의 부호가 아니라 원점에서의 거리를 비교해요.",
+   "options": [
+    {
+     "id": "A",
+     "text": "HPF예요. $-30$이 $-900$보다 크므로 극점이 나중에 와요. 저주파 이득 4, 고주파 이득 120이에요.",
+     "why": "부호 있는 값이 아니라 크기 $|p_1|=30<|z_1|=900$으로 비교해야 해요. 고주파 이득도 $\\alpha=4$예요.",
+     "misconception": "극점·영점을 부호 있는 값으로 비교함"
+    },
+    {
+     "id": "B",
+     "text": "LPF예요. 저주파 이득은 $4\\times30/900\\approx0.13$, 고주파 이득은 4예요.",
+     "why": "LPF 판정은 맞지만 DC 이득은 $\\alpha z_1/p_1$이라 $4\\times900/30=120$이에요.",
+     "misconception": "DC 이득의 비를 거꾸로 씀"
+    },
+    {
+     "id": "C",
+     "text": "HPF예요. 영점이 더 커서 고주파를 키워요. 저주파 이득 $\\approx0.13$, 고주파 이득 4예요.",
+     "why": "극점이 먼저 와서 LPF예요. 두 이득도 거꾸로 읽었어요.",
+     "misconception": "영점이 큰 쪽을 고주파 통과로 봄"
+    },
+    {
+     "id": "D",
+     "text": "LPF예요. 저주파 이득은 120, 고주파 이득은 4예요.",
+     "why": "$|p_1|=30<|z_1|=900$이라 극점이 먼저 와서 LPF이고, DC 이득 $4\\times900/30=120$, 고주파 이득 $\\alpha=4$예요."
+    }
+   ],
+   "answer": "D"
+  },
+  {
+   "id": "q6",
+   "objective": "o4",
+   "format": "short",
+   "title": "수동 RC 분압기의 고주파 이득",
+   "stem_html": "<p>그림의 수동 분압기에서 출력에 부하는 없어요. $R_1=1\\ \\mathrm{k\\Omega}$, $R_2=4\\ \\mathrm{k\\Omega}$, $C_1=3\\ \\mathrm{nF}$, $C_2=2\\ \\mathrm{nF}$이에요. 주파수가 매우 높을 때 $|V_{out}/V_{in}|$은 얼마인가요?</p><p>단위 없이 소수로 숫자만 적어요.</p>",
+   "hint": "아주 높은 주파수에서는 저항과 커패시터 중 어느 쪽이 전압을 나누는지 먼저 정해요.",
+   "answer": {
+    "canonical": "0.6",
+    "accepted": [
+     ".6",
+     "0.60",
+     "3/5"
+    ]
+   },
+   "solution": [
+    "고주파에서는 커패시터가 전압을 나눠요. 임피던스가 $1/C$에 비례해요.",
+    "$\\dfrac{C_1}{C_1+C_2}=\\dfrac{3}{3+2}=0.6$이에요."
+   ],
+   "figure_svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 360 170\" role=\"img\" aria-label=\"입력과 출력 사이에 R1과 C1이 병렬로 놓이고, 출력 노드에서 접지로 R2와 C2가 각각 연결된 수동 RC 분압기\"><title>수동 RC 분압기</title><g fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"20\" cy=\"60\" r=\"3\"/><line x1=\"23\" y1=\"60\" x2=\"50\" y2=\"60\"/><line x1=\"50\" y1=\"40\" x2=\"50\" y2=\"80\"/><polyline points=\"50,40 80,40 86,32 98,48 110,32 122,48 134,32 140,40 170,40\"/><line x1=\"50\" y1=\"80\" x2=\"104\" y2=\"80\"/><line x1=\"104\" y1=\"68\" x2=\"104\" y2=\"92\"/><line x1=\"112\" y1=\"68\" x2=\"112\" y2=\"92\"/><line x1=\"112\" y1=\"80\" x2=\"170\" y2=\"80\"/><line x1=\"170\" y1=\"40\" x2=\"170\" y2=\"80\"/><line x1=\"170\" y1=\"60\" x2=\"290\" y2=\"60\"/><line x1=\"230\" y1=\"60\" x2=\"230\" y2=\"75\"/><polyline points=\"230,75 238,82 222,90 238,98 222,106 230,113\"/><line x1=\"230\" y1=\"113\" x2=\"230\" y2=\"140\"/><line x1=\"290\" y1=\"60\" x2=\"290\" y2=\"92\"/><line x1=\"278\" y1=\"92\" x2=\"302\" y2=\"92\"/><line x1=\"278\" y1=\"100\" x2=\"302\" y2=\"100\"/><line x1=\"290\" y1=\"100\" x2=\"290\" y2=\"140\"/><line x1=\"230\" y1=\"140\" x2=\"290\" y2=\"140\"/><line x1=\"260\" y1=\"140\" x2=\"260\" y2=\"148\"/><line x1=\"248\" y1=\"148\" x2=\"272\" y2=\"148\"/><line x1=\"254\" y1=\"153\" x2=\"266\" y2=\"153\"/><line x1=\"290\" y1=\"60\" x2=\"327\" y2=\"60\"/><circle cx=\"330\" cy=\"60\" r=\"3\"/></g><g fill=\"currentColor\"><circle cx=\"230\" cy=\"60\" r=\"2.5\"/><circle cx=\"290\" cy=\"60\" r=\"2.5\"/></g><g fill=\"currentColor\" font-size=\"14\"><text x=\"4\" y=\"48\">V<tspan baseline-shift=\"sub\" font-size=\"10\">in</tspan></text><text x=\"102\" y=\"26\">R<tspan baseline-shift=\"sub\" font-size=\"10\">1</tspan></text><text x=\"100\" y=\"112\">C<tspan baseline-shift=\"sub\" font-size=\"10\">1</tspan></text><text x=\"244\" y=\"98\">R<tspan baseline-shift=\"sub\" font-size=\"10\">2</tspan></text><text x=\"308\" y=\"110\">C<tspan baseline-shift=\"sub\" font-size=\"10\">2</tspan></text><text x=\"310\" y=\"46\">V<tspan baseline-shift=\"sub\" font-size=\"10\">out</tspan></text></g></svg>"
+  },
+  {
+   "id": "q7",
+   "objective": "o4",
+   "format": "mcq",
+   "title": "수동 분압기는 LPF일까 HPF일까",
+   "stem_html": "<p>그림은 입력과 출력 사이에 $R_1\\parallel C_1$, 출력 노드와 접지 사이에 $R_2\\parallel C_2$가 있는 수동 분압기이고 출력에 부하는 없어요. $R_1=2\\ \\mathrm{k\\Omega}$, $C_1=5\\ \\mathrm{nF}$, $R_2=1\\ \\mathrm{k\\Omega}$, $C_2=4\\ \\mathrm{nF}$이에요. 맞는 설명은?</p>",
+   "hint": "비교할 두 시간 상수 $R_1C_1$과 $R_2C_2$를 먼저 구해요.",
+   "options": [
+    {
+     "id": "A",
+     "text": "HPF예요. $R_1C_1=10\\ \\mu\\mathrm{s}$가 $R_2C_2=4\\ \\mu\\mathrm{s}$보다 커요.",
+     "why": "$R_1C_1>R_2C_2$이면 HPF예요. 저주파 이득 $1/3$이 고주파 이득 $5/9$보다 작아 일치해요."
+    },
+    {
+     "id": "B",
+     "text": "LPF예요. 저주파 이득 $R_2/(R_1+R_2)$가 있으니까요.",
+     "why": "저주파 이득이 있다고 LPF가 아니라 저주파 이득이 고주파 이득보다 큰지를 봐야 해요. 여기서는 $1/3<5/9$예요.",
+     "misconception": "저주파 이득이 존재하면 LPF라고 봄"
+    },
+    {
+     "id": "C",
+     "text": "LPF예요. $R_2C_2$가 $R_1C_1$보다 작아서 먼저 꺾여요.",
+     "why": "LPF는 $R_2C_2>R_1C_1$일 때예요. 부등호 방향을 거꾸로 썼어요.",
+     "misconception": "조건 부등호를 거꾸로 외움"
+    },
+    {
+     "id": "D",
+     "text": "판단할 수 없어요. 수동 필터는 이득이 늘 1보다 작아서 LPF와 HPF가 갈리지 않아요.",
+     "why": "이득이 1보다 작아도 두 끝 이득의 크기 차이로 LPF/HPF가 갈려요.",
+     "misconception": "이득이 1보다 작으면 필터 종류를 못 가른다고 봄"
+    }
+   ],
+   "answer": "A",
+   "figure_svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 360 170\" role=\"img\" aria-label=\"입력과 출력 사이에 R1과 C1이 병렬로 놓이고, 출력 노드에서 접지로 R2와 C2가 각각 연결된 수동 RC 분압기\"><title>수동 RC 분압기</title><g fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"20\" cy=\"60\" r=\"3\"/><line x1=\"23\" y1=\"60\" x2=\"50\" y2=\"60\"/><line x1=\"50\" y1=\"40\" x2=\"50\" y2=\"80\"/><polyline points=\"50,40 80,40 86,32 98,48 110,32 122,48 134,32 140,40 170,40\"/><line x1=\"50\" y1=\"80\" x2=\"104\" y2=\"80\"/><line x1=\"104\" y1=\"68\" x2=\"104\" y2=\"92\"/><line x1=\"112\" y1=\"68\" x2=\"112\" y2=\"92\"/><line x1=\"112\" y1=\"80\" x2=\"170\" y2=\"80\"/><line x1=\"170\" y1=\"40\" x2=\"170\" y2=\"80\"/><line x1=\"170\" y1=\"60\" x2=\"290\" y2=\"60\"/><line x1=\"230\" y1=\"60\" x2=\"230\" y2=\"75\"/><polyline points=\"230,75 238,82 222,90 238,98 222,106 230,113\"/><line x1=\"230\" y1=\"113\" x2=\"230\" y2=\"140\"/><line x1=\"290\" y1=\"60\" x2=\"290\" y2=\"92\"/><line x1=\"278\" y1=\"92\" x2=\"302\" y2=\"92\"/><line x1=\"278\" y1=\"100\" x2=\"302\" y2=\"100\"/><line x1=\"290\" y1=\"100\" x2=\"290\" y2=\"140\"/><line x1=\"230\" y1=\"140\" x2=\"290\" y2=\"140\"/><line x1=\"260\" y1=\"140\" x2=\"260\" y2=\"148\"/><line x1=\"248\" y1=\"148\" x2=\"272\" y2=\"148\"/><line x1=\"254\" y1=\"153\" x2=\"266\" y2=\"153\"/><line x1=\"290\" y1=\"60\" x2=\"327\" y2=\"60\"/><circle cx=\"330\" cy=\"60\" r=\"3\"/></g><g fill=\"currentColor\"><circle cx=\"230\" cy=\"60\" r=\"2.5\"/><circle cx=\"290\" cy=\"60\" r=\"2.5\"/></g><g fill=\"currentColor\" font-size=\"14\"><text x=\"4\" y=\"48\">V<tspan baseline-shift=\"sub\" font-size=\"10\">in</tspan></text><text x=\"102\" y=\"26\">R<tspan baseline-shift=\"sub\" font-size=\"10\">1</tspan></text><text x=\"100\" y=\"112\">C<tspan baseline-shift=\"sub\" font-size=\"10\">1</tspan></text><text x=\"244\" y=\"98\">R<tspan baseline-shift=\"sub\" font-size=\"10\">2</tspan></text><text x=\"308\" y=\"110\">C<tspan baseline-shift=\"sub\" font-size=\"10\">2</tspan></text><text x=\"310\" y=\"46\">V<tspan baseline-shift=\"sub\" font-size=\"10\">out</tspan></text></g></svg>"
+  },
+  {
+   "id": "q8",
+   "objective": "o5",
+   "format": "mcq",
+   "title": "능동 1차 필터의 장단점",
+   "stem_html": "<p>반전 증폭기 구조의 능동 1차 필터는 $Z_1=R_1\\parallel C_1$, $Z_2=R_2\\parallel C_2$이고 $H=-Z_2/Z_1$이에요. 수동 RC 분압기와 비교해 맞는 설명은?</p>",
+   "hint": "능동 소자가 무엇을 주고 무엇을 가져가는지 두 가지를 같이 떠올려요.",
+   "options": [
+    {
+     "id": "A",
+     "text": "능동 필터는 저주파 이득이 항상 1보다 커요.",
+     "why": "저주파 이득은 $R_2/R_1$이라서 $R_2<R_1$이면 1보다 작아요. 키울 수 있다는 것이지 늘 크다는 뜻이 아니에요.",
+     "misconception": "능동이면 이득이 늘 1보다 크다고 봄"
+    },
+    {
+     "id": "B",
+     "text": "$R_2>R_1$로 저주파 이득을 1보다 크게 만들 수 있고 극점 $1/(R_2C_2)$와 영점 $1/(R_1C_1)$을 따로 정하지만, 전력을 쓰고 OP-amp 극점 이후 대역폭이 제한돼요.",
+     "why": "이득을 얻는 대가가 전력 소모와 대역폭 제한이에요."
+    },
+    {
+     "id": "C",
+     "text": "전원이 필요 없고 OP-amp 극점보다 높은 주파수에서도 같은 이득을 유지해요.",
+     "why": "능동 소자는 전원이 필요하고 자기 극점 뒤로 이득이 떨어져요.",
+     "misconception": "능동 소자의 전력·대역폭 한계를 무시함"
+    },
+    {
+     "id": "D",
+     "text": "극점이 하나뿐이어도 능동이면 기울기가 $-40\\ \\mathrm{dB/dec}$가 돼요.",
+     "why": "기울기는 극점 수로 정해져서 1차 능동 필터도 수동과 같은 $-20\\ \\mathrm{dB/dec}$예요.",
+     "misconception": "능동 구현이면 기울기가 더 가팔라진다고 봄"
+    }
+   ],
+   "answer": "B"
+  },
+  {
+   "id": "q9",
+   "objective": "o6",
+   "format": "short",
+   "title": "분모에서 Q 읽기",
+   "stem_html": "<p>2차 필터의 분모가 $s^2+4\\times10^3\\,s+10^8$이에요. 표준형 $s^2+\\dfrac{\\omega_n}{Q}s+\\omega_n^2$과 비교해 $Q$를 구해요. $s$의 단위는 $\\mathrm{rad/s}$예요.</p><p>단위 없이 숫자만 적어요.</p>",
+   "hint": "상수항에서 $\\omega_n$을 먼저 읽고 일차항 계수와 맞춰요.",
+   "answer": {
+    "canonical": "2.5",
+    "accepted": [
+     "2.50",
+     "5/2"
+    ]
+   },
+   "solution": [
+    "$\\omega_n^2=10^8$이라 $\\omega_n=10^4\\ \\mathrm{rad/s}$예요.",
+    "$\\omega_n/Q=4\\times10^3$이므로 $Q=10^4/(4\\times10^3)=2.5$예요."
+   ]
+  },
+  {
+   "id": "q10",
+   "objective": "o6",
+   "format": "mcq",
+   "title": "분모 계수로 극점 판정",
+   "stem_html": "<p>2차 필터의 분모가 $s^2+2\\times10^4\\,s+10^8$이에요. $s$의 단위는 $\\mathrm{rad/s}$예요. 극점은 어떻게 놓여 있나요?</p>",
+   "hint": "$\\omega_n$과 $Q$를 읽고 $Q$를 $1/2$과 비교해요.",
+   "options": [
+    {
+     "id": "A",
+     "text": "켤레 복소수 한 쌍이에요.",
+     "why": "복소 극점은 $Q>1/2$일 때만이에요. 여기서는 $Q=1/2$이에요.",
+     "misconception": "Q=1/2을 복소 극점 조건에 포함함"
+    },
+    {
+     "id": "B",
+     "text": "서로 다른 실수 극점 두 개예요.",
+     "why": "$Q<1/2$일 때의 모양이에요. 여기서는 판별식이 0이에요.",
+     "misconception": "Q=1/2을 Q<1/2과 구분하지 않음"
+    },
+    {
+     "id": "C",
+     "text": "$s=-10^4\\ \\mathrm{rad/s}$의 실수 중근이에요.",
+     "why": "$\\omega_n=10^4$, $\\omega_n/Q=2\\times10^4$에서 $Q=1/2$이라 판별식이 0이에요."
+    },
+    {
+     "id": "D",
+     "text": "허수축 위의 $\\pm j10^4$예요.",
+     "why": "허수축 극점은 일차항이 없는 $Q\\to\\infty$일 때예요. 일차항 계수가 $2\\times10^4$이라 아니에요.",
+     "misconception": "일차항 계수를 무시함"
+    }
+   ],
+   "answer": "C"
+  },
+  {
+   "id": "q11",
+   "objective": "o7",
+   "format": "mcq",
+   "title": "Q를 키우면 극점은 어디로 갈까",
+   "stem_html": "<p>$\\omega_n=10^4\\ \\mathrm{rad/s}$를 고정하고 2차 필터의 $Q$를 2에서 10으로 키워요. 복소 극점의 변화로 맞는 것은?</p>",
+   "hint": "극점의 크기 $|p|$가 무엇으로 정해지는지부터 확인해요.",
+   "options": [
+    {
+     "id": "A",
+     "text": "$|p|$도 $Q$에 비례해 커져 원점에서 멀어져요.",
+     "why": "$|p|=\\omega_n$이라 Q와 무관해요.",
+     "misconception": "극점 크기가 Q에 비례한다고 봄"
+    },
+    {
+     "id": "B",
+     "text": "실수부 크기 $\\omega_n/(2Q)$가 커져 더 왼쪽으로 가서 더 안정해져요.",
+     "why": "실수부 크기는 $Q$에 반비례해 줄어요.",
+     "misconception": "실수부가 Q에 비례한다고 봄"
+    },
+    {
+     "id": "C",
+     "text": "극점이 실수축으로 모여 실수 극점 두 개가 돼요.",
+     "why": "실수 극점은 $Q\\le1/2$일 때예요. $Q$를 키우면 허수부가 $\\omega_n$에 가까워져요.",
+     "misconception": "Q가 커지면 허수부가 0으로 간다고 봄"
+    },
+    {
+     "id": "D",
+     "text": "$|p|=\\omega_n$인 원 위에서 실수부 크기가 줄어 허수축에 가까워지고, $Q\\to\\infty$이면 불안정해요.",
+     "why": "실수부 $-\\omega_n/(2Q)$가 0으로 가고 극점이 $\\pm j\\omega_n$에 다가가요."
+    }
+   ],
+   "answer": "D"
+  },
+  {
+   "id": "q12",
+   "objective": "o8",
+   "format": "short",
+   "title": "2차 LPF의 고유 주파수에서 크기",
+   "stem_html": "<p>2차 저역 통과 필터 $H(s)=\\dfrac{4\\times10^8}{s^2+2\\times10^3\\,s+10^8}$에서 $\\omega=\\omega_n$일 때 $|H(j\\omega)|$는 얼마인가요? $s$의 단위는 $\\mathrm{rad/s}$예요.</p><p>단위 없이 숫자만 적어요.</p>",
+   "hint": "$\\omega_n$, $Q$, DC 이득을 차례로 읽어요.",
+   "answer": {
+    "canonical": "20",
+    "accepted": [
+     "20.0",
+     "20.00"
+    ]
+   },
+   "solution": [
+    "$\\omega_n=10^4$, $\\omega_n/Q=2\\times10^3$이므로 $Q=5$예요.",
+    "DC 이득은 $4\\times10^8/10^8=4$예요.",
+    "$\\omega_n$에서 크기는 DC 이득의 $Q$배라 $4\\times5=20$이에요."
+   ]
+  },
+  {
+   "id": "q13",
+   "objective": "o8",
+   "format": "mcq",
+   "title": "Q=0.6일 때 응답",
+   "stem_html": "<p>2차 저역 통과 필터의 $Q=0.6$이에요. 맞는 설명은?</p>",
+   "hint": "복소 극점 조건과 피킹이 생기는 기준을 따로 비교해요.",
+   "options": [
+    {
+     "id": "A",
+     "text": "극점은 복소 공액 쌍이지만 피킹 없이 단조롭게 줄어요.",
+     "why": "$0.5<Q<1/\\sqrt2$라서 복소 극점이고 피킹은 없어요."
+    },
+    {
+     "id": "B",
+     "text": "복소 극점이라서 $\\omega_n$ 근처에 피킹이 생겨요.",
+     "why": "피킹은 $Q>1/\\sqrt2\\approx0.707$일 때예요.",
+     "misconception": "복소 극점이면 피킹이 생긴다고 봄"
+    },
+    {
+     "id": "C",
+     "text": "$Q<1$이라서 극점이 실수 두 개예요.",
+     "why": "실수 극점 경계는 $Q=1/2$이에요.",
+     "misconception": "실수 극점 경계를 Q=1로 봄"
+    },
+    {
+     "id": "D",
+     "text": "$\\omega_n$에서 항상 DC 이득의 $1/\\sqrt2$배예요.",
+     "why": "$\\omega_n$에서 크기는 DC 이득의 $Q$배라 $0.6$배예요. $1/\\sqrt2$배는 $Q=1/\\sqrt2$일 때만이에요.",
+     "misconception": "$\\omega_n$이 늘 3 dB 주파수라고 봄"
+    }
+   ],
+   "answer": "A"
+  },
+  {
+   "id": "q14",
+   "objective": "o9",
+   "format": "mcq",
+   "title": "평탄함과 날카로움의 선택",
+   "stem_html": "<p>통과 대역 이득이 고르고 피킹이 없어야 하는 2차 저역 통과 필터를 설계해요. 맞는 선택은?</p>",
+   "hint": "피킹이 시작되는 $Q$ 값을 떠올려요.",
+   "options": [
+    {
+     "id": "A",
+     "text": "$Q=2$ 같은 큰 $Q$의 체비셰프형이에요. 날카로울수록 더 평탄해요.",
+     "why": "큰 $Q$는 천이는 날카롭지만 통과 대역에 피킹이 생겨요.",
+     "misconception": "날카로움과 평탄함을 같은 방향으로 봄"
+    },
+    {
+     "id": "B",
+     "text": "$Q=1/\\sqrt2$의 버터워스형이에요. 피킹 없이 가장 평탄하고 대신 천이는 덜 날카로워요.",
+     "why": "2차에서 $Q=1/\\sqrt2$는 버터워스예요."
+    },
+    {
+     "id": "C",
+     "text": "$Q=1/\\sqrt2$의 체비셰프형이에요.",
+     "why": "$Q=1/\\sqrt2$는 체비셰프가 아니라 버터워스예요.",
+     "misconception": "버터워스와 체비셰프를 맞바꿈"
+    },
+    {
+     "id": "D",
+     "text": "실수 극점 두 개짜리 1차 블록 두 개를 이어도 버터워스와 같아져서 2차 블록이 필요 없어요.",
+     "why": "1차 블록 둘로는 $Q\\le1/2$뿐이라 $Q=1/\\sqrt2$를 만들 수 없어요.",
+     "misconception": "1차 블록 둘로 같은 특성이 나온다고 봄"
+    }
+   ],
+   "answer": "B"
+  },
+  {
+   "id": "q15",
+   "objective": "o10",
+   "format": "short",
+   "title": "2차 HPF의 고유 주파수에서 크기",
+   "stem_html": "<p>2차 고역 통과 필터 $H(s)=\\dfrac{3s^2}{s^2+\\dfrac{\\omega_n}{4}s+\\omega_n^2}$에서 $\\omega=\\omega_n$일 때 $|H(j\\omega)|$는 얼마인가요?</p><p>단위 없이 숫자만 적어요.</p>",
+   "hint": "분모에서 $\\omega_n/Q$ 항이 $Q$를 얼마로 주는지 읽어요.",
+   "answer": {
+    "canonical": "12",
+    "accepted": [
+     "12.0",
+     "12.00"
+    ]
+   },
+   "solution": [
+    "$\\omega_n/Q=\\omega_n/4$이므로 $Q=4$예요. 고주파 이득은 $\\alpha=3$이에요.",
+    "$s=j\\omega_n$을 넣으면 분모는 $j\\omega_n^2/4$, 분자는 $-3\\omega_n^2$이에요.",
+    "$|H(j\\omega_n)|=\\alpha Q=3\\times4=12$예요."
+   ]
+  },
+  {
+   "id": "q16",
+   "objective": "o11",
+   "format": "short",
+   "title": "2차 BPF의 최대 크기",
+   "stem_html": "<p>2차 대역 통과 필터 $H(s)=\\dfrac{600\\,s}{s^2+20\\,s+4\\times10^4}$의 $|H(j\\omega)|$ 최댓값은 얼마인가요? $s$의 단위는 $\\mathrm{rad/s}$예요.</p><p>단위 없이 숫자만 적어요.</p>",
+   "hint": "크기가 최대가 되는 주파수를 먼저 정한 뒤 그 값을 넣어요.",
+   "answer": {
+    "canonical": "30",
+    "accepted": [
+     "30.0",
+     "30.00"
+    ]
+   },
+   "solution": [
+    "$\\omega_n^2=4\\times10^4$이라 $\\omega_n=200\\ \\mathrm{rad/s}$이고 $\\omega_n/Q=20$이므로 $Q=10$이에요.",
+    "$\\omega=\\omega_n$에서 분모의 실수부 $\\omega_n^2-\\omega^2$가 0이 되어 크기가 최대예요.",
+    "$\\dfrac{\\beta Q}{\\omega_n}=\\dfrac{600\\times10}{200}=30$이에요."
+   ]
+  }
+ ]
+}

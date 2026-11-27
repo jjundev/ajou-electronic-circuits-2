@@ -1,0 +1,287 @@
+{
+  "questions": [
+    {
+      "id": "q1",
+      "title": "멀리 떨어진 신호의 감쇠량",
+      "format": "short",
+      "stem_html": "<p>극점이 $200\\ \\mathrm{kHz}$에 하나 있는 1차 저역 통과 필터가 있어요. 보데 근사로 $200\\ \\mathrm{MHz}$ 신호는 통과 대역보다 몇 dB 작아지나요?</p><p>감쇠량을 양수로, 단위 없이 숫자만 적어요.</p>"
+    },
+    {
+      "id": "q2",
+      "title": "1차 필터로는 모자란 이유",
+      "format": "mcq",
+      "stem_html": "<p>내 채널에서 $1\\ \\mathrm{MHz}$ 떨어진 간섭 신호를 약 $40\\ \\mathrm{dB}$, 곧 크기로 1/100배까지 줄여야 해요. 극점이 하나뿐인 1차 저역 통과 필터로는 부족한 이유로 맞는 것은?</p>",
+      "options": [
+        {
+          "id": "A",
+          "text": "컷오프를 지나는 순간 한 번에 $20\\ \\mathrm{dB}$만 떨어지고 그 뒤로는 더 줄지 않아요."
+        },
+        {
+          "id": "B",
+          "text": "$-40\\ \\mathrm{dB}$는 크기로 1/20배인데 1차 필터는 1/10배까지만 만들 수 있어요."
+        },
+        {
+          "id": "C",
+          "text": "기울기가 $-20\\ \\mathrm{dB/dec}$라서 $40\\ \\mathrm{dB}$를 얻으려면 주파수가 100배 멀어져야 해요. 바로 옆 신호는 충분히 줄지 않아요."
+        },
+        {
+          "id": "D",
+          "text": "저항을 키우면 기울기가 $-40\\ \\mathrm{dB/dec}$가 되지만 전력을 너무 써서 못 써요."
+        }
+      ]
+    },
+    {
+      "id": "q3",
+      "title": "복소 극점이 필요한 블록",
+      "format": "mcq",
+      "stem_html": "<p>극점 네 개가 켤레 복소수 두 쌍인 4차 저역 통과 필터를 1차·2차 블록으로 만들려고 해요. 필요한 블록 조합으로 맞는 것은?</p>",
+      "options": [
+        {
+          "id": "A",
+          "text": "1차 블록 4개를 이어요."
+        },
+        {
+          "id": "B",
+          "text": "2차 블록 2개를 이어요."
+        },
+        {
+          "id": "C",
+          "text": "2차 블록 1개와 1차 블록 2개를 이어요."
+        },
+        {
+          "id": "D",
+          "text": "2차 블록 4개를 이어요."
+        }
+      ]
+    },
+    {
+      "id": "q4",
+      "title": "1차 전달함수의 DC 이득",
+      "format": "short",
+      "stem_html": "<p>1차 필터 $H(s)=5\\,\\dfrac{s+300}{s+1200}$의 DC 이득 $H(0)$을 구해요. $s$의 단위는 $\\mathrm{rad/s}$예요.</p><p>단위 없이 숫자만 적어요.</p>"
+    },
+    {
+      "id": "q5",
+      "title": "극점과 영점 중 어느 쪽이 먼저일까",
+      "format": "mcq",
+      "stem_html": "<p>1차 필터 $H(s)=4\\,\\dfrac{s+900}{s+30}$이에요. $s$의 단위는 $\\mathrm{rad/s}$예요. 필터 종류와 양 끝의 이득으로 맞는 것은?</p>",
+      "options": [
+        {
+          "id": "A",
+          "text": "HPF예요. $-30$이 $-900$보다 크므로 극점이 나중에 와요. 저주파 이득 4, 고주파 이득 120이에요."
+        },
+        {
+          "id": "B",
+          "text": "LPF예요. 저주파 이득은 $4\\times30/900\\approx0.13$, 고주파 이득은 4예요."
+        },
+        {
+          "id": "C",
+          "text": "HPF예요. 영점이 더 커서 고주파를 키워요. 저주파 이득 $\\approx0.13$, 고주파 이득 4예요."
+        },
+        {
+          "id": "D",
+          "text": "LPF예요. 저주파 이득은 120, 고주파 이득은 4예요."
+        }
+      ]
+    },
+    {
+      "id": "q6",
+      "title": "수동 RC 분압기의 고주파 이득",
+      "format": "short",
+      "stem_html": "<p>그림의 수동 분압기에서 출력에 부하는 없어요. $R_1=1\\ \\mathrm{k\\Omega}$, $R_2=4\\ \\mathrm{k\\Omega}$, $C_1=3\\ \\mathrm{nF}$, $C_2=2\\ \\mathrm{nF}$이에요. 주파수가 매우 높을 때 $|V_{out}/V_{in}|$은 얼마인가요?</p><p>단위 없이 소수로 숫자만 적어요.</p>",
+      "figure_svg": "<svg viewBox=\"0 0 360 170\" role=\"img\" aria-label=\"입력과 출력 사이에 R1과 C1이 병렬로 놓이고, 출력 노드에서 접지로 R2와 C2가 각각 연결된 수동 RC 분압기\" xmlns=\"http://www.w3.org/2000/svg\"><title>수동 RC 분압기</title><g fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"20\" cy=\"60\" r=\"3\" /><line x1=\"23\" y1=\"60\" x2=\"50\" y2=\"60\" /><line x1=\"50\" y1=\"40\" x2=\"50\" y2=\"80\" /><polyline points=\"50,40 80,40 86,32 98,48 110,32 122,48 134,32 140,40 170,40\" /><line x1=\"50\" y1=\"80\" x2=\"104\" y2=\"80\" /><line x1=\"104\" y1=\"68\" x2=\"104\" y2=\"92\" /><line x1=\"112\" y1=\"68\" x2=\"112\" y2=\"92\" /><line x1=\"112\" y1=\"80\" x2=\"170\" y2=\"80\" /><line x1=\"170\" y1=\"40\" x2=\"170\" y2=\"80\" /><line x1=\"170\" y1=\"60\" x2=\"290\" y2=\"60\" /><line x1=\"230\" y1=\"60\" x2=\"230\" y2=\"75\" /><polyline points=\"230,75 238,82 222,90 238,98 222,106 230,113\" /><line x1=\"230\" y1=\"113\" x2=\"230\" y2=\"140\" /><line x1=\"290\" y1=\"60\" x2=\"290\" y2=\"92\" /><line x1=\"278\" y1=\"92\" x2=\"302\" y2=\"92\" /><line x1=\"278\" y1=\"100\" x2=\"302\" y2=\"100\" /><line x1=\"290\" y1=\"100\" x2=\"290\" y2=\"140\" /><line x1=\"230\" y1=\"140\" x2=\"290\" y2=\"140\" /><line x1=\"260\" y1=\"140\" x2=\"260\" y2=\"148\" /><line x1=\"248\" y1=\"148\" x2=\"272\" y2=\"148\" /><line x1=\"254\" y1=\"153\" x2=\"266\" y2=\"153\" /><line x1=\"290\" y1=\"60\" x2=\"327\" y2=\"60\" /><circle cx=\"330\" cy=\"60\" r=\"3\" /></g><g fill=\"currentColor\"><circle cx=\"230\" cy=\"60\" r=\"2.5\" /><circle cx=\"290\" cy=\"60\" r=\"2.5\" /></g><g fill=\"currentColor\" font-size=\"14\"><text x=\"4\" y=\"48\">V<tspan baseline-shift=\"sub\" font-size=\"10\">in</tspan></text><text x=\"102\" y=\"26\">R<tspan baseline-shift=\"sub\" font-size=\"10\">1</tspan></text><text x=\"100\" y=\"112\">C<tspan baseline-shift=\"sub\" font-size=\"10\">1</tspan></text><text x=\"244\" y=\"98\">R<tspan baseline-shift=\"sub\" font-size=\"10\">2</tspan></text><text x=\"308\" y=\"110\">C<tspan baseline-shift=\"sub\" font-size=\"10\">2</tspan></text><text x=\"310\" y=\"46\">V<tspan baseline-shift=\"sub\" font-size=\"10\">out</tspan></text></g></svg>"
+    },
+    {
+      "id": "q7",
+      "title": "수동 분압기는 LPF일까 HPF일까",
+      "format": "mcq",
+      "stem_html": "<p>그림은 입력과 출력 사이에 $R_1\\parallel C_1$, 출력 노드와 접지 사이에 $R_2\\parallel C_2$가 있는 수동 분압기이고 출력에 부하는 없어요. $R_1=2\\ \\mathrm{k\\Omega}$, $C_1=5\\ \\mathrm{nF}$, $R_2=1\\ \\mathrm{k\\Omega}$, $C_2=4\\ \\mathrm{nF}$이에요. 맞는 설명은?</p>",
+      "figure_svg": "<svg viewBox=\"0 0 360 170\" role=\"img\" aria-label=\"입력과 출력 사이에 R1과 C1이 병렬로 놓이고, 출력 노드에서 접지로 R2와 C2가 각각 연결된 수동 RC 분압기\" xmlns=\"http://www.w3.org/2000/svg\"><title>수동 RC 분압기</title><g fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"20\" cy=\"60\" r=\"3\" /><line x1=\"23\" y1=\"60\" x2=\"50\" y2=\"60\" /><line x1=\"50\" y1=\"40\" x2=\"50\" y2=\"80\" /><polyline points=\"50,40 80,40 86,32 98,48 110,32 122,48 134,32 140,40 170,40\" /><line x1=\"50\" y1=\"80\" x2=\"104\" y2=\"80\" /><line x1=\"104\" y1=\"68\" x2=\"104\" y2=\"92\" /><line x1=\"112\" y1=\"68\" x2=\"112\" y2=\"92\" /><line x1=\"112\" y1=\"80\" x2=\"170\" y2=\"80\" /><line x1=\"170\" y1=\"40\" x2=\"170\" y2=\"80\" /><line x1=\"170\" y1=\"60\" x2=\"290\" y2=\"60\" /><line x1=\"230\" y1=\"60\" x2=\"230\" y2=\"75\" /><polyline points=\"230,75 238,82 222,90 238,98 222,106 230,113\" /><line x1=\"230\" y1=\"113\" x2=\"230\" y2=\"140\" /><line x1=\"290\" y1=\"60\" x2=\"290\" y2=\"92\" /><line x1=\"278\" y1=\"92\" x2=\"302\" y2=\"92\" /><line x1=\"278\" y1=\"100\" x2=\"302\" y2=\"100\" /><line x1=\"290\" y1=\"100\" x2=\"290\" y2=\"140\" /><line x1=\"230\" y1=\"140\" x2=\"290\" y2=\"140\" /><line x1=\"260\" y1=\"140\" x2=\"260\" y2=\"148\" /><line x1=\"248\" y1=\"148\" x2=\"272\" y2=\"148\" /><line x1=\"254\" y1=\"153\" x2=\"266\" y2=\"153\" /><line x1=\"290\" y1=\"60\" x2=\"327\" y2=\"60\" /><circle cx=\"330\" cy=\"60\" r=\"3\" /></g><g fill=\"currentColor\"><circle cx=\"230\" cy=\"60\" r=\"2.5\" /><circle cx=\"290\" cy=\"60\" r=\"2.5\" /></g><g fill=\"currentColor\" font-size=\"14\"><text x=\"4\" y=\"48\">V<tspan baseline-shift=\"sub\" font-size=\"10\">in</tspan></text><text x=\"102\" y=\"26\">R<tspan baseline-shift=\"sub\" font-size=\"10\">1</tspan></text><text x=\"100\" y=\"112\">C<tspan baseline-shift=\"sub\" font-size=\"10\">1</tspan></text><text x=\"244\" y=\"98\">R<tspan baseline-shift=\"sub\" font-size=\"10\">2</tspan></text><text x=\"308\" y=\"110\">C<tspan baseline-shift=\"sub\" font-size=\"10\">2</tspan></text><text x=\"310\" y=\"46\">V<tspan baseline-shift=\"sub\" font-size=\"10\">out</tspan></text></g></svg>",
+      "options": [
+        {
+          "id": "A",
+          "text": "HPF예요. $R_1C_1=10\\ \\mu\\mathrm{s}$가 $R_2C_2=4\\ \\mu\\mathrm{s}$보다 커요."
+        },
+        {
+          "id": "B",
+          "text": "LPF예요. 저주파 이득 $R_2/(R_1+R_2)$가 있으니까요."
+        },
+        {
+          "id": "C",
+          "text": "LPF예요. $R_2C_2$가 $R_1C_1$보다 작아서 먼저 꺾여요."
+        },
+        {
+          "id": "D",
+          "text": "판단할 수 없어요. 수동 필터는 이득이 늘 1보다 작아서 LPF와 HPF가 갈리지 않아요."
+        }
+      ]
+    },
+    {
+      "id": "q8",
+      "title": "능동 1차 필터의 장단점",
+      "format": "mcq",
+      "stem_html": "<p>반전 증폭기 구조의 능동 1차 필터는 $Z_1=R_1\\parallel C_1$, $Z_2=R_2\\parallel C_2$이고 $H=-Z_2/Z_1$이에요. 수동 RC 분압기와 비교해 맞는 설명은?</p>",
+      "options": [
+        {
+          "id": "A",
+          "text": "능동 필터는 저주파 이득이 항상 1보다 커요."
+        },
+        {
+          "id": "B",
+          "text": "$R_2>R_1$로 저주파 이득을 1보다 크게 만들 수 있고 극점 $1/(R_2C_2)$와 영점 $1/(R_1C_1)$을 따로 정하지만, 전력을 쓰고 OP-amp 극점 이후 대역폭이 제한돼요."
+        },
+        {
+          "id": "C",
+          "text": "전원이 필요 없고 OP-amp 극점보다 높은 주파수에서도 같은 이득을 유지해요."
+        },
+        {
+          "id": "D",
+          "text": "극점이 하나뿐이어도 능동이면 기울기가 $-40\\ \\mathrm{dB/dec}$가 돼요."
+        }
+      ]
+    },
+    {
+      "id": "q9",
+      "title": "분모에서 Q 읽기",
+      "format": "short",
+      "stem_html": "<p>2차 필터의 분모가 $s^2+4\\times10^3\\,s+10^8$이에요. 표준형 $s^2+\\dfrac{\\omega_n}{Q}s+\\omega_n^2$과 비교해 $Q$를 구해요. $s$의 단위는 $\\mathrm{rad/s}$예요.</p><p>단위 없이 숫자만 적어요.</p>"
+    },
+    {
+      "id": "q10",
+      "title": "분모 계수로 극점 판정",
+      "format": "mcq",
+      "stem_html": "<p>2차 필터의 분모가 $s^2+2\\times10^4\\,s+10^8$이에요. $s$의 단위는 $\\mathrm{rad/s}$예요. 극점은 어떻게 놓여 있나요?</p>",
+      "options": [
+        {
+          "id": "A",
+          "text": "켤레 복소수 한 쌍이에요."
+        },
+        {
+          "id": "B",
+          "text": "서로 다른 실수 극점 두 개예요."
+        },
+        {
+          "id": "C",
+          "text": "$s=-10^4\\ \\mathrm{rad/s}$의 실수 중근이에요."
+        },
+        {
+          "id": "D",
+          "text": "허수축 위의 $\\pm j10^4$예요."
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "title": "Q를 키우면 극점은 어디로 갈까",
+      "format": "mcq",
+      "stem_html": "<p>$\\omega_n=10^4\\ \\mathrm{rad/s}$를 고정하고 2차 필터의 $Q$를 2에서 10으로 키워요. 복소 극점의 변화로 맞는 것은?</p>",
+      "options": [
+        {
+          "id": "A",
+          "text": "$|p|$도 $Q$에 비례해 커져 원점에서 멀어져요."
+        },
+        {
+          "id": "B",
+          "text": "실수부 크기 $\\omega_n/(2Q)$가 커져 더 왼쪽으로 가서 더 안정해져요."
+        },
+        {
+          "id": "C",
+          "text": "극점이 실수축으로 모여 실수 극점 두 개가 돼요."
+        },
+        {
+          "id": "D",
+          "text": "$|p|=\\omega_n$인 원 위에서 실수부 크기가 줄어 허수축에 가까워지고, $Q\\to\\infty$이면 불안정해요."
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "title": "2차 LPF의 고유 주파수에서 크기",
+      "format": "short",
+      "stem_html": "<p>2차 저역 통과 필터 $H(s)=\\dfrac{4\\times10^8}{s^2+2\\times10^3\\,s+10^8}$에서 $\\omega=\\omega_n$일 때 $|H(j\\omega)|$는 얼마인가요? $s$의 단위는 $\\mathrm{rad/s}$예요.</p><p>단위 없이 숫자만 적어요.</p>"
+    },
+    {
+      "id": "q13",
+      "title": "Q=0.6일 때 응답",
+      "format": "mcq",
+      "stem_html": "<p>2차 저역 통과 필터의 $Q=0.6$이에요. 맞는 설명은?</p>",
+      "options": [
+        {
+          "id": "A",
+          "text": "극점은 복소 공액 쌍이지만 피킹 없이 단조롭게 줄어요."
+        },
+        {
+          "id": "B",
+          "text": "복소 극점이라서 $\\omega_n$ 근처에 피킹이 생겨요."
+        },
+        {
+          "id": "C",
+          "text": "$Q<1$이라서 극점이 실수 두 개예요."
+        },
+        {
+          "id": "D",
+          "text": "$\\omega_n$에서 항상 DC 이득의 $1/\\sqrt2$배예요."
+        }
+      ]
+    },
+    {
+      "id": "q14",
+      "title": "평탄함과 날카로움의 선택",
+      "format": "mcq",
+      "stem_html": "<p>통과 대역 이득이 고르고 피킹이 없어야 하는 2차 저역 통과 필터를 설계해요. 맞는 선택은?</p>",
+      "options": [
+        {
+          "id": "A",
+          "text": "$Q=2$ 같은 큰 $Q$의 체비셰프형이에요. 날카로울수록 더 평탄해요."
+        },
+        {
+          "id": "B",
+          "text": "$Q=1/\\sqrt2$의 버터워스형이에요. 피킹 없이 가장 평탄하고 대신 천이는 덜 날카로워요."
+        },
+        {
+          "id": "C",
+          "text": "$Q=1/\\sqrt2$의 체비셰프형이에요."
+        },
+        {
+          "id": "D",
+          "text": "실수 극점 두 개짜리 1차 블록 두 개를 이어도 버터워스와 같아져서 2차 블록이 필요 없어요."
+        }
+      ]
+    },
+    {
+      "id": "q15",
+      "title": "2차 HPF의 고유 주파수에서 크기",
+      "format": "short",
+      "stem_html": "<p>2차 고역 통과 필터 $H(s)=\\dfrac{3s^2}{s^2+\\dfrac{\\omega_n}{4}s+\\omega_n^2}$에서 $\\omega=\\omega_n$일 때 $|H(j\\omega)|$는 얼마인가요?</p><p>단위 없이 숫자만 적어요.</p>"
+    },
+    {
+      "id": "q16",
+      "title": "2차 BPF의 최대 크기",
+      "format": "short",
+      "stem_html": "<p>2차 대역 통과 필터 $H(s)=\\dfrac{600\\,s}{s^2+20\\,s+4\\times10^4}$의 $|H(j\\omega)|$ 최댓값은 얼마인가요? $s$의 단위는 $\\mathrm{rad/s}$예요.</p><p>단위 없이 숫자만 적어요.</p>"
+    }
+  ],
+  "items": {
+    "q1": "ac88f245a3df3154c18383a851ed7745a63b2f32f0134e9ee9628ea95150cd25",
+    "q2": "10d752e951c3eed0641b10439f6eb7a082c90b3df317e23a2bb0db18ee4679fb",
+    "q3": "59b1dfad890babcd2639e5d47492420866c7e56e6abb58af54efe2b8b062601d",
+    "q4": "725ca8305429c47b1fb65d3393896e31906e5042e974e89103edaf6b1cfc9334",
+    "q5": "2708ca6bd3bdc6a64ce9a18daf353342a825c2cac0621917c6e95036468023f1",
+    "q6": "6cca619a771dd0c2f0f2a0f4e451f400c830efc0dcf49a74067ec1cda5d044d7",
+    "q7": "bf77c2c157658998009d8a459d3e8d0fe6c32df0a8a06fd3bd37e72bf00ae80e",
+    "q8": "dc7e881b67070409ad22afd43c2a3a8b24b1080102b11abea47d684ec45b7339",
+    "q9": "88fdd55c94fcce178efc9d4a196e887a0e24b29bdfb5db1c335213bebd4b6eb1",
+    "q10": "1e9b23521aa1dd4340f6d7227f897402ae521739bd988e60c2112db2e540f065",
+    "q11": "8c34564dbfc9b085db429c372163a5ef4ca3a8e803a81bd66025329b4f5abf0a",
+    "q12": "76472331e989c5e449bd5f4c550e0bbe204f6192632fed940c2c3a287f390314",
+    "q13": "35f8a0f56d4fadae9f7c29bf9fd22a787b8501d155ffab1d984a1c35f4fd48c5",
+    "q14": "414ab2cbb1dc391e391284b5a27f8d5fd88260effd2552c49c0a03ff46a19ef3",
+    "q15": "c2a6229ffce449735f03258f73c61188306bd414f5274eff8dd8ddaadd24218a",
+    "q16": "e101d473393fe43d0e547c5af64e323d6badc4c5c2c5a50ce0688e613bba72e0"
+  },
+  "files": {
+    "문제.md": "a096784198eb5b13af97d1055973cba4714b362a711ecfd8e74f1eda64c2bb58",
+    "q7.svg": "0a90a55e7f3fb4055b619d1a32b98a0eaa46ff50263dea647b724c7437bddaf5",
+    "q6.svg": "0a90a55e7f3fb4055b619d1a32b98a0eaa46ff50263dea647b724c7437bddaf5"
+  }
+}
