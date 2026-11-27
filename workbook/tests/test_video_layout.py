@@ -236,6 +236,18 @@ class StepFigureTests(unittest.TestCase):
             self.assertGreaterEqual(f['scale'], 0.8, f)
         self.assertNotIn('fig-scale', got['overflow'])
 
+    def test_high_resolution_dense_figure_can_fill_its_print_width(self):
+        data = build_data(ids_selection(['2018-2_중간-Q1'], 'dense-exam'), 'answers')
+        data['meta']['layout'] = 'video-16x9'
+        problem = data['problems'][0]
+        problem['solution'] = {'paginate': True, 'answer': '<p>FinalAnswer</p>',
+                               'steps': [{'label': '풀이', 'html': '<p>회로를 읽어요.</p>'}]}
+        got = self._render(data)
+        figure, = got['figs']
+        self.assertTrue(figure['dense'])
+        self.assertLess(figure['scale'], 0.8)
+        self.assertEqual(got['overflow'], '')
+
     def test_shrunk_dense_figure_is_reported(self):
         got = self._render(self._data(self.LABELS), '.step-figs { width: 100px; }')
         self.assertIn('fig-scale=', got['overflow'])

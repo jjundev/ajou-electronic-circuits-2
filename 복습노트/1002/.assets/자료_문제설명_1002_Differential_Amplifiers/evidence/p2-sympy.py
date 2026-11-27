@@ -1,22 +1,28 @@
-import sympy as s
+"""E10.11: solve the differential BJT pair with PNP loads."""
+import sympy as sp
 
-# Fig 10.19(a): upper pnp base and emitter are AC ground. Its controlled
-# current vanishes but finite r_o3 remains at the output.
-gm1, ro1, ro3 = s.symbols("g_m1 r_o1 r_o3", positive=True)
-vin, vout, it = s.symbols("v_in v_out i_t")
-eq = gm1 * vin + vout / ro1 + vout / ro3
-v_solution = s.solve([eq], [vout], dict=True)[0][vout]
-av = s.factor(v_solution / vin)
-i_test = s.solve([it - vout / ro1 - vout / ro3], [it], dict=True)[0][it]
-rout = s.factor(vout / i_test)
-Gm = gm1
+v_in, v_1, v_2, v_p = sp.symbols("v_in v_1 v_2 v_p", real=True)
+gm, ro_in, ro_load, r_pi = sp.symbols("g_m1 r_o1 r_o3 r_pi1", positive=True)
 
-assert s.simplify(av + Gm * rout) == 0
-assert s.simplify(rout - ro1 * ro3 / (ro1 + ro3)) == 0
-assert s.simplify(s.limit(av, ro3, s.oo) + gm1 * ro1) == 0
-print("p2 model: matched differential halves; pnp base/emitter AC ground; finite r_o3")
-print("Gm =", Gm)
-print("Rout =", rout)
-print("Av_differential =", av)
-print("limit ro3->infinity =", s.limit(av, ro3, s.oo))
-print("equal-ro limit =", s.simplify(av.subs(ro3, ro1)))
+# The PNP bases and emitters have fixed bias voltages. Their transconductance
+# currents vanish, and each r_o connects its collector to AC ground.
+v_be1, v_be2 = v_in / 2 - v_p, -v_in / 2 - v_p
+i_c1 = gm * v_be1 + (v_1 - v_p) / ro_in
+i_c2 = gm * v_be2 + (v_2 - v_p) / ro_in
+i_b1, i_b2 = v_be1 / r_pi, v_be2 / r_pi
+
+kcl = (
+    i_c1 + v_1 / ro_load,
+    i_c2 + v_2 / ro_load,
+    -i_c1 - i_b1 - i_c2 - i_b2,
+)
+solution = sp.solve(kcl, (v_1, v_2, v_p), dict=True)[0]
+gain = sp.factor((solution[v_1] - solution[v_2]) / v_in)
+
+print("Node voltages =", solution)
+print("Differential gain =", gain)
+print("Ideal load limit (r_o3 -> infinity) =", sp.limit(gain, ro_load, sp.oo))
+print("KCL residuals =", [sp.simplify(eq.subs(solution)) for eq in kcl])
+assert solution[v_p] == 0
+assert sp.simplify(gain + gm / (1 / ro_in + 1 / ro_load)) == 0
+assert all(sp.simplify(eq.subs(solution)) == 0 for eq in kcl)

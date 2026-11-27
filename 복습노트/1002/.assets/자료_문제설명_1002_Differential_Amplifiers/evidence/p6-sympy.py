@@ -1,52 +1,72 @@
-"""Independent p6(1) calculation from original Fig Q2 and 15dd74db profile.
-
-No source reference answer or author explanation is used here.
-The exact hybrid-pi result is internal verification only; the displayed course
-model is the explicit 1/gm large-beta block from CIRCUIT-01.
-"""
 import sympy as sp
 
-gm, RP, beta, ron, rop = sp.symbols('g_m R_P beta r_on r_op', positive=True)
-vt, vb = sp.symbols('v_t v_b')
-rpi = beta/gm
-parallel = lambda *xs: sp.simplify(1/sum(1/x for x in xs))
+vi, vo, vb, vn, vp = sp.symbols("v_i v_o v_b v_n v_p")
+gn, gp, gon, gop, gpb = sp.symbols("g_mn g_mp g_on g_op g_pi_p", positive=True)
+r, rpi = sp.symbols("R r_pi", positive=True)
+tail, vt, va, beta = sp.Rational(1, 1000), sp.Rational(26, 1000), sp.Integer(10), sp.Integer(100)
+alpha = beta / (beta + 1)
+ic_input = alpha * tail / 2
+ic_middle = alpha * ic_input
 
-# Q3 is pnp with E at AC ground, C at output x, B connected via RP to C.
-# Base and collector KCL provide an independent model check of the known block.
-base_kcl = (vb-vt)/RP + vb/rpi
-base_solution = sp.solve(base_kcl, vb)[0]
-it = vt/rop + (vt-base_solution)/RP + gm*base_solution
-R_Q3_exact = sp.simplify(vt/it)
-R_Q3_known = parallel(rop, (RP+rpi)/(beta+1))
-print('Q3 full hybrid-pi minus corrected known block:', sp.simplify(R_Q3_exact-R_Q3_known))
+# (1) Q3's base sees its own collector through R, and its emitter is grounded.
+base_kcl = (vb - vo) / r + vb / rpi
+vb_out = sp.solve(base_kcl, vb)[0]
+i_p = (gop * vo + gp * vb + (vo - vb) / r).subs(vb, vb_out)
+i_half = sp.factor(gn * vi + gon * vo + i_p)
+r_half = sp.factor(1 / i_half.diff(vo))
+gain_1 = sp.factor(sp.solve(i_half, vo)[0] / vi)
+vals_1 = {gn: ic_input / vt, gp: ic_middle / vt, gon: ic_input / va,
+          gop: ic_middle / va, rpi: beta * vt / ic_middle, r: 10000}
+vals_1_eq = {gn: tail / (2 * vt), gp: tail / (2 * vt), gon: tail / (2 * va),
+             gop: tail / (2 * va), rpi: 2 * beta * vt / tail, r: 10000}
 
-# Required displayed model: explicit 1/gm and RP/beta, with rop retained.
-R_base = 1/gm + RP/beta
-R_Q3_default = parallel(rop,R_base)
-Rout_half = parallel(ron,R_Q3_default)
-Rout_diff = 2*Rout_half
-Gm = gm
-Av = -Gm*Rout_half
+print("(1) PNP-load conductance =", sp.factor(i_p.diff(vo)))
+print("(1) R_half =", r_half)
+print("(1) Numerical R_half [ohm] =", r_half.subs(vals_1).evalf(12))
+print("(1) Numerical R_diff [ohm] =", (2 * r_half).subs(vals_1).evalf(12))
+print("(1) Numerical A_v =", gain_1.subs(vals_1).evalf(12))
+print("(1) Equal-bias-current approximation [R_half (ohm), R_diff (ohm), A_v] =",
+      [k.subs(vals_1_eq).evalf(12) for k in (r_half, 2 * r_half, gain_1)])
 
-values = {gm:sp.Rational(1,52), RP:sp.Integer(10000), beta:sp.Integer(100),
-          ron:sp.Integer(20000), rop:sp.Integer(20000)}
-print('conditions: low frequency, Q3 active, E/VCC AC ground, beta=100 treated as large-beta course model')
-print('gmro3=',sp.simplify((gm*rop).subs(values)),'; beta=',values[beta])
-for label, expr in [('1/gm',1/gm),('RP/beta',RP/beta),('R_base',R_base),
-                    ('R_Q3_default',R_Q3_default),('Rout_half',Rout_half),
-                    ('Rout_diff',Rout_diff),('Gm',Gm),('Av',Av)]:
-    value = sp.simplify(expr.subs(values))
-    print(label,'=',value,'≈',sp.N(value,16))
+# (2) The cascode bases are AC ground and R/2 loads the upper emitter.
+gm1, gm3, gm5, go1, go3, go5, go7, gpi3, gpi5 = sp.symbols(
+    "g_m1 g_m3 g_m5 g_o1 g_o3 g_o5 g_o7 g_pi3 g_pi5", positive=True
+)
+i_n = go3 * vo - (go3 + gm3) * vn
+i_p = go5 * vo - (go5 + gm5) * vp
+node_kcl = [
+    gm1 * vi + (go1 + gpi3) * vn - i_n,
+    (go7 + 2 / r + gpi5) * vp - i_p,
+]
+nodes = sp.solve(node_kcl, [vn, vp])
+i_n = i_n.subs(nodes)
+i_p = i_p.subs(nodes)
+g_eff = sp.factor(i_n.diff(vi))
+r_n = sp.factor(1 / i_n.diff(vo))
+r_p = sp.factor(1 / i_p.diff(vo))
+r_half_2 = 1 / (1 / r_n + 1 / r_p)
+gain_2 = sp.factor(sp.solve(i_n + i_p, vo)[0] / vi)
+assert sp.simplify(gain_2 + g_eff * r_half_2) == 0
 
-# Internal comparison only. The reference-like finite-beta block is not the
-# default displayed formula under this profile snapshot.
-Rout_half_corr = parallel(ron,R_Q3_known)
-Av_corr = -gm*Rout_half_corr
-print('internal corrected Rout_half=',sp.simplify(Rout_half_corr.subs(values)),
-      '≈',sp.N(Rout_half_corr.subs(values),16))
-print('internal corrected Av=',sp.simplify(Av_corr.subs(values)),
-      '≈',sp.N(Av_corr.subs(values),16))
-print('base corrected/default ratio=',sp.simplify(((RP+rpi)/(beta+1))/R_base))
-print('limit beta->infinity base ratio=',sp.limit(((RP+rpi)/(beta+1))/R_base,beta,sp.oo))
-print('limit beta->infinity complete Rout ratio=',sp.limit(Rout_half_corr/Rout_half,beta,sp.oo))
-print('limit beta->infinity complete Av ratio=',sp.limit(Av_corr/Av,beta,sp.oo))
+vals_2 = {
+    gm1: ic_input / vt, gm3: ic_middle / vt, gm5: ic_middle / vt,
+    go1: ic_input / va, go3: ic_middle / va, go5: ic_middle / va,
+    go7: ic_input / va, gpi3: ic_middle / (beta * vt), gpi5: ic_middle / (beta * vt),
+    r: 10000,
+}
+vals_2_eq = {
+    gm1: tail / (2 * vt), gm3: tail / (2 * vt), gm5: tail / (2 * vt),
+    go1: tail / (2 * va), go3: tail / (2 * va), go5: tail / (2 * va),
+    go7: tail / (2 * va), gpi3: tail / (2 * beta * vt), gpi5: tail / (2 * beta * vt),
+    r: 10000,
+}
+print("(2) G_m,eff =", g_eff)
+print("(2) R_n =", r_n)
+print("(2) R_p =", r_p)
+print("(2) Numerical R_n [ohm] =", r_n.subs(vals_2).evalf(12))
+print("(2) Numerical R_p [ohm] =", r_p.subs(vals_2).evalf(12))
+print("(2) Numerical R_half [ohm] =", r_half_2.subs(vals_2).evalf(12))
+print("(2) Numerical R_diff [ohm] =", (2 * r_half_2).subs(vals_2).evalf(12))
+print("(2) Numerical A_v =", gain_2.subs(vals_2).evalf(12))
+print("(2) Equal-bias-current approximation [R_half (ohm), R_diff (ohm), A_v] =",
+      [k.subs(vals_2_eq).evalf(12) for k in (r_half_2, 2 * r_half_2, gain_2)])

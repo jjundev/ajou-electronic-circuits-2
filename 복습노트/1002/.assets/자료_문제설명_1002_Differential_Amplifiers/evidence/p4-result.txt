@@ -1,12 +1,9 @@
-I_each_mA = 1/2
-gm_n_mS = sqrt(10)*sqrt(w)/10 gm_p_mS = sqrt(5)*sqrt(w)/10
-ro_n_kOhm = 20 ro_p_kOhm = 10
-R_bottom_kOhm = 40*sqrt(10)*sqrt(w) R_top_kOhm = 10*sqrt(5)*sqrt(w)
-R_parallel_kOhm = 200*sqrt(2)*sqrt(w)/(sqrt(5) + 4*sqrt(10))
-gain_magnitude = 40*sqrt(5)*w/(sqrt(5) + 4*sqrt(10))
-common_W_over_L_exact = 5 + 20*sqrt(2)
-common_W_over_L_decimal = 33.2842712475
-gain_at_solution = 200
-gm_n_ro_n = 36.487955 gm_p_ro_p = 12.900440
-leading_term_limit_ratio = 1
-full_model_at_leading_solution_internal = 221.8383544
+G_m,eff = g_mn*(g_mn + g_on)/(g_mn + 2*g_on)
+R_n = (g_mn + 2*g_on)/g_on**2
+R_p = (g_mp + 2*g_op)/g_op**2
+A_v, left minus right = -g_mn*(g_mn + g_on)*(g_mp + 2*g_op)/(g_mn*g_op**2 + g_mp*g_on**2 + 2*g_on**2*g_op + 2*g_on*g_op**2)
+Exact gain target numerator = 40*sqrt(5)*s**3 + 10*sqrt(2)*s**2 + 80*s**2 - 796*sqrt(10)*s - 200*sqrt(5)*s - 1200
+Exact gain denominator = sqrt(5)*s + 4*sqrt(10)*s + 6
+Exact W/L within the first-order small-signal and square-law model = 29.8481644222
+Standard high-intrinsic-gain |A_v| = 40*W_over_L*(-1 + 4*sqrt(2))/31
+Standard W/L = 5 + 20*sqrt(2) = 33.2842712475

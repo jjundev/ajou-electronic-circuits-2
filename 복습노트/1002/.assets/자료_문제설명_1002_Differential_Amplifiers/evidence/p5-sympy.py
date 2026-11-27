@@ -1,85 +1,50 @@
-# Independent nodal analysis from problem statements and circuit images only.
 import sympy as sp
 
-def network(nodes, fixed, devices, injections=None):
-    injections = injections or {}
-    v = {'0': sp.S.Zero, **fixed}
-    v.update({name: sp.Symbol(name) for name in nodes if name not in v})
-    kcl = {name: sp.S.Zero for name in nodes}
-    def add(name, current):
-        if name in kcl:
-            kcl[name] += current
-    for dev in devices:
-        if dev[0] == 'R':
-            _, a, b, resistance = dev
-            i = (v[a]-v[b])/resistance
-            add(a,i); add(b,-i)
-        elif dev[0] in ('Q','M'):
-            kind, d, g, s, gm, ro, *extra = dev
-            i = gm*(v[g]-v[s]) + (v[d]-v[s])/ro
-            add(d,i); add(s,-i)
-            if kind == 'Q':
-                rpi = extra[0]
-                ib = (v[g]-v[s])/rpi
-                add(g,ib); add(s,-ib)
-    for name, current in injections.items():
-        add(name,-current)
-    unknown = [v[name] for name in nodes if name not in fixed]
-    sol = sp.solve([kcl[name] for name in nodes if name not in fixed], unknown, dict=True)
-    assert len(sol) == 1, sol
-    return {name:sp.simplify(expr.subs(sol[0])) for name,expr in v.items()}, {name:sp.simplify(expr.subs(sol[0])) for name,expr in kcl.items()}
+vi, vo, ve, vl, vx = sp.symbols("v_i v_o v_e v_l v_x")
+gm, ge, gload, rc, re = sp.symbols("g_m g_e g_load R_C R_E", positive=True)
+r1, r2, ron, rop = sp.symbols("R_1 R_2 r_on r_op", positive=True)
+gm1, gm2, go1, go2, gpi2 = sp.symbols("g_m1 g_m2 g_o1 g_o2 g_pi2", positive=True)
+alpha = sp.symbols("alpha", positive=True)
+iee = i1 = sp.Rational(1, 2000)
+vt = sp.Rational(1, 40)
+values_a = {gm: alpha * iee / vt, ge: iee / vt, gload: alpha * iee / vt, rc: 450, re: 100}
 
-def result(label, value):
-    print(label, '=', sp.simplify(value), '≈', sp.N(value, 16))
+# (a) The diode-connected upper device's emitter is v_l.
+eq_a = [
+    ge * (ve - vi) + ve / (re / 2),
+    gm * (vi - ve) + (vo - vl) / rc,
+    gload * vl + (vl - vo) / rc,
+]
+gain_a = sp.factor(sp.solve(eq_a, [ve, vo, vl])[vo] / vi)
+gain_a_dc = sp.factor(gain_a.subs(values_a))
+print("(1) KCL gain =", gain_a)
+print("(1) Equal-beta DC relation gives A_v =", gain_a_dc)
+print("(1) High-beta limit =", sp.limit(gain_a_dc, alpha, 1))
 
-vin = sp.Symbol('vin', positive=True)
-gm_a = sp.Rational(1,2)/25  # mA/mV = S: 0.5 mA / 25 mV
-assert gm_a == sp.Rational(1,50)
-R_C, R_E = sp.Integer(450), sp.Integer(100)
-# (a) Q3/Q4 are diode-connected npn: base and collector at VCC, emitter above RC.
-dev_a = [('Q','oL','inL','eL',gm_a,sp.oo,sp.oo),('Q','oR','inR','eR',gm_a,sp.oo,sp.oo),
-         ('Q','0','0','uL',gm_a,sp.oo,sp.oo),('Q','0','0','uR',gm_a,sp.oo,sp.oo),
-         ('R','uL','oL',R_C),('R','uR','oR',R_C),('R','eL','eR',R_E)]
-nodes_a=['oL','oR','uL','uR','eL','eR']
-va,_=network(nodes_a,{'inL':vin/2,'inR':-vin/2},dev_a)
-A_a=sp.simplify((va['oL']-va['oR'])/vin)
-result('p5(1) exact hybrid-pi differential gain with beta,ro infinite',A_a)
-Gma=1/(1/gm_a+R_E/2)
-Rla=R_C+1/gm_a
-result('p5(1) block Gm',Gma);result('p5(1) block load',Rla)
-print('p5(1) exact minus block',sp.simplify(A_a+Gma*Rla))
+# (b) R1 + R2 bridges the two outputs, so the differential half circuit
+# sees (R1 + R2)/2. Both transistor output resistances end at AC ground.
+eq_b = gm * vi + vo / ron + vo / rop + vo / ((r1 + r2) / 2)
+gain_b = sp.factor(sp.solve(eq_b, vo)[0] / vi)
+current_b = alpha * iee / 2
+gain_b_dc = gain_b.subs(
+    {gm: current_b / vt, ron: 5 / current_b, rop: 5 / current_b, r1: 10000, r2: 10000}
+)
+print("(2) KCL gain =", gain_b)
+print("(2) Finite-alpha relation gives A_v =", sp.factor(gain_b_dc))
+print("(2) High-beta limit =", sp.limit(gain_b_dc, alpha, 1))
 
-# (b) two pnp current-source loads, finite Early resistances, floating tail source.
-gm_b = sp.Rational(1,4)/25 # 0.25mA/25mV
-ro_b = sp.Integer(5)/sp.Rational(1,4000) # 5V/0.25mA = 20kOhm
-dev_b=[('Q','oL','inL','P',gm_b,ro_b,sp.oo),('Q','oR','inR','P',gm_b,ro_b,sp.oo),
-       ('Q','oL','0','0',gm_b,ro_b,sp.oo),('Q','oR','0','0',gm_b,ro_b,sp.oo),
-       ('R','oL','oR',sp.Integer(20000))]
-vb,_=network(['oL','oR','P'],{'inL':vin/2,'inR':-vin/2},dev_b)
-A_b=sp.simplify((vb['oL']-vb['oR'])/vin)
-result('p5(2) exact nodal differential gain',A_b)
-R_b=1/(1/ro_b+1/ro_b+1/sp.Integer(10000))
-print('p5(2) exact minus block',sp.simplify(A_b+gm_b*R_b))
-
-# (c) Q2 common-base cascode above Q1, output biased by an ideal 0.5mA source.
-beta=sp.Integer(200); I2=sp.Rational(1,2000) # A
-I1c=I2*(1+1/beta)  # Q1 collector equals Q2 emitter DC current
-gm1=I1c/sp.Rational(25,1000);gm2=I2/sp.Rational(25,1000)
-ro1=sp.Integer(5)/I1c;ro2=sp.Integer(5)/I2;rpi2=beta/gm2
-dev_c=[('Q','x','in','0',gm1,ro1,beta/gm1),('Q','o','0','x',gm2,ro2,rpi2)]
-vc,_=network(['x','o'],{'in':vin},dev_c)
-A_c=sp.simplify(vc['o']/vin)
-result('p5(3) exact finite-beta, finite-ro voltage gain',A_c)
-Rstar=1/(1/ro1+1/rpi2)
-lead_c=-gm1*gm2*ro2*Rstar
-result('p5(3) leading cascode gain',lead_c)
-print('p5(3) exact/leading',sp.simplify(A_c/lead_c))
-z=sp.Symbol('z',positive=True)
-print('p5(3) sympy.limit(exact/leading, gm2*ro2->infinity)',sp.limit(1+1/z,z,sp.oo))
-b=sp.Symbol('b',positive=True)
-g0=I2/sp.Rational(25,1000);r0=sp.Integer(5)/I2
-reference_lead=-g0*g0*r0/(1/r0+g0/b)
-corrected_lead=-(1+1/b)*g0*g0*r0/( (1+1/b)/r0 + g0/b )
-result('p5(3) equal-DC-current leading model at beta=200',reference_lead.subs(b,beta))
-print('p5(3) finite-beta DC correction/reference at beta=200',sp.N((corrected_lead/reference_lead).subs(b,beta),12))
-print('p5(3) sympy.limit(DC-correction/reference,beta->infinity)',sp.limit(corrected_lead/reference_lead,b,sp.oo))
+# (c) An ideal current source is open at signal frequencies.
+i_out = go2 * vo - (go2 + gm2) * vx
+eq_c = [gm1 * vi + (go1 + gpi2) * vx - i_out, i_out]
+gain_c = sp.factor(sp.solve(eq_c, [vx, vo])[vo] / vi)
+beta = sp.Integer(200)
+alpha_c = beta / (beta + 1)
+ic2 = i1
+ic1 = i1 / alpha_c
+values_c = {gm1: ic1 / vt, gm2: ic2 / vt, go1: ic1 / 5, go2: ic2 / 5, gpi2: ic2 / (beta * vt)}
+values_c_equal_current = {**values_c, gm1: ic2 / vt, go1: ic2 / 5}
+gain_c_dc = gain_c.subs(values_c)
+print("(3) KCL gain =", gain_c)
+print("(3) I_C1, I_C2 [mA] =", 1000 * ic1, 1000 * ic2)
+print("(3) A_v =", gain_c_dc, "=", gain_c_dc.evalf(12))
+print("(3) Equal-bias-current approximation =", gain_c.subs(values_c_equal_current))

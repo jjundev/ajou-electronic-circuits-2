@@ -1,26 +1,57 @@
-<div class="layer eli5" data-explanation="understand"><h4>문제를 읽어요</h4><p>그림의 $M_1,M_2$는 NMOS 입력쌍, 위 $M_3$–$M_6$은 양쪽 PMOS 캐스코드 부하, 아래 $M_7$은 유한 저항을 가진 테일이에요. (1)은 두 출력의 차를 두 입력의 차로 나눈 차동 이득이고, (2)는 두 입력을 같이 흔들 때 한쪽 출력 레벨의 CM 이득이에요. 완전 대칭이면 두 출력의 CM 변화 차는 0이라는 점도 별도로 구별해요.</p></div>
-<div class="layer formal" data-explanation="recall"><h4>이 개념과 공식을 떠올려요</h4><p>차동 입력에서는 테일 노드가 가상 접지라 한쪽 NMOS의 $r_{O1}$과 위쪽 PMOS 캐스코드 저항이 출력에 병렬이에요. CM 입력에서는 같은 두 가지 전류가 $M_7$으로 합쳐져 $R_{SS}=r_{O7}$를 반쪽마다 $2R_{SS}$로 나눠야 해요. 이때 아래 $M_1$의 유한 $r_{O1}$도 소스 축퇴 저항에 의해 증대해요. 위 캐스코드 저항과 비슷한 크기가 되므로 무시하지 않아요.</p><p>소자값은 $g_m=\sqrt{2\mu C_{ox}(W/L)I_D}$와 $r_O=1/(\lambda I_D)$예요. 두 이득 모두 출력 단락의 $G_m$, 입력 영점에서 아래·위 부하의 병렬 $R_{out}$, $-G_mR_{out}$ 순서로 구해요. 큰 곱 근사는 소자별 $g_mr_O\gg1$ 조건 아래 적용해요.</p></div>
-<div class="layer formal" data-explanation="start"><h4>종이에 쓸 첫 줄</h4><p data-answer-step="차동 반회로 판단" data-answer-subpart="1">(1) $I_{D1}=I_{D7}/2$를 먼저 구해요. P는 순수 차동 입력에서 가상 접지이므로 아래 $r_{O1}$과 위 $M_3,M_5$ 캐스코드 블록을 출력에서 병렬로 봐요.</p><p data-answer-step="CM 반회로 판단" data-answer-subpart="2">(2) 같은 CM 입력에서는 $M_7$의 $R_{SS}=r_{O7}$를 한쪽 소스 아래 $2R_{SS}$로 바꿔요. P는 가상 접지가 아니며 아래 $M_1$의 유한 $r_{O1}$을 유지해요.</p></div>
-<div class="layer formal" data-explanation="solve"><h4>이렇게 풀어요</h4><p>각 입력 가지에는 $1\,\mathrm{mA}$가 흘러요. $100\,\mu\mathrm{A/V^2}=0.1\,\mathrm{mA/V^2}$, $50\,\mu\mathrm{A/V^2}=0.05\,\mathrm{mA/V^2}$로 환산한 뒤 각각 계산해요.</p>
-$$I_{D1}=I_{D2}=\frac{I_{D7}}2=1\,\mathrm{mA}$$
-$$g_{m1}=\sqrt{2(0.1\,\mathrm{mA/V^2})(500)(1\,\mathrm{mA})}=10\,\mathrm{mS}$$
-$$g_{m3}=\sqrt{2(0.05\,\mathrm{mA/V^2})(1000)(1\,\mathrm{mA})}=10\,\mathrm{mS}$$
-$$r_{O1}=r_{O3}=r_{O5}=\frac{1}{(0.1\,\mathrm{V^{-1}})(1\,\mathrm{mA})}=10\,\mathrm{k\Omega}$$
-$$r_{O7}=\frac{1}{(0.1\,\mathrm{V^{-1}})(2\,\mathrm{mA})}=5\,\mathrm{k\Omega}$$
-<div data-subpart="1"><h4>(1) 차동 이득</h4><div data-gain-route="gm-rout"><div data-gain-stage="gm" data-answer-step="출력 단락의 전류 생성"><p>한쪽 출력을 AC 접지로 단락하고 오른쪽 접지에서 해당 드레인으로 유입하는 전류를 양으로 정해요. P가 차동 가상 접지라 $M_1$의 입력 전류 변화가 위 캐스코드 부하와 별도로 결정돼요.</p>$$G_{m,DM}\approx g_{m1}=10\,\mathrm{mS}$$</div><div data-gain-stage="rout" data-answer-step="입력 영점과 부하 병렬"><p>입력을 0으로 하고 출력에서 위·아래를 봐요. 위쪽은 먼 $M_5$의 $r_{O5}$를 $M_3$의 $g_{m3}r_{O3}$가 키운 주항이고, 아래쪽은 $r_{O1}$이에요. 두 가지가 같은 출력과 AC 접지 사이에 있어 마지막에 병렬로 묶어요.</p>
-$$R_{up}\approx g_{m3}r_{O3}r_{O5}=(10\,\mathrm{mS})(10\,\mathrm{k\Omega})^2=1\,\mathrm{M\Omega}$$
-$$R_{dn,DM}\approx r_{O1}=10\,\mathrm{k\Omega}$$
-$$R_{out,DM}\approx R_{dn,DM}\parallel R_{up}=10\,\mathrm{k\Omega}\parallel1\,\mathrm{M\Omega}\approx9.9\,\mathrm{k\Omega}$$</div><div data-gain-stage="gain" data-answer-step="부호 있는 차동 이득"><p>한쪽 출력의 반전 이득은 대칭인 두 출력 차의 이득과 같아요.</p>$$A_{DM}\approx-G_{m,DM}R_{out,DM}\approx-(10\,\mathrm{mS})(10\,\mathrm{k\Omega}\parallel1\,\mathrm{M\Omega})\approx-99.01\,\mathrm{V/V}$$</div></div></div>
-<div data-subpart="2"><h4>(2) 유한 테일의 한쪽 CM 이득</h4><p>$M_7$의 유한 출력저항이 전체 테일 $R_{SS}$예요. 두 반쪽의 같은 전류 $i$가 합쳐지므로 $v_P=(2i)R_{SS}=i(2R_{SS})$예요.</p><div data-answer-step="테일과 CM 반회로">$$R_{SS}=r_{O7}=5\,\mathrm{k\Omega}$$
-$$2R_{SS}=10\,\mathrm{k\Omega}$$</div>
-<div data-gain-route="gm-rout"><div data-gain-stage="gm" data-answer-step="CM 출력 단락의 전류 생성"><p>한쪽 출력을 오른쪽에서 단락하고 접지에서 드레인으로 유입하는 전류를 양으로 둬요. 소스가 $i(2R_{SS})$만큼 올라가 입력의 제어 전압을 줄여요. $g_{m1}(2R_{SS})=100\gg1$이라 큰 곱 주항을 써요.</p>$$G_{m,CM}\approx\frac{1}{2R_{SS}}=\frac{1}{10\,\mathrm{k\Omega}}=0.1\,\mathrm{mS}$$</div>
-<div data-gain-stage="rout" data-answer-step="입력 영점과 두 캐스코드 저항"><p>입력을 0으로 하고 출력에서 아래와 위를 따로 봐요. 아래 입력 $M_1$의 $r_{O1}$은 $2R_{SS}$ 축퇴 때문에 커져요. 위의 $M_3,M_5$ 캐스코드도 큰 저항이므로 두 가지 모두 보존해요.</p>
-$$R_{dn,CM}\approx g_{m1}r_{O1}(2R_{SS})=(10\,\mathrm{mS})(10\,\mathrm{k\Omega})^2=1\,\mathrm{M\Omega}$$
-$$R_{up}\approx g_{m3}r_{O3}r_{O5}=1\,\mathrm{M\Omega}$$
-$$R_{out,CM}\approx R_{dn,CM}\parallel R_{up}=0.5\,\mathrm{M\Omega}$$</div>
-<div data-gain-stage="gain" data-answer-step="부호 있는 CM 이득"><p>입력이 올라갈 때 한쪽 출력은 내려가므로 반전 부호를 붙여요. 두 출력이 같은 만큼 내려가므로 이는 한쪽 출력 CM 이득이에요.</p>$$A_{CM}\approx-G_{m,CM}R_{out,CM}=-(0.1\,\mathrm{mS})(0.5\,\mathrm{M\Omega})=-50\,\mathrm{V/V}$$</div></div></div></div>
-<div class="layer formal" data-explanation="verify"><h4>완성 답과 검산</h4><div data-subpart="1"><h4>(1) 검산</h4><p data-answer-final><strong>차동 이득 $A_{DM}\approx-99.01\,\mathrm{V/V}$</strong>예요.</p><p>$r_{O1}\ll R_{up}$이므로 전체 저항은 $10\,\mathrm{k\Omega}$보다 조금 작아요. 따라서 이득 크기도 $g_{m1}r_{O1}=100$보다 조금 작아야 해요.</p></div><div data-subpart="2"><h4>(2) 검산</h4><p data-answer-final><strong>한쪽 출력의 CM 이득 $A_{CM}\approx-50\,\mathrm{V/V}$</strong>예요.</p><p>위·아래가 각각 $1\,\mathrm{M\Omega}$이므로 병렬은 $0.5\,\mathrm{M\Omega}$예요. 두 출력 사이의 CM 차동 응답은 대칭이라 0이지만, 한쪽 CM 레벨은 크게 움직일 수 있어요.</p></div></div>
-<div class="layer warn" data-explanation="pitfall"><h4>주의할 점</h4><p>(2)에서 $M_7$ 하나의 $r_{O7}$를 $2R_{SS}$ 두 개로 나누는 것은 CM 대칭에만 해당해요. 위 캐스코드 저항이 크다는 이유로 아래 $M_1$의 $r_{O1}$을 단순한 $10\,\mathrm{k\Omega}$ 부하로 남겨 놓으면 안 돼요. 축퇴가 이를 $1\,\mathrm{M\Omega}$로 키우므로 위쪽과 병렬인 두 저항이 모두 답에 영향을 줘요.</p></div>
-<div class="layer eli5" data-explanation="retry"><h4>조건을 바꾸어 생각해요</h4><ul><li>같은 입력쌍·캐스코드 부하에서 $r_{O7}$를 두 배로 키우면 CM 아래 가지 저항과 $G_{m,CM}$은 각각 어느 방향으로 변하나요?</li><li>위 캐스코드 $R_{up}$이 매우 커지면 이 문제의 한쪽 CM 출력저항은 어느 가지가 정하나요?</li><li>두 출력이 완전히 대칭인데 CM 입력만 가하면 두 출력 사이 차는 어떻게 되나요?</li></ul></div>
-<div class="sum" hidden><p class="sum-lead">CM에서는 테일 $2r_{O7}$가 입력 소자를 축퇴시켜 아래 저항도 캐스코드 부하만큼 커져요.</p><p>(1) 차동 이득 $A_{DM}\approx-99.01\,\mathrm{V/V}$예요.</p><p>(2) $R_{dn,CM}\approx R_{up}\approx1\,\mathrm{M\Omega}$라 한쪽 CM 이득 $A_{CM}\approx-50\,\mathrm{V/V}$예요.</p><p>완전 대칭의 두 출력 차는 CM 입력에 대해 0이에요.</p></div>
-
+<div class="layer formal circuit-explanation" data-explanation="solve">
+  <div data-subpart="1">
+    <h4>(1) 캐스코드 부하의 차동 이득</h4>
+    <div data-answer-step="차동 반회로의 바이어스">
+      <p>대칭쌍의 두 가지에 전류가 반씩 흐르고, 순수 차동 입력에서는 공통 소스 노드 P가 가상 접지예요.</p>
+      <p>$$I_{D1}=I_{D2}=\frac{I_{D7}}2=1\,\mathrm{mA}$$</p>
+    </div>
+    <div data-gain-route="gm-rout">
+      <div data-gain-stage="gm" data-answer-step="출력 단락의 트랜스컨덕턴스">
+        <p>한쪽 출력을 AC 접지에 단락하고 $M_1$ 드레인으로 유입하는 전류를 양으로 둬요.</p>
+        <p>$$G_{m,DM}=g_{m1}=\sqrt{2(0.1\,\mathrm{mA/V^2})(500)(1\,\mathrm{mA})}=10\,\mathrm{mS}$$</p>
+      </div>
+      <div data-gain-stage="rout" data-answer-step="입력 영점의 캐스코드 부하">
+        <p>입력을 0으로 두면 출력 위쪽은 $M_3$이 $M_5$의 출력저항을 키우고, 아래쪽은 $M_1$의 $r_{O1}$이에요.</p>
+        <p>$$g_{m3}=\sqrt{2(0.05\,\mathrm{mA/V^2})(1000)(1\,\mathrm{mA})}=10\,\mathrm{mS}$$</p>
+        <p>$$r_{O1}=r_{O3}=r_{O5}=\frac{1}{(0.1\,\mathrm{V}^{-1})(1\,\mathrm{mA})}=10\,\mathrm{k\Omega}$$</p>
+        <p>$g_{m3}r_{O5}=100\gg1$이라 위쪽 캐스코드의 곱 항을 사용해요.</p>
+        <p>$$R_{up}\approx g_{m3}r_{O3}r_{O5}\approx1\,\mathrm{M\Omega}$$</p>
+        <p>$$R_{out,DM}\approx r_{O1}\parallel R_{up}\approx9.9\,\mathrm{k\Omega}$$</p>
+      </div>
+      <div data-gain-stage="gain" data-answer-final="">
+        <p>왼쪽 출력에서 오른쪽 출력을 뺀 차와 두 입력의 차는 각각 반회로 값의 두 배예요.</p>
+        <p>$$A_{DM}\approx-G_{m,DM}R_{out,DM}\approx-99.01\,\mathrm{V/V}$$</p>
+      </div>
+    </div>
+  </div>
+  <div data-subpart="2">
+    <h4>(2) 유한 테일의 한쪽 CM 이득</h4>
+    <div data-answer-step="유한 테일과 CM 반회로">
+      <p>같은 CM 입력에서는 두 가지의 소신호 전류가 같으므로 P에서 합쳐져요. 한쪽 전류를 $i$로 두면 반회로의 소스 저항은 $2R_{SS}$예요.</p>
+      <p>$$v_P=(2i)R_{SS}=i(2R_{SS})$$</p>
+      <p>$$R_{SS}=r_{O7}=\frac{1}{(0.1\,\mathrm{V}^{-1})(2\,\mathrm{mA})}=5\,\mathrm{k\Omega}$$</p>
+    </div>
+    <div data-gain-route="gm-rout">
+      <div data-gain-stage="gm" data-answer-step="CM 출력 단락의 트랜스컨덕턴스">
+        <p>한쪽 출력을 AC 접지에 단락하고 드레인에 들어가는 전류를 양으로 둬요.</p>
+        <p>$g_{m1}r_{O1}=100\gg1$이라 단락 계산에서 $1/r_{O1}$을 $g_{m1}$에 비해 생략해요.</p>
+        <p>$g_{m1}(2R_{SS})=100\gg1$이므로 분모의 $1/g_{m1}$도 $2R_{SS}$에 비해 작아요.</p>
+        <p>$$G_{m,CM}\approx\frac{1}{2R_{SS}}=\frac{1}{10\,\mathrm{k\Omega}}=0.1\,\mathrm{mS}$$</p>
+      </div>
+      <div data-gain-stage="rout" data-answer-step="입력 영점의 위아래 저항">
+        <p>입력을 0으로 두면 소스 축퇴가 아래쪽 저항을 높여요. 위쪽에는 (1)의 $R_{up}$이 그대로 있으므로 둘을 병렬로 둬요.</p>
+        <p>$$R_{dn,CM}\approx g_{m1}r_{O1}(2R_{SS})\approx1\,\mathrm{M\Omega}$$</p>
+        <p>$$R_{out,CM}\approx R_{dn,CM}\parallel R_{up}\approx0.5\,\mathrm{M\Omega}$$</p>
+      </div>
+      <div data-gain-stage="gain" data-answer-final="">
+        <p>$$A_{CM}\approx-G_{m,CM}R_{out,CM}\approx-50\,\mathrm{V/V}$$</p>
+        <p>두 출력이 같은 만큼 움직이므로 두 출력의 차는 0이에요.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sum" hidden>
+  <p class="sum-lead">차동에서는 P가 가상 접지이고, CM에서는 소스 축퇴로 아래 저항도 캐스코드 부하만큼 커져요.</p>
+  <p>차동 이득은 약 $-99.01\,\mathrm{V/V}$예요.</p>
+  <p>위아래 저항이 각각 약 $1\,\mathrm{M\Omega}$이므로 한쪽 CM 이득은 약 $-50\,\mathrm{V/V}$예요.</p>
+</div>

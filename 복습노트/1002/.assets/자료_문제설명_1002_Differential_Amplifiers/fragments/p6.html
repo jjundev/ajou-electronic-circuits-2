@@ -1,48 +1,59 @@
-<div class="layer eli5" data-explanation="understand"><h4>문제를 읽어요</h4><p>두 회로 모두 대칭 차동 입력을 넣고 각 그림의 출력저항과 차동 전압 이득을 구해요. 출력저항은 먼저 왼쪽 한 출력에서 본 값으로 정의하고, 두 출력 단자 사이에서 본 값도 함께 밝혀요. 두 번째 그림에는 조건 문장과 달리 $R_1$만 그려져 있으므로 실제 그림의 연결을 따라요.</p></div>
-<div class="layer formal" data-explanation="recall"><h4>이 개념과 공식을 떠올려요</h4><p>순수 차동 입력과 대칭 소자라 테일 노드 P는 가상 접지예요. 첫 회로의 pnp $Q_3$는 베이스가 $R_1$을 거쳐 자기 컬렉터에 연결돼요. 따라서 $R_1$과 유한 $r_{\pi3}$를 지나 베이스가 따라 움직이는 저항 부하이지, 베이스가 AC 접지된 전류원 부하가 아니에요.</p><p>두 번째 회로는 위 $Q_5,Q_7$과 아래 $Q_3,Q_1$의 캐스코드 저항을 출력에서 병렬로 봐요. A–B 사이 $R_1$의 가운데가 차동 가상 접지라 한쪽에서 $R_1/2$를 봐요. 유한 $r_\pi$를 각 캐스코드 이미터의 외부 저항과 먼저 병렬로 묶어요. 두 회로 모두 출력 단락의 $G_m$, 입력 영점의 부하 포함 $R_{out}$, 부호 있는 이득 순서예요.</p></div>
-<div class="layer formal" data-explanation="start"><h4>종이에 쓸 첫 줄</h4><p data-answer-step="베이스 귀환 경로" data-answer-subpart="1">(1) 왼쪽 차동 반회로에서 $Q_3$ 베이스의 경로는 출력→$R_1$→베이스→$r_{\pi3}$→AC 접지예요. $Q_1$의 $r_{O1}$도 출력에 병렬이에요.</p><p data-answer-step="먼 저항부터 합성" data-answer-subpart="2">(2) A–B의 $R_1$은 양쪽으로 $R_1/2$씩 나눠요. 위쪽 $R_{E5}=r_{O7}\parallel(R_1/2)$, 아래쪽 $R_{E3}=r_{O1}$부터 잡아요.</p></div>
-<div class="layer formal" data-explanation="solve"><h4>이렇게 풀어요</h4>
-<div data-subpart="1"><h4>(1) 베이스–컬렉터 저항 부하</h4><p>큰 $\beta$ 바이어스 주항에서 한 소자의 컬렉터 전류는 $I_{EE}/2=0.5\,\mathrm{mA}$예요. 필요한 값을 각각 구해요.</p>
-$$g_m=\frac{0.5\,\mathrm{mA}}{26\,\mathrm{mV}}\approx19.23\,\mathrm{mS}$$
-$$r_\pi=\frac{\beta}{g_m}=5.2\,\mathrm{k\Omega}$$
-$$r_O=\frac{10\,\mathrm V}{0.5\,\mathrm{mA}}=20\,\mathrm{k\Omega}$$
-<div data-gain-route="gm-rout"><div data-gain-stage="gm" data-answer-step="출력 단락의 전류 생성"><p>왼쪽 출력 단자를 AC 접지로 단락하고 접지에서 $Q_1$ 컬렉터 쪽으로 유입하는 전류를 양으로 정해요. P가 가상 접지여서 $Q_1$의 제어 전압은 왼쪽 입력이고, 단락된 $R_1$ 부하에는 출력 전압이 없어요.</p>$$G_m=\frac{i_{out,sc}}{v_{in1}}\approx g_{m1}\approx19.23\,\mathrm{mS}$$</div>
-<div data-gain-stage="rout"><p>입력을 0으로 두고 왼쪽 출력에서 봐요. 원 회로에서 $Q_3$의 컬렉터 출력은 $R_1$을 거쳐 자기 베이스에 연결되고 이미터는 AC 접지예요. $Q_3$ 블록의 외부 연결은 출력과 접지 두 단자뿐이므로 저주파 활성 영역의 저항 포함 다이오드 접속형 블록을 바로 쓸 수 있어요. 주어진 $\beta=100$은 $R_1/\beta$를 계산하는 데 써요. 큰 $\beta$의 기본 근사식에서도 내부 $1/g_{m3}$ 항을 함께 남겨요.</p>
-<div data-answer-step="유한 베이스 전류 부하 블록"><p>먼저 $Q_3$ 부하 하나의 유효 저항을 구하고, 별도 입력 $Q_1$ 가지의 $r_{O1}$을 마지막에 병렬로 붙여요. 이는 알려진 두 단자 블록의 근사 합성이며 전체 출력저항의 정확식 유도가 아니에요.</p>
-$$R_{Q3}\approx\left(\frac{1}{g_{m3}}+\frac{R_1}{\beta}\right)\parallel r_{O3}$$
-$$R_{Q3}\approx(52\,\Omega+100\,\Omega)\parallel20\,\mathrm{k\Omega}\approx150.85\,\Omega$$
-$$R_{out,1}\approx r_{O1}\parallel R_{Q3}\approx149.72\,\Omega$$</div>
-<p>순수 차동 출력의 두 단자 사이 저항은 동일 반회로 두 개의 직렬 합이에요.</p>
-$$R_{out,12}\approx2R_{out,1}\approx299.45\,\Omega$$</div>
-<div data-gain-stage="gain" data-answer-step="부호 있는 차동 이득"><p>입력이 늘면 왼쪽 출력이 내려가므로 부호는 음수예요. 출력과 입력의 차에서 각각 두 배가 상쇄돼 한쪽 이득과 같아요.</p>$$A_v\approx-G_mR_{out,1}\approx-\frac{0.5\,\mathrm{mA}}{26\,\mathrm{mV}}(r_{O1}\parallel R_{Q3})\approx-2.88\,\mathrm{V/V}$$</div></div></div>
-<div data-subpart="2"><h4>(2) 위아래 BJT 캐스코드</h4><p>같은 큰 $\beta$ 바이어스 주항에서 각 가지 전류는 $0.5\,\mathrm{mA}$예요. 따라서 $g_m\approx19.23\,\mathrm{mS}$, $r_\pi=5.2\,\mathrm{k\Omega}$, $r_O=20\,\mathrm{k\Omega}$를 두 쪽의 대응 소자에 적용해요. 그림에는 $R_2$가 없으므로 추가하지 않아요.</p>
-<div data-gain-route="gm-rout"><div data-gain-stage="gm" data-answer-step="출력 단락의 전류 생성"><p>왼쪽 출력을 단락할 때 오른쪽 접지에서 출력으로 유입하는 전류를 양으로 둬요. $Q_1$ 전류 변화는 큰 $\beta$에서 $Q_3$을 거쳐 전달돼요.</p>$$G_m\approx g_{m1}\approx19.23\,\mathrm{mS}$$</div>
-<div data-gain-stage="rout"><p>입력을 0으로 두고 출력에서 먼 A 노드와 아래 $Q_1$ 컬렉터부터 봐요. 차동 대칭 때문에 A–B의 $R_1$을 한쪽 $R_1/2$로 자를 수 있어요. 유한 $r_\pi$는 해당 캐스코드 소자의 이미터에서 본 저항과 병렬로 유지해요.</p>
-$$R_{E5}=r_{O7}\parallel(R_1/2)=20\parallel5\,\mathrm{k\Omega}=4\,\mathrm{k\Omega}$$
-$$R_{E5}^*=R_{E5}\parallel r_{\pi5}=4\parallel5.2\,\mathrm{k\Omega}\approx2.26\,\mathrm{k\Omega}$$
-$$R_{E3}^*=r_{O1}\parallel r_{\pi3}=20\parallel5.2\,\mathrm{k\Omega}\approx4.13\,\mathrm{k\Omega}$$
-<p>$g_{m5}R_{E5}^*\gg1$과 $g_{m3}R_{E3}^*\gg1$의 주항에서 위·아래를 각각 증대해요. 수치는 중간 반올림값 대신 원래 병렬식으로 계산해요.</p>
-<div data-answer-step="위아래 캐스코드 합성">$$R_{up}\approx g_{m5}r_{O5}R_{E5}^*\approx869.57\,\mathrm{k\Omega}$$
-$$R_{dn}\approx g_{m3}r_{O3}R_{E3}^*\approx1587.3\,\mathrm{k\Omega}$$
-$$R_{out,1}\approx R_{up}\parallel R_{dn}\approx561.8\,\mathrm{k\Omega}$$</div>
-<p>두 출력 단자 사이에서 측정하면 차동 대칭의 두 반회로가 직렬이에요.</p>$$R_{out,12}\approx2R_{out,1}\approx1.12\,\mathrm{M\Omega}$$</div>
-<div data-gain-stage="gain" data-answer-step="부호 있는 차동 이득"><p>위·아래 저항은 같은 출력에서 병렬이고, 입력 증가가 그 출력을 낮춰요.</p>$$A_v\approx-G_mR_{out,1}\approx-(19.23\,\mathrm{mS})(561.8\,\mathrm{k\Omega})\approx-1.08\times10^4\,\mathrm{V/V}$$</div></div></div></div>
-<div class="layer formal" data-explanation="verify"><h4>완성 답과 검산</h4><div data-subpart="1"><h4>(1) 검산</h4><div data-answer-final><p><strong>한쪽 출력저항, 두 출력 사이 저항, 차동 이득의 최종 답이에요.</strong></p>
-$$R_{out,1}\approx149.72\,\Omega$$
-$$R_{out,12}\approx299.45\,\Omega$$
-$$A_v\approx-2.88\,\mathrm{V/V}$$</div><p>두 출력 저항의 두 배 관계를 확인했어요. $R_{out,1}$은 베이스 되먹임으로 $r_O$보다 훨씬 작지만, 차동 출력 저항은 그 두 배예요.</p></div><div data-subpart="2"><h4>(2) 검산</h4><div data-answer-final><p><strong>한쪽 출력저항, 두 출력 사이 저항, 차동 이득의 최종 답이에요.</strong></p>
-$$R_{out,1}\approx561.8\,\mathrm{k\Omega}$$
-$$R_{out,12}\approx1.12\,\mathrm{M\Omega}$$
-$$A_v\approx-1.08\times10^4\,\mathrm{V/V}$$</div><p>$R_{out,1}$은 $R_{up}$과 $R_{dn}$보다 작고 두 출력 사이는 두 배예요. 이득의 단위는 S·Ω=V/V예요.</p></div></div>
-<div class="layer warn" data-explanation="pitfall"><h4>주의할 점</h4><p>(1)의 $R_1$은 베이스와 자기 컬렉터 사이예요. 단순히 출력에서 접지로 연결된 $10\,\mathrm{k\Omega}$로 두면 $Q_3$의 낮은 저항을 놓쳐요. (2)에는 그림상 $R_2$가 없어요. $R_1$은 A–B 사이이므로 차동 반회로에서만 $R_1/2$가 돼요. 한쪽 출력저항과 두 출력 단자 사이 저항을 섞지 않아요.</p></div>
-<div class="layer eli5" data-explanation="retry"><h4>조건을 바꾸어 생각해요</h4><ul><li>(1) $R_1$이 0으로 줄면 $Q_3$의 베이스–컬렉터 연결은 어떤 블록이 되고 부하 저항은 커지나요, 작아지나요?</li><li>(2) A와 B 사이 $R_1$이 매우 커져 개방되면 $R_{E5}$에서 어떤 병렬 항이 사라지나요?</li><li>두 출력 사이 저항을 물으면 왜 한쪽 값에 2를 곱하나요?</li></ul></div>
-<div class="sum" hidden><p class="sum-lead">베이스 되먹임 부하와 캐스코드의 유한 $r_\pi$ 경로를 먼저 구한 뒤 한쪽 출력저항으로 차동 이득을 계산해요.</p><p>한쪽 출력저항과 두 출력 사이 저항은 2배 차이예요.</p>
-$$R_{Q3}\approx\left(\frac1{g_{m3}}+\frac{R_1}{\beta}\right)\parallel r_{O3}$$
-<p class="panel-label">최종 답</p><p>(1) 한쪽 $R_{out,1}\approx149.72\,\Omega$예요.</p><p>(1) $A_v\approx-2.88\,\mathrm{V/V}$예요.</p><p>(2) 한쪽 $R_{out,1}\approx561.8\,\mathrm{k\Omega}$예요.</p><p>(2) $A_v\approx-1.08\times10^4\,\mathrm{V/V}$예요.</p></div>
-
-
-
-
-
-
-
+<div class="layer formal circuit-explanation" data-explanation="solve">
+  <div data-subpart="1">
+    <h4>(1) 베이스–컬렉터 저항으로 되먹인 부하</h4>
+    <div data-answer-step="차동 반회로의 소자값">
+      <p>차동 대칭에서 테일 노드 P는 가상 접지예요. 큰 $\beta$의 바이어스 주항 $I_C\approx I_{EE}/2=0.5\,\mathrm{mA}$를 써요.</p>
+      <p>$$g_m=I_C/V_T\approx19.23\,\mathrm{mS}$$</p>
+      <p>$$r_{\pi}=\beta/g_m\approx5.2\,\mathrm{k\Omega}$$</p>
+      <p>$$r_O=V_A/I_C\approx20\,\mathrm{k\Omega}$$</p>
+    </div>
+    <div data-gain-route="gm-rout">
+      <div data-gain-stage="gm" data-answer-step="단락 전류를 만드는 입력 소자">
+        <p>왼쪽 출력을 단락하고 접지에서 컬렉터로 들어오는 전류를 양으로 잡아요. P가 가상 접지여서 $Q_1$의 제어 전압은 왼쪽 입력이에요.</p>
+        <p>$$G_m=\frac{i_{out,sc}}{v_{in1}}\approx g_{m1}$$</p>
+      </div>
+      <div data-gain-stage="rout" data-answer-step="저항을 포함한 다이오드 접속 부하">
+        <p>입력 영점에서 $Q_3$의 이미터는 $V_{CC}$의 AC 접지에 있고, 컬렉터는 $R_1$을 거쳐 자기 베이스로 연결돼요. 따라서 이 부하는 $R_1$만으로 치환할 수 없고, 큰 $\beta$의 두 단자 블록에 $R_1/\beta$와 내부 $1/g_{m3}$를 함께 남겨요.</p>
+        <p>$$R_{Q3}\approx\left(\frac{1}{g_{m3}}+\frac{R_1}{\beta}\right)\parallel r_{O3}\approx150.85\,\Omega$$</p>
+        <p>$$R_{out,1}\approx r_{O1}\parallel R_{Q3}$$</p>
+      </div>
+      <div data-gain-stage="gain" data-answer-final="">
+        <p>두 출력 사이 저항은 반올림 전 한쪽 저항의 두 배예요. 차동 이득은 반전하는 한쪽 반회로 이득과 같아요.</p>
+        <p>$$R_{out,1}\approx149.72\,\Omega$$</p>
+        <p>$$R_{out,12}\approx2R_{out,1}\approx299.45\,\Omega$$</p>
+        <p>$$A_v\approx-G_mR_{out,1}\approx-2.88\,\mathrm{V/V}$$</p>
+      </div>
+    </div>
+  </div>
+  <div data-subpart="2">
+    <h4>(2) 위아래 BJT 캐스코드</h4>
+    <div data-answer-step="차동으로 나눈 A–B 저항">
+      <p>A–B 사이 $R_1$의 가운데는 차동 가상 접지여서 반회로의 A에 $R_1/2$가 걸려요. 조건의 $R_{1,2}$ 표기와 달리 그림에는 $R_1$만 연결돼요. 바이어스 주항이 (1)과 같으므로 $g_m$, $r_\pi$, $r_O$ 값을 재사용해요.</p>
+      <p>$$R_1/2=5\,\mathrm{k\Omega}$$</p>
+    </div>
+    <div data-gain-route="gm-rout">
+      <div data-gain-stage="gm" data-answer-step="아래 가지의 단락 전류">
+        <p>출력을 단락하고 접지에서 회로로 들어가는 전류를 양으로 잡아요. $g_{m3}\gg 1/r_{O1}+1/r_{\pi3}$이라 $Q_1$의 전류 변화가 대부분 $Q_3$을 거쳐 출력 단락으로 전달돼요.</p>
+        <p>$$G_m\approx g_{m1}$$</p>
+      </div>
+      <div data-gain-stage="rout" data-answer-step="먼 노드에서 시작한 캐스코드 저항">
+        <p>입력 영점에서 A 및 $Q_1$ 컬렉터의 저항에 해당 캐스코드 소자의 $r_\pi$를 병렬로 묶어요. 큰 곱의 주항으로 위아래 저항을 각각 구한 뒤 출력에서 병렬로 합쳐요.</p>
+        <p>$$R_{E5}^*=\bigl[r_{O7}\parallel(R_1/2)\bigr]\parallel r_{\pi5}\approx2.26\,\mathrm{k\Omega}$$</p>
+        <p>$$R_{E3}^*=r_{O1}\parallel r_{\pi3}\approx4.13\,\mathrm{k\Omega}$$</p>
+        <p>$$R_{up}\approx g_{m5}r_{O5}R_{E5}^*\approx869.57\,\mathrm{k\Omega}$$</p>
+        <p>$$R_{dn}\approx g_{m3}r_{O3}R_{E3}^*\approx1587.3\,\mathrm{k\Omega}$$</p>
+        <p>$$R_{out,1}\approx R_{up}\parallel R_{dn}$$</p>
+      </div>
+      <div data-gain-stage="gain" data-answer-final="">
+        <p>$$R_{out,1}\approx561.8\,\mathrm{k\Omega}$$</p>
+        <p>$$R_{out,12}\approx2R_{out,1}\approx1.12\,\mathrm{M\Omega}$$</p>
+        <p>$$A_v\approx-G_mR_{out,1}\approx-1.08\times10^4\,\mathrm{V/V}$$</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sum" hidden>
+  <p class="sum-lead">한쪽 출력저항은 반회로에서 구하고, 두 출력 사이 저항은 그 두 배예요.</p>
+  <p>$$R_{Q3}\approx\left(\frac{1}{g_{m3}}+\frac{R_1}{\beta}\right)\parallel r_{O3}$$</p>
+  <p>(2)는 A에서 $R_1/2$를 보고 각 캐스코드의 $r_\pi$를 남겨요.</p>
+</div>

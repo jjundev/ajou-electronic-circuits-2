@@ -1,10 +1,6 @@
-gm_each = I_C/(2*V_T)
-tail_rss = V_A/I_C
-KCL_solution_i = I_C*v_cm/(2*V_A + 2*V_T)
-KCL_solution_vP = V_A*v_cm/(V_A + V_T)
-Gm_CM = I_C/(2*(V_A + V_T))
-Rout_CM = R_C, because Q1/Q2 VA=infinity
-A_CM_single_ended = -I_C*R_C/(2*(V_A + V_T))
-abs(A_CM)<0.01 iff R_C*I_C < (V_A + V_T)/50
-target_identity = 0
-large_tail_limit = 0
+Tail KCL: I_C_tail*(v_CM - v_E)/V_T = I_C_tail*v_E/V_A
+Single-ended A_CM, finite beta: -I_C_tail*R_C*alpha/(2*V_A + 2*V_T)
+Single-ended A_CM, alpha=1: -I_C_tail*R_C/(2*(V_A + V_T))
+|A_CM| < 1/100 iff R_C*I_C_tail < (V_A + V_T)/50 (alpha=1)
+A_CM if r_o3=(V_A+V_CE3)/I_C_tail and alpha=1: -I_C_tail*R_C/(2*V_A + 2*V_CE3 + 2*V_T)
+Limit V_A -> infinity: 0

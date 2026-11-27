@@ -1,9 +1,6 @@
-p7(1) exact nodal DM gain = -100 ≈ -100.0000000000000
-p7(1) exact nodal differential Rout = 20000 ≈ 20000.00000000000
-p7(1) block DM gain = -100 ≈ -100.0000000000000
-p7(2) exact nodal CM gain with cascode tail = -50/10151 ≈ -0.004925623091321052
-p7(2) leading tail resistance = 2000000 ≈ 2000000.000000000
-p7(2) leading CM gain = -1/200 ≈ -0.005000000000000000
-p7(1) exact minus block 0
-p7(2) exact/leading CM 0.985124618264
-p7(2) sympy.limit(CM exact/leading,rs->infinity,gm->infinity) 1
+R_tail (ohm): gm5*ro5*ro6 + ro5 + ro6 -> 2020000 = 2020000.00000
+A_d: -gm1*ro1*ro3/(ro1 + ro3) -> -100 = -100.000000000
+A_CM (output mean): -gm1*ro1*ro3/(2*gm1*gm5*ro1*ro5*ro6 + 2*gm1*ro1*ro5 + 2*gm1*ro1*ro6 + 2*gm5*ro5*ro6 + ro1 + ro3 + 2*ro5 + 2*ro6) -> -50/10151 = -0.00492562309132
+A_CM (large gm*ro, exact R_tail): -ro3/(2*gm5*ro5*ro6 + 2*ro5 + 2*ro6) -> -1/202 = -0.00495049504950
+A_CM (leading R_tail): -ro3/(2*gm5*ro5*ro6) -> -1/200 = -0.00500000000000
+CM-to-differential gain: 0 -> 0 = 0

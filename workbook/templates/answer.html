@@ -366,7 +366,7 @@ const KIND_SLUG = { '예제': 'example', '연습문제': 'exercise', '장말문�
 const KIND_SHORT = { '예제': '예제', '연습문제': '연습', '장말문제': '문제', '기출': '문항' };   // Hint 쪽 항목 번호 앞 (번호가 종류끼리 겹침)
 const FIG_SCALE_CAP = 1.5;        // 교재 인쇄 크기 대비 확대 상한
 const DENSE_FIG_AREA_MM2 = 5000;  // 이 넓이 이상의 교재 그림은 확대 상한 폭을 최소 폭으로 유지
-const MIN_DENSE_FIG_SCALE = 0.8;  // 큰 그림이 원본 픽셀 대비 이보다 작아지면 넘침(라벨 판독 불가)으로 빌드 실패
+const MIN_DENSE_FIG_SCALE = 0.8;  // 큰 그림의 표시 폭이 인쇄 목표 폭의 이 비율에 못 미치면 실패
 const MATH_MIN_SCALE = 0.7;
 const STRIP_MATH_MIN_SCALE = 0.5;  // Hint 띠 속 식은 띠 폭에 맞춰 더 줄일 수 있음
 // 쪽 맞춤 순서: 폭 → 글자. 앞 단계 값은 유지한 채 다음 단계로 간다.
@@ -550,13 +550,14 @@ function figureImg(f, dense = false) {
   img.alt = '';
   img.width = Math.round(f.w_mm * 10);
   img.height = Math.round(f.h_mm * 10);
-  img.style.setProperty('--w-cap', `${f.w_mm * FIG_SCALE_CAP}mm`);
+  const targetWidth = f.w_mm * FIG_SCALE_CAP;
+  img.style.setProperty('--w-cap', `${targetWidth}mm`);
   img.style.setProperty('--ratio', f.w_mm / f.h_mm);
   // 교재에서 큰 그림(여러 회로를 한 장에 담은 그림 등)은 높이 맞춤으로 줄이면 라벨을 못 읽는다.
   // 풀이를 다음 쪽으로 넘길 수 있는 문항(solution.paginate)에서만 지킨다. 넘길 수 없으면 줄여서라도 한 쪽에 맞춘다.
   if (dense && f.w_mm * f.h_mm >= DENSE_FIG_AREA_MM2) {
-    img.style.setProperty('--w-min', `${f.w_mm * FIG_SCALE_CAP}mm`);
-    img.dataset.dense = '';
+    img.style.setProperty('--w-min', 'var(--w-cap)');
+    img.dataset.dense = String(targetWidth * 96 / 25.4);
   }
   return img;
 }
@@ -568,11 +569,11 @@ function stepFigure(f) {
   return img;
 }
 
-// 큰 그림이 원본보다 MIN_DENSE_FIG_SCALE 밑으로 줄어든 쪽. 렌더 폭 / 원본 픽셀 폭(--w-cap과 같음)
+// 화면 폭과 인쇄 목표 폭을 모두 CSS 픽셀로 비교한다. PNG 해상도는 배율을 바꾸지 않는다.
 function shrunkFigures(root) {
   const out = [];
   for (const img of root.querySelectorAll('img[data-dense]')) {
-    const scale = img.naturalWidth ? img.offsetWidth / img.naturalWidth : 0;
+    const scale = img.naturalWidth ? img.offsetWidth / Number(img.dataset.dense) : 0;
     if (scale < MIN_DENSE_FIG_SCALE) out.push(`${img.closest('.page').id}:fig-scale=${scale.toFixed(2)}`);
   }
   return out;

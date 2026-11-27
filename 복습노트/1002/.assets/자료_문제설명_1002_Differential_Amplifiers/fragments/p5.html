@@ -1,33 +1,74 @@
-<div class="layer eli5" data-explanation="understand"><h4>문제를 읽어요</h4><p>그림 (a)와 (b)는 왼쪽 출력에서 오른쪽 출력을 뺀 전압을 두 입력의 차로 나눈 차동 이득을 구해요. 그림 (c)는 $Q_1$ 입력에서 오른쪽 단자 $v_{out}$까지의 단일 전압 이득이에요. 세 그림의 바이어스 전류 경로와 $V_A$, $\beta$ 조건이 서로 달라서 나누어 계산해요.</p></div>
-<div class="layer formal" data-explanation="recall"><h4>이 개념과 공식을 떠올려요</h4><p>(1)은 두 독립 테일이 각각 $I_{EE}$를 흘리고 두 이미터 사이에 $R_E$가 있어요. 순수 차동 입력에서는 $R_E$의 가운데가 가상 접지라 반회로 이미터 저항은 $R_E/2$예요. 상단 $Q_3$는 베이스와 컬렉터가 $V_{CC}$에 묶인 다이오드 접속이며, $V_A=\infty$이므로 이미터에서 $1/g_{m3}$ 블록으로 봐요.</p><p>(2)는 한 테일 $I_{EE}$를 두 쪽이 나눠요. 같은 $R_1,R_2$의 가운데가 차동 가상 접지이므로 $R_1$은 출력 부하에 병렬이에요. (3)은 $Q_2$ 캐스코드에서 유한 $\beta$의 $r_{\pi2}$를 아래 $r_{O1}$과 병렬로 유지해요. 전압 이득은 각 그림의 같은 입출력 정의에서 $G_m$과 부하 포함 $R_{out}$을 구한 뒤 $-G_mR_{out}$으로 연결해요.</p></div>
-<div class="layer formal" data-explanation="start"><h4>종이에 쓸 첫 줄</h4><p data-answer-step="반회로 판단" data-answer-subpart="1">(1) 차동 대칭선을 잘라 $R_E/2=50\,\Omega$를 $Q_1$ 이미터 아래에 두고, $Q_3$의 다이오드 저항과 $R_C$를 컬렉터 부하로 봐요.</p><p data-answer-step="반회로 판단" data-answer-subpart="2">(2) P와 $R_1$·$R_2$의 가운데 X를 AC 접지로 두어요. 각 반회로의 출력에 $r_{O1}$, $r_{O3}$, $R_1$이 병렬이에요.</p><p data-answer-step="캐스코드 판단" data-answer-subpart="3">(3) 입력 $Q_1$이 전류를 만들고 $Q_2$가 출력저항을 키워요. 먼저 $R_e^*=r_{O1}\parallel r_{\pi2}$로 먼 노드를 묶어요.</p></div>
-<div class="layer formal" data-explanation="solve"><h4>이렇게 풀어요</h4>
-<div data-subpart="1"><h4>(1) 이미터 축퇴와 다이오드 부하</h4><p>양쪽 테일 전류원이 각각 $0.5\,\mathrm{mA}$를 흘리고 평형에서 $R_E$에는 DC 전류가 없어요. $Q_1,Q_3$의 전류를 같게 두는 큰 $\beta$ 근사에서 소자값은 다음과 같아요.</p>
-$$g_{m1}=\frac{I_{EE}}{V_T}=20\,\mathrm{mS}$$
-$$g_{m3}=\frac{I_{EE}}{V_T}=20\,\mathrm{mS}$$
-<div data-gain-route="gm-rout"><div data-gain-stage="gm" data-answer-step="출력 단락의 전류 생성"><p>출력을 단락해 0 V로 두고 접지에서 출력 단자로 유입하는 전류를 양으로 정해요. 반회로 이미터가 $R_E/2$로 축퇴되어, $1/g_{m1}=50\,\Omega$와 합쳐 입력 전압을 전류로 바꿔요. 이 문제의 $g_{m1}R_E/2=1$은 큰 곱이 아니므로 $1/g_{m1}$을 버리지 않아요.</p>
-$$G_m=\frac{1}{1/g_{m1}+R_E/2}=\frac{1}{50\,\Omega+50\,\Omega}=10\,\mathrm{mS}$$</div>
-<div data-gain-stage="rout" data-answer-step="입력 영점과 부하"><p>입력을 0으로 하고 출력에서 위를 봐요. $V_A=\infty$라 $Q_1$의 $r_O$는 개방이고, 출력 쪽에는 $R_C$와 다이오드 접속 $Q_3$의 저항이 직렬로 남아요.</p>
-$$R_{out}\approx R_C+\frac{1}{g_{m3}}=450\,\Omega+50\,\Omega=500\,\Omega$$</div>
-<div data-gain-stage="gain" data-answer-step="부호 있는 이득"><p>입력이 증가하면 왼쪽 컬렉터 전류가 늘어 출력은 내려가요. 양쪽 입출력이 모두 반대 방향으로 움직여 차동 이득은 이 반쪽의 이득이에요.</p>
-$$A_v\approx-G_mR_{out}=-(10\,\mathrm{mS})(0.5\,\mathrm{k\Omega})=-5\,\mathrm{V/V}$$</div></div></div>
-<div data-subpart="2"><h4>(2) pnp 부하와 가운데 저항</h4><p>테일 $0.5\,\mathrm{mA}$를 두 입력 가지가 나누므로 각 컬렉터에는 약 $0.25\,\mathrm{mA}$가 흘러요. 따라서 아래 소자와 위 pnp 소자의 값은 각각 같아요.</p>
-$$g_{m1}=\frac{0.25\,\mathrm{mA}}{25\,\mathrm{mV}}=10\,\mathrm{mS}$$
-$$r_{O1}=\frac{5\,\mathrm V}{0.25\,\mathrm{mA}}=20\,\mathrm{k\Omega}$$
-$$r_{O3}=\frac{5\,\mathrm V}{0.25\,\mathrm{mA}}=20\,\mathrm{k\Omega}$$
-<div data-gain-route="gm-rout"><div data-gain-stage="gm" data-answer-step="출력 단락의 전류 생성"><p>왼쪽 출력을 단락하면 $Q_1$이 만든 컬렉터 전류가 오른쪽 접지에서 출력으로 유입해요. X는 가상 접지여서 $R_1$에도 단락 전압이 걸리지 않아요.</p>$$G_m=\frac{i_{out,sc}}{v_{in1}}=g_{m1}=10\,\mathrm{mS}$$</div>
-<div data-gain-stage="rout" data-answer-step="입력 영점과 병렬 부하"><p>입력을 0으로 두고 왼쪽 출력에서 보면 $Q_1$ 쪽, pnp $Q_3$ 쪽, X로 가는 $R_1$이 모두 AC 접지로 이어져요.</p>$$R_{out}\approx r_{O1}\parallel r_{O3}\parallel R_1=20\parallel20\parallel10\,\mathrm{k\Omega}=5\,\mathrm{k\Omega}$$</div>
-<div data-gain-stage="gain" data-answer-step="부호 있는 이득"><p>두 출력 차를 두 입력 차로 나눈 이득은 한 반쪽의 반전 이득이에요.</p>$$A_v\approx-G_mR_{out}=-(10\,\mathrm{mS})(5\,\mathrm{k\Omega})=-50\,\mathrm{V/V}$$</div></div></div>
-<div data-subpart="3"><h4>(3) 유한 $r_\pi$를 가진 캐스코드</h4><p>$I_1=0.5\,\mathrm{mA}$가 $Q_1,Q_2$를 지나므로 소자값을 먼저 계산해요.</p>
-$$g_{m1}=g_{m2}=\frac{0.5\,\mathrm{mA}}{25\,\mathrm{mV}}=20\,\mathrm{mS}$$
-$$r_{O1}=r_{O2}=\frac{5\,\mathrm V}{0.5\,\mathrm{mA}}=10\,\mathrm{k\Omega}$$
-$$r_{\pi2}=\frac{\beta}{g_{m2}}=10\,\mathrm{k\Omega}$$
-<div data-gain-route="gm-rout"><div data-gain-stage="gm" data-answer-step="출력 단락의 전류 생성"><p>출력을 오른쪽에서 단락해 0 V로 두면 $Q_1$의 입력 전류 변화가 $Q_2$를 거쳐 출력 단자로 유입해요. 큰 $\beta$의 전류 전달 주항에서</p>$$G_m\approx g_{m1}=20\,\mathrm{mS}$$</div>
-<div data-gain-stage="rout" data-answer-step="입력 영점과 캐스코드 저항"><p>입력을 0으로 두고 출력에서 먼 $Q_1$의 컬렉터 노드를 먼저 봐요. $Q_2$의 베이스는 AC 접지지만 이미터는 움직이므로 $r_{\pi2}$가 $r_{O1}$과 병렬이에요. $g_{m2}(r_{O1}\parallel r_{\pi2})=100\gg1$에서 $Q_2$의 캐스코드 주항을 사용해요. 위의 이상적 $I_1$은 소신호 개방이에요.</p>
-$$R_e^*=r_{O1}\parallel r_{\pi2}=5\,\mathrm{k\Omega}$$
-$$R_{out}\approx g_{m2}r_{O2}R_e^*=(20\,\mathrm{mS})(10\,\mathrm{k\Omega})(5\,\mathrm{k\Omega})=1\,\mathrm{M\Omega}$$</div>
-<div data-gain-stage="gain" data-answer-step="부호 있는 이득"><p>증가한 컬렉터 전류가 출력 전압을 낮추므로 부호는 음수예요.</p>$$A_v\approx-G_mR_{out}=-(20\,\mathrm{mS})(1\,\mathrm{M\Omega})=-2\times10^4\,\mathrm{V/V}$$</div></div></div></div>
-<div class="layer formal" data-explanation="verify"><h4>완성 답과 검산</h4><div data-subpart="1"><h4>(1) 검산</h4><p data-answer-final><strong>$A_v\approx-5\,\mathrm{V/V}$</strong>. $G_mR_{out}$은 S·Ω라 무차원이에요. $1/g_{m1}=R_E/2$여서 내부 저항을 버리면 이득을 두 배로 잘못 구해요.</p></div><div data-subpart="2"><h4>(2) 검산</h4><p data-answer-final><strong>$A_v\approx-50\,\mathrm{V/V}$</strong>. 병렬 저항 $5\,\mathrm{k\Omega}$은 각 $20\,\mathrm{k\Omega}$ 및 $R_1=10\,\mathrm{k\Omega}$보다 작아요.</p></div><div data-subpart="3"><h4>(3) 검산</h4><p data-answer-final><strong>$A_v\approx-2\times10^4\,\mathrm{V/V}$</strong>. $r_{\pi2}\to\infty$이면 $R_e^*$가 $r_{O1}$로 돌아가고 이득 크기가 더 커져요.</p></div></div>
-<div class="layer warn" data-explanation="pitfall"><h4>주의할 점</h4><p>(1)의 두 테일은 각각 $I_{EE}$예요. (2)의 한 테일 $I_{EE}$를 나누는 것과 섞지 않아요. (1)은 주어진 $g_mR_E/2=1$ 때문에 큰 축퇴 근사로 $1/g_m$을 버리면 안 돼요. (3)은 유한 $\beta$에서 $Q_2$의 $r_{\pi2}$를 빼면 출력저항을 두 배로 과대평가해요.</p></div>
-<div class="layer eli5" data-explanation="retry"><h4>조건을 바꾸어 생각해요</h4><ul><li>(1) 같은 바이어스에서 $R_E$가 0이 되면 어느 저항 합 항이 없어지고 이득 크기는 어떻게 바뀌나요?</li><li>(2) $R_1=R_2$를 함께 매우 크게 만들면 어떤 출력 병렬 가지가 사라지나요?</li><li>(3) $\beta$가 매우 커져 $r_{\pi2}$가 개방되면 캐스코드 아래 유효 저항은 무엇으로 돌아가나요?</li></ul></div>
-<div class="sum" hidden><p class="sum-lead">각 그림의 차동 반회로 또는 캐스코드 블록을 정한 뒤 $G_m$, 부하 포함 $R_{out}$, 반전 이득을 계산해요.</p><p>(1)은 $g_mR_E/2=1$이라 $1/g_m$을 유지해요.</p><p>(3)은 $r_{\pi2}$를 $r_{O1}$과 병렬로 묶어요.</p><p class="panel-label">최종 답</p><p>$A_v^{(1)}\approx-5\,\mathrm{V/V}$</p><p>$A_v^{(2)}\approx-50\,\mathrm{V/V}$</p><p>$A_v^{(3)}\approx-2\times10^4\,\mathrm{V/V}$</p></div>
+<div class="layer formal circuit-explanation" data-explanation="solve">
+  <div data-subpart="1">
+    <h4>(1) 이미터 축퇴와 다이오드 부하</h4>
+    <div data-answer-step="가상 접지와 바이어스">
+      <p>그림 (a)는 두 테일이 각각 $I_{EE}$를 흘려요. 차동 반회로에서 $R_E$의 가운데는 가상 접지이고, 큰 $\beta$에서 $Q_1$과 $Q_3$의 $g_m$은 같아요.</p>
+      <p>$$g_{m1}=g_{m3}=I_{EE}/V_T=20\,\mathrm{mS}$$</p>
+    </div>
+    <div data-gain-route="gm-rout">
+      <div data-gain-stage="gm" data-answer-step="이미터 쪽 저항 합">
+        <p>왼쪽 출력을 단락해 접지에서 컬렉터로 유입하는 전류를 양으로 잡아요. $1/g_{m1}$과 $R_E/2$가 둘 다 $50\,\Omega$이므로 두 항을 모두 남겨요.</p>
+        <p>$$G_m=\frac{i_{out,sc}}{v_{in1}}=\frac{1}{1/g_{m1}+R_E/2}=10\,\mathrm{mS}$$</p>
+      </div>
+      <div data-gain-stage="rout" data-answer-step="컬렉터의 직렬 부하">
+        <p>입력 영점에서 $V_A=\infty$인 $Q_1$ 가지의 출력저항은 개방이에요. 남은 $R_C$는 다이오드 접속 $Q_3$의 저항과 직렬이에요.</p>
+        <p>$$R_{out}\approx R_C+\frac{1}{g_{m3}}=500\,\Omega$$</p>
+      </div>
+      <div data-gain-stage="gain" data-answer-final="">
+        <p>차동 입력과 출력에서 각각 두 배가 상쇄돼 반회로 이득과 같아요.</p>
+        <p>$$A_v\approx -G_mR_{out}\approx -5\,\mathrm{V/V}$$</p>
+      </div>
+    </div>
+  </div>
+  <div data-subpart="2">
+    <h4>(2) pnp 부하와 가운데 저항</h4>
+    <div data-answer-step="공유 테일과 가상 접지">
+      <p>그림 (b)는 한 테일을 두 쪽이 나눠요. P와 $R_1$·$R_2$의 접속점 X는 차동 가상 접지예요.</p>
+      <p>$$I_{C1}=I_{C3}\approx I_{EE}/2=0.25\,\mathrm{mA}$$</p>
+      <p>$$r_{O1}=r_{O3}\approx V_A/I_C=20\,\mathrm{k\Omega}$$</p>
+    </div>
+    <div data-gain-route="gm-rout">
+      <div data-gain-stage="gm" data-answer-step="단락 출력으로 들어가는 전류">
+        <p>왼쪽 출력을 단락하면 $R_1$ 양단의 소신호 전압은 0이고, 접지에서 출력으로 유입하는 전류는 $Q_1$이 정해요.</p>
+        <p>$$G_m=\frac{i_{out,sc}}{v_{in1}}\approx g_{m1}=\frac{I_{C1}}{V_T}\approx10\,\mathrm{mS}$$</p>
+      </div>
+      <div data-gain-stage="rout" data-answer-step="출력의 세 병렬 가지">
+        <p>입력 영점에서 $r_{O1}$, $r_{O3}$, X로 이어지는 $R_1$이 모두 접지로 연결돼요.</p>
+        <p>$$R_{out}\approx r_{O1}\parallel r_{O3}\parallel R_1=5\,\mathrm{k\Omega}$$</p>
+      </div>
+      <div data-gain-stage="gain" data-answer-final="">
+        <p>$$A_v\approx -G_mR_{out}\approx -50\,\mathrm{V/V}$$</p>
+      </div>
+    </div>
+  </div>
+  <div data-subpart="3">
+    <h4>(3) 공통 이미터와 공통 베이스의 연쇄 이득</h4>
+    <div data-answer-step="중간 노드와 바이어스">
+      <p>$v_X$를 $Q_1$의 컬렉터이자 $Q_2$의 이미터 전압으로 잡아요. $Q_2$의 베이스는 AC 접지이고, 이상 전류원 $I_1$은 소신호 개방이므로 출력에 외부 부하 전류가 없어요.</p>
+      <p>$$A_v=\frac{v_X}{v_{in}}\frac{v_{out}}{v_X}$$</p>
+      <p>큰 $\beta=200$에서 $Q_2$의 이미터와 컬렉터 바이어스 전류를 같게 보아요.</p>
+      <p>$$I_{C1}\approx I_{C2}=I_1=0.5\,\mathrm{mA}$$</p>
+      <p>$$g_{m1}\approx g_{m2}\approx I_1/V_T=20\,\mathrm{mS}$$</p>
+      <p>$$r_{O1}\approx r_{O2}\approx V_A/I_1=10\,\mathrm{k\Omega}$$</p>
+      <p>$$r_{\pi2}=\beta/g_{m2}=10\,\mathrm{k\Omega}$$</p>
+    </div>
+    <div data-answer-step="공통 이미터의 부하와 이득">
+      <p>출력 개방에서 $Q_2$의 컬렉터 소신호 전류가 0이므로, $Q_1$의 컬렉터에서는 $r_{O1}$과 $Q_2$의 베이스로 이어지는 $r_{\pi2}$를 병렬로 봐요.</p>
+      <p>$$R_X=r_{O1}\parallel r_{\pi2}=5\,\mathrm{k\Omega}$$</p>
+      <p>$$\frac{v_X}{v_{in}}=-g_{m1}R_X\approx-100$$</p>
+    </div>
+    <div data-answer-step="출력이 열린 공통 베이스의 이득">
+      <p>출력에서 $Q_2$의 $r_{O2}$ 전류가 제어 전류를 상쇄해요. $g_{m2}r_{O2}\approx200\gg1$이므로 양의 이득에서 주항을 써요.</p>
+      <p>$$\frac{v_{out}}{v_X}=1+g_{m2}r_{O2}\approx g_{m2}r_{O2}\approx200$$</p>
+    </div>
+    <div data-answer-final="">
+      <p>$$A_v\approx(-100)(200)=-2\times10^4\,\mathrm{V/V}$$</p>
+    </div>
+  </div>
+</div>
+<div class="sum" hidden>
+  <p class="sum-lead">(1)과 (2)는 차동 반회로에서 출력 단락의 $G_m$과 부하 포함 $R_{out}$을 곱해요.</p>
+  <p>(1)은 $1/g_{m1}$과 $R_E/2$를 함께 남겨요.</p>
+  <p>(2)는 출력의 세 저항을 병렬로 묶어요.</p>
+  <p>(3)은 $r_{\pi2}$까지 포함한 공통 이미터 이득에 출력이 열린 공통 베이스 이득을 곱해요.</p>
+</div>
