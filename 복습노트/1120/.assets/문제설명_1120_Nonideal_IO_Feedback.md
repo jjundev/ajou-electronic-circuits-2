@@ -1000,10 +1000,10 @@ $$
 R_{out,\mathrm{open}}=r_{O2}\parallel R_B
 $$
 
-$g_{m1}r_{O1}\gg1$에서 $M_1$ 소스 쪽 저항 $R_{S1}$은 다음과 같아요. 입력에서는 이 저항과 반송 부하 $R_A$를 병렬로 읽어요.
+$\lambda\gt0$이라 수업 규칙대로 $M_1$ 소스 쪽 저항 $R_{S1}$에 $r_{O1}$을 병렬로 둬요($R_{D1}\ll r_{O1}$). 입력에서는 이 저항과 반송 부하 $R_A$를 병렬로 읽어요.
 
 $$
-R_{S1}\approx\frac{1}{g_{m1}}\left(1+\frac{R_{D1}}{r_{O1}}\right)
+R_{S1}\approx\frac{1}{g_{m1}}\parallel r_{O1}
 $$
 
 $$
