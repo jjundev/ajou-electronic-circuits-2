@@ -1,0 +1,510 @@
+{
+ "source_sha256": "7fa1640c94fd3ec83a13f81b06073c11b381744acb9471cafe893a537018e638",
+ "reference": "정리노트 s0-selectivity-order \"두 RC 단의 극점은 어디에 있나요\" / 강의노트 L07 s7 / STT 1127 506–510행",
+ "gates": {
+  "machine": "pass",
+  "numeric_independent": "pass",
+  "probe": "pass",
+  "browser": "pass"
+ },
+ "machine": {
+  "check_cjs": "ok",
+  "steps_cjs": "steps.txt 재생성"
+ },
+ "numeric_independent": {
+  "reviewer": "별도 서브에이전트(작성자와 다른 컨텍스트)",
+  "method": "N(s)=(1+sR1C1)(1+sR2C2)+sR1C2(버퍼 없음), 곱(버퍼) 해석식과 2차 근의 공식으로 극점을 독립 계산(mna.js 미사용). 39개 상태(k 0.1·1·10·100, x 0.01·1·100, 버퍼 on/off, 프리셋·단계·예측)에서 극점·실제/근사 |H|·errPct·배지·플롯 비교",
+  "checks": 429,
+  "max_rel_err": 9.99899964251326e-07,
+  "display_mismatches": 0,
+  "reference_values": [
+   {
+    "state": "default",
+    "quantity": "p1 tile |p1|R1C1",
+    "lab": 0.382,
+    "ref": 0.38196601125010515,
+    "rel_err": 8.898370245984517e-05
+   },
+   {
+    "state": "default",
+    "quantity": "p2 tile |p2|R1C1",
+    "lab": 2.618,
+    "ref": 2.618033988749895,
+    "rel_err": 1.298254722477813e-05
+   },
+   {
+    "state": "default",
+    "quantity": "exact |H| tile",
+    "lab": 0.333,
+    "ref": 0.3333333333333333,
+    "rel_err": 0.0009999999999998899
+   },
+   {
+    "state": "default",
+    "quantity": "approx |H| tile",
+    "lab": 0.5,
+    "ref": 0.5,
+    "rel_err": 0.0
+   },
+   {
+    "state": "default",
+    "quantity": "exact |H| (marker)",
+    "lab": 0.3333333333333334,
+    "ref": 0.3333333333333333,
+    "rel_err": 3.3306690738754696e-16
+   },
+   {
+    "state": "default",
+    "quantity": "approx |H| (approxMarker)",
+    "lab": 0.5,
+    "ref": 0.5,
+    "rel_err": 0.0
+   },
+   {
+    "state": "default",
+    "quantity": "errPct (plotData; abs diff in %-points)",
+    "lab": 49.99999999999996,
+    "ref": 50.00000000000001,
+    "rel_err": 4.973799150320701e-14
+   },
+   {
+    "state": "default",
+    "quantity": "badge x |v_x|",
+    "lab": 0.471,
+    "ref": 0.4714045207910317,
+    "rel_err": 0.0008581181834083925
+   },
+   {
+    "state": "default",
+    "quantity": "badge out |v_out|",
+    "lab": 0.333,
+    "ref": 0.3333333333333333,
+    "rel_err": 0.0009999999999998899
+   },
+   {
+    "state": "k=0.1 x=1 buf=off",
+    "quantity": "p1 tile |p1|R1C1",
+    "lab": 0.084,
+    "ref": 0.08392021690038397,
+    "rel_err": 0.000950701780367688
+   },
+   {
+    "state": "k=0.1 x=1 buf=off",
+    "quantity": "p2 tile |p2|R1C1",
+    "lab": 11.916,
+    "ref": 11.916079783099615,
+    "rel_err": 6.695415024664985e-06
+   },
+   {
+    "state": "k=0.1 x=1 buf=off",
+    "quantity": "exact |H| tile",
+    "lab": 0.0833,
+    "ref": 0.08333333333333334,
+    "rel_err": 0.0004000000000001224
+   }
+  ],
+  "findings": "Critical 0, Important 0, Minor 6(도구 관련 1건 제외 모두 반영)"
+ },
+ "probe": {
+  "widths": [
+   1440,
+   375
+  ],
+  "themes": [
+   "light",
+   "dark"
+  ],
+  "checks": 60,
+  "defect_count": 0,
+  "preview_sha256": "29deaecd995abdfeeac7f4864e737e86dde8d054b64f39f4ee58e9bb527a7dbb"
+ },
+ "browser": {
+  "name": "Chromium 158.0.8127.36 (Playwright, headless)",
+  "url": "http://127.0.0.1:18127/2/preview.html",
+  "fallback_reason": "Codex 내부 브라우저(iab) 도구가 이 클라우드 세션에 없어 Playwright Chromium으로 같은 조건을 직접 조작",
+  "viewports": [
+   {
+    "width": 1440,
+    "height": 900,
+    "theme": "light"
+   },
+   {
+    "width": 1440,
+    "height": 900,
+    "theme": "dark"
+   },
+   {
+    "width": 375,
+    "height": 812,
+    "theme": "light"
+   },
+   {
+    "width": 375,
+    "height": 812,
+    "theme": "dark"
+   }
+  ],
+  "actions": [
+   {
+    "viewport": [
+     1440,
+     900
+    ],
+    "theme": "light",
+    "actions": [
+     {
+      "predict_verify_tiles": [
+       "0.382 극점 |p₁|·R₁C₁",
+       "2.618 극점 |p₂|·R₁C₁",
+       "0.333 실제 |H| (회로)",
+       "0.500 두 단 곱 근사 |H|"
+      ],
+      "result": "예측과 같아요.\n실제 |H| (회로) · 0.333\n두 단 곱 근사 |H| · 0.500\n\n분모가 \n𝑁\n(\n𝑠\n)\n=\n1\n+\n3\n𝑠\n𝑅\n𝐶\n+\n𝑠\n2\n𝑅\n2\n𝐶\n2\nN(s)=1+3sRC+s\n2\nR\n2\nC\n2\n이라 \n𝜔\n=\n1\n/\n(\n𝑅\n𝐶\n)\nω=1/(RC)에서 \n∣\n𝑁\n∣\n=\n3\n∣N∣=3, 크기는 \n1\n/\n3\n1/3이에요. 로딩 항 \n𝑠\n𝑅\n1\n𝐶\n2\n"
+     },
+     {
+      "after_fold_params": {
+       "k": 1,
+       "x": 1
+      },
+      "disabledElems": [
+       "buf"
+      ]
+     },
+     {
+      "buf_click": [
+       "false",
+       "true"
+      ],
+      "tiles_buf_on": [
+       "1.000 극점 |p₁|·R₁C₁",
+       "1.000 극점 |p₂|·R₁C₁",
+       "0.500 실제 |H| (회로)",
+       "0.500 두 단 곱 근사 |H|"
+      ],
+      "bypass_class": "is-dim",
+      "err_badge": "오차 0.0% · 10% 이내"
+     },
+     {
+      "buf_enter": "false",
+      "tiles": [
+       "0.382 극점 |p₁|·R₁C₁",
+       "2.618 극점 |p₂|·R₁C₁",
+       "0.333 실제 |H| (회로)",
+       "0.500 두 단 곱 근사 |H|"
+      ]
+     },
+     {
+      "k_min_x_max": [
+       "0.084 극점 |p₁|·R₁C₁",
+       "11.916 극점 |p₂|·R₁C₁",
+       "0.0000993 실제 |H| (회로)",
+       "0.000100 두 단 곱 근사 |H|"
+      ],
+      "err_badge": "오차 0.7% · 10% 이내"
+     },
+     {
+      "k_max_x_min": [
+       "0.905 극점 |p₁|·R₁C₁",
+       "1.105 극점 |p₂|·R₁C₁",
+       "1.00 실제 |H| (회로)",
+       "1.00 두 단 곱 근사 |H|"
+      ],
+      "err_badge": "오차 0.0% · 10% 이내",
+      "slider_vals": [
+       "×100",
+       "0.010"
+      ]
+     },
+     {
+      "preset_heavy": [
+       "0.084 극점 |p₁|·R₁C₁",
+       "11.916 극점 |p₂|·R₁C₁",
+       "0.0833 실제 |H| (회로)",
+       "0.500 두 단 곱 근사 |H|"
+      ],
+      "err_badge": "오차 500.0% · 10% 초과 (근사 붕괴)"
+     },
+     {
+      "right_closed_predict_in_stage": true
+     }
+    ],
+    "console_errors": [],
+    "hscroll": 0
+   },
+   {
+    "viewport": [
+     1440,
+     900
+    ],
+    "theme": "dark",
+    "actions": [
+     {
+      "predict_verify_tiles": [
+       "0.382 극점 |p₁|·R₁C₁",
+       "2.618 극점 |p₂|·R₁C₁",
+       "0.333 실제 |H| (회로)",
+       "0.500 두 단 곱 근사 |H|"
+      ],
+      "result": "예측과 같아요.\n실제 |H| (회로) · 0.333\n두 단 곱 근사 |H| · 0.500\n\n분모가 \n𝑁\n(\n𝑠\n)\n=\n1\n+\n3\n𝑠\n𝑅\n𝐶\n+\n𝑠\n2\n𝑅\n2\n𝐶\n2\nN(s)=1+3sRC+s\n2\nR\n2\nC\n2\n이라 \n𝜔\n=\n1\n/\n(\n𝑅\n𝐶\n)\nω=1/(RC)에서 \n∣\n𝑁\n∣\n=\n3\n∣N∣=3, 크기는 \n1\n/\n3\n1/3이에요. 로딩 항 \n𝑠\n𝑅\n1\n𝐶\n2\n"
+     },
+     {
+      "after_fold_params": {
+       "k": 1,
+       "x": 1
+      },
+      "disabledElems": [
+       "buf"
+      ]
+     },
+     {
+      "buf_click": [
+       "false",
+       "true"
+      ],
+      "tiles_buf_on": [
+       "1.000 극점 |p₁|·R₁C₁",
+       "1.000 극점 |p₂|·R₁C₁",
+       "0.500 실제 |H| (회로)",
+       "0.500 두 단 곱 근사 |H|"
+      ],
+      "bypass_class": "is-dim",
+      "err_badge": "오차 0.0% · 10% 이내"
+     },
+     {
+      "buf_enter": "false",
+      "tiles": [
+       "0.382 극점 |p₁|·R₁C₁",
+       "2.618 극점 |p₂|·R₁C₁",
+       "0.333 실제 |H| (회로)",
+       "0.500 두 단 곱 근사 |H|"
+      ]
+     },
+     {
+      "k_min_x_max": [
+       "0.084 극점 |p₁|·R₁C₁",
+       "11.916 극점 |p₂|·R₁C₁",
+       "0.0000993 실제 |H| (회로)",
+       "0.000100 두 단 곱 근사 |H|"
+      ],
+      "err_badge": "오차 0.7% · 10% 이내"
+     },
+     {
+      "k_max_x_min": [
+       "0.905 극점 |p₁|·R₁C₁",
+       "1.105 극점 |p₂|·R₁C₁",
+       "1.00 실제 |H| (회로)",
+       "1.00 두 단 곱 근사 |H|"
+      ],
+      "err_badge": "오차 0.0% · 10% 이내",
+      "slider_vals": [
+       "×100",
+       "0.010"
+      ]
+     },
+     {
+      "preset_heavy": [
+       "0.084 극점 |p₁|·R₁C₁",
+       "11.916 극점 |p₂|·R₁C₁",
+       "0.0833 실제 |H| (회로)",
+       "0.500 두 단 곱 근사 |H|"
+      ],
+      "err_badge": "오차 500.0% · 10% 초과 (근사 붕괴)"
+     },
+     {
+      "right_closed_predict_in_stage": true
+     }
+    ],
+    "console_errors": [],
+    "hscroll": 0
+   },
+   {
+    "viewport": [
+     375,
+     812
+    ],
+    "theme": "light",
+    "actions": [
+     "예측해 보기 열기",
+     {
+      "predict_verify_tiles": [
+       "",
+       "",
+       "",
+       ""
+      ],
+      "result": "예측과 같아요.\n실제 |H| (회로) · 0.333\n두 단 곱 근사 |H| · 0.500\n\n분모가 \n𝑁\n(\n𝑠\n)\n=\n1\n+\n3\n𝑠\n𝑅\n𝐶\n+\n𝑠\n2\n𝑅\n2\n𝐶\n2\nN(s)=1+3sRC+s\n2\nR\n2\nC\n2\n이라 \n𝜔\n=\n1\n/\n(\n𝑅\n𝐶\n)\nω=1/(RC)에서 \n∣\n𝑁\n∣\n=\n3\n∣N∣=3, 크기는 \n1\n/\n3\n1/3이에요. 로딩 항 \n𝑠\n𝑅\n1\n𝐶\n2\n"
+     },
+     {
+      "after_fold_params": {
+       "k": 1,
+       "x": 1
+      },
+      "disabledElems": [
+       "buf"
+      ]
+     },
+     {
+      "buf_click": [
+       "false",
+       "true"
+      ],
+      "tiles_buf_on": [
+       "",
+       "",
+       "",
+       ""
+      ],
+      "bypass_class": "is-dim",
+      "err_badge": "오차 0.0% · 10% 이내"
+     },
+     {
+      "buf_enter": "false",
+      "tiles": [
+       "",
+       "",
+       "",
+       ""
+      ]
+     },
+     {
+      "k_min_x_max": [
+       "",
+       "",
+       "",
+       ""
+      ],
+      "err_badge": "오차 0.7% · 10% 이내"
+     },
+     {
+      "k_max_x_min": [
+       "",
+       "",
+       "",
+       ""
+      ],
+      "err_badge": "오차 0.0% · 10% 이내",
+      "slider_vals": [
+       "",
+       ""
+      ]
+     },
+     {
+      "preset_heavy": [
+       "",
+       "",
+       "",
+       ""
+      ],
+      "err_badge": "오차 500.0% · 10% 초과 (근사 붕괴)"
+     },
+     {
+      "drawer_left_open": "left",
+      "after_escape": "none",
+      "right_open": "right"
+     }
+    ],
+    "console_errors": [],
+    "hscroll": 0
+   },
+   {
+    "viewport": [
+     375,
+     812
+    ],
+    "theme": "dark",
+    "actions": [
+     "예측해 보기 열기",
+     {
+      "predict_verify_tiles": [
+       "",
+       "",
+       "",
+       ""
+      ],
+      "result": "예측과 같아요.\n실제 |H| (회로) · 0.333\n두 단 곱 근사 |H| · 0.500\n\n분모가 \n𝑁\n(\n𝑠\n)\n=\n1\n+\n3\n𝑠\n𝑅\n𝐶\n+\n𝑠\n2\n𝑅\n2\n𝐶\n2\nN(s)=1+3sRC+s\n2\nR\n2\nC\n2\n이라 \n𝜔\n=\n1\n/\n(\n𝑅\n𝐶\n)\nω=1/(RC)에서 \n∣\n𝑁\n∣\n=\n3\n∣N∣=3, 크기는 \n1\n/\n3\n1/3이에요. 로딩 항 \n𝑠\n𝑅\n1\n𝐶\n2\n"
+     },
+     {
+      "after_fold_params": {
+       "k": 1,
+       "x": 1
+      },
+      "disabledElems": [
+       "buf"
+      ]
+     },
+     {
+      "buf_click": [
+       "false",
+       "true"
+      ],
+      "tiles_buf_on": [
+       "",
+       "",
+       "",
+       ""
+      ],
+      "bypass_class": "is-dim",
+      "err_badge": "오차 0.0% · 10% 이내"
+     },
+     {
+      "buf_enter": "false",
+      "tiles": [
+       "",
+       "",
+       "",
+       ""
+      ]
+     },
+     {
+      "k_min_x_max": [
+       "",
+       "",
+       "",
+       ""
+      ],
+      "err_badge": "오차 0.7% · 10% 이내"
+     },
+     {
+      "k_max_x_min": [
+       "",
+       "",
+       "",
+       ""
+      ],
+      "err_badge": "오차 0.0% · 10% 이내",
+      "slider_vals": [
+       "",
+       ""
+      ]
+     },
+     {
+      "preset_heavy": [
+       "",
+       "",
+       "",
+       ""
+      ],
+      "err_badge": "오차 500.0% · 10% 초과 (근사 붕괴)"
+     },
+     {
+      "drawer_left_open": "left",
+      "after_escape": "none",
+      "right_open": "right"
+     }
+    ],
+    "console_errors": [],
+    "hscroll": 0
+   }
+  ],
+  "screens_reviewed": "desktop light·dark 회로/예측/설명 패널, mobile light·dark 초기·서랍"
+ },
+ "fixes": [
+  "긴 전달함수 식의 katex-display 넘침을 N(s) 두 줄로 분할",
+  "버퍼 삼각형의 클릭 영역이 윤곽선뿐이라 클릭이 SVG로 빠지던 문제를 투명 히트 영역으로 수정",
+  "2단 배율 슬라이더 라벨 줄바꿈 정리",
+  "진단 제목을 \"측정점에서 근사 오차…\"로 명확화(검토 m-4)",
+  "버퍼 요약에 (교과서 보충) 표시, 직결 경로 라벨 \"직결 (버퍼를 뺐을 때)\"",
+  "플롯 y축 −90~10 dB(클리핑 해소)",
+  "왼쪽 패널 단계 설명의 미렌더 $수식$ 교체, 숫자 뒤 조사 정리"
+ ]
+}

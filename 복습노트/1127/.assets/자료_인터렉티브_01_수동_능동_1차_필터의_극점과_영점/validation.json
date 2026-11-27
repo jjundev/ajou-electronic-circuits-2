@@ -1,0 +1,514 @@
+{
+ "source_sha256": "59f531e82863b922a67b3976500deaa82e18bfd4d547b25cab5163243f72b2d1",
+ "reference": "정리노트 s2-passive·s2-active·s2-compare / 강의노트 L07 s10–s11 / STT 1127 620–740행",
+ "gates": {
+  "machine": "pass",
+  "numeric_independent": "pass",
+  "probe": "pass",
+  "browser": "pass"
+ },
+ "machine": {
+  "check_cjs": "ok",
+  "steps_cjs": "steps.txt 재생성"
+ },
+ "numeric_independent": {
+  "reviewer": "별도 서브에이전트(작성자와 다른 컨텍스트)",
+  "method": "수동 H=Z2/(Z1+Z2), 능동 H=−Z2/Z1 해석식과 유한 이득 A=10⁶ 노드방정식을 numpy로 독립 계산(mna.js 미사용). 56개 상태(기본·프리셋·단계·예측 전후·파라미터 끝값, 두 모드)에서 극점·영점·저주파/고주파 이득·측정점 |H|·가상 접지 전압·위상·플롯 81점 비교",
+  "checks": 504,
+  "max_rel_err": 1.7001836253527358e-05,
+  "display_mismatches": 0,
+  "reference_values": [
+   {
+    "state": "passive: default",
+    "quantity": "pole tile",
+    "lab": 500000.0,
+    "ref": 499999.9999999998,
+    "rel_err": 3.4924596548080455e-16
+   },
+   {
+    "state": "passive: default",
+    "quantity": "zero tile",
+    "lab": 1000000.0,
+    "ref": 999999.9999999998,
+    "rel_err": 2.3283064365386967e-16
+   },
+   {
+    "state": "passive: default",
+    "quantity": "low-gain tile |H(0)|",
+    "lab": 0.667,
+    "ref": 0.6666666666666666,
+    "rel_err": 0.0005000000000001115
+   },
+   {
+    "state": "passive: default",
+    "quantity": "high-gain tile |H(inf)|",
+    "lab": 0.333,
+    "ref": 0.3333333333333333,
+    "rel_err": 0.0009999999999998899
+   },
+   {
+    "state": "passive: default",
+    "quantity": "|H(jw_meas)| (marker)",
+    "lab": 0.6569809218112285,
+    "ref": 0.6569809218112287,
+    "rel_err": 3.3797724949588674e-16
+   },
+   {
+    "state": "passive: default",
+    "quantity": "badge out |v_out|",
+    "lab": 0.657,
+    "ref": 0.6569809218112287,
+    "rel_err": 2.9039182323195933e-05
+   },
+   {
+    "state": "active: default",
+    "quantity": "pole tile",
+    "lab": 250000.0,
+    "ref": 249999.99999999997,
+    "rel_err": 1.1641532182693483e-16
+   },
+   {
+    "state": "active: default",
+    "quantity": "zero tile",
+    "lab": 1000000.0,
+    "ref": 999999.9999999999,
+    "rel_err": 1.1641532182693483e-16
+   },
+   {
+    "state": "active: default",
+    "quantity": "low-gain tile |H(0)|",
+    "lab": 2.0,
+    "ref": 2.0,
+    "rel_err": 0.0
+   },
+   {
+    "state": "active: default",
+    "quantity": "high-gain tile |H(inf)|",
+    "lab": 0.5,
+    "ref": 0.5,
+    "rel_err": 0.0
+   },
+   {
+    "state": "active: default",
+    "quantity": "|H(jw_meas)| (marker)",
+    "lab": 1.8662098367846554,
+    "ref": 1.866215052101353,
+    "rel_err": 2.7945957738059198e-06
+   },
+   {
+    "state": "active: default",
+    "quantity": "badge out |v_out|",
+    "lab": 1.87,
+    "ref": 1.866215052101353,
+    "rel_err": 0.002028141341152135
+   }
+  ],
+  "findings": "Critical 0, Important 1(수정함), Minor 7(도구 관련 1건 제외 모두 반영)"
+ },
+ "probe": {
+  "widths": [
+   1440,
+   375
+  ],
+  "themes": [
+   "light",
+   "dark"
+  ],
+  "checks": 68,
+  "defect_count": 0,
+  "preview_sha256": "66097a563f7be8b3d914ee74912b20e5e8a79e1ba0095551aa73c63ea19d2092"
+ },
+ "browser": {
+  "name": "Chromium 158.0.8127.36 (Playwright, headless)",
+  "url": "http://127.0.0.1:18127/1/preview.html",
+  "fallback_reason": "Codex 내부 브라우저(iab) 도구가 이 클라우드 세션에 없어 Playwright Chromium으로 같은 조건을 직접 조작",
+  "viewports": [
+   {
+    "width": 1440,
+    "height": 900,
+    "theme": "light"
+   },
+   {
+    "width": 1440,
+    "height": 900,
+    "theme": "dark"
+   },
+   {
+    "width": 375,
+    "height": 812,
+    "theme": "light"
+   },
+   {
+    "width": 375,
+    "height": 812,
+    "theme": "dark"
+   }
+  ],
+  "actions": [
+   {
+    "viewport": [
+     1440,
+     900
+    ],
+    "theme": "light",
+    "actions": [
+     {
+      "predict_verify_tiles": [
+       "3.75×10⁵ rad/s 극점 |p|",
+       "5.00×10⁵ rad/s 영점 |z|",
+       "0.667 저주파 이득",
+       "0.500 고주파 이득"
+      ],
+      "result": "예측과 같아요.\n극점 |p| · 5.00×10⁵ rad/s → 3.75×10⁵ rad/s\n영점 |z| · 1.00×10⁶ rad/s → 5.00×10⁵ rad/s\n\n수동 분압기의 극점 \n∣\n𝑝\n∣\n=\n𝑅\n1\n+\n𝑅\n2\n𝑅\n1\n𝑅\n2\n(\n𝐶\n1\n+\n𝐶\n2\n)\n∣p∣=\nR\n1\n\t​\n\nR\n2\n\t​\n\n(C\n1\n\t​\n\n+C\n2\n\t​\n\n)\nR\n1\n\t​\n\n+R\n2\n\t​"
+     },
+     {
+      "after_fold_params": {
+       "r1": 1,
+       "c1": 2,
+       "r2": 2,
+       "c2": 2,
+       "w": 100000
+      },
+      "disabledElems": []
+     },
+     {
+      "active_c1_1": [
+       "2.50×10⁵ rad/s 극점 |p|",
+       "1.00×10⁶ rad/s 영점 |z|",
+       "−2.00 저주파 이득",
+       "−0.500 고주파 이득"
+      ],
+      "active_c1_2": [
+       "2.50×10⁵ rad/s 극점 |p|",
+       "5.00×10⁵ rad/s 영점 |z|",
+       "−2.00 저주파 이득",
+       "−1.00 고주파 이득"
+      ]
+     },
+     {
+      "causal_hot": [
+       [
+        "1:g"
+       ],
+       [
+        "2:z1"
+       ],
+       [
+        "3:g",
+        "3:z2"
+       ],
+       [
+        "4:g"
+       ]
+      ]
+     },
+     {
+      "active_ends": [
+       "2.50×10⁵ rad/s 극점 |p|",
+       "1.00×10⁶ rad/s 영점 |z|",
+       "−16.0 저주파 이득",
+       "−4.00 고주파 이득"
+      ],
+      "slider_vals": [
+       "0.5 kΩ",
+       "2 nF",
+       "8 kΩ",
+       "0.5 nF",
+       "1.00×10⁸ rad/s"
+      ]
+     },
+     {
+      "passive_preset_lec": [
+       "5.00×10⁵ rad/s 극점 |p|",
+       "1.00×10⁶ rad/s 영점 |z|",
+       "0.500 저주파 이득",
+       "0.250 고주파 이득"
+      ]
+     },
+     {
+      "right_closed_predict_in_stage": true
+     }
+    ],
+    "console_errors": [],
+    "hscroll": 0
+   },
+   {
+    "viewport": [
+     1440,
+     900
+    ],
+    "theme": "dark",
+    "actions": [
+     {
+      "predict_verify_tiles": [
+       "3.75×10⁵ rad/s 극점 |p|",
+       "5.00×10⁵ rad/s 영점 |z|",
+       "0.667 저주파 이득",
+       "0.500 고주파 이득"
+      ],
+      "result": "예측과 같아요.\n극점 |p| · 5.00×10⁵ rad/s → 3.75×10⁵ rad/s\n영점 |z| · 1.00×10⁶ rad/s → 5.00×10⁵ rad/s\n\n수동 분압기의 극점 \n∣\n𝑝\n∣\n=\n𝑅\n1\n+\n𝑅\n2\n𝑅\n1\n𝑅\n2\n(\n𝐶\n1\n+\n𝐶\n2\n)\n∣p∣=\nR\n1\n\t​\n\nR\n2\n\t​\n\n(C\n1\n\t​\n\n+C\n2\n\t​\n\n)\nR\n1\n\t​\n\n+R\n2\n\t​"
+     },
+     {
+      "after_fold_params": {
+       "r1": 1,
+       "c1": 2,
+       "r2": 2,
+       "c2": 2,
+       "w": 100000
+      },
+      "disabledElems": []
+     },
+     {
+      "active_c1_1": [
+       "2.50×10⁵ rad/s 극점 |p|",
+       "1.00×10⁶ rad/s 영점 |z|",
+       "−2.00 저주파 이득",
+       "−0.500 고주파 이득"
+      ],
+      "active_c1_2": [
+       "2.50×10⁵ rad/s 극점 |p|",
+       "5.00×10⁵ rad/s 영점 |z|",
+       "−2.00 저주파 이득",
+       "−1.00 고주파 이득"
+      ]
+     },
+     {
+      "causal_hot": [
+       [
+        "1:g"
+       ],
+       [
+        "2:z1"
+       ],
+       [
+        "3:g",
+        "3:z2"
+       ],
+       [
+        "4:g"
+       ]
+      ]
+     },
+     {
+      "active_ends": [
+       "2.50×10⁵ rad/s 극점 |p|",
+       "1.00×10⁶ rad/s 영점 |z|",
+       "−16.0 저주파 이득",
+       "−4.00 고주파 이득"
+      ],
+      "slider_vals": [
+       "0.5 kΩ",
+       "2 nF",
+       "8 kΩ",
+       "0.5 nF",
+       "1.00×10⁸ rad/s"
+      ]
+     },
+     {
+      "passive_preset_lec": [
+       "5.00×10⁵ rad/s 극점 |p|",
+       "1.00×10⁶ rad/s 영점 |z|",
+       "0.500 저주파 이득",
+       "0.250 고주파 이득"
+      ]
+     },
+     {
+      "right_closed_predict_in_stage": true
+     }
+    ],
+    "console_errors": [],
+    "hscroll": 0
+   },
+   {
+    "viewport": [
+     375,
+     812
+    ],
+    "theme": "light",
+    "actions": [
+     "예측해 보기 열기",
+     {
+      "predict_verify_tiles": [
+       "",
+       "",
+       "",
+       ""
+      ],
+      "result": "예측과 같아요.\n극점 |p| · 5.00×10⁵ rad/s → 3.75×10⁵ rad/s\n영점 |z| · 1.00×10⁶ rad/s → 5.00×10⁵ rad/s\n\n수동 분압기의 극점 \n∣\n𝑝\n∣\n=\n𝑅\n1\n+\n𝑅\n2\n𝑅\n1\n𝑅\n2\n(\n𝐶\n1\n+\n𝐶\n2\n)\n∣p∣=\nR\n1\n\t​\n\nR\n2\n\t​\n\n(C\n1\n\t​\n\n+C\n2\n\t​\n\n)\nR\n1\n\t​\n\n+R\n2\n\t​"
+     },
+     {
+      "after_fold_params": {
+       "r1": 1,
+       "c1": 2,
+       "r2": 2,
+       "c2": 2,
+       "w": 100000
+      },
+      "disabledElems": []
+     },
+     {
+      "active_c1_1": [
+       "",
+       "",
+       "",
+       ""
+      ],
+      "active_c1_2": [
+       "",
+       "",
+       "",
+       ""
+      ]
+     },
+     {
+      "causal_hot": [
+       [
+        "1:g"
+       ],
+       [
+        "2:z1"
+       ],
+       [
+        "3:g",
+        "3:z2"
+       ],
+       [
+        "4:g"
+       ]
+      ]
+     },
+     {
+      "active_ends": [
+       "",
+       "",
+       "",
+       ""
+      ],
+      "slider_vals": [
+       "",
+       "",
+       "",
+       "",
+       ""
+      ]
+     },
+     {
+      "passive_preset_lec": [
+       "",
+       "",
+       "",
+       ""
+      ]
+     },
+     {
+      "drawer_left_open": "left",
+      "after_escape": "none",
+      "right_open": "right"
+     }
+    ],
+    "console_errors": [],
+    "hscroll": 0
+   },
+   {
+    "viewport": [
+     375,
+     812
+    ],
+    "theme": "dark",
+    "actions": [
+     "예측해 보기 열기",
+     {
+      "predict_verify_tiles": [
+       "",
+       "",
+       "",
+       ""
+      ],
+      "result": "예측과 같아요.\n극점 |p| · 5.00×10⁵ rad/s → 3.75×10⁵ rad/s\n영점 |z| · 1.00×10⁶ rad/s → 5.00×10⁵ rad/s\n\n수동 분압기의 극점 \n∣\n𝑝\n∣\n=\n𝑅\n1\n+\n𝑅\n2\n𝑅\n1\n𝑅\n2\n(\n𝐶\n1\n+\n𝐶\n2\n)\n∣p∣=\nR\n1\n\t​\n\nR\n2\n\t​\n\n(C\n1\n\t​\n\n+C\n2\n\t​\n\n)\nR\n1\n\t​\n\n+R\n2\n\t​"
+     },
+     {
+      "after_fold_params": {
+       "r1": 1,
+       "c1": 2,
+       "r2": 2,
+       "c2": 2,
+       "w": 100000
+      },
+      "disabledElems": []
+     },
+     {
+      "active_c1_1": [
+       "",
+       "",
+       "",
+       ""
+      ],
+      "active_c1_2": [
+       "",
+       "",
+       "",
+       ""
+      ]
+     },
+     {
+      "causal_hot": [
+       [
+        "1:g"
+       ],
+       [
+        "2:z1"
+       ],
+       [
+        "3:g",
+        "3:z2"
+       ],
+       [
+        "4:g"
+       ]
+      ]
+     },
+     {
+      "active_ends": [
+       "",
+       "",
+       "",
+       ""
+      ],
+      "slider_vals": [
+       "",
+       "",
+       "",
+       "",
+       ""
+      ]
+     },
+     {
+      "passive_preset_lec": [
+       "",
+       "",
+       "",
+       ""
+      ]
+     },
+     {
+      "drawer_left_open": "left",
+      "after_escape": "none",
+      "right_open": "right"
+     }
+    ],
+    "console_errors": [],
+    "hscroll": 0
+   }
+  ],
+  "screens_reviewed": "desktop light·dark 회로/예측/설명 패널, mobile light·dark 초기·서랍"
+ },
+ "fixes": [
+  "가상 접지 라벨과 m 배지를 비반전 단자 접지 아래에서 노드 m 옆으로 이동(검토 Important I-1)",
+  "왼쪽 패널 인과·단계 설명의 미렌더 $수식$을 일반 텍스트로 교체",
+  "formula 배열이 렌더되지 않아 equations로 변경하고 넘침(katex-display overflow) 해소를 위해 식 분할",
+  "T 접합점 점 6곳 추가",
+  "프리셋 이름 \"수업 예시\"→\"정리노트 예시\"",
+  "OP-amp 대역폭 한계 미포함 명시, 위상 표기(−180° 포함) 설명",
+  "fmtWTex 지수 정규화, 단계 2 설명을 기본값 대비 C₁만 바꾼 상태로 정정, 숫자 뒤 조사 정리"
+ ]
+}
