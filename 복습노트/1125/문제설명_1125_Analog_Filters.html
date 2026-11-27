@@ -705,6 +705,56 @@ $$R_{out,closed}\approx(R_{out,open}+R_L)(1+KA_{\mathrm{open}})-R_L$$
   <text class="fig-loc" x="170" y="52" font-size="17">㉢</text>
 </g></svg><figcaption class="circuit-state">왼쪽은 C–C 개루프 회로, 오른쪽은 반송 포트 N을 단락한 귀환망이에요.</figcaption></figure>
   <div data-subpart="main">
+<h4>루프를 끊는 위치</h4>
+<figure class="figure"><svg id="p3-svg2-fig-p3-loop-ports" viewBox="0 0 460 280" role="img" aria-label="원 회로의 귀환망. 입력 노드 N은 위로 M1 소스에 연결되고 왼쪽 I_in이 접지에서 N으로 흐른다. N에서 R_F가 오른쪽 노드 P로 가고, P 위에는 레이저 R_L을 거쳐 M2 드레인에서 I_out이 내려온다. P에서 R_M이 접지로 간다. R_F와 R_M을 점선 상자로 묶었고, N 쪽 왼쪽 경계가 반송 포트, 레이저 쪽 위 경계가 감지 포트다.">
+  <path class="fig-ink" d="M130 130V60 M130 130H50V170 M50 198V250 M130 130H210l5-7 8 14 8-14 8 14 8-14 8 14 5-7H330 M330 130V90 M330 36V6 M330 130V150l8 4-16 8 16 8-16 8 16 8-16 8 8 4V250"/>
+  <path class="fig-ink" d="M50 250v8 M40 258H60 M44 263H56 M48 268H52 M330 250v8 M320 258H340 M324 263H336 M328 268H332"/>
+  <circle class="fig-ink" cx="50" cy="184" r="14"/>
+  <path class="fig-ink" d="M50 192V176 M45 181 50 176 55 181"/>
+  <rect class="fig-ink" x="290" y="36" width="80" height="54"/>
+  <path class="fig-accent" d="M330 12V30 M325 25 330 30 335 25"/>
+  <rect class="fig-accent" x="192" y="108" width="176" height="112" stroke-dasharray="6 4"/>
+  <circle class="fig-dot" cx="130" cy="130" r="3.5" data-node="N" data-node-color="blue"/>
+  <circle class="fig-dot" cx="330" cy="130" r="3.5" data-node="P" data-node-color="red"/>
+  <text class="fig-text fig-math" x="118" y="122" text-anchor="end" data-node="N" data-node-color="blue">N</text>
+  <text class="fig-text fig-math" x="318" y="150" text-anchor="end" data-node="P" data-node-color="red">P</text>
+  <text class="fig-text fig-math" x="130" y="48" text-anchor="middle">M<tspan baseline-shift="sub" font-size="78%">1</tspan> 소스</text>
+  <text class="fig-text fig-math" x="318" y="16" text-anchor="end">M<tspan baseline-shift="sub" font-size="78%">2</tspan> 드레인</text>
+  <text class="fig-text fig-math" x="342" y="26">I<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+  <text class="fig-text fig-math" x="330" y="60" text-anchor="middle">레이저</text>
+  <text class="fig-text fig-math" x="330" y="78" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text>
+  <text class="fig-text fig-math" x="72" y="189">I<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
+  <text class="fig-text fig-math" x="235" y="154" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+  <text class="fig-text fig-math" x="348" y="180">R<tspan baseline-shift="sub" font-size="78%">M</tspan></text>
+  <text class="fig-text" x="200" y="212">귀환망</text>
+  <text class="fig-text" x="136" y="112">반송 포트</text>
+  <text class="fig-text" x="376" y="124">감지 포트</text>
+</svg><figcaption>점선 안의 $R_F$와 $R_M$이 귀환망이에요. 반송 포트($N$–접지)는 $I_{in}$과 병렬, 감지 포트($P$–접지)는 레이저와 직렬이에요.</figcaption></figure>
+<p>$R_M$은 $I_{out}$을 감지하고 $R_F$는 감지한 신호를 $N$으로 되돌리므로 두 저항 모두 귀환망이에요. 둘은 접지를 공통 단자로 쓰는 두 포트 블록이고, 어느 저항도 증폭기 쪽에 나눠 넣지 않아요.</p>
+<p>이 블록을 입력 쪽과 출력 쪽에 하나씩 복제해요. 복제본에서 쓰지 않는 포트는 원 회로에서 직렬이면 개방하고 병렬이면 단락해요. 레이저와 직렬인 감지 포트는 입력 복제에서 열고, $I_{in}$과 병렬인 반송 포트는 출력 복제에서 단락해요.</p>
+<figure class="figure"><svg id="p3-svg3-fig-p3-loop-copies" viewBox="0 0 520 200" role="img" aria-label="귀환망의 두 복제. 왼쪽 입력 복제는 N에서 R_F를 거쳐 P로 가고 P에서 R_M이 접지로 간다. P에서 레이저 쪽으로 올라가는 감지 포트 도선은 끝이 열려 있다. 오른쪽 출력 복제는 P에서 R_F를 거쳐 왼쪽 N으로 가고 N은 도선으로 접지에 단락돼 있으며, P에서 R_M이 접지로 간다.">
+  <path class="fig-ink" d="M60 70H95l5-7 8 14 8-14 8 14 8-14 8 14 5-7H190 M190 70V36 M190 70V90l8 4-16 8 16 8-16 8 16 8-16 8 8 4V170"/>
+  <circle class="fig-ink" cx="190" cy="32" r="4"/>
+  <path class="fig-ink" d="M320 70V170 M320 70H355l5-7 8 14 8-14 8 14 8-14 8 14 5-7H470 M470 70V90l8 4-16 8 16 8-16 8 16 8-16 8 8 4V170"/>
+  <path class="fig-ink" d="M190 170v8 M180 178H200 M184 183H196 M188 188H192 M320 170v8 M310 178H330 M314 183H326 M318 188H322 M470 170v8 M460 178H480 M464 183H476 M468 188H472"/>
+  <circle class="fig-dot" cx="60" cy="70" r="3.5" data-node="N" data-node-color="blue"/>
+  <circle class="fig-dot" cx="190" cy="70" r="3.5" data-node="P" data-node-color="red"/>
+  <circle class="fig-dot" cx="320" cy="70" r="3.5" data-node="N" data-node-color="blue"/>
+  <circle class="fig-dot" cx="470" cy="70" r="3.5" data-node="P" data-node-color="red"/>
+  <text class="fig-text fig-math" x="60" y="52" text-anchor="middle" data-node="N" data-node-color="blue">N</text>
+  <text class="fig-text fig-math" x="202" y="64" data-node="P" data-node-color="red">P</text>
+  <text class="fig-text fig-math" x="320" y="52" text-anchor="middle" data-node="N" data-node-color="blue">N</text>
+  <text class="fig-text fig-math" x="482" y="64" data-node="P" data-node-color="red">P</text>
+  <text class="fig-text fig-math" x="120" y="49" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+  <text class="fig-text fig-math" x="172" y="124" text-anchor="end">R<tspan baseline-shift="sub" font-size="78%">M</tspan></text>
+  <text class="fig-text fig-math" x="380" y="49" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+  <text class="fig-text fig-math" x="452" y="124" text-anchor="end">R<tspan baseline-shift="sub" font-size="78%">M</tspan></text>
+</svg><figcaption>왼쪽 입력 복제는 감지 포트를 열어 $N$에서 $R_F+R_M$이 보여요. 오른쪽 출력 복제는 반송 포트 $N$을 단락해 $P$에서 $R_F\parallel R_M$이 보여요.</figcaption></figure>
+<ul>
+<li>출력 쪽에 원래의 $R_M$을 $R_F\parallel R_M$과 따로 더하지 않아요.</li>
+<li>입력 복제에서 $P$를 접지에 붙이면 $R_F$만 남아요. 감지 포트는 직렬이라 열어야 해요.</li>
+<li>출력 복제에서 $N$을 열어 두면 $R_F$에 전류가 흐르지 않아 $R_M$만 남아요. 반송 포트는 병렬이라 단락해야 해요.</li>
+</ul>
 <h4>레이저를 연결한 개루프 이득</h4>
 <p data-answer-step="귀환망 로딩"><span class="loc">㉠</span> 입력 $N$에서 전류를 병렬로 합치고 출력에서 레이저 전류를 직렬로 감지하는 C-C 귀환이에요. 입력 쪽 복제의 감지 포트를 열면 $N$에서 접지까지 $R_F+R_M$이 남아요. $r_{O1}\to\infty$로 두고 몸체 효과를 무시하면 $M_1$ 소스 쪽 저항은 $1/g_{m1}$이에요.</p>
 <div data-answer-step="목표 전류 이득과 두 항">
@@ -740,7 +790,7 @@ $$R_{out,closed}\approx (R_{out,open}+R_L)(1+KA_{\mathrm{open}})-R_L$$
 </div>
   </div>
 </div>
-<div class="sum" hidden=""><p class="sum-lead">레이저를 연결한 $KA_{\mathrm{open}}$을 써요.</p><p>출력저항은 $(R_{out,open}+R_L)$에 귀환 배율을 곱하고 $R_L$을 빼요.</p></div>
+<div class="sum" hidden=""><p class="sum-lead">$R_F$와 $R_M$은 통째로 귀환망이에요.</p><p>직렬인 감지 포트는 열고 병렬인 반송 포트는 단락해 복제해요.</p><p>레이저를 연결한 $KA_{\mathrm{open}}$을 써요.</p><p>출력저항은 $(R_{out,open}+R_L)$에 귀환 배율을 곱하고 $R_L$을 빼요.</p></div>
 </article><article class="topic" id="p4"><h3>P4. C-C 레이저 구동 회로를 레이저에서 본 노턴 등가</h3><p class="panel-meta">X12.32 · 연습문제 12.32 · <a href="%EB%B3%B5%EC%8A%B5%EB%AC%B8%EC%A0%9C_1125_Analog_Filters-%EB%AC%B8%EC%A0%9C.pdf">원 문제 보기</a></p><div class="problem-pane" data-problem-for="p4"><div class="layer formal" data-source-problem="p4"><h4>주어진 조건</h4><div data-source-field="conditions"><ul><li>예제 12.32의 회로: Fig 12.61(a), $R_F$가 크지 않음, $R_M$이 작지 않음, 레이저 다이오드는 저항 $R_L$, $r_{O2} &lt; \infty$</li><li>레이저를 구동하는 전체 회로(레이저를 뺀 나머지, 귀환 포함)를 레이저 단자에서 본 노턴 등가 회로로 나타냄 (노턴 전류원 $I_N$과 병렬 저항 $R_N$을 $I_{in}$과 회로 파라미터로)</li><li>소자 값은 주어지지 않음 (답은 소신호 파라미터 기호로)</li><li>예제 12.32의 결과: $A_{I,open} = \dfrac{(R_F + R_M) R_D}{R_F + R_M + 1/g_{m1}}\cdot\dfrac{-g_{m2} r_{O2}}{r_{O2} + R_L + R_M \parallel R_F}$ (식 12.166), $A_{I,closed} = \dfrac{A_{I,open}}{1 - \frac{R_M}{R_M + R_F} A_{I,open}}$ (식 12.171), $R_{out,closed} = (r_{O2} + R_F \parallel R_M)\left(1 - \dfrac{R_M}{R_M + R_F} A_{I,open}\right)$ (식 12.173)</li></ul></div><h4>구할 것</h4><div data-source-field="ask"><ul><li>레이저를 구동하는 전체 회로의 노턴 등가 회로 (노턴 전류와 노턴 저항)</li></ul></div><figure><img src=".assets/figures_문제설명_1125_Analog_Filters/1be4114edb619bd3-fig12-61-a.png" alt="그림 X12.32"></figure></div><details class="original" data-original-problem="p4"><summary>원문 보기</summary><p>레이저를 구동하는 전체 회로의 노턴 등가 회로를 만들어라.</p></details></div><div class="layer formal circuit-explanation" data-explanation="solve">
   <figure class="figure circuit"><svg id="p4-fig-p4-solve" viewBox="0 0 400 230" role="img" aria-label="노턴 등가 회로. 위쪽 단자 D와 아래쪽 단자 P 사이에 위로 흐르는 전류원 I_N과 저항 R_N이 병렬. 오른쪽에 레이저 R_L이 D와 P 사이에 연결되고 I_out이 D에서 레이저로 흐름."><path class="fig-ink" d="M80 50 L330 50"/><path class="fig-ink" d="M80 180 L330 180"/><path class="fig-ink" d="M80 50 L80 101"/><circle class="fig-ink" cx="80" cy="115" r="14"/><path class="fig-ink" d="M80 123 V107 M75 112 L80 107 L85 112"/><path class="fig-ink" d="M80 129 L80 180"/><text class="fig-text fig-math" x="56.2" y="120" text-anchor="end">I<tspan baseline-shift="sub" font-size="78%">N</tspan></text><path class="fig-ink" d="M170 50 V91.0 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 V180"/><text class="fig-text fig-math" x="188.4" y="120">R<tspan baseline-shift="sub" font-size="78%">N</tspan></text><circle class="fig-dot" data-node="D" data-node-color="blue" cx="240" cy="50" r="3.5"/><text class="fig-text fig-math" x="240" y="36.8" text-anchor="middle" data-node-color="blue" data-node="D">D</text><circle class="fig-dot" data-node="P" data-node-color="red" cx="240" cy="180" r="3.5"/><text class="fig-text fig-math" x="240" y="204" text-anchor="middle" data-node-color="red" data-node="P">P</text><path class="fig-ink" d="M262 50 H290 M284 45 L290 50 L284 55"/><text class="fig-text fig-math" x="276" y="28.2" text-anchor="middle">I<tspan baseline-shift="sub" font-size="78%">out</tspan></text><path class="fig-ink" d="M330 50 L330 86"/><rect class="fig-ink" x="290" y="86" width="80" height="60"/><path class="fig-ink" d="M330 146 L330 180"/><text class="fig-text fig-math" x="330" y="108" text-anchor="middle">레이저</text><text class="fig-text fig-math" x="330" y="127" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">L</tspan></text><text class="fig-loc" x="358" y="75" font-size="17">㉠</text><text class="fig-loc" x="211" y="83" font-size="17">㉡</text></svg><figcaption class="circuit-state">레이저를 다시 연결한 노턴 등가. 내부 전류원의 기준 방향은 $P$에서 $D$, 외부 부하 전류의 기준 방향은 $D$에서 $P$예요.</figcaption></figure>
   <div data-subpart="main">
