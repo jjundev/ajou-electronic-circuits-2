@@ -798,12 +798,6 @@ PMOS CS가 반전하므로 출력 부하 $R_M\parallel R_F$를 넣은 $A_{\mathr
 
 ㉡ 출력 전압을 감지해 ㉠ 입력에서 전류를 병렬로 합쳐요. 복제의 반대 포트 두 곳을 단락하면 입출력에 각각 $R_F$가 남아요. $\lambda=0$이고 몸체 효과는 무시해요.
 
-입력 전류원을 개방한 상태에서 ㉣ $M_2$ 소스를 바라보면 $1/g_{m2}$, $R_M$, $R_F$가 출력과 AC 접지 사이에 놓여요.
-
-$$
-R_{out,\mathrm{open}}=\frac{1}{g_{m2}}\parallel R_M\parallel R_F
-$$
-
 ㉢ $I_{in}\parallel R_F$를 테브난 전압 $v_{\mathrm{Th}}=I_{in}R_F$와 직렬 $R_F$로 바꿔요. 첫 인자 $R_F$는 $v_{\mathrm{Th}}/I_{in}$이에요. $X$에서 두 단을 나눠요.
 
 $$
@@ -816,10 +810,20 @@ $$
 \frac{v_X}{v_{\mathrm{Th}}}=\frac{R_D}{R_F+1/g_{m1}}
 $$
 
-소스 팔로워는 비반전이에요. 게이트 전압 $v_X$가 오를 때 출력 소스로 밀어 넣는 전류가 늘어요.
+㉣ $M_2$ 소스에는 $R_M$과 감지 복제의 $R_F$가 병렬로 달려요. 이 부하를 $R_{\mathrm{source}}$로 두고 소스 팔로워의 전압 이득 공식을 써요.
 
 $$
-\frac{v_{out}}{v_X}=+g_{m2}R_{out,\mathrm{open}}
+R_{\mathrm{source}}=R_M\parallel R_F
+$$
+
+$$
+\frac{v_{out}}{v_X}=\frac{R_{\mathrm{source}}}{1/g_{m2}+R_{\mathrm{source}}}
+$$
+
+두 단의 전압 이득과 테브난 변환의 첫 인자 $R_F$를 곱해요.
+
+$$
+A_{\mathrm{open}}=R_F\frac{R_D}{R_F+1/g_{m1}}\frac{R_{\mathrm{source}}}{1/g_{m2}+R_{\mathrm{source}}}
 $$
 
 귀환망만 떼어 반송단을 접지해요. 그 단자에서 출력 쪽으로 향하는 방향을 $I_F$의 양으로 잡아요.
@@ -844,10 +848,16 @@ $$
 
 #### (2) 폐루프 입출력 저항
 
-입력에서 본 $1/g_{m1}$과 반송 복제 $R_F$가 병렬이에요. 출력에는 (1)에서 구한 저항을 써요.
+입력에서 본 $1/g_{m1}$과 반송 복제 $R_F$가 병렬이에요.
 
 $$
 R_{in,\mathrm{open}}=\frac{1}{g_{m1}}\parallel R_F
+$$
+
+출력저항을 구할 때는 입력 전류원을 개방해요. 이때 $v_X=0$이므로 $M_2$ 소스에서 교류 접지까지 $1/g_{m2}$, $R_M$, $R_F$가 병렬로 보여요.
+
+$$
+R_{out,\mathrm{open}}=\frac{1}{g_{m2}}\parallel R_M\parallel R_F
 $$
 
 $$
@@ -896,18 +906,10 @@ Figure 12.112 depicts a popular transimpedance amplifier topology. Repeat the an
 
 ㉡ 컬렉터의 전압을 감지하고 ㉠ 베이스에 전류를 반송해요. 두 복제의 반대 포트를 단락하면 베이스와 컬렉터에 각각 $R_F$가 붙어요. $V_A\lt\infty$이므로 컬렉터의 $r_O$를 남겨요.
 
-$$
-R_{out,\mathrm{open}}=R_C\parallel r_O\parallel R_F
-$$
-
-$$
-R_{in,\mathrm{open}}=r_\pi\parallel R_F
-$$
-
 입력의 $I_{in}\parallel R_F$를 테브난 전압 $v_{\mathrm{Th}}=I_{in}R_F$와 직렬 $R_F$로 바꿔요. 첫 인자 $R_F$는 $v_{\mathrm{Th}}/I_{in}$이에요.
 
 $$
-A_{\mathrm{open}}=\frac{v_{out}}{I_{in}}=R_F\frac{v_{out}}{v_{\mathrm{Th}}}\ [\mathrm{V/A}]
+A_{\mathrm{open}}=\frac{v_{out}}{I_{in}}=R_F\frac{v_\pi}{v_{\mathrm{Th}}}\frac{v_{out}}{v_\pi}\ [\mathrm{V/A}]
 $$
 
 직렬 $R_F$와 $r_\pi$의 분압으로 실제 베이스 전압 $v_\pi$를 구하고, 베이스에서 컬렉터까지의 반전 이득을 곱해요.
@@ -916,12 +918,24 @@ $$
 \frac{v_\pi}{v_{\mathrm{Th}}}=\frac{r_\pi}{R_F+r_\pi}
 $$
 
+컬렉터에서 교류 접지까지 세 저항이 병렬이에요. 공통 이미터 이득에는 이 부하를 써요.
+
+$$
+R_{out,\mathrm{open}}=R_C\parallel r_O\parallel R_F
+$$
+
 $$
 \frac{v_{out}}{v_\pi}=-g_mR_{out,\mathrm{open}}
 $$
 
 $$
 A_{\mathrm{open}}=R_F\frac{r_\pi}{R_F+r_\pi}(-g_mR_{out,\mathrm{open}})
+$$
+
+베이스에서 교류 접지를 바라보면 $r_\pi$와 반송 복제의 $R_F$가 병렬이에요.
+
+$$
+R_{in,\mathrm{open}}=r_\pi\parallel R_F
 $$
 
 귀환망만 떼어 반송단을 접지해요. 그 단자에서 출력 쪽으로 향하는 방향을 $I_F$의 양으로 잡아요.

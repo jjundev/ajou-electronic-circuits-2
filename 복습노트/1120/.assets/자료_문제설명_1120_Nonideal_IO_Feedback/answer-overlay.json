@@ -5,7 +5,7 @@
   "slug": "Nonideal_IO_Feedback",
   "learning_style": {
     "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
-    "sha256": "af345a47b1ea0c5f0a5050ae537ebff1e8e454a2b400a9bff65430a1944681e3",
+    "sha256": "c6c0568c4631ebb85d9ba26c66b1f52b51c1063ae72fc860f17d251341a4a19b",
     "rule_ids": [
       "UNIT-01",
       "CALC-01",
@@ -22,7 +22,7 @@
       "FREQ-01"
     ]
   },
-  "input_hash": "19a178d0d69a6ac575519581d6a12f95762c35a2499c8847ea592960dc17c18a",
+  "input_hash": "8b7cab23112f962add4a5500cfa29d162d469bc4312b5c3ed2e7e12e3b1d56b7",
   "source_inputs": {
     "복습노트/1120/.assets/problems.txt": "2007de2ee28d5d90605ab5819a5bf832e18666713be06d68348133bd1e9ad478",
     "복습노트/1120/.assets/display-titles.json": "baaa58e3e80b55cfd388256f7f87cf4ea813a16e7cf98444425e32458ad5fb30",
@@ -49,7 +49,7 @@
     "from_the_past/md/2021-1_기말/figures/redrawn/fig-Q3.png": "0ae5ae6010d8cce46366c756fc231817ab1c58cdb649a43f74f0b2910ae29cf3",
     "교과서/마이크로전자회로/ch12/figures/fig12-112.png": "c124029e2dae02aa384e11156f6c4203c22f6c5be7774e7a44db88beaffe863a",
     "교과서/마이크로전자회로/ch12/figures/fig12-110.png": "10bb90bd2a77741ba2d260dcca0846560a5d6fc0e487a30a5c9e2e34e71fd64a",
-    ".claude/skills/ec2-review-pack/references/solution-style.md": "af345a47b1ea0c5f0a5050ae537ebff1e8e454a2b400a9bff65430a1944681e3"
+    ".claude/skills/ec2-review-pack/references/solution-style.md": "c6c0568c4631ebb85d9ba26c66b1f52b51c1063ae72fc860f17d251341a4a19b"
   },
   "problems": [
     {
@@ -312,8 +312,8 @@
       "steps": [
         {
           "subpart": "1",
-          "label": "감지·반송과 개루프 출력저항",
-          "html": "\n      <p> 출력 전압을 감지해  입력에서 전류를 병렬로 합쳐요. 복제의 반대 포트 두 곳을 단락하면 입출력에 각각 $R_F$가 남아요. $\\lambda=0$이고 몸체 효과는 무시해요.</p>\n      <p>입력 전류원을 개방한 상태에서  $M_2$ 소스를 바라보면 $1/g_{m2}$, $R_M$, $R_F$가 출력과 AC 접지 사이에 놓여요.</p>\n      $$R_{out,\\mathrm{open}}=\\frac{1}{g_{m2}}\\parallel R_M\\parallel R_F$$\n    "
+          "label": "감지·반송과 복제 종단",
+          "html": "\n      <p> 출력 전압을 감지해  입력에서 전류를 병렬로 합쳐요. 복제의 반대 포트 두 곳을 단락하면 입출력에 각각 $R_F$가 남아요. $\\lambda=0$이고 몸체 효과는 무시해요.</p>\n    "
         },
         {
           "subpart": "1",
@@ -323,7 +323,7 @@
         {
           "subpart": "1",
           "label": "소스 팔로워 항",
-          "html": "\n      <p>소스 팔로워는 비반전이에요. 게이트 전압 $v_X$가 오를 때 출력 소스로 밀어 넣는 전류가 늘어요.</p>\n      $$\\frac{v_{out}}{v_X}=+g_{m2}R_{out,\\mathrm{open}}$$\n    "
+          "html": "\n      <p> $M_2$ 소스에는 $R_M$과 감지 복제의 $R_F$가 병렬로 달려요. 이 부하를 $R_{\\mathrm{source}}$로 두고 소스 팔로워의 전압 이득 공식을 써요.</p>\n      $$R_{\\mathrm{source}}=R_M\\parallel R_F$$\n      $$\\frac{v_{out}}{v_X}=\\frac{R_{\\mathrm{source}}}{1/g_{m2}+R_{\\mathrm{source}}}$$\n      <p>두 단의 전압 이득과 테브난 변환의 첫 인자 $R_F$를 곱해요.</p>\n      $$A_{\\mathrm{open}}=R_F\\frac{R_D}{R_F+1/g_{m1}}\\frac{R_{\\mathrm{source}}}{1/g_{m2}+R_{\\mathrm{source}}}$$\n    "
         },
         {
           "subpart": "1",
@@ -333,7 +333,12 @@
         {
           "subpart": "2",
           "label": "개루프 입력저항",
-          "html": "\n      <p>입력에서 본 $1/g_{m1}$과 반송 복제 $R_F$가 병렬이에요. 출력에는 (1)에서 구한 저항을 써요.</p>\n      $$R_{in,\\mathrm{open}}=\\frac{1}{g_{m1}}\\parallel R_F$$\n    "
+          "html": "\n      <p>입력에서 본 $1/g_{m1}$과 반송 복제 $R_F$가 병렬이에요.</p>\n      $$R_{in,\\mathrm{open}}=\\frac{1}{g_{m1}}\\parallel R_F$$\n    "
+        },
+        {
+          "subpart": "2",
+          "label": "개루프 출력저항",
+          "html": "\n      <p>출력저항을 구할 때는 입력 전류원을 개방해요. 이때 $v_X=0$이므로 $M_2$ 소스에서 교류 접지까지 $1/g_{m2}$, $R_M$, $R_F$가 병렬로 보여요.</p>\n      $$R_{out,\\mathrm{open}}=\\frac{1}{g_{m2}}\\parallel R_M\\parallel R_F$$\n    "
         }
       ],
       "answers": [
@@ -356,13 +361,18 @@
       "steps": [
         {
           "subpart": "main",
-          "label": "두 포트에서 바로 읽는 개루프 저항",
-          "html": "\n      <p> 컬렉터의 전압을 감지하고  베이스에 전류를 반송해요. 두 복제의 반대 포트를 단락하면 베이스와 컬렉터에 각각 $R_F$가 붙어요. $V_A\\lt\\infty$이므로 컬렉터의 $r_O$를 남겨요.</p>\n      $$R_{out,\\mathrm{open}}=R_C\\parallel r_O\\parallel R_F$$\n      $$R_{in,\\mathrm{open}}=r_\\pi\\parallel R_F$$\n    "
+          "label": "감지·반송과 복제 종단",
+          "html": "\n      <p> 컬렉터의 전압을 감지하고  베이스에 전류를 반송해요. 두 복제의 반대 포트를 단락하면 베이스와 컬렉터에 각각 $R_F$가 붙어요. $V_A\\lt\\infty$이므로 컬렉터의 $r_O$를 남겨요.</p>\n    "
         },
         {
           "subpart": "main",
           "label": "테브난 입력과 공통 이미터 이득",
-          "html": "\n      <p>입력의 $I_{in}\\parallel R_F$를 테브난 전압 $v_{\\mathrm{Th}}=I_{in}R_F$와 직렬 $R_F$로 바꿔요. 첫 인자 $R_F$는 $v_{\\mathrm{Th}}/I_{in}$이에요.</p>\n      $$A_{\\mathrm{open}}=\\frac{v_{out}}{I_{in}}=R_F\\frac{v_{out}}{v_{\\mathrm{Th}}}\\ [\\mathrm{V/A}]$$\n      <p>직렬 $R_F$와 $r_\\pi$의 분압으로 실제 베이스 전압 $v_\\pi$를 구하고, 베이스에서 컬렉터까지의 반전 이득을 곱해요.</p>\n      $$\\frac{v_\\pi}{v_{\\mathrm{Th}}}=\\frac{r_\\pi}{R_F+r_\\pi}$$\n      $$\\frac{v_{out}}{v_\\pi}=-g_mR_{out,\\mathrm{open}}$$\n      $$A_{\\mathrm{open}}=R_F\\frac{r_\\pi}{R_F+r_\\pi}(-g_mR_{out,\\mathrm{open}})$$\n    "
+          "html": "\n      <p>입력의 $I_{in}\\parallel R_F$를 테브난 전압 $v_{\\mathrm{Th}}=I_{in}R_F$와 직렬 $R_F$로 바꿔요. 첫 인자 $R_F$는 $v_{\\mathrm{Th}}/I_{in}$이에요.</p>\n      $$A_{\\mathrm{open}}=\\frac{v_{out}}{I_{in}}=R_F\\frac{v_\\pi}{v_{\\mathrm{Th}}}\\frac{v_{out}}{v_\\pi}\\ [\\mathrm{V/A}]$$\n      <p>직렬 $R_F$와 $r_\\pi$의 분압으로 실제 베이스 전압 $v_\\pi$를 구하고, 베이스에서 컬렉터까지의 반전 이득을 곱해요.</p>\n      $$\\frac{v_\\pi}{v_{\\mathrm{Th}}}=\\frac{r_\\pi}{R_F+r_\\pi}$$\n      <p>컬렉터에서 교류 접지까지 세 저항이 병렬이에요. 공통 이미터 이득에는 이 부하를 써요.</p>\n      $$R_{out,\\mathrm{open}}=R_C\\parallel r_O\\parallel R_F$$\n      $$\\frac{v_{out}}{v_\\pi}=-g_mR_{out,\\mathrm{open}}$$\n      $$A_{\\mathrm{open}}=R_F\\frac{r_\\pi}{R_F+r_\\pi}(-g_mR_{out,\\mathrm{open}})$$\n    "
+        },
+        {
+          "subpart": "main",
+          "label": "개루프 입력저항",
+          "html": "\n      <p>베이스에서 교류 접지를 바라보면 $r_\\pi$와 반송 복제의 $R_F$가 병렬이에요.</p>\n      $$R_{in,\\mathrm{open}}=r_\\pi\\parallel R_F$$\n    "
         },
         {
           "subpart": "main",
