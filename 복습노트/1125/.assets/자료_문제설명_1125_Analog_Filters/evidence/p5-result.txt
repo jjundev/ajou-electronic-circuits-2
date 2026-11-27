@@ -1,1 +1,38 @@
-b=gm2 gm1 RD; A_V/I= -b/((gm1 + 1/RF)*(1/ro2 + 1/RM + 1/RF)) K= -1/RF Zinopen= 1/(gm1 + 1/RF) Zoutopen= 1/(1/ro2 + 1/RM + 1/RF) D=1-A/F; closed A/D, Zinopen/D, Zoutopen/D. Exact MNA uses Ae= (-b + 1/RF)/((gm1 + 1/RF)*(1/ro2 + 1/RM + 1/RF)) in all three. Current sensing drives Zin down/Zout up, voltage sensing drives both down.
+=== 1. Loaded open-loop (R_F to ground at both N and P) ===
+R_in,open  = R_F/(R_F*g_m1 + 1)    [= R_F || 1/g_m1 : True ]
+R_out,open = R_F*R_M*r_O2/(R_F*R_M + R_F*r_O2 + R_M*r_O2)    [= r_O2 || R_M || R_F]
+A_open     = -R_D*R_F**2*R_M*g_m1*g_m2*r_O2/((R_F*g_m1 + 1)*(R_F*R_M + R_F*r_O2 + R_M*r_O2))
+A_open == -(R_F||1/gm1)*gm1*R_D*gm2*(rO2||R_M||R_F) : True
+A_open == -[R_F*R_D/(R_F+1/gm1)]*gm2*(rO2||R_M||R_F) : True
+
+=== 2. Feedback factor and loop gain ===
+K = I_2/V_1 = -1/R_F
+K*A_open    = R_D*R_F*R_M*g_m1*g_m2*r_O2/((R_F*g_m1 + 1)*(R_F*R_M + R_F*r_O2 + R_M*r_O2))
+K*A_open > 0 (negative feedback): True
+
+=== 3. Closed loop via 1 + K*A_open ===
+1 + K*A_open = (R_D*R_F*R_M*g_m1*g_m2*r_O2 + R_F**2*R_M*g_m1 + R_F**2*g_m1*r_O2 + R_F*R_M*g_m1*r_O2 + R_F*R_M + R_F*r_O2 + R_M*r_O2)/((R_F*g_m1 + 1)*(R_F*R_M + R_F*r_O2 + R_M*r_O2))
+A_closed     = -R_D*R_F**2*R_M*g_m1*g_m2*r_O2/(R_D*R_F*R_M*g_m1*g_m2*r_O2 + R_F**2*R_M*g_m1 + R_F**2*g_m1*r_O2 + R_F*R_M*g_m1*r_O2 + R_F*R_M + R_F*r_O2 + R_M*r_O2)
+R_in,closed  = R_F*(R_F*R_M + R_F*r_O2 + R_M*r_O2)/(R_D*R_F*R_M*g_m1*g_m2*r_O2 + R_F**2*R_M*g_m1 + R_F**2*g_m1*r_O2 + R_F*R_M*g_m1*r_O2 + R_F*R_M + R_F*r_O2 + R_M*r_O2)
+R_out,closed = R_F*R_M*r_O2*(R_F*g_m1 + 1)/(R_D*R_F*R_M*g_m1*g_m2*r_O2 + R_F**2*R_M*g_m1 + R_F**2*g_m1*r_O2 + R_F*R_M*g_m1*r_O2 + R_F*R_M + R_F*r_O2 + R_M*r_O2)
+
+=== 4. Exact nodal KCL (R_F between N and P, finite r_O2) ===
+A_exact = V_out/I_in = -R_M*r_O2*(R_D*R_F*g_m1*g_m2 - 1)/(R_D*R_M*g_m1*g_m2*r_O2 + R_F*R_M*g_m1 + R_F*g_m1*r_O2 + R_M*g_m1*r_O2 + R_M + r_O2)
+R_in,exact = v_N/I_in = (R_F*R_M + R_F*r_O2 + R_M*r_O2)/(R_D*R_M*g_m1*g_m2*r_O2 + R_F*R_M*g_m1 + R_F*g_m1*r_O2 + R_M*g_m1*r_O2 + R_M + r_O2)
+R_out,exact (I_in open) = R_M*r_O2*(R_F*g_m1 + 1)/(R_D*R_M*g_m1*g_m2*r_O2 + R_F*R_M*g_m1 + R_F*g_m1*r_O2 + R_M*g_m1*r_O2 + R_M + r_O2)
+ratio A_exact/A_closed = (R_D*R_F*g_m1*g_m2 - 1)*(R_D*R_F*R_M*g_m1*g_m2*r_O2 + R_F**2*R_M*g_m1 + R_F**2*g_m1*r_O2 + R_F*R_M*g_m1*r_O2 + R_F*R_M + R_F*r_O2 + R_M*r_O2)/(R_D*R_F**2*g_m1*g_m2*(R_D*R_M*g_m1*g_m2*r_O2 + R_F*R_M*g_m1 + R_F*g_m1*r_O2 + R_M*g_m1*r_O2 + R_M + r_O2))
+  = 1 - 1/(g_m1*g_m2*R_D*R_F) ? : False
+limit g_m2->oo of ratio           = 1
+limit g_m2->oo of A_exact         = -R_F
+limit g_m2->oo of A_closed        = -R_F   (= 1/K = -R_F )
+exact numerator difference A_exact - A_closed = R_M*r_O2*(R_F*g_m1 + 1)*(R_F*R_M + R_F*r_O2 + R_M*r_O2)/((R_D*R_M*g_m1*g_m2*r_O2 + R_F*R_M*g_m1 + R_F*g_m1*r_O2 + R_M*g_m1*r_O2 + R_M + r_O2)*(R_D*R_F*R_M*g_m1*g_m2*r_O2 + R_F**2*R_M*g_m1 + R_F**2*g_m1*r_O2 + R_F*R_M*g_m1*r_O2 + R_F*R_M + R_F*r_O2 + R_M*r_O2))
+ratio R_in,exact/R_in,closed   = (R_D*R_F*R_M*g_m1*g_m2*r_O2 + R_F**2*R_M*g_m1 + R_F**2*g_m1*r_O2 + R_F*R_M*g_m1*r_O2 + R_F*R_M + R_F*r_O2 + R_M*r_O2)/(R_F*(R_D*R_M*g_m1*g_m2*r_O2 + R_F*R_M*g_m1 + R_F*g_m1*r_O2 + R_M*g_m1*r_O2 + R_M + r_O2))  -> limit g_m2->oo: 1
+ratio R_out,exact/R_out,closed = (R_D*R_F*R_M*g_m1*g_m2*r_O2 + R_F**2*R_M*g_m1 + R_F**2*g_m1*r_O2 + R_F*R_M*g_m1*r_O2 + R_F*R_M + R_F*r_O2 + R_M*r_O2)/(R_F*(R_D*R_M*g_m1*g_m2*r_O2 + R_F*R_M*g_m1 + R_F*g_m1*r_O2 + R_M*g_m1*r_O2 + R_M + r_O2))  -> limit g_m2->oo: 1
+numeric example {g_m1: 0.005, g_m2: 0.01, R_D: 5000.0, R_F: 10000.0, R_M: 2000.0, r_O2: 20000.0}
+  A_open = -75414.7812971342  K*A_open = 7.54147812971342
+  A_closed = -8829.24245099770  A_exact = -8828.82882882883
+  R_in closed/exact = 22.9560303725940 22.9641406111994
+  R_out closed/exact = 180.116546000353 180.180180180180
+
+=== 5. Sanity identity ===
+simplify(R_F*R_D/(R_F+1/g_m1) - ((1/g_m1)*R_F/((1/g_m1)+R_F))*g_m1*R_D) = 0 -> == 0: True

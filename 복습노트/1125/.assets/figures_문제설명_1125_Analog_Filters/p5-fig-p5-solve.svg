@@ -1,0 +1,158 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="300" viewBox="0 0 700 300" role="img" aria-label="개루프 회로. V_DD에서 R_D를 거쳐 노드 X, M1 드레인 X, 게이트 V_b, 소스 입력 노드 N. 왼쪽 I_in이 접지에서 N으로 흐르고, N에는 입력 복제 R_F 하나만 접지로 간다. X는 PMOS M2 게이트, M2 소스 V_DD, 드레인이 바로 출력 노드 P이고 P에서 R_M과 출력 복제 R_F가 각각 접지로 병렬이며 오른쪽 끝이 V_out 단자다. 오른쪽 귀환율 측정에서는 N을 접지하고 P에 시험 전압 V_out을 건다."><style>/* Copyright (c) 2021, Kil Hyung-jin (https://github.com/orioncactus/pretendard),
+with Reserved Font Name Pretendard.
+
+This Font Software is licensed under the SIL Open Font License, Version 1.1.
+This license is copied below, and is also available with a FAQ at:
+https://scripts.sil.org/OFL
+
+
+-----------------------------------------------------------
+SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007
+-----------------------------------------------------------
+
+PREAMBLE
+The goals of the Open Font License (OFL) are to stimulate worldwide
+development of collaborative font projects, to support the font creation
+efforts of academic and linguistic communities, and to provide a free and
+open framework in which fonts may be shared and improved in partnership
+with others.
+
+The OFL allows the licensed fonts to be used, studied, modified and
+redistributed freely as long as they are not sold by themselves. The
+fonts, including any derivative works, can be bundled, embedded,
+redistributed and/or sold with any software provided that any reserved
+names are not used by derivative works. The fonts and derivatives,
+however, cannot be released under any other type of license. The
+requirement for fonts to remain under this license does not apply
+to any document created using the fonts or their derivatives.
+
+DEFINITIONS
+"Font Software" refers to the set of files released by the Copyright
+Holder(s) under this license and clearly marked as such. This may
+include source files, build scripts and documentation.
+
+"Reserved Font Name" refers to any names specified as such after the
+copyright statement(s).
+
+"Original Version" refers to the collection of Font Software components as
+distributed by the Copyright Holder(s).
+
+"Modified Version" refers to any derivative made by adding to, deleting,
+or substituting -- in part or in whole -- any of the components of the
+Original Version, by changing formats or by porting the Font Software to a
+new environment.
+
+"Author" refers to any designer, engineer, programmer, technical
+writer or other person who contributed to the Font Software.
+
+PERMISSION &amp; CONDITIONS
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of the Font Software, to use, study, copy, merge, embed, modify,
+redistribute, and sell modified and unmodified copies of the Font
+Software, subject to the following conditions:
+
+1) Neither the Font Software nor any of its individual components,
+in Original or Modified Versions, may be sold by itself.
+
+2) Original or Modified Versions of the Font Software may be bundled,
+redistributed and/or sold with any software, provided that each copy
+contains the above copyright notice and this license. These can be
+included either as stand-alone text files, human-readable headers or
+in the appropriate machine-readable metadata fields within text or
+binary files as long as those fields can be easily viewed by the user.
+
+3) No Modified Version of the Font Software may use the Reserved Font
+Name(s) unless explicit written permission is granted by the corresponding
+Copyright Holder. This restriction only applies to the primary font name as
+presented to the users.
+
+4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font
+Software shall not be used to promote, endorse or advertise any
+Modified Version, except to acknowledge the contribution(s) of the
+Copyright Holder(s) and the Author(s) or with their explicit written
+permission.
+
+5) The Font Software, modified or unmodified, in part or in whole,
+must be distributed entirely under this license, and must not be
+distributed under any other license. The requirement for fonts to
+remain under this license does not apply to any document created
+using the Font Software.
+
+TERMINATION
+This license becomes null and void if any of the above conditions are
+not met.
+
+DISCLAIMER
+THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT
+OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE
+COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL
+DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM
+OTHER DEALINGS IN THE FONT SOFTWARE.
+ */
+@font-face { font-family: Pretendard; font-style: normal; font-weight: 600; src: url(data:font/woff2;base64,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) format('woff2'); }
+
+svg { color: #1b2130; font-family: Pretendard, -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; }
+.fig-ink { stroke: #1b2130; fill: none; stroke-width: 2; }
+.fig-accent { stroke: #2f6fdb; fill: none; stroke-width: 2.5; }
+.fig-danger { stroke: #d92d20; fill: none; stroke-width: 2.5; }
+.fig-dot { fill: #2f6fdb; }
+.fig-text { fill: #1b2130; font-size: 13px; }
+svg text, svg text[class], svg text tspan, .fig-math, .fig-math tspan { font-family: Pretendard, sans-serif; font-weight: 600; font-style: normal; }
+svg tspan[baseline-shift="sub"], svg tspan[baseline-shift="super"] { font-size: 78%; }
+svg :is(.fig-dot, .fig-text)[data-node-color="blue"] { fill: #2f6fdb; }
+svg :is(.fig-dot, .fig-text)[data-node-color="red"] { fill: #d92d20; }
+.fig-muted { fill: #4a5468; font-size: 12px; }
+.axis { stroke: #dde2ea; stroke-width: 1.5; }
+.tick { fill: #4a5468; font-size: 11px; }
+.plot-truth { fill: none; stroke: #4a5468; stroke-width: 1.5; stroke-dasharray: 5 4; }
+.plot-fit { fill: none; stroke: #2f6fdb; stroke-width: 2.5; }
+.pt-train { fill: #2f6fdb; }
+.pt-test { fill: #b54708; }
+.mark-ml { stroke: #2f6fdb; stroke-width: 1.5; stroke-dasharray: 3 3; }
+.mark-map { stroke: #067647; stroke-width: 1.5; stroke-dasharray: 3 3; }
+.plot-like { fill: none; stroke: #2f6fdb; stroke-width: 2; }
+.plot-prior { fill: none; stroke: #6941c6; stroke-width: 2; stroke-dasharray: 6 4; }
+.plot-post { fill: none; stroke: #067647; stroke-width: 3; }
+svg .fig-loc { fill: #6941c6; }
+svg .fig-loc-ring { fill: none; stroke: #6941c6; }
+</style><rect x="0" y="0" width="700" height="300" rx="10" fill="#ffffff"/>
+<path class="fig-ink" d="M120 30 L400 30"/><text class="fig-text fig-math" x="409.2" y="35">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text>
+<path class="fig-ink" d="M140 30 V41.0 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 V100"/><text class="fig-text fig-math" x="121" y="70" text-anchor="end">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text>
+<path class="fig-ink" d="M140 100 L140 116"/><circle class="fig-dot" data-node="X" data-node-color="red" cx="140" cy="108" r="3.5"/><text class="fig-text fig-math" x="127.6" y="113" text-anchor="end" data-node-color="red" data-node="X">X</text>
+<path class="fig-ink" d="M156 134 V166 M163 137 V163 M163 150 H186 M156 139 H140 V116 M156 161 H140 V184"/><path class="fig-ink" d="M152.0 157 L144.0 161 L152.0 165"/>
+<text class="fig-text fig-math" x="128" y="155" text-anchor="end">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" x="195.2" y="155">V<tspan baseline-shift="sub" font-size="78%">b</tspan></text>
+<path class="fig-ink" d="M140 184 L140 210"/><circle class="fig-dot" data-node="N" data-node-color="blue" cx="140" cy="200" r="3.5"/><text class="fig-text fig-math" x="151.12" y="195.58" data-node-color="blue" data-node="N">N</text>
+<path class="fig-ink" d="M140 200 L60 200 L60 222"/><circle class="fig-ink" cx="60" cy="236" r="14"/><path class="fig-ink" d="M60 244 V228 M55 233 L60 228 L65 233"/><path class="fig-ink" d="M60 250 L60 262"/><path class="fig-ink" d="M60 262 v8 M50 270 H70 M54 275 H66 M58 280 H62"/>
+<text class="fig-text fig-math" x="36.2" y="241" text-anchor="end">I<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
+<path class="fig-ink" d="M140 210 V212.0 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 V262"/><path class="fig-ink" d="M140 262 v8 M130 270 H150 M134 275 H146 M138 280 H142"/>
+<text class="fig-text fig-math" x="158.4" y="240">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+<path class="fig-ink" d="M140 108 L300 108"/><path class="fig-ink" d="M330 92 V124 M323 95 V121 M323 108 H300 M330 97 H346 V74 M330 119 H346 V142"/><path class="fig-ink" d="M342.0 93 L334.0 97 L342.0 101"/>
+<text class="fig-text fig-math" x="358" y="113">M<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+<path class="fig-ink" d="M346 74 L346 30"/><path class="fig-ink" d="M346 142 L346 200"/>
+<circle class="fig-dot" data-node="P" data-node-color="blue" cx="346" cy="200" r="3.5"/><text class="fig-text fig-math" x="332" y="196" text-anchor="end" data-node-color="blue" data-node="P">P</text>
+<path class="fig-ink" d="M346 200 V204.0 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 V256"/><path class="fig-ink" d="M346 256 v8 M336 264 H356 M340 269 H352 M344 274 H348"/>
+<text class="fig-text fig-math" x="327.4" y="236" text-anchor="end">R<tspan baseline-shift="sub" font-size="78%">M</tspan></text>
+<path class="fig-ink" d="M346 200 L466 200"/>
+<path class="fig-ink" d="M410 200 V204.0 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 V256"/><path class="fig-ink" d="M410 256 v8 M400 264 H420 M404 269 H416 M408 274 H412"/>
+<text class="fig-text fig-math" x="428.4" y="236">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+<circle class="fig-dot" data-node="P" data-node-color="blue" cx="410" cy="200" r="3.5"/><circle class="fig-dot" data-node="P" data-node-color="blue" cx="466" cy="200" r="3.5"/><text class="fig-text fig-math" x="466" y="186" text-anchor="middle" data-node-color="blue" data-node="P">V<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+<g class="fig-loc-mark"><circle class="fig-loc-ring" cx="103.5" cy="221.54" r="7.48" style="stroke-width:1.19px"/><text class="fig-loc" font-size="17" x="103.5" y="226.68" text-anchor="middle" style="font-size:14.45px">ㄱ</text></g><g class="fig-loc-mark"><circle class="fig-loc-ring" cx="380.5" cy="183.54" r="7.48" style="stroke-width:1.19px"/><text class="fig-loc" font-size="17" x="380.5" y="188.68" text-anchor="middle" style="font-size:14.45px">ㄴ</text></g>
+<g transform="translate(500 60)">
+  <path class="fig-ink" d="M22 72H40l5-7 8 14 8-14 8 14 8-14 8 14 5-7H150M22 72V140m-10 0h20m-16 5h12m-8 5h4M150 72V106m0 28v6m-10 0h20m-16 5h12m-8 5h4"/>
+  <circle class="fig-ink" cx="150" cy="120" r="14"/>
+  <text class="fig-text" x="150" y="117" text-anchor="middle" font-size="13">+</text>
+  <text class="fig-text" x="150" y="131" text-anchor="middle" font-size="13">−</text>
+  <path class="fig-accent" d="M48 50H92m-5-5 5 5-5 5"/>
+  <circle class="fig-dot" cx="22" cy="72" r="3.5" data-node="n-k" data-node-color="blue"/>
+  <circle class="fig-dot" cx="150" cy="72" r="3.5" data-node="p-k" data-node-color="red"/>
+  <text class="fig-text fig-math" x="14" y="56" data-node="n-k" data-node-color="blue">N</text>
+  <text class="fig-text fig-math" x="146" y="56" data-node="p-k" data-node-color="red">P</text>
+  <text class="fig-text fig-math" x="69" y="100" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+  <text class="fig-text fig-math" x="70" y="38" text-anchor="middle">I<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+  <text class="fig-text fig-math" x="172" y="125">V<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+  <g class="fig-loc-mark"><circle class="fig-loc-ring" cx="184.5" cy="49.54" r="7.48" style="stroke-width:1.19px"/><text class="fig-loc" font-size="17" x="184.5" y="54.68" text-anchor="middle" style="font-size:14.45px">ㄷ</text></g>
+</g></svg>

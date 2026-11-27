@@ -1,72 +1,137 @@
 <div class="layer formal circuit-explanation" data-explanation="solve">
-  <figure class="figure circuit">
-    <svg viewBox="0 0 538 181" role="img" aria-label="쌍방 종단을 적용한 V–C 개루프 회로. 입력 전류원과 귀환 저항 복제가 입력 N에서 접지에 병렬이고, 공통 게이트 M1의 드레인 X에는 RD가 붙는다. X가 제어하는 PMOS의 소신호 전류원과 rO2, RM, RF가 출력 P에서 접지에 병렬이다.">
-      <path class="fig-ink" d="M26 144H153M40 144V115M40 89V67H153V51M94 67V81l7 4-14 7 14 7-14 7 14 7-7 4v27M153 144V150M143 150H163M147 155H159M151 160H155"/>
-      <circle class="fig-ink" cx="40" cy="102" r="13"/>
-      <path class="fig-accent" d="M40 110V94M35 99L40 94l5 5"/>
-      <path class="fig-ink" d="M153 51h-10m0-3v6m0-14v6m0-14v6m10-4h-10M153 34V24H220V54l7 4-14 7 14 7-14 7 14 7-7 4v20"/>
-      <path class="fig-ink" d="M136 32V53M136 43H119V34M109 34H129M113 29H125M117 24H121M153 51v-9h-6m2-3-3 3 3 3"/>
-      <path class="fig-ink" d="M220 110V116m-10 0h20m-16 5h12m-8 5h4"/>
-      <path class="fig-ink" d="M220 24H246m50 32H512M300 56V83m0 34v27m68-88v26l7 4-14 7 14 7-14 7 14 7-7 4v26m58-88v26l7 4-14 7 14 7-14 7 14 7-7 4v26m58-88v26l7 4-14 7 14 7-14 7 14 7-7 4v26M286 144H498m-102 0v6m-10 0h20m-16 5h12m-8 5h4"/>
-      <path class="fig-ink" d="M247 24H257L282 78" stroke-dasharray="3 4"/>
-      <polygon class="fig-ink" points="300,83 317,100 300,117 283,100"/>
-      <path class="fig-accent" d="M300 107V93m-5 5 5-5 5 5"/>
-      <circle class="fig-dot" cx="94" cy="67" r="3.2" data-node="n" data-node-color="blue"/>
-      <circle class="fig-dot" cx="153" cy="67" r="3.2" data-node="n" data-node-color="blue"/>
-      <circle class="fig-dot" cx="220" cy="24" r="3.2" data-node="x" data-node-color="red"/>
-      <circle class="fig-dot" cx="300" cy="56" r="3.2" data-node="p" data-node-color="blue"/>
-      <circle class="fig-dot" cx="368" cy="56" r="3.2" data-node="p" data-node-color="blue"/>
-      <circle class="fig-dot" cx="426" cy="56" r="3.2" data-node="p" data-node-color="blue"/>
-      <circle class="fig-dot" cx="484" cy="56" r="3.2" data-node="p" data-node-color="blue"/>
-      <circle class="fig-dot" cx="512" cy="56" r="3.2" data-node="p" data-node-color="blue"/>
-      <circle class="fig-dot" cx="40" cy="144" r="2.6"/><circle class="fig-dot" cx="94" cy="144" r="2.6"/>
-      <circle class="fig-dot" cx="300" cy="144" r="2.6"/><circle class="fig-dot" cx="368" cy="144" r="2.6"/><circle class="fig-dot" cx="426" cy="144" r="2.6"/><circle class="fig-dot" cx="484" cy="144" r="2.6"/>
-      <text class="fig-text fig-math" x="59" y="107">I<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
-      <text class="fig-text fig-math" x="109" y="106">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
-      <text class="fig-text fig-math" x="94" y="53" text-anchor="middle" data-node="n" data-node-color="blue">N</text>
-      <text class="fig-text fig-math" x="174" y="45">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text>
-      <text class="fig-text fig-math" x="218" y="10" text-anchor="middle" data-node="x" data-node-color="red">V<tspan baseline-shift="sub" font-size="78%">X</tspan></text>
-      <text class="fig-text fig-math" x="201" y="80" text-anchor="end">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text>
-      <text class="fig-text fig-math" x="332" y="129" text-anchor="middle">−g<tspan baseline-shift="sub" font-size="78%">m2</tspan>V<tspan baseline-shift="sub" font-size="78%">X</tspan></text>
-      <text class="fig-text fig-math" x="386" y="102">r<tspan baseline-shift="sub" font-size="78%">O2</tspan></text>
-      <text class="fig-text fig-math" x="444" y="102">R<tspan baseline-shift="sub" font-size="78%">M</tspan></text>
-      <text class="fig-text fig-math" x="502" y="102">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
-      <text class="fig-text fig-math" x="513" y="39" text-anchor="end" data-node="p" data-node-color="blue">P, V<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
-      <text class="fig-loc" x="127" y="90" font-size="16">㉠</text>
-      <text class="fig-loc" x="427" y="40" font-size="16" text-anchor="middle">㉡</text>
-    </svg>
-    <figcaption class="circuit-state">V–C 개루프 소신호 회로. $V_{DD}$와 $V_b$는 AC 접지예요.</figcaption>
-  </figure>
+  <figure class="figure circuit"><svg id="fig-p5-solve" viewBox="0 0 700 300" role="img" aria-label="개루프 회로. V_DD에서 R_D를 거쳐 노드 X, M1 드레인 X, 게이트 V_b, 소스 입력 노드 N. 왼쪽 I_in이 접지에서 N으로 흐르고, N에는 입력 복제 R_F 하나만 접지로 간다. X는 PMOS M2 게이트, M2 소스 V_DD, 드레인이 바로 출력 노드 P이고 P에서 R_M과 출력 복제 R_F가 각각 접지로 병렬이며 오른쪽 끝이 V_out 단자다. 오른쪽 귀환율 측정에서는 N을 접지하고 P에 시험 전압 V_out을 건다.">
+<path class="fig-ink" d="M120 30 L400 30"/><text class="fig-text fig-math" x="409.2" y="35">V<tspan baseline-shift="sub" font-size="78%">DD</tspan></text>
+<path class="fig-ink" d="M140 30 V41.0 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 V100"/><text class="fig-text fig-math" x="121" y="70" text-anchor="end">R<tspan baseline-shift="sub" font-size="78%">D</tspan></text>
+<path class="fig-ink" d="M140 100 L140 116"/><circle class="fig-dot" data-node="X" data-node-color="red" cx="140" cy="108" r="3.5"/><text class="fig-text fig-math" x="127.6" y="113" text-anchor="end" data-node-color="red" data-node="X">X</text>
+<path class="fig-ink" d="M156 134 V166 M163 137 V163 M163 150 H186 M156 139 H140 V116 M156 161 H140 V184"/><path class="fig-ink" d="M152.0 157 L144.0 161 L152.0 165"/>
+<text class="fig-text fig-math" x="128" y="155" text-anchor="end">M<tspan baseline-shift="sub" font-size="78%">1</tspan></text><text class="fig-text fig-math" x="195.2" y="155">V<tspan baseline-shift="sub" font-size="78%">b</tspan></text>
+<path class="fig-ink" d="M140 184 L140 210"/><circle class="fig-dot" data-node="N" data-node-color="blue" cx="140" cy="200" r="3.5"/><text class="fig-text fig-math" x="151.12" y="195.58" data-node-color="blue" data-node="N">N</text>
+<path class="fig-ink" d="M140 200 L60 200 L60 222"/><circle class="fig-ink" cx="60" cy="236" r="14"/><path class="fig-ink" d="M60 244 V228 M55 233 L60 228 L65 233"/><path class="fig-ink" d="M60 250 L60 262"/><path class="fig-ink" d="M60 262 v8 M50 270 H70 M54 275 H66 M58 280 H62"/>
+<text class="fig-text fig-math" x="36.2" y="241" text-anchor="end">I<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
+<path class="fig-ink" d="M140 210 V212.0 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 V262"/><path class="fig-ink" d="M140 262 v8 M130 270 H150 M134 275 H146 M138 280 H142"/>
+<text class="fig-text fig-math" x="158.4" y="240">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+<path class="fig-ink" d="M140 108 L300 108"/><path class="fig-ink" d="M330 92 V124 M323 95 V121 M323 108 H300 M330 97 H346 V74 M330 119 H346 V142"/><path class="fig-ink" d="M342.0 93 L334.0 97 L342.0 101"/>
+<text class="fig-text fig-math" x="358" y="113">M<tspan baseline-shift="sub" font-size="78%">2</tspan></text>
+<path class="fig-ink" d="M346 74 L346 30"/><path class="fig-ink" d="M346 142 L346 200"/>
+<circle class="fig-dot" data-node="P" data-node-color="blue" cx="346" cy="200" r="3.5"/><text class="fig-text fig-math" x="332" y="196" text-anchor="end" data-node-color="blue" data-node="P">P</text>
+<path class="fig-ink" d="M346 200 V204.0 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 V256"/><path class="fig-ink" d="M346 256 v8 M336 264 H356 M340 269 H352 M344 274 H348"/>
+<text class="fig-text fig-math" x="327.4" y="236" text-anchor="end">R<tspan baseline-shift="sub" font-size="78%">M</tspan></text>
+<path class="fig-ink" d="M346 200 L466 200"/>
+<path class="fig-ink" d="M410 200 V204.0 l8 4 l-16 8 l16 8 l-16 8 l16 8 l-16 8 l8 4 V256"/><path class="fig-ink" d="M410 256 v8 M400 264 H420 M404 269 H416 M408 274 H412"/>
+<text class="fig-text fig-math" x="428.4" y="236">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+<circle class="fig-dot" data-node="P" data-node-color="blue" cx="410" cy="200" r="3.5"/><circle class="fig-dot" data-node="P" data-node-color="blue" cx="466" cy="200" r="3.5"/><text class="fig-text fig-math" x="466" y="186" text-anchor="middle" data-node-color="blue" data-node="P">V<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+<text class="fig-loc" x="95" y="228" font-size="17">㉠</text><text class="fig-loc" x="372" y="190" font-size="17">㉡</text>
+<g transform="translate(500 60)">
+  <path class="fig-ink" d="M22 72H40l5-7 8 14 8-14 8 14 8-14 8 14 5-7H150M22 72V140m-10 0h20m-16 5h12m-8 5h4M150 72V106m0 28v6m-10 0h20m-16 5h12m-8 5h4"/>
+  <circle class="fig-ink" cx="150" cy="120" r="14"/>
+  <text class="fig-text" x="150" y="117" text-anchor="middle" font-size="13">+</text>
+  <text class="fig-text" x="150" y="131" text-anchor="middle" font-size="13">−</text>
+  <path class="fig-accent" d="M48 50H92m-5-5 5 5-5 5"/>
+  <circle class="fig-dot" cx="22" cy="72" r="3.5" data-node="n-k" data-node-color="blue"/>
+  <circle class="fig-dot" cx="150" cy="72" r="3.5" data-node="p-k" data-node-color="red"/>
+  <text class="fig-text fig-math" x="14" y="56" data-node="n-k" data-node-color="blue">N</text>
+  <text class="fig-text fig-math" x="146" y="56" data-node="p-k" data-node-color="red">P</text>
+  <text class="fig-text fig-math" x="69" y="100" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+  <text class="fig-text fig-math" x="70" y="38" text-anchor="middle">I<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+  <text class="fig-text fig-math" x="172" y="125">V<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+  <text class="fig-loc" x="176" y="56" font-size="17">㉢</text>
+</g></svg><figcaption class="circuit-state">왼쪽은 원 회로에 두 복제를 단 V–C 개루프, 오른쪽은 반송 포트 $N$을 접지한 귀환망이에요.</figcaption></figure>
   <div data-subpart="main">
+<h4>루프를 끊는 위치</h4>
+<figure class="figure"><svg id="fig-p5-loop-ports" viewBox="0 0 460 280" role="img" aria-label="원 회로의 귀환망. 입력 노드 N은 위로 M1 소스에 연결되고 왼쪽 I_in이 접지에서 N으로 흐른다. N에서 R_F가 오른쪽 노드 P로 가고, P는 위로 M2 드레인에 바로 연결되며 오른쪽 끝이 V_out 단자다. P에서 R_M이 접지로 간다. R_F와 R_M을 점선 상자로 묶었고, N 쪽 왼쪽 경계가 반송 포트, P 쪽 오른쪽 경계가 감지 포트다.">
+  <path class="fig-ink" d="M130 130V60 M130 130H50V170 M50 198V250 M130 130H210l5-7 8 14 8-14 8 14 8-14 8 14 5-7H330 M330 130V36 M330 130H426 M330 130V150l8 4-16 8 16 8-16 8 16 8-16 8 8 4V250"/>
+  <path class="fig-ink" d="M50 250v8 M40 258H60 M44 263H56 M48 268H52 M330 250v8 M320 258H340 M324 263H336 M328 268H332"/>
+  <circle class="fig-ink" cx="50" cy="184" r="14"/>
+  <path class="fig-ink" d="M50 192V176 M45 181 50 176 55 181"/>
+  <rect class="fig-accent" x="192" y="108" width="176" height="112" stroke-dasharray="6 4"/>
+  <circle class="fig-dot" cx="130" cy="130" r="3.5" data-node="N" data-node-color="blue"/>
+  <circle class="fig-dot" cx="330" cy="130" r="3.5" data-node="P" data-node-color="red"/>
+  <circle class="fig-dot" cx="426" cy="130" r="3.5" data-node="P" data-node-color="red"/>
+  <text class="fig-text fig-math" x="118" y="122" text-anchor="end" data-node="N" data-node-color="blue">N</text>
+  <text class="fig-text fig-math" x="318" y="150" text-anchor="end" data-node="P" data-node-color="red">P</text>
+  <text class="fig-text fig-math" x="426" y="116" text-anchor="middle" data-node="P" data-node-color="red">V<tspan baseline-shift="sub" font-size="78%">out</tspan></text>
+  <text class="fig-text fig-math" x="130" y="48" text-anchor="middle">M<tspan baseline-shift="sub" font-size="78%">1</tspan> 소스</text>
+  <text class="fig-text fig-math" x="330" y="22" text-anchor="middle">M<tspan baseline-shift="sub" font-size="78%">2</tspan> 드레인</text>
+  <text class="fig-text fig-math" x="72" y="189">I<tspan baseline-shift="sub" font-size="78%">in</tspan></text>
+  <text class="fig-text fig-math" x="235" y="154" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+  <text class="fig-text fig-math" x="348" y="180">R<tspan baseline-shift="sub" font-size="78%">M</tspan></text>
+  <text class="fig-text" x="200" y="212">복제 블록</text>
+  <text class="fig-text" x="136" y="112">반송 포트</text>
+  <text class="fig-text" x="376" y="160">감지 포트</text>
+</svg><figcaption>점선 안의 $R_F$와 $R_M$을 한 블록으로 묶어 복제해요. 반송 포트($N$–접지)는 $I_{in}$과 병렬, 감지 포트($P$–접지)는 출력 $V_{out}$과 병렬이에요.</figcaption></figure>
+<p>$R_F$는 출력 전압을 감지해 $N$으로 전류를 되돌리는 귀환망이에요. 교과서는 $R_M$을 순방향 증폭기에 넣어요. $R_M$ 없이는 $M_2$가 출력 전압을 만들 수 없기 때문이에요. 그래도 $R_M$까지 한 블록으로 묶어 복제하면 결과가 같아요. 입력 복제에서는 $R_M$의 양단이 모두 접지가 되어 사라지고, 출력 복제에서는 원래 $R_M$ 자리에 그대로 남기 때문이에요. 이렇게 묶으면 원 회로의 $R_F$와 $R_M$을 지우고 아래 두 복제로 바꾸면 돼요.</p>
+<p>두 포트가 모두 원 회로에서 병렬이라, 복제본에서 쓰지 않는 포트는 둘 다 단락해요. 입력 복제는 감지 포트 $P$를, 출력 복제는 반송 포트 $N$을 접지에 붙여요.</p>
+<figure class="figure"><svg id="fig-p5-loop-copies" viewBox="0 0 520 200" role="img" aria-label="귀환망의 두 복제. 왼쪽 입력 복제는 N에서 R_F를 거쳐 P로 가고 P는 오른쪽 도선으로 접지에 단락돼 있다. P에서 접지로 가는 R_M은 양단이 모두 접지라 붉은 점선과 가위표로 지워져 있다. 오른쪽 출력 복제는 P에서 R_F를 거쳐 왼쪽 N으로 가고 N은 도선으로 접지에 단락돼 있으며, P에서 R_M이 접지로 간다.">
+  <path class="fig-ink" d="M60 70H95l5-7 8 14 8-14 8 14 8-14 8 14 5-7H230V170"/>
+  <path class="fig-danger" d="M190 70V90l8 4-16 8 16 8-16 8 16 8-16 8 8 4V170" stroke-dasharray="4 3"/>
+  <path class="fig-danger" d="M180 108l20 16M200 108l-20 16"/>
+  <path class="fig-ink" d="M320 70V170 M320 70H355l5-7 8 14 8-14 8 14 8-14 8 14 5-7H470 M470 70V90l8 4-16 8 16 8-16 8 16 8-16 8 8 4V170"/>
+  <path class="fig-ink" d="M190 170v8 M180 178H200 M184 183H196 M188 188H192 M230 170v8 M220 178H240 M224 183H236 M228 188H232 M320 170v8 M310 178H330 M314 183H326 M318 188H322 M470 170v8 M460 178H480 M464 183H476 M468 188H472"/>
+  <circle class="fig-dot" cx="60" cy="70" r="3.5" data-node="N" data-node-color="blue"/>
+  <circle class="fig-dot" cx="190" cy="70" r="3.5" data-node="P" data-node-color="red"/>
+  <circle class="fig-dot" cx="320" cy="70" r="3.5" data-node="N" data-node-color="blue"/>
+  <circle class="fig-dot" cx="470" cy="70" r="3.5" data-node="P" data-node-color="red"/>
+  <text class="fig-text fig-math" x="60" y="52" text-anchor="middle" data-node="N" data-node-color="blue">N</text>
+  <text class="fig-text fig-math" x="190" y="52" text-anchor="middle" data-node="P" data-node-color="red">P</text>
+  <text class="fig-text fig-math" x="320" y="52" text-anchor="middle" data-node="N" data-node-color="blue">N</text>
+  <text class="fig-text fig-math" x="482" y="64" data-node="P" data-node-color="red">P</text>
+  <text class="fig-text fig-math" x="120" y="49" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+  <text class="fig-muted fig-math" x="164" y="124" text-anchor="end">R<tspan baseline-shift="sub" font-size="78%">M</tspan></text>
+  <text class="fig-muted" x="110" y="150" text-anchor="middle">양단 접지</text>
+  <text class="fig-text fig-math" x="380" y="49" text-anchor="middle">R<tspan baseline-shift="sub" font-size="78%">F</tspan></text>
+  <text class="fig-text fig-math" x="452" y="124" text-anchor="end">R<tspan baseline-shift="sub" font-size="78%">M</tspan></text>
+</svg><figcaption>왼쪽 입력 복제는 $P$를 단락해 $R_M$의 양단이 모두 접지가 되므로 지우고, $N$에 $R_F$만 남아요. 오른쪽 출력 복제는 $N$을 단락해 $P$에서 $R_F\parallel R_M$이 보여요.</figcaption></figure>
+<ul>
+<li>원래의 $R_M$을 출력 복제의 $R_F\parallel R_M$과 따로 더하지 않아요.</li>
+<li>입력 쪽 첫 인자에 출력 복제의 $R_F\parallel R_M$을 쓰지 않아요. 입력 복제에서 $N$에 걸린 저항은 $R_F$뿐이에요.</li>
+<li>P3(E12.32)는 감지 포트가 레이저와 직렬이라 입력 복제에서 열어 $R_F+R_M$이 남아요. 여기는 병렬이라 단락해 $R_F$만 남아요.</li>
+</ul>
+<h4>개루프 저항과 이득</h4>
     <div data-answer-step="병렬 감지·반송과 개루프 저항">
-      <p><span class="loc">㉡</span> 출력 전압을 병렬로 감지하고 <span class="loc">㉠</span> 입력 $N$에서 전류를 병렬로 합쳐요. 두 복제의 반대쪽을 단락하면 출력에는 $R_M$과 $R_F$, 입력에는 $R_F$가 접지로 걸려요.</p>
-      $$R_{out,open}=r_{O2}\parallel R_M\parallel R_F$$
+      <p><span class="loc">㉠</span> 입력 $N$에서는 $M_1$ 소스 쪽 저항과 입력 복제의 $R_F$가 병렬이에요. $r_{O1}\to\infty$로 두고 몸체 효과를 무시하면 $M_1$ 소스 쪽 저항은 $1/g_{m1}$이에요. <span class="loc">㉡</span> 출력 $P$에서는 $r_{O2}$와 출력 복제의 $R_M$, $R_F$가 병렬이에요.</p>
       $$R_{in,open}=\frac{1}{g_{m1}}\parallel R_F$$
+      $$R_{out,open}=r_{O2}\parallel R_M\parallel R_F$$
     </div>
     <div data-answer-step="목표 전달저항과 두 단의 이득">
-      <p>$g_{m1}R_Dg_{m2}R_F\gg1$에서 $R_F$의 직접 순방향 전달을 생략해요. $N$의 노턴 입력은 테브난 전압 $V_{\mathrm{Th}}=I_{in}R_F$와 직렬 $R_F$로 바뀌어요. 첫 인자 $R_F$는 $V_{\mathrm{Th}}/I_{in}$이에요. 테브난 전압에서 $X$까지의 이득에는 $R_F$와 $1/g_{m1}$의 분압이 들어가요.</p>
+      <p>$g_{m1}R_Dg_{m2}R_F\gg1$에서 $R_F$의 직접 순방향 전달을 생략해요. $N$의 노턴 입력을 테브난 전압 $V_{\mathrm{Th}}=I_{in}R_F$와 직렬 $R_F$로 바꿔요. 이 $R_F$는 입력 복제에서 $N$에 걸린 저항이고, 첫 인자 $R_F$는 $V_{\mathrm{Th}}/I_{in}$이에요. 테브난 전압에서 $X$까지의 이득에는 $R_F$와 $1/g_{m1}$의 분압이 들어가요.</p>
       $$A_{\mathrm{open}}=\frac{V_{out}}{I_{in}}=R_F\frac{V_X}{V_{\mathrm{Th}}}\frac{V_{out}}{V_X}\ [\mathrm{V/A}]$$
       $$\frac{V_X}{V_{\mathrm{Th}}}=\frac{R_D}{R_F+1/g_{m1}}$$
-      <p>PMOS가 공급하는 전류의 변화 $-g_{m2}V_X$에 앞서 구한 출력저항을 곱해요.</p>
+      <p>검산: 앞의 두 인자를 곱하면 $R_{in,open}$에 공통 게이트 이득 $g_{m1}R_D$를 곱한 값과 같아요.</p>
+      $$R_F\frac{R_D}{R_F+1/g_{m1}}=\Bigl(\frac{1}{g_{m1}}\parallel R_F\Bigr)g_{m1}R_D$$
+      <p>$M_2$는 공통 소스 단이고, 드레인 $P$에서 보이는 저항은 앞서 구한 $R_{out,open}$이에요.</p>
       $$\frac{V_{out}}{V_X}=-g_{m2}R_{out,open}$$
+      $$A_{\mathrm{open}}=\frac{R_FR_D}{R_F+1/g_{m1}}\bigl(-g_{m2}R_{out,open}\bigr)$$
     </div>
     <div data-answer-step="귀환율 시험과 루프 이득">
-      <p>귀환망만 떼어 $N$을 접지하고 $P$에 $V_{out}$을 걸어요. 양의 $I_F$는 $N$에서 $P$로 향해요.</p>
+      <p><span class="loc">㉢</span> 귀환망만 떼어 $N$을 접지하고 $P$에 $V_{out}$을 걸어요. 양의 $I_F$는 $N$에서 $P$로 향해요.</p>
       $$V_{out}=-R_FI_F$$
       $$K=\frac{I_F}{V_{out}}=-\frac1{R_F}$$
       $$KA_{\mathrm{open}}=\frac{g_{m2}R_DR_{out,open}}{R_F+1/g_{m1}}$$
     </div>
+<h4>폐루프 이득과 임피던스</h4>
     <div data-answer-final="">
       <p>병렬 입력·병렬 감지라 폐루프 이득과 두 포트 저항이 모두 $1+KA_{\mathrm{open}}$로 나뉘어요.</p>
       $$A_{\mathrm{closed}}=\frac{V_{out}}{I_{in}}\approx\frac{A_{\mathrm{open}}}{1+KA_{\mathrm{open}}}$$
       $$R_{in,closed}\approx\frac{R_{in,open}}{1+KA_{\mathrm{open}}}$$
       $$R_{out,closed}\approx\frac{R_{out,open}}{1+KA_{\mathrm{open}}}$$
-      <p>교과서의 $r_{O2}\to\infty$ 모델에서는 출력 병렬 부하에는 $R_M\parallel R_F$만 남아요. E12.32는 $R_M$이 레이저와 직렬로 전류를 감지해 출력저항을 높이고, 이 회로는 $R_F$가 출력 전압을 병렬로 감지해 출력저항을 낮춰요. 입력 복제도 E12.32에서는 $R_F+R_M$, 여기서는 $R_F$예요.</p>
+      <p>교과서의 $r_{O2}\to\infty$ 모델에서는 출력 병렬 부하에 $R_M\parallel R_F$만 남아요. 두 회로의 차이는 아래와 같아요.</p>
+      <table>
+        <thead><tr><th></th><th>P3 (E12.32, C–C)</th><th>P5 (E12.33, V–C)</th></tr></thead>
+        <tbody>
+          <tr><td>감지</td><td>$R_M$이 레이저와 직렬로 전류 감지</td><td>$R_F$가 $P$에서 병렬로 전압 감지</td></tr>
+          <tr><td>입력 복제의 감지 포트</td><td>개방</td><td>단락</td></tr>
+          <tr><td>첫 인자 $V_{\mathrm{Th}}/I_{in}$</td><td>$R_F+R_M$</td><td>$R_F$</td></tr>
+          <tr><td>출력 복제</td><td>$R_F\parallel R_M$, 레이저와 직렬</td><td>$R_F\parallel R_M$, $r_{O2}$와 병렬</td></tr>
+          <tr><td>$K$</td><td>$-R_M/(R_M+R_F)$</td><td>$-1/R_F$</td></tr>
+          <tr><td>폐루프 출력저항</td><td>커짐</td><td>작아짐</td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
 <div class="sum" hidden>
   <p class="sum-lead">출력 전압을 병렬로 감지하면 두 복제의 반대 포트를 단락해요.</p>
-  <p>입력은 $R_F$로 종단하고, 출력의 병렬 부하에서 PMOS 이득을 읽어요.</p>
-  <p>폐루프 출력저항은 $1+KA_{\mathrm{open}}$로 나눠요.</p>
+  <p>입력 복제에서는 $R_M$의 양단이 접지라 $R_F$만 남고, 첫 인자도 $R_F$예요.</p>
+  <p>출력의 병렬 부하 $r_{O2}\parallel R_M\parallel R_F$에서 PMOS 이득을 읽어요.</p>
+  <p>폐루프 이득과 두 포트 저항은 $1+KA_{\mathrm{open}}$로 나눠요.</p>
 </div>

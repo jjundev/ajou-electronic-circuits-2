@@ -1,16 +1,20 @@
 {
   "review_policy_version": "problem-explain-2026-10-21-learning-style",
-  "input_hash": "be26dd50ef07b3599460b2af88cead55e37c89ec0b2a12609e87c30c53ec4bb0",
+  "input_hash": "ebb96c1c4d608ae32f5d6f0715ebf049d867311416e72c595ff58aa1022d2770",
   "references": [
     {
       "path": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\.claude\\skills\\ec2-review-pack\\references\\solution-style.md",
-      "sha256": "690fddd572c9a544ad2b1edf1aaf59557bed85237b44a484b35e32a5a4e1ae7d"
+      "sha256": "039b111c0c650129e918442ae4b470ec401b7c9f4da892c8258bc3a7c611ee30"
+    },
+    {
+      "path": "C:\\Users\\Hyunjun\\Desktop\\현준대학\\26-2\\ajou-electronic-circuits-2\\교과서\\마이크로전자회로\\12장.pdf",
+      "sha256": "351797bf72941f867d90c948e17d4c24f09e733a16796ae76aca500f9fd96498"
     }
   ],
   "learning_style_audit": {
     "learning_style": {
       "path": ".claude/skills/ec2-review-pack/references/solution-style.md",
-      "sha256": "690fddd572c9a544ad2b1edf1aaf59557bed85237b44a484b35e32a5a4e1ae7d",
+      "sha256": "039b111c0c650129e918442ae4b470ec401b7c9f4da892c8258bc3a7c611ee30",
       "rule_ids": [
         "UNIT-01",
         "CALC-01",
@@ -30,407 +34,407 @@
     "items": {
       "p1:1": {
         "status": "pass",
-        "reviewer": "independent content reviewer subagent (Claude Opus 5.5, default model; tier order not exposed)",
+        "reviewer": "content-reviewer-agent (claude-fable-5-2)",
         "rules": {
           "UNIT-01": {
-            "disposition": "not_applicable",
-            "evidence": "원문에 소자 값이 없어 수치·단위 환산이 없음. 기호식만 쓰며 전달비 단위([A/V] 등)는 NOTATION-01에서 확인."
+            "disposition": "applied",
+            "evidence": "첫 개루프 정의식 A_open=I_out/V_in 옆에 [A/V] 표기. 수치 환산은 없음."
           },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "목표 A_open=(V_X/V_in)(I_out/V_X) → 팔로워 V_S/V_X → I_out/V_X → A_open → KA_open → A_closed 순으로 중간값을 한 행씩 연결. 역산 없음."
+            "evidence": "목표비 → R_source=R_L+R_M 정의 → 팔로워 이득 → I_out/V_X → A_open → KA_open → A_closed 순으로 중간량을 기호로 정의해 대입."
           },
           "CALC-02": {
             "disposition": "not_applicable",
-            "evidence": "수치 계산·반올림 없음. 기호식만 정리."
+            "evidence": "수치 대입·반올림이 없는 기호 답 문항이라 분수·반올림 규칙을 적용할 대상이 없음. 기호식은 약분을 마친 형태로 제시됨."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "㉠ M1 게이트 AC 접지 CG(λ=0, 소스 쪽 1/g_m1 규칙과 부합), ㉡ M2 소스 팔로워 부하 R_source=R_L+R_M 직렬 판단을 회로 위치에서 읽음."
+            "evidence": "λ=0이라 CG 소스 쪽 저항을 1/g_m1로 사용(수업 규칙). 개루프 그림 ㉠ M1 게이트 교류 접지, ㉡ M2 소스의 R_L+R_M 직렬을 역할로 설명."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "개루프 그림에서 반송 쪽 게이트는 R_M 복제로 접지, 감지 R_M은 레이저와 직렬(figcaption). 입력 왼쪽·레이저 출력 오른쪽, X 빨강·V_in/V_F 파랑, 접지 점 생략. 블록으로 충분해 등가회로를 생략함."
+            "evidence": "소신호 등가회로 없이 MOS 기호 개루프 회로 1장: 반송 복제 R_M이 게이트–접지(전류 0), 감지 복제 R_M이 레이저와 직렬. 렌더에서 노드 점·색(X 빨강, V_in·V_F 파랑)·㉠㉡ 간격 확인."
           },
           "GAIN-01": {
             "disposition": "applied",
-            "evidence": "연쇄 곱을 먼저 쓰고, 부하를 연결한 팔로워 전압이득 V_S/V_X를 같은 가지 R_source로 나눠 I_out/V_X를 구함(부하 전류 규칙·1125 P1 예시와 일치). 부호 양수 확인."
+            "evidence": "(V_X/V_in)(I_out/V_X) 곱을 먼저 쓰고 CG 이득 g_m1R_D, 팔로워 전압 이득 V_S/V_X를 구한 뒤 같은 R_source로 나눠 I_out/V_X를 얻음(전압 이득에서 부하 전류). 기출 답과 일치 검산."
           },
           "DEGEN-01": {
             "disposition": "not_applicable",
-            "evidence": "축퇴 제어 전압 식을 세우지 않음. GAIN-01의 블록 연쇄로 직접 정리되어 DEGEN-01 예외 조항대로 블록 분해를 우선함."
+            "evidence": "규칙의 예외 조항대로 블록 연쇄 곱(GAIN-01)으로 연립 없이 정리되는 문항이라 제어 전압 식 전개는 적용 대상이 아님."
           },
           "SCALE-01": {
             "disposition": "not_applicable",
-            "evidence": "파라미터 배율·전류 거울 비례식 문항이 아님."
+            "evidence": "소자 치수·바이어스 배율 변화나 전류 거울 비례식을 묻지 않음."
           },
           "BIAS-01": {
             "disposition": "not_applicable",
-            "evidence": "DC 동작점·포화 경계 문항이 아님(소신호 귀환 해석)."
+            "evidence": "DC 동작점·포화 경계 부등식을 묻지 않는 소신호 귀환 문항."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "A_open 정의식에 [A/V], K=R_M, 폐루프 식에 KA_open을 직접 사용. SVG 라벨은 native tspan 첨자."
+            "evidence": "A_open/A_closed, K=R_M, 부호 있는 KA_open을 폐루프 식에 그대로 사용. SVG 라벨 Pretendard 600·tspan 첨자 확인."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "㉠·㉡ 판단 한 문장 → 식 → 결과. V_in−V_F 한 줄로 음귀환 판단."
+            "evidence": "㉠㉡ 판단 한 문장 → 식, 'V_F가 V_in−V_F로 돌아오므로 음귀환' 판단 뒤 답."
           },
           "CORRECT-01": {
-            "disposition": "applied",
-            "evidence": "필기 오기 교정 대상 아님. 답이 reference_answer와 일치함을 직접 대수 확인(A_closed=g_m1R_D/(1/g_m2+R_L+R_M+g_m1R_DR_M))."
+            "disposition": "not_applicable",
+            "evidence": "이 문항에 해당하는 필기 오기 교정 항목이 없음. 몸체 효과 생략 조건은 본문에 명시."
           },
           "FREQ-01": {
             "disposition": "not_applicable",
-            "evidence": "저주파 해석이며 팔로워 출력 임피던스의 주파수 꼴을 다루지 않음."
+            "evidence": "팔로워 출력 임피던스의 주파수 의존(커패시턴스) 문항이 아님."
           }
         }
       },
       "p1:2": {
         "status": "pass",
-        "reviewer": "independent content reviewer subagent (Claude Opus 5.5, default model; tier order not exposed)",
+        "reviewer": "content-reviewer-agent (claude-fable-5-2)",
         "rules": {
           "UNIT-01": {
             "disposition": "not_applicable",
-            "evidence": "원문에 소자 값이 없어 수치·단위 환산이 없음. 기호식만 쓰며 전달비 단위([A/V] 등)는 NOTATION-01에서 확인."
+            "evidence": "새 전달비 정의나 수치 환산이 없는 임피던스 소문항."
           },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "R_in,open=1/g_m1 → R_in,closed, R_out,open=1/g_m2+R_M → (R_out,open+R_L)(1+KA)−R_L → 정리식 순."
+            "evidence": "R_in,open, R_out,open을 먼저 구하고 (1)의 KA_open을 대입해 최종식까지 전개."
           },
           "CALC-02": {
             "disposition": "not_applicable",
-            "evidence": "수치 계산·반올림 없음. 기호식만 정리."
+            "evidence": "수치 대입·반올림이 없는 기호 답 문항이라 분수·반올림 규칙을 적용할 대상이 없음. 기호식은 약분을 마친 형태로 제시됨."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "㉢ 레이저 제거·V_in=0에서 위 단자 1/g_m2와 아래 단자 R_M이 같은 AC 접지로 이어져 직렬(교류 접지 연결 직렬 판정). λ=0이므로 1/g_m2."
+            "evidence": "레이저 두 단자에서 위 1/g_m2와 아래 R_M이 같은 교류 접지로 이어져 직렬 합으로 판정(㉢ 그림). R_in,open=1/g_m1(λ=0)."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "두 단자 그림(위 빨강·아래 파랑, 접지 분기점만 점)과 측정 조건 figcaption. 정확식 유도 없음."
+            "evidence": "입력 0·레이저 제거 조건의 두 단자 등가 그림 1장, 시험원 노드 방정식 없이 직렬 판정. R_out 정확식 전개 없음."
           },
           "GAIN-01": {
             "disposition": "applied",
-            "evidence": "레이저 직렬 감지 출력저항 규칙 (R_out,open+R_L)(1+KA_open)−R_L을 적용했고 결과 1/g_m2+R_M+g_m1R_DR_M을 직접 확인."
+            "evidence": "직렬 전류 감지: R_out,closed=(R_out,open+R_L)(1+KA_open)−R_L, 전개 결과 1/g_m2+R_M+g_m1R_DR_M이 기출 답과 일치함을 손계산으로 확인."
           },
           "DEGEN-01": {
             "disposition": "not_applicable",
-            "evidence": "축퇴 제어 전압 식을 세우지 않음. GAIN-01의 블록 연쇄로 직접 정리되어 DEGEN-01 예외 조항대로 블록 분해를 우선함."
+            "evidence": "규칙의 예외 조항대로 블록 연쇄 곱(GAIN-01)으로 연립 없이 정리되는 문항이라 제어 전압 식 전개는 적용 대상이 아님."
           },
           "SCALE-01": {
             "disposition": "not_applicable",
-            "evidence": "파라미터 배율·전류 거울 비례식 문항이 아님."
+            "evidence": "소자 치수·바이어스 배율 변화나 전류 거울 비례식을 묻지 않음."
           },
           "BIAS-01": {
             "disposition": "not_applicable",
-            "evidence": "DC 동작점·포화 경계 문항이 아님(소신호 귀환 해석)."
+            "evidence": "DC 동작점·포화 경계 부등식을 묻지 않는 소신호 귀환 문항."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "KA_open을 별칭 없이 사용, R_out,open/closed 표기 일관."
+            "evidence": "R_in,open/R_out,open/R_out,closed 기호, 부호 있는 KA_open 재사용."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "입력·출력 측정 조건을 각 식 바로 앞 한두 문장으로 설명."
+            "evidence": "측정 조건(레이저 제거, V_in=0 → X 교류 접지)을 식 바로 앞에서 설명."
           },
           "CORRECT-01": {
-            "disposition": "applied",
-            "evidence": "오기 교정 대상 없음. R_in,closed=(1+KA)/g_m1과 R_out,closed가 reference와 일치함을 확인."
+            "disposition": "not_applicable",
+            "evidence": "해당 필기 교정 항목 없음."
           },
           "FREQ-01": {
             "disposition": "not_applicable",
-            "evidence": "저주파 해석이며 팔로워 출력 임피던스의 주파수 꼴을 다루지 않음."
+            "evidence": "팔로워 출력 임피던스의 주파수 의존(커패시턴스) 문항이 아님."
           }
         }
       },
       "p2:1": {
         "status": "pass",
-        "reviewer": "independent content reviewer subagent (Claude Opus 5.5, default model; tier order not exposed)",
+        "reviewer": "content-reviewer-agent (claude-fable-5-2)",
         "rules": {
           "UNIT-01": {
-            "disposition": "not_applicable",
-            "evidence": "원문에 소자 값이 없어 수치·단위 환산이 없음. 기호식만 쓰며 전달비 단위([A/V] 등)는 NOTATION-01에서 확인."
+            "disposition": "applied",
+            "evidence": "A_open=I_out/V_in 첫 정의식에 [A/V]."
           },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "A_open 곱 → V_X/V_in → V_D/V_X → I_out/V_X → A_open, 이어서 R_in,open, R_out,open을 한 행씩."
+            "evidence": "V_X/V_in → V_D/V_X → I_out/V_X → A_open 순으로 중간 전압비를 정의해 조립."
           },
           "CALC-02": {
             "disposition": "not_applicable",
-            "evidence": "수치 계산·반올림 없음. 기호식만 정리."
+            "evidence": "수치 대입·반올림이 없는 기호 답 문항이라 분수·반올림 규칙을 적용할 대상이 없음. 기호식은 약분을 마친 형태로 제시됨."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "λ>0이므로 r_o 유지: ㉡ r_o1∥(R_L+R_M) 병렬 판단, 레이저 제거 시 r_o1과 R_M의 AC 접지 직렬 판정."
+            "evidence": "λ>0: 소스 쪽 구동점 저항이 등장하지 않는 구조(입력 게이트, PMOS CS)임을 확인. R_out,open은 r_o1과 R_M이 교류 접지를 거쳐 직렬이라는 판정으로 r_o1+R_M."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "차동 블록 입력 왼쪽, M1·레이저 오른쪽, X·V_D 빨강, V_in·V_F 파랑. 두 단자 그림은 이득 뒤에 배치(임피던스 배치 규칙)."
+            "evidence": "차동단을 M3–M6 블록(−/+)으로 둔 개루프 회로, M4 게이트는 복제 R_M으로 접지. 레이저를 뗀 두 단자 그림은 이득 뒤에 배치. 등가회로 전개 없음."
           },
           "GAIN-01": {
             "disposition": "applied",
-            "evidence": "부호 포함 전압비 V_X/V_in, V_D/V_X=−g_m1[r_o1∥(R_L+R_M)]에서 V_D를 같은 직렬 가지 R_L+R_M으로 나눔(1125 P2 예시와 일치). 이득 완성 후 R_in,open, R_out,open."
+            "evidence": "부호 포함 전압비 V_X/V_in≈−g_m3(r_o3∥r_o5), V_D/V_X=−g_m1[r_o1∥(R_L+R_M)]에서 ∥를 유지하고 V_D를 R_L+R_M으로 나눔. 이득 완성 뒤 R_in,open, R_out,open 순서(명세의 1125 P2 예시와 일치). 기출 답 g_m1g_m3(r_o3∥r_o5)r_o1/(r_o1+R_L+R_M)과 동치 확인."
           },
           "DEGEN-01": {
             "disposition": "not_applicable",
-            "evidence": "축퇴 제어 전압 식을 세우지 않음. GAIN-01의 블록 연쇄로 직접 정리되어 DEGEN-01 예외 조항대로 블록 분해를 우선함."
+            "evidence": "규칙의 예외 조항대로 블록 연쇄 곱(GAIN-01)으로 연립 없이 정리되는 문항이라 제어 전압 식 전개는 적용 대상이 아님."
           },
           "SCALE-01": {
             "disposition": "not_applicable",
-            "evidence": "파라미터 배율·전류 거울 비례식 문항이 아님."
+            "evidence": "소자 치수·바이어스 배율 변화나 전류 거울 비례식을 묻지 않음."
           },
           "BIAS-01": {
             "disposition": "not_applicable",
-            "evidence": "DC 동작점·포화 경계 문항이 아님(소신호 귀환 해석)."
+            "evidence": "DC 동작점·포화 경계 부등식을 묻지 않는 소신호 귀환 문항."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "A_open [A/V] 표기, 이득식에서 ∥ 유지."
+            "evidence": "A_open, 전압비 표기, 원문 소자 번호(M1 출력단, M3–M6 차동단) 유지."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "㉠ 반전 입력 판단, 차동단 성립 조건 한 줄, 게이트 입력이라 R_in=∞ 한 줄."
+            "evidence": "㉠ 반전 입력 판단, 차동단 이득의 성립 조건(대칭·1:1 거울·이상 테일·g_mr_o≫1) 한 문장 뒤 식."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "오기 교정 대상 없음. A_open이 reference g_m1g_m3(r_O3∥r_O5)r_O1/(r_O1+R_L+R_M)과 동치임을 확인."
+            "evidence": "PMOS 공통 소스의 음수 부호를 유지해 두 반전의 곱 A_open>0(요약에도 명시). 차동단 근사는 ≈로 표기."
           },
           "FREQ-01": {
             "disposition": "not_applicable",
-            "evidence": "저주파 해석이며 팔로워 출력 임피던스의 주파수 꼴을 다루지 않음."
+            "evidence": "팔로워 출력 임피던스의 주파수 의존(커패시턴스) 문항이 아님."
           }
         }
       },
       "p2:2": {
         "status": "pass",
-        "reviewer": "independent content reviewer subagent (Claude Opus 5.5, default model; tier order not exposed)",
+        "reviewer": "content-reviewer-agent (claude-fable-5-2)",
         "rules": {
           "UNIT-01": {
             "disposition": "not_applicable",
-            "evidence": "원문에 소자 값이 없어 수치·단위 환산이 없음. 기호식만 쓰며 전달비 단위([A/V] 등)는 NOTATION-01에서 확인."
+            "evidence": "새 전달비 정의·수치 환산 없음."
           },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "KA_open=R_M·A_open → A_closed → R_out,closed 순."
+            "evidence": "(1)의 A_open·R_out,open을 K=R_M과 함께 대입하는 구조."
           },
           "CALC-02": {
             "disposition": "not_applicable",
-            "evidence": "수치 계산·반올림 없음. 기호식만 정리."
+            "evidence": "수치 대입·반올림이 없는 기호 답 문항이라 분수·반올림 규칙을 적용할 대상이 없음. 기호식은 약분을 마친 형태로 제시됨."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "(1)에서 구한 R_out,open=r_o1+R_M을 재사용."
+            "evidence": "(1)에서 직렬 판정으로 구한 R_out,open을 재사용."
           },
           "CIRCUIT-02": {
-            "disposition": "applied",
-            "evidence": "(1)의 개루프 그림·두 단자 그림을 그대로 사용하며 새 측정 그림이 필요 없음."
+            "disposition": "not_applicable",
+            "evidence": "새 회로 상태가 없어 (1)의 그림을 공유. 추가 그림이 필요 없음."
           },
           "GAIN-01": {
             "disposition": "applied",
-            "evidence": "직렬 감지 레이저 출력저항 규칙 적용. 전개하면 r_o1+R_M+g_m1g_m3(r_o3∥r_o5)r_o1R_M으로 reference와 일치."
+            "evidence": "R_out,closed≈(R_out,open+R_L)(1+KA_open)−R_L; 전개하면 r_o1+R_M+g_m1g_m3(r_o3∥r_o5)r_o1R_M으로 기출 답과 일치 확인."
           },
           "DEGEN-01": {
             "disposition": "not_applicable",
-            "evidence": "축퇴 제어 전압 식을 세우지 않음. GAIN-01의 블록 연쇄로 직접 정리되어 DEGEN-01 예외 조항대로 블록 분해를 우선함."
+            "evidence": "규칙의 예외 조항대로 블록 연쇄 곱(GAIN-01)으로 연립 없이 정리되는 문항이라 제어 전압 식 전개는 적용 대상이 아님."
           },
           "SCALE-01": {
             "disposition": "not_applicable",
-            "evidence": "파라미터 배율·전류 거울 비례식 문항이 아님."
+            "evidence": "소자 치수·바이어스 배율 변화나 전류 거울 비례식을 묻지 않음."
           },
           "BIAS-01": {
             "disposition": "not_applicable",
-            "evidence": "DC 동작점·포화 경계 문항이 아님(소신호 귀환 해석)."
+            "evidence": "DC 동작점·포화 경계 부등식을 묻지 않는 소신호 귀환 문항."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "K=R_M, 부호 있는 KA_open을 폐루프 식에 직접 사용."
+            "evidence": "KA_open=R_MA_open을 별칭 없이 폐루프 식에 사용, 근사는 ≈."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "V_F 상승→X 상승→PMOS 전류 감소로 음귀환을 한 문장으로 판단."
+            "evidence": "I_out↑→V_F↑→X↑→PMOS 전류↓의 음귀환 판단 한 문장 뒤 K=R_M."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "오기 교정 대상 없음, 부호 일관(A_open>0, K>0)."
+            "evidence": "A_open>0, K>0로 KA_open>0 유지. 필기의 (r_o1+R_M)(1+KA) 꼴 대신 R_L을 포함·차감한 확정 표기 사용."
           },
           "FREQ-01": {
             "disposition": "not_applicable",
-            "evidence": "저주파 해석이며 팔로워 출력 임피던스의 주파수 꼴을 다루지 않음."
+            "evidence": "팔로워 출력 임피던스의 주파수 의존(커패시턴스) 문항이 아님."
           }
         }
       },
       "p3:main": {
         "status": "pass",
-        "reviewer": "independent content reviewer subagent (Claude Opus 5.5, default model; tier order not exposed)",
+        "reviewer": "content-reviewer-agent (claude-fable-5-2)",
         "rules": {
           "UNIT-01": {
-            "disposition": "not_applicable",
-            "evidence": "원문에 소자 값이 없어 수치·단위 환산이 없음. 기호식만 쓰며 전달비 단위([A/V] 등)는 NOTATION-01에서 확인."
+            "disposition": "applied",
+            "evidence": "A_open=I_out/I_in 첫 정의식에 [A/A]."
           },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "A_open 곱 정의 → V_X/V_Th → V_D/V_X → I_out/V_X → A_open → R_in,open, R_out,open → K → KA_open → 폐루프 순으로 한 행씩."
+            "evidence": "V_Th, V_X/V_Th, V_D/V_X, I_out/V_X를 차례로 정의해 A_open을 조립하고 K와 곱함."
           },
           "CALC-02": {
             "disposition": "not_applicable",
-            "evidence": "수치 계산·반올림 없음. 기호식만 정리."
+            "evidence": "수치 대입·반올림이 없는 기호 답 문항이라 분수·반올림 규칙을 적용할 대상이 없음. 기호식은 약분을 마친 형태로 제시됨."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "원문은 r_O2만 유한이므로 r_O1→∞에서 M1 소스 쪽 1/g_m1(λ=0 규칙), 같은 값을 R_in,open과 테브난 분압 분모에 재사용. 출력은 r_O2와 R_F∥R_M의 AC 접지 직렬 판정, I_in∥(R_F+R_M)의 노턴→테브난 변환."
+            "evidence": "노턴→테브난(V_Th=I_in(R_F+R_M), 직렬 R_F+R_M), r_O1→∞·몸체 효과 무시를 명시한 1/g_m1 분압 1회, R_in,open 별도 정의, 레이저 두 단자의 r_O2와 R_F∥R_M 직렬 판정."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "신규 '루프를 끊는 위치' 블록이 비이상 귀환 첫 판단 규칙을 수행함: 원 회로에서 감지 포트(P–접지, 레이저와 직렬)와 반송 포트(N–접지, I_in과 병렬)를 짚고, 입력 복제는 감지 포트 개방→N에서 R_F+R_M, 출력 복제는 N 단락→P에서 R_F∥R_M. 두 신규 SVG의 도선 끝을 모두 추적함: 포트 그림의 I_in(접지→N 위 화살표), N–R_F–P, P–R_M–접지, P–레이저–M2 드레인(I_out 아래 방향) 연결이 정확하고 점선 상자는 R_F·R_M만 포함. 복제 그림은 왼쪽 P 위 개방 스텁+빈 원, 오른쪽 N 수직 도선의 접지 단락, 두 R_M 접지가 정확. N 파랑(rgb 22,119,255)·P 빨강(rgb 217,45,32) 계산색 확인, SVG 안 글자는 소자·노드·단자·포트 이름뿐. 라이트/다크/모바일 렌더로 라벨 간격·클리핑 확인. 고정 그림 ㉠(N 쪽 R_F+R_M 직렬)·㉡(P 쪽 R_M, R_F 병렬)과 일치."
+            "evidence": "감지(직렬)·반송(병렬)을 포트 그림에서 짚고 감지 포트 개방/반송 포트 단락 복제 그림 제시. 개루프 회로는 MOS 기호 유지. 렌더에서 점·색·㉠㉡㉢ 간격 확인."
           },
           "GAIN-01": {
             "disposition": "applied",
-            "evidence": "목표비 A_open=(R_F+R_M)(V_X/V_Th)(I_out/V_X)[A/A]를 먼저 쓰고 항별로 채움. CS 이득 V_D/V_X=−g_m2[r_O2∥(R_L+R_F∥R_M)]에서 같은 가지 R_L+R_F∥R_M으로 나눔. 레이저 연결 A_open으로 R_out,closed=(R_out,open+R_L)(1+KA)−R_L. 별도 회로 상태의 R_in/R_out,open은 이득 뒤에 둠."
+            "evidence": "(R_F+R_M)(V_X/V_Th)(I_out/V_X) 곱을 먼저 쓰고, ∥를 유지한 CS 전압 이득에서 V_D를 R_L+(R_F∥R_M)으로 나눔. 식 12.166과 동치 확인. R_out,closed는 (R_out,open+R_L)(1+KA_open)−R_L."
           },
           "DEGEN-01": {
             "disposition": "not_applicable",
-            "evidence": "축퇴 제어 전압 식을 세우지 않음. GAIN-01의 블록 연쇄로 직접 정리되어 DEGEN-01 예외 조항대로 블록 분해를 우선함."
+            "evidence": "규칙의 예외 조항대로 블록 연쇄 곱(GAIN-01)으로 연립 없이 정리되는 문항이라 제어 전압 식 전개는 적용 대상이 아님."
           },
           "SCALE-01": {
             "disposition": "not_applicable",
-            "evidence": "파라미터 배율·전류 거울 비례식 문항이 아님."
+            "evidence": "소자 치수·바이어스 배율 변화나 전류 거울 비례식을 묻지 않음."
           },
           "BIAS-01": {
             "disposition": "not_applicable",
-            "evidence": "DC 동작점·포화 경계 문항이 아님(소신호 귀환 해석)."
+            "evidence": "DC 동작점·포화 경계 부등식을 묻지 않는 소신호 귀환 문항."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "K=I_F/I_out, I_F 기준 방향 N→P를 ㉢ 시험 그림과 함께 밝혀 K=−R_M/(R_M+R_F), KA_open>0 부호 유지. 신규 SVG도 native tspan 첨자, Pretendard 600 계산값 확인."
+            "evidence": "I_F 기준 방향(N→P)을 ㉢ 그림에 표시하고 K=I_F/I_out=−R_M/(R_M+R_F), KA_open>0을 부호째 사용."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "신규 블록이 포트 판단→종단 규칙→결과를 이어 주고 ㉠/㉡ 단계로 연결함. 수정된 함정 목록 세 항목은 각기 다른 실제 실수(R_M 중복 가산, 입력 복제 감지 포트 단락, 출력 복제 반송 포트 개방 시 R_M만 남음)를 짚어 캡션·㉡ 문장과 중복되지 않음."
+            "evidence": "'두 저항 모두 귀환망', 흔한 오답 3가지, 순방향 전달 생략 조건을 해당 식 곁에 둠."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "오기 교정 대상 없음. 답 식이 교과서 식 12.166–12.173과 기호 대응으로 일치함을 확인(1+KA_open=1−R_M/(R_M+R_F)·A_I,open)."
+            "evidence": "항목 10: PMOS 둘째 단 −g_m2 부호를 유지해 A_open<0, K<0, KA_open>0."
           },
           "FREQ-01": {
             "disposition": "not_applicable",
-            "evidence": "저주파 해석이며 팔로워 출력 임피던스의 주파수 꼴을 다루지 않음."
+            "evidence": "팔로워 출력 임피던스의 주파수 의존(커패시턴스) 문항이 아님."
           }
         }
       },
       "p4:main": {
         "status": "pass",
-        "reviewer": "independent content reviewer subagent (Claude Opus 5.5, default model; tier order not exposed)",
+        "reviewer": "content-reviewer-agent (claude-fable-5-2)",
         "rules": {
           "UNIT-01": {
             "disposition": "not_applicable",
-            "evidence": "원문에 소자 값이 없어 수치·단위 환산이 없음. 기호식만 쓰며 전달비 단위([A/V] 등)는 NOTATION-01에서 확인."
+            "evidence": "새 전달비 정의·수치 없음(3번의 A_open [A/A] 재사용)."
           },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "단락 조건 → A_closed|_{R_L=0}로 I_N → 시험 조건 → R_N=R_out,closed → 전개식 순."
+            "evidence": "3번의 A_open·K·R_out,open을 재사용해 I_N, R_N을 조립."
           },
           "CALC-02": {
             "disposition": "not_applicable",
-            "evidence": "수치 계산·반올림 없음. 기호식만 정리."
+            "evidence": "수치 대입·반올림이 없는 기호 답 문항이라 분수·반올림 규칙을 적용할 대상이 없음. 기호식은 약분을 마친 형태로 제시됨."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "3번의 R_out,open=r_O2+R_F∥R_M과 소스 쪽 1/g_m1을 같은 기호로 재사용."
+            "evidence": "노턴 등가 그림에 전류원 기준(P→D)과 부하 전류 기준(D→P)을 구별해 표시. R_N은 3번의 직렬 판정 결과 재사용."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "노턴 등가 그림: I_N·R_N 왼쪽, 레이저 오른쪽, D 파랑·P 빨강, 전류원 기준 P→D와 외부 I_out 기준 D→P를 figcaption에 명시. 단락 전류는 입력 유지, R_N은 I_in 개방으로 구분."
+            "evidence": "단락 전류(입력 유지)와 노턴 저항(I_in 개방, 시험전류 D→P)의 측정 조건을 구별. 새 등가회로 전개 없음."
           },
           "GAIN-01": {
             "disposition": "applied",
-            "evidence": "노턴 단락 전류에 전달비 전체 |_{R_L=0} 표기. R_N은 레이저 연결 A_open으로 (R_out,open+R_L)(1+KA)−R_L 후 R_L 차감. 전개 r_O2+R_F∥R_M+R_MR_Dg_m2r_O2/(R_F+R_M+1/g_m1)을 직접 확인."
+            "evidence": "단락 조건을 전달비 전체에 |_{R_L=0}로 표시. R_N≈(R_out,open+R_L)(1+KA_open)−R_L 전개값 r_O2+R_F∥R_M+R_MR_Dg_m2r_O2/(R_F+R_M+1/g_m1)을 손계산으로 확인(R_L 소거)."
           },
           "DEGEN-01": {
             "disposition": "not_applicable",
-            "evidence": "축퇴 제어 전압 식을 세우지 않음. GAIN-01의 블록 연쇄로 직접 정리되어 DEGEN-01 예외 조항대로 블록 분해를 우선함."
+            "evidence": "규칙의 예외 조항대로 블록 연쇄 곱(GAIN-01)으로 연립 없이 정리되는 문항이라 제어 전압 식 전개는 적용 대상이 아님."
           },
           "SCALE-01": {
             "disposition": "not_applicable",
-            "evidence": "파라미터 배율·전류 거울 비례식 문항이 아님."
+            "evidence": "소자 치수·바이어스 배율 변화나 전류 거울 비례식을 묻지 않음."
           },
           "BIAS-01": {
             "disposition": "not_applicable",
-            "evidence": "DC 동작점·포화 경계 문항이 아님(소신호 귀환 해석)."
+            "evidence": "DC 동작점·포화 경계 부등식을 묻지 않는 소신호 귀환 문항."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "A_open, K, KA_open 기호를 3번과 동일하게 재사용, I_N 부호(음수) 설명."
+            "evidence": "I_N, R_N, A_open, KA_open 기호와 ≈ 일관."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "㉠ 단락 조건, ㉡ 시험원 조건을 각각 식 앞 한 문장으로 설명."
+            "evidence": "㉠ 단락 조건, ㉡ 입력 개방 조건을 각 식 앞에 한 문장씩."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "오기 교정 대상 없음, 2포트 근사를 ≈로 표시."
+            "evidence": "A_open<0이므로 P→D 기준 I_N<0임을 명시해 부호 유지."
           },
           "FREQ-01": {
             "disposition": "not_applicable",
-            "evidence": "저주파 해석이며 팔로워 출력 임피던스의 주파수 꼴을 다루지 않음."
+            "evidence": "팔로워 출력 임피던스의 주파수 의존(커패시턴스) 문항이 아님."
           }
         }
       },
       "p5:main": {
         "status": "pass",
-        "reviewer": "independent content reviewer subagent (Claude Opus 5.5, default model; tier order not exposed)",
+        "reviewer": "content-reviewer-agent (claude-fable-5-2)",
         "rules": {
           "UNIT-01": {
-            "disposition": "not_applicable",
-            "evidence": "원문에 소자 값이 없어 수치·단위 환산이 없음. 기호식만 쓰며 전달비 단위([A/V] 등)는 NOTATION-01에서 확인."
+            "disposition": "applied",
+            "evidence": "A_open=V_out/I_in 첫 정의식에 [V/A]."
           },
           "CALC-01": {
             "disposition": "applied",
-            "evidence": "R_out,open, R_in,open → A_open 곱 → V_X/V_Th → V_out/V_X → K → KA_open → 폐루프 세 식."
+            "evidence": "R_in,open·R_out,open → V_Th → V_X/V_Th → V_out/V_X → A_open → K → KA_open 순으로 기호 중간량 조립, 검산 항등식 포함."
           },
           "CALC-02": {
             "disposition": "not_applicable",
-            "evidence": "수치 계산·반올림 없음. 기호식만 정리."
+            "evidence": "수치 대입·반올림이 없는 기호 답 문항이라 분수·반올림 규칙을 적용할 대상이 없음. 기호식은 약분을 마친 형태로 제시됨."
           },
           "CIRCUIT-01": {
             "disposition": "applied",
-            "evidence": "M1 소스 쪽 1/g_m1(λ=0 규칙), r_O2∥R_M∥R_F 병렬 판정, I_in∥R_F 노턴→테브난."
+            "evidence": "노턴→테브난(V_Th=I_inR_F, 직렬 R_F, 첫 인자 V_Th/I_in=R_F 명시), r_O1→∞ 명시 후 1/g_m1을 R_in,open과 분압에 같은 값으로 사용. 출력 P의 r_O2∥R_M∥R_F는 같은 두 노드(P–접지) 병렬."
           },
           "CIRCUIT-02": {
             "disposition": "applied",
-            "evidence": "V–C 개루프 소신호 그림: 제어원 −g_m2V_X 왼쪽 → r_O2 → R_M → R_F → 출력 P 맨 오른쪽, N 파랑·V_X 빨강·P 파랑. 두 복제의 반대 포트 단락을 이득 앞에서 판단(1120 P7 순서)."
+            "evidence": "감지·반송 포트 그림과 양쪽 단락 복제 그림(입력 복제의 R_M 양단 접지 표시), 원 회로 기호의 개루프 그림(소신호 등가 없음), 출력 단자·시험원 오른쪽, V_out 단자 점이 도선 끝(466,200). 재조립한 stage/ecd3e3d82ac34900831f8df7dc659504를 헤드리스 Chromium(라이트·다크)으로 다시 렌더해 수정 확인: 주 회로 ㉠이 y=228(실측 글리프 상자 y=212~232)로 I_in–N 도선(y=200) 아래 약 12px에 있고 I_in 원·R_F와 겹치지 않음, P–V_out 도선의 R_F 분기점(410,200)에 파란 점 추가, 포트 그림 'M2 드레인' 라벨이 y=22로 도선 끝과 간격 확보. 이전 stage 조각과 비교해 p5.html의 변경은 이 세 곳뿐임을 diff로 확인."
           },
           "GAIN-01": {
             "disposition": "applied",
-            "evidence": "A_open=R_F(V_X/V_Th)(V_out/V_X)[V/A]를 먼저 쓰고, V_out/V_X=−g_m2R_out,open에 앞서 구한 개루프 저항을 재사용."
+            "evidence": "R_F(V_X/V_Th)(V_out/V_X) 곱을 먼저 쓰고 앞에서 구한 R_out,open을 −g_m2R_out,open에 재사용. 식 12.174~12.183과 r_O2→∞에서 일치."
           },
           "DEGEN-01": {
             "disposition": "not_applicable",
-            "evidence": "축퇴 제어 전압 식을 세우지 않음. GAIN-01의 블록 연쇄로 직접 정리되어 DEGEN-01 예외 조항대로 블록 분해를 우선함."
+            "evidence": "규칙의 예외 조항대로 블록 연쇄 곱(GAIN-01)으로 연립 없이 정리되는 문항이라 제어 전압 식 전개는 적용 대상이 아님."
           },
           "SCALE-01": {
             "disposition": "not_applicable",
-            "evidence": "파라미터 배율·전류 거울 비례식 문항이 아님."
+            "evidence": "소자 치수·바이어스 배율 변화나 전류 거울 비례식을 묻지 않음."
           },
           "BIAS-01": {
             "disposition": "not_applicable",
-            "evidence": "DC 동작점·포화 경계 문항이 아님(소신호 귀환 해석)."
+            "evidence": "DC 동작점·포화 경계 부등식을 묻지 않는 소신호 귀환 문항."
           },
           "NOTATION-01": {
             "disposition": "applied",
-            "evidence": "N 접지 시험에서 I_F 기준 N→P, V_out=−R_FI_F에서 K=−1/R_F(1120 P7 예시와 동일), KA_open>0."
+            "evidence": "㉢ 시험: N 접지, I_F 양의 방향 N→P, V_out=−R_FI_F에서 K=−1/R_F. KA_open=g_m2R_DR_out,open/(R_F+1/g_m1)>0을 부호째 폐루프 분모에 사용. 참고: P 노드 색이 주 회로 왼쪽은 파랑, 오른쪽 귀환망·포트·복제 그림은 빨강(P3와 같은 패턴)."
           },
           "EXPLAIN-01": {
             "disposition": "applied",
-            "evidence": "㉡ 병렬 감지·㉠ 병렬 합산 판단 후 종단, 마지막에 E12.32와의 차이 한 문단."
+            "evidence": "포트 병렬 판단 → 복제 종단 → 오답 3가지 → 식. P3/P5 비교표로 '두 회로의 차이' 요구에 답함."
           },
           "CORRECT-01": {
             "disposition": "applied",
-            "evidence": "오기 교정 대상 없음. r_O2 유한 일반화를 밝히고 교과서 r_O2→∞ 모델 대응을 명시."
+            "evidence": "PMOS 공통 소스 −g_m2 부호 유지(A_open<0, K<0, KA_open>0), 폐루프 식은 ≈."
           },
           "FREQ-01": {
             "disposition": "not_applicable",
-            "evidence": "저주파 해석이며 팔로워 출력 임피던스의 주파수 꼴을 다루지 않음."
+            "evidence": "팔로워 출력 임피던스의 주파수 의존(커패시턴스) 문항이 아님."
           }
         }
       }
@@ -438,109 +442,109 @@
   },
   "source_visual": {
     "status": "pass",
-    "reviewer": "Claude Opus 5.5 (main agent)",
-    "evidence": "workbook/source_pages.py render로 2021-1 기말 Q4 p1, 2023-1 기말 Q3 p3, 교과서 12장 E12.32·X12.32·E12.33 p30–31을 다시 렌더해 대조했다. 조건(R_M 작지 않음, R_L, λ=0/λ>0, r_O2<∞, R_F 크지 않음), 그림 12.61(a)·12.62(a) 연결, 소문항 표지와 구할 것이 stage 원문 패널과 일치한다. 교과서 풀이의 '귀환 회로망은 R_M과 R_F를 포함'과 감지 복제 출력 포트 단락·반송 복제 입력 포트 개방이 P3 새 블록의 포트 판단과 일치한다."
+    "reviewer": "main-agent (claude-opus-5-5)",
+    "evidence": "workbook/source_pages.py render → pages/*.png 대조. p1(2021-1_기말 Q4): p1 쪽, λ=0·R_M 작지 않음·레이저 R_L·소문항 (1)(2) 일치. p2(2023-1_기말 Q3): p3 쪽, λ>0·차동쌍+PMOS M1·소문항 (1)(2) 일치. p3(E12.32): 교재 698쪽(pdf p30), Fig 12.61(a)·r_O2<∞ 일치. p4(X12.32): 699쪽 연습문제 '레이저를 구동하는 전체 회로의 노턴 등가' 일치. p5(E12.33): 699–700쪽(pdf p30–31), Fig 12.62(a) 연결(M2 드레인=V_out, R_M·R_F) 일치, 풀이 식 12.174–12.183과 해설 결과 일치. stage HTML 조건·구할 것·그림과도 차이 없음."
   },
   "browser": {
     "status": "pass",
-    "reviewer": "Claude Opus 5.5 (main agent)",
-    "evidence": "로컬 HTTP(127.0.0.1:8767) stage를 헤드리스 Playwright epe_browser_check.py로 1280×900·375×812 라이트·다크 네 조합 측정: 문항 5, KaTeX 오류 0, raw $ 없음, 깨진 이미지·외부 자원·가로 넘침·콘솔 오류 없음, pass. 새 P3 그림 fig-p3-loop-ports·fig-p3-loop-copies를 네 조합에서 요소 스크린샷으로 확인해 도선 끝(개방 단자 원, N 단락), 라벨 간격, N 파랑·P 빨강, 점선 귀환망 상자의 가시성을 확인했다. 내장 브라우저(visible)에서 고정 회로 아래 흐름 배치도 확인했다. 함정 목록 수정 뒤 재빌드한 stage 0e72831…에서 네 조합 측정을 다시 실행해 pass를 확인했다."
+    "reviewer": "main-agent (claude-opus-5-5)",
+    "evidence": "playwright-headless(epe_browser_check.py), stage ecd3e3d8…: 1280x900·375x812 × light·dark 모두 visibility visible, topics 5, sumsInPanel 5, katexErrors 0, rawDollar false, hScroll·panelOverflow·consoleErrors·spacingErrors·brokenImages·external 없음, flaky_rerun 없음. --shots와 P5 SVG 2배 캡처(light/dark)로 세 그림의 선·노드 점·라벨·㉠㉡㉢ 겹침 없음 확인. 내장 브라우저 창 클릭 확인은 미실시(측정은 스크립트로 대체)."
   },
   "content": {
     "status": "pass",
-    "reviewer": "independent content reviewer subagent (Claude Opus 5.5, default model; tier order not exposed)",
-    "evidence": "solution-style.md(sha256 690fddd5…ae7d, snapshot과 일치)의 13개 규칙과 verification.md content·learning_style_audit, authoring.md를 읽고 7개 소문항 조각을 stage HTML·동반 MD·answer-overlay와 대조함. 모든 답을 직접 대수 검산함(P1 A_closed·R_out,closed, P2 A_open 동치·R_out,closed, P3 교과서 식 12.166–12.173 대응, P4 R_N 전개·I_N 부호, P5 K·KA_open). P3 신규 '루프를 끊는 위치' 블록의 포트 식별, 종단 규칙, R_F+R_M/R_F∥R_M 결과가 정확하며 고정 그림·㉠/㉡/㉢ 문장과 일관됨. Playwright로 #p3를 라이트/다크/모바일에서 렌더해 두 신규 SVG의 배선(왼쪽 복제 P 개방 스텁+빈 원, 오른쪽 복제 N 접지 단락), N 파랑·P 빨강 계산색, Pretendard 600, 라벨 간격(반송 포트 라벨–점선 상자 8px, P 라벨–도선 12px 등), 클리핑 없음을 확인함. SVG 안에는 소자·노드·단자·포트 이름만 있음. MD에 신규 그림 두 장·캡션·문단이 반영되었고 overlay의 P3 단계·답은 불변. 재빌드 stage 0e7283164b6d4fde8a07656e67a34e68에서 함정 목록 수정(HTML·MD 두 줄만 변경, 그림·overlay 답 불변)을 확인해 이전 중복 결함이 해소됨. 작성자가 지적한 대로 이전 제안 문장('N을 열면 R_F+R_M이 R_M과 병렬')은 틀렸고, N 개방 시 R_F는 전류가 없어 P에서 R_M만 보인다는 새 3번 항목이 정확함. 남은 결함 없음. 참고(비차단): 고정 그림 본회로의 P는 파랑, ㉢ 삽도와 신규 두 그림의 P는 빨강(기존 승인분, 이름으로 구별됨).",
+    "reviewer": "content-reviewer-agent (claude-fable-5-2)",
+    "evidence": "P1–P5 조각·stage HTML·동반 MD·원문 쪽 렌더를 대조하고 모든 식을 손으로 재유도함. stage/ecd3e3d82ac34900831f8df7dc659504의 HTML을 로컬 서버+헤드리스 Chromium(1280×900, 라이트·다크, visibilityState=visible)으로 열어 생성 SVG를 직접 보고 라벨 경계상자를 측정함. P1–P4 조각은 이전 검토 stage의 조각과 바이트 동일(cmp), P5는 그림 좌표 세 곳만 변경되었고 지적한 ㉠ 겹침이 해소됨. 답안 PDF는 이 검토에서 렌더하지 않음.",
     "items": {
       "p1:1": {
         "status": "pass",
-        "reviewer": "independent content reviewer subagent (Claude Opus 5.5, default model; tier order not exposed)",
-        "evidence": "개루프 연쇄 곱(CG g_m1R_D × 팔로워 V_S/V_X ÷ R_source)과 KA_open, A_closed를 직접 대수 검산해 reference와 일치. 그림 연결·㉠㉡ 위치·노드 색 확인."
+        "reviewer": "content-reviewer-agent (claude-fable-5-2)",
+        "evidence": "원문 쪽 렌더(2021-1 기말 Q4)와 대조: CG M1(소스 입력, 게이트 귀환), 팔로워 M2, 레이저·R_M 직렬. A_open=g_m1R_D/(1/g_m2+R_L+R_M), K=R_M, KA_open, A_closed를 손으로 재유도해 기출 답과 일치. 팔로워 이득식과 I_out=V_S/R_source 변환식이 식으로 제시됨(말로 줄인 연산 없음). 개루프 그림의 ㉠㉡이 M1 소스 입력·M2 소스 가지를 가리키고 렌더에서 겹침 없음. 음귀환 방향(V_F↑→I_D1↑→X↓) 확인."
       },
       "p1:2": {
         "status": "pass",
-        "reviewer": "independent content reviewer subagent (Claude Opus 5.5, default model; tier order not exposed)",
-        "evidence": "R_in,closed=(1+KA)/g_m1, R_out,closed=(1/g_m2+R_M+R_L)(1+KA)−R_L=1/g_m2+R_M+g_m1R_DR_M 확인. ㉢ 두 단자 그림과 측정 조건 일치."
+        "reviewer": "content-reviewer-agent (claude-fable-5-2)",
+        "evidence": "R_in,closed=(1+KA_open)/g_m1, R_out,open=1/g_m2+R_M(레이저 제거·V_in=0·X 교류 접지), R_out,closed=(R_out,open+R_L)(1+KA_open)−R_L=1/g_m2+R_M+g_m1R_DR_M을 전개해 기출 답과 일치 확인. ㉢ 두 단자 그림이 본문 조건과 일치."
       },
       "p2:1": {
         "status": "pass",
-        "reviewer": "independent content reviewer subagent (Claude Opus 5.5, default model; tier order not exposed)",
-        "evidence": "A_open 부호(−·−=+)와 r_o1∥(R_L+R_M)/(R_L+R_M)=r_o1/(r_o1+R_L+R_M)로 reference와 동치. R_in=∞, R_out,open=r_o1+R_M, 이득 뒤 임피던스 배치 확인."
+        "reviewer": "content-reviewer-agent (claude-fable-5-2)",
+        "evidence": "원문 쪽 렌더(2023-1 기말 Q3)와 대조: X는 M3·M5 드레인(다이오드 결선은 M6), M4 게이트로 귀환. V_X/V_in≈−g_m3(r_o3∥r_o5), V_D/V_X=−g_m1[r_o1∥(R_L+R_M)], I_out=V_D/(R_L+R_M)에서 A_open=g_m1g_m3(r_o3∥r_o5)r_o1/(r_o1+R_L+R_M)로 기출 답과 동치. R_in,open=∞, R_out,open=r_o1+R_M 일치. 이득 → 임피던스 순서, 레이저 제거 그림이 이득 뒤에 위치."
       },
       "p2:2": {
         "status": "pass",
-        "reviewer": "independent content reviewer subagent (Claude Opus 5.5, default model; tier order not exposed)",
-        "evidence": "K=R_M 음귀환 판단, A_closed, R_out,closed 전개가 reference r_O1+R_M+g_m1g_m3(r_O3∥r_O5)r_O1R_M과 일치."
+        "reviewer": "content-reviewer-agent (claude-fable-5-2)",
+        "evidence": "K=R_M 음귀환 경로(V_F↑→M4→X↑→PMOS 전류↓) 확인. A_closed=A_open/(1+R_MA_open), R_out,closed≈(r_o1+R_M+R_L)(1+KA_open)−R_L=r_o1+R_M+g_m1g_m3(r_o3∥r_o5)r_o1R_M로 기출 답과 일치."
       },
       "p3:main": {
         "status": "pass",
-        "reviewer": "independent content reviewer subagent (Claude Opus 5.5, default model; tier order not exposed)",
-        "evidence": "재빌드 stage 0e7283164b6d4fde8a07656e67a34e68 확인: 이전 stage와의 차이는 HTML·MD의 함정 목록 두 줄뿐(그림 SVG 파일 동일, answer-overlay는 input_hash만 변경). 새 목록 1) 출력 쪽에 R_M을 R_F∥R_M과 따로 더하지 않음, 2) 입력 복제에서 P를 접지하면 R_F만 남는 실수, 3) 출력 복제에서 N을 열면 R_F가 매달린 가지가 되어 전류가 없고 P에서 R_M만 보이는 실수 — 셋 모두 물리적으로 정확하고 서로 다른 실제 실수이며 캡션·㉠/㉡ 문장을 반복하지 않음. 포트 식별(감지 P–접지·레이저 직렬, 반송 N–접지·I_in 병렬), 종단 결과 R_F+R_M/R_F∥R_M, 두 SVG 배선, N 파랑/P 빨강, 라벨 간격, 고정 그림과의 일관성, 답·답안 단계 불변은 이전 검토 그대로 유효."
+        "reviewer": "content-reviewer-agent (claude-fable-5-2)",
+        "evidence": "교과서 p698–699 렌더(그림 12.61, 식 12.166–12.173)와 대조. 입력 복제 R_F+R_M(감지 포트 개방), 출력 복제 R_F∥R_M(반송 포트 단락), A_open 전개가 식 12.166과 동치, R_in,open·R_out,open·K 일치, KA_open>0. 귀환율 그림의 I_F(N→P)·I_out 주입 방향과 K 부호 일치. R_out,closed는 명세가 정한 (R_out,open+R_L)(1+KA_open)−R_L 꼴. ㉠㉡㉢ 위치와 본문 대응, 렌더 겹침 없음."
       },
       "p4:main": {
         "status": "pass",
-        "reviewer": "independent content reviewer subagent (Claude Opus 5.5, default model; tier order not exposed)",
-        "evidence": "I_N=A_closed|_{R_L=0}·I_in의 부호(음수)와 전류원 기준 방향, R_N 전개 r_O2+R_F∥R_M+R_MR_Dg_m2r_O2/(R_F+R_M+1/g_m1)을 직접 대수 확인."
+        "reviewer": "content-reviewer-agent (claude-fable-5-2)",
+        "evidence": "I_N=I_out|_{R_L=0}(입력 유지, 전달비 전체에 단락 조건 표시), R_N=R_out,closed(I_in 개방, 시험전류 D→P). 전개식 r_O2+R_F∥R_M+R_MR_Dg_m2r_O2/(R_F+R_M+1/g_m1)을 3번 식에서 재유도해 R_L이 소거됨을 확인. 그림의 전류원 방향(P→D)과 I_N<0 설명 일치."
       },
       "p5:main": {
         "status": "pass",
-        "reviewer": "independent content reviewer subagent (Claude Opus 5.5, default model; tier order not exposed)",
-        "evidence": "두 복제 단락, R_out,open=r_O2∥R_M∥R_F, R_in,open=(1/g_m1)∥R_F, K=−1/R_F, KA_open=g_m2R_DR_out,open/(R_F+1/g_m1) 확인. 제어원→r_O2→출력 배치 확인."
+        "reviewer": "content-reviewer-agent (claude-fable-5-2)",
+        "evidence": "교과서 p699–701 렌더(그림 12.62, 식 12.174–12.183)와 비교해 R_in,open=(1/g_m1)∥R_F, R_out,open=r_O2∥R_M∥R_F(r_O2→∞이면 12.178), A_open=[R_FR_D/(R_F+1/g_m1)](−g_m2R_out,open)(12.175), K=−1/R_F(12.180), KA_open=g_m2R_DR_out,open/(R_F+1/g_m1)>0, 폐루프 세 식(12.181–12.183) 일치. 검산 항등식 R_FR_D/(R_F+1/g_m1)=((1/g_m1)∥R_F)g_m1R_D 성립. 'R_M을 복제 블록에 묶어도 같다'는 주장은 y-파라미터로 확인(y11=1/R_F, y22=1/R_F+1/R_M, y12=−1/R_F; 교과서 분할과 입력 로딩·출력 총 부하·K가 같음). 포트·복제 그림의 연결(입력 복제 P 단락, R_M 양단 접지 가위표, 출력 복제 N 단락), ㉠㉡㉢ 위치, 시험원 극성과 I_F 방향(N→P), V_out 단자 점(도선 끝), P3/P5 비교표 6행 모두 확인. 재조립한 stage/ecd3e3d82ac34900831f8df7dc659504를 헤드리스 Chromium(라이트·다크)으로 다시 렌더해 수정 확인: 주 회로 ㉠이 y=228(실측 글리프 상자 y=212~232)로 I_in–N 도선(y=200) 아래 약 12px에 있고 I_in 원·R_F와 겹치지 않음, P–V_out 도선의 R_F 분기점(410,200)에 파란 점 추가, 포트 그림 'M2 드레인' 라벨이 y=22로 도선 끝과 간격 확보. 이전 stage 조각과 비교해 p5.html의 변경은 이 세 곳뿐임을 diff로 확인. 참고(비차단): P 노드 색이 주 회로 왼쪽은 파랑, 귀환망·포트·복제 그림은 빨강(P3와 같은 패턴)."
       }
     }
   },
   "independent": {
     "status": "pass",
-    "reviewer": "Codex / 기존 독립 회로 검산자",
-    "evidence": "보관된 원문 기반 독립 검산 p1–p5와 blind-check를 이번 RUN에서 모두 재실행해 저장된 출력과 바이트 단위(줄끝 제외) 일치를 확인했다. 답과 답안 표지는 바뀌지 않았고, P3 새 블록의 R_in,open=1/g_m1∥(R_F+R_M), R_out,open=r_O2+R_F∥R_M, K=−R_M/(R_M+R_F)는 p3-result.txt의 Zin0·Zout0·K와 같다.",
+    "reviewer": "independent-checker-agent (claude-fable-5-2) + main-agent 재실행",
+    "evidence": "p5는 새 독립 검산, p1–p4는 기존 SymPy evidence 재실행·결과 동일",
     "items": {
       "p1:1": {
         "status": "pass",
-        "reviewer": "Codex / 기존 독립 회로 검산자",
-        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt 재실행 일치.",
+        "reviewer": "main-agent (claude-opus-5-5) — 기존 독립 검산 evidence 재실행",
+        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt: 이번 실행에서 스크립트를 다시 돌려 이전 발행 결과와 내용 동일(줄바꿈만 차이, 원 바이트 유지). p1 조각은 이전 발행본과 바이트 동일.",
         "method": "symbolic",
-        "conclusion": "CG–소스 팔로워의 단별 전압 이득과 직렬 R_source=R_L+R_M으로 같은 가지 전류를 구한다."
+        "conclusion": "이전 발행에서 독립 검산자가 기록한 결과와 동일, 조각 불변이라 결론 유지"
       },
       "p1:2": {
         "status": "pass",
-        "reviewer": "Codex / 기존 독립 회로 검산자",
-        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt 재실행 일치.",
+        "reviewer": "main-agent (claude-opus-5-5) — 기존 독립 검산 evidence 재실행",
+        "evidence": "evidence/p1-sympy.py, evidence/p1-result.txt: 이번 실행에서 스크립트를 다시 돌려 이전 발행 결과와 내용 동일(줄바꿈만 차이, 원 바이트 유지). p1 조각은 이전 발행본과 바이트 동일.",
         "method": "symbolic",
-        "conclusion": "입력은 CG 소스, 출력은 레이저를 뺀 두 단자에서 각각 읽고 출력 계산에서 R_L을 한 번 뺀다."
+        "conclusion": "이전 발행에서 독립 검산자가 기록한 결과와 동일, 조각 불변이라 결론 유지"
       },
       "p2:1": {
         "status": "pass",
-        "reviewer": "Codex / 기존 독립 회로 검산자",
-        "evidence": "evidence/p2-sympy.py, evidence/p2-result.txt 재실행 일치.",
+        "reviewer": "main-agent (claude-opus-5-5) — 기존 독립 검산 evidence 재실행",
+        "evidence": "evidence/p2-sympy.py, evidence/p2-result.txt: 이번 실행에서 스크립트를 다시 돌려 이전 발행 결과와 내용 동일(줄바꿈만 차이, 원 바이트 유지). p2 조각은 이전 발행본과 바이트 동일.",
         "method": "symbolic",
-        "conclusion": "부호를 포함한 V_X/V_in과 PMOS의 V_D/V_X를 계산한다. 같은 직렬 가지의 전압과 저항으로 전류를 환산하고 병렬저항을 유지한다. 개루프 이득 뒤에 게이트 입력 임피던스와 레이저를 뗀 출력 포트 임피던스를 구한다."
+        "conclusion": "이전 발행에서 독립 검산자가 기록한 결과와 동일, 조각 불변이라 결론 유지"
       },
       "p2:2": {
         "status": "pass",
-        "reviewer": "Codex / 기존 독립 회로 검산자",
-        "evidence": "evidence/p2-sympy.py, evidence/p2-result.txt 재실행 일치.",
+        "reviewer": "main-agent (claude-opus-5-5) — 기존 독립 검산 evidence 재실행",
+        "evidence": "evidence/p2-sympy.py, evidence/p2-result.txt: 이번 실행에서 스크립트를 다시 돌려 이전 발행 결과와 내용 동일(줄바꿈만 차이, 원 바이트 유지). p2 조각은 이전 발행본과 바이트 동일.",
         "method": "symbolic",
-        "conclusion": "K=R_M과 앞의 양의 A_open을 재사용한다. 부하를 연결한 이득으로 귀환 배율을 계산하고 레이저를 뗀 포트의 답에서는 R_L을 한 번 뺀다. 두 폐루프 식은 이전 결과와 대수적으로 같다."
+        "conclusion": "이전 발행에서 독립 검산자가 기록한 결과와 동일, 조각 불변이라 결론 유지"
       },
       "p3:main": {
         "status": "pass",
-        "reviewer": "Codex / 기존 독립 회로 검산자",
-        "evidence": "evidence/p3-sympy.py, evidence/p3-result.txt 재실행 일치.",
+        "reviewer": "main-agent (claude-opus-5-5) — 기존 독립 검산 evidence 재실행",
+        "evidence": "evidence/p3-sympy.py, evidence/p3-result.txt: 이번 실행에서 스크립트를 다시 돌려 이전 발행 결과와 내용 동일(줄바꿈만 차이, 원 바이트 유지). p3 조각은 이전 발행본과 바이트 동일.",
         "method": "symbolic",
-        "conclusion": "부하를 연결한 공통 소스 전압 이득에 r_O2와 레이저 가지의 병렬을 유지하고, 같은 가지 전압을 직렬 저항 합으로 나누어 I_out/V_X를 구한다. 입력·출력 임피던스는 이득 뒤에 따로 측정한다. 음의 A_open과 K에서 양의 귀환 곱으로 이어진다."
+        "conclusion": "이전 발행에서 독립 검산자가 기록한 결과와 동일, 조각 불변이라 결론 유지"
       },
       "p4:main": {
         "status": "pass",
-        "reviewer": "Codex / 기존 독립 회로 검산자",
-        "evidence": "evidence/p4-sympy.py, evidence/p4-result.txt 재실행 일치.",
+        "reviewer": "main-agent (claude-opus-5-5) — 기존 독립 검산 evidence 재실행",
+        "evidence": "evidence/p4-sympy.py, evidence/p4-result.txt: 이번 실행에서 스크립트를 다시 돌려 이전 발행 결과와 내용 동일(줄바꿈만 차이, 원 바이트 유지). p4 조각은 이전 발행본과 바이트 동일.",
         "method": "symbolic",
-        "conclusion": "입력을 유지한 레이저 단락에서 I_N을 계산하고 부호를 확인한다. 그 뒤 입력 전류원을 개방한 시험원 조건을 두고 P3의 포트 출력저항을 R_N으로 사용한다."
+        "conclusion": "이전 발행에서 독립 검산자가 기록한 결과와 동일, 조각 불변이라 결론 유지"
       },
       "p5:main": {
         "status": "pass",
-        "reviewer": "Codex / 기존 독립 회로 검산자",
-        "evidence": "evidence/p5-sympy.py, evidence/p5-result.txt 재실행 일치.",
+        "reviewer": "independent-checker-agent (claude-fable-5-2, 이번 실행 새 검산자, 해설·답 비노출)",
+        "evidence": "evidence/p5-sympy.py, evidence/p5-result.txt: 부하 개루프 R_in,open=(1/g_m1)||R_F, R_out,open=r_O2||R_M||R_F, A_open=-[R_F R_D/(R_F+1/g_m1)] g_m2 R_out,open, K=-1/R_F, KA_open>0; 정확 KCL 해와 g_m2→∞에서 비 1; 검산 항등식 simplify=0",
         "method": "symbolic",
-        "conclusion": "부하를 반영한 두 단의 전압비와 부호, 같은 출력 모델의 R_out 재사용, 양의 루프 곱을 확인했다."
+        "conclusion": "md 풀이(교재 12.174–12.183, r_O2→∞에서 R_out,open=R_F||R_M)·조각과 일치. 직접 순방향 전달 생략은 g_m1R_Dg_m2R_F≫1 조건의 근사 차이로 pass."
       }
     }
   },
@@ -553,13 +557,15 @@
     ".assets/figures_문제설명_1125_Analog_Filters/explain-fig-2.svg": "cb9c0594d59c6463bd7e967f3162c4f770719f7e5a5c312d146504cb109bd662",
     ".assets/figures_문제설명_1125_Analog_Filters/explain-fig-3.svg": "893c306a3497dc7344e0ac8e326987406327287da7bfd00ed5fdbb701205dd77",
     ".assets/figures_문제설명_1125_Analog_Filters/explain-fig-4.svg": "1f7235c7fe5115481f6179b0d6101df46cbd1d141bf2b0e7bb59f0de85d498fa",
-    ".assets/figures_문제설명_1125_Analog_Filters/explain-fig-5.svg": "aa9e9e70e2136411844d36eb787044b8060141055bca98451a33b419e6b3c758",
     ".assets/figures_문제설명_1125_Analog_Filters/p3-fig-p3-solve.svg": "ca49204d9f121ad50905e1b207d77f3ed8001a81f90497e7055b473c4c48c296",
     ".assets/figures_문제설명_1125_Analog_Filters/p3-svg2-fig-p3-loop-ports.svg": "bee63eae7a125cb96783a91f8530e704c2763fef65ef913fa8936218d3078586",
     ".assets/figures_문제설명_1125_Analog_Filters/p3-svg3-fig-p3-loop-copies.svg": "204018e4e1f3e703c9e9cdc8e521022347502ebbb317b130b73b1a4580bca1dc",
     ".assets/figures_문제설명_1125_Analog_Filters/p4-fig-p4-solve.svg": "11acdf1cc490f688e8654b9469bc12b31a0c0cf680a103661d37935dfc3b4c25",
-    ".assets/문제설명_1125_Analog_Filters.md": "f463d9d2970f2668231ff6283c7a491d5fa72d11b8afdf0fb5e22bf9119982b0",
-    ".assets/자료_문제설명_1125_Analog_Filters/answer-overlay.json": "ccefa5943200eaec7459b4b9bd909833fd803a584b51d92e7004de8799f2d9ac",
+    ".assets/figures_문제설명_1125_Analog_Filters/p5-fig-p5-solve.svg": "432b91cb9d97560e0f8e08266fdc3b7aff1c97a477595b939186c5b9d70a7141",
+    ".assets/figures_문제설명_1125_Analog_Filters/p5-svg2-fig-p5-loop-ports.svg": "559cfe5182196782fb7fbed58d266bd9dde62705369fd3811c7fac84435ecfc6",
+    ".assets/figures_문제설명_1125_Analog_Filters/p5-svg3-fig-p5-loop-copies.svg": "15f980e5f44733324132083fba898d472993ef2758cd1ec86717f14a8e633b45",
+    ".assets/문제설명_1125_Analog_Filters.md": "31d2d016f59626a4fdd70bc84d4109c1067112c3c17e8bc33e2b7ef70d8e7433",
+    ".assets/자료_문제설명_1125_Analog_Filters/answer-overlay.json": "0b124d82d719e61c263c3e96e38a41e671ce1b7b56ca5e04e4570b9668de469e",
     ".assets/자료_문제설명_1125_Analog_Filters/evidence/blind-check.py": "22497db6e3fae53ca8129eec58448462d9fbeb08f29a92e3104411be108d589b",
     ".assets/자료_문제설명_1125_Analog_Filters/evidence/blind-check.txt": "850398bce897c7ae733c78ed1e04101a0366a24460357880356c0d2b4afa5f82",
     ".assets/자료_문제설명_1125_Analog_Filters/evidence/p1-result.txt": "2d99f063ab003ed8406b2a023f3f208f69e30ba0ade7cc9a4c399fc6a3e8b039",
@@ -571,15 +577,15 @@
     ".assets/자료_문제설명_1125_Analog_Filters/evidence/p3_common.py": "723e98dffb90faeb5283e34d5823e498c7c921f7928502781d5cbe653c4b1b63",
     ".assets/자료_문제설명_1125_Analog_Filters/evidence/p4-result.txt": "8295ea0b61c0aaab3024c270427dbe59d1d90097f06d922b89f45c7759b2af44",
     ".assets/자료_문제설명_1125_Analog_Filters/evidence/p4-sympy.py": "ece9f3449bb3d93942582b2658a120e5c0123bb89f77af681828e0fefac21ced",
-    ".assets/자료_문제설명_1125_Analog_Filters/evidence/p5-result.txt": "16c8c65921ee6bc1a600ddb7a88b77e3f26b85950baacf0aa4cd8db1bd0fd852",
-    ".assets/자료_문제설명_1125_Analog_Filters/evidence/p5-sympy.py": "74d954b4c56fa333e6ca95703c9e537f4ad1a07e1d4ac73d44f05d0b87aebfd3",
+    ".assets/자료_문제설명_1125_Analog_Filters/evidence/p5-result.txt": "04ca8b04d9f46e0a609a8b049c5a32ed40b3b1fe95927604f3eb2396abcf5bfa",
+    ".assets/자료_문제설명_1125_Analog_Filters/evidence/p5-sympy.py": "f72b8f3ac720aac89356ee18d2dc3df3e03c8232fef008b6143d933061e3abd7",
     ".assets/자료_문제설명_1125_Analog_Filters/fragments/p1.html": "58000e9426897f415e603c3b990a3b55a93d140010aabbd51952cd9542eda8ce",
     ".assets/자료_문제설명_1125_Analog_Filters/fragments/p2.html": "9debd9c9359e680920b9b4024bcbabe536a7f0b0b9d47741a7a8b3baa767b20e",
     ".assets/자료_문제설명_1125_Analog_Filters/fragments/p3.html": "70e986087af2f674096435451f3f6d4919df85806695fe93cac35541126aeda8",
     ".assets/자료_문제설명_1125_Analog_Filters/fragments/p4.html": "9120af56c5c8045866be10fae99043cf7363ecd97c6f3205e041dadaf7af489d",
-    ".assets/자료_문제설명_1125_Analog_Filters/fragments/p5.html": "d85b962445f03bc09f835cfe7812194fa5ea3c337822c53d2649911f38ba92a8",
+    ".assets/자료_문제설명_1125_Analog_Filters/fragments/p5.html": "ccec48ee1ae0d68df735c44a36653048b6e338c97617b597531b7ae5c78ffe42",
     ".assets/자료_문제설명_1125_Analog_Filters/template-provenance.json": "df58e3bc22a94c057389598742586ab4ec80b9ad9e584abf4b48f2fc735c4f17",
-    "문제설명_1125_Analog_Filters.html": "613b2a269a8d84b913ca9cd8cfc359ce223bbdd2d9f840bedd5caeaa1523dc47",
-    ".assets/자료_문제설명_1125_Analog_Filters/manifest.json": "8c948a61c6562ac55e159957b6bf7345e2bd2769f6e3edac76e376efd9ac65f4"
+    "문제설명_1125_Analog_Filters.html": "7fe5d0e47a886aec0780cd06668ca0e94416b4b0afc74bdd0db6f7e9ebb9f850",
+    ".assets/자료_문제설명_1125_Analog_Filters/manifest.json": "30434e4c06cbea14a8d210e3e28c3a1ea62d5d8550df953d4a3e88a43269e89a"
   }
 }
